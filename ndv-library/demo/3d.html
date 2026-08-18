@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NDV — 3D view</title>
+<style>
+  body { font-family: system-ui, sans-serif; background: #16181b; color: #d7dbdf; margin: 0; overflow: hidden; }
+  #bar { position: absolute; top: 0.6rem; left: 0.8rem; z-index: 5; display: flex; gap: 0.6rem; align-items: center; }
+  select { background: #2b2f33; color: #d7dbdf; border: 1px solid #4a4f55; border-radius: 6px; padding: 0.25rem 0.4rem; font-size: 0.8rem; }
+  #hud { position: absolute; bottom: 0.8rem; left: 0.8rem; z-index: 5; background: #0c0e10cc; border: 1px solid #33373c;
+         border-radius: 6px; padding: 0.4rem 0.7rem; font-size: 0.8rem; min-height: 1.2rem; }
+  #hud .path { color: #f59e0b; font-family: ui-monospace, monospace; }
+  #note { position: absolute; top: 0.6rem; right: 0.8rem; z-index: 5; color: #565d64; font-size: 0.72rem; }
+  button { background: #2b2f33; color: #d7dbdf; border: 1px solid #4a4f55; border-radius: 6px;
+           padding: 0.25rem 0.55rem; font-size: 0.8rem; cursor: pointer; }
+  button:hover { background: #3a3f44; }
+  canvas { display: block; }
+</style>
+<script type="importmap">
+{ "imports": {
+    "three": "https://unpkg.com/three@0.161.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.161.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div id="bar"><strong style="font-size:0.9rem">AS7726-32X — 3D</strong><select id="cfg"></select></div>
+<div id="note">drag to orbit · wheel to zoom · hover front/rear to identify</div>
+<div id="hud">loading…</div>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const PARAMS = new URLSearchParams(location.search);
+const DEV = PARAMS.get('device') || 'as7726-32x';
+const COMP = PARAMS.get('component');   // e.g. common/qsfp-transceiver@1 - lone-component mode
+let COMP_ENTRY = null, COMP_SKIN = 'default';
+let W = 438.4, H = 43.5, D = 515;
+// animated FRUs: paths discovered per build, groups tweened along their face normal
+const FRU_PATHS = new Set(), FRU_GROUPS = {}, FRU_META = {}, TWEENS = [];
+let BODY_META = {};
+const PXMM = 4;
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x16181b);
+const camera = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, 1, 6000);
+camera.position.set(420, 260, 620);
+const renderer = new THREE.WebGLRenderer({antialias: true});
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(devicePixelRatio);
+document.body.appendChild(renderer.domElement);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+// lights shade only the relief geometry (Lambert); face textures stay unlit art
+scene.add(new THREE.AmbientLight(0xffffff, 1.6));
+const key = new THREE.DirectionalLight(0xffffff, 1.6);
+key.position.set(0.4, 1, 0.7);
+scene.add(key);
+const fill = new THREE.DirectionalLight(0xffffff, 0.9);
+fill.position.set(-0.5, -0.3, -1);
+scene.add(fill);
+addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+
+async function svgCanvas(url, wmm, hmm, flipX = false, flipYax = false) {
+  const text = await (await fetch(url, {cache: 'no-store'})).text();
+  const img = new Image();
+  const blobUrl = URL.createObjectURL(new Blob([text], {type: 'image/svg+xml'}));
+  await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = blobUrl; });
+  const cv = document.createElement('canvas');
+  cv.width = Math.round(wmm * PXMM); cv.height = Math.round(hmm * PXMM);
+  const ctx = cv.getContext('2d');
+  if (flipX) { ctx.translate(cv.width, 0); ctx.scale(-1, 1); }
+  if (flipYax) { ctx.translate(0, cv.height); ctx.scale(1, -1); }
+  ctx.drawImage(img, 0, 0, cv.width, cv.height);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  URL.revokeObjectURL(blobUrl);
+  return cv;
+}
+function canvasTex(cv) {
+  const tex = new THREE.CanvasTexture(cv);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+  return tex;
+}
+// crop a mm-rect out of a face canvas (no mirroring: the rear floor plane's
+// 180-degree rotation and the box rear-face UVs already reverse X to match)
+function crop(cv, r) {
+  const c = document.createElement('canvas');
+  c.width = Math.max(1, Math.round(r.w * PXMM)); c.height = Math.max(1, Math.round(r.h * PXMM));
+  const ctx = c.getContext('2d');
+  ctx.drawImage(cv, Math.round(r.x * PXMM), Math.round(r.y * PXMM), c.width, c.height, 0, 0, c.width, c.height);
+  return c;
+}
+
+// standards-relief extraction: cavities (with interior features) + outward protrusions.
+// Interior/plate art is re-rendered STANDALONE from its own nodes so bezel plates
+// can carry arbitrary shapes (plug-outline apertures, LED holes) via alpha.
+async function extractRelief(url) {
+  const div = document.createElement('div');
+  div.style.cssText = 'position:absolute;left:-10000px;top:0;width:1000px;visibility:hidden';
+  div.innerHTML = await (await fetch(url, {cache: 'no-store'})).text();
+  document.body.appendChild(div);
+  const svg = div.querySelector('svg');
+  const inv = svg.getScreenCTM().inverse();
+  const mmRect = el => {
+    const b = el.getBBox();
+    const m = inv.multiply(el.getScreenCTM());
+    const pts = [[b.x, b.y], [b.x + b.width, b.y + b.height]]
+      .map(([x, y]) => ({x: m.a * x + m.c * y + m.e, y: m.b * x + m.d * y + m.f}));
+    const x0 = Math.min(pts[0].x, pts[1].x), y0 = Math.min(pts[0].y, pts[1].y);
+    return {x: x0, y: y0, w: Math.abs(pts[1].x - pts[0].x), h: Math.abs(pts[1].y - pts[0].y)};
+  };
+  const shared = [...svg.querySelectorAll('style, defs')].map(n => n.outerHTML).join('');
+  // owning FRU (bay module / pull tab) of a node, for animated removal
+  const ownerOf = el => {
+    const a = el.closest('[data-path]');
+    if (!a) return null;
+    const root = a.dataset.path.split('/')[0];
+    return FRU_PATHS.has(root) ? root : null;
+  };
+  const nodeSvg = (el, rect) => {
+    const m = inv.multiply(el.getScreenCTM());
+    const clone = el.cloneNode(true);
+    clone.removeAttribute('transform');   // the CTM below already includes it
+    // raised descendants (collars, handles) render as their own geometry -
+    // keep them out of cavity floors and plate textures
+    for (const r of clone.querySelectorAll('[data-z-out],[data-z-cyl],[data-z-bar],[data-z-uhandle]'))
+      r.style.display = 'none';
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${rect.w} ${rect.h}"` +
+      ` width="${rect.w}mm" height="${rect.h}mm">${shared}` +
+      `<g transform="matrix(${m.a} ${m.b} ${m.c} ${m.d} ${m.e - rect.x} ${m.f - rect.y})">` +
+      clone.outerHTML + `</g></svg>`;
+  };
+  const cavities = [...svg.querySelectorAll('[data-depth]')]
+    .filter(el => !el.querySelector('[data-depth]'))
+    .map(el => {
+      const cavNode = el.dataset.cavity &&
+        svg.querySelector(`[id="${CSS.escape(el.id + '--' + el.dataset.cavity)}"]`);
+      const rect = mmRect(cavNode || el);
+      const grpRect = mmRect(el);
+      const features = [...el.querySelectorAll('[data-z-top],[data-z-sink]')].map(f => ({
+        ...mmRect(f),
+        kind: f.dataset.zTop ? 'top' : 'sink',
+        val: +(f.dataset.zTop || f.dataset.zSink),
+        color: f.dataset.zColor || '#0a0c0e',
+      }));
+      return {...rect, owner: ownerOf(el), d: +el.dataset.depth, wall: el.dataset.wall || '#a7adb4',
+              round: !!el.dataset.round, cavSvg: nodeSvg(cavNode || el, rect),
+              grpRect, grpSvg: nodeSvg(el, grpRect), features};
+    });
+  // pressed grooves: shallow standalone cavities whose own art is the floor
+  for (const el of svg.querySelectorAll('[data-groove]')) {
+    const rect = mmRect(el);
+    cavities.push({...rect, owner: ownerOf(el), d: +el.dataset.groove, wall: '#25282c', round: false,
+                   cavSvg: nodeSvg(el, rect), grpRect: rect,
+                   grpSvg: nodeSvg(el, rect), features: []});
+  }
+  const outs = [...svg.querySelectorAll('[data-z-out],[data-z-cyl],[data-z-bar],[data-z-uhandle]')].map(el => {
+    const rect = mmRect(el);
+    return {...rect, owner: ownerOf(el), out: el.dataset.zOut && +el.dataset.zOut,
+            cyl: el.dataset.zCyl && +el.dataset.zCyl,
+            bar: el.dataset.zBar && +el.dataset.zBar,
+            uhandle: el.dataset.zUhandle && +el.dataset.zUhandle,
+            lift: +(el.dataset.zLift || 0),
+            knurl: !!el.dataset.zKnurl,
+            color: el.dataset.zColor || null,
+            svgText: nodeSvg(el, rect)};
+  });
+  const domes = [...svg.querySelectorAll('[data-z-dome]')].map(el => {
+    const rect = mmRect(el);
+    return {...rect, owner: ownerOf(el), dome: +el.dataset.zDome, svgText: nodeSvg(el, rect)};
+  });
+  const vents = [...svg.querySelectorAll('[data-vent],[data-z-vent]')].map(el => {
+    const rect = mmRect(el);
+    return {...rect, owner: ownerOf(el), depth: +(el.dataset.vent || el.dataset.zVent),
+            svgText: nodeSvg(el, rect)};
+  });
+  // component instances only (data-ref) - contract elements can share a class
+  // name (pull-tab has an element called "tab"), which would shadow the module
+  const frus = [];
+  for (const el of svg.querySelectorAll('[data-class="psu"],[data-class="fan"],[data-class="tab"]')) {
+    if (!el.dataset.ref) continue;
+    const path = (el.dataset.path || '').split('/')[0];
+    if (!path || frus.some(f => f.path === path)) continue;
+    frus.push({path, ref: el.dataset.ref.split(':')[0], cls: el.dataset.class, ...mmRect(el)});
+  }
+  for (const el of svg.querySelectorAll('[data-z-out],[data-z-cyl],[data-z-bar],[data-z-uhandle]'))
+    el.style.display = 'none';
+  const cleanText = svg.outerHTML;
+  div.remove();
+  return {cavities, outs, domes, vents, frus, cleanText};
+}
+
+async function rasterize(svgText, wmm, hmm) {
+  const img = new Image();
+  const blobUrl = URL.createObjectURL(new Blob([svgText], {type: 'image/svg+xml'}));
+  await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = blobUrl; });
+  const cv = document.createElement('canvas');
+  cv.width = Math.max(1, Math.round(wmm * PXMM)); cv.height = Math.max(1, Math.round(hmm * PXMM));
+  cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
+  URL.revokeObjectURL(blobUrl);
+  return cv;
+}
+
+// six-sided FRU body: same art the component tab shows, reused inside the device
+async function bodyBoxMesh(body, faceW, faceH) {
+  const plain = () => new THREE.MeshLambertMaterial({color: body.color || '#3a3f44'});
+  const sideMat = async (name, wmm, hmm, flipX, flipY) => {
+    if (!body.sides || !body.sides[name]) return plain();
+    const c = await svgCanvas('../dist/' + body.sides[name], wmm, hmm, flipX, flipY);
+    return new THREE.MeshBasicMaterial({map: canvasTex(c)});
+  };
+  const fp = body.footprint || {at: [0, 0], size: [faceW, faceH]};
+  const [bw, bh] = fp.size, d = body.depth;
+  const mats = [
+    await sideMat('right', d, bh),
+    await sideMat('left', d, bh),
+    await sideMat('top', bw, d),
+    await sideMat('bottom', bw, d, true, true),
+    new THREE.MeshBasicMaterial({visible: false}),   // face art plane covers this
+    await sideMat('rear', bw, bh),
+  ];
+  return {mesh: new THREE.Mesh(new THREE.BoxGeometry(bw, bh, d), mats), fp, d};
+}
+
+function stepTweens(now) {
+  for (let i = TWEENS.length - 1; i >= 0; i--) {
+    const t = TWEENS[i];
+    const k = Math.min(1, (now - t.t0) / t.dur);
+    const e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;   // ease in-out
+    t.g.position.z = t.from + (t.to - t.from) * e;
+    if (k >= 1) TWEENS.splice(i, 1);
+  }
+}
+
+const CLS_LABEL = {fan: 'Fan module', psu: 'Power supply', tab: 'Info tab'};
+function toggleFru(path, btn) {
+  const g = FRU_GROUPS[path], meta = FRU_META[path];
+  if (!g || !meta) return;
+  const out = meta.pull;
+  const target = g.position.z > out / 2 ? 0 : out;
+  TWEENS.push({g, from: g.position.z, to: target, t0: performance.now(), dur: 900});
+  const [outIcon, inIcon] = meta.captive ? ['⤒ ', '⤓ '] : ['⏏ ', '⏎ '];
+  btn.textContent = (target ? inIcon : outIcon) + CLS_LABEL[meta.cls];
+  const verb = meta.captive ? (target ? 'extending' : 'retracting')
+                            : (target ? 'removing' : 'inserting');
+  document.getElementById('hud').textContent =
+    `${path} — ${verb} (${Math.round(out)}mm travel${meta.captive ? ', captive' : ''})`;
+}
+function syncFruButtons() {
+  document.querySelectorAll('#bar button[data-fru]').forEach(b => b.remove());
+  const picked = {};
+  for (const [path, meta] of Object.entries(FRU_META))
+    if (!picked[meta.cls]) picked[meta.cls] = path;
+  for (const cls of ['fan', 'psu', 'tab']) {
+    const path = picked[cls];
+    if (!path) continue;
+    const btn = document.createElement('button');
+    btn.dataset.fru = path;
+    btn.textContent = (FRU_META[path].captive ? '⤒ ' : '⏏ ') + CLS_LABEL[cls];
+    btn.title = `animate ${path} out of / into the chassis`;
+    btn.onclick = () => toggleFru(path, btn);
+    document.getElementById('bar').appendChild(btn);
+  }
+}
+window.__toggleFru = toggleFru;
+
+let box = null, reliefGroup = null;
+async function build(cfg) {
+  document.getElementById('hud').textContent = `loading ${cfg}…`;
+  const f = v => `../dist/${DEV}.${cfg}.${v}.svg`;
+  const meshes = [];
+  FRU_PATHS.clear();
+  for (const k of Object.keys(FRU_GROUPS)) delete FRU_GROUPS[k];
+  for (const k of Object.keys(FRU_META)) delete FRU_META[k];
+  TWEENS.length = 0;
+  if (!COMP) {
+    // FRU paths must be known during extraction (owner tagging)
+    for (const view of ['front', 'rear']) {
+      const txt = await (await fetch(f(view), {cache: 'no-store'})).text();
+      for (const m of txt.matchAll(/data-path="([^"\/]+)"[^>]*data-class="(psu|fan|tab)"/g))
+        FRU_PATHS.add(m[1]);
+      for (const m of txt.matchAll(/data-class="(psu|fan|tab)"[^>]*data-path="([^"\/]+)"/g))
+        FRU_PATHS.add(m[2]);
+      for (const m of txt.matchAll(/data-path="([^"]+)\/module"/g)) FRU_PATHS.add(m[1]);
+    }
+  }
+  const faceCv = {};
+  // Relief is built in LOCAL face coordinates (x right, y up, z out of the face,
+  // face plane at z=0) and oriented by a per-face group transform. flipLY handles
+  // views whose y axis runs opposite to the face's local up (top view).
+  const FACES = COMP ? [
+    {view: 'comp', url: '../dist/' + COMP_ENTRY.files[cfg],
+     fw: () => W, fh: () => H, pos: () => [0, 0, D / 2], rot: [0, 0, 0]},
+  ] : [
+    {view: 'front', fw: () => W, fh: () => H, pos: () => [0, 0, D / 2], rot: [0, 0, 0]},
+    {view: 'rear',  fw: () => W, fh: () => H, pos: () => [0, 0, -D / 2], rot: [0, Math.PI, 0]},
+    {view: 'right', fw: () => D, fh: () => H, pos: () => [W / 2, 0, 0], rot: [0, Math.PI / 2, 0]},
+    {view: 'left',  fw: () => D, fh: () => H, pos: () => [-W / 2, 0, 0], rot: [0, -Math.PI / 2, 0]},
+    {view: 'top',   fw: () => W, fh: () => D, pos: () => [0, H / 2, 0], rot: [-Math.PI / 2, 0, 0]},
+  ];
+  for (const F of FACES) {
+    const fw = F.fw(), fh = F.fh();
+    const src = F.url || f(F.view);
+    // a device need not declare every view; fall back to a plain face
+    if (!(await fetch(src, {method: 'HEAD', cache: 'no-store'})).ok) {
+      const cv0 = document.createElement('canvas');
+      cv0.width = Math.round(fw * PXMM); cv0.height = Math.round(fh * PXMM);
+      const c0 = cv0.getContext('2d');
+      c0.fillStyle = '#3a3f44'; c0.fillRect(0, 0, cv0.width, cv0.height);
+      faceCv[F.view] = cv0;
+      continue;
+    }
+    const {cavities, outs, domes, vents, frus, cleanText} = await extractRelief(src);
+    const cv = await rasterize(cleanText, fw, fh);
+    faceCv[F.view] = cv;
+    const grp = new THREE.Group();
+    grp.position.set(...F.pos());
+    grp.rotation.set(...F.rot);
+    const LX = (x, w) => x + w / 2 - fw / 2;
+    const LY = (y, h) => (F.flipLY ? -1 : 1) * (fh / 2 - (y + h / 2));
+    const sideMats = c => Array.from({length: 6},
+      () => new THREE.MeshLambertMaterial({color: c}));
+    // each FRU gets a subgroup so its art and relief travel together when ejected
+    const fruGroups = {};
+    for (const f of frus) {
+      const fg = new THREE.Group();
+      grp.add(fg);
+      fruGroups[f.path] = fg;
+      FRU_GROUPS[f.path] = fg;
+      const bd = BODY_META[f.ref];
+      const depth = bd ? bd.depth : 60;
+      // captive modules declare how far they pull out; removable FRUs clear the chassis
+      const captive = bd && bd.travel;
+      FRU_META[f.path] = {cls: f.cls, view: F.view, body: bd, captive: !!captive,
+                          pull: Math.min(captive || depth * 1.5 + 25, D - 10)};
+    }
+    let curOwner = null;
+    const addTo = obj => (curOwner && fruGroups[curOwner] ? fruGroups[curOwner] : grp).add(obj);
+    for (const c of cavities) {
+      curOwner = c.owner;
+      const d = Math.min(c.d, D - 2);
+      // floor + feature art comes from the cavity group rendered standalone, so
+      // raised bezel plates (drawn over the cavity on the face) never leak in
+      const gcv = await rasterize(c.grpSvg, c.grpRect.w, c.grpRect.h);
+      const floorCv = crop(gcv, {x: c.x - c.grpRect.x, y: c.y - c.grpRect.y, w: c.w, h: c.h});
+      const fctx = floorCv.getContext('2d');
+      for (const ft of c.features) {
+        ft.faceCv = crop(gcv, {x: ft.x - c.grpRect.x, y: ft.y - c.grpRect.y, w: ft.w, h: ft.h});
+        // remove the feature art from the floor (it lives on its own box now)
+        const px = [Math.round((ft.x - c.x) * PXMM), Math.round((ft.y - c.y) * PXMM),
+                    Math.round(ft.w * PXMM), Math.round(ft.h * PXMM)];
+        if (ft.kind === 'sink') fctx.clearRect(...px);
+        else { fctx.fillStyle = '#0d0f11'; fctx.fillRect(...px); }
+      }
+      // shape-accurate punch: the cavity node's own art defines the hole
+      const pctx = cv.getContext('2d');
+      pctx.globalCompositeOperation = 'destination-out';
+      pctx.drawImage(await rasterize(c.cavSvg, c.w, c.h),
+                     Math.round(c.x * PXMM), Math.round(c.y * PXMM));
+      pctx.globalCompositeOperation = 'source-over';
+      // walls are double-sided: the interior is the recess, and the exterior is
+      // the cage/housing body seen through neighboring vent holes. The back face
+      // is a separate dark exterior; the textured floor plane sits just inside it
+      // (sink pockets punch through the floor's alpha, so the back stays clear
+      // of the floor by the sink allowance).
+      const wallMat = new THREE.MeshLambertMaterial({color: c.wall, side: THREE.DoubleSide});
+      const backMat = new THREE.MeshLambertMaterial({color: 0x23262b, side: THREE.DoubleSide});
+      let walls;
+      if (c.round) {
+        walls = new THREE.Mesh(
+          new THREE.CylinderGeometry(c.w / 2, c.w / 2, d, 24, 1, true), wallMat);
+        walls.rotation.x = Math.PI / 2;
+      } else {
+        const noFace = new THREE.MeshBasicMaterial({visible: false});
+        walls = new THREE.Mesh(new THREE.BoxGeometry(c.w, c.h, d),
+          [wallMat, wallMat, wallMat, wallMat, noFace, noFace]);
+      }
+      walls.position.set(LX(c.x, c.w), LY(c.y, c.h), -d / 2);
+      addTo(walls);
+      // textured floor: the aperture art, pushed to the back of the recess
+      const floor = new THREE.Mesh(new THREE.PlaneGeometry(c.w, c.h),
+        new THREE.MeshBasicMaterial({map: canvasTex(floorCv), transparent: true, alphaTest: 0.1}));
+      floor.position.set(LX(c.x, c.w), LY(c.y, c.h), -(d - 0.1));
+      addTo(floor);
+      // closed exterior back, deep enough to clear any sink pockets
+      const maxSink = Math.max(0, ...c.features.filter(f => f.kind === 'sink').map(f => f.val));
+      const back = new THREE.Mesh(new THREE.PlaneGeometry(c.w, c.h), backMat);
+      back.position.set(LX(c.x, c.w), LY(c.y, c.h), -(d + maxSink + 0.15));
+      addTo(back);
+      for (const ft of c.features) {
+        if (ft.kind === 'top') {
+          const hgt = Math.min(ft.val, d - 0.2);
+          const mats = sideMats(ft.color);
+          mats[4] = new THREE.MeshBasicMaterial({map: canvasTex(ft.faceCv)});
+          const m = new THREE.Mesh(new THREE.BoxGeometry(ft.w, ft.h, hgt), mats);
+          m.position.set(LX(ft.x, ft.w), LY(ft.y, ft.h), -(d - hgt / 2));
+          addTo(m);
+        } else {   // sink: a deeper pocket beyond the floor
+          const m = new THREE.Mesh(new THREE.BoxGeometry(ft.w, ft.h, ft.val),
+            new THREE.MeshLambertMaterial({color: ft.color, side: THREE.DoubleSide}));
+          m.position.set(LX(ft.x, ft.w), LY(ft.y, ft.h), -(d + ft.val / 2));
+          addTo(m);
+        }
+      }
+    }
+    for (const v of vents) {  // air vents: the art's dark cells become real holes
+      curOwner = v.owner;
+      const vcv = await rasterize(v.svgText, v.w, v.h);
+      const fctx = cv.getContext('2d');
+      fctx.globalCompositeOperation = 'destination-out';
+      fctx.drawImage(vcv, Math.round(v.x * PXMM), Math.round(v.y * PXMM));
+      fctx.globalCompositeOperation = 'source-over';
+      const vd = Math.min(v.depth, D - 2);
+      const vm = new THREE.MeshLambertMaterial({color: 0x08090a, side: THREE.DoubleSide});
+      const vOpen = new THREE.MeshBasicMaterial({visible: false});
+      const box = new THREE.Mesh(new THREE.BoxGeometry(v.w, v.h, vd),
+        [vm, vm, vm, vm, vOpen, vm]);
+      box.position.set(LX(v.x, v.w), LY(v.y, v.h), -vd / 2);
+      addTo(box);
+    }
+    for (const dm of domes) { // gentle domes: node art draped on a paraboloid cap
+      curOwner = dm.owner;
+      // (LED lamps, bulged fan guards); apex proud, rim sunk 0.15 into the face
+      const dcv = await rasterize(dm.svgText, dm.w, dm.h);
+      const geo = new THREE.CircleGeometry(0.5, 48);
+      const pos = geo.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        const rr = Math.min(1, Math.hypot(pos.getX(i), pos.getY(i)) * 2);
+        pos.setZ(i, 1 - rr * rr);
+      }
+      geo.computeVertexNormals();
+      const m = new THREE.Mesh(geo, new THREE.MeshLambertMaterial(
+        {map: canvasTex(dcv), transparent: true, alphaTest: 0.1}));
+      m.scale.set(dm.w, dm.h, dm.dome + 0.15);
+      m.position.set(LX(dm.x, dm.w), LY(dm.y, dm.h), -0.15);
+      addTo(m);
+    }
+    for (const o of outs) {   // protrusions: bezel plates, handles, studs, tubes
+      curOwner = o.owner;
+      const ocv = await rasterize(o.svgText, o.w, o.h);
+      if (!o.color) {   // side color: sample the node's own art
+        const px = ocv.getContext('2d').getImageData(
+          Math.floor(ocv.width / 2), Math.floor(ocv.height / 2), 1, 1).data;
+        o.color = `rgb(${px[0]},${px[1]},${px[2]})`;
+      }
+      const faceTex = new THREE.MeshBasicMaterial(
+        {map: canvasTex(ocv), transparent: true, alphaTest: 0.1});
+      if (o.uhandle !== undefined && o.uhandle !== '') {
+        const far = +o.uhandle;
+        const horizontal = o.w >= o.h;
+        const dia = Math.min(o.w, o.h), r = dia / 2, Rb = dia;
+        const zBar = far - r, legH = Math.max(0.5, zBar - Rb);
+        const uLen = Math.max(o.w, o.h);
+        const u0 = horizontal ? o.x : o.y;
+        const a = u0 + r, b = u0 + uLen - r;          // leg centerlines (svg coords)
+        const cc = horizontal ? o.y + o.h / 2 : o.x + o.w / 2;  // cross-axis center
+        const mat = new THREE.MeshLambertMaterial({color: o.color});
+        const P = (u, z) => horizontal
+          ? [u - fw / 2, (F.flipLY ? -1 : 1) * (fh / 2 - cc), z]
+          : [cc - fw / 2, (F.flipLY ? -1 : 1) * (fh / 2 - u), z];
+        for (const u of [a, b]) {                     // legs
+          const leg = new THREE.Mesh(new THREE.CylinderGeometry(r, r, legH, 16), mat);
+          leg.rotation.x = Math.PI / 2;
+          leg.position.set(...P(u, legH / 2));
+          addTo(leg);
+        }
+        const barLen = (b - Rb) - (a + Rb);           // crossbar between the bends
+        if (barLen > 0.1) {
+          const bar = new THREE.Mesh(new THREE.CylinderGeometry(r, r, barLen, 16), mat);
+          if (horizontal) bar.rotation.z = Math.PI / 2;
+          bar.position.set(...P((a + b) / 2, zBar));
+          addTo(bar);
+        }
+        for (const [u, near] of [[a + Rb, a], [b - Rb, b]]) {   // continuous bends
+          const holder = new THREE.Group();
+          holder.position.set(...P(u, zBar - Rb));
+          holder.rotation.z = horizontal ? 0 : Math.PI / 2;
+          const elbow = new THREE.Mesh(new THREE.TorusGeometry(Rb, r, 12, 16, Math.PI / 2), mat);
+          // low-u corner sweeps (-u -> +z), high-u corner (+u -> +z), in holder-local xy
+          const legLocalU = horizontal ? near : -near;   // svg y runs opposite to local up
+          const cornerLocalU = horizontal ? u : -u;
+          elbow.rotation.set(Math.PI / 2, 0, legLocalU < cornerLocalU ? Math.PI / 2 : 0);
+          holder.add(elbow);
+          addTo(holder);
+        }
+      } else if (o.bar !== undefined && o.bar !== '') {
+        // round tube along the node's long axis, lift..lift+bar off the face
+        const len = Math.max(o.w, o.h), r = o.bar / 2;
+        const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, len, 16),
+          new THREE.MeshLambertMaterial({color: o.color}));
+        if (o.w >= o.h) m.rotation.z = Math.PI / 2;   // horizontal bar
+        m.position.set(LX(o.x, o.w), LY(o.y, o.h), o.lift + r);
+        addTo(m);
+      } else if (o.cyl !== undefined && o.cyl !== '') {
+        // cylinder: lift..lift+cyl, top cap carries the node art
+        const r = Math.min(o.w, o.h) / 2;
+        let side;
+        if (o.knurl) {  // fine grip ridges wrapped around the circumference
+          const kc = document.createElement('canvas');
+          kc.width = 8; kc.height = 8;
+          const kctx = kc.getContext('2d');
+          kctx.fillStyle = o.color; kctx.fillRect(0, 0, 8, 8);
+          kctx.fillStyle = 'rgba(0,0,0,0.45)'; kctx.fillRect(4, 0, 4, 8);
+          const ktex = canvasTex(kc);
+          ktex.wrapS = THREE.RepeatWrapping;
+          ktex.repeat.set(Math.max(12, Math.round(2 * Math.PI * r / 0.5)), 1);
+          ktex.magFilter = THREE.NearestFilter;
+          side = new THREE.MeshLambertMaterial({map: ktex});
+        } else {
+          side = new THREE.MeshLambertMaterial({color: o.color});
+        }
+        const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, o.cyl, 24),
+          [side, faceTex, side]);
+        m.rotation.x = Math.PI / 2;
+        m.position.set(LX(o.x, o.w), LY(o.y, o.h), o.lift + o.cyl / 2);
+        addTo(m);
+      } else {
+        // box: lift..out (lift defaults to 0 = sits on the face)
+        const depth = o.out - o.lift;
+        const mats = sideMats(o.color);
+        mats[4] = faceTex;
+        const m = new THREE.Mesh(new THREE.BoxGeometry(o.w, o.h, depth), mats);
+        m.position.set(LX(o.x, o.w), LY(o.y, o.h), o.lift + depth / 2);
+        addTo(m);
+      }
+    }
+    curOwner = null;
+    for (const f of frus) {   // move the FRU's face art into its group; leave a bay
+      const fg = fruGroups[f.path];
+      const faceCrop = crop(cv, f);
+      const plane = new THREE.Mesh(new THREE.PlaneGeometry(f.w, f.h),
+        new THREE.MeshBasicMaterial({map: canvasTex(faceCrop), transparent: true, alphaTest: 0.1}));
+      plane.position.set(LX(f.x, f.w), LY(f.y, f.h), 0.05);
+      fg.add(plane);
+      // CLEAR, never fill: an opaque patch on the chassis face would occlude
+      // everything behind it (the module's own cavities, pins, bay interior)
+      cv.getContext('2d').clearRect(Math.round(f.x * PXMM), Math.round(f.y * PXMM),
+                                    Math.round(f.w * PXMM), Math.round(f.h * PXMM));
+      const meta = FRU_META[f.path];
+      if (meta.body) {   // full module body travels with the FRU
+        const {mesh, fp, d} = await bodyBoxMesh(meta.body, f.w, f.h);
+        mesh.position.set(LX(f.x + fp.at[0], fp.size[0]),
+                          LY(f.y + fp.at[1], fp.size[1]), -d / 2 - 0.05);
+        fg.add(mesh);
+      }
+      // empty bay: interior surfaces only, so it never occludes the module's
+      // own cavities (the C14 inlet pins live inside this volume)
+      const bd = meta.body ? meta.body.depth : 60;
+      const bay = new THREE.Mesh(new THREE.BoxGeometry(f.w + 0.6, f.h + 0.6, bd),
+        new THREE.MeshLambertMaterial({color: 0x0a0c0e, side: THREE.BackSide}));
+      bay.position.set(LX(f.x, f.w), LY(f.y, f.h), -bd / 2 - 0.2);
+      grp.add(bay);
+    }
+    meshes.push(grp);
+  }
+  let mats;
+  if (COMP) {
+    const body = COMP_ENTRY.body || {};
+    const plain = new THREE.MeshLambertMaterial({color: body.color || '#3a3f44'});
+    const sideMat = async (name, wmm, hmm, flipX, flipY) => {
+      if (!body.sides || !body.sides[name]) return plain;
+      const c = await svgCanvas('../dist/' + body.sides[name], wmm, hmm, flipX, flipY);
+      return new THREE.MeshBasicMaterial({map: canvasTex(c)});
+    };
+    mats = [
+      await sideMat('right', D, H),               // +x: face end at image left -> front
+      await sideMat('left', D, H),                // -x: authored face-at-image-right (photo convention)
+      await sideMat('top', W, D),                 // +y: front at image bottom
+      await sideMat('bottom', W, D, true, true),  // -y: device bottom convention
+      new THREE.MeshBasicMaterial({map: canvasTex(faceCv.comp), transparent: true, alphaTest: 0.1}),
+      await sideMat('rear', W, H),                // -z: as seen from behind
+    ];
+  } else {
+    const bottomCv = await svgCanvas(f('bottom'), W, D, true, true);
+    mats = [faceCv.right, faceCv.left, faceCv.top, bottomCv, faceCv.front, faceCv.rear]
+      .map((c, i) => new THREE.MeshBasicMaterial(
+        // alphaTest: punched pixels must not write depth, or they occlude interiors
+        {map: canvasTex(c), transparent: i !== 3, alphaTest: i !== 3 ? 0.1 : 0}));
+  }
+  if (box) {
+    scene.remove(box); box.geometry.dispose();
+    if (box.userData && box.userData.bodyBox) {
+      scene.remove(box.userData.bodyBox); box.userData.bodyBox.geometry.dispose();
+    }
+  }
+  if (reliefGroup) {
+    scene.remove(reliefGroup);
+    reliefGroup.traverse(o => { if (o.isMesh) o.geometry.dispose(); });
+  }
+  const fp = COMP && COMP_ENTRY.body && COMP_ENTRY.body.footprint;
+  if (fp) {
+    // thin faceplate carries the face (and its mounting tabs); the body box
+    // sits behind it within the footprint
+    const plateMats = mats.map((m, i) => i === 4 ? m :
+      new THREE.MeshLambertMaterial({color: COMP_ENTRY.body.color || '#3a3f44'}));
+    const pl = COMP_ENTRY.body.plate || {at: [0, 0], size: [W, H]};
+    box = new THREE.Mesh(new THREE.BoxGeometry(pl.size[0], pl.size[1], 1.2), plateMats);
+    box.position.set(pl.at[0] + pl.size[0] / 2 - W / 2,
+                     H / 2 - (pl.at[1] + pl.size[1] / 2), D / 2 - 0.6);
+    // face texture must stay full-face aligned on the trimmed plate
+    const ftex = mats[4].map;
+    ftex.repeat.set(pl.size[0] / W, pl.size[1] / H);
+    ftex.offset.set(pl.at[0] / W, 1 - (pl.at[1] + pl.size[1]) / H);
+    const bodyMats = mats.map((m, i) => i === 4 ?
+      new THREE.MeshLambertMaterial({color: COMP_ENTRY.body.color || '#3a3f44'}) : m);
+    const bodyBox = new THREE.Mesh(
+      new THREE.BoxGeometry(fp.size[0], fp.size[1], D - 1.2), bodyMats);
+    bodyBox.position.set(fp.at[0] + fp.size[0] / 2 - W / 2,
+                         H / 2 - (fp.at[1] + fp.size[1] / 2), -0.6);
+    scene.add(box);
+    if (reliefGroup) { /* placeholder to keep structure */ }
+    box.userData.bodyBox = bodyBox;
+    scene.add(bodyBox);
+  } else {
+    box = new THREE.Mesh(new THREE.BoxGeometry(W, H, D), mats);
+    scene.add(box);
+  }
+  reliefGroup = new THREE.Group();
+  meshes.forEach(m => reliefGroup.add(m));
+  scene.add(reliefGroup);
+  document.getElementById('hud').textContent = 'hover the front or rear face to identify components';
+}
+
+// hit-testing: hidden inline SVGs give us component boxes in mm via getBBox/CTM
+const hitIndex = {front: [], rear: []};
+async function buildHitIndex(cfg) {
+  for (const view of ['front', 'rear']) {
+    const div = document.createElement('div');
+    div.style.cssText = 'position:absolute;left:-10000px;top:0;width:1000px;visibility:hidden';
+    div.innerHTML = await (await fetch(`../dist/${DEV}.${cfg}.${view}.svg`, {cache: 'no-store'})).text();
+    document.body.appendChild(div);
+    const svg = div.querySelector('svg');
+    const inv = svg.getScreenCTM().inverse();
+    hitIndex[view] = [...svg.children]
+      .filter(el => el.dataset && el.dataset.path && el.dataset.class !== 'region')
+      .map(el => {
+        const b = el.getBBox();
+        const m = inv.multiply(el.getScreenCTM());
+        const pts = [[b.x, b.y], [b.x + b.width, b.y + b.height]]
+          .map(([x, y]) => ({x: m.a * x + m.c * y + m.e, y: m.b * x + m.d * y + m.f}));
+        return {path: el.dataset.path, cls: el.dataset.class || '',
+                model: el.dataset.model || '', x0: Math.min(pts[0].x, pts[1].x), y0: Math.min(pts[0].y, pts[1].y),
+                x1: Math.max(pts[0].x, pts[1].x), y1: Math.max(pts[0].y, pts[1].y)};
+      });
+    div.remove();
+  }
+}
+const ray = new THREE.Raycaster(), mouse = new THREE.Vector2();
+addEventListener('pointermove', ev => {
+  if (!box) return;
+  mouse.set(ev.clientX / innerWidth * 2 - 1, -(ev.clientY / innerHeight) * 2 + 1);
+  ray.setFromCamera(mouse, camera);
+  const hit = ray.intersectObject(box)[0];
+  const hud = document.getElementById('hud');
+  if (!hit) { hud.textContent = ''; return; }
+  const view = hit.face.materialIndex === 4 ? 'front' : hit.face.materialIndex === 5 ? 'rear' : null;
+  if (!view) { hud.textContent = `(${['right','left','top','bottom'][hit.face.materialIndex]} face)`; return; }
+  const x = hit.uv.x * W, y = (1 - hit.uv.y) * H;
+  // smallest containing box wins — the chassis faceplate contains every point
+  const c = hitIndex[view]
+    .filter(c => x >= c.x0 && x <= c.x1 && y >= c.y0 && y <= c.y1)
+    .sort((a, b) => (a.x1 - a.x0) * (a.y1 - a.y0) - (b.x1 - b.x0) * (b.y1 - b.y0))[0];
+  hud.innerHTML = c ? `<span class="path">${view}/${c.path}</span> ${c.cls}${c.model ? ' · ' + c.model : ''}`
+                    : `${view} face`;
+});
+
+(async () => {
+  const sel = document.getElementById('cfg');
+  if (COMP) {
+    const idx = await (await fetch('../dist/components.json', {cache: 'no-store'})).json();
+    COMP_ENTRY = idx.components.find(e => `${e.ns}/${e.name}@${e.major.slice(1)}` === COMP);
+    if (!COMP_ENTRY) { document.getElementById('hud').textContent = `unknown component ${COMP}`; return; }
+    W = COMP_ENTRY.size.w; H = COMP_ENTRY.size.h;
+    D = COMP_ENTRY.body ? COMP_ENTRY.body.depth : Math.max(COMP_ENTRY.size.d || 2, 2);
+    document.querySelector('#bar strong').textContent = `${COMP} — 3D`;
+    document.getElementById('note').textContent = 'drag to orbit · wheel to zoom';
+    const span = Math.max(W, H);
+    camera.position.set(span * 0.9, span * 0.8, span * 1.6);
+    camera.near = 0.1; camera.updateProjectionMatrix();
+    COMP_ENTRY.skins.forEach(sk => {
+      const o = document.createElement('option');
+      o.value = sk; o.textContent = sk; sel.appendChild(o);
+    });
+    sel.onchange = () => build(sel.value);
+    await build(COMP_ENTRY.skins[0]);
+    window.__cam = camera; window.__controls = controls; window.__scene = scene;
+    (function loop() { requestAnimationFrame(loop); controls.update(); renderer.render(scene, camera); })();
+    return;
+  }
+  const idx = await (await fetch(`../dist/${DEV}.configs.json`, {cache: 'no-store'})).json();
+  const cidx = await (await fetch('../dist/components.json', {cache: 'no-store'})).json();
+  BODY_META = Object.fromEntries(cidx.components.filter(c => c.body)
+    .map(c => [`${c.ns}/${c.name}@${c.major.slice(1)}`, c.body]));
+  if (idx.chassis && idx.chassis.w) { W = idx.chassis.w; H = idx.chassis.h; D = idx.chassis.d; }
+  document.querySelector('#bar strong').textContent = `${idx.model || DEV} — 3D`;
+  camera.position.set(W * 0.95, H * 6, D * 1.2);
+  idx.configs.forEach(c => {
+    const o = document.createElement('option');
+    o.value = c.name; o.textContent = c.name;
+    if (c.name === idx.default) o.selected = true;
+    sel.appendChild(o);
+  });
+  sel.onchange = async () => {
+    await build(sel.value); await buildHitIndex(sel.value); syncFruButtons();
+  };
+  await build(idx.default);
+  await buildHitIndex(idx.default);
+  syncFruButtons();
+  window.__cam = camera; window.__controls = controls; window.__scene = scene;
+  (function loop(now) {
+    requestAnimationFrame(loop);
+    stepTweens(now || 0);
+    controls.update();
+    renderer.render(scene, camera);
+  })();
+})();
+</script>
+</body>
+</html>

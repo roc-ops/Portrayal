@@ -1,0 +1,31 @@
+format: 1
+kind: component
+name: c13-inlet
+version: 1.3.0
+class: inlet
+profile: networking
+conforms: c13-inlet
+description: IEC C14 appliance inlet (mates C13 cords) - panel cutout with the
+  keyed coupler shroud recessed behind it, earth pin up, line and neutral below
+size: {w: 28.0, h: 20.0, d: 13.0}
+attrs: {media: ac, input: ac}
+provenance:
+  size: standard (IEC 60320-1) via SCHURTER 6100-3 datasheet - panel cutout
+    28.0 +0.2/0 x 20.0 +0.2/0, corners max R3, front-side screw mounting
+  shroud: proportional from the same drawing (~25.0 wide), NOT dimensioned - the
+    datasheet dimensions the 28 x 20.5 boss and the 27.5 x 19.5 rear body but not
+    the coupler profile inside them
+  depth: estimated (shroud interior undimensioned; bounded by the behind-flange
+    body length E of 20.5 solder / 23.5 quick connect)
+elements:
+  opening: {at: [0.0, 0.0], size: [28.0, 20.0], class: cutout}
+relief:
+  wall: '#141619'
+  cavity: inlet-face
+  features:
+    - {node: pin-earth, top: 12.2, color: '#c0c5cb'}
+    - {node: pin-line, top: 12.2, color: '#c0c5cb'}
+    - {node: pin-neutral, top: 12.2, color: '#c0c5cb'}
+connection-points:
+  mate: {at: [14, 10], direction: front}
+skins: [default]

@@ -1,0 +1,20 @@
+format: 1
+kind: component
+name: led-rect
+version: 1.0.0
+class: led
+profile: networking
+description: Rectangular system LED (cell-site style green bar)
+size: {w: 4.6, h: 2.6}
+provenance:
+  size: drawing-inferred (S9510-28DC HIG Fig 26)
+elements:
+  lamp:
+    at: [0.4, 0.4]
+    size: [3.8, 1.8]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]
+relief:
+  features:
+    - {node: lamp, dome: 0.3}
+skins: [default]

@@ -1,0 +1,20 @@
+format: 1
+kind: component
+name: led-indicator
+version: 1.1.0
+class: led
+description: Single chassis status LED
+size: {w: 4.0, h: 4.0}
+provenance:
+  size: estimated
+elements:
+  lamp:
+    at: [1.0, 1.0]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', ok, fault, locate]
+    label-anchor: right
+relief:
+  features:
+    - {node: lamp, dome: 0.45}
+skins: [default]

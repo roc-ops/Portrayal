@@ -1,0 +1,232 @@
+#!/usr/bin/env python3
+"""NDV linter v0: schema validation + contract<->skin consistency + ID grammar.
+
+Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
+  L1 schema: every YAML validates against its schema
+  L2 grammar: every id/segment matches ^[a-z0-9]+(-[a-z0-9]+)*$ and contains no '--'
+  L3 skin: every contracted element id exists in every declared skin SVG
+  L4 skin: skin viewBox matches contract size
+  L5 device: placement refs resolve in the library path; instance ids unique per view
+  L6 device: bay defaults appear in the bay's accepts list
+  L7 device: region members reference existing instance ids
+  L9 component: conforms-declared size matches schemas/standards.yaml
+  L10 component: parts resolve, ids unique, no composition cycles (depth <= 4)
+"""
+import argparse
+import json
+import re
+import sys
+import xml.etree.ElementTree as ET
+from pathlib import Path
+
+import yaml
+from jsonschema import Draft202012Validator
+
+SEGMENT = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
+ERRORS = []
+
+
+def err(path, code, msg):
+    ERRORS.append(f"{path}: [{code}] {msg}")
+
+
+def check_segment(path, code, value):
+    if not SEGMENT.match(value) or "--" in value:
+        err(path, code, f"bad id segment {value!r}")
+
+
+def load_schema(schemas_dir, name):
+    with open(schemas_dir / name) as f:
+        return Draft202012Validator(json.load(f))
+
+
+def skin_ids(svg_path):
+    root = ET.parse(svg_path).getroot()
+    return {n.get("id") for n in root.iter() if n.get("id")}, root
+
+
+STANDARDS = {}
+
+
+def lint_component(path, validator):
+    data = yaml.safe_load(path.read_text())
+    for e in validator.iter_errors(data):
+        err(path, "L1", f"{'/'.join(str(p) for p in e.path)}: {e.message}")
+        return data
+    check_segment(path, "L2", data["name"])
+    for el in (data.get("elements") or {}):
+        check_segment(path, "L2", el)
+    conf = data.get("conforms")
+    if conf:
+        std = STANDARDS.get(conf)
+        if std is None:
+            err(path, "L9", f"conforms: unknown standards key {conf!r}")
+        else:
+            sz = data["size"]
+            if abs(sz["w"] - std["w"]) > 0.05 or abs(sz["h"] - std["h"]) > 0.05:
+                err(path, "L9", f"conforms {conf}: size {sz['w']}x{sz['h']} != registry {std['w']}x{std['h']} ({std['registry']})")
+            if sz.get("d") is not None and std.get("depth") is not None \
+                    and abs(sz["d"] - std["depth"]) > 0.05:
+                err(path, "L9", f"conforms {conf}: depth {sz['d']} != registry {std['depth']} ({std['registry']})")
+            # aperture vs cavity: registry cavity means the opening steps in, so the
+            # component must declare the recess cross-section and a node drawing it
+            cav = std.get("cavity")
+            if cav:
+                rel = data.get("relief") or {}
+                rsz = rel.get("size")
+                if rsz is None:
+                    err(path, "L9", f"conforms {conf}: registry defines a cavity "
+                        f"{cav['w']}x{cav['h']} - component must declare relief.size")
+                elif abs(rsz["w"] - cav["w"]) > 0.05 or abs(rsz["h"] - cav["h"]) > 0.05:
+                    err(path, "L9", f"conforms {conf}: relief.size {rsz['w']}x{rsz['h']} "
+                        f"!= registry cavity {cav['w']}x{cav['h']} ({std['registry']})")
+                if rsz is not None and not rel.get("cavity"):
+                    err(path, "L9", f"conforms {conf}: relief.size set without relief.cavity "
+                        "- name the skin node whose art is the recess silhouette")
+                if rsz is not None and (rsz["w"] > sz["w"] + 0.05 or rsz["h"] > sz["h"] + 0.05):
+                    err(path, "L9", f"conforms {conf}: cavity {rsz['w']}x{rsz['h']} "
+                        f"exceeds aperture {sz['w']}x{sz['h']}")
+    return data
+
+
+def lint_component_parts(path, data, lib_roots, depth=0, seen=None):
+    seen = seen or set()
+    key = f"{data.get('name')}@{data.get('version','')}"
+    if depth > 4:
+        err(path, "L10", "composition depth exceeds 4 (cycle?)")
+        return
+    ids = set()
+    for part in data.get("parts") or []:
+        if part["id"] in ids:
+            err(path, "L10", f"duplicate part id {part['id']}")
+        ids.add(part["id"])
+        nsname, major = part["ref"].rsplit("@", 1)
+        found = None
+        for r in lib_roots:
+            c = Path(r) / "components" / nsname / f"v{major}" / "contract.yaml"
+            if c.exists():
+                found = c
+                break
+        if not found:
+            err(path, "L10", f"unresolvable part ref {part['ref']}")
+            continue
+        sub = yaml.safe_load(found.read_text())
+        if part["ref"] in seen:
+            err(path, "L10", f"composition cycle via {part['ref']}")
+            continue
+        lint_component_parts(found, sub, lib_roots, depth + 1, seen | {part["ref"]})
+
+
+def _skin_checks(path, data):
+    skins_dir = path.parent / "skins"
+    contracted = set((data.get("elements") or {}).keys())
+    for skin in data.get("skins", ["default"]):
+        sp = skins_dir / f"{skin}.svg"
+        if not sp.exists():
+            err(path, "L3", f"declared skin missing: {sp.name}")
+            continue
+        ids, root = skin_ids(sp)
+        missing = contracted - ids
+        if missing:
+            err(sp, "L3", f"skin lacks contracted element ids: {sorted(missing)}")
+        relief = data.get("relief") or {}
+        rnodes = [relief["cavity"]] if relief.get("cavity") else []
+        rnodes += [ft["node"] for ft in relief.get("features") or []]
+        rmissing = set(rnodes) - ids
+        if rmissing:
+            err(sp, "L11", f"skin lacks relief node ids: {sorted(rmissing)}")
+        vb = (root.get("viewBox") or "").split()
+        size = data["size"]
+        if len(vb) == 4 and (float(vb[2]) != size["w"] or float(vb[3]) != size["h"]):
+            err(sp, "L4", f"viewBox {vb} != contract size {size['w']}x{size['h']}")
+    return data
+
+
+def lint_device(path, validator, lib_roots):
+    data = yaml.safe_load(path.read_text())
+    for e in validator.iter_errors(data):
+        err(path, "L1", f"{'/'.join(str(p) for p in e.path)}: {e.message}")
+        return data
+
+    def resolve(ref):
+        nsname, major = ref.rsplit("@", 1)
+        return any((Path(r) / "components" / nsname / f"v{major}" / "contract.yaml").exists()
+                   for r in lib_roots)
+
+    for vname, view in (data.get("views") or {}).items():
+        view = view or {}
+        seen = set()
+        for p in view.get("placements", []) or []:
+            check_segment(path, "L2", p["id"])
+            if p["id"] in seen:
+                err(path, "L5", f"duplicate instance id {p['id']} in view {vname}")
+            seen.add(p["id"])
+            if not resolve(p["ref"]):
+                err(path, "L5", f"unresolvable ref {p['ref']} ({p['id']})")
+        for b in view.get("bays", []) or []:
+            check_segment(path, "L2", b["id"])
+            if b["id"] in seen:
+                err(path, "L5", f"duplicate instance id {b['id']} in view {vname}")
+            seen.add(b["id"])
+            for acc in b["accepts"]:
+                if not resolve(acc):
+                    err(path, "L5", f"unresolvable accepts ref {acc} ({b['id']})")
+            if b.get("default") and b["default"] not in b["accepts"]:
+                err(path, "L6", f"bay {b['id']} default {b['default']} not in accepts")
+        for r in view.get("regions", []) or []:
+            check_segment(path, "L2", r["id"])
+            for m in r.get("members", []) or []:
+                if m not in seen:
+                    err(path, "L7", f"region {r['id']} member {m} is not an instance in view {vname}")
+    bay_accepts = {}
+    for view in (data.get("views") or {}).values():
+        for b in (view or {}).get("bays", []) or []:
+            bay_accepts[b["id"]] = b["accepts"]
+    for cname, cfg in (data.get("configurations") or {}).items():
+        for bid, ref in (cfg.get("bays") or {}).items():
+            if bid not in bay_accepts:
+                err(path, "L8", f"config {cname}: unknown bay {bid}")
+            elif ref not in bay_accepts[bid]:
+                err(path, "L8", f"config {cname}: bay {bid} ref {ref} not in accepts")
+    return data
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--schemas", required=True)
+    ap.add_argument("--library", action="append", required=True)
+    args = ap.parse_args()
+    schemas = Path(args.schemas)
+    std_file = schemas / "standards.yaml"
+    if std_file.exists():
+        STANDARDS.update(yaml.safe_load(std_file.read_text())["standards"])
+    comp_v = load_schema(schemas, "component.schema.json")
+    dev_v = load_schema(schemas, "device.schema.json")
+    ovl_v = load_schema(schemas, "overlay.schema.json")
+
+    n = 0
+    for root in args.library:
+        root = Path(root)
+        for f in sorted(root.glob("components/**/contract.yaml")):
+            d = lint_component(f, comp_v)
+            _skin_checks(f, d)
+            lint_component_parts(f, d, args.library)
+            n += 1
+        for f in sorted(root.glob("devices/**/device.yaml")):
+            lint_device(f, dev_v, args.library); n += 1
+        for f in sorted(root.glob("devices/**/overlays/*.yaml")):
+            data = yaml.safe_load(f.read_text())
+            for e in ovl_v.iter_errors(data):
+                err(f, "L1", f"{'/'.join(str(p) for p in e.path)}: {e.message}")
+            n += 1
+
+    if ERRORS:
+        print(f"LINT: {len(ERRORS)} error(s) across {n} file(s)")
+        for e in ERRORS:
+            print(f"  {e}")
+        sys.exit(1)
+    print(f"LINT: ok ({n} files)")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,30 @@
+format: 1
+kind: module
+name: fan-module
+version: 1.15.0
+class: fan
+profile: networking
+description: Hot-swappable 1U fan module — 44.6mm square unioned with a 4mm left mounting tab (captive screw), honeycomb grille, pull bar in the lower third
+size: {w: 48.6, h: 40.0}
+attrs: {airflow: front-to-back}
+provenance:
+  size: photo-measured (red bar 36.6mm wide -> square 44.6mm; pitch 48.6mm)
+  elements: photo-measured (bar rows 29.4-32.7mm abs)
+states: [ok, fail, absent]
+elements:
+  screw: {at: [0.3, 17.8], size: [3.4, 3.4], class: screw}
+  rotor: {at: [7.5, 0.8], size: [37.6, 37.6], class: rotor}
+  handle: {at: [8.0, 27.4], size: [36.6, 3.3], class: latch}
+relief:
+  features:
+    - {node: rotor-grille, vent: 25}
+    - {node: rotor-behind, vent: 25}
+    - {node: rotor-bulge, dome: 3.2}
+    - {node: handle, uhandle: 12.7}
+    - {node: screw, cyl: 5, knurl: true}
+skins: [default, blue]
+body:
+  depth: 56
+  color: '#26292d'
+  footprint: {at: [4, 0], size: [44.6, 40]}
+  plate: {at: [0.8, 0], size: [47.8, 40]}

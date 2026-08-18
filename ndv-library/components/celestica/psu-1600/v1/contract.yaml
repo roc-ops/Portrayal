@@ -1,0 +1,51 @@
+format: 1
+kind: module
+name: psu-1600
+version: 1.2.0
+class: psu
+profile: networking
+description: Gospower G1482-1600WRA 1600W AC PSU (Celestica ES1010 FRU) - 54.5V
+  output for PoE++, CRPS form factor, C14 inlet, purple release latch, fold-out
+  handle, 40mm fan
+size: {w: 73.5, h: 40.0}
+attrs:
+  watts: '1600'
+  input: ac
+  model: G1482-1600WRA
+  part-number: PR0B
+  vendor: Gospower
+  output-v: '54.5'
+provenance:
+  size: estimated (CRPS 1U form factor; verify with calipers)
+  face: STILL ESTIMATED - the fan/latch spacing was tuned around a c13-inlet that
+    was 20 percent undersized, so correcting the inlet to 28 x 20 forced a retighten
+    of the right-hand side. psu-face.jpeg now contains a verified 28mm scale
+    reference (the C14 boss), so the face can be re-derived properly from it
+  face: photo (psu-face.jpeg - fan, C14, purple latch, black handle)
+  ratings: FRU label photo (100-127V 13A / 200-240V 10A in; +54.5V 18.35A/29.35A;
+    1000W/1600W max depending on input)
+  body: photo (six faces captured; card-edge blind-mate connector at the rear)
+elements:
+  status-led:
+    at: [64.0, 31.0]
+    size: [3.0, 3.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: fail, color: '#ef4444'},
+             {name: standby, color: '#f59e0b'}]
+  latch: {at: [57.5, 6.0], size: [5.0, 22.0], class: latch}
+  handle: {at: [3.0, 12.0], size: [26.0, 4.0], class: handle}
+parts:
+  - {ref: std/c13-inlet@1, id: inlet, at: [30.5, 9]}
+relief:
+  features:
+    - {node: fan-guard, dome: 1.2}
+    - {node: latch, out: 2.6}
+    - {node: handle, uhandle: 14}
+    - {node: inlet-frame, out: 1.6}
+    - {node: status-led, dome: 0.4}
+body:
+  depth: 185
+  color: '#b9bec4'
+connection-points:
+  power: {at: [42.75, 19.0], direction: front}
+skins: [default]

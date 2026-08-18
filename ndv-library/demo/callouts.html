@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NDV — AS7726-32X interface callouts (datasheet figure recreation)</title>
+<style>
+  body { font-family: system-ui, sans-serif; background: #16181b; color: #d7dbdf; margin: 0.8rem 1.2rem; }
+  h1 { font-size: 1rem; margin: 0 0 0.2rem; }
+  h2 { font-size: 0.85rem; color: #9aa1a8; margin: 0.4rem 0 0.1rem; }
+  p.note { color: #9aa1a8; max-width: 60rem; }
+  .panel { position: relative; margin: 0.3rem 0 0.9rem; }
+  .panel svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .panel { padding: 14px 0; }
+  .co-rect { fill: none; stroke: #f5c542; stroke-width: 0.55; pointer-events: none; }
+  .co-badge circle { fill: #f5c542; }
+  .co-badge text { fill: #16181b; font-weight: 700; font-size: 3.4px; font-family: system-ui, sans-serif;
+                   text-anchor: middle; dominant-baseline: central; }
+  .co-rect.active { stroke: #ffffff; filter: drop-shadow(0 0 1.2px #f5c542); }
+  .co-badge.active circle { fill: #ffffff; }
+  table { border-collapse: collapse; margin-top: 0.2rem; font-size: 0.82rem; }
+  td, th { border: 1px solid #33373c; padding: 0.2rem 0.7rem; text-align: left; }
+  th { color: #9aa1a8; font-weight: 600; }
+  tbody tr:hover { background: #23262a; cursor: default; }
+</style>
+</head>
+<body>
+<script>
+if ((new URLSearchParams(location.search).get('device') || 'as7726-32x') !== 'as7726-32x') {
+  document.write('');
+  throw new Error('device not supported');
+}
+</script>
+<h1>Interfaces — Edgecore AS7726-32X <span style="font-weight:400;color:#9aa1a8;font-size:0.75rem">— selector-generated callouts; hover a table row to flash one</span></h1>
+<h2>Front</h2><div class="panel" id="front"></div>
+<h2>Rear</h2><div class="panel" id="rear"></div>
+<table id="legend">
+  <thead><tr><th>#</th><th>Description</th><th>Selector</th></tr></thead>
+  <tbody></tbody>
+</table>
+<script>
+const ITEMS = [
+  {n: 1,  view: 'front', desc: 'System LEDs',                    sels: ["[data-path='region:status-leds']"]},
+  {n: 2,  view: 'front', desc: 'Port indicators (per-lane LEDs)', sels: ["#port-1 [data-class='led']"]},
+  {n: 3,  view: 'front', desc: '32 x 100G QSFP28 ports',          sels: ["g[data-media='qsfp28']"]},
+  {n: 4,  view: 'front', desc: 'Management port',                 sels: ['#mgmt-eth--jack']},
+  {n: 5,  view: 'front', desc: '10G management ports',            sels: ['#mgmt-sfp-1--cage, #mgmt-sfp-2--cage, #sfp-leds']},
+  {n: 6,  view: 'front', desc: 'USB storage port',                sels: ['#usb--receptacle']},
+  {n: 7,  view: 'front', desc: 'Console port',                    sels: ['#console--jack']},
+  {n: 8,  view: 'rear',  desc: 'PSU2',                            sels: ['#psu-2']},
+  {n: 9,  view: 'rear',  desc: 'Hot-swappable 5+1 redundant fans', sels: ['#fan-1, #fan-2, #fan-3, #fan-4, #fan-5, #fan-6']},
+  {n: 10, view: 'rear',  desc: 'PSU1',                            sels: ['#psu-1']},
+  {n: 11, view: 'rear',  desc: 'Grounding points',                sels: ['#ground-left', '#ground-right']},
+];
+async function load(view) {
+  const r = await fetch(`../dist/as7726-32x.${view}.svg`, {cache: 'no-store'});
+  document.getElementById(view).innerHTML = await r.text();
+}
+const NS = 'http://www.w3.org/2000/svg';
+function userRect(svg, el) {
+  // element bbox mapped into the ROOT SVG's user coordinate space — the overlay
+  // is drawn in the same space and scales with the SVG, so it can never drift.
+  const b = el.getBBox();
+  const m = svg.getScreenCTM().inverse().multiply(el.getScreenCTM());
+  const pts = [[b.x, b.y], [b.x + b.width, b.y], [b.x, b.y + b.height], [b.x + b.width, b.y + b.height]]
+    .map(([x, y]) => ({x: m.a*x + m.c*y + m.e, y: m.b*x + m.d*y + m.f}));
+  return {left: Math.min(...pts.map(p => p.x)), top: Math.min(...pts.map(p => p.y)),
+          right: Math.max(...pts.map(p => p.x)), bottom: Math.max(...pts.map(p => p.y))};
+}
+function drawCallouts() {
+  document.querySelectorAll('.co-rect,.co-badge').forEach(e => e.remove());
+  const pad = 0.9;                      // mm, in SVG user units
+  const placedBadges = [];
+  ITEMS.forEach(item => {
+    const panel = document.getElementById(item.view);
+    const svg = panel.querySelector('svg');
+    item.sels.forEach((sel, i) => {
+      let u = null;
+      panel.querySelectorAll(sel).forEach(el => {
+        const b = userRect(svg, el);
+        u = u ? {left: Math.min(u.left,b.left), top: Math.min(u.top,b.top),
+                 right: Math.max(u.right,b.right), bottom: Math.max(u.bottom,b.bottom)} : b;
+      });
+      if (!u) return;
+      const rect = document.createElementNS(NS, 'rect');
+      rect.setAttribute('class', 'co-rect'); rect.dataset.n = item.n;
+      rect.setAttribute('x', u.left - pad); rect.setAttribute('y', u.top - pad);
+      rect.setAttribute('width', u.right - u.left + 2*pad);
+      rect.setAttribute('height', u.bottom - u.top + 2*pad);
+      rect.setAttribute('rx', 0.8);
+      svg.appendChild(rect);
+      if (i === 0) {
+        let bx = u.left - pad, by = u.top - pad;
+        while (placedBadges.some(([v, px, py]) => v === item.view && Math.abs(px - bx) < 7 && Math.abs(py - by) < 7)) bx += 8;
+        placedBadges.push([item.view, bx, by]);
+        const g = document.createElementNS(NS, 'g');
+        g.setAttribute('class', 'co-badge'); g.dataset.n = item.n;
+        const c = document.createElementNS(NS, 'circle');
+        c.setAttribute('cx', bx); c.setAttribute('cy', by); c.setAttribute('r', 3.1);
+        const t = document.createElementNS(NS, 'text');
+        t.setAttribute('x', bx); t.setAttribute('y', by); t.textContent = item.n;
+        g.appendChild(c); g.appendChild(t);
+        svg.appendChild(g);
+      }
+    });
+  });
+}
+function buildTable() {
+  const tb = document.querySelector('#legend tbody');
+  ITEMS.forEach(item => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${item.n}</td><td>${item.desc}</td><td><code>${item.sels.join(' | ')}</code></td>`;
+    tr.onmouseenter = () => document.querySelectorAll(`[data-n='${item.n}']`).forEach(e => e.classList.add('active'));
+    tr.onmouseleave = () => document.querySelectorAll(`[data-n='${item.n}']`).forEach(e => e.classList.remove('active'));
+    tb.appendChild(tr);
+  });
+}
+(async () => {
+  await load('front'); await load('rear');
+  drawCallouts(); buildTable();
+})();
+</script>
+</body>
+</html>

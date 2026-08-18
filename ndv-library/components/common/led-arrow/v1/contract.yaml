@@ -1,0 +1,20 @@
+format: 1
+kind: component
+name: led-arrow
+version: 1.0.0
+class: led
+profile: networking
+description: Single triangle port LED - up skin for top-row ports, down for bottom
+size: {w: 3.6, h: 3.2}
+provenance:
+  size: drawing-inferred (S9510-28DC HIG Fig 9)
+elements:
+  lamp:
+    at: [0.2, 0.2]
+    size: [3.2, 2.8]
+    class: led
+    states: ['off', link, activity]
+relief:
+  features:
+    - {node: lamp, dome: 0.25}
+skins: [up, down]

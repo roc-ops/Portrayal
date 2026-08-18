@@ -1,0 +1,25 @@
+format: 1
+kind: component
+name: qsfp-module
+version: 1.4.0
+class: port
+profile: networking
+conforms: qsfp-module
+description: QSFP family per-port opening inside a ganged cage block - the cage
+  aperture, with the SFF-8661 module envelope as the recess behind it
+size: {w: 18.5, h: 9.58, d: 37.0}
+attrs: {media: qsfp}
+provenance:
+  depth: standard (SFF-8663 Rev 1.7 Fig 4-1, bezel to connector 37 REF)
+  size: measured (TE 2322551-4, a 1x2 ganged QSFP cage - opening 18.500 wide,
+    top and bottom edges 9.58 apart, two openings on a 19.000 pitch)
+  relief.size: standard (SFF-8661 Rev 2.5 Fig 5-1/5-2 module envelope 18.35 x 8.5)
+elements:
+  opening: {at: [0.0, 0.0], size: [18.5, 9.58], class: cutout}
+relief:
+  wall: '#aab0b7'
+  cavity: module-bay
+  size: {w: 18.35, h: 8.5}
+connection-points:
+  mate: {at: [9.25, 4.79], direction: front}
+skins: [default]

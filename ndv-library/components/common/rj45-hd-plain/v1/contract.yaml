@@ -1,0 +1,26 @@
+format: 1
+kind: component
+name: rj45-hd-plain
+version: 1.2.0
+class: port
+profile: networking
+description: High-density ganged RJ45 port with a jack-outline bezel and no LEDs
+  (console/serial use on dense faceplates)
+size: {w: 14.0, h: 12.0}
+attrs: {media: rj45}
+provenance:
+  bezel-window: generated from the std cavity silhouette (11.89 x 6.85 body
+    + 4.0 x 2.6 keyway, TE 2497310-1 CAD) so the plate frames the recess exactly
+    rather than approximating it
+  size: measured (ES1010 square-on product photo)
+  bezel: photo (console jack carries no LEDs)
+  cutout: via std/rj45-module (ganged opening)
+elements: {}
+parts:
+  - {ref: std/rj45-module@1, id: jack, at: [0.65, 0.5]}
+relief:
+  features:
+    - {node: bezel, out: 0.5, color: '#9aa0a8'}
+connection-points:
+  net: {at: [7.0, 6.0], direction: front}
+skins: [default]

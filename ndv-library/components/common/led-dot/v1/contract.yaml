@@ -1,0 +1,20 @@
+format: 1
+kind: component
+name: led-dot
+version: 1.0.0
+class: led
+profile: networking
+description: Tiny round port LED (2mm)
+size: {w: 2.0, h: 2.0}
+provenance:
+  size: estimated
+elements:
+  lamp:
+    at: [0.3, 0.3]
+    size: [1.4, 1.4]
+    class: led
+    states: ['off', link, activity, fault]
+relief:
+  features:
+    - {node: lamp, dome: 0.3}
+skins: [default]

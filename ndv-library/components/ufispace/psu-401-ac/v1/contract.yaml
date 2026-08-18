@@ -1,0 +1,35 @@
+format: 1
+kind: module
+name: psu-401-ac
+version: 1.2.0
+class: psu
+profile: networking
+description: UfiSpace PSU-401-AISB 400W AC PSU - C14 inlet with cord strap, blue
+  release latch, black tube handle, status LED (S9510-28DC family)
+size: {w: 50.5, h: 40.2}
+attrs: {watts: '400', input: ac, model: PSU-401-AISB}
+provenance:
+  size: HIG (Fig 7 drawing, 50.5 x 40.2 face)
+  inlet: standard (IEC 60320-1 via std/c13-inlet)
+  led-states: HIG PSU FRU LED table
+elements:
+  status-led:
+    at: [44.2, 2.2]
+    size: [3.2, 3.2]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: fail, color: '#ef4444'},
+             {name: standby, color: '#f59e0b'}]
+  latch: {at: [0.6, 4.5], size: [3.6, 14.0], class: latch}
+  handle: {at: [38.6, 6.0], size: [3.4, 26.0], class: handle}
+parts:
+  - {ref: std/c13-inlet@1, id: inlet, at: [6.25, 18.9]}
+relief:
+  features:
+    - {node: latch, out: 2.2}
+    - {node: handle, uhandle: 25}
+    - {node: inlet-frame, out: 2.4}
+    - {node: status-led, dome: 0.4}
+    - {node: vent-field, vent: 30}
+connection-points:
+  power: {at: [20.25, 29.5], direction: front}
+skins: [default]

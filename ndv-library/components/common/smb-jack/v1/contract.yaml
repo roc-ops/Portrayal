@@ -1,0 +1,21 @@
+format: 1
+kind: component
+name: smb-jack
+version: 1.0.0
+class: port
+profile: networking
+description: Panel-mount SMB jack with gold nut (bezel) around a std/smb core
+size: {w: 7.0, h: 7.0}
+attrs: {media: coax-smb}
+provenance:
+  size: drawing-inferred (S9510-28DC HIG Fig 9)
+  core: standard (via std/smb)
+elements: {}
+parts:
+  - {ref: std/smb@1, id: jack, at: [1.085, 1.085]}
+relief:
+  features:
+    - {node: nut, cyl: 1.8, color: '#b8962e'}
+connection-points:
+  rf: {at: [3.5, 3.5], direction: front}
+skins: [default]

@@ -1,0 +1,40 @@
+format: 1
+kind: component
+name: qsfp-lane-leds
+version: 1.1.0
+class: led
+profile: networking
+description: QSFP port lane LED strip - four triangles, one per lane (no separate
+  link/activity LEDs on this platform)
+size: {w: 19.5, h: 3.4}
+provenance:
+  size: drawing-inferred (S9510-28DC HIG Fig 9)
+  semantics: field knowledge (Jason, corrected 2026-08-17) - lanes 1-4 only
+elements:
+  lane-1:
+    at: [2.2, 0.4]
+    size: [2.4, 2.6]
+    class: led
+    states: ['off', link, activity]
+  lane-2:
+    at: [6.6, 0.4]
+    size: [2.4, 2.6]
+    class: led
+    states: ['off', link, activity]
+  lane-3:
+    at: [11.0, 0.4]
+    size: [2.4, 2.6]
+    class: led
+    states: ['off', link, activity]
+  lane-4:
+    at: [15.4, 0.4]
+    size: [2.4, 2.6]
+    class: led
+    states: ['off', link, activity]
+relief:
+  features:
+    - {node: lane-1, dome: 0.25}
+    - {node: lane-2, dome: 0.25}
+    - {node: lane-3, dome: 0.25}
+    - {node: lane-4, dome: 0.25}
+skins: [default]

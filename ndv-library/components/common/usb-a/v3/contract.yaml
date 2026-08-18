@@ -1,0 +1,23 @@
+format: 1
+kind: component
+name: usb-a
+version: 3.1.0
+class: port
+profile: networking
+description: USB Type-A port in a silver panel bezel (v3 = bezel plate spans the
+  component so it can abut neighboring port bezels; receptacle centered)
+size: {w: 17.0, h: 9.3}
+attrs: {media: usb-a}
+provenance:
+  size: drawing-inferred (S9510-28DC HIG - bezel bridges mgmt and console jacks)
+  opening: standard (USB 3.0 via std/usb-a)
+elements:
+  receptacle: {at: [2.0, 1.85], size: [13.0, 5.6], class: jack}
+parts:
+  - {ref: std/usb-a@1, id: port, at: [2.5, 2.4]}
+relief:
+  features:
+    - {node: bezel, out: 0.5, color: '#9aa1a8'}
+connection-points:
+  usb: {at: [8.5, 4.65], direction: front}
+skins: [default]

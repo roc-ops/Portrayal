@@ -1,0 +1,21 @@
+format: 1
+kind: component
+name: sma-jack
+version: 1.0.0
+class: port
+profile: networking
+description: Panel-mount SMA jack with gold jam nut (bezel) around a std/sma core
+size: {w: 9.5, h: 9.5}
+attrs: {media: coax-sma}
+provenance:
+  size: drawing-inferred (S9510-28DC HIG Fig 9, ~9.5mm nut envelope)
+  core: standard (via std/sma)
+elements: {}
+parts:
+  - {ref: std/sma@1, id: jack, at: [1.575, 1.575]}
+relief:
+  features:
+    - {node: nut, cyl: 2.2, color: '#b8962e'}
+connection-points:
+  rf: {at: [4.75, 4.75], direction: front}
+skins: [default]

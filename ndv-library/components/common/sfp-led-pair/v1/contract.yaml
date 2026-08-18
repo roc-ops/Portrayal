@@ -1,0 +1,27 @@
+format: 1
+kind: component
+name: sfp-led-pair
+version: 1.2.0
+class: led
+profile: networking
+description: Stacked-SFP indicator pair — left lamp = upper port, right lamp = lower port, up/down triangles between
+size: {w: 12.0, h: 4.0}
+provenance:
+  size: photo-inferred
+  led-states: quick start guide (green=10G mode, amber=1G mode)
+elements:
+  lamp-1:
+    at: [1.0, 1.0]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: link-10g, color: '#22c55e'}, {name: link-1g, color: '#fbbf24'}, fault]
+  lamp-2:
+    at: [9.0, 1.0]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: link-10g, color: '#22c55e'}, {name: link-1g, color: '#fbbf24'}, fault]
+relief:
+  features:
+    - {node: lamp-1, dome: 0.45}
+    - {node: lamp-2, dome: 0.45}
+skins: [default]

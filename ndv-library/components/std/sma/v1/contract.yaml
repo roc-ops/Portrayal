@@ -1,0 +1,21 @@
+format: 1
+kind: component
+name: sma
+version: 1.0.0
+class: port
+profile: networking
+conforms: sma
+description: SMA coaxial panel jack (1/4-36UNS-2B) - threaded barrel protrudes;
+  GNSS/RF antenna input
+size: {w: 6.35, h: 6.35}
+attrs: {media: coax-sma}
+provenance:
+  size: standard (1/4-36UNS-2B thread major dia; S9510-28DC datasheet cable spec)
+elements:
+  opening: {at: [0.0, 0.0], size: [6.35, 6.35], class: cutout}
+relief:
+  features:
+    - {node: barrel, cyl: 5.5, knurl: true, color: '#c9a227'}
+connection-points:
+  mate: {at: [3.175, 3.175], direction: front}
+skins: [default]

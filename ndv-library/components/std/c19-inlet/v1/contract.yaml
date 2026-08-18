@@ -1,0 +1,29 @@
+format: 1
+kind: component
+name: c19-inlet
+version: 1.3.0
+class: inlet
+profile: networking
+conforms: c19-inlet
+description: IEC C20 appliance inlet (mates C19 cords) - panel cutout with the
+  rounded-rectangle coupler recess behind it, earth pin up, line and neutral below
+size: {w: 32.4, h: 24.4, d: 15.0}
+attrs: {media: ac, input: ac}
+provenance:
+  depth: estimated (typical receptacle depth; refine from spec)
+  size: standard (IEC 60320-1) via a SCHURTER C20 dimension drawing - panel cutout
+    32.4 +0.1/0 x 24.4 +0.1/0, corners max R4.5
+  recess: proportional from the same drawing, NOT dimensioned - C19/C20 is a plain
+    rounded rectangle with no keying chamfers, so polarity is by pin layout alone
+elements:
+  opening: {at: [0.0, 0.0], size: [32.4, 24.4], class: cutout}
+relief:
+  wall: '#141619'
+  cavity: inlet-face
+  features:
+    - {node: pin-earth, top: 14.2, color: '#c0c5cb'}
+    - {node: pin-line, top: 14.2, color: '#c0c5cb'}
+    - {node: pin-neutral, top: 14.2, color: '#c0c5cb'}
+connection-points:
+  mate: {at: [16.2, 12.2], direction: front}
+skins: [default]

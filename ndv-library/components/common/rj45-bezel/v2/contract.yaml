@@ -1,0 +1,25 @@
+format: 1
+kind: component
+name: rj45-bezel
+version: 2.2.0
+class: port
+profile: networking
+description: RJ45 panel port with jack-outline bezel, no LEDs (v2 = silver plate
+  over the cutout leaving a plug-shaped aperture, stepped keyway down; console use)
+size: {w: 17.0, h: 14.9}
+attrs: {media: rj45}
+provenance:
+  bezel-window: generated from the std cavity silhouette (11.89 x 6.85 body
+    + 4.0 x 2.6 keyway, TE 2497310-1 CAD) so the plate frames the recess exactly
+    rather than approximating it
+  size: estimated (bezel plate + standard cutout)
+  cutout: standard (IEC 60603-7 via std/rj45)
+elements: {}
+parts:
+  - {ref: std/rj45@1, id: jack, at: [0.5, 0.5]}
+relief:
+  features:
+    - {node: bezel, out: 0.5, color: '#9aa1a8'}
+connection-points:
+  net: {at: [8.5, 7.5], direction: front}
+skins: [default, dark]

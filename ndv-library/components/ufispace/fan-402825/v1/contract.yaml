@@ -1,0 +1,29 @@
+format: 1
+kind: module
+name: fan-402825
+version: 1.0.0
+class: fan
+profile: networking
+description: UfiSpace FAN-402825-HD hot-swap fan module (S9510-28DC family) -
+  red tube handle on the left, knurled captive thumbscrew on the right,
+  status LED top-left; exhaust airflow
+size: {w: 51.5, h: 42.2}
+attrs: {model: FAN-402825-HD, airflow: exhaust}
+provenance:
+  size: HIG (component table 51.5 x 57.8 x 42.2; Fig 8 drawing)
+  led-states: HIG Fan FRU LED table
+elements:
+  status-led:
+    at: [2.0, 1.6]
+    size: [3.0, 3.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]
+relief:
+  features:
+    - {node: rotor-grille, vent: 25}
+    - {node: rotor-behind, vent: 25}
+    - {node: rotor-bulge, dome: 3.2}
+    - {node: handle, uhandle: 25}
+    - {node: thumbscrew, cyl: 5, knurl: true}
+    - {node: status-led, dome: 0.4}
+skins: [default]

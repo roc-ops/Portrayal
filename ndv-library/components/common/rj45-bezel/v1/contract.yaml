@@ -1,0 +1,24 @@
+format: 1
+kind: component
+name: rj45-bezel
+version: 1.0.0
+class: port
+profile: networking
+description: RJ45 panel port framed by a plain dark bezel, no LEDs (console/serial)
+size: {w: 17.6, h: 15.1}
+attrs: {media: rj45}
+provenance:
+  size: estimated (bezel frame + standard cutout)
+  cutout: standard (IEC 60603-7 via std/rj45)
+elements: {}
+parts:
+  - {ref: std/rj45@1, id: jack, at: [0.8, 0.6]}
+relief:
+  features:
+    - {node: frame-top, out: 0.7, color: '#15181b'}
+    - {node: frame-bottom, out: 0.7, color: '#15181b'}
+    - {node: frame-left, out: 0.7, color: '#15181b'}
+    - {node: frame-right, out: 0.7, color: '#15181b'}
+connection-points:
+  net: {at: [8.8, 7.6], direction: front}
+skins: [default]

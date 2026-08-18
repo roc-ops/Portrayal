@@ -1,0 +1,29 @@
+format: 1
+kind: component
+name: rj45-module
+version: 1.3.0
+class: port
+profile: networking
+conforms: rj45-module
+description: RJ45 jack aperture inside a ganged multi-port block - the per-port
+  opening where ports share walls, narrower than the IEC single-port panel cutout
+size: {w: 12.7, h: 11.0, d: 16.0}
+attrs: {media: rj45}
+provenance:
+  size: measured (ES1010 square-on product photo - 13.99mm column pitch leaves
+    ~12.7mm of opening between shared walls; the IEC 60603-7 16x14 cutout governs single ports only,
+    exactly as qsfp-module does for ganged QSFP cages) - verify with calipers.
+    This is the per-port face area, not the cavity.
+  relief.size: measured (TE 2497310-1 CAD) - the 8P8C cavity is invariant, so a
+    ganged port shares it with the single-port rj45; only the surrounding face
+    area shrinks. Rows mirror, so the upper row is this same component rotated 180;
+    which way the keyway points is a per-device fact and is set at placement.
+elements:
+  opening: {at: [0.0, 0.0], size: [13.6, 12.4], class: cutout}
+relief:
+  wall: '#b9bec4'
+  cavity: cavity
+  size: {w: 11.89, h: 9.45}
+connection-points:
+  mate: {at: [6.35, 5.5], direction: front}
+skins: [default]

@@ -1,0 +1,42 @@
+format: 1
+kind: component
+name: rj45-hd
+version: 1.5.0
+class: port
+profile: networking
+description: High-density ganged RJ45 port with a jack-outline bezel - silver plate
+  over the cutout leaving the plug silhouette open (body plus stepped keyway), two
+  link/activity LEDs in the outer corners; the mirrored bottom row is the same part rotated 180 at placement
+size: {w: 14.0, h: 12.0}
+attrs: {media: rj45, speed: 1g}
+provenance:
+  bezel-window: generated from the std cavity silhouette (11.89 x 6.85 body
+    + 4.0 x 2.6 keyway, TE 2497310-1 CAD) so the plate frames the recess exactly
+    rather than approximating it
+  size: measured (ES1010 square-on product photo, 13.99mm column pitch)
+  bezel: photo (jack-outline plate with corner LEDs, same style as the AS7726
+    management ports)
+  cutout: via std/rj45-module (ganged opening)
+elements:
+  led-a:
+    at: [1.6, 0.2]
+    size: [2.2, 1.1]
+    class: led
+    states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#f59e0b'},
+             {name: poe, color: '#f5c542'}]
+  led-b:
+    at: [10.2, 0.2]
+    size: [2.2, 1.1]
+    class: led
+    states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#f59e0b'},
+             {name: poe, color: '#f5c542'}]
+parts:
+  - {ref: std/rj45-module@1, id: jack, at: [0.65, 0.5]}
+relief:
+  features:
+    - {node: bezel, out: 0.5, color: '#9aa0a8'}
+    - {node: led-a, dome: 0.25}
+    - {node: led-b, dome: 0.25}
+connection-points:
+  net: {at: [7.0, 6.0], direction: front}
+skins: [default]

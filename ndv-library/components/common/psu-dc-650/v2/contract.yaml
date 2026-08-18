@@ -1,0 +1,25 @@
+format: 1
+kind: module
+name: psu-dc-650
+version: 2.3.0
+class: psu
+profile: networking
+description: 650W -48V DC PSU module - blue fold-out handle, terminal cover (v2 = photo-measured 54mm)
+size: {w: 54.0, h: 40.0}
+attrs: {watts: '650', input: dc, voltage: '-48v'}
+provenance:
+  body: same enclosure form factor as the AC unit (photo-measured); DC-specific
+    side art pending its own photos
+  size: photo-measured (rear overlay; body ~45mm + fold-out handle)
+  elements: estimated from AC v2 + angled DC photo
+states: [ok, fail, absent]
+elements:
+  latch: {at: [0.0, 8.0], size: [7.8, 24.0], class: latch}
+  handle: {at: [10.0, 8.0], size: [5.0, 24.0], class: handle}
+  dc-inlet: {at: [24.0, 4.0], size: [21.0, 32.0], class: inlet}
+connection-points:
+  power: {at: [34.5, 20.0], direction: rear}
+skins: [default, blue]
+body:
+  depth: 195
+  color: '#b9bec4'
