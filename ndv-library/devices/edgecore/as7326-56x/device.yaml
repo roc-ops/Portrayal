@@ -48,8 +48,9 @@ provenance:
     the QSFP row below it
   mgmt-block: owner - the two 10G ports are a 1x2 belly-to-belly gang with arrow
     LEDs between them and their label below the lower one, USB-A beneath that; the
-    RJ45 pair is belly-to-belly with a USB-C below. Numbering of the 10G pair shown
-    as M1/M2 is a placeholder - the silkscreen numbers were not captured
+    RJ45 pair is top-to-top (latches facing away from each other, not toward) with
+    a USB-C below and the pull-out tab under that stack. The 10G pair is ports
+    57/58. The SFP-to-QSFP gap is ~21mm, just over one QSFP port width
   mgmt-positions: estimated from IMG_2141 (racked front)
   psu-fan-reuse: the AC PSU FRU part numbers (F0TZZ5654019A / F0TZZ5654020A) are
     identical to the AS7726-32X, so common/psu-ac-650 is the same physical module
@@ -115,18 +116,18 @@ views:
     decor:
       - {at: [0, 1], size: [2.8, 41.5], pattern: vent, vent: 25}
       - {at: [435.6, 1], size: [2.8, 41.5], pattern: vent, vent: 25}
-      - {at: [285, 1.5], size: [76, 8.5], fill: '#26292d'}
-      - {at: [291, 26.5], text: '49▲', font-size: 1.9, fill: '#c9cdd1', anchor: middle}
-      - {at: [298, 26.5], text: '50▼', font-size: 1.9, fill: '#c9cdd1', anchor: middle}
-      - {at: [310, 26.5], text: '51▲', font-size: 1.9, fill: '#c9cdd1', anchor: middle}
-      - {at: [317, 26.5], text: '52▼', font-size: 1.9, fill: '#c9cdd1', anchor: middle}
-      - {at: [329, 26.5], text: '53▲', font-size: 1.9, fill: '#c9cdd1', anchor: middle}
-      - {at: [336, 26.5], text: '54▼', font-size: 1.9, fill: '#c9cdd1', anchor: middle}
-      - {at: [348, 26.5], text: '55▲', font-size: 1.9, fill: '#c9cdd1', anchor: middle}
-      - {at: [355, 26.5], text: '56▼', font-size: 1.9, fill: '#c9cdd1', anchor: middle}
+      - {at: [298, 1.5], size: [76, 8.5], fill: '#26292d'}
+      - {at: [304, 26.5], text: '49▲', font-size: 1.9, fill: '#c9cdd1', anchor: middle}
+      - {at: [311, 26.5], text: '50▼', font-size: 1.9, fill: '#c9cdd1', anchor: middle}
+      - {at: [323, 26.5], text: '51▲', font-size: 1.9, fill: '#c9cdd1', anchor: middle}
+      - {at: [330, 26.5], text: '52▼', font-size: 1.9, fill: '#c9cdd1', anchor: middle}
+      - {at: [342, 26.5], text: '53▲', font-size: 1.9, fill: '#c9cdd1', anchor: middle}
+      - {at: [349, 26.5], text: '54▼', font-size: 1.9, fill: '#c9cdd1', anchor: middle}
+      - {at: [361, 26.5], text: '55▲', font-size: 1.9, fill: '#c9cdd1', anchor: middle}
+      - {at: [368, 26.5], text: '56▼', font-size: 1.9, fill: '#c9cdd1', anchor: middle}
       - {at: [277.5, 1], size: [6, 41.5], fill: '#2e3236'}
-      - {at: [369.6, 33.8], text: 'M1▲', font-size: 1.55, fill: '#c9cdd1', anchor: middle}
-      - {at: [376.6, 33.8], text: 'M2▼', font-size: 1.55, fill: '#c9cdd1', anchor: middle}
+      - {at: [391.6, 33.8], text: '57▲', font-size: 1.55, fill: '#c9cdd1', anchor: middle}
+      - {at: [398.6, 33.8], text: '58▼', font-size: 1.55, fill: '#c9cdd1', anchor: middle}
       - {at: [17.4, 28.6], text: '1▲', font-size: 1.55, fill: '#c9cdd1', anchor: middle}
       - {at: [21.6, 28.6], text: '2▼', font-size: 1.55, fill: '#c9cdd1', anchor: middle}
       - {at: [26.2, 28.6], text: '3▼', font-size: 1.55, fill: '#c9cdd1', anchor: middle}
@@ -279,35 +280,35 @@ views:
       - {ref: std/sfp-module@1, id: port-46, at: [263, 1], group: sfp-ports, rel-pos: 46}
       - {ref: std/sfp-module@1, id: port-47, at: [263, 15.5], group: sfp-ports, rel-pos: 47}
       - {ref: std/sfp-module@1, id: port-48, at: [263, 30], group: sfp-ports, rel-pos: 48}
-      - {ref: std/qsfp-module@1, id: port-49, at: [285.25, 12], group: qsfp-ports, rel-pos: 49}
-      - {ref: std/qsfp-module@1, id: port-50, at: [285.25, 30], rotate: 180, group: qsfp-ports, rel-pos: 50}
-      - {ref: std/qsfp-module@1, id: port-51, at: [304.25, 12], group: qsfp-ports, rel-pos: 51}
-      - {ref: std/qsfp-module@1, id: port-52, at: [304.25, 30], rotate: 180, group: qsfp-ports, rel-pos: 52}
-      - {ref: std/qsfp-module@1, id: port-53, at: [323.25, 12], group: qsfp-ports, rel-pos: 53}
-      - {ref: std/qsfp-module@1, id: port-54, at: [323.25, 30], rotate: 180, group: qsfp-ports, rel-pos: 54}
-      - {ref: std/qsfp-module@1, id: port-55, at: [342.25, 12], group: qsfp-ports, rel-pos: 55}
-      - {ref: std/qsfp-module@1, id: port-56, at: [342.25, 30], rotate: 180, group: qsfp-ports, rel-pos: 56}
-      - {ref: common/led-dot@1, id: led-p49, at: [293.25, 3], group: qsfp-leds, attrs: {port: '49'}}
-      - {ref: common/led-dot@1, id: led-p50, at: [293.25, 7], group: qsfp-leds, attrs: {port: '50'}}
-      - {ref: common/led-dot@1, id: led-p51, at: [312.25, 3], group: qsfp-leds, attrs: {port: '51'}}
-      - {ref: common/led-dot@1, id: led-p52, at: [312.25, 7], group: qsfp-leds, attrs: {port: '52'}}
-      - {ref: common/led-dot@1, id: led-p53, at: [331.25, 3], group: qsfp-leds, attrs: {port: '53'}}
-      - {ref: common/led-dot@1, id: led-p54, at: [331.25, 7], group: qsfp-leds, attrs: {port: '54'}}
-      - {ref: common/led-dot@1, id: led-p55, at: [350.25, 3], group: qsfp-leds, attrs: {port: '55'}}
-      - {ref: common/led-dot@1, id: led-p56, at: [350.25, 7], group: qsfp-leds, attrs: {port: '56'}}
-      - {ref: std/sfp-module@1, id: mgmt-10g-1, at: [366, 6.0], group: mgmt, attrs: {speed: 10g, role: mgmt}}
-      - {ref: common/led-arrow@1, id: led-mgmt-1, at: [368.6, 17.1], skin: up, group: mgmt, attrs: {port: 'M1'}}
-      - {ref: common/led-arrow@1, id: led-mgmt-2, at: [373.9, 17.1], skin: down, group: mgmt, attrs: {port: 'M2'}}
-      - {ref: std/sfp-module@1, id: mgmt-10g-2, at: [366, 21.0], rotate: 180, group: mgmt, attrs: {speed: 10g, role: mgmt}}
-      - {ref: std/usb-a@1, id: usb-a, at: [367.1, 36.0], group: mgmt, attrs: {role: storage}}
-      - {ref: common/rj45-bezel@2, id: mgmt-eth, at: [385, 2.0], group: mgmt, attrs: {media: rj45, role: mgmt}}
-      - {ref: common/rj45-bezel@2, id: console, at: [385, 17.5], rotate: 180, group: mgmt, attrs: {media: rj45-serial, role: console}}
-      - {ref: std/usb-c@1, id: usb-c, at: [389.3, 35.0], group: mgmt, attrs: {role: console}}
-      - {ref: common/pull-tab@1, id: info-tab, at: [407, 37.0]}
+      - {ref: std/qsfp-module@1, id: port-49, at: [298.25, 12], group: qsfp-ports, rel-pos: 49}
+      - {ref: std/qsfp-module@1, id: port-50, at: [298.25, 30], rotate: 180, group: qsfp-ports, rel-pos: 50}
+      - {ref: std/qsfp-module@1, id: port-51, at: [317.25, 12], group: qsfp-ports, rel-pos: 51}
+      - {ref: std/qsfp-module@1, id: port-52, at: [317.25, 30], rotate: 180, group: qsfp-ports, rel-pos: 52}
+      - {ref: std/qsfp-module@1, id: port-53, at: [336.25, 12], group: qsfp-ports, rel-pos: 53}
+      - {ref: std/qsfp-module@1, id: port-54, at: [336.25, 30], rotate: 180, group: qsfp-ports, rel-pos: 54}
+      - {ref: std/qsfp-module@1, id: port-55, at: [355.25, 12], group: qsfp-ports, rel-pos: 55}
+      - {ref: std/qsfp-module@1, id: port-56, at: [355.25, 30], rotate: 180, group: qsfp-ports, rel-pos: 56}
+      - {ref: common/led-dot@1, id: led-p49, at: [306.25, 3], group: qsfp-leds, attrs: {port: '49'}}
+      - {ref: common/led-dot@1, id: led-p50, at: [306.25, 7], group: qsfp-leds, attrs: {port: '50'}}
+      - {ref: common/led-dot@1, id: led-p51, at: [325.25, 3], group: qsfp-leds, attrs: {port: '51'}}
+      - {ref: common/led-dot@1, id: led-p52, at: [325.25, 7], group: qsfp-leds, attrs: {port: '52'}}
+      - {ref: common/led-dot@1, id: led-p53, at: [344.25, 3], group: qsfp-leds, attrs: {port: '53'}}
+      - {ref: common/led-dot@1, id: led-p54, at: [344.25, 7], group: qsfp-leds, attrs: {port: '54'}}
+      - {ref: common/led-dot@1, id: led-p55, at: [363.25, 3], group: qsfp-leds, attrs: {port: '55'}}
+      - {ref: common/led-dot@1, id: led-p56, at: [363.25, 7], group: qsfp-leds, attrs: {port: '56'}}
+      - {ref: std/sfp-module@1, id: port-57, at: [388, 6.0], group: mgmt, attrs: {speed: 10g, role: mgmt}}
+      - {ref: common/led-arrow@1, id: led-p57, at: [390.6, 17.1], skin: up, group: mgmt, attrs: {port: '57'}}
+      - {ref: common/led-arrow@1, id: led-p58, at: [395.9, 17.1], skin: down, group: mgmt, attrs: {port: '58'}}
+      - {ref: std/sfp-module@1, id: port-58, at: [388, 21.0], rotate: 180, group: mgmt, attrs: {speed: 10g, role: mgmt}}
+      - {ref: std/usb-a@1, id: usb-a, at: [389.1, 36.0], group: mgmt, attrs: {role: storage}}
+      - {ref: common/rj45-bezel@2, id: mgmt-eth, at: [410, 2.0], rotate: 180, group: mgmt, attrs: {media: rj45, role: mgmt}}
+      - {ref: common/rj45-bezel@2, id: console, at: [410, 17.5], group: mgmt, attrs: {media: rj45-serial, role: console}}
+      - {ref: std/usb-c@1, id: usb-c, at: [414.3, 33.8], group: mgmt, attrs: {role: console}}
+      - {ref: common/pull-tab@1, id: info-tab, at: [410, 38.0]}
     regions:
       - {id: sfp-block, at: [14, 0], size: {w: 266, h: 43.5}, label: 48x 25G SFP28}
-      - {id: qsfp-block, at: [283, 12], size: {w: 80, h: 31.5}, label: 8x 100G QSFP28}
-      - {id: mgmt-block, at: [364, 0], size: {w: 62, h: 43.5}, label: Management}
+      - {id: qsfp-block, at: [296, 1], size: {w: 80, h: 42.5}, label: 8x 100G QSFP28}
+      - {id: mgmt-block, at: [384, 0], size: {w: 45, h: 43.5}, label: Management}
   rear:
     decor:
       - {at: [0, 1], size: [8, 41.5], pattern: vent, vent: 25}
