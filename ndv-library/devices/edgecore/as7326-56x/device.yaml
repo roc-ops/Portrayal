@@ -56,9 +56,14 @@ provenance:
   mgmt-positions: estimated from IMG_2141 (racked front)
   psu-fan-reuse: the AC PSU FRU part numbers (F0TZZ5654019A / F0TZZ5654020A) are
     identical to the AS7726-32X, so common/psu-ac-650 is the same physical module
+  entity-and-interfaces: read from the live unit (ArcOS S8.5.1A, netlab-leaf1) via
+    'show components | display json' and 'show interface brief'. Chassis serial,
+    MAC and every per-transceiver serial are redacted from the committed dump
+  port-count-note: ArcOS presents swp1-swp56 only. The faceplate labels the 10G
+    management pair 57/58, but they are not ASIC switch ports - no swp57/58 exists
 attrs:
   asic: Broadcom BCM56873 Trident 3
-  cpu: Intel Xeon D-1518, 4-core @ 2.2 GHz
+  cpu: Intel Xeon D-1518, 4-core / 8-thread @ 2.2 GHz
   memory: 16 GB DDR4 (2x 8 GB SO-DIMM)
   storage: 64 GB M.2 SSD (MLC)
   spi-flash: 2x 16 MB
@@ -76,6 +81,14 @@ attrs:
     10GBASE-RJ45 supported on H/W R01G or newer
   optics-qsfp28: 100GBASE-SR4/CWDM4/LR4, 100G-DAC/AOC, 40GBASE-SR4/LR4, 40G-DAC/AOC
   mgmt-ports: 1x RJ-45 console, 1x RJ-45 100/1000BASE-T, 2x 10G, 1x USB-A storage
+  nos-verified: ArcOS S8.5.1A on netlab-leaf1 (same unit as the intake photos)
+  interface-naming: swp1-swp56 switch ports, ma1 management, loopback0
+  entity-map: chassis > lc0 (LINECARD) > psu0/psu1, fan1-fan6 chassis fans
+    (plus fan0 inside PSU 2), led0-led4, thermal0-thermal5, eeprom0, sfp1-sfp56
+  entity-transceivers: sfp1-sfp56, each carrying SwPort/Status/Vendor/Model/
+    Type/Module-Type/Media-Type/Module-Capability
+  thermal-sensors: CPU Core, LM75-1-48, LM75-2-49, LM75-3-4A, LM75-4-4B, PSU-2
+  firmware-mu: EdgeCore MU 1.2.3
   operating-temp-f2b: 0 to 45 C
   operating-temp-b2f: 0 to 40 C
 chassis:
@@ -237,11 +250,11 @@ views:
       - {ref: common/led-arrow@1, id: led-p48, at: [272.6, 11.7], skin: down, group: port-leds, attrs: {port: '48'}}
       - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0], skin: left, optional: ears}
       - {ref: common/rack-ear@1, id: ear-right, at: [438.4, 0], skin: right, optional: ears}
-      - {ref: common/led-indicator@1, id: led-diag, at: [10.5, 3.5], group: leds, rel-pos: 1, label: "DIAG", label-at: [2, 6.6], label-size: 1.6}
-      - {ref: common/led-indicator@1, id: led-loc, at: [10.5, 11.5], group: leds, rel-pos: 2, label: "LOC", label-at: [2, 6.6], label-size: 1.6}
-      - {ref: common/led-indicator@1, id: led-psu1, at: [10.5, 19.5], group: leds, rel-pos: 3, label: "PS1", label-at: [2, 6.6], label-size: 1.6}
-      - {ref: common/led-indicator@1, id: led-psu2, at: [10.5, 27.5], group: leds, rel-pos: 4, label: "PS2", label-at: [2, 6.6], label-size: 1.6}
-      - {ref: common/led-indicator@1, id: led-fan, at: [10.5, 35.5], group: leds, rel-pos: 5, label: "FAN", label-at: [2, 6.6], label-size: 1.6}
+      - {ref: common/led-indicator@1, id: led-diag, at: [10.5, 3.5], group: leds, rel-pos: 1, label: "DIAG", label-at: [2, 6.6], label-size: 1.6, attrs: {entity: led0}}
+      - {ref: common/led-indicator@1, id: led-loc, at: [10.5, 11.5], group: leds, rel-pos: 2, label: "LOC", label-at: [2, 6.6], label-size: 1.6, attrs: {entity: led1}}
+      - {ref: common/led-indicator@1, id: led-psu1, at: [10.5, 19.5], group: leds, rel-pos: 3, label: "PS1", label-at: [2, 6.6], label-size: 1.6, attrs: {entity: led3}}
+      - {ref: common/led-indicator@1, id: led-psu2, at: [10.5, 27.5], group: leds, rel-pos: 4, label: "PS2", label-at: [2, 6.6], label-size: 1.6, attrs: {entity: led4}}
+      - {ref: common/led-indicator@1, id: led-fan, at: [10.5, 35.5], group: leds, rel-pos: 5, label: "FAN", label-at: [2, 6.6], label-size: 1.6, attrs: {entity: led2}}
       - {ref: std/sfp-module@1, id: port-1, at: [16, 1], group: sfp-ports, rel-pos: 1}
       - {ref: std/sfp-module@1, id: port-2, at: [16, 15.5], group: sfp-ports, rel-pos: 2}
       - {ref: std/sfp-module@1, id: port-3, at: [16, 30], group: sfp-ports, rel-pos: 3}
