@@ -23,5 +23,16 @@ HTML
 # COPYFILE_DISABLE stops macOS tar emitting ._ AppleDouble files for xattrs
 COPYFILE_DISABLE=1 tar czf - -C "$STAGE" . \
   | ssh "$TARGET" "rm -rf ${REMOTE:?}/* && tar xzf - -C '$REMOTE' && find '$REMOTE' -name '._*' -delete"
-ssh "$TARGET" "systemctl is-active ndv-demo >/dev/null 2>&1 && sudo systemctl restart ndv-demo; \
-               curl -sf -o /dev/null -w 'demo: HTTP %{http_code}\n' http://127.0.0.1:9003/demo/"
+ssh "$TARGET" "bash -s" <<'REMOTE'
+set -e
+systemctl is-active ndv-demo >/dev/null 2>&1 && sudo systemctl restart ndv-demo
+# the server needs a moment to rebind after a restart - poll rather than
+# curl once and report a spurious 000
+for i in $(seq 1 20); do
+  code=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:9003/demo/ || true)
+  [ "$code" = "200" ] && { echo "demo: HTTP 200 (ready after ${i} tr(y|ies))"; exit 0; }
+  sleep 0.5
+done
+echo "demo: NOT READY (last code ${code:-none})" >&2
+exit 1
+REMOTE
