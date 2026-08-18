@@ -56,6 +56,10 @@ provenance:
   mgmt-positions: estimated from IMG_2141 (racked front)
   psu-fan-reuse: the AC PSU FRU part numbers (F0TZZ5654019A / F0TZZ5654020A) are
     identical to the AS7726-32X, so common/psu-ac-650 is the same physical module
+  top-bottom-sides: extrapolated from the AS7726-32X, which shares this chassis
+    line and its width and height, restretched to the 536mm depth. Top grooves and
+    the centre access plate are from IMG_2129; the bottom labels from IMG_2130.
+    Side screw and vent positions are NOT measured - reshoot on a bench to confirm
   entity-and-interfaces: read from the live unit (ArcOS S8.5.1A, netlab-leaf1) via
     'show components | display json' and 'show interface brief'. Chassis serial,
     MAC and every per-transceiver serial are redacted from the committed dump
@@ -376,3 +380,51 @@ views:
       - {id: psu-1, at: [366.6, 2], size: {w: 54, h: 40}, accepts: ['common/psu-ac-650@3', 'common/psu-dc-650@2'], group: psus, rel-pos: 1, default: 'common/psu-ac-650@3'}
     regions:
       - {id: exhaust, at: [71, 0], size: {w: 292, h: 43.5}, physical-context: Exhaust, label: Fan tray, members: [fan-1, fan-2, fan-3, fan-4, fan-5, fan-6]}
+  top:
+    size: {w: 438.4, h: 536}
+    decor:
+      # two long recessed grooves front and rear, and the centre access plate
+      # with its void sticker - all from IMG_2129
+      - {at: [8, 517], size: [422.4, 14], pattern: vent, vent: 20}
+      - {at: [55, 22], size: [1.8, 483], fill: '#2e3236', sink: 1}
+      - {at: [383.4, 22], size: [1.8, 483], fill: '#2e3236', sink: 1}
+      - {at: [62, 26], size: [314, 12], rx: 3, fill: '#26292d', sink: 0.8}
+      - {at: [62, 484], size: [314, 12], rx: 3, fill: '#26292d', sink: 0.8}
+      - {at: [186, 259], size: [66, 18], rx: 1, fill: '#8a9099', out: 0.6}
+      - {at: [190, 262], size: [34, 12], fill: '#3a3f45'}
+      - {at: [232, 263.5], size: [9, 9], rx: 4.5, fill: '#c8563c'}
+  bottom:
+    size: {w: 438.4, h: 536}
+    placements:
+      - {ref: common/compliance-sticker@1, id: bottom-label, at: [109.7, 165]}
+      - {ref: common/device-label@1, id: bottom-serial-label, at: [25, 32], attrs: {role: serial-label}}
+  left:
+    # drawn as seen from outside the left side: device front at image RIGHT
+    size: {w: 536, h: 43.5}
+    decor:
+      - {at: [530, 1], size: [6, 41.5], pattern: vent, vent: 25}
+      - {at: [500, 29], size: [5, 4], fill: '#17191c', vent: 25}
+      - {at: [493, 29], size: [5, 4], fill: '#17191c', vent: 25}
+      - {at: [500, 35], size: [5, 4], fill: '#17191c', vent: 25}
+      - {at: [493, 35], size: [5, 4], fill: '#17191c', vent: 25}
+    placements:
+      - {ref: common/screw-head@1, id: screw-1, at: [523.4, 8.5]}
+      - {ref: common/screw-head@1, id: screw-2, at: [523.4, 20]}
+      - {ref: common/screw-head@1, id: screw-3, at: [523.4, 31.5]}
+      - {ref: common/screw-head@1, id: screw-4, at: [268, 8.5]}
+      - {ref: common/screw-head@1, id: screw-5, at: [268, 31.5]}
+  right:
+    # mirror of the left: device front at image LEFT
+    size: {w: 536, h: 43.5}
+    decor:
+      - {at: [0, 1], size: [6, 41.5], pattern: vent, vent: 25}
+      - {at: [31, 29], size: [5, 4], fill: '#17191c', vent: 25}
+      - {at: [38, 29], size: [5, 4], fill: '#17191c', vent: 25}
+      - {at: [31, 35], size: [5, 4], fill: '#17191c', vent: 25}
+      - {at: [38, 35], size: [5, 4], fill: '#17191c', vent: 25}
+    placements:
+      - {ref: common/screw-head@1, id: screw-1, at: [9, 8.5]}
+      - {ref: common/screw-head@1, id: screw-2, at: [9, 20]}
+      - {ref: common/screw-head@1, id: screw-3, at: [9, 31.5]}
+      - {ref: common/screw-head@1, id: screw-4, at: [268, 8.5]}
+      - {ref: common/screw-head@1, id: screw-5, at: [268, 31.5]}
