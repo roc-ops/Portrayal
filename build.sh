@@ -9,4 +9,11 @@ for d in ndv-library/devices/*/*/device.yaml; do
 done
 python3 ndv-spec/tools/ndv/devices_index.py    --library ndv-library --out "$OUT"
 python3 ndv-spec/tools/ndv/components_index.py --library ndv-library --out "$OUT"
+# DCIM exports: NDV is the source of truth, a DCIM is one consumer
+for d in ndv-library/devices/*/*/device.yaml; do
+  for nos in arcos sonic; do
+    python3 ndv-spec/tools/ndv/nautobot_export.py "$d" --nos "$nos" \
+      --out ndv-library/exports/nautobot 2>/dev/null || true
+  done
+done
 echo "built $(ls "$OUT" | wc -l | tr -d ' ') files -> $OUT"
