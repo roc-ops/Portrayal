@@ -169,6 +169,8 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                     node.set("data-z-color", feat["color"])
                 if feat.get("knurl"):
                     node.set("data-z-knurl", "1")
+                if feat.get("thread"):
+                    node.set("data-z-thread", str(feat["thread"]))
                 break
     for part in contract.get("parts") or []:
         pg, _ = instance_group(lib, part["ref"], f"{inst_id}--{part['id']}",
@@ -189,6 +191,8 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                     node.set("data-z-color", feat["color"])
                 if feat.get("knurl"):
                     node.set("data-z-knurl", "1")
+                if feat.get("thread"):
+                    node.set("data-z-thread", str(feat["thread"]))
                 # bezel plates ('out') paint over composed parts: raise direct
                 # children to the end of the instance group
                 if any(feat.get(k) is not None for k in ("out", "cyl", "bar", "uhandle", "dome")) and node in list(g):

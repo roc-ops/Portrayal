@@ -165,6 +165,7 @@ async function extractRelief(url) {
             uhandle: el.dataset.zUhandle && +el.dataset.zUhandle,
             lift: +(el.dataset.zLift || 0),
             knurl: !!el.dataset.zKnurl,
+            thread: el.dataset.zThread && +el.dataset.zThread,
             color: el.dataset.zColor || null,
             svgText: nodeSvg(el, rect)};
   });
@@ -498,7 +499,28 @@ async function build(cfg) {
         // cylinder: lift..lift+cyl, top cap carries the node art
         const r = Math.min(o.w, o.h) / 2;
         let side;
-        if (o.knurl) {  // fine grip ridges wrapped around the circumference
+        if (o.thread) {
+          // single-start helix: one diagonal per tile, tiled once around the
+          // circumference and once per pitch along the axis, so the stripe meets
+          // itself at the seam and reads as a continuous thread rather than rings
+          const tc = document.createElement('canvas');
+          tc.width = 32; tc.height = 32;
+          const tx = tc.getContext('2d');
+          tx.fillStyle = o.color; tx.fillRect(0, 0, 32, 32);
+          tx.strokeStyle = 'rgba(0,0,0,0.42)'; tx.lineWidth = 7;
+          tx.lineCap = 'butt';
+          for (const dy of [-32, 0, 32]) {          // wrap copies keep it seamless
+            tx.beginPath(); tx.moveTo(0, 32 + dy); tx.lineTo(32, dy); tx.stroke();
+          }
+          tx.strokeStyle = 'rgba(255,255,255,0.20)'; tx.lineWidth = 2.5;
+          for (const dy of [-32, 0, 32]) {
+            tx.beginPath(); tx.moveTo(0, 27 + dy); tx.lineTo(32, dy - 5); tx.stroke();
+          }
+          const ttex = canvasTex(tc);
+          ttex.wrapS = ttex.wrapT = THREE.RepeatWrapping;
+          ttex.repeat.set(1, Math.max(1, Math.round(o.cyl / o.thread)));
+          side = new THREE.MeshLambertMaterial({map: ttex});
+        } else if (o.knurl) {  // fine grip ridges wrapped around the circumference
           const kc = document.createElement('canvas');
           kc.width = 8; kc.height = 8;
           const kctx = kc.getContext('2d');

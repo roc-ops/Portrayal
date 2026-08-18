@@ -130,17 +130,29 @@ standards:
     notes: Panel hole = 1/4 inch thread major diameter. Thread spec cited by the
       UfiSpace S9510-28DC datasheet ('50 ohm SMA coaxial cable with 1/4-36UNS-2B
       connector for GNSS'); MIL-STD-348 interface drawing verification pending.
-      Jam nut ~8mm across flats sits outside the hole. GNSS/RF antenna jacks.
+      Confirmed by CAD - Linx CONSMA001-C-G profiles a thread band of continuously
+      varying radius (2.79-3.22) from z -1 to -5, major dia 6.448 against the
+      nominal 6.35, so the panel hole is right. Same part gives the jam nut at 7.92
+      across flats (5/16 in, 9.15 across corners), threaded length ~4.0 and overall
+      13.6; pitch is 25.4/36 = 0.706. The nut sits outside the hole.
+      GNSS/RF antenna jacks.
   smb:
-    registry: SMB (10-32UNF-2A)
+    registry: SMB (snap-on; 10-32UNF-2A panel bushing unconfirmed)
     w: 4.83
     h: 4.83
     radius: 2.415
     depth: 0.0
-    confidence: verified
-    notes: Panel hole = 10-32 UNF thread major diameter (4.83mm). Thread spec cited
-      by the UfiSpace S9510-28DC datasheet ('50 ohm SMB coaxial cable with
-      10-32UNF-2A connector for 1PPS and 10MHz'). Snap-on timing coax.
+    confidence: registry
+    notes: 4.83 was taken as the 10-32 UNF thread major diameter on the strength of
+      the UfiSpace S9510-28DC datasheet ('50 ohm SMB coaxial cable with 10-32UNF-2A
+      connector for 1PPS and 10MHz'). CAD does not support it - TE 2477461-1
+      profiles as discrete cylinders with NO thread band anywhere (front interface
+      3.68 dia, a 9.90 flange, 11.5 overall), which is what SMB should look like,
+      being a snap-on interface with no coupling thread. Either the datasheet
+      describes a panel bushing rather than the connector, or that part is not
+      panel-mount and a panel variant does carry a 10-32 bushing. Confidence
+      dropped from verified to registry - 4.83 is retained as the incumbent value,
+      not a confirmed one. Compare sma, where CAD did confirm the thread.
   sfp-module:
     registry: SFF-8433 Rev 0.7 (SFP+ Ganged Cage Footprints and Bezel Openings)
     w: 14.25

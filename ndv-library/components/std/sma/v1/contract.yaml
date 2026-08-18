@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: sma
-version: 1.0.0
+version: 1.1.0
 class: port
 profile: networking
 conforms: sma
@@ -10,12 +10,16 @@ description: SMA coaxial panel jack (1/4-36UNS-2B) - threaded barrel protrudes;
 size: {w: 6.35, h: 6.35}
 attrs: {media: coax-sma}
 provenance:
-  size: standard (1/4-36UNS-2B thread major dia; S9510-28DC datasheet cable spec)
+  size: standard (1/4-36UNS-2B thread major dia; S9510-28DC datasheet cable spec),
+    confirmed by CAD - Linx CONSMA001-C-G measures a thread band of continuously
+    varying radius from z -1 to -5 with major dia 6.448, i.e. the nominal 6.35
+  barrel: measured (same part - threaded section ~4.0 long plus a ~1.0 tip, so the
+    barrel stands ~5.0 proud; pitch 25.4/36 = 0.706 for 36 TPI)
 elements:
   opening: {at: [0.0, 0.0], size: [6.35, 6.35], class: cutout}
 relief:
   features:
-    - {node: barrel, cyl: 5.5, knurl: true, color: '#c9a227'}
+    - {node: barrel, cyl: 5.0, thread: 0.706, color: '#c9a227'}
 connection-points:
   mate: {at: [3.175, 3.175], direction: front}
 skins: [default]
