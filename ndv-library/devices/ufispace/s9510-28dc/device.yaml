@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9510-28dc
-version: 0.8.0
+version: 0.9.0
 manufacturer: UfiSpace
 model: S9510-28DC
 description: UfiSpace S9510-28DC Disaggregated Cell Site Gateway Router - 1RU,
@@ -214,12 +214,12 @@ views:
       - {ref: std/sfp-module@1, id: port-25, at: [399.4, 22.6], group: ports, rel-pos: 25, label: "25", label-at: [7.125, 13.8], label-size: 2.9, label-color: "#17191c", attrs: {media: sfp28, speed: 25g}}
       - {ref: std/sfp-module@1, id: port-26, at: [413.65, 7], group: ports, rel-pos: 26, label: "26", label-at: [7.125, -1.4], label-size: 2.9, label-color: "#17191c", attrs: {media: sfp28, speed: 25g}}
       - {ref: std/sfp-module@1, id: port-27, at: [413.65, 22.6], group: ports, rel-pos: 27, label: "27", label-at: [7.125, 13.8], label-size: 2.9, label-color: "#17191c", attrs: {media: sfp28, speed: 25g}}
-      - {ref: common/sfp-lc-duplex@1, id: optic-4, at: [253.975, 7.95], group: optics, attrs: {populates: port-4}}
-      - {ref: common/sfp-lc-duplex@1, id: optic-6, at: [268.225, 7.95], group: optics, attrs: {populates: port-6}}
-      - {ref: common/sfp-lc-duplex@1, id: optic-8, at: [282.475, 7.95], group: optics, attrs: {populates: port-8}}
-      - {ref: common/sfp-lc-duplex@1, id: optic-10, at: [296.725, 7.95], group: optics, attrs: {populates: port-10}}
-      - {ref: common/sfp-lc-duplex@1, id: optic-12, at: [310.975, 7.95], group: optics, attrs: {populates: port-12}}
-      - {ref: common/sfp-lc-duplex@1, id: optic-14, at: [325.225, 7.95], group: optics, attrs: {populates: port-14}}
+      - {ref: common/sfp-lc-duplex@1, id: optic-4, mate-to: port-4, group: optics}
+      - {ref: common/sfp-lc-duplex@1, id: optic-6, mate-to: port-6, group: optics}
+      - {ref: common/sfp-lc-duplex@1, id: optic-8, mate-to: port-8, group: optics}
+      - {ref: common/sfp-lc-duplex@1, id: optic-10, mate-to: port-10, group: optics}
+      - {ref: common/sfp-lc-duplex@1, id: optic-12, mate-to: port-12, group: optics}
+      - {ref: common/sfp-lc-duplex@1, id: optic-14, mate-to: port-14, group: optics}
     regions:
       - {id: timing, at: [116, 1], size: {w: 36, h: 42}, label: Timing block, members: [gnss-ant, clk-10mhz, clk-1pps, bits, tod]}
       - {id: mgmt-block, at: [151, 1], size: {w: 19, h: 42}, label: Management, members: [mgmt, usb, console]}

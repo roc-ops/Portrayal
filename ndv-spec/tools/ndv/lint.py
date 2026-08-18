@@ -11,6 +11,9 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
   L7 device: region members reference existing instance ids
   L9 component: conforms-declared size matches schemas/standards.yaml
   L10 component: parts resolve, ids unique, no composition cycles (depth <= 4)
+  L11 mating: interface/mates need a `mate` point; a wrapper cannot lose or
+      change the interface of the receptacle it composes
+  L12 device: mate-to resolves, host is a receptacle, and the interfaces match
 """
 import argparse
 import json
@@ -89,6 +92,41 @@ def lint_component(path, validator):
     return data
 
 
+def resolve_component(ref, lib_roots):
+    """Locate a component contract from a `ns/name@major` ref."""
+    nsname, major = ref.rsplit("@", 1)
+    for r in lib_roots:
+        c = Path(r) / "components" / nsname / f"v{major}" / "contract.yaml"
+        if c.exists():
+            return c
+    return None
+
+
+def lint_component_mating(path, data, lib_roots):
+    """L11: mating declarations must be usable and must survive composition."""
+    cps = data.get("connection-points") or {}
+    for key in ("interface", "mates"):
+        if data.get(key) and "mate" not in cps:
+            err(path, "L11", f"{key}: {data[key]!r} declared but no 'mate' "
+                             "connection-point - nothing to align to")
+    # a wrapper may re-present the interface of a receptacle it composes, but it
+    # must not present a DIFFERENT one - a plug would mate with the wrapper and
+    # land on the wrong geometry
+    for part in data.get("parts") or []:
+        found = resolve_component(part["ref"], lib_roots)
+        if not found:
+            continue
+        sub = yaml.safe_load(found.read_text())
+        sub_if = sub.get("interface")
+        if not sub_if:
+            continue
+        # declaring none is fine - a PSU composes an inlet without presenting one
+        # at its own origin. Contradicting it is not.
+        if data.get("interface") and data["interface"] != sub_if:
+            err(path, "L11", f"declares interface {data['interface']!r} but composes "
+                             f"{part['ref']} presenting {sub_if!r}")
+
+
 def lint_component_parts(path, data, lib_roots, depth=0, seen=None):
     seen = seen or set()
     key = f"{data.get('name')}@{data.get('version','')}"
@@ -142,6 +180,38 @@ def _skin_checks(path, data):
     return data
 
 
+def lint_device_mating(path, view_name, view, lib_roots):
+    """L12: mate-to must resolve, and the two sides must agree on the interface."""
+    by_id = {p["id"]: p for p in (view.get("placements") or [])}
+    for p in view.get("placements") or []:
+        target = p.get("mate-to")
+        if not target:
+            continue
+        host = by_id.get(target)
+        if host is None:
+            err(path, "L12", f"{view_name}/{p['id']}: mate-to {target!r} is not a "
+                             "placement in this view")
+            continue
+        if not host.get("at"):
+            err(path, "L12", f"{view_name}/{p['id']}: mate-to {target!r} has no "
+                             "explicit position (occupants cannot host occupants)")
+            continue
+        hp, op = resolve_component(host["ref"], lib_roots), resolve_component(p["ref"], lib_roots)
+        if not hp or not op:
+            continue
+        hc, oc = yaml.safe_load(hp.read_text()), yaml.safe_load(op.read_text())
+        want, have = hc.get("interface"), oc.get("mates")
+        if not have:
+            err(path, "L12", f"{view_name}/{p['id']}: {p['ref']} declares no 'mates', "
+                             "so it cannot occupy anything")
+        if not want:
+            err(path, "L12", f"{view_name}/{p['id']}: host {host['ref']} presents no "
+                             "'interface', so nothing can mate into it")
+        if want and have and want != have:
+            err(path, "L12", f"{view_name}/{p['id']}: {p['ref']} mates {have!r} but "
+                             f"{host['ref']} presents {want!r}")
+
+
 def lint_device(path, validator, lib_roots):
     data = yaml.safe_load(path.read_text())
     for e in validator.iter_errors(data):
@@ -155,6 +225,7 @@ def lint_device(path, validator, lib_roots):
 
     for vname, view in (data.get("views") or {}).items():
         view = view or {}
+        lint_device_mating(path, vname, view, lib_roots)
         seen = set()
         for p in view.get("placements", []) or []:
             check_segment(path, "L2", p["id"])
@@ -211,6 +282,7 @@ def main():
             d = lint_component(f, comp_v)
             _skin_checks(f, d)
             lint_component_parts(f, d, args.library)
+            lint_component_mating(f, d, args.library)
             n += 1
         for f in sorted(root.glob("devices/**/device.yaml")):
             lint_device(f, dev_v, args.library); n += 1

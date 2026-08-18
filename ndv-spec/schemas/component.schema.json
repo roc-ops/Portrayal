@@ -40,6 +40,14 @@
       "$ref": "#/$defs/segment",
       "description": "standards-registry key; size is lint-enforced against schemas/standards.yaml"
     },
+    "interface": {
+      "$ref": "#/$defs/segment",
+      "description": "this component IS a receptacle presenting this mating interface, e.g. sfp, qsfp, rj45, iec-c14. Occupants declare the same key via `mates`. Deliberately not an enum - a new interface is a new key, not a schema change."
+    },
+    "mates": {
+      "$ref": "#/$defs/segment",
+      "description": "this component mates INTO a receptacle presenting this interface. Requires a `mate` connection-point, which is what aligns it to its host."
+    },
     "body": {
       "type": "object",
       "additionalProperties": false,

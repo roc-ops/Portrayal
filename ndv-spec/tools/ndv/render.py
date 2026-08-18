@@ -383,7 +383,25 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         r.set("pointer-events", "all")
 
     extents = [0.0, 0.0, w, h]
+    # resolve mate-to before drawing: an occupant is positioned so its `mate`
+    # connection-point lands on its host's, which is what keeps centring offsets
+    # out of device manifests entirely
+    hosts = {q["id"]: q for q in (view.get("placements") or []) if q.get("at")}
     for p in view.get("placements", []) or []:
+        if p.get("mate-to") and not p.get("at"):
+            host = hosts.get(p["mate-to"])
+            if host is None:
+                raise ValueError(f"{p['id']}: mate-to {p['mate-to']!r} is not a "
+                                 "placement with an explicit position in this view")
+            hc, _ = lib.resolve(host["ref"])
+            oc, _ = lib.resolve(p["ref"])
+            hm = (hc.get("connection-points") or {}).get("mate")
+            om = (oc.get("connection-points") or {}).get("mate")
+            if hm is None or om is None:
+                raise ValueError(f"{p['id']}: mate-to needs a 'mate' connection-point "
+                                 f"on both {p['ref']} and {host['ref']}")
+            p = dict(p, at=[round(host["at"][0] + hm["at"][0] - om["at"][0], 4),
+                            round(host["at"][1] + hm["at"][1] - om["at"][1], 4)])
         if p.get("optional") and p["optional"] not in include:
             continue
         g, contract = instance_group(lib, p["ref"], p["id"], p["at"],

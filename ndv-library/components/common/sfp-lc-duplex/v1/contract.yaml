@@ -1,8 +1,9 @@
 format: 1
 kind: component
 name: sfp-lc-duplex
-version: 1.2.0
+version: 1.3.0
 class: transceiver
+mates: sfp
 profile: networking
 description: SFP transceiver with an LC duplex face - two recessed bores with the
   fibre ferrules standing in them, and a bail latch that pivots to release
@@ -30,5 +31,7 @@ relief:
     - {node: body, out: 13.9, color: '#6e747c'}
     - {node: bail, lift: 13.9, out: 14.3, color: '#2f5fa8'}
 connection-points:
+  # mate is the module centre - what lands on the port's mate point
+  mate: {at: [6.75, 4.25], direction: front}
   optical: {at: [6.75, 4.25], direction: front}
 skins: [default]
