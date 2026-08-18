@@ -194,8 +194,12 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                 if feat.get("thread"):
                     node.set("data-z-thread", str(feat["thread"]))
                 # bezel plates ('out') paint over composed parts: raise direct
-                # children to the end of the instance group
-                if any(feat.get(k) is not None for k in ("out", "cyl", "bar", "uhandle", "dome")) and node in list(g):
+                # children to the end of the instance group. Only when there ARE
+                # composed parts - otherwise this reorders the skin's own draw
+                # order and a raised base plate paints over its own detail.
+                if contract.get("parts") \
+                        and any(feat.get(k) is not None for k in ("out", "cyl", "bar", "uhandle", "dome")) \
+                        and node in list(g):
                     g.remove(node)
                     g.append(node)
                 break

@@ -1,0 +1,34 @@
+format: 1
+kind: component
+name: sfp-lc-duplex
+version: 1.0.0
+class: transceiver
+profile: networking
+description: SFP transceiver with an LC duplex face - the module as seen plugged
+  into a cage, bail latched flat against the front
+size: {w: 13.5, h: 8.5}
+attrs: {media: sfp, form-factor: sfp, connector: lc-duplex, mode: single-mode,
+        reach: 30km, speed: 100m}
+provenance:
+  size: drawing (SFP-30K-FSF, AutomationDirect, full scale - 0.53 in [13.5] wide by
+    0.33 in [8.5] high), confirmed by the STEP solid at 13.46 x 8.48
+  lc-spacing: measured (STEP front face - bore centres at x +/-3.175, i.e. 0.125 in
+    each side of centre, so 6.35 apart)
+  length: drawing (2.18 in [55.4] overall; 0.49 in [12.3] is the face height with the
+    bail extended, which is why the module reads taller than 8.5 when unlatched)
+  protrusion: derived (55.4 module length less the ~41.5 bezel-to-connector measured
+    on the TE 2007562-6 cage, so ~13.9 stands proud of the faceplate)
+  bore-size: proportional, NOT dimensioned - the drawing gives the LC spacing but
+    not the receptacle opening
+  bail-colour: convention (blue commonly marks single-mode); the drawing is
+    monochrome and states only "SFP MODULE 100MB 30km SINGLE-MODE"
+elements:
+  lc-a: {at: [1.275, 2.05], size: [4.6, 4.4], class: optical-port}
+  lc-b: {at: [7.625, 2.05], size: [4.6, 4.4], class: optical-port}
+relief:
+  features:
+    - {node: body, out: 13.9, color: '#6e747c'}
+    - {node: bail, out: 14.3, color: '#2f5fa8'}
+connection-points:
+  optical: {at: [6.75, 4.25], direction: front}
+skins: [default]
