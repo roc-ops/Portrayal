@@ -1,11 +1,11 @@
 format: 1
 kind: component
 name: sfp-lc-duplex
-version: 1.1.0
+version: 1.2.0
 class: transceiver
 profile: networking
-description: SFP transceiver with an LC duplex face - the module as seen plugged
-  into a cage, bail latched flat against the front
+description: SFP transceiver with an LC duplex face - two recessed bores with the
+  fibre ferrules standing in them, and a bail latch that pivots to release
 size: {w: 13.5, h: 8.5}
 attrs: {media: sfp, form-factor: sfp, connector: lc-duplex, mode: single-mode,
         reach: 30km, speed: 100m}
@@ -18,13 +18,13 @@ provenance:
     bail extended, which is why the module reads taller than 8.5 when unlatched)
   protrusion: derived (55.4 module length less the ~41.5 bezel-to-connector measured
     on the TE 2007562-6 cage, so ~13.9 stands proud of the faceplate)
-  bore-size: proportional, NOT dimensioned - the drawing gives the LC spacing but
-    not the receptacle opening
   bail-colour: convention (blue commonly marks single-mode); the drawing is
     monochrome and states only "SFP MODULE 100MB 30km SINGLE-MODE"
-elements:
-  lc-a: {at: [1.275, 2.05], size: [4.6, 4.4], class: optical-port}
-  lc-b: {at: [7.625, 2.05], size: [4.6, 4.4], class: optical-port}
+parts:
+  # lifted to the module front: these recess from the transceiver face, which is
+  # 13.9 proud of the panel, not from the panel itself
+  - {ref: std/lc-bore@1, id: lc-a, at: [1.275, 2.05], lift: 13.9}
+  - {ref: std/lc-bore@1, id: lc-b, at: [7.625, 2.05], lift: 13.9}
 relief:
   features:
     - {node: body, out: 13.9, color: '#6e747c'}

@@ -1,0 +1,26 @@
+format: 1
+kind: component
+name: lc-bore
+version: 1.0.0
+class: port
+profile: networking
+description: One LC receptacle bore - a square recess with the fibre ferrule
+  standing in it, as seen looking into an LC port
+size: {w: 4.6, h: 4.4, d: 4.5}
+attrs: {media: fiber, connector: lc}
+provenance:
+  ferrule: standard (LC uses a 1.25mm ferrule; SC and FC use 2.5mm)
+  size: proportional - no spec we hold dimensions the receptacle opening, only
+    the ferrule and, on SFP-30K-FSF, the 6.35 spacing between bores
+  depth: estimated (recess deep enough that the ferrule face sits below the
+    surrounding surface, which is what you see looking into a real LC port)
+elements:
+  bore: {at: [0.0, 0.0], size: [4.6, 4.4], class: cutout}
+relief:
+  wall: '#4a4f55'
+  cavity: bore
+  features:
+    - {node: ferrule, top: 3.6, color: '#e8ecef'}
+connection-points:
+  optical: {at: [2.3, 2.2], direction: front}
+skins: [default]

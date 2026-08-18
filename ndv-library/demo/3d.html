@@ -147,6 +147,7 @@ async function extractRelief(url) {
         color: f.dataset.zColor || '#0a0c0e',
       }));
       return {...rect, owner: ownerOf(el), d: +el.dataset.depth, wall: el.dataset.wall || '#a7adb4',
+              lift: +(el.dataset.zLift || 0),
               round: !!el.dataset.round, cavSvg: nodeSvg(cavNode || el, rect),
               grpRect, grpSvg: nodeSvg(el, grpRect), features};
     });
@@ -357,11 +358,15 @@ async function build(cfg) {
         else { fctx.fillStyle = '#0d0f11'; fctx.fillRect(...px); }
       }
       // shape-accurate punch: the cavity node's own art defines the hole
-      const pctx = cv.getContext('2d');
-      pctx.globalCompositeOperation = 'destination-out';
-      pctx.drawImage(await rasterize(c.cavSvg, c.w, c.h),
-                     Math.round(c.x * PXMM), Math.round(c.y * PXMM));
-      pctx.globalCompositeOperation = 'source-over';
+      if (!c.lift) {   // a lifted cavity recesses from a raised part, so the
+        // chassis face beneath it is already covered - punching it would leave
+        // a hole straight through the faceplate
+        const pctx = cv.getContext('2d');
+        pctx.globalCompositeOperation = 'destination-out';
+        pctx.drawImage(await rasterize(c.cavSvg, c.w, c.h),
+                       Math.round(c.x * PXMM), Math.round(c.y * PXMM));
+        pctx.globalCompositeOperation = 'source-over';
+      }
       // walls are double-sided: the interior is the recess, and the exterior is
       // the cage/housing body seen through neighboring vent holes. The back face
       // is a separate dark exterior; the textured floor plane sits just inside it
@@ -379,17 +384,17 @@ async function build(cfg) {
         walls = new THREE.Mesh(new THREE.BoxGeometry(c.w, c.h, d),
           [wallMat, wallMat, wallMat, wallMat, noFace, noFace]);
       }
-      walls.position.set(LX(c.x, c.w), LY(c.y, c.h), -d / 2);
+      walls.position.set(LX(c.x, c.w), LY(c.y, c.h), c.lift - d / 2);
       addTo(walls);
       // textured floor: the aperture art, pushed to the back of the recess
       const floor = new THREE.Mesh(new THREE.PlaneGeometry(c.w, c.h),
         new THREE.MeshBasicMaterial({map: canvasTex(floorCv), transparent: true, alphaTest: 0.1}));
-      floor.position.set(LX(c.x, c.w), LY(c.y, c.h), -(d - 0.1));
+      floor.position.set(LX(c.x, c.w), LY(c.y, c.h), c.lift - (d - 0.1));
       addTo(floor);
       // closed exterior back, deep enough to clear any sink pockets
       const maxSink = Math.max(0, ...c.features.filter(f => f.kind === 'sink').map(f => f.val));
       const back = new THREE.Mesh(new THREE.PlaneGeometry(c.w, c.h), backMat);
-      back.position.set(LX(c.x, c.w), LY(c.y, c.h), -(d + maxSink + 0.15));
+      back.position.set(LX(c.x, c.w), LY(c.y, c.h), c.lift - (d + maxSink + 0.15));
       addTo(back);
       for (const ft of c.features) {
         if (ft.kind === 'top') {
@@ -397,7 +402,7 @@ async function build(cfg) {
           const mats = sideMats(ft.color);
           mats[4] = new THREE.MeshBasicMaterial({map: canvasTex(ft.faceCv)});
           const m = new THREE.Mesh(new THREE.BoxGeometry(ft.w, ft.h, hgt), mats);
-          m.position.set(LX(ft.x, ft.w), LY(ft.y, ft.h), -(d - hgt / 2));
+          m.position.set(LX(ft.x, ft.w), LY(ft.y, ft.h), c.lift - (d - hgt / 2));
           addTo(m);
         } else {   // sink: a deeper pocket beyond the floor
           const m = new THREE.Mesh(new THREE.BoxGeometry(ft.w, ft.h, ft.val),

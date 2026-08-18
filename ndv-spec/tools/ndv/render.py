@@ -179,6 +179,9 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                                rotate=part.get("rotate"), palette=palette,
                                skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                                path=f"{path}/{part['id']}", resolved=resolved)
+        # a part on a protruding parent recesses from THAT surface, not the panel
+        if part.get("lift"):
+            pg.set("data-z-lift", str(part["lift"]))
         g.append(pg)
     for feat in (contract.get("relief") or {}).get("features") or []:
         want = f"{inst_id}--{feat['node']}"
