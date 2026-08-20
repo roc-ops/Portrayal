@@ -25,7 +25,16 @@
 <iframe id="frame" src="interactive.html"></iframe>
 <script>
 let DEV = 'as7726-32x';
-function nav(src) { document.getElementById('frame').src = `${src}?device=${DEV}`; }
+// Build stamp appended to every iframe URL. A hard refresh bypasses the cache for
+// the document it reloads, but this shell navigates the iframe from JS afterwards,
+// and that is a fresh navigation which goes through the normal HTTP cache - so a
+// stale 3d.html survived reload after reload. Versioning the URL makes each deploy
+// a distinct cache key. Data fetches already use cache:'no-store'.
+let VER = '';
+function nav(src) {
+  const q = `${src}?device=${DEV}` + (VER ? `&v=${VER}` : '');
+  document.getElementById('frame').src = q;
+}
 document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   document.querySelectorAll('nav button').forEach(x => x.classList.remove('active'));
   b.classList.add('active');
@@ -33,7 +42,10 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
 });
 (async () => {
   const sel = document.getElementById('dev');
-  const d = await (await fetch('../dist/devices.json')).json();
+  const res = await fetch('../dist/devices.json', {cache: 'no-store'});
+  // Last-Modified changes on every deploy, so it works as a build stamp for free
+  VER = (res.headers.get('Last-Modified') || '').replace(/\W/g, '');
+  const d = await res.json();
   d.devices.forEach(x => {
     const o = document.createElement('option');
     o.value = x.name; o.textContent = x.model;
