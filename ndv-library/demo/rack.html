@@ -121,26 +121,51 @@ function labelSprite(text, px = 34, color = '#8d939a') {
 function buildRack(heightRU) {
   const g = new THREE.Group();
   const H = heightRU * RU;
-  const postMat = new THREE.MeshLambertMaterial({color: 0x4a5057});
+  // cage-nut bar is bright zinc-plated steel, not the dark grey it had
+  const railMat = new THREE.MeshLambertMaterial({color: 0xc3c8ce});
   const holeMat = new THREE.MeshBasicMaterial({color: 0x15181b});
+  const earMat = new THREE.MeshLambertMaterial({color: 0xd6dade});
+  const screwMat = new THREE.MeshLambertMaterial({color: 0x8d949c});
   for (const side of [-1, 1]) {
-    const post = new THREE.Mesh(new THREE.BoxGeometry(16, H, 34), postMat);
-    post.position.set(side * (RACK_W / 2 - 8), H / 2, -6);
+    const x = side * (RACK_W / 2 - 8);
+    const post = new THREE.Mesh(new THREE.BoxGeometry(16, H, 34), railMat);
+    post.position.set(x, H / 2, -6);
     g.add(post);
     // three mounting holes per U, on the EIA-310 0.5/0.625/0.625in spacing
     for (let u = 0; u < heightRU; u++) {
       for (const dy of [6.35, 22.22, 38.10]) {
-        const h = new THREE.Mesh(new THREE.BoxGeometry(6, 6, 1), holeMat);
-        h.position.set(side * (RACK_W / 2 - 8), u * RU + dy, 11.3);
+        const h = new THREE.Mesh(new THREE.BoxGeometry(6.5, 6.5, 1), holeMat);
+        h.position.set(x, u * RU + dy, 11.3);
         g.add(h);
       }
     }
   }
-  // U numbering up the left rail, counted from the bottom as racks are
-  for (let u = 1; u <= heightRU; u++) {
-    const s = labelSprite(String(u), 30, u % 5 === 0 ? '#c9cdd1' : '#6b7178');
-    s.position.set(-(RACK_W / 2 + 40), (u - 1) * RU + RU / 2, 12);
-    g.add(s);
+  g.userData = {railMat, earMat, screwMat};
+  return g;
+}
+
+// A 1U device is held by an ear each side, each taking two screws into the top
+// and bottom holes of its U. Drawn as geometry rather than face art because the
+// ears stand proud of the faceplate and the screws proud of the ears.
+function rackEars(rack, ru, faceZ) {
+  const g = new THREE.Group();
+  const {earMat, screwMat} = rack.userData;
+  const yBase = (ru - 1) * RU;
+  for (const side of [-1, 1]) {
+    const x = side * (RACK_W / 2 - 12);
+    const ear = new THREE.Mesh(new THREE.BoxGeometry(24, RU - 4.5, 3), earMat);
+    ear.position.set(x, yBase + RU / 2, faceZ + 1.5);
+    g.add(ear);
+    for (const dy of [6.35, 38.10]) {
+      const head = new THREE.Mesh(new THREE.CylinderGeometry(2.6, 2.6, 2.2, 14), screwMat);
+      head.rotation.x = Math.PI / 2;
+      head.position.set(x, yBase + dy, faceZ + 4.1);
+      g.add(head);
+      const slot = new THREE.Mesh(new THREE.BoxGeometry(3.6, 0.8, 0.6),
+        new THREE.MeshBasicMaterial({color: 0x4a5057}));
+      slot.position.set(x, yBase + dy, faceZ + 5.3);
+      g.add(slot);
+    }
   }
   return g;
 }
@@ -309,7 +334,8 @@ function cable(a, b, colour, striped, lateral, sag, flow) {
 
   const root = new THREE.Group();
   scene.add(root);
-  root.add(buildRack(lab.rack['height-ru']));
+  const rack = buildRack(lab.rack['height-ru']);
+  root.add(rack);
 
   hud('building devices…');
   const placed = {};
@@ -317,6 +343,7 @@ function cable(a, b, colour, striped, lateral, sag, flow) {
     const d = await buildDevice(entry, byName);
     if (!d) continue;
     root.add(d.mesh); root.add(d.tag);
+    root.add(rackEars(rack, entry.ru, d.mesh.position.z + d.D / 2));
     placed[entry.id] = d;
   }
 
