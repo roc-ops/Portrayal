@@ -1,0 +1,103 @@
+format: 1
+kind: device
+name: dcp-r-9d-cs
+version: 0.1.0
+manufacturer: Smartoptics
+model: DCP-R-9D-CS
+description: >-
+  40-channel colourless/directionless ROADM line unit, 1RU. Two rows of LC
+  duplex adapters carrying channels 921-960 plus Line, 1510 OSC filter and
+  cross-connects XC1-XC4, with ETH0 and RS232 management.
+profile: optical
+references:
+  - title: Smartoptics DCP-R User Manual 14.0_A
+  - title: Smartoptics DCP-R Visio stencil DCP-R_v260105.vssx (master r-9d)
+provenance:
+  chassis: manual DIMENSIONS (DCP-R) - 440mm (W) x 45mm (H) x 505mm (D), 1 RU
+  port-positions: stencil ShapeSheet connection points, which Visio stores as
+    fractions of shape width/height and therefore survive without the drawing
+    scale. Resolved against the 19-inch rack width the master is drawn at.
+  port-pairing: each LC duplex adapter carries two connection points about
+    6.6mm apart, one per fibre; adapters recovered by pairing those
+  column-grid: top and bottom rows agreed across all 23 columns, so one
+    averaged grid is used and the drawing jitter discarded
+  y-scale: this master is drawn 46.0mm tall against a 45mm chassis, so y was
+    scaled by 45/46.0. The 34D master needed no such correction - a reminder
+    that masters in one stencil are not all drawn to the same scale
+  channel-plan: silkscreen - channels alternate in pairs between rows, 921/922
+    top then 923/924 bottom, continuing to 960
+attrs:
+  channels: 40
+  form-factor: 1RU
+chassis: {width: 440, height: 45, depth: 505, ru: 1}
+views:
+  front:
+    size: {w: 440, h: 45}
+    placements:
+      - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.75], skin: left, optional: ears}
+      - {ref: common/rack-ear@1, id: ear-right, at: [440, 0.75], skin: right, optional: ears}
+      - {ref: common/rj45-shielded@1, id: eth0, at: [9.6, 10.2], attrs: {role: mgmt, speed: 1000base-t}}
+      - {ref: common/rj45-shielded@1, id: rs232, at: [10.8, 24.7], attrs: {role: console, media: rj45-serial}}
+      - {ref: common/lc-duplex-adapter@1, id: port-osc, at: [31.65, 26.2], label: "OSC", label-at: [6.6, 13.3], label-anchor: middle, label-size: 1.4, attrs: {media: fiber, role: osc}}
+      - {ref: common/led-dot@1, id: led-osc-tx, at: [33.9, 21.4], attrs: {function: osc-tx}}
+      - {ref: common/led-dot@1, id: led-osc-rx, at: [39.7, 21.4], attrs: {function: osc-rx}}
+      - {ref: common/led-dot@1, id: led-power, at: [53.2, 34.5], attrs: {function: power}}
+      - {ref: common/led-dot@1, id: led-status, at: [58.8, 34.5], attrs: {function: status}}
+      - {ref: common/lc-duplex-adapter@1, id: port-xc1, at: [68.93, 10.84], label: "XC1", label-at: [6.6, -1.5], label-anchor: middle, label-size: 1.4, group: row-top, attrs: {media: fiber, role: cross-connect}}
+      - {ref: common/lc-duplex-adapter@1, id: port-xc2, at: [82.37, 10.84], label: "XC2", label-at: [6.6, -1.5], label-anchor: middle, label-size: 1.4, group: row-top, attrs: {media: fiber, role: cross-connect}}
+      - {ref: common/lc-duplex-adapter@1, id: port-line, at: [99.27, 10.84], label: "Line", label-at: [6.6, -1.5], label-anchor: middle, label-size: 1.4, group: row-top, attrs: {media: fiber, role: line}}
+      - {ref: common/lc-duplex-adapter@1, id: port-921, at: [116.35, 10.84], label: "921", label-at: [6.6, -1.5], label-anchor: middle, label-size: 1.4, group: row-top, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-922, at: [129.61, 10.84], label: "922", label-at: [6.6, -1.5], label-anchor: middle, label-size: 1.4, group: row-top, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-925, at: [146.59, 10.84], label: "925", label-at: [6.6, -1.5], label-anchor: middle, label-size: 1.4, group: row-top, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-926, at: [160.14, 10.84], label: "926", label-at: [6.6, -1.5], label-anchor: middle, label-size: 1.4, group: row-top, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-929, at: [177.22, 10.84], label: "929", label-at: [6.6, -1.5], label-anchor: middle, label-size: 1.4, group: row-top, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-930, at: [190.63, 10.84], label: "930", label-at: [6.6, -1.5], label-anchor: middle, label-size: 1.4, group: row-top, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-933, at: [207.5, 10.84], label: "933", label-at: [6.6, -1.5], label-anchor: middle, label-size: 1.4, group: row-top, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-934, at: [220.98, 10.84], label: "934", label-at: [6.6, -1.5], label-anchor: middle, label-size: 1.4, group: row-top, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-937, at: [238.14, 10.84], label: "937", label-at: [6.6, -1.5], label-anchor: middle, label-size: 1.4, group: row-top, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-938, at: [251.4, 10.84], label: "938", label-at: [6.6, -1.5], label-anchor: middle, label-size: 1.4, group: row-top, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-941, at: [279.46, 10.84], label: "941", label-at: [6.6, -1.5], label-anchor: middle, label-size: 1.4, group: row-top, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-942, at: [292.72, 10.84], label: "942", label-at: [6.6, -1.5], label-anchor: middle, label-size: 1.4, group: row-top, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-945, at: [309.7, 10.84], label: "945", label-at: [6.6, -1.5], label-anchor: middle, label-size: 1.4, group: row-top, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-946, at: [323.11, 10.84], label: "946", label-at: [6.6, -1.5], label-anchor: middle, label-size: 1.4, group: row-top, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-949, at: [340.16, 10.84], label: "949", label-at: [6.6, -1.5], label-anchor: middle, label-size: 1.4, group: row-top, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-950, at: [353.61, 10.84], label: "950", label-at: [6.6, -1.5], label-anchor: middle, label-size: 1.4, group: row-top, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-953, at: [370.54, 10.84], label: "953", label-at: [6.6, -1.5], label-anchor: middle, label-size: 1.4, group: row-top, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-954, at: [383.91, 10.84], label: "954", label-at: [6.6, -1.5], label-anchor: middle, label-size: 1.4, group: row-top, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-957, at: [401.25, 10.84], label: "957", label-at: [6.6, -1.5], label-anchor: middle, label-size: 1.4, group: row-top, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-958, at: [414.48, 10.84], label: "958", label-at: [6.6, -1.5], label-anchor: middle, label-size: 1.4, group: row-top, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-1510, at: [68.93, 21.89], label: "1510", label-at: [6.6, 13.3], label-anchor: middle, label-size: 1.4, group: row-bottom, attrs: {media: fiber, role: osc-filter}}
+      - {ref: common/lc-duplex-adapter@1, id: port-xc3, at: [82.37, 21.89], label: "XC3", label-at: [6.6, 13.3], label-anchor: middle, label-size: 1.4, group: row-bottom, attrs: {media: fiber, role: cross-connect}}
+      - {ref: common/lc-duplex-adapter@1, id: port-xc4, at: [99.27, 21.89], label: "XC4", label-at: [6.6, 13.3], label-anchor: middle, label-size: 1.4, group: row-bottom, attrs: {media: fiber, role: cross-connect}}
+      - {ref: common/lc-duplex-adapter@1, id: port-923, at: [116.35, 21.89], label: "923", label-at: [6.6, 13.3], label-anchor: middle, label-size: 1.4, group: row-bottom, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-924, at: [129.61, 21.89], label: "924", label-at: [6.6, 13.3], label-anchor: middle, label-size: 1.4, group: row-bottom, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-927, at: [146.59, 21.89], label: "927", label-at: [6.6, 13.3], label-anchor: middle, label-size: 1.4, group: row-bottom, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-928, at: [160.14, 21.89], label: "928", label-at: [6.6, 13.3], label-anchor: middle, label-size: 1.4, group: row-bottom, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-931, at: [177.22, 21.89], label: "931", label-at: [6.6, 13.3], label-anchor: middle, label-size: 1.4, group: row-bottom, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-932, at: [190.63, 21.89], label: "932", label-at: [6.6, 13.3], label-anchor: middle, label-size: 1.4, group: row-bottom, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-935, at: [207.5, 21.89], label: "935", label-at: [6.6, 13.3], label-anchor: middle, label-size: 1.4, group: row-bottom, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-936, at: [220.98, 21.89], label: "936", label-at: [6.6, 13.3], label-anchor: middle, label-size: 1.4, group: row-bottom, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-939, at: [238.14, 21.89], label: "939", label-at: [6.6, 13.3], label-anchor: middle, label-size: 1.4, group: row-bottom, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-940, at: [251.4, 21.89], label: "940", label-at: [6.6, 13.3], label-anchor: middle, label-size: 1.4, group: row-bottom, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-943, at: [279.46, 21.89], label: "943", label-at: [6.6, 13.3], label-anchor: middle, label-size: 1.4, group: row-bottom, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-944, at: [292.72, 21.89], label: "944", label-at: [6.6, 13.3], label-anchor: middle, label-size: 1.4, group: row-bottom, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-947, at: [309.7, 21.89], label: "947", label-at: [6.6, 13.3], label-anchor: middle, label-size: 1.4, group: row-bottom, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-948, at: [323.11, 21.89], label: "948", label-at: [6.6, 13.3], label-anchor: middle, label-size: 1.4, group: row-bottom, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-951, at: [340.16, 21.89], label: "951", label-at: [6.6, 13.3], label-anchor: middle, label-size: 1.4, group: row-bottom, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-952, at: [353.61, 21.89], label: "952", label-at: [6.6, 13.3], label-anchor: middle, label-size: 1.4, group: row-bottom, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-955, at: [370.54, 21.89], label: "955", label-at: [6.6, 13.3], label-anchor: middle, label-size: 1.4, group: row-bottom, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-956, at: [383.91, 21.89], label: "956", label-at: [6.6, 13.3], label-anchor: middle, label-size: 1.4, group: row-bottom, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-959, at: [401.25, 21.89], label: "959", label-at: [6.6, 13.3], label-anchor: middle, label-size: 1.4, group: row-bottom, attrs: {media: fiber, role: channel}}
+      - {ref: common/lc-duplex-adapter@1, id: port-960, at: [414.48, 21.89], label: "960", label-at: [6.6, 13.3], label-anchor: middle, label-size: 1.4, group: row-bottom, attrs: {media: fiber, role: channel}}
+    decor:
+      - {at: [30, 8.6], size: [20, 10], pattern: vent, vent: 5}
+      - {at: [268, 13.5], size: [6, 18], pattern: vent, vent: 4}
+      - {at: [430, 12.5], size: [7, 19], pattern: vent, vent: 5}
+      - {text: smartoptics, at: [22, 6.2], font-size: 3.2, fill: '#e8ecef'}
+      - {text: DCP-R-9D-CS, at: [64, 6.0], font-size: 2.8, fill: '#e8ecef'}
+      - {text: ETH0, at: [6.2, 16.4], font-size: 2.1, fill: '#c9cdd1', anchor: middle, rotate: -90}
+      - {text: RS232, at: [7.4, 31.0], font-size: 2.1, fill: '#c9cdd1', anchor: middle, rotate: -90}
+      - {text: Tx, at: [30.6, 23.2], font-size: 1.9, fill: '#c9cdd1'}
+      - {text: Rx, at: [42.6, 23.2], font-size: 1.9, fill: '#c9cdd1'}
+      - {text: Power, at: [54.2, 33.7], font-size: 1.9, fill: '#c9cdd1', anchor: middle}
+      - {text: Status, at: [59.8, 33.7], font-size: 1.9, fill: '#c9cdd1', anchor: middle}

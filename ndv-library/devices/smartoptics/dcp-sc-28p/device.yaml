@@ -1,0 +1,81 @@
+format: 1
+kind: device
+name: dcp-sc-28p
+version: 0.1.0
+manufacturer: Smartoptics
+model: DCP-SC-28P
+description: >-
+  28-port service channel unit, 1RU. Twenty-four RJ45 service ports in two
+  rows flanking four LC duplex ports, plus a PROBE port, with ETH0 and RS232
+  management.
+profile: optical
+references:
+  - title: Smartoptics DCP-SC-28P User Manual R14.0_A
+  - title: Smartoptics DCP-R Visio stencil DCP-R_v260105.vssx (master sc-28p)
+provenance:
+  chassis: DCP-SC-28P User Manual - unit height is 1U (1.77 in); width and depth
+    taken from the DCP-R chassis the family shares (440 x 505mm)
+  port-positions: stencil ShapeSheet connection points, stored by Visio as
+    fractions of shape width/height and resolved against the 19-inch rack width
+  port-count: the recovered layout confirms the model name - 24 RJ45 on a
+    14.3mm column pitch plus 4 LC duplex, i.e. 28 ports, and a separate PROBE
+  port-identification: RJ45 columns carry one connection point per port; the LC
+    columns carry two about 6.4mm apart, one per fibre, which is what
+    distinguishes them
+  column-pitch: raw connection points jitter between 13.85 and 14.80mm, which
+    put ports 7/9 and 8/10 into a 0.15mm overlap that lint L13 caught. Each RJ45
+    group is therefore fitted to a uniform pitch across its span - 14.32mm left,
+    14.34mm right - and the drawing jitter discarded
+  connector-choice: rj45-hd (14.0mm) is used rather than rj45-shielded (15.8mm)
+    because the measured 14.3mm column pitch cannot accommodate the latter
+attrs:
+  ports: 28
+  form-factor: 1RU
+chassis: {width: 440, height: 45, depth: 505, ru: 1}
+views:
+  front:
+    size: {w: 440, h: 45}
+    placements:
+      - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.75], skin: left, optional: ears}
+      - {ref: common/rack-ear@1, id: ear-right, at: [440, 0.75], skin: right, optional: ears}
+      - {ref: common/rj45-shielded@1, id: eth0, at: [9.6, 12.4], attrs: {role: mgmt, speed: 1000base-t}}
+      - {ref: common/rj45-shielded@1, id: rs232, at: [9.6, 26.9], attrs: {role: console, media: rj45-serial}}
+      - {ref: common/led-dot@1, id: led-power, at: [30.2, 33.6], attrs: {function: power}}
+      - {ref: common/led-dot@1, id: led-status, at: [36.4, 33.6], attrs: {function: status}}
+      - {ref: common/sfp-plus-cage@2, id: port-probe, at: [395.2, 29.1], label: "29. PROBE", label-at: [8, -2.2], label-anchor: middle, label-size: 1.6, attrs: {media: sfp-plus, role: probe}}
+      - {ref: common/rj45-hd@1, id: port-1, at: [58.6, 12.7], label: "1", label-at: [7, -1.6], label-anchor: middle, label-size: 1.6, group: row-top, attrs: {media: rj45, role: service}}
+      - {ref: common/rj45-hd@1, id: port-3, at: [72.92, 12.7], label: "3", label-at: [7, -1.6], label-anchor: middle, label-size: 1.6, group: row-top, attrs: {media: rj45, role: service}}
+      - {ref: common/rj45-hd@1, id: port-5, at: [87.24, 12.7], label: "5", label-at: [7, -1.6], label-anchor: middle, label-size: 1.6, group: row-top, attrs: {media: rj45, role: service}}
+      - {ref: common/rj45-hd@1, id: port-7, at: [101.56, 12.7], label: "7", label-at: [7, -1.6], label-anchor: middle, label-size: 1.6, group: row-top, attrs: {media: rj45, role: service}}
+      - {ref: common/rj45-hd@1, id: port-9, at: [115.88, 12.7], label: "9", label-at: [7, -1.6], label-anchor: middle, label-size: 1.6, group: row-top, attrs: {media: rj45, role: service}}
+      - {ref: common/rj45-hd@1, id: port-11, at: [130.2, 12.7], label: "11", label-at: [7, -1.6], label-anchor: middle, label-size: 1.6, group: row-top, attrs: {media: rj45, role: service}}
+      - {ref: common/lc-duplex-adapter@1, id: port-13, at: [150.43, 13.2], label: "13", label-at: [6.6, -1.6], label-anchor: middle, label-size: 1.6, group: row-top, attrs: {media: fiber, role: service}}
+      - {ref: common/lc-duplex-adapter@1, id: port-15, at: [165.22, 13.2], label: "15", label-at: [6.6, -1.6], label-anchor: middle, label-size: 1.6, group: row-top, attrs: {media: fiber, role: service}}
+      - {ref: common/rj45-hd@1, id: port-17, at: [184.6, 12.7], label: "17", label-at: [7, -1.6], label-anchor: middle, label-size: 1.6, group: row-top, attrs: {media: rj45, role: service}}
+      - {ref: common/rj45-hd@1, id: port-19, at: [198.94, 12.7], label: "19", label-at: [7, -1.6], label-anchor: middle, label-size: 1.6, group: row-top, attrs: {media: rj45, role: service}}
+      - {ref: common/rj45-hd@1, id: port-21, at: [213.28, 12.7], label: "21", label-at: [7, -1.6], label-anchor: middle, label-size: 1.6, group: row-top, attrs: {media: rj45, role: service}}
+      - {ref: common/rj45-hd@1, id: port-23, at: [227.62, 12.7], label: "23", label-at: [7, -1.6], label-anchor: middle, label-size: 1.6, group: row-top, attrs: {media: rj45, role: service}}
+      - {ref: common/rj45-hd@1, id: port-25, at: [241.96, 12.7], label: "25", label-at: [7, -1.6], label-anchor: middle, label-size: 1.6, group: row-top, attrs: {media: rj45, role: service}}
+      - {ref: common/rj45-hd@1, id: port-27, at: [256.3, 12.7], label: "27", label-at: [7, -1.6], label-anchor: middle, label-size: 1.6, group: row-top, attrs: {media: rj45, role: service}}
+      - {ref: common/rj45-hd@1, id: port-2, at: [58.6, 25.3], label: "2", label-at: [7, 13.9], label-anchor: middle, label-size: 1.6, group: row-bottom, attrs: {media: rj45, role: service}}
+      - {ref: common/rj45-hd@1, id: port-4, at: [72.92, 25.3], label: "4", label-at: [7, 13.9], label-anchor: middle, label-size: 1.6, group: row-bottom, attrs: {media: rj45, role: service}}
+      - {ref: common/rj45-hd@1, id: port-6, at: [87.24, 25.3], label: "6", label-at: [7, 13.9], label-anchor: middle, label-size: 1.6, group: row-bottom, attrs: {media: rj45, role: service}}
+      - {ref: common/rj45-hd@1, id: port-8, at: [101.56, 25.3], label: "8", label-at: [7, 13.9], label-anchor: middle, label-size: 1.6, group: row-bottom, attrs: {media: rj45, role: service}}
+      - {ref: common/rj45-hd@1, id: port-10, at: [115.88, 25.3], label: "10", label-at: [7, 13.9], label-anchor: middle, label-size: 1.6, group: row-bottom, attrs: {media: rj45, role: service}}
+      - {ref: common/rj45-hd@1, id: port-12, at: [130.2, 25.3], label: "12", label-at: [7, 13.9], label-anchor: middle, label-size: 1.6, group: row-bottom, attrs: {media: rj45, role: service}}
+      - {ref: common/lc-duplex-adapter@1, id: port-14, at: [150.43, 25.8], label: "14", label-at: [6.6, 13.9], label-anchor: middle, label-size: 1.6, group: row-bottom, attrs: {media: fiber, role: service}}
+      - {ref: common/lc-duplex-adapter@1, id: port-16, at: [165.22, 25.8], label: "16", label-at: [6.6, 13.9], label-anchor: middle, label-size: 1.6, group: row-bottom, attrs: {media: fiber, role: service}}
+      - {ref: common/rj45-hd@1, id: port-18, at: [184.6, 25.3], label: "18", label-at: [7, 13.9], label-anchor: middle, label-size: 1.6, group: row-bottom, attrs: {media: rj45, role: service}}
+      - {ref: common/rj45-hd@1, id: port-20, at: [198.94, 25.3], label: "20", label-at: [7, 13.9], label-anchor: middle, label-size: 1.6, group: row-bottom, attrs: {media: rj45, role: service}}
+      - {ref: common/rj45-hd@1, id: port-22, at: [213.28, 25.3], label: "22", label-at: [7, 13.9], label-anchor: middle, label-size: 1.6, group: row-bottom, attrs: {media: rj45, role: service}}
+      - {ref: common/rj45-hd@1, id: port-24, at: [227.62, 25.3], label: "24", label-at: [7, 13.9], label-anchor: middle, label-size: 1.6, group: row-bottom, attrs: {media: rj45, role: service}}
+      - {ref: common/rj45-hd@1, id: port-26, at: [241.96, 25.3], label: "26", label-at: [7, 13.9], label-anchor: middle, label-size: 1.6, group: row-bottom, attrs: {media: rj45, role: service}}
+      - {ref: common/rj45-hd@1, id: port-28, at: [256.3, 25.3], label: "28", label-at: [7, 13.9], label-anchor: middle, label-size: 1.6, group: row-bottom, attrs: {media: rj45, role: service}}
+    decor:
+      - {at: [396, 14], size: [16, 11], pattern: vent, vent: 4}
+      - {text: smartoptics, at: [22, 6.2], font-size: 3.2, fill: '#e8ecef'}
+      - {text: DCP-SC-28P, at: [64, 6.0], font-size: 2.8, fill: '#e8ecef'}
+      - {text: ETH0, at: [6.2, 18.7], font-size: 2.1, fill: '#c9cdd1', anchor: middle, rotate: -90}
+      - {text: RS232, at: [6.2, 33.2], font-size: 2.1, fill: '#c9cdd1', anchor: middle, rotate: -90}
+      - {text: Power, at: [31.2, 32.3], font-size: 1.9, fill: '#c9cdd1', anchor: middle}
+      - {text: Status, at: [37.4, 32.3], font-size: 1.9, fill: '#c9cdd1', anchor: middle}
