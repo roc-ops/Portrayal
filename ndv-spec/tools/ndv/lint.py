@@ -233,7 +233,14 @@ def lint_device_overlap(path, view_name, view, lib_roots):
         sz = (yaml.safe_load(cp.read_text()) or {}).get("size") or {}
         if "w" not in sz or "h" not in sz:
             continue
-        boxes.append((p["id"], p["at"][0], p["at"][1], sz["w"], sz["h"]))
+        w, h = sz["w"], sz["h"]
+        x, y = p["at"][0], p["at"][1]
+        # a quarter-turn swaps the footprint about the component centre - the same
+        # transform render.py applies when it computes view extents
+        if p.get("rotate") in (90, 270, -90):
+            cx, cy = x + w / 2, y + h / 2
+            x, y, w, h = cx - h / 2, cy - w / 2, h, w
+        boxes.append((p["id"], x, y, w, h))
     for i, a in enumerate(boxes):
         for b in boxes[i + 1:]:
             ox = min(a[1] + a[3], b[1] + b[3]) - max(a[1], b[1])
