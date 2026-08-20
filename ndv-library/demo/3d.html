@@ -47,7 +47,10 @@ let BODY_META = {};
 const PXMM = 4;
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x16181b);
-const camera = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, 1, 6000);
+// near/far set the depth-buffer resolution: at 600mm a near of 0.1 resolves only
+// ~0.21mm, so anything sitting a few hundredths of a mm off a face z-fights.
+// near 5 / far 3000 resolves ~0.004mm, comfortably finer than any relief offset.
+const camera = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, 5, 3000);
 camera.position.set(420, 260, 620);
 const renderer = new THREE.WebGLRenderer({antialias: true});
 {
@@ -71,6 +74,9 @@ renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 document.body.appendChild(renderer.domElement);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
+// keep the camera outside the near plane so raising near cannot clip geometry
+controls.minDistance = 40;
+controls.maxDistance = 2500;
 // lights shade only the relief geometry (Lambert); face textures stay unlit art
 scene.add(new THREE.AmbientLight(0xffffff, 1.6));
 const key = new THREE.DirectionalLight(0xffffff, 1.6);
@@ -463,14 +469,11 @@ async function build(cfg) {
     // Large openings (cavities, FRU bays) are punched elsewhere and do not moire,
     // being a handful of big rectangles rather than a fine repeating lattice.
     for (const v of vents) {
+      // Vents are painted into the face art (see above), so the face is opaque
+      // here and a box behind it can only ever show through as z-fighting. It sat
+      // 0.05mm back, far finer than the depth buffer resolves, which is what was
+      // speckling along the side faces. Nothing to draw.
       curOwner = v.owner;
-      const vd = Math.min(v.depth, D - 2);
-      const vm = new THREE.MeshLambertMaterial({color: 0x08090a, side: THREE.DoubleSide});
-      const vOpen = new THREE.MeshBasicMaterial({visible: false});
-      const box = new THREE.Mesh(new THREE.BoxGeometry(v.w, v.h, vd),
-        [vm, vm, vm, vm, vOpen, vm]);
-      box.position.set(LX(v.x, v.w), LY(v.y, v.h), -vd / 2 - 0.05);
-      addTo(box);
     }
     for (const dm of domes) { // gentle domes: node art draped on a paraboloid cap
       curOwner = dm.owner;
@@ -605,7 +608,7 @@ async function build(cfg) {
       const faceCrop = crop(cv, f);
       const plane = new THREE.Mesh(new THREE.PlaneGeometry(f.w, f.h),
         new THREE.MeshBasicMaterial({map: canvasTex(faceCrop), transparent: true, alphaTest: 0.1, alphaToCoverage: true}));
-      plane.position.set(LX(f.x, f.w), LY(f.y, f.h), 0.05);
+      plane.position.set(LX(f.x, f.w), LY(f.y, f.h), 0.3);
       fg.add(plane);
       // CLEAR, never fill: an opaque patch on the chassis face would occlude
       // everything behind it (the module's own cavities, pins, bay interior)
@@ -752,7 +755,7 @@ addEventListener('pointermove', ev => {
     document.getElementById('note').textContent = 'drag to orbit · wheel to zoom';
     const span = Math.max(W, H);
     camera.position.set(span * 0.9, span * 0.8, span * 1.6);
-    camera.near = 0.1; camera.updateProjectionMatrix();
+    camera.near = 5; camera.updateProjectionMatrix();
     COMP_ENTRY.skins.forEach(sk => {
       const o = document.createElement('option');
       o.value = sk; o.textContent = sk; sel.appendChild(o);
