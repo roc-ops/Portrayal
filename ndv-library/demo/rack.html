@@ -27,9 +27,13 @@
 <body>
 <div id="bar"><strong>lab rack</strong><span id="sub"></span></div>
 <div id="key">
-  <div><i style="background:#e8d44d"></i>single-mode fibre</div>
+  <div><i style="background:#e8d44d"></i>span mcdnny–abrnny</div>
+  <div><i style="background:#e8874d"></i>span abrnny–gnvany</div>
+  <div><i style="background:#4de8a8"></i>span gnvany–mcdnny</div>
+  <div><i style="background:#bfae3a"></i>intra-site fibre</div>
   <div><i style="background:#4d7fe8"></i>ethernet</div>
-  <div style="margin-top:0.3rem;color:#8d939a">striped = B strand (the return fibre)</div>
+  <div style="margin-top:0.35rem;color:#8d939a">dashes flow TX → RX</div>
+  <div style="color:#8d939a">striped = B strand (return fibre)</div>
 </div>
 <div id="hud">loading…</div>
 <div id="note">drag to orbit · wheel to zoom</div>
@@ -209,40 +213,52 @@ async function portIndex(ref, cfg) {
 }
 
 // ----------------------------------------------------------------- cables
-const CABLE = {smf: 0xe8d44d, ethernet: 0x4d7fe8};
-const STRIPE = {smf: '#5d5416', ethernet: '#1b2f63'};
+const CABLE = {smf: 0xbfae3a, ethernet: 0x4d7fe8};
+// the three ring spans get their own hue so the topology reads at a glance;
+// intra-site fibre (XC cross-connect, OSC loops) stays the neutral fibre colour
+const SPAN = {
+  'mcdnny-abrnny': 0xe8d44d,
+  'abrnny-gnvany': 0xe8874d,
+  'gnvany-mcdnny': 0x4de8a8,
+};
+const DASH_MM = 95;               // one flowing dash per this much cable
+const FLOW = [];                  // textures animated in the render loop
 
-// A duplex pair is two fibres that look identical and run side by side, which
-// makes it impossible to say which is which. Real duplex cord marks one leg, so
-// the B strand gets a longitudinal stripe. Two stripes 180 degrees apart so it
-// reads from any viewing angle.
-const _matCache = new Map();
-function cableMat(media, striped) {
-  const k = `${media}|${striped}`;
-  if (_matCache.has(k)) return _matCache.get(k);
-  const colour = CABLE[media] ?? 0x9aa0a8;
-  let m;
-  if (!striped) {
-    m = new THREE.MeshLambertMaterial({color: colour});
-  } else {
-    const cv = document.createElement('canvas');
-    cv.width = 4; cv.height = 64;                 // u along the run, v around it
-    const c = cv.getContext('2d');
-    c.fillStyle = '#' + colour.toString(16).padStart(6, '0');
-    c.fillRect(0, 0, 4, 64);
-    c.fillStyle = STRIPE[media] || '#333';
-    c.fillRect(0, 7, 4, 9);
-    c.fillRect(0, 39, 4, 9);
-    const t = new THREE.CanvasTexture(cv);
-    t.colorSpace = THREE.SRGBColorSpace;
-    t.wrapS = t.wrapT = THREE.RepeatWrapping;
-    m = new THREE.MeshLambertMaterial({map: t});
+// Texture layout follows TubeGeometry's UVs: u runs along the cable, v around
+// it. So a repeating mark in u becomes a dash chasing down the run - scrolling
+// it shows which way the light goes - and a band in v becomes a stripe along
+// the length, which is how the B strand of a pair is marked.
+const _artCache = new Map();
+function cableArt(colour, striped) {
+  const k = `${colour}|${striped}`;
+  if (_artCache.has(k)) return _artCache.get(k);
+  const cv = document.createElement('canvas');
+  cv.width = 64; cv.height = 32;
+  const c = cv.getContext('2d');
+  const hex = '#' + colour.toString(16).padStart(6, '0');
+  c.fillStyle = hex; c.fillRect(0, 0, 64, 32);
+  c.fillStyle = 'rgba(255,255,255,0.55)';        // the travelling dash
+  c.fillRect(0, 0, 22, 32);
+  c.fillStyle = 'rgba(0,0,0,0.18)';              // soften its trailing edge
+  c.fillRect(22, 0, 6, 32);
+  if (striped) {                                  // two, 180 apart, so it reads
+    c.fillStyle = 'rgba(0,0,0,0.62)';             // from any angle
+    c.fillRect(0, 4, 64, 6);
+    c.fillRect(0, 20, 64, 6);
   }
-  _matCache.set(k, m);
-  return m;
+  _artCache.set(k, cv);
+  return cv;
+}
+function cableMat(colour, striped, lengthMm) {
+  const t = new THREE.CanvasTexture(cableArt(colour, striped));
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.repeat.set(Math.max(2, Math.round(lengthMm / DASH_MM)), 1);
+  FLOW.push(t);
+  return new THREE.MeshLambertMaterial({map: t});
 }
 
-function cable(a, b, media, striped, lateral, sag) {
+function cable(a, b, colour, striped, lateral, sag) {
   // Real patch leads leave a connector straight before they bend, so the first
   // and last control points sit off each port along that face's own normal.
   const out = 60;
@@ -265,7 +281,7 @@ function cable(a, b, media, striped, lateral, sag) {
   pts.push(b1, b.pos);
   const curve = new THREE.CatmullRomCurve3(pts, false, 'catmullrom', 0.35);
   const geo = new THREE.TubeGeometry(curve, 130, 1.9, 8, false);
-  const m = new THREE.Mesh(geo, cableMat(media, striped));
+  const m = new THREE.Mesh(geo, cableMat(colour, striped, curve.getLength()));
   m.renderOrder = 2;
   return m;
 }
@@ -349,7 +365,8 @@ function cable(a, b, media, striped, lateral, sag) {
     const lateral = n > 1 ? (k - (n - 1) / 2) * 34 : 0;
     const span = Math.abs(a.pos.y - b.pos.y);
     const sag = 34 + (span > 1 ? Math.min(span * 0.16, 170) : 26) + (k % 3) * 14;
-    root.add(cable(a, b, link.media, striped, lateral, sag));
+    const colour = SPAN[link.span] ?? CABLE[link.media] ?? 0x9aa0a8;
+    root.add(cable(a, b, colour, striped, lateral, sag));
     drawn++;
   }
 
@@ -366,8 +383,13 @@ function cable(a, b, media, striped, lateral, sag) {
   controls.update();
 
   hud(`${drawn} links drawn${missing ? ` · ${missing} unresolved` : ''} — drag to orbit`);
-  (function loop() {
+  let last = performance.now();
+  (function loop(now) {
     requestAnimationFrame(loop);
+    const dt = Math.min(((now || last) - last) / 1000, 0.1); last = now || last;
+    // a feature sits at u = (t - offset)/repeat, so a falling offset carries the
+    // dash toward u=1, which is the 'to' end of the link: TX -> RX
+    for (const t of FLOW) t.offset.x -= dt * 0.22;
     controls.update();
     renderer.render(scene, camera);
   })();

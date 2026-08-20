@@ -19,6 +19,9 @@ provenance:
   osc-loop: stated - OSC TX into 1510 RX, 1510 TX back into OSC RX, per ROADM
   strands: every fibre is modelled individually rather than as a duplex link, so
     a run appears as two tubes - TX at one end into RX at the other, and back
+  spans: the three ring spans are named so the viewer can colour them apart.
+    Intra-site fibre - the XC cross-connect and the OSC loops - carries no span
+    and renders in the neutral fibre colour
   roadm-model: assumed dcp-r-34d-cs. The diagram labels the units only as
     roadm01-D1/D2; the 34D-CS is the colourless-directionless cross-connect,
     which is the better fit for a ROADM role than the 9D
@@ -64,9 +67,9 @@ links:
   - {media: smf, from: [gnvany-roadm01-D2, port-osc, tx], to: [gnvany-roadm01-D2, port-1510, rx]}
   - {media: smf, from: [gnvany-roadm01-D2, port-1510, tx], to: [gnvany-roadm01-D2, port-osc, rx]}
   # the optical ring - Line ports, one fibre pair per span
-  - {media: smf, from: [mcdnny-roadm01-D1, port-line, tx], to: [abrnny-roadm01-D1, port-line, rx]}
-  - {media: smf, from: [abrnny-roadm01-D1, port-line, tx], to: [mcdnny-roadm01-D1, port-line, rx]}
-  - {media: smf, from: [abrnny-roadm01-D2, port-line, tx], to: [gnvany-roadm01-D1, port-line, rx]}
-  - {media: smf, from: [gnvany-roadm01-D1, port-line, tx], to: [abrnny-roadm01-D2, port-line, rx]}
-  - {media: smf, from: [gnvany-roadm01-D2, port-line, tx], to: [mcdnny-roadm01-D2, port-line, rx]}
-  - {media: smf, from: [mcdnny-roadm01-D2, port-line, tx], to: [gnvany-roadm01-D2, port-line, rx]}
+  - {media: smf, from: [mcdnny-roadm01-D1, port-line, tx], to: [abrnny-roadm01-D1, port-line, rx], span: mcdnny-abrnny}
+  - {media: smf, from: [abrnny-roadm01-D1, port-line, tx], to: [mcdnny-roadm01-D1, port-line, rx], span: mcdnny-abrnny}
+  - {media: smf, from: [abrnny-roadm01-D2, port-line, tx], to: [gnvany-roadm01-D1, port-line, rx], span: abrnny-gnvany}
+  - {media: smf, from: [gnvany-roadm01-D1, port-line, tx], to: [abrnny-roadm01-D2, port-line, rx], span: abrnny-gnvany}
+  - {media: smf, from: [gnvany-roadm01-D2, port-line, tx], to: [mcdnny-roadm01-D2, port-line, rx], span: gnvany-mcdnny}
+  - {media: smf, from: [mcdnny-roadm01-D2, port-line, tx], to: [gnvany-roadm01-D2, port-line, rx], span: gnvany-mcdnny}
