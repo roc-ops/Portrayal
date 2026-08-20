@@ -362,11 +362,30 @@ function faceDensity(rec) {
   return Math.max(Math.hypot(ax - ox, ay - oy), Math.hypot(bx - ox, by - oy));
 }
 
+// Punch masks repeat heavily - a 54-port faceplate uses a handful of distinct
+// cavity shapes - so memoise per (shape, density) and reuse across placements.
+const _punchCache = new Map();
+async function punchMask(svg, wmm, hmm, pxmm) {
+  const key = `${pxmm}|${wmm}x${hmm}|${svg}`;
+  if (!_punchCache.has(key)) _punchCache.set(key, rasterize(svg, wmm, hmm, pxmm));
+  return _punchCache.get(key);
+}
+
 async function refineFace(rec, pxmm) {
   if (rec.busy || rec.level === pxmm || !box) return;
   rec.busy = true;
   try {
     const cv = await rasterize(rec.svgText, rec.wmm, rec.hmm, pxmm, rec.flipX, rec.flipY);
+    // The build punches apertures out of the face after rasterising it; a fresh
+    // raster is opaque again, which would seal every cavity behind a flat wall.
+    const ctx = cv.getContext('2d');
+    const R = v => Math.round(v * pxmm);
+    for (const p of rec.punches) {
+      if (p.kind === 'rect') { ctx.clearRect(R(p.x), R(p.y), R(p.w), R(p.h)); continue; }
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.drawImage(await punchMask(p.svg, p.w, p.h, pxmm), R(p.x), R(p.y));
+      ctx.globalCompositeOperation = 'source-over';
+    }
     const mat = (Array.isArray(box.material) ? box.material : [box.material])[rec.matIndex];
     if (!mat) return;
     const old = mat.map;
@@ -434,7 +453,9 @@ async function build(cfg) {
   }
   const faceCv = {};
   const faceSvg = {};   // source text per face, for adaptive re-rasterisation
+  const facePunch = {}; // apertures cleared from each face, replayed on refinement
   lodPaused = performance.now() + 500;   // no refinement while the build is in flight
+  _punchCache.clear();
   // Relief is built in LOCAL face coordinates (x right, y up, z out of the face,
   // face plane at z=0) and oriented by a per-face group transform. flipLY handles
   // views whose y axis runs opposite to the face's local up (top view).
@@ -464,6 +485,7 @@ async function build(cfg) {
     const cv = await rasterize(cleanText, fw, fh);
     faceCv[F.view] = cv;
     faceSvg[F.view] = cleanText;
+    facePunch[F.view] = [];
     const grp = new THREE.Group();
     grp.position.set(...F.pos());
     grp.rotation.set(...F.rot);
@@ -512,6 +534,8 @@ async function build(cfg) {
         pctx.drawImage(await rasterize(c.cavSvg, c.w, c.h),
                        Math.round(c.x * PXMM), Math.round(c.y * PXMM));
         pctx.globalCompositeOperation = 'source-over';
+        facePunch[F.view].push({kind: 'shape', svg: c.cavSvg,
+                                x: c.x, y: c.y, w: c.w, h: c.h});
       }
       // walls are double-sided: the interior is the recess, and the exterior is
       // the cage/housing body seen through neighboring vent holes. The back face
@@ -713,6 +737,7 @@ async function build(cfg) {
       // everything behind it (the module's own cavities, pins, bay interior)
       cv.getContext('2d').clearRect(Math.round(f.x * PXMM), Math.round(f.y * PXMM),
                                     Math.round(f.w * PXMM), Math.round(f.h * PXMM));
+      facePunch[F.view].push({kind: 'rect', x: f.x, y: f.y, w: f.w, h: f.h});
       const meta = FRU_META[f.path];
       if (meta.body) {   // full module body travels with the FRU
         const {mesh, fp, d} = await bodyBoxMesh(meta.body, f.w, f.h);
@@ -811,6 +836,7 @@ async function build(cfg) {
   for (const [key, matIndex, wmm, hmm, pos, rot, flipX, flipY] of lodFaces) {
     if (!faceSvg[key]) continue;   // face fell back to flat colour - nothing to sharpen
     LOD.push({key, matIndex, wmm, hmm, svgText: faceSvg[key], flipX, flipY,
+              punches: facePunch[key] || [],
               frame: FRAME(pos, rot), level: PXMM, busy: false});
   }
   reliefGroup = new THREE.Group();
