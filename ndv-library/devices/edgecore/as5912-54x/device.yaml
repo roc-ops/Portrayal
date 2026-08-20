@@ -32,8 +32,18 @@ provenance:
   port-pitch: standard - SFP columns on the SFF-8433 basic 14.25, QSFP on the 19.0
     measured from TE 2322551-4. Feasibility checks out - 24 x 14.25 = 342 plus
     2 x 19.0 = 38 plus the management stack fits the 440mm panel
-  port-numbering: assumed column-major (odd top, even below), matching the Edgecore
-    convention seen on the AS7326-56X - VERIFY against the faceplate silkscreen
+  port-numbering: read off the unit's silkscreen in the 3D capture. SFP+ pairs read
+    N-up / N+1-down (45 up, 46 down, 47 up, 48 down), so column-major. QSFP is also
+    column-major but NOT contiguous with a row reading - the strip below QSFP row 2
+    reads '49 up / 50 down' and '52 up / 53 down', which puts the unlabelled bottom
+    row at 51 and 54, not 53 and 54
+  qsfp-geometry: QSFP row 2 shares its bottom edge with the SFP+ bottom row; the
+    12.0 and 14.5 row spacings are preserved from the datasheet figure
+  qsfp-leds: between the belly-to-belly pair, per column - up arrow, two round LEDs,
+    down arrow (capture frame 0)
+  bottom-row-labels: 51 and 54 are NOT silkscreened on the unit; drawn dimmed for
+    reference only
+  mgmt-silkscreen: 'up-arrow Mgmt' over 'down-arrow Console' beneath the RJ45 stack
   usb-area: the honeycomb stops either side of the USB port - that patch of panel
     is flat - and the USB trident is printed to its right (owner, from the unit)
   rear-layout: datasheet figure (PSU each end, six fans between, numbered 6..1)
@@ -139,6 +149,14 @@ views:
       - {at: [344.1, 30.4], text: '46▼', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
       - {at: [351.35, 30.4], text: '47▲', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
       - {at: [358.35, 30.4], text: '48▼', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [376.4, 30.42], text: '49▲', font-size: 1.6, fill: '#c9cdd1', anchor: middle}
+      - {at: [385.2, 30.42], text: '▼50', font-size: 1.6, fill: '#c9cdd1', anchor: middle}
+      - {at: [381, 43.6], text: '51▲', font-size: 1.3, fill: '#8d939a', anchor: middle}
+      - {at: [395.4, 30.42], text: '52▲', font-size: 1.6, fill: '#c9cdd1', anchor: middle}
+      - {at: [404.2, 30.42], text: '▼53', font-size: 1.6, fill: '#c9cdd1', anchor: middle}
+      - {at: [400, 43.6], text: '54▲', font-size: 1.3, fill: '#8d939a', anchor: middle}
+      - {at: [424.5, 37.2], text: '▲ Mgmt', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [424.5, 40.6], text: '▼ Console', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
     placements:
       - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0], skin: left, optional: ears}
       - {ref: common/rack-ear@1, id: ear-right, at: [440, 0], skin: right, optional: ears}
@@ -238,12 +256,20 @@ views:
       - {ref: common/led-arrow@1, id: led-p46, at: [341.4, 13.9], skin: down, group: port-leds, attrs: {port: '46'}}
       - {ref: common/led-arrow@1, id: led-p47, at: [350.35, 13.9], skin: up, group: port-leds, attrs: {port: '47'}}
       - {ref: common/led-arrow@1, id: led-p48, at: [355.65, 13.9], skin: down, group: port-leds, attrs: {port: '48'}}
-      - {ref: std/qsfp-module@1, id: port-49, at: [372.25, 2.5], group: qsfp-ports, rel-pos: 49}
-      - {ref: std/qsfp-module@1, id: port-51, at: [372.25, 14.5], rotate: 180, group: qsfp-ports, rel-pos: 51}
-      - {ref: std/qsfp-module@1, id: port-53, at: [372.25, 29], group: qsfp-ports, rel-pos: 53}
-      - {ref: std/qsfp-module@1, id: port-50, at: [391.25, 2.5], group: qsfp-ports, rel-pos: 50}
-      - {ref: std/qsfp-module@1, id: port-52, at: [391.25, 14.5], rotate: 180, group: qsfp-ports, rel-pos: 52}
-      - {ref: std/qsfp-module@1, id: port-54, at: [391.25, 29], group: qsfp-ports, rel-pos: 54}
+      - {ref: std/qsfp-module@1, id: port-49, at: [372.25, 6.42], group: qsfp-ports, rel-pos: 49}
+      - {ref: std/qsfp-module@1, id: port-50, at: [372.25, 18.42], rotate: 180, group: qsfp-ports, rel-pos: 50}
+      - {ref: std/qsfp-module@1, id: port-51, at: [372.25, 32.92], group: qsfp-ports, rel-pos: 51}
+      - {ref: std/qsfp-module@1, id: port-52, at: [391.25, 6.42], group: qsfp-ports, rel-pos: 52}
+      - {ref: std/qsfp-module@1, id: port-53, at: [391.25, 18.42], rotate: 180, group: qsfp-ports, rel-pos: 53}
+      - {ref: std/qsfp-module@1, id: port-54, at: [391.25, 32.92], group: qsfp-ports, rel-pos: 54}
+      - {ref: common/led-arrow@1, id: led-p49, at: [374.2, 16.72], skin: up, group: qsfp-leds, attrs: {port: '49'}}
+      - {ref: common/led-dot@1, id: led-p49-b, at: [379, 17.32], group: qsfp-leds, attrs: {port: '49'}}
+      - {ref: common/led-dot@1, id: led-p50-b, at: [382.4, 17.32], group: qsfp-leds, attrs: {port: '50'}}
+      - {ref: common/led-arrow@1, id: led-p50, at: [385.6, 16.72], skin: down, group: qsfp-leds, attrs: {port: '50'}}
+      - {ref: common/led-arrow@1, id: led-p52, at: [393.2, 16.72], skin: up, group: qsfp-leds, attrs: {port: '52'}}
+      - {ref: common/led-dot@1, id: led-p52-b, at: [398, 17.32], group: qsfp-leds, attrs: {port: '52'}}
+      - {ref: common/led-dot@1, id: led-p53-b, at: [401.4, 17.32], group: qsfp-leds, attrs: {port: '53'}}
+      - {ref: common/led-arrow@1, id: led-p53, at: [404.6, 16.72], skin: down, group: qsfp-leds, attrs: {port: '53'}}
       - {ref: std/usb-a@1, id: usb-a, at: [320, 35.5], group: mgmt, attrs: {role: storage}}
       - {ref: common/usb-symbol@1, id: usb-mark, at: [334.5, 35.75]}
       - {ref: common/rj45-bezel@2, id: mgmt-eth, at: [416, 2.5], group: mgmt, attrs: {media: rj45, role: mgmt}}
