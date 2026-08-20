@@ -10,6 +10,10 @@
   #hud { position: absolute; bottom: 0.8rem; left: 0.8rem; z-index: 5; background: #0c0e10cc; border: 1px solid #33373c;
          border-radius: 6px; padding: 0.4rem 0.7rem; font-size: 0.8rem; min-height: 1.2rem; }
   #hud .path { color: #f59e0b; font-family: ui-monospace, monospace; }
+  #gfx { position: absolute; bottom: 0.8rem; right: 0.8rem; z-index: 5;
+         background: #0c0e10cc; border: 1px solid #33373c; border-radius: 4px;
+         padding: 0.3rem 0.5rem; font: 11px ui-monospace, monospace; color: #8d939a; }
+  #gfx.warn { color: #f59e0b; border-color: #7a5a12; }
   #note { position: absolute; top: 0.6rem; right: 0.8rem; z-index: 5; color: #565d64; font-size: 0.72rem; }
   button { background: #2b2f33; color: #d7dbdf; border: 1px solid #4a4f55; border-radius: 6px;
            padding: 0.25rem 0.55rem; font-size: 0.8rem; cursor: pointer; }
@@ -27,6 +31,7 @@
 <div id="bar"><strong style="font-size:0.9rem">AS7726-32X — 3D</strong><select id="cfg"></select></div>
 <div id="note">drag to orbit · wheel to zoom · hover front/rear to identify</div>
 <div id="hud">loading…</div>
+<div id="gfx" title="graphics capabilities">gfx…</div>
 <script type="module">
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -45,9 +50,18 @@ scene.background = new THREE.Color(0x16181b);
 const camera = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, 1, 6000);
 camera.position.set(420, 260, 620);
 const renderer = new THREE.WebGLRenderer({antialias: true});
-console.log('[ndv] WebGL2:', renderer.capabilities.isWebGL2,
-            '| maxAnisotropy:', renderer.capabilities.getMaxAnisotropy(),
-            '| samples:', renderer.getContext().getParameter(renderer.getContext().SAMPLES));
+{
+  const gl = renderer.getContext();
+  const w2 = renderer.capabilities.isWebGL2;
+  const aniso = renderer.capabilities.getMaxAnisotropy();
+  const samples = gl.getParameter(gl.SAMPLES);
+  const el = document.getElementById('gfx');
+  el.textContent = `WebGL${w2 ? 2 : 1} · aniso ${aniso} · msaa ${samples}`;
+  // WebGL1 means NPOT textures cannot be mipmapped, and msaa 0 means antialias:true
+  // was not honoured - either one produces shimmer that no material setting fixes
+  if (!w2 || samples === 0 || aniso < 4) el.classList.add('warn');
+  console.log('[ndv] WebGL2:', w2, '| maxAnisotropy:', aniso, '| samples:', samples);
+}
 renderer.setSize(innerWidth, innerHeight);
 // cap the pixel ratio: at DPR 2+ an integrated laptop GPU allocates 4x the
 // fragments and drivers commonly reduce or silently drop MSAA, which shows up
