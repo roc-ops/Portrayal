@@ -29,6 +29,7 @@
 <div id="key">
   <div><i style="background:#e8d44d"></i>single-mode fibre</div>
   <div><i style="background:#4d7fe8"></i>ethernet</div>
+  <div style="margin-top:0.3rem;color:#8d939a">striped = B strand (the return fibre)</div>
 </div>
 <div id="hud">loading…</div>
 <div id="note">drag to orbit · wheel to zoom</div>
@@ -209,18 +210,62 @@ async function portIndex(ref, cfg) {
 
 // ----------------------------------------------------------------- cables
 const CABLE = {smf: 0xe8d44d, ethernet: 0x4d7fe8};
-function cable(a, b, colour, sag) {
+const STRIPE = {smf: '#5d5416', ethernet: '#1b2f63'};
+
+// A duplex pair is two fibres that look identical and run side by side, which
+// makes it impossible to say which is which. Real duplex cord marks one leg, so
+// the B strand gets a longitudinal stripe. Two stripes 180 degrees apart so it
+// reads from any viewing angle.
+const _matCache = new Map();
+function cableMat(media, striped) {
+  const k = `${media}|${striped}`;
+  if (_matCache.has(k)) return _matCache.get(k);
+  const colour = CABLE[media] ?? 0x9aa0a8;
+  let m;
+  if (!striped) {
+    m = new THREE.MeshLambertMaterial({color: colour});
+  } else {
+    const cv = document.createElement('canvas');
+    cv.width = 4; cv.height = 64;                 // u along the run, v around it
+    const c = cv.getContext('2d');
+    c.fillStyle = '#' + colour.toString(16).padStart(6, '0');
+    c.fillRect(0, 0, 4, 64);
+    c.fillStyle = STRIPE[media] || '#333';
+    c.fillRect(0, 7, 4, 9);
+    c.fillRect(0, 39, 4, 9);
+    const t = new THREE.CanvasTexture(cv);
+    t.colorSpace = THREE.SRGBColorSpace;
+    t.wrapS = t.wrapT = THREE.RepeatWrapping;
+    m = new THREE.MeshLambertMaterial({map: t});
+  }
+  _matCache.set(k, m);
+  return m;
+}
+
+function cable(a, b, media, striped, lateral, sag) {
   // Real patch leads leave a connector straight before they bend, so the first
-  // and last control points sit directly off each port along that face's own
-  // normal - which matters here because the management runs are rear-to-rear
-  // while the fibre is front-to-front.
-  const out = 70;
+  // and last control points sit off each port along that face's own normal.
+  const out = 60;
   const a1 = a.pos.clone().addScaledVector(a.n, out);
   const b1 = b.pos.clone().addScaledVector(b.n, out);
-  const mid = a1.clone().lerp(b1, 0.5).addScaledVector(a.n, sag);
-  const curve = new THREE.CatmullRomCurve3([a.pos, a1, mid, b1, b.pos], false, 'catmullrom', 0.4);
-  const geo = new THREE.TubeGeometry(curve, 64, 2.1, 8, false);
-  const m = new THREE.Mesh(geo, new THREE.MeshLambertMaterial({color: colour}));
+  const pts = [a.pos, a1];
+  if (a.n.dot(b.n) < 0) {
+    // opposite faces - a rear port reaching a front one. Route round the side of
+    // the rack the way it would actually be dressed, not through the chassis.
+    const side = lateral >= 0 ? 1 : -1;
+    const x = side * (RACK_W / 2 + 90 + Math.abs(lateral));
+    pts.push(new THREE.Vector3(x, a.pos.y, a.pos.z + a.n.z * 90));
+    pts.push(new THREE.Vector3(x, (a.pos.y + b.pos.y) / 2, (a.pos.z + b.pos.z) / 2));
+    pts.push(new THREE.Vector3(x, b.pos.y, b.pos.z + b.n.z * 90));
+  } else {
+    const mid = a1.clone().lerp(b1, 0.5).addScaledVector(a.n, sag);
+    mid.x += lateral;
+    pts.push(mid);
+  }
+  pts.push(b1, b.pos);
+  const curve = new THREE.CatmullRomCurve3(pts, false, 'catmullrom', 0.35);
+  const geo = new THREE.TubeGeometry(curve, 130, 1.9, 8, false);
+  const m = new THREE.Mesh(geo, cableMat(media, striped));
   m.renderOrder = 2;
   return m;
 }
@@ -284,16 +329,27 @@ function cable(a, b, colour, sag) {
     return {pos, n: new THREE.Vector3(0, 0, front ? 1 : -1), view};
   };
 
+  // Fan runs apart before drawing any of them. Links that share a device pair
+  // would otherwise stack into one line; links that share a PORT pair are the
+  // two strands of one duplex run, so those are the ones that need the stripe.
+  const pairKey = l => [`${l.from[0]}:${l.from[1]}`, `${l.to[0]}:${l.to[1]}`].sort().join('|');
+  const devKey  = l => [l.from[0], l.to[0]].sort().join('|');
+  const bucket = (map, k) => { if (!map.has(k)) map.set(k, []); return map.get(k); };
+  const byPair = new Map(), byDev = new Map();
+  for (const l of lab.links) { bucket(byPair, pairKey(l)).push(l); bucket(byDev, devKey(l)).push(l); }
+
   let drawn = 0, missing = 0;
-  for (const [i, link] of lab.links.entries()) {
+  for (const link of lab.links) {
     const a = await worldPort(link.from[0], link.from[1], link.from[2]);
     const b = await worldPort(link.to[0], link.to[1], link.to[2]);
     if (!a || !b) { missing++; continue; }
-    // stagger the bow so parallel runs - and the two strands of one duplex pair
-    // - stay individually readable rather than merging into one line
+    const pair = byPair.get(pairKey(link)), dev = byDev.get(devKey(link));
+    const striped = pair.length > 1 && pair.indexOf(link) === 1;   // the B strand
+    const n = dev.length, k = dev.indexOf(link);
+    const lateral = n > 1 ? (k - (n - 1) / 2) * 34 : 0;
     const span = Math.abs(a.pos.y - b.pos.y);
-    const sag = 34 + (span > 1 ? Math.min(span * 0.16, 170) : 22) + (i % 4) * 11;
-    root.add(cable(a, b, CABLE[link.media] ?? 0x9aa0a8, sag));
+    const sag = 34 + (span > 1 ? Math.min(span * 0.16, 170) : 26) + (k % 3) * 14;
+    root.add(cable(a, b, link.media, striped, lateral, sag));
     drawn++;
   }
 

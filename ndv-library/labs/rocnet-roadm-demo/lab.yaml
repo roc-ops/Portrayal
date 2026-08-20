@@ -12,8 +12,9 @@ provenance:
   topology: ring read off the connectivity diagram - D1-to-D1 between the first
     pair, D2-to-D1 onward, closing D2-to-D2 back to the first site. Management
     and the site cross-connect were corrected from the diagram afterwards
-  management: stated - each ROADM's rear ETH 4 goes to the controller's rear
-    ETH 1 for D1 and ETH 2 for D2. Rear to rear, not front
+  management: stated - each ROADM's REAR ETH 4 runs round to the FRONT of its
+    controller, D1 to port 1 and D2 to port 2. The SC-28P has no rear ethernet,
+    so these are rear-to-front runs and the viewer routes them accordingly
   cross-connect: stated - D1 XC34 to D2 XC34 at every site
   osc-loop: stated - OSC TX into 1510 RX, 1510 TX back into OSC RX, per ROADM
   strands: every fibre is modelled individually rather than as a duplex link, so
@@ -35,13 +36,13 @@ devices:
   - {id: gnvany-roadm01-D1,  ref: dcp-r-34d-cs,  ru: 18, label: gnvany-roadm01-D1}
   - {id: gnvany-roadm01-D2,  ref: dcp-r-34d-cs,  ru: 16, label: gnvany-roadm01-D2}
 links:
-  # management - each ROADM's rear ETH 4 back to the controller's rear ETH 1/2
-  - {media: ethernet, from: [mcdnny-roadm01-D1, eth4], to: [mcdnny-sc01, eth1]}
-  - {media: ethernet, from: [mcdnny-roadm01-D2, eth4], to: [mcdnny-sc01, eth2]}
-  - {media: ethernet, from: [abrnny-roadm01-D1, eth4], to: [abrnny-sc01, eth1]}
-  - {media: ethernet, from: [abrnny-roadm01-D2, eth4], to: [abrnny-sc01, eth2]}
-  - {media: ethernet, from: [gnvany-roadm01-D1, eth4], to: [gnvany-sc01, eth1]}
-  - {media: ethernet, from: [gnvany-roadm01-D2, eth4], to: [gnvany-sc01, eth2]}
+  # management - each ROADM's rear ETH 4 round to the controller's front
+  - {media: ethernet, from: [mcdnny-roadm01-D1, eth4], to: [mcdnny-sc01, port-1]}
+  - {media: ethernet, from: [mcdnny-roadm01-D2, eth4], to: [mcdnny-sc01, port-2]}
+  - {media: ethernet, from: [abrnny-roadm01-D1, eth4], to: [abrnny-sc01, port-1]}
+  - {media: ethernet, from: [abrnny-roadm01-D2, eth4], to: [abrnny-sc01, port-2]}
+  - {media: ethernet, from: [gnvany-roadm01-D1, eth4], to: [gnvany-sc01, port-1]}
+  - {media: ethernet, from: [gnvany-roadm01-D2, eth4], to: [gnvany-sc01, port-2]}
   # site cross-connect - D1 XC34 to D2 XC34, both strands
   - {media: smf, from: [mcdnny-roadm01-D1, xc34, tx], to: [mcdnny-roadm01-D2, xc34, rx]}
   - {media: smf, from: [mcdnny-roadm01-D2, xc34, tx], to: [mcdnny-roadm01-D1, xc34, rx]}
