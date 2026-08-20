@@ -416,19 +416,23 @@ async function build(cfg) {
         }
       }
     }
-    for (const v of vents) {  // air vents: the art's dark cells become real holes
+    // Air vents stay as painted art rather than punched alpha. Punching them made
+    // each honeycomb cell an alphaTest cutout, and alphaTest is a binary decision
+    // taken AFTER texture filtering - at a grazing angle, with dozens of cells
+    // falling in one pixel, the filtered alpha sits near the threshold and speckles.
+    // Neither mipmaps nor alphaToCoverage can fix that; both act before the cut.
+    // Left as colour, mipmapping averages the cells to smooth shading, which is
+    // what you actually see on a real chassis from any distance.
+    // Large openings (cavities, FRU bays) are punched elsewhere and do not moire,
+    // being a handful of big rectangles rather than a fine repeating lattice.
+    for (const v of vents) {
       curOwner = v.owner;
-      const vcv = await rasterize(v.svgText, v.w, v.h);
-      const fctx = cv.getContext('2d');
-      fctx.globalCompositeOperation = 'destination-out';
-      fctx.drawImage(vcv, Math.round(v.x * PXMM), Math.round(v.y * PXMM));
-      fctx.globalCompositeOperation = 'source-over';
       const vd = Math.min(v.depth, D - 2);
       const vm = new THREE.MeshLambertMaterial({color: 0x08090a, side: THREE.DoubleSide});
       const vOpen = new THREE.MeshBasicMaterial({visible: false});
       const box = new THREE.Mesh(new THREE.BoxGeometry(v.w, v.h, vd),
         [vm, vm, vm, vm, vOpen, vm]);
-      box.position.set(LX(v.x, v.w), LY(v.y, v.h), -vd / 2);
+      box.position.set(LX(v.x, v.w), LY(v.y, v.h), -vd / 2 - 0.05);
       addTo(box);
     }
     for (const dm of domes) { // gentle domes: node art draped on a paraboloid cap
