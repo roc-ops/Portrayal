@@ -1,0 +1,26 @@
+format: 1
+kind: component
+name: psu-550w
+version: 1.0.0
+class: psu
+profile: networking
+description: >-
+  550W hot-swap PSU module with an integrated axial fan and its own C14 inlet,
+  as fitted to the Smartoptics DCP chassis. Wider than the Edgecore
+  psu-ac-650 family because the fan and inlet share one module face.
+size: {w: 84.0, h: 40.0}
+attrs: {watts: 550, input: ac}
+provenance:
+  size: approximate - measured from a rear photo of racked DCP-R units
+    (IMG_2181), calibrated on the 440mm chassis width. Perspective was not
+    corrected, so treat as +/- 3mm until a straight-on rear elevation exists
+  fan: photo - single axial fan at the module's outer end
+  inlet: photo - C14 appliance inlet, mirrored to the outer edge on each side
+elements:
+  handle: {at: [30.0, 16.0], size: [22.0, 8.0], class: handle}
+parts:
+  - {ref: std/c13-inlet@1, id: inlet, at: [52.0, 10.0]}
+relief:
+  features:
+    - {node: handle, out: 1.6, color: '#3a4046'}
+skins: [default]

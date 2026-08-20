@@ -26,6 +26,17 @@ provenance:
     that masters in one stencil are not all drawn to the same scale
   channel-plan: silkscreen - channels alternate in pairs between rows, 921/922
     top then 923/924 bottom, continuing to 960
+  rear-layout: photo IMG_2181 of racked DCP-R units - PSU with integrated fan
+    and C14 inlet at each end, mirrored; honeycomb vent panel across the centre;
+    management block right of centre. Block positions are approximate to about
+    3mm - the photo has uncorrected perspective and partial cable occlusion, so
+    it fixes the structure and order but not exact millimetres
+  psu-orientation: photo - both modules are fitted the same way round, fan
+    inboard of the inlet, so the C14 sits at the far right on PSU-2 and inboard
+    on PSU-1. They are not mirrored
+  rear-mgmt-block: stencil master dcp-r-rear, which is orthographic - a 2x2
+    ganged RJ45 shell (ETH 2 / ETH 4 over ETH 1 / ETH 3), ESD warning, Tx and Rx
+    LEDs, an ETH 5 SFP cage and a recessed RESET button
 attrs:
   channels: 40
   form-factor: 1RU
@@ -101,3 +112,22 @@ views:
       - {text: Rx, at: [42.6, 23.2], font-size: 1.9, fill: '#c9cdd1'}
       - {text: Power, at: [54.2, 33.7], font-size: 1.9, fill: '#c9cdd1', anchor: middle}
       - {text: Status, at: [59.8, 33.7], font-size: 1.9, fill: '#c9cdd1', anchor: middle}
+  rear:
+    size: {w: 440, h: 45}
+    placements:
+      - {ref: common/rack-ear@1, id: ear-left-r, at: [-14, 0.75], skin: left, optional: ears}
+      - {ref: common/rack-ear@1, id: ear-right-r, at: [440, 0.75], skin: right, optional: ears}
+      - {ref: common/psu-550w@1, id: psu-1, at: [0, 2.5], attrs: {slot: '1'}}
+      - {ref: common/psu-550w@1, id: psu-2, at: [356, 2.5], attrs: {slot: '2'}}
+      - {ref: common/rj45-hd@1, id: eth2, at: [276, 8.5], label: "ETH 2", label-at: [7, -1.4], label-anchor: middle, label-size: 1.8, group: mgmt, attrs: {role: mgmt, speed: 1000base-t}}
+      - {ref: common/rj45-hd@1, id: eth4, at: [291, 8.5], label: "ETH 4", label-at: [7, -1.4], label-anchor: middle, label-size: 1.8, group: mgmt, attrs: {role: mgmt, speed: 1000base-t}}
+      - {ref: common/rj45-hd@1, id: eth1, at: [276, 22], label: "ETH 1", label-at: [7, 13.9], label-anchor: middle, label-size: 1.8, group: mgmt, attrs: {role: mgmt, speed: 1000base-t}}
+      - {ref: common/rj45-hd@1, id: eth3, at: [291, 22], label: "ETH 3", label-at: [7, 13.9], label-anchor: middle, label-size: 1.8, group: mgmt, attrs: {role: mgmt, speed: 1000base-t}}
+      - {ref: common/led-dot@1, id: led-eth5-tx, at: [320, 14], attrs: {function: tx}}
+      - {ref: common/led-dot@1, id: led-eth5-rx, at: [332, 14], attrs: {function: rx}}
+      - {ref: common/sfp-plus-cage@2, id: eth5, at: [318, 22], label: "ETH 5", label-at: [8, 13.9], label-anchor: middle, label-size: 1.8, group: mgmt, attrs: {role: mgmt, media: sfp}}
+      - {ref: common/reset-button@1, id: reset, at: [345, 26], label: "RESET", label-at: [2, 8.4], label-anchor: middle, label-size: 1.5, group: mgmt}
+    decor:
+      - {at: [87, 5], size: [175, 35], pattern: vent, vent: 9}
+      - {text: Tx, at: [316.5, 16], font-size: 1.8, fill: '#c9cdd1', anchor: end}
+      - {text: Rx, at: [336.5, 16], font-size: 1.8, fill: '#c9cdd1'}
