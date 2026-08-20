@@ -1,0 +1,269 @@
+format: 1
+kind: device
+name: as5912-54x
+version: 0.1.0
+manufacturer: Edgecore
+model: AS5912-54X (AGR100)
+part-numbers:
+  5912-54X-O-AC-F-US: FP3ZZ5654400A
+  5912-54X-O-AC-B-US: FP3ZZ5654401A
+  5912-54X-O-AC-F-EU: FP3ZZ5654201A
+  5912-54X-O-AC-B-EU: FP3ZZ5654200A
+  5912-54X-O-AC-F-UK: FP3ZZ5654301A
+  5912-54X-O-AC-B-UK: FP3ZZ5654300A
+  5912-54X-O-AC-F-JP: FP3ZZ5654501A
+  5912-54X-O-AC-B-JP: FP3ZZ5654500A
+  5912-54X-O-48V-F: FP3ZZ5654018A
+  5912-54X-O-48V-B: FP3ZZ5654020A
+description: 48x SFP+ 10G + 6x QSFP28 100G 1U aggregation router, Broadcom Qumran-MX
+profile: networking
+datasheet:
+  title: Edgecore AGR100 (AS5912-54X) Data Sheet R20 2024-06-27
+  url: https://www.edge-core.com/product/agr100/
+  sha256: 9eae5f0c10bb7f8bf19ac5c681c7cf64ebbb7d6a8f916895cf40e0870d60bedc
+references:
+  - title: Edgecore AGR100 AS5912-54X Quick Start Guide R02
+provenance:
+  attrs: datasheet (Ports/Key-Components/Performance/Power/Physical sections)
+  chassis: datasheet (Dimensions WxDxH 440 x 548 x 44 mm; Weight 9.34 kg). Note this
+    chassis is NOT the 438.4 x 43.5 of the AS7726/AS7326 line - it is 440 x 44
+  port-arrangement: datasheet Interfaces figure - 48 SFP+ as 2 rows x 24 columns in
+    three visual groups of 8, and 6 QSFP28 as 2 columns x 3 rows
+  port-pitch: standard - SFP columns on the SFF-8433 basic 14.25, QSFP on the 19.0
+    measured from TE 2322551-4. Feasibility checks out - 24 x 14.25 = 342 plus
+    2 x 19.0 = 38 plus the management stack fits the 440mm panel
+  port-numbering: assumed column-major (odd top, even below), matching the Edgecore
+    convention seen on the AS7326-56X - VERIFY against the faceplate silkscreen
+  rear-layout: datasheet figure (PSU each end, six fans between, numbered 6..1)
+  top-bottom-sides: NOT modelled yet - a 3D capture of this unit exists and should
+    be the source rather than extrapolation
+attrs:
+  asic: Broadcom BCM88370 Qumran-MX
+  cpu: Intel Atom C2538, 4-core @ 2.4 GHz
+  memory: 16 GB DDR3 (2x 8 GB SO-DIMM)
+  storage: 32 GB mSATA
+  switching-capacity: 800 Gbps
+  forwarding-rate: 720 Mpps
+  jumbo-frames: 9000 bytes
+  packet-buffer: 16 MB on-chip plus 6 GB deep DRAM buffer
+  mac-table: 750 K (LEM)
+  psus: 2x redundant, load-sharing, hot-swappable AC or -48 VDC
+  fans: 5+1 redundant, hot-swappable
+  software: ONIE installer
+  optics-sfp: 10GBASE-CR DAC, SRL/SR, LR, 1000BASE-T/SX/LX
+  optics-qsfp28: 1x 40/100 GbE per port
+  mgmt-ports: 1x RJ-45 console, 1x RJ-45 100/1000BASE-T, 1x USB-A storage (all front)
+  power-ac-min-w: '232'
+  power-ac-max-w: '327'
+  compliance: NEBS Level 1
+  operating-temp: 0 to 40 C
+chassis:
+  width: 440
+  height: 44
+  depth: 548
+  ru: 1
+  weight-kg: 9.34
+configurations:
+  ac-f2b:
+    airflow: front-to-back
+    description: Dual AC PSUs, front-to-back airflow (5912-54X-O-AC-F)
+    bays: {psu-1: 'common/psu-ac-650@3', psu-2: 'common/psu-ac-650@3'}
+  ac-b2f:
+    airflow: back-to-front
+    description: Dual AC PSUs, back-to-front airflow (5912-54X-O-AC-B)
+    region-context: {intake: Exhaust, exhaust: Intake}
+    bays: {psu-1: 'common/psu-ac-650@3', psu-2: 'common/psu-ac-650@3'}
+  dc-f2b:
+    airflow: front-to-back
+    description: Dual -48V DC PSUs, front-to-back airflow (5912-54X-O-48V-F)
+    bays: {psu-1: 'common/psu-dc-650@2', psu-2: 'common/psu-dc-650@2'}
+  dc-b2f:
+    airflow: back-to-front
+    description: Dual -48V DC PSUs, back-to-front airflow (5912-54X-O-48V-B)
+    region-context: {intake: Exhaust, exhaust: Intake}
+    bays: {psu-1: 'common/psu-dc-650@2', psu-2: 'common/psu-dc-650@2'}
+views:
+  front:
+    decor:
+      - {at: [0, 1], size: [2.8, 42], pattern: vent, vent: 25}
+      - {at: [437.2, 1], size: [2.8, 42], pattern: vent, vent: 25}
+      - {at: [14, 33], size: [348, 9], pattern: vent, vent: 22}
+      - {at: [17.6, 30.4], text: '1▲', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [24.6, 30.4], text: '2▼', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [31.85, 30.4], text: '3▲', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [38.85, 30.4], text: '4▼', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [46.1, 30.4], text: '5▲', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [53.1, 30.4], text: '6▼', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [60.35, 30.4], text: '7▲', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [67.35, 30.4], text: '8▼', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [74.6, 30.4], text: '9▲', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [81.6, 30.4], text: '10▼', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [88.85, 30.4], text: '11▲', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [95.85, 30.4], text: '12▼', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [103.1, 30.4], text: '13▲', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [110.1, 30.4], text: '14▼', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [117.35, 30.4], text: '15▲', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [124.35, 30.4], text: '16▼', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [134.6, 30.4], text: '17▲', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [141.6, 30.4], text: '18▼', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [148.85, 30.4], text: '19▲', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [155.85, 30.4], text: '20▼', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [163.1, 30.4], text: '21▲', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [170.1, 30.4], text: '22▼', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [177.35, 30.4], text: '23▲', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [184.35, 30.4], text: '24▼', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [191.6, 30.4], text: '25▲', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [198.6, 30.4], text: '26▼', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [205.85, 30.4], text: '27▲', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [212.85, 30.4], text: '28▼', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [220.1, 30.4], text: '29▲', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [227.1, 30.4], text: '30▼', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [234.35, 30.4], text: '31▲', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [241.35, 30.4], text: '32▼', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [251.6, 30.4], text: '33▲', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [258.6, 30.4], text: '34▼', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [265.85, 30.4], text: '35▲', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [272.85, 30.4], text: '36▼', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [280.1, 30.4], text: '37▲', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [287.1, 30.4], text: '38▼', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [294.35, 30.4], text: '39▲', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [301.35, 30.4], text: '40▼', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [308.6, 30.4], text: '41▲', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [315.6, 30.4], text: '42▼', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [322.85, 30.4], text: '43▲', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [329.85, 30.4], text: '44▼', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [337.1, 30.4], text: '45▲', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [344.1, 30.4], text: '46▼', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [351.35, 30.4], text: '47▲', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [358.35, 30.4], text: '48▼', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+    placements:
+      - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0], skin: left, optional: ears}
+      - {ref: common/rack-ear@1, id: ear-right, at: [440, 0], skin: right, optional: ears}
+      - {ref: std/sfp-module@1, id: port-1, at: [14, 3], group: sfp-ports, rel-pos: 1}
+      - {ref: std/sfp-module@1, id: port-2, at: [14, 17.6], group: sfp-ports, rel-pos: 2}
+      - {ref: std/sfp-module@1, id: port-3, at: [28.25, 3], group: sfp-ports, rel-pos: 3}
+      - {ref: std/sfp-module@1, id: port-4, at: [28.25, 17.6], group: sfp-ports, rel-pos: 4}
+      - {ref: std/sfp-module@1, id: port-5, at: [42.5, 3], group: sfp-ports, rel-pos: 5}
+      - {ref: std/sfp-module@1, id: port-6, at: [42.5, 17.6], group: sfp-ports, rel-pos: 6}
+      - {ref: std/sfp-module@1, id: port-7, at: [56.75, 3], group: sfp-ports, rel-pos: 7}
+      - {ref: std/sfp-module@1, id: port-8, at: [56.75, 17.6], group: sfp-ports, rel-pos: 8}
+      - {ref: std/sfp-module@1, id: port-9, at: [71, 3], group: sfp-ports, rel-pos: 9}
+      - {ref: std/sfp-module@1, id: port-10, at: [71, 17.6], group: sfp-ports, rel-pos: 10}
+      - {ref: std/sfp-module@1, id: port-11, at: [85.25, 3], group: sfp-ports, rel-pos: 11}
+      - {ref: std/sfp-module@1, id: port-12, at: [85.25, 17.6], group: sfp-ports, rel-pos: 12}
+      - {ref: std/sfp-module@1, id: port-13, at: [99.5, 3], group: sfp-ports, rel-pos: 13}
+      - {ref: std/sfp-module@1, id: port-14, at: [99.5, 17.6], group: sfp-ports, rel-pos: 14}
+      - {ref: std/sfp-module@1, id: port-15, at: [113.75, 3], group: sfp-ports, rel-pos: 15}
+      - {ref: std/sfp-module@1, id: port-16, at: [113.75, 17.6], group: sfp-ports, rel-pos: 16}
+      - {ref: std/sfp-module@1, id: port-17, at: [131, 3], group: sfp-ports, rel-pos: 17}
+      - {ref: std/sfp-module@1, id: port-18, at: [131, 17.6], group: sfp-ports, rel-pos: 18}
+      - {ref: std/sfp-module@1, id: port-19, at: [145.25, 3], group: sfp-ports, rel-pos: 19}
+      - {ref: std/sfp-module@1, id: port-20, at: [145.25, 17.6], group: sfp-ports, rel-pos: 20}
+      - {ref: std/sfp-module@1, id: port-21, at: [159.5, 3], group: sfp-ports, rel-pos: 21}
+      - {ref: std/sfp-module@1, id: port-22, at: [159.5, 17.6], group: sfp-ports, rel-pos: 22}
+      - {ref: std/sfp-module@1, id: port-23, at: [173.75, 3], group: sfp-ports, rel-pos: 23}
+      - {ref: std/sfp-module@1, id: port-24, at: [173.75, 17.6], group: sfp-ports, rel-pos: 24}
+      - {ref: std/sfp-module@1, id: port-25, at: [188, 3], group: sfp-ports, rel-pos: 25}
+      - {ref: std/sfp-module@1, id: port-26, at: [188, 17.6], group: sfp-ports, rel-pos: 26}
+      - {ref: std/sfp-module@1, id: port-27, at: [202.25, 3], group: sfp-ports, rel-pos: 27}
+      - {ref: std/sfp-module@1, id: port-28, at: [202.25, 17.6], group: sfp-ports, rel-pos: 28}
+      - {ref: std/sfp-module@1, id: port-29, at: [216.5, 3], group: sfp-ports, rel-pos: 29}
+      - {ref: std/sfp-module@1, id: port-30, at: [216.5, 17.6], group: sfp-ports, rel-pos: 30}
+      - {ref: std/sfp-module@1, id: port-31, at: [230.75, 3], group: sfp-ports, rel-pos: 31}
+      - {ref: std/sfp-module@1, id: port-32, at: [230.75, 17.6], group: sfp-ports, rel-pos: 32}
+      - {ref: std/sfp-module@1, id: port-33, at: [248, 3], group: sfp-ports, rel-pos: 33}
+      - {ref: std/sfp-module@1, id: port-34, at: [248, 17.6], group: sfp-ports, rel-pos: 34}
+      - {ref: std/sfp-module@1, id: port-35, at: [262.25, 3], group: sfp-ports, rel-pos: 35}
+      - {ref: std/sfp-module@1, id: port-36, at: [262.25, 17.6], group: sfp-ports, rel-pos: 36}
+      - {ref: std/sfp-module@1, id: port-37, at: [276.5, 3], group: sfp-ports, rel-pos: 37}
+      - {ref: std/sfp-module@1, id: port-38, at: [276.5, 17.6], group: sfp-ports, rel-pos: 38}
+      - {ref: std/sfp-module@1, id: port-39, at: [290.75, 3], group: sfp-ports, rel-pos: 39}
+      - {ref: std/sfp-module@1, id: port-40, at: [290.75, 17.6], group: sfp-ports, rel-pos: 40}
+      - {ref: std/sfp-module@1, id: port-41, at: [305, 3], group: sfp-ports, rel-pos: 41}
+      - {ref: std/sfp-module@1, id: port-42, at: [305, 17.6], group: sfp-ports, rel-pos: 42}
+      - {ref: std/sfp-module@1, id: port-43, at: [319.25, 3], group: sfp-ports, rel-pos: 43}
+      - {ref: std/sfp-module@1, id: port-44, at: [319.25, 17.6], group: sfp-ports, rel-pos: 44}
+      - {ref: std/sfp-module@1, id: port-45, at: [333.5, 3], group: sfp-ports, rel-pos: 45}
+      - {ref: std/sfp-module@1, id: port-46, at: [333.5, 17.6], group: sfp-ports, rel-pos: 46}
+      - {ref: std/sfp-module@1, id: port-47, at: [347.75, 3], group: sfp-ports, rel-pos: 47}
+      - {ref: std/sfp-module@1, id: port-48, at: [347.75, 17.6], group: sfp-ports, rel-pos: 48}
+      - {ref: common/led-arrow@1, id: led-p1, at: [16.6, 13.9], skin: up, group: port-leds, attrs: {port: '1'}}
+      - {ref: common/led-arrow@1, id: led-p2, at: [21.9, 13.9], skin: down, group: port-leds, attrs: {port: '2'}}
+      - {ref: common/led-arrow@1, id: led-p3, at: [30.85, 13.9], skin: up, group: port-leds, attrs: {port: '3'}}
+      - {ref: common/led-arrow@1, id: led-p4, at: [36.15, 13.9], skin: down, group: port-leds, attrs: {port: '4'}}
+      - {ref: common/led-arrow@1, id: led-p5, at: [45.1, 13.9], skin: up, group: port-leds, attrs: {port: '5'}}
+      - {ref: common/led-arrow@1, id: led-p6, at: [50.4, 13.9], skin: down, group: port-leds, attrs: {port: '6'}}
+      - {ref: common/led-arrow@1, id: led-p7, at: [59.35, 13.9], skin: up, group: port-leds, attrs: {port: '7'}}
+      - {ref: common/led-arrow@1, id: led-p8, at: [64.65, 13.9], skin: down, group: port-leds, attrs: {port: '8'}}
+      - {ref: common/led-arrow@1, id: led-p9, at: [73.6, 13.9], skin: up, group: port-leds, attrs: {port: '9'}}
+      - {ref: common/led-arrow@1, id: led-p10, at: [78.9, 13.9], skin: down, group: port-leds, attrs: {port: '10'}}
+      - {ref: common/led-arrow@1, id: led-p11, at: [87.85, 13.9], skin: up, group: port-leds, attrs: {port: '11'}}
+      - {ref: common/led-arrow@1, id: led-p12, at: [93.15, 13.9], skin: down, group: port-leds, attrs: {port: '12'}}
+      - {ref: common/led-arrow@1, id: led-p13, at: [102.1, 13.9], skin: up, group: port-leds, attrs: {port: '13'}}
+      - {ref: common/led-arrow@1, id: led-p14, at: [107.4, 13.9], skin: down, group: port-leds, attrs: {port: '14'}}
+      - {ref: common/led-arrow@1, id: led-p15, at: [116.35, 13.9], skin: up, group: port-leds, attrs: {port: '15'}}
+      - {ref: common/led-arrow@1, id: led-p16, at: [121.65, 13.9], skin: down, group: port-leds, attrs: {port: '16'}}
+      - {ref: common/led-arrow@1, id: led-p17, at: [133.6, 13.9], skin: up, group: port-leds, attrs: {port: '17'}}
+      - {ref: common/led-arrow@1, id: led-p18, at: [138.9, 13.9], skin: down, group: port-leds, attrs: {port: '18'}}
+      - {ref: common/led-arrow@1, id: led-p19, at: [147.85, 13.9], skin: up, group: port-leds, attrs: {port: '19'}}
+      - {ref: common/led-arrow@1, id: led-p20, at: [153.15, 13.9], skin: down, group: port-leds, attrs: {port: '20'}}
+      - {ref: common/led-arrow@1, id: led-p21, at: [162.1, 13.9], skin: up, group: port-leds, attrs: {port: '21'}}
+      - {ref: common/led-arrow@1, id: led-p22, at: [167.4, 13.9], skin: down, group: port-leds, attrs: {port: '22'}}
+      - {ref: common/led-arrow@1, id: led-p23, at: [176.35, 13.9], skin: up, group: port-leds, attrs: {port: '23'}}
+      - {ref: common/led-arrow@1, id: led-p24, at: [181.65, 13.9], skin: down, group: port-leds, attrs: {port: '24'}}
+      - {ref: common/led-arrow@1, id: led-p25, at: [190.6, 13.9], skin: up, group: port-leds, attrs: {port: '25'}}
+      - {ref: common/led-arrow@1, id: led-p26, at: [195.9, 13.9], skin: down, group: port-leds, attrs: {port: '26'}}
+      - {ref: common/led-arrow@1, id: led-p27, at: [204.85, 13.9], skin: up, group: port-leds, attrs: {port: '27'}}
+      - {ref: common/led-arrow@1, id: led-p28, at: [210.15, 13.9], skin: down, group: port-leds, attrs: {port: '28'}}
+      - {ref: common/led-arrow@1, id: led-p29, at: [219.1, 13.9], skin: up, group: port-leds, attrs: {port: '29'}}
+      - {ref: common/led-arrow@1, id: led-p30, at: [224.4, 13.9], skin: down, group: port-leds, attrs: {port: '30'}}
+      - {ref: common/led-arrow@1, id: led-p31, at: [233.35, 13.9], skin: up, group: port-leds, attrs: {port: '31'}}
+      - {ref: common/led-arrow@1, id: led-p32, at: [238.65, 13.9], skin: down, group: port-leds, attrs: {port: '32'}}
+      - {ref: common/led-arrow@1, id: led-p33, at: [250.6, 13.9], skin: up, group: port-leds, attrs: {port: '33'}}
+      - {ref: common/led-arrow@1, id: led-p34, at: [255.9, 13.9], skin: down, group: port-leds, attrs: {port: '34'}}
+      - {ref: common/led-arrow@1, id: led-p35, at: [264.85, 13.9], skin: up, group: port-leds, attrs: {port: '35'}}
+      - {ref: common/led-arrow@1, id: led-p36, at: [270.15, 13.9], skin: down, group: port-leds, attrs: {port: '36'}}
+      - {ref: common/led-arrow@1, id: led-p37, at: [279.1, 13.9], skin: up, group: port-leds, attrs: {port: '37'}}
+      - {ref: common/led-arrow@1, id: led-p38, at: [284.4, 13.9], skin: down, group: port-leds, attrs: {port: '38'}}
+      - {ref: common/led-arrow@1, id: led-p39, at: [293.35, 13.9], skin: up, group: port-leds, attrs: {port: '39'}}
+      - {ref: common/led-arrow@1, id: led-p40, at: [298.65, 13.9], skin: down, group: port-leds, attrs: {port: '40'}}
+      - {ref: common/led-arrow@1, id: led-p41, at: [307.6, 13.9], skin: up, group: port-leds, attrs: {port: '41'}}
+      - {ref: common/led-arrow@1, id: led-p42, at: [312.9, 13.9], skin: down, group: port-leds, attrs: {port: '42'}}
+      - {ref: common/led-arrow@1, id: led-p43, at: [321.85, 13.9], skin: up, group: port-leds, attrs: {port: '43'}}
+      - {ref: common/led-arrow@1, id: led-p44, at: [327.15, 13.9], skin: down, group: port-leds, attrs: {port: '44'}}
+      - {ref: common/led-arrow@1, id: led-p45, at: [336.1, 13.9], skin: up, group: port-leds, attrs: {port: '45'}}
+      - {ref: common/led-arrow@1, id: led-p46, at: [341.4, 13.9], skin: down, group: port-leds, attrs: {port: '46'}}
+      - {ref: common/led-arrow@1, id: led-p47, at: [350.35, 13.9], skin: up, group: port-leds, attrs: {port: '47'}}
+      - {ref: common/led-arrow@1, id: led-p48, at: [355.65, 13.9], skin: down, group: port-leds, attrs: {port: '48'}}
+      - {ref: std/qsfp-module@1, id: port-49, at: [372.25, 2.5], group: qsfp-ports, rel-pos: 49}
+      - {ref: std/qsfp-module@1, id: port-51, at: [372.25, 14.5], rotate: 180, group: qsfp-ports, rel-pos: 51}
+      - {ref: std/qsfp-module@1, id: port-53, at: [372.25, 29], group: qsfp-ports, rel-pos: 53}
+      - {ref: std/qsfp-module@1, id: port-50, at: [391.25, 2.5], group: qsfp-ports, rel-pos: 50}
+      - {ref: std/qsfp-module@1, id: port-52, at: [391.25, 14.5], rotate: 180, group: qsfp-ports, rel-pos: 52}
+      - {ref: std/qsfp-module@1, id: port-54, at: [391.25, 29], group: qsfp-ports, rel-pos: 54}
+      - {ref: std/usb-a@1, id: usb-a, at: [320, 35.5], group: mgmt, attrs: {role: storage}}
+      - {ref: common/rj45-bezel@2, id: mgmt-eth, at: [416, 2.5], group: mgmt, attrs: {media: rj45, role: mgmt}}
+      - {ref: common/rj45-bezel@2, id: console, at: [416, 19.0], rotate: 180, group: mgmt, attrs: {media: rj45-serial, role: console}}
+    regions:
+      - {id: sfp-block, at: [12, 0], size: {w: 352, h: 44}, label: 48x 10G SFP+}
+      - {id: qsfp-block, at: [370, 0], size: {w: 42, h: 44}, label: 6x 100G QSFP28}
+      - {id: mgmt-block, at: [414, 0], size: {w: 24, h: 44}, label: Management}
+  rear:
+    decor:
+      - {at: [0, 1], size: [8, 42], pattern: vent, vent: 25}
+      - {at: [432, 1], size: [8, 42], pattern: vent, vent: 25}
+    placements:
+      - {ref: common/rack-ear@1, id: rear-ear-left, at: [-14, 0], skin: left, optional: ears}
+      - {ref: common/rack-ear@1, id: rear-ear-right, at: [440, 0], skin: right, optional: ears}
+      - {ref: common/ground-lug@1, id: ground-left, at: [65, 26], attrs: {role: chassis-ground}}
+    bays:
+      - {id: psu-2, at: [10, 2], size: {w: 54, h: 40}, accepts: ['common/psu-ac-650@3', 'common/psu-dc-650@2'], group: psus, rel-pos: 2, default: 'common/psu-ac-650@3'}
+      - {id: fan-6, at: [72, 2], size: {w: 48.6, h: 40}, accepts: ['common/fan-module@1'], group: fans, rel-pos: 6, label: '6', label-at: [50.9, 7.6], label-size: 4.4, default: 'common/fan-module@1'}
+      - {id: fan-5, at: [120.6, 2], size: {w: 48.6, h: 40}, accepts: ['common/fan-module@1'], group: fans, rel-pos: 5, label: '5', label-at: [50.9, 7.6], label-size: 4.4, default: 'common/fan-module@1'}
+      - {id: fan-4, at: [169.2, 2], size: {w: 48.6, h: 40}, accepts: ['common/fan-module@1'], group: fans, rel-pos: 4, label: '4', label-at: [50.9, 7.6], label-size: 4.4, default: 'common/fan-module@1'}
+      - {id: fan-3, at: [217.8, 2], size: {w: 48.6, h: 40}, accepts: ['common/fan-module@1'], group: fans, rel-pos: 3, label: '3', label-at: [50.9, 7.6], label-size: 4.4, default: 'common/fan-module@1'}
+      - {id: fan-2, at: [266.4, 2], size: {w: 48.6, h: 40}, accepts: ['common/fan-module@1'], group: fans, rel-pos: 2, label: '2', label-at: [50.9, 7.6], label-size: 4.4, default: 'common/fan-module@1'}
+      - {id: fan-1, at: [315, 2], size: {w: 48.6, h: 40}, accepts: ['common/fan-module@1'], group: fans, rel-pos: 1, label: '1', label-at: [50.9, 7.6], label-size: 4.4, default: 'common/fan-module@1'}
+      - {id: psu-1, at: [368, 2], size: {w: 54, h: 40}, accepts: ['common/psu-ac-650@3', 'common/psu-dc-650@2'], group: psus, rel-pos: 1, default: 'common/psu-ac-650@3'}
+    regions:
+      - {id: exhaust, at: [72, 0], size: {w: 292, h: 44}, physical-context: Exhaust, label: Fan tray, members: [fan-1, fan-2, fan-3, fan-4, fan-5, fan-6]}
