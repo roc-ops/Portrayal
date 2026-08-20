@@ -1,0 +1,47 @@
+format: 1
+kind: component
+name: rj45-shielded
+version: 2.0.0
+class: port
+profile: networking
+description: >-
+  Shielded RJ45 jack with integrated link/activity LEDs in the shell corners
+  (v2 = v1 plus LEDs). The 8P8C plug interface is recessed behind the jack
+  face, so it reads as a real socket in 3D rather than painted art. Stack a
+  belly-to-belly pair by rotating the lower one 180 at placement
+size: {w: 15.8, h: 12.5, d: 12.0}
+attrs: {media: rj45}
+provenance:
+  size: datasheet-drawing (RJ45 15.76 x 12.48 body)
+  depth: estimated (typical receptacle depth; refine from spec)
+  relief.size: standard - the 8P8C cavity is invariant across vendors, 11.89 x
+    6.85 body plus a 4.0 x 2.6 latch keyway, same figure std/rj45 carries from
+    TE 2497310-1 CAD. A plug that fits one RJ45 fits them all
+  elements: stencil art - a green indicator sits in the shell corner beside the
+    pins. Two are declared, which is the usual arrangement for an
+    integrated-LED jack; the Smartoptics art lights one per port
+  led-side: art - ETH0 shows its indicator on the pin side and RS232 shows it
+    opposite, which is the same part rotated 180. The pins and keyway flip with
+    it, matching the drawing
+elements:
+  jack: {at: [0.6, 1.0], size: [14.6, 10.5], class: jack}
+  led-a:
+    at: [1.5, 1.3]
+    size: [2.6, 1.3]
+    class: led
+    states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#f59e0b'}]
+  led-b:
+    at: [11.7, 1.3]
+    size: [2.6, 1.3]
+    class: led
+    states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#f59e0b'}]
+relief:
+  wall: '#b9bec4'
+  cavity: cavity
+  size: {w: 11.89, h: 9.45}
+  features:
+    - {node: led-a, dome: 0.2}
+    - {node: led-b, dome: 0.2}
+connection-points:
+  net: {at: [7.9, 6.3], direction: front}
+skins: [default]
