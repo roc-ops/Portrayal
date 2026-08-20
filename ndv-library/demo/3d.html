@@ -46,7 +46,11 @@ const camera = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, 1, 6000
 camera.position.set(420, 260, 620);
 const renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize(innerWidth, innerHeight);
-renderer.setPixelRatio(devicePixelRatio);
+// cap the pixel ratio: at DPR 2+ an integrated laptop GPU allocates 4x the
+// fragments and drivers commonly reduce or silently drop MSAA, which shows up
+// as aliased silhouette edges - worst where two edges converge, i.e. corners -
+// while textured face interiors still look clean because they are anisotropic
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 document.body.appendChild(renderer.domElement);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
