@@ -108,25 +108,14 @@ async function svgCanvas(url, wmm, hmm, flipX = false, flipYax = false) {
   URL.revokeObjectURL(blobUrl);
   return cv;
 }
-// Textures must be power-of-two to be mipmapped on a WebGL1 context, and NPOT is
-// exactly what a face canvas is (a 548x44mm side is 2192x176 at 4px/mm). Without
-// mipmaps, minification does not blur - it aliases, and a long thin side face seen
-// near edge-on is minified enormously along one axis, so any repeating vent strip
-// beats against the pixel grid and crawls. UVs run 0..1 over the whole face, so
-// rescaling the pixels to POT costs nothing geometrically.
-const potSize = n => Math.min(4096, 2 ** Math.round(Math.log2(Math.max(1, n))));
-function toPOT(cv) {
-  const w = potSize(cv.width), h = potSize(cv.height);
-  if (w === cv.width && h === cv.height) return cv;
-  const out = document.createElement('canvas');
-  out.width = w; out.height = h;
-  const c = out.getContext('2d');
-  c.imageSmoothingEnabled = true; c.imageSmoothingQuality = 'high';
-  c.drawImage(cv, 0, 0, w, h);
-  return out;
-}
+// A face canvas is inevitably non-power-of-two (a 548x44mm side is 2192x176 at
+// 4px/mm). WebGL2 mipmaps NPOT textures natively, so rescaling to POT buys
+// nothing - and it costs: a 2192x176 side squashed to 2048x128 is 1.07x
+// horizontally but 1.38x vertically, and that anisotropic resample distorts fine
+// repeating detail (the AS5912's 488x5mm vent strips) into something that beats
+// against the pixel grid and crawls under motion. Feed the native raster instead.
 function canvasTex(cv) {
-  const tex = new THREE.CanvasTexture(toPOT(cv));
+  const tex = new THREE.CanvasTexture(cv);
   tex.colorSpace = THREE.SRGBColorSpace;
   tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
   tex.generateMipmaps = true;
