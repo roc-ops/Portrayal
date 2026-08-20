@@ -21,21 +21,26 @@ provenance:
     scale - resolved against the 19-inch rack width the master is drawn at, then
     expressed from the body edge
   port-pairing: each LC duplex adapter carries two connection points 6.6mm apart
-    (the Tx and Rx fibres); adapters were recovered by pairing those
+    (the Tx and Rx fibers); adapters were recovered by pairing those
   column-grid: top and bottom rows agreed to within 0.15mm across all 17 columns,
     so a single averaged grid is used and the drawing jitter discarded
-  silkscreen: read from the stencil master artwork - XC01 alone, then eight
-    abutting pairs at 13.24mm with about 17.3mm between pairs
+  silkscreen: port grouping read from the stencil master - XC1 alone, then
+    eight abutting pairs at 13.24mm with about 17.3mm between pairs. Label text
+    corrected from a rack photo - the device prints XC1, not the stencil's XC01,
+    and every port carries a small Tx/Rx box between its name and the adapter,
+    reversed on the bottom row
+  markings: photo - IEC 60825 laser hazard triangles in the gap between the two
+    port blocks, one above the top row and one below the bottom
   rear-layout: photo IMG_2181 of racked DCP-R units - PSU with integrated fan
     and C14 inlet at each end, mirrored; honeycomb vent panel across the centre;
     management block right of centre. Block positions are approximate to about
     3mm - the photo has uncorrected perspective and partial cable occlusion, so
     it fixes the structure and order but not exact millimetres
-  side-top-bottom: declared at the correct chassis dimensions but deliberately
-    featureless. Nothing in the stencil, the manuals or IMG_2181 shows these
-    faces - the manual's rack-kit section gives bracket part numbers but no hole
-    positions - so no vents, screws or labels are drawn rather than invent them.
-    A photo of the lid and one side would let these be populated
+  side-top-bottom: IMG_2188 shows the lid, so these now carry the real finish -
+    a light silver body with the black front panel wrapping about 12.7mm (half
+    an inch) back along every face. Still no vents, screws or lid labels - the
+    photo shows the finish and the panel depth but not those details, so they
+    are left out rather than invented
   psu-part: label - Gospower G1251-0550WNA, P/N CRPS0550-AH, and the fan
     sticker reads 550W Platinum CRPS. So the module is a standard CRPS 1U part
     at 73.5 x 40 x 185, not the 84mm-wide estimate taken from the racked photo,
@@ -65,15 +70,15 @@ views:
       - {ref: common/lc-duplex-adapter@1, id: port-1510, at: [52.7, 9.6], label: "1510", label-at: [6.6, -1.6], label-anchor: middle, label-size: 1.5, attrs: {role: osc-filter, media: fiber}}
       - {ref: common/lc-duplex-adapter@1, id: port-line, at: [104.71, 11.1], label: "Line", label-at: [6.6, -1.6], label-anchor: middle, label-size: 1.5, attrs: {role: line, media: fiber}}
       - {ref: std/sfp@1, id: port-osc, at: [30.7, 27.5], label: "OSC", label-at: [7.25, 12.9], label-anchor: middle, label-size: 1.4, attrs: {media: sfp, role: osc}}
-      - {ref: common/lc-duplex-adapter@1, id: xc01, at: [134.79, 11.1], label: "XC01", label-at: [6.6, -1.6], label-anchor: middle, label-size: 1.5, group: xc-top, attrs: {role: cross-connect, channel: '1'}}
-      - {ref: common/lc-duplex-adapter@1, id: xc02, at: [152.81, 11.1], label: "XC02", label-at: [6.6, -1.6], label-anchor: middle, label-size: 1.5, group: xc-top, attrs: {role: cross-connect, channel: '2'}}
-      - {ref: common/lc-duplex-adapter@1, id: xc03, at: [166.12, 11.1], label: "XC03", label-at: [6.6, -1.6], label-anchor: middle, label-size: 1.5, group: xc-top, attrs: {role: cross-connect, channel: '3'}}
-      - {ref: common/lc-duplex-adapter@1, id: xc04, at: [183.22, 11.1], label: "XC04", label-at: [6.6, -1.6], label-anchor: middle, label-size: 1.5, group: xc-top, attrs: {role: cross-connect, channel: '4'}}
-      - {ref: common/lc-duplex-adapter@1, id: xc05, at: [196.55, 11.1], label: "XC05", label-at: [6.6, -1.6], label-anchor: middle, label-size: 1.5, group: xc-top, attrs: {role: cross-connect, channel: '5'}}
-      - {ref: common/lc-duplex-adapter@1, id: xc06, at: [213.91, 11.1], label: "XC06", label-at: [6.6, -1.6], label-anchor: middle, label-size: 1.5, group: xc-top, attrs: {role: cross-connect, channel: '6'}}
-      - {ref: common/lc-duplex-adapter@1, id: xc07, at: [227.22, 11.1], label: "XC07", label-at: [6.6, -1.6], label-anchor: middle, label-size: 1.5, group: xc-top, attrs: {role: cross-connect, channel: '7'}}
-      - {ref: common/lc-duplex-adapter@1, id: xc08, at: [244.12, 11.1], label: "XC08", label-at: [6.6, -1.6], label-anchor: middle, label-size: 1.5, group: xc-top, attrs: {role: cross-connect, channel: '8'}}
-      - {ref: common/lc-duplex-adapter@1, id: xc09, at: [257.39, 11.1], label: "XC09", label-at: [6.6, -1.6], label-anchor: middle, label-size: 1.5, group: xc-top, attrs: {role: cross-connect, channel: '9'}}
+      - {ref: common/lc-duplex-adapter@1, id: xc01, at: [134.79, 11.1], label: "XC1", label-at: [6.6, -1.6], label-anchor: middle, label-size: 1.5, group: xc-top, attrs: {role: cross-connect, channel: '1'}}
+      - {ref: common/lc-duplex-adapter@1, id: xc02, at: [152.81, 11.1], label: "XC2", label-at: [6.6, -1.6], label-anchor: middle, label-size: 1.5, group: xc-top, attrs: {role: cross-connect, channel: '2'}}
+      - {ref: common/lc-duplex-adapter@1, id: xc03, at: [166.12, 11.1], label: "XC3", label-at: [6.6, -1.6], label-anchor: middle, label-size: 1.5, group: xc-top, attrs: {role: cross-connect, channel: '3'}}
+      - {ref: common/lc-duplex-adapter@1, id: xc04, at: [183.22, 11.1], label: "XC4", label-at: [6.6, -1.6], label-anchor: middle, label-size: 1.5, group: xc-top, attrs: {role: cross-connect, channel: '4'}}
+      - {ref: common/lc-duplex-adapter@1, id: xc05, at: [196.55, 11.1], label: "XC5", label-at: [6.6, -1.6], label-anchor: middle, label-size: 1.5, group: xc-top, attrs: {role: cross-connect, channel: '5'}}
+      - {ref: common/lc-duplex-adapter@1, id: xc06, at: [213.91, 11.1], label: "XC6", label-at: [6.6, -1.6], label-anchor: middle, label-size: 1.5, group: xc-top, attrs: {role: cross-connect, channel: '6'}}
+      - {ref: common/lc-duplex-adapter@1, id: xc07, at: [227.22, 11.1], label: "XC7", label-at: [6.6, -1.6], label-anchor: middle, label-size: 1.5, group: xc-top, attrs: {role: cross-connect, channel: '7'}}
+      - {ref: common/lc-duplex-adapter@1, id: xc08, at: [244.12, 11.1], label: "XC8", label-at: [6.6, -1.6], label-anchor: middle, label-size: 1.5, group: xc-top, attrs: {role: cross-connect, channel: '8'}}
+      - {ref: common/lc-duplex-adapter@1, id: xc09, at: [257.39, 11.1], label: "XC9", label-at: [6.6, -1.6], label-anchor: middle, label-size: 1.5, group: xc-top, attrs: {role: cross-connect, channel: '9'}}
       - {ref: common/lc-duplex-adapter@1, id: xc10, at: [280, 11.1], label: "XC10", label-at: [6.6, -1.6], label-anchor: middle, label-size: 1.5, group: xc-top, attrs: {role: cross-connect, channel: '10'}}
       - {ref: common/lc-duplex-adapter@1, id: xc11, at: [293.34, 11.1], label: "XC11", label-at: [6.6, -1.6], label-anchor: middle, label-size: 1.5, group: xc-top, attrs: {role: cross-connect, channel: '11'}}
       - {ref: common/lc-duplex-adapter@1, id: xc12, at: [311.21, 11.1], label: "XC12", label-at: [6.6, -1.6], label-anchor: middle, label-size: 1.5, group: xc-top, attrs: {role: cross-connect, channel: '12'}}
@@ -99,9 +104,83 @@ views:
       - {ref: common/lc-duplex-adapter@1, id: xc32, at: [354.68, 22.6], label: "XC32", label-at: [6.6, 13.4], label-anchor: middle, label-size: 1.5, group: xc-bottom, attrs: {role: cross-connect, channel: '32'}}
       - {ref: common/lc-duplex-adapter@1, id: xc33, at: [372.05, 22.6], label: "XC33", label-at: [6.6, 13.4], label-anchor: middle, label-size: 1.5, group: xc-bottom, attrs: {role: cross-connect, channel: '33'}}
       - {ref: common/lc-duplex-adapter@1, id: xc34, at: [385.45, 22.6], label: "XC34", label-at: [6.6, 13.4], label-anchor: middle, label-size: 1.5, group: xc-bottom, attrs: {role: cross-connect, channel: '34'}}
+      - {ref: common/laser-warning@1, id: laser-warn-top, at: [271.6, 5.4]}
+      - {ref: common/laser-warning@1, id: laser-warn-bottom, at: [271.6, 34.6]}
     decor:
+      - {text: Tx, at: [56, 9], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [62.6, 9], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [108.01, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [114.61, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [138.09, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [144.69, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [156.11, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [162.71, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [169.42, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [176.02, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [186.52, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [193.12, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [199.85, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [206.45, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [217.21, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [223.81, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [230.52, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [237.12, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [247.42, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [254.02, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [260.69, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [267.29, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [283.3, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [289.9, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [296.64, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [303.24, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [314.51, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [321.11, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [327.74, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [334.34, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [344.66, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [351.26, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [357.98, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [364.58, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [375.35, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [381.95, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [388.75, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [395.35, 10.5], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [138.09, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [144.69, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [156.11, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [162.71, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [169.42, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [176.02, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [186.52, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [193.12, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [199.85, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [206.45, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [217.21, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [223.81, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [230.52, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [237.12, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [247.42, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [254.02, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [260.69, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [267.29, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [283.3, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [289.9, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [296.64, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [303.24, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [314.51, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [321.11, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [327.74, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [334.34, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [344.66, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [351.26, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [357.98, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [364.58, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [375.35, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [381.95, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Rx, at: [388.75, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
+      - {text: Tx, at: [395.35, 36.2], font-size: 1.15, fill: '#9aa0a8', anchor: middle}
       - {at: [30, 9], size: [20, 10], pattern: vent, vent: 5}
-      - {at: [272, 14], size: [6, 17], pattern: vent, vent: 4}
+      - {at: [271.6, 15.5], size: [5.4, 14], pattern: vent, vent: 3}
       - {at: [424, 13], size: [7, 19], pattern: vent, vent: 5}
       - {text: smartoptics, at: [22, 6.4], font-size: 3.4, fill: '#e8ecef'}
       - {text: DCP-R-34D-CS, at: [66, 6.2], font-size: 3.0, fill: '#e8ecef'}
@@ -132,9 +211,21 @@ views:
       - {text: Rx, at: [336.5, 16], font-size: 1.8, fill: '#c9cdd1'}
   left:
     size: {w: 505, h: 45}
+    decor:
+      - {at: [0, 0], size: [505, 45], fill: '#b9bec4'}
+      - {at: [492.3, 0], size: [12.7, 45], fill: '#17191c'}
   right:
     size: {w: 505, h: 45}
+    decor:
+      - {at: [0, 0], size: [505, 45], fill: '#b9bec4'}
+      - {at: [0, 0], size: [12.7, 45], fill: '#17191c'}
   top:
     size: {w: 440, h: 505}
+    decor:
+      - {at: [0, 0], size: [440, 505], fill: '#b9bec4'}
+      - {at: [0, 492.3], size: [440, 12.7], fill: '#17191c'}
   bottom:
     size: {w: 440, h: 505}
+    decor:
+      - {at: [0, 0], size: [440, 505], fill: '#b9bec4'}
+      - {at: [0, 492.3], size: [440, 12.7], fill: '#17191c'}

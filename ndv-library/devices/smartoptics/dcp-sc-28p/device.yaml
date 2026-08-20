@@ -20,7 +20,7 @@ provenance:
   port-count: the recovered layout confirms the model name - 24 RJ45 on a
     14.3mm column pitch plus 4 LC duplex, i.e. 28 ports, and a separate PROBE
   port-identification: RJ45 columns carry one connection point per port; the LC
-    columns carry two about 6.4mm apart, one per fibre, which is what
+    columns carry two about 6.4mm apart, one per fiber, which is what
     distinguishes them
   column-pitch: raw connection points jitter between 13.85 and 14.80mm, which
     put ports 7/9 and 8/10 into a 0.15mm overlap that lint L13 caught. Each RJ45
@@ -33,11 +33,11 @@ provenance:
     management block right of centre. Block positions are approximate to about
     3mm - the photo has uncorrected perspective and partial cable occlusion, so
     it fixes the structure and order but not exact millimetres
-  side-top-bottom: declared at the correct chassis dimensions but deliberately
-    featureless. Nothing in the stencil, the manuals or IMG_2181 shows these
-    faces - the manual's rack-kit section gives bracket part numbers but no hole
-    positions - so no vents, screws or labels are drawn rather than invent them.
-    A photo of the lid and one side would let these be populated
+  side-top-bottom: IMG_2188 shows the lid, so these now carry the real finish -
+    a light silver body with the black front panel wrapping about 12.7mm (half
+    an inch) back along every face. Still no vents, screws or lid labels - the
+    photo shows the finish and the panel depth but not those details, so they
+    are left out rather than invented
   psu-part: label - Gospower G1251-0550WNA, P/N CRPS0550-AH, and the fan
     sticker reads 550W Platinum CRPS. So the module is a standard CRPS 1U part
     at 73.5 x 40 x 185, not the 84mm-wide estimate taken from the racked photo,
@@ -111,9 +111,21 @@ views:
       - {at: [78, 5], size: [285, 35], pattern: vent, vent: 9}
   left:
     size: {w: 505, h: 45}
+    decor:
+      - {at: [0, 0], size: [505, 45], fill: '#b9bec4'}
+      - {at: [492.3, 0], size: [12.7, 45], fill: '#17191c'}
   right:
     size: {w: 505, h: 45}
+    decor:
+      - {at: [0, 0], size: [505, 45], fill: '#b9bec4'}
+      - {at: [0, 0], size: [12.7, 45], fill: '#17191c'}
   top:
     size: {w: 440, h: 505}
+    decor:
+      - {at: [0, 0], size: [440, 505], fill: '#b9bec4'}
+      - {at: [0, 492.3], size: [440, 12.7], fill: '#17191c'}
   bottom:
     size: {w: 440, h: 505}
+    decor:
+      - {at: [0, 0], size: [440, 505], fill: '#b9bec4'}
+      - {at: [0, 492.3], size: [440, 12.7], fill: '#17191c'}

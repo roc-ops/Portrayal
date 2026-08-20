@@ -30,10 +30,10 @@
   <div><i style="background:#e8d44d"></i>span mcdnny–abrnny</div>
   <div><i style="background:#e8874d"></i>span abrnny–gnvany</div>
   <div><i style="background:#4de8a8"></i>span gnvany–mcdnny</div>
-  <div><i style="background:#bfae3a"></i>intra-site fibre</div>
+  <div><i style="background:#bfae3a"></i>intra-site fiber</div>
   <div><i style="background:#4d7fe8"></i>ethernet</div>
-  <div style="margin-top:0.35rem;color:#8d939a">dashes flow TX → RX (fibre only)</div>
-  <div style="color:#8d939a">striped = B strand (return fibre)</div>
+  <div style="margin-top:0.35rem;color:#8d939a">dashes flow TX → RX (fiber only)</div>
+  <div style="color:#8d939a">striped = B strand (return fiber)</div>
 </div>
 <div id="hud">loading…</div>
 <div id="note">drag to orbit · wheel to zoom</div>
@@ -217,7 +217,7 @@ async function portIndex(ref, cfg) {
 // ----------------------------------------------------------------- cables
 const CABLE = {smf: 0xbfae3a, ethernet: 0x4d7fe8};
 // the three ring spans get their own hue so the topology reads at a glance;
-// intra-site fibre (XC cross-connect, OSC loops) stays the neutral fibre colour
+// intra-site fiber (XC cross-connect, OSC loops) stays the neutral fiber colour
 const SPAN = {
   'mcdnny-abrnny': 0xe8d44d,
   'abrnny-gnvany': 0xe8874d,
@@ -331,7 +331,7 @@ function cable(a, b, colour, striped, lateral, sag, flow) {
     const faces = idxCache[ref];
     // prefer the exact strand (port/tx). An empty SFP cage has no bores, so fall
     // back to the port centre and split the pair either side of it - the two
-    // fibres of a duplex transceiver sit about 6.2mm apart.
+    // fibers of a duplex transceiver sit about 6.2mm apart.
     let view = null, p = null, split = 0;
     for (const v of ['front', 'rear']) {
       if (bore && faces[v][`${portId}/${bore}`]) { view = v; p = faces[v][`${portId}/${bore}`]; break; }
