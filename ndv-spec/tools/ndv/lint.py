@@ -212,6 +212,37 @@ def lint_device_mating(path, view_name, view, lib_roots):
                              f"{host['ref']} presents {want!r}")
 
 
+def lint_device_overlap(path, view_name, view, lib_roots):
+    """L13: two placed components must not occupy the same faceplate area.
+
+    Overlap is almost always a sizing mistake rather than a drawing choice: a
+    part measured off one device dropped into a tighter gap on another. It is
+    invisible in the flat SVG (the later node just paints over the earlier one)
+    but obvious in 3D, where an LED dome hangs over the lip of a port cavity.
+
+    Occupants are exempt - a transceiver placed with mate-to is *supposed* to
+    sit inside its host's aperture.
+    """
+    boxes = []
+    for p in view.get("placements") or []:
+        if not p.get("at") or p.get("mate-to"):
+            continue
+        cp = resolve_component(p["ref"], lib_roots)
+        if not cp:
+            continue
+        sz = (yaml.safe_load(cp.read_text()) or {}).get("size") or {}
+        if "w" not in sz or "h" not in sz:
+            continue
+        boxes.append((p["id"], p["at"][0], p["at"][1], sz["w"], sz["h"]))
+    for i, a in enumerate(boxes):
+        for b in boxes[i + 1:]:
+            ox = min(a[1] + a[3], b[1] + b[3]) - max(a[1], b[1])
+            oy = min(a[2] + a[4], b[2] + b[4]) - max(a[2], b[2])
+            if ox > 1e-3 and oy > 1e-3:
+                err(path, "L13", f"{view_name}: {a[0]} and {b[0]} overlap by "
+                                 f"{ox:.2f}x{oy:.2f}mm")
+
+
 def lint_device(path, validator, lib_roots):
     data = yaml.safe_load(path.read_text())
     for e in validator.iter_errors(data):
@@ -226,6 +257,7 @@ def lint_device(path, validator, lib_roots):
     for vname, view in (data.get("views") or {}).items():
         view = view or {}
         lint_device_mating(path, vname, view, lib_roots)
+        lint_device_overlap(path, vname, view, lib_roots)
         seen = set()
         for p in view.get("placements", []) or []:
             check_segment(path, "L2", p["id"])

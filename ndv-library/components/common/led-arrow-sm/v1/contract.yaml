@@ -1,0 +1,24 @@
+format: 1
+kind: component
+name: led-arrow-sm
+version: 1.0.0
+class: led
+profile: networking
+description: >-
+  Compact triangle port LED for tight inter-port gaps - up skin for top-row
+  ports, down for bottom. Geometrically identical to led-arrow at 0.625 scale.
+  led-arrow is 3.2mm tall and does not fit between belly-to-belly QSFP cages,
+  whose aperture-to-aperture gap is about 2.4mm.
+size: {w: 2.25, h: 2.0}
+provenance:
+  size: estimated
+elements:
+  lamp:
+    at: [0.125, 0.125]
+    size: [2.0, 1.75]
+    class: led
+    states: ['off', link, activity]
+relief:
+  features:
+    - {node: lamp, dome: 0.16}
+skins: [up, down]
