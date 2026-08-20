@@ -34,6 +34,8 @@ provenance:
     2 x 19.0 = 38 plus the management stack fits the 440mm panel
   port-numbering: assumed column-major (odd top, even below), matching the Edgecore
     convention seen on the AS7326-56X - VERIFY against the faceplate silkscreen
+  usb-area: the honeycomb stops either side of the USB port - that patch of panel
+    is flat - and the USB trident is printed to its right (owner, from the unit)
   rear-layout: datasheet figure (PSU each end, six fans between, numbered 6..1)
   top-bottom-sides: NOT modelled yet - a 3D capture of this unit exists and should
     be the source rather than extrapolation
@@ -87,7 +89,8 @@ views:
     decor:
       - {at: [0, 1], size: [2.8, 42], pattern: vent, vent: 25}
       - {at: [437.2, 1], size: [2.8, 42], pattern: vent, vent: 25}
-      - {at: [14, 33], size: [348, 9], pattern: vent, vent: 22}
+      - {at: [14, 33], size: [302, 9], pattern: vent, vent: 22}
+      - {at: [344, 33], size: [18, 9], pattern: vent, vent: 22}
       - {at: [17.6, 30.4], text: '1▲', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
       - {at: [24.6, 30.4], text: '2▼', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
       - {at: [31.85, 30.4], text: '3▲', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
@@ -242,6 +245,7 @@ views:
       - {ref: std/qsfp-module@1, id: port-52, at: [391.25, 14.5], rotate: 180, group: qsfp-ports, rel-pos: 52}
       - {ref: std/qsfp-module@1, id: port-54, at: [391.25, 29], group: qsfp-ports, rel-pos: 54}
       - {ref: std/usb-a@1, id: usb-a, at: [320, 35.5], group: mgmt, attrs: {role: storage}}
+      - {ref: common/usb-symbol@1, id: usb-mark, at: [334.5, 35.75]}
       - {ref: common/rj45-bezel@2, id: mgmt-eth, at: [416, 2.5], group: mgmt, attrs: {media: rj45, role: mgmt}}
       - {ref: common/rj45-bezel@2, id: console, at: [416, 19.0], rotate: 180, group: mgmt, attrs: {media: rj45-serial, role: console}}
     regions:
