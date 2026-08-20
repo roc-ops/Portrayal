@@ -1,0 +1,40 @@
+format: 1
+kind: module
+name: psu-550w
+version: 2.0.0
+class: psu
+profile: networking
+description: >-
+  550W CRPS hot-swap PSU module - axial fan, pull handle, latch and a
+  panel-mounted C14 inlet turned portrait. Fitted to the Smartoptics DCP
+  chassis; the observed part is a Gospower G1251-0550WNA (P/N CRPS0550-AH).
+size: {w: 73.5, h: 40.0, d: 185.0}
+conforms: crps-1u
+attrs: {watts: '550', input: ac, efficiency: platinum, form-factor: crps-1u}
+provenance:
+  size: registry - CRPS 1U module envelope. The part number CRPS0550-AH names
+    the form factor and the fan label reads "550W Platinum CRPS"
+  depth: measured - top face photographed flat has an aspect of 2.559, which at
+    the 73.5 width gives 188mm against the CRPS nominal 185
+  elements: photo-measured from a six-sided set of the module out of the chassis
+    plus a racked rear shot, so orientation is confirmed rather than inferred
+  inlet-orientation: photo - the C14 is mounted portrait in the chassis. It
+    reads landscape in the hand-held shots only because the module is being held
+    turned through 90 degrees
+  ratings: label - 100-240V, 550W max. Serial deliberately not recorded
+states: [ok, fail, absent]
+elements:
+  latch: {at: [65.0, 1.5], size: [7.0, 6.0], class: latch}
+  handle: {at: [6.0, 30.5], size: [46.0, 6.5], class: handle}
+parts:
+  - {ref: std/c13-inlet@1, id: inlet, at: [42.0, 10.0], rotate: 90}
+relief:
+  features:
+    - {node: handle, out: 2.0, color: '#1b1e21'}
+    - {node: latch, out: 1.4, color: '#3b4a8c'}
+connection-points:
+  power: {at: [56.0, 20.0], direction: rear}
+body:
+  depth: 185.0
+  color: '#b9bec4'
+skins: [default]

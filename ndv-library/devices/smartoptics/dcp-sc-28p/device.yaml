@@ -38,6 +38,10 @@ provenance:
     faces - the manual's rack-kit section gives bracket part numbers but no hole
     positions - so no vents, screws or labels are drawn rather than invent them.
     A photo of the lid and one side would let these be populated
+  psu-part: label - Gospower G1251-0550WNA, P/N CRPS0550-AH, and the fan
+    sticker reads 550W Platinum CRPS. So the module is a standard CRPS 1U part
+    at 73.5 x 40 x 185, not the 84mm-wide estimate taken from the racked photo,
+    and both bays sit flush to the chassis edges
   psu-orientation: photo - both modules are fitted the same way round, fan
     inboard of the inlet, so the C14 sits at the far right on PSU-2 and inboard
     on PSU-1. They are not mirrored
@@ -100,8 +104,8 @@ views:
     placements:
       - {ref: common/rack-ear@1, id: ear-left-r, at: [-14, 0.75], skin: left, optional: ears}
       - {ref: common/rack-ear@1, id: ear-right-r, at: [440, 0.75], skin: right, optional: ears}
-      - {ref: common/psu-550w@1, id: psu-1, at: [0, 2.5], attrs: {slot: '1'}}
-      - {ref: common/psu-550w@1, id: psu-2, at: [356, 2.5], attrs: {slot: '2'}}
+      - {ref: common/psu-550w@2, id: psu-1, at: [0, 2.5], attrs: {slot: '1'}}
+      - {ref: common/psu-550w@2, id: psu-2, at: [366.5, 2.5], attrs: {slot: '2'}}
       - {ref: common/rj45-hd@1, id: eth2, at: [276, 8.5], label: "ETH 2", label-at: [7, -1.4], label-anchor: middle, label-size: 1.8, group: mgmt, attrs: {role: mgmt, speed: 1000base-t}}
       - {ref: common/rj45-hd@1, id: eth4, at: [291, 8.5], label: "ETH 4", label-at: [7, -1.4], label-anchor: middle, label-size: 1.8, group: mgmt, attrs: {role: mgmt, speed: 1000base-t}}
       - {ref: common/rj45-hd@1, id: eth1, at: [276, 22], label: "ETH 1", label-at: [7, 13.9], label-anchor: middle, label-size: 1.8, group: mgmt, attrs: {role: mgmt, speed: 1000base-t}}
@@ -111,7 +115,7 @@ views:
       - {ref: std/sfp@1, id: eth5, at: [318.75, 22], label: "ETH 5", label-at: [8, 13.9], label-anchor: middle, label-size: 1.8, group: mgmt, attrs: {role: mgmt, media: sfp}}
       - {ref: common/reset-button@1, id: reset, at: [345, 26], label: "RESET", label-at: [2, 8.4], label-anchor: middle, label-size: 1.5, group: mgmt}
     decor:
-      - {at: [87, 5], size: [175, 35], pattern: vent, vent: 9}
+      - {at: [78, 5], size: [180, 35], pattern: vent, vent: 9}
       - {text: Tx, at: [316.5, 16], font-size: 1.8, fill: '#c9cdd1', anchor: end}
       - {text: Rx, at: [336.5, 16], font-size: 1.8, fill: '#c9cdd1'}
   left:
