@@ -62,7 +62,8 @@ globalThis.__ndv3d = {THREE, scene, camera, renderer};
   const aniso = renderer.capabilities.getMaxAnisotropy();
   const samples = gl.getParameter(gl.SAMPLES);
   const el = document.getElementById('gfx');
-  el.textContent = `WebGL${w2 ? 2 : 1} · aniso ${aniso} · msaa ${samples}`;
+  el.dataset.caps = `WebGL${w2 ? 2 : 1} · aniso ${aniso} · msaa ${samples}`;
+  el.textContent = el.dataset.caps;
   // WebGL1 means NPOT textures cannot be mipmapped, and msaa 0 means antialias:true
   // was not honoured - either one produces shimmer that no material setting fixes
   if (!w2 || samples === 0 || aniso < 4) el.classList.add('warn');
@@ -76,6 +77,7 @@ renderer.setSize(innerWidth, innerHeight);
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 document.body.appendChild(renderer.domElement);
 const controls = new OrbitControls(camera, renderer.domElement);
+globalThis.__ndv3d.controls = controls;
 controls.enableDamping = true;
 // keep the camera outside the near plane so raising near cannot clip geometry
 controls.minDistance = 40;
@@ -106,6 +108,7 @@ async function svgCanvas(url, wmm, hmm, flipX = false, flipYax = false) {
   ctx.drawImage(img, 0, 0, cv.width, cv.height);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   URL.revokeObjectURL(blobUrl);
+  cv._svgText = text;      // kept for adaptive re-rasterisation (see LOD below)
   return cv;
 }
 // A face canvas is inevitably non-power-of-two (a 548x44mm side is 2192x176 at
@@ -234,13 +237,16 @@ async function extractRelief(url) {
   return {cavities, outs, domes, vents, frus, cleanText};
 }
 
-async function rasterize(svgText, wmm, hmm) {
+async function rasterize(svgText, wmm, hmm, pxmm = PXMM, flipX = false, flipY = false) {
   const img = new Image();
   const blobUrl = URL.createObjectURL(new Blob([svgText], {type: 'image/svg+xml'}));
   await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = blobUrl; });
   const cv = document.createElement('canvas');
-  cv.width = Math.max(1, Math.round(wmm * PXMM)); cv.height = Math.max(1, Math.round(hmm * PXMM));
-  cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
+  cv.width = Math.max(1, Math.round(wmm * pxmm)); cv.height = Math.max(1, Math.round(hmm * pxmm));
+  const ctx = cv.getContext('2d');
+  if (flipX) { ctx.translate(cv.width, 0); ctx.scale(-1, 1); }
+  if (flipY) { ctx.translate(0, cv.height); ctx.scale(1, -1); }
+  ctx.drawImage(img, 0, 0, cv.width, cv.height);
   URL.revokeObjectURL(blobUrl);
   return cv;
 }
@@ -308,6 +314,104 @@ function syncFruButtons() {
 }
 window.__toggleFru = toggleFru;
 
+
+// --- adaptive face resolution -------------------------------------------------
+// Face art is baked into a canvas at PXMM, which puts a 1.5mm port label at ~6px:
+// legible from a metre, mush from 100mm. Rasterising every face at the sharpest
+// useful density is not an option - all six at ~28px/mm is roughly 380MB - so
+// instead measure how many screen pixels each face actually covers and re-raster
+// only the one being looked at. Faces turned away fall back to base density, so
+// the high-resolution canvas exists for at most a face or two at a time.
+//
+// This keeps the SVG as the single source of truth: refinement runs the exact
+// same rasteriser at a higher density, so 3D text can never drift from 2D text.
+const LOD_STEPS = [PXMM, 8, 16, 32];
+const MAX_FACE_TEXELS = 16e6;     // ~64MB RGBA: a 440x44mm faceplate reaches 16px/mm,
+                                  // and a 440x548mm top/bottom still reaches 8 - enough
+                                  // for the compliance and serial labels down there
+const MAX_TOTAL_TEXELS = 40e6;    // a 3/4 view lights up three faces at once
+const LOD = [];
+globalThis.__ndv3d.LOD = LOD;
+let lodPaused = 0;
+
+const texelsAt = (rec, px) => rec.wmm * rec.hmm * px * px;
+function lodClamp(rec, want) {
+  const maxDim = renderer.capabilities.maxTextureSize || 4096;
+  // what everything else is already holding, so one face cannot blow the budget
+  const others = LOD.reduce((n, r) => n + (r === rec ? 0 : texelsAt(r, r.level)), 0);
+  while (want > PXMM && (Math.max(rec.wmm, rec.hmm) * want > maxDim ||
+                         texelsAt(rec, want) > MAX_FACE_TEXELS ||
+                         others + texelsAt(rec, want) > MAX_TOTAL_TEXELS)) {
+    want = LOD_STEPS[LOD_STEPS.indexOf(want) - 1];
+  }
+  return want;
+}
+
+// screen pixels per mm across this face, at the drawing-buffer resolution that
+// actually gets sampled (not CSS pixels - a DPR-2 display samples twice as finely)
+const _v = () => new THREE.Vector3();
+function faceDensity(rec) {
+  const bw = renderer.domElement.width, bh = renderer.domElement.height;
+  const o = _v().applyMatrix4(rec.frame);
+  const n = _v().set(0, 0, 1).transformDirection(rec.frame);
+  if (n.dot(_v().copy(camera.position).sub(o).normalize()) <= 0.05) return 0;  // turned away
+  const scr = v => { const p = v.project(camera); return [p.x * 0.5 * bw, p.y * 0.5 * bh]; };
+  const [ox, oy] = scr(_v().applyMatrix4(rec.frame));
+  const [ax, ay] = scr(_v().set(1, 0, 0).applyMatrix4(rec.frame));
+  const [bx, by] = scr(_v().set(0, 1, 0).applyMatrix4(rec.frame));
+  return Math.max(Math.hypot(ax - ox, ay - oy), Math.hypot(bx - ox, by - oy));
+}
+
+async function refineFace(rec, pxmm) {
+  if (rec.busy || rec.level === pxmm || !box) return;
+  rec.busy = true;
+  try {
+    const cv = await rasterize(rec.svgText, rec.wmm, rec.hmm, pxmm, rec.flipX, rec.flipY);
+    const mat = (Array.isArray(box.material) ? box.material : [box.material])[rec.matIndex];
+    if (!mat) return;
+    const old = mat.map;
+    const tex = canvasTex(cv);
+    // the component-plate path retargets the face texture onto a trimmed plate
+    if (old) { tex.repeat.copy(old.repeat); tex.offset.copy(old.offset); }
+    mat.map = tex;
+    mat.needsUpdate = true;
+    if (old) old.dispose();
+    rec.level = pxmm;
+  } catch (e) {
+    console.warn('[ndv] face refine failed', rec.key, e);
+  } finally { rec.busy = false; }
+}
+
+function updateFaceLOD() {
+  if (!box || performance.now() < lodPaused) return;
+  for (const rec of LOD) {
+    const need = faceDensity(rec);
+    let want = LOD_STEPS.find(s => s >= need) || LOD_STEPS[LOD_STEPS.length - 1];
+    want = lodClamp(rec, want);
+    // hysteresis: drop a level only well below it, so nudging the camera around a
+    // threshold cannot trigger a re-raster on every frame
+    if (want < rec.level && need > rec.level / 2) continue;
+    if (want !== rec.level) refineFace(rec, want);
+  }
+  const shown = LOD.filter(r => r.level > PXMM)
+                   .map(r => `${r.key} ${r.level}px/mm`).join(' · ');
+  const el = document.getElementById('gfx');
+  if (el) el.textContent = el.dataset.caps + (shown ? ` · ${shown}` : '');
+}
+
+
+// Re-rasterising a face is main-thread work, so only do it once the camera has
+// settled - mid-orbit the extra sharpness is not perceptible anyway.
+let _lodCamKey = '', _lodSettledAt = 0, _lodRanAt = 0;
+function lodTick() {
+  const now = performance.now();
+  const key = camera.position.toArray().map(v => v.toFixed(1)).join(',');
+  if (key !== _lodCamKey) { _lodCamKey = key; _lodSettledAt = now; return; }
+  if (now - _lodSettledAt < 200 || now - _lodRanAt < 400) return;
+  _lodRanAt = now;
+  updateFaceLOD();
+}
+
 let box = null, reliefGroup = null;
 async function build(cfg) {
   document.getElementById('hud').textContent = `loading ${cfg}…`;
@@ -329,6 +433,8 @@ async function build(cfg) {
     }
   }
   const faceCv = {};
+  const faceSvg = {};   // source text per face, for adaptive re-rasterisation
+  lodPaused = performance.now() + 500;   // no refinement while the build is in flight
   // Relief is built in LOCAL face coordinates (x right, y up, z out of the face,
   // face plane at z=0) and oriented by a per-face group transform. flipLY handles
   // views whose y axis runs opposite to the face's local up (top view).
@@ -357,6 +463,7 @@ async function build(cfg) {
     const {cavities, outs, domes, vents, frus, cleanText} = await extractRelief(src);
     const cv = await rasterize(cleanText, fw, fh);
     faceCv[F.view] = cv;
+    faceSvg[F.view] = cleanText;
     const grp = new THREE.Group();
     grp.position.set(...F.pos());
     grp.rotation.set(...F.rot);
@@ -642,6 +749,7 @@ async function build(cfg) {
     ];
   } else {
     const bottomCv = await svgCanvas(f('bottom'), W, D, true, true);
+    faceSvg.bottom = bottomCv._svgText;
     mats = [faceCv.right, faceCv.left, faceCv.top, bottomCv, faceCv.front, faceCv.rear]
       .map((c, i) => new THREE.MeshBasicMaterial(
         // alphaTest: punched pixels must not write depth, or they occlude interiors
@@ -685,6 +793,25 @@ async function build(cfg) {
   } else {
     box = new THREE.Mesh(new THREE.BoxGeometry(W, H, D), mats);
     scene.add(box);
+  }
+  // register faces for adaptive refinement
+  LOD.length = 0;
+  const FRAME = (pos, rot) => new THREE.Matrix4().compose(
+    new THREE.Vector3(...pos),
+    new THREE.Quaternion().setFromEuler(new THREE.Euler(...rot)),
+    new THREE.Vector3(1, 1, 1));
+  const lodFaces = COMP
+    ? [['comp', 4, W, H, [0, 0, D / 2], [0, 0, 0], false, false]]
+    : [['right',  0, D, H, [W / 2, 0, 0],  [0, Math.PI / 2, 0],  false, false],
+       ['left',   1, D, H, [-W / 2, 0, 0], [0, -Math.PI / 2, 0], false, false],
+       ['top',    2, W, D, [0, H / 2, 0],  [-Math.PI / 2, 0, 0], false, false],
+       ['bottom', 3, W, D, [0, -H / 2, 0], [Math.PI / 2, 0, 0],  true,  true],
+       ['front',  4, W, H, [0, 0, D / 2],  [0, 0, 0],            false, false],
+       ['rear',   5, W, H, [0, 0, -D / 2], [0, Math.PI, 0],      false, false]];
+  for (const [key, matIndex, wmm, hmm, pos, rot, flipX, flipY] of lodFaces) {
+    if (!faceSvg[key]) continue;   // face fell back to flat colour - nothing to sharpen
+    LOD.push({key, matIndex, wmm, hmm, svgText: faceSvg[key], flipX, flipY,
+              frame: FRAME(pos, rot), level: PXMM, busy: false});
   }
   reliefGroup = new THREE.Group();
   meshes.forEach(m => reliefGroup.add(m));
@@ -755,7 +882,7 @@ addEventListener('pointermove', ev => {
     sel.onchange = () => build(sel.value);
     await build(COMP_ENTRY.skins[0]);
     window.__cam = camera; window.__controls = controls; window.__scene = scene;
-    (function loop() { requestAnimationFrame(loop); controls.update(); renderer.render(scene, camera); })();
+    (function loop() { requestAnimationFrame(loop); controls.update(); renderer.render(scene, camera); lodTick(); })();
     return;
   }
   const idx = await (await fetch(`../dist/${DEV}.configs.json`, {cache: 'no-store'})).json();
@@ -783,6 +910,7 @@ addEventListener('pointermove', ev => {
     stepTweens(now || 0);
     controls.update();
     renderer.render(scene, camera);
+    lodTick();
   })();
 })();
 </script>
