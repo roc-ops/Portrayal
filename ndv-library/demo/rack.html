@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NDV — lab rack</title>
+<style>
+  body { font-family: system-ui, sans-serif; background: #16181b; color: #d7dbdf; margin: 0; overflow: hidden; }
+  #bar { position: absolute; top: 0.6rem; left: 0.9rem; z-index: 5; display: flex; gap: 0.7rem; align-items: baseline; }
+  #bar strong { font-size: 0.95rem; }
+  #bar span { color: #8d939a; font-size: 0.8rem; }
+  #hud { position: absolute; bottom: 0.8rem; left: 0.9rem; z-index: 5; background: #0c0e10cc;
+         border: 1px solid #33373c; border-radius: 6px; padding: 0.4rem 0.7rem; font-size: 0.8rem; }
+  #key { position: absolute; top: 0.6rem; right: 0.9rem; z-index: 5; background: #0c0e10cc;
+         border: 1px solid #33373c; border-radius: 6px; padding: 0.5rem 0.7rem; font-size: 0.78rem; }
+  #key i { display: inline-block; width: 14px; height: 3px; border-radius: 2px; margin-right: 0.45rem;
+           vertical-align: middle; }
+  #note { position: absolute; bottom: 0.8rem; right: 0.9rem; z-index: 5; color: #565d64; font-size: 0.72rem; }
+  canvas { display: block; }
+</style>
+<script type="importmap">
+{ "imports": {
+    "three": "https://unpkg.com/three@0.161.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.161.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div id="bar"><strong>lab rack</strong><span id="sub"></span></div>
+<div id="key">
+  <div><i style="background:#e8d44d"></i>single-mode fibre</div>
+  <div><i style="background:#4d7fe8"></i>ethernet</div>
+</div>
+<div id="hud">loading…</div>
+<div id="note">drag to orbit · wheel to zoom</div>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const PARAMS = new URLSearchParams(location.search);
+const LAB = PARAMS.get('lab') || 'rocnet-roadm-demo';
+const RU = 44.45;                 // EIA-310 rack unit
+const RACK_W = 482.6;             // 19in rail-to-rail outer width
+const PXMM_FACE = 3;              // front/rear carry the detail worth reading
+const PXMM_SIDE = 1.2;            // sides/top/bottom are near-featureless here
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x121417);
+const camera = new THREE.PerspectiveCamera(42, innerWidth / innerHeight, 20, 12000);
+const renderer = new THREE.WebGLRenderer({antialias: true});
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+document.body.appendChild(renderer.domElement);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.minDistance = 200;
+controls.maxDistance = 9000;
+globalThis.__ndvRack = {THREE, scene, camera, renderer, controls};
+
+scene.add(new THREE.AmbientLight(0xffffff, 0.72));
+const key = new THREE.DirectionalLight(0xffffff, 0.85);
+key.position.set(0.5, 1, 1.1); scene.add(key);
+const fill = new THREE.DirectionalLight(0xffffff, 0.3);
+fill.position.set(-0.7, -0.2, -1); scene.add(fill);
+
+addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+
+const hud = m => { document.getElementById('hud').textContent = m; };
+
+// ---------------------------------------------------------------- textures
+async function svgCanvas(url, wmm, hmm, pxmm, flipX = false, flipY = false) {
+  const res = await fetch(url, {cache: 'no-store'});
+  if (!res.ok) return null;
+  const text = await res.text();
+  const img = new Image();
+  const blob = URL.createObjectURL(new Blob([text], {type: 'image/svg+xml'}));
+  await new Promise((ok, no) => { img.onload = ok; img.onerror = no; img.src = blob; });
+  const cv = document.createElement('canvas');
+  cv.width = Math.max(1, Math.round(wmm * pxmm));
+  cv.height = Math.max(1, Math.round(hmm * pxmm));
+  const c = cv.getContext('2d');
+  if (flipX) { c.translate(cv.width, 0); c.scale(-1, 1); }
+  if (flipY) { c.translate(0, cv.height); c.scale(1, -1); }
+  c.drawImage(img, 0, 0, cv.width, cv.height);
+  URL.revokeObjectURL(blob);
+  cv._svgText = text;
+  return cv;
+}
+function tex(cv) {
+  const t = new THREE.CanvasTexture(cv);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = renderer.capabilities.getMaxAnisotropy();
+  t.minFilter = THREE.LinearMipmapLinearFilter;
+  return t;
+}
+function labelSprite(text, px = 34, color = '#8d939a') {
+  const cv = document.createElement('canvas');
+  const c = cv.getContext('2d');
+  c.font = `600 ${px}px ui-monospace, monospace`;
+  cv.width = Math.ceil(c.measureText(text).width) + 12;
+  cv.height = px + 12;
+  const c2 = cv.getContext('2d');
+  c2.font = `600 ${px}px ui-monospace, monospace`;
+  c2.fillStyle = color; c2.textBaseline = 'middle';
+  c2.fillText(text, 6, cv.height / 2);
+  const s = new THREE.Sprite(new THREE.SpriteMaterial({map: tex(cv), depthTest: false}));
+  s.scale.set(cv.width / px * 22, cv.height / px * 22, 1);
+  return s;
+}
+
+// ------------------------------------------------------------------- rack
+// Rails only, as asked: two mounting posts with a U scale. No side panels,
+// no roof - the point is to read where each device sits, not to draw a cabinet.
+function buildRack(heightRU) {
+  const g = new THREE.Group();
+  const H = heightRU * RU;
+  const postMat = new THREE.MeshLambertMaterial({color: 0x4a5057});
+  const holeMat = new THREE.MeshBasicMaterial({color: 0x15181b});
+  for (const side of [-1, 1]) {
+    const post = new THREE.Mesh(new THREE.BoxGeometry(16, H, 34), postMat);
+    post.position.set(side * (RACK_W / 2 - 8), H / 2, -6);
+    g.add(post);
+    // three mounting holes per U, on the EIA-310 0.5/0.625/0.625in spacing
+    for (let u = 0; u < heightRU; u++) {
+      for (const dy of [6.35, 22.22, 38.10]) {
+        const h = new THREE.Mesh(new THREE.BoxGeometry(6, 6, 1), holeMat);
+        h.position.set(side * (RACK_W / 2 - 8), u * RU + dy, 11.3);
+        g.add(h);
+      }
+    }
+  }
+  // U numbering up the left rail, counted from the bottom as racks are
+  for (let u = 1; u <= heightRU; u++) {
+    const s = labelSprite(String(u), 30, u % 5 === 0 ? '#c9cdd1' : '#6b7178');
+    s.position.set(-(RACK_W / 2 + 40), (u - 1) * RU + RU / 2, 12);
+    g.add(s);
+  }
+  return g;
+}
+
+// ---------------------------------------------------------------- devices
+async function buildDevice(entry, byName) {
+  const meta = byName[entry.ref];
+  if (!meta) { console.warn('[ndv] unknown device', entry.ref); return null; }
+  const W = meta.chassis.w, H = meta.chassis.h, D = meta.chassis.d;
+  const cfg = meta.default || 'default';
+  const f = v => `../dist/${entry.ref}.${cfg}.${v}.svg`;
+  const plain = () => new THREE.MeshLambertMaterial({color: 0x3a3f44});
+  const face = async (view, wmm, hmm, pxmm, fx, fy) => {
+    const cv = await svgCanvas(f(view), wmm, hmm, pxmm, fx, fy);
+    return cv ? new THREE.MeshLambertMaterial(
+      {map: tex(cv), transparent: true, alphaTest: 0.08}) : plain();
+  };
+  const mats = [
+    await face('right',  D, H, PXMM_SIDE),
+    await face('left',   D, H, PXMM_SIDE),
+    await face('top',    W, D, PXMM_SIDE),
+    await face('bottom', W, D, PXMM_SIDE, true, true),
+    await face('front',  W, H, PXMM_FACE),
+    await face('rear',   W, H, PXMM_FACE),
+  ];
+  const mesh = new THREE.Mesh(new THREE.BoxGeometry(W, H, D), mats);
+  // a device at RU n occupies that U, measured from the rack floor
+  mesh.position.set(0, (entry.ru - 1) * RU + H / 2, -D / 2 + 14);
+  mesh.userData = {entry, W, H, D};
+
+  const tag = labelSprite(entry.label || entry.id, 30, '#d7dbdf');
+  tag.position.set(RACK_W / 2 + 30 + tag.scale.x / 2, mesh.position.y, 14);
+  return {mesh, tag, W, H, D};
+}
+
+// Port positions come from the compiled SVG rather than being restated here:
+// render it hidden, measure the node with getBBox, and the cable follows the
+// device manifest automatically if a port ever moves.
+async function portIndex(ref, cfg) {
+  const url = `../dist/${ref}.${cfg}.front.svg`;
+  const res = await fetch(url, {cache: 'no-store'});
+  if (!res.ok) return {};
+  const div = document.createElement('div');
+  div.style.cssText = 'position:absolute;left:-10000px;top:0;width:1200px;visibility:hidden';
+  div.innerHTML = await res.text();
+  document.body.appendChild(div);
+  const svg = div.querySelector('svg');
+  // getBBox() is in the element's OWN user space, so it drops the translate()
+  // that positions the placement. Compose it with the element's CTM relative to
+  // the root, which is what puts the port back where the manifest put it.
+  const inv = svg.getScreenCTM().inverse();
+  const idx = {};
+  for (const el of svg.children) {
+    const path = el.dataset && el.dataset.path;
+    if (!path || el.dataset.class === 'region') continue;
+    let b;
+    try { b = el.getBBox(); } catch { continue; }
+    if (!b.width && !b.height) continue;
+    const m = inv.multiply(el.getScreenCTM());
+    const pt = ([x, y]) => ({x: m.a * x + m.c * y + m.e, y: m.b * x + m.d * y + m.f});
+    const p0 = pt([b.x, b.y]), p1 = pt([b.x + b.width, b.y + b.height]);
+    idx[path] = {x: (p0.x + p1.x) / 2, y: (p0.y + p1.y) / 2};
+  }
+  div.remove();
+  return idx;
+}
+
+// ----------------------------------------------------------------- cables
+const CABLE = {smf: 0xe8d44d, ethernet: 0x4d7fe8};
+function cable(a, b, colour, sag) {
+  // route: out of the face, bow forward and down, back into the far face.
+  // Real patch leads leave a connector straight before they bend, so the first
+  // and last control points sit directly in front of their ports.
+  const out = 70;
+  const a1 = a.clone().add(new THREE.Vector3(0, 0, out));
+  const b1 = b.clone().add(new THREE.Vector3(0, 0, out));
+  const mid = a1.clone().lerp(b1, 0.5);
+  mid.z += sag;
+  const curve = new THREE.CatmullRomCurve3([a, a1, mid, b1, b], false, 'catmullrom', 0.4);
+  const geo = new THREE.TubeGeometry(curve, 64, 2.6, 8, false);
+  const m = new THREE.Mesh(geo, new THREE.MeshLambertMaterial({color: colour}));
+  m.renderOrder = 2;
+  return m;
+}
+
+// ------------------------------------------------------------------- main
+(async () => {
+  const labs = await (await fetch('../dist/labs.json', {cache: 'no-store'})).json();
+  const lab = labs.labs.find(l => l.name === LAB) || labs.labs[0];
+  if (!lab) { hud('no labs compiled'); return; }
+  // chassis dimensions and the default config live per device, not in the index
+  const refs = [...new Set(lab.devices.map(d => d.ref))];
+  const byName = {};
+  for (const ref of refs) {
+    const r = await fetch(`../dist/${ref}.configs.json`, {cache: 'no-store'});
+    if (!r.ok) { console.warn('[ndv] no configs for', ref); continue; }
+    byName[ref] = await r.json();
+  }
+
+  document.querySelector('#bar strong').textContent = lab.title;
+  document.getElementById('sub').textContent =
+    `${lab.devices.length} devices · ${lab.links.length} links · ${lab.rack['height-ru']}U`;
+
+  const root = new THREE.Group();
+  scene.add(root);
+  root.add(buildRack(lab.rack['height-ru']));
+
+  hud('building devices…');
+  const placed = {};
+  for (const entry of lab.devices) {
+    const d = await buildDevice(entry, byName);
+    if (!d) continue;
+    root.add(d.mesh); root.add(d.tag);
+    placed[entry.id] = d;
+  }
+
+  hud('resolving ports…');
+  const idxCache = {};
+  const worldPort = async (devId, portId) => {
+    const d = placed[devId];
+    if (!d) return null;
+    const ref = d.mesh.userData.entry.ref;
+    const cfg = (byName[ref] && byName[ref].default) || 'default';
+    idxCache[ref] ||= await portIndex(ref, cfg);
+    const p = idxCache[ref][portId];
+    if (!p) { console.warn('[ndv] no port', devId, portId); return null; }
+    // SVG mm (y down from the face top) -> world, on the front plane
+    return new THREE.Vector3(
+      p.x - d.W / 2,
+      d.mesh.position.y + d.H / 2 - p.y,
+      d.mesh.position.z + d.D / 2);
+  };
+
+  let drawn = 0, missing = 0;
+  for (const [i, link] of lab.links.entries()) {
+    const a = await worldPort(link.from[0], link.from[1]);
+    const b = await worldPort(link.to[0], link.to[1]);
+    if (!a || !b) { missing++; continue; }
+    // stagger the bow so parallel runs stay individually readable
+    const span = Math.abs(a.y - b.y);
+    const sag = 40 + (span > 1 ? Math.min(span * 0.18, 190) : 25) + (i % 3) * 12;
+    root.add(cable(a, b, CABLE[link.media] ?? 0x9aa0a8, sag));
+    drawn++;
+  }
+
+  // frame the populated part of the rack rather than the empty 42U
+  // frame the populated span, not the empty 42U, and bias the target right so
+  // the name column on that side does not push the rack off-centre
+  const us = lab.devices.map(d => d.ru);
+  const loU = Math.min(...us) - 1, hiU = Math.max(...us);
+  const midY = (loU + hiU) / 2 * RU;
+  const spanY = (hiU - loU) * RU;
+  const dist = spanY / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2)) * 1.35;
+  controls.target.set(150, midY, 0);
+  camera.position.set(150 + dist * 0.30, midY + dist * 0.22, dist);
+  controls.update();
+
+  hud(`${drawn} links drawn${missing ? ` · ${missing} unresolved` : ''} — drag to orbit`);
+  (function loop() {
+    requestAnimationFrame(loop);
+    controls.update();
+    renderer.render(scene, camera);
+  })();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+format: 1
+kind: lab
+name: rocnet-roadm-demo
+title: ROCNet ROADM customer demo
+description: >-
+  Three-site optical ring built in the lab for a customer demo. Each site is a
+  DCP-SC-28P service-channel controller with two DCP-R ROADM units below it,
+  one per direction. Transcribed from a hand-drawn Visio connectivity diagram.
+provenance:
+  layout: stated - controllers at U36, U28 and U20, each with its two ROADMs
+    below on alternate Us
+  topology: read off the connectivity diagram. The ring is D1-to-D1 between the
+    first pair and D2-to-D1 onward, closing D2-to-D2 back to the first site
+  roadm-model: assumed dcp-r-34d-cs. The diagram labels the units only as
+    roadm01-D1/D2; the 34D-CS is the colourless-directionless cross-connect,
+    which is the better fit for a ROADM role than the 9D
+  jumpers: the diagram shows a short fibre loop at the right-hand end of every
+    ROADM. Ports are not legible at that scale, so xc17-to-xc34 is a stand-in
+    for the shape of the connection, not a transcription
+rack:
+  height-ru: 42
+  rails-only: true
+devices:
+  - {id: mcdnny-sc01,        ref: dcp-sc-28p,    ru: 36, label: mcdnny-sc01,        mgmt-ip: 10.22.64.121}
+  - {id: mcdnny-roadm01-D1,  ref: dcp-r-34d-cs,  ru: 34, label: mcdnny-roadm01-D1}
+  - {id: mcdnny-roadm01-D2,  ref: dcp-r-34d-cs,  ru: 32, label: mcdnny-roadm01-D2}
+  - {id: abrnny-sc01,        ref: dcp-sc-28p,    ru: 28, label: abrnny-sc01,        mgmt-ip: 10.22.64.122}
+  - {id: abrnny-roadm01-D1,  ref: dcp-r-34d-cs,  ru: 26, label: abrnny-roadm01-D1}
+  - {id: abrnny-roadm01-D2,  ref: dcp-r-34d-cs,  ru: 24, label: abrnny-roadm01-D2}
+  - {id: gnvany-sc01,        ref: dcp-sc-28p,    ru: 20, label: gnvany-sc01,        mgmt-ip: 10.22.64.122}
+  - {id: gnvany-roadm01-D1,  ref: dcp-r-34d-cs,  ru: 18, label: gnvany-roadm01-D1}
+  - {id: gnvany-roadm01-D2,  ref: dcp-r-34d-cs,  ru: 16, label: gnvany-roadm01-D2}
+links:
+  # management - controller front service ports out to each ROADM's ETH0
+  - {media: ethernet, from: [mcdnny-sc01, port-1], to: [mcdnny-roadm01-D1, eth0]}
+  - {media: ethernet, from: [mcdnny-sc01, port-2], to: [mcdnny-roadm01-D2, eth0]}
+  - {media: ethernet, from: [abrnny-sc01, port-1], to: [abrnny-roadm01-D1, eth0]}
+  - {media: ethernet, from: [abrnny-sc01, port-2], to: [abrnny-roadm01-D2, eth0]}
+  - {media: ethernet, from: [gnvany-sc01, port-1], to: [gnvany-roadm01-D1, eth0]}
+  - {media: ethernet, from: [gnvany-sc01, port-2], to: [gnvany-roadm01-D2, eth0]}
+  # the optical ring - Line ports, one span per site pair
+  - {media: smf, from: [mcdnny-roadm01-D1, port-line], to: [abrnny-roadm01-D1, port-line], label: mcdnny-abrnny}
+  - {media: smf, from: [abrnny-roadm01-D2, port-line], to: [gnvany-roadm01-D1, port-line], label: abrnny-gnvany}
+  - {media: smf, from: [gnvany-roadm01-D2, port-line], to: [mcdnny-roadm01-D2, port-line], label: gnvany-mcdnny}
+  # short local loop at the right-hand end of each ROADM
+  - {media: smf, from: [mcdnny-roadm01-D1, xc17], to: [mcdnny-roadm01-D1, xc34]}
+  - {media: smf, from: [mcdnny-roadm01-D2, xc17], to: [mcdnny-roadm01-D2, xc34]}
+  - {media: smf, from: [abrnny-roadm01-D1, xc17], to: [abrnny-roadm01-D1, xc34]}
+  - {media: smf, from: [abrnny-roadm01-D2, xc17], to: [abrnny-roadm01-D2, xc34]}
+  - {media: smf, from: [gnvany-roadm01-D1, xc17], to: [gnvany-roadm01-D1, xc34]}
+  - {media: smf, from: [gnvany-roadm01-D2, xc17], to: [gnvany-roadm01-D2, xc34]}
