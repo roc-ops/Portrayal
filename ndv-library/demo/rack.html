@@ -32,7 +32,7 @@
   <div><i style="background:#4de8a8"></i>span gnvany–mcdnny</div>
   <div><i style="background:#bfae3a"></i>intra-site fibre</div>
   <div><i style="background:#4d7fe8"></i>ethernet</div>
-  <div style="margin-top:0.35rem;color:#8d939a">dashes flow TX → RX</div>
+  <div style="margin-top:0.35rem;color:#8d939a">dashes flow TX → RX (fibre only)</div>
   <div style="color:#8d939a">striped = B strand (return fibre)</div>
 </div>
 <div id="hud">loading…</div>
@@ -172,7 +172,9 @@ async function buildDevice(entry, byName) {
   mesh.userData = {entry, W, H, D};
 
   const tag = labelSprite(entry.label || entry.id, 30, '#d7dbdf');
-  tag.position.set(RACK_W / 2 + 30 + tag.scale.x / 2, mesh.position.y, 14);
+  // left side, outboard of the U numbering: the ethernet runs dress round the
+  // right-hand side of the rack and were sitting on top of these
+  tag.position.set(-(RACK_W / 2 + 76) - tag.scale.x / 2, mesh.position.y, 14);
   return {mesh, tag, W, H, D};
 }
 
@@ -249,7 +251,8 @@ function cableArt(colour, striped) {
   _artCache.set(k, cv);
   return cv;
 }
-function cableMat(colour, striped, lengthMm) {
+function cableMat(colour, striped, lengthMm, flow) {
+  if (!flow) return new THREE.MeshLambertMaterial({color: colour});
   const t = new THREE.CanvasTexture(cableArt(colour, striped));
   t.colorSpace = THREE.SRGBColorSpace;
   t.wrapS = t.wrapT = THREE.RepeatWrapping;
@@ -258,7 +261,7 @@ function cableMat(colour, striped, lengthMm) {
   return new THREE.MeshLambertMaterial({map: t});
 }
 
-function cable(a, b, colour, striped, lateral, sag) {
+function cable(a, b, colour, striped, lateral, sag, flow) {
   // Real patch leads leave a connector straight before they bend, so the first
   // and last control points sit off each port along that face's own normal.
   const out = 60;
@@ -281,7 +284,7 @@ function cable(a, b, colour, striped, lateral, sag) {
   pts.push(b1, b.pos);
   const curve = new THREE.CatmullRomCurve3(pts, false, 'catmullrom', 0.35);
   const geo = new THREE.TubeGeometry(curve, 130, 1.9, 8, false);
-  const m = new THREE.Mesh(geo, cableMat(colour, striped, curve.getLength()));
+  const m = new THREE.Mesh(geo, cableMat(colour, striped, curve.getLength(), flow));
   m.renderOrder = 2;
   return m;
 }
@@ -366,20 +369,21 @@ function cable(a, b, colour, striped, lateral, sag) {
     const span = Math.abs(a.pos.y - b.pos.y);
     const sag = 34 + (span > 1 ? Math.min(span * 0.16, 170) : 26) + (k % 3) * 14;
     const colour = SPAN[link.span] ?? CABLE[link.media] ?? 0x9aa0a8;
-    root.add(cable(a, b, colour, striped, lateral, sag));
+    root.add(cable(a, b, colour, striped, lateral, sag, link.media === 'smf'));
     drawn++;
   }
 
   // frame the populated part of the rack rather than the empty 42U
-  // frame the populated span, not the empty 42U, and bias the target right so
-  // the name column on that side does not push the rack off-centre
+  // frame the populated span, not the empty 42U, and bias toward the name
+  // column so it does not push the rack off-centre
   const us = lab.devices.map(d => d.ru);
   const loU = Math.min(...us) - 1, hiU = Math.max(...us);
   const midY = (loU + hiU) / 2 * RU;
   const spanY = (hiU - loU) * RU;
   const dist = spanY / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2)) * 1.35;
-  controls.target.set(150, midY, 0);
-  camera.position.set(150 + dist * 0.30, midY + dist * 0.22, dist);
+  // bias toward the name column, which now sits on the left
+  controls.target.set(-140, midY, 0);
+  camera.position.set(-140 + dist * 0.32, midY + dist * 0.22, dist);
   controls.update();
 
   hud(`${drawn} links drawn${missing ? ` · ${missing} unresolved` : ''} — drag to orbit`);
