@@ -14,6 +14,8 @@ REMOTE="${2:-/opt/ndv-demo}"
 STAGE="$(mktemp -d)"; trap 'rm -rf "$STAGE"' EXIT
 rsync -a --exclude 'reference/' --exclude '.DS_Store' ndv-library/demo "$STAGE/"
 rsync -a ndv-library/dist "$STAGE/"
+# no-cache static server: stock http.server lets browsers serve a stale build
+install -m 755 tools/serve.py "$STAGE/serve.py"
 cat > "$STAGE/index.html" <<'HTML'
 <!doctype html><meta charset="utf-8"><title>NDV</title>
 <meta http-equiv="refresh" content="0; url=demo/">
