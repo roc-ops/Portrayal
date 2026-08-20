@@ -53,6 +53,9 @@ scene.background = new THREE.Color(0x16181b);
 const camera = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, 5, 3000);
 camera.position.set(420, 260, 620);
 const renderer = new THREE.WebGLRenderer({antialias: true});
+// debug handle: lets devtools/automation walk the built scene, e.g. to check for
+// coplanar geometry when diagnosing z-fighting
+globalThis.__ndv3d = {THREE, scene, camera, renderer};
 {
   const gl = renderer.getContext();
   const w2 = renderer.capabilities.isWebGL2;
