@@ -48,8 +48,14 @@ provenance:
   usb-area: the honeycomb stops either side of the USB port - that patch of panel
     is flat - and the USB trident is printed to its right (owner, from the unit)
   rear-layout: datasheet figure (PSU each end, six fans between, numbered 6..1)
-  top-bottom-sides: NOT modelled yet - a 3D capture of this unit exists and should
-    be the source rather than extrapolation
+  top-bottom-sides: from the unit. Bottom label placement, the side-rail vent slots
+    and the rear-corner access panel are from IMG_2178; the top grooves and side
+    venting from the Object Capture frames. Positions are photo-inferred, not
+    measured - the chassis outline is the datasheet's 440 x 548 x 44
+  mgmt-leds: LNK and ACT, bracketed to the management port between the Mgmt and
+    Console silkscreen lines (IMG_2179)
+  rj45-orientation: the pair is mirrored with the latch keyways facing AWAY from
+    each other, so the upper jack is the inverted one (IMG_2179)
 attrs:
   asic: Broadcom BCM88370 Qumran-MX
   cpu: Intel Atom C2538, 4-core @ 2.4 GHz
@@ -156,8 +162,10 @@ views:
       - {at: [395.4, 30.42], text: '52▲', font-size: 1.6, fill: '#c9cdd1', anchor: middle}
       - {at: [404.2, 30.42], text: '▼53', font-size: 1.6, fill: '#c9cdd1', anchor: middle}
       - {at: [400, 43.6], text: '54▲', font-size: 1.3, fill: '#8d939a', anchor: middle}
-      - {at: [424.5, 37.2], text: '▲ Mgmt', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
-      - {at: [424.5, 40.6], text: '▼ Console', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [424.5, 36.4], text: '▲ Mgmt', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
+      - {at: [421.5, 41.0], text: 'LNK', font-size: 1.0, fill: '#8d939a', anchor: middle}
+      - {at: [428.5, 41.0], text: 'ACT', font-size: 1.0, fill: '#8d939a', anchor: middle}
+      - {at: [424.5, 43.2], text: '▼ Console', font-size: 1.5, fill: '#c9cdd1', anchor: middle}
     placements:
       - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0], skin: left, optional: ears}
       - {ref: common/rack-ear@1, id: ear-right, at: [440, 0], skin: right, optional: ears}
@@ -273,8 +281,10 @@ views:
       - {ref: common/led-arrow@1, id: led-p53, at: [404.6, 16.72], skin: down, group: qsfp-leds, attrs: {port: '53'}}
       - {ref: std/usb-a@1, id: usb-a, at: [320, 35.5], group: mgmt, attrs: {role: storage}}
       - {ref: common/usb-symbol@1, id: usb-mark, at: [334.5, 35.75]}
-      - {ref: common/rj45-bezel@2, id: mgmt-eth, at: [416, 2.5], group: mgmt, attrs: {media: rj45, role: mgmt}}
-      - {ref: common/rj45-bezel@2, id: console, at: [416, 19.0], rotate: 180, group: mgmt, attrs: {media: rj45-serial, role: console}}
+      - {ref: common/led-dot@1, id: led-mgmt-lnk, at: [420.5, 37.3], group: mgmt, attrs: {port: mgmt, function: link}}
+      - {ref: common/led-dot@1, id: led-mgmt-act, at: [427.5, 37.3], group: mgmt, attrs: {port: mgmt, function: activity}}
+      - {ref: common/rj45-bezel@2, id: mgmt-eth, at: [416, 2.5], rotate: 180, group: mgmt, attrs: {media: rj45, role: mgmt}}
+      - {ref: common/rj45-bezel@2, id: console, at: [416, 19.0], group: mgmt, attrs: {media: rj45-serial, role: console}}
     regions:
       - {id: sfp-block, at: [12, 0], size: {w: 352, h: 44}, label: 48x 10G SFP+}
       - {id: qsfp-block, at: [370, 0], size: {w: 42, h: 44}, label: 6x 100G QSFP28}
@@ -298,3 +308,52 @@ views:
       - {id: psu-1, at: [368, 2], size: {w: 54, h: 40}, accepts: ['common/psu-ac-650@3', 'common/psu-dc-650@2'], group: psus, rel-pos: 1, default: 'common/psu-ac-650@3'}
     regions:
       - {id: exhaust, at: [72, 0], size: {w: 292, h: 44}, physical-context: Exhaust, label: Fan tray, members: [fan-1, fan-2, fan-3, fan-4, fan-5, fan-6]}
+  top:
+    size: {w: 440, h: 548}
+    decor:
+      # long pressed stiffening grooves, plus the vent slots that run the length
+      # of both side rails (capture frames)
+      - {at: [10, 20], size: [4, 508], pattern: vent, vent: 18}
+      - {at: [426, 20], size: [4, 508], pattern: vent, vent: 18}
+      - {at: [70, 30], size: [2.2, 478], fill: '#2e3236', sink: 0.8}
+      - {at: [160, 30], size: [2.2, 478], fill: '#2e3236', sink: 0.8}
+      - {at: [250, 30], size: [2.2, 478], fill: '#2e3236', sink: 0.8}
+      - {at: [340, 30], size: [2.2, 478], fill: '#2e3236', sink: 0.8}
+      - {at: [20, 522], size: [400, 10], rx: 2, fill: '#26292d', sink: 0.6}
+  bottom:
+    # labels toward the rear, vent slots along both side rails, and the small
+    # access panel near the rear-right corner (IMG_2178)
+    size: {w: 440, h: 548}
+    decor:
+      - {at: [8, 24], size: [5, 500], pattern: vent, vent: 18}
+      - {at: [427, 24], size: [5, 500], pattern: vent, vent: 18}
+      - {at: [368, 492], size: [44, 26], rx: 1.5, fill: '#2b2f33', sink: 0.7}
+    placements:
+      - {ref: common/compliance-sticker@1, id: bottom-label, at: [96, 150]}
+      - {ref: common/device-label@1, id: bottom-serial-label, at: [322, 358], attrs: {role: serial-label}}
+  left:
+    # seen from outside the left side: device front at image RIGHT
+    size: {w: 548, h: 44}
+    decor:
+      - {at: [542, 1], size: [6, 42], pattern: vent, vent: 25}
+      - {at: [24, 2], size: [488, 5], pattern: vent, vent: 20}
+      - {at: [24, 37], size: [488, 5], pattern: vent, vent: 20}
+    placements:
+      - {ref: common/screw-head@1, id: screw-1, at: [535.4, 9]}
+      - {ref: common/screw-head@1, id: screw-2, at: [535.4, 20.5]}
+      - {ref: common/screw-head@1, id: screw-3, at: [535.4, 32]}
+      - {ref: common/screw-head@1, id: screw-4, at: [274, 9]}
+      - {ref: common/screw-head@1, id: screw-5, at: [274, 32]}
+  right:
+    # mirror of the left: device front at image LEFT
+    size: {w: 548, h: 44}
+    decor:
+      - {at: [0, 1], size: [6, 42], pattern: vent, vent: 25}
+      - {at: [36, 2], size: [488, 5], pattern: vent, vent: 20}
+      - {at: [36, 37], size: [488, 5], pattern: vent, vent: 20}
+    placements:
+      - {ref: common/screw-head@1, id: screw-1, at: [9, 9]}
+      - {ref: common/screw-head@1, id: screw-2, at: [9, 20.5]}
+      - {ref: common/screw-head@1, id: screw-3, at: [9, 32]}
+      - {ref: common/screw-head@1, id: screw-4, at: [274, 9]}
+      - {ref: common/screw-head@1, id: screw-5, at: [274, 32]}
