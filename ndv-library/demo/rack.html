@@ -175,47 +175,51 @@ async function buildDevice(entry, byName) {
 // render it hidden, measure the node with getBBox, and the cable follows the
 // device manifest automatically if a port ever moves.
 async function portIndex(ref, cfg) {
-  const url = `../dist/${ref}.${cfg}.front.svg`;
-  const res = await fetch(url, {cache: 'no-store'});
-  if (!res.ok) return {};
-  const div = document.createElement('div');
-  div.style.cssText = 'position:absolute;left:-10000px;top:0;width:1200px;visibility:hidden';
-  div.innerHTML = await res.text();
-  document.body.appendChild(div);
-  const svg = div.querySelector('svg');
-  // getBBox() is in the element's OWN user space, so it drops the translate()
-  // that positions the placement. Compose it with the element's CTM relative to
-  // the root, which is what puts the port back where the manifest put it.
-  const inv = svg.getScreenCTM().inverse();
-  const idx = {};
-  for (const el of svg.children) {
-    const path = el.dataset && el.dataset.path;
-    if (!path || el.dataset.class === 'region') continue;
-    let b;
-    try { b = el.getBBox(); } catch { continue; }
-    if (!b.width && !b.height) continue;
-    const m = inv.multiply(el.getScreenCTM());
-    const pt = ([x, y]) => ({x: m.a * x + m.c * y + m.e, y: m.b * x + m.d * y + m.f});
-    const p0 = pt([b.x, b.y]), p1 = pt([b.x + b.width, b.y + b.height]);
-    idx[path] = {x: (p0.x + p1.x) / 2, y: (p0.y + p1.y) / 2};
+  const faces = {};
+  for (const view of ['front', 'rear']) {
+    const res = await fetch(`../dist/${ref}.${cfg}.${view}.svg`, {cache: 'no-store'});
+    if (!res.ok) { faces[view] = {}; continue; }
+    const div = document.createElement('div');
+    div.style.cssText = 'position:absolute;left:-10000px;top:0;width:1200px;visibility:hidden';
+    div.innerHTML = await res.text();
+    document.body.appendChild(div);
+    const svg = div.querySelector('svg');
+    // getBBox() is in the element's OWN user space, so it drops the translate()
+    // that positions the placement. Compose it with the element's CTM relative to
+    // the root, which is what puts the port back where the manifest put it.
+    const inv = svg.getScreenCTM().inverse();
+    const idx = {};
+    for (const el of svg.querySelectorAll('[data-path]')) {
+      const path = el.dataset.path;
+      if (!path || el.dataset.class === 'region') continue;
+      if ((path.match(/\//g) || []).length > 1) continue;   // port and port/bore only
+      let b;
+      try { b = el.getBBox(); } catch { continue; }
+      if (!b.width && !b.height) continue;
+      const m = inv.multiply(el.getScreenCTM());
+      const pt = ([x, y]) => ({x: m.a * x + m.c * y + m.e, y: m.b * x + m.d * y + m.f});
+      const p0 = pt([b.x, b.y]), p1 = pt([b.x + b.width, b.y + b.height]);
+      idx[path] = {x: (p0.x + p1.x) / 2, y: (p0.y + p1.y) / 2};
+    }
+    div.remove();
+    faces[view] = idx;
   }
-  div.remove();
-  return idx;
+  return faces;
 }
 
 // ----------------------------------------------------------------- cables
 const CABLE = {smf: 0xe8d44d, ethernet: 0x4d7fe8};
 function cable(a, b, colour, sag) {
-  // route: out of the face, bow forward and down, back into the far face.
   // Real patch leads leave a connector straight before they bend, so the first
-  // and last control points sit directly in front of their ports.
+  // and last control points sit directly off each port along that face's own
+  // normal - which matters here because the management runs are rear-to-rear
+  // while the fibre is front-to-front.
   const out = 70;
-  const a1 = a.clone().add(new THREE.Vector3(0, 0, out));
-  const b1 = b.clone().add(new THREE.Vector3(0, 0, out));
-  const mid = a1.clone().lerp(b1, 0.5);
-  mid.z += sag;
-  const curve = new THREE.CatmullRomCurve3([a, a1, mid, b1, b], false, 'catmullrom', 0.4);
-  const geo = new THREE.TubeGeometry(curve, 64, 2.6, 8, false);
+  const a1 = a.pos.clone().addScaledVector(a.n, out);
+  const b1 = b.pos.clone().addScaledVector(b.n, out);
+  const mid = a1.clone().lerp(b1, 0.5).addScaledVector(a.n, sag);
+  const curve = new THREE.CatmullRomCurve3([a.pos, a1, mid, b1, b.pos], false, 'catmullrom', 0.4);
+  const geo = new THREE.TubeGeometry(curve, 64, 2.1, 8, false);
   const m = new THREE.Mesh(geo, new THREE.MeshLambertMaterial({color: colour}));
   m.renderOrder = 2;
   return m;
@@ -254,29 +258,41 @@ function cable(a, b, colour, sag) {
 
   hud('resolving ports…');
   const idxCache = {};
-  const worldPort = async (devId, portId) => {
+  const worldPort = async (devId, portId, bore) => {
     const d = placed[devId];
     if (!d) return null;
     const ref = d.mesh.userData.entry.ref;
     const cfg = (byName[ref] && byName[ref].default) || 'default';
     idxCache[ref] ||= await portIndex(ref, cfg);
-    const p = idxCache[ref][portId];
-    if (!p) { console.warn('[ndv] no port', devId, portId); return null; }
-    // SVG mm (y down from the face top) -> world, on the front plane
-    return new THREE.Vector3(
-      p.x - d.W / 2,
+    const faces = idxCache[ref];
+    // prefer the exact strand (port/tx). An empty SFP cage has no bores, so fall
+    // back to the port centre and split the pair either side of it - the two
+    // fibres of a duplex transceiver sit about 6.2mm apart.
+    let view = null, p = null, split = 0;
+    for (const v of ['front', 'rear']) {
+      if (bore && faces[v][`${portId}/${bore}`]) { view = v; p = faces[v][`${portId}/${bore}`]; break; }
+      if (faces[v][portId]) { view = v; p = faces[v][portId]; split = bore === 'tx' ? -3.1 : bore === 'rx' ? 3.1 : 0; }
+    }
+    if (!p) { console.warn('[ndv] no port', devId, portId, bore || ''); return null; }
+    const front = view === 'front';
+    // SVG mm (x left-to-right as that face is drawn, y down) -> world. The rear
+    // is drawn as seen from behind, so its x runs the other way in world space.
+    const pos = new THREE.Vector3(
+      (front ? (p.x + split) - d.W / 2 : d.W / 2 - (p.x + split)),
       d.mesh.position.y + d.H / 2 - p.y,
-      d.mesh.position.z + d.D / 2);
+      d.mesh.position.z + (front ? d.D / 2 : -d.D / 2));
+    return {pos, n: new THREE.Vector3(0, 0, front ? 1 : -1), view};
   };
 
   let drawn = 0, missing = 0;
   for (const [i, link] of lab.links.entries()) {
-    const a = await worldPort(link.from[0], link.from[1]);
-    const b = await worldPort(link.to[0], link.to[1]);
+    const a = await worldPort(link.from[0], link.from[1], link.from[2]);
+    const b = await worldPort(link.to[0], link.to[1], link.to[2]);
     if (!a || !b) { missing++; continue; }
-    // stagger the bow so parallel runs stay individually readable
-    const span = Math.abs(a.y - b.y);
-    const sag = 40 + (span > 1 ? Math.min(span * 0.18, 190) : 25) + (i % 3) * 12;
+    // stagger the bow so parallel runs - and the two strands of one duplex pair
+    // - stay individually readable rather than merging into one line
+    const span = Math.abs(a.pos.y - b.pos.y);
+    const sag = 34 + (span > 1 ? Math.min(span * 0.16, 170) : 22) + (i % 4) * 11;
     root.add(cable(a, b, CABLE[link.media] ?? 0x9aa0a8, sag));
     drawn++;
   }

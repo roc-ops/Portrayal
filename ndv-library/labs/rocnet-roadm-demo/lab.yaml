@@ -9,14 +9,18 @@ description: >-
 provenance:
   layout: stated - controllers at U36, U28 and U20, each with its two ROADMs
     below on alternate Us
-  topology: read off the connectivity diagram. The ring is D1-to-D1 between the
-    first pair and D2-to-D1 onward, closing D2-to-D2 back to the first site
+  topology: ring read off the connectivity diagram - D1-to-D1 between the first
+    pair, D2-to-D1 onward, closing D2-to-D2 back to the first site. Management
+    and the site cross-connect were corrected from the diagram afterwards
+  management: stated - each ROADM's rear ETH 4 goes to the controller's rear
+    ETH 1 for D1 and ETH 2 for D2. Rear to rear, not front
+  cross-connect: stated - D1 XC34 to D2 XC34 at every site
+  osc-loop: stated - OSC TX into 1510 RX, 1510 TX back into OSC RX, per ROADM
+  strands: every fibre is modelled individually rather than as a duplex link, so
+    a run appears as two tubes - TX at one end into RX at the other, and back
   roadm-model: assumed dcp-r-34d-cs. The diagram labels the units only as
     roadm01-D1/D2; the 34D-CS is the colourless-directionless cross-connect,
     which is the better fit for a ROADM role than the 9D
-  jumpers: the diagram shows a short fibre loop at the right-hand end of every
-    ROADM. Ports are not legible at that scale, so xc17-to-xc34 is a stand-in
-    for the shape of the connection, not a transcription
 rack:
   height-ru: 42
   rails-only: true
@@ -31,21 +35,37 @@ devices:
   - {id: gnvany-roadm01-D1,  ref: dcp-r-34d-cs,  ru: 18, label: gnvany-roadm01-D1}
   - {id: gnvany-roadm01-D2,  ref: dcp-r-34d-cs,  ru: 16, label: gnvany-roadm01-D2}
 links:
-  # management - controller front service ports out to each ROADM's ETH0
-  - {media: ethernet, from: [mcdnny-sc01, port-1], to: [mcdnny-roadm01-D1, eth0]}
-  - {media: ethernet, from: [mcdnny-sc01, port-2], to: [mcdnny-roadm01-D2, eth0]}
-  - {media: ethernet, from: [abrnny-sc01, port-1], to: [abrnny-roadm01-D1, eth0]}
-  - {media: ethernet, from: [abrnny-sc01, port-2], to: [abrnny-roadm01-D2, eth0]}
-  - {media: ethernet, from: [gnvany-sc01, port-1], to: [gnvany-roadm01-D1, eth0]}
-  - {media: ethernet, from: [gnvany-sc01, port-2], to: [gnvany-roadm01-D2, eth0]}
-  # the optical ring - Line ports, one span per site pair
-  - {media: smf, from: [mcdnny-roadm01-D1, port-line], to: [abrnny-roadm01-D1, port-line], label: mcdnny-abrnny}
-  - {media: smf, from: [abrnny-roadm01-D2, port-line], to: [gnvany-roadm01-D1, port-line], label: abrnny-gnvany}
-  - {media: smf, from: [gnvany-roadm01-D2, port-line], to: [mcdnny-roadm01-D2, port-line], label: gnvany-mcdnny}
-  # short local loop at the right-hand end of each ROADM
-  - {media: smf, from: [mcdnny-roadm01-D1, xc17], to: [mcdnny-roadm01-D1, xc34]}
-  - {media: smf, from: [mcdnny-roadm01-D2, xc17], to: [mcdnny-roadm01-D2, xc34]}
-  - {media: smf, from: [abrnny-roadm01-D1, xc17], to: [abrnny-roadm01-D1, xc34]}
-  - {media: smf, from: [abrnny-roadm01-D2, xc17], to: [abrnny-roadm01-D2, xc34]}
-  - {media: smf, from: [gnvany-roadm01-D1, xc17], to: [gnvany-roadm01-D1, xc34]}
-  - {media: smf, from: [gnvany-roadm01-D2, xc17], to: [gnvany-roadm01-D2, xc34]}
+  # management - each ROADM's rear ETH 4 back to the controller's rear ETH 1/2
+  - {media: ethernet, from: [mcdnny-roadm01-D1, eth4], to: [mcdnny-sc01, eth1]}
+  - {media: ethernet, from: [mcdnny-roadm01-D2, eth4], to: [mcdnny-sc01, eth2]}
+  - {media: ethernet, from: [abrnny-roadm01-D1, eth4], to: [abrnny-sc01, eth1]}
+  - {media: ethernet, from: [abrnny-roadm01-D2, eth4], to: [abrnny-sc01, eth2]}
+  - {media: ethernet, from: [gnvany-roadm01-D1, eth4], to: [gnvany-sc01, eth1]}
+  - {media: ethernet, from: [gnvany-roadm01-D2, eth4], to: [gnvany-sc01, eth2]}
+  # site cross-connect - D1 XC34 to D2 XC34, both strands
+  - {media: smf, from: [mcdnny-roadm01-D1, xc34, tx], to: [mcdnny-roadm01-D2, xc34, rx]}
+  - {media: smf, from: [mcdnny-roadm01-D2, xc34, tx], to: [mcdnny-roadm01-D1, xc34, rx]}
+  - {media: smf, from: [abrnny-roadm01-D1, xc34, tx], to: [abrnny-roadm01-D2, xc34, rx]}
+  - {media: smf, from: [abrnny-roadm01-D2, xc34, tx], to: [abrnny-roadm01-D1, xc34, rx]}
+  - {media: smf, from: [gnvany-roadm01-D1, xc34, tx], to: [gnvany-roadm01-D2, xc34, rx]}
+  - {media: smf, from: [gnvany-roadm01-D2, xc34, tx], to: [gnvany-roadm01-D1, xc34, rx]}
+  # OSC loop on every ROADM - OSC TX into 1510 RX and 1510 TX back into OSC RX
+  - {media: smf, from: [mcdnny-roadm01-D1, port-osc, tx], to: [mcdnny-roadm01-D1, port-1510, rx]}
+  - {media: smf, from: [mcdnny-roadm01-D1, port-1510, tx], to: [mcdnny-roadm01-D1, port-osc, rx]}
+  - {media: smf, from: [mcdnny-roadm01-D2, port-osc, tx], to: [mcdnny-roadm01-D2, port-1510, rx]}
+  - {media: smf, from: [mcdnny-roadm01-D2, port-1510, tx], to: [mcdnny-roadm01-D2, port-osc, rx]}
+  - {media: smf, from: [abrnny-roadm01-D1, port-osc, tx], to: [abrnny-roadm01-D1, port-1510, rx]}
+  - {media: smf, from: [abrnny-roadm01-D1, port-1510, tx], to: [abrnny-roadm01-D1, port-osc, rx]}
+  - {media: smf, from: [abrnny-roadm01-D2, port-osc, tx], to: [abrnny-roadm01-D2, port-1510, rx]}
+  - {media: smf, from: [abrnny-roadm01-D2, port-1510, tx], to: [abrnny-roadm01-D2, port-osc, rx]}
+  - {media: smf, from: [gnvany-roadm01-D1, port-osc, tx], to: [gnvany-roadm01-D1, port-1510, rx]}
+  - {media: smf, from: [gnvany-roadm01-D1, port-1510, tx], to: [gnvany-roadm01-D1, port-osc, rx]}
+  - {media: smf, from: [gnvany-roadm01-D2, port-osc, tx], to: [gnvany-roadm01-D2, port-1510, rx]}
+  - {media: smf, from: [gnvany-roadm01-D2, port-1510, tx], to: [gnvany-roadm01-D2, port-osc, rx]}
+  # the optical ring - Line ports, one fibre pair per span
+  - {media: smf, from: [mcdnny-roadm01-D1, port-line, tx], to: [abrnny-roadm01-D1, port-line, rx]}
+  - {media: smf, from: [abrnny-roadm01-D1, port-line, tx], to: [mcdnny-roadm01-D1, port-line, rx]}
+  - {media: smf, from: [abrnny-roadm01-D2, port-line, tx], to: [gnvany-roadm01-D1, port-line, rx]}
+  - {media: smf, from: [gnvany-roadm01-D1, port-line, tx], to: [abrnny-roadm01-D2, port-line, rx]}
+  - {media: smf, from: [gnvany-roadm01-D2, port-line, tx], to: [mcdnny-roadm01-D2, port-line, rx]}
+  - {media: smf, from: [mcdnny-roadm01-D2, port-line, tx], to: [gnvany-roadm01-D2, port-line, rx]}
