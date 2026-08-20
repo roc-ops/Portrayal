@@ -392,7 +392,7 @@ async function build(cfg) {
       addTo(walls);
       // textured floor: the aperture art, pushed to the back of the recess
       const floor = new THREE.Mesh(new THREE.PlaneGeometry(c.w, c.h),
-        new THREE.MeshBasicMaterial({map: canvasTex(floorCv), transparent: true, alphaTest: 0.1}));
+        new THREE.MeshBasicMaterial({map: canvasTex(floorCv), transparent: true, alphaTest: 0.1, alphaToCoverage: true}));
       floor.position.set(LX(c.x, c.w), LY(c.y, c.h), c.lift - (d - 0.1));
       addTo(floor);
       // closed exterior back, deep enough to clear any sink pockets
@@ -443,7 +443,7 @@ async function build(cfg) {
       }
       geo.computeVertexNormals();
       const m = new THREE.Mesh(geo, new THREE.MeshLambertMaterial(
-        {map: canvasTex(dcv), transparent: true, alphaTest: 0.1}));
+        {map: canvasTex(dcv), transparent: true, alphaTest: 0.1, alphaToCoverage: true}));
       m.scale.set(dm.w, dm.h, dm.dome + 0.15);
       m.position.set(LX(dm.x, dm.w), LY(dm.y, dm.h), -0.15);
       addTo(m);
@@ -457,7 +457,7 @@ async function build(cfg) {
         o.color = `rgb(${px[0]},${px[1]},${px[2]})`;
       }
       const faceTex = new THREE.MeshBasicMaterial(
-        {map: canvasTex(ocv), transparent: true, alphaTest: 0.1});
+        {map: canvasTex(ocv), transparent: true, alphaTest: 0.1, alphaToCoverage: true});
       if (o.uhandle !== undefined && o.uhandle !== '') {
         const far = +o.uhandle;
         const horizontal = o.w >= o.h;
@@ -563,7 +563,7 @@ async function build(cfg) {
       const fg = fruGroups[f.path];
       const faceCrop = crop(cv, f);
       const plane = new THREE.Mesh(new THREE.PlaneGeometry(f.w, f.h),
-        new THREE.MeshBasicMaterial({map: canvasTex(faceCrop), transparent: true, alphaTest: 0.1}));
+        new THREE.MeshBasicMaterial({map: canvasTex(faceCrop), transparent: true, alphaTest: 0.1, alphaToCoverage: true}));
       plane.position.set(LX(f.x, f.w), LY(f.y, f.h), 0.05);
       fg.add(plane);
       // CLEAR, never fill: an opaque patch on the chassis face would occlude
@@ -601,7 +601,7 @@ async function build(cfg) {
       await sideMat('left', D, H),                // -x: authored face-at-image-right (photo convention)
       await sideMat('top', W, D),                 // +y: front at image bottom
       await sideMat('bottom', W, D, true, true),  // -y: device bottom convention
-      new THREE.MeshBasicMaterial({map: canvasTex(faceCv.comp), transparent: true, alphaTest: 0.1}),
+      new THREE.MeshBasicMaterial({map: canvasTex(faceCv.comp), transparent: true, alphaTest: 0.1, alphaToCoverage: true}),
       await sideMat('rear', W, H),                // -z: as seen from behind
     ];
   } else {
@@ -609,7 +609,8 @@ async function build(cfg) {
     mats = [faceCv.right, faceCv.left, faceCv.top, bottomCv, faceCv.front, faceCv.rear]
       .map((c, i) => new THREE.MeshBasicMaterial(
         // alphaTest: punched pixels must not write depth, or they occlude interiors
-        {map: canvasTex(c), transparent: i !== 3, alphaTest: i !== 3 ? 0.1 : 0}));
+        {map: canvasTex(c), transparent: i !== 3, alphaTest: i !== 3 ? 0.1 : 0,
+         alphaToCoverage: i !== 3}));
   }
   if (box) {
     scene.remove(box); box.geometry.dispose();
