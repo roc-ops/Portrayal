@@ -140,6 +140,13 @@ function buildRack(heightRU) {
       }
     }
   }
+  // U numbering up the left rail, counted from the bottom as racks are.
+  // (Lost in the bright-rail rewrite of this function and restored here.)
+  for (let u = 1; u <= heightRU; u++) {
+    const s = labelSprite(String(u), 30, u % 5 === 0 ? '#e8ecef' : '#98a0a8');
+    s.position.set(-(RACK_W / 2 + 34), (u - 1) * RU + RU / 2, 46);
+    g.add(s);
+  }
   g.userData = {railMat, earMat, screwMat};
   return g;
 }
@@ -152,18 +159,21 @@ function rackEars(rack, ru, faceZ) {
   const {earMat, screwMat} = rack.userData;
   const yBase = (ru - 1) * RU;
   for (const side of [-1, 1]) {
-    const x = side * (RACK_W / 2 - 12);
+    // the screw goes through the ear into the cage nut, so it must sit on the
+    // rail's hole column - not on the ear's centre line, which is 4mm inboard
+    const holeX = side * (RACK_W / 2 - 8);
+    const earX = side * (RACK_W / 2 - 12);
     const ear = new THREE.Mesh(new THREE.BoxGeometry(24, RU - 4.5, 3), earMat);
-    ear.position.set(x, yBase + RU / 2, faceZ + 1.5);
+    ear.position.set(earX, yBase + RU / 2, faceZ + 1.5);
     g.add(ear);
     for (const dy of [6.35, 38.10]) {
       const head = new THREE.Mesh(new THREE.CylinderGeometry(2.6, 2.6, 2.2, 14), screwMat);
       head.rotation.x = Math.PI / 2;
-      head.position.set(x, yBase + dy, faceZ + 4.1);
+      head.position.set(holeX, yBase + dy, faceZ + 4.1);
       g.add(head);
       const slot = new THREE.Mesh(new THREE.BoxGeometry(3.6, 0.8, 0.6),
         new THREE.MeshBasicMaterial({color: 0x4a5057}));
-      slot.position.set(x, yBase + dy, faceZ + 5.3);
+      slot.position.set(holeX, yBase + dy, faceZ + 5.3);
       g.add(slot);
     }
   }
