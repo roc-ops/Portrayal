@@ -348,50 +348,57 @@ const _cmat = {
 // A plug standing off the port along that face's normal. Latch up or down
 // follows the jack: these are stacked belly to belly, so a port above the
 // chassis centre line takes its plug one way up and one below the other.
+const PLUG_LEN = {ethernet: 29, smf: 23};   // how far a seated plug stands proud
 function connector(media, at, latchDown) {
   const g = new THREE.Group();
   const up = latchDown ? -1 : 1;
   if (media === 'ethernet') {
-    const body = new THREE.Mesh(new THREE.BoxGeometry(11.7, 8.4, 21), _cmat.rj45);
-    body.position.z = 10.5; g.add(body);
-    const latch = new THREE.Mesh(new THREE.BoxGeometry(4.2, 1.6, 9), _cmat.rj45);
-    latch.position.set(0, up * 4.6, 8); latch.rotation.x = up * 0.22; g.add(latch);
-    const boot = new THREE.Mesh(new THREE.BoxGeometry(9, 7, 12), _cmat.rj45boot);
-    boot.position.z = 26; g.add(boot);
+    // body then strain-relief boot, meeting end to end so it reads as one plug
+    const body = new THREE.Mesh(new THREE.BoxGeometry(11.6, 8.2, 18), _cmat.rj45);
+    body.position.z = 9; g.add(body);
+    const latch = new THREE.Mesh(new THREE.BoxGeometry(4.0, 1.4, 8), _cmat.rj45);
+    latch.position.set(0, up * 4.4, 7.5); latch.rotation.x = up * 0.2; g.add(latch);
+    const boot = new THREE.Mesh(new THREE.BoxGeometry(8.6, 6.4, 11), _cmat.rj45boot);
+    boot.position.z = 23.5; g.add(boot);
   } else {
-    const body = new THREE.Mesh(new THREE.BoxGeometry(6.2, 6.2, 16), _cmat.lc);
-    body.position.z = 8; g.add(body);
-    const latch = new THREE.Mesh(new THREE.BoxGeometry(3.4, 1.2, 8), _cmat.lc);
-    latch.position.set(0, up * 3.5, 7); latch.rotation.x = up * 0.18; g.add(latch);
-    const boot = new THREE.Mesh(new THREE.CylinderGeometry(1.8, 1.4, 11, 10), _cmat.lcboot);
-    boot.rotation.x = Math.PI / 2; boot.position.z = 21; g.add(boot);
+    const body = new THREE.Mesh(new THREE.BoxGeometry(6.2, 6.2, 14), _cmat.lc);
+    body.position.z = 7; g.add(body);
+    const latch = new THREE.Mesh(new THREE.BoxGeometry(3.2, 1.1, 7), _cmat.lc);
+    latch.position.set(0, up * 3.4, 6); latch.rotation.x = up * 0.16; g.add(latch);
+    const boot = new THREE.Mesh(new THREE.CylinderGeometry(1.7, 1.35, 9, 10), _cmat.lcboot);
+    boot.rotation.x = Math.PI / 2; boot.position.z = 18.5; g.add(boot);
   }
   g.position.copy(at.pos);
   g.lookAt(at.pos.clone().add(at.n));   // the group's +z points out of the face
   return g;
 }
 
-function cable(a, b, colour, striped, lateral, sag, flow) {
-  // Real patch leads leave a connector straight before they bend, so the first
-  // and last control points sit off each port along that face's own normal.
-  const out = 60;
-  const a1 = a.pos.clone().addScaledVector(a.n, out);
-  const b1 = b.pos.clone().addScaledVector(b.n, out);
-  const pts = [a.pos, a1];
+function cable(a, b, media, colour, striped, lateral, sag, flow) {
+  // The cable emerges from the boot, not from the faceplate, and it has to leave
+  // along the plug axis - a lead entering its connector at an angle is the thing
+  // that looked wrong. So the run starts at the end of the plug and the first
+  // control point is collinear with it, which pins the tangent straight.
+  const plug = PLUG_LEN[media] ?? 0;
+  const aEnd = a.pos.clone().addScaledVector(a.n, plug);
+  const bEnd = b.pos.clone().addScaledVector(b.n, plug);
+  const out = 46;
+  const a1 = aEnd.clone().addScaledVector(a.n, out);
+  const b1 = bEnd.clone().addScaledVector(b.n, out);
+  const pts = [aEnd, a1];
   if (a.n.dot(b.n) < 0) {
     // opposite faces - a rear port reaching a front one. Route round the side of
     // the rack the way it would actually be dressed, not through the chassis.
     const side = lateral >= 0 ? 1 : -1;
     const x = side * (RACK_W / 2 + 90 + Math.abs(lateral));
-    pts.push(new THREE.Vector3(x, a.pos.y, a.pos.z + a.n.z * 90));
-    pts.push(new THREE.Vector3(x, (a.pos.y + b.pos.y) / 2, (a.pos.z + b.pos.z) / 2));
-    pts.push(new THREE.Vector3(x, b.pos.y, b.pos.z + b.n.z * 90));
+    pts.push(new THREE.Vector3(x, aEnd.y, aEnd.z + a.n.z * 80));
+    pts.push(new THREE.Vector3(x, (aEnd.y + bEnd.y) / 2, (aEnd.z + bEnd.z) / 2));
+    pts.push(new THREE.Vector3(x, bEnd.y, bEnd.z + b.n.z * 80));
   } else {
     const mid = a1.clone().lerp(b1, 0.5).addScaledVector(a.n, sag);
     mid.x += lateral;
     pts.push(mid);
   }
-  pts.push(b1, b.pos);
+  pts.push(b1, bEnd);
   const curve = new THREE.CatmullRomCurve3(pts, false, 'catmullrom', 0.35);
   const geo = new THREE.TubeGeometry(curve, 130, 1.9, 8, false);
   const m = new THREE.Mesh(geo, cableMat(colour, striped, curve.getLength(), flow));
@@ -484,7 +491,7 @@ function cable(a, b, colour, striped, lateral, sag, flow) {
     const span = Math.abs(a.pos.y - b.pos.y);
     const sag = 34 + (span > 1 ? Math.min(span * 0.16, 170) : 26) + (k % 3) * 14;
     const colour = SPAN[link.span] ?? CABLE[link.media] ?? 0x9aa0a8;
-    const tube = cable(a, b, colour, striped, lateral, sag, link.media === 'smf');
+    const tube = cable(a, b, link.media, colour, striped, lateral, sag, link.media === 'smf');
     root.add(tube);
     // a port above its chassis centre line takes the plug latch-down, below
     // takes it latch-up - which is how a belly-to-belly pair is cabled
