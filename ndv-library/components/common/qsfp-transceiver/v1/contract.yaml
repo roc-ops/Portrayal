@@ -17,20 +17,23 @@ provenance:
     directly. Depth 72.4 is the SFF-8436 module length, consistent with the
     drawing's 118 reference overall once the 34.80 MAX bail and its return are
     taken off
-  bail: drawing - PULL LATCH COLOR WHITE, 19.00 MAX across and 3.40 MAX thick,
-    reaching 34.80 MAX forward of the body. Modelled 18.35 across rather than
-    19.00 so the node stays inside the module footprint, which is what mates
+  bail: composed from common/qsfp-pull-tab, which carries the drawing's 19.00
+    MAX across, 3.40 MAX thick and 34.80 MAX reach. Placed at -0.325 so the
+    tab's 19.00 straddles the 18.35 module symmetrically, as the drawing shows
   heatsink: drawing - HEATSINK AREA on the upper face, flatness 0.075
   label: drawing - LABEL AREA 40.10 MAX on the underside
+  face: the optical interface is MPO or LC duplex depending on the reach - MPO
+    for parallel optics, LC duplex for the serial variants - so it is a skin
   latch-features: drawing - 4.20 +/-0.15 and 2.00 +/-0.15 steps at the cage end,
     29.60 +/-0.10 to the latch shoulder, 48.20 MIN to datum D
-elements:
-  bail: {at: [0.0, 2.55], size: [18.35, 3.4], class: latch}
+elements: {}
 relief:
   wall: '#4a4f55'
   cavity: opening
-  features:
-    - {node: bail, uhandle: 34.8, color: '#f2f4f6'}
+parts:
+  # the pull tab is its own part - a flat loop, not a round bail, and vendors
+  # colour-code it, so it carries its own skins
+  - {ref: common/qsfp-pull-tab@1, id: tab, at: [-0.325, 2.55], skin: white}
 connection-points:
   # mate is what aligns the module in its cage; optical is where the fibre lands
   mate: {at: [9.175, 4.25], direction: front}
@@ -38,4 +41,4 @@ connection-points:
 body:
   depth: 72.4
   color: '#8d949c'
-skins: [default]
+skins: [mpo, lc]

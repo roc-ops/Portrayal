@@ -1,0 +1,40 @@
+format: 1
+kind: component
+name: qsfp-pull-tab
+version: 1.0.0
+class: latch
+profile: networking
+description: >-
+  QSFP / QSFP-DD pull tab - the flat paddle bail that wraps the module and
+  extends forward, with an elongated opening through it for a finger. Built as
+  a flat loop, two side rails and a front crossbar, rather than a round bail,
+  which is what a tube primitive would give. Vendors colour-code it by reach.
+size: {w: 19.0, h: 3.4}
+attrs: {role: pull-latch}
+provenance:
+  size: drawing - 19.00 MAX across the bail, 3.40 MAX thick
+  reach: drawing - 34.80 MAX forward of the module body
+  section: drawing - 1.60 MAX rail thickness in the side view, so the paddle is
+    flat rather than round. A photograph of the part confirms a flat loop with
+    an elongated opening, not a wire bail
+  opening: photo - the finger opening runs most of the tab's length between the
+    two rails
+  speed-cut: drawing - the crossbar carries the reach cut through it as the word
+    100G rather than printed, so it reads from either side
+  colour: drawing - PULL LATCH COLOR WHITE on this part number. Vendors code the
+    tab by reach, so it is a skin rather than a fixed fill
+elements:
+  rail-l: {at: [0.0, 0.0], size: [2.6, 3.4], class: latch}
+  rail-r: {at: [16.4, 0.0], size: [2.6, 3.4], class: latch}
+  crossbar: {at: [0.0, 0.0], size: [19.0, 3.4], class: latch}
+  speed-cut: {at: [4.2, 0.75], size: [10.6, 1.9], class: marking}
+relief:
+  features:
+    # two flat rails running forward, joined by a flat bar across the far end -
+    # the gap between them IS the finger opening
+    - {node: rail-l, out: 34.8}
+    - {node: rail-r, out: 34.8}
+    - {node: crossbar, out: 3.4, lift: 31.4}
+    # the speed is cut through the crossbar as lettering, not printed on it
+    - {node: speed-cut, sink: 1.2, lift: 34.8}
+skins: [white, blue]

@@ -58,15 +58,15 @@ const DRAWING = {
     dims: [
       ['module width',        18.35, m => m.size.w,                 '±0.10'],
       ['module height',        8.50, m => m.size.h,                 '±0.10'],
-      ['bail width (max)',    19.00, m => m['element-boxes'].bail.size[0],  'MAX — modelled to the module footprint'],
-      ['bail thickness (max)', 3.40, m => m['element-boxes'].bail.size[1],  'MAX'],
-      ['bail reach (max)',    34.80, m => m.relief.features[0].uhandle, 'MAX'],
+      ['bail width (max)',    19.00, (m, tab) => tab.size.w,  'MAX'],
+      ['bail thickness (max)', 3.40, (m, tab) => tab.size.h,  'MAX'],
+      ['bail reach (max)',    34.80, (m, tab) => tab.relief.features[0].out, 'MAX — from common/qsfp-pull-tab'],
       ['body depth',           72.4, m => m.body.depth,             'SFF-8436; drawing gives 118 overall'],
     ],
-    notes: 'The bail is modelled 18.35 across rather than the drawing’s 19.00 MAX, '
-         + 'so the node stays inside the module footprint — that footprint is what mates '
-         + 'into a cage, and a 19.00 node would report a part wider than the envelope it '
-         + 'enters. Everything else is the drawing value.',
+    notes: 'The pull tab is its own component — a flat loop of two rails and a '
+         + 'crossbar, with the finger opening between them and the word 100G cut '
+         + 'through the crossbar. It is not a round bail, which is what a tube '
+         + 'primitive gives. The optical face is a skin: MPO or LC duplex.',
   },
 };
 
@@ -101,15 +101,23 @@ const hud = m => { document.getElementById('hud').textContent = m; };
   const meta = idx.components.find(c => c.ns === ns && c.name === name && c.major === 'v' + major);
   if (!meta) { hud('part not in the index'); return; }
   const spec = DRAWING[REF];
+  // a composed part's dimensions live on the part, not the parent
+  const partOf = ref => {
+    if (!ref) return null;
+    const [pns, prest] = ref.split('/');
+    const [pname, pmaj] = prest.split('@');
+    return idx.components.find(c => c.ns === pns && c.name === pname && c.major === 'v' + pmaj);
+  };
 
   const W = meta.size.w, H = meta.size.h, D = (meta.body && meta.body.depth) || 20;
+  const face = PARAMS.get('face') || meta.skins[0];
   const f = v => `../dist/components/${ns}--${name}--v${major}--${v}.svg`;
 
   // the module face, with its relief, plus the five body sides
   const meshes = [], faceCv = {}, faceSvg = {}, facePunch = {};
   await buildFaceRelief(
     {view: 'face', fw: () => W, fh: () => H, pos: () => [0, 0, D / 2], rot: [0, 0, 0]},
-    {src: f('default'), faceCv, faceSvg, facePunch, meshes,
+    {src: f(face), faceCv, faceSvg, facePunch, meshes,
      FRU_GROUPS: {}, FRU_META: {}, BODY_META: {}, D, bodyBoxMesh: null});
 
   const plain = () => new THREE.MeshLambertMaterial({color: meta.body?.color || 0x8d949c});
@@ -145,7 +153,7 @@ const hud = m => { document.getElementById('hud').textContent = m; };
   if (spec) {
     for (const [label, drawn, get, note] of spec.dims) {
       let got;
-      try { got = get(meta); } catch { got = undefined; }
+      try { got = get(meta, partOf(meta.parts && meta.parts[0])); } catch { got = undefined; }
       const same = typeof got === 'number' && Math.abs(got - drawn) < 0.005;
       tb.insertAdjacentHTML('beforeend',
         `<tr><td>${label}<div class="note">${note}</div></td>` +
