@@ -37,6 +37,13 @@ def main():
                 "provenance": data.get("provenance") or {},
                 "skins": data.get("skins", ["default"]),
                 "elements": sorted((data.get("elements") or {}).keys()),
+                # additive: the geometry behind those names, and the relief that
+                # acts on them, so a consumer can check a part against a drawing
+                # without re-reading the contract
+                "element-boxes": {k: {"at": v.get("at"), "size": v.get("size")}
+                                  for k, v in (data.get("elements") or {}).items()
+                                  if isinstance(v, dict)},
+                "relief": data.get("relief") or {},
                 "parts": [p["ref"] for p in data.get("parts") or []],
             }
             files = {}

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NDV — part study</title>
+<style>
+  body { font-family: system-ui, sans-serif; background: #16181b; color: #d7dbdf; margin: 0;
+         display: grid; grid-template-columns: 1fr 25rem; height: 100vh; overflow: hidden; }
+  #view { position: relative; }
+  #side { border-left: 1px solid #2b3035; padding: 1rem 1.1rem; overflow-y: auto; background: #131518; }
+  h1 { font-size: 1rem; margin: 0 0 0.15rem; }
+  h2 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; color: #8d939a;
+       margin: 1.3rem 0 0.4rem; font-weight: 600; }
+  .sub { color: #8d939a; font-size: 0.8rem; margin: 0 0 0.5rem; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.76rem; }
+  th { text-align: left; color: #8d939a; font-weight: 600; padding: 0.25rem 0.3rem; }
+  td { padding: 0.25rem 0.3rem; border-top: 1px solid #24272b; font-variant-numeric: tabular-nums; }
+  td.n { text-align: right; font-family: ui-monospace, monospace; }
+  .ok { color: #4ade80; } .warn { color: #f59e0b; }
+  .note { font-size: 0.72rem; color: #767d84; line-height: 1.45; margin-top: 0.5rem; }
+  #hud { position: absolute; bottom: 0.8rem; left: 0.9rem; background: #0c0e10cc;
+         border: 1px solid #33373c; border-radius: 6px; padding: 0.35rem 0.65rem; font-size: 0.78rem; }
+  canvas { display: block; }
+</style>
+<script type="importmap">
+{ "imports": {
+    "three": "https://unpkg.com/three@0.161.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.161.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div id="view"><div id="hud">loading…</div></div>
+<div id="side">
+  <h1 id="title">part study</h1>
+  <p class="sub" id="subtitle"></p>
+  <h2>Drawing vs model</h2>
+  <table id="dims"><thead><tr><th>dimension</th><th class="n">drawing</th><th class="n">model</th><th></th></tr></thead><tbody></tbody></table>
+  <p class="note" id="notes"></p>
+  <h2>Provenance</h2>
+  <div class="note" id="prov"></div>
+</div>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { configureRelief, buildFaceRelief, canvasTex, svgCanvas } from './relief.js';
+
+const PARAMS = new URLSearchParams(location.search);
+const REF = PARAMS.get('part') || 'common/qsfp-transceiver@1';
+const PXMM = 16;                  // a single small part, so afford real density
+
+// What the mechanical drawing calls out, transcribed once so the page can check
+// the model against it rather than restating numbers that might drift.
+const DRAWING = {
+  'common/qsfp-transceiver@1': {
+    title: 'QSFP transceiver',
+    source: 'vendor mechanical drawing — QSFP module with white pull latch',
+    dims: [
+      ['module width',        18.35, m => m.size.w,                 '±0.10'],
+      ['module height',        8.50, m => m.size.h,                 '±0.10'],
+      ['bail width (max)',    19.00, m => m['element-boxes'].bail.size[0],  'MAX — modelled to the module footprint'],
+      ['bail thickness (max)', 3.40, m => m['element-boxes'].bail.size[1],  'MAX'],
+      ['bail reach (max)',    34.80, m => m.relief.features[0].uhandle, 'MAX'],
+      ['body depth',           72.4, m => m.body.depth,             'SFF-8436; drawing gives 118 overall'],
+    ],
+    notes: 'The bail is modelled 18.35 across rather than the drawing’s 19.00 MAX, '
+         + 'so the node stays inside the module footprint — that footprint is what mates '
+         + 'into a cage, and a 19.00 node would report a part wider than the envelope it '
+         + 'enters. Everything else is the drawing value.',
+  },
+};
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x1b1e22);
+const view = document.getElementById('view');
+const camera = new THREE.PerspectiveCamera(38, 1, 1, 4000);
+const renderer = new THREE.WebGLRenderer({antialias: true});
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+view.appendChild(renderer.domElement);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+globalThis.__ndvPart = {THREE, scene, camera, renderer, controls};
+
+scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+const key = new THREE.DirectionalLight(0xffffff, 0.9); key.position.set(0.6, 1, 0.9); scene.add(key);
+const fill = new THREE.DirectionalLight(0xffffff, 0.35); fill.position.set(-0.6, -0.3, -0.8); scene.add(fill);
+
+function resize() {
+  const w = view.clientWidth, h = view.clientHeight;
+  camera.aspect = w / h; camera.updateProjectionMatrix();
+  renderer.setSize(w, h);
+}
+addEventListener('resize', resize);
+configureRelief({THREE, renderer, PXMM, FRU_PATHS: new Set()});
+const hud = m => { document.getElementById('hud').textContent = m; };
+
+(async () => {
+  const idx = await (await fetch('../dist/components.json', {cache: 'no-store'})).json();
+  const [ns, rest] = REF.split('/');
+  const [name, major] = rest.split('@');
+  const meta = idx.components.find(c => c.ns === ns && c.name === name && c.major === 'v' + major);
+  if (!meta) { hud('part not in the index'); return; }
+  const spec = DRAWING[REF];
+
+  const W = meta.size.w, H = meta.size.h, D = (meta.body && meta.body.depth) || 20;
+  const f = v => `../dist/components/${ns}--${name}--v${major}--${v}.svg`;
+
+  // the module face, with its relief, plus the five body sides
+  const meshes = [], faceCv = {}, faceSvg = {}, facePunch = {};
+  await buildFaceRelief(
+    {view: 'face', fw: () => W, fh: () => H, pos: () => [0, 0, D / 2], rot: [0, 0, 0]},
+    {src: f('default'), faceCv, faceSvg, facePunch, meshes,
+     FRU_GROUPS: {}, FRU_META: {}, BODY_META: {}, D, bodyBoxMesh: null});
+
+  const plain = () => new THREE.MeshLambertMaterial({color: meta.body?.color || 0x8d949c});
+  const side = async (v, wmm, hmm, fx, fy) => {
+    const cv = await svgCanvas(f('body-' + v), wmm, hmm, fx, fy);
+    return cv ? new THREE.MeshLambertMaterial({map: canvasTex(cv)}) : plain();
+  };
+  const mats = [
+    await side('right', D, H), await side('left', D, H),
+    await side('top', W, D),   await side('bottom', W, D, true, true),
+    faceCv.face ? new THREE.MeshLambertMaterial(
+      {map: canvasTex(faceCv.face), transparent: true, alphaTest: 0.08}) : plain(),
+    await side('rear', W, H),
+  ];
+  const box = new THREE.Mesh(new THREE.BoxGeometry(W, H, D), mats);
+  scene.add(box);
+  const relief = new THREE.Group();
+  meshes.forEach(m => relief.add(m));
+  scene.add(relief);
+
+  // frame the part including the bail reach, so nothing sits off screen
+  const reach = spec ? spec.dims.find(d => d[0].startsWith('bail reach'))?.[1] || 0 : 0;
+  const span = D + reach;
+  resize();
+  controls.target.set(0, 0, reach / 2);
+  camera.position.set(span * 0.75, span * 0.42, span * 0.95);
+  controls.update();
+
+  // report the model against the drawing
+  document.getElementById('title').textContent = spec ? spec.title : `${ns}/${name}`;
+  document.getElementById('subtitle').textContent = spec ? spec.source : REF;
+  const tb = document.querySelector('#dims tbody');
+  if (spec) {
+    for (const [label, drawn, get, note] of spec.dims) {
+      let got;
+      try { got = get(meta); } catch { got = undefined; }
+      const same = typeof got === 'number' && Math.abs(got - drawn) < 0.005;
+      tb.insertAdjacentHTML('beforeend',
+        `<tr><td>${label}<div class="note">${note}</div></td>` +
+        `<td class="n">${drawn.toFixed(2)}</td>` +
+        `<td class="n">${got === undefined ? '—' : Number(got).toFixed(2)}</td>` +
+        `<td class="${same ? 'ok' : 'warn'}">${same ? '✓' : '≠'}</td></tr>`);
+    }
+    document.getElementById('notes').textContent = spec.notes;
+  }
+  document.getElementById('prov').innerHTML = Object.entries(meta.provenance || {})
+    .map(([k, v]) => `<b>${k}</b> — ${v}`).join('<br><br>');
+
+  hud(`${W} × ${H} × ${D} mm — drag to orbit`);
+  (function loop() { requestAnimationFrame(loop); controls.update(); renderer.render(scene, camera); })();
+})();
+</script>
+</body>
+</html>
