@@ -134,12 +134,41 @@ const hud = m => { document.getElementById('hud').textContent = m; };
       {map: canvasTex(faceCv.face), transparent: true, alphaTest: 0.08}) : plain(),
     await side('rear', W, H),
   ];
-  const box = new THREE.Mesh(new THREE.BoxGeometry(W, H, D), mats);
-  scene.add(box);
-  const relief = new THREE.Group();
-  meshes.forEach(m => relief.add(m));
-  scene.add(relief);
+  // The body is not a single box. It steps down behind the tab, and its rear
+  // ends in three tongues of different length, width and height - shell, PCB
+  // and guide plate. Painting that on a cuboid's sides was what made the 3D
+  // disagree with the 2D, so it is built as real geometry.
+  const FRONT_D = 17.2, SHORT_H = H - 0.85, DEND = 4.20;
+  const MID_D = D - FRONT_D - DEND;
+  const zf = D / 2;                              // face plane
+  const box = new THREE.Group();
+  const shellMat = new THREE.MeshLambertMaterial({color: 0xa9b0b7});
 
+  // full-height section at the face, carrying the six-sided art
+  const front = new THREE.Mesh(new THREE.BoxGeometry(W, H, FRONT_D), mats);
+  front.position.z = zf - FRONT_D / 2;
+  box.add(front);
+
+  // stepped-down mid body
+  const mid = new THREE.Mesh(new THREE.BoxGeometry(W, SHORT_H, MID_D), mats);
+  mid.position.z = zf - FRONT_D - MID_D / 2;
+  box.add(mid);
+
+  // the three rear tongues, each stopping where the drawing stops it
+  const TONGUE = [
+    {w: W,     h: 2.94, top: 0.42, len: DEND - 0.00, col: 0x8d949c},
+    {w: 14.60, h: 1.24, top: 5.01, len: DEND - 1.85, col: 0xc9b98a},
+    {w: 12.40, h: 0.93, top: 7.14, len: DEND - 3.09, col: 0x6f767d},
+  ];
+  const zBack = zf - FRONT_D - MID_D;
+  for (const t of TONGUE) {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(t.w, t.h, t.len),
+                             new THREE.MeshLambertMaterial({color: t.col}));
+    // drawing y runs down from the top of the 8.50 envelope
+    m.position.set(0, H / 2 - (t.top + t.h / 2), zBack - t.len / 2);
+    box.add(m);
+  }
+  scene.add(box);
   // frame the part including the bail reach, so nothing sits off screen
   const reach = spec ? spec.dims.find(d => d[0].startsWith('bail reach'))?.[1] || 0 : 0;
   const span = D + reach;
