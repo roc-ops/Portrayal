@@ -169,6 +169,33 @@ const hud = m => { document.getElementById('hud').textContent = m; };
     box.add(m);
   }
   scene.add(box);
+
+  // The pull tab, as the corrected 2D has it: a flat loop, not two rails and
+  // not a round bail. Tip pad, two side rails, and a base where it meets the
+  // body - the gap between the rails IS the finger opening, so it is modelled
+  // rather than painted. Anchored at the top edge so a cable passes underneath.
+  const TAB = {w: 19.0, t: 3.40, reach: 34.80, pad: 8.4, slotEnd: 33.0, rail: 2.3};
+  const tabY = H / 2 - 0.35 - TAB.t / 2;
+  const tabMat = new THREE.MeshLambertMaterial({color: 0xe8dcc0});
+  const tabG = new THREE.Group();
+  const seg = (w, len, x, zFromFace) => {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w, TAB.t, len), tabMat);
+    m.position.set(x, tabY, zf + zFromFace + len / 2);
+    tabG.add(m);
+  };
+  seg(TAB.w, TAB.pad, 0, TAB.reach - TAB.pad);                       // tip pad
+  seg(TAB.w, TAB.reach - TAB.slotEnd, 0, 0);                          // base at the body
+  const railLen = TAB.slotEnd - TAB.pad;
+  const railX = (TAB.w - TAB.rail) / 2;
+  seg(TAB.rail, railLen, -railX, TAB.reach - TAB.slotEnd);            // rails either
+  seg(TAB.rail, railLen,  railX, TAB.reach - TAB.slotEnd);            // side of the slot
+
+  // 100G is embossed on the tip pad, so it stands proud rather than being drawn
+  const boss = new THREE.Mesh(new THREE.BoxGeometry(6.4, 0.35, 5.2),
+    new THREE.MeshLambertMaterial({color: 0xdcd0b2}));
+  boss.position.set(0, tabY + TAB.t / 2 + 0.17, zf + TAB.reach - TAB.pad / 2);
+  tabG.add(boss);
+  scene.add(tabG);
   // frame the part including the bail reach, so nothing sits off screen
   const reach = spec ? spec.dims.find(d => d[0].startsWith('bail reach'))?.[1] || 0 : 0;
   const span = D + reach;
