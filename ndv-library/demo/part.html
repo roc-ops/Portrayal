@@ -271,7 +271,7 @@ const hud = m => { document.getElementById('hud').textContent = m; };
   // plane. Orientation and contour then follow from the coordinates instead of
   // from an Euler order, which is what kept coming out wrong.
   {
-    const BW = 6.6, BL = 3.4, NX = 10, NZ = 6;   // across the tab, along it
+    const BW = 9.9, BL = 5.1, NX = 10, NZ = 6;   // across the tab, along it
     const z0 = TAB.pad / 2;
     const g = new THREE.BufferGeometry();
     const verts = [], uvs = [], idx = [];
@@ -281,8 +281,9 @@ const hud = m => { document.getElementById('hud').textContent = m; };
         const x = (u - 0.5) * BW;
         const zTip = z0 + (v - 0.5) * BL;
         verts.push(x, -waveAt(zTip) + TAB.t / 2 + 0.05, -zTip);
-        // z is negated when building, which mirrors the texture unless u is too
-        uvs.push(1 - u, 1 - v);
+        // z is negated when building, which mirrors the texture unless u is too.
+        // Both axes flipped again from that, to turn the badge 180.
+        uvs.push(u, v);
       }
     }
     for (let j = 0; j < NZ; j++) for (let i = 0; i < NX; i++) {
