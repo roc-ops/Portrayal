@@ -47,6 +47,8 @@ const RU = 44.45;                 // EIA-310 rack unit
 const RACK_W = 482.6;             // 19in rail-to-rail outer width
 const PXMM_FACE = 3;              // front/rear carry the detail worth reading
 const PXMM_SIDE = 1.2;            // sides/top/bottom are near-featureless here
+const RACK_FACE_Z = 11;           // front plane of the mounting posts
+const RECESS = 101.6;             // 4in - how far back the Smartoptics gear sits
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x121417);
@@ -151,29 +153,36 @@ function buildRack(heightRU) {
   return g;
 }
 
-// A 1U device is held by an ear each side, each taking two screws into the top
-// and bottom holes of its U. Drawn as geometry rather than face art because the
-// ears stand proud of the faceplate and the screws proud of the ears.
-function rackEars(rack, ru, faceZ) {
+// An L bracket per side: a flange flat against the rack face taking two screws
+// into the cage nuts, and a leg running back along the side of the device. The
+// gear sits recessed from the rack face, so the leg spans that gap - which is
+// what the bracket is for and why a flat plate looked wrong.
+function rackEars(rack, ru, faceZ, halfW) {
   const g = new THREE.Group();
   const {earMat, screwMat} = rack.userData;
   const yBase = (ru - 1) * RU;
+  const h = RU - 4.5;
+  const legLen = RACK_FACE_Z - faceZ;          // rack face back to the faceplate
   for (const side of [-1, 1]) {
-    // the screw goes through the ear into the cage nut, so it must sit on the
-    // rail's hole column - not on the ear's centre line, which is 4mm inboard
+    // the screw goes through the flange into the cage nut, so it sits on the
+    // rail's hole column - not on the flange centre line, which is 4mm inboard
     const holeX = side * (RACK_W / 2 - 8);
     const earX = side * (RACK_W / 2 - 12);
-    const ear = new THREE.Mesh(new THREE.BoxGeometry(24, RU - 4.5, 3), earMat);
-    ear.position.set(earX, yBase + RU / 2, faceZ + 1.5);
-    g.add(ear);
+    const flange = new THREE.Mesh(new THREE.BoxGeometry(24, h, 3), earMat);
+    flange.position.set(earX, yBase + RU / 2, RACK_FACE_Z + 1.5);
+    g.add(flange);
+    // the other leg of the L, flush against the flank of the device
+    const leg = new THREE.Mesh(new THREE.BoxGeometry(3, h, legLen), earMat);
+    leg.position.set(side * (halfW + 1.5), yBase + RU / 2, faceZ + legLen / 2);
+    g.add(leg);
     for (const dy of [6.35, 38.10]) {
       const head = new THREE.Mesh(new THREE.CylinderGeometry(2.6, 2.6, 2.2, 14), screwMat);
       head.rotation.x = Math.PI / 2;
-      head.position.set(holeX, yBase + dy, faceZ + 4.1);
+      head.position.set(holeX, yBase + dy, RACK_FACE_Z + 4.1);
       g.add(head);
       const slot = new THREE.Mesh(new THREE.BoxGeometry(3.6, 0.8, 0.6),
         new THREE.MeshBasicMaterial({color: 0x4a5057}));
-      slot.position.set(holeX, yBase + dy, faceZ + 5.3);
+      slot.position.set(holeX, yBase + dy, RACK_FACE_Z + 5.3);
       g.add(slot);
     }
   }
@@ -202,14 +211,16 @@ async function buildDevice(entry, byName) {
     await face('rear',   W, H, PXMM_FACE),
   ];
   const mesh = new THREE.Mesh(new THREE.BoxGeometry(W, H, D), mats);
-  // a device at RU n occupies that U, measured from the rack floor
-  mesh.position.set(0, (entry.ru - 1) * RU + H / 2, -D / 2 + 14);
+  // a device at RU n occupies that U, measured from the rack floor, and sits
+  // RECESS back from the rack face as these are mounted in the real rack
+  mesh.position.set(0, (entry.ru - 1) * RU + H / 2, RACK_FACE_Z - RECESS - D / 2);
   mesh.userData = {entry, W, H, D};
 
   const tag = labelSprite(entry.label || entry.id, 30, '#d7dbdf');
   // left side, outboard of the U numbering: the ethernet runs dress round the
   // right-hand side of the rack and were sitting on top of these
-  tag.position.set(-(RACK_W / 2 + 76) - tag.scale.x / 2, mesh.position.y, 14);
+  tag.position.set(-(RACK_W / 2 + 76) - tag.scale.x / 2, mesh.position.y,
+                   RACK_FACE_Z - RECESS + 4);
   return {mesh, tag, W, H, D};
 }
 
@@ -353,7 +364,7 @@ function cable(a, b, colour, striped, lateral, sag, flow) {
     const d = await buildDevice(entry, byName);
     if (!d) continue;
     root.add(d.mesh); root.add(d.tag);
-    root.add(rackEars(rack, entry.ru, d.mesh.position.z + d.D / 2));
+    root.add(rackEars(rack, entry.ru, d.mesh.position.z + d.D / 2, d.W / 2));
     placed[entry.id] = d;
   }
 
