@@ -180,11 +180,11 @@ const hud = m => { document.getElementById('hud').textContent = m; };
   const tabMat = new THREE.MeshLambertMaterial({color: 0xe8dcc0});
   const tabG = new THREE.Group();
 
-  // The plan shape came from top.svg, but the tab is not flat - side.svg shows a
-  // flattened M, two crests with a valley between. These are that path's control
-  // points, as an offset from the anchored line, measured from the tip.
+  // side.svg has the tab as a flattened M - two crests with a valley between.
+  // These are that path's control points, as an offset from the anchored line,
+  // measured from the tip.
   const WAVE = [[0, 1.35], [7, 0.0], [14, 1.35], [21, 0.0], [TAB.reach, 0.35]];
-  const waveAt = zTip => {                       // cosine between control points
+  const waveAt = zTip => {
     for (let i = 0; i < WAVE.length - 1; i++) {
       const [z0, y0] = WAVE[i], [z1, y1] = WAVE[i + 1];
       if (zTip <= z1) {
@@ -194,32 +194,59 @@ const hud = m => { document.getElementById('hud').textContent = m; };
     }
     return WAVE[WAVE.length - 1][1];
   };
-  const tabY0 = H / 2 - 0.35 - TAB.t / 2;
 
-  // sliced along its length so each slice sits on the profile - a single box
-  // per segment is what made it read flat
-  const SLICE = 1.2;
-  const seg = (w, zTipFrom, zTipTo, x) => {
-    for (let z = zTipFrom; z < zTipTo - 1e-6; z += SLICE) {
-      const len = Math.min(SLICE, zTipTo - z);
-      const m = new THREE.Mesh(new THREE.BoxGeometry(w, TAB.t, len * 1.04), tabMat);
-      m.position.set(x, tabY0 - waveAt(z + len / 2),
-                     zf + TAB.reach - (z + len / 2));
-      tabG.add(m);
-    }
+  // The tab is moulded plastic, so it wants one smooth shape, not stacked boxes.
+  // Plan outline with a rounded tip and a rounded slot as a hole, extruded to
+  // thickness with a small bevel, then bent onto the profile.
+  const rr = (path, x0, y0, x1, y1, r) => {
+    path.moveTo(x0 + r, y0);
+    path.lineTo(x1 - r, y0); path.absarc(x1 - r, y0 + r, r, -Math.PI / 2, 0, false);
+    path.lineTo(x1, y1 - r); path.absarc(x1 - r, y1 - r, r, 0, Math.PI / 2, false);
+    path.lineTo(x0 + r, y1); path.absarc(x0 + r, y1 - r, r, Math.PI / 2, Math.PI, false);
+    path.lineTo(x0, y0 + r); path.absarc(x0 + r, y0 + r, r, Math.PI, Math.PI * 1.5, false);
   };
-  seg(TAB.w, 0, TAB.pad, 0);                                     // tip pad
-  const railX = (TAB.w - TAB.rail) / 2;
-  seg(TAB.rail, TAB.pad, TAB.slotEnd, -railX);                   // rails either side
-  seg(TAB.rail, TAB.pad, TAB.slotEnd,  railX);                   // of the slot
-  seg(TAB.w, TAB.slotEnd, TAB.reach, 0);                         // base at the body
+  const BEV = 0.25;
+  // the bevel grows the result, so the plan is inset by it - otherwise the tab
+  // comes out 19.50 across and 35.30 long against a 19.00 x 34.80 envelope
+  const halfW = TAB.w / 2 - BEV, slotHalf = TAB.w / 2 - TAB.rail + BEV;
+  const shape = new THREE.Shape();
+  rr(shape, -halfW, BEV, halfW, TAB.reach - BEV, 3.6);      // rounded tip and root
+  const slot = new THREE.Path();
+  rr(slot, -slotHalf, TAB.pad + BEV, slotHalf, TAB.slotEnd - BEV, 2.4); // finger opening
+  shape.holes.push(slot);
 
-  // 100G raised on the tip pad, following the profile with it
+  const geo = new THREE.ExtrudeGeometry(shape, {
+    depth: TAB.t - 2 * BEV, bevelEnabled: true, bevelThickness: BEV,
+    bevelSize: BEV, bevelSegments: 3, curveSegments: 18,
+  });
+  geo.rotateX(-Math.PI / 2);          // plan into xz, thickness into y
+  geo.translate(0, -TAB.t / 2, 0);    // centre the thickness on the anchor line
+  const pos = geo.attributes.position;
+  for (let i = 0; i < pos.count; i++) {
+    const zTip = -pos.getZ(i);        // 0 at the tip, reach at the body
+    pos.setY(i, pos.getY(i) - waveAt(zTip));
+  }
+  geo.computeVertexNormals();
+  const tab = new THREE.Mesh(geo, tabMat);
+  tab.position.set(0, H / 2 - 0.35 - TAB.t / 2, zf + TAB.reach);
+  tabG.add(tab);
+
+  // 100G, moulded into the tip pad
+  const cv100 = document.createElement('canvas');
+  cv100.width = 256; cv100.height = 128;
+  const c1 = cv100.getContext('2d');
+  c1.fillStyle = '#e8dcc0'; c1.fillRect(0, 0, 256, 128);
+  c1.strokeStyle = '#c9bd9c'; c1.lineWidth = 7;
+  c1.beginPath(); c1.roundRect(14, 20, 228, 88, 44); c1.stroke();
+  c1.fillStyle = '#c9bd9c'; c1.font = 'bold 62px system-ui'; c1.textAlign = 'center';
+  c1.textBaseline = 'middle'; c1.fillText('100G', 128, 66);
+  const badge = new THREE.Mesh(new THREE.PlaneGeometry(6.6, 3.4),
+    new THREE.MeshLambertMaterial({map: canvasTex(cv100)}));
+  badge.rotation.x = -Math.PI / 2;
+  badge.rotation.z = Math.PI / 2;
   const bz = TAB.pad / 2;
-  const boss = new THREE.Mesh(new THREE.BoxGeometry(6.4, 0.35, 5.2),
-    new THREE.MeshLambertMaterial({color: 0xdcd0b2}));
-  boss.position.set(0, tabY0 - waveAt(bz) + TAB.t / 2 + 0.17, zf + TAB.reach - bz);
-  tabG.add(boss);
+  badge.position.set(0, H / 2 - 0.35 - waveAt(bz) + 0.02, zf + TAB.reach - bz);
+  tabG.add(badge);
   scene.add(tabG);
   // frame the part including the bail reach, so nothing sits off screen
   const reach = spec ? spec.dims.find(d => d[0].startsWith('bail reach'))?.[1] || 0 : 0;
