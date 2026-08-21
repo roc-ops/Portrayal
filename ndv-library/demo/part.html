@@ -67,11 +67,13 @@ const DRAWING = {
          + 'were corrected against photographs - 83.2 deep, stepping down 0.85 at '
          + '17.2 back from the face, with the shell, PCB and guide plate nesting at '
          + 'the rear at their own lengths and widths. The optical face is a skin, '
-         + 'MPO or LC duplex. The pull tab is built two ways for two reasons: the '
-         + 'rails take the side profile as a cross-section and extrude it across, '
-         + 'so the U opening is the gap between them; the tip pad takes its plan '
-         + 'outline so its corners can be rounded, then is bent onto the same '
-         + 'profile. Overall comes out 118, the reference length on the drawing.',
+         + 'MPO or LC duplex. The pull tab takes the side profile as its '
+         + 'cross-section and extrudes it across the width, in three pieces, so the '
+         + 'U opening is the gap between them. Overall comes out 118, the reference '
+         + 'length on the drawing. KNOWN GAP: the tab tip is square in plan. The '
+         + 'photographs show it rounded, and getting that while keeping the surface '
+         + 'smooth needs the section swept along the plan outline - a loft - rather '
+         + 'than an extrusion, which is not built into three.js.',
   },
 };
 
@@ -216,7 +218,7 @@ const hud = m => { document.getElementById('hud').textContent = m; };
   // piece uses - the pad's is larger, to soften its corners
   const profileShape = (zFrom, zTo, bev = BEV) => {
     const sh = new THREE.Shape();
-    const N = 48, half = TAB.t / 2 - bev;
+    const N = 96, half = TAB.t / 2 - bev;
     const yTop = z => -waveAt(z) + half, yBot = z => -waveAt(z) - half;
     sh.moveTo(zFrom, yTop(zFrom));
     for (let i = 1; i <= N; i++) {
@@ -233,7 +235,7 @@ const hud = m => { document.getElementById('hud').textContent = m; };
   const extrudeAcross = (sh, width, bev = BEV) => {
     const g = new THREE.ExtrudeGeometry(sh, {
       depth: width - 2 * bev, bevelEnabled: true, bevelThickness: bev,
-      bevelSize: bev, bevelSegments: 6, curveSegments: 4,
+      bevelSize: bev, bevelSegments: 10, curveSegments: 12,
     });
     // shape x is length, shape y is height, extrusion is width
     g.rotateY(Math.PI / 2);
@@ -265,20 +267,37 @@ const hud = m => { document.getElementById('hud').textContent = m; };
   c1.beginPath(); c1.roundRect(14, 20, 228, 88, 44); c1.stroke();
   c1.fillStyle = '#c9bd9c'; c1.font = 'bold 62px system-ui'; c1.textAlign = 'center';
   c1.textBaseline = 'middle'; c1.fillText('100G', 128, 66);
-  const badge = new THREE.Mesh(new THREE.PlaneGeometry(3.4, 6.6, 8, 16),
-    new THREE.MeshLambertMaterial({map: canvasTex(cv100), side: THREE.DoubleSide}));
-  badge.rotation.set(-Math.PI / 2, 0, Math.PI / 2);
-  // follow the pad's curve rather than lying flat across it - a flat plane on a
-  // curved surface shows its edge, which is the line that was cutting across
-  const bp = badge.geometry.attributes.position;
-  const bz0 = TAB.pad / 2;
-  for (let i = 0; i < bp.count; i++) {
-    const zTip = bz0 - bp.getY(i);          // plane y runs along the tab
-    bp.setZ(i, -waveAt(zTip) + waveAt(bz0));
+  // Built vertex by vertex in the tab's own frame rather than as a rotated
+  // plane. Orientation and contour then follow from the coordinates instead of
+  // from an Euler order, which is what kept coming out wrong.
+  {
+    const BW = 6.6, BL = 3.4, NX = 10, NZ = 6;   // across the tab, along it
+    const z0 = TAB.pad / 2;
+    const g = new THREE.BufferGeometry();
+    const verts = [], uvs = [], idx = [];
+    for (let j = 0; j <= NZ; j++) {
+      for (let i = 0; i <= NX; i++) {
+        const u = i / NX, v = j / NZ;
+        const x = (u - 0.5) * BW;
+        const zTip = z0 + (v - 0.5) * BL;
+        verts.push(x, -waveAt(zTip) + TAB.t / 2 + 0.05, -zTip);
+        // z is negated when building, which mirrors the texture unless u is too
+        uvs.push(1 - u, 1 - v);
+      }
+    }
+    for (let j = 0; j < NZ; j++) for (let i = 0; i < NX; i++) {
+      const a = j * (NX + 1) + i, b = a + 1, c = a + NX + 1, d = c + 1;
+      idx.push(a, c, b, b, c, d);
+    }
+    g.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
+    g.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+    g.setIndex(idx);
+    g.computeVertexNormals();
+    const badge = new THREE.Mesh(g, new THREE.MeshLambertMaterial(
+      {map: canvasTex(cv100), side: THREE.DoubleSide}));
+    badge.position.set(0, H / 2 - 0.35 - TAB.t / 2, zf + TAB.reach);
+    tabG.add(badge);
   }
-  badge.geometry.computeVertexNormals();
-  badge.position.set(0, H / 2 - 0.35 - waveAt(bz0) + 0.03, zf + TAB.reach - bz0);
-  tabG.add(badge);
   scene.add(tabG);
   // frame the part including the bail reach, so nothing sits off screen
   const reach = spec ? spec.dims.find(d => d[0].startsWith('bail reach'))?.[1] || 0 : 0;
