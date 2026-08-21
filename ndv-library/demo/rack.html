@@ -180,7 +180,9 @@ function rackEars(rack, ru, faceZ, halfW, depth) {
     // the screw goes through the flange into the cage nut, so it sits on the
     // rail's hole column - not on the flange centre line, which is 4mm inboard
     const holeX = side * (RACK_W / 2 - 8);
-    const earX = side * (RACK_W / 2 - 12);
+    // the flange has to start AT the leg, not straddle it - centring 24mm of
+    // flange on the leg put 10mm inboard of it and made the bracket a T
+    const earX = side * (halfW + 12);
     const flange = new THREE.Mesh(new THREE.BoxGeometry(24, h, 3), earMat);
     flange.position.set(earX, yBase + RU / 2, RACK_FACE_Z + 1.5);
     g.add(flange);
