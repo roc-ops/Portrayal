@@ -3,6 +3,10 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 OUT="${1:-ndv-library/dist}"
+
+# Lint first. A broken manifest used to render as an empty or partial dist that
+# looked like a successful build - failing here instead means that cannot happen.
+python3 ndv-spec/tools/ndv/lint.py --schemas ndv-spec/schemas --library ndv-library
 rm -rf "$OUT"
 for d in ndv-library/devices/*/*/device.yaml; do
   python3 ndv-spec/tools/ndv/render.py "$d" --library ndv-library --out "$OUT" >/dev/null

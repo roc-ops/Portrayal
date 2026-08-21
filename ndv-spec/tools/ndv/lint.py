@@ -250,8 +250,35 @@ def lint_device_overlap(path, view_name, view, lib_roots):
                                  f"{ox:.2f}x{oy:.2f}mm")
 
 
+def scalar_colon_hint(path, exc):
+    """A colon-space inside an unquoted scalar is the commonest way these break.
+
+    `notes: measured from a photo: about 3mm` parses as a nested mapping and the
+    error PyYAML gives says nothing about why. Point at the offending line, since
+    this has cost several builds.
+    """
+    mark = getattr(exc, "problem_mark", None)
+    if mark is None:
+        return
+    try:
+        line = path.read_text().splitlines()[mark.line]
+    except IndexError:
+        return
+    stripped = line.strip()
+    # a second ": " on the line is the tell - the first is the key, the rest is
+    # prose that PyYAML then tries to read as a nested mapping
+    if stripped.count(": ") > 1 and not stripped.startswith("#"):
+        err(path, "L0", f"line {mark.line + 1}: a colon inside an unquoted scalar - "
+                        f"rephrase or quote it: {stripped[:70]!r}")
+
+
 def lint_device(path, validator, lib_roots):
-    data = yaml.safe_load(path.read_text())
+    try:
+        data = yaml.safe_load(path.read_text())
+    except yaml.YAMLError as exc:
+        err(path, "L0", f"will not parse: {str(exc).splitlines()[0]}")
+        scalar_colon_hint(path, exc)
+        return None
     for e in validator.iter_errors(data):
         err(path, "L1", f"{'/'.join(str(p) for p in e.path)}: {e.message}")
         return data
