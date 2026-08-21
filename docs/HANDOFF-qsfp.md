@@ -9,35 +9,50 @@ ndv-spec/schemas --library ndv-library` (clean across 89 files as of writing).
 
 ---
 
-## The immediate task: round the pull tab's tip
+## The pull tab tip — done
 
-**Status:** the only known-wrong thing on the QSFP. It is stated as a KNOWN GAP on
-the study page so it can't be mistaken for finished.
+Solved as the loft this doc proposed. Kept here because the two dead ends are
+still worth not repeating.
 
-**What's wrong:** the tab tip is square in plan. The photographs (see below) show it
-rounded.
+**What was wrong:** the tab tip was square in plan; the photographs and
+`skins/top.svg` both show it rounded. The drawing radius is **3.2**, not the 3.4
+this doc previously guessed — and `top.svg` also carries a **2.4** radius on the
+finger slot, which had likewise never reached the 3D.
 
-**Two approaches already tried, both rejected for a reason — don't repeat them:**
+**Two approaches that do not work:**
 
-1. *Extrude the plan outline, then bend the vertices onto the profile.* Gives the
-   rounded corners but creases: `THREE.ExtrudeGeometry` puts no vertices along the
-   cap face, so the bend can only approximate the curve while the rails follow it
-   exactly. The mismatch shows as a visible crease where pad meets rails.
-2. *Wider bevel on the extrusion.* Rounds the **section**, not the plan. The corner
-   stays square.
+1. *Extrude the plan outline, then bend the vertices onto the profile.*
+   `THREE.ExtrudeGeometry` puts no vertices along the cap face, so the bend can
+   only approximate the wave while the rails follow it exactly. Creases.
+2. *Wider bevel on the extrusion.* Rounds the section, not the plan.
 
-**The approach that should work:** sweep the section along the plan outline — a loft.
-three.js has no loft primitive, so build the buffer geometry directly:
+**What was built:** `sweep(stations)` in `part.html`. Each station is one
+rounded-rectangle section at one z; consecutive stations stitch into quads. The
+plan corners come out of `outerHalf(z)` and `slotHalf(z)`, both read off
+`top.svg`. Because every station carries a complete section, the top and bottom
+faces have as many vertices as there are stations and follow the wave exactly.
 
-- sample the rounded plan outline of the tip pad (from `top.svg` in
-  `common/qsfp-drawing`, or reconstruct: 19.0 wide, 8.4 long, ~3.4 corner radius)
-- at each sample, place the side-profile cross-section
-- stitch quads between consecutive sections, cap the ends
+Three things that were not obvious and cost a pass each:
 
-`part.html` already has what you need: `waveAt(zTip)` returns the profile offset,
-`profileShape(zFrom, zTo, bev)` builds the section. The badge grid in the same file
-is the same construction style (explicit verts / uvs / index) and is working — copy
-its shape.
+- **The nose needs rolling in section too, not just plan.** The leading stations
+  inset by `bev - sqrt(bev^2 - u^2)` — the profile a ball of that radius leaves.
+  Without it the tip was rounded in plan and razor-edged in section.
+- **One bevel for the whole tab.** The pad at 0.30 and the rails at 0.22 met at
+  the same y with different radii, and the shading broke along the seam.
+- **Caps need their own vertices.** Fanning a cap off the shared side ring lets
+  `computeVertexNormals` average the cap normal into the side surface, smearing
+  the hard end edge into a shaded band about a millimetre wide. That band read
+  as a crease exactly where the pad met the rails, and survived the first two
+  fixes because it was never a geometry problem.
+
+Verified in a headless browser, not by reading the code: the plan silhouette was
+sampled off the vertex buffer at seven stations and matches `top.svg` to 0.02,
+the nose rolls 6.00 -> 7.653 half-width and 2.80 -> 3.40 thickness across the
+0.30 roll, and the six drawing-vs-model rows on the page still read.
+
+**Known discrepancy left:** `top.svg` closes the slot 1.8 before the body; the 3D
+runs it open to the body. It reads the same only because the body sits directly
+behind it. Closing it means a fourth piece, or one sweep whose section splits.
 
 ---
 
@@ -48,7 +63,7 @@ its shape.
 | envelope | **19.00 × 8.50 × 118.00** — matches the drawing's reference |
 | 2D | five views, measured against drawing *and* photographs |
 | body | stepped geometry: front section, mid body, three rear tongues |
-| tab | rails + pad extruded across from the side profile, on the flattened-M |
+| tab | one loft: rounded sections swept along the plan outline, 3.2 tip / 2.4 slot radii |
 | badge | 100G, 9.9 × 5.1, follows the contour, reads correctly |
 
 The 118 is a genuine cross-check, not an input: an 83.2 body and a 34.8 tab reach

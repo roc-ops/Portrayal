@@ -67,13 +67,14 @@ const DRAWING = {
          + 'were corrected against photographs - 83.2 deep, stepping down 0.85 at '
          + '17.2 back from the face, with the shell, PCB and guide plate nesting at '
          + 'the rear at their own lengths and widths. The optical face is a skin, '
-         + 'MPO or LC duplex. The pull tab takes the side profile as its '
-         + 'cross-section and extrudes it across the width, in three pieces, so the '
-         + 'U opening is the gap between them. Overall comes out 118, the reference '
-         + 'length on the drawing. KNOWN GAP: the tab tip is square in plan. The '
-         + 'photographs show it rounded, and getting that while keeping the surface '
-         + 'smooth needs the section swept along the plan outline - a loft - rather '
-         + 'than an extrusion, which is not built into three.js.',
+         + 'MPO or LC duplex. The pull tab is a loft: rounded-rectangle sections '
+         + 'swept along the plan outline from top.svg, so the 3.2 tip radius and '
+         + 'the 2.4 finger-slot radius are modelled rather than approximated, and '
+         + 'the flattened-M side profile is followed exactly instead of bent onto. '
+         + 'Overall comes out 118, the reference length on the drawing. Remaining '
+         + 'discrepancy: top.svg closes the slot 1.8 before the body and the 3D '
+         + 'leaves it open to the body, which reads the same only because the body '
+         + 'is immediately behind it.',
   },
 };
 
@@ -198,63 +199,120 @@ const hud = m => { document.getElementById('hud').textContent = m; };
     return WAVE[WAVE.length - 1][1];
   };
 
-  // The tab is moulded plastic, so it wants one smooth shape, not stacked boxes.
-  // Plan outline with a rounded tip and a rounded slot as a hole, extruded to
-  // thickness with a small bevel, then bent onto the profile.
-  const rr = (path, x0, y0, x1, y1, r) => {
-    path.moveTo(x0 + r, y0);
-    path.lineTo(x1 - r, y0); path.absarc(x1 - r, y0 + r, r, -Math.PI / 2, 0, false);
-    path.lineTo(x1, y1 - r); path.absarc(x1 - r, y1 - r, r, 0, Math.PI / 2, false);
-    path.lineTo(x0 + r, y1); path.absarc(x0 + r, y1 - r, r, Math.PI / 2, Math.PI, false);
-    path.lineTo(x0, y0 + r); path.absarc(x0 + r, y0 + r, r, Math.PI, Math.PI * 1.5, false);
+  // The tab is moulded plastic, so it wants one smooth shape, not stacked
+  // boxes. Two earlier attempts are recorded in docs/HANDOFF-qsfp.md and both
+  // failed the same way: ExtrudeGeometry puts no vertices along the cap face,
+  // so bending an extrusion onto the wave could only approximate it, and a
+  // wider bevel rounds the section rather than the plan.
+  //
+  // This sweeps the section along the plan outline instead - a loft. Every
+  // station carries a complete section, so the top and bottom faces have as
+  // many vertices as there are stations and follow the wave exactly.
+
+  // Plan outline read off skins/top.svg, the view measured against both the
+  // drawing and the photographs: 19.0 across, 3.2 radius at the tip, finger
+  // opening a 2.4-radius slot starting 8.4 back. Neither radius had reached
+  // the 3D model - the tip was square in plan, and so was the slot.
+  const PLAN = {tipR: 3.2, slotR: 2.4, slotHalf: TAB.w / 2 - TAB.rail};
+  const outerHalf = z => {
+    const r = PLAN.tipR, flat = TAB.w / 2 - r;
+    return z >= r ? TAB.w / 2
+                  : flat + Math.sqrt(Math.max(0, r * r - (r - z) * (r - z)));
   };
-  // Built the way the drawing describes it: take the side profile as the
-  // cross-section and extrude it ACROSS the width. Three pieces - a full-width
-  // tip pad and two rails - so the U opening is the gap between them rather
-  // than a hole cut in a plate. Trying to cut a plan outline was what kept
-  // producing folded corners.
-  const BEV = 0.22;
-  // the bevel grows the result, so the section is inset by whatever bevel that
-  // piece uses - the pad's is larger, to soften its corners
-  const profileShape = (zFrom, zTo, bev = BEV) => {
-    const sh = new THREE.Shape();
-    const N = 96, half = TAB.t / 2 - bev;
-    const yTop = z => -waveAt(z) + half, yBot = z => -waveAt(z) - half;
-    sh.moveTo(zFrom, yTop(zFrom));
-    for (let i = 1; i <= N; i++) {
-      const z = zFrom + (zTo - zFrom) * (i / N);
-      sh.lineTo(z, yTop(z));
-    }
-    for (let i = N; i >= 0; i--) {
-      const z = zFrom + (zTo - zFrom) * (i / N);
-      sh.lineTo(z, yBot(z));
-    }
-    sh.closePath();
-    return sh;
+  const slotHalf = z => {
+    const r = PLAN.slotR, cz = TAB.pad + r, flat = PLAN.slotHalf - r;
+    if (z <= TAB.pad) return flat;
+    return z >= cz ? PLAN.slotHalf
+                   : flat + Math.sqrt(Math.max(0, r * r - (cz - z) * (cz - z)));
   };
-  const extrudeAcross = (sh, width, bev = BEV) => {
-    const g = new THREE.ExtrudeGeometry(sh, {
-      depth: width - 2 * bev, bevelEnabled: true, bevelThickness: bev,
-      bevelSize: bev, bevelSegments: 10, curveSegments: 12,
-    });
-    // shape x is length, shape y is height, extrusion is width
-    g.rotateY(Math.PI / 2);
-    g.translate(-(width / 2 - bev), 0, 0);
+
+  // A station is one rounded-rectangle section placed at one z. Sampling every
+  // station at the same point count is what lets consecutive ones stitch into
+  // quads. Local z is negated, as the badge does it, so the tip is +z.
+  const NA = 5, M = 4 * (NA + 1);
+  const sweep = stations => {
+    const pos = [], idx = [];
+    for (const s of stations) {
+      const R = Math.max(0.02, Math.min(s.r, s.hw, s.hh));
+      const cor = [[s.hw - R, s.hh - R], [R - s.hw, s.hh - R],
+                   [R - s.hw, R - s.hh], [s.hw - R, R - s.hh]];
+      for (let k = 0; k < 4; k++) for (let i = 0; i <= NA; i++) {
+        const a = (k + i / NA) * Math.PI / 2;
+        pos.push(s.xc + cor[k][0] + R * Math.cos(a),
+                 s.yc + cor[k][1] + R * Math.sin(a), -s.z);
+      }
+    }
+    for (let j = 0; j < stations.length - 1; j++) for (let i = 0; i < M; i++) {
+      const v0 = j * M + i, v1 = j * M + (i + 1) % M;
+      idx.push(v0, v0 + M, v1, v1, v0 + M, v1 + M);
+    }
+    // Caps are fanned from the section centre off their OWN copy of the ring.
+    // Sharing the ring let computeVertexNormals average the cap's normal into
+    // the side surface, which smeared the hard end edge into a shaded band a
+    // millimetre wide - readable as a crease where the pad met the rails.
+    const cap = (s, base, flip) => {
+      const ring = pos.length / 3;
+      for (let i = 0; i < M; i++) {
+        const k = (base + i) * 3;
+        pos.push(pos[k], pos[k + 1], pos[k + 2]);
+      }
+      const mid = pos.length / 3;
+      pos.push(s.xc, s.yc, -s.z);
+      for (let i = 0; i < M; i++) {
+        const a = ring + i, b = ring + (i + 1) % M;
+        if (flip) idx.push(mid, b, a); else idx.push(mid, a, b);
+      }
+    };
+    cap(stations[0], 0, false);
+    cap(stations[stations.length - 1], (stations.length - 1) * M, true);
+
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    g.setIndex(idx);
+    g.computeVertexNormals();
     return g;
   };
-  // Every piece comes from the side profile, extruded across. The pad tried a
-  // plan outline so its corners could be rounded, but ExtrudeGeometry puts no
-  // vertices along the cap, so bending it could only approximate the curve -
-  // which is what made the surface jagged where the pad met the rails. A
-  // generous bevel softens the pad's corners instead.
-  const tabPieces = [
-    [TAB.w, 0, 0.75, TAB.pad, 0.75],                                 // tip pad
-    [TAB.rail, -(TAB.w - TAB.rail) / 2, TAB.pad, TAB.reach, BEV],   // rails either
-    [TAB.rail,  (TAB.w - TAB.rail) / 2, TAB.pad, TAB.reach, BEV],   // side of the gap
-  ];
-  for (const [w, x, zFrom, zTo, bev] of tabPieces) {
-    const m = new THREE.Mesh(extrudeAcross(profileShape(zFrom, zTo, bev), w, bev), tabMat);
-    m.position.set(x, H / 2 - 0.35 - TAB.t / 2, zf + TAB.reach);
+
+  // one bevel for the whole tab. Two different ones left a crease at the
+  // pad/rail joint, because the rounded top edges met at the same y but with
+  // different radii and the shading broke along the seam.
+  const BEVT = 0.30;
+  const yAt = z => -waveAt(z);
+
+  // Tip pad. The leading stations roll the front edge over: at u ahead of the
+  // tip the section insets by bev - sqrt(bev^2 - u^2), the profile a ball of
+  // that radius leaves behind, so the nose rounds in section as well as plan.
+  const padSt = [], NROLL = 5, NPAD = 64;
+  for (let k = 0; k <= NROLL; k++) {
+    const a = (Math.PI / 2) * (k / NROLL);
+    const z = BEVT * (1 - Math.cos(a)), d = BEVT * (1 - Math.sin(a));
+    padSt.push({z, xc: 0, yc: yAt(z),
+                hw: outerHalf(z) - d, hh: TAB.t / 2 - d, r: BEVT - d});
+  }
+  for (let k = 1; k <= NPAD; k++) {
+    const z = BEVT + (TAB.pad - BEVT) * (k / NPAD);
+    padSt.push({z, xc: 0, yc: yAt(z), hw: outerHalf(z), hh: TAB.t / 2, r: BEVT});
+  }
+
+  // Rails. Their inner edge follows the slot, so they thicken towards the pad -
+  // that rounded inner corner is the one you see through the finger opening.
+  const railSt = side => {
+    const st = [], N = 124, z0 = TAB.pad - BEVT;
+    for (let k = 0; k <= N; k++) {
+      const z = z0 + (TAB.reach - z0) * (k / N);
+      // the leading BEVT is buried in the pad and tapered in, so the two meshes
+      // never share a surface - butting them flush put a seam across the plan
+      const sink = z < TAB.pad ? 0.06 * (TAB.pad - z) / BEVT : 0;
+      const inner = slotHalf(z), outer = outerHalf(z);
+      st.push({z, xc: side * (inner + outer) / 2, yc: yAt(z),
+               hw: (outer - inner) / 2 - sink, hh: TAB.t / 2 - sink, r: BEVT});
+    }
+    return st;
+  };
+
+  for (const st of [padSt, railSt(-1), railSt(1)]) {
+    const m = new THREE.Mesh(sweep(st), tabMat);
+    m.position.set(0, H / 2 - 0.35 - TAB.t / 2, zf + TAB.reach);
     tabG.add(m);
   }
 
