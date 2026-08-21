@@ -262,7 +262,11 @@ async function buildDevice(entry, byName) {
   mesh.position.set(0, (entry.ru - 1) * RU + H / 2, RACK_FACE_Z - RECESS - D / 2);
   mesh.userData = {entry, W, H, D};
 
-  const scrim = new THREE.Mesh(new THREE.BoxGeometry(W + 2, H + 2, D + 2),
+  // Deep enough to swallow the relief, which stands proud of both faces - dust
+  // caps 9.5mm off the front, the PSU bail 22.85mm off the rear. A scrim sized
+  // to the chassis alone let all of that poke through, so an isolated view still
+  // showed every ROADM's caps lit.
+  const scrim = new THREE.Mesh(new THREE.BoxGeometry(W + 4, H + 4, D + 70),
     new THREE.MeshBasicMaterial({color: 0x121417, transparent: true, opacity: 0.72,
                                  depthWrite: false}));
   scrim.position.copy(mesh.position);
