@@ -117,8 +117,21 @@ Written down because each cost several rounds.
   the AS7726 photo reads 13.3, the Smartoptics stencil 12.7. Worth a caliper.
 - **`usb-a@2`** — its own provenance records a 13.1 × 5.7 nominal shell while
   declaring a 17.0 × 7.0 footprint. A photo measurement agreed with the nominal.
-- **AS7726-32X** — `mgmt-sfp-1`/`usb` overlap by 3.00 × 7.00 mm (lint L13 finds it).
-  Needs a look at the real faceplate.
-- **`build.sh` does not run lint.** L13 only fires when run by hand.
-- **YAML colon-in-plain-scalar** has broken the build several times (`"note: text"`).
-  A lint rule catching `": "` inside an unquoted scalar would pay for itself.
+- **AS5912-54X / AS7326-56X** — front faces only. `top`/`left`/`right` are finish
+  without vents, screws or lid labels. Needs photographs of a lid and a flank.
+- **Visio intake, unfinished** — DCP-M, DCP-F and the H-series stencils are sitting
+  in `working/intake` (gitignored) and were never modelled. Scope call, not a task.
+
+### Closed since this doc was first written — do not redo
+
+- ~~**`build.sh` does not run lint.**~~ It does now, before rendering. A manifest
+  that would not parse used to yield an empty or partial `dist` that still printed
+  a success line and deployed. That is how `dist` got emptied without my noticing.
+- ~~**YAML colon-in-plain-scalar.**~~ Lint rule **L0** now reports the offending
+  line and, when it carries a second `": "`, names the cause. Note the trap I fell
+  into writing it: my first condition skipped any line whose key was a valid
+  identifier, which is *every* line this can happen on. It only surfaced because I
+  tested by injecting the fault into a scratch copy of the library instead of
+  reasoning about the predicate. Do that.
+- ~~**AS7726-32X `mgmt-sfp-1`/`usb` overlap.**~~ False positive — L13 was not
+  honouring `rotate`. The faceplate is fine. Lint is clean at 89 files.
