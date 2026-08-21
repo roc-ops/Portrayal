@@ -18,9 +18,10 @@ provenance:
     the 73.5 width gives 188mm against the CRPS nominal 185
   elements: photo-measured from a six-sided set of the module out of the chassis
     plus a racked rear shot, so orientation is confirmed rather than inferred
-  handle: photo - a rounded U-bail pivoted on the module's centre line, lying
-    flat about a quarter inch from the edge when stowed. Modelled horizontal, in
-    the stowed position; the tube diameter comes from the node's short axis
+  handle: photo - a rounded U-bail pivoted on the module's centre line. Drawn
+    swung out rather than stowed, straddling the fan on its vertical centre and
+    standing 22.85mm proud, being half the 33mm fan bore plus a quarter inch.
+    Tube diameter comes from the node's short axis
   inlet-orientation: photo - the C14 is mounted portrait in the chassis. It
     reads landscape in the hand-held shots only because the module is being held
     turned through 90 degrees
@@ -28,14 +29,15 @@ provenance:
 states: [ok, fail, absent]
 elements:
   latch: {at: [65.0, 1.5], size: [7.0, 6.0], class: latch}
-  handle: {at: [6.0, 31.5], size: [52.0, 5.0], class: handle}
+  handle: {at: [1.0, 17.5], size: [40.0, 5.0], class: handle}
 parts:
   - {ref: std/c13-inlet@1, id: inlet, at: [42.0, 10.0], rotate: 90}
 relief:
   features:
-    # a real U-bail, not a raised plate: 5mm tube standing 10mm proud, lying
-    # about a quarter inch off the bottom edge the way it does when stowed
-    - {node: handle, uhandle: 10.0}
+    # a real U-bail, not a raised plate. It straddles the fan - legs just
+    # outside the 33mm bore, bar on the fan's centre line - and stands half the
+    # fan height plus a quarter inch proud so a hand clears the blades
+    - {node: handle, uhandle: 22.85}
     - {node: latch, out: 1.4, color: '#3b4a8c'}
 connection-points:
   power: {at: [56.0, 20.0], direction: rear}
