@@ -14,6 +14,13 @@
          border: 1px solid #33373c; border-radius: 6px; padding: 0.5rem 0.7rem; font-size: 0.78rem; }
   #key i { display: inline-block; width: 14px; height: 3px; border-radius: 2px; margin-right: 0.45rem;
            vertical-align: middle; }
+  #iso { position: absolute; top: 10.5rem; right: 0.9rem; z-index: 5; display: flex;
+         flex-direction: column; gap: 0.28rem; max-width: 15rem; }
+  #iso button { background: #1c1f23; color: #b9bec4; border: 1px solid #33373c;
+                border-radius: 6px; padding: 0.3rem 0.6rem; font-size: 0.78rem;
+                cursor: pointer; text-align: left; }
+  #iso button:hover { background: #2b3035; }
+  #iso button.on { background: #2f3a4d; color: #eef2f6; border-color: #5b7fb8; }
   #note { position: absolute; bottom: 0.8rem; right: 0.9rem; z-index: 5; color: #565d64; font-size: 0.72rem; }
   canvas { display: block; }
 </style>
@@ -35,6 +42,7 @@
   <div style="margin-top:0.35rem;color:#8d939a">dashes flow TX → RX (fiber only)</div>
   <div style="color:#8d939a">striped = B strand (return fiber)</div>
 </div>
+<div id="iso"></div>
 <div id="hud">loading…</div>
 <div id="note">drag to orbit · wheel to zoom</div>
 <script type="module">
@@ -233,12 +241,19 @@ async function buildDevice(entry, byName) {
   mesh.position.set(0, (entry.ru - 1) * RU + H / 2, RACK_FACE_Z - RECESS - D / 2);
   mesh.userData = {entry, W, H, D};
 
+  const scrim = new THREE.Mesh(new THREE.BoxGeometry(W + 2, H + 2, D + 2),
+    new THREE.MeshBasicMaterial({color: 0x121417, transparent: true, opacity: 0.72,
+                                 depthWrite: false}));
+  scrim.position.copy(mesh.position);
+  scrim.visible = false;
+  scrim.renderOrder = 3;
+
   const tag = labelSprite(entry.label || entry.id, 30, '#d7dbdf');
   // left side, outboard of the U numbering: the ethernet runs dress round the
   // right-hand side of the rack and were sitting on top of these
   tag.position.set(-(RACK_W / 2 + 76) - tag.scale.x / 2, mesh.position.y,
                    RACK_FACE_Z - RECESS + 4);
-  return {mesh, tag, W, H, D};
+  return {mesh, tag, scrim, W, H, D};
 }
 
 // Port positions come from the compiled SVG rather than being restated here:
@@ -324,6 +339,38 @@ function cableMat(colour, striped, lengthMm, flow) {
   return new THREE.MeshLambertMaterial({map: t});
 }
 
+const _cmat = {
+  rj45: new THREE.MeshLambertMaterial({color: 0xd8dde2}),
+  rj45boot: new THREE.MeshLambertMaterial({color: 0x2f5fb0}),
+  lc: new THREE.MeshLambertMaterial({color: 0xe6e9ec}),
+  lcboot: new THREE.MeshLambertMaterial({color: 0x2f5fb0}),
+};
+// A plug standing off the port along that face's normal. Latch up or down
+// follows the jack: these are stacked belly to belly, so a port above the
+// chassis centre line takes its plug one way up and one below the other.
+function connector(media, at, latchDown) {
+  const g = new THREE.Group();
+  const up = latchDown ? -1 : 1;
+  if (media === 'ethernet') {
+    const body = new THREE.Mesh(new THREE.BoxGeometry(11.7, 8.4, 21), _cmat.rj45);
+    body.position.z = 10.5; g.add(body);
+    const latch = new THREE.Mesh(new THREE.BoxGeometry(4.2, 1.6, 9), _cmat.rj45);
+    latch.position.set(0, up * 4.6, 8); latch.rotation.x = up * 0.22; g.add(latch);
+    const boot = new THREE.Mesh(new THREE.BoxGeometry(9, 7, 12), _cmat.rj45boot);
+    boot.position.z = 26; g.add(boot);
+  } else {
+    const body = new THREE.Mesh(new THREE.BoxGeometry(6.2, 6.2, 16), _cmat.lc);
+    body.position.z = 8; g.add(body);
+    const latch = new THREE.Mesh(new THREE.BoxGeometry(3.4, 1.2, 8), _cmat.lc);
+    latch.position.set(0, up * 3.5, 7); latch.rotation.x = up * 0.18; g.add(latch);
+    const boot = new THREE.Mesh(new THREE.CylinderGeometry(1.8, 1.4, 11, 10), _cmat.lcboot);
+    boot.rotation.x = Math.PI / 2; boot.position.z = 21; g.add(boot);
+  }
+  g.position.copy(at.pos);
+  g.lookAt(at.pos.clone().add(at.n));   // the group's +z points out of the face
+  return g;
+}
+
 function cable(a, b, colour, striped, lateral, sag, flow) {
   // Real patch leads leave a connector straight before they bend, so the first
   // and last control points sit off each port along that face's own normal.
@@ -381,7 +428,8 @@ function cable(a, b, colour, striped, lateral, sag, flow) {
   lab.devices.forEach((entry, i) => {
     const d = built[i];
     if (!d) return;
-    root.add(d.mesh); root.add(d.tag);
+    root.add(d.mesh); root.add(d.tag); root.add(d.scrim);
+    d.tag.userData.deviceId = entry.id;
     root.add(rackEars(rack, entry.ru, d.mesh.position.z + d.D / 2, d.W / 2, d.D));
     placed[entry.id] = d;
   });
@@ -423,6 +471,7 @@ function cable(a, b, colour, striped, lateral, sag, flow) {
   const byPair = new Map(), byDev = new Map();
   for (const l of lab.links) { bucket(byPair, pairKey(l)).push(l); bucket(byDev, devKey(l)).push(l); }
 
+  const LINKS = [];
   let drawn = 0, missing = 0;
   for (const link of lab.links) {
     const a = await worldPort(link.from[0], link.from[1], link.from[2]);
@@ -435,7 +484,16 @@ function cable(a, b, colour, striped, lateral, sag, flow) {
     const span = Math.abs(a.pos.y - b.pos.y);
     const sag = 34 + (span > 1 ? Math.min(span * 0.16, 170) : 26) + (k % 3) * 14;
     const colour = SPAN[link.span] ?? CABLE[link.media] ?? 0x9aa0a8;
-    root.add(cable(a, b, colour, striped, lateral, sag, link.media === 'smf'));
+    const tube = cable(a, b, colour, striped, lateral, sag, link.media === 'smf');
+    root.add(tube);
+    // a port above its chassis centre line takes the plug latch-down, below
+    // takes it latch-up - which is how a belly-to-belly pair is cabled
+    const ca = connector(link.media, a, a.pos.y > placed[link.from[0]].mesh.position.y);
+    const cb = connector(link.media, b, b.pos.y > placed[link.to[0]].mesh.position.y);
+    root.add(ca); root.add(cb);
+    LINKS.push({link, tube, plugs: [ca, cb],
+                group: link.span || (link.media === 'ethernet' ? 'management' : 'intra-site'),
+                devs: new Set([link.from[0], link.to[0]])});
     drawn++;
   }
 
@@ -452,7 +510,58 @@ function cable(a, b, colour, striped, lateral, sag, flow) {
   camera.position.set(-140 + dist * 0.32, midY + dist * 0.22, dist);
   controls.update();
 
-  hud(`${drawn} links drawn${missing ? ` · ${missing} unresolved` : ''} — drag to orbit`);
+  // ---- isolate ---------------------------------------------------------
+  // Dim everything that is not the chosen group, so a run can be followed
+  // through a bundle. Cables carry their own material so they dim directly;
+  // devices are dimmed behind a scrim because their faces are shared.
+  const groups = [...new Set(LINKS.map(l => l.group))];
+  function isolate(group) {
+    for (const rec of LINKS) {
+      const on = !group || rec.group === group;
+      rec.tube.material.opacity = on ? 1 : 0.05;
+      rec.tube.material.transparent = !on;
+      // a dimmed tube that still writes depth keeps hiding what is behind it,
+      // which defeats the point of isolating
+      rec.tube.material.depthWrite = on;
+      rec.tube.renderOrder = on ? 4 : 1;
+      for (const p of rec.plugs) p.visible = on;
+    }
+    const keep = new Set();
+    if (group) for (const rec of LINKS) if (rec.group === group) rec.devs.forEach(d => keep.add(d));
+    for (const [id, d] of Object.entries(placed)) d.scrim.visible = !!group && !keep.has(id);
+    for (const b of isoEl.querySelectorAll('button')) b.classList.toggle('on', b.dataset.g === (group || ''));
+  }
+  const isoEl = document.getElementById('iso');
+  for (const g of groups) {
+    const b = document.createElement('button');
+    b.textContent = `isolate ${g}`; b.dataset.g = g;
+    b.onclick = () => isolate(g);
+    isoEl.appendChild(b);
+  }
+  const rb = document.createElement('button');
+  rb.textContent = 'reset'; rb.dataset.g = ''; rb.classList.add('on');
+  rb.onclick = () => isolate(null);
+  isoEl.appendChild(rb);
+
+  // ---- click a name to fly to that device ------------------------------
+  const ray = new THREE.Raycaster(), ptr = new THREE.Vector2();
+  let tween = null;
+  renderer.domElement.addEventListener('click', ev => {
+    ptr.set(ev.clientX / innerWidth * 2 - 1, -(ev.clientY / innerHeight) * 2 + 1);
+    ray.setFromCamera(ptr, camera);
+    const hit = ray.intersectObjects(Object.values(placed).map(d => d.tag), false)[0];
+    if (!hit) return;
+    const d = placed[hit.object.userData.deviceId];
+    if (!d) return;
+    const face = new THREE.Vector3(0, d.mesh.position.y, d.mesh.position.z + d.D / 2);
+    const dist = d.W / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2)) * 0.62;
+    tween = {t0: performance.now(), dur: 750,
+             fromP: camera.position.clone(), toP: face.clone().add(new THREE.Vector3(0, 40, dist)),
+             fromT: controls.target.clone(), toT: face.clone()};
+    hud(`${d.mesh.userData.entry.label || d.mesh.userData.entry.id} — click another name, or drag to orbit`);
+  });
+
+  hud(`${drawn} links drawn${missing ? ` · ${missing} unresolved` : ''} — click a device name to zoom`);
   let last = performance.now();
   (function loop(now) {
     requestAnimationFrame(loop);
@@ -460,6 +569,13 @@ function cable(a, b, colour, striped, lateral, sag, flow) {
     // a feature sits at u = (t - offset)/repeat, so a falling offset carries the
     // dash toward u=1, which is the 'to' end of the link: TX -> RX
     for (const t of FLOW) t.offset.x -= dt * 0.22;
+    if (tween) {
+      const k = Math.min(1, (now - tween.t0) / tween.dur);
+      const e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;   // ease in-out
+      camera.position.lerpVectors(tween.fromP, tween.toP, e);
+      controls.target.lerpVectors(tween.fromT, tween.toT, e);
+      if (k >= 1) tween = null;
+    }
     controls.update();
     renderer.render(scene, camera);
   })();
