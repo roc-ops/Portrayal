@@ -45,8 +45,10 @@ const PARAMS = new URLSearchParams(location.search);
 const LAB = PARAMS.get('lab') || 'rocnet-roadm-demo';
 const RU = 44.45;                 // EIA-310 rack unit
 const RACK_W = 482.6;             // 19in rail-to-rail outer width
-const PXMM_FACE = 3;              // front/rear carry the detail worth reading
-const PXMM_SIDE = 1.2;            // sides/top/bottom are near-featureless here
+// Faces are rasterised once per MODEL, not per instance - this lab is 9 devices
+// but only 2 models - so the resolution budget goes a lot further than it looks.
+const PXMM_FACE = 10;             // front/rear carry the detail worth reading
+const PXMM_SIDE = 2;              // sides/top/bottom are near-featureless here
 const RACK_FACE_Z = 11;           // front plane of the mounting posts
 const RECESS = 101.6;             // 4in - how far back the Smartoptics gear sits
 
@@ -131,13 +133,13 @@ function buildRack(heightRU) {
   for (const side of [-1, 1]) {
     const x = side * (RACK_W / 2 - 8);
     const post = new THREE.Mesh(new THREE.BoxGeometry(16, H, 34), railMat);
-    post.position.set(x, H / 2, -6);
+    post.position.set(x, H / 2, RACK_FACE_Z - 17);
     g.add(post);
     // three mounting holes per U, on the EIA-310 0.5/0.625/0.625in spacing
     for (let u = 0; u < heightRU; u++) {
       for (const dy of [6.35, 22.22, 38.10]) {
         const h = new THREE.Mesh(new THREE.BoxGeometry(6.5, 6.5, 1), holeMat);
-        h.position.set(x, u * RU + dy, 11.3);
+        h.position.set(x, u * RU + dy, RACK_FACE_Z + 0.3);
         g.add(h);
       }
     }
@@ -155,14 +157,17 @@ function buildRack(heightRU) {
 
 // An L bracket per side: a flange flat against the rack face taking two screws
 // into the cage nuts, and a leg running back along the side of the device. The
-// gear sits recessed from the rack face, so the leg spans that gap - which is
-// what the bracket is for and why a flat plate looked wrong.
-function rackEars(rack, ru, faceZ, halfW) {
+// gear sits recessed from the rack face, so the leg spans that gap and then
+// carries on along the chassis - which is what the bracket is for and why a
+// flat plate looked wrong.
+function rackEars(rack, ru, faceZ, halfW, depth) {
   const g = new THREE.Group();
   const {earMat, screwMat} = rack.userData;
   const yBase = (ru - 1) * RU;
   const h = RU - 4.5;
-  const legLen = RACK_FACE_Z - faceZ;          // rack face back to the faceplate
+  // rack face back to the faceplate, then three quarters of the way along the
+  // chassis side - the leg is what actually carries the unit
+  const legLen = (RACK_FACE_Z - faceZ) + depth * 0.75;
   for (const side of [-1, 1]) {
     // the screw goes through the flange into the cage nut, so it sits on the
     // rail's hole column - not on the flange centre line, which is 4mm inboard
@@ -190,26 +195,36 @@ function rackEars(rack, ru, faceZ, halfW) {
 }
 
 // ---------------------------------------------------------------- devices
-async function buildDevice(entry, byName) {
-  const meta = byName[entry.ref];
-  if (!meta) { console.warn('[ndv] unknown device', entry.ref); return null; }
+const _matsCache = new Map();
+async function modelMaterials(ref, meta) {
+  if (_matsCache.has(ref)) return _matsCache.get(ref);
   const W = meta.chassis.w, H = meta.chassis.h, D = meta.chassis.d;
   const cfg = meta.default || 'default';
-  const f = v => `../dist/${entry.ref}.${cfg}.${v}.svg`;
+  const f = v => `../dist/${ref}.${cfg}.${v}.svg`;
   const plain = () => new THREE.MeshLambertMaterial({color: 0x3a3f44});
   const face = async (view, wmm, hmm, pxmm, fx, fy) => {
     const cv = await svgCanvas(f(view), wmm, hmm, pxmm, fx, fy);
     return cv ? new THREE.MeshLambertMaterial(
       {map: tex(cv), transparent: true, alphaTest: 0.08}) : plain();
   };
-  const mats = [
-    await face('right',  D, H, PXMM_SIDE),
-    await face('left',   D, H, PXMM_SIDE),
-    await face('top',    W, D, PXMM_SIDE),
-    await face('bottom', W, D, PXMM_SIDE, true, true),
-    await face('front',  W, H, PXMM_FACE),
-    await face('rear',   W, H, PXMM_FACE),
-  ];
+  // the six faces are independent, so fetch and rasterise them together
+  const promise = Promise.all([
+    face('right',  D, H, PXMM_SIDE),
+    face('left',   D, H, PXMM_SIDE),
+    face('top',    W, D, PXMM_SIDE),
+    face('bottom', W, D, PXMM_SIDE, true, true),
+    face('front',  W, H, PXMM_FACE),
+    face('rear',   W, H, PXMM_FACE),
+  ]);
+  _matsCache.set(ref, promise);
+  return promise;
+}
+
+async function buildDevice(entry, byName) {
+  const meta = byName[entry.ref];
+  if (!meta) { console.warn('[ndv] unknown device', entry.ref); return null; }
+  const W = meta.chassis.w, H = meta.chassis.h, D = meta.chassis.d;
+  const mats = await modelMaterials(entry.ref, meta);
   const mesh = new THREE.Mesh(new THREE.BoxGeometry(W, H, D), mats);
   // a device at RU n occupies that U, measured from the rack floor, and sits
   // RECESS back from the rack face as these are mounted in the real rack
@@ -360,13 +375,14 @@ function cable(a, b, colour, striped, lateral, sag, flow) {
 
   hud('building devices…');
   const placed = {};
-  for (const entry of lab.devices) {
-    const d = await buildDevice(entry, byName);
-    if (!d) continue;
+  const built = await Promise.all(lab.devices.map(e => buildDevice(e, byName)));
+  lab.devices.forEach((entry, i) => {
+    const d = built[i];
+    if (!d) return;
     root.add(d.mesh); root.add(d.tag);
-    root.add(rackEars(rack, entry.ru, d.mesh.position.z + d.D / 2, d.W / 2));
+    root.add(rackEars(rack, entry.ru, d.mesh.position.z + d.D / 2, d.W / 2, d.D));
     placed[entry.id] = d;
-  }
+  });
 
   hud('resolving ports…');
   const idxCache = {};
