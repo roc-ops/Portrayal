@@ -44,7 +44,7 @@
 </div>
 <div id="iso"></div>
 <div id="hud">loading…</div>
-<div id="note">drag to orbit · wheel to zoom</div>
+<div id="note">drag to orbit · wheel to zoom · double click to reset</div>
 <script type="module">
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -518,6 +518,7 @@ function cable(a, b, media, colour, striped, lateral, sag, flow) {
   controls.target.set(-140, midY, 0);
   camera.position.set(-140 + dist * 0.32, midY + dist * 0.22, dist);
   controls.update();
+  const HOME = {p: camera.position.clone(), t: controls.target.clone()};
 
   // ---- isolate ---------------------------------------------------------
   // Dim everything that is not the chosen group, so a run can be followed
@@ -573,7 +574,17 @@ function cable(a, b, media, colour, striped, lateral, sag, flow) {
     hud(`${d.mesh.userData.entry.label || d.mesh.userData.entry.id} — click another name, or drag to orbit`);
   });
 
-  hud(`${drawn} links drawn${missing ? ` · ${missing} unresolved` : ''} — click a device name to zoom`);
+  // double click is the universal "put it back" gesture, so it returns both the
+  // camera and the isolation state rather than only one of them
+  renderer.domElement.addEventListener('dblclick', () => {
+    tween = {t0: performance.now(), dur: 750,
+             fromP: camera.position.clone(), toP: HOME.p.clone(),
+             fromT: controls.target.clone(), toT: HOME.t.clone()};
+    isolate(null);
+    hud(`${drawn} links drawn — click a device name to zoom, double click to reset`);
+  });
+
+  hud(`${drawn} links drawn${missing ? ` · ${missing} unresolved` : ''} — click a device name to zoom, double click to reset`);
   let last = performance.now();
   (function loop(now) {
     requestAnimationFrame(loop);
