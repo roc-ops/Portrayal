@@ -177,8 +177,10 @@ function rackEars(rack, ru, faceZ, halfW, depth) {
     flange.position.set(earX, yBase + RU / 2, RACK_FACE_Z + 1.5);
     g.add(flange);
     // the other leg of the L, flush against the flank of the device
+    // the leg runs BACK from the rack face along the chassis. Centring it on
+    // faceZ + legLen/2 sent it forward out of the front of the unit instead.
     const leg = new THREE.Mesh(new THREE.BoxGeometry(3, h, legLen), earMat);
-    leg.position.set(side * (halfW + 1.5), yBase + RU / 2, faceZ + legLen / 2);
+    leg.position.set(side * (halfW + 1.5), yBase + RU / 2, RACK_FACE_Z - legLen / 2);
     g.add(leg);
     for (const dy of [6.35, 38.10]) {
       const head = new THREE.Mesh(new THREE.CylinderGeometry(2.6, 2.6, 2.2, 14), screwMat);
