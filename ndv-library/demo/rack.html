@@ -48,6 +48,8 @@
 <script type="module">
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { configureRelief, buildFaceRelief, canvasTex, svgCanvas as reliefSvgCanvas }
+  from './relief.js';
 
 const PARAMS = new URLSearchParams(location.search);
 const LAB = PARAMS.get('lab') || 'rocnet-roadm-demo';
@@ -55,6 +57,7 @@ const RU = 44.45;                 // EIA-310 rack unit
 const RACK_W = 482.6;             // 19in rail-to-rail outer width
 // Faces are rasterised once per MODEL, not per instance - this lab is 9 devices
 // but only 2 models - so the resolution budget goes a lot further than it looks.
+const PXMM_RELIEF = 8;            // density the shared relief pipeline rasterises at
 const PXMM_FACE = 10;             // front/rear carry the detail worth reading
 const PXMM_SIDE = 2;              // sides/top/bottom are near-featureless here
 const RACK_FACE_Z = 11;           // front plane of the mounting posts
@@ -72,6 +75,9 @@ controls.enableDamping = true;
 controls.minDistance = 200;
 controls.maxDistance = 9000;
 globalThis.__ndvRack = {THREE, scene, camera, renderer, controls};
+// no FRU animation in the rack view, so an empty path set stops the shared
+// pipeline building ejectable sub-groups it would never move
+configureRelief({THREE, renderer, PXMM: PXMM_RELIEF, FRU_PATHS: new Set()});
 
 scene.add(new THREE.AmbientLight(0xffffff, 0.72));
 const key = new THREE.DirectionalLight(0xffffff, 0.85);
@@ -207,28 +213,41 @@ function rackEars(rack, ru, faceZ, halfW, depth) {
 }
 
 // ---------------------------------------------------------------- devices
-const _matsCache = new Map();
-async function modelMaterials(ref, meta) {
-  if (_matsCache.has(ref)) return _matsCache.get(ref);
+const _modelCache = new Map();
+// Relief is built ONCE per model and cloned per instance - this lab is nine
+// devices of two models, so building it per device would be four and a half
+// times the work for identical geometry. clone() shares geometry and materials,
+// so the copies cost almost nothing.
+async function modelParts(ref, meta) {
+  if (_modelCache.has(ref)) return _modelCache.get(ref);
   const W = meta.chassis.w, H = meta.chassis.h, D = meta.chassis.d;
   const cfg = meta.default || 'default';
   const f = v => `../dist/${ref}.${cfg}.${v}.svg`;
-  const plain = () => new THREE.MeshLambertMaterial({color: 0x3a3f44});
-  const face = async (view, wmm, hmm, pxmm, fx, fy) => {
-    const cv = await svgCanvas(f(view), wmm, hmm, pxmm, fx, fy);
-    return cv ? new THREE.MeshLambertMaterial(
-      {map: tex(cv), transparent: true, alphaTest: 0.08}) : plain();
-  };
-  // the six faces are independent, so fetch and rasterise them together
-  const promise = Promise.all([
-    face('right',  D, H, PXMM_SIDE),
-    face('left',   D, H, PXMM_SIDE),
-    face('top',    W, D, PXMM_SIDE),
-    face('bottom', W, D, PXMM_SIDE, true, true),
-    face('front',  W, H, PXMM_FACE),
-    face('rear',   W, H, PXMM_FACE),
-  ]);
-  _matsCache.set(ref, promise);
+  const promise = (async () => {
+    const FACES = [
+      {view: 'front', fw: () => W, fh: () => H, pos: () => [0, 0, D / 2],  rot: [0, 0, 0]},
+      {view: 'rear',  fw: () => W, fh: () => H, pos: () => [0, 0, -D / 2], rot: [0, Math.PI, 0]},
+      {view: 'right', fw: () => D, fh: () => H, pos: () => [W / 2, 0, 0],  rot: [0, Math.PI / 2, 0]},
+      {view: 'left',  fw: () => D, fh: () => H, pos: () => [-W / 2, 0, 0], rot: [0, -Math.PI / 2, 0]},
+      {view: 'top',   fw: () => W, fh: () => D, pos: () => [0, H / 2, 0],  rot: [-Math.PI / 2, 0, 0]},
+    ];
+    const meshes = [], faceCv = {}, faceSvg = {}, facePunch = {};
+    for (const F of FACES) {
+      await buildFaceRelief(F, {src: f(F.view), faceCv, faceSvg, facePunch, meshes,
+        FRU_GROUPS: {}, FRU_META: {}, BODY_META: {}, D, bodyBoxMesh: null});
+    }
+    const relief = new THREE.Group();
+    meshes.forEach(m => relief.add(m));
+    // the bottom is not in the relief set; it carries no ports here
+    const bottomCv = await reliefSvgCanvas(f('bottom'), W, D, true, true);
+    const plain = () => new THREE.MeshLambertMaterial({color: 0x3a3f44});
+    const mat = cv => cv ? new THREE.MeshLambertMaterial(
+      {map: canvasTex(cv), transparent: true, alphaTest: 0.08}) : plain();
+    const mats = [faceCv.right, faceCv.left, faceCv.top, bottomCv, faceCv.front, faceCv.rear]
+      .map(mat);
+    return {mats, relief};
+  })();
+  _modelCache.set(ref, promise);
   return promise;
 }
 
@@ -236,7 +255,7 @@ async function buildDevice(entry, byName) {
   const meta = byName[entry.ref];
   if (!meta) { console.warn('[ndv] unknown device', entry.ref); return null; }
   const W = meta.chassis.w, H = meta.chassis.h, D = meta.chassis.d;
-  const mats = await modelMaterials(entry.ref, meta);
+  const {mats, relief} = await modelParts(entry.ref, meta);
   const mesh = new THREE.Mesh(new THREE.BoxGeometry(W, H, D), mats);
   // a device at RU n occupies that U, measured from the rack floor, and sits
   // RECESS back from the rack face as these are mounted in the real rack
@@ -255,7 +274,9 @@ async function buildDevice(entry, byName) {
   // right-hand side of the rack and were sitting on top of these
   tag.position.set(-(RACK_W / 2 + 76) - tag.scale.x / 2, mesh.position.y,
                    RACK_FACE_Z - RECESS + 4);
-  return {mesh, tag, scrim, W, H, D};
+  const reliefCopy = relief.clone();
+  reliefCopy.position.copy(mesh.position);
+  return {mesh, tag, scrim, relief: reliefCopy, W, H, D};
 }
 
 // Port positions come from the compiled SVG rather than being restated here:
@@ -437,7 +458,7 @@ function cable(a, b, media, colour, striped, lateral, sag, flow) {
   lab.devices.forEach((entry, i) => {
     const d = built[i];
     if (!d) return;
-    root.add(d.mesh); root.add(d.tag); root.add(d.scrim);
+    root.add(d.mesh); root.add(d.tag); root.add(d.scrim); root.add(d.relief);
     d.tag.userData.deviceId = entry.id;
     root.add(rackEars(rack, entry.ru, d.mesh.position.z + d.D / 2, d.W / 2, d.D));
     placed[entry.id] = d;
