@@ -518,10 +518,12 @@ function cable(a, b, media, colour, striped, lateral, sag, flow) {
     const colour = SPAN[link.span] ?? CABLE[link.media] ?? 0x9aa0a8;
     const tube = cable(a, b, link.media, colour, striped, lateral, sag, link.media === 'smf');
     root.add(tube);
-    // a port above its chassis centre line takes the plug latch-down, below
-    // takes it latch-up - which is how a belly-to-belly pair is cabled
-    const ca = connector(link.media, a, a.pos.y > placed[link.from[0]].mesh.position.y);
-    const cb = connector(link.media, b, b.pos.y > placed[link.to[0]].mesh.position.y);
+    // A plug's latch sits on the jack's keyway side. These jacks are stacked
+    // belly to belly - the upper one turned over so the pins face down - which
+    // puts the upper keyway at the TOP. So a port above its chassis centre line
+    // takes the plug latch-up, and one below takes it latch-down.
+    const ca = connector(link.media, a, a.pos.y < placed[link.from[0]].mesh.position.y);
+    const cb = connector(link.media, b, b.pos.y < placed[link.to[0]].mesh.position.y);
     root.add(ca); root.add(cb);
     LINKS.push({link, tube, plugs: [ca, cb],
                 group: link.span || (link.media === 'ethernet' ? 'management' : 'intra-site'),
