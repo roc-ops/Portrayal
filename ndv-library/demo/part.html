@@ -68,7 +68,8 @@ const DRAWING = {
          + '17.2 back from the face, with the shell, PCB and guide plate nesting at '
          + 'the rear. The optical face is a skin: MPO or LC duplex. The pull tab is '
          + 'modelled as a loop - tip pad, two rails and a base - so the finger opening '
-         + 'is a real gap, with the 100G raised on the pad. Overall comes out 118, '
+         + 'is a real gap, with the 100G raised on the pad. It follows the side view\u2019s '
+         + 'flattened-M profile rather than lying flat. Overall comes out 118, '
          + 'the reference length on the drawing, as 83.2 body plus 34.8 reach.',
   },
 };
@@ -176,25 +177,48 @@ const hud = m => { document.getElementById('hud').textContent = m; };
   // body - the gap between the rails IS the finger opening, so it is modelled
   // rather than painted. Anchored at the top edge so a cable passes underneath.
   const TAB = {w: 19.0, t: 3.40, reach: 34.80, pad: 8.4, slotEnd: 33.0, rail: 2.3};
-  const tabY = H / 2 - 0.35 - TAB.t / 2;
   const tabMat = new THREE.MeshLambertMaterial({color: 0xe8dcc0});
   const tabG = new THREE.Group();
-  const seg = (w, len, x, zFromFace) => {
-    const m = new THREE.Mesh(new THREE.BoxGeometry(w, TAB.t, len), tabMat);
-    m.position.set(x, tabY, zf + zFromFace + len / 2);
-    tabG.add(m);
-  };
-  seg(TAB.w, TAB.pad, 0, TAB.reach - TAB.pad);                       // tip pad
-  seg(TAB.w, TAB.reach - TAB.slotEnd, 0, 0);                          // base at the body
-  const railLen = TAB.slotEnd - TAB.pad;
-  const railX = (TAB.w - TAB.rail) / 2;
-  seg(TAB.rail, railLen, -railX, TAB.reach - TAB.slotEnd);            // rails either
-  seg(TAB.rail, railLen,  railX, TAB.reach - TAB.slotEnd);            // side of the slot
 
-  // 100G is embossed on the tip pad, so it stands proud rather than being drawn
+  // The plan shape came from top.svg, but the tab is not flat - side.svg shows a
+  // flattened M, two crests with a valley between. These are that path's control
+  // points, as an offset from the anchored line, measured from the tip.
+  const WAVE = [[0, 1.35], [7, 0.0], [14, 1.35], [21, 0.0], [TAB.reach, 0.35]];
+  const waveAt = zTip => {                       // cosine between control points
+    for (let i = 0; i < WAVE.length - 1; i++) {
+      const [z0, y0] = WAVE[i], [z1, y1] = WAVE[i + 1];
+      if (zTip <= z1) {
+        const k = (zTip - z0) / (z1 - z0);
+        return y0 + (y1 - y0) * (1 - Math.cos(Math.PI * k)) / 2;
+      }
+    }
+    return WAVE[WAVE.length - 1][1];
+  };
+  const tabY0 = H / 2 - 0.35 - TAB.t / 2;
+
+  // sliced along its length so each slice sits on the profile - a single box
+  // per segment is what made it read flat
+  const SLICE = 1.2;
+  const seg = (w, zTipFrom, zTipTo, x) => {
+    for (let z = zTipFrom; z < zTipTo - 1e-6; z += SLICE) {
+      const len = Math.min(SLICE, zTipTo - z);
+      const m = new THREE.Mesh(new THREE.BoxGeometry(w, TAB.t, len * 1.04), tabMat);
+      m.position.set(x, tabY0 - waveAt(z + len / 2),
+                     zf + TAB.reach - (z + len / 2));
+      tabG.add(m);
+    }
+  };
+  seg(TAB.w, 0, TAB.pad, 0);                                     // tip pad
+  const railX = (TAB.w - TAB.rail) / 2;
+  seg(TAB.rail, TAB.pad, TAB.slotEnd, -railX);                   // rails either side
+  seg(TAB.rail, TAB.pad, TAB.slotEnd,  railX);                   // of the slot
+  seg(TAB.w, TAB.slotEnd, TAB.reach, 0);                         // base at the body
+
+  // 100G raised on the tip pad, following the profile with it
+  const bz = TAB.pad / 2;
   const boss = new THREE.Mesh(new THREE.BoxGeometry(6.4, 0.35, 5.2),
     new THREE.MeshLambertMaterial({color: 0xdcd0b2}));
-  boss.position.set(0, tabY + TAB.t / 2 + 0.17, zf + TAB.reach - TAB.pad / 2);
+  boss.position.set(0, tabY0 - waveAt(bz) + TAB.t / 2 + 0.17, zf + TAB.reach - bz);
   tabG.add(boss);
   scene.add(tabG);
   // frame the part including the bail reach, so nothing sits off screen
