@@ -67,9 +67,9 @@ const DRAWING = {
          + 'were corrected against photographs — 83.2 deep, stepping down 0.85 at '
          + '17.2 back from the face, with the shell, PCB and guide plate nesting at '
          + 'the rear. The optical face is a skin: MPO or LC duplex. The pull tab is '
-         + 'modelled as a loop - tip pad, two rails and a base - so the finger opening '
-         + 'is a real gap, with the 100G raised on the pad. It follows the side view\u2019s '
-         + 'flattened-M profile rather than lying flat. Overall comes out 118, '
+         + 'the rear. The optical face is a skin: MPO or LC duplex. The pull tab is a '
+         + 'U - two rails and a rounded tip, open at the body so nothing crosses the '
+         + 'optical face. It follows the side view\u2019s flattened-M profile. Overall '
          + 'the reference length on the drawing, as 83.2 body plus 34.8 reach.',
   },
 };
@@ -206,23 +206,27 @@ const hud = m => { document.getElementById('hud').textContent = m; };
     path.lineTo(x0, y0 + r); path.absarc(x0 + r, y0 + r, r, Math.PI, Math.PI * 1.5, false);
   };
   const BEV = 0.25;
-  // the bevel grows the result, so the plan is inset by it - otherwise the tab
-  // comes out 19.50 across and 35.30 long against a 19.00 x 34.80 envelope
-  const halfW = TAB.w / 2 - BEV, slotHalf = TAB.w / 2 - TAB.rail + BEV;
-  // Rounded at the TIP, square at the root - the tab meets the body flat, so
-  // rounding both ends left a gap either side of the joint.
-  const TIP_R = 3.6, y0 = BEV, y1 = TAB.reach - BEV;
+  // The tab is a U, not a closed loop: the rails run back to the body and stop
+  // there. Closing it with a base put a wall across the top of the optical
+  // face, where the MPO actually slots in - there is nothing behind it.
+  const halfW = TAB.w / 2 - BEV;
+  const innerHalf = TAB.w / 2 - TAB.rail + BEV;
+  const TIP_R = 3.6, IN_R = 2.4;
+  const y0 = BEV, yRoot = TAB.reach, yInner = TAB.pad;
   const shape = new THREE.Shape();
-  shape.moveTo(-halfW, y1);                                  // root, left corner
+  shape.moveTo(-halfW, yRoot);                                  // outer left, at the body
   shape.lineTo(-halfW, y0 + TIP_R);
   shape.absarc(-halfW + TIP_R, y0 + TIP_R, TIP_R, Math.PI, Math.PI * 1.5, false);
   shape.lineTo(halfW - TIP_R, y0);
   shape.absarc(halfW - TIP_R, y0 + TIP_R, TIP_R, Math.PI * 1.5, Math.PI * 2, false);
-  shape.lineTo(halfW, y1);                                   // root, right corner
-  shape.closePath();                                         // square across the root
-  const slot = new THREE.Path();
-  rr(slot, -slotHalf, TAB.pad + BEV, slotHalf, TAB.slotEnd - BEV, 2.4); // finger opening
-  shape.holes.push(slot);
+  shape.lineTo(halfW, yRoot);                                   // outer right, at the body
+  shape.lineTo(innerHalf, yRoot);                               // across one rail
+  shape.lineTo(innerHalf, yInner + IN_R);                       // back up the inside
+  shape.absarc(innerHalf - IN_R, yInner + IN_R, IN_R, 0, Math.PI * 0.5, false);
+  shape.lineTo(-innerHalf + IN_R, yInner);
+  shape.absarc(-innerHalf + IN_R, yInner + IN_R, IN_R, Math.PI * 0.5, Math.PI, false);
+  shape.lineTo(-innerHalf, yRoot);                              // down to the body
+  shape.closePath();                                            // across the other rail
 
   const geo = new THREE.ExtrudeGeometry(shape, {
     depth: TAB.t - 2 * BEV, bevelEnabled: true, bevelThickness: BEV,
