@@ -1,0 +1,42 @@
+format: 1
+kind: component
+name: lc-duplex-adapter
+version: 3.0.0
+class: port
+profile: networking
+description: >-
+  Panel-mount LC duplex adapter - a bezel carrying two LC bores side by side,
+  as used for Tx/Rx pairs on optical line cards. The body stands proud of the
+  faceplate; the bores recess from that raised face, not from the panel. Both
+  bores carry a white dust cap, which is how an unused port ships and sits.
+  Distinct from sfp-lc-duplex, which is a pluggable transceiver.
+size: {w: 13.2, h: 11.0}
+attrs: {media: fiber, connector: lc-duplex}
+provenance:
+  size: measured - Smartoptics DCP-R stencil, from the pitch of abutting
+    adapters on the DCP-R-34D-CS faceplate (13.24mm) and the row pitch (11.5mm)
+  bore-spacing: measured - 6.6mm between the paired connection points, held
+    across 35 adapters on that faceplate
+  stand-off: photo - the adapter body sits about an eighth of an inch proud of
+    the faceplate, not the quarter inch first modelled
+  dust-caps: photo - unused ports carry a white cap with a square face about an
+    eighth of an inch deep and an inset square moulded into its front
+elements:
+  cap-tx: {at: [1.0, 3.3], size: [4.6, 4.4], class: cap}
+  cap-rx: {at: [7.6, 3.3], size: [4.6, 4.4], class: cap}
+relief:
+  features:
+    - {node: bezel, out: 3.175}
+    # caps sit on the raised bezel and stand proud of it again
+    - {node: cap-tx, out: 3.175, lift: 3.175, color: '#e9ecef'}
+    - {node: cap-rx, out: 3.175, lift: 3.175, color: '#e9ecef'}
+    # the moulded square recessed into each cap face
+    - {node: cap-tx-inset, sink: 0.9, lift: 6.35}
+    - {node: cap-rx-inset, sink: 0.9, lift: 6.35}
+parts:
+  # lifted onto the raised bezel, so each bore recesses from the proud face
+  - {ref: std/lc-bore@1, id: tx, at: [1.0, 3.3], lift: 3.175}
+  - {ref: std/lc-bore@1, id: rx, at: [7.6, 3.3], lift: 3.175}
+connection-points:
+  optical: {at: [6.6, 5.5], direction: front}
+skins: [default]
