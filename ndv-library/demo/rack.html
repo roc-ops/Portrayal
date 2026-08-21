@@ -527,11 +527,14 @@ function cable(a, b, media, colour, striped, lateral, sag, flow) {
   function isolate(group) {
     for (const rec of LINKS) {
       const on = !group || rec.group === group;
-      rec.tube.material.opacity = on ? 1 : 0.05;
-      rec.tube.material.transparent = !on;
-      // a dimmed tube that still writes depth keeps hiding what is behind it,
-      // which defeats the point of isolating
-      rec.tube.material.depthWrite = on;
+      const m = rec.tube.material;
+      m.opacity = on ? 1 : 0.05;
+      // toggling `transparent` swaps the blending setup, so the shader has to be
+      // rebuilt - without needsUpdate the material keeps its opaque program and
+      // the opacity is simply ignored, which is why dimming did nothing
+      if (m.transparent !== !on) { m.transparent = !on; m.needsUpdate = true; }
+      // a dimmed tube that still writes depth keeps hiding what is behind it
+      m.depthWrite = on;
       rec.tube.renderOrder = on ? 4 : 1;
       for (const p of rec.plugs) p.visible = on;
     }
