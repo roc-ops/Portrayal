@@ -252,7 +252,7 @@ const hud = m => { document.getElementById('hud').textContent = m; };
   const badge = new THREE.Mesh(new THREE.PlaneGeometry(6.6, 3.4),
     new THREE.MeshLambertMaterial({map: canvasTex(cv100)}));
   badge.rotation.x = -Math.PI / 2;
-  badge.rotation.z = Math.PI / 2;
+  badge.rotation.z = Math.PI;          // 100G reads across the tab, not along it
   const bz = TAB.pad / 2;
   badge.position.set(0, H / 2 - 0.35 - waveAt(bz) + 0.02, zf + TAB.reach - bz);
   tabG.add(badge);
