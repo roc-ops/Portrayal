@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NDV — drawing study</title>
+<style>
+  body { font-family: system-ui, sans-serif; background: #16181b; color: #d7dbdf;
+         margin: 0; padding: 1.4rem 1.6rem 4rem; }
+  h1 { font-size: 1.05rem; margin: 0 0 0.2rem; }
+  .sub { color: #8d939a; font-size: 0.82rem; margin: 0 0 1.2rem; }
+  .bar { display: flex; gap: 1.2rem; align-items: center; margin-bottom: 1.4rem;
+         font-size: 0.8rem; color: #8d939a; }
+  .bar input { width: 12rem; }
+  h2 { font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.07em;
+       color: #8d939a; margin: 1.6rem 0 0.35rem; font-weight: 600; }
+  .sheet { background: #1c2024; border: 1px solid #2b3035; border-radius: 8px;
+           padding: 0.9rem; overflow-x: auto; }
+  .sheet svg { display: block; }
+  table { border-collapse: collapse; margin-top: 1.6rem; font-size: 0.78rem; }
+  th { text-align: left; color: #8d939a; font-weight: 600; padding: 0.3rem 0.9rem 0.3rem 0; }
+  td { padding: 0.3rem 0.9rem 0.3rem 0; border-top: 1px solid #24272b;
+       font-variant-numeric: tabular-nums; }
+  td.n { font-family: ui-monospace, monospace; text-align: right; }
+  .note { color: #767d84; font-size: 0.76rem; line-height: 1.5; max-width: 46rem; margin-top: 1rem; }
+  .warn { color: #f59e0b; }
+</style>
+</head>
+<body>
+<h1>QSFP — drawing study</h1>
+<p class="sub">Three orthographic views transcribed from the vendor mechanical drawing, at true scale.
+   Everything below is computed from a dimension callout unless the notes say otherwise.</p>
+
+<div class="bar">
+  <label>scale <input id="zoom" type="range" min="4" max="26" step="1" value="13"></label>
+  <span id="zval"></span>
+  <span>· each grid square is 10 mm</span>
+</div>
+
+<div id="sheets"></div>
+
+<h2>Callouts transcribed</h2>
+<table>
+  <thead><tr><th>feature</th><th class="n">drawing</th><th>view</th></tr></thead>
+  <tbody id="dims"></tbody>
+</table>
+
+<p class="note" id="notes"></p>
+
+<script type="module">
+const REF = 'common--qsfp-drawing--v1';
+const VIEWS = ['top', 'side', 'bottom'];
+const L = 118.0, WB = 19.0;
+
+const CALLOUTS = [
+  ['overall length (reference)', '118',          'bottom'],
+  ['pull tab width',             '19.00 MAX',    'top'],
+  ['body width',                 '18.35 ±0.10',  'top'],
+  ['body height',                '8.50 ±0.10',   'side'],
+  ['pull tab reach',             '34.80 MAX',    'side'],
+  ['pull tab thickness',         '3.40 MAX',     'side'],
+  ['pull tab rail section',      '1.60 MAX',     'side'],
+  ['latch shoulder from datum D','29.60 ±0.10',  'side'],
+  ['step at datum D',            '4.20 ±0.15',   'top'],
+  ['rail',                       '2.00 ±0.15',   'side'],
+  ['label area',                 '40.10 MAX',    'bottom'],
+];
+
+const NOTES =
+  'Not dimensioned on the drawing, so drawn to look right at scale rather than measured: '
++ 'the heatsink rib pitch and count, and the curve of the pull tab’s return. Those are the '
++ 'first things to correct. The 100G cutout is not placed at all — I could not locate it on '
++ 'this drawing, so it is deliberately absent rather than guessed. The tab reads as a flat '
++ 'loop because the side view’s 1.60 MAX rail section says it is one.';
+
+const sheets = document.getElementById('sheets');
+const zoom = document.getElementById('zoom');
+const svgs = [];
+
+for (const v of VIEWS) {
+  const h2 = document.createElement('h2');
+  h2.textContent = v;
+  const d = document.createElement('div');
+  d.className = 'sheet';
+  sheets.append(h2, d);
+  const res = await fetch(`../dist/components/${REF}--${v}.svg`, {cache: 'no-store'});
+  d.innerHTML = res.ok ? await res.text() : '<span class="warn">view not built</span>';
+  const svg = d.querySelector('svg');
+  if (!svg) continue;
+  // a 10mm grid behind the part, so the scale is checkable by eye
+  const grid = `<defs><pattern id="g-${v}" width="10" height="10" patternUnits="userSpaceOnUse">
+      <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#2f353b" stroke-width="0.12"/>
+    </pattern></defs>
+    <rect x="0" y="0" width="${L}" height="${WB}" fill="url(#g-${v})"/>`;
+  svg.insertAdjacentHTML('afterbegin', grid);
+  svgs.push(svg);
+}
+
+function apply() {
+  const px = Number(zoom.value);
+  document.getElementById('zval').textContent = `${px} px/mm`;
+  for (const s of svgs) { s.style.width = `${L * px}px`; s.style.height = 'auto'; }
+}
+zoom.oninput = apply;
+apply();
+
+document.getElementById('dims').innerHTML = CALLOUTS
+  .map(([f, d, v]) => `<tr><td>${f}</td><td class="n">${d}</td><td>${v}</td></tr>`).join('');
+document.getElementById('notes').textContent = NOTES;
+</script>
+</body>
+</html>
