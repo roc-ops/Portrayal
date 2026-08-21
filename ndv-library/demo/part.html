@@ -67,11 +67,12 @@ const DRAWING = {
          + 'were corrected against photographs - 83.2 deep, stepping down 0.85 at '
          + '17.2 back from the face, with the shell, PCB and guide plate nesting at '
          + 'the rear at their own lengths and widths. The optical face is a skin, '
-         + 'MPO or LC duplex. The pull tab is a U - two rails and a rounded tip, '
-         + 'open at the body so nothing crosses the optical face - extruded as one '
-         + 'moulded shape and bent onto the side view\u2019s flattened-M profile. '
-         + 'Overall comes out 118.00, the reference length on the drawing, as an '
-         + '83.2 body plus a 34.8 reach that were derived separately.',
+         + 'MPO or LC duplex. The pull tab takes the side profile as its '
+         + 'cross-section and extrudes it ACROSS the width, in three pieces - a '
+         + 'full-width tip pad and two rails - so the U opening is the gap between '
+         + 'them rather than a hole cut in a plate. Overall comes out 118, the '
+         + 'reference length on the drawing. The tip is square in plan rather than '
+         + 'rounded, which is the trade for building it this way.',
   },
 };
 
@@ -206,47 +207,50 @@ const hud = m => { document.getElementById('hud').textContent = m; };
     path.lineTo(x0 + r, y1); path.absarc(x0 + r, y1 - r, r, Math.PI / 2, Math.PI, false);
     path.lineTo(x0, y0 + r); path.absarc(x0 + r, y0 + r, r, Math.PI, Math.PI * 1.5, false);
   };
-  const BEV = 0.25;
-  // The tab is a U, not a closed loop: the rails run back to the body and stop
-  // there. Closing it with a base put a wall across the top of the optical
-  // face, where the MPO actually slots in - there is nothing behind it.
-  const halfW = TAB.w / 2 - BEV;
-  const innerHalf = TAB.w / 2 - TAB.rail + BEV;
-  const TIP_R = 3.6, IN_R = 2.4;
-  const y0 = BEV, yRoot = TAB.reach, yInner = TAB.pad;
-  const shape = new THREE.Shape();
-  shape.moveTo(-halfW, yRoot);                                  // outer left, at the body
-  shape.lineTo(-halfW, y0 + TIP_R);
-  shape.absarc(-halfW + TIP_R, y0 + TIP_R, TIP_R, Math.PI, Math.PI * 1.5, false);
-  shape.lineTo(halfW - TIP_R, y0);
-  shape.absarc(halfW - TIP_R, y0 + TIP_R, TIP_R, Math.PI * 1.5, Math.PI * 2, false);
-  shape.lineTo(halfW, yRoot);                                   // outer right, at the body
-  shape.lineTo(innerHalf, yRoot);                               // across one rail
-  shape.lineTo(innerHalf, yInner + IN_R);                       // back up the inside
-  // the inner corners turn the opposite way to the outer ones. Sweeping them
-  // counter-clockwise sent the arc away from the corner and folded the path
-  // back on itself, which is what produced the jagged inner tip.
-  shape.absarc(innerHalf - IN_R, yInner + IN_R, IN_R, 0, -Math.PI * 0.5, true);
-  shape.lineTo(-innerHalf + IN_R, yInner);
-  shape.absarc(-innerHalf + IN_R, yInner + IN_R, IN_R, -Math.PI * 0.5, -Math.PI, true);
-  shape.lineTo(-innerHalf, yRoot);                              // down to the body
-  shape.closePath();                                            // across the other rail
-
-  const geo = new THREE.ExtrudeGeometry(shape, {
-    depth: TAB.t - 2 * BEV, bevelEnabled: true, bevelThickness: BEV,
-    bevelSize: BEV, bevelSegments: 3, curveSegments: 18,
-  });
-  geo.rotateX(-Math.PI / 2);          // plan into xz, thickness into y
-  geo.translate(0, -TAB.t / 2, 0);    // centre the thickness on the anchor line
-  const pos = geo.attributes.position;
-  for (let i = 0; i < pos.count; i++) {
-    const zTip = -pos.getZ(i);        // 0 at the tip, reach at the body
-    pos.setY(i, pos.getY(i) - waveAt(zTip));
+  // Built the way the drawing describes it: take the side profile as the
+  // cross-section and extrude it ACROSS the width. Three pieces - a full-width
+  // tip pad and two rails - so the U opening is the gap between them rather
+  // than a hole cut in a plate. Trying to cut a plan outline was what kept
+  // producing folded corners.
+  const BEV = 0.22;
+  const profileShape = (zFrom, zTo) => {
+    const sh = new THREE.Shape();
+    const N = 48, half = TAB.t / 2 - BEV;
+    const yTop = z => -waveAt(z) + half, yBot = z => -waveAt(z) - half;
+    sh.moveTo(zFrom, yTop(zFrom));
+    for (let i = 1; i <= N; i++) {
+      const z = zFrom + (zTo - zFrom) * (i / N);
+      sh.lineTo(z, yTop(z));
+    }
+    for (let i = N; i >= 0; i--) {
+      const z = zFrom + (zTo - zFrom) * (i / N);
+      sh.lineTo(z, yBot(z));
+    }
+    sh.closePath();
+    return sh;
+  };
+  const extrudeAcross = (sh, width) => {
+    const g = new THREE.ExtrudeGeometry(sh, {
+      depth: width - 2 * BEV, bevelEnabled: true, bevelThickness: BEV,
+      bevelSize: BEV, bevelSegments: 3, curveSegments: 4,
+    });
+    // shape x is length, shape y is height, extrusion is width
+    g.rotateY(Math.PI / 2);
+    g.translate(-(width / 2 - BEV), 0, 0);
+    return g;
+  };
+  const tabPieces = [
+    [TAB.w, 0, 0, TAB.pad],                                   // tip pad, full width
+    [TAB.rail, -(TAB.w - TAB.rail) / 2, TAB.pad, TAB.reach],  // rails either side
+    [TAB.rail,  (TAB.w - TAB.rail) / 2, TAB.pad, TAB.reach],  // of the opening
+  ];
+  for (const [w, x, zFrom, zTo] of tabPieces) {
+    const m = new THREE.Mesh(extrudeAcross(profileShape(zFrom, zTo), w), tabMat);
+    // rotateY already maps shape-x onto -z, so the tip lands at zf + reach and
+    // the root at zf. Flipping again put the tab behind the body.
+    m.position.set(x, H / 2 - 0.35 - TAB.t / 2, zf + TAB.reach);
+    tabG.add(m);
   }
-  geo.computeVertexNormals();
-  const tab = new THREE.Mesh(geo, tabMat);
-  tab.position.set(0, H / 2 - 0.35 - TAB.t / 2, zf + TAB.reach);
-  tabG.add(tab);
 
   // 100G, moulded into the tip pad
   const cv100 = document.createElement('canvas');
