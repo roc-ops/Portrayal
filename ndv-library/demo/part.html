@@ -67,12 +67,11 @@ const DRAWING = {
          + 'were corrected against photographs - 83.2 deep, stepping down 0.85 at '
          + '17.2 back from the face, with the shell, PCB and guide plate nesting at '
          + 'the rear at their own lengths and widths. The optical face is a skin, '
-         + 'MPO or LC duplex. The pull tab takes the side profile as its '
-         + 'cross-section and extrudes it ACROSS the width, in three pieces - a '
-         + 'full-width tip pad and two rails - so the U opening is the gap between '
-         + 'them rather than a hole cut in a plate. Overall comes out 118, the '
-         + 'reference length on the drawing. The tip is square in plan rather than '
-         + 'rounded, which is the trade for building it this way.',
+         + 'MPO or LC duplex. The pull tab is built two ways for two reasons: the '
+         + 'rails take the side profile as a cross-section and extrude it across, '
+         + 'so the U opening is the gap between them; the tip pad takes its plan '
+         + 'outline so its corners can be rounded, then is bent onto the same '
+         + 'profile. Overall comes out 118, the reference length on the drawing.',
   },
 };
 
@@ -239,10 +238,36 @@ const hud = m => { document.getElementById('hud').textContent = m; };
     g.translate(-(width / 2 - BEV), 0, 0);
     return g;
   };
+  // The rails come from the side profile. The tip pad instead uses its PLAN
+  // outline, so its corners can be rounded, then gets bent onto the same
+  // profile - safe here because a rounded rectangle has no inner corners, which
+  // is what folded when the whole U was built this way.
+  const padShape = new THREE.Shape();
+  const pw = TAB.w / 2 - BEV, TIP_R = 3.4;
+  padShape.moveTo(-pw, TAB.pad);
+  padShape.lineTo(-pw, BEV + TIP_R);
+  padShape.absarc(-pw + TIP_R, BEV + TIP_R, TIP_R, Math.PI, Math.PI * 1.5, false);
+  padShape.lineTo(pw - TIP_R, BEV);
+  padShape.absarc(pw - TIP_R, BEV + TIP_R, TIP_R, Math.PI * 1.5, Math.PI * 2, false);
+  padShape.lineTo(pw, TAB.pad);
+  padShape.closePath();
+  const padGeo = new THREE.ExtrudeGeometry(padShape, {
+    depth: TAB.t - 2 * BEV, bevelEnabled: true, bevelThickness: BEV,
+    bevelSize: BEV, bevelSegments: 3, curveSegments: 14,
+  });
+  padGeo.rotateX(-Math.PI / 2);
+  padGeo.translate(0, -TAB.t / 2, 0);
+  {
+    const pp = padGeo.attributes.position;
+    for (let i = 0; i < pp.count; i++) pp.setY(i, pp.getY(i) - waveAt(-pp.getZ(i)));
+    padGeo.computeVertexNormals();
+    const pad = new THREE.Mesh(padGeo, tabMat);
+    pad.position.set(0, H / 2 - 0.35 - TAB.t / 2, zf + TAB.reach);
+    tabG.add(pad);
+  }
   const tabPieces = [
-    [TAB.w, 0, 0, TAB.pad],                                   // tip pad, full width
-    [TAB.rail, -(TAB.w - TAB.rail) / 2, TAB.pad, TAB.reach],  // rails either side
-    [TAB.rail,  (TAB.w - TAB.rail) / 2, TAB.pad, TAB.reach],  // of the opening
+    [TAB.rail, -(TAB.w - TAB.rail) / 2, TAB.pad - 0.6, TAB.reach],  // rails either
+    [TAB.rail,  (TAB.w - TAB.rail) / 2, TAB.pad - 0.6, TAB.reach],  // side of the gap
   ];
   for (const [w, x, zFrom, zTo] of tabPieces) {
     const m = new THREE.Mesh(extrudeAcross(profileShape(zFrom, zTo), w), tabMat);
@@ -263,8 +288,10 @@ const hud = m => { document.getElementById('hud').textContent = m; };
   c1.textBaseline = 'middle'; c1.fillText('100G', 128, 66);
   const badge = new THREE.Mesh(new THREE.PlaneGeometry(6.6, 3.4),
     new THREE.MeshLambertMaterial({map: canvasTex(cv100)}));
-  badge.rotation.x = -Math.PI / 2;
-  badge.rotation.z = Math.PI;          // 100G reads across the tab, not along it
+  // faces up and reads across the tab. It was showing its back face, which is
+  // what mirrored the lettering.
+  badge.rotation.set(-Math.PI / 2, 0, -Math.PI / 2);
+  badge.material.side = THREE.DoubleSide;
   const bz = TAB.pad / 2;
   badge.position.set(0, H / 2 - 0.35 - waveAt(bz) + 0.02, zf + TAB.reach - bz);
   tabG.add(badge);
