@@ -64,13 +64,14 @@ const DRAWING = {
       ['body depth',           83.2, m => m.body.depth,             '118 overall less the 34.80 tab reach'],
     ],
     notes: 'Body geometry is rebuilt from common/qsfp-drawing after those views '
-         + 'were corrected against photographs — 83.2 deep, stepping down 0.85 at '
+         + 'were corrected against photographs - 83.2 deep, stepping down 0.85 at '
          + '17.2 back from the face, with the shell, PCB and guide plate nesting at '
-         + 'the rear. The optical face is a skin: MPO or LC duplex. The pull tab is '
-         + 'the rear. The optical face is a skin: MPO or LC duplex. The pull tab is a '
-         + 'U - two rails and a rounded tip, open at the body so nothing crosses the '
-         + 'optical face. It follows the side view\u2019s flattened-M profile. Overall '
-         + 'the reference length on the drawing, as 83.2 body plus 34.8 reach.',
+         + 'the rear at their own lengths and widths. The optical face is a skin, '
+         + 'MPO or LC duplex. The pull tab is a U - two rails and a rounded tip, '
+         + 'open at the body so nothing crosses the optical face - extruded as one '
+         + 'moulded shape and bent onto the side view\u2019s flattened-M profile. '
+         + 'Overall comes out 118.00, the reference length on the drawing, as an '
+         + '83.2 body plus a 34.8 reach that were derived separately.',
   },
 };
 
@@ -222,9 +223,12 @@ const hud = m => { document.getElementById('hud').textContent = m; };
   shape.lineTo(halfW, yRoot);                                   // outer right, at the body
   shape.lineTo(innerHalf, yRoot);                               // across one rail
   shape.lineTo(innerHalf, yInner + IN_R);                       // back up the inside
-  shape.absarc(innerHalf - IN_R, yInner + IN_R, IN_R, 0, Math.PI * 0.5, false);
+  // the inner corners turn the opposite way to the outer ones. Sweeping them
+  // counter-clockwise sent the arc away from the corner and folded the path
+  // back on itself, which is what produced the jagged inner tip.
+  shape.absarc(innerHalf - IN_R, yInner + IN_R, IN_R, 0, -Math.PI * 0.5, true);
   shape.lineTo(-innerHalf + IN_R, yInner);
-  shape.absarc(-innerHalf + IN_R, yInner + IN_R, IN_R, Math.PI * 0.5, Math.PI, false);
+  shape.absarc(-innerHalf + IN_R, yInner + IN_R, IN_R, -Math.PI * 0.5, -Math.PI, true);
   shape.lineTo(-innerHalf, yRoot);                              // down to the body
   shape.closePath();                                            // across the other rail
 
