@@ -209,8 +209,17 @@ const hud = m => { document.getElementById('hud').textContent = m; };
   // the bevel grows the result, so the plan is inset by it - otherwise the tab
   // comes out 19.50 across and 35.30 long against a 19.00 x 34.80 envelope
   const halfW = TAB.w / 2 - BEV, slotHalf = TAB.w / 2 - TAB.rail + BEV;
+  // Rounded at the TIP, square at the root - the tab meets the body flat, so
+  // rounding both ends left a gap either side of the joint.
+  const TIP_R = 3.6, y0 = BEV, y1 = TAB.reach - BEV;
   const shape = new THREE.Shape();
-  rr(shape, -halfW, BEV, halfW, TAB.reach - BEV, 3.6);      // rounded tip and root
+  shape.moveTo(-halfW, y1);                                  // root, left corner
+  shape.lineTo(-halfW, y0 + TIP_R);
+  shape.absarc(-halfW + TIP_R, y0 + TIP_R, TIP_R, Math.PI, Math.PI * 1.5, false);
+  shape.lineTo(halfW - TIP_R, y0);
+  shape.absarc(halfW - TIP_R, y0 + TIP_R, TIP_R, Math.PI * 1.5, Math.PI * 2, false);
+  shape.lineTo(halfW, y1);                                   // root, right corner
+  shape.closePath();                                         // square across the root
   const slot = new THREE.Path();
   rr(slot, -slotHalf, TAB.pad + BEV, slotHalf, TAB.slotEnd - BEV, 2.4); // finger opening
   shape.holes.push(slot);
