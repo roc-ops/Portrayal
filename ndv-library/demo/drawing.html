@@ -27,7 +27,7 @@
 </head>
 <body>
 <h1>QSFP — drawing study</h1>
-<p class="sub">Three orthographic views transcribed from the vendor mechanical drawing, at true scale.
+<p class="sub">Five orthographic views transcribed from the vendor mechanical drawing, at true scale.
    Everything below is computed from a dimension callout unless the notes say otherwise.</p>
 
 <div class="bar">
@@ -48,7 +48,7 @@
 
 <script type="module">
 const REF = 'common--qsfp-drawing--v1';
-const VIEWS = ['top', 'side', 'bottom'];
+const VIEWS = ['top', 'side', 'bottom', 'front', 'back'];
 const L = 118.0, WB = 19.0;
 
 const CALLOUTS = [
@@ -63,6 +63,7 @@ const CALLOUTS = [
   ['step at datum D',            '4.20 ±0.15',   'top'],
   ['rail',                       '2.00 ±0.15',   'side'],
   ['label area',                 '40.10 MAX',    'bottom'],
+  ['rear widths (body/PCB/plate)', '18.35 / 14.60 / 12.40', 'back'],
 ];
 
 const NOTES =
@@ -70,7 +71,11 @@ const NOTES =
 + 'the heatsink rib pitch and count, and the curve of the pull tab’s return. Those are the '
 + 'first things to correct. The 100G cutout is not placed at all — I could not locate it on '
 + 'this drawing, so it is deliberately absent rather than guessed. The tab reads as a flat '
-+ 'loop because the side view’s 1.60 MAX rail section says it is one.';
++ 'loop because the side view’s 1.60 MAX rail section says it is one. '
++ 'Front and back are end elevations drawn centred on the same 118 × 19 sheet, '
++ 'since every skin carries the contract’s frame — they are at true scale, just '
++ 'not filling the sheet. The rear widths are read off a photograph, not '
++ 'dimensioned.';
 
 const sheets = document.getElementById('sheets');
 const zoom = document.getElementById('zoom');
