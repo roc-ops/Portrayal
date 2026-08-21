@@ -212,9 +212,11 @@ const hud = m => { document.getElementById('hud').textContent = m; };
   // than a hole cut in a plate. Trying to cut a plan outline was what kept
   // producing folded corners.
   const BEV = 0.22;
-  const profileShape = (zFrom, zTo) => {
+  // the bevel grows the result, so the section is inset by whatever bevel that
+  // piece uses - the pad's is larger, to soften its corners
+  const profileShape = (zFrom, zTo, bev = BEV) => {
     const sh = new THREE.Shape();
-    const N = 48, half = TAB.t / 2 - BEV;
+    const N = 48, half = TAB.t / 2 - bev;
     const yTop = z => -waveAt(z) + half, yBot = z => -waveAt(z) - half;
     sh.moveTo(zFrom, yTop(zFrom));
     for (let i = 1; i <= N; i++) {
@@ -228,51 +230,28 @@ const hud = m => { document.getElementById('hud').textContent = m; };
     sh.closePath();
     return sh;
   };
-  const extrudeAcross = (sh, width) => {
+  const extrudeAcross = (sh, width, bev = BEV) => {
     const g = new THREE.ExtrudeGeometry(sh, {
-      depth: width - 2 * BEV, bevelEnabled: true, bevelThickness: BEV,
-      bevelSize: BEV, bevelSegments: 3, curveSegments: 4,
+      depth: width - 2 * bev, bevelEnabled: true, bevelThickness: bev,
+      bevelSize: bev, bevelSegments: 6, curveSegments: 4,
     });
     // shape x is length, shape y is height, extrusion is width
     g.rotateY(Math.PI / 2);
-    g.translate(-(width / 2 - BEV), 0, 0);
+    g.translate(-(width / 2 - bev), 0, 0);
     return g;
   };
-  // The rails come from the side profile. The tip pad instead uses its PLAN
-  // outline, so its corners can be rounded, then gets bent onto the same
-  // profile - safe here because a rounded rectangle has no inner corners, which
-  // is what folded when the whole U was built this way.
-  const padShape = new THREE.Shape();
-  const pw = TAB.w / 2 - BEV, TIP_R = 3.4;
-  padShape.moveTo(-pw, TAB.pad);
-  padShape.lineTo(-pw, BEV + TIP_R);
-  padShape.absarc(-pw + TIP_R, BEV + TIP_R, TIP_R, Math.PI, Math.PI * 1.5, false);
-  padShape.lineTo(pw - TIP_R, BEV);
-  padShape.absarc(pw - TIP_R, BEV + TIP_R, TIP_R, Math.PI * 1.5, Math.PI * 2, false);
-  padShape.lineTo(pw, TAB.pad);
-  padShape.closePath();
-  const padGeo = new THREE.ExtrudeGeometry(padShape, {
-    depth: TAB.t - 2 * BEV, bevelEnabled: true, bevelThickness: BEV,
-    bevelSize: BEV, bevelSegments: 3, curveSegments: 14,
-  });
-  padGeo.rotateX(-Math.PI / 2);
-  padGeo.translate(0, -TAB.t / 2, 0);
-  {
-    const pp = padGeo.attributes.position;
-    for (let i = 0; i < pp.count; i++) pp.setY(i, pp.getY(i) - waveAt(-pp.getZ(i)));
-    padGeo.computeVertexNormals();
-    const pad = new THREE.Mesh(padGeo, tabMat);
-    pad.position.set(0, H / 2 - 0.35 - TAB.t / 2, zf + TAB.reach);
-    tabG.add(pad);
-  }
+  // Every piece comes from the side profile, extruded across. The pad tried a
+  // plan outline so its corners could be rounded, but ExtrudeGeometry puts no
+  // vertices along the cap, so bending it could only approximate the curve -
+  // which is what made the surface jagged where the pad met the rails. A
+  // generous bevel softens the pad's corners instead.
   const tabPieces = [
-    [TAB.rail, -(TAB.w - TAB.rail) / 2, TAB.pad - 0.6, TAB.reach],  // rails either
-    [TAB.rail,  (TAB.w - TAB.rail) / 2, TAB.pad - 0.6, TAB.reach],  // side of the gap
+    [TAB.w, 0, 0.75, TAB.pad, 0.75],                                 // tip pad
+    [TAB.rail, -(TAB.w - TAB.rail) / 2, TAB.pad, TAB.reach, BEV],   // rails either
+    [TAB.rail,  (TAB.w - TAB.rail) / 2, TAB.pad, TAB.reach, BEV],   // side of the gap
   ];
-  for (const [w, x, zFrom, zTo] of tabPieces) {
-    const m = new THREE.Mesh(extrudeAcross(profileShape(zFrom, zTo), w), tabMat);
-    // rotateY already maps shape-x onto -z, so the tip lands at zf + reach and
-    // the root at zf. Flipping again put the tab behind the body.
+  for (const [w, x, zFrom, zTo, bev] of tabPieces) {
+    const m = new THREE.Mesh(extrudeAcross(profileShape(zFrom, zTo, bev), w, bev), tabMat);
     m.position.set(x, H / 2 - 0.35 - TAB.t / 2, zf + TAB.reach);
     tabG.add(m);
   }
@@ -286,14 +265,19 @@ const hud = m => { document.getElementById('hud').textContent = m; };
   c1.beginPath(); c1.roundRect(14, 20, 228, 88, 44); c1.stroke();
   c1.fillStyle = '#c9bd9c'; c1.font = 'bold 62px system-ui'; c1.textAlign = 'center';
   c1.textBaseline = 'middle'; c1.fillText('100G', 128, 66);
-  const badge = new THREE.Mesh(new THREE.PlaneGeometry(6.6, 3.4),
-    new THREE.MeshLambertMaterial({map: canvasTex(cv100)}));
-  // faces up and reads across the tab. It was showing its back face, which is
-  // what mirrored the lettering.
-  badge.rotation.set(-Math.PI / 2, 0, -Math.PI / 2);
-  badge.material.side = THREE.DoubleSide;
-  const bz = TAB.pad / 2;
-  badge.position.set(0, H / 2 - 0.35 - waveAt(bz) + 0.02, zf + TAB.reach - bz);
+  const badge = new THREE.Mesh(new THREE.PlaneGeometry(3.4, 6.6, 8, 16),
+    new THREE.MeshLambertMaterial({map: canvasTex(cv100), side: THREE.DoubleSide}));
+  badge.rotation.set(-Math.PI / 2, 0, Math.PI / 2);
+  // follow the pad's curve rather than lying flat across it - a flat plane on a
+  // curved surface shows its edge, which is the line that was cutting across
+  const bp = badge.geometry.attributes.position;
+  const bz0 = TAB.pad / 2;
+  for (let i = 0; i < bp.count; i++) {
+    const zTip = bz0 - bp.getY(i);          // plane y runs along the tab
+    bp.setZ(i, -waveAt(zTip) + waveAt(bz0));
+  }
+  badge.geometry.computeVertexNormals();
+  badge.position.set(0, H / 2 - 0.35 - waveAt(bz0) + 0.03, zf + TAB.reach - bz0);
   tabG.add(badge);
   scene.add(tabG);
   // frame the part including the bail reach, so nothing sits off screen
