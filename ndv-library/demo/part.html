@@ -61,12 +61,14 @@ const DRAWING = {
       ['bail width (max)',    19.00, (m, tab) => tab.size.w,  'MAX'],
       ['bail thickness (max)', 3.40, (m, tab) => tab.size.h,  'MAX'],
       ['bail reach (max)',    34.80, (m, tab) => tab.relief.features[0].out, 'MAX — from common/qsfp-pull-tab'],
-      ['body depth',           72.4, m => m.body.depth,             'SFF-8436; drawing gives 118 overall'],
+      ['body depth',           83.2, m => m.body.depth,             '118 overall less the 34.80 tab reach'],
     ],
-    notes: 'The pull tab is its own component — a flat loop of two rails and a '
-         + 'crossbar, with the finger opening between them and the word 100G cut '
-         + 'through the crossbar. It is not a round bail, which is what a tube '
-         + 'primitive gives. The optical face is a skin: MPO or LC duplex.',
+    notes: 'Body geometry is rebuilt from common/qsfp-drawing after those views '
+         + 'were corrected against photographs — 83.2 deep, stepping down 0.85 at '
+         + '17.2 back from the face, with the shell, PCB and guide plate nesting at '
+         + 'the rear. The optical face is a skin: MPO or LC duplex. NOT yet rebuilt: '
+         + 'the pull tab still renders as two rails rather than the slotted loop with '
+         + 'the 100G embossed on its tip pad that the 2D now shows.',
   },
 };
 

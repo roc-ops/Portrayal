@@ -9,14 +9,15 @@ description: >-
   drawing. The face is the module envelope that enters the cage; the bail is a
   U-bail standing proud of it, and the body carries the heatsink ribs on top and
   the label area underneath.
-size: {w: 18.35, h: 8.5, d: 72.4}
+size: {w: 18.35, h: 8.5, d: 83.2}
 mates: qsfp
 attrs: {media: qsfp, form-factor: qsfp}
 provenance:
   size: drawing - 18.35 +/-0.10 wide by 8.50 +/-0.10 high are called out
-    directly. Depth 72.4 is the SFF-8436 module length, consistent with the
-    drawing's 118 reference overall once the 34.80 MAX bail and its return are
-    taken off
+    directly. Depth 83.2 is the 118 reference overall less the 34.80 MAX tab
+    reach, so it follows from the drawing rather than from a standard
+  geometry: rebuilt from common/qsfp-drawing once those views were corrected
+    against photographs, rather than from a first reading of the drawing
   bail: composed from common/qsfp-pull-tab, which carries the drawing's 19.00
     MAX across, 3.40 MAX thick and 34.80 MAX reach. Placed at -0.325 so the
     tab's 19.00 straddles the 18.35 module symmetrically, as the drawing shows
@@ -39,6 +40,6 @@ connection-points:
   mate: {at: [9.175, 4.25], direction: front}
   optical: {at: [9.175, 4.25], direction: front}
 body:
-  depth: 72.4
+  depth: 83.2
   color: '#8d949c'
 skins: [mpo, lc]
