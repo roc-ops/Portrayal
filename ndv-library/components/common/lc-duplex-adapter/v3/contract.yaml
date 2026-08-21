@@ -19,20 +19,22 @@ provenance:
     across 35 adapters on that faceplate
   stand-off: photo - the adapter body sits about an eighth of an inch proud of
     the faceplate, not the quarter inch first modelled
-  dust-caps: photo - unused ports carry a white cap with a square face about an
-    eighth of an inch deep and an inset square moulded into its front
+  dust-caps: photo - unused ports carry a white cap standing about a quarter
+    inch proud of the jack face, with a rounded-square inset moulded into its
+    front. The spigot that seats it into the bore is not modelled separately -
+    it sits inside the recess and is never visible
 elements:
   cap-tx: {at: [1.0, 3.3], size: [4.6, 4.4], class: cap}
   cap-rx: {at: [7.6, 3.3], size: [4.6, 4.4], class: cap}
 relief:
   features:
     - {node: bezel, out: 3.175}
-    # caps sit on the raised bezel and stand proud of it again
-    - {node: cap-tx, out: 3.175, lift: 3.175, color: '#e9ecef'}
-    - {node: cap-rx, out: 3.175, lift: 3.175, color: '#e9ecef'}
-    # the moulded square recessed into each cap face
-    - {node: cap-tx-inset, sink: 0.9, lift: 6.35}
-    - {node: cap-rx-inset, sink: 0.9, lift: 6.35}
+    # caps seat into the bore and stand a quarter inch proud of the jack face
+    - {node: cap-tx, out: 6.35, lift: 3.175, color: '#e9ecef'}
+    - {node: cap-rx, out: 6.35, lift: 3.175, color: '#e9ecef'}
+    # the moulded square recessed into each cap front
+    - {node: cap-tx-inset, sink: 0.9, lift: 9.525}
+    - {node: cap-rx-inset, sink: 0.9, lift: 9.525}
 parts:
   # lifted onto the raised bezel, so each bore recesses from the proud face
   - {ref: std/lc-bore@1, id: tx, at: [1.0, 3.3], lift: 3.175}
