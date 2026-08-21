@@ -272,8 +272,10 @@ async function buildDevice(entry, byName) {
   const tag = labelSprite(entry.label || entry.id, 30, '#d7dbdf');
   // left side, outboard of the U numbering: the ethernet runs dress round the
   // right-hand side of the rack and were sitting on top of these
-  tag.position.set(-(RACK_W / 2 + 76) - tag.scale.x / 2, mesh.position.y,
-                   RACK_FACE_Z - RECESS + 4);
+  // Sit the names well clear of the U scale, and on the SAME plane as it. They
+  // were beside the recessed faceplate, so perspective slid them back over the
+  // U numbers even though they clear them in plan.
+  tag.position.set(-(RACK_W / 2 + 150) - tag.scale.x / 2, mesh.position.y, 46);
   const reliefCopy = relief.clone();
   reliefCopy.position.copy(mesh.position);
   return {mesh, tag, scrim, relief: reliefCopy, W, H, D};
