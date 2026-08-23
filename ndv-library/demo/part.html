@@ -127,6 +127,19 @@ const hud = m => { document.getElementById('hud').textContent = m; };
     {view: 'face', fw: () => W, fh: () => H, pos: () => [0, 0, D / 2], rot: [0, 0, 0]},
     {src: f(face), faceCv, faceSvg, facePunch, meshes,
      FRU_GROUPS: {}, FRU_META: {}, BODY_META: {}, D, bodyBoxMesh: null});
+  // buildFaceRelief fills `meshes` and does not parent them - 3d.html does this
+  // at its reliefGroup. Without it the face texture gets its alpha punched and
+  // nothing fills the recess, so you look straight through to the body inside.
+  // The tab is skipped: the skin carries it as a 34.8 protrusion, and this page
+  // builds the tab itself as a loft, so taking both would double it up.
+  const reliefGroup = new THREE.Group();
+  for (const m of meshes) {
+    // Box3, not geometry.boundingBox - the array holds groups as well as meshes
+    const bb = new THREE.Box3().setFromObject(m);
+    if (bb.max.z - bb.min.z > 20) continue;   // the tab protrusion, not a cavity
+    reliefGroup.add(m);
+  }
+  scene.add(reliefGroup);
 
   const plain = () => new THREE.MeshLambertMaterial({color: meta.body?.color || 0x8d949c});
   const side = async (v, wmm, hmm, fx, fy) => {
