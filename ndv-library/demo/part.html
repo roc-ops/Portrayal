@@ -132,14 +132,36 @@ const hud = m => { document.getElementById('hud').textContent = m; };
   // nothing fills the recess, so you look straight through to the body inside.
   // The tab is skipped: the skin carries it as a 34.8 protrusion, and this page
   // builds the tab itself as a loft, so taking both would double it up.
-  const reliefGroup = new THREE.Group();
+  // Relief hands back a single group holding everything it built, and that
+  // group carries the face-plane transform. Object3D.add() does NOT preserve
+  // world transform, so lifting the children out of it silently drops that
+  // offset - an earlier attempt did exactly that and put the cavities 41.6
+  // behind where they belong. Prune inside the group instead, then add the
+  // group itself.
+  const facePlane = D / 2;
+  const reliefAudit = [];
   for (const m of meshes) {
-    // Box3, not geometry.boundingBox - the array holds groups as well as meshes
-    const bb = new THREE.Box3().setFromObject(m);
-    if (bb.max.z - bb.min.z > 20) continue;   // the tab protrusion, not a cavity
-    reliefGroup.add(m);
+    // Compose the matrices first. Until something renders, matrixWorld is still
+    // identity, so Box3.setFromObject reports LOCAL coordinates - and comparing
+    // those against a world-space face plane silently keeps everything.
+    m.updateWorldMatrix(true, true);
+    const kids = m.isGroup ? [...m.children] : [m];
+    let keptAny = false;
+    for (const n of kids) {
+      // measured while still parented, so this is world z
+      const bb = new THREE.Box3().setFromObject(n);
+      // A recess sits at or behind the face; anything reaching in front of it
+      // is a protrusion, which here is the tab - and this page builds its own
+      // tab as a loft, so keeping relief's too would double it up.
+      const keep = bb.max.z <= facePlane + 0.01;
+      reliefAudit.push({kept: keep,
+                        z: [+bb.min.z.toFixed(2), +bb.max.z.toFixed(2)]});
+      if (keep) keptAny = true;
+      else if (m.isGroup) m.remove(n);
+    }
+    if (m.isGroup || keptAny) scene.add(m);
   }
-  scene.add(reliefGroup);
+  globalThis.__ndvPart.relief = {audit: reliefAudit, all: meshes};
 
   const plain = () => new THREE.MeshLambertMaterial({color: meta.body?.color || 0x8d949c});
   const side = async (v, wmm, hmm, fx, fy) => {
