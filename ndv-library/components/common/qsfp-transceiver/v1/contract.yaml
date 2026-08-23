@@ -33,24 +33,32 @@ provenance:
     places its two optical connection points at Width/3 and 2*Width/3 - 6.12 on
     an 18.35 face, within 2 percent. Same drawing independently confirms five
     figures already in this contract (18.35, 8.50, 29.60, 4.20, 2.00)
-  face-mpo: NOT sourced. The mpo skin's ferrule window is drawn to look right,
-    not measured - the photographs show the topology (two alignment pins with
-    the fibre row between them) but no dimension. Do not treat it as measured
+  face-mpo: the MPO variant is deliberately NOT here. Parts are emitted for
+    every skin, so two LC bores would appear on an MPO face too - one component
+    cannot carry both. It needs its own component, and needs dimensions first.
+    The photographs give the topology (two alignment pins with the fibre row
+    between them) and nothing else, so there is nothing yet to build it from
   latch-features: drawing - 4.20 +/-0.15 and 2.00 +/-0.15 steps at the cage end,
     29.60 +/-0.10 to the latch shoulder, 48.20 MIN to datum D
 elements: {}
 relief:
   wall: '#4a4f55'
-  cavity: opening
 parts:
   # the pull tab is its own part - a flat loop, not a round bail, and vendors
   # colour-code it, so it carries its own skins
   - {ref: common/qsfp-pull-tab@1, id: tab, at: [-0.325, 2.55], skin: white}
+  # Each bore is a part rather than paint. A cavity declared here would take
+  # its depth from size.d - 83.2, the whole body - and punch a tunnel clean
+  # through the module, which is exactly what the 3D was doing. lc-bore carries
+  # its own 4.5, which is the recess you actually see looking into the port.
+  - {ref: std/lc-bore@2, id: tx, at: [3.70, 1.90]}
+  - {ref: std/lc-bore@2, id: rx, at: [9.95, 1.90]}
 connection-points:
   # mate is what aligns the module in its cage; optical is where the fibre lands
   mate: {at: [9.175, 4.25], direction: front}
-  optical: {at: [9.175, 4.25], direction: front}
+  optical-tx: {at: [6.05, 4.25], direction: front}
+  optical-rx: {at: [12.30, 4.25], direction: front}
 body:
   depth: 83.2
   color: '#8d949c'
-skins: [mpo, lc]
+skins: [lc]
