@@ -137,6 +137,27 @@ Written down because each cost several rounds.
 - **Visio intake, unfinished** — DCP-M, DCP-F and the H-series stencils are sitting
   in `working/intake` (gitignored) and were never modelled. Scope call, not a task.
 
+### Correction — the LC face punch is NOT over-clearing
+
+The commit that composed the LC bores says the punch clears more than the two
+bore shapes and that the ferrules are missing. **Both claims are wrong**, and
+they are wrong in the way this doc keeps warning about - read off a small,
+oblique, low-resolution render instead of measured.
+
+Measured from the face texture's alpha channel in the browser, the cleared
+spans are 3.68-8.36 and 9.92-14.61 against an expected 3.70-8.40 and
+9.95-14.65 - inside one texel at 0.062 mm/px - and the strip between the bores
+is not cleared at all. `data-wall="#4a4f55"` reaches both bore groups, so the
+cavity walls are dark as intended, not the default `#a7adb4`.
+
+The pale shapes between the bores are almost certainly the ferrule posts doing
+their job: `top: 3.6` in a 4.5 cavity, coloured `#e8ecef`. So the face may
+already be correct.
+
+What is actually outstanding is a **straight-on close render to confirm it**,
+which is the check that should have been run before claiming a defect. Do that
+before changing any relief code.
+
 ### Closed since this doc was first written — do not redo
 
 - ~~**`build.sh` does not run lint.**~~ It does now, before rendering. A manifest
