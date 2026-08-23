@@ -1,17 +1,27 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="118.0mm" height="19.0mm" viewBox="0 0 118.0 19.0">
   <!-- Front elevation, looking into the optical face. 18.35 x 8.50, centred on
-       the common sheet. This part is an SR4, so the interface is MPO. -->
+       the common sheet. The drawing this transcribes is a duplex LC part, so
+       this view is LC - the SR4 in the photographs is the MPO variant and lives
+       as a separate skin on the placeable component. -->
   <rect id="shell" x="49.83" y="5.25" width="18.35" height="8.5" rx="0.7"
         fill="#a9b0b7" stroke="#767d84" stroke-width="0.25"/>
-  <rect id="opening" x="53.33" y="7.30" width="11.35" height="4.4" rx="0.4" fill="#15181b"/>
-  <rect id="mpo" x="54.33" y="8.10" width="9.35" height="2.8" rx="0.25" fill="#d7dbdf"/>
-  <g fill="#8d949c">
-    <rect x="54.73" y="8.85" width="0.5" height="1.3"/>
-    <rect x="56.23" y="8.85" width="0.5" height="1.3"/>
-    <rect x="57.73" y="8.85" width="0.5" height="1.3"/>
-    <rect x="59.23" y="8.85" width="0.5" height="1.3"/>
+  <!-- Optical face - duplex LC. Bore centres 6.25 +/-0.05 apart and each
+       opening 4.7 +/-0.05 square, both called out in section A-A of the vendor
+       mechanical specification. T left, R right, as that section labels them. -->
+  <rect id="opening" x="53.23" y="6.85" width="11.55" height="5.30" rx="0.4" fill="#15181b"/>
+  <rect id="bore-tx" x="53.53" y="7.15" width="4.7" height="4.7" rx="0.35" fill="#0a0c0e"/>
+  <rect id="bore-rx" x="59.78" y="7.15" width="4.7" height="4.7" rx="0.35" fill="#0a0c0e"/>
+  <circle cx="55.88" cy="9.50" r="0.625" fill="#d7dbdf"/>
+  <circle cx="62.13" cy="9.50" r="0.625" fill="#d7dbdf"/>
+  <g font-family="sans-serif" font-size="1.1" fill="#8d949c" text-anchor="middle">
+    <text x="55.88" y="11.55">T</text>
+    <text x="62.13" y="11.55">R</text>
   </g>
-  <!-- pull tab, anchored at the top edge as the side view shows -->
-  <rect id="tab" x="49.50" y="5.60" width="19.0" height="3.4" rx="1.2"
-        fill="#e8dcc0" stroke="#c4b898" stroke-width="0.25"/>
+  <!-- Pull tab, anchored at the top edge as the side view shows. Seen end-on it
+       is the two rails, not a solid bar - top.svg puts the finger slot between
+       them, and that gap is what lets the jumper reach the optical face. -->
+  <g id="tab" fill="#e8dcc0" stroke="#c4b898" stroke-width="0.25">
+    <rect x="49.50" y="5.60" width="2.3" height="3.4" rx="0.9"/>
+    <rect x="66.20" y="5.60" width="2.3" height="3.4" rx="0.9"/>
+  </g>
 </svg>
