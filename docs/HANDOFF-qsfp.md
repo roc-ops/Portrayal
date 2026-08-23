@@ -137,6 +137,29 @@ Written down because each cost several rounds.
 - **Visio intake, unfinished** — DCP-M, DCP-F and the H-series stencils are sitting
   in `working/intake` (gitignored) and were never modelled. Scope call, not a task.
 
+### Open — LC bores still read through to the PCB
+
+Parenting the relief meshes into a reliefGroup (part.html, mirroring 3d.html)
+was necessary but did NOT fix it. Confirmed deployed and cache-busted; Jason
+still sees straight through both bores to the PCB behind.
+
+I claimed from a render that the bores were filled. That was the third wrong
+call on this face in one session, all the same failure: reading a small render
+instead of measuring. The alpha probe I ran was sound and answered the wrong
+question - whether the hole was the right SHAPE, not whether anything filled it.
+
+Do not trust a screenshot for this. Next step is to enumerate what the
+reliefGroup actually contains, in the browser, and check each mesh's world z
+against the face plane at zf = D/2 = 41.6:
+
+    __ndvPart.scene.traverse(o => o.isMesh && console.log(
+      o.name, new THREE.Box3().setFromObject(o)))
+
+The question to answer first: does buildFaceRelief emit floor/back meshes for
+these cavities at all, or does the tab-exclusion filter (bbox z-reach > 20) drop
+them? That filter is a guess and is the most likely culprit - it was added to
+stop the tab duplicating, and it may be eating cavity backs with it.
+
 ### Correction — the LC face punch is NOT over-clearing
 
 The commit that composed the LC bores says the punch clears more than the two
