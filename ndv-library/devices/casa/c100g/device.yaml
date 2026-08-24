@@ -11,11 +11,7 @@ provenance:
   chassis: 'datasheet - Table A-1 of the C100G Hardware Installation Guide (rev 07/08/2022):
     22.5in (571mm) H, 19in (482mm) W, 15.25in (386mm) D, 13RU'
   slots: datasheet - 14 module slots front and rear, SMM in front 6 and 7
-  slot-pitch: drawing - measured inside the card band of Figure 1-1, where there is no caption
-    or page rule to confuse the bounding box. Cards span 5.8 to 94.3 percent of the chassis
-    width, symmetric, leaving a ~28mm mounting flange each side. That is 426.5mm over 14 slots
-    = 30.46. An earlier 26.26 came from a crop that included white page margin on the left,
-    which inflated the denominator and made the cards look far too narrow for the chassis
+  slot-pitch: drawing - 426.6mm card region from Fig 1-1 over 14 slots = 30.47
   card-height: drawing - Figure 1-1 puts the card band between the slot-number strip at 18.9
     percent and the FILTER band at 79.4 percent of chassis height, so 108.1 to 453.5, a 345.5
     card. An earlier 440 was wrong and made the cards overrun the space above
@@ -31,11 +27,12 @@ provenance:
     the real card. Their faceplate aspect is 13.26; the chassis front view gives 345.5 by
     30.46 = 11.34, about 17 percent wider. Port positions taken from those figures are therefore
     used as FRACTIONS of the faceplate and stretched to this width, not as absolute geometry
-  width: datasheet + photograph - Table A-1 quotes 19in (482) which is the RACK face INCLUDING
-    the mounting ears, the usual way a rack-mount device is quoted. Jason confirmed from a
-    real chassis that the ears sit outside the body. So the body is 440 between ears at x21
-    and x461, and the 14 cards span 28 to 454.4 - a ~7mm flange each side of the card cage,
-    which matches his "about a quarter inch"
+  width: 'Table A-1 quotes 19in / 482, which is the rack face INCLUDING the mounting ears.
+    Jason confirmed from a real chassis that the ears sit outside the body and that there
+    is only a 1/8in (3.175mm) flange either side of the cards. Working back: the card region
+    measures 426.6 in Fig 1-1, so the BODY is 426.6 + 2x3.175 = 432.95, and the ears must
+    protrude 24.5 each side to reach 482. Drawn as the body only - the ears are deliberately
+    omitted for now and can be added as their own part'
 attrs:
   role: CMTS/CCAP
   slots: 14 front + 14 rear, associated 1:1
@@ -44,7 +41,7 @@ attrs:
   weight: 132 lb / 61.23 kg fully loaded
   power: -42 to -60 VDC, 20 A nominal per feed at -48 VDC
 chassis:
-  width: 482.0
+  width: 432.95
   height: 571.0
   depth: 386.0
   color: '#a7a9ac'
@@ -53,15 +50,15 @@ chassis:
 views:
   front:
     size:
-      w: 482.0
+      w: 432.95
       h: 571.0
     bays:
     - id: front-0
       at:
-      - 28.0
+      - 3.17
       - 108.1
       size:
-        w: 30.46
+        w: 30.47
         h: 345.5
       accepts: &id001
       - casa/bdm@1
@@ -70,10 +67,10 @@ views:
       default: null
     - id: front-1
       at:
-      - 58.46
+      - 33.64
       - 108.1
       size:
-        w: 30.46
+        w: 30.47
         h: 345.5
       accepts: *id001
       group: front-slots
@@ -81,10 +78,10 @@ views:
       default: null
     - id: front-2
       at:
-      - 88.92
+      - 64.11
       - 108.1
       size:
-        w: 30.46
+        w: 30.47
         h: 345.5
       accepts: *id001
       group: front-slots
@@ -92,10 +89,10 @@ views:
       default: null
     - id: front-3
       at:
-      - 119.38
+      - 94.58
       - 108.1
       size:
-        w: 30.46
+        w: 30.47
         h: 345.5
       accepts: *id001
       group: front-slots
@@ -103,10 +100,10 @@ views:
       default: null
     - id: front-4
       at:
-      - 149.84
+      - 125.05
       - 108.1
       size:
-        w: 30.46
+        w: 30.47
         h: 345.5
       accepts: *id001
       group: front-slots
@@ -114,10 +111,10 @@ views:
       default: null
     - id: front-5
       at:
-      - 180.3
+      - 155.53
       - 108.1
       size:
-        w: 30.46
+        w: 30.47
         h: 345.5
       accepts: *id001
       group: front-slots
@@ -125,10 +122,10 @@ views:
       default: null
     - id: front-6
       at:
-      - 210.76
+      - 186.0
       - 108.1
       size:
-        w: 30.46
+        w: 30.47
         h: 345.5
       accepts:
       - casa/smm-8x10g@1
@@ -137,10 +134,10 @@ views:
       default: casa/smm-8x10g@1
     - id: front-7
       at:
-      - 241.22
+      - 216.47
       - 108.1
       size:
-        w: 30.46
+        w: 30.47
         h: 345.5
       accepts:
       - casa/smm-8x10g@1
@@ -149,10 +146,10 @@ views:
       default: casa/smm-8x10g@1
     - id: front-8
       at:
-      - 271.68
+      - 246.94
       - 108.1
       size:
-        w: 30.46
+        w: 30.47
         h: 345.5
       accepts: *id001
       group: front-slots
@@ -160,10 +157,10 @@ views:
       default: null
     - id: front-9
       at:
-      - 302.14
+      - 277.41
       - 108.1
       size:
-        w: 30.46
+        w: 30.47
         h: 345.5
       accepts: *id001
       group: front-slots
@@ -171,10 +168,10 @@ views:
       default: null
     - id: front-10
       at:
-      - 332.6
+      - 307.88
       - 108.1
       size:
-        w: 30.46
+        w: 30.47
         h: 345.5
       accepts: *id001
       group: front-slots
@@ -182,10 +179,10 @@ views:
       default: null
     - id: front-11
       at:
-      - 363.06
+      - 338.34
       - 108.1
       size:
-        w: 30.46
+        w: 30.47
         h: 345.5
       accepts: *id001
       group: front-slots
@@ -193,10 +190,10 @@ views:
       default: null
     - id: front-12
       at:
-      - 393.52
+      - 368.81
       - 108.1
       size:
-        w: 30.46
+        w: 30.47
         h: 345.5
       accepts: *id001
       group: front-slots
@@ -204,246 +201,64 @@ views:
       default: null
     - id: front-13
       at:
-      - 423.98
+      - 399.29
       - 108.1
       size:
-        w: 30.46
+        w: 30.47
         h: 345.5
       accepts: *id001
       group: front-slots
       rel-pos: 13
       default: null
     decor:
-    - &id003
-      at:
-      - 0
-      - 60
-      size:
-      - 21.0
-      - 451.0
-      fill: '#8d949c'
-      stroke: '#5f6469'
-      stroke-width: 0.6
-    - &id004
-      at:
-      - 461.0
-      - 60
-      size:
-      - 21.0
-      - 451.0
-      fill: '#8d949c'
-      stroke: '#5f6469'
-      stroke-width: 0.6
-    - &id005
-      at:
-      - 7.9
-      - 75.4
-      size:
-      - 5.2
-      - 5.2
-      rx: 2.6
-      fill: '#3a4046'
-    - &id006
-      at:
-      - 468.9
-      - 75.4
-      size:
-      - 5.2
-      - 5.2
-      rx: 2.6
-      fill: '#3a4046'
-    - &id007
-      at:
-      - 7.9
-      - 119.85000000000001
-      size:
-      - 5.2
-      - 5.2
-      rx: 2.6
-      fill: '#3a4046'
-    - &id008
-      at:
-      - 468.9
-      - 119.85000000000001
-      size:
-      - 5.2
-      - 5.2
-      rx: 2.6
-      fill: '#3a4046'
-    - &id009
-      at:
-      - 7.9
-      - 164.3
-      size:
-      - 5.2
-      - 5.2
-      rx: 2.6
-      fill: '#3a4046'
-    - &id010
-      at:
-      - 468.9
-      - 164.3
-      size:
-      - 5.2
-      - 5.2
-      rx: 2.6
-      fill: '#3a4046'
-    - &id011
-      at:
-      - 7.9
-      - 208.75000000000003
-      size:
-      - 5.2
-      - 5.2
-      rx: 2.6
-      fill: '#3a4046'
-    - &id012
-      at:
-      - 468.9
-      - 208.75000000000003
-      size:
-      - 5.2
-      - 5.2
-      rx: 2.6
-      fill: '#3a4046'
-    - &id013
-      at:
-      - 7.9
-      - 253.20000000000002
-      size:
-      - 5.2
-      - 5.2
-      rx: 2.6
-      fill: '#3a4046'
-    - &id014
-      at:
-      - 468.9
-      - 253.20000000000002
-      size:
-      - 5.2
-      - 5.2
-      rx: 2.6
-      fill: '#3a4046'
-    - &id015
-      at:
-      - 7.9
-      - 297.65
-      size:
-      - 5.2
-      - 5.2
-      rx: 2.6
-      fill: '#3a4046'
-    - &id016
-      at:
-      - 468.9
-      - 297.65
-      size:
-      - 5.2
-      - 5.2
-      rx: 2.6
-      fill: '#3a4046'
-    - &id017
-      at:
-      - 7.9
-      - 342.1
-      size:
-      - 5.2
-      - 5.2
-      rx: 2.6
-      fill: '#3a4046'
-    - &id018
-      at:
-      - 468.9
-      - 342.1
-      size:
-      - 5.2
-      - 5.2
-      rx: 2.6
-      fill: '#3a4046'
-    - &id019
-      at:
-      - 7.9
-      - 386.55
-      size:
-      - 5.2
-      - 5.2
-      rx: 2.6
-      fill: '#3a4046'
-    - &id020
-      at:
-      - 468.9
-      - 386.55
-      size:
-      - 5.2
-      - 5.2
-      rx: 2.6
-      fill: '#3a4046'
-    - &id021
-      at:
-      - 7.9
-      - 431.0
-      size:
-      - 5.2
-      - 5.2
-      rx: 2.6
-      fill: '#3a4046'
-    - &id022
-      at:
-      - 468.9
-      - 431.0
-      size:
-      - 5.2
-      - 5.2
-      rx: 2.6
-      fill: '#3a4046'
     - at:
-      - 21.0
+      - 0
       - 0
       size:
-      - 440.0
+      - 432.95
       - 108.1
       fill: '#4a4f55'
     - at:
-      - 241.0
+      - 216.475
       - 52
       text: C100G
       font-size: 20
       fill: '#d7dbdf'
       anchor: middle
     - at:
-      - 21.0
+      - 0
       - 453.5
       size:
-      - 440.0
+      - 432.95
       - 14.3
       fill: '#231f20'
     - at:
-      - 241.0
+      - 216.475
       - 464
       text: FILTER
       font-size: 8
       fill: '#d7dbdf'
       anchor: middle
     - at:
-      - 27.0
+      - 6
       - 470
       size:
-      - 428.0
+      - 420.95
       - 96.0
       fill: '#8d949c'
-      pattern: vent
+      pattern: holes
       vent: 60
   rear:
     size:
-      w: 482.0
+      w: 432.95
       h: 571.0
     bays:
     - id: rear-0
       at:
-      - 28.0
+      - 3.17
       - 108.1
       size:
-        w: 30.46
+        w: 30.47
         h: 345.5
       accepts: &id002
       - casa/io-6p12@1
@@ -452,10 +267,10 @@ views:
       default: null
     - id: rear-1
       at:
-      - 58.46
+      - 33.64
       - 108.1
       size:
-        w: 30.46
+        w: 30.47
         h: 345.5
       accepts: *id002
       group: rear-slots
@@ -463,10 +278,10 @@ views:
       default: null
     - id: rear-2
       at:
-      - 88.92
+      - 64.11
       - 108.1
       size:
-        w: 30.46
+        w: 30.47
         h: 345.5
       accepts: *id002
       group: rear-slots
@@ -474,10 +289,10 @@ views:
       default: null
     - id: rear-3
       at:
-      - 119.38
+      - 94.58
       - 108.1
       size:
-        w: 30.46
+        w: 30.47
         h: 345.5
       accepts: *id002
       group: rear-slots
@@ -485,10 +300,10 @@ views:
       default: null
     - id: rear-4
       at:
-      - 149.84
+      - 125.05
       - 108.1
       size:
-        w: 30.46
+        w: 30.47
         h: 345.5
       accepts: *id002
       group: rear-slots
@@ -496,10 +311,10 @@ views:
       default: null
     - id: rear-5
       at:
-      - 180.3
+      - 155.53
       - 108.1
       size:
-        w: 30.46
+        w: 30.47
         h: 345.5
       accepts: *id002
       group: rear-slots
@@ -507,10 +322,10 @@ views:
       default: null
     - id: rear-6
       at:
-      - 210.76
+      - 186.0
       - 108.1
       size:
-        w: 30.46
+        w: 30.47
         h: 345.5
       accepts: *id002
       group: rear-slots
@@ -518,10 +333,10 @@ views:
       default: null
     - id: rear-7
       at:
-      - 241.22
+      - 216.47
       - 108.1
       size:
-        w: 30.46
+        w: 30.47
         h: 345.5
       accepts: *id002
       group: rear-slots
@@ -529,10 +344,10 @@ views:
       default: null
     - id: rear-8
       at:
-      - 271.68
+      - 246.94
       - 108.1
       size:
-        w: 30.46
+        w: 30.47
         h: 345.5
       accepts: *id002
       group: rear-slots
@@ -540,10 +355,10 @@ views:
       default: null
     - id: rear-9
       at:
-      - 302.14
+      - 277.41
       - 108.1
       size:
-        w: 30.46
+        w: 30.47
         h: 345.5
       accepts: *id002
       group: rear-slots
@@ -551,10 +366,10 @@ views:
       default: null
     - id: rear-10
       at:
-      - 332.6
+      - 307.88
       - 108.1
       size:
-        w: 30.46
+        w: 30.47
         h: 345.5
       accepts: *id002
       group: rear-slots
@@ -562,10 +377,10 @@ views:
       default: null
     - id: rear-11
       at:
-      - 363.06
+      - 338.34
       - 108.1
       size:
-        w: 30.46
+        w: 30.47
         h: 345.5
       accepts: *id002
       group: rear-slots
@@ -573,10 +388,10 @@ views:
       default: null
     - id: rear-12
       at:
-      - 393.52
+      - 368.81
       - 108.1
       size:
-        w: 30.46
+        w: 30.47
         h: 345.5
       accepts: *id002
       group: rear-slots
@@ -584,61 +399,41 @@ views:
       default: null
     - id: rear-13
       at:
-      - 423.98
+      - 399.29
       - 108.1
       size:
-        w: 30.46
+        w: 30.47
         h: 345.5
       accepts: *id002
       group: rear-slots
       rel-pos: 13
       default: null
     decor:
-    - *id003
-    - *id004
-    - *id005
-    - *id006
-    - *id007
-    - *id008
-    - *id009
-    - *id010
-    - *id011
-    - *id012
-    - *id013
-    - *id014
-    - *id015
-    - *id016
-    - *id017
-    - *id018
-    - *id019
-    - *id020
-    - *id021
-    - *id022
     - at:
-      - 27.0
+      - 6
       - 6
       size:
-      - 428.0
+      - 420.95
       - 96.0
       fill: '#8d949c'
-      pattern: vent
+      pattern: holes
       vent: 60
     - at:
-      - 21.0
+      - 0
       - 491.4
       size:
-      - 440.0
+      - 432.95
       - 79.6
       fill: '#4a4f55'
     - at:
-      - 131.0
+      - 116.8965
       - 536
       text: PEM A
       font-size: 10
       fill: '#d7dbdf'
       anchor: middle
     - at:
-      - 351.0
+      - 316.0535
       - 536
       text: PEM B
       font-size: 10
