@@ -138,10 +138,25 @@ function buildTree(root) {
   return roots;
 }
 
+// A row that just says "front-0--module" makes you look at the drawing to find
+// out what is in the slot, which is the opposite of the point. Name the card.
+function modelOf(el) {
+  const ref = el.dataset.ref;
+  if (!ref) return null;
+  const c = compByRef(ref.split(':')[0]);
+  return c?.attrs?.model || c?.name || null;
+}
 function labelFor(n) {
   const el = n.el;
-  const title = el.querySelector(':scope > title');
   const own = n.path.split('/').pop();
+  const model = modelOf(el);
+  if (model) return model;
+  if (el.dataset.class === 'bay') {
+    const occ = el.querySelector('[data-ref]');
+    const m = occ && modelOf(occ);
+    return m ? `${own} — ${m}` : own;
+  }
+  const title = el.querySelector(':scope > title');
   return (title && title.textContent.trim()) || own;
 }
 
