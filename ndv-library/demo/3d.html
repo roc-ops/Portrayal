@@ -35,6 +35,7 @@
 <script type="module">
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { mountShare } from './share.js';
 import { configureRelief, svgCanvas, canvasTex, crop, extractRelief, rasterize,
          buildFaceRelief } from './relief.js';
 
@@ -180,6 +181,11 @@ const MAX_FACE_TEXELS = 16e6;     // ~64MB RGBA: a 440x44mm faceplate reaches 16
 const MAX_TOTAL_TEXELS = 40e6;    // a 3/4 view lights up three faces at once
 const LOD = [];
 globalThis.__ndv3d.LOD = LOD;
+
+// the filename is a callback because this page swaps device without reloading
+mountShare(scene, () => 'ndv-' + (PARAMS.get('device') || PARAMS.get('component') || 'scene')
+                            .replace(/[^a-z0-9.-]+/gi, '-'),
+           {note: 'GLB opens in Quick Look, PowerPoint, Blender'});
 let lodPaused = 0;
 
 const texelsAt = (rec, px) => rec.wmm * rec.hmm * px * px;

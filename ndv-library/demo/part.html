@@ -44,6 +44,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { configureRelief, buildFaceRelief, canvasTex, svgCanvas } from './relief.js';
+import { mountShare } from './share.js';
 
 const PARAMS = new URLSearchParams(location.search);
 const REF = PARAMS.get('part') || 'common/qsfp-transceiver@1';
@@ -393,6 +394,8 @@ const hud = m => { document.getElementById('hud').textContent = m; };
     tabG.add(badge);
   }
   scene.add(tabG);
+  mountShare(scene, `ndv-${name}-v${major}-${face}`,
+             {note: 'GLB opens in Quick Look, PowerPoint, Blender'});
   // frame the part including the bail reach, so nothing sits off screen
   const reach = spec ? spec.dims.find(d => d[0].startsWith('bail reach'))?.[1] || 0 : 0;
   const span = D + reach;

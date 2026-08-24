@@ -48,6 +48,7 @@
 <script type="module">
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { mountShare } from './share.js';
 import { configureRelief, buildFaceRelief, canvasTex, svgCanvas as reliefSvgCanvas }
   from './relief.js';
 
@@ -75,6 +76,11 @@ controls.enableDamping = true;
 controls.minDistance = 200;
 controls.maxDistance = 9000;
 globalThis.__ndvRack = {THREE, scene, camera, renderer, controls};
+// Scrims are visible=false and GLTFExporter honours onlyVisible, so they stay
+// out of the file - unless a device is isolated, where exporting what you see
+// is the right answer anyway.
+mountShare(scene, 'ndv-rocnet-roadm-lab',
+           {note: 'GLB opens in Quick Look, PowerPoint, Blender'});
 // no FRU animation in the rack view, so an empty path set stops the shared
 // pipeline building ejectable sub-groups it would never move
 configureRelief({THREE, renderer, PXMM: PXMM_RELIEF, FRU_PATHS: new Set()});
