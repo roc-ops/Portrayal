@@ -225,6 +225,50 @@ I/O combined, so it has more inside it. It should be its own component, not a sk
 - The PEM area is at the bottom rear with **PEM 1 / PEM 2** silkscreen, twin IEC
   inlets with their own switches, and ground studs.
 
+## Jason's hand-built SVGs — what they add
+
+Two hand-drawn chassis SVGs (front and back) in `working/intake/casa/handbuilt/`.
+Independently built from the hardware, so where they agree with what I read off the
+guide figures that is real corroboration, and where they have parts I do not, they are
+the better source.
+
+### Confirms, independently
+
+`slot0`–`slot13` on both faces. `U0`–`U11` and `D0`–`D5` port naming. STATUS / ALARM /
+ACTIVE. `LC-SW-BDM`. `6+12 SW IO` as its own card. And `SMM-SW-BDM` with **`C100G
+Slot 6 / C40G Slot 2`** for A and **`Slot 7 / Slot 3`** for B — the same slot legend I
+took off Fig 1-14, arrived at from the other direction.
+
+### Parts we do not have
+
+| named group | what it is |
+|---|---|
+| `pemA`, `pemB` | **PEM faceplates**, with `OK` / `HS` / `!` indicators and `Branch 1`–`Branch 4` |
+| `fanL`, `fanC`, `fanR` | **three fan modules** on the rear |
+| `groundStrapLocation`, `groundingBolts` | grounding points, both faces |
+| `chassisManager1`, `chassisManager2` | **two chassis manager cards** on the front — not modelled at all |
+| `cableCombs` | the combs, already drawn |
+| `exhaust`, `filter`, `plasticCover`, `insideFrame1/2`, `backingPlate`, `backPlaneBackGround` | chassis structure behind the cards |
+| `logo`, `modelLabel`, `moduleNamePlate` | branding furniture |
+
+### A different SMM
+
+His front carries **`SMM 300G`**, not the 8x10G I modelled — and its ports read
+`XG0`–`XG9` plus `CG0` and `CG1`. That is exactly the guide's "ten 10GigE, two 100GigE"
+for the 300G (Fig 1-9), so the CG pair is the 100G uplinks. Two real variants, both
+worth having.
+
+### Blank and EMPTY are drawn
+
+He has explicit `Blank` and `EMPTY` cards. That is the same distinction the schema only
+half expresses - an unpopulated slot versus a slot with a filler plate in it.
+
+### Scale does not match
+
+His viewBox is 191.575 x 275.873, aspect 0.694, against our 432.95 x 571 at 0.758. One
+of the two has the chassis proportion wrong. Ours derives from Table A-1 less the ears;
+his anchor is unknown. Worth settling with an overlay before trusting either.
+
 ## Faceplates, read off the vector figures
 
 ### BDM / BDM2 / BDM2m (front, Fig 1-14)
