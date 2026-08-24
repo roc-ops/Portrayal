@@ -352,7 +352,8 @@ views:
       size:
         w: 30.47
         h: 345.5
-      accepts: *id002
+      accepts:
+      - casa/io-6p12-sw@1
       group: rear-slots
       rel-pos: 8
       default: null
@@ -446,8 +447,8 @@ configurations:
   bdm2m-11plus1:
     description: 'BDM2m "11+1" - the vendor''s name for it. Redundancy collapses to a single
       protecting slot: rear 5 takes LC-BDM-SWITCH and front/rear 8 is freed to carry traffic
-      behind a combined 6+12 SW-IO. Rear 5, 6, 7 and 8 are left open here because LC-BDM-SWITCH,
-      SMM-SW-BDM and 6+12 SW-IO are not modelled yet.'
+      behind a combined 6+12 SW-IO. Rear 5, 6 and 7 are still open because LC-BDM-SWITCH and
+      SMM-SW-BDM are not modelled yet.'
     default: true
     bays:
       front-0: casa/bdm@1
@@ -474,6 +475,7 @@ configurations:
       rear-13: casa/io-6p12@1
       front-6: casa/smm-8x10g@1
       front-7: casa/smm-8x10g@1
+      rear-8: casa/io-6p12-sw@1
   docsis-classic:
     description: Classic DOCSIS. Redundancy is per side, one protecting slot each - front/rear
       5 and 8 - with LC Switch behind both.

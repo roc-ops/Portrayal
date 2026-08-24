@@ -1,16 +1,16 @@
 format: 1
 kind: module
-name: io-6p12
+name: io-6p12-sw
 version: 1.0.0
 class: line-card
 profile: networking
 description: >-
-  Casa 6+12 I/O module - the rear half of a BDM position, carrying six
-  downstream (D0-D5) and twelve upstream (U0-U11) MCX jacks. Pairs with a BDM
-  in the associated front slot. The IO2 variant is the same faceplate at
-  5-204 MHz instead of 5-85 MHz.
+  Casa 6+12 SW I/O - the combined switch and I/O card. Same six downstream and
+  twelve upstream MCX jacks as the plain 6+12, but it also carries the LC switch
+  function, so it goes in the redundancy slot that a BDM scheme frees up: C100G
+  rear 8, C40G rear 4. Its RF port section stands proud of the faceplate.
 size: {w: 30.47, h: 345.5, d: 380.0}
-attrs: {media: coax, connector: mcx, downstream: '6', upstream: '12', spectrum: 5-85MHz}
+attrs: {media: coax, connector: mcx, downstream: '6', upstream: '12', spectrum: 5-85MHz, switch: 'yes', slot: C100G-rear-8 / C40G-rear-4}
 provenance:
   layout: drawing - Figure 1-15 of the Casa C100G Hardware Installation Guide
     (rev 07/08/2022). Twelve U jacks in the left column, six D in the right,
@@ -27,6 +27,12 @@ provenance:
     cable with MCX male snap-on plug; 75 ohm male F-connector on opposite end",
     so the jack on this card is MCX and the F-connector is at the headend end
   bore: ESTIMATED - no MCX dimension in the guide
+  shape: photograph - a C40G rear shot with plain 6+12 I/O in slots 0 and 5 and
+    this card in slot 4 shows they are NOT the same. This one has slightly
+    different overall dimensions and a section carrying the RF ports that stands
+    about 5/8in (15.9mm) proud of the faceplate, ahead of the comb. The
+    dimensional difference is visible but not yet measured, so this card is
+    modelled at the plain card's envelope for now - that part is ESTIMATED
   comb: photograph - a C40G rear shot shows every I/O card fronted by a cable
     comb carried on brass standoffs. Jason measured the standoffs at about 3/8in
     (9.5mm) proud of the faceplate and the comb itself at about 1/16in (1.6mm)
@@ -61,6 +67,8 @@ relief:
     - {node: standoff-b, out: 9.5, color: '#b08d57'}
     # the comb itself sits on them, 1/16in thick
     - {node: comb, out: 11.1, color: '#c8ccd0'}
+    # the RF section stands proud of the faceplate, which the plain card does not
+    - {node: rf-block, out: 15.9, color: '#9aa0a6'}
 connection-points:
   mate: {at: [15.23, 172.75], direction: rear}
 skins: [default]

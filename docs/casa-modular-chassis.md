@@ -193,8 +193,9 @@ given us. Measurements are Jason's, from the hardware.
 ### Cable combs and standoffs
 
 Every I/O card is fronted by a **cable comb** - a notched strip carrying the
-`U0-U11` / `D0-D5` silkscreen. So **the labels a user reads are on the comb, not on
-the card face**, which changes what "the port layout" even means.
+`U0-U11` / `D0-D5` silkscreen. Per Jason the labels are on **both** the card face and
+the comb, so the comb repeats them at the point where a cable actually lands rather
+than replacing them.
 
 | | |
 |---|---|
