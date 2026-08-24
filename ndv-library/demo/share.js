@@ -30,12 +30,42 @@ const kb = n => n < 1024 * 1024
 // so exporting it straight through lands on the defaults and everything arrives
 // flat matte. Convert on a clone - clone() shares geometry and only the material
 // reference, so assigning new materials here cannot touch the live scene.
+// A cavity is a box whose front cap is a material with visible=false - that is
+// what leaves it open to look into. glTF has no invisible material, so a naive
+// conversion turns the cap into an opaque lid and seals the recess. Strip those
+// faces out of the geometry instead: drop each group whose material is hidden
+// and renumber what is left.
+function dropHiddenFaces(mesh) {
+  const mats = mesh.material;
+  if (!Array.isArray(mats) || mats.every(m => m && m.visible)) return false;
+  const geo = mesh.geometry.clone();
+  const kept = [], newMats = [], remap = new Map();
+  for (const g of geo.groups) {
+    const m = mats[g.materialIndex];
+    if (!m || !m.visible) continue;
+    if (!remap.has(g.materialIndex)) {
+      remap.set(g.materialIndex, newMats.length);
+      newMats.push(m);
+    }
+    kept.push([g.start, g.count, remap.get(g.materialIndex)]);
+  }
+  geo.clearGroups();
+  for (const [start, count, idx] of kept) geo.addGroup(start, count, idx);
+  mesh.geometry = geo;
+  mesh.material = newMats.length === 1 ? newMats[0] : newMats;
+  return true;
+}
+
 function forExport(root) {
   const copy = root.clone(true);
   const drop = [];
   copy.traverse(o => {
     if (o.isLight) { drop.push(o); return; }   // viewers bring their own lighting
     if (!o.isMesh) return;
+    // a wholly hidden mesh has no business in a file meant to be passed around
+    const single = !Array.isArray(o.material) && o.material && !o.material.visible;
+    if (!o.visible || single) { drop.push(o); return; }
+    dropHiddenFaces(o);
     const one = m => {
       if (!m || m.isMeshStandardMaterial) return m;
       return new THREE.MeshStandardMaterial({
