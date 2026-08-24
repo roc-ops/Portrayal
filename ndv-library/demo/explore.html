@@ -187,11 +187,22 @@ function select(path, fromTree) {
   const el = state.svg?.querySelector(`[data-path="${CSS.escape(path)}"]`);
   if (halo) { halo.remove(); halo = null; }
   if (el) {
+    // getBBox is in the element's OWN coordinate system. The halo is appended to
+    // the root, so the box has to be carried through every transform between them
+    // or it lands wherever that offset happens to point - which for a bay-mounted
+    // port is several slots away.
     const b = el.getBBox();
+    const m = state.svg.getScreenCTM().inverse().multiply(el.getScreenCTM());
+    const pt = (x, y) => ({x: m.a*x + m.c*y + m.e, y: m.b*x + m.d*y + m.f});
+    const cs = [pt(b.x, b.y), pt(b.x + b.width, b.y),
+                pt(b.x, b.y + b.height), pt(b.x + b.width, b.y + b.height)];
+    const xs = cs.map(c => c.x), ys = cs.map(c => c.y);
+    const x0 = Math.min(...xs), y0 = Math.min(...ys);
     halo = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
     halo.setAttribute('class', 'halo pulse');
-    halo.setAttribute('x', b.x - 0.6); halo.setAttribute('y', b.y - 0.6);
-    halo.setAttribute('width', b.width + 1.2); halo.setAttribute('height', b.height + 1.2);
+    halo.setAttribute('x', x0 - 0.6); halo.setAttribute('y', y0 - 0.6);
+    halo.setAttribute('width', Math.max(...xs) - x0 + 1.2);
+    halo.setAttribute('height', Math.max(...ys) - y0 + 1.2);
     state.svg.appendChild(halo);
   }
   if (!fromTree) {
