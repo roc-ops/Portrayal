@@ -12,46 +12,35 @@ size: {w: 30.47, h: 345.5, d: 380.0}
 attrs: {role: supervisor, sfp-plus: '8', sfp: '2', mgmt: 10/100BASE-T, console: RS-232}
 provenance:
   layout: drawing - Figure 1-8 of the Casa C100G Hardware Installation Guide
-    (rev 07/08/2022). Port order down the faceplate is 10/100MI, XG0 to XG7,
-    G0, G1, then the console - XG numbering runs UP the card, so XG0 is nearest
-    the management port at the top
-  ports: drawing - the caption states eight 10GigE and two GigE, which the
-    twelve detected cage bodies match once console and management are counted
-  size: ESTIMATED, shared with the rest of the family - this faceplate measures
-    201 x 2614 px against the BDM's 196 x 2610 and the 6+12 I/O's 197 x 2613.
-    Absolute numbers are Table A-1 arithmetic; the figures are schematic
-  leds: drawing - STATUS and ACTIVE drawn lit, ALARM unlit, plus a dark/green
-    pair beside each SFP and SFP+ cage
+    (rev 07/08/2022). Port order down the faceplate is 10/100MI, XG0 to XG7, G0,
+    G1, console - XG numbering runs UP the card, so XG0 sits nearest the
+    management port at the top
+  ports: composed from the shared cage components rather than drawn as
+    rectangles. Every cage is ROTATED 90 - the card is only 30.47 wide, so a
+    16.0 x 10.0 SFP+ cage only fits on its side, which is what the figure shows
+    (detected 9.7 x 16.0, against 10.0 x 16.0 for the rotated component)
+  size: ESTIMATED, shared with the rest of the family. Absolute numbers come
+    from the chassis front view; the isolated card figures are drawn ~17 percent
+    narrower than the real card, so their port positions are used as fractions
 elements:
-  mgmt: {at: [4.38, 39.81], size: [13.94, 14.21], class: port,
-        provenance: {kind: 'drawing - rj cage', label: 'drawing - silkscreen 10/100MI'}}
-  xg0: {at: [6.67, 61.33], size: [11.22, 15.31], class: port,
-        provenance: {kind: 'drawing - sfp-plus cage', label: 'drawing - silkscreen XG0'}}
-  xg1: {at: [6.67, 78.68], size: [11.22, 15.94], class: port,
-        provenance: {kind: 'drawing - sfp-plus cage', label: 'drawing - silkscreen XG1'}}
-  xg2: {at: [6.67, 98.86], size: [11.22, 15.23], class: port,
-        provenance: {kind: 'drawing - sfp-plus cage', label: 'drawing - silkscreen XG2'}}
-  xg3: {at: [6.67, 116.06], size: [11.22, 16.1], class: port,
-        provenance: {kind: 'drawing - sfp-plus cage', label: 'drawing - silkscreen XG3'}}
-  xg4: {at: [6.67, 135.84], size: [11.22, 15.23], class: port,
-        provenance: {kind: 'drawing - sfp-plus cage', label: 'drawing - silkscreen XG4'}}
-  xg5: {at: [6.67, 153.04], size: [11.22, 16.18], class: port,
-        provenance: {kind: 'drawing - sfp-plus cage', label: 'drawing - silkscreen XG5'}}
-  xg6: {at: [6.67, 173.3], size: [11.22, 15.15], class: port,
-        provenance: {kind: 'drawing - sfp-plus cage', label: 'drawing - silkscreen XG6'}}
-  xg7: {at: [6.67, 190.57], size: [11.22, 16.02], class: port,
-        provenance: {kind: 'drawing - sfp-plus cage', label: 'drawing - silkscreen XG7'}}
-  g0: {at: [5.45, 210.68], size: [12.28, 12.56], class: port,
-        provenance: {kind: 'drawing - sfp cage', label: 'drawing - silkscreen G0'}}
-  g1: {at: [5.45, 225.52], size: [12.12, 12.41], class: port,
-        provenance: {kind: 'drawing - sfp cage', label: 'drawing - silkscreen G1'}}
-  console: {at: [4.7, 240.59], size: [13.93, 14.21], class: port,
-        provenance: {kind: 'drawing - rj cage', label: 'drawing - silkscreen IOIOI'}}
-  alarm: {at: [5.34, 274.75], size: [4.07, 3.3], class: led}
-  active: {at: [5.34, 278.83], size: [4.07, 3.3], class: led}
-  status: {at: [5.34, 282.92], size: [4.07, 3.3], class: led}
+  alarm: {at: [5.3, 274.36], size: [4.07, 4.07], class: led}
+  active: {at: [5.3, 278.44], size: [4.07, 4.07], class: led}
+  status: {at: [5.3, 282.53], size: [4.07, 4.07], class: led}
 relief:
   wall: '#4a4f55'
+parts:
+  - {ref: common/rj45-shielded@2, id: mgmt, at: [7.33, 41.46], rotate: 90}
+  - {ref: common/sfp-plus-cage@2, id: xg0, at: [7.23, 64.33], rotate: 90}
+  - {ref: common/sfp-plus-cage@2, id: xg1, at: [7.23, 81.68], rotate: 90}
+  - {ref: common/sfp-plus-cage@2, id: xg2, at: [7.23, 101.86], rotate: 90}
+  - {ref: common/sfp-plus-cage@2, id: xg3, at: [7.23, 119.06], rotate: 90}
+  - {ref: common/sfp-plus-cage@2, id: xg4, at: [7.23, 138.84], rotate: 90}
+  - {ref: common/sfp-plus-cage@2, id: xg5, at: [7.23, 156.04], rotate: 90}
+  - {ref: common/sfp-plus-cage@2, id: xg6, at: [7.23, 176.3], rotate: 90}
+  - {ref: common/sfp-plus-cage@2, id: xg7, at: [7.23, 193.57], rotate: 90}
+  - {ref: common/sfp-plus-cage@2, id: g0, at: [7.23, 213.68], rotate: 90}
+  - {ref: common/sfp-plus-cage@2, id: g1, at: [7.23, 228.52], rotate: 90}
+  - {ref: common/rj45-shielded@2, id: console, at: [7.33, 242.24], rotate: 90}
 connection-points:
   mate: {at: [15.23, 172.75], direction: front}
 skins: [default]

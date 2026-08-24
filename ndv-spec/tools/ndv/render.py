@@ -302,6 +302,17 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             pat.set("patternUnits", "userSpaceOnUse")
             c = ET.SubElement(pat, f"{{{SVG_NS}}}circle")
             c.set("cx", "2.5"); c.set("cy", "2.5"); c.set("r", "1.1"); c.set("fill", "#3c4046")
+        if "grille" in used_patterns:
+            # A fan exhaust grille, not perforation: coarse square openings on a
+            # thin wire lattice. Roughly 4x the holes pattern, which is what a
+            # real C100G fan tray looks like from the front.
+            pat = ET.SubElement(defs, f"{{{SVG_NS}}}pattern")
+            pat.set("id", "ndv-grille"); pat.set("width", "20"); pat.set("height", "20")
+            pat.set("patternUnits", "userSpaceOnUse")
+            op = ET.SubElement(pat, f"{{{SVG_NS}}}rect")
+            op.set("x", "1.4"); op.set("y", "1.4")
+            op.set("width", "17.2"); op.set("height", "17.2")
+            op.set("rx", "1.2"); op.set("fill", "#15181b")
         if "slots-h" in used_patterns:
             pat = ET.SubElement(defs, f"{{{SVG_NS}}}pattern")
             pat.set("id", "ndv-slots-h"); pat.set("width", "14"); pat.set("height", "8")
