@@ -98,14 +98,24 @@ participates in redundancy.
 
 Nothing in the library does any of this yet:
 
-1. **Paired slots** — front N and rear N as one logical position, not two bays.
-2. **Empty as a real occupant** — distinct from unknown, and sometimes *required*
-   (redundant 10+1 mandates one of front 5/8 be empty).
-3. **A slot map that varies by configuration** — the same chassis has different
-   redundancy slots depending on card family and HA scheme. A static per-slot
-   `accepts` list cannot say this.
-4. **Compatibility with a reason** — "these two cards pair" is not enough; the
-   constraint is spectrum, and the error message should say so.
+Checked against the schema by building `devices/casa/c100g`, rather than assumed:
+
+| need | verdict |
+|---|---|
+| empty as a real occupant | **already works** — a bay's `default` is `["string","null"]`, and null means open |
+| slot map varying by configuration | **already works** — `configurations[].bays` overrides per-bay occupancy, and `configurations[].skins` picks the card variant |
+| paired slots (front N ↔ rear N) | **not expressible** — bays are independent, with nothing to bind one to another |
+| compatibility with a reason | **not expressible** — `accepts` is a flat ref list, so "wrong spectrum" cannot be said |
+
+So two of my four supposed gaps were me not reading the schema. The two that remain
+are the two that are genuinely about *relationships between* bays rather than the
+contents of one.
+
+A third limitation turned up that I had not anticipated: **`accepts` must be
+non-empty**, so a slot whose occupant type is not modelled yet cannot be declared at
+all. The C100G's SMM slots (front 6, 7) are therefore absent rather than shown empty,
+which is the wrong picture for a chassis viewer — an undeclared slot and an open slot
+look identical, and they mean different things.
 
 ## Orientation: the same card, rotated
 

@@ -1,0 +1,395 @@
+format: 1
+kind: device
+name: c100g
+version: 0.1.0
+manufacturer: Casa Systems
+model: C100G
+description: 'Casa C100G CMTS/CCAP - 13RU, 14 paired front/rear slots. Front and rear slot
+  N are two halves of one logical position: a DOCSIS line card in front N requires its I/O
+  partner in rear N.'
+provenance:
+  chassis: 'datasheet - Table A-1 of the C100G Hardware Installation Guide (rev 07/08/2022):
+    22.5in (571mm) H, 19in (482mm) W, 15.25in (386mm) D, 13RU'
+  slots: datasheet - 14 module slots front and rear, SMM in front 6 and 7
+  slot-pitch: ESTIMATED - arithmetic, not measured. 19in face less ~21mm of ear each side
+    gives ~440 interior, over 14 slots = 31.43. The guide figures are schematic and cannot
+    be scaled - see docs/casa-modular-chassis.md
+  card-height: ESTIMATED - bracketed by two schematic readings that disagree by 10 percent
+    (461mm and 417mm), 440 is the midpoint
+  configurations: datasheet - the redundancy layouts are stated per scheme in Chapter 3 (Remote
+    PHY) and Chapter 4 (BDM)
+  smm-slots: front 6 and 7 are SMM slots and are deliberately NOT declared as bays yet. The
+    schema requires every bay to accept at least one component, and no SMM is modelled so
+    far, so declaring them would mean inventing an occupant. They come back when casa/smm
+    exists - Figures 1-7 to 1-10 cover four variants
+attrs:
+  role: CMTS/CCAP
+  slots: 14 front + 14 rear, associated 1:1
+  smm-slots: front 6 and 7
+  rack: 13 RU
+  weight: 132 lb / 61.23 kg fully loaded
+  power: -42 to -60 VDC, 20 A nominal per feed at -48 VDC
+chassis:
+  width: 482.0
+  height: 571.0
+  depth: 386.0
+  color: '#a7a9ac'
+  ru: 13
+  weight-kg: 61.23
+views:
+  front:
+    size:
+      w: 482.0
+      h: 571.0
+    bays:
+    - id: front-0
+      at:
+      - 21.0
+      - 26.0
+      size:
+        w: 31.43
+        h: 440.0
+      accepts: &id001
+      - casa/bdm@1
+      group: front-slots
+      rel-pos: 0
+      default: null
+    - id: front-1
+      at:
+      - 52.43
+      - 26.0
+      size:
+        w: 31.43
+        h: 440.0
+      accepts: *id001
+      group: front-slots
+      rel-pos: 1
+      default: null
+    - id: front-2
+      at:
+      - 83.86
+      - 26.0
+      size:
+        w: 31.43
+        h: 440.0
+      accepts: *id001
+      group: front-slots
+      rel-pos: 2
+      default: null
+    - id: front-3
+      at:
+      - 115.29
+      - 26.0
+      size:
+        w: 31.43
+        h: 440.0
+      accepts: *id001
+      group: front-slots
+      rel-pos: 3
+      default: null
+    - id: front-4
+      at:
+      - 146.71
+      - 26.0
+      size:
+        w: 31.43
+        h: 440.0
+      accepts: *id001
+      group: front-slots
+      rel-pos: 4
+      default: null
+    - id: front-5
+      at:
+      - 178.14
+      - 26.0
+      size:
+        w: 31.43
+        h: 440.0
+      accepts: *id001
+      group: front-slots
+      rel-pos: 5
+      default: null
+    - id: front-8
+      at:
+      - 272.43
+      - 26.0
+      size:
+        w: 31.43
+        h: 440.0
+      accepts: *id001
+      group: front-slots
+      rel-pos: 8
+      default: null
+    - id: front-9
+      at:
+      - 303.86
+      - 26.0
+      size:
+        w: 31.43
+        h: 440.0
+      accepts: *id001
+      group: front-slots
+      rel-pos: 9
+      default: null
+    - id: front-10
+      at:
+      - 335.29
+      - 26.0
+      size:
+        w: 31.43
+        h: 440.0
+      accepts: *id001
+      group: front-slots
+      rel-pos: 10
+      default: null
+    - id: front-11
+      at:
+      - 366.71
+      - 26.0
+      size:
+        w: 31.43
+        h: 440.0
+      accepts: *id001
+      group: front-slots
+      rel-pos: 11
+      default: null
+    - id: front-12
+      at:
+      - 398.14
+      - 26.0
+      size:
+        w: 31.43
+        h: 440.0
+      accepts: *id001
+      group: front-slots
+      rel-pos: 12
+      default: null
+    - id: front-13
+      at:
+      - 429.57
+      - 26.0
+      size:
+        w: 31.43
+        h: 440.0
+      accepts: *id001
+      group: front-slots
+      rel-pos: 13
+      default: null
+  rear:
+    size:
+      w: 482.0
+      h: 571.0
+    bays:
+    - id: rear-0
+      at:
+      - 21.0
+      - 26.0
+      size:
+        w: 31.43
+        h: 440.0
+      accepts: &id002
+      - casa/io-6p12@1
+      group: rear-slots
+      rel-pos: 0
+      default: null
+    - id: rear-1
+      at:
+      - 52.43
+      - 26.0
+      size:
+        w: 31.43
+        h: 440.0
+      accepts: *id002
+      group: rear-slots
+      rel-pos: 1
+      default: null
+    - id: rear-2
+      at:
+      - 83.86
+      - 26.0
+      size:
+        w: 31.43
+        h: 440.0
+      accepts: *id002
+      group: rear-slots
+      rel-pos: 2
+      default: null
+    - id: rear-3
+      at:
+      - 115.29
+      - 26.0
+      size:
+        w: 31.43
+        h: 440.0
+      accepts: *id002
+      group: rear-slots
+      rel-pos: 3
+      default: null
+    - id: rear-4
+      at:
+      - 146.71
+      - 26.0
+      size:
+        w: 31.43
+        h: 440.0
+      accepts: *id002
+      group: rear-slots
+      rel-pos: 4
+      default: null
+    - id: rear-5
+      at:
+      - 178.14
+      - 26.0
+      size:
+        w: 31.43
+        h: 440.0
+      accepts: *id002
+      group: rear-slots
+      rel-pos: 5
+      default: null
+    - id: rear-6
+      at:
+      - 209.57
+      - 26.0
+      size:
+        w: 31.43
+        h: 440.0
+      accepts: *id002
+      group: rear-slots
+      rel-pos: 6
+      default: null
+    - id: rear-7
+      at:
+      - 241.0
+      - 26.0
+      size:
+        w: 31.43
+        h: 440.0
+      accepts: *id002
+      group: rear-slots
+      rel-pos: 7
+      default: null
+    - id: rear-8
+      at:
+      - 272.43
+      - 26.0
+      size:
+        w: 31.43
+        h: 440.0
+      accepts: *id002
+      group: rear-slots
+      rel-pos: 8
+      default: null
+    - id: rear-9
+      at:
+      - 303.86
+      - 26.0
+      size:
+        w: 31.43
+        h: 440.0
+      accepts: *id002
+      group: rear-slots
+      rel-pos: 9
+      default: null
+    - id: rear-10
+      at:
+      - 335.29
+      - 26.0
+      size:
+        w: 31.43
+        h: 440.0
+      accepts: *id002
+      group: rear-slots
+      rel-pos: 10
+      default: null
+    - id: rear-11
+      at:
+      - 366.71
+      - 26.0
+      size:
+        w: 31.43
+        h: 440.0
+      accepts: *id002
+      group: rear-slots
+      rel-pos: 11
+      default: null
+    - id: rear-12
+      at:
+      - 398.14
+      - 26.0
+      size:
+        w: 31.43
+        h: 440.0
+      accepts: *id002
+      group: rear-slots
+      rel-pos: 12
+      default: null
+    - id: rear-13
+      at:
+      - 429.57
+      - 26.0
+      size:
+        w: 31.43
+        h: 440.0
+      accepts: *id002
+      group: rear-slots
+      rel-pos: 13
+      default: null
+configurations:
+  bdm2m-11plus1:
+    description: 'BDM2m "11+1" - the vendor''s name for it. Redundancy collapses to a single
+      protecting slot: rear 5 takes LC-BDM-SWITCH and front/rear 8 is freed to carry traffic
+      behind a combined 6+12 SW-IO. Rear 5, 6, 7 and 8 are left open here because LC-BDM-SWITCH,
+      SMM-SW-BDM and 6+12 SW-IO are not modelled yet.'
+    default: true
+    bays:
+      front-0: casa/bdm@1
+      front-1: casa/bdm@1
+      front-2: casa/bdm@1
+      front-3: casa/bdm@1
+      front-4: casa/bdm@1
+      front-5: casa/bdm@1
+      front-8: casa/bdm@1
+      front-9: casa/bdm@1
+      front-10: casa/bdm@1
+      front-11: casa/bdm@1
+      front-12: casa/bdm@1
+      front-13: casa/bdm@1
+      rear-0: casa/io-6p12@1
+      rear-1: casa/io-6p12@1
+      rear-2: casa/io-6p12@1
+      rear-3: casa/io-6p12@1
+      rear-4: casa/io-6p12@1
+      rear-9: casa/io-6p12@1
+      rear-10: casa/io-6p12@1
+      rear-11: casa/io-6p12@1
+      rear-12: casa/io-6p12@1
+      rear-13: casa/io-6p12@1
+  docsis-classic:
+    description: Classic DOCSIS. Redundancy is per side, one protecting slot each - front/rear
+      5 and 8 - with LC Switch behind both.
+    bays:
+      front-0: casa/bdm@1
+      front-1: casa/bdm@1
+      front-2: casa/bdm@1
+      front-3: casa/bdm@1
+      front-4: casa/bdm@1
+      front-5: casa/bdm@1
+      front-8: casa/bdm@1
+      front-9: casa/bdm@1
+      front-10: casa/bdm@1
+      front-11: casa/bdm@1
+      front-12: casa/bdm@1
+      front-13: casa/bdm@1
+      rear-0: casa/io-6p12@1
+      rear-1: casa/io-6p12@1
+      rear-2: casa/io-6p12@1
+      rear-3: casa/io-6p12@1
+      rear-4: casa/io-6p12@1
+      rear-9: casa/io-6p12@1
+      rear-10: casa/io-6p12@1
+      rear-11: casa/io-6p12@1
+      rear-12: casa/io-6p12@1
+      rear-13: casa/io-6p12@1
+    skins:
+      bdm: bdm
