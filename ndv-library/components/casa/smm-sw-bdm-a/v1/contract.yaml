@@ -11,10 +11,16 @@ description: >-
 attrs: {model: 'SMM-SW-BDM A'}
 size: {w: 30.47, h: 345.5, d: 380.0}
 provenance:
-  layout: drawing - Figure 1-14. Power Supply Monitor window, and the faceplate
+  psu-monitor: Jason - the Power Supply Monitor is an RJ45 port, which the
+    figure draws only as a dark rectangle
+  layout: drawing - Figure 1-14. Power Supply Monitor, and the faceplate
     itself prints "C100G Slot 6 / C40G Slot 2"
   slot: datasheet - "SMM-SW-BDM-A (slot 6)". The guide adds that correct slot
     positions are indicated on the module face plates, so this is not advisory
 relief:
   wall: '#4a4f55'
+parts:
+  # the Power Supply Monitor is an RJ45, not a blank window. Rotated like every
+  # other jack on these cards, because the faceplate is only 30.47 wide.
+  - {ref: common/rj45-shielded@2, id: psu-monitor, at: [7.33, 119.65], rotate: 90}
 skins: [default]

@@ -454,8 +454,17 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         opening.set("fill", "#101214")
         default = (config.get("bays") or {}).get(b["id"], b.get("default"))
         if default:
-            g, contract = instance_group(lib, default, f"{b['id']}--module", b["at"],
-                                         b.get("label"), None, None, None, palette=palette,
+            # instance_group rotates a component about its OWN centre, so for a
+            # rotated bay the card has to be offset or it spins out of the opening.
+            # The bay's size is the rotated footprint, so the unrotated component is
+            # that transposed, and the offset is half the difference.
+            mod_at = b["at"]
+            if b.get("rotate") in (90, 270):
+                d = (b["size"]["w"] - b["size"]["h"]) / 2.0
+                mod_at = [b["at"][0] + d, b["at"][1] - d]
+            g, contract = instance_group(lib, default, f"{b['id']}--module", mod_at,
+                                         b.get("label"), None, None, None,
+                                         rotate=b.get("rotate"), palette=palette,
                                          skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                                          path=f"{b['id']}/module", resolved=resolved)
             bay_g.append(g)
