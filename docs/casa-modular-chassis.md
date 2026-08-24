@@ -107,6 +107,45 @@ Nothing in the library does any of this yet:
 4. **Compatibility with a reason** — "these two cards pair" is not enough; the
    constraint is spectrum, and the error message should say so.
 
+## Dimensions, and how the figures get scaled
+
+From Table A-1 in each guide:
+
+| | C100G | C40G |
+|---|---|---|
+| height | 22.5 in / **571 mm** | 10.47 in / **265.90 mm** |
+| width | 19 in / **482 mm** | 19 in / **482 mm** |
+| depth | 15.25 in / **386 mm** | 15.25 in / **388.45 mm** |
+| rack | 13 RU | 6 RU |
+| slots | 14 | 6 |
+| weight | 132 lb / 61.23 kg loaded | — |
+
+13 RU nominal is 577.9 mm against a stated 571, and 6 RU is 266.7 against 265.9 - both
+chassis sit just inside their RU envelope, as they should.
+
+This is what makes the vector figures usable. They come out of `pdftocairo` in page
+points with no intrinsic scale, but every figure contains something of known size -
+the chassis outline, or a card whose height is set by the chassis - so each can be
+calibrated rather than guessed. Record the calibration reference per figure in
+provenance, the same way the QSFP views were.
+
+---
+
+## How the cards decompose
+
+Per Jason, and this is what makes the set cheap to build:
+
+- **The PCB and the rear/backplane connectors are common to every card.** One shared
+  body component - board, backplane connector set, ejectors, side rails - serves all
+  of them. Photographed as top / bottom / rear-edge.
+- **Only the faceplate differs**, and every faceplate is already in the guides as
+  vector art.
+
+So an I/O card is `common body + faceplate skin`, and adding the next card is a skin,
+not a new model. The rear-edge photograph shows the shared connector set: a large gold
+multi-pin block, four white contact blocks, a centre bracket, and a fine-pitch
+connector at the opposite end.
+
 ## Faceplates, read off the vector figures
 
 ### BDM / BDM2 / BDM2m (front, Fig 1-14)
