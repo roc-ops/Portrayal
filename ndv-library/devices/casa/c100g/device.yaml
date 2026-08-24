@@ -36,6 +36,11 @@ provenance:
   airflow: Jason - air is drawn in at the rear, passes behind and through the cards, and exhausts
     at the FRONT bottom. So the grille below the filter is the fan EXHAUST, not an intake,
     and it is a coarse wire grille rather than perforation
+  rear-slots: 'datasheet - C100G rear side (11+1) in Chapter 4, verbatim: slots 0-4 6+12 IO
+    or IO2; slot 5 LC-BDM-SWITCH for BDM line module redundancy; slots 6 and 7 SMM-SW-BDM-A
+    and -B respectively, with the guide noting that correct slot positions are indicated on
+    the module faceplates; slot 8 6+12 SW-IO or SW-IO2, non-redundant under 11+1; slots 9-13
+    6+12 IO or IO2'
 attrs:
   role: CMTS/CCAP
   slots: 14 front + 14 rear, associated 1:1
@@ -319,10 +324,11 @@ views:
       size:
         w: 30.47
         h: 345.5
-      accepts: *id002
+      accepts:
+      - casa/lc-sw-bdm@1
       group: rear-slots
       rel-pos: 5
-      default: null
+      default: casa/lc-sw-bdm@1
     - id: rear-6
       at:
       - 186.0
@@ -330,10 +336,11 @@ views:
       size:
         w: 30.47
         h: 345.5
-      accepts: *id002
+      accepts:
+      - casa/smm-sw-bdm-a@1
       group: rear-slots
       rel-pos: 6
-      default: null
+      default: casa/smm-sw-bdm-a@1
     - id: rear-7
       at:
       - 216.47
@@ -341,10 +348,11 @@ views:
       size:
         w: 30.47
         h: 345.5
-      accepts: *id002
+      accepts:
+      - casa/smm-sw-bdm-b@1
       group: rear-slots
       rel-pos: 7
-      default: null
+      default: casa/smm-sw-bdm-b@1
     - id: rear-8
       at:
       - 246.94
@@ -356,7 +364,7 @@ views:
       - casa/io-6p12-sw@1
       group: rear-slots
       rel-pos: 8
-      default: null
+      default: casa/io-6p12-sw@1
     - id: rear-9
       at:
       - 277.41
@@ -445,10 +453,10 @@ views:
       anchor: middle
 configurations:
   bdm2m-11plus1:
-    description: 'BDM2m "11+1" - the vendor''s name for it. Redundancy collapses to a single
-      protecting slot: rear 5 takes LC-BDM-SWITCH and front/rear 8 is freed to carry traffic
-      behind a combined 6+12 SW-IO. Rear 5, 6 and 7 are still open because LC-BDM-SWITCH and
-      SMM-SW-BDM are not modelled yet.'
+    description: BDM2m "11+1" - the vendor's name for it. Redundancy collapses to a single
+      protecting slot. Rear 5 takes the LC-BDM-SWITCH that does the protecting; rear 8 takes
+      a combined 6+12 SW-IO, which is what frees front/rear 8 to carry traffic instead of
+      standing spare. Neither slot carries a plain 6+12 I/O.
     default: true
     bays:
       front-0: casa/bdm@1
@@ -476,6 +484,9 @@ configurations:
       front-6: casa/smm-8x10g@1
       front-7: casa/smm-8x10g@1
       rear-8: casa/io-6p12-sw@1
+      rear-5: casa/lc-sw-bdm@1
+      rear-6: casa/smm-sw-bdm-a@1
+      rear-7: casa/smm-sw-bdm-b@1
   docsis-classic:
     description: Classic DOCSIS. Redundancy is per side, one protecting slot each - front/rear
       5 and 8 - with LC Switch behind both.
