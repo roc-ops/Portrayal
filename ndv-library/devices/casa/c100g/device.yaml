@@ -11,11 +11,11 @@ provenance:
   chassis: 'datasheet - Table A-1 of the C100G Hardware Installation Guide (rev 07/08/2022):
     22.5in (571mm) H, 19in (482mm) W, 15.25in (386mm) D, 13RU'
   slots: datasheet - 14 module slots front and rear, SMM in front 6 and 7
-  slot-pitch: drawing - measured off Figure 1-1 as a PROPORTION of the real chassis, not by
-    scaling the figure. The card region spans 76.3 percent of the 482 width, so 14 slots give
-    26.26. Doing it per axis undoes the figure aspect error, and the result cross-checks against
-    Figure 1-15 - card aspect 13.16 there against 13.26 here, 0.8 percent apart on two independent
-    drawings
+  slot-pitch: drawing - measured inside the card band of Figure 1-1, where there is no caption
+    or page rule to confuse the bounding box. Cards span 5.8 to 94.3 percent of the chassis
+    width, symmetric, leaving a ~28mm mounting flange each side. That is 426.5mm over 14 slots
+    = 30.46. An earlier 26.26 came from a crop that included white page margin on the left,
+    which inflated the denominator and made the cards look far too narrow for the chassis
   card-height: drawing - Figure 1-1 puts the card band between the slot-number strip at 18.9
     percent and the FILTER band at 79.4 percent of chassis height, so 108.1 to 453.5, a 345.5
     card. An earlier 440 was wrong and made the cards overrun the space above
@@ -27,6 +27,10 @@ provenance:
   bands: drawing - front is air baffle above (0 to 108.1), cards, then FILTER (453.5) and
     the fan tray below. Rear is fan assemblies above (0 to 105.9), cards, then two power entry
     modules from 491.4. Fig 1-1 and Fig 1-2
+  card-aspect: NOTE - the isolated card figures (1-14, 1-15, 1-8) are drawn NARROWER than
+    the real card. Their faceplate aspect is 13.26; the chassis front view gives 345.5 by
+    30.46 = 11.34, about 17 percent wider. Port positions taken from those figures are therefore
+    used as FRACTIONS of the faceplate and stretched to this width, not as absolute geometry
 attrs:
   role: CMTS/CCAP
   slots: 14 front + 14 rear, associated 1:1
@@ -49,10 +53,10 @@ views:
     bays:
     - id: front-0
       at:
-      - 90.9
+      - 28.0
       - 108.1
       size:
-        w: 26.26
+        w: 30.46
         h: 345.5
       accepts: &id001
       - casa/bdm@1
@@ -61,10 +65,10 @@ views:
       default: null
     - id: front-1
       at:
-      - 117.16
+      - 58.46
       - 108.1
       size:
-        w: 26.26
+        w: 30.46
         h: 345.5
       accepts: *id001
       group: front-slots
@@ -72,10 +76,10 @@ views:
       default: null
     - id: front-2
       at:
-      - 143.42
+      - 88.92
       - 108.1
       size:
-        w: 26.26
+        w: 30.46
         h: 345.5
       accepts: *id001
       group: front-slots
@@ -83,10 +87,10 @@ views:
       default: null
     - id: front-3
       at:
-      - 169.68
+      - 119.38
       - 108.1
       size:
-        w: 26.26
+        w: 30.46
         h: 345.5
       accepts: *id001
       group: front-slots
@@ -94,10 +98,10 @@ views:
       default: null
     - id: front-4
       at:
-      - 195.94
+      - 149.84
       - 108.1
       size:
-        w: 26.26
+        w: 30.46
         h: 345.5
       accepts: *id001
       group: front-slots
@@ -105,10 +109,10 @@ views:
       default: null
     - id: front-5
       at:
-      - 222.2
+      - 180.3
       - 108.1
       size:
-        w: 26.26
+        w: 30.46
         h: 345.5
       accepts: *id001
       group: front-slots
@@ -116,10 +120,10 @@ views:
       default: null
     - id: front-6
       at:
-      - 248.46
+      - 210.76
       - 108.1
       size:
-        w: 26.26
+        w: 30.46
         h: 345.5
       accepts:
       - casa/smm-8x10g@1
@@ -128,10 +132,10 @@ views:
       default: casa/smm-8x10g@1
     - id: front-7
       at:
-      - 274.72
+      - 241.22
       - 108.1
       size:
-        w: 26.26
+        w: 30.46
         h: 345.5
       accepts:
       - casa/smm-8x10g@1
@@ -140,10 +144,10 @@ views:
       default: casa/smm-8x10g@1
     - id: front-8
       at:
-      - 300.98
+      - 271.68
       - 108.1
       size:
-        w: 26.26
+        w: 30.46
         h: 345.5
       accepts: *id001
       group: front-slots
@@ -151,10 +155,10 @@ views:
       default: null
     - id: front-9
       at:
-      - 327.24
+      - 302.14
       - 108.1
       size:
-        w: 26.26
+        w: 30.46
         h: 345.5
       accepts: *id001
       group: front-slots
@@ -162,10 +166,10 @@ views:
       default: null
     - id: front-10
       at:
-      - 353.5
+      - 332.6
       - 108.1
       size:
-        w: 26.26
+        w: 30.46
         h: 345.5
       accepts: *id001
       group: front-slots
@@ -173,10 +177,10 @@ views:
       default: null
     - id: front-11
       at:
-      - 379.76
+      - 363.06
       - 108.1
       size:
-        w: 26.26
+        w: 30.46
         h: 345.5
       accepts: *id001
       group: front-slots
@@ -184,10 +188,10 @@ views:
       default: null
     - id: front-12
       at:
-      - 406.02
+      - 393.52
       - 108.1
       size:
-        w: 26.26
+        w: 30.46
         h: 345.5
       accepts: *id001
       group: front-slots
@@ -195,10 +199,10 @@ views:
       default: null
     - id: front-13
       at:
-      - 432.28
+      - 423.98
       - 108.1
       size:
-        w: 26.26
+        w: 30.46
         h: 345.5
       accepts: *id001
       group: front-slots
@@ -249,10 +253,10 @@ views:
     bays:
     - id: rear-0
       at:
-      - 90.9
+      - 28.0
       - 108.1
       size:
-        w: 26.26
+        w: 30.46
         h: 345.5
       accepts: &id002
       - casa/io-6p12@1
@@ -261,10 +265,10 @@ views:
       default: null
     - id: rear-1
       at:
-      - 117.16
+      - 58.46
       - 108.1
       size:
-        w: 26.26
+        w: 30.46
         h: 345.5
       accepts: *id002
       group: rear-slots
@@ -272,10 +276,10 @@ views:
       default: null
     - id: rear-2
       at:
-      - 143.42
+      - 88.92
       - 108.1
       size:
-        w: 26.26
+        w: 30.46
         h: 345.5
       accepts: *id002
       group: rear-slots
@@ -283,10 +287,10 @@ views:
       default: null
     - id: rear-3
       at:
-      - 169.68
+      - 119.38
       - 108.1
       size:
-        w: 26.26
+        w: 30.46
         h: 345.5
       accepts: *id002
       group: rear-slots
@@ -294,10 +298,10 @@ views:
       default: null
     - id: rear-4
       at:
-      - 195.94
+      - 149.84
       - 108.1
       size:
-        w: 26.26
+        w: 30.46
         h: 345.5
       accepts: *id002
       group: rear-slots
@@ -305,10 +309,10 @@ views:
       default: null
     - id: rear-5
       at:
-      - 222.2
+      - 180.3
       - 108.1
       size:
-        w: 26.26
+        w: 30.46
         h: 345.5
       accepts: *id002
       group: rear-slots
@@ -316,10 +320,10 @@ views:
       default: null
     - id: rear-6
       at:
-      - 248.46
+      - 210.76
       - 108.1
       size:
-        w: 26.26
+        w: 30.46
         h: 345.5
       accepts: *id002
       group: rear-slots
@@ -327,10 +331,10 @@ views:
       default: null
     - id: rear-7
       at:
-      - 274.72
+      - 241.22
       - 108.1
       size:
-        w: 26.26
+        w: 30.46
         h: 345.5
       accepts: *id002
       group: rear-slots
@@ -338,10 +342,10 @@ views:
       default: null
     - id: rear-8
       at:
-      - 300.98
+      - 271.68
       - 108.1
       size:
-        w: 26.26
+        w: 30.46
         h: 345.5
       accepts: *id002
       group: rear-slots
@@ -349,10 +353,10 @@ views:
       default: null
     - id: rear-9
       at:
-      - 327.24
+      - 302.14
       - 108.1
       size:
-        w: 26.26
+        w: 30.46
         h: 345.5
       accepts: *id002
       group: rear-slots
@@ -360,10 +364,10 @@ views:
       default: null
     - id: rear-10
       at:
-      - 353.5
+      - 332.6
       - 108.1
       size:
-        w: 26.26
+        w: 30.46
         h: 345.5
       accepts: *id002
       group: rear-slots
@@ -371,10 +375,10 @@ views:
       default: null
     - id: rear-11
       at:
-      - 379.76
+      - 363.06
       - 108.1
       size:
-        w: 26.26
+        w: 30.46
         h: 345.5
       accepts: *id002
       group: rear-slots
@@ -382,10 +386,10 @@ views:
       default: null
     - id: rear-12
       at:
-      - 406.02
+      - 393.52
       - 108.1
       size:
-        w: 26.26
+        w: 30.46
         h: 345.5
       accepts: *id002
       group: rear-slots
@@ -393,10 +397,10 @@ views:
       default: null
     - id: rear-13
       at:
-      - 432.28
+      - 423.98
       - 108.1
       size:
-        w: 26.26
+        w: 30.46
         h: 345.5
       accepts: *id002
       group: rear-slots
