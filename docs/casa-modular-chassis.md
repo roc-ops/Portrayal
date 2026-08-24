@@ -107,6 +107,38 @@ Nothing in the library does any of this yet:
 4. **Compatibility with a reason** — "these two cards pair" is not enough; the
    constraint is spectrum, and the error message should say so.
 
+## Faceplates, read off the vector figures
+
+### BDM / BDM2 / BDM2m (front, Fig 1-14)
+
+**No RF connectors.** The BDM family faceplate carries a model band at the top, two
+groups of orange stripes, and three LEDs - **STATUS / ALARM / ACTIVE** - with an
+ejector top and bottom. All RF lands on the rear I/O card. That is the whole point of
+the architecture, and it means a front BDM in the drawing is a blank plate plus LEDs.
+
+### SMM Switch BDM A / B (rear, Fig 1-14)
+
+Each carries a **Power Supply Monitor** window and prints its own slot legend on the
+faceplate:
+
+| module | C100G | C40G |
+|---|---|---|
+| SMM-SW-BDM-A | slot 6 | slot 2 |
+| SMM-SW-BDM-B | slot 7 | slot 3 |
+
+This is now **verified from the figure**, not inferred by symmetry as it was on the
+first pass. `LC-SW-BDM` is a blank faceplate.
+
+### 6+12 IO / 6+12 IO2 (rear, Fig 1-15)
+
+Ports are **U0–U11** (twelve upstream) and **D0–D5** (six downstream), in two
+interleaved columns - which is literally where the "6+12" comes from.
+
+**The module connector is MCX, not F.** The figure's cable note: *"Single quad-shielded
+cable with MCX male snap-on plug; 75 ohm male F-connector on opposite end."* So the F
+connector is at the far end of the cable, at the headend equipment - never on the
+6+12 card itself. Also available as 3-metre colour-coded 4- and 6-cable bundles.
+
 ## Line cards are shared, the rest is not
 
 Per Jason: the front and rear **line cards are common to both chassis**; PEM, fans and
