@@ -1,0 +1,57 @@
+format: 1
+kind: module
+name: smm-8x10g
+version: 1.0.0
+class: supervisor
+profile: networking
+description: >-
+  Casa high-density SMM 8x10GigE - the C100G/C40G supervisor and switch module.
+  Eight 10GigE SFP+ (XG0-XG7), two GigE SFP (G0, G1), a 10/100BASE-T management
+  RJ45 and an RS-232 console RJ45, plus STATUS, ACTIVE and ALARM LEDs.
+size: {w: 31.43, h: 440.0, d: 380.0}
+attrs: {role: supervisor, sfp-plus: '8', sfp: '2', mgmt: 10/100BASE-T, console: RS-232}
+provenance:
+  layout: drawing - Figure 1-8 of the Casa C100G Hardware Installation Guide
+    (rev 07/08/2022). Port order down the faceplate is 10/100MI, XG0 to XG7,
+    G0, G1, then the console - XG numbering runs UP the card, so XG0 is nearest
+    the management port at the top
+  ports: drawing - the caption states eight 10GigE and two GigE, which the
+    twelve detected cage bodies match once console and management are counted
+  size: ESTIMATED, shared with the rest of the family - this faceplate measures
+    201 x 2614 px against the BDM's 196 x 2610 and the 6+12 I/O's 197 x 2613.
+    Absolute numbers are Table A-1 arithmetic; the figures are schematic
+  leds: drawing - STATUS and ACTIVE drawn lit, ALARM unlit, plus a dark/green
+    pair beside each SFP and SFP+ cage
+elements:
+  mgmt: {at: [4.53, 50.7], size: [14.39, 18.1], class: port,
+        provenance: {kind: 'drawing - rj cage', label: 'drawing - silkscreen 10/100MI'}}
+  xg0: {at: [6.88, 78.1], size: [11.57, 19.5], class: port,
+        provenance: {kind: 'drawing - sfp-plus cage', label: 'drawing - silkscreen XG0'}}
+  xg1: {at: [6.88, 100.2], size: [11.57, 20.3], class: port,
+        provenance: {kind: 'drawing - sfp-plus cage', label: 'drawing - silkscreen XG1'}}
+  xg2: {at: [6.88, 125.9], size: [11.57, 19.4], class: port,
+        provenance: {kind: 'drawing - sfp-plus cage', label: 'drawing - silkscreen XG2'}}
+  xg3: {at: [6.88, 147.8], size: [11.57, 20.5], class: port,
+        provenance: {kind: 'drawing - sfp-plus cage', label: 'drawing - silkscreen XG3'}}
+  xg4: {at: [6.88, 173.0], size: [11.57, 19.4], class: port,
+        provenance: {kind: 'drawing - sfp-plus cage', label: 'drawing - silkscreen XG4'}}
+  xg5: {at: [6.88, 194.9], size: [11.57, 20.6], class: port,
+        provenance: {kind: 'drawing - sfp-plus cage', label: 'drawing - silkscreen XG5'}}
+  xg6: {at: [6.88, 220.7], size: [11.57, 19.3], class: port,
+        provenance: {kind: 'drawing - sfp-plus cage', label: 'drawing - silkscreen XG6'}}
+  xg7: {at: [6.88, 242.7], size: [11.57, 20.4], class: port,
+        provenance: {kind: 'drawing - sfp-plus cage', label: 'drawing - silkscreen XG7'}}
+  g0: {at: [5.63, 268.3], size: [12.67, 16.0], class: port,
+        provenance: {kind: 'drawing - sfp cage', label: 'drawing - silkscreen G0'}}
+  g1: {at: [5.63, 287.2], size: [12.51, 15.8], class: port,
+        provenance: {kind: 'drawing - sfp cage', label: 'drawing - silkscreen G1'}}
+  console: {at: [4.85, 306.4], size: [14.38, 18.1], class: port,
+        provenance: {kind: 'drawing - rj cage', label: 'drawing - silkscreen IOIOI'}}
+  alarm: {at: [5.5, 349.9], size: [4.2, 4.2], class: led}
+  active: {at: [5.5, 355.1], size: [4.2, 4.2], class: led}
+  status: {at: [5.5, 360.3], size: [4.2, 4.2], class: led}
+relief:
+  wall: '#4a4f55'
+connection-points:
+  mate: {at: [15.71, 220.0], direction: front}
+skins: [default]

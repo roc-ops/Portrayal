@@ -18,10 +18,9 @@ provenance:
     (461mm and 417mm), 440 is the midpoint
   configurations: datasheet - the redundancy layouts are stated per scheme in Chapter 3 (Remote
     PHY) and Chapter 4 (BDM)
-  smm-slots: front 6 and 7 are SMM slots and are deliberately NOT declared as bays yet. The
-    schema requires every bay to accept at least one component, and no SMM is modelled so
-    far, so declaring them would mean inventing an occupant. They come back when casa/smm
-    exists - Figures 1-7 to 1-10 cover four variants
+  smm-slots: datasheet - front 6 and 7 take the SMM. Modelled with the 8x10GigE variant (Fig
+    1-8); the guide also lists SMM 2x10GE, SMM 300G and SMM 300Gm, which are further skins
+    or components when needed
 attrs:
   role: CMTS/CCAP
   slots: 14 front + 14 rear, associated 1:1
@@ -109,6 +108,30 @@ views:
       group: front-slots
       rel-pos: 5
       default: null
+    - id: front-6
+      at:
+      - 209.58
+      - 26.0
+      size:
+        w: 31.43
+        h: 440.0
+      accepts:
+      - casa/smm-8x10g@1
+      group: front-slots
+      rel-pos: 6
+      default: casa/smm-8x10g@1
+    - id: front-7
+      at:
+      - 241.01
+      - 26.0
+      size:
+        w: 31.43
+        h: 440.0
+      accepts:
+      - casa/smm-8x10g@1
+      group: front-slots
+      rel-pos: 7
+      default: casa/smm-8x10g@1
     - id: front-8
       at:
       - 272.43
@@ -365,6 +388,8 @@ configurations:
       rear-11: casa/io-6p12@1
       rear-12: casa/io-6p12@1
       rear-13: casa/io-6p12@1
+      front-6: casa/smm-8x10g@1
+      front-7: casa/smm-8x10g@1
   docsis-classic:
     description: Classic DOCSIS. Redundancy is per side, one protecting slot each - front/rear
       5 and 8 - with LC Switch behind both.
@@ -391,5 +416,7 @@ configurations:
       rear-11: casa/io-6p12@1
       rear-12: casa/io-6p12@1
       rear-13: casa/io-6p12@1
+      front-6: casa/smm-8x10g@1
+      front-7: casa/smm-8x10g@1
     skins:
       bdm: bdm
