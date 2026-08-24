@@ -24,12 +24,13 @@ provenance:
   skins: the default skin is the BDM2m, the current member of the family and the
     card the C100G ships in its default configuration. bdm2 and bdm are the two
     predecessors, selectable per configuration via configurations.skins
-  leds: drawing - colour-detected at 400dpi. STATUS and ACTIVE are drawn lit
-    green, ALARM unlit, which is a healthy card rather than a spec
+  leds: drawing - three LEDs in one column. Pitch set to 6.6 against a 3.0 diameter so they read as separate
+    indicators; the figure draws them nearly touching, which does not
+    survive being scaled down into a chassis view
 elements:
-  status: {at: [5.3, 194.81], size: [4.07, 3.3], class: led}
-  alarm: {at: [5.3, 199.29], size: [4.07, 3.3], class: led}
-  active: {at: [5.3, 202.9], size: [4.07, 3.3], class: led}
+  status: {at: [4.80, 190.90], size: [3.0, 3.0], class: led}
+  alarm: {at: [4.80, 197.50], size: [3.0, 3.0], class: led}
+  active: {at: [4.80, 204.10], size: [3.0, 3.0], class: led}
 relief:
   wall: '#4a4f55'
 connection-points:
