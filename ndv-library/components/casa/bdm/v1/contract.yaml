@@ -1,0 +1,34 @@
+format: 1
+kind: module
+name: bdm
+version: 1.0.0
+class: line-card
+profile: networking
+description: >-
+  Casa Bi-Directional Module - the front half of a BDM position. Carries no RF
+  connectors at all; every port lands on the paired rear 6+12 I/O card. The
+  faceplate is a blank plate with a model band, two tapering stripe groups and
+  three status LEDs. BDM, BDM2 and BDM2m share it and differ only by label.
+size: {w: 31.43, h: 440.0, d: 380.0}
+attrs: {role: docsis-line-card, rf-ports: '0', pairs-with: casa/io-6p12}
+provenance:
+  layout: drawing - Figure 1-14 of the Casa C100G Hardware Installation Guide
+    (rev 07/08/2022). Three LEDs in a single column with STATUS, ALARM and
+    ACTIVE printed to their right, between two mirrored stripe groups
+  ports: drawing - the BDM faceplate has NO connectors. This is not an
+    omission; the architecture puts all RF on the rear I/O card
+  size: ESTIMATED, shared with casa/io-6p12 - the six faceplates in Fig 1-14
+    measure 196 x 2610 px against that card's 197 x 2613, so the whole family
+    shares one envelope. The guide figures are schematic rather than to scale,
+    so the absolute numbers come from Table A-1 arithmetic. Needs a caliper
+  leds: drawing - colour-detected at 400dpi. STATUS and ACTIVE are drawn lit
+    green, ALARM unlit, which is a healthy card rather than a spec
+elements:
+  status: {at: [5.47, 248.1], size: [4.2, 4.2], class: led}
+  alarm: {at: [5.47, 253.8], size: [4.2, 4.2], class: led}
+  active: {at: [5.47, 258.4], size: [4.2, 4.2], class: led}
+relief:
+  wall: '#4a4f55'
+connection-points:
+  mate: {at: [15.71, 220.0], direction: front}
+skins: [bdm2m, bdm2, bdm]
