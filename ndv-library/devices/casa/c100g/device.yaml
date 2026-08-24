@@ -31,6 +31,11 @@ provenance:
     the real card. Their faceplate aspect is 13.26; the chassis front view gives 345.5 by
     30.46 = 11.34, about 17 percent wider. Port positions taken from those figures are therefore
     used as FRACTIONS of the faceplate and stretched to this width, not as absolute geometry
+  width: datasheet + photograph - Table A-1 quotes 19in (482) which is the RACK face INCLUDING
+    the mounting ears, the usual way a rack-mount device is quoted. Jason confirmed from a
+    real chassis that the ears sit outside the body. So the body is 440 between ears at x21
+    and x461, and the 14 cards span 28 to 454.4 - a ~7mm flange each side of the card cage,
+    which matches his "about a quarter inch"
 attrs:
   role: CMTS/CCAP
   slots: 14 front + 14 rear, associated 1:1
@@ -209,39 +214,221 @@ views:
       rel-pos: 13
       default: null
     decor:
-    - at:
+    - &id003
+      at:
       - 0
+      - 60
+      size:
+      - 21.0
+      - 451.0
+      fill: '#8d949c'
+      stroke: '#5f6469'
+      stroke-width: 0.6
+    - &id004
+      at:
+      - 461.0
+      - 60
+      size:
+      - 21.0
+      - 451.0
+      fill: '#8d949c'
+      stroke: '#5f6469'
+      stroke-width: 0.6
+    - &id005
+      at:
+      - 7.9
+      - 75.4
+      size:
+      - 5.2
+      - 5.2
+      rx: 2.6
+      fill: '#3a4046'
+    - &id006
+      at:
+      - 468.9
+      - 75.4
+      size:
+      - 5.2
+      - 5.2
+      rx: 2.6
+      fill: '#3a4046'
+    - &id007
+      at:
+      - 7.9
+      - 119.85000000000001
+      size:
+      - 5.2
+      - 5.2
+      rx: 2.6
+      fill: '#3a4046'
+    - &id008
+      at:
+      - 468.9
+      - 119.85000000000001
+      size:
+      - 5.2
+      - 5.2
+      rx: 2.6
+      fill: '#3a4046'
+    - &id009
+      at:
+      - 7.9
+      - 164.3
+      size:
+      - 5.2
+      - 5.2
+      rx: 2.6
+      fill: '#3a4046'
+    - &id010
+      at:
+      - 468.9
+      - 164.3
+      size:
+      - 5.2
+      - 5.2
+      rx: 2.6
+      fill: '#3a4046'
+    - &id011
+      at:
+      - 7.9
+      - 208.75000000000003
+      size:
+      - 5.2
+      - 5.2
+      rx: 2.6
+      fill: '#3a4046'
+    - &id012
+      at:
+      - 468.9
+      - 208.75000000000003
+      size:
+      - 5.2
+      - 5.2
+      rx: 2.6
+      fill: '#3a4046'
+    - &id013
+      at:
+      - 7.9
+      - 253.20000000000002
+      size:
+      - 5.2
+      - 5.2
+      rx: 2.6
+      fill: '#3a4046'
+    - &id014
+      at:
+      - 468.9
+      - 253.20000000000002
+      size:
+      - 5.2
+      - 5.2
+      rx: 2.6
+      fill: '#3a4046'
+    - &id015
+      at:
+      - 7.9
+      - 297.65
+      size:
+      - 5.2
+      - 5.2
+      rx: 2.6
+      fill: '#3a4046'
+    - &id016
+      at:
+      - 468.9
+      - 297.65
+      size:
+      - 5.2
+      - 5.2
+      rx: 2.6
+      fill: '#3a4046'
+    - &id017
+      at:
+      - 7.9
+      - 342.1
+      size:
+      - 5.2
+      - 5.2
+      rx: 2.6
+      fill: '#3a4046'
+    - &id018
+      at:
+      - 468.9
+      - 342.1
+      size:
+      - 5.2
+      - 5.2
+      rx: 2.6
+      fill: '#3a4046'
+    - &id019
+      at:
+      - 7.9
+      - 386.55
+      size:
+      - 5.2
+      - 5.2
+      rx: 2.6
+      fill: '#3a4046'
+    - &id020
+      at:
+      - 468.9
+      - 386.55
+      size:
+      - 5.2
+      - 5.2
+      rx: 2.6
+      fill: '#3a4046'
+    - &id021
+      at:
+      - 7.9
+      - 431.0
+      size:
+      - 5.2
+      - 5.2
+      rx: 2.6
+      fill: '#3a4046'
+    - &id022
+      at:
+      - 468.9
+      - 431.0
+      size:
+      - 5.2
+      - 5.2
+      rx: 2.6
+      fill: '#3a4046'
+    - at:
+      - 21.0
       - 0
       size:
-      - 482.0
+      - 440.0
       - 108.1
       fill: '#4a4f55'
     - at:
-      - 150
-      - 44
+      - 241.0
+      - 52
       text: C100G
-      font-size: 22
+      font-size: 20
       fill: '#d7dbdf'
       anchor: middle
     - at:
-      - 0
+      - 21.0
       - 453.5
       size:
-      - 482.0
+      - 440.0
       - 14.3
       fill: '#231f20'
     - at:
-      - 241
+      - 241.0
       - 464
       text: FILTER
-      font-size: 9
+      font-size: 8
       fill: '#d7dbdf'
       anchor: middle
     - at:
-      - 12
+      - 27.0
       - 470
       size:
-      - 458.0
+      - 428.0
       - 96.0
       fill: '#8d949c'
       pattern: vent
@@ -407,34 +594,54 @@ views:
       rel-pos: 13
       default: null
     decor:
+    - *id003
+    - *id004
+    - *id005
+    - *id006
+    - *id007
+    - *id008
+    - *id009
+    - *id010
+    - *id011
+    - *id012
+    - *id013
+    - *id014
+    - *id015
+    - *id016
+    - *id017
+    - *id018
+    - *id019
+    - *id020
+    - *id021
+    - *id022
     - at:
-      - 12
+      - 27.0
       - 6
       size:
-      - 458.0
+      - 428.0
       - 96.0
       fill: '#8d949c'
       pattern: vent
       vent: 60
     - at:
-      - 0
+      - 21.0
       - 491.4
       size:
-      - 482.0
+      - 440.0
       - 79.6
       fill: '#4a4f55'
     - at:
-      - 120
+      - 131.0
       - 536
       text: PEM A
-      font-size: 11
+      font-size: 10
       fill: '#d7dbdf'
       anchor: middle
     - at:
-      - 362
+      - 351.0
       - 536
       text: PEM B
-      font-size: 11
+      font-size: 10
       fill: '#d7dbdf'
       anchor: middle
 configurations:
