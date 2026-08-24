@@ -27,6 +27,11 @@ provenance:
     cable with MCX male snap-on plug; 75 ohm male F-connector on opposite end",
     so the jack on this card is MCX and the F-connector is at the headend end
   bore: ESTIMATED - no MCX dimension in the guide
+  comb: photograph - a C40G rear shot shows every I/O card fronted by a cable
+    comb carried on brass standoffs. Jason measured the standoffs at about 3/8in
+    (9.5mm) proud of the faceplate and the comb itself at about 1/16in (1.6mm)
+    thick. The comb is notched per port and carries the U0-U11 / D0-D5 silkscreen,
+    so the labels a user reads are on the COMB, not on the card face
 elements:
   u0: {at: [4.92, 40.36], size: [3.87, 3.14], class: cutout}
   u1: {at: [4.92, 59.7], size: [3.87, 3.14], class: cutout}
@@ -48,6 +53,13 @@ elements:
   d5: {at: [16.05, 239.1], size: [3.87, 3.14], class: cutout}
 relief:
   wall: '#4a4f55'
+  features:
+    # Brass standoffs stand 3/8in proud of the faceplate and carry the comb
+    - {node: standoff-t, out: 9.5, color: '#b08d57'}
+    - {node: standoff-m, out: 9.5, color: '#b08d57'}
+    - {node: standoff-b, out: 9.5, color: '#b08d57'}
+    # the comb itself sits on them, 1/16in thick
+    - {node: comb, out: 11.1, color: '#c8ccd0'}
 connection-points:
   mate: {at: [15.23, 172.75], direction: rear}
 skins: [default]

@@ -185,6 +185,45 @@ not a new model. The rear-edge photograph shows the shared connector set: a larg
 multi-pin block, four white contact blocks, a centre bracket, and a fine-pitch
 connector at the opposite end.
 
+## From a C40G rear photograph
+
+Things the line drawings do not show, and which the figures alone would never have
+given us. Measurements are Jason's, from the hardware.
+
+### Cable combs and standoffs
+
+Every I/O card is fronted by a **cable comb** - a notched strip carrying the
+`U0-U11` / `D0-D5` silkscreen. So **the labels a user reads are on the comb, not on
+the card face**, which changes what "the port layout" even means.
+
+| | |
+|---|---|
+| brass standoffs | ~**3/8 in / 9.5 mm** proud of the faceplate |
+| comb thickness | ~**1/16 in / 1.6 mm** |
+| fitted to | both plain and SW variants of the I/O card |
+
+### The 6+12 SW I/O is not the same shape
+
+The photo has plain 6+12 I/O in C40G slots 0 and 5 and the **6+12 SW I/O in slot 4**,
+and they are visibly different:
+
+- **slightly different overall dimensions** from the plain card
+- a section carrying the RF ports that stands **~5/8 in / 15.9 mm proud** of the
+  faceplate, ahead of the comb
+
+Which is consistent with what the guide says functionally - the SW card is switch and
+I/O combined, so it has more inside it. It should be its own component, not a skin.
+
+### Confirmations
+
+- C40G rear slots really do run **5 at the top to 0 at the bottom**, printed on the
+  chassis, with **3 and 2 in red** as the SMM switch pair.
+- `SMM-SW-BDM` A and B occupy **specific** slots on both chassis and are not
+  interchangeable - the faceplate legend says so and the photo shows them fitted that
+  way. A is C100G 6 / C40G 2, B is C100G 7 / C40G 3.
+- The PEM area is at the bottom rear with **PEM 1 / PEM 2** silkscreen, twin IEC
+  inlets with their own switches, and ground studs.
+
 ## Faceplates, read off the vector figures
 
 ### BDM / BDM2 / BDM2m (front, Fig 1-14)
