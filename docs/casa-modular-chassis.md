@@ -12,55 +12,100 @@ whose valid configurations are constrained.
 
 ## Chassis
 
+|  | C100G | C40G |
+|---|---|---|
+| slots | 0–13 (14 front + 14 rear) | 0–5 (6 front + 6 rear) |
+| SMM | front 6, 7 | front 2, 3 |
+| line cards | front 0–5, 8–13 | front 0–1, 4–5 |
+| "sides" | 0–5 left, 8–13 right | 0–1 left, 4–5 right |
+
+**Front and rear slots are associated 1:1** — *"if a specific slot in the front has a
+DQM/DCU module installed, the associated slot in the rear must have a RFD/RFU
+module."* They are not independent bays; they are two halves of one position.
+
+---
+
+## The slot map is a function of (chassis, card family, HA scheme)
+
+This is the thing that makes it harder than a fixed table, and it is where my first
+pass was wrong. Three variables move the redundancy slots:
+
+### Classic DOCSIS (DQM/DCU + RFD/RFU)
+
+Redundancy is **per side**, one protecting slot each:
+
 | | C100G | C40G |
 |---|---|---|
-| front slots | 0–13 | see note |
-| rear slots | 0–13 | varies by AC/DC and redundancy |
-| SMM slots | front 6, 7 | front (same pair) |
+| protecting slots | front/rear **5 and 8** | front/rear **1 and 4** |
+| rear occupant | LC Switch | LC Switch |
+| SMM switch | rear 6, 7 | rear 2, 3 |
 
-**Front and rear slots are associated 1:1.** The guide is explicit: *"Front and rear
-slots 0 to 13 on each side of chassis are associated with each other. This means that
-if a specific slot in the front has a DQM/DCU module installed, the associated slot in
-the rear must have a RFD/RFU module."*
+The guide states the rule plainly: *"The standby module must be installed on the same
+side of the chassis as the primary module."* On the C40G, primary QAM in slot 0 is
+protected by slot 1; primary UPS in slot 5 by slot 4. Redundancy is also limited to
+**one failure at a time** — a second concurrent failover is refused.
 
-That association is the core constraint. A front slot and its rear partner are not
-independent bays — they are two halves of one logical position.
+### BDM family (BDM / BDM2 / BDM2m + 6+12 I/O)
 
----
+Adding BDM **collapses redundancy to a single protecting slot**, and the far slot
+becomes an ordinary active one:
 
-## What goes where
-
-| slot | front | rear |
+| | C100G — "11+1" | C40G — "3+1" |
 |---|---|---|
-| 0–5, 8–13 | DOCSIS line card — **DQM** (downstream) or **DCU** (upstream), any mix | RF I/O — **RFD** or **RFU**, matching the front card |
-| 5, 8 | DOCSIS line card, redundant | **LC Switch** (optional) — enables DOCSIS N+1 |
-| 6, 7 | **SMM** | **SMM Switch** (optional) — enables SMM redundancy |
+| protecting slot | **5** | **1** |
+| freed to active | **8** | **4** |
+| rear of protecting slot | LC-BDM-SWITCH | LC-BDM-SWITCH |
+| rear of freed slot | **6+12 SW-IO / SW-IO2** | **6+12 SW-IO / SW-IO2** |
+| SMM switch | SMM-SW-BDM-A rear 6, -B rear 7 | -A rear 2, -B rear 3 |
 
-**Minimum configuration**, per the guide: one SMM, a DQM/RFD pair, a DCU/RFU pair,
-a fan tray, and a power entry module.
+**Why it collapses:** the `6+12 SW IO` is a *combined switch + I/O card*. The far slot
+no longer needs a separate LC Switch behind it, so it stops being a spare and starts
+carrying traffic. One protecting slot then covers both sides — which breaks the
+"same side" rule that governs the classic scheme.
 
-### The rear card is not always required
+C100G front 0–4 and 8–13 take BDM / BDM_204MHZ / BDM2m_204MHZ; slot 5 is the
+redundant HA slot; slot 8 is explicitly *non-redundant* under 11+1.
 
-Rear slots may be unpopulated. In the Remote PHY non-redundant Option 2, front slots
-5 and 8 and all of 6/7 rear sit empty. So "I/O card optional" is a real state, not an
-omission — the model needs an explicit *empty* occupant, distinct from *unknown*.
+### Remote PHY (CSC + OOB)
 
-### Remote PHY (CSC / OOB) combinations
+CSC 8x10G occupies front **0–5 and 8–13** on the C100G — up to twelve slots, 96 ports
+— paired with the rear **OOB 2+8 I/O** (two NDF downstream, eight NDR upstream).
+CSC 2x10G is explicitly **not** supported. Three sanctioned layouts:
 
-Front **CSC** modules pair with rear **OOB I/O** modules, and the guide gives three
-sanctioned layouts rather than a free choice:
-
-- **Non-redundant, option 1** — front 0–5 and 8–13 CSC, rear 0–4 and 9–13 OOB I/O,
-  rear 5 CSC, rear 8 OOB I/O, front 6/7 SMM, rear 6/7 unpopulated.
-- **Non-redundant, option 2** — front 5 and 8 unpopulated, rear 5 and 8 unpopulated,
+- **Non-redundant option 1** — rear 5 takes a CSC, rear 6/7 unpopulated.
+- **Non-redundant option 2** — front 5 and 8 unpopulated, rear 5 and 8 unpopulated,
   rear 6/7 either unpopulated or SMM Switch.
-- **Redundant 10+1** — rear 5 and 8 LC Switch, rear 6/7 SMM Switch, and *one* of the
-  two front redundant slots (5 or 8) deliberately left empty.
-
-That last one matters: a valid configuration can require a slot to be empty. Any
-validation we write has to express "must be empty", not just "may be empty".
+- **Redundant 10+1** — rear 5 and 8 LC Switch, rear 6/7 SMM Switch, and *one* of front
+  5 or 8 deliberately left empty.
 
 ---
+
+## Spectrum pairing, and why front↔rear is not just "type matches"
+
+The BDM pairing is by **upstream spectrum**, not merely by family:
+
+- `BDM` operates with `6+12 IO` only, 5–85 MHz
+- `BDM_204MHZ` and `BDM2m_204MHZ` operate with `6+12 IO2` exclusively, 5–204 MHz
+
+Mixing across a chassis is allowed, but the guide qualifies it twice: *"Limited to
+spectrum range supported by the I/O in service"* and *"HA redundancy limitations."*
+So a valid pairing depends on the card, its I/O partner, **and** whether that position
+participates in redundancy.
+
+---
+
+## What the contract has to express
+
+Nothing in the library does any of this yet:
+
+1. **Paired slots** — front N and rear N as one logical position, not two bays.
+2. **Empty as a real occupant** — distinct from unknown, and sometimes *required*
+   (redundant 10+1 mandates one of front 5/8 be empty).
+3. **A slot map that varies by configuration** — the same chassis has different
+   redundancy slots depending on card family and HA scheme. A static per-slot
+   `accepts` list cannot say this.
+4. **Compatibility with a reason** — "these two cards pair" is not enough; the
+   constraint is spectrum, and the error message should say so.
 
 ## Line cards are shared, the rest is not
 
