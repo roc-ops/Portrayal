@@ -11,16 +11,22 @@ provenance:
   chassis: 'datasheet - Table A-1 of the C100G Hardware Installation Guide (rev 07/08/2022):
     22.5in (571mm) H, 19in (482mm) W, 15.25in (386mm) D, 13RU'
   slots: datasheet - 14 module slots front and rear, SMM in front 6 and 7
-  slot-pitch: ESTIMATED - arithmetic, not measured. 19in face less ~21mm of ear each side
-    gives ~440 interior, over 14 slots = 31.43. The guide figures are schematic and cannot
-    be scaled - see docs/casa-modular-chassis.md
-  card-height: ESTIMATED - bracketed by two schematic readings that disagree by 10 percent
-    (461mm and 417mm), 440 is the midpoint
+  slot-pitch: drawing - measured off Figure 1-1 as a PROPORTION of the real chassis, not by
+    scaling the figure. The card region spans 76.3 percent of the 482 width, so 14 slots give
+    26.26. Doing it per axis undoes the figure aspect error, and the result cross-checks against
+    Figure 1-15 - card aspect 13.16 there against 13.26 here, 0.8 percent apart on two independent
+    drawings
+  card-height: drawing - Figure 1-1 puts the card band between the slot-number strip at 18.9
+    percent and the FILTER band at 79.4 percent of chassis height, so 108.1 to 453.5, a 345.5
+    card. An earlier 440 was wrong and made the cards overrun the space above
   configurations: datasheet - the redundancy layouts are stated per scheme in Chapter 3 (Remote
     PHY) and Chapter 4 (BDM)
   smm-slots: datasheet - front 6 and 7 take the SMM. Modelled with the 8x10GigE variant (Fig
     1-8); the guide also lists SMM 2x10GE, SMM 300G and SMM 300Gm, which are further skins
     or components when needed
+  bands: drawing - front is air baffle above (0 to 108.1), cards, then FILTER (453.5) and
+    the fan tray below. Rear is fan assemblies above (0 to 105.9), cards, then two power entry
+    modules from 491.4. Fig 1-1 and Fig 1-2
 attrs:
   role: CMTS/CCAP
   slots: 14 front + 14 rear, associated 1:1
@@ -43,11 +49,11 @@ views:
     bays:
     - id: front-0
       at:
-      - 21.0
-      - 26.0
+      - 90.9
+      - 108.1
       size:
-        w: 31.43
-        h: 440.0
+        w: 26.26
+        h: 345.5
       accepts: &id001
       - casa/bdm@1
       group: front-slots
@@ -55,66 +61,66 @@ views:
       default: null
     - id: front-1
       at:
-      - 52.43
-      - 26.0
+      - 117.16
+      - 108.1
       size:
-        w: 31.43
-        h: 440.0
+        w: 26.26
+        h: 345.5
       accepts: *id001
       group: front-slots
       rel-pos: 1
       default: null
     - id: front-2
       at:
-      - 83.86
-      - 26.0
+      - 143.42
+      - 108.1
       size:
-        w: 31.43
-        h: 440.0
+        w: 26.26
+        h: 345.5
       accepts: *id001
       group: front-slots
       rel-pos: 2
       default: null
     - id: front-3
       at:
-      - 115.29
-      - 26.0
+      - 169.68
+      - 108.1
       size:
-        w: 31.43
-        h: 440.0
+        w: 26.26
+        h: 345.5
       accepts: *id001
       group: front-slots
       rel-pos: 3
       default: null
     - id: front-4
       at:
-      - 146.71
-      - 26.0
+      - 195.94
+      - 108.1
       size:
-        w: 31.43
-        h: 440.0
+        w: 26.26
+        h: 345.5
       accepts: *id001
       group: front-slots
       rel-pos: 4
       default: null
     - id: front-5
       at:
-      - 178.14
-      - 26.0
+      - 222.2
+      - 108.1
       size:
-        w: 31.43
-        h: 440.0
+        w: 26.26
+        h: 345.5
       accepts: *id001
       group: front-slots
       rel-pos: 5
       default: null
     - id: front-6
       at:
-      - 209.58
-      - 26.0
+      - 248.46
+      - 108.1
       size:
-        w: 31.43
-        h: 440.0
+        w: 26.26
+        h: 345.5
       accepts:
       - casa/smm-8x10g@1
       group: front-slots
@@ -122,11 +128,11 @@ views:
       default: casa/smm-8x10g@1
     - id: front-7
       at:
-      - 241.01
-      - 26.0
+      - 274.72
+      - 108.1
       size:
-        w: 31.43
-        h: 440.0
+        w: 26.26
+        h: 345.5
       accepts:
       - casa/smm-8x10g@1
       group: front-slots
@@ -134,70 +140,108 @@ views:
       default: casa/smm-8x10g@1
     - id: front-8
       at:
-      - 272.43
-      - 26.0
+      - 300.98
+      - 108.1
       size:
-        w: 31.43
-        h: 440.0
+        w: 26.26
+        h: 345.5
       accepts: *id001
       group: front-slots
       rel-pos: 8
       default: null
     - id: front-9
       at:
-      - 303.86
-      - 26.0
+      - 327.24
+      - 108.1
       size:
-        w: 31.43
-        h: 440.0
+        w: 26.26
+        h: 345.5
       accepts: *id001
       group: front-slots
       rel-pos: 9
       default: null
     - id: front-10
       at:
-      - 335.29
-      - 26.0
+      - 353.5
+      - 108.1
       size:
-        w: 31.43
-        h: 440.0
+        w: 26.26
+        h: 345.5
       accepts: *id001
       group: front-slots
       rel-pos: 10
       default: null
     - id: front-11
       at:
-      - 366.71
-      - 26.0
+      - 379.76
+      - 108.1
       size:
-        w: 31.43
-        h: 440.0
+        w: 26.26
+        h: 345.5
       accepts: *id001
       group: front-slots
       rel-pos: 11
       default: null
     - id: front-12
       at:
-      - 398.14
-      - 26.0
+      - 406.02
+      - 108.1
       size:
-        w: 31.43
-        h: 440.0
+        w: 26.26
+        h: 345.5
       accepts: *id001
       group: front-slots
       rel-pos: 12
       default: null
     - id: front-13
       at:
-      - 429.57
-      - 26.0
+      - 432.28
+      - 108.1
       size:
-        w: 31.43
-        h: 440.0
+        w: 26.26
+        h: 345.5
       accepts: *id001
       group: front-slots
       rel-pos: 13
       default: null
+    decor:
+    - at:
+      - 0
+      - 0
+      size:
+      - 482.0
+      - 108.1
+      fill: '#4a4f55'
+    - at:
+      - 150
+      - 44
+      text: C100G
+      font-size: 22
+      fill: '#d7dbdf'
+      anchor: middle
+    - at:
+      - 0
+      - 453.5
+      size:
+      - 482.0
+      - 14.3
+      fill: '#231f20'
+    - at:
+      - 241
+      - 464
+      text: FILTER
+      font-size: 9
+      fill: '#d7dbdf'
+      anchor: middle
+    - at:
+      - 12
+      - 470
+      size:
+      - 458.0
+      - 96.0
+      fill: '#8d949c'
+      pattern: vent
+      vent: 60
   rear:
     size:
       w: 482.0
@@ -205,11 +249,11 @@ views:
     bays:
     - id: rear-0
       at:
-      - 21.0
-      - 26.0
+      - 90.9
+      - 108.1
       size:
-        w: 31.43
-        h: 440.0
+        w: 26.26
+        h: 345.5
       accepts: &id002
       - casa/io-6p12@1
       group: rear-slots
@@ -217,147 +261,178 @@ views:
       default: null
     - id: rear-1
       at:
-      - 52.43
-      - 26.0
+      - 117.16
+      - 108.1
       size:
-        w: 31.43
-        h: 440.0
+        w: 26.26
+        h: 345.5
       accepts: *id002
       group: rear-slots
       rel-pos: 1
       default: null
     - id: rear-2
       at:
-      - 83.86
-      - 26.0
+      - 143.42
+      - 108.1
       size:
-        w: 31.43
-        h: 440.0
+        w: 26.26
+        h: 345.5
       accepts: *id002
       group: rear-slots
       rel-pos: 2
       default: null
     - id: rear-3
       at:
-      - 115.29
-      - 26.0
+      - 169.68
+      - 108.1
       size:
-        w: 31.43
-        h: 440.0
+        w: 26.26
+        h: 345.5
       accepts: *id002
       group: rear-slots
       rel-pos: 3
       default: null
     - id: rear-4
       at:
-      - 146.71
-      - 26.0
+      - 195.94
+      - 108.1
       size:
-        w: 31.43
-        h: 440.0
+        w: 26.26
+        h: 345.5
       accepts: *id002
       group: rear-slots
       rel-pos: 4
       default: null
     - id: rear-5
       at:
-      - 178.14
-      - 26.0
+      - 222.2
+      - 108.1
       size:
-        w: 31.43
-        h: 440.0
+        w: 26.26
+        h: 345.5
       accepts: *id002
       group: rear-slots
       rel-pos: 5
       default: null
     - id: rear-6
       at:
-      - 209.57
-      - 26.0
+      - 248.46
+      - 108.1
       size:
-        w: 31.43
-        h: 440.0
+        w: 26.26
+        h: 345.5
       accepts: *id002
       group: rear-slots
       rel-pos: 6
       default: null
     - id: rear-7
       at:
-      - 241.0
-      - 26.0
+      - 274.72
+      - 108.1
       size:
-        w: 31.43
-        h: 440.0
+        w: 26.26
+        h: 345.5
       accepts: *id002
       group: rear-slots
       rel-pos: 7
       default: null
     - id: rear-8
       at:
-      - 272.43
-      - 26.0
+      - 300.98
+      - 108.1
       size:
-        w: 31.43
-        h: 440.0
+        w: 26.26
+        h: 345.5
       accepts: *id002
       group: rear-slots
       rel-pos: 8
       default: null
     - id: rear-9
       at:
-      - 303.86
-      - 26.0
+      - 327.24
+      - 108.1
       size:
-        w: 31.43
-        h: 440.0
+        w: 26.26
+        h: 345.5
       accepts: *id002
       group: rear-slots
       rel-pos: 9
       default: null
     - id: rear-10
       at:
-      - 335.29
-      - 26.0
+      - 353.5
+      - 108.1
       size:
-        w: 31.43
-        h: 440.0
+        w: 26.26
+        h: 345.5
       accepts: *id002
       group: rear-slots
       rel-pos: 10
       default: null
     - id: rear-11
       at:
-      - 366.71
-      - 26.0
+      - 379.76
+      - 108.1
       size:
-        w: 31.43
-        h: 440.0
+        w: 26.26
+        h: 345.5
       accepts: *id002
       group: rear-slots
       rel-pos: 11
       default: null
     - id: rear-12
       at:
-      - 398.14
-      - 26.0
+      - 406.02
+      - 108.1
       size:
-        w: 31.43
-        h: 440.0
+        w: 26.26
+        h: 345.5
       accepts: *id002
       group: rear-slots
       rel-pos: 12
       default: null
     - id: rear-13
       at:
-      - 429.57
-      - 26.0
+      - 432.28
+      - 108.1
       size:
-        w: 31.43
-        h: 440.0
+        w: 26.26
+        h: 345.5
       accepts: *id002
       group: rear-slots
       rel-pos: 13
       default: null
+    decor:
+    - at:
+      - 12
+      - 6
+      size:
+      - 458.0
+      - 96.0
+      fill: '#8d949c'
+      pattern: vent
+      vent: 60
+    - at:
+      - 0
+      - 491.4
+      size:
+      - 482.0
+      - 79.6
+      fill: '#4a4f55'
+    - at:
+      - 120
+      - 536
+      text: PEM A
+      font-size: 11
+      fill: '#d7dbdf'
+      anchor: middle
+    - at:
+      - 362
+      - 536
+      text: PEM B
+      font-size: 11
+      fill: '#d7dbdf'
+      anchor: middle
 configurations:
   bdm2m-11plus1:
     description: 'BDM2m "11+1" - the vendor''s name for it. Redundancy collapses to a single
