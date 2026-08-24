@@ -107,6 +107,35 @@ Nothing in the library does any of this yet:
 4. **Compatibility with a reason** — "these two cards pair" is not enough; the
    constraint is spectrum, and the error message should say so.
 
+## Orientation: the same card, rotated
+
+**The C100G takes line cards vertically; the C40G takes the same cards horizontally.**
+Confirmed against Fig 1-1 in each guide - the C40G front view shows cards stacked flat,
+with their silkscreen labels rotated, which is exactly what a card designed vertical
+looks like laid on its side.
+
+| | C100G | C40G |
+|---|---|---|
+| card orientation | vertical | horizontal |
+| slot order | 0 at left → 13 at right | **5 at top → 0 at bottom** |
+| SMM position | 6, 7 (centre pair) | 2, 3 (centre pair) |
+| pitch runs | across the 482 face | up the 265.9 height |
+
+That C40G numbering is inverted relative to reading order - slot 0 is the **bottom**
+card. Easy to get backwards in a manifest.
+
+The arithmetic holds for one card serving both. Taking roughly 440 long by 31.4 pitch:
+14 x 31.4 = 440 across the C100G face, and 6 x 31.4 = 188 of the C40G's 265.9 height,
+leaving ~78 mm for the fan trays and cable management visible along the bottom of the
+C40G front view.
+
+**This is what `rotate` in a placement is for.** The line card is modelled once and
+placed at rotate 0 in the C100G and rotate 90 in the C40G. Lint L13 is already
+rotate-aware, so overlap checking survives it.
+
+What does *not* transfer: PEM and fan modules differ between the chassis, so those get
+their own components per chassis rather than the shared-body treatment.
+
 ## Dimensions, and how the figures get scaled
 
 From Table A-1 in each guide:
