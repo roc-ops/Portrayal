@@ -515,8 +515,17 @@ def main():
                  "chassis": {"w": ch.get("width"), "h": ch.get("height"), "d": ch.get("depth")},
                  "default": default_cfg,
                  "configs": [{"name": n, "description": c.get("description", ""),
-                              "part-numbers": c.get("part-numbers") or {}}
-                             for n, c in sorted(configs.items())]}
+                              "part-numbers": c.get("part-numbers") or {},
+                              "bays": c.get("bays") or {}}
+                             for n, c in sorted(configs.items())],
+                 # what each bay will take, so a viewer can offer the swap rather
+                 # than guessing from component class
+                 "bays": {v: [{"id": b["id"], "accepts": b.get("accepts") or [],
+                               "default": b.get("default"), "group": b.get("group"),
+                               "rel-pos": b.get("rel-pos"),
+                               "at": b["at"], "size": b["size"]}
+                              for b in (device["views"][v].get("bays") or [])]
+                          for v in device["views"]}}
     (outdir / f"{device['name']}.configs.json").write_text(json.dumps(cfg_index, indent=1, sort_keys=True))
     print(f"wrote {device['name']}.configs.json")
 
