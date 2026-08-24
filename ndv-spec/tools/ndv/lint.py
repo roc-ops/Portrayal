@@ -52,7 +52,15 @@ STANDARDS = {}
 
 
 def lint_component(path, validator):
-    data = yaml.safe_load(path.read_text())
+    # same guard as lint_device - a component can break on a colon in a plain
+    # scalar just as easily, and an unhandled ScannerError is a traceback rather
+    # than a message that tells you which line to look at
+    try:
+        data = yaml.safe_load(path.read_text())
+    except yaml.YAMLError as exc:
+        err(path, "L0", f"will not parse: {str(exc).splitlines()[0]}")
+        scalar_colon_hint(path, exc)
+        return None
     for e in validator.iter_errors(data):
         err(path, "L1", f"{'/'.join(str(p) for p in e.path)}: {e.message}")
         return data
@@ -346,9 +354,12 @@ def main():
         root = Path(root)
         for f in sorted(root.glob("components/**/contract.yaml")):
             d = lint_component(f, comp_v)
-            _skin_checks(f, d)
-            lint_component_parts(f, d, args.library)
-            lint_component_mating(f, d, args.library)
+            # a file that would not parse has already been reported; running the
+            # rest against None just buries that message under a traceback
+            if d is not None:
+                _skin_checks(f, d)
+                lint_component_parts(f, d, args.library)
+                lint_component_mating(f, d, args.library)
             n += 1
         for f in sorted(root.glob("devices/**/device.yaml")):
             lint_device(f, dev_v, args.library); n += 1
