@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Portrayal — viewer3d harness</title>
+<style>
+  body { font-family: system-ui, sans-serif; background: #16181b; color: #d7dbdf; margin: 0;
+         overflow: hidden; display: flex; flex-direction: column; height: 100vh; }
+  #bar { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;
+         padding: 0.5rem 0.7rem; background: #1b1e22; border-bottom: 1px solid #2a2e33; }
+  select, button { background: #2b2f33; color: #d7dbdf; border: 1px solid #4a4f55;
+                   border-radius: 6px; padding: 0.25rem 0.55rem; font-size: 0.8rem; }
+  button { cursor: pointer; }
+  button:hover { background: #3a3f44; }
+  #stage { flex: 1; position: relative; min-height: 0; }
+  #hud { position: absolute; bottom: 0.8rem; left: 0.8rem; background: #0c0e10cc;
+         border: 1px solid #33373c; border-radius: 6px; padding: 0.4rem 0.7rem;
+         font-size: 0.8rem; min-height: 1.2rem; pointer-events: none; }
+  #hud .path { color: #f59e0b; font-family: ui-monospace, monospace; }
+  #gfx { position: absolute; bottom: 0.8rem; right: 0.8rem; background: #0c0e10cc;
+         border: 1px solid #33373c; border-radius: 4px; padding: 0.3rem 0.5rem;
+         font: 11px ui-monospace, monospace; color: #8d939a; pointer-events: none; }
+  #gfx.warn { color: #f59e0b; border-color: #7a5a12; }
+  .sep { width: 1px; align-self: stretch; background: #33373c; margin: 0 0.2rem; }
+  /* the pixel-diff run mounts the viewer alone, at the exact size the frozen
+     page gave its canvas, so the two captures are comparable */
+  body.bare #bar, body.bare #hud, body.bare #gfx { display: none; }
+</style>
+<script type="importmap">
+{ "imports": {
+    "three": "https://unpkg.com/three@0.161.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.161.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div id="bar">
+  <strong style="font-size:0.9rem">viewer3d harness</strong>
+  <select id="dev"></select>
+  <select id="cfg"></select>
+  <span class="sep"></span>
+  <span id="frus" style="display:flex;gap:0.4rem"></span>
+  <span class="sep"></span>
+  <select id="sel"><option value="">select…</option></select>
+  <button id="clear">clear selection</button>
+  <span class="sep"></span>
+  <button id="glb">GLB</button>
+  <button id="usdz">USDZ</button>
+  <button id="resize">resize()</button>
+  <button id="dispose">dispose()</button>
+  <button id="remount">mount</button>
+</div>
+<div id="stage"></div>
+<div id="hud">loading…</div>
+<div id="gfx">gfx…</div>
+
+<script type="module">
+import { createViewer } from './viewer3d.js';
+
+const P = new URLSearchParams(location.search);
+if (P.get('bare')) document.body.classList.add('bare');
+const $ = id => document.getElementById(id);
+const hud = (html) => { $('hud').innerHTML = html; };
+
+let viewer = null, unsub = [];
+
+async function devices() {
+  const d = await (await fetch('../dist/devices.json', {cache: 'no-store'})).json();
+  return d.devices.map(x => x.name).sort();
+}
+
+function paintFrus() {
+  const wrap = $('frus');
+  wrap.textContent = '';
+  for (const f of viewer.frus()) {
+    const b = document.createElement('button');
+    b.textContent = `${f.icon} ${f.path}`;
+    b.title = `${f.label} — ${Math.round(f.travel)}mm travel${f.captive ? ', captive' : ''}`;
+    b.onclick = () => {
+      const st = viewer.toggleFru(f.path);
+      b.textContent = `${st.icon} ${st.path}`;
+      hud(st.text);
+    };
+    wrap.appendChild(b);
+  }
+}
+
+function paintPaths() {
+  const sel = $('sel');
+  sel.textContent = '';
+  sel.appendChild(new Option('select…', ''));
+  for (const p of viewer.paths()) sel.appendChild(new Option(`${p.view}/${p.path}`, p.path));
+}
+
+function mount() {
+  if (viewer) return;
+  viewer = createViewer($('stage'), {dist: '../dist/'});
+  globalThis.viewer = viewer;
+  // the pose-diff harness drives the camera through the same handle the frozen
+  // page published, so one script can run against both
+  globalThis.__portrayal3d = viewer.three;
+  globalThis.__cam = viewer.three.camera;
+  globalThis.__scene = viewer.three.scene;
+  globalThis.__controls = viewer.three.controls;
+  const caps = viewer.capabilities();
+  $('gfx').textContent = caps.text;
+  $('gfx').classList.toggle('warn', caps.warn);
+  unsub = [
+    viewer.on('hover', (path, info) => {
+      if (!info) return hud('');
+      hud(path ? `<span class="path">${info.view}/${path}</span> ${info.cls}${info.model ? ' · ' + info.model : ''}`
+                : `(${info.view} face)`);
+    }),
+    viewer.on('select', path => {
+      $('sel').value = path || '';
+      if (path) { viewer.select(path); hud(`selected <span class="path">${path}</span>`); }
+      else { viewer.select(null); hud('selection cleared'); }
+    }),
+    viewer.on('lod', s => { $('gfx').textContent = caps.text + (s ? ` · ${s}` : ''); }),
+  ];
+}
+
+function unmount() {
+  if (!viewer) return;
+  unsub.forEach(f => f());
+  viewer.dispose();
+  viewer = globalThis.viewer = null;
+  $('frus').textContent = '';
+  hud('disposed — press mount to build a new one');
+}
+
+async function loadCurrent() {
+  hud(`loading ${$('dev').value} · ${$('cfg').value}…`);
+  const t0 = performance.now();
+  await viewer.load({device: $('dev').value, config: $('cfg').value || undefined});
+  const dt = Math.round(performance.now() - t0);
+  const cfgs = viewer.info.configs;
+  if ($('cfg').options.length !== cfgs.length || $('cfg').dataset.dev !== $('dev').value) {
+    $('cfg').textContent = '';
+    cfgs.forEach(c => $('cfg').appendChild(new Option(c, c)));
+    $('cfg').dataset.dev = $('dev').value;
+  }
+  $('cfg').value = viewer.info.config;
+  paintFrus();
+  paintPaths();
+  hud(`${viewer.info.model || $('dev').value} · ${viewer.info.config} — loaded in ${dt}ms`);
+}
+
+mount();
+const devs = await devices();
+devs.forEach(d => $('dev').appendChild(new Option(d, d)));
+$('dev').value = P.get('device') && devs.includes(P.get('device')) ? P.get('device') : devs[0];
+if (P.get('config')) $('cfg').appendChild(new Option(P.get('config'), P.get('config')));
+$('cfg').value = P.get('config') || '';
+await loadCurrent();
+
+$('dev').onchange = async () => { $('cfg').value = ''; await loadCurrent(); };
+$('cfg').onchange = loadCurrent;
+$('sel').onchange = () => viewer.select($('sel').value || null);
+$('clear').onclick = () => { viewer.select(null); $('sel').value = ''; hud('selection cleared'); };
+$('glb').onclick = async () => { hud('building GLB…'); const r = await viewer.download('glb'); hud(`${r.name} — ${Math.round(r.size / 1024)} KB`); };
+$('usdz').onclick = async () => { hud('building USDZ…'); const r = await viewer.download('usdz'); hud(`${r.name} — ${Math.round(r.size / 1024)} KB`); };
+$('resize').onclick = () => { viewer.resize(); hud('resize() called'); };
+$('dispose').onclick = unmount;
+$('remount').onclick = async () => { mount(); await loadCurrent(); };
+</script>
+</body>
+</html>
