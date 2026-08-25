@@ -227,6 +227,34 @@ export function createShell(opts = {}) {
   // A row reads "id — model". The id is the thing you already know (port-7,
   // front-6); the model is the thing you are checking. Model alone gave 54 rows
   // all reading "SFP module", which is why this used to need clicking to use.
+  // A port row has to say what the PORT is, not what its cage is. SFP, SFP+ and
+  // SFP28 share one cage component because the geometry is genuinely identical -
+  // SFF-8433 says so in as many words, "applies to SFP28 too, same cage
+  // mechanicals" - so the component name cannot tell you which of the three you
+  // are looking at. Twenty-four SFP28 ports were reading "port-4 - sfp-module":
+  // wrong, and misleading twice over, because "module" there means one position
+  // in a ganged block and every reader hears "transceiver". The port already
+  // declares itself in data-media/data-speed; read that.
+  //
+  // Falling back to the component name when a port declares no media is
+  // deliberate. It leaves the old label visible on exactly the ports that are
+  // genuinely undeclared, which is how you find them.
+  const MEDIA = {
+    'sfp-plus': 'SFP+', 'qsfp-dd': 'QSFP-DD', 'rj45-serial': 'RJ45 serial',
+    'coax-sma': 'SMA', 'coax-smb': 'SMB', 'micro-usb-b': 'micro-USB B',
+    'usb-a': 'USB-A', 'usb-c': 'USB-C', 'sc-apc': 'SC/APC', 'fiber': 'fibre',
+    'coax': 'coax', 'ac': 'AC',
+  };
+  const SPEED = {'1000base-t': '1000BASE-T', '10g-pon': '10G-PON', 'usb3': 'USB 3'};
+  const mediaLabel = m => MEDIA[m] || m.toUpperCase();
+  const speedLabel = s => SPEED[s] || s.toUpperCase();
+  function portLabel(e) {
+    const m = e.dataset.media;
+    if (!m) return null;
+    return e.dataset.speed ? `${mediaLabel(m)} ${speedLabel(e.dataset.speed)}`
+                           : mediaLabel(m);
+  }
+
   function labelFor(n) {
     const e = n.el;
     const own = n.path.split('/').pop();
@@ -235,6 +263,8 @@ export function createShell(opts = {}) {
       const m = occ && modelOf(occ);
       return m ? `${own} — ${m}` : own;
     }
+    const port = portLabel(e);
+    if (port) return `${own} — ${port}`;
     const model = modelOf(e);
     if (model && model !== own) return `${own} — ${model}`;
     const title = e.querySelector(':scope > title');
