@@ -36,8 +36,19 @@ export const deviceLabel = d =>
 // select is worse than a flat one - more depth to navigate, no less to read - so
 // the filter is not a refinement of the grouping, it is the other way in, and it
 // has to be built at the same time or it never gets built.
-const haystack = d => [d.manufacturer, d.model, d.name, d.portfolio?.series,
-                       d.portfolio?.family, d.portfolio?.line]
+//
+// The names alone are not enough, and the failures were measured: "400g",
+// "qumran" and "roadm" all found nothing while devices with 400G ports, a
+// Qumran ASIC and a ROADM line unit sat in the list. The description carries all
+// three. `attrs` would be better still - that is where switch-silicon and
+// capacity actually live - but attrs are in <device>.configs.json and not in
+// devices.json, and fetching thirteen files to build an index is not a trade
+// that survives three hundred. So the index reads whatever devices.json offers:
+// `search` or `attrs` if the build ever carries one, and nothing breaks until
+// then.
+const haystack = d => [d.manufacturer, d.model, d.name, d.description,
+                       d.portfolio?.series, d.portfolio?.family, d.portfolio?.line,
+                       d.search, d.attrs && Object.values(d.attrs).join(' ')]
   .filter(Boolean).join(' ').toLowerCase();
 
 const cmp = (a, b) => a.localeCompare(b, undefined, {numeric: true});
@@ -73,8 +84,8 @@ export function createDevicePicker({mount, devices, value, onchange}) {
   root.className = 'devpick';
   root.innerHTML =
     `<label>filter <input type="search" spellcheck="false"
-        placeholder="AGR, 400G…"
-        title="Matches manufacturer, model, series and family. Enter picks the first match."></label>`
+        placeholder="AGR, 400G, ROADM…"
+        title="Matches manufacturer, model, series, family and description. Enter picks the first match."></label>`
   + `<label>vendor <select class="ven"></select></label>`
   + `<label>device <select class="dev"></select></label>`;
   const q = root.querySelector('input');
@@ -98,22 +109,28 @@ export function createDevicePicker({mount, devices, value, onchange}) {
 
   function paint() {
     const hits = matches();
+    const hit = new Set(hits);
     const cur = byName(current);
-    // The selected device always stays reachable: a filter that hides what you
-    // are looking at, and so silently disagrees with the drawing on screen, is
-    // worse than one that shows a row it did not match.
+    // The selected device stays reachable whatever the filter says, because a
+    // menu that disagrees with the drawing on screen is worse than one extra
+    // row - but it is labelled as the selection rather than left looking like a
+    // match, or "no device matched" reads as "one device matched".
+    const kept = cur && !hit.has(cur);
     const vendors = [...new Set(hits.map(d => d.manufacturer)
                                     .concat(cur ? [cur.manufacturer] : []))].sort(cmp);
-    if (!vendors.includes(vendor))
-      vendor = vendors.includes(cur?.manufacturer) ? cur.manufacturer : vendors[0] || '';
+    // Filtering to one vendor and leaving the menu on another is the whole
+    // interaction failing silently: the device list goes empty and nothing says
+    // why. The chosen vendor survives only while it still has matches.
+    const live = new Set(hits.map(d => d.manufacturer));
+    if (!vendors.includes(vendor) || (live.size && !live.has(vendor)))
+      vendor = live.has(cur?.manufacturer) ? cur.manufacturer
+             : [...live].sort(cmp)[0] || cur?.manufacturer || vendors[0] || '';
 
     ven.innerHTML = vendors.map(v =>
       `<option value="${v.replace(/"/g, '&quot;')}">${v}</option>`).join('');
     ven.value = vendor;
 
-    const hit = new Set(hits);
-    const list = all.filter(d => d.manufacturer === vendor && (hit.has(d) || d === cur));
-
+    const list = all.filter(d => d.manufacturer === vendor && hit.has(d));
     const groups = new Map();
     for (const d of list) {
       const g = groupLabel(d.portfolio);
@@ -128,9 +145,19 @@ export function createDevicePicker({mount, devices, value, onchange}) {
     for (const g of [...groups.keys()].filter(Boolean).sort(cmp))
       html += `<optgroup label="${g.replace(/"/g, '&quot;')}">`
             + groups.get(g).map(opt).join('') + `</optgroup>`;
+    if (kept && cur.manufacturer === vendor)
+      html = `<optgroup label="current selection">${opt(cur)}</optgroup>` + html;
+    // Typing can move the vendor menu off the device that is actually on the
+    // stage. Nothing is loaded until the user asks for it, so the menu says so
+    // rather than naming a device it has not opened.
+    const away = cur && cur.manufacturer !== vendor;
+    if (away) html = `<option value="">${list.length} match${list.length === 1 ? '' : 'es'}`
+                   + ` \u2014 pick one</option>` + html;
     dev.innerHTML = html;
-    dev.value = list.some(d => d.name === current) ? current : (list[0]?.name || '');
-    dev.disabled = !list.length;
+    dev.value = away ? ''
+              : ([...list, ...(kept ? [cur] : [])].some(d => d.name === current)
+                 ? current : (list[0]?.name || ''));
+    dev.disabled = !list.length && !kept;
 
     root.querySelector('.none')?.remove();
     if (!hits.length) root.insertAdjacentHTML('beforeend',
@@ -154,9 +181,17 @@ export function createDevicePicker({mount, devices, value, onchange}) {
     const first = matches().filter(d => d.manufacturer === vendor)[0] || matches()[0];
     if (first) pick(first.name);
   };
-  // Changing vendor lands on that vendor's first device rather than leaving the
-  // two selects describing different boxes.
-  ven.onchange = () => { vendor = ven.value; paint(); pick(dev.value); };
+  // Asking for a vendor by hand is a request to look at that vendor, so it lands
+  // on its first device rather than leaving the two selects describing different
+  // boxes. Typing does not: the filter narrows what is on offer, and nothing is
+  // opened until you choose it.
+  const firstIn = v => matches().find(d => d.manufacturer === v);
+  ven.onchange = () => {
+    vendor = ven.value;
+    const first = firstIn(vendor);
+    paint();
+    if (first) pick(first.name);
+  };
   dev.onchange = () => pick(dev.value);
 
   paint();
