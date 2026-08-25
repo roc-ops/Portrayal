@@ -34,6 +34,9 @@ SEGMENT = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 # name is one half of a CSS class - `state-<name>` is what the compiled drawing
 # paints on - so anything that is not a token is a class nothing styles.
 STATE_TOKEN = re.compile(r"^[a-z0-9-]+$")
+# Solid, on and off, or flashing between two colours. Rate is not here yet -
+# see the note on `behavior` in the schema.
+STATE_BEHAVIORS = {"solid", "blinking", "alternating"}
 ERRORS = []
 WARNINGS = []
 
@@ -60,6 +63,7 @@ AMBIGUOUS_MEDIA = {"sfp", "qsfp"}
 
 _CLASS_CACHE = {}
 _ATTRS_CACHE = {}
+_ELEMENTS_CACHE = {}
 _SIZE_CACHE = {}
 
 
@@ -114,7 +118,22 @@ def contract_attrs(ref, lib_roots):
     return attrs
 
 
-def check_states(path, where, states, attrs):
+def contract_elements(ref, lib_roots):
+    """The element ids a component contracts, for L20's per-element states form."""
+    if ref in _ELEMENTS_CACHE:
+        return _ELEMENTS_CACHE[ref]
+    nsname, major = ref.rsplit("@", 1)
+    els = set()
+    for r in lib_roots:
+        f = Path(r) / "components" / nsname / f"v{major}" / "contract.yaml"
+        if f.exists():
+            els = set(((yaml.safe_load(f.read_text()) or {}).get("elements") or {}).keys())
+            break
+    _ELEMENTS_CACHE[ref] = els
+    return els
+
+
+def check_states(path, where, states, attrs, elements=None):
     """L20 - a state name is a token, and prose is not a state list.
 
     `states: 'Blue = 100G, Green = 40G'` is a real fact, correctly transcribed
@@ -129,14 +148,37 @@ def check_states(path, where, states, attrs):
     same wrong place - the structured field is `states:` on the placement or its
     group, with the sentence beside it in `description:`.
 
-    Warning rather than error while the portfolio catches up, per L18/L19.
+    Warning rather than error while the portfolio catches up, per L18/L19. The
+    two checks below it are errors instead, and can be: `behavior` and the
+    per-element mapping are new spellings, so nothing in the portfolio predates
+    them and no sweep is owed.
     """
+    if isinstance(states, dict):
+        for el, sts in states.items():
+            if elements is not None and el not in elements:
+                err(path, "L20", f"{where}: states names element {el!r}, which the "
+                                 f"component does not contract "
+                                 f"(has: {', '.join(sorted(elements)) or 'none'})")
+            check_states(path, f"{where}/{el}", sts, None)
+        states = []
     for st in states or []:
         name = st if isinstance(st, str) else (st or {}).get("name")
         if not isinstance(name, str) or not STATE_TOKEN.match(name):
             warn(path, "L20", f"{where}: state name {name!r} is not a token "
                               f"(^[a-z0-9-]+$). `state-<name>` is a CSS class; put "
                               f"the sentence in description: instead")
+        # A state is colour AND behaviour, and `alternating` is the one behaviour
+        # that cannot be drawn from a single colour - it flashes between two.
+        beh = st.get("behavior") if isinstance(st, dict) else None
+        if beh is None:
+            continue
+        mode = beh if isinstance(beh, str) else beh.get("mode")
+        if mode not in STATE_BEHAVIORS:
+            err(path, "L20", f"{where}/{name}: behavior {mode!r} is not one of "
+                             f"{', '.join(sorted(STATE_BEHAVIORS))}")
+        if mode == "alternating" and not (isinstance(beh, dict) and beh.get("color")):
+            err(path, "L20", f"{where}/{name}: behavior alternating flashes between "
+                             f"two colours - give the second as behavior.color")
     prose = (attrs or {}).get("states")
     if prose is not None:
         warn(path, "L20", f"{where}: attrs.states = {str(prose)[:60]!r} - state "
@@ -544,7 +586,8 @@ def lint_device(path, validator, lib_roots):
             # it: led-p0-a next to port-0 is a convention a reader infers and a
             # tool cannot. Warning, not error - `for:` postdates most of the
             # portfolio and 1101 of 1159 placements predate it.
-            check_states(path, f"{vname}/{p['id']}", p.get("states"), p.get("attrs"))
+            check_states(path, f"{vname}/{p['id']}", p.get("states"), p.get("attrs"),
+                         contract_elements(p["ref"], lib_roots))
             if cls in ("led", "button", "display") and not p.get("for"):
                 warn(path, "L19", f"{vname}/{p['id']}: {cls} declares no 'for:', so "
                                   "nothing knows what it indicates")

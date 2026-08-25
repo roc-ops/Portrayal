@@ -30,6 +30,23 @@ STATE_CSS = """
     .state-fail  { --led-color: #ef4444; }
     .state-locate { --led-color: #3b82f6; }
     .state-absent { opacity: 0.35; }
+    /* A state is a colour AND a behaviour. Solid and blinking of the same colour
+       are different facts on real hardware: on the S9510-28DC a solid green PWR
+       is "system power good" and a blinking green PWR is "power good but BMC
+       power fail". A blinking state that renders solid is the same failure as a
+       state class nothing paints - it looks modelled and is not.
+       blink animates opacity rather than fill, because each skin carries its own
+       unlit colour in the fill fallback and a keyframe cannot name it. alternate
+       animates fill, because two colours is the whole point, and takes its first
+       value from the element's own fill. */
+    @keyframes portrayal-blink {
+      0%, 49.9% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+    @keyframes portrayal-alternate {
+      0%, 49.9% { fill: var(--led-color, #3a3f44); }
+      50%, 100% { fill: var(--led-color-alt, #3a3f44); }
+    }
     .portrayal-highlight { filter: drop-shadow(0 0 1.2px #f59e0b) drop-shadow(0 0 0.5px #f59e0b); }
     .portrayal-dim { opacity: 0.25; }
     [data-class='region'].portrayal-highlight { stroke: #f59e0b; stroke-width: 0.7; filter: none; }
@@ -72,9 +89,44 @@ def state_names(states):
     return [st if isinstance(st, str) else st["name"] for st in states or []]
 
 
-def state_colors(states):
-    return {st["name"]: st["color"] for st in states or []
-            if isinstance(st, dict) and st.get("color")}
+# How a lamp is lit, as opposed to what colour it is lit. `blinking` is one
+# colour on and off; `alternating` flashes between two, which the S9510-28DC PSU
+# does to mean "working condition not satisfied". Rate is deliberately NOT here
+# yet - some hardware distinguishes a slow blink from a fast one, and the object
+# form of `behavior` exists from day one so that adding `rate:` is one more
+# property rather than the coercion `legend: true` needed a v2 to undo.
+BEHAVIORS = {"solid", "blinking", "alternating"}
+BLINK_KEYFRAMES = {"blinking": "portrayal-blink", "alternating": "portrayal-alternate"}
+
+
+def state_style(st):
+    """(color, alt-color, mode) for one state, or None if it needs no CSS.
+
+    A bare token needs none: it names a state with no declared presentation, and
+    whatever the base stylesheet says about `state-<name>` still applies.
+    """
+    if not isinstance(st, dict):
+        return None
+    beh = st.get("behavior")
+    mode = beh if isinstance(beh, str) else (beh or {}).get("mode", "solid")
+    alt = None if isinstance(beh, str) else (beh or {}).get("color")
+    color = st.get("color")
+    if not color and mode == "solid":
+        return None
+    return (color, alt, mode)
+
+
+def state_rule(sel_color, sel_anim, color, alt, mode):
+    """The CSS for one state at one scope: what colour, and how it is lit."""
+    out = ""
+    decls = [d for d in (f"--led-color: {color};" if color else "",
+                         f"--led-color-alt: {alt};" if alt else "") if d]
+    if decls:
+        out += f"\n    {sel_color} {{ {' '.join(decls)} }}"
+    if mode in BLINK_KEYFRAMES:
+        out += (f"\n    {sel_anim} {{ animation: {BLINK_KEYFRAMES[mode]} "
+                f"1s linear infinite; }}")
+    return out
 
 
 def apply_states(g, states, palette):
@@ -96,15 +148,36 @@ def apply_states(g, states, palette):
     Colours are collected per instance id rather than per component ref: two
     placements of the SAME component now legitimately paint different colours for
     different names, which a `g[data-ref^=...]` rule cannot express.
+
+    A mapping instead of a list addresses one lamp at a time, because one
+    component can carry two lamps that do NOT share a vocabulary: the S9510-28DC
+    management jack is one common/rj45-port whose left lamp is green for a 1G
+    link and whose right lamp is amber for 10M/100M. One list over both would
+    have to invent a vocabulary neither lamp has.
     """
-    names = " ".join(state_names(states))
-    g.set("data-states", names)
+    def lamp(node, sts):
+        node.set("data-states", " ".join(state_names(sts)))
+        if palette is None:
+            return
+        for st in sts or []:
+            style = state_style(st)
+            if style:
+                name = st if isinstance(st, str) else st["name"]
+                palette.setdefault((name, *style), []).append(
+                    (node.get("id"), node is not g))
+
+    if isinstance(states, dict):
+        for el, sts in states.items():
+            want = f"{g.get('id')}--{el}"
+            for node in g.iter():
+                if node.get("id") == want:
+                    lamp(node, sts)
+                    break
+        return
+    lamp(g, states)
     for node in g.iter():
         if node is not g and node.get("data-class") == "led":
-            node.set("data-states", names)
-    if palette is not None:
-        for name, color in state_colors(states).items():
-            palette.setdefault((name, color), []).append(g.get("id"))
+            node.set("data-states", g.get("data-states"))
 
 
 def rewrite_ids(el, prefix, contract, path_prefix, skip=None):
@@ -126,6 +199,8 @@ def rewrite_ids(el, prefix, contract, path_prefix, skip=None):
                 node.set("data-class", spec["class"])
             if spec.get("states"):
                 node.set("data-states", " ".join(state_names(spec["states"])))
+            if spec.get("description"):
+                node.set("data-description", spec["description"])
     for node in el.iter():
         for attr, val in list(node.attrib.items()):
             if "url(#" in val:
@@ -142,8 +217,10 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     if palette is not None:
         comp = ref.split("@")[0]
         for spec in (contract.get("elements") or {}).values():
-            for name, color in state_colors(spec.get("states")).items():
-                palette[(comp, name)] = color
+            for st in spec.get("states") or []:
+                style = state_style(st)
+                if style:
+                    palette[(comp, st["name"])] = style
     skin_file = skins / f"{skin_name}.svg"
     skin = ET.parse(skin_file).getroot()
     path = path or inst_id
@@ -591,17 +668,29 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
 
     if palette or inst_palette:
         extra = "".join(
-            f"\n    g[data-ref^='{comp}@'] .state-{name} {{ --led-color: {color}; }}"
-            for (comp, name), color in sorted(palette.items()))
+            state_rule(f"g[data-ref^='{comp}@'] .state-{name}",
+                       f"g[data-ref^='{comp}@'] .state-{name}", *style)
+            for (comp, name), style in sorted(palette.items()))
         # An instance rule has to beat the component rule for the same name, so it
         # is written as an id selector: one id beats any number of attribute
         # selectors whatever the source order. The state class lands on the lamp
         # element from the tree, or on the whole instance from a viewer that
-        # states the part rather than the lamp - so both are matched.
+        # states the part rather than the lamp - so both are matched for colour,
+        # which inherits. Behaviour does not inherit: an animation on the instance
+        # would blink the bezel along with the lamp, so it is aimed at the lamps.
+        def sels(ids, name):
+            color, anim = [], []
+            for i, is_lamp in ids:
+                color.append(f"#{i}.state-{name}" if is_lamp
+                             else f"#{i}.state-{name}, #{i} .state-{name}")
+                anim.append(f"#{i}.state-{name}" if is_lamp
+                            else f"#{i}.state-{name} [data-class='led'], #{i} .state-{name}")
+            return ", ".join(color), ", ".join(anim)
+
         extra += "".join(
-            "\n    " + ", ".join(f"#{i}.state-{name}, #{i} .state-{name}" for i in ids)
-            + f" {{ --led-color: {color}; }}"
-            for (name, color), ids in sorted(inst_palette.items()))
+            state_rule(*sels(ids, name), color, alt, mode)
+            for (name, color, alt, mode), ids in sorted(
+                inst_palette.items(), key=lambda kv: tuple(str(x) for x in kv[0])))
         style.text = STATE_CSS + extra + "\n"
 
     # A component's own <g id="silkscreen"> is printed on ITS faceplate, so it

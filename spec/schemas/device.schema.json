@@ -242,12 +242,31 @@
             "type": "object"
           },
           "states": {
-            "type": "array",
-            "minItems": 1,
-            "items": {
-              "$ref": "#/$defs/state"
-            },
-            "description": "what this indicator's states MEAN on this device. Overrides the component's own vocabulary, which can only be generic - the same led-dot is a speed lamp on one port and a link lamp on the next. A block of eighteen speed lamps shares one vocabulary and says it once; a placement inside it may still override"
+            "description": "what this indicator's states MEAN on this device. Overrides the component's own vocabulary, which can only be generic - the same led-dot is a speed lamp on one port and a link lamp on the next. A block of eighteen speed lamps shares one vocabulary and says it once; a placement inside it may still override",
+            "oneOf": [
+              {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "$ref": "#/$defs/state"
+                }
+              },
+              {
+                "type": "object",
+                "minProperties": 1,
+                "description": "per contracted element, when one component carries two lamps that do NOT share a vocabulary - a management jack whose left lamp is green for 1G and whose right is amber for 10M/100M. Keys are element ids of the referenced component; lint L20 rejects one that names no element",
+                "propertyNames": {
+                  "$ref": "#/$defs/segment"
+                },
+                "additionalProperties": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/$defs/state"
+                  }
+                }
+              }
+            ]
           },
           "description": {
             "type": "string",
@@ -602,12 +621,31 @@
                       "type": "object"
                     },
                     "states": {
-                      "type": "array",
-                      "minItems": 1,
-                      "items": {
-                        "$ref": "#/$defs/state"
-                      },
-                      "description": "what this indicator's states MEAN on this device. Overrides the component's own vocabulary, which can only be generic - the same led-dot is a speed lamp on one port and a link lamp on the next"
+                      "description": "what this indicator's states MEAN on this device. Overrides the component's own vocabulary, which can only be generic - the same led-dot is a speed lamp on one port and a link lamp on the next",
+                      "oneOf": [
+                        {
+                          "type": "array",
+                          "minItems": 1,
+                          "items": {
+                            "$ref": "#/$defs/state"
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "minProperties": 1,
+                          "description": "per contracted element, when one component carries two lamps that do NOT share a vocabulary - a management jack whose left lamp is green for 1G and whose right is amber for 10M/100M. Keys are element ids of the referenced component; lint L20 rejects one that names no element",
+                          "propertyNames": {
+                            "$ref": "#/$defs/segment"
+                          },
+                          "additionalProperties": {
+                            "type": "array",
+                            "minItems": 1,
+                            "items": {
+                              "$ref": "#/$defs/state"
+                            }
+                          }
+                        }
+                      ]
                     },
                     "description": {
                       "type": "string",
@@ -741,6 +779,38 @@
           "properties": {
             "name": {
               "$ref": "#/$defs/segment"
+            },
+            "behavior": {
+              "description": "how the lamp is lit, as opposed to what colour it is lit. Omitted means solid. A state is colour AND behaviour: solid green and blinking green are different facts on real hardware. The object form takes a second `color` for `alternating`, and exists so that a blink `rate` can be added later as one more property rather than a coercion",
+              "oneOf": [
+                {
+                  "enum": [
+                    "solid",
+                    "blinking",
+                    "alternating"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "mode"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "mode": {
+                      "enum": [
+                        "solid",
+                        "blinking",
+                        "alternating"
+                      ]
+                    },
+                    "color": {
+                      "type": "string",
+                      "description": "the second colour, for `alternating` - the lamp flashes between `color` and this one"
+                    }
+                  }
+                }
+              ]
             },
             "color": {
               "type": "string",

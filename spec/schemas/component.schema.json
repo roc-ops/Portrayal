@@ -248,6 +248,10 @@
             },
             "minItems": 1
           },
+          "description": {
+            "type": "string",
+            "description": "the vendor's own sentence about this element, kept beside the state tokens - never instead of them"
+          },
           "label-anchor": {
             "enum": [
               "above",
@@ -368,6 +372,38 @@
           "properties": {
             "name": {
               "$ref": "#/$defs/segment"
+            },
+            "behavior": {
+              "description": "how the lamp is lit, as opposed to what colour it is lit. Omitted means solid. A state is colour AND behaviour: solid green and blinking green are different facts on real hardware. The object form takes a second `color` for `alternating`, and exists so that a blink `rate` can be added later as one more property rather than a coercion",
+              "oneOf": [
+                {
+                  "enum": [
+                    "solid",
+                    "blinking",
+                    "alternating"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "mode"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "mode": {
+                      "enum": [
+                        "solid",
+                        "blinking",
+                        "alternating"
+                      ]
+                    },
+                    "color": {
+                      "type": "string",
+                      "description": "the second colour, for `alternating` - the lamp flashes between `color` and this one"
+                    }
+                  }
+                }
+              ]
             },
             "color": {
               "type": "string",
