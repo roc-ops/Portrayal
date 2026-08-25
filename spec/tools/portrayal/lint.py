@@ -30,10 +30,62 @@ from jsonschema import Draft202012Validator
 
 SEGMENT = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 ERRORS = []
+WARNINGS = []
 
 
 def err(path, code, msg):
     ERRORS.append(f"{path}: [{code}] {msg}")
+
+
+def warn(path, code, msg):
+    """A rule the portfolio does not satisfy yet.
+
+    A rule that goes red across every device on the day it lands teaches people
+    to ignore the linter. A warning states the debt, keeps the count visible,
+    and gets promoted to err() once the sweep is done.
+    """
+    WARNINGS.append(f"{path}: [{code}] {msg}")
+
+
+# A cage whose media token names a FAMILY rather than a specific media. One
+# component serves all of them because the mechanicals are identical, so the
+# component's own attrs can never resolve which. Anything not listed here
+# answers for itself - an RJ45 is an RJ45.
+AMBIGUOUS_MEDIA = {"sfp", "qsfp"}
+
+_CLASS_CACHE = {}
+_ATTRS_CACHE = {}
+
+
+def contract_class(ref, lib_roots):
+    """The `class` a component declares, or None. Cached - L18/L19 ask per
+    placement, and a 188-placement device would otherwise re-read one contract
+    188 times."""
+    if ref in _CLASS_CACHE:
+        return _CLASS_CACHE[ref]
+    nsname, major = ref.rsplit("@", 1)
+    cls = None
+    for r in lib_roots:
+        f = Path(r) / "components" / nsname / f"v{major}" / "contract.yaml"
+        if f.exists():
+            cls = (yaml.safe_load(f.read_text()) or {}).get("class")
+            break
+    _CLASS_CACHE[ref] = cls
+    return cls
+
+
+def contract_attrs(ref, lib_roots):
+    if ref in _ATTRS_CACHE:
+        return _ATTRS_CACHE[ref]
+    nsname, major = ref.rsplit("@", 1)
+    attrs = {}
+    for r in lib_roots:
+        f = Path(r) / "components" / nsname / f"v{major}" / "contract.yaml"
+        if f.exists():
+            attrs = (yaml.safe_load(f.read_text()) or {}).get("attrs") or {}
+            break
+    _ATTRS_CACHE[ref] = attrs
+    return attrs
 
 
 def check_segment(path, code, value):
@@ -366,6 +418,38 @@ def lint_device(path, validator, lib_roots):
             seen.add(p["id"])
             if not resolve(p["ref"]):
                 err(path, "L5", f"unresolvable ref {p['ref']} ({p['id']})")
+                continue
+            cls = contract_class(p["ref"], lib_roots)
+            # L18 - a port on an AMBIGUOUS cage has to say which media it is.
+            #
+            # Most components answer for themselves: std/rj45 is an RJ45 and
+            # nothing more specific exists, so inheriting media from the contract
+            # is right and this rule must not fire on it. But one cage covers a
+            # whole family - std/sfp-module is SFP, SFP+, SFP28 or SFP56, because
+            # SFF-8433 gives them identical mechanicals - so the component can only
+            # ever say "sfp", and a port that inherits it displays as SFP when the
+            # datasheet says SFP28. That is the whole defect: the model looked
+            # complete because a family token is still a token.
+            #
+            # Group attrs count. Declaring media once for a homogeneous block is
+            # exactly what a group is for.
+            if cls == "port":
+                gattrs = ((data.get("groups") or {}).get(p.get("group")) or {}).get("attrs") or {}
+                declared = (p.get("attrs") or {}).get("media") or gattrs.get("media")
+                if not declared:
+                    own = (contract_attrs(p["ref"], lib_roots) or {}).get("media")
+                    if own in AMBIGUOUS_MEDIA:
+                        warn(path, "L18", f"{vname}/{p['id']}: inherits media {own!r} from "
+                                          f"{p['ref']}, which is a family, not an answer. "
+                                          f"Declare the real media on the placement or on "
+                                          f"group {p.get('group')!r}")
+            # L19 - an indicator says what it indicates. Naming alone does not do
+            # it: led-p0-a next to port-0 is a convention a reader infers and a
+            # tool cannot. Warning, not error - `for:` postdates most of the
+            # portfolio and 1101 of 1159 placements predate it.
+            if cls in ("led", "button", "display") and not p.get("for"):
+                warn(path, "L19", f"{vname}/{p['id']}: {cls} declares no 'for:', so "
+                                  "nothing knows what it indicates")
         for b in vp["bays"]:
             check_segment(path, "L2", b["id"])
             if b["id"] in seen:
@@ -539,6 +623,16 @@ def main():
                 err(f, "L1", f"{'/'.join(str(p) for p in e.path)}: {e.message}")
             n += 1
 
+    if WARNINGS:
+        by_code = {}
+        for w in WARNINGS:
+            by_code.setdefault(w.split("[")[1].split("]")[0], []).append(w)
+        for code, ws in sorted(by_code.items()):
+            print(f"LINT: {len(ws)} warning(s) [{code}]")
+            for w in ws[:5]:
+                print(f"  {w}")
+            if len(ws) > 5:
+                print(f"  ... and {len(ws) - 5} more")
     if ERRORS:
         print(f"LINT: {len(ERRORS)} error(s) across {n} file(s)")
         for e in ERRORS:
