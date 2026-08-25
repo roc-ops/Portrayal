@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Portrayal</title>
+<style>
+  body { font-family: system-ui, sans-serif; background: #16181b; color: #d7dbdf; margin: 0; }
+  nav { display: flex; gap: 0.25rem; align-items: flex-end;
+        padding: 0.6rem 1rem 0; background: #101214; border-bottom: 1px solid #33373c; }
+  nav select { background: #1c1f23; color: #d7dbdf; border: 1px solid #33373c; border-radius: 6px;
+               margin: 0 0.6rem 0.3rem 0; padding: 0.22rem 0.35rem; font-size: 0.85rem; max-width: 16rem; }
+  nav button { background: #1c1f23; color: #9aa1a8; border: 1px solid #33373c; border-bottom: none;
+               border-radius: 8px 8px 0 0; padding: 0.5rem 1.2rem; cursor: pointer; font-size: 0.95rem; }
+  nav button.active { background: #16181b; color: #f0f2f4; border-color: #4a4f55; }
+  iframe { width: 100%; border: none; display: block; height: calc(100vh - 46px); }
+  #gap { display: none; padding: 3rem; color: #8d939a; font-size: 0.85rem; line-height: 1.6; }
+  #gap code { color: #d7dbdf; }
+</style>
+</head>
+<body>
+<nav>
+  <select id="dev"></select>
+  <button data-src="explore.html" class="active">Explorer</button>
+  <button data-src="annotate.html">Annotate</button>
+  <button data-src="components.html">Components</button>
+  <button data-src="exporter.html">Exporter</button>
+</nav>
+<iframe id="frame"></iframe>
+<div id="gap"></div>
+<script>
+let DEV = new URLSearchParams(location.search).get('device') || 'as7726-32x';
+// Build stamp appended to every iframe URL. A hard refresh bypasses the cache for
+// the document it reloads, but this shell navigates the iframe from JS afterwards,
+// and that is a fresh navigation which goes through the normal HTTP cache - so a
+// stale page survived reload after reload. Versioning the URL makes each deploy
+// a distinct cache key. Data fetches already use cache:'no-store'.
+let VER = '';
+const frame = document.getElementById('frame');
+const gap = document.getElementById('gap');
+
+async function nav(src) {
+  // Annotate lands after marks.js does. An iframe pointed at a missing file shows
+  // the server's 404 page, which reads like a broken demo rather than an unbuilt
+  // tab, so ask first and say what is missing.
+  const here = (await fetch(src, {method: 'HEAD', cache: 'no-store'}).catch(() => null))?.ok;
+  frame.style.display = here ? '' : 'none';
+  gap.style.display = here ? 'none' : 'block';
+  if (!here) {
+    gap.innerHTML = `<b>${src}</b> is not built yet.<br><br>` +
+      `The markup document lives in <code>marks.js</code>, and the Annotate tab is ` +
+      `wired up from <code>shell.js</code> and <code>marks.js</code> once both have landed.`;
+    return;
+  }
+  frame.src = `${src}?device=${encodeURIComponent(DEV)}` + (VER ? `&v=${VER}` : '');
+}
+
+const current = () => document.querySelector('nav button.active').dataset.src;
+document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('nav button').forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+  nav(b.dataset.src);
+});
+
+// Every tab carries its own device menu - the Explorer's bar is part of the shell
+// - so the two would disagree the moment you used the inner one. The page tells
+// us what it switched to and we follow, which makes them one control.
+addEventListener('message', e => {
+  if (e.data?.portrayal !== 'device' || !e.data.device) return;
+  DEV = e.data.device;
+  document.getElementById('dev').value = DEV;
+});
+
+(async () => {
+  const sel = document.getElementById('dev');
+  const res = await fetch('../dist/devices.json', {cache: 'no-store'});
+  // Last-Modified changes on every deploy, so it works as a build stamp for free
+  VER = (res.headers.get('Last-Modified') || '').replace(/\W/g, '');
+  const d = (await res.json()).devices;
+  d.sort((a, b) => a.manufacturer.localeCompare(b.manufacturer)
+                || a.model.localeCompare(b.model, undefined, {numeric: true}));
+  const byVendor = new Map();
+  for (const x of d) {
+    if (!byVendor.has(x.manufacturer)) byVendor.set(x.manufacturer, []);
+    byVendor.get(x.manufacturer).push(x);
+  }
+  sel.innerHTML = [...byVendor].map(([v, list]) =>
+    `<optgroup label="${v}">` +
+    list.map(x => `<option value="${x.name}">${x.model}</option>`).join('') +
+    '</optgroup>').join('');
+  if (!d.some(x => x.name === DEV)) DEV = d[0].name;
+  sel.value = DEV;
+  sel.onchange = () => { DEV = sel.value; nav(current()); };
+  nav(current());
+})();
+</script>
+</body>
+</html>

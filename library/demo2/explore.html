@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Portrayal — explorer</title>
+<style>
+  /* The shell brings its own stylesheet. Everything here is the Explorer's own:
+     the stage toggle, the state chips, and the About panel. */
+  #mode { display:flex; gap:0.2rem; }
+  #mode button { border-radius:0; }
+  #mode button:first-child { border-radius:6px 0 0 6px; }
+  #mode button:last-child { border-radius:0 6px 6px 0; margin-left:-1px; }
+  #stage-3d { background:#16181b; }
+  #stage-3d canvas { display:block; }
+  #frus { display:flex; gap:0.2rem; flex-wrap:wrap; }
+  #frus[hidden] { display:none; }        /* display:flex outranks the hidden attribute */
+  #frus button { font-family:ui-monospace, monospace; font-size:0.72rem; padding:0.26rem 0.42rem; }
+  #gfx { position:absolute; bottom:0.6rem; right:0.7rem; z-index:5; pointer-events:none;
+         background:#0c0e10cc; border:1px solid #33373c; border-radius:4px;
+         padding:0.25rem 0.45rem; font:11px ui-monospace, monospace; color:#8d939a; }
+  #gfx.warn { color:#f59e0b; border-color:#7a5a12; }
+  #glx { position:absolute; bottom:0.6rem; left:0.7rem; z-index:5; display:flex;
+         gap:0.3rem; align-items:center; font-size:0.72rem; }
+  #glx button:disabled { opacity:0.55; cursor:progress; }
+  #glx .msg { color:var(--dim); }
+  #glx .msg.bad { color:var(--warn); }
+  .chip { display:inline-block; margin-left:0.3rem; padding:0 0.4rem; border:1px solid #4a4f55;
+          border-radius:9px; font-size:0.64rem; color:#c7ccd1; cursor:pointer; user-select:none;
+          line-height:1.35; }
+  .chip:hover { border-color:var(--warn); }
+  .chip.on { background:var(--warn); color:#16181b; border-color:var(--warn); }
+  .node.sel .chip { border-color:#ffffff66; }
+  #inspect .prov { color:var(--dim); font-size:0.68rem; line-height:1.45; margin:-0.15rem 0 0.5rem 5.4rem;
+                   border-left:2px solid var(--line); padding-left:0.45rem; }
+  #inspect .pn { margin:0 0 0.5rem 0.2rem; font-size:0.7rem; }
+  #inspect .pn code { color:var(--ink); }
+  #inspect .pn div { color:var(--dim); }
+  #inspect .cfgname { color:var(--ink); font-weight:600; }
+</style>
+<!-- viewer3d.js pulls three from here. An import map is a property of the
+     document, so it has to live in the page even though nothing in the page
+     imports three directly. -->
+<script type="importmap">
+{ "imports": {
+    "three": "https://unpkg.com/three@0.161.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.161.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<script type="module">
+import { createShell, esc } from './shell.js';
+
+const shell = createShell({title: 'Portrayal explorer'});
+const state = shell.state;
+
+// ---------------------------------------------------------------- state chips
+
+// A state name is meant to be a token, and `state-<name>` on the compiled SVG is
+// what the drawing's own CSS keys off. Several contracts have put a description
+// in the name field instead, so data-states can read "Green = OK, Amber = fault".
+// Splitting that on spaces produces chips called "=" and "OK," that set classes
+// nothing styles. Fixing the data is a separate job; until it lands, a value that
+// is not a list of tokens gets no chips rather than garbage ones.
+const TOKEN = /^[a-z0-9-]+$/;
+function statesOf(el) {
+  const raw = (el.dataset.states || '').trim();
+  if (!raw) return [];
+  const toks = raw.split(/\s+/);
+  return toks.every(t => TOKEN.test(t)) ? toks : [];
+}
+
+// Ported from demo/interactive.html: click a chip to set state-<name>, click it
+// again to clear, and `off` always clears - "off" is the absence of a state, not
+// a state of its own.
+function chips(el) {
+  const states = statesOf(el);
+  if (!states.length) return null;
+  const span = document.createElement('span');
+  for (const st of states) {
+    const chip = document.createElement('span');
+    chip.className = 'chip' + (el.classList.contains('state-' + st) ? ' on' : '');
+    chip.textContent = st;
+    chip.title = `set ${st} on this element`;
+    chip.onclick = ev => {
+      ev.stopPropagation(); ev.preventDefault();
+      const was = el.classList.contains('state-' + st);
+      [...el.classList].filter(c => c.startsWith('state-')).forEach(c => el.classList.remove(c));
+      span.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+      if (st !== 'off' && !was) { el.classList.add('state-' + st); chip.classList.add('on'); }
+    };
+    span.appendChild(chip);
+  }
+  return span;
+}
+
+shell.on('row', (row, node) => {
+  if (!node.el) return;                       // a group fold indicates nothing
+  const c = chips(node.el);
+  if (c) row.querySelector('.nm').after(c);
+});
+
+// ---------------------------------------------------------------- About panel
+
+// Facts about the device that belong to no view: they are not in the drawing,
+// they are not in the tree, and until now there was nowhere to read them. The
+// chassis row is already the first row of the tree (TIER.chassis = -1), so
+// selecting it is the natural way in.
+const dim = v => (v == null ? '—' : `${(+v).toFixed(1).replace(/\.0$/, '')} mm`);
+
+function about(box) {
+  const meta = state.meta || {};
+  const d = shell.device() || {};
+  const ch = meta.chassis || {};
+  const prov = {...(meta.provenance || {})};
+  const attrs = meta.attrs || {};
+  const row = (k, v) => `<div class="row"><span>${esc(k)}</span><span class="v">${esc(v)}</span></div>`;
+  // A fact and its citation belong together. Whatever provenance is left over is
+  // about the modelling rather than about one fact, and goes at the bottom.
+  const cite = (...keys) => keys.map(k => {
+    const t = prov[k];
+    if (!t) return '';
+    delete prov[k];
+    return `<div class="prov">${esc(k)}: ${esc(t)}</div>`;
+  }).join('');
+
+  let h = `<h2>About</h2>`;
+  h += row('manufacturer', d.manufacturer || '');
+  h += row('model', meta.model || d.model || '');
+  if (d.version) h += row('version', d.version);
+  if (d.description) h += row('description', d.description);
+
+  h += `<h3>Dimensions</h3>`;
+  h += row('rack units', ch.ru != null ? `${ch.ru} RU` : '—');
+  h += row('W × H × D', `${dim(ch.w)} × ${dim(ch.h)} × ${dim(ch.d)}`);
+  h += cite('chassis', 'dimensions', 'width', 'height', 'depth', 'ru');
+
+  const akeys = Object.keys(attrs);
+  if (akeys.length) {
+    h += `<h3>Attributes</h3>`;
+    for (const k of akeys) h += row(k, attrs[k]) + cite(k);
+  }
+
+  const cfgs = (meta.configs || []).filter(c => Object.keys(c['part-numbers'] || {}).length);
+  if (cfgs.length) {
+    h += `<h3>Part numbers</h3>`;
+    for (const c of cfgs) {
+      h += `<div class="pn"><span class="cfgname">${esc(c.name)}</span>`
+         + (c.description ? ` — ${esc(c.description)}` : '');
+      for (const [sku, v] of Object.entries(c['part-numbers'])) {
+        const cord = (v || {})['power-cord'];
+        h += `<div><code>${esc(sku)}</code> · ${esc((v || {}).part || '')}`
+           + (cord && cord !== 'none' ? ` · ${esc(cord)}` : '') + `</div>`;
+      }
+      h += `</div>`;
+    }
+    h += cite('configurations', 'part-numbers');
+  }
+
+  const rest = Object.keys(prov);
+  if (rest.length) {
+    h += `<h3>Provenance</h3>`;
+    for (const k of rest) h += `<div class="prov" style="margin-left:0">${esc(k)}: ${esc(prov[k])}</div>`;
+  }
+  if (!akeys.length && !rest.length)
+    h += `<div class="hint" style="padding-left:0">This manifest carries no attrs or provenance.
+          Both are optional; a device at maturity <code>modelled</code> or better has them.</div>`;
+  box.innerHTML = h;
+}
+
+// The chassis row is the device itself, so it gets the device's own facts rather
+// than the generic node inspector. Inside a module the chassis is that module's
+// faceplate, not the box, so leave it alone there.
+shell.on('inspect', ({path, box}) => {
+  if (path !== 'chassis' || state.module) return false;
+  about(box);
+  return true;
+});
+
+// ---------------------------------------------------------------- 2D / 3D
+
+// The 3D scene is a module mounted into a container beside the SVG stage - same
+// page, same tree, same inspector, no iframe and no message protocol. It is
+// imported on first use: it drags in three.js and a WebGL context, and someone
+// who never presses 3D should pay for neither.
+const modeBar = document.createElement('span');
+modeBar.id = 'mode';
+modeBar.innerHTML = `<button data-mode="2d" class="on">2D</button><button data-mode="3d">3D</button>`;
+shell.el.fit.before(modeBar);
+
+const host3d = document.createElement('div');
+host3d.className = 'stage-host';
+host3d.id = 'stage-3d';
+host3d.hidden = true;
+shell.el.stage.appendChild(host3d);
+
+let mode = '2d', viewer = null, loading = null, loadedKey = '';
+
+async function ensureViewer() {
+  if (viewer) return viewer;
+  if (!loading) loading = (async () => {
+    const {createViewer} = await import('./viewer3d.js');
+    // no options: the pinned API defines none, and viewer3d.js is mounted from
+    // this same directory so its own idea of where dist/ is agrees with ours
+    const v = createViewer(host3d);
+    // 3D shows every face at once and the tree shows one view, so the scene can
+    // report a part the drawing on the other tab does not contain - click a PSU
+    // while the view is `front`. Say so rather than clearing the selection to
+    // nothing and looking broken.
+    v.on('select', p => {
+      if (!p) return;
+      if (state.svg?.querySelector(`[data-path="${CSS.escape(p)}"]`)) return shell.select(p, false);
+      shell.el.status.textContent = `${p} — not in the ${state.view} view`;
+    });
+    v.on('hover', p => { shell.el.status.textContent = p || ''; });
+    mountExtras(v);
+    return v;
+  })();
+  try {
+    viewer = await loading;
+  } catch (err) {
+    loading = null;               // a rejected promise would poison every retry
+    throw err;
+  }
+  return viewer;
+}
+
+// The pinned API is load/select/on/resize/dispose. Everything 3d.html owned above
+// its canvas - the FRU eject buttons, the capability HUD, the GLB/USDZ buttons -
+// is chrome, and chrome belongs to the page. The pinned five cannot express any
+// of it, so the module reports the rest through names outside the pin and the
+// page asks before using each: if a name is not there the chrome simply is not
+// there either, and nothing breaks. Both overlays are children of the 3D host,
+// so they come and go with the canvas without a mode handler.
+const kb = n => n < 1048576 ? `${Math.round(n / 1024)} KB` : `${(n / 1048576).toFixed(1)} MB`;
+
+function mountExtras(v) {
+  // A diagnosis aid, not decoration. WebGL1, msaa 0 and anisotropy below 4 each
+  // produce shimmer no material setting can fix, and knowing which of the three
+  // you are looking at is the difference between a driver note and a bug hunt.
+  if (typeof v.capabilities === 'function') {
+    const gfx = document.createElement('div');
+    gfx.id = 'gfx';
+    const c = v.capabilities() || {};
+    gfx.textContent = c.text || '';
+    gfx.classList.toggle('warn', !!c.warn);
+    host3d.appendChild(gfx);
+  }
+  // A GLB is the demo's only output that survives someone not being able to reach
+  // the demo host. The module does the exporting - it owns the scene graph, and
+  // the pinned API deliberately does not hand that out - so the page is two
+  // buttons and a progress line over the canvas.
+  if (typeof v.download !== 'function') return;
+  const bar = document.createElement('div');
+  bar.id = 'glx';
+  bar.innerHTML =
+    `<button data-fmt="glb" title="Geometry and textures in one file. Opens in Quick Look, Windows 3D Viewer, PowerPoint, Blender, Sketchfab.">Download GLB</button>`
+  + `<button data-fmt="usdz" title="AR Quick Look on iPhone and iPad.">USDZ</button>`
+  + `<span class="msg"></span>`;
+  host3d.appendChild(bar);
+  const msg = bar.querySelector('.msg');
+  const all = [...bar.querySelectorAll('button')];
+  for (const b of all) b.onclick = async () => {
+    const fmt = b.dataset.fmt;
+    all.forEach(x => { x.disabled = true; });
+    msg.classList.remove('bad');
+    msg.textContent = `building ${fmt.toUpperCase()}…`;
+    try {
+      const {name, size} = await v.download(fmt);
+      msg.textContent = `${name} — ${kb(size)}`;
+    } catch (err) {
+      // USDZ is fussier than GLB, so say which one failed rather than "export failed"
+      msg.textContent = `${fmt.toUpperCase()} failed: ${err.message || err}`;
+      msg.classList.add('bad');
+    } finally {
+      all.forEach(x => { x.disabled = false; });
+    }
+  };
+}
+
+// One button per removable unit. frus() names each one by its class - "Fan
+// module", "Power supply" - which is true and useless when a 2RU box has five
+// fans and two PSUs: seven buttons in a row, two labels between them, and no way
+// to tell which one you are about to pull. So the button carries the unit's own
+// path. That is what the tree row, the halo and the hover status already call it,
+// so pressing `fan-3` and watching `fan-3` slide out needs no translation.
+//
+// The glyph is the module's, not ours: it reports the action available (⏏ eject,
+// ⏎ insert; ⤒/⤓ for a captive unit that extends rather than comes out), and
+// toggleFru returns the next state, so the button re-labels itself as it moves.
+const fruBox = document.createElement('span');
+fruBox.id = 'frus';
+fruBox.hidden = true;
+shell.el.status.before(fruBox);
+
+function fruBar(v) {
+  fruBox.replaceChildren();
+  if (typeof v.frus !== 'function' || typeof v.toggleFru !== 'function') return;
+  for (const fru of v.frus() || []) {
+    const btn = document.createElement('button');
+    btn.dataset.fru = fru.path;
+    const paint = st => {
+      btn.textContent = `${st.icon} ${st.path}`;
+      // out units stay lit, so a chassis left half stripped still reads at a glance
+      btn.classList.toggle('on', !!st.out);
+      btn.title = `${st.label} — ${st.out ? 'insert' : 'eject'}`
+                + ` (${Math.round(st.travel)} mm travel${st.captive ? ', captive' : ''})`;
+    };
+    paint(fru);
+    btn.onclick = () => {
+      const st = v.toggleFru(fru.path);
+      if (!st) return;
+      paint(st);
+      shell.el.status.textContent = st.text || '';
+    };
+    fruBox.appendChild(btn);
+  }
+}
+
+// Ejecting a fan does nothing you can see on a flat drawing, so the FRU bar is
+// 3D chrome and leaves with the canvas. Fit goes the other way: it measures the
+// SVG stage, and while that stage is hidden it measures 0x0 and returns without
+// doing anything - a button that silently does nothing is worse than no button.
+shell.on('mode', m => {
+  fruBox.hidden = m !== '3d';
+  shell.el.fit.hidden = m === '3d';
+});
+
+async function sync3d() {
+  if (mode !== '3d') return;
+  const v = await ensureViewer();
+  const key = `${state.device}.${state.cfg}`;
+  if (key === loadedKey) return;
+  await v.load({device: state.device, config: state.cfg});
+  loadedKey = key;                // only once it is actually the thing on screen
+  fruBar(v);
+  if (state.sel) v.select(state.sel);
+}
+
+async function setMode(m) {
+  if (m === mode) return;
+  mode = m;
+  for (const b of modeBar.querySelectorAll('button')) b.classList.toggle('on', b.dataset.mode === m);
+  shell.el.svgHost.hidden = m !== '2d';
+  host3d.hidden = m !== '3d';
+  shell.emit('mode', m);
+  if (m === '2d') {
+    // the SVG could not be measured while it was hidden, so the halo and the fit
+    // both have to be recomputed now that it can be
+    shell.fit();
+    if (state.sel) shell.select(state.sel, true);
+    return;
+  }
+  shell.el.status.textContent = 'loading 3D…';
+  try {
+    await sync3d();
+    (await ensureViewer()).resize();
+    shell.el.status.textContent = '';
+  } catch (err) {
+    // viewer3d.js is written by another hand and may not be there yet. Say so,
+    // and drop back to the drawing rather than leaving a black rectangle.
+    console.warn('[portrayal] 3D unavailable', err);
+    shell.el.status.textContent = `3D unavailable: ${err.message || err}`;
+    setMode('2d');
+  }
+}
+for (const b of modeBar.querySelectorAll('button')) b.onclick = () => setMode(b.dataset.mode);
+
+// the tree and the bar do not change when the stage does: selecting a row
+// highlights in whichever stage is showing, and a config change reaches both
+shell.on('select', path => { if (mode === '3d' && viewer) viewer.select(path); });
+// a config change reloads the drawing and the scene both; the scene's half can
+// fail on its own, and an unhandled rejection is a silent one
+shell.on('load', () => { sync3d().catch(err => {
+  console.warn('[portrayal] 3D reload failed', err);
+  shell.el.status.textContent = `3D unavailable: ${err.message || err}`;
+}); });
+addEventListener('resize', () => { if (mode === '3d' && viewer) viewer.resize(); });
+
+await shell.ready;
+</script>
+</body>
+</html>

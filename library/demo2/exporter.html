@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Portrayal — DCIM export</title>
+<style>
+  body { font-family: system-ui, sans-serif; background: #16181b; color: #d7dbdf; margin: 0.8rem 1.2rem; }
+  .hdr { display: flex; gap: 0.9rem; align-items: center; flex-wrap: wrap; margin-bottom: 0.7rem; }
+  h1 { font-size: 1rem; margin: 0; }
+  label { font-size: 0.8rem; color: #9aa1a8; display: flex; gap: 0.4rem; align-items: center; }
+  select, button { background: #2b2f33; color: #d7dbdf; border: 1px solid #4a4f55; border-radius: 6px;
+                   padding: 0.25rem 0.5rem; font-size: 0.8rem; }
+  button { cursor: pointer; }
+  button:hover { background: #3a3f45; }
+  .note { font-size: 0.74rem; color: #7d848b; max-width: 60rem; line-height: 1.5; }
+  .note code { color: #9aa1a8; }
+  pre { background: #121417; border: 1px solid #33373c; border-radius: 8px; padding: 0.7rem 0.9rem;
+        font: 0.76rem/1.5 ui-monospace, monospace; overflow: auto; max-height: 74vh; white-space: pre; }
+  .bad { color: #f59e0b; }
+</style>
+</head>
+<body>
+<div class="hdr">
+  <h1>DCIM export</h1>
+  <label>device <select id="dev"></select></label>
+  <label>NOS <select id="nos"><option value="arcos">arcos</option><option value="sonic">sonic</option></select></label>
+  <button id="dl">Download YAML</button>
+  <span id="src" class="note"></span>
+</div>
+<p class="note">
+  Portrayal is the source of truth for the physical facts; a DCIM is one consumer of them.
+  This is the file <code>spec/tools/portrayal/nautobot_export.py</code> writes at build time, in the
+  schema used by <code>nautobot/devicetype-library</code>, so a device modelled here loads into
+  Nautobot without anyone re-typing port counts by hand. Interface names come from the NOS
+  profile, because they are a property of the network OS rather than of the hardware.
+</p>
+<pre id="out">loading…</pre>
+<script>
+const $ = id => document.getElementById(id);
+let DEVICES = [], text = '', file = '';
+
+// The build writes exports/nautobot/<manufacturer>/<model>-<nos>.yaml, and the
+// model in that name is the plain model with any parenthesised alias dropped -
+// "AS7946-30XB", not "AS5912-54X (AGR100)". Rebuild the same name here rather
+// than adding an index nobody else needs.
+const pathFor = (d, nos) =>
+  `../exports/nautobot/${encodeURIComponent(d.manufacturer)}/` +
+  `${encodeURIComponent(d.model.split(' (')[0])}-${nos}.yaml`;
+
+async function show() {
+  const d = DEVICES.find(x => x.name === $('dev').value);
+  // the tab shell keeps its own device menu; tell it what we switched to
+  if (parent !== window) parent.postMessage({portrayal: 'device', device: d.name}, '*');
+  const nos = $('nos').value;
+  file = pathFor(d, nos);
+  $('src').textContent = '';
+  const res = await fetch(file, {cache: 'no-store'});
+  if (!res.ok) {
+    text = '';
+    // nautobot_export.py writes nothing when it cannot resolve an interface for
+    // the profile - a CCAP chassis has no swp ports - and that is a fact about
+    // the device, not a broken build. Say which.
+    $('out').innerHTML = `<span class="bad">No ${nos} export for ${d.model}.</span>\n\n` +
+      `The exporter emits a file only once it can resolve interfaces for the NOS profile;\n` +
+      `a device whose ports are all line-card bays (a CCAP chassis, an optical shelf)\n` +
+      `produces none. Expected at ${file}`;
+    return;
+  }
+  text = await res.text();
+  $('out').textContent = text;
+  $('src').textContent = file.replace('../', 'library/');
+}
+
+$('dl').onclick = () => {
+  if (!text) return;
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([text], {type: 'text/yaml'}));
+  a.download = file.split('/').pop();
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+};
+
+(async () => {
+  DEVICES = (await (await fetch('../dist/devices.json', {cache: 'no-store'})).json()).devices;
+  DEVICES.sort((a, b) => a.manufacturer.localeCompare(b.manufacturer)
+                      || a.model.localeCompare(b.model, undefined, {numeric: true}));
+  const byVendor = new Map();
+  for (const d of DEVICES) {
+    if (!byVendor.has(d.manufacturer)) byVendor.set(d.manufacturer, []);
+    byVendor.get(d.manufacturer).push(d);
+  }
+  $('dev').innerHTML = [...byVendor].map(([v, list]) =>
+    `<optgroup label="${v}">` +
+    list.map(d => `<option value="${d.name}">${d.model}</option>`).join('') +
+    '</optgroup>').join('');
+  const want = new URLSearchParams(location.search).get('device');
+  $('dev').value = DEVICES.some(d => d.name === want) ? want : DEVICES[0].name;
+  $('dev').onchange = show;
+  $('nos').onchange = show;
+  await show();
+})();
+</script>
+</body>
+</html>
