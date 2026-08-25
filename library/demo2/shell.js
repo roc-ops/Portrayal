@@ -15,6 +15,8 @@
 // one: every ordering rule exists because a specific device read badly without
 // it, and the comment says which.
 
+import { createDevicePicker } from './devsel.js';
+
 const NS = 'http://www.w3.org/2000/svg';
 
 export const esc = s => String(s ?? '').replace(/[&<>"]/g,
@@ -100,7 +102,7 @@ export const SHELL_CSS = `
 const SHELL_HTML = `
 <header>
   <h1></h1>
-  <label class="f">device <select id="dev"></select></label>
+  <span class="f" id="devpick"></span>
   <label class="f">config <select id="cfg"></select></label>
   <label class="f">view <select id="view"></select></label>
   <span class="f" id="hl" title="Selection colour - pick one that stands out against this chassis"></span>
@@ -121,6 +123,7 @@ const SHELL_HTML = `
 let DEVICES = [], COMPONENTS = [];
 
 export function createShell(opts = {}) {
+  let picker = null;
   const DIST = opts.dist || '../dist';
   const body = opts.mount || document.body;
   const j = async p => (await fetch(`${DIST}/${p}`, {cache: 'no-store'})).json();
@@ -132,7 +135,7 @@ export function createShell(opts = {}) {
   const el = {
     header: $('header'), main: $('main'), stage: $('#stage'), svgHost: $('#stage-svg'),
     aside: $('aside'), crumb: $('#crumb'), tree: $('#tree'), inspect: $('#inspect'),
-    status: $('#status'), dev: $('#dev'), cfg: $('#cfg'), view: $('#view'), fit: $('#fit'),
+    status: $('#status'), dev: $('#devpick'), cfg: $('#cfg'), view: $('#view'), fit: $('#fit'),
   };
   $('header h1').textContent = opts.title || 'Portrayal';
 
@@ -594,10 +597,7 @@ export function createShell(opts = {}) {
       .map(c => `<option value="${c.name}"${c.name === state.cfg ? ' selected' : ''}>${c.name}</option>`).join('');
     el.view.innerHTML = state.meta.views
       .map(v => `<option value="${v}">${v}</option>`).join('');
-    if (el.dev.value !== name) el.dev.value = name;
-    // the tab shell keeps its own device menu; tell it what we switched to so
-    // that changing device here and then changing tab does not undo itself
-    if (parent !== window) parent.postMessage({portrayal: 'device', device: name}, '*');
+    if (picker && picker.value !== name) picker.value = name;
     syncCfgBays();
     emit('device', name, state.meta);
     await loadStage();
@@ -607,7 +607,6 @@ export function createShell(opts = {}) {
     state.cfgBays = {...(c?.bays || {})};
   }
 
-  el.dev.onchange = e => loadDevice(e.target.value);
   el.cfg.onchange = e => { state.cfg = e.target.value; state.module = null; syncCfgBays(); loadStage(); };
   el.view.onchange = e => { state.view = e.target.value; state.module = null; loadStage(); };
   addEventListener('resize', fit);
@@ -615,26 +614,22 @@ export function createShell(opts = {}) {
   const ready = (async () => {
     DEVICES = DEVICES.length ? DEVICES : (await j('devices.json')).devices;
     COMPONENTS = COMPONENTS.length ? COMPONENTS : (await j('components.json')).components;
-    // Grouped by manufacturer, alphabetical within each, rather than in the order
-    // they happened to be built. With seven vendors in the list that is the
-    // difference between a menu and a pile.
-    DEVICES.sort((a, b) => a.manufacturer.localeCompare(b.manufacturer)
-                        || a.model.localeCompare(b.model, undefined, {numeric: true}));
-    const byVendor = new Map();
-    for (const d of DEVICES) {
-      if (!byVendor.has(d.manufacturer)) byVendor.set(d.manufacturer, []);
-      byVendor.get(d.manufacturer).push(d);
-    }
-    el.dev.innerHTML = [...byVendor].map(([vendor, list]) =>
-      `<optgroup label="${esc(vendor)}">` +
-      list.map(d => `<option value="${d.name}">${esc(d.model)}</option>`).join('') +
-      '</optgroup>').join('');
     // the tab shell picks the device and hands it over in the query string, so
     // switching tabs keeps you on the same box
     const want = opts.device || new URLSearchParams(location.search).get('device');
     const start = DEVICES.find(d => d.name === want)
                || DEVICES.find(d => d.name === 'c100g') || DEVICES[0];
-    el.dev.value = start.name;
+    // Which device is the outer shell's state, and inside an iframe this header
+    // must not offer a second answer to it. Opened on its own - explore.html
+    // straight from the filesystem, or one of the harness pages - there is no
+    // outer shell, so the page has to carry the picker itself. Same component
+    // either way; only whether it is mounted differs.
+    if (parent === window) {
+      picker = createDevicePicker({mount: el.dev, devices: DEVICES, value: start.name,
+                                   onchange: name => loadDevice(name)});
+    } else {
+      el.dev.hidden = true;
+    }
     await loadDevice(start.name);
   })();
 

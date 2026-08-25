@@ -7,8 +7,7 @@
   body { font-family: system-ui, sans-serif; background: #16181b; color: #d7dbdf; margin: 0; }
   nav { display: flex; gap: 0.25rem; align-items: flex-end;
         padding: 0.6rem 1rem 0; background: #101214; border-bottom: 1px solid #33373c; }
-  nav select { background: #1c1f23; color: #d7dbdf; border: 1px solid #33373c; border-radius: 6px;
-               margin: 0 0.6rem 0.3rem 0; padding: 0.22rem 0.35rem; font-size: 0.85rem; max-width: 16rem; }
+  nav .devpick { margin: 0 0.9rem 0.35rem 0; }
   nav button { background: #1c1f23; color: #9aa1a8; border: 1px solid #33373c; border-bottom: none;
                border-radius: 8px 8px 0 0; padding: 0.5rem 1.2rem; cursor: pointer; font-size: 0.95rem; }
   nav button.active { background: #16181b; color: #f0f2f4; border-color: #4a4f55; }
@@ -19,7 +18,7 @@
 </head>
 <body>
 <nav>
-  <select id="dev"></select>
+  <span id="pick"></span>
   <button data-src="explore.html" class="active">Explorer</button>
   <button data-src="annotate.html">Annotate</button>
   <button data-src="components.html">Components</button>
@@ -27,7 +26,9 @@
 </nav>
 <iframe id="frame"></iframe>
 <div id="gap"></div>
-<script>
+<script type="module">
+import { createDevicePicker } from './devsel.js';
+
 let DEV = new URLSearchParams(location.search).get('device') || 'as7726-32x';
 // Build stamp appended to every iframe URL. A hard refresh bypasses the cache for
 // the document it reloads, but this shell navigates the iframe from JS afterwards,
@@ -61,35 +62,24 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   nav(b.dataset.src);
 });
 
-// Every tab carries its own device menu - the Explorer's bar is part of the shell
-// - so the two would disagree the moment you used the inner one. The page tells
-// us what it switched to and we follow, which makes them one control.
-addEventListener('message', e => {
-  if (e.data?.portrayal !== 'device' || !e.data.device) return;
-  DEV = e.data.device;
-  document.getElementById('dev').value = DEV;
-});
+// There used to be a second device menu inside every tab, kept in step with this
+// one by a postMessage handshake. Two controls for one piece of state is one
+// too many however carefully they are synchronised, so the division is now by
+// what the state is *about*: this shell owns which device you are looking at,
+// and a tab owns how you are looking at it - config, view, 2D/3D, colour, fit.
+// The tabs still render their own picker when opened directly; they hide it
+// when embedded here.
 
 (async () => {
-  const sel = document.getElementById('dev');
   const res = await fetch('../dist/devices.json', {cache: 'no-store'});
   // Last-Modified changes on every deploy, so it works as a build stamp for free
   VER = (res.headers.get('Last-Modified') || '').replace(/\W/g, '');
   const d = (await res.json()).devices;
-  d.sort((a, b) => a.manufacturer.localeCompare(b.manufacturer)
-                || a.model.localeCompare(b.model, undefined, {numeric: true}));
-  const byVendor = new Map();
-  for (const x of d) {
-    if (!byVendor.has(x.manufacturer)) byVendor.set(x.manufacturer, []);
-    byVendor.get(x.manufacturer).push(x);
-  }
-  sel.innerHTML = [...byVendor].map(([v, list]) =>
-    `<optgroup label="${v}">` +
-    list.map(x => `<option value="${x.name}">${x.model}</option>`).join('') +
-    '</optgroup>').join('');
   if (!d.some(x => x.name === DEV)) DEV = d[0].name;
-  sel.value = DEV;
-  sel.onchange = () => { DEV = sel.value; nav(current()); };
+  createDevicePicker({
+    mount: document.getElementById('pick'), devices: d, value: DEV,
+    onchange: name => { DEV = name; nav(current()); },
+  });
   nav(current());
 })();
 </script>

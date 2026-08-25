@@ -36,6 +36,29 @@
   #inspect .pn code { color:var(--ink); }
   #inspect .pn div { color:var(--dim); }
   #inspect .cfgname { color:var(--ink); font-weight:600; }
+  /* Capability and gaps. Both are read by someone deciding whether to trust the
+     model or to go and fill it in, so `blocked` and `wanted` - the two fields
+     that say what to do next - get full-width lines rather than a tooltip. */
+  #inspect .lvl { display:flex; gap:0.35rem; align-items:baseline; flex-wrap:wrap;
+                  margin-bottom:0.45rem; }
+  #inspect .lvl b { font-size:0.95rem; color:var(--ink); }
+  #inspect .lvl .nm { color:var(--ink); }
+  #inspect .flag { border:1px solid #3f6a4a; background:#1b2a20; color:#8fd3a4;
+                   border-radius:9px; padding:0 0.42rem; font-size:0.64rem; }
+  #inspect .blocked { border-left:2px solid var(--warn); padding:0.1rem 0 0.1rem 0.5rem;
+                      margin:0.35rem 0; line-height:1.5; }
+  #inspect .blocked b { color:var(--warn); font-weight:600; }
+  #inspect .gap { border:1px solid var(--line); border-radius:6px; padding:0.4rem 0.5rem;
+                  margin-bottom:0.45rem; line-height:1.5; }
+  #inspect .gap .hd { display:flex; gap:0.35rem; align-items:baseline; flex-wrap:wrap;
+                      margin-bottom:0.2rem; }
+  #inspect .gap .what { color:var(--ink); font-weight:600; }
+  #inspect .gap .why { border:1px solid #6b4d15; color:var(--warn); border-radius:9px;
+                       padding:0 0.4rem; font-size:0.64rem; }
+  #inspect .gap .sc { color:var(--dim); font-size:0.68rem; }
+  #inspect .gap .note { color:var(--dim); font-size:0.7rem; }
+  #inspect .gap .want { margin-top:0.25rem; color:var(--ink); font-size:0.72rem; }
+  #inspect .gap .want b { color:var(--accent); font-weight:600; }
 </style>
 <!-- viewer3d.js pulls three from here. An import map is a property of the
      document, so it has to live in the page even though nothing in the page
@@ -108,6 +131,68 @@ shell.on('row', (row, node) => {
 // selecting it is the natural way in.
 const dim = v => (v == null ? '—' : `${(+v).toFixed(1).replace(/\.0$/, '')} mm`);
 
+// Capability and gaps are computed by the build - there is deliberately no
+// `capability:` key in a manifest - and arrive in <device>.configs.json. They are
+// written by a different hand and may simply not be there yet, on this device or
+// on any device, so every branch below is guarded: a manifest without them reads
+// exactly as it did before rather than showing an empty heading.
+
+// The chain is 1-4 and the level is the longest satisfied prefix, so a bare
+// number is a grade. What makes it useful is `blocked`: "level 4 needs rel-pos on
+// 12 placements in view rear" is a job someone can pick up.
+function capability(cap) {
+  if (!cap || cap.level == null) return '';
+  let h = `<h3>Capability</h3>`;
+  h += `<div class="lvl"><b>level ${esc(cap.level)}</b>`
+     + (cap.name ? `<span class="nm">${esc(cap.name)}</span>` : '')
+     + (cap.flags || []).map(f => `<span class="flag">${esc(f)}</span>`).join('')
+     + `</div>`;
+  for (const b of cap.blocked || []) {
+    // `needs` is the whole point of the record; a blocked entry without one is a
+    // scoreboard again, so say the level is blocked and leave the line visible.
+    h += `<div class="blocked"><b>level ${esc(b.level)}`
+       + (b.name ? ` ${esc(b.name)}` : '') + ` blocked</b>`
+       + (b.needs ? ` — needs ${esc(b.needs)}` : '') + `</div>`;
+  }
+  return h;
+}
+
+// A gap is a fact about what nobody knows, and half of them are facts about a
+// *document* rather than about the manifest - "the HIG has no port-lamp table" -
+// which no rule can ever find. `wanted` says what would close it, and that turns
+// the panel from a list of shortcomings into a list of requests.
+//
+// A derived gap and a blocked level are the same sentence twice: the build emits
+// a CAP gap whose `wanted` is verbatim the `needs` of the level it blocks. The
+// chain already reads better under Capability, where the level it unlocks is
+// next to it, so a gap that repeats a blocked line is dropped here rather than
+// printed again three inches further down. Comparing the strings keeps that true
+// without either side having to know how the other phrases it.
+function gaps(list, cap) {
+  const needs = new Set((cap?.blocked || []).map(b => b.needs).filter(Boolean));
+  const show = (Array.isArray(list) ? list : []).filter(g => !needs.has(g.wanted));
+  if (!show.length) return '';
+  let h = `<h3>Gaps</h3>`;
+  for (const g of show) {
+    const scope = Array.isArray(g.scope) ? g.scope.join(', ') : (g.scope || '');
+    // `reason` is the controlled word on a declared gap - vendor-silent,
+    // needs-hardware - and a derived one carries the rule that found it instead.
+    // Either way it is the badge: it says who could close this.
+    h += `<div class="gap"><div class="hd"><span class="what">${esc(g.what || '')}</span>`
+       + (g.reason || g.rule ? `<span class="why">${esc(g.reason || g.rule)}</span>` : '')
+       + (g.kind ? `<span class="sc">${esc(g.kind)}</span>` : '')
+       // a count of 0 means the rule had nothing to count, not that it found
+       // nothing wrong - the gap is there, so print the gap and not the zero
+       + (g.count > 0 ? `<span class="sc">\u00d7${esc(g.count)}</span>` : '')
+       + `</div>`;
+    if (scope) h += `<div class="sc">${esc(scope)}</div>`;
+    if (g.note) h += `<div class="note">${esc(g.note)}</div>`;
+    if (g.wanted) h += `<div class="want"><b>wanted:</b> ${esc(g.wanted)}</div>`;
+    h += `</div>`;
+  }
+  return h;
+}
+
 function about(box) {
   const meta = state.meta || {};
   const d = shell.device() || {};
@@ -127,8 +212,18 @@ function about(box) {
   let h = `<h2>About</h2>`;
   h += row('manufacturer', d.manufacturer || '');
   h += row('model', meta.model || d.model || '');
+  // The series used to be part of `model:` - "AS5912-54X (AGR100)" - which put the
+  // same fact in two places once portfolio: arrived, and put a marketing name into
+  // every data-model attribute in every compiled drawing. It is structured now, so
+  // it is a row of its own.
+  const pf = d.portfolio || {};
+  if (pf.series) h += row('series', pf.series);
+  if (pf.family) h += row('family', pf.family);
+  if (pf.line) h += row('line', pf.line);
   if (d.version) h += row('version', d.version);
   if (d.description) h += row('description', d.description);
+
+  h += capability(meta.capability || d.capability);
 
   h += `<h3>Dimensions</h3>`;
   h += row('rack units', ch.ru != null ? `${ch.ru} RU` : '—');
@@ -156,6 +251,8 @@ function about(box) {
     }
     h += cite('configurations', 'part-numbers');
   }
+
+  h += gaps(meta.gaps || d.gaps, meta.capability || d.capability);
 
   const rest = Object.keys(prov);
   if (rest.length) {

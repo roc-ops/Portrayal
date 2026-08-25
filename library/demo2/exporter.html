@@ -22,7 +22,7 @@
 <body>
 <div class="hdr">
   <h1>DCIM export</h1>
-  <label>device <select id="dev"></select></label>
+  <span id="pick"></span>
   <label>NOS <select id="nos"><option value="arcos">arcos</option><option value="sonic">sonic</option></select></label>
   <button id="dl">Download YAML</button>
   <span id="src" class="note"></span>
@@ -35,22 +35,23 @@
   profile, because they are a property of the network OS rather than of the hardware.
 </p>
 <pre id="out">loading…</pre>
-<script>
-const $ = id => document.getElementById(id);
-let DEVICES = [], text = '', file = '';
+<script type="module">
+import { createDevicePicker } from './devsel.js';
 
-// The build writes exports/nautobot/<manufacturer>/<model>-<nos>.yaml, and the
-// model in that name is the plain model with any parenthesised alias dropped -
-// "AS7946-30XB", not "AS5912-54X (AGR100)". Rebuild the same name here rather
-// than adding an index nobody else needs.
+const $ = id => document.getElementById(id);
+let DEVICES = [], text = '', file = '', DEV = '';
+
+// The build writes exports/nautobot/<manufacturer>/<model>-<nos>.yaml. The
+// marketing series used to be crammed into `model:` - "AS5912-54X (AGR100)" -
+// and had to be stripped back out here; it now lives in `portfolio.series`, so
+// the model is the model. Rebuild the name rather than adding an index nobody
+// else needs.
 const pathFor = (d, nos) =>
   `../exports/nautobot/${encodeURIComponent(d.manufacturer)}/` +
-  `${encodeURIComponent(d.model.split(' (')[0])}-${nos}.yaml`;
+  `${encodeURIComponent(d.model)}-${nos}.yaml`;
 
 async function show() {
-  const d = DEVICES.find(x => x.name === $('dev').value);
-  // the tab shell keeps its own device menu; tell it what we switched to
-  if (parent !== window) parent.postMessage({portrayal: 'device', device: d.name}, '*');
+  const d = DEVICES.find(x => x.name === DEV);
   const nos = $('nos').value;
   file = pathFor(d, nos);
   $('src').textContent = '';
@@ -82,20 +83,14 @@ $('dl').onclick = () => {
 
 (async () => {
   DEVICES = (await (await fetch('../dist/devices.json', {cache: 'no-store'})).json()).devices;
-  DEVICES.sort((a, b) => a.manufacturer.localeCompare(b.manufacturer)
-                      || a.model.localeCompare(b.model, undefined, {numeric: true}));
-  const byVendor = new Map();
-  for (const d of DEVICES) {
-    if (!byVendor.has(d.manufacturer)) byVendor.set(d.manufacturer, []);
-    byVendor.get(d.manufacturer).push(d);
-  }
-  $('dev').innerHTML = [...byVendor].map(([v, list]) =>
-    `<optgroup label="${v}">` +
-    list.map(d => `<option value="${d.name}">${d.model}</option>`).join('') +
-    '</optgroup>').join('');
   const want = new URLSearchParams(location.search).get('device');
-  $('dev').value = DEVICES.some(d => d.name === want) ? want : DEVICES[0].name;
-  $('dev').onchange = show;
+  DEV = DEVICES.some(d => d.name === want) ? want : DEVICES[0].name;
+  // Which device is the tab shell's state; this page only renders one. Opened on
+  // its own it has to offer the choice, embedded it must not - two menus for one
+  // fact is what the deleted postMessage sync was papering over.
+  if (parent === window)
+    createDevicePicker({mount: $('pick'), devices: DEVICES, value: DEV,
+                        onchange: name => { DEV = name; show(); }});
   $('nos').onchange = show;
   await show();
 })();
