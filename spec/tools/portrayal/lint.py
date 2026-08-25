@@ -401,10 +401,14 @@ def lint_device(path, validator, lib_roots):
             bw = max(f[0] + f[2] for f in fps) - ax
             bh = max(f[1] + f[3] for f in fps) - ay
             mx, my = at
-            # inside that region or within one region-dimension of it - printed beside
-            # a port, not across the chassis. Floor of 6mm: a legend beside a 2mm LED
-            # is necessarily further away than 2mm, because text is wider than a lamp.
-            tx, ty = max(bw, 6.0), max(bh, 6.0)
+            # Inside that region, or within one region-dimension of it. The floor of
+            # 20mm is what makes this usable on real hardware: indicators and legends
+            # are grouped, so a column's LEDs often sit above the TOP port and serve
+            # the bottom one 18mm away, and a legend beside a 2mm lamp is necessarily
+            # further off than 2mm. 20mm is generous for light-pipe and silkscreen
+            # practice while still an order of magnitude below "somewhere else on the
+            # panel", which is the mistake this rule exists to catch.
+            tx, ty = max(bw, 20.0), max(bh, 20.0)
             if mx < ax - tx or mx > ax + bw + tx or my < ay - ty or my > ay + bh + ty:
                 err(path, "L14", f"{vname}: {kind} {ident!r} at ({mx:g}, {my:g}) is "
                                  f"for {', '.join(known)} but sits well outside "
