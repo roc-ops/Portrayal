@@ -12,6 +12,11 @@ description: >-
 attrs: {model: 'AGR PSU (DC)', input: '-40 to -75 VDC, 40 A max per PSU'}
 size: {w: 60.1, h: 37.6, d: 360.7}
 provenance:
+  terminal: 'photo - IMG_6789 and IMG_6796 at 5x. A BLACK plastic housing, not the
+    grey an earlier pass drew, with three vertical walls forming two open-ended
+    lanes. Each lane takes a bolt with a hex nut and a star washer. Jason: the
+    walls stand about 3/4 inch proud (19mm) and the bolts about 1/2 inch (12.7).
+    The lanes are centred in the housing - they were drawn off to the left'
   face: 'drawing + photo - 60.1 x 37.6 measured off the rear panel figure; the
     arrangement (bail handle LEFT, input centre, red latch RIGHT) is read off
     photographs of the real unit'
@@ -36,5 +41,13 @@ relief:
     # reads as a coloured shadow under the handle.
     - {node: handle, uhandle: 9.0}
     - {node: latch, out: 4.2}
-    - {node: inlet, out: 2.2}
+    # The terminal is a BLACK housing with three walls making two open-ended
+    # lanes, so cables drop in from above (PSU0) or below (PSU1) onto a bolt.
+    # Each wall carries its own `out` - one feature on the group would use the
+    # group's bounding rect and fill the lanes back in.
+    - {node: wall-l, out: 19.0}
+    - {node: wall-m, out: 19.0}
+    - {node: wall-r, out: 19.0}
+    - {node: bolt-pos, out: 12.7}
+    - {node: bolt-neg, out: 12.7}
 skins: [default]

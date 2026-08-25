@@ -273,11 +273,24 @@ def lint_device_overlap(path, view_name, view, lib_roots):
             cx, cy = x + w / 2, y + h / 2
             x, y, w, h = cx - h / 2, cy - w / 2, h, w
         boxes.append((p["id"], x, y, w, h))
+    # Bays occupy faceplate area exactly as placements do. Leaving them out let a
+    # rivet row sit on top of five fan bays without a word from the linter.
+    for b in view_parts(view)["bays"]:
+        # NOT transposed for `rotate`. A placement's size comes from the unrotated
+        # component, so a quarter turn swaps it; a bay's size is authored as the
+        # ON-PANEL footprint already, and `rotate` only spins the occupant inside
+        # it. Transposing here reported the C40G's six horizontal card bays as
+        # overlapping each other by 300mm.
+        boxes.append((b["id"], b["at"][0], b["at"][1], b["size"]["w"], b["size"]["h"]))
     for i, a in enumerate(boxes):
         for b in boxes[i + 1:]:
             ox = min(a[1] + a[3], b[1] + b[3]) - max(a[1], b[1])
             oy = min(a[2] + a[4], b[2] + b[4]) - max(a[2], b[2])
-            if ox > 1e-3 and oy > 1e-3:
+            # 0.05mm, not 0.001. Abutting parts on a fractional pitch round into
+            # a hair of overlap - the C100G's 30.47mm card pitch puts adjacent
+            # bays 0.01mm into each other - and reporting that trains people to
+            # ignore the rule. Anything a sheet-metal shop could not hold is noise.
+            if ox > 0.05 and oy > 0.05:
                 if b[0] in owned.get(a[0], ()) or a[0] in owned.get(b[0], ()):
                     continue
                 err(path, "L13", f"{view_name}: {a[0]} and {b[0]} overlap by "

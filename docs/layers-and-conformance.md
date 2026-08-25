@@ -151,6 +151,19 @@ The proximity test allows a legend inside its part's footprint or within one par
 of it, which covers printed-beside-a-port without permitting a label on the far side of
 the chassis.
 
+**L13 — placed parts must not overlap** — and that now includes **bays**, not just
+placements. Leaving bays out let a row of rivets sit on top of five fan bays with
+nothing said. Two subtleties, both learned the hard way:
+
+- A **placement's** size comes from its unrotated component, so a quarter turn
+  swaps it. A **bay's** size is authored as the on-panel footprint already, and
+  `rotate` only spins the occupant inside it. Transposing a bay reported the
+  C40G's six horizontal card bays as overlapping by 300 mm.
+- The tolerance is **0.05 mm**, not 0.001. Abutting parts on a fractional pitch
+  round into a hair of overlap — the C100G's 30.47 mm card pitch puts adjacent
+  bays 0.01 mm into each other — and reporting that trains people to ignore the
+  rule.
+
 **L15 — the maturity gate.** Above.
 
 **L16 — manufacturing order.** View keys must read `size > panel > silkscreen >
