@@ -11,6 +11,7 @@ from pathlib import Path
 
 import yaml
 
+import attrsections as attrs_mod
 import capability
 from manifest import view_parts
 
@@ -23,7 +24,7 @@ SCHEMAS = Path(__file__).resolve().parents[2] / "schemas"
 SEARCH_ATTRS = ("media", "speed", "role", "function", "type", "slot")
 
 
-def search_blob(d):
+def search_blob(d, ddir=None):
     """Everything a reader might type that is not already in the index entry.
 
     The filter searched manufacturer, model, series, family and description, and
@@ -52,7 +53,11 @@ def search_blob(d):
         elif obj is not None:
             words.append(str(obj))
 
-    take(d.get("attrs") or {})
+    # FLATTENED, not walked. `take` appends keys as well as values, so walking
+    # the sections would put "physical", "power" and "other" into every device's
+    # haystack and make those words match the whole portfolio - a filter term
+    # that matches everything is worse than one that matches nothing.
+    take(attrs_mod.flatten(d.get("attrs")))
     take(d.get("part-numbers") or {})
     for g, gdef in (d.get("groups") or {}).items():
         words.append(g)
@@ -73,6 +78,14 @@ def search_blob(d):
                     words.append(str(q["attrs"][k]))
         for b in vp["bays"]:
             refs.update(b.get("accepts") or [])
+    # The NOS an overlay exists for. "arcos" used to be findable on the
+    # AS7326-56X because somebody had written it into an attr; the attr moved to
+    # overlays/arcos.yaml, which is its right home, and the word would have gone
+    # with it. What a device can be joined to is a fact worth searching for, so
+    # it is indexed from the overlay itself rather than from a sentence.
+    for f in sorted((ddir / "overlays").glob("*.yaml")) if ddir else []:
+        o = yaml.safe_load(f.read_text()) or {}
+        words.append(str(o.get("nos") or ""))
     for ref in refs:                      # 'std/qsfp-dd@1' -> 'qsfp-dd'
         words.append(ref.split("/")[-1].rsplit("@", 1)[0])
     seen, out = set(), []
@@ -111,7 +124,7 @@ def main():
                 # this; absent is fine and sorts under the manufacturer alone.
                 "portfolio": d.get("portfolio") or {},
                 # what the type-ahead filter matches on beyond the fields above
-                "search": search_blob(d),
+                "search": search_blob(d, man.parent),
             })
     devices.sort(key=lambda x: (x["manufacturer"], x["name"]))
 

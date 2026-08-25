@@ -265,10 +265,27 @@ function about(box) {
   h += row('W × H × D', `${dim(ch.w)} × ${dim(ch.h)} × ${dim(ch.d)}`);
   h += cite('chassis', 'dimensions', 'width', 'height', 'depth', 'ru');
 
-  const akeys = Object.keys(attrs);
-  if (akeys.length) {
-    h += `<h3>Attributes</h3>`;
-    for (const k of akeys) h += row(k, attrs[k]) + cite(k);
+  // Attributes are SECTIONED, and this is where the sectioning pays. Twenty-four
+  // rows in one undifferentiated column headed "Attributes" is a wall - a reader
+  // looking for the operating range had to read the ASIC, the MAC table and the
+  // optics list on the way past. `other` is printed like any other section and
+  // not last-and-quiet: it holds the facts that fit nowhere yet, and a reader
+  // seeing it is the point of it existing rather than being hidden.
+  //
+  // Unknown sections are printed after the known ones rather than dropped. This
+  // panel is a viewer for a compiled drawing that may be older or newer than
+  // itself, and silently swallowing a section a manifest declares is the worst
+  // of the options: the fact is in the file, in the drawing, and nowhere on
+  // screen.
+  const SECTIONS = ['physical', 'performance', 'power', 'thermal', 'environmental',
+                    'platform', 'features', 'management', 'compliance', 'lifecycle',
+                    'other'];
+  const present = Object.keys(attrs).filter(s => attrs[s] && Object.keys(attrs[s]).length);
+  const akeys = present.flatMap(s => Object.keys(attrs[s]));
+  for (const s of [...SECTIONS.filter(s => present.includes(s)),
+                   ...present.filter(s => !SECTIONS.includes(s))]) {
+    h += `<h3>${esc(s[0].toUpperCase() + s.slice(1))}</h3>`;
+    for (const [k, v] of Object.entries(attrs[s])) h += row(k, v) + cite(k);
   }
 
   const cfgs = (meta.configs || []).filter(c => Object.keys(c['part-numbers'] || {}).length);

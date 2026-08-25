@@ -49,7 +49,6 @@ def nos_name(profile, kind, n, origin=1):
 
 def build(dev, profile):
     ch = dev.get("chassis", {})
-    attrs = dev.get("attrs", {})
     out = {
         "manufacturer": dev["manufacturer"],
         "model": dev["model"].split(" (")[0],

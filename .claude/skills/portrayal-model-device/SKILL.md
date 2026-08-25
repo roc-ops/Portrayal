@@ -185,9 +185,41 @@ Now populate. **Reuse before building.**
    differ per port family.** On one router the QSFP-DD ports carry a stacked
    pair outside each block, the QSFP28 ports four above each column, and the
    SFP28 ports one each. One rule for all of them will be wrong.
-8. **Transcribe the spec table.** Switch silicon, CPU, memory, boot flash,
-   storage, BMC, capacity, buffering, power draw, PSU inputs, temperature and
-   humidity all belong in `attrs`. They are why someone opens the model.
+8. **Transcribe the spec table, into SECTIONS.** Switch silicon, CPU, memory,
+   boot flash, storage, BMC, capacity, buffering, power draw, PSU inputs,
+   temperature and humidity all belong in `attrs`. They are why someone opens
+   the model. `attrs` is not a flat bag: it is
+   `physical / performance / power / thermal / environmental / platform /
+   features / management / compliance / lifecycle`, plus `other`. Three rules:
+   - **A key keeps its own prefix** - `power.power-max-w`, not `power.max-w`.
+     Every attr leaves the manifest as `data-<key>` on the SVG root and is read
+     there without its container. Keys are unique across sections; lint L25 is
+     an error if two claim one name.
+   - **Do not restate what the structure already says.** `rack: '13 RU'` beside
+     `chassis.ru: 13`, `slots: '14 front + 14 rear'` beside 33 modelled bays,
+     `ports: 28` beside 28 placements. Two sources for one fact, and the prose
+     one is the one no tool can use.
+   - **`other` is for facts that fit no section, and it is counted.** Lint L24
+     reports it and the gaps register carries it as `attrs-unclassified`. Use
+     it honestly - it is how the next section gets discovered - but do not use
+     it to avoid choosing.
+9. **Transcribe compliance, and do not tidy the wording.** Every datasheet
+   carries a compliance line and we hold it for two devices in thirteen. The
+   AGR420's is the worked example: `nebs: 'NEBS Level 3 (pre-test; certificate
+   by request)'` is a materially different claim from "NEBS Level 3", and
+   shortening it under a heading called `compliance` would turn a hedge into a
+   certification - a false statement about a product.
+10. **Search for an EOL announcement.** Two minutes, and the notices are nearly
+   always public: "<vendor> <model> end of life", "<vendor> <model> end of
+   sale", and the vendor's own product-notices page. GA is assumed and GA dates
+   are NOT worth hunting; only what has been ANNOUNCED goes in.
+   - found -> `lifecycle: {eol: announced, eol-announcement: <url>,
+     end-of-sale: ..., end-of-life: ...}`, with the link, because a date no
+     reader can check is a claim about a product.
+   - searched and found nothing -> `lifecycle: {eol: none-announced}`. Record
+     it. This is the state that earns the two minutes: absent means NOBODY
+     LOOKED, and "we checked and the vendor has announced nothing" is a real
+     finding that must not be indistinguishable from it.
 
 Occupants (a transceiver in a cage) use `mate-to:` and carry no position of
 their own.
@@ -293,7 +325,18 @@ description: >-
   one paragraph
 provenance:
   <key>: '<confidence> - <where, precisely>'
-attrs: {...}
+attrs:
+  physical: {...}      # sections, not a flat bag - see step 8. Omit any that
+  performance: {...}   # have no data; `other` is counted, not free.
+  power: {...}
+  thermal: {...}
+  environmental: {...}
+  platform: {...}
+  features: {...}
+  management: {...}
+  compliance: {...}
+  lifecycle: {eol: none-announced}
+  other: {...}
 chassis: {width: , height: , depth: , ru: , color: }
 groups:
   sfp-plus: {term: Port, index-origin: 1, attrs: {media: sfp-plus, speed: 10g}}

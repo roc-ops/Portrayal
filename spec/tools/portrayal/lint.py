@@ -17,6 +17,8 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
   L20 states: a state name is a token - prose belongs in `description`
   L22 device: a group's declared media/speed matches the ports it holds
   L23 device: a port group is one family, or says in `mixed:` why it is not
+  L24 device: `attrs.other` is counted, so the long tail cannot go quiet
+  L25 device: one attr key is claimed by one section - it flattens to data-<key>
 """
 import argparse
 import json
@@ -27,6 +29,7 @@ from pathlib import Path
 
 import yaml
 
+import attrsections as attrs_mod
 from manifest import (view_parts, targets, split_target, VIEW_KEY_ORDER,
                       PANEL_KEY_ORDER, COMPONENT_KEY_ORDER)
 from jsonschema import Draft202012Validator
@@ -611,6 +614,37 @@ def lint_device_groups(path, data, lib_roots):
                               f"`mixed:` states a fact about the hardware - drop it")
 
 
+def lint_device_attrs(path, data):
+    """L24 and L25 - what the sections of `attrs` promise.
+
+    L25, error. Two sections claiming one key. `attrs` flattens onto the SVG
+    root as `data-<key>` and there is no nesting in an attribute list to
+    disambiguate them, so one of the two facts would silently win. It is an
+    error rather than a warning because the loser is invisible: the drawing
+    still compiles and still validates, and only a diff of two builds would
+    show which value went missing.
+
+    L24, warning, and it is a CENSUS rather than a complaint. `attrs.other` is
+    a real section - 17 of the 22 keys that fit no section appeared on exactly
+    one device, and a section per one-off is a taxonomy of nothing. The failure
+    mode is not that the tail exists, it is that the tail goes quiet and `other`
+    becomes where anything difficult gets put. So it is counted here, every
+    build, and carried into the gaps register as `attrs-unclassified`. It either
+    shrinks as patterns emerge or it stays visibly unshrunk; what it cannot do
+    is become normal.
+    """
+    attrs = data.get("attrs") or {}
+    for key, sections in sorted(attrs_mod.collisions(attrs).items()):
+        err(path, "L25", f"attrs key {key!r} is in {' and '.join(sections)} - it "
+                         f"flattens to data-{key} either way, so one of the two "
+                         "values is silently discarded. A key belongs to one section")
+    tail = sorted((attrs.get(attrs_mod.TAIL) or {}).keys())
+    if tail:
+        warn(path, "L24", f"attrs.other holds {len(tail)} key(s) - {', '.join(tail)}. "
+                          "Fits no section yet: either a section is missing or this "
+                          "is a genuine one-off. Counted so the tail cannot go quiet")
+
+
 def lint_device(path, validator, lib_roots):
     try:
         data = yaml.safe_load(path.read_text())
@@ -627,6 +661,7 @@ def lint_device(path, validator, lib_roots):
         return any((Path(r) / "components" / nsname / f"v{major}" / "contract.yaml").exists()
                    for r in lib_roots)
 
+    lint_device_attrs(path, data)
     declared_groups = set((data.get("groups") or {}).keys())
     for gname, gdef in (data.get("groups") or {}).items():
         check_states(path, f"groups/{gname}", (gdef or {}).get("states"),

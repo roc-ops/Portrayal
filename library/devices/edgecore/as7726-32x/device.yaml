@@ -25,27 +25,32 @@ provenance:
     from a dark in-rack shot (big sticker edge visible ~155mm from front, second label front-left
     estimated) - reshoot on a bench for calibration; sides extrapolated from angled photo
 attrs:
-  asic: Broadcom BCM56870 Trident 3
-  cpu: Intel Xeon D-1518, 4-core @ 2.2 GHz
-  memory: 16 GB DDR4 (2x 8 GB SO-DIMM)
-  storage: 64 GB M.2 SSD (MLC)
-  spi-flash: 2x 16 MB
-  tpm: TPM 1.2
-  switching-capacity: 3.2 Tbps (6.4 Tbps full duplex)
-  forwarding-rate: 2003.4 Mpps
-  packet-buffer: 32 MB
-  jumbo-frames: 9416 bytes
-  mac-table: 32 K min / 288 K max (NOS-dependent)
-  power-min-w: '149.8'
-  power-typical-w: '296.73'
-  psus: 2x 650 W redundant, load-sharing, hot-swappable
-  fans: 5+1 redundant, hot-swappable
-  software: ONIE installer
-  logical-ports-max: '128'
-  port-modes-qsfp28: 1x 100G, 2x 50G, 4x 25G, 1x 40G, 4x 10G (breakout via DAC)
-  optics-qsfp28: 100GBASE-SR4/CWDM4/LR4/ER4/ZR4/PSM4-2/DR1/FR1/LR1, 100G-DAC/AOC, 40GBASE-SR4/LR4,
-    40G-DAC/AOC
-  mgmt-ports: 1x RJ-45 console, 1x RJ-45 1000BASE-T, 2x SFP+ 10G, 1x USB-A storage
+  performance:
+    switching-capacity: 3.2 Tbps (6.4 Tbps full duplex)
+    forwarding-rate: 2003.4 Mpps
+    packet-buffer: 32 MB
+    jumbo-frames: 9416 bytes
+    mac-table: 32 K min / 288 K max (NOS-dependent)
+    logical-ports-max: '128'
+    port-modes-qsfp28: 1x 100G, 2x 50G, 4x 25G, 1x 40G, 4x 10G (breakout via DAC)
+    optics-qsfp28: 100GBASE-SR4/CWDM4/LR4/ER4/ZR4/PSM4-2/DR1/FR1/LR1, 100G-DAC/AOC, 40GBASE-SR4/LR4, 40G-DAC/AOC
+  power:
+    power-min-w: '149.8'
+    power-typical-w: '296.73'
+    psus: 2x 650 W redundant, load-sharing, hot-swappable
+  thermal:
+    fans: 5+1 redundant, hot-swappable
+  platform:
+    asic: Broadcom BCM56870 Trident 3
+    cpu: Intel Xeon D-1518, 4-core @ 2.2 GHz
+    memory: 16 GB DDR4 (2x 8 GB SO-DIMM)
+    storage: 64 GB M.2 SSD (MLC)
+    boot-flash: 2x 16 MB
+    software: ONIE installer
+  features:
+    tpm: TPM 1.2
+  management:
+    mgmt-ports: 1x RJ-45 console, 1x RJ-45 1000BASE-T, 2x SFP+ 10G, 1x USB-A storage
 chassis:
   width: 438.4
   height: 43.5

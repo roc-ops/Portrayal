@@ -101,7 +101,148 @@
       }
     },
     "attrs": {
-      "type": "object"
+      "type": "object",
+      "description": "facts about the device that belong to no view, filed by section. Keys are globally unique across sections and keep their own prefix (`power.power-max-w`, not `power.max-w`): each one is flattened onto the SVG root as `data-<key>`, where it is read without its container, and the section is a classification of a fact rather than a namespace for it - so re-filing a key changes no drawing and no export. Lint L25 is an error if two sections claim one key. `spec/schemas/profiles.yaml` states what each device class owes in terms of these sections.",
+      "additionalProperties": false,
+      "properties": {
+        "physical": {
+          "type": "object",
+          "description": "the box as an object: weight, and anything dimensional the chassis block does not already hold. `rack: '13 RU'` beside `chassis.ru: 13` is NOT physical data, it is the same fact written twice - the structured one is the one a tool can use",
+          "additionalProperties": {
+            "type": [
+              "string",
+              "number",
+              "boolean"
+            ]
+          }
+        },
+        "performance": {
+          "type": "object",
+          "description": "what the box forwards and on what: capacity, forwarding rate, buffers, table sizes, the modes its cages run and the optics they take",
+          "additionalProperties": {
+            "type": [
+              "string",
+              "number",
+              "boolean"
+            ]
+          }
+        },
+        "power": {
+          "type": "object",
+          "description": "what it draws and what it is fed. `power-max-w`, `power-typical-w`, `power-min-w`, suffixed `-ac-w`/`-dc-w` only where the vendor states both and they differ",
+          "additionalProperties": {
+            "type": [
+              "string",
+              "number",
+              "boolean"
+            ]
+          }
+        },
+        "thermal": {
+          "type": "object",
+          "description": "operating temperature and the machinery that holds it - fans, airflow. `operating-temp-f2b` and `operating-temp-b2f` are two facts, not two spellings: the airflow SKUs have different ranges",
+          "additionalProperties": {
+            "type": [
+              "string",
+              "number",
+              "boolean"
+            ]
+          }
+        },
+        "environmental": {
+          "type": "object",
+          "description": "conditions the box is rated for but does not control - storage temperature, humidity, altitude",
+          "additionalProperties": {
+            "type": [
+              "string",
+              "number",
+              "boolean"
+            ]
+          }
+        },
+        "platform": {
+          "type": "object",
+          "description": "what it is built from: ASIC, CPU, memory, storage, flash, BMC, external TCAM, the software it ships with",
+          "additionalProperties": {
+            "type": [
+              "string",
+              "number",
+              "boolean"
+            ]
+          }
+        },
+        "features": {
+          "type": "object",
+          "description": "capabilities that are switched on rather than dimensioned - MACsec, PoE, FlexE, timing, TPM, GNSS. Where a datasheet says 'optional' the fact may belong in `configurations` as a SKU variant instead; state it here only while the SKUs are unmodelled",
+          "additionalProperties": {
+            "type": [
+              "string",
+              "number",
+              "boolean"
+            ]
+          }
+        },
+        "management": {
+          "type": "object",
+          "description": "how it is operated and observed: management ports, firmware bundles, telemetry the box exposes about itself",
+          "additionalProperties": {
+            "type": [
+              "string",
+              "number",
+              "boolean"
+            ]
+          }
+        },
+        "compliance": {
+          "type": "object",
+          "description": "what it is certified or tested to. Wording is load-bearing and must survive verbatim: 'NEBS Level 3 (pre-test; certificate by request)' is a materially different claim from 'NEBS Level 3', and flattening it would be a false statement about a product",
+          "additionalProperties": {
+            "type": [
+              "string",
+              "number",
+              "boolean"
+            ]
+          }
+        },
+        "lifecycle": {
+          "type": "object",
+          "description": "GA is assumed. Record only what the vendor has ANNOUNCED, with the link",
+          "additionalProperties": false,
+          "properties": {
+            "eol": {
+              "enum": [
+                "none-announced",
+                "announced"
+              ],
+              "description": "ABSENT means nobody has looked. `none-announced` means somebody searched and the vendor has announced nothing - a real finding, and it must not be indistinguishable from nobody looking. `announced` owes `eol-announcement`"
+            },
+            "eol-announcement": {
+              "type": "string",
+              "description": "URL of the notice. A date with no link is a claim about a product that no reader can check"
+            },
+            "end-of-sale": {
+              "type": "string"
+            },
+            "end-of-support": {
+              "type": "string"
+            },
+            "end-of-life": {
+              "type": "string"
+            }
+          }
+        },
+        "other": {
+          "type": "object",
+          "description": "the long tail: a real device fact that fits no section yet. Not an escape hatch - lint L24 counts it and the gaps register carries it as `attrs-unclassified`, so it shrinks as patterns emerge or stays visibly unshrunk",
+          "additionalProperties": {
+            "type": [
+              "string",
+              "number",
+              "boolean"
+            ]
+          }
+        }
+      }
     },
     "chassis": {
       "type": "object",

@@ -51,34 +51,33 @@ provenance:
   port-count-note: ArcOS presents swp1-swp56 only. The faceplate labels the 10G management pair
     57/58, but they are not ASIC switch ports - no swp57/58 exists
 attrs:
-  asic: Broadcom BCM56873 Trident 3
-  cpu: Intel Xeon D-1518, 4-core / 8-thread @ 2.2 GHz
-  memory: 16 GB DDR4 (2x 8 GB SO-DIMM)
-  storage: 64 GB M.2 SSD (MLC)
-  spi-flash: 2x 16 MB
-  switching-capacity: 2 Tbps (4 Tbps full duplex)
-  forwarding-rate: 2 Bpps
-  packet-buffer: 32 MB integrated
-  jumbo-frames: 9000 bytes
-  mac-table: 32 K min / 288 K max
-  vlan-ids: 4 K
-  psus: 2x redundant, load-sharing, hot-swappable AC or -48 VDC
-  fans: 5+1 redundant, hot-swappable
-  software: ONIE installer
-  port-modes-qsfp28: 1x 100G, 1x 40G, 4x 25G, 4x 10G (breakout via DAC)
-  optics-sfp28: 1G fixed / 10G / 25G single-rate transceivers, AOC, DAC; 10GBASE-RJ45 supported
-    on H/W R01G or newer
-  optics-qsfp28: 100GBASE-SR4/CWDM4/LR4, 100G-DAC/AOC, 40GBASE-SR4/LR4, 40G-DAC/AOC
-  mgmt-ports: 1x RJ-45 console, 1x RJ-45 100/1000BASE-T, 2x 10G, 1x USB-A storage
-  nos-verified: ArcOS S8.5.1A on netlab-leaf1 (same unit as the intake photos)
-  interface-naming: swp1-swp56 switch ports, ma1 management, loopback0
-  entity-map: chassis > lc0 (LINECARD) > psu0/psu1, fan1-fan6 chassis fans (plus fan0 inside PSU
-    2), led0-led4, thermal0-thermal5, eeprom0, sfp1-sfp56
-  entity-transceivers: sfp1-sfp56, each carrying SwPort/Status/Vendor/Model/ Type/Module-Type/Media-Type/Module-Capability
-  thermal-sensors: CPU Core, LM75-1-48, LM75-2-49, LM75-3-4A, LM75-4-4B, PSU-2
-  firmware-mu: EdgeCore MU 1.2.3
-  operating-temp-f2b: 0 to 45 C
-  operating-temp-b2f: 0 to 40 C
+  performance:
+    switching-capacity: 2 Tbps (4 Tbps full duplex)
+    forwarding-rate: 2 Bpps
+    packet-buffer: 32 MB integrated
+    jumbo-frames: 9000 bytes
+    mac-table: 32 K min / 288 K max
+    vlan-ids: 4 K
+    port-modes-qsfp28: 1x 100G, 1x 40G, 4x 25G, 4x 10G (breakout via DAC)
+    optics-sfp28: 1G fixed / 10G / 25G single-rate transceivers, AOC, DAC; 10GBASE-RJ45 supported on H/W
+      R01G or newer
+    optics-qsfp28: 100GBASE-SR4/CWDM4/LR4, 100G-DAC/AOC, 40GBASE-SR4/LR4, 40G-DAC/AOC
+  power:
+    psus: 2x redundant, load-sharing, hot-swappable AC or -48 VDC
+  thermal:
+    fans: 5+1 redundant, hot-swappable
+    operating-temp-f2b: 0 to 45 C
+    operating-temp-b2f: 0 to 40 C
+  platform:
+    asic: Broadcom BCM56873 Trident 3
+    cpu: Intel Xeon D-1518, 4-core / 8-thread @ 2.2 GHz
+    memory: 16 GB DDR4 (2x 8 GB SO-DIMM)
+    storage: 64 GB M.2 SSD (MLC)
+    boot-flash: 2x 16 MB
+    software: ONIE installer
+  management:
+    mgmt-ports: 1x RJ-45 console, 1x RJ-45 100/1000BASE-T, 2x 10G, 1x USB-A storage
+    firmware-mu: EdgeCore MU 1.2.3
 chassis:
   width: 438.4
   height: 43.5

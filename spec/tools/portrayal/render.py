@@ -14,6 +14,7 @@ from pathlib import Path
 
 import yaml
 
+import attrsections as attrs_mod
 from manifest import view_parts, targets, split_target
 import capability
 
@@ -385,7 +386,14 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     svg.set("data-device", device["name"])
     svg.set("data-view", view_name)
     svg.set("data-config", config_name)
-    for ak, av in (device.get("attrs") or {}).items():
+    # Sections are a classification, not a namespace: a drawing is opened
+    # somewhere else, and `data-power-max-w` is readable there while
+    # `data-power-max-w` under some section prefix would only be longer. So the
+    # bag is FLATTENED here and every key keeps the exact spelling it had before
+    # sections existed - re-filing a key between sections must not change a
+    # single byte of a compiled drawing. attrs.flatten is shared with the search
+    # index and the exporters so they cannot disagree about what the bag holds.
+    for ak, av in attrs_mod.flatten(device.get("attrs")).items():
         svg.set(f"data-{ak}", str(av))
     airflow = config.get("airflow") or (device.get("chassis") or {}).get("airflow")
     if airflow:
@@ -801,6 +809,12 @@ def main():
                  # drawing as data-* on the SVG root, which meant a viewer had to
                  # load and scrape a picture to answer "how much memory" - and
                  # provenance never reached it at all.
+                 #
+                 # SECTIONED here, flat on the SVG root, and that asymmetry is
+                 # deliberate. An SVG attribute list has no nesting to offer, and
+                 # a panel that prints 24 rows in one column is a wall - the
+                 # sections are what make it readable. Both shapes come from the
+                 # same manifest, so neither can drift from the other.
                  "attrs": device.get("attrs") or {},
                  "provenance": device.get("provenance") or {},
                  "default": default_cfg,

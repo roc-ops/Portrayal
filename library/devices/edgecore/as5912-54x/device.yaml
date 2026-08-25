@@ -41,25 +41,31 @@ provenance:
   rj45-orientation: the pair is mirrored with the latch keyways facing AWAY from each other, so
     the upper jack is the inverted one (IMG_2179)
 attrs:
-  asic: Broadcom BCM88370 Qumran-MX
-  cpu: Intel Atom C2538, 4-core @ 2.4 GHz
-  memory: 16 GB DDR3 (2x 8 GB SO-DIMM)
-  storage: 32 GB mSATA
-  switching-capacity: 800 Gbps
-  forwarding-rate: 720 Mpps
-  jumbo-frames: 9000 bytes
-  packet-buffer: 16 MB on-chip plus 6 GB deep DRAM buffer
-  mac-table: 750 K (LEM)
-  psus: 2x redundant, load-sharing, hot-swappable AC or -48 VDC
-  fans: 5+1 redundant, hot-swappable
-  software: ONIE installer
-  optics-sfp: 10GBASE-CR DAC, SRL/SR, LR, 1000BASE-T/SX/LX
-  optics-qsfp28: 1x 40/100 GbE per port
-  mgmt-ports: 1x RJ-45 console, 1x RJ-45 100/1000BASE-T, 1x USB-A storage (all front)
-  power-ac-min-w: '232'
-  power-ac-max-w: '327'
-  compliance: NEBS Level 1
-  operating-temp: 0 to 40 C
+  performance:
+    switching-capacity: 800 Gbps
+    forwarding-rate: 720 Mpps
+    jumbo-frames: 9000 bytes
+    packet-buffer: 16 MB on-chip plus 6 GB deep DRAM buffer
+    mac-table: 750 K (LEM)
+    optics-sfp: 10GBASE-CR DAC, SRL/SR, LR, 1000BASE-T/SX/LX
+    optics-qsfp28: 1x 40/100 GbE per port
+  power:
+    psus: 2x redundant, load-sharing, hot-swappable AC or -48 VDC
+    power-min-ac-w: '232'
+    power-max-ac-w: '327'
+  thermal:
+    fans: 5+1 redundant, hot-swappable
+    operating-temp: 0 to 40 C
+  platform:
+    asic: Broadcom BCM88370 Qumran-MX
+    cpu: Intel Atom C2538, 4-core @ 2.4 GHz
+    memory: 16 GB DDR3 (2x 8 GB SO-DIMM)
+    storage: 32 GB mSATA
+    software: ONIE installer
+  management:
+    mgmt-ports: 1x RJ-45 console, 1x RJ-45 100/1000BASE-T, 1x USB-A storage (all front)
+  compliance:
+    nebs: NEBS Level 1
 chassis:
   width: 440
   height: 44

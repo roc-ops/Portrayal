@@ -239,12 +239,27 @@ def _specified(data, profiles):
         return None, (f"an entry for profile {prof!r} in spec/schemas/profiles.yaml, "
                       "which is where the minimum set for a class is defined"), \
             "profile-undefined"
-    attrs = data.get("attrs") or {}
-    missing = [fact for fact, keys in (spec.get("requires") or {}).items()
-               if not any(k in attrs for k in keys)]
+    sections = data.get("attrs") or {}
+    missing = []
+    for req in spec.get("requires") or []:
+        name = req["section"]
+        have = sections.get(name) or {}
+        if not have:
+            missing.append(f"an `attrs.{name}` section")
+            continue
+        # A section requirement is satisfied by the section existing. Naming keys
+        # is the exception, for the facts where mere presence is too weak - and
+        # the exceptions are argued for in profiles.yaml rather than accumulating
+        # here.
+        want = [k for k in (req.get("keys") or []) if k not in have]
+        if want:
+            missing.append(", ".join(f"`attrs.{name}.{k}`" for k in want))
+        any_of = req.get("any-of") or []
+        if any_of and not any(k in have for k in any_of):
+            missing.append(f"one of `{'`, `'.join(any_of)}` in `attrs.{name}`")
     if not missing:
         return True, "", None
-    return False, (f"attrs stating {', '.join(missing)} "
+    return False, (f"{'; '.join(missing)} "
                    f"(profile `{prof}` - see spec/schemas/profiles.yaml)"), None
 
 
@@ -385,6 +400,13 @@ RULE_GAPS = {
             "`description` beside them"),
     "L21": ("silkscreen-legibility",
             "the buried marks moved clear of the components that paint over them"),
+    # The tail of `attrs`, reported rather than tolerated. A section that
+    # nobody counts is where anything difficult ends up, and it stops being a
+    # gap the moment it stops being visible - so `other` files a gap per device
+    # that has one, and the register is what makes it shrink.
+    "L24": ("attrs-unclassified",
+            "a section for these facts, or a decision that they are genuine "
+            "one-offs and `other` is where they belong"),
 }
 
 CAP_GAPS = {

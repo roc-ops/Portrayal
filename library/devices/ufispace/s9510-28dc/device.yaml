@@ -31,30 +31,35 @@ provenance:
     "link" had neither a colour nor a base stylesheet rule so it rendered identically to
     "off". Fixed in common/qsfp-lane-leds v1.2.0'
 attrs:
-  asic: Broadcom Qumran2a BCM88483
-  cpu: Intel Denverton-NS 4-core @ 1.6 GHz (premium SKU 8-core @ 1.7 GHz)
-  memory: 8 GB DDR4 (premium 16 GB)
-  storage: 32 GB SSD (premium 128 GB)
-  bmc: ASPEED AST2620
-  switching-capacity: 800 Gbps
-  deep-buffer: 2 GB
-  timing: Stratum 3E OCXO, SyncE, IEEE 1588v2 (T-GM, T-BC/OC, T-TC), Class C, TSN
-  timing-interfaces: GNSS SMA in, 10MHz SMB in/out, 1PPS SMB in/out, ToD RJ45 in, BITS RJ48 in/out
-  gnss: internal receiver for master clock
-  flexe: OIF FlexE 1.1 and 2.0, 400G total bandwidth
-  power-typical-w: '137'
-  power-max-dc-w: '306'
-  power-max-ac-w: '301.2'
-  psus: 2x 400 W 1+1 redundant, hot-swappable (intake)
-  fans: 4+1 redundant, hot-swappable (exhaust)
-  operating-temp: -40 to 65 C (temperature hardened)
-  port-modes-qsfp-dd: 100/400G, OpenZR+ and 400ZR
-  port-modes-qsfp28: 40/100G
-  port-modes-sfp28: 1/10/25G
-  optics-qsfp-dd: 400G SR4/LR4/FR4/ZR4/OpenZR+
-  optics-qsfp28: 100G SR4/LR4/ER4
-  optics-sfp28: 25G SR/LR/ER, 10G SFP+ SR/LR/ER/ZR
-  software: ONIE (NOS required for timing/GNSS features)
+  performance:
+    switching-capacity: 800 Gbps
+    packet-buffer: 2 GB
+    port-modes-qsfp-dd: 100/400G, OpenZR+ and 400ZR
+    port-modes-qsfp28: 40/100G
+    port-modes-sfp28: 1/10/25G
+    optics-qsfp-dd: 400G SR4/LR4/FR4/ZR4/OpenZR+
+    optics-qsfp28: 100G SR4/LR4/ER4
+    optics-sfp28: 25G SR/LR/ER, 10G SFP+ SR/LR/ER/ZR
+  power:
+    power-typical-w: '137'
+    power-max-dc-w: '306'
+    power-max-ac-w: '301.2'
+    psus: 2x 400 W 1+1 redundant, hot-swappable (intake)
+  thermal:
+    fans: 4+1 redundant, hot-swappable (exhaust)
+    operating-temp: -40 to 65 C (temperature hardened)
+  platform:
+    asic: Broadcom Qumran2a BCM88483
+    cpu: Intel Denverton-NS 4-core @ 1.6 GHz (premium SKU 8-core @ 1.7 GHz)
+    memory: 8 GB DDR4 (premium 16 GB)
+    storage: 32 GB SSD (premium 128 GB)
+    bmc: ASPEED AST2620
+    software: ONIE (NOS required for timing/GNSS features)
+  features:
+    timing: Stratum 3E OCXO, SyncE, IEEE 1588v2 (T-GM, T-BC/OC, T-TC), Class C, TSN
+    timing-interfaces: GNSS SMA in, 10MHz SMB in/out, 1PPS SMB in/out, ToD RJ45 in, BITS RJ48 in/out
+    gnss: internal receiver for master clock
+    flexe: OIF FlexE 1.1 and 2.0, 400G total bandwidth
 chassis:
   width: 440
   height: 43.5

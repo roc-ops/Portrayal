@@ -19,20 +19,26 @@ provenance:
   psu: photo (Gospower G1482-1600WRA FRU, six faces)
   fans: datasheet (2+1 FIXED fans - not FRUs; three grilles seen on the rear photo)
 attrs:
-  asic: Broadcom TD3.X2
-  switching-capacity: 148 Gbps
-  cpu: Intel Denverton x86, 4C @ 2.1 GHz (8C @ 2.2 GHz option)
-  memory: 16 GB DDR4 (32 GB option)
-  storage: 64 GB M.2 SSD (up to 256 GB)
-  encryption: 256b MACsec
-  timing: optional IEEE 1588 and SyncE
-  poe: optional IEEE 802.3af/at/bt Type 4 Class 8, 90 W per port, persistent PoE
-  psus: 2x 1600 W hot-swap AC, 0:1 / 1:1 redundancy
-  fans: 2+1 fixed (not field-replaceable)
-  port-modes-rj45: 1000Base-T
-  port-modes-sfp28: 1/10/25G
-  mgmt-ports: 1x RJ45 console, OOB management as a combo pair (RJ45 at the mgmt stack and SFP in
-    the top band share one interface), 2x USB 3.0 Type A
+  performance:
+    switching-capacity: 148 Gbps
+    port-modes-rj45: 1000Base-T
+    port-modes-sfp28: 1/10/25G
+  power:
+    psus: 2x 1600 W hot-swap AC, 0:1 / 1:1 redundancy
+  thermal:
+    fans: 2+1 fixed (not field-replaceable)
+  platform:
+    asic: Broadcom TD3.X2
+    cpu: Intel Denverton x86, 4C @ 2.1 GHz (8C @ 2.2 GHz option)
+    memory: 16 GB DDR4 (32 GB option)
+    storage: 64 GB M.2 SSD (up to 256 GB)
+  features:
+    encryption: 256b MACsec
+    timing: optional IEEE 1588 and SyncE
+    poe: optional IEEE 802.3af/at/bt Type 4 Class 8, 90 W per port, persistent PoE
+  management:
+    mgmt-ports: 1x RJ45 console, OOB management as a combo pair (RJ45 at the mgmt stack and SFP in the
+      top band share one interface), 2x USB 3.0 Type A
 chassis:
   width: 438.2
   height: 43.4
