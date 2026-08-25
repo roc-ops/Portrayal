@@ -30,6 +30,21 @@ def targets(value):
     return list(value) if isinstance(value, (list, tuple)) else [value]
 
 
+def split_target(t):
+    """One `for:` target, split into (view, id).
+
+    A bare id means "in this view" and gives (None, id) - that is what ~250
+    bindings in the portfolio say and it has not changed meaning. A qualified
+    'view/id' names a target in another view of the SAME device and gives
+    (view, id): a front-panel PSU lamp indicates a PSU that lives in the rear.
+    A list may mix the two forms.
+    """
+    if "/" in t:
+        v, i = t.split("/", 1)
+        return v, i
+    return None, t
+
+
 # the order a view's keys must appear in - the order the part is made
 VIEW_KEY_ORDER = ("size", "panel", "silkscreen", "components", "regions")
 PANEL_KEY_ORDER = ("decor", "cutouts")

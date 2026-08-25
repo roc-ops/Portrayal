@@ -25,7 +25,7 @@ from pathlib import Path
 
 import yaml
 
-from manifest import (view_parts, targets, VIEW_KEY_ORDER,
+from manifest import (view_parts, targets, split_target, VIEW_KEY_ORDER,
                       PANEL_KEY_ORDER, COMPONENT_KEY_ORDER)
 from jsonschema import Draft202012Validator
 
@@ -527,6 +527,14 @@ def lint_device(path, validator, lib_roots):
     for gname, gdef in (data.get("groups") or {}).items():
         check_states(path, f"groups/{gname}", (gdef or {}).get("states"),
                      (gdef or {}).get("attrs"))
+    # Every id each view offers, indexed by view name. A `for:` may name a target
+    # in ANOTHER view of the same device (`rear/psu-0`), so the check below cannot
+    # be answered from the view it is standing in.
+    view_ids = {}
+    for vn_, vv_ in (data.get("views") or {}).items():
+        vpp = view_parts(vv_ or {})
+        view_ids[vn_] = ({q["id"] for q in vpp["placements"]}
+                         | {b["id"] for b in vpp["bays"]})
     for vname, view in (data.get("views") or {}).items():
         view = view or {}
         # L16 - a view is written in the order the part is made. Not a style
@@ -630,6 +638,41 @@ def lint_device(path, validator, lib_roots):
             names = targets(value)
             known = []
             for owner in names:
+                # `chassis` is the whole unit, and it is not an invention: the
+                # renderer already gives the faceplate data-path="chassis", so it
+                # is a real node and the first row of every tree. An indicator
+                # whose subject is a rail, a timing core or the box itself names
+                # it. Nothing to locate, so nothing to measure against.
+                if owner == "chassis":
+                    if kind == "silkscreen":
+                        err(path, "L14", f"{vname}: silkscreen {ident!r} is for "
+                                         "'chassis'. Printed ink annotates a part, "
+                                         "not the whole unit")
+                    continue
+                vref, oid = split_target(owner)
+                if vref is not None:
+                    # A cross-view reference: `rear/psu-0` from the front view. The
+                    # view and the id both have to exist, and that is the whole
+                    # test.
+                    #
+                    # There is deliberately NO proximity test here, and adding one
+                    # would be wrong rather than merely strict. Each view defines
+                    # its own coordinate system over its own face; the distance
+                    # between a lamp at (12, 8) on the front and a PSU at (30, 20)
+                    # on the rear is a subtraction of two unrelated origins and
+                    # means nothing. The 30mm floor below exists to catch a legend
+                    # on the far side of one panel from its target - across faces
+                    # of a box it would reject every correct binding, since a front
+                    # lamp is legitimately half a metre of chassis away from the
+                    # part it names. Do not "fix" this.
+                    if vref not in view_ids:
+                        err(path, "L14", f"{vname}: {kind} {ident!r} is for {owner!r}, "
+                                         f"but this device has no view {vref!r}")
+                    elif oid not in view_ids[vref]:
+                        err(path, "L14", f"{vname}: {kind} {ident!r} is for {owner!r}, "
+                                         f"but {oid!r} is not a placement or bay in "
+                                         f"view {vref}")
+                    continue
                 if owner not in seen:
                     err(path, "L14", f"{vname}: {kind} {ident!r} is for {owner!r}, "
                                      "which is not a placement or bay in this view")

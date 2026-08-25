@@ -39,10 +39,37 @@ where the label did. `decor` no longer takes `text` for the same reason.
 
 The same field on a placement, a bay and a silkscreen mark, meaning the same thing:
 this belongs to that. It is **authored, never inferred from names**. One target or a
-list; a leader line that joins two things names both. The renderer emits `data-for`,
-the explorer nests the child under its owner and highlights both on selection, and
-L14 checks every target exists and is nearby - within one owner-dimension, floored at
-6 mm so a legend beside a 2 mm LED is not a finding.
+list; a leader line that joins two things names both, and on an indicator a list means
+*collectively* - a FAN lamp over five trays names all five. The renderer emits
+`data-for`, the explorer nests the child under its owner and highlights both on
+selection, and L14 checks every target exists and is nearby - within one
+owner-dimension, floored at 6 mm so a legend beside a 2 mm LED is not a finding.
+
+A **placement** may name two things a silkscreen mark and a bay may not, because an
+indicator's subject need not be on the face the indicator is printed on:
+
+- `view/id` - a target in another view of the same device. A front-panel PSU lamp
+  indicates a PSU that lives in the rear; that relationship is real, knowable, and
+  nothing else in the schema can spell it. Cross-view targets are **not** proximity
+  tested: each view has its own coordinate system over its own face, so the distance
+  between a lamp on the front and a supply on the rear is a subtraction of two
+  unrelated origins and means nothing.
+- `chassis` - the whole unit. A DIAG, LOC or unnumbered POWER lamp reports on the box
+  or on a rail, not on a modelled part, and `chassis` is already a real node: the
+  renderer gives the faceplate `data-path="chassis"` and it is the first row of every
+  tree. An unnumbered POWER lamp takes this, not the PSU bays: "the unit has power" is
+  not "these two supplies have power".
+
+Printed ink stays where it was printed - silkscreen `for:` is a bare id in this view,
+never qualified and never `chassis`, and L14 says so.
+
+In the emitted SVG a cross-view target is written device-absolute, `data-for="/rear/psu-0"`.
+Consumers split `data-for` on spaces and look each token up as a path in the drawing
+they hold; `rear/psu-0` is a plausible-looking local path and could resolve to the
+wrong node in silence. No `data-path` ever begins with a slash, so the qualified form
+cannot be mistaken for a local one. A front-view tree cannot nest a rear-view bay -
+the bay is not in that drawing - so the explorer leaves the row where it falls and
+prints the target beside it: `led-ps0 — led-rect → rear/psu-0`.
 
 Whether an LED (part of) and a label (describes) deserved different words was
 considered. They do not: the distinction is already carried by which section the
@@ -111,9 +138,10 @@ silkscreen whether or not its author put it in the right group.
       text: '0'
       for: front-0
 
-`for` names a placement or bay in the same view and is emitted as `data-for`, so a viewer
-can select a component and its legend together. It also earns its keep at lint time — see
-L14.
+A silkscreen `for` names a placement or bay in the same view and is emitted as `data-for`,
+so a viewer can select a component and its legend together. It also earns its keep at lint
+time — see L14. A placement's `for` may reach further: `rear/psu-0` for a target in another
+view, or `chassis` for the whole unit.
 
 ## Conformance: `maturity`
 

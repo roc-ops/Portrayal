@@ -14,7 +14,7 @@ from pathlib import Path
 
 import yaml
 
-from manifest import view_parts, targets
+from manifest import view_parts, targets, split_target
 
 TOOL_VERSION = "0.1.0"
 SVG_NS = "http://www.w3.org/2000/svg"
@@ -52,6 +52,27 @@ STATE_CSS = """
     [data-class='region'].portrayal-highlight { stroke: #f59e0b; stroke-width: 0.7; filter: none; }
     .state-fail[data-class='psu'], .state-fail[data-class='fan'] { filter: drop-shadow(0 0 1.4px #ef4444); }
 """
+
+
+def data_for(value):
+    """The `data-for` attribute for a `for:` value, or None.
+
+    A bare target stays bare: it is a data-path in THIS drawing, and the ~250
+    existing bindings say exactly that. A cross-view target comes out
+    device-absolute, with a leading slash - `/rear/psu-0`.
+
+    The slash is the point. Consumers split data-for on spaces and look each
+    token up as a path in the drawing they are holding; `rear/psu-0` is a
+    perfectly plausible-looking local path (a bay `rear` carrying a child
+    `psu-0`) and could resolve to the wrong node without a word said. No
+    data-path ever begins with a slash, so the qualified form cannot be mistaken
+    for a local one: a consumer either understands the leading slash or fails to
+    find the token, and neither of those is silent.
+    """
+    tg = targets(value)
+    if not tg:
+        return None
+    return " ".join("/" + t if split_target(t)[0] else t for t in tg)
 
 
 def load_yaml(path):
@@ -566,9 +587,9 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                 t.set("id", m["id"])
             # bind the mark to what it annotates, so a viewer can select both at once.
             # A leader line names both ends.
-            tg = targets(m.get("for"))
-            if tg:
-                t.set("data-for", " ".join(tg))
+            df = data_for(m.get("for"))
+            if df:
+                t.set("data-for", df)
             silk_g.append(t)
 
     extents = [0.0, 0.0, w, h]
@@ -617,9 +638,9 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             g.set("data-description", desc)
         # what this part belongs to - an LED to its port. The tree nests on it and
         # selecting either side highlights both.
-        tg = targets(p.get("for"))
-        if tg:
-            g.set("data-for", " ".join(tg))
+        df = data_for(p.get("for"))
+        if df:
+            g.set("data-for", df)
         svg.append(g)
         cw, chh_ = contract["size"]["w"], contract["size"]["h"]
         if p.get("rotate") in (90, 270, -90):
@@ -662,9 +683,9 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                                          skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                                          path=f"{b['id']}/module", resolved=resolved)
             bay_g.append(g)
-        tg = targets(b.get("for"))
-        if tg:
-            bay_g.set("data-for", " ".join(tg))
+        df = data_for(b.get("for"))
+        if df:
+            bay_g.set("data-for", df)
 
     if palette or inst_palette:
         extra = "".join(

@@ -70,6 +70,9 @@ export const SHELL_CSS = `
   .node .tw { width:0.85rem; color:var(--dim); flex:none; text-align:center; }
   .node .cls { color:var(--dim); font-size:0.68rem; margin-left:auto; padding-left:0.5rem; }
   .node.empty .nm { color:var(--warn); font-style:italic; }
+  /* a target in another view: the row cannot nest under it, so it says it */
+  .node .xref { color:var(--dim); font-size:0.68rem; padding-left:0.5rem;
+            white-space:nowrap; }
   .kids { margin-left:0.72rem; border-left:1px solid #262b30; }
   .kids.hid { display:none; }
   /* the About panel is long, and the tree above it must not be squeezed to a
@@ -207,8 +210,16 @@ export function createShell(opts = {}) {
       // `for:` in the manifest - an LED belongs to its port, a button to its module.
       // Nest under the first target, so an indicator lists under the thing it
       // indicates rather than in a pile of 52 LEDs somewhere else in the tree.
+      // A cross-view target is written device-absolute, `/rear/psu-0`, and is not
+      // a path in this drawing - a front-view tree cannot nest a rear-view bay,
+      // because the rear-view bay is not here. Nest under the first LOCAL target,
+      // and leave the row where it naturally falls when there is none. The
+      // binding is not dropped: xrefOf() below puts the qualified target on the
+      // row as text, so a front-panel PSU lamp reads "led-ps0 → rear/psu-0"
+      // rather than sitting silently unexplained among the unbound lamps.
       if (!parent && n.el.dataset.for) {
-        const owner = byPath.get(n.el.dataset.for.split(' ')[0]);
+        const here = n.el.dataset.for.split(' ').find(t => t[0] !== '/');
+        const owner = here && byPath.get(here);
         if (owner && owner !== n) parent = owner;
       }
       (parent ? parent.kids : roots).push(n);
@@ -253,6 +264,14 @@ export function createShell(opts = {}) {
     if (!m) return null;
     return e.dataset.speed ? `${mediaLabel(m)} ${speedLabel(e.dataset.speed)}`
                            : mediaLabel(m);
+  }
+
+  // The targets of this node that live in another view, spelled as the manifest
+  // spells them. Only these need saying out loud - a same-view target is already
+  // said by the nesting.
+  function xrefOf(e) {
+    return (e.dataset.for || '').split(' ')
+      .filter(t => t[0] === '/').map(t => t.slice(1));
   }
 
   function labelFor(n) {
@@ -354,8 +373,11 @@ export function createShell(opts = {}) {
         const isBay = cls === 'bay';
         const occupied = isBay ? !!n.el.querySelector('[data-ref]') : true;
         if (isBay && !occupied) row.classList.add('empty');
+        const xref = xrefOf(n.el);
         row.innerHTML = `<span class="tw">${n.kids.length ? '▸' : ''}</span>`
           + `<span class="nm">${labelFor(n)}${isBay && !occupied ? ' — open' : ''}</span>`
+          + (xref.length ? `<span class="xref" title="in another view of this device">`
+                           + `→ ${xref.join(', ')}</span>` : '')
           + `<span class="cls">${cls}</span>`;
         into.appendChild(row);
         const kids = document.createElement('div');
