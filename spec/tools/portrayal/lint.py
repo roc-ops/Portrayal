@@ -60,6 +60,7 @@ AMBIGUOUS_MEDIA = {"sfp", "qsfp"}
 
 _CLASS_CACHE = {}
 _ATTRS_CACHE = {}
+_SIZE_CACHE = {}
 
 
 def contract_class(ref, lib_roots):
@@ -77,6 +78,26 @@ def contract_class(ref, lib_roots):
             break
     _CLASS_CACHE[ref] = cls
     return cls
+
+
+def contract_size(ref, lib_roots):
+    """The `size` a component declares, or None. Cached alongside class and attrs -
+    L21 asks per placement and a 248-placement view would re-read otherwise."""
+    if ref in _SIZE_CACHE:
+        return _SIZE_CACHE[ref]
+    try:
+        nsname, major = ref.rsplit("@", 1)
+    except ValueError:
+        _SIZE_CACHE[ref] = None
+        return None
+    size = None
+    for r in lib_roots:
+        f = Path(r) / "components" / nsname / f"v{major}" / "contract.yaml"
+        if f.exists():
+            size = (yaml.safe_load(f.read_text()) or {}).get("size")
+            break
+    _SIZE_CACHE[ref] = size
+    return size
 
 
 def contract_attrs(ref, lib_roots):
@@ -122,6 +143,41 @@ def check_states(path, where, states, attrs):
                           f"meanings in attrs: reach nothing. Declare states: on "
                           f"the placement or its group, with the prose in "
                           f"description:")
+
+
+# Approximate glyph metrics, in em. Real faces differ by a few percent, which is
+# why L21 carries a tolerance rather than pretending these are exact.
+CAP_EM, DESC_EM, ADV_EM = 0.72, 0.10, 0.60
+# How far a mark may reach into a part before it is a finding. The metrics above
+# are estimates and a mark that grazes a boundary is not what this rule is for;
+# 0.3mm is comfortably below the real cases, which buried 0.4 to 1.8mm of glyph.
+SILK_TOL = 0.3
+
+
+def _path_extent(path_d, at):
+    """Bounding box of a silkscreen path, whose geometry is relative to its `at`."""
+    v = []
+    for tok in path_d.replace(",", " ").split():
+        try:
+            v.append(float(tok))
+        except ValueError:
+            pass
+    if len(v) < 2:
+        return None
+    xs, ys = v[0::2], v[1::2]
+    return (at[0] + min(xs), at[1] + min(ys), at[0] + max(xs), at[1] + max(ys))
+
+
+def _text_extent(m):
+    """Bounding box of a text mark. `at` is the BASELINE, not the top edge - which
+    is the whole reason this rule exists: 2.2mm digits anchored 1.2mm below a port
+    still reached up into it."""
+    x, y = m["at"]
+    fs = m.get("font-size", 2.2)
+    w = len(str(m["text"])) * fs * ADV_EM
+    anchor = m.get("anchor", "start")
+    x0 = x - w if anchor == "end" else (x - w / 2 if anchor == "middle" else x)
+    return (x0, y - fs * CAP_EM, x0 + w, y + fs * DESC_EM)
 
 
 def check_segment(path, code, value):
@@ -575,6 +631,41 @@ def lint_device(path, validator, lib_roots):
             if m.get("id"):
                 check_segment(path, "L2", m["id"])
             check_for("silkscreen", m.get("text") or m.get("id") or "path", m["at"], m.get("for"))
+        # L21 - printed ink that a part covers is ink nobody can read.
+        #
+        # Silkscreen paints UNDER components by design: that is the layer model,
+        # and a legend that disappears when its module is fitted is the intended
+        # signal that it is in the wrong place. Nothing was checking it, so the
+        # signal only ever arrived by someone looking at a render. On the AGR420
+        # the port numbers were anchored 1.2mm below the bottom cage row and still
+        # reached into it, because a text `at` is a baseline and the glyphs grow
+        # upward from it. Across the portfolio 53 marks are buried, one of them by
+        # 1.8mm of a 2.2mm digit.
+        boxes = []
+        for p in vp["placements"]:
+            if not p.get("at"):
+                continue                      # a mate-to occupant carries no position
+            sz = (contract_size(p["ref"], lib_roots) or {})
+            if sz.get("w") and sz.get("h"):
+                boxes.append((p["at"][0], p["at"][1], sz["w"], sz["h"], p["id"]))
+        for m in vp["silkscreen"]:
+            if not m.get("at"):
+                continue
+            ext = _text_extent(m) if m.get("text") else (
+                _path_extent(m["path"], m["at"]) if m.get("path") else None)
+            if not ext:
+                continue
+            mx0, my0, mx1, my1 = ext
+            for bx, by, bw, bh, bid in boxes:
+                ox = min(mx1, bx + bw) - max(mx0, bx)
+                oy = min(my1, by + bh) - max(my0, by)
+                if ox > SILK_TOL and oy > SILK_TOL:
+                    what = repr(m.get("text")) if m.get("text") else (m.get("id") or "path")
+                    warn(path, "L21", f"{vname}: silkscreen {what} at "
+                                      f"({m['at'][0]:g}, {m['at'][1]:g}) is {oy:.2f}mm "
+                                      f"inside {bid}, which paints over it")
+                    break
+
         for p in vp["placements"]:
             check_for("placement", p["id"], p.get("at"), p.get("for"))
         for b in vp["bays"]:
@@ -682,10 +773,20 @@ def main():
             by_code.setdefault(w.split("[")[1].split("]")[0], []).append(w)
         for code, ws in sorted(by_code.items()):
             print(f"LINT: {len(ws)} warning(s) [{code}]")
+            # Five examples, then a per-file tally. The examples alone hid the
+            # shape of the debt and actively misled: `lint | grep device` came
+            # back empty for a device with dozens of warnings, because it was
+            # grepping the five that happened to print. A count per file is what
+            # makes this a dashboard instead of a sample.
             for w in ws[:5]:
                 print(f"  {w}")
             if len(ws) > 5:
-                print(f"  ... and {len(ws) - 5} more")
+                per_file = {}
+                for w in ws:
+                    per_file[w.split(":")[0]] = per_file.get(w.split(":")[0], 0) + 1
+                print(f"  ... and {len(ws) - 5} more, by file:")
+                for f_, n_ in sorted(per_file.items(), key=lambda kv: -kv[1]):
+                    print(f"      {n_:4d}  {f_}")
     if ERRORS:
         print(f"LINT: {len(ERRORS)} error(s) across {n} file(s)")
         for e in ERRORS:
