@@ -134,6 +134,26 @@ provenance:
     being silently chosen
   part-numbers: datasheet Ordering Information - AS7946-74XKSB-O-DC-F is FNPEC7946007Z and
     AS7946-74XKSB-O-AC-F is FNPEC7946008Z
+  top-view-orientation: 'the top and bottom views put y = 0 at the REAR, following the AGR400,
+    whose caution label sits at y 26 and is described there as being at the rear left. The
+    photographs agree with that reading: in IMG_6808 the caution notice is at the end with the
+    DC terminals and the spec and serial labels at the end with the front thumb screws'
+  audit-by-name: 'gate 5 - all thirteen datasheet page-2 callouts walked and satisfied. 1 ->
+    port-0/1; 2 -> port-2..9; 3 -> port-10..73; 4 -> bits-0/1/2; 5 -> mhz-10-in; 6 -> usb;
+    7 -> mgmt-eth with led-mgmt-link and led-mgmt-act; 8 -> console-1; 9 -> pps-tod;
+    10 -> pps-1-out; 11 -> console-0; 12 -> psu-0/psu-1 bays with dc-psu and ac-psu
+    configurations; 13 -> fan-0..fan-4. From the QSG on top of those: the grounding point ->
+    ground-plate, the reset button -> reset, the five system LEDs -> led-diag/loc/fan/ps0/ps1,
+    and the Air Filter Replacement procedure -> filter-top, filter-top-step, filter-bottom-step
+    and filter-bottom. From the photographs: four corner captive screws -> panel-screw-0..3, and
+    the top-cover labels -> label-spec, label-serial, label-caution. 324 placements and bays in
+    all, 74 ports and 148 port lamps among them. Nothing in either document is unaccounted for'
+  audit-by-eye: 'gate 5 - the front and rear were rendered at the reference figure''s own px/mm
+    (3947 and 3943 px wide) and compared strip by strip against it. Every cage row, every block
+    gap, every pair legend and every LED strip lands on the reference; the numbering was
+    confirmed as far out as the 36/37 legend rather than being trusted from block A alone. Two
+    things were moved because of this pass and not before it: the rear PSU pair and grounding
+    plate, and the top filter''s left thumb screw'
 attrs:
   role: aggregation router
   rack: 2 RU
@@ -155,6 +175,10 @@ attrs:
   storage-temp: -40 C to 70 C
   humidity: operating 5-85 percent, storage 5-95 percent, non-condensing
   nos: ONIE preinstalled; ONL and commercial NOS supported
+  airflow: front to back; both listed SKUs are F
+  nebs: NEBS Level 3 (pre-test; certificate by request)
+  compliance: UL/CSA 60950-1 and IEC 62368-1 safety, CB, CE, EN 55032 Class A, FCC Part 15
+    Class A, RoHS 2.0, WEEE
 chassis:
   width: 440.0
   height: 87.0
