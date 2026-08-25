@@ -473,6 +473,54 @@ $('#runtests').onclick = async () => {
   });
   // px/mm is a claim about print resolution, and a data URL that decodes to the
   // wrong size would satisfy every other check here.
+  // A crop is a field of the document, so it has to survive the URL and it has
+  // to be what the export is actually cut to - the two are the same promise.
+  await t('a crop round-trips through the URL and cuts the export', () => {
+    marks.clear(svg);
+    const vb = svg.getAttribute('viewBox').split(/[\s,]+/).map(Number);
+    const c = {x: vb[0] + vb[2] / 4, y: vb[1], w: vb[2] / 2, h: vb[3] / 2};
+    const d = {...SAMPLE, legend: false, crop: c};
+    const back = marks.decode(marks.encode(d)).crop;
+    const box = new DOMParser().parseFromString(marks.toSvg(svg, d), 'image/svg+xml')
+      .documentElement.getAttribute('viewBox').split(/[\s,]+/).map(Number);
+    const want = [c.x, c.y, c.w, c.h].map(n => Math.round(n * 1000) / 1000);
+    return (JSON.stringify(back) === JSON.stringify({x: want[0], y: want[1], w: want[2], h: want[3]}) &&
+            JSON.stringify(box) === JSON.stringify(want)) ||
+      `url=${JSON.stringify(back)} export=${box.join(' ')} wanted ${want.join(' ')}`;
+  });
+  // A crop that misses the drawing is not a crop of nothing; and a document
+  // with no crop must export exactly as it did before crops existed.
+  // A crop the document carries but the drawing does not contain is dropped at
+  // the drawing, not at the parser: normalise() keeps what it was given, because
+  // a document written against the rear view is not rubbish, it is just not
+  // about this picture. What it must never do is silently cut the export.
+  await t('a crop off the drawing is dropped, and no crop changes nothing', () => {
+    marks.clear(svg);
+    const off = {x: -9e4, y: -9e4, w: 10, h: 10};
+    const kept = !!marks.normalise({crop: off}).crop;
+    const dropped = marks.clampCrop(svg, off) === null;
+    // the embedded markup differs by the crop itself; the drawing must not
+    const bare = s => s.replace(/ data-portrayal-markup="[^"]*"/, '');
+    const plain = bare(marks.toSvg(svg, {...SAMPLE, crop: null}));
+    const same = bare(marks.toSvg(svg, {...SAMPLE, crop: off}));
+    return (kept && dropped && plain === same && !/portrayal-crop/.test(plain)) ||
+      `kept=${kept} dropped=${dropped} identical=${plain === same}`;
+  });
+  // A legend row for a mark that reached nothing is a claim about the drawing
+  // that the drawing contradicts, in a file that outlives the page that made it.
+  await t('a labelled mark that matches nothing takes no legend row', () => {
+    marks.clear(svg);
+    const rows = doc => {
+      const built = marks.legend(svg, doc);
+      return built ? built.g.querySelectorAll('text').length : 0;
+    };
+    const one = rows({marks: [{select: nested, color: '#0ff', label: 'real'}]});
+    const two = rows({marks: [{select: nested, color: '#0ff', label: 'real'},
+                              {select: "[data-path='no-such-part']", label: 'typo'}]});
+    const none = rows({marks: [{select: "[data-path='no-such-part']", label: 'typo'}]});
+    marks.clear(svg);
+    return (one === 1 && two === 1 && none === 0) || `${one}, ${two}, ${none}`;
+  });
   await t('toPng is exactly px/mm of the exported drawing', async () => {
     const vb = new DOMParser().parseFromString(marks.toSvg(svg, SAMPLE), 'image/svg+xml')
       .documentElement.getAttribute('viewBox').split(/[\s,]+/).map(Number);

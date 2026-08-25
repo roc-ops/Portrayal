@@ -52,6 +52,27 @@
   .note.warn { color:var(--warn); }
   .note.dim { color:var(--dim); }
   .empty { color:var(--dim); font-size:0.72rem; line-height:1.5; padding:0.3rem 0.1rem; }
+  /* A mark carrying only a state is a statement about the device, not a
+     highlight, and it was made in the tree rather than here. It still has to be
+     listed - it is in the document, it will be exported, and this is the only
+     place to delete it - but it should not read as another coloured ring. */
+  .mark.stateonly { background:#171b1f; border-style:dotted; }
+  .mark.stateonly .idx { color:#5f666d; }
+
+  /* state chips in the tree. Amber rather than the mark colours: a state is a
+     depicted condition of the hardware, a mark is ink for the reader, and the
+     two must not look like the same control. */
+  .chip { display:inline-block; margin-left:0.3rem; padding:0 0.4rem; border:1px solid #4a4f55;
+          border-radius:9px; font-size:0.64rem; color:#c7ccd1; cursor:pointer; user-select:none;
+          line-height:1.35; }
+  .chip:hover { border-color:var(--warn); }
+  .chip.on { background:var(--warn); color:#16181b; border-color:var(--warn); }
+  .chip.nocss { border-style:dashed; color:#7d848b; }
+  .node.sel .chip { border-color:#ffffff66; }
+
+  .croprow { display:flex; gap:0.35rem; align-items:center; font-size:0.7rem;
+             color:var(--dim); margin-top:0.32rem; }
+  .croprow b { color:var(--ink); font-weight:600; font-variant-numeric:tabular-nums; }
 
   .btns { display:flex; flex-wrap:wrap; gap:0.3rem; align-items:center; }
   .btns button { font-size:0.71rem; padding:0.18rem 0.45rem; }
@@ -81,7 +102,7 @@ const state = shell.state;
 // from it. That is the whole point of the schema - a UI that keeps its own
 // parallel model would be a second source of truth for an MCP client to
 // disagree with.
-let doc = {v: 1, device: '', config: '', view: '', legend: true, marks: []};
+let doc = {v: 1, device: '', config: '', view: '', legend: true, crop: null, marks: []};
 let report = [];
 let hadLegend = false;
 
@@ -96,7 +117,8 @@ panel.innerHTML = `
 <section>
   <h2>rules<span class="sp"></span>
     <button id="addsel" title="Add a mark for the current selection">+ selection</button>
-    <button id="clickadd" class="on" title="Clicking a part in the stage or the tree adds a mark for it">click adds</button>
+    <button id="desel" title="Clear the selection (Esc)">deselect</button>
+    <button id="clickadd" class="on" title="Clicking a part in the stage or the tree highlights it; clicking it again takes the highlight off">click highlights</button>
   </h2>
   <div class="rules" id="rules"></div>
 </section>
@@ -109,7 +131,7 @@ panel.innerHTML = `
   <div class="msg" id="selmsg"></div>
 </section>
 <section class="grow">
-  <h2>marks<span class="sp"></span>
+  <h2>highlights<span class="sp"></span>
     <span class="msg" id="perf" style="margin:0"></span>
     <button id="clearall">clear all</button>
   </h2>
@@ -125,6 +147,11 @@ panel.innerHTML = `
     <button data-act="png-16">16 px/mm</button>
     <button data-act="share">share URL</button>
     <label class="f" style="margin-left:auto"><input type="checkbox" id="legend" checked> legend</label>
+  </div>
+  <div class="croprow">
+    <button id="crop" title="Drag a rectangle on the drawing to export just that region">crop ▭</button>
+    <span id="cropwhat">whole view</span>
+    <button id="cropclear" hidden>✕</button>
   </div>
   <input id="share" readonly placeholder="share URL appears here">
   <div class="msg" id="expmsg"></div>
@@ -187,24 +214,52 @@ function addMark(m) {
 // ---------------------------------------------------------------- apply
 
 let timer = null;
-const schedule = () => { clearTimeout(timer); timer = setTimeout(render, 160); };
+const schedule = () => { clearTimeout(timer); timer = setTimeout(restage, 160); };
 
-function render(opts = {}) {
-  clearTimeout(timer);
-  if (!state.svg) return;
+// Two jobs, and running the second one when only the first was needed is what
+// made the legend label field impossible to type in: every keystroke rebuilt
+// the row list's innerHTML, which destroys the input the cursor is sitting in.
+//
+//   stage()    the document changed - re-apply it to the drawing
+//   render()   the LIST changed - a row was added, deleted or moved, so the
+//              rows have to be built from scratch
+//
+// A keystroke needs the first and never the second: the row already exists and
+// nothing about its shape has changed. paintRows() then updates the parts of a
+// row that are derived rather than typed - the count, the notes, the state
+// menu - without touching an element the user is in the middle of using.
+function stage(opts = {}) {
   const t0 = performance.now();
   report = marks.apply(state.svg, doc);
   const ms = Math.round(performance.now() - t0);
+  drawCrop();
+  paintRules();
   // The legend grows the root viewBox, so appearing or disappearing moves the
   // whole drawing. Refit for that, but NOT for a label getting longer: refitting
   // on every keystroke throws away the zoom someone spent time on.
   const has = !!state.svg.querySelector('#portrayal-legend');
   if (opts.fit || has !== hadLegend) shell.fit();
   hadLegend = has;
-  drawRows();
-  drawTreeDots();
   $('#perf').textContent = report.length
     ? `${report.length} mark${report.length === 1 ? '' : 's'} · ${ms} ms` : '';
+}
+
+function restage(opts = {}) {
+  clearTimeout(timer);
+  if (!state.svg) return;
+  stage(opts);
+  paintRows();
+  drawTreeDots();
+  drawTreeChips();
+}
+
+function render(opts = {}) {
+  clearTimeout(timer);
+  if (!state.svg) return;
+  stage(opts);
+  drawRows();
+  drawTreeDots();
+  drawTreeChips();
 }
 
 // ---------------------------------------------------------------- rows
@@ -213,32 +268,56 @@ function render(opts = {}) {
 // what you see if the stylesheet has a rule for it, and several components
 // declare states nobody wrote CSS for - the AGR400's port LEDs offer `link`,
 // and `state-link` sets a class no rule matches. Rather than hardcode render.py's
-// list (which per-component `palette:` extends anyway), ask the drawing: park a
-// probe beside the element, with and without the class, and see whether anything
-// computed moves. The answer is then true for THIS drawing, palettes included.
-const NS = 'http://www.w3.org/2000/svg';
+// list (which per-component `palette:` extends anyway), ask the drawing.
+//
+// Asked the wrong way, this lies. The first version parked an empty <g> beside
+// the element and put the class on THAT, which cannot answer for the rules
+// render.py emits self-scoped:
+//
+//   #mgmt--led-left.state-link-1g { --led-color: #22c55e; }
+//
+// id and class on the same element. A stand-in with no id matches nothing of
+// the sort, so it reported "no CSS" for states that work perfectly - and the
+// asymmetry is invisible from here: a placement-level state emits both forms
+// (`#led-gnss.state-learning, #led-gnss .state-learning`) while an element-level
+// state inside a group override emits only the self form.
+//
+// So the question is put to the element itself. Its own state- classes come off
+// for the two readings and go back on immediately, synchronously, before
+// anything can observe them - there is no await between them and no layout is
+// forced, only style. That is exact for both forms and for anything a future
+// palette invents, where any stand-in is a guess about what the selector needed.
 const paintCache = new Map();
+const PROPS = ['--led-color', '--led-color-alt', 'opacity', 'fill', 'stroke',
+               'filter', 'animation-name'];
+
 function paints(el, st) {
   if (!el || !st) return true;
-  const host = el.parentNode && el.parentNode.nodeType === 1 ? el.parentNode : el;
-  // A palette rule is scoped `g[data-ref^='comp@'] .state-x`, so the answer
-  // varies by the component the element sits in and by nothing else - that is
-  // the cache key.
+  // `off` is the absence of a state, not a state with a rule of its own: an
+  // unlit lamp is what the skin's own fill fallback already draws.
+  if (st === 'off') return true;
+  // Self-scoped rules are keyed on the id, so the id is the cache key wherever
+  // there is one. Without an id the answer can only come from inherited scope -
+  // `g[data-ref^='ufispace/psu-401-dc@'] .state-fail` - which varies by the
+  // component and by the element's own class and nothing else.
   let ref = '';
-  for (let p = host; p && p.nodeType === 1 && !ref; p = p.parentNode)
+  for (let p = el; p && p.nodeType === 1 && !ref; p = p.parentNode)
     ref = p.getAttribute('data-ref') || '';
-  const key = `${st}|${ref}`;
+  const key = el.id ? `${st}|#${el.id}`
+                    : `${st}|${ref}|${el.getAttribute('data-class') || ''}|${el.tagName}`;
   if (paintCache.has(key)) return paintCache.get(key);
-  const probe = document.createElementNS(NS, 'g');
-  host.appendChild(probe);
+
   const read = () => {
-    const cs = getComputedStyle(probe);
-    return cs.getPropertyValue('--led-color').trim() + '|' + cs.opacity;
+    const cs = getComputedStyle(el);
+    return PROPS.map(p => cs.getPropertyValue(p).trim()).join('|');
   };
+  const mine = [...el.classList].filter(c => c.startsWith('state-'));
+  el.classList.remove(...mine);
   const base = read();
-  probe.setAttribute('class', 'state-' + st);
+  el.classList.add('state-' + st);
   const lit = read();
-  probe.remove();
+  el.classList.remove('state-' + st);
+  if (mine.length) el.classList.add(...mine);
   const ok = base !== lit;
   paintCache.set(key, ok);
   return ok;
@@ -277,49 +356,97 @@ function stateOptions(r, cur) {
   return h;
 }
 
+const EMPTY = {count: 0, total: 0, states: [], error: null, warning: null};
+
+// count and total differ by up to 2x wherever the art nests a group and a leaf
+// that both match. Showing one of them alone is how you end up arguing with the
+// drawing about how many ports it has.
+const cntHtml = r => `<b>${r.count}</b> part${r.count === 1 ? '' : 's'}` +
+  (r.total !== r.count ? ` <span title="raw selector hits, before nested matches were collapsed">· ${r.total} hits</span>` : '');
+
+function notesHtml(m, r) {
+  const notes = [];
+  if (r.error) notes.push(`<div class="note err">skipped — ${esc(r.error)}</div>`);
+  else if (!r.count) notes.push(`<div class="note warn">matches nothing in this
+    ${esc(state.view)} view of ${esc(state.device)}${m.label
+      ? ' — its legend row is left out rather than claiming a highlight the reader cannot see' : ''}.</div>`);
+  if (r.warning) notes.push(`<div class="note warn">${esc(r.warning)}</div>`);
+  if (m.state && !r.error && r.count && !paints(firstMatch(m.select), m.state))
+    notes.push(`<div class="note warn">nothing in this drawing paints
+      <code>state-${esc(m.state)}</code>: the class is set, the picture does not change.</div>`);
+  if (!m.color && !m.state && !m.label && r.count)
+    notes.push(`<div class="note dim">no colour, no state and no label: this mark
+      does nothing.</div>`);
+  return notes.join('');
+}
+
+// A mark that carries a state and nothing else was made in the tree and belongs
+// to the depicted condition of the device rather than to the reader's ink.
+const stateOnly = m => !!m.state && !m.color && !m.label;
+
 function drawRows() {
   const box = $('#rows');
   if (!doc.marks.length) {
     box.innerHTML = `<div class="empty">No marks yet. Click a part in the drawing or the
       tree, press a rule above, or type a selector. Every one of the three writes the
-      same <code>select</code> field.</div>`;
+      same <code>select</code> field. To show a lamp lit rather than ringed, use the
+      state chips on the tree row instead — that is a fact about the device, not a
+      highlight.</div>`;
     return;
   }
   box.innerHTML = doc.marks.map((m, i) => {
-    const r = report[i] || {count: 0, total: 0, states: [], error: null, warning: null};
-    const dead = !r.error && r.count === 0;
-    const notes = [];
-    if (r.error) notes.push(`<div class="note err">skipped — ${esc(r.error)}</div>`);
-    else if (dead) notes.push(`<div class="note warn">matches nothing in this
-      ${esc(state.view)} view of ${esc(state.device)}${m.label
-        ? ' — but it will still take a row in the legend' : ''}.</div>`);
-    if (r.warning) notes.push(`<div class="note warn">${esc(r.warning)}</div>`);
-    if (m.state && !r.error && r.count && !paints(firstMatch(m.select), m.state))
-      notes.push(`<div class="note warn">nothing in this drawing paints
-        <code>state-${esc(m.state)}</code>: the class is set, the picture does not change.</div>`);
-    // count and total differ by up to 2x wherever the art nests a group and a
-    // leaf that both match. Showing one of them alone is how you end up arguing
-    // with the drawing about how many ports it has.
-    const cnt = `<b>${r.count}</b> part${r.count === 1 ? '' : 's'}` +
-      (r.total !== r.count ? ` <span title="raw selector hits, before nested matches were collapsed">· ${r.total} hits</span>` : '');
-    return `<div class="mark${dead ? ' dead' : ''}${r.error ? ' bad' : ''}" data-i="${i}">
+    const r = report[i] || EMPTY;
+    return `<div class="mark${!r.error && !r.count ? ' dead' : ''}${r.error ? ' bad' : ''}${
+        stateOnly(m) ? ' stateonly' : ''}" data-i="${i}">
       <div class="l1">
         <span class="idx">${i + 1}</span>
         <input class="sel" value="${esc(m.select)}" spellcheck="false">
-        <span class="cnt">${cnt}</span>
+        <span class="cnt">${cntHtml(r)}</span>
         <button class="x" title="delete">✕</button>
       </div>
       <div class="l2">
-        <input type="checkbox" class="paint"${m.color ? ' checked' : ''} title="paint a halo in this colour">
+        <input type="checkbox" class="paint"${m.color ? ' checked' : ''} title="ring every match in this colour">
         <input type="color" class="col" value="${esc(m.color || nextColor())}">
         <select class="st" title="add state-&lt;name&gt; to every match">${stateOptions({...r, select: m.select}, m.state)}</select>
         <input class="lab" value="${esc(m.label)}" placeholder="legend label">
         <button class="mv" data-d="-1" title="earlier in paint order">↑</button>
         <button class="mv" data-d="1" title="later in paint order">↓</button>
       </div>
-      ${notes.join('')}
+      <div class="notes">${notesHtml(m, r)}</div>
     </div>`;
   }).join('');
+  for (const row of box.children) row._sig = sigOf(row);
+}
+
+// Everything in a row that is DERIVED - what the selector reached, what the
+// drawing has to say about it, which states are on offer - refreshed in place.
+// Nothing the user types is written back to, and the element that has focus is
+// never rebuilt: the whole point of this pass is that it can run on a keystroke.
+const sigOf = row => {
+  const m = doc.marks[+row.dataset.i], r = report[+row.dataset.i] || EMPTY;
+  return `${(r.states || []).join(',')}|${m ? m.state : ''}`;
+};
+
+function paintRows() {
+  const box = $('#rows');
+  if (!doc.marks.length || box.children.length !== doc.marks.length) return drawRows();
+  for (const row of box.children) {
+    const i = +row.dataset.i, m = doc.marks[i], r = report[i] || EMPTY;
+    if (!m) continue;
+    row.classList.toggle('dead', !r.error && !r.count);
+    row.classList.toggle('bad', !!r.error);
+    row.classList.toggle('stateonly', stateOnly(m));
+    row.querySelector('.cnt').innerHTML = cntHtml(r);
+    row.querySelector('.notes').innerHTML = notesHtml(m, r);
+    const sel = row.querySelector('.st'), sig = sigOf(row);
+    // A <select> is rebuilt only when its CONTENTS would differ. Rebuilding one
+    // that happens to be open closes it, and rebuilding one on every keystroke
+    // in the label beside it is the same bug this pass exists to fix.
+    if (sig !== row._sig && sel !== document.activeElement) {
+      sel.innerHTML = stateOptions({...r, select: m.select}, m.state);
+      row._sig = sig;
+    }
+  }
 }
 
 // Edits are delegated, so a redraw of the list cannot leave a listener behind on
@@ -340,7 +467,8 @@ $('#rows').addEventListener('change', ev => {
   const m = doc.marks[+row.dataset.i]; if (!m) return;
   if (!ev.target.classList.contains('st')) return;
   m.state = ev.target.value;
-  render();
+  row._sig = sigOf(row);              // the user just set it; do not rebuild under them
+  restage();
 });
 $('#rows').addEventListener('click', ev => {
   const row = ev.target.closest('.mark'); if (!row) return;
@@ -363,12 +491,17 @@ const markOf = el => {
   const hit = [...el.classList].map(c => /^pm-(\d+)$/.exec(c)).filter(Boolean).pop();
   return hit ? +hit[1] : null;
 };
-function drawTreeDots() {
-  // one pass over the drawing rather than one query per tree row: the AS7946's
-  // front face is 3600 elements and its tree is 200 rows
+// one pass over the drawing rather than one query per tree row: the AS7946's
+// front face is 3600 elements and its tree is 200 rows
+function pathIndex() {
   const byPath = new Map();
   for (const e of state.svg.querySelectorAll('[data-path]'))
     if (!byPath.has(e.dataset.path)) byPath.set(e.dataset.path, e);
+  return byPath;
+}
+
+function drawTreeDots() {
+  const byPath = pathIndex();
   for (const row of shell.el.tree.querySelectorAll('.node[data-path]')) {
     row.querySelector('.pm')?.remove();
     const el = byPath.get(row.dataset.path);
@@ -386,6 +519,85 @@ function drawTreeDots() {
     dot.style.boxShadow = m?.color ? 'none' : 'inset 0 0 0 1px var(--dim)';
     dot.title = `mark ${idx + 1}${m?.label ? ` — ${m.label}` : ''}`;
     row.querySelector('.tw').after(dot);
+  }
+}
+
+// ------------------------------------------------------------- states in the tree
+
+// A state and a mark are different operations and they get different surfaces.
+//
+// A STATE is a property of the depicted condition of the device: this PSU lamp
+// is showing no-dc, that port is down. A MARK is ink for the reader: ring this,
+// call it "failed PSU" in the legend. Editing both through one marks row forced
+// every state change to also be a highlight - on a lamp, where the lit colour IS
+// the information, the ring drawn around it is the thing in the way.
+//
+// So states are set where the Explorer sets them, on the tree row, and
+// highlights are composed in the panel. What they are NOT is two models: a chip
+// writes `state` on a mark in the same document, which is why a share URL and an
+// export still reproduce the condition the drawing was showing.
+const TOKEN = /^[a-z0-9-]+$/;
+const pathSel = path => `[data-path='${path}']`;
+
+// `states:` accepts a bare string and several contracts have put a description
+// where the name goes - "Green = OK, Amber = fault". Splitting that on spaces
+// offers chips called "=" and "OK," that set classes nothing paints, so a value
+// that is not a list of tokens gets no chips rather than garbage ones.
+function statesOfEl(el) {
+  const raw = (el.dataset.states || '').trim();
+  if (!raw) return [];
+  const toks = raw.split(/[\s,]+/);
+  return toks.every(t => TOKEN.test(t)) ? toks : [];
+}
+
+function setState(path, st) {
+  const select = pathSel(path);
+  const m = doc.marks.find(x => x.select === select);
+  if (!m) return st ? addMark({select, state: st}) : undefined;
+  m.state = m.state === st ? '' : st;
+  // a mark with nothing left to say is not kept as an empty row: the tree is
+  // where it was made, and clearing a state there should leave the document as
+  // it was before the state was set
+  if (!m.state && !m.color && !m.label) doc.marks.splice(doc.marks.indexOf(m), 1);
+  render();
+}
+
+shell.on('row', (row, node) => {
+  if (!node.el) return;                       // a group fold has no element
+  const sts = statesOfEl(node.el);
+  if (!sts.length) return;
+  const span = document.createElement('span');
+  span.className = 'chips';
+  for (const st of sts) {
+    const chip = document.createElement('span');
+    chip.className = 'chip';
+    chip.dataset.st = st;
+    chip.textContent = st;
+    // the row's own click selects the part; a chip is a different verb
+    chip.onclick = ev => { ev.stopPropagation(); ev.preventDefault(); setState(node.path, st); };
+    span.appendChild(chip);
+  }
+  row.querySelector('.nm').after(span);
+});
+
+// Which chip is lit is read from the DOCUMENT, not from the element's classes.
+// The classes are the composition of every mark, so a rule that set all LEDs to
+// `off` would light the chip on a row nobody has touched, and pressing it would
+// then appear to do nothing. The chip answers for what this row asserts.
+function drawTreeChips() {
+  const byPath = pathIndex();
+  for (const span of shell.el.tree.querySelectorAll('.chips')) {
+    const path = span.closest('.node')?.dataset.path;
+    const el = byPath.get(path);
+    const cur = doc.marks.find(x => x.select === pathSel(path))?.state || '';
+    for (const chip of span.children) {
+      const st = chip.dataset.st;
+      chip.classList.toggle('on', st === cur);
+      const ok = !el || paints(el, st);
+      chip.classList.toggle('nocss', !ok);
+      chip.title = ok ? `show this part as ${st}`
+        : `state-${st} is declared here, but nothing in this drawing paints it`;
+    }
   }
 }
 
@@ -414,22 +626,62 @@ shell.el.svgHost.addEventListener('pointerdown', e => {
                    {once: true});
 }, true);
 
+// Selection TOGGLES. The shell's selection is a sticky thing - it draws a halo
+// in the user's chosen colour and leaves it there - and on a page whose whole
+// business is drawing rings on hardware, a ring you cannot turn off is a ring
+// that ends up in the export you were composing. So a second click on the part
+// you already have selected clears the selection as well as taking its
+// highlight off, and Esc clears it from anywhere.
+let lastSel = null, muting = false;
+function deselect() {
+  lastSel = null;
+  if (!state.sel) return;
+  muting = true;
+  try { shell.select(null); } finally { muting = false; }
+}
+$('#desel').onclick = deselect;
+addEventListener('keydown', ev => {
+  if (ev.key !== 'Escape') return;
+  if (cropArmed) return disarmCrop();
+  if (document.activeElement && /^(INPUT|SELECT|TEXTAREA)$/.test(document.activeElement.tagName))
+    return document.activeElement.blur();
+  deselect();
+});
+
 shell.on('select', (path, target, fromTree) => {
-  if (!clickAdds || !path) return;
+  if (muting) return;
+  if (!path) { lastSel = null; return; }
   if (!fromTree && dragged) return;
-  addForPath(path);
+  const again = path === lastSel;
+  lastSel = again ? null : path;
+  if (clickAdds) addForPath(path);
+  // deselect last: it re-enters this handler with a null path, and doing it
+  // first would leave the halo drawn again by the click that is still in flight
+  if (again) deselect();
 });
 $('#addsel').onclick = () => {
   if (!state.sel) return say('#selmsg', 'nothing selected', 'bad');
   addForPath(state.sel);
 };
 function addForPath(path) {
-  const select = `[data-path='${path}']`;
+  toggleMark(`[data-path='${path}']`, path.split('/').pop());
+}
+
+// One selector, one mark. Adding the same selector twice draws two rings around
+// one port and lists it twice in the legend, which is never what a second press
+// of the same button meant - it meant "no, not that one".
+function toggleMark(select, label) {
   const i = doc.marks.findIndex(m => m.select === select);
-  // clicking the same part twice is how you undo a mis-click, not how you draw
-  // two haloes around one port
-  if (i >= 0) { doc.marks.splice(i, 1); render(); return; }
-  addMark({select, color: nextColor(), label: path.split('/').pop()});
+  if (i >= 0) {
+    const m = doc.marks[i];
+    // a mark carrying a state was made in the tree and says something about the
+    // device: take the highlight off it rather than deleting the statement
+    if (m.state) { m.color = ''; m.label = ''; }
+    else doc.marks.splice(i, 1);
+    render();
+    return;
+  }
+  addMark({select, color: nextColor(), label: label || ''});
 }
 
 // 2. Rules. The canonical set from demo/interactive.html, plus one button per
@@ -468,13 +720,26 @@ function buildRules() {
     offered++;
     const b = document.createElement('button');
     b.className = isGroup ? 'grp' : '';
+    b.dataset.sel = select;
     b.innerHTML = `${esc(label)}<span class="n">${n}</span>`;
     b.title = select;
-    b.onclick = () => addMark({select, color: nextColor(), label});
+    // Pressing a rule a second time takes it off again. It used to add a second
+    // identical mark - two rings on every 100G port and two legend rows saying
+    // so - with no way back except finding both rows and deleting them.
+    b.onclick = () => toggleMark(select, label);
     box.appendChild(b);
   }
   if (!offered) box.innerHTML = `<span class="empty">this view carries none of the
     attributes the rules are written against</span>`;
+  paintRules();
+}
+
+// A rule button is a toggle, so it has to say which way it is set - otherwise
+// the only way to know whether "100G ports" is on is to read the marks list.
+function paintRules() {
+  const on = new Set(doc.marks.map(m => m.select));
+  for (const b of $('#rules').querySelectorAll('button[data-sel]'))
+    b.classList.toggle('on', on.has(b.dataset.sel));
 }
 
 // 3. A selector box. Typed CSS goes through verbatim - the reason the renderer
@@ -503,6 +768,114 @@ $('#seladd').onclick = () => {
   say('#selmsg', '', '');
 };
 
+// ---------------------------------------------------------------- crop
+
+// "I want the management block, and this chassis declares no region for it."
+// The rectangle is a field of the DOCUMENT in the drawing's own millimetres, not
+// a setting of this page: that is what makes it survive a share URL and what
+// lets an MCP client ask for the same picture. The drag is only one way to write
+// it, and the least interesting one.
+const NS = 'http://www.w3.org/2000/svg';
+let cropArmed = false;
+
+// A veil over the stage rather than a listener on it. The shell owns
+// wheel/pointer on the stage for zoom and pan and owns click for selection;
+// competing with three handlers for one drag is how you get a crop rectangle
+// that also panned the drawing and selected a port. Nothing reaches them while
+// this is up.
+const veil = document.createElement('div');
+veil.style.cssText = 'position:absolute;inset:0;z-index:6;cursor:crosshair;display:none';
+shell.el.stage.appendChild(veil);
+
+function armCrop(on) {
+  cropArmed = on;
+  veil.style.display = on ? 'block' : 'none';
+  $('#crop').classList.toggle('on', on);
+  if (on) say('#expmsg', 'drag a rectangle on the drawing — Esc to cancel', '');
+}
+const disarmCrop = () => armCrop(false);
+$('#crop').onclick = () => armCrop(!cropArmed);
+$('#cropclear').onclick = () => { doc.crop = null; render(); };
+
+// clientX/Y through the root's own CTM: the stage's zoom and pan are a CSS
+// transform on the SVG element, and getScreenCTM already accounts for it, so
+// the same drag at any zoom writes the same millimetres.
+function toUser(ev) {
+  const m = state.svg && state.svg.getScreenCTM();
+  if (!m) return null;
+  const p = new DOMPoint(ev.clientX, ev.clientY).matrixTransform(m.inverse());
+  return {x: p.x, y: p.y};
+}
+const between = (a, b) => ({x: Math.min(a.x, b.x), y: Math.min(a.y, b.y),
+                            w: Math.abs(a.x - b.x), h: Math.abs(a.y - b.y)});
+
+veil.addEventListener('pointerdown', ev => {
+  const p0 = toUser(ev);
+  if (!p0) return;
+  ev.preventDefault();
+  // a pointer that is not down cannot be captured, and a synthetic one never is
+  try { veil.setPointerCapture(ev.pointerId); } catch (e) { /* drag still works */ }
+  const move = e => {
+    const p = toUser(e);
+    if (!p) return;
+    doc.crop = marks.clampCrop(state.svg, between(p0, p));
+    drawCrop();
+  };
+  veil.addEventListener('pointermove', move);
+  veil.addEventListener('pointerup', e => {
+    veil.removeEventListener('pointermove', move);
+    const p = toUser(e) || p0;
+    const r = between(p0, p);
+    // a click rather than a drag is a cancel, not a crop of nothing: 2mm is
+    // under a port pitch on every device in the library
+    doc.crop = r.w > 2 && r.h > 2 ? marks.clampCrop(state.svg, r) : null;
+    disarmCrop();
+    render();
+  }, {once: true});
+});
+
+// The preview is drawn INTO the drawing, tagged as marks.js's own so that the
+// next apply() clears it and no export can ever contain it - a crop marker in
+// the file that shows the crop would be a fine joke and a bad deliverable.
+function drawCrop() {
+  if (!state.svg) return;
+  for (const e of state.svg.querySelectorAll('[data-portrayal^="crop"]')) e.remove();
+  updateCropUI();
+  const c = doc.crop;
+  if (!c) return;
+  const vb = marks.baseViewBox(state.svg);
+  // one path, two subpaths, evenodd: everything outside the crop goes dim, which
+  // is the only honest preview of a crop - it shows what will be gone
+  const mask = document.createElementNS(NS, 'path');
+  mask.setAttribute('data-portrayal', 'crop-mask');
+  mask.setAttribute('d',
+    `M${vb.x},${vb.y}h${vb.w}v${vb.h}h${-vb.w}Z M${c.x},${c.y}h${c.w}v${c.h}h${-c.w}Z`);
+  mask.setAttribute('fill', '#0b0d0f');
+  mask.setAttribute('fill-rule', 'evenodd');
+  mask.setAttribute('fill-opacity', '0.62');
+  mask.setAttribute('pointer-events', 'none');
+  state.svg.appendChild(mask);
+  const box = document.createElementNS(NS, 'rect');
+  box.setAttribute('data-portrayal', 'crop-box');
+  box.setAttribute('x', c.x); box.setAttribute('y', c.y);
+  box.setAttribute('width', c.w); box.setAttribute('height', c.h);
+  box.setAttribute('fill', 'none');
+  box.setAttribute('stroke', '#4c9aff');
+  box.setAttribute('stroke-width', '0.35');
+  box.setAttribute('stroke-dasharray', '1.2 0.8');
+  box.setAttribute('pointer-events', 'none');
+  state.svg.appendChild(box);
+}
+
+function updateCropUI() {
+  const c = doc.crop;
+  const mm = n => (Math.round(n * 10) / 10).toFixed(1).replace(/\.0$/, '');
+  $('#cropwhat').innerHTML = c
+    ? `<b>${mm(c.w)} × ${mm(c.h)} mm</b> at ${mm(c.x)},${mm(c.y)}`
+    : 'whole view';
+  $('#cropclear').hidden = !c;
+}
+
 // ---------------------------------------------------------------- export
 
 $('#legend').onchange = () => { doc.legend = $('#legend').checked; render(); };
@@ -518,9 +891,18 @@ $('#legend').onchange = () => { doc.legend = $('#legend').checked; render(); };
 // The fix belongs in marks.js - one removeAttribute in toSvg - but that file is
 // frozen, so the export is taken from a detached, style-stripped copy instead.
 // Cloning also means the live stage never flickers mid-export.
+//
+// The shell's SELECTION halo has to come out for the same reason and it is
+// worse. It is a plain <rect class="halo"> painted by the shell's stylesheet -
+// `fill:none; stroke:var(--hl)` - and that stylesheet is a property of this
+// page. In a file opened on its own the rule is not there, so the rect falls
+// back to the initial values and paints SOLID BLACK over whatever you had
+// selected. It looks like a hole in the drawing, and only in the file you sent
+// on: the stage it was exported from is showing a neat pink ring.
 const exportRoot = () => {
   const c = state.svg.cloneNode(true);
   c.removeAttribute('style');
+  for (const h of c.querySelectorAll('.halo')) h.remove();
   return c;
 };
 
@@ -581,6 +963,15 @@ panel.querySelector('.btns').addEventListener('click', async ev => {
 // than quietly deleting them.
 shell.on('load', () => {
   paintCache.clear();
+  lastSel = null;
+  disarmCrop();
+  // A crop is millimetres of THIS drawing. The marks survive a view change on
+  // purpose - a selector is written against the hardware - but a rectangle is
+  // not: the rear face of a 1RU switch is a different picture the same size, and
+  // silently exporting the same corner of it would be wrong without a word. So
+  // it is re-cut against the drawing that is now loaded, and dropped when it
+  // misses it entirely - the readout beside the button says which happened.
+  if (doc.crop) doc.crop = marks.clampCrop(state.svg, doc.crop);
   writeTarget();
   buildRules();
   render({fit: true});
@@ -592,7 +983,7 @@ shell.on('load', () => {
 let dotJob = null;
 shell.on('row', () => {
   clearTimeout(dotJob);
-  dotJob = setTimeout(drawTreeDots, 0);
+  dotJob = setTimeout(() => { drawTreeDots(); drawTreeChips(); }, 0);
 });
 
 await shell.ready;

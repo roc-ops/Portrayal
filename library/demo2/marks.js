@@ -7,7 +7,7 @@
 // vocabulary. Everything here is a pure function over an SVG root and such a
 // document - no UI, no globals, no shell.
 //
-//   {v:1, device, config, view, legend, marks:[{select, color, state, label}]}
+//   {v:1, device, config, view, legend, crop, marks:[{select, color, state, label}]}
 //
 // Three rules learned the hard way and encoded below:
 //
@@ -57,14 +57,42 @@ export function normalise(doc) {
     device: str(d.device),
     config: str(d.config),
     view: str(d.view),
-    legend: d.legend !== false,
+    // Carried through as given when it is an object. `legend: true` is the whole
+    // of v1, but a legend with a title, a placement or a column count is an
+    // object, and a normalise() that coerced one to `true` would eat those
+    // fields silently - the worst way to reject a document. Everything here
+    // tests it for truth, so an object reads as "yes, a legend" today and can
+    // grow meaning without a second document shape.
+    legend: d.legend && typeof d.legend === 'object' ? d.legend : d.legend !== false,
+    crop: rect(d.crop),
     marks: marks.filter(m => m && typeof m === 'object').map(m => ({
+      // Optional, never invented. Marks are otherwise positional, so "drop the
+      // mark on psu-0" is index arithmetic or selector-string matching - fine
+      // for a UI holding the array, hopeless for an MCP client editing a
+      // document it was handed. An id given is an id kept, through the URL codec
+      // and back; absent stays absent rather than becoming a synthetic name that
+      // changes every time the document is round-tripped.
+      id: str(m.id),
       select: str(m.select),
       color: str(m.color),
       state: str(m.state),
       label: str(m.label),
     })),
   };
+}
+
+/**
+ * A crop rectangle in the drawing's OWN coordinate system - millimetres, the
+ * same units as the viewBox - or null. Millimetres and not pixels for the same
+ * reason px/mm is how the PNG is dimensioned: the drawing is hardware, and "the
+ * management block" is a region of a faceplate, not a region of someone's
+ * screen at whatever zoom they happened to be at.
+ */
+function rect(c) {
+  if (!c || typeof c !== 'object') return null;
+  const [x, y, w, h] = ['x', 'y', 'w', 'h'].map(k => Number(c[k]));
+  if (![x, y, w, h].every(Number.isFinite) || w <= 0 || h <= 0) return null;
+  return {x: round(x), y: round(y), w: round(w), h: round(h)};
 }
 
 // Control characters are stripped, not preserved. XML 1.0 cannot represent most
@@ -78,7 +106,9 @@ const str = v => (typeof v === 'string' ? v : v == null ? '' : String(v))
 export function filename(doc, ext) {
   const d = normalise(doc);
   const parts = [d.device, d.config, d.view].filter(Boolean);
-  return `${parts.join('-') || 'drawing'}-marked.${ext}`;
+  // A crop is a different picture of the same view, and two files an hour apart
+  // in a downloads folder should not be told apart by their timestamps.
+  return `${parts.join('-') || 'drawing'}-marked${d.crop ? '-crop' : ''}.${ext}`;
 }
 
 // ------------------------------------------------------------------ matching
@@ -295,8 +325,15 @@ function put(el, attr, value) {
  */
 export function legend(svgRoot, doc) {
   const d = normalise(doc);
+  // A label on a mark that reached nothing is not a legend row. The legend is a
+  // key to the drawing beside it, and a row for a mark that matched nothing is
+  // an export that confidently states something is highlighted when the reader
+  // can see it is not - a typo'd selector, or the right selector on the wrong
+  // view, turned into a false claim in a document that outlives this page. The
+  // mark stays in the document and the panel still says it matched nothing; it
+  // simply does not get to speak for the drawing.
   const items = d.marks
-    .filter(m => m.label)
+    .filter(m => m.label && match(svgRoot, m).els.length)
     .map(m => ({label: m.label, color: m.color || stateColor(svgRoot, m.state) || '#8d939a',
                 hollow: !m.color}));
   if (!items.length) return null;
@@ -421,6 +458,85 @@ function viewBox(svg) {
 
 const clamp = (n, lo, hi) => Math.max(lo, Math.min(hi, n));
 
+// The drawing's own box, ignoring a legend that may currently be mounted on it.
+// A crop is a region of the HARDWARE, so it has to be measured against the
+// faceplate rather than against the faceplate-plus-whatever-strip-is-showing;
+// otherwise arming the crop tool with the legend on and again with it off gives
+// two different rectangles for the same drag.
+export function baseViewBox(svgRoot) {
+  const stashed = (svgRoot.getAttribute(VIEWBOX) || '').split('|')[0];
+  if (stashed) {
+    const raw = stashed.trim().split(/[\s,]+/).map(Number);
+    if (raw.length === 4 && raw.every(Number.isFinite))
+      return {x: raw[0], y: raw[1], w: raw[2], h: raw[3]};
+  }
+  return viewBox(svgRoot);
+}
+
+/**
+ * A crop rectangle intersected with the drawing, or null if they miss entirely.
+ * Exported because a UI dragging a rectangle over the stage has to write a crop
+ * the exporter will agree with, and "agree with" means one implementation.
+ */
+export function clampCrop(svgRoot, c) {
+  const r = rect(c);
+  if (!r) return null;
+  const vb = baseViewBox(svgRoot);
+  const x = clamp(r.x, vb.x, vb.x + vb.w), y = clamp(r.y, vb.y, vb.y + vb.h);
+  const w = clamp(r.x + r.w, vb.x, vb.x + vb.w) - x;
+  const h = clamp(r.y + r.h, vb.y, vb.y + vb.h) - y;
+  return w > 0 && h > 0 ? {x: round(x), y: round(y), w: round(w), h: round(h)} : null;
+}
+
+// The crop is the viewBox, and width/height follow it: those two are the printed
+// size in millimetres, so a third of the faceplate has to arrive in Word as a
+// third of the faceplate's width and not scaled back up to fill the old one.
+function crop(svgRoot, c) {
+  const r = clampCrop(svgRoot, c);
+  if (!r) return null;
+  const vb = baseViewBox(svgRoot);
+  grow(svgRoot, 'width', r.w / vb.w);
+  grow(svgRoot, 'height', r.h / vb.h);
+  svgRoot.setAttribute('viewBox', `${r.x} ${r.y} ${r.w} ${r.h}`);
+  return r;
+}
+
+// A root viewBox already clips at the viewport, and every browser honours it.
+// This is for the consumer that does not: Word has its own SVG importer, and a
+// crop that silently kept the other 400mm of chassis would be discovered by
+// someone else, in a document, after it was sent.
+//
+// The clip goes on a GROUP wrapped around the drawing, not on the root <svg>.
+// clip-path on an outermost svg is resolved in the CSS box - Chrome clipped a
+// 70mm crop to the top-left 70 CSS PIXELS of it, which is a nearly empty
+// picture that still looks like a plausible drawing. On a group it is the
+// group's own user space, which is millimetres, which is what the crop is in.
+//
+// Wrapped, not reparented one by one: the compiled stylesheet keys on ids,
+// classes and descendant scope (`g[data-ref^='comp@'] .state-fail`) and never on
+// structure, so an extra ancestor changes nothing it matches. The legend stays
+// outside the wrapper - it is drawn BELOW the crop, and clipping the drawing
+// must not cut off the key to it.
+function clipToViewBox(svgRoot, box) {
+  const cp = document.createElementNS(NS, 'clipPath');
+  cp.setAttribute('id', 'portrayal-crop');
+  cp.setAttribute('clipPathUnits', 'userSpaceOnUse');
+  const r = document.createElementNS(NS, 'rect');
+  r.setAttribute('x', box.x); r.setAttribute('y', box.y);
+  r.setAttribute('width', box.w); r.setAttribute('height', box.h);
+  cp.appendChild(r);
+
+  const KEEP = new Set(['style', 'defs', 'clipPath', 'title', 'desc', 'metadata']);
+  const kids = [...svgRoot.children].filter(n =>
+    !KEEP.has(n.localName) && n.id !== 'portrayal-legend');
+  if (!kids.length) return;
+  const g = document.createElementNS(NS, 'g');
+  g.setAttribute('clip-path', 'url(#portrayal-crop)');
+  svgRoot.insertBefore(g, kids[0]);
+  for (const k of kids) g.appendChild(k);
+  svgRoot.insertBefore(cp, svgRoot.firstChild);
+}
+
 // ------------------------------------------------------------------ export
 
 // Off-screen but LAID OUT. getBBox and getScreenCTM both answer nothing for an
@@ -441,6 +557,11 @@ function host() {
  * Assume the consumer is Word: no external CSS, no script, and no CSS custom
  * properties - so var(--led-color) is resolved to a literal paint here.
  *
+ * doc.crop narrows the export to one rectangle of the drawing - "I want the
+ * management block, and this chassis declares no region for it". It is a field
+ * of the document rather than an argument here so that a share URL reproduces
+ * it and an MCP client can ask for it, which is worth more than the drag.
+ *
  * @param opts.pxmm  emit width/height in pixels at this density instead of mm
  *                   (used by toPng; a rasteriser needs pixels, not millimetres)
  */
@@ -451,7 +572,13 @@ export function toSvg(svgRoot, doc, opts = {}) {
   try {
     box.appendChild(clone);
     clear(clone);                    // the source may already be previewing marks
+    // Cropped BEFORE the marks go on, because the legend is laid out from the
+    // viewBox: strip width, type size and the wrap column all follow the box the
+    // reader will actually see, so a crop of the management block gets a legend
+    // sized for the management block rather than for the whole faceplate.
+    const cropped = d.crop ? crop(clone, d.crop) : null;
     apply(clone, d);
+    if (cropped) clipToViewBox(clone, cropped);
     flatten(clone);
     clone.setAttribute('data-portrayal-markup', encode(d));
     if (opts.pxmm) {
@@ -556,8 +683,15 @@ const PREFIX = 'm1.';
 export function encode(doc) {
   const d = normalise(doc);
   // trailing empties are dropped: most marks are a selector and a colour
-  const marks = d.marks.map(m => trimTail([m.select, m.color, m.state, m.label]));
-  const json = JSON.stringify([1, d.device, d.config, d.view, d.legend ? 1 : 0, marks]);
+  const marks = d.marks.map(m => trimTail([m.select, m.color, m.state, m.label, m.id]));
+  // Appended, not inserted: a share URL written before either of these existed
+  // decodes with a[6] undefined, which is exactly "no crop", and an object
+  // legend rides in slot 4 where the boolean was.
+  const cropped = d.crop ? [d.crop.x, d.crop.y, d.crop.w, d.crop.h] : 0;
+  const json = JSON.stringify([1, d.device, d.config, d.view,
+                               d.legend && typeof d.legend === 'object' ? d.legend
+                                                                        : (d.legend ? 1 : 0),
+                               marks, cropped]);
   let packed = json;
   for (const [long, short] of TOKENS) packed = packed.split(long).join(short);
   return PREFIX + b64url(packed);
@@ -567,6 +701,12 @@ export function decode(input) {
   let s = str(input);
   if (s.startsWith('#')) s = s.slice(1);
   if (!s) return null;
+  // A raw JSON document typed into the hash arrives percent-encoded - every
+  // browser escapes the quotes - so the debugging path this branch exists for
+  // never once worked from the address bar. base64url has no '%' in its
+  // alphabet, so decoding here cannot damage the compact form.
+  if (s.includes('%')) { try { s = decodeURIComponent(s); } catch (e) { /* leave it */ } }
+  if (!s) return null;
   try {
     if (s.startsWith('{')) return normalise(JSON.parse(s));   // raw JSON, for MCP and debugging
     if (!s.startsWith(PREFIX)) return null;
@@ -574,9 +714,13 @@ export function decode(input) {
     for (const [long, short] of TOKENS) packed = packed.split(short).join(long);
     const a = JSON.parse(packed);
     if (!Array.isArray(a) || a[0] !== 1) return null;
+    const c = Array.isArray(a[6]) ? {x: a[6][0], y: a[6][1], w: a[6][2], h: a[6][3]} : null;
     return normalise({
-      v: 1, device: a[1], config: a[2], view: a[3], legend: a[4] !== 0,
-      marks: (a[5] || []).map(m => ({select: m[0], color: m[1], state: m[2], label: m[3]})),
+      v: 1, device: a[1], config: a[2], view: a[3],
+      legend: a[4] && typeof a[4] === 'object' ? a[4] : a[4] !== 0,
+      crop: c,
+      marks: (a[5] || []).map(m => ({select: m[0], color: m[1], state: m[2],
+                                     label: m[3], id: m[4]})),
     });
   } catch (e) {
     return null;                     // a truncated or hand-edited hash is not fatal
