@@ -38,14 +38,18 @@ export const deviceLabel = d =>
 // has to be built at the same time or it never gets built.
 //
 // The names alone are not enough, and the failures were measured: "400g",
-// "qumran" and "roadm" all found nothing while devices with 400G ports, a
-// Qumran ASIC and a ROADM line unit sat in the list. The description carries all
-// three. `attrs` would be better still - that is where switch-silicon and
-// capacity actually live - but attrs are in <device>.configs.json and not in
-// devices.json, and fetching thirteen files to build an index is not a trade
-// that survives three hundred. So the index reads whatever devices.json offers:
-// `search` or `attrs` if the build ever carries one, and nothing breaks until
-// then.
+// "qumran" and "roadm" all found nothing while a device with 400G ports, four
+// with a Qumran ASIC and two ROADM line units sat in the list. `description`
+// finds them, but it indexes prose - what a query finds then depends on how
+// somebody worded a summary. `search` is the durable answer: a blob the build
+// flattens from the device's own data, including GROUP attrs, which is where the
+// answer usually lives. The AGR400 says 400G in exactly one place,
+// `groups.qsfpdd-400g.attrs.speed`; its device attrs say "2.4 Tb/s" and never
+// mention it.
+//
+// Both stay in the list. `description` still carries words no structured field
+// has, `attrs` is read if a device entry ever carries one directly, and a build
+// that predates `search` degrades to what it used to do rather than to nothing.
 const haystack = d => [d.manufacturer, d.model, d.name, d.description,
                        d.portfolio?.series, d.portfolio?.family, d.portfolio?.line,
                        d.search, d.attrs && Object.values(d.attrs).join(' ')]
