@@ -189,7 +189,7 @@ views:
              complete), Blinking Green (learning state, self-survey not complete), Solid Yellow
              (power up, not tracking any satellite), Blinking Yellow (antenna short to ground).
              Every row but Solid Yellow is annotated "need NOS to activate this feature"'}
-        - {ref: common/led-rect@1, id: led-sync, at: [121.4, 19.1],
+        - {ref: common/led-rect@1, id: led-sync, for: chassis, at: [121.4, 19.1],
            states: ['off',
                    {name: synced, color: '#22c55e'},
                    {name: synce, color: '#22c55e', behavior: blinking},
@@ -199,21 +199,21 @@ views:
              (timing core, 1588 and SyncE, synchronized to an external source), Blinking Green
              (synchronized in SyncE mode), Solid Yellow (acquiring state or holdover), Blinking
              Yellow (synchronization fail)'}
-        - {ref: common/led-rect@1, id: led-stat, at: [121.4, 22.0],
+        - {ref: common/led-rect@1, id: led-stat, for: chassis, at: [121.4, 22.0],
            states: ['off',
                    {name: boot-complete, color: '#22c55e'},
                    {name: booting, color: '#22c55e', behavior: blinking}],
            description: 'HIG STAT row - Off (X86 and BMC initializing, or not powered), Solid Green (boot
              complete), Blinking Green (system is booting). The table lists no yellow for this
              lamp'}
-        - {ref: common/led-rect@1, id: led-fan, at: [121.4, 24.9],
+        - {ref: common/led-rect@1, id: led-fan, for: [rear/fan-1, rear/fan-2, rear/fan-3, rear/fan-4, rear/fan-5], at: [121.4, 24.9],
            states: ['off',
                    {name: ok, color: '#22c55e'},
                    {name: fault, color: '#eab308', behavior: blinking}],
            description: 'HIG FAN row - Off (X86 and BMC initializing, or not powered), Solid Green (all fan
              modules work well), Blinking Yellow (one or more fan modules fail or no fan module
              present)'}
-        - {ref: common/led-rect@1, id: led-pwr, at: [121.4, 27.8],
+        - {ref: common/led-rect@1, id: led-pwr, for: chassis, at: [121.4, 27.8],
            states: ['off',
                    {name: ok, color: '#22c55e'},
                    {name: bmc-power-fail, color: '#22c55e', behavior: blinking},
@@ -224,7 +224,7 @@ views:
              CPU power fail), Blinking Yellow (system power fail). Four meanings out of two
              colours and two behaviours - the lamp that put behaviour into the model'}
         - {ref: common/ground-symbol@1, id: ground-mark, at: [431.6, 18.75]}
-        - {ref: common/reset-button@1, id: reset, at: [118.8, 34.6]}
+        - {ref: common/reset-button@1, id: reset, at: [118.8, 34.6], for: chassis}
         - {ref: common/rj45-bezel@2, id: bits, at: [131.8, 13.4], attrs: {media: rj48, role: bits-io}}
         - {ref: common/rj45-bezel@2, id: tod, at: [131.8, 28.3], attrs: {media: rj45, role: tod-in}}
         - {ref: common/rj45-port@4, id: mgmt, at: [152.3, 1.2], attrs: {role: mgmt, speed: 100m-1g},

@@ -47,11 +47,11 @@ views:
       - {at: [149.0, 28.6], text: TEL1, font-size: 1.9, for: tel-1}
     components:
       placements:
-        - {ref: common/power-button@1, id: power-btn, at: [12, 13]}
+        - {ref: common/power-button@1, id: power-btn, at: [12, 13], for: chassis}
         - {ref: common/dc-barrel@1, id: dc-in, at: [32, 12.5]}
         - {ref: common/rj45-shielded@1, id: eth-10g, at: [68.1, 12], attrs: {speed: 10g}}
         - {ref: common/rj45-jack@2, id: eth-lan, at: [91.1, 11.5], skin: yellow, attrs: {speed: 1g}}
-        - {ref: common/reset-button@1, id: reset, at: [113, 16]}
+        - {ref: common/reset-button@1, id: reset, at: [113, 16], for: chassis}
         - {ref: common/rj11-jack@1, id: tel-2, at: [123, 12.5], rotate: 180, attrs: {role: fxs}, rel-pos: 2}
         - {ref: common/rj11-jack@1, id: tel-1, at: [142, 12.5], rotate: 180, attrs: {role: fxs}, rel-pos: 1}
   top:
@@ -76,14 +76,14 @@ views:
       - {at: [68.2, 100.8], text: TEL2, font-size: 1.5, for: led-tel2}
     components:
       placements:
-        - {ref: common/led-indicator@1, id: led-power, at: [20, 102], group: leds, rel-pos: 1}
-        - {ref: common/led-indicator@1, id: led-pon, at: [26.6, 102], group: leds, rel-pos: 2}
-        - {ref: common/led-indicator@1, id: led-los, at: [33.2, 102], group: leds, rel-pos: 3}
+        - {ref: common/led-indicator@1, id: led-power, at: [20, 102], group: leds, rel-pos: 1, for: chassis}
+        - {ref: common/led-indicator@1, id: led-pon, at: [26.6, 102], group: leds, rel-pos: 2, for: bottom/pon}
+        - {ref: common/led-indicator@1, id: led-los, at: [33.2, 102], group: leds, rel-pos: 3, for: bottom/pon}
         - {ref: common/led-indicator@1, id: led-net, at: [39.8, 102], group: leds, rel-pos: 4}
-        - {ref: common/led-indicator@1, id: led-lan, at: [46.4, 102], group: leds, rel-pos: 5}
-        - {ref: common/led-indicator@1, id: led-10g, at: [53, 102], group: leds, rel-pos: 6}
-        - {ref: common/led-indicator@1, id: led-tel1, at: [59.6, 102], group: leds, rel-pos: 7}
-        - {ref: common/led-indicator@1, id: led-tel2, at: [66.2, 102], group: leds, rel-pos: 8}
+        - {ref: common/led-indicator@1, id: led-lan, at: [46.4, 102], group: leds, rel-pos: 5, for: rear/eth-lan}
+        - {ref: common/led-indicator@1, id: led-10g, at: [53, 102], group: leds, rel-pos: 6, for: rear/eth-10g}
+        - {ref: common/led-indicator@1, id: led-tel1, at: [59.6, 102], group: leds, rel-pos: 7, for: rear/tel-1}
+        - {ref: common/led-indicator@1, id: led-tel2, at: [66.2, 102], group: leds, rel-pos: 8, for: rear/tel-2}
     regions:
       - {id: status-leds, at: [17, 96], size: {w: 63, h: 14}, label: Status LEDs, members: [led-power, led-pon, led-los, led-net, led-lan, led-10g, led-tel1, led-tel2]}
       - {id: logo-zone, at: [110, 92], size: {w: 46, h: 20}, label: Branding area}

@@ -739,14 +739,14 @@ views:
         - {id: mgmt-eth, ref: std/rj45@1, at: [413.50, 27.00], rotate: 180, group: mgmt, rel-pos: 1, attrs: {leds: 'Left = link, Right = activity'}}
         - {id: console-0, ref: std/micro-usb@1, at: [402.90, 44.40], group: mgmt, rel-pos: 2}
         - {id: console-1, ref: std/rj45@1, at: [413.50, 44.40], rotate: 180, group: mgmt, rel-pos: 3}
-        - {id: reset, ref: common/reset-button@1, at: [394.80, 44.60], group: mgmt, rel-pos: 4}
+        - {id: reset, ref: common/reset-button@1, at: [394.80, 44.60], group: mgmt, rel-pos: 4, for: chassis}
         - {id: led-mgmt-link, ref: common/led-rect@1, at: [414.6, 28.0], group: mgmt-leds, rel-pos: 0, for: mgmt-eth, attrs: {function: link, states: Lit = link}}
         - {id: led-mgmt-act, ref: common/led-rect@1, at: [423.8, 28.0], group: mgmt-leds, rel-pos: 1, for: mgmt-eth, attrs: {function: activity, states: Blinking = activity}}
-        - {id: led-diag, ref: common/led-rect@1, at: [359.30, 45.00], group: status-leds, rel-pos: 0, attrs: {function: DIAG, states: 'Green = OK, Amber = fault detected'}}
-        - {id: led-loc, ref: common/led-rect@1, at: [364.20, 45.00], group: status-leds, rel-pos: 1, attrs: {function: LOC, states: 'Flashes Amber when the locate command is activated'}}
-        - {id: led-fan, ref: common/led-rect@1, at: [368.95, 45.00], group: status-leds, rel-pos: 2, attrs: {function: FAN, states: 'Green = OK, Amber = fault'}}
-        - {id: led-ps0, ref: common/led-rect@1, at: [373.70, 45.00], group: status-leds, rel-pos: 3, attrs: {function: PS0, states: 'Green = OK, Amber = fault'}}
-        - {id: led-ps1, ref: common/led-rect@1, at: [378.45, 45.00], group: status-leds, rel-pos: 4, attrs: {function: PS1, states: 'Green = OK, Amber = fault'}}
+        - {id: led-diag, ref: common/led-rect@1, at: [359.30, 45.00], group: status-leds, rel-pos: 0, for: chassis, attrs: {function: DIAG, states: 'Green = OK, Amber = fault detected'}}
+        - {id: led-loc, ref: common/led-rect@1, at: [364.20, 45.00], group: status-leds, rel-pos: 1, for: chassis, attrs: {function: LOC, states: 'Flashes Amber when the locate command is activated'}}
+        - {id: led-fan, ref: common/led-rect@1, at: [368.95, 45.00], group: status-leds, rel-pos: 2, for: [rear/fan-0, rear/fan-1, rear/fan-2, rear/fan-3, rear/fan-4], attrs: {function: FAN, states: 'Green = OK, Amber = fault'}}
+        - {id: led-ps0, ref: common/led-rect@1, at: [373.70, 45.00], group: status-leds, rel-pos: 3, for: rear/psu-0, attrs: {function: PS0, states: 'Green = OK, Amber = fault'}}
+        - {id: led-ps1, ref: common/led-rect@1, at: [378.45, 45.00], group: status-leds, rel-pos: 4, for: rear/psu-1, attrs: {function: PS1, states: 'Green = OK, Amber = fault'}}
         - {id: panel-screw-0, ref: edgecore/agr-panel-screw@1, at: [1.60, 9.30], group: fasteners, rel-pos: 0}
         - {id: panel-screw-1, ref: edgecore/agr-panel-screw@1, at: [1.60, 69.40], group: fasteners, rel-pos: 1}
         - {id: panel-screw-2, ref: edgecore/agr-panel-screw@1, at: [429.70, 1.60], group: fasteners, rel-pos: 2}

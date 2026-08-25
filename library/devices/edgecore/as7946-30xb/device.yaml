@@ -390,16 +390,16 @@ views:
            states: ['off', {name: activity, behavior: blinking}], description: 'right lamp: activity. The QSG gives it no colour'}
         - {id: console-1, ref: std/rj45@1, at: [415.7, 45.3], rotate: 180, group: mgmt, rel-pos: 3}
         - {id: console-0, ref: std/micro-usb@1, at: [404.0, 46.4], group: mgmt, rel-pos: 2}
-        - {id: reset, ref: common/reset-button@1, at: [394.5, 45.4], group: mgmt, rel-pos: 4}
-        - {id: led-diag, ref: common/led-rect@1, at: [359.2, 48.6], group: status-leds, rel-pos: 0, attrs: {function: DIAG},
+        - {id: reset, ref: common/reset-button@1, at: [394.5, 45.4], group: mgmt, rel-pos: 4, for: chassis}
+        - {id: led-diag, ref: common/led-rect@1, at: [359.2, 48.6], group: status-leds, rel-pos: 0, for: chassis, attrs: {function: DIAG},
            description: 'DIAG - Green (OK), Amber (fault detected)'}
-        - {id: led-loc, ref: common/led-rect@1, at: [364.5, 48.6], group: status-leds, rel-pos: 1, attrs: {function: LOC},
+        - {id: led-loc, ref: common/led-rect@1, at: [364.5, 48.6], group: status-leds, rel-pos: 1, for: chassis, attrs: {function: LOC},
            states: ['off', {name: locate, color: '#f59e0b'}],
            description: 'LOC - flashes Amber when the command is activated. The only status
              lamp here that is not Green (OK) / Amber (fault)'}
-        - {id: led-fan, ref: common/led-rect@1, at: [369.7, 48.6], group: status-leds, rel-pos: 2, attrs: {function: FAN}}
-        - {id: led-ps0, ref: common/led-rect@1, at: [374.8, 48.6], group: status-leds, rel-pos: 3, attrs: {function: PS0}}
-        - {id: led-ps1, ref: common/led-rect@1, at: [379.7, 48.6], group: status-leds, rel-pos: 4, attrs: {function: PS1}}
+        - {id: led-fan, ref: common/led-rect@1, at: [369.7, 48.6], group: status-leds, rel-pos: 2, for: [rear/fan-0, rear/fan-1, rear/fan-2, rear/fan-3, rear/fan-4], attrs: {function: FAN}}
+        - {id: led-ps0, ref: common/led-rect@1, at: [374.8, 48.6], group: status-leds, rel-pos: 3, for: rear/psu-0, attrs: {function: PS0}}
+        - {id: led-ps1, ref: common/led-rect@1, at: [379.7, 48.6], group: status-leds, rel-pos: 4, for: rear/psu-1, attrs: {function: PS1}}
   rear:
     size:
       w: 440.0

@@ -43,7 +43,9 @@ list; a leader line that joins two things names both, and on an indicator a list
 *collectively* - a FAN lamp over five trays names all five. The renderer emits
 `data-for`, the explorer nests the child under its owner and highlights both on
 selection, and L14 checks every target exists and is nearby - within one
-owner-dimension, floored at 6 mm so a legend beside a 2 mm LED is not a finding.
+owner-dimension, floored at 30 mm. The floor has to clear the largest real stack
+pitch: indicators are banded, so one lamp row serves a stacked pair and the lamp for the
+far member sits a whole pitch away - 27.4 mm on the AS7326-56X.
 
 A **placement** may name two things a silkscreen mark and a bay may not, because an
 indicator's subject need not be on the face the indicator is printed on:

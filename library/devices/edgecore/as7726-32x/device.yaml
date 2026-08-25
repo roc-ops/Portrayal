@@ -174,12 +174,12 @@ views:
         - {ref: common/qsfp28-cage@3, id: port-30, at: [324, 25.5], rotate: 180, group: ports, rel-pos: 30}
         - {ref: common/qsfp28-cage@3, id: port-31, at: [343, 10], group: ports, rel-pos: 31}
         - {ref: common/qsfp28-cage@3, id: port-32, at: [343, 25.5], rotate: 180, group: ports, rel-pos: 32}
-        - {ref: common/led-indicator@1, id: led-loc, at: [40, 7], group: leds, rel-pos: 2}
-        - {ref: common/led-indicator@1, id: led-psu1, at: [33, 15], group: leds, rel-pos: 4}
-        - {ref: common/led-indicator@1, id: led-diag, at: [40, 15], group: leds, rel-pos: 1}
-        - {ref: common/led-indicator@1, id: led-psu2, at: [33, 23], group: leds, rel-pos: 5}
-        - {ref: common/led-indicator@1, id: led-fan, at: [40, 23], group: leds, rel-pos: 3}
-        - {ref: common/reset-button@1, id: reset, at: [36.5, 32]}
+        - {ref: common/led-indicator@1, id: led-loc, at: [40, 7], group: leds, rel-pos: 2, for: chassis}
+        - {ref: common/led-indicator@1, id: led-psu1, at: [33, 15], group: leds, rel-pos: 4, for: rear/psu-1}
+        - {ref: common/led-indicator@1, id: led-diag, at: [40, 15], group: leds, rel-pos: 1, for: chassis}
+        - {ref: common/led-indicator@1, id: led-psu2, at: [33, 23], group: leds, rel-pos: 5, for: rear/psu-2}
+        - {ref: common/led-indicator@1, id: led-fan, at: [40, 23], group: leds, rel-pos: 3, for: [rear/fan-1, rear/fan-2, rear/fan-3, rear/fan-4, rear/fan-5, rear/fan-6]}
+        - {ref: common/reset-button@1, id: reset, at: [36.5, 32], for: chassis}
         - {ref: common/rj45-port@4, id: mgmt-eth, at: [362, 9.1], attrs: {role: mgmt, speed: 1000base-t}}
         - {ref: common/rj45-bezel@2, id: console, at: [362, 25.2], attrs: {media: rj45-serial, role: console}}
         - {ref: common/sfp-led-pair@1, id: sfp-leds, at: [383, 9], group: leds, rel-pos: 6, for: [mgmt-sfp-1, mgmt-sfp-2]}
