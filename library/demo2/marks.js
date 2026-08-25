@@ -7,7 +7,18 @@
 // vocabulary. Everything here is a pure function over an SVG root and such a
 // document - no UI, no globals, no shell.
 //
-//   {v:1, device, config, view, legend, crop, marks:[{select, color, state, label}]}
+//   {v:1, device, config, view, legend, crop, marks:[{select, color, state, label, lamp}]}
+//
+// `color` and `lamp` are both colours and they are not the same kind of thing.
+// `color` is INK: a ring the reader is meant to notice, drawn around the part.
+// `lamp` is what the HARDWARE is showing - the paint of the lamp itself. It
+// exists because a lamp nobody documented renders `off`/`on` and the `on` is a
+// stylesheet default, not a fact; somebody composing a picture of a device whose
+// vendor never published a port-LED table has to be able to say what colour the
+// lamp is in the picture they are drawing. It sits on the mark beside `state`
+// rather than in a document of its own, because it is the same statement about
+// the same part addressed by the same selector, and two parallel documents
+// keyed by selector is two things to keep in step.
 //
 // Three rules learned the hard way and encoded below:
 //
@@ -39,8 +50,15 @@ const OWNED = 'data-portrayal';
 const ADDED = 'data-pm-added';
 const TOOK = 'data-pm-took';
 const VIEWBOX = 'data-pm-viewbox';
+const LIT = 'data-pm-lit';
 
 const STATE_RE = /^[a-z0-9-]+$/;          // a state name is a token, not prose
+// A lamp colour is written into an inline custom property and then read back out
+// by getComputedStyle for the export, so it is the one field of the document
+// that reaches a CSS value slot. Hex only: that is what a colour input produces,
+// it is what Word's importer understands, and it is not a syntax that can carry
+// `url(...)` into a drawing built from a share URL somebody else wrote.
+const HEX_RE = /^#(?:[0-9a-f]{3}|[0-9a-f]{4}|[0-9a-f]{6}|[0-9a-f]{8})$/i;
 
 // ------------------------------------------------------------------ document
 
@@ -77,6 +95,11 @@ export function normalise(doc) {
       color: str(m.color),
       state: str(m.state),
       label: str(m.label),
+      // Dropped rather than kept-and-ignored when it is not a hex: a value that
+      // survives normalise() is a value the URL codec will hand back and a UI
+      // will show in its swatch, and a swatch showing something the drawing
+      // never painted is worse than no swatch.
+      lamp: HEX_RE.test(str(m.lamp)) ? str(m.lamp).toLowerCase() : '',
     })),
   };
 }
@@ -156,6 +179,12 @@ function statesOf(els) {
   }
   return [...out].sort();
 }
+
+// A lamp, or a part with a lamp in it. The distinction matters for `lamp`: the
+// colour is set on the matched part and INHERITS down to the lamp, so marking a
+// whole rj45 jack whose left LED is the lamp is a legitimate way to say it.
+const isLamp = el => el.getAttribute('data-class') === 'led' ||
+                     !!el.querySelector('[data-class="led"]');
 
 // ------------------------------------------------------------------ geometry
 
@@ -247,6 +276,13 @@ export function apply(svgRoot, doc, opts = {}) {
       row.warning = `no match declares state '${mark.state}' ` +
                     `(declared: ${row.states.join(', ')})`;
 
+    // A lamp colour aimed at something that is not a lamp sets a custom property
+    // nothing reads, and the picture does not change. The UI only offers the
+    // choice on lamps, but a typed selector and a share URL can say anything.
+    if (mark.lamp && parts.length && !parts.some(isLamp))
+      row.warning = [row.warning, `no match is a lamp: a lamp colour paints ` +
+        `--led-color, and nothing here reads it`].filter(Boolean).join('; ');
+
     for (const el of parts) {
       const add = ['portrayal-marked', `pm-${index}`];
       if (mark.state && STATE_RE.test(mark.state)) {
@@ -273,6 +309,21 @@ export function apply(svgRoot, doc, opts = {}) {
       el.setAttribute(ADDED, [...new Set(
         (el.getAttribute(ADDED) || '').split(' ').filter(Boolean).concat(add))].join(' '));
       if (mark.label) el.setAttribute('data-mark-label', mark.label);
+      // The skins paint every lamp fill="var(--led-color, <unlit>)" and the
+      // state- rules work by setting that property on the part or an ancestor.
+      // So a chosen lamp colour is the same mechanism, one specificity higher:
+      // an inline custom property on the part, inherited by the lamp inside it.
+      // It beats any state- rule for the same lamp, which is what "I am telling
+      // you what this one shows" has to mean.
+      //
+      // `off` is the exception and it is not a special case so much as the
+      // literal reading: a lamp the document says is off is not showing a
+      // colour. The choice stays in the document so that turning it back on
+      // does not ask for the colour again.
+      if (mark.lamp && HEX_RE.test(mark.lamp) && mark.state !== 'off') {
+        if (!el.hasAttribute(LIT)) el.setAttribute(LIT, el.style.getPropertyValue('--led-color'));
+        el.style.setProperty('--led-color', mark.lamp);
+      }
     }
     if (mark.color) for (const el of parts) halo(svgRoot, el, mark.color);
     report.push(row);
@@ -294,6 +345,16 @@ export function clear(svgRoot) {
     el.removeAttribute(ADDED);
     el.removeAttribute(TOOK);
     el.removeAttribute('data-mark-label');
+    if (el.hasAttribute(LIT)) {
+      const was = el.getAttribute(LIT);
+      if (was) el.style.setProperty('--led-color', was);
+      else el.style.removeProperty('--led-color');
+      el.removeAttribute(LIT);
+      // An element the drawing gave no style attribute gets none back. The
+      // harness compares outerHTML before and after to prove clear() is exact,
+      // and a leftover style="" is a difference.
+      if (!el.getAttribute('style')) el.removeAttribute('style');
+    }
     if (!el.getAttribute('class')) el.removeAttribute('class');
   }
   // The legend grows all three of viewBox, height and width - a label wider than
@@ -334,7 +395,11 @@ export function legend(svgRoot, doc) {
   // simply does not get to speak for the drawing.
   const items = d.marks
     .filter(m => m.label && match(svgRoot, m).els.length)
-    .map(m => ({label: m.label, color: m.color || stateColor(svgRoot, m.state) || '#8d939a',
+    // A lamp colour is ahead of the stylesheet's own idea of the state, because
+    // it was chosen precisely where the stylesheet's idea is a default and not a
+    // fact. It is behind `color`, which is the ring the row is a key to.
+    .map(m => ({label: m.label,
+                color: m.color || m.lamp || stateColor(svgRoot, m.state) || '#8d939a',
                 hollow: !m.color}));
   if (!items.length) return null;
 
@@ -683,7 +748,10 @@ const PREFIX = 'm1.';
 export function encode(doc) {
   const d = normalise(doc);
   // trailing empties are dropped: most marks are a selector and a colour
-  const marks = d.marks.map(m => trimTail([m.select, m.color, m.state, m.label, m.id]));
+  // Appended, like the crop below and for the same reason: a share URL written
+  // before lamp colours existed decodes with m[5] undefined, which is exactly
+  // "no lamp colour", and trimTail keeps the common mark at two slots.
+  const marks = d.marks.map(m => trimTail([m.select, m.color, m.state, m.label, m.id, m.lamp]));
   // Appended, not inserted: a share URL written before either of these existed
   // decodes with a[6] undefined, which is exactly "no crop", and an object
   // legend rides in slot 4 where the boolean was.
@@ -720,7 +788,7 @@ export function decode(input) {
       legend: a[4] && typeof a[4] === 'object' ? a[4] : a[4] !== 0,
       crop: c,
       marks: (a[5] || []).map(m => ({select: m[0], color: m[1], state: m[2],
-                                     label: m[3], id: m[4]})),
+                                     label: m[3], id: m[4], lamp: m[5]})),
     });
   } catch (e) {
     return null;                     // a truncated or hand-edited hash is not fatal

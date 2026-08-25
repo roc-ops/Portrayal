@@ -70,6 +70,39 @@
   .chip.nocss { border-style:dashed; color:#7d848b; }
   .node.sel .chip { border-color:#ffffff66; }
 
+  /* The lamp picker, in the tree and in the panel. Round, chip-height and
+     borrowing the chips' own metrics: on the S9510-28DC thirty of these appear
+     at once, and the row has to stay a row. A native colour input is used rather
+     than a swatch that opens one - it is one element, it takes a keyboard, and
+     what it shows IS the value.
+
+     Unset is said with presentation, because a colour input has no empty value:
+     desaturated behind a dashed ring, showing the colour it would offer. Solid
+     means the document carries a choice. */
+  input.lampsw, input.lamp {
+    width:0.95rem; height:0.95rem; padding:0; margin-left:0.3rem; border-radius:50%;
+    border:1px solid #4a4f55; background:none; cursor:pointer; flex:none;
+    vertical-align:-0.12rem; overflow:hidden;
+  }
+  input.lampsw::-webkit-color-swatch-wrapper, input.lamp::-webkit-color-swatch-wrapper
+    { padding:0; }
+  input.lampsw::-webkit-color-swatch, input.lamp::-webkit-color-swatch
+    { border:none; border-radius:50%; }
+  input.lampsw::-moz-color-swatch, input.lamp::-moz-color-swatch
+    { border:none; border-radius:50%; }
+  input.lampsw.unset, input.lamp.unset { opacity:0.4; filter:grayscale(0.85);
+                                         border-style:dashed; }
+  input.lampsw:hover, input.lamp:hover { border-color:var(--accent); opacity:1; }
+  /* .chip sets display:inline-block, which outranks the UA rule behind the
+     hidden attribute - so every untouched lamp grew a clear button for a colour
+     it did not have. */
+  .chip[hidden] { display:none; }
+  .chip.lampx { margin-left:0.18rem; padding:0 0.28rem; color:#8d939a; }
+  .chip.lampx:hover { border-color:var(--bad); color:var(--ink); }
+  .mark .lampbox { display:flex; align-items:center; flex:none; }
+  .mark .lampbox .lx { padding:0.02rem 0.26rem; font-size:0.68rem; line-height:1.2;
+                       margin-left:0.15rem; }
+
   .croprow { display:flex; gap:0.35rem; align-items:center; font-size:0.7rem;
              color:var(--dim); margin-top:0.32rem; }
   .croprow b { color:var(--ink); font-weight:600; font-variant-numeric:tabular-nums; }
@@ -323,6 +356,88 @@ function paints(el, st) {
   return ok;
 }
 
+// ------------------------------------------------- documented vs. undocumented
+
+// Which lamps does the model actually have something to say about?
+//
+// Every LED component in the library declares `states: ['off', 'on']` and
+// nothing else, because a lamp can only know that it is a lamp - what it MEANS
+// is a per-device, per-function fact that lives in the device manifest. So a
+// lamp still carrying exactly off/on is one whose device said nothing: the
+// S9510-28DC's HIG has LED tables for GNSS, SYNC, STAT, FAN, PWR, the PSU and
+// fan FRUs and the management jack, and no table at all for the port lamps, and
+// its thirty port lamps sit on that default as a result.
+//
+// That is the case the colour picker exists for, and the case it must be
+// confined to. `led-pwr`'s off/ok/bmc-power-fail/cpu-power-fail was transcribed
+// from a vendor table; offering to recolour it would turn a fact into a
+// preference and put a false picture into an export.
+//
+// The literal pair is NOT the whole test, because a device may one day declare
+// exactly off and on out of a real document. Two questions are asked:
+//
+//   1. Is the vocabulary anything other than the components' off/on default?
+//      Any override - at the placement, at the group, or in the contract's own
+//      element - lands in data-states, so a longer or different list is somebody
+//      having written something down.
+//   2. Failing that, does the drawing carry a rule that paints one of these
+//      states FOR THIS LAMP IN PARTICULAR? render.py emits a declared colour as
+//      `#lamp-id.state-on` or `g[data-ref^='common/led-dot@'] .state-on`; the
+//      base stylesheet's own `.state-on { --led-color:#22c55e }` is the generic
+//      fallback that every undocumented lamp in the library gets. A scoped rule
+//      means a colour was declared, which means somebody read a table.
+//
+// Today no device in the library declares a coloured off/on, so (2) never fires
+// and (1) carries the whole boundary. It is here because the day it does fire is
+// the day the literal-pair test would start lying, silently, in an export.
+let scopedRules = null;
+
+function stateRules() {
+  if (scopedRules) return scopedRules;
+  scopedRules = [];
+  for (const style of state.svg.querySelectorAll('style')) {
+    let rules;
+    try { rules = style.sheet && style.sheet.cssRules; } catch (e) { rules = null; }
+    for (const rule of rules || []) {
+      if (!rule.selectorText) continue;
+      for (const part of rule.selectorText.split(',')) {
+        const st = /\.state-([a-z0-9-]+)/.exec(part);
+        // '#' and '[data-ref' are the only two scopes render.py emits for a
+        // declared colour. Not any attribute selector: the base sheet's own
+        // `.state-fail[data-class='psu']` is a drop-shadow every PSU gets, and
+        // reading that as a declaration would call every default PSU documented.
+        if (st && (part.includes('#') || part.includes('[data-ref')))
+          scopedRules.push({state: st[1], sel: part.trim()});
+      }
+    }
+  }
+  return scopedRules;
+}
+
+// Does a rule declared for this element in particular paint `st`? Asked by
+// putting the class on the element and letting the browser answer, for the same
+// reason paints() does: a stand-in element cannot match a self-scoped selector.
+function declaredHere(el, st) {
+  const cands = stateRules().filter(r => r.state === st);
+  if (!cands.length) return false;
+  const had = el.classList.contains('state-' + st);
+  if (!had) el.classList.add('state-' + st);
+  const hit = cands.some(r => { try { return el.matches(r.sel); } catch (e) { return false; } });
+  if (!had) el.classList.remove('state-' + st);
+  return hit;
+}
+
+const DEFAULT_VOCAB = ['off', 'on'];
+
+/** True when this element is a lamp whose meaning the model does not record. */
+function undocumented(el) {
+  if (!el || el.getAttribute('data-class') !== 'led') return false;
+  const sts = statesOfEl(el);
+  if (sts.length !== DEFAULT_VOCAB.length ||
+      !DEFAULT_VOCAB.every(s => sts.includes(s))) return false;
+  return !sts.some(st => declaredHere(el, st));
+}
+
 // The stylesheet's own vocabulary, for a state a match does not declare. Offered
 // separately and second: choosing one is a claim about the hardware the model
 // does not support, and marks.js says so in `warning`.
@@ -356,6 +471,45 @@ function stateOptions(r, cur) {
   return h;
 }
 
+// The panel gets the same picker as the tree, under the same rule, because the
+// interesting way to colour thirty undocumented lamps is not thirty pickers - it
+// is one rule with one picker on it.
+//
+// "The same rule" has to mean the same rule. A selector reaching a mix - say
+// [data-class='led'] on the S9510, which is thirty silent port lamps AND the PWR
+// lamp whose four states came off a vendor table - is not a place the model is
+// silent, and a picker there would recolour the transcribed ones along with the
+// rest. So the control is offered only where EVERY lamp the selector reaches is
+// undocumented; a mixed rule gets no picker and says why.
+function lampCensus(select) {
+  const c = {undoc: 0, doc: 0};
+  if (!select || !state.svg) return c;
+  let els;
+  try { els = state.svg.querySelectorAll(select); } catch (e) { return c; }
+  for (const el of els) {
+    if (el.getAttribute('data-class') !== 'led' || !statesOfEl(el).length) continue;
+    if (undocumented(el)) c.undoc++; else c.doc++;
+  }
+  return c;
+}
+
+const lampable = select => {
+  const c = lampCensus(select);
+  return c.undoc > 0 && c.doc === 0;
+};
+
+const LAMPTIP = 'the model records no meaning for these lamps — choose what they show';
+
+function lampHtml(m) {
+  if (!lampable(m.select)) return '';
+  // The clear button is always built and hidden rather than added on demand, so
+  // that choosing a colour never has to rebuild the control the user is holding.
+  return `<input type="color" class="lamp${m.lamp ? '' : ' unset'}"
+      value="${esc(m.lamp || LAMP_DEFAULT)}" title="${LAMPTIP}"
+    ><button class="lx"${m.lamp ? '' : ' hidden'}
+      title="let the drawing paint these lamps again">✕</button>`;
+}
+
 const EMPTY = {count: 0, total: 0, states: [], error: null, warning: null};
 
 // count and total differ by up to 2x wherever the art nests a group and a leaf
@@ -374,7 +528,21 @@ function notesHtml(m, r) {
   if (m.state && !r.error && r.count && !paints(firstMatch(m.select), m.state))
     notes.push(`<div class="note warn">nothing in this drawing paints
       <code>state-${esc(m.state)}</code>: the class is set, the picture does not change.</div>`);
-  if (!m.color && !m.state && !m.label && r.count)
+  if (m.lamp && r.count) {
+    // A lamp colour can arrive from a share URL or an MCP client on any selector
+    // at all, and the selector on a mark made here can be edited afterwards. So
+    // the panel says what the colour is currently overriding rather than
+    // assuming the control that offered it is still the control that applies.
+    const c = lampCensus(m.select);
+    notes.push(c.doc
+      ? `<div class="note warn">this colour overrides ${c.doc} lamp${c.doc === 1 ? '' : 's'}
+         whose states the model transcribes from the vendor — an export will show
+         ${c.doc === 1 ? 'it' : 'them'} in a colour the hardware does not use.</div>`
+      : `<div class="note dim">this lamp colour is your choice: the model records no
+         vocabulary for ${c.undoc === 1 ? 'this lamp' : `these ${c.undoc} lamps`}, so
+         nothing is being contradicted — and nothing is being asserted either.</div>`);
+  }
+  if (!m.color && !m.state && !m.label && !m.lamp && r.count)
     notes.push(`<div class="note dim">no colour, no state and no label: this mark
       does nothing.</div>`);
   return notes.join('');
@@ -382,7 +550,9 @@ function notesHtml(m, r) {
 
 // A mark that carries a state and nothing else was made in the tree and belongs
 // to the depicted condition of the device rather than to the reader's ink.
-const stateOnly = m => !!m.state && !m.color && !m.label;
+// A lamp colour belongs on the same side of that line as a state: it says what
+// the hardware is showing, not what the reader should look at.
+const stateOnly = m => (!!m.state || !!m.lamp) && !m.color && !m.label;
 
 function drawRows() {
   const box = $('#rows');
@@ -391,7 +561,9 @@ function drawRows() {
       tree, press a rule above, or type a selector. Every one of the three writes the
       same <code>select</code> field. To show a lamp lit rather than ringed, use the
       state chips on the tree row instead — that is a fact about the device, not a
-      highlight.</div>`;
+      highlight. A lamp the model says nothing about carries a colour dot beside
+      its chips: the vendor never published what it means, so the colour is
+      yours to choose.</div>`;
     return;
   }
   box.innerHTML = doc.marks.map((m, i) => {
@@ -408,6 +580,7 @@ function drawRows() {
         <input type="checkbox" class="paint"${m.color ? ' checked' : ''} title="ring every match in this colour">
         <input type="color" class="col" value="${esc(m.color || nextColor())}">
         <select class="st" title="add state-&lt;name&gt; to every match">${stateOptions({...r, select: m.select}, m.state)}</select>
+        <span class="lampbox">${lampHtml(m)}</span>
         <input class="lab" value="${esc(m.label)}" placeholder="legend label">
         <button class="mv" data-d="-1" title="earlier in paint order">↑</button>
         <button class="mv" data-d="1" title="later in paint order">↓</button>
@@ -438,6 +611,19 @@ function paintRows() {
     row.classList.toggle('stateonly', stateOnly(m));
     row.querySelector('.cnt').innerHTML = cntHtml(r);
     row.querySelector('.notes').innerHTML = notesHtml(m, r);
+    // Whether the picker is offered follows the SELECTOR, which is typed - so it
+    // has to be re-derived here rather than only at drawRows(). Never under the
+    // element the user is holding: a colour input rebuilt mid-drag closes the
+    // operating system's picker.
+    const lb = row.querySelector('.lampbox');
+    const cur = lb.querySelector('.lamp');
+    if (!!cur !== lampable(m.select)) {
+      if (!lb.contains(document.activeElement)) lb.innerHTML = lampHtml(m);
+    } else if (cur) {
+      if (cur !== document.activeElement) cur.value = m.lamp || LAMP_DEFAULT;
+      cur.classList.toggle('unset', !m.lamp);
+      lb.querySelector('.lx').hidden = !m.lamp;
+    }
     const sel = row.querySelector('.st'), sig = sigOf(row);
     // A <select> is rebuilt only when its CONTENTS would differ. Rebuilding one
     // that happens to be open closes it, and rebuilding one on every keystroke
@@ -459,6 +645,7 @@ $('#rows').addEventListener('input', ev => {
   else if (t.classList.contains('lab')) m.label = t.value;
   else if (t.classList.contains('col')) { m.color = t.value; row.querySelector('.paint').checked = true; }
   else if (t.classList.contains('paint')) m.color = t.checked ? row.querySelector('.col').value : '';
+  else if (t.classList.contains('lamp')) { m.lamp = t.value; t.classList.remove('unset'); }
   else return;
   schedule();
 });
@@ -473,7 +660,8 @@ $('#rows').addEventListener('change', ev => {
 $('#rows').addEventListener('click', ev => {
   const row = ev.target.closest('.mark'); if (!row) return;
   const i = +row.dataset.i;
-  if (ev.target.classList.contains('x')) { doc.marks.splice(i, 1); render(); }
+  if (ev.target.classList.contains('lx')) { doc.marks[i].lamp = ''; render(); }
+  else if (ev.target.classList.contains('x')) { doc.marks.splice(i, 1); render(); }
   else if (ev.target.classList.contains('mv')) {
     const j = i + (+ev.target.dataset.d);
     if (j < 0 || j >= doc.marks.length) return;
@@ -558,9 +746,45 @@ function setState(path, st) {
   // a mark with nothing left to say is not kept as an empty row: the tree is
   // where it was made, and clearing a state there should leave the document as
   // it was before the state was set
+  if (!m.state && !m.color && !m.label && !m.lamp) doc.marks.splice(doc.marks.indexOf(m), 1);
+  render();
+}
+
+// The lamp colour writes the same document, on the same mark, addressed by the
+// same selector as the state chips beside it - because it is the same kind of
+// statement. `off`/`on` and "shows blue" are both claims about what the hardware
+// is doing; the difference is only that the second one is the user's claim
+// rather than the vendor's, which is exactly why it is offered here and nowhere
+// a documented lamp can reach it.
+//
+// The swatch is its own on/off indicator - grey means "however the drawing
+// paints it", coloured means "this". So choosing a colour does not touch
+// `state`, with one exception: choosing a colour for a lamp the document has
+// explicitly turned off is a contradiction, and the newer statement wins.
+function setLamp(path, hex) {
+  const select = pathSel(path);
+  const m = doc.marks.find(x => x.select === select);
+  if (!m) return addMark({select, lamp: hex});
+  m.lamp = hex;
+  if (m.state === 'off') m.state = '';
+  render();
+}
+
+function clearLamp(path) {
+  const select = pathSel(path);
+  const m = doc.marks.find(x => x.select === select);
+  if (!m) return;
+  m.lamp = '';
   if (!m.state && !m.color && !m.label) doc.marks.splice(doc.marks.indexOf(m), 1);
   render();
 }
+
+const lampOf = path => doc.marks.find(x => x.select === pathSel(path))?.lamp || '';
+
+// The colour a picker opens on when nothing has been chosen. Amber rather than
+// one of the mark colours: the picker is about a lamp, and the palette a reader
+// expects from one is the palette hardware uses.
+const LAMP_DEFAULT = '#f59e0b';
 
 shell.on('row', (row, node) => {
   if (!node.el) return;                       // a group fold has no element
@@ -577,6 +801,28 @@ shell.on('row', (row, node) => {
     chip.onclick = ev => { ev.stopPropagation(); ev.preventDefault(); setState(node.path, st); };
     span.appendChild(chip);
   }
+  // The picker sits where the vocabulary would have been if there were one, and
+  // it is a chip rather than a colour well on purpose: thirty of these on one
+  // device has to read as thirty small dots beside thirty pairs of chips, not as
+  // a column of paint pots. The clear button only exists once a colour is set,
+  // so a device nobody has touched grows one element per lamp, not two.
+  if (undocumented(node.el)) {
+    const sw = document.createElement('input');
+    sw.type = 'color';
+    sw.className = 'lampsw';
+    sw.title = 'the model records no meaning for this lamp — choose what it shows';
+    const stop = ev => ev.stopPropagation();
+    sw.onclick = stop;
+    sw.onpointerdown = stop;
+    sw.oninput = ev => { stop(ev); setLamp(node.path, ev.target.value); };
+    span.appendChild(sw);
+    const x = document.createElement('span');
+    x.className = 'chip lampx';
+    x.textContent = '✕';
+    x.title = 'let the drawing paint this lamp again';
+    x.onclick = ev => { stop(ev); ev.preventDefault(); clearLamp(node.path); };
+    span.appendChild(x);
+  }
   row.querySelector('.nm').after(span);
 });
 
@@ -590,8 +836,19 @@ function drawTreeChips() {
     const path = span.closest('.node')?.dataset.path;
     const el = byPath.get(path);
     const cur = doc.marks.find(x => x.select === pathSel(path))?.state || '';
+    const lamp = lampOf(path);
+    const sw = span.querySelector('.lampsw');
+    if (sw) {
+      // A colour input cannot be empty, so "no colour chosen" is said with the
+      // swatch's own presentation rather than with its value: ghosted, and
+      // showing the colour it would offer.
+      if (sw !== document.activeElement) sw.value = lamp || LAMP_DEFAULT;
+      sw.classList.toggle('unset', !lamp);
+      span.querySelector('.lampx').hidden = !lamp;
+    }
     for (const chip of span.children) {
       const st = chip.dataset.st;
+      if (!st) continue;              // the lamp swatch and its clear button
       chip.classList.toggle('on', st === cur);
       const ok = !el || paints(el, st);
       chip.classList.toggle('nocss', !ok);
@@ -674,9 +931,10 @@ function toggleMark(select, label) {
   const i = doc.marks.findIndex(m => m.select === select);
   if (i >= 0) {
     const m = doc.marks[i];
-    // a mark carrying a state was made in the tree and says something about the
-    // device: take the highlight off it rather than deleting the statement
-    if (m.state) { m.color = ''; m.label = ''; }
+    // a mark carrying a state or a lamp colour was made in the tree and says
+    // something about the device: take the highlight off it rather than
+    // deleting the statement
+    if (m.state || m.lamp) { m.color = ''; m.label = ''; }
     else doc.marks.splice(i, 1);
     render();
     return;
@@ -963,6 +1221,7 @@ panel.querySelector('.btns').addEventListener('click', async ev => {
 // than quietly deleting them.
 shell.on('load', () => {
   paintCache.clear();
+  scopedRules = null;                 // a different drawing carries a different sheet
   lastSel = null;
   disarmCrop();
   // A crop is millimetres of THIS drawing. The marks survive a view change on

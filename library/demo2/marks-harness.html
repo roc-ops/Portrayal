@@ -81,6 +81,7 @@
         <button data-add='{"select":"[data-class=&#39;port&#39;]","color":"#00d5ff","label":"ports"}'>ports</button>
         <button data-add='{"select":"[data-media=&#39;rj45&#39;]","color":"#ffd400","label":"RJ45"}'>RJ45</button>
         <button data-add='{"select":"[data-class=&#39;led&#39;]","state":"fault"}'>all LEDs fault</button>
+        <button data-add='{"select":"[data-class=&#39;led&#39;]","lamp":"#ff00ff"}'>all lamps magenta</button>
         <button data-add='{"select":"[data-path=&#39;psu-0&#39;]","color":"#ff2d95","label":"failed PSU"}'>psu-0</button>
         <button data-add='{"select":"[data-class=&#39;region&#39;]","color":"#ff6d00","label":"regions"}'>regions</button>
         <button data-add='{"select":"not a ][ selector","color":"#ff2d95"}'>bad selector</button>
@@ -371,7 +372,56 @@ $('#runtests').onclick = async () => {
     const after = stateful.classList.contains('state-ok') &&
                   !stateful.classList.contains('state-fault');
     stateful.classList.remove('state-ok');
+    // An element the drawing gave no class attribute must not be left with an
+    // empty one. classList.remove() leaves class="" behind, and the next test to
+    // snapshot outerHTML and demand it back byte for byte fails on a difference
+    // this test made - which is how the lamp-colour check below first "failed".
+    if (!stateful.getAttribute('class')) stateful.removeAttribute('class');
     return (during && after) || `during=${during} after=${after}`;
+  });
+  // A lamp colour is the one field that reaches a CSS value slot: it is written
+  // as an inline --led-color, read back by getComputedStyle for the export, and
+  // has to leave the drawing exactly as it found it. Three promises in one test,
+  // because passing two of them is indistinguishable from working.
+  await t('a lamp colour lights the lamp, exports as paint, and undoes itself', () => {
+    const lamp = svg.querySelector('[data-class="led"][data-path]');
+    if (!lamp) return 'no lamps in this view';
+    marks.clear(svg);
+    const before = svg.outerHTML;
+    const sel = `[data-path='${lamp.getAttribute('data-path')}']`;
+    const d = {legend: false, marks: [{select: sel, lamp: '#ff00ff'}]};
+    marks.apply(svg, d);
+    const lit = getComputedStyle(lamp).getPropertyValue('--led-color').trim();
+    marks.clear(svg);
+    const painted = /#ff00ff|rgb\(255, ?0, ?255\)/i
+      .test(marks.toSvg(svg, d).replace(/data-portrayal-markup="[^"]*"/, ''));
+    return (/ff00ff|255, ?0, ?255/i.test(lit) && painted && svg.outerHTML === before) ||
+      `lit=${lit} painted=${painted} restored=${svg.outerHTML === before}`;
+  });
+  // `off` is the document saying the lamp is dark. A colour chosen for later
+  // must not override that, and must not be forgotten either.
+  await t('a lamp the document turns off shows no colour but keeps it', () => {
+    const lamp = svg.querySelector('[data-class="led"][data-path]');
+    if (!lamp) return 'no lamps in this view';
+    marks.clear(svg);
+    const sel = `[data-path='${lamp.getAttribute('data-path')}']`;
+    marks.apply(svg, {marks: [{select: sel, lamp: '#ff00ff', state: 'off'}]});
+    const dark = !/ff00ff|255, ?0, ?255/i
+      .test(getComputedStyle(lamp).getPropertyValue('--led-color'));
+    marks.clear(svg);
+    const kept = marks.decode(marks.encode(
+      {marks: [{select: sel, lamp: '#ff00ff', state: 'off'}]})).marks[0].lamp;
+    return (dark && kept === '#ff00ff') || `dark=${dark} kept=${kept}`;
+  });
+  // The document is the only carrier: a colour that does not survive the hash is
+  // a colour the person you sent the picture to does not see.
+  await t('a lamp colour survives the URL, and rubbish in that slot does not', () => {
+    const d = {marks: [{select: nested, lamp: '#0088FF'},
+                       {select: nested, lamp: 'url(#evil)'},
+                       {select: nested, color: '#f0f', label: 'plain'}]};
+    const back = marks.decode(marks.encode(d)).marks;
+    return (back[0].lamp === '#0088ff' && back[1].lamp === '' && back[2].lamp === '') ||
+      JSON.stringify(back);
   });
   await t('nested matches collapse to the outermost part', () => {
     const r = marks.apply(svg, {marks: [{select: nested, color: '#f0f'}]})[0];
@@ -397,7 +447,10 @@ $('#runtests').onclick = async () => {
   await t('the export carries no var() and no external reference', () => {
     const text = marks.toSvg(svg, SAMPLE);
     const bad = [];
-    if (/var\(--/.test(text)) bad.push('var(--…)');
+    // Quoting what was found, not just that something was: "var(--…)" sent the
+    // last reader hunting through 400KB of SVG for it.
+    const v = /.{0,70}var\(--.{0,30}/.exec(text);
+    if (v) bad.push(`var(--…) at: ${v[0]}`);
     if (/<script/i.test(text)) bad.push('<script>');
     if (/xlink:href="(?!#)/.test(text) || /\shref="https?:/.test(text)) bad.push('external href');
     if (/<\?xml-stylesheet/.test(text)) bad.push('xml-stylesheet');
