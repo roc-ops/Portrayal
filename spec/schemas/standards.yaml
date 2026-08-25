@@ -43,7 +43,7 @@ standards:
     notes: Cage body 14.0 x 8.95 (INF-8074/SFF-8432) + panel clearance; source-table
       height of 11.5 rejected as inflated (likely included flange). 1G/10G/25G pluggable.
       Single-port only - at 14.5 wide this cannot gang, since SFF-8433 sets the ganged
-      port pitch at 14.25. Use sfp-module inside a ganged block.
+      port pitch at 14.25. Use sfp-ganged inside a ganged block.
   rj45:
     registry: IEC 60603-7
     w: 16.0
@@ -88,7 +88,7 @@ standards:
     depth-confidence: verified
     notes: 200G variant; same QSFP cage family, assumed identical bezel opening to
       the SFF-8663 Fig 5-4 spring-finger value. Primary-source check pending.
-  qsfp-module:
+  qsfp-ganged:
     registry: SFF-8661 Rev 2.5 (QSFP+ module envelope) / TE 2322551-4 ganged cage
     w: 18.5
     h: 9.58
@@ -173,7 +173,7 @@ standards:
       was estimated at before the photos, would imply a 215mm depth, which is not
       a CRPS length. Depths vary by model (185 and 265 are both common), so treat
       depth as per-part rather than fixed by the form factor.
-  sfp-module:
+  sfp-ganged:
     registry: SFF-8433 Rev 0.7 (SFP+ Ganged Cage Footprints and Bezel Openings)
     w: 14.25
     h: 10.4
@@ -183,7 +183,7 @@ standards:
     depth-confidence: measured
     row-pitch: 15.0
     row-pitch-confidence: measured
-    notes: Per-port share of a ganged SFP+ bezel slot. Unlike rj45-module the ports
+    notes: Per-port share of a ganged SFP+ bezel slot. Unlike rj45-ganged the ports
       are NOT separated in the bezel - a 1xN assembly gets one continuous cutout,
       C01 = N x 14.25 + 1.2 (1x2 29.7, 1x4 58.2, 1x6 86.7) by C02 10.40 high, corner
       radius C06 0.03 max. So w here is the port pitch B04 (14.25 Basic) and adjacent
@@ -197,7 +197,7 @@ standards:
       at 14.00 x 9.50 inside the 14.25 pitch, leaving a 0.25 shared wall. Depth 41.0
       is the bezel-to-connector distance, STEP planes at 40.9-42.7 (SFF-8433 C07/C08
       give 38.9/39.4 to the guide-pin centreline, a slightly different datum).
-  rj45-module:
+  rj45-ganged:
     registry: (ganged block aperture - no governing spec found)
     w: 12.7
     h: 11.0
@@ -210,7 +210,7 @@ standards:
     notes: Per-port opening inside a ganged 2xN RJ45 block, where adjacent ports
       share walls and the pitch (~14.5mm on 48-port 1U faceplates) is narrower
       than the IEC 60603-7 single-port cutout of 16x14. Same relationship as
-      qsfp-module to qsfp28. Ganged pitch is a standard imperial 0.550 in
+      qsfp-ganged to qsfp28. Ganged pitch is a standard imperial 0.550 in
       (13.97mm) - measured off the TE 2497310-1 2x6 magjack CAD (autocorrelation
       13.9695, comb fit 13.960) and independently off the ES1010 square-on photo
       (13.99mm) - agreeing to 0.02mm. Vertical row pitch ~12.1mm from the same

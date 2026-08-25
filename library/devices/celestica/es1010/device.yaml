@@ -15,7 +15,7 @@ provenance:
     grouping are reliable, mm positions are NOT calibrated; column pitch 14.5mm estimated from the
     front photo and from fitting 24 columns plus the uplink and management clusters into 438.2mm).
     Needs caliper verification or a square-on photo before the geometry can be trusted.
-  port-apertures: ganged block openings via std/rj45-module (estimated)
+  port-apertures: ganged block openings via std/rj45-ganged (estimated)
   psu: photo (Gospower G1482-1600WRA FRU, six faces)
   fans: datasheet (2+1 FIXED fans - not FRUs; three grilles seen on the rear photo)
 attrs:
@@ -136,10 +136,10 @@ views:
         - {ref: common/rj45-hd@1, id: port-46, at: [333.46, 27.6], rotate: 180, group: ports, rel-pos: 46, attrs: {media: rj45, speed: 1g}}
         - {ref: common/rj45-hd@1, id: port-47, at: [347.46, 15.6], group: ports, rel-pos: 47, attrs: {media: rj45, speed: 1g}}
         - {ref: common/rj45-hd@1, id: port-48, at: [347.46, 27.6], rotate: 180, group: ports, rel-pos: 48, attrs: {media: rj45, speed: 1g}}
-        - {ref: std/sfp-module@1, id: port-49, at: [374.8, 3.0], group: uplinks, rel-pos: 49, attrs: {media: sfp28, speed: 25g}}
-        - {ref: std/sfp-module@1, id: port-50, at: [374.8, 19.0], group: uplinks, rel-pos: 50, attrs: {media: sfp28, speed: 25g}}
-        - {ref: std/sfp-module@1, id: port-51, at: [389.05, 3.0], group: uplinks, rel-pos: 51, attrs: {media: sfp28, speed: 25g}}
-        - {ref: std/sfp-module@1, id: port-52, at: [389.05, 19.0], group: uplinks, rel-pos: 52, attrs: {media: sfp28, speed: 25g}}
+        - {ref: std/sfp-ganged@1, id: port-49, at: [374.8, 3.0], group: uplinks, rel-pos: 49, attrs: {media: sfp28, speed: 25g}}
+        - {ref: std/sfp-ganged@1, id: port-50, at: [374.8, 19.0], group: uplinks, rel-pos: 50, attrs: {media: sfp28, speed: 25g}}
+        - {ref: std/sfp-ganged@1, id: port-51, at: [389.05, 3.0], group: uplinks, rel-pos: 51, attrs: {media: sfp28, speed: 25g}}
+        - {ref: std/sfp-ganged@1, id: port-52, at: [389.05, 19.0], group: uplinks, rel-pos: 52, attrs: {media: sfp28, speed: 25g}}
         - {ref: std/usb-a@1, id: usb-1, at: [328.5, 6.0], attrs: {role: storage, speed: usb3}}
         - {ref: common/led-dot@1, id: led-sys, at: [349.8, 6.2], attrs: {role: system}}
         - {ref: std/sfp@1, id: mgmt-sfp, at: [355.5, 4.6], attrs: {media: sfp, role: mgmt-combo, combo-with: mgmt}}

@@ -4,7 +4,7 @@ name: qsfp28-cage
 version: 3.1.0
 class: port
 profile: networking
-description: QSFP28 cage at the measured 19.0mm ganged pitch, four round per-lane LEDs (v3 = composed - cage bezel wraps a std/qsfp-module aperture core; ganged cages keep vendor pitch, the aperture is the standard part)
+description: QSFP28 cage at the measured 19.0mm ganged pitch, four round per-lane LEDs (v3 = composed - cage bezel wraps a std/qsfp-ganged aperture core; ganged cages keep vendor pitch, the aperture is the standard part)
 size: {w: 19.0, h: 14.5}
 attrs: {media: qsfp28, speed: 100g, lanes: '4'}
 provenance:
@@ -40,7 +40,7 @@ elements:
     states: ['off', {name: link-100g, color: '#3b82f6'}, {name: link-40g, color: '#f97316'},
              {name: link-25g, color: '#f5f7fa'}, {name: link-10g, color: '#22c55e'}, fault]
 parts:
-  - {ref: std/qsfp-module@1, id: aperture, at: [0.25, 4.2]}
+  - {ref: std/qsfp-ganged@1, id: aperture, at: [0.25, 4.2]}
 connection-points:
   net: {at: [9.5, 9.0], direction: front}
 skins: [default]

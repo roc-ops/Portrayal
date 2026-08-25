@@ -25,7 +25,7 @@ provenance:
   size: measured (ES1010 square-on product photo, 13.99mm column pitch)
   bezel: photo (jack-outline plate with corner LEDs, same style as the AS7726
     management ports)
-  cutout: via std/rj45-module (ganged opening)
+  cutout: via std/rj45-ganged (ganged opening)
 elements:
   led-a:
     at: [1.6, 0.2]
@@ -40,7 +40,7 @@ elements:
     states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#f59e0b'},
              {name: poe, color: '#f5c542'}]
 parts:
-  - {ref: std/rj45-module@1, id: jack, at: [0.65, 0.5]}
+  - {ref: std/rj45-ganged@1, id: jack, at: [0.65, 0.5]}
 relief:
   features:
     - {node: bezel, out: 0.5, color: '#9aa0a8'}

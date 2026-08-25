@@ -231,7 +231,7 @@ export function createShell(opts = {}) {
   // SFP28 share one cage component because the geometry is genuinely identical -
   // SFF-8433 says so in as many words, "applies to SFP28 too, same cage
   // mechanicals" - so the component name cannot tell you which of the three you
-  // are looking at. Twenty-four SFP28 ports were reading "port-4 - sfp-module":
+  // are looking at. Twenty-four SFP28 ports were reading "port-4 - sfp-ganged":
   // wrong, and misleading twice over, because "module" there means one position
   // in a ganged block and every reader hears "transceiver". The port already
   // declares itself in data-media/data-speed; read that.

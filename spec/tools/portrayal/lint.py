@@ -425,7 +425,7 @@ def lint_device(path, validator, lib_roots):
             # Most components answer for themselves: std/rj45 is an RJ45 and
             # nothing more specific exists, so inheriting media from the contract
             # is right and this rule must not fire on it. But one cage covers a
-            # whole family - std/sfp-module is SFP, SFP+, SFP28 or SFP56, because
+            # whole family - std/sfp-ganged is SFP, SFP+, SFP28 or SFP56, because
             # SFF-8433 gives them identical mechanicals - so the component can only
             # ever say "sfp", and a port that inherits it displays as SFP when the
             # datasheet says SFP28. That is the whole defect: the model looked
