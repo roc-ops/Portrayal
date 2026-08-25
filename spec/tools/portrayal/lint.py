@@ -382,24 +382,33 @@ def lint_device(path, validator, lib_roots):
             return ax, ay, bw, bh
 
         def check_for(kind, ident, at, value):
-            for owner in targets(value):
+            names = targets(value)
+            known = []
+            for owner in names:
                 if owner not in seen:
                     err(path, "L14", f"{vname}: {kind} {ident!r} is for {owner!r}, "
                                      "which is not a placement or bay in this view")
-                    continue
-                if owner not in boxes or not at:
-                    continue
-                ax, ay, bw, bh = footprint(owner)
-                mx, my = at
-                # inside the owner's footprint or within one owner-dimension of it -
-                # printed beside a port, not across the chassis. Floor of 6mm: a
-                # legend beside a 2mm LED is necessarily further away than 2mm,
-                # because the text is wider than the lamp.
-                tx, ty = max(bw, 6.0), max(bh, 6.0)
-                if mx < ax - tx or mx > ax + bw + tx or my < ay - ty or my > ay + bh + ty:
-                    err(path, "L14", f"{vname}: {kind} {ident!r} at ({mx:g}, {my:g}) is "
-                                     f"for {owner!r} but sits well outside it "
-                                     f"({ax:g}, {ay:g} {bw:g}x{bh:g})")
+                elif owner in boxes:
+                    known.append(owner)
+            if not known or not at:
+                return
+            # A mark naming SEVERAL things is tested against the region they span,
+            # not against each one alone. A "0/1" legend under a stacked pair, or a
+            # leader line from a breaker to its terminal, is necessarily far from at
+            # least one end - that is what joining two things means.
+            fps = [footprint(o) for o in known]
+            ax = min(f[0] for f in fps); ay = min(f[1] for f in fps)
+            bw = max(f[0] + f[2] for f in fps) - ax
+            bh = max(f[1] + f[3] for f in fps) - ay
+            mx, my = at
+            # inside that region or within one region-dimension of it - printed beside
+            # a port, not across the chassis. Floor of 6mm: a legend beside a 2mm LED
+            # is necessarily further away than 2mm, because text is wider than a lamp.
+            tx, ty = max(bw, 6.0), max(bh, 6.0)
+            if mx < ax - tx or mx > ax + bw + tx or my < ay - ty or my > ay + bh + ty:
+                err(path, "L14", f"{vname}: {kind} {ident!r} at ({mx:g}, {my:g}) is "
+                                 f"for {', '.join(known)} but sits well outside "
+                                 f"({ax:g}, {ay:g} {bw:g}x{bh:g})")
 
         for m in vp["silkscreen"]:
             if m.get("id"):

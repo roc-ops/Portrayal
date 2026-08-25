@@ -1,0 +1,26 @@
+format: 1
+kind: module
+name: agr-psu
+version: 1.0.0
+class: psu
+profile: networking
+description: >-
+  Hot-swappable PSU for the Edgecore AGR400 (AS7946-30XB) and AGR420
+  (AS7946-74XKSB). The same module is used by both platforms. Available as
+  AC-DC and DC-DC; the faceplate differs only in the inlet, which is a skin.
+attrs: {model: 'AGR PSU'}
+size: {w: 60.1, h: 37.6, d: 250.0}
+provenance:
+  size: 'drawing - measured off the rear panel figure in the AS7946-30XB Quick
+    Start Guide (page 1), which is orthographic and scales to the datasheet at
+    0.1 percent. Two PSUs stack in a 60.09 x 75.16 mm block'
+  shared: Jason - both AGR platforms use the same PSUs and fans
+  depth: estimated - not given in either document, and not measurable from a
+    face-on figure
+  redundancy: datasheet - "Hot-swappable, load-sharing, and 1+1 redundant
+    DC-DC/AC-DC PSUs" (AGR400 datasheet, Features)
+elements:
+  latch: {at: [2.0, 14.0], size: [4.0, 20.0], class: latch}
+relief:
+  wall: '#4a4f55'
+skins: [default]
