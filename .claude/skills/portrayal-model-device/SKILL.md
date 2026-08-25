@@ -25,7 +25,7 @@ the single most repeated error.
 | **datasheet / spec table** | overall dimensions, RU, weight, port counts, power | positions |
 | **install guide figure** | *what* is on a face and *how it is arranged*; port order; legends | absolute geometry - these figures are schematic and their aspect is wrong |
 | **mechanical drawing** (vendor or hand-built from the hardware) | size and placement of every feature | colour, legend text |
-| **photograph** | colour, finish, confirmation of everything above; count of things | measurement, unless something of known size is in frame |
+| **photograph** | colour, finish, construction, confirmation of everything above; count of things | measurement, unless something of known size is in frame - but see below |
 | **standards registry** (`spec/schemas/standards.yaml`) | cage and connector sizes | anything vendor-specific |
 
 Write the source list into `provenance:` first, before a single number. Every
@@ -36,6 +36,23 @@ person know which figure to re-measure when something is wrong.
 Confidence words, used verbatim in provenance: `datasheet`, `drawing`,
 `measured`, `photo-measured`, `registry`, `estimated`. Anything `estimated` keeps
 the device out of `verified`.
+
+**Use every image you have, not the first one that answers.** Guide art is often
+a mock-up rather than a finished unit, and it will show placeholders where the
+real part has hardware. On one router the guide drew plain diamonds along the
+rear where the real chassis has rivet heads, and drew two more where the real
+device has a two-hole grounding plate under an earth symbol. Vendor stock renders
+are a third source again, and may show a different SKU - the stock rear showed an
+AC PSU where the unit in hand was DC.
+
+So: check the guide figure, the vendor's stock renders AND the photographs of the
+real device before drawing anything. **Where they disagree, the real device
+wins**, and say so in provenance. Where they differ because they are different
+variants, model both - usually as skins of one shell.
+
+**A photograph with a ruler in it IS a measurement.** Two close-up shots of this
+router had a tape measure lying beside the part, which turned two estimated
+depths into measured ones. Look for scale before writing `estimated`.
 
 **Reference material stays in `working/`** (gitignored). Transcribe facts; never
 copy a datasheet, stencil or CAD file into the library.
@@ -261,6 +278,16 @@ configurations: {...}
   deep and 16 kg; its own quick start guide said 524 mm and 14.5 kg. Record the
   disagreement in provenance rather than silently choosing, and say which you
   used.
+- **Prefer `std/` over `common/`.** `std/` parts are derived from a published
+  standard; `common/` ones were drawn by hand and can be wrong. One
+  `common/` RJ-45 puts its integrated LEDs on the contacts side, which no real
+  jack does. If the standard part lacks a feature - LEDs, a bezel - place that
+  on top of it rather than reaching for a hand-drawn variant.
+- **Labels are rectangular unless you have seen otherwise.** There is an oval
+  label component in the library that belongs to exactly one platform and gets
+  reached for by default. Measure the label in the photograph and make a
+  device-specific rectangular one if nothing fits. Never transcribe a real
+  serial, SKU or MAC into artwork - draw placeholder blocks.
 - **Connectors have an orientation, and a component draws only one.** A stacked
   pair of RJ-45s mirrors: the upper is keyway-up, the lower keyway-down. Check
   which way round each jack is and use `rotate: 180` where it differs. The same
