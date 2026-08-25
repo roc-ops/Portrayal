@@ -190,7 +190,7 @@ chassis:
   ru: 2
   color: '#3f4449'
 groups:
-  qsfpdd:
+  qsfpdd-100g:
     term: Port
     index-origin: 0
     attrs:
@@ -217,9 +217,13 @@ groups:
   timing:
     term: Port
     index-origin: 0
+    mixed: the timing block - BITS and 1PPS/ToD on RJ45 beside 10MHz and 1PPS on coax SMB. What
+      makes it one block is the clock, not the connector, and the faceplate legends it as one
   mgmt:
     term: Port
     index-origin: 0
+    mixed: the management corner - out-of-band RJ45, RS-232 console on micro-USB-B, a USB-A service
+      port and the recessed reset. One cluster on the faceplate, four media
   mgmt-leds:
     term: LED
     index-origin: 0
@@ -507,8 +511,8 @@ views:
         - {id: filter-top-step, ref: edgecore/agr420-filter-step@1, at: [12.5, 10.7], group: filters, rel-pos: 1}
         - {id: filter-bottom-step, ref: edgecore/agr420-filter-step@1, at: [12.5, 61.0], group: filters, rel-pos: 2}
         - {id: filter-bottom, ref: edgecore/agr420-filter-bottom@1, at: [12.5, 77.5], group: filters, rel-pos: 3}
-        - {id: port-0, ref: std/qsfp-ganged@1, at: [16.10, 31.30], group: qsfpdd, rel-pos: 0}
-        - {id: port-1, ref: std/qsfp-ganged@1, at: [16.10, 44.30], group: qsfpdd, rel-pos: 1}
+        - {id: port-0, ref: std/qsfp-ganged@1, at: [16.10, 31.30], group: qsfpdd-100g, rel-pos: 0}
+        - {id: port-1, ref: std/qsfp-ganged@1, at: [16.10, 44.30], group: qsfpdd-100g, rel-pos: 1}
         - {id: port-2, ref: std/qsfp-ganged@1, at: [44.60, 14.60], group: qsfp28, rel-pos: 2}
         - {id: port-3, ref: std/qsfp-ganged@1, at: [44.60, 31.30], group: qsfp28, rel-pos: 3}
         - {id: port-4, ref: std/qsfp-ganged@1, at: [44.60, 44.30], group: qsfp28, rel-pos: 4}

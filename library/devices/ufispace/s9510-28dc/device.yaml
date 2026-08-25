@@ -87,9 +87,18 @@ groups:
   psus:
     term: PSU
     index-origin: 1
-  ports:
+  qsfpdd-400g:
     term: Port
-    index-origin: 1
+    index-origin: 0
+    attrs: {media: qsfp-dd, speed: 400g}
+  qsfp28:
+    term: Port
+    index-origin: 0
+    attrs: {media: qsfp28, speed: 100g}
+  sfp28:
+    term: Port
+    index-origin: 0
+    attrs: {media: sfp28, speed: 25g}
   optics:
     term: Port
     index-origin: 1
@@ -264,8 +273,8 @@ views:
              list'}
         - {ref: common/usb-a@3, id: usb, at: [152.3, 16.1], attrs: {role: storage, speed: usb3}}
         - {ref: common/rj45-bezel@2, id: console, at: [152.3, 25.4], attrs: {media: rj45-serial, role: console}}
-        - {ref: common/qsfp-cage@1, id: port-0, at: [177.4, 26.2], skin: blue, group: ports, rel-pos: 100, attrs: {media: qsfp-dd, speed: 400g}}
-        - {ref: common/qsfp-cage@1, id: port-1, at: [204.5, 26.2], skin: blue, group: ports, rel-pos: 101, attrs: {media: qsfp-dd, speed: 400g}}
+        - {ref: common/qsfp-cage@1, id: port-0, at: [177.4, 26.2], skin: blue, group: qsfpdd-400g, rel-pos: 0}
+        - {ref: common/qsfp-cage@1, id: port-1, at: [204.5, 26.2], skin: blue, group: qsfpdd-400g, rel-pos: 1}
         - {ref: common/led-arrow@1, id: led-port-4, at: [255.975, 18.7], skin: up, for: port-4, attrs: {port: '4'}}
         - {ref: common/led-arrow@1, id: led-port-5, at: [261.875, 18.7], skin: down, for: port-5, attrs: {port: '5'}}
         - {ref: common/led-arrow@1, id: led-port-6, at: [270.225, 18.7], skin: up, for: port-6, attrs: {port: '6'}}
@@ -296,32 +305,32 @@ views:
         - {ref: common/led-dot@1, id: led-p1-b, at: [214.5, 21.7], for: port-1, attrs: {port: '1', role: activity}}
         - {ref: common/qsfp-lane-leds@1, id: leds-port-2, at: [229.8, 19.7], for: port-2, attrs: {port: '2'}}
         - {ref: common/qsfp-lane-leds@1, id: leds-port-3, at: [229.8, 39.7], for: port-3, attrs: {port: '3'}}
-        - {ref: common/qsfp-cage@1, id: port-2, at: [229.8, 5.9], rotate: 180, skin: green, group: ports, rel-pos: 102, attrs: {media: qsfp28, speed: 100g}}
-        - {ref: common/qsfp-cage@1, id: port-3, at: [229.8, 26.2], skin: green, group: ports, rel-pos: 103, attrs: {media: qsfp28, speed: 100g}}
-        - {ref: std/sfp-ganged@1, id: port-4, at: [253.6, 7], group: ports, rel-pos: 4, attrs: {media: sfp28, speed: 25g}}
-        - {ref: std/sfp-ganged@1, id: port-5, at: [253.6, 22.6], group: ports, rel-pos: 5, attrs: {media: sfp28, speed: 25g}}
-        - {ref: std/sfp-ganged@1, id: port-6, at: [267.85, 7], group: ports, rel-pos: 6, attrs: {media: sfp28, speed: 25g}}
-        - {ref: std/sfp-ganged@1, id: port-7, at: [267.85, 22.6], group: ports, rel-pos: 7, attrs: {media: sfp28, speed: 25g}}
-        - {ref: std/sfp-ganged@1, id: port-8, at: [282.1, 7], group: ports, rel-pos: 8, attrs: {media: sfp28, speed: 25g}}
-        - {ref: std/sfp-ganged@1, id: port-9, at: [282.1, 22.6], group: ports, rel-pos: 9, attrs: {media: sfp28, speed: 25g}}
-        - {ref: std/sfp-ganged@1, id: port-10, at: [296.35, 7], group: ports, rel-pos: 10, attrs: {media: sfp28, speed: 25g}}
-        - {ref: std/sfp-ganged@1, id: port-11, at: [296.35, 22.6], group: ports, rel-pos: 11, attrs: {media: sfp28, speed: 25g}}
-        - {ref: std/sfp-ganged@1, id: port-12, at: [310.6, 7], group: ports, rel-pos: 12, attrs: {media: sfp28, speed: 25g}}
-        - {ref: std/sfp-ganged@1, id: port-13, at: [310.6, 22.6], group: ports, rel-pos: 13, attrs: {media: sfp28, speed: 25g}}
-        - {ref: std/sfp-ganged@1, id: port-14, at: [324.85, 7], group: ports, rel-pos: 14, attrs: {media: sfp28, speed: 25g}}
-        - {ref: std/sfp-ganged@1, id: port-15, at: [324.85, 22.6], group: ports, rel-pos: 15, attrs: {media: sfp28, speed: 25g}}
-        - {ref: std/sfp-ganged@1, id: port-16, at: [342.4, 7], group: ports, rel-pos: 16, attrs: {media: sfp28, speed: 25g}}
-        - {ref: std/sfp-ganged@1, id: port-17, at: [342.4, 22.6], group: ports, rel-pos: 17, attrs: {media: sfp28, speed: 25g}}
-        - {ref: std/sfp-ganged@1, id: port-18, at: [356.65, 7], group: ports, rel-pos: 18, attrs: {media: sfp28, speed: 25g}}
-        - {ref: std/sfp-ganged@1, id: port-19, at: [356.65, 22.6], group: ports, rel-pos: 19, attrs: {media: sfp28, speed: 25g}}
-        - {ref: std/sfp-ganged@1, id: port-20, at: [370.9, 7], group: ports, rel-pos: 20, attrs: {media: sfp28, speed: 25g}}
-        - {ref: std/sfp-ganged@1, id: port-21, at: [370.9, 22.6], group: ports, rel-pos: 21, attrs: {media: sfp28, speed: 25g}}
-        - {ref: std/sfp-ganged@1, id: port-22, at: [385.15, 7], group: ports, rel-pos: 22, attrs: {media: sfp28, speed: 25g}}
-        - {ref: std/sfp-ganged@1, id: port-23, at: [385.15, 22.6], group: ports, rel-pos: 23, attrs: {media: sfp28, speed: 25g}}
-        - {ref: std/sfp-ganged@1, id: port-24, at: [399.4, 7], group: ports, rel-pos: 24, attrs: {media: sfp28, speed: 25g}}
-        - {ref: std/sfp-ganged@1, id: port-25, at: [399.4, 22.6], group: ports, rel-pos: 25, attrs: {media: sfp28, speed: 25g}}
-        - {ref: std/sfp-ganged@1, id: port-26, at: [413.65, 7], group: ports, rel-pos: 26, attrs: {media: sfp28, speed: 25g}}
-        - {ref: std/sfp-ganged@1, id: port-27, at: [413.65, 22.6], group: ports, rel-pos: 27, attrs: {media: sfp28, speed: 25g}}
+        - {ref: common/qsfp-cage@1, id: port-2, at: [229.8, 5.9], rotate: 180, skin: green, group: qsfp28, rel-pos: 2}
+        - {ref: common/qsfp-cage@1, id: port-3, at: [229.8, 26.2], skin: green, group: qsfp28, rel-pos: 3}
+        - {ref: std/sfp-ganged@1, id: port-4, at: [253.6, 7], group: sfp28, rel-pos: 4}
+        - {ref: std/sfp-ganged@1, id: port-5, at: [253.6, 22.6], group: sfp28, rel-pos: 5}
+        - {ref: std/sfp-ganged@1, id: port-6, at: [267.85, 7], group: sfp28, rel-pos: 6}
+        - {ref: std/sfp-ganged@1, id: port-7, at: [267.85, 22.6], group: sfp28, rel-pos: 7}
+        - {ref: std/sfp-ganged@1, id: port-8, at: [282.1, 7], group: sfp28, rel-pos: 8}
+        - {ref: std/sfp-ganged@1, id: port-9, at: [282.1, 22.6], group: sfp28, rel-pos: 9}
+        - {ref: std/sfp-ganged@1, id: port-10, at: [296.35, 7], group: sfp28, rel-pos: 10}
+        - {ref: std/sfp-ganged@1, id: port-11, at: [296.35, 22.6], group: sfp28, rel-pos: 11}
+        - {ref: std/sfp-ganged@1, id: port-12, at: [310.6, 7], group: sfp28, rel-pos: 12}
+        - {ref: std/sfp-ganged@1, id: port-13, at: [310.6, 22.6], group: sfp28, rel-pos: 13}
+        - {ref: std/sfp-ganged@1, id: port-14, at: [324.85, 7], group: sfp28, rel-pos: 14}
+        - {ref: std/sfp-ganged@1, id: port-15, at: [324.85, 22.6], group: sfp28, rel-pos: 15}
+        - {ref: std/sfp-ganged@1, id: port-16, at: [342.4, 7], group: sfp28, rel-pos: 16}
+        - {ref: std/sfp-ganged@1, id: port-17, at: [342.4, 22.6], group: sfp28, rel-pos: 17}
+        - {ref: std/sfp-ganged@1, id: port-18, at: [356.65, 7], group: sfp28, rel-pos: 18}
+        - {ref: std/sfp-ganged@1, id: port-19, at: [356.65, 22.6], group: sfp28, rel-pos: 19}
+        - {ref: std/sfp-ganged@1, id: port-20, at: [370.9, 7], group: sfp28, rel-pos: 20}
+        - {ref: std/sfp-ganged@1, id: port-21, at: [370.9, 22.6], group: sfp28, rel-pos: 21}
+        - {ref: std/sfp-ganged@1, id: port-22, at: [385.15, 7], group: sfp28, rel-pos: 22}
+        - {ref: std/sfp-ganged@1, id: port-23, at: [385.15, 22.6], group: sfp28, rel-pos: 23}
+        - {ref: std/sfp-ganged@1, id: port-24, at: [399.4, 7], group: sfp28, rel-pos: 24}
+        - {ref: std/sfp-ganged@1, id: port-25, at: [399.4, 22.6], group: sfp28, rel-pos: 25}
+        - {ref: std/sfp-ganged@1, id: port-26, at: [413.65, 7], group: sfp28, rel-pos: 26}
+        - {ref: std/sfp-ganged@1, id: port-27, at: [413.65, 22.6], group: sfp28, rel-pos: 27}
     regions:
       - {id: timing, at: [116, 1], size: {w: 36, h: 42}, label: Timing block, members: [gnss-ant, clk-10mhz, clk-1pps, bits, tod]}
       - {id: mgmt-block, at: [151, 1], size: {w: 19, h: 42}, label: Management, members: [mgmt, usb, console]}

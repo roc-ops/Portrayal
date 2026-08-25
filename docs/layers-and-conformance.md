@@ -84,12 +84,40 @@ word for one of them and where numbering starts (L17):
 
 ```yaml
 groups:
-  ports:     {term: Port, index-origin: 1, attrs: {media: sfp-plus, speed: 10g}}
-  port-leds: {term: LED,  index-origin: 1}
+  sfp-plus:      {term: Port, index-origin: 1, attrs: {media: sfp-plus, speed: 10g}}
+  sfp-plus-leds: {term: LED,  index-origin: 1}
 ```
 
 That is what gives the explorer its fold titles, the exporter its shape names and a
 DCIM its numbering. Freezing the vocabulary across devices is still open (#12).
+
+**One group per port family, named for the family.** `sfp28`, `qsfp28`,
+`qsfpdd-400g` - the media token, with the speed appended where the media alone does
+not fix it or where the device carries the family at two speeds. Not `sfp-ports`,
+which says only the cage; not `row-top`, which says only where it sits; and not
+`ports`, which says nothing. The name is what the tree folds under and what a marks
+selector reaches for, so it has to name the thing.
+
+The payoff is `attrs`: a block that is one family declares its media and its speed
+**once**, and the renderer merges them into every member. The S9510-28DC is what the
+alternative costs - one `ports` group holding QSFP-DD/400G, QSFP28/100G and SFP28/25G
+could carry no attrs at all, so all twenty-eight ports repeated their media
+individually and the tree showed twenty-eight undifferentiated rows.
+
+**L22 (error) - the group's promise matches its members.** A group declaring
+`attrs.media` or `attrs.speed` may not hold a port that contradicts it. Family cages
+are the exception that proves it: `std/sfp-ganged` can only ever say `sfp`, because
+one cage serves SFP, SFP+ and SFP28, so a group declaring `sfp28` over it is narrowing
+a family and not clashing with it. An RJ45 in that group is a clash.
+
+**L23 (warning) - one family, or say why not.** Some mixed groups are right:
+`as7326-56x/mgmt` is SFP+, USB-A, RJ45, serial and USB-C because the vendor's
+faceplate calls it one management cluster, and `as7946-30xb/timing` is RJ45 beside
+coax-SMB because what makes it a block is the clock. No rule can tell those from a
+bucket nobody has sorted, and guessing would be the wrong kind of clever - so the
+author declares it in `mixed:`, naming the job the ports do together. It is a reason,
+not a switch: L23 also objects to `mixed:` on a group that turns out to be one family,
+because that is a claim about the hardware that is false.
 
 ### Cutouts - declared, not yet checked
 
@@ -200,6 +228,10 @@ nothing said. Two subtleties, both learned the hard way:
 components > regions`, panel `decor > cutouts`, components `bays > placements`.
 
 **L17 — declared groups.** Every `group:` used is declared under top-level `groups:`.
+
+**L22 — a group's attrs are true of its members.** Above.
+
+**L23 — a port group is one family, or declares `mixed:`.** Above.
 
 ## What is done and what is not
 

@@ -4,8 +4,9 @@ name: dcp-sc-28p
 version: 0.1.0
 manufacturer: Smartoptics
 model: DCP-SC-28P
-description: 28-port service channel unit, 1RU. Twenty-four RJ45 service ports in two rows flanking
-  four LC duplex ports, plus a PROBE port, with ETH0 and RS232 management.
+description: 28-port service channel unit, 1RU. Twenty-four RJ-45 1G Ethernet ports (ETH1-12
+  and ETH17-28) flanking four SFP+ 10G ports (ETH13-16), plus a QSFP-DD probe port, with ETH0
+  and RS232 management.
 profile: optical
 provenance:
   chassis: DCP-SC-28P User Manual - unit height is 1U (1.77 in); width and depth taken from the
@@ -16,6 +17,18 @@ provenance:
     4 LC duplex, i.e. 28 ports, and a separate PROBE
   port-identification: RJ45 columns carry one connection point per port; the LC columns carry two
     about 6.4mm apart, one per fiber, which is what distinguishes them
+  port-families: DCP-SC-28P User Manual R14.0 A section 2.2 lists the shelf controller's ports
+    as 1x RS232, 1x ETH0, 24x RJ-45 1G Ethernet, 4x SFP+ 10G Ethernet and 1x QSFP-DD probe. Its
+    NEBS warnings address the RJ-45 block as ETH1-12 plus ETH17-28 and section 8.7 calls the
+    optical pair ETH13-16, so the numbering is one 1-28 series with the SFP+ cages in the middle
+    of it, not two rows. The front-view figure agrees - the cages sit two over two between the
+    RJ45 blocks, under silkscreen boxes reading 13/14 and 15/16
+  sfp-media: SFP+ 10G, from the same list. The stencil could only show LC duplex because the
+    figure's cages are fitted with LC optics; the cage itself is SFP+ and the ports are now
+    modelled as such rather than as the bare `sfp` family token
+  probe-port: QSFP-DD, from the same list. Measured off the front-view figure against the RJ45
+    height it is about 19.7 x 10.6mm, i.e. a QSFP-family cage and not the SFP+ one an earlier
+    revision drew. Placed on the centre the stencil recovered, so only the aperture changed
   column-pitch: raw connection points jitter between 13.85 and 14.80mm, which put ports 7/9 and
     8/10 into a 0.15mm overlap that lint L13 caught. Each RJ45 group is therefore fitted to a uniform
     pitch across its span - 14.32mm left, 14.34mm right - and the drawing jitter discarded
@@ -47,12 +60,20 @@ chassis:
   ru: 1
   color: '#1b1e21'
 groups:
-  row-top:
+  rj45-1g:
     term: Port
     index-origin: 1
-  row-bottom:
+    attrs: {media: rj45, speed: 1g, role: service}
+    description: the 24 RJ-45 1G Ethernet ports of DCP-SC-28P User Manual R14.0 A section 2.2.
+      The manual addresses them as ETH1-12 and ETH17-28, one series with the four SFP+ cages
+      sitting at 13-16 in the middle of it - so the two apparent rows are one block, not two
+  sfp-plus:
     term: Port
     index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g, role: service}
+    description: the 4 SFP+ 10G Ethernet ports of DCP-SC-28P User Manual R14.0 A section 2.2,
+      addressed ETH13-16 (section 8.7 calls them the optical ports ETH13-16). They occupy the
+      13-16 gap in the RJ-45 numbering, two over two
 views:
   front:
     size:
@@ -161,35 +182,35 @@ views:
         - {ref: common/rj45-shielded@2, id: rs232, at: [9.6, 26.9], attrs: {role: console, media: rj45-serial}}
         - {ref: common/led-dot@1, id: led-power, at: [30.2, 33.6], for: chassis, attrs: {function: power}}
         - {ref: common/led-dot@1, id: led-status, at: [36.4, 33.6], for: chassis, attrs: {function: status}}
-        - {ref: common/sfp-plus-cage@2, id: port-probe, at: [395.2, 29.1], attrs: {media: sfp-plus, role: probe}}
-        - {ref: common/rj45-hd@1, id: port-1, at: [58.6, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
-        - {ref: common/rj45-hd@1, id: port-3, at: [72.92, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
-        - {ref: common/rj45-hd@1, id: port-5, at: [87.24, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
-        - {ref: common/rj45-hd@1, id: port-7, at: [101.56, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
-        - {ref: common/rj45-hd@1, id: port-9, at: [115.88, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
-        - {ref: common/rj45-hd@1, id: port-11, at: [130.2, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
-        - {ref: std/sfp@1, id: port-13, at: [149.78, 13.7], group: row-top, attrs: {media: sfp, role: service}}
-        - {ref: std/sfp@1, id: port-15, at: [164.57, 13.7], group: row-top, attrs: {media: sfp, role: service}}
-        - {ref: common/rj45-hd@1, id: port-17, at: [184.6, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
-        - {ref: common/rj45-hd@1, id: port-19, at: [198.94, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
-        - {ref: common/rj45-hd@1, id: port-21, at: [213.28, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
-        - {ref: common/rj45-hd@1, id: port-23, at: [227.62, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
-        - {ref: common/rj45-hd@1, id: port-25, at: [241.96, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
-        - {ref: common/rj45-hd@1, id: port-27, at: [256.3, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
-        - {ref: common/rj45-hd@1, id: port-2, at: [58.6, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
-        - {ref: common/rj45-hd@1, id: port-4, at: [72.92, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
-        - {ref: common/rj45-hd@1, id: port-6, at: [87.24, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
-        - {ref: common/rj45-hd@1, id: port-8, at: [101.56, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
-        - {ref: common/rj45-hd@1, id: port-10, at: [115.88, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
-        - {ref: common/rj45-hd@1, id: port-12, at: [130.2, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
-        - {ref: std/sfp@1, id: port-14, at: [149.78, 26.3], group: row-bottom, attrs: {media: sfp, role: service}}
-        - {ref: std/sfp@1, id: port-16, at: [164.57, 26.3], group: row-bottom, attrs: {media: sfp, role: service}}
-        - {ref: common/rj45-hd@1, id: port-18, at: [184.6, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
-        - {ref: common/rj45-hd@1, id: port-20, at: [198.94, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
-        - {ref: common/rj45-hd@1, id: port-22, at: [213.28, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
-        - {ref: common/rj45-hd@1, id: port-24, at: [227.62, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
-        - {ref: common/rj45-hd@1, id: port-26, at: [241.96, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
-        - {ref: common/rj45-hd@1, id: port-28, at: [256.3, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
+        - {ref: std/qsfp-ganged@1, id: port-probe, at: [393.95, 29.31], attrs: {media: qsfp-dd, role: probe}}
+        - {ref: common/rj45-hd@1, id: port-1, at: [58.6, 12.7], rotate: 180, group: rj45-1g}
+        - {ref: common/rj45-hd@1, id: port-3, at: [72.92, 12.7], rotate: 180, group: rj45-1g}
+        - {ref: common/rj45-hd@1, id: port-5, at: [87.24, 12.7], rotate: 180, group: rj45-1g}
+        - {ref: common/rj45-hd@1, id: port-7, at: [101.56, 12.7], rotate: 180, group: rj45-1g}
+        - {ref: common/rj45-hd@1, id: port-9, at: [115.88, 12.7], rotate: 180, group: rj45-1g}
+        - {ref: common/rj45-hd@1, id: port-11, at: [130.2, 12.7], rotate: 180, group: rj45-1g}
+        - {ref: std/sfp@1, id: port-13, at: [149.78, 13.7], group: sfp-plus}
+        - {ref: std/sfp@1, id: port-15, at: [164.57, 13.7], group: sfp-plus}
+        - {ref: common/rj45-hd@1, id: port-17, at: [184.6, 12.7], rotate: 180, group: rj45-1g}
+        - {ref: common/rj45-hd@1, id: port-19, at: [198.94, 12.7], rotate: 180, group: rj45-1g}
+        - {ref: common/rj45-hd@1, id: port-21, at: [213.28, 12.7], rotate: 180, group: rj45-1g}
+        - {ref: common/rj45-hd@1, id: port-23, at: [227.62, 12.7], rotate: 180, group: rj45-1g}
+        - {ref: common/rj45-hd@1, id: port-25, at: [241.96, 12.7], rotate: 180, group: rj45-1g}
+        - {ref: common/rj45-hd@1, id: port-27, at: [256.3, 12.7], rotate: 180, group: rj45-1g}
+        - {ref: common/rj45-hd@1, id: port-2, at: [58.6, 25.3], group: rj45-1g}
+        - {ref: common/rj45-hd@1, id: port-4, at: [72.92, 25.3], group: rj45-1g}
+        - {ref: common/rj45-hd@1, id: port-6, at: [87.24, 25.3], group: rj45-1g}
+        - {ref: common/rj45-hd@1, id: port-8, at: [101.56, 25.3], group: rj45-1g}
+        - {ref: common/rj45-hd@1, id: port-10, at: [115.88, 25.3], group: rj45-1g}
+        - {ref: common/rj45-hd@1, id: port-12, at: [130.2, 25.3], group: rj45-1g}
+        - {ref: std/sfp@1, id: port-14, at: [149.78, 26.3], group: sfp-plus}
+        - {ref: std/sfp@1, id: port-16, at: [164.57, 26.3], group: sfp-plus}
+        - {ref: common/rj45-hd@1, id: port-18, at: [184.6, 25.3], group: rj45-1g}
+        - {ref: common/rj45-hd@1, id: port-20, at: [198.94, 25.3], group: rj45-1g}
+        - {ref: common/rj45-hd@1, id: port-22, at: [213.28, 25.3], group: rj45-1g}
+        - {ref: common/rj45-hd@1, id: port-24, at: [227.62, 25.3], group: rj45-1g}
+        - {ref: common/rj45-hd@1, id: port-26, at: [241.96, 25.3], group: rj45-1g}
+        - {ref: common/rj45-hd@1, id: port-28, at: [256.3, 25.3], group: rj45-1g}
   rear:
     size:
       w: 440

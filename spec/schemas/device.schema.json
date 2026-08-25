@@ -242,6 +242,10 @@
             "type": "string",
             "description": "Redfish PhysicalContext value shared by everything in this block, e.g. 'PowerSupply' for the PSU bays. A whole group is the natural place to say it once"
           },
+          "mixed": {
+            "type": "string",
+            "description": "the job these ports do together, when they do NOT share a media or a speed and that is deliberate: a management cluster of SFP+, USB and RJ45, a timing block of RJ45 and coax. The default shape of a port group is one family - one media, one speed - because that is what lets the block declare its facts once in `attrs`; a group spanning families is normally a bucket nobody has sorted yet, and lint L23 says so. This field is the author's answer: the vendor's faceplate calls these one thing, and splitting them by media would be a worse drawing. State the function, e.g. 'management cluster' or 'timing inputs and outputs' - it is a reason, not a switch, and L23 also objects if it is set on a group that is in fact one family"
+          },
           "attrs": {
             "type": "object"
           },

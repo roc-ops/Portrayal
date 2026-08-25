@@ -15,6 +15,8 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
       change the interface of the receptacle it composes
   L12 device: mate-to resolves, host is a receptacle, and the interfaces match
   L20 states: a state name is a token - prose belongs in `description`
+  L22 device: a group's declared media/speed matches the ports it holds
+  L23 device: a port group is one family, or says in `mixed:` why it is not
 """
 import argparse
 import json
@@ -60,6 +62,21 @@ def warn(path, code, msg):
 # component's own attrs can never resolve which. Anything not listed here
 # answers for itself - an RJ45 is an RJ45.
 AMBIGUOUS_MEDIA = {"sfp", "qsfp"}
+
+# Which media share a cage. SFP+ modules go in SFP cages, QSFP28 modules go in
+# QSFP-DD cages, and the mechanicals do not distinguish them - which is why one
+# component serves the whole column and why a group is allowed to say "these are
+# SFP28" over a component whose contract can only say "sfp". Anything absent
+# answers for itself: rj45 is its own family and nothing else is in it.
+MEDIA_FAMILY = {
+    "sfp": "sfp", "sfp-plus": "sfp", "sfp28": "sfp", "sfp56": "sfp",
+    "qsfp": "qsfp", "qsfp-plus": "qsfp", "qsfp28": "qsfp", "qsfp56": "qsfp",
+    "qsfp-dd": "qsfp",
+}
+
+
+def media_family(m):
+    return MEDIA_FAMILY.get(m, m)
 
 _CLASS_CACHE = {}
 _ATTRS_CACHE = {}
@@ -507,6 +524,93 @@ def scalar_colon_hint(path, exc):
                         f"rephrase or quote it: {stripped[:70]!r}")
 
 
+def lint_device_groups(path, data, lib_roots):
+    """L22 and L23 - what a port group promises, and what it actually holds.
+
+    A group is the one place a block of ports says its facts once: the renderer
+    merges `groups.<g>.attrs` down into every member, so `media: sfp28` on the
+    group is what forty-eight ports draw. That only works if the block really is
+    one family. Two rules, from the two directions:
+
+      L22, error. The group DECLARES a media or a speed and a member contradicts
+      it. This is the rule that makes group attrs trustworthy - without it a
+      group can quietly relabel an RJ45 as SFP28 and the drawing will say so.
+
+      L23, warning. The group SPANS families and does not say why. The S9510-28DC
+      is the case: one `ports` group holding QSFP-DD/400G, QSFP28/100G and
+      SFP28/25G, which is why it could carry no attrs at all and all twenty-eight
+      ports repeated their media individually.
+
+    But a mixed group is not always wrong. A management cluster is SFP+, USB-A,
+    RJ45, serial and USB-C because the vendor's faceplate calls it one thing;
+    splitting it by media would be a worse drawing. No rule can tell that from
+    "nobody sorted this yet", and guessing would be the wrong kind of clever - so
+    the author declares it, in `mixed:`, and says what job the block does. Same
+    move as a `for:` that names `chassis`: the deliberate case is an answer, not
+    an exemption. L23 checks that declaration both ways, because `mixed:` on a
+    block that is in fact one family is a claim about the hardware that is false.
+    """
+    groups = data.get("groups") or {}
+    # A group may be used in more than one view - `mgmt` is front on the Edgecore
+    # boxes and rear on the DCP-R - so the members are gathered per device, not
+    # per view, and a group is judged on everything it holds.
+    members = {}
+    for vname, view in (data.get("views") or {}).items():
+        for p in view_parts(view or {})["placements"]:
+            g = p.get("group")
+            if not g or g not in groups:
+                continue
+            if contract_class(p["ref"], lib_roots) != "port":
+                continue
+            own = (p.get("attrs") or {}).get("media")
+            members.setdefault(g, []).append({
+                "where": f"{vname}/{p['id']}",
+                "declared-media": own,
+                "media": own or (contract_attrs(p["ref"], lib_roots) or {}).get("media"),
+                "declared-speed": (p.get("attrs") or {}).get("speed"),
+            })
+
+    for gname, gdef in groups.items():
+        mem = members.get(gname) or []
+        if not mem:
+            continue
+        gattrs = (gdef or {}).get("attrs") or {}
+        gm, gs = gattrs.get("media"), gattrs.get("speed")
+        # L22 - the promise against the members.
+        for m in mem:
+            if gm and m["media"] and media_family(m["media"]) != media_family(gm):
+                err(path, "L22", f"{m['where']}: group {gname!r} declares media {gm!r}, "
+                                 f"but this port is {m['media']!r}. A group's attrs are "
+                                 f"merged into every member, so the drawing would call it "
+                                 f"{gm!r}")
+            elif gm and m["declared-media"] and m["declared-media"] != gm \
+                    and m["declared-media"] not in AMBIGUOUS_MEDIA:
+                err(path, "L22", f"{m['where']}: group {gname!r} declares media {gm!r}, "
+                                 f"but this port declares {m['declared-media']!r}. Same "
+                                 f"cage, different media - one of the two is wrong")
+            if gs and m["declared-speed"] and m["declared-speed"] != gs:
+                err(path, "L22", f"{m['where']}: group {gname!r} declares speed {gs!r}, "
+                                 f"but this port declares {m['declared-speed']!r}")
+        # L23 - the composition against the declaration. Effective values, because
+        # a member that says nothing is answered by its group.
+        medias = {m["declared-media"] or gm or m["media"] for m in mem} - {None}
+        speeds = {m["declared-speed"] or gs for m in mem} - {None}
+        reason = (gdef or {}).get("mixed")
+        spans = len(medias) > 1 or len(speeds) > 1
+        if spans and not reason:
+            found = ", ".join(sorted(medias)) or "one media"
+            if len(speeds) > 1:
+                found += " at " + ", ".join(sorted(speeds))
+            warn(path, "L23", f"groups/{gname}: {len(mem)} ports spanning more than one "
+                              f"family ({found}), so the block can declare nothing in "
+                              f"attrs and every port must repeat itself. Split it by "
+                              f"family, or say in `mixed:` what job they do together")
+        elif reason and not spans:
+            warn(path, "L23", f"groups/{gname}: declares mixed {reason!r}, but all "
+                              f"{len(mem)} ports are {', '.join(sorted(medias)) or 'one family'}. "
+                              f"`mixed:` states a fact about the hardware - drop it")
+
+
 def lint_device(path, validator, lib_roots):
     try:
         data = yaml.safe_load(path.read_text())
@@ -527,6 +631,7 @@ def lint_device(path, validator, lib_roots):
     for gname, gdef in (data.get("groups") or {}).items():
         check_states(path, f"groups/{gname}", (gdef or {}).get("states"),
                      (gdef or {}).get("attrs"))
+    lint_device_groups(path, data, lib_roots)
     # Every id each view offers, indexed by view name. A `for:` may name a target
     # in ANOTHER view of the same device (`rear/psu-0`), so the check below cannot
     # be answered from the view it is standing in.

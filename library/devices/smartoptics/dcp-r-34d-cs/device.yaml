@@ -55,15 +55,18 @@ chassis:
   ru: 1
   color: '#1b1e21'
 groups:
-  xc-top:
+  xc:
     term: Port
     index-origin: 1
-  xc-bottom:
-    term: Port
-    index-origin: 1
+    attrs: {media: fiber, role: cross-connect}
+    description: XC01-XC34, the cross-connect ports. One block of 34 laid out seventeen over
+      seventeen - the two rows are how they fit on a 1U faceplate, not two kinds of port
   mgmt:
     term: Port
     index-origin: 1
+    mixed: the rear management block - ETH1-4 on RJ45 to the shelf controller, ETH5 as an SFP
+      for optical management access, and the recessed reset beside them. DCP-R User Manual 14.0
+      A section 2.10 lists them as one set of network management interfaces
 views:
   front:
     size:
@@ -277,40 +280,40 @@ views:
         - {ref: common/lc-duplex-adapter@3, id: port-1510, at: [52.7, 9.6], attrs: {role: osc-filter, media: fiber}}
         - {ref: common/lc-duplex-adapter@3, id: port-line, at: [104.71, 11.1], attrs: {role: line, media: fiber}}
         - {ref: std/sfp@1, id: port-osc, at: [30.7, 27.5], attrs: {media: sfp, role: osc}}
-        - {ref: common/lc-duplex-adapter@3, id: xc01, at: [134.79, 11.1], group: xc-top, attrs: {role: cross-connect, channel: '1'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc02, at: [152.81, 11.1], group: xc-top, attrs: {role: cross-connect, channel: '2'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc03, at: [166.12, 11.1], group: xc-top, attrs: {role: cross-connect, channel: '3'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc04, at: [183.22, 11.1], group: xc-top, attrs: {role: cross-connect, channel: '4'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc05, at: [196.55, 11.1], group: xc-top, attrs: {role: cross-connect, channel: '5'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc06, at: [213.91, 11.1], group: xc-top, attrs: {role: cross-connect, channel: '6'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc07, at: [227.22, 11.1], group: xc-top, attrs: {role: cross-connect, channel: '7'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc08, at: [244.12, 11.1], group: xc-top, attrs: {role: cross-connect, channel: '8'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc09, at: [257.39, 11.1], group: xc-top, attrs: {role: cross-connect, channel: '9'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc10, at: [280, 11.1], group: xc-top, attrs: {role: cross-connect, channel: '10'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc11, at: [293.34, 11.1], group: xc-top, attrs: {role: cross-connect, channel: '11'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc12, at: [311.21, 11.1], group: xc-top, attrs: {role: cross-connect, channel: '12'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc13, at: [324.44, 11.1], group: xc-top, attrs: {role: cross-connect, channel: '13'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc14, at: [341.36, 11.1], group: xc-top, attrs: {role: cross-connect, channel: '14'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc15, at: [354.68, 11.1], group: xc-top, attrs: {role: cross-connect, channel: '15'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc16, at: [372.05, 11.1], group: xc-top, attrs: {role: cross-connect, channel: '16'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc17, at: [385.45, 11.1], group: xc-top, attrs: {role: cross-connect, channel: '17'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc18, at: [134.79, 22.6], group: xc-bottom, attrs: {role: cross-connect, channel: '18'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc19, at: [152.81, 22.6], group: xc-bottom, attrs: {role: cross-connect, channel: '19'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc20, at: [166.12, 22.6], group: xc-bottom, attrs: {role: cross-connect, channel: '20'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc21, at: [183.22, 22.6], group: xc-bottom, attrs: {role: cross-connect, channel: '21'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc22, at: [196.55, 22.6], group: xc-bottom, attrs: {role: cross-connect, channel: '22'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc23, at: [213.91, 22.6], group: xc-bottom, attrs: {role: cross-connect, channel: '23'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc24, at: [227.22, 22.6], group: xc-bottom, attrs: {role: cross-connect, channel: '24'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc25, at: [244.12, 22.6], group: xc-bottom, attrs: {role: cross-connect, channel: '25'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc26, at: [257.39, 22.6], group: xc-bottom, attrs: {role: cross-connect, channel: '26'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc27, at: [280, 22.6], group: xc-bottom, attrs: {role: cross-connect, channel: '27'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc28, at: [293.34, 22.6], group: xc-bottom, attrs: {role: cross-connect, channel: '28'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc29, at: [311.21, 22.6], group: xc-bottom, attrs: {role: cross-connect, channel: '29'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc30, at: [324.44, 22.6], group: xc-bottom, attrs: {role: cross-connect, channel: '30'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc31, at: [341.36, 22.6], group: xc-bottom, attrs: {role: cross-connect, channel: '31'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc32, at: [354.68, 22.6], group: xc-bottom, attrs: {role: cross-connect, channel: '32'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc33, at: [372.05, 22.6], group: xc-bottom, attrs: {role: cross-connect, channel: '33'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc34, at: [385.45, 22.6], group: xc-bottom, attrs: {role: cross-connect, channel: '34'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc01, at: [134.79, 11.1], group: xc, attrs: {channel: '1'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc02, at: [152.81, 11.1], group: xc, attrs: {channel: '2'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc03, at: [166.12, 11.1], group: xc, attrs: {channel: '3'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc04, at: [183.22, 11.1], group: xc, attrs: {channel: '4'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc05, at: [196.55, 11.1], group: xc, attrs: {channel: '5'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc06, at: [213.91, 11.1], group: xc, attrs: {channel: '6'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc07, at: [227.22, 11.1], group: xc, attrs: {channel: '7'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc08, at: [244.12, 11.1], group: xc, attrs: {channel: '8'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc09, at: [257.39, 11.1], group: xc, attrs: {channel: '9'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc10, at: [280, 11.1], group: xc, attrs: {channel: '10'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc11, at: [293.34, 11.1], group: xc, attrs: {channel: '11'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc12, at: [311.21, 11.1], group: xc, attrs: {channel: '12'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc13, at: [324.44, 11.1], group: xc, attrs: {channel: '13'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc14, at: [341.36, 11.1], group: xc, attrs: {channel: '14'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc15, at: [354.68, 11.1], group: xc, attrs: {channel: '15'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc16, at: [372.05, 11.1], group: xc, attrs: {channel: '16'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc17, at: [385.45, 11.1], group: xc, attrs: {channel: '17'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc18, at: [134.79, 22.6], group: xc, attrs: {channel: '18'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc19, at: [152.81, 22.6], group: xc, attrs: {channel: '19'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc20, at: [166.12, 22.6], group: xc, attrs: {channel: '20'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc21, at: [183.22, 22.6], group: xc, attrs: {channel: '21'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc22, at: [196.55, 22.6], group: xc, attrs: {channel: '22'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc23, at: [213.91, 22.6], group: xc, attrs: {channel: '23'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc24, at: [227.22, 22.6], group: xc, attrs: {channel: '24'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc25, at: [244.12, 22.6], group: xc, attrs: {channel: '25'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc26, at: [257.39, 22.6], group: xc, attrs: {channel: '26'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc27, at: [280, 22.6], group: xc, attrs: {channel: '27'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc28, at: [293.34, 22.6], group: xc, attrs: {channel: '28'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc29, at: [311.21, 22.6], group: xc, attrs: {channel: '29'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc30, at: [324.44, 22.6], group: xc, attrs: {channel: '30'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc31, at: [341.36, 22.6], group: xc, attrs: {channel: '31'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc32, at: [354.68, 22.6], group: xc, attrs: {channel: '32'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc33, at: [372.05, 22.6], group: xc, attrs: {channel: '33'}}
+        - {ref: common/lc-duplex-adapter@3, id: xc34, at: [385.45, 22.6], group: xc, attrs: {channel: '34'}}
         - {ref: common/laser-warning@1, id: laser-warn-top, at: [271.6, 5.4]}
         - {ref: common/laser-warning@1, id: laser-warn-bottom, at: [271.6, 34.6]}
   rear:
@@ -341,7 +344,7 @@ views:
         - {ref: common/rj45-hd@1, id: eth3, at: [291, 22], group: mgmt, attrs: {role: mgmt, speed: 1000base-t}}
         - {ref: common/led-dot@1, id: led-eth5-tx, at: [320, 14], for: eth5, attrs: {function: tx}}
         - {ref: common/led-dot@1, id: led-eth5-rx, at: [332, 14], for: eth5, attrs: {function: rx}}
-        - {ref: std/sfp@1, id: eth5, at: [318.75, 22], group: mgmt, attrs: {role: mgmt, media: sfp}}
+        - {ref: std/sfp@1, id: eth5, at: [318.75, 22], group: mgmt, attrs: {role: mgmt, media: sfp, speed: 100m-1g}}
         - {ref: common/reset-button@1, id: reset, at: [345, 26], group: mgmt, for: chassis}
   left:
     size:

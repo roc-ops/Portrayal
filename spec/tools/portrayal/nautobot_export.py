@@ -24,6 +24,7 @@ IFACE_TYPE = {
     ("sfp", "25g"): "25gbase-x-sfp28",
     ("sfp", "10g"): "10gbase-x-sfpp",
     ("sfp", "1g"): "1000base-x-sfp",
+    ("qsfp", "400g"): "400gbase-x-qsfpdd",
     ("qsfp", "100g"): "100gbase-x-qsfp28",
     ("qsfp", "40g"): "40gbase-x-qsfpp",
     ("rj45", "1g"): "1000base-t",
@@ -31,12 +32,18 @@ IFACE_TYPE = {
 AIRFLOW = {"front-to-back": "front-to-rear", "back-to-front": "rear-to-front"}
 
 
-def nos_name(profile, kind, n):
-    """Interface name for a port, per NOS convention."""
+def nos_name(profile, kind, n, origin=1):
+    """Interface name for a port, per NOS convention.
+
+    `origin` is the group's index-origin - where the vendor's own numbering
+    starts. SONiC counts lanes from zero whatever the faceplate says, so the
+    first port is Ethernet0 on a box silkscreened 1 and on a box silkscreened 0
+    alike; assuming 1 gave the AS7946-30XB an interface called `Ethernet-4`.
+    """
     if profile == "arcos":
         return {"switch": f"swp{n}", "mgmt": "ma1"}[kind]
     if profile == "sonic":                    # SONiC numbers by lane, not by port
-        return {"switch": f"Ethernet{(n - 1) * 4}", "mgmt": "eth0"}[kind]
+        return {"switch": f"Ethernet{(n - origin) * 4}", "mgmt": "eth0"}[kind]
     raise SystemExit(f"unknown NOS profile: {profile}")
 
 
@@ -69,10 +76,22 @@ def build(dev, profile):
     if dev.get("datasheet", {}).get("url"):
         out["comments"] = dev["datasheet"]["url"]
 
+    # A group carries the facts its members share, and since the port blocks were
+    # sorted by family that is now where the media and the speed of a whole block
+    # live. Reading only the placement made this exporter answer from a default
+    # the moment a manifest said something once instead of forty-eight times: the
+    # S9510's two 400G uplinks came back as 100G, and the DCP-SC-28P's four SFP+
+    # as 25G SFP28. The renderer had the same defect and the same fix.
+    dev_groups = dev.get("groups") or {}
+
+    def attrs_of(p):
+        g = dev_groups.get(p.get("group")) or {}
+        return {**(g.get("attrs") or {}), **(p.get("attrs") or {})}
+
     console, mgmt_rj, mgmt_sfp, bays = [], [], [], []
     for view in (dev.get("views") or {}).values():
         for p in view_parts(view)["placements"]:
-            a = p.get("attrs") or {}
+            a = attrs_of(p)
             role, media = a.get("role"), a.get("media")
             if role == "console" and media == "rj45-serial":
                 console.append({"name": "Console", "type": "rj-45"})
@@ -100,7 +119,7 @@ def build(dev, profile):
         for p in view_parts(view)["placements"]:
             if not p["id"].startswith("port-"):
                 continue
-            a = p.get("attrs") or {}
+            a = attrs_of(p)
             if a.get("role") in ("mgmt", "console"):
                 continue
             ref = p["ref"]
@@ -117,9 +136,10 @@ def build(dev, profile):
                 n = int(p["id"].split("-")[1])
             except ValueError:
                 continue
-            ports.append((n, t))
-    for n, t in sorted(set(ports)):
-        ifaces.append({"name": nos_name(profile, "switch", n), "type": t})
+            origin = (dev_groups.get(p.get("group")) or {}).get("index-origin", 1)
+            ports.append((n, t, origin))
+    for n, t, origin in sorted(set(ports)):
+        ifaces.append({"name": nos_name(profile, "switch", n, origin), "type": t})
 
     if console:
         out["console-ports"] = console

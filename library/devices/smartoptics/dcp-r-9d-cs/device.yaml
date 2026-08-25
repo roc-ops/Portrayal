@@ -52,15 +52,26 @@ chassis:
   ru: 1
   color: '#1b1e21'
 groups:
-  row-top:
+  xc:
     term: Port
     index-origin: 1
-  row-bottom:
+    attrs: {media: fiber, role: cross-connect}
+    description: XC1-XC4, the cross-connect ports. DCP-R User Manual 14.0 A section 2.1.2 has
+      degrees interconnected either through the LC cross-connects or through the five connections
+      carried in the MPO. Two sit in the upper row and two in the lower, which is why a positional
+      grouping split them
+  channels:
     term: Port
     index-origin: 1
+    attrs: {media: fiber, role: channel}
+    description: the 40 add/drop channel ports, silkscreened 921-960. They alternate in pairs
+      between the two rows - 921/922 upper, 923/924 lower - so the rows are a layout, not a block
   mgmt:
     term: Port
     index-origin: 1
+    mixed: the rear management block - ETH1-4 on RJ45 to the shelf controller, ETH5 as an SFP
+      for optical management access, and the recessed reset beside them. DCP-R User Manual 14.0
+      A section 2.10 lists them as one set of network management interfaces
 views:
   front:
     size:
@@ -322,52 +333,52 @@ views:
         - {ref: common/led-dot@1, id: led-osc-rx, at: [39.7, 21.4], for: port-osc, attrs: {function: osc-rx}}
         - {ref: common/led-dot@1, id: led-power, at: [53.2, 34.5], for: chassis, attrs: {function: power}}
         - {ref: common/led-dot@1, id: led-status, at: [58.8, 34.5], for: chassis, attrs: {function: status}}
-        - {ref: common/lc-duplex-adapter@3, id: port-xc1, at: [68.93, 10.84], group: row-top, attrs: {media: fiber, role: cross-connect}}
-        - {ref: common/lc-duplex-adapter@3, id: port-xc2, at: [82.37, 10.84], group: row-top, attrs: {media: fiber, role: cross-connect}}
-        - {ref: common/lc-duplex-adapter@3, id: port-line, at: [99.27, 10.84], group: row-top, attrs: {media: fiber, role: line}}
-        - {ref: common/lc-duplex-adapter@3, id: port-921, at: [116.35, 10.84], group: row-top, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-922, at: [129.61, 10.84], group: row-top, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-925, at: [146.59, 10.84], group: row-top, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-926, at: [160.14, 10.84], group: row-top, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-929, at: [177.22, 10.84], group: row-top, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-930, at: [190.63, 10.84], group: row-top, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-933, at: [207.5, 10.84], group: row-top, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-934, at: [220.98, 10.84], group: row-top, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-937, at: [238.14, 10.84], group: row-top, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-938, at: [251.4, 10.84], group: row-top, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-941, at: [279.46, 10.84], group: row-top, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-942, at: [292.72, 10.84], group: row-top, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-945, at: [309.7, 10.84], group: row-top, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-946, at: [323.11, 10.84], group: row-top, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-949, at: [340.16, 10.84], group: row-top, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-950, at: [353.61, 10.84], group: row-top, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-953, at: [370.54, 10.84], group: row-top, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-954, at: [383.91, 10.84], group: row-top, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-957, at: [401.25, 10.84], group: row-top, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-958, at: [414.48, 10.84], group: row-top, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-1510, at: [68.93, 21.89], group: row-bottom, attrs: {media: fiber, role: osc-filter}}
-        - {ref: common/lc-duplex-adapter@3, id: port-xc3, at: [82.37, 21.89], group: row-bottom, attrs: {media: fiber, role: cross-connect}}
-        - {ref: common/lc-duplex-adapter@3, id: port-xc4, at: [99.27, 21.89], group: row-bottom, attrs: {media: fiber, role: cross-connect}}
-        - {ref: common/lc-duplex-adapter@3, id: port-923, at: [116.35, 21.89], group: row-bottom, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-924, at: [129.61, 21.89], group: row-bottom, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-927, at: [146.59, 21.89], group: row-bottom, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-928, at: [160.14, 21.89], group: row-bottom, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-931, at: [177.22, 21.89], group: row-bottom, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-932, at: [190.63, 21.89], group: row-bottom, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-935, at: [207.5, 21.89], group: row-bottom, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-936, at: [220.98, 21.89], group: row-bottom, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-939, at: [238.14, 21.89], group: row-bottom, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-940, at: [251.4, 21.89], group: row-bottom, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-943, at: [279.46, 21.89], group: row-bottom, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-944, at: [292.72, 21.89], group: row-bottom, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-947, at: [309.7, 21.89], group: row-bottom, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-948, at: [323.11, 21.89], group: row-bottom, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-951, at: [340.16, 21.89], group: row-bottom, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-952, at: [353.61, 21.89], group: row-bottom, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-955, at: [370.54, 21.89], group: row-bottom, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-956, at: [383.91, 21.89], group: row-bottom, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-959, at: [401.25, 21.89], group: row-bottom, attrs: {media: fiber, role: channel}}
-        - {ref: common/lc-duplex-adapter@3, id: port-960, at: [414.48, 21.89], group: row-bottom, attrs: {media: fiber, role: channel}}
+        - {ref: common/lc-duplex-adapter@3, id: port-xc1, at: [68.93, 10.84], group: xc}
+        - {ref: common/lc-duplex-adapter@3, id: port-xc2, at: [82.37, 10.84], group: xc}
+        - {ref: common/lc-duplex-adapter@3, id: port-line, at: [99.27, 10.84], attrs: {media: fiber, role: line}}
+        - {ref: common/lc-duplex-adapter@3, id: port-921, at: [116.35, 10.84], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-922, at: [129.61, 10.84], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-925, at: [146.59, 10.84], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-926, at: [160.14, 10.84], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-929, at: [177.22, 10.84], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-930, at: [190.63, 10.84], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-933, at: [207.5, 10.84], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-934, at: [220.98, 10.84], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-937, at: [238.14, 10.84], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-938, at: [251.4, 10.84], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-941, at: [279.46, 10.84], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-942, at: [292.72, 10.84], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-945, at: [309.7, 10.84], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-946, at: [323.11, 10.84], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-949, at: [340.16, 10.84], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-950, at: [353.61, 10.84], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-953, at: [370.54, 10.84], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-954, at: [383.91, 10.84], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-957, at: [401.25, 10.84], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-958, at: [414.48, 10.84], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-1510, at: [68.93, 21.89], attrs: {media: fiber, role: osc-filter}}
+        - {ref: common/lc-duplex-adapter@3, id: port-xc3, at: [82.37, 21.89], group: xc}
+        - {ref: common/lc-duplex-adapter@3, id: port-xc4, at: [99.27, 21.89], group: xc}
+        - {ref: common/lc-duplex-adapter@3, id: port-923, at: [116.35, 21.89], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-924, at: [129.61, 21.89], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-927, at: [146.59, 21.89], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-928, at: [160.14, 21.89], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-931, at: [177.22, 21.89], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-932, at: [190.63, 21.89], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-935, at: [207.5, 21.89], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-936, at: [220.98, 21.89], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-939, at: [238.14, 21.89], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-940, at: [251.4, 21.89], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-943, at: [279.46, 21.89], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-944, at: [292.72, 21.89], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-947, at: [309.7, 21.89], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-948, at: [323.11, 21.89], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-951, at: [340.16, 21.89], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-952, at: [353.61, 21.89], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-955, at: [370.54, 21.89], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-956, at: [383.91, 21.89], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-959, at: [401.25, 21.89], group: channels}
+        - {ref: common/lc-duplex-adapter@3, id: port-960, at: [414.48, 21.89], group: channels}
         - {ref: common/laser-warning@1, id: laser-warn-top, at: [269.5, 4.6]}
         - {ref: common/laser-warning@1, id: laser-warn-bottom, at: [269.5, 35.4]}
   rear:
@@ -398,7 +409,7 @@ views:
         - {ref: common/rj45-hd@1, id: eth3, at: [291, 22], group: mgmt, attrs: {role: mgmt, speed: 1000base-t}}
         - {ref: common/led-dot@1, id: led-eth5-tx, at: [320, 14], for: eth5, attrs: {function: tx}}
         - {ref: common/led-dot@1, id: led-eth5-rx, at: [332, 14], for: eth5, attrs: {function: rx}}
-        - {ref: std/sfp@1, id: eth5, at: [318.75, 22], group: mgmt, attrs: {role: mgmt, media: sfp}}
+        - {ref: std/sfp@1, id: eth5, at: [318.75, 22], group: mgmt, attrs: {role: mgmt, media: sfp, speed: 100m-1g}}
         - {ref: common/reset-button@1, id: reset, at: [345, 26], group: mgmt, for: chassis}
   left:
     size:

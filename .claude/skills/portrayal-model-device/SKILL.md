@@ -158,11 +158,19 @@ Now populate. **Reuse before building.**
 3. `components.bays` is for things that seat into an opening; everything else,
    removable or not, is a `components.placements` entry. See rule 6.
 4. An indicator declares what it belongs to: `{id: led-p1, ref: std/led-arrow@1,
-   for: port-1, group: port-leds}`. Never rely on naming to imply it.
+   for: port-1, group: sfp28-leds}`. Never rely on naming to imply it.
 5. Every placement and bay carries `group:` and `rel-pos:`, and every group is
    declared under top-level `groups:` with its `term` (the vendor's word: Port,
    Slot, Bay) and `index-origin`. That is what gives the tree, the exporter and
    any DCIM their numbering.
+   **One group per port family, named for the family** - `sfp28`, `qsfp28`,
+   `qsfpdd-400g`, with the speed appended where the media token alone does not fix
+   it. Then the block declares `attrs: {media, speed}` once instead of on every
+   port (lint L22 checks that promise against the members). Not `sfp-ports`, which
+   names only the cage; not `row-top`, which names only where it sits; not `ports`,
+   which names nothing. If the block genuinely spans media because the vendor's
+   faceplate treats it as one thing - a management cluster, a timing block - say so
+   in `mixed:` and name the job they do together; lint L23 asks for exactly that.
 
 6. **If the guide has a replacement procedure for it, it is a part, not
    decoration** - but that does not make it a bay. Ask how it is held on:
@@ -262,8 +270,9 @@ provenance:
 attrs: {...}
 chassis: {width: , height: , depth: , ru: , color: }
 groups:
-  ports: {term: Port, index-origin: 1, attrs: {media: sfp-plus, speed: 10g}}
-  port-leds: {term: LED, index-origin: 1}
+  sfp-plus: {term: Port, index-origin: 1, attrs: {media: sfp-plus, speed: 10g}}
+  sfp-plus-leds: {term: LED, index-origin: 1}
+  mgmt: {term: Port, index-origin: 1, mixed: <the job these ports share>}
 views:
   front:
     size: {w: , h: }
