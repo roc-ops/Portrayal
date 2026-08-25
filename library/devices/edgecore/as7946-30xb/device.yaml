@@ -56,10 +56,22 @@ provenance:
     it at y 39.5 and 54.2, immediately right of the PSU bay. Only the upper stud is modelled, because
     common/ground-lug carries one stud under its symbol; the second is recorded here rather than
     faked
-  other-faces: 'datasheet - top, bottom, left and right are sized from the spec table (440 x 524
-    x 87) so a rack elevation and the 3D box are correct, but they carry NO detail: neither document
-    shows those faces and every photograph is front or rear. Invented vents or screws would be worse
-    than an honest blank'
+  other-faces: 'photo - the real-device photographs DO show these faces, which an earlier pass wrongly
+    assumed they did not. Top (IMG_6788): two rectangular labels near the front right and a caution
+    notice at the rear left. Bottom (IMG_6792): rivets and formed dimples, no labels. Sides (IMG_6790):
+    a cluster of rack-bracket holes near the front and rivets along the length. Positions are photo-measured
+    against the 440 mm width and are approximate - none of these shots is orthographic'
+  labels: 'photo - RECTANGULAR. common/device-label is an oval recess belonging to another platform
+    and is deliberately not used here. The artwork is placeholder blocks: the real serial, SKU and
+    MAC addresses are legible in IMG_6788 and are not transcribed'
+  rivets: photo - the quick start guide draws diamonds along the rear edges. On the real chassis
+    those are RIVET HEADS - the guide art is evidently a mock-up, not a finished unit. Placement
+    follows the guide; appearance follows the photograph
+  sources-disagree: 'NOTE - guide art and real photographs disagree in three places on this device:
+    the rear fasteners (diamonds vs rivets), the grounding landing (two diamonds vs a two-hole plate
+    under an earth symbol) and the fan bay proportions (the figure reads taller than square). Where
+    they conflict the REAL DEVICE wins. The stock renders show an AC PSU and our unit is DC, which
+    is not a conflict - both variants exist, and both are modelled'
   spec-table: datasheet - silicon, CPU, memory, flash, SSD, BMC, capacity, buffering, power and
     environmentals transcribed into attrs. Where the datasheet and the QSG disagree - weight 16
     vs 14.5 kg, max power 527 vs 638 W - both numbers are carried rather than one being silently
@@ -129,6 +141,15 @@ groups:
     index-origin: 0
   mgmt-leds:
     term: LED
+    index-origin: 0
+  fasteners:
+    term: Rivet
+    index-origin: 0
+  bracket-holes:
+    term: Hole
+    index-origin: 0
+  labels:
+    term: Label
     index-origin: 0
   psus:
     term: PSU
@@ -322,43 +343,148 @@ views:
       w: 440.0
       h: 87.0
     silkscreen:
-      - {at: [3.0, 20.0], text: PSU0, font-size: 2.2, rotate: 270, for: psu-0}
-      - {at: [3.0, 57.58], text: PSU1, font-size: 2.2, rotate: 270, for: psu-1}
-      - {at: [115.89, 81.0], text: FAN 4, font-size: 2.2, anchor: end, for: fan-4}
-      - {at: [119.49, 81.0], path: M -1.0 -0.3 L 0 -2.2 L 1.0 -0.3 Z, fill: '#c7ccd1', stroke-width: 0.3, for: fan-4}
-      - {at: [185.29, 81.0], text: FAN 3, font-size: 2.2, anchor: end, for: fan-3}
-      - {at: [188.89, 81.0], path: M -1.0 -0.3 L 0 -2.2 L 1.0 -0.3 Z, fill: '#c7ccd1', stroke-width: 0.3, for: fan-3}
-      - {at: [254.69, 81.0], text: FAN 2, font-size: 2.2, anchor: end, for: fan-2}
-      - {at: [258.29, 81.0], path: M -1.0 -0.3 L 0 -2.2 L 1.0 -0.3 Z, fill: '#c7ccd1', stroke-width: 0.3, for: fan-2}
-      - {at: [324.09, 81.0], text: FAN 1, font-size: 2.2, anchor: end, for: fan-1}
-      - {at: [327.69, 81.0], path: M -1.0 -0.3 L 0 -2.2 L 1.0 -0.3 Z, fill: '#c7ccd1', stroke-width: 0.3, for: fan-1}
-      - {at: [393.49, 81.0], text: FAN 0, font-size: 2.2, anchor: end, for: fan-0}
-      - {at: [397.09000000000003, 81.0], path: M -1.0 -0.3 L 0 -2.2 L 1.0 -0.3 Z, fill: '#c7ccd1', stroke-width: 0.3, for: fan-0}
-      - {at: [73.2, 22.5], text: GND, font-size: 2.0, for: ground-point}
+      - {at: [1.0, 23.4], text: PSU0, font-size: 1.8, anchor: start, for: psu-0}
+      - {at: [3.3, 26.6], path: M -0.8 0.4 L 0 -1.0 L 0.8 0.4 Z, fill: '#c7ccd1', stroke-width: 0.25, for: psu-0}
+      - {at: [3.3, 29.4], path: M -0.8 -1.0 L 0 0.4 L 0.8 -1.0 Z, fill: '#c7ccd1', stroke-width: 0.25, for: psu-1}
+      - {at: [1.0, 33.4], text: PSU1, font-size: 1.8, anchor: start, for: psu-1}
+      - {at: [115.69, 84.0], text: FAN 4, font-size: 2.2, anchor: end, for: fan-4}
+      - {at: [119.29, 84.0], path: M -1.0 -0.3 L 0 -2.2 L 1.0 -0.3 Z, fill: '#c7ccd1', stroke-width: 0.3, for: fan-4}
+      - {at: [89.19, 80.6], path: M -3.0 0 H 2.0 M 0.4 -1.4 L 2.4 0 L 0.4 1.4, fill: none, stroke-width: 0.4, for: fan-4}
+      - {at: [186.09, 84.0], text: FAN 3, font-size: 2.2, anchor: end, for: fan-3}
+      - {at: [189.69, 84.0], path: M -1.0 -0.3 L 0 -2.2 L 1.0 -0.3 Z, fill: '#c7ccd1', stroke-width: 0.3, for: fan-3}
+      - {at: [159.59, 80.6], path: M -3.0 0 H 2.0 M 0.4 -1.4 L 2.4 0 L 0.4 1.4, fill: none, stroke-width: 0.4, for: fan-3}
+      - {at: [256.49, 84.0], text: FAN 2, font-size: 2.2, anchor: end, for: fan-2}
+      - {at: [260.09, 84.0], path: M -1.0 -0.3 L 0 -2.2 L 1.0 -0.3 Z, fill: '#c7ccd1', stroke-width: 0.3, for: fan-2}
+      - {at: [229.99, 80.6], path: M -3.0 0 H 2.0 M 0.4 -1.4 L 2.4 0 L 0.4 1.4, fill: none, stroke-width: 0.4, for: fan-2}
+      - {at: [326.89, 84.0], text: FAN 1, font-size: 2.2, anchor: end, for: fan-1}
+      - {at: [330.48999999999995, 84.0], path: M -1.0 -0.3 L 0 -2.2 L 1.0 -0.3 Z, fill: '#c7ccd1', stroke-width: 0.3, for: fan-1}
+      - {at: [300.39, 80.6], path: M -3.0 0 H 2.0 M 0.4 -1.4 L 2.4 0 L 0.4 1.4, fill: none, stroke-width: 0.4, for: fan-1}
+      - {at: [397.29, 84.0], text: FAN 0, font-size: 2.2, anchor: end, for: fan-0}
+      - {at: [400.89, 84.0], path: M -1.0 -0.3 L 0 -2.2 L 1.0 -0.3 Z, fill: '#c7ccd1', stroke-width: 0.3, for: fan-0}
+      - {at: [370.79, 80.6], path: M -3.0 0 H 2.0 M 0.4 -1.4 L 2.4 0 L 0.4 1.4, fill: none, stroke-width: 0.4, for: fan-0}
     components:
       bays:
         - {id: psu-0, at: [6.26, 11.74], size: {w: 60.1, h: 37.6}, accepts: [edgecore/agr-psu@1], default: edgecore/agr-psu@1, group: psus, rel-pos: 0}
         - {id: psu-1, at: [6.26, 49.32], size: {w: 60.1, h: 37.6}, accepts: [edgecore/agr-psu@1], default: edgecore/agr-psu@1, group: psus, rel-pos: 1}
-        - {id: fan-4, at: [83.19, 2.54], size: {w: 69.4, h: 75.4}, accepts: [edgecore/agr-fan@1], default: edgecore/agr-fan@1, group: fans, rel-pos: 4}
-        - {id: fan-3, at: [152.59, 2.54], size: {w: 69.4, h: 75.4}, accepts: [edgecore/agr-fan@1], default: edgecore/agr-fan@1, group: fans, rel-pos: 3}
-        - {id: fan-2, at: [221.99, 2.54], size: {w: 69.4, h: 75.4}, accepts: [edgecore/agr-fan@1], default: edgecore/agr-fan@1, group: fans, rel-pos: 2}
-        - {id: fan-1, at: [291.39, 2.54], size: {w: 69.4, h: 75.4}, accepts: [edgecore/agr-fan@1], default: edgecore/agr-fan@1, group: fans, rel-pos: 1}
-        - {id: fan-0, at: [360.79, 2.54], size: {w: 69.4, h: 75.4}, accepts: [edgecore/agr-fan@1], default: edgecore/agr-fan@1, group: fans, rel-pos: 0}
+        - {id: fan-4, at: [83.19, 8.8], size: {w: 69.4, h: 69.4}, accepts: [edgecore/agr-fan@1], default: edgecore/agr-fan@1, group: fans, rel-pos: 4}
+        - {id: fan-3, at: [153.59, 8.8], size: {w: 69.4, h: 69.4}, accepts: [edgecore/agr-fan@1], default: edgecore/agr-fan@1, group: fans, rel-pos: 3}
+        - {id: fan-2, at: [223.99, 8.8], size: {w: 69.4, h: 69.4}, accepts: [edgecore/agr-fan@1], default: edgecore/agr-fan@1, group: fans, rel-pos: 2}
+        - {id: fan-1, at: [294.39, 8.8], size: {w: 69.4, h: 69.4}, accepts: [edgecore/agr-fan@1], default: edgecore/agr-fan@1, group: fans, rel-pos: 1}
+        - {id: fan-0, at: [364.79, 8.8], size: {w: 69.4, h: 69.4}, accepts: [edgecore/agr-fan@1], default: edgecore/agr-fan@1, group: fans, rel-pos: 0}
       placements:
-        - {id: ground-point, ref: common/ground-lug@1, at: [73.2, 26.0], group: grounding, rel-pos: 0}
+        - {id: ground-plate, ref: edgecore/agr-ground-plate@1, at: [69.6, 24.0], group: grounding, rel-pos: 0}
+        - {id: rivet-0, ref: common/rivet@1, at: [76.0, 3.4], group: fasteners, rel-pos: 0}
+        - {id: rivet-1, ref: common/rivet@1, at: [99.4, 3.4], group: fasteners, rel-pos: 1}
+        - {id: rivet-2, ref: common/rivet@1, at: [122.8, 3.4], group: fasteners, rel-pos: 2}
+        - {id: rivet-3, ref: common/rivet@1, at: [146.2, 3.4], group: fasteners, rel-pos: 3}
+        - {id: rivet-4, ref: common/rivet@1, at: [169.6, 3.4], group: fasteners, rel-pos: 4}
+        - {id: rivet-5, ref: common/rivet@1, at: [193.0, 3.4], group: fasteners, rel-pos: 5}
+        - {id: rivet-6, ref: common/rivet@1, at: [216.4, 3.4], group: fasteners, rel-pos: 6}
+        - {id: rivet-7, ref: common/rivet@1, at: [239.8, 3.4], group: fasteners, rel-pos: 7}
+        - {id: rivet-8, ref: common/rivet@1, at: [263.2, 3.4], group: fasteners, rel-pos: 8}
+        - {id: rivet-9, ref: common/rivet@1, at: [286.6, 3.4], group: fasteners, rel-pos: 9}
+        - {id: rivet-10, ref: common/rivet@1, at: [310.0, 3.4], group: fasteners, rel-pos: 10}
+        - {id: rivet-11, ref: common/rivet@1, at: [333.4, 3.4], group: fasteners, rel-pos: 11}
+        - {id: rivet-12, ref: common/rivet@1, at: [356.8, 3.4], group: fasteners, rel-pos: 12}
+        - {id: rivet-13, ref: common/rivet@1, at: [380.2, 3.4], group: fasteners, rel-pos: 13}
+        - {id: rivet-14, ref: common/rivet@1, at: [403.6, 3.4], group: fasteners, rel-pos: 14}
+        - {id: rivet-15, ref: common/rivet@1, at: [427.0, 3.4], group: fasteners, rel-pos: 15}
+        - {id: rivet-16, ref: common/rivet@1, at: [76.0, 80.6], group: fasteners, rel-pos: 16}
+        - {id: rivet-17, ref: common/rivet@1, at: [99.4, 80.6], group: fasteners, rel-pos: 17}
+        - {id: rivet-18, ref: common/rivet@1, at: [122.8, 80.6], group: fasteners, rel-pos: 18}
+        - {id: rivet-19, ref: common/rivet@1, at: [146.2, 80.6], group: fasteners, rel-pos: 19}
+        - {id: rivet-20, ref: common/rivet@1, at: [169.6, 80.6], group: fasteners, rel-pos: 20}
+        - {id: rivet-21, ref: common/rivet@1, at: [193.0, 80.6], group: fasteners, rel-pos: 21}
+        - {id: rivet-22, ref: common/rivet@1, at: [216.4, 80.6], group: fasteners, rel-pos: 22}
+        - {id: rivet-23, ref: common/rivet@1, at: [239.8, 80.6], group: fasteners, rel-pos: 23}
+        - {id: rivet-24, ref: common/rivet@1, at: [263.2, 80.6], group: fasteners, rel-pos: 24}
+        - {id: rivet-25, ref: common/rivet@1, at: [286.6, 80.6], group: fasteners, rel-pos: 25}
+        - {id: rivet-26, ref: common/rivet@1, at: [310.0, 80.6], group: fasteners, rel-pos: 26}
+        - {id: rivet-27, ref: common/rivet@1, at: [333.4, 80.6], group: fasteners, rel-pos: 27}
+        - {id: rivet-28, ref: common/rivet@1, at: [356.8, 80.6], group: fasteners, rel-pos: 28}
+        - {id: rivet-29, ref: common/rivet@1, at: [380.2, 80.6], group: fasteners, rel-pos: 29}
+        - {id: rivet-30, ref: common/rivet@1, at: [403.6, 80.6], group: fasteners, rel-pos: 30}
+        - {id: rivet-31, ref: common/rivet@1, at: [427.0, 80.6], group: fasteners, rel-pos: 31}
   top:
     size:
       w: 440.0
       h: 524.0
+    components:
+      placements:
+        - {id: label-spec, ref: edgecore/agr-label-spec@1, at: [352.0, 300.0], group: labels, rel-pos: 0}
+        - {id: label-serial, ref: edgecore/agr-label-serial@1, at: [352.0, 396.0], group: labels, rel-pos: 1}
+        - {id: label-caution, ref: edgecore/agr-label-caution@1, at: [16.0, 26.0], group: labels, rel-pos: 2}
   bottom:
     size:
       w: 440.0
       h: 524.0
+    components:
+      placements:
+        - {id: rivet-b0, ref: common/rivet@1, at: [24.0, 60.0], group: fasteners, rel-pos: 0}
+        - {id: rivet-b1, ref: common/rivet@1, at: [118.0, 60.0], group: fasteners, rel-pos: 1}
+        - {id: rivet-b2, ref: common/rivet@1, at: [212.0, 60.0], group: fasteners, rel-pos: 2}
+        - {id: rivet-b3, ref: common/rivet@1, at: [306.0, 60.0], group: fasteners, rel-pos: 3}
+        - {id: rivet-b4, ref: common/rivet@1, at: [400.0, 60.0], group: fasteners, rel-pos: 4}
+        - {id: rivet-b5, ref: common/rivet@1, at: [24.0, 150.0], group: fasteners, rel-pos: 5}
+        - {id: rivet-b6, ref: common/rivet@1, at: [118.0, 150.0], group: fasteners, rel-pos: 6}
+        - {id: rivet-b7, ref: common/rivet@1, at: [212.0, 150.0], group: fasteners, rel-pos: 7}
+        - {id: rivet-b8, ref: common/rivet@1, at: [306.0, 150.0], group: fasteners, rel-pos: 8}
+        - {id: rivet-b9, ref: common/rivet@1, at: [400.0, 150.0], group: fasteners, rel-pos: 9}
+        - {id: rivet-b10, ref: common/rivet@1, at: [24.0, 240.0], group: fasteners, rel-pos: 10}
+        - {id: rivet-b11, ref: common/rivet@1, at: [118.0, 240.0], group: fasteners, rel-pos: 11}
+        - {id: rivet-b12, ref: common/rivet@1, at: [212.0, 240.0], group: fasteners, rel-pos: 12}
+        - {id: rivet-b13, ref: common/rivet@1, at: [306.0, 240.0], group: fasteners, rel-pos: 13}
+        - {id: rivet-b14, ref: common/rivet@1, at: [400.0, 240.0], group: fasteners, rel-pos: 14}
+        - {id: rivet-b15, ref: common/rivet@1, at: [24.0, 330.0], group: fasteners, rel-pos: 15}
+        - {id: rivet-b16, ref: common/rivet@1, at: [118.0, 330.0], group: fasteners, rel-pos: 16}
+        - {id: rivet-b17, ref: common/rivet@1, at: [212.0, 330.0], group: fasteners, rel-pos: 17}
+        - {id: rivet-b18, ref: common/rivet@1, at: [306.0, 330.0], group: fasteners, rel-pos: 18}
+        - {id: rivet-b19, ref: common/rivet@1, at: [400.0, 330.0], group: fasteners, rel-pos: 19}
+        - {id: rivet-b20, ref: common/rivet@1, at: [24.0, 420.0], group: fasteners, rel-pos: 20}
+        - {id: rivet-b21, ref: common/rivet@1, at: [118.0, 420.0], group: fasteners, rel-pos: 21}
+        - {id: rivet-b22, ref: common/rivet@1, at: [212.0, 420.0], group: fasteners, rel-pos: 22}
+        - {id: rivet-b23, ref: common/rivet@1, at: [306.0, 420.0], group: fasteners, rel-pos: 23}
+        - {id: rivet-b24, ref: common/rivet@1, at: [400.0, 420.0], group: fasteners, rel-pos: 24}
+        - {id: rivet-b25, ref: common/rivet@1, at: [24.0, 494.0], group: fasteners, rel-pos: 25}
+        - {id: rivet-b26, ref: common/rivet@1, at: [118.0, 494.0], group: fasteners, rel-pos: 26}
+        - {id: rivet-b27, ref: common/rivet@1, at: [212.0, 494.0], group: fasteners, rel-pos: 27}
+        - {id: rivet-b28, ref: common/rivet@1, at: [306.0, 494.0], group: fasteners, rel-pos: 28}
+        - {id: rivet-b29, ref: common/rivet@1, at: [400.0, 494.0], group: fasteners, rel-pos: 29}
   left:
     size:
       w: 524.0
       h: 87.0
+    components:
+      placements:
+        - {id: bracket-hole-0, ref: common/rivet@1, at: [26.0, 30.0], group: bracket-holes, rel-pos: 0}
+        - {id: bracket-hole-1, ref: common/rivet@1, at: [26.0, 46.0], group: bracket-holes, rel-pos: 1}
+        - {id: bracket-hole-2, ref: common/rivet@1, at: [46.0, 30.0], group: bracket-holes, rel-pos: 2}
+        - {id: bracket-hole-3, ref: common/rivet@1, at: [46.0, 46.0], group: bracket-holes, rel-pos: 3}
+        - {id: bracket-hole-4, ref: common/rivet@1, at: [66.0, 30.0], group: bracket-holes, rel-pos: 4}
+        - {id: bracket-hole-5, ref: common/rivet@1, at: [66.0, 46.0], group: bracket-holes, rel-pos: 5}
+        - {id: bracket-hole-6, ref: common/rivet@1, at: [86.0, 30.0], group: bracket-holes, rel-pos: 6}
+        - {id: bracket-hole-7, ref: common/rivet@1, at: [86.0, 46.0], group: bracket-holes, rel-pos: 7}
+        - {id: rivet-s0, ref: common/rivet@1, at: [170.0, 42.0], group: fasteners, rel-pos: 0}
+        - {id: rivet-s1, ref: common/rivet@1, at: [250.0, 42.0], group: fasteners, rel-pos: 1}
+        - {id: rivet-s2, ref: common/rivet@1, at: [330.0, 42.0], group: fasteners, rel-pos: 2}
+        - {id: rivet-s3, ref: common/rivet@1, at: [410.0, 42.0], group: fasteners, rel-pos: 3}
+        - {id: rivet-s4, ref: common/rivet@1, at: [480.0, 42.0], group: fasteners, rel-pos: 4}
   right:
     size:
       w: 524.0
       h: 87.0
+    components:
+      placements:
+        - {id: bracket-hole-0, ref: common/rivet@1, at: [498.0, 30.0], group: bracket-holes, rel-pos: 0}
+        - {id: bracket-hole-1, ref: common/rivet@1, at: [498.0, 46.0], group: bracket-holes, rel-pos: 1}
+        - {id: bracket-hole-2, ref: common/rivet@1, at: [478.0, 30.0], group: bracket-holes, rel-pos: 2}
+        - {id: bracket-hole-3, ref: common/rivet@1, at: [478.0, 46.0], group: bracket-holes, rel-pos: 3}
+        - {id: bracket-hole-4, ref: common/rivet@1, at: [458.0, 30.0], group: bracket-holes, rel-pos: 4}
+        - {id: bracket-hole-5, ref: common/rivet@1, at: [458.0, 46.0], group: bracket-holes, rel-pos: 5}
+        - {id: bracket-hole-6, ref: common/rivet@1, at: [438.0, 30.0], group: bracket-holes, rel-pos: 6}
+        - {id: bracket-hole-7, ref: common/rivet@1, at: [438.0, 46.0], group: bracket-holes, rel-pos: 7}
+        - {id: rivet-s0, ref: common/rivet@1, at: [354.0, 42.0], group: fasteners, rel-pos: 0}
+        - {id: rivet-s1, ref: common/rivet@1, at: [274.0, 42.0], group: fasteners, rel-pos: 1}
+        - {id: rivet-s2, ref: common/rivet@1, at: [194.0, 42.0], group: fasteners, rel-pos: 2}
+        - {id: rivet-s3, ref: common/rivet@1, at: [114.0, 42.0], group: fasteners, rel-pos: 3}
+        - {id: rivet-s4, ref: common/rivet@1, at: [44.0, 42.0], group: fasteners, rel-pos: 4}

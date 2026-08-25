@@ -1,25 +1,32 @@
 format: 1
 kind: module
 name: agr-fan
-version: 1.0.0
+version: 2.0.0
 class: fan
 profile: networking
 description: >-
   Hot-swappable fan module for the Edgecore AGR400 (AS7946-30XB) and AGR420
-  (AS7946-74XKSB). Five fit across the rear in a 4+1 redundant arrangement,
-  numbered FAN 0 at the right to FAN 4 at the left.
+  (AS7946-74XKSB). Five across the rear in a 4+1 redundant arrangement,
+  numbered FAN 0 at the right to FAN 4 at the left. Two counter-rotating rotors
+  in tandem behind a circular honeycomb finger guard, with a red D-handle on
+  the left of the faceplate.
 attrs: {model: 'AGR Fan'}
-size: {w: 69.4, h: 75.4, d: 120.0}
+size: {w: 69.4, h: 69.4, d: 132.0}
 provenance:
-  size: 'drawing - measured off the rear panel figure in the AS7946-30XB Quick
-    Start Guide (page 1). Five latch centres at 82.4, 152.3, 222.5, 291.3 and
-    360.1 mm give a 69.4 mm pitch across a 351.9 mm bay'
-  shared: Jason - both AGR platforms use the same PSUs and fans
+  face: 'photo - SQUARE, not the rectangle an earlier pass drew, and set with an
+    equal 8.8 mm lip above and below on the 87 mm panel. 69.4 square is the only
+    size that is both square and fits the measured 70.4 mm bay pitch'
+  depth: 'measured - 132 mm, read off a tape measure lying beside the module in
+    IMG_6802 at 156 px/inch. Previously estimated at 120'
+  grille: photo - a circular honeycomb finger guard filling most of the square
+    face, over two rotors in tandem. The stock rear render and the real
+    photograph agree
+  handle: photo - a red D-handle on the LEFT of every bay, carrying a small FB
+    marking
   count: datasheet - "4 +1 redundant, hot-swappable fan modules" (AGR400
     datasheet, Features)
-  numbering: drawing - the rear figure silkscreens FAN 4, FAN 3, FAN 2, FAN 1,
-    FAN 0 from left to right
-  depth: estimated - not given in either document
+  numbering: drawing - FAN 4, FAN 3, FAN 2, FAN 1, FAN 0 left to right
+  shared: Jason - both AGR platforms use the same PSUs and fans
 relief:
   wall: '#4a4f55'
 skins: [default]
