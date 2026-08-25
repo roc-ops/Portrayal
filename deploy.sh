@@ -29,9 +29,22 @@ HTML
 # COPYFILE_DISABLE stops macOS tar emitting ._ AppleDouble files for xattrs
 COPYFILE_DISABLE=1 tar czf - -C "$STAGE" . \
   | ssh "$TARGET" "rm -rf ${REMOTE:?}/* && tar xzf - -C '$REMOTE' && find '$REMOTE' -name '._*' -delete"
-ssh "$TARGET" "bash -s" <<'REMOTE'
+# SERVICE has to be handed to the remote shell explicitly: the heredoc below is
+# quoted, so every $VAR in it belongs to the far end. It used to be passed
+# nowhere at all, which made the guard `systemctl is-active ""` fail, the &&
+# short-circuit, and the restart silently never happen. That went unnoticed
+# because content is read from disk per request - it only bites when serve.py
+# itself changes, and serve.py is what sends the no-cache header that stops a
+# browser serving a stale build.
+ssh "$TARGET" "SERVICE=$(printf %q "$SERVICE") bash -s" <<'REMOTE'
 set -e
-systemctl is-active "$SERVICE" >/dev/null 2>&1 && sudo systemctl restart "$SERVICE"
+: "${SERVICE:?deploy: SERVICE was not passed to the remote shell}"
+if systemctl is-active "$SERVICE" >/dev/null 2>&1; then
+  # -n so a sudo password prompt fails loudly instead of hanging the deploy
+  sudo -n systemctl restart "$SERVICE" && echo "demo: restarted $SERVICE"
+else
+  echo "demo: $SERVICE is not an active unit - left whatever is running alone" >&2
+fi
 # the server needs a moment to rebind after a restart - poll rather than
 # curl once and report a spurious 000
 for i in $(seq 1 20); do

@@ -81,6 +81,14 @@ side foreshortens the face; a near-straight-on shot of a 2RU router measured
 for colour, counts and confirmation, and for construction detail a line drawing
 flattens away - not for dimensions.
 
+**When two drawings disagree, measure both against something that repeats.** A
+hand-built drawing and a vendor figure of the same chassis gave aspects of 0.694
+and 0.758, and arguing from the outlines got nowhere. Counting slot pitch across
+each - a feature whose true spacing is known - settled it in one step: the widths
+agreed to 1%, the heights differed by 8%, so one drawing was stretched
+vertically. A repeated feature of known pitch is a ruler that is already in the
+picture.
+
 Then render your own panel (`render.py --without silkscreen`) and overlay. If the
 aspect is wrong, stop; nothing downstream survives a wrong panel.
 
@@ -142,6 +150,11 @@ Now populate. **Reuse before building.**
 2. Only build a new component when nothing fits *and* you have a source for its
    dimensions. A new component with `estimated` size is a last resort and must
    say so.
+2b. **Reuse applies inside a component too.** A module's own faceplate carries
+   standard hardware - an IEC inlet, a jack, an LED - and a component composes
+   those through `parts: [{ref, id, at}]` rather than redrawing them in its skin.
+   A PSU here got a hand-drawn "IEC C13" that was not one; `std/c13-inlet` as a
+   `parts:` entry was both correct and shorter.
 3. `components.bays` is for things that seat into an opening; everything else,
    removable or not, is a `components.placements` entry. See rule 6.
 4. An indicator declares what it belongs to: `{id: led-p1, ref: std/led-arrow@1,
@@ -181,6 +194,17 @@ explorer: the tree reads chassis, then groups in tier order, every row
 `id - model`, indicators nested under what they indicate. Then set
 `maturity: modelled` and lint again; L15 will tell you if the provenance is
 not good enough.
+
+**Lint after every structural addition, not just at the end.** The rules see
+what is declared, so a rule can only find a collision once both sides exist.
+Adding the rear bays to this router immediately surfaced fifteen rivets sitting
+on top of the fan modules - L13 had been comparing placements with placements
+and had nothing to compare them against. Re-run after each stage.
+
+**Check in a browser you know is current.** Verify against a build you just made;
+if you are looking at the deployed demo, confirm the page carries your change
+before you trust what it shows. A session was spent chasing a rendering fault
+that a deploy had already fixed.
 
 ## Gate 5 - audit against the source, twice
 
@@ -293,10 +317,24 @@ configurations: {...}
   square blob with the nut and washer painted flat on its top. Made of three
   nodes - stud as a threaded `cyl`, washer and nut as short `cyl`s stacked with
   `lift` - it is a bolt. `lift` is what stacks parts up a shaft.
+- **Depth on a leaf is a HOLE, not a lump.** `size.d` on anything that is not
+  `kind: module` compiles to `data-depth`, which the 3D viewer reads as a cavity
+  to look into. Rivets, a grounding plate and three labels all got depth "so they
+  would stand proud" and rendered as neat little pits. A module gets
+  `data-body-depth` instead and fills its bay; everything else that stands proud
+  says so with `relief.features` and no depth at all.
 - **A module with a real body should declare one.** `body: {depth, color,
   footprint?, plate?}` plus `skins/body-{left,right,top,bottom,rear}.svg` makes a
   FRU eject as a six-sided box instead of a floating faceplate. The mechanism
-  already exists - check before deciding a module can only be a face.
+  already exists - check before deciding a module can only be a face. **If you
+  were handed photographs of all six faces of a part, draw all six** - being
+  given the sides and being asked for a faceplate are not the same request.
+- **A skin cannot compose parts; only a component can.** `parts:` sits on the
+  component, so two variants that differ in what they compose - an AC PSU with an
+  IEC inlet, a DC one with a terminal block - are two components, not two skins of
+  one. Trying to do it with skins forced a rebuild; splitting into
+  `agr-psu-ac` / `agr-psu-dc` and selecting between them per configuration did
+  not.
 - **Alternate skins are only reachable through a configuration.** The 3D and 2D
   selectors switch CONFIG, not skin, so a variant like an AC versus DC PSU needs
   a `configurations:` entry carrying `skins: {component: variant}` or nobody can
@@ -318,3 +356,22 @@ configurations: {...}
 - **An inventory is not a layout.** Knowing a panel has four things called
   "Branch N" does not tell you they are breaker legends with leader lines. Open
   the figure that shows the layout before drawing.
+- **A device with hundreds of repeated placements wants a generator**, kept in
+  `working/` (gitignored) beside the notes, so the pitch lives in one line
+  instead of 300. Three rules make it safe:
+  - **Generate per group, never generate then split.** A filter's foam was one
+    list of cells cut into relief groups by x, which put a cell's backing rect in
+    one group and its dots in the next - one segment ended up with 112 circles and
+    no rect behind them. Emit each group's art from its own loop and assert that
+    every piece it needs is inside it.
+  - **Assert that an edit matched something.** A scripted change aimed at a
+    coordinate that was not in the file, so it silently rewrote nothing and only
+    the captions moved. Count the substitutions and fail on zero.
+  - **Re-read what you rewrote.** A later pass over the same block quietly
+    dropped the system LEDs' state semantics. Diff the rendered output, not just
+    the source.
+- **Two environment traps that waste an afternoon.** Do not run Python from
+  `/tmp` - a stray `bisect.py` there shadows the standard library and every
+  import breaks in a way that looks like your code. And BSD `sed` has no `\b` and
+  will not honour `0,/re/` reliably, so a probe silently does nothing; use Python
+  for anything conditional.
