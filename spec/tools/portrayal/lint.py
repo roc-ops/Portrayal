@@ -505,14 +505,25 @@ def lint_device(path, validator, lib_roots):
             bw = max(f[0] + f[2] for f in fps) - ax
             bh = max(f[1] + f[3] for f in fps) - ay
             mx, my = at
-            # Inside that region, or within one region-dimension of it. The floor of
-            # 20mm is what makes this usable on real hardware: indicators and legends
-            # are grouped, so a column's LEDs often sit above the TOP port and serve
-            # the bottom one 18mm away, and a legend beside a 2mm lamp is necessarily
-            # further off than 2mm. 20mm is generous for light-pipe and silkscreen
-            # practice while still an order of magnitude below "somewhere else on the
-            # panel", which is the mistake this rule exists to catch.
-            tx, ty = max(bw, 20.0), max(bh, 20.0)
+            # Inside that region, or within one region-dimension of it. The floor
+            # exists because indicators are banded: a stacked pair gets ONE row of
+            # lamps above it, so the lamp serving the far member is a whole stack
+            # pitch away from it and always will be. The floor therefore has to
+            # clear the largest real stack pitch, not the typical one.
+            #
+            # It was 20mm, calibrated on an SFP belly-to-belly pair at 18mm. That
+            # silently rejected QSFP: on the AS7326-56X the QSFP28 pair is on an
+            # 18mm pitch with a 10.15mm cage, putting the lamp band 27.4mm from the
+            # lower port's near edge, so sixteen correct bindings could not be
+            # written. 30mm clears that with margin and is still a fifteenth of a
+            # 440mm panel - an order of magnitude below "somewhere else entirely",
+            # which is the mistake this rule exists to catch.
+            #
+            # Note what this rule can and cannot do: it catches an indicator bound
+            # to something far away. It cannot catch one bound to the WRONG port in
+            # the right block - that is a meaning error, and no distance test sees
+            # it.
+            tx, ty = max(bw, 30.0), max(bh, 30.0)
             if mx < ax - tx or mx > ax + bw + tx or my < ay - ty or my > ay + bh + ty:
                 err(path, "L14", f"{vname}: {kind} {ident!r} at ({mx:g}, {my:g}) is "
                                  f"for {', '.join(known)} but sits well outside "

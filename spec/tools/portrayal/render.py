@@ -233,6 +233,15 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                 silkscreen=True):
     config = config or {}
     ch = device["chassis"]
+    # A group carries the facts its members share - the media and speed of a
+    # homogeneous port block, declared once instead of forty-eight times. Lint
+    # already accepts that (L18), but this function never read groups: at all, so
+    # a group-level declaration cleared the warning and changed nothing in the
+    # drawing: 48 ports still compiled to data-media="sfp" while the manifest
+    # said sfp28. A rule that accepts a fix the renderer ignores is worse than no
+    # rule. Placement attrs win, so a specific port can still differ from its
+    # block.
+    dev_groups = device.get("groups") or {}
     vsize = view.get("size")
     w = vsize["w"] if vsize else ch["width"]
     h = vsize["h"] if vsize else ch["height"]
@@ -475,8 +484,10 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                             round(host["at"][1] + hm["at"][1] - om["at"][1], 4)])
         if p.get("optional") and p["optional"] not in include:
             continue
+        gattrs = ((dev_groups.get(p.get("group")) or {}).get("attrs")) or {}
+        merged_attrs = {**gattrs, **(p.get("attrs") or {})} or None
         g, contract = instance_group(lib, p["ref"], p["id"], p["at"],
-                                     None, p.get("attrs"),
+                                     None, merged_attrs,
                                      p.get("group"), p.get("rel-pos"),
                                      skin_name=p.get("skin", "default"),
                                      rotate=p.get("rotate"), palette=palette,
