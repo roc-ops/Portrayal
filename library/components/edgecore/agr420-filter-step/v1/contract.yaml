@@ -1,0 +1,35 @@
+format: 1
+kind: module
+name: agr420-filter-step
+version: 1.0.0
+class: filter
+profile: networking
+description: >-
+  The deep section of an Edgecore AGR420 air filter, beside the QSFP-DD column at the left of the front panel, where the nearest port row is 17 mm away and the frame can drop a second foam cell in. Both the top and the bottom filter carry one; it is not a separate FRU, it is the stepped end of one, split out because a placement is a bounding rectangle.
+attrs: {model: 'AGR420 Air Filter (step)'}
+size: {w: 25.5, h: 16.5, d: 12.0}
+provenance:
+  extent: 'drawing - measured off the AGR420 datasheet page-2 front figure at 8.9705 px/mm
+    across and 8.9080 px/mm down. The reticulated foam was found by local variance on the
+    600 dpi render, which is what fixes both ends of each band'
+  reuse: 'checked before drawing - edgecore/agr-filter-top@1 and agr-filter-bottom@1 do NOT
+    fit this front. They are 353.5 mm wide against the 400 to 417 needed here, and the top one
+    is stepped for the AGR400 pair of QSFP-DD blocks where this front has a single block at
+    the left'
+  split: 'the stepped frame is one physical part, modelled as a band plus an
+    agr420-filter-step. A placement is a bounding rectangle to both the renderer and L13, so
+    one 26 mm-tall stepped box would sit on top of sixteen ports it steps around'
+  construction: photo - the metal frame, the open sections with foam behind them and the
+    captive slotted screws are read off IMG_6807, a straight-on shot of a real unit
+  screws: drawing - none. Both thumb screws sit in the band, not in this section
+  removable: datasheet - the QSG has an Air Filter Replacement procedure, so it is a
+    serviceable part rather than chassis decoration
+  depth: estimated - not given in either document
+relief:
+  wall: '#4a4f55'
+  features:
+    # bolted onto the OUTSIDE of the faceplate, so it stands proud. `out` uses the node's
+    # bounding rect and textures the slab from that node alone, so it sits on the GROUP
+    # holding the frame, its foam and its screws - on a bare rect it came out blank.
+    - {node: frame, out: 3.0}
+skins: [default]

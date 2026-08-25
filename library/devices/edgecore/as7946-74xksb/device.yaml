@@ -2,7 +2,7 @@ format: 1
 kind: device
 name: as7946-74xksb
 version: 0.1.0
-maturity: draft
+maturity: modelled
 manufacturer: Edgecore
 model: AS7946-74XKSB
 description: Edgecore AGR420 (AS7946-74XKSB) 25GbE aggregation router. 2RU, 74 fixed ports - 2
@@ -55,11 +55,14 @@ provenance:
     three families, and the ARRANGEMENT DIFFERS BY FAMILY. QSFP-DD: LED1 top, LED2 bottom, a
     stacked pair OUTSIDE the block at x 12.6, at y 36.6/39.7 for port 0 and 45.6/48.7 for port 1.
     QSFP28 and SFP28: LED1 left, LED2 right, as arrow-shaped light pipes in the white strip
-    BETWEEN the two rows of a pair - centres at column x + 1.50, 3.45, 13.70, 15.70 for QSFP28
+    BETWEEN the two rows of a pair - centres at column x + 1.35, 3.75, 13.55, 15.95 for QSFP28
     and + 1.95, 4.85, 8.85, 11.75 for SFP28, on strips centred at panel y 28.4 and 57.8. Within
     each pair of marks the DOWN arrow serves the port below the strip and the UP arrow the port
     above it, so a strip carries four lamps for two ports. The strip is 6.4 mm tall and the marks
-    were read at 7x before being assigned'
+    were read at 7x before being assigned. The QSFP28 offsets are nudged 0.15 mm apart from the
+    1.50/3.45/13.70/15.70 that were read off the render, because common/led-arrow-sm is 2.25 mm
+    wide and two lamps 1.95 mm apart overlap; 0.15 is well inside the +/- 0.3 mm this figure
+    can be read to'
   mgmt-block: 'drawing - a ganged 2x2 RJ-45 block at 356.0/372.3 by 14.4/28.2 carrying BITS 0 and
     BITS 2 above and BITS 1 and PPS/TOD below; two SMB jacks at x 393.6 and 394.1; USB Type A on
     its side centred at 407.2, 33.6; MGMT and CONSOLE 1 RJ-45s at 413.5; a micro-USB CONSOLE 0 at
@@ -75,18 +78,41 @@ provenance:
   status-leds: drawing - DIAG, LOC, FAN, PS0 and PS1 on a 4.75 mm pitch beneath the timing block
     at y 45.0, legends beneath them at 48.9
   filters: 'drawing plus photo - the AGR420 front carries a top and a bottom air filter, and
-    NEITHER is the AGR400 part. edgecore/agr-filter-top@1 is 353.5 mm wide and stepped for the
-    AGR400''s TWO QSFP-DD blocks; this front has ONE QSFP-DD block, at the left, and the filter
-    runs about 425 mm to clear the management corner. Both filters are therefore new components
-    measured off this figure. Verified before assuming, as asked'
-  rear: 'drawing plus Jason - two stacked PSU bays at the left, a grounding landing, then five fan
-    bays. The AGR420 datasheet rear figure reads about 1.5 percent smaller than the AGR400 QSG
-    figure for the same parts, which is within figure error, so the AGR400''s already-measured
-    bay geometry is reused rather than re-derived: the two platforms share PSUs and fans (Jason),
-    and re-measuring a shared part off a worse figure would only add noise. The AGR420 figure''s
-    yellow callout box round the PSU pair starts at x 14, which does not fit a 60.1 mm PSU at
-    x 6.26; the box is drawn loosely round the pair and the module faces inside it are what was
-    matched'
+    NEITHER is the AGR400 part. Checked before assuming, as asked: edgecore/agr-filter-top@1 is
+    353.5 mm wide against the 417 needed here, and it is stepped for the AGR400''s TWO QSFP-DD
+    blocks where this front has ONE, at the left. Three new components were drawn -
+    agr420-filter-top (417.0 x 8.6 at panel 12.5, 1.0), agr420-filter-bottom (399.5 x 9.0 at
+    12.5, 77.5) and agr420-filter-step (25.5 x 16.5, placed twice, at 12.5, 10.7 and 12.5, 61.0).
+    Each physical filter is ONE part with a stepped frame and appears as two placements: a
+    placement is a bounding rectangle to both the renderer and lint rule L13, so a single 26 mm
+    stepped box would read as sitting on top of the sixteen ports it steps around. Both halves
+    carry group `filters` and their descriptions say which whole they belong to'
+  rear: 'drawing plus Jason - two stacked PSU bays at the left, a grounding landing, then five
+    fan bays. The PSU pair is placed from THIS device''s figure, not the AGR400''s: both Edgecore
+    datasheet rear figures put the PSU block''s left edge at panel x 13-14 (12.82 on the AGR400
+    page, 14.06 here), while the AGR400 model has it at 6.26 measured off that router''s QSG, and
+    at 6.26 the PSU0/PSU1 legend would be printed under the bay. The bays here start at 11.5 and
+    the grounding plate moves right to 71.8, which is where IMG_6809 and the figure both put it.
+    The AGR400 rear should be re-checked'
+  psu-width: 'CARRIED FORWARD, not resolved - edgecore/agr-psu-dc@1 and agr-psu-ac@1 are 60.1 mm
+    wide, and the callout box drawn round the PSU pair measures 57.9 mm on the AGR400 datasheet
+    page and 53.6 mm here. The component may be a little over. It is reused unchanged because
+    Jason confirmed both platforms take the same PSU and narrowing it would silently move the
+    AGR400; the disagreement is recorded rather than acted on'
+  fans: 'drawing plus Jason - the fan bays keep the AGR400 geometry, 69.4 mm square on a 70.4 mm
+    pitch. This figure reads 68.5 mm pitch, 2.7 percent smaller, which is inside figure error, and
+    the AGR400 number has the stronger derivation - it is the only size that is both square, as
+    the photographs show, and fits its measured pitch. Overlaid at matched scale the five bays
+    land on the reference'
+  panel-screws: 'drawing - four captive slotted thumb screws about 8.4 mm across at the panel
+    corners, Hough-detected at (5.8, 13.5), (5.8, 73.6) and (433.9, 5.8); the fourth, at
+    (433.9, 81.2), is hidden behind a callout arrow in the figure and is taken from IMG_6807 and
+    from the symmetry of the other three. common/screw-head is 3.6 mm and reads as a machine
+    screw at this size, so edgecore/agr-panel-screw was drawn for them'
+  indicators: 'the five system LEDs and the RST button carry no `for:` and lint warns (L19).
+    That is correct here and matches the AGR400: DIAG and LOC are chassis-wide, and PS0/PS1
+    annotate psu-0 and psu-1, which are bays in the REAR view - L14 requires a `for:` target in
+    the SAME view, so naming them would trade a warning for an error'
   fan-labels: photo - the datasheet figure prints FAN 4 to FAN 0 vertically beside each bay. The
     real device (IMG_6809) prints them horizontally BELOW each bay with an airflow arrow to their
     left, the same as the AGR400. The real device wins
@@ -449,6 +475,10 @@ views:
       - {at: [421.0, 69.6], text: 'AS7946-74XKSB', font-size: 2.0, anchor: middle}
     components:
       placements:
+        - {id: filter-top, ref: edgecore/agr420-filter-top@1, at: [12.5, 1.0], group: filters, rel-pos: 0}
+        - {id: filter-top-step, ref: edgecore/agr420-filter-step@1, at: [12.5, 10.7], group: filters, rel-pos: 1}
+        - {id: filter-bottom-step, ref: edgecore/agr420-filter-step@1, at: [12.5, 61.0], group: filters, rel-pos: 2}
+        - {id: filter-bottom, ref: edgecore/agr420-filter-bottom@1, at: [12.5, 77.5], group: filters, rel-pos: 3}
         - {id: port-0, ref: std/qsfp-module@1, at: [16.10, 31.30], group: qsfpdd, rel-pos: 0}
         - {id: port-1, ref: std/qsfp-module@1, at: [16.10, 44.30], group: qsfpdd, rel-pos: 1}
         - {id: port-2, ref: std/qsfp-module@1, at: [44.60, 14.60], group: qsfp28, rel-pos: 2}
@@ -523,6 +553,154 @@ views:
         - {id: port-71, ref: std/sfp-module@1, at: [331.01, 31.30], group: sfp28, rel-pos: 71}
         - {id: port-72, ref: std/sfp-module@1, at: [331.01, 44.30], group: sfp28, rel-pos: 72}
         - {id: port-73, ref: std/sfp-module@1, at: [331.01, 61.00], group: sfp28, rel-pos: 73}
+        - {id: led-p0-a, ref: common/led-dot@1, at: [12.60, 34.60], group: port-leds, rel-pos: 0, for: port-0, attrs: {function: speed, states: 'Blue = 100G'}}
+        - {id: led-p0-b, ref: common/led-dot@1, at: [12.60, 37.70], group: port-leds, rel-pos: 1, for: port-0, attrs: {function: link, states: 'Blue = all lanes linked, Off = not all lanes linked, Blinking = activity'}}
+        - {id: led-p1-a, ref: common/led-dot@1, at: [12.60, 43.60], group: port-leds, rel-pos: 2, for: port-1, attrs: {function: speed, states: 'Blue = 100G'}}
+        - {id: led-p1-b, ref: common/led-dot@1, at: [12.60, 46.70], group: port-leds, rel-pos: 3, for: port-1, attrs: {function: link, states: 'Blue = all lanes linked, Off = not all lanes linked, Blinking = activity'}}
+        - {id: led-p3-a, ref: common/led-arrow-sm@1, at: [44.83, 27.40], skin: down, group: port-leds, rel-pos: 4, for: port-3, attrs: {function: speed, states: 'Blue = 100G, Green = 40G'}}
+        - {id: led-p2-a, ref: common/led-arrow-sm@1, at: [47.23, 27.40], skin: up, group: port-leds, rel-pos: 5, for: port-2, attrs: {function: speed, states: 'Blue = 100G, Green = 40G'}}
+        - {id: led-p3-b, ref: common/led-arrow-sm@1, at: [57.03, 27.40], skin: down, group: port-leds, rel-pos: 6, for: port-3, attrs: {function: link, states: 'Blue = link, Off = not all lanes linked, Blinking = activity'}}
+        - {id: led-p2-b, ref: common/led-arrow-sm@1, at: [59.42, 27.40], skin: up, group: port-leds, rel-pos: 7, for: port-2, attrs: {function: link, states: 'Blue = link, Off = not all lanes linked, Blinking = activity'}}
+        - {id: led-p5-a, ref: common/led-arrow-sm@1, at: [44.83, 56.80], skin: down, group: port-leds, rel-pos: 8, for: port-5, attrs: {function: speed, states: 'Blue = 100G, Green = 40G'}}
+        - {id: led-p4-a, ref: common/led-arrow-sm@1, at: [47.23, 56.80], skin: up, group: port-leds, rel-pos: 9, for: port-4, attrs: {function: speed, states: 'Blue = 100G, Green = 40G'}}
+        - {id: led-p5-b, ref: common/led-arrow-sm@1, at: [57.03, 56.80], skin: down, group: port-leds, rel-pos: 10, for: port-5, attrs: {function: link, states: 'Blue = link, Off = not all lanes linked, Blinking = activity'}}
+        - {id: led-p4-b, ref: common/led-arrow-sm@1, at: [59.42, 56.80], skin: up, group: port-leds, rel-pos: 11, for: port-4, attrs: {function: link, states: 'Blue = link, Off = not all lanes linked, Blinking = activity'}}
+        - {id: led-p7-a, ref: common/led-arrow-sm@1, at: [63.33, 27.40], skin: down, group: port-leds, rel-pos: 12, for: port-7, attrs: {function: speed, states: 'Blue = 100G, Green = 40G'}}
+        - {id: led-p6-a, ref: common/led-arrow-sm@1, at: [65.72, 27.40], skin: up, group: port-leds, rel-pos: 13, for: port-6, attrs: {function: speed, states: 'Blue = 100G, Green = 40G'}}
+        - {id: led-p7-b, ref: common/led-arrow-sm@1, at: [75.53, 27.40], skin: down, group: port-leds, rel-pos: 14, for: port-7, attrs: {function: link, states: 'Blue = link, Off = not all lanes linked, Blinking = activity'}}
+        - {id: led-p6-b, ref: common/led-arrow-sm@1, at: [77.92, 27.40], skin: up, group: port-leds, rel-pos: 15, for: port-6, attrs: {function: link, states: 'Blue = link, Off = not all lanes linked, Blinking = activity'}}
+        - {id: led-p9-a, ref: common/led-arrow-sm@1, at: [63.33, 56.80], skin: down, group: port-leds, rel-pos: 16, for: port-9, attrs: {function: speed, states: 'Blue = 100G, Green = 40G'}}
+        - {id: led-p8-a, ref: common/led-arrow-sm@1, at: [65.72, 56.80], skin: up, group: port-leds, rel-pos: 17, for: port-8, attrs: {function: speed, states: 'Blue = 100G, Green = 40G'}}
+        - {id: led-p9-b, ref: common/led-arrow-sm@1, at: [75.53, 56.80], skin: down, group: port-leds, rel-pos: 18, for: port-9, attrs: {function: link, states: 'Blue = link, Off = not all lanes linked, Blinking = activity'}}
+        - {id: led-p8-b, ref: common/led-arrow-sm@1, at: [77.92, 56.80], skin: up, group: port-leds, rel-pos: 19, for: port-8, attrs: {function: link, states: 'Blue = link, Off = not all lanes linked, Blinking = activity'}}
+        - {id: led-p11-a, ref: common/led-arrow-sm@1, at: [91.17, 27.40], skin: down, group: port-leds, rel-pos: 20, for: port-11, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p10-a, ref: common/led-arrow-sm@1, at: [94.07, 27.40], skin: up, group: port-leds, rel-pos: 21, for: port-10, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p11-b, ref: common/led-arrow-sm@1, at: [98.07, 27.40], skin: down, group: port-leds, rel-pos: 22, for: port-11, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p10-b, ref: common/led-arrow-sm@1, at: [100.97, 27.40], skin: up, group: port-leds, rel-pos: 23, for: port-10, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p13-a, ref: common/led-arrow-sm@1, at: [91.17, 56.80], skin: down, group: port-leds, rel-pos: 24, for: port-13, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p12-a, ref: common/led-arrow-sm@1, at: [94.07, 56.80], skin: up, group: port-leds, rel-pos: 25, for: port-12, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p13-b, ref: common/led-arrow-sm@1, at: [98.07, 56.80], skin: down, group: port-leds, rel-pos: 26, for: port-13, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p12-b, ref: common/led-arrow-sm@1, at: [100.97, 56.80], skin: up, group: port-leds, rel-pos: 27, for: port-12, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p15-a, ref: common/led-arrow-sm@1, at: [105.42, 27.40], skin: down, group: port-leds, rel-pos: 28, for: port-15, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p14-a, ref: common/led-arrow-sm@1, at: [108.32, 27.40], skin: up, group: port-leds, rel-pos: 29, for: port-14, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p15-b, ref: common/led-arrow-sm@1, at: [112.32, 27.40], skin: down, group: port-leds, rel-pos: 30, for: port-15, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p14-b, ref: common/led-arrow-sm@1, at: [115.22, 27.40], skin: up, group: port-leds, rel-pos: 31, for: port-14, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p17-a, ref: common/led-arrow-sm@1, at: [105.42, 56.80], skin: down, group: port-leds, rel-pos: 32, for: port-17, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p16-a, ref: common/led-arrow-sm@1, at: [108.32, 56.80], skin: up, group: port-leds, rel-pos: 33, for: port-16, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p17-b, ref: common/led-arrow-sm@1, at: [112.32, 56.80], skin: down, group: port-leds, rel-pos: 34, for: port-17, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p16-b, ref: common/led-arrow-sm@1, at: [115.22, 56.80], skin: up, group: port-leds, rel-pos: 35, for: port-16, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p19-a, ref: common/led-arrow-sm@1, at: [119.67, 27.40], skin: down, group: port-leds, rel-pos: 36, for: port-19, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p18-a, ref: common/led-arrow-sm@1, at: [122.57, 27.40], skin: up, group: port-leds, rel-pos: 37, for: port-18, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p19-b, ref: common/led-arrow-sm@1, at: [126.57, 27.40], skin: down, group: port-leds, rel-pos: 38, for: port-19, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p18-b, ref: common/led-arrow-sm@1, at: [129.47, 27.40], skin: up, group: port-leds, rel-pos: 39, for: port-18, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p21-a, ref: common/led-arrow-sm@1, at: [119.67, 56.80], skin: down, group: port-leds, rel-pos: 40, for: port-21, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p20-a, ref: common/led-arrow-sm@1, at: [122.57, 56.80], skin: up, group: port-leds, rel-pos: 41, for: port-20, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p21-b, ref: common/led-arrow-sm@1, at: [126.57, 56.80], skin: down, group: port-leds, rel-pos: 42, for: port-21, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p20-b, ref: common/led-arrow-sm@1, at: [129.47, 56.80], skin: up, group: port-leds, rel-pos: 43, for: port-20, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p23-a, ref: common/led-arrow-sm@1, at: [133.92, 27.40], skin: down, group: port-leds, rel-pos: 44, for: port-23, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p22-a, ref: common/led-arrow-sm@1, at: [136.82, 27.40], skin: up, group: port-leds, rel-pos: 45, for: port-22, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p23-b, ref: common/led-arrow-sm@1, at: [140.82, 27.40], skin: down, group: port-leds, rel-pos: 46, for: port-23, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p22-b, ref: common/led-arrow-sm@1, at: [143.72, 27.40], skin: up, group: port-leds, rel-pos: 47, for: port-22, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p25-a, ref: common/led-arrow-sm@1, at: [133.92, 56.80], skin: down, group: port-leds, rel-pos: 48, for: port-25, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p24-a, ref: common/led-arrow-sm@1, at: [136.82, 56.80], skin: up, group: port-leds, rel-pos: 49, for: port-24, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p25-b, ref: common/led-arrow-sm@1, at: [140.82, 56.80], skin: down, group: port-leds, rel-pos: 50, for: port-25, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p24-b, ref: common/led-arrow-sm@1, at: [143.72, 56.80], skin: up, group: port-leds, rel-pos: 51, for: port-24, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p27-a, ref: common/led-arrow-sm@1, at: [157.14, 27.40], skin: down, group: port-leds, rel-pos: 52, for: port-27, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p26-a, ref: common/led-arrow-sm@1, at: [160.04, 27.40], skin: up, group: port-leds, rel-pos: 53, for: port-26, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p27-b, ref: common/led-arrow-sm@1, at: [164.04, 27.40], skin: down, group: port-leds, rel-pos: 54, for: port-27, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p26-b, ref: common/led-arrow-sm@1, at: [166.94, 27.40], skin: up, group: port-leds, rel-pos: 55, for: port-26, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p29-a, ref: common/led-arrow-sm@1, at: [157.14, 56.80], skin: down, group: port-leds, rel-pos: 56, for: port-29, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p28-a, ref: common/led-arrow-sm@1, at: [160.04, 56.80], skin: up, group: port-leds, rel-pos: 57, for: port-28, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p29-b, ref: common/led-arrow-sm@1, at: [164.04, 56.80], skin: down, group: port-leds, rel-pos: 58, for: port-29, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p28-b, ref: common/led-arrow-sm@1, at: [166.94, 56.80], skin: up, group: port-leds, rel-pos: 59, for: port-28, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p31-a, ref: common/led-arrow-sm@1, at: [171.39, 27.40], skin: down, group: port-leds, rel-pos: 60, for: port-31, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p30-a, ref: common/led-arrow-sm@1, at: [174.29, 27.40], skin: up, group: port-leds, rel-pos: 61, for: port-30, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p31-b, ref: common/led-arrow-sm@1, at: [178.29, 27.40], skin: down, group: port-leds, rel-pos: 62, for: port-31, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p30-b, ref: common/led-arrow-sm@1, at: [181.19, 27.40], skin: up, group: port-leds, rel-pos: 63, for: port-30, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p33-a, ref: common/led-arrow-sm@1, at: [171.39, 56.80], skin: down, group: port-leds, rel-pos: 64, for: port-33, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p32-a, ref: common/led-arrow-sm@1, at: [174.29, 56.80], skin: up, group: port-leds, rel-pos: 65, for: port-32, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p33-b, ref: common/led-arrow-sm@1, at: [178.29, 56.80], skin: down, group: port-leds, rel-pos: 66, for: port-33, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p32-b, ref: common/led-arrow-sm@1, at: [181.19, 56.80], skin: up, group: port-leds, rel-pos: 67, for: port-32, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p35-a, ref: common/led-arrow-sm@1, at: [185.64, 27.40], skin: down, group: port-leds, rel-pos: 68, for: port-35, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p34-a, ref: common/led-arrow-sm@1, at: [188.54, 27.40], skin: up, group: port-leds, rel-pos: 69, for: port-34, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p35-b, ref: common/led-arrow-sm@1, at: [192.54, 27.40], skin: down, group: port-leds, rel-pos: 70, for: port-35, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p34-b, ref: common/led-arrow-sm@1, at: [195.44, 27.40], skin: up, group: port-leds, rel-pos: 71, for: port-34, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p37-a, ref: common/led-arrow-sm@1, at: [185.64, 56.80], skin: down, group: port-leds, rel-pos: 72, for: port-37, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p36-a, ref: common/led-arrow-sm@1, at: [188.54, 56.80], skin: up, group: port-leds, rel-pos: 73, for: port-36, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p37-b, ref: common/led-arrow-sm@1, at: [192.54, 56.80], skin: down, group: port-leds, rel-pos: 74, for: port-37, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p36-b, ref: common/led-arrow-sm@1, at: [195.44, 56.80], skin: up, group: port-leds, rel-pos: 75, for: port-36, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p39-a, ref: common/led-arrow-sm@1, at: [199.89, 27.40], skin: down, group: port-leds, rel-pos: 76, for: port-39, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p38-a, ref: common/led-arrow-sm@1, at: [202.79, 27.40], skin: up, group: port-leds, rel-pos: 77, for: port-38, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p39-b, ref: common/led-arrow-sm@1, at: [206.79, 27.40], skin: down, group: port-leds, rel-pos: 78, for: port-39, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p38-b, ref: common/led-arrow-sm@1, at: [209.69, 27.40], skin: up, group: port-leds, rel-pos: 79, for: port-38, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p41-a, ref: common/led-arrow-sm@1, at: [199.89, 56.80], skin: down, group: port-leds, rel-pos: 80, for: port-41, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p40-a, ref: common/led-arrow-sm@1, at: [202.79, 56.80], skin: up, group: port-leds, rel-pos: 81, for: port-40, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p41-b, ref: common/led-arrow-sm@1, at: [206.79, 56.80], skin: down, group: port-leds, rel-pos: 82, for: port-41, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p40-b, ref: common/led-arrow-sm@1, at: [209.69, 56.80], skin: up, group: port-leds, rel-pos: 83, for: port-40, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p43-a, ref: common/led-arrow-sm@1, at: [223.11, 27.40], skin: down, group: port-leds, rel-pos: 84, for: port-43, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p42-a, ref: common/led-arrow-sm@1, at: [226.01, 27.40], skin: up, group: port-leds, rel-pos: 85, for: port-42, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p43-b, ref: common/led-arrow-sm@1, at: [230.01, 27.40], skin: down, group: port-leds, rel-pos: 86, for: port-43, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p42-b, ref: common/led-arrow-sm@1, at: [232.91, 27.40], skin: up, group: port-leds, rel-pos: 87, for: port-42, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p45-a, ref: common/led-arrow-sm@1, at: [223.11, 56.80], skin: down, group: port-leds, rel-pos: 88, for: port-45, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p44-a, ref: common/led-arrow-sm@1, at: [226.01, 56.80], skin: up, group: port-leds, rel-pos: 89, for: port-44, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p45-b, ref: common/led-arrow-sm@1, at: [230.01, 56.80], skin: down, group: port-leds, rel-pos: 90, for: port-45, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p44-b, ref: common/led-arrow-sm@1, at: [232.91, 56.80], skin: up, group: port-leds, rel-pos: 91, for: port-44, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p47-a, ref: common/led-arrow-sm@1, at: [237.36, 27.40], skin: down, group: port-leds, rel-pos: 92, for: port-47, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p46-a, ref: common/led-arrow-sm@1, at: [240.26, 27.40], skin: up, group: port-leds, rel-pos: 93, for: port-46, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p47-b, ref: common/led-arrow-sm@1, at: [244.26, 27.40], skin: down, group: port-leds, rel-pos: 94, for: port-47, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p46-b, ref: common/led-arrow-sm@1, at: [247.16, 27.40], skin: up, group: port-leds, rel-pos: 95, for: port-46, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p49-a, ref: common/led-arrow-sm@1, at: [237.36, 56.80], skin: down, group: port-leds, rel-pos: 96, for: port-49, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p48-a, ref: common/led-arrow-sm@1, at: [240.26, 56.80], skin: up, group: port-leds, rel-pos: 97, for: port-48, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p49-b, ref: common/led-arrow-sm@1, at: [244.26, 56.80], skin: down, group: port-leds, rel-pos: 98, for: port-49, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p48-b, ref: common/led-arrow-sm@1, at: [247.16, 56.80], skin: up, group: port-leds, rel-pos: 99, for: port-48, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p51-a, ref: common/led-arrow-sm@1, at: [251.61, 27.40], skin: down, group: port-leds, rel-pos: 100, for: port-51, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p50-a, ref: common/led-arrow-sm@1, at: [254.51, 27.40], skin: up, group: port-leds, rel-pos: 101, for: port-50, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p51-b, ref: common/led-arrow-sm@1, at: [258.51, 27.40], skin: down, group: port-leds, rel-pos: 102, for: port-51, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p50-b, ref: common/led-arrow-sm@1, at: [261.41, 27.40], skin: up, group: port-leds, rel-pos: 103, for: port-50, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p53-a, ref: common/led-arrow-sm@1, at: [251.61, 56.80], skin: down, group: port-leds, rel-pos: 104, for: port-53, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p52-a, ref: common/led-arrow-sm@1, at: [254.51, 56.80], skin: up, group: port-leds, rel-pos: 105, for: port-52, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p53-b, ref: common/led-arrow-sm@1, at: [258.51, 56.80], skin: down, group: port-leds, rel-pos: 106, for: port-53, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p52-b, ref: common/led-arrow-sm@1, at: [261.41, 56.80], skin: up, group: port-leds, rel-pos: 107, for: port-52, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p55-a, ref: common/led-arrow-sm@1, at: [265.86, 27.40], skin: down, group: port-leds, rel-pos: 108, for: port-55, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p54-a, ref: common/led-arrow-sm@1, at: [268.76, 27.40], skin: up, group: port-leds, rel-pos: 109, for: port-54, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p55-b, ref: common/led-arrow-sm@1, at: [272.76, 27.40], skin: down, group: port-leds, rel-pos: 110, for: port-55, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p54-b, ref: common/led-arrow-sm@1, at: [275.66, 27.40], skin: up, group: port-leds, rel-pos: 111, for: port-54, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p57-a, ref: common/led-arrow-sm@1, at: [265.86, 56.80], skin: down, group: port-leds, rel-pos: 112, for: port-57, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p56-a, ref: common/led-arrow-sm@1, at: [268.76, 56.80], skin: up, group: port-leds, rel-pos: 113, for: port-56, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p57-b, ref: common/led-arrow-sm@1, at: [272.76, 56.80], skin: down, group: port-leds, rel-pos: 114, for: port-57, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p56-b, ref: common/led-arrow-sm@1, at: [275.66, 56.80], skin: up, group: port-leds, rel-pos: 115, for: port-56, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p59-a, ref: common/led-arrow-sm@1, at: [289.08, 27.40], skin: down, group: port-leds, rel-pos: 116, for: port-59, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p58-a, ref: common/led-arrow-sm@1, at: [291.99, 27.40], skin: up, group: port-leds, rel-pos: 117, for: port-58, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p59-b, ref: common/led-arrow-sm@1, at: [295.99, 27.40], skin: down, group: port-leds, rel-pos: 118, for: port-59, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p58-b, ref: common/led-arrow-sm@1, at: [298.88, 27.40], skin: up, group: port-leds, rel-pos: 119, for: port-58, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p61-a, ref: common/led-arrow-sm@1, at: [289.08, 56.80], skin: down, group: port-leds, rel-pos: 120, for: port-61, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p60-a, ref: common/led-arrow-sm@1, at: [291.99, 56.80], skin: up, group: port-leds, rel-pos: 121, for: port-60, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p61-b, ref: common/led-arrow-sm@1, at: [295.99, 56.80], skin: down, group: port-leds, rel-pos: 122, for: port-61, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p60-b, ref: common/led-arrow-sm@1, at: [298.88, 56.80], skin: up, group: port-leds, rel-pos: 123, for: port-60, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p63-a, ref: common/led-arrow-sm@1, at: [303.33, 27.40], skin: down, group: port-leds, rel-pos: 124, for: port-63, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p62-a, ref: common/led-arrow-sm@1, at: [306.24, 27.40], skin: up, group: port-leds, rel-pos: 125, for: port-62, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p63-b, ref: common/led-arrow-sm@1, at: [310.24, 27.40], skin: down, group: port-leds, rel-pos: 126, for: port-63, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p62-b, ref: common/led-arrow-sm@1, at: [313.13, 27.40], skin: up, group: port-leds, rel-pos: 127, for: port-62, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p65-a, ref: common/led-arrow-sm@1, at: [303.33, 56.80], skin: down, group: port-leds, rel-pos: 128, for: port-65, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p64-a, ref: common/led-arrow-sm@1, at: [306.24, 56.80], skin: up, group: port-leds, rel-pos: 129, for: port-64, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p65-b, ref: common/led-arrow-sm@1, at: [310.24, 56.80], skin: down, group: port-leds, rel-pos: 130, for: port-65, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p64-b, ref: common/led-arrow-sm@1, at: [313.13, 56.80], skin: up, group: port-leds, rel-pos: 131, for: port-64, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p67-a, ref: common/led-arrow-sm@1, at: [317.58, 27.40], skin: down, group: port-leds, rel-pos: 132, for: port-67, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p66-a, ref: common/led-arrow-sm@1, at: [320.49, 27.40], skin: up, group: port-leds, rel-pos: 133, for: port-66, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p67-b, ref: common/led-arrow-sm@1, at: [324.49, 27.40], skin: down, group: port-leds, rel-pos: 134, for: port-67, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p66-b, ref: common/led-arrow-sm@1, at: [327.38, 27.40], skin: up, group: port-leds, rel-pos: 135, for: port-66, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p69-a, ref: common/led-arrow-sm@1, at: [317.58, 56.80], skin: down, group: port-leds, rel-pos: 136, for: port-69, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p68-a, ref: common/led-arrow-sm@1, at: [320.49, 56.80], skin: up, group: port-leds, rel-pos: 137, for: port-68, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p69-b, ref: common/led-arrow-sm@1, at: [324.49, 56.80], skin: down, group: port-leds, rel-pos: 138, for: port-69, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p68-b, ref: common/led-arrow-sm@1, at: [327.38, 56.80], skin: up, group: port-leds, rel-pos: 139, for: port-68, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p71-a, ref: common/led-arrow-sm@1, at: [331.83, 27.40], skin: down, group: port-leds, rel-pos: 140, for: port-71, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p70-a, ref: common/led-arrow-sm@1, at: [334.74, 27.40], skin: up, group: port-leds, rel-pos: 141, for: port-70, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p71-b, ref: common/led-arrow-sm@1, at: [338.74, 27.40], skin: down, group: port-leds, rel-pos: 142, for: port-71, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p70-b, ref: common/led-arrow-sm@1, at: [341.63, 27.40], skin: up, group: port-leds, rel-pos: 143, for: port-70, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p73-a, ref: common/led-arrow-sm@1, at: [331.83, 56.80], skin: down, group: port-leds, rel-pos: 144, for: port-73, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p72-a, ref: common/led-arrow-sm@1, at: [334.74, 56.80], skin: up, group: port-leds, rel-pos: 145, for: port-72, attrs: {function: speed, states: 'Blue = 25G, Green = 10G'}}
+        - {id: led-p73-b, ref: common/led-arrow-sm@1, at: [338.74, 56.80], skin: down, group: port-leds, rel-pos: 146, for: port-73, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
+        - {id: led-p72-b, ref: common/led-arrow-sm@1, at: [341.63, 56.80], skin: up, group: port-leds, rel-pos: 147, for: port-72, attrs: {function: link, states: 'Blue = link, Blinking = activity'}}
         - {id: bits-0, ref: std/rj45@1, at: [356.00, 14.40], rotate: 180, group: timing, rel-pos: 0}
         - {id: bits-2, ref: std/rj45@1, at: [372.30, 14.40], rotate: 180, group: timing, rel-pos: 1}
         - {id: bits-1, ref: std/rj45@1, at: [356.00, 28.50], group: timing, rel-pos: 2}
@@ -541,6 +719,10 @@ views:
         - {id: led-fan, ref: common/led-rect@1, at: [368.95, 45.00], group: status-leds, rel-pos: 2, attrs: {function: FAN, states: 'Green = OK, Amber = fault'}}
         - {id: led-ps0, ref: common/led-rect@1, at: [373.70, 45.00], group: status-leds, rel-pos: 3, attrs: {function: PS0, states: 'Green = OK, Amber = fault'}}
         - {id: led-ps1, ref: common/led-rect@1, at: [378.45, 45.00], group: status-leds, rel-pos: 4, attrs: {function: PS1, states: 'Green = OK, Amber = fault'}}
+        - {id: panel-screw-0, ref: edgecore/agr-panel-screw@1, at: [1.60, 9.30], group: fasteners, rel-pos: 0}
+        - {id: panel-screw-1, ref: edgecore/agr-panel-screw@1, at: [1.60, 69.40], group: fasteners, rel-pos: 1}
+        - {id: panel-screw-2, ref: edgecore/agr-panel-screw@1, at: [429.70, 1.60], group: fasteners, rel-pos: 2}
+        - {id: panel-screw-3, ref: edgecore/agr-panel-screw@1, at: [429.70, 77.00], group: fasteners, rel-pos: 3}
   rear:
     size:
       w: 440.0
@@ -567,31 +749,120 @@ views:
       - {at: [370.79, 80.6], path: M -3.0 0 H 2.0 M 0.4 -1.4 L 2.4 0 L 0.4 1.4, fill: none, stroke-width: 0.4, for: fan-0}
     components:
       bays:
-        - {id: psu-0, at: [6.26, 11.74], size: {w: 60.1, h: 37.6}, accepts: [edgecore/agr-psu-dc@1, edgecore/agr-psu-ac@1], default: edgecore/agr-psu-dc@1, group: psus, rel-pos: 0}
-        - {id: psu-1, at: [6.26, 49.34], size: {w: 60.1, h: 37.6}, accepts: [edgecore/agr-psu-dc@1, edgecore/agr-psu-ac@1], default: edgecore/agr-psu-dc@1, group: psus, rel-pos: 1}
+        - {id: psu-0, at: [11.5, 5.00], size: {w: 60.1, h: 37.6}, accepts: [edgecore/agr-psu-dc@1, edgecore/agr-psu-ac@1], default: edgecore/agr-psu-dc@1, group: psus, rel-pos: 0}
+        - {id: psu-1, at: [11.5, 44.00], size: {w: 60.1, h: 37.6}, accepts: [edgecore/agr-psu-dc@1, edgecore/agr-psu-ac@1], default: edgecore/agr-psu-dc@1, group: psus, rel-pos: 1}
         - {id: fan-4, at: [83.19, 11.74], size: {w: 69.4, h: 69.4}, accepts: [edgecore/agr-fan@1], default: edgecore/agr-fan@1, group: fans, rel-pos: 4}
         - {id: fan-3, at: [153.59, 11.74], size: {w: 69.4, h: 69.4}, accepts: [edgecore/agr-fan@1], default: edgecore/agr-fan@1, group: fans, rel-pos: 3}
         - {id: fan-2, at: [223.99, 11.74], size: {w: 69.4, h: 69.4}, accepts: [edgecore/agr-fan@1], default: edgecore/agr-fan@1, group: fans, rel-pos: 2}
         - {id: fan-1, at: [294.39, 11.74], size: {w: 69.4, h: 69.4}, accepts: [edgecore/agr-fan@1], default: edgecore/agr-fan@1, group: fans, rel-pos: 1}
         - {id: fan-0, at: [364.79, 11.74], size: {w: 69.4, h: 69.4}, accepts: [edgecore/agr-fan@1], default: edgecore/agr-fan@1, group: fans, rel-pos: 0}
       placements:
-        - {id: ground-plate, ref: edgecore/agr-ground-plate@1, at: [69.6, 24.0], group: grounding, rel-pos: 0}
+        - {id: ground-plate, ref: edgecore/agr-ground-plate@1, at: [71.8, 25.0], group: grounding, rel-pos: 0}
+        - {id: rivet-0, ref: common/rivet@1, at: [76.00, 3.4], group: fasteners, rel-pos: 0}
+        - {id: rivet-1, ref: common/rivet@1, at: [99.40, 3.4], group: fasteners, rel-pos: 1}
+        - {id: rivet-2, ref: common/rivet@1, at: [122.80, 3.4], group: fasteners, rel-pos: 2}
+        - {id: rivet-3, ref: common/rivet@1, at: [146.20, 3.4], group: fasteners, rel-pos: 3}
+        - {id: rivet-4, ref: common/rivet@1, at: [169.60, 3.4], group: fasteners, rel-pos: 4}
+        - {id: rivet-5, ref: common/rivet@1, at: [193.00, 3.4], group: fasteners, rel-pos: 5}
+        - {id: rivet-6, ref: common/rivet@1, at: [216.40, 3.4], group: fasteners, rel-pos: 6}
+        - {id: rivet-7, ref: common/rivet@1, at: [239.80, 3.4], group: fasteners, rel-pos: 7}
+        - {id: rivet-8, ref: common/rivet@1, at: [263.20, 3.4], group: fasteners, rel-pos: 8}
+        - {id: rivet-9, ref: common/rivet@1, at: [286.60, 3.4], group: fasteners, rel-pos: 9}
+        - {id: rivet-10, ref: common/rivet@1, at: [310.00, 3.4], group: fasteners, rel-pos: 10}
+        - {id: rivet-11, ref: common/rivet@1, at: [333.40, 3.4], group: fasteners, rel-pos: 11}
+        - {id: rivet-12, ref: common/rivet@1, at: [356.80, 3.4], group: fasteners, rel-pos: 12}
+        - {id: rivet-13, ref: common/rivet@1, at: [380.20, 3.4], group: fasteners, rel-pos: 13}
+        - {id: rivet-14, ref: common/rivet@1, at: [403.60, 3.4], group: fasteners, rel-pos: 14}
+        - {id: rivet-15, ref: common/rivet@1, at: [427.00, 3.4], group: fasteners, rel-pos: 15}
+        - {id: rivet-16, ref: common/rivet@1, at: [81.69, 82.6], group: fasteners, rel-pos: 16}
+        - {id: rivet-17, ref: common/rivet@1, at: [152.09, 82.6], group: fasteners, rel-pos: 17}
+        - {id: rivet-18, ref: common/rivet@1, at: [222.49, 82.6], group: fasteners, rel-pos: 18}
+        - {id: rivet-19, ref: common/rivet@1, at: [292.89, 82.6], group: fasteners, rel-pos: 19}
+        - {id: rivet-20, ref: common/rivet@1, at: [363.29, 82.6], group: fasteners, rel-pos: 20}
+        - {id: rivet-21, ref: common/rivet@1, at: [433.69, 82.6], group: fasteners, rel-pos: 21}
   top:
     size:
       w: 440.0
       h: 480.0
+    components:
+      placements:
+        - {id: label-spec, ref: edgecore/agr-label-spec@1, at: [352.0, 275.0], group: labels, rel-pos: 0}
+        - {id: label-serial, ref: edgecore/agr-label-serial@1, at: [352.0, 363.0], group: labels, rel-pos: 1}
+        - {id: label-caution, ref: edgecore/agr-label-caution@1, at: [16.0, 26.0], group: labels, rel-pos: 2}
   bottom:
     size:
       w: 440.0
       h: 480.0
+    components:
+      placements:
+        - {id: rivet-b0, ref: common/rivet@1, at: [24.0, 55.0], group: fasteners, rel-pos: 0}
+        - {id: rivet-b1, ref: common/rivet@1, at: [118.0, 55.0], group: fasteners, rel-pos: 1}
+        - {id: rivet-b2, ref: common/rivet@1, at: [212.0, 55.0], group: fasteners, rel-pos: 2}
+        - {id: rivet-b3, ref: common/rivet@1, at: [306.0, 55.0], group: fasteners, rel-pos: 3}
+        - {id: rivet-b4, ref: common/rivet@1, at: [400.0, 55.0], group: fasteners, rel-pos: 4}
+        - {id: rivet-b5, ref: common/rivet@1, at: [24.0, 138.0], group: fasteners, rel-pos: 5}
+        - {id: rivet-b6, ref: common/rivet@1, at: [118.0, 138.0], group: fasteners, rel-pos: 6}
+        - {id: rivet-b7, ref: common/rivet@1, at: [212.0, 138.0], group: fasteners, rel-pos: 7}
+        - {id: rivet-b8, ref: common/rivet@1, at: [306.0, 138.0], group: fasteners, rel-pos: 8}
+        - {id: rivet-b9, ref: common/rivet@1, at: [400.0, 138.0], group: fasteners, rel-pos: 9}
+        - {id: rivet-b10, ref: common/rivet@1, at: [24.0, 220.0], group: fasteners, rel-pos: 10}
+        - {id: rivet-b11, ref: common/rivet@1, at: [118.0, 220.0], group: fasteners, rel-pos: 11}
+        - {id: rivet-b12, ref: common/rivet@1, at: [212.0, 220.0], group: fasteners, rel-pos: 12}
+        - {id: rivet-b13, ref: common/rivet@1, at: [306.0, 220.0], group: fasteners, rel-pos: 13}
+        - {id: rivet-b14, ref: common/rivet@1, at: [400.0, 220.0], group: fasteners, rel-pos: 14}
+        - {id: rivet-b15, ref: common/rivet@1, at: [24.0, 302.0], group: fasteners, rel-pos: 15}
+        - {id: rivet-b16, ref: common/rivet@1, at: [118.0, 302.0], group: fasteners, rel-pos: 16}
+        - {id: rivet-b17, ref: common/rivet@1, at: [212.0, 302.0], group: fasteners, rel-pos: 17}
+        - {id: rivet-b18, ref: common/rivet@1, at: [306.0, 302.0], group: fasteners, rel-pos: 18}
+        - {id: rivet-b19, ref: common/rivet@1, at: [400.0, 302.0], group: fasteners, rel-pos: 19}
+        - {id: rivet-b20, ref: common/rivet@1, at: [24.0, 385.0], group: fasteners, rel-pos: 20}
+        - {id: rivet-b21, ref: common/rivet@1, at: [118.0, 385.0], group: fasteners, rel-pos: 21}
+        - {id: rivet-b22, ref: common/rivet@1, at: [212.0, 385.0], group: fasteners, rel-pos: 22}
+        - {id: rivet-b23, ref: common/rivet@1, at: [306.0, 385.0], group: fasteners, rel-pos: 23}
+        - {id: rivet-b24, ref: common/rivet@1, at: [400.0, 385.0], group: fasteners, rel-pos: 24}
+        - {id: rivet-b25, ref: common/rivet@1, at: [24.0, 452.0], group: fasteners, rel-pos: 25}
+        - {id: rivet-b26, ref: common/rivet@1, at: [118.0, 452.0], group: fasteners, rel-pos: 26}
+        - {id: rivet-b27, ref: common/rivet@1, at: [212.0, 452.0], group: fasteners, rel-pos: 27}
+        - {id: rivet-b28, ref: common/rivet@1, at: [306.0, 452.0], group: fasteners, rel-pos: 28}
+        - {id: rivet-b29, ref: common/rivet@1, at: [400.0, 452.0], group: fasteners, rel-pos: 29}
   left:
     size:
       w: 480.0
       h: 87.0
+    components:
+      placements:
+        - {id: bracket-hole-0, ref: common/rivet@1, at: [26.0, 30.0], group: bracket-holes, rel-pos: 0}
+        - {id: bracket-hole-1, ref: common/rivet@1, at: [26.0, 46.0], group: bracket-holes, rel-pos: 1}
+        - {id: bracket-hole-2, ref: common/rivet@1, at: [46.0, 30.0], group: bracket-holes, rel-pos: 2}
+        - {id: bracket-hole-3, ref: common/rivet@1, at: [46.0, 46.0], group: bracket-holes, rel-pos: 3}
+        - {id: bracket-hole-4, ref: common/rivet@1, at: [66.0, 30.0], group: bracket-holes, rel-pos: 4}
+        - {id: bracket-hole-5, ref: common/rivet@1, at: [66.0, 46.0], group: bracket-holes, rel-pos: 5}
+        - {id: bracket-hole-6, ref: common/rivet@1, at: [86.0, 30.0], group: bracket-holes, rel-pos: 6}
+        - {id: bracket-hole-7, ref: common/rivet@1, at: [86.0, 46.0], group: bracket-holes, rel-pos: 7}
+        - {id: rivet-s0, ref: common/rivet@1, at: [170.0, 42.0], group: fasteners, rel-pos: 0}
+        - {id: rivet-s1, ref: common/rivet@1, at: [250.0, 42.0], group: fasteners, rel-pos: 1}
+        - {id: rivet-s2, ref: common/rivet@1, at: [330.0, 42.0], group: fasteners, rel-pos: 2}
+        - {id: rivet-s3, ref: common/rivet@1, at: [410.0, 42.0], group: fasteners, rel-pos: 3}
+        - {id: rivet-s4, ref: common/rivet@1, at: [460.0, 42.0], group: fasteners, rel-pos: 4}
   right:
     size:
       w: 480.0
       h: 87.0
+    components:
+      placements:
+        - {id: bracket-hole-0, ref: common/rivet@1, at: [454.0, 30.0], group: bracket-holes, rel-pos: 0}
+        - {id: bracket-hole-1, ref: common/rivet@1, at: [454.0, 46.0], group: bracket-holes, rel-pos: 1}
+        - {id: bracket-hole-2, ref: common/rivet@1, at: [434.0, 30.0], group: bracket-holes, rel-pos: 2}
+        - {id: bracket-hole-3, ref: common/rivet@1, at: [434.0, 46.0], group: bracket-holes, rel-pos: 3}
+        - {id: bracket-hole-4, ref: common/rivet@1, at: [414.0, 30.0], group: bracket-holes, rel-pos: 4}
+        - {id: bracket-hole-5, ref: common/rivet@1, at: [414.0, 46.0], group: bracket-holes, rel-pos: 5}
+        - {id: bracket-hole-6, ref: common/rivet@1, at: [394.0, 30.0], group: bracket-holes, rel-pos: 6}
+        - {id: bracket-hole-7, ref: common/rivet@1, at: [394.0, 46.0], group: bracket-holes, rel-pos: 7}
+        - {id: rivet-s0, ref: common/rivet@1, at: [310.0, 42.0], group: fasteners, rel-pos: 0}
+        - {id: rivet-s1, ref: common/rivet@1, at: [230.0, 42.0], group: fasteners, rel-pos: 1}
+        - {id: rivet-s2, ref: common/rivet@1, at: [150.0, 42.0], group: fasteners, rel-pos: 2}
+        - {id: rivet-s3, ref: common/rivet@1, at: [70.0, 42.0], group: fasteners, rel-pos: 3}
+        - {id: rivet-s4, ref: common/rivet@1, at: [20.0, 42.0], group: fasteners, rel-pos: 4}
 configurations:
   dc-psu:
     description: Modular dual DC PSUs, front-to-back airflow. This is the unit we photographed.

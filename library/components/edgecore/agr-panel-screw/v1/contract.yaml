@@ -1,0 +1,26 @@
+format: 1
+kind: component
+name: agr-panel-screw
+version: 1.0.0
+class: fastener
+profile: networking
+description: >-
+  Captive slotted thumb screw at each corner of the Edgecore AGR400 / AGR420
+  front panel, holding the rack flange to the chassis. A bright plated head
+  about 8.4 mm across with a single broad slot, standing proud of the paint.
+  Much larger than common/screw-head, which is 3.6 mm and reads as a machine
+  screw rather than a thumb screw at this scale.
+attrs: {model: 'AGR captive panel screw'}
+size: {w: 8.4, h: 8.4, d: 3.0}
+provenance:
+  size: drawing - Hough-detected on the AGR420 datasheet page-2 front figure at radius
+    4.12 to 4.24 px/mm-scaled, so 8.2 to 8.5 mm across. Four of them, at panel
+    (5.8, 13.5), (5.8, 73.6), (433.9, 5.8) and (433.9, 81.2)
+  appearance: photo - IMG_6807 shows a bright plated head with one broad slot cut across
+    it, sitting proud of the dark panel
+  depth: estimated - it stands proud but was not measured
+relief:
+  features:
+    # on the GROUP, so the raised slab carries the head and its slot
+    - {node: head, cyl: 1.6}
+skins: [default]
