@@ -125,8 +125,8 @@ Now populate. **Reuse before building.**
 2. Only build a new component when nothing fits *and* you have a source for its
    dimensions. A new component with `estimated` size is a last resort and must
    say so.
-3. Modules that come out go in `components.bays` with `accepts:`. Things that
-   do not come out go in `components.placements`.
+3. `components.bays` is for things that seat into an opening; everything else,
+   removable or not, is a `components.placements` entry. See rule 6.
 4. An indicator declares what it belongs to: `{id: led-p1, ref: std/led-arrow@1,
    for: port-1, group: port-leds}`. Never rely on naming to imply it.
 5. Every placement and bay carries `group:` and `rel-pos:`, and every group is
@@ -135,8 +135,14 @@ Now populate. **Reuse before building.**
    any DCIM their numbering.
 
 6. **If the guide has a replacement procedure for it, it is a part, not
-   decoration.** Air filters, fan trays and PSUs all come out. Model them as
-   bays with `accepts:`, not as `panel.decor`.
+   decoration** - but that does not make it a bay. Ask how it is held on:
+   - it **slides into an opening** in the metal (PSU, fan, line card) -> a `bay`
+     with `accepts:`, and the bay's dark opening is what shows when it is out;
+   - it **bolts onto the outside** of the faceplate (an air filter, a cable
+     manager, a bezel) -> a `placement`, painting over the panel and its
+     silkscreen, because that is where it physically sits.
+   Getting this wrong is visible: a non-rectangular part in a bay leaves the
+   bay's opening showing around it, like a hole in the chassis that is not there.
 7. **Read the guide's LED section for count AND arrangement, and expect them to
    differ per port family.** On one router the QSFP-DD ports carry a stacked
    pair outside each block, the QSFP28 ports four above each column, and the

@@ -502,17 +502,12 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             bay_g.set("data-rel-pos", str(b["rel-pos"]))
         title = ET.SubElement(bay_g, f"{{{SVG_NS}}}title")
         title.text = b["id"]
+        opening = ET.SubElement(bay_g, f"{{{SVG_NS}}}rect")
+        opening.set("id", f"{b['id']}--opening")
+        opening.set("x", f"{b['at'][0]:g}"); opening.set("y", f"{b['at'][1]:g}")
+        opening.set("width", f"{b['size']['w']:g}"); opening.set("height", f"{b['size']['h']:g}")
+        opening.set("fill", "#101214")
         default = (config.get("bays") or {}).get(b["id"], b.get("default"))
-        # The dark opening is what an EMPTY bay looks like. Painting it under an
-        # occupied one used to be harmless, because an occupant filled its bay - but
-        # a part whose outline is not a rectangle does not, and the hole showed
-        # around it. A stepped air filter is not a hole in the chassis.
-        if not default:
-            opening = ET.SubElement(bay_g, f"{{{SVG_NS}}}rect")
-            opening.set("id", f"{b['id']}--opening")
-            opening.set("x", f"{b['at'][0]:g}"); opening.set("y", f"{b['at'][1]:g}")
-            opening.set("width", f"{b['size']['w']:g}"); opening.set("height", f"{b['size']['h']:g}")
-            opening.set("fill", "#101214")
         if default:
             # instance_group rotates a component about its OWN centre, so for a
             # rotated bay the card has to be offset or it spins out of the opening.

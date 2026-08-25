@@ -198,10 +198,9 @@ views:
       - {at: [382.0, 51.4], text: PS1, font-size: 1.9, for: led-ps1}
       - {at: [418.0, 79.6], text: AS7946-30XB, font-size: 2.4}
     components:
-      bays:
-        - {id: filter-top, at: [1.4, 8.4], size: {w: 353.5, h: 17.2}, accepts: [edgecore/agr-filter-top@1], default: edgecore/agr-filter-top@1, group: filters, rel-pos: 0}
-        - {id: filter-bottom, at: [1.4, 60.5], size: {w: 353.5, h: 17.2}, accepts: [edgecore/agr-filter-bottom@1], default: edgecore/agr-filter-bottom@1, group: filters, rel-pos: 1}
       placements:
+        - {id: filter-top, ref: edgecore/agr-filter-top@1, at: [1.4, 8.4], group: filters, rel-pos: 0}
+        - {id: filter-bottom, ref: edgecore/agr-filter-bottom@1, at: [1.4, 60.5], group: filters, rel-pos: 1}
         - {id: port-0, ref: std/qsfp-module@1, at: [15.1, 33.0], group: qsfpdd-400g, rel-pos: 0}
         - {id: port-1, ref: std/qsfp-module@1, at: [15.1, 46.0], group: qsfpdd-400g, rel-pos: 1}
         - {id: port-2, ref: std/qsfp-module@1, at: [34.3, 33.0], group: qsfpdd-400g, rel-pos: 2}
