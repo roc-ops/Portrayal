@@ -22,6 +22,7 @@ ET.register_namespace("", SVG_NS)
 
 STATE_CSS = """
     [data-path] { cursor: pointer; }
+    .state-on    { --led-color: #22c55e; }
     .state-up    { --led-color: #22c55e; }
     .state-activity { --led-color: #86efac; }
     .state-ok    { --led-color: #22c55e; }
@@ -74,6 +75,36 @@ def state_names(states):
 def state_colors(states):
     return {st["name"]: st["color"] for st in states or []
             if isinstance(st, dict) and st.get("color")}
+
+
+def apply_states(g, states, palette):
+    """Override a placed instance's state vocabulary with the device's own.
+
+    A component declares what it IS - a 2mm round lamp - and can only guess what
+    it MEANS. The meaning is per-device and per-function: the same common/led-dot
+    is a speed lamp on one port and a link lamp on the next, and the speed lamp
+    over a QSFP28 says Blue=100G/Green=40G while the one over a QSFP-DD says
+    Cyan=400G/Blue=100G. Nothing about the lamp knows that; the device does.
+
+    So the vocabulary is overridden on the whole instance: on the group element,
+    and on every contracted element inside it that is a lamp - including lamps in
+    composed parts, because a jack with integrated LEDs is one indicator to
+    whoever declared it. Overriding only the outer <g> would be the bug this
+    replaces: the tree reads the innermost data-states it can find, so the
+    component's generic default would still be what reaches the chips.
+
+    Colours are collected per instance id rather than per component ref: two
+    placements of the SAME component now legitimately paint different colours for
+    different names, which a `g[data-ref^=...]` rule cannot express.
+    """
+    names = " ".join(state_names(states))
+    g.set("data-states", names)
+    for node in g.iter():
+        if node is not g and node.get("data-class") == "led":
+            node.set("data-states", names)
+    if palette is not None:
+        for name, color in state_colors(states).items():
+            palette.setdefault((name, color), []).append(g.get("id"))
 
 
 def rewrite_ids(el, prefix, contract, path_prefix, skip=None):
@@ -283,6 +314,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
 
     resolved = {}
     palette = {}
+    inst_palette = {}
     parts = view_parts(view)
 
     used_patterns = {d.get("pattern") for d in parts["decor"] if d.get("pattern")}
@@ -484,7 +516,8 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                             round(host["at"][1] + hm["at"][1] - om["at"][1], 4)])
         if p.get("optional") and p["optional"] not in include:
             continue
-        gattrs = ((dev_groups.get(p.get("group")) or {}).get("attrs")) or {}
+        grp = dev_groups.get(p.get("group")) or {}
+        gattrs = grp.get("attrs") or {}
         merged_attrs = {**gattrs, **(p.get("attrs") or {})} or None
         g, contract = instance_group(lib, p["ref"], p["id"], p["at"],
                                      None, merged_attrs,
@@ -493,6 +526,18 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                                      rotate=p.get("rotate"), palette=palette,
                                      skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                                      resolved=resolved)
+        # What the lamps on this instance mean. A placement wins over its group,
+        # the way attrs already do: a block of eighteen QSFP28 speed lamps says
+        # its vocabulary once, and one lamp inside it may still differ.
+        states = p.get("states") or grp.get("states")
+        if states:
+            apply_states(g, states, inst_palette)
+        # The sentence the vendor wrote, kept beside the tokens rather than
+        # instead of them. "Blue = 100G, Green = 40G" is not a state list and was
+        # never usable as one; it is still worth carrying, so it travels as prose.
+        desc = p.get("description") or grp.get("description")
+        if desc:
+            g.set("data-description", desc)
         # what this part belongs to - an LED to its port. The tree nests on it and
         # selecting either side highlights both.
         tg = targets(p.get("for"))
@@ -544,10 +589,19 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         if tg:
             bay_g.set("data-for", " ".join(tg))
 
-    if palette:
+    if palette or inst_palette:
         extra = "".join(
             f"\n    g[data-ref^='{comp}@'] .state-{name} {{ --led-color: {color}; }}"
             for (comp, name), color in sorted(palette.items()))
+        # An instance rule has to beat the component rule for the same name, so it
+        # is written as an id selector: one id beats any number of attribute
+        # selectors whatever the source order. The state class lands on the lamp
+        # element from the tree, or on the whole instance from a viewer that
+        # states the part rather than the lamp - so both are matched.
+        extra += "".join(
+            "\n    " + ", ".join(f"#{i}.state-{name}, #{i} .state-{name}" for i in ids)
+            + f" {{ --led-color: {color}; }}"
+            for (name, color), ids in sorted(inst_palette.items()))
         style.text = STATE_CSS + extra + "\n"
 
     # A component's own <g id="silkscreen"> is printed on ITS faceplate, so it

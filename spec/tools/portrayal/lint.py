@@ -14,6 +14,7 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
   L11 mating: interface/mates need a `mate` point; a wrapper cannot lose or
       change the interface of the receptacle it composes
   L12 device: mate-to resolves, host is a receptacle, and the interfaces match
+  L20 states: a state name is a token - prose belongs in `description`
 """
 import argparse
 import json
@@ -29,6 +30,10 @@ from manifest import (view_parts, targets, VIEW_KEY_ORDER,
 from jsonschema import Draft202012Validator
 
 SEGMENT = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
+# The same test the Explorer applies before it will build state chips. A state
+# name is one half of a CSS class - `state-<name>` is what the compiled drawing
+# paints on - so anything that is not a token is a class nothing styles.
+STATE_TOKEN = re.compile(r"^[a-z0-9-]+$")
 ERRORS = []
 WARNINGS = []
 
@@ -88,6 +93,37 @@ def contract_attrs(ref, lib_roots):
     return attrs
 
 
+def check_states(path, where, states, attrs):
+    """L20 - a state name is a token, and prose is not a state list.
+
+    `states: 'Blue = 100G, Green = 40G'` is a real fact, correctly transcribed
+    from the vendor's quick start guide, written in the only field that would
+    accept it. attrs: takes anything, so it took that - and then nothing could
+    read it. The Explorer splits data-states on whitespace and would have made
+    chips called "=" and "100G," setting classes nothing paints, so it refuses
+    the whole value and the port's real semantics reach no one.
+
+    Two checks, one rule. A declared state name must be a token, because half of
+    it becomes a CSS class. And `states` inside attrs: is that same prose in the
+    same wrong place - the structured field is `states:` on the placement or its
+    group, with the sentence beside it in `description:`.
+
+    Warning rather than error while the portfolio catches up, per L18/L19.
+    """
+    for st in states or []:
+        name = st if isinstance(st, str) else (st or {}).get("name")
+        if not isinstance(name, str) or not STATE_TOKEN.match(name):
+            warn(path, "L20", f"{where}: state name {name!r} is not a token "
+                              f"(^[a-z0-9-]+$). `state-<name>` is a CSS class; put "
+                              f"the sentence in description: instead")
+    prose = (attrs or {}).get("states")
+    if prose is not None:
+        warn(path, "L20", f"{where}: attrs.states = {str(prose)[:60]!r} - state "
+                          f"meanings in attrs: reach nothing. Declare states: on "
+                          f"the placement or its group, with the prose in "
+                          f"description:")
+
+
 def check_segment(path, code, value):
     if not SEGMENT.match(value) or "--" in value:
         err(path, code, f"bad id segment {value!r}")
@@ -120,8 +156,10 @@ def lint_component(path, validator):
         err(path, "L1", f"{'/'.join(str(p) for p in e.path)}: {e.message}")
         return data
     check_segment(path, "L2", data["name"])
-    for el in (data.get("elements") or {}):
+    check_states(path, data["name"], data.get("states"), data.get("attrs"))
+    for el, spec in (data.get("elements") or {}).items():
         check_segment(path, "L2", el)
+        check_states(path, f"{data['name']}/{el}", (spec or {}).get("states"), None)
     conf = data.get("conforms")
     if conf:
         std = STANDARDS.get(conf)
@@ -388,6 +426,9 @@ def lint_device(path, validator, lib_roots):
                    for r in lib_roots)
 
     declared_groups = set((data.get("groups") or {}).keys())
+    for gname, gdef in (data.get("groups") or {}).items():
+        check_states(path, f"groups/{gname}", (gdef or {}).get("states"),
+                     (gdef or {}).get("attrs"))
     for vname, view in (data.get("views") or {}).items():
         view = view or {}
         # L16 - a view is written in the order the part is made. Not a style
@@ -447,6 +488,7 @@ def lint_device(path, validator, lib_roots):
             # it: led-p0-a next to port-0 is a convention a reader infers and a
             # tool cannot. Warning, not error - `for:` postdates most of the
             # portfolio and 1101 of 1159 placements predate it.
+            check_states(path, f"{vname}/{p['id']}", p.get("states"), p.get("attrs"))
             if cls in ("led", "button", "display") and not p.get("for"):
                 warn(path, "L19", f"{vname}/{p['id']}: {cls} declares no 'for:', so "
                                   "nothing knows what it indicates")

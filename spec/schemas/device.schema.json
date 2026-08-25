@@ -240,6 +240,18 @@
           },
           "attrs": {
             "type": "object"
+          },
+          "states": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/state"
+            },
+            "description": "what this indicator's states MEAN on this device. Overrides the component's own vocabulary, which can only be generic - the same led-dot is a speed lamp on one port and a link lamp on the next. A block of eighteen speed lamps shares one vocabulary and says it once; a placement inside it may still override"
+          },
+          "description": {
+            "type": "string",
+            "description": "the vendor's own sentence about this block of indicators, kept beside the tokens"
           }
         }
       }
@@ -589,6 +601,18 @@
                     "attrs": {
                       "type": "object"
                     },
+                    "states": {
+                      "type": "array",
+                      "minItems": 1,
+                      "items": {
+                        "$ref": "#/$defs/state"
+                      },
+                      "description": "what this indicator's states MEAN on this device. Overrides the component's own vocabulary, which can only be generic - the same led-dot is a speed lamp on one port and a link lamp on the next"
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "the vendor's own sentence about this indicator, kept beside the tokens - 'Blue = 100G, Green = 40G'. Prose, never a state list"
+                    },
                     "provenance": {
                       "type": "object",
                       "additionalProperties": {
@@ -702,6 +726,30 @@
     }
   },
   "$defs": {
+    "state": {
+      "description": "one state a lamp can be in. The name is a token because `state-<name>` is a CSS class; the sentence explaining it belongs in `description` alongside",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/segment"
+        },
+        {
+          "type": "object",
+          "required": [
+            "name"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "$ref": "#/$defs/segment"
+            },
+            "color": {
+              "type": "string",
+              "description": "LED color for this state, emitted as scoped CSS"
+            }
+          }
+        }
+      ]
+    },
     "segment": {
       "type": "string",
       "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
