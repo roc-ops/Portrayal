@@ -1,0 +1,133 @@
+format: 1
+kind: device
+name: as7946-74xksb
+version: 0.1.0
+maturity: draft
+manufacturer: Edgecore
+model: AS7946-74XKSB
+description: Edgecore AGR420 (AS7946-74XKSB) 25GbE aggregation router. 2RU, 74 fixed ports - 2
+  x 100G QSFP-DD, 8 x 40/100G QSFP28 and 64 x 10/25G SFP28 - with a timing block, 1+1 redundant
+  PSUs and 4+1 redundant fans.
+provenance:
+  sources: datasheet AGR420-AS7946-74XKSB-DS-R03 and quick start guide AS7946-74XKSB-QSG-R03,
+    both Edgecore, plus six photographs of a real unit and Edgecore's stock renders. No mechanical
+    drawing was available
+  chassis: 'datasheet - "Dimensions (WxDxH): 440 mm x 480 mm x 87 mm (2RU)". The QSG Chassis
+    section gives the same 440 x 480 x 87 mm (17.3 x 18.9 x 3.4 in), so unlike the AGR400 the
+    two documents agree on depth and no disagreement has to be carried'
+  scale: drawing - the datasheet page-2 Interfaces figures are orthographic. The front panel
+    measures 3947 x 777 px on a 600 dpi render, an aspect of 5.080 against the datasheet 440/87
+    = 5.057, a 0.5 percent match; the rear measures 3941 x 771, an aspect of 5.112. Both carry
+    geometry, and everything below is measured off them at 8.970 px/mm across and 8.931 px/mm
+    down
+  ru: datasheet - 87 mm is 2 RU
+  color: photo - the same dark grey painted steel as the AGR400, which shares this chassis
+  other-faces: 'photo - the top, bottom and side faces are the AGR400 shell. They are sized
+    from the spec table so a rack elevation and the 3D box are right'
+attrs:
+  role: aggregation router
+  rack: 2 RU
+  switch-silicon: Broadcom BCM88820 Qumran-2C
+  external-tcam: Broadcom BCM16K knowledge-based processor
+  cpu: Intel Xeon D-1548 8-core
+  memory: DDR4 SO-DIMM 32 GB (2 x 16 GB)
+  boot-flash: SPI, redundant 2 x 16 MB
+  storage: M.2 SSD 128 GB
+  bmc: ASPEED AST2600
+  capacity: 2.4 Tb/s
+  timing: SyncE and IEEE 1588v2 PTP
+  weight: 16 kg with PSUs and fans (datasheet); QSG says 15.3 kg
+  power-max: 692 W (datasheet); QSG says 527 W at 25 C and 723 W at 45 C
+  power-typical: 201 W
+  psu-dc-input: -40 to -75 VDC, 40 A max per PSU
+  psu-ac-input: 100-120 V 12 A or 200-240 V 7.5 A, 50-60 Hz per PSU
+  operating-temp: 0 C to 45 C
+  storage-temp: -40 C to 70 C
+  humidity: operating 5-85 percent, storage 5-95 percent, non-condensing
+  nos: ONIE preinstalled; ONL and commercial NOS supported
+chassis:
+  width: 440.0
+  height: 87.0
+  depth: 480.0
+  ru: 2
+  color: '#3f4449'
+groups:
+  qsfpdd:
+    term: Port
+    index-origin: 0
+    attrs:
+      media: qsfp-dd
+      speed: 100g
+  qsfp28:
+    term: Port
+    index-origin: 0
+    attrs:
+      media: qsfp28
+      speed: 100g
+  sfp28:
+    term: Port
+    index-origin: 0
+    attrs:
+      media: sfp28
+      speed: 25g
+  port-leds:
+    term: LED
+    index-origin: 0
+  status-leds:
+    term: LED
+    index-origin: 1
+  timing:
+    term: Port
+    index-origin: 0
+  mgmt:
+    term: Port
+    index-origin: 0
+  mgmt-leds:
+    term: LED
+    index-origin: 0
+  fasteners:
+    term: Rivet
+    index-origin: 0
+  bracket-holes:
+    term: Hole
+    index-origin: 0
+  labels:
+    term: Label
+    index-origin: 0
+  psus:
+    term: PSU
+    index-origin: 0
+  fans:
+    term: Fan
+    index-origin: 0
+  grounding:
+    term: Point
+    index-origin: 0
+  filters:
+    term: Filter
+    index-origin: 0
+views:
+  front:
+    size:
+      w: 440.0
+      h: 87.0
+  rear:
+    size:
+      w: 440.0
+      h: 87.0
+  top:
+    size:
+      w: 440.0
+      h: 480.0
+  bottom:
+    size:
+      w: 440.0
+      h: 480.0
+  left:
+    size:
+      w: 480.0
+      h: 87.0
+  right:
+    size:
+      w: 480.0
+      h: 87.0
