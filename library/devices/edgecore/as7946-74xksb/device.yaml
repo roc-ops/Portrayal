@@ -10,20 +10,104 @@ description: Edgecore AGR420 (AS7946-74XKSB) 25GbE aggregation router. 2RU, 74 f
   PSUs and 4+1 redundant fans.
 provenance:
   sources: datasheet AGR420-AS7946-74XKSB-DS-R03 and quick start guide AS7946-74XKSB-QSG-R03,
-    both Edgecore, plus six photographs of a real unit and Edgecore's stock renders. No mechanical
-    drawing was available
+    both Edgecore, plus six photographs of a real unit (IMG_6807 front, 6808 top, 6809 rear,
+    6810 left, 6811 right, 6812 bottom) and Edgecore's stock renders. No mechanical drawing
+    was available
   chassis: 'datasheet - "Dimensions (WxDxH): 440 mm x 480 mm x 87 mm (2RU)". The QSG Chassis
     section gives the same 440 x 480 x 87 mm (17.3 x 18.9 x 3.4 in), so unlike the AGR400 the
-    two documents agree on depth and no disagreement has to be carried'
+    two Edgecore documents agree and no disagreement has to be carried'
+  depth: 'measured - 480 mm, and the AGR400 model''s 524 mm is believed WRONG. The AGR400 and
+    the AGR420 are the SAME SHELL, not two shells: the bottom pans in IMG_6792 (AGR400) and
+    IMG_6812 (AGR420) are the same stamping - the same dimple pattern, the same PSU and fan
+    cut-out at one corner, the same rivet lines - and the top, side and rear metalwork matches
+    as well. One shell can only have one depth. Three of the four Edgecore documents say 480
+    (both AGR420 documents and the AGR400 datasheet); only the AGR400 quick start guide says
+    524, and that is the outlier. It is not an over-handles figure either: the rear PSU and fan
+    handles project about 17 mm past the rear panel, photo-measured in IMG_6810, not the 44 mm
+    the difference would need. This model uses 480 for every face. The AGR400 model still
+    carries 524 and should be corrected to match'
   scale: drawing - the datasheet page-2 Interfaces figures are orthographic. The front panel
-    measures 3947 x 777 px on a 600 dpi render, an aspect of 5.080 against the datasheet 440/87
-    = 5.057, a 0.5 percent match; the rear measures 3941 x 771, an aspect of 5.112. Both carry
-    geometry, and everything below is measured off them at 8.970 px/mm across and 8.931 px/mm
+    measures 3947 x 775 px on a 600 dpi render, an aspect of 5.093 against the datasheet 440/87
+    = 5.057, a 0.7 percent match; the rear measures 3943 x 772, an aspect of 5.108. Both carry
+    geometry, and everything below is measured off them at 8.9705 px/mm across and 8.9080 px/mm
     down
   ru: datasheet - 87 mm is 2 RU
-  color: photo - the same dark grey painted steel as the AGR400, which shares this chassis
-  other-faces: 'photo - the top, bottom and side faces are the AGR400 shell. They are sized
-    from the spec table so a rack elevation and the 3D box are right'
+  color: photo - the same dark grey painted steel as the AGR400, which is the same shell
+  ports: 'drawing - four cage rows whose tops sit at panel y 14.6, 31.3, 44.3 and 61.0. The
+    QSFP-DD pair occupies the middle two rows in a single column at x 16.1; the eight QSFP28
+    sit in two abutting columns at x 44.6 and 63.1, four rows deep; the 64 SFP28 sit in four
+    blocks of four columns, the blocks starting at x 90.35, 156.32, 222.29 and 288.26 on a
+    65.97 mm pitch and the columns inside each block on a 14.25 mm pitch, which is exactly the
+    std/sfp-module footprint - ganged cages abut'
+  port-count: 'datasheet - callouts 1 to 3 on the page-2 figure: 2 x 100G QSFP-DD, 8 x 100G
+    QSFP28, 64 x 25GE SFP28. 2 + 8 + 64 = 74, matching the model number'
+  port-numbering: 'drawing - the pair legends read "N up down M" with the up arrow belonging to
+    the LEFT number and the down arrow to the right, the same convention as the AGR400, read at
+    7x on the 600 dpi render. Numbering runs down each column four at a time: ports 0-1 are the
+    QSFP-DD, 2-5 the left QSFP28 column and 6-9 the right, then the SFP28 run 10-73 block by
+    block and column by column. The last legend, 72 up down 73, is legible on the real device in
+    IMG_6807 at the bottom right, which confirms the scheme end to end'
+  port-cutouts: 'drawing - one cutout per aperture, 74 of them, sized from the module footprint
+    rather than the registry aperture because ganged cages abut: 18.5 x 9.58 for QSFP and
+    14.25 x 10.4 for SFP28. The registry apertures (19.0 x 10.0 and 14.5 x 10.0) are single-port
+    figures and would overlap at the measured 14.25 mm pitch'
+  port-leds: 'drawing plus datasheet - the QSG Front LEDs section gives two LEDs per port on all
+    three families, and the ARRANGEMENT DIFFERS BY FAMILY. QSFP-DD: LED1 top, LED2 bottom, a
+    stacked pair OUTSIDE the block at x 12.6, at y 36.6/39.7 for port 0 and 45.6/48.7 for port 1.
+    QSFP28 and SFP28: LED1 left, LED2 right, as arrow-shaped light pipes in the white strip
+    BETWEEN the two rows of a pair - centres at column x + 1.50, 3.45, 13.70, 15.70 for QSFP28
+    and + 1.95, 4.85, 8.85, 11.75 for SFP28, on strips centred at panel y 28.4 and 57.8. Within
+    each pair of marks the DOWN arrow serves the port below the strip and the UP arrow the port
+    above it, so a strip carries four lamps for two ports. The strip is 6.4 mm tall and the marks
+    were read at 7x before being assigned'
+  mgmt-block: 'drawing - a ganged 2x2 RJ-45 block at 356.0/372.3 by 14.4/28.2 carrying BITS 0 and
+    BITS 2 above and BITS 1 and PPS/TOD below; two SMB jacks at x 393.6 and 394.1; USB Type A on
+    its side centred at 407.2, 33.6; MGMT and CONSOLE 1 RJ-45s at 413.5; a micro-USB CONSOLE 0 at
+    402.9, 44.4 and a recessed RST button at 394.8, 44.6. The block is within 2 mm of the AGR400''s
+    in every position, which is what a shared shell predicts'
+  rj45-orientation: drawing - BITS 0, BITS 2, MGMT and CONSOLE 1 are keyway-UP; only BITS 1 and
+    PPS/TOD, the lower row of the ganged block, are keyway-down. A 2-high ganged jack mirrors its
+    rows so both release tabs stay reachable. std/rj45 draws keyway-down, so the other four carry
+    rotate 180
+  rj45-choice: Jason - use std/ before common/. std/rj45 is the IEC 60603-7 aperture; the
+    hand-drawn common/rj45-shielded puts its integrated LEDs on the contacts side, which no real
+    jack does. All six jacks are std/rj45@1, and MGMT's two LEDs are placed on top of it
+  status-leds: drawing - DIAG, LOC, FAN, PS0 and PS1 on a 4.75 mm pitch beneath the timing block
+    at y 45.0, legends beneath them at 48.9
+  filters: 'drawing plus photo - the AGR420 front carries a top and a bottom air filter, and
+    NEITHER is the AGR400 part. edgecore/agr-filter-top@1 is 353.5 mm wide and stepped for the
+    AGR400''s TWO QSFP-DD blocks; this front has ONE QSFP-DD block, at the left, and the filter
+    runs about 425 mm to clear the management corner. Both filters are therefore new components
+    measured off this figure. Verified before assuming, as asked'
+  rear: 'drawing plus Jason - two stacked PSU bays at the left, a grounding landing, then five fan
+    bays. The AGR420 datasheet rear figure reads about 1.5 percent smaller than the AGR400 QSG
+    figure for the same parts, which is within figure error, so the AGR400''s already-measured
+    bay geometry is reused rather than re-derived: the two platforms share PSUs and fans (Jason),
+    and re-measuring a shared part off a worse figure would only add noise. The AGR420 figure''s
+    yellow callout box round the PSU pair starts at x 14, which does not fit a 60.1 mm PSU at
+    x 6.26; the box is drawn loosely round the pair and the module faces inside it are what was
+    matched'
+  fan-labels: photo - the datasheet figure prints FAN 4 to FAN 0 vertically beside each bay. The
+    real device (IMG_6809) prints them horizontally BELOW each bay with an airflow arrow to their
+    left, the same as the AGR400. The real device wins
+  grounding: photo - an IEC earth symbol with a two-hole plate beneath it, immediately right of
+    the PSU bays, visible in IMG_6809. edgecore/agr-ground-plate@1 draws exactly this
+  airflow: datasheet - both listed SKUs are front-to-back
+  other-faces: 'photo - all four remaining faces were photographed and are modelled from those
+    shots, not left blank. Top (IMG_6808): two rectangular labels near the front right and a
+    caution notice at the rear left. Bottom (IMG_6812): rivets and formed dimples in five columns,
+    no labels. Sides (IMG_6810 left, IMG_6811 right): a cluster of eight rack-bracket holes near
+    the front and rivets along the length. Positions are photo-measured against the 440 mm width
+    and the 480 mm depth and are approximate - none of these shots is orthographic'
+  labels: 'photo - RECTANGULAR. common/device-label is an oval recess belonging to another
+    platform and is deliberately not used. The artwork is placeholder blocks: the real serial,
+    SKU and MAC addresses are legible in IMG_6808 and are NOT transcribed'
+  spec-table: datasheet - silicon, external TCAM, CPU, memory, flash, SSD, BMC, capacity, timing,
+    power and environmentals transcribed into attrs. Where the datasheet and the QSG disagree -
+    weight 16 vs 15.3 kg, max power 692 vs 527/723 W - both numbers are carried rather than one
+    being silently chosen
+  part-numbers: datasheet Ordering Information - AS7946-74XKSB-O-DC-F is FNPEC7946007Z and
+    AS7946-74XKSB-O-AC-F is FNPEC7946008Z
 attrs:
   role: aggregation router
   rack: 2 RU
@@ -111,6 +195,93 @@ views:
     size:
       w: 440.0
       h: 87.0
+    panel:
+      cutouts:
+      - {id: port-0, at: [16.10, 31.30], size: [18.50, 9.58], shape: rect}
+      - {id: port-1, at: [16.10, 44.30], size: [18.50, 9.58], shape: rect}
+      - {id: port-2, at: [44.60, 14.60], size: [18.50, 9.58], shape: rect}
+      - {id: port-3, at: [44.60, 31.30], size: [18.50, 9.58], shape: rect}
+      - {id: port-4, at: [44.60, 44.30], size: [18.50, 9.58], shape: rect}
+      - {id: port-5, at: [44.60, 61.00], size: [18.50, 9.58], shape: rect}
+      - {id: port-6, at: [63.10, 14.60], size: [18.50, 9.58], shape: rect}
+      - {id: port-7, at: [63.10, 31.30], size: [18.50, 9.58], shape: rect}
+      - {id: port-8, at: [63.10, 44.30], size: [18.50, 9.58], shape: rect}
+      - {id: port-9, at: [63.10, 61.00], size: [18.50, 9.58], shape: rect}
+      - {id: port-10, at: [90.35, 14.60], size: [14.25, 10.40], shape: rect}
+      - {id: port-11, at: [90.35, 31.30], size: [14.25, 10.40], shape: rect}
+      - {id: port-12, at: [90.35, 44.30], size: [14.25, 10.40], shape: rect}
+      - {id: port-13, at: [90.35, 61.00], size: [14.25, 10.40], shape: rect}
+      - {id: port-14, at: [104.60, 14.60], size: [14.25, 10.40], shape: rect}
+      - {id: port-15, at: [104.60, 31.30], size: [14.25, 10.40], shape: rect}
+      - {id: port-16, at: [104.60, 44.30], size: [14.25, 10.40], shape: rect}
+      - {id: port-17, at: [104.60, 61.00], size: [14.25, 10.40], shape: rect}
+      - {id: port-18, at: [118.85, 14.60], size: [14.25, 10.40], shape: rect}
+      - {id: port-19, at: [118.85, 31.30], size: [14.25, 10.40], shape: rect}
+      - {id: port-20, at: [118.85, 44.30], size: [14.25, 10.40], shape: rect}
+      - {id: port-21, at: [118.85, 61.00], size: [14.25, 10.40], shape: rect}
+      - {id: port-22, at: [133.10, 14.60], size: [14.25, 10.40], shape: rect}
+      - {id: port-23, at: [133.10, 31.30], size: [14.25, 10.40], shape: rect}
+      - {id: port-24, at: [133.10, 44.30], size: [14.25, 10.40], shape: rect}
+      - {id: port-25, at: [133.10, 61.00], size: [14.25, 10.40], shape: rect}
+      - {id: port-26, at: [156.32, 14.60], size: [14.25, 10.40], shape: rect}
+      - {id: port-27, at: [156.32, 31.30], size: [14.25, 10.40], shape: rect}
+      - {id: port-28, at: [156.32, 44.30], size: [14.25, 10.40], shape: rect}
+      - {id: port-29, at: [156.32, 61.00], size: [14.25, 10.40], shape: rect}
+      - {id: port-30, at: [170.57, 14.60], size: [14.25, 10.40], shape: rect}
+      - {id: port-31, at: [170.57, 31.30], size: [14.25, 10.40], shape: rect}
+      - {id: port-32, at: [170.57, 44.30], size: [14.25, 10.40], shape: rect}
+      - {id: port-33, at: [170.57, 61.00], size: [14.25, 10.40], shape: rect}
+      - {id: port-34, at: [184.82, 14.60], size: [14.25, 10.40], shape: rect}
+      - {id: port-35, at: [184.82, 31.30], size: [14.25, 10.40], shape: rect}
+      - {id: port-36, at: [184.82, 44.30], size: [14.25, 10.40], shape: rect}
+      - {id: port-37, at: [184.82, 61.00], size: [14.25, 10.40], shape: rect}
+      - {id: port-38, at: [199.07, 14.60], size: [14.25, 10.40], shape: rect}
+      - {id: port-39, at: [199.07, 31.30], size: [14.25, 10.40], shape: rect}
+      - {id: port-40, at: [199.07, 44.30], size: [14.25, 10.40], shape: rect}
+      - {id: port-41, at: [199.07, 61.00], size: [14.25, 10.40], shape: rect}
+      - {id: port-42, at: [222.29, 14.60], size: [14.25, 10.40], shape: rect}
+      - {id: port-43, at: [222.29, 31.30], size: [14.25, 10.40], shape: rect}
+      - {id: port-44, at: [222.29, 44.30], size: [14.25, 10.40], shape: rect}
+      - {id: port-45, at: [222.29, 61.00], size: [14.25, 10.40], shape: rect}
+      - {id: port-46, at: [236.54, 14.60], size: [14.25, 10.40], shape: rect}
+      - {id: port-47, at: [236.54, 31.30], size: [14.25, 10.40], shape: rect}
+      - {id: port-48, at: [236.54, 44.30], size: [14.25, 10.40], shape: rect}
+      - {id: port-49, at: [236.54, 61.00], size: [14.25, 10.40], shape: rect}
+      - {id: port-50, at: [250.79, 14.60], size: [14.25, 10.40], shape: rect}
+      - {id: port-51, at: [250.79, 31.30], size: [14.25, 10.40], shape: rect}
+      - {id: port-52, at: [250.79, 44.30], size: [14.25, 10.40], shape: rect}
+      - {id: port-53, at: [250.79, 61.00], size: [14.25, 10.40], shape: rect}
+      - {id: port-54, at: [265.04, 14.60], size: [14.25, 10.40], shape: rect}
+      - {id: port-55, at: [265.04, 31.30], size: [14.25, 10.40], shape: rect}
+      - {id: port-56, at: [265.04, 44.30], size: [14.25, 10.40], shape: rect}
+      - {id: port-57, at: [265.04, 61.00], size: [14.25, 10.40], shape: rect}
+      - {id: port-58, at: [288.26, 14.60], size: [14.25, 10.40], shape: rect}
+      - {id: port-59, at: [288.26, 31.30], size: [14.25, 10.40], shape: rect}
+      - {id: port-60, at: [288.26, 44.30], size: [14.25, 10.40], shape: rect}
+      - {id: port-61, at: [288.26, 61.00], size: [14.25, 10.40], shape: rect}
+      - {id: port-62, at: [302.51, 14.60], size: [14.25, 10.40], shape: rect}
+      - {id: port-63, at: [302.51, 31.30], size: [14.25, 10.40], shape: rect}
+      - {id: port-64, at: [302.51, 44.30], size: [14.25, 10.40], shape: rect}
+      - {id: port-65, at: [302.51, 61.00], size: [14.25, 10.40], shape: rect}
+      - {id: port-66, at: [316.76, 14.60], size: [14.25, 10.40], shape: rect}
+      - {id: port-67, at: [316.76, 31.30], size: [14.25, 10.40], shape: rect}
+      - {id: port-68, at: [316.76, 44.30], size: [14.25, 10.40], shape: rect}
+      - {id: port-69, at: [316.76, 61.00], size: [14.25, 10.40], shape: rect}
+      - {id: port-70, at: [331.01, 14.60], size: [14.25, 10.40], shape: rect}
+      - {id: port-71, at: [331.01, 31.30], size: [14.25, 10.40], shape: rect}
+      - {id: port-72, at: [331.01, 44.30], size: [14.25, 10.40], shape: rect}
+      - {id: port-73, at: [331.01, 61.00], size: [14.25, 10.40], shape: rect}
+      - {id: cut-bits-0, at: [356.00, 14.40], size: [16.00, 14.00], shape: rect}
+      - {id: cut-bits-2, at: [372.30, 14.40], size: [16.00, 14.00], shape: rect}
+      - {id: cut-bits-1, at: [356.00, 28.20], size: [16.00, 14.00], shape: rect}
+      - {id: cut-pps-tod, at: [372.30, 28.20], size: [16.00, 14.00], shape: rect}
+      - {id: cut-mhz-10-in, at: [393.60, 17.80], size: [4.83, 4.83], shape: circle}
+      - {id: cut-pps-1-out, at: [394.10, 31.20], size: [4.83, 4.83], shape: circle}
+      - {id: cut-usb, at: [404.95, 27.60], size: [4.50, 12.00], shape: rect}
+      - {id: cut-mgmt-eth, at: [413.50, 27.00], size: [16.00, 14.00], shape: rect}
+      - {id: cut-console-0, at: [402.90, 44.40], size: [7.50, 2.75], shape: rect}
+      - {id: cut-console-1, at: [413.50, 44.40], size: [16.00, 14.00], shape: rect}
+      - {id: cut-reset, at: [394.80, 44.60], size: [4.00, 4.00], shape: rect}
   rear:
     size:
       w: 440.0
