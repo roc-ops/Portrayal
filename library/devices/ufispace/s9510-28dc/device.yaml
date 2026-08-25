@@ -169,7 +169,7 @@ views:
         - {ref: common/sma-jack@1, id: gnss-ant, at: [119.2, 1.4], attrs: {role: gnss-in}}
         - {ref: common/smb-jack@1, id: clk-10mhz, at: [133.5, 2.4], attrs: {role: 10mhz-io}}
         - {ref: common/smb-jack@1, id: clk-1pps, at: [143.5, 2.4], attrs: {role: 1pps-io}}
-        - {ref: common/led-rect@1, id: led-gnss, at: [121.4, 16.2]}
+        - {ref: common/led-rect@1, id: led-gnss, at: [121.4, 16.2], for: gnss-ant}
         - {ref: common/led-rect@1, id: led-sync, at: [121.4, 19.1]}
         - {ref: common/led-rect@1, id: led-stat, at: [121.4, 22.0]}
         - {ref: common/led-rect@1, id: led-fan, at: [121.4, 24.9]}
@@ -183,36 +183,36 @@ views:
         - {ref: common/rj45-bezel@2, id: console, at: [152.3, 25.4], attrs: {media: rj45-serial, role: console}}
         - {ref: common/qsfp-cage@1, id: port-0, at: [177.4, 26.2], skin: blue, group: ports, rel-pos: 100, attrs: {media: qsfp-dd, speed: 400g}}
         - {ref: common/qsfp-cage@1, id: port-1, at: [204.5, 26.2], skin: blue, group: ports, rel-pos: 101, attrs: {media: qsfp-dd, speed: 400g}}
-        - {ref: common/led-arrow@1, id: led-port-4, at: [255.975, 18.7], skin: up, attrs: {port: '4'}}
-        - {ref: common/led-arrow@1, id: led-port-5, at: [261.875, 18.7], skin: down, attrs: {port: '5'}}
-        - {ref: common/led-arrow@1, id: led-port-6, at: [270.225, 18.7], skin: up, attrs: {port: '6'}}
-        - {ref: common/led-arrow@1, id: led-port-7, at: [276.125, 18.7], skin: down, attrs: {port: '7'}}
-        - {ref: common/led-arrow@1, id: led-port-8, at: [284.475, 18.7], skin: up, attrs: {port: '8'}}
-        - {ref: common/led-arrow@1, id: led-port-9, at: [290.375, 18.7], skin: down, attrs: {port: '9'}}
-        - {ref: common/led-arrow@1, id: led-port-10, at: [298.725, 18.7], skin: up, attrs: {port: '10'}}
-        - {ref: common/led-arrow@1, id: led-port-11, at: [304.625, 18.7], skin: down, attrs: {port: '11'}}
-        - {ref: common/led-arrow@1, id: led-port-12, at: [312.975, 18.7], skin: up, attrs: {port: '12'}}
-        - {ref: common/led-arrow@1, id: led-port-13, at: [318.875, 18.7], skin: down, attrs: {port: '13'}}
-        - {ref: common/led-arrow@1, id: led-port-14, at: [327.225, 18.7], skin: up, attrs: {port: '14'}}
-        - {ref: common/led-arrow@1, id: led-port-15, at: [333.125, 18.7], skin: down, attrs: {port: '15'}}
-        - {ref: common/led-arrow@1, id: led-port-16, at: [344.775, 18.7], skin: up, attrs: {port: '16'}}
-        - {ref: common/led-arrow@1, id: led-port-17, at: [350.675, 18.7], skin: down, attrs: {port: '17'}}
-        - {ref: common/led-arrow@1, id: led-port-18, at: [359.025, 18.7], skin: up, attrs: {port: '18'}}
-        - {ref: common/led-arrow@1, id: led-port-19, at: [364.925, 18.7], skin: down, attrs: {port: '19'}}
-        - {ref: common/led-arrow@1, id: led-port-20, at: [373.275, 18.7], skin: up, attrs: {port: '20'}}
-        - {ref: common/led-arrow@1, id: led-port-21, at: [379.175, 18.7], skin: down, attrs: {port: '21'}}
-        - {ref: common/led-arrow@1, id: led-port-22, at: [387.525, 18.7], skin: up, attrs: {port: '22'}}
-        - {ref: common/led-arrow@1, id: led-port-23, at: [393.425, 18.7], skin: down, attrs: {port: '23'}}
-        - {ref: common/led-arrow@1, id: led-port-24, at: [401.775, 18.7], skin: up, attrs: {port: '24'}}
-        - {ref: common/led-arrow@1, id: led-port-25, at: [407.675, 18.7], skin: down, attrs: {port: '25'}}
-        - {ref: common/led-arrow@1, id: led-port-26, at: [416.025, 18.7], skin: up, attrs: {port: '26'}}
-        - {ref: common/led-arrow@1, id: led-port-27, at: [421.925, 18.7], skin: down, attrs: {port: '27'}}
-        - {ref: common/led-dot@1, id: led-p0-a, at: [182.9, 21.7], attrs: {port: '0', role: link}}
-        - {ref: common/led-dot@1, id: led-p0-b, at: [187.4, 21.7], attrs: {port: '0', role: activity}}
-        - {ref: common/led-dot@1, id: led-p1-a, at: [210.0, 21.7], attrs: {port: '1', role: link}}
-        - {ref: common/led-dot@1, id: led-p1-b, at: [214.5, 21.7], attrs: {port: '1', role: activity}}
-        - {ref: common/qsfp-lane-leds@1, id: leds-port-2, at: [229.8, 19.7], attrs: {port: '2'}}
-        - {ref: common/qsfp-lane-leds@1, id: leds-port-3, at: [229.8, 39.7], attrs: {port: '3'}}
+        - {ref: common/led-arrow@1, id: led-port-4, at: [255.975, 18.7], skin: up, for: port-4, attrs: {port: '4'}}
+        - {ref: common/led-arrow@1, id: led-port-5, at: [261.875, 18.7], skin: down, for: port-5, attrs: {port: '5'}}
+        - {ref: common/led-arrow@1, id: led-port-6, at: [270.225, 18.7], skin: up, for: port-6, attrs: {port: '6'}}
+        - {ref: common/led-arrow@1, id: led-port-7, at: [276.125, 18.7], skin: down, for: port-7, attrs: {port: '7'}}
+        - {ref: common/led-arrow@1, id: led-port-8, at: [284.475, 18.7], skin: up, for: port-8, attrs: {port: '8'}}
+        - {ref: common/led-arrow@1, id: led-port-9, at: [290.375, 18.7], skin: down, for: port-9, attrs: {port: '9'}}
+        - {ref: common/led-arrow@1, id: led-port-10, at: [298.725, 18.7], skin: up, for: port-10, attrs: {port: '10'}}
+        - {ref: common/led-arrow@1, id: led-port-11, at: [304.625, 18.7], skin: down, for: port-11, attrs: {port: '11'}}
+        - {ref: common/led-arrow@1, id: led-port-12, at: [312.975, 18.7], skin: up, for: port-12, attrs: {port: '12'}}
+        - {ref: common/led-arrow@1, id: led-port-13, at: [318.875, 18.7], skin: down, for: port-13, attrs: {port: '13'}}
+        - {ref: common/led-arrow@1, id: led-port-14, at: [327.225, 18.7], skin: up, for: port-14, attrs: {port: '14'}}
+        - {ref: common/led-arrow@1, id: led-port-15, at: [333.125, 18.7], skin: down, for: port-15, attrs: {port: '15'}}
+        - {ref: common/led-arrow@1, id: led-port-16, at: [344.775, 18.7], skin: up, for: port-16, attrs: {port: '16'}}
+        - {ref: common/led-arrow@1, id: led-port-17, at: [350.675, 18.7], skin: down, for: port-17, attrs: {port: '17'}}
+        - {ref: common/led-arrow@1, id: led-port-18, at: [359.025, 18.7], skin: up, for: port-18, attrs: {port: '18'}}
+        - {ref: common/led-arrow@1, id: led-port-19, at: [364.925, 18.7], skin: down, for: port-19, attrs: {port: '19'}}
+        - {ref: common/led-arrow@1, id: led-port-20, at: [373.275, 18.7], skin: up, for: port-20, attrs: {port: '20'}}
+        - {ref: common/led-arrow@1, id: led-port-21, at: [379.175, 18.7], skin: down, for: port-21, attrs: {port: '21'}}
+        - {ref: common/led-arrow@1, id: led-port-22, at: [387.525, 18.7], skin: up, for: port-22, attrs: {port: '22'}}
+        - {ref: common/led-arrow@1, id: led-port-23, at: [393.425, 18.7], skin: down, for: port-23, attrs: {port: '23'}}
+        - {ref: common/led-arrow@1, id: led-port-24, at: [401.775, 18.7], skin: up, for: port-24, attrs: {port: '24'}}
+        - {ref: common/led-arrow@1, id: led-port-25, at: [407.675, 18.7], skin: down, for: port-25, attrs: {port: '25'}}
+        - {ref: common/led-arrow@1, id: led-port-26, at: [416.025, 18.7], skin: up, for: port-26, attrs: {port: '26'}}
+        - {ref: common/led-arrow@1, id: led-port-27, at: [421.925, 18.7], skin: down, for: port-27, attrs: {port: '27'}}
+        - {ref: common/led-dot@1, id: led-p0-a, at: [182.9, 21.7], for: port-0, attrs: {port: '0', role: link}}
+        - {ref: common/led-dot@1, id: led-p0-b, at: [187.4, 21.7], for: port-0, attrs: {port: '0', role: activity}}
+        - {ref: common/led-dot@1, id: led-p1-a, at: [210.0, 21.7], for: port-1, attrs: {port: '1', role: link}}
+        - {ref: common/led-dot@1, id: led-p1-b, at: [214.5, 21.7], for: port-1, attrs: {port: '1', role: activity}}
+        - {ref: common/qsfp-lane-leds@1, id: leds-port-2, at: [229.8, 19.7], for: port-2, attrs: {port: '2'}}
+        - {ref: common/qsfp-lane-leds@1, id: leds-port-3, at: [229.8, 39.7], for: port-3, attrs: {port: '3'}}
         - {ref: common/qsfp-cage@1, id: port-2, at: [229.8, 5.9], rotate: 180, skin: green, group: ports, rel-pos: 102, attrs: {media: qsfp28, speed: 100g}}
         - {ref: common/qsfp-cage@1, id: port-3, at: [229.8, 26.2], skin: green, group: ports, rel-pos: 103, attrs: {media: qsfp28, speed: 100g}}
         - {ref: std/sfp-ganged@1, id: port-4, at: [253.6, 7], group: ports, rel-pos: 4, attrs: {media: sfp28, speed: 25g}}
