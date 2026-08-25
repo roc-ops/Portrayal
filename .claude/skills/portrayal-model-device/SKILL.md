@@ -250,6 +250,32 @@ so both release tabs stay reachable, and the component draws only one
 orientation. Nothing in the manifest was wrong; nothing would ever have linted.
 Only looking found it.
 
+### Against a second party, for completeness only
+
+If the device is in **NetBox Labs NDX** (`netboxlabs.com/ndx/<vendor>/<model>/`),
+walk their field list and account for anything they have that you do not. It is a
+free second reading of the same public datasheet.
+
+Use it for **completeness, never correctness**. Almost no failure in this project
+has been a wrong number; they have been categories nobody looked for - a
+grounding point that was callout 13, a rear air filter, an entire compliance
+section. A second party who read the same document is a cheap way to ask "did I
+miss a KIND of thing?".
+
+Two rules, because it is a derived aggregate and not a source:
+
+- **A disagreement sends you back to the vendor document, not to their number.**
+  Their own confidence scale runs down to "Unverified (community contribution)"
+  and "heuristic derivation". They can be wrong in exactly the way a confident
+  secondary source is always wrong.
+- **A difference is expected and is usually ours to keep.** They list interfaces
+  and stop; we model USB, timing inputs, SMA and SMB jacks, grounding plates and
+  rivets. Finding that we have more is the normal outcome. The question is only
+  ever whether they have something we lack.
+
+Do not ingest their enrichment layer. Reading a public page to check your own
+work is diligence; copying a commercial catalogue into this repo is not.
+
 ## The canonical shape
 
 Key order is fixed and linted (L16). A view reads top to bottom in the order

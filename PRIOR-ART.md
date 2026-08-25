@@ -38,6 +38,7 @@ Evidence the gap is real and wanted:
 | Project | What it is | Gap vs. goal |
 |---|---|---|
 | [devicetype-library](https://github.com/netbox-community/devicetype-library) (CC0, very active) | Community YAML device definitions: interfaces, power ports, module bays, etc. Optional flat front/rear *raster* images; max two per device | No positional/visual component data; port-to-image mapping declined upstream. Natural **export target** for us |
+| [NetBox Labs NDX](https://netboxlabs.com/ndx/) (commercial, launched after this research) | Curated catalogue built on devicetype-library plus enrichment: **17,620 entries, 116 vendors, 98.2% enriched**. Per-field provenance with confidence tiers, lifecycle dates, thermal/environmental sections, protocol metadata (SNMP/gNMI/NETCONF/Redfish) | **Data only — no geometry, no positional model, no visual output.** The strongest evidence the gap below is structural rather than unattempted: three orders of magnitude more data than we will ever hold, and still nothing about where a port *is*. See §1a |
 | [netbox-device-view](https://github.com/peterbaumert/netbox-device-view) (MIT, active, small) | NetBox plugin; per-DeviceType YAML layout → schematic SVG panel; ports colored by live connection state | Grid cells not physical geometry; ports only (no PSU/fan/LED/ground); layouts in NetBox DB, not a portable library; NetBox-coupled. Proves concept + demand |
 | NetBox core | Rack elevations as SVG via REST since v2.7 | Device = 1U-multiple box with optional flat image; no component model on faces |
 | [RacksDB](https://github.com/rackslab/RacksDB) (MIT, active) | YAML-in-Git infrastructure DB with SVG/PNG rendering incl. axonometric | Equipment-in-rack granularity only; philosophically aligned |
@@ -48,6 +49,50 @@ Evidence the gap is real and wanted:
 Confirmed absent: any community library of structured (ID-bearing) SVG faceplates for
 network hardware; any open schema for port positions on a device face; any vendor
 publishing openly licensed component-structured vector faceplates.
+
+### 1a. NDX, and why it strengthens the verdict (added 2026-08-25)
+
+NetBox Labs launched NDX after this research was written. It is the same
+`devicetype-library` backbone with a large curated enrichment layer on top, and
+it is worth reading carefully because it is the closest thing to a competitor
+this project has - and it is not one.
+
+**What it confirms.** NDX scaled the *data* axis enormously and did not move on
+the *geometry* axis at all. The 2023 discussion in which the devicetype-library
+maintainers declined port-to-image mapping as out of scope now has a much larger
+sibling that also declined it. The niche is open because the data people and the
+picture people have never been the same people, not because nobody tried.
+
+**Where it independently arrived where we did.** Per-field provenance with
+confidence tiers - theirs High (vendor datasheet) down to Unverified (community)
+and heuristic derivation; ours `datasheet / drawing / measured / photo-measured /
+registry / estimated`. Automated extraction with human review for high-priority
+vendors. Convergent design is reassuring.
+
+**Where we are ahead, and it is not cosmetic.** Their interfaces are named once
+per device (`cd0`, `ce0`, `xe0`). On white-box hardware the NOS is chosen
+separately from the box and the same silicon gets different names under ArcOS and
+SONiC, which is why we carry per-NOS overlays. Their model cannot express it.
+They also do not model USB, timing or grounding hardware, and there is no gaps
+register - nothing that says *this is unknown, and here is what would close it*.
+
+**What we should take.** Sectioned attributes (see issue on attr sections): our
+`attrs` is a flat bag of 74 keys across 13 devices with visible drift -
+`power-ac-max-w` beside `power-max-ac-w`, three spellings of operating
+temperature. Certifications and regulatory compliance, which every datasheet
+carries and which we hold for 2 of 13 devices. Lifecycle, in the narrower form
+described in that issue.
+
+**Use as a source: cross-check only, and only against publicly verifiable
+facts.** NDX is a derived aggregate, not a primary source. It is valuable as a
+**completeness** check rather than a correctness one - our failures have almost
+never been wrong numbers, they have been categories nobody looked for. A second
+party who read the same datasheet is a cheap way to ask "did we miss a kind of
+thing?". Rules: a disagreement sends you back to the vendor document, never to
+their number; and a difference is expected, because we model USB, SMA, SMB, RJ48
+and grounding where they list 29 interfaces and stop. This is written into the
+modelling skill's Gate 5. Their paid enrichment layer is not a source and is not
+to be ingested.
 
 ## 2. Architectural templates from adjacent domains
 
