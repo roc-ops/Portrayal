@@ -10,6 +10,8 @@
   #mode button { border-radius:0; }
   #mode button:first-child { border-radius:6px 0 0 6px; }
   #mode button:last-child { border-radius:0 6px 6px 0; margin-left:-1px; }
+  #mode button:disabled { opacity:0.45; cursor:not-allowed; }
+  #mode button:disabled:hover { background:#23272c; }
   #stage-3d { background:#16181b; }
   #stage-3d canvas { display:block; }
   #frus { display:flex; gap:0.2rem; flex-wrap:wrap; }
@@ -462,6 +464,34 @@ async function setMode(m) {
   }
 }
 for (const b of modeBar.querySelectorAll('button')) b.onclick = () => setMode(b.dataset.mode);
+
+// A scene needs six faces that describe one box, which is exactly portrayal
+// level 3. Below it the viewer has nothing to extrude the sides from and draws a
+// plausible wrong box instead - c100g has a front and a rear and ships in this
+// device list, so this is not hypothetical. The build says which faces are
+// missing, in words, so the button can decline and say why rather than lie.
+//
+// Absent capability data leaves the button exactly as it was: a device the build
+// has not judged is not a device we refuse to draw.
+const btn3d = modeBar.querySelector('[data-mode="3d"]');
+const CAN_3D = 3;
+
+shell.on('device', (name, meta) => {
+  const cap = meta?.capability || shell.device()?.capability;
+  const short = cap && cap.level != null && cap.level < CAN_3D;
+  btn3d.disabled = !!short;
+  if (!short) {
+    btn3d.title = '';
+    return;
+  }
+  // the blocked entry for the level 3D needs carries the missing faces; fall
+  // back to the level name so the button is never disabled without a reason.
+  // The same sentence is in About -> Capability, which is where it can be read
+  // at leisure; this is the version you get with the pointer on the button.
+  const needs = (cap.blocked || []).find(b => b.level === CAN_3D)?.needs;
+  btn3d.title = needs ? `3D needs ${needs}` : `3D needs portrayal level ${CAN_3D}`;
+  if (mode === '3d') setMode('2d');
+});
 
 // the tree and the bar do not change when the stage does: selecting a row
 // highlights in whichever stage is showing, and a config change reaches both
