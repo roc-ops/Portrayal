@@ -109,3 +109,36 @@ def test_derived_gaps_are_not_hand_written():
     by_rule = {g["rule"]: g for g in gaps}
     assert by_rule["L20"]["count"] > 100, "the prose-in-attrs debt is real"
     assert all(g["kind"] == "derived" for g in gaps)
+
+
+def test_cannot_evaluate_is_not_the_same_answer_as_no():
+    """The two most complete models in the portfolio - level 4, `modelled`, 19
+    and 23 attrs off a datasheet - declare no `profile:`, so `specified` has
+    nothing to judge them against. Reporting that as a bare `no` is a silent
+    failure: it is indistinguishable from a device that was checked and came up
+    short, and a reader who knows the attr count concludes the predicate is
+    broken."""
+    complete = assess(load("edgecore/as7946-30xb"))
+    assert complete["level"] == 4
+    assert "specified" not in complete["flags"]
+    assert complete["unknown"] == ["specified"]
+
+    checked = assess(load("edgecore/as7326-56x"))          # has a profile,
+    assert "specified" not in checked["flags"]             # genuinely short a key
+    assert checked["unknown"] == []
+
+
+def test_an_unevaluable_flag_files_its_gap_against_the_missing_thing():
+    """`specified: no` on a device with 23 datasheet attrs reads as a broken
+    predicate. `profile-undeclared` reads as one line of YAML somebody has to
+    decide on, which is what it is - and which profile a device is, is a
+    decision, not something to guess to make a number go up."""
+    man = LIB / "devices/edgecore/as7946-74xksb/device.yaml"
+    dev = yaml.safe_load(man.read_text())
+    cap, flags = capability.assess(dev, profiles=PROFILES)
+    gaps = capability.derived_gaps(man, dev, [str(LIB)], cap, flags)
+    what = {g["what"] for g in gaps}
+    assert "profile-undeclared" in what
+    assert "specified" not in what, "the gap names the cause, not the symptom"
+    gap = next(g for g in gaps if g["what"] == "profile-undeclared")
+    assert "profiles.yaml" in gap["wanted"] and "`specified`" in gap["wanted"]

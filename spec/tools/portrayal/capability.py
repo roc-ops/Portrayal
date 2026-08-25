@@ -213,25 +213,39 @@ def _chain(data):
 def _specified(data, profiles):
     """(bool | None, needs). None means the device declares no profile.
 
-    Unevaluable is a third answer and it has to stay distinct from false: "this
-    device does not state its power draw" and "nobody said what kind of device
-    this is" want different fixes from different people.
+    Unevaluable is a third answer and it has to stay distinct from false, which
+    is why this returns a name for the gap as well. "This device does not state
+    its power draw" and "nobody said what kind of thing this is" want different
+    fixes from different people, and collapsing them onto `no` produces exactly
+    the failure the whole exercise is against: the two most complete models in
+    the portfolio - level 4, `modelled`, nineteen and twenty-three attrs off a
+    datasheet - scored a bare `no` here, indistinguishable from a device that
+    was checked and came up short. A reader sees that and concludes the
+    predicate is broken. The right report is "cannot evaluate", and the right
+    fix is filed against `profile:`, not against the attrs.
+
+    Filling those profiles in is deliberately NOT done here. Which profile an
+    AS7946-30XB is may be obvious and an ES1010 may not be, and guessing is how
+    a taxonomy vocabulary goes wrong on the first dozen devices.
     """
     prof = data.get("profile")
     if not prof:
-        return None, ("a top-level `profile:` naming the device class, so there "
-                      "is something to judge the attrs against")
+        return None, ("a top-level `profile:` naming the device class, so that "
+                      "`specified` has something to judge the attrs against - see "
+                      "spec/schemas/profiles.yaml for the classes that exist"), \
+            "profile-undeclared"
     spec = profiles.get(prof)
     if spec is None:
-        return None, (f"profile {prof!r} has no entry in spec/schemas/profiles.yaml, "
-                      "so the minimum set for it is undefined")
+        return None, (f"an entry for profile {prof!r} in spec/schemas/profiles.yaml, "
+                      "which is where the minimum set for a class is defined"), \
+            "profile-undefined"
     attrs = data.get("attrs") or {}
     missing = [fact for fact, keys in (spec.get("requires") or {}).items()
                if not any(k in attrs for k in keys)]
     if not missing:
-        return True, ""
+        return True, "", None
     return False, (f"attrs stating {', '.join(missing)} "
-                   f"(profile `{prof}` - see spec/schemas/profiles.yaml)")
+                   f"(profile `{prof}` - see spec/schemas/profiles.yaml)"), None
 
 
 def _wired(data):
@@ -265,9 +279,9 @@ def _wired(data):
         # wired" would be the flag reporting a hole as a feature - which is the
         # exact failure this whole exercise exists to stop.
         return False, ("no bays and no grouped ports to correlate against, so "
-                       "there is nothing to wire yet - group the ports first")
+                       "there is nothing to wire yet - group the ports first"), None
     if not bare_bays and not bare_groups:
-        return True, ""
+        return True, "", None
     parts = []
     if bare_bays:
         parts.append(f"`physical-context` on {_plural(len(bare_bays), 'bay')} "
@@ -276,7 +290,7 @@ def _wired(data):
         parts.append("`physical-context` on port "
                      f"{'group' if len(bare_groups) == 1 else 'groups'} "
                      f"{', '.join(bare_groups)}")
-    return False, "; ".join(parts)
+    return False, "; ".join(parts), None
 
 
 def _templated(data):
@@ -290,15 +304,15 @@ def _templated(data):
     try:
         import nautobot_export
     except ImportError:                        # pragma: no cover
-        return False, "the Nautobot exporter is not importable"
+        return False, "the Nautobot exporter is not importable", None
     for nos in ("arcos", "sonic"):
         try:
             if nautobot_export.build(data, nos).get("interfaces"):
-                return True, ""
+                return True, "", None
         except Exception:
             continue
     return False, ("ports the Nautobot exporter recognises - each port placement "
-                   "needs `attrs.media` and `attrs.speed` in a combination it maps")
+                   "needs `attrs.media` and `attrs.speed` in a combination it maps"), None
 
 
 # ---------------------------------------------------------------- assembly
@@ -306,11 +320,19 @@ def _templated(data):
 def assess(data, schemas_dir=None, profiles=None):
     """The `capability` block for one device manifest.
 
-    {"level": 3, "name": "solid", "flags": [...], "blocked": [{...}]}
+    {"level": 3, "name": "solid", "flags": [...], "unknown": [...],
+     "blocked": [{...}]}
 
     `blocked` says how to fix it, in words. That is the whole difference between
     a tool and a scoreboard: "level 4 needs `rel-pos` on 12 placements in view
     rear" is something an author can act on this afternoon; a bare 3 is a grade.
+
+    `unknown` lists the flags that could not be EVALUATED, and it is not the
+    same list as "flags minus earned". A flag missing from both lists was tested
+    and failed; a flag in `unknown` was never testable, and telling a reader
+    which is which is the difference between "this model is short of facts" and
+    "nobody told the tool what class of thing this is". Absent, the two most
+    complete devices in the portfolio read identically to the least.
     """
     profiles = profiles if profiles is not None else load_profiles(schemas_dir or ".")
     level, blocked = _chain(data)
@@ -320,6 +342,7 @@ def assess(data, schemas_dir=None, profiles=None):
     return {"level": level,
             "name": LEVEL_NAME.get(level, "none"),
             "flags": [f for f in FLAGS if results[f][0] is True],
+            "unknown": [f for f in FLAGS if results[f][0] is None],
             "blocked": blocked}, results
 
 
@@ -377,8 +400,18 @@ def derived_gaps(path, data, lib_roots, capability, flag_results):
         out.append({"kind": "derived", "what": b["name"], "rule": "CAP",
                     "count": 1, "wanted": b["needs"]})
     for flag in FLAGS:
-        ok, needs = flag_results[flag]
+        ok, needs, blocker = flag_results[flag]
         if ok is True:
+            continue
+        # An unevaluable flag files its gap against the thing that is actually
+        # missing. `specified: no` on a device with twenty-four datasheet attrs
+        # reads as a broken predicate; `profile-undeclared` reads as one line of
+        # YAML somebody has to decide on, which is what it is.
+        if ok is None and blocker:
+            out.append({"kind": "derived", "what": blocker, "rule": "CAP",
+                        "count": 1,
+                        "wanted": f"{needs}, which unlocks `{flag}` and with it "
+                                  f"{CAP_GAPS[flag]}"})
             continue
         out.append({"kind": "derived", "what": flag, "rule": "CAP",
                     "count": 1,

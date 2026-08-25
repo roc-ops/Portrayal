@@ -846,20 +846,30 @@ def print_matrix(matrix, schemas):
     print(f"  {'device':<{w}}  lvl  {'capability':<12} {'profile':<11} "
           f"{'maturity':<9} flags / next")
     for name, cap, prof, mat in sorted(rows, key=lambda r: (-r[1]["level"], r[0])):
-        # Flags earned, then the first thing standing in the way. A report that
-        # does not say how to fix it is a scoreboard, not a tool.
-        tail = " ".join(f"+{f}" for f in cap["flags"])
+        # Flags earned, then the ones that could not be tested at all, then the
+        # first thing standing in the way. A report that does not say how to fix
+        # it is a scoreboard, not a tool - and one that prints the same `no` for
+        # "checked and short" as for "never checked" is worse than a scoreboard,
+        # because a reader who knows the device has twenty-four attrs concludes
+        # the predicate is broken and stops trusting the column.
+        tail = " ".join([f"+{f}" for f in cap["flags"]]
+                        + [f"?{f}" for f in cap["unknown"]])
         if cap["blocked"]:
             b = cap["blocked"][0]
             tail = (tail + "  " if tail else "") + f"-> {b['level']} {b['name']}: {b['needs']}"
         print(f"  {name:<{w}}  {cap['level']:>3}  {cap['name']:<12} {prof:<11} "
               f"{mat:<9} {tail}")
-    earned = {}
+    earned, unknown = {}, {}
     for _, cap, _, _ in rows:
         for f in cap["flags"]:
             earned[f] = earned.get(f, 0) + 1
-    print("  " + ", ".join(f"{f}: {earned.get(f, 0)}/{len(rows)}"
-                           for f in capability.FLAGS))
+        for f in cap["unknown"]:
+            unknown[f] = unknown.get(f, 0) + 1
+    print("  " + ", ".join(
+        f"{f}: {earned.get(f, 0)}/{len(rows)}"
+        + (f" (+{unknown[f]} ? unevaluable)" if unknown.get(f) else "")
+        for f in capability.FLAGS))
+    print("  + earned, ? cannot be evaluated, absent means tested and not met")
     print()
 
 
