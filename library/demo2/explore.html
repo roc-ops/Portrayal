@@ -47,6 +47,12 @@
   #inspect .lvl .nm { color:var(--ink); }
   #inspect .flag { border:1px solid #3f6a4a; background:#1b2a20; color:#8fd3a4;
                    border-radius:9px; padding:0 0.42rem; font-size:0.64rem; }
+  /* a flag nothing could test is not a flag that failed, and it must not be
+     able to be mistaken for one at a glance - dashed, dim, and question-marked */
+  #inspect .flag.unk { border-style:dashed; border-color:#4a4f55; background:none;
+                       color:var(--dim); }
+  #inspect .legend { color:var(--dim); font-size:0.66rem; margin:-0.2rem 0 0.5rem;
+                     line-height:1.45; }
   #inspect .blocked { border-left:2px solid var(--warn); padding:0.1rem 0 0.1rem 0.5rem;
                       margin:0.35rem 0; line-height:1.5; }
   #inspect .blocked b { color:var(--warn); font-weight:600; }
@@ -142,19 +148,45 @@ const dim = v => (v == null ? '—' : `${(+v).toFixed(1).replace(/\.0$/, '')} mm
 // The chain is 1-4 and the level is the longest satisfied prefix, so a bare
 // number is a grade. What makes it useful is `blocked`: "level 4 needs rel-pos on
 // 12 placements in view rear" is a job someone can pick up.
-function capability(cap) {
+//
+// The flags need three states, not two. A flag in `flags` was tested and met; a
+// flag in `unknown` could never be tested at all - six of thirteen devices
+// declare no `profile:`, so there is no minimum attr set to judge `specified`
+// against; a flag in neither was tested and not met. Printing the second as a
+// plain "no" would say the AGR400 is unspecified, which is false in a way that
+// matters: nineteen attrs off a datasheet, level 4, maturity modelled. It is
+// untested, and untested has to look different from failed. `+` and `?` follow
+// the matrix lint prints.
+function capability(cap, gapList) {
   if (!cap || cap.level == null) return '';
+  // A CAP gap carries the reason a flag could not be judged - "no top-level
+  // `profile:`" - which is exactly the tooltip. The gap is named for the cause
+  // rather than the flag (`profile-undeclared`, not `specified`), so this looks
+  // for the flag named in the text as well. Best effort by design: if the
+  // wording changes the chip falls back to the generic phrase and the full
+  // sentence is still under Gaps, three inches below.
+  const why = f => (gapList || []).find(
+    g => g.what === f || (g.wanted || '').includes('`' + f + '`'))?.wanted || '';
   let h = `<h3>Capability</h3>`;
   h += `<div class="lvl"><b>level ${esc(cap.level)}</b>`
      + (cap.name ? `<span class="nm">${esc(cap.name)}</span>` : '')
-     + (cap.flags || []).map(f => `<span class="flag">${esc(f)}</span>`).join('')
+     + (cap.flags || []).map(f =>
+         `<span class="flag" title="met">+${esc(f)}</span>`).join('')
+     + (cap.unknown || []).map(f =>
+         `<span class="flag unk" title="${esc(why(f) || 'nothing to test it against')}">`
+         + `?${esc(f)}</span>`).join('')
      + `</div>`;
+  // the legend only earns its space once a `?` is on screen; with everything
+  // evaluated the `+` chips need no explaining
+  if ((cap.unknown || []).length)
+    h += `<div class="legend">+ met · ? nothing to test it against ·`
+       + ` a flag shown by neither was tested and not met</div>`;
   for (const b of cap.blocked || []) {
     // `needs` is the whole point of the record; a blocked entry without one is a
     // scoreboard again, so say the level is blocked and leave the line visible.
     h += `<div class="blocked"><b>level ${esc(b.level)}`
        + (b.name ? ` ${esc(b.name)}` : '') + ` blocked</b>`
-       + (b.needs ? ` — needs ${esc(b.needs)}` : '') + `</div>`;
+       + (b.needs ? ` \u2014 needs ${esc(b.needs)}` : '') + `</div>`;
   }
   return h;
 }
@@ -164,24 +196,25 @@ function capability(cap) {
 // which no rule can ever find. `wanted` says what would close it, and that turns
 // the panel from a list of shortcomings into a list of requests.
 //
-// A derived gap and a blocked level are the same sentence twice: the build emits
-// a CAP gap whose `wanted` is verbatim the `needs` of the level it blocks. The
-// chain already reads better under Capability, where the level it unlocks is
-// next to it, so a gap that repeats a blocked line is dropped here rather than
-// printed again three inches further down. Comparing the strings keeps that true
-// without either side having to know how the other phrases it.
-function gaps(list, cap) {
-  const needs = new Set((cap?.blocked || []).map(b => b.needs).filter(Boolean));
-  const show = (Array.isArray(list) ? list : []).filter(g => !needs.has(g.wanted));
-  if (!show.length) return '';
+// The chain used to be here too, as a CAP gap per blocked level whose `wanted`
+// was verbatim the `needs` of the level it blocked - one sentence printed twice,
+// three inches apart. This filtered those out by string equality until the build
+// stopped emitting them. It no longer does, so there is nothing to filter: the
+// chain reads under Capability, where the level it unlocks is next to it, and
+// `gaps` is the flags and the lint rules.
+function gaps(list) {
+  if (!Array.isArray(list) || !list.length) return '';
   let h = `<h3>Gaps</h3>`;
-  for (const g of show) {
+  for (const g of list) {
     const scope = Array.isArray(g.scope) ? g.scope.join(', ') : (g.scope || '');
-    // `reason` is the controlled word on a declared gap - vendor-silent,
-    // needs-hardware - and a derived one carries the rule that found it instead.
-    // Either way it is the badge: it says who could close this.
+    // `because` is one field with two vocabularies, and `kind` says which to
+    // read: on a declared gap it is the controlled word for who could close it -
+    // vendor-silent, needs-hardware - and on a derived one it is the rule that
+    // found it. Either way it is the badge. `reason` and `rule` were the two
+    // fields it replaced and cost nothing to keep reading.
+    const because = g.because || g.reason || g.rule;
     h += `<div class="gap"><div class="hd"><span class="what">${esc(g.what || '')}</span>`
-       + (g.reason || g.rule ? `<span class="why">${esc(g.reason || g.rule)}</span>` : '')
+       + (because ? `<span class="why">${esc(because)}</span>` : '')
        + (g.kind ? `<span class="sc">${esc(g.kind)}</span>` : '')
        // a count of 0 means the rule had nothing to count, not that it found
        // nothing wrong - the gap is there, so print the gap and not the zero
@@ -225,7 +258,7 @@ function about(box) {
   if (d.version) h += row('version', d.version);
   if (d.description) h += row('description', d.description);
 
-  h += capability(meta.capability || d.capability);
+  h += capability(meta.capability || d.capability, meta.gaps || d.gaps);
 
   h += `<h3>Dimensions</h3>`;
   h += row('rack units', ch.ru != null ? `${ch.ru} RU` : '—');
@@ -254,7 +287,7 @@ function about(box) {
     h += cite('configurations', 'part-numbers');
   }
 
-  h += gaps(meta.gaps || d.gaps, meta.capability || d.capability);
+  h += gaps(meta.gaps || d.gaps);
 
   const rest = Object.keys(prov);
   if (rest.length) {
