@@ -4,6 +4,71 @@ Two changes that came out of one conversation: model a faceplate the way it is a
 made, and make "does this manifest comply" a question lint can answer rather than a
 question a reviewer has to hold in their head.
 
+## The canonical manifest
+
+A view is written in the order the part is made, and lint holds it to that order
+(L16). This is not a style preference: an agent building a device follows the file
+top to bottom, stage by stage, and a file that reads in a different order teaches
+the wrong procedure. The procedure itself is `.claude/skills/portrayal-model-device/`.
+
+```yaml
+views:
+  front:
+    size: {w: 438.4, h: 43.5}
+    panel:                      # 1. the sheet metal
+      decor: [...]              #    what it is: vents, grooves, bezels
+      cutouts: [...]            #    where it is punched
+    silkscreen: [...]           # 2. what is printed on it, before anything is installed
+    components:                 # 3. what is installed
+      bays: [...]               #    things that come out
+      placements: [...]         #    things that do not
+    regions: [...]              # 4. author-drawn callout boxes, optional
+```
+
+`label:` on a placement or bay no longer exists. A legend is a silkscreen mark that
+says what it belongs to - `{at: [53, 30], text: '1', for: port-1}` - and it renders
+where the label did. `decor` no longer takes `text` for the same reason.
+
+### `for:` - one word for "belongs to"
+
+```yaml
+- {id: led-p1, ref: std/led-arrow@1, for: port-1, group: port-leds}      # placement
+- {at: [53.1, 30.0], text: '1', for: port-1}                              # silkscreen
+- {id: branch-1-leader, path: 'M 169 10.4 H 199.9 V 46.6', for: [breaker-1, branch-1]}
+```
+
+The same field on a placement, a bay and a silkscreen mark, meaning the same thing:
+this belongs to that. It is **authored, never inferred from names**. One target or a
+list; a leader line that joins two things names both. The renderer emits `data-for`,
+the explorer nests the child under its owner and highlights both on selection, and
+L14 checks every target exists and is nearby - within one owner-dimension, floored at
+6 mm so a legend beside a 2 mm LED is not a finding.
+
+Whether an LED (part of) and a label (describes) deserved different words was
+considered. They do not: the distinction is already carried by which section the
+child is in, and every consumer treats the relationship identically.
+
+### `groups:` - declared, not just used
+
+Every `group:` on a placement or bay is declared once at top level with the vendor's
+word for one of them and where numbering starts (L17):
+
+```yaml
+groups:
+  ports:     {term: Port, index-origin: 1, attrs: {media: sfp-plus, speed: 10g}}
+  port-leds: {term: LED,  index-origin: 1}
+```
+
+That is what gives the explorer its fold titles, the exporter its shape names and a
+DCIM its numbering. Freezing the vocabulary across devices is still open (#12).
+
+### Cutouts - declared, not yet checked
+
+`panel.cutouts` is in the schema and renders (a hole with nothing in it shows the
+dark inside of the chassis, which is what the drawing shows too). The lint that
+asserts every component sits in one and every one is filled is #5. No existing device
+declares cutouts yet; new devices built with the skill do.
+
 ## The layer model
 
 A faceplate is manufactured in three steps, and the model now mirrors them.
@@ -87,6 +152,11 @@ of it, which covers printed-beside-a-port without permitting a label on the far 
 the chassis.
 
 **L15 — the maturity gate.** Above.
+
+**L16 — manufacturing order.** View keys must read `size > panel > silkscreen >
+components > regions`, panel `decor > cutouts`, components `bays > placements`.
+
+**L17 — declared groups.** Every `group:` used is declared under top-level `groups:`.
 
 ## What is done and what is not
 

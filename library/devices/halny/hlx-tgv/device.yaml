@@ -6,39 +6,15 @@ manufacturer: Halny
 model: HLX-TGV
 description: XGS-PON ONT (SFU/HGU) - 1x 10G RJ45, 1x GbE RJ45, 2x FXS, SC/APC PON, VoIP
 profile: networking
-datasheet:
-  title: HALNy HLX-TGV Leaflet
-  url: https://www.halny.com/
-  sha256: 17aac5fcba1178fa259d2ed256e23de527c4a4918ea1af449ef3dbb9e3583a89
-references:
-  - title: HALNy HLX-TGV Quick Installation Guide 2024-12 EN
-    sha256: fe892f7d5d2e47a5df1becb7d0699288299c0b9c596543f3561fa17c82130d53
 provenance:
   chassis: datasheet (Dimension WxDxH 172 x 115 x 40mm; DC +12V/1.0A)
   rear-layout: photo-measured (stock rear photo, labels ON/OFF POWER 10G LAN RESET TEL2 TEL1)
   top-layout: photo-measured (owner capture with ruler; 8 labeled LEDs + 1 unlabeled position)
-  bottom-layout: hand-tuned by owner against the physical unit (Inkscape round-trip of the compiled SVG, 2026-08-15)
+  bottom-layout: hand-tuned by owner against the physical unit (Inkscape round-trip of the compiled
+    SVG, 2026-08-15)
 attrs:
   wan: xgs-pon
   cpu: dual-core-1ghz
-configurations:
-  eu:
-    description: With European power adapter (HLX-TGV / HLX-TGV-EU)
-    default: true
-    part-numbers:
-      HLX-TGV-EU: {power-cord: EU power adapter}
-  us:
-    description: With North America power adapter (HLX-TGV-US)
-    part-numbers:
-      HLX-TGV-US: {power-cord: NA power adapter}
-  uk:
-    description: With United Kingdom power adapter (HLX-TGV-UK)
-    part-numbers:
-      HLX-TGV-UK: {power-cord: UK power adapter}
-  nops:
-    description: Without power adapter (HLX-TGV-NOPS)
-    part-numbers:
-      HLX-TGV-NOPS: {power-cord: none}
 chassis:
   width: 172.0
   height: 40.0
@@ -47,69 +23,134 @@ chassis:
   edge: '#c2c7cc'
   silk: '#4a4f55'
 groups:
-  leds: {index-origin: 1, term: LED}
+  leds:
+    index-origin: 1
+    term: LED
 views:
   front:
-    decor:
-      - {at: [0, 1], size: [5, 38], pattern: ribs}
-      - {at: [167, 1], size: [5, 38], pattern: ribs}
+    panel:
+      decor:
+        - {at: [0, 1], size: [5, 38], pattern: ribs}
+        - {at: [167, 1], size: [5, 38], pattern: ribs}
   rear:
-    decor:
-      - {at: [8, 7], size: [156, 25], fill: '#e3e6e9'}
-      - {at: [28, 33], size: [10, 6.5], fill: '#17191c'}
-    placements:
-      - {ref: common/power-button@1, id: power-btn, at: [12, 13], label: ON/OFF, label-size: 1.9}
-      - {ref: common/dc-barrel@1, id: dc-in, at: [32, 12.5], label: POWER, label-size: 1.9}
-      - {ref: common/rj45-shielded@1, id: eth-10g, at: [68.1, 12], label: 10G, label-size: 1.9, attrs: {speed: 10g}}
-      - {ref: common/rj45-jack@2, id: eth-lan, at: [91.1, 11.5], skin: yellow, label: LAN, label-size: 1.9, attrs: {speed: 1g}}
-      - {ref: common/reset-button@1, id: reset, at: [113, 16], label: RESET, label-size: 1.9}
-      - {ref: common/rj11-jack@1, id: tel-2, at: [123, 12.5], rotate: 180, label: TEL2, label-size: 1.9, attrs: {role: fxs}, rel-pos: 2}
-      - {ref: common/rj11-jack@1, id: tel-1, at: [142, 12.5], rotate: 180, label: TEL1, label-size: 1.9, attrs: {role: fxs}, rel-pos: 1}
+    panel:
+      decor:
+        - {at: [8, 7], size: [156, 25], fill: '#e3e6e9'}
+        - {at: [28, 33], size: [10, 6.5], fill: '#17191c'}
+    silkscreen:
+      - {at: [18.0, 27.6], text: ON/OFF, font-size: 1.9, for: power-btn}
+      - {at: [38.0, 28.1], text: POWER, font-size: 1.9, for: dc-in}
+      - {at: [76.0, 27.1], text: 10G, font-size: 1.9, for: eth-10g}
+      - {at: [99.0, 27.3], text: LAN, font-size: 1.9, for: eth-lan}
+      - {at: [115.0, 22.6], text: RESET, font-size: 1.9, for: reset}
+      - {at: [130.0, 28.6], text: TEL2, font-size: 1.9, for: tel-2}
+      - {at: [149.0, 28.6], text: TEL1, font-size: 1.9, for: tel-1}
+    components:
+      placements:
+        - {ref: common/power-button@1, id: power-btn, at: [12, 13]}
+        - {ref: common/dc-barrel@1, id: dc-in, at: [32, 12.5]}
+        - {ref: common/rj45-shielded@1, id: eth-10g, at: [68.1, 12], attrs: {speed: 10g}}
+        - {ref: common/rj45-jack@2, id: eth-lan, at: [91.1, 11.5], skin: yellow, attrs: {speed: 1g}}
+        - {ref: common/reset-button@1, id: reset, at: [113, 16]}
+        - {ref: common/rj11-jack@1, id: tel-2, at: [123, 12.5], rotate: 180, attrs: {role: fxs}, rel-pos: 2}
+        - {ref: common/rj11-jack@1, id: tel-1, at: [142, 12.5], rotate: 180, attrs: {role: fxs}, rel-pos: 1}
   top:
-    size: {w: 172, h: 115}
-    decor:
-      - {at: [12, 8], size: [148, 84], pattern: slots-h}
-      - {at: [76.8, 104.6], size: [1.8, 1.8], fill: '#3c4046'}
+    size:
+      w: 172
+      h: 115
+    panel:
+      decor:
+        - {at: [12, 8], size: [148, 84], pattern: slots-h}
+        - {at: [76.8, 104.6], size: [1.8, 1.8], fill: '#3c4046'}
     silkscreen:
       - {at: [131, 100], text: HALNY, font-size: 6.5}
       - {at: [131, 104], text: High Availability Local Networks, font-size: 1.9}
       - {at: [131, 109], text: HLX-TGV, font-size: 3}
-    placements:
-      - {ref: common/led-indicator@1, id: led-power, at: [20, 102], group: leds, rel-pos: 1, label: POWER, label-at: [2, -1.2], label-size: 1.5}
-      - {ref: common/led-indicator@1, id: led-pon, at: [26.6, 102], group: leds, rel-pos: 2, label: PON, label-at: [2, -1.2], label-size: 1.5}
-      - {ref: common/led-indicator@1, id: led-los, at: [33.2, 102], group: leds, rel-pos: 3, label: LOS, label-at: [2, -1.2], label-size: 1.5}
-      - {ref: common/led-indicator@1, id: led-net, at: [39.8, 102], group: leds, rel-pos: 4, label: NET, label-at: [2, -1.2], label-size: 1.5}
-      - {ref: common/led-indicator@1, id: led-lan, at: [46.4, 102], group: leds, rel-pos: 5, label: LAN, label-at: [2, -1.2], label-size: 1.5}
-      - {ref: common/led-indicator@1, id: led-10g, at: [53, 102], group: leds, rel-pos: 6, label: 10G, label-at: [2, -1.2], label-size: 1.5}
-      - {ref: common/led-indicator@1, id: led-tel1, at: [59.6, 102], group: leds, rel-pos: 7, label: TEL1, label-at: [2, -1.2], label-size: 1.5}
-      - {ref: common/led-indicator@1, id: led-tel2, at: [66.2, 102], group: leds, rel-pos: 8, label: TEL2, label-at: [2, -1.2], label-size: 1.5}
+      - {at: [22, 100.8], text: POWER, font-size: 1.5, for: led-power}
+      - {at: [28.6, 100.8], text: PON, font-size: 1.5, for: led-pon}
+      - {at: [35.2, 100.8], text: LOS, font-size: 1.5, for: led-los}
+      - {at: [41.8, 100.8], text: NET, font-size: 1.5, for: led-net}
+      - {at: [48.4, 100.8], text: LAN, font-size: 1.5, for: led-lan}
+      - {at: [55, 100.8], text: 10G, font-size: 1.5, for: led-10g}
+      - {at: [61.6, 100.8], text: TEL1, font-size: 1.5, for: led-tel1}
+      - {at: [68.2, 100.8], text: TEL2, font-size: 1.5, for: led-tel2}
+    components:
+      placements:
+        - {ref: common/led-indicator@1, id: led-power, at: [20, 102], group: leds, rel-pos: 1}
+        - {ref: common/led-indicator@1, id: led-pon, at: [26.6, 102], group: leds, rel-pos: 2}
+        - {ref: common/led-indicator@1, id: led-los, at: [33.2, 102], group: leds, rel-pos: 3}
+        - {ref: common/led-indicator@1, id: led-net, at: [39.8, 102], group: leds, rel-pos: 4}
+        - {ref: common/led-indicator@1, id: led-lan, at: [46.4, 102], group: leds, rel-pos: 5}
+        - {ref: common/led-indicator@1, id: led-10g, at: [53, 102], group: leds, rel-pos: 6}
+        - {ref: common/led-indicator@1, id: led-tel1, at: [59.6, 102], group: leds, rel-pos: 7}
+        - {ref: common/led-indicator@1, id: led-tel2, at: [66.2, 102], group: leds, rel-pos: 8}
     regions:
       - {id: status-leds, at: [17, 96], size: {w: 63, h: 14}, label: Status LEDs, members: [led-power, led-pon, led-los, led-net, led-lan, led-10g, led-tel1, led-tel2]}
       - {id: logo-zone, at: [110, 92], size: {w: 46, h: 20}, label: Branding area}
   bottom:
-    size: {w: 172, h: 115}
-    decor:
-      - {at: [0, 0], size: [172, 5], pattern: ribs}
-      - {at: [0, 110], size: [172, 5], pattern: ribs}
-      - {at: [0, 4], size: [26.8, 72], pattern: slots-h}
-      - {at: [0, 94], size: [36, 18], pattern: slots-h}
-      - {at: [140, 4], size: [32, 104], pattern: slots-h}
-      - {at: [114.4, 100], size: [25.6, 12], pattern: slots-h}
-      - {at: [30, 70], size: [72, 45], fill: '#e8eaed', rx: 3}
-      - {at: [0, 76], size: [40, 16], fill: '#e8eaed', rx: 3}
-      - {at: [37.6, 20.5], size: [95, 56.7], pattern: holes}
-      - {at: [40.1, 23.9], size: [90, 51], rx: 25, stroke: '#c2c7cc', stroke-width: 5}
-      - {at: [27.6, 0], size: [9, 43], fill: '#d5d9dc', rx: 2}
-      - {at: [0, 86.7], size: [36, 10], fill: '#d5d9dc', rx: 2}
-    placements:
-      - {ref: common/device-label@1, id: id-label, at: [44.1, 28.9], rotate: 180}
-      - {ref: common/sc-apc@1, id: pon, at: [95.9, 79.3], skin: side, attrs: {speed: 10g-pon}, label: PON SC/APC, label-at: [10.1, 21.9], label-size: 1.9}
+    size:
+      w: 172
+      h: 115
+    panel:
+      decor:
+        - {at: [0, 0], size: [172, 5], pattern: ribs}
+        - {at: [0, 110], size: [172, 5], pattern: ribs}
+        - {at: [0, 4], size: [26.8, 72], pattern: slots-h}
+        - {at: [0, 94], size: [36, 18], pattern: slots-h}
+        - {at: [140, 4], size: [32, 104], pattern: slots-h}
+        - {at: [114.4, 100], size: [25.6, 12], pattern: slots-h}
+        - {at: [30, 70], size: [72, 45], fill: '#e8eaed', rx: 3}
+        - {at: [0, 76], size: [40, 16], fill: '#e8eaed', rx: 3}
+        - {at: [37.6, 20.5], size: [95, 56.7], pattern: holes}
+        - {at: [40.1, 23.9], size: [90, 51], rx: 25, stroke: '#c2c7cc', stroke-width: 5}
+        - {at: [27.6, 0], size: [9, 43], fill: '#d5d9dc', rx: 2}
+        - {at: [0, 86.7], size: [36, 10], fill: '#d5d9dc', rx: 2}
+    silkscreen:
+      - {at: [106.0, 101.2], text: PON SC/APC, font-size: 1.9, for: pon}
+    components:
+      placements:
+        - {ref: common/device-label@1, id: id-label, at: [44.1, 28.9], rotate: 180}
+        - {ref: common/sc-apc@1, id: pon, at: [95.9, 79.3], skin: side, attrs: {speed: 10g-pon}}
   left:
-    size: {w: 115, h: 40}
-    decor:
-      - {at: [2, 1], size: [111, 38], pattern: ribs}
+    size:
+      w: 115
+      h: 40
+    panel:
+      decor:
+        - {at: [2, 1], size: [111, 38], pattern: ribs}
   right:
-    size: {w: 115, h: 40}
-    decor:
-      - {at: [2, 1], size: [111, 38], pattern: ribs}
-      - {at: [19, 31], size: [12, 8], fill: '#17191c', rx: 2}
+    size:
+      w: 115
+      h: 40
+    panel:
+      decor:
+        - {at: [2, 1], size: [111, 38], pattern: ribs}
+        - {at: [19, 31], size: [12, 8], fill: '#17191c', rx: 2}
+configurations:
+  eu:
+    description: With European power adapter (HLX-TGV / HLX-TGV-EU)
+    default: true
+    part-numbers:
+      HLX-TGV-EU:
+        power-cord: EU power adapter
+  us:
+    description: With North America power adapter (HLX-TGV-US)
+    part-numbers:
+      HLX-TGV-US:
+        power-cord: NA power adapter
+  uk:
+    description: With United Kingdom power adapter (HLX-TGV-UK)
+    part-numbers:
+      HLX-TGV-UK:
+        power-cord: UK power adapter
+  nops:
+    description: Without power adapter (HLX-TGV-NOPS)
+    part-numbers:
+      HLX-TGV-NOPS:
+        power-cord: none
+datasheet:
+  title: HALNy HLX-TGV Leaflet
+  url: https://www.halny.com/
+  sha256: 17aac5fcba1178fa259d2ed256e23de527c4a4918ea1af449ef3dbb9e3583a89
+references:
+  - {title: HALNy HLX-TGV Quick Installation Guide 2024-12 EN, sha256: fe892f7d5d2e47a5df1becb7d0699288299c0b9c596543f3561fa17c82130d53}

@@ -17,6 +17,8 @@ from pathlib import Path
 
 import yaml
 
+from manifest import view_parts
+
 # Portrayal media/speed -> Nautobot interface type
 IFACE_TYPE = {
     ("sfp", "25g"): "25gbase-x-sfp28",
@@ -69,7 +71,7 @@ def build(dev, profile):
 
     console, mgmt_rj, mgmt_sfp, bays = [], [], [], []
     for view in (dev.get("views") or {}).values():
-        for p in (view or {}).get("placements", []) or []:
+        for p in view_parts(view)["placements"]:
             a = p.get("attrs") or {}
             role, media = a.get("role"), a.get("media")
             if role == "console" and media == "rj45-serial":
@@ -86,7 +88,7 @@ def build(dev, profile):
                                  "type": "10gbase-x-sfpp", "mgmt_only": True,
                                  "description": "10G management port (faceplate label; "
                                                 "not presented as a switch interface)"})
-        for b in (view or {}).get("bays", []) or []:
+        for b in view_parts(view)["bays"]:
             if b.get("group") in ("psus", "fans"):
                 bays.append({"name": b["id"].replace("psu-", "PSU ").replace("fan-", "Fan "),
                              "position": b["id"].rsplit("-", 1)[-1]})
@@ -95,7 +97,7 @@ def build(dev, profile):
     ifaces = mgmt_rj + sorted(mgmt_sfp, key=lambda i: i["name"])
     ports = []
     for view in (dev.get("views") or {}).values():
-        for p in (view or {}).get("placements", []) or []:
+        for p in view_parts(view)["placements"]:
             if not p["id"].startswith("port-"):
                 continue
             a = p.get("attrs") or {}

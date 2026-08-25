@@ -146,7 +146,14 @@ function buildTree(root) {
   const roots = [];
   for (const n of byPath.values()) {
     const cut = n.path.lastIndexOf('/');
-    const parent = cut < 0 ? null : byPath.get(n.path.slice(0, cut));
+    let parent = cut < 0 ? null : byPath.get(n.path.slice(0, cut));
+    // `for:` in the manifest - an LED belongs to its port, a button to its module.
+    // Nest under the first target, so an indicator lists under the thing it
+    // indicates rather than in a pile of 52 LEDs somewhere else in the tree.
+    if (!parent && n.el.dataset.for) {
+      const owner = byPath.get(n.el.dataset.for.split(' ')[0]);
+      if (owner && owner !== n) parent = owner;
+    }
     (parent ? parent.kids : roots).push(n);
   }
   return roots;

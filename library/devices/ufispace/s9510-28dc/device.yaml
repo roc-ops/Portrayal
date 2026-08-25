@@ -4,25 +4,17 @@ name: s9510-28dc
 version: 0.9.0
 manufacturer: UfiSpace
 model: S9510-28DC
-description: UfiSpace S9510-28DC Disaggregated Cell Site Gateway Router - 1RU,
-  2x QSFP-DD 400G + 2x QSFP28 100G + 24x SFP28 25G, full timing (GNSS/1PPS/
-  10MHz/ToD/BITS), temperature hardened, front-service
-datasheet:
-  title: UfiSpace S9510-28DC Datasheet (202500822V06)
-  url: https://www.ufispace.com/products/telco/access/s9510-28dc
-  sha256: 3f2f5a9663467c4604928f61aa06a6c80e7193e2e4f2cd8a727044089aa045cc
-references:
-  - title: UfiSpace S9510-28DC Hardware Installation Guide
-    sha256: 36086ea166a7dd4c738efb3597ab6afc94108504b55bd653dadfd1ac71e6ffc5
+description: UfiSpace S9510-28DC Disaggregated Cell Site Gateway Router - 1RU, 2x QSFP-DD 400G
+  + 2x QSFP28 100G + 24x SFP28 25G, full timing (GNSS/1PPS/ 10MHz/ToD/BITS), temperature hardened,
+  front-service
 provenance:
   chassis: datasheet (440 x 302 x 43.5mm, 4.9kg without FRU)
-  layout: drawing-inferred (HIG Fig 5/9 front drawing measured at 4.5 px/mm;
-    pending photo overlay calibration - marketing photos are low resolution)
-  sfp-pitch: drawing-inferred (~14.45mm ganged - std/sfp cutouts shoulder to
-    shoulder; verify against physical unit)
-  bits-tod-jacks: estimated (drawing shows compact stacked jacks ~11.5mm tall;
-    modeled as two standard 14mm cutout ports which slightly exceeds the drawn
-    stack - verify against physical unit)
+  layout: drawing-inferred (HIG Fig 5/9 front drawing measured at 4.5 px/mm; pending photo overlay
+    calibration - marketing photos are low resolution)
+  sfp-pitch: drawing-inferred (~14.45mm ganged - std/sfp cutouts shoulder to shoulder; verify against
+    physical unit)
+  bits-tod-jacks: estimated (drawing shows compact stacked jacks ~11.5mm tall; modeled as two standard
+    14mm cutout ports which slightly exceeds the drawn stack - verify against physical unit)
   attrs: datasheet (Specifications/Performance/Accessories sections)
   led-semantics: HIG section 10 LED tables
 attrs:
@@ -34,8 +26,7 @@ attrs:
   switching-capacity: 800 Gbps
   deep-buffer: 2 GB
   timing: Stratum 3E OCXO, SyncE, IEEE 1588v2 (T-GM, T-BC/OC, T-TC), Class C, TSN
-  timing-interfaces: GNSS SMA in, 10MHz SMB in/out, 1PPS SMB in/out, ToD RJ45 in,
-    BITS RJ48 in/out
+  timing-interfaces: GNSS SMA in, 10MHz SMB in/out, 1PPS SMB in/out, ToD RJ45 in, BITS RJ48 in/out
   gnss: internal receiver for master clock
   flexe: OIF FlexE 1.1 and 2.0, 400G total bandwidth
   power-typical-w: '137'
@@ -57,207 +48,300 @@ chassis:
   depth: 302
   ru: 1
   weight-kg: 4.9
+groups:
+  psus:
+    term: PSU
+    index-origin: 1
+  ports:
+    term: Port
+    index-origin: 1
+  optics:
+    term: Port
+    index-origin: 1
+  fans:
+    term: Fan
+    index-origin: 1
+views:
+  front:
+    size:
+      w: 440
+      h: 43.5
+    panel:
+      decor:
+        - {at: [170.5, 2], size: [57, 17.6], pattern: vent, vent: 25}
+        - {at: [253.4, 0.8], size: [175.8, 2.6], pattern: vent, vent: 25}
+        - {at: [253.4, 37.4], size: [175.8, 5.2], pattern: vent, vent: 25}
+        - {at: [170.5, 19.6], size: [6.9, 6.2], pattern: vent, vent: 25}
+        - {at: [196.9, 19.6], size: [7.6, 6.2], pattern: vent, vent: 25}
+        - {at: [224, 19.6], size: [3.5, 6.2], pattern: vent, vent: 25}
+        - {at: [177.4, 19.6], size: [19.5, 6.2], fill: '#33373c', rx: 0.5}
+        - {at: [204.5, 19.6], size: [19.5, 6.2], fill: '#33373c', rx: 0.5}
+        - {at: [229.8, 19.3], size: [19.5, 4.2], fill: '#b0b5bb', rx: 0.8}
+        - {at: [170.5, 25.8], size: [6.9, 15.7], pattern: vent, vent: 25}
+        - {at: [197, 25.8], size: [7.4, 15.7], pattern: vent, vent: 25}
+        - {at: [224.1, 25.8], size: [3.4, 15.7], pattern: vent, vent: 25}
+        - {at: [254.025, 3.6], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
+        - {at: [254.025, 33], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
+        - {at: [268.275, 3.6], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
+        - {at: [268.275, 33], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
+        - {at: [282.525, 3.6], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
+        - {at: [282.525, 33], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
+        - {at: [296.775, 3.6], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
+        - {at: [296.775, 33], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
+        - {at: [311.025, 3.6], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
+        - {at: [311.025, 33], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
+        - {at: [325.275, 3.6], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
+        - {at: [325.275, 33], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
+        - {at: [342.825, 3.6], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
+        - {at: [342.825, 33], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
+        - {at: [357.075, 3.6], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
+        - {at: [357.075, 33], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
+        - {at: [371.325, 3.6], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
+        - {at: [371.325, 33], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
+        - {at: [385.575, 3.6], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
+        - {at: [385.575, 33], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
+        - {at: [399.825, 3.6], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
+        - {at: [399.825, 33], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
+        - {at: [414.075, 3.6], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
+        - {at: [414.075, 33], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
+        - {at: [253.6, 18.2], size: [14.25, 4.2], fill: '#b0b5bb', rx: 0.8}
+        - {at: [267.85, 18.2], size: [14.25, 4.2], fill: '#b0b5bb', rx: 0.8}
+        - {at: [282.1, 18.2], size: [14.25, 4.2], fill: '#b0b5bb', rx: 0.8}
+        - {at: [296.35, 18.2], size: [14.25, 4.2], fill: '#b0b5bb', rx: 0.8}
+        - {at: [310.6, 18.2], size: [14.25, 4.2], fill: '#b0b5bb', rx: 0.8}
+        - {at: [324.85, 18.2], size: [14.25, 4.2], fill: '#b0b5bb', rx: 0.8}
+        - {at: [342.4, 18.2], size: [14.25, 4.2], fill: '#b0b5bb', rx: 0.8}
+        - {at: [356.65, 18.2], size: [14.25, 4.2], fill: '#b0b5bb', rx: 0.8}
+        - {at: [370.9, 18.2], size: [14.25, 4.2], fill: '#b0b5bb', rx: 0.8}
+        - {at: [385.15, 18.2], size: [14.25, 4.2], fill: '#b0b5bb', rx: 0.8}
+        - {at: [399.4, 18.2], size: [14.25, 4.2], fill: '#b0b5bb', rx: 0.8}
+        - {at: [413.65, 18.2], size: [14.25, 4.2], fill: '#b0b5bb', rx: 0.8}
+    silkscreen:
+      - {text: PSU0, at: [58.9, 8], font-size: 2.6, rotate: 90}
+      - {text: PSU1, at: [58.9, 27], font-size: 2.6, rotate: 90}
+      - {text: S9510-28DC, at: [121.5, 32.6], font-size: 1.9}
+      - {text: BITS, at: [128.2, 19.8], font-size: 1.9}
+      - {text: ▲▼, at: [128.2, 29.0], font-size: 1.9}
+      - {text: TOD, at: [128.2, 36.2], font-size: 1.9}
+      - {text: SS⚡ ▲▼ IOIOI, at: [160.8, 42.8], font-size: 1.7}
+      - {at: [123.95, 12.8], text: GNSS ANT, font-size: 1.9, for: gnss-ant}
+      - {at: [137.0, 11.2], text: 10MHZ, font-size: 1.9, for: clk-10mhz}
+      - {at: [147.0, 11.2], text: 1PPS, font-size: 1.9, for: clk-1pps}
+      - {at: [116.8, 18.1], text: GNSS, font-size: 1.7, for: led-gnss}
+      - {at: [116.8, 21.0], text: SYNC, font-size: 1.7, for: led-sync}
+      - {at: [116.8, 23.9], text: STAT, font-size: 1.7, for: led-stat}
+      - {at: [116.8, 26.8], text: FAN, font-size: 1.7, for: led-fan}
+      - {at: [116.8, 29.7], text: PWR, font-size: 1.7, for: led-pwr}
+      - {at: [126.2, 37.8], text: RESET, font-size: 1.8, for: reset}
+      - {at: [187.15, 38.1], text: '0', font-size: 2.6, fill: '#f5f7fa', for: port-0}
+      - {at: [214.25, 38.1], text: '1', font-size: 2.6, fill: '#f5f7fa', for: port-1}
+      - {at: [239.55, 8.8], text: '2', font-size: 2.6, fill: '#f5f7fa', for: port-2}
+      - {at: [239.55, 38.1], text: '3', font-size: 2.6, fill: '#f5f7fa', for: port-3}
+      - {at: [260.725, 5.6], text: '4', font-size: 2.9, fill: '#17191c', for: port-4}
+      - {at: [260.725, 36.4], text: '5', font-size: 2.9, fill: '#17191c', for: port-5}
+      - {at: [274.975, 5.6], text: '6', font-size: 2.9, fill: '#17191c', for: port-6}
+      - {at: [274.975, 36.4], text: '7', font-size: 2.9, fill: '#17191c', for: port-7}
+      - {at: [289.225, 5.6], text: '8', font-size: 2.9, fill: '#17191c', for: port-8}
+      - {at: [289.225, 36.4], text: '9', font-size: 2.9, fill: '#17191c', for: port-9}
+      - {at: [303.475, 5.6], text: '10', font-size: 2.9, fill: '#17191c', for: port-10}
+      - {at: [303.475, 36.4], text: '11', font-size: 2.9, fill: '#17191c', for: port-11}
+      - {at: [317.725, 5.6], text: '12', font-size: 2.9, fill: '#17191c', for: port-12}
+      - {at: [317.725, 36.4], text: '13', font-size: 2.9, fill: '#17191c', for: port-13}
+      - {at: [331.975, 5.6], text: '14', font-size: 2.9, fill: '#17191c', for: port-14}
+      - {at: [331.975, 36.4], text: '15', font-size: 2.9, fill: '#17191c', for: port-15}
+      - {at: [349.525, 5.6], text: '16', font-size: 2.9, fill: '#17191c', for: port-16}
+      - {at: [349.525, 36.4], text: '17', font-size: 2.9, fill: '#17191c', for: port-17}
+      - {at: [363.775, 5.6], text: '18', font-size: 2.9, fill: '#17191c', for: port-18}
+      - {at: [363.775, 36.4], text: '19', font-size: 2.9, fill: '#17191c', for: port-19}
+      - {at: [378.025, 5.6], text: '20', font-size: 2.9, fill: '#17191c', for: port-20}
+      - {at: [378.025, 36.4], text: '21', font-size: 2.9, fill: '#17191c', for: port-21}
+      - {at: [392.275, 5.6], text: '22', font-size: 2.9, fill: '#17191c', for: port-22}
+      - {at: [392.275, 36.4], text: '23', font-size: 2.9, fill: '#17191c', for: port-23}
+      - {at: [406.525, 5.6], text: '24', font-size: 2.9, fill: '#17191c', for: port-24}
+      - {at: [406.525, 36.4], text: '25', font-size: 2.9, fill: '#17191c', for: port-25}
+      - {at: [420.775, 5.6], text: '26', font-size: 2.9, fill: '#17191c', for: port-26}
+      - {at: [420.775, 36.4], text: '27', font-size: 2.9, fill: '#17191c', for: port-27}
+    components:
+      bays:
+        - {id: psu-0, at: [4.5, 1.6], size: {w: 50.5, h: 40.2}, accepts: [ufispace/psu-401-dc@1, ufispace/psu-401-ac@1], group: psus, rel-pos: 1, default: ufispace/psu-401-dc@1}
+        - {id: psu-1, at: [63.2, 1.6], size: {w: 50.5, h: 40.2}, accepts: [ufispace/psu-401-dc@1, ufispace/psu-401-ac@1], group: psus, rel-pos: 2, default: ufispace/psu-401-dc@1}
+      placements:
+        - {ref: common/sma-jack@1, id: gnss-ant, at: [119.2, 1.4], attrs: {role: gnss-in}}
+        - {ref: common/smb-jack@1, id: clk-10mhz, at: [133.5, 2.4], attrs: {role: 10mhz-io}}
+        - {ref: common/smb-jack@1, id: clk-1pps, at: [143.5, 2.4], attrs: {role: 1pps-io}}
+        - {ref: common/led-rect@1, id: led-gnss, at: [121.4, 16.2]}
+        - {ref: common/led-rect@1, id: led-sync, at: [121.4, 19.1]}
+        - {ref: common/led-rect@1, id: led-stat, at: [121.4, 22.0]}
+        - {ref: common/led-rect@1, id: led-fan, at: [121.4, 24.9]}
+        - {ref: common/led-rect@1, id: led-pwr, at: [121.4, 27.8]}
+        - {ref: common/ground-symbol@1, id: ground-mark, at: [431.6, 18.75]}
+        - {ref: common/reset-button@1, id: reset, at: [118.8, 34.6]}
+        - {ref: common/rj45-bezel@2, id: bits, at: [131.8, 13.4], attrs: {media: rj48, role: bits-io}}
+        - {ref: common/rj45-bezel@2, id: tod, at: [131.8, 28.3], attrs: {media: rj45, role: tod-in}}
+        - {ref: common/rj45-port@4, id: mgmt, at: [152.3, 1.2], attrs: {role: mgmt, speed: 100m-1g}}
+        - {ref: common/usb-a@3, id: usb, at: [152.3, 16.1], attrs: {role: storage, speed: usb3}}
+        - {ref: common/rj45-bezel@2, id: console, at: [152.3, 25.4], attrs: {media: rj45-serial, role: console}}
+        - {ref: common/qsfp-cage@1, id: port-0, at: [177.4, 26.2], skin: blue, group: ports, rel-pos: 100, attrs: {media: qsfp-dd, speed: 400g}}
+        - {ref: common/qsfp-cage@1, id: port-1, at: [204.5, 26.2], skin: blue, group: ports, rel-pos: 101, attrs: {media: qsfp-dd, speed: 400g}}
+        - {ref: common/led-arrow@1, id: led-port-4, at: [255.975, 18.7], skin: up, attrs: {port: '4'}}
+        - {ref: common/led-arrow@1, id: led-port-5, at: [261.875, 18.7], skin: down, attrs: {port: '5'}}
+        - {ref: common/led-arrow@1, id: led-port-6, at: [270.225, 18.7], skin: up, attrs: {port: '6'}}
+        - {ref: common/led-arrow@1, id: led-port-7, at: [276.125, 18.7], skin: down, attrs: {port: '7'}}
+        - {ref: common/led-arrow@1, id: led-port-8, at: [284.475, 18.7], skin: up, attrs: {port: '8'}}
+        - {ref: common/led-arrow@1, id: led-port-9, at: [290.375, 18.7], skin: down, attrs: {port: '9'}}
+        - {ref: common/led-arrow@1, id: led-port-10, at: [298.725, 18.7], skin: up, attrs: {port: '10'}}
+        - {ref: common/led-arrow@1, id: led-port-11, at: [304.625, 18.7], skin: down, attrs: {port: '11'}}
+        - {ref: common/led-arrow@1, id: led-port-12, at: [312.975, 18.7], skin: up, attrs: {port: '12'}}
+        - {ref: common/led-arrow@1, id: led-port-13, at: [318.875, 18.7], skin: down, attrs: {port: '13'}}
+        - {ref: common/led-arrow@1, id: led-port-14, at: [327.225, 18.7], skin: up, attrs: {port: '14'}}
+        - {ref: common/led-arrow@1, id: led-port-15, at: [333.125, 18.7], skin: down, attrs: {port: '15'}}
+        - {ref: common/led-arrow@1, id: led-port-16, at: [344.775, 18.7], skin: up, attrs: {port: '16'}}
+        - {ref: common/led-arrow@1, id: led-port-17, at: [350.675, 18.7], skin: down, attrs: {port: '17'}}
+        - {ref: common/led-arrow@1, id: led-port-18, at: [359.025, 18.7], skin: up, attrs: {port: '18'}}
+        - {ref: common/led-arrow@1, id: led-port-19, at: [364.925, 18.7], skin: down, attrs: {port: '19'}}
+        - {ref: common/led-arrow@1, id: led-port-20, at: [373.275, 18.7], skin: up, attrs: {port: '20'}}
+        - {ref: common/led-arrow@1, id: led-port-21, at: [379.175, 18.7], skin: down, attrs: {port: '21'}}
+        - {ref: common/led-arrow@1, id: led-port-22, at: [387.525, 18.7], skin: up, attrs: {port: '22'}}
+        - {ref: common/led-arrow@1, id: led-port-23, at: [393.425, 18.7], skin: down, attrs: {port: '23'}}
+        - {ref: common/led-arrow@1, id: led-port-24, at: [401.775, 18.7], skin: up, attrs: {port: '24'}}
+        - {ref: common/led-arrow@1, id: led-port-25, at: [407.675, 18.7], skin: down, attrs: {port: '25'}}
+        - {ref: common/led-arrow@1, id: led-port-26, at: [416.025, 18.7], skin: up, attrs: {port: '26'}}
+        - {ref: common/led-arrow@1, id: led-port-27, at: [421.925, 18.7], skin: down, attrs: {port: '27'}}
+        - {ref: common/led-dot@1, id: led-p0-a, at: [182.9, 21.7], attrs: {port: '0', role: link}}
+        - {ref: common/led-dot@1, id: led-p0-b, at: [187.4, 21.7], attrs: {port: '0', role: activity}}
+        - {ref: common/led-dot@1, id: led-p1-a, at: [210.0, 21.7], attrs: {port: '1', role: link}}
+        - {ref: common/led-dot@1, id: led-p1-b, at: [214.5, 21.7], attrs: {port: '1', role: activity}}
+        - {ref: common/qsfp-lane-leds@1, id: leds-port-2, at: [229.8, 19.7], attrs: {port: '2'}}
+        - {ref: common/qsfp-lane-leds@1, id: leds-port-3, at: [229.8, 39.7], attrs: {port: '3'}}
+        - {ref: common/qsfp-cage@1, id: port-2, at: [229.8, 5.9], rotate: 180, skin: green, group: ports, rel-pos: 102, attrs: {media: qsfp28, speed: 100g}}
+        - {ref: common/qsfp-cage@1, id: port-3, at: [229.8, 26.2], skin: green, group: ports, rel-pos: 103, attrs: {media: qsfp28, speed: 100g}}
+        - {ref: std/sfp-module@1, id: port-4, at: [253.6, 7], group: ports, rel-pos: 4, attrs: {media: sfp28, speed: 25g}}
+        - {ref: std/sfp-module@1, id: port-5, at: [253.6, 22.6], group: ports, rel-pos: 5, attrs: {media: sfp28, speed: 25g}}
+        - {ref: std/sfp-module@1, id: port-6, at: [267.85, 7], group: ports, rel-pos: 6, attrs: {media: sfp28, speed: 25g}}
+        - {ref: std/sfp-module@1, id: port-7, at: [267.85, 22.6], group: ports, rel-pos: 7, attrs: {media: sfp28, speed: 25g}}
+        - {ref: std/sfp-module@1, id: port-8, at: [282.1, 7], group: ports, rel-pos: 8, attrs: {media: sfp28, speed: 25g}}
+        - {ref: std/sfp-module@1, id: port-9, at: [282.1, 22.6], group: ports, rel-pos: 9, attrs: {media: sfp28, speed: 25g}}
+        - {ref: std/sfp-module@1, id: port-10, at: [296.35, 7], group: ports, rel-pos: 10, attrs: {media: sfp28, speed: 25g}}
+        - {ref: std/sfp-module@1, id: port-11, at: [296.35, 22.6], group: ports, rel-pos: 11, attrs: {media: sfp28, speed: 25g}}
+        - {ref: std/sfp-module@1, id: port-12, at: [310.6, 7], group: ports, rel-pos: 12, attrs: {media: sfp28, speed: 25g}}
+        - {ref: std/sfp-module@1, id: port-13, at: [310.6, 22.6], group: ports, rel-pos: 13, attrs: {media: sfp28, speed: 25g}}
+        - {ref: std/sfp-module@1, id: port-14, at: [324.85, 7], group: ports, rel-pos: 14, attrs: {media: sfp28, speed: 25g}}
+        - {ref: std/sfp-module@1, id: port-15, at: [324.85, 22.6], group: ports, rel-pos: 15, attrs: {media: sfp28, speed: 25g}}
+        - {ref: std/sfp-module@1, id: port-16, at: [342.4, 7], group: ports, rel-pos: 16, attrs: {media: sfp28, speed: 25g}}
+        - {ref: std/sfp-module@1, id: port-17, at: [342.4, 22.6], group: ports, rel-pos: 17, attrs: {media: sfp28, speed: 25g}}
+        - {ref: std/sfp-module@1, id: port-18, at: [356.65, 7], group: ports, rel-pos: 18, attrs: {media: sfp28, speed: 25g}}
+        - {ref: std/sfp-module@1, id: port-19, at: [356.65, 22.6], group: ports, rel-pos: 19, attrs: {media: sfp28, speed: 25g}}
+        - {ref: std/sfp-module@1, id: port-20, at: [370.9, 7], group: ports, rel-pos: 20, attrs: {media: sfp28, speed: 25g}}
+        - {ref: std/sfp-module@1, id: port-21, at: [370.9, 22.6], group: ports, rel-pos: 21, attrs: {media: sfp28, speed: 25g}}
+        - {ref: std/sfp-module@1, id: port-22, at: [385.15, 7], group: ports, rel-pos: 22, attrs: {media: sfp28, speed: 25g}}
+        - {ref: std/sfp-module@1, id: port-23, at: [385.15, 22.6], group: ports, rel-pos: 23, attrs: {media: sfp28, speed: 25g}}
+        - {ref: std/sfp-module@1, id: port-24, at: [399.4, 7], group: ports, rel-pos: 24, attrs: {media: sfp28, speed: 25g}}
+        - {ref: std/sfp-module@1, id: port-25, at: [399.4, 22.6], group: ports, rel-pos: 25, attrs: {media: sfp28, speed: 25g}}
+        - {ref: std/sfp-module@1, id: port-26, at: [413.65, 7], group: ports, rel-pos: 26, attrs: {media: sfp28, speed: 25g}}
+        - {ref: std/sfp-module@1, id: port-27, at: [413.65, 22.6], group: ports, rel-pos: 27, attrs: {media: sfp28, speed: 25g}}
+        - {ref: common/sfp-lc-duplex@1, id: optic-4, mate-to: port-4, group: optics}
+        - {ref: common/sfp-lc-duplex@1, id: optic-6, mate-to: port-6, group: optics}
+        - {ref: common/sfp-lc-duplex@1, id: optic-8, mate-to: port-8, group: optics}
+        - {ref: common/sfp-lc-duplex@1, id: optic-10, mate-to: port-10, group: optics}
+        - {ref: common/sfp-lc-duplex@1, id: optic-12, mate-to: port-12, group: optics}
+        - {ref: common/sfp-lc-duplex@1, id: optic-14, mate-to: port-14, group: optics}
+    regions:
+      - {id: timing, at: [116, 1], size: {w: 36, h: 42}, label: Timing block, members: [gnss-ant, clk-10mhz, clk-1pps, bits, tod]}
+      - {id: mgmt-block, at: [151, 1], size: {w: 19, h: 42}, label: Management, members: [mgmt, usb, console]}
+      - {id: intake, at: [4, 0], size: {w: 110, h: 43.5}, physical-context: Intake, label: PSU intake, members: [psu-0, psu-1]}
+  rear:
+    size:
+      w: 440
+      h: 43.5
+    panel:
+      decor:
+        - {at: [281, 2], size: [147, 39.5], pattern: vent, vent: 25}
+    silkscreen:
+      - {at: [16.0, 4.8], text: FAN-1, for: fan-1}
+      - {at: [69.2, 4.8], text: FAN-2, for: fan-2}
+      - {at: [122.4, 4.8], text: FAN-3, for: fan-3}
+      - {at: [175.6, 4.8], text: FAN-4, for: fan-4}
+      - {at: [228.8, 4.8], text: FAN-5, for: fan-5}
+    components:
+      bays:
+        - {id: fan-1, at: [8.0, 0.8], size: {w: 51.5, h: 42.2}, accepts: [ufispace/fan-402825@1], group: fans, rel-pos: 1, default: ufispace/fan-402825@1}
+        - {id: fan-2, at: [61.2, 0.8], size: {w: 51.5, h: 42.2}, accepts: [ufispace/fan-402825@1], group: fans, rel-pos: 2, default: ufispace/fan-402825@1}
+        - {id: fan-3, at: [114.4, 0.8], size: {w: 51.5, h: 42.2}, accepts: [ufispace/fan-402825@1], group: fans, rel-pos: 3, default: ufispace/fan-402825@1}
+        - {id: fan-4, at: [167.6, 0.8], size: {w: 51.5, h: 42.2}, accepts: [ufispace/fan-402825@1], group: fans, rel-pos: 4, default: ufispace/fan-402825@1}
+        - {id: fan-5, at: [220.8, 0.8], size: {w: 51.5, h: 42.2}, accepts: [ufispace/fan-402825@1], group: fans, rel-pos: 5, default: ufispace/fan-402825@1}
+    regions:
+      - {id: exhaust, at: [8, 0], size: {w: 266, h: 43.5}, physical-context: Exhaust, label: Fan exhaust, members: [fan-1, fan-2, fan-3, fan-4, fan-5]}
+  top:
+    size:
+      w: 440
+      h: 302
+    panel:
+      decor:
+        - {at: [25, 68], size: [390, 3.2], fill: '#2e3236', sink: 1}
+        - {at: [25, 148], size: [390, 3.2], fill: '#2e3236', sink: 1}
+        - {at: [25, 228], size: [390, 3.2], fill: '#2e3236', sink: 1}
+  bottom:
+    size:
+      w: 440
+      h: 302
+    components:
+      placements:
+        - {ref: common/compliance-sticker@1, id: bottom-label, at: [110.5, 48]}
+  left:
+    size:
+      w: 302
+      h: 43.5
+    components:
+      placements:
+        - {ref: common/screw-head@1, id: screw-l1, at: [40, 20]}
+        - {ref: common/screw-head@1, id: screw-l2, at: [150, 20]}
+        - {ref: common/screw-head@1, id: screw-l3, at: [260, 20]}
+  right:
+    size:
+      w: 302
+      h: 43.5
+    silkscreen:
+      - {at: [251, 12.8], text: GND, font-size: 2.4, for: ground-1}
+    components:
+      placements:
+        - {ref: common/screw-head@1, id: screw-r1, at: [40, 20]}
+        - {ref: common/screw-head@1, id: screw-r2, at: [150, 20]}
+        - {ref: common/ground-lug@1, id: ground-1, at: [242, 15]}
+        - {ref: common/ground-lug@1, id: ground-2, at: [253, 15]}
 configurations:
   dc:
     description: Dual 400W DC PSUs (PSU-401-DISB-1), front-to-back airflow
     default: true
     airflow: front-to-back
     part-numbers:
-      PSU-401-DISB-1: {part: PSU-401-DISB-1}
-      FAN-402825-HD: {part: FAN-402825-HD}
+      PSU-401-DISB-1:
+        part: PSU-401-DISB-1
+      FAN-402825-HD:
+        part: FAN-402825-HD
     component-attrs:
-      psu-401-dc: {model: PSU-401-DISB-1}
-      fan-402825: {model: FAN-402825-HD}
+      psu-401-dc:
+        model: PSU-401-DISB-1
+      fan-402825:
+        model: FAN-402825-HD
   ac:
     description: Dual 400W AC PSUs (PSU-401-AISB), front-to-back airflow
     airflow: front-to-back
-    bays: {psu-0: 'ufispace/psu-401-ac@1', psu-1: 'ufispace/psu-401-ac@1'}
+    bays:
+      psu-0: ufispace/psu-401-ac@1
+      psu-1: ufispace/psu-401-ac@1
     part-numbers:
-      PSU-401-AISB: {part: PSU-401-AISB}
-      FAN-402825-HD: {part: FAN-402825-HD}
+      PSU-401-AISB:
+        part: PSU-401-AISB
+      FAN-402825-HD:
+        part: FAN-402825-HD
     component-attrs:
-      psu-401-ac: {model: PSU-401-AISB}
-      fan-402825: {model: FAN-402825-HD}
-views:
-  front:
-    size: {w: 440, h: 43.5}
-    decor:
-      - {at: [170.5, 2], size: [57, 17.6], pattern: vent, vent: 25}
-      - {at: [253.4, 0.8], size: [175.8, 2.6], pattern: vent, vent: 25}
-      - {at: [253.4, 37.4], size: [175.8, 5.2], pattern: vent, vent: 25}
-      - {at: [170.5, 19.6], size: [6.9, 6.2], pattern: vent, vent: 25}
-      - {at: [196.9, 19.6], size: [7.6, 6.2], pattern: vent, vent: 25}
-      - {at: [224, 19.6], size: [3.5, 6.2], pattern: vent, vent: 25}
-      - {at: [177.4, 19.6], size: [19.5, 6.2], fill: '#33373c', rx: 0.5}
-      - {at: [204.5, 19.6], size: [19.5, 6.2], fill: '#33373c', rx: 0.5}
-      - {at: [229.8, 19.3], size: [19.5, 4.2], fill: '#b0b5bb', rx: 0.8}
-      - {at: [170.5, 25.8], size: [6.9, 15.7], pattern: vent, vent: 25}
-      - {at: [197, 25.8], size: [7.4, 15.7], pattern: vent, vent: 25}
-      - {at: [224.1, 25.8], size: [3.4, 15.7], pattern: vent, vent: 25}
-      - {at: [254.025, 3.6], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
-      - {at: [254.025, 33], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
-      - {at: [268.275, 3.6], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
-      - {at: [268.275, 33], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
-      - {at: [282.525, 3.6], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
-      - {at: [282.525, 33], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
-      - {at: [296.775, 3.6], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
-      - {at: [296.775, 33], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
-      - {at: [311.025, 3.6], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
-      - {at: [311.025, 33], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
-      - {at: [325.275, 3.6], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
-      - {at: [325.275, 33], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
-      - {at: [342.825, 3.6], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
-      - {at: [342.825, 33], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
-      - {at: [357.075, 3.6], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
-      - {at: [357.075, 33], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
-      - {at: [371.325, 3.6], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
-      - {at: [371.325, 33], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
-      - {at: [385.575, 3.6], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
-      - {at: [385.575, 33], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
-      - {at: [399.825, 3.6], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
-      - {at: [399.825, 33], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
-      - {at: [414.075, 3.6], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
-      - {at: [414.075, 33], size: [13.4, 3.9], fill: '#f5c542', rx: 0.4}
-      - {at: [253.6, 18.2], size: [14.25, 4.2], fill: '#b0b5bb', rx: 0.8}
-      - {at: [267.85, 18.2], size: [14.25, 4.2], fill: '#b0b5bb', rx: 0.8}
-      - {at: [282.1, 18.2], size: [14.25, 4.2], fill: '#b0b5bb', rx: 0.8}
-      - {at: [296.35, 18.2], size: [14.25, 4.2], fill: '#b0b5bb', rx: 0.8}
-      - {at: [310.6, 18.2], size: [14.25, 4.2], fill: '#b0b5bb', rx: 0.8}
-      - {at: [324.85, 18.2], size: [14.25, 4.2], fill: '#b0b5bb', rx: 0.8}
-      - {at: [342.4, 18.2], size: [14.25, 4.2], fill: '#b0b5bb', rx: 0.8}
-      - {at: [356.65, 18.2], size: [14.25, 4.2], fill: '#b0b5bb', rx: 0.8}
-      - {at: [370.9, 18.2], size: [14.25, 4.2], fill: '#b0b5bb', rx: 0.8}
-      - {at: [385.15, 18.2], size: [14.25, 4.2], fill: '#b0b5bb', rx: 0.8}
-      - {at: [399.4, 18.2], size: [14.25, 4.2], fill: '#b0b5bb', rx: 0.8}
-      - {at: [413.65, 18.2], size: [14.25, 4.2], fill: '#b0b5bb', rx: 0.8}
-    silkscreen:
-      - {text: "PSU0", at: [58.9, 8], font-size: 2.6, rotate: 90}
-      - {text: "PSU1", at: [58.9, 27], font-size: 2.6, rotate: 90}
-      - {text: "S9510-28DC", at: [121.5, 32.6], font-size: 1.9}
-      - {text: "BITS", at: [128.2, 19.8], font-size: 1.9}
-      - {text: "\u25b2\u25bc", at: [128.2, 29.0], font-size: 1.9}
-      - {text: "TOD", at: [128.2, 36.2], font-size: 1.9}
-      - {text: "SS\u26a1 \u25b2\u25bc IOIOI", at: [160.8, 42.8], font-size: 1.7}
-    bays:
-      - {id: psu-0, at: [4.5, 1.6], size: {w: 50.5, h: 40.2}, accepts: ['ufispace/psu-401-dc@1', 'ufispace/psu-401-ac@1'], group: psus, rel-pos: 1, default: 'ufispace/psu-401-dc@1'}
-      - {id: psu-1, at: [63.2, 1.6], size: {w: 50.5, h: 40.2}, accepts: ['ufispace/psu-401-dc@1', 'ufispace/psu-401-ac@1'], group: psus, rel-pos: 2, default: 'ufispace/psu-401-dc@1'}
-    placements:
-      - {ref: common/sma-jack@1, id: gnss-ant, at: [119.2, 1.4], label: "GNSS ANT", label-at: [4.75, 11.4], label-size: 1.9, attrs: {role: gnss-in}}
-      - {ref: common/smb-jack@1, id: clk-10mhz, at: [133.5, 2.4], label: "10MHZ", label-at: [3.5, 8.8], label-size: 1.9, attrs: {role: 10mhz-io}}
-      - {ref: common/smb-jack@1, id: clk-1pps, at: [143.5, 2.4], label: "1PPS", label-at: [3.5, 8.8], label-size: 1.9, attrs: {role: 1pps-io}}
-      - {ref: common/led-rect@1, id: led-gnss, at: [121.4, 16.2], label: "GNSS", label-at: [-4.6, 1.9], label-size: 1.7}
-      - {ref: common/led-rect@1, id: led-sync, at: [121.4, 19.1], label: "SYNC", label-at: [-4.6, 1.9], label-size: 1.7}
-      - {ref: common/led-rect@1, id: led-stat, at: [121.4, 22.0], label: "STAT", label-at: [-4.6, 1.9], label-size: 1.7}
-      - {ref: common/led-rect@1, id: led-fan, at: [121.4, 24.9], label: "FAN", label-at: [-4.6, 1.9], label-size: 1.7}
-      - {ref: common/led-rect@1, id: led-pwr, at: [121.4, 27.8], label: "PWR", label-at: [-4.6, 1.9], label-size: 1.7}
-      - {ref: common/ground-symbol@1, id: ground-mark, at: [431.6, 18.75]}
-      - {ref: common/reset-button@1, id: reset, at: [118.8, 34.6], label: "RESET", label-at: [7.4, 3.2], label-size: 1.8}
-      - {ref: common/rj45-bezel@2, id: bits, at: [131.8, 13.4], attrs: {media: rj48, role: bits-io}}
-      - {ref: common/rj45-bezel@2, id: tod, at: [131.8, 28.3], attrs: {media: rj45, role: tod-in}}
-      - {ref: common/rj45-port@4, id: mgmt, at: [152.3, 1.2], attrs: {role: mgmt, speed: 100m-1g}}
-      - {ref: common/usb-a@3, id: usb, at: [152.3, 16.1], attrs: {role: storage, speed: usb3}}
-      - {ref: common/rj45-bezel@2, id: console, at: [152.3, 25.4], attrs: {media: rj45-serial, role: console}}
-      - {ref: common/qsfp-cage@1, id: port-0, at: [177.4, 26.2], skin: blue, group: ports, rel-pos: 100, label: "0", label-at: [9.75, 11.9], label-size: 2.6, label-color: "#f5f7fa", attrs: {media: qsfp-dd, speed: 400g}}
-      - {ref: common/qsfp-cage@1, id: port-1, at: [204.5, 26.2], skin: blue, group: ports, rel-pos: 101, label: "1", label-at: [9.75, 11.9], label-size: 2.6, label-color: "#f5f7fa", attrs: {media: qsfp-dd, speed: 400g}}
-      - {ref: common/led-arrow@1, id: led-port-4, at: [255.975, 18.7], skin: up, attrs: {port: '4'}}
-      - {ref: common/led-arrow@1, id: led-port-5, at: [261.875, 18.7], skin: down, attrs: {port: '5'}}
-      - {ref: common/led-arrow@1, id: led-port-6, at: [270.225, 18.7], skin: up, attrs: {port: '6'}}
-      - {ref: common/led-arrow@1, id: led-port-7, at: [276.125, 18.7], skin: down, attrs: {port: '7'}}
-      - {ref: common/led-arrow@1, id: led-port-8, at: [284.475, 18.7], skin: up, attrs: {port: '8'}}
-      - {ref: common/led-arrow@1, id: led-port-9, at: [290.375, 18.7], skin: down, attrs: {port: '9'}}
-      - {ref: common/led-arrow@1, id: led-port-10, at: [298.725, 18.7], skin: up, attrs: {port: '10'}}
-      - {ref: common/led-arrow@1, id: led-port-11, at: [304.625, 18.7], skin: down, attrs: {port: '11'}}
-      - {ref: common/led-arrow@1, id: led-port-12, at: [312.975, 18.7], skin: up, attrs: {port: '12'}}
-      - {ref: common/led-arrow@1, id: led-port-13, at: [318.875, 18.7], skin: down, attrs: {port: '13'}}
-      - {ref: common/led-arrow@1, id: led-port-14, at: [327.225, 18.7], skin: up, attrs: {port: '14'}}
-      - {ref: common/led-arrow@1, id: led-port-15, at: [333.125, 18.7], skin: down, attrs: {port: '15'}}
-      - {ref: common/led-arrow@1, id: led-port-16, at: [344.775, 18.7], skin: up, attrs: {port: '16'}}
-      - {ref: common/led-arrow@1, id: led-port-17, at: [350.675, 18.7], skin: down, attrs: {port: '17'}}
-      - {ref: common/led-arrow@1, id: led-port-18, at: [359.025, 18.7], skin: up, attrs: {port: '18'}}
-      - {ref: common/led-arrow@1, id: led-port-19, at: [364.925, 18.7], skin: down, attrs: {port: '19'}}
-      - {ref: common/led-arrow@1, id: led-port-20, at: [373.275, 18.7], skin: up, attrs: {port: '20'}}
-      - {ref: common/led-arrow@1, id: led-port-21, at: [379.175, 18.7], skin: down, attrs: {port: '21'}}
-      - {ref: common/led-arrow@1, id: led-port-22, at: [387.525, 18.7], skin: up, attrs: {port: '22'}}
-      - {ref: common/led-arrow@1, id: led-port-23, at: [393.425, 18.7], skin: down, attrs: {port: '23'}}
-      - {ref: common/led-arrow@1, id: led-port-24, at: [401.775, 18.7], skin: up, attrs: {port: '24'}}
-      - {ref: common/led-arrow@1, id: led-port-25, at: [407.675, 18.7], skin: down, attrs: {port: '25'}}
-      - {ref: common/led-arrow@1, id: led-port-26, at: [416.025, 18.7], skin: up, attrs: {port: '26'}}
-      - {ref: common/led-arrow@1, id: led-port-27, at: [421.925, 18.7], skin: down, attrs: {port: '27'}}
-      - {ref: common/led-dot@1, id: led-p0-a, at: [182.9, 21.7], attrs: {port: '0', role: link}}
-      - {ref: common/led-dot@1, id: led-p0-b, at: [187.4, 21.7], attrs: {port: '0', role: activity}}
-      - {ref: common/led-dot@1, id: led-p1-a, at: [210.0, 21.7], attrs: {port: '1', role: link}}
-      - {ref: common/led-dot@1, id: led-p1-b, at: [214.5, 21.7], attrs: {port: '1', role: activity}}
-      - {ref: common/qsfp-lane-leds@1, id: leds-port-2, at: [229.8, 19.7], attrs: {port: '2'}}
-      - {ref: common/qsfp-lane-leds@1, id: leds-port-3, at: [229.8, 39.7], attrs: {port: '3'}}
-      - {ref: common/qsfp-cage@1, id: port-2, at: [229.8, 5.9], rotate: 180, skin: green, group: ports, rel-pos: 102, label: "2", label-at: [9.75, 2.9], label-size: 2.6, label-color: "#f5f7fa", attrs: {media: qsfp28, speed: 100g}}
-      - {ref: common/qsfp-cage@1, id: port-3, at: [229.8, 26.2], skin: green, group: ports, rel-pos: 103, label: "3", label-at: [9.75, 11.9], label-size: 2.6, label-color: "#f5f7fa", attrs: {media: qsfp28, speed: 100g}}
-      - {ref: std/sfp-module@1, id: port-4, at: [253.6, 7], group: ports, rel-pos: 4, label: "4", label-at: [7.125, -1.4], label-size: 2.9, label-color: "#17191c", attrs: {media: sfp28, speed: 25g}}
-      - {ref: std/sfp-module@1, id: port-5, at: [253.6, 22.6], group: ports, rel-pos: 5, label: "5", label-at: [7.125, 13.8], label-size: 2.9, label-color: "#17191c", attrs: {media: sfp28, speed: 25g}}
-      - {ref: std/sfp-module@1, id: port-6, at: [267.85, 7], group: ports, rel-pos: 6, label: "6", label-at: [7.125, -1.4], label-size: 2.9, label-color: "#17191c", attrs: {media: sfp28, speed: 25g}}
-      - {ref: std/sfp-module@1, id: port-7, at: [267.85, 22.6], group: ports, rel-pos: 7, label: "7", label-at: [7.125, 13.8], label-size: 2.9, label-color: "#17191c", attrs: {media: sfp28, speed: 25g}}
-      - {ref: std/sfp-module@1, id: port-8, at: [282.1, 7], group: ports, rel-pos: 8, label: "8", label-at: [7.125, -1.4], label-size: 2.9, label-color: "#17191c", attrs: {media: sfp28, speed: 25g}}
-      - {ref: std/sfp-module@1, id: port-9, at: [282.1, 22.6], group: ports, rel-pos: 9, label: "9", label-at: [7.125, 13.8], label-size: 2.9, label-color: "#17191c", attrs: {media: sfp28, speed: 25g}}
-      - {ref: std/sfp-module@1, id: port-10, at: [296.35, 7], group: ports, rel-pos: 10, label: "10", label-at: [7.125, -1.4], label-size: 2.9, label-color: "#17191c", attrs: {media: sfp28, speed: 25g}}
-      - {ref: std/sfp-module@1, id: port-11, at: [296.35, 22.6], group: ports, rel-pos: 11, label: "11", label-at: [7.125, 13.8], label-size: 2.9, label-color: "#17191c", attrs: {media: sfp28, speed: 25g}}
-      - {ref: std/sfp-module@1, id: port-12, at: [310.6, 7], group: ports, rel-pos: 12, label: "12", label-at: [7.125, -1.4], label-size: 2.9, label-color: "#17191c", attrs: {media: sfp28, speed: 25g}}
-      - {ref: std/sfp-module@1, id: port-13, at: [310.6, 22.6], group: ports, rel-pos: 13, label: "13", label-at: [7.125, 13.8], label-size: 2.9, label-color: "#17191c", attrs: {media: sfp28, speed: 25g}}
-      - {ref: std/sfp-module@1, id: port-14, at: [324.85, 7], group: ports, rel-pos: 14, label: "14", label-at: [7.125, -1.4], label-size: 2.9, label-color: "#17191c", attrs: {media: sfp28, speed: 25g}}
-      - {ref: std/sfp-module@1, id: port-15, at: [324.85, 22.6], group: ports, rel-pos: 15, label: "15", label-at: [7.125, 13.8], label-size: 2.9, label-color: "#17191c", attrs: {media: sfp28, speed: 25g}}
-      - {ref: std/sfp-module@1, id: port-16, at: [342.4, 7], group: ports, rel-pos: 16, label: "16", label-at: [7.125, -1.4], label-size: 2.9, label-color: "#17191c", attrs: {media: sfp28, speed: 25g}}
-      - {ref: std/sfp-module@1, id: port-17, at: [342.4, 22.6], group: ports, rel-pos: 17, label: "17", label-at: [7.125, 13.8], label-size: 2.9, label-color: "#17191c", attrs: {media: sfp28, speed: 25g}}
-      - {ref: std/sfp-module@1, id: port-18, at: [356.65, 7], group: ports, rel-pos: 18, label: "18", label-at: [7.125, -1.4], label-size: 2.9, label-color: "#17191c", attrs: {media: sfp28, speed: 25g}}
-      - {ref: std/sfp-module@1, id: port-19, at: [356.65, 22.6], group: ports, rel-pos: 19, label: "19", label-at: [7.125, 13.8], label-size: 2.9, label-color: "#17191c", attrs: {media: sfp28, speed: 25g}}
-      - {ref: std/sfp-module@1, id: port-20, at: [370.9, 7], group: ports, rel-pos: 20, label: "20", label-at: [7.125, -1.4], label-size: 2.9, label-color: "#17191c", attrs: {media: sfp28, speed: 25g}}
-      - {ref: std/sfp-module@1, id: port-21, at: [370.9, 22.6], group: ports, rel-pos: 21, label: "21", label-at: [7.125, 13.8], label-size: 2.9, label-color: "#17191c", attrs: {media: sfp28, speed: 25g}}
-      - {ref: std/sfp-module@1, id: port-22, at: [385.15, 7], group: ports, rel-pos: 22, label: "22", label-at: [7.125, -1.4], label-size: 2.9, label-color: "#17191c", attrs: {media: sfp28, speed: 25g}}
-      - {ref: std/sfp-module@1, id: port-23, at: [385.15, 22.6], group: ports, rel-pos: 23, label: "23", label-at: [7.125, 13.8], label-size: 2.9, label-color: "#17191c", attrs: {media: sfp28, speed: 25g}}
-      - {ref: std/sfp-module@1, id: port-24, at: [399.4, 7], group: ports, rel-pos: 24, label: "24", label-at: [7.125, -1.4], label-size: 2.9, label-color: "#17191c", attrs: {media: sfp28, speed: 25g}}
-      - {ref: std/sfp-module@1, id: port-25, at: [399.4, 22.6], group: ports, rel-pos: 25, label: "25", label-at: [7.125, 13.8], label-size: 2.9, label-color: "#17191c", attrs: {media: sfp28, speed: 25g}}
-      - {ref: std/sfp-module@1, id: port-26, at: [413.65, 7], group: ports, rel-pos: 26, label: "26", label-at: [7.125, -1.4], label-size: 2.9, label-color: "#17191c", attrs: {media: sfp28, speed: 25g}}
-      - {ref: std/sfp-module@1, id: port-27, at: [413.65, 22.6], group: ports, rel-pos: 27, label: "27", label-at: [7.125, 13.8], label-size: 2.9, label-color: "#17191c", attrs: {media: sfp28, speed: 25g}}
-      - {ref: common/sfp-lc-duplex@1, id: optic-4, mate-to: port-4, group: optics}
-      - {ref: common/sfp-lc-duplex@1, id: optic-6, mate-to: port-6, group: optics}
-      - {ref: common/sfp-lc-duplex@1, id: optic-8, mate-to: port-8, group: optics}
-      - {ref: common/sfp-lc-duplex@1, id: optic-10, mate-to: port-10, group: optics}
-      - {ref: common/sfp-lc-duplex@1, id: optic-12, mate-to: port-12, group: optics}
-      - {ref: common/sfp-lc-duplex@1, id: optic-14, mate-to: port-14, group: optics}
-    regions:
-      - {id: timing, at: [116, 1], size: {w: 36, h: 42}, label: Timing block, members: [gnss-ant, clk-10mhz, clk-1pps, bits, tod]}
-      - {id: mgmt-block, at: [151, 1], size: {w: 19, h: 42}, label: Management, members: [mgmt, usb, console]}
-      - {id: intake, at: [4, 0], size: {w: 110, h: 43.5}, physical-context: Intake, label: PSU intake, members: [psu-0, psu-1]}
-  rear:
-    size: {w: 440, h: 43.5}
-    decor:
-      - {at: [281, 2], size: [147, 39.5], pattern: vent, vent: 25}
-    bays:
-      - {id: fan-1, at: [8.0, 0.8], size: {w: 51.5, h: 42.2}, accepts: ['ufispace/fan-402825@1'], group: fans, rel-pos: 1, label: 'FAN-1', label-at: [8, 4], label-size: 2.2, default: 'ufispace/fan-402825@1'}
-      - {id: fan-2, at: [61.2, 0.8], size: {w: 51.5, h: 42.2}, accepts: ['ufispace/fan-402825@1'], group: fans, rel-pos: 2, label: 'FAN-2', label-at: [8, 4], label-size: 2.2, default: 'ufispace/fan-402825@1'}
-      - {id: fan-3, at: [114.4, 0.8], size: {w: 51.5, h: 42.2}, accepts: ['ufispace/fan-402825@1'], group: fans, rel-pos: 3, label: 'FAN-3', label-at: [8, 4], label-size: 2.2, default: 'ufispace/fan-402825@1'}
-      - {id: fan-4, at: [167.6, 0.8], size: {w: 51.5, h: 42.2}, accepts: ['ufispace/fan-402825@1'], group: fans, rel-pos: 4, label: 'FAN-4', label-at: [8, 4], label-size: 2.2, default: 'ufispace/fan-402825@1'}
-      - {id: fan-5, at: [220.8, 0.8], size: {w: 51.5, h: 42.2}, accepts: ['ufispace/fan-402825@1'], group: fans, rel-pos: 5, label: 'FAN-5', label-at: [8, 4], label-size: 2.2, default: 'ufispace/fan-402825@1'}
-    regions:
-      - {id: exhaust, at: [8, 0], size: {w: 266, h: 43.5}, physical-context: Exhaust, label: Fan exhaust, members: [fan-1, fan-2, fan-3, fan-4, fan-5]}
-  top:
-    size: {w: 440, h: 302}
-    decor:
-      - {at: [25, 68], size: [390, 3.2], fill: '#2e3236', sink: 1}
-      - {at: [25, 148], size: [390, 3.2], fill: '#2e3236', sink: 1}
-      - {at: [25, 228], size: [390, 3.2], fill: '#2e3236', sink: 1}
-  bottom:
-    size: {w: 440, h: 302}
-    placements:
-      - {ref: common/compliance-sticker@1, id: bottom-label, at: [110.5, 48]}
-  left:
-    size: {w: 302, h: 43.5}
-    placements:
-      - {ref: common/screw-head@1, id: screw-l1, at: [40, 20]}
-      - {ref: common/screw-head@1, id: screw-l2, at: [150, 20]}
-      - {ref: common/screw-head@1, id: screw-l3, at: [260, 20]}
-  right:
-    # drawn as seen from outside the right side: device front at image LEFT
-    size: {w: 302, h: 43.5}
-    placements:
-      - {ref: common/screw-head@1, id: screw-r1, at: [40, 20]}
-      - {ref: common/screw-head@1, id: screw-r2, at: [150, 20]}
-      - {ref: common/ground-lug@1, id: ground-1, at: [242, 15], label: "GND", label-at: [9, -2.2], label-size: 2.4}
-      - {ref: common/ground-lug@1, id: ground-2, at: [253, 15]}
+      psu-401-ac:
+        model: PSU-401-AISB
+      fan-402825:
+        model: FAN-402825-HD
+datasheet:
+  title: UfiSpace S9510-28DC Datasheet (202500822V06)
+  url: https://www.ufispace.com/products/telco/access/s9510-28dc
+  sha256: 3f2f5a9663467c4604928f61aa06a6c80e7193e2e4f2cd8a727044089aa045cc
+references:
+  - {title: UfiSpace S9510-28DC Hardware Installation Guide, sha256: 36086ea166a7dd4c738efb3597ab6afc94108504b55bd653dadfd1ac71e6ffc5}

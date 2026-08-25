@@ -23,6 +23,9 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 import yaml
+
+from manifest import (view_parts, targets, VIEW_KEY_ORDER,
+                      PANEL_KEY_ORDER, COMPONENT_KEY_ORDER)
 from jsonschema import Draft202012Validator
 
 SEGMENT = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
@@ -205,8 +208,9 @@ def _instance_size(ref, lib_roots):
 
 def lint_device_mating(path, view_name, view, lib_roots):
     """L12: mate-to must resolve, and the two sides must agree on the interface."""
-    by_id = {p["id"]: p for p in (view.get("placements") or [])}
-    for p in view.get("placements") or []:
+    placements = view_parts(view)["placements"]
+    by_id = {p["id"]: p for p in placements}
+    for p in placements:
         target = p.get("mate-to")
         if not target:
             continue
@@ -247,7 +251,7 @@ def lint_device_overlap(path, view_name, view, lib_roots):
     sit inside its host's aperture.
     """
     boxes = []
-    for p in view.get("placements") or []:
+    for p in view_parts(view)["placements"]:
         if not p.get("at") or p.get("mate-to"):
             continue
         cp = resolve_component(p["ref"], lib_roots)
@@ -311,19 +315,38 @@ def lint_device(path, validator, lib_roots):
         return any((Path(r) / "components" / nsname / f"v{major}" / "contract.yaml").exists()
                    for r in lib_roots)
 
+    declared_groups = set((data.get("groups") or {}).keys())
     for vname, view in (data.get("views") or {}).items():
         view = view or {}
+        # L16 - a view is written in the order the part is made. Not a style
+        # preference: an agent building a device follows this order stage by stage,
+        # and a file that reads in a different order teaches the wrong procedure.
+        for keys, order, where in ((list(view.keys()), VIEW_KEY_ORDER, vname),
+                                   (list((view.get("panel") or {}).keys()), PANEL_KEY_ORDER, f"{vname}/panel"),
+                                   (list((view.get("components") or {}).keys()), COMPONENT_KEY_ORDER, f"{vname}/components")):
+            present = [k for k in order if k in keys]
+            if [k for k in keys if k in order] != present:
+                err(path, "L16", f"{where}: keys must read {' > '.join(present)} "
+                                 f"(manufacturing order), not {' > '.join(k for k in keys if k in order)}")
         lint_device_mating(path, vname, view, lib_roots)
         lint_device_overlap(path, vname, view, lib_roots)
+        vp = view_parts(view)
         seen = set()
-        for p in view.get("placements", []) or []:
+        # L17 - every group used is declared. The declaration carries the vendor's
+        # word and the numbering origin; a group that is only a string has neither.
+        for item in vp["placements"] + vp["bays"]:
+            g = item.get("group")
+            if g and g not in declared_groups:
+                err(path, "L17", f"{vname}/{item['id']}: group {g!r} is not declared "
+                                 "under top-level groups:")
+        for p in vp["placements"]:
             check_segment(path, "L2", p["id"])
             if p["id"] in seen:
                 err(path, "L5", f"duplicate instance id {p['id']} in view {vname}")
             seen.add(p["id"])
             if not resolve(p["ref"]):
                 err(path, "L5", f"unresolvable ref {p['ref']} ({p['id']})")
-        for b in view.get("bays", []) or []:
+        for b in vp["bays"]:
             check_segment(path, "L2", b["id"])
             if b["id"] in seen:
                 err(path, "L5", f"duplicate instance id {b['id']} in view {vname}")
@@ -333,52 +356,59 @@ def lint_device(path, validator, lib_roots):
                     err(path, "L5", f"unresolvable accepts ref {acc} ({b['id']})")
             if b.get("default") and b["default"] not in b["accepts"]:
                 err(path, "L6", f"bay {b['id']} default {b['default']} not in accepts")
-        for r in view.get("regions", []) or []:
+        for r in vp["regions"]:
             check_segment(path, "L2", r["id"])
             for m in r.get("members", []) or []:
                 if m not in seen:
                     err(path, "L7", f"region {r['id']} member {m} is not an instance in view {vname}")
-        # L14 - silkscreen bound to a part must name a part that exists, and must sit
-        # somewhere near it. A legend on the far side of the chassis from the thing it
-        # labels is the failure this catches; it is exactly the class of mistake that
-        # is invisible in YAML and obvious on the drawing.
+        # L14 - `for:` must name a placement or bay that exists in this view, and
+        # the thing carrying it must sit near it. Same field, same rule, whether the
+        # carrier is a silkscreen legend, an LED or a bay: "belongs to / annotates".
+        # A legend or indicator on the far side of the chassis from its target is
+        # the failure this catches; it is invisible in YAML and obvious drawn.
         boxes = {}
-        for p in view.get("placements", []) or []:
+        for p in vp["placements"]:
             c = _instance_size(p.get("ref"), lib_roots)
             if c and p.get("at"):
                 boxes[p["id"]] = (p["at"], c, p.get("rotate"))
-        for b in view.get("bays", []) or []:
+        for b in vp["bays"]:
             boxes[b["id"]] = (b["at"], (b["size"]["w"], b["size"]["h"]), b.get("rotate"))
-        for m in view.get("silkscreen", []) or []:
+
+        def footprint(owner):
+            (ax, ay), (bw, bh), rot = boxes[owner]
+            if rot in (90, 270, -90):
+                d = (bw - bh) / 2.0
+                ax, ay, bw, bh = ax + d, ay - d, bh, bw
+            return ax, ay, bw, bh
+
+        def check_for(kind, ident, at, value):
+            for owner in targets(value):
+                if owner not in seen:
+                    err(path, "L14", f"{vname}: {kind} {ident!r} is for {owner!r}, "
+                                     "which is not a placement or bay in this view")
+                    continue
+                if owner not in boxes or not at:
+                    continue
+                ax, ay, bw, bh = footprint(owner)
+                mx, my = at
+                # inside the owner's footprint or within one owner-dimension of it -
+                # printed beside a port, not across the chassis. Floor of 6mm: a
+                # legend beside a 2mm LED is necessarily further away than 2mm,
+                # because the text is wider than the lamp.
+                tx, ty = max(bw, 6.0), max(bh, 6.0)
+                if mx < ax - tx or mx > ax + bw + tx or my < ay - ty or my > ay + bh + ty:
+                    err(path, "L14", f"{vname}: {kind} {ident!r} at ({mx:g}, {my:g}) is "
+                                     f"for {owner!r} but sits well outside it "
+                                     f"({ax:g}, {ay:g} {bw:g}x{bh:g})")
+
+        for m in vp["silkscreen"]:
             if m.get("id"):
                 check_segment(path, "L2", m["id"])
-            owner = m.get("for")
-            if owner is None:
-                continue
-            if owner not in seen:
-                err(path, "L14", f"{vname}: silkscreen {m['text']!r} is for {owner!r}, "
-                                 "which is not a placement or bay in this view")
-                continue
-            box = boxes.get(owner)
-            if not box:
-                continue
-            (ax, ay), (bw, bh), rot = box
-            if rot in (90, 270, -90):
-                bw, bh = bh, bw
-                ax, ay = ax + (box[1][0] - box[1][1]) / 2.0, ay - (box[1][0] - box[1][1]) / 2.0
-            mx, my = m["at"]
-            # a legend belongs to its part if it is inside the part's footprint or
-            # within one part-dimension of it - printed beside a port, not across the box
-            far_x = mx < ax - bw or mx > ax + 2 * bw
-            far_y = my < ay - bh or my > ay + 2 * bh
-            if far_x or far_y:
-                err(path, "L14", f"{vname}: silkscreen {m['text']!r} at "
-                                 f"({mx:g}, {my:g}) is bound to {owner!r} but sits well "
-                                 f"outside it ({ax:g}, {ay:g} {bw:g}x{bh:g})")
-    bay_accepts = {}
-    for view in (data.get("views") or {}).values():
-        for b in (view or {}).get("bays", []) or []:
-            bay_accepts[b["id"]] = b["accepts"]
+            check_for("silkscreen", m.get("text") or m.get("id") or "path", m["at"], m.get("for"))
+        for p in vp["placements"]:
+            check_for("placement", p["id"], p.get("at"), p.get("for"))
+        for b in vp["bays"]:
+            check_for("bay", b["id"], b.get("at"), b.get("for"))
     # L15 - the conformance gate. A device declares how far it has been taken and
     # lint holds it to that standard, so work in progress can be committed without
     # fighting the linter while a device that CLAIMS to be verified has to earn it.
@@ -411,9 +441,10 @@ def lint_device(path, validator, lib_roots):
                              f"({', '.join(est[:4])}) - verified means measured, not guessed")
         refs = set()
         for view in (data.get("views") or {}).values():
-            for q in (view or {}).get("placements", []) or []:
+            vp_ = view_parts(view)
+            for q in vp_["placements"]:
                 refs.add(q["ref"])
-            for b in (view or {}).get("bays", []) or []:
+            for b in vp_["bays"]:
                 refs.update(b.get("accepts") or [])
         for ref in sorted(refs):
             c = resolve_component(ref, lib_roots)
@@ -429,6 +460,10 @@ def lint_device(path, validator, lib_roots):
                                  f"{', '.join(ce)} - a verified device cannot be built "
                                  "from guessed parts")
 
+    bay_accepts = {}
+    for view in (data.get("views") or {}).values():
+        for b in view_parts(view)["bays"]:
+            bay_accepts[b["id"]] = b["accepts"]
     for cname, cfg in (data.get("configurations") or {}).items():
         for bid, ref in (cfg.get("bays") or {}).items():
             if bid not in bay_accepts:

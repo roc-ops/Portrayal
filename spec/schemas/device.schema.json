@@ -220,7 +220,7 @@
     },
     "groups": {
       "type": "object",
-      "description": "component groups: numbering + shared attrs, e.g. ports",
+      "description": "every `group:` used in any view, declared once: the vendor's word for one of them (term), where numbering starts, and shared attrs. Lint L17 rejects an undeclared group",
       "propertyNames": {
         "$ref": "#/$defs/segment"
       },
@@ -256,6 +256,7 @@
       "additionalProperties": {
         "type": "object",
         "additionalProperties": false,
+        "description": "one face of the device, written in the order the part is made: size the panel, punch it, print it, populate it. Key order is linted (L16).",
         "properties": {
           "size": {
             "type": "object",
@@ -274,239 +275,143 @@
               }
             }
           },
-          "placements": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "required": [
-                "ref",
-                "id"
-              ],
-              "additionalProperties": false,
-              "properties": {
-                "ref": {
-                  "type": "string",
-                  "pattern": "^[a-z0-9-]+/[a-z0-9-]+@\\d+$",
-                  "description": "namespace/component@major"
-                },
-                "id": {
-                  "$ref": "#/$defs/segment"
-                },
-                "at": {
-                  "$ref": "#/$defs/xy"
-                },
-                "rotate": {
-                  "type": "number"
-                },
-                "skin": {
-                  "$ref": "#/$defs/segment"
-                },
-                "group": {
-                  "$ref": "#/$defs/segment"
-                },
-                "rel-pos": {
-                  "type": "integer"
-                },
-                "label": {
-                  "type": "string"
-                },
-                "label-at": {
-                  "$ref": "#/$defs/xy",
-                  "description": "label position relative to component origin; default below center"
-                },
-                "label-anchor": {
-                  "enum": [
-                    "start",
-                    "middle",
-                    "end"
-                  ]
-                },
-                "label-size": {
-                  "type": "number",
-                  "description": "font size in mm; default 2.2. Multi-line labels use \n"
-                },
-                "label-color": {
-                  "type": "string",
-                  "description": "label text color; default chassis silk"
-                },
-                "optional": {
-                  "$ref": "#/$defs/segment",
-                  "description": "render only when --with <tag> is given (e.g. ears)"
-                },
-                "attrs": {
-                  "type": "object"
-                },
-                "provenance": {
+          "panel": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "the sheet metal - what it is (decor) and where it is punched (cutouts)",
+            "properties": {
+              "decor": {
+                "type": "array",
+                "description": "non-addressable chassis decoration (vent fields etc.)",
+                "items": {
                   "type": "object",
-                  "additionalProperties": {
-                    "type": "string"
-                  }
-                },
-                "mate-to": {
-                  "$ref": "#/$defs/segment",
-                  "description": "id of a placement in this view to mate into. The renderer positions this component so its `mate` connection-point coincides with the host's, so an occupant never carries hand-computed centring offsets. Mutually exclusive with `at`."
-                }
-              },
-              "oneOf": [
-                {
                   "required": [
                     "at"
-                  ]
-                },
-                {
-                  "required": [
-                    "mate-to"
-                  ]
-                }
-              ]
-            }
-          },
-          "bays": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "required": [
-                "id",
-                "at",
-                "size",
-                "accepts"
-              ],
-              "additionalProperties": false,
-              "properties": {
-                "id": {
-                  "$ref": "#/$defs/segment"
-                },
-                "at": {
-                  "$ref": "#/$defs/xy"
-                },
-                "size": {
-                  "type": "object",
-                  "required": [
-                    "w",
-                    "h"
                   ],
                   "additionalProperties": false,
                   "properties": {
-                    "w": {
+                    "at": {
+                      "$ref": "#/$defs/xy"
+                    },
+                    "size": {
+                      "$ref": "#/$defs/xy"
+                    },
+                    "pattern": {
+                      "enum": [
+                        "vent",
+                        "holes",
+                        "grille",
+                        "slots",
+                        "slots-h",
+                        "ribs"
+                      ]
+                    },
+                    "vent": {
+                      "type": "number",
+                      "exclusiveMinimum": 0,
+                      "description": "air vent: dark cells (or the whole rect when plain-fill) become holes into a cavity this deep in 3D"
+                    },
+                    "pattern-offset": {
+                      "$ref": "#/$defs/xy",
+                      "description": "shift the pattern phase under this rect (align lattice rows across corners)"
+                    },
+                    "out": {
+                      "type": "number",
+                      "exclusiveMinimum": 0,
+                      "description": "decor protrudes this many mm from the face in 3D (raised stampings)"
+                    },
+                    "sink": {
+                      "type": "number",
+                      "exclusiveMinimum": 0,
+                      "description": "decor is recessed this many mm into the face in 3D (pressed grooves)"
+                    },
+                    "fill": {
+                      "type": "string",
+                      "description": "plain fill (e.g. groove color) when no pattern"
+                    },
+                    "rx": {
                       "type": "number"
                     },
-                    "h": {
+                    "stroke": {
+                      "type": "string",
+                      "description": "outline-only decor (fiber channels etc.); fill defaults to none"
+                    },
+                    "stroke-width": {
                       "type": "number"
+                    },
+                    "rotate": {
+                      "type": "number",
+                      "description": "text decor rotation in degrees about its anchor"
                     }
                   }
-                },
-                "accepts": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  },
-                  "minItems": 1
-                },
-                "group": {
-                  "$ref": "#/$defs/segment"
-                },
-                "rel-pos": {
-                  "type": "integer"
-                },
-                "label": {
-                  "type": "string"
-                },
-                "label-at": {
-                  "$ref": "#/$defs/xy"
-                },
-                "label-anchor": {
-                  "enum": [
-                    "start",
-                    "middle",
-                    "end"
-                  ]
-                },
-                "label-size": {
-                  "type": "number"
-                },
-                "label-color": {
-                  "type": "string"
-                },
-                "default": {
-                  "type": [
-                    "string",
-                    "null"
+                }
+              },
+              "cutouts": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "id",
+                    "at",
+                    "size"
                   ],
-                  "description": "ref populated by default config; null = open"
-                },
-                "rotate": {
-                  "type": "number",
-                  "description": "degrees to rotate the occupant, e.g. a line card mounted horizontally in one chassis and vertically in another"
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/segment"
+                    },
+                    "at": {
+                      "$ref": "#/$defs/xy"
+                    },
+                    "size": {
+                      "$ref": "#/$defs/xy",
+                      "description": "[w, h] in mm"
+                    },
+                    "shape": {
+                      "enum": [
+                        "rect",
+                        "circle",
+                        "d-sub",
+                        "slot"
+                      ],
+                      "default": "rect"
+                    },
+                    "rx": {
+                      "type": "number",
+                      "description": "corner radius for rect"
+                    },
+                    "empty": {
+                      "type": "boolean",
+                      "description": "a hole with deliberately nothing in it (a blanked-off option). Without this, a cutout no placement sits in is a lint finding"
+                    },
+                    "provenance": {
+                      "$ref": "#/$defs/provenance"
+                    }
+                  }
                 }
               }
             }
           },
-          "decor": {
+          "silkscreen": {
             "type": "array",
-            "description": "non-addressable chassis decoration (vent fields etc.)",
+            "description": "Printed matter on the CHASSIS panel. Painted after the panel and its decor and BEFORE components, because on the real device the silkscreen goes down on the punched panel and the modules are installed on top of it. A legend that a module would cover is therefore invisible here, which is the correct behaviour: on the hardware it would be invisible too. Silkscreen printed on a MODULE's own faceplate belongs in that component's skin, inside <g id=\"silkscreen\">, and travels with it.",
             "items": {
               "type": "object",
+              "additionalProperties": false,
               "required": [
                 "at"
               ],
-              "additionalProperties": false,
               "properties": {
+                "id": {
+                  "$ref": "#/$defs/segment",
+                  "description": "optional stable id; needed only when something else refers to this mark"
+                },
                 "at": {
                   "$ref": "#/$defs/xy"
                 },
-                "size": {
-                  "$ref": "#/$defs/xy"
-                },
-                "pattern": {
-                  "enum": [
-                    "vent",
-                    "holes",
-                    "grille",
-                    "slots",
-                    "slots-h",
-                    "ribs"
-                  ]
-                },
-                "vent": {
-                  "type": "number",
-                  "exclusiveMinimum": 0,
-                  "description": "air vent: dark cells (or the whole rect when plain-fill) become holes into a cavity this deep in 3D"
-                },
-                "pattern-offset": {
-                  "$ref": "#/$defs/xy",
-                  "description": "shift the pattern phase under this rect (align lattice rows across corners)"
-                },
-                "out": {
-                  "type": "number",
-                  "exclusiveMinimum": 0,
-                  "description": "decor protrudes this many mm from the face in 3D (raised stampings)"
-                },
-                "sink": {
-                  "type": "number",
-                  "exclusiveMinimum": 0,
-                  "description": "decor is recessed this many mm into the face in 3D (pressed grooves)"
-                },
-                "fill": {
-                  "type": "string",
-                  "description": "plain fill (e.g. groove color) when no pattern"
-                },
-                "rx": {
-                  "type": "number"
-                },
-                "stroke": {
-                  "type": "string",
-                  "description": "outline-only decor (fiber channels etc.); fill defaults to none"
-                },
-                "stroke-width": {
-                  "type": "number"
-                },
                 "text": {
                   "type": "string",
-                  "description": "silkscreen text decor (needs no size)"
-                },
-                "rotate": {
-                  "type": "number",
-                  "description": "text decor rotation in degrees about its anchor"
+                  "description": "printed legend. Multi-line uses \\n. Exactly one of text or path"
                 },
                 "font-size": {
                   "type": "number"
@@ -516,6 +421,211 @@
                     "start",
                     "middle",
                     "end"
+                  ]
+                },
+                "rotate": {
+                  "type": "number",
+                  "description": "degrees about the anchor"
+                },
+                "fill": {
+                  "type": "string",
+                  "description": "ink colour; defaults to chassis silk"
+                },
+                "for": {
+                  "description": "what this mark annotates. One placement or bay, or a list when the mark joins things - a leader line from a breaker to its terminal names both. Emitted as data-for.",
+                  "oneOf": [
+                    {
+                      "$ref": "#/$defs/segment"
+                    },
+                    {
+                      "type": "array",
+                      "minItems": 1,
+                      "items": {
+                        "$ref": "#/$defs/segment"
+                      }
+                    }
+                  ]
+                },
+                "path": {
+                  "type": "string",
+                  "description": "printed line or symbol as an SVG path in view mm - a leader line, a polarity arrow, an earth mark. Exactly one of text or path"
+                },
+                "stroke-width": {
+                  "type": "number"
+                }
+              },
+              "oneOf": [
+                {
+                  "required": [
+                    "text"
+                  ]
+                },
+                {
+                  "required": [
+                    "path"
+                  ]
+                }
+              ]
+            }
+          },
+          "components": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "what is installed into the panel. bays are things that come out; placements are things that do not",
+            "properties": {
+              "bays": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "at",
+                    "size",
+                    "accepts"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/segment"
+                    },
+                    "at": {
+                      "$ref": "#/$defs/xy"
+                    },
+                    "size": {
+                      "type": "object",
+                      "required": [
+                        "w",
+                        "h"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "w": {
+                          "type": "number"
+                        },
+                        "h": {
+                          "type": "number"
+                        }
+                      }
+                    },
+                    "accepts": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "minItems": 1
+                    },
+                    "group": {
+                      "$ref": "#/$defs/segment"
+                    },
+                    "rel-pos": {
+                      "type": "integer"
+                    },
+                    "default": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "description": "ref populated by default config; null = open"
+                    },
+                    "rotate": {
+                      "type": "number",
+                      "description": "degrees to rotate the occupant, e.g. a line card mounted horizontally in one chassis and vertically in another"
+                    },
+                    "for": {
+                      "description": "the placement or bay this one belongs to - an LED to its port, a button to its module. Emitted as data-for. One target or a list; never inferred from names.",
+                      "oneOf": [
+                        {
+                          "$ref": "#/$defs/segment"
+                        },
+                        {
+                          "type": "array",
+                          "minItems": 1,
+                          "items": {
+                            "$ref": "#/$defs/segment"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              },
+              "placements": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "ref",
+                    "id"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "ref": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9-]+/[a-z0-9-]+@\\d+$",
+                      "description": "namespace/component@major"
+                    },
+                    "id": {
+                      "$ref": "#/$defs/segment"
+                    },
+                    "at": {
+                      "$ref": "#/$defs/xy"
+                    },
+                    "rotate": {
+                      "type": "number"
+                    },
+                    "skin": {
+                      "$ref": "#/$defs/segment"
+                    },
+                    "group": {
+                      "$ref": "#/$defs/segment"
+                    },
+                    "rel-pos": {
+                      "type": "integer"
+                    },
+                    "optional": {
+                      "$ref": "#/$defs/segment",
+                      "description": "render only when --with <tag> is given (e.g. ears)"
+                    },
+                    "attrs": {
+                      "type": "object"
+                    },
+                    "provenance": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "mate-to": {
+                      "$ref": "#/$defs/segment",
+                      "description": "id of a placement in this view to mate into. The renderer positions this component so its `mate` connection-point coincides with the host's, so an occupant never carries hand-computed centring offsets. Mutually exclusive with `at`."
+                    },
+                    "for": {
+                      "description": "the placement or bay this one belongs to - an LED to its port, a button to its module. Emitted as data-for. One target or a list; never inferred from names.",
+                      "oneOf": [
+                        {
+                          "$ref": "#/$defs/segment"
+                        },
+                        {
+                          "type": "array",
+                          "minItems": 1,
+                          "items": {
+                            "$ref": "#/$defs/segment"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "oneOf": [
+                    {
+                      "required": [
+                        "at"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "mate-to"
+                      ]
+                    }
                   ]
                 }
               }
@@ -564,53 +674,6 @@
                 },
                 "label": {
                   "type": "string"
-                }
-              }
-            }
-          },
-          "silkscreen": {
-            "type": "array",
-            "description": "Printed matter on the CHASSIS panel. Painted after the panel and its decor and BEFORE components, because on the real device the silkscreen goes down on the punched panel and the modules are installed on top of it. A legend that a module would cover is therefore invisible here, which is the correct behaviour: on the hardware it would be invisible too. Silkscreen printed on a MODULE's own faceplate belongs in that component's skin, inside <g id=\"silkscreen\">, and travels with it.",
-            "items": {
-              "type": "object",
-              "additionalProperties": false,
-              "required": [
-                "at",
-                "text"
-              ],
-              "properties": {
-                "id": {
-                  "$ref": "#/$defs/segment",
-                  "description": "optional stable id; needed only when something else refers to this mark"
-                },
-                "at": {
-                  "$ref": "#/$defs/xy"
-                },
-                "text": {
-                  "type": "string",
-                  "description": "printed legend. Multi-line uses \\n"
-                },
-                "font-size": {
-                  "type": "number"
-                },
-                "anchor": {
-                  "enum": [
-                    "start",
-                    "middle",
-                    "end"
-                  ]
-                },
-                "rotate": {
-                  "type": "number",
-                  "description": "degrees about the anchor"
-                },
-                "fill": {
-                  "type": "string",
-                  "description": "ink colour; defaults to chassis silk"
-                },
-                "for": {
-                  "$ref": "#/$defs/segment",
-                  "description": "id of a placement or bay in this view that this legend annotates. Emitted as data-for, so selecting the component selects its legend and vice versa. Omit for chassis-level marks that belong to no part."
                 }
               }
             }

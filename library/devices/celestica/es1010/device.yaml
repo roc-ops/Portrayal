@@ -4,23 +4,17 @@ name: es1010
 version: 0.7.0
 manufacturer: Celestica
 model: ES1010
-description: Celestica ES1010 - 1U 48-port 1GbE (PoE++) access switch with 4x 25G
-  SFP28 uplinks; Broadcom TD3.X2, fixed 2+1 fans, 1+1 hot-swap AC PSUs
-datasheet:
-  title: Celestica ES1010 datasheet (cls_branded_datasheet_ES1010_111224)
-  url: https://www.celestica.com/
-  sha256: 7f3f95af70982d00e06cf319f604c55f247d9fc7bf1c56d86f43c9f528a30c12
+description: Celestica ES1010 - 1U 48-port 1GbE (PoE++) access switch with 4x 25G SFP28 uplinks;
+  Broadcom TD3.X2, fixed 2+1 fans, 1+1 hot-swap AC PSUs
 provenance:
   chassis: datasheet (438.2 x 371.6 x 43.4 mm)
-  layout: measured from a square-on product photo (working/celestica/product-front.png),
-    calibrated on two independent references - the 438.2mm chassis body and the
-    482.6mm rack width - which agree to 99.6 percent. Column pitch 13.99mm, extra
-    8.0mm between the four blocks, first column centre 8.46mm from the faceplate
-    edge. Supersedes the earlier oblique-photo reading (order and
-    grouping are reliable, mm positions are NOT calibrated; column pitch 14.5mm
-    estimated from the front photo and from fitting 24 columns plus the uplink
-    and management clusters into 438.2mm). Needs caliper verification or a
-    square-on photo before the geometry can be trusted.
+  layout: measured from a square-on product photo (working/celestica/product-front.png), calibrated
+    on two independent references - the 438.2mm chassis body and the 482.6mm rack width - which
+    agree to 99.6 percent. Column pitch 13.99mm, extra 8.0mm between the four blocks, first column
+    centre 8.46mm from the faceplate edge. Supersedes the earlier oblique-photo reading (order and
+    grouping are reliable, mm positions are NOT calibrated; column pitch 14.5mm estimated from the
+    front photo and from fitting 24 columns plus the uplink and management clusters into 438.2mm).
+    Needs caliper verification or a square-on photo before the geometry can be trusted.
   port-apertures: ganged block openings via std/rj45-module (estimated)
   psu: photo (Gospower G1482-1600WRA FRU, six faces)
   fans: datasheet (2+1 FIXED fans - not FRUs; three grilles seen on the rear photo)
@@ -37,171 +31,213 @@ attrs:
   fans: 2+1 fixed (not field-replaceable)
   port-modes-rj45: 1000Base-T
   port-modes-sfp28: 1/10/25G
-  mgmt-ports: 1x RJ45 console, OOB management as a combo pair (RJ45 at the mgmt
-    stack and SFP in the top band share one interface), 2x USB 3.0 Type A
+  mgmt-ports: 1x RJ45 console, OOB management as a combo pair (RJ45 at the mgmt stack and SFP in
+    the top band share one interface), 2x USB 3.0 Type A
 chassis:
   width: 438.2
   height: 43.4
   depth: 371.6
   ru: 1
+groups:
+  ports:
+    term: Port
+    index-origin: 1
+  uplinks:
+    term: Port
+    index-origin: 1
+  psus:
+    term: PSU
+    index-origin: 1
+views:
+  front:
+    size:
+      w: 438.2
+      h: 43.4
+    silkscreen:
+      - {text: 1 ▲▼ 2, at: [8.46, 41.2], font-size: 1.9}
+      - {text: 3 ▲▼ 4, at: [22.46, 41.2], font-size: 1.9}
+      - {text: 5 ▲▼ 6, at: [36.46, 41.2], font-size: 1.9}
+      - {text: 7 ▲▼ 8, at: [50.46, 41.2], font-size: 1.9}
+      - {text: 9 ▲▼ 10, at: [64.46, 41.2], font-size: 1.9}
+      - {text: 11 ▲▼ 12, at: [78.46, 41.2], font-size: 1.9}
+      - {text: 13 ▲▼ 14, at: [100.46, 41.2], font-size: 1.9}
+      - {text: 15 ▲▼ 16, at: [114.46, 41.2], font-size: 1.9}
+      - {text: 17 ▲▼ 18, at: [128.46, 41.2], font-size: 1.9}
+      - {text: 19 ▲▼ 20, at: [142.46, 41.2], font-size: 1.9}
+      - {text: 21 ▲▼ 22, at: [156.46, 41.2], font-size: 1.9}
+      - {text: 23 ▲▼ 24, at: [170.46, 41.2], font-size: 1.9}
+      - {text: 25 ▲▼ 26, at: [192.46, 41.2], font-size: 1.9}
+      - {text: 27 ▲▼ 28, at: [206.46, 41.2], font-size: 1.9}
+      - {text: 29 ▲▼ 30, at: [220.46, 41.2], font-size: 1.9}
+      - {text: 31 ▲▼ 32, at: [234.46, 41.2], font-size: 1.9}
+      - {text: 33 ▲▼ 34, at: [248.46, 41.2], font-size: 1.9}
+      - {text: 35 ▲▼ 36, at: [262.46, 41.2], font-size: 1.9}
+      - {text: 37 ▲▼ 38, at: [284.46, 41.2], font-size: 1.9}
+      - {text: 39 ▲▼ 40, at: [298.46, 41.2], font-size: 1.9}
+      - {text: 41 ▲▼ 42, at: [312.46, 41.2], font-size: 1.9}
+      - {text: 43 ▲▼ 44, at: [326.46, 41.2], font-size: 1.9}
+      - {text: 45 ▲▼ 46, at: [340.46, 41.2], font-size: 1.9}
+      - {text: 47 ▲▼ 48, at: [354.46, 41.2], font-size: 1.9}
+      - {text: 49 ▲▼ 50, at: [382.05, 41.2], font-size: 1.9}
+      - {text: 51 ▲▼ 52, at: [397.05, 41.2], font-size: 1.9}
+      - {text: MGMT COMBO, at: [396.0, 1.6], font-size: 1.8}
+      - {text: IOIOI, at: [416.0, 35.6], font-size: 1.6}
+      - {at: [423.8, 5.6], text: STAT, font-size: 1.4, for: led-stat}
+      - {at: [424.4, 13.1], text: FAN, font-size: 1.4, for: led-fan}
+      - {at: [424.4, 20.6], text: PWR, font-size: 1.4, for: led-pwr}
+      - {at: [424.4, 28.1], text: ALM, font-size: 1.4, for: led-alm}
+    components:
+      placements:
+        - {ref: common/rj45-hd@1, id: port-1, at: [1.46, 15.6], group: ports, rel-pos: 1, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-2, at: [1.46, 27.6], rotate: 180, group: ports, rel-pos: 2, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-3, at: [15.46, 15.6], group: ports, rel-pos: 3, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-4, at: [15.46, 27.6], rotate: 180, group: ports, rel-pos: 4, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-5, at: [29.46, 15.6], group: ports, rel-pos: 5, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-6, at: [29.46, 27.6], rotate: 180, group: ports, rel-pos: 6, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-7, at: [43.46, 15.6], group: ports, rel-pos: 7, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-8, at: [43.46, 27.6], rotate: 180, group: ports, rel-pos: 8, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-9, at: [57.46, 15.6], group: ports, rel-pos: 9, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-10, at: [57.46, 27.6], rotate: 180, group: ports, rel-pos: 10, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-11, at: [71.46, 15.6], group: ports, rel-pos: 11, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-12, at: [71.46, 27.6], rotate: 180, group: ports, rel-pos: 12, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-13, at: [93.46, 15.6], group: ports, rel-pos: 13, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-14, at: [93.46, 27.6], rotate: 180, group: ports, rel-pos: 14, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-15, at: [107.46, 15.6], group: ports, rel-pos: 15, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-16, at: [107.46, 27.6], rotate: 180, group: ports, rel-pos: 16, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-17, at: [121.46, 15.6], group: ports, rel-pos: 17, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-18, at: [121.46, 27.6], rotate: 180, group: ports, rel-pos: 18, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-19, at: [135.46, 15.6], group: ports, rel-pos: 19, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-20, at: [135.46, 27.6], rotate: 180, group: ports, rel-pos: 20, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-21, at: [149.46, 15.6], group: ports, rel-pos: 21, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-22, at: [149.46, 27.6], rotate: 180, group: ports, rel-pos: 22, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-23, at: [163.46, 15.6], group: ports, rel-pos: 23, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-24, at: [163.46, 27.6], rotate: 180, group: ports, rel-pos: 24, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-25, at: [185.46, 15.6], group: ports, rel-pos: 25, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-26, at: [185.46, 27.6], rotate: 180, group: ports, rel-pos: 26, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-27, at: [199.46, 15.6], group: ports, rel-pos: 27, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-28, at: [199.46, 27.6], rotate: 180, group: ports, rel-pos: 28, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-29, at: [213.46, 15.6], group: ports, rel-pos: 29, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-30, at: [213.46, 27.6], rotate: 180, group: ports, rel-pos: 30, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-31, at: [227.46, 15.6], group: ports, rel-pos: 31, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-32, at: [227.46, 27.6], rotate: 180, group: ports, rel-pos: 32, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-33, at: [241.46, 15.6], group: ports, rel-pos: 33, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-34, at: [241.46, 27.6], rotate: 180, group: ports, rel-pos: 34, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-35, at: [255.46, 15.6], group: ports, rel-pos: 35, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-36, at: [255.46, 27.6], rotate: 180, group: ports, rel-pos: 36, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-37, at: [277.46, 15.6], group: ports, rel-pos: 37, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-38, at: [277.46, 27.6], rotate: 180, group: ports, rel-pos: 38, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-39, at: [291.46, 15.6], group: ports, rel-pos: 39, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-40, at: [291.46, 27.6], rotate: 180, group: ports, rel-pos: 40, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-41, at: [305.46, 15.6], group: ports, rel-pos: 41, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-42, at: [305.46, 27.6], rotate: 180, group: ports, rel-pos: 42, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-43, at: [319.46, 15.6], group: ports, rel-pos: 43, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-44, at: [319.46, 27.6], rotate: 180, group: ports, rel-pos: 44, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-45, at: [333.46, 15.6], group: ports, rel-pos: 45, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-46, at: [333.46, 27.6], rotate: 180, group: ports, rel-pos: 46, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-47, at: [347.46, 15.6], group: ports, rel-pos: 47, attrs: {media: rj45, speed: 1g}}
+        - {ref: common/rj45-hd@1, id: port-48, at: [347.46, 27.6], rotate: 180, group: ports, rel-pos: 48, attrs: {media: rj45, speed: 1g}}
+        - {ref: std/sfp-module@1, id: port-49, at: [374.8, 3.0], group: uplinks, rel-pos: 49, attrs: {media: sfp28, speed: 25g}}
+        - {ref: std/sfp-module@1, id: port-50, at: [374.8, 19.0], group: uplinks, rel-pos: 50, attrs: {media: sfp28, speed: 25g}}
+        - {ref: std/sfp-module@1, id: port-51, at: [389.05, 3.0], group: uplinks, rel-pos: 51, attrs: {media: sfp28, speed: 25g}}
+        - {ref: std/sfp-module@1, id: port-52, at: [389.05, 19.0], group: uplinks, rel-pos: 52, attrs: {media: sfp28, speed: 25g}}
+        - {ref: std/usb-a@1, id: usb-1, at: [328.5, 6.0], attrs: {role: storage, speed: usb3}}
+        - {ref: common/led-dot@1, id: led-sys, at: [349.8, 6.2], attrs: {role: system}}
+        - {ref: std/sfp@1, id: mgmt-sfp, at: [355.5, 4.6], attrs: {media: sfp, role: mgmt-combo, combo-with: mgmt}}
+        - {ref: common/rj45-hd@1, id: mgmt, at: [407.6, 5.6], attrs: {role: mgmt, speed: 100m-1g, combo-with: mgmt-sfp}}
+        - {ref: std/usb-a@1, id: usb-2, at: [408.6, 18.8], attrs: {role: storage, speed: usb3}}
+        - {ref: common/rj45-hd-plain@1, id: console, at: [407.6, 25.9], rotate: 180, attrs: {media: rj45-serial, role: console}}
+        - {ref: common/led-dot@1, id: led-stat, at: [428.0, 4.0]}
+        - {ref: common/led-dot@1, id: led-fan, at: [428.0, 11.5]}
+        - {ref: common/led-dot@1, id: led-pwr, at: [428.0, 19.0]}
+        - {ref: common/led-dot@1, id: led-alm, at: [428.0, 26.5]}
+    regions:
+      - {id: mgmt-block, at: [358, 0], size: {w: 80, h: 43.4}, label: Uplinks and management}
+  rear:
+    size:
+      w: 438.2
+      h: 43.4
+    panel:
+      decor:
+        - {at: [163, 4], size: [96, 36], pattern: vent, vent: 30}
+        - {at: [263, 4], size: [170, 36], pattern: vent, vent: 30}
+    silkscreen:
+      - {text: '3', at: [292, 26], font-size: 2.4}
+      - {text: '2', at: [349, 26], font-size: 2.4}
+      - {text: '1', at: [406, 26], font-size: 2.4}
+    components:
+      bays:
+        - {id: psu-1, at: [5, 1.7], size: {w: 73.5, h: 40}, accepts: [celestica/psu-1600@1], group: psus, rel-pos: 1, default: celestica/psu-1600@1}
+        - {id: psu-2, at: [83, 1.7], size: {w: 73.5, h: 40}, accepts: [celestica/psu-1600@1], group: psus, rel-pos: 2, default: celestica/psu-1600@1}
+    regions:
+      - {id: exhaust, at: [163, 0], size: {w: 270, h: 43.4}, physical-context: Exhaust, label: Fixed fan exhaust}
+  left:
+    size:
+      w: 371.6
+      h: 43.4
+    components:
+      placements:
+        - {ref: common/screw-head@1, id: screw-l1, at: [40, 20]}
+        - {ref: common/screw-head@1, id: screw-l2, at: [150, 20]}
+        - {ref: common/screw-head@1, id: screw-l3, at: [260, 20]}
+        - {ref: common/screw-head@1, id: screw-l4, at: [340, 20]}
+  right:
+    size:
+      w: 371.6
+      h: 43.4
+    components:
+      placements:
+        - {ref: common/screw-head@1, id: screw-r1, at: [40, 20]}
+        - {ref: common/screw-head@1, id: screw-r2, at: [150, 20]}
+        - {ref: common/screw-head@1, id: screw-r3, at: [260, 20]}
+        - {ref: common/screw-head@1, id: screw-r4, at: [340, 20]}
+  top:
+    size:
+      w: 438.2
+      h: 371.6
+    panel:
+      decor:
+        - {at: [40, 60], size: [150, 90], fill: '#2e3236', sink: 0.8}
+        - {at: [240, 60], size: [150, 90], fill: '#2e3236', sink: 0.8}
+    components:
+      placements:
+        - {ref: common/device-label@1, id: top-label, at: [300, 300]}
+  bottom:
+    size:
+      w: 438.2
+      h: 371.6
+    components:
+      placements:
+        - {ref: common/compliance-sticker@1, id: bottom-label, at: [110, 83]}
 configurations:
   poe-b2f:
     description: ES1010-48CP with PoE++, back-to-front airflow (R4048-F91L9-A1)
     default: true
     airflow: back-to-front
     part-numbers:
-      R4048-F91L9-A1: {part: R4048-F91L9-A1}
+      R4048-F91L9-A1:
+        part: R4048-F91L9-A1
     component-attrs:
-      psu-1600: {model: G1482-1600WRA}
+      psu-1600:
+        model: G1482-1600WRA
   poe-f2b:
     description: ES1010-48CP with PoE++, front-to-back airflow (R4048-F90L9-A1)
     airflow: front-to-back
     part-numbers:
-      R4048-F90L9-A1: {part: R4048-F90L9-A1}
+      R4048-F90L9-A1:
+        part: R4048-F90L9-A1
   f2b:
     description: ES1010-48C, no PoE, front-to-back airflow (R4048-F90LA-A1)
     airflow: front-to-back
     part-numbers:
-      R4048-F90LA-A1: {part: R4048-F90LA-A1}
+      R4048-F90LA-A1:
+        part: R4048-F90LA-A1
   b2f:
     description: ES1010-48C, no PoE, back-to-front airflow (R4048-F91LA-A1)
     airflow: back-to-front
     part-numbers:
-      R4048-F91LA-A1: {part: R4048-F91LA-A1}
-views:
-  front:
-    size: {w: 438.2, h: 43.4}
-    silkscreen:
-      - {text: "1 \u25b2\u25bc 2", at: [8.46, 41.2], font-size: 1.9}
-      - {text: "3 \u25b2\u25bc 4", at: [22.46, 41.2], font-size: 1.9}
-      - {text: "5 \u25b2\u25bc 6", at: [36.46, 41.2], font-size: 1.9}
-      - {text: "7 \u25b2\u25bc 8", at: [50.46, 41.2], font-size: 1.9}
-      - {text: "9 \u25b2\u25bc 10", at: [64.46, 41.2], font-size: 1.9}
-      - {text: "11 \u25b2\u25bc 12", at: [78.46, 41.2], font-size: 1.9}
-      - {text: "13 \u25b2\u25bc 14", at: [100.46, 41.2], font-size: 1.9}
-      - {text: "15 \u25b2\u25bc 16", at: [114.46, 41.2], font-size: 1.9}
-      - {text: "17 \u25b2\u25bc 18", at: [128.46, 41.2], font-size: 1.9}
-      - {text: "19 \u25b2\u25bc 20", at: [142.46, 41.2], font-size: 1.9}
-      - {text: "21 \u25b2\u25bc 22", at: [156.46, 41.2], font-size: 1.9}
-      - {text: "23 \u25b2\u25bc 24", at: [170.46, 41.2], font-size: 1.9}
-      - {text: "25 \u25b2\u25bc 26", at: [192.46, 41.2], font-size: 1.9}
-      - {text: "27 \u25b2\u25bc 28", at: [206.46, 41.2], font-size: 1.9}
-      - {text: "29 \u25b2\u25bc 30", at: [220.46, 41.2], font-size: 1.9}
-      - {text: "31 \u25b2\u25bc 32", at: [234.46, 41.2], font-size: 1.9}
-      - {text: "33 \u25b2\u25bc 34", at: [248.46, 41.2], font-size: 1.9}
-      - {text: "35 \u25b2\u25bc 36", at: [262.46, 41.2], font-size: 1.9}
-      - {text: "37 \u25b2\u25bc 38", at: [284.46, 41.2], font-size: 1.9}
-      - {text: "39 \u25b2\u25bc 40", at: [298.46, 41.2], font-size: 1.9}
-      - {text: "41 \u25b2\u25bc 42", at: [312.46, 41.2], font-size: 1.9}
-      - {text: "43 \u25b2\u25bc 44", at: [326.46, 41.2], font-size: 1.9}
-      - {text: "45 \u25b2\u25bc 46", at: [340.46, 41.2], font-size: 1.9}
-      - {text: "47 \u25b2\u25bc 48", at: [354.46, 41.2], font-size: 1.9}
-      - {text: "49 \u25b2\u25bc 50", at: [382.05, 41.2], font-size: 1.9}
-      - {text: "51 \u25b2\u25bc 52", at: [397.05, 41.2], font-size: 1.9}
-      - {text: "MGMT COMBO", at: [396.0, 1.6], font-size: 1.8}
-      - {text: "IOIOI", at: [416.0, 35.6], font-size: 1.6}
-    placements:
-      - {ref: common/rj45-hd@1, id: port-1, at: [1.46, 15.6], group: ports, rel-pos: 1, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-2, at: [1.46, 27.6], rotate: 180, group: ports, rel-pos: 2, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-3, at: [15.46, 15.6], group: ports, rel-pos: 3, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-4, at: [15.46, 27.6], rotate: 180, group: ports, rel-pos: 4, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-5, at: [29.46, 15.6], group: ports, rel-pos: 5, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-6, at: [29.46, 27.6], rotate: 180, group: ports, rel-pos: 6, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-7, at: [43.46, 15.6], group: ports, rel-pos: 7, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-8, at: [43.46, 27.6], rotate: 180, group: ports, rel-pos: 8, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-9, at: [57.46, 15.6], group: ports, rel-pos: 9, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-10, at: [57.46, 27.6], rotate: 180, group: ports, rel-pos: 10, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-11, at: [71.46, 15.6], group: ports, rel-pos: 11, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-12, at: [71.46, 27.6], rotate: 180, group: ports, rel-pos: 12, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-13, at: [93.46, 15.6], group: ports, rel-pos: 13, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-14, at: [93.46, 27.6], rotate: 180, group: ports, rel-pos: 14, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-15, at: [107.46, 15.6], group: ports, rel-pos: 15, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-16, at: [107.46, 27.6], rotate: 180, group: ports, rel-pos: 16, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-17, at: [121.46, 15.6], group: ports, rel-pos: 17, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-18, at: [121.46, 27.6], rotate: 180, group: ports, rel-pos: 18, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-19, at: [135.46, 15.6], group: ports, rel-pos: 19, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-20, at: [135.46, 27.6], rotate: 180, group: ports, rel-pos: 20, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-21, at: [149.46, 15.6], group: ports, rel-pos: 21, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-22, at: [149.46, 27.6], rotate: 180, group: ports, rel-pos: 22, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-23, at: [163.46, 15.6], group: ports, rel-pos: 23, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-24, at: [163.46, 27.6], rotate: 180, group: ports, rel-pos: 24, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-25, at: [185.46, 15.6], group: ports, rel-pos: 25, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-26, at: [185.46, 27.6], rotate: 180, group: ports, rel-pos: 26, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-27, at: [199.46, 15.6], group: ports, rel-pos: 27, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-28, at: [199.46, 27.6], rotate: 180, group: ports, rel-pos: 28, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-29, at: [213.46, 15.6], group: ports, rel-pos: 29, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-30, at: [213.46, 27.6], rotate: 180, group: ports, rel-pos: 30, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-31, at: [227.46, 15.6], group: ports, rel-pos: 31, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-32, at: [227.46, 27.6], rotate: 180, group: ports, rel-pos: 32, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-33, at: [241.46, 15.6], group: ports, rel-pos: 33, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-34, at: [241.46, 27.6], rotate: 180, group: ports, rel-pos: 34, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-35, at: [255.46, 15.6], group: ports, rel-pos: 35, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-36, at: [255.46, 27.6], rotate: 180, group: ports, rel-pos: 36, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-37, at: [277.46, 15.6], group: ports, rel-pos: 37, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-38, at: [277.46, 27.6], rotate: 180, group: ports, rel-pos: 38, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-39, at: [291.46, 15.6], group: ports, rel-pos: 39, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-40, at: [291.46, 27.6], rotate: 180, group: ports, rel-pos: 40, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-41, at: [305.46, 15.6], group: ports, rel-pos: 41, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-42, at: [305.46, 27.6], rotate: 180, group: ports, rel-pos: 42, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-43, at: [319.46, 15.6], group: ports, rel-pos: 43, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-44, at: [319.46, 27.6], rotate: 180, group: ports, rel-pos: 44, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-45, at: [333.46, 15.6], group: ports, rel-pos: 45, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-46, at: [333.46, 27.6], rotate: 180, group: ports, rel-pos: 46, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-47, at: [347.46, 15.6], group: ports, rel-pos: 47, attrs: {media: rj45, speed: 1g}}
-      - {ref: common/rj45-hd@1, id: port-48, at: [347.46, 27.6], rotate: 180, group: ports, rel-pos: 48, attrs: {media: rj45, speed: 1g}}
-      - {ref: std/sfp-module@1, id: port-49, at: [374.8, 3.0], group: uplinks, rel-pos: 49, attrs: {media: sfp28, speed: 25g}}
-      - {ref: std/sfp-module@1, id: port-50, at: [374.8, 19.0], group: uplinks, rel-pos: 50, attrs: {media: sfp28, speed: 25g}}
-      - {ref: std/sfp-module@1, id: port-51, at: [389.05, 3.0], group: uplinks, rel-pos: 51, attrs: {media: sfp28, speed: 25g}}
-      - {ref: std/sfp-module@1, id: port-52, at: [389.05, 19.0], group: uplinks, rel-pos: 52, attrs: {media: sfp28, speed: 25g}}
-      - {ref: std/usb-a@1, id: usb-1, at: [328.5, 6.0], attrs: {role: storage, speed: usb3}}
-      - {ref: common/led-dot@1, id: led-sys, at: [349.8, 6.2], attrs: {role: system}}
-      - {ref: std/sfp@1, id: mgmt-sfp, at: [355.5, 4.6], attrs: {media: sfp, role: mgmt-combo, combo-with: mgmt}}
-      - {ref: common/rj45-hd@1, id: mgmt, at: [407.6, 5.6], attrs: {role: mgmt, speed: 100m-1g, combo-with: mgmt-sfp}}
-      - {ref: std/usb-a@1, id: usb-2, at: [408.6, 18.8], attrs: {role: storage, speed: usb3}}
-      - {ref: common/rj45-hd-plain@1, id: console, at: [407.6, 25.9], rotate: 180, attrs: {media: rj45-serial, role: console}}
-      - {ref: common/led-dot@1, id: led-stat, at: [428.0, 4.0], label: "STAT", label-at: [-4.2, 1.6], label-size: 1.4}
-      - {ref: common/led-dot@1, id: led-fan, at: [428.0, 11.5], label: "FAN", label-at: [-3.6, 1.6], label-size: 1.4}
-      - {ref: common/led-dot@1, id: led-pwr, at: [428.0, 19.0], label: "PWR", label-at: [-3.6, 1.6], label-size: 1.4}
-      - {ref: common/led-dot@1, id: led-alm, at: [428.0, 26.5], label: "ALM", label-at: [-3.6, 1.6], label-size: 1.4}
-    regions:
-      - {id: mgmt-block, at: [358, 0], size: {w: 80, h: 43.4}, label: Uplinks and management}
-  rear:
-    size: {w: 438.2, h: 43.4}
-    decor:
-      - {at: [163, 4], size: [96, 36], pattern: vent, vent: 30}
-      - {at: [263, 4], size: [170, 36], pattern: vent, vent: 30}
-    silkscreen:
-      - {text: "3", at: [292, 26], font-size: 2.4}
-      - {text: "2", at: [349, 26], font-size: 2.4}
-      - {text: "1", at: [406, 26], font-size: 2.4}
-    bays:
-      - {id: psu-1, at: [5, 1.7], size: {w: 73.5, h: 40}, accepts: ['celestica/psu-1600@1'], group: psus, rel-pos: 1, default: 'celestica/psu-1600@1'}
-      - {id: psu-2, at: [83, 1.7], size: {w: 73.5, h: 40}, accepts: ['celestica/psu-1600@1'], group: psus, rel-pos: 2, default: 'celestica/psu-1600@1'}
-    regions:
-      - {id: exhaust, at: [163, 0], size: {w: 270, h: 43.4}, physical-context: Exhaust, label: Fixed fan exhaust}
-  left:
-    # drawn as photographed from outside the left side: device front at image RIGHT
-    size: {w: 371.6, h: 43.4}
-    placements:
-      - {ref: common/screw-head@1, id: screw-l1, at: [40, 20]}
-      - {ref: common/screw-head@1, id: screw-l2, at: [150, 20]}
-      - {ref: common/screw-head@1, id: screw-l3, at: [260, 20]}
-      - {ref: common/screw-head@1, id: screw-l4, at: [340, 20]}
-  right:
-    size: {w: 371.6, h: 43.4}
-    placements:
-      - {ref: common/screw-head@1, id: screw-r1, at: [40, 20]}
-      - {ref: common/screw-head@1, id: screw-r2, at: [150, 20]}
-      - {ref: common/screw-head@1, id: screw-r3, at: [260, 20]}
-      - {ref: common/screw-head@1, id: screw-r4, at: [340, 20]}
-  top:
-    size: {w: 438.2, h: 371.6}
-    decor:
-      - {at: [40, 60], size: [150, 90], fill: '#2e3236', sink: 0.8}
-      - {at: [240, 60], size: [150, 90], fill: '#2e3236', sink: 0.8}
-    placements:
-      - {ref: common/device-label@1, id: top-label, at: [300, 300]}
-  bottom:
-    size: {w: 438.2, h: 371.6}
-    placements:
-      - {ref: common/compliance-sticker@1, id: bottom-label, at: [110, 83]}
+      R4048-F91LA-A1:
+        part: R4048-F91LA-A1
+datasheet:
+  title: Celestica ES1010 datasheet (cls_branded_datasheet_ES1010_111224)
+  url: https://www.celestica.com/
+  sha256: 7f3f95af70982d00e06cf319f604c55f247d9fc7bf1c56d86f43c9f528a30c12

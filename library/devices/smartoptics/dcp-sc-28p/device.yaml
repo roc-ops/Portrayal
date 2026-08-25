@@ -4,213 +4,237 @@ name: dcp-sc-28p
 version: 0.1.0
 manufacturer: Smartoptics
 model: DCP-SC-28P
-description: >-
-  28-port service channel unit, 1RU. Twenty-four RJ45 service ports in two
-  rows flanking four LC duplex ports, plus a PROBE port, with ETH0 and RS232
-  management.
+description: 28-port service channel unit, 1RU. Twenty-four RJ45 service ports in two rows flanking
+  four LC duplex ports, plus a PROBE port, with ETH0 and RS232 management.
 profile: optical
-references:
-  - title: Smartoptics DCP-SC-28P User Manual R14.0_A
-  - title: Smartoptics DCP-R Visio stencil DCP-R_v260105.vssx (master sc-28p)
 provenance:
-  chassis: DCP-SC-28P User Manual - unit height is 1U (1.77 in); width and depth
-    taken from the DCP-R chassis the family shares (440 x 505mm)
-  port-positions: stencil ShapeSheet connection points, stored by Visio as
-    fractions of shape width/height and resolved against the 19-inch rack width
-  port-count: the recovered layout confirms the model name - 24 RJ45 on a
-    14.3mm column pitch plus 4 LC duplex, i.e. 28 ports, and a separate PROBE
-  port-identification: RJ45 columns carry one connection point per port; the LC
-    columns carry two about 6.4mm apart, one per fiber, which is what
-    distinguishes them
-  column-pitch: raw connection points jitter between 13.85 and 14.80mm, which
-    put ports 7/9 and 8/10 into a 0.15mm overlap that lint L13 caught. Each RJ45
-    group is therefore fitted to a uniform pitch across its span - 14.32mm left,
-    14.34mm right - and the drawing jitter discarded
-  connector-choice: rj45-hd (14.0mm) is used rather than rj45-shielded (15.8mm)
-    because the measured 14.3mm column pitch cannot accommodate the latter
-  rear-layout: photo IMG_2181 of racked DCP-R units - PSU with integrated fan
-    and C14 inlet at each end, mirrored; honeycomb vent panel across the centre;
-    management block right of centre. Block positions are approximate to about
-    3mm - the photo has uncorrected perspective and partial cable occlusion, so
-    it fixes the structure and order but not exact millimetres
-  side-top-bottom: IMG_2188 shows the lid, so these now carry the real finish -
-    a light silver body with the black front panel wrapping about 12.7mm (half
-    an inch) back along every face. Still no vents, screws or lid labels - the
-    photo shows the finish and the panel depth but not those details, so they
-    are left out rather than invented
-  psu-part: label - Gospower G1251-0550WNA, P/N CRPS0550-AH, and the fan
-    sticker reads 550W Platinum CRPS. So the module is a standard CRPS 1U part
-    at 73.5 x 40 x 185, not the 84mm-wide estimate taken from the racked photo,
-    and both bays sit flush to the chassis edges
-  psu-orientation: photo - both modules are fitted the same way round, fan
-    inboard of the inlet, so the C14 sits at the far right on PSU-2 and inboard
-    on PSU-1. They are not mirrored
-  rear-mgmt-block: none. The SC-28P carries no rear management ports - its
-    manual places only power and fan units in the back panel, and its ETH0 and
-    RS232 are on the front. An earlier revision copied the DCP-R rear here by
-    mistake; the vent now spans what that block wrongly occupied
+  chassis: DCP-SC-28P User Manual - unit height is 1U (1.77 in); width and depth taken from the
+    DCP-R chassis the family shares (440 x 505mm)
+  port-positions: stencil ShapeSheet connection points, stored by Visio as fractions of shape width/height
+    and resolved against the 19-inch rack width
+  port-count: the recovered layout confirms the model name - 24 RJ45 on a 14.3mm column pitch plus
+    4 LC duplex, i.e. 28 ports, and a separate PROBE
+  port-identification: RJ45 columns carry one connection point per port; the LC columns carry two
+    about 6.4mm apart, one per fiber, which is what distinguishes them
+  column-pitch: raw connection points jitter between 13.85 and 14.80mm, which put ports 7/9 and
+    8/10 into a 0.15mm overlap that lint L13 caught. Each RJ45 group is therefore fitted to a uniform
+    pitch across its span - 14.32mm left, 14.34mm right - and the drawing jitter discarded
+  connector-choice: rj45-hd (14.0mm) is used rather than rj45-shielded (15.8mm) because the measured
+    14.3mm column pitch cannot accommodate the latter
+  rear-layout: photo IMG_2181 of racked DCP-R units - PSU with integrated fan and C14 inlet at each
+    end, mirrored; honeycomb vent panel across the centre; management block right of centre. Block
+    positions are approximate to about 3mm - the photo has uncorrected perspective and partial cable
+    occlusion, so it fixes the structure and order but not exact millimetres
+  side-top-bottom: IMG_2188 shows the lid, so these now carry the real finish - a light silver body
+    with the black front panel wrapping about 12.7mm (half an inch) back along every face. Still
+    no vents, screws or lid labels - the photo shows the finish and the panel depth but not those
+    details, so they are left out rather than invented
+  psu-part: label - Gospower G1251-0550WNA, P/N CRPS0550-AH, and the fan sticker reads 550W Platinum
+    CRPS. So the module is a standard CRPS 1U part at 73.5 x 40 x 185, not the 84mm-wide estimate
+    taken from the racked photo, and both bays sit flush to the chassis edges
+  psu-orientation: photo - both modules are fitted the same way round, fan inboard of the inlet,
+    so the C14 sits at the far right on PSU-2 and inboard on PSU-1. They are not mirrored
+  rear-mgmt-block: none. The SC-28P carries no rear management ports - its manual places only power
+    and fan units in the back panel, and its ETH0 and RS232 are on the front. An earlier revision
+    copied the DCP-R rear here by mistake; the vent now spans what that block wrongly occupied
 attrs:
   ports: 28
   form-factor: 1RU
-chassis: {width: 440, height: 45, depth: 505, ru: 1, color: '#1b1e21'}
+chassis:
+  width: 440
+  height: 45
+  depth: 505
+  ru: 1
+  color: '#1b1e21'
+groups:
+  row-top:
+    term: Port
+    index-origin: 1
+  row-bottom:
+    term: Port
+    index-origin: 1
 views:
   front:
-    size: {w: 440, h: 45}
-    placements:
-      - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.75], skin: left, optional: ears}
-      - {ref: common/rack-ear@1, id: ear-right, at: [440, 0.75], skin: right, optional: ears}
-      - {ref: common/rj45-shielded@2, id: eth0, at: [9.6, 12.4], rotate: 180, attrs: {role: mgmt, speed: 1000base-t}}
-      - {ref: common/rj45-shielded@2, id: rs232, at: [9.6, 26.9], attrs: {role: console, media: rj45-serial}}
-      - {ref: common/led-dot@1, id: led-power, at: [30.2, 33.6], attrs: {function: power}}
-      - {ref: common/led-dot@1, id: led-status, at: [36.4, 33.6], attrs: {function: status}}
-      - {ref: common/sfp-plus-cage@2, id: port-probe, at: [395.2, 29.1], label: "29. PROBE", label-at: [8, -2.2], label-anchor: middle, label-size: 1.6, attrs: {media: sfp-plus, role: probe}}
-      - {ref: common/rj45-hd@1, id: port-1, at: [58.6, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
-      - {ref: common/rj45-hd@1, id: port-3, at: [72.92, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
-      - {ref: common/rj45-hd@1, id: port-5, at: [87.24, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
-      - {ref: common/rj45-hd@1, id: port-7, at: [101.56, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
-      - {ref: common/rj45-hd@1, id: port-9, at: [115.88, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
-      - {ref: common/rj45-hd@1, id: port-11, at: [130.2, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
-      - {ref: std/sfp@1, id: port-13, at: [149.78, 13.7], group: row-top, attrs: {media: sfp, role: service}}
-      - {ref: std/sfp@1, id: port-15, at: [164.57, 13.7], group: row-top, attrs: {media: sfp, role: service}}
-      - {ref: common/rj45-hd@1, id: port-17, at: [184.6, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
-      - {ref: common/rj45-hd@1, id: port-19, at: [198.94, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
-      - {ref: common/rj45-hd@1, id: port-21, at: [213.28, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
-      - {ref: common/rj45-hd@1, id: port-23, at: [227.62, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
-      - {ref: common/rj45-hd@1, id: port-25, at: [241.96, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
-      - {ref: common/rj45-hd@1, id: port-27, at: [256.3, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
-      - {ref: common/rj45-hd@1, id: port-2, at: [58.6, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
-      - {ref: common/rj45-hd@1, id: port-4, at: [72.92, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
-      - {ref: common/rj45-hd@1, id: port-6, at: [87.24, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
-      - {ref: common/rj45-hd@1, id: port-8, at: [101.56, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
-      - {ref: common/rj45-hd@1, id: port-10, at: [115.88, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
-      - {ref: common/rj45-hd@1, id: port-12, at: [130.2, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
-      - {ref: std/sfp@1, id: port-14, at: [149.78, 26.3], group: row-bottom, attrs: {media: sfp, role: service}}
-      - {ref: std/sfp@1, id: port-16, at: [164.57, 26.3], group: row-bottom, attrs: {media: sfp, role: service}}
-      - {ref: common/rj45-hd@1, id: port-18, at: [184.6, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
-      - {ref: common/rj45-hd@1, id: port-20, at: [198.94, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
-      - {ref: common/rj45-hd@1, id: port-22, at: [213.28, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
-      - {ref: common/rj45-hd@1, id: port-24, at: [227.62, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
-      - {ref: common/rj45-hd@1, id: port-26, at: [241.96, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
-      - {ref: common/rj45-hd@1, id: port-28, at: [256.3, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
-    decor:
-      - {at: [59.3, 4], size: [12.6, 3], rx: 1.5, fill: 'none', stroke: '#c9cdd1', stroke-width: 0.18}
-      - {at: [59.3, 7.55], size: [12.6, 3], rx: 1.5, fill: 'none', stroke: '#c9cdd1', stroke-width: 0.18}
-      - {at: [73.62, 4], size: [12.6, 3], rx: 1.5, fill: 'none', stroke: '#c9cdd1', stroke-width: 0.18}
-      - {at: [73.62, 7.55], size: [12.6, 3], rx: 1.5, fill: 'none', stroke: '#c9cdd1', stroke-width: 0.18}
-      - {at: [87.94, 4], size: [12.6, 3], rx: 1.5, fill: 'none', stroke: '#c9cdd1', stroke-width: 0.18}
-      - {at: [87.94, 7.55], size: [12.6, 3], rx: 1.5, fill: 'none', stroke: '#c9cdd1', stroke-width: 0.18}
-      - {at: [102.26, 4], size: [12.6, 3], rx: 1.5, fill: 'none', stroke: '#c9cdd1', stroke-width: 0.18}
-      - {at: [102.26, 7.55], size: [12.6, 3], rx: 1.5, fill: 'none', stroke: '#c9cdd1', stroke-width: 0.18}
-      - {at: [116.58, 4], size: [12.6, 3], rx: 1.5, fill: 'none', stroke: '#c9cdd1', stroke-width: 0.18}
-      - {at: [116.58, 7.55], size: [12.6, 3], rx: 1.5, fill: 'none', stroke: '#c9cdd1', stroke-width: 0.18}
-      - {at: [130.9, 4], size: [12.6, 3], rx: 1.5, fill: 'none', stroke: '#c9cdd1', stroke-width: 0.18}
-      - {at: [130.9, 7.55], size: [12.6, 3], rx: 1.5, fill: 'none', stroke: '#c9cdd1', stroke-width: 0.18}
-      - {at: [150.08, 4], size: [12.6, 3], rx: 1.5, fill: 'none', stroke: '#c9cdd1', stroke-width: 0.18}
-      - {at: [150.08, 7.55], size: [12.6, 3], rx: 1.5, fill: 'none', stroke: '#c9cdd1', stroke-width: 0.18}
-      - {at: [164.87, 4], size: [12.6, 3], rx: 1.5, fill: 'none', stroke: '#c9cdd1', stroke-width: 0.18}
-      - {at: [164.87, 7.55], size: [12.6, 3], rx: 1.5, fill: 'none', stroke: '#c9cdd1', stroke-width: 0.18}
-      - {at: [185.3, 4], size: [12.6, 3], rx: 1.5, fill: 'none', stroke: '#c9cdd1', stroke-width: 0.18}
-      - {at: [185.3, 7.55], size: [12.6, 3], rx: 1.5, fill: 'none', stroke: '#c9cdd1', stroke-width: 0.18}
-      - {at: [199.64, 4], size: [12.6, 3], rx: 1.5, fill: 'none', stroke: '#c9cdd1', stroke-width: 0.18}
-      - {at: [199.64, 7.55], size: [12.6, 3], rx: 1.5, fill: 'none', stroke: '#c9cdd1', stroke-width: 0.18}
-      - {at: [213.98, 4], size: [12.6, 3], rx: 1.5, fill: 'none', stroke: '#c9cdd1', stroke-width: 0.18}
-      - {at: [213.98, 7.55], size: [12.6, 3], rx: 1.5, fill: 'none', stroke: '#c9cdd1', stroke-width: 0.18}
-      - {at: [228.32, 4], size: [12.6, 3], rx: 1.5, fill: 'none', stroke: '#c9cdd1', stroke-width: 0.18}
-      - {at: [228.32, 7.55], size: [12.6, 3], rx: 1.5, fill: 'none', stroke: '#c9cdd1', stroke-width: 0.18}
-      - {at: [242.66, 4], size: [12.6, 3], rx: 1.5, fill: 'none', stroke: '#c9cdd1', stroke-width: 0.18}
-      - {at: [242.66, 7.55], size: [12.6, 3], rx: 1.5, fill: 'none', stroke: '#c9cdd1', stroke-width: 0.18}
-      - {at: [257, 4], size: [12.6, 3], rx: 1.5, fill: 'none', stroke: '#c9cdd1', stroke-width: 0.18}
-      - {at: [257, 7.55], size: [12.6, 3], rx: 1.5, fill: 'none', stroke: '#c9cdd1', stroke-width: 0.18}
-      - {at: [396, 14], size: [16, 11], pattern: vent, vent: 4}
+    size:
+      w: 440
+      h: 45
+    panel:
+      decor:
+        - {at: [59.3, 4], size: [12.6, 3], rx: 1.5, fill: none, stroke: '#c9cdd1', stroke-width: 0.18}
+        - {at: [59.3, 7.55], size: [12.6, 3], rx: 1.5, fill: none, stroke: '#c9cdd1', stroke-width: 0.18}
+        - {at: [73.62, 4], size: [12.6, 3], rx: 1.5, fill: none, stroke: '#c9cdd1', stroke-width: 0.18}
+        - {at: [73.62, 7.55], size: [12.6, 3], rx: 1.5, fill: none, stroke: '#c9cdd1', stroke-width: 0.18}
+        - {at: [87.94, 4], size: [12.6, 3], rx: 1.5, fill: none, stroke: '#c9cdd1', stroke-width: 0.18}
+        - {at: [87.94, 7.55], size: [12.6, 3], rx: 1.5, fill: none, stroke: '#c9cdd1', stroke-width: 0.18}
+        - {at: [102.26, 4], size: [12.6, 3], rx: 1.5, fill: none, stroke: '#c9cdd1', stroke-width: 0.18}
+        - {at: [102.26, 7.55], size: [12.6, 3], rx: 1.5, fill: none, stroke: '#c9cdd1', stroke-width: 0.18}
+        - {at: [116.58, 4], size: [12.6, 3], rx: 1.5, fill: none, stroke: '#c9cdd1', stroke-width: 0.18}
+        - {at: [116.58, 7.55], size: [12.6, 3], rx: 1.5, fill: none, stroke: '#c9cdd1', stroke-width: 0.18}
+        - {at: [130.9, 4], size: [12.6, 3], rx: 1.5, fill: none, stroke: '#c9cdd1', stroke-width: 0.18}
+        - {at: [130.9, 7.55], size: [12.6, 3], rx: 1.5, fill: none, stroke: '#c9cdd1', stroke-width: 0.18}
+        - {at: [150.08, 4], size: [12.6, 3], rx: 1.5, fill: none, stroke: '#c9cdd1', stroke-width: 0.18}
+        - {at: [150.08, 7.55], size: [12.6, 3], rx: 1.5, fill: none, stroke: '#c9cdd1', stroke-width: 0.18}
+        - {at: [164.87, 4], size: [12.6, 3], rx: 1.5, fill: none, stroke: '#c9cdd1', stroke-width: 0.18}
+        - {at: [164.87, 7.55], size: [12.6, 3], rx: 1.5, fill: none, stroke: '#c9cdd1', stroke-width: 0.18}
+        - {at: [185.3, 4], size: [12.6, 3], rx: 1.5, fill: none, stroke: '#c9cdd1', stroke-width: 0.18}
+        - {at: [185.3, 7.55], size: [12.6, 3], rx: 1.5, fill: none, stroke: '#c9cdd1', stroke-width: 0.18}
+        - {at: [199.64, 4], size: [12.6, 3], rx: 1.5, fill: none, stroke: '#c9cdd1', stroke-width: 0.18}
+        - {at: [199.64, 7.55], size: [12.6, 3], rx: 1.5, fill: none, stroke: '#c9cdd1', stroke-width: 0.18}
+        - {at: [213.98, 4], size: [12.6, 3], rx: 1.5, fill: none, stroke: '#c9cdd1', stroke-width: 0.18}
+        - {at: [213.98, 7.55], size: [12.6, 3], rx: 1.5, fill: none, stroke: '#c9cdd1', stroke-width: 0.18}
+        - {at: [228.32, 4], size: [12.6, 3], rx: 1.5, fill: none, stroke: '#c9cdd1', stroke-width: 0.18}
+        - {at: [228.32, 7.55], size: [12.6, 3], rx: 1.5, fill: none, stroke: '#c9cdd1', stroke-width: 0.18}
+        - {at: [242.66, 4], size: [12.6, 3], rx: 1.5, fill: none, stroke: '#c9cdd1', stroke-width: 0.18}
+        - {at: [242.66, 7.55], size: [12.6, 3], rx: 1.5, fill: none, stroke: '#c9cdd1', stroke-width: 0.18}
+        - {at: [257, 4], size: [12.6, 3], rx: 1.5, fill: none, stroke: '#c9cdd1', stroke-width: 0.18}
+        - {at: [257, 7.55], size: [12.6, 3], rx: 1.5, fill: none, stroke: '#c9cdd1', stroke-width: 0.18}
+        - {at: [396, 14], size: [16, 11], pattern: vent, vent: 4}
     silkscreen:
       - {text: '1', at: [61.9, 6.15], font-size: 2.1, fill: '#e8ecef'}
-      - {text: '▲', at: [69.5, 6.15], font-size: 2.0, fill: '#e8ecef', anchor: middle}
+      - {text: ▲, at: [69.5, 6.15], font-size: 2.0, fill: '#e8ecef', anchor: middle}
       - {text: '2', at: [61.9, 9.7], font-size: 2.1, fill: '#e8ecef'}
-      - {text: '▼', at: [69.5, 9.7], font-size: 2.0, fill: '#e8ecef', anchor: middle}
+      - {text: ▼, at: [69.5, 9.7], font-size: 2.0, fill: '#e8ecef', anchor: middle}
       - {text: '3', at: [76.22, 6.15], font-size: 2.1, fill: '#e8ecef'}
-      - {text: '▲', at: [83.82, 6.15], font-size: 2.0, fill: '#e8ecef', anchor: middle}
+      - {text: ▲, at: [83.82, 6.15], font-size: 2.0, fill: '#e8ecef', anchor: middle}
       - {text: '4', at: [76.22, 9.7], font-size: 2.1, fill: '#e8ecef'}
-      - {text: '▼', at: [83.82, 9.7], font-size: 2.0, fill: '#e8ecef', anchor: middle}
+      - {text: ▼, at: [83.82, 9.7], font-size: 2.0, fill: '#e8ecef', anchor: middle}
       - {text: '5', at: [90.54, 6.15], font-size: 2.1, fill: '#e8ecef'}
-      - {text: '▲', at: [98.14, 6.15], font-size: 2.0, fill: '#e8ecef', anchor: middle}
+      - {text: ▲, at: [98.14, 6.15], font-size: 2.0, fill: '#e8ecef', anchor: middle}
       - {text: '6', at: [90.54, 9.7], font-size: 2.1, fill: '#e8ecef'}
-      - {text: '▼', at: [98.14, 9.7], font-size: 2.0, fill: '#e8ecef', anchor: middle}
+      - {text: ▼, at: [98.14, 9.7], font-size: 2.0, fill: '#e8ecef', anchor: middle}
       - {text: '7', at: [104.86, 6.15], font-size: 2.1, fill: '#e8ecef'}
-      - {text: '▲', at: [112.46, 6.15], font-size: 2.0, fill: '#e8ecef', anchor: middle}
+      - {text: ▲, at: [112.46, 6.15], font-size: 2.0, fill: '#e8ecef', anchor: middle}
       - {text: '8', at: [104.86, 9.7], font-size: 2.1, fill: '#e8ecef'}
-      - {text: '▼', at: [112.46, 9.7], font-size: 2.0, fill: '#e8ecef', anchor: middle}
+      - {text: ▼, at: [112.46, 9.7], font-size: 2.0, fill: '#e8ecef', anchor: middle}
       - {text: '9', at: [119.18, 6.15], font-size: 2.1, fill: '#e8ecef'}
-      - {text: '▲', at: [126.78, 6.15], font-size: 2.0, fill: '#e8ecef', anchor: middle}
+      - {text: ▲, at: [126.78, 6.15], font-size: 2.0, fill: '#e8ecef', anchor: middle}
       - {text: '10', at: [119.18, 9.7], font-size: 2.1, fill: '#e8ecef'}
-      - {text: '▼', at: [126.78, 9.7], font-size: 2.0, fill: '#e8ecef', anchor: middle}
+      - {text: ▼, at: [126.78, 9.7], font-size: 2.0, fill: '#e8ecef', anchor: middle}
       - {text: '11', at: [133.5, 6.15], font-size: 2.1, fill: '#e8ecef'}
-      - {text: '▲', at: [141.1, 6.15], font-size: 2.0, fill: '#e8ecef', anchor: middle}
+      - {text: ▲, at: [141.1, 6.15], font-size: 2.0, fill: '#e8ecef', anchor: middle}
       - {text: '12', at: [133.5, 9.7], font-size: 2.1, fill: '#e8ecef'}
-      - {text: '▼', at: [141.1, 9.7], font-size: 2.0, fill: '#e8ecef', anchor: middle}
+      - {text: ▼, at: [141.1, 9.7], font-size: 2.0, fill: '#e8ecef', anchor: middle}
       - {text: '13', at: [152.68, 6.15], font-size: 2.1, fill: '#e8ecef'}
-      - {text: '▲', at: [160.28, 6.15], font-size: 2.0, fill: '#e8ecef', anchor: middle}
+      - {text: ▲, at: [160.28, 6.15], font-size: 2.0, fill: '#e8ecef', anchor: middle}
       - {text: '14', at: [152.68, 9.7], font-size: 2.1, fill: '#e8ecef'}
-      - {text: '▼', at: [160.28, 9.7], font-size: 2.0, fill: '#e8ecef', anchor: middle}
+      - {text: ▼, at: [160.28, 9.7], font-size: 2.0, fill: '#e8ecef', anchor: middle}
       - {text: '15', at: [167.47, 6.15], font-size: 2.1, fill: '#e8ecef'}
-      - {text: '▲', at: [175.07, 6.15], font-size: 2.0, fill: '#e8ecef', anchor: middle}
+      - {text: ▲, at: [175.07, 6.15], font-size: 2.0, fill: '#e8ecef', anchor: middle}
       - {text: '16', at: [167.47, 9.7], font-size: 2.1, fill: '#e8ecef'}
-      - {text: '▼', at: [175.07, 9.7], font-size: 2.0, fill: '#e8ecef', anchor: middle}
+      - {text: ▼, at: [175.07, 9.7], font-size: 2.0, fill: '#e8ecef', anchor: middle}
       - {text: '17', at: [187.9, 6.15], font-size: 2.1, fill: '#e8ecef'}
-      - {text: '▲', at: [195.5, 6.15], font-size: 2.0, fill: '#e8ecef', anchor: middle}
+      - {text: ▲, at: [195.5, 6.15], font-size: 2.0, fill: '#e8ecef', anchor: middle}
       - {text: '18', at: [187.9, 9.7], font-size: 2.1, fill: '#e8ecef'}
-      - {text: '▼', at: [195.5, 9.7], font-size: 2.0, fill: '#e8ecef', anchor: middle}
+      - {text: ▼, at: [195.5, 9.7], font-size: 2.0, fill: '#e8ecef', anchor: middle}
       - {text: '19', at: [202.24, 6.15], font-size: 2.1, fill: '#e8ecef'}
-      - {text: '▲', at: [209.84, 6.15], font-size: 2.0, fill: '#e8ecef', anchor: middle}
+      - {text: ▲, at: [209.84, 6.15], font-size: 2.0, fill: '#e8ecef', anchor: middle}
       - {text: '20', at: [202.24, 9.7], font-size: 2.1, fill: '#e8ecef'}
-      - {text: '▼', at: [209.84, 9.7], font-size: 2.0, fill: '#e8ecef', anchor: middle}
+      - {text: ▼, at: [209.84, 9.7], font-size: 2.0, fill: '#e8ecef', anchor: middle}
       - {text: '21', at: [216.58, 6.15], font-size: 2.1, fill: '#e8ecef'}
-      - {text: '▲', at: [224.18, 6.15], font-size: 2.0, fill: '#e8ecef', anchor: middle}
+      - {text: ▲, at: [224.18, 6.15], font-size: 2.0, fill: '#e8ecef', anchor: middle}
       - {text: '22', at: [216.58, 9.7], font-size: 2.1, fill: '#e8ecef'}
-      - {text: '▼', at: [224.18, 9.7], font-size: 2.0, fill: '#e8ecef', anchor: middle}
+      - {text: ▼, at: [224.18, 9.7], font-size: 2.0, fill: '#e8ecef', anchor: middle}
       - {text: '23', at: [230.92, 6.15], font-size: 2.1, fill: '#e8ecef'}
-      - {text: '▲', at: [238.52, 6.15], font-size: 2.0, fill: '#e8ecef', anchor: middle}
+      - {text: ▲, at: [238.52, 6.15], font-size: 2.0, fill: '#e8ecef', anchor: middle}
       - {text: '24', at: [230.92, 9.7], font-size: 2.1, fill: '#e8ecef'}
-      - {text: '▼', at: [238.52, 9.7], font-size: 2.0, fill: '#e8ecef', anchor: middle}
+      - {text: ▼, at: [238.52, 9.7], font-size: 2.0, fill: '#e8ecef', anchor: middle}
       - {text: '25', at: [245.26, 6.15], font-size: 2.1, fill: '#e8ecef'}
-      - {text: '▲', at: [252.86, 6.15], font-size: 2.0, fill: '#e8ecef', anchor: middle}
+      - {text: ▲, at: [252.86, 6.15], font-size: 2.0, fill: '#e8ecef', anchor: middle}
       - {text: '26', at: [245.26, 9.7], font-size: 2.1, fill: '#e8ecef'}
-      - {text: '▼', at: [252.86, 9.7], font-size: 2.0, fill: '#e8ecef', anchor: middle}
+      - {text: ▼, at: [252.86, 9.7], font-size: 2.0, fill: '#e8ecef', anchor: middle}
       - {text: '27', at: [259.6, 6.15], font-size: 2.1, fill: '#e8ecef'}
-      - {text: '▲', at: [267.2, 6.15], font-size: 2.0, fill: '#e8ecef', anchor: middle}
+      - {text: ▲, at: [267.2, 6.15], font-size: 2.0, fill: '#e8ecef', anchor: middle}
       - {text: '28', at: [259.6, 9.7], font-size: 2.1, fill: '#e8ecef'}
-      - {text: '▼', at: [267.2, 9.7], font-size: 2.0, fill: '#e8ecef', anchor: middle}
+      - {text: ▼, at: [267.2, 9.7], font-size: 2.0, fill: '#e8ecef', anchor: middle}
       - {text: smartoptics, at: [16.7, 6.2], font-size: 3.2, fill: '#e8ecef'}
       - {text: DCP-SC-28P, at: [39.8, 6.0], font-size: 2.8, fill: '#e8ecef'}
       - {text: ETH0, at: [6.2, 18.7], font-size: 2.1, fill: '#c9cdd1', anchor: middle, rotate: -90}
       - {text: RS232, at: [6.2, 33.2], font-size: 2.1, fill: '#c9cdd1', anchor: middle, rotate: -90}
       - {text: Power, at: [31.2, 32.3], font-size: 1.9, fill: '#c9cdd1', anchor: middle}
       - {text: Status, at: [37.4, 32.3], font-size: 1.9, fill: '#c9cdd1', anchor: middle}
+      - {at: [403.2, 26.9], text: 29. PROBE, font-size: 1.6, for: port-probe}
+    components:
+      placements:
+        - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.75], skin: left, optional: ears}
+        - {ref: common/rack-ear@1, id: ear-right, at: [440, 0.75], skin: right, optional: ears}
+        - {ref: common/rj45-shielded@2, id: eth0, at: [9.6, 12.4], rotate: 180, attrs: {role: mgmt, speed: 1000base-t}}
+        - {ref: common/rj45-shielded@2, id: rs232, at: [9.6, 26.9], attrs: {role: console, media: rj45-serial}}
+        - {ref: common/led-dot@1, id: led-power, at: [30.2, 33.6], attrs: {function: power}}
+        - {ref: common/led-dot@1, id: led-status, at: [36.4, 33.6], attrs: {function: status}}
+        - {ref: common/sfp-plus-cage@2, id: port-probe, at: [395.2, 29.1], attrs: {media: sfp-plus, role: probe}}
+        - {ref: common/rj45-hd@1, id: port-1, at: [58.6, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
+        - {ref: common/rj45-hd@1, id: port-3, at: [72.92, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
+        - {ref: common/rj45-hd@1, id: port-5, at: [87.24, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
+        - {ref: common/rj45-hd@1, id: port-7, at: [101.56, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
+        - {ref: common/rj45-hd@1, id: port-9, at: [115.88, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
+        - {ref: common/rj45-hd@1, id: port-11, at: [130.2, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
+        - {ref: std/sfp@1, id: port-13, at: [149.78, 13.7], group: row-top, attrs: {media: sfp, role: service}}
+        - {ref: std/sfp@1, id: port-15, at: [164.57, 13.7], group: row-top, attrs: {media: sfp, role: service}}
+        - {ref: common/rj45-hd@1, id: port-17, at: [184.6, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
+        - {ref: common/rj45-hd@1, id: port-19, at: [198.94, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
+        - {ref: common/rj45-hd@1, id: port-21, at: [213.28, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
+        - {ref: common/rj45-hd@1, id: port-23, at: [227.62, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
+        - {ref: common/rj45-hd@1, id: port-25, at: [241.96, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
+        - {ref: common/rj45-hd@1, id: port-27, at: [256.3, 12.7], rotate: 180, group: row-top, attrs: {media: rj45, role: service}}
+        - {ref: common/rj45-hd@1, id: port-2, at: [58.6, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
+        - {ref: common/rj45-hd@1, id: port-4, at: [72.92, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
+        - {ref: common/rj45-hd@1, id: port-6, at: [87.24, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
+        - {ref: common/rj45-hd@1, id: port-8, at: [101.56, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
+        - {ref: common/rj45-hd@1, id: port-10, at: [115.88, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
+        - {ref: common/rj45-hd@1, id: port-12, at: [130.2, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
+        - {ref: std/sfp@1, id: port-14, at: [149.78, 26.3], group: row-bottom, attrs: {media: sfp, role: service}}
+        - {ref: std/sfp@1, id: port-16, at: [164.57, 26.3], group: row-bottom, attrs: {media: sfp, role: service}}
+        - {ref: common/rj45-hd@1, id: port-18, at: [184.6, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
+        - {ref: common/rj45-hd@1, id: port-20, at: [198.94, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
+        - {ref: common/rj45-hd@1, id: port-22, at: [213.28, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
+        - {ref: common/rj45-hd@1, id: port-24, at: [227.62, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
+        - {ref: common/rj45-hd@1, id: port-26, at: [241.96, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
+        - {ref: common/rj45-hd@1, id: port-28, at: [256.3, 25.3], group: row-bottom, attrs: {media: rj45, role: service}}
   rear:
-    size: {w: 440, h: 45}
-    placements:
-      - {ref: common/rack-ear@1, id: ear-left-r, at: [-14, 0.75], skin: left, optional: ears}
-      - {ref: common/rack-ear@1, id: ear-right-r, at: [440, 0.75], skin: right, optional: ears}
-      - {ref: common/psu-550w@2, id: psu-1, at: [0, 2.5], attrs: {slot: '1'}}
-      - {ref: common/psu-550w@2, id: psu-2, at: [366.5, 2.5], attrs: {slot: '2'}}
-    decor:
-      - {at: [78, 5], size: [285, 35], pattern: vent, vent: 9}
+    size:
+      w: 440
+      h: 45
+    panel:
+      decor:
+        - {at: [78, 5], size: [285, 35], pattern: vent, vent: 9}
+    components:
+      placements:
+        - {ref: common/rack-ear@1, id: ear-left-r, at: [-14, 0.75], skin: left, optional: ears}
+        - {ref: common/rack-ear@1, id: ear-right-r, at: [440, 0.75], skin: right, optional: ears}
+        - {ref: common/psu-550w@2, id: psu-1, at: [0, 2.5], attrs: {slot: '1'}}
+        - {ref: common/psu-550w@2, id: psu-2, at: [366.5, 2.5], attrs: {slot: '2'}}
   left:
-    size: {w: 505, h: 45}
-    decor:
-      - {at: [0, 0], size: [505, 45], fill: '#b9bec4'}
-      - {at: [492.3, 0], size: [12.7, 45], fill: '#17191c'}
+    size:
+      w: 505
+      h: 45
+    panel:
+      decor:
+        - {at: [0, 0], size: [505, 45], fill: '#b9bec4'}
+        - {at: [492.3, 0], size: [12.7, 45], fill: '#17191c'}
   right:
-    size: {w: 505, h: 45}
-    decor:
-      - {at: [0, 0], size: [505, 45], fill: '#b9bec4'}
-      - {at: [0, 0], size: [12.7, 45], fill: '#17191c'}
+    size:
+      w: 505
+      h: 45
+    panel:
+      decor:
+        - {at: [0, 0], size: [505, 45], fill: '#b9bec4'}
+        - {at: [0, 0], size: [12.7, 45], fill: '#17191c'}
   top:
-    size: {w: 440, h: 505}
-    decor:
-      - {at: [0, 0], size: [440, 505], fill: '#b9bec4'}
-      - {at: [0, 492.3], size: [440, 12.7], fill: '#17191c'}
+    size:
+      w: 440
+      h: 505
+    panel:
+      decor:
+        - {at: [0, 0], size: [440, 505], fill: '#b9bec4'}
+        - {at: [0, 492.3], size: [440, 12.7], fill: '#17191c'}
   bottom:
-    size: {w: 440, h: 505}
-    decor:
-      - {at: [0, 0], size: [440, 505], fill: '#b9bec4'}
-      - {at: [0, 492.3], size: [440, 12.7], fill: '#17191c'}
+    size:
+      w: 440
+      h: 505
+    panel:
+      decor:
+        - {at: [0, 0], size: [440, 505], fill: '#b9bec4'}
+        - {at: [0, 492.3], size: [440, 12.7], fill: '#17191c'}
+references:
+  - {title: Smartoptics DCP-SC-28P User Manual R14.0_A}
+  - {title: Smartoptics DCP-R Visio stencil DCP-R_v260105.vssx (master sc-28p)}

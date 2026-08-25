@@ -33,6 +33,64 @@ chassis:
   depth: 388.45
   ru: 6
   color: '#a7a9ac'
+groups:
+  front-slots:
+    term: Slot
+    index-origin: 1
+  rear-slots:
+    term: Slot
+    index-origin: 1
+views:
+  front:
+    size:
+      w: 432.95
+      h: 265.9
+    panel:
+      decor:
+        - {at: [0, 0], size: [40.0, 265.9], fill: '#8d949c'}
+        - {at: [391.5, 0], size: [41.44999999999999, 265.9], fill: '#8d949c'}
+    silkscreen:
+      - {at: [6, 250], text: C40G, font-size: 9, fill: '#231f20', anchor: start}
+      - {at: [20, 183.35], text: '0', font-size: 11, anchor: middle, fill: '#231f20'}
+      - {at: [20, 152.88], text: '1', font-size: 11, anchor: middle, fill: '#231f20'}
+      - {at: [20, 122.41], text: '2', font-size: 11, anchor: middle, fill: '#e03127'}
+      - {at: [20, 91.94], text: '3', font-size: 11, anchor: middle, fill: '#e03127'}
+      - {at: [20, 61.47], text: '4', font-size: 11, anchor: middle, fill: '#231f20'}
+      - {at: [20, 31.0], text: '5', font-size: 11, anchor: middle, fill: '#231f20'}
+    components:
+      bays:
+        - {id: front-0, at: [42.0, 164.35], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1], default: casa/bdm@1, group: front-slots, rel-pos: 0}
+        - {id: front-1, at: [42.0, 133.88], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1], default: casa/bdm@1, group: front-slots, rel-pos: 1}
+        - {id: front-2, at: [42.0, 103.41], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-8x10g@1], default: casa/smm-8x10g@1, group: front-slots, rel-pos: 2}
+        - {id: front-3, at: [42.0, 72.94], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-8x10g@1], default: casa/smm-8x10g@1, group: front-slots, rel-pos: 3}
+        - {id: front-4, at: [42.0, 42.47], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1], default: casa/bdm@1, group: front-slots, rel-pos: 4}
+        - {id: front-5, at: [42.0, 12.0], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1], default: casa/bdm@1, group: front-slots, rel-pos: 5}
+  rear:
+    size:
+      w: 432.95
+      h: 265.9
+    panel:
+      decor:
+        - {at: [0, 0], size: [40.0, 265.9], fill: '#8d949c'}
+        - {at: [391.5, 0], size: [41.44999999999999, 265.9], fill: '#8d949c'}
+        - {at: [42.0, 200], size: [345.5, 60], fill: '#8d949c', pattern: grille, vent: 50}
+    silkscreen:
+      - {at: [4.0, 216], text: PEM 1, font-size: 6, fill: '#231f20', anchor: start}
+      - {at: [4.0, 232], text: PEM 2, font-size: 6, fill: '#231f20', anchor: start}
+      - {at: [20, 183.35], text: '0', font-size: 11, anchor: middle, fill: '#231f20'}
+      - {at: [20, 152.88], text: '1', font-size: 11, anchor: middle, fill: '#231f20'}
+      - {at: [20, 122.41], text: '2', font-size: 11, anchor: middle, fill: '#e03127'}
+      - {at: [20, 91.94], text: '3', font-size: 11, anchor: middle, fill: '#e03127'}
+      - {at: [20, 61.47], text: '4', font-size: 11, anchor: middle, fill: '#231f20'}
+      - {at: [20, 31.0], text: '5', font-size: 11, anchor: middle, fill: '#231f20'}
+    components:
+      bays:
+        - {id: rear-0, at: [42.0, 164.35], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/io-6p12@1], default: casa/io-6p12@1, group: rear-slots, rel-pos: 0}
+        - {id: rear-1, at: [42.0, 133.88], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/lc-sw-bdm@1], default: casa/lc-sw-bdm@1, group: rear-slots, rel-pos: 1}
+        - {id: rear-2, at: [42.0, 103.41], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-sw-bdm-a@1], default: casa/smm-sw-bdm-a@1, group: rear-slots, rel-pos: 2}
+        - {id: rear-3, at: [42.0, 72.94], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-sw-bdm-b@1], default: casa/smm-sw-bdm-b@1, group: rear-slots, rel-pos: 3}
+        - {id: rear-4, at: [42.0, 42.47], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/io-6p12-sw@1], default: casa/io-6p12-sw@1, group: rear-slots, rel-pos: 4}
+        - {id: rear-5, at: [42.0, 12.0], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/io-6p12@1], default: casa/io-6p12@1, group: rear-slots, rel-pos: 5}
 configurations:
   bdm-3plus1:
     description: 'BDM "3+1". Redundancy collapses to a single protecting slot: rear 1 takes the LC-BDM-SWITCH,
@@ -69,50 +127,3 @@ configurations:
       rear-3: casa/smm-sw-bdm-b@1
       rear-4: casa/io-6p12-sw@1
       rear-5: casa/io-6p12@1
-views:
-  front:
-    size:
-      w: 432.95
-      h: 265.9
-    bays:
-      - {id: front-0, at: [42.0, 164.35], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1], default: casa/bdm@1, group: front-slots, rel-pos: 0}
-      - {id: front-1, at: [42.0, 133.88], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1], default: casa/bdm@1, group: front-slots, rel-pos: 1}
-      - {id: front-2, at: [42.0, 103.41], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-8x10g@1], default: casa/smm-8x10g@1, group: front-slots, rel-pos: 2}
-      - {id: front-3, at: [42.0, 72.94], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-8x10g@1], default: casa/smm-8x10g@1, group: front-slots, rel-pos: 3}
-      - {id: front-4, at: [42.0, 42.47], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1], default: casa/bdm@1, group: front-slots, rel-pos: 4}
-      - {id: front-5, at: [42.0, 12.0], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1], default: casa/bdm@1, group: front-slots, rel-pos: 5}
-    decor:
-      - {at: [0, 0], size: [40.0, 265.9], fill: '#8d949c'}
-      - {at: [391.5, 0], size: [41.44999999999999, 265.9], fill: '#8d949c'}
-    silkscreen:
-      - {at: [6, 250], text: C40G, font-size: 9, fill: '#231f20', anchor: start}
-      - {at: [20, 183.35], text: '0', font-size: 11, anchor: middle, fill: '#231f20'}
-      - {at: [20, 152.88], text: '1', font-size: 11, anchor: middle, fill: '#231f20'}
-      - {at: [20, 122.41], text: '2', font-size: 11, anchor: middle, fill: '#e03127'}
-      - {at: [20, 91.94], text: '3', font-size: 11, anchor: middle, fill: '#e03127'}
-      - {at: [20, 61.47], text: '4', font-size: 11, anchor: middle, fill: '#231f20'}
-      - {at: [20, 31.0], text: '5', font-size: 11, anchor: middle, fill: '#231f20'}
-  rear:
-    size:
-      w: 432.95
-      h: 265.9
-    bays:
-      - {id: rear-0, at: [42.0, 164.35], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/io-6p12@1], default: casa/io-6p12@1, group: rear-slots, rel-pos: 0}
-      - {id: rear-1, at: [42.0, 133.88], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/lc-sw-bdm@1], default: casa/lc-sw-bdm@1, group: rear-slots, rel-pos: 1}
-      - {id: rear-2, at: [42.0, 103.41], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-sw-bdm-a@1], default: casa/smm-sw-bdm-a@1, group: rear-slots, rel-pos: 2}
-      - {id: rear-3, at: [42.0, 72.94], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-sw-bdm-b@1], default: casa/smm-sw-bdm-b@1, group: rear-slots, rel-pos: 3}
-      - {id: rear-4, at: [42.0, 42.47], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/io-6p12-sw@1], default: casa/io-6p12-sw@1, group: rear-slots, rel-pos: 4}
-      - {id: rear-5, at: [42.0, 12.0], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/io-6p12@1], default: casa/io-6p12@1, group: rear-slots, rel-pos: 5}
-    decor:
-      - {at: [0, 0], size: [40.0, 265.9], fill: '#8d949c'}
-      - {at: [391.5, 0], size: [41.44999999999999, 265.9], fill: '#8d949c'}
-      - {at: [42.0, 200], size: [345.5, 60], fill: '#8d949c', pattern: grille, vent: 50}
-    silkscreen:
-      - {at: [4.0, 216], text: PEM 1, font-size: 6, fill: '#231f20', anchor: start}
-      - {at: [4.0, 232], text: PEM 2, font-size: 6, fill: '#231f20', anchor: start}
-      - {at: [20, 183.35], text: '0', font-size: 11, anchor: middle, fill: '#231f20'}
-      - {at: [20, 152.88], text: '1', font-size: 11, anchor: middle, fill: '#231f20'}
-      - {at: [20, 122.41], text: '2', font-size: 11, anchor: middle, fill: '#e03127'}
-      - {at: [20, 91.94], text: '3', font-size: 11, anchor: middle, fill: '#e03127'}
-      - {at: [20, 61.47], text: '4', font-size: 11, anchor: middle, fill: '#231f20'}
-      - {at: [20, 31.0], text: '5', font-size: 11, anchor: middle, fill: '#231f20'}

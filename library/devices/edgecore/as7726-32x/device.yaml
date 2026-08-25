@@ -4,29 +4,22 @@ name: as7726-32x
 version: 0.29.0
 manufacturer: Edgecore
 model: AS7726-32X (DCS204)
-part-numbers:
-  7726-32X-O-AC-F: FP3ZZ7632074A
-  7726-32X-O-AC-B: FP3ZZ7632076A
 description: 32x QSFP28 1U spine/ToR switch, Broadcom Trident 3 (BCM56870)
 profile: networking
-datasheet:
-  title: Edgecore DCS204 (AS7726-32X) Data Sheet R09 2026-07-07
-  url: https://www.edge-core.com/product/dcs204/
-  sha256: c15ce7bf73e9202358e450ed8f7d745de9e8b07220e223c545f45c7c22208ec2
-references:
-  - title: Edgecore DCS204 (AS7726-32X) Quick Start Guide R03
-    sha256: 9c6408ad3bc54d4d8fa660ae3d8118987f54d78a2d5d05401b8324a9b975a51e
 provenance:
-  cpu: datasheet says only 'Intel Xeon 4-Core'; model and clock (D-1518 @ 2.20GHz)
-    from the live roc-spine1 entity dump (dumps/arcos-openconfig-components.json)
-  attrs: datasheet (Hardware/Performance/Power/Supported-Transceivers sections; power figures are min idle
-    / typical 32x SR4 at 30 percent load, 25 C ambient)
+  cpu: datasheet says only 'Intel Xeon 4-Core'; model and clock (D-1518 @ 2.20GHz) from the live
+    roc-spine1 entity dump (dumps/arcos-openconfig-components.json)
+  attrs: datasheet (Hardware/Performance/Power/Supported-Transceivers sections; power figures are
+    min idle / typical 32x SR4 at 30 percent load, 25 C ambient)
   chassis: datasheet (Dimensions WxDxH 43.84 x 51.5 x 4.35 cm; Weight 10.87 kg)
-  port-positions: photo-inferred; true 18.5mm pitch (measured ~18.8mm from photo), 6mm block gaps, human-reviewed round 5
+  port-positions: photo-inferred; true 18.5mm pitch (measured ~18.8mm from photo), 6mm block gaps,
+    human-reviewed round 5
   port-numbering: estimated (verify against faceplate silkscreen)
   led-cluster: human-reviewed vs device photo
   rear-layout: human-reviewed round 3-5
-  top-bottom-sides: top from angled photo (grooves + front vent strip); bottom = two labels photo-inferred from a dark in-rack shot (big sticker edge visible ~155mm from front, second label front-left estimated) - reshoot on a bench for calibration; sides extrapolated from angled photo
+  top-bottom-sides: top from angled photo (grooves + front vent strip); bottom = two labels photo-inferred
+    from a dark in-rack shot (big sticker edge visible ~155mm from front, second label front-left
+    estimated) - reshoot on a bench for calibration; sides extrapolated from angled photo
 attrs:
   asic: Broadcom BCM56870 Trident 3
   cpu: Intel Xeon D-1518, 4-core @ 2.2 GHz
@@ -46,8 +39,8 @@ attrs:
   software: ONIE installer
   logical-ports-max: '128'
   port-modes-qsfp28: 1x 100G, 2x 50G, 4x 25G, 1x 40G, 4x 10G (breakout via DAC)
-  optics-qsfp28: 100GBASE-SR4/CWDM4/LR4/ER4/ZR4/PSM4-2/DR1/FR1/LR1, 100G-DAC/AOC,
-    40GBASE-SR4/LR4, 40G-DAC/AOC
+  optics-qsfp28: 100GBASE-SR4/CWDM4/LR4/ER4/ZR4/PSM4-2/DR1/FR1/LR1, 100G-DAC/AOC, 40GBASE-SR4/LR4,
+    40G-DAC/AOC
   mgmt-ports: 1x RJ-45 console, 1x RJ-45 1000BASE-T, 2x SFP+ 10G, 1x USB-A storage
 chassis:
   width: 438.4
@@ -55,201 +48,358 @@ chassis:
   depth: 515.0
   ru: 1
   weight-kg: 10.87
+groups:
+  ports:
+    index-origin: 1
+    term: Port
+    attrs:
+      media: qsfp28
+      speed: 100g
+  mgmt-sfp:
+    index-origin: 1
+    term: Port
+    attrs:
+      media: sfp-plus
+      speed: 10g
+      role: mgmt-uplink
+  psus:
+    index-origin: 1
+    term: PSU
+  fans:
+    index-origin: 1
+    term: Fan
+  leds:
+    index-origin: 1
+    term: LED
+views:
+  front:
+    panel:
+      decor:
+        - {at: [0, 1], size: [2.8, 41.5], pattern: vent, vent: 25}
+        - {at: [46, 0.8], size: [314, 7.4], pattern: vent, vent: 25}
+        - {at: [46, 40.2], size: [314, 3], pattern: vent, vent: 25}
+        - {at: [435.6, 1], size: [2.8, 41.5], pattern: vent, vent: 25, pattern-offset: [0, 2.555]}
+        - {at: [9.5, 31.5], size: [5.5, 4], fill: '#0d0f11', vent: 25}
+        - {at: [16.5, 31.5], size: [5.5, 4], fill: '#0d0f11', vent: 25}
+        - {at: [23.5, 31.5], size: [5.5, 4], fill: '#0d0f11', vent: 25}
+        - {at: [9.5, 37.5], size: [5.5, 4], fill: '#0d0f11', vent: 25}
+        - {at: [16.5, 37.5], size: [5.5, 4], fill: '#0d0f11', vent: 25}
+        - {at: [23.5, 37.5], size: [5.5, 4], fill: '#0d0f11', vent: 25}
+        - {at: [412, 31.5], size: [5.5, 4], fill: '#0d0f11', vent: 25}
+        - {at: [419, 31.5], size: [5.5, 4], fill: '#0d0f11', vent: 25}
+        - {at: [426, 31.5], size: [5.5, 4], fill: '#0d0f11', vent: 25}
+        - {at: [412, 37.5], size: [5.5, 4], fill: '#0d0f11', vent: 25}
+        - {at: [419, 37.5], size: [5.5, 4], fill: '#0d0f11', vent: 25}
+        - {at: [426, 37.5], size: [5.5, 4], fill: '#0d0f11', vent: 25}
+        - {at: [46, 9.6], size: [314, 3.8], fill: '#26292d'}
+        - {at: [46, 37.2], size: [314, 3.8], fill: '#26292d'}
+    silkscreen:
+      - {at: [55.25, 12.35], text: '1', for: port-1}
+      - {at: [55.25, 39.4], text: '2', for: port-2}
+      - {at: [74.25, 12.35], text: '3', for: port-3}
+      - {at: [74.25, 39.4], text: '4', for: port-4}
+      - {at: [93.25, 12.35], text: '5', for: port-5}
+      - {at: [93.25, 39.4], text: '6', for: port-6}
+      - {at: [112.25, 12.35], text: '7', for: port-7}
+      - {at: [112.25, 39.4], text: '8', for: port-8}
+      - {at: [135.25, 12.35], text: '9', for: port-9}
+      - {at: [135.25, 39.4], text: '10', for: port-10}
+      - {at: [154.25, 12.35], text: '11', for: port-11}
+      - {at: [154.25, 39.4], text: '12', for: port-12}
+      - {at: [173.25, 12.35], text: '13', for: port-13}
+      - {at: [173.25, 39.4], text: '14', for: port-14}
+      - {at: [192.25, 12.35], text: '15', for: port-15}
+      - {at: [192.25, 39.4], text: '16', for: port-16}
+      - {at: [215.25, 12.35], text: '17', for: port-17}
+      - {at: [215.25, 39.4], text: '18', for: port-18}
+      - {at: [234.25, 12.35], text: '19', for: port-19}
+      - {at: [234.25, 39.4], text: '20', for: port-20}
+      - {at: [253.25, 12.35], text: '21', for: port-21}
+      - {at: [253.25, 39.4], text: '22', for: port-22}
+      - {at: [272.25, 12.35], text: '23', for: port-23}
+      - {at: [272.25, 39.4], text: '24', for: port-24}
+      - {at: [295.25, 12.35], text: '25', for: port-25}
+      - {at: [295.25, 39.4], text: '26', for: port-26}
+      - {at: [314.25, 12.35], text: '27', for: port-27}
+      - {at: [314.25, 39.4], text: '28', for: port-28}
+      - {at: [333.25, 12.35], text: '29', for: port-29}
+      - {at: [333.25, 39.4], text: '30', for: port-30}
+      - {at: [352.25, 12.35], text: '31', for: port-31}
+      - {at: [352.25, 39.4], text: '32', for: port-32}
+      - {at: [42, 13.6], text: LOC, font-size: 1.7, for: led-loc}
+      - {at: [35, 21.6], text: PS1, font-size: 1.7, for: led-psu1}
+      - {at: [42, 21.6], text: DIAG, font-size: 1.7, for: led-diag}
+      - {at: [35, 29.6], text: PS2, font-size: 1.7, for: led-psu2}
+      - {at: [42, 29.6], text: FAN, font-size: 1.7, for: led-fan}
+      - {at: [38.5, 39.6], text: RST, font-size: 1.7, for: reset}
+      - {at: [370.5, 6.5], text: MGMT, for: mgmt-eth}
+      - {at: [370.5, 41.5], text: CONSOLE, for: console}
+    components:
+      placements:
+        - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0], skin: left, optional: ears}
+        - {ref: common/rack-ear@1, id: ear-right, at: [438.4, 0], skin: right, optional: ears}
+        - {ref: common/qsfp28-cage@3, id: port-1, at: [46, 10], group: ports, rel-pos: 1}
+        - {ref: common/qsfp28-cage@3, id: port-2, at: [46, 25.5], rotate: 180, group: ports, rel-pos: 2}
+        - {ref: common/qsfp28-cage@3, id: port-3, at: [65, 10], group: ports, rel-pos: 3}
+        - {ref: common/qsfp28-cage@3, id: port-4, at: [65, 25.5], rotate: 180, group: ports, rel-pos: 4}
+        - {ref: common/qsfp28-cage@3, id: port-5, at: [84, 10], group: ports, rel-pos: 5}
+        - {ref: common/qsfp28-cage@3, id: port-6, at: [84, 25.5], rotate: 180, group: ports, rel-pos: 6}
+        - {ref: common/qsfp28-cage@3, id: port-7, at: [103, 10], group: ports, rel-pos: 7}
+        - {ref: common/qsfp28-cage@3, id: port-8, at: [103, 25.5], rotate: 180, group: ports, rel-pos: 8}
+        - {ref: common/qsfp28-cage@3, id: port-9, at: [126, 10], group: ports, rel-pos: 9}
+        - {ref: common/qsfp28-cage@3, id: port-10, at: [126, 25.5], rotate: 180, group: ports, rel-pos: 10}
+        - {ref: common/qsfp28-cage@3, id: port-11, at: [145, 10], group: ports, rel-pos: 11}
+        - {ref: common/qsfp28-cage@3, id: port-12, at: [145, 25.5], rotate: 180, group: ports, rel-pos: 12}
+        - {ref: common/qsfp28-cage@3, id: port-13, at: [164, 10], group: ports, rel-pos: 13}
+        - {ref: common/qsfp28-cage@3, id: port-14, at: [164, 25.5], rotate: 180, group: ports, rel-pos: 14}
+        - {ref: common/qsfp28-cage@3, id: port-15, at: [183, 10], group: ports, rel-pos: 15}
+        - {ref: common/qsfp28-cage@3, id: port-16, at: [183, 25.5], rotate: 180, group: ports, rel-pos: 16}
+        - {ref: common/qsfp28-cage@3, id: port-17, at: [206, 10], group: ports, rel-pos: 17}
+        - {ref: common/qsfp28-cage@3, id: port-18, at: [206, 25.5], rotate: 180, group: ports, rel-pos: 18}
+        - {ref: common/qsfp28-cage@3, id: port-19, at: [225, 10], group: ports, rel-pos: 19}
+        - {ref: common/qsfp28-cage@3, id: port-20, at: [225, 25.5], rotate: 180, group: ports, rel-pos: 20}
+        - {ref: common/qsfp28-cage@3, id: port-21, at: [244, 10], group: ports, rel-pos: 21}
+        - {ref: common/qsfp28-cage@3, id: port-22, at: [244, 25.5], rotate: 180, group: ports, rel-pos: 22}
+        - {ref: common/qsfp28-cage@3, id: port-23, at: [263, 10], group: ports, rel-pos: 23}
+        - {ref: common/qsfp28-cage@3, id: port-24, at: [263, 25.5], rotate: 180, group: ports, rel-pos: 24}
+        - {ref: common/qsfp28-cage@3, id: port-25, at: [286, 10], group: ports, rel-pos: 25}
+        - {ref: common/qsfp28-cage@3, id: port-26, at: [286, 25.5], rotate: 180, group: ports, rel-pos: 26}
+        - {ref: common/qsfp28-cage@3, id: port-27, at: [305, 10], group: ports, rel-pos: 27}
+        - {ref: common/qsfp28-cage@3, id: port-28, at: [305, 25.5], rotate: 180, group: ports, rel-pos: 28}
+        - {ref: common/qsfp28-cage@3, id: port-29, at: [324, 10], group: ports, rel-pos: 29}
+        - {ref: common/qsfp28-cage@3, id: port-30, at: [324, 25.5], rotate: 180, group: ports, rel-pos: 30}
+        - {ref: common/qsfp28-cage@3, id: port-31, at: [343, 10], group: ports, rel-pos: 31}
+        - {ref: common/qsfp28-cage@3, id: port-32, at: [343, 25.5], rotate: 180, group: ports, rel-pos: 32}
+        - {ref: common/led-indicator@1, id: led-loc, at: [40, 7], group: leds, rel-pos: 2}
+        - {ref: common/led-indicator@1, id: led-psu1, at: [33, 15], group: leds, rel-pos: 4}
+        - {ref: common/led-indicator@1, id: led-diag, at: [40, 15], group: leds, rel-pos: 1}
+        - {ref: common/led-indicator@1, id: led-psu2, at: [33, 23], group: leds, rel-pos: 5}
+        - {ref: common/led-indicator@1, id: led-fan, at: [40, 23], group: leds, rel-pos: 3}
+        - {ref: common/reset-button@1, id: reset, at: [36.5, 32]}
+        - {ref: common/rj45-port@4, id: mgmt-eth, at: [362, 9.1], attrs: {role: mgmt, speed: 1000base-t}}
+        - {ref: common/rj45-bezel@2, id: console, at: [362, 25.2], attrs: {media: rj45-serial, role: console}}
+        - {ref: common/sfp-led-pair@1, id: sfp-leds, at: [383, 9], group: leds, rel-pos: 6}
+        - {ref: common/sfp-plus-cage@2, id: mgmt-sfp-1, at: [381, 14.5], group: mgmt-sfp, rel-pos: 1}
+        - {ref: common/sfp-plus-cage@2, id: mgmt-sfp-2, at: [381, 25.5], group: mgmt-sfp, rel-pos: 2}
+        - {ref: common/usb-a@2, id: usb, at: [394, 16.5], rotate: 270}
+        - {ref: common/pull-tab@1, id: info-tab, at: [381, 38.6]}
+    regions:
+      - {id: mgmt-block, at: [360, 1], size: {w: 52, h: 42}, label: Management, members: [mgmt-eth, console, mgmt-sfp-1, mgmt-sfp-2, sfp-leds, usb, info-tab]}
+      - {id: status-leds, at: [32, 2], size: {w: 15, h: 38}, label: Status LEDs, members: [led-loc, led-psu1, led-diag, led-psu2, led-fan, reset]}
+      - {id: intake, at: [0, 0], size: {w: 438.4, h: 43.5}, physical-context: Intake, label: Front airflow (intake on F2B SKUs)}
+  rear:
+    silkscreen:
+      - {at: [122.0, 9.6], text: '6', font-size: 4.4, for: fan-6}
+      - {at: [170.6, 9.6], text: '5', font-size: 4.4, for: fan-5}
+      - {at: [219.2, 9.6], text: '4', font-size: 4.4, for: fan-4}
+      - {at: [267.8, 9.6], text: '3', font-size: 4.4, for: fan-3}
+      - {at: [316.4, 9.6], text: '2', font-size: 4.4, for: fan-2}
+      - {at: [365.0, 9.6], text: '1', font-size: 4.4, for: fan-1}
+      - {at: [4.5, 16], text: '>
+
+    PS2', font-size: 4.4, for: ground-left}
+      - {at: [433.9, 16], text: '<
+
+    PS1', font-size: 4.4, for: ground-right}
+    components:
+      bays:
+        - {id: psu-2, at: [10, 2], size: {w: 54, h: 40}, accepts: [common/psu-ac-650@3, common/psu-dc-650@2], group: psus, rel-pos: 2, default: common/psu-ac-650@3}
+        - {id: fan-6, at: [71.1, 2], size: {w: 48.6, h: 40}, accepts: [common/fan-module@1], group: fans, rel-pos: 6, default: common/fan-module@1}
+        - {id: fan-5, at: [119.7, 2], size: {w: 48.6, h: 40}, accepts: [common/fan-module@1], group: fans, rel-pos: 5, default: common/fan-module@1}
+        - {id: fan-4, at: [168.3, 2], size: {w: 48.6, h: 40}, accepts: [common/fan-module@1], group: fans, rel-pos: 4, default: common/fan-module@1}
+        - {id: fan-3, at: [216.9, 2], size: {w: 48.6, h: 40}, accepts: [common/fan-module@1], group: fans, rel-pos: 3, default: common/fan-module@1}
+        - {id: fan-2, at: [265.5, 2], size: {w: 48.6, h: 40}, accepts: [common/fan-module@1], group: fans, rel-pos: 2, default: common/fan-module@1}
+        - {id: fan-1, at: [314.1, 2], size: {w: 48.6, h: 40}, accepts: [common/fan-module@1], group: fans, rel-pos: 1, default: common/fan-module@1}
+        - {id: psu-1, at: [366.6, 2], size: {w: 54, h: 40}, accepts: [common/psu-ac-650@3, common/psu-dc-650@2], group: psus, rel-pos: 1, default: common/psu-ac-650@3}
+      placements:
+        - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0], skin: left, optional: ears}
+        - {ref: common/rack-ear@1, id: ear-right, at: [438.4, 0], skin: right, optional: ears}
+        - {ref: common/ground-lug@1, id: ground-left, at: [1.2, 27]}
+        - {ref: common/ground-lug@1, id: ground-right, at: [430.2, 27]}
+    regions:
+      - {id: exhaust, at: [71, 0], size: {w: 292, h: 43.5}, physical-context: Exhaust, label: Fan tray exhaust, members: [fan-1, fan-2, fan-3, fan-4, fan-5, fan-6]}
+  top:
+    size:
+      w: 438.4
+      h: 515
+    panel:
+      decor:
+        - {at: [8, 496], size: [422.4, 14], pattern: vent, vent: 20}
+        - {at: [55, 22], size: [1.8, 462], fill: '#2e3236', sink: 1}
+        - {at: [108, 22], size: [1.8, 462], fill: '#2e3236', sink: 1}
+        - {at: [161, 22], size: [1.8, 462], fill: '#2e3236', sink: 1}
+        - {at: [214, 22], size: [1.8, 462], fill: '#2e3236', sink: 1}
+        - {at: [267, 22], size: [1.8, 462], fill: '#2e3236', sink: 1}
+        - {at: [320, 22], size: [1.8, 462], fill: '#2e3236', sink: 1}
+        - {at: [373, 22], size: [1.8, 462], fill: '#2e3236', sink: 1}
+  bottom:
+    size:
+      w: 438.4
+      h: 515
+    components:
+      placements:
+        - {ref: common/compliance-sticker@1, id: bottom-label, at: [109.7, 154.5]}
+        - {ref: common/device-label@1, id: bottom-serial-label, at: [25, 30], attrs: {role: serial-label}}
+  left:
+    size:
+      w: 515
+      h: 43.5
+    panel:
+      decor:
+        - {at: [509, 1], size: [6, 41.5], pattern: vent, vent: 25}
+        - {at: [500, 29], size: [5, 4], fill: '#17191c', vent: 25}
+        - {at: [493, 29], size: [5, 4], fill: '#17191c', vent: 25}
+        - {at: [486, 29], size: [5, 4], fill: '#17191c', vent: 25}
+        - {at: [500, 35], size: [5, 4], fill: '#17191c', vent: 25}
+        - {at: [493, 35], size: [5, 4], fill: '#17191c', vent: 25}
+        - {at: [486, 35], size: [5, 4], fill: '#17191c', vent: 25}
+    components:
+      placements:
+        - {ref: common/screw-head@1, id: screw-1, at: [502.4, 8.5]}
+        - {ref: common/screw-head@1, id: screw-2, at: [502.4, 20]}
+        - {ref: common/screw-head@1, id: screw-3, at: [361.4, 20]}
+        - {ref: common/screw-head@1, id: screw-4, at: [211.4, 20]}
+        - {ref: common/screw-head@1, id: screw-5, at: [51.4, 20]}
+  right:
+    size:
+      w: 515
+      h: 43.5
+    panel:
+      decor:
+        - {at: [0, 1], size: [6, 41.5], pattern: vent, vent: 25}
+        - {at: [10, 29], size: [5, 4], fill: '#17191c', vent: 25}
+        - {at: [17, 29], size: [5, 4], fill: '#17191c', vent: 25}
+        - {at: [24, 29], size: [5, 4], fill: '#17191c', vent: 25}
+        - {at: [10, 35], size: [5, 4], fill: '#17191c', vent: 25}
+        - {at: [17, 35], size: [5, 4], fill: '#17191c', vent: 25}
+        - {at: [24, 35], size: [5, 4], fill: '#17191c', vent: 25}
+    components:
+      placements:
+        - {ref: common/screw-head@1, id: screw-1, at: [9, 8.5]}
+        - {ref: common/screw-head@1, id: screw-2, at: [9, 20]}
+        - {ref: common/screw-head@1, id: screw-3, at: [150, 20]}
+        - {ref: common/screw-head@1, id: screw-4, at: [300, 20]}
+        - {ref: common/screw-head@1, id: screw-5, at: [460, 20]}
 configurations:
   ac-f2b:
     description: Dual AC PSUs, front-to-back airflow (7726-32X-O-AC-F)
     default: true
     airflow: front-to-back
     part-numbers:
-      7726-32X-O-AC-F: {part: FP3ZZ7632074A, power-cord: none}
-      7726-32X-O-AC-F-UN: {part: FP3ZZ76320ATA, power-cord: IEC 60320 C13-C14}
-      7726-32X-O-AC-F-US: {part: FP3ZZ7632420A, power-cord: NEMA5-15 (UL)}
-      7726-32X-O-AC-F-EU: {part: FP3ZZ7632214A, power-cord: IEC 60083 Type E/F (CEE 7/7)}
-      7726-32X-O-AC-F-UK: {part: FP3ZZ7632314A, power-cord: IEC 60083 Type G (BS 1363)}
-      7726-32X-O-AC-F-JP: {part: FP3ZZ7632514A, power-cord: JIS C8303 Class I}
-      7726-32X-O-AC-F-CN: {part: FP3ZZ7632706A, power-cord: IEC 60083 Type I (GB 2099.1)}
+      7726-32X-O-AC-F:
+        part: FP3ZZ7632074A
+        power-cord: none
+      7726-32X-O-AC-F-UN:
+        part: FP3ZZ76320ATA
+        power-cord: IEC 60320 C13-C14
+      7726-32X-O-AC-F-US:
+        part: FP3ZZ7632420A
+        power-cord: NEMA5-15 (UL)
+      7726-32X-O-AC-F-EU:
+        part: FP3ZZ7632214A
+        power-cord: IEC 60083 Type E/F (CEE 7/7)
+      7726-32X-O-AC-F-UK:
+        part: FP3ZZ7632314A
+        power-cord: IEC 60083 Type G (BS 1363)
+      7726-32X-O-AC-F-JP:
+        part: FP3ZZ7632514A
+        power-cord: JIS C8303 Class I
+      7726-32X-O-AC-F-CN:
+        part: FP3ZZ7632706A
+        power-cord: IEC 60083 Type I (GB 2099.1)
     component-attrs:
-      psu-ac-650: {model: PSU-AC-650B-F, part-number: F0TZZ5654019A, alt-model: PSU-AC-650C-F (F0TZZ7656002A)}
-      fan-module: {model: FAN-1U-1x1C-F, part-number: F0TAO6632000A}
+      psu-ac-650:
+        model: PSU-AC-650B-F
+        part-number: F0TZZ5654019A
+        alt-model: PSU-AC-650C-F (F0TZZ7656002A)
+      fan-module:
+        model: FAN-1U-1x1C-F
+        part-number: F0TAO6632000A
   ac-b2f:
     description: Dual AC PSUs, back-to-front airflow (7726-32X-O-AC-B)
     airflow: back-to-front
-    skins: {fan-module: blue, psu-ac-650: blue}
-    region-context: {intake: Exhaust, exhaust: Intake}
+    skins:
+      fan-module: blue
+      psu-ac-650: blue
+    region-context:
+      intake: Exhaust
+      exhaust: Intake
     part-numbers:
-      7726-32X-O-AC-B: {part: FP3ZZ7632076A, power-cord: none}
-      7726-32X-O-AC-B-UN: {part: FP3ZZ76320AUA, power-cord: IEC 60320 C13-C14}
-      7726-32X-O-AC-B-US: {part: FP3ZZ7632421A, power-cord: NEMA5-15 (UL)}
-      7726-32X-O-AC-B-EU: {part: FP3ZZ7632215A, power-cord: IEC 60083 Type E/F (CEE 7/7)}
-      7726-32X-O-AC-B-UK: {part: FP3ZZ7632315A, power-cord: IEC 60083 Type G (BS 1363)}
-      7726-32X-O-AC-B-JP: {part: FP3ZZ7632515A, power-cord: JIS C8303 Class I}
-      7726-32X-O-AC-B-CN: {part: FP3ZZ7632707A, power-cord: IEC 60083 Type I (GB 2099.1)}
+      7726-32X-O-AC-B:
+        part: FP3ZZ7632076A
+        power-cord: none
+      7726-32X-O-AC-B-UN:
+        part: FP3ZZ76320AUA
+        power-cord: IEC 60320 C13-C14
+      7726-32X-O-AC-B-US:
+        part: FP3ZZ7632421A
+        power-cord: NEMA5-15 (UL)
+      7726-32X-O-AC-B-EU:
+        part: FP3ZZ7632215A
+        power-cord: IEC 60083 Type E/F (CEE 7/7)
+      7726-32X-O-AC-B-UK:
+        part: FP3ZZ7632315A
+        power-cord: IEC 60083 Type G (BS 1363)
+      7726-32X-O-AC-B-JP:
+        part: FP3ZZ7632515A
+        power-cord: JIS C8303 Class I
+      7726-32X-O-AC-B-CN:
+        part: FP3ZZ7632707A
+        power-cord: IEC 60083 Type I (GB 2099.1)
     component-attrs:
-      psu-ac-650: {model: PSU-AC-650B-B, part-number: F0TZZ5654020A, alt-model: PSU-AC-650C-B (F0TZZ7656003A)}
-      fan-module: {model: FAN-1U-1x1C-B2, part-number: F0TZZ7632000A}
+      psu-ac-650:
+        model: PSU-AC-650B-B
+        part-number: F0TZZ5654020A
+        alt-model: PSU-AC-650C-B (F0TZZ7656003A)
+      fan-module:
+        model: FAN-1U-1x1C-B2
+        part-number: F0TZZ7632000A
   dc-f2b:
     description: Dual -48V DC PSUs, front-to-back airflow (7726-32X-O-48V-F)
     airflow: front-to-back
-    bays: {psu-1: 'common/psu-dc-650@2', psu-2: 'common/psu-dc-650@2'}
+    bays:
+      psu-1: common/psu-dc-650@2
+      psu-2: common/psu-dc-650@2
     part-numbers:
-      7726-32X-O-48V-F: {part: FP3ZZ76320A0A, power-cord: none}
+      7726-32X-O-48V-F:
+        part: FP3ZZ76320A0A
+        power-cord: none
     component-attrs:
-      psu-dc-650: {model: PSU-48V-650-F, part-number: F0TZZ7632004A}
-      fan-module: {model: FAN-1U-1x1C-F, part-number: F0TAO6632000A}
+      psu-dc-650:
+        model: PSU-48V-650-F
+        part-number: F0TZZ7632004A
+      fan-module:
+        model: FAN-1U-1x1C-F
+        part-number: F0TAO6632000A
   dc-b2f:
     description: Dual -48V DC PSUs, back-to-front airflow (7726-32X-O-48V-B)
     airflow: back-to-front
-    skins: {fan-module: blue, psu-dc-650: blue}
-    bays: {psu-1: 'common/psu-dc-650@2', psu-2: 'common/psu-dc-650@2'}
-    region-context: {intake: Exhaust, exhaust: Intake}
-    part-numbers:
-      7726-32X-O-48V-B: {part: FP3ZZ76320A2A, power-cord: none}
-    component-attrs:
-      psu-dc-650: {model: PSU-48V-650-B, part-number: F0TZZ7632003A}
-      fan-module: {model: FAN-1U-1x1C-B2, part-number: F0TZZ7632000A}
-groups:
-  ports: {index-origin: 1, term: Port, attrs: {media: qsfp28, speed: 100g}}
-  mgmt-sfp: {index-origin: 1, term: Port, attrs: {media: sfp-plus, speed: 10g, role: mgmt-uplink}}
-  psus: {index-origin: 1, term: PSU}
-  fans: {index-origin: 1, term: Fan}
-  leds: {index-origin: 1, term: LED}
-views:
-  front:
-    decor:
-      - {at: [0, 1], size: [2.8, 41.5], pattern: vent, vent: 25}
-      - {at: [46, 0.8], size: [314, 7.4], pattern: vent, vent: 25}
-      - {at: [46, 40.2], size: [314, 3], pattern: vent, vent: 25}
-      - {at: [435.6, 1], size: [2.8, 41.5], pattern: vent, vent: 25, pattern-offset: [0, 2.555]}
-      - {at: [9.5, 31.5], size: [5.5, 4], fill: '#0d0f11', vent: 25}
-      - {at: [16.5, 31.5], size: [5.5, 4], fill: '#0d0f11', vent: 25}
-      - {at: [23.5, 31.5], size: [5.5, 4], fill: '#0d0f11', vent: 25}
-      - {at: [9.5, 37.5], size: [5.5, 4], fill: '#0d0f11', vent: 25}
-      - {at: [16.5, 37.5], size: [5.5, 4], fill: '#0d0f11', vent: 25}
-      - {at: [23.5, 37.5], size: [5.5, 4], fill: '#0d0f11', vent: 25}
-      - {at: [412, 31.5], size: [5.5, 4], fill: '#0d0f11', vent: 25}
-      - {at: [419, 31.5], size: [5.5, 4], fill: '#0d0f11', vent: 25}
-      - {at: [426, 31.5], size: [5.5, 4], fill: '#0d0f11', vent: 25}
-      - {at: [412, 37.5], size: [5.5, 4], fill: '#0d0f11', vent: 25}
-      - {at: [419, 37.5], size: [5.5, 4], fill: '#0d0f11', vent: 25}
-      - {at: [426, 37.5], size: [5.5, 4], fill: '#0d0f11', vent: 25}
-      - {at: [46, 9.6], size: [314, 3.8], fill: '#26292d'}
-      - {at: [46, 37.2], size: [314, 3.8], fill: '#26292d'}
-    placements:
-      - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0], skin: left, optional: ears}
-      - {ref: common/rack-ear@1, id: ear-right, at: [438.4, 0], skin: right, optional: ears}
-      - {ref: common/qsfp28-cage@3, id: port-1, at: [46, 10], group: ports, rel-pos: 1, label: "1", label-at: [9.25, 2.35]}
-      - {ref: common/qsfp28-cage@3, id: port-2, at: [46, 25.5], rotate: 180, group: ports, rel-pos: 2, label: "2", label-at: [9.25, 13.9]}
-      - {ref: common/qsfp28-cage@3, id: port-3, at: [65, 10], group: ports, rel-pos: 3, label: "3", label-at: [9.25, 2.35]}
-      - {ref: common/qsfp28-cage@3, id: port-4, at: [65, 25.5], rotate: 180, group: ports, rel-pos: 4, label: "4", label-at: [9.25, 13.9]}
-      - {ref: common/qsfp28-cage@3, id: port-5, at: [84, 10], group: ports, rel-pos: 5, label: "5", label-at: [9.25, 2.35]}
-      - {ref: common/qsfp28-cage@3, id: port-6, at: [84, 25.5], rotate: 180, group: ports, rel-pos: 6, label: "6", label-at: [9.25, 13.9]}
-      - {ref: common/qsfp28-cage@3, id: port-7, at: [103, 10], group: ports, rel-pos: 7, label: "7", label-at: [9.25, 2.35]}
-      - {ref: common/qsfp28-cage@3, id: port-8, at: [103, 25.5], rotate: 180, group: ports, rel-pos: 8, label: "8", label-at: [9.25, 13.9]}
-      - {ref: common/qsfp28-cage@3, id: port-9, at: [126, 10], group: ports, rel-pos: 9, label: "9", label-at: [9.25, 2.35]}
-      - {ref: common/qsfp28-cage@3, id: port-10, at: [126, 25.5], rotate: 180, group: ports, rel-pos: 10, label: "10", label-at: [9.25, 13.9]}
-      - {ref: common/qsfp28-cage@3, id: port-11, at: [145, 10], group: ports, rel-pos: 11, label: "11", label-at: [9.25, 2.35]}
-      - {ref: common/qsfp28-cage@3, id: port-12, at: [145, 25.5], rotate: 180, group: ports, rel-pos: 12, label: "12", label-at: [9.25, 13.9]}
-      - {ref: common/qsfp28-cage@3, id: port-13, at: [164, 10], group: ports, rel-pos: 13, label: "13", label-at: [9.25, 2.35]}
-      - {ref: common/qsfp28-cage@3, id: port-14, at: [164, 25.5], rotate: 180, group: ports, rel-pos: 14, label: "14", label-at: [9.25, 13.9]}
-      - {ref: common/qsfp28-cage@3, id: port-15, at: [183, 10], group: ports, rel-pos: 15, label: "15", label-at: [9.25, 2.35]}
-      - {ref: common/qsfp28-cage@3, id: port-16, at: [183, 25.5], rotate: 180, group: ports, rel-pos: 16, label: "16", label-at: [9.25, 13.9]}
-      - {ref: common/qsfp28-cage@3, id: port-17, at: [206, 10], group: ports, rel-pos: 17, label: "17", label-at: [9.25, 2.35]}
-      - {ref: common/qsfp28-cage@3, id: port-18, at: [206, 25.5], rotate: 180, group: ports, rel-pos: 18, label: "18", label-at: [9.25, 13.9]}
-      - {ref: common/qsfp28-cage@3, id: port-19, at: [225, 10], group: ports, rel-pos: 19, label: "19", label-at: [9.25, 2.35]}
-      - {ref: common/qsfp28-cage@3, id: port-20, at: [225, 25.5], rotate: 180, group: ports, rel-pos: 20, label: "20", label-at: [9.25, 13.9]}
-      - {ref: common/qsfp28-cage@3, id: port-21, at: [244, 10], group: ports, rel-pos: 21, label: "21", label-at: [9.25, 2.35]}
-      - {ref: common/qsfp28-cage@3, id: port-22, at: [244, 25.5], rotate: 180, group: ports, rel-pos: 22, label: "22", label-at: [9.25, 13.9]}
-      - {ref: common/qsfp28-cage@3, id: port-23, at: [263, 10], group: ports, rel-pos: 23, label: "23", label-at: [9.25, 2.35]}
-      - {ref: common/qsfp28-cage@3, id: port-24, at: [263, 25.5], rotate: 180, group: ports, rel-pos: 24, label: "24", label-at: [9.25, 13.9]}
-      - {ref: common/qsfp28-cage@3, id: port-25, at: [286, 10], group: ports, rel-pos: 25, label: "25", label-at: [9.25, 2.35]}
-      - {ref: common/qsfp28-cage@3, id: port-26, at: [286, 25.5], rotate: 180, group: ports, rel-pos: 26, label: "26", label-at: [9.25, 13.9]}
-      - {ref: common/qsfp28-cage@3, id: port-27, at: [305, 10], group: ports, rel-pos: 27, label: "27", label-at: [9.25, 2.35]}
-      - {ref: common/qsfp28-cage@3, id: port-28, at: [305, 25.5], rotate: 180, group: ports, rel-pos: 28, label: "28", label-at: [9.25, 13.9]}
-      - {ref: common/qsfp28-cage@3, id: port-29, at: [324, 10], group: ports, rel-pos: 29, label: "29", label-at: [9.25, 2.35]}
-      - {ref: common/qsfp28-cage@3, id: port-30, at: [324, 25.5], rotate: 180, group: ports, rel-pos: 30, label: "30", label-at: [9.25, 13.9]}
-      - {ref: common/qsfp28-cage@3, id: port-31, at: [343, 10], group: ports, rel-pos: 31, label: "31", label-at: [9.25, 2.35]}
-      - {ref: common/qsfp28-cage@3, id: port-32, at: [343, 25.5], rotate: 180, group: ports, rel-pos: 32, label: "32", label-at: [9.25, 13.9]}
-      - {ref: common/led-indicator@1, id: led-loc, at: [40, 7], group: leds, rel-pos: 2, label: "LOC", label-at: [2, 6.6], label-size: 1.7}
-      - {ref: common/led-indicator@1, id: led-psu1, at: [33, 15], group: leds, rel-pos: 4, label: "PS1", label-at: [2, 6.6], label-size: 1.7}
-      - {ref: common/led-indicator@1, id: led-diag, at: [40, 15], group: leds, rel-pos: 1, label: "DIAG", label-at: [2, 6.6], label-size: 1.7}
-      - {ref: common/led-indicator@1, id: led-psu2, at: [33, 23], group: leds, rel-pos: 5, label: "PS2", label-at: [2, 6.6], label-size: 1.7}
-      - {ref: common/led-indicator@1, id: led-fan, at: [40, 23], group: leds, rel-pos: 3, label: "FAN", label-at: [2, 6.6], label-size: 1.7}
-      - {ref: common/reset-button@1, id: reset, at: [36.5, 32], label: "RST", label-at: [2, 7.6], label-size: 1.7}
-      - {ref: common/rj45-port@4, id: mgmt-eth, at: [362, 9.1], label: "MGMT", label-at: [8.5, -2.6], attrs: {role: mgmt, speed: 1000base-t}}
-      - {ref: common/rj45-bezel@2, id: console, at: [362, 25.2], label: "CONSOLE", label-at: [8.5, 16.3], attrs: {media: rj45-serial, role: console}}
-      - {ref: common/sfp-led-pair@1, id: sfp-leds, at: [383, 9], group: leds, rel-pos: 6}
-      - {ref: common/sfp-plus-cage@2, id: mgmt-sfp-1, at: [381, 14.5], group: mgmt-sfp, rel-pos: 1}
-      - {ref: common/sfp-plus-cage@2, id: mgmt-sfp-2, at: [381, 25.5], group: mgmt-sfp, rel-pos: 2}
-      - {ref: common/usb-a@2, id: usb, at: [394, 16.5], rotate: 270}
-      - {ref: common/pull-tab@1, id: info-tab, at: [381, 38.6]}
-    regions:
-      - {id: mgmt-block, at: [360, 1], size: {w: 52, h: 42}, label: Management, members: [mgmt-eth, console, mgmt-sfp-1, mgmt-sfp-2, sfp-leds, usb, info-tab]}
-      - {id: status-leds, at: [32, 2], size: {w: 15, h: 38}, label: Status LEDs, members: [led-loc, led-psu1, led-diag, led-psu2, led-fan, reset]}
-      - {id: intake, at: [0, 0], size: {w: 438.4, h: 43.5}, physical-context: Intake, label: Front airflow (intake on F2B SKUs)}
-  rear:
-    placements:
-      - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0], skin: left, optional: ears}
-      - {ref: common/rack-ear@1, id: ear-right, at: [438.4, 0], skin: right, optional: ears}
-      - {ref: common/ground-lug@1, id: ground-left, at: [1.2, 27], label: ">\nPS2", label-at: [3.3, -11], label-size: 4.4}
-      - {ref: common/ground-lug@1, id: ground-right, at: [430.2, 27], label: "<\nPS1", label-at: [3.7, -11], label-size: 4.4}
+    skins:
+      fan-module: blue
+      psu-dc-650: blue
     bays:
-      - {id: psu-2, at: [10, 2], size: {w: 54, h: 40}, accepts: ['common/psu-ac-650@3', 'common/psu-dc-650@2'], group: psus, rel-pos: 2, default: 'common/psu-ac-650@3'}
-      - {id: fan-6, at: [71.1, 2], size: {w: 48.6, h: 40}, accepts: ['common/fan-module@1'], group: fans, rel-pos: 6, label: '6', label-at: [50.9, 7.6], label-size: 4.4, default: 'common/fan-module@1'}
-      - {id: fan-5, at: [119.7, 2], size: {w: 48.6, h: 40}, accepts: ['common/fan-module@1'], group: fans, rel-pos: 5, label: '5', label-at: [50.9, 7.6], label-size: 4.4, default: 'common/fan-module@1'}
-      - {id: fan-4, at: [168.3, 2], size: {w: 48.6, h: 40}, accepts: ['common/fan-module@1'], group: fans, rel-pos: 4, label: '4', label-at: [50.9, 7.6], label-size: 4.4, default: 'common/fan-module@1'}
-      - {id: fan-3, at: [216.9, 2], size: {w: 48.6, h: 40}, accepts: ['common/fan-module@1'], group: fans, rel-pos: 3, label: '3', label-at: [50.9, 7.6], label-size: 4.4, default: 'common/fan-module@1'}
-      - {id: fan-2, at: [265.5, 2], size: {w: 48.6, h: 40}, accepts: ['common/fan-module@1'], group: fans, rel-pos: 2, label: '2', label-at: [50.9, 7.6], label-size: 4.4, default: 'common/fan-module@1'}
-      - {id: fan-1, at: [314.1, 2], size: {w: 48.6, h: 40}, accepts: ['common/fan-module@1'], group: fans, rel-pos: 1, label: '1', label-at: [50.9, 7.6], label-size: 4.4, default: 'common/fan-module@1'}
-      - {id: psu-1, at: [366.6, 2], size: {w: 54, h: 40}, accepts: ['common/psu-ac-650@3', 'common/psu-dc-650@2'], group: psus, rel-pos: 1, default: 'common/psu-ac-650@3'}
-    regions:
-      - {id: exhaust, at: [71, 0], size: {w: 292, h: 43.5}, physical-context: Exhaust, label: Fan tray exhaust, members: [fan-1, fan-2, fan-3, fan-4, fan-5, fan-6]}
-  top:
-    size: {w: 438.4, h: 515}
-    decor:
-      - {at: [8, 496], size: [422.4, 14], pattern: vent, vent: 20}
-      - {at: [55, 22], size: [1.8, 462], fill: '#2e3236', sink: 1}
-      - {at: [108, 22], size: [1.8, 462], fill: '#2e3236', sink: 1}
-      - {at: [161, 22], size: [1.8, 462], fill: '#2e3236', sink: 1}
-      - {at: [214, 22], size: [1.8, 462], fill: '#2e3236', sink: 1}
-      - {at: [267, 22], size: [1.8, 462], fill: '#2e3236', sink: 1}
-      - {at: [320, 22], size: [1.8, 462], fill: '#2e3236', sink: 1}
-      - {at: [373, 22], size: [1.8, 462], fill: '#2e3236', sink: 1}
-  bottom:
-    size: {w: 438.4, h: 515}
-    placements:
-      - {ref: common/compliance-sticker@1, id: bottom-label, at: [109.7, 154.5]}
-      - {ref: common/device-label@1, id: bottom-serial-label, at: [25, 30], attrs: {role: serial-label}}
-  left:
-    # drawn as seen from outside the left side: device front at image RIGHT
-    # (photo convention; mirror of the right view)
-    size: {w: 515, h: 43.5}
-    decor:
-      - {at: [509, 1], size: [6, 41.5], pattern: vent, vent: 25}
-      - {at: [500, 29], size: [5, 4], fill: '#17191c', vent: 25}
-      - {at: [493, 29], size: [5, 4], fill: '#17191c', vent: 25}
-      - {at: [486, 29], size: [5, 4], fill: '#17191c', vent: 25}
-      - {at: [500, 35], size: [5, 4], fill: '#17191c', vent: 25}
-      - {at: [493, 35], size: [5, 4], fill: '#17191c', vent: 25}
-      - {at: [486, 35], size: [5, 4], fill: '#17191c', vent: 25}
-    placements:
-      - {ref: common/screw-head@1, id: screw-1, at: [502.4, 8.5]}
-      - {ref: common/screw-head@1, id: screw-2, at: [502.4, 20]}
-      - {ref: common/screw-head@1, id: screw-3, at: [361.4, 20]}
-      - {ref: common/screw-head@1, id: screw-4, at: [211.4, 20]}
-      - {ref: common/screw-head@1, id: screw-5, at: [51.4, 20]}
-  right:
-    size: {w: 515, h: 43.5}
-    decor:
-      - {at: [0, 1], size: [6, 41.5], pattern: vent, vent: 25}
-      - {at: [10, 29], size: [5, 4], fill: '#17191c', vent: 25}
-      - {at: [17, 29], size: [5, 4], fill: '#17191c', vent: 25}
-      - {at: [24, 29], size: [5, 4], fill: '#17191c', vent: 25}
-      - {at: [10, 35], size: [5, 4], fill: '#17191c', vent: 25}
-      - {at: [17, 35], size: [5, 4], fill: '#17191c', vent: 25}
-      - {at: [24, 35], size: [5, 4], fill: '#17191c', vent: 25}
-    placements:
-      - {ref: common/screw-head@1, id: screw-1, at: [9, 8.5]}
-      - {ref: common/screw-head@1, id: screw-2, at: [9, 20]}
-      - {ref: common/screw-head@1, id: screw-3, at: [150, 20]}
-      - {ref: common/screw-head@1, id: screw-4, at: [300, 20]}
-      - {ref: common/screw-head@1, id: screw-5, at: [460, 20]}
+      psu-1: common/psu-dc-650@2
+      psu-2: common/psu-dc-650@2
+    region-context:
+      intake: Exhaust
+      exhaust: Intake
+    part-numbers:
+      7726-32X-O-48V-B:
+        part: FP3ZZ76320A2A
+        power-cord: none
+    component-attrs:
+      psu-dc-650:
+        model: PSU-48V-650-B
+        part-number: F0TZZ7632003A
+      fan-module:
+        model: FAN-1U-1x1C-B2
+        part-number: F0TZZ7632000A
+part-numbers:
+  7726-32X-O-AC-F: FP3ZZ7632074A
+  7726-32X-O-AC-B: FP3ZZ7632076A
+datasheet:
+  title: Edgecore DCS204 (AS7726-32X) Data Sheet R09 2026-07-07
+  url: https://www.edge-core.com/product/dcs204/
+  sha256: c15ce7bf73e9202358e450ed8f7d745de9e8b07220e223c545f45c7c22208ec2
+references:
+  - {title: Edgecore DCS204 (AS7726-32X) Quick Start Guide R03, sha256: 9c6408ad3bc54d4d8fa660ae3d8118987f54d78a2d5d05401b8324a9b975a51e}

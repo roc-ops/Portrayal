@@ -14,6 +14,8 @@ from pathlib import Path
 
 import yaml
 
+from manifest import view_parts, targets
+
 TOOL_VERSION = "0.1.0"
 SVG_NS = "http://www.w3.org/2000/svg"
 ET.register_namespace("", SVG_NS)
@@ -209,22 +211,6 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     return g, contract
 
 
-def label_el(svg, at, size_wh, label, label_at, anchor, chassis_h, font_size=None, fill=None):
-    """Place a label: at label_at (relative to component origin) if given,
-    else centered below the component (falling back to above near the bottom edge)."""
-    fs = font_size or 2.2
-    if label_at:
-        lx, ly = at[0] + label_at[0], at[1] + label_at[1]
-    else:
-        lx = at[0] + size_wh[0] / 2
-        ly = at[1] + size_wh[1] + 2.6
-        if ly > chassis_h - 0.5:
-            ly = max(2.2, at[1] - 1.0)
-    for i, line in enumerate(label.split("\n")):
-        svg.append(text_el(lx, ly + i * fs * 1.15, line, size=fs, anchor=anchor or "middle",
-                           fill=fill or "#c7ccd1"))
-
-
 def text_el(x, y, s, size=2.2, anchor="middle", fill="#c7ccd1"):
     t = ET.Element(f"{{{SVG_NS}}}text")
     t.set("x", f"{x:g}")
@@ -281,10 +267,10 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     faceplate.set("stroke", ch.get("edge", "#22262a")); faceplate.set("stroke-width", "0.5")
 
     resolved = {}
-    pending_labels = []
     palette = {}
+    parts = view_parts(view)
 
-    used_patterns = {d.get("pattern") for d in (view.get("decor") or []) if d.get("pattern")}
+    used_patterns = {d.get("pattern") for d in parts["decor"] if d.get("pattern")}
     if used_patterns:
         defs = ET.SubElement(svg, f"{{{SVG_NS}}}defs")
         if "vent" in used_patterns:
@@ -338,15 +324,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             gap = ET.SubElement(pat, f"{{{SVG_NS}}}rect")
             gap.set("x", "5.4"); gap.set("y", "0"); gap.set("width", "1.8"); gap.set("height", "6")
             gap.set("fill", "#6a7075")
-    for d in view.get("decor", []) or []:
-        if d.get("text"):
-            t = text_el(d["at"][0], d["at"][1], d["text"],
-                        size=d.get("font-size", 2.2), anchor=d.get("anchor", "middle"),
-                        fill=d.get("fill") or ch.get("silk", "#c7ccd1"))
-            if d.get("rotate"):
-                t.set("transform", f"rotate({d['rotate']:g} {d['at'][0]:g} {d['at'][1]:g})")
-            svg.append(t)
-            continue
+    for d in parts["decor"]:
         r = ET.SubElement(svg, f"{{{SVG_NS}}}rect")
         r.set("x", f"{d['at'][0]:g}"); r.set("y", f"{d['at'][1]:g}")
         r.set("width", f"{d['size'][0]:g}"); r.set("height", f"{d['size'][1]:g}")
@@ -375,7 +353,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             r.set("data-groove", f"{d['sink']:g}")
 
     # regions first (under components)
-    for region in view.get("regions", []) or []:
+    for region in parts["regions"]:
         r = ET.SubElement(svg, f"{{{SVG_NS}}}rect")
         r.set("id", f"region--{region['id']}")
         r.set("data-path", f"region:{region['id']}")
@@ -394,36 +372,87 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         r.set("stroke", "none")
         r.set("pointer-events", "all")
 
+    # CUTOUTS. The panel is punched before anything is printed on it or put into
+    # it, so the holes paint first. A hole with nothing in it shows the dark inside
+    # of the chassis, which is exactly what the drawing shows too; a placed component
+    # covers its hole. Addressable, like regions, so a viewer can list them.
+    if parts["cutouts"]:
+        cut_g = ET.SubElement(svg, f"{{{SVG_NS}}}g")
+        cut_g.set("id", "--cutouts")
+        cut_g.set("data-class", "cutouts")
+        for c in parts["cutouts"]:
+            x, y = c["at"]; cw_, ch_ = c["size"]
+            if c.get("shape") == "circle":
+                e = ET.SubElement(cut_g, f"{{{SVG_NS}}}ellipse")
+                e.set("cx", f"{x + cw_ / 2:g}"); e.set("cy", f"{y + ch_ / 2:g}")
+                e.set("rx", f"{cw_ / 2:g}"); e.set("ry", f"{ch_ / 2:g}")
+            else:
+                e = ET.SubElement(cut_g, f"{{{SVG_NS}}}rect")
+                e.set("x", f"{x:g}"); e.set("y", f"{y:g}")
+                e.set("width", f"{cw_:g}"); e.set("height", f"{ch_:g}")
+                if c.get("rx") is not None:
+                    e.set("rx", f"{c['rx']:g}")
+            e.set("id", f"cutout--{c['id']}")
+            e.set("data-path", f"cutout:{c['id']}")
+            e.set("data-class", "cutout")
+            e.set("fill", "#101214")
+
     # SILKSCREEN. On the real part the panel is punched, the silkscreen is printed
     # onto it, and only then are the modules installed - so chassis silkscreen paints
     # HERE, after the panel and before any component. A legend a module would cover is
     # invisible in the drawing because it is invisible on the hardware, which makes a
     # mispositioned legend show up as missing rather than as a lie. Silkscreen printed
     # on a module's own faceplate lives in that component's skin and travels with it.
-    silk_items = (view.get("silkscreen") or []) if silkscreen else []
+    silk_items = parts["silkscreen"] if silkscreen else []
     if silk_items:
         silk_g = ET.SubElement(svg, f"{{{SVG_NS}}}g")
         silk_g.set("id", "--silkscreen")
         silk_g.set("data-class", "silkscreen")
+        silk_default = ch.get("silk", "#c7ccd1")
         for m in silk_items:
-            t = text_el(m["at"][0], m["at"][1], m["text"],
-                        size=m.get("font-size", 2.2), anchor=m.get("anchor", "middle"),
-                        fill=m.get("fill") or ch.get("silk", "#c7ccd1"))
-            if m.get("rotate"):
-                t.set("transform", f"rotate({m['rotate']:g} {m['at'][0]:g} {m['at'][1]:g})")
+            x, y = m["at"]
+            if m.get("path"):
+                # a printed line or symbol - a leader, an arrow, an earth mark
+                t = ET.Element(f"{{{SVG_NS}}}path")
+                t.set("d", m["path"])
+                t.set("fill", "none")
+                t.set("stroke", m.get("fill") or silk_default)
+                t.set("stroke-width", f"{m.get('stroke-width', 0.6):g}")
+                t.set("stroke-linecap", "round"); t.set("stroke-linejoin", "round")
+                if x or y:
+                    t.set("transform", f"translate({x:g} {y:g})")
+            else:
+                fs = m.get("font-size", 2.2)
+                lines = str(m["text"]).split("\n")
+                if len(lines) == 1:
+                    t = text_el(x, y, lines[0], size=fs, anchor=m.get("anchor", "middle"),
+                                fill=m.get("fill") or silk_default)
+                else:
+                    # multi-line legend: one <text> holding tspans, so it stays one mark
+                    t = text_el(x, y, "", size=fs, anchor=m.get("anchor", "middle"),
+                                fill=m.get("fill") or silk_default)
+                    t.text = None
+                    for i_, line in enumerate(lines):
+                        ts = ET.SubElement(t, f"{{{SVG_NS}}}tspan")
+                        ts.set("x", f"{x:g}"); ts.set("y", f"{y + i_ * fs * 1.15:g}")
+                        ts.text = line
+                if m.get("rotate"):
+                    t.set("transform", f"rotate({m['rotate']:g} {x:g} {y:g})")
             if m.get("id"):
                 t.set("id", m["id"])
-            # bind the legend to the part it names, so a viewer can select both at once
-            if m.get("for"):
-                t.set("data-for", m["for"])
+            # bind the mark to what it annotates, so a viewer can select both at once.
+            # A leader line names both ends.
+            tg = targets(m.get("for"))
+            if tg:
+                t.set("data-for", " ".join(tg))
             silk_g.append(t)
 
     extents = [0.0, 0.0, w, h]
     # resolve mate-to before drawing: an occupant is positioned so its `mate`
     # connection-point lands on its host's, which is what keeps centring offsets
     # out of device manifests entirely
-    hosts = {q["id"]: q for q in (view.get("placements") or []) if q.get("at")}
-    for p in view.get("placements", []) or []:
+    hosts = {q["id"]: q for q in parts["placements"] if q.get("at")}
+    for p in parts["placements"]:
         if p.get("mate-to") and not p.get("at"):
             host = hosts.get(p["mate-to"])
             if host is None:
@@ -441,12 +470,17 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         if p.get("optional") and p["optional"] not in include:
             continue
         g, contract = instance_group(lib, p["ref"], p["id"], p["at"],
-                                     p.get("label"), p.get("attrs"),
+                                     None, p.get("attrs"),
                                      p.get("group"), p.get("rel-pos"),
                                      skin_name=p.get("skin", "default"),
                                      rotate=p.get("rotate"), palette=palette,
                                      skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                                      resolved=resolved)
+        # what this part belongs to - an LED to its port. The tree nests on it and
+        # selecting either side highlights both.
+        tg = targets(p.get("for"))
+        if tg:
+            g.set("data-for", " ".join(tg))
         svg.append(g)
         cw, chh_ = contract["size"]["w"], contract["size"]["h"]
         if p.get("rotate") in (90, 270, -90):
@@ -456,12 +490,8 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             x0, y0, x1, y1 = p["at"][0], p["at"][1], p["at"][0] + cw, p["at"][1] + chh_
         extents[0] = min(extents[0], x0); extents[1] = min(extents[1], y0)
         extents[2] = max(extents[2], x1); extents[3] = max(extents[3], y1)
-        if p.get("label"):
-            pending_labels.append((p["at"], (contract["size"]["w"], contract["size"]["h"]),
-                                   p["label"], p.get("label-at"), p.get("label-anchor"),
-                                   p.get("label-size"), p.get("label-color")))
 
-    for b in view.get("bays", []) or []:
+    for b in parts["bays"]:
         bay_g = ET.SubElement(svg, f"{{{SVG_NS}}}g")
         bay_g.set("id", b["id"])
         bay_g.set("data-path", b["id"])
@@ -471,7 +501,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         if b.get("rel-pos") is not None:
             bay_g.set("data-rel-pos", str(b["rel-pos"]))
         title = ET.SubElement(bay_g, f"{{{SVG_NS}}}title")
-        title.text = b.get("label") or b["id"]
+        title.text = b["id"]
         opening = ET.SubElement(bay_g, f"{{{SVG_NS}}}rect")
         opening.set("id", f"{b['id']}--opening")
         opening.set("x", f"{b['at'][0]:g}"); opening.set("y", f"{b['at'][1]:g}")
@@ -488,15 +518,14 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                 d = (b["size"]["w"] - b["size"]["h"]) / 2.0
                 mod_at = [b["at"][0] + d, b["at"][1] - d]
             g, contract = instance_group(lib, default, f"{b['id']}--module", mod_at,
-                                         b.get("label"), None, None, None,
+                                         None, None, None, None,
                                          rotate=b.get("rotate"), palette=palette,
                                          skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                                          path=f"{b['id']}/module", resolved=resolved)
             bay_g.append(g)
-        if b.get("label"):
-            pending_labels.append((b["at"], (b["size"]["w"], b["size"]["h"]),
-                                   b["label"], b.get("label-at"), b.get("label-anchor"),
-                                   b.get("label-size"), b.get("label-color")))
+        tg = targets(b.get("for"))
+        if tg:
+            bay_g.set("data-for", " ".join(tg))
 
     if palette:
         extra = "".join(
@@ -520,11 +549,6 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                          or n.get("data-class") == "silkscreen"
                          or n.tag == f"{{{SVG_NS}}}text"]:
                 parent.remove(node)
-    # instance labels are silkscreen too: printed on the chassis beside the part
-    silk = ch.get("silk", "#c7ccd1")
-    if silkscreen:
-        for at, wh, label, label_at, anchor, fsize, lcolor in pending_labels:
-            label_el(svg, at, wh, label, label_at, anchor, h, fsize, fill=lcolor or silk)
 
     meta_payload = {
         "generator": {"tool": "portrayal-render", "version": TOOL_VERSION},
@@ -592,7 +616,7 @@ def main():
                                "default": b.get("default"), "group": b.get("group"),
                                "rel-pos": b.get("rel-pos"),
                                "at": b["at"], "size": b["size"]}
-                              for b in (device["views"][v].get("bays") or [])]
+                              for b in view_parts(device["views"][v])["bays"]]
                           for v in device["views"]}}
     (outdir / f"{device['name']}.configs.json").write_text(json.dumps(cfg_index, indent=1, sort_keys=True))
     print(f"wrote {device['name']}.configs.json")
