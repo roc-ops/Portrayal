@@ -29,6 +29,16 @@ provenance:
   inputs: datasheet - DC -40 to -75 VDC 40 A max per PSU; AC 100-120 V 12 A or
     200-240 V 7.5 A per PSU
   shared: Jason - both AGR platforms use the same PSUs and fans
+body:
+  depth: 360.7
+  color: '#b9bec4'
 relief:
   wall: '#4a4f55'
+  features:
+    # `out` textures its slab from the node alone, so each of these sits on a
+    # GROUP or a shape that carries its own art. A bare rect gives a blank slab.
+    - {node: handle-bar, uhandle: 9.0}
+    - {node: latch-bar, out: 4.2}
+    - {node: latch-lip, out: 3.0, lift: 2.2}
+    - {node: inlet, out: 2.2}
 skins: [default, ac]

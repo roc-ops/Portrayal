@@ -278,6 +278,21 @@ configurations: {...}
   deep and 16 kg; its own quick start guide said 524 mm and 14.5 kg. Record the
   disagreement in provenance rather than silently choosing, and say which you
   used.
+- **A raised feature is textured from ITS OWN node, and uses that node's
+  bounding rect.** `relief.features: [{node: X, out: N}]` lifts a slab, paints it
+  with only what is inside `X`, and shapes it as `X`'s bounding box. So put `out`
+  on a **group** holding the part and all its detail, never on a bare rect or
+  path. On a bare path it gave a rectangular shadow with nothing in it; on a bare
+  rect the plate came out a blank grey bar with its bolt holes missing. A stepped
+  outline needs one group per step.
+- **A module with a real body should declare one.** `body: {depth, color,
+  footprint?, plate?}` plus `skins/body-{left,right,top,bottom,rear}.svg` makes a
+  FRU eject as a six-sided box instead of a floating faceplate. The mechanism
+  already exists - check before deciding a module can only be a face.
+- **Alternate skins are only reachable through a configuration.** The 3D and 2D
+  selectors switch CONFIG, not skin, so a variant like an AC versus DC PSU needs
+  a `configurations:` entry carrying `skins: {component: variant}` or nobody can
+  see it.
 - **Prefer `std/` over `common/`.** `std/` parts are derived from a published
   standard; `common/` ones were drawn by hand and can be wrong. One
   `common/` RJ-45 puts its integrated LEDs on the contacts side, which no real
