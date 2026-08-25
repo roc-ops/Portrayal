@@ -51,9 +51,21 @@ Establish `chassis.width/height/depth` and each view's `size`.
 - Panel decor (vents, grooves, bezels) goes in `panel.decor`. It is what the
   metal *is*.
 
-**Gate 1.** Render (`render.py --without silkscreen`) and overlay on the
-reference at a common scale. Aspect must match. If it does not, stop; nothing
-downstream survives a wrong panel.
+**Gate 1 - prove a figure can be measured before you measure it.** Render the
+guide page at 400-600 dpi (`pdftocairo -png -r 600`), find the panel in it, and
+compare its pixel aspect with the datasheet's W/H. If they agree to about a
+percent the figure is orthographic and carries geometry, and you can work off it
+at a known px/mm. If they do not, the figure is schematic and you may take only
+*fractions* from it.
+
+**Photographs almost never pass this gate.** A camera slightly above or to one
+side foreshortens the face; a near-straight-on shot of a 2RU router measured
+5.43-5.77 against a true 5.06 depending on where the edge was placed. Use photos
+for colour, counts and confirmation, and for construction detail a line drawing
+flattens away - not for dimensions.
+
+Then render your own panel (`render.py --without silkscreen`) and overlay. If the
+aspect is wrong, stop; nothing downstream survives a wrong panel.
 
 ## Stage 2 - the cutouts
 
@@ -122,14 +134,45 @@ Now populate. **Reuse before building.**
    Slot, Bay) and `index-origin`. That is what gives the tree, the exporter and
    any DCIM their numbering.
 
+6. **If the guide has a replacement procedure for it, it is a part, not
+   decoration.** Air filters, fan trays and PSUs all come out. Model them as
+   bays with `accepts:`, not as `panel.decor`.
+7. **Read the guide's LED section for count AND arrangement, and expect them to
+   differ per port family.** On one router the QSFP-DD ports carry a stacked
+   pair outside each block, the QSFP28 ports four above each column, and the
+   SFP28 ports one each. One rule for all of them will be wrong.
+8. **Transcribe the spec table.** Switch silicon, CPU, memory, boot flash,
+   storage, BMC, capacity, buffering, power draw, PSU inputs, temperature and
+   humidity all belong in `attrs`. They are why someone opens the model.
+
 Occupants (a transceiver in a cage) use `mate-to:` and carry no position of
 their own.
+
+**Model every face.** Six views, even where a face has no detail. Size them from
+the spec table so a rack elevation and the 3D box are right, and say in
+provenance that they are deliberately blank. A missing view is indistinguishable
+from an unfinished one; an empty view that states why is not.
 
 **Gate 4.** `lint.py` clean. Render both with and without silkscreen. Open the
 explorer: the tree reads chassis, then groups in tier order, every row
 `id - model`, indicators nested under what they indicate. Then set
 `maturity: modelled` and lint again; L15 will tell you if the provenance is
 not good enough.
+
+## Gate 5 - audit against the source, by name
+
+The gates above check that what you drew is *right*. This one checks that it is
+*complete*, and it is the one that catches the quiet omissions.
+
+Go back to the guide's overview figure and walk its numbered callouts one by
+one. For each, name the id in your manifest that satisfies it. Then do the same
+for the spec table. Write the audit down - a dozen lines of "callout 13,
+grounding point -> `ground-point`" is enough.
+
+This is not ceremony. On the first device built with this skill, every gate
+passed and the model still had no grounding point, because callout 13 was never
+looked for. Nothing else would have caught it: it lints clean, it renders, and
+it looks finished.
 
 ## The canonical shape
 
@@ -179,6 +222,18 @@ configurations: {...}
 - **Pattern-match by colour, not by vector.** Rendering a guide page at 400dpi
   and detecting features by colour is reliable. Parsing its vector art is not -
   text comes out as glyph paths under nested transforms.
+- **Read silkscreen legends at high zoom before trusting them.** A port pair
+  legend that looks like `0<up>1` at page scale turned out to be `0<up><down>1`
+  at 7x - two arrows, not one - which inverts which row is even. Zoom until the
+  glyphs are unambiguous, then decide.
+- **A `path:` silkscreen mark is stroked, not filled.** The renderer sets
+  `fill: none`, so a solid triangle or arrow comes out as an outline. Anchor the
+  path at its `at` and draw the geometry relative to that, or L14 has nothing to
+  test against.
+- **Where two sources disagree, carry both numbers.** One datasheet said 480 mm
+  deep and 16 kg; its own quick start guide said 524 mm and 14.5 kg. Record the
+  disagreement in provenance rather than silently choosing, and say which you
+  used.
 - **An inventory is not a layout.** Knowing a panel has four things called
   "Branch N" does not tell you they are breaker legends with leader lines. Open
   the figure that shows the layout before drawing.

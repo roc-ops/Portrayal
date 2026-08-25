@@ -43,17 +43,38 @@ provenance:
     9.43, left for the top port and right for the bottom. Every lens carries its function and state
     meanings from the QSG Front LEDs section in attrs'
   airflow: datasheet - "Supports front-to-back airflow SKUs"; every listed SKU is F
-  filters: 'drawing + photo - both filters are REMOVABLE PARTS, not decoration: the QSG has an Air
-    Filter Replacement procedure. Extents measured off the figure - top 298.7 x 18.0 at 1.4, 8.4
-    and bottom 353.5 x 17.2 at 1.4, 60.5, the bottom being wider because it also spans the SFP28
-    pair. Their construction - a dark metal frame with open sections, reticulated foam behind and
-    captive slotted screws - is read off photographs, and the top filter drops deeper over each
-    QSFP-DD block rather than being a plain rectangle'
+  grounding: drawing - QSG rear callout 13. An IEC earth symbol at 73.2, 26.0 with TWO studs beneath
+    it at y 39.5 and 54.2, immediately right of the PSU bay. Only the upper stud is modelled, because
+    common/ground-lug carries one stud under its symbol; the second is recorded here rather than
+    faked
+  other-faces: 'datasheet - top, bottom, left and right are sized from the spec table (440 x 524
+    x 87) so a rack elevation and the 3D box are correct, but they carry NO detail: neither document
+    shows those faces and every photograph is front or rear. Invented vents or screws would be worse
+    than an honest blank'
+  spec-table: datasheet - silicon, CPU, memory, flash, SSD, BMC, capacity, buffering, power and
+    environmentals transcribed into attrs. Where the datasheet and the QSG disagree - weight 16
+    vs 14.5 kg, max power 527 vs 638 W - both numbers are carried rather than one being silently
+    chosen
 attrs:
   role: aggregation router
   rack: 2 RU
-  weight: 16 kg with PSUs and fans
+  switch-silicon: Broadcom BCM88823 Qumran-2C
   cpu: Intel Xeon D-1548 8-core
+  memory: DDR4 SO-DIMM 32 GB (2 x 16 GB)
+  boot-flash: SPI, redundant 2 x 16 MB
+  storage: M.2 SSD 128 GB
+  bmc: ASPEED AST2600
+  capacity: 2.4 Tb/s full duplex
+  packet-buffer: 4 Gb integrated deep buffering
+  weight: 16 kg with PSUs and fans (datasheet); QSG says 14.5 kg
+  power-max: 527 W (datasheet); QSG says 638 W at 25C and 695 W at 45C
+  power-typical: 186 W
+  psu-dc-input: -40 to -75 VDC, 40 A max per PSU
+  psu-ac-input: 100-120 V 12 A or 200-240 V 7.5 A, 50-60 Hz per PSU
+  operating-temp: 0 C to 45 C
+  storage-temp: -40 C to 70 C
+  humidity: operating 5-85 percent, storage 5-95 percent, non-condensing
+  nos: ONIE preinstalled; ONL and commercial NOS supported
 chassis:
   width: 440.0
   height: 87.0
@@ -102,6 +123,9 @@ groups:
     index-origin: 0
   fans:
     term: Fan
+    index-origin: 0
+  grounding:
+    term: Point
     index-origin: 0
   filters:
     term: Filter
@@ -175,7 +199,7 @@ views:
       - {at: [418.0, 79.6], text: AS7946-30XB, font-size: 2.4}
     components:
       bays:
-        - {id: filter-top, at: [1.4, 8.4], size: {w: 298.7, h: 18.0}, accepts: [edgecore/agr-filter-top@1], default: edgecore/agr-filter-top@1, group: filters, rel-pos: 0}
+        - {id: filter-top, at: [1.4, 8.4], size: {w: 353.5, h: 17.2}, accepts: [edgecore/agr-filter-top@1], default: edgecore/agr-filter-top@1, group: filters, rel-pos: 0}
         - {id: filter-bottom, at: [1.4, 60.5], size: {w: 353.5, h: 17.2}, accepts: [edgecore/agr-filter-bottom@1], default: edgecore/agr-filter-bottom@1, group: filters, rel-pos: 1}
       placements:
         - {id: port-0, ref: std/qsfp-module@1, at: [15.1, 33.0], group: qsfpdd-400g, rel-pos: 0}
@@ -297,6 +321,7 @@ views:
       - {at: [327.69, 81.0], path: M -1.0 -0.3 L 0 -2.2 L 1.0 -0.3 Z, fill: '#c7ccd1', stroke-width: 0.3, for: fan-1}
       - {at: [393.49, 81.0], text: FAN 0, font-size: 2.2, anchor: end, for: fan-0}
       - {at: [397.09000000000003, 81.0], path: M -1.0 -0.3 L 0 -2.2 L 1.0 -0.3 Z, fill: '#c7ccd1', stroke-width: 0.3, for: fan-0}
+      - {at: [73.2, 22.5], text: GND, font-size: 2.0, for: ground-point}
     components:
       bays:
         - {id: psu-0, at: [6.26, 11.74], size: {w: 60.1, h: 37.6}, accepts: [edgecore/agr-psu@1], default: edgecore/agr-psu@1, group: psus, rel-pos: 0}
@@ -306,3 +331,21 @@ views:
         - {id: fan-2, at: [221.99, 2.54], size: {w: 69.4, h: 75.4}, accepts: [edgecore/agr-fan@1], default: edgecore/agr-fan@1, group: fans, rel-pos: 2}
         - {id: fan-1, at: [291.39, 2.54], size: {w: 69.4, h: 75.4}, accepts: [edgecore/agr-fan@1], default: edgecore/agr-fan@1, group: fans, rel-pos: 1}
         - {id: fan-0, at: [360.79, 2.54], size: {w: 69.4, h: 75.4}, accepts: [edgecore/agr-fan@1], default: edgecore/agr-fan@1, group: fans, rel-pos: 0}
+      placements:
+        - {id: ground-point, ref: common/ground-lug@1, at: [73.2, 26.0], group: grounding, rel-pos: 0}
+  top:
+    size:
+      w: 440.0
+      h: 524.0
+  bottom:
+    size:
+      w: 440.0
+      h: 524.0
+  left:
+    size:
+      w: 524.0
+      h: 87.0
+  right:
+    size:
+      w: 524.0
+      h: 87.0
