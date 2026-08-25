@@ -814,6 +814,13 @@
           "wanted": {
             "type": "string",
             "description": "required, and the most valuable field: the difference between 'we don't know' and a request someone can act on"
+          },
+          "blocks": {
+            "type": "array",
+            "description": "capability flags or levels this gap stands in the way of, so a consumer can join a flag to its explanation structurally rather than by reading the prose in `wanted`. Optional, and an empty list is a fine answer - do not invent a blocker to fill the field. Absent or empty means 'blocks nothing we can name', not 'unknown'.",
+            "items": {
+              "$ref": "#/$defs/segment"
+            }
           }
         }
       }

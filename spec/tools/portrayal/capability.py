@@ -352,7 +352,13 @@ def declared_gaps(data):
     for g in data.get("gaps") or []:
         rec = {"kind": "declared", "what": g["what"],
                "scope": list(g.get("scope") or []),
-               "because": g["reason"], "wanted": g["wanted"]}
+               "because": g["reason"], "wanted": g["wanted"],
+               # An author field, and empty is a fine answer. The S9510's
+               # port-lamp gap blocks no capability today - the lamps render,
+               # nothing downstream is waiting on their vocabulary - and
+               # inventing a blocker to fill the field would make the join
+               # meaningless for the gaps that really do block something.
+               "blocks": list(g.get("blocks") or [])}
         if g.get("note"):
             rec["note"] = " ".join(str(g["note"]).split())
         out.append(rec)
@@ -401,7 +407,7 @@ def derived_gaps(path, data, lib_roots, capability, flag_results):
             continue
         what, wanted = RULE_GAPS[code]
         out.append({"kind": "derived", "what": what, "because": code,
-                    "count": len(ws), "wanted": wanted})
+                    "count": len(ws), "wanted": wanted, "blocks": []})
     # The CHAIN is deliberately not here. `capability.blocked` already carries
     # every unsatisfied level with the same sentence, and a gap record repeating
     # it verbatim is one statement printed twice a few inches apart - which
@@ -420,12 +426,21 @@ def derived_gaps(path, data, lib_roots, capability, flag_results):
         # No `count` on either: there is nothing being counted, and `count: 0`
         # reads as "nothing found" rather than "nothing to count". A field that
         # measures nothing is better absent than zero.
+        #
+        # `blocks` is what lets a consumer join a flag to its explanation. It
+        # matters most exactly where the gap is named for the CAUSE rather than
+        # the symptom: an About panel showing a `?specified` chip cannot find
+        # `profile-undeclared` by name, and was reduced to matching the flag in
+        # backticks inside the sentence below - which works until somebody
+        # rewords it, and then fails silently.
         if ok is None and blocker:
             out.append({"kind": "derived", "what": blocker, "because": "CAP",
+                        "blocks": [flag],
                         "wanted": f"{needs}, which unlocks `{flag}` and with it "
                                   f"{CAP_GAPS[flag]}"})
             continue
         out.append({"kind": "derived", "what": flag, "because": "CAP",
+                    "blocks": [flag],
                     "wanted": f"{needs} - unlocks {CAP_GAPS[flag]}"})
     return out
 

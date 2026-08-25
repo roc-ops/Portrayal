@@ -220,3 +220,33 @@ def test_search_finds_what_a_device_is_not_how_it_was_phrased():
     # "Blue = all lanes linked, Off = not all lanes linked", and folding that in
     # makes half the portfolio match "off" and "link"
     assert "lanes" not in idx["as7946-74xksb"]
+
+
+def test_a_gap_names_the_flag_it_blocks_in_a_field():
+    """The About panel renders a `?specified` chip and wants to explain it. The
+    gap is correctly named for the cause - `profile-undeclared` - so a name
+    match finds nothing, and matching the flag in backticks inside `wanted` is
+    prose parsing that breaks silently the first time someone rewords it."""
+    man = LIB / "devices/edgecore/as7946-30xb/device.yaml"
+    dev = yaml.safe_load(man.read_text())
+    cap, flags = capability.assess(dev, profiles=PROFILES)
+    gaps = capability.derived_gaps(man, dev, [str(LIB)], cap, flags)
+    assert all("blocks" in g for g in gaps)
+
+    for flag in cap["unknown"] + [f for f in capability.FLAGS
+                                  if f not in cap["flags"]]:
+        assert [g for g in gaps if flag in g["blocks"]], \
+            f"nothing explains why {flag} is not earned"
+
+    cause = next(g for g in gaps if g["what"] == "profile-undeclared")
+    assert cause["blocks"] == ["specified"]
+    # a debt no capability is waiting on says so, rather than inventing one
+    assert next(g for g in gaps if g["because"] == "L21")["blocks"] == []
+
+
+def test_a_declared_gap_may_block_nothing():
+    """Empty is a fine answer. The S9510's lamps render and nothing downstream
+    waits on their vocabulary; a join that is sometimes fabricated is worse than
+    one that is sometimes empty."""
+    gaps = capability.declared_gaps(load("ufispace/s9510-28dc"))
+    assert gaps[0]["blocks"] == []
