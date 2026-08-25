@@ -15,7 +15,7 @@ provenance:
   terminal: 'photo - IMG_6789 and IMG_6796 at 5x. A BLACK plastic housing, not the
     grey an earlier pass drew, with three vertical walls forming two open-ended
     lanes. Each lane takes a bolt with a hex nut and a star washer. Jason: the
-    walls stand about 3/4 inch proud (19mm) and the bolts about 1/2 inch (12.7).
+    walls stand about 1/2 inch proud (12.7mm) and the bolts about 1/4 inch (6.35).
     The lanes are centred in the housing - they were drawn off to the left'
   face: 'drawing + photo - 60.1 x 37.6 measured off the rear panel figure; the
     arrangement (bail handle LEFT, input centre, red latch RIGHT) is read off
@@ -45,9 +45,18 @@ relief:
     # lanes, so cables drop in from above (PSU0) or below (PSU1) onto a bolt.
     # Each wall carries its own `out` - one feature on the group would use the
     # group's bounding rect and fill the lanes back in.
-    - {node: wall-l, out: 19.0}
-    - {node: wall-m, out: 19.0}
-    - {node: wall-r, out: 19.0}
-    - {node: bolt-pos, out: 12.7}
-    - {node: bolt-neg, out: 12.7}
+    - {node: wall-l, out: 12.7}
+    - {node: wall-m, out: 12.7}
+    - {node: wall-r, out: 12.7}
+    # The bolt is a stack, not one blob: a threaded stud standing 1/4 inch proud,
+    # with the star washer and then the nut as their own solids up its length.
+    # `cyl` runs lift..lift+cyl and takes its radius from the node, so each of the
+    # three has to be its own node - grouped, they became a single box slab with
+    # all three painted flat on its top.
+    - {node: stud-pos, cyl: 6.35, thread: 1.0}
+    - {node: washer-pos, cyl: 0.7, lift: 2.4}
+    - {node: nut-pos, cyl: 2.2, lift: 3.1}
+    - {node: stud-neg, cyl: 6.35, thread: 1.0}
+    - {node: washer-neg, cyl: 0.7, lift: 2.4}
+    - {node: nut-neg, cyl: 2.2, lift: 3.1}
 skins: [default]

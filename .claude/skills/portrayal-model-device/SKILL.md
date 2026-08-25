@@ -287,6 +287,12 @@ configurations: {...}
   outline needs one group per step. The same applies in reverse: a raised node is
   taken OFF the flat plate, so a sibling that is not raised stays behind and reads
   as a coloured shadow under the part. Raise the whole group.
+- **Pick the right relief primitive.** `out` builds a BOX from the node's
+  bounding rect; `cyl` builds a cylinder of the node's radius running
+  `lift..lift+cyl`, and takes `thread` or `knurl`. A bolt made with `out` is a
+  square blob with the nut and washer painted flat on its top. Made of three
+  nodes - stud as a threaded `cyl`, washer and nut as short `cyl`s stacked with
+  `lift` - it is a bolt. `lift` is what stacks parts up a shaft.
 - **A module with a real body should declare one.** `body: {depth, color,
   footprint?, plate?}` plus `skins/body-{left,right,top,bottom,rear}.svg` makes a
   FRU eject as a six-sided box instead of a floating faceplate. The mechanism
