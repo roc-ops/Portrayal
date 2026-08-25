@@ -14,6 +14,7 @@ done
 python3 spec/tools/portrayal/devices_index.py    --library library --out "$OUT"
 python3 spec/tools/portrayal/components_index.py --library library --out "$OUT"
 python3 spec/tools/portrayal/labs_index.py       --library library --out "$OUT"
+python3 spec/tools/portrayal/gaps_index.py       --library library --out "$OUT"
 # DCIM exports: Portrayal is the source of truth, a DCIM is one consumer
 for d in library/devices/*/*/device.yaml; do
   for nos in arcos sonic; do

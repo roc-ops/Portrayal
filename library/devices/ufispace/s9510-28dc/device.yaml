@@ -61,6 +61,28 @@ chassis:
   depth: 302
   ru: 1
   weight-kg: 4.9
+# What no rule can find, because the manifest looks complete. The port lamps
+# carry the component default of off/on, which is indistinguishable from a
+# genuine two-state lamp - the absence is invisible by construction, so it has
+# to be asserted. Detectable gaps are derived from the lint rules at build time
+# and must not be listed here.
+gaps:
+- what: port-led-semantics
+  scope: [ports, optics]
+  reason: vendor-silent
+  note: >-
+    HIG section 10 (pages 20-21) tables the GNSS, SYNC, STAT, FAN and PWR system
+    lamps, the PSU and Fan FRU lamps and the management jack, and gives no table
+    at all for the port lamps. The twenty-four led-arrow, four led-dot and two
+    qsfp-lane-leds placements therefore keep their component default of off/on
+    rather than an invented link/activity vocabulary. Nine rows elsewhere in
+    those same tables read "need NOS to activate this feature", so these may be
+    NOS-defined rather than simply undocumented - which is a different fix, and
+    the reason this is filed as vendor-silent rather than nos-dependent: we do
+    not know which, and guessing would put an answer where the unknown belongs.
+  wanted: >-
+    a per-NOS LED table from UfiSpace or from a NOS vendor, or photographs of a
+    live unit with the ports in known states (down, 1G/10G/25G link, traffic)
 groups:
   psus:
     term: PSU

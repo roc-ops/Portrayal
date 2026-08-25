@@ -820,6 +820,49 @@ def lint_device(path, validator, lib_roots):
     return data
 
 
+def print_matrix(matrix, schemas):
+    """One table, every device, level and flags.
+
+    This is what turns lint output from a pass/fail into a dashboard. The
+    portfolio's shape - which models can be put in a rack elevation, which can
+    go to 3D, which can be exported - was previously only knowable by opening
+    thirteen files, so nobody knew it.
+
+    Nothing here is declared. Every column is computed from the manifest, so it
+    cannot be optimistic and cannot go stale.
+    """
+    import capability
+    profiles = capability.load_profiles(schemas)
+    rows = []
+    for path, d in matrix:
+        cap, _ = capability.assess(d, profiles=profiles)
+        rows.append((d["name"], cap, d.get("profile") or "-",
+                     d.get("maturity") or "draft"))
+    if not rows:
+        return
+    w = max(len(r[0]) for r in rows)
+    print()
+    print(f"PORTFOLIO  {len(rows)} devices")
+    print(f"  {'device':<{w}}  lvl  {'capability':<12} {'profile':<11} "
+          f"{'maturity':<9} flags / next")
+    for name, cap, prof, mat in sorted(rows, key=lambda r: (-r[1]["level"], r[0])):
+        # Flags earned, then the first thing standing in the way. A report that
+        # does not say how to fix it is a scoreboard, not a tool.
+        tail = " ".join(f"+{f}" for f in cap["flags"])
+        if cap["blocked"]:
+            b = cap["blocked"][0]
+            tail = (tail + "  " if tail else "") + f"-> {b['level']} {b['name']}: {b['needs']}"
+        print(f"  {name:<{w}}  {cap['level']:>3}  {cap['name']:<12} {prof:<11} "
+              f"{mat:<9} {tail}")
+    earned = {}
+    for _, cap, _, _ in rows:
+        for f in cap["flags"]:
+            earned[f] = earned.get(f, 0) + 1
+    print("  " + ", ".join(f"{f}: {earned.get(f, 0)}/{len(rows)}"
+                           for f in capability.FLAGS))
+    print()
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--schemas", required=True)
@@ -834,6 +877,7 @@ def main():
     ovl_v = load_schema(schemas, "overlay.schema.json")
 
     n = 0
+    matrix = []
     for root in args.library:
         root = Path(root)
         for f in sorted(root.glob("components/**/contract.yaml")):
@@ -846,12 +890,16 @@ def main():
                 lint_component_mating(f, d, args.library)
             n += 1
         for f in sorted(root.glob("devices/**/device.yaml")):
-            lint_device(f, dev_v, args.library); n += 1
+            d = lint_device(f, dev_v, args.library); n += 1
+            if d is not None and d.get("kind") == "device":
+                matrix.append((f, d))
         for f in sorted(root.glob("devices/**/overlays/*.yaml")):
             data = yaml.safe_load(f.read_text())
             for e in ovl_v.iter_errors(data):
                 err(f, "L1", f"{'/'.join(str(p) for p in e.path)}: {e.message}")
             n += 1
+
+    print_matrix(matrix, schemas)
 
     if WARNINGS:
         by_code = {}

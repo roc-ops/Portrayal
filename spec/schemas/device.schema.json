@@ -238,6 +238,10 @@
             "type": "string",
             "description": "vendor display word, e.g. 'Port', 'Slot', 'Bay'"
           },
+          "physical-context": {
+            "type": "string",
+            "description": "Redfish PhysicalContext value shared by everything in this block, e.g. 'PowerSupply' for the PSU bays. A whole group is the natural place to say it once"
+          },
           "attrs": {
             "type": "object"
           },
@@ -551,6 +555,10 @@
                     "rel-pos": {
                       "type": "integer"
                     },
+                    "physical-context": {
+                      "type": "string",
+                      "description": "Redfish PhysicalContext value, e.g. 'PowerSupply', 'Fan', 'NetworkingDevice'. This is the join between the drawing and a running box: it is what lets an ENTITY-MIB entPhysicalTable row or a Redfish Thermal sensor be laid over the bay it actually describes. The `wired` capability flag is exactly 'every bay and every port group says this'"
+                    },
                     "default": {
                       "type": [
                         "string",
@@ -612,6 +620,10 @@
                     },
                     "rel-pos": {
                       "type": "integer"
+                    },
+                    "physical-context": {
+                      "type": "string",
+                      "description": "Redfish PhysicalContext value. See the same key on a bay; declaring it once on the group is usually right, and a placement overrides"
                     },
                     "optional": {
                       "$ref": "#/$defs/segment",
@@ -759,6 +771,50 @@
         "series": {
           "type": "string",
           "description": "marketing series, e.g. 'AGR400'; the model is the SKU root"
+        }
+      }
+    },
+    "gaps": {
+      "type": "array",
+      "description": "unknowns no rule can ever find, because the manifest looks complete. 'The HIG has no port-lamp table' is a fact about a DOCUMENT, not about this file, and only someone who read the source knows it. Detectable gaps - a port with no media, an indicator with no `for:` - are derived from the lint rules at build time and must NOT be listed here: a hand-kept list of machine-findable problems goes stale the first time someone fixes one. Declare the unknowns, derive the rest.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "what",
+          "reason",
+          "wanted"
+        ],
+        "properties": {
+          "what": {
+            "$ref": "#/$defs/segment",
+            "description": "the missing knowledge, as a token: port-led-semantics, fan-direction"
+          },
+          "scope": {
+            "type": "array",
+            "description": "what it applies to: group names, instance ids, or view names",
+            "items": {
+              "type": "string"
+            }
+          },
+          "reason": {
+            "description": "why it is missing, because that decides who can close it",
+            "enum": [
+              "vendor-silent",
+              "nos-dependent",
+              "needs-hardware",
+              "needs-photo",
+              "needs-drawing"
+            ]
+          },
+          "note": {
+            "type": "string",
+            "description": "what was looked at and what it did not say. Cite the section, so the next reader does not repeat the search"
+          },
+          "wanted": {
+            "type": "string",
+            "description": "required, and the most valuable field: the difference between 'we don't know' and a request someone can act on"
+          }
         }
       }
     }

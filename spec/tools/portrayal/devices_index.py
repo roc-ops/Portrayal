@@ -11,6 +11,10 @@ from pathlib import Path
 
 import yaml
 
+import capability
+
+SCHEMAS = Path(__file__).resolve().parents[2] / "schemas"
+
 
 def main():
     ap = argparse.ArgumentParser()
@@ -24,8 +28,14 @@ def main():
             d = yaml.safe_load(man.read_text())
             if d.get("kind") != "device":
                 continue
+            cap = capability.report(man, d, args.library, SCHEMAS)
             devices.append({
                 "name": d["name"],
+                # the picker greys out what a model cannot do rather than
+                # offering it and drawing something wrong, so it needs this
+                # before it has loaded the device
+                "capability": cap["capability"],
+                "gaps": cap["gaps"],
                 "model": d.get("model", d["name"]),
                 "manufacturer": d.get("manufacturer", ""),
                 "version": d.get("version", ""),

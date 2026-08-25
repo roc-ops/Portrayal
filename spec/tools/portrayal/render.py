@@ -15,8 +15,12 @@ from pathlib import Path
 import yaml
 
 from manifest import view_parts, targets, split_target
+import capability
 
 TOOL_VERSION = "0.1.0"
+# profiles.yaml lives with the schemas, and every tool that needs it can find it
+# from here rather than each growing a flag that is always given the same value.
+SCHEMAS = Path(__file__).resolve().parents[2] / "schemas"
 SVG_NS = "http://www.w3.org/2000/svg"
 ET.register_namespace("", SVG_NS)
 
@@ -783,7 +787,13 @@ def main():
                 (outdir / nm).write_text('<?xml version="1.0" encoding="UTF-8"?>\n' + data + "\n")
         print(f"wrote config {cfg_name}")
     ch = device.get("chassis") or {}
+    # What this model can and cannot do, and why. The viewer has to know before
+    # it offers a control: a two-view device opened in 3D used to draw a wrong
+    # box rather than say it has no top or bottom face, which is the demo lying
+    # instead of declining.
+    cap = capability.report(Path(args.device_yaml), device, args.library, SCHEMAS)
     cfg_index = {"device": device["name"], "model": device.get("model", ""),
+                 "capability": cap["capability"], "gaps": cap["gaps"],
                  "views": list(device["views"].keys()),
                  "chassis": {"w": ch.get("width"), "h": ch.get("height"), "d": ch.get("depth"),
                              "ru": ch.get("ru")},

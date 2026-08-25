@@ -1,0 +1,48 @@
+# What a device of each class has to STATE before the `specified` capability
+# flag is true.
+#
+# The flag could have been "at least ten attrs". It is not, because a threshold
+# is arbitrary and games easily - ten trivia beat five facts, and nobody can
+# argue about the number on its merits. The device class already says what
+# matters, and `profile:` already exists on the device, so the minimum set is
+# declared here per profile: one file to argue about instead of a negotiation
+# per device.
+#
+# A requirement is a FACT the device must state, and the list under it is the
+# attr keys that count as stating it. The lists are longer than they should be
+# because the attr vocabulary drifted before anything was checking it -
+# `switching-capacity` on the Edgecore models, `capacity` on the AS7946s,
+# `power-ac-max-w` here and `power-max-ac-w` there. Listing the spellings makes
+# the drift visible in one place, which is the first step to ending it; it is
+# not permission for more of them. Add a device's spelling here only when it
+# genuinely means the same fact.
+#
+# Note what is deliberately NOT aliased: `power-typical-w` does not satisfy
+# `power-max`, and `forwarding-rate` (pps) does not satisfy `capacity` (bps).
+# Those are different facts, and accepting them would make the flag a lie.
+#
+# A device that declares no `profile:` is not judged against a default set -
+# it is reported as unevaluable, and the register carries a `device-profile`
+# gap saying so. Inventing a universal minimum would mean asserting that a
+# passive optical mux and a 2U switch owe the same facts, which is false.
+
+profiles:
+
+  networking:
+    description: a switch, router or aggregation device - the box forwards packets
+    requires:
+      capacity: [capacity, switching-capacity]
+      cpu: [cpu]
+      memory: [memory]
+      power-max: [power-max, power-ac-max-w, power-max-ac-w, power-max-dc-w]
+      operating-temp: [operating-temp, operating-temp-f2b, operating-temp-b2f]
+
+  optical:
+    description: >-
+      DWDM transport - mux/demux, transponder, amplifier. No CPU or memory is
+      owed: a passive mux has neither, and requiring them would make the flag
+      unreachable for a whole product class rather than informative about it.
+    requires:
+      capacity: [capacity, channels, switching-capacity]
+      power-max: [power-max, power-ac-max-w, power-max-ac-w, power-max-dc-w]
+      operating-temp: [operating-temp, operating-temp-f2b, operating-temp-b2f]
