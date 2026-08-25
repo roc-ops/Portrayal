@@ -610,7 +610,14 @@ def main():
     ch = device.get("chassis") or {}
     cfg_index = {"device": device["name"], "model": device.get("model", ""),
                  "views": list(device["views"].keys()),
-                 "chassis": {"w": ch.get("width"), "h": ch.get("height"), "d": ch.get("depth")},
+                 "chassis": {"w": ch.get("width"), "h": ch.get("height"), "d": ch.get("depth"),
+                             "ru": ch.get("ru")},
+                 # facts about the device that belong to no view. They reach the
+                 # drawing as data-* on the SVG root, which meant a viewer had to
+                 # load and scrape a picture to answer "how much memory" - and
+                 # provenance never reached it at all.
+                 "attrs": device.get("attrs") or {},
+                 "provenance": device.get("provenance") or {},
                  "default": default_cfg,
                  "configs": [{"name": n, "description": c.get("description", ""),
                               "part-numbers": c.get("part-numbers") or {},
