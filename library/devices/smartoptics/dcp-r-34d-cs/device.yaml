@@ -270,8 +270,8 @@ views:
         - {ref: common/rack-ear@1, id: ear-right, at: [440, 0.75], skin: right, optional: ears}
         - {ref: common/rj45-shielded@2, id: eth0, at: [9.6, 10.55], rotate: 180, attrs: {role: mgmt, speed: 1000base-t}}
         - {ref: common/rj45-shielded@2, id: rs232, at: [10, 24.85], attrs: {role: console, media: rj45-serial}}
-        - {ref: common/led-dot@1, id: led-osc-tx, at: [33.9, 21.8], attrs: {function: osc-tx}}
-        - {ref: common/led-dot@1, id: led-osc-rx, at: [39.7, 21.8], attrs: {function: osc-rx}}
+        - {ref: common/led-dot@1, id: led-osc-tx, at: [33.9, 21.8], for: port-osc, attrs: {function: osc-tx}}
+        - {ref: common/led-dot@1, id: led-osc-rx, at: [39.7, 21.8], for: port-osc, attrs: {function: osc-rx}}
         - {ref: common/led-dot@1, id: led-power, at: [53.2, 35], attrs: {function: power}}
         - {ref: common/led-dot@1, id: led-status, at: [58.8, 35], attrs: {function: status}}
         - {ref: common/lc-duplex-adapter@3, id: port-1510, at: [52.7, 9.6], attrs: {role: osc-filter, media: fiber}}
@@ -339,8 +339,8 @@ views:
         - {ref: common/rj45-hd@1, id: eth4, at: [291, 8.5], group: mgmt, attrs: {role: mgmt, speed: 1000base-t}}
         - {ref: common/rj45-hd@1, id: eth1, at: [276, 22], group: mgmt, attrs: {role: mgmt, speed: 1000base-t}}
         - {ref: common/rj45-hd@1, id: eth3, at: [291, 22], group: mgmt, attrs: {role: mgmt, speed: 1000base-t}}
-        - {ref: common/led-dot@1, id: led-eth5-tx, at: [320, 14], attrs: {function: tx}}
-        - {ref: common/led-dot@1, id: led-eth5-rx, at: [332, 14], attrs: {function: rx}}
+        - {ref: common/led-dot@1, id: led-eth5-tx, at: [320, 14], for: eth5, attrs: {function: tx}}
+        - {ref: common/led-dot@1, id: led-eth5-rx, at: [332, 14], for: eth5, attrs: {function: rx}}
         - {ref: std/sfp@1, id: eth5, at: [318.75, 22], group: mgmt, attrs: {role: mgmt, media: sfp}}
         - {ref: common/reset-button@1, id: reset, at: [345, 26], group: mgmt}
   left:
