@@ -155,6 +155,9 @@ export function createShell(opts = {}) {
   // ---------------------------------------------------------------- stage
 
   let zoom = 1, panX = 0, panY = 0;
+  // set while the pointer is panning, so the click that ends a drag does not
+  // also change the selection
+  let dragged = false;
   function applyTransform() {
     if (state.svg) state.svg.style.transform = `translate(${panX}px,${panY}px) scale(${zoom})`;
   }
@@ -181,11 +184,17 @@ export function createShell(opts = {}) {
     zoom *= k; applyTransform();
   }, {passive: false});
   (() => {                              // drag to pan
-    let on = false, sx = 0, sy = 0;
+    let on = false, sx = 0, sy = 0, px = 0, py = 0;
     const st = el.svgHost;
     st.addEventListener('pointerdown', e => { on = true; sx = e.clientX - panX; sy = e.clientY - panY;
+                                              px = e.clientX; py = e.clientY; dragged = false;
                                               st.setPointerCapture(e.pointerId); });
     st.addEventListener('pointermove', e => { if (!on) return;
+                                              // a few pixels of travel is a tremor, not a drag; without
+                                              // this every click on a part reads as a pan and never
+                                              // reaches the selection handler
+                                              if (Math.abs(e.clientX - px) + Math.abs(e.clientY - py) > 4)
+                                                dragged = true;
                                               panX = e.clientX - sx; panY = e.clientY - sy; applyTransform(); });
     st.addEventListener('pointerup', () => { on = false; });
   })();
@@ -394,7 +403,7 @@ export function createShell(opts = {}) {
             row.querySelector('.tw').textContent = kids.classList.contains('hid') ? '▸' : '▾';
           };
         }
-        row.onclick = () => select(n.path, true);
+        row.onclick = () => select(n.path === state.sel ? null : n.path, true);
         // a page decorates its own rows here - state chips, mark counts - rather
         // than re-walking the tree afterwards and guessing which row is which
         emit('row', row, n);
@@ -564,9 +573,16 @@ export function createShell(opts = {}) {
     el.svgHost.appendChild(svg);
     state.svg = svg;
     state.sel = null;
+    // Clicking the selected thing again clears it, and clicking away from any
+    // part clears it too. A selection you cannot revoke is a halo painted over
+    // the hardware for the rest of the session - and on the annotate tab, one
+    // that ends up in the export you were composing. Esc does the same from
+    // anywhere; see below.
     svg.addEventListener('click', ev => {
+      if (dragged) return;              // this click is the end of a pan
       const hit = ev.target.closest('[data-path]');
-      if (hit) select(hit.dataset.path, false);
+      const path = hit ? hit.dataset.path : null;
+      select(path && path !== state.sel ? path : null, false);
     });
     fit();
     refreshTree();
@@ -632,6 +648,17 @@ export function createShell(opts = {}) {
     }
     await loadDevice(start.name);
   })();
+
+  // Esc clears the selection from anywhere. A page that binds Esc for its own
+  // purposes - annotate disarms a crop with it - handles that first and this
+  // never sees it, because that listener runs on the page and stops there only
+  // when it has something of its own to cancel.
+  addEventListener('keydown', ev => {
+    if (ev.key !== 'Escape' || ev.defaultPrevented) return;
+    const a = document.activeElement;
+    if (a && /^(INPUT|SELECT|TEXTAREA)$/.test(a.tagName)) return;
+    if (state.sel != null) select(null, false);
+  });
 
   return {
     state, el, ready, on, emit,
