@@ -58,8 +58,17 @@ provenance:
     the bottom - LED1 above is speed, LED2 below is link. QSFP28: four above each column on a 4.0
     mm pitch at offsets 4.2/8.2/12.2/16.2, the left pair serving the top port and the right pair
     the bottom, each pair being speed then link. SFP28: two above each column at offsets 3.56 and
-    9.43, left for the top port and right for the bottom. Every lens carries its function and state
-    meanings from the QSG Front LEDs section in attrs'
+    9.43, left for the top port and right for the bottom'
+  led-states: 'QSG Front LEDs section, callouts 1 to 5, re-read off the 600dpi render. Every
+    lens carries its function in attrs and its state vocabulary in structured states:, declared
+    on the group where a block shares one - eight QSFP-DD speed lamps, eighteen QSFP28 speed
+    lamps, twenty-six link lamps, four SFP28 lamps - and on the placement where it does not,
+    which here is LOC alone. The sentence the guide prints sits beside them in description:.
+    This was previously prose in attrs: {states: ...}, which no tool could read: the Explorer
+    refuses a data-states value that is not a list of tokens, so what reached the chips was
+    led-dot''s generic default and the real 100G/40G vocabulary reached nobody. One correction
+    from the re-read: the guide says LOC "flashes Amber when the command is activated" - the
+    word "locate" was the modeller''s gloss. Everything else transcribed correctly'
   airflow: datasheet - "Supports front-to-back airflow SKUs"; every listed SKU is F
   rj45-orientation: drawing - RJ-45 jacks are NOT all the same way up. BITS 0, BITS 2, MGMT and
     CONSOLE 1 are keyway-UP with their contacts along the bottom; only BITS 1 and PPS/TOD, the lower
@@ -145,12 +154,36 @@ groups:
     attrs:
       media: sfp28
       speed: 25g
-  port-leds:
+  qsfpdd-speed-leds:
     term: LED
     index-origin: 0
+    states: ['off', {name: 400g, color: '#22d3ee'}, {name: 100g, color: '#3b82f6'}]
+    description: QSG Front LEDs callout 1 - LED1 (top) - Cyan (400G), Blue (100G). All eight
+      QSFP-DD ports carry it, including the four wired at 100G
+  qsfp28-speed-leds:
+    term: LED
+    index-origin: 0
+    states: ['off', {name: 100g, color: '#3b82f6'}, {name: 40g, color: '#22c55e'}]
+    description: QSG Front LEDs callout 2 - LED1 (left of each pair) - Blue (100G), Green (40G)
+  port-link-leds:
+    term: LED
+    index-origin: 0
+    states: ['off', {name: linked, color: '#3b82f6'}, {name: partial, color: '#ef4444'}, activity]
+    description: QSG Front LEDs callouts 1 and 2 - LED2 - Blue (all lanes linked), Red (not
+      all lanes linked), Blinking (activity). Blinking has no colour of its own - the lamp
+      flashes in whatever colour it is already showing, so `activity` carries none
+  sfp28-port-leds:
+    term: LED
+    index-origin: 0
+    states: ['off', {name: 25g, color: '#3b82f6'}, {name: 10g, color: '#22c55e'}, activity]
+    description: QSG Front LEDs callout 3 - Blue (25G), Green (10G), Blinking (activity). One
+      lens per SFP28 port, speed and link on the same lamp
   status-leds:
     term: LED
     index-origin: 1
+    states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]
+    description: QSG Front LEDs callout 4 - Green (OK), Amber (fault). LOC does not follow
+      this and overrides it on its own placement
   timing:
     term: Port
     index-origin: 0
@@ -160,6 +193,8 @@ groups:
   mgmt-leds:
     term: LED
     index-origin: 0
+    description: QSG Front LEDs callout 5 - RJ-45 OOB port, left (link), right (activity). The
+      guide names no colours, so both lamps keep the component's plain off/on
   fasteners:
     term: Rivet
     index-origin: 0
@@ -282,62 +317,62 @@ views:
         - {id: port-27, ref: std/sfp-ganged@1, at: [314.5, 46.0], group: sfp28, rel-pos: 27}
         - {id: port-28, ref: std/sfp-ganged@1, at: [328.8, 33.0], group: sfp28, rel-pos: 28}
         - {id: port-29, ref: std/sfp-ganged@1, at: [328.8, 46.0], group: sfp28, rel-pos: 29}
-        - {id: led-p0-a, ref: common/led-dot@1, at: [12.02, 36.19], group: port-leds, rel-pos: 0, for: port-0, attrs: {function: speed, states: 'Cyan = 400G, Blue = 100G'}}
-        - {id: led-p0-b, ref: common/led-dot@1, at: [12.02, 39.22], group: port-leds, rel-pos: 1, for: port-0, attrs: {function: link, states: 'Blue = all lanes linked, Red = not all lanes linked, Blinking = activity'}}
-        - {id: led-p1-a, ref: common/led-dot@1, at: [12.02, 46.46], group: port-leds, rel-pos: 2, for: port-1, attrs: {function: speed, states: 'Cyan = 400G, Blue = 100G'}}
-        - {id: led-p1-b, ref: common/led-dot@1, at: [12.02, 49.45], group: port-leds, rel-pos: 3, for: port-1, attrs: {function: link, states: 'Blue = all lanes linked, Red = not all lanes linked, Blinking = activity'}}
-        - {id: led-p2-a, ref: common/led-dot@1, at: [56.06, 36.19], group: port-leds, rel-pos: 4, for: port-2, attrs: {function: speed, states: 'Cyan = 400G, Blue = 100G'}}
-        - {id: led-p2-b, ref: common/led-dot@1, at: [56.06, 39.22], group: port-leds, rel-pos: 5, for: port-2, attrs: {function: link, states: 'Blue = all lanes linked, Red = not all lanes linked, Blinking = activity'}}
-        - {id: led-p3-a, ref: common/led-dot@1, at: [56.06, 46.46], group: port-leds, rel-pos: 6, for: port-3, attrs: {function: speed, states: 'Cyan = 400G, Blue = 100G'}}
-        - {id: led-p3-b, ref: common/led-dot@1, at: [56.06, 49.45], group: port-leds, rel-pos: 7, for: port-3, attrs: {function: link, states: 'Blue = all lanes linked, Red = not all lanes linked, Blinking = activity'}}
-        - {id: led-p22-a, ref: common/led-dot@1, at: [264.21, 36.19], group: port-leds, rel-pos: 44, for: port-22, attrs: {function: speed, states: 'Cyan = 400G, Blue = 100G'}}
-        - {id: led-p22-b, ref: common/led-dot@1, at: [264.21, 39.22], group: port-leds, rel-pos: 45, for: port-22, attrs: {function: link, states: 'Blue = all lanes linked, Red = not all lanes linked, Blinking = activity'}}
-        - {id: led-p23-a, ref: common/led-dot@1, at: [264.21, 46.46], group: port-leds, rel-pos: 46, for: port-23, attrs: {function: speed, states: 'Cyan = 400G, Blue = 100G'}}
-        - {id: led-p23-b, ref: common/led-dot@1, at: [264.21, 49.45], group: port-leds, rel-pos: 47, for: port-23, attrs: {function: link, states: 'Blue = all lanes linked, Red = not all lanes linked, Blinking = activity'}}
-        - {id: led-p24-a, ref: common/led-dot@1, at: [308.15, 36.19], group: port-leds, rel-pos: 48, for: port-24, attrs: {function: speed, states: 'Cyan = 400G, Blue = 100G'}}
-        - {id: led-p24-b, ref: common/led-dot@1, at: [308.15, 39.22], group: port-leds, rel-pos: 49, for: port-24, attrs: {function: link, states: 'Blue = all lanes linked, Red = not all lanes linked, Blinking = activity'}}
-        - {id: led-p25-a, ref: common/led-dot@1, at: [308.15, 46.46], group: port-leds, rel-pos: 50, for: port-25, attrs: {function: speed, states: 'Cyan = 400G, Blue = 100G'}}
-        - {id: led-p25-b, ref: common/led-dot@1, at: [308.15, 49.45], group: port-leds, rel-pos: 51, for: port-25, attrs: {function: link, states: 'Blue = all lanes linked, Red = not all lanes linked, Blinking = activity'}}
-        - {id: led-p4-a, ref: common/led-dot@1, at: [67.0, 28.35], group: port-leds, rel-pos: 8, for: port-4, attrs: {function: speed, states: 'Blue = 100G, Green = 40G'}}
-        - {id: led-p4-b, ref: common/led-dot@1, at: [71.0, 28.35], group: port-leds, rel-pos: 9, for: port-4, attrs: {function: link, states: 'Blue = all lanes linked, Red = not all lanes linked, Blinking = activity'}}
-        - {id: led-p5-a, ref: common/led-dot@1, at: [75.0, 28.35], group: port-leds, rel-pos: 10, for: port-5, attrs: {function: speed, states: 'Blue = 100G, Green = 40G'}}
-        - {id: led-p5-b, ref: common/led-dot@1, at: [79.0, 28.35], group: port-leds, rel-pos: 11, for: port-5, attrs: {function: link, states: 'Blue = all lanes linked, Red = not all lanes linked, Blinking = activity'}}
-        - {id: led-p6-a, ref: common/led-dot@1, at: [86.2, 28.35], group: port-leds, rel-pos: 12, for: port-6, attrs: {function: speed, states: 'Blue = 100G, Green = 40G'}}
-        - {id: led-p6-b, ref: common/led-dot@1, at: [90.2, 28.35], group: port-leds, rel-pos: 13, for: port-6, attrs: {function: link, states: 'Blue = all lanes linked, Red = not all lanes linked, Blinking = activity'}}
-        - {id: led-p7-a, ref: common/led-dot@1, at: [94.2, 28.35], group: port-leds, rel-pos: 14, for: port-7, attrs: {function: speed, states: 'Blue = 100G, Green = 40G'}}
-        - {id: led-p7-b, ref: common/led-dot@1, at: [98.2, 28.35], group: port-leds, rel-pos: 15, for: port-7, attrs: {function: link, states: 'Blue = all lanes linked, Red = not all lanes linked, Blinking = activity'}}
-        - {id: led-p8-a, ref: common/led-dot@1, at: [105.2, 28.35], group: port-leds, rel-pos: 16, for: port-8, attrs: {function: speed, states: 'Blue = 100G, Green = 40G'}}
-        - {id: led-p8-b, ref: common/led-dot@1, at: [109.2, 28.35], group: port-leds, rel-pos: 17, for: port-8, attrs: {function: link, states: 'Blue = all lanes linked, Red = not all lanes linked, Blinking = activity'}}
-        - {id: led-p9-a, ref: common/led-dot@1, at: [113.2, 28.35], group: port-leds, rel-pos: 18, for: port-9, attrs: {function: speed, states: 'Blue = 100G, Green = 40G'}}
-        - {id: led-p9-b, ref: common/led-dot@1, at: [117.2, 28.35], group: port-leds, rel-pos: 19, for: port-9, attrs: {function: link, states: 'Blue = all lanes linked, Red = not all lanes linked, Blinking = activity'}}
-        - {id: led-p10-a, ref: common/led-dot@1, at: [135.5, 28.35], group: port-leds, rel-pos: 20, for: port-10, attrs: {function: speed, states: 'Blue = 100G, Green = 40G'}}
-        - {id: led-p10-b, ref: common/led-dot@1, at: [139.5, 28.35], group: port-leds, rel-pos: 21, for: port-10, attrs: {function: link, states: 'Blue = all lanes linked, Red = not all lanes linked, Blinking = activity'}}
-        - {id: led-p11-a, ref: common/led-dot@1, at: [143.5, 28.35], group: port-leds, rel-pos: 22, for: port-11, attrs: {function: speed, states: 'Blue = 100G, Green = 40G'}}
-        - {id: led-p11-b, ref: common/led-dot@1, at: [147.5, 28.35], group: port-leds, rel-pos: 23, for: port-11, attrs: {function: link, states: 'Blue = all lanes linked, Red = not all lanes linked, Blinking = activity'}}
-        - {id: led-p12-a, ref: common/led-dot@1, at: [154.6, 28.35], group: port-leds, rel-pos: 24, for: port-12, attrs: {function: speed, states: 'Blue = 100G, Green = 40G'}}
-        - {id: led-p12-b, ref: common/led-dot@1, at: [158.6, 28.35], group: port-leds, rel-pos: 25, for: port-12, attrs: {function: link, states: 'Blue = all lanes linked, Red = not all lanes linked, Blinking = activity'}}
-        - {id: led-p13-a, ref: common/led-dot@1, at: [162.6, 28.35], group: port-leds, rel-pos: 26, for: port-13, attrs: {function: speed, states: 'Blue = 100G, Green = 40G'}}
-        - {id: led-p13-b, ref: common/led-dot@1, at: [166.6, 28.35], group: port-leds, rel-pos: 27, for: port-13, attrs: {function: link, states: 'Blue = all lanes linked, Red = not all lanes linked, Blinking = activity'}}
-        - {id: led-p14-a, ref: common/led-dot@1, at: [173.7, 28.35], group: port-leds, rel-pos: 28, for: port-14, attrs: {function: speed, states: 'Blue = 100G, Green = 40G'}}
-        - {id: led-p14-b, ref: common/led-dot@1, at: [177.7, 28.35], group: port-leds, rel-pos: 29, for: port-14, attrs: {function: link, states: 'Blue = all lanes linked, Red = not all lanes linked, Blinking = activity'}}
-        - {id: led-p15-a, ref: common/led-dot@1, at: [181.7, 28.35], group: port-leds, rel-pos: 30, for: port-15, attrs: {function: speed, states: 'Blue = 100G, Green = 40G'}}
-        - {id: led-p15-b, ref: common/led-dot@1, at: [185.7, 28.35], group: port-leds, rel-pos: 31, for: port-15, attrs: {function: link, states: 'Blue = all lanes linked, Red = not all lanes linked, Blinking = activity'}}
-        - {id: led-p16-a, ref: common/led-dot@1, at: [203.8, 28.35], group: port-leds, rel-pos: 32, for: port-16, attrs: {function: speed, states: 'Blue = 100G, Green = 40G'}}
-        - {id: led-p16-b, ref: common/led-dot@1, at: [207.8, 28.35], group: port-leds, rel-pos: 33, for: port-16, attrs: {function: link, states: 'Blue = all lanes linked, Red = not all lanes linked, Blinking = activity'}}
-        - {id: led-p17-a, ref: common/led-dot@1, at: [211.8, 28.35], group: port-leds, rel-pos: 34, for: port-17, attrs: {function: speed, states: 'Blue = 100G, Green = 40G'}}
-        - {id: led-p17-b, ref: common/led-dot@1, at: [215.8, 28.35], group: port-leds, rel-pos: 35, for: port-17, attrs: {function: link, states: 'Blue = all lanes linked, Red = not all lanes linked, Blinking = activity'}}
-        - {id: led-p18-a, ref: common/led-dot@1, at: [223.0, 28.35], group: port-leds, rel-pos: 36, for: port-18, attrs: {function: speed, states: 'Blue = 100G, Green = 40G'}}
-        - {id: led-p18-b, ref: common/led-dot@1, at: [227.0, 28.35], group: port-leds, rel-pos: 37, for: port-18, attrs: {function: link, states: 'Blue = all lanes linked, Red = not all lanes linked, Blinking = activity'}}
-        - {id: led-p19-a, ref: common/led-dot@1, at: [231.0, 28.35], group: port-leds, rel-pos: 38, for: port-19, attrs: {function: speed, states: 'Blue = 100G, Green = 40G'}}
-        - {id: led-p19-b, ref: common/led-dot@1, at: [235.0, 28.35], group: port-leds, rel-pos: 39, for: port-19, attrs: {function: link, states: 'Blue = all lanes linked, Red = not all lanes linked, Blinking = activity'}}
-        - {id: led-p20-a, ref: common/led-dot@1, at: [242.2, 28.35], group: port-leds, rel-pos: 40, for: port-20, attrs: {function: speed, states: 'Blue = 100G, Green = 40G'}}
-        - {id: led-p20-b, ref: common/led-dot@1, at: [246.2, 28.35], group: port-leds, rel-pos: 41, for: port-20, attrs: {function: link, states: 'Blue = all lanes linked, Red = not all lanes linked, Blinking = activity'}}
-        - {id: led-p21-a, ref: common/led-dot@1, at: [250.2, 28.35], group: port-leds, rel-pos: 42, for: port-21, attrs: {function: speed, states: 'Blue = 100G, Green = 40G'}}
-        - {id: led-p21-b, ref: common/led-dot@1, at: [254.2, 28.35], group: port-leds, rel-pos: 43, for: port-21, attrs: {function: link, states: 'Blue = all lanes linked, Red = not all lanes linked, Blinking = activity'}}
-        - {id: led-p26, ref: common/led-dot@1, at: [317.06, 26.06], group: port-leds, rel-pos: 52, for: port-26, attrs: {function: speed/link, states: 'Blue = 25G, Green = 10G, Blinking = activity'}}
-        - {id: led-p27, ref: common/led-dot@1, at: [322.93, 26.06], group: port-leds, rel-pos: 54, for: port-27, attrs: {function: speed/link, states: 'Blue = 25G, Green = 10G, Blinking = activity'}}
-        - {id: led-p28, ref: common/led-dot@1, at: [331.36, 26.06], group: port-leds, rel-pos: 56, for: port-28, attrs: {function: speed/link, states: 'Blue = 25G, Green = 10G, Blinking = activity'}}
-        - {id: led-p29, ref: common/led-dot@1, at: [337.23, 26.06], group: port-leds, rel-pos: 58, for: port-29, attrs: {function: speed/link, states: 'Blue = 25G, Green = 10G, Blinking = activity'}}
+        - {id: led-p0-a, ref: common/led-dot@1, at: [12.02, 36.19], group: qsfpdd-speed-leds, rel-pos: 0, for: port-0, attrs: {function: speed}}
+        - {id: led-p0-b, ref: common/led-dot@1, at: [12.02, 39.22], group: port-link-leds, rel-pos: 0, for: port-0, attrs: {function: link}}
+        - {id: led-p1-a, ref: common/led-dot@1, at: [12.02, 46.46], group: qsfpdd-speed-leds, rel-pos: 1, for: port-1, attrs: {function: speed}}
+        - {id: led-p1-b, ref: common/led-dot@1, at: [12.02, 49.45], group: port-link-leds, rel-pos: 1, for: port-1, attrs: {function: link}}
+        - {id: led-p2-a, ref: common/led-dot@1, at: [56.06, 36.19], group: qsfpdd-speed-leds, rel-pos: 2, for: port-2, attrs: {function: speed}}
+        - {id: led-p2-b, ref: common/led-dot@1, at: [56.06, 39.22], group: port-link-leds, rel-pos: 2, for: port-2, attrs: {function: link}}
+        - {id: led-p3-a, ref: common/led-dot@1, at: [56.06, 46.46], group: qsfpdd-speed-leds, rel-pos: 3, for: port-3, attrs: {function: speed}}
+        - {id: led-p3-b, ref: common/led-dot@1, at: [56.06, 49.45], group: port-link-leds, rel-pos: 3, for: port-3, attrs: {function: link}}
+        - {id: led-p22-a, ref: common/led-dot@1, at: [264.21, 36.19], group: qsfpdd-speed-leds, rel-pos: 4, for: port-22, attrs: {function: speed}}
+        - {id: led-p22-b, ref: common/led-dot@1, at: [264.21, 39.22], group: port-link-leds, rel-pos: 22, for: port-22, attrs: {function: link}}
+        - {id: led-p23-a, ref: common/led-dot@1, at: [264.21, 46.46], group: qsfpdd-speed-leds, rel-pos: 5, for: port-23, attrs: {function: speed}}
+        - {id: led-p23-b, ref: common/led-dot@1, at: [264.21, 49.45], group: port-link-leds, rel-pos: 23, for: port-23, attrs: {function: link}}
+        - {id: led-p24-a, ref: common/led-dot@1, at: [308.15, 36.19], group: qsfpdd-speed-leds, rel-pos: 6, for: port-24, attrs: {function: speed}}
+        - {id: led-p24-b, ref: common/led-dot@1, at: [308.15, 39.22], group: port-link-leds, rel-pos: 24, for: port-24, attrs: {function: link}}
+        - {id: led-p25-a, ref: common/led-dot@1, at: [308.15, 46.46], group: qsfpdd-speed-leds, rel-pos: 7, for: port-25, attrs: {function: speed}}
+        - {id: led-p25-b, ref: common/led-dot@1, at: [308.15, 49.45], group: port-link-leds, rel-pos: 25, for: port-25, attrs: {function: link}}
+        - {id: led-p4-a, ref: common/led-dot@1, at: [67.0, 28.35], group: qsfp28-speed-leds, rel-pos: 0, for: port-4, attrs: {function: speed}}
+        - {id: led-p4-b, ref: common/led-dot@1, at: [71.0, 28.35], group: port-link-leds, rel-pos: 4, for: port-4, attrs: {function: link}}
+        - {id: led-p5-a, ref: common/led-dot@1, at: [75.0, 28.35], group: qsfp28-speed-leds, rel-pos: 1, for: port-5, attrs: {function: speed}}
+        - {id: led-p5-b, ref: common/led-dot@1, at: [79.0, 28.35], group: port-link-leds, rel-pos: 5, for: port-5, attrs: {function: link}}
+        - {id: led-p6-a, ref: common/led-dot@1, at: [86.2, 28.35], group: qsfp28-speed-leds, rel-pos: 2, for: port-6, attrs: {function: speed}}
+        - {id: led-p6-b, ref: common/led-dot@1, at: [90.2, 28.35], group: port-link-leds, rel-pos: 6, for: port-6, attrs: {function: link}}
+        - {id: led-p7-a, ref: common/led-dot@1, at: [94.2, 28.35], group: qsfp28-speed-leds, rel-pos: 3, for: port-7, attrs: {function: speed}}
+        - {id: led-p7-b, ref: common/led-dot@1, at: [98.2, 28.35], group: port-link-leds, rel-pos: 7, for: port-7, attrs: {function: link}}
+        - {id: led-p8-a, ref: common/led-dot@1, at: [105.2, 28.35], group: qsfp28-speed-leds, rel-pos: 4, for: port-8, attrs: {function: speed}}
+        - {id: led-p8-b, ref: common/led-dot@1, at: [109.2, 28.35], group: port-link-leds, rel-pos: 8, for: port-8, attrs: {function: link}}
+        - {id: led-p9-a, ref: common/led-dot@1, at: [113.2, 28.35], group: qsfp28-speed-leds, rel-pos: 5, for: port-9, attrs: {function: speed}}
+        - {id: led-p9-b, ref: common/led-dot@1, at: [117.2, 28.35], group: port-link-leds, rel-pos: 9, for: port-9, attrs: {function: link}}
+        - {id: led-p10-a, ref: common/led-dot@1, at: [135.5, 28.35], group: qsfp28-speed-leds, rel-pos: 6, for: port-10, attrs: {function: speed}}
+        - {id: led-p10-b, ref: common/led-dot@1, at: [139.5, 28.35], group: port-link-leds, rel-pos: 10, for: port-10, attrs: {function: link}}
+        - {id: led-p11-a, ref: common/led-dot@1, at: [143.5, 28.35], group: qsfp28-speed-leds, rel-pos: 7, for: port-11, attrs: {function: speed}}
+        - {id: led-p11-b, ref: common/led-dot@1, at: [147.5, 28.35], group: port-link-leds, rel-pos: 11, for: port-11, attrs: {function: link}}
+        - {id: led-p12-a, ref: common/led-dot@1, at: [154.6, 28.35], group: qsfp28-speed-leds, rel-pos: 8, for: port-12, attrs: {function: speed}}
+        - {id: led-p12-b, ref: common/led-dot@1, at: [158.6, 28.35], group: port-link-leds, rel-pos: 12, for: port-12, attrs: {function: link}}
+        - {id: led-p13-a, ref: common/led-dot@1, at: [162.6, 28.35], group: qsfp28-speed-leds, rel-pos: 9, for: port-13, attrs: {function: speed}}
+        - {id: led-p13-b, ref: common/led-dot@1, at: [166.6, 28.35], group: port-link-leds, rel-pos: 13, for: port-13, attrs: {function: link}}
+        - {id: led-p14-a, ref: common/led-dot@1, at: [173.7, 28.35], group: qsfp28-speed-leds, rel-pos: 10, for: port-14, attrs: {function: speed}}
+        - {id: led-p14-b, ref: common/led-dot@1, at: [177.7, 28.35], group: port-link-leds, rel-pos: 14, for: port-14, attrs: {function: link}}
+        - {id: led-p15-a, ref: common/led-dot@1, at: [181.7, 28.35], group: qsfp28-speed-leds, rel-pos: 11, for: port-15, attrs: {function: speed}}
+        - {id: led-p15-b, ref: common/led-dot@1, at: [185.7, 28.35], group: port-link-leds, rel-pos: 15, for: port-15, attrs: {function: link}}
+        - {id: led-p16-a, ref: common/led-dot@1, at: [203.8, 28.35], group: qsfp28-speed-leds, rel-pos: 12, for: port-16, attrs: {function: speed}}
+        - {id: led-p16-b, ref: common/led-dot@1, at: [207.8, 28.35], group: port-link-leds, rel-pos: 16, for: port-16, attrs: {function: link}}
+        - {id: led-p17-a, ref: common/led-dot@1, at: [211.8, 28.35], group: qsfp28-speed-leds, rel-pos: 13, for: port-17, attrs: {function: speed}}
+        - {id: led-p17-b, ref: common/led-dot@1, at: [215.8, 28.35], group: port-link-leds, rel-pos: 17, for: port-17, attrs: {function: link}}
+        - {id: led-p18-a, ref: common/led-dot@1, at: [223.0, 28.35], group: qsfp28-speed-leds, rel-pos: 14, for: port-18, attrs: {function: speed}}
+        - {id: led-p18-b, ref: common/led-dot@1, at: [227.0, 28.35], group: port-link-leds, rel-pos: 18, for: port-18, attrs: {function: link}}
+        - {id: led-p19-a, ref: common/led-dot@1, at: [231.0, 28.35], group: qsfp28-speed-leds, rel-pos: 15, for: port-19, attrs: {function: speed}}
+        - {id: led-p19-b, ref: common/led-dot@1, at: [235.0, 28.35], group: port-link-leds, rel-pos: 19, for: port-19, attrs: {function: link}}
+        - {id: led-p20-a, ref: common/led-dot@1, at: [242.2, 28.35], group: qsfp28-speed-leds, rel-pos: 16, for: port-20, attrs: {function: speed}}
+        - {id: led-p20-b, ref: common/led-dot@1, at: [246.2, 28.35], group: port-link-leds, rel-pos: 20, for: port-20, attrs: {function: link}}
+        - {id: led-p21-a, ref: common/led-dot@1, at: [250.2, 28.35], group: qsfp28-speed-leds, rel-pos: 17, for: port-21, attrs: {function: speed}}
+        - {id: led-p21-b, ref: common/led-dot@1, at: [254.2, 28.35], group: port-link-leds, rel-pos: 21, for: port-21, attrs: {function: link}}
+        - {id: led-p26, ref: common/led-dot@1, at: [317.06, 26.06], group: sfp28-port-leds, rel-pos: 0, for: port-26, attrs: {function: speed/link}}
+        - {id: led-p27, ref: common/led-dot@1, at: [322.93, 26.06], group: sfp28-port-leds, rel-pos: 1, for: port-27, attrs: {function: speed/link}}
+        - {id: led-p28, ref: common/led-dot@1, at: [331.36, 26.06], group: sfp28-port-leds, rel-pos: 2, for: port-28, attrs: {function: speed/link}}
+        - {id: led-p29, ref: common/led-dot@1, at: [337.23, 26.06], group: sfp28-port-leds, rel-pos: 3, for: port-29, attrs: {function: speed/link}}
         - {id: bits-0, ref: std/rj45@1, at: [356.2, 14.4], rotate: 180, group: timing, rel-pos: 0}
         - {id: bits-2, ref: std/rj45@1, at: [372.2, 14.4], rotate: 180, group: timing, rel-pos: 1}
         - {id: bits-1, ref: std/rj45@1, at: [356.2, 28.4], group: timing, rel-pos: 2}
@@ -345,17 +380,23 @@ views:
         - {id: mhz-10-in, ref: std/smb@1, at: [393.81, 18.01], group: timing, rel-pos: 4}
         - {id: pps-1-out, ref: std/smb@1, at: [393.81, 30.53], group: timing, rel-pos: 5}
         - {id: usb, ref: std/usb-a@1, at: [403.79, 28.77], rotate: 90, group: mgmt, rel-pos: 0}
-        - {id: mgmt-eth, ref: std/rj45@1, at: [415.7, 28.3], rotate: 180, group: mgmt, rel-pos: 1, attrs: {leds: 'Left = link, Right = activity'}}
-        - {id: led-mgmt-link, ref: common/led-rect@1, at: [417.2, 29.3], group: mgmt-leds, rel-pos: 0, for: mgmt-eth, attrs: {function: link, states: Lit = link}}
-        - {id: led-mgmt-act, ref: common/led-rect@1, at: [426.2, 29.3], group: mgmt-leds, rel-pos: 1, for: mgmt-eth, attrs: {function: activity, states: Blinking = activity}}
+        - {id: mgmt-eth, ref: std/rj45@1, at: [415.7, 28.3], rotate: 180, group: mgmt, rel-pos: 1}
+        - {id: led-mgmt-link, ref: common/led-rect@1, at: [417.2, 29.3], group: mgmt-leds, rel-pos: 0, for: mgmt-eth, attrs: {function: link},
+           description: 'left lamp: link. The QSG gives it no colour'}
+        - {id: led-mgmt-act, ref: common/led-rect@1, at: [426.2, 29.3], group: mgmt-leds, rel-pos: 1, for: mgmt-eth, attrs: {function: activity},
+           states: ['off', activity], description: 'right lamp: activity. The QSG gives it no colour'}
         - {id: console-1, ref: std/rj45@1, at: [415.7, 45.3], rotate: 180, group: mgmt, rel-pos: 3}
         - {id: console-0, ref: std/micro-usb@1, at: [404.0, 46.4], group: mgmt, rel-pos: 2}
         - {id: reset, ref: common/reset-button@1, at: [394.5, 45.4], group: mgmt, rel-pos: 4}
-        - {id: led-diag, ref: common/led-rect@1, at: [359.2, 48.6], group: status-leds, rel-pos: 0, attrs: {function: DIAG, states: 'Green = OK, Amber = fault detected'}}
-        - {id: led-loc, ref: common/led-rect@1, at: [364.5, 48.6], group: status-leds, rel-pos: 1, attrs: {function: LOC, states: Flashes Amber when the locate command is activated}}
-        - {id: led-fan, ref: common/led-rect@1, at: [369.7, 48.6], group: status-leds, rel-pos: 2, attrs: {function: FAN, states: 'Green = OK, Amber = fault'}}
-        - {id: led-ps0, ref: common/led-rect@1, at: [374.8, 48.6], group: status-leds, rel-pos: 3, attrs: {function: PS0, states: 'Green = OK, Amber = fault'}}
-        - {id: led-ps1, ref: common/led-rect@1, at: [379.7, 48.6], group: status-leds, rel-pos: 4, attrs: {function: PS1, states: 'Green = OK, Amber = fault'}}
+        - {id: led-diag, ref: common/led-rect@1, at: [359.2, 48.6], group: status-leds, rel-pos: 0, attrs: {function: DIAG},
+           description: 'DIAG - Green (OK), Amber (fault detected)'}
+        - {id: led-loc, ref: common/led-rect@1, at: [364.5, 48.6], group: status-leds, rel-pos: 1, attrs: {function: LOC},
+           states: ['off', {name: locate, color: '#f59e0b'}],
+           description: 'LOC - flashes Amber when the command is activated. The only status
+             lamp here that is not Green (OK) / Amber (fault)'}
+        - {id: led-fan, ref: common/led-rect@1, at: [369.7, 48.6], group: status-leds, rel-pos: 2, attrs: {function: FAN}}
+        - {id: led-ps0, ref: common/led-rect@1, at: [374.8, 48.6], group: status-leds, rel-pos: 3, attrs: {function: PS0}}
+        - {id: led-ps1, ref: common/led-rect@1, at: [379.7, 48.6], group: status-leds, rel-pos: 4, attrs: {function: PS1}}
   rear:
     size:
       w: 440.0

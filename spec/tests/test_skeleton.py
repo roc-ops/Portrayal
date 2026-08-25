@@ -6,6 +6,7 @@ from pathlib import Path
 SPEC = Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library"
 DEVICE = LIB / "devices/edgecore/as7726-32x/device.yaml"
+LAMPS = LIB / "devices/edgecore/as7946-30xb/device.yaml"
 
 
 def run(*args):
@@ -53,3 +54,33 @@ def test_compiled_ids_and_attrs(tmp_path):
     # metadata embeds source + resolved versions, no timestamps
     assert '"resolved-components"' in front
     assert '"tool":"portrayal-render"' in front
+
+
+def test_declared_states_reach_the_lamp_and_paint(tmp_path):
+    """A state vocabulary declared on a group or a placement must reach the drawing.
+
+    The bug this pins: `states:` used to exist only on the component, so the same
+    common/led-dot was a generic four-state lamp whether it was a speed lamp on a
+    QSFP28 or a link lamp beside it. The device's real semantics lived in
+    attrs: {states: 'Blue = 100G, Green = 40G'} where nothing could read them - and
+    the tree reads the INNERMOST data-states, so overriding only the outer <g>
+    would have looked fixed and changed nothing.
+    """
+    run(SPEC / "tools/portrayal/render.py", LAMPS, "--library", LIB, "--out", tmp_path)
+    front = (tmp_path / "as7946-30xb.front.svg").read_text()
+    # declared once on the group, reaching all eighteen QSFP28 speed lamps...
+    assert front.count('data-states="off 100g 40g"') == 36     # instance + lamp, x18
+    assert 'id="led-p4-a--lamp" ' in front
+    assert front.count('data-states="off 400g 100g"') == 16    # the eight QSFP-DD, x2
+    assert front.count('data-states="off linked partial activity"') == 52   # 26 link lamps
+    # ...and a placement still overrides its group: LOC is not Green/Amber ok/fault
+    assert 'id="led-loc"' in front and 'data-states="off locate"' in front
+    assert 'data-states="off ok fault"' in front               # the other four status lamps
+    # a declared state paints: an id rule beats the component's own rule
+    assert "#led-p4-a .state-100g" in front and "--led-color: #3b82f6" in front
+    assert "#led-loc .state-locate" in front
+    # the prose is kept, as prose, beside the tokens - not instead of them
+    assert 'data-description="QSG Front LEDs callout 2' in front
+    assert "Blue (100G), Green (40G)" in front
+    # and the fake states string is gone from the embedded source manifest with it
+    assert "Blue = 100G" not in front
