@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Portrayal — annotate</title>
+<style>
+  /* The shell brings its own stylesheet. Everything here is the Annotator's own:
+     the marks panel down the right of the tree, and the export bar under it. */
+  #marks { width:28rem; border-left:1px solid var(--line); background:var(--panel);
+           display:flex; flex-direction:column; min-height:0; }
+  #marks section { border-bottom:1px solid var(--line); padding:0.5rem 0.65rem; }
+  #marks section.grow { flex:1; overflow:auto; min-height:6rem; padding-top:0.35rem; }
+  #marks h2 { font-size:0.68rem; text-transform:uppercase; letter-spacing:0.06em;
+              color:var(--dim); margin:0 0 0.4rem; font-weight:600;
+              display:flex; align-items:center; gap:0.4rem; }
+  #marks h2 .sp { flex:1; }
+  #marks h2 button { font-size:0.68rem; padding:0.1rem 0.4rem; text-transform:none;
+                     letter-spacing:0; }
+  .rules { display:flex; flex-wrap:wrap; gap:0.28rem; }
+  .rules button { font-size:0.69rem; padding:0.12rem 0.42rem; }
+  .rules button .n { color:var(--dim); margin-left:0.3rem; font-variant-numeric:tabular-nums; }
+  .rules button.grp { border-style:dashed; }
+  .selbox { display:flex; gap:0.3rem; }
+  .selbox input { flex:1; min-width:0; font-family:ui-monospace, monospace; font-size:0.72rem; }
+  .selbox input.bad { border-color:var(--bad); }
+
+  /* One mark is two dense lines plus whatever it has to complain about. Grid
+     rather than flex so the colour, the state and the label line up down the
+     column: a document of ten marks is read column-wise, not row-wise. */
+  .mark { border:1px solid #262b30; border-radius:6px; padding:0.32rem 0.4rem;
+          margin-bottom:0.3rem; background:#1a1e22; }
+  .mark.dead { opacity:0.62; border-style:dashed; }
+  .mark.bad { border-color:#5b2626; }
+  .mark .l1 { display:flex; gap:0.3rem; align-items:center; }
+  .mark .l1 input { flex:1; min-width:0; font-family:ui-monospace, monospace; font-size:0.71rem;
+                    padding:0.14rem 0.35rem; }
+  .mark .l2 { display:flex; gap:0.3rem; align-items:center; margin-top:0.28rem; }
+  .mark .l2 select { max-width:8rem; }
+  .mark .l2 .lab { flex:1; min-width:0; padding:0.14rem 0.35rem; }
+  .mark .idx { color:var(--dim); font-size:0.66rem; width:1.1rem; flex:none;
+               text-align:right; font-variant-numeric:tabular-nums; }
+  .mark .cnt { font-size:0.68rem; color:var(--dim); white-space:nowrap;
+               font-variant-numeric:tabular-nums; }
+  .mark .cnt b { color:var(--ink); font-weight:600; }
+  .mark.dead .cnt b { color:var(--warn); }
+  .mark .x, .mark .mv { padding:0.05rem 0.32rem; font-size:0.72rem; line-height:1.2; }
+  .mark input[type=color] { width:1.6rem; height:1.25rem; padding:0; border:none;
+                            background:none; cursor:pointer; flex:none; }
+  .mark input[type=checkbox] { accent-color:var(--accent); margin:0; }
+  .mark .note { font-size:0.67rem; line-height:1.4; margin-top:0.24rem; }
+  .note.err { color:var(--bad); font-family:ui-monospace, monospace; word-break:break-all; }
+  .note.warn { color:var(--warn); }
+  .note.dim { color:var(--dim); }
+  .empty { color:var(--dim); font-size:0.72rem; line-height:1.5; padding:0.3rem 0.1rem; }
+
+  .btns { display:flex; flex-wrap:wrap; gap:0.3rem; align-items:center; }
+  .btns button { font-size:0.71rem; padding:0.18rem 0.45rem; }
+  #share { width:100%; font-family:ui-monospace, monospace; font-size:0.67rem;
+           margin-top:0.32rem; }
+  .msg { color:var(--dim); font-size:0.7rem; min-height:1.1em; margin-top:0.3rem;
+         line-height:1.4; word-break:break-word; }
+  .msg.bad { color:var(--bad); }
+  .msg.good { color:#22c55e; }
+  /* the tree says which rows a mark reached: the same colour, in the same place,
+     as the swatch in the panel */
+  .node .pm { width:0.5rem; height:0.5rem; border-radius:50%; flex:none;
+              margin-left:0.15rem; }
+  :root { --bad:#ef4444; }
+</style>
+</head>
+<body>
+<script type="module">
+import { createShell, esc } from './shell.js';
+import * as marks from './marks.js';
+
+const shell = createShell({title: 'Portrayal annotate'});
+const state = shell.state;
+
+// The document. Everything on this page is a view of this object, and nothing
+// else is state: the panel, the stage, the exports and the URL are all built
+// from it. That is the whole point of the schema - a UI that keeps its own
+// parallel model would be a second source of truth for an MCP client to
+// disagree with.
+let doc = {v: 1, device: '', config: '', view: '', legend: true, marks: []};
+let report = [];
+let hadLegend = false;
+
+const NEXT = ['#ff2d95', '#00e676', '#00d5ff', '#ffd400', '#ff6d00', '#b388ff', '#ffffff'];
+const nextColor = () => NEXT[doc.marks.length % NEXT.length];
+
+// ---------------------------------------------------------------- panel shell
+
+const panel = document.createElement('aside');
+panel.id = 'marks';
+panel.innerHTML = `
+<section>
+  <h2>rules<span class="sp"></span>
+    <button id="addsel" title="Add a mark for the current selection">+ selection</button>
+    <button id="clickadd" class="on" title="Clicking a part in the stage or the tree adds a mark for it">click adds</button>
+  </h2>
+  <div class="rules" id="rules"></div>
+</section>
+<section>
+  <h2>selector</h2>
+  <div class="selbox">
+    <input id="sel" spellcheck="false" placeholder="any CSS selector, e.g. [data-group='qsfp28'] [data-class='led']">
+    <button id="seladd">Add</button>
+  </div>
+  <div class="msg" id="selmsg"></div>
+</section>
+<section class="grow">
+  <h2>marks<span class="sp"></span>
+    <span class="msg" id="perf" style="margin:0"></span>
+    <button id="clearall">clear all</button>
+  </h2>
+  <div id="rows"></div>
+</section>
+<section>
+  <h2>export</h2>
+  <div class="btns">
+    <button data-act="svg-save">SVG</button>
+    <button data-act="svg-open">open ↗</button>
+    <button data-act="png-4">PNG 4</button>
+    <button data-act="png-8">8</button>
+    <button data-act="png-16">16 px/mm</button>
+    <button data-act="share">share URL</button>
+    <label class="f" style="margin-left:auto"><input type="checkbox" id="legend" checked> legend</label>
+  </div>
+  <input id="share" readonly placeholder="share URL appears here">
+  <div class="msg" id="expmsg"></div>
+</section>`;
+shell.el.main.appendChild(panel);
+
+const $ = s => panel.querySelector(s);
+const say = (sel, text, cls) => {
+  const el = $(sel); el.textContent = text; el.className = `msg ${cls || ''}`.trim();
+};
+
+// ---------------------------------------------------------------- the document
+
+// device/config/view are FIELDS OF THE DOCUMENT, not page state, and apply()
+// deliberately ignores them - a document applied to the wrong drawing looks
+// exactly like a document full of bad selectors. So the two are kept in step in
+// both directions: the shell's bar writes the document, and a document arriving
+// from a share URL moves the shell's bar.
+function writeTarget() {
+  doc.device = state.device || '';
+  doc.config = state.cfg || '';
+  doc.view = state.view || '';
+}
+
+/** @returns true if the shell is reloading, in which case its 'load' re-enters. */
+async function retarget(d) {
+  if (d.device && d.device !== state.device) {
+    if (!shell.devices().some(x => x.name === d.device)) {
+      say('#expmsg', `no such device: ${d.device}`, 'bad');
+      return false;
+    }
+    await shell.loadDevice(d.device);
+    // loadDevice resets config and view to the device's defaults, so the rest of
+    // the target has to be replayed against the device we have just arrived at
+    return await retarget({...d, device: ''}) || true;
+  }
+  for (const [key, sel] of [['config', shell.el.cfg], ['view', shell.el.view]]) {
+    const want = d[key];
+    if (!want || want === sel.value) continue;
+    if (![...sel.options].some(o => o.value === want)) {
+      say('#expmsg', `this device has no ${key} '${want}'`, 'bad');
+      continue;
+    }
+    sel.value = want;
+    // the shell's own handler owns the reload: it also re-reads the config's bay
+    // occupancy, which setting state.cfg by hand would skip
+    sel.dispatchEvent(new Event('change'));
+    return true;
+  }
+  return false;
+}
+
+function addMark(m) {
+  doc.marks.push({select: '', color: '', state: '', label: '', ...m});
+  render();
+  // a mark you cannot see is a mark you cannot fix
+  $('#rows').lastElementChild?.scrollIntoView({block: 'nearest'});
+}
+
+// ---------------------------------------------------------------- apply
+
+let timer = null;
+const schedule = () => { clearTimeout(timer); timer = setTimeout(render, 160); };
+
+function render(opts = {}) {
+  clearTimeout(timer);
+  if (!state.svg) return;
+  const t0 = performance.now();
+  report = marks.apply(state.svg, doc);
+  const ms = Math.round(performance.now() - t0);
+  // The legend grows the root viewBox, so appearing or disappearing moves the
+  // whole drawing. Refit for that, but NOT for a label getting longer: refitting
+  // on every keystroke throws away the zoom someone spent time on.
+  const has = !!state.svg.querySelector('#portrayal-legend');
+  if (opts.fit || has !== hadLegend) shell.fit();
+  hadLegend = has;
+  drawRows();
+  drawTreeDots();
+  $('#perf').textContent = report.length
+    ? `${report.length} mark${report.length === 1 ? '' : 's'} · ${ms} ms` : '';
+}
+
+// ---------------------------------------------------------------- rows
+
+// Which states does the drawing actually PAINT? Applying a state only changes
+// what you see if the stylesheet has a rule for it, and several components
+// declare states nobody wrote CSS for - the AGR400's port LEDs offer `link`,
+// and `state-link` sets a class no rule matches. Rather than hardcode render.py's
+// list (which per-component `palette:` extends anyway), ask the drawing: park a
+// probe beside the element, with and without the class, and see whether anything
+// computed moves. The answer is then true for THIS drawing, palettes included.
+const NS = 'http://www.w3.org/2000/svg';
+const paintCache = new Map();
+function paints(el, st) {
+  if (!el || !st) return true;
+  const host = el.parentNode && el.parentNode.nodeType === 1 ? el.parentNode : el;
+  // A palette rule is scoped `g[data-ref^='comp@'] .state-x`, so the answer
+  // varies by the component the element sits in and by nothing else - that is
+  // the cache key.
+  let ref = '';
+  for (let p = host; p && p.nodeType === 1 && !ref; p = p.parentNode)
+    ref = p.getAttribute('data-ref') || '';
+  const key = `${st}|${ref}`;
+  if (paintCache.has(key)) return paintCache.get(key);
+  const probe = document.createElementNS(NS, 'g');
+  host.appendChild(probe);
+  const read = () => {
+    const cs = getComputedStyle(probe);
+    return cs.getPropertyValue('--led-color').trim() + '|' + cs.opacity;
+  };
+  const base = read();
+  probe.setAttribute('class', 'state-' + st);
+  const lit = read();
+  probe.remove();
+  const ok = base !== lit;
+  paintCache.set(key, ok);
+  return ok;
+}
+
+// The stylesheet's own vocabulary, for a state a match does not declare. Offered
+// separately and second: choosing one is a claim about the hardware the model
+// does not support, and marks.js says so in `warning`.
+const GLOBAL_STATES = ['up', 'activity', 'ok', 'fault', 'fail', 'locate', 'absent'];
+
+function firstMatch(sel) {
+  try { return state.svg.querySelector(sel); } catch (e) { return null; }
+}
+
+function stateOptions(r, cur) {
+  const el = firstMatch(r.select);
+  const declared = r.states || [];
+  const opt = (v, label, sel) =>
+    `<option value="${esc(v)}"${sel ? ' selected' : ''}>${esc(label)}</option>`;
+  let h = opt('', '— no state —', !cur);
+  if (declared.length) {
+    h += `<optgroup label="declared here">`;
+    for (const s of declared)
+      h += opt(s, paints(el, s) ? s : `${s} — no CSS`, s === cur);
+    h += `</optgroup>`;
+  }
+  const rest = GLOBAL_STATES.filter(s => !declared.includes(s));
+  if (rest.length) {
+    h += `<optgroup label="${declared.length ? 'not declared here' : 'stylesheet states'}">`;
+    for (const s of rest) h += opt(s, s, s === cur);
+    h += `</optgroup>`;
+  }
+  // a state typed into a share URL, or sent by an MCP client, that is in neither list
+  if (cur && !declared.includes(cur) && !rest.includes(cur))
+    h += opt(cur, `${cur} — unknown`, true);
+  return h;
+}
+
+function drawRows() {
+  const box = $('#rows');
+  if (!doc.marks.length) {
+    box.innerHTML = `<div class="empty">No marks yet. Click a part in the drawing or the
+      tree, press a rule above, or type a selector. Every one of the three writes the
+      same <code>select</code> field.</div>`;
+    return;
+  }
+  box.innerHTML = doc.marks.map((m, i) => {
+    const r = report[i] || {count: 0, total: 0, states: [], error: null, warning: null};
+    const dead = !r.error && r.count === 0;
+    const notes = [];
+    if (r.error) notes.push(`<div class="note err">skipped — ${esc(r.error)}</div>`);
+    else if (dead) notes.push(`<div class="note warn">matches nothing in this
+      ${esc(state.view)} view of ${esc(state.device)}${m.label
+        ? ' — but it will still take a row in the legend' : ''}.</div>`);
+    if (r.warning) notes.push(`<div class="note warn">${esc(r.warning)}</div>`);
+    if (m.state && !r.error && r.count && !paints(firstMatch(m.select), m.state))
+      notes.push(`<div class="note warn">nothing in this drawing paints
+        <code>state-${esc(m.state)}</code>: the class is set, the picture does not change.</div>`);
+    // count and total differ by up to 2x wherever the art nests a group and a
+    // leaf that both match. Showing one of them alone is how you end up arguing
+    // with the drawing about how many ports it has.
+    const cnt = `<b>${r.count}</b> part${r.count === 1 ? '' : 's'}` +
+      (r.total !== r.count ? ` <span title="raw selector hits, before nested matches were collapsed">· ${r.total} hits</span>` : '');
+    return `<div class="mark${dead ? ' dead' : ''}${r.error ? ' bad' : ''}" data-i="${i}">
+      <div class="l1">
+        <span class="idx">${i + 1}</span>
+        <input class="sel" value="${esc(m.select)}" spellcheck="false">
+        <span class="cnt">${cnt}</span>
+        <button class="x" title="delete">✕</button>
+      </div>
+      <div class="l2">
+        <input type="checkbox" class="paint"${m.color ? ' checked' : ''} title="paint a halo in this colour">
+        <input type="color" class="col" value="${esc(m.color || nextColor())}">
+        <select class="st" title="add state-&lt;name&gt; to every match">${stateOptions({...r, select: m.select}, m.state)}</select>
+        <input class="lab" value="${esc(m.label)}" placeholder="legend label">
+        <button class="mv" data-d="-1" title="earlier in paint order">↑</button>
+        <button class="mv" data-d="1" title="later in paint order">↓</button>
+      </div>
+      ${notes.join('')}
+    </div>`;
+  }).join('');
+}
+
+// Edits are delegated, so a redraw of the list cannot leave a listener behind on
+// a row that no longer exists.
+$('#rows').addEventListener('input', ev => {
+  const row = ev.target.closest('.mark'); if (!row) return;
+  const m = doc.marks[+row.dataset.i]; if (!m) return;
+  const t = ev.target;
+  if (t.classList.contains('sel')) m.select = t.value;
+  else if (t.classList.contains('lab')) m.label = t.value;
+  else if (t.classList.contains('col')) { m.color = t.value; row.querySelector('.paint').checked = true; }
+  else if (t.classList.contains('paint')) m.color = t.checked ? row.querySelector('.col').value : '';
+  else return;
+  schedule();
+});
+$('#rows').addEventListener('change', ev => {
+  const row = ev.target.closest('.mark'); if (!row) return;
+  const m = doc.marks[+row.dataset.i]; if (!m) return;
+  if (!ev.target.classList.contains('st')) return;
+  m.state = ev.target.value;
+  render();
+});
+$('#rows').addEventListener('click', ev => {
+  const row = ev.target.closest('.mark'); if (!row) return;
+  const i = +row.dataset.i;
+  if (ev.target.classList.contains('x')) { doc.marks.splice(i, 1); render(); }
+  else if (ev.target.classList.contains('mv')) {
+    const j = i + (+ev.target.dataset.d);
+    if (j < 0 || j >= doc.marks.length) return;
+    [doc.marks[i], doc.marks[j]] = [doc.marks[j], doc.marks[i]];
+    render();
+  }
+});
+$('#clearall').onclick = () => { doc.marks = []; render(); };
+
+// ---------------------------------------------------------------- tree dots
+
+// apply() puts `pm-<index>` on everything it marked, so the tree can say which
+// rows a rule actually reached without this page re-running any selector.
+const markOf = el => {
+  const hit = [...el.classList].map(c => /^pm-(\d+)$/.exec(c)).filter(Boolean).pop();
+  return hit ? +hit[1] : null;
+};
+function drawTreeDots() {
+  // one pass over the drawing rather than one query per tree row: the AS7946's
+  // front face is 3600 elements and its tree is 200 rows
+  const byPath = new Map();
+  for (const e of state.svg.querySelectorAll('[data-path]'))
+    if (!byPath.has(e.dataset.path)) byPath.set(e.dataset.path, e);
+  for (const row of shell.el.tree.querySelectorAll('.node[data-path]')) {
+    row.querySelector('.pm')?.remove();
+    const el = byPath.get(row.dataset.path);
+    if (!el) continue;
+    // a marked part may be a child of this row rather than the row itself
+    const idx = markOf(el) ?? (() => {
+      const k = el.querySelector('[class*="pm-"]');
+      return k ? markOf(k) : null;
+    })();
+    if (idx == null) continue;
+    const m = doc.marks[idx];
+    const dot = document.createElement('span');
+    dot.className = 'pm';
+    dot.style.background = m?.color || 'transparent';
+    dot.style.boxShadow = m?.color ? 'none' : 'inset 0 0 0 1px var(--dim)';
+    dot.title = `mark ${idx + 1}${m?.label ? ` — ${m.label}` : ''}`;
+    row.querySelector('.tw').after(dot);
+  }
+}
+
+// ---------------------------------------------------------------- three inputs
+
+// 1. Click. The shell already emits a selection for a click on the stage AND for
+//    a click on a tree row, so both arrive here as the same event.
+let clickAdds = true;
+$('#clickadd').onclick = () => {
+  clickAdds = !clickAdds;
+  $('#clickadd').classList.toggle('on', clickAdds);
+};
+
+// Dragging the stage to pan ends in a click on whatever was under the pointer,
+// and the shell turns that into a selection. On the Explorer that is harmless -
+// you inspect a part you did not mean to. Here it would silently add a mark
+// every time you moved the drawing, so a selection that came out of a drag adds
+// nothing. Measured, not thresholded to zero: a click always jitters a pixel.
+let dragged = false;
+shell.el.svgHost.addEventListener('pointerdown', e => {
+  const x0 = e.clientX, y0 = e.clientY;
+  dragged = false;
+  const move = ev => { if (Math.hypot(ev.clientX - x0, ev.clientY - y0) > 4) dragged = true; };
+  shell.el.svgHost.addEventListener('pointermove', move);
+  addEventListener('pointerup', () => shell.el.svgHost.removeEventListener('pointermove', move),
+                   {once: true});
+}, true);
+
+shell.on('select', (path, target, fromTree) => {
+  if (!clickAdds || !path) return;
+  if (!fromTree && dragged) return;
+  addForPath(path);
+});
+$('#addsel').onclick = () => {
+  if (!state.sel) return say('#selmsg', 'nothing selected', 'bad');
+  addForPath(state.sel);
+};
+function addForPath(path) {
+  const select = `[data-path='${path}']`;
+  const i = doc.marks.findIndex(m => m.select === select);
+  // clicking the same part twice is how you undo a mis-click, not how you draw
+  // two haloes around one port
+  if (i >= 0) { doc.marks.splice(i, 1); render(); return; }
+  addMark({select, color: nextColor(), label: path.split('/').pop()});
+}
+
+// 2. Rules. The canonical set from demo/interactive.html, plus one button per
+//    data-group the drawing actually carries - that is what "a named region"
+//    means on a device whose author drew no <region>. Every button is built
+//    against the LOADED drawing and a rule that matches nothing is not offered:
+//    a rule button that cannot work is worse than no button, and the AS7946's
+//    front face has no data-speed at all.
+const CANON = [
+  ['100G ports', "[data-speed='100g']"],
+  ['10G ports', "[data-speed='10g']"],
+  ['RJ45', "[data-media='rj45'],[data-media='rj45-serial']"],
+  ['ports', "[data-class='port']"],
+  ['LEDs', "[data-class='led']"],
+  ['regions', "[data-class='region']"],
+  ['bays', "[data-class='bay']"],
+  ['PSUs', "[data-class='psu']"],
+  ['fans', "[data-class='fan']"],
+  // "the whole device" cannot be spelled as a selector - querySelectorAll never
+  // returns the node it was called on, so nothing addresses the SVG root. The
+  // faceplate rect is the nearest true thing, and it is a descendant.
+  ['faceplate', "[data-class='chassis']"],
+];
+
+function buildRules() {
+  const box = $('#rules');
+  box.innerHTML = '';
+  const groups = [...new Set([...state.svg.querySelectorAll('[data-group]')]
+    .map(e => e.dataset.group))].sort();
+  const all = CANON.concat(groups.map(g => [g, `[data-group='${g}']`, true]));
+  let offered = 0;
+  for (const [label, select, isGroup] of all) {
+    let n = 0;
+    try { n = state.svg.querySelectorAll(select).length; } catch (e) { n = 0; }
+    if (!n) continue;
+    offered++;
+    const b = document.createElement('button');
+    b.className = isGroup ? 'grp' : '';
+    b.innerHTML = `${esc(label)}<span class="n">${n}</span>`;
+    b.title = select;
+    b.onclick = () => addMark({select, color: nextColor(), label});
+    box.appendChild(b);
+  }
+  if (!offered) box.innerHTML = `<span class="empty">this view carries none of the
+    attributes the rules are written against</span>`;
+}
+
+// 3. A selector box. Typed CSS goes through verbatim - the reason the renderer
+//    emits stable ids and data-* is so a person, or an MCP client, can name a
+//    thing directly. Validated as you type only so the Add button can say why.
+const selInput = $('#sel');
+selInput.addEventListener('input', () => {
+  const v = selInput.value.trim();
+  if (!v) { selInput.classList.remove('bad'); return say('#selmsg', '', ''); }
+  try {
+    const n = state.svg.querySelectorAll(v).length;
+    selInput.classList.remove('bad');
+    say('#selmsg', `${n} element${n === 1 ? '' : 's'}${n ? '' : ' — nothing matches'}`,
+        n ? '' : 'bad');
+  } catch (e) {
+    selInput.classList.add('bad');
+    say('#selmsg', String(e.message || e), 'bad');
+  }
+});
+selInput.addEventListener('keydown', e => { if (e.key === 'Enter') $('#seladd').click(); });
+$('#seladd').onclick = () => {
+  const v = selInput.value.trim();
+  if (!v) return;
+  addMark({select: v, color: nextColor()});
+  selInput.value = '';
+  say('#selmsg', '', '');
+};
+
+// ---------------------------------------------------------------- export
+
+$('#legend').onchange = () => { doc.legend = $('#legend').checked; render(); };
+
+// toSvg() deep-clones the root it is given, INLINE STYLE INCLUDED - and the
+// shell's fit() writes `width/height/transform` onto that root every time you
+// zoom or pan. A transform on the root of an exported file is applied by every
+// consumer, so the drawing arrived in Word panned off its own viewBox and scaled
+// by whatever the stage happened to be showing: a quarter of a switch on a white
+// page. marks-harness.html never saw it because it sizes its stage from a
+// stylesheet and never writes an inline style at all.
+//
+// The fix belongs in marks.js - one removeAttribute in toSvg - but that file is
+// frozen, so the export is taken from a detached, style-stripped copy instead.
+// Cloning also means the live stage never flickers mid-export.
+const exportRoot = () => {
+  const c = state.svg.cloneNode(true);
+  c.removeAttribute('style');
+  return c;
+};
+
+function save(data, name, type) {
+  const url = URL.createObjectURL(new Blob([data], {type}));
+  const a = document.createElement('a');
+  a.href = url; a.download = name; a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+panel.querySelector('.btns').addEventListener('click', async ev => {
+  const act = ev.target.dataset.act;
+  if (!act || !state.svg) return;
+  const buttons = [...panel.querySelectorAll('.btns button')];
+  buttons.forEach(b => { b.disabled = true; });
+  try {
+    if (act.startsWith('svg')) {
+      const text = marks.toSvg(exportRoot(), doc);
+      const name = marks.filename(doc, 'svg');
+      const kb = (new Blob([text]).size / 1024).toFixed(0);
+      if (act === 'svg-save') save(text, name, 'image/svg+xml');
+      // a blob URL, not a data URL: opened standalone the file gets no CSS and no
+      // script from this page, which is the Word case exactly
+      else window.open(URL.createObjectURL(new Blob([text], {type: 'image/svg+xml'})), '_blank');
+      say('#expmsg', `${name} — ${kb} KB, self-contained`, 'good');
+    } else if (act.startsWith('png')) {
+      const pxmm = +act.split('-')[1];
+      const blob = await marks.toPng(exportRoot(), doc, pxmm);
+      const bmp = await createImageBitmap(blob);
+      save(blob, marks.filename(doc, 'png'), 'image/png');
+      say('#expmsg', `PNG ${bmp.width}×${bmp.height} at ${pxmm} px/mm — ` +
+        `${(blob.size / 1024).toFixed(0)} KB`, 'good');
+    } else if (act === 'share') {
+      const enc = marks.encode(doc);
+      // this page may be running in the tab shell's iframe, so the URL that is
+      // worth sharing is this document's own - opening it directly reproduces
+      // device, config, view and every mark from the hash alone
+      const url = `${location.origin}${location.pathname}#${enc}`;
+      history.replaceState(null, '', `#${enc}`);
+      $('#share').value = url;
+      $('#share').select();
+      try { await navigator.clipboard.writeText(url); say('#expmsg', `copied — ${url.length} chars`, 'good'); }
+      catch (e) { say('#expmsg', `${url.length} chars — select and copy`, ''); }
+    }
+  } catch (e) {
+    say('#expmsg', `${act} failed: ${e.message || e}`, 'bad');
+  } finally {
+    buttons.forEach(b => { b.disabled = false; });
+  }
+});
+
+// ---------------------------------------------------------------- wiring
+
+// Every reload of the drawing - device, config, view, a bay swap, drilling into
+// a module - invalidates the matches and the rules, and the marks stay: a
+// selector is written against the hardware, not against one drawing of it, so
+// switching from front to rear SHOULD leave the port rules reading zero rather
+// than quietly deleting them.
+shell.on('load', () => {
+  paintCache.clear();
+  writeTarget();
+  buildRules();
+  render({fit: true});
+});
+
+// The tree is rebuilt whole on a bay swap, which drops the dots with it. 'row'
+// fires once per row, so the repaint is coalesced to one pass at the end of the
+// rebuild rather than run two hundred times.
+let dotJob = null;
+shell.on('row', () => {
+  clearTimeout(dotJob);
+  dotJob = setTimeout(drawTreeDots, 0);
+});
+
+await shell.ready;
+
+// A share hash is the document, and the document names its own drawing. Applying
+// it means moving the shell first, then letting the reload re-enter render().
+const fromHash = marks.decode(location.hash);
+if (fromHash) {
+  doc = fromHash;
+  $('#legend').checked = doc.legend;
+  if (!await retarget(doc)) { writeTarget(); render({fit: true}); }
+  say('#expmsg', `restored ${doc.marks.length} mark(s) from the URL`, 'good');
+}
+</script>
+</body>
+</html>
