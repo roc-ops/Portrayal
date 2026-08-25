@@ -67,12 +67,23 @@ export async function svgCanvas(url, wmm, hmm, flipX = false, flipYax = false) {
 // horizontally but 1.38x vertically, and that anisotropic resample distorts fine
 // repeating detail (the AS5912's 488x5mm vent strips) into something that beats
 // against the pixel grid and crawls under motion. Feed the native raster instead.
+// ?tex=plain drops mipmaps and anisotropy. Edge artefacts at a corner seen
+// nearly edge-on are a sampler question, and samplers differ by GPU and browser
+// in ways this machine cannot reproduce - so make the suspect switchable rather
+// than argue about it. A corner line that survives ?tex=plain is not sampling.
+const TEX_MODE = new URLSearchParams(location.search).get('tex') || '';
 export function canvasTex(cv) {
   const tex = new THREE.CanvasTexture(cv);
   tex.colorSpace = THREE.SRGBColorSpace;
-  tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
-  tex.generateMipmaps = true;
-  tex.minFilter = THREE.LinearMipmapLinearFilter;
+  if (TEX_MODE === 'plain') {
+    tex.anisotropy = 1;
+    tex.generateMipmaps = false;
+    tex.minFilter = THREE.LinearFilter;
+  } else {
+    tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+    tex.generateMipmaps = true;
+    tex.minFilter = THREE.LinearMipmapLinearFilter;
+  }
   tex.needsUpdate = true;
   return tex;
 }
