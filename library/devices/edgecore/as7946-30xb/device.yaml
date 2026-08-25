@@ -15,9 +15,23 @@ description: Edgecore AGR400 (AS7946-30XB) 100GbE aggregation router. 2RU, 30 fi
 provenance:
   sources: datasheet AGR400-AS7946-30XB-DS-R05 and quick start guide AS7946-30XB_QSG-R04, both Edgecore,
     plus straight-on photographs of a real unit. No mechanical drawing was available
-  chassis: datasheet - "Dimensions (WxDxH) 440 mm x 480 mm x 87 mm (2RU)". The QSG Chassis section
-    gives 440 x 524 x 87 mm (17.3 x 20.6 x 3.4 in), self-consistent in both units, so 524 is used
-    for depth and the datasheet 480 is recorded as a disagreement
+  chassis: measured - 440 x 480 x 87 mm (2RU). The depth was contested and is now settled by
+    measuring the hardware - both the AGR400 and the AGR420 measure 480 mm. The datasheet says
+    480; the QSG Chassis section says 524 (17.3 x 20.6 x 3.4 in, self-consistent in both units)
+    and is simply wrong. An earlier pass here chose 524 on the grounds that the QSG was
+    self-consistent, which it is - consistently wrong is still wrong, and internal consistency
+    was never evidence about the metal. Three independent things agree on 480 - the tape measure,
+    both AGR420 documents, and this device's own datasheet. The AGR420 model reached the same
+    conclusion from photographs before the measurement, by matching the two bottom pans as one
+    stamping and ruling out an over-the-handles reading (the rear handles project about 17 mm,
+    not the 44 mm the difference would need)
+  depth-correction: measured - the four faces whose size is the depth (top, bottom, left, right)
+    were resized 524 -> 480, and the 59 placements on them had their depth-axis coordinate
+    rescaled by 480/524. Those positions were photo-measured off non-orthographic shots against
+    the 524 assumption and were already flagged approximate - some had drifted past 498 mm, which
+    a 480 mm chassis cannot have. Rescaling reproduces what the same method would have given with
+    the right depth; it does not make them better than approximate. Re-derive them from an
+    orthographic shot before this device goes to verified
   scale: drawing - the QSG page-1 panel figures are orthographic. The front panel measures 2248
     x 444 px, an aspect of 5.063 against the datasheet 440/87 = 5.057, a 0.1 percent match, so the
     figure carries geometry and everything below is measured off it at 5.109 px/mm
@@ -103,7 +117,7 @@ attrs:
 chassis:
   width: 440.0
   height: 87.0
-  depth: 524.0
+  depth: 480.0
   ru: 2
   color: '#3f4449'
 groups:
@@ -402,86 +416,86 @@ views:
   top:
     size:
       w: 440.0
-      h: 524.0
+      h: 480.0
     components:
       placements:
-        - {id: label-spec, ref: edgecore/agr-label-spec@1, at: [352.0, 300.0], group: labels, rel-pos: 0}
-        - {id: label-serial, ref: edgecore/agr-label-serial@1, at: [352.0, 396.0], group: labels, rel-pos: 1}
-        - {id: label-caution, ref: edgecore/agr-label-caution@1, at: [16.0, 26.0], group: labels, rel-pos: 2}
+        - {id: label-spec, ref: edgecore/agr-label-spec@1, at: [352, 274.81], group: labels, rel-pos: 0}
+        - {id: label-serial, ref: edgecore/agr-label-serial@1, at: [352, 370.81], group: labels, rel-pos: 1}
+        - {id: label-caution, ref: edgecore/agr-label-caution@1, at: [16, 23.82], group: labels, rel-pos: 2}
   bottom:
     size:
       w: 440.0
-      h: 524.0
+      h: 480.0
     components:
       placements:
-        - {id: rivet-b0, ref: common/rivet@1, at: [24.0, 60.0], group: fasteners, rel-pos: 0}
-        - {id: rivet-b1, ref: common/rivet@1, at: [118.0, 60.0], group: fasteners, rel-pos: 1}
-        - {id: rivet-b2, ref: common/rivet@1, at: [212.0, 60.0], group: fasteners, rel-pos: 2}
-        - {id: rivet-b3, ref: common/rivet@1, at: [306.0, 60.0], group: fasteners, rel-pos: 3}
-        - {id: rivet-b4, ref: common/rivet@1, at: [400.0, 60.0], group: fasteners, rel-pos: 4}
-        - {id: rivet-b5, ref: common/rivet@1, at: [24.0, 150.0], group: fasteners, rel-pos: 5}
-        - {id: rivet-b6, ref: common/rivet@1, at: [118.0, 150.0], group: fasteners, rel-pos: 6}
-        - {id: rivet-b7, ref: common/rivet@1, at: [212.0, 150.0], group: fasteners, rel-pos: 7}
-        - {id: rivet-b8, ref: common/rivet@1, at: [306.0, 150.0], group: fasteners, rel-pos: 8}
-        - {id: rivet-b9, ref: common/rivet@1, at: [400.0, 150.0], group: fasteners, rel-pos: 9}
-        - {id: rivet-b10, ref: common/rivet@1, at: [24.0, 240.0], group: fasteners, rel-pos: 10}
-        - {id: rivet-b11, ref: common/rivet@1, at: [118.0, 240.0], group: fasteners, rel-pos: 11}
-        - {id: rivet-b12, ref: common/rivet@1, at: [212.0, 240.0], group: fasteners, rel-pos: 12}
-        - {id: rivet-b13, ref: common/rivet@1, at: [306.0, 240.0], group: fasteners, rel-pos: 13}
-        - {id: rivet-b14, ref: common/rivet@1, at: [400.0, 240.0], group: fasteners, rel-pos: 14}
-        - {id: rivet-b15, ref: common/rivet@1, at: [24.0, 330.0], group: fasteners, rel-pos: 15}
-        - {id: rivet-b16, ref: common/rivet@1, at: [118.0, 330.0], group: fasteners, rel-pos: 16}
-        - {id: rivet-b17, ref: common/rivet@1, at: [212.0, 330.0], group: fasteners, rel-pos: 17}
-        - {id: rivet-b18, ref: common/rivet@1, at: [306.0, 330.0], group: fasteners, rel-pos: 18}
-        - {id: rivet-b19, ref: common/rivet@1, at: [400.0, 330.0], group: fasteners, rel-pos: 19}
-        - {id: rivet-b20, ref: common/rivet@1, at: [24.0, 420.0], group: fasteners, rel-pos: 20}
-        - {id: rivet-b21, ref: common/rivet@1, at: [118.0, 420.0], group: fasteners, rel-pos: 21}
-        - {id: rivet-b22, ref: common/rivet@1, at: [212.0, 420.0], group: fasteners, rel-pos: 22}
-        - {id: rivet-b23, ref: common/rivet@1, at: [306.0, 420.0], group: fasteners, rel-pos: 23}
-        - {id: rivet-b24, ref: common/rivet@1, at: [400.0, 420.0], group: fasteners, rel-pos: 24}
-        - {id: rivet-b25, ref: common/rivet@1, at: [24.0, 494.0], group: fasteners, rel-pos: 25}
-        - {id: rivet-b26, ref: common/rivet@1, at: [118.0, 494.0], group: fasteners, rel-pos: 26}
-        - {id: rivet-b27, ref: common/rivet@1, at: [212.0, 494.0], group: fasteners, rel-pos: 27}
-        - {id: rivet-b28, ref: common/rivet@1, at: [306.0, 494.0], group: fasteners, rel-pos: 28}
-        - {id: rivet-b29, ref: common/rivet@1, at: [400.0, 494.0], group: fasteners, rel-pos: 29}
+        - {id: rivet-b0, ref: common/rivet@1, at: [24, 54.96], group: fasteners, rel-pos: 0}
+        - {id: rivet-b1, ref: common/rivet@1, at: [118, 54.96], group: fasteners, rel-pos: 1}
+        - {id: rivet-b2, ref: common/rivet@1, at: [212, 54.96], group: fasteners, rel-pos: 2}
+        - {id: rivet-b3, ref: common/rivet@1, at: [306, 54.96], group: fasteners, rel-pos: 3}
+        - {id: rivet-b4, ref: common/rivet@1, at: [400, 54.96], group: fasteners, rel-pos: 4}
+        - {id: rivet-b5, ref: common/rivet@1, at: [24, 137.4], group: fasteners, rel-pos: 5}
+        - {id: rivet-b6, ref: common/rivet@1, at: [118, 137.4], group: fasteners, rel-pos: 6}
+        - {id: rivet-b7, ref: common/rivet@1, at: [212, 137.4], group: fasteners, rel-pos: 7}
+        - {id: rivet-b8, ref: common/rivet@1, at: [306, 137.4], group: fasteners, rel-pos: 8}
+        - {id: rivet-b9, ref: common/rivet@1, at: [400, 137.4], group: fasteners, rel-pos: 9}
+        - {id: rivet-b10, ref: common/rivet@1, at: [24, 219.85], group: fasteners, rel-pos: 10}
+        - {id: rivet-b11, ref: common/rivet@1, at: [118, 219.85], group: fasteners, rel-pos: 11}
+        - {id: rivet-b12, ref: common/rivet@1, at: [212, 219.85], group: fasteners, rel-pos: 12}
+        - {id: rivet-b13, ref: common/rivet@1, at: [306, 219.85], group: fasteners, rel-pos: 13}
+        - {id: rivet-b14, ref: common/rivet@1, at: [400, 219.85], group: fasteners, rel-pos: 14}
+        - {id: rivet-b15, ref: common/rivet@1, at: [24, 302.29], group: fasteners, rel-pos: 15}
+        - {id: rivet-b16, ref: common/rivet@1, at: [118, 302.29], group: fasteners, rel-pos: 16}
+        - {id: rivet-b17, ref: common/rivet@1, at: [212, 302.29], group: fasteners, rel-pos: 17}
+        - {id: rivet-b18, ref: common/rivet@1, at: [306, 302.29], group: fasteners, rel-pos: 18}
+        - {id: rivet-b19, ref: common/rivet@1, at: [400, 302.29], group: fasteners, rel-pos: 19}
+        - {id: rivet-b20, ref: common/rivet@1, at: [24, 384.73], group: fasteners, rel-pos: 20}
+        - {id: rivet-b21, ref: common/rivet@1, at: [118, 384.73], group: fasteners, rel-pos: 21}
+        - {id: rivet-b22, ref: common/rivet@1, at: [212, 384.73], group: fasteners, rel-pos: 22}
+        - {id: rivet-b23, ref: common/rivet@1, at: [306, 384.73], group: fasteners, rel-pos: 23}
+        - {id: rivet-b24, ref: common/rivet@1, at: [400, 384.73], group: fasteners, rel-pos: 24}
+        - {id: rivet-b25, ref: common/rivet@1, at: [24, 452.52], group: fasteners, rel-pos: 25}
+        - {id: rivet-b26, ref: common/rivet@1, at: [118, 452.52], group: fasteners, rel-pos: 26}
+        - {id: rivet-b27, ref: common/rivet@1, at: [212, 452.52], group: fasteners, rel-pos: 27}
+        - {id: rivet-b28, ref: common/rivet@1, at: [306, 452.52], group: fasteners, rel-pos: 28}
+        - {id: rivet-b29, ref: common/rivet@1, at: [400, 452.52], group: fasteners, rel-pos: 29}
   left:
     size:
-      w: 524.0
+      w: 480.0
       h: 87.0
     components:
       placements:
-        - {id: bracket-hole-0, ref: common/rivet@1, at: [26.0, 30.0], group: bracket-holes, rel-pos: 0}
-        - {id: bracket-hole-1, ref: common/rivet@1, at: [26.0, 46.0], group: bracket-holes, rel-pos: 1}
-        - {id: bracket-hole-2, ref: common/rivet@1, at: [46.0, 30.0], group: bracket-holes, rel-pos: 2}
-        - {id: bracket-hole-3, ref: common/rivet@1, at: [46.0, 46.0], group: bracket-holes, rel-pos: 3}
-        - {id: bracket-hole-4, ref: common/rivet@1, at: [66.0, 30.0], group: bracket-holes, rel-pos: 4}
-        - {id: bracket-hole-5, ref: common/rivet@1, at: [66.0, 46.0], group: bracket-holes, rel-pos: 5}
-        - {id: bracket-hole-6, ref: common/rivet@1, at: [86.0, 30.0], group: bracket-holes, rel-pos: 6}
-        - {id: bracket-hole-7, ref: common/rivet@1, at: [86.0, 46.0], group: bracket-holes, rel-pos: 7}
-        - {id: rivet-s0, ref: common/rivet@1, at: [170.0, 42.0], group: fasteners, rel-pos: 0}
-        - {id: rivet-s1, ref: common/rivet@1, at: [250.0, 42.0], group: fasteners, rel-pos: 1}
-        - {id: rivet-s2, ref: common/rivet@1, at: [330.0, 42.0], group: fasteners, rel-pos: 2}
-        - {id: rivet-s3, ref: common/rivet@1, at: [410.0, 42.0], group: fasteners, rel-pos: 3}
-        - {id: rivet-s4, ref: common/rivet@1, at: [480.0, 42.0], group: fasteners, rel-pos: 4}
+        - {id: bracket-hole-0, ref: common/rivet@1, at: [23.82, 30], group: bracket-holes, rel-pos: 0}
+        - {id: bracket-hole-1, ref: common/rivet@1, at: [23.82, 46], group: bracket-holes, rel-pos: 1}
+        - {id: bracket-hole-2, ref: common/rivet@1, at: [42.14, 30], group: bracket-holes, rel-pos: 2}
+        - {id: bracket-hole-3, ref: common/rivet@1, at: [42.14, 46], group: bracket-holes, rel-pos: 3}
+        - {id: bracket-hole-4, ref: common/rivet@1, at: [60.46, 30], group: bracket-holes, rel-pos: 4}
+        - {id: bracket-hole-5, ref: common/rivet@1, at: [60.46, 46], group: bracket-holes, rel-pos: 5}
+        - {id: bracket-hole-6, ref: common/rivet@1, at: [78.78, 30], group: bracket-holes, rel-pos: 6}
+        - {id: bracket-hole-7, ref: common/rivet@1, at: [78.78, 46], group: bracket-holes, rel-pos: 7}
+        - {id: rivet-s0, ref: common/rivet@1, at: [155.73, 42], group: fasteners, rel-pos: 0}
+        - {id: rivet-s1, ref: common/rivet@1, at: [229.01, 42], group: fasteners, rel-pos: 1}
+        - {id: rivet-s2, ref: common/rivet@1, at: [302.29, 42], group: fasteners, rel-pos: 2}
+        - {id: rivet-s3, ref: common/rivet@1, at: [375.57, 42], group: fasteners, rel-pos: 3}
+        - {id: rivet-s4, ref: common/rivet@1, at: [439.69, 42], group: fasteners, rel-pos: 4}
   right:
     size:
-      w: 524.0
+      w: 480.0
       h: 87.0
     components:
       placements:
-        - {id: bracket-hole-0, ref: common/rivet@1, at: [498.0, 30.0], group: bracket-holes, rel-pos: 0}
-        - {id: bracket-hole-1, ref: common/rivet@1, at: [498.0, 46.0], group: bracket-holes, rel-pos: 1}
-        - {id: bracket-hole-2, ref: common/rivet@1, at: [478.0, 30.0], group: bracket-holes, rel-pos: 2}
-        - {id: bracket-hole-3, ref: common/rivet@1, at: [478.0, 46.0], group: bracket-holes, rel-pos: 3}
-        - {id: bracket-hole-4, ref: common/rivet@1, at: [458.0, 30.0], group: bracket-holes, rel-pos: 4}
-        - {id: bracket-hole-5, ref: common/rivet@1, at: [458.0, 46.0], group: bracket-holes, rel-pos: 5}
-        - {id: bracket-hole-6, ref: common/rivet@1, at: [438.0, 30.0], group: bracket-holes, rel-pos: 6}
-        - {id: bracket-hole-7, ref: common/rivet@1, at: [438.0, 46.0], group: bracket-holes, rel-pos: 7}
-        - {id: rivet-s0, ref: common/rivet@1, at: [354.0, 42.0], group: fasteners, rel-pos: 0}
-        - {id: rivet-s1, ref: common/rivet@1, at: [274.0, 42.0], group: fasteners, rel-pos: 1}
-        - {id: rivet-s2, ref: common/rivet@1, at: [194.0, 42.0], group: fasteners, rel-pos: 2}
-        - {id: rivet-s3, ref: common/rivet@1, at: [114.0, 42.0], group: fasteners, rel-pos: 3}
-        - {id: rivet-s4, ref: common/rivet@1, at: [44.0, 42.0], group: fasteners, rel-pos: 4}
+        - {id: bracket-hole-0, ref: common/rivet@1, at: [456.18, 30], group: bracket-holes, rel-pos: 0}
+        - {id: bracket-hole-1, ref: common/rivet@1, at: [456.18, 46], group: bracket-holes, rel-pos: 1}
+        - {id: bracket-hole-2, ref: common/rivet@1, at: [437.86, 30], group: bracket-holes, rel-pos: 2}
+        - {id: bracket-hole-3, ref: common/rivet@1, at: [437.86, 46], group: bracket-holes, rel-pos: 3}
+        - {id: bracket-hole-4, ref: common/rivet@1, at: [419.54, 30], group: bracket-holes, rel-pos: 4}
+        - {id: bracket-hole-5, ref: common/rivet@1, at: [419.54, 46], group: bracket-holes, rel-pos: 5}
+        - {id: bracket-hole-6, ref: common/rivet@1, at: [401.22, 30], group: bracket-holes, rel-pos: 6}
+        - {id: bracket-hole-7, ref: common/rivet@1, at: [401.22, 46], group: bracket-holes, rel-pos: 7}
+        - {id: rivet-s0, ref: common/rivet@1, at: [324.27, 42], group: fasteners, rel-pos: 0}
+        - {id: rivet-s1, ref: common/rivet@1, at: [250.99, 42], group: fasteners, rel-pos: 1}
+        - {id: rivet-s2, ref: common/rivet@1, at: [177.71, 42], group: fasteners, rel-pos: 2}
+        - {id: rivet-s3, ref: common/rivet@1, at: [104.43, 42], group: fasteners, rel-pos: 3}
+        - {id: rivet-s4, ref: common/rivet@1, at: [40.31, 42], group: fasteners, rel-pos: 4}
 configurations:
   dc-psu:
     description: Modular dual DC PSUs, front-to-back airflow. This is the unit we photographed.
