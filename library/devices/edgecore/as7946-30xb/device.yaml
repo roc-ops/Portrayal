@@ -220,15 +220,15 @@ views:
       - {at: [380.2, 45.0], text: PPS/TOD, font-size: 2.2, for: pps-tod}
       - {at: [397.5, 15.9], text: 10MHz IN, font-size: 2.0, for: mhz-10-in}
       - {at: [397.5, 40.4], text: 1PPS OUT, font-size: 2.0, for: pps-1-out}
-      - {at: [422.0, 26.6], text: MGMT, font-size: 2.2, for: mgmt-eth}
+      - {at: [423.7, 26.6], text: MGMT, font-size: 2.2, for: mgmt-eth}
       - {at: [423.6, 61.8], text: CONSOLE 1, font-size: 2.0, for: console-1}
       - {at: [407.8, 52.6], text: CONSOLE 0, font-size: 2.0, for: console-0}
       - {at: [396.5, 52.6], text: RST, font-size: 2.0, for: reset}
-      - {at: [361.5, 52.0], text: DIAG, font-size: 1.9, for: led-diag}
-      - {at: [366.8, 52.0], text: LOC, font-size: 1.9, for: led-loc}
-      - {at: [372.0, 52.0], text: FAN, font-size: 1.9, for: led-fan}
-      - {at: [377.1, 52.0], text: PS0, font-size: 1.9, for: led-ps0}
-      - {at: [382.0, 52.0], text: PS1, font-size: 1.9, for: led-ps1}
+      - {at: [361.5, 53.8], text: DIAG, font-size: 1.9, for: led-diag}
+      - {at: [366.8, 53.8], text: LOC, font-size: 1.9, for: led-loc}
+      - {at: [372.0, 53.8], text: FAN, font-size: 1.9, for: led-fan}
+      - {at: [377.1, 53.8], text: PS0, font-size: 1.9, for: led-ps0}
+      - {at: [382.0, 53.8], text: PS1, font-size: 1.9, for: led-ps1}
       - {at: [418.0, 79.6], text: AS7946-30XB, font-size: 2.4}
     components:
       placements:
@@ -327,17 +327,17 @@ views:
         - {id: mhz-10-in, ref: std/smb@1, at: [393.81, 18.01], group: timing, rel-pos: 4}
         - {id: pps-1-out, ref: std/smb@1, at: [393.81, 30.53], group: timing, rel-pos: 5}
         - {id: usb, ref: std/usb-a@1, at: [403.79, 28.77], rotate: 90, group: mgmt, rel-pos: 0}
-        - {id: mgmt-eth, ref: std/rj45@1, at: [413.9, 28.3], rotate: 180, group: mgmt, rel-pos: 1, attrs: {leds: 'Left = link, Right = activity'}}
-        - {id: led-mgmt-link, ref: common/led-rect@1, at: [415.4, 29.3], group: mgmt-leds, rel-pos: 0, for: mgmt-eth, attrs: {function: link, states: Lit = link}}
-        - {id: led-mgmt-act, ref: common/led-rect@1, at: [424.4, 29.3], group: mgmt-leds, rel-pos: 1, for: mgmt-eth, attrs: {function: activity, states: Blinking = activity}}
+        - {id: mgmt-eth, ref: std/rj45@1, at: [415.7, 28.3], rotate: 180, group: mgmt, rel-pos: 1, attrs: {leds: 'Left = link, Right = activity'}}
+        - {id: led-mgmt-link, ref: common/led-rect@1, at: [417.2, 29.3], group: mgmt-leds, rel-pos: 0, for: mgmt-eth, attrs: {function: link, states: Lit = link}}
+        - {id: led-mgmt-act, ref: common/led-rect@1, at: [426.2, 29.3], group: mgmt-leds, rel-pos: 1, for: mgmt-eth, attrs: {function: activity, states: Blinking = activity}}
         - {id: console-1, ref: std/rj45@1, at: [415.7, 45.3], rotate: 180, group: mgmt, rel-pos: 3}
         - {id: console-0, ref: std/micro-usb@1, at: [404.0, 46.4], group: mgmt, rel-pos: 2}
         - {id: reset, ref: common/reset-button@1, at: [394.5, 45.4], group: mgmt, rel-pos: 4}
-        - {id: led-diag, ref: common/led-rect@1, at: [359.2, 44.4], group: status-leds, rel-pos: 0}
-        - {id: led-loc, ref: common/led-rect@1, at: [364.5, 44.4], group: status-leds, rel-pos: 1}
-        - {id: led-fan, ref: common/led-rect@1, at: [369.7, 44.4], group: status-leds, rel-pos: 2}
-        - {id: led-ps0, ref: common/led-rect@1, at: [374.8, 44.4], group: status-leds, rel-pos: 3}
-        - {id: led-ps1, ref: common/led-rect@1, at: [379.7, 44.4], group: status-leds, rel-pos: 4}
+        - {id: led-diag, ref: common/led-rect@1, at: [359.2, 48.6], group: status-leds, rel-pos: 0, attrs: {function: DIAG, states: 'Green = OK, Amber = fault detected'}}
+        - {id: led-loc, ref: common/led-rect@1, at: [364.5, 48.6], group: status-leds, rel-pos: 1, attrs: {function: LOC, states: Flashes Amber when the locate command is activated}}
+        - {id: led-fan, ref: common/led-rect@1, at: [369.7, 48.6], group: status-leds, rel-pos: 2, attrs: {function: FAN, states: 'Green = OK, Amber = fault'}}
+        - {id: led-ps0, ref: common/led-rect@1, at: [374.8, 48.6], group: status-leds, rel-pos: 3, attrs: {function: PS0, states: 'Green = OK, Amber = fault'}}
+        - {id: led-ps1, ref: common/led-rect@1, at: [379.7, 48.6], group: status-leds, rel-pos: 4, attrs: {function: PS1, states: 'Green = OK, Amber = fault'}}
   rear:
     size:
       w: 440.0
@@ -366,11 +366,11 @@ views:
       bays:
         - {id: psu-0, at: [6.26, 11.74], size: {w: 60.1, h: 37.6}, accepts: [edgecore/agr-psu@1], default: edgecore/agr-psu@1, group: psus, rel-pos: 0}
         - {id: psu-1, at: [6.26, 49.32], size: {w: 60.1, h: 37.6}, accepts: [edgecore/agr-psu@1], default: edgecore/agr-psu@1, group: psus, rel-pos: 1}
-        - {id: fan-4, at: [83.19, 8.8], size: {w: 69.4, h: 69.4}, accepts: [edgecore/agr-fan@1], default: edgecore/agr-fan@1, group: fans, rel-pos: 4}
-        - {id: fan-3, at: [153.59, 8.8], size: {w: 69.4, h: 69.4}, accepts: [edgecore/agr-fan@1], default: edgecore/agr-fan@1, group: fans, rel-pos: 3}
-        - {id: fan-2, at: [223.99, 8.8], size: {w: 69.4, h: 69.4}, accepts: [edgecore/agr-fan@1], default: edgecore/agr-fan@1, group: fans, rel-pos: 2}
-        - {id: fan-1, at: [294.39, 8.8], size: {w: 69.4, h: 69.4}, accepts: [edgecore/agr-fan@1], default: edgecore/agr-fan@1, group: fans, rel-pos: 1}
-        - {id: fan-0, at: [364.79, 8.8], size: {w: 69.4, h: 69.4}, accepts: [edgecore/agr-fan@1], default: edgecore/agr-fan@1, group: fans, rel-pos: 0}
+        - {id: fan-4, at: [83.19, 11.74], size: {w: 69.4, h: 69.4}, accepts: [edgecore/agr-fan@1], default: edgecore/agr-fan@1, group: fans, rel-pos: 4}
+        - {id: fan-3, at: [153.59, 11.74], size: {w: 69.4, h: 69.4}, accepts: [edgecore/agr-fan@1], default: edgecore/agr-fan@1, group: fans, rel-pos: 3}
+        - {id: fan-2, at: [223.99, 11.74], size: {w: 69.4, h: 69.4}, accepts: [edgecore/agr-fan@1], default: edgecore/agr-fan@1, group: fans, rel-pos: 2}
+        - {id: fan-1, at: [294.39, 11.74], size: {w: 69.4, h: 69.4}, accepts: [edgecore/agr-fan@1], default: edgecore/agr-fan@1, group: fans, rel-pos: 1}
+        - {id: fan-0, at: [364.79, 11.74], size: {w: 69.4, h: 69.4}, accepts: [edgecore/agr-fan@1], default: edgecore/agr-fan@1, group: fans, rel-pos: 0}
       placements:
         - {id: ground-plate, ref: edgecore/agr-ground-plate@1, at: [69.6, 24.0], group: grounding, rel-pos: 0}
         - {id: rivet-0, ref: common/rivet@1, at: [76.0, 3.4], group: fasteners, rel-pos: 0}

@@ -284,7 +284,9 @@ configurations: {...}
   on a **group** holding the part and all its detail, never on a bare rect or
   path. On a bare path it gave a rectangular shadow with nothing in it; on a bare
   rect the plate came out a blank grey bar with its bolt holes missing. A stepped
-  outline needs one group per step.
+  outline needs one group per step. The same applies in reverse: a raised node is
+  taken OFF the flat plate, so a sibling that is not raised stays behind and reads
+  as a coloured shadow under the part. Raise the whole group.
 - **A module with a real body should declare one.** `body: {depth, color,
   footprint?, plate?}` plus `skins/body-{left,right,top,bottom,rear}.svg` makes a
   FRU eject as a six-sided box instead of a floating faceplate. The mechanism

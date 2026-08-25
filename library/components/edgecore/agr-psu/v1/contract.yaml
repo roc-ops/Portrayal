@@ -35,10 +35,10 @@ body:
 relief:
   wall: '#4a4f55'
   features:
-    # `out` textures its slab from the node alone, so each of these sits on a
-    # GROUP or a shape that carries its own art. A bare rect gives a blank slab.
-    - {node: handle-bar, uhandle: 9.0}
-    - {node: latch-bar, out: 4.2}
-    - {node: latch-lip, out: 3.0, lift: 2.2}
+    # These sit on the GROUP, not on the bar inside it. A raised node is taken
+    # off the flat plate, but a sibling that is NOT raised stays behind and
+    # reads as a coloured shadow under the handle.
+    - {node: handle, uhandle: 9.0}
+    - {node: latch, out: 4.2}
     - {node: inlet, out: 2.2}
 skins: [default, ac]
