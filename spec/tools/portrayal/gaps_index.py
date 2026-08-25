@@ -31,7 +31,7 @@ def main():
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
 
-    gaps, devices = [], 0
+    gaps, blocked, devices = [], {}, 0
     for root in args.library:
         for man in sorted(Path(root).glob("devices/*/*/device.yaml")):
             d = yaml.safe_load(man.read_text())
@@ -42,6 +42,12 @@ def main():
             for g in rep["gaps"]:
                 gaps.append(dict(g, device=d["name"],
                                  manufacturer=d.get("manufacturer", "")))
+            # The chain gets its own field rather than a gap record per level.
+            # It used to be both, which meant every unsatisfied level printed
+            # its one sentence twice and left consumers de-duplicating by string
+            # equality. One statement, one place.
+            if rep["capability"]["blocked"]:
+                blocked[d["name"]] = rep["capability"]["blocked"]
 
     by_kind = {}
     for g in gaps:
@@ -49,7 +55,8 @@ def main():
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     (out / "gaps.json").write_text(json.dumps(
-        {"gaps": gaps, "devices": devices, "by-kind": by_kind},
+        {"gaps": gaps, "blocked": blocked, "devices": devices,
+         "by-kind": by_kind},
         indent=1, sort_keys=True))
     print(f"compiled {len(gaps)} gaps across {devices} devices "
           f"({by_kind.get('declared', 0)} declared, {by_kind.get('derived', 0)} "

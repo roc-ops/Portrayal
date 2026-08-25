@@ -352,7 +352,7 @@ def declared_gaps(data):
     for g in data.get("gaps") or []:
         rec = {"kind": "declared", "what": g["what"],
                "scope": list(g.get("scope") or []),
-               "reason": g["reason"], "wanted": g["wanted"]}
+               "because": g["reason"], "wanted": g["wanted"]}
         if g.get("note"):
             rec["note"] = " ".join(str(g["note"]).split())
         out.append(rec)
@@ -362,6 +362,12 @@ def declared_gaps(data):
 # One record per rule per device, not per occurrence: forty ports missing a
 # media is one gap of size forty, and listing it forty times buries the other
 # four. `wanted` is the field that turns a count into a request.
+#
+# Every record says WHY it is open in one field, `because`, whichever kind it
+# is: a lint code for a derived gap, a reason token for a declared one. They had
+# separate fields and a renderer could not tell by position which it was holding,
+# so both landed in the same badge and read as one vocabulary. `kind` says how to
+# read `because`; there is one thing to read.
 RULE_GAPS = {
     "L18": ("port-media",
             "the real media on each port placement, or once on its group - a "
@@ -394,11 +400,14 @@ def derived_gaps(path, data, lib_roots, capability, flag_results):
         if code not in RULE_GAPS:
             continue
         what, wanted = RULE_GAPS[code]
-        out.append({"kind": "derived", "what": what, "rule": code,
+        out.append({"kind": "derived", "what": what, "because": code,
                     "count": len(ws), "wanted": wanted})
-    for b in capability["blocked"]:
-        out.append({"kind": "derived", "what": b["name"], "rule": "CAP",
-                    "count": 1, "wanted": b["needs"]})
+    # The CHAIN is deliberately not here. `capability.blocked` already carries
+    # every unsatisfied level with the same sentence, and a gap record repeating
+    # it verbatim is one statement printed twice a few inches apart - which
+    # consumers were left to de-duplicate by string equality. One statement, one
+    # place. What survives here is the flags, which say something `blocked` does
+    # not: they are independent of the chain and of each other.
     for flag in FLAGS:
         ok, needs, blocker = flag_results[flag]
         if ok is True:
@@ -407,14 +416,16 @@ def derived_gaps(path, data, lib_roots, capability, flag_results):
         # missing. `specified: no` on a device with twenty-four datasheet attrs
         # reads as a broken predicate; `profile-undeclared` reads as one line of
         # YAML somebody has to decide on, which is what it is.
+        #
+        # No `count` on either: there is nothing being counted, and `count: 0`
+        # reads as "nothing found" rather than "nothing to count". A field that
+        # measures nothing is better absent than zero.
         if ok is None and blocker:
-            out.append({"kind": "derived", "what": blocker, "rule": "CAP",
-                        "count": 1,
+            out.append({"kind": "derived", "what": blocker, "because": "CAP",
                         "wanted": f"{needs}, which unlocks `{flag}` and with it "
                                   f"{CAP_GAPS[flag]}"})
             continue
-        out.append({"kind": "derived", "what": flag, "rule": "CAP",
-                    "count": 1,
+        out.append({"kind": "derived", "what": flag, "because": "CAP",
                     "wanted": f"{needs} - unlocks {CAP_GAPS[flag]}"})
     return out
 

@@ -12,8 +12,75 @@ from pathlib import Path
 import yaml
 
 import capability
+from manifest import view_parts
 
 SCHEMAS = Path(__file__).resolve().parents[2] / "schemas"
+
+# Placement and group attrs worth indexing. An allowlist, not everything: `states`
+# and `leds` hold transcribed vendor prose ("Blue = all lanes linked, Off = not
+# all lanes linked"), and folding that into the haystack makes half the portfolio
+# match "off" and "link".
+SEARCH_ATTRS = ("media", "speed", "role", "function", "type", "slot")
+
+
+def search_blob(d):
+    """Everything a reader might type that is not already in the index entry.
+
+    The filter searched manufacturer, model, series, family and description, and
+    so found devices by how their summary happened to be PHRASED. "Qumran" and
+    "ROADM" found nothing while a device with a Qumran ASIC and two ROADM line
+    units sat in the list. What a device IS lives in attrs, and attrs live in
+    <device>.configs.json - which the browser would have to fetch once per device
+    to index, thirteen times today and three hundred at the size the filter
+    exists for. So it is flattened here, once, at build.
+
+    Group attrs matter as much as device attrs and are easy to miss: on the
+    AGR400 the only place that says 400G is `groups.qsfpdd-400g.attrs.speed`.
+    Component refs are in too, so "qsfp-dd" and "lc-duplex" find the devices that
+    carry them without anyone having written those words in a sentence.
+    """
+    words = []
+
+    def take(obj):
+        if isinstance(obj, dict):
+            for k, v in obj.items():
+                words.append(str(k))
+                take(v)
+        elif isinstance(obj, (list, tuple)):
+            for v in obj:
+                take(v)
+        elif obj is not None:
+            words.append(str(obj))
+
+    take(d.get("attrs") or {})
+    take(d.get("part-numbers") or {})
+    for g, gdef in (d.get("groups") or {}).items():
+        words.append(g)
+        gdef = gdef or {}
+        words.append(str(gdef.get("term") or ""))
+        for k in SEARCH_ATTRS:
+            if (gdef.get("attrs") or {}).get(k):
+                words.append(str(gdef["attrs"][k]))
+    for cfg in (d.get("configurations") or {}).values():
+        take((cfg or {}).get("part-numbers") or {})
+    refs = set()
+    for view in (d.get("views") or {}).values():
+        vp = view_parts(view or {})
+        for q in vp["placements"]:
+            refs.add(q["ref"])
+            for k in SEARCH_ATTRS:
+                if (q.get("attrs") or {}).get(k):
+                    words.append(str(q["attrs"][k]))
+        for b in vp["bays"]:
+            refs.update(b.get("accepts") or [])
+    for ref in refs:                      # 'std/qsfp-dd@1' -> 'qsfp-dd'
+        words.append(ref.split("/")[-1].rsplit("@", 1)[0])
+    seen, out = set(), []
+    for w in " ".join(words).lower().split():
+        if w not in seen:
+            seen.add(w)
+            out.append(w)
+    return " ".join(out)
 
 
 def main():
@@ -43,6 +110,8 @@ def main():
                 # where it sits in the vendor's catalogue. The picker groups on
                 # this; absent is fine and sorts under the manufacturer alone.
                 "portfolio": d.get("portfolio") or {},
+                # what the type-ahead filter matches on beyond the fields above
+                "search": search_blob(d),
             })
     devices.sort(key=lambda x: (x["manufacturer"], x["name"]))
 

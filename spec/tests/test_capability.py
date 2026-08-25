@@ -95,7 +95,7 @@ def test_declared_gaps_carry_what_no_rule_can_see():
     dev = load("ufispace/s9510-28dc")
     gaps = capability.declared_gaps(dev)
     assert [g["what"] for g in gaps] == ["port-led-semantics"]
-    assert gaps[0]["reason"] == "vendor-silent"
+    assert gaps[0]["because"] == "vendor-silent"
     assert gaps[0]["wanted"], "wanted is the field that makes it actionable"
 
 
@@ -106,7 +106,7 @@ def test_derived_gaps_are_not_hand_written():
     dev = yaml.safe_load(man.read_text())
     cap, flags = capability.assess(dev, profiles=PROFILES)
     gaps = capability.derived_gaps(man, dev, [str(LIB)], cap, flags)
-    by_rule = {g["rule"]: g for g in gaps}
+    by_rule = {g["because"]: g for g in gaps}
     assert by_rule["L20"]["count"] > 100, "the prose-in-attrs debt is real"
     assert all(g["kind"] == "derived" for g in gaps)
 
@@ -142,3 +142,81 @@ def test_an_unevaluable_flag_files_its_gap_against_the_missing_thing():
     assert "specified" not in what, "the gap names the cause, not the symptom"
     gap = next(g for g in gaps if g["what"] == "profile-undeclared")
     assert "profiles.yaml" in gap["wanted"] and "`specified`" in gap["wanted"]
+
+
+def test_both_kinds_of_gap_say_why_in_the_same_field():
+    """A derived gap carried `rule` and a declared one `reason`, so a renderer
+    could not tell by position which it was holding and put both in one badge.
+    One field, and `kind` says how to read it."""
+    man = LIB / "devices/ufispace/s9510-28dc/device.yaml"
+    dev = yaml.safe_load(man.read_text())
+    cap, flags = capability.assess(dev, profiles=PROFILES)
+    gaps = (capability.declared_gaps(dev)
+            + capability.derived_gaps(man, dev, [str(LIB)], cap, flags))
+    assert all("because" in g for g in gaps)
+    assert not any("rule" in g or "reason" in g for g in gaps)
+    kinds = {g["because"]: g["kind"] for g in gaps}
+    assert kinds["vendor-silent"] == "declared"
+    assert kinds["L21"] == "derived"
+
+
+def test_the_chain_is_stated_once():
+    """`capability.blocked` carries every unsatisfied level with the sentence
+    that says how to fix it. A gap record repeating it verbatim is one statement
+    printed twice, and left consumers de-duplicating by string equality."""
+    man = LIB / "devices/casa/c100g/device.yaml"
+    dev = yaml.safe_load(man.read_text())
+    cap, flags = capability.assess(dev, profiles=PROFILES)
+    assert [b["level"] for b in cap["blocked"]] == [3, 4]
+    gaps = capability.derived_gaps(man, dev, [str(LIB)], cap, flags)
+    names = {n for _, n in capability.LEVELS}
+    assert not (names & {g["what"] for g in gaps}), "the chain is not a gap"
+    needs = {b["needs"] for b in cap["blocked"]}
+    assert not (needs & {g["wanted"] for g in gaps})
+
+
+def test_a_gap_that_counts_nothing_omits_count():
+    """`count: 0` reads as "nothing found" rather than "nothing to count"."""
+    man = LIB / "devices/edgecore/as7946-30xb/device.yaml"
+    dev = yaml.safe_load(man.read_text())
+    cap, flags = capability.assess(dev, profiles=PROFILES)
+    gaps = capability.derived_gaps(man, dev, [str(LIB)], cap, flags)
+    flag_gap = next(g for g in gaps if g["what"] == "profile-undeclared")
+    assert "count" not in flag_gap
+    rule_gap = next(g for g in gaps if g["because"] == "L21")
+    assert rule_gap["count"] > 0
+
+
+def test_search_finds_what_a_device_is_not_how_it_was_phrased():
+    """The filter matched manufacturer, model, series, family and description,
+    so it found devices by wording. `search` flattens what a device IS - attrs,
+    group attrs, component refs - which otherwise lives in configs.json and
+    would cost one fetch per device to index in the browser."""
+    import subprocess
+    import sys
+    import json
+    import tempfile
+    with tempfile.TemporaryDirectory() as tmp:
+        r = subprocess.run([sys.executable, SPEC / "tools/portrayal/devices_index.py",
+                            "--library", LIB, "--out", tmp],
+                           capture_output=True, text=True)
+        assert r.returncode == 0, r.stdout + r.stderr
+        idx = {d["name"]: d["search"]
+               for d in json.load(open(f"{tmp}/devices.json"))["devices"]}
+
+    def find(q):
+        return {n for n, blob in idx.items() if q in blob}
+
+    # the ASIC nobody writes in a summary
+    assert "as7946-74xksb" in find("qumran")
+    # a form factor, from the component ref rather than any sentence
+    assert "as7946-30xb" in find("qsfp-dd")
+    # 400G is declared ONLY in groups.qsfpdd-400g.attrs.speed on the AGR400 -
+    # device attrs say "2.4 Tb/s" and never mention it
+    assert find("400g") == {"as7946-30xb", "s9510-28dc"}
+    # and it must not find the AGR420, whose QSFP-DD ports are declared 100g
+    assert "as7946-74xksb" not in find("400g")
+    # transcribed vendor prose is deliberately NOT indexed: `states` holds
+    # "Blue = all lanes linked, Off = not all lanes linked", and folding that in
+    # makes half the portfolio match "off" and "link"
+    assert "lanes" not in idx["as7946-74xksb"]
