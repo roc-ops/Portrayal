@@ -2,6 +2,7 @@ format: 1
 kind: device
 name: c100g
 version: 0.1.0
+maturity: modelled
 manufacturer: Casa Systems
 model: C100G
 description: 'Casa C100G CMTS/CCAP - 13RU, 14 paired front/rear slots. Front and rear slot
@@ -68,6 +69,30 @@ views:
     size:
       w: 432.95
       h: 571.0
+    placements:
+    - id: brand-swoop
+      ref: casa/brand-swoop@1
+      at: [109.2, 8.2]
+      group: furniture
+      rel-pos: 2
+    - id: cable-mgr-l
+      ref: casa/cable-manager@1
+      at: [13.2, 539.7]
+      group: furniture
+      rel-pos: 0
+      label: Cable Manager L
+    - id: cable-mgr-r
+      ref: casa/cable-manager@1
+      at: [348.4, 539.7]
+      group: furniture
+      rel-pos: 1
+      label: Cable Manager R
+    - id: ground-strap-front
+      ref: casa/ground-strap@1
+      at: [348.4, 530.4]
+      group: grounding
+      rel-pos: 0
+      label: Ground Strap
     bays:
     - id: front-0
       at:
@@ -239,22 +264,8 @@ views:
       - 58.0
       size:
       - 432.95
-      - 15.6
+      - 32.85
       fill: '#5a6066'
-    - at:
-      - 26
-      - 30
-      text: casa systems
-      font-size: 13
-      fill: '#d7dbdf'
-      anchor: start
-    - at:
-      - 406.95
-      - 30
-      text: C100G
-      font-size: 13
-      fill: '#d7dbdf'
-      anchor: end
     - at:
       - 12.18
       - 60.5
@@ -369,109 +380,11 @@ views:
       fill: '#3f4449'
     - at:
       - 0
-      - 73.6
+      - 90.85
       size:
       - 432.95
-      - 34.5
+      - 17.25
       fill: '#231f20'
-    - at:
-      - 18.41
-      - 97.6
-      text: '0'
-      font-size: 11
-      anchor: middle
-      fill: '#d7dbdf'
-    - at:
-      - 48.88
-      - 97.6
-      text: '1'
-      font-size: 11
-      anchor: middle
-      fill: '#d7dbdf'
-    - at:
-      - 79.35
-      - 97.6
-      text: '2'
-      font-size: 11
-      anchor: middle
-      fill: '#d7dbdf'
-    - at:
-      - 109.82
-      - 97.6
-      text: '3'
-      font-size: 11
-      anchor: middle
-      fill: '#d7dbdf'
-    - at:
-      - 140.29
-      - 97.6
-      text: '4'
-      font-size: 11
-      anchor: middle
-      fill: '#d7dbdf'
-    - at:
-      - 170.76
-      - 97.6
-      text: '5'
-      font-size: 11
-      anchor: middle
-      fill: '#d7dbdf'
-    - at:
-      - 201.23
-      - 97.6
-      text: '6'
-      font-size: 11
-      anchor: middle
-      fill: '#e03127'
-    - at:
-      - 231.7
-      - 97.6
-      text: '7'
-      font-size: 11
-      anchor: middle
-      fill: '#e03127'
-    - at:
-      - 262.17
-      - 97.6
-      text: '8'
-      font-size: 11
-      anchor: middle
-      fill: '#d7dbdf'
-    - at:
-      - 292.64
-      - 97.6
-      text: '9'
-      font-size: 11
-      anchor: middle
-      fill: '#d7dbdf'
-    - at:
-      - 323.11
-      - 97.6
-      text: '10'
-      font-size: 11
-      anchor: middle
-      fill: '#d7dbdf'
-    - at:
-      - 353.58
-      - 97.6
-      text: '11'
-      font-size: 11
-      anchor: middle
-      fill: '#d7dbdf'
-    - at:
-      - 384.05
-      - 97.6
-      text: '12'
-      font-size: 11
-      anchor: middle
-      fill: '#d7dbdf'
-    - at:
-      - 414.52
-      - 97.6
-      text: '13'
-      font-size: 11
-      anchor: middle
-      fill: '#d7dbdf'
     - at:
       - 0
       - 453.5
@@ -480,12 +393,21 @@ views:
       - 14.3
       fill: '#231f20'
     - at:
-      - 216.475
-      - 464
-      text: FILTER
-      font-size: 8
+      - 142.0
+      - 455.5
+      size:
+      - 24.5
+      - 10.3
       fill: '#d7dbdf'
-      anchor: middle
+      rx: 1.2
+    - at:
+      - 266.5
+      - 455.5
+      size:
+      - 24.5
+      - 10.3
+      fill: '#d7dbdf'
+      rx: 1.2
     - at:
       - 6
       - 470
@@ -495,10 +417,157 @@ views:
       fill: '#8d949c'
       pattern: grille
       vent: 60
+    silkscreen:
+    - at:
+      - 26
+      - 30
+      text: casa systems
+      font-size: 13
+      fill: '#d7dbdf'
+      anchor: start
+    - at:
+      - 417.9
+      - 30
+      text: C100G
+      font-size: 13
+      fill: '#d7dbdf'
+      anchor: end
+    - at:
+      - 18.41
+      - 102.7
+      text: '0'
+      for: front-0
+      font-size: 9
+      anchor: middle
+      fill: '#d7dbdf'
+    - at:
+      - 48.88
+      - 102.7
+      text: '1'
+      for: front-1
+      font-size: 9
+      anchor: middle
+      fill: '#d7dbdf'
+    - at:
+      - 79.35
+      - 102.7
+      text: '2'
+      for: front-2
+      font-size: 9
+      anchor: middle
+      fill: '#d7dbdf'
+    - at:
+      - 109.82
+      - 102.7
+      text: '3'
+      for: front-3
+      font-size: 9
+      anchor: middle
+      fill: '#d7dbdf'
+    - at:
+      - 140.29
+      - 102.7
+      text: '4'
+      for: front-4
+      font-size: 9
+      anchor: middle
+      fill: '#d7dbdf'
+    - at:
+      - 170.76
+      - 102.7
+      text: '5'
+      for: front-5
+      font-size: 9
+      anchor: middle
+      fill: '#d7dbdf'
+    - at:
+      - 201.23
+      - 102.7
+      text: '6'
+      for: front-6
+      font-size: 9
+      anchor: middle
+      fill: '#e03127'
+    - at:
+      - 231.7
+      - 102.7
+      text: '7'
+      for: front-7
+      font-size: 9
+      anchor: middle
+      fill: '#e03127'
+    - at:
+      - 262.17
+      - 102.7
+      text: '8'
+      for: front-8
+      font-size: 9
+      anchor: middle
+      fill: '#d7dbdf'
+    - at:
+      - 292.64
+      - 102.7
+      text: '9'
+      for: front-9
+      font-size: 9
+      anchor: middle
+      fill: '#d7dbdf'
+    - at:
+      - 323.11
+      - 102.7
+      text: '10'
+      for: front-10
+      font-size: 9
+      anchor: middle
+      fill: '#d7dbdf'
+    - at:
+      - 353.58
+      - 102.7
+      text: '11'
+      for: front-11
+      font-size: 9
+      anchor: middle
+      fill: '#d7dbdf'
+    - at:
+      - 384.05
+      - 102.7
+      text: '12'
+      for: front-12
+      font-size: 9
+      anchor: middle
+      fill: '#d7dbdf'
+    - at:
+      - 414.52
+      - 102.7
+      text: '13'
+      for: front-13
+      font-size: 9
+      anchor: middle
+      fill: '#d7dbdf'
+    - at:
+      - 216.475
+      - 464
+      text: FILTER
+      font-size: 8
+      fill: '#d7dbdf'
+      anchor: middle
   rear:
     size:
       w: 432.95
       h: 571.0
+    placements:
+    - id: ground-strap-rear
+      ref: casa/ground-strap@1
+      at: [6.3, 461.9]
+      group: grounding
+      rel-pos: 0
+      label: Ground Strap
+    - id: ground-bolts-rear
+      ref: casa/ground-bolts@1
+      at: [393.2, 460.2]
+      group: grounding
+      rel-pos: 1
+      label: Grounding Studs
     bays:
     - id: rear-0
       at:
@@ -659,37 +728,76 @@ views:
       group: rear-slots
       rel-pos: 13
       default: null
+    - id: fan-l
+      at:
+      - 4.0
+      - 4.5
+      size:
+        w: 137.25
+        h: 91.2
+      accepts: &id003
+      - casa/fan@1
+      group: fans
+      rel-pos: 0
+      label: Fan L
+      default: casa/fan@1
+    - id: fan-c
+      at:
+      - 147.85
+      - 4.5
+      size:
+        w: 137.25
+        h: 91.2
+      accepts: *id003
+      group: fans
+      rel-pos: 1
+      label: Fan C
+      default: casa/fan@1
+    - id: fan-r
+      at:
+      - 291.7
+      - 4.5
+      size:
+        w: 137.25
+        h: 91.2
+      accepts: *id003
+      group: fans
+      rel-pos: 2
+      label: Fan R
+      default: casa/fan@1
+    - id: pem-b
+      at:
+      - 6.0
+      - 476.7
+      size:
+        w: 207.0
+        h: 91.6
+      accepts: &id004
+      - casa/pem@1
+      group: power
+      rel-pos: 0
+      label: PEM B
+      default: casa/pem@1
+    - id: pem-a
+      at:
+      - 219.95
+      - 476.7
+      size:
+        w: 207.0
+        h: 91.6
+      accepts: *id004
+      group: power
+      rel-pos: 1
+      label: PEM A
+      default: casa/pem@1
     decor:
     - at:
-      - 6
-      - 6
-      size:
-      - 420.95
-      - 96.0
-      fill: '#8d949c'
-      pattern: grille
-      vent: 60
-    - at:
       - 0
-      - 491.4
+      - 470.0
       size:
       - 432.95
-      - 79.6
+      - 101.0
       fill: '#4a4f55'
-    - at:
-      - 116.8965
-      - 536
-      text: PEM A
-      font-size: 10
-      fill: '#d7dbdf'
-      anchor: middle
-    - at:
-      - 316.0535
-      - 536
-      text: PEM B
-      font-size: 10
-      fill: '#d7dbdf'
-      anchor: middle
 configurations:
   bdm2m-11plus1:
     description: BDM2m "11+1" - the vendor's name for it. Redundancy collapses to a single

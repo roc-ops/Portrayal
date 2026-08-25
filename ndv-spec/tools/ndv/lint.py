@@ -188,6 +188,21 @@ def _skin_checks(path, data):
     return data
 
 
+def _instance_size(ref, lib_roots):
+    """(w, h) of a component, or None when it cannot be resolved."""
+    if not ref:
+        return None
+    c = resolve_component(ref, lib_roots)          # returns a PATH, not the document
+    if c is None:
+        return None
+    try:
+        d = yaml.safe_load(c.read_text()) or {}
+    except yaml.YAMLError:
+        return None
+    sz = d.get("size")
+    return (sz["w"], sz["h"]) if sz else None
+
+
 def lint_device_mating(path, view_name, view, lib_roots):
     """L12: mate-to must resolve, and the two sides must agree on the interface."""
     by_id = {p["id"]: p for p in (view.get("placements") or [])}
@@ -323,10 +338,97 @@ def lint_device(path, validator, lib_roots):
             for m in r.get("members", []) or []:
                 if m not in seen:
                     err(path, "L7", f"region {r['id']} member {m} is not an instance in view {vname}")
+        # L14 - silkscreen bound to a part must name a part that exists, and must sit
+        # somewhere near it. A legend on the far side of the chassis from the thing it
+        # labels is the failure this catches; it is exactly the class of mistake that
+        # is invisible in YAML and obvious on the drawing.
+        boxes = {}
+        for p in view.get("placements", []) or []:
+            c = _instance_size(p.get("ref"), lib_roots)
+            if c and p.get("at"):
+                boxes[p["id"]] = (p["at"], c, p.get("rotate"))
+        for b in view.get("bays", []) or []:
+            boxes[b["id"]] = (b["at"], (b["size"]["w"], b["size"]["h"]), b.get("rotate"))
+        for m in view.get("silkscreen", []) or []:
+            if m.get("id"):
+                check_segment(path, "L2", m["id"])
+            owner = m.get("for")
+            if owner is None:
+                continue
+            if owner not in seen:
+                err(path, "L14", f"{vname}: silkscreen {m['text']!r} is for {owner!r}, "
+                                 "which is not a placement or bay in this view")
+                continue
+            box = boxes.get(owner)
+            if not box:
+                continue
+            (ax, ay), (bw, bh), rot = box
+            if rot in (90, 270, -90):
+                bw, bh = bh, bw
+                ax, ay = ax + (box[1][0] - box[1][1]) / 2.0, ay - (box[1][0] - box[1][1]) / 2.0
+            mx, my = m["at"]
+            # a legend belongs to its part if it is inside the part's footprint or
+            # within one part-dimension of it - printed beside a port, not across the box
+            far_x = mx < ax - bw or mx > ax + 2 * bw
+            far_y = my < ay - bh or my > ay + 2 * bh
+            if far_x or far_y:
+                err(path, "L14", f"{vname}: silkscreen {m['text']!r} at "
+                                 f"({mx:g}, {my:g}) is bound to {owner!r} but sits well "
+                                 f"outside it ({ax:g}, {ay:g} {bw:g}x{bh:g})")
     bay_accepts = {}
     for view in (data.get("views") or {}).values():
         for b in (view or {}).get("bays", []) or []:
             bay_accepts[b["id"]] = b["accepts"]
+    # L15 - the conformance gate. A device declares how far it has been taken and
+    # lint holds it to that standard, so work in progress can be committed without
+    # fighting the linter while a device that CLAIMS to be verified has to earn it.
+    maturity = data.get("maturity", "draft")
+    if maturity in ("modelled", "verified"):
+        prov = data.get("provenance") or {}
+        if not prov:
+            err(path, "L15", f"maturity {maturity}: no provenance block. A device at this "
+                             "level must cite where its numbers came from")
+        else:
+            joined = " ".join(str(v) for v in prov.values()).lower()
+            if not any(k in joined for k in ("datasheet", "installation guide",
+                                             "hardware guide", "install guide", "manual")):
+                err(path, "L15", f"maturity {maturity}: provenance cites no datasheet or "
+                                 "hardware guide. If there genuinely is no document, say so "
+                                 "explicitly in provenance and drop to draft")
+        for key in ("width", "height", "depth"):
+            if key in (data.get("chassis") or {}) and not prov:
+                break
+    if maturity == "verified":
+        # verified has to hold for the whole assembly, not just the chassis manifest.
+        # A device that places a component whose dimensions are guessed is not verified,
+        # however carefully the chassis itself was measured.
+        def estimated_keys(doc):
+            return sorted(k for k, v in (doc.get("provenance") or {}).items()
+                          if str(v).lstrip().lower().startswith("estimated"))
+        est = estimated_keys(data)
+        if est:
+            err(path, "L15", f"maturity verified: {len(est)} estimated value(s) on the device "
+                             f"({', '.join(est[:4])}) - verified means measured, not guessed")
+        refs = set()
+        for view in (data.get("views") or {}).values():
+            for q in (view or {}).get("placements", []) or []:
+                refs.add(q["ref"])
+            for b in (view or {}).get("bays", []) or []:
+                refs.update(b.get("accepts") or [])
+        for ref in sorted(refs):
+            c = resolve_component(ref, lib_roots)
+            if c is None:
+                continue
+            try:
+                cd = yaml.safe_load(c.read_text()) or {}
+            except yaml.YAMLError:
+                continue
+            ce = estimated_keys(cd)
+            if ce:
+                err(path, "L15", f"maturity verified: component {ref} has estimated "
+                                 f"{', '.join(ce)} - a verified device cannot be built "
+                                 "from guessed parts")
+
     for cname, cfg in (data.get("configurations") or {}).items():
         for bid, ref in (cfg.get("bays") or {}).items():
             if bid not in bay_accepts:

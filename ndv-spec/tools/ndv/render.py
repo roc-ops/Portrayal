@@ -237,7 +237,8 @@ def text_el(x, y, s, size=2.2, anchor="middle", fill="#c7ccd1"):
     return t
 
 
-def render_view(device, view_name, view, lib, include=(), config_name="default", config=None):
+def render_view(device, view_name, view, lib, include=(), config_name="default", config=None,
+                silkscreen=True):
     config = config or {}
     ch = device["chassis"]
     vsize = view.get("size")
@@ -393,6 +394,30 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         r.set("stroke", "none")
         r.set("pointer-events", "all")
 
+    # SILKSCREEN. On the real part the panel is punched, the silkscreen is printed
+    # onto it, and only then are the modules installed - so chassis silkscreen paints
+    # HERE, after the panel and before any component. A legend a module would cover is
+    # invisible in the drawing because it is invisible on the hardware, which makes a
+    # mispositioned legend show up as missing rather than as a lie. Silkscreen printed
+    # on a module's own faceplate lives in that component's skin and travels with it.
+    silk_items = (view.get("silkscreen") or []) if silkscreen else []
+    if silk_items:
+        silk_g = ET.SubElement(svg, f"{{{SVG_NS}}}g")
+        silk_g.set("id", "--silkscreen")
+        silk_g.set("data-class", "silkscreen")
+        for m in silk_items:
+            t = text_el(m["at"][0], m["at"][1], m["text"],
+                        size=m.get("font-size", 2.2), anchor=m.get("anchor", "middle"),
+                        fill=m.get("fill") or ch.get("silk", "#c7ccd1"))
+            if m.get("rotate"):
+                t.set("transform", f"rotate({m['rotate']:g} {m['at'][0]:g} {m['at'][1]:g})")
+            if m.get("id"):
+                t.set("id", m["id"])
+            # bind the legend to the part it names, so a viewer can select both at once
+            if m.get("for"):
+                t.set("data-for", m["for"])
+            silk_g.append(t)
+
     extents = [0.0, 0.0, w, h]
     # resolve mate-to before drawing: an occupant is positioned so its `mate`
     # connection-point lands on its host's, which is what keeps centring offsets
@@ -479,10 +504,27 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             for (comp, name), color in sorted(palette.items()))
         style.text = STATE_CSS + extra + "\n"
 
-    # labels paint above all components/bays (silkscreen is on top of the chassis)
+    # A component's own <g id="silkscreen"> is printed on ITS faceplate, so it
+    # travels with the part and is never occluded by it - unlike chassis silkscreen,
+    # which the part covers. Both come out together under --without silkscreen, which
+    # is what makes a bare panel-and-components drawing possible.
+    if not silkscreen:
+        # Two passes, because component skins have not all adopted the grouping yet.
+        # The group is the convention and lint will come to require it; the <text>
+        # sweep is the backstop, and it is sound rather than a bodge - printed text on
+        # a faceplate IS silkscreen, so a text node in a skin is silkscreen whether or
+        # not its author put it in the right group. Geometry is unaffected either way.
+        for parent in svg.iter():
+            for node in [n for n in list(parent)
+                         if n.get("id", "").endswith("silkscreen")
+                         or n.get("data-class") == "silkscreen"
+                         or n.tag == f"{{{SVG_NS}}}text"]:
+                parent.remove(node)
+    # instance labels are silkscreen too: printed on the chassis beside the part
     silk = ch.get("silk", "#c7ccd1")
-    for at, wh, label, label_at, anchor, fsize, lcolor in pending_labels:
-        label_el(svg, at, wh, label, label_at, anchor, h, fsize, fill=lcolor or silk)
+    if silkscreen:
+        for at, wh, label, label_at, anchor, fsize, lcolor in pending_labels:
+            label_el(svg, at, wh, label, label_at, anchor, h, fsize, fill=lcolor or silk)
 
     meta_payload = {
         "generator": {"tool": "ndv-render", "version": TOOL_VERSION},
@@ -507,6 +549,11 @@ def main():
     ap.add_argument("--library", action="append", required=True,
                     help="library root (repeatable, searched in order)")
     ap.add_argument("--out", default="dist")
+    ap.add_argument("--without", dest="without", action="append", default=[],
+                    choices=["silkscreen"],
+                    help="omit a layer. --without silkscreen emits the punched panel and "
+                         "the components installed in it, with nothing printed on either - "
+                         "the drawing you hand to whoever does the artwork")
     ap.add_argument("--with", dest="include", action="append", default=[],
                     help="include optional placements tagged with this name (e.g. ears)")
     args = ap.parse_args()
@@ -520,6 +567,7 @@ def main():
     for cfg_name, cfg in configs.items():
         for view_name, view in device["views"].items():
             svg = render_view(device, view_name, view or {}, lib, include=tuple(args.include),
+                              silkscreen=("silkscreen" not in args.without),
                               config_name=cfg_name, config=cfg)
             ET.indent(svg, space="  ")
             data = ET.tostring(svg, encoding="unicode", xml_declaration=False)

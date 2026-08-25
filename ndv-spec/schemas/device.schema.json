@@ -28,6 +28,14 @@
       "type": "string",
       "pattern": "^\\d+\\.\\d+\\.\\d+$"
     },
+    "maturity": {
+      "enum": [
+        "draft",
+        "modelled",
+        "verified"
+      ],
+      "description": "how far this device has been taken, and the standard lint holds it to. draft: no requirement. modelled: must carry a provenance block citing a datasheet or hardware guide. verified: additionally no dimension may be estimated. Defaults to draft when absent."
+    },
     "manufacturer": {
       "type": "string"
     },
@@ -556,6 +564,53 @@
                 },
                 "label": {
                   "type": "string"
+                }
+              }
+            }
+          },
+          "silkscreen": {
+            "type": "array",
+            "description": "Printed matter on the CHASSIS panel. Painted after the panel and its decor and BEFORE components, because on the real device the silkscreen goes down on the punched panel and the modules are installed on top of it. A legend that a module would cover is therefore invisible here, which is the correct behaviour: on the hardware it would be invisible too. Silkscreen printed on a MODULE's own faceplate belongs in that component's skin, inside <g id=\"silkscreen\">, and travels with it.",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "at",
+                "text"
+              ],
+              "properties": {
+                "id": {
+                  "$ref": "#/$defs/segment",
+                  "description": "optional stable id; needed only when something else refers to this mark"
+                },
+                "at": {
+                  "$ref": "#/$defs/xy"
+                },
+                "text": {
+                  "type": "string",
+                  "description": "printed legend. Multi-line uses \\n"
+                },
+                "font-size": {
+                  "type": "number"
+                },
+                "anchor": {
+                  "enum": [
+                    "start",
+                    "middle",
+                    "end"
+                  ]
+                },
+                "rotate": {
+                  "type": "number",
+                  "description": "degrees about the anchor"
+                },
+                "fill": {
+                  "type": "string",
+                  "description": "ink colour; defaults to chassis silk"
+                },
+                "for": {
+                  "$ref": "#/$defs/segment",
+                  "description": "id of a placement or bay in this view that this legend annotates. Emitted as data-for, so selecting the component selects its legend and vice versa. Omit for chassis-level marks that belong to no part."
                 }
               }
             }
