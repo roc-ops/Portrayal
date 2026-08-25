@@ -35,6 +35,9 @@
           font-size:0.76rem; cursor:pointer; border-radius:4px; white-space:nowrap; }
   .node:hover { background:#23272c; }
   .node.sel { background:var(--hl); color:#fff; }
+  .node.grp { color:var(--dim); text-transform:uppercase; font-size:0.68rem;
+              letter-spacing:0.05em; margin-top:0.25rem; }
+  .node.grp .cls { text-transform:none; letter-spacing:0; }
   #hl { display:flex; align-items:center; gap:0.25rem; }
   #hl .sw { width:0.95rem; height:0.95rem; border-radius:3px; cursor:pointer;
             border:1px solid #00000055; }
@@ -157,26 +160,97 @@ function modelOf(el) {
   const c = compByRef(ref.split(':')[0]);
   return c?.attrs?.model || c?.name || null;
 }
+// A row reads "id — model". The id is the thing you already know (port-7,
+// front-6); the model is the thing you are checking. Model alone gave 54 rows
+// all reading "SFP module", which is why this used to need clicking to use.
 function labelFor(n) {
   const el = n.el;
   const own = n.path.split('/').pop();
-  const model = modelOf(el);
-  if (model) return model;
   if (el.dataset.class === 'bay') {
     const occ = el.querySelector('[data-ref]');
     const m = occ && modelOf(occ);
     return m ? `${own} — ${m}` : own;
   }
+  const model = modelOf(el);
+  if (model && model !== own) return `${own} — ${model}`;
   const title = el.querySelector(':scope > title');
   return (title && title.textContent.trim()) || own;
 }
 
+// Ordering rules. Tier comes from the component's class, never from the author,
+// so it cannot drift between devices:
+//   1  things you connect to or replace   bays, ports, PSUs, fans, cards
+//   2  things you read                    LEDs, buttons, displays
+//   3  furniture                          ears, swoops, cable managers, grounding
+// Within a tier: group, then rel-pos, then a numeric-aware id sort. Never a
+// plain string sort, which is what put 52 LEDs in front of 54 ports.
+const TIER = {
+  bay: 1, port: 1, transceiver: 1, psu: 1, fan: 1, cooling: 1, power: 1, inlet: 1,
+  'line-card': 1, switch: 1, supervisor: 1, module: 1,
+  led: 2, button: 2, display: 2,
+  region: 0,          // regions are containers the author drew; they stay on top
+  chassis: -1,        // the device itself is always the first row
+};
+function tierOf(el) {
+  const c = el.dataset.class || '';
+  return c in TIER ? TIER[c] : 3;
+}
+function relPos(el) {
+  const v = el.dataset.relPos;
+  return v === undefined ? Number.POSITIVE_INFINITY : +v;
+}
+function cmpNode(a, b) {
+  return tierOf(a.el) - tierOf(b.el)
+      || (a.el.dataset.group || '~').localeCompare(b.el.dataset.group || '~')
+      || relPos(a.el) - relPos(b.el)
+      || a.path.localeCompare(b.path, undefined, {numeric: true});
+}
+
+// Fold a flat list into one row per data-group. Groups were always in the data
+// - the renderer has emitted data-group for a long time - the tree just never
+// read them, so 118 placements became 118 rows.
+function groupNodes(list) {
+  const out = [], seen = new Map();
+  for (const n of list.sort(cmpNode)) {
+    const g = n.el.dataset.group;
+    if (!g) { out.push(n); continue; }
+    if (!seen.has(g)) {
+      const head = {path: `${n.path.slice(0, n.path.lastIndexOf('/') + 1)}${g}`,
+                    el: null, kids: [], group: g, tier: tierOf(n.el)};
+      seen.set(g, head); out.push(head);
+    }
+    seen.get(g).kids.push(n);
+  }
+  return out.sort((a, b) => (a.tier ?? tierOf(a.el)) - (b.tier ?? tierOf(b.el))
+                          || (a.group || '').localeCompare(b.group || ''));
+}
+
 function renderTree(roots) {
   const box = $('#tree'); box.innerHTML = '';
-  const draw = (list, into, depth) => {
-    for (const n of list.sort((a, b) => a.path.localeCompare(b.path, undefined, {numeric: true}))) {
+  // `fold` is true for a fresh list and false for a group's own children: those
+  // all carry the same data-group, so folding them again would build the same
+  // head again, and again. That is the crash the first version of this had.
+  const draw = (list, into, depth, fold = true) => {
+    for (const n of (fold ? groupNodes(list) : list.sort(cmpNode))) {
       const row = document.createElement('div');
       row.className = 'node';
+      // a group row is a fold, not a thing - it has no element and selects nothing
+      if (!n.el) {
+        row.classList.add('grp');
+        row.innerHTML = `<span class="tw">▾</span>`
+          + `<span class="nm">${n.group}</span>`
+          + `<span class="cls">${n.kids.length}</span>`;
+        into.appendChild(row);
+        const kids = document.createElement('div');
+        kids.className = 'kids';
+        into.appendChild(kids);
+        row.onclick = () => {
+          kids.classList.toggle('hid');
+          row.querySelector('.tw').textContent = kids.classList.contains('hid') ? '▸' : '▾';
+        };
+        draw(n.kids, kids, depth + 1, false);
+        continue;
+      }
       row.dataset.path = n.path;
       const cls = n.el.dataset.class || '';
       const isBay = cls === 'bay';
