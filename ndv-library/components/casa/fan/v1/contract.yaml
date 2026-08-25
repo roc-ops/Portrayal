@@ -1,0 +1,51 @@
+format: 1
+kind: module
+name: fan
+version: 1.2.0
+class: cooling
+profile: networking
+description: >-
+  Casa C100G fan assembly module. Three sit side by side above the rear card
+  band - LEFT, CENTER and RIGHT - and each contains two fans, designated 0 =
+  front and 1 = back. The face is a punched perforation grid with a pull
+  handle across the lower third and an indicator panel carrying a hot-swap
+  button and HS / alarm / OK indicators. Maximum 100 W each, 300 W across the
+  three.
+attrs: {model: 'Fan Assembly'}
+size: {w: 137.25, h: 91.2, d: 150.0}
+provenance:
+  layout: 'drawing - Figure 1-4 of the C100G Hardware Installation Guide, "C100G
+    fan module", left panel "Fan tray front view". Measured as percentages of
+    that figure''s face and stretched onto this module. The figure''s aspect is
+    1.563 against this module''s 1.505, so it is close to scale, but fractions
+    are used anyway'
+  perforation-colour: Jason - the punched cells look THROUGH the faceplate into
+    the chassis, so they are drawn dark with a light punch edge. Figure 1-4 shows
+    them white, which is line-art convention, not what the part looks like
+  perforation: 'drawing - 19 columns x 9 rows of punched cells, each 4.15 percent
+    of the face wide and 7.83 percent tall, on a 5.09 x 10.84 percent pitch,
+    starting at 2.31 / 2.75 percent. Three cells in the bottom row are blanked
+    where the handle latches land'
+  panel: 'drawing - indicator panel at 33.8 to 68.3 percent of the width and 1.6
+    to 31.7 percent of the height. Hot-swap button at 40.2 percent, three
+    indicators at 49.2 / 55.9 / 62.5 percent with their icons above them and the
+    LEDs below - HS, warning triangle, boxed OK'
+  size: 'drawing - Jason''s hand-built rear SVG, group `fanL`: 60.06 x 43.84 in a
+    190.26-wide frame, mapped fractionally onto our 432.95 x 571 body and
+    symmetrised across the three modules'
+  count: datasheet - the guide names three fan modules, LEFT, CENTER and
+    RIGHT, each with two fans designated either front or back
+  airflow: 'CONFLICT, unresolved. Figure 1-5 and the body text say the fans draw
+    air in at the FRONT BOTTOM through the filter and exhaust at the rear top,
+    which would make this face an OUTLET. Jason states the opposite from the
+    hardware - in at the rear, out at the front bottom. The filter sits on the
+    front bottom opening, and filters belong on intakes, which favours the guide.
+    Recorded rather than decided; see docs/casa-modular-chassis.md'
+  depth: estimated - not measured
+elements:
+  hs: {at: [65.8, 19.5], size: [3.4, 3.4], class: led}
+  alarm: {at: [75.0, 19.5], size: [3.4, 3.4], class: led}
+  ok: {at: [84.1, 19.5], size: [3.4, 3.4], class: led}
+relief:
+  wall: '#4a4f55'
+skins: [default]

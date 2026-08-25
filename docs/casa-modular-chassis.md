@@ -263,11 +263,197 @@ worth having.
 He has explicit `Blank` and `EMPTY` cards. That is the same distinction the schema only
 half expresses - an unpopulated slot versus a slot with a filler plate in it.
 
-### Scale does not match
+### Scale — settled, and the error is vertical
 
-His viewBox is 191.575 x 275.873, aspect 0.694, against our 432.95 x 571 at 0.758. One
-of the two has the chassis proportion wrong. Ours derives from Table A-1 less the ears;
-his anchor is unknown. Worth settling with an overlay before trusting either.
+His viewBox is 191.575 x 275.873; his `chassisFrame` is 190.26 x 274.56, aspect **0.693**,
+against our 432.95 x 571 at **0.758**. That looked like an open question. It is not.
+
+Measure both against **the slot pitch**, which is the one thing the two drawings agree on
+independently. His `slot13` sits at x 0.71 and `slot0` at x 176.63, so 13 pitches span
+175.92 and his pitch is **13.532 units**. Ours is 30.47 mm. That gives a scale of
+**2.2517 mm/unit** derived from geometry neither drawing guessed at.
+
+Now apply it to a part and compare against mapping that same part as a *fraction* of each
+frame:
+
+| | via slot pitch | via frame fraction | agree? |
+|---|---|---|---|
+| `pemA` width | 204.5 | 206.6 | yes, 1 % |
+| `fanL` width | 135.2 | 136.7 | yes, 1 % |
+| `pemA` height | 99.2 | 91.6 | **no, 8.3 %** |
+| `fanL` height | 98.7 | 91.2 | **no, 8.2 %** |
+
+The disagreement is confined to one axis. And the pitch-derived heights do not fit: stack
+his bands at 2.2517 mm/unit and fan 98.7 + card 345.5 + PEM 99.2 plus his gaps overruns
+571 by about 5 mm, whereas the fractional heights land the PEM at 568.3 with 2.7 to spare.
+
+So **his drawing is roughly 8 % stretched vertically** and our 432.95 x 571 stands. Both
+drawings independently agree that the cards span ~99 % of the body width (his 98.9 %, ours
+98.5 %) and sit between ~18 % and ~78 % of its height (his 18.2–77.6, ours 18.9–79.4).
+
+Two further things fell out of the same measurement:
+
+- His `slot0` is on the **right** and `slot13` on the **left** of the rear view. The rear
+  mirroring is confirmed from a second source.
+- His `pemA` is on the **right** and `pemB` on the **left**. Our rear decor had those two
+  labels the wrong way round; fixed.
+
+### PEM and fan geometry, as built
+
+Mapped fractionally onto the 432.95 x 571 body and symmetrised about the centre line,
+because the real parts are symmetric and his measured margins were not (6.8 vs 4.05 on the
+PEMs, 6.5 vs 3.15 on the fans):
+
+| part | size | at |
+|---|---|---|
+| `casa/fan` x3 | 137.25 x 91.2 | x 4.0 / 147.85 / 291.7, y 4.5 |
+| `casa/pem` x2 | 207.0 x 91.6 | `pem-b` x 6.0, `pem-a` x 219.95, y 476.7 |
+
+Depths are **estimated**, not measured — nothing in the guide or the SVGs gives them.
+
+### The PEM face, from Figure 1-6
+
+The hand-built SVG gives the PEM's **size**; Figure 1-6 of the guide, "C100G Power Entry
+Module, terminal covers removed", gives its **layout**. Do not mix the two the other way
+round — the figure's own aspect is 3.43 against the module's 2.26, the same schematic
+distortion the isolated card figures have, so everything is taken as a percentage of the
+figure's faceplate and stretched.
+
+Top row is **four rocker circuit breakers**, not terminals. The guide is explicit:
+*"Each PEM provides power terminals for four 30A power branches. Each power branch
+consists of a -48VDC cable and a corresponding return cable protected by a 30A circuit
+breaker … These breakers are for protection only and are not intended to be used as power
+switches."* Measured centres 18.04 / 37.99 / 61.36 / 81.33 %, each 15.07 % wide and
+24.2 % tall.
+
+The **terminals** are the two dark recessed blocks below, at 6.99 % and 71.1 %, each
+21.5 % wide and 61.9 % tall, holding four studs in 2 columns × 2 rows. The **top row is
+-48/-60VDC and the bottom row is RTN**, labelled once per block in the central gap. Left
+block carries Branch 4 (left column) and Branch 3; right block carries Branch 2 and
+Branch 1 (right column). So branches run **4-3-2-1 left to right** across the whole face,
+breakers included.
+
+### The leader lines are not uniform
+
+Each branch has a leader running from its terminal-cover screw up to the breaker that
+protects it, and the two shapes differ:
+
+| | route |
+|---|---|
+| **outer** (Branch 4, Branch 1) | leaves the breaker's **outer side edge** at 12.9 % height, runs outward to 3.41 % / 96.27 %, then straight down to the cover screw |
+| **inner** (Branch 3, Branch 2) | drops from the breaker's **bottom centre**, then runs inward to the cover screw |
+
+Every run is interrupted where its `Branch N` label sits, which is why the figure shows
+short tick stubs either side of the inner labels. Cover screws are at 5.25 / 30.80 /
+68.39 / 94.33 %, all at 60.3 % height.
+
+Indicators sit in the central gap: a black hot-swap button at ~43.7 %, then blue / red /
+green at 48.22 / 52.13 / 56.92 %, all at 72.1 % height, captioned HS / ⚠ / OK.
+
+The lower rail is 12.2 % of the module height and carries two captive screws. The A / B
+letter is *not* in the skin — the chassis supplies it as the bay label.
+
+### The fan face, from Figure 1-4
+
+Same rule, same source discipline. Figure 1-4's "Fan tray front view" is close to scale
+(aspect 1.563 against the module's 1.505) but is still read as fractions.
+
+The face is a **punched perforation grid**, 19 columns × 9 rows, each cell 4.15 % wide and
+7.83 % tall on a 5.09 × 10.84 % pitch starting at 2.31 / 2.75 %. A black **pull handle**
+runs across at 78–88 % height, and three cells in the bottom row are blanked where its
+latches land. The **indicator panel** sits at 33.8–68.3 % of the width and 1.6–31.7 % of
+the height, with the hot-swap button at 40.2 % and three indicators at 49.2 / 55.9 /
+62.5 % — icons on top (HS, warning triangle, boxed OK), LEDs below. There is **no model
+silkscreen** on the fan face.
+
+Three modules, LEFT / CENTER / RIGHT, each holding two fans designated front (0) and
+back (1). 100 W each, 300 W total.
+
+The perforations are drawn **dark**. Figure 1-4 shows them white, which is line-art
+convention — they are holes looking into the chassis.
+
+### Where the guide figure and the hardware disagree on proportion
+
+Figure 1-6 is right about *what* is on the PEM and *where*, and wrong about how tall
+things are. Corrected against the hardware:
+
+| | figure | drawn |
+|---|---|---|
+| breaker height | 24.2 % of the plate | **18.2 %** (a quarter off) |
+| terminal block | 61.9 % tall, uneven split | **40.4 mm in two equal halves of 20.2** |
+
+The block's top edge is unchanged; only its height and the split moved. Studs sit at the
+centre of each half.
+
+### Labels: the guide's convention does not survive the scale change
+
+Figure 1-6 interrupts each leader line where its `Branch N` label sits. At the size a whole
+chassis renders at, that reads as text slicing through the line, and the `-48/-60VDC`
+captions ran onto the terminal blocks. So: **lines unbroken, labels moved clear** — outer
+labels above their horizontal run, inner labels below theirs, and the polarity captions
+centred in the clear lane between each block and the nearest leader vertical, sized to fit
+that lane. Faithful to the figure's *content*, not to its typesetting.
+
+## Chassis furniture — cable managers and grounding
+
+These are `placements`, not `bays`: fixed components with real ids and data-paths, so they
+appear in the explorer, but nothing goes in or out of them.
+
+| part | face | at | size |
+|---|---|---|---|
+| `casa/cable-manager` ×2 | front | 13.2 / 348.4, y 539.7 | 71.4 × 10.8 |
+| `casa/ground-strap` | front | 348.4, y 530.4 | 15.0 × 7.9 |
+| `casa/ground-strap` | rear | 6.3, y 461.9 | 15.0 × 7.9 |
+| `casa/ground-bolts` | rear | 393.2, y 460.2 | 27.6 × 11.3 |
+
+The ground strap is on the **right of the front view and the left of the rear view** — the
+same physical corner, seen from two sides. That is the same fact as the mirrored rear slot
+order, and it arrived independently, which is a useful check that the mirroring is real.
+
+`chassisManager1/2` in the hand-built front SVG are **plain grey rects with no internal
+detail**, so only their outline is measured. The end screws on `casa/cable-manager` are the
+minimum needed to read as a bracket and are marked as such in its provenance.
+
+### Front bezel bands, corrected against the hardware
+
+| band | was | now |
+|---|---|---|
+| card-guide strip | 58.0, h 15.6 | 58.0, **h 32.85** |
+| slot-number bar | 73.6, h 34.5 | **90.85, h 17.25** |
+| slot numbers | y 97.6, 11 pt | y 102.7, 9 pt |
+
+The number bar's bottom edge stays on the card line at 108.1; only its top moved. The
+card-guide strip grew to fill what it gave up. His `moduleNamePlate` measures 13.75 tall,
+so the corrected 17.25 sits between his drawing and the original — worth tightening if it
+still reads tall.
+
+**Filter pull handles.** His `filter` group is a dark bar with two white handles either
+side of the FILTER caption, at 32.8–38.4 % and 61.7–67.4 % of the bar's width. Drawn at
+142.0 and 266.5, 24.5 × 10.3, symmetric about the centre line.
+
+**The bezel swoop.** `casa/brand-swoop`, placed at 109.2, 8.2 and 258.3 × 40.5. A closed
+lens outline, stroked, not filled. Its path was **sampled** — 160 points along
+`getTotalLength()` through the browser CTM, decimated to 80 — rather than composed from
+transforms by hand, which is the only reliable way to lift a curve out of that file. Its
+tip reaches x 367.5, which is why `C100G` moved from 406.95 to 417.9; his `modelLabel`
+starts at 374.5, so the original text was too far left and the swoop ran into it.
+
+### Airflow — the guide and Jason disagree
+
+Recorded, not decided.
+
+**Figure 1-5** ("C100G chassis air flow cross section") draws Front on the left and Rear on
+the right. Cyan arrows enter at the **front bottom**, pass up through the filter and across
+the cards, turn red, and leave at the **top**. The body text agrees: *"the air flow as
+system fans draw air from the front of the chassis to the rear."* That makes the rear fan
+face an **outlet**.
+
+**Jason** stated the opposite from the hardware — in at the rear, out at the front bottom,
+and that the grille below the front filter is the fan exhaust. `c100g/device.yaml` still
+records his version under `provenance.airflow`.
+
+The guide has one physical argument on its side: the **filter sits on the front bottom
+opening**, and filters go on intakes. Worth one look at the machine to settle.
 
 ## Faceplates, read off the vector figures
 

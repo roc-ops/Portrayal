@@ -17,15 +17,18 @@ silently shipping a partial `dist`.
 
 | | |
 |---|---|
-| **C100G** | front 14/14, rear 14/14, 2 configurations, full chassis furniture |
-| **C40G** | front 6/6, rear 6/6, 2 configurations, cards rotated 90 |
-| **components** | 7 cards under `components/casa/`, all shared between both chassis |
+| **C100G** | front 14/14, rear 14/14, 2 configurations, plus 3 fan bays and 2 PEM bays |
+| **C40G** | front 6/6, rear 6/6, 2 configurations, cards rotated 90. **No PEM or fan bays** |
+| **components** | 12 under `components/casa/` — 7 cards, `fan`, `pem`, and the furniture: `cable-manager`, `ground-strap`, `ground-bolts` |
 | **explorer** | `demo/explore.html` — drawing left, live hierarchy right, slot inspector |
 
 ### The seven cards
 
 `bdm` (BDM/BDM2/BDM2m as three skins) · `io-6p12` · `io-6p12-sw` · `smm-8x10g` ·
-`lc-sw-bdm` · `smm-sw-bdm-a` · `smm-sw-bdm-b`
+`lc-sw-bdm` · `smm-sw-bdm-a` · `smm-sw-bdm-b` · `fan` · `pem`
+
+Chassis furniture, placed with `placements` rather than `bays`: `cable-manager` ×2 and
+`ground-strap` on the front, `ground-strap` and `ground-bolts` on the rear.
 
 Each carries `attrs.model` — the human name, which the explorer uses for tree rows.
 Nothing else in the contract had one: `name` is a slug, `description` is a paragraph.
@@ -34,43 +37,36 @@ Nothing else in the contract had one: `name` is a slug, `description` is a parag
 
 ## The next thing to do
 
-**Mine Jason's hand-built SVGs.** They are in `working/intake/casa/handbuilt/`
-(`front.svg`, `back.svg`, gitignored). Drawn from the hardware, not from the guide,
-and they contain named groups for everything we are still faking as `decor`:
+**PEM and fans are done** — `casa/fan` and `casa/pem` exist and the C100G rear carries
+them as real bays (`fan-l`/`fan-c`/`fan-r`, `pem-b`/`pem-a`) instead of decor. **Size**
+comes from Jason's hand-built SVGs, **layout** from Figures 1-4 and 1-6 of the guide.
+Keep those two roles separate; mixing them is what went wrong the first time.
 
-| group | what |
-|---|---|
-| `pemA`, `pemB` | PEM faceplates, with `OK` / `HS` / `!` and `Branch 1`–`Branch 4` |
-| `fanL`, `fanC`, `fanR` | three rear fan modules |
-| `chassisManager1`, `chassisManager2` | two front chassis-manager cards — **not modelled at all** |
-| `groundStrapLocation`, `groundingBolts` | grounding, both faces |
-| `backingPlate`, `insideFrame1/2`, `backPlaneBackGround`, `plasticCover` | structure behind the cards |
+Next, in order:
 
-Jason's suggested order, and it is the right one: **PEM and fans first** (biggest gap,
-already drawn), then the chassis managers, then `SMM 300G` as a second supervisor
-variant. Grounding and internal structure can trail.
+1. **`SMM 300G`** as a second supervisor variant — his front carries it, with `XG0`–`XG9`
+   plus `CG0`/`CG1`, matching the guide's Fig 1-9 "ten 10GigE, two 100GigE".
+2. **C40G PEM and fans.** Deliberately not done. His hand-built SVGs are **C100G only**,
+   and the C40G is 6RU with horizontal cards, so its power and cooling layout does not
+   follow from anything measured. Guessing it would have been worse than leaving the
+   existing decor in place. Needs a C40G rear figure or photograph.
+3. Then internal structure — `backingPlate`, `insideFrame1/2`, `plasticCover`.
 
 His SVGs are Inkscape-style with per-card groups (`c132`–`c145` front, `c312`–`c325`
-back) and `slot0`–`slot13` on both faces, so the geometry is addressable by id.
-
-### Unresolved: the two drawings disagree on chassis aspect
-
-His viewBox is **191.575 × 275.873** — aspect **0.694**. Ours is **432.95 × 571** —
-aspect **0.758**. One is wrong. Ours derives from Table A-1's 482 less the ears Jason
-confirmed; his anchor is unknown.
-
-**Settle it with an overlay, not by argument.** Render both to a common scale and diff.
-This session's repeated failure was judging by eye; do not add to it.
-
----
+back) and `slot0`–`slot13` on both faces, so the geometry is addressable by id. To measure
+one: serve the file and read `getBBox()` composed through `getScreenCTM()`, or walk the
+tree in Python composing `transform` attributes — but see the trap below about the latter.
 
 ## Also queued
 
 - **Cable combs, properly.** Deliberately removed. When they return it is with their
   labels and with slots cut to expose the MCX jacks and standoffs — a real drawing job,
   not the strip that was there.
-- **PEM and fan photos** from Jason for both chassis, if they arrive. The hand-built
-  SVGs may make them unnecessary.
+- **Airflow direction is contested.** Figure 1-5 says front-bottom in / rear-top out;
+  Jason said the reverse. `c100g/device.yaml` still carries his version. One look at a
+  running chassis settles it. The filter's position argues for the guide.
+- **PEM and fan depth.** Both are `estimated` in the contracts. Nothing in the guide or
+  the SVGs gives a depth, and it only matters to the relief/3D path.
 - **A lint rule for element-vs-skin agreement.** See below; this is the most valuable
   rule left.
 
@@ -109,6 +105,27 @@ and the *drawing* was what collided. Successive rescalings had moved positions b
 factor and radii by another. **Nothing checks that a declared element sits where its
 artwork is.** That rule would have caught the LEDs, the stray comb box, and probably
 more. Write it.
+
+**Composing transforms by hand is not the same as `getScreenCTM()`.** Walking his SVG in
+Python and multiplying `transform` attributes resolved the *shape* geometry correctly but
+put the text 20 units outside the group's own bounding box — some nesting the hand-rolled
+matrix code did not account for. The browser CTM never disagreed with `getBBox()`. Where
+both were available the browser won, and where only the Python walk was available (the
+per-feature positions inside `pemA`) the result was treated as an **inventory**, not as
+coordinates.
+
+**Serving from `/tmp` breaks Python.** There is a stray `/tmp/bisect.py` on this machine
+that shadows the stdlib module, so `python3 -m http.server` in `/tmp` dies importing
+`random`. Serve from a subdirectory. Half an hour went into this.
+
+**And an inventory is not a layout.** Reading the hand-built SVG told me the PEM had four
+things labelled `Branch N`, so I drew four terminal blocks in a row. They are **circuit
+breakers** — the terminals are the two recessed blocks below them, and the `Branch N`
+labels belong to leader lines joining each terminal to its breaker. The guide says so in
+words and Figure 1-6 draws it. The lesson is not "check the PDF" but *which* source
+answers *which* question: the hand-built SVG is authoritative on **size and placement in
+the chassis**, the guide figure on **what is on a faceplate and how it is arranged**. I
+had the better source for layout in hand and did not open it.
 
 **L0 only covered one code path.** The colon-in-scalar guard was added to `lint_device`
 and not `lint_component`, so a component with the same fault crashed with a traceback

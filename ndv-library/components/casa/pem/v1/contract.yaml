@@ -1,0 +1,70 @@
+format: 1
+kind: module
+name: pem
+version: 1.2.0
+class: power
+profile: networking
+description: >-
+  Casa C-series Power Entry Module. Two per chassis, PEM B on the left and
+  PEM A on the right when facing the rear. Each carries four 30 A power
+  branches. A branch is a -48/-60 VDC feed with its return, landed on a pair
+  of studs in one of the two terminal blocks, and protected by its own rocker
+  circuit breaker in the row above. The faceplate draws a leader line from
+  each branch's terminal-cover screw up to the breaker that protects it.
+attrs: {model: 'PEM'}
+size: {w: 207.0, h: 91.6, d: 250.0}
+provenance:
+  layout: 'drawing - Figure 1-6 of the C100G Hardware Installation Guide, "C100G
+    Power Entry Module, terminal covers removed". Every feature position below
+    is a measured PERCENTAGE of that figure''s faceplate, stretched onto this
+    module''s size. The figure''s own aspect is 3.43 against this module''s 2.26,
+    so its absolute geometry is not usable - the same trap the isolated card
+    figures set, and the reason fractions are used throughout'
+  size: 'drawing - Jason''s hand-built rear SVG, group `pemA`: 90.80 x 44.04 in a
+    190.26-wide frame, mapped fractionally onto our 432.95 x 571 body. The guide
+    figure gives the layout; the hand-built SVG gives the size'
+  branches: 'datasheet - "Each PEM provides power terminals for four 30A power
+    branches. Each power branch consists of a -48VDC cable and a corresponding
+    return cable protected by a 30A circuit breaker" (Chapter 1). "The
+    over-current protection is provided by circuit breakers (4), one for each
+    branch. These breakers are for protection only and are not intended to be
+    used as power switches"'
+  breaker-order: 'drawing - measured breaker centres are 18.04 / 37.99 / 61.36 /
+    81.33 percent of the faceplate, so four evenly-paired rockers. They map to
+    Branch 4 / 3 / 2 / 1 LEFT TO RIGHT, which the leader lines in the figure
+    make unambiguous'
+  labels: 'Jason - the guide interrupts each leader where its Branch label sits.
+    At this drawing scale that reads as text cutting through the line, so the
+    lines are drawn UNBROKEN and the labels moved clear - outer labels above
+    their horizontal run, inner labels below theirs. The -48/-60VDC and RTN
+    captions are centred in the clear lane between each block and the nearest
+    leader vertical, at a size that fits it, rather than overlapping the block'
+  leaders: 'drawing - the routing is NOT uniform. The two OUTER branches (4 and 1)
+    leave their rocker''s outer side edge at 12.9 percent height, run outward to
+    3.41 / 96.27 percent, then drop to the cover screw. The two INNER branches
+    (3 and 2) drop from their rocker''s bottom CENTRE and run inward to the screw.
+    Each run is interrupted where its Branch label sits'
+  terminals: 'drawing - two blocks at 6.99 and 71.1 percent, each 21.5 percent
+    wide. Figure 1-6 draws them 61.9 percent tall with an uneven split; corrected
+    on Jason''s eye against the hardware to 40.4mm total in TWO EQUAL halves of
+    20.2, top edge unchanged. Breaker height likewise cut a quarter, 19.5 to 14.6. Four studs per block in 2 columns x 2 rows: the
+    TOP row is -48/-60VDC and the BOTTOM row is RTN, labelled once per block in
+    the central gap. Left block holds Branch 4 (left column) and Branch 3; right
+    block holds Branch 2 and Branch 1 (right column)'
+  hand: 'drawing - his `pemA` sits at x 97.70 (RIGHT) and `pemB` at x 2.98 (LEFT)'
+  depth: estimated - not measured
+elements:
+  breaker-4: {at: [22.4, 3.2], size: [31.2, 14.6], class: circuit-breaker}
+  breaker-3: {at: [63.7, 3.2], size: [31.2, 14.6], class: circuit-breaker}
+  breaker-2: {at: [112.1, 3.2], size: [31.2, 14.6], class: circuit-breaker}
+  breaker-1: {at: [153.4, 3.2], size: [31.2, 14.6], class: circuit-breaker}
+  branch-4: {at: [20.1, 33.0], size: [10.0, 27.0], class: dc-terminal}
+  branch-3: {at: [44.2, 33.0], size: [10.0, 27.0], class: dc-terminal}
+  branch-2: {at: [152.8, 33.0], size: [10.0, 27.0], class: dc-terminal}
+  branch-1: {at: [176.9, 33.0], size: [10.0, 27.0], class: dc-terminal}
+  hs: {at: [98.4, 56.6], size: [2.8, 2.8], class: led}
+  alarm: {at: [107.4, 56.6], size: [2.8, 2.8], class: led}
+  ok: {at: [116.4, 56.6], size: [2.8, 2.8], class: led}
+relief:
+  wall: '#4a4f55'
+skins: [default]
