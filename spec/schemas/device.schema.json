@@ -680,6 +680,25 @@
           }
         }
       }
+    },
+    "portfolio": {
+      "type": "object",
+      "description": "where this device sits in the vendor's own catalogue, in the vendor's own words. Free text on purpose: the controlled vocabulary is to be harvested from what accumulates, not designed up front from a dozen devices. All fields optional; a device without a portfolio block sorts under its manufacturer.",
+      "additionalProperties": false,
+      "properties": {
+        "line": {
+          "type": "string",
+          "description": "the vendor's business line, e.g. 'Service Provider'"
+        },
+        "family": {
+          "type": "string",
+          "description": "the vendor's word for the category, e.g. 'Aggregation Router'"
+        },
+        "series": {
+          "type": "string",
+          "description": "marketing series, e.g. 'AGR400'; the model is the SKU root"
+        }
+      }
     }
   },
   "$defs": {

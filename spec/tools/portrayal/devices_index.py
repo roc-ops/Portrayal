@@ -30,6 +30,9 @@ def main():
                 "manufacturer": d.get("manufacturer", ""),
                 "version": d.get("version", ""),
                 "description": d.get("description", ""),
+                # where it sits in the vendor's catalogue. The picker groups on
+                # this; absent is fine and sorts under the manufacturer alone.
+                "portfolio": d.get("portfolio") or {},
             })
     devices.sort(key=lambda x: (x["manufacturer"], x["name"]))
 
