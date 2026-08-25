@@ -139,6 +139,10 @@ $('#stage').addEventListener('wheel', e => {
 function buildTree(root) {
   const nodes = [...root.querySelectorAll('[data-path]')];
   const byPath = new Map();
+  // document order = manifest order, and the manifest is now written in the order
+  // the part is made. That is a better group ordering than the alphabet: it put
+  // qsfp28 (ports 4-21) ahead of qsfpdd-400g (ports 0-3) purely on spelling.
+  nodes.forEach((el, i) => { if (el.__docIdx === undefined) el.__docIdx = i; });
   for (const el of nodes) {
     const path = el.dataset.path;
     if (!byPath.has(path)) byPath.set(path, {path, el, kids: []});
@@ -223,13 +227,17 @@ function groupNodes(list) {
     if (!g) { out.push(n); continue; }
     if (!seen.has(g)) {
       const head = {path: `${n.path.slice(0, n.path.lastIndexOf('/') + 1)}${g}`,
-                    el: null, kids: [], group: g, tier: tierOf(n.el)};
+                    el: null, kids: [], group: g, tier: tierOf(n.el),
+                    doc: n.el.__docIdx ?? Infinity};
       seen.set(g, head); out.push(head);
     }
-    seen.get(g).kids.push(n);
+    const head = seen.get(g);
+    head.kids.push(n);
+    head.doc = Math.min(head.doc, n.el.__docIdx ?? Infinity);
   }
+  const docOf = x => x.doc ?? x.el?.__docIdx ?? Infinity;
   return out.sort((a, b) => (a.tier ?? tierOf(a.el)) - (b.tier ?? tierOf(b.el))
-                          || (a.group || '').localeCompare(b.group || ''));
+                          || docOf(a) - docOf(b));
 }
 
 function renderTree(roots) {
