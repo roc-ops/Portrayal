@@ -8,7 +8,11 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 TARGET="${1:?usage: deploy.sh user@host [remote-dir]}"
-REMOTE="${2:-/opt/portrayal-demo}"
+# The demo host still runs the pre-rename service and path. Renaming those is an
+# ops task for publication day, not something a build script should do behind
+# your back, so the old names stay the default and are overridable.
+SERVICE="${PORTRAYAL_SERVICE:-ndv-demo}"
+REMOTE="${2:-/opt/$SERVICE}"
 
 ./build.sh
 STAGE="$(mktemp -d)"; trap 'rm -rf "$STAGE"' EXIT
@@ -27,7 +31,7 @@ COPYFILE_DISABLE=1 tar czf - -C "$STAGE" . \
   | ssh "$TARGET" "rm -rf ${REMOTE:?}/* && tar xzf - -C '$REMOTE' && find '$REMOTE' -name '._*' -delete"
 ssh "$TARGET" "bash -s" <<'REMOTE'
 set -e
-systemctl is-active portrayal-demo >/dev/null 2>&1 && sudo systemctl restart portrayal-demo
+systemctl is-active "$SERVICE" >/dev/null 2>&1 && sudo systemctl restart "$SERVICE"
 # the server needs a moment to rebind after a restart - poll rather than
 # curl once and report a spurious 000
 for i in $(seq 1 20); do

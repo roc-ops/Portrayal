@@ -5,7 +5,11 @@
 <title>Portrayal — explorer</title>
 <style>
   :root { --bg:#16181b; --panel:#1c2024; --line:#2b3035; --ink:#d7dbdf; --dim:#8d939a;
-          --accent:#4c9aff; --warn:#f59e0b; }
+          --accent:#4c9aff; --warn:#f59e0b;
+          /* selection colour. Deliberately NOT --accent: the halo has to stand out
+             against the faceplate it is drawn on, and a chassis can be any colour,
+             so this is user-settable and remembered. */
+          --hl:#ff2d95; }
   * { box-sizing: border-box; }
   body { margin:0; height:100vh; display:flex; flex-direction:column;
          font-family: system-ui, sans-serif; background:var(--bg); color:var(--ink); }
@@ -30,7 +34,13 @@
   .node { display:flex; align-items:center; gap:0.3rem; padding:0.12rem 0.5rem;
           font-size:0.76rem; cursor:pointer; border-radius:4px; white-space:nowrap; }
   .node:hover { background:#23272c; }
-  .node.sel { background:#22406b; color:#fff; }
+  .node.sel { background:var(--hl); color:#fff; }
+  #hl { display:flex; align-items:center; gap:0.25rem; }
+  #hl .sw { width:0.95rem; height:0.95rem; border-radius:3px; cursor:pointer;
+            border:1px solid #00000055; }
+  #hl .sw.on { outline:2px solid var(--ink); outline-offset:1px; }
+  #hl input[type=color] { width:1.5rem; height:1.2rem; padding:0; border:none;
+            background:none; cursor:pointer; }
   .node .tw { width:0.85rem; color:var(--dim); flex:none; text-align:center; }
   .node .cls { color:var(--dim); font-size:0.68rem; margin-left:auto; padding-left:0.5rem; }
   .node.empty .nm { color:var(--warn); font-style:italic; }
@@ -42,7 +52,7 @@
   #inspect .row { display:flex; gap:0.4rem; align-items:center; margin-bottom:0.35rem; }
   #inspect .row span { color:var(--dim); min-width:5rem; }
   .hint { color:var(--dim); font-size:0.72rem; padding:0.5rem 0.7rem; line-height:1.5; }
-  .halo { fill:none; stroke:var(--accent); stroke-width:1.4; vector-effect:non-scaling-stroke;
+  .halo { fill:none; stroke:var(--hl); stroke-width:1.4; vector-effect:non-scaling-stroke;
           pointer-events:none; }
   .halo.pulse { animation: p 1.1s ease-out 2; }
   @keyframes p { 0%,100%{ stroke-opacity:1 } 50%{ stroke-opacity:0.25 } }
@@ -54,6 +64,7 @@
   <label class="f">device <select id="dev"></select></label>
   <label class="f">config <select id="cfg"></select></label>
   <label class="f">view <select id="view"></select></label>
+  <span class="f" id="hl" title="Selection colour - pick one that stands out against this chassis"></span>
   <button id="fit">Fit</button>
   <span class="f" id="status"></span>
 </header>
@@ -194,6 +205,38 @@ function renderTree(roots) {
 }
 
 // ---------------------------------------------------------------- selection
+
+// Selection colour picker. A fixed highlight fails on some hardware - a light
+// blue halo vanishes on a blue-grey faceplate, and a yellow one would vanish on
+// a yellow chassis - so the colour is chosen by whoever is looking at it.
+const HL_KEY = 'portrayal.hl';
+const HL_SWATCHES = ['#ff2d95', '#00e676', '#ffd400', '#00d5ff', '#ff6d00', '#ffffff'];
+function setHl(c) {
+  document.documentElement.style.setProperty('--hl', c);
+  try { localStorage.setItem(HL_KEY, c); } catch (e) { /* private mode */ }
+  for (const sw of document.querySelectorAll('#hl .sw'))
+    sw.classList.toggle('on', sw.dataset.c === c);
+  const inp = document.querySelector('#hl input');
+  if (inp && inp.value.toLowerCase() !== c.toLowerCase()) inp.value = c;
+}
+(function mountHl() {
+  const host = document.getElementById('hl');
+  if (!host) return;
+  let cur = '#ff2d95';
+  try { cur = localStorage.getItem(HL_KEY) || cur; } catch (e) { /* ignore */ }
+  for (const c of HL_SWATCHES) {
+    const b = document.createElement('span');
+    b.className = 'sw'; b.dataset.c = c; b.style.background = c;
+    b.title = c;
+    b.onclick = () => setHl(c);
+    host.appendChild(b);
+  }
+  const inp = document.createElement('input');
+  inp.type = 'color'; inp.title = 'custom';
+  inp.oninput = () => setHl(inp.value);
+  host.appendChild(inp);
+  setHl(cur);
+})();
 
 let halo = null;
 function select(path, fromTree) {
@@ -358,9 +401,20 @@ addEventListener('resize', fit);
 (async () => {
   DEVICES = (await j('devices.json')).devices;
   COMPONENTS = (await j('components.json')).components;
-  DEVICES.sort((a, b) => (a.manufacturer + a.model).localeCompare(b.manufacturer + b.model));
-  $('#dev').innerHTML = DEVICES
-    .map(d => `<option value="${d.name}">${d.manufacturer} ${d.model}</option>`).join('');
+  // Grouped by manufacturer, alphabetical within each, rather than in the order
+  // they happened to be built. With seven vendors in the list that is the
+  // difference between a menu and a pile.
+  DEVICES.sort((a, b) => a.manufacturer.localeCompare(b.manufacturer)
+                      || a.model.localeCompare(b.model, undefined, {numeric: true}));
+  const byVendor = new Map();
+  for (const d of DEVICES) {
+    if (!byVendor.has(d.manufacturer)) byVendor.set(d.manufacturer, []);
+    byVendor.get(d.manufacturer).push(d);
+  }
+  $('#dev').innerHTML = [...byVendor].map(([vendor, list]) =>
+    `<optgroup label="${vendor}">` +
+    list.map(d => `<option value="${d.name}">${d.model}</option>`).join('') +
+    '</optgroup>').join('');
   const start = DEVICES.find(d => d.name === 'c100g') || DEVICES[0];
   $('#dev').value = start.name;
   await loadDevice(start.name);
