@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: qsfp-lane-leds
-version: 1.1.0
+version: 1.2.0
 class: led
 profile: networking
 description: QSFP port lane LED strip - four triangles, one per lane (no separate
@@ -9,28 +9,35 @@ description: QSFP port lane LED strip - four triangles, one per lane (no separat
 size: {w: 19.5, h: 3.4}
 provenance:
   size: drawing-inferred (S9510-28DC HIG Fig 9)
-  semantics: field knowledge (Jason, corrected 2026-08-17) - lanes 1-4 only
+  semantics: field knowledge (Jason, corrected 2026-08-17) - lanes 1-4 only. The lane
+    COUNT is what that established; the states were not sourced. They were 'off, link,
+    activity', which no document supports - the S9510-28DC HIG has tables for GNSS,
+    SYNC, STAT, FAN, PWR, the PSU and fan FRUs and the management jack, and none for
+    the port lamps. Reduced to the off/on default. 'link' also had no colour and no
+    base stylesheet rule, so it rendered identically to 'off' - a state that looked
+    declared and did nothing. If the real vocabulary is known from the field, declare
+    it here with colours and say so; do not restore an undocumented guess
 elements:
   lane-1:
     at: [2.2, 0.4]
     size: [2.4, 2.6]
     class: led
-    states: ['off', link, activity]
+    states: ['off', 'on']
   lane-2:
     at: [6.6, 0.4]
     size: [2.4, 2.6]
     class: led
-    states: ['off', link, activity]
+    states: ['off', 'on']
   lane-3:
     at: [11.0, 0.4]
     size: [2.4, 2.6]
     class: led
-    states: ['off', link, activity]
+    states: ['off', 'on']
   lane-4:
     at: [15.4, 0.4]
     size: [2.4, 2.6]
     class: led
-    states: ['off', link, activity]
+    states: ['off', 'on']
 relief:
   features:
     - {node: lane-1, dome: 0.25}

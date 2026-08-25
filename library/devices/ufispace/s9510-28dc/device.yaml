@@ -26,7 +26,10 @@ provenance:
     FRU and Fan FRU tables belong to the modules and are transcribed in their own contracts. The
     HIG gives NO table for the port lamps, so the twenty-four led-arrow, four led-dot and two
     qsfp-lane-leds placements keep the component default of off/on rather than an invented
-    link/activity vocabulary'
+    link/activity vocabulary. Corrected after review: qsfp-lane-leds did NOT carry that
+    default when this was written - it still declared off/link/activity, unsourced, and
+    "link" had neither a colour nor a base stylesheet rule so it rendered identically to
+    "off". Fixed in common/qsfp-lane-leds v1.2.0'
 attrs:
   asic: Broadcom Qumran2a BCM88483
   cpu: Intel Denverton-NS 4-core @ 1.6 GHz (premium SKU 8-core @ 1.7 GHz)
