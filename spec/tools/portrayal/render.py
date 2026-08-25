@@ -123,8 +123,14 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     g.set("data-path", path)
     g.set("data-class", contract.get("class", "component"))
     g.set("data-ref", f"{ref}:{contract['version']}")
+    # A cavity is a hole you look INTO - a port aperture, a cage. A MODULE is a
+    # solid body that fills its bay, and its depth says how far it reaches into
+    # the chassis, not that the face has an N-mm hole in it. Emitting data-depth
+    # for one rendered every PSU and fan as an empty recess in 3D. The depth is
+    # still carried, as data-body-depth, so it stays addressable.
     if contract["size"].get("d"):
-        g.set("data-depth", str(contract["size"]["d"]))
+        aperture = contract.get("kind") != "module" or (contract.get("relief") or {}).get("cavity")
+        g.set("data-depth" if aperture else "data-body-depth", str(contract["size"]["d"]))
     relief = contract.get("relief")
     if relief:
         if relief.get("wall"):
