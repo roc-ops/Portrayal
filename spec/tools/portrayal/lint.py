@@ -251,7 +251,12 @@ def lint_device_overlap(path, view_name, view, lib_roots):
     sit inside its host's aperture.
     """
     boxes = []
-    for p in view_parts(view)["placements"]:
+    parts_ = view_parts(view)["placements"]
+    # An indicator that DECLARES it belongs to a part may sit on it: an LED in a
+    # jack's bezel overlaps the jack by construction. `for:` is the declaration,
+    # so honour it here the same way mate-to is honoured.
+    owned = {p["id"]: set(targets(p.get("for"))) for p in parts_}
+    for p in parts_:
         if not p.get("at") or p.get("mate-to"):
             continue
         cp = resolve_component(p["ref"], lib_roots)
@@ -273,6 +278,8 @@ def lint_device_overlap(path, view_name, view, lib_roots):
             ox = min(a[1] + a[3], b[1] + b[3]) - max(a[1], b[1])
             oy = min(a[2] + a[4], b[2] + b[4]) - max(a[2], b[2])
             if ox > 1e-3 and oy > 1e-3:
+                if b[0] in owned.get(a[0], ()) or a[0] in owned.get(b[0], ()):
+                    continue
                 err(path, "L13", f"{view_name}: {a[0]} and {b[0]} overlap by "
                                  f"{ox:.2f}x{oy:.2f}mm")
 
