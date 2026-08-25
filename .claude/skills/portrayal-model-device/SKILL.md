@@ -165,10 +165,9 @@ explorer: the tree reads chassis, then groups in tier order, every row
 `maturity: modelled` and lint again; L15 will tell you if the provenance is
 not good enough.
 
-## Gate 5 - audit against the source, by name
+## Gate 5 - audit against the source, twice
 
-The gates above check that what you drew is *right*. This one checks that it is
-*complete*, and it is the one that catches the quiet omissions.
+### By name
 
 Go back to the guide's overview figure and walk its numbered callouts one by
 one. For each, name the id in your manifest that satisfies it. Then do the same
@@ -179,6 +178,28 @@ This is not ceremony. On the first device built with this skill, every gate
 passed and the model still had no grounding point, because callout 13 was never
 looked for. Nothing else would have caught it: it lints clean, it renders, and
 it looks finished.
+
+### By eye, at matched scale
+
+A name audit proves things are *present*. It says nothing about whether they are
+*right*. For that, put your drawing next to the reference at the SAME scale:
+
+```sh
+# reference px/mm = reference panel width in px / real width in mm
+cairosvg out.svg -o mine.png --output-width <panel_px>    # same px/mm
+# then crop the identical millimetre range from both and view them side by side
+```
+
+Rendering to the reference's scale rather than to a convenient pixel width is
+what makes the comparison work: the same feature lands in the same place in both
+images, and anything that differs stands out immediately. When something looks
+off, crop that feature alone at 4-5x from both and confirm before claiming it.
+
+This is how the AGR400's RJ-45s were caught. At matched scale it was obvious
+that four of six jacks were upside down - a 2-high ganged jack mirrors its rows
+so both release tabs stay reachable, and the component draws only one
+orientation. Nothing in the manifest was wrong; nothing would ever have linted.
+Only looking found it.
 
 ## The canonical shape
 
@@ -240,6 +261,10 @@ configurations: {...}
   deep and 16 kg; its own quick start guide said 524 mm and 14.5 kg. Record the
   disagreement in provenance rather than silently choosing, and say which you
   used.
+- **Connectors have an orientation, and a component draws only one.** A stacked
+  pair of RJ-45s mirrors: the upper is keyway-up, the lower keyway-down. Check
+  which way round each jack is and use `rotate: 180` where it differs. The same
+  goes for anything with a keyway, a latch or a pin-1 mark.
 - **An inventory is not a layout.** Knowing a panel has four things called
   "Branch N" does not tell you they are breaker legends with leader lines. Open
   the figure that shows the layout before drawing.

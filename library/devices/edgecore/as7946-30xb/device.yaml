@@ -43,6 +43,16 @@ provenance:
     9.43, left for the top port and right for the bottom. Every lens carries its function and state
     meanings from the QSG Front LEDs section in attrs'
   airflow: datasheet - "Supports front-to-back airflow SKUs"; every listed SKU is F
+  rj45-orientation: drawing - RJ-45 jacks are NOT all the same way up. BITS 0, BITS 2, MGMT and
+    CONSOLE 1 are keyway-UP with their contacts along the bottom; only BITS 1 and PPS/TOD, the lower
+    row of the ganged block, are keyway-down. A 2-high ganged jack mirrors its rows so both release
+    tabs stay reachable. common/rj45-shielded draws keyway-down, so the other four carry rotate
+    180
+  rj45-leds: NOTE - common/rj45-shielded puts its two integrated LEDs on the CONTACTS side. On this
+    device MGMT-s green link and activity lenses flank the KEYWAY instead, so after the 180 rotation
+    they sit on the wrong edge. The jack orientation is right and the LED side is not; fixing it
+    means a component variant rather than a placement change, so it is recorded here rather than
+    bodged
   grounding: drawing - QSG rear callout 13. An IEC earth symbol at 73.2, 26.0 with TWO studs beneath
     it at y 39.5 and 54.2, immediately right of the PSU bay. Only the upper stud is modelled, because
     common/ground-lug carries one stud under its symbol; the second is recorded here rather than
@@ -287,15 +297,15 @@ views:
         - {id: led-p27, ref: common/led-dot@1, at: [322.93, 26.06], group: port-leds, rel-pos: 54, for: port-27, attrs: {function: speed/link, states: 'Blue = 25G, Green = 10G, Blinking = activity'}}
         - {id: led-p28, ref: common/led-dot@1, at: [331.36, 26.06], group: port-leds, rel-pos: 56, for: port-28, attrs: {function: speed/link, states: 'Blue = 25G, Green = 10G, Blinking = activity'}}
         - {id: led-p29, ref: common/led-dot@1, at: [337.23, 26.06], group: port-leds, rel-pos: 58, for: port-29, attrs: {function: speed/link, states: 'Blue = 25G, Green = 10G, Blinking = activity'}}
-        - {id: bits-0, ref: common/rj45-shielded@2, at: [356.03, 16.83], group: timing, rel-pos: 0}
-        - {id: bits-2, ref: common/rj45-shielded@2, at: [372.18, 16.83], group: timing, rel-pos: 1}
+        - {id: bits-0, ref: common/rj45-shielded@2, at: [356.03, 16.83], rotate: 180, group: timing, rel-pos: 0}
+        - {id: bits-2, ref: common/rj45-shielded@2, at: [372.18, 16.83], rotate: 180, group: timing, rel-pos: 1}
         - {id: bits-1, ref: common/rj45-shielded@2, at: [356.03, 29.33], group: timing, rel-pos: 2}
         - {id: pps-tod, ref: common/rj45-shielded@2, at: [372.18, 29.33], group: timing, rel-pos: 3}
         - {id: mhz-10-in, ref: std/smb@1, at: [393.81, 18.01], group: timing, rel-pos: 4}
         - {id: pps-1-out, ref: std/smb@1, at: [393.81, 30.53], group: timing, rel-pos: 5}
         - {id: usb, ref: std/usb-a@1, at: [403.79, 28.77], rotate: 90, group: mgmt, rel-pos: 0}
-        - {id: mgmt-eth, ref: common/rj45-shielded@2, at: [414.16, 28.97], group: mgmt, rel-pos: 1, attrs: {leds: 'Left = link, Right = activity'}}
-        - {id: console-1, ref: common/rj45-shielded@2, at: [415.73, 45.8], group: mgmt, rel-pos: 3}
+        - {id: mgmt-eth, ref: common/rj45-shielded@2, at: [414.16, 28.97], rotate: 180, group: mgmt, rel-pos: 1, attrs: {leds: 'Left = link, Right = activity'}}
+        - {id: console-1, ref: common/rj45-shielded@2, at: [415.73, 45.8], rotate: 180, group: mgmt, rel-pos: 3}
         - {id: console-0, ref: std/micro-usb@1, at: [404.0, 46.4], group: mgmt, rel-pos: 2}
         - {id: reset, ref: common/reset-button@1, at: [394.5, 45.4], group: mgmt, rel-pos: 4}
         - {id: led-diag, ref: common/led-rect@1, at: [359.2, 44.4], group: status-leds, rel-pos: 0}
