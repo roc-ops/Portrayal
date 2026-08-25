@@ -30,6 +30,21 @@ export function svgSource(url) {
 }
 export function clearSvgCache() { SVG_CACHE.clear(); }
 
+// A flat drawing outlines the faceplate and rounds its corners so the sheet
+// metal reads as a part on a page. On a box, the outline of a face IS the box's
+// edge, and both devices cost us something in 3D: the 0.5mm stroke sits half
+// inside each face, so where two textured faces meet - front to side, rear to
+// side - you get 0.5mm of near-black that reads as a gap you can see through,
+// and rx="1.2" makes the four corners genuinely transparent under alphaTest, so
+// at each box vertex you really can. Top edges escaped notice only because the
+// lid art paints a bright line along them that swamps the seam. Square and
+// de-stroke the faceplate before it becomes a texture; the geometry draws the
+// edge.
+export function squareFaceplate(text) {
+  return text.replace(/<rect\b[^>]*\bid="chassis-faceplate"[^>]*>/,
+    m => m.replace(/\s(?:rx|ry|stroke|stroke-width)="[^"]*"/g, ''));
+}
+
 export async function svgCanvas(url, wmm, hmm, flipX = false, flipYax = false) {
   const text = await svgSource(url);
   const img = new Image();
@@ -206,9 +221,10 @@ export async function buildFaceRelief(F, ctx) {
       return;
     }
     const {cavities, outs, domes, vents, frus, cleanText} = await extractRelief(src);
-    const cv = await rasterize(cleanText, fw, fh);
+    const faceText = squareFaceplate(cleanText);
+    const cv = await rasterize(faceText, fw, fh);
     faceCv[F.view] = cv;
-    faceSvg[F.view] = cleanText;
+    faceSvg[F.view] = faceText;   // LOD re-rasterises from this; keep it squared
     facePunch[F.view] = [];
     const grp = new THREE.Group();
     grp.position.set(...F.pos());

@@ -37,7 +37,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { mountShare } from './share.js';
 import { configureRelief, svgCanvas, canvasTex, crop, extractRelief, rasterize, svgSource,
-         buildFaceRelief } from './relief.js';
+         buildFaceRelief, squareFaceplate } from './relief.js';
 
 const PARAMS = new URLSearchParams(location.search);
 const DEV = PARAMS.get('device') || 'as7726-32x';
@@ -48,6 +48,9 @@ let W = 438.4, H = 43.5, D = 515;
 const FRU_PATHS = new Set(), FRU_GROUPS = {}, FRU_META = {}, TWEENS = [];
 let BODY_META = {};
 const PXMM = 4;
+// box-face shading, in +x -x +y -y +z -z order: sides darker, lid lifted,
+// underside in shadow. Multiplies the face texture on an unlit material.
+const FACE_TINT = [0.65, 0.65, 1.25, 0.45, 1, 1];
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x16181b);
 // near/far set the depth-buffer resolution: at 600mm a near of 0.1 resolves only
@@ -345,13 +348,24 @@ async function build(cfg) {
       await sideMat('rear', W, H),                // -z: as seen from behind
     ];
   } else {
-    const bottomCv = await svgCanvas(f('bottom'), W, D, true, true);
-    faceSvg.bottom = bottomCv._svgText;
+    // the underside gets no relief pass, so square its faceplate here too
+    const bottomTxt = squareFaceplate(await svgSource(f('bottom')));
+    const bottomCv = await rasterize(bottomTxt, W, D, PXMM, true, true);
+    faceSvg.bottom = bottomTxt;
     mats = [faceCv.right, faceCv.left, faceCv.top, bottomCv, faceCv.front, faceCv.rear]
-      .map((c, i) => new THREE.MeshBasicMaterial(
-        // alphaTest: punched pixels must not write depth, or they occlude interiors
-        {map: canvasTex(c), transparent: i !== 3, alphaTest: i !== 3 ? 0.1 : 0,
-         alphaToCoverage: i !== 3}));
+      .map((c, i) => {
+        const m = new THREE.MeshBasicMaterial(
+          // alphaTest: punched pixels must not write depth, or they occlude interiors
+          {map: canvasTex(c), transparent: i !== 3, alphaTest: i !== 3 ? 0.1 : 0,
+           alphaToCoverage: i !== 3});
+        // The faces are unlit, so with the faceplate outline gone nothing marks a
+        // corner: front and side are the same flat grey and the box loses its
+        // form. Tint each face instead - the lid catches light, the sides fall
+        // away, the underside is in shadow. It reads as a box without putting a
+        // black line where two faces meet.
+        m.color.setScalar(FACE_TINT[i]);
+        return m;
+      });
   }
   if (box) {
     scene.remove(box); box.geometry.dispose();
