@@ -364,8 +364,8 @@ views:
       - {at: [370.79, 80.6], path: M -3.0 0 H 2.0 M 0.4 -1.4 L 2.4 0 L 0.4 1.4, fill: none, stroke-width: 0.4, for: fan-0}
     components:
       bays:
-        - {id: psu-0, at: [6.26, 11.74], size: {w: 60.1, h: 37.6}, accepts: [edgecore/agr-psu@1], default: edgecore/agr-psu@1, group: psus, rel-pos: 0}
-        - {id: psu-1, at: [6.26, 49.32], size: {w: 60.1, h: 37.6}, accepts: [edgecore/agr-psu@1], default: edgecore/agr-psu@1, group: psus, rel-pos: 1}
+        - {id: psu-0, at: [6.26, 11.74], size: {w: 60.1, h: 37.6}, accepts: [edgecore/agr-psu-dc@1, edgecore/agr-psu-ac@1], default: edgecore/agr-psu-dc@1, group: psus, rel-pos: 0}
+        - {id: psu-1, at: [6.26, 49.32], size: {w: 60.1, h: 37.6}, accepts: [edgecore/agr-psu-dc@1, edgecore/agr-psu-ac@1], default: edgecore/agr-psu-dc@1, group: psus, rel-pos: 1}
         - {id: fan-4, at: [83.19, 11.74], size: {w: 69.4, h: 69.4}, accepts: [edgecore/agr-fan@1], default: edgecore/agr-fan@1, group: fans, rel-pos: 4}
         - {id: fan-3, at: [153.59, 11.74], size: {w: 69.4, h: 69.4}, accepts: [edgecore/agr-fan@1], default: edgecore/agr-fan@1, group: fans, rel-pos: 3}
         - {id: fan-2, at: [223.99, 11.74], size: {w: 69.4, h: 69.4}, accepts: [edgecore/agr-fan@1], default: edgecore/agr-fan@1, group: fans, rel-pos: 2}
@@ -498,8 +498,9 @@ configurations:
   ac-psu:
     description: Modular dual AC PSUs, front-to-back airflow. Same shell, IEC inlet instead of the
       terminal block.
-    skins:
-      agr-psu: ac
+    bays:
+      psu-0: edgecore/agr-psu-ac@1
+      psu-1: edgecore/agr-psu-ac@1
     part-numbers:
       AS7946-30XB-O-AC-F-US:
         part: FNPEC7946401Z

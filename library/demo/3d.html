@@ -36,7 +36,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { mountShare } from './share.js';
-import { configureRelief, svgCanvas, canvasTex, crop, extractRelief, rasterize,
+import { configureRelief, svgCanvas, canvasTex, crop, extractRelief, rasterize, svgSource,
          buildFaceRelief } from './relief.js';
 
 const PARAMS = new URLSearchParams(location.search);
@@ -297,7 +297,7 @@ async function build(cfg) {
   if (!COMP) {
     // FRU paths must be known during extraction (owner tagging)
     for (const view of ['front', 'rear']) {
-      const txt = await (await fetch(f(view), {cache: 'no-store'})).text();
+      const txt = await svgSource(f(view));
       for (const m of txt.matchAll(/data-path="([^"\/]+)"[^>]*data-class="(psu|fan|tab)"/g))
         FRU_PATHS.add(m[1]);
       for (const m of txt.matchAll(/data-class="(psu|fan|tab)"[^>]*data-path="([^"\/]+)"/g))
@@ -423,7 +423,7 @@ async function buildHitIndex(cfg) {
   for (const view of ['front', 'rear']) {
     const div = document.createElement('div');
     div.style.cssText = 'position:absolute;left:-10000px;top:0;width:1000px;visibility:hidden';
-    div.innerHTML = await (await fetch(`../dist/${DEV}.${cfg}.${view}.svg`, {cache: 'no-store'})).text();
+    div.innerHTML = await svgSource(`../dist/${DEV}.${cfg}.${view}.svg`);
     document.body.appendChild(div);
     const svg = div.querySelector('svg');
     const inv = svg.getScreenCTM().inverse();

@@ -16,8 +16,22 @@ export function configureRelief(deps) {
   ({THREE, renderer, PXMM, FRU_PATHS} = deps);
 }
 
+// Every view SVG was fetched with cache: 'no-store' from four separate call
+// sites - svgCanvas (once per box face), extractRelief, and twice more in the
+// page - so switching configuration re-downloaded the same six files dozens of
+// times. On the demo host that was 9.4 of the 11.8 seconds a switch took. The
+// URL already carries the config name, so memoising per URL is safe; a build
+// tool writes new files under new names.
+const SVG_CACHE = new Map();
+export function svgSource(url) {
+  if (!SVG_CACHE.has(url))
+    SVG_CACHE.set(url, fetch(url, {cache: 'no-store'}).then(r => r.text()));
+  return SVG_CACHE.get(url);
+}
+export function clearSvgCache() { SVG_CACHE.clear(); }
+
 export async function svgCanvas(url, wmm, hmm, flipX = false, flipYax = false) {
-  const text = await (await fetch(url, {cache: 'no-store'})).text();
+  const text = await svgSource(url);
   const img = new Image();
   const blobUrl = URL.createObjectURL(new Blob([text], {type: 'image/svg+xml'}));
   await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = blobUrl; });
@@ -63,7 +77,7 @@ export function crop(cv, r) {
 export async function extractRelief(url) {
   const div = document.createElement('div');
   div.style.cssText = 'position:absolute;left:-10000px;top:0;width:1000px;visibility:hidden';
-  div.innerHTML = await (await fetch(url, {cache: 'no-store'})).text();
+  div.innerHTML = await svgSource(url);
   document.body.appendChild(div);
   const svg = div.querySelector('svg');
   const inv = svg.getScreenCTM().inverse();
