@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Portrayal — live entity map (ArcOS)</title>
+<style>
+  body { font-family: system-ui, sans-serif; background: #16181b; color: #d7dbdf; margin: 0.8rem 1.2rem; }
+  h1 { font-size: 1rem; margin: 0 0 0.3rem; }
+  h1 small { font-weight: 400; color: #9aa1a8; font-size: 0.78rem; }
+  .panel { margin: 0.15rem 0 0.5rem; }
+  .panel svg { width: 100%; height: auto; display: block; }
+  #tbl-wrap { max-height: 48vh; overflow-y: auto; border: 1px solid #33373c; border-radius: 8px; margin-top: 0.6rem; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.78rem; }
+  th, td { border-bottom: 1px solid #26292d; padding: 0.22rem 0.6rem; text-align: left; }
+  th { position: sticky; top: 0; background: #1c1f23; color: #9aa1a8; }
+  tbody tr:hover { background: #23262a; }
+  td.mono, th.mono { font-family: ui-monospace, monospace; }
+  .to { color: #f59e0b; }
+  .unmapped { color: #565d64; }
+  .val { color: #7aa2f7; }
+</style>
+</head>
+<body>
+<script>
+if ((new URLSearchParams(location.search).get('device') || 'as7726-32x') !== 'as7726-32x') {
+  document.write('');
+  throw new Error('device not supported');
+}
+</script>
+<h1>Entity map — ArcOS (roc-spine1) <small>sanitized <code>show components | display json</code> joined onto physical parts
+through the overlay's entity-map; hover a row to highlight its part. NOS trees are never drawn — only joined.</small></h1>
+<div class="panel" id="front"></div>
+<div class="panel" id="rear"></div>
+<div id="tbl-wrap">
+<table>
+  <thead><tr><th class="mono">NOS component</th><th class="mono">Parent</th><th>Type</th><th>Description</th>
+             <th class="mono">→ physical</th><th>Data</th></tr></thead>
+  <tbody id="rows"></tbody>
+</table>
+</div>
+<script src="hl.js"></script>
+<script>
+async function j(url) { return (await fetch(url, {cache: 'no-store'})).json(); }
+async function t(url) { return (await fetch(url, {cache: 'no-store'})).text(); }
+function resolveRule(name, rules) {
+  for (const rule of rules) {
+    const re = new RegExp('^' + rule.match.replace(/[.*+?^$()|[\]\\]/g, '\\$&').replace(/\{n\}/g, '(\\d+)') + '$');
+    const m = name.match(re);
+    if (!m) continue;
+    let n = m[1] !== undefined ? parseInt(m[1], 10) : null;
+    if (rule.range && n !== null) {
+      const [lo, hi] = rule.range.split('-').map(Number);
+      if (n < lo || n > hi) continue;
+    }
+    const to = rule.to.replace(/\{n\+1\}/g, n === null ? '' : String(n + 1))
+                      .replace(/\{n\}/g, n === null ? '' : String(n));
+    return {to, note: rule.note || ''};
+  }
+  return null;
+}
+function targetEl(to) {
+  if (to.startsWith('region:')) return document.querySelector(`[data-path='${to}']`);
+  return document.getElementById(to) || document.querySelector(`[data-path='${to}']`);
+}
+function compData(c) {
+  const out = [];
+  const props = c.properties && c.properties.property || [];
+  for (const p of props) {
+    const v = p.state && (p.state.value !== undefined ? p.state.value : p.state['configured-value']);
+    if (v !== undefined && v !== '') out.push(`${p.name}=${v}`);
+    if (out.length >= 3) break;
+  }
+  return out.join('  ');
+}
+(async () => {
+  document.getElementById('front').innerHTML = await t('../dist/as7726-32x.front.svg');
+  document.getElementById('rear').innerHTML = await t('../dist/as7726-32x.rear.svg');
+  const overlays = (await j('../dist/as7726-32x.overlays.json')).overlays;
+  const rules = overlays.arcos['entity-map'];
+  const dump = await j('../devices/edgecore/as7726-32x/dumps/arcos-openconfig-components.json');
+  let comps = dump.data['openconfig-platform:components'].component;
+  // cages with no transceiver inserted exist only as subcomponent references —
+  // surface them as rows too so the port mapping is visible
+  const present = new Set(comps.map(c => c.name));
+  const subs = [];
+  comps.forEach(c => (c.subcomponents && c.subcomponents.subcomponent || []).forEach(sc => {
+    if (!present.has(sc.name)) {
+      present.add(sc.name);
+      subs.push({name: sc.name, state: {type: 'subcomponent-ref',
+                description: `declared under ${c.name} (empty cage / not a component row)`}});
+    }
+  }));
+  comps = comps.concat(subs);
+  const parentOf = {};
+  comps.forEach(c => (c.subcomponents && c.subcomponents.subcomponent || []).forEach(sc => { parentOf[sc.name] = c.name; }));
+  // FRU health: present in the entity list but reporting no identity = seated-but-silent
+  const propMap = c => Object.fromEntries((c.properties && c.properties.property || []).map(p => [p.name, p.state && p.state.value]));
+  comps.filter(c => c.name.startsWith('psu')).forEach(c => {
+    const pr = propMap(c);
+    if (pr['Status'] === 'PRESENT' && !pr['Model']) {
+      const res = resolveRule(c.name, rules);
+      const mod = res && document.getElementById(res.to + '--module');
+      if (mod) { mod.classList.add('state-fail'); c._note = 'present but not reporting (no model/serial, no fan/thermal sensors)'; }
+    }
+  });
+  const rows = document.getElementById('rows');
+  const mapped = [], unmapped = [];
+  comps.forEach(c => (resolveRule(c.name, rules) ? mapped : unmapped).push(c));
+  const add = (c, res) => {
+    const tr = document.createElement('tr');
+    const type = ((c.state && c.state.type) || '').split(':').pop().split('openconfig-platform-types.').pop();
+    tr.innerHTML = `<td class="mono">${c.name}</td><td class="mono" style="color:#565d64">${parentOf[c.name] || ''}</td><td>${type}</td>` +
+      `<td>${(c.state && c.state.description) || ''}</td>` +
+      `<td class="mono ${res ? 'to' : 'unmapped'}">${res ? res.to : '(unmapped — no faceplate presence)'}</td>` +
+      `<td class="val">${compData(c)}${c._note ? ' <span style="color:#ef4444">· ' + c._note + '</span>' : ''}${res && res.note ? ' <span style="color:#565d64">· ' + res.note + '</span>' : ''}</td>`;
+    if (res) {
+      tr.onmouseenter = () => portrayalHl.on(targetEl(res.to));
+      tr.onmouseleave = () => portrayalHl.off(targetEl(res.to));
+    }
+    rows.appendChild(tr);
+  };
+  mapped.forEach(c => add(c, resolveRule(c.name, rules)));
+  unmapped.forEach(c => add(c, null));
+})();
+</script>
+</body>
+</html>

@@ -28,7 +28,7 @@ part — so they come and go with the layer.
 
 ### Handing a drawing to whoever does the artwork
 
-    python3 ndv-spec/tools/ndv/render.py <device.yaml> --library ndv-library \
+    python3 spec/tools/portrayal/render.py <device.yaml> --library library \
         --without silkscreen --out dist-bare
 
 The punched panel with every component installed and nothing printed on any of it. On the

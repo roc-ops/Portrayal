@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Static file server for the NDV demo.
+"""Static file server for the Portrayal demo.
 
 `python -m http.server` sends Last-Modified but no Cache-Control and no ETag.
 With no explicit freshness, browsers fall back to a heuristic and will happily

@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://roc-ops.github.io/Portrayal/schemas/v0/overlay.schema.json",
+  "title": "Portrayal NOS overlay (v0) — joins a NOS's naming/entity tree onto physical IDs",
+  "type": "object",
+  "required": ["format", "kind", "nos"],
+  "additionalProperties": false,
+  "properties": {
+    "format": { "const": 1 },
+    "kind": { "const": "overlay" },
+    "nos": { "type": "string", "description": "e.g. arcos, sonic, cumulus" },
+    "nos-versions": { "type": "string", "description": "optional applicability note, e.g. '>=S8.5'" },
+    "device": { "type": "string", "description": "device this overlay applies to (namespace/name)" },
+    "terms": {
+      "type": "object",
+      "description": "display vocabulary overrides, e.g. {bay: 'Slot'}",
+      "additionalProperties": { "type": "string" }
+    },
+    "interfaces": {
+      "type": "array",
+      "description": "logical interface naming rules; {n} expands over a group's rel-pos",
+      "items": {
+        "type": "object",
+        "required": ["physical", "name"],
+        "additionalProperties": false,
+        "properties": {
+          "physical": { "type": "string", "description": "physical id or pattern, e.g. 'port-{n}'" },
+          "name": { "type": "string", "description": "NOS interface name pattern, e.g. 'swp{n}' or 'Ethernet{(n-1)*4}'" },
+          "range": { "type": "string", "description": "e.g. '1-32'; omit for single" },
+          "breakout": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "modes": { "type": "array", "items": { "type": "string" } },
+              "child-name": { "type": "string", "description": "pattern for breakout children" }
+            }
+          }
+        }
+      }
+    },
+    "entity-map": {
+      "type": "array",
+      "description": "rules joining NOS component names (ENTITY-MIB / ietf-hardware / OpenConfig) to physical ids or regions; NOS trees are joined, never drawn; unmapped NOS nodes are legal",
+      "items": {
+        "type": "object",
+        "required": ["match", "to"],
+        "additionalProperties": false,
+        "properties": {
+          "source": { "enum": ["openconfig", "entity-mib", "ietf-hardware", "redfish"], "description": "which tree these names come from; omit = any" },
+          "match": { "type": "string", "description": "NOS component name pattern, e.g. 'sfp{n}' or 'PSU-{n}'" },
+          "range": { "type": "string" },
+          "to": { "type": "string", "description": "physical id pattern ('port-{n}'), or 'region:<id>'" },
+          "note": { "type": "string" }
+        }
+      }
+    }
+  }
+}

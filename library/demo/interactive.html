@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Portrayal demo — Edgecore AS7726-32X</title>
+<style>
+  body { font-family: system-ui, sans-serif; background: #16181b; color: #d7dbdf; margin: 0.8rem 1.2rem; }
+  h1 { font-size: 1rem; margin: 0; white-space: nowrap; } h2 { font-size: 0.85rem; color: #9aa1a8; margin: 0.5rem 0 0.2rem; }
+  .hdr { display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap; }
+  .panel { margin: 0.15rem 0 0.5rem; }
+  .panel svg { width: 100%; height: auto; max-height: 30vh; display: block; }
+  select { background: #2b2f33; color: #d7dbdf; border: 1px solid #4a4f55; border-radius: 6px; padding: 0.25rem 0.4rem; font-size: 0.8rem; max-width: 22rem; }
+  button { background: #2b2f33; color: #d7dbdf; border: 1px solid #4a4f55; border-radius: 6px;
+           padding: 0.25rem 0.6rem; margin: 0; cursor: pointer; font-size: 0.8rem; }
+  button:hover { background: #3a3f45; }
+  #callout { position: absolute; pointer-events: none; background: #0c0e10; border: 1px solid #f59e0b;
+             border-radius: 6px; padding: 0.4rem 0.6rem; font-size: 0.8rem; display: none; z-index: 10; }
+  #callout .path { color: #f59e0b; font-family: ui-monospace, monospace; }
+  #tree-wrap { margin-top: 0.8rem; }
+  #tree { max-height: 52vh; overflow-y: auto; border: 1px solid #33373c; border-radius: 8px;
+          padding: 0.5rem 0.8rem; font-size: 0.82rem; background: #121417; }
+  #tree details { margin-left: 0.9rem; }
+  #tree > details { margin-left: 0; }
+  #tree summary { cursor: pointer; padding: 0.1rem 0.2rem; border-radius: 4px; list-style: none; }
+  #tree summary::before { content: '\25B8'; color: #565d64; display: inline-block; width: 1em; }
+  #tree details[open] > summary::before { content: '\25BE'; }
+  #tree details.leaf > summary::before { content: '\00B7'; }
+  #tree summary:hover { background: #23262a; }
+  .t-path { font-family: ui-monospace, monospace; color: #e8eaec; }
+  .t-class { color: #7aa2f7; font-size: 0.72rem; margin-left: 0.45rem; }
+  .t-attr { color: #9aa1a8; font-size: 0.72rem; margin-left: 0.45rem; }
+  .chip { display: inline-block; margin-left: 0.35rem; padding: 0 0.45rem; border: 1px solid #4a4f55;
+          border-radius: 9px; font-size: 0.68rem; color: #c7ccd1; cursor: pointer; user-select: none; }
+  .chip:hover { border-color: #f59e0b; }
+  .chip.on { background: #f59e0b; color: #16181b; border-color: #f59e0b; }
+</style>
+</head>
+<body>
+<div class="hdr">
+<h1>AS7726-32X</h1>
+  <select id="cfg" title="configuration"></select>
+  <button onclick="highlight('[data-speed=\'100g\']')">Highlight 100G ports</button>
+  <button onclick="highlight('[data-speed=\'10g\']')">Highlight 10G ports</button>
+  <button onclick="highlight('[data-media=\'rj45\'],[data-media=\'rj45-serial\']')">Highlight RJ45</button>
+  <button onclick="highlightRegion('mgmt-block')">Region: management</button>
+  <button onclick="simulateLink()">Simulate link states</button>
+  <button onclick="psuFail()">Fail PSU-2</button>
+  <button onclick="reset()">Reset</button>
+</div>
+<div id="panels"></div>
+<div id="tree-wrap">
+  <h2>Component tree <span style="font-weight:400;font-size:0.78rem">— hover highlights; click a state chip to set it (off clears)</span></h2>
+  <div id="tree"></div>
+</div>
+<div id="callout"></div>
+<script src="hl.js"></script>
+<script>
+const DEV = new URLSearchParams(location.search).get('device') || 'as7726-32x';
+let CFG = null, VIEWS = ['front', 'rear'];
+async function load(view) {
+  const r = await fetch(`../dist/${DEV}.${CFG}.${view}.svg`, {cache: 'no-store'});
+  document.getElementById(view).innerHTML = await r.text();
+}
+const q = sel => document.querySelectorAll(sel);
+function clearFx() { portrayalHl.clear(); q('.portrayal-dim').forEach(e => e.classList.remove('portrayal-dim')); }
+function highlight(sel) {
+  clearFx();
+  q('svg > g[data-path]').forEach(e => e.classList.add('portrayal-dim'));
+  q(sel).forEach(e => { e.classList.remove('portrayal-dim'); portrayalHl.on(e); });
+}
+function highlightRegion(id) {
+  clearFx();
+  const region = document.querySelector(`[data-path='region:${id}']`);
+  if (!region) return;
+  portrayalHl.on(region);
+  (region.getAttribute('data-members') || '').split(' ').forEach(m => portrayalHl.on(document.getElementById(m)));
+}
+function simulateLink() {
+  reset();
+  // real AS7726-32X semantics: blue=100G, orange=40G, white=25G/lane, green=10G/lane
+  q('[data-media=\'qsfp28\']').forEach((p, i) => {
+    const leds = p.querySelectorAll('[data-class=led]');
+    const mode = i % 4;
+    if (mode === 0) leds[0].classList.add('state-link-100g');
+    else if (mode === 1) leds[0].classList.add('state-link-40g');
+    else if (mode === 2) leds.forEach(l => l.classList.add('state-link-25g'));
+    else leds.forEach((l, k) => { if (k < 3) l.classList.add('state-link-10g'); });
+  });
+  document.querySelector('#sfp-leds--lamp-1')?.classList.add('state-link-10g');
+  document.querySelector('#sfp-leds--lamp-2')?.classList.add('state-link-1g');
+}
+function psuFail() {
+  const psu = document.querySelector('#psu-2 [data-path=\'psu-2/module\']');
+  if (!psu) return;
+  psu.classList.add('state-fail');
+  psu.querySelector('[data-class=led]')?.classList.add('state-fail');
+  portrayalHl.on(psu);
+}
+function reset() {
+  clearFx();
+  q('[class*=state-]').forEach(e => e.classList.remove(...[...e.classList].filter(c => c.startsWith('state-'))));
+}
+const callout = document.getElementById('callout');
+document.addEventListener('mouseover', ev => {
+  const t = ev.target.closest('[data-path]');
+  if (!t || !t.closest('svg')) { callout.style.display = 'none'; return; }
+  const attrs = [...t.attributes].filter(a => a.name.startsWith('data-') && a.name !== 'data-path')
+    .map(a => `${a.name.slice(5)}=${a.value}`).join('  ');
+  callout.innerHTML = `<span class="path">${t.getAttribute('data-path')}</span><br>${attrs || ''}`;
+  callout.style.display = 'block';
+});
+document.addEventListener('mousemove', ev => {
+  callout.style.left = (ev.pageX + 14) + 'px'; callout.style.top = (ev.pageY + 14) + 'px';
+});
+function directPathChildren(el) {
+  const out = [];
+  (function walk(n) {
+    for (const c of n.children) {
+      if (c.dataset && c.dataset.path !== undefined) out.push(c);
+      else walk(c);
+    }
+  })(el);
+  return out;
+}
+function stateChips(el) {
+  const states = (el.dataset.states || '').split(' ').filter(Boolean);
+  if (!states.length) return null;
+  const span = document.createElement('span');
+  states.forEach(st => {
+    const chip = document.createElement('span');
+    chip.className = 'chip'; chip.textContent = st;
+    chip.onclick = ev => {
+      ev.stopPropagation(); ev.preventDefault();
+      const was = el.classList.contains('state-' + st);
+      [...el.classList].filter(c => c.startsWith('state-')).forEach(c => el.classList.remove(c));
+      if (st !== 'off' && !was) el.classList.add('state-' + st);
+      span.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+      if (st !== 'off' && !was) chip.classList.add('on');
+    };
+    span.appendChild(chip);
+  });
+  return span;
+}
+function treeNode(el) {
+  const d = document.createElement('details');
+  const sm = document.createElement('summary');
+  const path = document.createElement('span');
+  path.className = 't-path';
+  path.textContent = el.dataset.path;
+  sm.appendChild(path);
+  if (el.dataset.class) { const c = document.createElement('span'); c.className = 't-class'; c.textContent = el.dataset.class; sm.appendChild(c); }
+  const extras = ['model','sku','partNumber','altModel','media','speed','role','group','relPos','physicalContext','watts','input']
+    .map(k => el.dataset[k] ? `${k.replace(/([A-Z])/g, '-$1').toLowerCase()}=${el.dataset[k]}` : null)
+    .filter(Boolean).join(' ');
+  if (extras) { const a = document.createElement('span'); a.className = 't-attr'; a.textContent = extras; sm.appendChild(a); }
+  const chips = stateChips(el);
+  if (chips) sm.appendChild(chips);
+  sm.onmouseenter = () => portrayalHl.on(el);
+  sm.onmouseleave = () => portrayalHl.off(el);
+  d.appendChild(sm);
+  const kids = directPathChildren(el);
+  if (!kids.length) d.className = 'leaf';
+  kids.forEach(k => d.appendChild(treeNode(k)));
+  return d;
+}
+function buildTree() {
+  const tree = document.getElementById('tree');
+  tree.innerHTML = '';
+  VIEWS.forEach(view => {
+    const svg = document.querySelector(`#${view} svg`);
+    if (!svg) return;
+    const top = document.createElement('details');
+    top.open = true;
+    const sm = document.createElement('summary');
+    sm.innerHTML = `<span class="t-path" style="color:#f59e0b">${view}</span>`;
+    top.appendChild(sm);
+    directPathChildren(svg).forEach(el => top.appendChild(treeNode(el)));
+    tree.appendChild(top);
+  });
+}
+async function reloadAll() { for (const v of VIEWS) await load(v); buildTree(); }
+(async () => {
+  const idx = await (await fetch(`../dist/${DEV}.configs.json`, {cache: 'no-store'})).json();
+  VIEWS = idx.views || VIEWS;
+  document.querySelector('.hdr h1').textContent = idx.model || DEV;
+  const panels = document.getElementById('panels');
+  VIEWS.forEach(v => {
+    const h = document.createElement('h2'); h.textContent = v[0].toUpperCase() + v.slice(1);
+    const d = document.createElement('div'); d.className = 'panel'; d.id = v;
+    panels.appendChild(h); panels.appendChild(d);
+  });
+  CFG = idx.default;
+  const sel = document.getElementById('cfg');
+  idx.configs.forEach(c => {
+    const o = document.createElement('option');
+    o.value = c.name; o.textContent = `${c.name} — ${c.description}`;
+    if (c.name === CFG) o.selected = true;
+    sel.appendChild(o);
+  });
+  sel.onchange = () => { CFG = sel.value; reloadAll(); };
+  await reloadAll();
+})();
+</script>
+</body>
+</html>

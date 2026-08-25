@@ -1,0 +1,225 @@
+format: 1
+kind: device
+name: c100g
+version: 0.1.0
+maturity: modelled
+manufacturer: Casa Systems
+model: C100G
+description: 'Casa C100G CMTS/CCAP - 13RU, 14 paired front/rear slots. Front and rear slot N are
+  two halves of one logical position: a DOCSIS line card in front N requires its I/O partner in
+  rear N.'
+provenance:
+  chassis: 'datasheet - Table A-1 of the C100G Hardware Installation Guide (rev 07/08/2022): 22.5in
+    (571mm) H, 19in (482mm) W, 15.25in (386mm) D, 13RU'
+  slots: datasheet - 14 module slots front and rear, SMM in front 6 and 7
+  slot-pitch: drawing - 426.6mm card region from Fig 1-1 over 14 slots = 30.47
+  card-height: drawing - Figure 1-1 puts the card band between the slot-number strip at 18.9 percent
+    and the FILTER band at 79.4 percent of chassis height, so 108.1 to 453.5, a 345.5 card. An earlier
+    440 was wrong and made the cards overrun the space above
+  configurations: datasheet - the redundancy layouts are stated per scheme in Chapter 3 (Remote
+    PHY) and Chapter 4 (BDM)
+  smm-slots: datasheet - front 6 and 7 take the SMM. Modelled with the 8x10GigE variant (Fig 1-8);
+    the guide also lists SMM 2x10GE, SMM 300G and SMM 300Gm, which are further skins or components
+    when needed
+  bands: drawing - front is air baffle above (0 to 108.1), cards, then FILTER (453.5) and the fan
+    tray below. Rear is fan assemblies above (0 to 105.9), cards, then two power entry modules from
+    491.4. Fig 1-1 and Fig 1-2
+  card-aspect: NOTE - the isolated card figures (1-14, 1-15, 1-8) are drawn NARROWER than the real
+    card. Their faceplate aspect is 13.26; the chassis front view gives 345.5 by 30.46 = 11.34,
+    about 17 percent wider. Port positions taken from those figures are therefore used as FRACTIONS
+    of the faceplate and stretched to this width, not as absolute geometry
+  width: 'Table A-1 quotes 19in / 482, which is the rack face INCLUDING the mounting ears. Jason
+    confirmed from a real chassis that the ears sit outside the body and that there is only a 1/8in
+    (3.175mm) flange either side of the cards. Working back: the card region measures 426.6 in Fig
+    1-1, so the BODY is 426.6 + 2x3.175 = 432.95, and the ears must protrude 24.5 each side to reach
+    482. Drawn as the body only - the ears are deliberately omitted for now and can be added as
+    their own part'
+  airflow: Jason - air is drawn in at the rear, passes behind and through the cards, and exhausts
+    at the FRONT bottom. So the grille below the filter is the fan EXHAUST, not an intake, and it
+    is a coarse wire grille rather than perforation
+  rear-slots: 'datasheet - C100G rear side (11+1) in Chapter 4, verbatim: slots 0-4 6+12 IO or IO2;
+    slot 5 LC-BDM-SWITCH for BDM line module redundancy; slots 6 and 7 SMM-SW-BDM-A and -B respectively,
+    with the guide noting that correct slot positions are indicated on the module faceplates; slot
+    8 6+12 SW-IO or SW-IO2, non-redundant under 11+1; slots 9-13 6+12 IO or IO2'
+  rear-order: 'Jason - the rear slot order is MIRRORED. Rear N connects to front N, so viewed from
+    the back the numbering runs right to left: rear 0 sits directly behind front 0, which is on
+    the far side when you walk round. Rear bay x is therefore FL + (13 - N) * pitch, not FL + N
+    * pitch'
+  front-furniture: photograph + drawing - the top is a sloped shroud carrying the casa systems mark
+    and the model, with a row of card-guide tabs along its lower lip, then the black slot-number
+    strip. Numbers run 0 to 13 with 6 and 7 in RED, which is how both the product photo and Fig
+    1-1 mark the SMM pair
+attrs:
+  role: CMTS/CCAP
+  slots: 14 front + 14 rear, associated 1:1
+  smm-slots: front 6 and 7
+  rack: 13 RU
+  weight: 132 lb / 61.23 kg fully loaded
+  power: -42 to -60 VDC, 20 A nominal per feed at -48 VDC
+chassis:
+  width: 432.95
+  height: 571.0
+  depth: 386.0
+  color: '#a7a9ac'
+  ru: 13
+  weight-kg: 61.23
+views:
+  front:
+    size:
+      w: 432.95
+      h: 571.0
+    placements:
+      - {id: brand-swoop, ref: casa/brand-swoop@1, at: [109.2, 8.2], group: furniture, rel-pos: 2}
+      - {id: cable-mgr-l, ref: casa/cable-manager@1, at: [13.2, 539.7], group: furniture, rel-pos: 0, label: Cable Manager L}
+      - {id: cable-mgr-r, ref: casa/cable-manager@1, at: [348.4, 539.7], group: furniture, rel-pos: 1, label: Cable Manager R}
+      - {id: ground-strap-front, ref: casa/ground-strap@1, at: [348.4, 530.4], group: grounding, rel-pos: 0, label: Ground Strap}
+    bays:
+      - {id: front-0, at: [3.17, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1], group: front-slots, rel-pos: 0, default: null}
+      - {id: front-1, at: [33.64, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1], group: front-slots, rel-pos: 1, default: null}
+      - {id: front-2, at: [64.11, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1], group: front-slots, rel-pos: 2, default: null}
+      - {id: front-3, at: [94.58, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1], group: front-slots, rel-pos: 3, default: null}
+      - {id: front-4, at: [125.05, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1], group: front-slots, rel-pos: 4, default: null}
+      - {id: front-5, at: [155.53, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1], group: front-slots, rel-pos: 5, default: null}
+      - {id: front-6, at: [186.0, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/smm-8x10g@1], group: front-slots, rel-pos: 6, default: casa/smm-8x10g@1}
+      - {id: front-7, at: [216.47, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/smm-8x10g@1], group: front-slots, rel-pos: 7, default: casa/smm-8x10g@1}
+      - {id: front-8, at: [246.94, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1], group: front-slots, rel-pos: 8, default: null}
+      - {id: front-9, at: [277.41, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1], group: front-slots, rel-pos: 9, default: null}
+      - {id: front-10, at: [307.88, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1], group: front-slots, rel-pos: 10, default: null}
+      - {id: front-11, at: [338.34, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1], group: front-slots, rel-pos: 11, default: null}
+      - {id: front-12, at: [368.81, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1], group: front-slots, rel-pos: 12, default: null}
+      - {id: front-13, at: [399.29, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1], group: front-slots, rel-pos: 13, default: null}
+    decor:
+      - {at: [0, 0], size: [432.95, 58.0], fill: '#6f757b'}
+      - {at: [0, 58.0], size: [432.95, 32.85], fill: '#5a6066'}
+      - {at: [12.18, 60.5], size: [12.0, 10.5], rx: 2.4, fill: '#3f4449'}
+      - {at: [42.64, 60.5], size: [12.0, 10.5], rx: 2.4, fill: '#3f4449'}
+      - {at: [73.11, 60.5], size: [12.0, 10.5], rx: 2.4, fill: '#3f4449'}
+      - {at: [103.58, 60.5], size: [12.0, 10.5], rx: 2.4, fill: '#3f4449'}
+      - {at: [134.06, 60.5], size: [12.0, 10.5], rx: 2.4, fill: '#3f4449'}
+      - {at: [164.53, 60.5], size: [12.0, 10.5], rx: 2.4, fill: '#3f4449'}
+      - {at: [195.0, 60.5], size: [12.0, 10.5], rx: 2.4, fill: '#3f4449'}
+      - {at: [225.47, 60.5], size: [12.0, 10.5], rx: 2.4, fill: '#3f4449'}
+      - {at: [255.94, 60.5], size: [12.0, 10.5], rx: 2.4, fill: '#3f4449'}
+      - {at: [286.41, 60.5], size: [12.0, 10.5], rx: 2.4, fill: '#3f4449'}
+      - {at: [316.88, 60.5], size: [12.0, 10.5], rx: 2.4, fill: '#3f4449'}
+      - {at: [347.34, 60.5], size: [12.0, 10.5], rx: 2.4, fill: '#3f4449'}
+      - {at: [377.81, 60.5], size: [12.0, 10.5], rx: 2.4, fill: '#3f4449'}
+      - {at: [408.29, 60.5], size: [12.0, 10.5], rx: 2.4, fill: '#3f4449'}
+      - {at: [0, 90.85], size: [432.95, 17.25], fill: '#231f20'}
+      - {at: [0, 453.5], size: [432.95, 14.3], fill: '#231f20'}
+      - {at: [142.0, 455.5], size: [24.5, 10.3], fill: '#d7dbdf', rx: 1.2}
+      - {at: [266.5, 455.5], size: [24.5, 10.3], fill: '#d7dbdf', rx: 1.2}
+      - {at: [6, 470], size: [420.95, 96.0], fill: '#8d949c', pattern: grille, vent: 60}
+    silkscreen:
+      - {at: [26, 30], text: casa systems, font-size: 13, fill: '#d7dbdf', anchor: start}
+      - {at: [417.9, 30], text: C100G, font-size: 13, fill: '#d7dbdf', anchor: end}
+      - {at: [18.41, 102.7], text: '0', for: front-0, font-size: 9, anchor: middle, fill: '#d7dbdf'}
+      - {at: [48.88, 102.7], text: '1', for: front-1, font-size: 9, anchor: middle, fill: '#d7dbdf'}
+      - {at: [79.35, 102.7], text: '2', for: front-2, font-size: 9, anchor: middle, fill: '#d7dbdf'}
+      - {at: [109.82, 102.7], text: '3', for: front-3, font-size: 9, anchor: middle, fill: '#d7dbdf'}
+      - {at: [140.29, 102.7], text: '4', for: front-4, font-size: 9, anchor: middle, fill: '#d7dbdf'}
+      - {at: [170.76, 102.7], text: '5', for: front-5, font-size: 9, anchor: middle, fill: '#d7dbdf'}
+      - {at: [201.23, 102.7], text: '6', for: front-6, font-size: 9, anchor: middle, fill: '#e03127'}
+      - {at: [231.7, 102.7], text: '7', for: front-7, font-size: 9, anchor: middle, fill: '#e03127'}
+      - {at: [262.17, 102.7], text: '8', for: front-8, font-size: 9, anchor: middle, fill: '#d7dbdf'}
+      - {at: [292.64, 102.7], text: '9', for: front-9, font-size: 9, anchor: middle, fill: '#d7dbdf'}
+      - {at: [323.11, 102.7], text: '10', for: front-10, font-size: 9, anchor: middle, fill: '#d7dbdf'}
+      - {at: [353.58, 102.7], text: '11', for: front-11, font-size: 9, anchor: middle, fill: '#d7dbdf'}
+      - {at: [384.05, 102.7], text: '12', for: front-12, font-size: 9, anchor: middle, fill: '#d7dbdf'}
+      - {at: [414.52, 102.7], text: '13', for: front-13, font-size: 9, anchor: middle, fill: '#d7dbdf'}
+      - {at: [216.475, 464], text: FILTER, font-size: 8, fill: '#d7dbdf', anchor: middle}
+  rear:
+    size:
+      w: 432.95
+      h: 571.0
+    placements:
+      - {id: ground-strap-rear, ref: casa/ground-strap@1, at: [6.3, 461.9], group: grounding, rel-pos: 0, label: Ground Strap}
+      - {id: ground-bolts-rear, ref: casa/ground-bolts@1, at: [393.2, 460.2], group: grounding, rel-pos: 1, label: Grounding Studs}
+    bays:
+      - {id: rear-0, at: [399.29, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/io-6p12@1], group: rear-slots, rel-pos: 0, default: null}
+      - {id: rear-1, at: [368.81, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/io-6p12@1], group: rear-slots, rel-pos: 1, default: null}
+      - {id: rear-2, at: [338.34, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/io-6p12@1], group: rear-slots, rel-pos: 2, default: null}
+      - {id: rear-3, at: [307.88, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/io-6p12@1], group: rear-slots, rel-pos: 3, default: null}
+      - {id: rear-4, at: [277.41, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/io-6p12@1], group: rear-slots, rel-pos: 4, default: null}
+      - {id: rear-5, at: [246.94, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/lc-sw-bdm@1], group: rear-slots, rel-pos: 5, default: casa/lc-sw-bdm@1}
+      - {id: rear-6, at: [216.47, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/smm-sw-bdm-a@1], group: rear-slots, rel-pos: 6, default: casa/smm-sw-bdm-a@1}
+      - {id: rear-7, at: [186.0, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/smm-sw-bdm-b@1], group: rear-slots, rel-pos: 7, default: casa/smm-sw-bdm-b@1}
+      - {id: rear-8, at: [155.53, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/io-6p12-sw@1], group: rear-slots, rel-pos: 8, default: casa/io-6p12-sw@1}
+      - {id: rear-9, at: [125.05, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/io-6p12@1], group: rear-slots, rel-pos: 9, default: null}
+      - {id: rear-10, at: [94.58, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/io-6p12@1], group: rear-slots, rel-pos: 10, default: null}
+      - {id: rear-11, at: [64.11, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/io-6p12@1], group: rear-slots, rel-pos: 11, default: null}
+      - {id: rear-12, at: [33.64, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/io-6p12@1], group: rear-slots, rel-pos: 12, default: null}
+      - {id: rear-13, at: [3.17, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/io-6p12@1], group: rear-slots, rel-pos: 13, default: null}
+      - {id: fan-l, at: [4.0, 4.5], size: {w: 137.25, h: 91.2}, accepts: [casa/fan@1], group: fans, rel-pos: 0, label: Fan L, default: casa/fan@1}
+      - {id: fan-c, at: [147.85, 4.5], size: {w: 137.25, h: 91.2}, accepts: [casa/fan@1], group: fans, rel-pos: 1, label: Fan C, default: casa/fan@1}
+      - {id: fan-r, at: [291.7, 4.5], size: {w: 137.25, h: 91.2}, accepts: [casa/fan@1], group: fans, rel-pos: 2, label: Fan R, default: casa/fan@1}
+      - {id: pem-b, at: [6.0, 476.7], size: {w: 207.0, h: 91.6}, accepts: [casa/pem@1], group: power, rel-pos: 0, label: PEM B, default: casa/pem@1}
+      - {id: pem-a, at: [219.95, 476.7], size: {w: 207.0, h: 91.6}, accepts: [casa/pem@1], group: power, rel-pos: 1, label: PEM A, default: casa/pem@1}
+    decor:
+      - {at: [0, 470.0], size: [432.95, 101.0], fill: '#4a4f55'}
+configurations:
+  bdm2m-11plus1:
+    description: BDM2m "11+1" - the vendor's name for it. Redundancy collapses to a single protecting
+      slot. Rear 5 takes the LC-BDM-SWITCH that does the protecting; rear 8 takes a combined 6+12
+      SW-IO, which is what frees front/rear 8 to carry traffic instead of standing spare. Neither
+      slot carries a plain 6+12 I/O.
+    default: true
+    bays:
+      front-0: casa/bdm@1
+      front-1: casa/bdm@1
+      front-2: casa/bdm@1
+      front-3: casa/bdm@1
+      front-4: casa/bdm@1
+      front-5: casa/bdm@1
+      front-8: casa/bdm@1
+      front-9: casa/bdm@1
+      front-10: casa/bdm@1
+      front-11: casa/bdm@1
+      front-12: casa/bdm@1
+      front-13: casa/bdm@1
+      rear-0: casa/io-6p12@1
+      rear-1: casa/io-6p12@1
+      rear-2: casa/io-6p12@1
+      rear-3: casa/io-6p12@1
+      rear-4: casa/io-6p12@1
+      rear-9: casa/io-6p12@1
+      rear-10: casa/io-6p12@1
+      rear-11: casa/io-6p12@1
+      rear-12: casa/io-6p12@1
+      rear-13: casa/io-6p12@1
+      front-6: casa/smm-8x10g@1
+      front-7: casa/smm-8x10g@1
+      rear-8: casa/io-6p12-sw@1
+      rear-5: casa/lc-sw-bdm@1
+      rear-6: casa/smm-sw-bdm-a@1
+      rear-7: casa/smm-sw-bdm-b@1
+  docsis-classic:
+    description: Classic DOCSIS. Redundancy is per side, one protecting slot each - front/rear 5 and
+      8 - with LC Switch behind both.
+    bays:
+      front-0: casa/bdm@1
+      front-1: casa/bdm@1
+      front-2: casa/bdm@1
+      front-3: casa/bdm@1
+      front-4: casa/bdm@1
+      front-5: casa/bdm@1
+      front-8: casa/bdm@1
+      front-9: casa/bdm@1
+      front-10: casa/bdm@1
+      front-11: casa/bdm@1
+      front-12: casa/bdm@1
+      front-13: casa/bdm@1
+      rear-0: casa/io-6p12@1
+      rear-1: casa/io-6p12@1
+      rear-2: casa/io-6p12@1
+      rear-3: casa/io-6p12@1
+      rear-4: casa/io-6p12@1
+      rear-9: casa/io-6p12@1
+      rear-10: casa/io-6p12@1
+      rear-11: casa/io-6p12@1
+      rear-12: casa/io-6p12@1
+      rear-13: casa/io-6p12@1
+      front-6: casa/smm-8x10g@1
+      front-7: casa/smm-8x10g@1
+    skins:
+      bdm: bdm

@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Portrayal — lab rack</title>
+<style>
+  body { font-family: system-ui, sans-serif; background: #16181b; color: #d7dbdf; margin: 0; overflow: hidden; }
+  #bar { position: absolute; top: 0.6rem; left: 0.9rem; z-index: 5; display: flex; gap: 0.7rem; align-items: baseline; }
+  #bar strong { font-size: 0.95rem; }
+  #bar span { color: #8d939a; font-size: 0.8rem; }
+  #hud { position: absolute; bottom: 0.8rem; left: 0.9rem; z-index: 5; background: #0c0e10cc;
+         border: 1px solid #33373c; border-radius: 6px; padding: 0.4rem 0.7rem; font-size: 0.8rem; }
+  #key { position: absolute; top: 0.6rem; right: 0.9rem; z-index: 5; background: #0c0e10cc;
+         border: 1px solid #33373c; border-radius: 6px; padding: 0.5rem 0.7rem; font-size: 0.78rem; }
+  #key i { display: inline-block; width: 14px; height: 3px; border-radius: 2px; margin-right: 0.45rem;
+           vertical-align: middle; }
+  #iso { position: absolute; top: 10.5rem; right: 0.9rem; z-index: 5; display: flex;
+         flex-direction: column; gap: 0.28rem; max-width: 15rem; }
+  #iso button { background: #1c1f23; color: #b9bec4; border: 1px solid #33373c;
+                border-radius: 6px; padding: 0.3rem 0.6rem; font-size: 0.78rem;
+                cursor: pointer; text-align: left; }
+  #iso button:hover { background: #2b3035; }
+  #iso button.on { background: #2f3a4d; color: #eef2f6; border-color: #5b7fb8; }
+  #note { position: absolute; bottom: 0.8rem; right: 0.9rem; z-index: 5; color: #565d64; font-size: 0.72rem; }
+  canvas { display: block; }
+</style>
+<script type="importmap">
+{ "imports": {
+    "three": "https://unpkg.com/three@0.161.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.161.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div id="bar"><strong>lab rack</strong><span id="sub"></span></div>
+<div id="key">
+  <div><i style="background:#e8d44d"></i>span mcdnny–abrnny</div>
+  <div><i style="background:#e8874d"></i>span abrnny–gnvany</div>
+  <div><i style="background:#4de8a8"></i>span gnvany–mcdnny</div>
+  <div><i style="background:#bfae3a"></i>intra-site fiber</div>
+  <div><i style="background:#4d7fe8"></i>ethernet</div>
+  <div style="margin-top:0.35rem;color:#8d939a">dashes flow TX → RX (fiber only)</div>
+  <div style="color:#8d939a">striped = B strand (return fiber)</div>
+</div>
+<div id="iso"></div>
+<div id="hud">loading…</div>
+<div id="note">drag to orbit · wheel to zoom · double click to reset</div>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { mountShare } from './share.js';
+import { configureRelief, buildFaceRelief, canvasTex, svgCanvas as reliefSvgCanvas }
+  from './relief.js';
+
+const PARAMS = new URLSearchParams(location.search);
+const LAB = PARAMS.get('lab') || 'rocnet-roadm-demo';
+const RU = 44.45;                 // EIA-310 rack unit
+const RACK_W = 482.6;             // 19in rail-to-rail outer width
+// Faces are rasterised once per MODEL, not per instance - this lab is 9 devices
+// but only 2 models - so the resolution budget goes a lot further than it looks.
+const PXMM_RELIEF = 8;            // density the shared relief pipeline rasterises at
+const PXMM_FACE = 10;             // front/rear carry the detail worth reading
+const PXMM_SIDE = 2;              // sides/top/bottom are near-featureless here
+const RACK_FACE_Z = 11;           // front plane of the mounting posts
+const RECESS = 101.6;             // 4in - how far back the Smartoptics gear sits
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x121417);
+const camera = new THREE.PerspectiveCamera(42, innerWidth / innerHeight, 20, 12000);
+const renderer = new THREE.WebGLRenderer({antialias: true});
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+document.body.appendChild(renderer.domElement);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.minDistance = 200;
+controls.maxDistance = 9000;
+globalThis.__portrayalRack = {THREE, scene, camera, renderer, controls};
+// Scrims are visible=false and GLTFExporter honours onlyVisible, so they stay
+// out of the file - unless a device is isolated, where exporting what you see
+// is the right answer anyway.
+mountShare(scene, 'portrayal-rocnet-roadm-lab',
+           {note: 'GLB opens in Quick Look, PowerPoint, Blender'});
+// no FRU animation in the rack view, so an empty path set stops the shared
+// pipeline building ejectable sub-groups it would never move
+configureRelief({THREE, renderer, PXMM: PXMM_RELIEF, FRU_PATHS: new Set()});
+
+scene.add(new THREE.AmbientLight(0xffffff, 0.72));
+const key = new THREE.DirectionalLight(0xffffff, 0.85);
+key.position.set(0.5, 1, 1.1); scene.add(key);
+const fill = new THREE.DirectionalLight(0xffffff, 0.3);
+fill.position.set(-0.7, -0.2, -1); scene.add(fill);
+
+addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+
+const hud = m => { document.getElementById('hud').textContent = m; };
+
+// ---------------------------------------------------------------- textures
+async function svgCanvas(url, wmm, hmm, pxmm, flipX = false, flipY = false) {
+  const res = await fetch(url, {cache: 'no-store'});
+  if (!res.ok) return null;
+  const text = await res.text();
+  const img = new Image();
+  const blob = URL.createObjectURL(new Blob([text], {type: 'image/svg+xml'}));
+  await new Promise((ok, no) => { img.onload = ok; img.onerror = no; img.src = blob; });
+  const cv = document.createElement('canvas');
+  cv.width = Math.max(1, Math.round(wmm * pxmm));
+  cv.height = Math.max(1, Math.round(hmm * pxmm));
+  const c = cv.getContext('2d');
+  if (flipX) { c.translate(cv.width, 0); c.scale(-1, 1); }
+  if (flipY) { c.translate(0, cv.height); c.scale(1, -1); }
+  c.drawImage(img, 0, 0, cv.width, cv.height);
+  URL.revokeObjectURL(blob);
+  cv._svgText = text;
+  return cv;
+}
+function tex(cv) {
+  const t = new THREE.CanvasTexture(cv);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = renderer.capabilities.getMaxAnisotropy();
+  t.minFilter = THREE.LinearMipmapLinearFilter;
+  return t;
+}
+function labelSprite(text, px = 34, color = '#8d939a') {
+  const cv = document.createElement('canvas');
+  const c = cv.getContext('2d');
+  c.font = `600 ${px}px ui-monospace, monospace`;
+  cv.width = Math.ceil(c.measureText(text).width) + 12;
+  cv.height = px + 12;
+  const c2 = cv.getContext('2d');
+  c2.font = `600 ${px}px ui-monospace, monospace`;
+  c2.fillStyle = color; c2.textBaseline = 'middle';
+  c2.fillText(text, 6, cv.height / 2);
+  const s = new THREE.Sprite(new THREE.SpriteMaterial({map: tex(cv), depthTest: false}));
+  s.scale.set(cv.width / px * 22, cv.height / px * 22, 1);
+  return s;
+}
+
+// ------------------------------------------------------------------- rack
+// Rails only, as asked: two mounting posts with a U scale. No side panels,
+// no roof - the point is to read where each device sits, not to draw a cabinet.
+function buildRack(heightRU) {
+  const g = new THREE.Group();
+  const H = heightRU * RU;
+  // cage-nut bar is bright zinc-plated steel, not the dark grey it had
+  const railMat = new THREE.MeshLambertMaterial({color: 0xc3c8ce});
+  const holeMat = new THREE.MeshBasicMaterial({color: 0x15181b});
+  const earMat = new THREE.MeshLambertMaterial({color: 0xd6dade});
+  const screwMat = new THREE.MeshLambertMaterial({color: 0x8d949c});
+  for (const side of [-1, 1]) {
+    const x = side * (RACK_W / 2 - 8);
+    const post = new THREE.Mesh(new THREE.BoxGeometry(16, H, 34), railMat);
+    post.position.set(x, H / 2, RACK_FACE_Z - 17);
+    g.add(post);
+    // three mounting holes per U, on the EIA-310 0.5/0.625/0.625in spacing
+    for (let u = 0; u < heightRU; u++) {
+      for (const dy of [6.35, 22.22, 38.10]) {
+        const h = new THREE.Mesh(new THREE.BoxGeometry(6.5, 6.5, 1), holeMat);
+        h.position.set(x, u * RU + dy, RACK_FACE_Z + 0.3);
+        g.add(h);
+      }
+    }
+  }
+  // U numbering up the left rail, counted from the bottom as racks are.
+  // (Lost in the bright-rail rewrite of this function and restored here.)
+  for (let u = 1; u <= heightRU; u++) {
+    const s = labelSprite(String(u), 30, u % 5 === 0 ? '#e8ecef' : '#98a0a8');
+    s.position.set(-(RACK_W / 2 + 34), (u - 1) * RU + RU / 2, 46);
+    g.add(s);
+  }
+  g.userData = {railMat, earMat, screwMat};
+  return g;
+}
+
+// An L bracket per side: a flange flat against the rack face taking two screws
+// into the cage nuts, and a leg running back along the side of the device. The
+// gear sits recessed from the rack face, so the leg spans that gap and then
+// carries on along the chassis - which is what the bracket is for and why a
+// flat plate looked wrong.
+function rackEars(rack, ru, faceZ, halfW, depth) {
+  const g = new THREE.Group();
+  const {earMat, screwMat} = rack.userData;
+  const yBase = (ru - 1) * RU;
+  const h = RU - 4.5;
+  // rack face back to the faceplate, then three quarters of the way along the
+  // chassis side - the leg is what actually carries the unit
+  const legLen = (RACK_FACE_Z - faceZ) + depth * 0.75;
+  for (const side of [-1, 1]) {
+    // the screw goes through the flange into the cage nut, so it sits on the
+    // rail's hole column - not on the flange centre line, which is 4mm inboard
+    const holeX = side * (RACK_W / 2 - 8);
+    // the flange has to start AT the leg, not straddle it - centring 24mm of
+    // flange on the leg put 10mm inboard of it and made the bracket a T
+    const earX = side * (halfW + 12);
+    const flange = new THREE.Mesh(new THREE.BoxGeometry(24, h, 3), earMat);
+    flange.position.set(earX, yBase + RU / 2, RACK_FACE_Z + 1.5);
+    g.add(flange);
+    // the other leg of the L, flush against the flank of the device
+    // the leg runs BACK from the rack face along the chassis. Centring it on
+    // faceZ + legLen/2 sent it forward out of the front of the unit instead.
+    const leg = new THREE.Mesh(new THREE.BoxGeometry(3, h, legLen), earMat);
+    leg.position.set(side * (halfW + 1.5), yBase + RU / 2, RACK_FACE_Z - legLen / 2);
+    g.add(leg);
+    for (const dy of [6.35, 38.10]) {
+      const head = new THREE.Mesh(new THREE.CylinderGeometry(2.6, 2.6, 2.2, 14), screwMat);
+      head.rotation.x = Math.PI / 2;
+      head.position.set(holeX, yBase + dy, RACK_FACE_Z + 4.1);
+      g.add(head);
+      const slot = new THREE.Mesh(new THREE.BoxGeometry(3.6, 0.8, 0.6),
+        new THREE.MeshBasicMaterial({color: 0x4a5057}));
+      slot.position.set(holeX, yBase + dy, RACK_FACE_Z + 5.3);
+      g.add(slot);
+    }
+  }
+  return g;
+}
+
+// ---------------------------------------------------------------- devices
+const _modelCache = new Map();
+// Relief is built ONCE per model and cloned per instance - this lab is nine
+// devices of two models, so building it per device would be four and a half
+// times the work for identical geometry. clone() shares geometry and materials,
+// so the copies cost almost nothing.
+async function modelParts(ref, meta) {
+  if (_modelCache.has(ref)) return _modelCache.get(ref);
+  const W = meta.chassis.w, H = meta.chassis.h, D = meta.chassis.d;
+  const cfg = meta.default || 'default';
+  const f = v => `../dist/${ref}.${cfg}.${v}.svg`;
+  const promise = (async () => {
+    const FACES = [
+      {view: 'front', fw: () => W, fh: () => H, pos: () => [0, 0, D / 2],  rot: [0, 0, 0]},
+      {view: 'rear',  fw: () => W, fh: () => H, pos: () => [0, 0, -D / 2], rot: [0, Math.PI, 0]},
+      {view: 'right', fw: () => D, fh: () => H, pos: () => [W / 2, 0, 0],  rot: [0, Math.PI / 2, 0]},
+      {view: 'left',  fw: () => D, fh: () => H, pos: () => [-W / 2, 0, 0], rot: [0, -Math.PI / 2, 0]},
+      {view: 'top',   fw: () => W, fh: () => D, pos: () => [0, H / 2, 0],  rot: [-Math.PI / 2, 0, 0]},
+    ];
+    const meshes = [], faceCv = {}, faceSvg = {}, facePunch = {};
+    for (const F of FACES) {
+      await buildFaceRelief(F, {src: f(F.view), faceCv, faceSvg, facePunch, meshes,
+        FRU_GROUPS: {}, FRU_META: {}, BODY_META: {}, D, bodyBoxMesh: null});
+    }
+    const relief = new THREE.Group();
+    meshes.forEach(m => relief.add(m));
+    // the bottom is not in the relief set; it carries no ports here
+    const bottomCv = await reliefSvgCanvas(f('bottom'), W, D, true, true);
+    const plain = () => new THREE.MeshLambertMaterial({color: 0x3a3f44});
+    const mat = cv => cv ? new THREE.MeshLambertMaterial(
+      {map: canvasTex(cv), transparent: true, alphaTest: 0.08}) : plain();
+    const mats = [faceCv.right, faceCv.left, faceCv.top, bottomCv, faceCv.front, faceCv.rear]
+      .map(mat);
+    return {mats, relief};
+  })();
+  _modelCache.set(ref, promise);
+  return promise;
+}
+
+async function buildDevice(entry, byName) {
+  const meta = byName[entry.ref];
+  if (!meta) { console.warn('[portrayal] unknown device', entry.ref); return null; }
+  const W = meta.chassis.w, H = meta.chassis.h, D = meta.chassis.d;
+  const {mats, relief} = await modelParts(entry.ref, meta);
+  const mesh = new THREE.Mesh(new THREE.BoxGeometry(W, H, D), mats);
+  // a device at RU n occupies that U, measured from the rack floor, and sits
+  // RECESS back from the rack face as these are mounted in the real rack
+  mesh.position.set(0, (entry.ru - 1) * RU + H / 2, RACK_FACE_Z - RECESS - D / 2);
+  mesh.userData = {entry, W, H, D};
+
+  // Deep enough to swallow the relief, which stands proud of both faces - dust
+  // caps 9.5mm off the front, the PSU bail 22.85mm off the rear. A scrim sized
+  // to the chassis alone let all of that poke through, so an isolated view still
+  // showed every ROADM's caps lit.
+  const scrim = new THREE.Mesh(new THREE.BoxGeometry(W + 4, H + 4, D + 70),
+    new THREE.MeshBasicMaterial({color: 0x121417, transparent: true, opacity: 0.72,
+                                 depthWrite: false}));
+  scrim.position.copy(mesh.position);
+  scrim.visible = false;
+  scrim.renderOrder = 3;
+
+  const tag = labelSprite(entry.label || entry.id, 30, '#d7dbdf');
+  // left side, outboard of the U numbering: the ethernet runs dress round the
+  // right-hand side of the rack and were sitting on top of these
+  // Sit the names well clear of the U scale, and on the SAME plane as it. They
+  // were beside the recessed faceplate, so perspective slid them back over the
+  // U numbers even though they clear them in plan.
+  tag.position.set(-(RACK_W / 2 + 150) - tag.scale.x / 2, mesh.position.y, 46);
+  const reliefCopy = relief.clone();
+  reliefCopy.position.copy(mesh.position);
+  return {mesh, tag, scrim, relief: reliefCopy, W, H, D};
+}
+
+// Port positions come from the compiled SVG rather than being restated here:
+// render it hidden, measure the node with getBBox, and the cable follows the
+// device manifest automatically if a port ever moves.
+async function portIndex(ref, cfg) {
+  const faces = {};
+  for (const view of ['front', 'rear']) {
+    const res = await fetch(`../dist/${ref}.${cfg}.${view}.svg`, {cache: 'no-store'});
+    if (!res.ok) { faces[view] = {}; continue; }
+    const div = document.createElement('div');
+    div.style.cssText = 'position:absolute;left:-10000px;top:0;width:1200px;visibility:hidden';
+    div.innerHTML = await res.text();
+    document.body.appendChild(div);
+    const svg = div.querySelector('svg');
+    // getBBox() is in the element's OWN user space, so it drops the translate()
+    // that positions the placement. Compose it with the element's CTM relative to
+    // the root, which is what puts the port back where the manifest put it.
+    const inv = svg.getScreenCTM().inverse();
+    const idx = {};
+    for (const el of svg.querySelectorAll('[data-path]')) {
+      const path = el.dataset.path;
+      if (!path || el.dataset.class === 'region') continue;
+      if ((path.match(/\//g) || []).length > 1) continue;   // port and port/bore only
+      let b;
+      try { b = el.getBBox(); } catch { continue; }
+      if (!b.width && !b.height) continue;
+      const m = inv.multiply(el.getScreenCTM());
+      const pt = ([x, y]) => ({x: m.a * x + m.c * y + m.e, y: m.b * x + m.d * y + m.f});
+      const p0 = pt([b.x, b.y]), p1 = pt([b.x + b.width, b.y + b.height]);
+      idx[path] = {x: (p0.x + p1.x) / 2, y: (p0.y + p1.y) / 2};
+    }
+    div.remove();
+    faces[view] = idx;
+  }
+  return faces;
+}
+
+// ----------------------------------------------------------------- cables
+const CABLE = {smf: 0xbfae3a, ethernet: 0x4d7fe8};
+// the three ring spans get their own hue so the topology reads at a glance;
+// intra-site fiber (XC cross-connect, OSC loops) stays the neutral fiber colour
+const SPAN = {
+  'mcdnny-abrnny': 0xe8d44d,
+  'abrnny-gnvany': 0xe8874d,
+  'gnvany-mcdnny': 0x4de8a8,
+};
+const DASH_MM = 95;               // one flowing dash per this much cable
+const FLOW = [];                  // textures animated in the render loop
+
+// Texture layout follows TubeGeometry's UVs: u runs along the cable, v around
+// it. So a repeating mark in u becomes a dash chasing down the run - scrolling
+// it shows which way the light goes - and a band in v becomes a stripe along
+// the length, which is how the B strand of a pair is marked.
+const _artCache = new Map();
+function cableArt(colour, striped) {
+  const k = `${colour}|${striped}`;
+  if (_artCache.has(k)) return _artCache.get(k);
+  const cv = document.createElement('canvas');
+  cv.width = 64; cv.height = 32;
+  const c = cv.getContext('2d');
+  const hex = '#' + colour.toString(16).padStart(6, '0');
+  c.fillStyle = hex; c.fillRect(0, 0, 64, 32);
+  c.fillStyle = 'rgba(255,255,255,0.55)';        // the travelling dash
+  c.fillRect(0, 0, 22, 32);
+  c.fillStyle = 'rgba(0,0,0,0.18)';              // soften its trailing edge
+  c.fillRect(22, 0, 6, 32);
+  if (striped) {                                  // two, 180 apart, so it reads
+    c.fillStyle = 'rgba(0,0,0,0.62)';             // from any angle
+    c.fillRect(0, 4, 64, 6);
+    c.fillRect(0, 20, 64, 6);
+  }
+  _artCache.set(k, cv);
+  return cv;
+}
+function cableMat(colour, striped, lengthMm, flow) {
+  if (!flow) return new THREE.MeshLambertMaterial({color: colour});
+  const t = new THREE.CanvasTexture(cableArt(colour, striped));
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.repeat.set(Math.max(2, Math.round(lengthMm / DASH_MM)), 1);
+  FLOW.push(t);
+  return new THREE.MeshLambertMaterial({map: t});
+}
+
+const _cmat = {
+  rj45: new THREE.MeshLambertMaterial({color: 0xd8dde2}),
+  rj45boot: new THREE.MeshLambertMaterial({color: 0x2f5fb0}),
+  lc: new THREE.MeshLambertMaterial({color: 0xe6e9ec}),
+  lcboot: new THREE.MeshLambertMaterial({color: 0x2f5fb0}),
+};
+// A plug standing off the port along that face's normal. Latch up or down
+// follows the jack: these are stacked belly to belly, so a port above the
+// chassis centre line takes its plug one way up and one below the other.
+const PLUG_LEN = {ethernet: 29, smf: 23};   // how far a seated plug stands proud
+function connector(media, at, latchDown) {
+  const g = new THREE.Group();
+  const up = latchDown ? -1 : 1;
+  if (media === 'ethernet') {
+    // body then strain-relief boot, meeting end to end so it reads as one plug
+    const body = new THREE.Mesh(new THREE.BoxGeometry(11.6, 8.2, 18), _cmat.rj45);
+    body.position.z = 9; g.add(body);
+    const latch = new THREE.Mesh(new THREE.BoxGeometry(4.0, 1.4, 8), _cmat.rj45);
+    latch.position.set(0, up * 4.4, 7.5); latch.rotation.x = up * 0.2; g.add(latch);
+    const boot = new THREE.Mesh(new THREE.BoxGeometry(8.6, 6.4, 11), _cmat.rj45boot);
+    boot.position.z = 23.5; g.add(boot);
+  } else {
+    const body = new THREE.Mesh(new THREE.BoxGeometry(6.2, 6.2, 14), _cmat.lc);
+    body.position.z = 7; g.add(body);
+    const latch = new THREE.Mesh(new THREE.BoxGeometry(3.2, 1.1, 7), _cmat.lc);
+    latch.position.set(0, up * 3.4, 6); latch.rotation.x = up * 0.16; g.add(latch);
+    const boot = new THREE.Mesh(new THREE.CylinderGeometry(1.7, 1.35, 9, 10), _cmat.lcboot);
+    boot.rotation.x = Math.PI / 2; boot.position.z = 18.5; g.add(boot);
+  }
+  g.position.copy(at.pos);
+  g.lookAt(at.pos.clone().add(at.n));   // the group's +z points out of the face
+  return g;
+}
+
+function cable(a, b, media, colour, striped, lateral, sag, flow) {
+  // The cable emerges from the boot, not from the faceplate, and it has to leave
+  // along the plug axis - a lead entering its connector at an angle is the thing
+  // that looked wrong. So the run starts at the end of the plug and the first
+  // control point is collinear with it, which pins the tangent straight.
+  const plug = PLUG_LEN[media] ?? 0;
+  const aEnd = a.pos.clone().addScaledVector(a.n, plug);
+  const bEnd = b.pos.clone().addScaledVector(b.n, plug);
+  const out = 46;
+  const a1 = aEnd.clone().addScaledVector(a.n, out);
+  const b1 = bEnd.clone().addScaledVector(b.n, out);
+  const pts = [aEnd, a1];
+  if (a.n.dot(b.n) < 0) {
+    // opposite faces - a rear port reaching a front one. Route round the side of
+    // the rack the way it would actually be dressed, not through the chassis.
+    const side = lateral >= 0 ? 1 : -1;
+    const x = side * (RACK_W / 2 + 90 + Math.abs(lateral));
+    pts.push(new THREE.Vector3(x, aEnd.y, aEnd.z + a.n.z * 80));
+    pts.push(new THREE.Vector3(x, (aEnd.y + bEnd.y) / 2, (aEnd.z + bEnd.z) / 2));
+    pts.push(new THREE.Vector3(x, bEnd.y, bEnd.z + b.n.z * 80));
+  } else {
+    const mid = a1.clone().lerp(b1, 0.5).addScaledVector(a.n, sag);
+    mid.x += lateral;
+    pts.push(mid);
+  }
+  pts.push(b1, bEnd);
+  const curve = new THREE.CatmullRomCurve3(pts, false, 'catmullrom', 0.35);
+  const geo = new THREE.TubeGeometry(curve, 130, 1.9, 8, false);
+  const m = new THREE.Mesh(geo, cableMat(colour, striped, curve.getLength(), flow));
+  m.renderOrder = 2;
+  return m;
+}
+
+// ------------------------------------------------------------------- main
+(async () => {
+  const labs = await (await fetch('../dist/labs.json', {cache: 'no-store'})).json();
+  const lab = labs.labs.find(l => l.name === LAB) || labs.labs[0];
+  if (!lab) { hud('no labs compiled'); return; }
+  // chassis dimensions and the default config live per device, not in the index
+  const refs = [...new Set(lab.devices.map(d => d.ref))];
+  const byName = {};
+  for (const ref of refs) {
+    const r = await fetch(`../dist/${ref}.configs.json`, {cache: 'no-store'});
+    if (!r.ok) { console.warn('[portrayal] no configs for', ref); continue; }
+    byName[ref] = await r.json();
+  }
+
+  document.querySelector('#bar strong').textContent = lab.title;
+  document.getElementById('sub').textContent =
+    `${lab.devices.length} devices · ${lab.links.length} links · ${lab.rack['height-ru']}U`;
+
+  const root = new THREE.Group();
+  scene.add(root);
+  const rack = buildRack(lab.rack['height-ru']);
+  root.add(rack);
+
+  hud('building devices…');
+  const placed = {};
+  const built = await Promise.all(lab.devices.map(e => buildDevice(e, byName)));
+  lab.devices.forEach((entry, i) => {
+    const d = built[i];
+    if (!d) return;
+    root.add(d.mesh); root.add(d.tag); root.add(d.scrim); root.add(d.relief);
+    d.tag.userData.deviceId = entry.id;
+    root.add(rackEars(rack, entry.ru, d.mesh.position.z + d.D / 2, d.W / 2, d.D));
+    placed[entry.id] = d;
+  });
+
+  hud('resolving ports…');
+  const idxCache = {};
+  const worldPort = async (devId, portId, bore) => {
+    const d = placed[devId];
+    if (!d) return null;
+    const ref = d.mesh.userData.entry.ref;
+    const cfg = (byName[ref] && byName[ref].default) || 'default';
+    idxCache[ref] ||= await portIndex(ref, cfg);
+    const faces = idxCache[ref];
+    // prefer the exact strand (port/tx). An empty SFP cage has no bores, so fall
+    // back to the port centre and split the pair either side of it - the two
+    // fibers of a duplex transceiver sit about 6.2mm apart.
+    let view = null, p = null, split = 0;
+    for (const v of ['front', 'rear']) {
+      if (bore && faces[v][`${portId}/${bore}`]) { view = v; p = faces[v][`${portId}/${bore}`]; break; }
+      if (faces[v][portId]) { view = v; p = faces[v][portId]; split = bore === 'tx' ? -3.1 : bore === 'rx' ? 3.1 : 0; }
+    }
+    if (!p) { console.warn('[portrayal] no port', devId, portId, bore || ''); return null; }
+    const front = view === 'front';
+    // SVG mm (x left-to-right as that face is drawn, y down) -> world. The rear
+    // is drawn as seen from behind, so its x runs the other way in world space.
+    const pos = new THREE.Vector3(
+      (front ? (p.x + split) - d.W / 2 : d.W / 2 - (p.x + split)),
+      d.mesh.position.y + d.H / 2 - p.y,
+      d.mesh.position.z + (front ? d.D / 2 : -d.D / 2));
+    return {pos, n: new THREE.Vector3(0, 0, front ? 1 : -1), view};
+  };
+
+  // Fan runs apart before drawing any of them. Links that share a device pair
+  // would otherwise stack into one line; links that share a PORT pair are the
+  // two strands of one duplex run, so those are the ones that need the stripe.
+  const pairKey = l => [`${l.from[0]}:${l.from[1]}`, `${l.to[0]}:${l.to[1]}`].sort().join('|');
+  const devKey  = l => [l.from[0], l.to[0]].sort().join('|');
+  const bucket = (map, k) => { if (!map.has(k)) map.set(k, []); return map.get(k); };
+  const byPair = new Map(), byDev = new Map();
+  for (const l of lab.links) { bucket(byPair, pairKey(l)).push(l); bucket(byDev, devKey(l)).push(l); }
+
+  const LINKS = [];
+  let drawn = 0, missing = 0;
+  for (const link of lab.links) {
+    const a = await worldPort(link.from[0], link.from[1], link.from[2]);
+    const b = await worldPort(link.to[0], link.to[1], link.to[2]);
+    if (!a || !b) { missing++; continue; }
+    const pair = byPair.get(pairKey(link)), dev = byDev.get(devKey(link));
+    const striped = pair.length > 1 && pair.indexOf(link) === 1;   // the B strand
+    const n = dev.length, k = dev.indexOf(link);
+    const lateral = n > 1 ? (k - (n - 1) / 2) * 34 : 0;
+    const span = Math.abs(a.pos.y - b.pos.y);
+    const sag = 34 + (span > 1 ? Math.min(span * 0.16, 170) : 26) + (k % 3) * 14;
+    const colour = SPAN[link.span] ?? CABLE[link.media] ?? 0x9aa0a8;
+    const tube = cable(a, b, link.media, colour, striped, lateral, sag, link.media === 'smf');
+    root.add(tube);
+    // A plug's latch sits on the jack's keyway side. These jacks are stacked
+    // belly to belly - the upper one turned over so the pins face down - which
+    // puts the upper keyway at the TOP. So a port above its chassis centre line
+    // takes the plug latch-up, and one below takes it latch-down.
+    const ca = connector(link.media, a, a.pos.y < placed[link.from[0]].mesh.position.y);
+    const cb = connector(link.media, b, b.pos.y < placed[link.to[0]].mesh.position.y);
+    root.add(ca); root.add(cb);
+    LINKS.push({link, tube, plugs: [ca, cb],
+                group: link.span || (link.media === 'ethernet' ? 'management' : 'intra-site'),
+                devs: new Set([link.from[0], link.to[0]])});
+    drawn++;
+  }
+
+  // frame the populated part of the rack rather than the empty 42U
+  // frame the populated span, not the empty 42U, and bias toward the name
+  // column so it does not push the rack off-centre
+  const us = lab.devices.map(d => d.ru);
+  const loU = Math.min(...us) - 1, hiU = Math.max(...us);
+  const midY = (loU + hiU) / 2 * RU;
+  const spanY = (hiU - loU) * RU;
+  const dist = spanY / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2)) * 1.35;
+  // bias toward the name column, which now sits on the left
+  controls.target.set(-140, midY, 0);
+  camera.position.set(-140 + dist * 0.32, midY + dist * 0.22, dist);
+  controls.update();
+  const HOME = {p: camera.position.clone(), t: controls.target.clone()};
+
+  // ---- isolate ---------------------------------------------------------
+  // Dim everything that is not the chosen group, so a run can be followed
+  // through a bundle. Cables carry their own material so they dim directly;
+  // devices are dimmed behind a scrim because their faces are shared.
+  const groups = [...new Set(LINKS.map(l => l.group))];
+  function isolate(group) {
+    for (const rec of LINKS) {
+      const on = !group || rec.group === group;
+      const m = rec.tube.material;
+      m.opacity = on ? 1 : 0.05;
+      // toggling `transparent` swaps the blending setup, so the shader has to be
+      // rebuilt - without needsUpdate the material keeps its opaque program and
+      // the opacity is simply ignored, which is why dimming did nothing
+      if (m.transparent !== !on) { m.transparent = !on; m.needsUpdate = true; }
+      // a dimmed tube that still writes depth keeps hiding what is behind it
+      m.depthWrite = on;
+      rec.tube.renderOrder = on ? 4 : 1;
+      for (const p of rec.plugs) p.visible = on;
+    }
+    const keep = new Set();
+    if (group) for (const rec of LINKS) if (rec.group === group) rec.devs.forEach(d => keep.add(d));
+    for (const [id, d] of Object.entries(placed)) d.scrim.visible = !!group && !keep.has(id);
+    for (const b of isoEl.querySelectorAll('button')) b.classList.toggle('on', b.dataset.g === (group || ''));
+  }
+  const isoEl = document.getElementById('iso');
+  for (const g of groups) {
+    const b = document.createElement('button');
+    b.textContent = `isolate ${g}`; b.dataset.g = g;
+    b.onclick = () => isolate(g);
+    isoEl.appendChild(b);
+  }
+  const rb = document.createElement('button');
+  rb.textContent = 'reset'; rb.dataset.g = ''; rb.classList.add('on');
+  rb.onclick = () => isolate(null);
+  isoEl.appendChild(rb);
+
+  // ---- click a name to fly to that device ------------------------------
+  const ray = new THREE.Raycaster(), ptr = new THREE.Vector2();
+  let tween = null;
+  renderer.domElement.addEventListener('click', ev => {
+    ptr.set(ev.clientX / innerWidth * 2 - 1, -(ev.clientY / innerHeight) * 2 + 1);
+    ray.setFromCamera(ptr, camera);
+    const hit = ray.intersectObjects(Object.values(placed).map(d => d.tag), false)[0];
+    if (!hit) return;
+    const d = placed[hit.object.userData.deviceId];
+    if (!d) return;
+    const face = new THREE.Vector3(0, d.mesh.position.y, d.mesh.position.z + d.D / 2);
+    const dist = d.W / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2)) * 0.62;
+    tween = {t0: performance.now(), dur: 750,
+             fromP: camera.position.clone(), toP: face.clone().add(new THREE.Vector3(0, 40, dist)),
+             fromT: controls.target.clone(), toT: face.clone()};
+    hud(`${d.mesh.userData.entry.label || d.mesh.userData.entry.id} — click another name, or drag to orbit`);
+  });
+
+  // double click is the universal "put it back" gesture, so it returns both the
+  // camera and the isolation state rather than only one of them
+  renderer.domElement.addEventListener('dblclick', () => {
+    tween = {t0: performance.now(), dur: 750,
+             fromP: camera.position.clone(), toP: HOME.p.clone(),
+             fromT: controls.target.clone(), toT: HOME.t.clone()};
+    isolate(null);
+    hud(`${drawn} links drawn — click a device name to zoom, double click to reset`);
+  });
+
+  hud(`${drawn} links drawn${missing ? ` · ${missing} unresolved` : ''} — click a device name to zoom, double click to reset`);
+  let last = performance.now();
+  (function loop(now) {
+    requestAnimationFrame(loop);
+    const dt = Math.min(((now || last) - last) / 1000, 0.1); last = now || last;
+    // a feature sits at u = (t - offset)/repeat, so a falling offset carries the
+    // dash toward u=1, which is the 'to' end of the link: TX -> RX
+    for (const t of FLOW) t.offset.x -= dt * 0.22;
+    if (tween) {
+      const k = Math.min(1, (now - tween.t0) / tween.dur);
+      const e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;   // ease in-out
+      camera.position.lerpVectors(tween.fromP, tween.toP, e);
+      controls.target.lerpVectors(tween.fromT, tween.toT, e);
+      if (k >= 1) tween = null;
+    }
+    controls.update();
+    renderer.render(scene, camera);
+  })();
+})();
+</script>
+</body>
+</html>

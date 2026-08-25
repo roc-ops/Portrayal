@@ -1,0 +1,423 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://roc-ops.github.io/Portrayal/schemas/v0/component.schema.json",
+  "title": "Portrayal component/module contract (v0)",
+  "type": "object",
+  "required": [
+    "format",
+    "kind",
+    "name",
+    "version",
+    "class",
+    "size"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "format": {
+      "const": 1
+    },
+    "kind": {
+      "enum": [
+        "component",
+        "module"
+      ]
+    },
+    "name": {
+      "$ref": "#/$defs/segment"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "class": {
+      "$ref": "#/$defs/segment",
+      "description": "core/profile class identity, e.g. port, psu, fan, blank"
+    },
+    "profile": {
+      "$ref": "#/$defs/segment"
+    },
+    "conforms": {
+      "$ref": "#/$defs/segment",
+      "description": "standards-registry key; size is lint-enforced against schemas/standards.yaml"
+    },
+    "interface": {
+      "$ref": "#/$defs/segment",
+      "description": "this component IS a receptacle presenting this mating interface, e.g. sfp, qsfp, rj45, iec-c14. Occupants declare the same key via `mates`. Deliberately not an enum - a new interface is a new key, not a schema change."
+    },
+    "mates": {
+      "$ref": "#/$defs/segment",
+      "description": "this component mates INTO a receptacle presenting this interface. Requires a `mate` connection-point, which is what aligns it to its host."
+    },
+    "body": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "depth"
+      ],
+      "description": "3D body for FRU modules: box depth behind the face; per-side art via skins/body-{left,right,top,bottom,rear}.svg, each drawn as photographed from outside that side (right: face at image left; left: face at image right; rear as seen from behind)",
+      "properties": {
+        "depth": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "color": {
+          "type": "string",
+          "description": "side color where no art exists"
+        },
+        "travel": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "captive module: pulls out this far and stays in the chassis (omit for removable FRUs)"
+        },
+        "footprint": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "at",
+            "size"
+          ],
+          "description": "body box smaller than the face (mounting tabs exist only on the thin faceplate)",
+          "properties": {
+            "at": {
+              "$ref": "#/$defs/xy"
+            },
+            "size": {
+              "$ref": "#/$defs/xy"
+            }
+          }
+        },
+        "plate": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "at",
+            "size"
+          ],
+          "description": "faceplate slab bounds (defaults to the full face) - trim to the art so no bare plate edge shows",
+          "properties": {
+            "at": {
+              "$ref": "#/$defs/xy"
+            },
+            "size": {
+              "$ref": "#/$defs/xy"
+            }
+          }
+        }
+      }
+    },
+    "relief": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "3D interior model: cavity wall color, cavity shape node and cross-section, and per-node features",
+      "properties": {
+        "wall": {
+          "type": "string",
+          "description": "cavity wall color (CSS)"
+        },
+        "cavity": {
+          "$ref": "#/$defs/segment",
+          "description": "skin node id whose bbox is the recess; default = whole component"
+        },
+        "size": {
+          "$ref": "#/$defs/wh",
+          "description": "cavity cross-section bbox in mm; default = the aperture (size). Set when the opening steps in - the aperture is the hole in the panel, the cavity is the box behind it."
+        },
+        "round": {
+          "type": "boolean",
+          "description": "cavity is circular: shape-punched from the cavity node's art, cylindrical walls"
+        },
+        "features": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "node"
+            ],
+            "properties": {
+              "node": {
+                "$ref": "#/$defs/segment",
+                "description": "skin node id"
+              },
+              "top": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "mm the feature rises above the cavity floor"
+              },
+              "sink": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "mm the feature recesses beyond the cavity floor"
+              },
+              "out": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "mm the feature protrudes outward from the panel face"
+              },
+              "dome": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "domed LED: apex protrudes this many mm, rim slightly inset"
+              },
+              "cyl": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "cylindrical protrusion this many mm tall (radius from the node's bbox); combine with lift to stack"
+              },
+              "bar": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "round tube of this diameter lying along the node's long axis, spanning lift..lift+bar off the face (U-handle crossbars)"
+              },
+              "uhandle": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "complete U-shaped tube handle this many mm proud: legs at the node's long-axis ends, continuous 90-degree bends, crossbar; tube diameter = node's short axis"
+              },
+              "lift": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "standoff: the feature starts this many mm off the face (floating handle bars, stacked washers)"
+              },
+              "knurl": {
+                "type": "boolean",
+                "description": "knurled side surface (thumbscrews) - rendered as fine grip ridges around a cyl"
+              },
+              "thread": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "threaded side surface - value is the thread pitch in mm (e.g. 1/4-36 UNS = 25.4/36 = 0.706). Rendered as a single-start helix around a cyl. Use instead of knurl for coax bushings and screw barrels."
+              },
+              "vent": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "air vent: the node's dark cells become real holes into a cavity this deep"
+              },
+              "color": {
+                "type": "string",
+                "description": "side/body color (CSS)"
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": {
+      "type": "string"
+    },
+    "size": {
+      "$ref": "#/$defs/wh",
+      "description": "faceplate footprint in mm"
+    },
+    "attrs": {
+      "type": "object",
+      "description": "default data-* attributes for instances"
+    },
+    "provenance": {
+      "$ref": "#/$defs/provenance"
+    },
+    "elements": {
+      "type": "object",
+      "description": "contracted sub-elements; key = element segment id",
+      "propertyNames": {
+        "$ref": "#/$defs/segment"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "at",
+          "size"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "at": {
+            "$ref": "#/$defs/xy",
+            "description": "mm offset from component origin (top-left, y-down)"
+          },
+          "size": {
+            "$ref": "#/$defs/xy",
+            "description": "[w, h] in mm"
+          },
+          "class": {
+            "$ref": "#/$defs/segment"
+          },
+          "states": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/state"
+            },
+            "minItems": 1
+          },
+          "label-anchor": {
+            "enum": [
+              "above",
+              "below",
+              "left",
+              "right",
+              "center"
+            ]
+          },
+          "provenance": {
+            "$ref": "#/$defs/provenance"
+          }
+        }
+      }
+    },
+    "parts": {
+      "type": "array",
+      "description": "sub-components composed into this component (compile-time flattened); e.g. a std/ cutout core inside a bezel",
+      "items": {
+        "type": "object",
+        "required": [
+          "ref",
+          "id",
+          "at"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "ref": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+/[a-z0-9-]+@\\d+$"
+          },
+          "id": {
+            "$ref": "#/$defs/segment"
+          },
+          "at": {
+            "$ref": "#/$defs/xy"
+          },
+          "rotate": {
+            "type": "number"
+          },
+          "skin": {
+            "$ref": "#/$defs/segment"
+          },
+          "attrs": {
+            "type": "object"
+          },
+          "lift": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "description": "mm this composed part sits proud of the parent's face. Use when the parent itself protrudes (a transceiver body, a raised bezel) and the part's cavity should recess from THAT surface rather than from the panel."
+          }
+        }
+      }
+    },
+    "connection-points": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/segment"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "at"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "at": {
+            "$ref": "#/$defs/xy"
+          },
+          "direction": {
+            "enum": [
+              "front",
+              "rear",
+              "up",
+              "down",
+              "left",
+              "right"
+            ]
+          }
+        }
+      }
+    },
+    "states": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/state"
+      },
+      "description": "states of the component as a whole"
+    },
+    "skins": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/segment"
+      },
+      "minItems": 1,
+      "default": [
+        "default"
+      ]
+    },
+    "bays": {
+      "type": "object",
+      "description": "for modules that themselves host bays (v0: unused)",
+      "additionalProperties": true
+    }
+  },
+  "$defs": {
+    "state": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/segment"
+        },
+        {
+          "type": "object",
+          "required": [
+            "name"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "$ref": "#/$defs/segment"
+            },
+            "color": {
+              "type": "string",
+              "description": "LED color for this state, emitted as scoped CSS"
+            }
+          }
+        }
+      ]
+    },
+    "segment": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "xy": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "wh": {
+      "type": "object",
+      "required": [
+        "w",
+        "h"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "w": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "h": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "d": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "recess depth behind the panel face in mm (3D); optional"
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "description": "field name -> source, e.g. 'datasheet \u00a7Physical', 'photo-inferred', 'measured', 'estimated'"
+      }
+    }
+  }
+}
