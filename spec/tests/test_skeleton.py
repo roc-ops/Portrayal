@@ -7,6 +7,7 @@ SPEC = Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library"
 DEVICE = LIB / "devices/edgecore/as7726-32x/device.yaml"
 LAMPS = LIB / "devices/edgecore/as7946-30xb/device.yaml"
+BLINK = LIB / "devices/ufispace/s9510-28dc/device.yaml"
 
 
 def run(*args):
@@ -84,3 +85,32 @@ def test_declared_states_reach_the_lamp_and_paint(tmp_path):
     assert "Blue (100G), Green (40G)" in front
     # and the fake states string is gone from the embedded source manifest with it
     assert "Blue = 100G" not in front
+
+
+def test_behaviour_is_part_of_the_state(tmp_path):
+    """Solid and blinking of one colour are different facts, so both must compile.
+
+    The S9510-28DC HIG draws four distinct meanings out of two colours and two
+    behaviours on one lamp: solid green PWR is "system power good" and blinking
+    green PWR is "power good but BMC power fail". A model carrying only colour
+    collapses them, and a blinking state that renders solid is the same failure as
+    a state class nothing paints.
+    """
+    run(SPEC / "tools/portrayal/render.py", BLINK, "--library", LIB, "--out", tmp_path)
+    front = (tmp_path / "s9510-28dc.front.svg").read_text()
+    assert 'data-states="off ok bmc-power-fail cpu-power-fail power-fail"' in front
+    # same colour, different behaviour - so the colour rule covers both names and
+    # only one of them animates
+    assert "#led-pwr.state-ok" in front and "#led-pwr.state-bmc-power-fail" in front
+    assert ".state-bmc-power-fail { animation: portrayal-blink" in front
+    assert ".state-ok { animation:" not in front
+    assert "@keyframes portrayal-blink" in front
+    # alternating needs two colours and its own keyframes; this one is declared on
+    # the ufispace PSU contract, so it lands at component scope
+    assert "@keyframes portrayal-alternate" in front
+    assert "--led-color: #22c55e; --led-color-alt: #ef4444;" in front
+    assert "state-warning { animation: portrayal-alternate" in front
+    # one component, two lamps, two vocabularies: a single list could not say this
+    assert 'data-path="mgmt/led-left" data-class="led" data-states="off link-1g activity-1g"' in front
+    assert 'data-states="off link-100m activity-100m"' in front
+    assert "#mgmt--led-right.state-activity-100m { animation: portrayal-blink" in front

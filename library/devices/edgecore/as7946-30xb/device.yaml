@@ -168,14 +168,17 @@ groups:
   port-link-leds:
     term: LED
     index-origin: 0
-    states: ['off', {name: linked, color: '#3b82f6'}, {name: partial, color: '#ef4444'}, activity]
+    states: ['off', {name: linked, color: '#3b82f6'}, {name: partial, color: '#ef4444'},
+             {name: activity, behavior: blinking}]
     description: QSG Front LEDs callouts 1 and 2 - LED2 - Blue (all lanes linked), Red (not
-      all lanes linked), Blinking (activity). Blinking has no colour of its own - the lamp
-      flashes in whatever colour it is already showing, so `activity` carries none
+      all lanes linked), Blinking (activity). Blinking is a behaviour rather than a colour - the lamp
+      flashes in whatever colour it is already showing, so `activity` declares the blink and
+      no colour of its own
   sfp28-port-leds:
     term: LED
     index-origin: 0
-    states: ['off', {name: 25g, color: '#3b82f6'}, {name: 10g, color: '#22c55e'}, activity]
+    states: ['off', {name: 25g, color: '#3b82f6'}, {name: 10g, color: '#22c55e'},
+             {name: activity, behavior: blinking}]
     description: QSG Front LEDs callout 3 - Blue (25G), Green (10G), Blinking (activity). One
       lens per SFP28 port, speed and link on the same lamp
   status-leds:
@@ -384,7 +387,7 @@ views:
         - {id: led-mgmt-link, ref: common/led-rect@1, at: [417.2, 29.3], group: mgmt-leds, rel-pos: 0, for: mgmt-eth, attrs: {function: link},
            description: 'left lamp: link. The QSG gives it no colour'}
         - {id: led-mgmt-act, ref: common/led-rect@1, at: [426.2, 29.3], group: mgmt-leds, rel-pos: 1, for: mgmt-eth, attrs: {function: activity},
-           states: ['off', activity], description: 'right lamp: activity. The QSG gives it no colour'}
+           states: ['off', {name: activity, behavior: blinking}], description: 'right lamp: activity. The QSG gives it no colour'}
         - {id: console-1, ref: std/rj45@1, at: [415.7, 45.3], rotate: 180, group: mgmt, rel-pos: 3}
         - {id: console-0, ref: std/micro-usb@1, at: [404.0, 46.4], group: mgmt, rel-pos: 2}
         - {id: reset, ref: common/reset-button@1, at: [394.5, 45.4], group: mgmt, rel-pos: 4}

@@ -16,7 +16,17 @@ provenance:
   bits-tod-jacks: estimated (drawing shows compact stacked jacks ~11.5mm tall; modeled as two standard
     14mm cutout ports which slightly exceeds the drawn stack - verify against physical unit)
   attrs: datasheet (Specifications/Performance/Accessories sections)
-  led-semantics: HIG section 10 LED tables
+  led-semantics: 'HIG section 10, pages 20-21, transcribed rather than only cited - the citation was here and
+    the tables were not, so nobody could interpret two of these lamps. Each front-panel lamp
+    carries its own vocabulary: GNSS, SYNC and PWR each draw four distinct meanings out of two
+    colours and two behaviours, which is why a state carries a behavior as well as a color. On
+    PWR, Solid Green is "system power good" and Blinking Green is "power good but BMC power
+    fail"; a model carrying only colour collapses them into one. The management jack is declared
+    per element because its left lamp is green for 1G and its right amber for 10M/100M. The PSU
+    FRU and Fan FRU tables belong to the modules and are transcribed in their own contracts. The
+    HIG gives NO table for the port lamps, so the twenty-four led-arrow, four led-dot and two
+    qsfp-lane-leds placements keep the component default of off/on rather than an invented
+    link/activity vocabulary'
 attrs:
   asic: Broadcom Qumran2a BCM88483
   cpu: Intel Denverton-NS 4-core @ 1.6 GHz (premium SKU 8-core @ 1.7 GHz)
@@ -169,16 +179,64 @@ views:
         - {ref: common/sma-jack@1, id: gnss-ant, at: [119.2, 1.4], attrs: {role: gnss-in}}
         - {ref: common/smb-jack@1, id: clk-10mhz, at: [133.5, 2.4], attrs: {role: 10mhz-io}}
         - {ref: common/smb-jack@1, id: clk-1pps, at: [143.5, 2.4], attrs: {role: 1pps-io}}
-        - {ref: common/led-rect@1, id: led-gnss, at: [121.4, 16.2], for: gnss-ant}
-        - {ref: common/led-rect@1, id: led-sync, at: [121.4, 19.1]}
-        - {ref: common/led-rect@1, id: led-stat, at: [121.4, 22.0]}
-        - {ref: common/led-rect@1, id: led-fan, at: [121.4, 24.9]}
-        - {ref: common/led-rect@1, id: led-pwr, at: [121.4, 27.8]}
+        - {ref: common/led-rect@1, id: led-gnss, at: [121.4, 16.2], for: gnss-ant,
+           states: ['off',
+                   {name: survey-complete, color: '#22c55e'},
+                   {name: learning, color: '#22c55e', behavior: blinking},
+                   {name: no-satellite, color: '#eab308'},
+                   {name: antenna-short, color: '#eab308', behavior: blinking}],
+           description: 'HIG GNSS row - Off (not configured), Solid Green (normal state, self-survey
+             complete), Blinking Green (learning state, self-survey not complete), Solid Yellow
+             (power up, not tracking any satellite), Blinking Yellow (antenna short to ground).
+             Every row but Solid Yellow is annotated "need NOS to activate this feature"'}
+        - {ref: common/led-rect@1, id: led-sync, at: [121.4, 19.1],
+           states: ['off',
+                   {name: synced, color: '#22c55e'},
+                   {name: synce, color: '#22c55e', behavior: blinking},
+                   {name: acquiring, color: '#eab308'},
+                   {name: sync-fail, color: '#eab308', behavior: blinking}],
+           description: 'HIG SYNC row - Off (timing synchronization disabled or free-run), Solid Green
+             (timing core, 1588 and SyncE, synchronized to an external source), Blinking Green
+             (synchronized in SyncE mode), Solid Yellow (acquiring state or holdover), Blinking
+             Yellow (synchronization fail)'}
+        - {ref: common/led-rect@1, id: led-stat, at: [121.4, 22.0],
+           states: ['off',
+                   {name: boot-complete, color: '#22c55e'},
+                   {name: booting, color: '#22c55e', behavior: blinking}],
+           description: 'HIG STAT row - Off (X86 and BMC initializing, or not powered), Solid Green (boot
+             complete), Blinking Green (system is booting). The table lists no yellow for this
+             lamp'}
+        - {ref: common/led-rect@1, id: led-fan, at: [121.4, 24.9],
+           states: ['off',
+                   {name: ok, color: '#22c55e'},
+                   {name: fault, color: '#eab308', behavior: blinking}],
+           description: 'HIG FAN row - Off (X86 and BMC initializing, or not powered), Solid Green (all fan
+             modules work well), Blinking Yellow (one or more fan modules fail or no fan module
+             present)'}
+        - {ref: common/led-rect@1, id: led-pwr, at: [121.4, 27.8],
+           states: ['off',
+                   {name: ok, color: '#22c55e'},
+                   {name: bmc-power-fail, color: '#22c55e', behavior: blinking},
+                   {name: cpu-power-fail, color: '#eab308'},
+                   {name: power-fail, color: '#eab308', behavior: blinking}],
+           description: 'HIG PWR row - Off (no power or shutdown), Solid Green (system power good), Blinking
+             Green (system power good but BMC power fail), Solid Yellow (system power good but
+             CPU power fail), Blinking Yellow (system power fail). Four meanings out of two
+             colours and two behaviours - the lamp that put behaviour into the model'}
         - {ref: common/ground-symbol@1, id: ground-mark, at: [431.6, 18.75]}
         - {ref: common/reset-button@1, id: reset, at: [118.8, 34.6]}
         - {ref: common/rj45-bezel@2, id: bits, at: [131.8, 13.4], attrs: {media: rj48, role: bits-io}}
         - {ref: common/rj45-bezel@2, id: tod, at: [131.8, 28.3], attrs: {media: rj45, role: tod-in}}
-        - {ref: common/rj45-port@4, id: mgmt, at: [152.3, 1.2], attrs: {role: mgmt, speed: 100m-1g}}
+        - {ref: common/rj45-port@4, id: mgmt, at: [152.3, 1.2], attrs: {role: mgmt, speed: 100m-1g},
+           states: {led-left: ['off', {name: link-1g, color: '#22c55e'},
+                               {name: activity-1g, color: '#22c55e', behavior: blinking}],
+                    led-right: ['off', {name: link-100m, color: '#f59e0b'},
+                                {name: activity-100m, color: '#f59e0b', behavior: blinking}]},
+           description: 'HIG Management port LED table - left lamp Off (1G no link), Solid Green (1G link-
+             up), Blinking Green (1G TX/RX activity); right lamp Off (no activity), Solid Amber
+             (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity). The two lamps do not
+             share a vocabulary, which is why this is declared per element rather than as one
+             list'}
         - {ref: common/usb-a@3, id: usb, at: [152.3, 16.1], attrs: {role: storage, speed: usb3}}
         - {ref: common/rj45-bezel@2, id: console, at: [152.3, 25.4], attrs: {media: rj45-serial, role: console}}
         - {ref: common/qsfp-cage@1, id: port-0, at: [177.4, 26.2], skin: blue, group: ports, rel-pos: 100, attrs: {media: qsfp-dd, speed: 400g}}

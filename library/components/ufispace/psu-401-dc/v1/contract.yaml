@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: psu-401-dc
-version: 1.1.0
+version: 1.2.0
 class: psu
 profile: networking
 description: UfiSpace PSU-401-DISB-1 400W DC PSU - screw-terminal block, blue
@@ -10,14 +10,24 @@ size: {w: 50.5, h: 40.2}
 attrs: {watts: '400', input: dc, model: PSU-401-DISB-1}
 provenance:
   size: HIG (Fig 6 drawing, 50.5 x 40.2 face; body 211mm, handle to 27mm proud)
-  led-states: HIG PSU FRU LED table
+  led-states: HIG section 10, PSU FRU LED table (page 21), transcribed in full
 elements:
   status-led:
     at: [44.2, 2.2]
     size: [3.2, 3.2]
     class: led
-    states: ['off', {name: ok, color: '#22c55e'}, {name: fail, color: '#ef4444'},
-             {name: standby, color: '#f59e0b'}]
+    states: ['off',
+             {name: ok, color: '#22c55e'},
+             {name: fail, color: '#ef4444'},
+             {name: standby, color: '#22c55e', behavior: blinking},
+             {name: no-dc, color: '#ef4444', behavior: blinking},
+             {name: warning, color: '#22c55e', behavior: {mode: alternating, color: '#ef4444'}}]
+    description: >-
+      HIG PSU FRU LED table - Off (no DC power to any PSU), Green (DC output on and
+      OK), Red (PSU failure), Flashing Green (DC present, only standby output on -
+      poor contact), Flashing Red (no DC power to THIS PSU), Flashing between Green
+      and Red (warning: working condition not satisfied, check voltage, current and
+      temperature)
   latch: {at: [0.6, 4.5], size: [3.6, 14.0], class: latch}
   handle: {at: [38.6, 6.0], size: [3.4, 26.0], class: handle}
   terminal-block: {at: [5.8, 21.0], size: [30.2, 16.5], class: inlet}
