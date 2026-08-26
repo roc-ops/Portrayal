@@ -10,8 +10,15 @@ attrs: {media: rj45}
 provenance:
   size: datasheet-drawing (RJ45 15.76 x 12.48 body + bezel)
   elements: physical unit (8 pins, clip at top, no LEDs)
+  elements.jack: 'skin-read - default.svg and yellow.svg both draw rect id=jack
+    at 1.6, 1.6 sized 12.6 x 10.8, with jack-tab at the top edge and the eight
+    pins inside it. This is the opening, so it is class cutout, matching the
+    opening std/rj45 declares. The box was contracted as 14.6 x 11.6 at 0.6, 0.8,
+    a 0.6/0.8 inset off the 15.8 x 13.2 body - which is how v1 was built but not
+    how v2 is drawn, and no skin has ever painted that rectangle. Corrected to
+    what is painted; no drawn geometry moved'
 elements:
-  jack: {at: [0.6, 0.8], size: [14.6, 11.6], class: jack}
+  jack: {at: [1.6, 1.6], size: [12.6, 10.8], class: cutout}
 connection-points:
   net: {at: [7.9, 6.6], direction: front}
 skins: [default, yellow]

@@ -16,8 +16,13 @@ provenance:
     6.85 body plus a 4.0 x 2.6 latch keyway, same figure std/rj45 carries from
     TE 2497310-1 CAD. A plug that fits one RJ45 fits them all
   elements: physical unit (no LEDs on the port; LEDs live on the top face)
+  elements.jack: 'skin-read - default.svg draws rect id=jack at 0.6, 1.0 sized
+    14.6 x 10.5, the opening in the shell face a plug enters. Declared class
+    cutout rather than jack for the same reason v2 is - std/rj45 gives the same
+    #17191c face rect the name opening and the class cutout. The box is
+    unchanged, it already matched the skin to the digit'
 elements:
-  jack: {at: [0.6, 1.0], size: [14.6, 10.5], class: jack}
+  jack: {at: [0.6, 1.0], size: [14.6, 10.5], class: cutout}
 relief:
   wall: '#b9bec4'
   cavity: cavity
