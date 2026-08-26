@@ -9,22 +9,31 @@ description: >-
   of ten - even-numbered ports in one column, odd in the other - with a STATUS lamp and
   a captive screw at each end. One of the four MPAs the ASR 9001 takes; it also seats in
   the A9K-MOD carrier line cards.
-size: {w: 33.66, h: 160.02}
+size: {w: 34.54, h: 161.8, d: 170.18}
 attrs:
   model: 'A9K-MPA-20X1GE'
   role: 'modular-port-adapter'
   sfp: 20
   media: 'SFP, 1 Gigabit Ethernet'
   eol: 'none-announced'
+  weight-kg: 0.96
 provenance:
   size: >-
-    drawing - index.json's shapesheet for the MPA masters, 33.81 x 160.02 mm (the two
-    20-port masters read 33.66, a 0.15 mm difference that is below the drawing's own
-    accuracy). Corroborated by the chassis it goes in: the ASR 9001 front master draws
-    its two MPA openings at 162.56 x 37.80 mm, which is this envelope with 2.5 mm of
-    clearance along its length and 4.0 across - what a bay should give a module. NO
-    document in the intake gives an MPA's dimensions; the ASR 9001 data sheet lists the
-    family by port count and stops.
+    datasheet - Cisco ASR 9000 Series data sheet c78-735809, Table 3, 'Physical
+    dimensions', which lists EVERY MPA by part number and gives them all the same three
+    figures: '6.37 W x 1.36 H x 6.70 L', and a second line '6.37 W x 1.36 H x 8.30 L
+    (including jackscrew)'. In millimetres, 161.80 long by 34.54 thick by 170.18 deep,
+    or 210.82 deep with the jackscrew, which protrudes and is not part of the body. AN
+    EARLIER VERSION OF THIS COMPONENT SAID 'NO document in the intake gives an MPA's
+    dimensions' and used index.json's shapesheet instead, 33.81 x 160.02 (33.66 for the
+    two 20-port masters). That claim was false. The shapesheet was a good proxy - 1.1
+    percent short on the length and 2.1 to 2.6 on the thickness - and every measured
+    coordinate on this faceplate is now scaled by the ratio of the two, which is exactly
+    equivalent to having read the master at the stated anchor to begin with. THE
+    CORROBORATION IS WORTH KEEPING: the A9K-MOD400-SE master draws its two MPA bays as
+    outlines and, at that carrier's own 43.7 x 395.7 anchor, they measure 161.21 and
+    160.94 mm long - 0.4 percent from Cisco's stated 161.80. Two Cisco documents, a
+    drawing and a table, agreeing through a third part.
   frame: >-
     modelled PORTRAIT - x across the module's 33.8 mm thickness, y along its 160.0 mm
     length - which is how most of these masters are drawn and how every other card in
@@ -35,17 +44,29 @@ provenance:
     notes flag as a reason to read the artwork rather than assume an orientation from
     index.json's axis order.
   inset: >-
-    READ THIS BEFORE RESCALING ANYTHING ON THIS MASTER. Its art measures 29.07 mm across
-    where the shapesheet says 33.66, a 16 percent difference - far larger than the sub-
-    millimetre gaps elsewhere in this stencil. The art is NOT stretched to fill the
-    envelope, and the reason is a ruler inside the picture: the drawn SFP cage measures
-    14.4 x 9.24 mm against SFF-8433's 14.25 x 10.40, so the art's own scale is already
-    right to one percent. Stretching x by 1.158 would have made the cage 16.7 mm wide,
-    which no SFP cage is. So the plate is drawn INSET in its shape box and the art is
-    centred in the envelope, 2.30 mm each side. This is the counter-case to the axis
-    rule that a power module taught earlier tonight: both axes still come from one
-    source for the ENVELOPE, but where the art contains a standard part of known size,
-    that part is the authority for the internal SCALE.
+    READ THIS BEFORE RESCALING ANYTHING ON THIS MASTER, AND READ THE CORRECTION AT THE
+    END. Its art measures 29.07 mm across where the shapesheet says 33.66, a 16 percent
+    difference - far larger than the sub-millimetre gaps elsewhere in this stencil. The
+    art is modelled as NOT stretched to fill the envelope: the plate is drawn INSET in
+    its shape box and centred, and the cages keep the art's own scale. THE ARITHMETIC
+    THIS CONCLUSION WAS FIRST ARGUED FROM WAS WRONG. It said 'stretching x by 1.158
+    would have made the cage 16.7 mm wide, which no SFP cage is' - but 16.7 is 14.4 x
+    1.158, and 14.4 is the cage's ALONG-CARD dimension, which a stretch of the across
+    axis does not touch. Done correctly the comparison is much closer: the drawn cage is
+    9.24 mm across, so inset it reads 9.24 against SFF-8433's 10.40 opening height (11
+    percent under) and stretched to Cisco's stated 34.54 it reads 10.98 (5.6 percent
+    over). Neither is absurd and the standard-part ruler does not settle it. THE
+    QUESTION IS THEREFORE OPEN and is recorded as open rather than quietly kept or
+    quietly flipped. What is NOT in doubt: the ENVELOPE, which Cisco states outright at
+    34.54 x 161.80, and the along-card scale, which the A9K-MOD400 bay measurement
+    corroborates to 0.4 percent. What is in doubt is only where the twenty cages sit
+    across a 34.54 mm face, by at most 2.7 mm. A photograph, or any drawing of this MPA
+    that is not this master, would settle it. NOTE FOR THE METROLOGY RULE: the counter-
+    case clause this card was originally used to justify - that where the art contains a
+    standard part of known size, that part is the authority for the internal scale - is
+    unaffected and was independently confirmed tonight on the A9K-MOD200, where the
+    ruler gave 1.2 percent against 6.4 and settled the question outright. Only this
+    card's particular arithmetic was wrong, not the rule drawn from it.
   ports: >-
     drawing - twenty cages in two columns at x 4.35 and 19.29 and ten rows on a 14.4 to
     14.67 mm pitch with a gap in the middle where the captive screws sit. Numbering is
@@ -70,9 +91,13 @@ provenance:
     warning stands.
   lifecycle: >-
     searched - no end-of-life notice for this part number is in the intake.
+  weight: >-
+    datasheet - c78-735809 Table 3, same row: 34 oz (0.96 kg). Cisco gives every MPA the
+    same envelope and a different weight, so the weight is the only physical figure that
+    distinguishes them.
 elements:
   status:
-    at: [15.53, 68.0]
+    at: [15.97, 68.76]
     size: [2.6, 2.6]
     class: led
     description: >-
@@ -86,25 +111,28 @@ elements:
     - 'off'
 relief:
   wall: '#4a4f55'
+body:
+  depth: 170.18
+  color: '#b9bec4'
 parts:
-  - {ref: std/sfp-ganged@1, id: p0, at: [6.06, 5.5], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p1, at: [21.0, 5.5], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p2, at: [6.06, 19.9], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p3, at: [21.0, 19.9], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p4, at: [6.06, 34.3], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p5, at: [21.0, 34.3], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p6, at: [6.06, 48.98], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p7, at: [21.0, 48.98], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p8, at: [6.06, 63.38], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p9, at: [21.0, 63.38], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p10, at: [6.06, 86.75], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p11, at: [21.0, 86.75], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p12, at: [6.06, 101.14], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p13, at: [21.0, 101.14], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p14, at: [6.06, 115.81], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p15, at: [21.0, 115.81], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p16, at: [6.06, 130.21], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p17, at: [21.0, 130.21], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p18, at: [6.06, 144.6], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p19, at: [21.0, 144.6], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p0, at: [6.5, 5.64], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p1, at: [21.44, 5.64], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p2, at: [6.5, 20.21], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p3, at: [21.44, 20.21], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p4, at: [6.5, 34.77], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p5, at: [21.44, 34.77], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p6, at: [6.5, 49.59], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p7, at: [21.44, 49.59], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p8, at: [6.5, 64.16], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p9, at: [21.44, 64.16], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p10, at: [6.5, 87.78], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p11, at: [21.44, 87.78], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p12, at: [6.5, 102.34], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p13, at: [21.44, 102.34], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p14, at: [6.5, 117.19], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p15, at: [21.44, 117.19], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p16, at: [6.5, 131.75], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p17, at: [21.44, 131.75], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p18, at: [6.5, 146.29], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p19, at: [21.44, 146.29], rotate: 90}
 skins: [default]

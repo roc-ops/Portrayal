@@ -9,15 +9,31 @@ description: >-
   with an A/L lamp beside it, a STATUS lamp and a captive screw at each end - the
   emptiest faceplate in the MPA family. One of the adapters the ASR 9001 takes; it also
   seats in the A9K-MOD carrier line cards.
-size: {w: 33.81, h: 160.02}
+size: {w: 34.54, h: 161.8, d: 170.18}
 attrs:
   model: 'A9K-MPA-1X40GE'
   role: 'modular-port-adapter'
   qsfp-plus: 1
   media: 'QSFP+, 40 Gigabit Ethernet'
+  weight-kg: 0.7
   eol: 'none-announced'
 provenance:
   size: >-
+    datasheet - Cisco ASR 9000 Series data sheet c78-735809, Table 3, 'Physical
+    dimensions', which lists EVERY MPA by part number: 'A9K-MPA-1X40GE: 6.37 W x 1.36 H
+    x 6.70 L; 26 oz (est.) (0.7 kg). 6.37 W x 1.36 H x 8.30 L (including jackscrew)'. In
+    millimetres that is 161.80 long by 34.54 thick by 170.18 deep, or 210.82 deep with
+    the jackscrew, which protrudes and is not part of the body. AN EARLIER VERSION OF
+    THIS COMPONENT SAID 'NO document in the intake gives an MPA's dimensions' and took
+    index.json's shapesheet, 33.81 x 160.02. That claim was false and the shapesheet was
+    a good proxy: 1.1 percent short on the length and 2.1 on the thickness. The stated
+    figures are now carried and every measured coordinate on this faceplate is scaled to
+    them, which is exactly equivalent to having read the master at this anchor in the
+    first place. THE CORROBORATION IS WORTH KEEPING: the A9K-MOD400-SE master draws its
+    two MPA bays as outlines, and at that carrier's own 43.7 x 395.7 anchor they measure
+    161.21 and 160.94 mm long - 0.4 percent from Cisco's stated 161.80. Two Cisco
+    documents, a drawing and a table, agreeing through a third part.
+  envelope-was-wrong: >-
     drawing - and READ THE ORIENTATION FIRST, because this master is drawn on its side.
     index.json gives its shapesheet as 160.02 x 33.81 mm where the 4-port and 20-port
     MPA masters give 33.81 x 160.02: the same envelope, drawn landscape. Every
@@ -95,8 +111,8 @@ provenance:
     the A9K-MOD400-CM carrier takes the -CM MPAs and not this one.
 elements:
   led-p0:
-    at: [21.16, 30.29]
-    size: [3.42, 2.91]
+    at: [21.62, 30.63]
+    size: [3.49, 2.94]
     class: led
     description: >-
       the port's A/L (Active/Link) lamp. Table 24, '1-Port 40-Gigabit Ethernet MPA LEDs':
@@ -110,7 +126,7 @@ elements:
     - {name: amber, color: '#f5a623'}
     - 'off'
   status:
-    at: [12.1, 144.4]
+    at: [12.36, 146.01]
     size: [2.6, 2.6]
     class: led
     description: >-
@@ -123,6 +139,9 @@ elements:
     - 'off'
 relief:
   wall: '#4a4f55'
+body:
+  depth: 170.18
+  color: '#b9bec4'
 parts:
-  - {ref: std/qsfp28@1, id: p0, at: [10.24, 44.48], rotate: 90}
+  - {ref: std/qsfp28@1, id: p0, at: [10.68, 45.03], rotate: 90}
 skins: [default]

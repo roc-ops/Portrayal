@@ -10,7 +10,7 @@ description: >-
   almost nothing else - a Status lamp, an ejector and a captive screw at each end. Every
   port this card presents belongs to the MPA seated in one of its bays. The only carrier
   in the family whose supported MPA list Cisco writes out.
-size: {w: 43.7, h: 395.7, d: 520.7}
+size: {w: 43.7, h: 395.7, d: 616.0}
 attrs:
   model: 'A9K-MOD400-SE'
   role: 'modular-line-card'
@@ -18,6 +18,7 @@ attrs:
   mpa-bays: 2
   variant: 'service-edge'
   power-draw-max-w: 600
+  weight-kg: 9.5
   eol: 'none-announced'
 provenance:
   size: >-
@@ -32,7 +33,21 @@ provenance:
     generation's 41.4 instead and they come out 6.4 to 6.9 percent off. The card is 43.7
     thick, and the depth of 520.7 is the one Table A-10 gives for its 80 and 160
     Gigabyte siblings, carried across as a sibling's figure and flagged as one rather
-    than measured.
+    than measured. AND THERE IS A DIRECT SOURCE AFTER ALL, found later than the
+    measurement above and kept alongside it because the two disagree in an instructive
+    way. Cisco data sheet c78-735809, Table 3, 'Physical dimensions', has a row for this
+    part: 'A9K-MOD400-SE / -TR: 14.5 W x 1.72 H x 24.25 L (including ejector levers); 21
+    lb (9.5 kg)'. The 1.72 in confirms the 43.7 mm thickness the MPA ruler gave. The
+    24.25 in = 616.0 mm is a DEPTH, and it is carried - these two carriers are 95 mm
+    deeper than the 80 and 160 Gigabyte cards Table A-10 puts at 20.5 in. THE 14.5 IN
+    DOES NOT AGREE WITH ANYTHING and is not carried: 14.5 in is 368.3 mm, which is the
+    PLATE figure every other Cisco sheet in this family gives WITHOUT an ejector
+    qualifier, while the sheets that do say '(includes ejector bracket/lever)' give
+    15.58 in = 395.7 mm. So this row's parenthetical contradicts the rest of Cisco's own
+    documents. The drawing settles it: at 395.7 the bays this master draws measure
+    161.21 mm against the MPA's stated 161.80, and at 368.3 they measure 150.05 - 0.4
+    percent against 7.3. The card is 395.7 including ejectors and Table 3's '(including
+    ejector levers)' is misplaced.
   art-box-is-not-a-size: >-
     A TRAP IN THIS STENCIL THAT COST ME A WRONG ARGUMENT, recorded because it will catch
     the next person. The first version of this provenance said these carriers share a
@@ -134,8 +149,8 @@ relief:
 skins: [default]
 bays:
   bay-0:
-    at: [7.59, 32.24]
-    size: [33.81, 160.02]
+    at: [6.93, 31.95]
+    size: [34.54, 161.8]
     accepts:
     - 'cisco/a9k-mpa-blank@1'
     - 'cisco/a9k-mpa-2x10ge@1'
@@ -145,8 +160,8 @@ bays:
     - 'cisco/a9k-mpa-2x40ge@1'
     - 'cisco/a9k-mpa-20x10ge@1'
   bay-1:
-    at: [7.59, 202.78]
-    size: [33.81, 160.02]
+    at: [6.93, 202.35]
+    size: [34.54, 161.8]
     accepts:
     - 'cisco/a9k-mpa-blank@1'
     - 'cisco/a9k-mpa-2x10ge@1'
