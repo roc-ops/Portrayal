@@ -81,7 +81,7 @@
 </head>
 <body>
 <script type="module">
-import { createShell, esc } from './shell.js';
+import { createShell, esc } from '../viewer/shell.js';
 
 const shell = createShell({title: 'Portrayal explorer'});
 const state = shell.state;
@@ -349,7 +349,7 @@ let mode = '2d', viewer = null, loading = null, loadedKey = '';
 async function ensureViewer() {
   if (viewer) return viewer;
   if (!loading) loading = (async () => {
-    const {createViewer} = await import('./viewer3d.js');
+    const {createViewer} = await import('../viewer/viewer3d.js');
     // no options: the pinned API defines none, and viewer3d.js is mounted from
     // this same directory so its own idea of where dist/ is agrees with ours
     const v = createViewer(host3d);

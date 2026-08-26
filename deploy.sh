@@ -3,7 +3,10 @@
 #
 #   ./deploy.sh user@host [remote-dir]
 #
-# Ships demo/ + demo2/ + dist/. demo/reference/ is deliberately excluded: it holds
+# Ships demo/ + demo2/ + viewer/ + dist/. viewer/ is the module library the demo2
+# pages import as ../viewer/*.js, so it has to be a sibling of demo2/ under the
+# web root - stage it here or every page 404s on its imports.
+# demo/reference/ is deliberately excluded: it holds
 # vendor photos and 3D models that are not ours to redistribute.
 #
 # BOTH demos ship. demo/ is frozen and stays until v2 is demonstrably better, so
@@ -22,6 +25,7 @@ REMOTE="${2:-/opt/$SERVICE}"
 STAGE="$(mktemp -d)"; trap 'rm -rf "$STAGE"' EXIT
 rsync -a --exclude 'reference/' --exclude '.DS_Store' library/demo "$STAGE/"
 rsync -a --exclude '.DS_Store' library/demo2 "$STAGE/"
+rsync -a --exclude '.DS_Store' library/viewer "$STAGE/"
 rsync -a library/dist "$STAGE/"
 # no-cache static server: stock http.server lets browsers serve a stale build
 install -m 755 tools/serve.py "$STAGE/serve.py"
@@ -68,12 +72,15 @@ fi
 for i in $(seq 1 20); do
   code=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:9003/demo/ || true)
   code2=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:9003/demo2/ || true)
-  # both, because a green light on v1 while v2 404s is the exact failure this
-  # deploy exists to catch
-  [ "$code" = "200" ] && [ "$code2" = "200" ] && {
-    echo "demo: HTTP 200 on /demo/ and /demo2/ (ready after ${i} tr(y|ies))"; exit 0; }
+  # viewer/ too: demo2/ itself returns 200 whether or not the module library
+  # shipped, and a page whose imports 404 is a blank screen with a green light.
+  code3=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:9003/viewer/shell.js || true)
+  # all three, because a green light on v1 while v2 404s is the exact failure
+  # this deploy exists to catch
+  [ "$code" = "200" ] && [ "$code2" = "200" ] && [ "$code3" = "200" ] && {
+    echo "demo: HTTP 200 on /demo/, /demo2/ and /viewer/ (ready after ${i} tr(y|ies))"; exit 0; }
   sleep 0.5
 done
-echo "demo: NOT READY (/demo/=${code:-none} /demo2/=${code2:-none})" >&2
+echo "demo: NOT READY (/demo/=${code:-none} /demo2/=${code2:-none} /viewer/=${code3:-none})" >&2
 exit 1
 REMOTE
