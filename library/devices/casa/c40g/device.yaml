@@ -306,39 +306,69 @@ configurations:
 # build time and must not be listed here.
 gaps:
 - what: paired-module-power
-  scope: [casa/bdm2m@1, casa/io-6p12@2, casa/io-6p12-sw@2, casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1]
+  scope:
+  - casa/bdm2@1
+  - casa/bdm2m@1
+  - casa/bdm@1
+  - casa/ds-8x192@1
+  - casa/ds-8x8@1
+  - casa/ds-8x96@1
+  - casa/io-6p12-io2@1
+  - casa/io-6p12-sw-io2@1
+  - casa/io-6p12-sw@2
+  - casa/io-6p12@2
+  - casa/rfd@1
+  - casa/rfu-16x8@1
+  - casa/ups-32x4@1
+  - casa/us-16x4@1
+  - casa/us-16x8@1
   reason: vendor-silent
-  note: >-
-    The BDM2/BDM2m datasheet states "Total Power  300 W" in a technical
-    specifications table headed "BDM2/2 m with 6+12 IO Card", whose RF connector
-    row describes that card's six downstream and twelve upstream ports. The
-    figure is the assembly's. A BDM position is TWO modules here - casa/bdm in a
-    front bay and casa/io-6p12 in the paired rear bay, which is why casa/bdm
-    already carries `pairs-with` - and no document we hold divides the 300 W
-    between them. Writing it onto the front module would make the chassis total
-    come out right and the answer to "what does a BDM front module draw" come
-    out wrong, so neither half carries a figure and the chassis total stays a
-    floor. The arithmetic does not settle it either way: 12 x 300 W lands on the
-    C100G's stated 3.6 kW whether the 300 W is the pair or the front half with
-    small rear cards.
-    THE THREE REAR RF I/O CARDS ADDED LATER FALL ON THE SAME SIDE OF THIS AS THE
-    6+12. casa/rfd, casa/rfu-16x8 and casa/ups-32x4 carry NO power figure,
-    because Tables A-8 and A-9 give their port counts and connector types and no
-    watts at all, and every figure Casa does publish for the slot is already the
-    pair's - Table A-3 heads the DQM column "Maximum consumption with I/O
-    module" and Table A-4 gives "Single DCU w/ RFU I/O" 200 W against "Single
-    DCU w/ RFU UPS 32x4 I/O" 220 W for the same US16x8. Subtracting one from the
-    other to get a rear card's share would be our arithmetic and would also be
-    the wrong subtraction - the 20 W is the difference between two PAIRINGS, not
-    between two I/O cards.
-  wanted: >-
-    a pairable unit that can carry properties, so that a figure measured on a
-    pair can be attached to the pair. The scope is now DATA - every card here
-    declares `power-draw-scope: module-with-paired-io`, so a chassis sum knows
-    not to add the rear partner and L30 catches it if one gains its own figure -
-    but the scope says only THAT the figure covers a pair, not WHICH pair. The
-    C100G HIG gives the same US16x8 200 W with the RFU I/O and 220 W with the
-    RFU UPS 32x4, and the manifest can carry only one of them. Asking for "a
-    per-module figure" was the wrong question: Casa states none, and one may not
-    exist to be divided out. What is missing is the mechanism, and enough
-    vendors doing this to design one from - Casa is the only one in the corpus.
+  note: 'The BDM2/BDM2m datasheet states "Total Power  300 W" in a technical specifications
+    table headed "BDM2/2 m with 6+12 IO Card", whose RF connector row describes
+    that card''s six downstream and twelve upstream ports. The figure is the assembly''s.
+    A BDM position is TWO modules here - casa/bdm in a front bay and casa/io-6p12
+    in the paired rear bay, which is why casa/bdm already carries `pairs-with` -
+    and no document we hold divides the 300 W between them. Writing it onto the
+    front module would make the chassis total come out right and the answer to "what
+    does a BDM front module draw" come out wrong, so neither half carries a figure
+    and the chassis total stays a floor. The arithmetic does not settle it either
+    way: 12 x 300 W lands on the C100G''s stated 3.6 kW whether the 300 W is the
+    pair or the front half with small rear cards. THE THREE REAR RF I/O CARDS ADDED
+    LATER FALL ON THE SAME SIDE OF THIS AS THE 6+12. casa/rfd, casa/rfu-16x8 and
+    casa/ups-32x4 carry NO power figure, because Tables A-8 and A-9 give their port
+    counts and connector types and no watts at all, and every figure Casa does publish
+    for the slot is already the pair''s - Table A-3 heads the DQM column "Maximum
+    consumption with I/O module" and Table A-4 gives "Single DCU w/ RFU I/O" 200
+    W against "Single DCU w/ RFU UPS 32x4 I/O" 220 W for the same US16x8. Subtracting
+    one from the other to get a rear card''s share would be our arithmetic and would
+    also be the wrong subtraction - the 20 W is the difference between two PAIRINGS,
+    not between two I/O cards.'
+  wanted: 'a pairable unit that can carry properties, so that a figure measured
+    on a pair can be attached to the pair. The scope is now DATA - every card here
+    declares `power-draw-scope: module-with-paired-io`, so a chassis sum knows not
+    to add the rear partner and L30 catches it if one gains its own figure - but
+    the scope says only THAT the figure covers a pair, not WHICH pair. The C100G
+    HIG gives the same US16x8 200 W with the RFU I/O and 220 W with the RFU UPS
+    32x4, and the manifest can carry only one of them. Asking for "a per-module
+    figure" was the wrong question: Casa states none, and one may not exist to be
+    divided out. What is missing is the mechanism, and enough vendors doing this
+    to design one from - Casa is the only one in the corpus.'
+- what: power-entry-rating
+  scope:
+  - casa/c40g-pem@1
+  reason: vendor-silent
+  note: 'Casa rates a power ENTRY module in amps and volts, never in watts. Table
+    A-1 gives "DC current 20A nominal per feed @ -48VDC" and the PEM section says
+    the modules "receive -40.5 to -60 VDC (-48VDC nominal) power from separate 20A
+    power supply sources" - but no document states a wattage, and deriving one means
+    choosing a point the vendor left open: two current figures across a voltage
+    range put V x I anywhere from about 810 W to 1800 W per feed. A power entry
+    module also does not convert or regulate; it filters and distributes what the
+    plant feeds it, so its rating is a current-carrying limit rather than the continuous
+    output power-output-w means. The stated volts and amps are recorded in the contract''s
+    attrs; the L27 warning stays standing as the record that the watt figure is
+    missing.'
+  wanted: a wattage for the C40G power entry module from Casa - a nameplate photograph
+    of the module itself would do it, or any document that rates it in watts rather
+    than amps
+  blocks: []

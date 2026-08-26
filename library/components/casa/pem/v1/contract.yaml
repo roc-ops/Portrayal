@@ -11,9 +11,32 @@ description: >-
   of studs in one of the two terminal blocks, and protected by its own rocker
   circuit breaker in the row above. The faceplate draws a leader line from
   each branch's terminal-cover screw up to the breaker that protects it.
-attrs: {model: 'PEM'}
+attrs:
+  model: 'PEM'
+  role: dc-power-entry
+  input-voltage: '-42 to -60 VDC (-48 VDC nominal)'
+  current-per-feed: '20 A nominal, 30 A rating'
+  feeds: '4'
+
 size: {w: 207.0, h: 91.6, d: 250.0}
 provenance:
+  power: 'NO WATT FIGURE IS STATED, and it is not there to be found. Casa rates
+    a power ENTRY module in amps and volts, never in watts. Recording one would
+    mean multiplying, and the multiplication has no single answer: the guide gives
+    TWO current figures - Table A-1s "20A nominal per feed" and the chassis nameplates
+    "30A per Feed" - across a voltage range 18 V wide, so V x I lands anywhere from
+    about 810 W to 1800 W per feed depending on which pair you pick. Any one number
+    would be this library choosing a point the vendor deliberately left open. What
+    IS stated is recorded in attrs. The L27 warning stays standing: it is the honest
+    record that the figure is missing, and an unsourced watt figure is the same
+    number minus the warning. Note too that a power entry module does not convert
+    or regulate - it filters and distributes what the plant feeds it - so its rating
+    is a current-carrying limit rather than a continuous output in the sense power-output-w
+    means'
+  electrical: 'datasheet - Table A-1 of the C100G install guide gives "Voltage
+    -42 to -60VDC" and "Current 20A nominal per feed"; the chassis nameplate reproduced
+    at Figure 1-3 gives "-48VDC, 30A per Feed (4+4 Feeds)". Four feeds per PEM,
+    two PEMs, hence 4+4'
   layout: 'drawing - Figure 1-6 of the C100G Hardware Installation Guide, "C100G
     Power Entry Module, terminal covers removed". Every feature position below
     is a measured PERCENTAGE of that figure''s faceplate, stretched onto this
