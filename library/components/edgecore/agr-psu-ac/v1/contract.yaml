@@ -33,8 +33,26 @@ relief:
     # These sit on the GROUP, not on the bar inside it. A raised node is taken
     # off the flat plate, but a sibling that is NOT raised stays behind and
     # reads as a coloured shadow under the handle.
-    - {node: handle, uhandle: 9.0}
-    - {node: latch, out: 4.2}
+    - node: handle
+      uhandle: 9.0
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-ac@1 itself - unsourced. This contract's face key covers the
+        ARRANGEMENT only ('bail handle LEFT, input centre, red latch RIGHT ... read off
+        photographs') and its depth key's 'measured - 360.7 mm' is the MODULE's depth off a
+        tape measure, not this feature's. The handle 9.0 and latch 4.2 are the same two
+        numbers on the AC and DC units because they share one shell, so they are one
+        estimate written twice.
+    - node: latch
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-ac@1 itself - unsourced. This contract's face key covers the
+        ARRANGEMENT only ('bail handle LEFT, input centre, red latch RIGHT ... read off
+        photographs') and its depth key's 'measured - 360.7 mm' is the MODULE's depth off a
+        tape measure, not this feature's. The handle 9.0 and latch 4.2 are the same two
+        numbers on the AC and DC units because they share one shell, so they are one
+        estimate written twice.
 parts:
   # the standard inlet, not a trapezoid drawn by hand - it brings its own keyed
   # coupler, pins and 3D relief

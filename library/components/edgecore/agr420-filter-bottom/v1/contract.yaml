@@ -31,5 +31,13 @@ relief:
     # bolted onto the OUTSIDE of the faceplate, so it stands proud. `out` uses the node's
     # bounding rect and textures the slab from that node alone, so it sits on the GROUP
     # holding the frame, its foam and its screws - on a bare rect it came out blank.
-    - {node: frame, out: 3.0}
+    - node: frame
+      out: 3.0
+      confidence: estimated
+      source: >-
+        edgecore/agr420-filter-bottom@1's own depth key: 'estimated - not given in either
+        document'. That key is about the filter's 12.0 size.d; its proudness off the panel
+        has no source at all. The frame and foam EXTENTS are drawing-measured off the
+        datasheet front figure and are not in doubt - only how far the assembly stands off
+        the face.
 skins: [default]

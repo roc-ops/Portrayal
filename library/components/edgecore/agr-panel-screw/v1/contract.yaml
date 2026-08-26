@@ -22,5 +22,13 @@ provenance:
 relief:
   features:
     # on the GROUP, so the raised slab carries the head and its slot
-    - {node: head, cyl: 1.6}
+    - node: head
+      cyl: 1.6
+      confidence: estimated
+      source: >-
+        edgecore/agr-panel-screw@1's own depth key, which says it in as many words:
+        'estimated - it stands proud but was not measured'. Its size key IS sourced - 8.2 to
+        8.5 mm across, Hough-detected on the AGR420 datasheet front figure - so the head's
+        DIAMETER is drawn and its HEIGHT is not. This 1.6 is the library's most-cited
+        captive-screw figure; it has never been measured.
 skins: [default]

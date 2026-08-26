@@ -39,24 +39,133 @@ relief:
     # These sit on the GROUP, not on the bar inside it. A raised node is taken
     # off the flat plate, but a sibling that is NOT raised stays behind and
     # reads as a coloured shadow under the handle.
-    - {node: handle, uhandle: 9.0}
-    - {node: latch, out: 4.2}
+    - node: handle
+      uhandle: 9.0
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 itself - unsourced. This contract's face key covers the
+        ARRANGEMENT only ('bail handle LEFT, input centre, red latch RIGHT ... read off
+        photographs') and its depth key's 'measured - 360.7 mm' is the MODULE's depth off a
+        tape measure, not this feature's. The handle 9.0 and latch 4.2 are the same two
+        numbers on the AC and DC units because they share one shell, so they are one
+        estimate written twice.
+    - node: latch
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 itself - unsourced. This contract's face key covers the
+        ARRANGEMENT only ('bail handle LEFT, input centre, red latch RIGHT ... read off
+        photographs') and its depth key's 'measured - 360.7 mm' is the MODULE's depth off a
+        tape measure, not this feature's. The handle 9.0 and latch 4.2 are the same two
+        numbers on the AC and DC units because they share one shell, so they are one
+        estimate written twice.
     # The terminal is a BLACK housing with three walls making two open-ended
     # lanes, so cables drop in from above (PSU0) or below (PSU1) onto a bolt.
     # Each wall carries its own `out` - one feature on the group would use the
     # group's bounding rect and fill the lanes back in.
-    - {node: wall-l, out: 12.7}
-    - {node: wall-m, out: 12.7}
-    - {node: wall-r, out: 12.7}
+    - node: wall-l
+      out: 12.7
+      confidence: measured
+      source: >-
+        edgecore/agr-psu-dc@1's own terminal key - the owner, on the real unit at 5x in
+        IMG_6789 and IMG_6796: 'the walls stand about 1/2 inch proud (12.7mm) and the bolts
+        about 1/4 inch (6.35)'. THIS IS ONE OF THE VERY FEW GENUINELY MEASURED RELIEF
+        MAGNITUDES IN THE LIBRARY - a person looking at hardware - which is why several
+        vendors' features point here. Note the reading is to the nearest quarter inch and
+        the word is 'about'.
+    - node: wall-m
+      out: 12.7
+      confidence: measured
+      source: >-
+        edgecore/agr-psu-dc@1's own terminal key - the owner, on the real unit at 5x in
+        IMG_6789 and IMG_6796: 'the walls stand about 1/2 inch proud (12.7mm) and the bolts
+        about 1/4 inch (6.35)'. THIS IS ONE OF THE VERY FEW GENUINELY MEASURED RELIEF
+        MAGNITUDES IN THE LIBRARY - a person looking at hardware - which is why several
+        vendors' features point here. Note the reading is to the nearest quarter inch and
+        the word is 'about'.
+    - node: wall-r
+      out: 12.7
+      confidence: measured
+      source: >-
+        edgecore/agr-psu-dc@1's own terminal key - the owner, on the real unit at 5x in
+        IMG_6789 and IMG_6796: 'the walls stand about 1/2 inch proud (12.7mm) and the bolts
+        about 1/4 inch (6.35)'. THIS IS ONE OF THE VERY FEW GENUINELY MEASURED RELIEF
+        MAGNITUDES IN THE LIBRARY - a person looking at hardware - which is why several
+        vendors' features point here. Note the reading is to the nearest quarter inch and
+        the word is 'about'.
     # The bolt is a stack, not one blob: a threaded stud standing 1/4 inch proud,
     # with the star washer and then the nut as their own solids up its length.
     # `cyl` runs lift..lift+cyl and takes its radius from the node, so each of the
     # three has to be its own node - grouped, they became a single box slab with
     # all three painted flat on its top.
-    - {node: stud-pos, cyl: 6.35, thread: 1.0}
-    - {node: washer-pos, cyl: 0.7, lift: 2.4}
-    - {node: nut-pos, cyl: 2.2, lift: 3.1}
-    - {node: stud-neg, cyl: 6.35, thread: 1.0}
-    - {node: washer-neg, cyl: 0.7, lift: 2.4}
-    - {node: nut-neg, cyl: 2.2, lift: 3.1}
+    - node: stud-pos
+      cyl: 6.35
+      thread: 1.0
+      confidence: measured
+      source: >-
+        edgecore/agr-psu-dc@1's own terminal key - the owner, on the real unit at 5x in
+        IMG_6789 and IMG_6796: 'the walls stand about 1/2 inch proud (12.7mm) and the bolts
+        about 1/4 inch (6.35)'. THIS IS ONE OF THE VERY FEW GENUINELY MEASURED RELIEF
+        MAGNITUDES IN THE LIBRARY - a person looking at hardware - which is why several
+        vendors' features point here. Note the reading is to the nearest quarter inch and
+        the word is 'about'.
+    - node: washer-pos
+      cyl: 0.7
+      lift: 2.4
+      confidence: estimated
+      source: >-
+        DERIVED, NOT MEASURED, and the distinction matters because this feature sits beside
+        two that ARE measured. The owner's reading in the terminal key covers the WALLS
+        (12.7) and the BOLTS (6.35) and nothing else; it says only that 'each lane takes a
+        bolt with a hex nut and a star washer'. The washer and nut thicknesses and their
+        lifts are chosen to stack plausibly inside the measured 6.35 stud, so they are
+        estimates standing on a measurement rather than measurements. ANYONE CITING THIS
+        NODE AS 'MEASURED OFF REAL HARDWARE' IS CITING THE WALLS, NOT THE NUT.
+    - node: nut-pos
+      cyl: 2.2
+      lift: 3.1
+      confidence: estimated
+      source: >-
+        DERIVED, NOT MEASURED, and the distinction matters because this feature sits beside
+        two that ARE measured. The owner's reading in the terminal key covers the WALLS
+        (12.7) and the BOLTS (6.35) and nothing else; it says only that 'each lane takes a
+        bolt with a hex nut and a star washer'. The washer and nut thicknesses and their
+        lifts are chosen to stack plausibly inside the measured 6.35 stud, so they are
+        estimates standing on a measurement rather than measurements. ANYONE CITING THIS
+        NODE AS 'MEASURED OFF REAL HARDWARE' IS CITING THE WALLS, NOT THE NUT.
+    - node: stud-neg
+      cyl: 6.35
+      thread: 1.0
+      confidence: measured
+      source: >-
+        edgecore/agr-psu-dc@1's own terminal key - the owner, on the real unit at 5x in
+        IMG_6789 and IMG_6796: 'the walls stand about 1/2 inch proud (12.7mm) and the bolts
+        about 1/4 inch (6.35)'. THIS IS ONE OF THE VERY FEW GENUINELY MEASURED RELIEF
+        MAGNITUDES IN THE LIBRARY - a person looking at hardware - which is why several
+        vendors' features point here. Note the reading is to the nearest quarter inch and
+        the word is 'about'.
+    - node: washer-neg
+      cyl: 0.7
+      lift: 2.4
+      confidence: estimated
+      source: >-
+        DERIVED, NOT MEASURED, and the distinction matters because this feature sits beside
+        two that ARE measured. The owner's reading in the terminal key covers the WALLS
+        (12.7) and the BOLTS (6.35) and nothing else; it says only that 'each lane takes a
+        bolt with a hex nut and a star washer'. The washer and nut thicknesses and their
+        lifts are chosen to stack plausibly inside the measured 6.35 stud, so they are
+        estimates standing on a measurement rather than measurements. ANYONE CITING THIS
+        NODE AS 'MEASURED OFF REAL HARDWARE' IS CITING THE WALLS, NOT THE NUT.
+    - node: nut-neg
+      cyl: 2.2
+      lift: 3.1
+      confidence: estimated
+      source: >-
+        DERIVED, NOT MEASURED, and the distinction matters because this feature sits beside
+        two that ARE measured. The owner's reading in the terminal key covers the WALLS
+        (12.7) and the BOLTS (6.35) and nothing else; it says only that 'each lane takes a
+        bolt with a hex nut and a star washer'. The washer and nut thicknesses and their
+        lifts are chosen to stack plausibly inside the measured 6.35 stud, so they are
+        estimates standing on a measurement rather than measurements. ANYONE CITING THIS
+        NODE AS 'MEASURED OFF REAL HARDWARE' IS CITING THE WALLS, NOT THE NUT.
 skins: [default]
