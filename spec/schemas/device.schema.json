@@ -129,7 +129,18 @@
         },
         "power": {
           "type": "object",
-          "description": "what it draws and what it is fed. `power-max-w`, `power-typical-w`, `power-min-w`, suffixed `-ac-w`/`-dc-w` only where the vendor states both and they differ",
+          "description": "what it draws and what it is fed. `power-max-w`, `power-typical-w`, `power-min-w`, suffixed `-ac-w`/`-dc-w` only where the vendor states both and they differ. These are the WHOLE BOX's spellings and are refused on a component contract (lint L28); a module says `power-draw-max-w` or `power-output-w`, which is what stops a sum over a chassis's occupants resolving to a plausible wrong number",
+          "properties": {
+            "power-envelope": {
+              "description": "what the vendor's own figure COVERS, where a document says - and it is what decides whether a module total may be reconciled against that figure at all. Casa states '3.6 kW per fully loaded chassis'; Cisco publishes no chassis draw for the ASR9000 at all, only a per-card table and an instruction to compute your own budget. The same key on two chassis can therefore mean opposite things, and without this word a consumer cannot tell which it is holding. An enum rather than a free string because a value that licenses a reconciliation drifts into `fully-loaded`, `full` and `yes`. ABSENT means nobody has looked; `unstated` means somebody read the datasheet and it is silent, which is a finding - the same distinction `lifecycle.eol: none-announced` draws",
+              "enum": [
+                "bare",
+                "as-tested",
+                "fully-configured",
+                "unstated"
+              ]
+            }
+          },
           "additionalProperties": {
             "type": [
               "string",

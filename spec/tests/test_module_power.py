@@ -289,6 +289,51 @@ def test_a_chassis_with_no_bays_at_all_raises_nothing(tmp_path):
     assert found(dev, tmp_path, "L29") == []
 
 
+# ---------------------------------------------------------------- power-envelope
+
+
+def _envelope(value):
+    """A minimal device carrying one `power-envelope`, against the schema."""
+    import json
+
+    from jsonschema import Draft202012Validator
+    schema = json.loads((SPEC / "schemas/device.schema.json").read_text())
+    dev = {"format": 1, "kind": "device", "name": "chassis", "version": "0.1.0",
+           "attrs": {"power": {"power-max-w": "4000", "power-envelope": value}},
+           "views": {"front": {"size": {"w": 440.0, "h": 44.0}}}}
+    # Only this key's errors: a deliberately minimal device is missing other
+    # required fields, and those are not what is under test here.
+    return [e.message for e in Draft202012Validator(schema).iter_errors(dev)
+            if "power-envelope" in list(e.path) or "power-envelope" in e.message]
+
+
+def test_the_envelope_vocabulary_is_closed():
+    """It decides whether a module total may be reconciled against the vendor's
+    figure at all, and an uncontrolled value that licenses a reconciliation
+    drifts into `fully-loaded`, `full` and `yes`. Casa's own wording is "fully
+    loaded" - the token is deliberately not a quote of it."""
+    for ok in ("bare", "as-tested", "fully-configured", "unstated"):
+        assert _envelope(ok) == [], ok
+    for drift in ("fully-loaded", "full", "yes", "Fully-Configured"):
+        assert _envelope(drift), drift
+
+
+def test_unstated_is_a_value_and_not_the_absence_of_one():
+    """`unstated` means somebody read the datasheet and it is silent, which is a
+    finding. An absent key means nobody looked. Collapsing the two would lose
+    the distinction `lifecycle.eol: none-announced` exists to draw."""
+    assert _envelope("unstated") == []
+    import json
+
+    from jsonschema import Draft202012Validator
+    schema = json.loads((SPEC / "schemas/device.schema.json").read_text())
+    dev = {"format": 1, "kind": "device", "name": "chassis", "version": "0.1.0",
+           "attrs": {"power": {"power-max-w": "4000"}},
+           "views": {"front": {"size": {"w": 440.0, "h": 44.0}}}}
+    assert [e.message for e in Draft202012Validator(schema).iter_errors(dev)
+            if "power-envelope" in list(e.path) or "power-envelope" in e.message] == []
+
+
 def test_the_register_carries_the_rule(tmp_path):
     """L29 is in RULE_GAPS, which is the only reason any of this reaches
     `gaps.json`: `derived_gaps` runs the DEVICE rules, so a component-scoped
