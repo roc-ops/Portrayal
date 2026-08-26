@@ -188,7 +188,7 @@ attrs:
   performance:
     switching-capacity: 2.4 Tb/s
   power:
-    power-max-w: 692 W (datasheet); QSG says 527 W at 25 C and 723 W at 45 C
+    power-max-w: 692 W
     power-typical-w: 201 W
     psu-dc-input: -40 to -75 VDC, 40 A max per PSU
     psu-ac-input: 100-120 V 12 A or 200-240 V 7.5 A, 50-60 Hz per PSU
@@ -241,6 +241,23 @@ gaps:
     jack and not a gap in one revision.
   wanted: a NOS LED table, or photographs of the OOB jack with a link up and
     traffic running
+  blocks: []
+- what: power-consumption-sources
+  scope: [power-max-w]
+  reason: sources-disagree
+  note: >-
+    The datasheet states "Power Consumption - Max: 692 W, Typical: 201 W" with
+    no ambient. The QSG for the same SKU states "527 W at 25 C, 723 W at 45 C".
+    Most of that is explained by ambient rather than by disagreement - 527 W at
+    25 C sits comfortably below the datasheet maximum - but the 45 C figure
+    EXCEEDS the stated maximum by 31 W, and 45 C is the top of this device's own
+    rated operating range (0 to 45 C), so the figure at that ambient should BE
+    the maximum. 692 W is kept as the datasheet's own maximum.
+  wanted: >-
+    an Edgecore statement of what ambient the datasheet's 692 W assumes, or a
+    measurement at 45 C. Note that the QSG's 25 C figure here, 527 W, is
+    identical to the AGR400 datasheet's stated maximum, which may mean one of
+    the four Edgecore figures is a copy error
   blocks: []
 groups:
   qsfpdd-100g:

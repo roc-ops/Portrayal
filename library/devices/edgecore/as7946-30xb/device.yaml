@@ -117,7 +117,7 @@ attrs:
     switching-capacity: 2.4 Tb/s full duplex
     packet-buffer: 4 Gb integrated deep buffering
   power:
-    power-max-w: 527 W (datasheet); QSG says 638 W at 25C and 695 W at 45C
+    power-max-w: 527 W
     power-typical-w: 186 W
     psu-dc-input: -40 to -75 VDC, 40 A max per PSU
     psu-ac-input: 100-120 V 12 A or 200-240 V 7.5 A, 50-60 Hz per PSU
@@ -581,3 +581,27 @@ configurations:
       AS7946-30XB-O-AC-F-JP:
         part: FNPEC7946501Z
         power-cord: Japan
+# What no rule can find. Two Edgecore documents for this SKU state different
+# power consumption figures, and the manifest can only carry one of them.
+gaps:
+- what: power-consumption-sources
+  scope: [power-max-w]
+  reason: sources-disagree
+  note: >-
+    The datasheet states "Power Consumption - Max: 527 W, Typical: 186 W" with
+    no ambient. The quick start guide for the same SKU states "Power Consumption
+    638 W at 25 C, 695 W at 45 C". This is not the usual measure-versus-measure
+    difference that explains most such pairs: the QSG's LOWEST figure, at the
+    cooler ambient, already exceeds the datasheet's stated MAXIMUM by 111 W, so
+    neither typical-against-max nor an ambient axis accounts for it. Both rows
+    are labelled Power Consumption and neither states a scope or a population.
+    527 W is kept because it is the datasheet's, which is the source of record
+    for a spec-table fact; if the QSG is right the device draws 21 percent more
+    than this manifest says.
+  wanted: >-
+    a measurement from a running unit, or any Edgecore document stating what
+    each figure covers - populated or bare, input power or system draw. Note
+    that the AGR420's QSG gives 527 W at 25 C, the same number this datasheet
+    gives as the AGR400's maximum, which may mean one of the four figures is a
+    copy error
+  blocks: []
