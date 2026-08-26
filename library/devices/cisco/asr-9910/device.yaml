@@ -69,6 +69,22 @@ provenance:
     explicit rail positions at 9.45 in and 5.00 in from the rear and where those rails ARE drawn.
     The distinction is deliberate: a region says "this is here" and decor says "this is here, at
     this size, in this place", and only the second needs a dimension behind it
+  bottom-face-figure-12-checked-directly: >-
+    datasheet - FINAL CHECK, made because Figure 12 is the best drawing in the corpus and it was
+    reasonable to expect it to carry this. IT DOES NOT. Its Top View is rendered at 300 dpi and
+    read whole, with a generous crop in case a dimension had been cut off, and it carries EXACTLY
+    ONE dimension: 17.600, the chassis width, on a vertical arrow at its right. There is no second
+    dimension line anywhere on that view. The 31.266 "Cable Mgt to Fabric card" below it belongs to
+    the Side View, not the Top.
+    AND THE VIEW CANNOT BE CALIBRATED TO RECOVER IT. Taking 17.600 in across its 445 px short axis
+    gives 0.03955 in/px, at which its 709 px long axis measures 28.04 in - against Table 13's 31.50
+    (-11.0%) and the side view's 31.266 (-10.3%). It matches no dimension anyone states, so there
+    is no scale to put a fraction on. The only interior vertical line the scan finds sits about
+    5 mm from an edge, which is a skin or flange line at the chassis wall rather than a mounting
+    plane at any plausible depth.
+    So the best-documented chassis in the family does not give this, which is a real finding rather
+    than a search that fell short: Figure 12 spends its dimensions on the OUTSIDE of the box and
+    none on where the box mounts
   bottom-face-attempted-and-refused: >-
     measured - the fraction route was tried and it failed the gate, so it was not used. Every
     sibling's mounting plane came from a dimensioned figure; the 9910's Figure 12 dimensions only
@@ -310,20 +326,22 @@ gaps:
   scope: [bottom]
   reason: needs-drawing
   note: >-
-    NARROWED, and the earlier version of this gap was wrong in a way worth recording. It claimed
-    the bottom face was unreachable for every chassis in the family because no bottom VIEW exists
-    in the intake. The first half is still true - no bottom view of any ASR 9000 exists in 78
-    documents - but the conclusion did not follow. The rack mounting flange is a vertical plate
-    spanning the chassis height, so it intersects the bottom plane too, and every chassis whose
-    TOP-DOWN footprint figure dimensions that plane can carry it on the bottom as a real measured
-    feature. Five of the seven do: the 9006 at 5.73 in from the front, the 9010 at 23.21 in from
-    the rear, the 9912 and 9922 at 22 in from the rear, and the 9906 from its side view's rail
-    positions. Those five reached level 4 on that evidence.
-    THIS CHASSIS IS THE ONE THAT DOES NOT. Figure 12 is the richest drawing in the corpus - a
-    dimensioned three-view - and it dimensions the overall width, height and depth and nothing
-    else. Its side view draws two vertical rails but gives no position for them, and the HIG's
-    only side-view-with-rail-locations figure is the ASR 9906's. Transferring the 9906's 127.0 and
-    240.0 mm would be an inference across two chassis that differ in height by 313 mm, which is
-    exactly the kind of sibling transfer the rest of this work has been correcting.
-  wanted: a dimensioned rail position for the ASR 9910, from any figure, or its rack-mount
-    installation drawing
+    THE BOTTOM FACE IS EMPTY BY VERIFICATION, NOT BY OMISSION, and this is the only chassis in the
+    Cisco family where that is still true. Its seven siblings each earn this face from a rack
+    mounting surface strip dimensioned in their own footprint figure. FOUR ROUTES WERE TRIED HERE
+    AND ALL FOUR FAIL:
+    (1) Figure 12's Top View, read whole at 300 dpi, carries exactly one dimension - 17.600, the
+    width - and no mounting offset. (2) The fraction route needs a scale, and that view has none
+    that reconciles: 17.600 across its short axis makes its long axis 28.04 in, which is 11 percent
+    off Table 13's 31.50 and 10 percent off its own side view's 31.266. (3) The HIG's 4-post
+    mounting figures for this chassis are undimensioned illustrations. (4) Transferring the ASR
+    9906's 127.0 and 240.0 mm would cross two chassis differing by 313 mm in height, which is the
+    sibling transfer this work has spent the session correcting.
+    Separately and for the whole family: no bottom VIEW of any ASR 9000 chassis exists in the
+    78-document intake - every figure caption in all 65 PDFs was searched for "Bottom View",
+    "underside" and "bottom of the chassis", returning zero hits.
+    Nothing is drawn and no region names the absence. The face is correctly SIZED, so the 3D box
+    and a rack elevation are the right shape; what is missing is a statement of what is on it, and
+    this chassis holds at capability 2 rather than borrow a number it cannot source.
+  wanted: a dimensioned rail or mounting-flange position for the ASR 9910 from any figure, or a
+    way for a view to declare itself deliberately empty so empty-by-verification can count

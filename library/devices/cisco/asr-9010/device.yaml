@@ -145,6 +145,12 @@ provenance:
     the rack - the kind of internal inconsistency this work has spent the night finding in other
     people's artefacts. casa-cards' ASR 9006 and 9904 match across both faces and are the standard
     this follows
+  strip-label-carries-the-number: >-
+    the region label states the figure's own dimension AND its conversion to a distance from the
+    front. That is not decoration: it is the only number in the file a reader can check the
+    geometry against, and its absence is why the ASR 9906's strips sat in the wrong half of the box
+    through two reviews before a human noticed. Where the label carried a distance - on the ASR
+    9006 and 9904 - the same error was caught in minutes
   card-orientation: >-
     datasheet - stated directly, and it had been an inference until now. The Overview and
     Reference Guide's "Chassis Slots" section (b-asr9k-overview-reference-guide.pdf p17) names
@@ -382,7 +388,7 @@ views:
       decor:
         - {at: [0, 587.55], size: [444.5, 3.9], fill: '#9a9c9e'}
     regions:
-      - {id: rack-mounting-surface, label: 'Rack mounting surface - the same plane the bottom face carries'}
+      - {id: rack-mounting-surface, label: 'Rack mounting surface - 23.21 in (58.95 cm) from the rear, i.e. 137.7 mm from the front'}
       - {id: top-plate, label: 'Top plate - outline and rack mounting brackets dimensioned in Figure 8'}
       - {id: rack-mounting-brackets, label: 'Rack mounting brackets'}
   bottom:
@@ -391,7 +397,7 @@ views:
       decor:
         - {at: [0, 587.55], size: [444.5, 3.9], fill: '#9a9c9e'}
     regions:
-      - {id: rack-mounting-plane, label: 'Rack mounting plane - where the chassis bolts to the rack posts'}
+      - {id: rack-mounting-surface, label: 'Rack mounting surface - 23.21 in (58.95 cm) from the rear, i.e. 137.7 mm from the front'}
   left:
     size: {w: 727.2, h: 933.45}
     regions:
