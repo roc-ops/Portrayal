@@ -63,6 +63,26 @@ def test_one_key_belongs_to_one_section():
     assert len(errs) == 1 and "L25" in errs[0] and "'fans'" in errs[0]
 
 
+def test_temperature_is_environmental_because_thermal_is_the_machinery():
+    """`thermal` holds fans, cooling-path, fan-trays, air-filter-location. An
+    operating range belongs with humidity and altitude, which is `environmental`.
+
+    The library had it both ways - all eight ASR 9000s under `environmental`,
+    four other devices under `thermal` - and the requirement named the smaller
+    half, so every ASR would have failed a thermal requirement while stating its
+    range on the line above. Locked here so the move is not quietly reverted."""
+    where = set()
+    for man in MANIFESTS:
+        attrs = (yaml.safe_load(man.read_text()) or {}).get("attrs") or {}
+        for section, body in attrs.items():
+            if isinstance(body, dict) and any("temp" in k for k in body):
+                where.add(section)
+    assert where <= {"environmental"}, where
+    for name in ("networking", "optical"):
+        req = [r for r in PROFILES[name]["requires"] if "operating-temp" in str(r)]
+        assert [r["section"] for r in req] == ["environmental"]
+
+
 def test_a_section_is_not_satisfied_by_the_machinery_inside_it():
     """The AS7726-32X is why the temperature requirement names its keys.
 
@@ -83,7 +103,8 @@ def test_the_requirement_names_a_section_and_not_four_spellings():
     `power-ac-max-w`, `power-max-ac-w` and `power-max-dc-w` onto one fact, which
     made `specified` mean "has a key spelled one of four ways"."""
     reqs = PROFILES["networking"]["requires"]
-    assert [r["section"] for r in reqs] == ["performance", "platform", "power", "thermal"]
+    assert [r["section"] for r in reqs] == ["performance", "platform", "power",
+                                            "environmental"]
     # bare section requirements exist and are the common case
     assert reqs[0] == {"section": "performance"}
     # and where a key still has to be named there is exactly one spelling of it

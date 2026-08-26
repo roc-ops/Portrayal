@@ -245,7 +245,20 @@ def _specified(data, profiles):
         name = req["section"]
         have = sections.get(name) or {}
         if not have:
-            missing.append(f"an `attrs.{name}` section")
+            # AN ABSENT SECTION STILL OWES THE SAME FACT. Where the requirement
+            # names keys, say which - "needs an `attrs.environmental` section" is
+            # true and useless, and the author has to open profiles.yaml to learn
+            # that what is actually wanted is an operating range. The AS7726-32X
+            # is the case: it states fans and no temperature, and moving the
+            # temperature requirement from `thermal` to `environmental` turned a
+            # message that named the fact into one that named the container.
+            want = req.get("keys") or req.get("any-of") or []
+            if want:
+                joined = "`, `".join(want)
+                lead = "one of " if req.get("any-of") else ""
+                missing.append(f"{lead}`{joined}` in a missing `attrs.{name}` section")
+            else:
+                missing.append(f"an `attrs.{name}` section")
             continue
         # A section requirement is satisfied by the section existing. Naming keys
         # is the exception, for the facts where mere presence is too weak - and

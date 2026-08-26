@@ -47,12 +47,20 @@
 #   AS7326-56X is rated 0-45 C front-to-back and 0-40 C back-to-front - so a
 #   device states either one range or two, and both spellings are real facts.
 #
-# The temperature requirement cannot be left as bare `section: thermal`, and
-# the AS7726-32X is why: its thermal section holds `fans`, so section presence
-# alone reported it as fully specified while the manifest states no operating
-# range at all. A section is the right unit for "has data about X" only where
-# any key in it IS the fact; where the section also holds the machinery, name
-# the fact.
+# The temperature requirement names `environmental`, and it took a measurement
+# to settle which section that is. `thermal` holds the MACHINERY - fans,
+# cooling-path, fan-trays, air-filter-location, fan-controller-redundancy - and
+# `environmental` holds the ENVELOPE the box is rated for: humidity, altitude,
+# acoustic noise, shock, vibration. An operating range belongs with humidity and
+# altitude, not with fans, and the library had it both ways: all eight ASR 9000s
+# filed it under `environmental` and four other devices under `thermal`, with
+# this requirement naming the smaller half. Every ASR would have failed a
+# thermal requirement while stating its range on the line above.
+#
+# It still cannot be a bare `section: environmental`: that section also holds
+# humidity and altitude, so a device stating those and no temperature would pass.
+# A section is the right unit for "has data about X" only where any key in it IS
+# the fact; where the section holds neighbours, name the fact.
 #
 # Note what is still deliberately NOT accepted: `power-typical-w` does not
 # satisfy the maximum, and `forwarding-rate` (pps) is in the same section as
@@ -75,7 +83,7 @@ profiles:
         keys: [cpu, memory]
       - section: power
         any-of: [power-max-w, power-max-ac-w, power-max-dc-w]
-      - section: thermal
+      - section: environmental
         any-of: [operating-temp, operating-temp-f2b, operating-temp-b2f]
 
   optical:
@@ -87,5 +95,5 @@ profiles:
       - section: performance
       - section: power
         any-of: [power-max-w, power-max-ac-w, power-max-dc-w]
-      - section: thermal
+      - section: environmental
         any-of: [operating-temp, operating-temp-f2b, operating-temp-b2f]
