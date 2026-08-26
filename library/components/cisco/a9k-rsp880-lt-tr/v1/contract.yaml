@@ -1,0 +1,265 @@
+format: 1
+kind: module
+name: a9k-rsp880-lt-tr
+version: 1.0.0
+class: supervisor
+profile: networking
+description: >-
+  Cisco ASR 9000 Route Switch Processor 880-LT, Packet Transport optimised - four cores
+  at 2.4 GHz and two 128 GB SSDs, against the RSP-880's eight cores and two 32 GB SSDs.
+  Ten RJ-45 jacks - two SYNC timing ports configurable as BITS, J.211 or DTI, an IEEE
+  1588 timestamp port, two inter-chassis sync ports of which ICS1 doubles as the
+  RS232/422 GPS time-of-day input, two management LAN ports, a CMP port, a console and
+  an auxiliary port - plus 10 MHz and 1 PPS SMB clock inputs, a nine-pin alarm output, a
+  USB 2.0 type A port, nine discrete status lamps, a four-character LED dot-matrix
+  display and a LAMP TEST push button.
+size: {w: 46.0, h: 428.5, d: 628.9}
+attrs:
+  model: 'A9K-RSP880-LT-TR'
+  role: 'route-switch-processor'
+  mgmt: '2 x 10/100/1000 RJ-45'
+  console: 'EIA/TIA-232 RJ-45'
+  timing: '2 x SYNC (BITS/J.211/DTI) RJ-45, IEEE 1588 RJ-45, 2 x inter-chassis sync RJ-45, 10 MHz and 1 PPS SMB'
+  alarm: 'DB9, three dry-contact outputs'
+  usb: '1 x USB 2.0 type A'
+  power-draw-max-w: 315
+  eol: 'none-announced'
+  weight-kg: 8.07
+provenance:
+  one-drawing: >-
+    READ THIS BEFORE TRUSTING A FEATURE POSITION TO THE MILLIMETRE. Nine RSP and RP
+    masters in this stencil are ONE DRAWING: extracted jack, SMB, USB, DB9, LED-matrix
+    and lamp coordinates agree to 0.00 mm across a9k-rsp5-se and -tr, a9k-rsp880-se and
+    -tr, a9k-rsp880-lt-se and -tr, a99-rp3-se and -tr, and a99-rsp-se. The DATASHEETS do
+    not agree: these cards are 402.8, 428.5, 428.2 and 403.4 mm wide and 41.0 to 46.0 mm
+    high. So the drawing is generic across the family and cannot be all four sizes. Each
+    card here is scaled to its OWN stated envelope - long axis to its width, short axis
+    to its height, two factors, exactly as the line cards were - which makes the OUTLINE
+    right for every one and makes the interior positions proportional rather than
+    measured. A jack centre is therefore good to a few millimetres, not to a tenth, and
+    anyone needing better needs a mechanical drawing Cisco has not published.
+  size: >-
+    datasheet - Cisco ASR 9000 Route Switch Processor 880 Data Sheet, 'Physical
+    specifications': Height 1.81 in. (4.60 cm), Width 16.87 in. (42.85 cm), Depth 24.74
+    in. (62.89 cm), Weight 17.8 lb (8.07 kg). That data sheet covers all four part
+    numbers - A9K-RSP880-SE, -TR, A9K-RSP880-LT-SE and -LT-TR - with ONE physical block,
+    so the LT variants take the same envelope from Cisco's own scoping rather than by
+    inference. Note this card is 46.0 mm high where the RSP5 is 41.0: it is a thicker
+    card, and a bay sized for one is not sized for the other.
+  ports: >-
+    install guide - the Overview and Reference Guide's per-card 'Front Panel and Access
+    Ports' section, corroborated feature by feature by the artwork. For the RSP5: 'Two
+    RJ-45 Sync timing ports with Link and Fault LEDs built into the RJ-45. IEEE1588
+    RJ-45 Timestamp port. Two Inter-Chassis Sync ports - nVSync1 is shared with
+    RS232/422 GPS TOD RJ-45 port. RS232/422 GPS TOD RJ-45 port for system timing input.
+    10 MHz and 1 PPS clock input SMB ports. Alarm Output DB9 port with three alarm
+    outputs. External USB2, class-A port. Two dual-speed 100/1000 Mbit Ethernet
+    Management ports. One Connectivity Management Processor (CMP) port. Two EIA/TIA-232
+    RJ232 serial RJ-45 ports - one each for Console and Auxiliary modem ports.' That is
+    ten RJ-45s, and the master draws ten.
+  jack-orientation: >-
+    the ICS and MGT LAN jacks are STACKED PAIRS in one bezel, not two singles side by
+    side, and the pair MIRRORS: read at high zoom the upper jack's keyway points up and
+    the lower one's points down, so both release tabs stay reachable. The upper of each
+    pair is therefore placed at rotate 270 and everything else at 90. This is the
+    failure that was caught by eye on the AGR400's RJ-45s and would have linted clean
+    here too. Which jack is 0: the artwork prints '0' beside the upper of each pair and
+    '1' beside the lower, and ICS0 sits above ICS1/TOD under the GPS bracket.
+  cages: >-
+    composed from std/, never drawn. The RJ-45s go in as std/rj45-ganged (12.7 x 11.0)
+    rather than std/rj45 (16.0 x 14.0): the IEC 60603-7 single-port cutout is the wrong
+    part for a stacked pair whose ports share walls, and 16.0 will not fit twice across
+    a 41 mm card. The drawn jack measures 10.83 x 12.81, which rotated is 12.81 x 10.83
+    against the ganged registry's 12.7 x 11.0 - agreement to one percent, which is the
+    check. Timing coax is std/smb, sourced from the same 10-32 UNF figure the registry
+    carries; the USB is std/usb-a.
+  alarm-out: >-
+    install guide - 'Each RSP/RP card drives a set of three alarm output contacts. Alarm
+    circuitry on the RSP/RP activates dry contact closures that are accessible through
+    the nine-pin Alarm Out connector on the RSP/RP front panel... Both normally-open and
+    normally-closed contacts are available. Only the active RSP/RP drives the alarm
+    outputs.'
+  db9: >-
+    the ALARM OUT connector is DRAWN, not composed, and it is deliberately NOT declared
+    `class: cutout`. There is no std/ part for a D-subminiature DE-9 and no `db9` key in
+    spec/schemas/standards.yaml, and no document in this intake dimensions the panel
+    opening - the guides say 'Alarm Output DB9 port with three alarm outputs' and 'the
+    nine-pin Alarm Out connector' and give no geometry. Declaring a cutout that conforms
+    to nothing would put a false entry in the aperture census L26 keeps, and inventing a
+    MIL-DTL-24308 figure from memory would be worse. It is `class: connector` and this
+    sentence is the record of the missing registry key.
+  lamps: >-
+    install guide - Table 4, 'RSP, RSP-440, RSP-440 Lite, RSP-880, RSP880-LT, RSP4-S,
+    RSP5 Discrete LED Display Definitions', and Table 5 for the RP, transcribed per lamp
+    with Cisco's own sentence kept beside the state tokens. WHICH lamp is where was read
+    off the artwork at high zoom, not guessed: three columns of three, SSD/CRIT/FAIL, FC
+    FAULT/MAJ/ACO and GPS/MIN/SYNC, and the same nine names appear on the rsp5, rsp880,
+    rsp880-lt, rp3 and a99-rsp masters. FC FAULT is in none of Cisco's tables - see its
+    own description.
+  buttons: >-
+    install guide - 'Alarm Cut Off (ACO) and Lamp Test momentary push buttons', and on
+    the RSP5 the guide adds that they 'can be used to eject the RSP5 card'. Both are
+    drawn on the master as stroked circles with their legends beside them. Worth
+    recording how nearly they were missed: the first extraction pass reported one
+    button, because a circle is a curve and the outline reader skips curves - the second
+    was found by looking at the artwork at 8 px/mm rather than by trusting the count.
+  power: >-
+    install guide - Table 23, row 'RSP880-LT Card': 285 W at 27 C, 295 W at 40 C, 315 W
+    at 55 C. max is the highest rated ambient. This is a separate row from the RSP-880's
+    425/430/450, which is the difference between four cores at 2.4 GHz and eight at 1.9.
+    Table 23 names the CARD, not the part number: its rows are 'RSP5 Card', 'RSP-880
+    Card', 'RP3 Card' and so on, with no -SE/-TR distinction anywhere in the table. So
+    the figure below is carried on both variants of a card, which is transcription of
+    Cisco's own scope rather than an inference across it. Contrast Table 35 for the line
+    cards, which DOES split by variant and where the 16-port -TR and -SE differ by two
+    thirds - that is why the scope of each table is worth stating.
+  lifecycle: >-
+    searched - no end-of-life notice for this part number is in the intake.
+elements:
+  alarm-out:
+    at: [10.89, 194.06]
+    size: [11.86, 35.65]
+    class: connector
+  led-matrix:
+    at: [15.96, 376.86]
+    size: [19.43, 8.23]
+    class: display
+    description: >-
+      the four-character 5x7 LED dot-matrix display. The Overview and Reference Guide
+      devotes two sections to what it shows - 'LED Matrix Boot Stage and Runtime Display'
+      and 'LED Matrix CAN Bus Controller Error Display' - which is a message vocabulary
+      rather than a lamp state list, so it is modelled as a display and not as an
+      indicator with states.
+  aco:
+    at: [10.39, 329.2]
+    size: [3.97, 3.9]
+    class: button
+    description: >-
+      the Alarm Cut Off momentary push button. Pressing it after an alarm lights the ACO
+      lamp: 'Alarm Cutoff has been enabled. The ACO push button was pressed after at least
+      one alarm has occurred.'
+  lamp-test:
+    at: [10.39, 339.61]
+    size: [3.97, 3.9]
+    class: button
+    description: >-
+      the LAMP TEST momentary push button. On the RSP5 the guide adds that these two
+      buttons 'can be used to eject the RSP5 card', which is why they are modelled as
+      buttons and not as decoration.
+  ssd:
+    at: [22.92, 352.47]
+    size: [2.11, 2.11]
+    class: led
+    description: >-
+      Internal Solid State Hard Disk Drive (SSD). Green: SSD0 is busy/active, driven by
+      the SSD controller. Off (default after reset): not busy/active.
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  fc-fault:
+    at: [22.92, 360.9]
+    size: [2.11, 2.11]
+    class: led
+    description: >-
+      FC FAULT, printed on the faceplate between SSD and GPS. NO ROW FOR IT EXISTS in
+      Table 4 or Table 5 of the Overview and Reference Guide, which between them describe
+      FAIL, CRIT, MAJ, MIN, SYNC, ACO, HDD, CF, SSD, GPS and the three USB lamps. So its
+      colours are unknown and it carries off/on rather than a vocabulary borrowed from the
+      lamp beside it. This is a gap in the documents, not in the model - the name is
+      legible on the artwork at high zoom and the card really does have nine lamps.
+    states:
+    - 'off'
+    - 'on'
+  gps:
+    at: [22.92, 369.32]
+    size: [2.11, 2.11]
+    class: led
+    description: >-
+      GPS. Green: 'GPS interface provisioned and ports are turned on. ToD, 1 PPS, 10 Mhz
+      are all valid.' Off (default after reset): either the interface is not provisioned
+      or the ports are not turned on.
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  crit:
+    at: [18.06, 352.47]
+    size: [2.11, 2.11]
+    class: led
+    description: >-
+      Critical Alarm (CRIT). Red: a critical alarm has occurred. Off (default after
+      reset): no critical alarm has occurred.
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  maj:
+    at: [18.06, 360.9]
+    size: [2.11, 2.11]
+    class: led
+    description: >-
+      Major Alarm (MAJ). Red: a major alarm has occurred. Off (default after reset): no
+      major alarm has occurred.
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  min:
+    at: [18.06, 369.32]
+    size: [2.11, 2.11]
+    class: led
+    description: >-
+      Minor Alarm (MIN). Amber: a minor alarm has occurred. Off (default after reset): no
+      minor alarm has occurred.
+    states:
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  fail:
+    at: [12.76, 352.47]
+    size: [2.11, 2.11]
+    class: led
+    description: >-
+      Power Fail (FAIL). Red: 'Standby Power Fail LED. The LED is turned off by the CAN
+      bus controller after it is up and running.' Off: standby power is normal.
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  aco:
+    at: [12.76, 360.9]
+    size: [2.11, 2.11]
+    class: led
+    description: >-
+      Alarm Cutoff (ACO). Amber: 'Alarm Cutoff has been enabled. The ACO push button was
+      pressed after at least one alarm has occurred.' Off (default after reset): alarm
+      cutoff is not enabled.
+    states:
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  sync:
+    at: [12.76, 369.32]
+    size: [2.11, 2.11]
+    class: led
+    description: >-
+      Synchronization (SYNC). Green: system timing is synchronized to an external timing
+      source. Amber: system timing is free running. Off: no system timing is configured.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+relief:
+  wall: '#4a4f55'
+parts:
+  - {ref: std/rj45-ganged@1, id: sync-0, at: [8.97, 47.4], rotate: 90}
+  - {ref: std/rj45-ganged@1, id: sync-1, at: [8.97, 66.89], rotate: 90}
+  - {ref: std/rj45-ganged@1, id: ieee-1588, at: [8.97, 128.84], rotate: 90}
+  - {ref: std/rj45-ganged@1, id: ics-0, at: [24.83, 152.27], rotate: 270}
+  - {ref: std/rj45-ganged@1, id: ics-1-tod, at: [8.97, 152.27], rotate: 90}
+  - {ref: std/rj45-ganged@1, id: mgt-lan-0, at: [26.15, 246.4], rotate: 270}
+  - {ref: std/rj45-ganged@1, id: mgt-lan-1, at: [8.97, 246.4], rotate: 90}
+  - {ref: std/rj45-ganged@1, id: cmp, at: [8.97, 267.2], rotate: 90}
+  - {ref: std/rj45-ganged@1, id: console, at: [8.97, 288.35], rotate: 90}
+  - {ref: std/rj45-ganged@1, id: aux, at: [8.97, 309.15], rotate: 90}
+  - {ref: std/smb@1, id: gps-10mhz, at: [11.0, 173.75]}
+  - {ref: std/smb@1, id: gps-1pps, at: [11.0, 184.09]}
+  - {ref: std/usb-a@1, id: usb, at: [12.13, 234.04], rotate: 90}
+body:
+  depth: 628.9
+  color: '#b9bec4'
+skins: [default]
