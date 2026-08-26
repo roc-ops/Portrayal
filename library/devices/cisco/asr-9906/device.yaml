@@ -302,13 +302,24 @@ gaps:
     states their width, their height, or where the PEM sits. The rear is therefore sized and
     carries regions naming what is there, with no cutouts invented to fill it.
   wanted: an ASR 9906 rear elevation, or a rear photograph
-- what: blank-faces
-  scope: [top, bottom, left, right]
+- what: bottom-face-is-undocumented-family-wide
+  scope: [bottom]
   reason: vendor-silent
   note: >-
-    All four side faces are sized from Table 13 and Figure 11 (the 9906's top-down footprint) and
-    are deliberately EMPTY. This chassis breathes front to rear, so unlike the ASR 9006 and 9904 -
-    whose right sides carry an intake and an air filter - its sides have no stated features, and
-    its air filter is underneath the card cage where no view we model shows it. The sizes are
-    right, which is what these views carry for a rack elevation and the 3D box.
-  wanted: a six-face photograph set, or the mechanical drawings behind Figure 11
+    THE BOTTOM IS THE ONLY FACE OF THIS CHASSIS WITH NO SOURCE, and it is not a gap in this file's
+    research. There is no bottom view of ANY ASR 9000 chassis anywhere in the 78-document intake:
+    every figure caption in all 65 PDFs was searched for "Bottom View", "underside" and "bottom of
+    the chassis", and the result is zero hits. That is a fact about how Cisco documents a rack
+    chassis rather than about this model - a face that sits on rack rails and is never serviced
+    gets no figure.
+    The face is SIZED correctly from Table 13, so a rack elevation and the 3D box are the right
+    shape; what it lacks is any statement of what is on it. Nothing is invented to fill it, and no
+    region is added naming the absence, because a check passed by annotating that you have nothing
+    is worse than a check failed honestly.
+    THIS HOLDS THE CHASSIS AT CAPABILITY 2. Front, rear, top, left and right all now carry sourced
+    content; the bottom alone does not, and level 3's implementation requires content on all six.
+    The written design asks only that six faces be "present, sized, and mutually consistent", which
+    this file satisfies - the content requirement comes from `_has_content`, which was written for
+    level 1. See working/notes/deliberately-empty-faces.md.
+  wanted: a bottom elevation, a photograph of the underside, or a way for a view to declare itself
+    deliberately empty so that empty-by-verification counts where empty-by-omission does not
