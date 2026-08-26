@@ -58,7 +58,7 @@ provenance:
     two separately-derived figures is the only check available and it passes. The
     bays carry rotate 90 because the modules are drawn portrait and this chassis
     lays them flat; the bay size is the ROTATED footprint, which is the convention
-    asr9k-cards verified with a scratch device rather than asserted'
+    asr9k-cards verified with a scratch device rather than asserted. WIDENED after the XFP MPAs landed: both bays now accept 20x1ge, 2x10ge, 4x10ge and the blank. All four share the 33.81 x 160.02 envelope, so widening accepts needed no geometry change - which is the point of an envelope shared across a family. A9K-MPA-1X40GE is the one member still unbuilt and has its own gap entry'
   front-geometry: 'drawing-measured off the stencil master at the calibration
     above, expressed in body coordinates. The two MPA bays are one row at y 2.6
     to 38.2, BAY 0 at x 20.0 to 182.9 and BAY 1 at x 208.9 to 371.9, each 163.0
@@ -213,8 +213,8 @@ views:
       - {at: [310.7, 67.2], text: 'SYNC', for: led-sync}
     components:
       bays:
-        - {id: mpa-0, at: [20.0, 2.6], size: {w: 163.0, h: 35.6}, rotate: 90, accepts: [cisco/a9k-mpa-20x1ge@1, cisco/a9k-mpa-blank@1], group: mpa-bays, rel-pos: 0, default: cisco/a9k-mpa-blank@1}
-        - {id: mpa-1, at: [208.9, 2.6], size: {w: 163.0, h: 35.6}, rotate: 90, accepts: [cisco/a9k-mpa-20x1ge@1, cisco/a9k-mpa-blank@1], group: mpa-bays, rel-pos: 1, default: cisco/a9k-mpa-blank@1}
+        - {id: mpa-0, at: [20.0, 2.6], size: {w: 163.0, h: 35.6}, rotate: 90, accepts: [cisco/a9k-mpa-20x1ge@1, cisco/a9k-mpa-2x10ge@1, cisco/a9k-mpa-4x10ge@1, cisco/a9k-mpa-blank@1], group: mpa-bays, rel-pos: 0, default: cisco/a9k-mpa-blank@1}
+        - {id: mpa-1, at: [208.9, 2.6], size: {w: 163.0, h: 35.6}, rotate: 90, accepts: [cisco/a9k-mpa-20x1ge@1, cisco/a9k-mpa-2x10ge@1, cisco/a9k-mpa-4x10ge@1, cisco/a9k-mpa-blank@1], group: mpa-bays, rel-pos: 1, default: cisco/a9k-mpa-blank@1}
         - {id: psu-0, at: [10.3, 45.0], size: {w: 56.6, h: 41.0}, accepts: [cisco/a9k-750w-ac@1, cisco/a9k-750w-dc@1], group: power-modules, rel-pos: 0, default: cisco/a9k-750w-ac@1}
         - {id: psu-1, at: [72.0, 45.0], size: {w: 56.8, h: 41.0}, accepts: [cisco/a9k-750w-ac@1, cisco/a9k-750w-dc@1], group: power-modules, rel-pos: 1, default: cisco/a9k-750w-ac@1}
         - {id: fan-0, at: [387.1, 0.0], size: {w: 54.86, h: 88.2}, accepts: [cisco/asr-9001-fan@1], group: cooling, rel-pos: 0, default: cisco/asr-9001-fan@1}
@@ -340,21 +340,22 @@ gaps:
     and until it is, an sma or smb standing in would be a plausible wrong answer
     - which is the failure mode this project keeps having to dig back out
   blocks: []
-- what: mpa-modules
+- what: mpa-1x40ge
   scope: [mpa-0, mpa-1]
   reason: vendor-silent
   note: >-
-    The two MPA openings are measured and drawn, but they are declared as panel
-    CUTOUTS rather than as bays, because a bay must accept something and nothing
-    exists for them to accept. The data sheet names the family - 20 x 1 GE, 2 x
-    10 GE, 4 x 10 GE and 1 x 40 GE - but no MPA component is modelled yet, and
-    library/components/cisco/ belongs to another agent this session, so no part
-    was built here. Pointing them at cisco/a9k-slot-cover instead would be worse
-    than leaving them open: that part is 41.4 x 395.7, a modular-chassis line
-    card slot, and does not fit a 163 x 35.6 MPA opening. A blank is wanted as
-    much as the modules are - the guide says the ASR 9001-S ships with BAY 1
-    'disabled and covered with dust caps by default', so a dust cap is a real
-    documented part on this chassis. These become bays the moment either lands.
+    THREE OF THE FOUR ADAPTERS THE DATA SHEET NAMES ARE NOW MODELLED and both
+    bays accept them: a9k-mpa-20x1ge, a9k-mpa-2x10ge and a9k-mpa-4x10ge, plus
+    a9k-mpa-blank as the default - the guide says the ASR 9001-S ships with BAY
+    1 'disabled and covered with dust caps by default', so the blank is a real
+    documented part on this chassis rather than a placeholder. A9K-MPA-1X40GE is
+    the one outstanding member. It is buildable - a single QSFP+ cage, and
+    std/qsfp28 carries the SFF-8663 single-cage aperture - and its absence is a
+    scheduling fact rather than a sourcing one, but it is recorded here because a
+    bay list that names three of four reads as if the fourth does not exist.
+    One caution for whoever builds it: the stencil master prints BOTH
+    'A9K-MPA-1X40GE' and 'A9K-MPA-2X10GE' on the same faceplate, so the artwork
+    is shared and the silkscreen legend cannot be used to tell them apart.
   wanted: >-
-    MPA components for the four adapter types, and an MPA-sized blank or dust cap
+    cisco/a9k-mpa-1x40ge, on the shared 33.81 x 160.02 MPA envelope
   blocks: []
