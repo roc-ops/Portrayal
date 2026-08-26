@@ -39,6 +39,8 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
       unstated - an estimate and a measurement are indistinguishable otherwise
   L36 component: a `borrowed` magnitude names an origin that actually measured it
   L37 device: a group says what it is FOR, and a declared group has members
+  L38 component: printed text in a skin sits in a silkscreen group, unless the
+      part is applied over the panel rather than printed into it
 """
 import argparse
 import json
@@ -914,15 +916,77 @@ def lint_component_parts(path, data, lib_roots, depth=0, seen=None):
         lint_component_parts(found, sub, lib_roots, depth + 1, seen | {part["ref"]})
 
 
+# PARTS APPLIED OVER THE PANEL RATHER THAN PRINTED INTO IT. Kept in step with
+# render.py's list of the same name, which is what stops `--without silkscreen`
+# erasing a label's text along with the chassis printing.
+APPLIED_CLASSES = {"sticker", "label", "marking"}
+
+
+def _ungrouped_text(root):
+    """How many <text> nodes sit outside a silkscreen group.
+
+    Ancestry, not parentage: a run may be wrapped several levels down inside a
+    part's own sub-group, and that still counts as grouped.
+    """
+    ns = "{http://www.w3.org/2000/svg}"
+    parent = {c: p for p in root.iter() for c in p}
+
+    def grouped(e):
+        n = e
+        while n is not None:
+            if (n.get("id") or "").endswith("silkscreen") or n.get("data-class") == "silkscreen":
+                return True
+            n = parent.get(n)
+        return False
+
+    return sum(1 for e in root.iter() if e.tag == ns + "text" and not grouped(e))
+
+
 def _skin_checks(path, data):
     skins_dir = path.parent / "skins"
     contracted = set((data.get("elements") or {}).keys())
+    # L38 SWEEPS EVERY FILE UNDER skins/, not the ones `skins:` names.
+    #
+    # Scoped to the declared list it read as passing and was blind: `skins:` names
+    # the faceplate variants, while body-top, body-left and the rest are reached
+    # through the relief body and never appear in it. Twelve of the thirty-three
+    # skins this rule was written for are body skins, so the first version agreed
+    # the library was clean while unable to open a third of the evidence. A rule
+    # that cannot see a file does not just miss it, it certifies it.
+    if (data.get("class") or "") not in APPLIED_CLASSES:
+        for sp in sorted(skins_dir.glob("*.svg")) if skins_dir.exists() else []:
+            try:
+                _, root = skin_ids(sp)
+            except Exception:
+                continue          # L3 reports an unparseable skin
+            loose = _ungrouped_text(root)
+            if loose:
+                err(sp, "L38", f"{loose} printed text node(s) outside a silkscreen "
+                               "group. Wrap them in <g id=\"silkscreen\"> - one "
+                               "contiguous run at a time, because paint order is "
+                               "meaning: consolidating a file\'s text into one group "
+                               "moved an OK legend behind the box it is printed on")
     for skin in data.get("skins", ["default"]):
         sp = skins_dir / f"{skin}.svg"
         if not sp.exists():
             err(path, "L3", f"declared skin missing: {sp.name}")
             continue
         ids, root = skin_ids(sp)
+        # L38 - printed text belongs in a silkscreen group.
+        #
+        # `--without silkscreen` gets the right answer today via a backstop that
+        # sweeps any remaining <text>, which is sound - printed text on a faceplate
+        # IS silkscreen whether or not its author grouped it - but it means the
+        # convention is unenforced, and an unenforced convention is one skin away
+        # from not being one. Grouping is what makes the layer CHECKABLE rather
+        # than merely correct: a tree can list a part's legends only if the drawing
+        # says which nodes are legends.
+        #
+        # A STICKER IS THE EXCEPTION AND IS NOT AN OVERSIGHT. Silkscreen is ink on
+        # the metal; a label is a separate part applied over it, and its printing
+        # belongs to that part the way a cage's walls belong to the cage. Asking a
+        # label to group its own text as silkscreen would be asking it to declare
+        # itself printing on something else.
         missing = contracted - ids
         if missing:
             err(sp, "L3", f"skin lacks contracted element ids: {sorted(missing)}")

@@ -14,6 +14,11 @@ from pathlib import Path
 
 import yaml
 
+# PARTS APPLIED OVER THE PANEL RATHER THAN PRINTED INTO IT. Their text is the
+# part, not silkscreen, so `--without silkscreen` leaves them alone and L38 does
+# not ask them to group text they were never meant to group.
+APPLIED_CLASSES = {"sticker", "label", "marking"}
+
 import attrsections as attrs_mod
 from manifest import view_parts, targets, split_target
 import capability
@@ -927,15 +932,32 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     # is what makes a bare panel-and-components drawing possible.
     if not silkscreen:
         # Two passes, because component skins have not all adopted the grouping yet.
-        # The group is the convention and lint will come to require it; the <text>
-        # sweep is the backstop, and it is sound rather than a bodge - printed text on
-        # a faceplate IS silkscreen, so a text node in a skin is silkscreen whether or
-        # not its author put it in the right group. Geometry is unaffected either way.
+        # The group is the convention and L38 requires it; the <text> sweep is the
+        # backstop, and it is sound rather than a bodge - printed text on a faceplate
+        # IS silkscreen, so a text node in a skin is silkscreen whether or not its
+        # author put it in the right group. Geometry is unaffected either way.
+        #
+        # A LABEL IS NOT SILKSCREEN AND MUST SURVIVE. Silkscreen is ink on the metal;
+        # a sticker is a separate part applied over it, and its printing belongs to
+        # that part the way a cage's walls belong to the cage. The backstop could not
+        # tell the difference, so `--without silkscreen` erased the text of every
+        # label on the device - the AGR420's top face carries three, and a bare-panel
+        # drawing rendered them as blank rectangles. A part that is nothing BUT its
+        # printing, reduced to an empty box, is a picture of a device that does not
+        # exist. Skip the whole subtree of an applied part rather than its text
+        # nodes alone, so anything else printed on one survives with it.
+        exempt = set()
+        for node in svg.iter():
+            if node.get("data-class") in APPLIED_CLASSES:
+                exempt.update(id(d) for d in node.iter())
         for parent in svg.iter():
+            if id(parent) in exempt:
+                continue
             for node in [n for n in list(parent)
-                         if n.get("id", "").endswith("silkscreen")
-                         or n.get("data-class") == "silkscreen"
-                         or n.tag == f"{{{SVG_NS}}}text"]:
+                         if id(n) not in exempt
+                         and (n.get("id", "").endswith("silkscreen")
+                              or n.get("data-class") == "silkscreen"
+                              or n.tag == f"{{{SVG_NS}}}text")]:
                 parent.remove(node)
 
     meta_payload = {
