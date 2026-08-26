@@ -188,6 +188,17 @@ provenance:
     so it can be corrected in one line: this view is laid out as Figure 9 lays it out, front at the
     BOTTOM edge (y = 734.8) and rear at the top (y = 0), so the mounting surface line sits at
     734.8 - 145.5 = 589.3. Nothing in the schema or the renderer fixes which edge is the front
+  card-compatibility: >-
+    datasheet - and this is Cisco stating it directly rather than being inferred from geometry.
+    The per-card datasheets carry a "Chassis compatibility" row, and datasheet-c78-743580, "Cisco
+    ASR 9000 Series 5th Generation High-Density Multi-Rate Line Cards: 2 Terabit and 0.8 Terabit
+    Cards", says of A9K-20HG-FLEX-SE, -TR, A9K-8HG-FLEX-SE and -TR: "Compatible with the Cisco ASR
+    9006, ASR 9010, ASR 9904, ASR 9906, ASR 9910, ASR 9912, and ASR 9922 chassis". All seven, this
+    chassis among them, so those four are in every card slot's accepts alongside the blank. The
+    row is per-DATASHEET and does not extend to cards it does not cover: the ASR 9900-only parts
+    (A99-32X100GE, A99-10X400GE-X and the 16-port Service Edge) name only the 9900 chassis in their
+    own rows and are deliberately absent here. A card is listed when a Cisco document says it fits,
+    not when it would physically go in
   slot-accepts: >-
     datasheet + component contract - slots 0 to 5 accept cisco/a9k-slot-cover@1, and the claim is
     checked rather than assumed. That component is Cisco's line card and RSP/RP blank filler,
@@ -319,12 +330,12 @@ views:
       - {at: [33.0, 293.0], text: ESD, font-size: 4, anchor: middle}
     components:
       bays:
-        - {id: slot-5, at: [60.94, 104.63], size: {w: 352.59, h: 46.61}, accepts: ['cisco/a9k-slot-cover@1'], group: slots, rel-pos: 5}
-        - {id: slot-4, at: [60.94, 151.24], size: {w: 352.59, h: 46.61}, accepts: ['cisco/a9k-slot-cover@1'], group: slots, rel-pos: 4}
-        - {id: slot-3, at: [60.94, 197.84], size: {w: 352.59, h: 46.61}, accepts: ['cisco/a9k-slot-cover@1'], group: slots, rel-pos: 3}
-        - {id: slot-2, at: [60.94, 244.45], size: {w: 352.59, h: 46.61}, accepts: ['cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2}
-        - {id: slot-1, at: [60.94, 291.05], size: {w: 352.59, h: 46.61}, accepts: ['cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1}
-        - {id: slot-0, at: [60.94, 337.66], size: {w: 352.59, h: 46.61}, accepts: ['cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0}
+        - {id: slot-5, at: [60.94, 104.63], size: {w: 352.59, h: 46.61}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 5}
+        - {id: slot-4, at: [60.94, 151.24], size: {w: 352.59, h: 46.61}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 4}
+        - {id: slot-3, at: [60.94, 197.84], size: {w: 352.59, h: 46.61}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 3}
+        - {id: slot-2, at: [60.94, 244.45], size: {w: 352.59, h: 46.61}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2}
+        - {id: slot-1, at: [60.94, 291.05], size: {w: 352.59, h: 46.61}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1}
+        - {id: slot-0, at: [60.94, 337.66], size: {w: 352.59, h: 46.61}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0}
     regions:
       - {id: rsp-slots, label: Two bottom slots reserved for redundant RSPs, members: [slot-0, slot-1]}
       - {id: lc-slots, label: Four slots for line cards, members: [slot-2, slot-3, slot-4, slot-5]}
