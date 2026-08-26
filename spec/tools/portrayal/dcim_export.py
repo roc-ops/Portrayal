@@ -77,16 +77,31 @@ ATTR_IFACE = {
 }
 PART_CONSOLE = {"std/rj45-ganged": "rj-45", "common/rj45-shielded": "rj-45",
                 "std/usb-a": "usb-a"}
+
+# RF and timing connectors. These are INTERFACES, not front ports: a front port
+# in both libraries is a patch-panel pass-through and requires a rear_port to
+# terminate on, which a connector on a line card does not have. Emitting them as
+# front ports made 21 module types invalid before this was noticed.
+#
+# The connector is not the signal. Casa's 6+12 I/O cards carry DOCSIS on MCX and
+# its QAM/US I/O cards carry it on F, so both are `docsis` and the label records
+# which connector. The SMB ports on Cisco route processors are gps-10mhz and
+# gps-1pps - timing inputs, not network interfaces - so they take `other`, which
+# says "a thing this schema has no name for" rather than naming a neighbour.
 # std/c13-inlet is the appliance inlet that accepts a C13 cord, which on the
-# equipment side is a C14. Naming them from the cord end is the convention in
-# the manifests; the DCIM names them from the inlet.
+# equipment side is a C14. The manifests name it from the cord end; both DCIMs
+# name it from the inlet. Same coupler, opposite ends - see roc-ops/ndv#25.
 PART_POWER = {"std/c13-inlet": "iec-60320-c14"}
-# Deliberately unmapped: std/mcx, std/smb, std/f-type are RF and timing
-# connectors with no honest equivalent in either library's front-port
-# vocabulary, and std/lc-bore appears twice. Guessing a type for a DOCSIS F
-# connector would put a wrong fact in a source of truth.
-PART_SKIP = {"std/mcx", "std/smb", "std/f-type", "std/lc-bore",
-             "common/qsfp-pull-tab"}
+
+PART_RF = {
+    "std/f-type": ("docsis", "F"),
+    "std/mcx": ("docsis", "MCX"),
+    "std/smb": ("other", "SMB"),
+}
+
+# std/lc-bore is the rx/tx bore of a QSFP transceiver, not a port on a device:
+# the transceiver IS the module. A pull tab is furniture.
+PART_SKIP = {"common/qsfp-pull-tab", "std/lc-bore"}
 
 # Both libraries take the same device-type document. They differ only in what
 # they REQUIRE - NetBox also demands u_height and is_full_depth, which we always
@@ -388,6 +403,11 @@ def build_module(contract, manufacturer):
             powers.append({"name": pid or "Inlet", "type": PART_POWER[ref]})
         elif ref in PART_CONSOLE:
             consoles.append({"name": pid or "Console", "type": PART_CONSOLE[ref]})
+        elif ref in PART_RF:
+            t, connector = PART_RF[ref]
+            # The type says what the signal is; the label keeps the connector,
+            # which is the part the type cannot express.
+            ifaces.append({"name": pid or t, "type": t, "label": connector})
         elif ref in PART_IFACE:
             t = PART_IFACE[ref]
             if faster and t.split("base")[0] < faster.split("base")[0]:
