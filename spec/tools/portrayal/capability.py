@@ -407,6 +407,15 @@ RULE_GAPS = {
     "L24": ("attrs-unclassified",
             "a section for these facts, or a decision that they are genuine "
             "one-offs and `other` is where they belong"),
+    # Chassis power depends on what is in the chassis, and this is the count of
+    # what cannot be totalled. It is here rather than left to the component rule
+    # because a component-scoped warning never reaches the register - the
+    # derivation below runs the DEVICE rules - and because the unit somebody
+    # wants an answer about is the chassis, not the card.
+    "L29": ("module-power",
+            "a `power-draw-max-w` on each module this chassis accepts, from the "
+            "vendor's own per-card table - Cisco publishes one per ambient, most "
+            "vendors publish none, and until they land a module total is a floor"),
 }
 
 CAP_GAPS = {

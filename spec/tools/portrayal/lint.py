@@ -21,6 +21,12 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
   L25 device: one attr key is claimed by one section - it flattens to data-<key>
   L26 component: an aperture is declared once - a `class: cutout` element must
       conform, or resolve through `parts:` to something that does
+  L27 component: a power-bearing module states its figure, or leaves the record
+      that no document holds it
+  L28 component: a power figure says which way it points, and its min/typical/max
+      are in order
+  L29 device: a chassis says how many of the modules it accepts have no figure,
+      so a module total is never quoted as one while it is a floor
 """
 import argparse
 import json
@@ -520,6 +526,104 @@ def lint_component_aperture(path, data, lib_roots):
          "dimension cannot be sourced yet, this warning is the record of that")
 
 
+# Which way the power goes, by class. A module that consumes owes a
+# `power-draw-*-w`; a module that provides owes `power-output-w`. They are
+# opposite signs of one unit, and the reason they can never share a key is that
+# a sum over both looks entirely plausible and is a category error: two 650 W
+# PSUs and eight 850 W line cards added together is not a draw, not a supply,
+# and not a crash.
+DRAW_CLASSES = ("line-card", "supervisor", "fan", "cooling", "transceiver")
+SUPPLY_CLASSES = ("psu", "power")
+DRAW_KEYS = ("power-draw-typical-w", "power-draw-max-w", "power-draw-min-w")
+SUPPLY_KEYS = ("power-output-w",)
+
+# The device-level vocabulary, reserved for the whole box and refused here, plus
+# the spelling this design replaced. `watts: '650'` is banned for saying nothing
+# about direction; `power-max-w` is banned for being the DEVICE's word, so that
+# the obvious downstream query - sum `power-max-w` over a chassis's occupants -
+# returns nothing at all rather than a credible wrong number.
+AMBIGUOUS_POWER_KEYS = {
+    "watts": "it does not say whether the module draws this or provides it",
+    "power-max-w": "that spelling belongs to the whole device",
+    "power-typical-w": "that spelling belongs to the whole device",
+    "power-min-w": "that spelling belongs to the whole device",
+    "power-max-ac-w": "that spelling belongs to the whole device",
+    "power-max-dc-w": "that spelling belongs to the whole device",
+}
+
+
+def _power_advice(cls):
+    """The key this class owes, named so the author cannot pick the wrong side."""
+    if cls in SUPPLY_CLASSES:
+        return ("power-output-w",
+                "the continuous output it is rated to PROVIDE")
+    return ("power-draw-max-w",
+            "the load it IMPOSES at its worst rated case (and "
+            "`power-draw-typical-w` beside it where the vendor states one)")
+
+
+def lint_component_power(path, data, _lib_roots=None):
+    """L27 and L28 - a module's watts, and which way they point.
+
+    L27, warning. A component of a power-bearing class states no figure. The
+    message names the key for THAT class, because the whole design turns on the
+    author not picking the wrong side of it while clearing the warning.
+
+    A warning for the L26 reason: most of what it finds is true and unfixable
+    the same day. Edgecore publishes no output wattage for the AGR PSUs in any
+    document here - the datasheet gives input current only - and not one line
+    card, fan or transceiver in the library has a draw figure from any source.
+    So this is a to-do list against the SOURCES, not an accusation against the
+    author, and an err() would go red across the library on day one and teach
+    people to ignore the linter. That is the failure L14 and L21 both had to be
+    recalibrated out of.
+
+    L28, error. A figure that cannot be trusted: an ambiguous spelling, or an
+    ordering contradiction (min above typical, typical above max). An error and
+    not a warning because unlike L26 and L27 neither half depends on a document
+    nobody has - renaming `watts` needs no new information, and a card whose
+    typical exceeds its max is a transcription slip in this repo, not a fact
+    about the world. It is the same line L22 (the group contradicts its members,
+    error) draws against L23 (the group has not explained itself, warning), and
+    it is what makes the ban in L28 a ban: a warning-level ban is not one.
+    """
+    attrs = data.get("attrs") or {}
+    name = data.get("name")
+    for key, why in AMBIGUOUS_POWER_KEYS.items():
+        if key not in attrs:
+            continue
+        want, means = _power_advice(data.get("class"))
+        err(path, "L28", f"attrs.{key} on a component: {why}. Draw and supply are "
+                         f"opposite signs of one unit, so a sum over both is a "
+                         f"category error that reads as an answer. Write {want} "
+                         f"- {means} - as a number in watts")
+    figures = {k: attrs[k] for k in DRAW_KEYS
+               if isinstance(attrs.get(k), (int, float))}
+    lo, mid, hi = (figures.get("power-draw-min-w"),
+                   figures.get("power-draw-typical-w"),
+                   figures.get("power-draw-max-w"))
+    for a, an, b, bn in ((lo, "min", mid, "typical"), (mid, "typical", hi, "max"),
+                         (lo, "min", hi, "max")):
+        if a is not None and b is not None and a > b:
+            err(path, "L28", f"power-draw-{an}-w is {a} W and power-draw-{bn}-w is "
+                             f"{b} W - {an} cannot exceed {bn}. One of the two was "
+                             "read off the wrong row")
+    cls = data.get("class")
+    if cls not in DRAW_CLASSES and cls not in SUPPLY_CLASSES:
+        return
+    keys = SUPPLY_KEYS if cls in SUPPLY_CLASSES else DRAW_KEYS
+    if any(k in attrs for k in keys):
+        return
+    want, means = _power_advice(cls)
+    warn(path, "L27", f"{name} is class {cls} and states no power figure. Add "
+                      f"attrs.{want} - {means} - as a number in watts. If no "
+                      "document you hold states it, leave this warning standing: "
+                      "it is the record that the figure is missing, and a chassis "
+                      "total is a floor rather than a total until it lands. Do not "
+                      "estimate one - an unsourced watt figure is the same number "
+                      "minus the warning")
+
+
 def lint_component_parts(path, data, lib_roots, depth=0, seen=None):
     seen = seen or set()
     key = f"{data.get('name')}@{data.get('version','')}"
@@ -819,6 +923,64 @@ def lint_device_attrs(path, data):
                           "is a genuine one-off. Counted so the tail cannot go quiet")
 
 
+def lint_device_module_power(path, data, lib_roots):
+    """L29 - a chassis says how much of its own draw it can account for.
+
+    The ask this exists for is "sum the populated bays". The failure it exists
+    for is the sum being quotable when it is not: a chassis whose cards have no
+    figures totals to a small, confident, wrong number, and nothing in the
+    output says which bays were skipped. So the count comes out with the total,
+    and while it is non-zero the total is a FLOOR.
+
+    Reported from the device side rather than left to L27, because that is the
+    only side the gaps register can see: `capability.derived_gaps` runs the
+    DEVICE rules, so a component-scoped warning never reaches `gaps.json` - L26
+    does not. Every modular device now carries "N of M accepted modules have no
+    power figure" in the register automatically, with the entry disappearing
+    when the figures land. Derived, never declared.
+
+    The population is every module a bay can ACCEPT, not only the one installed
+    by default. A bay's occupant is a configuration choice and the chassis has
+    to be totalled for each of them, so a card that is accepted anywhere and
+    has no figure blocks some real configuration's total.
+
+    PSUs are not counted here. Their figure is `power-output-w` and it belongs
+    to the supply side of the arithmetic, which is a different sum with a
+    different meaning - see L27 for the module itself.
+    """
+    refs = set()
+    for view in (data.get("views") or {}).values():
+        for bay in view_parts(view or {})["bays"]:
+            refs.update(bay.get("accepts") or [])
+            if bay.get("default"):
+                refs.add(bay["default"])
+    for cfg in (data.get("configurations") or {}).values():
+        refs.update(r for r in (cfg.get("bays") or {}).values() if r)
+    modules, unsourced = set(), set()
+    for ref in sorted(refs):
+        found = resolve_component(ref, lib_roots)
+        if not found:
+            continue                       # L5 reports the broken ref
+        sub = yaml.safe_load(found.read_text()) or {}
+        if sub.get("class") not in DRAW_CLASSES:
+            continue
+        modules.add(ref)
+        if not any(k in (sub.get("attrs") or {}) for k in DRAW_KEYS):
+            unsourced.add(ref)
+    # One warning per unsourced module, not one per chassis. The register turns
+    # a rule's warning count into the gap's size, and a chassis that cannot
+    # account for five of its cards is a bigger hole than one that cannot
+    # account for one - which a single warning per device flattens to 1.
+    for ref in sorted(unsourced):
+        warn(path, "L29", f"{ref} is accepted by a bay here and states no power "
+                          f"draw ({len(unsourced)} of {len(modules)} module(s) this "
+                          "chassis accepts), so its module total is a floor and not "
+                          "a total. Add power-draw-max-w to that contract from the "
+                          "vendor's own per-card table; where no document states it, "
+                          "this count is the honest report of how much of the "
+                          "chassis is unaccounted for")
+
+
 def lint_device(path, validator, lib_roots):
     try:
         data = yaml.safe_load(path.read_text())
@@ -836,6 +998,7 @@ def lint_device(path, validator, lib_roots):
                    for r in lib_roots)
 
     lint_device_attrs(path, data)
+    lint_device_module_power(path, data, lib_roots)
     declared_groups = set((data.get("groups") or {}).keys())
     for gname, gdef in (data.get("groups") or {}).items():
         check_states(path, f"groups/{gname}", (gdef or {}).get("states"),
@@ -1233,6 +1396,7 @@ def main():
                 lint_component_parts(f, d, args.library)
                 lint_component_mating(f, d, args.library)
                 lint_component_aperture(f, d, args.library)
+                lint_component_power(f, d)
             n += 1
         for f in sorted(root.glob("devices/**/device.yaml")):
             d = lint_device(f, dev_v, args.library); n += 1
