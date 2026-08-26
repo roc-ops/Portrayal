@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: c40g-ac-inlet-panel
-version: 1.2.0
+version: 1.3.0
 class: inlet
 profile: networking
 description: >-
@@ -56,11 +56,22 @@ provenance:
     is edgecore/agr-panel-screw@1. The skin gained an id per corner screw so each cyl
     takes its own radius; as one group of six spread over 340 mm it would have been a
     single cylinder the width of the panel.
-    NOT GIVEN RELIEF: `vent-top` and `vent-bottom`. They are real openings, but the skin
-    draws the CELLS light on a grey panel, and `vent` punches a node''s DARK cells - so
-    declaring it would assert that the surround is the hole and the cells are metal,
-    which is backwards. Same artwork-polarity problem as casa/c40g-psu-ac''s fans, and
-    the same answer: fix the drawing first, with a source, or leave it.'
+    THE VENT REFUSAL IS LIFTED. The first pass declined `vent` on vent-top and
+    vent-bottom because the skin drew the CELLS light on a grey panel, the inverse of
+    what `vent` punches, and recorded that the answer was to fix the drawing WITH A
+    SOURCE. The owner''s working/photos/casa/c40g-rear-ac.png is that source: the bottom
+    band of an AC chassis carries fields of fine perforation that are unmistakably DARK
+    HOLES on light grey metal, above and below the inlet row and between the groups. The
+    cells are now drawn dark and the vent is declared.
+    THE PHOTOGRAPH ALSO CONFIRMS THE ARRANGEMENT this contract derived from Figure 1-11:
+    a small black rocker switch immediately to the LEFT of each IEC inlet, four groups
+    across. That was read off a figure and is now corroborated by hardware.
+    ONE FIDELITY POINT, RECORDED RATHER THAN FIXED: the real perforation is ROUND holes
+    on a staggered lattice; this skin draws a rectangular grid of rounded cells. That
+    simplification predates this pass, the photograph shows it is a simplification, and
+    changing it is a drawing job rather than a relief one.
+    NO DEPTH COMES OFF THE PHOTOGRAPH. It is a perspective shot with nothing of known
+    size in frame; the 20.0 is this contract own estimate restated.'
   NOT-PLACED: 'THIS COMPONENT IS BUILT BUT NOT PLACED ON THE C40G, and that is
     a format limitation rather than an oversight. It belongs on the rear face ONLY
     in the ac-power configuration, and there is no way to say that: a configuration
@@ -94,4 +105,7 @@ relief:
     - {node: corner-mr, cyl: 1.6, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
     - {node: corner-bl, cyl: 1.6, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
     - {node: corner-br, cyl: 1.6, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
+    # Perforated grille above and below the inlet row - real holes, redrawn dark.
+    - {node: vent-top, vent: 20.0, confidence: estimated, source: 'this contract own ESTIMATED 20.0 panel depth re-expressed. Not a second claim'}
+    - {node: vent-bottom, vent: 20.0, confidence: estimated, source: 'this contract own ESTIMATED 20.0 panel depth re-expressed. Not a second claim'}
 skins: [default]

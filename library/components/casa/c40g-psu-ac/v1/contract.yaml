@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: c40g-psu-ac
-version: 1.2.0
+version: 1.3.0
 class: psu
 profile: networking
 description: >-
@@ -81,12 +81,24 @@ provenance:
     - status: dome 0.3, common/led-dot@1''s lamp. Note the lamp DIAMETER stays 2.6 and
       stays unmeasured, for the reason the faceplate entry above gives; this pass adds
       Z only.
-    NOT GIVEN RELIEF, and the reason is the artwork rather than the sources: the two
-    fan openings. `vent` turns a node''s DARK cells into holes, and this skin draws each
-    fan as a LIGHT disc with dark guard wires over it - the inverse - so a vent here
-    would punch the finger guard and leave the openings solid. Making them work means
-    redrawing the fan as a dark aperture behind a light guard, which is an artwork
-    change with no source behind it and is left alone. The four corner screws per fan
+    THE FAN REFUSAL IS LIFTED AND THE ART IS REDRAWN. The first pass declined `vent`
+    on fan-left/fan-right because this skin drew each fan as a LIGHT disc with dark guard
+    wires over it - the inverse of what `vent` needs, which punches a node''s DARK cells -
+    so declaring it would have asserted that the surround was the hole. It recorded that
+    the fix was "redrawing the fan as a dark aperture behind a light guard, which is an
+    artwork change with no source behind it". THE OWNER''S PHOTOGRAPH IS THAT SOURCE:
+    working/photos/casa/c40g-front.png, the chassis with the PSU cover off, shows each of
+    the four PSUs with TWO circular openings that are genuinely dark and see-through, with
+    the fan blades visible behind, and a light WIRE FINGER GUARD over each - concentric
+    rings crossed by radial spokes. The art now draws that, and the vent is honest.
+    IT ALSO CONFIRMS THE FOLDED HANDLE. The bail is a bright metal tube lying flat across
+    the LEFT fan, exactly where Figure 1-10 draws it and where this contract put it. The
+    tube is visibly more substantial than the 1.5 the drawn stroke width gave, but the
+    photograph supplies no dimension and the number is unchanged.
+    THE PHOTOGRAPH FAILS GATE 1 AND WAS TESTED RATHER THAN ASSUMED. Its metal extent
+    measures 1149 x 591 px for an aspect of 1.944 against the real rack face at 1.813 -
+    7.2 percent out - so no absolute geometry comes off it and no fraction either. Shape,
+    count and arrangement only, which is all that was needed. The four corner screws per fan
     that Figure 1-10 shows are still not drawn, for the reason already recorded above.'
   body: 'the 300.0 is the size entry''s own ESTIMATED depth restated as a body, not a
     second claim. Unlike the PEMs and the fans this one WILL eject: it is class psu,
@@ -109,6 +121,12 @@ relief:
     - {node: handle, bar: 1.5, confidence: drawing, source: 'the handle path own drawn stroke width - the bail wire diameter. Also a FLOOR'}
     - {node: thumbscrew, cyl: 5.0, knurl: true, confidence: borrowed, source: 'common/fan-module@1 - its knurled locking screw'}
     - {node: status, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    # The two fan openings are REAL HOLES with a wire finger guard over each. The
+    # art was drawn light-on-grey, the inverse of what `vent` needs, and the first
+    # pass refused the feature rather than assert the surround was the hole. The
+    # owner's C40G front photograph settled it and the art is redrawn dark-on-light.
+    - {node: fan-left, vent: 25.0, confidence: borrowed, source: 'common/fan-module@1 grille 25; edgecore/agr-fan@1 measures 26. The PHOTO gives the shape and no depth'}
+    - {node: fan-right, vent: 25.0, confidence: borrowed, source: 'common/fan-module@1 grille 25; edgecore/agr-fan@1 measures 26. The PHOTO gives the shape and no depth'}
 body:
   depth: 300.0
   color: '#e9eaec'
