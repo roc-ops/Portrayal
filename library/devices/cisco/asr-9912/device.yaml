@@ -1,0 +1,245 @@
+format: 1
+kind: device
+name: asr-9912
+version: 0.1.0
+maturity: modelled
+manufacturer: Cisco
+model: ASR 9912
+description: >-
+  Cisco ASR 9912 Router - 30 RU, and the first chassis in this family with TWO card cages on one
+  face. Ten vertical line card slots sit above a second cage of nine positions carrying two route
+  processors flanking seven fabric cards, with three power shelves below. The two fan trays are
+  fitted from the REAR, which the guide marks on the figure itself. Modelled as a bare cage with
+  every card position a real bay.
+portfolio:
+  line: Service Provider
+  family: Aggregation Services Router
+  series: ASR 9000 Series
+provenance:
+  chassis: >-
+    datasheet - Table 13, b-asr9k-overview-reference-guide.pdf p130. ASR 9912: chassis height 52.5
+    inches (133.4 cm), chassis width 17.6 inches (44.7 cm) with "19.0 inches (48.3 cm) including
+    chassis rack-mount flanges and front doors", chassis depth 25.7 inches (65.2 cm), "29.4 inches
+    (74.7 cm) including the cable management system" and "30.1 inches (76.4 cm) including cable
+    management system and front doors". Modelled as the BODY, 447.0 x 1333.5 x 652.0 mm, taking
+    the bare depth. This row gives 17.6 and 19.0 on separate lines, which is what showed the ASR
+    9910's row has its flange phrase attached to the wrong number
+  ru: datasheet - 52.5 in / 1.75 = exactly 30.00 RU, and the stencil's height_in of 5.2500 agrees
+    exactly. One of the four chassis in the family where the guide and the stencil need no
+    reconciling
+  calibration: >-
+    measured - gate 1 passed. Calibrating x on 482.6 mm (the 19.0 in rack face) and y on Table 13's
+    1333.5 mm independently gives 0.20134 and 0.20144 mm/px, agreeing to 0.05 percent
+  master-faces-verified: >-
+    drawing - checked deliberately, because Cisco's ASR 9910 masters are SWAPPED and modelling from
+    a filename there would build the chassis inside out. The 9912's are correctly named:
+    asr-9912-ac-front carries the cable management tray with the cisco logo, both card cages and
+    the populated power shelves, while asr-9912-ac-rear carries the two fan trays, a block of
+    yellow warning labels and the power inlets. Figure 23 corroborates by marking the fan trays
+    "(rear insertion)"
+  slots: >-
+    datasheet - Figure 23 "Cisco ASR 9912 Router Slot Numbering", p38 of
+    b-asr9k-overview-reference-guide.pdf, read at 250 dpi. Top to bottom: fan trays FT0 over FT1
+    marked "rear insertion"; then Slot 0 to Slot 9 carrying LC0 to LC9; then a second cage of nine
+    positions labelled by NAME and not by slot number - RP0, FC0, FC1, FC2, FC3, FC4, FC5, FC6,
+    RP1; then power shelves PS0, PS1, PS2 each M0 to M3. The RP/FC positions are named directly by
+    Cisco, so they are named directly here rather than given invented slot numbers
+  slot-pitch-measured-from-the-silkscreen: >-
+    measured - BOTH cages print their positions, and both were read. The ten line card labels
+    centre at 25.08 through 421.61 mm with nine pitches of 44.10, 43.99, 44.09, 44.09, 43.99,
+    44.10, 44.09, 43.99 and 44.09 - a mean of 44.06 with a spread of 0.11 mm. The nine RP/FC labels
+    centre at 47.13 through 399.57 with the same 44.05 pitch, so the two cages share a pitch, which
+    is what makes a fabric card and a line card the same mechanical slot on this chassis. Both
+    cages measure 6.36 to 440.24 mm across the body
+  pitch-against-the-siblings: >-
+    NOTE - 44.06 here against 43.78 measured the same way on the ASR 9910 and 43.75 on the ASR
+    9906. The 0.28 mm difference is larger than either chassis's own label spread, so it is
+    probably real rather than noise, and it is consistent with the 9912 and 9922 being a slightly
+    different mechanical build from the 9906 and 9910 - they take the full-width A99-SFC3 fabric
+    card at 41.4 mm where the 9910 takes the double-width A99-SFC3-S at 76.2. Recorded rather than
+    averaged away
+  bay-sizing: >-
+    the bays are sized to the COMPONENT envelope, 41.4 x 395.7, and POSITIONED on the measured
+    label centres. The 2.66 mm between that envelope and the 44.06 measured pitch is the card guide
+    between slots, which is chassis structure rather than part of the bay. This follows the team's
+    arbitration that a module's size is the slot envelope and that a bay and its occupant must
+    carry the same size so the two can be checked against each other. NOTE FOR HARMONISING LATER:
+    the ASR 9006 and ASR 9010 committed earlier size their bays to the cage OPENING instead, which
+    predates that ruling and should be brought into line
+  card-compatibility: >-
+    datasheet - the per-card datasheets carry a "Chassis compatibility" row. c78-743580, the 5th
+    Generation High-Density Multi-Rate data sheet, says of A9K-20HG-FLEX-SE/-TR and
+    A9K-8HG-FLEX-SE/-TR: "Compatible with the Cisco ASR 9006, ASR 9010, ASR 9904, ASR 9906, ASR
+    9910, ASR 9912, and ASR 9922 chassis". This chassis is named, so those four are in every line
+    card bay. Cards whose rows omit the 9912 are deliberately absent
+  fabric-and-rp: >-
+    datasheet - the seven FC positions accept cisco/a99-sfc3@1, which Table 23 names as an ASR 9912
+    part in its own right. The two RP positions accept the RP3 pair; the ASR 9900 Series Route
+    Processor 3 data sheet is the source for the part and Figure 23 for the positions. THE FABRIC
+    CARD'S POWER FIGURE IS SCOPED AND MUST NOT BE READ OFF THE COMPONENT HERE - see gaps
+  airflow: >-
+    datasheet - "Cisco ASR 9912 Router: Front-to-rear cooling path. The inlet is at the bottom
+    front of the chassis, and the exhaust is at the upper rear",
+    b-asr9k-overview-reference-guide.pdf p3740
+  air-filter: >-
+    datasheet - Table 17, b-asr9k-hardware-installation-guide.pdf p228: "Cisco ASR 9912 Router -
+    Three air filters on the front of the RP and FC card cage". THREE filters, on the FRONT, which
+    is unlike every other chassis in the family - the 9006 and 9904 put theirs on the right side
+    and the 9010, 9906 and 9910 underneath a cage. Not modelled as bays; no figure dimensions them
+  grounding: datasheet - "Bottom rear right side of the chassis",
+    b-asr9k-hardware-installation-guide.pdf p125, illustrated by Figure 137
+  environmental: datasheet - Table 14, p131. The 9912 is in the narrower short-term group,
+    23 to 122 degF (-5 to 50 degC), with the 9010, 9910 and 9922
+  electrical: datasheet - Table 15 (AC) and Table 16 (DC), pp132-135, ASR 9912 columns only
+  weight: >-
+    datasheet - Table 13. "Chassis only - 181 pounds (82.10 kg)" and "Chassis: fully configured
+    using all card slots and three power trays - 643 pounds (291.66 kg)"
+  no-chassis-power-figure: NOTE - Cisco publishes no chassis-level draw for any ASR 9000; Table 14
+    says only to use the Cisco Power Calculator, so the module total here is a floor
+  lifecycle: datasheet - searched. No end-of-sale or end-of-life notice for this chassis was found
+  compliance: datasheet - data_sheet_c78-501767.pdf series compliance list, transcribed as printed
+attrs:
+  physical:
+    weight-configured-kg: 291.66
+    weight-configured-scope: fully configured using all card slots and three power trays
+    depth-with-cable-management-mm: 746.8
+    depth-with-front-doors-mm: 764.5
+  environmental:
+    operating-temperature: 41 to 104degF (5 to 40degC)
+    operating-temperature-short-term: 23 to 122degF (-5 to 50degC)
+    non-operating-temperature: -40 to 158degF (-40 to 70degC)
+    humidity-operating: 10 to 85 percent noncondensing
+    altitude-operating: 0 to 13,000 ft (0 to 4,000 m)
+    acoustic-noise: 78 dB at 80.6degF (27degC) maximum
+  power:
+    power-modules-v2: Version 2 power system - up to twelve AC power modules per system, four per tray
+    power-modules-v3: Version 3 power system - up to nine AC power modules per system, three per tray
+    power-ac-input-per-module-v2: 3290 VA (3000 W output module)
+    power-ac-input-per-module-v3: 6510 VA (6000 W output module)
+    power-ac-input-voltage: 200-240 VAC nominal (range 180 to 264 VAC); 220-240 VAC (UK)
+    power-ac-redundancy: AC power modules operate in N+N redundancy mode
+  thermal:
+    cooling-path: front-to-rear; inlet at the bottom front, exhaust at the upper rear
+    fan-trays: two, FT0 over FT1, fitted from the REAR
+    air-filter-location: three filters on the front of the RP and FC card cage
+  platform:
+    operating-system: Cisco IOS XR
+    interface-path-id: rack/slot/module/port
+  compliance:
+    nebs: 'SR-3580: NEBS Criteria Levels (Level 3)'
+    nebs-emc-safety: 'GR-1089-CORE: NEBS EMC and Safety'
+    nebs-physical: 'GR-63-CORE: NEBS Physical Protection'
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 447.0
+  height: 1333.5
+  depth: 652.0
+  ru: 30
+  weight-kg: 82.1
+  airflow: front-to-back
+  color: '#c8cacc'
+groups:
+  slots:
+    term: Slot
+    index-origin: 0
+    physical-context: NetworkingDevice
+  fabric:
+    term: FC
+    index-origin: 0
+    physical-context: NetworkingDevice
+  rp:
+    term: RP
+    index-origin: 0
+    physical-context: NetworkingDevice
+views:
+  front:
+    size: {w: 447.0, h: 1333.5}
+    panel:
+      decor:
+        - {at: [0, 0], size: [447.0, 320.0], fill: '#d5d7d9'}
+      cutouts:
+        - {id: lc-cage, at: [6.36, 324.31], size: [433.88, 357.35], shape: rect}
+        - {id: rpfc-cage, at: [6.36, 759.21], size: [433.88, 358.15], shape: rect}
+        - {id: shelf-0, at: [10.0, 1125.0], size: [427.0, 66.0], shape: rect}
+        - {id: shelf-1, at: [10.0, 1195.0], size: [427.0, 66.0], shape: rect}
+        - {id: shelf-2, at: [10.0, 1265.0], size: [427.0, 66.0], shape: rect}
+    components:
+      bays:
+        - {id: slot-0, at: [4.38, 305.13], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1'], group: slots, rel-pos: 0}
+        - {id: slot-1, at: [48.48, 305.13], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1'], group: slots, rel-pos: 1}
+        - {id: slot-2, at: [92.47, 305.13], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1'], group: slots, rel-pos: 2}
+        - {id: slot-3, at: [136.56, 305.13], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1'], group: slots, rel-pos: 3}
+        - {id: slot-4, at: [180.65, 305.13], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1'], group: slots, rel-pos: 4}
+        - {id: slot-5, at: [224.64, 305.13], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1'], group: slots, rel-pos: 5}
+        - {id: slot-6, at: [268.74, 305.13], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1'], group: slots, rel-pos: 6}
+        - {id: slot-7, at: [312.83, 305.13], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1'], group: slots, rel-pos: 7}
+        - {id: slot-8, at: [356.82, 305.13], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1'], group: slots, rel-pos: 8}
+        - {id: slot-9, at: [400.91, 305.13], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1'], group: slots, rel-pos: 9}
+        - {id: rp-0, at: [26.43, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a99-rp3-se@1', 'cisco/a99-rp3-tr@1'], group: rp, rel-pos: 0}
+        - {id: fc-0, at: [70.52, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a99-sfc3@1'], group: fabric, rel-pos: 0}
+        - {id: fc-1, at: [114.51, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a99-sfc3@1'], group: fabric, rel-pos: 1}
+        - {id: fc-2, at: [158.61, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a99-sfc3@1'], group: fabric, rel-pos: 2}
+        - {id: fc-3, at: [202.70, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a99-sfc3@1'], group: fabric, rel-pos: 3}
+        - {id: fc-4, at: [246.79, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a99-sfc3@1'], group: fabric, rel-pos: 4}
+        - {id: fc-5, at: [290.78, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a99-sfc3@1'], group: fabric, rel-pos: 5}
+        - {id: fc-6, at: [334.88, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a99-sfc3@1'], group: fabric, rel-pos: 6}
+        - {id: rp-1, at: [378.87, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a99-rp3-se@1', 'cisco/a99-rp3-tr@1'], group: rp, rel-pos: 1}
+    regions:
+      - {id: line-cards, label: 'Line cards LC0 to LC9 - slots 0 to 9'}
+      - {id: rp-fc-cage, label: 'RP and FC cage - RP0, FC0 to FC6, RP1, named directly by Cisco'}
+      - {id: air-filters, label: 'Three air filters on the front of the RP and FC card cage'}
+      - {id: power-shelves, label: 'Power shelves PS0, PS1 and PS2'}
+  rear:
+    size: {w: 447.0, h: 1333.5}
+    panel:
+      cutouts:
+        - {id: ground-pad, at: [26.0, 1280.0], size: [46.0, 20.0], shape: rect}
+    regions:
+      - {id: fan-trays, label: 'Fan trays FT0 and FT1 - rear insertion'}
+      - {id: rear-air-exhaust, label: 'Rear air exhaust - upper rear'}
+      - {id: nebs-ground, label: 'NEBS bonding and grounding - bottom rear right side'}
+  top:
+    size: {w: 447.0, h: 652.0}
+  bottom:
+    size: {w: 447.0, h: 652.0}
+  left:
+    size: {w: 652.0, h: 1333.5}
+  right:
+    size: {w: 652.0, h: 1333.5}
+gaps:
+- what: fabric-card-power-is-scoped-to-the-9922
+  scope: [fabric]
+  reason: sources-disagree
+  note: >-
+    cisco/a99-sfc3@1 carries power-draw-max-w 340, and that figure is the ASR 9922's. Table 23 of
+    b-asr9k-overview-reference-guide.pdf lists the SAME part number twice with different figures
+    scoped by chassis - "A99-SFC3 Card (ASR 9922)" at 320/330/340 W across the three ambients, and
+    a separate ASR 9912 row at a lower number. These are two scopes rather than two answers: the
+    same card draws less in this chassis than in the 9922. A chassis total built from the component
+    here is therefore CONSERVATIVE - it over-counts each of the seven fabric cards - which is the
+    safe direction but is not the right number. The component cannot carry both without a
+    chassis-scoped mechanism, which the library does not have; casa/c100g records the same species
+    of problem for paired modules.
+  wanted: a per-chassis power scope on a component contract, or a separate PID for the 9912 variant
+- what: power-module-openings
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    Three power shelves are drawn as single openings rather than four module openings each. Figure
+    23 numbers them M0 to M3 per shelf and Table 15 gives "Version 2 power system: Up to twelve AC
+    power modules per system, four per tray" - so twelve, and the count is not in doubt. The
+    boundaries are: the master draws all three shelves populated, so scanning returns module detail
+    rather than separators. The shelves' vertical extents here are estimated from the band below
+    the RP/FC cage rather than measured off separator rules, which is weaker than everything else
+    in this file and is why they are cutouts and not bays.
+  wanted: a figure showing the power shelves empty, or a dimensioned front elevation
+- what: blank-faces
+  scope: [top, bottom, left, right]
+  reason: vendor-silent
+  note: >-
+    All four side faces are sized from Table 13 and Figure 14 (the 9912's top-down footprint) and
+    are deliberately EMPTY. This chassis breathes front to rear and its three air filters are on
+    the FRONT, so no side carries a feature the guide names. The sizes are right, which is what
+    these views carry for a rack elevation and the 3D box.
+  wanted: a six-face photograph set, or the mechanical drawings behind Figure 14
