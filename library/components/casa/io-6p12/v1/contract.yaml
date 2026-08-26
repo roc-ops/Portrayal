@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: io-6p12
-version: 1.0.0
+version: 1.1.0
 class: line-card
 profile: networking
 description: >-
@@ -26,32 +26,23 @@ provenance:
   connector: drawing - the figure's cable note reads "Single quad-shielded
     cable with MCX male snap-on plug; 75 ohm male F-connector on opposite end",
     so the jack on this card is MCX and the F-connector is at the headend end
-  bore: ESTIMATED - no MCX dimension in the guide
+  bore: registry - the eighteen MCX openings are now COMPOSED from std/mcx@1
+    rather than drawn here, so the aperture is the registry's `mcx` key (4.95 x
+    4.50 D-hole, Radiall R113.553.000 panel drawing) instead of the estimate this
+    card used to carry. Every jack CENTRE is unchanged to 0.001 mm - only the
+    hole's size and shape moved, from a guessed rectangle to the sourced D-hole
+    (proved by diffing the compiled drawing - 18/18 axes land within 0.005 mm,
+    which is the old skin's two-decimal rounding and not a move). Note the
+    composed part is placed on its AXIS, which sits 2.475 from the top of a
+    4.50-high D-hole rather than at half its height.
+    The two cards had disagreed with each other about the same connector (3.87 x
+    3.14 here against 3.88 x 3.88 on the SW card); they now cannot
   comb: photograph - a C40G rear shot shows every I/O card fronted by a cable
     comb carried on brass standoffs. Jason measured the standoffs at about 3/8in
     (9.5mm) proud of the faceplate and the comb itself at about 1/16in (1.6mm)
     thick. The comb is notched per port and carries the U0-U11 / D0-D5 silkscreen,
     and the labels appear on BOTH the card face and the comb - the comb
     repeats them where the cable actually lands rather than replacing them
-elements:
-  u0: {at: [4.92, 40.36], size: [3.87, 3.14], class: cutout}
-  u1: {at: [4.92, 59.7], size: [3.87, 3.14], class: cutout}
-  u2: {at: [4.92, 79.04], size: [3.87, 3.14], class: cutout}
-  u3: {at: [4.92, 98.38], size: [3.87, 3.14], class: cutout}
-  u4: {at: [4.92, 117.72], size: [3.87, 3.14], class: cutout}
-  u5: {at: [4.92, 137.06], size: [3.87, 3.14], class: cutout}
-  u6: {at: [4.92, 156.4], size: [3.87, 3.14], class: cutout}
-  u7: {at: [4.92, 175.74], size: [3.87, 3.14], class: cutout}
-  u8: {at: [4.92, 195.08], size: [3.87, 3.14], class: cutout}
-  u9: {at: [4.92, 214.42], size: [3.87, 3.14], class: cutout}
-  u10: {at: [4.92, 233.76], size: [3.87, 3.14], class: cutout}
-  u11: {at: [4.92, 253.1], size: [3.87, 3.14], class: cutout}
-  d0: {at: [16.05, 45.15], size: [3.87, 3.14], class: cutout}
-  d1: {at: [16.05, 83.94], size: [3.87, 3.14], class: cutout}
-  d2: {at: [16.05, 122.73], size: [3.87, 3.14], class: cutout}
-  d3: {at: [16.05, 161.52], size: [3.87, 3.14], class: cutout}
-  d4: {at: [16.05, 200.31], size: [3.87, 3.14], class: cutout}
-  d5: {at: [16.05, 239.1], size: [3.87, 3.14], class: cutout}
 relief:
   wall: '#4a4f55'
   features:
@@ -60,6 +51,25 @@ relief:
     - {node: standoff-t, out: 9.5, color: '#b08d57'}
     - {node: standoff-m, out: 9.5, color: '#b08d57'}
     - {node: standoff-b, out: 9.5, color: '#b08d57'}
+parts:
+  - {ref: std/mcx@1, id: u0, at: [4.38, 39.455]}
+  - {ref: std/mcx@1, id: u1, at: [4.38, 58.795]}
+  - {ref: std/mcx@1, id: u2, at: [4.38, 78.135]}
+  - {ref: std/mcx@1, id: u3, at: [4.38, 97.475]}
+  - {ref: std/mcx@1, id: u4, at: [4.38, 116.815]}
+  - {ref: std/mcx@1, id: u5, at: [4.38, 136.155]}
+  - {ref: std/mcx@1, id: u6, at: [4.38, 155.495]}
+  - {ref: std/mcx@1, id: u7, at: [4.38, 174.835]}
+  - {ref: std/mcx@1, id: u8, at: [4.38, 194.175]}
+  - {ref: std/mcx@1, id: u9, at: [4.38, 213.515]}
+  - {ref: std/mcx@1, id: u10, at: [4.38, 232.855]}
+  - {ref: std/mcx@1, id: u11, at: [4.38, 252.195]}
+  - {ref: std/mcx@1, id: d0, at: [15.51, 44.245]}
+  - {ref: std/mcx@1, id: d1, at: [15.51, 83.035]}
+  - {ref: std/mcx@1, id: d2, at: [15.51, 121.825]}
+  - {ref: std/mcx@1, id: d3, at: [15.51, 160.615]}
+  - {ref: std/mcx@1, id: d4, at: [15.51, 199.405]}
+  - {ref: std/mcx@1, id: d5, at: [15.51, 238.195]}
 connection-points:
   mate: {at: [15.23, 172.75], direction: rear}
 skins: [default]

@@ -1,0 +1,37 @@
+format: 1
+kind: component
+name: mcx
+version: 1.0.0
+class: port
+profile: networking
+conforms: mcx
+interface: mcx
+description: MCX coaxial panel jack (IEC 61169-36) - snap-on micro coax, the
+  75-ohm RF drop connector on cable headend I/O cards and the 50-ohm GNSS/timing
+  jack elsewhere. The panel aperture is a D-hole with one anti-rotation flat.
+size: {w: 4.95, h: 4.50}
+attrs: {media: coax-mcx}
+provenance:
+  size: standard - registry key `mcx`, from the MOUNTING HOLE inset of the
+    Radiall R113.553.000 technical data sheet (MCX bulkhead jack receptacle,
+    front mount, cylindrical contact; issue 9841B04). Bore dia 5.00/4.90, across
+    the flat 4.55/4.45; w and h are the midpoints. Radiall originated MCX, so
+    this is the series' own panel drawing rather than a derived figure.
+    Corroborated by L-com LCCN3038, sold as fitting a ".177 inch D hole"
+  barrel: drawing - the same sheet's side elevation, scaled against its own
+    2.5 mm maximum panel thickness (36 px/mm at 600 dpi). The 6.5 dia flange and
+    the mating interface together stand about 2.0 mm proud of the panel front,
+    which is why an MCX jack reads as a flush disc rather than a threaded stalk
+    the way sma does
+  flat: the flat is drawn at the BOTTOM of the aperture. Nothing in the Radiall
+    sheet fixes its clocking - a D-hole is punched to whatever orientation the
+    panel drawing calls for - so a card that shows a different clocking should
+    place this part with `rotate:` rather than have the flat re-cut here
+elements:
+  opening: {at: [0.0, 0.0], size: [4.95, 4.50], class: cutout}
+relief:
+  features:
+    - {node: barrel, cyl: 2.0, color: '#c9a227'}
+connection-points:
+  mate: {at: [2.475, 2.475], direction: front}
+skins: [default]
