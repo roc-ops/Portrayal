@@ -1,0 +1,148 @@
+format: 1
+kind: module
+name: a9k-sip-700
+version: 1.0.0
+class: line-card
+profile: networking
+description: >-
+  Cisco ASR 9000 SIP-700 SPA Interface Processor with 4 GB of memory. A carrier for
+  shared port adapters rather than a port card: the faceplate is four SPA subslots in a
+  two-by-two grid and a single Status lamp. Cisco: 'up to 2 single-width, double-height
+  SPAs, up to 4 single-width, single-height SPAs, or up to 2 double-width, single-height
+  SPAs. The Cisco ASR 9000 SIP-700 does not support double-width, double-height SPAs.'
+  Supported on all ASR 9000 Series routers except the ASR 9906.
+size: {w: 43.7, h: 395.7}
+attrs:
+  model: 'A9K-SIP-700'
+  role: 'spa-interface-processor'
+  memory: '4 GB'
+  capacity: '20 Gbps'
+  spa-subslots: 4
+  weight-kg: 10.0
+  operating-temp: '0 to 40 C'
+  eol: 'none-announced'
+provenance:
+  size: >-
+    install guide + drawing, and the guide's own sentence is the anchor. Table 6, 'Cisco
+    ASR 9000 SIP-700 Physical Specifications', gives 'Physical dimensions: OCCUPIES ONE
+    LINE CARD SLOT on a Cisco ASR 9000 Series Aggregation Services Router' and no
+    numbers - so Cisco states the envelope by reference rather than by dimension. The
+    line card slot it occupies is the original generation's, whose dimensions ARE
+    stated: 1.72 x 14 in, 43.7 x 355.6 mm, in Table A-10 of the OL-17500-09 Ethernet
+    Line Card Installation Guide and in the original-generation data sheets. This card
+    is modelled at 43.7 x 395.7, the same ejector-inclusive step and the same reasoning
+    as every original-generation card already in this library. Corroborated, weakly, by
+    the master's raw art box of 46.55 x 413.95, which is the original generation's
+    drawing template - weakly because the A9K-MOD200 proves that template identity does
+    not settle a size on its own.
+  depth: >-
+    NOT MODELLED. 'Occupies one line card slot' fixes the opening a card goes through
+    and says nothing about how far back it reaches, and a card need not fill its slot's
+    depth. Table 6 gives a shipping weight and three temperature ranges and no depth.
+    Rather than inherit the original generation's 520.7, which would be a slot's figure
+    presented as this card's, the component declares a faceplate and no body.
+  bays: >-
+    install guide + drawing, AND THEY CORROBORATE EACH OTHER ON THE NUMBERING, which is
+    the part worth setting out because SPA subslot numbering is not in reading order.
+    The guide lists it flatly: 'Bay 2 (Top Left), Bay 0 (Top Right), Bay 3 (Bottom
+    Left), Bay 1 (Bottom Right)'. The master prints all four numerals on its end
+    flanges: '2' and '0' together at one end of the card and '3' and '1' at the other,
+    and within each pair the 2/3 numeral sits at across-card x 21.19 and the 0/1 numeral
+    at 37.42. So the master says {2,0} share one end, {3,1} the other, {2,3} one side
+    and {0,1} the other - which is exactly the guide's Top/Bottom/Left/Right partition,
+    with Top mapping to the low-y end and Left to the low-x side. Two sources, different
+    media, same answer. IT ALSO FIXES WHICH CARD AXIS IS 'WIDTH': the guide captions its
+    figure '2 double-width, single-height SPAs' and the master draws exactly two panels,
+    each spanning the FULL 34.58 mm across the card at one position along it. So width
+    runs across the card and height along it, and a single-width single-height subslot
+    is half of one of those panels. The four bays here are those halves.
+  bay-split: >-
+    THE SPLIT DOWN THE MIDDLE IS MINE. The master draws only the two double-width
+    panels, at 6.98, 27.71 and 6.98, 195.59, each 34.58 mm across and 167.87 and 165.47
+    mm long - those two bands are measured. Where the dividing line falls between the
+    left and right subslots inside a band is NOT drawn, because the SPAs installed in
+    the figure span both. It is taken as the middle. The guide supports halves rather
+    than any other split - 'up to 4 single-width, single-height SPAs' in a 2 x 2 grid -
+    but not the exact millimetre, and the printed numerals at x 21.19 and 37.42 fall on
+    either side of that middle, which is consistent with it without proving it.
+  bays-are-inert: >-
+    Component-level `bays:` is documented in the schema as 'for modules that themselves
+    host bays (v0: unused)', and nothing in render.py or lint.py reads it. These four
+    are inert, and there is a second reason they would be inert anyway: NO SPA IS
+    MODELLED IN THIS LIBRARY. The stencil has no SPA masters - the two the SIP-700
+    master draws are part of its own artwork, labelled SPA-2XCH0C12I050 - so there is
+    nothing for `accepts` to name and the key is omitted rather than filled with a
+    guess. The geometry and the numbering are recorded because they are sourced and
+    because prose is where a future renderer cannot reach them.
+  capacity: >-
+    install guide - Table 3, 'SIP Summary', names this part '20G SPA Interface
+    Processor, 4 GB memory'.
+  variants: >-
+    install guide - 'There are two types of Cisco ASR 9000 SIP-700 available;
+    A9K-SIP-700 and A9K-SIP-700-8G. A9K-SIP-700 supports 4 GB of memory. A9K-SIP-700-8G
+    supports 8 GB of memory. BOTH TYPES ... ARE IDENTICAL IN APPEARANCE and can be
+    identified by the PID located on the faceplate of the SIP.' That last clause is why
+    both are modelled from the one master: Cisco says the faceplates differ in exactly
+    one thing, the printed PID, and that is the only thing that differs between these
+    two components.
+  chassis: >-
+    install guide - 'Cisco ASR 9000 SIP-700 SIPs are supported on all Cisco ASR 9000
+    Series Routers.' ONE EXCEPTION IS STATED ELSEWHERE and is easy to miss because it is
+    not in the SIP guide at all: the Overview and Reference Guide notes that 'The Cisco
+    ASR 9906 supports A9K-VSM-500 and Tomahawk-based line cards; it does not support
+    SIP-700'. Two Cisco books disagreeing, and the narrower statement is the one
+    carried.
+  physical-other: >-
+    install guide - Table 6: shipping weight 10 kg (22 lb), operating temperature 32 to
+    104 F (0 to 40 C), relative humidity 10 to 90 percent noncondensing, storage
+    temperature -4 to 149 F (-20 to 65 C). Note the operating ceiling is 40 C where the
+    Ethernet line cards are rated to 55.
+  status-lamp: >-
+    install guide - 'The Cisco ASR 9000 SIP-700 faceplate has one Status LED.' That is
+    the whole of it: the guide gives the lamp's existence and its count and NO COLOUR
+    TABLE. The master draws it as a stroked circle 3.54 mm across at 25.25, 370.39 with
+    its STATUS legend beside it. The four-state card vocabulary here is the modular line
+    cards' and is a BORROWING, flagged as one.
+  power: >-
+    NOT STATED ANYWHERE IN THE INTAKE. The SIP and SPA Hardware Installation Guide has
+    no power table at all - Table 6 is its physical specifications and gives weight,
+    temperature and humidity only. Table 35 of the Ethernet Line Card Installation Guide
+    covers Ethernet line cards and has no SIP row, and Table 23 of the Overview and
+    Reference Guide covers RSPs, RPs and fabric cards. A SIP in a slot certainly draws,
+    and how much is not recorded anywhere I can reach. The L27 warning stands and is the
+    honest report.
+  lifecycle: >-
+    searched - no end-of-life notice for this part number is in the intake. Note the
+    guide's own note that 'The ASR 9000 SIP-700 is not supported on Cisco IOS XR 64-bit
+    images', which is a software limit rather than a lifecycle statement but is the
+    nearest thing to one that the intake carries.
+elements:
+  status:
+    at: [25.25, 370.39]
+    size: [3.54, 3.54]
+    class: led
+    description: >-
+      the SIP's single Status lamp. The guide gives its existence and no colour table, so
+      the four states here are the modular line cards' and are a BORROWING, flagged as
+      one.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+relief:
+  wall: '#4a4f55'
+skins: [default]
+bays:
+  bay-2:
+    at: [6.98, 27.71]
+    size: [17.29, 167.87]
+  bay-0:
+    at: [24.27, 27.71]
+    size: [17.29, 167.87]
+  bay-3:
+    at: [6.98, 195.59]
+    size: [17.29, 165.47]
+  bay-1:
+    at: [24.27, 195.59]
+    size: [17.29, 165.47]
