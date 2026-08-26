@@ -1007,6 +1007,128 @@ def _bay_refs_by_view(data):
     return out
 
 
+# ---------------------------------------------------------------- L31
+# A region label that states a distance from an edge must agree with something
+# drawn at that distance.
+#
+# This exists because a whole class of defect is invisible to every other rule:
+# THE WORDS ARE RIGHT AND ONLY THE NUMBERS ARE WRONG. An ASR 9006 said its air
+# filter was "accessible from the rear" while drawing it at the front, and an
+# ASR 9906 region said its rails were at 127.0 and 240.0 mm while the geometry
+# put them at 78.0 and 191.0. In both cases the file contained its own
+# contradiction in plain text and lint stayed green.
+#
+# WHAT IS NOT CHECKED, deliberately. A bare direction word in a label is not a
+# claim about position within a view - "fitted from the rear" is an access
+# direction, "rear-panel bracket" is a part name, and "Front air intake" on a
+# front view says nothing about depth. Checking those means reading English and
+# guessing intent, which is how a rule earns a reputation for crying wolf. THE
+# TRIGGER IS A NUMBER WITH A UNIT, because a number is a claim that can be
+# wrong. That is also why the fix for a firing is often to ADD the distance to
+# a label rather than to move geometry: a label without a number gives the
+# drawing nothing to disagree with.
+NUM_RE = r"(\d+(?:\.\d+)?)"
+EDGE_ANCHOR = re.compile(r"\bfrom\s+the\s+(front|rear|back)\b", re.I)
+MEASURE_RE = re.compile(NUM_RE + r"\s*(in|mm|cm)\b", re.I)
+COORD_RE = re.compile(r"\b([xy])\s*=\s*" + NUM_RE + r"\b")
+_TO_MM = {"in": 25.4, "mm": 1.0, "cm": 10.0}
+# A sentence break is a period followed by whitespace; a decimal point is a
+# period followed by a digit. Splitting on the first is what lets "5.00 in and
+# 9.45 in from the rear" yield TWO measurements without crossing a sentence.
+SENTENCE_BREAK = re.compile(r"[;]|\.\s")
+# depth axis index per view, and whether coordinate zero is the FRONT. Derived
+# from viewer3d.js, which builds each face in local coordinates (x right, y up,
+# z out of the face) and orients it with a fixed rotation, front at +z:
+#   right rot [0, +pi/2, 0]  local +x -> world -z   so x = 0 is the FRONT
+#   left  rot [0, -pi/2, 0]  local +x -> world +z   so x = 0 is the REAR
+#   top   rot [-pi/2, 0, 0]  local +y -> world -z   so y = 0 is the REAR
+# LEFT AND RIGHT ARE OPPOSITE because they are two views of one axis from
+# opposite sides. Encoding it here is what stops the derivation being lost.
+DEPTH_AXIS = {"top": (1, False), "bottom": (1, False),
+              "left": (0, False), "right": (0, True)}
+
+
+def _depth_extents(view, axis):
+    """Everything drawn on this face, as (id, lo, hi) along the depth axis."""
+    out = []
+    panel = view.get("panel") or {}
+    for kind in ("decor", "cutouts"):
+        for i, el in enumerate(panel.get(kind) or []):
+            at, size = el.get("at"), el.get("size")
+            if not at or not size:
+                continue
+            out.append((el.get("id") or f"{kind}[{i}]", at[axis], at[axis] + size[axis]))
+    for b in (view.get("bays") or []):
+        at, size = b.get("at"), b.get("size") or {}
+        if at and size:
+            span = size["w"] if axis == 0 else size["h"]
+            out.append((b.get("id", "bay"), at[axis], at[axis] + span))
+    for pl in (view.get("placements") or []):
+        at, size = pl.get("at"), pl.get("size") or {}
+        if at and size:
+            span = size.get("w") if axis == 0 else size.get("h")
+            if span:
+                out.append((pl.get("id", "placement"), at[axis], at[axis] + span))
+    return out
+
+
+def _label_claims(label, depth_mm, zero_is_front):
+    """(quoted text, coordinate in view space) for each position a label asserts."""
+    found = []
+    for anchor in EDGE_ANCHOR.finditer(label):
+        edge = anchor.group(1).lower()
+        window = label[max(0, anchor.start() - 70):anchor.start()]
+        cut = None
+        for br in SENTENCE_BREAK.finditer(window):
+            cut = br.end()
+        if cut is not None:
+            window = window[cut:]
+        for q in MEASURE_RE.finditer(window):
+            mm = float(q.group(1)) * _TO_MM[q.group(2).lower()]
+            if mm > depth_mm + 1:
+                continue                      # too big to be a depth on this face
+            from_front = edge == "front"
+            coord = mm if from_front == zero_is_front else depth_mm - mm
+            found.append((f"{q.group(0)} from the {edge}", coord))
+    for m in COORD_RE.finditer(label):
+        found.append((m.group(0), float(m.group(2))))
+    # "5.73 in (14.55 cm) from the front" states one position twice
+    keep = []
+    for txt, coord in found:
+        if not any(abs(coord - k) < 0.75 for _, k in keep):
+            keep.append((txt, coord))
+    return keep
+
+
+def lint_device_label_geometry(path, data):
+    for vname, view in (data.get("views") or {}).items():
+        if vname not in DEPTH_AXIS or not view:
+            continue
+        axis, zero_is_front = DEPTH_AXIS[vname]
+        size = view.get("size") or {}
+        depth_mm = size.get("w") if axis == 0 else size.get("h")
+        if not depth_mm:
+            continue
+        extents = _depth_extents(view, axis)
+        if not extents:
+            continue                          # nothing drawn: L31 has no opinion
+        for region in (view.get("regions") or []):
+            label = region.get("label") or ""
+            for txt, coord in _label_claims(label, depth_mm, zero_is_front):
+                if any(lo - 1.0 <= coord <= hi + 1.0 for _, lo, hi in extents):
+                    continue
+                # say which way the disagreement runs, in from-the-front terms for
+                # both, so a reader can see at a glance which half to fix
+                def from_front(c):
+                    return c if zero_is_front else depth_mm - c
+                near = min(extents, key=lambda e: abs((e[1] + e[2]) / 2 - coord))
+                lo, hi = sorted((from_front(near[1]), from_front(near[2])))
+                warn(path, "L31",
+                     f"{vname}/{region['id']}: label says {txt!r}, which is "
+                     f"{from_front(coord):.1f} mm from the front, but nothing is drawn "
+                     f"there - nearest is {near[0]} at {lo:.1f}-{hi:.1f} mm from the front")
+
+
 def lint_device_double_count(path, data, lib_roots):
     """L30 - a chassis whose front and rear figures overlap.
 
@@ -1157,6 +1279,7 @@ def lint_device(path, validator, lib_roots):
     lint_device_attrs(path, data)
     lint_device_module_power(path, data, lib_roots)
     lint_device_double_count(path, data, lib_roots)
+    lint_device_label_geometry(path, data)
     declared_groups = set((data.get("groups") or {}).keys())
     for gname, gdef in (data.get("groups") or {}).items():
         check_states(path, f"groups/{gname}", (gdef or {}).get("states"),
