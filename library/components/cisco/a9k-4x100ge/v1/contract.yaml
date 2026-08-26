@@ -1,0 +1,182 @@
+format: 1
+kind: module
+name: a9k-4x100ge
+version: 1.0.0
+class: line-card
+profile: networking
+description: >-
+  Cisco ASR 9000 Series 4-Port 100 Gigabit Ethernet LAN Line Card. Four QSFP28 ports in
+  two pairs, each pair with an A/L lamp at either end. Cisco calls this one a low-power
+  design and it is the QSFP28 4-port card, NOT the CPAK A9K-4X100GE-SE and -TR which
+  share the number and are a different card - see `identity`. Breaks out to sixteen
+  10GE.
+size: {w: 41.4, h: 395.7, d: 559.3}
+attrs:
+  model: 'A9K-4X100GE'
+  role: 'line-card'
+  qsfp28: 4
+  throughput: '400 Gbps'
+  weight-kg: 8.9
+  breakout: '16 x 10GE'
+  operating-temp: '5 to 40 C'
+  chassis: 'ASR 9006, ASR 9010, ASR 9904, ASR 9906, ASR 9910, ASR 9912, ASR 9922'
+  eol: 'none-announced'
+provenance:
+  size: >-
+    datasheet - Cisco ASR 9000 4-port 100GE LAN line card data sheet (c78-740092), Table
+    2: 'Physical dimensions (H x W x D); weight: 4-port 100 Gigabit Ethernet LAN line
+    card: 14.5 x 1.63 x 22.02 in.; 19.7 lb (368.3 mm x 41.4 mm x 559.3 mm; 8.9 kg)'.
+    Same axis order and same missing qualifier as the A99-12X100GE sheet, and the same
+    three numbers to the tenth - H is the long dimension, 368.3 is the plate, and the
+    card is modelled at the family's ejector-inclusive 395.7. Depth 559.3 is the sheet's
+    own.
+  identity: >-
+    TWO DIFFERENT CARDS SHARE THIS PART NUMBER'S ROOT and getting them mixed up would
+    put a CPAK aperture on a QSFP28 card. Cisco's own data sheets separate them:
+    c78-733790, 'Cisco ASR 9000 Series 4-Port and 8-Port 100 Gigabit Ethernet Line
+    Cards', is CPAK throughout and covers A9K-4X100GE-SE and A9K-4X100GE-TR at 28 lb;
+    c78-740092 is titled 'Cisco ASR 9000 4-port 100GE LAN line card A9K-4X100GE',
+    mentions QSFP28 and no CPAK at all, and gives 19.7 lb. The line card family data
+    sheet c78-737841 lists them as two separate entries - 'A9K-4X100GE (-FC, -SE, -TR)'
+    and, on its own line, 'A9K-4X100GE'. THE DRAWING AGREES: this master's cages measure
+    8.45 x 19.16 mm, which is the QSFP28 signature the A99-12X100GE draws at 8.09 x
+    18.56, while the A9K-4X100GE-SE master's are 14.69 x 37.01 - nearly twice the
+    length. Four sources, one answer.
+  layout: >-
+    drawing - the Cisco Visio master, scaled to the datasheet's own overall dimensions.
+    CAUTION for anyone re-deriving this: index.json's props.height_in and width_in are
+    the Visio SHAPE box, not the card. They read 1.72 x 14.75 in for EVERY card master,
+    against the datasheet's 1.63 x 15.58 in, and are 5 percent out in both axes. The ART
+    is orthographic and does carry geometry: taking Cisco's stated W - which the spec
+    table says 'includes ejector bracket/lever' - as the full long extent of the art
+    puts the faceplate rectangle at 41.6 mm against a stated H of 41.4, inside half a
+    percent, which is the gate-1 check. So the drawing is the ruler and the shape box is
+    not.
+  frame: >-
+    the card is modelled PORTRAIT - x across the card's thickness, y along its width -
+    which is the stencil's own frame and casa's. WHICH WAY A CHASSIS CARRIES IT is the
+    Overview and Reference Guide's 'Chassis Slots' section, quoted because an earlier
+    version of this note had it wrong for three chassis out of seven: 'Cisco ASR 9010
+    Router: All line cards and RSP cards are front-facing and mounted VERTICALLY, with
+    ejector levers and captive screws at the top and bottom of each card. Cisco ASR 9006
+    Router and Cisco ASR 9904 Router: All chassis line cards and RSP cards are
+    front-facing and mounted HORIZONTALLY, with ejector levers and captive screws at the
+    left and right ends of each card. Cisco ASR 9906 Router: ... mounted vertically ...
+    Cisco ASR 9910 Router: ... vertically ... Cisco ASR 9922 Router: ... vertically ...
+    Cisco ASR 9912 Router: ... vertically.' So only the ASR 9006 and the ASR 9904 lay
+    their cards flat and rotate the bay; the other five place this component unrotated.
+    The ejector-lever wording is the tell and it is why the guide is worth quoting
+    rather than paraphrasing - 'top and bottom' means vertical, 'left and right ends'
+    means horizontal, and the RU height of a chassis does not decide it.
+  leds: >-
+    install guide - 'Each line card has a single tristate Status LED to display card
+    status. Each ... port on the line card has a port status LED visible on the front
+    panel.' The state vocabulary on both is Table 32, 'Port Status and Line Card Status
+    LEDs', of the Ethernet Line Card Installation Guide, transcribed rather than
+    summarised: the card lamp's amber is TWO states, steady during boot and blinking for
+    a software configuration error.
+  not-drawn: >-
+    one thing on the real faceplate is deliberately NOT modelled: the coloured outlines
+    that box each port group. They are real printing - the install guide spells the
+    scheme out for the 400G combo card, 'Ports 0-5 (blue), 10-15 (red), 20-25 (magenta),
+    30-35 (orange)' - and the stencil draws them per group in solid and dashed strokes.
+    They are omitted because the stencil builds them from many short stroked segments
+    rather than closed rectangles, and guessing at a box that reads as a group boundary
+    would put a line on the drawing that no measurement supports. Port grouping is
+    carried structurally instead, by the port ids and by the lamp clusters that sit at
+    each group's end.
+  cages: >-
+    drawing, HANDED TO THE BUILDER RATHER THAN DETECTED, and the reason is worth
+    recording. Every other QSFP card in this stencil paints an open bore at #0c0c0c and
+    the cage detector keys on that darkness. This master draws POPULATED cages instead -
+    the housing at #595959 with its gold contact fingers showing - so there is no dark
+    bore anywhere on it and the detector returns nothing. The four cages are measured
+    off the master at 7.57, 105.67 / 125.08 / 204.81 / 224.22, each 8.45 x 19.16 mm, and
+    passed in explicitly. The scale is corroborated the usual way: at the 41.4 anchor
+    those cages are within 4.4 percent of the A99-12X100GE's, and at 43.7 they would be
+    10 percent out.
+  ports: >-
+    datasheet - c78-740092, Table 2: 'Port density: 4 ports of 100 Gigabit Ethernet or
+    16 10GE ports via breakout per line card'. The master prints all four numerals as
+    text - '0' at y 102.35, '1' at 149.87, '2' at 201.50, '3' at 249.02 - and each falls
+    beside the cage it belongs to, so 0 and 1 are the first pair and 2 and 3 the second.
+  chassis: >-
+    datasheet - c78-740092, Table 2: 'Chassis compatibility: Compatible with the Cisco
+    ASR 9006, ASR 9010, ASR 9904, ASR 9906, ASR 9910, ASR 9912, and ASR 9922 chassis'.
+    All seven, stated outright, which is rarer in this family than it should be.
+  power: >-
+    NOT CARRIED, and the near miss is the same shape as the A9K-MOD200's. Table 35 of
+    the Ethernet Line Card Installation Guide has a row '4-Port 100-Gigabit Line Card'
+    at 450 W at 27 C, 475 at 40 and 500 at 55, and a SEPARATE row '4-Port 100-Gigabit
+    Ethernet Line Card (OTN version)' at 1000/1050/1100. The unqualified row is very
+    likely this card - its own data sheet calls it a 'LAN line card', twice describes it
+    as low-power, and the table pairs LAN and OTN explicitly for the 8-port. It is NOT
+    carried because the unqualified heading names no part number and there is a third
+    candidate for it: A9K-400GE-LAN-FC, which the family data sheet lists as a 400G LAN
+    card and which is also four ports of 100G. An argument from what is left over is not
+    a citation, and this is the third time tonight the same restraint has applied. The
+    data sheet itself states no power figure at all.
+  lifecycle: >-
+    searched - this part number is not in bulletin EOL15321, which covers the 4th
+    generation Ethernet line card family, and no other notice for it is in the intake.
+elements:
+  led-p0:
+    at: [8.63, 99.75]
+    size: [3.07, 3.29]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p1:
+    at: [8.63, 147.27]
+    size: [3.07, 3.31]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p2:
+    at: [8.63, 198.89]
+    size: [3.07, 3.31]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p3:
+    at: [8.63, 246.42]
+    size: [3.07, 3.29]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  status:
+    at: [18.61, 371.11]
+    size: [3.72, 3.72]
+    class: led
+    description: >-
+      the single tristate card Status LED (Ethernet Line Card Installation Guide, Table
+      32)
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - {name: amber-blinking, behavior: blinking, color: '#f5a623'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+relief:
+  wall: '#4a4f55'
+parts:
+  - {ref: std/qsfp-ganged@1, id: p0, at: [2.46, 110.46], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p1, at: [2.46, 129.87], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p2, at: [2.46, 209.61], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p3, at: [2.46, 229.02], rotate: 90}
+body:
+  depth: 559.3
+  color: '#b9bec4'
+skins: [default]
