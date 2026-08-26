@@ -67,16 +67,20 @@ for ix in devices_index components_index labs_index gaps_index; do
   pids+=("$!")
 done
 for pid in "${pids[@]}"; do wait "$pid"; done
-# DCIM exports: Portrayal is the source of truth, a DCIM is one consumer
-# Two NOS profiles x every device is 42 interpreter starts for about 3 seconds
-# of actual work, so the same cap applies. `|| true` per item is kept: a device
-# that exports nothing is not a build failure.
+# DCIM exports: Portrayal is the source of truth, a DCIM is one consumer.
+#
+# One device type per SKU, for NetBox and Nautobot alike, with elevation images
+# rendered from the compiled faces. Errors are NOT swallowed: the old loop hid
+# every failure behind `2>/dev/null || true`, which is how a device silently
+# stopped exporting.
+#
+# Runs one process per device under the same worker cap as the render pass, and
+# skips entirely on a --device build: the exports are a whole-library artefact
+# and half of one is worse than yesterday's.
 if [ ${#DEVSEL[@]} -eq 0 ]; then
-ls library/devices/*/*/device.yaml \
-  | xargs -P "$JOBS" -I{} sh -c '\
-      for nos in arcos sonic; do \
-        python3 spec/tools/portrayal/nautobot_export.py "$1" --nos "$nos" \
-          --out library/exports/nautobot 2>/dev/null || true; \
-      done' _ {}
+  rm -rf library/exports
+  ls library/devices/*/*/device.yaml \
+    | xargs -P "$JOBS" -I{} python3 spec/tools/portrayal/dcim_export.py {} \
+        --out library/exports --nos arcos --nos sonic --dist "$OUT" >/dev/null
 fi
 echo "built $(ls "$OUT" | wc -l | tr -d ' ') files -> $OUT"
