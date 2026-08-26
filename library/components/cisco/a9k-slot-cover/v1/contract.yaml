@@ -1,0 +1,64 @@
+format: 1
+kind: module
+name: a9k-slot-cover
+version: 1.0.0
+class: blank
+profile: networking
+description: >-
+  Line card and RSP/RP blank filler for a Cisco ASR 9000 modular chassis. A plain
+  plate on the line-card envelope with a captive installation screw at each end and
+  nothing else on it. It is a functional part, not trim: the installation guide is
+  explicit that "unoccupied card slots must have a blank filler card installed for
+  electromagnetic compatibility (EMC)", and the high-density 100GE cards additionally
+  require the two-screen A9K-LC-FILR-V2 in the slots around them "for optimal cooling
+  and EMI". An empty slot in a real chassis has one of these in it.
+size: {w: 41.4, h: 395.7, d: 25.0}
+attrs:
+  model: 'A9K Slot Cover'
+  role: 'airflow-blank'
+  part-numbers: 'A9K-LC-FILR, A9K-LC-FILR-V2'
+provenance:
+  purpose: >-
+    install guide - the Ethernet Line Card Installation Guide's removal procedure ends
+    "If the line card slot is to remain empty, install a line card blank (Product
+    Number A9K-LC-FILR) to keep the chassis dust free and to maintain proper airflow",
+    and the Hardware Installation Guide carries the EMC caution. The Overview and
+    Reference Guide lists "Line card and RSP blank fillers" among the chassis's own
+    field-replaceable units, which is what makes this a bay occupant rather than
+    decoration.
+  variants: >-
+    TWO part numbers exist and they are NOT modelled separately, because no document
+    here draws the difference. A9K-LC-FILR is the original; A9K-LC-FILR-V2 is
+    described only as the one "that ha[s] two screens", required beside the 4-port and
+    12-port 100GE cards. Nothing states where those screens sit, how big they are, or
+    what the plate looks like around them, so drawing them would be invention. The
+    plain plate here is the A9K-LC-FILR as the stencil draws it, and the V2's screens
+    are an open gap - a photograph would close it.
+  size: >-
+    drawing - the stencil's "A9K Slot Cover" master, read the way the line cards were:
+    its own shape box is the same padded 1.72 x 14.75 in every card master carries and
+    is not the part, while the art measures a plate of 42.05 x 362.24 mm inside a
+    395.7 mm envelope. The envelope is Cisco's stated line-card W - "includes ejector
+    bracket/lever" - and w is normalised to the cards' 41.4 so that one bay accepts a
+    card or a blank without two sizes for one opening. The 0.65 mm the art gives the
+    blank over a card is the clearance a plate needs to sit in front of the rails, and
+    it is below the drawing's own accuracy.
+  depth: >-
+    ESTIMATED, and deliberately shallow. A blank has no body behind its face - it is a
+    plate with a stiffening flange - so 25 mm is plate-plus-flange and NOT the 604.5 mm
+    a line card occupies. No document states it. This is the one number here that a
+    source would improve.
+  screws: >-
+    drawing - one captive installation screw at each end, at the same positions the
+    line cards carry theirs (centres 24.5 and 387.4 mm down the envelope), which is
+    what lets a blank and a card share a slot's screw holes. The stencil draws no
+    ejector levers on the blank, and none are drawn here: a filler is pulled out by
+    its screws, not levered.
+  cutouts: >-
+    NONE. A blank is unpunched by definition, which is the entire point of the part.
+elements:
+  screw-top: {at: [21.34, 5.42], size: [6.49, 6.49], class: fastener}
+  screw-bot: {at: [21.34, 383.79], size: [6.49, 6.49], class: fastener}
+relief:
+  wall: '#4a4f55'
+skins: [default]
