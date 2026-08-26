@@ -1,0 +1,81 @@
+format: 1
+kind: module
+name: a9k-750w-dc
+version: 1.0.0
+class: psu
+profile: networking
+description: >-
+  Cisco ASR 9001 and ASR 9001-S DC power entry module, 750 W. Same shell as the AC unit,
+  with a two-pole -48 VDC terminal block and its '+  -' legend where the AC unit carries
+  its appliance inlet, and the vent field moved to the right of the handle.
+size: {w: 55.2, h: 39.9}
+attrs:
+  model: 'A9K-750W-DC'
+  input: 'dc'
+  power-output-w: 750
+  eol: 'none-announced'
+provenance:
+  size: >-
+    drawing - the stencil masters A9K-750W-AC and A9K-750W-DC, at the stencil's 1:10
+    inches. For THESE masters the shape box is usable, and the check is what says so:
+    the box aspect is 1.3834 and the art's own is 1.3791, agreeing to 0.3 percent, where
+    the line-card masters' box and art disagree by five percent and the box had to be
+    thrown away. So 55.2 x 39.9 mm is Cisco's own figure for this module. NEITHER the
+    ASR 9001 nor the ASR 9001-S data sheet gives a power supply dimension - both give
+    the chassis at 88.2 x 442 x 470 mm and stop - so this is stencil-derived. It is
+    consistent with the chassis: two of these stacked is 79.8 mm inside an 88.2 mm 2RU
+    box.
+  face: >-
+    drawing - measured off the master. Both variants share one shell: a punched vent
+    field of vertical slots, a pull handle, and FAIL and OK lamps. What differs is the
+    input, which is why these are two components and not two skins of one - a skin
+    cannot compose a part, and the AC unit's inlet is a real standard part.
+  power: >-
+    part number - the module IS its rating. The ASR 9001-S data sheet's 'Power supply
+    part number' row gives 'A9K-750W-AC' and 'A9K-750W-DC', and its ordering table names
+    them 'AC Power Entry module' and 'DC Power Entry module'. 750 W is the continuous
+    output the part number states, and power-output-w is the supply side of the meter,
+    not a draw. No document in the intake gives these modules an efficiency, an input
+    current or a hold-up time.
+  lamps: >-
+    drawing - two lamps, printed FAIL and OK, read off the master at high zoom. NO
+    colour table for them exists in the intake: the Overview and Reference Guide's
+    indicator tables cover the RSP, RP and FC cards and the fan tray, and neither fixed-
+    port guide gives a power supply LED table. So the states here are the two the
+    LEGENDS name and nothing more - `on` and `off` per lamp, with no colour asserted.
+    That is the honest shape of what is known; a green/amber/red vocabulary borrowed
+    from another card would look identical and be invented.
+  lifecycle: >-
+    searched - no end-of-life notice for either part number is in the intake.
+  terminal-block: >-
+    drawing - a two-pole terminal block with a captive screw at each end, printed '+  -'
+    above it, measured off the master at 33.64 x 14.87 mm. It is drawn here rather than
+    composed because no std/ part and no standards.yaml key exists for a DC terminal
+    block, and no document in the intake dimensions this one - so there is nothing to
+    conform to yet. It is deliberately NOT declared `class: cutout`: a terminal block is
+    hardware bolted to the face, not a hole punched in it, and claiming a cutout would
+    put a false entry in the aperture census that L26 keeps.
+elements:
+  fail:
+    at: [45.3, 2.3]
+    size: [2.6, 2.6]
+    class: led
+    description: >-
+      the lamp printed FAIL. No document in the intake gives this module's
+      lamp colours, so the states are the legend and nothing more.
+    states: ['off', 'on']
+  ok:
+    at: [45.3, 7.3]
+    size: [2.6, 2.6]
+    class: led
+    description: >-
+      the lamp printed OK. Same footing as `fail`: legend only, no sourced
+      colour vocabulary.
+    states: ['off', 'on']
+  handle:
+    at: [38.1, 4.2]
+    size: [5.0, 31.0]
+    class: handle
+relief:
+  wall: '#4a4f55'
+skins: [default]
