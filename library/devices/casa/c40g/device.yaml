@@ -67,6 +67,28 @@ provenance:
     the air filter side of the fan module"), the fan modules are inserted from the
     front, and no figure shows an opening in either side panel. Drawing vents on
     a guess is the wrong-box outcome these views exist to prevent'
+  ac-variant: 'drawing - the C40G ships AC or DC and the guide draws the rear
+    both ways: Figures 1-2 and 1-3 for the AC chassis, 1-4 and 1-5 for the DC one.
+    The AC build puts "up to four removable 1100W AC power supply units" in a row
+    across the bottom FRONT, behind the snap-on cover, in place of the two DC power
+    entry modules at the bottom rear. Figure 1-10 shows them with the cover off
+    and Figure 1-11 shows their other end. Numbering runs right to left - "PSUs
+    are labeled on the front of the chassis as PSU1, PSU2, PSU3 and PSU4 from right
+    to left" - so the LEFTMOST bay is psu-4, and rel-pos follows the vendor rather
+    than the drawing order. THIS IS AN ORTHOGONAL AXIS to the other two configurations,
+    which are redundancy schemes: an AC chassis can run either scheme. Configurations
+    are the only mechanism the format has for a variant, so the axes share one list;
+    ac-power changes nothing about redundancy and neither BDM scheme says anything
+    about power. The PEM bays therefore default EMPTY and each DC scheme names them,
+    because a configuration cannot clear a bay - occupants are strings - and because
+    neither AC nor DC is "the" C40G. NOT MODELLED: the AC rear face. Figure 1-11
+    gives each PSU a rocker switch and an IEC inlet at the rear of the chassis,
+    but these bays live on the front view, so only the front face is drawn. A rendering
+    note: the snap-on cover is a placement over these bays and carries `for:` naming
+    all four, which is what lets L13 allow the overlap - but the renderer draws
+    bays after placements, so the PSUs appear IN FRONT of a cover that physically
+    sits in front of them. More useful to look at than the truth, and recorded here
+    so nobody reads it as a claim'
   protecting-slots: 'SETTLED, and the same half-fault as the C100G. The guide
     numbers this one twice over. For the classic scheme the chassis overview reads
     "Rear slots (fully redundant system) - Upstream and downstream line card I/O
@@ -143,6 +165,10 @@ views:
       - {at: [20, 31.0], text: '5', font-size: 11, anchor: middle, fill: '#231f20'}
     components:
       bays:
+        - {id: psu-4, at: [44.0, 226.7], size: {w: 81.0, h: 38.2}, accepts: [casa/c40g-psu-ac@1], group: power, rel-pos: 4, default: null}
+        - {id: psu-3, at: [131.2, 226.7], size: {w: 81.0, h: 38.2}, accepts: [casa/c40g-psu-ac@1], group: power, rel-pos: 3, default: null}
+        - {id: psu-2, at: [218.4, 226.7], size: {w: 81.0, h: 38.2}, accepts: [casa/c40g-psu-ac@1], group: power, rel-pos: 2, default: null}
+        - {id: psu-1, at: [305.6, 226.7], size: {w: 81.0, h: 38.2}, accepts: [casa/c40g-psu-ac@1], group: power, rel-pos: 1, default: null}
         - {id: fan-left, at: [1.5, 17.0], size: {w: 34.7, h: 205.0}, accepts: [casa/c40g-fan@1], group: cooling, rel-pos: 0, default: null}
         - {id: fan-right, at: [388.0, 17.0], size: {w: 34.7, h: 205.0}, accepts: [casa/c40g-fan@1], group: cooling, rel-pos: 1, default: casa/c40g-fan@1}
         - {id: front-0, at: [42.0, 164.35], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1, casa/bdm2@1, casa/bdm2m@1, casa/csc-8x10g@1, casa/ds-8x8@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1, casa/blank-faceplate@1], default: casa/bdm@1, group: front-slots, rel-pos: 0}
@@ -152,7 +178,7 @@ views:
         - {id: front-4, at: [42.0, 42.47], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1, casa/bdm2@1, casa/bdm2m@1, casa/csc-8x10g@1, casa/ds-8x8@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1, casa/blank-faceplate@1], default: casa/bdm@1, group: front-slots, rel-pos: 4}
         - {id: front-5, at: [42.0, 12.0], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1, casa/bdm2@1, casa/bdm2m@1, casa/csc-8x10g@1, casa/ds-8x8@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1, casa/blank-faceplate@1], default: casa/bdm@1, group: front-slots, rel-pos: 5}
       placements:
-        - {id: psu-cover, ref: casa/c40g-psu-cover@1, at: [37.5, 226.7], group: furniture, rel-pos: 0}
+        - {id: psu-cover, ref: casa/c40g-psu-cover@1, at: [37.5, 226.7], for: [psu-1, psu-2, psu-3, psu-4], group: furniture, rel-pos: 0}
   rear:
     size:
       w: 432.95
@@ -173,8 +199,8 @@ views:
       - {at: [20, 31.0], text: '5', font-size: 11, anchor: middle, fill: '#231f20'}
     components:
       bays:
-        - {id: pem-1, at: [44.8, 196.0], size: {w: 158.0, h: 68.5}, accepts: [casa/c40g-pem@1], group: power, rel-pos: 1, default: casa/c40g-pem@1}
-        - {id: pem-2, at: [212.8, 196.0], size: {w: 158.0, h: 68.5}, accepts: [casa/c40g-pem@1], group: power, rel-pos: 2, default: casa/c40g-pem@1}
+        - {id: pem-1, at: [44.8, 196.0], size: {w: 158.0, h: 68.5}, accepts: [casa/c40g-pem@1], group: power, rel-pos: 1, default: null}
+        - {id: pem-2, at: [212.8, 196.0], size: {w: 158.0, h: 68.5}, accepts: [casa/c40g-pem@1], group: power, rel-pos: 2, default: null}
         - {id: rear-0, at: [42.0, 164.35], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1], default: casa/io-6p12@2, group: rear-slots, rel-pos: 0}
         - {id: rear-1, at: [42.0, 133.88], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/lc-sw-bdm@1, casa/blank-faceplate@1], default: casa/lc-sw-bdm@1, group: rear-slots, rel-pos: 1}
         - {id: rear-2, at: [42.0, 103.41], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-sw-bdm-a@1, casa/blank-faceplate@1], default: casa/smm-sw-bdm-a@1, group: rear-slots, rel-pos: 2}
@@ -217,6 +243,16 @@ views:
         - {id: flange-r3, ref: common/screw-head@1, at: [383.65, 186.0], group: furniture, rel-pos: 8}
         - {id: flange-r4, ref: common/screw-head@1, at: [383.65, 228.0], group: furniture, rel-pos: 9}
 configurations:
+  ac-power:
+    description: AC power. Four 1100 W PSUs in a row across the bottom front behind the snap-on
+      cover, instead of the two DC power entry modules at the bottom rear. Redundancy is
+      unchanged - this axis is orthogonal to the BDM and classic schemes, and the guide draws
+      the rear both ways (Figures 1-2 and 1-3 AC, 1-4 and 1-5 DC).
+    bays:
+      psu-1: casa/c40g-psu-ac@1
+      psu-2: casa/c40g-psu-ac@1
+      psu-3: casa/c40g-psu-ac@1
+      psu-4: casa/c40g-psu-ac@1
   bdm-3plus1:
     description: 'BDM "3+1". Redundancy collapses to a single protecting slot: rear 1 takes the LC-BDM-SWITCH,
       and rear 4 takes a combined 6+12 SW-IO which frees slot 4 to carry traffic.'
@@ -228,6 +264,8 @@ configurations:
       front-3: casa/smm-8x10g@1
       front-4: casa/bdm2m@1
       front-5: casa/bdm2m@1
+      pem-1: casa/c40g-pem@1
+      pem-2: casa/c40g-pem@1
       rear-0: casa/io-6p12@2
       rear-1: casa/lc-sw-bdm@1
       rear-2: casa/smm-sw-bdm-a@1
@@ -244,6 +282,8 @@ configurations:
       front-3: casa/smm-8x10g@1
       front-4: casa/bdm@1
       front-5: casa/bdm@1
+      pem-1: casa/c40g-pem@1
+      pem-2: casa/c40g-pem@1
       rear-0: casa/io-6p12@2
       rear-1: casa/lc-sw-bdm@1
       rear-2: casa/smm-sw-bdm-a@1

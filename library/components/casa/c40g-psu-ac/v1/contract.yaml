@@ -1,0 +1,53 @@
+format: 1
+kind: module
+name: c40g-psu-ac
+version: 1.0.0
+class: psu
+profile: networking
+description: >-
+  Casa C40G AC power supply unit, 1100 W. Four sit in a row across the bottom
+  front of the chassis behind the snap-on cover, numbered PSU1 to PSU4 from
+  right to left. The front face carries two fans, a folding pull handle and a
+  status LED; the ON/OFF switch and the AC inlet are on the module's other end,
+  at the rear of the chassis.
+size: {w: 81.0, h: 38.2, d: 300.0}
+attrs:
+  model: 'C40G AC PSU'
+  role: ac-power-supply
+  power-output-w: 1100
+  input: 115VAC or 240VAC auto-adjusting
+  redundancy: 'up to four, concurrent; the C40G-20 needs at least two'
+provenance:
+  what-it-is: '"The C40G supports up to four removable 1100W AC power supply units
+    (PSUs). The PSUs operate concurrently in the chassis. In the event of a PSU
+    failure, the remaining PSUs (up to two) provide the required power to maintain
+    system operation." The warning beside it is worth keeping: "The C40G-20 cannot
+    be sufficiently powered with less than two PSUs"'
+  power-output-w: '1100 W, and it is an OUTPUT because this module PROVIDES power.
+    A psu states power-output-w and never a draw key - they are opposite signs of
+    one unit and summing across both is the category error the vocabulary exists
+    to prevent. The figure is the vendors nameplate rating, stated in the running
+    text'
+  faceplate: 'drawing - Figure 1-10, "C40G AC power supply units", shows the four
+    in place with the cover removed. Each face carries two fans, a folding pull
+    handle across them and a small status LED. The guide labels the handle and the
+    LED explicitly ("Folding pull handle", "Status LED  ON / FAIL"), and a locking
+    thumb screw'
+  the-other-end: 'drawing - Figure 1-11, "C40G PSU On/Off switch and AC power
+    receptacle", shows a rocker switch and an IEC appliance inlet per PSU, with
+    vent mesh above and below. That figure numbers PSU1 to PSU4 LEFT to right while
+    Figure 1-10 numbers them right to left, and the two are consistent rather than
+    in conflict: walking round the chassis flips left and right, so Figure 1-11
+    is the REAR face of the same four modules. The text settles which way round
+    is which - "PSUs are labeled on the front of the chassis as PSU1, PSU2, PSU3
+    and PSU4 from right to left". Only the front face is drawn here; the rear face
+    is not modelled, because these bays live on the front view'
+  size: 'drawing, as FRACTIONS - Figure 1-10 FAILS the orthographic gate at an
+    aspect of 1.918 against the real 1.813, nearly 6 percent out, where Figure 1-1
+    passes at 1.795. So only proportions are taken from it and they are anchored
+    to the band Figure 1-1 does carry: the PSU row occupies the snap-on covers footprint,
+    y 226.7 to 264.9 and x 44.0 to 386.6, and the four read as about 81.0 wide on
+    an 87.2 pitch within it. The depth is ESTIMATED'
+relief:
+  wall: '#4a4f55'
+skins: [default]
