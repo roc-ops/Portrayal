@@ -541,6 +541,26 @@ configurations: {...}
   - **Re-read what you rewrote.** A later pass over the same block quietly
     dropped the system LEDs' state semantics. Diff the rendered output, not just
     the source.
+- **Two figures can describe DIFFERENT THINGS that look like the same thing,
+  and the trap is assuming they conflict.** The ASR 9006 has THREE "NEBS bonding
+  and grounding points" - right side, rear, left side, drawn in one figure - and
+  ONE "grounding receptacle", a kit part with its own documented location, "Top
+  rear right side", in a different figure and a different table. Reading the two
+  together they look like one fact stated twice and contradicted; they are two
+  facts about two things. Before recording a source disagreement, check that both
+  sources are talking about the same object - the vendor's own vocabulary usually
+  distinguishes them, and the words to look for are the ones that differ
+  (`point` versus `receptacle`) rather than the ones that match (`grounding`).
+  The cost of getting this wrong is a fabricated conflict in provenance, which is
+  worse than a missing one because it looks like diligence.
+- **State the axis convention on any face where the arithmetic could read as an
+  error.** A top or bottom view laid out from a vendor's footprint figure
+  usually has y = 0 at the REAR, because those figures print "Rear of chassis"
+  at the top. A dimension measured from the front then sits at y = depth - D,
+  and to anyone assuming y = 0 is the front it reads as an error of nearly the
+  whole depth. Write the convention in provenance next to the number. And note
+  that a bottom view mirrors LEFT and RIGHT, not front and back - so a full-width
+  feature is unaffected but an asymmetric one needs the flip.
 - **A test that asserts something is MISSING from a live manifest is pinned to
   that model's incompleteness.** Three tests broke in one session because a
   device got BETTER: two capability tests used the C100G as their "stuck at
