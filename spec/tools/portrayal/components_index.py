@@ -10,7 +10,7 @@ from pathlib import Path
 import yaml
 
 sys.path.insert(0, str(Path(__file__).parent))
-from render import SVG_NS, STATE_CSS, Library, instance_group  # noqa: E402
+from render import SVG_NS, STATE_CSS, Library, instance_group, state_rule  # noqa: E402
 
 
 def main():
@@ -59,9 +59,19 @@ def main():
                 g, _ = instance_group(lib, ref, data["name"], [0, 0], None, None,
                                       None, None, skin_name=skin, palette=palette,
                                       resolved={})
+                # state_rule, NOT a second copy of it. This built the rule by
+                # hand and named the palette value `color`, but state_style()
+                # returns (color, alt, mode) - so every component-scoped rule
+                # read `--led-color: ('#39b54a', None, 'solid')`, which is not a
+                # colour, and no lamp in a standalone component skin ever changed
+                # when its state class was set. The device drawings were right
+                # the whole time because render.py unpacks the tuple; this file
+                # is what demo2 fetches when you swap a module into a bay, so the
+                # swapped card was the one case a user could actually click.
                 extra = "".join(
-                    f"\n    g[data-ref^='{comp}@'] .state-{name} {{ --led-color: {color}; }}"
-                    for (comp, name), color in sorted(palette.items()))
+                    state_rule(f"g[data-ref^='{comp}@'] .state-{name}",
+                               f"g[data-ref^='{comp}@'] .state-{name}", *style)
+                    for (comp, name), style in sorted(palette.items()))
                 style.text = STATE_CSS + extra
                 svg.append(g)
                 ET.indent(svg, space="  ")
