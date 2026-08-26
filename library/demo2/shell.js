@@ -459,7 +459,13 @@ export function createShell(opts = {}) {
     // getScreenCTM is null while the SVG is hidden, which is exactly what a page
     // showing a 3D stage instead has done to it. Selection still stands; only
     // the halo waits until the drawing is on screen again.
-    if (target && state.svg.getScreenCTM()) {
+    // A region that records no extent gets NO HALO, because its rect is 0x0 and
+    // the halo would be a degenerate box the user cannot see - selecting such a
+    // region appeared to do nothing at all. Everything else about selection still
+    // happens: the row highlights, the tree scrolls, the inspector explains why
+    // there is nothing to point at.
+    const noExtent = target?.dataset.extent === 'none';
+    if (target && !noExtent && state.svg.getScreenCTM()) {
       // getBBox is in the element's OWN coordinate system. The halo is appended to
       // the root, so the box has to be carried through every transform between them
       // or it lands wherever that offset happens to point - which for a bay-mounted
@@ -504,6 +510,20 @@ export function createShell(opts = {}) {
 
     let html = `<h2>${cls || 'node'}</h2><div class="row"><span>path</span><code>${path}</code></div>`;
     if (ref) html += `<div class="row"><span>component</span><code>${ref.split(':')[0]}</code></div>`;
+
+    // Why nothing lit up. A region is allowed to name a part of the device that
+    // the manifest has no box for - "front air intake" is a real thing to say
+    // and there is no rectangle for it - and saying so is better than a silent
+    // no-op that reads as a broken viewer.
+    if (e.dataset.extent === 'none')
+      html += `<div class="row" style="color:var(--warn)">no extent recorded &mdash; `
+            + `this region names a part of the device but the manifest gives it `
+            + `no box and no members to derive one from, so there is nothing to `
+            + `highlight</div>`;
+    else if (e.dataset.extent === 'derived')
+      html += `<div class="row"><span>extent</span>derived from members</div>`;
+    if (e.dataset.members)
+      html += `<div class="row"><span>members</span><code>${e.dataset.members}</code></div>`;
 
     if (bay) {
       const cur = (state.cfgBays?.[bay.id]) ?? bay.default ?? '';

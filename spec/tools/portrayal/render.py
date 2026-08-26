@@ -561,6 +561,45 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         if d.get("sink"):
             r.set("data-groove", f"{d['sink']:g}")
 
+    # A REGION WITH NO EXTENT USED TO RENDER AS A 0x0 RECT AT THE ORIGIN, which is
+    # a click target that can never highlight anything: selecting it in the tree
+    # appeared to work and did nothing. 105 of the library's 137 regions state
+    # neither `at`/`size` nor `members`, so that was the common case, not the edge.
+    #
+    # Order of preference: the stated box, else the union of what `members` names,
+    # else NOTHING - and "nothing" is declared rather than faked, so a viewer can
+    # say "no extent recorded" instead of offering a target that does not exist.
+    def member_box(mid):
+        for src in ("cutouts", "bays", "placements"):
+            for q in parts[src]:
+                if q.get("id") != mid or not q.get("at"):
+                    continue
+                if q.get("size") is not None:
+                    w, h = bay_size(q)
+                else:
+                    # a placement carries no size of its own; its extent is the
+                    # component's, which only the contract knows
+                    try:
+                        w = h = 0
+                        if q.get("ref"):
+                            c, _ = lib.resolve(q["ref"])
+                            w, h = c["size"]["w"], c["size"]["h"]
+                    except Exception:
+                        w = h = 0
+                return q["at"][0], q["at"][1], w, h
+        return None
+
+    def region_extent(region):
+        at, size = region.get("at"), region.get("size")
+        if at and size:
+            return at[0], at[1], size["w"], size["h"]
+        boxes = [b for b in (member_box(m) for m in region.get("members") or []) if b]
+        if not boxes:
+            return None
+        x0 = min(b[0] for b in boxes); y0 = min(b[1] for b in boxes)
+        x1 = max(b[0] + b[2] for b in boxes); y1 = max(b[1] + b[3] for b in boxes)
+        return x0, y0, x1 - x0, y1 - y0
+
     # regions first (under components)
     for region in parts["regions"]:
         r = ET.SubElement(svg, f"{{{SVG_NS}}}rect")
@@ -572,14 +611,22 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             r.set("data-physical-context", pc)
         if region.get("members"):
             r.set("data-members", " ".join(region["members"]))
-        at = region.get("at", [0, 0]); size = region.get("size", {"w": 0, "h": 0})
-        r.set("x", f"{at[0]:g}"); r.set("y", f"{at[1]:g}")
-        r.set("width", f"{size['w']:g}"); r.set("height", f"{size['h']:g}")
+        box = region_extent(region)
+        x, y, w, h = box or (0, 0, 0, 0)
+        r.set("x", f"{x:g}"); r.set("y", f"{y:g}")
+        r.set("width", f"{w:g}"); r.set("height", f"{h:g}")
         r.set("rx", "0.8")
         # regions are addressable, not visible; highlight CSS gives them a stroke on demand
         r.set("fill", "none")
         r.set("stroke", "none")
-        r.set("pointer-events", "all")
+        if box and w > 0 and h > 0:
+            r.set("pointer-events", "all")
+        else:
+            # not a click target, and it says why rather than looking like one
+            r.set("data-extent", "none")
+            r.set("pointer-events", "none")
+        if box and not (region.get("at") and region.get("size")):
+            r.set("data-extent", "derived")
 
     # CUTOUTS. The panel is punched before anything is printed on it or put into
     # it, so the holes paint first. A hole with nothing in it shows the dark inside
