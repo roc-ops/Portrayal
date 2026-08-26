@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fan
-version: 1.3.0
+version: 1.4.0
 class: cooling
 profile: networking
 description: >-
@@ -50,6 +50,42 @@ provenance:
     hardware - in at the rear, out at the front bottom. The filter sits on the
     front bottom opening, and filters belong on intakes, which favours the guide.
     Recorded rather than decided; see docs/casa-modular-chassis.md'
+  relief: 'estimated depths, sourced kinds. WHICH nodes stand off the face and
+    what they are is drawing - Figure 1-4, "C100G fan module", left panel "Fan tray
+    front view", and Figure 7-11, "Fan assembly installation", which draws the same
+    three trays in the chassis at higher fidelity. Between them: a punched
+    perforation grid across the whole face, an indicator panel sitting on top of it,
+    a pull handle across the lower third and three spring-latch slots in the bottom
+    row.
+    NO C100G DOCUMENT GIVES A DEPTH for any of them. Searched both guides for "fan
+    assembly", "fan tray", "fan module" and Appendix A Table A-2; the tables carry
+    power and airflow and no mechanical dimension at all. So: vent 25.0 is the
+    library''s figure for a fan grille (common/fan-module@1 uses 25, edgecore/agr-fan@1
+    uses 26, the latter measured off real hardware); cyl 1.2 and dome 0.3 are the
+    pushbutton and lamp idiom this library already uses (common/led-dot@1). The
+    HANDLE is the one number that is not borrowed and not invented: bar 9.0 is the
+    handle rect''s own drawn height, so the tube is as thick as the handle is drawn.
+    Whether it stands 9 mm proud or 20 is unknown - a pull handle must clear enough
+    for fingers, and 9.0 is the floor rather than a reading.
+    NOT RAISED, on purpose and not by oversight:
+    - `panel`, the indicator bezel. It IS drawn as a plate over the grid in both
+      figures and it should be raised. It is not, because `dome` carries no `lift`
+      in the relief extractor (library/demo2/relief.js reads data-z-lift for cavities
+      and for out/cyl/bar/uhandle, not for domes), so raising the bezel by 1.5 would
+      bury the three lamps it holds at z 0 inside it. The lamps are this module''s
+      state display and they win. If dome ever takes lift, add {node: panel, out: 1.5}
+      and lift the button and lamps onto it.
+    - `latch-slots`. Figure 1-4 draws them black like the punched cells and Figure
+      7-11 draws them as grey tabs, so it is not resolved whether they are openings
+      in the metal or the spring latch standing in them. Two figures disagreeing about
+      what a thing IS is not a depth question and is not answered by picking one.
+    WHAT WOULD SETTLE ALL OF IT: one photograph of a C100G fan tray out of the chassis'
+  body: 'the 150.0 is the size entry''s own ESTIMATED depth restated as a body so the
+    tray draws as a solid rather than a face floating in the rear plate. NOTE the
+    viewer will not eject it even so: it builds FRU groups for data-class psu, fan and
+    tab, and every Casa and Cisco fan is class `cooling` while every Edgecore, UfiSpace
+    and common one is class `fan` (library/demo2/relief.js). That split is reported,
+    not papered over here'
   depth: estimated - not measured
 elements:
   hs: {at: [65.8, 19.5], size: [3.4, 3.4], class: led}
@@ -57,4 +93,25 @@ elements:
   ok: {at: [84.1, 19.5], size: [3.4, 3.4], class: led}
 relief:
   wall: '#4a4f55'
+  features:
+    # The punched cells are REAL HOLES, not dark paint - Figure 1-4 draws the
+    # whole face as a perforation grid and the guide's own note (see
+    # perforation-colour) is that they look through the faceplate into the
+    # chassis. `vent` is the only primitive that says that.
+    - {node: perforation, vent: 25.0}
+    # The pull handle. Figure 7-11 draws it as a light grey bar with an outline
+    # standing on the grid, where Figure 1-4 draws it solid black at lower
+    # fidelity; both put it in the same place and the guide calls it a handle.
+    # `bar` at 9.0 is the node's OWN drawn short axis - a tube as thick as the
+    # handle is drawn, which is the one diameter that is not a new number.
+    - {node: handle, bar: 9.0}
+    # Hot-swap pushbutton and the three lamps. See provenance/relief for why the
+    # indicator panel around them is deliberately NOT raised.
+    - {node: hs-button, cyl: 1.2}
+    - {node: hs, dome: 0.3}
+    - {node: alarm, dome: 0.3}
+    - {node: ok, dome: 0.3}
+body:
+  depth: 150.0
+  color: '#8d949c'
 skins: [default]

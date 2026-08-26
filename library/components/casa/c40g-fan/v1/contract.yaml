@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: c40g-fan
-version: 1.0.0
+version: 1.1.0
 class: cooling
 profile: networking
 description: >-
@@ -63,6 +63,33 @@ provenance:
     400W." The word is the vendors: approximately. This is a whole-module figure
     for all eight fan units, and it is stated for THE system fan module in the singular
     - no document held here says what a second, redundancy-kit module adds'
+  relief: 'one feature, and the rest is a refusal. The front face carries exactly
+    one thing - "grab the handle on the front of the fan tray and slowly pull the
+    module out of the chassis" - and Figures 1-1 and 2-3 both draw that one long
+    rounded bar and nothing else, which is why the mesh was taken off this face.
+    So there is one raised node to declare and `bar` is the right primitive for a
+    grab handle. Its DIAMETER, 7.9, is the drawn rectangle''s own short axis - the
+    only self-consistent choice available - and its PROUDNESS is therefore also 7.9,
+    which is a floor and not a measurement: a handle must clear enough for fingers.
+    THE CROSS SECTION DOES NOT HELP, and this is worth recording because it is the
+    figure anyone would reach for. Figure 1-8, "C40G fan module cross section", is not
+    a section through the depth: it is the module with a side cover off, looking at the
+    eight fan faces in two rows of four with the controller PCB and its fuses below.
+    It shows the handle in profile at the right-hand edge, but the drawing''s own
+    aspect (1100 x 740 px, 1.49) matches neither 380/205 (1.85) nor any other pair of
+    this module''s dimensions, so it fails the orthographic gate and a fraction off it
+    would be a number about the drawing. What it DOES establish is construction: eight
+    fans, two rows, a PCB with fuses and a backplane connector, and a handle that
+    genuinely protrudes.
+    NOT MODELLED HERE: the perforated air-filter face. It is real and Figure 1-9 draws
+    it, but it is the OUTBOARD side, and this component has only a front skin. A
+    skins/body-right.svg carrying that mesh with a `vent` on it is the right way to add
+    it and is left for whoever draws the six faces.
+    WHAT WOULD SETTLE THE HANDLE: a front photograph of the fan strip, or a caliper -
+    the same two things the face entry above already asks for.'
+  body: 'the 380.0 is the size entry''s own depth restated as a body so the tray draws
+    as a solid. Same caveat as casa/fan: class `cooling` is not in the viewer''s FRU
+    class list, so it will not eject until that is reconciled with class `fan`'
   not-the-c100g-fan: 'CHECKED, and they are NOT the same part. casa/fan is the
     C100G assembly: three of them sit horizontally above the rear card band, each
     holds two fans, each draws 100 W, and the air goes front to rear. This one is
@@ -70,4 +97,13 @@ provenance:
     right to left. Same vendor, same era, different machine'
 relief:
   wall: '#4a4f55'
+  features:
+    # The one thing on this face. `bar` at 7.9 is the handle rect's OWN drawn
+    # short axis, so the tube is as thick as the handle is drawn rather than as
+    # thick as somebody guessed. See provenance/relief - and note the face entry
+    # above already records that this rectangle is UNMEASURED in x and y too.
+    - {node: handle, bar: 7.9}
+body:
+  depth: 380.0
+  color: '#9b9da0'
 skins: [default]
