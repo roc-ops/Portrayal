@@ -1027,6 +1027,45 @@ def _bay_refs_by_view(data):
 # wrong. That is also why the fix for a firing is often to ADD the distance to
 # a label rather than to move geometry: a label without a number gives the
 # drawing nothing to disagree with.
+#
+# THE OBVIOUS EXTENSION WAS BUILT AND MEASURED AND REJECTED. Recorded here so
+# the next reader does not spend a session rediscovering it.
+#
+# L31 covers 14 of the 61 positional labels and specifically NOT the class that
+# prompted it: the ASR 9006's "accessible from the rear" carries no number. So a
+# second rule was prototyped in its narrowest defensible form - label names ONE
+# depth end, on a face whose axis is known, no number, fire if nothing drawn on
+# that face lies in the named half. Population after exclusions:
+#
+#     61  positional labels
+#     21    excluded - front/rear views have no depth axis
+#     14    excluded - carries a number, L31 owns it
+#     10    excluded - names no depth end (left/right/upper only)
+#      8    excluded - names BOTH ends ("front-to-rear cooling path")
+#      8  CHECKABLE
+#
+# On the library as it stands: 8 checked, 0 fired. Replayed against the ASR
+# 9006's pre-fix coordinates it DOES catch the motivating defect. That looks
+# like a pass, and it is not, because of what the 8 turn out to be:
+#
+#     4  redundant - the ASR 9001 flanges, already covered by L31's `x = N` form
+#     1  the true positive
+#     3  QUIET ONLY BY COINCIDENCE
+#
+# The three are the reason to stop. "Fan tray sits behind this face, fitted from
+# the rear" is an ACCESS DIRECTION, and it stays quiet because a grille's centre
+# lands in the rear half by 0.2 mm - one edit to that grille and it fires
+# falsely. "Not an air path - inlet right side, exhaust upper rear" describes the
+# CHASSIS, not anything on the face it sits on, and is quiet only because the one
+# cutout there happens to be rearward.
+#
+# AND THE DISCRIMINATION CANNOT BE MADE MECHANICALLY. "Accessible from the rear"
+# is a position and the defect this whole rule exists for; "fitted from the rear"
+# is an access direction and a false positive. They are grammatically identical.
+# Telling them apart means knowing what a fan tray is, which is not something a
+# linter knows - so the honest coverage is 14 of 61, and the remaining 39 need a
+# person. A rule quiet by 0.2 mm is not a rule that passed; it is one that has
+# not fired YET.
 NUM_RE = r"(\d+(?:\.\d+)?)"
 EDGE_ANCHOR = re.compile(r"\bfrom\s+the\s+(front|rear|back)\b", re.I)
 MEASURE_RE = re.compile(NUM_RE + r"\s*(in|mm|cm)\b", re.I)
