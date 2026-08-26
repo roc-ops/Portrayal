@@ -82,6 +82,15 @@ provenance:
     geometry against, and its absence is why the ASR 9906's strips sat in the wrong half of the box
     through two reviews before a human noticed. Where the label carried a distance - on the ASR
     9006 and 9904 - the same error was caught in minutes
+  side-face-labels-say-when-a-position-is-UNKNOWN: >-
+    every region on a side face now states either where the feature sits or that no figure
+    dimensions it. That second half is the point. A region reading only "Vertical rack rail
+    locations" is silent about position, and silence is indistinguishable from a position that was
+    known and not written down - which is exactly how a feature ends up drawn at the wrong end with
+    nothing to contradict it. casa-cards found seven such features across two chassis where the
+    LABEL WAS RIGHT AND THE GEOMETRY WAS WRONG, and lint stayed green because no rule compares the
+    two. Saying "present but not dimensioned" gives a reader the same thing a distance would: a
+    claim to check the drawing against
   card-orientation: >-
     datasheet - stated directly, and it had been an inference until now. The Overview and
     Reference Guide's "Chassis Slots" section (b-asr9k-overview-reference-guide.pdf p17) names
@@ -280,14 +289,14 @@ views:
   left:
     size: {w: 652.0, h: 1333.5}
     regions:
-      - {id: rack-rails, label: 'Vertical rack rail locations'}
-      - {id: lift-handles, label: 'Chassis lift handles'}
+      - {id: rack-rails, label: 'Vertical rack rail locations - present but NOT dimensioned in any figure for this chassis'}
+      - {id: lift-handles, label: 'Chassis lift handles - present but NOT dimensioned in any figure for this chassis'}
       - {id: cooling-path, label: 'Front-to-rear cooling path - inlet at the bottom front, exhaust at the upper rear'}
   right:
     size: {w: 652.0, h: 1333.5}
     regions:
-      - {id: rack-rails, label: 'Vertical rack rail locations'}
-      - {id: lift-handles, label: 'Chassis lift handles'}
+      - {id: rack-rails, label: 'Vertical rack rail locations - present but NOT dimensioned in any figure for this chassis'}
+      - {id: lift-handles, label: 'Chassis lift handles - present but NOT dimensioned in any figure for this chassis'}
       - {id: cooling-path, label: 'Front-to-rear cooling path - inlet at the bottom front, exhaust at the upper rear'}
 gaps:
 - what: fabric-card-power-is-scoped-to-the-9922

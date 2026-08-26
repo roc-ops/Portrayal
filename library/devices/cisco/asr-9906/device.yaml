@@ -116,6 +116,15 @@ provenance:
     NOTHING COULD HAVE CAUGHT THIS. The region label said "5.00 in and 9.45 in from the front" and
     was right the whole time; only the coordinates disagreed with it, and no lint rule compares a
     label against a geometry
+  side-face-labels-say-when-a-position-is-UNKNOWN: >-
+    every region on a side face now states either where the feature sits or that no figure
+    dimensions it. That second half is the point. A region reading only "Vertical rack rail
+    locations" is silent about position, and silence is indistinguishable from a position that was
+    known and not written down - which is exactly how a feature ends up drawn at the wrong end with
+    nothing to contradict it. casa-cards found seven such features across two chassis where the
+    LABEL WAS RIGHT AND THE GEOMETRY WAS WRONG, and lint stayed green because no rule compares the
+    two. Saying "present but not dimensioned" gives a reader the same thing a distance would: a
+    claim to check the drawing against
   card-orientation: >-
     datasheet - stated directly, and it had been an inference until now. The Overview and
     Reference Guide's "Chassis Slots" section (b-asr9k-overview-reference-guide.pdf p17) names
@@ -321,7 +330,7 @@ views:
         - {at: [596.8, 40.0], size: [14.0, 540.0], fill: '#b0b2b4'}
     regions:
       - {id: rack-rails, label: 'Vertical rack rail locations - 5.00 in and 9.45 in from the rear'}
-      - {id: lift-handles, label: 'Chassis lift handles - two per side'}
+      - {id: lift-handles, label: 'Chassis lift handles - two per side, drawn in HIG Figure 17 but not dimensioned'}
   right:
     size: {w: 730.8, h: 619.51}
     panel:
@@ -330,7 +339,7 @@ views:
         - {at: [233.0, 40.0], size: [14.0, 540.0], fill: '#b0b2b4'}
     regions:
       - {id: rack-rails, label: 'Vertical rack rail locations - 5.00 in and 9.45 in from the rear'}
-      - {id: lift-handles, label: 'Chassis lift handles - two per side'}
+      - {id: lift-handles, label: 'Chassis lift handles - two per side, drawn in HIG Figure 17 but not dimensioned'}
 gaps:
 - what: power-module-openings
   scope: [front]

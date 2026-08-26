@@ -98,6 +98,15 @@ provenance:
     So this face stays empty and this chassis stays at capability 2. A failed gate is a reason to
     stop, not a reason to use the broken ruler anyway - the same call casa-cards made on the ASR
     9000v, and the same one this file made on Figure 12's side view earlier
+  side-face-labels-say-when-a-position-is-UNKNOWN: >-
+    every region on a side face now states either where the feature sits or that no figure
+    dimensions it. That second half is the point. A region reading only "Vertical rack rail
+    locations" is silent about position, and silence is indistinguishable from a position that was
+    known and not written down - which is exactly how a feature ends up drawn at the wrong end with
+    nothing to contradict it. casa-cards found seven such features across two chassis where the
+    LABEL WAS RIGHT AND THE GEOMETRY WAS WRONG, and lint stayed green because no rule compares the
+    two. Saying "present but not dimensioned" gives a reader the same thing a distance would: a
+    claim to check the drawing against
   card-orientation: >-
     datasheet - stated directly, and it had been an inference until now. The Overview and
     Reference Guide's "Chassis Slots" section (b-asr9k-overview-reference-guide.pdf p17) names
@@ -300,14 +309,14 @@ views:
   left:
     size: {w: 800.1, h: 932.18}
     regions:
-      - {id: rack-rails, label: 'Vertical rack rail locations'}
-      - {id: lift-handles, label: 'Chassis lift handles'}
+      - {id: rack-rails, label: 'Vertical rack rail locations - present but NOT dimensioned in any figure for this chassis'}
+      - {id: lift-handles, label: 'Chassis lift handles - present but NOT dimensioned in any figure for this chassis'}
       - {id: cooling-path, label: 'Front-to-rear cooling path - inlet at the bottom front, exhaust at the upper rear'}
   right:
     size: {w: 800.1, h: 932.18}
     regions:
-      - {id: rack-rails, label: 'Vertical rack rail locations'}
-      - {id: lift-handles, label: 'Chassis lift handles'}
+      - {id: rack-rails, label: 'Vertical rack rail locations - present but NOT dimensioned in any figure for this chassis'}
+      - {id: lift-handles, label: 'Chassis lift handles - present but NOT dimensioned in any figure for this chassis'}
       - {id: cooling-path, label: 'Front-to-rear cooling path - inlet at the bottom front, exhaust at the upper rear'}
 gaps:
 - what: power-module-openings
