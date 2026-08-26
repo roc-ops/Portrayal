@@ -1,0 +1,69 @@
+format: 1
+kind: module
+name: asr-9910-fan
+version: 1.0.0
+class: cooling
+profile: networking
+description: >-
+  Cisco ASR 9910 Router fan tray. Twelve axial 134 mm (5.27 in) fans behind a full-width
+  plate, with a pull handle across the middle, a grip at each end, a FAN STATUS lamp at
+  the left and two laser/hazard labels. The ASR 9910 carries two of these for
+  redundancy; the tray is secured by two captive screws and aligns on two guide pins,
+  and swapping one does not interrupt service.
+size: {w: 445.2, h: 41.1}
+attrs:
+  model: 'ASR-9910-FAN'
+  role: 'fan-tray'
+  fans: '12 x 134 mm axial'
+  weight-kg: 12.04
+  power-draw-max-w: 3000
+  eol: 'none-announced'
+provenance:
+  size: >-
+    drawing - the stencil master at the stencil's 1:10 inches. The shape box is usable
+    for this master where it is not for a line card, and the check is what says so: box
+    aspect against the art's own agrees to well under a percent here (12.492 against
+    12.492 for the 9922 V3, 10.886 against 10.832 for the 9910), while every card
+    master's box and art disagree by five percent.
+  lamp: >-
+    install guide - the Overview and Reference Guide's 'Fan Tray Status Indicators'
+    section, transcribed: 'After fan tray insertion into the chassis, the LED lights up
+    temporarily appearing yellow. During normal operation: The LED lights green to
+    indicate that all fans in the module are operating normally. The LED lights red to
+    indicate a fan failure or another fault in the fan tray module. Possible faults are:
+    Fan stopped. Fans running below required speed to maintain sufficient cooling.
+    Controller card has a fault.' Four states - yellow is a real one and is the
+    insertion state, not an omission.
+  fans: >-
+    install guide - 'Cisco ASR 9910 Router Fan Trays' in the Overview and Reference
+    Guide: 'The Cisco ASR 9910 Router contains two fan trays for redundancy... The fan
+    tray contains 12 axial 134-mm (5.27-in) fans. There is a fan control board at the
+    back end of each tray... The fan tray aligns through two guide pins inside the
+    chassis, and it is secured by two captive screws... The maximum weight of the fan
+    tray is 26.55 lb (12.04 kg).'
+  power: >-
+    install guide - Table 24, 'Fan Tray Power Consumption Specifications', of the
+    Overview and Reference Guide, row 'ASR 9910 Fan Tray': 450 W at 25 C, 900 W at 40 C,
+    3000 W at 55 C. READ THAT SPREAD BEFORE USING THE LOW FIGURE: it is nearly seven to
+    one across the rated ambient range, because a fan tray's draw is what the fans are
+    doing rather than a fixed load. max means the worst rated case, so 3000 is what is
+    carried - a chassis budget built on the 25 C figure would be short by 2.5 kW per
+    tray. Cisco's own note on the table: 'The fan tray power consumption numbers reflect
+    the power budget for a single fan tray'.
+  lifecycle: >-
+    searched - no end-of-life notice for this part number is in the intake.
+elements:
+  status:
+    at: [23.5, 7.9]
+    size: [3.0, 3.0]
+    class: led
+    description: >-
+      the fan tray's Run/Fail status LED, one per tray.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: yellow, color: '#f5c518'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+relief:
+  wall: '#4a4f55'
+skins: [default]

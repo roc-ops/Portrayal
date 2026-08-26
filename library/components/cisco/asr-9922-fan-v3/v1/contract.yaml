@@ -1,0 +1,74 @@
+format: 1
+kind: module
+name: asr-9922-fan-v3
+version: 1.0.0
+class: cooling
+profile: networking
+description: >-
+  Cisco ASR 9922 Router fan tray, version 3. Twelve axial 120 mm (4.72 in) fans behind a
+  full-width plate, with a pull handle across the middle, a grip at each end, a FAN
+  STATUS lamp and two hazard labels. The ASR 9922 carries four of these and the ASR 9912
+  three; the V3 is the wider tray - Cisco raised it from 16.3 to 17.3 inches and lifted
+  each fan's current rating to 2 A to support higher speeds - and it is the tray the
+  16-port, 20-port and 32-port 100GE line cards require in a 9922.
+size: {w: 475.96, h: 38.1}
+attrs:
+  model: 'ASR-9922-FAN-V3'
+  role: 'fan-tray'
+  fans: '12 x 120 mm axial'
+  weight-kg: 8.16
+  power-draw-max-w: 2800
+  eol: 'none-announced'
+provenance:
+  size: >-
+    install guide AND drawing, and they agree, which is the point. The Overview and
+    Reference Guide states the V3 change directly: 'The fan tray width is increased from
+    16.3 inches to 17.3 inches. The overall fan tray depth remains the same at 23
+    inches.' 17.3 in is 439.4 mm; the master's plate measures 434.98 mm inside a 475.96
+    mm envelope that includes the grip at each end. Those agree to one percent, from two
+    independent directions, which is the gate-1 check for this part. drawing - the
+    stencil master at the stencil's 1:10 inches. The shape box is usable for this master
+    where it is not for a line card, and the check is what says so: box aspect against
+    the art's own agrees to well under a percent here (12.492 against 12.492 for the
+    9922 V3, 10.886 against 10.832 for the 9910), while every card master's box and art
+    disagree by five percent.
+  lamp: >-
+    install guide - the Overview and Reference Guide's 'Fan Tray Status Indicators'
+    section, transcribed: 'After fan tray insertion into the chassis, the LED lights up
+    temporarily appearing yellow. During normal operation: The LED lights green to
+    indicate that all fans in the module are operating normally. The LED lights red to
+    indicate a fan failure or another fault in the fan tray module. Possible faults are:
+    Fan stopped. Fans running below required speed to maintain sufficient cooling.
+    Controller card has a fault.' Four states - yellow is a real one and is the
+    insertion state, not an omission.
+  fans: >-
+    install guide - 'Cisco ASR 9922 Router and Cisco ASR 9912 Router Fan Trays': 'The
+    Cisco ASR 9922 Router contains four fan trays, and the Cisco ASR 9912 Router
+    contains three fan trays for redundancy... The fan tray contains 12 axial 120-mm
+    (4.72-in) fans... secured by two captive screws... The maximum weight of the fan
+    tray is 18.00 lb (8.16 kg).' Cisco's warning is worth carrying with the part: 'Do
+    not operate the chassis with any of the fan trays completely missing. Replace any
+    missing fan tray within five minutes.'
+  power: >-
+    install guide - Table 24 of the Overview and Reference Guide, row 'ASR 9922 Fan Tray
+    V3': 500 W at 25 C, 1200 W at 40 C, 2800 W at 55 C. max is the worst rated ambient.
+    The spread is five to one - a fan tray's draw is what the fans are doing - so the 25
+    C figure is not a number to budget a chassis with. Note the V2 row exists separately
+    at 200/870/1000 W and is a different tray, not a different reading of this one.
+  lifecycle: >-
+    searched - no end-of-life notice for this part number is in the intake.
+elements:
+  status:
+    at: [32.5, 22.5]
+    size: [3.0, 3.0]
+    class: led
+    description: >-
+      the fan tray's Run/Fail status LED, one per tray.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: yellow, color: '#f5c518'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+relief:
+  wall: '#4a4f55'
+skins: [default]
