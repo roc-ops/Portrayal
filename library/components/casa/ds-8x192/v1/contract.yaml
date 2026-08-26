@@ -1,0 +1,52 @@
+format: 1
+kind: module
+name: ds-8x192
+version: 1.0.0
+class: line-card
+profile: networking
+description: >-
+  Casa DS 8X192 downstream line card for the C100G/C40G CCAP chassis.
+  DOCSIS QAM downstream module (DQM). Eight downstream QAM ports, but the RF connectors are on the paired rear RF Downstream I/O (RFD) module - this faceplate carries no connectors at all, only the STATUS, ALARM and ACTIVE lamps.
+size: {w: 30.47, h: 345.5, d: 380.0}
+attrs:
+  model: 'DS 8X192'
+  role: downstream
+  rf-ports: '8'
+  power-draw-max-w: 350
+provenance:
+  layout: drawing - Figure 1-11 of the Casa C100G Hardware Installation Guide (rev
+    07/08/2022) draws US 16X4, US 16X8, DS 8X8, DS 8X96 and DS 8X192 side by side
+    on ONE shell. It is authoritative for WHAT is on the face - which is nothing
+    but three lamps, because the RF connectors live on the rear I/O module - and
+    for the lamp ORDER, which is STATUS, ALARM, ACTIVE and is NOT the STATUS, ACTIVE,
+    ALARM order the SMM and CSC faceplates use
+  size: shared with the rest of the C100G front-card family, taken from the chassis
+    slot envelope (30.47 x 345.5, C100G device manifest); the depth is the family
+    estimate carried by casa/smm-8x10g
+  positions: 'photo-measured - taken as FRACTIONS of the known 345.5 card height
+    from the DS8x96 data sheet product photograph. Figure 1-11 fails the orthographic
+    gate: its plate renders 147 x 1951 px, aspect 0.0753 against the real 0.0882,
+    so it is drawn about 15 percent narrow, and its five cards are drawn small enough
+    that the lamp dots are squeezed onto a 3.6 pitch. Scaled by the full card height
+    the photograph puts them on 8.14, and the DS8x96 and SMM300G photographs independently
+    agree with each other on the two legend bands to within 0.5mm. So the photograph
+    is used for placement and the figure for arrangement'
+  cutouts: NONE - this card has no aperture of any kind, which is the whole point
+    of the split. The eight QAM or sixteen burst-receiver ports belong to the rear
+    RFD/RFU I/O module, and Tables A-8 and A-9 of the install guide give those their
+    F-type and MCX connectors
+  power-draw-max-w: 'install guide - THE TWO SOURCES DISAGREE. Table A-3 of the
+    C100G install guide (rev 07/08/2022) gives ''DS8x192: 350W'' as maximum consumption
+    with the I/O module; the DS8x192 data sheet (R6, April 2018) prints ''Total
+    Power 320W''. Both numbers are recorded here rather than one being quietly dropped.
+    350 is the figure carried, because max means the highest rated case and the
+    install guide is the later and more specific document. The check was worth making:
+    the DS8x96 data sheet prints 320W too, for a card of half the density, so the
+    datasheet pair alone would have read as one number covering both densities'
+elements:
+  status: {at: [4.8, 197.7], size: [3.0, 3.0], class: led}
+  alarm: {at: [4.8, 205.8], size: [3.0, 3.0], class: led}
+  active: {at: [4.8, 214.0], size: [3.0, 3.0], class: led}
+relief:
+  wall: '#4a4f55'
+skins: [default]
