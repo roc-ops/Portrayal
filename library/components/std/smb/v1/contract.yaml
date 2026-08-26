@@ -15,7 +15,17 @@ elements:
   opening: {at: [0.0, 0.0], size: [4.83, 4.83], class: cutout}
 relief:
   features:
-    - {node: barrel, cyl: 5.0, color: '#c9a227'}
+    - node: barrel
+      cyl: 5.0
+      color: '#c9a227'
+      confidence: estimated
+      source: >-
+        std/sma@1's barrel 5.0, carried across to SMB with no source of its own - this
+        contract has no barrel provenance key at all. TREAT IT WITH SUSPICION RATHER THAN AS
+        A BORROW: the registry's own smb note records that TE 2477461-1 profiles SMB as
+        discrete cylinders with NO thread band anywhere (3.68 dia front interface, 9.90
+        flange, 11.5 overall), which is what a snap-on interface should look like. SMA and
+        SMB are different interfaces and there is no reason their barrels should match.
 connection-points:
   mate: {at: [2.415, 2.415], direction: front}
 skins: [default]

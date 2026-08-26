@@ -17,7 +17,18 @@ elements:
 relief:
   wall: '#aab0b7'
   features:
-    - {node: collar, out: 1.0, color: '#7d848c'}
+    - node: collar
+      out: 1.0
+      color: '#7d848c'
+      confidence: estimated
+      source: >-
+        std/ cage collars - the library's ONE cage-lip figure, carried by std/sfp@1,
+        std/xfp@1, std/qsfp28@1, std/qsfp56@1 and std/qsfp-dd@1. SFF-8432, INF-8077i,
+        SFF-8663 and the QSFP-DD MSA all dimension the bezel OPENING and the
+        bezel-to-connector depth, and NONE of them dimensions how far the cage lip stands
+        proud of the panel - which is why five cages share one number. It is one estimate
+        written five times, not five readings, and one caliper on any cage in any vendor's
+        hardware corrects all five.
 connection-points:
   mate: {at: [10.0, 5.075], direction: front}
 skins: [default]

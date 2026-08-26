@@ -21,7 +21,16 @@ relief:
   wall: '#4a4f55'
   cavity: bore
   features:
-    - {node: ferrule, top: 3.6, color: '#e8ecef'}
+    - node: ferrule
+      top: 3.6
+      color: '#e8ecef'
+      confidence: estimated
+      source: >-
+        std/lc-bore@1's own depth key - 'estimated (recess deep enough that the ferrule face
+        sits below the surrounding surface, which is what you see looking into a real LC
+        port)'. The 1.25 mm ferrule DIAMETER is standard and the contract says so; how far
+        the ferrule stands off the cavity floor is not, and 3.6 is the shape of that
+        sentence rather than a figure.
 connection-points:
   mate: {at: [2.3, 2.2], direction: front}
 skins: [default]

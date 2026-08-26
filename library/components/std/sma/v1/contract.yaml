@@ -20,7 +20,18 @@ elements:
   opening: {at: [0.0, 0.0], size: [6.35, 6.35], class: cutout}
 relief:
   features:
-    - {node: barrel, cyl: 5.0, thread: 0.706, color: '#c9a227'}
+    - node: barrel
+      cyl: 5.0
+      thread: 0.706
+      color: '#c9a227'
+      confidence: measured
+      source: >-
+        std/sma@1's own barrel key - measured off the Linx CONSMA001-C-G solid model: a
+        threaded section about 4.0 long plus a roughly 1.0 tip, so the barrel stands about
+        5.0 proud. SAID PRECISELY BECAUSE IT MATTERS DOWNSTREAM: this is a vendor CAD file
+        measured in software, not a caliper on hardware. It is the geometry the vendor
+        ships, which is why the token is measured and not drawing. The 0.706 pitch is
+        25.4/36 computed for 36 TPI.
 connection-points:
   mate: {at: [3.175, 3.175], direction: front}
 skins: [default]

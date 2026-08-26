@@ -22,9 +22,36 @@ relief:
   wall: '#141619'
   cavity: inlet-face
   features:
-    - {node: pin-earth, top: 14.2, color: '#c0c5cb'}
-    - {node: pin-line, top: 14.2, color: '#c0c5cb'}
-    - {node: pin-neutral, top: 14.2, color: '#c0c5cb'}
+    - node: pin-earth
+      top: 14.2
+      color: '#c0c5cb'
+      confidence: estimated
+      source: >-
+        std/c19-inlet@1 itself - the SCHURTER C20 dimension drawing dimensions the panel
+        cutout and the body behind it but NOT the pin length. This contract's own
+        shroud/recess key says 'proportional... NOT dimensioned' and its depth key says
+        'estimated', so the pin protrusion has no source either. IEC 60320-1 does fix
+        appliance-coupler pin geometry; we do not hold it.
+    - node: pin-line
+      top: 14.2
+      color: '#c0c5cb'
+      confidence: estimated
+      source: >-
+        std/c19-inlet@1 itself - the SCHURTER C20 dimension drawing dimensions the panel
+        cutout and the body behind it but NOT the pin length. This contract's own
+        shroud/recess key says 'proportional... NOT dimensioned' and its depth key says
+        'estimated', so the pin protrusion has no source either. IEC 60320-1 does fix
+        appliance-coupler pin geometry; we do not hold it.
+    - node: pin-neutral
+      top: 14.2
+      color: '#c0c5cb'
+      confidence: estimated
+      source: >-
+        std/c19-inlet@1 itself - the SCHURTER C20 dimension drawing dimensions the panel
+        cutout and the body behind it but NOT the pin length. This contract's own
+        shroud/recess key says 'proportional... NOT dimensioned' and its depth key says
+        'estimated', so the pin protrusion has no source either. IEC 60320-1 does fix
+        appliance-coupler pin geometry; we do not hold it.
 connection-points:
   mate: {at: [16.2, 12.2], direction: front}
 skins: [default]

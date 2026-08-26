@@ -29,8 +29,25 @@ elements:
   opening: {at: [0.0, 0.0], size: [9.7, 7.9], class: cutout}
 relief:
   features:
-    - {node: nut, cyl: 2.4, color: '#c0c4c8'}
-    - {node: thread, cyl: 10.6, lift: 2.4, thread: 0.794, color: '#c0c4c8'}
+    - node: nut
+      cyl: 2.4
+      color: '#c0c4c8'
+      confidence: drawing
+      source: >-
+        std/f-type@1's own nut key - Pasternack PE44327 CAD drawing REV 1.1: the hex nut and
+        washer take up about 2.4 mm of the 0.235 [6.0] front assembly. Read off the sheet,
+        not estimated.
+    - node: thread
+      cyl: 10.6
+      lift: 2.4
+      thread: 0.794
+      color: '#c0c4c8'
+      confidence: drawing
+      source: >-
+        std/f-type@1's own neck key - Pasternack PE44327 CAD drawing REV 1.1 dimensions the
+        3/8-32 threaded section at 0.419 [10.6] and the maximum panel at 0.093 [2.4], so the
+        thread stands 10.6 proud from a 2.4 lift. The 0.794 pitch is 25.4/32 computed for 32
+        TPI, not read off anything.
 connection-points:
   mate: {at: [4.85, 3.95], direction: front}
 skins: [default]
