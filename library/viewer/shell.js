@@ -235,6 +235,24 @@ export function createShell(opts = {}) {
       // binding is not dropped: xrefOf() below puts the qualified target on the
       // row as text, so a front-panel PSU lamp reads "led-ps0 → rear/psu-0"
       // rather than sitting silently unexplained among the unbound lamps.
+      // A HOLE THAT SOMETHING FILLS IS THAT THING'S APERTURE, NOT A PEER OF IT.
+      // Panel cutouts get a namespaced path, `cutout:<id>`, which has no parent
+      // component in it, so every one of them landed at the root. On the AGR420
+      // that was 74 rows - `cutout:port-0` to `cutout:port-73` - each naming a
+      // hole the port listed three rows above already accounts for.
+      //
+      // The manifest says which is which without being asked: a cutout is
+      // declared, then a component is placed in it under THE SAME id. So a
+      // cutout whose id is also a path is that node's aperture and nests under
+      // it, exactly as a component's own `port-1/aperture/opening` already does.
+      // A cutout nothing names is a feature in its own right and stays - which
+      // is every cutout on every Cisco chassis, where `shelf-0`, `ft-0` and
+      // `esd` are real openings with no module modelled behind them and this row
+      // is the only place the tree admits they exist.
+      if (!parent && n.path.startsWith('cutout:')) {
+        const filled = byPath.get(n.path.slice(7));
+        if (filled && filled !== n) parent = filled;
+      }
       if (!parent && n.el.dataset.for) {
         const here = n.el.dataset.for.split(' ').find(t => t[0] !== '/');
         const owner = here && byPath.get(here);
