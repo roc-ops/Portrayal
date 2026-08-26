@@ -453,6 +453,10 @@ groups:
     term: Power Module
     index-origin: 0
     physical-context: PowerSupply
+  doors:
+    term: Door
+    index-origin: 0
+    physical-context: Chassis
 views:
   front:
     size: {w: 444.5, h: 444.5}
@@ -482,10 +486,12 @@ views:
         - {id: slot-2, at: [39.38, 247.05], size: {w: 395.70, h: 41.40}, rotate: 90, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2}
         - {id: slot-1, at: [39.38, 293.65], size: {w: 395.70, h: 41.40}, rotate: 90, accepts: ['cisco/a9k-rsp880-se@1', 'cisco/a9k-rsp880-tr@1', 'cisco/a9k-rsp880-lt-se@1', 'cisco/a9k-rsp880-lt-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1}
         - {id: slot-0, at: [39.38, 340.26], size: {w: 395.70, h: 41.40}, rotate: 90, accepts: ['cisco/a9k-rsp880-se@1', 'cisco/a9k-rsp880-tr@1', 'cisco/a9k-rsp880-lt-se@1', 'cisco/a9k-rsp880-lt-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0}
+      placements:
+        - {ref: cisco/a9k-fan-tray-door@1, id: fan-tray-door, at: [0, 33.66], group: doors, rel-pos: 0}
     regions:
       - {id: rsp-slots, label: Two bottom slots reserved for redundant RSPs, members: [slot-0, slot-1]}
       - {id: lc-slots, label: Four slots for line cards, members: [slot-2, slot-3, slot-4, slot-5]}
-      - {id: fan-tray-door, label: Fan tray door (two fan trays)}
+      - {id: fan-tray-door, label: 'Fan tray door - hinged, one captive screw, covers FT0 and FT1 and carries the chassis branding', members: [fan-tray-door]}
       - {id: power-shelf, label: Power shelf}
   rear:
     size: {w: 444.5, h: 444.5}

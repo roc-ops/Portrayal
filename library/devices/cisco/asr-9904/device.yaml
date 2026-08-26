@@ -134,6 +134,19 @@ provenance:
     draws a large rounded panel on the top face, very likely a removable cover,
     and that is NOT drawn: its edges would not resolve cleanly enough to place,
     and a cover at a guessed size is worse than none'
+  a99-12x100ge-is-eligible-here: >-
+    datasheet - c78-737623 states the compatibility twice, in prose and in a table row, and both
+    name this chassis: "The ASR 9000 Series 12-port 100-GE line cards are fully compatible with the
+    ASR 9904 Router, ASR 9910 Router..." and "Chassis compatibility: Compatible with the Cisco ASR
+    9904, ASR 9910, ASR 9912, and ASR 9922 chassis". So cisco/a99-12x100ge@1 joins the accepts on
+    the two LINE CARD slots and not on the RSP pair - slot-1 and slot-2 are reserved for the
+    redundant RSPs and a compatibility statement about a chassis is not a statement that a card
+    fits every slot in it. The geometry agrees independently: the card contracts 41.4 x 395.7 and
+    these bays are 395.70 x 41.40 rotated, coincident to the hundredth of a millimetre, which is
+    what a card and its own slot should be. NOTE THAT THE ASR 9906 IS ABSENT FROM BOTH STATEMENTS,
+    and that is the second Cisco compatibility row in this family to single it out - not modelled
+    as an oversight here, because the row lists four chassis by name and omitting one of six is a
+    choice rather than a gap.
   depth-axis-on-side-views: >-
     CHECKED AND NOTHING HAD TO MOVE, stated so that the next reader knows it was
     checked rather than missed. The convention is derived in the ASR 9006's
@@ -269,10 +282,10 @@ views:
       - {at: [420.0, 12.0], text: 'Cisco ASR 9000 Series', font-size: 5, anchor: end}
     components:
       bays:
-        - {id: slot-0, at: [44.09, 150.83], size: {w: 395.70, h: 41.40}, rotate: 90, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0}
+        - {id: slot-0, at: [44.09, 150.83], size: {w: 395.70, h: 41.40}, rotate: 90, accepts: ['cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0}
         - {id: slot-1, at: [44.09, 107.57], size: {w: 395.70, h: 41.40}, rotate: 90, accepts: ['cisco/a9k-rsp880-se@1', 'cisco/a9k-rsp880-tr@1', 'cisco/a9k-rsp880-lt-se@1', 'cisco/a9k-rsp880-lt-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1}
         - {id: slot-2, at: [44.09, 64.31], size: {w: 395.70, h: 41.40}, rotate: 90, accepts: ['cisco/a9k-rsp880-se@1', 'cisco/a9k-rsp880-tr@1', 'cisco/a9k-rsp880-lt-se@1', 'cisco/a9k-rsp880-lt-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2}
-        - {id: slot-3, at: [44.09, 21.05], size: {w: 395.70, h: 41.40}, rotate: 90, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 3}
+        - {id: slot-3, at: [44.09, 21.05], size: {w: 395.70, h: 41.40}, rotate: 90, accepts: ['cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 3}
     regions:
       - {id: rsp-slots, label: RSP cards - the middle pair}
       - {id: lc-slots, label: Line cards - above and below the RSP pair}
