@@ -79,6 +79,18 @@ groups:
     attrs:
       media: qsfp28
       speed: 100g
+  mgmt:
+    index-origin: 1
+    term: Port
+    mixed: the host-access ports at the right-hand end of the faceplate - the
+      out-of-band RJ45, the RS-232 console and a USB-A service port. Three media,
+      one job. They were the only ports on this device carrying no group at all,
+      so each drew its own one-row heading in the tree beside QSFP28, as though a
+      console socket ranked with 32 line ports. The sibling AS7326-56X already
+      names the same cluster `mgmt`; this is that vocabulary, not a new one.
+      The two SFP+ uplinks stay in `sfp-plus`, which is a real media group with
+      real attrs - folding them in here would trade one grouping defect for the
+      loss of `media` and `speed`
   sfp-plus:
     index-origin: 1
     term: Port
@@ -200,12 +212,12 @@ views:
         - {ref: common/led-indicator@1, id: led-psu2, at: [33, 23], group: leds, rel-pos: 5, for: rear/psu-2}
         - {ref: common/led-indicator@1, id: led-fan, at: [40, 23], group: leds, rel-pos: 3, for: [rear/fan-1, rear/fan-2, rear/fan-3, rear/fan-4, rear/fan-5, rear/fan-6]}
         - {ref: common/reset-button@1, id: reset, at: [36.5, 32], for: chassis}
-        - {ref: common/rj45-port@4, id: mgmt-eth, at: [362, 9.1], attrs: {role: mgmt, speed: 1000base-t}}
-        - {ref: common/rj45-bezel@2, id: console, at: [362, 25.2], attrs: {media: rj45-serial, role: console}}
+        - {ref: common/rj45-port@4, id: mgmt-eth, at: [362, 9.1], group: mgmt, rel-pos: 1, attrs: {role: mgmt, speed: 1000base-t}}
+        - {ref: common/rj45-bezel@2, id: console, at: [362, 25.2], group: mgmt, rel-pos: 2, attrs: {media: rj45-serial, role: console}}
         - {ref: common/sfp-led-pair@1, id: sfp-leds, at: [383, 9], group: leds, rel-pos: 6, for: [mgmt-sfp-1, mgmt-sfp-2]}
         - {ref: common/sfp-plus-cage@2, id: mgmt-sfp-1, at: [381, 14.5], group: sfp-plus, rel-pos: 1}
         - {ref: common/sfp-plus-cage@2, id: mgmt-sfp-2, at: [381, 25.5], group: sfp-plus, rel-pos: 2}
-        - {ref: common/usb-a@2, id: usb, at: [394, 16.5], rotate: 270}
+        - {ref: common/usb-a@2, id: usb, at: [394, 16.5], group: mgmt, rel-pos: 3, rotate: 270}
         - {ref: common/pull-tab@1, id: info-tab, at: [381, 38.6]}
     regions:
       - {id: mgmt-block, at: [360, 1], size: {w: 52, h: 42}, label: Management, members: [mgmt-eth, console, mgmt-sfp-1, mgmt-sfp-2, sfp-leds, usb, info-tab]}

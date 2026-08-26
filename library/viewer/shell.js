@@ -236,6 +236,23 @@ export function createShell(opts = {}) {
         const here = n.el.dataset.for.split(' ').find(t => t[0] !== '/');
         const owner = here && byPath.get(here);
         if (owner && owner !== n) parent = owner;
+        // AN INDICATOR WITH ONLY CROSS-VIEW TARGETS STILL BELONGS TO SOMETHING.
+        // Leaving it at the root made it a SIBLING of the chassis row, while the
+        // lamps beside it on the same faceplate - the ones naming a local target
+        // - nested INSIDE that row. One declared group then rendered as two
+        // headings in two places, which is what "why are there two LED sections"
+        // was seeing: DIAG and Location inside the chassis, Fan and the two PSU
+        // lamps outside it, split by nothing more than where the thing each one
+        // watches happens to live.
+        //
+        // The panel is the answer. A lamp pointing at `/rear/psu-1` is screwed to
+        // THIS faceplate and reports on something behind it; the target being
+        // elsewhere says what it watches, never where it is. So fall back to the
+        // chassis - not to the root, which is not a place on the device.
+        if (!parent) {
+          const body = byPath.get('chassis');
+          if (body && body !== n) parent = body;
+        }
       }
       (parent ? parent.kids : roots).push(n);
     }
@@ -337,7 +354,7 @@ export function createShell(opts = {}) {
   // Fold a flat list into one row per data-group. Groups were always in the data
   // - the renderer has emitted data-group for a long time - the tree just never
   // read them, so 118 placements became 118 rows.
-  function groupNodes(list) {
+  function groupNodes(list, atRoot = true) {
     const out = [], seen = new Map();
     for (const n of list.sort(cmpNode)) {
       const g = n.el.dataset.group;
@@ -353,8 +370,21 @@ export function createShell(opts = {}) {
       head.doc = Math.min(head.doc, n.el.__docIdx ?? Infinity);
     }
     const docOf = x => x.doc ?? x.el?.__docIdx ?? Infinity;
-    return out.sort((a, b) => (a.tier ?? tierOf(a.el)) - (b.tier ?? tierOf(b.el))
-                            || docOf(a) - docOf(b));
+    const ordered = out.sort((a, b) => (a.tier ?? tierOf(a.el)) - (b.tier ?? tierOf(b.el))
+                                     || docOf(a) - docOf(b));
+    // A HEADING THAT NAMES ONE ROW EARNS NOTHING. Nested under the thing it
+    // belongs to, `sfp28-leds > led-p1` says what `led-p1` already said and
+    // charges a fold and a level of indent to say it. On the AS7326-56X that was
+    // 48 such headings over one lamp each - and, on the same device, a second and
+    // third `mgmt` heading over a single management lamp on each of two ports.
+    // That is the SAME "why is this group listed three times" the chassis lamps
+    // were reported for, arriving from nesting rather than from parenting.
+    //
+    // At the ROOT a one-member group still earns its row, because nothing else up
+    // there says what category it is: `grounding 1` and `doors 1` are the only
+    // word the tree ever offers for those. Under a parent, the parent is that word.
+    return atRoot ? ordered
+                  : ordered.map(n => (!n.el && n.kids.length === 1) ? n.kids[0] : n);
   }
 
   function renderTree(roots) {
@@ -363,7 +393,7 @@ export function createShell(opts = {}) {
     // all carry the same data-group, so folding them again would build the same
     // head again, and again. That is the crash the first version of this had.
     const draw = (list, into, depth, fold = true) => {
-      for (const n of (fold ? groupNodes(list) : list.sort(cmpNode))) {
+      for (const n of (fold ? groupNodes(list, depth === 0) : list.sort(cmpNode))) {
         const row = document.createElement('div');
         row.className = 'node';
         // a group row is a fold, not a thing - it has no element and selects nothing
