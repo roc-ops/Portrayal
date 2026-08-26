@@ -11,36 +11,61 @@ description: >-
   SPAs, up to 4 single-width, single-height SPAs, or up to 2 double-width, single-height
   SPAs. The Cisco ASR 9000 SIP-700 does not support double-width, double-height SPAs.'
   Supported on all ASR 9000 Series routers except the ASR 9906.
-size: {w: 43.7, h: 395.7}
+size: {w: 43.7, h: 395.7, d: 520.7}
 attrs:
   model: 'A9K-SIP-700-8G'
   role: 'spa-interface-processor'
   memory: '8 GB'
   capacity: '20 Gbps'
   spa-subslots: 4
-  weight-kg: 10.0
-  operating-temp: '0 to 40 C'
+  weight-kg: 6.35
+  operating-temp: '5 to 40 C'
+  operating-temp-short-term: '-5 to 55 C'
+  power-draw-max-w: 375
   eol: 'none-announced'
 provenance:
   size: >-
-    install guide + drawing, and the guide's own sentence is the anchor. Table 6, 'Cisco
-    ASR 9000 SIP-700 Physical Specifications', gives 'Physical dimensions: OCCUPIES ONE
-    LINE CARD SLOT on a Cisco ASR 9000 Series Aggregation Services Router' and no
-    numbers - so Cisco states the envelope by reference rather than by dimension. The
-    line card slot it occupies is the original generation's, whose dimensions ARE
-    stated: 1.72 x 14 in, 43.7 x 355.6 mm, in Table A-10 of the OL-17500-09 Ethernet
-    Line Card Installation Guide and in the original-generation data sheets. This card
-    is modelled at 43.7 x 395.7, the same ejector-inclusive step and the same reasoning
-    as every original-generation card already in this library. Corroborated, weakly, by
-    the master's raw art box of 46.55 x 413.95, which is the original generation's
-    drawing template - weakly because the A9K-MOD200 proves that template identity does
-    not settle a size on its own.
-  depth: >-
-    NOT MODELLED. 'Occupies one line card slot' fixes the opening a card goes through
-    and says nothing about how far back it reaches, and a card need not fill its slot's
-    depth. Table 6 gives a shipping weight and three temperature ranges and no depth.
-    Rather than inherit the original generation's 520.7, which would be a slot's figure
-    presented as this card's, the component declares a faceplate and no body.
+    datasheet + install guide, and they say it two ways. THE DATA SHEET GIVES NUMBERS:
+    data_sheet_c78-573452, the Cisco ASR 9000 SIP-700 data sheet, 'Physical dimensions
+    (H x W x D); weight: 14 x 1.72 x 20.5 in.; 14 lb' - 355.6 x 43.7 x 520.7 mm and 6.35
+    kg, the original generation's envelope exactly. The INSTALL GUIDE gives the same
+    fact by reference: Table 6, 'Cisco ASR 9000 SIP-700 Physical Specifications', says
+    'Physical dimensions: Occupies one line card slot on a Cisco ASR 9000 Series
+    Aggregation Services Router' and no numbers at all. 355.6 is the PLATE; the
+    component carries 395.7, the ejector-inclusive step every original-generation card
+    in this library uses and which Cisco's own sheets write as 15.58 in where the plate
+    is 14.5. Depth 520.7 is the sheet's own 20.5 in. AN EARLIER VERSION OF THIS
+    COMPONENT modelled no depth at all, on the reasoning that 'occupies one line card
+    slot' fixes the opening and not how far back the card reaches. That reasoning was
+    sound and the conclusion was unnecessary - the number was stated in a data sheet I
+    had not found.
+  power: >-
+    datasheet - data_sheet_c78-573452, the Cisco ASR 9000 SIP-700 data sheet: 'Power:
+    375W (maximum)'. No typical and no ambient are given with it. AN EARLIER VERSION OF
+    THIS COMPONENT SAID 'NOT STATED ANYWHERE IN THE INTAKE' and was wrong. What that
+    sentence got right is that the SIP and SPA Hardware Installation Guide has no power
+    table, Table 35 of the Ethernet Line Card guide has no SIP row, and Table 23 of the
+    Overview and Reference Guide covers RSPs, RPs and fabric cards only - all three
+    true, and all three about the wrong books. THE FIGURE IS THE CARRIER'S AND THE SPAs'
+    DRAW IS INSIDE IT, on the same reasoning as the A9K-MOD carriers: no SPA has a power
+    row anywhere in the intake either, so a chassis budget must not add one on top of
+    this.
+  weight: >-
+    datasheet - data_sheet_c78-573452, the Cisco ASR 9000 SIP-700 data sheet gives '14
+    lb' with the physical dimensions, which is 6.35 kg and is the CARD. The install
+    guide's Table 6 gives 'Shipping weight 10kg (22 lbs)', which is the card plus its
+    packaging. Both are Cisco's and they are not the same quantity; attrs carries the
+    card at 6.35 and this sentence is the record of the other, so that nobody later
+    reads the two as a contradiction.
+  operating-temp: >-
+    datasheet + install guide, AND THEY DISAGREE, so both are here.
+    data_sheet_c78-573452, the Cisco ASR 9000 SIP-700 data sheet: 'Operating temperature
+    (nominal): 41 to 104F (5 to 40C). Operating temperature (short-term): 23 to 131F (-5
+    to 55C).' The SIP and SPA Hardware Installation Guide's Table 6: 'Operating
+    temperature 32 to 104F (0 to 40C)'. The ceilings agree at 40 C for continuous
+    operation; the floors differ, 5 C against 0 C, and only the data sheet mentions a
+    short-term range at all. attrs carries the data sheet's nominal range because it is
+    the more conservative floor and the more completely specified pair.
   bays: >-
     install guide + drawing, AND THEY CORROBORATE EACH OTHER ON THE NUMBERING, which is
     the part worth setting out because SPA subslot numbering is not in reading order.
@@ -92,11 +117,6 @@ provenance:
     ASR 9906 supports A9K-VSM-500 and Tomahawk-based line cards; it does not support
     SIP-700'. Two Cisco books disagreeing, and the narrower statement is the one
     carried.
-  physical-other: >-
-    install guide - Table 6: shipping weight 10 kg (22 lb), operating temperature 32 to
-    104 F (0 to 40 C), relative humidity 10 to 90 percent noncondensing, storage
-    temperature -4 to 149 F (-20 to 65 C). Note the operating ceiling is 40 C where the
-    Ethernet line cards are rated to 55.
   status-lamp: >-
     install guide - Table 32, 'Port Status and Line Card Status LEDs', of the Ethernet
     Line Card Installation Guide, section 'Card Status LED (one per card)'. Green: 'Line
@@ -117,19 +137,14 @@ provenance:
     table rather than a neighbour's. An earlier version of this component said the guide
     gave the lamp's existence and no colour table and carried a flagged BORROWING; the
     colour table was in the other book, which that note points at.
-  power: >-
-    NOT STATED ANYWHERE IN THE INTAKE. The SIP and SPA Hardware Installation Guide has
-    no power table at all - Table 6 is its physical specifications and gives weight,
-    temperature and humidity only. Table 35 of the Ethernet Line Card Installation Guide
-    covers Ethernet line cards and has no SIP row, and Table 23 of the Overview and
-    Reference Guide covers RSPs, RPs and fabric cards. A SIP in a slot certainly draws,
-    and how much is not recorded anywhere I can reach. The L27 warning stands and is the
-    honest report.
   lifecycle: >-
     searched - no end-of-life notice for this part number is in the intake. Note the
     guide's own note that 'The ASR 9000 SIP-700 is not supported on Cisco IOS XR 64-bit
     images', which is a software limit rather than a lifecycle statement but is the
     nearest thing to one that the intake carries.
+body:
+  depth: 520.7
+  color: '#b9bec4'
 elements:
   status:
     at: [25.25, 370.39]
