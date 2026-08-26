@@ -1,0 +1,81 @@
+format: 1
+kind: module
+name: a9k-fan-tray-door
+version: 1.0.0
+class: blank
+profile: networking
+description: >-
+  Hinged fan tray door for the Cisco ASR 9006 Router. A cosmetic and EMC door across
+  the top of the chassis front, covering both fan trays FT0 and FT1, hinged at one
+  side and held by a single captive screw. THIS IS THE PART THAT CARRIES THE CHASSIS
+  BRANDING: the cisco bridge, the wordmark and the "Cisco ASR 9000 Series" legend are
+  printed on the door face, not on the chassis, which is why they belong here and are
+  deliberately absent from the ASR 9006 device manifest. Open the door and the
+  branding swings away with it.
+size: {w: 444.5, h: 70.97, d: 20.0}
+attrs:
+  model: 'ASR 9006 fan tray door'
+  role: 'access-door'
+provenance:
+  existence: >-
+    install guide - b-asr9k-hardware-installation-guide.pdf, "Removing a Fan Tray from
+    the Cisco ASR 9006 Router", step 1: "Loosen the captive screw that secures the fan
+    tray door to the chassis and open the door". So the door exists, it is hinged, and
+    it is secured by ONE captive screw. That sentence is the whole of what any document
+    in the intake says about this part.
+  size: >-
+    DERIVED FROM THE CHASSIS, which is the right way round for a rack-face part: this
+    is trim on the chassis front, so it is sized to the opening it covers and not to a
+    body of its own. Height 70.97 mm is the door face measured by asr9k-chassis in the
+    ASR 9006 front master and committed in that chassis manifest - the fan band there
+    runs 0 to 104.63 mm of which the top 33.66 mm is a shroud, and the two fan tray
+    openings ft-0 and ft-1 are placed at y 33.66 with height 70.97, so the door face
+    and the openings it covers are coincident to the millimetre. Width 444.5 mm is the
+    chassis body width, 17.5 in, which is the only width available: the door must span
+    both openings, and those run from x 60.94 to 413.53 mm, comfortably inside it.
+  width-is-not-measured: >-
+    A LIMIT WORTH STATING PLAINLY. The front master does not delineate this door. It
+    draws the whole chassis front as one gradient running ear to ear and prints the
+    branding on top of it, so there is no outline in the artwork whose width could be
+    read. 444.5 is therefore the body width rather than a measurement of the part, and
+    the door could in truth be inset a few millimetres at each end. Nothing in the
+    intake settles it. What IS certain from the drawing is that the door is at least as
+    wide as the branding plus both openings, and 444.5 is the smallest width consistent
+    with that which is also a real dimension of this chassis.
+  branding: >-
+    drawing - lifted from the ASR 9006 front master at its measured positions. The
+    calibration is the ear-inclusive chassis face, 482.6 x 444.5 mm against an art box
+    of 616.16 x 563.86, which gives 0.78324 mm per unit across and 0.78832 along - two
+    independently derived scales agreeing to 0.64 percent, which is the cross-check
+    that the art box really is the chassis face. Coordinates are then shifted by the
+    19.05 mm ear at the left and the 33.66 mm shroud at the top to land in the door's
+    own frame. The bridge is nine teal (#005568) bars in the familiar
+    5.4 / 9.0 / 16.5 / 9.0 / 5.4 mm pattern spanning x 48.96 to 108.82, the wordmark is
+    its five red (#c41230) glyph shapes at y 44.60 plus the two dots of the registered
+    mark, and the legend "Cisco ASR 9000 Series" is live text in the master at 7.66 mm.
+    The wordmark is SET AS TEXT and not traced, which is the one place this drawing
+    departs from the master: the extractor yields each glyph's bounding box, so
+    carrying it verbatim would put five red blocks on the door, and five blocks are a
+    worse likeness of the mark than five letters standing at the measured origin,
+    x-height and span. The bridge is traced, because there the shapes ARE the artwork.
+    That the whole of that artwork falls inside y 0 to 70.97 - the door face computed
+    from a completely different measurement, asr9k-chassis's fan band - is a second
+    cross-check, and it is the one that says the branding really is on the door.
+  screw: >-
+    POSITION IS A DRAWING DECISION, not a measurement. The install guide gives the
+    screw's existence and its count, one, and nothing about where it is. A hinged door
+    latches on the side away from its hinge, so it is drawn at the right-hand end on
+    the centreline. Same standing as the fan arrangement on cisco/asr-9006-fan: the
+    inventory is sourced and the placement is mine.
+  power: >-
+    NOT APPLICABLE and deliberately absent. A door consumes nothing, and class blank
+    is outside the lint's DRAW_CLASSES, so no power figure is expected or given. The
+    fan power for this chassis belongs to cisco/asr-9006-fan, which is the FRU behind
+    this door and states 375 W.
+elements:
+  screw:
+    at: [428.5, 32.09]
+    size: [8.0, 8.0]
+    description: >-
+      the single captive screw that secures the fan tray door to the chassis
+skins: [default]
