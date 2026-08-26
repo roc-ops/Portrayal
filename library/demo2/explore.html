@@ -112,6 +112,7 @@ function chips(el) {
       [...el.classList].filter(c => c.startsWith('state-')).forEach(c => el.classList.remove(c));
       span.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
       if (st !== 'off' && !was) { el.classList.add('state-' + st); chip.classList.add('on'); }
+      pushStates();
     };
     span.appendChild(chip);
   }
@@ -123,6 +124,37 @@ shell.on('row', (row, node) => {
   const c = chips(node.el);
   if (c) row.querySelector('.nm').after(c);
 });
+
+// A STATE IS A FACT ABOUT THE DEVICE, so it belongs to both stages, not to the
+// drawing that happened to be showing when it was set. The chip writes a class
+// into the LIVE SVG; the 3D scene is rasterised from the compiled files, which
+// carry every state's RULE and have never carried one APPLIED - so a lit lamp
+// was lit in 2D and dark in 3D, on every device in the library.
+//
+// The whole live drawing is read rather than the one element that changed. It is
+// one pass over a few thousand nodes for a click, it is the same answer after a
+// swap or a config change as after a chip, and it cannot drift from what the
+// drawing is showing the way an incrementally-maintained copy can.
+//
+// THE COST IS PAID WHERE IT BELONGS, the same rule the swap sync follows: in 2D
+// this does nothing at all and sync3d picks the states up on the mode switch,
+// which is already a rebuild-shaped moment. Nobody repaints a scene they are not
+// looking at, and a user who never opens 3D never pays. In 3D it is cheap by
+// design - the viewer repaints only the textures the change reaches.
+function liveStates() {
+  const out = {};
+  if (!state.svg) return out;
+  for (const el of state.svg.querySelectorAll('[data-path][class]')) {
+    const sts = [...el.classList].filter(c => c.startsWith('state-'));
+    if (sts.length) out[el.dataset.path] = sts.join(' ');
+  }
+  return out;
+}
+function pushStates() {
+  if (mode !== '3d' || !viewer) return;
+  Promise.resolve(viewer.setStates(liveStates()))
+    .catch(err => console.warn('[portrayal] 3D state sync failed', err));
+}
 
 // ---------------------------------------------------------------- About panel
 
@@ -504,6 +536,13 @@ async function sync3d() {
   if (mode !== '3d') return;
   const v = await ensureViewer();
   const key = `${state.device}.${state.cfg}|${swapKey()}`;
+  // BEFORE the early return, and before the load. Before the return because
+  // states set while the drawing was showing are exactly the case where the
+  // device and the swaps have not changed and the scene still has to catch up -
+  // which is the same trap the swap fix had to be taught about. Before the load
+  // because build() reads them, so a scene comes up already lit instead of
+  // flashing dark and repainting itself.
+  await v.setStates(liveStates());
   if (key === loadedKey) return;
   await v.load({device: state.device, config: state.cfg,
                 overrides: swapOverrides()});

@@ -47,6 +47,64 @@ export function svgSource(url) {
 }
 export function clearSvgCache() { SVG_CACHE.clear(); }
 
+// A STATE SET AT RUNTIME IS A CHANGE TO THE DOCUMENT, exactly like a bay swap,
+// and it reached 3D exactly as well: not at all. The chip in the tree adds
+// `state-10g` to an element in the LIVE SVG the page is showing, and everything
+// in here rasterises a document FETCHED from dist/ - a different DOM that has
+// never carried a state class in its life. Zero of the library's 390 compiled
+// faces do; the class only ever exists in the browser. So every lamp on every
+// device painted its unlit fallback in 3D while 2D showed it lit.
+//
+// The registry is by `data-path` rather than by id or by element, because that
+// is the one name the live drawing and the compiled file agree on - the page
+// knows what the user clicked by path, and both documents label the same part
+// with it. Values are the classes to apply, space-separated, as the page has
+// them.
+//
+// This is deliberately NOT a lamp feature. Nothing here knows what an LED is:
+// the classes are applied to whatever elements carry those paths, and any rule
+// the drawing's own stylesheet keys off them - a fill, an opacity, an animation,
+// a colour on a cylinder's cap - takes effect for the same reason. `data-z-dome`
+// is how these lamps happen to be modelled today, and a fix that could only see
+// domes would light some of a device's indicators and not others.
+const NODE_STATES = new Map();
+
+/** Replace the runtime state classes, keyed by data-path. */
+export function setNodeStates(map) {
+  NODE_STATES.clear();
+  for (const [path, cls] of map instanceof Map ? map : Object.entries(map || {}))
+    if (cls) NODE_STATES.set(path, String(cls));
+}
+export function clearNodeStates() { NODE_STATES.clear(); }
+export function nodeStates() { return new Map(NODE_STATES); }
+
+// Applied by CLEARING FIRST, over the whole document rather than over the paths
+// in the registry. Turning a state off is a state change like any other, and it
+// arrives as a path that is no longer in the map - so a version that only
+// visited registered paths would light lamps correctly and never put one out.
+/** Put the registered classes onto the matching elements of a parsed document. */
+export function applyNodeStates(root) {
+  if (!root) return root;
+  for (const el of root.querySelectorAll('[data-path][class]'))
+    for (const c of [...el.classList]) if (c.startsWith('state-')) el.classList.remove(c);
+  for (const [path, cls] of NODE_STATES)
+    for (const el of root.querySelectorAll(`[data-path="${CSS.escape(path)}"]`))
+      el.classList.add(...cls.split(/\s+/).filter(Boolean));
+  return root;
+}
+
+// Re-apply the registry to an already-serialised fragment. A state change repaints
+// and never re-shapes, so a texture can be redrawn from the text it was built
+// from without re-extracting any geometry - which is the whole reason clicking a
+// state chip does not cost a rebuild.
+export function restyleText(text) {
+  if (!text) return text;
+  const div = document.createElement('div');
+  div.innerHTML = text;
+  applyNodeStates(div);
+  return div.innerHTML;
+}
+
 // A flat drawing outlines the faceplate and rounds its corners so the sheet
 // metal reads as a part on a page. On a box, the outline of a face IS the box's
 // edge, and both devices cost us something in 3D: the 0.5mm stroke sits half
@@ -104,6 +162,19 @@ export function canvasTex(cv) {
   tex.needsUpdate = true;
   return tex;
 }
+// Swap the art on a material that is already in the scene, disposing what it
+// replaces. Textures are GPU allocations, and a state chip is a control a user
+// will click repeatedly; leaking one per click is how a viewer that felt fine in
+// review runs a machine out of memory in a demo.
+export function remap(mat, cv) {
+  const old = mat.map;
+  const tex = canvasTex(cv);
+  if (old) { tex.repeat.copy(old.repeat); tex.offset.copy(old.offset); }
+  mat.map = tex;
+  mat.needsUpdate = true;
+  if (old) old.dispose();
+}
+
 // crop a mm-rect out of a face canvas (no mirroring: the rear floor plane's
 // 180-degree rotation and the box rear-face UVs already reverse X to match)
 export function crop(cv, r) {
@@ -123,6 +194,10 @@ export async function extractRelief(url) {
   div.innerHTML = await svgSource(url);
   document.body.appendChild(div);
   const svg = div.querySelector('svg');
+  // before anything is measured or serialised: cleanText and every nodeSvg below
+  // are taken from this document, so applying the runtime states once here is
+  // what puts them on the face texture and on every piece of relief at once.
+  applyNodeStates(svg);
   const inv = svg.getScreenCTM().inverse();
   const mmRect = el => {
     const b = el.getBBox();
@@ -167,6 +242,39 @@ export async function extractRelief(url) {
     const root = a.dataset.path.split('/')[0];
     return FRU_PATHS.has(root) ? root : null;
   };
+  // A NODE RENDERED ALONE LOSES THE SCOPE ITS RULES WERE WRITTEN IN, and that is
+  // the third bug of the shape the `lift` note above names. `shared` carries the
+  // face's whole stylesheet into every one of these standalone documents, but
+  // the two forms render.py emits for a declared state colour are
+  //
+  //   #led-p65-a.state-10g          the element itself
+  //   #led-p65-a .state-10g         a descendant of it
+  //
+  // and the element being rasterised here is `led-p65-a--lamp`, a CHILD of that
+  // group. Reparented under a bare transform <g>, neither selector can match:
+  // the ancestor simply is not in the document any more. Measured - a lamp whose
+  // state is set paints rgb(34,197,94) on the face and rgb(60,65,71) in its own
+  // node svg, from the same text and the same stylesheet.
+  //
+  // So the ancestor chain is rebuilt as empty groups carrying ONLY id and class -
+  // never `transform`, since the CTM below already accounts for every one of
+  // them, and re-applying them would move the art twice. data-path rides along
+  // so a later restyle can tell which nodes a change reaches.
+  //
+  // This is not about states. Any id-scoped rule the compiled sheet carries -
+  // a per-instance fill, a group override, a palette on a component - was
+  // equally invisible to relief art before this, and looked like a modelling
+  // gap rather than a plumbing one.
+  const scopeWrap = (el, inner) => {
+    for (let p = el.parentElement; p && p !== svg; p = p.parentElement) {
+      const id = p.getAttribute('id'), cls = p.getAttribute('class'),
+            path = p.getAttribute('data-path');
+      if (!id && !cls) continue;      // a pure layout group changes no selector
+      inner = `<g${id ? ` id="${id}"` : ''}${cls ? ` class="${cls}"` : ''}` +
+              `${path ? ` data-path="${path}"` : ''}>${inner}</g>`;
+    }
+    return inner;
+  };
   const nodeSvg = (el, rect) => {
     const m = inv.multiply(el.getScreenCTM());
     const clone = el.cloneNode(true);
@@ -178,8 +286,9 @@ export async function extractRelief(url) {
       r.style.display = 'none';
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${rect.w} ${rect.h}"` +
       ` width="${rect.w}mm" height="${rect.h}mm">${shared}` +
-      `<g transform="matrix(${m.a} ${m.b} ${m.c} ${m.d} ${m.e - rect.x} ${m.f - rect.y})">` +
-      clone.outerHTML + `</g></svg>`;
+      scopeWrap(el,
+        `<g transform="matrix(${m.a} ${m.b} ${m.c} ${m.d} ${m.e - rect.x} ${m.f - rect.y})">` +
+        clone.outerHTML + `</g>`) + `</svg>`;
   };
   const cavities = [...svg.querySelectorAll('[data-depth]')]
     .filter(el => !el.querySelector('[data-depth]'))
@@ -283,6 +392,20 @@ export async function rasterize(svgText, wmm, hmm, pxmm = PXMM, flipX = false, f
 export async function buildFaceRelief(F, ctx) {
   const {src, faceCv, faceSvg, facePunch, meshes,
          FRU_GROUPS, FRU_META, BODY_META, D, bodyBoxMesh} = ctx;
+    // Every texture below that was rasterised from a node's OWN art records how
+    // to redraw itself. That is the whole cost model for a state change: it
+    // repaints and never re-shapes, so nothing here has to be measured, extruded
+    // or disposed again - only the handful of canvases the change actually
+    // reaches. A full rebuild of this device is 1.0-1.4 s; one lamp is one
+    // 1.6 ms raster and one face.
+    //
+    // Registered by TEXT, not by path, and the affected test is a substring
+    // search over that text. A node's svg carries its ancestors (for scope) and
+    // its descendants (for their own art), so any of the three can be what the
+    // state class lands on - and asking the text is the only version of the
+    // question that cannot miss one of the three.
+    const restyle = ctx.restyle || [];
+    const reg = (svgText, run) => { if (svgText) restyle.push({svgText, run}); };
     const fw = F.fw(), fh = F.fh();
     // a device need not declare every view; fall back to a plain face
     if (!(await fetch(src, {method: 'HEAD', cache: 'no-store'})).ok) {
@@ -329,9 +452,11 @@ export async function buildFaceRelief(F, ctx) {
       // raised bezel plates (drawn over the cavity on the face) never leak in
       const gcv = await rasterize(c.grpSvg, c.grpRect.w, c.grpRect.h);
       const floorCv = crop(gcv, {x: c.x - c.grpRect.x, y: c.y - c.grpRect.y, w: c.w, h: c.h});
+      const cavCrops = [];
       const fctx = floorCv.getContext('2d');
       for (const ft of c.features) {
         ft.faceCv = crop(gcv, {x: ft.x - c.grpRect.x, y: ft.y - c.grpRect.y, w: ft.w, h: ft.h});
+        cavCrops.push(ft);
         // remove the feature art from the floor (it lives on its own box now)
         const px = [Math.round((ft.x - c.x) * PXMM), Math.round((ft.y - c.y) * PXMM),
                     Math.round(ft.w * PXMM), Math.round(ft.h * PXMM)];
@@ -374,6 +499,16 @@ export async function buildFaceRelief(F, ctx) {
         new THREE.MeshBasicMaterial({map: canvasTex(floorCv), transparent: true, alphaTest: 0.1, alphaToCoverage: true}));
       floor.position.set(LX(c.x, c.w), LY(c.y, c.h), c.lift - (d - 0.1));
       addTo(floor);
+      // one raster feeds the floor and every raised feature standing in it, so
+      // they are redrawn together from the one group svg they were cut from
+      const floorMat = floor.material;
+      reg(c.grpSvg, async text => {
+        const g2 = await rasterize(text, c.grpRect.w, c.grpRect.h);
+        remap(floorMat, crop(g2, {x: c.x - c.grpRect.x, y: c.y - c.grpRect.y, w: c.w, h: c.h}));
+        for (const ft of cavCrops)
+          if (ft.mat) remap(ft.mat,
+            crop(g2, {x: ft.x - c.grpRect.x, y: ft.y - c.grpRect.y, w: ft.w, h: ft.h}));
+      });
       // closed exterior back, deep enough to clear any sink pockets
       const maxSink = Math.max(0, ...c.features.filter(f => f.kind === 'sink').map(f => f.val));
       const back = new THREE.Mesh(new THREE.PlaneGeometry(c.w, c.h), backMat);
@@ -384,6 +519,7 @@ export async function buildFaceRelief(F, ctx) {
           const hgt = Math.min(ft.val, d - 0.2);
           const mats = sideMats(ft.color);
           mats[4] = new THREE.MeshBasicMaterial({map: canvasTex(ft.faceCv)});
+          ft.mat = mats[4];
           const m = new THREE.Mesh(new THREE.BoxGeometry(ft.w, ft.h, hgt), mats);
           m.position.set(LX(ft.x, ft.w), LY(ft.y, ft.h), c.lift - (d - hgt / 2));
           addTo(m);
@@ -427,6 +563,7 @@ export async function buildFaceRelief(F, ctx) {
       m.scale.set(dm.w, dm.h, dm.dome + 0.15);
       m.position.set(LX(dm.x, dm.w), LY(dm.y, dm.h), (dm.lift || 0) - 0.15);
       addTo(m);
+      reg(dm.svgText, async text => remap(m.material, await rasterize(text, dm.w, dm.h)));
     }
     for (const o of outs) {   // protrusions: bezel plates, handles, studs, tubes
       curOwner = o.owner;
@@ -438,6 +575,7 @@ export async function buildFaceRelief(F, ctx) {
       }
       const faceTex = new THREE.MeshBasicMaterial(
         {map: canvasTex(ocv), transparent: true, alphaTest: 0.1, alphaToCoverage: true});
+      reg(o.svgText, async text => remap(faceTex, await rasterize(text, o.w, o.h)));
       if (o.uhandle !== undefined && o.uhandle !== '') {
         const far = +o.uhandle;
         const horizontal = o.w >= o.h;
