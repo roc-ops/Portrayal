@@ -29,6 +29,8 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
       so a module total is never quoted as one while it is a floor
   L30 device: a card whose figure already covers its paired I/O module, beside a
       paired module that states its own - a sum would count the pairing twice
+  L33 device: a bay reserves room for every module it accepts, compared
+      against the module's `insert` where it has one and `size` otherwise
   L32 any yaml: no mapping declares the same key twice - a duplicate is resolved
       by the parser before anything else sees the file, so the loss is silent
 """
@@ -1413,6 +1415,7 @@ def lint_device(path, validator, lib_roots):
     lint_device_attrs(path, data)
     lint_device_module_power(path, data, lib_roots)
     lint_device_double_count(path, data, lib_roots)
+    lint_device_bay_fit(path, data, lib_roots)
     lint_device_label_geometry(path, data)
     declared_groups = set((data.get("groups") or {}).keys())
     for gname, gdef in (data.get("groups") or {}).items():
@@ -1784,6 +1787,72 @@ def print_matrix(matrix, schemas):
     print("  + earned, ? cannot be evaluated, absent means tested and not met")
     print()
 
+
+
+# ---------------------------------------------------------------- L33
+FIT_TOL = 0.05          # a rounding difference is not a misfit
+
+
+def lint_device_bay_fit(path, data, lib_roots):
+    """L33 - a bay must reserve enough room for every module it accepts.
+
+    THE 262 MISMATCHES THIS EXISTS FOR were found by a script nobody ran, and a
+    finding that lives in a script is a finding that goes stale. The check is
+    cheap and belongs in the build.
+
+    What it compares matters more than that it compares. A module has TWO
+    extents and they are not interchangeable:
+
+        size    what the skin DRAWS - the faceplate as depicted
+        insert  what the slot must ACCOMMODATE, where a source states it
+                separately: "Physical dimensions (includes ejector bracket/lever)"
+
+    Cisco publishes both, sometimes in one sheet and often without saying which
+    it means, and 35 of this library's cards carry one figure in `size` and the
+    other in a provenance sentence. So the comparison is against `insert` where
+    it exists and `size` otherwise, never against whichever happens to be
+    smaller.
+
+    AND IT WARNS RATHER THAN ERRORING, deliberately. A module wider than its bay
+    is usually two figures describing different things rather than a part that
+    does not fit, and the fix is often to state the second extent rather than to
+    move a number. Erroring would push people toward reconciling the two - which
+    silences the only check that can see them.
+    """
+    for vname, view in (data.get("views") or {}).items():
+        for bay in (((view.get("components") or {}).get("bays")) or []):
+            bs = bay.get("size")
+            if not bs:
+                continue
+            bw, bh = bs.get("w"), bs.get("h")
+            if bw is None or bh is None:
+                continue
+            if (bay.get("rotate") or 0) % 180 == 90:
+                bw, bh = bh, bw
+            for ref in sorted(bay.get("accepts") or []):
+                found = resolve_component(ref, lib_roots)
+                if not found:
+                    continue                   # L5 reports the broken ref
+                sub = yaml.safe_load(found.read_text()) or {}
+                ext = sub.get("insert") or sub.get("size") or {}
+                w, h = ext.get("w"), ext.get("h")
+                if w is None or h is None:
+                    continue
+                over_w, over_h = w - bw, h - bh
+                if over_w <= FIT_TOL and over_h <= FIT_TOL:
+                    continue
+                which = "insert" if sub.get("insert") else "size"
+                worst = "wider" if over_w > over_h else "longer"
+                by = max(over_w, over_h)
+                warn(path, "L33",
+                     f"{vname}: bay {bay.get('id')} is {bs['w']:g} x {bs['h']:g} "
+                     f"and accepts {ref}, whose {which} is {w:g} x {h:g} - "
+                     f"{by:.2f} mm {worst} than the bay. If those two numbers "
+                     f"measure DIFFERENT THINGS - a plate that overlaps its "
+                     f"aperture, an envelope that includes an ejector - say so by "
+                     f"giving the module an `insert:` and leaving `size` as what "
+                     f"the skin draws. Do NOT reconcile them by moving one to "
+                     f"meet the other unless you measured it")
 
 
 # ---------------------------------------------------------------- L32
