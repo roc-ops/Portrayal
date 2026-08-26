@@ -1,0 +1,435 @@
+format: 1
+kind: module
+name: a99-32x100ge-tr
+version: 1.0.0
+class: line-card
+profile: networking
+description: >-
+  Cisco ASR 9900 Series 32-Port 100 Gigabit Ethernet Packet Transport Line Card, 4th
+  generation. Thirty-two QSFP28/QSFP+ ports in two rows of sixteen; QSFP+ is permitted
+  on ports 0 to 20 only. Superseded by the A99-32X100GE-X-TR.
+size: {w: 41.4, h: 395.7, d: 604.5}
+attrs:
+  model: 'A99-32X100GE-TR'
+  role: 'line-card'
+  generation: '4th'
+  qsfp28: 32
+  throughput: '3.2 Tbps'
+  weight-kg: 12.43
+  operating-temp: '5 to 40 C'
+  power-draw-max-w: 1425
+  eol: 'announced'
+  eol-announcement: 'https://www.cisco.com/c/en/us/products/collateral/routers/asr-9000-series-aggregation-services-routers/asr-9000-4th-gen-ethernet-lc-fam-eol.html'
+  eol-announced: '2024-03-15'
+  end-of-sale: '2024-06-15'
+  end-of-life: '2029-06-15'
+provenance:
+  size: >-
+    datasheet - Cisco ASR 9000 Series 32-Port 100 Gigabit Ethernet Line Card Data Sheet:
+    '32-port 100 Gigabit Ethernet Line Card: 1.63 x 15.58 x 1.63 x 23.80 in.; 27.4 lb
+    (est.) (41.4 mm x 395.7 mm x 604.5 mm; 12.43 kg)'. The four-figure 'H x W x D' with
+    1.63 printed twice is Cisco's typo; the millimetre triple beside it is unambiguous
+    and is what is carried. That datasheet names the -TR and -FC part numbers; the -SE
+    shares the drawing, see se-tr.
+  se-tr: >-
+    the -SE and -TR masters of this card are the SAME DRAWING: extracted port centres
+    agree to 0.00 mm across every port, which is what one expects of two part numbers
+    that differ in buffering and table scale rather than in sheet metal. Checked, not
+    assumed - and the -X- master of the same port count does NOT agree with the non-X
+    one (5.64 mm apart at worst), so the check distinguishes real variants from cosmetic
+    ones.
+  layout: >-
+    drawing - the Cisco Visio master, scaled to the datasheet's own overall dimensions.
+    CAUTION for anyone re-deriving this: index.json's props.height_in and width_in are
+    the Visio SHAPE box, not the card. They read 1.72 x 14.75 in for EVERY card master,
+    against the datasheet's 1.63 x 15.58 in, and are 5 percent out in both axes. The ART
+    is orthographic and does carry geometry: taking Cisco's stated W - which the spec
+    table says 'includes ejector bracket/lever' - as the full long extent of the art
+    puts the faceplate rectangle at 41.6 mm against a stated H of 41.4, inside half a
+    percent, which is the gate-1 check. So the drawing is the ruler and the shape box is
+    not.
+  frame: >-
+    the card is modelled PORTRAIT - x across the 41.4 mm thickness, y along the 395.7 mm
+    width - which is the stencil's own frame and the frame casa/ uses. The ASR 9006,
+    9010, 9906 and 9910 carry their cards flat and the ASR 9912 and 9922 carry them
+    upright; a chassis of the first kind rotates the bay rather than the card carrying
+    two orientations.
+  cages: >-
+    composed from std/, not drawn. Ganged QSFP pitch measures 18.73 mm off the art
+    against the registry's TE-measured 19.0, so Cisco's shared-wall block is about 1.4
+    percent tighter; the measured PITCH is carried and the registry's APERTURE is
+    carried, which leaves a nominal 0.23 mm wall. Aperture size is a governed dimension
+    and a drawing is not the place to take it from.
+  leds: >-
+    install guide - 'Each line card has a single tristate Status LED to display card
+    status. Each ... port on the line card has a port status LED visible on the front
+    panel.' The state vocabulary on both is Table 32, 'Port Status and Line Card Status
+    LEDs', of the Ethernet Line Card Installation Guide, transcribed rather than
+    summarised: the card lamp's amber is TWO states, steady during boot and blinking for
+    a software configuration error.
+  not-drawn: >-
+    one thing on the real faceplate is deliberately NOT modelled: the coloured outlines
+    that box each port group. They are real printing - the install guide spells the
+    scheme out for the 400G combo card, 'Ports 0-5 (blue), 10-15 (red), 20-25 (magenta),
+    30-35 (orange)' - and the stencil draws them per group in solid and dashed strokes.
+    They are omitted because the stencil builds them from many short stroked segments
+    rather than closed rectangles, and guessing at a box that reads as a group boundary
+    would put a line on the drawing that no measurement supports. Port grouping is
+    carried structurally instead, by the port ids and by the lamp clusters that sit at
+    each group's end.
+  ports: >-
+    install guide - '32-Port 100-Gigabit Ethernet Line Card with QSFP28/QSFP+ ...
+    provides thirty two ports for QSFP28/QSFP+ modules that operate at a rate of 100
+    Gbps', and 'In a 32-port 100GE Line Card, QSFP+ is permitted only from port 0 to
+    port 20'.
+  power: >-
+    install guide - Table 35 of the Ethernet Line Card Installation Guide, row '32-port
+    100-Gigabit Ethernet Line Card (-TR or -CM)': 1325 W at 27 C, 1350 W at 40 C, 1425 W
+    at 50 C. max means the highest rated ambient, so 1425 is carried; Cisco states no
+    typical for any card in this table, only one figure per ambient.
+  lifecycle: >-
+    bulletin EOL15321, 'End-of-Sale and End-of-Life Announcement for the Cisco ASR 9000
+    Series 4th Generation Ethernet Line Card Family', updated 15 March 2024. Table 2
+    lists this part number as affected. Last order 15 June 2024; last date of hardware
+    support 15 June 2029.
+elements:
+  led-p0:
+    at: [10.33, 32.16]
+    size: [1.59, 2.91]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p1:
+    at: [13.94, 32.16]
+    size: [1.59, 2.91]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p2:
+    at: [17.54, 32.16]
+    size: [1.59, 2.91]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p3:
+    at: [17.54, 156.37]
+    size: [1.59, 2.89]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p4:
+    at: [13.94, 156.37]
+    size: [1.59, 2.89]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p5:
+    at: [10.33, 156.37]
+    size: [1.59, 2.89]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p6:
+    at: [10.33, 162.15]
+    size: [1.59, 2.89]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p7:
+    at: [13.94, 162.15]
+    size: [1.59, 2.89]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p8:
+    at: [17.54, 162.15]
+    size: [1.59, 2.89]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p9:
+    at: [17.54, 286.35]
+    size: [1.59, 2.89]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p10:
+    at: [13.94, 286.35]
+    size: [1.59, 2.89]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p11:
+    at: [10.33, 286.35]
+    size: [1.59, 2.89]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p12:
+    at: [3.19, 299.89]
+    size: [1.59, 2.91]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p13:
+    at: [3.19, 318.69]
+    size: [1.59, 2.91]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p14:
+    at: [3.19, 337.1]
+    size: [1.59, 2.91]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p15:
+    at: [3.19, 355.51]
+    size: [1.59, 2.91]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p16:
+    at: [29.67, 32.16]
+    size: [1.59, 2.91]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p17:
+    at: [26.07, 32.16]
+    size: [1.59, 2.91]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p18:
+    at: [22.46, 32.16]
+    size: [1.59, 2.91]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p19:
+    at: [22.46, 156.37]
+    size: [1.59, 2.89]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p20:
+    at: [26.07, 156.37]
+    size: [1.59, 2.89]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p21:
+    at: [29.67, 156.37]
+    size: [1.59, 2.89]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p22:
+    at: [29.67, 162.15]
+    size: [1.59, 2.89]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p23:
+    at: [26.07, 162.15]
+    size: [1.59, 2.89]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p24:
+    at: [22.46, 162.15]
+    size: [1.59, 2.89]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p25:
+    at: [22.46, 286.35]
+    size: [1.59, 2.89]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p26:
+    at: [26.07, 286.35]
+    size: [1.59, 2.89]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p27:
+    at: [29.67, 286.35]
+    size: [1.59, 2.89]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p28:
+    at: [35.77, 299.89]
+    size: [1.59, 2.91]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p29:
+    at: [35.77, 318.69]
+    size: [1.59, 2.91]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p30:
+    at: [35.77, 337.1]
+    size: [1.59, 2.91]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p31:
+    at: [35.77, 355.51]
+    size: [1.59, 2.91]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  status:
+    at: [18.61, 371.11]
+    size: [3.72, 3.72]
+    class: led
+    description: >-
+      the single tristate card Status LED (Ethernet Line Card Installation Guide, Table
+      32)
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - {name: amber-blinking, behavior: blinking, color: '#f5a623'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+relief:
+  wall: '#4a4f55'
+parts:
+  - {ref: std/qsfp-ganged@1, id: p0, at: [3.68, 43.93], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p1, at: [3.68, 62.66], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p2, at: [3.68, 81.39], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p3, at: [3.68, 100.12], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p4, at: [3.68, 118.85], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p5, at: [3.68, 137.59], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p6, at: [3.68, 173.92], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p7, at: [3.68, 192.64], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p8, at: [3.68, 211.38], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p9, at: [3.68, 230.11], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p10, at: [3.68, 248.84], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p11, at: [3.68, 267.57], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p12, at: [5.26, 296.87], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p13, at: [5.26, 315.6], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p14, at: [5.26, 334.33], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p15, at: [5.26, 353.07], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p16, at: [22.76, 43.93], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p17, at: [22.76, 62.66], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p18, at: [22.76, 81.39], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p19, at: [22.76, 100.12], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p20, at: [22.76, 118.85], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p21, at: [22.76, 137.59], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p22, at: [22.76, 173.92], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p23, at: [22.76, 192.64], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p24, at: [22.76, 211.38], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p25, at: [22.76, 230.11], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p26, at: [22.76, 248.84], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p27, at: [22.76, 267.57], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p28, at: [20.22, 296.87], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p29, at: [20.22, 315.6], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p30, at: [20.22, 334.33], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p31, at: [20.22, 353.07], rotate: 90}
+body:
+  depth: 604.5
+  color: '#b9bec4'
+skins: [default]
