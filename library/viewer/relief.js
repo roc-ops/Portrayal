@@ -308,10 +308,17 @@ export async function extractRelief(url) {
               round: !!el.dataset.round, cavSvg: nodeSvg(cavNode || el, rect),
               grpRect, grpSvg: nodeSvg(el, grpRect), features};
     });
-  // pressed grooves: shallow standalone cavities whose own art is the floor
+  // pressed grooves: shallow standalone cavities whose own art is the floor.
+  // `lift` is not optional here even though a groove is always pressed into the
+  // face and always reads 0: every consumer of a cavity does arithmetic on it,
+  // and `undefined - d / 2` is NaN, which Three.js does not reject - it culls the
+  // mesh. Omitting it punched the faceplate and then silently deleted the walls
+  // and floor that were supposed to close the hole, so the chassis had seven
+  // full-length slits you could see the background through.
   for (const el of svg.querySelectorAll('[data-groove]')) {
     const rect = mmRect(el);
     cavities.push({...rect, owner: ownerOf(el), d: +el.dataset.groove, wall: '#25282c', round: false,
+                   lift: liftOf(el),
                    cavSvg: nodeSvg(el, rect), grpRect: rect,
                    grpSvg: nodeSvg(el, rect), features: []});
   }
@@ -492,7 +499,15 @@ export async function buildFaceRelief(F, ctx) {
         walls = new THREE.Mesh(new THREE.BoxGeometry(c.w, c.h, d),
           [wallMat, wallMat, wallMat, wallMat, noFace, noFace]);
       }
-      walls.position.set(LX(c.x, c.w), LY(c.y, c.h), c.lift - d / 2);
+      // A NON-FINITE POSITION IS NOT A DRAWING ERROR, IT IS A DISAPPEARANCE.
+      // Three.js culls a mesh whose matrix holds a NaN rather than complaining,
+      // so the failure looks exactly like geometry nobody wrote - which is how
+      // seven see-through slits survived in a shipped drawing. Say it out loud.
+      const zc = c.lift - d / 2;
+      if (!Number.isFinite(zc) || !Number.isFinite(LX(c.x, c.w)) || !Number.isFinite(LY(c.y, c.h)))
+        console.error('relief: cavity has a non-finite position and will not render',
+                      {owner: c.owner, x: c.x, y: c.y, d, lift: c.lift});
+      walls.position.set(LX(c.x, c.w), LY(c.y, c.h), zc);
       addTo(walls);
       // textured floor: the aperture art, pushed to the back of the recess
       const floor = new THREE.Mesh(new THREE.PlaneGeometry(c.w, c.h),
