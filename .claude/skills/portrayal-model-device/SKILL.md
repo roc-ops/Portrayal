@@ -406,7 +406,32 @@ that a deploy had already fixed.
 
 ### By name
 
-Go back to the guide's overview figure and walk its numbered callouts one by
+**When you audit your OWN files, ask a structural question, not a string one.**
+A sweep of 88 components for "which reading does this figure rest on" searched
+their provenance for the words the author expected to have used - `highest`,
+`conservative`, `disagree` - and reported 24 files with no recorded basis. The
+gap was not real. Those 24 record their basis in phrasing the pattern never
+anticipated: *"NOT the ... row at 310/320/350 - that is the A9K-8T/4, a
+different part number with the same port count, and the two differ by 280 W"*,
+and *"READ THAT SPREAD BEFORE USING THE LOW FIGURE"*. Both are model provenance
+sentences and neither contains a searchable marker.
+
+**A string search over your own prose measures your recall, not your files** -
+and your recall is the thing you are trying to check, so the audit is circular
+in exactly the direction that returns a clean answer. The structural form does
+not care what words you chose: *does any figure have no provenance key that
+could carry its source?* That returned the right answer, zero, in one pass.
+
+The general shape is that **the query you want to run is often not the query the
+data supports, and the fix is to ask what the structure can actually answer.**
+The same thing one level up stopped a lint rule being useless: region labels
+could not be checked against their own regions, because 60 of 61 regions carry
+no geometry at all, so the rule had to re-derive the geometry from the face
+rather than follow a link that does not exist. And do not try to write prose
+that is both good and grep-able - the sentences above are the right ones to have
+written. Ask the structure instead.
+
+Then go back to the guide's overview figure and walk its numbered callouts one by
 one. For each, name the id in your manifest that satisfies it. Then do the same
 for the spec table. Write the audit down - a dozen lines of "callout 13,
 grounding point -> `ground-point`" is enough.
