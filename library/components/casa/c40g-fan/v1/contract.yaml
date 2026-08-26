@@ -1,0 +1,53 @@
+format: 1
+kind: module
+name: c40g-fan
+version: 1.0.0
+class: cooling
+profile: networking
+description: >-
+  Casa C40G system fan module. A tall side-mounted assembly of eight fan units
+  with the air filter built into its outboard face, occupying the full height of
+  the card band. The chassis takes two: the right-hand slot carries the system
+  fan module and is the air INTAKE, and the left-hand slot is a secondary fan
+  module position that is empty unless the redundancy kit is fitted.
+size: {w: 34.7, h: 205.0, d: 380.0}
+attrs:
+  model: 'C40G System Fan Module'
+  role: cooling
+  fans: '8'
+  power-draw-max-w: 400
+provenance:
+  layout: 'drawing - Figure 1-1 of the C40G Hardware Installation Guide (rev 07/07/2022),
+    "Casa C40G CMTS front view", which PASSES the orthographic gate: the drawn chassis
+    measures 1364 x 760 px for an aspect of 1.795 against the real rack face of
+    482 / 265.9 = 1.813, agreeing to 1 percent, so it carries geometry at 2.858
+    px/mm scaled by the exactly known 265.9 height. Positions here are measured
+    off it rather than taken as fractions'
+  what-it-is: 'drawing - "The C40G is equipped with a system fan module and air
+    filter assembly on the right-hand side of the chassis. The fan assembly module
+    (see Figure 1-7) has eight fans units to supply cooling air to the chassis,
+    drawing cool air through the air filter and across the system modules from right
+    to left with the air exiting the chassis on the left." Figure 1-7 labels the
+    right strip "System fan module" and "Air filter" with "Air flow direction IN",
+    and the left strip "Secondary fan module slot (optional with redundancy kit)"
+    with "Air flow direction OUT"'
+  air-filter: 'drawing - the filter is PART OF THIS MODULE, not a separate FRU.
+    "Figure 1-9 shows the air filter side of the fan module." That is why no separate
+    filter component is modelled for the fan position. The chassis carries a SECOND,
+    unrelated filter - the one integrated into the snap-on front PSU cover - which
+    is casa/c40g-psu-cover'
+  size: 'drawing-measured - the strip runs x 386.7 to 422.7 and y 17 to 222 in
+    body coordinates off Figure 1-1, so 36 x 205. The width is trimmed to 34.7 so
+    the bay does not overlap the card bays, which end at x 387.5'
+  power-draw-max-w: 'drawing - "The fan module has a power draw of approximately
+    400W." The word is the vendors: approximately. This is a whole-module figure
+    for all eight fan units, and it is stated for THE system fan module in the singular
+    - no document held here says what a second, redundancy-kit module adds'
+  not-the-c100g-fan: 'CHECKED, and they are NOT the same part. casa/fan is the
+    C100G assembly: three of them sit horizontally above the rear card band, each
+    holds two fans, each draws 100 W, and the air goes front to rear. This one is
+    a single tall side-mounted module holding eight fans at 400 W with the air going
+    right to left. Same vendor, same era, different machine'
+relief:
+  wall: '#4a4f55'
+skins: [default]

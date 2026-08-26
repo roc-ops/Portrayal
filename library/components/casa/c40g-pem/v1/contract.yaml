@@ -1,0 +1,41 @@
+format: 1
+kind: module
+name: c40g-pem
+version: 1.0.0
+class: power
+profile: networking
+description: >-
+  Casa C40G DC power entry module. Two sit side by side across the bottom of the
+  rear face, each taking -40.5 to -60 VDC from a separate 20 A source and
+  providing EMI filtering and redundant DC power to the chassis. The face
+  carries a bolted terminal cover, four studs in a minus pair and a plus pair,
+  two release levers and a disconnect-power warning.
+size: {w: 158.0, h: 70.5, d: 200.0}
+attrs:
+  model: 'C40G PEM'
+  role: dc-power-entry
+  input: '-40.5 to -60 VDC'
+provenance:
+  what-it-is: 'drawing - "The C40G ships with two DC power entry modules (PEMs).
+    The power entry modules receive -40.5 to -60 VDC (-48VDC nominal) power from
+    separate 20A power supply sources. The two PEMs provide EMI filtering and redundant
+    DC power to the chassis, as shown in Figure 1-12." It is a bay rather than a
+    placement because the guide has both "Removing the DC power entry modules" and
+    "Replacing the PEMs" procedures and it slides into an opening'
+  size: 'drawing-measured off Figure 1-4, "C40G CMTS rear view (DC; non-redundant)",
+    scaled by the known 265.9 chassis height at 2.982 px/mm. The two PEM faces read
+    x 44.8 to 195.7 and 212.8 to 377.7, so about 151 and 165 wide - the spread is
+    edge noise on a figure at this scale - and 158.0 is carried for both. The band
+    runs y 194 to 264.5, so 70.5 tall. The depth is ESTIMATED'
+  not-the-c100g-pem: 'CHECKED, and they do not match. casa/pem, the C100G part,
+    is 207.0 x 91.6 for an aspect of 2.26; this face measures 158 x 70.5 for an
+    aspect of 2.24. The aspects are nearly identical but the SIZE is not - the C40G
+    part is a quarter narrower - so they are modelled separately rather than shared
+    on the strength of a name and a silhouette. If a drawing later shows one part
+    in both chassis, this is the assumption to break'
+  power: 'NONE STATED. Neither C40G table gives a PEM figure, and a power ENTRY
+    module is not a supply in the sense power-output-w means - it filters and distributes
+    what the plant feeds it. The L27 warning is left standing as the record'
+relief:
+  wall: '#4a4f55'
+skins: [default]

@@ -2,6 +2,7 @@ format: 1
 kind: device
 name: c40g
 version: 0.1.0
+maturity: modelled
 manufacturer: Casa Systems
 model: C40G
 portfolio:
@@ -22,7 +23,51 @@ provenance:
   rear-slots: photograph - a C40G rear shows plain 6+12 I/O in slots 0 and 5, the 6+12 SW I/O in
     slot 4, and SMM-SW-BDM B and A in 3 and 2. Slot 1 takes the LC-BDM-SWITCH that protects, per
     the 3+1 scheme
-  'slot-compatibility': 'drawing - the C40G guide numbers its own slots twice. The
+  front-furniture: 'drawing-measured - Figure 1-1, "Casa C40G CMTS front view",
+    PASSES the orthographic gate. Its chassis renders 1364 x 760 px for an aspect
+    of 1.795 against a true rack face of 482 / 265.9 = 1.813, agreeing to 1 percent,
+    so unlike the isolated card figures it carries geometry - at 2.858 px/mm scaled
+    by the exactly known 265.9 height. Measured off it in body coordinates: the
+    two vertical fan strips at x 1.5-37.5 and 386.7-422.7, both running y 17-222;
+    the card band x 37.5-386.4, which independently confirms the existing card bays
+    at x 42.0 width 345.5; the brand band y 196.3-222.9; and the snap-on PSU cover
+    y 226.7-264.9. The right fan bay is trimmed to start at x 388.0 so it does not
+    overlap the card bays, which end at 387.5'
+  fan-modules: 'drawing - Figure 1-7, "C40G fan module location and directional
+    air flow", settles which side is which and it is NOT symmetric. The RIGHT strip
+    is labelled "System fan module" and "Air filter" with "Air flow direction IN";
+    the LEFT strip is labelled "Secondary fan module slot (optional with redundancy
+    kit)" with "Air flow direction OUT". So fan-right defaults to a module and fan-left
+    defaults to empty, which is what a chassis without the redundancy kit actually
+    looks like. Both strips carry the same FAN TRAY 2 / FAN TRAY 1 / AIR FILTER
+    legend printed on the CHASSIS, which is why an empty left slot still shows it
+    in the guide figures'
+  power-entry: 'drawing-measured - Figure 1-4, "C40G CMTS rear view (DC; non-redundant)",
+    scaled by the known 265.9 height at 2.982 px/mm. The two PEM faces read x 44.8-195.7
+    and 212.8-377.7 and the band runs y 194-264.5. They are bays and not placements
+    because the guide carries both "Removing the DC power entry modules" and "Replacing
+    the PEMs" and they slide into openings. NOTE THE VARIANT SPLIT: this is the
+    DC chassis. The C40G also ships AC, with four removable 1100 W PSUs behind the
+    snap-on front cover instead of these two PEMs, drawn in Figures 1-2 and 1-3.
+    The AC variant is NOT modelled - it wants its own configuration and its own
+    PSU component, and inventing either from the DC figures would be guessing'
+  side-faces: 'drawing plus a stated absence, exactly as on the C100G. NO FIGURE
+    IN THIS GUIDE SHOWS THE TOP, BOTTOM OR SIDE FACES either - Figures 1-1 through
+    1-5 are front and rear elevations and 1-7 is an airflow diagram. So the four
+    are sized from Table A-1 ("Height: 10.47 in. (265.90 mm), Depth: 15.25 in. (388.45
+    mm)"; its 19 in / 482 mm width is the rack face including the flanges, so the
+    432.95 body width is used) and carry only the integral mounting flanges and
+    the chassis label, which the guide locates in the same words the C100G guide
+    uses - "The C40G product label is affixed to the top front side of the chassis".
+    Orientation matches the C100G: top and bottom put the front at y = 0, left puts
+    it at x = 0, right mirrors it. NO SIDE VENTS ARE DRAWN, deliberately, and this
+    is the judgement call worth flagging. Air goes right to left through this chassis,
+    so the side panels are a plausible place for an intake and an exhaust - but
+    the filter the guide describes is on the FAN MODULEs own face ("Figure 1-9 shows
+    the air filter side of the fan module"), the fan modules are inserted from the
+    front, and no figure shows an opening in either side panel. Drawing vents on
+    a guess is the wrong-box outcome these views exist to prevent'
+  slot-compatibility: 'drawing - the C40G guide numbers its own slots twice. The
     chassis overview lists "Front slots - Upstream and downstream line card slots:
     0, 1, 4 5; Active and standby SMM slots: 2 and 3", and Table A-2, "C40G capacities",
     agrees: "6 line card slots on front - 1 Switch and Management (SMM) module,
@@ -55,6 +100,15 @@ groups:
   front-slots:
     term: Slot
     index-origin: 1
+  cooling:
+    term: Fan module
+    index-origin: 1
+  power:
+    term: PEM
+    index-origin: 1
+  furniture:
+    term: Item
+    index-origin: 1
   rear-slots:
     term: Slot
     index-origin: 1
@@ -66,7 +120,7 @@ views:
     panel:
       decor:
         - {at: [0, 0], size: [40.0, 265.9], fill: '#8d949c'}
-        - {at: [391.5, 0], size: [41.44999999999999, 265.9], fill: '#8d949c'}
+        - {at: [386.7, 0], size: [46.25, 265.9], fill: '#8d949c'}
     silkscreen:
       - {at: [6, 250], text: C40G, font-size: 9, fill: '#231f20', anchor: start}
       - {at: [20, 183.35], text: '0', font-size: 11, anchor: middle, fill: '#231f20'}
@@ -77,12 +131,16 @@ views:
       - {at: [20, 31.0], text: '5', font-size: 11, anchor: middle, fill: '#231f20'}
     components:
       bays:
+        - {id: fan-left, at: [1.5, 17.0], size: {w: 34.7, h: 205.0}, accepts: [casa/c40g-fan@1], group: cooling, rel-pos: 0, default: null}
+        - {id: fan-right, at: [388.0, 17.0], size: {w: 34.7, h: 205.0}, accepts: [casa/c40g-fan@1], group: cooling, rel-pos: 1, default: casa/c40g-fan@1}
         - {id: front-0, at: [42.0, 164.35], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1, casa/bdm2@1, casa/bdm2m@1, casa/csc-8x10g@1, casa/ds-8x8@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1, casa/blank-faceplate@1], default: casa/bdm@1, group: front-slots, rel-pos: 0}
         - {id: front-1, at: [42.0, 133.88], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1, casa/bdm2@1, casa/bdm2m@1, casa/csc-8x10g@1, casa/ds-8x8@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1, casa/blank-faceplate@1], default: casa/bdm@1, group: front-slots, rel-pos: 1}
         - {id: front-2, at: [42.0, 103.41], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-8x10g@1, casa/smm-2x10g@1, casa/smm-300g@1, casa/blank-faceplate@1], default: casa/smm-8x10g@1, group: front-slots, rel-pos: 2}
         - {id: front-3, at: [42.0, 72.94], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-8x10g@1, casa/smm-2x10g@1, casa/smm-300g@1, casa/blank-faceplate@1], default: casa/smm-8x10g@1, group: front-slots, rel-pos: 3}
         - {id: front-4, at: [42.0, 42.47], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1, casa/bdm2@1, casa/bdm2m@1, casa/csc-8x10g@1, casa/ds-8x8@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1, casa/blank-faceplate@1], default: casa/bdm@1, group: front-slots, rel-pos: 4}
         - {id: front-5, at: [42.0, 12.0], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1, casa/bdm2@1, casa/bdm2m@1, casa/csc-8x10g@1, casa/ds-8x8@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1, casa/blank-faceplate@1], default: casa/bdm@1, group: front-slots, rel-pos: 5}
+      placements:
+        - {id: psu-cover, ref: casa/c40g-psu-cover@1, at: [37.5, 226.7], group: furniture, rel-pos: 0}
   rear:
     size:
       w: 432.95
@@ -90,7 +148,7 @@ views:
     panel:
       decor:
         - {at: [0, 0], size: [40.0, 265.9], fill: '#8d949c'}
-        - {at: [391.5, 0], size: [41.44999999999999, 265.9], fill: '#8d949c'}
+        - {at: [386.7, 0], size: [46.25, 265.9], fill: '#8d949c'}
         - {at: [42.0, 200], size: [345.5, 60], fill: '#8d949c', pattern: grille, vent: 50}
     silkscreen:
       - {at: [4.0, 216], text: PEM 1, font-size: 6, fill: '#231f20', anchor: start}
@@ -103,12 +161,49 @@ views:
       - {at: [20, 31.0], text: '5', font-size: 11, anchor: middle, fill: '#231f20'}
     components:
       bays:
+        - {id: pem-1, at: [44.8, 196.0], size: {w: 158.0, h: 68.5}, accepts: [casa/c40g-pem@1], group: power, rel-pos: 1, default: casa/c40g-pem@1}
+        - {id: pem-2, at: [212.8, 196.0], size: {w: 158.0, h: 68.5}, accepts: [casa/c40g-pem@1], group: power, rel-pos: 2, default: casa/c40g-pem@1}
         - {id: rear-0, at: [42.0, 164.35], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/io-6p12@1, casa/blank-faceplate@1], default: casa/io-6p12@1, group: rear-slots, rel-pos: 0}
         - {id: rear-1, at: [42.0, 133.88], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/lc-sw-bdm@1, casa/blank-faceplate@1], default: casa/lc-sw-bdm@1, group: rear-slots, rel-pos: 1}
         - {id: rear-2, at: [42.0, 103.41], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-sw-bdm-a@1, casa/blank-faceplate@1], default: casa/smm-sw-bdm-a@1, group: rear-slots, rel-pos: 2}
         - {id: rear-3, at: [42.0, 72.94], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-sw-bdm-b@1, casa/blank-faceplate@1], default: casa/smm-sw-bdm-b@1, group: rear-slots, rel-pos: 3}
         - {id: rear-4, at: [42.0, 42.47], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/io-6p12-sw@1, casa/blank-faceplate@1], default: casa/io-6p12-sw@1, group: rear-slots, rel-pos: 4}
         - {id: rear-5, at: [42.0, 12.0], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/io-6p12@1, casa/blank-faceplate@1], default: casa/io-6p12@1, group: rear-slots, rel-pos: 5}
+  top:
+    size: {w: 432.95, h: 388.45}
+    panel:
+      decor:
+        - {at: [0, 0], size: [432.95, 6.0], fill: '#8f9295'}
+    components:
+      placements:
+        - {id: chassis-label, ref: casa/chassis-label@1, at: [156.5, 24.0], group: furniture, rel-pos: 1}
+  bottom:
+    size: {w: 432.95, h: 388.45}
+    panel:
+      decor:
+        - {at: [0, 382.45], size: [432.95, 6.0], fill: '#8f9295'}
+  left:
+    size: {w: 388.45, h: 265.9}
+    panel:
+      decor:
+        - {at: [0, 0], size: [6.0, 265.9], fill: '#8f9295'}
+    components:
+      placements:
+        - {id: flange-l1, ref: common/screw-head@1, at: [1.2, 34.0], group: furniture, rel-pos: 2}
+        - {id: flange-l2, ref: common/screw-head@1, at: [1.2, 110.0], group: furniture, rel-pos: 3}
+        - {id: flange-l3, ref: common/screw-head@1, at: [1.2, 186.0], group: furniture, rel-pos: 4}
+        - {id: flange-l4, ref: common/screw-head@1, at: [1.2, 228.0], group: furniture, rel-pos: 5}
+  right:
+    size: {w: 388.45, h: 265.9}
+    panel:
+      decor:
+        - {at: [382.45, 0], size: [6.0, 265.9], fill: '#8f9295'}
+    components:
+      placements:
+        - {id: flange-r1, ref: common/screw-head@1, at: [383.65, 34.0], group: furniture, rel-pos: 6}
+        - {id: flange-r2, ref: common/screw-head@1, at: [383.65, 110.0], group: furniture, rel-pos: 7}
+        - {id: flange-r3, ref: common/screw-head@1, at: [383.65, 186.0], group: furniture, rel-pos: 8}
+        - {id: flange-r4, ref: common/screw-head@1, at: [383.65, 228.0], group: furniture, rel-pos: 9}
 configurations:
   bdm-3plus1:
     description: 'BDM "3+1". Redundancy collapses to a single protecting slot: rear 1 takes the LC-BDM-SWITCH,
