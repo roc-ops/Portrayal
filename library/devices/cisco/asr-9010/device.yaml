@@ -222,6 +222,11 @@ provenance:
     and the component's own attrs.chassis carries the same list. At 41.4 mm it fits every line card
     bay in the family. Added to the line card slots only - a compatibility row names a chassis, not
     a slot, and this chassis's RSP and RP positions take supervisors
+  card-envelope-headroom: >-
+    derived - 399.96 mm of clear vertical space between the structure above this card cage and the
+    structure below it, measured off this chassis's own committed geometry. Any card envelope
+    larger than that cannot be installed regardless of what its data sheet states. Used as a check
+    on the control-card lengths, not as a source for the bays
   card-orientation: >-
     datasheet - stated directly, and it had been an inference until now. The Overview and
     Reference Guide's "Chassis Slots" section (b-asr9k-overview-reference-guide.pdf p17) names
@@ -475,6 +480,29 @@ views:
       - {id: lift-handles, label: 'Chassis lift handles - present but NOT dimensioned in any figure for this chassis'}
       - {id: cooling-path, label: 'Front-to-rear cooling path - inlet at the bottom front, exhaust at the upper rear'}
 gaps:
+- what: neighbour-constraint-excludes-the-control-card-length
+  scope: [slots]
+  reason: sources-disagree
+  note: >-
+    A THIRD LINE OF EVIDENCE ON THE ~428 mm CONTROL CARDS, derived rather than asserted, and it
+    comes from parts that have nothing to do with the question. The vertical space available to a
+    card is bounded by whatever structure sits above and below its cage, and on this chassis that
+    space measures the figure recorded in card-envelope-headroom below. A card envelope larger than
+    that cannot be installed whatever any data sheet says, because something else is already there.
+    Applied across the family:
+        ASR 9010   399.96 mm between the cable management tray and the card guide bar
+        ASR 9910   421.79 mm between the tray band and the front air intake
+        ASR 9922   420.30 mm between the tray band and the fan band
+        ASR 9912   439.21 mm - does NOT exclude 428.5, so this chassis is silent on the question
+        ASR 9906   unbounded above in the model, so no constraint is derivable
+    Three of the five independently exclude a 428.2-428.5 card. That is a separate argument from
+    the slot pitch and from the ejector arithmetic, and it agrees with both. THE 9912 DOES NOT
+    EXCLUDE IT and is recorded as silent rather than as agreement - a constraint that fails to
+    bite is not evidence either way, and reporting it as if it were would manufacture support.
+    The 9010's 399.96 also sits 3.14 mm under the 403.10 fifth-generation envelope its bays now
+    carry, which is a smaller open question of the same kind.
+  wanted: a figure dimensioning the clear vertical opening of any ASR 9000 card cage, which would
+    turn all of this from derived to measured
 - what: rsp880-length-also-exceeds-the-cage
   scope: [slots]
   reason: sources-disagree

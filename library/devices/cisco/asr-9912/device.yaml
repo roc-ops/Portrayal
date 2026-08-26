@@ -115,6 +115,25 @@ provenance:
     and the component's own attrs.chassis carries the same list. At 41.4 mm it fits every line card
     bay in the family. Added to the line card slots only - a compatibility row names a chassis, not
     a slot, and this chassis's RSP and RP positions take supervisors
+  power-shelves-derived-from-a-neighbour: >-
+    DERIVED, not measured, and the derivation is better than the estimate it replaces. The three
+    shelves were placed by eye at y 1125, 1195 and 1265 because the master draws them populated and
+    no separator rule is readable. That estimate put shelf-0 ELEVEN MILLIMETRES INSIDE the RP bay:
+    the RP/FC cage ends at 1117.36 and an RP bay carries 18.77 mm of ejector past it, so nothing
+    can begin above 1136.13.
+    That is a constraint from a part with nothing to do with power. Three shelves then fill
+    1136.13 to the chassis bottom at 1333.50 - 197.37 mm, 65.79 each - and are placed at 1136.50,
+    1202.17 and 1267.84 on a 65.67 pitch at 63.0 tall, which leaves a visible gap between them and
+    lands the last edge 0.66 mm short of the chassis bottom.
+    THE TWO DECIMAL PLACES ARE ARITHMETIC AND NOT PRECISION. The underlying inputs are a measured
+    cage edge and a published ejector allowance; nothing in any figure resolves a power shelf to a
+    hundredth of a millimetre. Read them as "three shelves evenly filling the space the RP bay
+    leaves", which is what they are
+  card-envelope-headroom: >-
+    derived - 439.21 mm of clear vertical space between the structure above this card cage and the
+    structure below it, measured off this chassis's own committed geometry. Any card envelope
+    larger than that cannot be installed regardless of what its data sheet states. Used as a check
+    on the control-card lengths, not as a source for the bays
   card-orientation: >-
     datasheet - stated directly, and it had been an inference until now. The Overview and
     Reference Guide's "Chassis Slots" section (b-asr9k-overview-reference-guide.pdf p17) names
@@ -264,9 +283,9 @@ views:
       cutouts:
         - {id: lc-cage, at: [6.36, 324.31], size: [433.88, 357.35], shape: rect}
         - {id: rpfc-cage, at: [6.36, 759.21], size: [433.88, 358.15], shape: rect}
-        - {id: shelf-0, at: [10.0, 1125.0], size: [427.0, 66.0], shape: rect}
-        - {id: shelf-1, at: [10.0, 1195.0], size: [427.0, 66.0], shape: rect}
-        - {id: shelf-2, at: [10.0, 1265.0], size: [427.0, 66.0], shape: rect}
+        - {id: shelf-0, at: [10.0, 1136.50], size: [427.0, 63.0], shape: rect}
+        - {id: shelf-1, at: [10.0, 1202.17], size: [427.0, 63.0], shape: rect}
+        - {id: shelf-2, at: [10.0, 1267.84], size: [427.0, 63.0], shape: rect}
     components:
       bays:
         - {id: slot-0, at: [3.74, 301.43], size: {w: 42.67, h: 403.10}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0}
@@ -331,6 +350,29 @@ views:
       - {id: lift-handles, label: 'Chassis lift handles - present but NOT dimensioned in any figure for this chassis'}
       - {id: cooling-path, label: 'Front-to-rear cooling path - inlet at the bottom front, exhaust at the upper rear'}
 gaps:
+- what: neighbour-constraint-excludes-the-control-card-length
+  scope: [slots]
+  reason: sources-disagree
+  note: >-
+    A THIRD LINE OF EVIDENCE ON THE ~428 mm CONTROL CARDS, derived rather than asserted, and it
+    comes from parts that have nothing to do with the question. The vertical space available to a
+    card is bounded by whatever structure sits above and below its cage, and on this chassis that
+    space measures the figure recorded in card-envelope-headroom below. A card envelope larger than
+    that cannot be installed whatever any data sheet says, because something else is already there.
+    Applied across the family:
+        ASR 9010   399.96 mm between the cable management tray and the card guide bar
+        ASR 9910   421.79 mm between the tray band and the front air intake
+        ASR 9922   420.30 mm between the tray band and the fan band
+        ASR 9912   439.21 mm - does NOT exclude 428.5, so this chassis is silent on the question
+        ASR 9906   unbounded above in the model, so no constraint is derivable
+    Three of the five independently exclude a 428.2-428.5 card. That is a separate argument from
+    the slot pitch and from the ejector arithmetic, and it agrees with both. THE 9912 DOES NOT
+    EXCLUDE IT and is recorded as silent rather than as agreement - a constraint that fails to
+    bite is not evidence either way, and reporting it as if it were would manufacture support.
+    The 9010's 399.96 also sits 3.14 mm under the 403.10 fifth-generation envelope its bays now
+    carry, which is a smaller open question of the same kind.
+  wanted: a figure dimensioning the clear vertical opening of any ASR 9000 card cage, which would
+    turn all of this from derived to measured
 - what: rsp880-length-also-exceeds-the-cage
   scope: [slots]
   reason: sources-disagree
