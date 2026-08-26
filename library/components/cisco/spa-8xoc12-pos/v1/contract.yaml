@@ -1,0 +1,346 @@
+format: 1
+kind: module
+name: spa-8xoc12-pos
+version: 1.0.0
+class: line-card
+profile: networking
+description: >-
+  Cisco 8-Port OC12/STM4 SPA, a single-height shared port adapter for the ASR 9000 SIP-700.
+  'The 8-Port OC12/STM4 SPA uses a small form-factor pluggable (SFP) optical transceiver
+  module installed in each port.' Qualified optics: SFP-OC12-MM, -SR, -IR1, -LR1, -LR2.
+  Seats in a SIP-700 SPA subslot; it is a module, not a device.
+size: {w: 17.29, h: 167.87}
+attrs:
+  model: 'SPA-8XOC12-POS'
+  role: 'shared-port-adapter'
+  form-factor: 'single-width, single-height (one SIP-700 subslot)'
+  ports: 8
+  media: 'SFP, OC-12/STM-4 POS'
+  min-ios-xr: '4.0.0'
+  min-hardware-revision: '1.0'
+  eol: 'none-announced'
+provenance:
+  size: >-
+    NO CISCO DOCUMENT IN THIS INTAKE STATES ANY SPA DIMENSION. THIS SENTENCE IS THE SAME
+    SENTENCE ON ALL 24 SPA COMPONENTS: it is ONE derivation, not 24 measurements, and the
+    next reader should count it once. Searches run before writing it: 'Physical dimensions',
+    'Physical specifications', 'dimension', 'weight', 'inches' and 'mm' across all 104 PDFs
+    of the intake rendered to text, plus the SIP and SPA Hardware Installation Guide read
+    end to end. What the guide has is Table 6, 'Cisco ASR 9000 SIP-700 Physical
+    Specifications', whose 'Physical dimensions' row reads 'Occupies one line card slot on a
+    Cisco ASR 9000 Series Aggregation Services Router' - a heading that promises coverage
+    its row does not have. The SPA data sheet, data_sheet_c78-688005 'Cisco ASR 9000 Series
+    Shared Port Adapter Support', is an ordering list: it points at a URL for specifications
+    and gives none. WHAT THE NUMBER IS: the SIP-700's own subslot band, measured off Cisco's
+    stencil master by whoever built library/components/cisco/a9k-sip-700 and recorded there
+    as bays 17.29 x 167.87 mm. That is the OPENING this SPA seats in, and this library's
+    convention (the note bay-size-vs-component-size.md under working/notes) is that a bay
+    and its occupant carry the same envelope, so the occupant takes the band. THE HALVING IS
+    A JUDGEMENT AND NOT MINE: the SIP-700's own provenance.bay-split says the divider
+    between the left and right subslots is not drawn on the master and the middle was
+    assumed. AND THE FIGURE DOES NOT AGREE WITH IT ALONG THE LONG AXIS. Scale each faceplate
+    figure so its drawn plate is 167.87 mm and two independent standard apertures come out
+    oversized: the SFP bezel opening reads 16.5 mm against SFF-8432's 14.5, and the ganged
+    RJ-45 pitch on the 8-port T1/E1 SPA reads 17.9 mm against this library's measured 13.99.
+    Scale the same figures by those apertures instead and the plate is 131 to 148 mm long -
+    but the ACROSS axis then reads 16.3 to 16.9 mm against the band's 17.29, agreeing to 3
+    per cent. So the two axes disagree about which reading is right, and nothing in the
+    intake settles it. The likeliest reconciliation is that the 167.87 band includes the
+    SPA's end brackets and captive jackscrews, which every faceplate figure draws OUTSIDE
+    the plate body, and the plate itself is nearer 145 mm - but that is a reading, not a
+    measurement, and the number carried here is the band.
+  form-factor: >-
+    install guide - THIS PARAGRAPH IS SHARED BY ALL 24 SPA COMPONENTS. The guide uses TWO
+    AXIS VOCABULARIES for one form factor and never reconciles them. The SIP-700 chapter
+    says width for the axis across the card and height for the axis along it - 'The Cisco
+    ASR 9000 SIP-700 supports a maximum of 2 single-width, double-height SPAs, 4 single-
+    width, single-height SPAs, 2 double-width, single-height SPAs' - and Figure 2's caption,
+    'the Cisco ASR 9000 SIP-700 faceplate with 2 double-width, single-height SPAs', is drawn
+    as two panels each spanning the full 34.58 mm across the card. Table 7 uses the opposite
+    naming for the same shape: 'Double height single width SPA in Subslot 0, Bay 3', against
+    a figure in which that SPA is the one spanning both levels across the card. Table 10,
+    the supported-SPA list, is in TABLE 7's vocabulary - it calls SPA-2XCHOC12/DS0 double-
+    height, and Figure 6 draws that part's plate at twice the thickness and the same length
+    as a single. So: `double-height` in Table 10 and `double-width` in the SIP-700 prose are
+    the SAME PHYSICAL THING, a plate about 34.58 mm across and the same length as a single,
+    filling two subslots SIDE BY SIDE. The attrs key here is written in the SIP-700
+    chapter's vocabulary, because that is the chapter the seating geometry comes from, and
+    the drawing is what settles the shape. FOR THIS PART the sources agree on single-height:
+    Table 10's row reads 'single-height' and the faceplate figure draws a single-height
+    plate.
+  ports: >-
+    install guide - 'The 8-Port OC12/STM4 SPA is a single-height SPA that installs into one
+    SIP subslot... On this SPA, any given port can use an OC-12 SFP module, so the per-port
+    bandwidth can be 622.08 Mbps.'. 'The 8-Port OC12/STM4 SPA uses a small form-factor
+    pluggable (SFP) optical transceiver module installed in each port.' Qualified optics:
+    SFP-OC12-MM, -SR, -IR1, -LR1, -LR2.
+  leds: >-
+    install guide - Table 15's C/A off row reads 'SONET controller is shut down' and its A/L
+    off row 'Interface is shut down' - this SPA's table words the off state differently from
+    its siblings', and the difference is kept. Lamp positions are fractions of the drawn
+    plate (see provenance.figure); lamp SIZE is the figure's own 6 x 4 px at that scale and
+    is not a Cisco dimension. The state vocabularies are transcribed from this part's own
+    LED table, named in each element's description, and NOT from a sibling's - the SPA
+    sections in this guide word the same lamp differently often enough that borrowing one
+    would be a false citation.
+  figure: >-
+    install guide - Figure 15, '8-Port OC12/STM4 SPA Faceplate'. THIS SENTENCE IS SHARED BY
+    ALL 24 SPA COMPONENTS and describes the drawings as a class. The faceplate figures are
+    RASTERS embedded in the PDF at about 570 px across, which is roughly 2.7 px/mm at the
+    plate scale used here, so no position below is better than about +/- 0.4 mm and none of
+    them is stated more precisely than the millimetre. GATE 1, on the axis it can be run on:
+    the drawn plate's thickness-to-length ratio is 0.107 against the 0.103 the SIP-700's
+    subslot band implies, agreeing to 4 per cent, and a single-height plate and a double-
+    height plate differ by the factor of two the guide's vocabulary requires - so the
+    figures are orthographic and their FRACTIONS carry geometry. They do not carry absolute
+    scale: see provenance.size. Every position on this component is therefore a fraction of
+    the drawn plate mapped onto the band, and every standard aperture is placed at its
+    measured CENTRE at the size the registry gives it rather than at the size the figure
+    draws it.
+  power: >-
+    NOT STATED. No document in this intake gives a power figure for any SPA: not the SIP and
+    SPA Hardware Installation Guide, which has no power table at all; not
+    data_sheet_c78-688005, the SPA data sheet, which is an ordering list; and not Table 35
+    of the Ethernet Line Card Installation Guide, whose rows are line cards and carriers. So
+    no power-draw key is written and lint L27 stands - that warning is the record. AND THE
+    SCOPE QUESTION IS OPEN AT THE OTHER END TOO: the SIP-700 states 375 W maximum without
+    saying whether the measurement was taken with SPAs seated or bare, so a budget cannot be
+    closed from this end either. See a9k-sip-700's provenance.power.
+  lifecycle: >-
+    searched - no end-of-life notice for SPA-8XOC12-POS is in this intake. Table 10 gives
+    this part a minimum IOS XR release of 4.0.0 and a minimum hardware revision of 1.0,
+    which is a support floor and not a lifecycle statement.
+elements:
+  led-ca-p0:
+    at: [13.54, 7.38]
+    size: [2.2, 1.4]
+    class: led
+    description: >-
+      the port's C/A (Carrier/Alarm) lamp. Table 15 of the Cisco ASR 9000 Series SIP and SPA
+      Hardware Installation Guide: off - port is not enabled by software; green on - port is
+      enabled by software, and there is a valid signal without any alarms; amber on - port
+      is enabled by software, and there is at least one alarm.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-al-p0:
+    at: [13.54, 15.83]
+    size: [2.2, 1.4]
+    class: led
+    description: >-
+      the port's A/L (Active/Loopback) lamp. Table 15 of the Cisco ASR 9000 Series SIP and
+      SPA Hardware Installation Guide: off - port is not enabled by software; green on -
+      port is enabled by software, loopback is off; amber on - port is enabled by software,
+      loopback is on.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-ca-p1:
+    at: [13.54, 26.48]
+    size: [2.2, 1.4]
+    class: led
+    description: >-
+      the port's C/A (Carrier/Alarm) lamp. Table 15 of the Cisco ASR 9000 Series SIP and SPA
+      Hardware Installation Guide: off - port is not enabled by software; green on - port is
+      enabled by software, and there is a valid signal without any alarms; amber on - port
+      is enabled by software, and there is at least one alarm.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-al-p1:
+    at: [13.54, 34.93]
+    size: [2.2, 1.4]
+    class: led
+    description: >-
+      the port's A/L (Active/Loopback) lamp. Table 15 of the Cisco ASR 9000 Series SIP and
+      SPA Hardware Installation Guide: off - port is not enabled by software; green on -
+      port is enabled by software, loopback is off; amber on - port is enabled by software,
+      loopback is on.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-ca-p2:
+    at: [13.54, 45.58]
+    size: [2.2, 1.4]
+    class: led
+    description: >-
+      the port's C/A (Carrier/Alarm) lamp. Table 15 of the Cisco ASR 9000 Series SIP and SPA
+      Hardware Installation Guide: off - port is not enabled by software; green on - port is
+      enabled by software, and there is a valid signal without any alarms; amber on - port
+      is enabled by software, and there is at least one alarm.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-al-p2:
+    at: [13.54, 54.03]
+    size: [2.2, 1.4]
+    class: led
+    description: >-
+      the port's A/L (Active/Loopback) lamp. Table 15 of the Cisco ASR 9000 Series SIP and
+      SPA Hardware Installation Guide: off - port is not enabled by software; green on -
+      port is enabled by software, loopback is off; amber on - port is enabled by software,
+      loopback is on.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-ca-p3:
+    at: [13.54, 64.68]
+    size: [2.2, 1.4]
+    class: led
+    description: >-
+      the port's C/A (Carrier/Alarm) lamp. Table 15 of the Cisco ASR 9000 Series SIP and SPA
+      Hardware Installation Guide: off - port is not enabled by software; green on - port is
+      enabled by software, and there is a valid signal without any alarms; amber on - port
+      is enabled by software, and there is at least one alarm.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-al-p3:
+    at: [13.54, 73.13]
+    size: [2.2, 1.4]
+    class: led
+    description: >-
+      the port's A/L (Active/Loopback) lamp. Table 15 of the Cisco ASR 9000 Series SIP and
+      SPA Hardware Installation Guide: off - port is not enabled by software; green on -
+      port is enabled by software, loopback is off; amber on - port is enabled by software,
+      loopback is on.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-ca-p4:
+    at: [13.54, 84.15]
+    size: [2.2, 1.4]
+    class: led
+    description: >-
+      the port's C/A (Carrier/Alarm) lamp. Table 15 of the Cisco ASR 9000 Series SIP and SPA
+      Hardware Installation Guide: off - port is not enabled by software; green on - port is
+      enabled by software, and there is a valid signal without any alarms; amber on - port
+      is enabled by software, and there is at least one alarm.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-al-p4:
+    at: [13.54, 92.6]
+    size: [2.2, 1.4]
+    class: led
+    description: >-
+      the port's A/L (Active/Loopback) lamp. Table 15 of the Cisco ASR 9000 Series SIP and
+      SPA Hardware Installation Guide: off - port is not enabled by software; green on -
+      port is enabled by software, loopback is off; amber on - port is enabled by software,
+      loopback is on.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-ca-p5:
+    at: [13.54, 102.89]
+    size: [2.2, 1.4]
+    class: led
+    description: >-
+      the port's C/A (Carrier/Alarm) lamp. Table 15 of the Cisco ASR 9000 Series SIP and SPA
+      Hardware Installation Guide: off - port is not enabled by software; green on - port is
+      enabled by software, and there is a valid signal without any alarms; amber on - port
+      is enabled by software, and there is at least one alarm.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-al-p5:
+    at: [13.54, 111.34]
+    size: [2.2, 1.4]
+    class: led
+    description: >-
+      the port's A/L (Active/Loopback) lamp. Table 15 of the Cisco ASR 9000 Series SIP and
+      SPA Hardware Installation Guide: off - port is not enabled by software; green on -
+      port is enabled by software, loopback is off; amber on - port is enabled by software,
+      loopback is on.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-ca-p6:
+    at: [13.54, 121.62]
+    size: [2.2, 1.4]
+    class: led
+    description: >-
+      the port's C/A (Carrier/Alarm) lamp. Table 15 of the Cisco ASR 9000 Series SIP and SPA
+      Hardware Installation Guide: off - port is not enabled by software; green on - port is
+      enabled by software, and there is a valid signal without any alarms; amber on - port
+      is enabled by software, and there is at least one alarm.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-al-p6:
+    at: [13.54, 130.07]
+    size: [2.2, 1.4]
+    class: led
+    description: >-
+      the port's A/L (Active/Loopback) lamp. Table 15 of the Cisco ASR 9000 Series SIP and
+      SPA Hardware Installation Guide: off - port is not enabled by software; green on -
+      port is enabled by software, loopback is off; amber on - port is enabled by software,
+      loopback is on.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-ca-p7:
+    at: [13.54, 141.09]
+    size: [2.2, 1.4]
+    class: led
+    description: >-
+      the port's C/A (Carrier/Alarm) lamp. Table 15 of the Cisco ASR 9000 Series SIP and SPA
+      Hardware Installation Guide: off - port is not enabled by software; green on - port is
+      enabled by software, and there is a valid signal without any alarms; amber on - port
+      is enabled by software, and there is at least one alarm.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-al-p7:
+    at: [13.54, 149.54]
+    size: [2.2, 1.4]
+    class: led
+    description: >-
+      the port's A/L (Active/Loopback) lamp. Table 15 of the Cisco ASR 9000 Series SIP and
+      SPA Hardware Installation Guide: off - port is not enabled by software; green on -
+      port is enabled by software, loopback is off; amber on - port is enabled by software,
+      loopback is on.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  status:
+    at: [11.96, 163.83]
+    size: [2.2, 2.2]
+    class: led
+    description: >-
+      the SPA's STATUS lamp, the one lamp every SPA in this guide carries. Table 15 of the
+      Cisco ASR 9000 Series SIP and SPA Hardware Installation Guide: off - SPA power is off;
+      green on - SPA is ready and operational; amber on - SPA power is on and good, and the
+      SPA is being configured.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+relief:
+  wall: '#4a4f55'
+parts:
+  - {ref: std/sfp@1, id: p0, at: [-0.37, 6.57], rotate: 90}
+  - {ref: std/sfp@1, id: p1, at: [-0.37, 25.67], rotate: 90}
+  - {ref: std/sfp@1, id: p2, at: [-0.37, 44.77], rotate: 90}
+  - {ref: std/sfp@1, id: p3, at: [-0.37, 63.87], rotate: 90}
+  - {ref: std/sfp@1, id: p4, at: [-0.37, 83.34], rotate: 90}
+  - {ref: std/sfp@1, id: p5, at: [-0.37, 102.08], rotate: 90}
+  - {ref: std/sfp@1, id: p6, at: [-0.37, 120.81], rotate: 90}
+  - {ref: std/sfp@1, id: p7, at: [-0.37, 140.28], rotate: 90}
+skins: [default]
