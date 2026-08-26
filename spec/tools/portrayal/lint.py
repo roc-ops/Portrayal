@@ -35,6 +35,9 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
       against the module's `insert` where it has one and `size` otherwise
   L32 any yaml: no mapping declares the same key twice - a duplicate is resolved
       by the parser before anything else sees the file, so the loss is silent
+  L35 component: a relief magnitude says where it came from, or is counted as
+      unstated - an estimate and a measurement are indistinguishable otherwise
+  L36 component: a `borrowed` magnitude names an origin that actually measured it
 """
 import argparse
 import json
@@ -770,6 +773,116 @@ def lint_component_power(path, data, _lib_roots=None):
                       "total is a floor rather than a total until it lands. Do not "
                       "estimate one - an unsourced watt figure is the same number "
                       "minus the warning")
+
+
+
+# ---------------------------------------------------------------- L35 / L36
+#
+# A relief magnitude is a number about the world and until this afternoon the
+# library had nowhere to say where it came from. `confidence` and `source` fixed
+# that; these two rules are what stop the field being only as good as each
+# author's memory.
+#
+# THE VOCABULARY, so the rule teaches it rather than merely scoring it:
+#
+#   measured        off this part's own hardware, with an instrument
+#   photo-measured  off a photograph of it
+#   drawing         off its own artwork, or a vendor figure of it
+#   datasheet       the vendor states it
+#   registry        from spec/schemas/standards.yaml
+#   borrowed        another Portrayal part's MEASURED figure for the same class of
+#                   hardware, reused because nobody publishes one for this part
+#   estimated       a plausible figure with no source
+#   known-wrong     not merely unmeasured - contradicted by something checkable
+#
+CONFIDENCE_MEASURED = ("measured", "photo-measured")
+
+
+def _feature_magnitude(feat):
+    """The one dimension a relief feature declares, as (key, value), or None.
+
+    `lift`, `knurl`, `thread` and `color` modify a feature; they are not the
+    number it is about, and asking a feature which magnitude it carries has to
+    ignore them or every stacked cyl looks like two numbers.
+    """
+    keys = [k for k in ("top", "sink", "out", "dome", "cyl", "bar", "uhandle", "vent")
+            if feat.get(k) is not None]
+    return (keys[0], float(feat[keys[0]])) if len(keys) == 1 else None
+
+
+def lint_component_relief_confidence(path, data, lib_roots):
+    """L35 (warning) and L36 (error) - where a relief magnitude came from.
+
+    L35 COUNTS THE UNMARKED rather than naming each one, which is L26's and L27's
+    shape: most of what it finds is true and was written before the field existed,
+    and a rule that prints forty lines per file gets ignored, which is the failure
+    L14 and L21 were both recalibrated for. One line per file, with the count.
+
+    Warning, not error, ON PURPOSE. An optional key that becomes mandatory
+    retroactively fails features nobody has had the chance to mark, on parts whose
+    authors are long gone from this session.
+
+    L36 IS AN ERROR, and the difference is the same line L28 draws against L27.
+    `borrowed` does not merely fail to state a source, it ASSERTS one: it says the
+    magnitude is another part's MEASURED figure, and that is the only thing it adds
+    over `estimated`. A token that asserts a fact must have the fact checked at
+    every use, and here the fact depends on nothing but files in this repository -
+    so it is checkable, and a warning-level ban is not a ban.
+
+    IT ASKS A STRUCTURAL QUESTION, NOT A STRING ONE. Not "does the origin's prose
+    contain the word measured", which measures the author's phrasing; but "does the
+    origin carry a relief feature of this same magnitude, and does THAT feature call
+    itself measured or photo-measured". That is the query the data supports.
+    Borrowing from a borrow fails, which is intended: a chain of citations has to
+    terminate in somebody holding an instrument.
+
+    This rule is written because 213 of 216 `borrowed` features in one vendor's set
+    asserted a measurement that was never taken - two of them citing origins whose
+    own provenance reads "estimated - it stands proud but was not measured". It
+    would have caught every one of them at the moment it was written.
+    """
+    feats = ((data.get("relief") or {}).get("features") or [])
+    if not feats:
+        return
+    unstated = [f["node"] for f in feats if not f.get("confidence")]
+    if unstated:
+        shown = ", ".join(unstated[:4]) + (" ..." if len(unstated) > 4 else "")
+        warn(path, "L35", f"{len(unstated)} of {len(feats)} relief feature(s) state no "
+                          f"`confidence` ({shown}). A magnitude with no source is "
+                          f"indistinguishable from a measured one. Tokens: measured, "
+                          f"photo-measured, drawing, datasheet, registry, borrowed, "
+                          f"estimated, known-wrong")
+    for f in feats:
+        if f.get("confidence") != "borrowed":
+            continue
+        node, src = f["node"], (f.get("source") or "")
+        m = re.match(r"([a-z0-9-]+/[a-z0-9-]+@\d+)", src)
+        if not m:
+            err(path, "L36", f"{node}: confidence `borrowed` but `source` does not begin "
+                             f"with the origin ref. Write it as '<ns>/<name>@<major> - why', "
+                             f"so the claim can be checked; or use `estimated`")
+            continue
+        ref = m.group(1)
+        found = resolve_component(ref, lib_roots)
+        if not found:
+            err(path, "L36", f"{node}: `borrowed` from {ref}, which does not resolve")
+            continue
+        mine = _feature_magnitude(f)
+        origin = yaml.safe_load(found.read_text()) or {}
+        ofeats = ((origin.get("relief") or {}).get("features") or [])
+        matches = [o for o in ofeats
+                   if mine and (_feature_magnitude(o) or (None, None))[1] == mine[1]]
+        if not matches:
+            err(path, "L36", f"{node}: `borrowed` from {ref}, which carries no relief "
+                             f"magnitude of {mine[1] if mine else '?'}. Either the ref is "
+                             f"wrong or the number did not come from there")
+            continue
+        if not any(o.get("confidence") in CONFIDENCE_MEASURED for o in matches):
+            got = sorted({o.get("confidence") or "unstated" for o in matches})
+            err(path, "L36", f"{node}: `borrowed` asserts {ref} MEASURED this magnitude, "
+                             f"and there it is {'/'.join(got)}. Borrowing does not create a "
+                             f"measurement - use `estimated` and say in `source` that the "
+                             f"origin did not measure it either")
 
 
 def lint_component_parts(path, data, lib_roots, depth=0, seen=None):
@@ -2043,6 +2156,7 @@ def main():
                 lint_component_mating(f, d, args.library)
                 lint_component_aperture(f, d, args.library)
                 lint_component_power(f, d)
+                lint_component_relief_confidence(f, d, args.library)
             n += 1
         for f in sorted(root.glob("devices/**/device.yaml")):
             lint_duplicate_keys(f)
