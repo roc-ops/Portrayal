@@ -23,14 +23,26 @@ provenance:
   size: shared with the rest of the C100G front-card family, taken from the chassis
     slot envelope (30.47 x 345.5, C100G device manifest); the depth is the family
     estimate carried by casa/smm-8x10g
-  positions: 'photo-measured - taken as FRACTIONS of the known 345.5 card height
-    from the DS8x96 data sheet product photograph. Figure 1-11 fails the orthographic
-    gate: its plate renders 147 x 1951 px, aspect 0.0753 against the real 0.0882,
-    so it is drawn about 15 percent narrow, and its five cards are drawn small enough
-    that the lamp dots are squeezed onto a 3.6 pitch. Scaled by the full card height
-    the photograph puts them on 8.14, and the DS8x96 and SMM300G photographs independently
-    agree with each other on the two legend bands to within 0.5mm. So the photograph
-    is used for placement and the figure for arrangement'
+  positions: 'drawing, reconciled against casa/bdm - these are the BDM''s numbers
+    to the millimetre, because the BDM and the DQM/DCU cards are ONE faceplate.
+    Figure 1-14 (the BDM) and Figure 1-11 (the DQM/DCU) put the bands, both stripe
+    groups and the lamp cluster within 0.5mm of each other, and casa/bdm was built
+    from the first of them. The DS8x96 photograph, scaled by the full card height,
+    puts the stripe groups 5.6 and 8.0mm lower; that is a three-quarter view''s
+    perspective error over a 345.5mm card rather than a real difference, and six
+    of these cards sit side by side in a C100G where a 6mm offset between two members
+    of one family would read as a modelling fault. The lamp pitch is the one place
+    the figure is the outlier: it draws the dots nearly touching on a 3.6 pitch,
+    the photograph measures 8.14, and casa/bdm''s 6.6 is carried'
+  positions-rejected: 'photo-measured - taken as FRACTIONS of the known 345.5 card
+    height from the DS8x96 data sheet product photograph. Figure 1-11 fails the
+    orthographic gate: its plate renders 147 x 1951 px, aspect 0.0753 against the
+    real 0.0882, so it is drawn about 15 percent narrow, and its five cards are
+    drawn small enough that the lamp dots are squeezed onto a 3.6 pitch. Scaled
+    by the full card height the photograph puts them on 8.14, and the DS8x96 and
+    SMM300G photographs independently agree with each other on the two legend bands
+    to within 0.5mm. So the photograph is used for placement and the figure for
+    arrangement'
   cutouts: NONE - this card has no aperture of any kind, which is the whole point
     of the split. The eight QAM or sixteen burst-receiver ports belong to the rear
     RFD/RFU I/O module, and Tables A-8 and A-9 of the install guide give those their
@@ -44,9 +56,9 @@ provenance:
     the DS8x96 data sheet prints 320W too, for a card of half the density, so the
     datasheet pair alone would have read as one number covering both densities'
 elements:
-  status: {at: [4.8, 197.7], size: [3.0, 3.0], class: led}
-  alarm: {at: [4.8, 205.8], size: [3.0, 3.0], class: led}
-  active: {at: [4.8, 214.0], size: [3.0, 3.0], class: led}
+  status: {at: [4.8, 190.9], size: [3.0, 3.0], class: led}
+  alarm: {at: [4.8, 197.5], size: [3.0, 3.0], class: led}
+  active: {at: [4.8, 204.1], size: [3.0, 3.0], class: led}
 relief:
   wall: '#4a4f55'
 skins: [default]
