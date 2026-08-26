@@ -116,6 +116,33 @@ export async function extractRelief(url) {
     return {x: x0, y: y0, w: Math.abs(pts[1].x - pts[0].x), h: Math.abs(pts[1].y - pts[0].y)};
   };
   const shared = [...svg.querySelectorAll('style, defs')].map(n => n.outerHTML).join('');
+  // HOW FAR OFF THE FACE A FEATURE STARTS, summed up the ANCESTOR CHAIN.
+  //
+  // `lift` is not always written on the node that carries the feature. A composed
+  // part gets its lift on the part's instance GROUP (render.py writes it there,
+  // because that is the thing being positioned), while the `cyl` or `dome` that
+  // has to move sits on a child of it - and `dataset` does not inherit. So an
+  // MCX jack mounted on a block standing 15.9mm proud read lift 0 and drew at
+  // the panel, underneath its own block.
+  //
+  // Sum rather than look one level up: a part on a raised block on a raised
+  // bezel is a real shape, and the third case arrives the day after the second
+  // is special-cased.
+  //
+  // THIS IS THE SECOND BUG OF EXACTLY THIS SHAPE IN ONE AFTERNOON, and the
+  // pattern is worth naming because there will be a third. This module decides
+  // what exists in 3D by QUERYING THE DOM FOR ATTRIBUTES, so every query is a
+  // chance to miss data that is correctly present. The other case was the FRU
+  // class list below, which asked for psu/fan/tab and so could not see the
+  // twelve parts that spell the same classes `power` and `cooling`. In both,
+  // the manifest was right, the compiled SVG was right, and the extractor threw
+  // the answer away - which looks exactly like a modelling gap and is not one.
+  // When something declared does not appear in 3D, suspect the selector first.
+  const liftOf = el => {
+    let z = 0;
+    for (let n = el; n && n !== svg; n = n.parentElement) z += +(n.dataset.zLift || 0);
+    return z;
+  };
   // owning FRU (bay module / pull tab) of a node, for animated removal
   const ownerOf = el => {
     const a = el.closest('[data-path]');
@@ -129,7 +156,8 @@ export async function extractRelief(url) {
     clone.removeAttribute('transform');   // the CTM below already includes it
     // raised descendants (collars, handles) render as their own geometry -
     // keep them out of cavity floors and plate textures
-    for (const r of clone.querySelectorAll('[data-z-out],[data-z-cyl],[data-z-bar],[data-z-uhandle]'))
+    for (const r of clone.querySelectorAll(
+        '[data-z-out],[data-z-cyl],[data-z-bar],[data-z-uhandle],[data-z-dome][data-z-lift]'))
       r.style.display = 'none';
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${rect.w} ${rect.h}"` +
       ` width="${rect.w}mm" height="${rect.h}mm">${shared}` +
@@ -150,7 +178,7 @@ export async function extractRelief(url) {
         color: f.dataset.zColor || '#0a0c0e',
       }));
       return {...rect, owner: ownerOf(el), d: +el.dataset.depth, wall: el.dataset.wall || '#a7adb4',
-              lift: +(el.dataset.zLift || 0),
+              lift: liftOf(el),
               round: !!el.dataset.round, cavSvg: nodeSvg(cavNode || el, rect),
               grpRect, grpSvg: nodeSvg(el, grpRect), features};
     });
@@ -167,7 +195,7 @@ export async function extractRelief(url) {
             cyl: el.dataset.zCyl && +el.dataset.zCyl,
             bar: el.dataset.zBar && +el.dataset.zBar,
             uhandle: el.dataset.zUhandle && +el.dataset.zUhandle,
-            lift: +(el.dataset.zLift || 0),
+            lift: liftOf(el),
             knurl: !!el.dataset.zKnurl,
             thread: el.dataset.zThread && +el.dataset.zThread,
             color: el.dataset.zColor || null,
@@ -175,7 +203,9 @@ export async function extractRelief(url) {
   });
   const domes = [...svg.querySelectorAll('[data-z-dome]')].map(el => {
     const rect = mmRect(el);
-    return {...rect, owner: ownerOf(el), dome: +el.dataset.zDome, svgText: nodeSvg(el, rect)};
+    // a lamp on a raised indicator bezel domes from THAT surface, not the panel
+    return {...rect, owner: ownerOf(el), dome: +el.dataset.zDome, lift: liftOf(el),
+            svgText: nodeSvg(el, rect)};
   });
   const vents = [...svg.querySelectorAll('[data-vent],[data-z-vent]')].map(el => {
     const rect = mmRect(el);
@@ -378,7 +408,7 @@ export async function buildFaceRelief(F, ctx) {
       const m = new THREE.Mesh(geo, new THREE.MeshLambertMaterial(
         {map: canvasTex(dcv), transparent: true, alphaTest: 0.1, alphaToCoverage: true}));
       m.scale.set(dm.w, dm.h, dm.dome + 0.15);
-      m.position.set(LX(dm.x, dm.w), LY(dm.y, dm.h), -0.15);
+      m.position.set(LX(dm.x, dm.w), LY(dm.y, dm.h), (dm.lift || 0) - 0.15);
       addTo(m);
     }
     for (const o of outs) {   // protrusions: bezel plates, handles, studs, tubes

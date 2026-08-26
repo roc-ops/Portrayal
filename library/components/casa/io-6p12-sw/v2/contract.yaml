@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: io-6p12-sw
-version: 2.2.0
+version: 2.3.0
 class: line-card
 profile: networking
 description: >-
@@ -91,43 +91,97 @@ provenance:
     Clearance is not close even here, where the pitch is tightest of the two
     cards - 16.72 between U jacks and 11.2 between the columns against a 4.95
     aperture. Nothing had to be compressed.
-  rf-block-3d: 'THE RAISED RF SECTION WAS DRAWING AS A BLANK PLATE OVER THE PORTS,
-    which is the "switch I/O card with no ports in it" the owner reported, and it was
-    two separate defects.
-    FIRST, `rf-block` was a BARE RECT. relief.features textures a raised solid from ITS
-    OWN node''s art, so a 27.27 x 202.02 rect at fill-opacity 0.18 extruded 15.9 mm
-    produced exactly what it says: a blank translucent slab. It is now a GROUP holding
-    that rect and the eighteen U0-U11 / D0-D5 legends, so the block face carries its own
-    printing. This is the "put `out` on a group holding the part and all its detail,
-    never on a bare rect" rule, and it had been missed here.
-    SECOND, the eighteen MCX jacks are COMPOSED parts and composed parts are siblings of
-    the block, not children of it - so with the block 15.9 mm proud they were left lying
-    on the faceplate underneath it. Each part now declares `lift: 15.9`, which is the
-    correct statement: the jacks are mounted ON the raised section, so their faces sit at
-    the block face and their barrels stand 2.0 further out from there.
-    THAT LIFT IS NOT HONOURED BY THE 3D VIEWER TODAY, and saying so is the point of this
-    entry. render.py writes it as data-z-lift on the composed part''s instance GROUP,
-    and library/demo2/relief.js reads data-z-lift off the FEATURE element itself when it
-    collects outs (a dataset is not inherited), so a lift on the parent group reaches
-    cavity parts and not protruding ones - and std/mcx@1 is a protruding `cyl`, not a
-    cavity. Until the extractor walks up for an ancestor lift, the barrels will still
-    draw at the panel. The DATA is right; one renderer line is not. Reported.'
-  standoff-vs-block: 'AN UNRESOLVED CONTRADICTION IN THIS FILE, recorded rather than
-    reconciled. The `comb` entry has Jason measuring the brass standoffs about 3/8in
-    (9.5 mm) proud of the FACEPLATE; the `shape` entry has him measuring the RF section
-    about 5/8in (15.9 mm) proud of the same faceplate. Both readings are off one C40G
-    rear photograph and both are carried here. On this card all three standoffs sit
-    INSIDE the block''s footprint, so at 9.5 against 15.9 they are buried in it - a
-    standoff 6 mm shorter than the thing it passes through cannot carry a comb.
-    Something has to give and it is not obvious which: "ahead of the comb" in the shape
-    entry can mean the block stands further out than the comb, or that it sits between
-    the faceplate and the comb, and the two readings may also have been taken on
-    DIFFERENT CARDS - the same photo has plain 6+12 cards in slots 0 and 5, which have
-    no RF block at all, and the standoff reading would be right on those.
-    NOTHING IS CHANGED. Deriving out 25.4 (block face plus the measured 9.5) would be
-    arithmetic dressed as a measurement, and it would silence the only check that can
-    see the problem. WHAT WOULD SETTLE IT: one question to Jason - on the SW card, does
-    the comb stand in front of the RF block or behind it - or one side-on photograph.'
+  rf-block-3d: 'CORRECTED, AND THE CORRECTION REVERSES PART OF THE FIRST PASS. Read
+    this before touching the RF section again.
+    WHAT WAS FIXED AND STAYS FIXED: `rf-block` was a BARE RECT. A raised solid is
+    textured from ITS OWN node''s art, so a 27.27 x 202.02 rect at fill-opacity 0.18
+    extruded as a blank translucent slab standing over everything - the "switch I/O
+    card with no ports in it". It is now a GROUP holding that rect and the eighteen
+    U0-U11 / D0-D5 legends, which is right whether or not it is ever raised.
+    WHAT WAS UNDONE: the `out: 15.9` on that group and the `lift: 15.9` on the
+    eighteen composed jacks. Both are gone. THREE INDEPENDENT STRANDS point away from
+    a raised RF section on this card and none of them existed when the 15.9 was
+    written:
+    (1) THE OWNER, LOOKING AT THE HARDWARE: "on some of the 6 plus 12 I/O cards the
+        MCX connector is RECESSED INTO the faceplate, so it actually doesn''t stick
+        out from the faceplate ... whereas the US I/O and the DS I/Os have the F
+        fitting STICKING OUT". Jacks mounted on a section standing 15.9 proud would
+        stick out further than anything else on the card, which is the opposite.
+    (2) THE FIGURE DRAWS THE SAME OUTLINE ON THE PLAIN CARD. Figure 1-15, "Casa 6+12
+        IO modules", and Figure 1-16, "Casa 6+12 Switch I/O modules", are the same
+        artwork in this respect: both enclose the port field in one light rectangle
+        with three hex standoffs inside it, and both put a notched cable retention
+        bracket beside it. So the rectangle is not what distinguishes the switch card.
+        casa/ups-32x4 reads the IDENTICAL artwork as "the footprint the cable
+        retention plate seats against ... drawn as a silkscreen outline, not as
+        relief, because nothing states its depth" - and that call was made
+        independently, before this one, on a different card.
+    (3) THE STANDOFF ARITHMETIC. The owner has since confirmed the topology -
+        FACEPLATE, then RF section, then COMB, with the standoffs "raising the comb up
+        above the faceplate" - so a standoff must clear everything under it. At 9.5
+        it cannot clear a 15.9 block. That contradiction only exists if the block is
+        raised, and it disappears when it is not, which is evidence rather than
+        convenience.
+    WHAT IS NOT CLAIMED: that Jason''s 5/8in reading is wrong. It is a photograph of
+    real hardware and it stays recorded in `shape` above, untouched. Something on this
+    card stands proud; what is now in doubt is whether it is the port field. THIS IS
+    A SUSPENDED MEASUREMENT, NOT A WITHDRAWN ONE.
+    THE RECESS CANNOT BE MODELLED AT ALL TODAY, and that is the real gap. Portrayal
+    has no way to say "this REGION of a module''s face is a pocket": `sink` is the
+    right word and exists in the schema, but the extractor only reads it inside a
+    node that already carries data-depth, and `relief.cavity` on a module would turn
+    the whole 380 mm card into a cavity. So the port field is flat - which is wrong,
+    but it is wrong by the same amount the plain card is, instead of wrong in the
+    opposite direction by 15.9. WANTED: a way to declare a face pocket, and then the
+    pocket depth, which no figure or document gives.'
+  mcx-is-recessed: 'THE OWNER, AGAINST THE HARDWARE: "the MCX connector is RECESSED
+    INTO the faceplate, so it actually doesn''t stick out from the faceplate, it''s
+    recessed from the faceplate ... whereas the US I/O and the DS I/Os have the F
+    fitting STICKING OUT of the faceplate." Recorded here in his terms so it does not
+    have to be rediscovered, and it is a fact about the WORLD, not about a drawing.
+    THE FIGURES AGREE, INDEPENDENTLY. Figure 1-12, "RF IO upstream and downstream
+    modules", draws all three rear I/O cards side by side and gives the two connector
+    families completely different treatments: on QAM IO and US IO each F port is a HEX
+    NUT with concentric rings and a shadow - a connector body standing off the plate -
+    while on UPS IO 32 each MCX port is a small flat dark circle with no hex and no
+    body at all. Figures 1-15 and 1-16 draw the 6+12 cards'' MCX the same flat way.
+    That is a second source, and it was read after the owner spoke rather than before,
+    so it is confirmation and not the thing that suggested it.
+    THIS CONTRACT CANNOT ACT ON IT YET. The aperture is composed from std/mcx@1, whose
+    relief is {node: barrel, cyl: 2.0} - a PROTRUSION, sourced from the Radiall
+    R113.553.000 side elevation, which is a FRONT-MOUNT bulkhead jack whose flange
+    genuinely does sit on the front of its panel. That part is not wrong about the
+    Radiall connector; it is the wrong VARIANT for every card that uses it, and all
+    five of its users are Casa. Reported to the team lead rather than edited, because
+    it is a std/ part and because the registry note in spec/schemas/standards.yaml
+    says the same thing ("a hole through sheet metal with the barrel standing proud of
+    it"), so the two would have to move together.
+    NO DEPTH IS GUESSED. The owner gave a topology, not a dimension, and nothing in
+    either guide gives a recess depth. WANTED: how far below the faceplate the MCX
+    interface sits - one caliper reading, or a side-on photograph of a 6+12 card.'
+  standoff-vs-block: 'THE SWITCH CARD''S STANDOFF HEIGHT WAS NEVER MEASURED, and 9.5
+    is carried here without confirmation. This entry supersedes the unresolved
+    contradiction the first pass recorded; the owner has since answered the question
+    that was put to him.
+    WHAT HE SETTLED - the topology: "the comb stands in front of the RF block. So it''s
+    away from the card ... That''s what the standoffs do is they raise the comb up
+    above the faceplate and help hold the cables." So the order outward from the card
+    is FACEPLATE, RF SECTION, COMB, with the comb furthest out. That is now a sourced
+    fact and should not have to be asked again.
+    WHAT HE DID NOT SETTLE - the 9.5. The `comb` entry above has him measuring the
+    brass standoffs about 3/8in proud of the faceplate off ONE C40G rear photograph,
+    and that same photograph contains PLAIN 6+12 CARDS IN SLOTS 0 AND 5 WITH NO RF
+    SECTION AT ALL. On one of those, 9.5 is entirely sensible - there is nothing to
+    clear. So the most likely reading is that 9.5 is a correct measurement OF A
+    DIFFERENT CARD and this card''s standoff was never measured. That is a materially
+    different state from "9.5 is wrong", and it is why the number is left alone rather
+    than replaced: 15.9-plus-a-bit would be arithmetic dressed as a measurement.
+    AND IF THE RF SECTION DOES STAND 15.9 PROUD, THE STANDOFF MUST EXCEED IT. That
+    constraint is recorded even though this contract no longer raises the section (see
+    rf-block-3d for why), because it is the check that will catch the error if the
+    section turns out to be raised after all.
+    WANTED: a photograph of a SWITCH I/O card with a rule in frame, or a Casa
+    mechanical drawing. One reading closes both this and the 15.9.'
   relief: 'the C100G/C40G card family treatment - two captive screws (cyl 1.6), the
     ejector latch strip (out 4.2). THE FULL ARGUMENT IS IN casa/bdm@1 AND THIS IS A
     POINTER TO IT, not a second reading: the three magnitudes are one estimate per kind of
@@ -150,27 +204,28 @@ relief:
     - {node: standoff-t, out: 9.5, color: '#b08d57'}
     - {node: standoff-m, out: 9.5, color: '#b08d57'}
     - {node: standoff-b, out: 9.5, color: '#b08d57'}
-    # the RF section stands proud of the faceplate, which the plain card does not
-    - {node: rf-block, out: 15.9, color: '#9aa0a6'}
+    # NOTE: rf-block carries NO relief. It was raised 15.9 out and that has been
+    # reversed - see provenance/rf-block-3d. It stays a GROUP so that if it is ever
+    # raised again it carries its own port legends instead of extruding blank.
 parts:
-  - {ref: std/mcx@1, id: u0, at: [6.135, 64.635], lift: 15.9}
-  - {ref: std/mcx@1, id: u1, at: [6.135, 81.365], lift: 15.9}
-  - {ref: std/mcx@1, id: u2, at: [6.135, 98.095], lift: 15.9}
-  - {ref: std/mcx@1, id: u3, at: [6.135, 114.825], lift: 15.9}
-  - {ref: std/mcx@1, id: u4, at: [6.135, 131.555], lift: 15.9}
-  - {ref: std/mcx@1, id: u5, at: [6.135, 148.285], lift: 15.9}
-  - {ref: std/mcx@1, id: u6, at: [6.135, 165.015], lift: 15.9}
-  - {ref: std/mcx@1, id: u7, at: [6.135, 181.735], lift: 15.9}
-  - {ref: std/mcx@1, id: u8, at: [6.135, 198.465], lift: 15.9}
-  - {ref: std/mcx@1, id: u9, at: [6.135, 215.195], lift: 15.9}
-  - {ref: std/mcx@1, id: u10, at: [6.135, 231.925], lift: 15.9}
-  - {ref: std/mcx@1, id: u11, at: [6.135, 248.655], lift: 15.9}
-  - {ref: std/mcx@1, id: d0, at: [17.395, 61.705], lift: 15.9}
-  - {ref: std/mcx@1, id: d1, at: [17.395, 94.065], lift: 15.9}
-  - {ref: std/mcx@1, id: d2, at: [17.395, 126.415], lift: 15.9}
-  - {ref: std/mcx@1, id: d3, at: [17.395, 158.775], lift: 15.9}
-  - {ref: std/mcx@1, id: d4, at: [17.395, 191.125], lift: 15.9}
-  - {ref: std/mcx@1, id: d5, at: [17.395, 223.485], lift: 15.9}
+  - {ref: std/mcx@1, id: u0, at: [6.135, 64.635]}
+  - {ref: std/mcx@1, id: u1, at: [6.135, 81.365]}
+  - {ref: std/mcx@1, id: u2, at: [6.135, 98.095]}
+  - {ref: std/mcx@1, id: u3, at: [6.135, 114.825]}
+  - {ref: std/mcx@1, id: u4, at: [6.135, 131.555]}
+  - {ref: std/mcx@1, id: u5, at: [6.135, 148.285]}
+  - {ref: std/mcx@1, id: u6, at: [6.135, 165.015]}
+  - {ref: std/mcx@1, id: u7, at: [6.135, 181.735]}
+  - {ref: std/mcx@1, id: u8, at: [6.135, 198.465]}
+  - {ref: std/mcx@1, id: u9, at: [6.135, 215.195]}
+  - {ref: std/mcx@1, id: u10, at: [6.135, 231.925]}
+  - {ref: std/mcx@1, id: u11, at: [6.135, 248.655]}
+  - {ref: std/mcx@1, id: d0, at: [17.395, 61.705]}
+  - {ref: std/mcx@1, id: d1, at: [17.395, 94.065]}
+  - {ref: std/mcx@1, id: d2, at: [17.395, 126.415]}
+  - {ref: std/mcx@1, id: d3, at: [17.395, 158.775]}
+  - {ref: std/mcx@1, id: d4, at: [17.395, 191.125]}
+  - {ref: std/mcx@1, id: d5, at: [17.395, 223.485]}
 connection-points:
   mate: {at: [15.23, 172.75], direction: rear}
 skins: [default]

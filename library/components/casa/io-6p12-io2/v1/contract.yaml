@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: io-6p12-io2
-version: 1.1.0
+version: 1.2.0
 class: line-card
 profile: networking
 description: >-
@@ -66,6 +66,32 @@ provenance:
     thick. The comb is notched per port and carries the U0-U11 / D0-D5 silkscreen,
     and the labels appear on BOTH the card face and the comb - the comb
     repeats them where the cable actually lands rather than replacing them
+  mcx-is-recessed: 'THE OWNER, AGAINST THE HARDWARE: "the MCX connector is RECESSED
+    INTO the faceplate, so it actually doesn''t stick out from the faceplate, it''s
+    recessed from the faceplate ... whereas the US I/O and the DS I/Os have the F
+    fitting STICKING OUT of the faceplate." So the two connector families on these
+    chassis go OPPOSITE WAYS - MCX recessed, F-type proud - and that is a fact about
+    the world, recorded in his terms so it does not have to be rediscovered.
+    THIS SENTENCE IS COPIED FROM casa/io-6p12-sw@2, where it was written first. One
+    statement from one person about one pair of connector families, restated on every
+    card it applies to - not several observations that agreed.
+    THE FIGURES AGREE, INDEPENDENTLY AND AFTERWARDS. Figure 1-12 (C100G), "RF IO
+    upstream and downstream modules", draws the three rear I/O cards side by side and
+    treats the families completely differently: every F port on QAM IO and US IO is a
+    HEX NUT with concentric rings and a shadow, a connector body standing off the
+    plate, while every MCX port on UPS IO 32 is a small flat dark circle with no hex
+    and no body. Figures 1-15 and 1-16 draw the 6+12 cards'' MCX the same flat way.
+    NOTHING IS CHANGED HERE YET, and the reason is not indecision. The aperture is
+    composed from std/mcx@1, whose relief is {node: barrel, cyl: 2.0} - a PROTRUSION
+    read off the Radiall R113.553.000 side elevation, which is a FRONT-MOUNT bulkhead
+    jack whose flange does sit on the front of its panel. std/mcx@1 is not wrong about
+    that connector; it is the wrong VARIANT for every card that composes it, and all
+    five of its users are Casa. It is a std/ part and the registry note in
+    spec/schemas/standards.yaml says the same thing, so the two have to move together
+    and the decision is not this contract''s to take. Reported to the team lead.
+    NO DEPTH IS GUESSED: the owner gave a topology, not a dimension, and no Casa
+    document gives a recess depth. WANTED: how far below the faceplate the MCX
+    interface sits - one caliper reading or one side-on photograph.'
   relief: 'the C100G/C40G card family treatment - two captive screws (cyl 1.6), the
     ejector latch strip (out 4.2). THE FULL ARGUMENT IS IN casa/bdm@1 AND THIS IS A
     POINTER TO IT, not a second reading: the three magnitudes are one estimate per kind of

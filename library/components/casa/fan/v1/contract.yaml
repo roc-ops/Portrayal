@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fan
-version: 1.4.0
+version: 1.5.0
 class: cooling
 profile: networking
 description: >-
@@ -67,14 +67,16 @@ provenance:
     handle rect''s own drawn height, so the tube is as thick as the handle is drawn.
     Whether it stands 9 mm proud or 20 is unknown - a pull handle must clear enough
     for fingers, and 9.0 is the floor rather than a reading.
+    THE INDICATOR BEZEL IS NOW RAISED, and the history is worth keeping. It was left
+    FLAT in the first pass - deliberately, and recorded as such - because `dome`
+    carried no `lift` in the relief extractor, so raising the bezel 1.5 would have
+    buried the three lamps it holds at z 0 inside it, and the lamps are this module''s
+    state display. That extractor gap has since been fixed (library/demo2/relief.js now
+    sums data-z-lift up the ancestor chain and domes honour it), so the reason no longer
+    applies and the panel is raised with the button and lamps lifted onto its face. A
+    part that was deliberately wrong for a reason that has gone away must not quietly
+    stay wrong. The 1.5 is the bolted-plate estimate, edgecore/agr-ground-plate@1''s.
     NOT RAISED, on purpose and not by oversight:
-    - `panel`, the indicator bezel. It IS drawn as a plate over the grid in both
-      figures and it should be raised. It is not, because `dome` carries no `lift`
-      in the relief extractor (library/demo2/relief.js reads data-z-lift for cavities
-      and for out/cyl/bar/uhandle, not for domes), so raising the bezel by 1.5 would
-      bury the three lamps it holds at z 0 inside it. The lamps are this module''s
-      state display and they win. If dome ever takes lift, add {node: panel, out: 1.5}
-      and lift the button and lamps onto it.
     - `latch-slots`. Figure 1-4 draws them black like the punched cells and Figure
       7-11 draws them as grey tabs, so it is not resolved whether they are openings
       in the metal or the spring latch standing in them. Two figures disagreeing about
@@ -105,12 +107,14 @@ relief:
     # `bar` at 9.0 is the node's OWN drawn short axis - a tube as thick as the
     # handle is drawn, which is the one diameter that is not a new number.
     - {node: handle, bar: 9.0}
-    # Hot-swap pushbutton and the three lamps. See provenance/relief for why the
-    # indicator panel around them is deliberately NOT raised.
-    - {node: hs-button, cyl: 1.2}
-    - {node: hs, dome: 0.3}
-    - {node: alarm, dome: 0.3}
-    - {node: ok, dome: 0.3}
+    # The indicator bezel is a plate sitting ON the perforation grid - Figures 1-4
+    # and 7-11 both draw it that way - so it is raised, and the button and the
+    # three lamps it holds are lifted onto its face rather than left at the panel.
+    - {node: panel, out: 1.5}
+    - {node: hs-button, cyl: 1.2, lift: 1.5}
+    - {node: hs, dome: 0.3, lift: 1.5}
+    - {node: alarm, dome: 0.3, lift: 1.5}
+    - {node: ok, dome: 0.3, lift: 1.5}
 body:
   depth: 150.0
   color: '#8d949c'
