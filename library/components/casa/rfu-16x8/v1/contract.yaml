@@ -1,0 +1,65 @@
+format: 1
+kind: module
+name: rfu-16x8
+version: 1.0.0
+class: line-card
+profile: networking
+description: >-
+  Casa RF Upstream I/O module (RFU), 16x8 variant - the rear half of a DCU
+  position, carrying sixteen upstream F-type ports at eight channels each for a
+  US 16x8 or US 16x4 line card in the paired front slot. Silkscreened US IO. The
+  UPS 32x4 I/O module is the other RFU and is a different card, not a skin of this
+  one: it swaps all sixteen F ports for thirty-two MCX.
+size: {w: 30.47, h: 345.5, d: 380.0}
+attrs: {model: 'US IO', role: upstream, media: coax, connector: f-type, rf-ports: '16', channels-per-port: '8', pairs-with: casa/us-16x8}
+provenance:
+  size: ESTIMATED, and shared with the whole C100G/C40G rear-slot family. Figure
+    1-12 is schematic - it draws these three cards 309, 295 and 288 px wide for
+    one physical card, and the guide's chassis aspect is 0.936 against a
+    specified 0.844 - so nothing absolute is taken from it. The envelope is the
+    rear-slot bay in the C100G device manifest, 30.47 x 345.5, and the depth is
+    the family estimate carried by casa/io-6p12
+  layout: drawing - Figure 1-12 of the Casa C100G Hardware Installation Guide
+    (rev 07/08/2022), "RF IO upstream and downstream modules", which draws all
+    three rear I/O cards side by side. Port COUNT, port ORDER and the column
+    arrangement are read straight off it and are reliable; positions are taken
+    as fractions of the drawn plate, measured by colour detection at 600 dpi
+  furniture: drawing - the same figure. Two captive screws on the card
+    centreline, the orange band(s) and the legend below them, and the latch
+    strip on the RIGHT of the plate. Note that casa/io-6p12 draws its latch
+    strip on the LEFT while both Figure 1-12 and Figure 1-15 put it on the
+    right; these cards follow the figures
+  ports: drawing - Table A-9 of the same guide, headed "RFU specifications",
+    gives "16 ports x 8 channels per port using UPS 16x8 I/O module" and a
+    connector row reading "F-type, 75 ohm, SCTE compliant" with a maximum torque
+    of 20 inch-pounds. The aperture is the registry's
+    `f-type` key; Casa states the connector type and no dimension
+  positions: drawing - one column at 0.566 of the plate width, sixteen ports on
+    a uniform 16.77 mm pitch from 52.99. The drawn per-port spacing wanders
+    between 16.1 and 17.4 mm, which is more than the ports could really vary, so
+    a uniform pitch is fitted across the sixteen rather than each gap copied
+  power: NO FIGURE. See the RFD note - Table A-9 gives ports and connector only,
+    and Table A-4's US16x8 figures (200 W with this I/O, 220 W with the UPS 32x4
+    I/O) are the PAIR's. L27 stands
+relief:
+  wall: '#4a4f55'
+parts:
+  - {ref: std/f-type@1, id: p0, at: [12.39, 49.04]}
+  - {ref: std/f-type@1, id: p1, at: [12.39, 65.81]}
+  - {ref: std/f-type@1, id: p2, at: [12.39, 82.58]}
+  - {ref: std/f-type@1, id: p3, at: [12.39, 99.35]}
+  - {ref: std/f-type@1, id: p4, at: [12.39, 116.12]}
+  - {ref: std/f-type@1, id: p5, at: [12.39, 132.89]}
+  - {ref: std/f-type@1, id: p6, at: [12.39, 149.66]}
+  - {ref: std/f-type@1, id: p7, at: [12.39, 166.43]}
+  - {ref: std/f-type@1, id: p8, at: [12.39, 183.2]}
+  - {ref: std/f-type@1, id: p9, at: [12.39, 199.97]}
+  - {ref: std/f-type@1, id: p10, at: [12.39, 216.74]}
+  - {ref: std/f-type@1, id: p11, at: [12.39, 233.51]}
+  - {ref: std/f-type@1, id: p12, at: [12.39, 250.28]}
+  - {ref: std/f-type@1, id: p13, at: [12.39, 267.05]}
+  - {ref: std/f-type@1, id: p14, at: [12.39, 283.82]}
+  - {ref: std/f-type@1, id: p15, at: [12.39, 300.59]}
+connection-points:
+  mate: {at: [15.23, 172.75], direction: rear}
+skins: [default]

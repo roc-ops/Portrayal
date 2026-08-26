@@ -1,0 +1,104 @@
+format: 1
+kind: module
+name: ups-32x4
+version: 1.0.0
+class: line-card
+profile: networking
+description: >-
+  Casa UPS 32x4 I/O module - the high-density RFU, and the only Casa rear I/O card
+  that lands its upstream RF on MCX instead of F. Thirty-two ports at four
+  channels each, in two staggered columns, for a US 16x8 line card in the paired
+  front slot; it is not supported behind a US 16x4. Silkscreened UPS IO 32.
+size: {w: 30.47, h: 345.5, d: 380.0}
+attrs: {model: 'UPS IO 32', role: upstream, media: coax, connector: mcx, rf-ports: '32', channels-per-port: '4', pairs-with: casa/us-16x8}
+provenance:
+  size: ESTIMATED, and shared with the whole C100G/C40G rear-slot family. Figure
+    1-12 is schematic - it draws these three cards 309, 295 and 288 px wide for
+    one physical card, and the guide's chassis aspect is 0.936 against a
+    specified 0.844 - so nothing absolute is taken from it. The envelope is the
+    rear-slot bay in the C100G device manifest, 30.47 x 345.5, and the depth is
+    the family estimate carried by casa/io-6p12
+  layout: drawing - Figure 1-12 of the Casa C100G Hardware Installation Guide
+    (rev 07/08/2022), "RF IO upstream and downstream modules", which draws all
+    three rear I/O cards side by side. Port COUNT, port ORDER and the column
+    arrangement are read straight off it and are reliable; positions are taken
+    as fractions of the drawn plate, measured by colour detection at 600 dpi
+  furniture: drawing - the same figure. Two captive screws on the card
+    centreline, the orange band(s) and the legend below them, and the latch
+    strip on the RIGHT of the plate. Note that casa/io-6p12 draws its latch
+    strip on the LEFT while both Figure 1-12 and Figure 1-15 put it on the
+    right; these cards follow the figures
+  ports: drawing - Table A-9 of the same guide, headed "RFU specifications",
+    gives "32 ports x 4 channels per port using UPS 32x4 I/O module" and a
+    connector row reading, for that module, "MCX (micro coaxial), 50 ohm,
+    European CECC 22220". Casa naming CECC 22220 is the
+    same specification the registry's `mcx` key cites, so the aperture composed
+    here is the one Casa points at. Note the impedance - this card is 50-ohm MCX
+    where the BDM's 6+12 I/O is 75-ohm MCX (Table A-10) - one mechanical
+    interface, two impedances, which is why the panel hole is shared and the
+    media attr is not
+  numbering: drawing - the RIGHT column is even (0, 2 ... 30) and the LEFT column
+    odd (1, 3 ... 31), with both numbers printed BELOW their row. Read at 4x
+    from the 600 dpi render; at page scale the pair reads as one number
+  positions: drawing - two columns at 0.183 and 0.645 of the plate width,
+    sixteen rows on a uniform 17.69 mm pitch from 43.29. The drawn row spacing
+    varies from 16.0 to 19.8 mm, so a uniform pitch is fitted rather than each
+    gap copied. The column pair's midline sits 2.6 mm left of the plate centre,
+    which is where casa/io-6p12's two columns sit too (12.42 against 12.61) -
+    two cards measured off two different figures agreeing to 0.2 mm is what
+    makes the offset real rather than jitter
+  thumbscrews: drawing - three hexagonal captive thumb-screw studs on the column
+    midline, at the mid-point of the row pairs (0,1), (14,15) and (28,29). The
+    installation procedure names them - "attach the UPS 32x4 cable retention
+    plate using the three captive thumb screws at the front of the plate". How
+    far they stand proud is NOT stated and is not modelled - casa/io-6p12's
+    brass standoffs were measured at 9.5 mm on a photograph, but that is a
+    different card and copying the number would be inventing one
+  rf-field: drawing - the figure outlines the port field with a light rectangle,
+    which is the footprint the cable retention plate seats against. Drawn as a
+    silkscreen outline, not as relief, because nothing states its depth
+  power: NO FIGURE. Table A-9 gives ports and connector only. Table A-4 gives
+    the row "Single DCU w/ RFU UPS 32x4 I/O" as 220 W for the US16x8 - that is the
+    PAIR's figure and casa/us-16x8 already carries it with
+    `power-draw-scope` of module-with-paired-io. Deriving this card's share by
+    subtracting the 200 W RFU figure from the 220 W UPS 32x4 figure would be OUR
+    arithmetic, not Casa's, and would also be wrong - the two numbers differ by
+    the whole pairing, not by one card. L27 stands
+relief:
+  wall: '#4a4f55'
+parts:
+  - {ref: std/mcx@1, id: p0, at: [17.177, 40.815]}
+  - {ref: std/mcx@1, id: p1, at: [3.093, 40.815]}
+  - {ref: std/mcx@1, id: p2, at: [17.177, 58.504]}
+  - {ref: std/mcx@1, id: p3, at: [3.093, 58.504]}
+  - {ref: std/mcx@1, id: p4, at: [17.177, 76.193]}
+  - {ref: std/mcx@1, id: p5, at: [3.093, 76.193]}
+  - {ref: std/mcx@1, id: p6, at: [17.177, 93.882]}
+  - {ref: std/mcx@1, id: p7, at: [3.093, 93.882]}
+  - {ref: std/mcx@1, id: p8, at: [17.177, 111.571]}
+  - {ref: std/mcx@1, id: p9, at: [3.093, 111.571]}
+  - {ref: std/mcx@1, id: p10, at: [17.177, 129.26]}
+  - {ref: std/mcx@1, id: p11, at: [3.093, 129.26]}
+  - {ref: std/mcx@1, id: p12, at: [17.177, 146.949]}
+  - {ref: std/mcx@1, id: p13, at: [3.093, 146.949]}
+  - {ref: std/mcx@1, id: p14, at: [17.177, 164.638]}
+  - {ref: std/mcx@1, id: p15, at: [3.093, 164.638]}
+  - {ref: std/mcx@1, id: p16, at: [17.177, 182.327]}
+  - {ref: std/mcx@1, id: p17, at: [3.093, 182.327]}
+  - {ref: std/mcx@1, id: p18, at: [17.177, 200.016]}
+  - {ref: std/mcx@1, id: p19, at: [3.093, 200.016]}
+  - {ref: std/mcx@1, id: p20, at: [17.177, 217.705]}
+  - {ref: std/mcx@1, id: p21, at: [3.093, 217.705]}
+  - {ref: std/mcx@1, id: p22, at: [17.177, 235.394]}
+  - {ref: std/mcx@1, id: p23, at: [3.093, 235.394]}
+  - {ref: std/mcx@1, id: p24, at: [17.177, 253.083]}
+  - {ref: std/mcx@1, id: p25, at: [3.093, 253.083]}
+  - {ref: std/mcx@1, id: p26, at: [17.177, 270.772]}
+  - {ref: std/mcx@1, id: p27, at: [3.093, 270.772]}
+  - {ref: std/mcx@1, id: p28, at: [17.177, 288.461]}
+  - {ref: std/mcx@1, id: p29, at: [3.093, 288.461]}
+  - {ref: std/mcx@1, id: p30, at: [17.177, 306.15]}
+  - {ref: std/mcx@1, id: p31, at: [3.093, 306.15]}
+connection-points:
+  mate: {at: [15.23, 172.75], direction: rear}
+skins: [default]

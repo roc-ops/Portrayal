@@ -1,0 +1,61 @@
+format: 1
+kind: module
+name: rfd
+version: 1.0.0
+class: line-card
+profile: networking
+description: >-
+  Casa RF Downstream I/O module (RFD) - the rear half of a DQM position, carrying
+  the eight downstream F-type ports for one DS 8x8, DS 8x96 or DS 8x192 line card
+  in the paired front slot. Silkscreened QAM IO. It carries no electronics of its
+  own that the guide describes; it is the mechanical and electrical QAM
+  connection to the HFC network.
+size: {w: 30.47, h: 345.5, d: 380.0}
+attrs: {model: 'QAM IO', role: downstream, media: coax, connector: f-type, rf-ports: '8', pairs-with: casa/ds-8x192}
+provenance:
+  size: ESTIMATED, and shared with the whole C100G/C40G rear-slot family. Figure
+    1-12 is schematic - it draws these three cards 309, 295 and 288 px wide for
+    one physical card, and the guide's chassis aspect is 0.936 against a
+    specified 0.844 - so nothing absolute is taken from it. The envelope is the
+    rear-slot bay in the C100G device manifest, 30.47 x 345.5, and the depth is
+    the family estimate carried by casa/io-6p12
+  layout: drawing - Figure 1-12 of the Casa C100G Hardware Installation Guide
+    (rev 07/08/2022), "RF IO upstream and downstream modules", which draws all
+    three rear I/O cards side by side. Port COUNT, port ORDER and the column
+    arrangement are read straight off it and are reliable; positions are taken
+    as fractions of the drawn plate, measured by colour detection at 600 dpi
+  furniture: drawing - the same figure. Two captive screws on the card
+    centreline, the orange band(s) and the legend below them, and the latch
+    strip on the RIGHT of the plate. Note that casa/io-6p12 draws its latch
+    strip on the LEFT while both Figure 1-12 and Figure 1-15 put it on the
+    right; these cards follow the figures
+  ports: drawing - Table A-8 of the same guide, headed "RFD specifications",
+    gives "8 ports per RFD" and a connector row reading "F-type, 75 ohm, SCTE
+    compliant" with a maximum torque of 20 inch-pounds. The aperture itself is the registry's `f-type` key - Casa
+    states the connector type and no dimension, which is exactly the case the
+    registry exists for
+  positions: drawing - one column at 0.528 of the plate width, eight ports on a
+    uniform 26.43 mm pitch from 77.65. The measured per-port x scatters +-0.4 mm
+    down the card, which is figure jitter rather than a real skew, so a single
+    column x is used. Note the RFU's column measures 1.15 mm further right on
+    the same figure; the two cards are NOT forced onto one x, because nothing
+    says they share one
+  power: NO FIGURE. Tables A-8 and A-9 give the RFD and RFU ports and connector
+    type and no power at all, and Table A-3's DQM figures are headed "Maximum
+    consumption WITH I/O module", so the only published numbers already contain
+    this card and no document divides them. L27 stands, and the C100G and C40G
+    `paired-module-power` gap carries the reason
+relief:
+  wall: '#4a4f55'
+parts:
+  - {ref: std/f-type@1, id: p0, at: [11.24, 73.7]}
+  - {ref: std/f-type@1, id: p1, at: [11.24, 100.128]}
+  - {ref: std/f-type@1, id: p2, at: [11.24, 126.556]}
+  - {ref: std/f-type@1, id: p3, at: [11.24, 152.984]}
+  - {ref: std/f-type@1, id: p4, at: [11.24, 179.412]}
+  - {ref: std/f-type@1, id: p5, at: [11.24, 205.84]}
+  - {ref: std/f-type@1, id: p6, at: [11.24, 232.268]}
+  - {ref: std/f-type@1, id: p7, at: [11.24, 258.696]}
+connection-points:
+  mate: {at: [15.23, 172.75], direction: rear}
+skins: [default]

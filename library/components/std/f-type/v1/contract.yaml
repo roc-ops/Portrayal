@@ -1,0 +1,36 @@
+format: 1
+kind: component
+name: f-type
+version: 1.0.0
+class: port
+profile: networking
+conforms: f-type
+interface: f-type
+description: F-type 75-ohm coaxial panel jack (3/8-32 UNEF-2A) - the CATV drop
+  connector. The threaded neck IS the mating interface, so it stands proud of the
+  panel with the hex nut clamped behind it; the aperture is a double-D hole.
+size: {w: 9.7, h: 7.9}
+attrs: {media: coax-f}
+provenance:
+  size: standard - registry key `f-type`, from the MOUNTING HOLE inset of the
+    Pasternack PE44327 CAD drawing (REV 1.1, 75-ohm F female bulkhead mount,
+    .380 inch DD hole) - 0.380 [9.7] by 0.310 [7.9]. See the registry note for
+    why this is a mounting style rather than a figure the F standard fixes
+  neck: drawing - the same sheet dimensions the 3/8-32 threaded section at
+    0.419 [10.6] and the maximum panel at 0.093 [2.4]. The thread is the mating
+    interface, so it is the part that stands outside the panel; pitch is
+    25.4/32 = 0.794
+  nut: drawing - the hex nut and washer between the thread and the panel take up
+    about 2.4 mm of the 0.235 [6.0] front assembly. The real 3/8 in nut is 9.53
+    across flats, WIDER than the 9.7 x 7.9 aperture in one axis, so the art here
+    draws it inscribed in the aperture rather than overhanging - a component may
+    not paint outside its own opening
+elements:
+  opening: {at: [0.0, 0.0], size: [9.7, 7.9], class: cutout}
+relief:
+  features:
+    - {node: nut, cyl: 2.4, color: '#c0c4c8'}
+    - {node: thread, cyl: 10.6, lift: 2.4, thread: 0.794, color: '#c0c4c8'}
+connection-points:
+  mate: {at: [4.85, 3.95], direction: front}
+skins: [default]

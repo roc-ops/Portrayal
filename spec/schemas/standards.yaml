@@ -190,6 +190,28 @@ standards:
       barrel standing proud of it, not a recess to look into.
       75-ohm MCX (Casa's RF I/O cards) and 50-ohm MCX share one mechanical
       interface; the impedance is inside the connector, not in the panel hole.
+  f-type:
+    registry: F (IEC 61169-24 / SCTE; 3/8-32 UNEF-2A) - double-D bulkhead panel hole
+    w: 9.7
+    h: 7.9
+    radius: 4.85
+    depth: 0.0
+    confidence: registry
+    notes: >-
+      Read off the MOUNTING HOLE inset of the Pasternack PE44327 CAD drawing
+      (REV 1.1, 75-ohm F female bulkhead mount, .380 inch DD hole) - 0.380 [9.7]
+      across by 0.310 [7.9], a double-D hole with a flat top and bottom, for a
+      3/8-32 UNEF-2A threaded neck and a maximum panel of 0.093 [2.4].
+      Confidence is `registry` rather than `verified` ON PURPOSE, and the reason
+      is a real difference from mcx. The F INTERFACE is standardised - the
+      3/8-32 thread is what a plug's nut screws onto, and every F bulkhead
+      carries it - but the PANEL HOLE is not: Pasternack alone sells F bulkheads
+      for a .380 DD hole (PE44327), a .350 D hole (PE44334) and a .340 D hole,
+      and L-com for a .500 D. What every variant has in common is that the hole
+      must clear the 3/8-32 major diameter, 9.525. So 9.7 x 7.9 is one sourced
+      panel drawing for the mounting style a chassis faceplate uses, not a
+      figure the F standard fixes, and a card documented to a different hole
+      should say so rather than be forced onto this key.
   crps-1u:
     registry: CRPS (Common Redundant Power Supply) 1U module envelope
     w: 73.5
