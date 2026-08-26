@@ -22,8 +22,9 @@ the single most repeated error.
 
 | source | authoritative for | never use it for |
 |---|---|---|
-| **datasheet / spec table** | overall dimensions, RU, weight, port counts, power | positions |
+| **datasheet / spec table** | overall dimensions, RU, weight, port counts, the box's own power figure | positions; per-module power, which it almost never carries |
 | **install guide figure** | *what* is on a face and *how it is arranged*; port order; legends | absolute geometry - these figures are schematic and their aspect is wrong |
+| **install / reference guide appendix** | per-card and per-fan-tray power, and the ambient each figure assumes | anything the datasheet answers better |
 | **mechanical drawing** (vendor or hand-built from the hardware) | size and placement of every feature | colour, legend text |
 | **photograph** | colour, finish, construction, confirmation of everything above; count of things | measurement, unless something of known size is in frame - but see below |
 | **standards registry** (`spec/schemas/standards.yaml`) | cage and connector sizes | anything vendor-specific |
@@ -203,6 +204,55 @@ Now populate. **Reuse before building.**
      reports it and the gaps register carries it as `attrs-unclassified`. Use
      it honestly - it is how the next section gets discovered - but do not use
      it to avoid choosing.
+8b. **Every module you place or build gets its power figure, and the key says
+   which way the power goes.** Chassis power depends on what is in the chassis,
+   so the figure belongs on the module's contract, not in the chassis's prose -
+   `psus: '2x 400 W 1+1 redundant'` is a sentence no tool can add up.
+
+   Two keys, and choosing between them is the whole point:
+   - a module that **PROVIDES** power - `psu`, `power` - states
+     `power-output-w`, the continuous output on its nameplate;
+   - a module that **CONSUMES** it - `line-card`, `supervisor`, `fan`,
+     `cooling`, `transceiver` - states `power-draw-max-w`, and
+     `power-draw-typical-w` beside it where the vendor gives one.
+
+   They are opposite signs of one unit and must never share a key. The library
+   used to write `watts: '650'` on every PSU, which says nothing about
+   direction: sum it over a chassis holding two PSUs and eight line cards and
+   you get a number that is neither, and looks entirely plausible. Lint L28 is
+   an **error** on `watts` and on the device-level spellings (`power-max-w` and
+   its relatives), which are reserved for the whole box. Numbers, not strings.
+
+   **Where to look, because it is usually not the datasheet.** Vendors publish
+   per-card power in the install or reference guide's technical-specifications
+   appendix. Cisco's ASR9000 table gives one figure per card per ambient - the
+   RSP-440 is 285 W at 25 C, 350 at 40 and 370 at 55 - and `power-draw-max-w`
+   takes the highest, which is what `max` means. Note how large the spread can
+   be before you decide a low figure is safe: the ASR 9912 fan tray is 290 W at
+   25 C and 1800 W at 55.
+
+   **If no document you hold states it, write nothing and leave L27 standing.**
+   That warning is the record that the figure is missing, and while it stands
+   the chassis total is a floor rather than a total. An estimated watt figure is
+   the same number minus the warning, and it will be summed by somebody who
+   cannot see that you guessed.
+
+8c. **What the device's own `power-typical-w` covers, if the document says.**
+   On a modular chassis the vendor's figure is ambiguous by default and you
+   generally cannot resolve it: the AGR400's datasheet says "Max 527 W, Typical
+   186 W" while its own QSG says "638 W at 25 C", a 21 % spread on one SKU with
+   neither document naming what was installed. Cisco publishes no chassis draw
+   at all for the ASR9000 - only the per-card table and an instruction to
+   compute your own budget - while publishing chassis weight *twice*, bare and
+   "fully configured using all card slots and six power modules". The vocabulary
+   exists; it is just not applied to power.
+
+   So **transcribe the vendor's figure as the vendor's figure and do not
+   reconcile it against your module total.** Never add module draw to it, and
+   do not treat the total exceeding it as an error. They are two facts with two
+   provenances, and asserting a relationship between them is asserting something
+   no source states.
+
 9. **Transcribe compliance, and do not tidy the wording.** Every datasheet
    carries a compliance line and we hold it for two devices in thirteen. The
    AGR420's is the worked example: `nebs: 'NEBS Level 3 (pre-test; certificate
@@ -259,6 +309,13 @@ This is not ceremony. On the first device built with this skill, every gate
 passed and the model still had no grounding point, because callout 13 was never
 looked for. Nothing else would have caught it: it lints clean, it renders, and
 it looks finished.
+
+**Then walk the L27 and L29 warnings the same way, one at a time.** They name
+every module in this device with no power figure. For each, either the source
+states it and you missed it - most vendors bury per-card power in an appendix,
+not on the datasheet - or no document you hold says, and the warning stays. What
+must not happen is the list going unread: a chassis whose L29 count you never
+looked at is one whose module total is a floor without anybody knowing it is.
 
 ### By eye, at matched scale
 
