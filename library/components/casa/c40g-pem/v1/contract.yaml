@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: c40g-pem
-version: 1.0.0
+version: 1.1.0
 class: power
 profile: networking
 description: >-
@@ -47,6 +47,57 @@ provenance:
   power: 'NONE STATED. Neither C40G table gives a PEM figure, and a power ENTRY
     module is not a supply in the sense power-output-w means - it filters and distributes
     what the plant feeds it. The L27 warning is left standing as the record'
+  relief: 'estimated, and the two halves of that word are different claims.
+    WHAT stands proud is drawing - Figure 1-12, "C40G power entry module": a bolted
+    terminal cover plate at the top left with a captive screw at its centre and two
+    bolt sockets; below it a minus pair and a plus pair of studs, each carrying a hex
+    nut over a star washer; two release levers to the right of them; and the yellow
+    DISCONNECT POWER warning label. Those five kinds of thing, and which node each is,
+    are read straight off that figure.
+    HOW FAR each stands proud is stated NOWHERE. Searched both C40G guides for
+    "power entry", "PEM", "terminal", "stud" and Appendix A; there is no Z dimension
+    for this module in any of them, and Figure 1-12 is a flat elevation, so it cannot
+    supply one either. Every mm below is ESTIMATED against the library''s existing
+    treatment of the same class of part, named so the next reader can overturn it in
+    one place: 1.5 for the bolted cover plate is edgecore/agr-ground-plate@1; 1.6 for
+    a panel screw head is edgecore/agr-panel-screw@1; 2.2 for a terminal nut is
+    edgecore/agr-psu-dc@1, which took it off real hardware; 4.2 for a release lever is
+    the same part''s latch; 0.2 for a printed label is edgecore/agr-label-caution@1.
+    NOT DONE ON PURPOSE: the two white-outlined terminal boxes are NOT raised. The
+    figure draws them as outlines on the same grey as the plate, which is as
+    consistent with printed boundaries as with a moulded body, and raising them would
+    turn an ambiguity into an assertion. Note this is the opposite call from casa/pem,
+    where the C100G blocks are drawn as filled black bodies - the two parts are
+    treated differently because the two figures show different things, not by oversight.
+    WHAT WOULD SETTLE IT: one oblique photograph of a C40G rear, or a caliper.
+    THE FACE IS UNTOUCHED. 158.0 x 68.5 and every x/y in the skin are exactly as the
+    size provenance above left them; this pass adds Z and nothing else'
+  body: 'the box behind the face is the size entry''s own ESTIMATED 200.0 depth
+    restated as a body, not a second claim about the world. It is declared so the
+    module draws as a solid filling its bay rather than as art painted on the rear
+    plate. As with casa/pem, the 3D viewer additionally builds FRU groups only for
+    data-class psu, fan and tab (library/demo2/relief.js), so a class power module
+    will not eject until that list admits it - reported, not worked around'
 relief:
   wall: '#4a4f55'
+  features:
+    # WHAT is raised comes from Figure 1-12; HOW FAR does not - see provenance/relief.
+    # The bolted terminal cover is a plate on the outside of the face, so it takes
+    # the same treatment (and the same 1.5) as edgecore/agr-ground-plate@1.
+    - {node: terminal-cover, out: 1.5}
+    - {node: cover-screw, cyl: 1.6, lift: 1.5}
+    # Four studs, a minus pair above a plus pair, each carrying a hex nut over a
+    # star washer. Own node each, so `cyl` takes ITS radius.
+    - {node: nut-neg-l, cyl: 2.2}
+    - {node: nut-neg-r, cyl: 2.2}
+    - {node: nut-pos-l, cyl: 2.2}
+    - {node: nut-pos-r, cyl: 2.2}
+    # The two release levers stand off the face far enough to get a hand behind.
+    - {node: lever-a, out: 4.2}
+    - {node: lever-b, out: 4.2}
+    # DISCONNECT POWER PRIOR TO SERVICE - a printed label, not sheet metal.
+    - {node: warning, out: 0.2}
+body:
+  depth: 200.0
+  color: '#9b9da0'
 skins: [default]

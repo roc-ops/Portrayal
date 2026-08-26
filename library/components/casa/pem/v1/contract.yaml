@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: pem
-version: 1.2.0
+version: 1.3.0
 class: power
 profile: networking
 description: >-
@@ -75,6 +75,37 @@ provenance:
     the central gap. Left block holds Branch 4 (left column) and Branch 3; right
     block holds Branch 2 and Branch 1 (right column)'
   hand: 'drawing - his `pemA` sits at x 97.70 (RIGHT) and `pemB` at x 2.98 (LEFT)'
+  relief: 'estimated, and the split matters. WHAT is raised, what it is, and where
+    it sits are read off Figure 1-6, "C100G Power Entry Module, terminal covers
+    removed" - the breakers are bezels standing off the plate, the terminal blocks
+    are moulded bodies with the studs on their faces, the cover screws are captive
+    brass, the HS control is a pushbutton and the three indicators are lamps. That
+    is what an elevation can answer and it is what this contract was missing.
+    HOW FAR each stands proud is NOT in any Casa document. Neither hardware
+    installation guide, nor Table A-1, nor the chassis nameplate carries a single Z
+    dimension for this module; the only figures of it are flat elevations, and this
+    one fails the orthographic gate outright at an aspect of 3.43 against this
+    module''s 2.26, so even a fraction off it would be worthless. Searched: both
+    guides for "Power Entry", "PEM", "terminal", "breaker" and the Appendix A
+    tables. So every mm here is ESTIMATED, and each is the Portrayal library''s
+    existing figure for the same class of hardware rather than a fresh guess:
+    the 2.2 mm nut is agr-psu-dc''s, which was read off real Edgecore terminal
+    hardware; the 1.6 mm screw head is edgecore/agr-panel-screw@1; the 0.3 mm lamp
+    dome is common/led-dot@1. The two with no library precedent are the 3.0 mm
+    breaker bezel and the 6.0 mm terminal block, and they are flagged here rather
+    than buried: they are the only invented magnitudes in this file.
+    WHAT WOULD SETTLE IT: a caliper on a C100G PEM, or any three-quarter photograph
+    of the rear face - one oblique shot with the terminal covers off would fix the
+    block height, the bezel and the stud length together'
+  body: 'the box behind the face is the size entry''s own depth, 250.0, which that
+    entry already records as ESTIMATED - not a second claim. `body` is declared so
+    the module draws as a solid that fills its bay instead of a floating faceplate;
+    without it the 3D viewer has no box to build and the PEM reads as art painted
+    on the rear plate, which is what the owner is seeing. NOTE that declaring it is
+    necessary but not sufficient here: the viewer builds FRU groups only for
+    data-class psu, fan and tab (library/demo2/relief.js), and this module is
+    class power, so it will not eject until that list admits it. Reported rather
+    than worked around by mislabelling a power ENTRY module as a psu'
   depth: estimated - not measured
 elements:
   breaker-4: {at: [22.4, 3.2], size: [31.2, 14.6], class: circuit-breaker}
@@ -90,4 +121,49 @@ elements:
   ok: {at: [116.4, 56.6], size: [2.8, 2.8], class: led}
 relief:
   wall: '#4a4f55'
+  features:
+    # WHICH node is raised and WHICH primitive it is comes from Figure 1-6; the
+    # MAGNITUDES do not - see provenance/relief. Every mm below is `estimated`.
+    #
+    # The four rocker breakers are a moulded bezel standing off the plate: the
+    # figure draws each as a black surround with a lighter, clearly inboard panel
+    # carrying the round trip button and the rocker paddle.
+    - {node: breaker-4, out: 3.0}
+    - {node: breaker-3, out: 3.0}
+    - {node: breaker-2, out: 3.0}
+    - {node: breaker-1, out: 3.0}
+    # Each terminal block is a moulded body standing proud, with the studs on its
+    # face. `out` goes on the GROUP so the black surround, the well and the
+    # centre divider all travel with it; a raised sibling left behind would read
+    # as a coloured shadow under the block.
+    - {node: terminal-block-1, out: 6.0}
+    - {node: terminal-block-2, out: 6.0}
+    # Eight studs, two per branch: -48/-60 VDC on the top row, RTN below. Each is
+    # its own node so `cyl` takes ITS radius - grouped per branch, a pair 25.9 mm
+    # apart would have produced one cylinder spanning both. lift 6.0 stands them
+    # on the block face rather than on the faceplate. See agr-psu-dc, which is
+    # where the 2.2 comes from.
+    - {node: nut-b4-vdc, cyl: 2.2, lift: 6.0}
+    - {node: nut-b4-rtn, cyl: 2.2, lift: 6.0}
+    - {node: nut-b3-vdc, cyl: 2.2, lift: 6.0}
+    - {node: nut-b3-rtn, cyl: 2.2, lift: 6.0}
+    - {node: nut-b2-vdc, cyl: 2.2, lift: 6.0}
+    - {node: nut-b2-rtn, cyl: 2.2, lift: 6.0}
+    - {node: nut-b1-vdc, cyl: 2.2, lift: 6.0}
+    - {node: nut-b1-rtn, cyl: 2.2, lift: 6.0}
+    # The brass captive screws that hold the terminal covers this figure removed.
+    - {node: cover-screw-4, cyl: 1.6, color: '#b8860b'}
+    - {node: cover-screw-3, cyl: 1.6, color: '#b8860b'}
+    - {node: cover-screw-2, cyl: 1.6, color: '#b8860b'}
+    - {node: cover-screw-1, cyl: 1.6, color: '#b8860b'}
+    # Hot-swap pushbutton, then the three lamps. A lamp is a lens, not a plate.
+    - {node: hs-button, cyl: 1.2}
+    - {node: hs, dome: 0.3}
+    - {node: alarm, dome: 0.3}
+    - {node: ok, dome: 0.3}
+    - {node: rail-screw-l, cyl: 1.6}
+    - {node: rail-screw-r, cyl: 1.6}
+body:
+  depth: 250.0
+  color: '#8d949c'
 skins: [default]
