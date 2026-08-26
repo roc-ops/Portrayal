@@ -23,6 +23,10 @@ provenance:
     slot 4, and SMM-SW-BDM B and A in 3 and 2. Slot 1 takes the LC-BDM-SWITCH that protects, per
     the 3+1 scheme
 attrs:
+  power:
+    power-max-w: < 1800 W (nominal, spec table); the same datasheet's highlights
+      bullet says 1.8 kW per fully loaded chassis
+    power-envelope: fully-configured
   other:
     redundancy: 3+1 with BDM (slot 1 protects, slot 4 active); classic DOCSIS protects per side at 1 and
       4
@@ -126,3 +130,30 @@ configurations:
       rear-3: casa/smm-sw-bdm-b@1
       rear-4: casa/io-6p12-sw@1
       rear-5: casa/io-6p12@1
+# What no rule can find, because the manifest looks complete. Both bays are
+# populated, both components render, and nothing in the model can see that the
+# only power figure the vendor publishes for them is a single number covering
+# the two of them together. Detectable gaps are derived from the lint rules at
+# build time and must not be listed here.
+gaps:
+- what: paired-module-power
+  scope: [casa/bdm@1, casa/io-6p12@1, casa/io-6p12-sw@1]
+  reason: vendor-silent
+  note: >-
+    The BDM2/BDM2m datasheet states "Total Power  300 W" in a technical
+    specifications table headed "BDM2/2 m with 6+12 IO Card", whose RF connector
+    row describes that card's six downstream and twelve upstream ports. The
+    figure is the assembly's. A BDM position is TWO modules here - casa/bdm in a
+    front bay and casa/io-6p12 in the paired rear bay, which is why casa/bdm
+    already carries `pairs-with` - and no document we hold divides the 300 W
+    between them. Writing it onto the front module would make the chassis total
+    come out right and the answer to "what does a BDM front module draw" come
+    out wrong, so neither half carries a figure and the chassis total stays a
+    floor. The arithmetic does not settle it either way: 12 x 300 W lands on the
+    C100G's stated 3.6 kW whether the 300 W is the pair or the front half with
+    small rear cards.
+  wanted: >-
+    a separate figure for the BDM front module and for the 6+12 I/O card, or any
+    document stating which of the two the 300 W covers. Failing that, a
+    mechanism for assembly-scoped figures - `pairs-with` already declares the
+    relationship, so one example short of a vocabulary is all that is missing

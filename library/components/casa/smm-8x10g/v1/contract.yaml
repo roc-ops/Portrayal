@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: smm-8x10g
-version: 1.0.0
+version: 1.1.0
 class: supervisor
 profile: networking
 description: >-
@@ -9,7 +9,8 @@ description: >-
   Eight 10GigE SFP+ (XG0-XG7), two GigE SFP (G0, G1), a 10/100BASE-T management
   RJ45 and an RS-232 console RJ45, plus STATUS, ACTIVE and ALARM LEDs.
 size: {w: 30.47, h: 345.5, d: 380.0}
-attrs: {model: 'SMM 8x10G', role: supervisor, sfp-plus: '8', sfp: '2', mgmt: 10/100BASE-T, console: RS-232}
+attrs: {model: 'SMM 8x10G', role: supervisor, power-draw-max-w: 160, sfp-plus: '8',
+  sfp: '2', mgmt: 10/100BASE-T, console: RS-232}
 provenance:
   layout: drawing - Figure 1-8 of the Casa C100G Hardware Installation Guide
     (rev 07/08/2022). Port order down the faceplate is 10/100MI, XG0 to XG7, G0,
@@ -19,6 +20,11 @@ provenance:
     rectangles. Every cage is ROTATED 90 - the card is only 30.47 wide, so a
     16.0 x 10.0 SFP+ cage only fits on its side, which is what the figure shows
     (detected 9.7 x 16.0, against 10.0 x 16.0 for the rotated component)
+  power: datasheet - Casa SMM8x10G datasheet, "Power Consumption 160W". The
+    datasheet calls it a single-slot module and there is no paired rear half, so
+    unlike the BDM2's 300 W this figure covers exactly this component. Filed as
+    max because a single unqualified figure on a card spec table is the number a
+    chassis is budgeted with; Casa states no typical
   size: ESTIMATED, shared with the rest of the family. Absolute numbers come
     from the chassis front view; the isolated card figures are drawn ~17 percent
     narrower than the real card, so their port positions are used as fractions
