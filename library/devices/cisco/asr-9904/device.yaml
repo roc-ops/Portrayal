@@ -16,6 +16,18 @@ portfolio:
   family: Aggregation Services Router
   series: ASR 9000 Series
 provenance:
+  bay-opening-is-the-hole-not-the-reserved-space: >-
+    `size` on these bays is what the slot RESERVES - where a card is placed and what
+    L33 and L34 check it against - and it is the card's own envelope, per the
+    arbitration that a bay and its occupant carry the same size. The renderer also
+    painted that rectangle dark, so the visible opening was drawn over sheet metal at
+    each end of every slot. `opening` now carries the hole separately: 372.27 x 43.26 mm,
+    the cage measured off the front master at x 55.80 to 428.07 and y 20.12 to 193.17, four bands of 43.26.
+    NOTHING ABOUT PLACEMENT OR CHECKING MOVES. Only what is painted dark changes, and
+    the opening is centred on the bay because a hole and the space reserved around it
+    share a centre. Where only one axis is measured the other keeps the bay's own
+    figure rather than being inferred from the occupant, which is the mistake this
+    field exists to undo.
   chassis: >-
     datasheet - Table 13 "Cisco ASR 9000 Series Routers Physical Descriptions",
     b-asr9k-overview-reference-guide.pdf p130. ASR 9904: chassis height 10.38 inches (26.36 cm),
@@ -289,10 +301,10 @@ views:
       - {at: [420.0, 12.0], text: 'Cisco ASR 9000 Series', font-size: 5, anchor: end}
     components:
       bays:
-        - {id: slot-0, at: [44.09, 150.83], size: {w: 395.70, h: 41.40}, rotate: 90, accepts: ['cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0, default: cisco/a9k-slot-cover@1}
-        - {id: slot-1, at: [44.09, 107.57], size: {w: 395.70, h: 41.40}, rotate: 90, accepts: ['cisco/a9k-rsp880-se@1', 'cisco/a9k-rsp880-tr@1', 'cisco/a9k-rsp880-lt-se@1', 'cisco/a9k-rsp880-lt-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1, default: cisco/a9k-slot-cover@1}
-        - {id: slot-2, at: [44.09, 64.31], size: {w: 395.70, h: 41.40}, rotate: 90, accepts: ['cisco/a9k-rsp880-se@1', 'cisco/a9k-rsp880-tr@1', 'cisco/a9k-rsp880-lt-se@1', 'cisco/a9k-rsp880-lt-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2, default: cisco/a9k-slot-cover@1}
-        - {id: slot-3, at: [44.09, 21.05], size: {w: 395.70, h: 41.40}, rotate: 90, accepts: ['cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 3, default: cisco/a9k-slot-cover@1}
+        - {id: slot-0, at: [44.09, 150.83], size: {w: 395.70, h: 41.40}, opening: {w: 372.27, h: 43.26}, rotate: 90, accepts: ['cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0, default: cisco/a9k-slot-cover@1}
+        - {id: slot-1, at: [44.09, 107.57], size: {w: 395.70, h: 41.40}, opening: {w: 372.27, h: 43.26}, rotate: 90, accepts: ['cisco/a9k-rsp880-se@1', 'cisco/a9k-rsp880-tr@1', 'cisco/a9k-rsp880-lt-se@1', 'cisco/a9k-rsp880-lt-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1, default: cisco/a9k-slot-cover@1}
+        - {id: slot-2, at: [44.09, 64.31], size: {w: 395.70, h: 41.40}, opening: {w: 372.27, h: 43.26}, rotate: 90, accepts: ['cisco/a9k-rsp880-se@1', 'cisco/a9k-rsp880-tr@1', 'cisco/a9k-rsp880-lt-se@1', 'cisco/a9k-rsp880-lt-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2, default: cisco/a9k-slot-cover@1}
+        - {id: slot-3, at: [44.09, 21.05], size: {w: 395.70, h: 41.40}, opening: {w: 372.27, h: 43.26}, rotate: 90, accepts: ['cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 3, default: cisco/a9k-slot-cover@1}
     regions:
       - {id: rsp-slots, label: RSP cards - the middle pair}
       - {id: lc-slots, label: Line cards - above and below the RSP pair}
