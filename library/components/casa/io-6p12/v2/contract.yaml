@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: io-6p12
-version: 2.0.0
+version: 2.1.0
 class: line-card
 profile: networking
 description: >-
@@ -79,9 +79,23 @@ provenance:
     Clearance is not close. The U pitch is 19.32 and the columns are 11.1 apart,
     so a 4.95 aperture (and even a 6.5 flange) fits with room; nothing had to be
     compressed to make the sourced size fit the figure's pitch.
+  relief: 'the C100G/C40G card family treatment - two captive screws (cyl 1.6), the
+    ejector latch strip (out 4.2). THE FULL ARGUMENT IS IN casa/bdm@1 AND THIS IS A
+    POINTER TO IT, not a second reading: the three magnitudes are one estimate per kind of
+    hardware, borrowed from edgecore/agr-panel-screw@1, edgecore/agr-psu-dc@1 and
+    common/led-dot@1, applied across the family because these cards share a faceplate.
+    No Casa document states a depth for any of them. Eleven cards carrying 4.2 is ONE
+    estimate written eleven times, not eleven readings that agreed. The three brass comb standoffs above are a separate, PHOTO-MEASURED number and are not part of this family treatment.'
 relief:
   wall: '#4a4f55'
   features:
+    # Two captive slotted screws on the centreline - the guide's own
+    # "integrated thumbscrews" / "captive screws".
+    - {node: screw-t, cyl: 1.6}
+    - {node: screw-b, cyl: 1.6}
+    # The ejector latch strip.
+    - {node: latch-t, out: 4.2}
+    - {node: latch-b, out: 4.2}
     # Brass standoffs stand 3/8in proud of the faceplate, centred across the
     # card, and carry the comb when it is fitted
     - {node: standoff-t, out: 9.5, color: '#b08d57'}

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: blank-faceplate
-version: 1.0.0
+version: 1.1.0
 class: blank
 profile: networking
 description: >-
@@ -46,6 +46,18 @@ provenance:
     drawn as the same slotted captive screw the cards carry'
   cutouts: none - a blank is unpunched by definition. That is the entire point
     of the part
+  relief: 'the C100G/C40G card family treatment - two captive screws (cyl 1.6), the
+    ejector latch strip (out 4.2). THE FULL ARGUMENT IS IN casa/bdm@1 AND THIS IS A
+    POINTER TO IT, not a second reading: the three magnitudes are one estimate per kind of
+    hardware, borrowed from edgecore/agr-panel-screw@1, edgecore/agr-psu-dc@1 and
+    common/led-dot@1, applied across the family because these cards share a faceplate.
+    No Casa document states a depth for any of them. Eleven cards carrying 4.2 is ONE
+    estimate written eleven times, not eleven readings that agreed. A blank has no latch and no lamp, so it takes the two screws and nothing else - which is the whole point of the part.'
 relief:
   wall: '#4a4f55'
+  features:
+    # Two captive slotted screws on the centreline - the guide's own
+    # "integrated thumbscrews" / "captive screws".
+    - {node: screw-t, cyl: 1.6}
+    - {node: screw-b, cyl: 1.6}
 skins: [default]

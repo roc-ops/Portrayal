@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: smm-sw-bdm-b
-version: 1.0.0
+version: 1.1.0
 class: switch
 profile: networking
 description: >-
@@ -14,8 +14,23 @@ provenance:
     figure draws only as a dark rectangle
   layout: drawing - Figure 1-14. Faceplate prints "C100G Slot 7 / C40G Slot 3"
   slot: datasheet - "SMM-SW-BDM-B (slot 7)"
+  relief: 'the C100G/C40G card family treatment - two captive screws (cyl 1.6), the
+    ejector latch strip (out 4.2). THE FULL ARGUMENT IS IN casa/bdm@1 AND THIS IS A
+    POINTER TO IT, not a second reading: the three magnitudes are one estimate per kind of
+    hardware, borrowed from edgecore/agr-panel-screw@1, edgecore/agr-psu-dc@1 and
+    common/led-dot@1, applied across the family because these cards share a faceplate.
+    No Casa document states a depth for any of them. Eleven cards carrying 4.2 is ONE
+    estimate written eleven times, not eleven readings that agreed.'
 relief:
   wall: '#4a4f55'
+  features:
+    # Two captive slotted screws on the centreline - the guide's own
+    # "integrated thumbscrews" / "captive screws".
+    - {node: screw-t, cyl: 1.6}
+    - {node: screw-b, cyl: 1.6}
+    # The ejector latch strip.
+    - {node: latch-t, out: 4.2}
+    - {node: latch-b, out: 4.2}
 parts:
   # the Power Supply Monitor is an RJ45, not a blank window. Rotated like every
   # other jack on these cards, because the faceplate is only 30.47 wide.

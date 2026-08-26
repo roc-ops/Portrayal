@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ds-8x8
-version: 1.1.0
+version: 1.2.0
 class: line-card
 profile: networking
 description: >-
@@ -87,10 +87,29 @@ provenance:
     gave: these drawings are anisotropic, so a round lamp scales to two different diameters
     depending on the axis, which tells you the drawing is wrong rather than telling you the
     size.'
+  relief: 'the C100G/C40G card family treatment - two captive screws (cyl 1.6), the
+    ejector latch strip (out 4.2) and the 3 status lamps (dome 0.3). THE FULL ARGUMENT IS IN casa/bdm@1 AND THIS IS A
+    POINTER TO IT, not a second reading: the three magnitudes are one estimate per kind of
+    hardware, borrowed from edgecore/agr-panel-screw@1, edgecore/agr-psu-dc@1 and
+    common/led-dot@1, applied across the family because these cards share a faceplate.
+    No Casa document states a depth for any of them. Eleven cards carrying 4.2 is ONE
+    estimate written eleven times, not eleven readings that agreed.'
 elements:
   status: {at: [4.8, 196.08], size: [3.0, 3.0], class: led}
   alarm: {at: [4.8, 199.68], size: [3.0, 3.0], class: led}
   active: {at: [4.8, 203.28], size: [3.0, 3.0], class: led}
 relief:
   wall: '#4a4f55'
+  features:
+    # Two captive slotted screws on the centreline - the guide's own
+    # "integrated thumbscrews" / "captive screws".
+    - {node: screw-t, cyl: 1.6}
+    - {node: screw-b, cyl: 1.6}
+    # The ejector latch strip.
+    - {node: latch-t, out: 4.2}
+    - {node: latch-b, out: 4.2}
+    # STATUS / ALARM / ACTIVE - lenses, not painted dots.
+    - {node: status, dome: 0.3}
+    - {node: active, dome: 0.3}
+    - {node: alarm, dome: 0.3}
 skins: [default]

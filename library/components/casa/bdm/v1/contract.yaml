@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: bdm
-version: 1.1.0
+version: 1.2.0
 class: line-card
 profile: networking
 description: >-
@@ -88,12 +88,53 @@ provenance:
     a front bay and casa/io-6p12 in the paired rear bay - and no document divides
     the 300 W between them, so a chassis sum must not add the rear module as
     well. Both vendor statements say "approximately"'
+  relief: 'THE C100G/C40G CARD FAMILY RELIEF. This entry is written in full HERE and
+    every other Casa card points at it; the short entries in those files say so and name
+    this one, so nobody reads eleven files and mistakes one decision for eleven agreeing
+    readings.
+    WHAT IS ON A CASA CARD FACE, and this part IS sourced: two captive slotted screws on
+    the centreline and an ejector latch strip at one edge, drawn in Figures 1-11, 1-12,
+    1-14, 1-15 and 1-16 of both guides and named in the text - "remove using the
+    integrated thumbscrews", "screw down its captive screws", and the latch strip the
+    rear-card entries already call an ejector latch. Where a card has lamps, the figure
+    names them (STATUS / ALARM / ACTIVE, or per-port pairs). So which nodes stand off the
+    plate, and what each one IS, comes off the figures.
+    HOW FAR NONE OF THEM STAND IS PUBLISHED. Neither guide, neither datasheet set and no
+    appendix table carries a Z dimension for any card feature; searched both guides for
+    "thumbscrew", "captive", "latch", "ejector", "LED" and Appendix A. Every card figure
+    also fails the orthographic gate - Figure 1-11 renders its plate 15 percent narrow -
+    so no fraction off one would be worth taking even if depth were visible in an
+    elevation, which it is not.
+    SO THREE NUMBERS ARE USED, ONE PER KIND OF THING, EACH BORROWED FROM AN EXISTING
+    PORTRAYAL PART RATHER THAN INVENTED HERE:
+      cyl 1.6  captive panel screw   = edgecore/agr-panel-screw@1
+      out 4.2  ejector latch         = edgecore/agr-psu-dc@1, measured off real hardware
+      dome 0.3 panel lamp            = common/led-dot@1
+    They are ESTIMATES. Applying one estimate to a family is a deliberate choice and it
+    is the honest one HERE, because these cards genuinely share a faceplate - the DQM/DCU
+    positions entry already records that the BDM and the DS/US cards are ONE plate to the
+    millimetre. What must not be read into it is corroboration: eleven cards carrying 4.2
+    is ONE estimate written eleven times.
+    WHAT WOULD SETTLE IT: a caliper on any one C100G or C40G card. One measurement fixes
+    the whole family, which is the other reason to keep the family on one number.'
 elements:
   status: {at: [4.80, 194.66], size: [3.0, 3.0], class: led}
   alarm: {at: [4.80, 198.68], size: [3.0, 3.0], class: led}
   active: {at: [4.80, 202.70], size: [3.0, 3.0], class: led}
 relief:
   wall: '#4a4f55'
+  features:
+    # Two captive slotted screws on the centreline - the guide's own
+    # "integrated thumbscrews" / "captive screws".
+    - {node: screw-t, cyl: 1.6}
+    - {node: screw-b, cyl: 1.6}
+    # The ejector latch strip.
+    - {node: latch-t, out: 4.2}
+    - {node: latch-b, out: 4.2}
+    # STATUS / ALARM / ACTIVE - lenses, not painted dots.
+    - {node: status, dome: 0.3}
+    - {node: active, dome: 0.3}
+    - {node: alarm, dome: 0.3}
 connection-points:
   mate: {at: [15.23, 172.75], direction: front}
 skins: [default]

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: bdm2
-version: 1.1.0
+version: 1.2.0
 class: line-card
 profile: networking
 description: >-
@@ -87,12 +87,31 @@ provenance:
     a front bay and casa/io-6p12 in the paired rear bay - and no document divides
     the 300 W between them, so a chassis sum must not add the rear module as
     well. Both vendor statements say "approximately"'
+  relief: 'the C100G/C40G card family treatment - two captive screws (cyl 1.6), the
+    ejector latch strip (out 4.2) and the 3 status lamps (dome 0.3). THE FULL ARGUMENT IS IN casa/bdm@1 AND THIS IS A
+    POINTER TO IT, not a second reading: the three magnitudes are one estimate per kind of
+    hardware, borrowed from edgecore/agr-panel-screw@1, edgecore/agr-psu-dc@1 and
+    common/led-dot@1, applied across the family because these cards share a faceplate.
+    No Casa document states a depth for any of them. Eleven cards carrying 4.2 is ONE
+    estimate written eleven times, not eleven readings that agreed.'
 elements:
   status: {at: [4.80, 194.66], size: [3.0, 3.0], class: led}
   alarm: {at: [4.80, 198.68], size: [3.0, 3.0], class: led}
   active: {at: [4.80, 202.70], size: [3.0, 3.0], class: led}
 relief:
   wall: '#4a4f55'
+  features:
+    # Two captive slotted screws on the centreline - the guide's own
+    # "integrated thumbscrews" / "captive screws".
+    - {node: screw-t, cyl: 1.6}
+    - {node: screw-b, cyl: 1.6}
+    # The ejector latch strip.
+    - {node: latch-t, out: 4.2}
+    - {node: latch-b, out: 4.2}
+    # STATUS / ALARM / ACTIVE - lenses, not painted dots.
+    - {node: status, dome: 0.3}
+    - {node: active, dome: 0.3}
+    - {node: alarm, dome: 0.3}
 connection-points:
   mate: {at: [15.23, 172.75], direction: front}
 skins: [default]

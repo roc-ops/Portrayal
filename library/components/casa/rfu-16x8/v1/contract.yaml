@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: rfu-16x8
-version: 1.0.0
+version: 1.1.0
 class: line-card
 profile: networking
 description: >-
@@ -51,8 +51,23 @@ provenance:
   power: NO FIGURE. See the RFD note - Table A-9 gives ports and connector only,
     and Table A-4's US16x8 figures (200 W with this I/O, 220 W with the UPS 32x4
     I/O) are the PAIR's. L27 stands
+  relief: 'the C100G/C40G card family treatment - two captive screws (cyl 1.6), the
+    ejector latch strip (out 4.2). THE FULL ARGUMENT IS IN casa/bdm@1 AND THIS IS A
+    POINTER TO IT, not a second reading: the three magnitudes are one estimate per kind of
+    hardware, borrowed from edgecore/agr-panel-screw@1, edgecore/agr-psu-dc@1 and
+    common/led-dot@1, applied across the family because these cards share a faceplate.
+    No Casa document states a depth for any of them. Eleven cards carrying 4.2 is ONE
+    estimate written eleven times, not eleven readings that agreed.'
 relief:
   wall: '#4a4f55'
+  features:
+    # Two captive slotted screws on the centreline - the guide's own
+    # "integrated thumbscrews" / "captive screws".
+    - {node: screw-t, cyl: 1.6}
+    - {node: screw-b, cyl: 1.6}
+    # The ejector latch strip.
+    - {node: latch-t, out: 4.2}
+    - {node: latch-b, out: 4.2}
 parts:
   - {ref: std/f-type@1, id: p0, at: [12.39, 49.04]}
   - {ref: std/f-type@1, id: p1, at: [12.39, 65.81]}

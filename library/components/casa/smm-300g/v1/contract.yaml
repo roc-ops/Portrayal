@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: smm-300g
-version: 1.0.0
+version: 1.1.0
 class: supervisor
 profile: networking
 description: >-
@@ -75,6 +75,13 @@ provenance:
     C100G-SMM-300-GM as ''2X100GbE SFP + 8X10GbE SFP''. The install guide, the figure
     and the photograph all show ten, so ten is modelled and the ordering line is
     recorded as the vendor''s error'
+  relief: 'the C100G/C40G card family treatment - two captive screws (cyl 1.6), the
+    ejector latch strip (out 4.2) and the 3 status lamps and 24 port lamps (dome 0.3). THE FULL ARGUMENT IS IN casa/bdm@1 AND THIS IS A
+    POINTER TO IT, not a second reading: the three magnitudes are one estimate per kind of
+    hardware, borrowed from edgecore/agr-panel-screw@1, edgecore/agr-psu-dc@1 and
+    common/led-dot@1, applied across the family because these cards share a faceplate.
+    No Casa document states a depth for any of them. Eleven cards carrying 4.2 is ONE
+    estimate written eleven times, not eleven readings that agreed.'
 elements:
   status: {at: [4.8, 298.7], size: [3.0, 3.0], class: led}
   active: {at: [4.8, 307.2], size: [3.0, 3.0], class: led}
@@ -105,6 +112,43 @@ elements:
   p11-led-b: {at: [20.8, 249.6], size: [1.4, 1.4], class: led}
 relief:
   wall: '#4a4f55'
+  features:
+    # Two captive slotted screws on the centreline - the guide's own
+    # "integrated thumbscrews" / "captive screws".
+    - {node: screw-t, cyl: 1.6}
+    - {node: screw-b, cyl: 1.6}
+    # The ejector latch strip.
+    - {node: latch-t, out: 4.2}
+    - {node: latch-b, out: 4.2}
+    # STATUS / ALARM / ACTIVE - lenses, not painted dots.
+    - {node: status, dome: 0.3}
+    - {node: active, dome: 0.3}
+    - {node: alarm, dome: 0.3}
+    # 24 per-port lamps.
+    - {node: p0-led-a, dome: 0.3}
+    - {node: p1-led-a, dome: 0.3}
+    - {node: p2-led-a, dome: 0.3}
+    - {node: p3-led-a, dome: 0.3}
+    - {node: p4-led-a, dome: 0.3}
+    - {node: p5-led-a, dome: 0.3}
+    - {node: p6-led-a, dome: 0.3}
+    - {node: p7-led-a, dome: 0.3}
+    - {node: p8-led-a, dome: 0.3}
+    - {node: p9-led-a, dome: 0.3}
+    - {node: p10-led-a, dome: 0.3}
+    - {node: p11-led-a, dome: 0.3}
+    - {node: p0-led-b, dome: 0.3}
+    - {node: p1-led-b, dome: 0.3}
+    - {node: p2-led-b, dome: 0.3}
+    - {node: p3-led-b, dome: 0.3}
+    - {node: p4-led-b, dome: 0.3}
+    - {node: p5-led-b, dome: 0.3}
+    - {node: p6-led-b, dome: 0.3}
+    - {node: p7-led-b, dome: 0.3}
+    - {node: p8-led-b, dome: 0.3}
+    - {node: p9-led-b, dome: 0.3}
+    - {node: p10-led-b, dome: 0.3}
+    - {node: p11-led-b, dome: 0.3}
 parts:
   - {ref: std/sfp-ganged@1, id: xg0, at: [5.475, 70.8], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
   - {ref: std/sfp-ganged@1, id: xg1, at: [5.475, 85.05], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
