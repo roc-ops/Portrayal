@@ -541,6 +541,15 @@ configurations: {...}
   - **Re-read what you rewrote.** A later pass over the same block quietly
     dropped the system LEDs' state semantics. Diff the rendered output, not just
     the source.
+- **A loop that writes a file and later reads that same file has already
+  corrupted it.** Splitting one component into three, the loop copied
+  `bdm/v1/skins/bdm.svg` onto `bdm/v1/skins/default.svg` for the first variant -
+  and `default.svg` was the source the THIRD variant was about to be copied
+  from. So the third got the first one's artwork. Lint was green, the schema was
+  satisfied, the file rendered, and the only symptom was a card wearing the
+  wrong model name in a chassis view. Read every source into memory BEFORE
+  writing any destination, and assert on what you read. This is the same family
+  as "re-read what you rewrote", but it bites in one pass rather than two.
 - **Two environment traps that waste an afternoon.** Do not run Python from
   `/tmp` - a stray `bisect.py` there shadows the standard library and every
   import breaks in a way that looks like your code. And BSD `sed` has no `\b` and
