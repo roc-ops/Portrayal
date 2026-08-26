@@ -125,6 +125,19 @@ provenance:
     remains true is that no BOTTOM VIEW of any ASR 9000 chassis exists in the 78-document intake;
     what this face carries is a feature dimensioned in a TOP-down figure whose geometry the bottom
     necessarily shares. Positions are given from the REAR, which is how the figures dimension them
+  top-and-bottom-view-convention: >-
+    ON THIS CHASSIS'S TOP AND BOTTOM VIEWS, y = 0 IS THE REAR AND y = depth IS THE FRONT. Verified
+    on this chassis's own footprint figure rather than carried across from a sibling: the figure
+    prints "Rear of chassis" above the drawing and "Front of chassis" below it, read by eye because
+    that text is vector art and does not extract. Stated here because it is not derivable from the
+    file and because reading it the other way turns every depth-wise position into its complement -
+    which is exactly the error that put this family's ASR 9906 strips in the wrong half of the box.
+  strip-is-centred-on-the-plane: >-
+    the rack mounting strip is 3.9 mm thick and is placed so the DIMENSIONED PLANE PASSES THROUGH
+    ITS MIDDLE, at y = plane - 1.95. Neither edge carries the number. An earlier revision put the
+    plane on one edge, which meant the figure's dimension was 3.9 mm from where the drawing said it
+    was, and which edge differed between chassis - casa-cards found the same inconsistency across
+    the two it owns and centred them the same way
   card-orientation: >-
     datasheet - stated directly, and it had been an inference until now. The Overview and
     Reference Guide's "Chassis Slots" section (b-asr9k-overview-reference-guide.pdf p17) names
@@ -365,7 +378,7 @@ views:
     size: {w: 444.5, h: 727.2}
     panel:
       decor:
-        - {at: [0, 589.5], size: [444.5, 3.9], fill: '#9a9c9e'}
+        - {at: [0, 587.55], size: [444.5, 3.9], fill: '#9a9c9e'}
     regions:
       - {id: rack-mounting-plane, label: 'Rack mounting plane - where the chassis bolts to the rack posts'}
   left:
