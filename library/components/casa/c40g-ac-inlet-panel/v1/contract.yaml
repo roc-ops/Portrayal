@@ -1,0 +1,63 @@
+format: 1
+kind: module
+name: c40g-ac-inlet-panel
+version: 1.0.0
+class: inlet
+profile: networking
+description: >-
+  Casa C40G AC input panel - the bolted panel across the bottom of the REAR face
+  on an AC chassis, where a DC chassis carries its two power entry modules. One
+  continuous panel, not four module ends: it carries a rocker ON/OFF switch and
+  an IEC C14 inlet for each of the four front-loaded PSUs, with vent mesh above
+  and below.
+size: {w: 349.2, h: 70.5, d: 20.0}
+attrs:
+  model: 'C40G AC Input Panel'
+  role: ac-input
+  inlets: '4'
+  input: 115VAC or 240VAC auto-adjusting
+provenance:
+  what-it-is: 'drawing - Figure 1-2, "C40G CMTS rear view (AC; non-redundant)",
+    and Figure 1-3, its redundant twin. The bottom band of an AC chassis is ONE
+    panel spanning the card-region width with screws at its corners and mid-edges
+    and one captive screw at its centre - not four separate PSU rear faces. Figure
+    1-11 shows the same four switch-and-inlet groups in isolation and calls them
+    "C40G PSU On/Off switch and AC power receptacle"'
+  why-not-bays: 'the four PSUs are already modelled as FRONT bays (casa/c40g-psu-ac),
+    because that is where they load and where the guide numbers them. Declaring
+    the rear groups as bays too would count each PSU twice in any module total.
+    This panel is therefore ONE part standing for the chassis-side AC entry, and
+    it holds no power figure - the PSUs hold it'
+  mirroring: 'the four groups run PSU1 to PSU4 LEFT to right here, which is the
+    mirror of the front, where the guide says they are "labeled on the front of
+    the chassis as PSU1, PSU2, PSU3 and PSU4 from right to left". Walking round
+    a chassis flips left and right. Group centres are the front bay centres mirrored
+    about the panel width, so an inlet lands behind its own PSU'
+  size: 'drawing, as FRACTIONS - Figure 1-2 renders at an aspect of 1.756 against
+    the real 1.813, about 3 percent out, so it sits between Figure 1-1 (1.795, passes
+    the gate) and Figure 1-10 (1.918, fails). Proportions only, anchored to the
+    band already established from the DC rear: the panel occupies the same y 194
+    to 264.5 the two PEMs do, and the same x 37.5 to 386.7 card-region width. The
+    depth is ESTIMATED'
+  inlets: 'composed from std/c13-inlet@1 rather than drawn - the IEC 60320 C14
+    appliance inlet at the standard 28.0 x 20.0 panel cutout. The figure draws the
+    unmistakable C14 shroud, and the guide calls it an "AC power socket 115VAC or
+    240VAC auto-adjusting"'
+  NOT-PLACED: 'THIS COMPONENT IS BUILT BUT NOT PLACED ON THE C40G, and that is
+    a format limitation rather than an oversight. It belongs on the rear face ONLY
+    in the ac-power configuration, and there is no way to say that: a configuration
+    can carry bays, skins, airflow, region-context and part-numbers, but not placements,
+    so a bolted panel cannot be switched per configuration. Making it a BAY instead
+    would overlap the two PEM bays that occupy the same band, which L13 rejects
+    - and unlike a placement, a bay cannot use `for:` to declare the overlap legitimate,
+    because L13 builds its owned-set from placements only. Marking it `optional:`
+    would hide it everywhere, since build.sh emits no --with variants. So it is
+    measured, recorded and ready for whoever adds config-scoped placements'
+parts:
+  - {ref: std/c13-inlet@1, id: inlet-psu1, at: [28.60, 25.2]}
+  - {ref: std/c13-inlet@1, id: inlet-psu2, at: [115.80, 25.2]}
+  - {ref: std/c13-inlet@1, id: inlet-psu3, at: [203.00, 25.2]}
+  - {ref: std/c13-inlet@1, id: inlet-psu4, at: [290.20, 25.2]}
+relief:
+  wall: '#4a4f55'
+skins: [default]

@@ -81,14 +81,17 @@ provenance:
     ac-power changes nothing about redundancy and neither BDM scheme says anything
     about power. The PEM bays therefore default EMPTY and each DC scheme names them,
     because a configuration cannot clear a bay - occupants are strings - and because
-    neither AC nor DC is "the" C40G. NOT MODELLED: the AC rear face. Figure 1-11
-    gives each PSU a rocker switch and an IEC inlet at the rear of the chassis,
-    but these bays live on the front view, so only the front face is drawn. A rendering
-    note: the snap-on cover is a placement over these bays and carries `for:` naming
-    all four, which is what lets L13 allow the overlap - but the renderer draws
-    bays after placements, so the PSUs appear IN FRONT of a cover that physically
-    sits in front of them. More useful to look at than the truth, and recorded here
-    so nobody reads it as a claim'
+    neither AC nor DC is "the" C40G. THE AC REAR FACE IS BUILT BUT NOT PLACED. Figures
+    1-2 and 1-3 show it: one bolted panel across the bottom of the rear carrying
+    a rocker switch and an IEC C14 inlet per PSU, where the DC chassis carries its
+    two PEMs. It is modelled as casa/c40g-ac-inlet-panel@1 and left unplaced, because
+    the format cannot say that a bolted panel is present only in one configuration:
+    a configuration carries bays, skins, airflow, region-context and part-numbers,
+    but not placements. Making it a bay instead would overlap the two PEM bays in
+    the same band, which L13 rejects - and a bay cannot use `for:` to declare that
+    overlap legitimate, because L13 builds its owned-set from placements only. `optional:`
+    would hide it everywhere, since build.sh emits no --with variants. So the AC
+    rear renders as an empty band today and the part is measured and waiting.'
   protecting-slots: 'SETTLED, and the same half-fault as the C100G. The guide
     numbers this one twice over. For the classic scheme the chassis overview reads
     "Rear slots (fully redundant system) - Upstream and downstream line card I/O
