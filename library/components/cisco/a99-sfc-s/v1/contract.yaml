@@ -1,0 +1,75 @@
+format: 1
+kind: module
+name: a99-sfc-s
+version: 1.0.0
+class: fabric
+profile: networking
+description: >-
+  Cisco ASR 9900 switch fabric card for the ASR 9910, the generation the A99-SFC3-S
+  replaced. Same faceplate as its successor - the two stencil masters are the same
+  drawing - and the Hardware Installation Guide carries a migration procedure between
+  them.
+size: {w: 76.2, h: 492.1}
+attrs:
+  model: 'A99-SFC-S'
+  role: 'switch-fabric'
+  chassis: 'ASR 9910'
+  eol: 'none-announced'
+provenance:
+  size: >-
+    drawing - the stencil master, and for THIS master the shape box is usable where it
+    was not for the cards. The card masters are padded: their shape box aspect (0.1166)
+    disagrees with their own art (0.1122). This master's agrees - 0.1548 shape against
+    0.1552 art for the -S, 0.0888 against 0.0890 for the -T - so the box is the art box,
+    at the stencil's 1:10 inches, giving 76.2 x 492.1 mm and 43.7 x 492.1 mm. Checking
+    the box against the art before using it is the whole of the method here; it is what
+    caught the cards. NO document in the intake states a fabric card's dimensions.
+  depth: >-
+    NOT MODELLED. No document in the intake gives a fabric card's depth, and unlike the
+    line cards there is no datasheet row to take it from. Rather than inherit the line
+    cards' 604.5 - which would be a guess dressed as a measurement, and these cards do
+    not even share the line cards' length - the component declares a faceplate and no
+    body. It will render as a face rather than a box in 3D, and that is the honest
+    depiction of what is known.
+  lamp: >-
+    install guide - Table 9, 'FC Card LED Display Definitions', of the Overview and
+    Reference Guide. Four states, transcribed rather than reduced: green, red, amber and
+    off, each with the sentence Cisco prints beside it. This is a sourced vocabulary,
+    not the RSP's borrowed.
+  shared-art: >-
+    the A99-SFC-S and A99-SFC3-S masters are the SAME DRAWING, agreeing to 0.01 mm on
+    every shape, with only the printed part number differing.
+  power: >-
+    NOT STATED. Table 23 of the Overview and Reference Guide is the per-fabric power
+    table and it has rows for A99-SFC3, A99-SFC3-S, A99-SFC3-T and for the FC/FC2
+    generations by chassis - and for 'SFC-T Card (ASR 9906)', which is this card's -T
+    sibling, at 75/75/85 W. There is no SFC-S row. Reading the -T's 85 W onto the -S
+    would cross both a chassis and a form factor: the successor pair differs 110 against
+    170 the same way. So the figure is absent and the L27 warning stands.
+  chassis: >-
+    install guide - the Hardware Installation Guide's 'Migrating from
+    A99-SFC-S/A99-SFC-T to A99-SFC3-S/A99-SFC3-T Card' section pairs -S with -S and -T
+    with -T, and the SFC3 data sheet puts A99-SFC3-S in the ASR 9910. The -S is
+    therefore the 9910's card in both generations.
+  lifecycle: >-
+    searched - no end-of-life notice for this part number is in the intake.
+elements:
+  status:
+    at: [36.4, 358.4]
+    size: [3.2, 3.2]
+    class: led
+    description: >-
+      the single tri-colour Status LED. Table 9, 'FC Card LED Display Definitions', of
+      the Overview and Reference Guide: green - FC card powered on and FPGA is
+      programmed; red - fault or malfunction in FC card power up or FPGA programming;
+      amber - FC card powered on but fabric not active; off - FC card powered off via
+      CLI. Cisco's own note on the green state is worth carrying: 'Fabric Data Link
+      failure is not detected so LED remains green'.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+relief:
+  wall: '#4a4f55'
+skins: [default]

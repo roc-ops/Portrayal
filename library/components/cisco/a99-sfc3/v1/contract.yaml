@@ -1,0 +1,84 @@
+format: 1
+kind: module
+name: a99-sfc3
+version: 1.0.0
+class: fabric
+profile: networking
+description: >-
+  Cisco ASR 9900 Series Third Generation Switch Fabric Card. One switch fabric plane for
+  an ASR 9912 or an ASR 9922 - the data sheet's specifications table gives the same part
+  number for both. A plain faceplate: a hex-perforated vent field over most of its
+  length, two ejector levers, two captive installation screws and a single tri-colour
+  Status LED.
+size: {w: 41.4, h: 395.7}
+attrs:
+  model: 'A99-SFC3'
+  role: 'switch-fabric'
+  generation: '3rd'
+  chassis: 'ASR 9912, ASR 9922'
+  power-draw-max-w: 340
+  eol: 'none-announced'
+provenance:
+  size: >-
+    drawing - the stencil master, read the way the line cards were. Its shape box is the
+    padded 1.72 x 14.75 in that every card-envelope master in this stencil carries and
+    is not the part; the art measures a plate of 44.06 x 358.8 mm inside a 395.7 mm
+    envelope, and 395.7 is Cisco's own stated line-card W, the one the spec table says
+    'includes ejector bracket/lever'. w is normalised to the line cards' 41.4 so that a
+    fabric slot and a line-card slot are the same opening where a chassis shares them.
+    NO datasheet states a fabric card's dimensions - the SFC3 and SFC2 data sheets carry
+    a specifications table with no physical row at all - so this is stencil-derived, and
+    the corroboration is that the art is the same drawing, at the same scale, as the
+    cards whose dimensions ARE stated.
+  depth: >-
+    NOT MODELLED. No document in the intake gives a fabric card's depth, and unlike the
+    line cards there is no datasheet row to take it from. Rather than inherit the line
+    cards' 604.5 - which would be a guess dressed as a measurement, and these cards do
+    not even share the line cards' length - the component declares a faceplate and no
+    body. It will render as a face rather than a box in 3D, and that is the honest
+    depiction of what is known.
+  lamp: >-
+    install guide - Table 9, 'FC Card LED Display Definitions', of the Overview and
+    Reference Guide. Four states, transcribed rather than reduced: green, red, amber and
+    off, each with the sentence Cisco prints beside it. This is a sourced vocabulary,
+    not the RSP's borrowed.
+  chassis: >-
+    datasheet - Cisco ASR 9900 Series Third Generation Switch Fabric Card 3 Data Sheet,
+    Table 3: 'A99-SFC3 (supports both ASR 9912 and ASR 9922 chassis)', 'A99-SFC3-S
+    (supports ASR 9910 chassis)', 'A99-SFC3-T (supports ASR 9906 chassis)'. One family,
+    three chassis, three part numbers.
+  power: >-
+    install guide - Table 23, 'RSP Cards, RP Cards, Fabric Cards Power Consumption
+    Specifications', of the Overview and Reference Guide. READ THE SCOPE: this one part
+    number has TWO rows, because its draw depends on which chassis it is in. 'A99-SFC3
+    Card (ASR 9922)' is 320 W at 27 C, 330 at 40 and 340 at 55; 'A99-SFC3 Card (ASR
+    9912)' is 165 W at 27 C, 175 at 40 and 185 at 55. That is not a contradiction, it is
+    two scopes - an ASR 9922 carries seven fabric planes against the 9912's five and
+    drives them harder - so both are recorded and the HIGHEST is what power-draw-max-w
+    carries, which is what max means. A 9912 budget built from this number is
+    conservative by up to 155 W per card, and that is the right direction to be wrong
+    in. Cisco states no typical for any card in this table.
+  lifecycle: >-
+    searched - no end-of-life notice for this part number is in the intake. It is itself
+    the migration target: the Hardware Installation Guide carries a 'Migrating from
+    A99-SFC2 to A99-SFC3 Card' section.
+elements:
+  status:
+    at: [34.4, 353.4]
+    size: [3.2, 3.2]
+    class: led
+    description: >-
+      the single tri-colour Status LED. Table 9, 'FC Card LED Display Definitions', of
+      the Overview and Reference Guide: green - FC card powered on and FPGA is
+      programmed; red - fault or malfunction in FC card power up or FPGA programming;
+      amber - FC card powered on but fabric not active; off - FC card powered off via
+      CLI. Cisco's own note on the green state is worth carrying: 'Fabric Data Link
+      failure is not detected so LED remains green'.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+relief:
+  wall: '#4a4f55'
+skins: [default]

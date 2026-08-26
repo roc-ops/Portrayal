@@ -534,7 +534,14 @@ def lint_component_aperture(path, data, lib_roots):
 # a sum over both looks entirely plausible and is a category error: two 650 W
 # PSUs and eight 850 W line cards added together is not a draw, not a supply,
 # and not a crash.
-DRAW_CLASSES = ("line-card", "supervisor", "fan", "cooling", "transceiver")
+# `fabric` is here for the same reason the others are, not as a courtesy. An
+# ASR 9922 holds seven switch fabric cards and Cisco's own per-card table gives
+# them 340 W each at 55 C - 2.4 kW that a chassis budget cannot leave out. A
+# fabric card is a card in a slot that consumes; the only thing separating it
+# from `line-card` is that it forwards between cards rather than off the box,
+# which is not a fact about power.
+DRAW_CLASSES = ("line-card", "supervisor", "fabric", "fan", "cooling",
+                "transceiver")
 SUPPLY_CLASSES = ("psu", "power")
 DRAW_KEYS = ("power-draw-typical-w", "power-draw-max-w", "power-draw-min-w")
 SUPPLY_KEYS = ("power-output-w",)
