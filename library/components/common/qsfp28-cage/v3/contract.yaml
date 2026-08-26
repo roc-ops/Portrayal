@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: qsfp28-cage
-version: 3.1.0
+version: 3.2.0
 class: port
 profile: networking
 description: QSFP28 cage at the measured 19.0mm ganged pitch, four round per-lane LEDs (v3 = composed - cage bezel wraps a std/qsfp-ganged aperture core; ganged cages keep vendor pitch, the aperture is the standard part)
@@ -12,6 +12,11 @@ provenance:
     shared wall 0.500). The previous 18.5 was the OPENING width mistaken for the
     pitch, which would have left no cage wall at all between ganged ports
   elements: photo-inferred
+  led-band: 'drawing - the four lamps are holes in the CHASSIS panel above the aperture,
+    not part of the cage: the AS7726-32X datasheet front figure shows the same metal
+    running behind them, with the port number printed in the gap between the left and
+    right pairs. The skin body therefore starts at the cage flange (y 3.4) and leaves
+    that band unpainted, so panel decor and silkscreen read through it'
   led-states: quick start guide (blue=100G, orange=40G, white=25G breakout/lane, green=10G breakout/lane)
 elements:
   cage: {at: [0.25, 3.5], size: [18.5, 11.0], class: cage}

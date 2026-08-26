@@ -51,6 +51,14 @@ provenance:
     QSFP-DD, 2-5 the left QSFP28 column and 6-9 the right, then the SFP28 run 10-73 block by
     block and column by column. The last legend, 72 up down 73, is legible on the real device in
     IMG_6807 at the bottom right, which confirms the scheme end to end'
+  port-0-1-legend: 'drawing + photo - the 0 up down 1 legend is NOT in the top band with
+    the others. The QSFP-DD column stands alone at the left, and the datasheet page-2 front
+    figure and IMG_6807 both show its legend printed on the metal step between the air
+    filter and the top aperture, not above the filter. Placed at baseline 30.20, which is
+    the same 1.10mm above the aperture that every other column on this panel uses; the
+    step edge measures 27.1 in the photograph against the 27.2 this model already had, so
+    the band it sits in is 4.1mm tall and the glyphs clear both edges. It was at 13.50,
+    under filter-top-step, where nothing could read it'
   port-cutouts: 'drawing - one cutout per aperture, 74 of them, sized from the module footprint
     rather than the registry aperture because ganged cages abut: 18.5 x 9.58 for QSFP and
     14.25 x 10.4 for SFP28. The registry apertures (19.0 x 10.0 and 14.5 x 10.0) are single-port
@@ -423,10 +431,10 @@ views:
       - {id: cut-console-1, at: [413.50, 44.40], size: [16.00, 14.00], shape: rect}
       - {id: cut-reset, at: [394.80, 44.60], size: [4.00, 4.00], shape: rect}
     silkscreen:
-      - {at: [23.25, 13.50], text: '0', font-size: 2.2, anchor: end, for: [port-0, port-1]}
-      - {at: [24.45, 13.50], path: M -0.65 -0.3 L 0 -1.75 L 0.65 -0.3 Z, fill: '#c7ccd1', stroke-width: 0.45, for: [port-0, port-1]}
-      - {at: [26.25, 13.50], path: M -0.65 -1.75 L 0 -0.3 L 0.65 -1.75 Z, fill: '#c7ccd1', stroke-width: 0.45, for: [port-0, port-1]}
-      - {at: [27.45, 13.50], text: '1', font-size: 2.2, anchor: start, for: [port-0, port-1]}
+      - {at: [23.25, 30.20], text: '0', font-size: 2.2, anchor: end, for: [port-0, port-1]}
+      - {at: [24.45, 30.20], path: M -0.65 -0.3 L 0 -1.75 L 0.65 -0.3 Z, fill: '#c7ccd1', stroke-width: 0.45, for: [port-0, port-1]}
+      - {at: [26.25, 30.20], path: M -0.65 -1.75 L 0 -0.3 L 0.65 -1.75 Z, fill: '#c7ccd1', stroke-width: 0.45, for: [port-0, port-1]}
+      - {at: [27.45, 30.20], text: '1', font-size: 2.2, anchor: start, for: [port-0, port-1]}
       - {at: [51.75, 13.50], text: '2', font-size: 2.2, anchor: end, for: [port-2, port-3]}
       - {at: [52.95, 13.50], path: M -0.65 -0.3 L 0 -1.75 L 0.65 -0.3 Z, fill: '#c7ccd1', stroke-width: 0.45, for: [port-2, port-3]}
       - {at: [54.75, 13.50], path: M -0.65 -1.75 L 0 -0.3 L 0.65 -1.75 Z, fill: '#c7ccd1', stroke-width: 0.45, for: [port-2, port-3]}

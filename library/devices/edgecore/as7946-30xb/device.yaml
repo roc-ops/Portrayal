@@ -42,6 +42,13 @@ provenance:
     the up arrow belongs to the left number and the down arrow to the right. Numbering is column-major
     with the EVEN port on the TOP row and the odd port below it. The first pass had this inverted,
     from reading the legend at a resolution where the two arrows merged into one'
+  port-legend-anchors: 'drawing - CONSOLE 0 is centred under the micro-USB, per the QSG
+    mgmt detail figure; its x already WAS the connector centre (404.0 + 7.5/2 = 407.75)
+    and only the anchor was missing, so left-anchored it ran under the CONSOLE 1 jack.
+    The pair arrows were also drawn 2.0mm tall against a 1.73mm digit cap; the datasheet
+    front figure shows the arrow SHORTER than the digits, as the AGR420 legend has it, so
+    they are redrawn at the AGR420 proportion. NOTE, unfixed: the figure prints TWO arrows
+    between each pair of numbers (26 up down 27); this model draws one'
   port-classes: 'datasheet - callouts 1 to 4 on the QSG overview map the groups: ports 0-3 are 400G
     QSFP-DD, 4-21 are 100G QSFP28, 22-25 are 100G QSFP-DD, 26-29 are SFP28'
   mgmt-block: drawing - a ganged 2x2 RJ-45 block at 356.0, 16.8 (32.3 x 25.1) carrying BITS 0 and
@@ -234,49 +241,49 @@ views:
       h: 87.0
     silkscreen:
       - {at: [22.35, 58.4], text: '0', font-size: 2.4, anchor: end, for: [port-0, port-1]}
-      - {at: [24.35, 58.4], path: M -1.1 -0.4 L 0 -2.4 L 1.1 -0.4 Z, fill: '#c7ccd1', stroke-width: 0.3, for: [port-0, port-1]}
+      - {at: [24.35, 58.4], path: M -0.71 -0.33 L 0 -1.91 L 0.71 -0.33 Z, fill: '#c7ccd1', stroke-width: 0.3, for: [port-0, port-1]}
       - {at: [26.35, 58.4], text: '1', font-size: 2.4, anchor: start, for: [port-0, port-1]}
       - {at: [41.55, 58.4], text: '2', font-size: 2.4, anchor: end, for: [port-2, port-3]}
-      - {at: [43.55, 58.4], path: M -1.1 -0.4 L 0 -2.4 L 1.1 -0.4 Z, fill: '#c7ccd1', stroke-width: 0.3, for: [port-2, port-3]}
+      - {at: [43.55, 58.4], path: M -0.71 -0.33 L 0 -1.91 L 0.71 -0.33 Z, fill: '#c7ccd1', stroke-width: 0.3, for: [port-2, port-3]}
       - {at: [45.55, 58.4], text: '3', font-size: 2.4, anchor: start, for: [port-2, port-3]}
       - {at: [71.05, 58.4], text: '4', font-size: 2.4, anchor: end, for: [port-4, port-5]}
-      - {at: [73.05, 58.4], path: M -1.1 -0.4 L 0 -2.4 L 1.1 -0.4 Z, fill: '#c7ccd1', stroke-width: 0.3, for: [port-4, port-5]}
+      - {at: [73.05, 58.4], path: M -0.71 -0.33 L 0 -1.91 L 0.71 -0.33 Z, fill: '#c7ccd1', stroke-width: 0.3, for: [port-4, port-5]}
       - {at: [75.05, 58.4], text: '5', font-size: 2.4, anchor: start, for: [port-4, port-5]}
       - {at: [90.25, 58.4], text: '6', font-size: 2.4, anchor: end, for: [port-6, port-7]}
-      - {at: [92.25, 58.4], path: M -1.1 -0.4 L 0 -2.4 L 1.1 -0.4 Z, fill: '#c7ccd1', stroke-width: 0.3, for: [port-6, port-7]}
+      - {at: [92.25, 58.4], path: M -0.71 -0.33 L 0 -1.91 L 0.71 -0.33 Z, fill: '#c7ccd1', stroke-width: 0.3, for: [port-6, port-7]}
       - {at: [94.25, 58.4], text: '7', font-size: 2.4, anchor: start, for: [port-6, port-7]}
       - {at: [109.25, 58.4], text: '8', font-size: 2.4, anchor: end, for: [port-8, port-9]}
-      - {at: [111.25, 58.4], path: M -1.1 -0.4 L 0 -2.4 L 1.1 -0.4 Z, fill: '#c7ccd1', stroke-width: 0.3, for: [port-8, port-9]}
+      - {at: [111.25, 58.4], path: M -0.71 -0.33 L 0 -1.91 L 0.71 -0.33 Z, fill: '#c7ccd1', stroke-width: 0.3, for: [port-8, port-9]}
       - {at: [113.25, 58.4], text: '9', font-size: 2.4, anchor: start, for: [port-8, port-9]}
       - {at: [139.55, 58.4], text: '10', font-size: 2.4, anchor: end, for: [port-10, port-11]}
-      - {at: [141.55, 58.4], path: M -1.1 -0.4 L 0 -2.4 L 1.1 -0.4 Z, fill: '#c7ccd1', stroke-width: 0.3, for: [port-10, port-11]}
+      - {at: [141.55, 58.4], path: M -0.71 -0.33 L 0 -1.91 L 0.71 -0.33 Z, fill: '#c7ccd1', stroke-width: 0.3, for: [port-10, port-11]}
       - {at: [143.55, 58.4], text: '11', font-size: 2.4, anchor: start, for: [port-10, port-11]}
       - {at: [158.65, 58.4], text: '12', font-size: 2.4, anchor: end, for: [port-12, port-13]}
-      - {at: [160.65, 58.4], path: M -1.1 -0.4 L 0 -2.4 L 1.1 -0.4 Z, fill: '#c7ccd1', stroke-width: 0.3, for: [port-12, port-13]}
+      - {at: [160.65, 58.4], path: M -0.71 -0.33 L 0 -1.91 L 0.71 -0.33 Z, fill: '#c7ccd1', stroke-width: 0.3, for: [port-12, port-13]}
       - {at: [162.65, 58.4], text: '13', font-size: 2.4, anchor: start, for: [port-12, port-13]}
       - {at: [177.75, 58.4], text: '14', font-size: 2.4, anchor: end, for: [port-14, port-15]}
-      - {at: [179.75, 58.4], path: M -1.1 -0.4 L 0 -2.4 L 1.1 -0.4 Z, fill: '#c7ccd1', stroke-width: 0.3, for: [port-14, port-15]}
+      - {at: [179.75, 58.4], path: M -0.71 -0.33 L 0 -1.91 L 0.71 -0.33 Z, fill: '#c7ccd1', stroke-width: 0.3, for: [port-14, port-15]}
       - {at: [181.75, 58.4], text: '15', font-size: 2.4, anchor: start, for: [port-14, port-15]}
       - {at: [207.85, 58.4], text: '16', font-size: 2.4, anchor: end, for: [port-16, port-17]}
-      - {at: [209.85, 58.4], path: M -1.1 -0.4 L 0 -2.4 L 1.1 -0.4 Z, fill: '#c7ccd1', stroke-width: 0.3, for: [port-16, port-17]}
+      - {at: [209.85, 58.4], path: M -0.71 -0.33 L 0 -1.91 L 0.71 -0.33 Z, fill: '#c7ccd1', stroke-width: 0.3, for: [port-16, port-17]}
       - {at: [211.85, 58.4], text: '17', font-size: 2.4, anchor: start, for: [port-16, port-17]}
       - {at: [227.05, 58.4], text: '18', font-size: 2.4, anchor: end, for: [port-18, port-19]}
-      - {at: [229.05, 58.4], path: M -1.1 -0.4 L 0 -2.4 L 1.1 -0.4 Z, fill: '#c7ccd1', stroke-width: 0.3, for: [port-18, port-19]}
+      - {at: [229.05, 58.4], path: M -0.71 -0.33 L 0 -1.91 L 0.71 -0.33 Z, fill: '#c7ccd1', stroke-width: 0.3, for: [port-18, port-19]}
       - {at: [231.05, 58.4], text: '19', font-size: 2.4, anchor: start, for: [port-18, port-19]}
       - {at: [246.25, 58.4], text: '20', font-size: 2.4, anchor: end, for: [port-20, port-21]}
-      - {at: [248.25, 58.4], path: M -1.1 -0.4 L 0 -2.4 L 1.1 -0.4 Z, fill: '#c7ccd1', stroke-width: 0.3, for: [port-20, port-21]}
+      - {at: [248.25, 58.4], path: M -0.71 -0.33 L 0 -1.91 L 0.71 -0.33 Z, fill: '#c7ccd1', stroke-width: 0.3, for: [port-20, port-21]}
       - {at: [250.25, 58.4], text: '21', font-size: 2.4, anchor: start, for: [port-20, port-21]}
       - {at: [275.95, 58.4], text: '22', font-size: 2.4, anchor: end, for: [port-22, port-23]}
-      - {at: [277.95, 58.4], path: M -1.1 -0.4 L 0 -2.4 L 1.1 -0.4 Z, fill: '#c7ccd1', stroke-width: 0.3, for: [port-22, port-23]}
+      - {at: [277.95, 58.4], path: M -0.71 -0.33 L 0 -1.91 L 0.71 -0.33 Z, fill: '#c7ccd1', stroke-width: 0.3, for: [port-22, port-23]}
       - {at: [279.95, 58.4], text: '23', font-size: 2.4, anchor: start, for: [port-22, port-23]}
       - {at: [295.15, 58.4], text: '24', font-size: 2.4, anchor: end, for: [port-24, port-25]}
-      - {at: [297.15, 58.4], path: M -1.1 -0.4 L 0 -2.4 L 1.1 -0.4 Z, fill: '#c7ccd1', stroke-width: 0.3, for: [port-24, port-25]}
+      - {at: [297.15, 58.4], path: M -0.71 -0.33 L 0 -1.91 L 0.71 -0.33 Z, fill: '#c7ccd1', stroke-width: 0.3, for: [port-24, port-25]}
       - {at: [299.15, 58.4], text: '25', font-size: 2.4, anchor: start, for: [port-24, port-25]}
       - {at: [319.62, 58.4], text: '26', font-size: 2.4, anchor: end, for: [port-26, port-27]}
-      - {at: [321.62, 58.4], path: M -1.1 -0.4 L 0 -2.4 L 1.1 -0.4 Z, fill: '#c7ccd1', stroke-width: 0.3, for: [port-26, port-27]}
+      - {at: [321.62, 58.4], path: M -0.71 -0.33 L 0 -1.91 L 0.71 -0.33 Z, fill: '#c7ccd1', stroke-width: 0.3, for: [port-26, port-27]}
       - {at: [323.62, 58.4], text: '27', font-size: 2.4, anchor: start, for: [port-26, port-27]}
       - {at: [333.93, 58.4], text: '28', font-size: 2.4, anchor: end, for: [port-28, port-29]}
-      - {at: [335.93, 58.4], path: M -1.1 -0.4 L 0 -2.4 L 1.1 -0.4 Z, fill: '#c7ccd1', stroke-width: 0.3, for: [port-28, port-29]}
+      - {at: [335.93, 58.4], path: M -0.71 -0.33 L 0 -1.91 L 0.71 -0.33 Z, fill: '#c7ccd1', stroke-width: 0.3, for: [port-28, port-29]}
       - {at: [337.93, 58.4], text: '29', font-size: 2.4, anchor: start, for: [port-28, port-29]}
       - {at: [364.2, 13.0], text: BITS 0, font-size: 2.2, for: bits-0}
       - {at: [380.2, 13.0], text: BITS 2, font-size: 2.2, for: bits-2}
@@ -286,7 +293,7 @@ views:
       - {at: [397.5, 40.4], text: 1PPS OUT, font-size: 2.0, for: pps-1-out}
       - {at: [423.7, 26.6], text: MGMT, font-size: 2.2, for: mgmt-eth}
       - {at: [423.6, 61.8], text: CONSOLE 1, font-size: 2.0, for: console-1}
-      - {at: [407.8, 52.6], text: CONSOLE 0, font-size: 2.0, for: console-0}
+      - {at: [407.8, 52.6], text: CONSOLE 0, font-size: 2.0, anchor: middle, for: console-0}
       - {at: [396.5, 52.6], text: RST, font-size: 2.0, for: reset}
       - {at: [361.5, 53.8], text: DIAG, font-size: 1.9, for: led-diag}
       - {at: [366.8, 53.8], text: LOC, font-size: 1.9, for: led-loc}

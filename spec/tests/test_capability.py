@@ -109,9 +109,12 @@ def _derived(slug):
 
 def test_derived_gaps_are_not_hand_written():
     """A hand-kept list of machine-findable problems goes stale the first time
-    someone fixes one, so the rules are asked rather than transcribed."""
-    gaps, by_rule = _derived("edgecore/as7726-32x")
-    assert by_rule["L21"]["count"] > 30, "the buried-silkscreen debt is real"
+    someone fixes one, so the rules are asked rather than transcribed. The
+    S9510 carries the last of the buried-silkscreen debt: its QSFP-DD port
+    numbers are printed on the blue band the cage component draws, so the mark
+    is right and the component is wrong, and no label move can pay it."""
+    gaps, by_rule = _derived("ufispace/s9510-28dc")
+    assert by_rule["L21"]["count"] > 0, "the buried-silkscreen debt is real"
     assert all(g["kind"] == "derived" for g in gaps)
 
 
@@ -191,7 +194,7 @@ def test_the_chain_is_stated_once():
 
 def test_a_gap_that_counts_nothing_omits_count():
     """`count: 0` reads as "nothing found" rather than "nothing to count"."""
-    man = LIB / "devices/edgecore/as7946-30xb/device.yaml"
+    man = LIB / "devices/ufispace/s9510-28dc/device.yaml"
     dev = yaml.safe_load(man.read_text())
     cap, flags = capability.assess(dev, profiles=PROFILES)
     gaps = capability.derived_gaps(man, dev, [str(LIB)], cap, flags)
@@ -241,7 +244,7 @@ def test_a_gap_names_the_flag_it_blocks_in_a_field():
     gap is correctly named for the cause - `profile-undeclared` - so a name
     match finds nothing, and matching the flag in backticks inside `wanted` is
     prose parsing that breaks silently the first time someone rewords it."""
-    man = LIB / "devices/edgecore/as7946-30xb/device.yaml"
+    man = LIB / "devices/ufispace/s9510-28dc/device.yaml"
     dev = yaml.safe_load(man.read_text())
     cap, flags = capability.assess(dev, profiles=PROFILES)
     gaps = capability.derived_gaps(man, dev, [str(LIB)], cap, flags)

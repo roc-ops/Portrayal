@@ -15,6 +15,21 @@ provenance:
     physical unit)
   bits-tod-jacks: estimated (drawing shows compact stacked jacks ~11.5mm tall; modeled as two standard
     14mm cutout ports which slightly exceeds the drawn stack - verify against physical unit)
+  timing-labels: 'drawing - BITS, the up-down pair and TOD are printed in the gutter to the
+    LEFT of the stacked jacks and RIGHT-aligned against them, and the S9510-28DC wordmark
+    ends on the same edge, one line below the lamp stack. Read off the datasheet front
+    figure (1701px embedded image, the one legible source for this panel). Re-anchored to
+    end at 130.8; left-anchored at 128.2, BITS and the wordmark ran under the jacks - which
+    are themselves modelled ~5mm oversize, see bits-tod-jacks above'
+  qsfpdd-port-numbers: 'UNFIXED, and deliberately. Ports 0-3 keep their numbers at
+    baselines 38.1 and 8.8, which the datasheet front figure says is right: the digit
+    is printed on a blue band just below each QSFP-DD aperture. L21 still reports them
+    because common/qsfp-cage draws that band as tab-accent, a filled rect inside its own
+    13.0mm box, so the number is under the cage rather than on the panel. The figure
+    shows the blue band NARROWER than the aperture and separated from it, which is a
+    printed panel accent, not cage bezel. Paying this means moving tab-accent into
+    panel.decor and shortening the cage - a geometry change on a layout already flagged
+    drawing-inferred and pending photo overlay calibration, not a label move'
   attrs: datasheet (Specifications/Performance/Accessories sections)
   led-semantics: 'HIG section 10, pages 20-21, transcribed rather than only cited - the citation was here and
     the tables were not, so nobody could interpret two of these lamps. Each front-panel lamp
@@ -168,10 +183,10 @@ views:
     silkscreen:
       - {text: PSU0, at: [58.9, 8], font-size: 2.6, rotate: 90}
       - {text: PSU1, at: [58.9, 27], font-size: 2.6, rotate: 90}
-      - {text: S9510-28DC, at: [121.5, 32.6], font-size: 1.9}
-      - {text: BITS, at: [128.2, 19.8], font-size: 1.9}
-      - {text: ▲▼, at: [128.2, 29.0], font-size: 1.9}
-      - {text: TOD, at: [128.2, 36.2], font-size: 1.9}
+      - {text: S9510-28DC, at: [130.8, 32.6], font-size: 1.9, anchor: end}
+      - {text: BITS, at: [130.8, 19.8], font-size: 1.9, anchor: end}
+      - {text: ▲▼, at: [130.8, 29.0], font-size: 1.9, anchor: end}
+      - {text: TOD, at: [130.8, 36.2], font-size: 1.9, anchor: end}
       - {text: SS⚡ ▲▼ IOIOI, at: [160.8, 42.8], font-size: 1.7}
       - {at: [123.95, 12.8], text: GNSS ANT, font-size: 1.9, for: gnss-ant}
       - {at: [137.0, 11.2], text: 10MHZ, font-size: 1.9, for: clk-10mhz}

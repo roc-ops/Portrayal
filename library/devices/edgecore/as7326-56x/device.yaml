@@ -39,6 +39,11 @@ provenance:
     facing away from each other, not toward) with a USB-C below and the pull-out tab under that
     stack. The 10G pair is ports 57/58. The SFP-to-QSFP gap is ~21mm, just over one QSFP port width
   mgmt-positions: estimated from IMG_2141 (racked front)
+  status-led-labels: 'drawing + photo - DIAG, LOC, PS1, PS2 and FAN are printed to the LEFT
+    of their lamps and level with them, not beneath them: the datasheet page-2 System LEDs
+    callout and IMG_2141 agree, and the same layout is visible on the S9510-28DC lamp stack.
+    Right-anchored 1.3mm clear of the lamp column at x 9.2, with each baseline on its lamp
+    centre. They were left-anchored at 12.5 under the lamps, which put DIAG into port-1'
   psu-fan-reuse: the AC PSU FRU part numbers (F0TZZ5654019A / F0TZZ5654020A) are identical to the
     AS7726-32X, so common/psu-ac-650 is the same physical module
   top-bottom-sides: extrapolated from the AS7726-32X, which shares this chassis line and its width
@@ -189,11 +194,11 @@ views:
       - {at: [264.4, 28.6], text: 46▲, font-size: 1.55, fill: '#c9cdd1', anchor: middle}
       - {at: [268.6, 28.6], text: 47▼, font-size: 1.55, fill: '#c9cdd1', anchor: middle}
       - {at: [273.2, 28.6], text: 48▼, font-size: 1.55, fill: '#c9cdd1', anchor: middle}
-      - {at: [12.5, 10.1], text: DIAG, font-size: 1.6, for: led-diag}
-      - {at: [12.5, 18.1], text: LOC, font-size: 1.6, for: led-loc}
-      - {at: [12.5, 26.1], text: PS1, font-size: 1.6, for: led-psu1}
-      - {at: [12.5, 34.1], text: PS2, font-size: 1.6, for: led-psu2}
-      - {at: [12.5, 42.1], text: FAN, font-size: 1.6, for: led-fan}
+      - {at: [9.2, 6.08], text: DIAG, font-size: 1.6, anchor: end, for: led-diag}
+      - {at: [9.2, 14.08], text: LOC, font-size: 1.6, anchor: end, for: led-loc}
+      - {at: [9.2, 22.08], text: PS1, font-size: 1.6, anchor: end, for: led-psu1}
+      - {at: [9.2, 30.08], text: PS2, font-size: 1.6, anchor: end, for: led-psu2}
+      - {at: [9.2, 38.08], text: FAN, font-size: 1.6, anchor: end, for: led-fan}
     components:
       placements:
         - {ref: common/led-arrow@1, id: led-p1, at: [17.1, 11.7], skin: up, group: sfp28-leds, for: port-1, attrs: {port: '1'}}

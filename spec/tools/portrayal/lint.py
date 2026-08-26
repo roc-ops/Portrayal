@@ -153,6 +153,109 @@ def contract_elements(ref, lib_roots):
     return els
 
 
+_PAINT_CACHE = {}
+_SVG_NS = "{http://www.w3.org/2000/svg}"
+
+
+def _paint_box(el):
+    """The box a single SVG node covers, or None if it paints nothing or if this
+    reader cannot be sure. `fill` absent means black in SVG, so absent is FILLED;
+    only an explicit `none` is not. A stroked outline with no fill is a groove or
+    a moulding - you read printing through it, so it does not bury anything."""
+    tag = el.tag.replace(_SVG_NS, "")
+    if el.get("transform"):
+        return "unsure"                    # composing transforms is out of scope here
+    if (el.get("fill") or "").strip() == "none":
+        return None
+    try:
+        if tag == "rect":
+            x, y = float(el.get("x", 0)), float(el.get("y", 0))
+            return (x, y, x + float(el.get("width", 0)), y + float(el.get("height", 0)))
+        if tag == "circle":
+            cx, cy, r = (float(el.get(k, 0)) for k in ("cx", "cy", "r"))
+            return (cx - r, cy - r, cx + r, cy + r)
+        if tag == "ellipse":
+            cx, cy = float(el.get("cx", 0)), float(el.get("cy", 0))
+            rx, ry = float(el.get("rx", 0)), float(el.get("ry", 0))
+            return (cx - rx, cy - ry, cx + rx, cy + ry)
+        if tag in ("path", "polygon", "polyline"):
+            d = el.get("d") or el.get("points") or ""
+            # The token bbox below only tells the truth when every number is half of
+            # an x,y pair. Relative commands, and the shorthands H V A C S Q T that
+            # carry an odd count, both break that, so anything but M/L/Z is unsure.
+            if tag == "path" and re.search(r"[^MLZ0-9eE.,+\-\s]", d):
+                return "unsure"
+            return _path_extent(d, (0, 0)) or "unsure"
+    except (TypeError, ValueError):
+        return "unsure"
+    return "unsure"
+
+
+def paint_boxes(ref, skin, lib_roots):
+    """Every box a component's skin actually PAINTS, in component-local mm, or None
+    when the skin cannot be read confidently.
+
+    L21 asks whether a legend is buried, and burial is about paint, not about a
+    bounding rectangle. Two components in this library make the difference matter:
+    casa/brand-swoop is one unfilled stroked curve 258mm wide that paints nothing
+    over the mark it was accused of hiding, and common/qsfp28-cage carries four
+    panel LEDs above its aperture, with the port number printed in the metal
+    BETWEEN the two LED pairs - exactly where the vendor prints it."""
+    key = (ref, skin)
+    if key in _PAINT_CACHE:
+        return _PAINT_CACHE[key]
+    boxes = None
+    try:
+        nsname, major = ref.rsplit("@", 1)
+    except ValueError:
+        _PAINT_CACHE[key] = None
+        return None
+    for r in lib_roots:
+        base = Path(r) / "components" / nsname / f"v{major}"
+        if not (base / "contract.yaml").exists():
+            continue
+        sp = base / "skins" / f"{skin}.svg"
+        if not sp.exists():
+            break
+        try:
+            root = ET.parse(sp).getroot()
+        except ET.ParseError:
+            break
+        boxes = []
+        for el in root.iter():
+            if el is root:
+                continue
+            tag = el.tag.replace(_SVG_NS, "")
+            if tag in ("defs", "title", "desc", "style", "metadata"):
+                boxes = None
+                break
+            if tag in ("g", "svg"):
+                if el.get("transform"):
+                    boxes = None
+                    break
+                continue
+            b = _paint_box(el)
+            if b == "unsure":
+                boxes = None
+                break
+            if b:
+                boxes.append(b)
+        # A component composes standard hardware through `parts:`; that art paints
+        # too, and the skin does not contain it.
+        if boxes is not None:
+            contract = yaml.safe_load((base / "contract.yaml").read_text()) or {}
+            for p in contract.get("parts") or []:
+                psz = contract_size(p.get("ref", ""), lib_roots) or {}
+                if not (psz.get("w") and psz.get("h")):
+                    boxes = None
+                    break
+                px, py = (p.get("at") or [0, 0])[:2]
+                boxes.append((px, py, px + psz["w"], py + psz["h"]))
+        break
+    _PAINT_CACHE[key] = boxes
+    return boxes
+
+
 def check_states(path, where, states, attrs, elements=None):
     """L20 - a state name is a token, and prose is not a state list.
 
@@ -867,13 +970,33 @@ def lint_device(path, validator, lib_roots):
         # reached into it, because a text `at` is a baseline and the glyphs grow
         # upward from it. Across the portfolio 53 marks are buried, one of them by
         # 1.8mm of a 2.2mm digit.
+        #
+        # What buries a mark is PAINT, not a bounding rectangle. A placement's box
+        # is only the fallback: where the skin can be read, each painted node is
+        # tested on its own, so a legend printed in the bare metal a component
+        # reserves inside its own box - between two LED holes, inside an unfilled
+        # moulding - is correctly left alone. See paint_boxes.
         boxes = []
         for p in vp["placements"]:
             if not p.get("at"):
                 continue                      # a mate-to occupant carries no position
             sz = (contract_size(p["ref"], lib_roots) or {})
-            if sz.get("w") and sz.get("h"):
-                boxes.append((p["at"][0], p["at"][1], sz["w"], sz["h"], p["id"]))
+            if not (sz.get("w") and sz.get("h")):
+                continue
+            px, py, pw, ph = p["at"][0], p["at"][1], sz["w"], sz["h"]
+            painted = paint_boxes(p["ref"], p.get("skin", "default"), lib_roots)
+            if painted is None:
+                boxes.append((px, py, pw, ph, p["id"]))
+                continue
+            flip = str(p.get("rotate", 0)) == "180"
+            for x0, y0, x1, y1 in painted:
+                if flip:                      # a half turn about the box centre
+                    x0, x1 = pw - x1, pw - x0
+                    y0, y1 = ph - y1, ph - y0
+                x0, y0 = max(x0, 0.0), max(y0, 0.0)   # the contracted box is the limit
+                x1, y1 = min(x1, pw), min(y1, ph)
+                if x1 > x0 and y1 > y0:
+                    boxes.append((px + x0, py + y0, x1 - x0, y1 - y0, p["id"]))
         for m in vp["silkscreen"]:
             if not m.get("at"):
                 continue
