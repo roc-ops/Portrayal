@@ -33,21 +33,36 @@ provenance:
     generation's 41.4 instead and they come out 6.4 to 6.9 percent off. The card is 43.7
     thick, and the depth of 520.7 is the one Table A-10 gives for its 80 and 160
     Gigabyte siblings, carried across as a sibling's figure and flagged as one rather
-    than measured. AND THERE IS A DIRECT SOURCE AFTER ALL, found later than the
-    measurement above and kept alongside it because the two disagree in an instructive
-    way. Cisco data sheet c78-735809, Table 3, 'Physical dimensions', has a row for this
-    part: 'A9K-MOD400-SE / -TR: 14.5 W x 1.72 H x 24.25 L (including ejector levers); 21
-    lb (9.5 kg)'. The 1.72 in confirms the 43.7 mm thickness the MPA ruler gave. The
-    24.25 in = 616.0 mm is a DEPTH, and it is carried - these two carriers are 95 mm
-    deeper than the 80 and 160 Gigabyte cards Table A-10 puts at 20.5 in. THE 14.5 IN
-    DOES NOT AGREE WITH ANYTHING and is not carried: 14.5 in is 368.3 mm, which is the
-    PLATE figure every other Cisco sheet in this family gives WITHOUT an ejector
-    qualifier, while the sheets that do say '(includes ejector bracket/lever)' give
-    15.58 in = 395.7 mm. So this row's parenthetical contradicts the rest of Cisco's own
-    documents. The drawing settles it: at 395.7 the bays this master draws measure
-    161.21 mm against the MPA's stated 161.80, and at 368.3 they measure 150.05 - 0.4
-    percent against 7.3. The card is 395.7 including ejectors and Table 3's '(including
-    ejector levers)' is misplaced.
+    than measured. AND A SECOND DIRECT SOURCE, found later than the measurement above
+    and kept beside it because it settles what the parenthetical means. Two Cisco data
+    sheets carry this family in a 'Physical Dimensions' table. data_sheet_c78-663866,
+    the ASR 9000 Modular Line Cards sheet, gives the 80 and 160 Gigabyte carriers in TWO
+    LINES each: '14.5 W x 1.72 H x 22.40 L' and, underneath, '14.5 W x 1.72 H x 24.25 L
+    (including ejector levers)'. datasheet-c78-735809 gives the 200 and 400 in ONE line,
+    which is the second of those two: '14.5 W x 1.72 H x 24.25 L (including ejector
+    levers)'. SO THE PARENTHETICAL ATTACHES TO L. The ejector levers add 1.85 in = 47.0
+    mm to the DEPTH and nothing to the width - which is physically right, since a card's
+    levers protrude forward of its faceplate - and 14.5 in = 368.3 mm is the PLATE width
+    in both sheets. The ejector-inclusive width, 395.7, is simply not stated on either;
+    it comes from the family's own sheets, which give 368.3 and 15.58 in = 395.7 for the
+    same cards, and from the MPA measurement above. An earlier version of this
+    provenance said the parenthetical was misplaced. It is not; it was the two-line
+    layout collapsing to one.
+  depth: >-
+    THREE CISCO FIGURES FOR THIS DEPTH AND ONE IS CARRIED. Table A-10 of the OL-17500-09
+    line card guide gives the 80 and 160 Gigabyte carriers 20.5 in = 520.7 mm,
+    unqualified, in a row alongside every original-generation line card at the same
+    figure. data_sheet_c78-663866 gives the same two cards 22.40 in = 568.96 mm for the
+    body and 24.25 in = 616.0 mm including ejector levers. datasheet-c78-735809 gives
+    the 200 and 400 only the 616.0. 616.0 IS CARRIED, on all eight, for two reasons: it
+    is the one figure both dedicated data sheets state, and it is the ejector-inclusive
+    convention this library already uses for the 4th-generation cards, which carry the
+    604.5 their sheets give as '(includes ejector bracket/lever)'. Carrying 520.7 would
+    have made these carriers shallower than the 4th-generation cards they sit beside in
+    the same chassis, which they are not. Table A-10's 520.7 looks like the original-
+    generation row value applied to a card that had not been measured separately; it is
+    recorded here rather than discarded, because it is Cisco's and because it is what
+    the 80 and 160 were first modelled at.
   art-box-is-not-a-size: >-
     A TRAP IN THIS STENCIL THAT COST ME A WRONG ARGUMENT, recorded because it will catch
     the next person. The first version of this provenance said these carriers share a

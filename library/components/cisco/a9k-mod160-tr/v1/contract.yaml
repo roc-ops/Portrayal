@@ -9,7 +9,7 @@ description: >-
   carrier, not a port card: the faceplate is two bays for Modular Port Adapters and
   almost nothing else - a Status lamp, an ejector and a captive screw at each end. Every
   port this card presents belongs to the MPA seated in one of its bays.
-size: {w: 43.7, h: 395.7, d: 520.7}
+size: {w: 43.7, h: 395.7, d: 616.0}
 attrs:
   model: 'A9K-MOD160-TR'
   role: 'modular-line-card'
@@ -33,6 +33,36 @@ provenance:
     section whose entire content is 'For physical specifications, refer to the ASR 9000
     Series line card data sheets' and a URL. The older revision is in the intake and it
     is the source. Anything sized from the newer guide alone would have had to guess.
+    AND A SECOND DIRECT SOURCE, found later than the measurement above and kept beside
+    it because it settles what the parenthetical means. Two Cisco data sheets carry this
+    family in a 'Physical Dimensions' table. data_sheet_c78-663866, the ASR 9000 Modular
+    Line Cards sheet, gives the 80 and 160 Gigabyte carriers in TWO LINES each: '14.5 W
+    x 1.72 H x 22.40 L' and, underneath, '14.5 W x 1.72 H x 24.25 L (including ejector
+    levers)'. datasheet-c78-735809 gives the 200 and 400 in ONE line, which is the
+    second of those two: '14.5 W x 1.72 H x 24.25 L (including ejector levers)'. SO THE
+    PARENTHETICAL ATTACHES TO L. The ejector levers add 1.85 in = 47.0 mm to the DEPTH
+    and nothing to the width - which is physically right, since a card's levers protrude
+    forward of its faceplate - and 14.5 in = 368.3 mm is the PLATE width in both sheets.
+    The ejector-inclusive width, 395.7, is simply not stated on either; it comes from
+    the family's own sheets, which give 368.3 and 15.58 in = 395.7 for the same cards,
+    and from the MPA measurement above. An earlier version of this provenance said the
+    parenthetical was misplaced. It is not; it was the two-line layout collapsing to
+    one.
+  depth: >-
+    THREE CISCO FIGURES FOR THIS DEPTH AND ONE IS CARRIED. Table A-10 of the OL-17500-09
+    line card guide gives the 80 and 160 Gigabyte carriers 20.5 in = 520.7 mm,
+    unqualified, in a row alongside every original-generation line card at the same
+    figure. data_sheet_c78-663866 gives the same two cards 22.40 in = 568.96 mm for the
+    body and 24.25 in = 616.0 mm including ejector levers. datasheet-c78-735809 gives
+    the 200 and 400 only the 616.0. 616.0 IS CARRIED, on all eight, for two reasons: it
+    is the one figure both dedicated data sheets state, and it is the ejector-inclusive
+    convention this library already uses for the 4th-generation cards, which carry the
+    604.5 their sheets give as '(includes ejector bracket/lever)'. Carrying 520.7 would
+    have made these carriers shallower than the 4th-generation cards they sit beside in
+    the same chassis, which they are not. Table A-10's 520.7 looks like the original-
+    generation row value applied to a card that had not been measured separately; it is
+    recorded here rather than discarded, because it is Cisco's and because it is what
+    the 80 and 160 were first modelled at.
   art-box-is-not-a-size: >-
     A TRAP IN THIS STENCIL THAT COST ME A WRONG ARGUMENT, recorded because it will catch
     the next person. The first version of this provenance said these carriers share a
@@ -93,6 +123,12 @@ provenance:
     every MPA in this library plus the blank - which is what the guide's general
     sentence supports and no more. If a per-card restriction exists in a data sheet not
     in this intake, this list is the thing it would narrow.
+  weight: >-
+    install guide - Table A-10 of OL-17500-09, row 'A9K-MOD160-SE': 16.34 pounds /
+    7.4117 kg, footnoted '(without EPs)' - that is, without the port adapters.
+    data_sheet_c78-663866 gives '18 lbs. (8.16 Kg)' for the same part with no qualifier
+    at all. The qualified figure is carried because it is the one whose scope is known;
+    the estimate is recorded so the difference is not read later as an error.
   lifecycle: >-
     searched - no end-of-life notice for this part number is in the intake.
 elements:
