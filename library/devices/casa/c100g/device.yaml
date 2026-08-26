@@ -54,11 +54,12 @@ provenance:
   captions: 'the HIG has no "Ground Strap" text anywhere - it says ESD strap receptacle,
     21 times - and no "Cable Manager" text either. Both were the modeller naming parts, so
     both have moved out of silkscreen[] (ink on the metal) into regions (author annotation),
-    carrying the vendor word rather than the invented one. STILL UNRESOLVED: Fan L/C/R and
-    Grounding Studs on the rear are the same species and are NOT in the HIG text either, but
-    they sit beside PEM A/PEM B, which a rear panel plausibly does print - and there is no
-    photograph of the chassis rear in the intake to settle it. Left as silkscreen rather than
-    guessed at; a square-on rear photograph closes it'
+    carrying the vendor word rather than the invented one. Fan L/C/R and Grounding Studs on
+    the rear were the same species and were held back one pass for want of a rear photograph,
+    since they sit beside PEM A/PEM B, which a rear panel plausibly does print. Owner
+    confirmed 2026-08-25 that they are NOT printed, so they are regions too. PEM A and PEM B
+    stay in silkscreen: they were not part of that question and nothing says they are absent
+    from the metal'
 attrs:
   physical:
     weight: 132 lb / 61.23 kg fully loaded
@@ -166,12 +167,8 @@ views:
       decor:
         - {at: [0, 470.0], size: [432.95, 101.0], fill: '#4a4f55'}
     silkscreen:
-      - {at: [72.625, 98.3], text: Fan L, for: fan-l}
-      - {at: [216.475, 98.3], text: Fan C, for: fan-c}
-      - {at: [360.325, 98.3], text: Fan R, for: fan-r}
       - {at: [109.5, 475.7], text: PEM B, for: pem-b}
       - {at: [323.45, 475.7], text: PEM A, for: pem-a}
-      - {at: [407.0, 474.1], text: Grounding Studs, for: ground-bolts-rear}
     components:
       bays:
         - {id: rear-0, at: [399.29, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/io-6p12@1], group: rear-slots, rel-pos: 0, default: null}
@@ -198,6 +195,8 @@ views:
         - {id: ground-bolts-rear, ref: casa/ground-bolts@1, at: [393.2, 460.2], group: grounding, rel-pos: 1}
     regions:
       - {id: esd-strap-rear, label: ESD strap receptacle, members: [ground-strap-rear]}
+      - {id: fan-tray, label: Fan modules, members: [fan-l, fan-c, fan-r]}
+      - {id: grounding-studs, label: Grounding studs, members: [ground-bolts-rear]}
 configurations:
   bdm2m-11plus1:
     description: BDM2m "11+1" - the vendor's name for it. Redundancy collapses to a single protecting
