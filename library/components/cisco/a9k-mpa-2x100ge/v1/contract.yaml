@@ -1,0 +1,161 @@
+format: 1
+kind: module
+name: a9k-mpa-2x100ge
+version: 1.0.0
+class: line-card
+profile: networking
+description: >-
+  Cisco 2-Port 100 Gigabit Ethernet Modular Port Adapter with CFP2. Two CFP2 cages on
+  the MPA envelope, each with a triangular A/L indicator and a numeral beside it, plus a
+  STATUS lamp - all of them drawn as outlined glyphs rather than as text, which is why a
+  text scan of this master finds only the PID. Seats in an A9K-MOD carrier; it is on the
+  400 Gigabyte carrier's explicit supported list, which names it as the '2-Port
+  100-Gigabit Ethernet Modular Port Adapter with CFP2-DCO and CPAK'.
+size: {w: 34.54, h: 161.8, d: 170.18}
+attrs:
+  model: 'A9K-MPA-2X100GE'
+  role: 'modular-port-adapter'
+  cfp2: 2
+  media: 'CFP2, 100 Gigabit Ethernet'
+  weight-kg: 1.09
+  eol: 'none-announced'
+provenance:
+  size: >-
+    datasheet - Cisco ASR 9000 Series data sheet c78-735809, Table 3, 'Physical
+    dimensions', row 'A9K-MPA-2X100GE': 6.37 W x 1.36 H x 6.70 L, and a second line 6.37
+    W x 1.36 H x 8.30 L (including jackscrew); weight 38.4 oz (1.09 kg). In millimetres
+    161.80 long by 34.54 thick by 170.18 deep, or 210.82 with the jackscrew, which
+    protrudes and is not part of the body. Every MPA in that table carries the same
+    envelope and a different weight.
+  aperture: >-
+    DRAWN, NOT COMPOSED, AND DECLARED `class: cutout` ANYWAY - which takes an L26
+    warning, and the warning is the point. THE CFP2 SPECIFICATION EXCLUDES THE NUMBER
+    EXPLICITLY. Revision 1.0 was fetched and read: section 5.3 states 'All mechanical
+    hardware dimensions in this document are for reference only. Normative dimensions
+    are found in the latest published CFP2 baseline drawing', and section 5.4, Host
+    System Dimensions, is one sentence pointing at the same members-only document. The
+    cages here are transcribed from the master at 15.23 x 37.13 mm and conform to
+    nothing, because there is nothing to conform to. The earlier instinct on cards like
+    this was to withhold `class: cutout` so the aperture census stayed clean; that is
+    backwards. L26's own message ends 'if the dimension cannot be sourced yet, this
+    warning is the record of that'. A census kept tidy by not declaring a cutout has
+    been routed around, not satisfied. WHAT WOULD CLOSE THIS, stated so a contributor is
+    not sent on an errand that cannot be run: CFP MSA membership and the baseline
+    drawing it gives access to, or a Cisco mechanical drawing of this faceplate. NOT
+    'look harder' - this is not a search that failed, it is a specification that
+    withholds the figure. Contrast the XFP on the 4-port and 2-port 10GE MPAs in this
+    library, where INF-8077i gives the bezel opening outright in two figures and the
+    only thing missing had been anyone looking outside the vendor's own guide. AND TWO
+    CISCO MASTERS DRAW THIS SAME APERTURE DIFFERENTLY, which is worth knowing before
+    anyone is tempted to register a key from either. This master draws its CFP2 opening
+    at 15.23 x 37.13 mm; the A9K-400G-DWDM-TR master draws its CFP2 openings at 13.61 x
+    42.63. Same form factor, same vendor, same stencil, 12 percent apart across and 13
+    percent along. Neither can be the standard's opening and at most one is this card's,
+    so the drawing is a poor witness here even setting aside that there is no registry
+    entry to compare it against.
+  outlined-glyphs: >-
+    READ THIS BEFORE BELIEVING ANY 'NOTHING IS PRINTED' CLAIM ABOUT THIS MASTER. Its
+    port numeral, its A/L legend and its STATUS legend are ALL OUTLINED GLYPHS, not text
+    - the text extractor returns only the PID (twice), CLASS 1 LASER and a stray CM-1,
+    and on that basis a first draft of this component asserted the card 'PRINTS NO PORT
+    NUMERALS AT ALL'. Rendering the master at 8 px/mm shows the numeral in Cisco blue
+    above the cage, an A/L triangle beside it and a STATUS lamp with its legend. The
+    numerals are recoverable as #054467 ink boxes, the A/L indicators as #737373
+    triangles and the STATUS lamp as a stroked circle - all three found by looking at
+    the artwork rather than at the text runs. THE SAME TRAP CAUGHT THE A99-12X100GE
+    EARLIER in this library and it is the same shape as every false claim of vendor
+    silence in this vendor's set: 'not in the thing I searched' written down as 'not
+    there'.
+  screws: >-
+    drawing - three captive screws, all stroked circles found by scanning fill:none
+    paths: 8.11 mm at (4.21, 76.90), 5.38 at (27.45, 78.25) and 5.38 at (2.18, 88.11).
+    Two sizes and an asymmetric arrangement, which is what the master draws. ONE
+    ARTEFACT REPRODUCED RATHER THAN CORRECTED: the smallest screw's circle extends about
+    0.5 mm past the plate's own edge in the master. That is the drawing's, not a
+    modelling error, and nudging it inward would have made the component disagree with
+    the artwork it is transcribed from without making it agree with the hardware.
+  ports: >-
+    install guide + drawing. The guide's contents name '2-Port 100-Gigabit Ethernet
+    Modular Port Adapter with CFP2', and the A9K-MOD400's supported list names it again
+    with the media spelled 'CFP2-DCO and CPAK'. THE MASTER NUMBERS ITS PORTS, as
+    outlined glyphs in Cisco blue rather than as text: a #054467 ink box beside each
+    cage, at (26.71, 39.0) for '0', (26.91, 123.9) for '1'.
+  power: >-
+    NOT STATED. No MPA in this family has a power figure anywhere in the intake: Table
+    35 of the Ethernet Line Card Installation Guide gives per-card power for the
+    modular-chassis line cards including the A9K-MOD carriers and nothing for the
+    adapters inside them, and c78-735809's Table 3 gives dimensions and weights only. An
+    MPA's draw is inside its carrier's, and the carriers say so.
+  lamps: >-
+    drawing - an A/L triangle per port and one STATUS lamp for the adapter, which is the
+    same complement every other MPA in this library carries. The A/L indicators are
+    #737373 triangles at (21.63, 11.37), (21.63, 100.71), and the STATUS lamp is a
+    stroked circle 3.18 mm across found by scanning fill:none paths, because it appears
+    in no filled-shape list. NO PER-CARD LED TABLE EXISTS for this MPA - the guide has
+    one for six of the others and none for this - so the vocabularies are the family's
+    and are BORROWINGS, flagged as such.
+  lifecycle: >-
+    searched - no end-of-life notice for this part number is in the intake.
+elements:
+  cfp2-0:
+    at: [10.45, 20.81]
+    size: [15.23, 37.13]
+    class: cutout
+    description: >-
+      CFP2 port 0. A drawn opening, not a composed aperture - see provenance.aperture.
+  cfp2-1:
+    at: [10.45, 105.54]
+    size: [15.23, 37.13]
+    class: cutout
+    description: >-
+      CFP2 port 1. A drawn opening, not a composed aperture - see provenance.aperture.
+  led-p0:
+    at: [21.63, 11.37]
+    size: [3.48, 2.94]
+    class: led
+    description: >-
+      the port's A/L (Active/Link) indicator. The master draws it as a TRIANGLE rather
+      than a rectangle or a circle, with its 'A/L' legend beside it as outlined glyphs -
+      see provenance.outlined-glyphs. No per-card LED table exists for this MPA, so the
+      three states are the family's and are a BORROWING, flagged as one.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-p1:
+    at: [21.63, 100.71]
+    size: [3.48, 2.94]
+    class: led
+    description: >-
+      the port's A/L (Active/Link) indicator. The master draws it as a TRIANGLE rather
+      than a rectangle or a circle, with its 'A/L' legend beside it as outlined glyphs -
+      see provenance.outlined-glyphs. No per-card LED table exists for this MPA, so the
+      three states are the family's and are a BORROWING, flagged as one.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  status:
+    at: [14.01, 146.83]
+    size: [3.18, 3.18]
+    class: led
+    description: >-
+      the card's Status LED. Table 32, 'Port Status and Line Card Status LEDs', of the
+      Ethernet Line Card Installation Guide, section 'Card Status LED (one per card)'.
+      Green: line card has booted properly and is ready to pass or is passing traffic.
+      Steady amber: boot process underway. Blinking amber: software configuration error
+      that prevents the card passing traffic - it may still be passing traffic with some
+      degradation. Red: hardware error, not passing traffic. Off: powered off. Steady and
+      blinking amber share one colour and are not two states; the distinction is recorded
+      because it is the difference between a card booting and a card misconfigured.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+relief:
+  wall: '#4a4f55'
+body:
+  depth: 170.18
+  color: '#b9bec4'
+skins: [default]

@@ -1,0 +1,139 @@
+format: 1
+kind: module
+name: a9k-4x100ge-se
+version: 1.0.0
+class: line-card
+profile: networking
+description: >-
+  Cisco ASR 9000 Series 4-Port 100 Gigabit Ethernet Line Card with CPAK. 4 CPAK cages
+  down the faceplate, numbered 0 to 3, with a single card Status lamp. Cisco: 'Based on
+  Cisco CPAK technology, this line card has flexible interfaces that support 100 Gigabit
+  Ethernet, 40 Gigabit Ethernet and 10 Gigabit Ethernet modes, so it gives customers the
+  flexibility to mix and match interface types on the same line card.' The -TR sibling
+  shares this drawing and has no master of its own.
+size: {w: 41.4, h: 395.7, d: 559.3}
+attrs:
+  model: 'A9K-4X100GE-SE'
+  role: 'line-card'
+  cpak: 4
+  media: 'CPAK, 100/40/10 Gigabit Ethernet'
+  weight-kg: 12.7
+  operating-temp: '5 to 40 C'
+  chassis: 'ASR 9006, ASR 9010, ASR 9904, ASR 9912, ASR 9922'
+  eol: 'none-announced'
+provenance:
+  size: >-
+    datasheet - Cisco ASR 9000 Series 4-Port and 8-Port 100 Gigabit Ethernet Line Cards
+    Data Sheet (c78-733790), 'Physical dimensions (H x W x D); weight': '4-port 100
+    Gigabit Ethernet Line Card: 14.5 x 1.63 x 22.02 in.; 28 lb (est.) (368.3 mm x 41.4
+    mm x 559.3 mm; 12.7 kg)'. H is the LONG dimension in this sheet's axis order and
+    368.3 is the PLATE; the card is modelled at the family's ejector-inclusive 395.7,
+    the same step and the same reasoning as every other 4th-generation card here, and
+    Cisco's own sheets give both figures for cards of this family - 368.3 unqualified
+    and 15.58 in = 395.7 where they say '(includes ejector bracket/lever)'. Depth 559.3
+    is the sheet's.
+  shell: >-
+    drawing - the plate, ejector blocks, captive screws and Status lamp are measured off
+    this master and scaled to the datasheet's own dimensions on both axes. NOTE THE ART
+    BOX IS NOT A SIZE: this master is drawn on the 46.55 x 413.95 template that the
+    ORIGINAL generation uses, and the datasheet says 41.4 mm, which is the 4th
+    generation's thickness and not that template's 43.7. The A9K-MOD200 is the standing
+    proof that a template does not settle a thickness - it sits on the 4th generation's
+    template and is an original-generation 43.7 mm card - so the datasheet is the
+    authority here and the template is only a fact about which drawing Cisco copied.
+  aperture: >-
+    DRAWN, NOT COMPOSED, AND DECLARED `class: cutout` ANYWAY - which takes an L26
+    warning, and the warning is the point. CPAK IS CISCO-PROPRIETARY AND HAS NO MSA AT
+    ALL. There is no multi-source agreement, no public mechanical specification and no
+    bezel-opening figure anywhere in the 78-document intake. The cages here are
+    transcribed from the master at 13.92 x 37.01 mm and conform to nothing, because
+    there is nothing to conform to. The earlier instinct on cards like this was to
+    withhold `class: cutout` so the aperture census stayed clean; that is backwards.
+    L26's own message ends 'if the dimension cannot be sourced yet, this warning is the
+    record of that'. A census kept tidy by not declaring a cutout has been routed
+    around, not satisfied. WHAT WOULD CLOSE THIS, stated so a contributor is not sent on
+    an errand that cannot be run: CFP MSA membership and the baseline drawing it gives
+    access to, or a Cisco mechanical drawing of this faceplate. NOT 'look harder' - this
+    is not a search that failed, it is a specification that withholds the figure.
+    Contrast the XFP on the 4-port and 2-port 10GE MPAs in this library, where INF-8077i
+    gives the bezel opening outright in two figures and the only thing missing had been
+    anyone looking outside the vendor's own guide.
+  ports: >-
+    drawing - the master draws 4 cages at x 18.10 on a pitch that alternates 42.25 and
+    44.93 mm, and NUMBERS EVERY ONE ITSELF as text at x 34.21. The numerals are read,
+    not inferred: '0' at y 41.04 through '3' at 171.87, each beside its own cage.
+  chassis: >-
+    datasheet - c78-733790: 'Both the ASR 9000 Series 4-port and 8-port 100 Gigabit
+    Ethernet line cards are fully compatible with Cisco ASR 9006 Router, ASR 9010
+    Router, ASR 9904 Router, ASR 9912 Router, and ASR 9922 Router. However, their
+    chassis may require a hardware update for the cooling and power systems, because the
+    line cards offer industry-leading, high-density 100 Gigabit Ethernet throughput.'
+    Five chassis, and the caveat is Cisco's own and worth carrying - it is the only
+    place in this family where a compatibility statement comes with a condition
+    attached.
+  lifecycle: >-
+    searched - no end-of-life notice for this part number is in the intake.
+  power: >-
+    NOT CARRIED. Table 35 of the Ethernet Line Card Installation Guide has a row '4-Port
+    100-Gigabit Ethernet Line Card (OTN version)' at 1000 W at 27 C, 1050 at 40 and 1100
+    at 50, and a separate unqualified row '4-Port 100-Gigabit Line Card' at 450/475/500.
+    This card is the CPAK one and the OTN row is very likely it - the unqualified row
+    belongs to the QSFP28 A9K-4X100GE, whose own data sheet calls it a LAN card and
+    twice calls it low-power. But c78-733790 never says OTN, so the join is an inference
+    and not a citation, and there is a third candidate for the unqualified row in
+    A9K-400GE-LAN-FC. Same restraint as cisco/a9k-4x100ge, cisco/a9k-mod200-se and
+    cisco/a9k-16x100ge-se.
+  identity: >-
+    TWO DIFFERENT CARDS SHARE THIS PART NUMBER'S ROOT. cisco/a9k-4x100ge is the QSFP28
+    'LAN line card' with its own data sheet c78-740092 at 8.9 kg; this is the CPAK card
+    from c78-733790 at 12.7 kg. The masters settle it too - this one's cages are 13.92 x
+    37.01 mm against the QSFP28 card's 8.45 x 19.16, nearly twice the length.
+elements:
+  cpak-0:
+    at: [18.1, 27.45]
+    size: [13.92, 37.01]
+    class: cutout
+    description: >-
+      CPAK port 0. A drawn opening, not a composed aperture - see provenance.aperture.
+  cpak-1:
+    at: [18.1, 69.7]
+    size: [13.92, 37.01]
+    class: cutout
+    description: >-
+      CPAK port 1. A drawn opening, not a composed aperture - see provenance.aperture.
+  cpak-2:
+    at: [18.1, 114.63]
+    size: [13.92, 37.01]
+    class: cutout
+    description: >-
+      CPAK port 2. A drawn opening, not a composed aperture - see provenance.aperture.
+  cpak-3:
+    at: [18.1, 158.23]
+    size: [13.92, 37.01]
+    class: cutout
+    description: >-
+      CPAK port 3. A drawn opening, not a composed aperture - see provenance.aperture.
+  status:
+    at: [22.24, 368.71]
+    size: [3.36, 3.36]
+    class: led
+    description: >-
+      the card's Status LED. Table 32, 'Port Status and Line Card Status LEDs', of the
+      Ethernet Line Card Installation Guide, section 'Card Status LED (one per card)'.
+      Green: line card has booted properly and is ready to pass or is passing traffic.
+      Steady amber: boot process underway. Blinking amber: software configuration error
+      that prevents the card passing traffic - it may still be passing traffic with some
+      degradation. Red: hardware error, not passing traffic. Off: powered off. Steady and
+      blinking amber share one colour and are not two states; the distinction is recorded
+      because it is the difference between a card booting and a card misconfigured.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+relief:
+  wall: '#4a4f55'
+body:
+  depth: 559.3
+  color: '#b9bec4'
+skins: [default]
