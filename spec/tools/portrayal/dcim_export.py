@@ -54,6 +54,40 @@ IFACE_TYPE = {
 }
 AIRFLOW = {"front-to-back": "front-to-rear", "back-to-front": "rear-to-front"}
 
+# A module's ports are its `parts`. Mapped by component ref, because a cage's
+# ref says what the cage IS while the speed it runs at is a property of the card
+# - a9k-40ge-b's forty std/sfp-ganged are SFP+, and the attrs say so.
+PART_IFACE = {
+    "std/sfp-ganged": "10gbase-x-sfpp",
+    "common/sfp-plus-cage": "10gbase-x-sfpp",
+    "std/sfp": "1000base-x-sfp",
+    "std/xfp": "10gbase-x-xfp",
+    "std/qsfp-ganged": "40gbase-x-qsfpp",
+    "std/qsfp28": "100gbase-x-qsfp28",
+    "std/qsfp-dd": "400gbase-x-qsfpdd",
+}
+# Where the card's own attrs name a faster media, they win over the cage default:
+# a QSFP cage on a 100G card is not 40G because the cage would also take 40G.
+ATTR_IFACE = {
+    "qsfp-dd": "400gbase-x-qsfpdd",
+    "qsfp28": "100gbase-x-qsfp28",
+    "qsfp": "40gbase-x-qsfpp",
+    "sfp-plus": "10gbase-x-sfpp",
+    "sfp": "1000base-x-sfp",
+}
+PART_CONSOLE = {"std/rj45-ganged": "rj-45", "common/rj45-shielded": "rj-45",
+                "std/usb-a": "usb-a"}
+# std/c13-inlet is the appliance inlet that accepts a C13 cord, which on the
+# equipment side is a C14. Naming them from the cord end is the convention in
+# the manifests; the DCIM names them from the inlet.
+PART_POWER = {"std/c13-inlet": "iec-60320-c14"}
+# Deliberately unmapped: std/mcx, std/smb, std/f-type are RF and timing
+# connectors with no honest equivalent in either library's front-port
+# vocabulary, and std/lc-bore appears twice. Guessing a type for a DOCSIS F
+# connector would put a wrong fact in a source of truth.
+PART_SKIP = {"std/mcx", "std/smb", "std/f-type", "std/lc-bore",
+             "common/qsfp-pull-tab"}
+
 # Both libraries take the same device-type document. They differ only in what
 # they REQUIRE - NetBox also demands u_height and is_full_depth, which we always
 # write - and in the airflow enum, where NetBox allows three values we never
@@ -321,6 +355,65 @@ def build(dev, cfg_name, cfg, profile, dist=None, frus=None, label=None):
     return out, bool(ports)
 
 
+def build_module(contract, manufacturer):
+    """A module contract as a DCIM module type."""
+    attrs = contract.get("attrs") or {}
+    model = str(attrs.get("model") or contract["name"])
+    out = {"manufacturer": manufacturer, "model": model}
+
+    if attrs.get("weight-kg"):
+        out["weight"] = round(float(attrs["weight-kg"]), 2)
+        out["weight_unit"] = "kg"
+
+    if contract.get("description"):
+        out["description"] = contract["description"].strip().split(".")[0][:200]
+
+    # Which interface type this card's cages actually run at. The cage ref gives
+    # the floor; an attr naming a faster media raises it.
+    faster = None
+    for key, t in ATTR_IFACE.items():
+        if attrs.get(key):
+            faster = t
+            break
+
+    ifaces, consoles, powers = [], [], []
+    for part in contract.get("parts") or []:
+        if not isinstance(part, dict):
+            continue
+        ref = part["ref"].split("@")[0]
+        pid = str(part.get("id") or "")
+        if ref in PART_SKIP:
+            continue
+        if ref in PART_POWER:
+            powers.append({"name": pid or "Inlet", "type": PART_POWER[ref]})
+        elif ref in PART_CONSOLE:
+            consoles.append({"name": pid or "Console", "type": PART_CONSOLE[ref]})
+        elif ref in PART_IFACE:
+            t = PART_IFACE[ref]
+            if faster and t.split("base")[0] < faster.split("base")[0]:
+                t = faster
+            ifaces.append({"name": pid, "type": t})
+
+    if consoles:
+        out["console-ports"] = consoles
+    if ifaces:
+        out["interfaces"] = ifaces
+    if powers:
+        out["power-ports"] = powers
+
+    body = []
+    if contract.get("description"):
+        body += [contract["description"].strip(), ""]
+    facts = [f"- {k}: {v}" for k, v in attrs.items()
+             if k != "model" and isinstance(v, (str, int, float))]
+    if facts:
+        body.append("Facts carried in the model that this schema has no field for:")
+        body += facts
+    if body:
+        out["comments"] = "\n".join(body).strip()
+    return out
+
+
 def _num(s):
     try:
         return int(s)
@@ -372,15 +465,62 @@ def render_image(dist, root, target, doc, dev_name, cfg_name, face):
     return png
 
 
+def export_modules(library, root, dist=None):
+    """Every module contract in the library, as module types for both targets.
+
+    A module type is an orderable part, so it needs a manufacturer. The
+    namespace gives it - learned from the devices, which are the only place the
+    library states a manufacturer - and the generic `common/` namespace is
+    skipped: a part with no vendor is not something a DCIM can order.
+    """
+    lib = Path(library)
+    ns2man = {}
+    for f in sorted(lib.glob("devices/*/*/device.yaml")):
+        ns = f.parts[-3]
+        ns2man.setdefault(ns, yaml.safe_load(f.read_text()).get("manufacturer"))
+
+    wrote = skipped = 0
+    for f in sorted(lib.glob("components/*/*/*/contract.yaml")):
+        contract = yaml.safe_load(f.read_text())
+        if contract.get("kind") != "module":
+            continue
+        ns = f.parts[-4]
+        man = ns2man.get(ns)
+        if not man:
+            skipped += 1
+            continue
+        doc = build_module(contract, man)
+        for target in TARGETS:
+            d = Path(root) / target / "module-types" / man
+            d.mkdir(parents=True, exist_ok=True)
+            # Cisco ships part numbers with slashes in them - A9K-16T/8-B - and
+            # a slash is a path separator, not a character. The model keeps the
+            # real name; only the filename is sanitised.
+            out = d / (doc["model"].replace("/", "-") + ".yaml")
+            out.write_text("---\n" + yaml.dump(doc, Dumper=Indented, sort_keys=False,
+                                               width=100, default_flow_style=False))
+        wrote += 1
+        print(f"{doc['model']}  ({len(doc.get('interfaces', []))} interfaces, "
+              f"{len(doc.get('power-ports', []))} power ports)")
+    print(f"module types: {wrote} written, {skipped} skipped for having no manufacturer")
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("device")
+    ap.add_argument("device", nargs="?")
+    ap.add_argument("--modules", help="export module types from this library root")
     ap.add_argument("--out", required=True, help="root of the exports tree")
     ap.add_argument("--nos", action="append", default=[],
                     help="NOS profile to name interfaces for; repeatable")
     ap.add_argument("--dist", help="compiled SVG directory, for images")
     ap.add_argument("--library", help="library root; inferred from the manifest path")
     args = ap.parse_args()
+
+    if args.modules:
+        export_modules(args.modules, args.out, args.dist)
+        return
+    if not args.device:
+        raise SystemExit("give a device manifest, or --modules LIBRARY")
 
     dev = yaml.safe_load(Path(args.device).read_text())
 

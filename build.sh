@@ -82,5 +82,8 @@ if [ ${#DEVSEL[@]} -eq 0 ]; then
   ls library/devices/*/*/device.yaml \
     | xargs -P "$JOBS" -I{} python3 spec/tools/portrayal/dcim_export.py {} \
         --out library/exports --nos arcos --nos sonic --dist "$OUT" >/dev/null
+  # Module types are per component, not per device: one pass over the library.
+  python3 spec/tools/portrayal/dcim_export.py --modules library \
+    --out library/exports >/dev/null
 fi
 echo "built $(ls "$OUT" | wc -l | tr -d ' ') files -> $OUT"
