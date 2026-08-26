@@ -22,13 +22,22 @@ provenance:
   rear-slots: photograph - a C40G rear shows plain 6+12 I/O in slots 0 and 5, the 6+12 SW I/O in
     slot 4, and SMM-SW-BDM B and A in 3 and 2. Slot 1 takes the LC-BDM-SWITCH that protects, per
     the 3+1 scheme
-  slot-compatibility: datasheet - the C40G data sheet counts the chassis in
-    its own words -
-    "6RU, 6 slot chassis (4 subscriber slots, 2 management module slots)", and its
-    ordering table lists SMM-300-GM. front-2 and front-3 are the two management
-    slots and take the SMM generations; the other four are the subscriber slots
-    and take the CSC and the DQM/DCU line cards, which the CSC data sheet confirms
-    at "The C40G can house 4 CSCs for a maximum of 32 ports". Defaults unchanged
+  'slot-compatibility': 'drawing - the C40G guide numbers its own slots twice. The
+    chassis overview lists "Front slots - Upstream and downstream line card slots:
+    0, 1, 4 5; Active and standby SMM slots: 2 and 3", and Table A-2, "C40G capacities",
+    agrees: "6 line card slots on front - 1 Switch and Management (SMM) module,
+    1 SMM redundant module, 4 DOCSIS modules (any combination of DS and US modules)".
+    So front-2 and front-3 take the SMM generations and the other four take every
+    DS and US card, "any combination" being a real statement modelled as it reads.
+    Table A-2''s DQM row names DS8x8, DS8x96 and DS8x192 and its DCU row names US16x4
+    and US16x8, so all five are eligible here even though THIS guide''s Tables A-3
+    and A-4 print power for only three of them - the C100G guide carries the other
+    two. The CSC is placed by its data sheet, "The C40G can house 4 CSCs for a maximum
+    of 32 ports", which is the same four slots. The rear is deliberately NOT widened:
+    the same overview puts LC Switch in rear 1 and 4, SMM Switch in rear 2 and 3,
+    and I/O cards in the rest, and it is the only place either guide says where
+    blank filler plates go by number - "Rear slots (non-redundant system) - Blank
+    filler plates: 2, 3". Bay defaults are unchanged'
 attrs:
   power:
     power-max-w: '1800'
@@ -68,12 +77,12 @@ views:
       - {at: [20, 31.0], text: '5', font-size: 11, anchor: middle, fill: '#231f20'}
     components:
       bays:
-        - {id: front-0, at: [42.0, 164.35], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1, casa/csc-8x10g@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1], default: casa/bdm@1, group: front-slots, rel-pos: 0}
-        - {id: front-1, at: [42.0, 133.88], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1, casa/csc-8x10g@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1], default: casa/bdm@1, group: front-slots, rel-pos: 1}
-        - {id: front-2, at: [42.0, 103.41], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-8x10g@1, casa/smm-2x10g@1, casa/smm-300g@1], default: casa/smm-8x10g@1, group: front-slots, rel-pos: 2}
-        - {id: front-3, at: [42.0, 72.94], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-8x10g@1, casa/smm-2x10g@1, casa/smm-300g@1], default: casa/smm-8x10g@1, group: front-slots, rel-pos: 3}
-        - {id: front-4, at: [42.0, 42.47], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1, casa/csc-8x10g@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1], default: casa/bdm@1, group: front-slots, rel-pos: 4}
-        - {id: front-5, at: [42.0, 12.0], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1, casa/csc-8x10g@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1], default: casa/bdm@1, group: front-slots, rel-pos: 5}
+        - {id: front-0, at: [42.0, 164.35], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1, casa/bdm2@1, casa/bdm2m@1, casa/csc-8x10g@1, casa/ds-8x8@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1, casa/blank-faceplate@1], default: casa/bdm@1, group: front-slots, rel-pos: 0}
+        - {id: front-1, at: [42.0, 133.88], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1, casa/bdm2@1, casa/bdm2m@1, casa/csc-8x10g@1, casa/ds-8x8@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1, casa/blank-faceplate@1], default: casa/bdm@1, group: front-slots, rel-pos: 1}
+        - {id: front-2, at: [42.0, 103.41], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-8x10g@1, casa/smm-2x10g@1, casa/smm-300g@1, casa/blank-faceplate@1], default: casa/smm-8x10g@1, group: front-slots, rel-pos: 2}
+        - {id: front-3, at: [42.0, 72.94], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-8x10g@1, casa/smm-2x10g@1, casa/smm-300g@1, casa/blank-faceplate@1], default: casa/smm-8x10g@1, group: front-slots, rel-pos: 3}
+        - {id: front-4, at: [42.0, 42.47], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1, casa/bdm2@1, casa/bdm2m@1, casa/csc-8x10g@1, casa/ds-8x8@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1, casa/blank-faceplate@1], default: casa/bdm@1, group: front-slots, rel-pos: 4}
+        - {id: front-5, at: [42.0, 12.0], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1, casa/bdm2@1, casa/bdm2m@1, casa/csc-8x10g@1, casa/ds-8x8@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1, casa/blank-faceplate@1], default: casa/bdm@1, group: front-slots, rel-pos: 5}
   rear:
     size:
       w: 432.95
@@ -94,24 +103,24 @@ views:
       - {at: [20, 31.0], text: '5', font-size: 11, anchor: middle, fill: '#231f20'}
     components:
       bays:
-        - {id: rear-0, at: [42.0, 164.35], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/io-6p12@1], default: casa/io-6p12@1, group: rear-slots, rel-pos: 0}
-        - {id: rear-1, at: [42.0, 133.88], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/lc-sw-bdm@1], default: casa/lc-sw-bdm@1, group: rear-slots, rel-pos: 1}
-        - {id: rear-2, at: [42.0, 103.41], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-sw-bdm-a@1], default: casa/smm-sw-bdm-a@1, group: rear-slots, rel-pos: 2}
-        - {id: rear-3, at: [42.0, 72.94], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-sw-bdm-b@1], default: casa/smm-sw-bdm-b@1, group: rear-slots, rel-pos: 3}
-        - {id: rear-4, at: [42.0, 42.47], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/io-6p12-sw@1], default: casa/io-6p12-sw@1, group: rear-slots, rel-pos: 4}
-        - {id: rear-5, at: [42.0, 12.0], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/io-6p12@1], default: casa/io-6p12@1, group: rear-slots, rel-pos: 5}
+        - {id: rear-0, at: [42.0, 164.35], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/io-6p12@1, casa/blank-faceplate@1], default: casa/io-6p12@1, group: rear-slots, rel-pos: 0}
+        - {id: rear-1, at: [42.0, 133.88], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/lc-sw-bdm@1, casa/blank-faceplate@1], default: casa/lc-sw-bdm@1, group: rear-slots, rel-pos: 1}
+        - {id: rear-2, at: [42.0, 103.41], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-sw-bdm-a@1, casa/blank-faceplate@1], default: casa/smm-sw-bdm-a@1, group: rear-slots, rel-pos: 2}
+        - {id: rear-3, at: [42.0, 72.94], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-sw-bdm-b@1, casa/blank-faceplate@1], default: casa/smm-sw-bdm-b@1, group: rear-slots, rel-pos: 3}
+        - {id: rear-4, at: [42.0, 42.47], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/io-6p12-sw@1, casa/blank-faceplate@1], default: casa/io-6p12-sw@1, group: rear-slots, rel-pos: 4}
+        - {id: rear-5, at: [42.0, 12.0], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/io-6p12@1, casa/blank-faceplate@1], default: casa/io-6p12@1, group: rear-slots, rel-pos: 5}
 configurations:
   bdm-3plus1:
     description: 'BDM "3+1". Redundancy collapses to a single protecting slot: rear 1 takes the LC-BDM-SWITCH,
       and rear 4 takes a combined 6+12 SW-IO which frees slot 4 to carry traffic.'
     default: true
     bays:
-      front-0: casa/bdm@1
-      front-1: casa/bdm@1
+      front-0: casa/bdm2m@1
+      front-1: casa/bdm2m@1
       front-2: casa/smm-8x10g@1
       front-3: casa/smm-8x10g@1
-      front-4: casa/bdm@1
-      front-5: casa/bdm@1
+      front-4: casa/bdm2m@1
+      front-5: casa/bdm2m@1
       rear-0: casa/io-6p12@1
       rear-1: casa/lc-sw-bdm@1
       rear-2: casa/smm-sw-bdm-a@1
@@ -121,8 +130,6 @@ configurations:
   docsis-classic:
     description: Classic DOCSIS. Redundancy is per side - front/rear 1 and 4 - with an LC Switch behind
       both.
-    skins:
-      bdm: bdm
     bays:
       front-0: casa/bdm@1
       front-1: casa/bdm@1
@@ -143,7 +150,7 @@ configurations:
 # build time and must not be listed here.
 gaps:
 - what: paired-module-power
-  scope: [casa/bdm@1, casa/io-6p12@1, casa/io-6p12-sw@1]
+  scope: [casa/bdm2m@1, casa/io-6p12@1, casa/io-6p12-sw@1]
   reason: vendor-silent
   note: >-
     The BDM2/BDM2m datasheet states "Total Power  300 W" in a technical
