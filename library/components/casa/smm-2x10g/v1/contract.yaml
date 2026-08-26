@@ -1,0 +1,85 @@
+format: 1
+kind: module
+name: smm-2x10g
+version: 1.0.0
+class: supervisor
+profile: networking
+description: >-
+  Casa standard SMM 2x10GE - the C100G/C40G Switch and Management Module in its
+  original density. Eight GigE SFP (G0-G7) and two 10GigE SFP+ (XG2, XG1), a
+  10/100BASE-T management RJ45 at the top and an RS-232 console RJ45 at the
+  bottom, plus STATUS, ACTIVE and ALARM lamps. The cage population is the
+  inverse of the high-density SMM 8x10G, on the same eleven openings.
+size: {w: 30.47, h: 345.5, d: 380.0}
+attrs:
+  model: 'SMM 2x10G'
+  role: supervisor
+  sfp-plus: '2'
+  sfp: '8'
+  mgmt: 10/100BASE-T
+  console: RS-232
+  power-draw-max-w: 110
+provenance:
+  layout: drawing - Figure 1-7 of the Casa C100G Hardware Installation Guide (rev
+    07/08/2022), 'Standard SMM 2x10GE (eight GigE, two 10GigE ports)'. The faceplate
+    order top to bottom is SMM, 10/100MI, G0 through G7, XG2, XG1, IOIOI, then STATUS,
+    ACTIVE, ALARM. Note XG2 sits ABOVE XG1, which is the order the figure prints
+    and is not a transcription slip. There is NO data sheet for this card - the
+    install guide figure and Table A-5 are the sources
+  size: shared with the rest of the C100G front-card family, taken from the chassis
+    slot envelope (30.47 x 345.5, C100G device manifest); the depth is the family
+    estimate carried by casa/smm-8x10g
+  legend: photo-measured - the model legend sits between TWO orange bands, not below
+    one. The DS8x96, CSC8x10G and SMM300G product photographs independently put
+    the upper band at 21.1-22.5 and the lower at 34.1-35.4 as fractions of the 345.5
+    card height, agreeing with each other to within 0.7mm, so 22.0 and 34.8 are
+    carried for the whole family
+  positions: inherited from casa/smm-8x10g, deliberately. Figures 1-7 and 1-8 draw
+    the same shell with the same eleven openings in the same places - one RJ45,
+    ten cages, one RJ45 - and differ only in which cage takes which media and in
+    the legends. Modelling it as the sibling's geometry with the population inverted
+    is the claim the guide actually supports; re-measuring the small figure would
+    have invented precision it does not carry
+  ports: composed from common/sfp-plus-cage@2, as casa/smm-8x10g does, with attrs
+    overridden per port so the eight GigE positions declare media sfp at 1g and
+    the two 10GigE positions declare sfp-plus at 10g. The cage hardware is the same
+    either way - SFP and SFP+ share the SFF-8432 aperture - so the difference between
+    the two cards is the transceiver each socket accepts, not the metal
+  rotation: 'every cage is ROTATED 90, as on casa/smm-8x10g and for the same reason:
+    the faceplate is 30.47 wide and a 16.0-wide cage has to lie on its side'
+  lamps: drawing - Figure 1-7 prints STATUS, ACTIVE, ALARM top to bottom, as do
+    Figures 1-8 and 1-9, and the CSC8x10G photograph shows the same order at a legible
+    size. casa/smm-8x10g, which this card otherwise inherits its geometry from,
+    draws the three the other way up with ALARM at the top. This card follows the
+    source rather than the sibling, and the disagreement is recorded here rather
+    than propagated
+  legends: 'placed BESIDE each opening rather than below it, at x 21.0, which the
+    SMM300G photograph shows is what the real hardware does. Below does not work
+    on this shell: the cage pitch alternates 17.3 and 20.2 while a rotated cage
+    is 16 tall, so on every tight pair a legend under one opening falls inside the
+    next one and the cage installed there paints over it. casa/smm-8x10g places
+    its twelve legends that way and loses six of them for exactly this reason'
+  power-draw-max-w: install guide - Table A-5 of the C100G install guide, 'SMM power
+    consumption 110W'. There is no data sheet for this card, so the install guide
+    is the only source - but it IS a source, and 110 W is 50 W below the SMM 8x10G
+    sibling whose 160 W it was assumed to share
+elements:
+  status: {at: [4.8, 270.3], size: [3.0, 3.0], class: led}
+  active: {at: [4.8, 276.9], size: [3.0, 3.0], class: led}
+  alarm: {at: [4.8, 283.5], size: [3.0, 3.0], class: led}
+relief:
+  wall: '#4a4f55'
+parts:
+  - {ref: common/rj45-shielded@2, id: mgmt, at: [7.335, 41.46], rotate: 90}
+  - {ref: common/sfp-plus-cage@2, id: g0, at: [7.23, 64.33], rotate: 90, attrs: {media: sfp, speed: 1g}}
+  - {ref: common/sfp-plus-cage@2, id: g1, at: [7.23, 81.68], rotate: 90, attrs: {media: sfp, speed: 1g}}
+  - {ref: common/sfp-plus-cage@2, id: g2, at: [7.23, 101.86], rotate: 90, attrs: {media: sfp, speed: 1g}}
+  - {ref: common/sfp-plus-cage@2, id: g3, at: [7.23, 119.06], rotate: 90, attrs: {media: sfp, speed: 1g}}
+  - {ref: common/sfp-plus-cage@2, id: g4, at: [7.23, 138.84], rotate: 90, attrs: {media: sfp, speed: 1g}}
+  - {ref: common/sfp-plus-cage@2, id: g5, at: [7.23, 156.04], rotate: 90, attrs: {media: sfp, speed: 1g}}
+  - {ref: common/sfp-plus-cage@2, id: g6, at: [7.23, 176.3], rotate: 90, attrs: {media: sfp, speed: 1g}}
+  - {ref: common/sfp-plus-cage@2, id: g7, at: [7.23, 193.57], rotate: 90, attrs: {media: sfp, speed: 1g}}
+  - {ref: common/sfp-plus-cage@2, id: xg2, at: [7.23, 213.68], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: common/sfp-plus-cage@2, id: xg1, at: [7.23, 228.52], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: common/rj45-shielded@2, id: console, at: [7.335, 242.24], rotate: 90}
+skins: [default]
