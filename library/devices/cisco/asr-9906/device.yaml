@@ -1,0 +1,237 @@
+format: 1
+kind: device
+name: asr-9906
+version: 0.1.0
+maturity: modelled
+manufacturer: Cisco
+model: ASR 9906
+description: >-
+  Cisco ASR 9906 Router - the 14 RU, six-slot member of the ASR 9900 generation. Cards mount
+  VERTICALLY and the redundant RSP pair takes the OUTER slots, 0 and 5, with four line cards
+  between them. The layout is unusual for the family: a vertical power shelf runs down the LEFT of
+  the card cage and two fan trays sit behind a door on the RIGHT, with a full-width air intake
+  along the bottom. Modelled as a BARE CAGE; the card openings are cutouts rather than bays - see
+  gaps.
+portfolio:
+  line: Service Provider
+  family: Aggregation Services Router
+  series: ASR 9000 Series
+provenance:
+  chassis: >-
+    datasheet - Table 13 "Cisco ASR 9000 Series Routers Physical Descriptions",
+    b-asr9k-overview-reference-guide.pdf p130. ASR 9906: chassis height 24.39 inches (61.95 cm),
+    chassis width 17.6 inches (44.7 cm), chassis depth 28.77 inches (73.08 cm) with "31.45 inches
+    (79.88 cm) including the cable management system". Modelled as the BODY, 447.0 x 619.51 x
+    730.8 mm, taking the depth WITHOUT the cable management system since that is the chassis. Note
+    Table 13's 9906 row does not quote a flanged width at all, unlike the 9006 and 9010 rows
+  ru: >-
+    datasheet - 24.39 in / 1.75 = 13.94 RU. The chassis OCCUPIES 14 RU and is built about 0.11 in
+    under it, the same clearance allowance the ASR 9904 shows more starkly at 5.93. chassis.height
+    carries the real 619.51 mm and chassis.ru the allocation; they are deliberately not reconciled
+  stencil-disagrees-and-the-guide-wins: >-
+    NOTE - Cisco's Visio stencil records height_in 2.4500 for this master, i.e. 24.50 in, against
+    Table 13's 24.39. THE STENCIL HAS ROUNDED UP TO THE WHOLE RU (14 x 1.75 = 24.50) and the guide
+    has not. The manifest carries the guide's 24.39 because a spec table states the chassis as
+    built while a stencil states the space it occupies. The same 0.05 in rounding is on the ASR
+    9910 master; the 9904 is the case where both sources agree on the un-rounded figure
+  calibration: >-
+    measured - the front master passes gate 1. Calibrating x on 482.6 mm (the 19.0 in rack face)
+    and y on Table 13's 619.51 mm independently gives 0.20134 and 0.20062 mm/px, agreeing to
+    0.36 percent. Origin shifted in by (482.6 - 447.0) / 2 = 17.8 mm to reach the body edge
+  slots: >-
+    datasheet - Figure 21 "Cisco ASR 9906 Router Slot ID Numbering", p36 of
+    b-asr9k-overview-reference-guide.pdf, read at 250 dpi because the slot IDs are artwork and do
+    not survive text extraction. Left to right: Slot 0 = RSP0, Slot 1 = Line card 0, Slot 2 = Line
+    card 1, Slot 3 = Line card 2, Slot 4 = Line card 3, Slot 5 = RSP1. THE RSP PAIR IS THE OUTER
+    PAIR - the exact inverse of the ASR 9904, which puts its RSPs in the middle with the line cards
+    outside. Five chassis and four different arrangements so far
+  slot-geometry: >-
+    drawing - the card cage opening spans 70.59 to 331.11 mm across the body and 94.09 to 458.41 mm
+    down it. Six slots of equal width divide 260.52 mm into a 43.42 mm pitch
+  slot-pitch-confirmed-by-the-silkscreen: >-
+    measured, and independently of the division above. This master PRINTS its slot IDs in a row
+    beneath the cage - PS0, RSP0, LC0, LC1, LC2, LC3, RSP1 - and the six slot labels centre at
+    90.22, 132.29, 177.30, 220.38, 264.77 and 308.97 mm. An even six-way division of the measured
+    cage puts the centres at 92.30, 135.72, 179.14, 222.56, 265.98 and 309.40. Every one agrees
+    within 3.4 mm, and the mean label-to-label pitch of 43.75 mm sits within 0.8 percent of the
+    43.42 the cage gives. The residual spread is text centring - RSP0 and RSP1 are four characters
+    against LC's three - so the pitch is confirmed rather than assumed. THE PRINTED ROW ALSO
+    CONFIRMS FIGURE 21's NUMBERING on the metal itself, which is a second source for the slot map
+  power-shelf: >-
+    drawing + datasheet - the power shelf is VERTICAL and runs down the LEFT of the card cage,
+    which no other chassis in this family does. Figure 21 labels it PS0 and stacks M0 at the bottom
+    through M2 at the top, and Table 15 agrees: "ASR 9906: Version 3 power system: Up to three AC
+    power modules per system". The master draws the column POPULATED, so the individual module
+    openings are not separately measured - see gaps
+  fan-trays: >-
+    datasheet + drawing - two fan trays, FT0 above FT1, to the RIGHT of the cage per Figure 21.
+    The master draws them behind a door carrying "Cisco ASR 9000 Series", the cisco logo, an OPEN
+    legend and two indicators marked FAN0 and FAN 1. As on the ASR 9006, that text belongs to the
+    door rather than to chassis metal and is deliberately not in this manifest's silkscreen
+  airflow: >-
+    datasheet - "Cisco ASR 9906 Router: Front-to-top-to-rear cooling path. The inlet is at the
+    bottom front of the chassis, and the exhaust is at the LOWER rear",
+    b-asr9k-overview-reference-guide.pdf p3731. Note the lower rear, where the 9010 and 9910 both
+    exhaust at the upper rear. The bottom of the front face carries a large hexagonal-mesh intake
+    grille in the master, which is that inlet
+  air-filter: >-
+    datasheet - Table 17, b-asr9k-hardware-installation-guide.pdf p228: "Cisco ASR 9906 Router -
+    Located underneath the card cage", removed "by simply sliding it out of the chassis". Different
+    again from the 9006 and 9904, whose filters are on the right side
+  grounding: >-
+    datasheet - "Bottom rear and left side of the chassis",
+    b-asr9k-hardware-installation-guide.pdf p125, illustrated by Figure 135
+  fabric-cards: >-
+    datasheet - the rear carries fabric cards in their own cage with numbering that restarts at
+    Slot 0, as Figure 22 shows for the sibling 9910. The COUNT is not readable from any figure we
+    hold, but Table 13 supplies it independently: the 9906's configured weight is quoted for a
+    chassis "Configured with two fan trays, two RSPs, five fabric cards, and one PEM". Five. The
+    rear is not otherwise modelled - no master or figure here shows it
+  environmental: >-
+    datasheet - Table 14, p131. The 9906 shares the 9006's and 9904's wider short-term range,
+    23 to 131 degF (-5 to 55 degC)
+  electrical: datasheet - Table 15 (AC) and Table 16 (DC), pp132-135, ASR 9906 columns only
+  weight: >-
+    datasheet - Table 13, two scopes. "Chassis only - 108.02 pounds (49 kg)" and "Chassis:
+    Configured with two fan trays, two RSPs, five fabric cards, and one PEM - 251.10 pounds
+    (113.9 kg)". Note the 9906 and 9910 rows describe a SPECIFIC configuration rather than the
+    "fully configured using all card slots" phrasing the older chassis use, so the two numbers are
+    not comparable across the family
+  no-chassis-power-figure: >-
+    NOTE - Cisco publishes no chassis-level draw for any ASR 9000; Table 14 says only to use the
+    Cisco Power Calculator
+  lifecycle: datasheet - searched. No end-of-sale or end-of-life notice for this chassis was found
+  compliance: datasheet - data_sheet_c78-501767.pdf series compliance list, transcribed as printed
+attrs:
+  physical:
+    weight-configured-kg: 113.9
+    weight-configured-scope: configured with two fan trays, two RSPs, five fabric cards, and one PEM
+    depth-with-cable-management-mm: 798.8
+  environmental:
+    operating-temperature: 41 to 104degF (5 to 40degC)
+    operating-temperature-short-term: 23 to 131degF (-5 to 55degC)
+    non-operating-temperature: -40 to 158degF (-40 to 70degC)
+    humidity-operating: 10 to 85 percent noncondensing
+    humidity-non-operating: 5 to 95 percent noncondensing
+    altitude-operating: 0 to 13,000 ft (0 to 4,000 m)
+    acoustic-noise: 78 dB at 80.6degF (27degC) maximum
+  power:
+    power-modules-v3: Version 3 power system - up to three AC power modules per system
+    power-ac-input-per-module-v3: 6510 VA (6000 W output module)
+    power-ac-input-voltage: 200-240 VAC nominal (range 180 to 264 VAC); 220-240 VAC (UK)
+    power-ac-input-frequency: 50/60 Hz nominal (range 47 to 63 Hz)
+    power-ac-input-current: 15 A maximum at 200 VAC; 13 A maximum at 220 to 240 VRMS (UK)
+    power-ac-service-requirement: 20 A North America; 16 A international; 13 A United Kingdom
+    power-ac-redundancy: at least two AC power modules required for N+1 redundancy for a fully
+      configured system
+  thermal:
+    cooling-path: front-to-top-to-rear; inlet at the bottom front, exhaust at the lower rear
+    fan-trays: two, FT0 above FT1, to the right of the card cage
+    air-filter-location: underneath the card cage
+  platform:
+    operating-system: Cisco IOS XR
+    interface-path-id: rack/slot/module/port
+  compliance:
+    nebs: 'SR-3580: NEBS Criteria Levels (Level 3)'
+    nebs-emc-safety: 'GR-1089-CORE: NEBS EMC and Safety'
+    nebs-physical: 'GR-63-CORE: NEBS Physical Protection'
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 447.0
+  height: 619.51
+  depth: 730.8
+  ru: 14
+  weight-kg: 49.0
+  airflow: front-to-back
+  color: '#c8cacc'
+views:
+  front:
+    size: {w: 447.0, h: 619.51}
+    panel:
+      decor:
+        - {at: [20.0, 500.0], size: [300.0, 105.0], fill: '#3a3c3e', pattern: grille, vent: 60}
+      cutouts:
+        - {id: slot-0, at: [70.59, 94.09], size: [43.42, 364.32], shape: rect}
+        - {id: slot-1, at: [114.01, 94.09], size: [43.42, 364.32], shape: rect}
+        - {id: slot-2, at: [157.43, 94.09], size: [43.42, 364.32], shape: rect}
+        - {id: slot-3, at: [200.85, 94.09], size: [43.42, 364.32], shape: rect}
+        - {id: slot-4, at: [244.27, 94.09], size: [43.42, 364.32], shape: rect}
+        - {id: slot-5, at: [287.69, 94.09], size: [43.42, 364.32], shape: rect}
+        - {id: power-shelf, at: [16.0, 94.09], size: [46.0, 364.32], shape: rect}
+        - {id: esd, at: [352.0, 512.0], size: [5.0, 5.0], shape: circle}
+    silkscreen:
+      - {at: [39.48, 487.0], text: PS0, font-size: 6, anchor: middle}
+      - {at: [90.22, 487.0], text: RSP0, font-size: 6, anchor: middle}
+      - {at: [132.29, 487.0], text: LC0, font-size: 6, anchor: middle}
+      - {at: [177.3, 487.0], text: LC1, font-size: 6, anchor: middle}
+      - {at: [220.38, 487.0], text: LC2, font-size: 6, anchor: middle}
+      - {at: [264.77, 487.0], text: LC3, font-size: 6, anchor: middle}
+      - {at: [308.97, 487.0], text: RSP1, font-size: 6, anchor: middle}
+    regions:
+      - {id: rsp-slots, label: 'RSP cards - the outer pair, slots 0 and 5'}
+      - {id: lc-slots, label: Line cards 0 to 3 - slots 1 to 4}
+      - {id: power-shelf-region, label: 'Power shelf PS0 - vertical, left of the cage, M0 to M2'}
+      - {id: fan-trays, label: 'Fan trays FT0 and FT1 - right of the cage, behind a door'}
+      - {id: front-air-intake, label: Front air intake - inlet at the bottom front}
+  rear:
+    size: {w: 447.0, h: 619.51}
+    regions:
+      - {id: fabric-cards, label: 'Fabric card cage - five fabric cards, numbering restarts at Slot 0'}
+      - {id: nebs-ground, label: 'NEBS bonding and grounding - bottom rear and left side'}
+  top:
+    size: {w: 447.0, h: 730.8}
+  bottom:
+    size: {w: 447.0, h: 730.8}
+  left:
+    size: {w: 730.8, h: 619.51}
+  right:
+    size: {w: 730.8, h: 619.51}
+gaps:
+- what: card-openings-are-cutouts-not-bays
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    The six card slots are CUTOUTS rather than bays, deliberately. A bay must name a component
+    that fits it, and the only Cisco blank in the library - a9k-slot-cover, A9K-LC-FILR - carries
+    size.w 44.39 against this chassis's measured 43.42 mm pitch, so six of them come to 266.3 mm
+    in a 260.52 mm cage. Its plate measures 42.05 mm and WOULD fit, which is the heart of the
+    problem: it is not established whether a card component's size.w is the faceplate or the slot
+    pitch, and the answer decides every accepts list in this family. A9K-LC-FILR is also sourced
+    from the Ethernet Line Card Installation Guide, a 9006/9010-era document, while this is an
+    ASR 9900 chassis. The measurements are all here and converting cutouts to bays is mechanical.
+  wanted: the ASR 9900 generation's line card and RP blank, or a statement of whether a card
+    component's size is its faceplate or its slot pitch
+- what: power-module-openings
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    The vertical power shelf is drawn as one opening rather than three module openings. Figure 21
+    and Table 15 both establish three modules stacked M0 at the bottom to M2 at the top, so the
+    count and numbering are not in doubt; the boundaries are. The master draws this column
+    POPULATED - each module rendered with its own fan wheel - so a scan returns grille detail
+    rather than separators, the same obstacle the ASR 9904's horizontal shelf presents. The
+    column's outer rectangle is measured and drawn.
+  wanted: a figure showing the power shelf empty, or a dimensioned front elevation
+- what: rear-face
+  scope: [rear]
+  reason: needs-drawing
+  note: >-
+    The ASR 9906's rear carries the fabric card cage and we know a great deal ABOUT it and almost
+    nothing about its geometry. There is no ASR-9906 Rear master in Cisco's stencil, and Figure 21
+    shows only the front. The count is sourced but indirectly: Table 13 quotes the configured
+    weight for a chassis "Configured with two fan trays, two RSPs, five fabric cards, and one PEM",
+    so five, and the sibling ASR 9910's Figure 22 shows fabric slots numbered from 0. Nothing
+    states their width, their height, or where the PEM sits. The rear is therefore sized and
+    carries regions naming what is there, with no cutouts invented to fill it.
+  wanted: an ASR 9906 rear elevation, or a rear photograph
+- what: blank-faces
+  scope: [top, bottom, left, right]
+  reason: vendor-silent
+  note: >-
+    All four side faces are sized from Table 13 and Figure 11 (the 9906's top-down footprint) and
+    are deliberately EMPTY. This chassis breathes front to rear, so unlike the ASR 9006 and 9904 -
+    whose right sides carry an intake and an air filter - its sides have no stated features, and
+    its air filter is underneath the card cage where no view we model shows it. The sizes are
+    right, which is what these views carry for a rack elevation and the 3D box.
+  wanted: a six-face photograph set, or the mechanical drawings behind Figure 11
