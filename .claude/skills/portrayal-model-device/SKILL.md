@@ -34,9 +34,15 @@ the single most repeated error.
 Before searching the web, and before declaring a vendor silent about what a face
 looks like, **pull the figures out of the PDFs already in `working/intake/`.**
 This project modelled two vendors and ~250 components before anyone did, and the
-intake turned out to hold **4,500+ figures** - faceplate elevations with every
-port numbered, isometric drawings showing ejectors and rails, and LED callout
-tables sitting under the drawing that names them.
+intake turned out to hold **2,193 figures across 112 documents** - faceplate
+elevations with every port numbered, isometric drawings showing ejectors and
+rails, and LED callout tables sitting under the drawing that names them.
+
+That is the KEPT count. 5,087 pictures were saved and 2,894 classified as icons
+or chapter banners, and counting the files on disk instead of the kept figures
+overstates the haul by more than double. **Say which of the two any figure count
+is** - the rejects are deliberately kept on disk, so `find -name '*.png' | wc -l`
+will always flatter you.
 
     working/images/extract.py     docling: figure + caption + page + section
     working/images/INDEX.md       roll-up, grouped by part number
