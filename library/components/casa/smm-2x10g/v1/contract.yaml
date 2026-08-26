@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: smm-2x10g
-version: 1.1.0
+version: 1.2.0
 class: supervisor
 profile: networking
 description: >-
@@ -112,15 +112,15 @@ relief:
   features:
     # Two captive slotted screws on the centreline - the guide's own
     # "integrated thumbscrews" / "captive screws".
-    - {node: screw-t, cyl: 1.6}
-    - {node: screw-b, cyl: 1.6}
+    - {node: screw-t, cyl: 1.6, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
+    - {node: screw-b, cyl: 1.6, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
     # The ejector latch strip.
-    - {node: latch-t, out: 4.2}
-    - {node: latch-b, out: 4.2}
+    - {node: latch-t, out: 4.2, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 latch - measured off the real PSU'}
+    - {node: latch-b, out: 4.2, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 latch - measured off the real PSU'}
     # STATUS / ALARM / ACTIVE - lenses, not painted dots.
-    - {node: status, dome: 0.3}
-    - {node: active, dome: 0.3}
-    - {node: alarm, dome: 0.3}
+    - {node: status, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: active, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: alarm, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
 parts:
   - {ref: common/rj45-shielded@2, id: mgmt, at: [7.335, 41.46], rotate: 90}
   - {ref: common/sfp-plus-cage@2, id: g0, at: [7.23, 64.33], rotate: 90, attrs: {media: sfp, speed: 1g}}

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: smm-300g
-version: 1.1.0
+version: 1.2.0
 class: supervisor
 profile: networking
 description: >-
@@ -115,40 +115,40 @@ relief:
   features:
     # Two captive slotted screws on the centreline - the guide's own
     # "integrated thumbscrews" / "captive screws".
-    - {node: screw-t, cyl: 1.6}
-    - {node: screw-b, cyl: 1.6}
+    - {node: screw-t, cyl: 1.6, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
+    - {node: screw-b, cyl: 1.6, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
     # The ejector latch strip.
-    - {node: latch-t, out: 4.2}
-    - {node: latch-b, out: 4.2}
+    - {node: latch-t, out: 4.2, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 latch - measured off the real PSU'}
+    - {node: latch-b, out: 4.2, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 latch - measured off the real PSU'}
     # STATUS / ALARM / ACTIVE - lenses, not painted dots.
-    - {node: status, dome: 0.3}
-    - {node: active, dome: 0.3}
-    - {node: alarm, dome: 0.3}
+    - {node: status, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: active, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: alarm, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
     # 24 per-port lamps.
-    - {node: p0-led-a, dome: 0.3}
-    - {node: p1-led-a, dome: 0.3}
-    - {node: p2-led-a, dome: 0.3}
-    - {node: p3-led-a, dome: 0.3}
-    - {node: p4-led-a, dome: 0.3}
-    - {node: p5-led-a, dome: 0.3}
-    - {node: p6-led-a, dome: 0.3}
-    - {node: p7-led-a, dome: 0.3}
-    - {node: p8-led-a, dome: 0.3}
-    - {node: p9-led-a, dome: 0.3}
-    - {node: p10-led-a, dome: 0.3}
-    - {node: p11-led-a, dome: 0.3}
-    - {node: p0-led-b, dome: 0.3}
-    - {node: p1-led-b, dome: 0.3}
-    - {node: p2-led-b, dome: 0.3}
-    - {node: p3-led-b, dome: 0.3}
-    - {node: p4-led-b, dome: 0.3}
-    - {node: p5-led-b, dome: 0.3}
-    - {node: p6-led-b, dome: 0.3}
-    - {node: p7-led-b, dome: 0.3}
-    - {node: p8-led-b, dome: 0.3}
-    - {node: p9-led-b, dome: 0.3}
-    - {node: p10-led-b, dome: 0.3}
-    - {node: p11-led-b, dome: 0.3}
+    - {node: p0-led-a, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: p1-led-a, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: p2-led-a, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: p3-led-a, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: p4-led-a, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: p5-led-a, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: p6-led-a, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: p7-led-a, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: p8-led-a, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: p9-led-a, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: p10-led-a, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: p11-led-a, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: p0-led-b, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: p1-led-b, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: p2-led-b, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: p3-led-b, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: p4-led-b, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: p5-led-b, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: p6-led-b, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: p7-led-b, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: p8-led-b, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: p9-led-b, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: p10-led-b, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: p11-led-b, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
 parts:
   - {ref: std/sfp-ganged@1, id: xg0, at: [5.475, 70.8], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
   - {ref: std/sfp-ganged@1, id: xg1, at: [5.475, 85.05], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}

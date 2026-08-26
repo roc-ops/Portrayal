@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: io-6p12-sw-io2
-version: 1.5.0
+version: 1.6.0
 class: line-card
 profile: networking
 description: >-
@@ -199,16 +199,16 @@ relief:
   features:
     # Two captive slotted screws on the centreline - the guide's own
     # "integrated thumbscrews" / "captive screws".
-    - {node: screw-t, cyl: 1.6}
-    - {node: screw-b, cyl: 1.6}
+    - {node: screw-t, cyl: 1.6, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
+    - {node: screw-b, cyl: 1.6, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
     # The ejector latch strip.
-    - {node: latch-t, out: 4.2}
-    - {node: latch-b, out: 4.2}
+    - {node: latch-t, out: 4.2, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 latch - measured off the real PSU'}
+    - {node: latch-b, out: 4.2, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 latch - measured off the real PSU'}
     # Brass standoffs stand 3/8in proud of the faceplate, centred across the
     # card, and carry the comb when it is fitted
-    - {node: standoff-t, out: 9.5, color: '#b08d57'}
-    - {node: standoff-m, out: 9.5, color: '#b08d57'}
-    - {node: standoff-b, out: 9.5, color: '#b08d57'}
+    - {node: standoff-t, out: 9.5, color: '#b08d57', confidence: photo-measured, source: 'Jason - 3/8in off one C40G rear photograph. All twelve are that ONE reading'}
+    - {node: standoff-m, out: 9.5, color: '#b08d57', confidence: photo-measured, source: 'Jason - 3/8in off one C40G rear photograph. All twelve are that ONE reading'}
+    - {node: standoff-b, out: 9.5, color: '#b08d57', confidence: photo-measured, source: 'Jason - 3/8in off one C40G rear photograph. All twelve are that ONE reading'}
     # NOTE: rf-block carries NO relief. It was raised 15.9 out and that has been
     # reversed - see provenance/rf-block-3d. It stays a GROUP so that if it is ever
     # raised again it carries its own port legends instead of extruding blank.

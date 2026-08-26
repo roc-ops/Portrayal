@@ -139,6 +139,22 @@
                 "$ref": "#/$defs/segment",
                 "description": "skin node id"
               },
+              "confidence": {
+                "enum": [
+                  "measured",
+                  "photo-measured",
+                  "drawing",
+                  "datasheet",
+                  "registry",
+                  "borrowed",
+                  "estimated"
+                ],
+                "description": "where this feature's MAGNITUDE came from. The relief vocabulary is the library's provenance vocabulary, not a second one: measured (off this part's own hardware), photo-measured, drawing (off this part's own artwork or a vendor figure of it), datasheet, registry (from standards.yaml), estimated (a plausible figure with no source), and `borrowed`. BORROWED IS THE ONE THAT IS NEW AND IT IS THE COMMON CASE: the magnitude is another Portrayal part's MEASURED figure for the same class of hardware - a captive screw head, an ejector latch, a panel lamp - reused here because nobody publishes one for this part. It is an estimate for THIS part, but not a free one, and `source` must name the part it came from. Do not spell it `measured`: the measurement was taken on a different object. Note the enum deliberately omits standards.yaml's `verified`, which answers a different question - whether a CUTOUT matches its governing standard - and cannot apply to a depth no standard states."
+              },
+              "source": {
+                "type": "string",
+                "description": "where precisely, in one phrase - the part a `borrowed` figure came from, the figure a `drawing` one was read off, the photograph behind a `photo-measured` one. The machine-readable half is `confidence`; this is the half that lets the next reader go and check, and it is what stops twenty features sharing one reading from reading as twenty readings."
+              },
               "top": {
                 "type": "number",
                 "exclusiveMinimum": 0,

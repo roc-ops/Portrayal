@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ups-32x4
-version: 1.4.0
+version: 1.5.0
 class: line-card
 profile: networking
 description: >-
@@ -154,18 +154,18 @@ relief:
   features:
     # Two captive slotted screws on the centreline - the guide's own
     # "integrated thumbscrews" / "captive screws".
-    - {node: screw-t, cyl: 1.6}
-    - {node: screw-b, cyl: 1.6}
+    - {node: screw-t, cyl: 1.6, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
+    - {node: screw-b, cyl: 1.6, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
     # Three captive round slotted thumb screws down the port field.
     # NOT screw heads - hex STANDOFFS that carry the cable retention plate. See
     # provenance/standoffs-not-screws. The node ids still read `thumbscrew` because
     # renaming them would break every reference to a part whose position is right.
-    - {node: thumbscrew-0, cyl: 9.5, color: '#b08d57'}
-    - {node: thumbscrew-1, cyl: 9.5, color: '#b08d57'}
-    - {node: thumbscrew-2, cyl: 9.5, color: '#b08d57'}
+    - {node: thumbscrew-0, cyl: 9.5, color: '#b08d57', confidence: borrowed, source: 'casa/io-6p12@2 - ONE photo reading of a DIFFERENT card. Not a second reading'}
+    - {node: thumbscrew-1, cyl: 9.5, color: '#b08d57', confidence: borrowed, source: 'casa/io-6p12@2 - ONE photo reading of a DIFFERENT card. Not a second reading'}
+    - {node: thumbscrew-2, cyl: 9.5, color: '#b08d57', confidence: borrowed, source: 'casa/io-6p12@2 - ONE photo reading of a DIFFERENT card. Not a second reading'}
     # The ejector latch strip.
-    - {node: latch-t, out: 4.2}
-    - {node: latch-b, out: 4.2}
+    - {node: latch-t, out: 4.2, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 latch - measured off the real PSU'}
+    - {node: latch-b, out: 4.2, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 latch - measured off the real PSU'}
 parts:
   - {ref: std/mcx@1, id: p0, at: [17.177, 40.815]}
   - {ref: std/mcx@1, id: p1, at: [3.093, 40.815]}

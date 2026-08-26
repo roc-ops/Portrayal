@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: rfu-16x8
-version: 1.3.0
+version: 1.4.0
 class: line-card
 profile: networking
 description: >-
@@ -81,11 +81,11 @@ relief:
   features:
     # Two captive slotted screws on the centreline - the guide's own
     # "integrated thumbscrews" / "captive screws".
-    - {node: screw-t, cyl: 1.6}
-    - {node: screw-b, cyl: 1.6}
+    - {node: screw-t, cyl: 1.6, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
+    - {node: screw-b, cyl: 1.6, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
     # The ejector latch strip.
-    - {node: latch-t, out: 4.2}
-    - {node: latch-b, out: 4.2}
+    - {node: latch-t, out: 4.2, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 latch - measured off the real PSU'}
+    - {node: latch-b, out: 4.2, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 latch - measured off the real PSU'}
 parts:
   - {ref: std/f-type@1, id: p0, at: [12.39, 49.04]}
   - {ref: std/f-type@1, id: p1, at: [12.39, 65.81]}

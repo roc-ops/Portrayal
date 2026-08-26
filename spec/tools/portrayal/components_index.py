@@ -13,6 +13,21 @@ sys.path.insert(0, str(Path(__file__).parent))
 from render import SVG_NS, STATE_CSS, Library, instance_group, state_rule  # noqa: E402
 
 
+def _confidence_counts(data):
+    """{token: n} over a component's relief features, with the unmarked counted.
+
+    Deliberately counts FEATURES rather than distinct numbers. Nineteen cards
+    carrying one borrowed 4.2 is nineteen features and one reading, and the two
+    are different facts - the per-feature `source` is what tells them apart, so
+    a consumer that needs the second must read it rather than infer it here.
+    """
+    counts = {}
+    for f in ((data.get("relief") or {}).get("features") or []):
+        counts[f.get("confidence") or "unstated"] = \
+            counts.get(f.get("confidence") or "unstated", 0) + 1
+    return counts
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--library", action="append", required=True)
@@ -44,6 +59,15 @@ def main():
                                   for k, v in (data.get("elements") or {}).items()
                                   if isinstance(v, dict)},
                 "relief": data.get("relief") or {},
+                # A RELIEF MAGNITUDE'S CONFIDENCE, COUNTED, so a consumer does not
+                # have to walk the features to find out how much of a part's 3D is
+                # sourced. The raw block above already carries the per-feature
+                # `confidence`; this is the roll-up, and `unstated` is the point of
+                # it - a part whose features say nothing about where their numbers
+                # came from looks exactly like one whose numbers were measured, and
+                # that is how a vendor modelled entirely from estimates comes to
+                # look more complete than one that honestly declared nothing.
+                "relief-confidence": _confidence_counts(data),
                 "parts": [p["ref"] for p in data.get("parts") or []],
             }
             files = {}
@@ -91,7 +115,12 @@ def main():
                         sides[side] = f"components/{fname}"
                 entry["body"] = {**data["body"], "sides": sides}
             index.append(entry)
-    (out / "components.json").write_text(json.dumps({"components": index}, indent=1, sort_keys=True))
+    totals = {}
+    for e in index:
+        for k, n in e["relief-confidence"].items():
+            totals[k] = totals.get(k, 0) + n
+    (out / "components.json").write_text(json.dumps(
+        {"components": index, "relief-confidence": totals}, indent=1, sort_keys=True))
     print(f"compiled {len(index)} components -> {out}/components.json")
 
 

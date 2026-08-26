@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: c40g-ac-inlet-panel
-version: 1.1.0
+version: 1.2.0
 class: inlet
 profile: networking
 description: >-
@@ -82,16 +82,16 @@ relief:
     # Four rocker ON/OFF switches, one per PSU. Same bezel treatment and the same
     # 3.0 as casa/pem's breakers - one number for one kind of hardware, not two
     # readings that happened to agree.
-    - {node: psu1-switch, out: 3.0}
-    - {node: psu2-switch, out: 3.0}
-    - {node: psu3-switch, out: 3.0}
-    - {node: psu4-switch, out: 3.0}
+    - {node: psu1-switch, out: 3.0, confidence: estimated, source: 'NO PRECEDENT - a panel rocker/breaker bezel. Invented here and reused across casa/pem and casa/c40g-ac-inlet-panel'}
+    - {node: psu2-switch, out: 3.0, confidence: estimated, source: 'NO PRECEDENT - a panel rocker/breaker bezel. Invented here and reused across casa/pem and casa/c40g-ac-inlet-panel'}
+    - {node: psu3-switch, out: 3.0, confidence: estimated, source: 'NO PRECEDENT - a panel rocker/breaker bezel. Invented here and reused across casa/pem and casa/c40g-ac-inlet-panel'}
+    - {node: psu4-switch, out: 3.0, confidence: estimated, source: 'NO PRECEDENT - a panel rocker/breaker bezel. Invented here and reused across casa/pem and casa/c40g-ac-inlet-panel'}
     # The captive centre screw and the six edge screws that bolt the panel on.
-    - {node: screw-mid, cyl: 1.6}
-    - {node: corner-tl, cyl: 1.6}
-    - {node: corner-tr, cyl: 1.6}
-    - {node: corner-ml, cyl: 1.6}
-    - {node: corner-mr, cyl: 1.6}
-    - {node: corner-bl, cyl: 1.6}
-    - {node: corner-br, cyl: 1.6}
+    - {node: screw-mid, cyl: 1.6, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
+    - {node: corner-tl, cyl: 1.6, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
+    - {node: corner-tr, cyl: 1.6, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
+    - {node: corner-ml, cyl: 1.6, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
+    - {node: corner-mr, cyl: 1.6, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
+    - {node: corner-bl, cyl: 1.6, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
+    - {node: corner-br, cyl: 1.6, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
 skins: [default]

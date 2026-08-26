@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: c40g-psu-ac
-version: 1.1.0
+version: 1.2.0
 class: psu
 profile: networking
 description: >-
@@ -106,9 +106,9 @@ relief:
     # The handle is FOLDED in Figure 1-10 - lying flat across the left fan - so it
     # is modelled lying on the face. bar 1.5 is the drawn stroke width, i.e. the
     # wire diameter, which is a quantity the drawing actually carries.
-    - {node: handle, bar: 1.5}
-    - {node: thumbscrew, cyl: 5.0, knurl: true}
-    - {node: status, dome: 0.3}
+    - {node: handle, bar: 1.5, confidence: drawing, source: 'the handle path own drawn stroke width - the bail wire diameter. Also a FLOOR'}
+    - {node: thumbscrew, cyl: 5.0, knurl: true, confidence: borrowed, source: 'common/fan-module@1 - its knurled locking screw'}
+    - {node: status, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
 body:
   depth: 300.0
   color: '#e9eaec'

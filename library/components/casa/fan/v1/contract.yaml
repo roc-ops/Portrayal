@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fan
-version: 1.5.0
+version: 1.6.0
 class: cooling
 profile: networking
 description: >-
@@ -100,21 +100,21 @@ relief:
     # whole face as a perforation grid and the guide's own note (see
     # perforation-colour) is that they look through the faceplate into the
     # chassis. `vent` is the only primitive that says that.
-    - {node: perforation, vent: 25.0}
+    - {node: perforation, vent: 25.0, confidence: borrowed, source: 'common/fan-module@1 grille 25; edgecore/agr-fan@1 measures 26'}
     # The pull handle. Figure 7-11 draws it as a light grey bar with an outline
     # standing on the grid, where Figure 1-4 draws it solid black at lower
     # fidelity; both put it in the same place and the guide calls it a handle.
     # `bar` at 9.0 is the node's OWN drawn short axis - a tube as thick as the
     # handle is drawn, which is the one diameter that is not a new number.
-    - {node: handle, bar: 9.0}
+    - {node: handle, bar: 9.0, confidence: drawing, source: 'the handle rect own drawn 9.0 short axis - the diameter is drawn. The proudness is a FLOOR'}
     # The indicator bezel is a plate sitting ON the perforation grid - Figures 1-4
     # and 7-11 both draw it that way - so it is raised, and the button and the
     # three lamps it holds are lifted onto its face rather than left at the panel.
-    - {node: panel, out: 1.5}
-    - {node: hs-button, cyl: 1.2, lift: 1.5}
-    - {node: hs, dome: 0.3, lift: 1.5}
-    - {node: alarm, dome: 0.3, lift: 1.5}
-    - {node: ok, dome: 0.3, lift: 1.5}
+    - {node: panel, out: 1.5, confidence: borrowed, source: 'edgecore/agr-ground-plate@1 - a plate bolted to the outside'}
+    - {node: hs-button, cyl: 1.2, lift: 1.5, confidence: estimated, source: 'NO PRECEDENT - a panel pushbutton. Invented here'}
+    - {node: hs, dome: 0.3, lift: 1.5, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: alarm, dome: 0.3, lift: 1.5, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: ok, dome: 0.3, lift: 1.5, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
 body:
   depth: 150.0
   color: '#8d949c'

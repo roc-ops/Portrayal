@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: c40g-pem
-version: 1.1.0
+version: 1.2.0
 class: power
 profile: networking
 description: >-
@@ -84,19 +84,19 @@ relief:
     # WHAT is raised comes from Figure 1-12; HOW FAR does not - see provenance/relief.
     # The bolted terminal cover is a plate on the outside of the face, so it takes
     # the same treatment (and the same 1.5) as edgecore/agr-ground-plate@1.
-    - {node: terminal-cover, out: 1.5}
-    - {node: cover-screw, cyl: 1.6, lift: 1.5}
+    - {node: terminal-cover, out: 1.5, confidence: borrowed, source: 'edgecore/agr-ground-plate@1 - a plate bolted to the outside'}
+    - {node: cover-screw, cyl: 1.6, lift: 1.5, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
     # Four studs, a minus pair above a plus pair, each carrying a hex nut over a
     # star washer. Own node each, so `cyl` takes ITS radius.
-    - {node: nut-neg-l, cyl: 2.2}
-    - {node: nut-neg-r, cyl: 2.2}
-    - {node: nut-pos-l, cyl: 2.2}
-    - {node: nut-pos-r, cyl: 2.2}
+    - {node: nut-neg-l, cyl: 2.2, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 terminal nut - measured off real hardware'}
+    - {node: nut-neg-r, cyl: 2.2, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 terminal nut - measured off real hardware'}
+    - {node: nut-pos-l, cyl: 2.2, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 terminal nut - measured off real hardware'}
+    - {node: nut-pos-r, cyl: 2.2, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 terminal nut - measured off real hardware'}
     # The two release levers stand off the face far enough to get a hand behind.
-    - {node: lever-a, out: 4.2}
-    - {node: lever-b, out: 4.2}
+    - {node: lever-a, out: 4.2, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 latch - measured off the real PSU'}
+    - {node: lever-b, out: 4.2, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 latch - measured off the real PSU'}
     # DISCONNECT POWER PRIOR TO SERVICE - a printed label, not sheet metal.
-    - {node: warning, out: 0.2}
+    - {node: warning, out: 0.2, confidence: borrowed, source: 'edgecore/agr-label-spec@1 - adhesive label thickness'}
 body:
   depth: 200.0
   color: '#9b9da0'
