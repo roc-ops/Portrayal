@@ -64,6 +64,14 @@ provenance:
     Slot 3 = Line card 1. THE RSP PAIR IS THE MIDDLE PAIR, with the line cards OUTSIDE it - the
     exact inverse of the ASR 9906 and 9910, which put the RSPs at the outer edges. Four different
     arrangements across five chassis; there is no family rule
+  card-bays: >-
+    the card openings are BAYS, converted from cutouts once cisco/a9k-slot-cover@1 was shown to fit
+    them. That took no new component: the blank carries the line card envelope, 41.4 x 395.7, which
+    is the same envelope every card in this cage uses, and the question that had held the
+    conversion up - whether a component's size is its faceplate or its slot envelope - was settled
+    as the envelope. The measured pitch is wider than the envelope by the card guide, which is
+    chassis structure and not bay. Bays are sized to the component and positioned on the measured
+    cage, matching every other chassis in this family
   slot-geometry: >-
     drawing - the card cage opening spans 55.80 to 428.07 mm across the body and 20.12 to 193.17 mm
     down it. Four slots of equal height divide that into a 43.26 mm pitch
@@ -168,6 +176,11 @@ chassis:
   weight-kg: 19.64
   airflow: side
   color: '#c8cacc'
+groups:
+  slots:
+    term: Slot
+    index-origin: 0
+    physical-context: NetworkingDevice
 views:
   front:
     size: {w: 450.85, h: 263.6}
@@ -175,10 +188,6 @@ views:
       decor:
         - {at: [24.79, 20.12], size: [7.45, 173.05], fill: '#2c3550'}
       cutouts:
-        - {id: slot-3, at: [55.8, 20.12], size: [372.27, 43.26], shape: rect}
-        - {id: slot-2, at: [55.8, 63.38], size: [372.27, 43.26], shape: rect}
-        - {id: slot-1, at: [55.8, 106.65], size: [372.27, 43.26], shape: rect}
-        - {id: slot-0, at: [55.8, 149.91], size: [372.27, 43.26], shape: rect}
         - {id: shelf, at: [13.5, 209.0], size: [423.85, 48.0], shape: rect}
         - {id: esd, at: [40.0, 200.0], size: [5.0, 5.0], shape: circle}
     silkscreen:
@@ -188,6 +197,12 @@ views:
       - {at: [28.5, 170.0], text: LC0, font-size: 5, anchor: middle, fill: '#d7dbdf'}
       - {at: [30.0, 12.0], text: FAN STATUS, font-size: 5, anchor: start}
       - {at: [420.0, 12.0], text: 'Cisco ASR 9000 Series', font-size: 5, anchor: end}
+    components:
+      bays:
+        - {id: slot-0, at: [44.09, 150.83], size: {w: 395.70, h: 41.40}, rotate: 90, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0}
+        - {id: slot-1, at: [44.09, 107.57], size: {w: 395.70, h: 41.40}, rotate: 90, accepts: ['cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1}
+        - {id: slot-2, at: [44.09, 64.31], size: {w: 395.70, h: 41.40}, rotate: 90, accepts: ['cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2}
+        - {id: slot-3, at: [44.09, 21.05], size: {w: 395.70, h: 41.40}, rotate: 90, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 3}
     regions:
       - {id: rsp-slots, label: RSP cards - the middle pair}
       - {id: lc-slots, label: Line cards - above and below the RSP pair}
@@ -213,20 +228,6 @@ views:
       - {id: side-air-intake, label: Side air intake - inlet at the right side of the cage}
       - {id: air-filter, label: 'Single air filter, accessible from the rear'}
 gaps:
-- what: card-openings-are-cutouts-not-bays
-  scope: [front]
-  reason: needs-drawing
-  note: >-
-    The four card slots are drawn as CUTOUTS, and this is a deliberate refusal rather than an
-    unfinished model. A bay must name a component that fits it, and the only Cisco blank in the
-    library - a9k-slot-cover, part numbers A9K-LC-FILR and A9K-LC-FILR-V2 - measures a plate of
-    42.05 x 362.24 mm. This chassis's opening is 372.27 mm wide, so that plate would leave a 5 mm
-    gap at each end and would not cover it. That is consistent with A9K-LC-FILR being the
-    ASR 9006/9010-era part, sourced as it is from the Ethernet Line Card Installation Guide, and
-    the ASR 9900 generation having its own filler. Declaring it anyway would lint clean and claim
-    something false about a product. Every measurement is here and converting these four cutouts
-    to bays is mechanical once a part that fits exists.
-  wanted: the ASR 9900 generation's line card and RP blank, or a Cisco table giving chassis support per card
 - what: power-module-openings
   scope: [front]
   reason: needs-drawing

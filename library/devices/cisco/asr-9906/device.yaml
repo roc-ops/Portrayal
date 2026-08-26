@@ -57,6 +57,14 @@ provenance:
     card 1, Slot 3 = Line card 2, Slot 4 = Line card 3, Slot 5 = RSP1. THE RSP PAIR IS THE OUTER
     PAIR - the exact inverse of the ASR 9904, which puts its RSPs in the middle with the line cards
     outside. Five chassis and four different arrangements so far
+  card-bays: >-
+    the card openings are BAYS, converted from cutouts once cisco/a9k-slot-cover@1 was shown to fit
+    them. That took no new component: the blank carries the line card envelope, 41.4 x 395.7, which
+    is the same envelope every card in this cage uses, and the question that had held the
+    conversion up - whether a component's size is its faceplate or its slot envelope - was settled
+    as the envelope. The measured pitch is wider than the envelope by the card guide, which is
+    chassis structure and not bay. Bays are sized to the component and positioned on the measured
+    cage, matching every other chassis in this family
   slot-geometry: >-
     drawing - the card cage opening spans 70.59 to 331.11 mm across the body and 94.09 to 458.41 mm
     down it. Six slots of equal width divide 260.52 mm into a 43.42 mm pitch
@@ -162,6 +170,11 @@ chassis:
   weight-kg: 49.0
   airflow: front-to-back
   color: '#c8cacc'
+groups:
+  slots:
+    term: Slot
+    index-origin: 0
+    physical-context: NetworkingDevice
 views:
   front:
     size: {w: 447.0, h: 619.51}
@@ -169,12 +182,6 @@ views:
       decor:
         - {at: [20.0, 500.0], size: [300.0, 105.0], fill: '#3a3c3e', pattern: grille, vent: 60}
       cutouts:
-        - {id: slot-0, at: [70.59, 94.09], size: [43.42, 364.32], shape: rect}
-        - {id: slot-1, at: [114.01, 94.09], size: [43.42, 364.32], shape: rect}
-        - {id: slot-2, at: [157.43, 94.09], size: [43.42, 364.32], shape: rect}
-        - {id: slot-3, at: [200.85, 94.09], size: [43.42, 364.32], shape: rect}
-        - {id: slot-4, at: [244.27, 94.09], size: [43.42, 364.32], shape: rect}
-        - {id: slot-5, at: [287.69, 94.09], size: [43.42, 364.32], shape: rect}
         - {id: power-shelf, at: [16.0, 94.09], size: [46.0, 364.32], shape: rect}
         - {id: esd, at: [352.0, 512.0], size: [5.0, 5.0], shape: circle}
     silkscreen:
@@ -185,6 +192,14 @@ views:
       - {at: [220.38, 487.0], text: LC2, font-size: 6, anchor: middle}
       - {at: [264.77, 487.0], text: LC3, font-size: 6, anchor: middle}
       - {at: [308.97, 487.0], text: RSP1, font-size: 6, anchor: middle}
+    components:
+      bays:
+        - {id: slot-0, at: [71.60, 78.40], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0}
+        - {id: slot-1, at: [115.02, 78.40], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1}
+        - {id: slot-2, at: [158.44, 78.40], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2}
+        - {id: slot-3, at: [201.86, 78.40], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 3}
+        - {id: slot-4, at: [245.28, 78.40], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 4}
+        - {id: slot-5, at: [288.70, 78.40], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-slot-cover@1'], group: slots, rel-pos: 5}
     regions:
       - {id: rsp-slots, label: 'RSP cards - the outer pair, slots 0 and 5'}
       - {id: lc-slots, label: Line cards 0 to 3 - slots 1 to 4}
@@ -205,20 +220,6 @@ views:
   right:
     size: {w: 730.8, h: 619.51}
 gaps:
-- what: card-openings-are-cutouts-not-bays
-  scope: [front]
-  reason: needs-drawing
-  note: >-
-    The six card slots are CUTOUTS rather than bays, deliberately. A bay must name a component
-    that fits it, and the only Cisco blank in the library - a9k-slot-cover, A9K-LC-FILR - carries
-    size.w 44.39 against this chassis's measured 43.42 mm pitch, so six of them come to 266.3 mm
-    in a 260.52 mm cage. Its plate measures 42.05 mm and WOULD fit, which is the heart of the
-    problem: it is not established whether a card component's size.w is the faceplate or the slot
-    pitch, and the answer decides every accepts list in this family. A9K-LC-FILR is also sourced
-    from the Ethernet Line Card Installation Guide, a 9006/9010-era document, while this is an
-    ASR 9900 chassis. The measurements are all here and converting cutouts to bays is mechanical.
-  wanted: the ASR 9900 generation's line card and RP blank, or a statement of whether a card
-    component's size is its faceplate or its slot pitch
 - what: power-module-openings
   scope: [front]
   reason: needs-drawing
