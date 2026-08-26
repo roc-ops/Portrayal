@@ -22,6 +22,22 @@ elements:
   opening: {at: [0.0, 0.0], size: [14.25, 10.4], class: cutout}
 relief:
   wall: '#aab0b7'
+  # THE MODULE ENVELOPE, NOT THE BEZEL BORE. Without this the recess is the full
+  # 14.25 x 10.4 aperture, so a ganged port is a hole the size of its own opening
+  # rather than a cage a module slides into - and this is the most-used part in
+  # the library at 734 placements, 516 of them cisco/.
+  #
+  # 13.5 x 8.5 is taken from std/sfp, which is the SAME SFF-8432 MODULE - one
+  # envelope recorded twice, not a second reading. Said here so nobody later
+  # reads the two files agreeing as corroboration.
+  #
+  # NO COLLAR, DELIBERATELY, and this is where ganged differs from single. This
+  # skin's own note says the ganged bezel cutout is ONE CONTINUOUS SLOT (SFF-8433
+  # C01) with ports abutting - the only thing between two ports is the shared cage
+  # wall below. std/sfp has a collar because a single cage has a rim all the way
+  # round; a ganged block does not, and giving it one would draw a frame the
+  # hardware does not have.
+  size: {w: 13.5, h: 8.5}
 connection-points:
   mate: {at: [7.125, 5.2], direction: front}
 skins: [default]
