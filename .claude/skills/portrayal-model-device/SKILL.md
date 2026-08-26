@@ -84,6 +84,18 @@ the same intake directory, still has the table - height, width, depth and
 weight for every card in a generation. Anything sized from the newer guide
 alone would have had to guess.
 
+**And note HOW that one defeats a search rather than merely failing it.** The
+newer guide still has a section headed "Ethernet Line Card Physical
+Dimensions". Grep for the heading and you find it; the reader concludes the
+guide covers dimensions, reads the sentence, and stops. A heading that
+advertises coverage its section does not have is worse than no heading, because
+it converts a careful search into a confident wrong answer. The other traps of
+this shape are quieter and just as effective: a bulleted list whose fourth item
+sits on the far side of a page break, so the extracted text shows three; and a
+figure caption naming a part the figure does not contain. **When a section
+heading promises exactly what you are looking for, read the section rather than
+trusting the heading.**
+
 Then **record which searches you ran**, not just the conclusion. "Table 35 has
 no row for any 5th-generation card, and no data sheet carries one either" is a
 statement somebody can check and overturn. "No document states this" is not.
