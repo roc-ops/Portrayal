@@ -29,14 +29,30 @@ export const NS = 'http://www.w3.org/2000/svg';
 // every card sits at rotate: 90, and a swap that only translated re-rendered the
 // card upright inside a horizontal slot.
 export function bayTransform(bay, c) {
+  // THE SAME COMPOSITION render.py USES, and it must stay the same one:
+  //
+  //     translate(bay centre) rotate(deg) translate(-w/2, -h/2)
+  //
+  // Read left to right it states the intent: go to where the card belongs, turn
+  // it, and put its middle there. Nothing is scaled - this is a rotation and two
+  // translations, and the drawing stays at true millimetre scale throughout.
+  //
+  // The previous version translated to a PRE-COMPENSATED origin and rotated
+  // about the component's own centre. That is algebraically the same thing, and
+  // it is where the bug lived: it makes the caller solve backwards for an origin
+  // that lands the ROTATED box correctly, and this file solved it from the
+  // COMPONENT's size while render.py solved it from the BAY's. Those agree
+  // exactly when the occupant matches its slot and diverge by half the mismatch
+  // when it does not - so an A9K-RSP880-LT-SE swapped into an ASR 9006 landed
+  // 16.4 mm from where the build puts it, and hung out through the side of the
+  // chassis. There is no origin to solve for now.
+  const sz = c?.insert || c?.size;
+  if (!sz || !bay.size) return `translate(${bay.at[0]},${bay.at[1]})`;
+  const cx = bay.at[0] + bay.size.w / 2;
+  const cy = bay.at[1] + bay.size.h / 2;
   const deg = bay.rotate || 0;
-  if (!deg || !c?.size) return `translate(${bay.at[0]},${bay.at[1]})`;
-  const cx = c.size.w / 2, cy = c.size.h / 2;
-  // 90 and 270 swap the box; 180 leaves it where it is
-  const quarter = ((deg % 360) + 360) % 360 % 180 === 90;
-  const offX = quarter ? cx - cy : 0;
-  const offY = quarter ? cy - cx : 0;
-  return `translate(${bay.at[0] - offX},${bay.at[1] - offY}) rotate(${deg} ${cx} ${cy})`;
+  return `translate(${cx},${cy})${deg ? ` rotate(${deg})` : ''}`
+       + ` translate(${-sz.w / 2},${-sz.h / 2})`;
 }
 
 // Re-address a component's own namespace into the bay's, matching render.py:

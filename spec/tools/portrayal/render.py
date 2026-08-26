@@ -248,7 +248,7 @@ def rewrite_ids(el, prefix, contract, path_prefix, skip=None):
                     lambda m: f"url(#{renamed.get(m.group(1), m.group(1))})", val))
 
 
-def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0):
+def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None):
     contract, skins = lib.resolve(ref)
     comp_name = ref.split("/")[-1].split("@")[0]
     if skin_overrides and comp_name in skin_overrides:
@@ -299,10 +299,33 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         g.set("data-rel-pos", str(rel_pos))
     if contract.get("states"):
         g.set("data-states", " ".join(state_names(contract["states"])))
-    tf = f"translate({at[0]},{at[1]})"
-    if rotate:
-        cw, chh = contract["size"]["w"], contract["size"]["h"]
-        tf += f" rotate({rotate} {cw / 2} {chh / 2})"
+    # HUNG BY ITS CENTRE WHEN A CENTRE IS GIVEN. Read left to right, the
+    # transform states the intent directly: go to where this thing belongs,
+    # turn it, and put its middle there.
+    #
+    #     translate(centre) rotate(deg) translate(-w/2, -h/2)
+    #
+    # The alternative - translate to a pre-compensated top-left and then rotate
+    # about the component's own centre - is algebraically the same, and it is
+    # where both of today's placement bugs came from. It makes the CALLER solve
+    # backwards for an origin that lands the ROTATED box in the right place, and
+    # two callers solved it two different ways: render_view derived the offset
+    # from the bay, swap.js from the component, and they agreed only when the
+    # occupant happened to match its slot. Nothing here is scaled; both forms are
+    # a rotation and a translation and the drawing stays at true millimetre scale.
+    #
+    # `at` is still honoured for placements, which are positioned by their own
+    # top-left corner and have no container to be centred in.
+    cw, chh = contract["size"]["w"], contract["size"]["h"]
+    if centre is not None:
+        tf = f"translate({centre[0]:g},{centre[1]:g})"
+        if rotate:
+            tf += f" rotate({rotate})"
+        tf += f" translate({-cw / 2:g},{-chh / 2:g})"
+    else:
+        tf = f"translate({at[0]},{at[1]})"
+        if rotate:
+            tf += f" rotate({rotate} {cw / 2} {chh / 2})"
     g.set("transform", tf)
     title = ET.SubElement(g, f"{{{SVG_NS}}}title")
     title.text = label or inst_id
@@ -815,38 +838,28 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                 opening.set("data-depth", f"{max(depths):g}")
                 opening.set("data-wall", "#2a2e31")
         if default:
-            # instance_group rotates a component about its OWN centre, so for a
-            # rotated bay the card has to be offset or it spins out of the opening.
-            # The bay's size is the rotated footprint, so the unrotated component is
-            # that transposed, and the offset is half the difference.
-            mod_at = b["at"]
-            if b.get("rotate") in (90, 270):
-                d = (b["size"]["w"] - b["size"]["h"]) / 2.0
-                mod_at = [b["at"][0] + d, b["at"][1] - d]
-            # AN OCCUPANT IS CENTRED IN ITS BAY, not aligned to its corner. A
-            # module sits in the middle of its opening, and a faceplate that is
-            # LARGER than the aperture - which is the normal case once a card has
-            # ejector brackets - overlaps it on both sides rather than hanging off
-            # one. Aligning to the origin made an undersized cover sit flush
-            # top-left with the dark opening showing along two edges, which is the
-            # black seam visible on every ASR RSP slot: a 41.4 x 395.7 cover in a
-            # 46.0 x 406.4 bay.
+            # THE BAY'S CENTRE, and nothing else. instance_group hangs the
+            # occupant by its own middle, so there is no origin to solve for and
+            # no rotation to pre-compensate: `bay.size` is already the rotated
+            # footprint, so its centre is the right point at every angle.
             #
-            # This does NOT reconcile the two numbers and must not be read as
-            # doing so. The bay stays the bay and the module stays the module;
-            # L33 still reports every mismatch. All that changes is that the
-            # difference is shared evenly instead of accumulating on one side.
-            try:
-                _c, _ = lib.resolve(default)
-                _e = _c.get("insert") or _c.get("size") or {}
-                if _e.get("w") and _e.get("h") and not b.get("rotate"):
-                    mod_at = [mod_at[0] + (b["size"]["w"] - _e["w"]) / 2.0,
-                              mod_at[1] + (b["size"]["h"] - _e["h"]) / 2.0]
-            except Exception:
-                pass                     # L5 reports an unresolvable ref
-            g, contract = instance_group(lib, default, f"{b['id']}--module", mod_at,
+            # This replaces two special cases that each got half of it - a
+            # rotation offset derived from the bay, and a centring step that
+            # skipped rotated bays. An A9K-RSP880-LT-SE in an ASR 9006 hung 14 mm
+            # off one end and 19 mm off the other, through the side of the
+            # chassis, because the card is 428.5 long in a 395.7 slot and the
+            # overhang all landed on one side.
+            #
+            # It RECONCILES NOTHING. The bay stays the bay, the module stays the
+            # module, and L33 still reports every mismatch. A card too long for
+            # its slot is still too long; it now overhangs evenly, which is what
+            # a faceplate overlapping its aperture does.
+            bay_centre = [b["at"][0] + b["size"]["w"] / 2.0,
+                          b["at"][1] + b["size"]["h"] / 2.0]
+            g, contract = instance_group(lib, default, f"{b['id']}--module", b["at"],
                                          None, None, None, None,
                                          rotate=b.get("rotate"), palette=palette,
+                                         centre=bay_centre,
                                          skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                                          path=f"{b['id']}/module", resolved=resolved)
             bay_g.append(g)
