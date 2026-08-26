@@ -129,6 +129,11 @@ export function createViewer(container, opts = {}) {
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
   // keep the camera outside the near plane so raising near cannot clip geometry
+  // Closest a selection is ever framed from: a hand's length, the distance a
+  // person holds a chassis at to read a port label. Not a collision limit -
+  // controls.minDistance below is that, and letting it double as a framing floor
+  // is what put the eye 60 mm from an 18.5 mm cage.
+  const INSPECT_MM = 230;
   controls.minDistance = 40;
   controls.maxDistance = 2500;
   // lights shade only the relief geometry (Lambert); face textures stay unlit art
@@ -689,7 +694,24 @@ export function createViewer(container, opts = {}) {
     const normal = new THREE.Vector3(0, 0, 1).transformDirection(grp.matrixWorld);
     const fov = camera.fov * Math.PI / 180;
     const fit = Math.max(h, w / camera.aspect) / 2;
-    const dist = Math.min(Math.max(fit / Math.tan(fov / 2) * 2.2, controls.minDistance + 20),
+    // HOW CLOSE IS TOO CLOSE. A distance computed from the selected feature alone
+    // scales all the way down with it: an 18.5 x 9.58 mm QSFP-DD cage frames at
+    // 35 mm and a 3 mm status LED at 9 mm. What rescued those to 60 mm was
+    // controls.minDistance - an orbit collision guard doing framing's job by
+    // accident, and badly, because it knows nothing about what is being framed.
+    //
+    // At any of those distances the cage fills the view and its neighbours fall
+    // outside it, so the one question selecting a port asks - WHICH port - is the
+    // one thing the frame cannot answer. Identifying a part is a comparison with
+    // the parts beside it, and a frame with no neighbours in it has thrown that
+    // away to show detail nobody asked for.
+    //
+    // So: no closer than the distance a person actually holds a chassis at to
+    // read it. Anything bigger than about a hand's length of panel still frames
+    // itself - the floor only reaches features smaller than a fan module, which
+    // are exactly the ones that were unreadable.
+    const dist = Math.min(Math.max(fit / Math.tan(fov / 2) * 2.2, INSPECT_MM,
+                                   controls.minDistance + 20),
                           controls.maxDistance - 10);
     controls.target.copy(centre);
     camera.position.copy(centre).addScaledVector(normal, dist);
