@@ -110,6 +110,30 @@ def test_the_message_names_the_key_for_that_class_not_a_generic_one(tmp_path):
     assert "IMPOSES" in found(card, tmp_path, "L27")[0]
 
 
+def test_a_conduit_is_not_told_to_invent_an_output(tmp_path):
+    """A power ENTRY module neither draws nor supplies: it filters and
+    distributes what the DC plant feeds it, so its rating bounds what may pass
+    through rather than describing an output. Casa rates one in amps and volts
+    and never in watts, and two current figures across an 18 V-wide input range
+    put V x I anywhere from about 810 W to 1800 W per feed.
+
+    L27 still asks - the figure really is missing - but a rule that tells you to
+    do the wrong thing is worse than one that stays quiet, so the message has to
+    offer the conduit reading. There is no `conduit` class yet, deliberately."""
+    p = plant(tmp_path, "acme/pem@1", cls="power")
+    msg = found(p, tmp_path, "L27")[0]
+    assert "CARRIES current" in msg
+    assert "volts and amps" in msg
+    assert "power entry module" in msg
+
+
+def test_a_consumer_is_never_offered_the_conduit_reading(tmp_path):
+    """A line card is not a conduit and the escape hatch would just be noise on
+    it - and worse, an invitation to answer a draw question with volts."""
+    p = plant(tmp_path, "acme/card@1")
+    assert "CARRIES current" not in found(p, tmp_path, "L27")[0]
+
+
 def test_the_message_forbids_estimating_the_number(tmp_path):
     """An unsourced watt figure is the same number minus the warning, and the
     rule has to say so where the author reads it - otherwise the cheapest way

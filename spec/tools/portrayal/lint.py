@@ -624,8 +624,28 @@ def lint_component_power(path, data, _lib_roots=None):
     if any(k in attrs for k in keys):
         return
     want, means = _power_advice(cls)
+    # A CONDUIT is neither a draw nor a supply, and telling one to state
+    # `power-output-w` is advice to write a wrong number - worse than saying
+    # nothing. Casa rates a power entry module in amps and volts and never in
+    # watts, because a PEM does not convert or regulate: it filters and
+    # distributes what the DC plant feeds it, so its rating bounds what may PASS
+    # THROUGH rather than describing an output. Deriving watts means multiplying,
+    # and with two current figures across an 18 V-wide input range the product
+    # lands anywhere from about 810 W to 1800 W per feed.
+    #
+    # There is no `conduit` class yet and this message is deliberately doing the
+    # work one would do, because one vendor's DC plant is not enough to design a
+    # class from - see the design note. What the message must not do meanwhile is
+    # instruct the author to guess.
+    conduit = (" That is the key if this part CONVERTS or REGULATES. If it only "
+               "CARRIES current - a power entry module, a busbar - watts are the "
+               "wrong unit for it: the rating bounds what may pass through and is "
+               "not an output, so record the vendor's own volts and amps instead "
+               "of multiplying them into one answer out of a range."
+               if cls in SUPPLY_CLASSES else "")
     warn(path, "L27", f"{name} is class {cls} and states no power figure. Add "
-                      f"attrs.{want} - {means} - as a number in watts. If no "
+                      f"attrs.{want} - {means} - as a number in watts.{conduit} "
+                      "If no "
                       "document you hold states it, leave this warning standing: "
                       "it is the record that the figure is missing, and a chassis "
                       "total is a floor rather than a total until it lands. Do not "
