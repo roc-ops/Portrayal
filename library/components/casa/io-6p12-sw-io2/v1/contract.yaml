@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: io-6p12-sw-io2
-version: 1.0.0
+version: 1.1.0
 class: line-card
 profile: networking
 description: >-
@@ -76,6 +76,48 @@ provenance:
     thick. The comb is notched per port and carries the U0-U11 / D0-D5 silkscreen,
     and the labels appear on BOTH the card face and the comb - the comb
     repeats them where the cable actually lands rather than replacing them
+  rf-block-3d: 'BOTH ENTRIES BELOW (rf-block-3d and standoff-vs-block) ARE THE SAME
+    TEXT casa/io-6p12-sw@2 CARRIES, written there first and copied here. That is ONE
+    analysis of ONE defect that both files happen to share - the two skins were built
+    from each other - and NOT two independent findings that agreed. Restated rather than
+    cross-referenced for the reason this file''s power entry gives.
+    THE RAISED RF SECTION WAS DRAWING AS A BLANK PLATE OVER THE PORTS,
+    which is the "switch I/O card with no ports in it" the owner reported, and it was
+    two separate defects.
+    FIRST, `rf-block` was a BARE RECT. relief.features textures a raised solid from ITS
+    OWN node''s art, so a 27.27 x 202.02 rect at fill-opacity 0.18 extruded 15.9 mm
+    produced exactly what it says: a blank translucent slab. It is now a GROUP holding
+    that rect and the eighteen U0-U11 / D0-D5 legends, so the block face carries its own
+    printing. This is the "put `out` on a group holding the part and all its detail,
+    never on a bare rect" rule, and it had been missed here.
+    SECOND, the eighteen MCX jacks are COMPOSED parts and composed parts are siblings of
+    the block, not children of it - so with the block 15.9 mm proud they were left lying
+    on the faceplate underneath it. Each part now declares `lift: 15.9`, which is the
+    correct statement: the jacks are mounted ON the raised section, so their faces sit at
+    the block face and their barrels stand 2.0 further out from there.
+    THAT LIFT IS NOT HONOURED BY THE 3D VIEWER TODAY, and saying so is the point of this
+    entry. render.py writes it as data-z-lift on the composed part''s instance GROUP,
+    and library/demo2/relief.js reads data-z-lift off the FEATURE element itself when it
+    collects outs (a dataset is not inherited), so a lift on the parent group reaches
+    cavity parts and not protruding ones - and std/mcx@1 is a protruding `cyl`, not a
+    cavity. Until the extractor walks up for an ancestor lift, the barrels will still
+    draw at the panel. The DATA is right; one renderer line is not. Reported.'
+  standoff-vs-block: 'AN UNRESOLVED CONTRADICTION IN THIS FILE, recorded rather than
+    reconciled. The `comb` entry has Jason measuring the brass standoffs about 3/8in
+    (9.5 mm) proud of the FACEPLATE; the `shape` entry has him measuring the RF section
+    about 5/8in (15.9 mm) proud of the same faceplate. Both readings are off one C40G
+    rear photograph and both are carried here. On this card all three standoffs sit
+    INSIDE the block''s footprint, so at 9.5 against 15.9 they are buried in it - a
+    standoff 6 mm shorter than the thing it passes through cannot carry a comb.
+    Something has to give and it is not obvious which: "ahead of the comb" in the shape
+    entry can mean the block stands further out than the comb, or that it sits between
+    the faceplate and the comb, and the two readings may also have been taken on
+    DIFFERENT CARDS - the same photo has plain 6+12 cards in slots 0 and 5, which have
+    no RF block at all, and the standoff reading would be right on those.
+    NOTHING IS CHANGED. Deriving out 25.4 (block face plus the measured 9.5) would be
+    arithmetic dressed as a measurement, and it would silence the only check that can
+    see the problem. WHAT WOULD SETTLE IT: one question to Jason - on the SW card, does
+    the comb stand in front of the RF block or behind it - or one side-on photograph.'
 relief:
   wall: '#4a4f55'
   features:
@@ -87,24 +129,24 @@ relief:
     # the RF section stands proud of the faceplate, which the plain card does not
     - {node: rf-block, out: 15.9, color: '#9aa0a6'}
 parts:
-  - {ref: std/mcx@1, id: u0, at: [6.135, 64.635]}
-  - {ref: std/mcx@1, id: u1, at: [6.135, 81.365]}
-  - {ref: std/mcx@1, id: u2, at: [6.135, 98.095]}
-  - {ref: std/mcx@1, id: u3, at: [6.135, 114.825]}
-  - {ref: std/mcx@1, id: u4, at: [6.135, 131.555]}
-  - {ref: std/mcx@1, id: u5, at: [6.135, 148.285]}
-  - {ref: std/mcx@1, id: u6, at: [6.135, 165.015]}
-  - {ref: std/mcx@1, id: u7, at: [6.135, 181.735]}
-  - {ref: std/mcx@1, id: u8, at: [6.135, 198.465]}
-  - {ref: std/mcx@1, id: u9, at: [6.135, 215.195]}
-  - {ref: std/mcx@1, id: u10, at: [6.135, 231.925]}
-  - {ref: std/mcx@1, id: u11, at: [6.135, 248.655]}
-  - {ref: std/mcx@1, id: d0, at: [17.395, 61.705]}
-  - {ref: std/mcx@1, id: d1, at: [17.395, 94.065]}
-  - {ref: std/mcx@1, id: d2, at: [17.395, 126.415]}
-  - {ref: std/mcx@1, id: d3, at: [17.395, 158.775]}
-  - {ref: std/mcx@1, id: d4, at: [17.395, 191.125]}
-  - {ref: std/mcx@1, id: d5, at: [17.395, 223.485]}
+  - {ref: std/mcx@1, id: u0, at: [6.135, 64.635], lift: 15.9}
+  - {ref: std/mcx@1, id: u1, at: [6.135, 81.365], lift: 15.9}
+  - {ref: std/mcx@1, id: u2, at: [6.135, 98.095], lift: 15.9}
+  - {ref: std/mcx@1, id: u3, at: [6.135, 114.825], lift: 15.9}
+  - {ref: std/mcx@1, id: u4, at: [6.135, 131.555], lift: 15.9}
+  - {ref: std/mcx@1, id: u5, at: [6.135, 148.285], lift: 15.9}
+  - {ref: std/mcx@1, id: u6, at: [6.135, 165.015], lift: 15.9}
+  - {ref: std/mcx@1, id: u7, at: [6.135, 181.735], lift: 15.9}
+  - {ref: std/mcx@1, id: u8, at: [6.135, 198.465], lift: 15.9}
+  - {ref: std/mcx@1, id: u9, at: [6.135, 215.195], lift: 15.9}
+  - {ref: std/mcx@1, id: u10, at: [6.135, 231.925], lift: 15.9}
+  - {ref: std/mcx@1, id: u11, at: [6.135, 248.655], lift: 15.9}
+  - {ref: std/mcx@1, id: d0, at: [17.395, 61.705], lift: 15.9}
+  - {ref: std/mcx@1, id: d1, at: [17.395, 94.065], lift: 15.9}
+  - {ref: std/mcx@1, id: d2, at: [17.395, 126.415], lift: 15.9}
+  - {ref: std/mcx@1, id: d3, at: [17.395, 158.775], lift: 15.9}
+  - {ref: std/mcx@1, id: d4, at: [17.395, 191.125], lift: 15.9}
+  - {ref: std/mcx@1, id: d5, at: [17.395, 223.485], lift: 15.9}
 connection-points:
   mate: {at: [15.23, 172.75], direction: rear}
 skins: [default]
