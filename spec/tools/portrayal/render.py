@@ -275,6 +275,12 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     g.set("id", inst_id)
     g.set("data-path", path)
     g.set("data-class", contract.get("class", "component"))
+    # HOW IT MOVES, beside WHAT IT IS. The 3D viewer decided what could be
+    # ejected from a hardcoded class list, so every new removable type meant
+    # editing that list - and a transceiver, which is removable, was not on it.
+    # See roc-ops/ndv#3.
+    if contract.get("behaviour"):
+        g.set("data-behaviour", contract["behaviour"])
     g.set("data-ref", f"{ref}:{contract['version']}")
     # A cavity is a hole you look INTO - a port aperture, a cage. A MODULE is a
     # solid body that fills its bay, and its depth says how far it reaches into

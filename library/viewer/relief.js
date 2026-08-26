@@ -362,8 +362,22 @@ export async function extractRelief(url) {
   // The visible symptom was that every Casa and Cisco fan and PEM drew as art
   // painted on the chassis plate, with no body and no ejection - and edgecore
   // "worked in 3D" for no better reason than its choice of word.
+  //
+  // THAT LIST IS NOW A FALLBACK. A part says how it MOVES - `data-behaviour`,
+  // one of fills / occupies / mounts - and a body is owed to anything that comes
+  // out, which is `fills` (into an aperture) and `occupies` (into a receptacle).
+  // The class list could never say that: it was a catalogue of nouns, so every
+  // new removable type meant editing it, and a TRANSCEIVER - removable, and the
+  // reason the SFP bail cannot pivot yet - was simply not on it. `mounts` is
+  // deliberately excluded: a rack ear, a label and a ground lug attach to the
+  // box and do not withdraw from it.
+  //
+  // The old list stays for drawings compiled before behaviours existed. It costs
+  // one selector and means a stale dist/ does not silently lose every FRU.
   const BODY_CLASSES = ['psu', 'fan', 'tab', 'power', 'cooling'];
-  for (const el of svg.querySelectorAll(BODY_CLASSES.map(c => `[data-class="${c}"]`).join(','))) {
+  const BODY_SELECTOR = ['[data-behaviour="fills"]', '[data-behaviour="occupies"]']
+    .concat(BODY_CLASSES.map(c => `[data-class="${c}"]:not([data-behaviour])`)).join(',');
+  for (const el of svg.querySelectorAll(BODY_SELECTOR)) {
     if (!el.dataset.ref) continue;
     const path = (el.dataset.path || '').split('/')[0];
     if (!path || frus.some(f => f.path === path)) continue;
