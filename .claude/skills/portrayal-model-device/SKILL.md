@@ -237,6 +237,42 @@ Now populate. **Reuse before building.**
    the same number minus the warning, and it will be summed by somebody who
    cannot see that you guessed.
 
+8b-i. **Capture what a power figure MEASURES, not just its value.** The
+   qualifier is what makes two numbers comparable later, and a number captured
+   without it is the problem. Three questions, every time:
+   - **Which measure?** Typical, maximum, minimum. If the document does not say
+     — "Total Power 300 W", "Power Consumption: 160W" — file it as
+     `power-draw-max-w`, because a single figure on a card spec table is what a
+     chassis is budgeted with, **and say in provenance that the vendor did not
+     qualify it.** That sentence is not paperwork: it tells the next reader the
+     `max` is your reading, so a later document giving a real typical is new
+     information rather than a contradiction.
+   - **Which scope?** Card alone, or card plus its paired I/O module? Bare
+     chassis, or fully configured? At what ambient? Casa heads a row "Maximum
+     consumption WITH I/O module"; Cisco gives one figure per card per ambient.
+     Put the scope in provenance, and on a device use `power-envelope`.
+   - **Which side of the meter?** Draw or supply. A number under a "Power
+     Consumption" heading is not automatically consumption: the C100G's
+     datasheet prints 4000 W there, and the install guide shows it is the AC
+     input to provision for a 3600 W load. Recording it as the device's draw
+     put a wrong number in the manifest for two commits.
+
+8b-ii. **When two documents give different numbers, work down this list and
+   stop at the first that fits.** Most apparent conflicts are not conflicts.
+   1. **Different measures** — typical against maximum. Not a conflict: record
+      **both**, as `power-draw-typical-w` and `power-draw-max-w`.
+   2. **Different scopes** — with or without a paired module, at different
+      ambients, bare against configured, draw against required input. Not
+      comparable as they stand; the qualifier belongs with the figure.
+   3. **Same measure, same scope, different value.** *Only now* is it a
+      conflict. Record it in `gaps:` as `reason: sources-disagree` with both
+      figures and their sources in the `note`, and say in provenance which one
+      the manifest carries and why.
+
+   `sources-disagree` is the last resort, not the first response to two
+   different numbers. Reaching for it early manufactures a finding that is not
+   there, and a manufactured conflict looks exactly like a real one.
+
 8c. **What the device's own `power-typical-w` covers, if the document says.**
    On a modular chassis the vendor's figure is ambiguous by default and you
    generally cannot resolve it: the AGR400's datasheet says "Max 527 W, Typical
