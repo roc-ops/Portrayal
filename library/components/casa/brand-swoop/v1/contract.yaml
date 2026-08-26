@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: brand-swoop
-version: 1.0.0
+version: 1.1.0
 class: marking
 profile: networking
 description: >-
@@ -18,6 +18,21 @@ provenance:
     frame, which is 1.64 here. Drawn as an outline because that is what the
     source is - a moulded groove reads as an outline, a printed graphic would
     not
+  relief: 'the 1.0 mm depth was compiling to a 258.3 x 40.5 RECTANGULAR PIT, which is
+    not what a moulded groove is. `size.d` on anything that is not kind: module becomes
+    data-depth, and the 3D viewer reads data-depth as a cavity to look into, taking its
+    cross-section from the component''s bounding box unless a `cavity` node says
+    otherwise. So the whole band was a shallow tray.
+    `relief.cavity: swoop` fixes it without touching a single number: the recess is now
+    shape-punched from the swoop path''s own art, which is the closed stroked outline the
+    style entry above describes, so the groove has the shape of the groove. The depth is
+    unchanged and still ESTIMATED - Jason''s source is a 2D path and states no depth -
+    and 1.0 mm is what this file has always carried.
+    A groove is the right primitive here rather than a protrusion: the style entry
+    settles it - "a moulded groove reads as an outline, a printed graphic would not".'
   extent: drawing - 48.66 to 162.13 across and 4.62 to 24.08 down in his frame,
     mapped fractionally onto our 432.95 x 571 body
+relief:
+  wall: '#8a8d90'
+  cavity: swoop
 skins: [default]

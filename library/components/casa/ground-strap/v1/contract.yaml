@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: ground-strap
-version: 1.0.0
+version: 1.1.0
 class: mechanical
 profile: networking
 description: >-
@@ -10,12 +10,28 @@ description: >-
   side of the chassis - which reads as the RIGHT of the front view and the LEFT
   of the rear view.
 attrs: {model: 'Ground Strap Point'}
-size: {w: 15.0, h: 7.9, d: 2.0}
+size: {w: 15.0, h: 7.9}
 provenance:
   layout: 'drawing - Jason''s hand-built SVGs, `groundStrapLocation` on both
     faces, 6.58 x 3.81 in a 190.26-wide frame. Traced from its children - a bolt
     hole at 16 percent of the width, a stem at 61 percent dropping to a bar
     spanning 35 to 86 percent, and three hatch strokes below it'
+  depth: 'REMOVED. This carried d 2.0, and `size.d` on a kind: component compiles to
+    data-depth, which the 3D viewer reads as a CAVITY - so a marked grounding point was
+    rendering as a 15 x 7.9 x 2 mm pit in the front and rear plates. A thing that stands
+    proud says so with relief.features and no depth; this one does not stand proud, so
+    it now says nothing, which is the correct answer rather than the inverted one.'
+  relief: 'NO FEATURES, on purpose. What Jason''s source gives is a black marked area
+    carrying a bolt hole and a chassis-earth symbol, traced as outline geometry - and
+    nothing in it, or in either guide, says whether the marking is printed on the sheet
+    metal or carried on a separate plate, nor how far the bolt head stands off. Both
+    readings are open and picking one would be an assertion, so the part stays flat.
+    The BOLT HOLE is the one thing that could be modelled as a cavity, and it is not,
+    because its depth is the thickness of a piece of metal nobody has measured and a
+    guessed hole depth is a guessed number with a hole around it.
+    WHAT WOULD SETTLE IT: one photograph of the C100G rear corner. If the marking turns
+    out to be a plate, {node: plate, out: 1.5} is the entry to add, matching
+    edgecore/agr-ground-plate@1.'
   hand: 'drawing - front at x 153.78, rear at x 3.42. Both are the same corner of
     the real chassis; walking round the box swaps left for right, which is the
     same reason the rear slot order mirrors'

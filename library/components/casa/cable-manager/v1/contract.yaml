@@ -1,14 +1,14 @@
 format: 1
 kind: component
 name: cable-manager
-version: 1.0.0
+version: 1.1.0
 class: mechanical
 profile: networking
 description: >-
   Casa C100G front cable manager. Two brackets across the bottom of the front
   face, left and right, that carry the coax down and away from the exhaust.
 attrs: {model: 'Cable Manager'}
-size: {w: 71.4, h: 10.8, d: 40.0}
+size: {w: 71.4, h: 10.8}
 provenance:
   size: drawing - Jason's hand-built front SVG, `chassisManager1` and
     `chassisManager2`, 31.38 x 5.18 in a 190.26-wide frame, mapped fractionally
@@ -17,7 +17,26 @@ provenance:
     internal detail, so only the outline is measured. The end mounting screws
     drawn here are the minimum needed to read as a bracket and are not from any
     source. Anything more would be invention'
-  depth: estimated - not measured
+  depth: 'MOVED FROM size.d TO relief, and the sign was wrong. `size.d` on a kind:
+    component compiles to data-depth, which the 3D viewer reads as a CAVITY - so a
+    bracket that carries coax AWAY from the face was rendering as a 71.4 x 10.8 x 40 mm
+    HOLE in the front of the chassis. That is the deepest pit in the Casa set and it is
+    the same defect the library has recorded before, on rivets and a grounding plate.
+    THE NUMBER IS UNCHANGED AND STILL ESTIMATED. 40.0 is what this file has always
+    carried and no C100G document states a projection for this bracket; it is now
+    expressed as `out`, which is what a bracket bolted to the outside of a faceplate
+    actually does. Re-expressing an estimate is not the same as sourcing one - what has
+    been fixed is the DIRECTION, which was certainly wrong, not the magnitude, which is
+    still a guess. WHAT WOULD SETTLE IT: one photograph of a C100G front from the side.
+    Note the `out` sits on `bracket`, the group''s outer rect, so the extruded solid is
+    textured with the bracket''s own face art rather than coming out blank.'
+  relief-not-on-the-screws: 'the two end screws are deliberately left flat. The `detail`
+    entry above says in as many words that they "are not from any source" - they were
+    drawn to make the part read as a bracket. Giving them a height would put a sourced-
+    looking Z claim on art that is itself acknowledged invention, which is worse than
+    leaving them painted on.'
 relief:
   wall: '#4a4f55'
+  features:
+    - {node: bracket, out: 40.0}
 skins: [default]

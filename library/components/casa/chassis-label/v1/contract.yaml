@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: chassis-label
-version: 1.0.0
+version: 1.1.0
 class: sticker
 profile: networking
 description: >-
@@ -26,7 +26,20 @@ provenance:
     about 2.1 to 1, which 120 x 57 preserves. No guide states the label''s
     dimensions and no photograph of the chassis top exists here. A tape measure
     on a real unit closes this in one minute'
+  relief: 'out 0.2 on the label, which is the thickness of an adhesive label and is
+    edgecore''s figure for the same thing - agr-label-spec@1, agr-label-serial@1 and
+    agr-label-caution@1 all carry 0.2. It is ESTIMATED and no Casa document states it;
+    the point of declaring it at all is that a label is a thing stuck ON the metal, so
+    at zero it is indistinguishable from print. The placeholder blocks inside it are
+    NOT given relief - they stand for printed fields, and print has no height.
+    Note this part has no `size.d` and must not acquire one: depth on a kind: component
+    compiles to a cavity, so a 0.2 there would make the label a pit rather than a
+    sticker.'
   artwork: 'placeholder blocks, deliberately. The vendor''s own figure prints
     Serial # 00, but transcribing any real identifier into artwork is a rule this
     library keeps regardless. The rectangle is a stand-in for the printed fields'
+relief:
+  wall: '#8a8d90'
+  features:
+    - {node: label, out: 0.2}
 skins: [default]

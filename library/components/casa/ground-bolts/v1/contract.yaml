@@ -1,18 +1,42 @@
 format: 1
 kind: component
 name: ground-bolts
-version: 1.0.0
+version: 1.1.0
 class: mechanical
 profile: networking
 description: >-
   Casa C100G rear grounding lug landing. Two studs on 15.3 mm centres, each
   with a star washer under a hex nut, for a two-hole grounding lug.
 attrs: {model: 'Grounding Studs'}
-size: {w: 27.6, h: 11.3, d: 12.0}
+size: {w: 27.6, h: 11.3}
 provenance:
   layout: 'drawing - Jason''s hand-built rear SVG, `groundingBolts`, 12.13 x 5.41
     in a 190.26-wide frame. Two identical sub-groups 6.72 apart in his units,
     which is 15.3mm here - the standard two-hole lug spacing. Each is a toothed
     star washer, a hex nut and the stud'
-  depth: estimated - the stud protrusion is not given
+  depth: 'REMOVED, and that is the fix. This carried d 12.0, and `size.d` on anything
+    that is not kind: module compiles to data-depth, which the 3D viewer reads as a
+    CAVITY - so two grounding studs were rendering as a 27.6 x 11.3 x 12 mm PIT in the
+    rear of the chassis. A thing that stands proud says so with relief.features and no
+    depth at all. The stud protrusion is still not given by any source; it is now
+    absent instead of inverted.'
+  relief: 'estimated, built as a STACK rather than one lump, which is what the drawing
+    already describes: "a toothed star washer, a hex nut and the stud". Three nodes per
+    stud, so each `cyl` takes ITS own radius - as one group the star washer would have
+    set a 10.8 mm cylinder for the lot.
+    The magnitudes are edgecore/agr-psu-dc@1''s terminal stack, the closest thing in
+    this library and one read off real hardware: washer 0.7, nut 2.2 sitting on it. The
+    threaded stud standing 3.5 through both is a FLOOR - it has to clear the nut, and
+    nothing states how far past it goes. The 1.0 thread pitch is that part''s too.
+    WHAT WOULD SETTLE IT: a caliper, or any photograph of the C100G rear from the side.
+    The two-hole 15.3 mm lug spacing above is sourced; none of the Z is.'
+relief:
+  wall: '#4a4f55'
+  features:
+    - {node: stud-top-1, cyl: 3.5, thread: 1.0}
+    - {node: washer-1, cyl: 0.7}
+    - {node: nut-1, cyl: 2.2, lift: 0.7}
+    - {node: stud-top-2, cyl: 3.5, thread: 1.0}
+    - {node: washer-2, cyl: 0.7}
+    - {node: nut-2, cyl: 2.2, lift: 0.7}
 skins: [default]
