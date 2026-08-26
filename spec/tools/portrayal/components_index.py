@@ -1,6 +1,15 @@
 #!/usr/bin/env python3
 """Publish every library component COMPILED (skin + composed parts flattened)
-to dist/components/ with a JSON index for the demo component browser."""
+to dist/components/ with a JSON index for the demo component browser.
+
+TWO index files come out of here, not one:
+
+  components.json          what a viewer reads to draw a part - identity, size,
+                           skins, files, body, attrs, elements. Fetched on every
+                           demo page load, so it carries nothing else.
+  components-detail.json   `provenance` and `relief` per ref, in full. Nothing
+                           is dropped; it is one deliberate fetch away.
+"""
 import argparse
 import json
 import sys
@@ -56,7 +65,6 @@ def main():
                 "size-confidence": data.get("size-confidence") or {},
                 "size-notes": data.get("size-notes", ""),
                 "attrs": data.get("attrs") or {},
-                "provenance": data.get("provenance") or {},
                 "skins": data.get("skins", ["default"]),
                 "elements": sorted((data.get("elements") or {}).keys()),
                 # additive: the geometry behind those names, and the relief that
@@ -65,7 +73,6 @@ def main():
                 "element-boxes": {k: {"at": v.get("at"), "size": v.get("size")}
                                   for k, v in (data.get("elements") or {}).items()
                                   if isinstance(v, dict)},
-                "relief": data.get("relief") or {},
                 # A RELIEF MAGNITUDE'S CONFIDENCE, COUNTED, so a consumer does not
                 # have to walk the features to find out how much of a part's 3D is
                 # sourced. The raw block above already carries the per-feature
@@ -76,6 +83,12 @@ def main():
                 # look more complete than one that honestly declared nothing.
                 "relief-confidence": _confidence_counts(data),
                 "parts": [p["ref"] for p in data.get("parts") or []],
+                # SPLIT OFF BELOW, not dropped. Both are carried on the entry so
+                # everything downstream of here (relief-confidence, the defect
+                # register) still reads one object; _split() lifts them out into
+                # components-detail.json just before the index is written.
+                "_detail": {"provenance": data.get("provenance") or {},
+                            "relief": data.get("relief") or {}},
             }
             files = {}
             for skin in entry["skins"]:
@@ -135,11 +148,24 @@ def main():
             size_totals[conf] = size_totals.get(conf, 0) + 1
             if conf == "known-wrong":
                 known_wrong.append(f"{e['ns']}/{e['name']}@{e['major'][1:]} {dim}")
+    # THE INDEX IS TWO FILES, and the reason is what a 3D viewer pays to load it.
+    # `provenance` and `relief` are 88% of the bytes here and neither is read by
+    # the device viewer, the Explorer or the component browser, which between them
+    # fetch this file on every page load. Splitting is NOT deleting: both keys keep
+    # every byte they had, keyed by the same ref, one fetch away for anything that
+    # actually wants them (library/demo/part.html is the one page that does).
+    detail = {}
+    for e in index:
+        ref = f"{e['ns']}/{e['name']}@{e['major'][1:]}"
+        detail[ref] = e.pop("_detail")
     (out / "components.json").write_text(json.dumps(
         {"components": index, "relief-confidence": totals,
          "size-confidence": size_totals,
          "known-wrong": sorted(known_wrong)}, indent=1, sort_keys=True))
-    print(f"compiled {len(index)} components -> {out}/components.json")
+    (out / "components-detail.json").write_text(json.dumps(
+        {"components": detail}, indent=1, sort_keys=True))
+    print(f"compiled {len(index)} components -> {out}/components.json"
+          f" (+ components-detail.json)")
 
 
 if __name__ == "__main__":

@@ -17,6 +17,7 @@
 
 import { createDevicePicker } from './devsel.js';
 import { seatModule } from './swap.js';
+import { jdist } from './dist.js';
 
 const NS = 'http://www.w3.org/2000/svg';
 
@@ -127,7 +128,8 @@ export function createShell(opts = {}) {
   let picker = null;
   const DIST = opts.dist || '../dist';
   const body = opts.mount || document.body;
-  const j = async p => (await fetch(`${DIST}/${p}`, {cache: 'no-store'})).json();
+  // shared with the 3D viewer mounted in the same page - see dist.js
+  const j = p => jdist(`${DIST}/${p}`);
 
   document.head.appendChild(Object.assign(document.createElement('style'),
                                           {textContent: SHELL_CSS}));

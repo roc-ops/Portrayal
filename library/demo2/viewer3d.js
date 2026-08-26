@@ -27,6 +27,7 @@ import { toGLB, toUSDZ } from './share.js';
 import { configureRelief, svgCanvas, canvasTex, rasterize, svgSource, setSvgOverride, clearSvgOverrides,
          buildFaceRelief, squareFaceplate } from './relief.js';
 import { applyOverrides } from './swap.js';
+import { jdist } from './dist.js';
 
 const CLS_LABEL = {fan: 'Fan module', psu: 'Power supply', tab: 'Info tab'};
 // box-face shading, in +x -x +y -y +z -z order: sides darker, lid lifted,
@@ -680,16 +681,27 @@ export function createViewer(container, opts = {}) {
   }
 
   // --- loading ----------------------------------------------------------------
+
+  // The component index does NOT depend on the device, so loading it does not
+  // belong behind either mode's "did the subject change" guard - that is what
+  // made every device switch pull 2 MB of device-independent data down again.
+  // Both modes need COMP_INDEX and both need BODY_META with it; jdist means the
+  // bytes arrive once per page even with the shell asking for them too.
+  async function ensureComponents() {
+    if (COMP_INDEX) return;
+    const cidx = await jdist(`${DIST}components.json`);
+    COMP_INDEX = cidx.components;
+    BODY_META = Object.fromEntries(cidx.components.filter(c => c.body)
+      .map(c => [`${c.ns}/${c.name}@${c.major.slice(1)}`, c.body]));
+  }
+
   async function loadDevice(device, config) {
     const first = device !== DEV;
     DEV = device;
     COMP = COMP_ENTRY = null;
+    await ensureComponents();
     if (first || !devIndex) {
-      devIndex = await (await fetch(`${DIST}${DEV}.configs.json`, {cache: 'no-store'})).json();
-      const cidx = await (await fetch(`${DIST}components.json`, {cache: 'no-store'})).json();
-      COMP_INDEX = cidx.components;
-      BODY_META = Object.fromEntries(cidx.components.filter(c => c.body)
-        .map(c => [`${c.ns}/${c.name}@${c.major.slice(1)}`, c.body]));
+      devIndex = await jdist(`${DIST}${DEV}.configs.json`);
       if (devIndex.chassis && devIndex.chassis.w) {
         W = devIndex.chassis.w; H = devIndex.chassis.h; D = devIndex.chassis.d;
       }
@@ -706,9 +718,8 @@ export function createViewer(container, opts = {}) {
     COMP = component;
     DEV = null;
     if (first || !COMP_ENTRY) {
-      const idx = await (await fetch(`${DIST}components.json`, {cache: 'no-store'})).json();
-      COMP_INDEX = idx.components;
-      COMP_ENTRY = idx.components.find(e => `${e.ns}/${e.name}@${e.major.slice(1)}` === COMP);
+      await ensureComponents();
+      COMP_ENTRY = COMP_INDEX.find(e => `${e.ns}/${e.name}@${e.major.slice(1)}` === COMP);
       if (!COMP_ENTRY) throw new Error(`unknown component ${COMP}`);
       W = COMP_ENTRY.size.w; H = COMP_ENTRY.size.h;
       D = COMP_ENTRY.body ? COMP_ENTRY.body.depth : Math.max(COMP_ENTRY.size.d || 2, 2);

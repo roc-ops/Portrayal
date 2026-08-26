@@ -104,7 +104,17 @@ configureRelief({THREE, renderer, PXMM, FRU_PATHS: new Set()});
 const hud = m => { document.getElementById('hud').textContent = m; };
 
 (async () => {
-  const idx = await (await fetch('../dist/components.json', {cache: 'no-store'})).json();
+  // The two-file index: this page is the one consumer that reads `provenance`
+  // (the panel at the bottom) and `relief` (the bail-reach row in DRAWING), so
+  // it is the one page that pays for components-detail.json. The device viewer
+  // and the browser read neither and no longer download them. Merged back onto
+  // the entries here, so everything below still reads one object.
+  const [idx, det] = await Promise.all([
+    fetch('../dist/components.json').then(r => r.json()),
+    fetch('../dist/components-detail.json').then(r => r.json()),
+  ]);
+  for (const c of idx.components)
+    Object.assign(c, det.components[`${c.ns}/${c.name}@${c.major.slice(1)}`] || {});
   const [ns, rest] = REF.split('/');
   const [name, major] = rest.split('@');
   const meta = idx.components.find(c => c.ns === ns && c.name === name && c.major === 'v' + major);

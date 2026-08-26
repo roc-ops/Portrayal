@@ -157,6 +157,13 @@ decor:
 `library/demo/3d.html` reads only compiled SVGs plus `components.json`. It
 never reads YAML.
 
+`components.json` is the LEAN half of a two-file index: identity, size, skins,
+files, body, attrs, elements - what a viewer needs to draw a part. The full
+`provenance` and `relief` blocks live beside it in `components-detail.json`,
+keyed by the same `ns/name@major` ref. Nothing was dropped; the split exists
+because those two keys were 88% of a file every demo page fetches on load, and
+no viewer reads either. `library/demo/part.html` fetches both and merges them.
+
 **Faces.** Each view (front, rear, left, right, top) is rasterised to a canvas
 at 4 px/mm and applied to a `BoxGeometry` sized from the chassis. Relief meshes
 are built in a **local face frame** (x right, y up, +z out of the face) and a
@@ -257,5 +264,5 @@ the next render — no device file is touched.
 | `spec/schemas/device.schema.json` | decor `vent`, `sink`, `out`, `pattern-offset` |
 | `spec/tools/portrayal/render.py` | emits `data-depth`, `data-z-*`, `data-vent`, `data-groove` |
 | `spec/tools/portrayal/lint.py` | L9 (registry match incl. depth), L11 (relief nodes exist) |
-| `spec/tools/portrayal/components_index.py` | publishes compiled components + body side art |
+| `spec/tools/portrayal/components_index.py` | publishes compiled components + body side art, and both halves of the index |
 | `library/demo/3d.html` | the viewer: device mode and `?component=ns/name@major` |

@@ -31,7 +31,8 @@
   <span style="font-size:0.72rem;color:#565d64">grid = 1 mm · gold = standards-registry conformant</span>
 </div>
 <div id="grid"></div>
-<script>
+<script type="module">
+import { jdist } from './dist.js';
 let DATA = [];
 const $ = id => document.getElementById(id);
 function render() {
@@ -85,7 +86,7 @@ function render() {
     });
 }
 (async () => {
-  const idx = await (await fetch('../dist/components.json', {cache: 'no-store'})).json();
+  const idx = await jdist('../dist/components.json');
   DATA = idx.components.sort((a, b) => (a.ns + a.name).localeCompare(b.ns + b.name));
   [...new Set(DATA.map(c => c.ns))].forEach(ns => {
     const o = document.createElement('option'); o.value = ns; o.textContent = ns; $('ns').appendChild(o);
