@@ -1,0 +1,142 @@
+format: 1
+kind: module
+name: a9k-mpa-2x40ge
+version: 1.0.0
+class: line-card
+profile: networking
+description: >-
+  Cisco 2-Port 40 Gigabit Ethernet Modular Port Adapter with QSFP+. Two QSFP+ cages well
+  apart down the faceplate, each with an A/L lamp, plus a STATUS lamp and a captive
+  screw at each end. One of the adapters the ASR 9001 takes; it also seats in the
+  A9K-MOD carrier line cards.
+size: {w: 33.81, h: 160.02}
+attrs:
+  model: 'A9K-MPA-2X40GE'
+  role: 'modular-port-adapter'
+  qsfp-plus: 2
+  media: 'QSFP+, 40 Gigabit Ethernet'
+  eol: 'none-announced'
+provenance:
+  size: >-
+    drawing - and READ THE ORIENTATION FIRST, because this master is drawn on its side.
+    index.json gives its shapesheet as 160.02 x 33.81 mm where the 4-port and 20-port
+    MPA masters give 33.81 x 160.02: the same envelope, drawn landscape. Every
+    coordinate below is therefore the master's transposed - the master's y becomes this
+    component's x and its x becomes the y - so that all seven MPAs in this library share
+    one frame and a chassis can rotate a bay once for all of them. The transposition is
+    a relabelling of axes and not a scale, so it cannot introduce the mixed-source error
+    that a stretch would.
+  orientation: >-
+    THE CONVERSION IS A ROTATION AND NOT A TRANSPOSE, and the difference is a mirrored
+    faceplate. Swapping the axes - master y to component x, master x to component y - is
+    a reflection, and it puts every A/L lamp on the wrong side of its cage. The rotation
+    is fixed by one requirement: port 0 must sit at the TOP, which is where the
+    portrait-drawn 4-port and 20-port masters put theirs and what lets a chassis rotate
+    one bay for all seven MPAs. THE CHECK THAT SETTLES IT is the 4-port MPA, which is
+    drawn portrait and needs no conversion at all: its cages sit at across-card x 15.29
+    and its port numerals at 26.89. Rotate the 1-port 40GE master and its cage lands at
+    15.35 and its numeral at 26.91 - both inside 0.06 mm of a card that was never
+    converted. Transpose it instead and they land at 8.68 and 6.90, on the other side of
+    the plate. Two masters drawn in different orientations agreeing to a twentieth of a
+    millimetre is not something the wrong conversion produces.
+  frame: >-
+    modelled PORTRAIT - x across the module's 33.8 mm thickness, y along its 160.0 mm
+    length - which is how most of these masters are drawn and how every other card in
+    this library is modelled. The ASR 9001 lays its two MPAs FLAT, so its bays rotate
+    the component rather than the component carrying two orientations. Note the stencil
+    is not consistent about this: A9K-MPA-1X40GE, -2X40GE and -8x10GE are drawn
+    landscape and the rest portrait, for one physical form factor - which the intake
+    notes flag as a reason to read the artwork rather than assume an orientation from
+    index.json's axis order.
+  leds: >-
+    install guide - Table 33, 'Modular Port Adapter LEDs', of the Ethernet Line Card
+    Installation Guide gives the family vocabulary: 'The modular port adapters have two
+    types of LEDs: an A/L LED for each individual port and a STATUS LED for the modular
+    port adapter.' EACH MPA ALSO HAS ITS OWN TABLE and where the two differ the card's
+    own table wins - Table 33 says the A/L is RED when the link is down, while this
+    card's table says AMBER, and it is this card's table that is transcribed below. That
+    divergence is the reason to cite the specific table rather than the general one.
+  ports: >-
+    install guide - 'The 2-Port 40-Gigabit Ethernet (GE) modular port adapter (MPA)
+    provides two cages for QSFP+ Ethernet optical interface modules that operate at a
+    rate of 40 Gbps.' The master draws two cages and NUMBERS THEM ITSELF, '0' at
+    transposed y 29.6 and '1' at 96.3, which is what fixes the order rather than a rule
+    of mine: the numerals fall on the cages at y 20.58 and 87.18 respectively.
+  power: >-
+    NOT STATED. Table 35 of the Ethernet Line Card Installation Guide gives per-card
+    power for the modular-chassis line cards including the A9K-MOD carriers, but nothing
+    for the MPAs that go inside them, and the ASR 9001 data sheet gives a chassis figure
+    only (425 W typical, 525 W maximum). An MPA's draw is inside its carrier's.
+  lifecycle: >-
+    searched - no end-of-life notice for this part number is in the intake.
+  cages: >-
+    std/qsfp28 is the QSFP+ aperture here and the name is worth explaining. The registry
+    key's own citation is SFF-8663 Rev 1.7 Figure 5-4, which is the QSFP BEZEL OPENING -
+    one opening for QSFP, QSFP+ and QSFP28 alike, because they are one mechanical family
+    and differ in signalling, not in sheet metal. Cisco says the same thing on its own
+    faceplates: the 16-port card in this library is labelled 'QSFP28/QSFP+' on a single
+    cage. The drawing corroborates it - this master's cage measures 19.84 x 9.78 mm
+    against the registry's 20.0 x 10.15, inside half a millimetre on both axes - so the
+    aperture is not assumed from the port's name, it is measured and then found to
+    match. The port's SPEED is 40 Gbps and lives in attrs; conforms describes the hole.
+  duplicate-master: >-
+    THE STENCIL CONTAINS THIS DRAWING TWICE. Masters 'a9k-mpa-2x40ge' and
+    'a9k-mpa-2x40ge-59' are identical - same shapesheet, same text runs in the same
+    places, same cages, same PID. One component is built, from the unsuffixed master.
+    The duplicate is recorded here so that nobody later reads the second master as
+    evidence of a second variant; it is not one.
+  compatibility: >-
+    install guide - a compatibility fact stated as a Note beside this MPA's figure and
+    worth carrying because nothing else in the model would show it: 'This MPA is not
+    compatible with consumption-model MOD400 consumption-model line card.' Cisco adds
+    that 'The consumption-model MPAs can only be used only with consumption-model line
+    cards', so the A9K-MOD400-CM carrier takes the -CM MPAs and not this one.
+elements:
+  led-p0:
+    at: [21.03, 11.11]
+    size: [3.46, 2.91]
+    class: led
+    description: >-
+      the port's A/L (Active/Link) lamp. Table 25, '2-Port 40-Gigabit Ethernet MPA LEDs':
+      off - port is not enabled; green on - port is enabled and the link is up; amber on -
+      port is enabled and the link is down. Cisco adds, on the sibling tables for the XFP
+      and 20-port MPAs, that the A/L 'will blink green and amber when there is traffic
+      activity'; this card's own table omits that row, so blink is not carried as a state
+      here. This one is port 0's.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-p1:
+    at: [21.03, 79.61]
+    size: [3.46, 2.91]
+    class: led
+    description: >-
+      the port's A/L (Active/Link) lamp. Table 25, '2-Port 40-Gigabit Ethernet MPA LEDs':
+      off - port is not enabled; green on - port is enabled and the link is up; amber on -
+      port is enabled and the link is down. Cisco adds, on the sibling tables for the XFP
+      and 20-port MPAs, that the A/L 'will blink green and amber when there is traffic
+      activity'; this card's own table omits that row, so blink is not carried as a state
+      here. This one is port 1's.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  status:
+    at: [12.1, 144.4]
+    size: [2.6, 2.6]
+    class: led
+    description: >-
+      the MPA's STATUS lamp. Table 25: off - modular port adapter power is off; green on -
+      modular port adapter is ready and operational; amber on - modular port adapter power
+      is on and good, and the modular port adapter is being configured.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+relief:
+  wall: '#4a4f55'
+parts:
+  - {ref: std/qsfp28@1, id: p0, at: [10.21, 25.45], rotate: 90}
+  - {ref: std/qsfp28@1, id: p1, at: [10.21, 92.08], rotate: 90}
+skins: [default]
