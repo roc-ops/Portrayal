@@ -954,9 +954,10 @@
             }
           },
           "reason": {
-            "description": "why it is missing, because that decides who can close it",
+            "description": "why it is missing, because that decides who can close it. `sources-disagree` is the one that is NOT an absence: two documents we hold state different values for one fact, and picking the bigger number and saying nothing loses a real finding. It is the normal case rather than the exceptional one - the AGR400's datasheet says 527 W max where its own QSG says 638 W at 25 C, and the C100G guide gives the fan assemblies 100 W each in prose and 330 W for the three of them in Table A-2. The `note` carries both figures with their sources",
             "enum": [
               "vendor-silent",
+              "sources-disagree",
               "nos-dependent",
               "needs-hardware",
               "needs-photo",

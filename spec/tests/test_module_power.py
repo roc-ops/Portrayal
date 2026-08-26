@@ -334,6 +334,38 @@ def test_unstated_is_a_value_and_not_the_absence_of_one():
             if "power-envelope" in list(e.path) or "power-envelope" in e.message] == []
 
 
+def _gap_reason(value):
+    """A minimal device carrying one declared gap, against the schema."""
+    import json
+
+    from jsonschema import Draft202012Validator
+    schema = json.loads((SPEC / "schemas/device.schema.json").read_text())
+    dev = {"format": 1, "kind": "device", "name": "chassis", "version": "0.1.0",
+           "views": {"front": {"size": {"w": 440.0, "h": 44.0}}},
+           "gaps": [{"what": "fan-power-sources", "reason": value,
+                     "wanted": "a measurement from a running chassis"}]}
+    return [e.message for e in Draft202012Validator(schema).iter_errors(dev)
+            if "reason" in list(e.path) or "is not one of" in e.message]
+
+
+def test_two_sources_disagreeing_has_its_own_reason():
+    """`vendor-silent` means no document describes it. Two documents describing
+    it differently is the opposite, and filing it as vendor-silent would be a
+    false statement about the sources. The C100G guide gives its fan assemblies
+    100 W each in prose and 330 W for the three of them in Table A-2; the AGR400
+    datasheet says 527 W max where its own QSG says 638 W. Four such cases
+    across three vendors is why this is a token and not a provenance sentence."""
+    assert _gap_reason("sources-disagree") == []
+
+
+def test_the_reason_vocabulary_is_still_closed():
+    """It decides who can close the gap, so it cannot become free text - a
+    reason nobody can act on is a note, and notes were what the register
+    replaced."""
+    for drift in ("sources-conflict", "disputed", "conflict", "unknown"):
+        assert _gap_reason(drift), drift
+
+
 def test_the_register_carries_the_rule(tmp_path):
     """L29 is in RULE_GAPS, which is the only reason any of this reaches
     `gaps.json`: `derived_gaps` runs the DEVICE rules, so a component-scoped
