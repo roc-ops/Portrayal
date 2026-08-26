@@ -110,7 +110,7 @@ def main():
                 # colour, and no lamp in a standalone component skin ever changed
                 # when its state class was set. The device drawings were right
                 # the whole time because render.py unpacks the tuple; this file
-                # is what demo2 fetches when you swap a module into a bay, so the
+                # is what the viewer fetches when you swap a module into a bay, so
                 # swapped card was the one case a user could actually click.
                 extra = "".join(
                     state_rule(f"g[data-ref^='{comp}@'] .state-{name}",

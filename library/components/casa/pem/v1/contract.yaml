@@ -106,10 +106,11 @@ provenance:
     the module draws as a solid that fills its bay instead of a floating faceplate;
     without it the 3D viewer has no box to build and the PEM reads as art painted
     on the rear plate, which is what the owner is seeing. NOTE that declaring it is
-    necessary but not sufficient here: the viewer builds FRU groups only for
-    data-class psu, fan and tab (library/demo2/relief.js), and this module is
-    class power, so it will not eject until that list admits it. Reported rather
-    than worked around by mislabelling a power ENTRY module as a psu'
+    necessary but not sufficient here: the viewer built FRU groups only for
+    data-class psu, fan and tab, and this module is class power, so it would not
+    eject. Reported rather than worked around by mislabelling a power ENTRY
+    module as a psu - and library/viewer/relief.js now admits power and cooling
+    to that list, so it ejects'
   depth: estimated - not measured
 elements:
   breaker-4: {at: [22.4, 3.2], size: [31.2, 14.6], class: circuit-breaker}
