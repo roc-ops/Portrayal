@@ -19,6 +19,8 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
   L23 device: a port group is one family, or says in `mixed:` why it is not
   L24 device: `attrs.other` is counted, so the long tail cannot go quiet
   L25 device: one attr key is claimed by one section - it flattens to data-<key>
+  L26 component: an aperture is declared once - a `class: cutout` element must
+      conform, or resolve through `parts:` to something that does
 """
 import argparse
 import json
@@ -447,6 +449,75 @@ def lint_component_mating(path, data, lib_roots):
         if data.get("interface") and data["interface"] != sub_if:
             err(path, "L11", f"declares interface {data['interface']!r} but composes "
                              f"{part['ref']} presenting {sub_if!r}")
+
+
+def _composes_a_standard(data, lib_roots, depth=0, seen=None):
+    """Does anything under `parts:` say what standard it is, transitively?
+
+    A leaf satisfies this by declaring `conforms:` OR `interface:`. `conforms:`
+    is the strong form - L9 checks it against the registry to the millimetre -
+    but `std/lc-bore@1` carries `interface: lc` and no `conforms:`, and 82
+    `lc-duplex-adapter` placements resolve through it. An aperture that names
+    the plug it accepts has said what it is, even where the registry has not
+    caught up with it yet.
+    """
+    seen = seen or set()
+    if depth > 4:
+        return False
+    for part in data.get("parts") or []:
+        ref = part.get("ref")
+        if not ref or ref in seen:
+            continue
+        found = resolve_component(ref, lib_roots)
+        if not found:
+            continue                       # L10 reports the broken ref
+        sub = yaml.safe_load(found.read_text()) or {}
+        if sub.get("conforms") or sub.get("interface"):
+            return True
+        if _composes_a_standard(sub, lib_roots, depth + 1, seen | {ref}):
+            return True
+    return False
+
+
+def lint_component_aperture(path, data, lib_roots):
+    """L26: an aperture is declared once, in one place, and everything else
+    composes it.
+
+    Keyed on `class: cutout` rather than on `class: port`, because the geometry
+    is the population and the class is not. `casa/io-6p12` and `io-6p12-sw` are
+    `class: line-card` and draw eighteen MCX openings each as inline rectangles
+    at an ESTIMATED bore - 252 rendered apertures across the C100G and C40G bays,
+    which a rule keyed on `class: port` would never look at.
+
+    A warning, not an error, and the message names the registry on purpose. Half
+    of what this finds is true and unfixable the same day: there is no `std/mcx`
+    and no `mcx` key in `standards.yaml`, so the warning is a to-do list for
+    `std/` rather than an accusation. L14 and L21 both had to be recalibrated for
+    firing as accusations too early.
+
+    `std/` is exempt. Those components compose nothing because they ARE the
+    bottom of the stack; running the rule on them would flag the foundations for
+    not standing on anything.
+    """
+    cutouts = sorted(el for el, spec in (data.get("elements") or {}).items()
+                     if (spec or {}).get("class") == "cutout")
+    if not cutouts:
+        return
+    try:
+        ns = path.parents[2].name
+    except IndexError:
+        ns = ""
+    if ns == "std" or data.get("conforms"):
+        return
+    if _composes_a_standard(data, lib_roots):
+        return
+    shown = ", ".join(cutouts[:4]) + (" ..." if len(cutouts) > 4 else "")
+    warn(path, "L26", f"{len(cutouts)} element(s) declare class: cutout ({shown}) "
+         f"but {data.get('name')} declares no 'conforms:' and composes no part that "
+         "does - the opening is drawn here instead of composed. If no std/ "
+         "component exists for this connector, add the key to "
+         "spec/schemas/standards.yaml and a std/ part carrying it; if the "
+         "dimension cannot be sourced yet, this warning is the record of that")
 
 
 def lint_component_parts(path, data, lib_roots, depth=0, seen=None):
@@ -1161,6 +1232,7 @@ def main():
                 _skin_checks(f, d)
                 lint_component_parts(f, d, args.library)
                 lint_component_mating(f, d, args.library)
+                lint_component_aperture(f, d, args.library)
             n += 1
         for f in sorted(root.glob("devices/**/device.yaml")):
             d = lint_device(f, dev_v, args.library); n += 1
