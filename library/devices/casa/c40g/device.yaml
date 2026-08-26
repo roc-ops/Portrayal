@@ -163,12 +163,12 @@ views:
       bays:
         - {id: pem-1, at: [44.8, 196.0], size: {w: 158.0, h: 68.5}, accepts: [casa/c40g-pem@1], group: power, rel-pos: 1, default: casa/c40g-pem@1}
         - {id: pem-2, at: [212.8, 196.0], size: {w: 158.0, h: 68.5}, accepts: [casa/c40g-pem@1], group: power, rel-pos: 2, default: casa/c40g-pem@1}
-        - {id: rear-0, at: [42.0, 164.35], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/io-6p12@1, casa/blank-faceplate@1], default: casa/io-6p12@1, group: rear-slots, rel-pos: 0}
-        - {id: rear-1, at: [42.0, 133.88], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/lc-sw-bdm@1, casa/blank-faceplate@1], default: casa/lc-sw-bdm@1, group: rear-slots, rel-pos: 1}
+        - {id: rear-0, at: [42.0, 164.35], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@1, casa/blank-faceplate@1], default: casa/io-6p12@1, group: rear-slots, rel-pos: 0}
+        - {id: rear-1, at: [42.0, 133.88], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/lc-sw-bdm@1, casa/blank-faceplate@1], default: casa/lc-sw-bdm@1, group: rear-slots, rel-pos: 1}
         - {id: rear-2, at: [42.0, 103.41], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-sw-bdm-a@1, casa/blank-faceplate@1], default: casa/smm-sw-bdm-a@1, group: rear-slots, rel-pos: 2}
         - {id: rear-3, at: [42.0, 72.94], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-sw-bdm-b@1, casa/blank-faceplate@1], default: casa/smm-sw-bdm-b@1, group: rear-slots, rel-pos: 3}
-        - {id: rear-4, at: [42.0, 42.47], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/io-6p12-sw@1, casa/blank-faceplate@1], default: casa/io-6p12-sw@1, group: rear-slots, rel-pos: 4}
-        - {id: rear-5, at: [42.0, 12.0], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/io-6p12@1, casa/blank-faceplate@1], default: casa/io-6p12@1, group: rear-slots, rel-pos: 5}
+        - {id: rear-4, at: [42.0, 42.47], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12-sw@1, casa/blank-faceplate@1], default: casa/io-6p12-sw@1, group: rear-slots, rel-pos: 4}
+        - {id: rear-5, at: [42.0, 12.0], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@1, casa/blank-faceplate@1], default: casa/io-6p12@1, group: rear-slots, rel-pos: 5}
   top:
     size: {w: 432.95, h: 388.45}
     panel:
@@ -245,7 +245,7 @@ configurations:
 # build time and must not be listed here.
 gaps:
 - what: paired-module-power
-  scope: [casa/bdm2m@1, casa/io-6p12@1, casa/io-6p12-sw@1]
+  scope: [casa/bdm2m@1, casa/io-6p12@1, casa/io-6p12-sw@1, casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1]
   reason: vendor-silent
   note: >-
     The BDM2/BDM2m datasheet states "Total Power  300 W" in a technical
@@ -260,6 +260,16 @@ gaps:
     floor. The arithmetic does not settle it either way: 12 x 300 W lands on the
     C100G's stated 3.6 kW whether the 300 W is the pair or the front half with
     small rear cards.
+    THE THREE REAR RF I/O CARDS ADDED LATER FALL ON THE SAME SIDE OF THIS AS THE
+    6+12. casa/rfd, casa/rfu-16x8 and casa/ups-32x4 carry NO power figure,
+    because Tables A-8 and A-9 give their port counts and connector types and no
+    watts at all, and every figure Casa does publish for the slot is already the
+    pair's - Table A-3 heads the DQM column "Maximum consumption with I/O
+    module" and Table A-4 gives "Single DCU w/ RFU I/O" 200 W against "Single
+    DCU w/ RFU UPS 32x4 I/O" 220 W for the same US16x8. Subtracting one from the
+    other to get a rear card's share would be our arithmetic and would also be
+    the wrong subtraction - the 20 W is the difference between two PAIRINGS, not
+    between two I/O cards.
   wanted: >-
     a pairable unit that can carry properties, so that a figure measured on a
     pair can be attached to the pair. The scope is now DATA - every card here
