@@ -41,6 +41,9 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
   L37 device: a group says what it is FOR, and a declared group has members
   L38 component: printed text in a skin sits in a silkscreen group, unless the
       part is applied over the panel rather than printed into it
+  L39 device: the panel's holes agree with what goes in them - no two overlap,
+      each matches its occupant's standard, no legend is printed on one, and a
+      port on a view that declares cutouts has one
 """
 import argparse
 import json
@@ -1131,6 +1134,103 @@ def scalar_colon_hint(path, exc):
                         f"rephrase or quote it: {stripped[:70]!r}")
 
 
+def lint_device_cutouts(path, view_name, view, lib_roots):
+    """L39: the panel's holes must agree with what goes in them.
+
+    Cutouts became real data so that a whole class of error could be checked
+    rather than eyeballed - the errors that have actually bitten this project,
+    which are a chassis measured 12% too wide, forty-eight ports on a wrong
+    pitch, and a legend printed where a module would cover it. Gate 2 of the
+    modelling skill says "render, overlay, count them"; this is that gate as a
+    rule.
+
+    WHAT A CLEAN RUN DOES AND DOES NOT MEAN. Twelve of the library's twenty
+    devices declare no cutouts at all, and every check here is silent on them -
+    there is nothing to disagree with. A pass means the eight devices that DO
+    declare holes are consistent; it says nothing whatever about the other
+    twelve, and reading it as library-wide correctness is the mistake this
+    docstring exists to prevent.
+
+    `every cutout is filled` is deliberately NOT among the checks. Thirty-three
+    cutouts in the library are named by nothing, and all thirty-three are real:
+    Cisco power shelves, fan-tray openings, ESD jacks, ground pads and card
+    cages, which are holes in the metal with no module modelled behind them. A
+    rule there would report correct modelling as a defect.
+    """
+    panel = (view.get("panel") or {})
+    cuts = panel.get("cutouts") or []
+    if not cuts:
+        return
+    boxes = {c["id"]: (c["at"][0], c["at"][1],
+                       c["at"][0] + c["size"][0], c["at"][1] + c["size"][1])
+             for c in cuts if c.get("at") and c.get("size")}
+
+    # 1. no two holes in the same piece of metal
+    ids = sorted(boxes)
+    for i, a in enumerate(ids):
+        for b in ids[i + 1:]:
+            ax0, ay0, ax1, ay1 = boxes[a]
+            bx0, by0, bx1, by1 = boxes[b]
+            ix = min(ax1, bx1) - max(ax0, bx0)
+            iy = min(ay1, by1) - max(ay0, by0)
+            if ix > 0.001 and iy > 0.001:
+                err(path, "L39", f"{view_name}: cutouts {a} and {b} overlap by "
+                                 f"{ix:.2f} x {iy:.2f} mm. Two holes cannot share metal")
+
+    placements = view_parts(view)["placements"]
+    by_id = {q.get("id"): q for q in placements}
+
+    # 2. a hole matches the standard of whatever sits in it. A rotated part turns
+    #    its opening with it, which is why this compares against the rotated
+    #    footprint rather than the registry's own orientation.
+    for cid, c in ((c["id"], c) for c in cuts):
+        q = by_id.get(cid)
+        if not q:
+            continue
+        cp = resolve_component(q.get("ref", ""), lib_roots)
+        spec = (yaml.safe_load(cp.read_text()) or {}) if cp else {}
+        conf = spec.get("conforms")
+        std = STANDARDS.get(conf) if isinstance(conf, str) else None
+        if not std or std.get("w") is None:
+            continue
+        sw, sh = std["w"], std["h"]
+        if ((q.get("rotate") or 0) % 180) == 90:
+            sw, sh = sh, sw
+        cw, ch = c["size"]
+        if abs(cw - sw) > 0.3 or abs(ch - sh) > 0.3:
+            err(path, "L39", f"{view_name}: cutout {cid} is {cw:g} x {ch:g} but its "
+                             f"occupant conforms to {conf} ({sw:g} x {sh:g}). The hole "
+                             "and the part disagree")
+
+    # 3. you cannot print on a hole
+    for m in (view.get("silkscreen") or []):
+        if m.get("path") or not m.get("at"):
+            continue
+        mx, my = m["at"]
+        for cid, (x0, y0, x1, y1) in boxes.items():
+            if x0 < mx < x1 and y0 < my < y1:
+                err(path, "L39", f"{view_name}: silkscreen {str(m.get('text'))[:20]!r} "
+                                 f"is printed inside cutout {cid}. There is no metal "
+                                 "there to print on")
+                break
+
+    # 4. a port on a panel that has been punched should have its own hole.
+    #    WARNING, not an error: it reports incomplete work rather than wrong work,
+    #    and the ASR 9001 has fifteen of them because it declares two cutouts for
+    #    clock connectors and none for its ports. Restricted to `port` because no
+    #    lamp in the library has a cutout and no button does either - that is a
+    #    modelling convention held consistently, not 163 omissions.
+    for q in placements:
+        cp = resolve_component(q.get("ref", ""), lib_roots)
+        if not cp or (yaml.safe_load(cp.read_text()) or {}).get("class") != "port":
+            continue
+        if q.get("mate-to"):
+            continue          # an occupant sits in its host, not in the metal
+        if q.get("id") not in boxes:
+            warn(path, "L39", f"{view_name}: port {q.get('id')} has no cutout, on a "
+                              "panel that declares them. Either punch it or say why")
+
+
 def lint_device_groups(path, data, lib_roots):
     """L22 and L23 - what a port group promises, and what it actually holds.
 
@@ -1625,6 +1725,7 @@ def lint_device(path, validator, lib_roots):
                                  f"(manufacturing order), not {' > '.join(k for k in keys if k in order)}")
         lint_device_mating(path, vname, view, lib_roots)
         lint_device_overlap(path, vname, view, lib_roots)
+        lint_device_cutouts(path, vname, view, lib_roots)
         vp = view_parts(view)
         seen = set()
         # L17 - every group used is declared. The declaration carries the vendor's

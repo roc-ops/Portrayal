@@ -306,6 +306,14 @@ panel:
 Count them. This is the last cheap moment to fix a pitch error - after
 components are placed, moving 48 holes means moving 48 parts and 48 labels.
 
+L39 checks what it can once the holes are declared: no two overlap, each matches
+the standard its occupant `conforms:` to, no legend is printed on one, and a
+`port` on a punched panel has a hole of its own. **Name a cutout after the thing
+that goes in it** - that identity is what ties the two together, in the rule and
+in the tree, and a `cut-` prefix on the same panel as bare ids means neither can
+see the other. It says nothing about a panel that declares no cutouts at all,
+which is most of the library; a clean run is not a finished panel.
+
 ## Stage 3 - the silkscreen
 
 Everything printed on the panel goes in `silkscreen[]`, and each mark says what
