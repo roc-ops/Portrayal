@@ -40,6 +40,21 @@
 // resolves var(--led-color) to a literal paint and draws every halo as plain
 // stroked geometry. The preview uses exactly the same geometry, so what you see
 // on the stage is what lands in the document.
+//
+// And a fourth rule, which is the reason the behaviour section below exists:
+//
+//   A STATIC EXPORT OF A BLINKING LAMP DOES NOT LOSE THE BLINK, IT LIES.
+//
+// The animation is real and it is in the exported file, but only a browser
+// holding that file as a DOCUMENT will run it. An <img>, Word, PowerPoint,
+// Inkscape and every PNG rasteriser show one frame - and one frame of a blink is
+// a picture of a different, documented, wrong state. On the S9510-28DC
+// "Blinking Green" on the GNSS lamp is `learning`; the frame that renders solid
+// is `survey-complete` and the frame that renders dark is `off` (not
+// configured). Three rows of the same HIG table, and a reader has no way to know
+// which one they are looking at. So every behaving lamp is ringed, the ring is
+// plain geometry that survives print and greyscale, and the legend names the
+// notation. See "behaviour" below for what the ring means.
 
 const NS = 'http://www.w3.org/2000/svg';
 
@@ -239,6 +254,142 @@ function halo(svg, el, color) {
   return true;
 }
 
+// ----------------------------------------------------------------- behaviour
+
+// render.py writes one of two animations onto a lamp whose state declares a
+// `behavior`. Reading them back is how this module learns that a lamp is not
+// showing what it appears to be showing.
+const BEHAVIOR_ANIM = {'portrayal-blink': 'blinking',
+                       'portrayal-alternate': 'alternating'};
+
+// The word that goes beside a label in the legend. Deliberately the vocabulary
+// of the device.yaml `behavior:` field and of the vendor HIG tables ("Blinking
+// Green", "Flashing between Green and Red"), not a coinage of this module.
+const BEHAVIOR_WORD = {blinking: 'blinking', alternating: 'alternating'};
+
+// Which selectors in THIS drawing carry an animation, straight out of the
+// compiled stylesheet. The alternative - getComputedStyle on every element with
+// a state- class - is correct and unusably slow: `[data-class='led']` with a
+// state on the AGR400 front is ~1500 elements, on every keystroke. The rules are
+// a handful, their selectors are already exact about which lamps and which
+// state, and querySelectorAll settles the class test for free.
+const ANIM_RULE = /([^{}]+)\{\s*animation:\s*(portrayal-blink|portrayal-alternate)\b[^}]*\}/g;
+
+function behaviorRules(svgRoot) {
+  const out = [];
+  for (const style of svgRoot.querySelectorAll('style')) {
+    ANIM_RULE.lastIndex = 0;
+    let m;
+    while ((m = ANIM_RULE.exec(style.textContent || '')))
+      out.push([m[1].trim(), BEHAVIOR_ANIM[m[2]]]);
+  }
+  return out;
+}
+
+/**
+ * Every lamp in this drawing that is currently animating, with the paint it is
+ * animating between. Needs a laid-out root: the colours are custom properties
+ * resolved by the cascade, and a detached tree has no cascade.
+ * @returns {Array<{el: Element, mode: string, color: string, alt: string|null}>}
+ */
+export function behaving(svgRoot) {
+  if (!svgRoot || !svgRoot.isConnected) return [];
+  const seen = new Map();
+  for (const [sel, mode] of behaviorRules(svgRoot)) {
+    let els;
+    try { els = svgRoot.querySelectorAll(sel); } catch (e) { continue; }
+    for (const el of els) if (!seen.has(el)) seen.set(el, mode);
+  }
+  const out = [];
+  for (const [el, mode] of seen) {
+    // The rule matched, but the cascade decides. A later rule for the same lamp
+    // can have turned the animation off, and a lamp the document then marked
+    // `off` should not be ringed for a behaviour it is not performing.
+    const cs = getComputedStyle(el);
+    if (BEHAVIOR_ANIM[(cs.animationName || '').split(',')[0].trim()] !== mode) continue;
+    out.push({el, mode,
+              color: cs.getPropertyValue('--led-color').trim() || '#8d939a',
+              alt: cs.getPropertyValue('--led-color-alt').trim() || null});
+  }
+  return out;
+}
+
+// An odd dash count so the pattern cannot come to rest on the corners of a
+// rectangular lamp and read as four ticks.
+const RING_DASHES = 7;
+
+/**
+ * The static notation for a behaviour: a ring around the lamp.
+ *
+ * Why a ring, and why these two rings:
+ *
+ *   It is geometry, not colour, not opacity and not a filter. Word imports no
+ *   filters, print has no opacity budget worth spending on a 2mm lamp, and a
+ *   colour-coded notation is exactly the thing that dies in greyscale - which is
+ *   how these drawings get photocopied into a runbook.
+ *
+ *   BROKEN ring = blinking. The gaps in the ring ARE the gaps in the light: the
+ *   lamp goes dark, and the notation goes dark with it.
+ *   CONTINUOUS two-tone ring = alternating. It never goes dark, because the lamp
+ *   never goes dark - it swaps colour. So in greyscale, where the two colours
+ *   collapse into one grey, the distinction that survives is the one that
+ *   matters: a ring with holes in it means the lamp turns off, a ring without
+ *   them means it does not.
+ *
+ *   The dash COUNT is fixed and the dash length is derived from the ring's own
+ *   perimeter, so a 1.6mm status lamp and a 6mm PSU lamp both get seven dashes.
+ *   A fixed dash LENGTH would have given the small lamp two dashes and a smear.
+ *
+ *   Each ring is laid over a dark backing ring, the same trick halo() uses: the
+ *   lamp colours are saturated mid-tones and the chassis they sit on is a dark
+ *   grey, so a bare green ring on a dark panel is legible and the same ring on a
+ *   white-background crop is not.
+ */
+function behaviorRing(svg, el, mode, color, alt) {
+  const r = rootRect(svg, el);
+  if (!r) return false;
+  const size = Math.min(r.w, r.h);
+  // Tight. Status lamps are stacked on 2.9mm centres on the S9510-28DC and are
+  // 2mm tall, so a ring with a generous margin reaches into the lamp above it
+  // and the reader cannot tell which of the two it belongs to - which is a new
+  // way of being wrong about the same fact.
+  const pad = clamp(size * 0.22, 0.22, 0.45);
+  const width = clamp(size * 0.18, 0.22, 0.45);
+  const box = {x: r.x - pad, y: r.y - pad, w: r.w + pad * 2, h: r.h + pad * 2};
+  // A round lamp deserves a round ring, and a long rectangular one a stadium.
+  // It also keeps the notation clearly apart from halo()'s square mark ring.
+  const rx = Math.min(box.w, box.h) / 2;
+  const perim = 2 * (box.w - 2 * rx) + 2 * (box.h - 2 * rx) + 2 * Math.PI * rx;
+  const dash = round(perim / (RING_DASHES * 2));
+
+  const at = (stroke, w, dashes, offset, opacity, tag) => {
+    const rect = document.createElementNS(NS, 'rect');
+    rect.setAttribute(OWNED, tag);
+    rect.setAttribute('x', round(box.x));
+    rect.setAttribute('y', round(box.y));
+    rect.setAttribute('width', round(box.w));
+    rect.setAttribute('height', round(box.h));
+    rect.setAttribute('rx', round(rx));
+    rect.setAttribute('fill', 'none');
+    rect.setAttribute('stroke', stroke);
+    rect.setAttribute('stroke-width', round(w));
+    if (dashes) rect.setAttribute('stroke-dasharray', dashes);
+    if (offset) rect.setAttribute('stroke-dashoffset', offset);
+    if (opacity < 1) rect.setAttribute('stroke-opacity', opacity);
+    rect.setAttribute('pointer-events', 'none');
+    svg.appendChild(rect);
+  };
+
+  const pattern = `${dash} ${dash}`;
+  at('#14171a', width * 1.9, mode === 'alternating' ? null : pattern, 0, 0.5, 'beh-back');
+  at(color, width, pattern, 0, 1, 'beh');
+  // The second colour occupies the gaps, so the ring closes: two colours, no
+  // darkness. `alt` is what the device.yaml wrote as `behavior: {mode:
+  // alternating, color: ...}` - the S9510-28DC PSU flashing green/red.
+  if (mode === 'alternating') at(alt || '#8d939a', width, pattern, dash, 1, 'beh');
+  return true;
+}
+
 // ------------------------------------------------------------------ apply
 
 /**
@@ -329,6 +480,18 @@ export function apply(svgRoot, doc, opts = {}) {
     report.push(row);
   });
 
+  // Every behaving lamp in the drawing, not only the ones a mark named. A lamp
+  // put into a blinking state by a chip, by a share URL, or by the config the
+  // drawing was compiled with misrepresents itself in a static file just as
+  // badly as one this document lit, and neither carries a label to warn anyone.
+  //
+  // Drawn on the live stage too, where the lamp is genuinely blinking and the
+  // ring is therefore redundant. That is the point: the stage is the preview,
+  // and a preview that omits the notation the file will carry is a preview of a
+  // different picture.
+  if (opts.behavior !== false)
+    for (const b of behaving(svgRoot)) behaviorRing(svgRoot, b.el, b.mode, b.color, b.alt);
+
   if (opts.legend !== false && d.legend) mountLegend(svgRoot, d);
   return report;
 }
@@ -393,14 +556,61 @@ export function legend(svgRoot, doc) {
   // view, turned into a false claim in a document that outlives this page. The
   // mark stays in the document and the panel still says it matched nothing; it
   // simply does not get to speak for the drawing.
+  // What is animating right now, which for a legend built by apply() is what
+  // this document just made animate. Consulted twice: to note the behaviour on
+  // the row whose mark caused it, and to key the notation at the end.
+  const beh = behaving(svgRoot);
+  const behAt = new Map(beh.map(b => [b.el, b]));
+  const modeOf = els => {
+    for (const el of els) {
+      if (behAt.has(el)) return behAt.get(el);
+      // A mark usually names the part, not the lamp inside it - `psu-0`, not
+      // `psu-0--led`. The behaviour is on the lamp, and the row is still a row
+      // about a part that is blinking.
+      for (const [el2, b] of behAt) if (el.contains(el2)) return b;
+    }
+    return null;
+  };
+
   const items = d.marks
     .filter(m => m.label && match(svgRoot, m).els.length)
     // A lamp colour is ahead of the stylesheet's own idea of the state, because
     // it was chosen precisely where the stylesheet's idea is a default and not a
     // fact. It is behind `color`, which is the ring the row is a key to.
-    .map(m => ({label: m.label,
-                color: m.color || m.lamp || stateColor(svgRoot, m.state) || '#8d939a',
-                hollow: !m.color}));
+    .map(m => {
+      const els = match(svgRoot, m).els;
+      const b = modeOf(els);
+      return {label: m.label,
+              color: m.color || m.lamp || litColor(els, m.state) ||
+                     stateColor(svgRoot, m.state) || '#8d939a',
+              hollow: !m.color,
+              // The note is a SEPARATE run of text, in the dim ink, rather than
+              // an edit to the label. "Blinking Green - learning" is what the
+              // legend has to end up saying, and the half of it the document
+              // supplied is the half nothing here is entitled to rewrite.
+              note: b ? BEHAVIOR_WORD[b.mode] : '',
+              beh: b ? b.mode : '', behColor: b ? b.color : '', behAlt: b ? b.alt : ''};
+    });
+
+  // The key. Without it the ring is a mark the reader can see and cannot read,
+  // and "the drawing looks slightly different" is not the same as being told
+  // that this lamp is not showing a steady light. It is generated, so it is
+  // appended after the document's own rows, and it appears whether or not any
+  // mark carries a label - the lamps are ringed either way.
+  const modes = new Set(beh.map(b => b.mode));
+  const keys = [];
+  if (modes.has('blinking'))
+    keys.push({label: 'broken ring: blinking, not steady', color: '#22262a',
+               hollow: true, note: '', beh: 'blinking', behColor: '#22262a', behAlt: ''});
+  if (modes.has('alternating'))
+    // Two inks that are both dark enough to read on the pale strip. The obvious
+    // choice for "the other colour" is the dim grey used elsewhere here, and it
+    // disappears against the panel - which makes the key chip look BROKEN, i.e.
+    // it draws the notation for the other behaviour.
+    keys.push({label: 'two-tone ring: alternating between two colours', color: '#22262a',
+               hollow: true, note: '', beh: 'alternating', behColor: '#22262a',
+               behAlt: '#767e86'});
+  items.push(...keys);
   if (!items.length) return null;
 
   const vb = viewBox(svgRoot);
@@ -409,15 +619,26 @@ export function legend(svgRoot, doc) {
   // measurement is derived from it, so the strip stays in proportion.
   const fs = clamp(vb.w / 122, 2.0, 3.8);
   const pad = fs * 0.65, sw = fs * 1.6, gap = fs * 0.5, sep = fs * 1.4;
-  const est = t => t.length * fs * 0.55;
+  // Per-character rather than a flat 0.55em average. The average is fine for
+  // wrapping a sentence and wrong for a short all-caps label: "PWR" measured at
+  // 0.55em came out narrower than it prints, and the behaviour note that follows
+  // it was laid down on top of the last letter.
+  const est = t => fs * [...t].reduce((a, c) =>
+    a + (/[A-Z0-9@#%&]/.test(c) ? 0.72 : /[ilj.,:;'!|()[\]]/.test(c) ? 0.31
+                                       : /[mw]/.test(c) ? 0.82 : 0.55), 0);
+  // The chip of a behaving row wears the same ring as the lamp does, so the key
+  // is a picture of the notation and not a description of it.
+  const rpad = fs * 0.34;
 
   // Flow into rows, wrapping at the drawing's width.
   const rows = [[]];
   let used = 0;
   for (const it of items) {
-    const w = sw + gap + est(it.label) + sep;
+    const chipW = sw + (it.beh ? rpad * 2 : 0);
+    const w = chipW + gap + est(it.label) +
+              (it.note ? gap * 1.1 + est(it.note) : 0) + sep;
     if (used && used + w > vb.w - pad * 2) { rows.push([]); used = 0; }
-    rows[rows.length - 1].push({...it, w});
+    rows[rows.length - 1].push({...it, w, chipW});
     used += w;
   }
   const rowH = fs * 1.85;
@@ -446,29 +667,93 @@ export function legend(svgRoot, doc) {
     let x = pad;
     const y = pad + ri * rowH;
     for (const it of row) {
+      const cx = x + (it.beh ? rpad : 0);
+      const ch = fs * 1.15, cy = y + (rowH - ch) / 2;
       const chip = document.createElementNS(NS, 'rect');
-      chip.setAttribute('x', round(x));
-      chip.setAttribute('y', round(y + (rowH - fs * 1.15) / 2));
+      chip.setAttribute('x', round(cx));
+      chip.setAttribute('y', round(cy));
       chip.setAttribute('width', round(sw));
-      chip.setAttribute('height', round(fs * 1.15));
+      chip.setAttribute('height', round(ch));
       chip.setAttribute('rx', round(fs * 0.2));
       chip.setAttribute('fill', it.hollow ? 'none' : it.color);
       chip.setAttribute('stroke', it.color);
       chip.setAttribute('stroke-width', round(it.hollow ? fs * 0.2 : 0.25));
       g.appendChild(chip);
+      if (it.beh) chipRing(g, {x: cx - rpad, y: cy - rpad,
+                               w: sw + rpad * 2, h: ch + rpad * 2},
+                           fs, it.beh, it.behColor, it.behAlt);
 
+      let tx = x + it.chipW + gap;
       const t = document.createElementNS(NS, 'text');
-      t.setAttribute('x', round(x + sw + gap));
+      t.setAttribute('x', round(tx));
       t.setAttribute('y', round(y + rowH / 2 + fs * 0.36));
       t.setAttribute('font-family', 'sans-serif');
       t.setAttribute('font-size', round(fs));
       t.setAttribute('fill', '#22262a');
       t.textContent = it.label;
       g.appendChild(t);
+      if (it.note) {
+        tx += est(it.label) + gap * 1.1;
+        const n = t.cloneNode(false);
+        n.setAttribute('x', round(tx));
+        n.setAttribute('fill', '#5c646b');
+        n.setAttribute('font-style', 'italic');
+        n.textContent = it.note;
+        g.appendChild(n);
+      }
       x += it.w;
     }
   });
   return {g, height, width};
+}
+
+// The legend's copy of behaviorRing(), in the strip's own coordinates and around
+// a chip rather than a lamp. Same dash count and the same "broken means it goes
+// dark" rule, because a key that draws the notation differently from the drawing
+// is not a key.
+function chipRing(g, box, fs, mode, color, alt) {
+  const rx = Math.min(box.w, box.h) / 2;
+  const perim = 2 * (box.w - 2 * rx) + 2 * (box.h - 2 * rx) + 2 * Math.PI * rx;
+  const dash = round(perim / (RING_DASHES * 2));
+  const at = (stroke, offset) => {
+    const r = document.createElementNS(NS, 'rect');
+    r.setAttribute('x', round(box.x)); r.setAttribute('y', round(box.y));
+    r.setAttribute('width', round(box.w)); r.setAttribute('height', round(box.h));
+    r.setAttribute('rx', round(rx));
+    r.setAttribute('fill', 'none');
+    r.setAttribute('stroke', stroke);
+    r.setAttribute('stroke-width', round(fs * 0.17));
+    r.setAttribute('stroke-dasharray', `${dash} ${dash}`);
+    if (offset) r.setAttribute('stroke-dashoffset', offset);
+    g.appendChild(r);
+  };
+  at(color, 0);
+  if (mode === 'alternating') at(alt || '#8d939a', dash);
+}
+
+/**
+ * The paint the marked lamp is ACTUALLY showing, read off the lamp itself.
+ *
+ * stateColor() below probes a bare <g class="state-x"> at the root, and for the
+ * device-wide palette that is right. It cannot see the per-instance palette,
+ * which render.py writes as id selectors - `#led-sync.state-synced { --led-color:
+ * #22c55e }` - precisely so that one instance's vocabulary beats the component's.
+ * A detached probe matches no id, so every one of those rows drew a grey swatch
+ * beside a green lamp: the legend disagreeing with the drawing it is a key to.
+ *
+ * Only consulted for a state-only mark. A mark with no state says nothing about
+ * what the lamp shows, and inheriting whatever the drawing happened to be
+ * painting would invent a claim the document never made.
+ */
+function litColor(els, state) {
+  if (!state || !els.length || !els[0].isConnected) return null;
+  for (const el of els) {
+    const lamp = el.getAttribute('data-class') === 'led'
+      ? el : el.querySelector('[data-class="led"]');
+    const c = getComputedStyle(lamp || el).getPropertyValue('--led-color').trim();
+    if (c) return c;
+  }
+  return null;
 }
 
 // A state-only mark has no colour of its own. The compiled stylesheet knows one:
@@ -629,6 +914,9 @@ function host() {
  *
  * @param opts.pxmm  emit width/height in pixels at this density instead of mm
  *                   (used by toPng; a rasteriser needs pixels, not millimetres)
+ * @param opts.phase 0 (default) or 0.5 - which half of the blink to freeze every
+ *                   behaving lamp at. toGif() asks for both; everything else
+ *                   takes the lit half. The file never animates: see hold().
  */
 export function toSvg(svgRoot, doc, opts = {}) {
   const d = normalise(doc);
@@ -644,6 +932,7 @@ export function toSvg(svgRoot, doc, opts = {}) {
     const cropped = d.crop ? crop(clone, d.crop) : null;
     apply(clone, d);
     if (cropped) clipToViewBox(clone, cropped);
+    hold(clone, opts.phase);
     flatten(clone);
     clone.setAttribute('data-portrayal-markup', encode(d));
     if (opts.pxmm) {
@@ -659,6 +948,58 @@ export function toSvg(svgRoot, doc, opts = {}) {
   } finally {
     box.remove();
   }
+}
+
+/**
+ * Stop the clock on every behaving lamp and hold it at one phase of its cycle.
+ * Phase 0 - lamp lit, first colour - unless asked otherwise.
+ *
+ * Two separate things are settled here, and the second is the reason the
+ * animation does not survive an export at all.
+ *
+ * FLATTEN WAS BAKING AN ANIMATED VALUE. getComputedStyle reports the animated
+ * value, and flatten() exists to write computed paint into attributes, so a
+ * blinking lamp exported with `opacity="0.37"` and an alternating one with
+ * whichever of its two colours the frame happened to be at. Arbitrary,
+ * permanent, and not a state the device has.
+ *
+ * THE ANIMATION IS REMOVED, NOT KEPT. It is tempting to leave the @keyframes
+ * running - it costs nothing and it is correct in a browser holding the file as
+ * a document. Measured, it is worse than nothing: Chromium renders the same
+ * exported file with the lamp LIT through a canvas and DARK in an <img>, and an
+ * <img> is what a wiki, a ticket and a chat client all use. So the phase a
+ * reader gets is decided by their viewer, and one of the phases they can get is
+ * a picture of `off` - a documented, different, wrong state. An inline
+ * `animation: none` takes that choice away from the viewer and gives the same
+ * still to everyone. The blink is then carried by the ring in every static
+ * export and by toGif() where it needs to actually move.
+ */
+const KEYFRAMES_RE =
+  /\s*@keyframes\s+portrayal-(?:blink|alternate)\s*\{(?:[^{}]*\{[^{}]*\})*[^{}]*\}/g;
+
+function hold(svg, phase = 0) {
+  for (const {el, mode, alt} of behaving(svg)) {
+    // The longhand, not the `animation` shorthand: the shorthand serialises as
+    // `animation: auto ease 0s 1 normal none running none`, which is correct and
+    // unreadable, and a reader opening the exported file should be able to see
+    // at a glance that this lamp was deliberately stopped.
+    el.style.setProperty('animation-name', 'none');
+    if (phase < 0.5) continue;
+    // The far half of the cycle, for a GIF frame. Blinking goes dark - opacity,
+    // matching the keyframe, so whatever is behind the lamp shows through
+    // exactly as it does on screen. Alternating takes the second colour, because
+    // it never goes dark; that is the whole difference between the two.
+    if (mode === 'alternating') { if (alt) el.style.fill = alt; }
+    else el.style.opacity = '0';
+  }
+  // Nothing references them now, and they are the last var() in the file - the
+  // export's standing promise is that a consumer with no CSS custom properties
+  // (Word) sees exactly what a browser sees, and `fill: var(--led-color)` inside
+  // a dead @keyframes block is a counterexample sitting in the evidence. Left
+  // in, it also reads as an animated file to anyone who greps it, which is the
+  // misunderstanding that took a day to measure the first time.
+  for (const style of svg.querySelectorAll('style'))
+    style.textContent = (style.textContent || '').replace(KEYFRAMES_RE, '');
 }
 
 // Word's SVG importer has no CSS custom properties and no filters. The compiled
@@ -697,13 +1038,23 @@ function hex(paint) {
  */
 export async function toPng(svgRoot, doc, pxmm = 8, opts = {}) {
   const text = toSvg(svgRoot, doc, {pxmm});
-  // Take the size from the export itself, not from the live root: the live root
-  // may already be previewing a legend, and its viewBox is grown accordingly.
+  const canvas = await rasterise(text, opts);
+  return await new Promise((ok, no) =>
+    canvas.toBlob(b => (b ? ok(b) : no(new Error('canvas produced no PNG'))), 'image/png'));
+}
+
+// Take the size from the export itself, not from the live root: the live root
+// may already be previewing a legend, and its viewBox is grown accordingly.
+function pixelSize(text) {
   const w = Math.max(1, +(/\swidth="(\d+)"/.exec(text) || [])[1] || 0);
   const h = Math.max(1, +(/\sheight="(\d+)"/.exec(text) || [])[1] || 0);
   if (w * h > 1.2e8)
     throw new Error(`${w}x${h} is too large to rasterise; choose a lower px/mm`);
+  return [w, h];
+}
 
+async function rasterise(text, opts = {}) {
+  const [w, h] = pixelSize(text);
   const img = new Image();
   img.decoding = 'sync';
   // A data URL rather than a blob URL: the image must count as same-origin or
@@ -720,8 +1071,53 @@ export async function toPng(svgRoot, doc, pxmm = 8, opts = {}) {
   // .background paints a flat colour under it for consumers that cannot.
   if (opts.background) { ctx.fillStyle = opts.background; ctx.fillRect(0, 0, w, h); }
   ctx.drawImage(img, 0, 0, w, h);
-  return await new Promise((ok, no) =>
-    canvas.toBlob(b => (b ? ok(b) : no(new Error('canvas produced no PNG'))), 'image/png'));
+  return canvas;
+}
+
+// One blink is 1s at 50% duty - render.py writes `1s linear infinite` and the
+// keyframes switch at 50% - so the honest animation is two frames of half a
+// second. Not four or eight: nothing moves BETWEEN the phases, so extra frames
+// are extra full-size raster images of a picture that has not changed.
+const GIF_PHASES = [0, 0.5];
+const GIF_DELAY_MS = 500;
+
+/**
+ * The drawing as an animated GIF, blink included.
+ *
+ * A GIF is a picture of a drawing, not the drawing: no data-path, no
+ * data-states, nothing addressable, no text a reader can select and no
+ * resolution beyond the one it was baked at. It is here because it is the only
+ * format that shows a blinking lamp blinking to an audience - a slide, a ticket,
+ * a chat message - and it belongs beside SVG and PNG rather than in front of
+ * them. The SVG remains the interchange format and the thing worth keeping.
+ *
+ * Frames are cut down to the rectangle that actually changed, which for a
+ * faceplate whose only motion is two 2mm lamps is a few hundred pixels against
+ * a few million.
+ *
+ * @param opts.background flat colour under the drawing (default white - GIF
+ *                        transparency is one bit, and a chassis with antialiased
+ *                        edges composited against it fringes badly)
+ * @returns {Promise<{blob: Blob, width, height, frames: number, delay: number}>}
+ */
+export async function toGif(svgRoot, doc, pxmm = 4, opts = {}) {
+  const {encodeGif} = await import('./gif.js');
+  const bg = opts.background || '#ffffff';
+  // Both phases are built first and compared as strings: a drawing with nothing
+  // behaving produces two identical files, and that is the cheapest possible
+  // test for "this is a still picture" - no rasterising, no pixel diff.
+  const texts = GIF_PHASES.map(phase => toSvg(svgRoot, doc, {pxmm, phase}));
+  const still = texts[0] === texts[1];
+  const frames = [];
+  for (const text of still ? texts.slice(0, 1) : texts) {
+    const canvas = await rasterise(text, {background: bg});
+    frames.push(canvas.getContext('2d')
+      .getImageData(0, 0, canvas.width, canvas.height).data);
+  }
+  const [width, height] = pixelSize(texts[0]);
+  const bytes = encodeGif({width, height, frames, delay: GIF_DELAY_MS});
+  return {blob: new Blob([bytes], {type: 'image/gif'}),
+          width, height, frames: frames.length, delay: GIF_DELAY_MS, still};
 }
 
 // ------------------------------------------------------------------ URL codec

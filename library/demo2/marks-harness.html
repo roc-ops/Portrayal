@@ -53,7 +53,7 @@
   .msg.good { color:var(--ok); }
   .btns { display:flex; flex-wrap:wrap; gap:0.35rem; }
   #hash { width:100%; font-family:ui-monospace, monospace; font-size:0.68rem; margin-top:0.35rem; }
-  #shot { width:100%; background:#fff; border:1px solid var(--line); border-radius:6px;
+  #shot, #gif { width:100%; background:#fff; border:1px solid var(--line); border-radius:6px;
           display:block; margin-top:0.4rem; }
   .note { color:var(--dim); font-size:0.68rem; line-height:1.5; margin:0.35rem 0 0; }
   .pass { color:var(--ok); } .fail { color:var(--bad); }
@@ -101,6 +101,7 @@
         <button data-act="png-4">PNG 4 px/mm</button>
         <button data-act="png-8">PNG 8</button>
         <button data-act="png-16">PNG 16</button>
+        <button data-act="gif-4">GIF 4 px/mm</button>
         <button data-act="hash">Share URL</button>
       </div>
       <input id="hash" readonly placeholder="share URL appears here">
@@ -110,6 +111,10 @@
         script, so anything visible there is carried by the file itself.
         <span id="shotmeta"></span></p>
       <img id="shot" alt="export preview">
+      <p class="note">And the GIF, which is the same picture for an audience that
+        will watch it rather than read it. A GIF animates inside an
+        <code>&lt;img&gt;</code>; an SVG does not.</p>
+      <img id="gif" alt="animated export preview" hidden>
     </section>
     <section>
       <h2>self-check</h2>
@@ -314,6 +319,16 @@ $('.btns').onclick = async ev => {
       save(blob, marks.filename(state.doc, 'png'), 'image/png');
       say('#expmsg', `PNG ${bitmap.width}x${bitmap.height} at ${pxmm} px/mm — ` +
         `${(blob.size / 1024).toFixed(0)} KB`, 'good');
+    } else if (act.startsWith('gif')) {
+      const pxmm = +act.split('-')[1];
+      const g = await marks.toGif(state.svg, state.doc, pxmm);
+      $('#gif').src = URL.createObjectURL(g.blob);
+      $('#gif').hidden = false;
+      save(g.blob, marks.filename(state.doc, 'gif'), 'image/gif');
+      say('#expmsg', `GIF ${g.width}x${g.height} at ${pxmm} px/mm — ` +
+        `${(g.blob.size / 1024).toFixed(0)} KB, ` +
+        (g.still ? 'ONE frame: nothing in this drawing is behaving'
+                 : `${g.frames} frames at ${g.delay} ms`), g.still ? '' : 'good');
     } else if (act === 'hash') {
       const enc = marks.encode(state.doc);
       const url = `${location.origin}${location.pathname}#${enc}`;
@@ -586,6 +601,123 @@ $('#runtests').onclick = async () => {
         bad.push(`${px}: ${bmp.width}x${bmp.height} wanted ${want.join('x')}`);
     }
     return bad.length === 0 || bad.join('; ');
+  });
+
+
+  // ---- behaviour: the half of a state that a static file used to throw away.
+  //
+  // On the S9510-28DC the GNSS lamp draws five meanings from three colours and
+  // two behaviours, and "Blinking Green" (learning) and "Solid Green" (self
+  // survey complete) are adjacent rows of the same HIG table. If those two
+  // export as the same picture then the file is not incomplete, it is WRONG -
+  // and the person it is wrong for is holding a printout, with no way to know.
+  const behState = () => {
+    // Any state this drawing declares AND animates, found from the compiled
+    // stylesheet rather than hardcoded, so the check follows whatever device the
+    // harness is pointed at.
+    for (const st of svg.querySelectorAll('style')) {
+      const m = /([^{}]+)\{\s*animation:\s*portrayal-(blink|alternate)\b/.exec(st.textContent);
+      const name = m && /\.state-([a-z0-9-]+)/.exec(m[1]);
+      if (name) return name[1];
+    }
+    return null;
+  };
+  const anyLamp = state => {
+    const el = [...svg.querySelectorAll('[data-states]')]
+      .find(e => (e.getAttribute('data-states') || '').split(/[\s,]+/).includes(state));
+    return el && el.getAttribute('data-path')
+      ? `[data-path='${el.getAttribute('data-path')}']` : null;
+  };
+
+  await t('a blinking state does not export as the solid state of the same colour', () => {
+    const st = behState();
+    if (!st) return 'this drawing declares no animated state';
+    const sel = anyLamp(st);
+    if (!sel) return `no element declares ${st}`;
+    marks.clear(svg);
+    const bare = s => s.replace(/ data-portrayal-markup="[^"]*"/, '');
+    const blink = bare(marks.toSvg(svg, {legend: false, marks: [{select: sel, state: st}]}));
+    const solid = bare(marks.toSvg(svg, {legend: false, marks: [{select: sel, state: 'on'}]}));
+    const rings = (blink.match(/data-portrayal="beh"/g) || []).length;
+    out.push(`      state '${st}' on ${sel}: ${rings} behaviour ring(s)`);
+    return (rings > 0 && blink !== solid &&
+            !/data-portrayal="beh"/.test(solid)) ||
+      `rings=${rings} differ=${blink !== solid}`;
+  });
+
+  // getComputedStyle reports the ANIMATED value, and flatten() bakes computed
+  // paint into attributes. Before hold(), a blinking lamp exported with whatever
+  // opacity the fade happened to be at when the button was pressed - a permanent
+  // arbitrary number in a file nobody would ever think to question.
+  await t('an exported blinking lamp carries no baked-in mid-fade opacity', () => {
+    const st = behState();
+    if (!st) return 'this drawing declares no animated state';
+    const sel = anyLamp(st);
+    if (!sel) return `no element declares ${st}`;
+    marks.clear(svg);
+    const doc = new DOMParser().parseFromString(
+      marks.toSvg(svg, {legend: false, marks: [{select: sel, state: st}]}), 'image/svg+xml');
+    const bad = [...doc.querySelectorAll('[opacity]')]
+      .map(e => e.getAttribute('opacity'))
+      .filter(v => v !== '0' && v !== '1' && Math.abs(+v - 0.35) > 1e-9);  // .state-absent
+    // And the animation is switched off rather than left to the viewer. The same
+    // file renders the lamp lit through a canvas and dark in an <img>; "dark" is
+    // the S9510-28DC's `off`, which is not configured. One still for everyone.
+    const off = [...doc.querySelectorAll('[style]')]
+      .filter(e => /animation-name:\s*none/.test(e.getAttribute('style'))).length;
+    return (bad.length === 0 && off > 0) ||
+      `stray opacity ${bad.join(',')} animation-none on ${off} element(s)`;
+  });
+
+  await t('the legend keys the ring instead of leaving the reader to guess', () => {
+    const st = behState();
+    if (!st) return 'this drawing declares no animated state';
+    const sel = anyLamp(st);
+    if (!sel) return `no element declares ${st}`;
+    marks.clear(svg);
+    marks.apply(svg, {legend: true, marks: [{select: sel, state: st, label: 'GNSS'}]});
+    const text = [...svg.querySelectorAll('#portrayal-legend text')].map(e => e.textContent);
+    marks.clear(svg);
+    out.push(`      legend says: ${text.join(' | ')}`);
+    return (text.some(x => /blinking|alternating/.test(x)) &&
+            text.some(x => /ring/.test(x))) || text.join(' | ');
+  });
+
+  // The rings and the strip are both drawn by apply(); a document is only a
+  // document if putting it on and taking it off leaves the drawing untouched.
+  await t('clear() removes the behaviour rings too', () => {
+    const st = behState();
+    if (!st) return 'this drawing declares no animated state';
+    const sel = anyLamp(st);
+    if (!sel) return `no element declares ${st}`;
+    marks.clear(svg);
+    const before = svg.outerHTML;
+    marks.apply(svg, {legend: true, marks: [{select: sel, state: st, label: 'x'}]});
+    const rings = svg.querySelectorAll('[data-portrayal^="beh"]').length;
+    marks.clear(svg);
+    return (rings > 0 && svg.outerHTML === before) ||
+      `rings=${rings} restored=${svg.outerHTML === before}`;
+  });
+
+  await t('a GIF is two frames when a lamp blinks and one when none does', async () => {
+    const st = behState();
+    if (!st) return 'this drawing declares no animated state';
+    const sel = anyLamp(st);
+    if (!sel) return `no element declares ${st}`;
+    marks.clear(svg);
+    const moving = await marks.toGif(svg, {legend: false, marks: [{select: sel, state: st}]}, 2);
+    const still = await marks.toGif(svg, {legend: false, marks: []}, 2);
+    out.push(`      ${moving.width}x${moving.height} at 2 px/mm: ` +
+      `${(moving.blob.size / 1024).toFixed(0)} KB moving, ` +
+      `${(still.blob.size / 1024).toFixed(0)} KB still`);
+    // A GIF header is fixed; the check that matters is that the file decodes as
+    // an image at the size asked for, which createImageBitmap will not do for a
+    // malformed LZW stream.
+    const bmp = await createImageBitmap(moving.blob);
+    return (moving.frames === 2 && !moving.still && still.frames === 1 && still.still &&
+            bmp.width === moving.width && bmp.height === moving.height) ||
+      `moving=${moving.frames}/${moving.still} still=${still.frames}/${still.still} ` +
+      `bitmap=${bmp.width}x${bmp.height}`;
   });
 
   $('#selftest').innerHTML = out.join('\n');

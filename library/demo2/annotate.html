@@ -178,6 +178,7 @@ panel.innerHTML = `
     <button data-act="png-4">PNG 4</button>
     <button data-act="png-8">8</button>
     <button data-act="png-16">16 px/mm</button>
+    <button data-act="gif-4" title="Animated GIF at 4 px/mm. Raster and unaddressable — for a slide or a ticket, where a blinking lamp has to be seen blinking. The SVG stays the file worth keeping.">GIF ▸</button>
     <button data-act="share">share URL</button>
     <label class="f" style="margin-left:auto"><input type="checkbox" id="legend" checked> legend</label>
   </div>
@@ -1193,6 +1194,17 @@ panel.querySelector('.btns').addEventListener('click', async ev => {
       save(blob, marks.filename(doc, 'png'), 'image/png');
       say('#expmsg', `PNG ${bmp.width}×${bmp.height} at ${pxmm} px/mm — ` +
         `${(blob.size / 1024).toFixed(0)} KB`, 'good');
+    } else if (act.startsWith('gif')) {
+      const pxmm = +act.split('-')[1];
+      const g = await marks.toGif(exportRoot(), doc, pxmm);
+      save(g.blob, marks.filename(doc, 'gif'), 'image/gif');
+      // A GIF of a drawing with nothing blinking is a PNG that costs more, and
+      // the reader should be told rather than left to wonder why it is still.
+      say('#expmsg', `GIF ${g.width}×${g.height} at ${pxmm} px/mm — ` +
+        `${(g.blob.size / 1024).toFixed(0)} KB, ` +
+        (g.still ? 'one frame: nothing in this drawing is blinking'
+                 : `${g.frames} frames at ${g.delay} ms — raster, for presentation`),
+        g.still ? '' : 'good');
     } else if (act === 'share') {
       const enc = marks.encode(doc);
       // this page may be running in the tab shell's iframe, so the URL that is
