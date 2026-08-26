@@ -190,6 +190,18 @@ function medianCut(used, count, sum, want) {
       acc += count[sorted[cut - 1]];
       if (acc >= half) break;
     }
+    // THE MEDIAN CAN BE OFF THE END, AND AN EMPTY BOX IS NOT A SPLIT. The loop
+    // accumulates count[sorted[cut - 1]], so it never adds the LAST bucket's
+    // weight - and when one colour holds more than half the pixels and sorts
+    // last in the chosen channel, `acc` never reaches half and `cut` runs to
+    // sorted.length. That splices the whole box back plus an empty one, which
+    // still increments boxes.length, so the loop "reaches" its 256 boxes with
+    // 254 of them empty. Every empty box takes the [0, 0, 0] branch below, and
+    // a 1642-colour drawing came out with FOUR: two real colours and a great
+    // many blacks. The S9510-28DC is the case - its export background is a
+    // cream (220, 214, 197) that is high in all three channels, so it sorts
+    // last every time and the picture loses every lamp in it.
+    if (cut >= sorted.length) cut = sorted.length - 1;
     boxes.splice(pick, 1, sorted.slice(0, cut), sorted.slice(cut));
   }
   return boxes;
