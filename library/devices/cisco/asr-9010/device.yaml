@@ -205,6 +205,7 @@ groups:
   slots:
     term: Slot
     index-origin: 0
+    physical-context: NetworkingDevice
   fan-trays:
     term: Fan Tray
     index-origin: 0
@@ -266,6 +267,29 @@ views:
   right:
     size: {w: 727.2, h: 933.45}
 gaps:
+- what: slot-pitch-disagrees-with-the-sibling-chassis
+  scope: [front]
+  reason: sources-disagree
+  note: >-
+    THE ASR 9006 AND ASR 9010 TAKE THE SAME CARDS AND MY TWO MEASURED PITCHES DO NOT AGREE. The
+    9006's cage is 279.63 mm over six horizontal slots, giving 46.60; the 9010's is 443.32 mm over
+    ten vertical slots, giving 44.33. They differ by 2.27 mm, and one of them is wrong, because a
+    card that seats in both cannot have two thicknesses. The cards' LONG dimension corroborates
+    across the pair perfectly - 352.59 from the 9006's cage width against 354.95 from the 9010's
+    cage height, 2.4 mm apart - so it is only the pitch that disagrees.
+    THE EVIDENCE LEANS TOWARDS 44.33 BEING THE CARD AND THE 9006 OVER-DIVIDING ITS CAGE. Ten slots
+    at 46.60 would need 466.0 mm and the body is 444.5, so 46.60 is impossible on the 9010; six
+    slots at 44.33 need 266.0 mm and the 9006's cage is 279.63, leaving 13.6 mm which is entirely
+    plausible as card guides or an end rail. The component set gives a third reading and it is the
+    one that surfaced this: a9k-rsp880's slot envelope is 46.0 mm, which fits a 46.60 pitch and
+    NOT a 44.33 one, and the RSP-880 is an original-generation part that belongs in both chassis.
+    So either the 9006's pitch is right and the 9010's cage is not ten equal slots, or the RSP
+    slots on one of them are wider than the line card slots.
+    Neither chassis's figures show a per-slot dimension and neither master prints slot labels - the
+    9904, 9906 and 9910 do, which is how their pitches were confirmed, and these two do not. Both
+    files therefore carry an evenly divided cage and this record of why that is an assumption.
+  wanted: a dimensioned front elevation of either chassis, a per-slot width from any card install
+    guide, or a tape measure on a real ASR 9006 or 9010
 - what: fan-tray-split
   scope: [front, fan-trays]
   reason: needs-drawing

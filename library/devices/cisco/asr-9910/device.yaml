@@ -150,6 +150,10 @@ chassis:
   airflow: front-to-back
   color: '#c8cacc'
 groups:
+  fabric:
+    term: Slot
+    index-origin: 0
+    physical-context: NetworkingDevice
   fan-trays:
     term: Fan Tray
     index-origin: 0
@@ -197,14 +201,14 @@ views:
       decor:
         - {at: [6.0, 8.66], size: [435.0, 101.92], fill: '#3a3c3e', pattern: grille, vent: 60}
       cutouts:
-        - {id: fc-0, at: [34.75, 270.71], size: [77.76, 467.3], shape: rect}
-        - {id: fc-1, at: [112.51, 270.71], size: [77.76, 467.3], shape: rect}
-        - {id: fc-2, at: [190.27, 270.71], size: [77.76, 467.3], shape: rect}
-        - {id: fc-3, at: [268.03, 270.71], size: [77.76, 467.3], shape: rect}
-        - {id: fc-4, at: [345.79, 270.71], size: [77.76, 467.3], shape: rect}
         - {id: ground-pad, at: [26.0, 880.0], size: [46.0, 20.0], shape: rect}
     components:
       bays:
+        - {id: fc-0, at: [35.53, 270.71], size: {w: 76.2, h: 467.3}, accepts: ['cisco/a99-sfc3-s@1', 'cisco/a99-sfc-s@1'], group: fabric, rel-pos: 0}
+        - {id: fc-1, at: [113.29, 270.71], size: {w: 76.2, h: 467.3}, accepts: ['cisco/a99-sfc3-s@1', 'cisco/a99-sfc-s@1'], group: fabric, rel-pos: 1}
+        - {id: fc-2, at: [191.05, 270.71], size: {w: 76.2, h: 467.3}, accepts: ['cisco/a99-sfc3-s@1', 'cisco/a99-sfc-s@1'], group: fabric, rel-pos: 2}
+        - {id: fc-3, at: [268.81, 270.71], size: {w: 76.2, h: 467.3}, accepts: ['cisco/a99-sfc3-s@1', 'cisco/a99-sfc-s@1'], group: fabric, rel-pos: 3}
+        - {id: fc-4, at: [346.57, 270.71], size: {w: 76.2, h: 467.3}, accepts: ['cisco/a99-sfc3-s@1', 'cisco/a99-sfc-s@1'], group: fabric, rel-pos: 4}
         - {id: ft-0, at: [0.9, 121.05], size: {w: 445.2, h: 41.1}, accepts: ['cisco/asr-9910-fan@1'], group: fan-trays, rel-pos: 0}
         - {id: ft-1, at: [0.9, 174.83], size: {w: 445.2, h: 41.1}, accepts: ['cisco/asr-9910-fan@1'], group: fan-trays, rel-pos: 1}
     regions:
