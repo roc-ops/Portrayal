@@ -54,8 +54,22 @@ relief:
   cavity: cavity
   size: {w: 11.89, h: 9.45}
   features:
-    - {node: led-a, dome: 0.2}
-    - {node: led-b, dome: 0.2}
+    - node: led-a
+      dome: 0.2
+      confidence: estimated
+      source: >-
+        common/rj45-shielded@2 itself - unsourced. Four RJ45 bezel plates and the USB-A
+        bezel all carry out 0.5: one estimate written five times. Their bezel WINDOWS are
+        exact - generated from the TE 2497310-1 CAD cavity silhouette - so the opening is
+        sourced and the plate's thickness is not.
+    - node: led-b
+      dome: 0.2
+      confidence: estimated
+      source: >-
+        common/rj45-shielded@2 itself - unsourced. Four RJ45 bezel plates and the USB-A
+        bezel all carry out 0.5: one estimate written five times. Their bezel WINDOWS are
+        exact - generated from the TE 2497310-1 CAD cavity silhouette - so the opening is
+        sourced and the plate's thickness is not.
 connection-points:
   net: {at: [7.9, 6.3], direction: front}
 skins: [default]

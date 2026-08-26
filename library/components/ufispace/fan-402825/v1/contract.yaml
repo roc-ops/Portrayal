@@ -27,10 +27,48 @@ elements:
       N/A and are deliberately not modelled
 relief:
   features:
-    - {node: rotor-grille, vent: 25}
-    - {node: rotor-behind, vent: 25}
-    - {node: rotor-bulge, dome: 3.2}
-    - {node: handle, uhandle: 25}
-    - {node: thumbscrew, cyl: 5, knurl: true}
-    - {node: status-led, dome: 0.4}
+    - node: rotor-grille
+      vent: 25
+      confidence: estimated
+      source: >-
+        ufispace/fan-402825@1 - the HIG's Fig 8 drawing gives the 51.5 x 42.2 FACE and, for
+        the fan and PSU handles, a projection; it dimensions nothing else off the face. This
+        magnitude is not in it.
+    - node: rotor-behind
+      vent: 25
+      confidence: estimated
+      source: >-
+        ufispace/fan-402825@1 - the HIG's Fig 8 drawing gives the 51.5 x 42.2 FACE and, for
+        the fan and PSU handles, a projection; it dimensions nothing else off the face. This
+        magnitude is not in it.
+    - node: rotor-bulge
+      dome: 3.2
+      confidence: estimated
+      source: >-
+        ufispace/fan-402825@1 - the HIG's Fig 8 drawing gives the 51.5 x 42.2 FACE and, for
+        the fan and PSU handles, a projection; it dimensions nothing else off the face. This
+        magnitude is not in it.
+    - node: handle
+      uhandle: 25
+      confidence: datasheet
+      source: >-
+        UfiSpace S9510-28DC HIG, Space Clearance: 'The handle for the fan units will extend
+        outwards by 1 inch (2.5cm)'. 25 mm exactly, published by the vendor for THIS part.
+        ONE OF ONLY TWO VENDOR-PUBLISHED RELIEF PROJECTIONS IN THE WHOLE INTAKE - no Cisco,
+        Casa, Edgecore or Celestica document states one for any part.
+    - node: thumbscrew
+      cyl: 5
+      knurl: true
+      confidence: estimated
+      source: >-
+        ufispace/fan-402825@1 - the HIG's Fig 8 drawing gives the 51.5 x 42.2 FACE and, for
+        the fan and PSU handles, a projection; it dimensions nothing else off the face. This
+        magnitude is not in it.
+    - node: status-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/fan-402825@1 - unsourced. The HIG's fan FRU LED table gives the lamp's
+        STATES in full and nothing about its lens. 0.4 is the same dome on all three
+        UfiSpace FRUs: one estimate written three times.
 skins: [default]

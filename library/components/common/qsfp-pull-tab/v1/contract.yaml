@@ -32,9 +32,36 @@ relief:
   features:
     # two flat rails running forward, joined by a flat bar across the far end -
     # the gap between them IS the finger opening
-    - {node: rail-l, out: 34.8}
-    - {node: rail-r, out: 34.8}
-    - {node: crossbar, out: 3.4, lift: 31.4}
+    - node: rail-l
+      out: 34.8
+      confidence: drawing
+      source: >-
+        common/qsfp-pull-tab@1's own reach key - 'drawing - 34.80 MAX forward of the module
+        body'. A dimensioned figure, and one of the few relief magnitudes in the library
+        that is.
+    - node: rail-r
+      out: 34.8
+      confidence: drawing
+      source: >-
+        common/qsfp-pull-tab@1's own reach key - the same 34.80 MAX dimension as rail-l. One
+        drawing dimension covering both rails of one part.
+    - node: crossbar
+      out: 3.4
+      lift: 31.4
+      confidence: drawing
+      source: >-
+        common/qsfp-pull-tab@1's own size key - 'drawing - 19.00 MAX across the bail, 3.40
+        MAX thick'. The 31.4 lift is 34.8 - 3.4, the subtraction that puts the crossbar at
+        the end of the rails, not a separate reading.
     # the speed is cut through the crossbar as lettering, not printed on it
-    - {node: speed-cut, sink: 1.2, lift: 34.8}
+    - node: speed-cut
+      sink: 1.2
+      lift: 34.8
+      confidence: estimated
+      source: >-
+        common/qsfp-pull-tab@1 - the 34.8 lift is the drawing's reach and the 1.2 sink is
+        not dimensioned anywhere. The speed-cut key establishes that the cut goes THROUGH
+        the crossbar ('carries the reach cut through it as the word 100G rather than
+        printed, so it reads from either side'), which makes 1.2 a shallow stand-in for a
+        through-cut.
 skins: [white, blue]

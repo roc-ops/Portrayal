@@ -33,11 +33,47 @@ elements:
   terminal-block: {at: [5.8, 21.0], size: [30.2, 16.5], class: inlet}
 relief:
   features:
-    - {node: latch, out: 2.2}
-    - {node: handle, uhandle: 25}
-    - {node: terminal-block, out: 8}
-    - {node: status-led, dome: 0.4}
-    - {node: vent-field, vent: 30}
+    - node: latch
+      out: 2.2
+      confidence: estimated
+      source: >-
+        ufispace/psu-401-dc@1 - the HIG's Fig 6 drawing gives the 50.5 x 40.2 FACE and, for
+        the fan and PSU handles, a projection; it dimensions nothing else off the face. This
+        magnitude is not in it.
+    - node: handle
+      uhandle: 25
+      confidence: estimated
+      source: >-
+        MISMATCH, FLAGGED RATHER THAN QUIETLY CORRECTED. The UfiSpace S9510-28DC HIG
+        publishes this figure and it is not 25: 'The handle for the fan units will extend
+        outwards by 1 inch (2.5cm) and the handle for the power supplies will extend
+        outwards by 1.06 INCHES (2.7CM)' (Space Clearance). ufispace/psu-401-dc@1's OWN size
+        key says the same thing - 'body 211mm, handle to 27mm proud'. So the sourced value
+        is 27 and this feature carries 25, which is the FAN handle's figure applied to a
+        PSU. Left at 25 and marked estimated because changing a rendered dimension belongs
+        in its own commit where a reviewer can see it, not buried in a provenance sweep.
+        Once corrected to 27 this becomes `datasheet`.
+    - node: terminal-block
+      out: 8
+      confidence: estimated
+      source: >-
+        ufispace/psu-401-dc@1 - unsourced. Its size key reaches past the face to give 'body
+        211mm, handle to 27mm proud' and stops there; the terminal block's 8 mm is not in
+        the HIG.
+    - node: status-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/psu-401-dc@1 - unsourced. The HIG's PSU FRU LED table gives the lamp's
+        states and nothing about its lens. Same 0.4 as the fan and the AC PSU: one estimate
+        written three times.
+    - node: vent-field
+      vent: 30
+      confidence: estimated
+      source: >-
+        ufispace/psu-401-dc@1 - the HIG's Fig 6 drawing gives the 50.5 x 40.2 FACE and, for
+        the fan and PSU handles, a projection; it dimensions nothing else off the face. This
+        magnitude is not in it.
 connection-points:
   power: {at: [20.9, 29], direction: front}
 skins: [default]

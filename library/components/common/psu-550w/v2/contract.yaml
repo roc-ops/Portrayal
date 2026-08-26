@@ -37,8 +37,22 @@ relief:
     # a real U-bail, not a raised plate. It straddles the fan - legs just
     # outside the 33mm bore, bar on the fan's centre line - and stands half the
     # fan height plus a quarter inch proud so a hand clears the blades
-    - {node: handle, uhandle: 22.85}
-    - {node: latch, out: 1.4, color: '#3b4a8c'}
+    - node: handle
+      uhandle: 22.85
+      confidence: estimated
+      source: >-
+        common/psu-550w@2's own handle key, and read what it actually says: 'standing
+        22.85mm proud, being HALF THE 33MM FAN BORE PLUS A QUARTER INCH'. That is a
+        CONSTRUCTION from a measured bore, not a measurement of the handle - the bail was
+        photographed swung out and its reach was computed, not read. Precise to the
+        hundredth because it is arithmetic.
+    - node: latch
+      out: 1.4
+      color: '#3b4a8c'
+      confidence: estimated
+      source: >-
+        common/psu-550w@2 - unsourced. Six provenance keys cover size, depth, elements,
+        handle, inlet orientation and ratings; none mentions the latch.
 connection-points:
   power: {at: [56.0, 20.0], direction: rear}
 body:

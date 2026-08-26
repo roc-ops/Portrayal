@@ -16,5 +16,13 @@ elements:
     states: ['off', 'on']
 relief:
   features:
-    - {node: lamp, dome: 0.3}
+    - node: lamp
+      dome: 0.3
+      confidence: estimated
+      source: >-
+        common/led-rect@1 itself - unsourced. The library's five panel-lamp components carry
+        five different domes - led-arrow-sm 0.16, led-arrow 0.25, led-dot 0.3, led-rect 0.3,
+        led-indicator 0.45 - and they scale with each lamp's drawn diameter rather than with
+        any measurement, which is what a set of proportional guesses looks like. led-dot's
+        0.3 is the one hundreds of features across casa/ and cisco/ point at.
 skins: [default]

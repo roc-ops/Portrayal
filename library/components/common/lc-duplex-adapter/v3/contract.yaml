@@ -28,13 +28,50 @@ elements:
   cap-rx: {at: [7.6, 3.3], size: [4.6, 4.4], class: cap}
 relief:
   features:
-    - {node: bezel, out: 3.175}
+    - node: bezel
+      out: 3.175
+      confidence: photo-measured
+      source: >-
+        common/lc-duplex-adapter@3's own stand-off key - 'photo - the adapter body sits
+        about an eighth of an inch proud of the faceplate, not the quarter inch first
+        modelled'. 3.175 is that eighth of an inch. A photograph read to the nearest eighth,
+        and it CORRECTED an earlier quarter-inch guess, which is why it is photo-measured
+        rather than estimated.
     # caps seat into the bore and stand a quarter inch proud of the jack face
-    - {node: cap-tx, out: 6.35, lift: 3.175, color: '#e9ecef'}
-    - {node: cap-rx, out: 6.35, lift: 3.175, color: '#e9ecef'}
+    - node: cap-tx
+      out: 6.35
+      lift: 3.175
+      color: '#e9ecef'
+      confidence: photo-measured
+      source: >-
+        common/lc-duplex-adapter@3's own dust-caps key - 'photo - unused ports carry a white
+        cap standing about a quarter inch proud of the jack face'. 6.35 is that quarter
+        inch; the 3.175 lift is the bezel's own eighth-inch stand-off, so the cap is
+        measured from the faceplate and not from the jack.
+    - node: cap-rx
+      out: 6.35
+      lift: 3.175
+      color: '#e9ecef'
+      confidence: photo-measured
+      source: >-
+        common/lc-duplex-adapter@3's own dust-caps key - the same 'about a quarter inch
+        proud' reading as cap-tx. ONE reading covering both caps, not two.
     # the moulded square recessed into each cap front
-    - {node: cap-tx-inset, sink: 0.9, lift: 9.525}
-    - {node: cap-rx-inset, sink: 0.9, lift: 9.525}
+    - node: cap-tx-inset
+      sink: 0.9
+      lift: 9.525
+      confidence: estimated
+      source: >-
+        common/lc-duplex-adapter@3 - the dust-caps key fixes that there IS 'a rounded-square
+        inset moulded into its front' and nothing about how deep. The 9.525 lift is 3.175 +
+        6.35, both photo-measured; only the 0.9 sink is invented.
+    - node: cap-rx-inset
+      sink: 0.9
+      lift: 9.525
+      confidence: estimated
+      source: >-
+        common/lc-duplex-adapter@3 - as cap-tx-inset. The inset's existence is photographed,
+        its depth is not.
 parts:
   # lifted onto the raised bezel, so each bore recesses from the proud face
   - {ref: std/lc-bore@1, id: tx, at: [1.0, 3.3], lift: 3.175}

@@ -28,8 +28,27 @@ parts:
   - {ref: std/lc-bore@1, id: lc-b, at: [7.625, 2.05], lift: 13.9}
 relief:
   features:
-    - {node: body, out: 13.9, color: '#6e747c'}
-    - {node: bail, lift: 13.9, out: 14.3, color: '#2f5fa8'}
+    - node: body
+      out: 13.9
+      color: '#6e747c'
+      confidence: drawing
+      source: >-
+        common/sfp-lc-duplex@1's own protrusion key - 'derived (55.4 module length less the
+        ~41.5 bezel-to-connector measured on the TE 2007562-6 cage, so ~13.9 stands proud)'.
+        A SUBTRACTION OF TWO SOURCED NUMBERS rather than a reading: 55.4 is the
+        AutomationDirect SFP-30K-FSF drawing, 41.5 is measured off the TE cage. Tokened
+        `drawing` for the weaker of the two inputs; the tilde in the contract's own '~13.9'
+        is honest and is why this is not `measured`.
+    - node: bail
+      lift: 13.9
+      out: 14.3
+      color: '#2f5fa8'
+      confidence: estimated
+      source: >-
+        common/sfp-lc-duplex@1 - unsourced. The length key gives '0.49 in [12.3] is the face
+        height with the bail extended', which is a HEIGHT across the face, not how far
+        forward the bail reaches. 14.3 is 0.4 past the body's derived 13.9 and nothing
+        states it.
 connection-points:
   # mate is the module centre - what lands on the port's mate point
   mate: {at: [6.75, 4.25], direction: front}
