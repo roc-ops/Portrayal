@@ -102,6 +102,20 @@ provenance:
     the rack - the kind of internal inconsistency this work has spent the night finding in other
     people's artefacts. casa-cards' ASR 9006 and 9904 match across both faces and are the standard
     this follows
+  side-view-depth-axes-run-OPPOSITE-ways: >-
+    CORRECTED, and it was wrong in two ways at once. casa-cards derived the convention from
+    viewer3d.js rather than from preference, and I verified it against the same source: a right
+    view rotates [0, +pi/2, 0] so its local +x maps to world -z, putting x = 0 at the FRONT; a left
+    view rotates [0, -pi/2, 0] so x = 0 is at the REAR. The file's own comments say the same -
+    "right: face end at image left -> front" and "left: authored face-at-image-right".
+    This chassis's two rack rails are 127.0 and 240.0 mm from the FRONT. They were placed with an
+    arbitrary 56 mm offset on the right view - 78.0 and 191.0 from the front, out by 49 - and with
+    the rail's EDGE rather than its centre on the left. Both faces now use the same rule as the top
+    and bottom strips: x = depth - D - w/2 on the left, x = D - w/2 on the right, so the
+    dimensioned plane passes through the middle of the rail on every face of the box.
+    NOTHING COULD HAVE CAUGHT THIS. The region label said "5.00 in and 9.45 in from the front" and
+    was right the whole time; only the coordinates disagreed with it, and no lint rule compares a
+    label against a geometry
   card-orientation: >-
     datasheet - stated directly, and it had been an inference until now. The Overview and
     Reference Guide's "Chassis Slots" section (b-asr9k-overview-reference-guide.pdf p17) names
@@ -303,8 +317,8 @@ views:
     size: {w: 730.8, h: 619.51}
     panel:
       decor:
-        - {at: [490.8, 40.0], size: [14.0, 540.0], fill: '#b0b2b4'}
-        - {at: [603.8, 40.0], size: [14.0, 540.0], fill: '#b0b2b4'}
+        - {at: [483.8, 40.0], size: [14.0, 540.0], fill: '#b0b2b4'}
+        - {at: [596.8, 40.0], size: [14.0, 540.0], fill: '#b0b2b4'}
     regions:
       - {id: rack-rails, label: 'Vertical rack rail locations - 5.00 in and 9.45 in from the rear'}
       - {id: lift-handles, label: 'Chassis lift handles - two per side'}
@@ -312,8 +326,8 @@ views:
     size: {w: 730.8, h: 619.51}
     panel:
       decor:
-        - {at: [71.0, 40.0], size: [14.0, 540.0], fill: '#b0b2b4'}
-        - {at: [184.0, 40.0], size: [14.0, 540.0], fill: '#b0b2b4'}
+        - {at: [120.0, 40.0], size: [14.0, 540.0], fill: '#b0b2b4'}
+        - {at: [233.0, 40.0], size: [14.0, 540.0], fill: '#b0b2b4'}
     regions:
       - {id: rack-rails, label: 'Vertical rack rail locations - 5.00 in and 9.45 in from the rear'}
       - {id: lift-handles, label: 'Chassis lift handles - two per side'}
