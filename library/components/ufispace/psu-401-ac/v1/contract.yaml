@@ -43,18 +43,16 @@ relief:
         the fan and PSU handles, a projection; it dimensions nothing else off the face. This
         magnitude is not in it.
     - node: handle
-      uhandle: 25
-      confidence: estimated
+      uhandle: 27
+      confidence: datasheet
       source: >-
-        MISMATCH, FLAGGED RATHER THAN QUIETLY CORRECTED. The UfiSpace S9510-28DC HIG
-        publishes this figure and it is not 25: 'The handle for the fan units will extend
+        UfiSpace S9510-28DC HIG, Space Clearance: 'The handle for the fan units will extend
         outwards by 1 inch (2.5cm) and the handle for the power supplies will extend
-        outwards by 1.06 INCHES (2.7CM)' (Space Clearance). ufispace/psu-401-dc@1's OWN size
-        key says the same thing - 'body 211mm, handle to 27mm proud'. So the sourced value
-        is 27 and this feature carries 25, which is the FAN handle's figure applied to a
-        PSU. Left at 25 and marked estimated because changing a rendered dimension belongs
-        in its own commit where a reviewer can see it, not buried in a provenance sweep.
-        Once corrected to 27 this becomes `datasheet`.
+        outwards by 1.06 inches (2.7cm)'. 27 mm, published by the vendor for the PSU handle
+        specifically. CORRECTED FROM 25, which was the FAN handle's figure - the two are
+        given in one sentence and the wrong half had been taken. Note the scope: the HIG
+        states this as clearance beyond the chassis, and the PSU face sits flush with the
+        chassis rear, so it is also the handle's proudness off this module's own face.
     - node: inlet-frame
       out: 2.4
       confidence: estimated
