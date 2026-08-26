@@ -48,14 +48,26 @@ provenance:
   mpa-bays: 'NOW BAYS - they were panel cutouts until cisco/a9k-mpa-blank@1 and
     cisco/a9k-mpa-20x1ge@1 landed, because device.schema.json requires accepts with
     minItems 1 and there was nothing legal to accept. The conversion was mechanical,
-    as the placeholder note promised: the measurements did not move. TWO INDEPENDENT
-    NUMBERS AGREE without either being fitted to the other - I measured these openings
-    at 163.0 x 35.6 off the front master, and asr9k-cards took 33.81 x 160.02 for
-    the module envelope from the stencil shapesheet. That is a module inside its
-    opening with a couple of millimetres of clearance each way, which is what a
-    bay should give a card. No document in the intake dimensions an MPA at all -
-    the data sheet lists the family by port count and stops - so the agreement of
-    two separately-derived figures is the only check available and it passes. The
+    as the placeholder note promised: the measurements did not move. THE BAYS ARE SIZED TO THE DRAWN OPENING,
+    NOT TO THE MODULE, AND THAT IS WHY THEY SURVIVED THE MODULE CHANGING. I measured
+    these openings at 163.0 x 35.6 off the front master. The module envelope they
+    accept has since moved twice: first 33.81 x 160.02, read off the stencil
+    shapesheet under the belief that no document dimensioned an MPA, and now
+    34.54 x 161.80 x 170.18 from Cisco data sheet c78-735809 Table 3, which lists
+    every MPA by part number at 6.37 W x 1.36 H x 6.70 L and turns out to have been
+    in the intake the whole time. A 5 percent change in the part, and nothing here
+    needed editing, because a bay measured from the hole is not a restatement of
+    the card. Had these bays been set to the shapesheet figure they would now be
+    0.73 and 1.78 mm UNDER the module they accept. Clearance against the sourced
+    envelope is 1.20 along and 1.06 across - tighter than against the old figure
+    and more plausible for a module in a bay.
+    NOTE THE CORROBORATION THIS ENTRY USED TO CITE HAS BEEN RETRACTED. It claimed
+    two independently derived figures agreeing, one of them the shapesheet reading,
+    and that reading was wrong. The check is now stronger rather than weaker - a
+    measured opening against a VENDOR-STATED envelope beats two derivations - but
+    the sentence had to be rewritten, and a provenance entry citing a number that
+    has since been withdrawn is exactly the stale-words failure this file spent the
+    night finding in other people''s files. The
     bays carry rotate 90 because the modules are drawn portrait and this chassis
     lays them flat; the bay size is the ROTATED footprint, which is the convention
     asr9k-cards verified with a scratch device rather than asserted. WIDENED after the XFP MPAs landed: both bays now accept 20x1ge, 2x10ge, 4x10ge and the blank. All four share the 33.81 x 160.02 envelope, so widening accepts needed no geometry change - which is the point of an envelope shared across a family. COMPLETE, AND THE LIST IS THE CHASSIS''S OWN. a9k-mpa-1x40ge landed and both bays now accept all four adapters plus the blank. THE ELIGIBILITY IS NOT INFERRED FROM THE FAMILY: the fixed-port install guide has a section headed ''Modular Port Adapters'' that says outright ''The Cisco ASR 9001 Router has two bays that support the following Modular Port Adapters (MPAs)'' and then lists exactly four - 20-Port Gigabit Ethernet, 4-Port 10 Gigabit Ethernet, 2-Port 10 Gigabit Ethernet and 1-Port 40 Gigabit Ethernet. That is a per-CHASSIS list rather than a per-family one, which is the distinction that decides what belongs here. A9K-MPA-2X40GE AND A9K-MPA-8X10GE ARE MODELLED IN THE LIBRARY AND ARE DELIBERATELY NOT ACCEPTED: a list that names four is excluding the others, and a card existing on the same 33.81 x 160.02 envelope says it would FIT, not that it is SUPPORTED. READ THE LIST IN THE PDF AND NOT IN THE TEXT DUMP - the fourth bullet is separated from the first three by a page break, so the extracted text puts a running header, a page number and a section title between them and a reader scanning the bulleted block finds only three. ONE WARNING FOR ANYONE TOUCHING THE 40GE ARTWORK: its stencil master prints BOTH ''A9K-MPA-1X40GE'' AND ''A9K-MPA-2X10GE'' on the same faceplate, so the artwork is shared and the silkscreen legend cannot be used to tell the two apart'
