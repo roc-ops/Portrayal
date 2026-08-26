@@ -11,7 +11,7 @@ description: >-
   three; the V3 is the wider tray - Cisco raised it from 16.3 to 17.3 inches and lifted
   each fan's current rating to 2 A - and it is the tray the 16-port, 20-port and 32-port
   100GE line cards require in a 9922.
-size: {w: 475.95, h: 38.1}
+size: {w: 475.95, h: 38.1, d: 584.2}
 attrs:
   model: 'ASR-9922-FAN-V3'
   role: 'fan-tray'
@@ -57,6 +57,24 @@ provenance:
     3.66 mm too wide and stopped three of them fitting a shelf built for three. Here the
     gap was 1.89 mm on a 447 mm part, which is the dangerous size: small enough to look
     right, systematic enough to be wrong everywhere.
+  depth: >-
+    install guide - 23 inches, 584.2 mm, and it is THE SAME SENTENCE the width above is
+    read from: 'The fan tray width is increased from 16.3 inches to 17.3 inches. The
+    overall fan tray depth remains the same at 23 inches.' (Overview and Reference Guide,
+    'Cisco ASR 9922 Router and Cisco ASR 9912 Router Fan Trays', item 6). SAY THAT PLAINLY
+    RATHER THAN LET IT LOOK LIKE A SECOND SOURCE: the width and the depth stand or fall
+    together, so if the reading that item 6 describes the V3 tray is wrong, both numbers
+    are wrong, and there is no independent check on either. `body.depth` below RESTATES
+    this number for the 3D body box; it is one measurement written in two places because
+    the renderer reads one and the exporter the other, not two agreeing readings. Note
+    also what this figure is: the tray's OVERALL depth, which is what a body box wants -
+    Cisco does not qualify it further and does not say whether the grips are inside it.
+    THIS IS THE ONLY CISCO FAN TRAY OR POWER MODULE IN THE INTAKE WITH A PUBLISHED DEPTH.
+    The other four trays' sections (ASR 9001, 9006, 9010, 9910) give fan count, fan
+    diameter, captive-screw count, finger guard and weight and NO dimension at all, and
+    no PEM or power tray anywhere in the 112 documents carries one - searched for the part
+    numbers and for 'power entry module' with a dimension on the line, in the current and
+    the older revision of the Overview and Reference Guide both.
   lamp: >-
     install guide - the Overview and Reference Guide's 'Fan Tray Status Indicators'
     section, transcribed: 'After fan tray insertion into the chassis, the LED lights up
@@ -96,4 +114,7 @@ elements:
     - 'off'
 relief:
   wall: '#4a4f55'
+body:
+  depth: 584.2
+  color: '#b9bec4'
 skins: [default]
