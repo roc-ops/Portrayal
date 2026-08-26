@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ups-32x4
-version: 1.6.0
+version: 1.7.0
 class: line-card
 profile: networking
 description: >-
@@ -196,7 +196,7 @@ provenance:
   relief: 'the C100G/C40G card family treatment - two captive screws (cyl 1.6), the
     ejector latch strip (out 4.2). THE FULL ARGUMENT IS IN casa/bdm@1 AND THIS IS A
     POINTER TO IT, not a second reading: the magnitudes are one estimate per kind of
-    hardware, borrowed from edgecore/agr-panel-screw@1 for a screw head and edgecore/agr-psu-dc@1 for the ejector latch, applied across the family because these cards share a faceplate.
+    hardware, taken from edgecore/agr-panel-screw@1 for a screw head and edgecore/agr-psu-dc@1 for the ejector latch, applied across the family because these cards share a faceplate.
     No Casa document states a depth for any of them. Eleven cards carrying 4.2 is ONE
     estimate written eleven times, not eleven readings that agreed. NOTE this card has
     NO LAMPS, so the family''s dome figure is deliberately not cited here - citing a
@@ -206,18 +206,18 @@ relief:
   features:
     # Two captive slotted screws on the centreline - the guide's own
     # "integrated thumbscrews" / "captive screws".
-    - {node: screw-t, cyl: 1.6, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
-    - {node: screw-b, cyl: 1.6, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
+    - {node: screw-t, cyl: 1.6, confidence: estimated, source: 'edgecore/agr-panel-screw@1 - the library one figure for a captive screw head. NOT MEASURED: that part own provenance reads estimated - it stands proud but was not measured'}
+    - {node: screw-b, cyl: 1.6, confidence: estimated, source: 'edgecore/agr-panel-screw@1 - the library one figure for a captive screw head. NOT MEASURED: that part own provenance reads estimated - it stands proud but was not measured'}
     # Three captive round slotted thumb screws down the port field.
     # NOT screw heads - hex STANDOFFS that carry the cable retention plate. See
     # provenance/standoffs-not-screws. The node ids still read `thumbscrew` because
     # renaming them would break every reference to a part whose position is right.
-    - {node: thumbscrew-0, cyl: 9.5, color: '#b08d57', confidence: borrowed, source: 'casa/io-6p12@2 - ONE photo reading of a DIFFERENT card. Not a second reading'}
-    - {node: thumbscrew-1, cyl: 9.5, color: '#b08d57', confidence: borrowed, source: 'casa/io-6p12@2 - ONE photo reading of a DIFFERENT card. Not a second reading'}
-    - {node: thumbscrew-2, cyl: 9.5, color: '#b08d57', confidence: borrowed, source: 'casa/io-6p12@2 - ONE photo reading of a DIFFERENT card. Not a second reading'}
+    - {node: thumbscrew-0, cyl: 9.5, color: '#b08d57', confidence: borrowed, source: 'casa/io-6p12@2 standoff - the origin IS a measurement, photo-measured: Jason read 3/8in proud off one C40G rear photograph. ONE reading of a DIFFERENT card, not a second reading'}
+    - {node: thumbscrew-1, cyl: 9.5, color: '#b08d57', confidence: borrowed, source: 'casa/io-6p12@2 standoff - the origin IS a measurement, photo-measured: Jason read 3/8in proud off one C40G rear photograph. ONE reading of a DIFFERENT card, not a second reading'}
+    - {node: thumbscrew-2, cyl: 9.5, color: '#b08d57', confidence: borrowed, source: 'casa/io-6p12@2 standoff - the origin IS a measurement, photo-measured: Jason read 3/8in proud off one C40G rear photograph. ONE reading of a DIFFERENT card, not a second reading'}
     # The ejector latch strip.
-    - {node: latch-t, out: 4.2, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 latch - measured off the real PSU'}
-    - {node: latch-b, out: 4.2, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 latch - measured off the real PSU'}
+    - {node: latch-t, out: 4.2, confidence: estimated, source: 'edgecore/agr-psu-dc@1 latch - the library one figure for an ejector latch. NOT MEASURED: that part measured 360.7 is the MODULE depth; the latch height is sourced nowhere'}
+    - {node: latch-b, out: 4.2, confidence: estimated, source: 'edgecore/agr-psu-dc@1 latch - the library one figure for an ejector latch. NOT MEASURED: that part measured 360.7 is the MODULE depth; the latch height is sourced nowhere'}
 parts:
   - {ref: std/mcx@1, id: p0, at: [17.177, 40.815]}
   - {ref: std/mcx@1, id: p1, at: [3.093, 40.815]}

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: pem
-version: 1.4.0
+version: 1.5.0
 class: power
 profile: networking
 description: >-
@@ -89,9 +89,13 @@ provenance:
     guides for "Power Entry", "PEM", "terminal", "breaker" and the Appendix A
     tables. So every mm here is ESTIMATED, and each is the Portrayal library''s
     existing figure for the same class of hardware rather than a fresh guess:
-    the 2.2 mm nut is agr-psu-dc''s, which was read off real Edgecore terminal
-    hardware; the 1.6 mm screw head is edgecore/agr-panel-screw@1; the 0.3 mm lamp
-    dome is common/led-dot@1. The two with no library precedent are the 3.0 mm
+    the 2.2 mm nut is agr-psu-dc''s, the 1.6 mm screw head is
+    edgecore/agr-panel-screw@1 and the 0.3 mm lamp dome is common/led-dot@1 - AND NONE
+    OF THE THREE WAS MEASURED THERE EITHER, which an earlier version of this entry got
+    wrong by calling the nut "read off real Edgecore terminal hardware". What the owner
+    measured on that PSU is its walls at 12.7 and its bolts at 6.35; the nut subdivides
+    the 6.35. agr-panel-screw says "estimated - not measured" outright and led-dot carries
+    no depth provenance at all. The two with no library precedent are the 3.0 mm
     breaker bezel and the 6.0 mm terminal block, and they are flagged here rather
     than buried: they are the only invented magnitudes in this file.
     WHAT WOULD SETTLE IT: a caliper on a C100G PEM, or any three-quarter photograph
@@ -143,26 +147,26 @@ relief:
     # apart would have produced one cylinder spanning both. lift 6.0 stands them
     # on the block face rather than on the faceplate. See agr-psu-dc, which is
     # where the 2.2 comes from.
-    - {node: nut-b4-vdc, cyl: 2.2, lift: 6.0, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 terminal nut - measured off real hardware'}
-    - {node: nut-b4-rtn, cyl: 2.2, lift: 6.0, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 terminal nut - measured off real hardware'}
-    - {node: nut-b3-vdc, cyl: 2.2, lift: 6.0, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 terminal nut - measured off real hardware'}
-    - {node: nut-b3-rtn, cyl: 2.2, lift: 6.0, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 terminal nut - measured off real hardware'}
-    - {node: nut-b2-vdc, cyl: 2.2, lift: 6.0, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 terminal nut - measured off real hardware'}
-    - {node: nut-b2-rtn, cyl: 2.2, lift: 6.0, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 terminal nut - measured off real hardware'}
-    - {node: nut-b1-vdc, cyl: 2.2, lift: 6.0, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 terminal nut - measured off real hardware'}
-    - {node: nut-b1-rtn, cyl: 2.2, lift: 6.0, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 terminal nut - measured off real hardware'}
+    - {node: nut-b4-vdc, cyl: 2.2, lift: 6.0, confidence: estimated, source: 'edgecore/agr-psu-dc@1 terminal nut - NOT MEASURED. The owner measured that part walls at 12.7 and its bolts at 6.35; the nut subdivides the 6.35 and was not itself measured'}
+    - {node: nut-b4-rtn, cyl: 2.2, lift: 6.0, confidence: estimated, source: 'edgecore/agr-psu-dc@1 terminal nut - NOT MEASURED. The owner measured that part walls at 12.7 and its bolts at 6.35; the nut subdivides the 6.35 and was not itself measured'}
+    - {node: nut-b3-vdc, cyl: 2.2, lift: 6.0, confidence: estimated, source: 'edgecore/agr-psu-dc@1 terminal nut - NOT MEASURED. The owner measured that part walls at 12.7 and its bolts at 6.35; the nut subdivides the 6.35 and was not itself measured'}
+    - {node: nut-b3-rtn, cyl: 2.2, lift: 6.0, confidence: estimated, source: 'edgecore/agr-psu-dc@1 terminal nut - NOT MEASURED. The owner measured that part walls at 12.7 and its bolts at 6.35; the nut subdivides the 6.35 and was not itself measured'}
+    - {node: nut-b2-vdc, cyl: 2.2, lift: 6.0, confidence: estimated, source: 'edgecore/agr-psu-dc@1 terminal nut - NOT MEASURED. The owner measured that part walls at 12.7 and its bolts at 6.35; the nut subdivides the 6.35 and was not itself measured'}
+    - {node: nut-b2-rtn, cyl: 2.2, lift: 6.0, confidence: estimated, source: 'edgecore/agr-psu-dc@1 terminal nut - NOT MEASURED. The owner measured that part walls at 12.7 and its bolts at 6.35; the nut subdivides the 6.35 and was not itself measured'}
+    - {node: nut-b1-vdc, cyl: 2.2, lift: 6.0, confidence: estimated, source: 'edgecore/agr-psu-dc@1 terminal nut - NOT MEASURED. The owner measured that part walls at 12.7 and its bolts at 6.35; the nut subdivides the 6.35 and was not itself measured'}
+    - {node: nut-b1-rtn, cyl: 2.2, lift: 6.0, confidence: estimated, source: 'edgecore/agr-psu-dc@1 terminal nut - NOT MEASURED. The owner measured that part walls at 12.7 and its bolts at 6.35; the nut subdivides the 6.35 and was not itself measured'}
     # The brass captive screws that hold the terminal covers this figure removed.
-    - {node: cover-screw-4, cyl: 1.6, color: '#b8860b', confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
-    - {node: cover-screw-3, cyl: 1.6, color: '#b8860b', confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
-    - {node: cover-screw-2, cyl: 1.6, color: '#b8860b', confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
-    - {node: cover-screw-1, cyl: 1.6, color: '#b8860b', confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
+    - {node: cover-screw-4, cyl: 1.6, color: '#b8860b', confidence: estimated, source: 'edgecore/agr-panel-screw@1 - the library one figure for a captive screw head. NOT MEASURED: that part own provenance reads estimated - it stands proud but was not measured'}
+    - {node: cover-screw-3, cyl: 1.6, color: '#b8860b', confidence: estimated, source: 'edgecore/agr-panel-screw@1 - the library one figure for a captive screw head. NOT MEASURED: that part own provenance reads estimated - it stands proud but was not measured'}
+    - {node: cover-screw-2, cyl: 1.6, color: '#b8860b', confidence: estimated, source: 'edgecore/agr-panel-screw@1 - the library one figure for a captive screw head. NOT MEASURED: that part own provenance reads estimated - it stands proud but was not measured'}
+    - {node: cover-screw-1, cyl: 1.6, color: '#b8860b', confidence: estimated, source: 'edgecore/agr-panel-screw@1 - the library one figure for a captive screw head. NOT MEASURED: that part own provenance reads estimated - it stands proud but was not measured'}
     # Hot-swap pushbutton, then the three lamps. A lamp is a lens, not a plate.
     - {node: hs-button, cyl: 1.2, confidence: estimated, source: 'NO PRECEDENT - a panel pushbutton. Invented here'}
-    - {node: hs, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
-    - {node: alarm, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
-    - {node: ok, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
-    - {node: rail-screw-l, cyl: 1.6, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
-    - {node: rail-screw-r, cyl: 1.6, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
+    - {node: hs, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: alarm, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: ok, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: rail-screw-l, cyl: 1.6, confidence: estimated, source: 'edgecore/agr-panel-screw@1 - the library one figure for a captive screw head. NOT MEASURED: that part own provenance reads estimated - it stands proud but was not measured'}
+    - {node: rail-screw-r, cyl: 1.6, confidence: estimated, source: 'edgecore/agr-panel-screw@1 - the library one figure for a captive screw head. NOT MEASURED: that part own provenance reads estimated - it stands proud but was not measured'}
 body:
   depth: 250.0
   color: '#8d949c'

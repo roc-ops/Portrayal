@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ds-8x8
-version: 1.5.0
+version: 1.6.0
 class: line-card
 profile: networking
 description: >-
@@ -165,8 +165,9 @@ provenance:
   relief: 'the C100G/C40G card family treatment - two captive screws (cyl 1.6), the
     ejector latch strip (out 4.2) and the 3 status lamps (dome 0.3). THE FULL ARGUMENT IS IN casa/bdm@1 AND THIS IS A
     POINTER TO IT, not a second reading: the three magnitudes are one estimate per kind of
-    hardware, borrowed from edgecore/agr-panel-screw@1, edgecore/agr-psu-dc@1 and
-    common/led-dot@1, applied across the family because these cards share a faceplate.
+    hardware, taken from edgecore/agr-panel-screw@1, edgecore/agr-psu-dc@1 and
+    common/led-dot@1 - NONE of which measured them, which is why all three are tokened
+    `estimated` rather than `borrowed` - applied across the family because these cards share a faceplate.
     No Casa document states a depth for any of them. Eleven cards carrying 4.2 is ONE
     estimate written eleven times, not eleven readings that agreed.'
 elements:
@@ -178,13 +179,13 @@ relief:
   features:
     # Two captive slotted screws on the centreline - the guide's own
     # "integrated thumbscrews" / "captive screws".
-    - {node: screw-t, cyl: 1.6, knurl: true, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
-    - {node: screw-b, cyl: 1.6, knurl: true, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
+    - {node: screw-t, cyl: 1.6, knurl: true, confidence: estimated, source: 'edgecore/agr-panel-screw@1 - the library one figure for a captive screw head. NOT MEASURED: that part own provenance reads estimated - it stands proud but was not measured'}
+    - {node: screw-b, cyl: 1.6, knurl: true, confidence: estimated, source: 'edgecore/agr-panel-screw@1 - the library one figure for a captive screw head. NOT MEASURED: that part own provenance reads estimated - it stands proud but was not measured'}
     # The ejector latch strip.
-    - {node: latch-t, out: 4.2, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 latch - measured off the real PSU'}
-    - {node: latch-b, out: 4.2, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 latch - measured off the real PSU'}
+    - {node: latch-t, out: 4.2, confidence: estimated, source: 'edgecore/agr-psu-dc@1 latch - the library one figure for an ejector latch. NOT MEASURED: that part measured 360.7 is the MODULE depth; the latch height is sourced nowhere'}
+    - {node: latch-b, out: 4.2, confidence: estimated, source: 'edgecore/agr-psu-dc@1 latch - the library one figure for an ejector latch. NOT MEASURED: that part measured 360.7 is the MODULE depth; the latch height is sourced nowhere'}
     # STATUS / ALARM / ACTIVE - lenses, not painted dots.
-    - {node: status, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
-    - {node: active, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
-    - {node: alarm, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: status, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: active, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: alarm, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
 skins: [default]

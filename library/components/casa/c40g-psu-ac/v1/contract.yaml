@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: c40g-psu-ac
-version: 1.3.0
+version: 1.4.0
 class: psu
 profile: networking
 description: >-
@@ -119,14 +119,14 @@ relief:
     # is modelled lying on the face. bar 1.5 is the drawn stroke width, i.e. the
     # wire diameter, which is a quantity the drawing actually carries.
     - {node: handle, bar: 1.5, confidence: drawing, source: 'the handle path own drawn stroke width - the bail wire diameter. Also a FLOOR'}
-    - {node: thumbscrew, cyl: 5.0, knurl: true, confidence: borrowed, source: 'common/fan-module@1 - its knurled locking screw'}
-    - {node: status, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: thumbscrew, cyl: 5.0, knurl: true, confidence: estimated, source: 'common/fan-module@1 knurled locking screw - NOT MEASURED: that part provenance covers size and elements only and says nothing about screw height'}
+    - {node: status, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
     # The two fan openings are REAL HOLES with a wire finger guard over each. The
     # art was drawn light-on-grey, the inverse of what `vent` needs, and the first
     # pass refused the feature rather than assert the surround was the hole. The
     # owner's C40G front photograph settled it and the art is redrawn dark-on-light.
-    - {node: fan-left, vent: 25.0, confidence: borrowed, source: 'common/fan-module@1 grille 25; edgecore/agr-fan@1 measures 26. The PHOTO gives the shape and no depth'}
-    - {node: fan-right, vent: 25.0, confidence: borrowed, source: 'common/fan-module@1 grille 25; edgecore/agr-fan@1 measures 26. The PHOTO gives the shape and no depth'}
+    - {node: fan-left, vent: 25.0, confidence: estimated, source: 'common/fan-module@1 grille - NOT MEASURED: neither that part nor edgecore/agr-fan@1 which draws 26 gives a grille depth; both carry only a module depth'}
+    - {node: fan-right, vent: 25.0, confidence: estimated, source: 'common/fan-module@1 grille - NOT MEASURED: neither that part nor edgecore/agr-fan@1 which draws 26 gives a grille depth; both carry only a module depth'}
 body:
   depth: 300.0
   color: '#e9eaec'

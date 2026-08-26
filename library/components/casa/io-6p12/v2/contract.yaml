@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: io-6p12
-version: 2.6.0
+version: 2.7.0
 class: line-card
 profile: networking
 description: >-
@@ -174,7 +174,7 @@ provenance:
   relief: 'the C100G/C40G card family treatment - two captive screws (cyl 1.6), the
     ejector latch strip (out 4.2). THE FULL ARGUMENT IS IN casa/bdm@1 AND THIS IS A
     POINTER TO IT, not a second reading: the magnitudes are one estimate per kind of
-    hardware, borrowed from edgecore/agr-panel-screw@1 for a screw head and edgecore/agr-psu-dc@1 for the ejector latch, applied across the family because these cards share a faceplate.
+    hardware, taken from edgecore/agr-panel-screw@1 for a screw head and edgecore/agr-psu-dc@1 for the ejector latch, applied across the family because these cards share a faceplate.
     No Casa document states a depth for any of them. Eleven cards carrying 4.2 is ONE
     estimate written eleven times, not eleven readings that agreed. NOTE this card has
     NO LAMPS, so the family''s dome figure is deliberately not cited here - citing a
@@ -184,11 +184,11 @@ relief:
   features:
     # Two captive slotted screws on the centreline - the guide's own
     # "integrated thumbscrews" / "captive screws".
-    - {node: screw-t, cyl: 1.6, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
-    - {node: screw-b, cyl: 1.6, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
+    - {node: screw-t, cyl: 1.6, confidence: estimated, source: 'edgecore/agr-panel-screw@1 - the library one figure for a captive screw head. NOT MEASURED: that part own provenance reads estimated - it stands proud but was not measured'}
+    - {node: screw-b, cyl: 1.6, confidence: estimated, source: 'edgecore/agr-panel-screw@1 - the library one figure for a captive screw head. NOT MEASURED: that part own provenance reads estimated - it stands proud but was not measured'}
     # The ejector latch strip.
-    - {node: latch-t, out: 4.2, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 latch - measured off the real PSU'}
-    - {node: latch-b, out: 4.2, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 latch - measured off the real PSU'}
+    - {node: latch-t, out: 4.2, confidence: estimated, source: 'edgecore/agr-psu-dc@1 latch - the library one figure for an ejector latch. NOT MEASURED: that part measured 360.7 is the MODULE depth; the latch height is sourced nowhere'}
+    - {node: latch-b, out: 4.2, confidence: estimated, source: 'edgecore/agr-psu-dc@1 latch - the library one figure for an ejector latch. NOT MEASURED: that part measured 360.7 is the MODULE depth; the latch height is sourced nowhere'}
     # Brass standoffs stand 3/8in proud of the faceplate, centred across the
     # card, and carry the comb when it is fitted
     - {node: standoff-t, out: 9.5, color: '#b08d57', confidence: photo-measured, source: 'Jason - 3/8in off one C40G rear photograph. All twelve are that ONE reading'}

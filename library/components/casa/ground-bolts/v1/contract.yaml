@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: ground-bolts
-version: 1.2.0
+version: 1.3.0
 class: mechanical
 profile: networking
 description: >-
@@ -25,7 +25,8 @@ provenance:
     stud, so each `cyl` takes ITS own radius - as one group the star washer would have
     set a 10.8 mm cylinder for the lot.
     The magnitudes are edgecore/agr-psu-dc@1''s terminal stack, the closest thing in
-    this library and one read off real hardware: washer 0.7, nut 2.2 sitting on it. The
+    this library - and NOT measured: the owner measured that part''s walls and bolts, and
+    the washer and nut subdivide a measured bolt without themselves being measured: washer 0.7, nut 2.2 sitting on it. The
     threaded stud standing 3.5 through both is a FLOOR - it has to clear the nut, and
     nothing states how far past it goes. The 1.0 thread pitch is that part''s too.
     WHAT WOULD SETTLE IT: a caliper, or any photograph of the C100G rear from the side.
@@ -34,9 +35,9 @@ relief:
   wall: '#4a4f55'
   features:
     - {node: stud-top-1, cyl: 3.5, thread: 1.0, confidence: estimated, source: 'NO PRECEDENT - a grounding stud. A FLOOR: it has to clear the nut'}
-    - {node: washer-1, cyl: 0.7, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 star washer - measured off real hardware'}
-    - {node: nut-1, cyl: 2.2, lift: 0.7, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 terminal nut - measured off real hardware'}
+    - {node: washer-1, cyl: 0.7, confidence: estimated, source: 'edgecore/agr-psu-dc@1 star washer - NOT MEASURED. It subdivides that part owner-measured 6.35 bolt along with the nut; the split was not measured'}
+    - {node: nut-1, cyl: 2.2, lift: 0.7, confidence: estimated, source: 'edgecore/agr-psu-dc@1 terminal nut - NOT MEASURED. The owner measured that part walls at 12.7 and its bolts at 6.35; the nut subdivides the 6.35 and was not itself measured'}
     - {node: stud-top-2, cyl: 3.5, thread: 1.0, confidence: estimated, source: 'NO PRECEDENT - a grounding stud. A FLOOR: it has to clear the nut'}
-    - {node: washer-2, cyl: 0.7, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 star washer - measured off real hardware'}
-    - {node: nut-2, cyl: 2.2, lift: 0.7, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 terminal nut - measured off real hardware'}
+    - {node: washer-2, cyl: 0.7, confidence: estimated, source: 'edgecore/agr-psu-dc@1 star washer - NOT MEASURED. It subdivides that part owner-measured 6.35 bolt along with the nut; the split was not measured'}
+    - {node: nut-2, cyl: 2.2, lift: 0.7, confidence: estimated, source: 'edgecore/agr-psu-dc@1 terminal nut - NOT MEASURED. The owner measured that part walls at 12.7 and its bolts at 6.35; the nut subdivides the 6.35 and was not itself measured'}
 skins: [default]

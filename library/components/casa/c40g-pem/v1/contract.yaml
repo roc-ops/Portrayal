@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: c40g-pem
-version: 1.2.0
+version: 1.3.0
 class: power
 profile: networking
 description: >-
@@ -61,7 +61,7 @@ provenance:
     treatment of the same class of part, named so the next reader can overturn it in
     one place: 1.5 for the bolted cover plate is edgecore/agr-ground-plate@1; 1.6 for
     a panel screw head is edgecore/agr-panel-screw@1; 2.2 for a terminal nut is
-    edgecore/agr-psu-dc@1, which took it off real hardware; 4.2 for a release lever is
+    edgecore/agr-psu-dc@1, which did NOT measure it - its own measured figure is the module depth; 4.2 for a release lever is
     the same part''s latch; 0.2 for a printed label is edgecore/agr-label-caution@1.
     NOT DONE ON PURPOSE: the two white-outlined terminal boxes are NOT raised. The
     figure draws them as outlines on the same grey as the plate, which is as
@@ -84,19 +84,19 @@ relief:
     # WHAT is raised comes from Figure 1-12; HOW FAR does not - see provenance/relief.
     # The bolted terminal cover is a plate on the outside of the face, so it takes
     # the same treatment (and the same 1.5) as edgecore/agr-ground-plate@1.
-    - {node: terminal-cover, out: 1.5, confidence: borrowed, source: 'edgecore/agr-ground-plate@1 - a plate bolted to the outside'}
-    - {node: cover-screw, cyl: 1.6, lift: 1.5, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
+    - {node: terminal-cover, out: 1.5, confidence: estimated, source: 'edgecore/agr-ground-plate@1 - the library one figure for a bolted plate. NOT MEASURED: that part own provenance reads estimated - the plate stands slightly proud; not measured'}
+    - {node: cover-screw, cyl: 1.6, lift: 1.5, confidence: estimated, source: 'edgecore/agr-panel-screw@1 - the library one figure for a captive screw head. NOT MEASURED: that part own provenance reads estimated - it stands proud but was not measured'}
     # Four studs, a minus pair above a plus pair, each carrying a hex nut over a
     # star washer. Own node each, so `cyl` takes ITS radius.
-    - {node: nut-neg-l, cyl: 2.2, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 terminal nut - measured off real hardware'}
-    - {node: nut-neg-r, cyl: 2.2, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 terminal nut - measured off real hardware'}
-    - {node: nut-pos-l, cyl: 2.2, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 terminal nut - measured off real hardware'}
-    - {node: nut-pos-r, cyl: 2.2, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 terminal nut - measured off real hardware'}
+    - {node: nut-neg-l, cyl: 2.2, confidence: estimated, source: 'edgecore/agr-psu-dc@1 terminal nut - NOT MEASURED. The owner measured that part walls at 12.7 and its bolts at 6.35; the nut subdivides the 6.35 and was not itself measured'}
+    - {node: nut-neg-r, cyl: 2.2, confidence: estimated, source: 'edgecore/agr-psu-dc@1 terminal nut - NOT MEASURED. The owner measured that part walls at 12.7 and its bolts at 6.35; the nut subdivides the 6.35 and was not itself measured'}
+    - {node: nut-pos-l, cyl: 2.2, confidence: estimated, source: 'edgecore/agr-psu-dc@1 terminal nut - NOT MEASURED. The owner measured that part walls at 12.7 and its bolts at 6.35; the nut subdivides the 6.35 and was not itself measured'}
+    - {node: nut-pos-r, cyl: 2.2, confidence: estimated, source: 'edgecore/agr-psu-dc@1 terminal nut - NOT MEASURED. The owner measured that part walls at 12.7 and its bolts at 6.35; the nut subdivides the 6.35 and was not itself measured'}
     # The two release levers stand off the face far enough to get a hand behind.
-    - {node: lever-a, out: 4.2, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 latch - measured off the real PSU'}
-    - {node: lever-b, out: 4.2, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 latch - measured off the real PSU'}
+    - {node: lever-a, out: 4.2, confidence: estimated, source: 'edgecore/agr-psu-dc@1 latch - the library one figure for an ejector latch. NOT MEASURED: that part measured 360.7 is the MODULE depth; the latch height is sourced nowhere'}
+    - {node: lever-b, out: 4.2, confidence: estimated, source: 'edgecore/agr-psu-dc@1 latch - the library one figure for an ejector latch. NOT MEASURED: that part measured 360.7 is the MODULE depth; the latch height is sourced nowhere'}
     # DISCONNECT POWER PRIOR TO SERVICE - a printed label, not sheet metal.
-    - {node: warning, out: 0.2, confidence: borrowed, source: 'edgecore/agr-label-spec@1 - adhesive label thickness'}
+    - {node: warning, out: 0.2, confidence: estimated, source: 'edgecore/agr-label-spec@1 - the library one figure for an adhesive label. NOT MEASURED: that part has photo-measured SIZE provenance and no depth provenance at all'}
 body:
   depth: 200.0
   color: '#9b9da0'

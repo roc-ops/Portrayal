@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fan
-version: 1.6.0
+version: 1.7.0
 class: cooling
 profile: networking
 description: >-
@@ -61,7 +61,8 @@ provenance:
     assembly", "fan tray", "fan module" and Appendix A Table A-2; the tables carry
     power and airflow and no mechanical dimension at all. So: vent 25.0 is the
     library''s figure for a fan grille (common/fan-module@1 uses 25, edgecore/agr-fan@1
-    uses 26, the latter measured off real hardware); cyl 1.2 and dome 0.3 are the
+    uses 26); NEITHER OF THOSE IS A MEASUREMENT - neither part gives a grille
+    depth, only a module depth. cyl 1.2 and dome 0.3 are the
     pushbutton and lamp idiom this library already uses (common/led-dot@1). The
     HANDLE is the one number that is not borrowed and not invented: bar 9.0 is the
     handle rect''s own drawn height, so the tube is as thick as the handle is drawn.
@@ -100,7 +101,7 @@ relief:
     # whole face as a perforation grid and the guide's own note (see
     # perforation-colour) is that they look through the faceplate into the
     # chassis. `vent` is the only primitive that says that.
-    - {node: perforation, vent: 25.0, confidence: borrowed, source: 'common/fan-module@1 grille 25; edgecore/agr-fan@1 measures 26'}
+    - {node: perforation, vent: 25.0, confidence: estimated, source: 'common/fan-module@1 grille - NOT MEASURED: neither that part nor edgecore/agr-fan@1 which draws 26 gives a grille depth; both carry only a module depth'}
     # The pull handle. Figure 7-11 draws it as a light grey bar with an outline
     # standing on the grid, where Figure 1-4 draws it solid black at lower
     # fidelity; both put it in the same place and the guide calls it a handle.
@@ -110,11 +111,11 @@ relief:
     # The indicator bezel is a plate sitting ON the perforation grid - Figures 1-4
     # and 7-11 both draw it that way - so it is raised, and the button and the
     # three lamps it holds are lifted onto its face rather than left at the panel.
-    - {node: panel, out: 1.5, confidence: borrowed, source: 'edgecore/agr-ground-plate@1 - a plate bolted to the outside'}
+    - {node: panel, out: 1.5, confidence: estimated, source: 'edgecore/agr-ground-plate@1 - the library one figure for a bolted plate. NOT MEASURED: that part own provenance reads estimated - the plate stands slightly proud; not measured'}
     - {node: hs-button, cyl: 1.2, lift: 1.5, confidence: estimated, source: 'NO PRECEDENT - a panel pushbutton. Invented here'}
-    - {node: hs, dome: 0.3, lift: 1.5, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
-    - {node: alarm, dome: 0.3, lift: 1.5, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
-    - {node: ok, dome: 0.3, lift: 1.5, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: hs, dome: 0.3, lift: 1.5, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: alarm, dome: 0.3, lift: 1.5, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: ok, dome: 0.3, lift: 1.5, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
 body:
   depth: 150.0
   color: '#8d949c'

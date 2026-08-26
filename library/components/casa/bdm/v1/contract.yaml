@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: bdm
-version: 1.5.0
+version: 1.6.0
 class: line-card
 profile: networking
 description: >-
@@ -180,11 +180,26 @@ provenance:
     also fails the orthographic gate - Figure 1-11 renders its plate 15 percent narrow -
     so no fraction off one would be worth taking even if depth were visible in an
     elevation, which it is not.
-    SO THREE NUMBERS ARE USED, ONE PER KIND OF THING, EACH BORROWED FROM AN EXISTING
-    PORTRAYAL PART RATHER THAN INVENTED HERE:
+    SO THREE NUMBERS ARE USED, ONE PER KIND OF THING, AND NONE OF THE THREE IS A
+    MEASUREMENT. Each is the library''s single existing figure for that hardware, reused
+    so the library carries ONE number per kind rather than nineteen:
       cyl 1.6  captive panel screw   = edgecore/agr-panel-screw@1
-      out 4.2  ejector latch         = edgecore/agr-psu-dc@1, measured off real hardware
+      out 4.2  ejector latch         = edgecore/agr-psu-dc@1
       dome 0.3 panel lamp            = common/led-dot@1
+    CORRECTED. An earlier version of this entry called the 4.2 "measured off real
+    hardware" and tokened all three `borrowed`, which in this library means the ORIGIN
+    was measured. Going and reading the three origin contracts shows none of them was:
+    agr-panel-screw says "estimated - it stands proud but was not measured"; agr-psu-dc''s
+    only measured figure is the MODULE''s 360.7 mm depth and its latch height is sourced
+    nowhere; common/led-dot carries no depth provenance at all, only size: estimated.
+    All three are now tokened `estimated` and each feature''s `source` names the origin
+    AND says it is not a measurement. Found by cisco-relief, which went to read the
+    origins in order to cite them precisely - the check this contract should have run
+    when it wrote the citation.
+    THE REUSE IS STILL THE RIGHT DESIGN and nothing about it changes: one number per kind
+    of hardware, the link recorded, and one caliper on any panel screw anywhere in the
+    library fixing every screw in it. What went is only the claim that somebody had
+    already held that caliper.
     They are ESTIMATES. Applying one estimate to a family is a deliberate choice and it
     is the honest one HERE, because these cards genuinely share a faceplate - the DQM/DCU
     positions entry already records that the BDM and the DS/US cards are ONE plate to the
@@ -201,15 +216,15 @@ relief:
   features:
     # Two captive slotted screws on the centreline - the guide's own
     # "integrated thumbscrews" / "captive screws".
-    - {node: screw-t, cyl: 1.6, knurl: true, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
-    - {node: screw-b, cyl: 1.6, knurl: true, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
+    - {node: screw-t, cyl: 1.6, knurl: true, confidence: estimated, source: 'edgecore/agr-panel-screw@1 - the library one figure for a captive screw head. NOT MEASURED: that part own provenance reads estimated - it stands proud but was not measured'}
+    - {node: screw-b, cyl: 1.6, knurl: true, confidence: estimated, source: 'edgecore/agr-panel-screw@1 - the library one figure for a captive screw head. NOT MEASURED: that part own provenance reads estimated - it stands proud but was not measured'}
     # The ejector latch strip.
-    - {node: latch-t, out: 4.2, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 latch - measured off the real PSU'}
-    - {node: latch-b, out: 4.2, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 latch - measured off the real PSU'}
+    - {node: latch-t, out: 4.2, confidence: estimated, source: 'edgecore/agr-psu-dc@1 latch - the library one figure for an ejector latch. NOT MEASURED: that part measured 360.7 is the MODULE depth; the latch height is sourced nowhere'}
+    - {node: latch-b, out: 4.2, confidence: estimated, source: 'edgecore/agr-psu-dc@1 latch - the library one figure for an ejector latch. NOT MEASURED: that part measured 360.7 is the MODULE depth; the latch height is sourced nowhere'}
     # STATUS / ALARM / ACTIVE - lenses, not painted dots.
-    - {node: status, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
-    - {node: active, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
-    - {node: alarm, dome: 0.3, confidence: borrowed, source: 'common/led-dot@1 - the library panel-lamp figure'}
+    - {node: status, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: active, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: alarm, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
 connection-points:
   mate: {at: [15.23, 172.75], direction: front}
 skins: [default]
