@@ -22,28 +22,40 @@ attrs:
   eol: 'none-announced'
 provenance:
   relief: >-
-    NO RELIEF FEATURE IS DECLARED AND THIS IS THE RECORD OF WHY. What should stand proud of
-    this face: the status lamp and the per-port lamps, domed lenses on the real card. Each
-    needs a depth in millimetres, and no document in the intake states one for any Cisco
-    part. The searches, recorded so this can be overturned rather than repeated: every
-    doc.md in the 112-document intake for 'protrud', 'extends outward', 'stands proud' and
-    'clearance in front' - the ONLY vendor in the whole intake that publishes a projection
-    is UfiSpace, whose S9510-28DC datasheet gives its fan and PSU handle travel, and no
-    Cisco document does; the per-card dimension tables, Table A-10 of the older Ethernet
-    Line Card Installation Guide and every data sheet's 'Physical dimensions (includes
-    ejector bracket/lever)' row, which carry H, W, D and weight only - and where the ejector
-    IS included it is included in the card's LONG axis, which this model already draws in
-    2D, not in its depth; and the ASR 9000 Visio stencil, whose 119 masters are FRONT and
-    REAR elevations with no side, top or isometric view, so it carries no depth axis to
-    measure at all. The figures that DO show this hardware in three dimensions - Figure 48
-    of the Ethernet Line Card Installation Guide, 'Ejector Levers and Captive Screws', and
-    Figure 1-8 of the ISM guide - are perspective drawings with a vanishing point and no
-    scale, so they are authoritative for WHAT IS THERE and for nothing about size. A lamp
-    measured off a drawing whose aspect is wrong reads two different diameters and neither
-    is the lens, so the drawing cannot supply this either. WHAT WOULD CLOSE IT: the lamp's
-    part number, or a photograph of the part with a rule in frame. THIS PARAGRAPH IS ONE
-    STATEMENT, WRITTEN ONCE BY THE CISCO RELIEF PASS AND INSERTED INTO THE 51 SIBLING
-    CONTRACTS that share this hardware - it is a single search, not 51 agreeing readings.
+    RELIEF IS DECLARED, AND WHAT MATTERS ABOUT IT IS THAT IT IS A HANDFUL OF NUMBERS AND NOT
+    A HANDFUL PER PART. This face carries: 5 panel lamps at dome 0.3 (one number, carried by
+    120 Cisco contracts). EVERY MAGNITUDE BELOW IS ESTIMATED, AND THAT IS A DELIBERATE
+    READING OF WHAT RELIEF IS FOR. The owner's ruling: 'the whole 3d part is kind of
+    interpolated anyway... It's just to give it a realistic view instead of just being a
+    flat 2d... All of the 3d stuff is going to be mostly conjecture unless the vendor
+    provides that data.' So a proudness here is an interpolation for a realistic view, NOT a
+    claim about the hardware, and the confidence token on every feature says so rather than
+    leaving it to be inferred. WHY `estimated` AND NOT `borrowed`, SINCE EVERY NUMBER HERE
+    DOES COME FROM ANOTHER PORTRAYAL PART. `borrowed` is defined as another part's MEASURED
+    figure reused for the same class of hardware, and these origins are not measured - they
+    are the library's first guess at that hardware, and the contracts say so themselves:
+    agr-panel-screw's provenance reads 'estimated - it stands proud but was not measured',
+    agr-psu-dc sources its latch's ARRANGEMENT from a photograph and never its proudness,
+    agr-fan describes its handle and grille by appearance only, and common/led-dot's entire
+    provenance is 'size: estimated'. Spelling that chain `borrowed` would convert a guess
+    into an apparent measurement at one remove, a thousand times over. `source` still names
+    the origin, so the coordinating benefit is kept and only the claim that is not true is
+    dropped. READ THE COUNTS ABOVE AS THEY ARE MEANT: a figure carried by sixty-odd
+    contracts is ONE ESTIMATE WRITTEN SIXTY-ODD TIMES, not sixty-odd readings that happened
+    to agree. One caliper on any one Cisco captive screw, any one ejector lever or any one
+    panel lamp corrects every part in the library that shares it, which is the whole reason
+    the numbers are pooled instead of chosen per card. THE SEARCH FOR A REAL FIGURE WAS RUN
+    FIRST AND IS RECORDED SO IT IS NOT REPEATED: all 112 doc.md extracts for 'protrud',
+    'extends outward', 'stands proud' and 'clearance in front' - the only vendor in the
+    intake that publishes a projection is UfiSpace, on the S9510-28DC; the per-card
+    dimension tables, including Table A-10 of the older Ethernet Line Card Installation
+    Guide which the current revision dropped, all of which carry H, W, D and weight only;
+    and the ASR 9000 Visio stencil, whose 119 masters are FRONT and REAR elevations with no
+    side, top or isometric view, so it holds no depth axis at all and is closed as a source.
+    Figure 48 of the Ethernet Line Card Installation Guide and Figure 1-8 of the ISM guide
+    DO show this hardware in three dimensions and are perspective drawings with a vanishing
+    point, so they settle the ARRANGEMENT - bracket off the plate, lever along it, domed
+    screw head proud of both - and nothing about size.
   size: >-
     NO CISCO DOCUMENT IN THIS INTAKE STATES ANY SPA DIMENSION. THIS SENTENCE IS THE SAME
     SENTENCE ON ALL 24 SPA COMPONENTS: it is ONE derivation, not 24 measurements, and the
@@ -203,4 +215,35 @@ elements:
     - 'off'
 relief:
   wall: '#4a4f55'
+  features:
+    - node: led-ca-p0
+      dome: 0.3
+      confidence: estimated
+      source: >-
+        common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
+        estimated' and the dome carries none
+    - node: led-ca-p1
+      dome: 0.3
+      confidence: estimated
+      source: >-
+        common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
+        estimated' and the dome carries none
+    - node: led-al-p0
+      dome: 0.3
+      confidence: estimated
+      source: >-
+        common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
+        estimated' and the dome carries none
+    - node: led-al-p1
+      dome: 0.3
+      confidence: estimated
+      source: >-
+        common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
+        estimated' and the dome carries none
+    - node: status
+      dome: 0.3
+      confidence: estimated
+      source: >-
+        common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
+        estimated' and the dome carries none
 skins: [default]
