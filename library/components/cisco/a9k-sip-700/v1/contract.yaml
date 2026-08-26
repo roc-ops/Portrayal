@@ -98,11 +98,25 @@ provenance:
     temperature -4 to 149 F (-20 to 65 C). Note the operating ceiling is 40 C where the
     Ethernet line cards are rated to 55.
   status-lamp: >-
-    install guide - 'The Cisco ASR 9000 SIP-700 faceplate has one Status LED.' That is
-    the whole of it: the guide gives the lamp's existence and its count and NO COLOUR
-    TABLE. The master draws it as a stroked circle 3.54 mm across at 25.25, 370.39 with
-    its STATUS legend beside it. The four-state card vocabulary here is the modular line
-    cards' and is a BORROWING, flagged as one.
+    install guide - Table 32, 'Port Status and Line Card Status LEDs', of the Ethernet
+    Line Card Installation Guide, section 'Card Status LED (one per card)'. Green: 'Line
+    card has booted properly, and is ready to pass or is passing traffic.' Steady amber:
+    'Line card boot process is underway. When the Cisco IOS XR software finishes
+    loading, the LED turns green.' Blinking amber: 'Software configuration error has
+    occurred that prevents the line card from passing traffic. It is possible that the
+    line card is still passing traffic, but there is some degradation.' Red: 'Line card
+    has encountered a hardware error, and is not passing traffic.' Off: 'Line card is
+    powered off. The LED might turn off momentarily when switching between the states
+    described above, although the line card has not powered off.' Steady and blinking
+    amber share one colour and are not carried as two states; the distinction is
+    recorded here because it is the difference between a card booting and a card
+    misconfigured. A SIP IS NOT AN ETHERNET LINE CARD, so the scope needs a licence and
+    Cisco gives one explicitly: the SIP and SPA Hardware Installation Guide carries the
+    note 'References to line cards in the router hardware installation and configuration
+    guides apply equally to SIPs.' That sentence is what makes Table 32 this card's
+    table rather than a neighbour's. An earlier version of this component said the guide
+    gave the lamp's existence and no colour table and carried a flagged BORROWING; the
+    colour table was in the other book, which that note points at.
   power: >-
     NOT STATED ANYWHERE IN THE INTAKE. The SIP and SPA Hardware Installation Guide has
     no power table at all - Table 6 is its physical specifications and gives weight,
@@ -122,9 +136,9 @@ elements:
     size: [3.54, 3.54]
     class: led
     description: >-
-      the SIP's single Status lamp. The guide gives its existence and no colour table, so
-      the four states here are the modular line cards' and are a BORROWING, flagged as
-      one.
+      the SIP's single Status lamp. Cisco: 'The Cisco ASR 9000 SIP-700 faceplate has one
+      Status LED.' Its vocabulary is Table 32's Card Status LED - see provenance.status-
+      lamp for why that table reaches a SIP.
     states:
     - {name: green, color: '#39b54a'}
     - {name: amber, color: '#f5a623'}

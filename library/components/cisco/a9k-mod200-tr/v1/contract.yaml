@@ -103,11 +103,24 @@ elements:
     size: [3.54, 3.54]
     class: led
     description: >-
-      the card's Status LED. NOT SOURCED FOR THIS CARD: the Ethernet Line Card
-      Installation Guide's Table 32, 'Port Status and Line Card Status LEDs', is the
-      nearest thing and it is written for the fixed-port cards. The MLC sections give the
-      MPA LED tables and no table for the carrier's own lamp. The four-state card
-      vocabulary here is therefore the line cards' and is a BORROWING, flagged as one.
+      install guide - Table 32, 'Port Status and Line Card Status LEDs', of the Ethernet
+      Line Card Installation Guide, section 'Card Status LED (one per card)'. Green: 'Line
+      card has booted properly, and is ready to pass or is passing traffic.' Steady amber:
+      'Line card boot process is underway. When the Cisco IOS XR software finishes
+      loading, the LED turns green.' Blinking amber: 'Software configuration error has
+      occurred that prevents the line card from passing traffic. It is possible that the
+      line card is still passing traffic, but there is some degradation.' Red: 'Line card
+      has encountered a hardware error, and is not passing traffic.' Off: 'Line card is
+      powered off. The LED might turn off momentarily when switching between the states
+      described above, although the line card has not powered off.' Steady and blinking
+      amber share one colour and are not carried as two states; the distinction is
+      recorded here because it is the difference between a card booting and a card
+      misconfigured. AN EARLIER VERSION OF THIS SENTENCE said Table 32 'is written for the
+      fixed-port cards' and called this vocabulary a BORROWING. That was wrong. Table 32
+      sits in Chapter 3, 'Verifying and Troubleshooting the Line Card Installation', which
+      is scoped to line cards generally and not to fixed-port ones - Table 33, the MPA
+      lamp table, is in the same section, and MPAs only exist inside modular carriers. A
+      modular line card is a line card and its Status lamp is a Card Status LED.
     states:
     - {name: green, color: '#39b54a'}
     - {name: amber, color: '#f5a623'}
