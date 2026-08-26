@@ -98,6 +98,17 @@ provenance:
     9900-generation chassis and not in the 9906, which is the second time a Cisco compatibility row
     has singled that chassis out, and exactly why these lists are transcribed rather than inferred
     from generation
+  four-hg-flex-accepted: >-
+    datasheet - the A9K-4HG-FLEX and A99-4HG-FLEX pairs added to the line card slots, and each is
+    placed on ITS OWN declared chassis list rather than on an inference from generation. The A9K
+    pair's contract names all seven chassis; the A99 pair's names five - "ASR 9922, ASR 9912, ASR
+    9910, ASR 9906 and ASR 9904" - so the two are not interchangeable even though they share an
+    envelope. A component that declares what it fits is a better source than a chassis deciding
+    what it will take
+  first-generation-fabric-accepted: >-
+    datasheet - the fabric bays gain this chassis's first-generation switch fabric card, placed on
+    the component's own attrs.chassis, which names exactly one chassis. That single-chassis
+    declaration is why it can be added without a compatibility row: the part says where it goes
   card-orientation: >-
     datasheet - stated directly, and it had been an inference until now. The Overview and
     Reference Guide's "Chassis Slots" section (b-asr9k-overview-reference-guide.pdf p17) names
@@ -252,24 +263,24 @@ views:
         - {id: shelf-2, at: [10.0, 1265.0], size: [427.0, 66.0], shape: rect}
     components:
       bays:
-        - {id: slot-0, at: [4.38, 305.13], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0}
-        - {id: slot-1, at: [48.48, 305.13], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1}
-        - {id: slot-2, at: [92.47, 305.13], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2}
-        - {id: slot-3, at: [136.56, 305.13], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 3}
-        - {id: slot-4, at: [180.65, 305.13], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 4}
-        - {id: slot-5, at: [224.64, 305.13], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 5}
-        - {id: slot-6, at: [268.74, 305.13], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 6}
-        - {id: slot-7, at: [312.83, 305.13], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 7}
-        - {id: slot-8, at: [356.82, 305.13], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 8}
-        - {id: slot-9, at: [400.91, 305.13], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 9}
+        - {id: slot-0, at: [4.38, 305.13], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0}
+        - {id: slot-1, at: [48.48, 305.13], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1}
+        - {id: slot-2, at: [92.47, 305.13], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2}
+        - {id: slot-3, at: [136.56, 305.13], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 3}
+        - {id: slot-4, at: [180.65, 305.13], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 4}
+        - {id: slot-5, at: [224.64, 305.13], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 5}
+        - {id: slot-6, at: [268.74, 305.13], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 6}
+        - {id: slot-7, at: [312.83, 305.13], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 7}
+        - {id: slot-8, at: [356.82, 305.13], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 8}
+        - {id: slot-9, at: [400.91, 305.13], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 9}
         - {id: rp-0, at: [26.43, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/asr-9922-rp-se@1', 'cisco/asr-9922-rp-tr@1', 'cisco/a99-rp3-se@1', 'cisco/a99-rp3-tr@1', 'cisco/a9k-slot-cover@1'], group: rp, rel-pos: 0}
-        - {id: fc-0, at: [70.52, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a99-sfc3@1'], group: fabric, rel-pos: 0}
-        - {id: fc-1, at: [114.51, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a99-sfc3@1'], group: fabric, rel-pos: 1}
-        - {id: fc-2, at: [158.61, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a99-sfc3@1'], group: fabric, rel-pos: 2}
-        - {id: fc-3, at: [202.70, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a99-sfc3@1'], group: fabric, rel-pos: 3}
-        - {id: fc-4, at: [246.79, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a99-sfc3@1'], group: fabric, rel-pos: 4}
-        - {id: fc-5, at: [290.78, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a99-sfc3@1'], group: fabric, rel-pos: 5}
-        - {id: fc-6, at: [334.88, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/a99-sfc3@1'], group: fabric, rel-pos: 6}
+        - {id: fc-0, at: [70.52, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/asr-9912-sfc110@1', 'cisco/a99-sfc3@1'], group: fabric, rel-pos: 0}
+        - {id: fc-1, at: [114.51, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/asr-9912-sfc110@1', 'cisco/a99-sfc3@1'], group: fabric, rel-pos: 1}
+        - {id: fc-2, at: [158.61, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/asr-9912-sfc110@1', 'cisco/a99-sfc3@1'], group: fabric, rel-pos: 2}
+        - {id: fc-3, at: [202.70, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/asr-9912-sfc110@1', 'cisco/a99-sfc3@1'], group: fabric, rel-pos: 3}
+        - {id: fc-4, at: [246.79, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/asr-9912-sfc110@1', 'cisco/a99-sfc3@1'], group: fabric, rel-pos: 4}
+        - {id: fc-5, at: [290.78, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/asr-9912-sfc110@1', 'cisco/a99-sfc3@1'], group: fabric, rel-pos: 5}
+        - {id: fc-6, at: [334.88, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/asr-9912-sfc110@1', 'cisco/a99-sfc3@1'], group: fabric, rel-pos: 6}
         - {id: rp-1, at: [378.87, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/asr-9922-rp-se@1', 'cisco/asr-9922-rp-tr@1', 'cisco/a99-rp3-se@1', 'cisco/a99-rp3-tr@1', 'cisco/a9k-slot-cover@1'], group: rp, rel-pos: 1}
     regions:
       - {id: line-cards, label: 'Line cards LC0 to LC9 - slots 0 to 9'}
