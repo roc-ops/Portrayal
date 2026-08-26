@@ -175,12 +175,12 @@ views:
       bays:
         - {id: pem-1, at: [44.8, 196.0], size: {w: 158.0, h: 68.5}, accepts: [casa/c40g-pem@1], group: power, rel-pos: 1, default: casa/c40g-pem@1}
         - {id: pem-2, at: [212.8, 196.0], size: {w: 158.0, h: 68.5}, accepts: [casa/c40g-pem@1], group: power, rel-pos: 2, default: casa/c40g-pem@1}
-        - {id: rear-0, at: [42.0, 164.35], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@1, casa/blank-faceplate@1], default: casa/io-6p12@1, group: rear-slots, rel-pos: 0}
+        - {id: rear-0, at: [42.0, 164.35], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1], default: casa/io-6p12@2, group: rear-slots, rel-pos: 0}
         - {id: rear-1, at: [42.0, 133.88], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/lc-sw-bdm@1, casa/blank-faceplate@1], default: casa/lc-sw-bdm@1, group: rear-slots, rel-pos: 1}
         - {id: rear-2, at: [42.0, 103.41], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-sw-bdm-a@1, casa/blank-faceplate@1], default: casa/smm-sw-bdm-a@1, group: rear-slots, rel-pos: 2}
         - {id: rear-3, at: [42.0, 72.94], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-sw-bdm-b@1, casa/blank-faceplate@1], default: casa/smm-sw-bdm-b@1, group: rear-slots, rel-pos: 3}
-        - {id: rear-4, at: [42.0, 42.47], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12-sw@1, casa/lc-sw-bdm@1, casa/blank-faceplate@1], default: casa/io-6p12-sw@1, group: rear-slots, rel-pos: 4}
-        - {id: rear-5, at: [42.0, 12.0], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@1, casa/blank-faceplate@1], default: casa/io-6p12@1, group: rear-slots, rel-pos: 5}
+        - {id: rear-4, at: [42.0, 42.47], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12-sw@2, casa/io-6p12-sw-io2@1, casa/lc-sw-bdm@1, casa/blank-faceplate@1], default: casa/io-6p12-sw@2, group: rear-slots, rel-pos: 4}
+        - {id: rear-5, at: [42.0, 12.0], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1], default: casa/io-6p12@2, group: rear-slots, rel-pos: 5}
   top:
     size: {w: 432.95, h: 388.45}
     panel:
@@ -228,12 +228,12 @@ configurations:
       front-3: casa/smm-8x10g@1
       front-4: casa/bdm2m@1
       front-5: casa/bdm2m@1
-      rear-0: casa/io-6p12@1
+      rear-0: casa/io-6p12@2
       rear-1: casa/lc-sw-bdm@1
       rear-2: casa/smm-sw-bdm-a@1
       rear-3: casa/smm-sw-bdm-b@1
-      rear-4: casa/io-6p12-sw@1
-      rear-5: casa/io-6p12@1
+      rear-4: casa/io-6p12-sw@2
+      rear-5: casa/io-6p12@2
   docsis-classic:
     description: Classic DOCSIS. Redundancy is per side - front/rear 1 and 4 - with an LC Switch behind
       both.
@@ -244,12 +244,12 @@ configurations:
       front-3: casa/smm-8x10g@1
       front-4: casa/bdm@1
       front-5: casa/bdm@1
-      rear-0: casa/io-6p12@1
+      rear-0: casa/io-6p12@2
       rear-1: casa/lc-sw-bdm@1
       rear-2: casa/smm-sw-bdm-a@1
       rear-3: casa/smm-sw-bdm-b@1
       rear-4: casa/lc-sw-bdm@1
-      rear-5: casa/io-6p12@1
+      rear-5: casa/io-6p12@2
 # What no rule can find, because the manifest looks complete. Both bays are
 # populated, both components render, and nothing in the model can see that the
 # only power figure the vendor publishes for them is a single number covering
@@ -257,7 +257,7 @@ configurations:
 # build time and must not be listed here.
 gaps:
 - what: paired-module-power
-  scope: [casa/bdm2m@1, casa/io-6p12@1, casa/io-6p12-sw@1, casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1]
+  scope: [casa/bdm2m@1, casa/io-6p12@2, casa/io-6p12-sw@2, casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1]
   reason: vendor-silent
   note: >-
     The BDM2/BDM2m datasheet states "Total Power  300 W" in a technical

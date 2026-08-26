@@ -1,0 +1,110 @@
+format: 1
+kind: module
+name: io-6p12-sw-io2
+version: 1.0.0
+class: line-card
+profile: networking
+description: >-
+  Casa 6+12 SW-IO2 - the 204 MHz-capable combined switch and I/O card. Same
+  eighteen MCX jacks and the same LC switch function as the plain 6+12 SW-
+  IO, at 5-204 MHz, so it is what a 204 MHz BDM build puts in the redundancy
+  slot a BDM scheme frees up: C100G rear 8, C40G rear 4.
+size: {w: 30.47, h: 345.5, d: 380.0}
+attrs: {model: '6+12 SW-IO2', media: coax, connector: mcx, downstream: '6', upstream: '12', spectrum: 5-204MHz, switch: 'yes', slot: C100G-rear-8 / C40G-rear-4}
+provenance:
+  variant: 'drawing - the IO2 is a REAL, separately orderable card, not a relabelling.
+    Both guides list it as an alternative wherever the plain 6+12 goes: "Slots 0
+    to 4 - 6+12 IO or 6+12 IO2 module", "Slot 8 - 6+12 SW-IO or 6+12 SW-IO2" on
+    the C100G, and the same pairs on the C40G. What differs is the upstream spectrum
+    and therefore which BDM it pairs with: Table A-10 heads the plain card "BDM
+    6+12 (BDM with 6+12 IO)" at "Up to 85 MHz", and Table A-11 heads the IO2 "BDM
+    6+12 (BDM_204MHZ and BDM2m_204MHZ with 6+12 IO2)" at "Up to 204 MHz". The C40G
+    data sheets ordering table names the part: "BDM6-12-IO2 - BDM2/2M IO card 204
+    MHz-capable, supporting 6 DS and 12 US ports"'
+  geometry: 'drawing - the faceplate is the plain cards, deliberately and on the
+    vendors authority: casa/io-6p12 already recorded that "The IO2 variant is the
+    same faceplate at 5-204 MHz instead of 5-85 MHz". Same eighteen MCX jacks on
+    the same axes, same cable comb, same standoffs. Only the legend and the spectrum
+    change. Jack positions and the composed std/mcx@1 aperture are taken from casa/io-6p12@2
+    and casa/io-6p12-sw@2 rather than re-derived, so the four cards cannot drift
+    apart'
+  power: 'NONE STATED, same as the plain card. No table in either guide gives
+    an I/O module a figure - Tables A-8 and A-9 give the RFD and RFU their connectors
+    and nothing else - and the BDMs "approximately 300W" is scoped to the BDM WITH
+    its I/O card, which is the front halfs figure carrying power-draw-scope: module-with-paired-io.
+    Writing anything here would double count that pairing. The L27 warning is the
+    record'
+  layout: drawing - Figure 1-15 of the Casa C100G Hardware Installation Guide
+    (rev 07/08/2022). Twelve U jacks in the left column, six D in the right,
+    interleaved. Port COUNT and ARRANGEMENT are read straight off the figure
+    and are reliable
+  size: ESTIMATED. The guide figures are schematic, not to scale - the drawn
+    chassis aspect is 0.936 against a specified 0.844, and the drawn slot
+    pitches are irregular (108, 130, 78, 112 px for what should be one pitch).
+    Width is arithmetic from Table A-1 instead - 19in rack, ~440mm interior,
+    14 slots gives 31.43. Height is bracketed by two schematic estimates that
+    disagree by 10 percent - 461mm from the front-view proportion, 417mm from
+    the Fig 1-15 faceplate aspect - so 440 is the midpoint. Needs a caliper
+  connector: drawing - the figure's cable note reads "Single quad-shielded
+    cable with MCX male snap-on plug; 75 ohm male F-connector on opposite end",
+    so the jack on this card is MCX and the F-connector is at the headend end
+  bore: registry - THIS IS THE VERSION BUMP. v1 drew the eighteen MCX openings
+    inline; v2 COMPOSES std/mcx@1, so the aperture is the registry's `mcx` key (4.95 x
+    4.50 D-hole, Radiall R113.553.000 panel drawing) instead of the estimate this
+    card used to carry. Every jack AXIS is unchanged - only the
+    hole's size and shape moved, from a guessed rectangle to the sourced D-hole
+    (proved by diffing the compiled drawing - 18/18 axes land within 0.005 mm,
+    which is the old skin's two-decimal rounding and not a move). Note the
+    composed part is placed on its AXIS, which sits 2.475 from the top of a
+    4.50-high D-hole rather than at half its height.
+    The two cards had disagreed with each other about the same connector (3.87 x
+    3.14 here against 3.88 x 3.88 on the SW card); they now cannot
+  rf-layout: drawing - Figure 1-16, measured separately from Figure 1-15 rather
+    than copied. The SW card's port field is SHORTER and more compressed - it spans
+    18.6 to 72.7 percent of the plate against the plain card's 12.1 to 73.7, and its
+    U pitch is 4.84 percent of plate height against 5.60. Jason flagged this; the
+    figures agree
+  shape: photograph - a C40G rear shot with plain 6+12 I/O in slots 0 and 5 and
+    this card in slot 4 shows they are NOT the same. This one has slightly
+    different overall dimensions and a section carrying the RF ports that stands
+    about 5/8in (15.9mm) proud of the faceplate, ahead of the comb. The
+    dimensional difference is visible but not yet measured, so this card is
+    modelled at the plain card's envelope for now - that part is ESTIMATED
+  comb: photograph - a C40G rear shot shows every I/O card fronted by a cable
+    comb carried on brass standoffs. Jason measured the standoffs at about 3/8in
+    (9.5mm) proud of the faceplate and the comb itself at about 1/16in (1.6mm)
+    thick. The comb is notched per port and carries the U0-U11 / D0-D5 silkscreen,
+    and the labels appear on BOTH the card face and the comb - the comb
+    repeats them where the cable actually lands rather than replacing them
+relief:
+  wall: '#4a4f55'
+  features:
+    # Brass standoffs stand 3/8in proud of the faceplate, centred across the
+    # card, and carry the comb when it is fitted
+    - {node: standoff-t, out: 9.5, color: '#b08d57'}
+    - {node: standoff-m, out: 9.5, color: '#b08d57'}
+    - {node: standoff-b, out: 9.5, color: '#b08d57'}
+    # the RF section stands proud of the faceplate, which the plain card does not
+    - {node: rf-block, out: 15.9, color: '#9aa0a6'}
+parts:
+  - {ref: std/mcx@1, id: u0, at: [6.135, 64.635]}
+  - {ref: std/mcx@1, id: u1, at: [6.135, 81.365]}
+  - {ref: std/mcx@1, id: u2, at: [6.135, 98.095]}
+  - {ref: std/mcx@1, id: u3, at: [6.135, 114.825]}
+  - {ref: std/mcx@1, id: u4, at: [6.135, 131.555]}
+  - {ref: std/mcx@1, id: u5, at: [6.135, 148.285]}
+  - {ref: std/mcx@1, id: u6, at: [6.135, 165.015]}
+  - {ref: std/mcx@1, id: u7, at: [6.135, 181.735]}
+  - {ref: std/mcx@1, id: u8, at: [6.135, 198.465]}
+  - {ref: std/mcx@1, id: u9, at: [6.135, 215.195]}
+  - {ref: std/mcx@1, id: u10, at: [6.135, 231.925]}
+  - {ref: std/mcx@1, id: u11, at: [6.135, 248.655]}
+  - {ref: std/mcx@1, id: d0, at: [17.395, 61.705]}
+  - {ref: std/mcx@1, id: d1, at: [17.395, 94.065]}
+  - {ref: std/mcx@1, id: d2, at: [17.395, 126.415]}
+  - {ref: std/mcx@1, id: d3, at: [17.395, 158.775]}
+  - {ref: std/mcx@1, id: d4, at: [17.395, 191.125]}
+  - {ref: std/mcx@1, id: d5, at: [17.395, 223.485]}
+connection-points:
+  mate: {at: [15.23, 172.75], direction: rear}
+skins: [default]
