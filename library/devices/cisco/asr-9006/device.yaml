@@ -56,14 +56,32 @@ provenance:
     datasheet - 28.93 in (73.48 cm), stated identically by Table 13 and by Figure 9's own
     dimension line. Two sources, no disagreement. Figure 9 also puts the rack mounting surface
     5.73 in (14.55 cm) back from the front of the chassis
-  bay-sizing-harmonised: >-
-    the card bays are sized to the COMPONENT envelope and positioned on the measured cage, which is
-    the team's arbitration: a module's size is its slot envelope, and a bay and its occupant carry
-    the same size so the two can be checked against each other. An earlier revision of this file
-    sized these bays to the cage OPENING instead, which predated that ruling and left this chassis
-    disagreeing with the ASR 9912 - my own chassis disagreeing with each other being exactly the
-    smell I have been chasing in the vendor's artefacts. The difference between the envelope and
-    the measured pitch is the card guide, which is chassis structure rather than bay.
+  bay-sizing-reverted-to-the-measured-opening: >-
+    A BAY IS THE HOLE IN THE METAL. These six were sized to the card's 395.7 mm
+    ENVELOPE and re-centred, under an earlier arbitration that a bay and its
+    occupant should carry the same size so the two could be compared. That made
+    them comparable and made them wrong: the measured cage opening is 352.59 mm
+    (60.94 to 413.53 across the front master), so each bay end sat 21.56 mm
+    outside the metal, and the bay's dark opening was drawn over a card rail the
+    master shows as sheet steel. The owner saw it as black showing past the edges
+    of an installed card.
+    Reverted to the master's own numbers: 352.59 across, six bands of 46.605 down
+    from 104.63, which is the pitch this file already records and which Figure 19
+    independently supports - measured off the front face of that figure the
+    opening reads about 358 wide with a 63.5 mm left inset, against 352.59 and
+    60.94 here.
+    THE ASYMMETRY IS REAL AND IS NOT A BUG. 60.94 mm of metal to the left and
+    30.97 to the right, because the master draws a wide vertical strip on the left
+    carrying the ESD receptacle and only a card rail on the right. Figure 19 shows
+    the same, and the power shelf below - which has no such strip - is symmetric.
+    WHAT THIS EXPOSES RATHER THAN FIXES: a card is now legitimately WIDER than its
+    bay, because a faceplate overlaps the aperture it covers. For a line card that
+    is coherent - a 362.24 mm plate over a 352.59 mm opening, with the ejectors
+    taking it to 395.7. For the RSP-880 family it is not: 428.5 mm needs 37.96 mm
+    of overlap per side, and centred on this cage it reaches 6.99 mm PAST the
+    chassis wall. Nine cards share these slots and two families disagree by 32.8
+    on the one axis that has to fit one opening. That is recorded and NOT resolved
+    here - see the rsp880-width gap.
   rotate: >-
     datasheet - this chassis mounts its cards HORIZONTALLY (see card-orientation), so each bay
     carries `rotate: 90` and the rotated footprint. OPEN, and flagged rather than asserted: rotate
@@ -480,12 +498,12 @@ views:
         - {id: pm-0, at: [13.51, 386.33], size: {w: 139.12, h: 44.45}, accepts: ['cisco/a9k-power-module@1'], group: power-modules, rel-pos: 0, default: cisco/a9k-power-module@1}
         - {id: pm-1, at: [152.63, 386.33], size: {w: 139.12, h: 44.45}, accepts: ['cisco/a9k-power-module@1'], group: power-modules, rel-pos: 1, default: cisco/a9k-power-module@1}
         - {id: pm-2, at: [291.75, 386.33], size: {w: 139.12, h: 44.45}, accepts: ['cisco/a9k-power-module@1'], group: power-modules, rel-pos: 2, default: cisco/a9k-power-module@1}
-        - {id: slot-5, at: [39.38, 107.23], size: {w: 395.70, h: 41.40}, rotate: 90, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 5, default: cisco/a9k-slot-cover@1}
-        - {id: slot-4, at: [39.38, 153.84], size: {w: 395.70, h: 41.40}, rotate: 90, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 4, default: cisco/a9k-slot-cover@1}
-        - {id: slot-3, at: [39.38, 200.44], size: {w: 395.70, h: 41.40}, rotate: 90, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 3, default: cisco/a9k-slot-cover@1}
-        - {id: slot-2, at: [39.38, 247.05], size: {w: 395.70, h: 41.40}, rotate: 90, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2, default: cisco/a9k-slot-cover@1}
-        - {id: slot-1, at: [39.38, 293.65], size: {w: 395.70, h: 41.40}, rotate: 90, accepts: ['cisco/a9k-rsp880-se@1', 'cisco/a9k-rsp880-tr@1', 'cisco/a9k-rsp880-lt-se@1', 'cisco/a9k-rsp880-lt-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1, default: cisco/a9k-slot-cover@1}
-        - {id: slot-0, at: [39.38, 340.26], size: {w: 395.70, h: 41.40}, rotate: 90, accepts: ['cisco/a9k-rsp880-se@1', 'cisco/a9k-rsp880-tr@1', 'cisco/a9k-rsp880-lt-se@1', 'cisco/a9k-rsp880-lt-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0, default: cisco/a9k-slot-cover@1}
+        - {id: slot-5, at: [60.94, 104.63], size: {w: 352.59, h: 46.605}, rotate: 90, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 5, default: cisco/a9k-slot-cover@1}
+        - {id: slot-4, at: [60.94, 151.235], size: {w: 352.59, h: 46.605}, rotate: 90, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 4, default: cisco/a9k-slot-cover@1}
+        - {id: slot-3, at: [60.94, 197.84], size: {w: 352.59, h: 46.605}, rotate: 90, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 3, default: cisco/a9k-slot-cover@1}
+        - {id: slot-2, at: [60.94, 244.445], size: {w: 352.59, h: 46.605}, rotate: 90, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2, default: cisco/a9k-slot-cover@1}
+        - {id: slot-1, at: [60.94, 291.05], size: {w: 352.59, h: 46.605}, rotate: 90, accepts: ['cisco/a9k-rsp880-se@1', 'cisco/a9k-rsp880-tr@1', 'cisco/a9k-rsp880-lt-se@1', 'cisco/a9k-rsp880-lt-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1, default: cisco/a9k-slot-cover@1}
+        - {id: slot-0, at: [60.94, 337.655], size: {w: 352.59, h: 46.605}, rotate: 90, accepts: ['cisco/a9k-rsp880-se@1', 'cisco/a9k-rsp880-tr@1', 'cisco/a9k-rsp880-lt-se@1', 'cisco/a9k-rsp880-lt-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0, default: cisco/a9k-slot-cover@1}
       placements:
         - {ref: cisco/a9k-fan-tray-door@1, id: fan-tray-door, at: [0, 33.66], group: doors, rel-pos: 0}
     regions:
@@ -551,6 +569,38 @@ gaps:
     disagree by about 3.7 mm until someone re-measures the master.
   wanted: a re-measurement of the 'A9K Power Module' stencil master, or a Cisco dimension for the
     version 1 power module
+- what: rsp880-width-cannot-fit-this-cage
+  scope: [slots]
+  reason: sources-disagree
+  note: >-
+    NINE CARDS SHARE THESE SIX SLOTS AND TWO FAMILIES DISAGREE BY 32.8 mm ON THE
+    ONE AXIS THAT HAS TO FIT ONE OPENING. The line cards and the blank filler are
+    395.7 mm; all four RSP-880 variants are 428.5. The measured cage opening is
+    352.59.
+    The line-card story is coherent: a9k-slot-cover's own art measures a PLATE of
+    362.24 inside a 395.7 envelope, so the plate covers the 352.59 opening with
+    4.8 mm of overlap per side and the ejector brackets account for the remaining
+    16.7 per side. Every number has a job.
+    The RSP-880's does not. 428.5 needs 37.96 mm of overlap per side to cover the
+    same opening, and a card centred on this cage reaches x 22.99 to 451.49 in a
+    444.5 mm chassis - 6.99 mm PAST the outer wall, which is visible in the 3D
+    view as the card's end standing proud of the side of the box.
+    WHERE 428.5 COMES FROM, AND WHY IT IS THE SUSPECT: the RSP-880 data sheet's
+    'Physical specifications' row. This library's own a9k-rsp880-se provenance
+    already records that NINE RSP AND RP MASTERS IN THE STENCIL ARE ONE DRAWING,
+    scaled to four different stated widths - 402.8, 428.5, 428.2 and 403.4 - so
+    "the drawing is generic across the family and cannot be all four sizes". The
+    cage, by contrast, is measured off this chassis's own master and independently
+    supported by Figure 19.
+    NOT RESOLVED HERE. Two numbers describing different things is the likeliest
+    reading - the same trap as a plate against an envelope - but nothing we hold
+    says WHICH thing 428.5 measures, and inventing a smaller one would be the
+    reconciliation this project keeps digging back out.
+  wanted: >-
+    a Cisco mechanical drawing of an RSP-880 faceplate, or one measurement across
+    a real card from ejector tip to ejector tip. Either settles it for all four
+    variants at once and for every chassis they go in.
+  blocks: []
 - what: slot-pitch-even-division-is-unconfirmed
   scope: [slots]
   reason: needs-drawing
