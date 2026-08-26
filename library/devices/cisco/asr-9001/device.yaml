@@ -93,6 +93,20 @@ provenance:
     f-type. Substituting one of those would name a connector Cisco does not. The
     holes are measured (about 4 mm, centred at y 68.0) and a gap records what is
     missing'
+  variants: 'the ASR 9001-S is a CONFIGURATION, not a second device, because the
+    rule in portfolio-taxonomy-design.md is that a new device.yaml is warranted
+    only when the sheet metal differs. It does not here: same chassis, same faceplate,
+    same four cages, with two ports and one bay disabled in software until A9K-9001-120G-LIC
+    is applied. The stencil having its own asr-9001-s-front master is not evidence
+    to the contrary - a marketing stencil drawing a variant separately says nothing
+    about the metal. What the configuration cannot express is recorded in the per-instance-config-attrs
+    gap'
+  fan-legend: 'REMOVED, do not re-add at chassis level. "ASR-9001 FAN"
+    and "STATUS" are printed on the FAN MODULE''s own faceplate and
+    cisco/asr-9001-fan already draws both inside its <g id="silkscreen">.
+    A chassis-level copy was both a duplicate and buried - it sat at
+    (414.5, 84.0), inside the fan-0 bay, so the module painted over it.
+    Text on a module''s faceplate is that module''s, not the chassis''s'
   leds: 'drawing - eight discrete indicators, which matches the guide''s callout
     ''Eight discrete LED indicators'' on Figure 13. Grouped as the stencil draws
     them: RSP FAIL and LC FAIL in the left column, CRIT / MAJ / MIN in the middle,
@@ -168,7 +182,6 @@ views:
       - {at: [146.5, 59.5], text: 'ON-OFF FOR ENTIRE SHELF', rotate: 90}
       - {at: [182.3, 64.0], text: '10MHz'}
       - {at: [195.05, 64.0], text: '1PPS'}
-      - {at: [414.5, 84.0], text: 'ASR-9001 FAN', for: fan-0}
       - {at: [340.0, 84.0], text: 'Cisco ASR-9001'}
       - {at: [166.1, 44.050000000000004], text: 'TOD', for: tod}
       - {at: [166.1, 60.1], text: 'SVC LAN', for: svc-lan}
@@ -249,7 +262,59 @@ views:
     panel:
       decor:
         - {at: [464.0, 0], size: [6.0, 88.2], fill: '#b0b2b4'}
+configurations:
+  asr-9001:
+    description: >-
+      The full ASR 9001. 120 Gbps fabric, four fixed 10 GE SFP+ ports and both
+      modular bays usable.
+    default: true
+    part-numbers:
+      ASR 9001 Router:
+        part: ASR-9001
+  asr-9001-s:
+    description: >-
+      The ASR 9001-S - THE SAME SHEET METAL, sold at half the capacity. 60 Gbps
+      instead of 120, one usable modular bay (BAY 0) instead of two, and two
+      usable fixed ports (SFP+ 0 and SFP+ 1) instead of four. BAY 1 and SFP+ 2
+      and 3 are physically present and identical - the cages are the same cages -
+      but disabled by default and dust-capped, and unlocked by applying the
+      A9K-9001-120G-LIC upgrade licence, after which the router must be reloaded.
+      NOTE WHAT THIS CONFIGURATION CANNOT SAY - see the per-instance-config-attrs
+      gap. It cannot mark SFP+ 2 and 3 as disabled, and it cannot carry the
+      60 Gbps figure, so both live in this sentence rather than in data.
+    part-numbers:
+      ASR 9001-S Router with 2 x 10 GE:
+        part: ASR-9001-S
+      Upgrade license for 120G Bandwidth:
+        part: A9K-9001-120G-LIC
 gaps:
+- what: per-instance-config-attrs
+  scope: [sfp-plus-2, sfp-plus-3]
+  reason: vendor-silent
+  note: >-
+    The ASR 9001-S is the same metal as the ASR 9001 with two of its four fixed
+    SFP+ ports disabled until a licence is applied. That is not a population
+    fact - the cages are physically present and identical - so `bays:` cannot
+    express it, and the ports are correctly drawn present in both configurations.
+    INVESTIGATED AND IT DOES NOT REACH: `component-attrs` is the closest
+    mechanism the format has, and it is keyed by component NAME rather than by
+    placement id. render.py computes `comp_name = ref.split("/")[-1].split("@")[0]`
+    and looks the overrides up by that, so `component-attrs: {sfp-ganged: ...}`
+    would mark all SIX std/sfp-ganged instances on this chassis - both CLUSTER
+    ports and all four SFP+ - when only two are disabled. A placement can carry
+    `attrs:` per instance but not per configuration; `component-attrs` is per
+    configuration but not per instance. The 9001-S needs both at once and
+    neither mechanism spans the gap. The same edge stops this configuration
+    carrying its own 60 Gbps fabric figure, since a configuration cannot
+    override device attrs at all.
+  wanted: >-
+    per-instance attrs in a configuration - `component-attrs` keyed by placement
+    id as well as by component name would do it - or a device-attrs override in
+    a configuration. This is a second instance of the shape recorded in
+    working/notes/config-scoped-placements.md, from a different vendor: the
+    format can say what OCCUPIES a bay per configuration, but not what is TRUE
+    of a part per configuration.
+  blocks: []
 - what: din-1-0-2-3-connector
   scope: [clk-10mhz, clk-1pps]
   reason: vendor-silent
