@@ -107,7 +107,14 @@ def build(dev, profile):
                                  "description": "10G management port (faceplate label; "
                                                 "not presented as a switch interface)"})
         for b in view_parts(view)["bays"]:
-            if b.get("group") in ("psus", "fans"):
+            # A FRU BAY IS ONE BECAUSE OF WHAT IT IS FOR, not because of what its
+            # group was called. This tested `group in ("psus", "fans")`, which
+            # worked only because every device exported so far happened to pick
+            # those two words - the library also says `cooling`, `power`,
+            # `power-modules` and `fan-trays` for the same thing, and the first
+            # Casa or Cisco chassis exported would have dropped its PSU and fan
+            # bays silently. `role` is the field that actually answers this.
+            if (dev_groups.get(b.get("group")) or {}).get("role") == "service":
                 bays.append({"name": b["id"].replace("psu-", "PSU ").replace("fan-", "Fan "),
                              "position": b["id"].rsplit("-", 1)[-1]})
 
