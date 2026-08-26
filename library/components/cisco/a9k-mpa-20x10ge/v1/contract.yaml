@@ -1,0 +1,526 @@
+format: 1
+kind: module
+name: a9k-mpa-20x10ge
+version: 1.0.0
+class: line-card
+profile: networking
+description: >-
+  Cisco 20-Port 10 Gigabit Ethernet Modular Port Adapter with SFP+. The densest MPA in
+  the family: twenty SFP+ ports as two double-stacked blocks of ten, each block five
+  positions along the card by two across, with the A/L lamps in the light strip running
+  between the two stacks. Seats in an A9K-MOD carrier; it is on the 400 Gigabyte
+  carrier's explicit supported list.
+size: {w: 33.66, h: 160.02}
+attrs:
+  model: 'A9K-MPA-20X10GE'
+  role: 'modular-port-adapter'
+  sfp-plus: 20
+  media: 'SFP+, 10 Gigabit Ethernet'
+  eol: 'none-announced'
+provenance:
+  size: >-
+    drawing - index.json's shapesheet for the MPA masters, 33.81 x 160.02 mm (the two
+    20-port masters read 33.66, a 0.15 mm difference that is below the drawing's own
+    accuracy). Corroborated by the chassis it goes in: the ASR 9001 front master draws
+    its two MPA openings at 162.56 x 37.80 mm, which is this envelope with 2.5 mm of
+    clearance along its length and 4.0 across - what a bay should give a module. NO
+    document in the intake gives an MPA's dimensions; the ASR 9001 data sheet lists the
+    family by port count and stops.
+  frame: >-
+    modelled PORTRAIT - x across the module's 33.8 mm thickness, y along its 160.0 mm
+    length - which is how most of these masters are drawn and how every other card in
+    this library is modelled. The ASR 9001 lays its two MPAs FLAT, so its bays rotate
+    the component rather than the component carrying two orientations. Note the stencil
+    is not consistent about this: A9K-MPA-1X40GE, -2X40GE and -8x10GE are drawn
+    landscape and the rest portrait, for one physical form factor - which the intake
+    notes flag as a reason to read the artwork rather than assume an orientation from
+    index.json's axis order.
+  ports: >-
+    install guide - 'The 20-Port 10-Gigabit Ethernet (GE) modular port adapter (MPA)
+    provides two 2x5 double-stacked cages for SFP+ Ethernet optical interface modules.'
+    The master draws exactly that: two blocks of 29.27 x 71.71 mm at y 4.77 and 84.30,
+    each holding five positions along the card on a 14.18 mm pitch and two across, at x
+    5.11 and 22.50. Twenty openings of 10.72 x 14.19 mm against std/sfp's 14.5 x 10.0 -
+    the same slight under-height every SFP cage in this stencil shows.
+  numbering: >-
+    drawing - THE MASTER NUMBERS ONLY THE FOUR END PORTS, and those four are enough. It
+    prints no numerals as text and none was found until the artwork was rendered and
+    looked at; they are outlined glyphs, four dark ink boxes outside the cage blocks at
+    the two ends of the card. Reading them: at the top, x 9.13 width 2.48 mm and x 28.63
+    width 1.84 mm; at the bottom, x 9.46 width 3.97 and x 26.46 width 3.95. The two
+    columns of cages sit at x 5.11 to 15.83 and 22.50 to 33.22, so one numeral stands
+    over each column at each end. THE WIDTHS SAY WHICH IS WHICH. At the top both are
+    single digits and the narrower - 1.84 against 2.48 - is the figure one, so the top
+    of the low-x column is 0 and the top of the high-x column is 1. At the bottom both
+    are double width, so they are 18 and 19, and the only assignment consistent with 0
+    and 1 above them is 18 under the 0 and 19 under the 1. That fixes the whole card:
+    the low-x column carries the EVEN ports and the high-x column the ODD, ascending
+    together down the length, 0-1 at the first position through 18-19 at the tenth. It
+    is the same scheme the A9K-MPA-20X1GE prints - that master numbers its ends 0, 1,
+    18, 19 as live text - which is the corroboration from a sibling that the reading is
+    right rather than merely self-consistent.
+  lamps: >-
+    drawing, and the shapes had to be looked at rather than measured. The middle strip
+    between the two stacks carries four small shapes per position and only two of them
+    are lamps: rendered at 26 px/mm the outer four are the cage LATCH TABS, two at each
+    end, and the middle two are a TRIANGLE PAIR pointing outward, one at each of the two
+    stacked ports. That is what makes the count come right - two per position, ten per
+    block, twenty for twenty ports - and it is what the guide describes: 'Each SFP+ cage
+    on the 20-Port 10GE MPA has an adjacent A/L (Active/Link) LED visible on the front
+    panel'. WHICH TRIANGLE BELONGS TO WHICH OF THE TWO STACKED PORTS is not established
+    here: both sit at the same across-card x within half a millimetre, and the
+    assignment follows the same positional convention as the numbering. If the numbering
+    is ever corrected the lamp pairing moves with it.
+  power: >-
+    NOT STATED. Table 35 of the Ethernet Line Card Installation Guide gives per-card
+    power for the modular-chassis line cards including the A9K-MOD carriers, but nothing
+    for the MPAs that go inside them. An MPA's draw is inside its carrier's, and the
+    carriers here say so.
+  carrier: >-
+    install guide - this MPA is named on the one explicit per-carrier list in the
+    intake: 'The 400 Gigabyte Modular Line Cards only support the following MPAs ...
+    20-Port 10-Gigabit Ethernet Modular Port Adapter (MPA) with SFP+'. A consumption-
+    model variant A9K-MPA-20x10GE-CM exists as a separate part number for the
+    A9K-MOD400-CM carrier and is not modelled - no master.
+  lifecycle: >-
+    searched - no end-of-life notice for this part number is in the intake.
+elements:
+  led-p0:
+    at: [17.0, 9.65]
+    size: [2.67, 1.95]
+    class: led
+    description: >-
+      the port's A/L (Active/Link) lamp. NO PER-CARD LED TABLE EXISTS for this MPA - the
+      guide gives one for the 20-port GE, the 2-, 4- and 8-port 10GE and both 40GE cards,
+      and none for this one - so the vocabulary here is the family's Table 33, 'Modular
+      Port Adapter LEDs', reduced to the three states its A/L rows name that have a
+      colour: off - port is administratively shut down; green on - link is up; and the
+      down state. Table 33 calls that down state RED where five of the six per-card tables
+      call it AMBER; amber is carried because the majority of the per-card tables in this
+      same family say so, and this is the one place in these seven MPAs where a state
+      colour is a judgement rather than a transcription. Table 33's fourth row, 'Blinking
+      ... The LED blinks green-amber-green', is a modulation of states already named and
+      is not a fourth state. This one is port 0's.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-p1:
+    at: [17.0, 12.96]
+    size: [2.67, 1.95]
+    class: led
+    description: >-
+      the port's A/L (Active/Link) lamp. NO PER-CARD LED TABLE EXISTS for this MPA - the
+      guide gives one for the 20-port GE, the 2-, 4- and 8-port 10GE and both 40GE cards,
+      and none for this one - so the vocabulary here is the family's Table 33, 'Modular
+      Port Adapter LEDs', reduced to the three states its A/L rows name that have a
+      colour: off - port is administratively shut down; green on - link is up; and the
+      down state. Table 33 calls that down state RED where five of the six per-card tables
+      call it AMBER; amber is carried because the majority of the per-card tables in this
+      same family say so, and this is the one place in these seven MPAs where a state
+      colour is a judgement rather than a transcription. Table 33's fourth row, 'Blinking
+      ... The LED blinks green-amber-green', is a modulation of states already named and
+      is not a fourth state. This one is port 1's.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-p2:
+    at: [17.0, 23.85]
+    size: [2.67, 1.95]
+    class: led
+    description: >-
+      the port's A/L (Active/Link) lamp. NO PER-CARD LED TABLE EXISTS for this MPA - the
+      guide gives one for the 20-port GE, the 2-, 4- and 8-port 10GE and both 40GE cards,
+      and none for this one - so the vocabulary here is the family's Table 33, 'Modular
+      Port Adapter LEDs', reduced to the three states its A/L rows name that have a
+      colour: off - port is administratively shut down; green on - link is up; and the
+      down state. Table 33 calls that down state RED where five of the six per-card tables
+      call it AMBER; amber is carried because the majority of the per-card tables in this
+      same family say so, and this is the one place in these seven MPAs where a state
+      colour is a judgement rather than a transcription. Table 33's fourth row, 'Blinking
+      ... The LED blinks green-amber-green', is a modulation of states already named and
+      is not a fourth state. This one is port 2's.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-p3:
+    at: [17.0, 27.16]
+    size: [2.67, 1.95]
+    class: led
+    description: >-
+      the port's A/L (Active/Link) lamp. NO PER-CARD LED TABLE EXISTS for this MPA - the
+      guide gives one for the 20-port GE, the 2-, 4- and 8-port 10GE and both 40GE cards,
+      and none for this one - so the vocabulary here is the family's Table 33, 'Modular
+      Port Adapter LEDs', reduced to the three states its A/L rows name that have a
+      colour: off - port is administratively shut down; green on - link is up; and the
+      down state. Table 33 calls that down state RED where five of the six per-card tables
+      call it AMBER; amber is carried because the majority of the per-card tables in this
+      same family say so, and this is the one place in these seven MPAs where a state
+      colour is a judgement rather than a transcription. Table 33's fourth row, 'Blinking
+      ... The LED blinks green-amber-green', is a modulation of states already named and
+      is not a fourth state. This one is port 3's.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-p4:
+    at: [17.0, 38.06]
+    size: [2.67, 1.95]
+    class: led
+    description: >-
+      the port's A/L (Active/Link) lamp. NO PER-CARD LED TABLE EXISTS for this MPA - the
+      guide gives one for the 20-port GE, the 2-, 4- and 8-port 10GE and both 40GE cards,
+      and none for this one - so the vocabulary here is the family's Table 33, 'Modular
+      Port Adapter LEDs', reduced to the three states its A/L rows name that have a
+      colour: off - port is administratively shut down; green on - link is up; and the
+      down state. Table 33 calls that down state RED where five of the six per-card tables
+      call it AMBER; amber is carried because the majority of the per-card tables in this
+      same family say so, and this is the one place in these seven MPAs where a state
+      colour is a judgement rather than a transcription. Table 33's fourth row, 'Blinking
+      ... The LED blinks green-amber-green', is a modulation of states already named and
+      is not a fourth state. This one is port 4's.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-p5:
+    at: [17.0, 41.36]
+    size: [2.67, 1.95]
+    class: led
+    description: >-
+      the port's A/L (Active/Link) lamp. NO PER-CARD LED TABLE EXISTS for this MPA - the
+      guide gives one for the 20-port GE, the 2-, 4- and 8-port 10GE and both 40GE cards,
+      and none for this one - so the vocabulary here is the family's Table 33, 'Modular
+      Port Adapter LEDs', reduced to the three states its A/L rows name that have a
+      colour: off - port is administratively shut down; green on - link is up; and the
+      down state. Table 33 calls that down state RED where five of the six per-card tables
+      call it AMBER; amber is carried because the majority of the per-card tables in this
+      same family say so, and this is the one place in these seven MPAs where a state
+      colour is a judgement rather than a transcription. Table 33's fourth row, 'Blinking
+      ... The LED blinks green-amber-green', is a modulation of states already named and
+      is not a fourth state. This one is port 5's.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-p6:
+    at: [17.0, 52.25]
+    size: [2.67, 1.95]
+    class: led
+    description: >-
+      the port's A/L (Active/Link) lamp. NO PER-CARD LED TABLE EXISTS for this MPA - the
+      guide gives one for the 20-port GE, the 2-, 4- and 8-port 10GE and both 40GE cards,
+      and none for this one - so the vocabulary here is the family's Table 33, 'Modular
+      Port Adapter LEDs', reduced to the three states its A/L rows name that have a
+      colour: off - port is administratively shut down; green on - link is up; and the
+      down state. Table 33 calls that down state RED where five of the six per-card tables
+      call it AMBER; amber is carried because the majority of the per-card tables in this
+      same family say so, and this is the one place in these seven MPAs where a state
+      colour is a judgement rather than a transcription. Table 33's fourth row, 'Blinking
+      ... The LED blinks green-amber-green', is a modulation of states already named and
+      is not a fourth state. This one is port 6's.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-p7:
+    at: [17.0, 55.57]
+    size: [2.67, 1.95]
+    class: led
+    description: >-
+      the port's A/L (Active/Link) lamp. NO PER-CARD LED TABLE EXISTS for this MPA - the
+      guide gives one for the 20-port GE, the 2-, 4- and 8-port 10GE and both 40GE cards,
+      and none for this one - so the vocabulary here is the family's Table 33, 'Modular
+      Port Adapter LEDs', reduced to the three states its A/L rows name that have a
+      colour: off - port is administratively shut down; green on - link is up; and the
+      down state. Table 33 calls that down state RED where five of the six per-card tables
+      call it AMBER; amber is carried because the majority of the per-card tables in this
+      same family say so, and this is the one place in these seven MPAs where a state
+      colour is a judgement rather than a transcription. Table 33's fourth row, 'Blinking
+      ... The LED blinks green-amber-green', is a modulation of states already named and
+      is not a fourth state. This one is port 7's.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-p8:
+    at: [17.0, 66.45]
+    size: [2.67, 1.95]
+    class: led
+    description: >-
+      the port's A/L (Active/Link) lamp. NO PER-CARD LED TABLE EXISTS for this MPA - the
+      guide gives one for the 20-port GE, the 2-, 4- and 8-port 10GE and both 40GE cards,
+      and none for this one - so the vocabulary here is the family's Table 33, 'Modular
+      Port Adapter LEDs', reduced to the three states its A/L rows name that have a
+      colour: off - port is administratively shut down; green on - link is up; and the
+      down state. Table 33 calls that down state RED where five of the six per-card tables
+      call it AMBER; amber is carried because the majority of the per-card tables in this
+      same family say so, and this is the one place in these seven MPAs where a state
+      colour is a judgement rather than a transcription. Table 33's fourth row, 'Blinking
+      ... The LED blinks green-amber-green', is a modulation of states already named and
+      is not a fourth state. This one is port 8's.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-p9:
+    at: [17.0, 69.76]
+    size: [2.67, 1.95]
+    class: led
+    description: >-
+      the port's A/L (Active/Link) lamp. NO PER-CARD LED TABLE EXISTS for this MPA - the
+      guide gives one for the 20-port GE, the 2-, 4- and 8-port 10GE and both 40GE cards,
+      and none for this one - so the vocabulary here is the family's Table 33, 'Modular
+      Port Adapter LEDs', reduced to the three states its A/L rows name that have a
+      colour: off - port is administratively shut down; green on - link is up; and the
+      down state. Table 33 calls that down state RED where five of the six per-card tables
+      call it AMBER; amber is carried because the majority of the per-card tables in this
+      same family say so, and this is the one place in these seven MPAs where a state
+      colour is a judgement rather than a transcription. Table 33's fourth row, 'Blinking
+      ... The LED blinks green-amber-green', is a modulation of states already named and
+      is not a fourth state. This one is port 9's.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-p10:
+    at: [17.0, 89.17]
+    size: [2.67, 1.95]
+    class: led
+    description: >-
+      the port's A/L (Active/Link) lamp. NO PER-CARD LED TABLE EXISTS for this MPA - the
+      guide gives one for the 20-port GE, the 2-, 4- and 8-port 10GE and both 40GE cards,
+      and none for this one - so the vocabulary here is the family's Table 33, 'Modular
+      Port Adapter LEDs', reduced to the three states its A/L rows name that have a
+      colour: off - port is administratively shut down; green on - link is up; and the
+      down state. Table 33 calls that down state RED where five of the six per-card tables
+      call it AMBER; amber is carried because the majority of the per-card tables in this
+      same family say so, and this is the one place in these seven MPAs where a state
+      colour is a judgement rather than a transcription. Table 33's fourth row, 'Blinking
+      ... The LED blinks green-amber-green', is a modulation of states already named and
+      is not a fourth state. This one is port 10's.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-p11:
+    at: [17.0, 92.48]
+    size: [2.67, 1.95]
+    class: led
+    description: >-
+      the port's A/L (Active/Link) lamp. NO PER-CARD LED TABLE EXISTS for this MPA - the
+      guide gives one for the 20-port GE, the 2-, 4- and 8-port 10GE and both 40GE cards,
+      and none for this one - so the vocabulary here is the family's Table 33, 'Modular
+      Port Adapter LEDs', reduced to the three states its A/L rows name that have a
+      colour: off - port is administratively shut down; green on - link is up; and the
+      down state. Table 33 calls that down state RED where five of the six per-card tables
+      call it AMBER; amber is carried because the majority of the per-card tables in this
+      same family say so, and this is the one place in these seven MPAs where a state
+      colour is a judgement rather than a transcription. Table 33's fourth row, 'Blinking
+      ... The LED blinks green-amber-green', is a modulation of states already named and
+      is not a fourth state. This one is port 11's.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-p12:
+    at: [17.0, 103.38]
+    size: [2.67, 1.95]
+    class: led
+    description: >-
+      the port's A/L (Active/Link) lamp. NO PER-CARD LED TABLE EXISTS for this MPA - the
+      guide gives one for the 20-port GE, the 2-, 4- and 8-port 10GE and both 40GE cards,
+      and none for this one - so the vocabulary here is the family's Table 33, 'Modular
+      Port Adapter LEDs', reduced to the three states its A/L rows name that have a
+      colour: off - port is administratively shut down; green on - link is up; and the
+      down state. Table 33 calls that down state RED where five of the six per-card tables
+      call it AMBER; amber is carried because the majority of the per-card tables in this
+      same family say so, and this is the one place in these seven MPAs where a state
+      colour is a judgement rather than a transcription. Table 33's fourth row, 'Blinking
+      ... The LED blinks green-amber-green', is a modulation of states already named and
+      is not a fourth state. This one is port 12's.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-p13:
+    at: [17.0, 106.68]
+    size: [2.67, 1.95]
+    class: led
+    description: >-
+      the port's A/L (Active/Link) lamp. NO PER-CARD LED TABLE EXISTS for this MPA - the
+      guide gives one for the 20-port GE, the 2-, 4- and 8-port 10GE and both 40GE cards,
+      and none for this one - so the vocabulary here is the family's Table 33, 'Modular
+      Port Adapter LEDs', reduced to the three states its A/L rows name that have a
+      colour: off - port is administratively shut down; green on - link is up; and the
+      down state. Table 33 calls that down state RED where five of the six per-card tables
+      call it AMBER; amber is carried because the majority of the per-card tables in this
+      same family say so, and this is the one place in these seven MPAs where a state
+      colour is a judgement rather than a transcription. Table 33's fourth row, 'Blinking
+      ... The LED blinks green-amber-green', is a modulation of states already named and
+      is not a fourth state. This one is port 13's.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-p14:
+    at: [17.0, 117.58]
+    size: [2.67, 1.95]
+    class: led
+    description: >-
+      the port's A/L (Active/Link) lamp. NO PER-CARD LED TABLE EXISTS for this MPA - the
+      guide gives one for the 20-port GE, the 2-, 4- and 8-port 10GE and both 40GE cards,
+      and none for this one - so the vocabulary here is the family's Table 33, 'Modular
+      Port Adapter LEDs', reduced to the three states its A/L rows name that have a
+      colour: off - port is administratively shut down; green on - link is up; and the
+      down state. Table 33 calls that down state RED where five of the six per-card tables
+      call it AMBER; amber is carried because the majority of the per-card tables in this
+      same family say so, and this is the one place in these seven MPAs where a state
+      colour is a judgement rather than a transcription. Table 33's fourth row, 'Blinking
+      ... The LED blinks green-amber-green', is a modulation of states already named and
+      is not a fourth state. This one is port 14's.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-p15:
+    at: [17.0, 120.89]
+    size: [2.67, 1.95]
+    class: led
+    description: >-
+      the port's A/L (Active/Link) lamp. NO PER-CARD LED TABLE EXISTS for this MPA - the
+      guide gives one for the 20-port GE, the 2-, 4- and 8-port 10GE and both 40GE cards,
+      and none for this one - so the vocabulary here is the family's Table 33, 'Modular
+      Port Adapter LEDs', reduced to the three states its A/L rows name that have a
+      colour: off - port is administratively shut down; green on - link is up; and the
+      down state. Table 33 calls that down state RED where five of the six per-card tables
+      call it AMBER; amber is carried because the majority of the per-card tables in this
+      same family say so, and this is the one place in these seven MPAs where a state
+      colour is a judgement rather than a transcription. Table 33's fourth row, 'Blinking
+      ... The LED blinks green-amber-green', is a modulation of states already named and
+      is not a fourth state. This one is port 15's.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-p16:
+    at: [17.0, 131.77]
+    size: [2.67, 1.95]
+    class: led
+    description: >-
+      the port's A/L (Active/Link) lamp. NO PER-CARD LED TABLE EXISTS for this MPA - the
+      guide gives one for the 20-port GE, the 2-, 4- and 8-port 10GE and both 40GE cards,
+      and none for this one - so the vocabulary here is the family's Table 33, 'Modular
+      Port Adapter LEDs', reduced to the three states its A/L rows name that have a
+      colour: off - port is administratively shut down; green on - link is up; and the
+      down state. Table 33 calls that down state RED where five of the six per-card tables
+      call it AMBER; amber is carried because the majority of the per-card tables in this
+      same family say so, and this is the one place in these seven MPAs where a state
+      colour is a judgement rather than a transcription. Table 33's fourth row, 'Blinking
+      ... The LED blinks green-amber-green', is a modulation of states already named and
+      is not a fourth state. This one is port 16's.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-p17:
+    at: [17.0, 135.09]
+    size: [2.67, 1.95]
+    class: led
+    description: >-
+      the port's A/L (Active/Link) lamp. NO PER-CARD LED TABLE EXISTS for this MPA - the
+      guide gives one for the 20-port GE, the 2-, 4- and 8-port 10GE and both 40GE cards,
+      and none for this one - so the vocabulary here is the family's Table 33, 'Modular
+      Port Adapter LEDs', reduced to the three states its A/L rows name that have a
+      colour: off - port is administratively shut down; green on - link is up; and the
+      down state. Table 33 calls that down state RED where five of the six per-card tables
+      call it AMBER; amber is carried because the majority of the per-card tables in this
+      same family say so, and this is the one place in these seven MPAs where a state
+      colour is a judgement rather than a transcription. Table 33's fourth row, 'Blinking
+      ... The LED blinks green-amber-green', is a modulation of states already named and
+      is not a fourth state. This one is port 17's.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-p18:
+    at: [17.0, 145.98]
+    size: [2.67, 1.95]
+    class: led
+    description: >-
+      the port's A/L (Active/Link) lamp. NO PER-CARD LED TABLE EXISTS for this MPA - the
+      guide gives one for the 20-port GE, the 2-, 4- and 8-port 10GE and both 40GE cards,
+      and none for this one - so the vocabulary here is the family's Table 33, 'Modular
+      Port Adapter LEDs', reduced to the three states its A/L rows name that have a
+      colour: off - port is administratively shut down; green on - link is up; and the
+      down state. Table 33 calls that down state RED where five of the six per-card tables
+      call it AMBER; amber is carried because the majority of the per-card tables in this
+      same family say so, and this is the one place in these seven MPAs where a state
+      colour is a judgement rather than a transcription. Table 33's fourth row, 'Blinking
+      ... The LED blinks green-amber-green', is a modulation of states already named and
+      is not a fourth state. This one is port 18's.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-p19:
+    at: [17.0, 149.28]
+    size: [2.67, 1.95]
+    class: led
+    description: >-
+      the port's A/L (Active/Link) lamp. NO PER-CARD LED TABLE EXISTS for this MPA - the
+      guide gives one for the 20-port GE, the 2-, 4- and 8-port 10GE and both 40GE cards,
+      and none for this one - so the vocabulary here is the family's Table 33, 'Modular
+      Port Adapter LEDs', reduced to the three states its A/L rows name that have a
+      colour: off - port is administratively shut down; green on - link is up; and the
+      down state. Table 33 calls that down state RED where five of the six per-card tables
+      call it AMBER; amber is carried because the majority of the per-card tables in this
+      same family say so, and this is the one place in these seven MPAs where a state
+      colour is a judgement rather than a transcription. Table 33's fourth row, 'Blinking
+      ... The LED blinks green-amber-green', is a modulation of states already named and
+      is not a fourth state. This one is port 19's.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  status:
+    at: [14.5, 76.0]
+    size: [2.6, 2.6]
+    class: led
+    description: >-
+      the MPA's STATUS lamp. Table 33, 'Modular Port Adapter LEDs': off - modular port
+      adapter power is not enabled; red on - has encountered an hardware error; amber on -
+      power is on and there is activity; green on - ready and operational, there is no
+      activity. Four states, transcribed. Note this is the FAMILY table and its STATUS
+      rows are not contradicted by any per-card table, unlike its A/L rows.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+relief:
+  wall: '#4a4f55'
+parts:
+  - {ref: std/sfp@1, id: p0, at: [3.22, 7.29], rotate: 90}
+  - {ref: std/sfp@1, id: p1, at: [20.61, 7.29], rotate: 90}
+  - {ref: std/sfp@1, id: p2, at: [3.22, 21.48], rotate: 90}
+  - {ref: std/sfp@1, id: p3, at: [20.61, 21.48], rotate: 90}
+  - {ref: std/sfp@1, id: p4, at: [3.22, 35.66], rotate: 90}
+  - {ref: std/sfp@1, id: p5, at: [20.61, 35.66], rotate: 90}
+  - {ref: std/sfp@1, id: p6, at: [3.22, 49.84], rotate: 90}
+  - {ref: std/sfp@1, id: p7, at: [20.61, 49.84], rotate: 90}
+  - {ref: std/sfp@1, id: p8, at: [3.22, 64.03], rotate: 90}
+  - {ref: std/sfp@1, id: p9, at: [20.61, 64.03], rotate: 90}
+  - {ref: std/sfp@1, id: p10, at: [3.22, 86.81], rotate: 90}
+  - {ref: std/sfp@1, id: p11, at: [20.61, 86.81], rotate: 90}
+  - {ref: std/sfp@1, id: p12, at: [3.22, 101.0], rotate: 90}
+  - {ref: std/sfp@1, id: p13, at: [20.61, 101.0], rotate: 90}
+  - {ref: std/sfp@1, id: p14, at: [3.22, 115.19], rotate: 90}
+  - {ref: std/sfp@1, id: p15, at: [20.61, 115.19], rotate: 90}
+  - {ref: std/sfp@1, id: p16, at: [3.22, 129.38], rotate: 90}
+  - {ref: std/sfp@1, id: p17, at: [20.61, 129.38], rotate: 90}
+  - {ref: std/sfp@1, id: p18, at: [3.22, 143.56], rotate: 90}
+  - {ref: std/sfp@1, id: p19, at: [20.61, 143.56], rotate: 90}
+skins: [default]
