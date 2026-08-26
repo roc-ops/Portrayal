@@ -209,8 +209,15 @@ provenance:
     matches the four bays - the 9006 and 9010 rows say "six power modules" against four and eight
     bays respectively, so Cisco is not consistent about that phrase
   no-chassis-power-figure: >-
-    NOTE - Cisco publishes no chassis-level draw for any ASR 9000; Table 14 says only to use the
-    Cisco Power Calculator. There is deliberately no power-max-w here
+    NOTE, and NARROWED. The current Table 14 says only to use the Cisco Power Calculator, so there
+    is no chassis-level figure for THIS chassis in any document held and the module total here is a
+    floor. That is narrower than what an earlier revision of this file claimed: it said Cisco
+    publishes no chassis draw for ANY ASR 9000, and that is false. The older Ethernet Line Card
+    Installation Guide (asr9kELCIGbk.pdf, OL-17500-09) states "Power Dissipation 7600 W maximum
+    (Cisco ASR 9010 Router)" and 4556 W maximum for the ASR 9006 in its Table A-1 - a table the
+    current revision deleted. Those two chassis predate this one and no equivalent figure for this
+    model appears in either revision, so this is the vendor being silent about this chassis rather
+    than about the family
   lifecycle: >-
     datasheet - searched. Bulletin EOL9675 covers the ASR 9006 and 9010 version 1 power bundles
     and names no ASR 9904 PID, and no end-of-sale notice for this chassis was found

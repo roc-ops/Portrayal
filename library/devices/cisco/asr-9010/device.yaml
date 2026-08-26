@@ -189,6 +189,15 @@ provenance:
     So at least one of those four numbers measures something different from the others - most
     likely the RSP-880's 1.81 in, which may be taken over a lever rather than at the seating width.
     The slots are sized to the published widths and the shortfall is recorded rather than absorbed
+  two-power-entries-existed-briefly: >-
+    RECORDED because it is the failure this file already names one entry above. When
+    chassis-power-figure was added to correct the claim, the old no-chassis-power-figure entry was
+    NOT removed, so for one commit this file asserted a 7600 W maximum and, forty lines later, that
+    Cisco publishes no such figure. Both in the same provenance block. That is exactly
+    "a correction is not done when the geometry moves" applied to prose rather than coordinates,
+    made by the person who wrote the rule, about an hour after writing it. The general form is
+    worth more than either instance: WHEN YOU ADD A CORRECTED CLAIM, DELETE THE ONE IT REPLACES -
+    an addition is not a correction, and nothing in lint compares two sentences in one file
   card-orientation: >-
     datasheet - stated directly, and it had been an inference until now. The Overview and
     Reference Guide's "Chassis Slots" section (b-asr9k-overview-reference-guide.pdf p17) names
@@ -292,9 +301,6 @@ provenance:
     footnoted as excluding cards, power modules, fan trays, filter and accessories, and "Chassis:
     fully configured using all card slots and six power modules - 375 pounds (170.5 kg)".
     chassis.weight-kg carries the bare 67.81 because that is the empty cage this manifest draws
-  no-chassis-power-figure: >-
-    NOTE - Cisco publishes no chassis-level draw for any ASR 9000. Table 14's "Power Dissipation"
-    row says only to use the Cisco Power Calculator. So there is deliberately no power-max-w here
   lifecycle: >-
     datasheet - searched. Cisco bulletin EOL9675 (Amended) retires the ASR-9010-AC and ASR-9010-DC
     VERSION 1 POWER BUNDLE PIDs, not the chassis: "The Cisco ASR 9006 and ASR 9010 chassis continue
