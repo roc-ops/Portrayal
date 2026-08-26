@@ -12,6 +12,34 @@ description: MCX coaxial panel jack (IEC 61169-36) - snap-on micro coax, the
 size: {w: 4.95, h: 4.50}
 attrs: {media: coax-mcx}
 provenance:
+  variant-is-front-mount-and-at-least-one-vendor-is-not: >-
+    THE 2.0 IS TRUE OF THIS VARIANT AND IS NOT TRUE OF EVERY MCX. It is read off
+    a FRONT-MOUNT bulkhead jack, whose flange sits on the front of the panel -
+    the sheet is named in `barrel` above and the registry entry says
+    'bulkhead front-mount panel hole' in as many words. This part is not wrong;
+    it is specific, and the specificity was not stated where a reader would meet
+    it.
+    THE CASA CARDS THAT COMPOSE IT USE A VARIANT THAT DOES NOT PROTRUDE. The
+    owner, looking at the hardware: the MCX connectors on the 6+12 I/O cards are
+    RECESSED INTO the faceplate and do not stick out, where the F fittings on the
+    US and DS I/O cards do. Figure 1-12 of the C40G guide shows both in one
+    image - every F port a hex nut with concentric rings and a shadow, every MCX
+    port on the neighbouring UPS IO 32 a flat dark circle with no body at all.
+    So all five users of this part - casa/io-6p12, io-6p12-sw, io-6p12-io2,
+    io-6p12-sw-io2 and ups-32x4 - draw about 774 barrels standing 2.0 proud that
+    the hardware does not stand.
+    NOTHING IS CHANGED HERE, DELIBERATELY. Flattening this part would make it
+    wrong about the jack it documents and would silently re-point every future
+    user at a shape nobody measured. What is missing is the Casa variant: a part
+    number, or a Casa mechanical drawing, or one oblique photograph with a rule.
+    Until then the mismatch is recorded on the Casa contracts where it applies
+    rather than corrected here, and the direction is known - the error is
+    PROUD-WHEN-IT-SHOULD-NOT-BE, not an unknown sign.
+    Portrayal also has no way to express the recess itself: `sink` is the right
+    word and is in the schema, but the extractor reads it only inside a node
+    already carrying a depth, and `relief.cavity` on a module would make the
+    whole card a cavity. That mechanism is not being built ahead of a number to
+    put in it.
   size: standard - registry key `mcx`, from the MOUNTING HOLE inset of the
     Radiall R113.553.000 technical data sheet (MCX bulkhead jack receptacle,
     front mount, cylindrical contact; issue 9841B04). Bore dia 5.00/4.90, across
