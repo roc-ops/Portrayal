@@ -27,6 +27,9 @@ export const esc = s => String(s ?? '').replace(/[&<>"]/g,
 export const SHELL_CSS = `
   :root { --bg:#16181b; --panel:#1c2024; --line:#2b3035; --ink:#d7dbdf; --dim:#8d939a;
           --accent:#4c9aff; --warn:#f59e0b;
+          --control:#23272c; --control-line:#3a4046; --control-hover:#2c3137;
+          --on-bg:#2f4a6d; --on-ink:#eaf1fb; --stage:#101214; --sel-ink:#fff;
+          --kid-line:#262b30;
           /* selection colour. Deliberately NOT --accent: the halo has to stand out
              against the faceplate it is drawn on, and a chassis can be any colour,
              so this is user-settable and remembered. */
@@ -37,14 +40,14 @@ export const SHELL_CSS = `
   header { display:flex; gap:0.7rem; align-items:center; flex-wrap:wrap;
            padding:0.55rem 0.9rem; border-bottom:1px solid var(--line); background:var(--panel); }
   header h1 { font-size:0.86rem; margin:0 0.5rem 0 0; font-weight:600; letter-spacing:0.02em; }
-  select, button, input { font:inherit; font-size:0.78rem; background:#23272c; color:var(--ink);
-                   border:1px solid #3a4046; border-radius:6px; padding:0.26rem 0.5rem; }
+  select, button, input { font:inherit; font-size:0.78rem; background:var(--control); color:var(--ink);
+                   border:1px solid var(--control-line); border-radius:6px; padding:0.26rem 0.5rem; }
   button { cursor:pointer; }
-  button:hover { background:#2c3137; }
-  button.on { background:#2f4a6d; border-color:#4c9aff; color:#eaf1fb; }
+  button:hover { background:var(--control-hover); }
+  button.on { background:var(--on-bg); border-color:var(--accent); color:var(--on-ink); }
   label.f { font-size:0.72rem; color:var(--dim); display:flex; gap:0.32rem; align-items:center; }
   main { flex:1; display:flex; min-height:0; }
-  #stage { flex:1; position:relative; overflow:hidden; background:#101214; min-width:0; }
+  #stage { flex:1; position:relative; overflow:hidden; background:var(--stage); min-width:0; }
   /* the SVG lives in its own host so a page can put another stage - a 3D canvas -
      beside it and swap which one is showing without the two fighting over
      pointer events or over #stage's children */
@@ -60,8 +63,8 @@ export const SHELL_CSS = `
   #tree { flex:1; overflow:auto; padding:0.4rem 0.2rem 1rem; }
   .node { display:flex; align-items:center; gap:0.3rem; padding:0.12rem 0.5rem;
           font-size:0.76rem; cursor:pointer; border-radius:4px; white-space:nowrap; }
-  .node:hover { background:#23272c; }
-  .node.sel { background:var(--hl); color:#fff; }
+  .node:hover { background:var(--control); }
+  .node.sel { background:var(--hl); color:var(--sel-ink); }
   .node.grp { color:var(--dim); text-transform:uppercase; font-size:0.68rem;
               letter-spacing:0.05em; margin-top:0.25rem; }
   .node.grp .cls { text-transform:none; letter-spacing:0; }
@@ -77,7 +80,7 @@ export const SHELL_CSS = `
   /* a target in another view: the row cannot nest under it, so it says it */
   .node .xref { color:var(--dim); font-size:0.68rem; padding-left:0.5rem;
             white-space:nowrap; }
-  .kids { margin-left:0.72rem; border-left:1px solid #262b30; }
+  .kids { margin-left:0.72rem; border-left:1px solid var(--kid-line); }
   .kids.hid { display:none; }
   /* the About panel is long, and the tree above it must not be squeezed to a
      sliver by it - so the inspector scrolls in its own right */
