@@ -22,10 +22,16 @@ provenance:
   rear-slots: photograph - a C40G rear shows plain 6+12 I/O in slots 0 and 5, the 6+12 SW I/O in
     slot 4, and SMM-SW-BDM B and A in 3 and 2. Slot 1 takes the LC-BDM-SWITCH that protects, per
     the 3+1 scheme
+  slot-compatibility: datasheet - the C40G data sheet counts the chassis in
+    its own words -
+    "6RU, 6 slot chassis (4 subscriber slots, 2 management module slots)", and its
+    ordering table lists SMM-300-GM. front-2 and front-3 are the two management
+    slots and take the SMM generations; the other four are the subscriber slots
+    and take the CSC and the DQM/DCU line cards, which the CSC data sheet confirms
+    at "The C40G can house 4 CSCs for a maximum of 32 ports". Defaults unchanged
 attrs:
   power:
-    power-max-w: < 1800 W (nominal, spec table); the same datasheet's highlights
-      bullet says 1.8 kW per fully loaded chassis
+    power-max-w: '1800'
     power-envelope: fully-configured
   other:
     redundancy: 3+1 with BDM (slot 1 protects, slot 4 active); classic DOCSIS protects per side at 1 and
@@ -62,12 +68,12 @@ views:
       - {at: [20, 31.0], text: '5', font-size: 11, anchor: middle, fill: '#231f20'}
     components:
       bays:
-        - {id: front-0, at: [42.0, 164.35], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1], default: casa/bdm@1, group: front-slots, rel-pos: 0}
-        - {id: front-1, at: [42.0, 133.88], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1], default: casa/bdm@1, group: front-slots, rel-pos: 1}
-        - {id: front-2, at: [42.0, 103.41], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-8x10g@1], default: casa/smm-8x10g@1, group: front-slots, rel-pos: 2}
-        - {id: front-3, at: [42.0, 72.94], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-8x10g@1], default: casa/smm-8x10g@1, group: front-slots, rel-pos: 3}
-        - {id: front-4, at: [42.0, 42.47], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1], default: casa/bdm@1, group: front-slots, rel-pos: 4}
-        - {id: front-5, at: [42.0, 12.0], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1], default: casa/bdm@1, group: front-slots, rel-pos: 5}
+        - {id: front-0, at: [42.0, 164.35], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1, casa/csc-8x10g@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1], default: casa/bdm@1, group: front-slots, rel-pos: 0}
+        - {id: front-1, at: [42.0, 133.88], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1, casa/csc-8x10g@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1], default: casa/bdm@1, group: front-slots, rel-pos: 1}
+        - {id: front-2, at: [42.0, 103.41], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-8x10g@1, casa/smm-2x10g@1, casa/smm-300g@1], default: casa/smm-8x10g@1, group: front-slots, rel-pos: 2}
+        - {id: front-3, at: [42.0, 72.94], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-8x10g@1, casa/smm-2x10g@1, casa/smm-300g@1], default: casa/smm-8x10g@1, group: front-slots, rel-pos: 3}
+        - {id: front-4, at: [42.0, 42.47], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1, casa/csc-8x10g@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1], default: casa/bdm@1, group: front-slots, rel-pos: 4}
+        - {id: front-5, at: [42.0, 12.0], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1, casa/csc-8x10g@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1], default: casa/bdm@1, group: front-slots, rel-pos: 5}
   rear:
     size:
       w: 432.95

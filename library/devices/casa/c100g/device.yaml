@@ -60,13 +60,24 @@ provenance:
     confirmed 2026-08-25 that they are NOT printed, so they are regions too. PEM A and PEM B
     stay in silkscreen: they were not part of that question and nothing says they are absent
     from the metal'
+  slot-compatibility: drawing - which front slots take which card. The install
+    guide says the SMM pair "supports full redundancy between chassis slots 6 and
+    7" and that the SMM300G "installs in the dedicated active and standby slots",
+    so front-6 and front-7 accept the three SMM generations and nothing else. That
+    leaves twelve subscriber slots, and the CSC8x10G data sheet counts them
+    independently - "The C100G is 13 RU and can house 12 CSCs for a maximum of 96
+    ports" - so the twelve accept the CSC and the DQM/DCU line cards. The bays'
+    defaults are unchanged; this widens what each is declared to take
 attrs:
   physical:
     weight: 132 lb / 61.23 kg fully loaded
   power:
-    power-max-w: < 4000 W (nominal, spec table); the same datasheet's highlights
-      bullet says 3.6 kW per fully loaded chassis
+    power-max-w: '3600'
     power-envelope: fully-configured
+    ac-input-provisioning: 3600 W across three 120 VAC inputs (4800 W over four
+      recommended), or 4000 W across two 240 VAC inputs. This is SUPPLY to be
+      provisioned, not draw - the 4000 W is what two 240 V feeds come to, and is
+      not a consumption figure
     psu-dc-input: -42 to -60 VDC, 20 A nominal per feed at -48 VDC
 chassis:
   width: 432.95
@@ -140,20 +151,20 @@ views:
       - {at: [216.475, 464], text: FILTER, font-size: 8, fill: '#d7dbdf', anchor: middle}
     components:
       bays:
-        - {id: front-0, at: [3.17, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1], group: front-slots, rel-pos: 0, default: null}
-        - {id: front-1, at: [33.64, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1], group: front-slots, rel-pos: 1, default: null}
-        - {id: front-2, at: [64.11, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1], group: front-slots, rel-pos: 2, default: null}
-        - {id: front-3, at: [94.58, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1], group: front-slots, rel-pos: 3, default: null}
-        - {id: front-4, at: [125.05, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1], group: front-slots, rel-pos: 4, default: null}
-        - {id: front-5, at: [155.53, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1], group: front-slots, rel-pos: 5, default: null}
-        - {id: front-6, at: [186.0, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/smm-8x10g@1], group: front-slots, rel-pos: 6, default: casa/smm-8x10g@1}
-        - {id: front-7, at: [216.47, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/smm-8x10g@1], group: front-slots, rel-pos: 7, default: casa/smm-8x10g@1}
-        - {id: front-8, at: [246.94, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1], group: front-slots, rel-pos: 8, default: null}
-        - {id: front-9, at: [277.41, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1], group: front-slots, rel-pos: 9, default: null}
-        - {id: front-10, at: [307.88, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1], group: front-slots, rel-pos: 10, default: null}
-        - {id: front-11, at: [338.34, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1], group: front-slots, rel-pos: 11, default: null}
-        - {id: front-12, at: [368.81, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1], group: front-slots, rel-pos: 12, default: null}
-        - {id: front-13, at: [399.29, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1], group: front-slots, rel-pos: 13, default: null}
+        - {id: front-0, at: [3.17, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1, casa/csc-8x10g@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1], group: front-slots, rel-pos: 0, default: null}
+        - {id: front-1, at: [33.64, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1, casa/csc-8x10g@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1], group: front-slots, rel-pos: 1, default: null}
+        - {id: front-2, at: [64.11, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1, casa/csc-8x10g@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1], group: front-slots, rel-pos: 2, default: null}
+        - {id: front-3, at: [94.58, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1, casa/csc-8x10g@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1], group: front-slots, rel-pos: 3, default: null}
+        - {id: front-4, at: [125.05, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1, casa/csc-8x10g@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1], group: front-slots, rel-pos: 4, default: null}
+        - {id: front-5, at: [155.53, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1, casa/csc-8x10g@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1], group: front-slots, rel-pos: 5, default: null}
+        - {id: front-6, at: [186.0, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/smm-8x10g@1, casa/smm-2x10g@1, casa/smm-300g@1], group: front-slots, rel-pos: 6, default: casa/smm-8x10g@1}
+        - {id: front-7, at: [216.47, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/smm-8x10g@1, casa/smm-2x10g@1, casa/smm-300g@1], group: front-slots, rel-pos: 7, default: casa/smm-8x10g@1}
+        - {id: front-8, at: [246.94, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1, casa/csc-8x10g@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1], group: front-slots, rel-pos: 8, default: null}
+        - {id: front-9, at: [277.41, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1, casa/csc-8x10g@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1], group: front-slots, rel-pos: 9, default: null}
+        - {id: front-10, at: [307.88, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1, casa/csc-8x10g@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1], group: front-slots, rel-pos: 10, default: null}
+        - {id: front-11, at: [338.34, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1, casa/csc-8x10g@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1], group: front-slots, rel-pos: 11, default: null}
+        - {id: front-12, at: [368.81, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1, casa/csc-8x10g@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1], group: front-slots, rel-pos: 12, default: null}
+        - {id: front-13, at: [399.29, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1, casa/csc-8x10g@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1], group: front-slots, rel-pos: 13, default: null}
       placements:
         - {id: brand-swoop, ref: casa/brand-swoop@1, at: [109.2, 8.2], group: furniture, rel-pos: 2}
         - {id: cable-mgr-l, ref: casa/cable-manager@1, at: [13.2, 539.7], group: furniture, rel-pos: 0}
