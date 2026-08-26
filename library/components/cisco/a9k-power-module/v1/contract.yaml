@@ -8,7 +8,7 @@ description: >-
   Cisco ASR 9000 version 1 power module for a modular-chassis power tray. Three axial
   fans behind finger guards across the face, an ejector door with a latch on the right,
   and Input, Output and Fault lamps. Three of these fill a version 1 tray.
-size: {w: 142.78, h: 44.4}
+size: {w: 139.12, h: 44.45}
 attrs:
   model: 'A9K Power Module (V1)'
   role: 'power-module'
@@ -17,19 +17,27 @@ attrs:
   eol: 'none-announced'
 provenance:
   size: >-
-    drawing - the stencil master 'A9K Power Module' at the stencil's 1:10 inches, 142.78
-    x 44.4 mm. For this master the shape box is usable: box aspect 3.130 against the
-    art's own 3.216, agreeing to three percent, where the line-card masters' box and art
-    disagree by five. No document in the intake gives a power module's dimensions.
+    drawing - the stencil master 'A9K Power Module', BOTH AXES from index.json's
+    shapesheet at the stencil's 1:10 inches: 0.5477 x 0.175 in, so 139.12 x 44.45 mm.
+    CORRECTED, and the correction is the reason this note is long. The first version of
+    this component read 142.78 x 44.40 - the height from the shapesheet and the width
+    from the ART BOUNDING BOX, which includes the handle standing proud of the module's
+    right-hand edge. It was caught by arithmetic rather than by eye: three modules at
+    142.78 need 428.34 mm and the ASR 9006's shelf interior measures 416.50, so three of
+    them would not fit a shelf that holds exactly three, and lint L13 reported the bays
+    overlapping the moment they were placed at their measured centres. At 139.12 the
+    arithmetic comes right - three make 417.36 against a 416.50 shelf, filling it with
+    under a millimetre spare. A component right in one dimension and wrong in the other
+    is the kind of wrong that survives review; take both axes from the same source. No
+    document in the intake gives a power module's dimensions.
   generation: >-
-    the version is read off the WIDTH, not off the name. This master is 142.78 mm wide
-    and the drawn tray's module openings are 99.05 mm; the 'A9K Power Module V2' master
-    is 95.85 mm and fits them to three percent. The Overview and Reference Guide's own
-    arithmetic agrees: the version 1 tray holds THREE modules ('three 2100 W power
-    modules in a single tray, 6300 W') and the version 2 tray holds four ('four 2100 W
-    DC power modules or 3000 W AC power modules in a single tray'). A 142.78 mm module
-    fits three across a 429 mm tray and not four. So this is the version 1 module and
-    the other master is version 2.
+    the version is read off the WIDTH, not off the name. This master is 139.12 mm wide
+    and the version 2 tray's four module positions are on a 107.3 mm pitch; the 'A9K
+    Power Module V2' master is 99.62 mm and fits one, while this one cannot. The
+    Overview and Reference Guide's own arithmetic agrees: the version 1 tray holds THREE
+    modules ('three 2100 W power modules in a single tray, 6300 W') and the version 2
+    tray holds four ('four 2100 W DC power modules or 3000 W AC power modules in a
+    single tray'). A 139.12 mm module fits three across a 429 mm tray and not four.
   lamps: >-
     install guide - the Overview and Reference Guide's 'Power Module Status Indicators',
     which gives one table for the version 1 module and a second for version 2 and says
@@ -59,7 +67,7 @@ provenance:
     searched - no end-of-life notice for this part is in the intake.
 elements:
   input:
-    at: [129.5, 8.0]
+    at: [126.18, 8.01]
     size: [2.6, 2.6]
     class: led
     description: >-
@@ -71,7 +79,7 @@ elements:
     - 'on'
     - 'blinking'
   output:
-    at: [129.5, 14.6]
+    at: [126.18, 14.62]
     size: [2.6, 2.6]
     class: led
     description: >-
@@ -83,7 +91,7 @@ elements:
     - 'on'
     - 'blinking'
   fault:
-    at: [129.5, 21.2]
+    at: [126.18, 21.23]
     size: [2.6, 2.6]
     class: led
     description: >-

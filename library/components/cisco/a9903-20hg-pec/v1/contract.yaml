@@ -9,7 +9,7 @@ description: >-
   - five 400GE QSFP-DD and fifteen 100GE QSFP28 - arranged as five groups of four, each
   group one QSFP-DD and three QSFP28. Configuring the QSFP-DD port for 400GE leaves the
   other three ports of its group unused. One of two optional PECs for the ASR 9903.
-size: {w: 414.27, h: 37.34, d: 383.28}
+size: {w: 436.58, h: 38.73, d: 383.28}
 attrs:
   model: 'A9903-20HG-PEC'
   role: 'port-expansion-card'
@@ -21,12 +21,22 @@ attrs:
   eol: 'none-announced'
 provenance:
   size: >-
-    datasheet - Cisco ASR 9903 Compact High-Performance Router Data Sheet, 'Physical
-    dimensions (H x W x D); weight': 1.47 x 16.31 x 15.09 in. (37.34 mm x 414.27 mm x
-    383.28 mm). Both PECs share that envelope; they differ in weight, 6.81 kg for the 2T
-    against 5.82 kg (est.) for the 800G. The stencil master is 436.58 mm across against
-    the stated 414.27, and the difference is the ejector at each end - the same
-    relationship the modular line cards have between their plate and their stated width.
+    TWO NUMBERS, and which one this component carries matters. The Cisco ASR 9903
+    Compact High-Performance Router Data Sheet gives 'Physical dimensions (H x W x D);
+    weight': 1.47 x 16.31 x 15.09 in. (37.34 mm x 414.27 mm x 383.28 mm) for both PECs,
+    which differ only in weight - 6.81 kg for the 2T against 5.82 kg (est.) for the
+    800G. index.json's shapesheet gives 436.58 x 38.73 mm. The difference is 22.31 mm
+    across and 1.39 mm high, which is an ejector at each end and a rail top and bottom.
+    THE SHAPESHEET FIGURE IS CARRIED, for two reasons. First, a module's `size` in this
+    library is its SLOT ENVELOPE - the bay it occupies - not its faceplate, and the
+    faceplate is what the skin draws. Second, this datasheet's heading is bare '(H x W x
+    D)' where every modular line-card sheet in the intake says '(includes ejector
+    bracket/lever)', and the one other sheet that omits the qualifier - the dual-rate
+    10GE pair - turned out to be quoting the plate rather than the envelope in exactly
+    the same way. So 414.27 x 37.34 is recorded here as the plate and is what the
+    drawing shows; 436.58 x 38.73 is the envelope and is what a bay is sized from. Both
+    axes of the carried figure come from one source, which is the rule a power module
+    3.66 mm too wide taught tonight.
   orientation: >-
     modelled LANDSCAPE, as the master draws it and as the card installs: the ASR 9903 is
     a 3RU fixed-port chassis and its PECs lie flat across the width. So unlike the
@@ -93,26 +103,26 @@ elements:
 relief:
   wall: '#4a4f55'
 parts:
-  - {ref: std/qsfp-dd@1, id: p0, at: [28.65, 17.92]}
-  - {ref: std/qsfp-ganged@1, id: p1, at: [53.0, 18.13]}
-  - {ref: std/qsfp-ganged@1, id: p2, at: [77.02, 1.93]}
-  - {ref: std/qsfp-ganged@1, id: p3, at: [77.02, 18.13]}
-  - {ref: std/qsfp-dd@1, id: p4, at: [101.26, 17.92]}
-  - {ref: std/qsfp-ganged@1, id: p5, at: [125.61, 18.13]}
-  - {ref: std/qsfp-ganged@1, id: p6, at: [149.62, 1.93]}
-  - {ref: std/qsfp-ganged@1, id: p7, at: [149.62, 18.13]}
-  - {ref: std/qsfp-dd@1, id: p8, at: [173.87, 17.92]}
-  - {ref: std/qsfp-ganged@1, id: p9, at: [198.22, 18.13]}
-  - {ref: std/qsfp-ganged@1, id: p10, at: [222.22, 1.93]}
-  - {ref: std/qsfp-ganged@1, id: p11, at: [222.22, 18.13]}
-  - {ref: std/qsfp-dd@1, id: p12, at: [246.47, 17.92]}
-  - {ref: std/qsfp-ganged@1, id: p13, at: [270.83, 18.13]}
-  - {ref: std/qsfp-ganged@1, id: p14, at: [294.83, 1.93]}
-  - {ref: std/qsfp-ganged@1, id: p15, at: [294.83, 18.13]}
-  - {ref: std/qsfp-dd@1, id: p16, at: [319.08, 17.92]}
-  - {ref: std/qsfp-ganged@1, id: p17, at: [343.43, 18.13]}
-  - {ref: std/qsfp-ganged@1, id: p18, at: [367.45, 1.93]}
-  - {ref: std/qsfp-ganged@1, id: p19, at: [367.45, 18.13]}
+  - {ref: std/qsfp-dd@1, id: p0, at: [30.7, 18.77]}
+  - {ref: std/qsfp-ganged@1, id: p1, at: [56.36, 18.98]}
+  - {ref: std/qsfp-ganged@1, id: p2, at: [81.66, 2.19]}
+  - {ref: std/qsfp-ganged@1, id: p3, at: [81.66, 18.98]}
+  - {ref: std/qsfp-dd@1, id: p4, at: [107.22, 18.77]}
+  - {ref: std/qsfp-ganged@1, id: p5, at: [132.88, 18.98]}
+  - {ref: std/qsfp-ganged@1, id: p6, at: [158.18, 2.19]}
+  - {ref: std/qsfp-ganged@1, id: p7, at: [158.18, 18.98]}
+  - {ref: std/qsfp-dd@1, id: p8, at: [183.75, 18.77]}
+  - {ref: std/qsfp-ganged@1, id: p9, at: [209.39, 18.98]}
+  - {ref: std/qsfp-ganged@1, id: p10, at: [234.68, 2.19]}
+  - {ref: std/qsfp-ganged@1, id: p11, at: [234.68, 18.98]}
+  - {ref: std/qsfp-dd@1, id: p12, at: [260.26, 18.77]}
+  - {ref: std/qsfp-ganged@1, id: p13, at: [285.91, 18.98]}
+  - {ref: std/qsfp-ganged@1, id: p14, at: [311.21, 2.19]}
+  - {ref: std/qsfp-ganged@1, id: p15, at: [311.21, 18.98]}
+  - {ref: std/qsfp-dd@1, id: p16, at: [336.77, 18.77]}
+  - {ref: std/qsfp-ganged@1, id: p17, at: [362.41, 18.98]}
+  - {ref: std/qsfp-ganged@1, id: p18, at: [387.73, 2.19]}
+  - {ref: std/qsfp-ganged@1, id: p19, at: [387.73, 18.98]}
 body:
   depth: 383.28
   color: '#b9bec4'

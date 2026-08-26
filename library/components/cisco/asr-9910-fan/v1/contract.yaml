@@ -1,16 +1,16 @@
 format: 1
 kind: module
 name: asr-9910-fan
-version: 1.0.0
+version: 1.1.0
 class: cooling
 profile: networking
 description: >-
   Cisco ASR 9910 Router fan tray. Twelve axial 134 mm (5.27 in) fans behind a full-width
   plate, with a pull handle across the middle, a grip at each end, a FAN STATUS lamp at
-  the left and two laser/hazard labels. The ASR 9910 carries two of these for
-  redundancy; the tray is secured by two captive screws and aligns on two guide pins,
-  and swapping one does not interrupt service.
-size: {w: 445.2, h: 41.1}
+  the left and two hazard labels. The ASR 9910 carries two of these for redundancy; the
+  tray is secured by two captive screws and aligns on two guide pins, and swapping one
+  does not interrupt service.
+size: {w: 447.09, h: 41.07}
 attrs:
   model: 'ASR-9910-FAN'
   role: 'fan-tray'
@@ -20,11 +20,12 @@ attrs:
   eol: 'none-announced'
 provenance:
   size: >-
-    drawing - the stencil master at the stencil's 1:10 inches. The shape box is usable
-    for this master where it is not for a line card, and the check is what says so: box
-    aspect against the art's own agrees to well under a percent here (12.492 against
-    12.492 for the 9922 V3, 10.886 against 10.832 for the 9910), while every card
-    master's box and art disagree by five percent.
+    BOTH AXES from index.json's shapesheet at the stencil's 1:10 inches, which is the
+    rule this component was CORRECTED to follow. The first version took its height from
+    the shapesheet and its width from the art bounding box - the mixed-source error that
+    made a power module 3.66 mm too wide and stopped three of them fitting a shelf built
+    for three. Here the gap was 1.89 mm on a 447 mm part, which is the dangerous size:
+    small enough to look right, systematic enough to be wrong everywhere.
   lamp: >-
     install guide - the Overview and Reference Guide's 'Fan Tray Status Indicators'
     section, transcribed: 'After fan tray insertion into the chassis, the LED lights up
@@ -44,17 +45,18 @@ provenance:
   power: >-
     install guide - Table 24, 'Fan Tray Power Consumption Specifications', of the
     Overview and Reference Guide, row 'ASR 9910 Fan Tray': 450 W at 25 C, 900 W at 40 C,
-    3000 W at 55 C. READ THAT SPREAD BEFORE USING THE LOW FIGURE: it is nearly seven to
-    one across the rated ambient range, because a fan tray's draw is what the fans are
-    doing rather than a fixed load. max means the worst rated case, so 3000 is what is
-    carried - a chassis budget built on the 25 C figure would be short by 2.5 kW per
-    tray. Cisco's own note on the table: 'The fan tray power consumption numbers reflect
-    the power budget for a single fan tray'.
+    3000 W at 55 C. READ THAT SPREAD BEFORE USING THE LOW FIGURE: nearly seven to one
+    across the rated ambient range, because a fan tray's draw is what the fans are DOING
+    rather than a fixed load. max means the worst rated case, so 3000 is carried - a
+    chassis budget built on the 25 C figure would be short by 2.5 kW per tray. Cisco's
+    own note on the table: 'The fan tray power consumption numbers reflect the power
+    budget for a single fan tray'. Cisco does not qualify these figures as typical or
+    maximum; one figure per ambient is all the table gives.
   lifecycle: >-
     searched - no end-of-life notice for this part number is in the intake.
 elements:
   status:
-    at: [23.5, 7.9]
+    at: [23.6, 7.89]
     size: [3.0, 3.0]
     class: led
     description: >-

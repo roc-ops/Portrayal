@@ -10,7 +10,7 @@ description: >-
   SFP+ by default; thirty-two of them are multi-rate and can be switched to 25GE SFP28 a
   slice at a time, and the card supports line-rate MACsec on both rates. One of two
   optional PECs for the ASR 9903.
-size: {w: 414.27, h: 37.34, d: 383.28}
+size: {w: 436.58, h: 38.73, d: 383.28}
 attrs:
   model: 'A9903-8HG-PEC'
   role: 'port-expansion-card'
@@ -22,12 +22,22 @@ attrs:
   eol: 'none-announced'
 provenance:
   size: >-
-    datasheet - Cisco ASR 9903 Compact High-Performance Router Data Sheet, 'Physical
-    dimensions (H x W x D); weight': 1.47 x 16.31 x 15.09 in. (37.34 mm x 414.27 mm x
-    383.28 mm). Both PECs share that envelope; they differ in weight, 6.81 kg for the 2T
-    against 5.82 kg (est.) for the 800G. The stencil master is 436.58 mm across against
-    the stated 414.27, and the difference is the ejector at each end - the same
-    relationship the modular line cards have between their plate and their stated width.
+    TWO NUMBERS, and which one this component carries matters. The Cisco ASR 9903
+    Compact High-Performance Router Data Sheet gives 'Physical dimensions (H x W x D);
+    weight': 1.47 x 16.31 x 15.09 in. (37.34 mm x 414.27 mm x 383.28 mm) for both PECs,
+    which differ only in weight - 6.81 kg for the 2T against 5.82 kg (est.) for the
+    800G. index.json's shapesheet gives 436.58 x 38.73 mm. The difference is 22.31 mm
+    across and 1.39 mm high, which is an ejector at each end and a rail top and bottom.
+    THE SHAPESHEET FIGURE IS CARRIED, for two reasons. First, a module's `size` in this
+    library is its SLOT ENVELOPE - the bay it occupies - not its faceplate, and the
+    faceplate is what the skin draws. Second, this datasheet's heading is bare '(H x W x
+    D)' where every modular line-card sheet in the intake says '(includes ejector
+    bracket/lever)', and the one other sheet that omits the qualifier - the dual-rate
+    10GE pair - turned out to be quoting the plate rather than the envelope in exactly
+    the same way. So 414.27 x 37.34 is recorded here as the plate and is what the
+    drawing shows; 436.58 x 38.73 is the envelope and is what a bay is sized from. Both
+    axes of the carried figure come from one source, which is the rule a power module
+    3.66 mm too wide taught tonight.
   orientation: >-
     modelled LANDSCAPE, as the master draws it and as the card installs: the ASR 9903 is
     a 3RU fixed-port chassis and its PECs lie flat across the width. So unlike the
@@ -102,54 +112,54 @@ elements:
 relief:
   wall: '#4a4f55'
 parts:
-  - {ref: std/sfp-ganged@1, id: p0, at: [28.48, 2.45]}
-  - {ref: std/sfp-ganged@1, id: p1, at: [28.47, 17.44]}
-  - {ref: std/sfp-ganged@1, id: p2, at: [42.06, 2.45]}
-  - {ref: std/sfp-ganged@1, id: p3, at: [42.05, 17.44]}
-  - {ref: std/sfp-ganged@1, id: p4, at: [55.65, 2.45]}
-  - {ref: std/sfp-ganged@1, id: p5, at: [55.63, 17.44]}
-  - {ref: std/sfp-ganged@1, id: p6, at: [69.25, 2.45]}
-  - {ref: std/sfp-ganged@1, id: p7, at: [69.25, 17.44]}
-  - {ref: std/sfp-ganged@1, id: p8, at: [82.86, 2.45]}
-  - {ref: std/sfp-ganged@1, id: p9, at: [82.84, 17.44]}
-  - {ref: std/sfp-ganged@1, id: p10, at: [96.48, 2.4]}
-  - {ref: std/sfp-ganged@1, id: p11, at: [96.45, 17.47]}
-  - {ref: std/sfp-ganged@1, id: p12, at: [124.4, 2.45]}
-  - {ref: std/sfp-ganged@1, id: p13, at: [124.38, 17.44]}
-  - {ref: std/sfp-ganged@1, id: p14, at: [137.99, 2.45]}
-  - {ref: std/sfp-ganged@1, id: p15, at: [137.97, 17.44]}
-  - {ref: std/sfp-ganged@1, id: p16, at: [151.56, 2.45]}
-  - {ref: std/sfp-ganged@1, id: p17, at: [151.53, 17.44]}
-  - {ref: std/sfp-ganged@1, id: p18, at: [165.18, 2.45]}
-  - {ref: std/sfp-ganged@1, id: p19, at: [165.16, 17.44]}
-  - {ref: std/sfp-ganged@1, id: p20, at: [178.78, 2.45]}
-  - {ref: std/sfp-ganged@1, id: p21, at: [178.76, 17.44]}
-  - {ref: std/sfp-ganged@1, id: p22, at: [192.38, 2.4]}
-  - {ref: std/sfp-ganged@1, id: p23, at: [192.38, 17.47]}
-  - {ref: std/sfp-ganged@1, id: p24, at: [209.97, 2.45]}
-  - {ref: std/sfp-ganged@1, id: p25, at: [209.97, 17.44]}
-  - {ref: std/sfp-ganged@1, id: p26, at: [223.56, 2.45]}
-  - {ref: std/sfp-ganged@1, id: p27, at: [223.53, 17.44]}
-  - {ref: std/sfp-ganged@1, id: p28, at: [237.12, 2.45]}
-  - {ref: std/sfp-ganged@1, id: p29, at: [237.12, 17.44]}
-  - {ref: std/sfp-ganged@1, id: p30, at: [250.74, 2.45]}
-  - {ref: std/sfp-ganged@1, id: p31, at: [250.73, 17.44]}
-  - {ref: std/sfp-ganged@1, id: p32, at: [264.36, 2.45]}
-  - {ref: std/sfp-ganged@1, id: p33, at: [264.33, 17.44]}
-  - {ref: std/sfp-ganged@1, id: p34, at: [277.96, 2.4]}
-  - {ref: std/sfp-ganged@1, id: p35, at: [277.95, 17.47]}
-  - {ref: std/sfp-ganged@1, id: p36, at: [304.73, 2.45]}
-  - {ref: std/sfp-ganged@1, id: p37, at: [304.71, 17.44]}
-  - {ref: std/sfp-ganged@1, id: p38, at: [318.31, 2.45]}
-  - {ref: std/sfp-ganged@1, id: p39, at: [318.3, 17.44]}
-  - {ref: std/sfp-ganged@1, id: p40, at: [331.88, 2.45]}
-  - {ref: std/sfp-ganged@1, id: p41, at: [331.88, 17.44]}
-  - {ref: std/sfp-ganged@1, id: p42, at: [345.5, 2.45]}
-  - {ref: std/sfp-ganged@1, id: p43, at: [345.49, 17.44]}
-  - {ref: std/sfp-ganged@1, id: p44, at: [359.11, 2.45]}
-  - {ref: std/sfp-ganged@1, id: p45, at: [359.08, 17.44]}
-  - {ref: std/sfp-ganged@1, id: p46, at: [372.73, 2.4]}
-  - {ref: std/sfp-ganged@1, id: p47, at: [372.71, 17.47]}
+  - {ref: std/sfp-ganged@1, id: p0, at: [30.41, 2.73]}
+  - {ref: std/sfp-ganged@1, id: p1, at: [30.38, 18.27]}
+  - {ref: std/sfp-ganged@1, id: p2, at: [44.7, 2.73]}
+  - {ref: std/sfp-ganged@1, id: p3, at: [44.7, 18.27]}
+  - {ref: std/sfp-ganged@1, id: p4, at: [59.03, 2.73]}
+  - {ref: std/sfp-ganged@1, id: p5, at: [59.0, 18.27]}
+  - {ref: std/sfp-ganged@1, id: p6, at: [73.36, 2.73]}
+  - {ref: std/sfp-ganged@1, id: p7, at: [73.34, 18.27]}
+  - {ref: std/sfp-ganged@1, id: p8, at: [87.72, 2.73]}
+  - {ref: std/sfp-ganged@1, id: p9, at: [87.69, 18.27]}
+  - {ref: std/sfp-ganged@1, id: p10, at: [102.06, 2.69]}
+  - {ref: std/sfp-ganged@1, id: p11, at: [102.03, 18.33]}
+  - {ref: std/sfp-ganged@1, id: p12, at: [131.49, 2.73]}
+  - {ref: std/sfp-ganged@1, id: p13, at: [131.47, 18.27]}
+  - {ref: std/sfp-ganged@1, id: p14, at: [145.79, 2.73]}
+  - {ref: std/sfp-ganged@1, id: p15, at: [145.78, 18.27]}
+  - {ref: std/sfp-ganged@1, id: p16, at: [160.12, 2.73]}
+  - {ref: std/sfp-ganged@1, id: p17, at: [160.09, 18.27]}
+  - {ref: std/sfp-ganged@1, id: p18, at: [174.46, 2.73]}
+  - {ref: std/sfp-ganged@1, id: p19, at: [174.43, 18.27]}
+  - {ref: std/sfp-ganged@1, id: p20, at: [188.79, 2.73]}
+  - {ref: std/sfp-ganged@1, id: p21, at: [188.78, 18.27]}
+  - {ref: std/sfp-ganged@1, id: p22, at: [203.13, 2.69]}
+  - {ref: std/sfp-ganged@1, id: p23, at: [203.12, 18.33]}
+  - {ref: std/sfp-ganged@1, id: p24, at: [221.66, 2.73]}
+  - {ref: std/sfp-ganged@1, id: p25, at: [221.66, 18.27]}
+  - {ref: std/sfp-ganged@1, id: p26, at: [235.97, 2.73]}
+  - {ref: std/sfp-ganged@1, id: p27, at: [235.97, 18.27]}
+  - {ref: std/sfp-ganged@1, id: p28, at: [250.3, 2.73]}
+  - {ref: std/sfp-ganged@1, id: p29, at: [250.27, 18.27]}
+  - {ref: std/sfp-ganged@1, id: p30, at: [264.62, 2.73]}
+  - {ref: std/sfp-ganged@1, id: p31, at: [264.62, 18.27]}
+  - {ref: std/sfp-ganged@1, id: p32, at: [278.98, 2.73]}
+  - {ref: std/sfp-ganged@1, id: p33, at: [278.95, 18.27]}
+  - {ref: std/sfp-ganged@1, id: p34, at: [293.32, 2.69]}
+  - {ref: std/sfp-ganged@1, id: p35, at: [293.31, 18.33]}
+  - {ref: std/sfp-ganged@1, id: p36, at: [321.54, 2.73]}
+  - {ref: std/sfp-ganged@1, id: p37, at: [321.5, 18.27]}
+  - {ref: std/sfp-ganged@1, id: p38, at: [335.83, 2.73]}
+  - {ref: std/sfp-ganged@1, id: p39, at: [335.82, 18.27]}
+  - {ref: std/sfp-ganged@1, id: p40, at: [350.14, 2.73]}
+  - {ref: std/sfp-ganged@1, id: p41, at: [350.13, 18.27]}
+  - {ref: std/sfp-ganged@1, id: p42, at: [364.49, 2.73]}
+  - {ref: std/sfp-ganged@1, id: p43, at: [364.48, 18.27]}
+  - {ref: std/sfp-ganged@1, id: p44, at: [378.82, 2.73]}
+  - {ref: std/sfp-ganged@1, id: p45, at: [378.81, 18.27]}
+  - {ref: std/sfp-ganged@1, id: p46, at: [393.18, 2.69]}
+  - {ref: std/sfp-ganged@1, id: p47, at: [393.17, 18.33]}
 body:
   depth: 383.28
   color: '#b9bec4'

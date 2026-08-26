@@ -8,7 +8,7 @@ description: >-
   Cisco ASR 9000 version 2 power module for a modular-chassis power tray. Two axial fans
   behind finger guards, a pull handle between them, a hazard label and Input, Output and
   Fault lamps. Four of these fill a version 2 tray.
-size: {w: 95.85, h: 42.8}
+size: {w: 99.62, h: 42.85}
 attrs:
   model: 'A9K Power Module (V2)'
   role: 'power-module'
@@ -17,17 +17,22 @@ attrs:
   eol: 'none-announced'
 provenance:
   size: >-
-    drawing - the stencil master 'A9K Power Module V2' at 1:10, 95.85 x 42.8 mm. Shape-
-    box aspect 2.325 against the art's 2.239 - three percent, so the box is usable here.
-    No document in the intake dimensions a power module.
+    drawing - the stencil master 'A9K Power Module V2', BOTH AXES from index.json's
+    shapesheet: 0.3922 x 0.1687 in, so 99.62 x 42.85 mm. CORRECTED from 95.85 x 42.80,
+    which mixed a shapesheet height with an art-derived width - the same error as the
+    version 1 module and found in the same sweep. Note this one erred the other way,
+    3.77 mm UNDER rather than over, because this master's art is narrower than its shape
+    box where the version 1's is wider. That is why the rule is 'both axes from the same
+    source' rather than 'the art is always bigger'. No document in the intake gives a
+    power module's dimensions.
   fits: >-
     checked, not assumed, and the measurement is worth stating precisely because the
     first attempt used the wrong feature. The 'A9K Power Tray' master draws ONE
     continuous opening 429.2 mm wide with four M0..M3 legends beneath it, so the module
     pitch is 429.2 / 4 = 107.3 mm - the 99.05 mm bands under the legends are the LABELS,
     not the bays, and reading them as bays is what the first pass did. This module is
-    95.85 mm wide, which fits a 107.3 mm position with room for the rails; the version 1
-    master at 142.78 mm cannot. Four positions is also exactly what the guide's version
+    99.62 mm wide, which fits a 107.3 mm position with room for the rails; the version 1
+    master at 139.12 mm cannot. Four positions is also exactly what the guide's version
     2 arithmetic needs: 'four 2100 W DC power modules or 3000 W AC power modules in a
     single tray, 8400 W (DC) 12,000 W (AC)'. The version 3 trays are on different
     pitches again - 139.05 mm on the AC tray and 104.5 on the DC - so this module is not
@@ -61,7 +66,7 @@ provenance:
     searched - no end-of-life notice for this part is in the intake.
 elements:
   input:
-    at: [2.6, 8.0]
+    at: [2.7, 8.01]
     size: [2.6, 2.6]
     class: led
     description: >-
@@ -73,7 +78,7 @@ elements:
     - 'on'
     - 'blinking'
   output:
-    at: [2.6, 14.6]
+    at: [2.7, 14.62]
     size: [2.6, 2.6]
     class: led
     description: >-
@@ -85,7 +90,7 @@ elements:
     - 'on'
     - 'blinking'
   fault:
-    at: [2.6, 21.2]
+    at: [2.7, 21.23]
     size: [2.6, 2.6]
     class: led
     description: >-

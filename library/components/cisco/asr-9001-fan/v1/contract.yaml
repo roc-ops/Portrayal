@@ -1,34 +1,30 @@
 format: 1
 kind: module
 name: asr-9001-fan
-version: 1.0.0
+version: 1.1.0
 class: cooling
 profile: networking
 description: >-
   Cisco ASR 9001 fan module. A narrow 2RU-tall module that stands on one side of the
   fixed-port chassis rather than lying across it - the faceplate is a slotted vent, a
   STATUS lamp and two captive screws.
-size: {w: 54.86, h: 88.2}
+size: {w: 54.76, h: 88.19}
 attrs:
   model: 'ASR-9001-FAN'
   role: 'fan-module'
   eol: 'none-announced'
 provenance:
   size: >-
-    drawing - the stencil master at 1:10, 54.86 x 88.2 mm. The 88.2 is the
-    corroboration: it is exactly the ASR 9001 chassis height the data sheet states,
-    3.472 in. (88.2 mm), so this module is the full height of the box it stands in, and
-    the drawing and the data sheet agree without either being fitted to the other.
-    drawing - the stencil master at the stencil's 1:10 inches. The shape box is usable
-    for this master where it is not for a line card, and the check is what says so: box
-    aspect against the art's own agrees to well under a percent here (12.492 against
-    12.492 for the 9922 V3, 10.886 against 10.832 for the 9910), while every card
-    master's box and art disagree by five percent.
+    drawing - the stencil master, both axes from index.json's shapesheet, 54.76 x 88.19
+    mm. The 88.19 is the corroboration: it is the ASR 9001 chassis height the data sheet
+    states, 3.472 in. (88.2 mm), so this module is the full height of the box it stands
+    in, and the drawing and the data sheet agree without either being fitted to the
+    other.
   lamp: >-
     drawing - the faceplate is printed STATUS beside one lamp. The four-state vocabulary
     carried here is the Overview and Reference Guide's 'Fan Tray Status Indicators'
     section, which describes the MODULAR chassis fan trays; the fixed-port guide gives
-    no LED table for this module. So the states are borrowed from a sibling part and
+    no LED table for this module. So the states are BORROWED from a sibling part and
     that is stated rather than hidden - if the ASR 9001's fan lamp differs, this is the
     assumption to break first.
   power: >-
@@ -40,7 +36,7 @@ provenance:
     searched - no end-of-life notice for this part number is in the intake.
 elements:
   status:
-    at: [8.1, 42.2]
+    at: [8.09, 42.2]
     size: [3.0, 3.0]
     class: led
     description: >-
