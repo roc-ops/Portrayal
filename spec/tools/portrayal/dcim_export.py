@@ -132,6 +132,42 @@ PART_POWER = {
     "std/c20-inlet": "iec-60320-c20",
 }
 
+# What the PLACEMENT says runs through the connector, when it says.
+#
+# A housing cannot carry this. Ten identical `common/sfp-plus-cage` can be eight
+# 1G and two 10G, and an 8P8C shell is equally an Ethernet port, a console and a
+# telemetry link - roc-ops/ndv#27 and #29 are the same defect seen twice. The
+# library answers both the same way: `attrs` on the placement, which thirty-odd
+# parts already carried before either issue was filed.
+#
+# Keyed (media, speed) and falling back to (media, None), because a medium that
+# runs at one rate does not repeat it - rj45-telemetry has no speed to give.
+#
+# rj45-telemetry is `other` deliberately. It is the Casa switch BDM's link to a
+# rectifier shelf: an 8P8C housing carrying a proprietary monitoring protocol,
+# which is neither Ethernet nor a console. `other` says "a thing this schema has
+# no name for", and that is exactly true; typing it rj-45 console would invite
+# somebody to patch it into a terminal server.
+PART_MEDIA = {
+    ("sfp", "1g"): "1000base-x-sfp",
+    ("sfp-plus", "10g"): "10gbase-x-sfpp",
+    ("qsfp", "40g"): "40gbase-x-qsfpp",
+    ("qsfp28", "100g"): "100gbase-x-qsfp28",
+    ("qsfp-dd", "400g"): "400gbase-x-qsfpdd",
+    ("rj45-telemetry", None): "other",
+}
+
+
+def placed_type(part):
+    """The interface type the placement itself declares, or None."""
+    a = part.get("attrs") or {}
+    media = a.get("media")
+    if not media:
+        return None
+    speed = a.get("speed")
+    return PART_MEDIA.get((media, speed)) or PART_MEDIA.get((media, None))
+
+
 PART_RF = {
     "std/f-type": ("docsis", "F"),
     "std/mcx": ("docsis", "MCX"),
@@ -432,7 +468,16 @@ def build_module(contract, manufacturer):
         pid = str(part.get("id") or "")
         if ref in PART_SKIP:
             continue
-        if ref in PART_POWER:
+        # The placement is more specific than the ref, so it is checked first.
+        # Reaching PART_CONSOLE with an rj45-telemetry part would file a
+        # rectifier link as a console port, which is how #29 read before.
+        placed = placed_type(part)
+        if placed:
+            iface = {"name": pid, "type": placed}
+            if placed == "other":
+                iface["label"] = "RJ45"
+            ifaces.append(iface)
+        elif ref in PART_POWER:
             powers.append({"name": pid or "Inlet", "type": PART_POWER[ref]})
         elif ref in PART_CONSOLE:
             consoles.append({"name": pid or "Console", "type": PART_CONSOLE[ref]})
