@@ -77,6 +77,21 @@ provenance:
     rows are 'RSP-440 Card', 'RP Card' and so on, with no -SE/-TR split anywhere - so
     one figure serves both variants by Cisco's own scoping rather than by an inference
     across it.
+  power-datasheet-disagrees: >-
+    A THIRD FIGURE EXISTS AND IS NOT CARRIED. datasheet-c78-674143, the RSP-440 data
+    sheet, has a 'Power consumption' row reading 'Typical: 170 W. Maximum: 450 W'.
+    Neither number is used, and the reason is that the row looks like an un-updated copy
+    rather than a measurement of this card. Its typical, 170 W, is the SAME NUMBER
+    data_sheet_c78-500699 gives for the ORIGINAL RSP - a card Table 23 rates 110 W lower
+    at every ambient - and the two sheets share that whole table verbatim down to the
+    mains input rows and the 26.53 in depth. The tell is what happens on the older
+    sheet: there the maximum, 205 W, matches Table 23's 'RSP Card' row at 40 C exactly,
+    which is independent corroboration that the block belongs to the card. Here 450 W
+    matches nothing in Table 23's RSP-440 row - not 285, not 350, not 370 - so the block
+    has no such corroboration. The same document also states its operating temperature
+    twice with different floors, 0 C in one table and 5 C in another, which is what a
+    partly-updated copy looks like. Recorded rather than reconciled: if someone later
+    finds 450 W corroborated, this is the note to overturn.
   variants: >-
     the data sheet's ordering table also lists A9K-RSP440-LT and A9K-RSP440-LTU. Neither
     has artwork in the stencil and neither is modelled.
