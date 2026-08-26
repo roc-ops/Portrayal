@@ -95,6 +95,13 @@ provenance:
     plane on one edge, which meant the figure's dimension was 3.9 mm from where the drawing said it
     was, and which edge differed between chassis - casa-cards found the same inconsistency across
     the two it owns and centred them the same way
+  top-and-bottom-agree: >-
+    the rack mounting flange is one vertical plate, so it intersects the top and bottom planes at
+    the SAME depth and appears on both faces at the same y. An earlier revision drew it only on the
+    bottom, which left the two faces of one chassis disagreeing about where the chassis bolts to
+    the rack - the kind of internal inconsistency this work has spent the night finding in other
+    people's artefacts. casa-cards' ASR 9006 and 9904 match across both faces and are the standard
+    this follows
   card-orientation: >-
     datasheet - stated directly, and it had been an inference until now. The Overview and
     Reference Guide's "Chassis Slots" section (b-asr9k-overview-reference-guide.pdf p17) names
@@ -273,11 +280,14 @@ views:
     size: {w: 447.0, h: 730.8}
     panel:
       decor:
+        - {at: [0, 601.85], size: [447.0, 3.9], fill: '#9a9c9e'}
+        - {at: [0, 488.85], size: [447.0, 3.9], fill: '#9a9c9e'}
         - {at: [42.0, 29.0], size: [152.0, 93.0], fill: '#e8eaec'}
         - {at: [42.0, 129.0], size: [155.0, 165.0], fill: '#d5d7d9'}
     silkscreen:
       - {at: [111.0, 650.0], text: cisco, font-size: 22, anchor: middle}
     regions:
+      - {id: rack-mounting-surface, label: 'Rack mounting surface - the same plane the bottom face carries'}
       - {id: regulatory-label, label: 'Regulatory and compliance label block'}
       - {id: top-access-panel, label: 'Top access panel'}
       - {id: cable-management-protrusion, label: 'Cable management system - protrudes 2.68 in (6.81 cm) beyond the front'}

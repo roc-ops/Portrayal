@@ -119,6 +119,13 @@ provenance:
     plane on one edge, which meant the figure's dimension was 3.9 mm from where the drawing said it
     was, and which edge differed between chassis - casa-cards found the same inconsistency across
     the two it owns and centred them the same way
+  top-and-bottom-agree: >-
+    the rack mounting flange is one vertical plate, so it intersects the top and bottom planes at
+    the SAME depth and appears on both faces at the same y. An earlier revision drew it only on the
+    bottom, which left the two faces of one chassis disagreeing about where the chassis bolts to
+    the rack - the kind of internal inconsistency this work has spent the night finding in other
+    people's artefacts. casa-cards' ASR 9006 and 9904 match across both faces and are the standard
+    this follows
   card-orientation: >-
     datasheet - "Cisco ASR 9922 Router: All RP, FCs, and LCs are front-facing and mounted
     vertically, with ejector levers and captive screws at the top and bottom of each card"
@@ -286,7 +293,11 @@ views:
       - {id: nebs-ground, label: 'NEBS bonding and grounding - top rear right side'}
   top:
     size: {w: 447.0, h: 668.0}
+    panel:
+      decor:
+        - {at: [0, 556.85], size: [447.0, 3.9], fill: '#9a9c9e'}
     regions:
+      - {id: rack-mounting-surface, label: 'Rack mounting surface - the same plane the bottom face carries'}
       - {id: top-plate, label: 'Top plate - outline and rack mounting brackets dimensioned in Figure 13'}
       - {id: rack-mounting-brackets, label: 'Rack mounting brackets'}
   bottom:
