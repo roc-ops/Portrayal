@@ -125,6 +125,18 @@ provenance:
     LABEL WAS RIGHT AND THE GEOMETRY WAS WRONG, and lint stayed green because no rule compares the
     two. Saying "present but not dimensioned" gives a reader the same thing a distance would: a
     claim to check the drawing against
+  left-right-flip-checked-not-assumed: >-
+    a bottom view flips LEFT and RIGHT relative to a top view - you walk under the box, not around
+    it - so a feature that is not full-width must sit at MIRRORED x on the two faces, at
+    width - x - w, and not at the same x. The trap is that identical x on both faces LOOKS
+    consistent while being wrong. Audited rather than assumed: this chassis is the only one of the
+    seven with non-full-width features on either face - the regulatory label block and the top
+    access panel, both at x = 42.0 of a 447.0 width - and both exist on the TOP ONLY, so there is
+    no counterpart to disagree with. Their x comes from Figure 11, a view from ABOVE, whose
+    left-right therefore matches the front view's directly and needs no mirror. Every other feature
+    on every top or bottom face in this family is full-width and immune. Recorded because
+    "symmetric, so it cannot be at the wrong end" is luck rather than care, and the next
+    asymmetric feature drawn on a bottom face will not be
   card-orientation: >-
     datasheet - stated directly, and it had been an inference until now. The Overview and
     Reference Guide's "Chassis Slots" section (b-asr9k-overview-reference-guide.pdf p17) names
