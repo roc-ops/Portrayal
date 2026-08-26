@@ -1,0 +1,99 @@
+format: 1
+kind: module
+name: pwr-2kw-dc-v2
+version: 1.0.0
+class: psu
+profile: networking
+description: >-
+  Cisco ASR 9000 version 2 DC power supply, 2100 W, for a version 2 power entry module
+  (ASR9K-DC-PEM-V2). Two axial fans behind finger guards, a pull handle between them, a
+  hazard label and Input, Output and Fault lamps. Four of these fill a version 2 tray.
+  The AC and DC modules of this generation share one faceplate because the input lands
+  on the tray.
+size: {w: 99.62, h: 42.85}
+attrs:
+  model: 'PWR-2KW-DC-V2'
+  role: 'power-module'
+  generation: '2'
+  input: 'dc'
+  fans: '2'
+  power-output-w: 2100
+  eol: 'none-announced'
+provenance:
+  size: >-
+    drawing - the stencil master 'A9K Power Module V2', BOTH AXES from index.json's
+    shapesheet at the stencil's 1:10 inches: 0.3922 x 0.1687 in, so 99.62 x 42.85 mm.
+    Not from the art bounding box, which on this master is NARROWER than the shape box
+    and would have made the module 3.77 mm too small - the mirror image of the version 1
+    module, whose art is wider and which came out 3.66 mm too large and would not fit
+    three to a shelf. No document in the intake gives a power module's dimensions.
+  one-face: >-
+    ONE DRAWING, TWO PART NUMBERS, and that is a fact about the hardware rather than a
+    shortcut. The stencil has a single 'A9K Power Module V2' master and there is no
+    second one, because an AC and a DC version 2 module present the same face: on these
+    trays the AC receptacles and the DC lugs are on the TRAY, not on the module, so the
+    module's face is a vent field, a handle and three lamps either way. They are two
+    components rather than two skins of one for the reason the AGR PSUs were: a skin
+    cannot carry a different power figure, and 3000 W and 2100 W is the whole difference
+    between these two.
+  lamps: >-
+    install guide - the Overview and Reference Guide's 'Power Module Status Indicators',
+    which gives one table for the version 1 module and a second for version 2 and says
+    'The status indicators for the version 3 power module are similar'. Note what Cisco
+    does NOT give: a colour for any of the three. So the states are on/blinking/off and
+    no colour is asserted.
+  power: >-
+    datasheet - the Cisco ASR 9000 Series Aggregation Services Routers Data Sheet's
+    ordering table, which is where the wattage finally becomes attributable to a PART
+    NUMBER rather than to a power system: 'DC power supply, 2100W' against 'PWR-2KW-
+    DC-V2'. That is power-OUTPUT-w, the supply side of the meter, not a draw. The
+    Overview and Reference Guide corroborates it from the system side - 'four 2100 W DC
+    power modules or 3000 W AC power modules in a single tray, 8400 W (DC) 12,000 W
+    (AC)' - and the two multiply out exactly. This is the figure the generic a9k-power-
+    module-v2 component could not carry, because with one drawing and two ratings there
+    was nothing to attach it to; naming the part numbers is what resolves it.
+  tray: >-
+    install guide - 'Version 2 power which uses ASR9K-DC-PEM-V2 power entry modules and
+    PWR-2KW-DC-V2 -48/-60 VDC power supplies' (Overview and Reference Guide, ASR 9922
+    power modules section). The same sentence names the version 3 pairing, which is how
+    the generations are kept apart.
+  lifecycle: >-
+    searched - no end-of-life notice for this part number is in the intake.
+elements:
+  input:
+    at: [2.7, 8.01]
+    size: [2.6, 2.6]
+    class: led
+    description: >-
+      Input LED. ON continuously when the input voltage is present and within the correct
+      range; BLINKING when the input voltage is out of acceptable range; OFF when no input
+      voltage is present. Cisco states no colour for it.
+    states:
+    - 'off'
+    - 'on'
+    - 'blinking'
+  output:
+    at: [2.7, 14.62]
+    size: [2.6, 2.6]
+    class: led
+    description: >-
+      Output LED. ON when the power module output voltage is present; BLINKING when the
+      power module is in a power limit or overcurrent condition. Cisco states no colour
+      for it.
+    states:
+    - 'off'
+    - 'on'
+    - 'blinking'
+  fault:
+    at: [2.7, 21.22]
+    size: [2.6, 2.6]
+    class: led
+    description: >-
+      Fault LED. ON indicates that a power supply failure has occurred. Cisco states no
+      colour for it, and gives no off-state sentence.
+    states:
+    - 'off'
+    - 'on'
+relief:
+  wall: '#4a4f55'
+skins: [default]

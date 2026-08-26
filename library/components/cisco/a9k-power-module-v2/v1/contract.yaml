@@ -16,6 +16,16 @@ attrs:
   fans: '2'
   eol: 'none-announced'
 provenance:
+  superseded-by: >-
+    PREFER pwr-3kw-ac-v2 OR pwr-2kw-dc-v2. This component is the version 2 module's
+    GEOMETRY with no power figure, because one drawing serves two part numbers and
+    there was nothing to attach a rating to. Those two components are the same face
+    with their ratings attached - the ASR 9000 Series data sheet's ordering table makes
+    the wattage attributable to a part number, "AC power supply, 3000W" against
+    PWR-3KW-AC-V2 and "DC power supply, 2100W" against PWR-2KW-DC-V2 - so a chassis
+    that knows which it has should accept those instead, and its module total will then
+    be a total rather than a floor. This one is kept for a bay that genuinely does not
+    know which variant is fitted.
   size: >-
     drawing - the stencil master 'A9K Power Module V2', BOTH AXES from index.json's
     shapesheet: 0.3922 x 0.1687 in, so 99.62 x 42.85 mm. CORRECTED from 95.85 x 42.80,

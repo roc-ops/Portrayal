@@ -1,0 +1,82 @@
+format: 1
+kind: module
+name: asr-9006-fan
+version: 1.0.0
+class: cooling
+profile: networking
+description: >-
+  Cisco ASR 9006 Router fan tray. Six axial 92 mm (3.62 in) fans behind a perforated
+  face, secured by a single captive screw and aligned on two guide pins. The ASR 9006
+  carries two of these for redundancy, side by side above the card cage and BEHIND A
+  HINGED DOOR - which is why, uniquely in this family, no drawing of this tray exists
+  anywhere: on the chassis master you see the door, not the tray.
+size: {w: 175.65, h: 70.97}
+attrs:
+  model: 'ASR-9006-FAN'
+  role: 'fan-tray'
+  fans: '6 x 92 mm axial'
+  power-draw-max-w: 375
+  eol: 'none-announced'
+provenance:
+  size: >-
+    MEASURED, but not by me and not from a drawing of this part. There is NO stencil
+    master for the ASR 9006 fan tray and the chassis master does not draw one, because
+    the 9006's trays sit behind a hinged door and the master draws the door - the Cisco
+    logo and 'Cisco ASR 9000 Series' legend at the top of that chassis are printed on
+    it. So the envelope here is asr9k-chassis's measurement of the OPENING in the ASR
+    9006 front master, 175.65 x 70.97 mm, taken at a scale calibrated against Table 13
+    of the Overview and Reference Guide. That is a sound number for the bay; it is not a
+    measurement of the part.
+  arrangement: >-
+    NOT SOURCED, and this is the weakest thing in the component. No document in the
+    intake and no master in the stencil shows this faceplate. What IS sourced is the
+    inventory: 'The fan tray contains six axial 92-mm (3.62-in) fans... The fan tray
+    aligns through two guide pins inside the chassis, and is secured by ONE captive
+    screw... A finger guard is adjacent to the front of most of the fans' (Overview and
+    Reference Guide, 'Cisco ASR 9006 Router Fan Trays'), plus the Run/Fail status LED
+    every tray in the family carries. Where each of those sits on the face is a drawing
+    decision of mine, not a measurement. Note one thing that rules out the obvious
+    layout: six 92 mm fans CANNOT be laid out on a 175.65 x 70.97 face - two across is
+    already 184 mm - so the fans sit behind the plate in depth and the face is a vent,
+    which is what is drawn. Anyone with a photograph of an ASR 9006 with its fan door
+    open can replace this face outright.
+  lamp: >-
+    install guide - the Overview and Reference Guide's 'Fan Tray Status Indicators':
+    'After fan tray insertion into the chassis, the LED lights up temporarily appearing
+    yellow. During normal operation: The LED lights green to indicate that all fans in
+    the module are operating normally. The LED lights red to indicate a fan failure or
+    another fault in the fan tray module.' Four states; yellow is the insertion state
+    and is real.
+  power: >-
+    install guide - Table 24 of the Overview and Reference Guide, row 'ASR 9006 Fan Tray
+    V2': 100 W at 25 C, 275 W at 40 C, 375 W at 55 C. max is the worst rated ambient.
+    Note the row names the V2 and Table 24 has NO V1 row for this chassis, although
+    ASR-9006-FAN and ASR-9006-FAN-V2 are both real part numbers in the IOS XR 24.3.2
+    firmware table. So this figure is the V2's and the V1's is simply not published.
+  weight: >-
+    NOT CARRIED, and the reason is a figure I do not believe. The guide says 'The
+    maximum weight of the fan tray is 39.7 lb (18.0 kg)' for the ASR 9006's six-fan
+    tray, while the ASR 9010's TWELVE-fan tray is 13.82 lb (6.29 kg) and the ASR 9904's
+    twelve-fan tray is 11.0 lb (4.99 kg) in the same series of sections. A six-fan tray
+    weighing three times a twelve-fan one is not credible, and the pound and kilogram
+    figures are consistent with each other, so it is not a unit slip in one column - it
+    looks like the wrong number against that heading. Rather than carry a figure I would
+    not defend or silently substitute a plausible one, the attribute is absent and this
+    is the record of why.
+  lifecycle: >-
+    searched - no end-of-life notice for this part number is in the intake.
+elements:
+  status:
+    at: [10.2, 54.7]
+    size: [3.6, 3.6]
+    class: led
+    description: >-
+      the fan tray's Run/Fail status LED, one per tray.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: yellow, color: '#f5c518'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+relief:
+  wall: '#4a4f55'
+skins: [default]

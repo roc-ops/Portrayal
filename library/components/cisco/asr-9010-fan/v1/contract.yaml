@@ -1,0 +1,81 @@
+format: 1
+kind: module
+name: asr-9010-fan
+version: 1.0.0
+class: cooling
+profile: networking
+description: >-
+  Cisco ASR 9010 Router fan tray. Twelve axial 120 mm (4.72 in) fans behind a full-width
+  band, with a pull handle across the middle, a grip and a captive screw at each end, a
+  FAN STATUS lamp and a hazard label. The ASR 9010 carries two of these for redundancy
+  and both are required for normal operation - if both are pulled or missing the router
+  raises a critical alarm.
+size: {w: 444.25, h: 33.32}
+attrs:
+  model: 'ASR-9010-FAN'
+  role: 'fan-tray'
+  fans: '12 x 120 mm axial'
+  weight-kg: 6.29
+  power-draw-max-w: 1100
+  eol: 'none-announced'
+provenance:
+  size: >-
+    drawing - and NOT from a fan-tray master, because there is not one. The ASR 9010's
+    own front master draws BOTH trays in place, labelled ASR-9010-FAN with their FAN
+    STATUS legends and hazard labels, so the part is measured off the chassis it sits
+    in: the band runs x 23.97 to 468.22 and y 571.44 to 604.76 in that master's frame,
+    giving 444.25 x 33.32 mm. The Y ANCHOR IS EXACT - the chassis master's 21 RU is
+    933.45 mm and lands on the shape box to 0.05 mm - and every feature below is
+    measured in that same frame. THE X ANCHOR IS THE ONE TO CHECK: this art's bounding
+    box is 492.38 mm where the shape box says 482.60, so an x scale taken from the art
+    would be 2 percent generous. 444.25 is quoted as measured because it lands within a
+    quarter of a millimetre of the 444.5 mm chassis body asr9k-chassis measured
+    independently, which is what a full-width tray should do - but if that agreement is
+    coincidence rather than corroboration, this is the number to re-derive first.
+  lamp: >-
+    install guide - the Overview and Reference Guide's 'Fan Tray Status Indicators':
+    'After fan tray insertion into the chassis, the LED lights up temporarily appearing
+    yellow. During normal operation: The LED lights green to indicate that all fans in
+    the module are operating normally. The LED lights red to indicate a fan failure or
+    another fault in the fan tray module.' Four states; yellow is the insertion state
+    and is real.
+  fans: >-
+    install guide - 'Cisco ASR 9010 Router Fan Trays' in the Overview and Reference
+    Guide: 'The Cisco ASR 9010 Router contains two fan trays for redundancy... The fan
+    tray contains 12 axial 120-mm (4.72-in) fans. There is a fan control board at the
+    back end of each tray with a single power/data connector that connects with the
+    backplane. The fan tray aligns through two guide pins inside the chassis, and it is
+    secured by two captive screws... The maximum weight of the fan tray is 13.82 lb
+    (6.29 kg).' The guide adds that 'Both fan trays are required for normal system
+    operation for the Cisco ASR 9010 Router and Cisco ASR 9006 Router. If both fan trays
+    in the router are pulled out or are not installed, a critical alarm is raised.'
+  power: >-
+    install guide - Table 24 of the Overview and Reference Guide, and THERE ARE TWO ROWS
+    because there are two generations of this tray. 'ASR 9010 Fan Tray V1': 200 W at 25
+    C, 300 at 40, 600 at 55. 'ASR 9010 Fan Tray V2': 240 W at 25 C, 960 at 40, 1100 at
+    55. Both part numbers are real - ASR-9010-FAN and ASR-9010-FAN-V2 both appear in the
+    IOS XR 24.3.2 firmware table. THE V2 FIGURE IS CARRIED, 1100 W, because this
+    component is named for the tray without a version suffix and the V2 is the current
+    one, and because a budget built on 600 W would be 500 W short per tray if a V2 is
+    fitted. That is a choice between two Cisco figures rather than a reading of one, and
+    it is the kind of choice worth seeing: if you know the tray is a V1, 600 is the
+    number.
+  lifecycle: >-
+    searched - no end-of-life notice for this part number is in the intake, though
+    EOL9675 retires the version 1 POWER bundle for this chassis, which is a different
+    part.
+elements:
+  status:
+    at: [16.5, 1.7]
+    size: [3.0, 3.0]
+    class: led
+    description: >-
+      the fan tray's Run/Fail status LED, one per tray.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: yellow, color: '#f5c518'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+relief:
+  wall: '#4a4f55'
+skins: [default]
