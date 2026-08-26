@@ -46,7 +46,25 @@ provenance:
     scaled by the known 265.9 height at 2.982 px/mm. The two PEM faces read x 44.8-195.7
     and 212.8-377.7 and the band runs y 194-264.5. They are bays and not placements
     because the guide carries both "Removing the DC power entry modules" and "Replacing
-    the PEMs" and they slide into openings. NOTE THE VARIANT SPLIT: this is the
+    the PEMs" and they slide into openings. THE TOP EDGE IS BOUNDED, NOT MEASURED,
+    and that is the honest description of the number now in the file. Three figures
+    disagreed about where this band starts. This sentence and casa/c40g-pem''s own
+    provenance both said y 194; the bays said 196.0; and the card slot immediately
+    above, rear-0, ends at 164.35 + 30.47 = 194.82, so 194 is IMPOSSIBLE - two
+    pieces of sheet metal cannot share 0.82 mm. The bottom edge at 264.5 is agreed
+    by every source and is not in question. So the band is placed FLUSH UNDER THE
+    SLOT at 194.82 and its height is the difference, 69.68, which is a DERIVED
+    extent between two independently measured edges rather than a reading of
+    either. It is stated to the hundredth because that is what the subtraction
+    gives, NOT because the figure resolves to it - at 2.982 px/mm the whole
+    disagreement is about six pixels, and a tape measure would likely move this by
+    a millimetre.
+    HOW IT WAS FOUND, because that is the reusable part: asr9k-cards wrote a
+    bay-versus-occupant fit check and swept the library, and casa/c40g-pem at 70.5
+    did not fit bays declared at 68.5. Nothing else could see it. L13 only fires on
+    overlap, so a bay too SMALL for what it accepts is invisible, and 2.00 mm is
+    invisible drawn. The prose was right and the geometry was wrong, which is the
+    third instance of that exact shape this session. NOTE THE VARIANT SPLIT: this is the
     DC chassis, and the AC one is modelled too - see the ac-variant entry. An AC
     C40G carries four 1100 W PSUs behind the snap-on front cover instead of these
     two PEMs, which is why these bays default EMPTY and each DC configuration names
@@ -208,8 +226,8 @@ views:
       - {at: [20, 31.0], text: '5', font-size: 11, anchor: middle, fill: '#231f20'}
     components:
       bays:
-        - {id: pem-1, at: [44.8, 196.0], size: {w: 158.0, h: 68.5}, accepts: [casa/c40g-pem@1], group: power, rel-pos: 1, default: null}
-        - {id: pem-2, at: [212.8, 196.0], size: {w: 158.0, h: 68.5}, accepts: [casa/c40g-pem@1], group: power, rel-pos: 2, default: null}
+        - {id: pem-1, at: [44.8, 194.82], size: {w: 158.0, h: 69.68}, accepts: [casa/c40g-pem@1], group: power, rel-pos: 1, default: null}
+        - {id: pem-2, at: [212.8, 194.82], size: {w: 158.0, h: 69.68}, accepts: [casa/c40g-pem@1], group: power, rel-pos: 2, default: null}
         - {id: rear-0, at: [42.0, 164.35], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1], default: casa/io-6p12@2, group: rear-slots, rel-pos: 0}
         - {id: rear-1, at: [42.0, 133.88], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/lc-sw-bdm@1, casa/blank-faceplate@1], default: casa/lc-sw-bdm@1, group: rear-slots, rel-pos: 1}
         - {id: rear-2, at: [42.0, 103.41], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-sw-bdm-a@1, casa/blank-faceplate@1], default: casa/smm-sw-bdm-a@1, group: rear-slots, rel-pos: 2}
