@@ -125,6 +125,20 @@ BEHAVIORS = {"solid", "blinking", "alternating"}
 BLINK_KEYFRAMES = {"blinking": "portrayal-blink", "alternating": "portrayal-alternate"}
 
 
+# A bay's size is {w,h} on a device and [w,h] in a component contract. One
+# reader for both, because the difference is historical rather than meaningful.
+def bay_size(bay):
+    sz = bay.get("size")
+    if isinstance(sz, dict):
+        return sz["w"], sz["h"]
+    return sz[0], sz[1]
+
+
+# A carrier in a carrier is real (chassis -> MOD -> MPA). A carrier in ITSELF is
+# a contract bug, and without a cap it is an unbounded recursion at build time.
+MAX_BAY_DEPTH = 3
+
+
 def state_style(st):
     """(color, alt-color, mode) for one state, or None if it needs no CSS.
 
@@ -234,7 +248,7 @@ def rewrite_ids(el, prefix, contract, path_prefix, skip=None):
                     lambda m: f"url(#{renamed.get(m.group(1), m.group(1))})", val))
 
 
-def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None):
+def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0):
     contract, skins = lib.resolve(ref)
     comp_name = ref.split("/")[-1].split("@")[0]
     if skin_overrides and comp_name in skin_overrides:
@@ -348,6 +362,44 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                     g.remove(node)
                     g.append(node)
                 break
+
+    # A CARRIER IS A MODULE WITH BAYS OF ITS OWN. The A9K-MOD80/160/200/400 hold
+    # two MPAs each and the SIP-700 holds four SPAs, and until this loop existed
+    # those bays were not merely empty, they were UNFILLABLE: render_view seats
+    # occupants into the DEVICE's bays and nothing recursed into a seated
+    # module's. A MOD card in a slot drew two dark rectangles that nothing could
+    # ever occupy.
+    #
+    # The occupant is appended INSIDE g, which already carries this instance's
+    # translate/rotate, so a nested bay's `at` is used as the local coordinate it
+    # is - no composing transforms by hand, which is the step that has gone wrong
+    # here before.
+    #
+    # The skin already draws the opening (a <rect id="bay-0">), so this does not
+    # add a second one; it makes the existing rect addressable and seats over it.
+    for bay_id, bay in sorted((contract.get("bays") or {}).items()):
+        if not isinstance(bay, dict) or not bay.get("at"):
+            continue
+        want = f"{inst_id}--{bay_id}"
+        for node in g.iter():
+            if node.get("id") == want:
+                node.set("data-path", f"{path}/{bay_id}")
+                node.set("data-class", "bay")
+                break
+        occupant = bay.get("default")
+        if not occupant or depth >= MAX_BAY_DEPTH:
+            continue
+        bw, bh = bay_size(bay)
+        b_at = bay["at"]
+        if bay.get("rotate") in (90, 270):
+            d = (bw - bh) / 2.0
+            b_at = [b_at[0] + d, b_at[1] - d]
+        sub, _ = instance_group(
+            lib, occupant, f"{inst_id}--{bay_id}--module", b_at,
+            None, None, None, None, rotate=bay.get("rotate"), palette=palette,
+            skin_overrides=skin_overrides, attr_overrides=attr_overrides,
+            path=f"{path}/{bay_id}/module", resolved=resolved, depth=depth + 1)
+        g.append(sub)
     return g, contract
 
 
