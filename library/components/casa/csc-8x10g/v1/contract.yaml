@@ -1,0 +1,92 @@
+format: 1
+kind: module
+name: csc-8x10g
+version: 1.0.0
+class: line-card
+profile: networking
+description: >-
+  Casa CCAP Services Card (CSC8x10G) for the C100G/C40G CCAP chassis. Eight
+  10GbE SFP+ ports (XG0-XG7) in two ganged blocks of four, carrying the DOCSIS
+  and EQAM MAC functions to Distributed Access nodes, plus a bank of eight
+  two-lamp port rows and the STATUS, ACTIVE and ALARM cluster. Out-of-band
+  signalling is on the separate optional CSC I/O card, not on this faceplate.
+size: {w: 30.47, h: 345.5, d: 380.0}
+attrs:
+  model: 'CSC 8x10G'
+  role: ccap-services
+  sfp-plus: '8'
+  power-draw-max-w: 250
+provenance:
+  layout: 'photo-measured - the CSC8x10G data sheet (CSC R7, May 2019) product photograph,
+    read as fractions of the known 345.5 card height. Top to bottom: the CCAP 8x10G
+    legend between two orange bands, XG0-XG3 in one ganged bezel, XG4-XG7 in a second,
+    a separate bank of eight port-lamp rows labelled XG0-XG7 in two groups of four,
+    then STATUS, ACTIVE, ALARM and the graduated stripe motif. Note the lamp order
+    is STATUS, ACTIVE, ALARM here and on the SMM cards, but STATUS, ALARM, ACTIVE
+    on the DQM and DCU line cards - one rule for all of them would be wrong'
+  size: shared with the rest of the C100G front-card family, taken from the chassis
+    slot envelope (30.47 x 345.5, C100G device manifest); the depth is the family
+    estimate carried by casa/smm-8x10g
+  legend: photo-measured - the model legend sits between TWO orange bands, not below
+    one. The DS8x96, CSC8x10G and SMM300G product photographs independently put
+    the upper band at 21.1-22.5 and the lower at 34.1-35.4 as fractions of the 345.5
+    card height, agreeing with each other to within 0.7mm, so 22.0 and 34.8 are
+    carried for the whole family
+  ports: composed from std/ aperture components rather than drawn as rectangles.
+    The ganged blocks use std/sfp-ganged (SFF-8433, the port's share of a continuous
+    1xN slot, so adjacent instances abut with no gap) and std/qsfp-ganged; the two
+    jacks reuse common/rj45-shielded@2 exactly as casa/smm-8x10g does
+  rotation: every cage is ROTATED 90. A ganged SFP opening is 14.25 x 10.4 and the
+    faceplate is only 30.47 wide, so the long axis has to run down the card. The
+    SMM300G photograph measures the openings at 10.1mm across (7.5 to 17.6mm from
+    the plate edge on the CSC, independently), which is the rotated width, and the
+    vertical pitch measures 14.0-14.2 against the 14.25 the standard specifies
+  port-pitch: registry (SFF-8433 B04, 14.25 Basic) confirmed by photograph - the
+    photograph measures 13.8-14.1 between adjacent cages, and the standard figure
+    is carried because a ganged block's pitch is specified, not chosen. Block A
+    starts at 81.1 and block B at 142.4, both photo-measured
+  port-lamps: photo-inferred - two lamps per port, on either side of the port legend,
+    in a bank BELOW the cages rather than beside them. The photograph resolves the
+    dots and the XG0-XG7 legends; no document held here gives their colour vocabulary,
+    so no states are declared
+  stripes: photo-measured - five stripes below the lamp cluster, thick to thin downward.
+    The lower two measure under 0.2mm, which is the photograph's resolution limit,
+    and are drawn at 0.35
+  power-draw-max-w: 'datasheet - the CCAP Services Card CSC8x10G data sheet (CSC
+    R7, May 2019) technical specifications: ''Total Power 250W''. This card is not
+    in the C100G install guide''s Appendix A tables, which predate it, so the data
+    sheet is the only source and there is nothing to cross-check it against'
+  compliance: not stated - the CSC8x10G data sheet carries no compliance line at
+    all, unlike the SMM300G sheets which both give NEBS level 3
+elements:
+  status: {at: [4.8, 254.3], size: [3.0, 3.0], class: led}
+  active: {at: [4.8, 260.3], size: [3.0, 3.0], class: led}
+  alarm: {at: [4.8, 266.2], size: [3.0, 3.0], class: led}
+  xg0-led-a: {at: [9.9, 197.3], size: [1.4, 1.4], class: led}
+  xg0-led-b: {at: [14.600000000000001, 197.3], size: [1.4, 1.4], class: led}
+  xg1-led-a: {at: [9.9, 203.35], size: [1.4, 1.4], class: led}
+  xg1-led-b: {at: [14.600000000000001, 203.35], size: [1.4, 1.4], class: led}
+  xg2-led-a: {at: [9.9, 209.4], size: [1.4, 1.4], class: led}
+  xg2-led-b: {at: [14.600000000000001, 209.4], size: [1.4, 1.4], class: led}
+  xg3-led-a: {at: [9.9, 215.45], size: [1.4, 1.4], class: led}
+  xg3-led-b: {at: [14.600000000000001, 215.45], size: [1.4, 1.4], class: led}
+  xg4-led-a: {at: [9.9, 226.5], size: [1.4, 1.4], class: led}
+  xg4-led-b: {at: [14.600000000000001, 226.5], size: [1.4, 1.4], class: led}
+  xg5-led-a: {at: [9.9, 232.57], size: [1.4, 1.4], class: led}
+  xg5-led-b: {at: [14.600000000000001, 232.57], size: [1.4, 1.4], class: led}
+  xg6-led-a: {at: [9.9, 238.64], size: [1.4, 1.4], class: led}
+  xg6-led-b: {at: [14.600000000000001, 238.64], size: [1.4, 1.4], class: led}
+  xg7-led-a: {at: [9.9, 244.71], size: [1.4, 1.4], class: led}
+  xg7-led-b: {at: [14.600000000000001, 244.71], size: [1.4, 1.4], class: led}
+relief:
+  wall: '#4a4f55'
+parts:
+  - {ref: std/sfp-ganged@1, id: xg0, at: [5.475, 75.9], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg1, at: [5.475, 90.15], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg2, at: [5.475, 104.4], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg3, at: [5.475, 118.65], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg4, at: [5.475, 137.2], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg5, at: [5.475, 151.45], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg6, at: [5.475, 165.7], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg7, at: [5.475, 179.95], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+skins: [default]
