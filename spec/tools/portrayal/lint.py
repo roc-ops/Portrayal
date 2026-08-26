@@ -29,6 +29,8 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
       so a module total is never quoted as one while it is a floor
   L30 device: a card whose figure already covers its paired I/O module, beside a
       paired module that states its own - a sum would count the pairing twice
+  L32 any yaml: no mapping declares the same key twice - a duplicate is resolved
+      by the parser before anything else sees the file, so the loss is silent
 """
 import argparse
 import json
@@ -1700,6 +1702,66 @@ def print_matrix(matrix, schemas):
     print()
 
 
+
+# ---------------------------------------------------------------- L32
+class _DupCounting(yaml.SafeLoader):
+    """A loader that RECORDS duplicate mapping keys instead of resolving them.
+
+    WHY NO POST-PARSE CHECK CAN SUBSTITUTE, which is the durable part of this
+    rule: a duplicate key is resolved by the parser before any consumer sees the
+    document. yaml.safe_load hands back a legal object with one of the two
+    values silently gone, so the JSON Schema validates it happily and every
+    downstream rule is satisfied by the survivor. The collision has to be caught
+    at construction time or not at all.
+
+    ERROR rather than warning, because there is no case where two identical keys
+    in one mapping are intended, and the failure is always silent data loss.
+
+    AND IT CAN BE WORSE THAN LOSS. On celestica/psu-1600 the discarded
+    `provenance.face` said the geometry was "STILL ESTIMATED - the fan/latch
+    spacing was tuned around a c13-inlet that was 20 percent undersized" and the
+    surviving one said "photo (psu-face.jpeg ...)". The collapse did not merely
+    lose a sentence; it UPGRADED THE APPARENT CONFIDENCE of the component, from
+    estimated to photo-sourced, which is exactly what L15 gates `verified` on.
+
+    Recording rather than raising so that one file reports every duplicate it
+    has in one run, and so that a bad file does not abort the pass.
+    """
+
+    def __init__(self, *a, **kw):
+        super().__init__(*a, **kw)
+        self.dups = []
+
+    def construct_mapping(self, node, deep=False):
+        seen = set()
+        for key_node, _ in node.value:
+            key = self.construct_object(key_node, deep=deep)
+            try:
+                if key in seen:
+                    self.dups.append((key, key_node.start_mark.line + 1))
+                seen.add(key)
+            except TypeError:          # unhashable key - the schema will catch it
+                pass
+        return super().construct_mapping(node, deep=deep)
+
+
+def lint_duplicate_keys(path):
+    """L32: no mapping in this file declares the same key twice."""
+    loader = _DupCounting(path.read_text())
+    try:
+        loader.get_single_data()
+    except yaml.YAMLError:
+        return                          # unparseable: L1 has already said so
+    finally:
+        loader.dispose()
+    for key, line in loader.dups:
+        err(path, "L32", f"duplicate key {key!r} at line {line} - YAML keeps the "
+            "LAST one and discards the other silently, so whatever the first "
+            "declared is gone before any rule or schema sees this file. Give them "
+            "distinct names, or merge them into one statement if they are two "
+            "accounts of the same fact")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--schemas", required=True)
@@ -1709,6 +1771,10 @@ def main():
     std_file = schemas / "standards.yaml"
     if std_file.exists():
         STANDARDS.update(yaml.safe_load(std_file.read_text())["standards"])
+    # the schemas are YAML too where they are YAML, and a duplicate in the
+    # registry would be as silent there as anywhere else
+    for f in sorted(schemas.glob("*.yaml")):
+        lint_duplicate_keys(f)
     comp_v = load_schema(schemas, "component.schema.json")
     dev_v = load_schema(schemas, "device.schema.json")
     ovl_v = load_schema(schemas, "overlay.schema.json")
@@ -1718,6 +1784,7 @@ def main():
     for root in args.library:
         root = Path(root)
         for f in sorted(root.glob("components/**/contract.yaml")):
+            lint_duplicate_keys(f)
             d = lint_component(f, comp_v)
             # a file that would not parse has already been reported; running the
             # rest against None just buries that message under a traceback
@@ -1729,10 +1796,12 @@ def main():
                 lint_component_power(f, d)
             n += 1
         for f in sorted(root.glob("devices/**/device.yaml")):
+            lint_duplicate_keys(f)
             d = lint_device(f, dev_v, args.library); n += 1
             if d is not None and d.get("kind") == "device":
                 matrix.append((f, d))
         for f in sorted(root.glob("devices/**/overlays/*.yaml")):
+            lint_duplicate_keys(f)
             data = yaml.safe_load(f.read_text())
             for e in ovl_v.iter_errors(data):
                 err(f, "L1", f"{'/'.join(str(p) for p in e.path)}: {e.message}")
