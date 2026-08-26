@@ -115,6 +115,16 @@ provenance:
     explicit rail positions at 9.45 in and 5.00 in from the rear and where those rails ARE drawn.
     The distinction is deliberate: a region says "this is here" and decor says "this is here, at
     this size, in this place", and only the second needs a dimension behind it
+  bottom-face: >-
+    datasheet - the bottom is NOT featureless after all, and the feature is the one thing every
+    footprint figure dimensions. Figure 8 dimensions 23.21 in (58.95 cm) from the rear against a 28.93 in overall. The rack mounting flange is a vertical plate spanning the
+    chassis height, so it intersects the BOTTOM plane as well as the top and appears on this face
+    as a line across the width at that depth. That is a real dimensioned feature rather than an
+    annotation of absence, which is the distinction that matters here - an earlier revision of this
+    file said the bottom was unreachable without inventing something, and that was wrong. What
+    remains true is that no BOTTOM VIEW of any ASR 9000 chassis exists in the 78-document intake;
+    what this face carries is a feature dimensioned in a TOP-down figure whose geometry the bottom
+    necessarily shares. Positions are given from the REAR, which is how the figures dimension them
   card-orientation: >-
     datasheet - stated directly, and it had been an inference until now. The Overview and
     Reference Guide's "Chassis Slots" section (b-asr9k-overview-reference-guide.pdf p17) names
@@ -353,6 +363,11 @@ views:
       - {id: rack-mounting-brackets, label: 'Rack mounting brackets'}
   bottom:
     size: {w: 444.5, h: 727.2}
+    panel:
+      decor:
+        - {at: [0, 589.5], size: [444.5, 3.9], fill: '#9a9c9e'}
+    regions:
+      - {id: rack-mounting-plane, label: 'Rack mounting plane - where the chassis bolts to the rack posts'}
   left:
     size: {w: 727.2, h: 933.45}
     regions:

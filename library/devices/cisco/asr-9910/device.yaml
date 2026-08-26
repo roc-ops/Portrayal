@@ -293,24 +293,24 @@ gaps:
     detail rather than separators. The shelves' outer rectangles are measured and drawn.
   wanted: a figure showing the power shelves empty, and a statement of the AC and DC module counts
     on one page
-- what: bottom-face-is-undocumented-family-wide
+- what: rack-mounting-plane-not-dimensioned-for-this-chassis
   scope: [bottom]
-  reason: vendor-silent
+  reason: needs-drawing
   note: >-
-    THE BOTTOM IS THE ONLY FACE OF THIS CHASSIS WITH NO SOURCE, and it is not a gap in this file's
-    research. There is no bottom view of ANY ASR 9000 chassis anywhere in the 78-document intake:
-    every figure caption in all 65 PDFs was searched for "Bottom View", "underside" and "bottom of
-    the chassis", and the result is zero hits. That is a fact about how Cisco documents a rack
-    chassis rather than about this model - a face that sits on rack rails and is never serviced
-    gets no figure.
-    The face is SIZED correctly from Table 13, so a rack elevation and the 3D box are the right
-    shape; what it lacks is any statement of what is on it. Nothing is invented to fill it, and no
-    region is added naming the absence, because a check passed by annotating that you have nothing
-    is worse than a check failed honestly.
-    THIS HOLDS THE CHASSIS AT CAPABILITY 2. Front, rear, top, left and right all now carry sourced
-    content; the bottom alone does not, and level 3's implementation requires content on all six.
-    The written design asks only that six faces be "present, sized, and mutually consistent", which
-    this file satisfies - the content requirement comes from `_has_content`, which was written for
-    level 1. See working/notes/deliberately-empty-faces.md.
-  wanted: a bottom elevation, a photograph of the underside, or a way for a view to declare itself
-    deliberately empty so that empty-by-verification counts where empty-by-omission does not
+    NARROWED, and the earlier version of this gap was wrong in a way worth recording. It claimed
+    the bottom face was unreachable for every chassis in the family because no bottom VIEW exists
+    in the intake. The first half is still true - no bottom view of any ASR 9000 exists in 78
+    documents - but the conclusion did not follow. The rack mounting flange is a vertical plate
+    spanning the chassis height, so it intersects the bottom plane too, and every chassis whose
+    TOP-DOWN footprint figure dimensions that plane can carry it on the bottom as a real measured
+    feature. Five of the seven do: the 9006 at 5.73 in from the front, the 9010 at 23.21 in from
+    the rear, the 9912 and 9922 at 22 in from the rear, and the 9906 from its side view's rail
+    positions. Those five reached level 4 on that evidence.
+    THIS CHASSIS IS THE ONE THAT DOES NOT. Figure 12 is the richest drawing in the corpus - a
+    dimensioned three-view - and it dimensions the overall width, height and depth and nothing
+    else. Its side view draws two vertical rails but gives no position for them, and the HIG's
+    only side-view-with-rail-locations figure is the ASR 9906's. Transferring the 9906's 127.0 and
+    240.0 mm would be an inference across two chassis that differ in height by 313 mm, which is
+    exactly the kind of sibling transfer the rest of this work has been correcting.
+  wanted: a dimensioned rail position for the ASR 9910, from any figure, or its rack-mount
+    installation drawing

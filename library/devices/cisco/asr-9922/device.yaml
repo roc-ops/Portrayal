@@ -96,6 +96,16 @@ provenance:
     explicit rail positions at 9.45 in and 5.00 in from the rear and where those rails ARE drawn.
     The distinction is deliberate: a region says "this is here" and decor says "this is here, at
     this size, in this place", and only the second needs a dimension behind it
+  bottom-face: >-
+    datasheet - the bottom is NOT featureless after all, and the feature is the one thing every
+    footprint figure dimensions. Figure 13 dimensions 22 in (55.88 cm) from the rear. The rack mounting flange is a vertical plate spanning the
+    chassis height, so it intersects the BOTTOM plane as well as the top and appears on this face
+    as a line across the width at that depth. That is a real dimensioned feature rather than an
+    annotation of absence, which is the distinction that matters here - an earlier revision of this
+    file said the bottom was unreachable without inventing something, and that was wrong. What
+    remains true is that no BOTTOM VIEW of any ASR 9000 chassis exists in the 78-document intake;
+    what this face carries is a feature dimensioned in a TOP-down figure whose geometry the bottom
+    necessarily shares. Positions are given from the REAR, which is how the figures dimension them
   card-orientation: >-
     datasheet - "Cisco ASR 9922 Router: All RP, FCs, and LCs are front-facing and mounted
     vertically, with ejector levers and captive screws at the top and bottom of each card"
@@ -268,6 +278,11 @@ views:
       - {id: rack-mounting-brackets, label: 'Rack mounting brackets'}
   bottom:
     size: {w: 447.0, h: 668.0}
+    panel:
+      decor:
+        - {at: [0, 558.8], size: [447.0, 3.9], fill: '#9a9c9e'}
+    regions:
+      - {id: rack-mounting-plane, label: 'Rack mounting plane - where the chassis bolts to the rack posts'}
   left:
     size: {w: 668.0, h: 1955.8}
     regions:
