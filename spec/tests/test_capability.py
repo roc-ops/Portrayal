@@ -99,16 +99,30 @@ def test_declared_gaps_carry_what_no_rule_can_see():
     assert gaps[0]["wanted"], "wanted is the field that makes it actionable"
 
 
-def test_derived_gaps_are_not_hand_written():
-    """A hand-kept list of machine-findable problems goes stale the first time
-    someone fixes one, so the rules are asked rather than transcribed."""
-    man = LIB / "devices/edgecore/as7946-74xksb/device.yaml"
+def _derived(slug):
+    man = LIB / f"devices/{slug}/device.yaml"
     dev = yaml.safe_load(man.read_text())
     cap, flags = capability.assess(dev, profiles=PROFILES)
     gaps = capability.derived_gaps(man, dev, [str(LIB)], cap, flags)
-    by_rule = {g["because"]: g for g in gaps}
-    assert by_rule["L20"]["count"] > 100, "the prose-in-attrs debt is real"
+    return gaps, {g["because"]: g for g in gaps}
+
+
+def test_derived_gaps_are_not_hand_written():
+    """A hand-kept list of machine-findable problems goes stale the first time
+    someone fixes one, so the rules are asked rather than transcribed."""
+    gaps, by_rule = _derived("edgecore/as7726-32x")
+    assert by_rule["L21"]["count"] > 30, "the buried-silkscreen debt is real"
     assert all(g["kind"] == "derived" for g in gaps)
+
+
+def test_a_paid_debt_leaves_the_register_on_its_own():
+    """The other half of the same promise, and the half a hand-kept list gets
+    wrong. The AGR420 carried 155 L20 warnings - state meanings written as prose
+    in `attrs` on 148 lamps - and the fix was to declare them once per group.
+    Nobody edited a register to say so: the rule stopped warning and the gap
+    stopped existing. If this ever fails, the gap is being transcribed again."""
+    _, by_rule = _derived("edgecore/as7946-74xksb")
+    assert "L20" not in by_rule
 
 
 def test_cannot_evaluate_is_not_the_same_answer_as_no():
