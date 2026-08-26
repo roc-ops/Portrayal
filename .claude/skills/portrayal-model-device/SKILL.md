@@ -64,6 +64,33 @@ disk to argue with. Then LOOK at a sample of what you dropped.
 `^Figure \d+:` in the document's text and compare it against what you captured.
 "No figure for this part" means something very different at 62/62 than at 39/62.
 
+### AN EMPTY `relief.features` DOES NOT MEAN A FLAT PART. COMPILE IT AND COUNT.
+
+This has now been got wrong three times in one day, by three different readers,
+in both directions - so do not reason about it, measure it.
+
+A COMPOSED PART CARRIES ITS OWN DEPTH. `render.py` treats anything that is not
+`kind: module` as an aperture, so a `std/` or `common/` port emits `data-depth`
+from its own `size.d` REGARDLESS of what the parent card's relief block says. A
+line card with 48 composed cages already has 48 recessed ports in 3D even though
+its own `relief` is a wall colour and nothing else.
+
+    "all 127 relief blocks have no features"          <- true
+    "therefore every part renders flat"               <- FALSE, 82 of 128 have cavities
+
+The same error in reverse: a wrapper assembly with no relief of its own reads as
+flat, when the `std/` part it composes is doing the work. `common/sfp-plus-cage`
+has no relief block at all and its ten placements on a supervisor still compile
+to ten 41 mm cavities, because it composes `std/sfp`.
+
+THE CHECK, which takes a minute and settles it:
+
+    compile the component through instance_group, count `data-depth` in the output
+
+Do that before writing "renders flat" anywhere, and before adding a feature to
+fix a flatness that is not there. A part that already has cavities does not need
+them invented, and the invented ones will be wrong.
+
 ### A FIGURE'S OWN ASPECT TELLS YOU WHETHER TO TRUST IT
 
 Before taking any fraction off a drawing, measure the drawing against something
