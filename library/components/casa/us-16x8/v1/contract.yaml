@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: us-16x8
-version: 1.3.0
+version: 1.4.0
 class: line-card
 profile: networking
 description: >-
@@ -86,6 +86,41 @@ provenance:
     gave: these drawings are anisotropic, so a round lamp scales to two different diameters
     depending on the axis, which tells you the drawing is wrong rather than telling you the
     size.'
+  faceplate-hardware-photo: 'THE OWNER SUPPLIED AN ISOMETRIC OF THE C100G FRONT and it
+    corrects the SHAPE of two things on this faceplate. working/photos/casa/ -
+    c100g-front-isometric.png and the crop crop-ejectors.png, read at high zoom.
+    WHAT IT SETTLES:
+    - The captive screw is not a flat slotted head. It is a substantial BLACK KNURLED
+      KNOB standing well proud, with a dark top face and a light metallic band. `knurl`
+      is added for that reason - it is a shape fact and costs no dimension. The drawn
+      2D head is still a slotted circle and is NOT redrawn; the figures draw it that way
+      and this photograph cannot give a true elevation of it.
+    - The EJECTOR LEVER is the most prominent thing on the whole face: a large CURVED
+      BLACK lever, not the rounded strip this skin draws, with a thin vertical linkage
+      rod running down the card from the knob to it.
+    - RELATIVE PROMINENCE, which is the one quantitative thing a perspective view CAN
+      give: lever stands proud of knob stands proud of lamp. This contract already
+      orders them that way - 4.2, 1.6, 0.3 - so the photograph CONFIRMS the ordering
+      rather than correcting it. Only the absolute magnitudes are understated, and it
+      gives no absolute magnitude.
+    WHAT IT DOES NOT SETTLE, and why nothing else moved. It is a three-quarter view:
+    every forward projection is foreshortened by an unknown factor, nothing of known
+    size is in frame, and the one feature that looks measurable - the knob ellipse -
+    needs a diameter nobody has. So it fails gate 1 outright, exactly as the Cisco
+    perspective figures did. THE LEVER SILHOUETTE IS DELIBERATELY NOT REDRAWN: the true
+    elevation outline of a curved lever is precisely what a three-quarter crop cannot
+    give, and drawing sixteen faceplates from it would replace a sourced schematic strip
+    with an invented curve. The 4.2 stays, marked `borrowed`.
+    WANTED, and it closes both at once: ONE STRAIGHT-ON PHOTOGRAPH OF A SINGLE CARD,
+    with a rule or any part of known size in frame. That would give the lever its
+    silhouette AND its projection, and it is the cheapest open question on this family.
+    THIS ENTRY IS ONE READING OF ONE PHOTOGRAPH restated across the thirteen front-slot
+    cards that share this faceplate. The photograph shows DS 8X96, US 16X4 and SMM 8X10G
+    specifically; the rest inherit it because the family shares a plate, which the
+    DS/US positions provenance already establishes to the millimetre. It is NOT thirteen
+    observations. The REAR cards - the 6+12 I/O family, rfd, rfu-16x8, ups-32x4,
+    lc-sw-bdm and the two SMM Switch BDMs - are NOT in this photograph and are
+    deliberately left alone.'
   relief: 'the C100G/C40G card family treatment - two captive screws (cyl 1.6), the
     ejector latch strip (out 4.2) and the 3 status lamps (dome 0.3). THE FULL ARGUMENT IS IN casa/bdm@1 AND THIS IS A
     POINTER TO IT, not a second reading: the three magnitudes are one estimate per kind of
@@ -102,8 +137,8 @@ relief:
   features:
     # Two captive slotted screws on the centreline - the guide's own
     # "integrated thumbscrews" / "captive screws".
-    - {node: screw-t, cyl: 1.6, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
-    - {node: screw-b, cyl: 1.6, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
+    - {node: screw-t, cyl: 1.6, knurl: true, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
+    - {node: screw-b, cyl: 1.6, knurl: true, confidence: borrowed, source: 'edgecore/agr-panel-screw@1 - its measured captive screw head'}
     # The ejector latch strip.
     - {node: latch-t, out: 4.2, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 latch - measured off the real PSU'}
     - {node: latch-b, out: 4.2, confidence: borrowed, source: 'edgecore/agr-psu-dc@1 latch - measured off the real PSU'}

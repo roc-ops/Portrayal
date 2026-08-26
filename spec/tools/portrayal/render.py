@@ -558,6 +558,10 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             r.set("data-vent", f"{d['vent']:g}")
         if d.get("out"):
             r.set("data-z-out", f"{d['out']:g}")
+        # relief.js sums data-z-lift up the ancestor chain, so a decor rect that
+        # carries one spans lift..out rather than 0..out
+        if d.get("lift"):
+            r.set("data-z-lift", f"{d['lift']:g}")
         if d.get("sink"):
             r.set("data-groove", f"{d['sink']:g}")
 
