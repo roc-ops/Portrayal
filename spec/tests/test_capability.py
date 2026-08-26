@@ -107,15 +107,47 @@ def _derived(slug):
     return gaps, {g["because"]: g for g in gaps}
 
 
-def test_derived_gaps_are_not_hand_written():
+def _planted(tmp_path, at=(55.5, 18.0), slug="edgecore/as7726-32x", port="port-1"):
+    """A device that owns its own defect.
+
+    These two tests need a derived gap to look at, and they used to borrow one
+    from whichever device was in arrears - the AGR420's L20, then the AS7726's
+    L21, then the S9510's. Each time that debt was paid the tests broke, and the
+    fix was to re-point them at the next debtor. Three devices in, the pattern is
+    the bug: a test that asserts some real work has NOT been done yet punishes
+    the person who does it, and quietly pressures them into weakening the
+    assertion to get a green run.
+
+    So the defect is planted here instead. A label is dropped in the dead centre
+    of a port's opaque body, where nothing but this function will ever move it.
+    """
+    man = LIB / "devices" / slug / "device.yaml"
+    dev = yaml.safe_load(man.read_text())
+    front = dev["views"]["front"]
+    front.setdefault("silkscreen", []).insert(
+        0, {"at": list(at), "text": "BURIED", "font-size": 1.5, "for": port})
+    # The other half this fixture owns: no `profile:`, so `specified` cannot be
+    # evaluated and the flag gap that carries no count exists to be looked at.
+    dev.pop("profile", None)
+    out = tmp_path / "device.yaml"
+    out.write_text(yaml.safe_dump(dev))
+    cap, flags = capability.assess(dev, profiles=PROFILES)
+    gaps = capability.derived_gaps(out, dev, [str(LIB)], cap, flags)
+    return gaps, {g["because"]: g for g in gaps}, cap
+
+
+def test_derived_gaps_are_not_hand_written(tmp_path):
     """A hand-kept list of machine-findable problems goes stale the first time
-    someone fixes one, so the rules are asked rather than transcribed. The
-    S9510 carries the last of the buried-silkscreen debt: its QSFP-DD port
-    numbers are printed on the blue band the cage component draws, so the mark
-    is right and the component is wrong, and no label move can pay it."""
-    gaps, by_rule = _derived("ufispace/s9510-28dc")
-    assert by_rule["L21"]["count"] > 0, "the buried-silkscreen debt is real"
+    someone fixes one, so the rules are asked rather than transcribed."""
+    gaps, by_rule, _ = _planted(tmp_path)
+    assert by_rule["L21"]["count"] > 0, "a planted burial is found by asking L21"
     assert all(g["kind"] == "derived" for g in gaps)
+
+    # And the real library is not consulted for a debt, only for the shape of
+    # the answer: whatever gaps exist out there are derived, never transcribed.
+    for slug in ("ufispace/s9510-28dc", "edgecore/as7726-32x"):
+        real, _ = _derived(slug)
+        assert all(g["kind"] == "derived" and g["because"] for g in real), slug
 
 
 def test_a_paid_debt_leaves_the_register_on_its_own():
@@ -161,15 +193,14 @@ def test_an_unevaluable_flag_files_its_gap_against_the_missing_thing():
     assert "profiles.yaml" in gap["wanted"] and "`specified`" in gap["wanted"]
 
 
-def test_both_kinds_of_gap_say_why_in_the_same_field():
+def test_both_kinds_of_gap_say_why_in_the_same_field(tmp_path):
     """A derived gap carried `rule` and a declared one `reason`, so a renderer
     could not tell by position which it was holding and put both in one badge.
     One field, and `kind` says how to read it."""
-    man = LIB / "devices/ufispace/s9510-28dc/device.yaml"
-    dev = yaml.safe_load(man.read_text())
-    cap, flags = capability.assess(dev, profiles=PROFILES)
-    gaps = (capability.declared_gaps(dev)
-            + capability.derived_gaps(man, dev, [str(LIB)], cap, flags))
+    dev = load("ufispace/s9510-28dc")          # the one device with a DECLARED gap
+    derived, _, _ = _planted(tmp_path, at=(190.0, 33.0),   # and a planted derived one
+                             slug="ufispace/s9510-28dc", port="port-0")
+    gaps = capability.declared_gaps(dev) + derived
     assert all("because" in g for g in gaps)
     assert not any("rule" in g or "reason" in g for g in gaps)
     kinds = {g["because"]: g["kind"] for g in gaps}
@@ -192,16 +223,12 @@ def test_the_chain_is_stated_once():
     assert not (needs & {g["wanted"] for g in gaps})
 
 
-def test_a_gap_that_counts_nothing_omits_count():
+def test_a_gap_that_counts_nothing_omits_count(tmp_path):
     """`count: 0` reads as "nothing found" rather than "nothing to count"."""
-    man = LIB / "devices/ufispace/s9510-28dc/device.yaml"
-    dev = yaml.safe_load(man.read_text())
-    cap, flags = capability.assess(dev, profiles=PROFILES)
-    gaps = capability.derived_gaps(man, dev, [str(LIB)], cap, flags)
+    gaps, by_rule, _ = _planted(tmp_path)
     flag_gap = next(g for g in gaps if g["what"] == "profile-undeclared")
     assert "count" not in flag_gap
-    rule_gap = next(g for g in gaps if g["because"] == "L21")
-    assert rule_gap["count"] > 0
+    assert by_rule["L21"]["count"] > 0
 
 
 def test_search_finds_what_a_device_is_not_how_it_was_phrased():
@@ -239,15 +266,16 @@ def test_search_finds_what_a_device_is_not_how_it_was_phrased():
     assert "lanes" not in idx["as7946-74xksb"]
 
 
-def test_a_gap_names_the_flag_it_blocks_in_a_field():
+def test_a_gap_names_the_flag_it_blocks_in_a_field(tmp_path):
     """The About panel renders a `?specified` chip and wants to explain it. The
     gap is correctly named for the cause - `profile-undeclared` - so a name
     match finds nothing, and matching the flag in backticks inside `wanted` is
-    prose parsing that breaks silently the first time someone rewords it."""
-    man = LIB / "devices/ufispace/s9510-28dc/device.yaml"
-    dev = yaml.safe_load(man.read_text())
-    cap, flags = capability.assess(dev, profiles=PROFILES)
-    gaps = capability.derived_gaps(man, dev, [str(LIB)], cap, flags)
+    prose parsing that breaks silently the first time someone rewords it.
+
+    On the planted fixture for the same reason as the two above: the last line
+    needs a rule gap to exist, and borrowing one from a real device makes this
+    an assertion that somebody's cleanup is still outstanding."""
+    gaps, _, cap = _planted(tmp_path)
     assert all("blocks" in g for g in gaps)
 
     for flag in cap["unknown"] + [f for f in capability.FLAGS
