@@ -52,6 +52,14 @@ provenance:
     measured - the best gate-1 result in the whole family. Calibrating x on 482.6 mm (the 19.0 in
     rack face) and y on Table 13's 932.18 mm INDEPENDENTLY gives 0.20134 and 0.20133 mm/px - they
     agree to 0.00 percent. Origin shifted in by (482.6 - 447.0) / 2 = 17.8 mm to reach the body
+  slot-id-silkscreen-position: >-
+    measured, and corrected. The printed slot ID row was first placed at y 650 mm, which was the
+    cage bottom plus a round 10 - a guess, not a measurement - and it put every label INSIDE the
+    card bays once those were resized from the cage opening to the component envelope. The
+    renderer paints a legend under the module that covers it, exactly as the skill warns, so all
+    ten vanished. The text row actually measures 666.60 mm down the body, about 27 mm below the
+    cage, which is both the real position and clear of the bays' 654.88 mm bottom edge. A legend
+    that disappears when a component is placed is in the wrong place, not badly coloured
   card-orientation: >-
     datasheet - stated directly, and it had been an inference until now. The Overview and
     Reference Guide's "Chassis Slots" section (b-asr9k-overview-reference-guide.pdf p17) names
@@ -171,6 +179,7 @@ chassis:
   weight-kg: 64.915
   airflow: front-to-back
   color: '#c8cacc'
+  silk: '#231f20'
 groups:
   slots:
     term: Slot
@@ -195,16 +204,16 @@ views:
         - {id: shelf-0, at: [6.96, 821.24], size: [408.71, 46.0], shape: rect}
         - {id: shelf-1, at: [6.96, 873.0], size: [408.71, 46.0], shape: rect}
     silkscreen:
-      - {at: [28.81, 650.0], text: RSP0, font-size: 7, anchor: middle}
-      - {at: [72.6, 650.0], text: LC0, font-size: 7, anchor: middle}
-      - {at: [116.29, 650.0], text: LC1, font-size: 7, anchor: middle}
-      - {at: [160.18, 650.0], text: LC2, font-size: 7, anchor: middle}
-      - {at: [203.87, 650.0], text: LC3, font-size: 7, anchor: middle}
-      - {at: [247.76, 650.0], text: LC4, font-size: 7, anchor: middle}
-      - {at: [291.45, 650.0], text: LC5, font-size: 7, anchor: middle}
-      - {at: [335.24, 650.0], text: LC6, font-size: 7, anchor: middle}
-      - {at: [379.03, 650.0], text: LC7, font-size: 7, anchor: middle}
-      - {at: [422.82, 650.0], text: RSP1, font-size: 7, anchor: middle}
+      - {at: [28.81, 666.60], text: RSP0, font-size: 7, anchor: middle}
+      - {at: [72.6, 666.60], text: LC0, font-size: 7, anchor: middle}
+      - {at: [116.29, 666.60], text: LC1, font-size: 7, anchor: middle}
+      - {at: [160.18, 666.60], text: LC2, font-size: 7, anchor: middle}
+      - {at: [203.87, 666.60], text: LC3, font-size: 7, anchor: middle}
+      - {at: [247.76, 666.60], text: LC4, font-size: 7, anchor: middle}
+      - {at: [291.45, 666.60], text: LC5, font-size: 7, anchor: middle}
+      - {at: [335.24, 666.60], text: LC6, font-size: 7, anchor: middle}
+      - {at: [379.03, 666.60], text: LC7, font-size: 7, anchor: middle}
+      - {at: [422.82, 666.60], text: RSP1, font-size: 7, anchor: middle}
     components:
       bays:
         - {id: slot-0, at: [8.11, 259.18], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0}
