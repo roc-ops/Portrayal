@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: io-6p12
-version: 2.2.0
+version: 2.3.0
 class: line-card
 profile: networking
 description: >-
@@ -105,6 +105,20 @@ provenance:
     NO DEPTH IS GUESSED: the owner gave a topology, not a dimension, and no Casa
     document gives a recess depth. WANTED: how far below the faceplate the MCX
     interface sits - one caliper reading or one side-on photograph.'
+  missing-component: 'THE CABLE COMB IS A REAL, NAMED PART AND THIS LIBRARY DOES NOT
+    HAVE ONE. The `comb` entry above describes it from a photograph; the guides name it
+    and draw it. Figures 1-15 and 1-16 of the C100G guide are captioned "6+12 IO Module
+    w/ cable retention bracket" and "6+12 SW IO Modules w/ cable retention bracket", and
+    each draws the bracket as its OWN object beside the card - a notched strip with the
+    U and D numbers printed between the notches and three screws through it, one per
+    standoff. Figure 2-15 of the C40G guide names the equivalent outright, "UPS 32x4 I/O
+    cable retention plate", and draws it separated from its module.
+    So casa/ is missing a component, not a decision: there is no cable-retention-plate
+    part and none of the four I/O card families can seat one, even though the three
+    standoffs on this faceplate exist for no other purpose than to carry it. Recorded
+    rather than built - building it is a modelling job with its own sourcing, not part
+    of a relief pass. It is NOT casa/cable-manager, which is a different bracket on the
+    chassis front. WRITTEN FIRST IN casa/ups-32x4@1 and restated here.'
   relief: 'the C100G/C40G card family treatment - two captive screws (cyl 1.6), the
     ejector latch strip (out 4.2). THE FULL ARGUMENT IS IN casa/bdm@1 AND THIS IS A
     POINTER TO IT, not a second reading: the three magnitudes are one estimate per kind of

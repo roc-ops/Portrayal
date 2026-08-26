@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ups-32x4
-version: 1.2.0
+version: 1.3.0
 class: line-card
 profile: networking
 description: >-
@@ -101,6 +101,46 @@ provenance:
     NO DEPTH IS GUESSED: the owner gave a topology, not a dimension, and no Casa
     document gives a recess depth. WANTED: how far below the faceplate the MCX
     interface sits - one caliper reading or one side-on photograph.'
+  standoffs-not-screws: 'THE RECORDED DRAWING-VERSUS-PHOTOGRAPH DISAGREEMENT ABOVE IS
+    NOT A DISAGREEMENT. The `thumbscrews` entry has Figure 1-12 drawing three HEXAGONS
+    and the US16x8 datasheet photograph showing three ROUND SLOTTED HEADS at the same
+    three places, and resolves it by letting the photograph win. Figure 2-15 shows both
+    at once and they are TWO DIFFERENT OBJECTS.
+    That figure draws three things stacked and labels them: the "UPS 16x8 line card",
+    the "UPS 32x4 I/O cable retention plate" and the "UPS 32x4 I/O module". The MODULE
+    carries three HEX heads inside the outlined port field. The RETENTION PLATE, drawn
+    separately above it, carries three ROUND SLOTTED SCREW HEADS at matching heights.
+    So the hexagons are threaded STANDOFFS on the card and the round heads are the
+    screws that fasten the plate to them - and the datasheet photograph was taken WITH
+    THE PLATE FITTED, which is why it shows round heads where the figure shows hex.
+    Both sources were right about different objects. This is the trap the modelling
+    notes name in as many words: before recording a source disagreement, check that
+    both sources are talking about the same thing.
+    WHAT CHANGES: the three nodes are standoffs, so cyl 1.6 - a panel screw HEAD
+    height - was the wrong kind of number for them, not merely the wrong value. They
+    now carry 9.5.
+    WHERE THE 9.5 COMES FROM, AND WHAT IT IS NOT: it is the 3/8in Jason read off the
+    C40G rear photograph for the 6+12 I/O cards standoffs, recorded in casa/io-6p12@2.
+    It is adopted here because Figure 2-15 shows the same kind of hex standoff carrying
+    the same kind of retention plate on this card. THAT IS ONE READING APPLIED TO A
+    SECOND PART, NOT A SECOND READING - the two cards agreeing about it would be an
+    echo, and if their standoffs differ this is the first assumption to break. No
+    figure or table gives this card its own standoff height. WANTED: a caliper, or a
+    side-on photograph of a UPS 32x4 with the plate off.'
+  missing-component: 'THE CABLE RETENTION PLATE IS A REAL PART AND THIS LIBRARY DOES
+    NOT HAVE ONE. Figure 2-15 names it - "UPS 32x4 I/O cable retention plate" - and
+    draws it as its own object: a notched strip with the port numbers printed between
+    the notches and three screws through it. Figures 1-15 and 1-16 of the C100G guide
+    draw the equivalent beside the 6+12 and 6+12 SW I/O cards, captioned "w/ cable
+    retention bracket". The three standoffs on this card exist for no other purpose
+    than to carry it.
+    So this is a MISSING COMPONENT, not a missing decision: casa/ has no
+    cable-retention-plate and none of the four I/O card families can seat one. It is
+    recorded rather than built because building it is a modelling job with its own
+    sourcing, not part of a relief pass. Note it is NOT casa/cable-manager, which is a
+    different part on the chassis front.
+    `rf-field` stays a silkscreen outline and is now CONFIRMED as one: Figure 2-15
+    makes it unambiguous that the rectangle is where that plate seats.'
   relief: 'the C100G/C40G card family treatment - two captive screws (cyl 1.6), the
     ejector latch strip (out 4.2). THE FULL ARGUMENT IS IN casa/bdm@1 AND THIS IS A
     POINTER TO IT, not a second reading: the three magnitudes are one estimate per kind of
@@ -116,9 +156,12 @@ relief:
     - {node: screw-t, cyl: 1.6}
     - {node: screw-b, cyl: 1.6}
     # Three captive round slotted thumb screws down the port field.
-    - {node: thumbscrew-0, cyl: 1.6}
-    - {node: thumbscrew-1, cyl: 1.6}
-    - {node: thumbscrew-2, cyl: 1.6}
+    # NOT screw heads - hex STANDOFFS that carry the cable retention plate. See
+    # provenance/standoffs-not-screws. The node ids still read `thumbscrew` because
+    # renaming them would break every reference to a part whose position is right.
+    - {node: thumbscrew-0, cyl: 9.5, color: '#b08d57'}
+    - {node: thumbscrew-1, cyl: 9.5, color: '#b08d57'}
+    - {node: thumbscrew-2, cyl: 9.5, color: '#b08d57'}
     # The ejector latch strip.
     - {node: latch-t, out: 4.2}
     - {node: latch-b, out: 4.2}
