@@ -24,8 +24,9 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { toGLB, toUSDZ } from './share.js';
-import { configureRelief, svgCanvas, canvasTex, rasterize, svgSource,
+import { configureRelief, svgCanvas, canvasTex, rasterize, svgSource, setSvgOverride, clearSvgOverrides,
          buildFaceRelief, squareFaceplate } from './relief.js';
+import { applyOverrides } from './swap.js';
 
 const CLS_LABEL = {fan: 'Fan module', psu: 'Power supply', tab: 'Info tab'};
 // box-face shading, in +x -x +y -y +z -z order: sides darker, lid lifted,
@@ -75,6 +76,11 @@ export function createViewer(container, opts = {}) {
   const HL_COLOR = opts.highlight || '#f59e0b';
 
   let DEV = null, CFG = null, disposed = false;
+  // Runtime bay swaps, bay id -> ref (or null for an emptied bay). The 3D scene
+  // is extracted from the COMPILED face files, which know only what the built
+  // configuration says, so without these a swap made in the 2D inspector is
+  // invisible here - on every device, in both directions.
+  let OVERRIDES = {}, COMP_INDEX = null;
   let COMP = null, COMP_ENTRY = null;     // lone-component mode, as ?component= gave
   let W = 438.4, H = 43.5, D = 515;
   // animated FRUs: paths discovered per build, groups tweened along their face normal
@@ -334,9 +340,46 @@ export function createViewer(container, opts = {}) {
     return {mesh: new THREE.Mesh(new THREE.BoxGeometry(bw, bh, d), mats), fp, d};
   }
 
+  // Rewrite the fetched faces to match the runtime swaps, BEFORE anything reads
+  // them. Everything downstream - the FRU-path scan, every face texture, every
+  // cavity, the hit index - goes through svgSource, so one substitution per face
+  // reaches all of them.
+  //
+  // The overrides are cleared first ON PURPOSE: svgSource consults the override
+  // map ahead of its cache, so reading a face here while a previous build's
+  // override still stood would re-swap an already-swapped document.
+  async function applyBayOverrides(cfg) {
+    clearSvgOverrides();
+    if (COMP || !devIndex?.bays || !Object.keys(OVERRIDES).length) return 0;
+    const byRef = ref => (COMP_INDEX || []).find(
+      c => `${c.ns}/${c.name}@${c.major.slice(1)}` === ref.split(':')[0]);
+    const loadSkin = async ref => {
+      const c = byRef(ref);
+      if (!c) return null;
+      const skin = c.skins?.includes('default') ? 'default' : c.skins?.[0];
+      const url = `${DIST}components/${c.ns}--${c.name}--${c.major}--${skin}.svg`;
+      return {comp: c, text: await svgSource(url)};
+    };
+    let total = 0;
+    for (const [view, bays] of Object.entries(devIndex.bays)) {
+      if (!bays.some(b => Object.prototype.hasOwnProperty.call(OVERRIDES, b.id))) continue;
+      const url = `${DIST}${DEV}.${cfg}.${view}.svg`;
+      let text;
+      try { text = await svgSource(url); } catch { continue; }
+      const doc = new DOMParser().parseFromString(text, 'image/svg+xml');
+      if (doc.querySelector('parsererror')) continue;
+      const n = await applyOverrides(doc.documentElement, bays, OVERRIDES, loadSkin);
+      if (!n) continue;
+      setSvgOverride(url, new XMLSerializer().serializeToString(doc));
+      total += n;
+    }
+    return total;
+  }
+
   async function build(cfg) {
     // the shared relief pipeline is global state; claim it for this build
     configureRelief({THREE, renderer, PXMM, FRU_PATHS});
+    await applyBayOverrides(cfg);
     gen++;
     const f = v => `${DIST}${DEV}.${cfg}.${v}.svg`;
     const meshes = [];
@@ -644,6 +687,7 @@ export function createViewer(container, opts = {}) {
     if (first || !devIndex) {
       devIndex = await (await fetch(`${DIST}${DEV}.configs.json`, {cache: 'no-store'})).json();
       const cidx = await (await fetch(`${DIST}components.json`, {cache: 'no-store'})).json();
+      COMP_INDEX = cidx.components;
       BODY_META = Object.fromEntries(cidx.components.filter(c => c.body)
         .map(c => [`${c.ns}/${c.name}@${c.major.slice(1)}`, c.body]));
       if (devIndex.chassis && devIndex.chassis.w) {
@@ -663,6 +707,7 @@ export function createViewer(container, opts = {}) {
     DEV = null;
     if (first || !COMP_ENTRY) {
       const idx = await (await fetch(`${DIST}components.json`, {cache: 'no-store'})).json();
+      COMP_INDEX = idx.components;
       COMP_ENTRY = idx.components.find(e => `${e.ns}/${e.name}@${e.major.slice(1)}` === COMP);
       if (!COMP_ENTRY) throw new Error(`unknown component ${COMP}`);
       W = COMP_ENTRY.size.w; H = COMP_ENTRY.size.h;
@@ -681,6 +726,9 @@ export function createViewer(container, opts = {}) {
       if (disposed) return;
       if (!spec.component && !spec.device && !DEV)
         throw new Error('viewer3d: load() needs a device or a component');
+      // `overrides` is the host's live swap state. Absent leaves the previous set
+      // standing, so a caller that does not use the feature never has to mention it.
+      if (spec.overrides) OVERRIDES = {...spec.overrides};
       if (spec.component) await loadComponent(spec.component, spec.skin || spec.config);
       else await loadDevice(spec.device || DEV, spec.config);
       // a config switch keeps the host's selection; the boxes were rebuilt

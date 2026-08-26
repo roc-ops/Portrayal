@@ -23,7 +23,24 @@ export function configureRelief(deps) {
 // URL already carries the config name, so memoising per URL is safe; a build
 // tool writes new files under new names.
 const SVG_CACHE = new Map();
+// A FACE CAN BE OVERRIDDEN FOR A BUILD. A runtime bay swap changes what the device
+// looks like without changing any file on disk, and everything downstream here -
+// svgCanvas, extractRelief, the hit index, the FRU-path scan - reads its text
+// through svgSource. Registering the swapped text against the same URL is what
+// lets ONE substitution reach all of them; threading a text argument through five
+// signatures instead would have meant five chances to miss one, and the one that
+// was missed would look like a rendering fault rather than a plumbing gap.
+//
+// Global, like the rest of this module's per-build state, and cleared at the top
+// of a build for the same reason `configureRelief` is called there.
+const SVG_OVERRIDE = new Map();
+export function setSvgOverride(url, text) {
+  if (text == null) SVG_OVERRIDE.delete(url);
+  else SVG_OVERRIDE.set(url, text);
+}
+export function clearSvgOverrides() { SVG_OVERRIDE.clear(); }
 export function svgSource(url) {
+  if (SVG_OVERRIDE.has(url)) return Promise.resolve(SVG_OVERRIDE.get(url));
   if (!SVG_CACHE.has(url))
     SVG_CACHE.set(url, fetch(url, {cache: 'no-store'}).then(r => r.text()));
   return SVG_CACHE.get(url);

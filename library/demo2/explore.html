@@ -475,12 +475,45 @@ shell.on('mode', m => {
   shell.el.fit.hidden = m === '3d';
 });
 
+// AN OVERRIDE IS A DEVIATION FROM WHAT WAS BUILT, not a restatement of it.
+// `state.cfgBays` is SEEDED from the configuration's own bays, so handing it over
+// whole would ask the viewer to re-seat occupants the compiled face already
+// contains. That is not merely wasted work: seatModule drops one component's skin
+// into one bay, where render.py also RECURSES INTO A CARRIER'S OWN BAYS, so
+// re-seating a modular line card would quietly lose its MPAs. Only what the user
+// actually changed is sent, and everything else keeps the compiled geometry.
+function builtOccupant(bayId) {
+  const cfg = state.meta?.configs?.find(c => c.name === state.cfg);
+  const declared = cfg?.bays || {};
+  if (Object.prototype.hasOwnProperty.call(declared, bayId)) return declared[bayId] || null;
+  for (const bays of Object.values(state.meta?.bays || {}))
+    for (const b of bays) if (b.id === bayId) return b.default || null;
+  return null;
+}
+function swapOverrides() {
+  const out = {};
+  for (const [id, ref] of Object.entries(state.cfgBays || {}))
+    if ((ref || null) !== builtOccupant(id)) out[id] = ref || null;
+  return out;
+}
+
+// THE SWAP STATE IS PART OF WHAT IS ON SCREEN, so it is part of the key.
+// A runtime swap changes no file on disk - the 3D scene is extracted from the
+// compiled faces, which know only what the built configuration says - so the
+// overrides have to travel with the load AND be visible to the early-return, or
+// sync3d would decide it was already showing the right thing. That early return
+// is why swapping while in 3D did nothing even after the viewer learned how.
+const swapKey = () => Object.entries(swapOverrides())
+  .sort(([a], [b]) => a < b ? -1 : 1)
+  .map(([k, v]) => `${k}=${v || ''}`).join(',');
+
 async function sync3d() {
   if (mode !== '3d') return;
   const v = await ensureViewer();
-  const key = `${state.device}.${state.cfg}`;
+  const key = `${state.device}.${state.cfg}|${swapKey()}`;
   if (key === loadedKey) return;
-  await v.load({device: state.device, config: state.cfg});
+  await v.load({device: state.device, config: state.cfg,
+                overrides: swapOverrides()});
   loadedKey = key;                // only once it is actually the thing on screen
   fruBar(v);
   if (state.sel) v.select(state.sel);
@@ -548,6 +581,15 @@ shell.on('device', (name, meta) => {
 shell.on('select', path => { if (mode === '3d' && viewer) viewer.select(path); });
 // a config change reloads the drawing and the scene both; the scene's half can
 // fail on its own, and an unhandled rejection is a silent one
+// A swap is the same event as a config change as far as the scene is concerned:
+// the drawing on the other tab now shows something the 3D scene does not. In 2D
+// mode sync3d returns immediately and the rebuild is deferred to the mode switch,
+// which is where the cost belongs - swapping is a 2D affordance and nobody should
+// pay for a scene they are not looking at.
+shell.on('change', () => { sync3d().catch(err => {
+  console.warn('[portrayal] 3D swap sync failed', err);
+  shell.el.status.textContent = `3D unavailable: ${err.message || err}`;
+}); });
 shell.on('load', () => { sync3d().catch(err => {
   console.warn('[portrayal] 3D reload failed', err);
   shell.el.status.textContent = `3D unavailable: ${err.message || err}`;

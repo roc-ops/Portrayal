@@ -16,6 +16,7 @@
 // it, and the comment says which.
 
 import { createDevicePicker } from './devsel.js';
+import { seatModule } from './swap.js';
 
 const NS = 'http://www.w3.org/2000/svg';
 
@@ -547,78 +548,27 @@ export function createShell(opts = {}) {
 
   // Swapping is done in the DOM, not by rebuilding: fetch the component's compiled
   // skin and drop it into the bay at the bay's own origin.
+  //
+  // THE SURGERY LIVES IN swap.js, not here, because viewer3d.js needs the identical
+  // operation on the fetched face text before it extracts relief from it - the 3D
+  // scene is built entirely out of that text, so a swap that only touched this DOM
+  // was invisible in 3D on every device. Two copies of `rename` and `bayTransform`
+  // would each have been right the day they were written.
   async function swapBay(bayId, ref) {
     const bay = (state.meta.bays[state.view] || []).find(b => b.id === bayId);
     const g = state.svg.querySelector(`[data-path="${CSS.escape(bayId)}"]`);
     if (!g || !bay) return;
     g.querySelector(`[id="${CSS.escape(bayId)}--module"]`)?.remove();
     state.cfgBays[bayId] = ref || null;
-    if (!ref) { refreshTree(); select(bayId, true); return; }
+    if (!ref) { refreshTree(); select(bayId, true); emit('change'); return; }
     const c = compByRef(ref);
     const skin = c?.skins?.includes('default') ? 'default' : c?.skins?.[0];
     const file = `${DIST}/components/${c.ns}--${c.name}--${c.major}--${skin}.svg`;
     const txt = await (await fetch(file, {cache: 'no-store'})).text();
-    const doc = new DOMParser().parseFromString(txt, 'image/svg+xml');
-    const wrap = document.createElementNS(NS, 'g');
-    wrap.setAttribute('id', `${bayId}--module`);
-    wrap.setAttribute('data-path', `${bayId}/module`);
-    wrap.setAttribute('data-ref', ref);
-    wrap.setAttribute('transform', bayTransform(bay, c));
-
-    // A standalone component skin is addressed in its OWN namespace: the file
-    // carries `<g id="bdm" data-path="bdm">` plus siblings `bdm--screw-t` and so
-    // on. render.py rewrites all of that into the bay's namespace when it builds
-    // a device - `front-0--module`, `front-0/module/status` - and dropping the
-    // file's nodes in verbatim skipped that step, so a swapped bay published a
-    // second root called `bdm` into a drawing that already had one at
-    // `front-0/module`. It showed up as a stray line-card row hanging outside
-    // FRONT-SLOTS, and only after a swap, which is what gave it away.
-    const root = doc.getElementById(c.name);
-    if (root) for (const a of [...root.attributes])
-      if (a.name.startsWith('data-') && a.name !== 'data-path' && !wrap.hasAttribute(a.name))
-        wrap.setAttribute(a.name, a.value);
-    for (const n of [...doc.documentElement.childNodes])
-      (n === root ? [...n.childNodes] : [n]).forEach(k => wrap.appendChild(k));
-    rename(wrap, c.name, bayId);
-    g.appendChild(wrap);
+    g.appendChild(seatModule(document, bayId, bay, ref, c, txt));
     refreshTree();
     select(bayId, true);
     emit('change');
-  }
-
-  // Re-address a component's own namespace into the bay's, matching render.py:
-  //   id="bdm--plate"        -> id="front-0--module--plate"
-  //   data-path="bdm/status" -> data-path="front-0/module/status"
-  // The component's own root id/path is the wrapper's already, so it is dropped
-  // rather than renamed - two nodes claiming one path is the bug this fixes.
-  function rename(wrap, name, bayId) {
-    for (const el of wrap.querySelectorAll('[id],[data-path]')) {
-      const id = el.getAttribute('id');
-      if (id === name) el.removeAttribute('id');
-      else if (id && id.startsWith(name + '--'))
-        el.setAttribute('id', `${bayId}--module--${id.slice(name.length + 2)}`);
-      const dp = el.getAttribute('data-path');
-      if (dp === name) el.setAttribute('data-path', `${bayId}/module`);
-      else if (dp && dp.startsWith(name + '/'))
-        el.setAttribute('data-path', `${bayId}/module/${dp.slice(name.length + 1)}`);
-    }
-  }
-
-  // Place an occupant the way its bay holds it, matching render.py exactly.
-  // A rotated bay is not a translate: render.py rotates the component about its
-  // OWN centre and then translates so the rotated bounding box lands on the
-  // bay's `at`. The C40G is the case that exposes this - its slots are
-  // horizontal, so every card sits at rotate: 90, and a swap that only
-  // translated re-rendered the card upright inside a horizontal slot.
-  function bayTransform(bay, c) {
-    const deg = bay.rotate || 0;
-    if (!deg || !c?.size) return `translate(${bay.at[0]},${bay.at[1]})`;
-    const cx = c.size.w / 2, cy = c.size.h / 2;
-    // 90 and 270 swap the box; 180 leaves it where it is
-    const quarter = ((deg % 360) + 360) % 360 % 180 === 90;
-    const offX = quarter ? cx - cy : 0;
-    const offY = quarter ? cy - cx : 0;
-    return `translate(${bay.at[0] - offX},${bay.at[1] - offY}) rotate(${deg} ${cx} ${cy})`;
   }
 
   function openModule(ref) { state.module = ref; loadStage(); }
