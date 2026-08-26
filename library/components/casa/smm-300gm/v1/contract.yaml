@@ -1,0 +1,253 @@
+format: 1
+kind: module
+name: smm-300gm
+version: 1.5.0
+class: supervisor
+profile: networking
+description: >-
+  Casa/CommScope SMM300GM Switch and Management Module - the supervisor for the
+  C100G and C40G CCAP chassis, and the SMM 300G fitted with a newer packet
+  processor after the original went end-of-life. Identical metal; the model name
+  on the silkscreen is the only visible difference. Ten 10GigE SFP+ (XG0-XG9) in ganged blocks of
+  six and four, two 100GigE QSFP28 (CG0, CG1), a 10/100BASE-T management RJ45 and
+  an RS-232 console RJ45, plus STATUS, ACTIVE and ALARM lamps. Up to two per
+  chassis in the dedicated active and standby slots, for 600G aggregate.
+size: {w: 30.47, h: 345.5, d: 380.0}
+size-confidence: {d: known-wrong}
+size-notes: 'd 380.0 is IMPOSSIBLE - a front and a rear card mate at a midplane inside a 386.0 chassis and two at 380.0 need 760. See provenance/depth-known-wrong'
+attrs:
+  model: 'SMM 300GM'
+  role: supervisor
+  qsfp28: '2'
+  sfp-plus: '10'
+  mgmt: 10/100BASE-T
+  console: RS-232
+  switching-throughput: 300G bidirectional per module
+  timing: IEEE 1588v2
+  nebs: 'Designed to NEBS level 3 requirements'
+  power-draw-max-w: 160
+provenance:
+  identity: 'Jason and roc-ops/ndv#28 - the SMM 300GM is the SMM 300G fitted with a
+    newer packet processor after the original went end-of-life at the manufacturer.
+    Physically identical - same cages, same layout, same power - and the only visible
+    difference is the model name on the silkscreen. WANTED: a Casa datasheet or
+    ordering guide naming the 300GM, the way the BDM2/BDM2m data sheet (12-2024)
+    settles that pair. Every dimension below is inherited from casa/smm-300g@1 and
+    carries its sources unchanged; this line covers only the claim that the variant
+    exists and is the same metal.'
+  depth-known-wrong: 'THE 380.0 IS NOT MERELY UNMEASURED, IT IS IMPOSSIBLE, and this
+    contract now says so in a field a tool can read - size-confidence: {d: known-wrong}.
+    THE CONSTRAINT. Front and rear cards MEET AT A MIDPLANE, which the owner photographed:
+    working/photos/casa/c40g-empty-midplane.png shows the emptied cage with the card guides
+    and the midplane at the back of it, and the opening where the rear I/O card reaches
+    through to the front card. So a front card and its rear partner have to share the
+    chassis depth - 386.0 on the C100G, 388.45 on the C40G. Two cards at 380.0 need 760,
+    which is not a wide error bar, it is twice the box.
+    WHAT THE SHAPE IS, from the owner: "the front card is mostly rectangular, but the I/O
+    card is kind of L SHAPED where the top part of the top connector PASSES THROUGH THE
+    MIDPLANE and plugs into the front card, and the other one is plugged into the midplane.
+    So they ultimately kind of meet in the middle." So the rear card is a body against the
+    midplane PLUS A TONGUE at the top reaching forward through it.
+    NOTE WHAT THAT DOES AND DOES NOT ALLOW, because the obvious rule is wrong. front + rear
+    CAN exceed the chassis depth, by about the tongue length, because the tongue overlaps the
+    front card at a height where the front card is not - they interleave rather than tile. The
+    constraint is therefore an inequality with slack, not an equality. What it cannot absorb
+    is a 374 mm overlap where a tongue is tens of millimetres.
+    ONE PHOTOGRAPH IS USABLE AND IT IS NOT THIS CARD-FAMILY-WIDE. bdm2m-solder-side.jpeg has
+    the faceplate FULLY IN FRAME, so its 345.5 long axis anchors the scale at 5.00 px/mm; the
+    card measures 1336 px from the faceplate to the top of its midplane connectors. Raw that
+    is 267 mm. The shot is NOT orthographic - the PCB reads 4.66 percent wider at the
+    connector end than at the faceplate end, which is perspective, not a taper - so correcting
+    to the mean scale gives about 261, and taking the card top at the outermost connector edge
+    instead pushes it to about 282. CALL IT 270 PLUS OR MINUS 12 AND DO NOT ROUND THAT AWAY.
+    REJECTED, and the rejection is the useful part: bdm2m-top-plan.jpeg and both qam-io-card
+    plan shots have the faceplate CLIPPED BY THE FRAME, so the 345.5 anchor is truncated and
+    every number off them is understated by an unknown amount. Measured anyway, the top-plan
+    gives 227 mm for the same card the solder side gives 270 - a 19 percent disagreement that
+    is entirely the broken anchor. They are not second opinions and must not be averaged in.
+    NOTHING IS REPLACED. 270 plus or minus 12 is one reading of one card from one photograph
+    that fails gate 1, and stamping it on twelve cards would be the family-number pattern
+    doing harm instead of good - these cards share a FACEPLATE, which is established, not a
+    depth, which is not. What is established is that 380.0 cannot be true.
+    WANTED, in order of how much each unlocks: a tape on any one front card (fixes it
+    outright); a tape on any one rear I/O card; an unclipped side-on photograph of a rear card
+    showing where the tongue begins, which would give the midplane position and both halves
+    at once.'
+  layout: 'drawing - Figure 1-9 of the Casa C100G Hardware Installation Guide (rev
+    07/08/2022) gives the faceplate order top to bottom: SMM 300G, XG0 through XG9,
+    CG0, CG1, 10/100MI, IOIOI, then STATUS, ACTIVE, ALARM. Unlike the SMM 8x10G
+    the management jack is at the BOTTOM, after the ports, not at the top'
+  size: shared with the rest of the C100G front-card family, taken from the chassis
+    slot envelope (30.47 x 345.5, C100G device manifest); the depth is the family
+    estimate carried by casa/smm-8x10g
+  legend: 'drawing - the model legend sits between TWO orange bands, not below one,
+    which is the first thing three product photographs settle and which casa/smm-8x10g
+    does not show. Position is casa/bdm''s, from Figure 1-14: 20.42 and 33.76. The
+    DS8x96, CSC8x10G and SMM300G photographs put them at 21.1-22.5 and 34.1-35.4,
+    consistently 1.3-1.6mm lower and in the same direction as they put the DS card''s
+    stripe groups 5.6mm lower - one perspective bias across all three, not three
+    findings - so the figure is carried and the whole front-card family lines up'
+  ports: composed from std/ aperture components rather than drawn as rectangles.
+    The ganged blocks use std/sfp-ganged (SFF-8433, the port's share of a continuous
+    1xN slot, so adjacent instances abut with no gap) and std/qsfp-ganged; the two
+    jacks reuse common/rj45-shielded@2 exactly as casa/smm-8x10g does
+  rotation: every cage is ROTATED 90. A ganged SFP opening is 14.25 x 10.4 and the
+    faceplate is only 30.47 wide, so the long axis has to run down the card. The
+    SMM300G photograph measures the openings at 10.1mm across (7.5 to 17.6mm from
+    the plate edge on the CSC, independently), which is the rotated width, and the
+    vertical pitch measures 14.0-14.2 against the 14.25 the standard specifies
+  positions: photo-measured - the SMM300G data sheet product photograph, read as
+    fractions of the known 345.5 card height (the plate renders 3438px for 345.5mm).
+    The ten SFP+ fall into two ganged bezels of six and four, block A from 76.0
+    and block B from 164.4, both on the standard 14.25 pitch; the two QSFP28 measure
+    an 18.8 pitch against the 19.0 std/qsfp-ganged carries from a measured TE part,
+    and the standard figure is used
+  port-lamps: photo-inferred - each optical port carries one lamp ABOVE and one
+    BELOW its legend, in a column to the right of the cages, which is why the cages
+    sit left of the plate centre at 12.6 rather than centred. No document held here
+    gives their colour vocabulary, so no states are declared
+  power-draw-max-w: 'datasheet - both SMM300G data sheets agree on ''Power Consumption:
+    160W'', and Table A-7 of the C100G install guide agrees a third time with ''SMM
+    power consumption 160W''. Three sources, one figure. The transceivers are extra
+    and the guide prices them separately: 1W per SFP-PLUS-SR/LR, 1.5W per SFP-PLUS-ER,
+    2.5-5.0W per QSFP28 depending on reach'
+  two-datasheets: 'THE TWO SMM300G DATA SHEETS ARE DIFFERENT DOCUMENTS AND THEY
+    DISAGREE. Data-Sheet-SMM300G (SMM300G-DS_RevA, 12-2024) is CommScope-branded
+    and covers the SMM300G and the newer SMM300Gm; Casa-Datasheet-SMM300G (SMM300G
+    R2, May 2018) is Casa-branded and covers the SMM300G alone. The dated 2024 sheet
+    is preferred. Where they differ: (1) the 2018 sheet claims ''IEEE 1588v2 Precision
+    Timing AND SyncE'' / ''Synchronous Ethernet support'', the 2024 sheet drops
+    SyncE from the wording entirely, so only 1588v2 is recorded here; (2) the 2018
+    sheet advertises 10G EPON OLT / DPoEv2 service with 16x10G PON cards, which
+    the 2024 sheet does not mention; (3) the 2018 sheet scopes the two-module limit
+    to the C100G, the 2024 sheet to ''a chassis''; (4) the 2024 sheet contradicts
+    ITSELF - its spec table says ten 10GE interfaces while its ordering table describes
+    C100G-SMM-300-GM as ''2X100GbE SFP + 8X10GbE SFP''. The install guide, the figure
+    and the photograph all show ten, so ten is modelled and the ordering line is
+    recorded as the vendor''s error'
+  faceplate-hardware-photo: 'THE OWNER SUPPLIED AN ISOMETRIC OF THE C100G FRONT and it
+    corrects the SHAPE of two things on this faceplate. working/photos/casa/ -
+    c100g-front-isometric.png and the crop crop-ejectors.png, read at high zoom.
+    WHAT IT SETTLES:
+    - The captive screw is not a flat slotted head. It is a substantial BLACK KNURLED
+      KNOB standing well proud, with a dark top face and a light metallic band. `knurl`
+      is added for that reason - it is a shape fact and costs no dimension. The drawn
+      2D head is still a slotted circle and is NOT redrawn; the figures draw it that way
+      and this photograph cannot give a true elevation of it.
+    - The EJECTOR LEVER is the most prominent thing on the whole face: a large CURVED
+      BLACK lever, not the rounded strip this skin draws, with a thin vertical linkage
+      rod running down the card from the knob to it.
+    - RELATIVE PROMINENCE, which is the one quantitative thing a perspective view CAN
+      give: lever stands proud of knob stands proud of lamp. This contract already
+      orders them that way - 4.2, 1.6, 0.3 - so the photograph CONFIRMS the ordering
+      rather than correcting it. Only the absolute magnitudes are understated, and it
+      gives no absolute magnitude.
+    WHAT IT DOES NOT SETTLE, and why nothing else moved. It is a three-quarter view:
+    every forward projection is foreshortened by an unknown factor, nothing of known
+    size is in frame, and the one feature that looks measurable - the knob ellipse -
+    needs a diameter nobody has. So it fails gate 1 outright, exactly as the Cisco
+    perspective figures did. THE LEVER SILHOUETTE IS DELIBERATELY NOT REDRAWN: the true
+    elevation outline of a curved lever is precisely what a three-quarter crop cannot
+    give, and drawing sixteen faceplates from it would replace a sourced schematic strip
+    with an invented curve. The 4.2 stays, marked `borrowed`.
+    WANTED, and it closes both at once: ONE STRAIGHT-ON PHOTOGRAPH OF A SINGLE CARD,
+    with a rule or any part of known size in frame. That would give the lever its
+    silhouette AND its projection, and it is the cheapest open question on this family.
+    THIS ENTRY IS ONE READING OF ONE PHOTOGRAPH restated across the thirteen front-slot
+    cards that share this faceplate. The photograph shows DS 8X96, US 16X4 and SMM 8X10G
+    specifically; the rest inherit it because the family shares a plate, which the
+    DS/US positions provenance already establishes to the millimetre. It is NOT thirteen
+    observations. The REAR cards - the 6+12 I/O family, rfd, rfu-16x8, ups-32x4,
+    lc-sw-bdm and the two SMM Switch BDMs - are NOT in this photograph and are
+    deliberately left alone.'
+  relief: 'the C100G/C40G card family treatment - two captive screws (cyl 1.6), the
+    ejector latch strip (out 4.2) and the 3 status lamps and 24 port lamps (dome 0.3). THE FULL ARGUMENT IS IN casa/bdm@1 AND THIS IS A
+    POINTER TO IT, not a second reading: the three magnitudes are one estimate per kind of
+    hardware, taken from edgecore/agr-panel-screw@1, edgecore/agr-psu-dc@1 and
+    common/led-dot@1 - NONE of which measured them, which is why all three are tokened
+    `estimated` rather than `borrowed` - applied across the family because these cards share a faceplate.
+    No Casa document states a depth for any of them. Eleven cards carrying 4.2 is ONE
+    estimate written eleven times, not eleven readings that agreed.'
+elements:
+  status: {at: [4.8, 298.7], size: [3.0, 3.0], class: led}
+  active: {at: [4.8, 307.2], size: [3.0, 3.0], class: led}
+  alarm: {at: [4.8, 315.7], size: [3.0, 3.0], class: led}
+  p0-led-a: {at: [20.8, 71.8], size: [1.4, 1.4], class: led}
+  p0-led-b: {at: [20.8, 78.8], size: [1.4, 1.4], class: led}
+  p1-led-a: {at: [20.8, 86.05], size: [1.4, 1.4], class: led}
+  p1-led-b: {at: [20.8, 93.05], size: [1.4, 1.4], class: led}
+  p2-led-a: {at: [20.8, 100.3], size: [1.4, 1.4], class: led}
+  p2-led-b: {at: [20.8, 107.3], size: [1.4, 1.4], class: led}
+  p3-led-a: {at: [20.8, 114.55], size: [1.4, 1.4], class: led}
+  p3-led-b: {at: [20.8, 121.55], size: [1.4, 1.4], class: led}
+  p4-led-a: {at: [20.8, 128.8], size: [1.4, 1.4], class: led}
+  p4-led-b: {at: [20.8, 135.8], size: [1.4, 1.4], class: led}
+  p5-led-a: {at: [20.8, 143.05], size: [1.4, 1.4], class: led}
+  p5-led-b: {at: [20.8, 150.05], size: [1.4, 1.4], class: led}
+  p6-led-a: {at: [20.8, 160.2], size: [1.4, 1.4], class: led}
+  p6-led-b: {at: [20.8, 167.2], size: [1.4, 1.4], class: led}
+  p7-led-a: {at: [20.8, 174.45], size: [1.4, 1.4], class: led}
+  p7-led-b: {at: [20.8, 181.45], size: [1.4, 1.4], class: led}
+  p8-led-a: {at: [20.8, 188.7], size: [1.4, 1.4], class: led}
+  p8-led-b: {at: [20.8, 195.7], size: [1.4, 1.4], class: led}
+  p9-led-a: {at: [20.8, 202.95], size: [1.4, 1.4], class: led}
+  p9-led-b: {at: [20.8, 209.95], size: [1.4, 1.4], class: led}
+  p10-led-a: {at: [20.8, 223.6], size: [1.4, 1.4], class: led}
+  p10-led-b: {at: [20.8, 230.6], size: [1.4, 1.4], class: led}
+  p11-led-a: {at: [20.8, 242.6], size: [1.4, 1.4], class: led}
+  p11-led-b: {at: [20.8, 249.6], size: [1.4, 1.4], class: led}
+relief:
+  wall: '#4a4f55'
+  features:
+    # Two captive slotted screws on the centreline - the guide's own
+    # "integrated thumbscrews" / "captive screws".
+    - {node: screw-t, cyl: 1.6, knurl: true, confidence: estimated, source: 'edgecore/agr-panel-screw@1 - the library one figure for a captive screw head. NOT MEASURED: that part own provenance reads estimated - it stands proud but was not measured'}
+    - {node: screw-b, cyl: 1.6, knurl: true, confidence: estimated, source: 'edgecore/agr-panel-screw@1 - the library one figure for a captive screw head. NOT MEASURED: that part own provenance reads estimated - it stands proud but was not measured'}
+    # The ejector latch strip.
+    - {node: latch-t, out: 4.2, confidence: estimated, source: 'edgecore/agr-psu-dc@1 latch - the library one figure for an ejector latch. NOT MEASURED: that part measured 360.7 is the MODULE depth; the latch height is sourced nowhere'}
+    - {node: latch-b, out: 4.2, confidence: estimated, source: 'edgecore/agr-psu-dc@1 latch - the library one figure for an ejector latch. NOT MEASURED: that part measured 360.7 is the MODULE depth; the latch height is sourced nowhere'}
+    # STATUS / ALARM / ACTIVE - lenses, not painted dots.
+    - {node: status, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: active, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: alarm, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    # 24 per-port lamps.
+    - {node: p0-led-a, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: p1-led-a, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: p2-led-a, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: p3-led-a, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: p4-led-a, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: p5-led-a, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: p6-led-a, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: p7-led-a, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: p8-led-a, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: p9-led-a, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: p10-led-a, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: p11-led-a, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: p0-led-b, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: p1-led-b, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: p2-led-b, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: p3-led-b, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: p4-led-b, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: p5-led-b, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: p6-led-b, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: p7-led-b, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: p8-led-b, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: p9-led-b, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: p10-led-b, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+    - {node: p11-led-b, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+parts:
+  - {ref: std/sfp-ganged@1, id: xg0, at: [5.475, 70.8], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg1, at: [5.475, 85.05], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg2, at: [5.475, 99.3], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg3, at: [5.475, 113.55], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg4, at: [5.475, 127.8], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg5, at: [5.475, 142.05], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg6, at: [5.475, 159.2], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg7, at: [5.475, 173.45], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg8, at: [5.475, 187.7], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg9, at: [5.475, 201.95], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/qsfp-ganged@1, id: cg0, at: [3.35, 223.01], rotate: 90, attrs: {media: qsfp28, speed: 100g}}
+  - {ref: std/qsfp-ganged@1, id: cg1, at: [3.35, 242.01], rotate: 90, attrs: {media: qsfp28, speed: 100g}}
+  - {ref: common/rj45-shielded@2, id: mgmt, at: [7.335, 261.05], rotate: 90}
+  - {ref: common/rj45-shielded@2, id: console, at: [7.335, 279.95], rotate: 90}
+skins: [default]
