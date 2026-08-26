@@ -1064,8 +1064,18 @@ def _bay_refs_by_view(data):
 # is an access direction and a false positive. They are grammatically identical.
 # Telling them apart means knowing what a fan tray is, which is not something a
 # linter knows - so the honest coverage is 14 of 61, and the remaining 39 need a
-# person. A rule quiet by 0.2 mm is not a rule that passed; it is one that has
-# not fired YET.
+# person. There is no narrower form to come back and tune, because the true
+# positive and the false positives are the same sentence.
+#
+# THE GENERAL LESSON, WHICH OUTLIVES THIS RULE:
+#
+#     A RULE QUIET AT 0.2 MM OF MARGIN HAS NOT PASSED. IT HAS NOT FIRED YET.
+#
+# That distinction is invisible in exactly the statistics that would have
+# shipped it - 8 checked, 0 fired, catches the historical defect - and it
+# applies to ANY check validated by counting how many fired rather than by
+# reading the cases. Read what the quiet ones say. Three of these eight were
+# coin flips, and no summary statistic could have told you.
 NUM_RE = r"(\d+(?:\.\d+)?)"
 EDGE_ANCHOR = re.compile(r"\bfrom\s+the\s+(front|rear|back)\b", re.I)
 MEASURE_RE = re.compile(NUM_RE + r"\s*(in|mm|cm)\b", re.I)
