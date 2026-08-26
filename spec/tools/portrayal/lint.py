@@ -1134,6 +1134,34 @@ def scalar_colon_hint(path, exc):
                         f"rephrase or quote it: {stripped[:70]!r}")
 
 
+def _footprint(item, lib_roots):
+    """Where a bay or placement actually sits, as (x0, y0, x1, y1), or None.
+
+    A bay states its own size; a placement borrows its component's and turns it
+    with `rotate`, the same quarter-turn L13 applies about the centre.
+    """
+    at = item.get("at")
+    if not at:
+        return None
+    sz = item.get("size")
+    if isinstance(sz, dict):
+        w, h = sz.get("w"), sz.get("h")
+    elif isinstance(sz, (list, tuple)) and len(sz) >= 2:
+        w, h = sz[0], sz[1]
+    else:
+        cp = resolve_component(item.get("ref", ""), lib_roots)
+        spec = (yaml.safe_load(cp.read_text()) or {}) if cp else {}
+        csz = spec.get("size") or {}
+        w, h = csz.get("w"), csz.get("h")
+    if not w or not h:
+        return None
+    x, y = at[0], at[1]
+    if item.get("rotate") in (90, 270, -90):
+        cx, cy = x + w / 2, y + h / 2
+        x, y, w, h = cx - h / 2, cy - w / 2, h, w
+    return (x, y, x + w, y + h)
+
+
 def lint_device_cutouts(path, view_name, view, lib_roots):
     """L39: the panel's holes must agree with what goes in them.
 
@@ -1214,7 +1242,45 @@ def lint_device_cutouts(path, view_name, view, lib_roots):
                                  "there to print on")
                 break
 
-    # 4. a port on a panel that has been punched should have its own hole.
+    # 4. A HOLE WITH NOTHING IN IT. Somebody put a hole in the metal, and if the
+    #    model has nothing to put through it the model is unfinished, not the
+    #    chassis - the ASR 9904, 9906, 9910 and 9912 all cut a power-shelf
+    #    opening and none of them models a shelf, a cover or a module.
+    #
+    #    SATISFIED BY COVERAGE, NOT BY NAME. A cage is a hole that many things
+    #    fill: the ASR 9912's `lc-cage` holds ten slots, none of them called
+    #    `lc-cage`. And not by containment either, which is the shape this was
+    #    first written in and got wrong - a line card's faceplate is 403.1 mm
+    #    tall over a 357.35 mm opening, because a faceplate COVERS an aperture
+    #    rather than fitting inside it, so containment reported seven correctly
+    #    modelled cages as empty.
+    #
+    #    A warning: it reports work not done rather than work done wrongly, and
+    #    what belongs in a given hole is a modelling question with a source
+    #    behind it, not something a linter can decide.
+    filled = {q.get("id") for q in placements} | {
+        b.get("id") for b in view_parts(view)["bays"]}
+    for cid, cb in boxes.items():
+        if cid in filled:
+            continue
+        area = (cb[2] - cb[0]) * (cb[3] - cb[1])
+        if area <= 0:
+            continue
+        covered = 0.0
+        for q in placements + view_parts(view)["bays"]:
+            qb = _footprint(q, lib_roots)
+            if not qb:
+                continue
+            ix = min(cb[2], qb[2]) - max(cb[0], qb[0])
+            iy = min(cb[3], qb[3]) - max(cb[1], qb[1])
+            if ix > 0 and iy > 0:
+                covered += ix * iy
+        if covered / area < 0.5:
+            warn(path, "L39", f"{view_name}: cutout {cid} has nothing in it. A hole in "
+                              "the metal means something goes through it - a module, a "
+                              "bay, a lug, or the cover that blanks it off")
+
+    # 5. a port on a panel that has been punched should have its own hole.
     #    WARNING, not an error: it reports incomplete work rather than wrong work,
     #    and the ASR 9001 has fifteen of them because it declares two cutouts for
     #    clock connectors and none for its ports. Restricted to `port` because no
