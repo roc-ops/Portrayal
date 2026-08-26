@@ -77,14 +77,24 @@ provenance:
     normally-closed contacts are available. Only the active RSP/RP drives the alarm
     outputs.'
   db9: >-
-    the ALARM OUT connector is DRAWN, not composed, and it is deliberately NOT declared
-    `class: cutout`. There is no std/ part for a D-subminiature DE-9 and no `db9` key in
+    the ALARM OUT connector is DRAWN, not composed, and it IS declared `class: cutout` -
+    which is a reversal of what these components said until now and the reversal is the
+    point. There is no std/ part for a D-subminiature DE-9, no `db9` key in
     spec/schemas/standards.yaml, and no document in this intake dimensions the panel
-    opening - the guides say 'Alarm Output DB9 port with three alarm outputs' and 'the
-    nine-pin Alarm Out connector' and give no geometry. Declaring a cutout that conforms
-    to nothing would put a false entry in the aperture census L26 keeps, and inventing a
-    MIL-DTL-24308 figure from memory would be worse. It is `class: connector` and this
-    sentence is the record of the missing registry key.
+    opening; the geometry here is transcribed from the master. The earlier version
+    withheld `class: cutout` on the reasoning that a cutout conforming to nothing would
+    corrupt the aperture census L26 keeps. THAT WAS BACKWARDS. L26's own message ends
+    'if the dimension cannot be sourced yet, this warning is the record of that', and
+    its docstring calls the rule a to-do list for std/ rather than an accusation.
+    Withholding the declaration did not keep the census clean, it kept a real gap OUT of
+    the one rule built to hold it - a count kept tidy by routing around the detector. So
+    the cutout is declared, the L26 warning stands, and the register is one entry more
+    honest. WHAT WOULD CLOSE IT: a `db9` key in standards.yaml carrying the D-sub panel
+    cutout from MIL-DTL-24308 or its commercial equivalent, plus a std/db9 part. That is
+    a real errand somebody can run, unlike the CFP family's, and nobody has run it.
+    CONTRAST cisco/a9k-750w-dc, whose DC terminal block is correctly NOT a cutout: that
+    is hardware bolted to the face rather than a hole punched in it, and the distinction
+    is between a thing that needs an opening and a thing that does not.
   lamps: >-
     install guide - Table 4, 'RSP, RSP-440, RSP-440 Lite, RSP-880, RSP880-LT, RSP4-S,
     RSP5 Discrete LED Display Definitions', and Table 5 for the RP, transcribed per lamp
@@ -173,7 +183,7 @@ elements:
   alarm-out:
     at: [10.46, 182.7]
     size: [11.39, 33.56]
-    class: connector
+    class: cutout
   led-matrix:
     at: [15.34, 354.78]
     size: [18.67, 7.75]
