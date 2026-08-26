@@ -67,6 +67,18 @@ provenance:
     the air filter side of the fan module"), the fan modules are inserted from the
     front, and no figure shows an opening in either side panel. Drawing vents on
     a guess is the wrong-box outcome these views exist to prevent'
+  protecting-slots: 'SETTLED, and the same half-fault as the C100G. The guide
+    numbers this one twice over. For the classic scheme the chassis overview reads
+    "Rear slots (fully redundant system) - Upstream and downstream line card I/O
+    slots: 0, 5; LC Switch slots: 1, 4; SMM Switch slots: 2, 3", Table A-2 agrees
+    with "Two LC Switch modules for DOCSIS-module redundancy in rear slots 1 and
+    4", and Figure 1-5, the rear view OF THAT EXACT LAYOUT, is legible at 4x: slots
+    5 to 0 read QAM IO, LC SWITCH, SMM SWITCH, SMM SWITCH, LC SWITCH, US IO. So
+    rear-4 is an LC Switch in the classic scheme, and docsis-classic said so in
+    its description while placing a switched I/O. For the BDM scheme the guide is
+    equally explicit - "C40G rear side (3+1): Slot 1 - LC-BDM-SWITCH; Slot 4 - 6+12
+    SW-IO or 6+12 SW-IO2" - so bdm-3plus1 was right and is unchanged. rear-4 accepts
+    both, and each configuration names its own'
   slot-compatibility: 'drawing - the C40G guide numbers its own slots twice. The
     chassis overview lists "Front slots - Upstream and downstream line card slots:
     0, 1, 4 5; Active and standby SMM slots: 2 and 3", and Table A-2, "C40G capacities",
@@ -167,7 +179,7 @@ views:
         - {id: rear-1, at: [42.0, 133.88], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/lc-sw-bdm@1, casa/blank-faceplate@1], default: casa/lc-sw-bdm@1, group: rear-slots, rel-pos: 1}
         - {id: rear-2, at: [42.0, 103.41], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-sw-bdm-a@1, casa/blank-faceplate@1], default: casa/smm-sw-bdm-a@1, group: rear-slots, rel-pos: 2}
         - {id: rear-3, at: [42.0, 72.94], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-sw-bdm-b@1, casa/blank-faceplate@1], default: casa/smm-sw-bdm-b@1, group: rear-slots, rel-pos: 3}
-        - {id: rear-4, at: [42.0, 42.47], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12-sw@1, casa/blank-faceplate@1], default: casa/io-6p12-sw@1, group: rear-slots, rel-pos: 4}
+        - {id: rear-4, at: [42.0, 42.47], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12-sw@1, casa/lc-sw-bdm@1, casa/blank-faceplate@1], default: casa/io-6p12-sw@1, group: rear-slots, rel-pos: 4}
         - {id: rear-5, at: [42.0, 12.0], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@1, casa/blank-faceplate@1], default: casa/io-6p12@1, group: rear-slots, rel-pos: 5}
   top:
     size: {w: 432.95, h: 388.45}
@@ -236,7 +248,7 @@ configurations:
       rear-1: casa/lc-sw-bdm@1
       rear-2: casa/smm-sw-bdm-a@1
       rear-3: casa/smm-sw-bdm-b@1
-      rear-4: casa/io-6p12-sw@1
+      rear-4: casa/lc-sw-bdm@1
       rear-5: casa/io-6p12@1
 # What no rule can find, because the manifest looks complete. Both bays are
 # populated, both components render, and nothing in the model can see that the

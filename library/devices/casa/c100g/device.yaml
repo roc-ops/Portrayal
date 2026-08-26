@@ -83,6 +83,17 @@ provenance:
     entry), but both readings are front-to-rear or rear-to-front, and neither puts
     an opening on these two faces. An invented top plate would be the wrong-box
     outcome these four views exist to prevent'
+  protecting-slots: 'SETTLED, and the manifest was half wrong. The protecting
+    rear slots take a DIFFERENT card in each redundancy scheme, and only one of
+    the two was modelled. In the BDM 11+1 scheme the guide lists "Slot 5 - LC-BDM-SWITCH"
+    and "Slot 8 - 6+12 SW-IO or 6+12 SW-IO2 (Slot 8 is non-redundant with 11+1 redundancy)",
+    which is what bdm2m-11plus1 already had. In the classic scheme Table A-2 puts
+    an LC Switch in BOTH - its RFS row reads "LC Switch in rear slots 5 and 8, SMM
+    Switch in rear slots 6 and 7" - and docsis-classic was silent on rear-8, so
+    it inherited the bay default and quietly showed a switched I/O where the classic
+    scheme has a switch. Its own description had said "with LC Switch behind both"
+    the whole time. Both cards are now in rear-8s accepts because both are cited,
+    and each configuration names the one its own scheme uses'
   slot-compatibility: 'drawing - Table A-2, "C100G capacities", states it directly
     rather than leaving it to be inferred: "14 line card slots on front - 1 Switch
     and Management (SMM) module, 1 SMM redundant module, 12 DOCSIS modules (any
@@ -226,7 +237,7 @@ views:
         - {id: rear-5, at: [246.94, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/lc-sw-bdm@1, casa/blank-faceplate@1], group: rear-slots, rel-pos: 5, default: casa/lc-sw-bdm@1}
         - {id: rear-6, at: [216.47, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/smm-sw-bdm-a@1, casa/blank-faceplate@1], group: rear-slots, rel-pos: 6, default: casa/smm-sw-bdm-a@1}
         - {id: rear-7, at: [186.0, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/smm-sw-bdm-b@1, casa/blank-faceplate@1], group: rear-slots, rel-pos: 7, default: casa/smm-sw-bdm-b@1}
-        - {id: rear-8, at: [155.53, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12-sw@1, casa/blank-faceplate@1], group: rear-slots, rel-pos: 8, default: casa/io-6p12-sw@1}
+        - {id: rear-8, at: [155.53, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12-sw@1, casa/lc-sw-bdm@1, casa/blank-faceplate@1], group: rear-slots, rel-pos: 8, default: casa/io-6p12-sw@1}
         - {id: rear-9, at: [125.05, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@1, casa/blank-faceplate@1], group: rear-slots, rel-pos: 9, default: casa/blank-faceplate@1}
         - {id: rear-10, at: [94.58, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@1, casa/blank-faceplate@1], group: rear-slots, rel-pos: 10, default: casa/blank-faceplate@1}
         - {id: rear-11, at: [64.11, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@1, casa/blank-faceplate@1], group: rear-slots, rel-pos: 11, default: casa/blank-faceplate@1}
@@ -336,6 +347,7 @@ configurations:
       rear-2: casa/io-6p12@1
       rear-3: casa/io-6p12@1
       rear-4: casa/io-6p12@1
+      rear-8: casa/lc-sw-bdm@1
       rear-9: casa/io-6p12@1
       rear-10: casa/io-6p12@1
       rear-11: casa/io-6p12@1
