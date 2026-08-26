@@ -612,14 +612,19 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         if region.get("members"):
             r.set("data-members", " ".join(region["members"]))
         box = region_extent(region)
-        x, y, w, h = box or (0, 0, 0, 0)
-        r.set("x", f"{x:g}"); r.set("y", f"{y:g}")
-        r.set("width", f"{w:g}"); r.set("height", f"{h:g}")
+        # rx, ry, rw, rh - NOT w and h. Unpacking into w,h here shadowed the
+        # VIEW's width and height for the rest of the function, so the viewBox
+        # was computed from the last region's box: the C100G rear came out
+        # 420.8 x 471.5 against a 432.95 x 571.0 panel, clipping a card off the
+        # right edge and putting both PEMs outside the drawing entirely.
+        rx_, ry_, rw, rh = box or (0, 0, 0, 0)
+        r.set("x", f"{rx_:g}"); r.set("y", f"{ry_:g}")
+        r.set("width", f"{rw:g}"); r.set("height", f"{rh:g}")
         r.set("rx", "0.8")
         # regions are addressable, not visible; highlight CSS gives them a stroke on demand
         r.set("fill", "none")
         r.set("stroke", "none")
-        if box and w > 0 and h > 0:
+        if box and rw > 0 and rh > 0:
             r.set("pointer-events", "all")
         else:
             # not a click target, and it says why rather than looking like one
