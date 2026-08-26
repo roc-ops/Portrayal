@@ -66,15 +66,47 @@ PART_IFACE = {
     "std/qsfp28": "100gbase-x-qsfp28",
     "std/qsfp-dd": "400gbase-x-qsfpdd",
 }
-# Where the card's own attrs name a faster media, they win over the cage default:
-# a QSFP cage on a 100G card is not 40G because the cage would also take 40G.
-ATTR_IFACE = {
-    "qsfp-dd": "400gbase-x-qsfpdd",
-    "qsfp28": "100gbase-x-qsfp28",
-    "qsfp": "40gbase-x-qsfpp",
-    "sfp-plus": "10gbase-x-sfpp",
-    "sfp": "1000base-x-sfp",
+# What a cage RUNS AT is a property of the card, not of the cage. So the cage ref
+# gives the family and the card's attrs give the speed within it.
+#
+# Matching by family matters because twelve modules declare more than one: an
+# A9K-8HG-FLEX-TR is qsfp-dd AND qsfp28, in std/qsfp-dd and std/qsfp-ganged
+# cages respectively, and an SMM 300G is qsfp28 in its QSFP cages and sfp-plus
+# in its SFP ones. Applying one declared media to every cage on the card would
+# retype half of them.
+#
+# Two earlier versions of this were wrong in opposite directions. Keeping the
+# cage default unless the attr looked "faster" - compared as strings, which is
+# not an ordering - meant A9K-40GE-B still exported forty 10G interfaces after
+# its contract was corrected to `sfp: 40` (roc-ops/ndv#23). Letting the attr win
+# outright then retyped every QSFP cage on the mixed cards.
+CAGE_FAMILY = {
+    "std/sfp-ganged": "sfp",
+    "common/sfp-plus-cage": "sfp",
+    "std/sfp": "sfp",
+    "std/qsfp-ganged": "qsfp",
+    "std/qsfp28": "qsfp",
+    "std/qsfp-dd": "qsfp-dd",
+    "std/xfp": "xfp",
 }
+# Most specific first: a card declaring both qsfp28 and qsfp is 100G in a QSFP
+# cage, because a QSFP28 cage takes a 40G optic too.
+FAMILY_ATTRS = {
+    "sfp": (("sfp-plus", "10gbase-x-sfpp"), ("sfp", "1000base-x-sfp")),
+    "qsfp": (("qsfp28", "100gbase-x-qsfp28"), ("qsfp", "40gbase-x-qsfpp")),
+    "qsfp-dd": (("qsfp-dd", "400gbase-x-qsfpdd"),),
+    "xfp": (),
+}
+
+
+def cage_type(ref, attrs):
+    """The interface type for one cage on one card."""
+    for attr, t in FAMILY_ATTRS.get(CAGE_FAMILY.get(ref, ""), ()):
+        if attrs.get(attr):
+            return t
+    return PART_IFACE.get(ref)
+
+
 PART_CONSOLE = {"std/rj45-ganged": "rj-45", "common/rj45-shielded": "rj-45",
                 "std/usb-a": "usb-a"}
 
@@ -88,10 +120,19 @@ PART_CONSOLE = {"std/rj45-ganged": "rj-45", "common/rj45-shielded": "rj-45",
 # which connector. The SMB ports on Cisco route processors are gps-10mhz and
 # gps-1pps - timing inputs, not network interfaces - so they take `other`, which
 # says "a thing this schema has no name for" rather than naming a neighbour.
-# std/c13-inlet is the appliance inlet that accepts a C13 cord, which on the
-# equipment side is a C14. The manifests name it from the cord end; both DCIMs
-# name it from the inlet. Same coupler, opposite ends - see roc-ops/ndv#25.
-PART_POWER = {"std/c13-inlet": "iec-60320-c14"}
+# An appliance inlet that accepts a C13 cord is a C14 on the equipment side, and
+# both DCIMs name it from the inlet.
+#
+# BOTH SPELLINGS ARE ACCEPTED, AND THAT IS TRANSITIONAL. The component was
+# `std/c13-inlet` when this was written and is being renamed to `std/c14-inlet`
+# (roc-ops/ndv#25). Matching only one of them means every PSU power port
+# silently vanishes on whichever side of the rename this lands - and a port that
+# disappears without an error is the worst way for a rename to be noticed.
+# Drop the c13 key once the rename is on main.
+PART_POWER = {
+    "std/c14-inlet": "iec-60320-c14",
+    "std/c13-inlet": "iec-60320-c14",
+}
 
 PART_RF = {
     "std/f-type": ("docsis", "F"),
@@ -385,12 +426,6 @@ def build_module(contract, manufacturer):
 
     # Which interface type this card's cages actually run at. The cage ref gives
     # the floor; an attr naming a faster media raises it.
-    faster = None
-    for key, t in ATTR_IFACE.items():
-        if attrs.get(key):
-            faster = t
-            break
-
     ifaces, consoles, powers = [], [], []
     for part in contract.get("parts") or []:
         if not isinstance(part, dict):
@@ -409,10 +444,7 @@ def build_module(contract, manufacturer):
             # which is the part the type cannot express.
             ifaces.append({"name": pid or t, "type": t, "label": connector})
         elif ref in PART_IFACE:
-            t = PART_IFACE[ref]
-            if faster and t.split("base")[0] < faster.split("base")[0]:
-                t = faster
-            ifaces.append({"name": pid, "type": t})
+            ifaces.append({"name": pid, "type": cage_type(ref, attrs)})
 
     if consoles:
         out["console-ports"] = consoles
