@@ -29,6 +29,8 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
       so a module total is never quoted as one while it is a floor
   L30 device: a card whose figure already covers its paired I/O module, beside a
       paired module that states its own - a sum would count the pairing twice
+  L34 device: front and rear occupants of one slot fit around the midplane -
+      they may overlap by a tongue, not by a card length
   L33 device: a bay reserves room for every module it accepts, compared
       against the module's `insert` where it has one and `size` otherwise
   L32 any yaml: no mapping declares the same key twice - a duplicate is resolved
@@ -1416,6 +1418,7 @@ def lint_device(path, validator, lib_roots):
     lint_device_module_power(path, data, lib_roots)
     lint_device_double_count(path, data, lib_roots)
     lint_device_bay_fit(path, data, lib_roots)
+    lint_device_midplane_depth(path, data, lib_roots)
     lint_device_label_geometry(path, data)
     declared_groups = set((data.get("groups") or {}).keys())
     for gname, gdef in (data.get("groups") or {}).items():
@@ -1853,6 +1856,100 @@ def lint_device_bay_fit(path, data, lib_roots):
                      f"giving the module an `insert:` and leaving `size` as what "
                      f"the skin draws. Do NOT reconcile them by moving one to "
                      f"meet the other unless you measured it")
+
+
+# ---------------------------------------------------------------- L34
+# A front card and a rear card in the same slot position MAY overlap in depth,
+# because the rear I/O card is an L: its body sits against the midplane and a
+# tongue continues forward THROUGH it to mate with the front card, at reduced
+# height. So the honest test is not F + R <= C. It is that the overlap must be
+# TONGUE-SIZED. 25 percent of the chassis depth is deliberately generous - it
+# admits a ~96 mm tongue on a 386 mm chassis, which is far more than any tongue,
+# and still catches the case this exists for: two 380 mm cards in a 386 mm
+# chassis, a 374 mm overlap that no interlock can absorb.
+MIDPLANE_SLACK = 1.25
+
+
+def lint_device_midplane_depth(path, data, lib_roots):
+    """L34 - front and rear occupants of one slot must fit around the midplane.
+
+    Found by a photograph, not by arithmetic. Every Casa card carried d 380.0 in
+    a 386-388 mm chassis, on both faces, and nothing complained: each number was
+    individually plausible, honestly marked `estimated`, and propagated cleanly
+    across a family. It took a picture of an empty cage with the midplane visible
+    to show that two of them cannot both be true.
+
+    That is the shape worth catching. The defect was never in one contract - it
+    was in the RELATIONSHIP between two contracts that no rule compared, which is
+    the same blind spot L33 exists for one axis over.
+
+    Reads `size-confidence` so a depth already marked `known-wrong` is reported as
+    a KNOWN defect rather than a new one: the register and the rule should agree
+    about what is already understood, or the rule just re-reports the backlog.
+    """
+    ch = data.get("chassis") or {}
+    cd = ch.get("depth")
+    views = data.get("views") or {}
+    if not cd or "front" not in views or "rear" not in views:
+        return
+
+    def by_pos(vname):
+        """Slot bays only, keyed by position.
+
+        ONLY SLOT GROUPS MATE ACROSS A MIDPLANE. A fan tray and a power module
+        also carry a rel-pos, and pairing a front fan with a rear line card by
+        position alone is how the first draft of this rule produced two
+        confident warnings about hardware that never meets. A group whose name
+        does not say `slot` is not in this relationship.
+        """
+        out = {}
+        for b in (((views.get(vname) or {}).get("components") or {}).get("bays") or []):
+            rp, g = b.get("rel-pos"), b.get("group")
+            if rp is not None and g and "slot" in g:
+                out.setdefault(rp, []).append(b)
+        return out
+
+    def deepest(bay):
+        """(depth, ref, confidence) of the deepest thing this bay accepts."""
+        best = (None, None, None)
+        for ref in (bay.get("accepts") or []):
+            found = resolve_component(ref, lib_roots)
+            if not found:
+                continue
+            sub = yaml.safe_load(found.read_text()) or {}
+            d = (sub.get("size") or {}).get("d")
+            if d and (best[0] is None or d > best[0]):
+                conf = (sub.get("size-confidence") or {}).get("d")
+                best = (d, ref, conf)
+        return best
+
+    front, rear = by_pos("front"), by_pos("rear")
+    seen = set()
+    for pos, fbays in sorted(front.items()):
+        rbays = rear.get(pos)
+        if not rbays:
+            continue
+        fd, fref, fconf = deepest(fbays[0])
+        rd, rref, rconf = deepest(rbays[0])
+        if not fd or not rd:
+            continue
+        total = fd + rd
+        if total <= cd * MIDPLANE_SLACK:
+            continue
+        pair = tuple(sorted((fref, rref)))
+        if pair in seen:
+            continue                      # one warning per pair of parts
+        seen.add(pair)
+        known = [r for r, c in ((fref, fconf), (rref, rconf)) if c == "known-wrong"]
+        tail = (f" ALREADY RECORDED as known-wrong on {', '.join(known)}."
+                if known else
+                " NEITHER depth is marked known-wrong, so this is a new defect.")
+        warn(path, "L34",
+             f"slot {pos}: front accepts {fref} at d {fd:g} and rear accepts "
+             f"{rref} at d {rd:g}, together {total:g} mm in a {cd:g} mm chassis. "
+             f"A rear I/O card may legitimately OVERLAP the front one - its tongue "
+             f"passes through the midplane to mate with it - but by a tongue, not "
+             f"by {total - cd:.0f} mm.{tail}")
 
 
 # ---------------------------------------------------------------- L32
