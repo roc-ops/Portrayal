@@ -1,0 +1,124 @@
+format: 1
+kind: module
+name: a9k-mod160-se
+version: 1.0.0
+class: line-card
+profile: networking
+description: >-
+  Cisco ASR 9000 Series 160 Gigabyte Modular Line Card, Service Edge Optimized. A
+  carrier, not a port card: the faceplate is two bays for Modular Port Adapters and
+  almost nothing else - a Status lamp, an ejector and a captive screw at each end. Every
+  port this card presents belongs to the MPA seated in one of its bays.
+size: {w: 43.7, h: 395.7, d: 520.7}
+attrs:
+  model: 'A9K-MOD160-SE'
+  role: 'modular-line-card'
+  capacity: '160 Gbps'
+  mpa-bays: 2
+  variant: 'service-edge'
+  power-draw-max-w: 420
+  eol: 'none-announced'
+provenance:
+  size: >-
+    drawing - the ORIGINAL-generation card shell, and the identification is the evidence
+    rather than an assumption from the chassis it goes in. index.json gives this master
+    the padded 1.72 x 14.75 in shape box that every card-envelope master in this stencil
+    carries and which gate 1 discards; the art measures a plate of 40.82 x 358.13 mm at
+    0.27, 19.19, which is the SAME PLATE, to the hundredth of a millimetre, as the
+    A9K-24X10GE-SE and the rest of the original-generation line cards already in this
+    library. Those are anchored to Cisco's stated 43.7 x 395.7 x 520.7 mm, W including
+    the ejector bracket, so this card takes the same three numbers. Note what that is
+    NOT: no document in the intake gives an A9K-MOD's dimensions. The Ethernet Line Card
+    Installation Guide has a section headed 'Ethernet Line Card Physical Dimensions'
+    whose entire content is 'For physical specifications, refer to the ASR 9000 Series
+    line card data sheets' and a URL. The dimensions here are the shared shell's, and
+    they are sound because one drawing cannot be two sizes.
+  bays: >-
+    install guide + drawing, and the two agree. The guide: 'The modular line card
+    provides two bays that support the following Modular Port Adapters (MPAs)'. The
+    drawing gives WHERE: the A9K-MOD400-SE master is drawn with two MPAs actually
+    installed - a 20-port GE in the upper bay and a 2-port 100GE in the lower - and
+    their outlines measure 33.23 x 161.21 and 33.23 x 160.94 mm at x 7.59, y 32.24 and
+    202.78. An MPA's own envelope is 33.81 x 160.02, so the drawn openings agree with it
+    to 1.7 and 0.75 percent. THE BAYS ARE DECLARED AT THE MPA'S ENVELOPE, not at the
+    drawn opening, because the module's own dimension is the better of two measurements
+    of one thing; the drawn opening is what corroborates it. Bay 0 is the upper - the
+    master prints '0' at y 27.45 and '1' at 366.39, one above each bay.
+  bays-are-inert: >-
+    A NOTE ON WHAT `bays:` DOES HERE, so nobody reads more into it than is there. The
+    component schema calls this key 'for modules that themselves host bays (v0:
+    unused)', and it is accurate: nothing in render.py or lint.py reads a COMPONENT's
+    bays - every bay the toolchain acts on today is a device view's. So these two
+    entries are inert. They are declared anyway because the geometry is real, measured
+    and sourced, and the alternative is to leave it in prose where no future renderer
+    can reach it. When nested modules are supported the numbers are already here; until
+    then a MOD carrier renders as a faceplate with two empty openings.
+  variants: >-
+    install guide - 'Each type of card is available in -SE (Service Edge Optimized) and
+    -TR (Packet Transport Optimized) variants. The two variants are functionally
+    equivalent, but vary in configuration scale and buffer capacity.' THE STENCIL HAS
+    ONLY THE -SE MASTERS. The -TR is modelled on the same drawing, which that sentence
+    licenses: configuration scale and buffer capacity are internal and no faceplate can
+    show them. Table 35 says the same thing from the other side - every modular line
+    card power row is headed '(-TR or -SE)', so Cisco itself gives one figure for the
+    pair.
+  power: >-
+    install guide - Table 35 of the Ethernet Line Card Installation Guide, row '160
+    Gigabyte 4-NPU Modular Line Card (-TR or -SE)': 350 W at 25 C, 400 W at 40 C, 420 W
+    at 55 C. max is the highest rated ambient. The row's heading names both variants, so
+    one figure covers the pair by Cisco's own wording. THE FIGURE IS THE CARRIER'S and
+    the MPAs' draw is inside it - no MPA has a power row anywhere in the intake, so a
+    chassis budget must not add one on top. No typical stated.
+  mpas: >-
+    install guide - 'The modular line card provides two bays that support the following
+    Modular Port Adapters (MPAs)', followed by the chapter's own MPA sections. NO PER-
+    CARD LIST EXISTS FOR THIS CARRIER: the 400 Gigabyte card is the only one the guide
+    narrows, with an explicit 'only support the following' list, and nothing equivalent
+    is written for the 80, 160 or 200. `accepts` therefore carries the general family -
+    every MPA in this library plus the blank - which is what the guide's general
+    sentence supports and no more. If a per-card restriction exists in a data sheet not
+    in this intake, this list is the thing it would narrow.
+  lifecycle: >-
+    searched - no end-of-life notice for this part number is in the intake.
+elements:
+  status:
+    at: [27.26, 372.18]
+    size: [3.54, 3.54]
+    class: led
+    description: >-
+      the card's Status LED. NOT SOURCED FOR THIS CARD: the Ethernet Line Card
+      Installation Guide's Table 32, 'Port Status and Line Card Status LEDs', is the
+      nearest thing and it is written for the fixed-port cards. The MLC sections give the
+      MPA LED tables and no table for the carrier's own lamp. The four-state card
+      vocabulary here is therefore the line cards' and is a BORROWING, flagged as one.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+relief:
+  wall: '#4a4f55'
+skins: [default]
+bays:
+  bay-0:
+    at: [7.59, 32.24]
+    size: [33.81, 160.02]
+    accepts:
+    - 'cisco/a9k-mpa-blank@1'
+    - 'cisco/a9k-mpa-2x10ge@1'
+    - 'cisco/a9k-mpa-4x10ge@1'
+    - 'cisco/a9k-mpa-8x10ge@1'
+    - 'cisco/a9k-mpa-1x40ge@1'
+    - 'cisco/a9k-mpa-2x40ge@1'
+    - 'cisco/a9k-mpa-20x1ge@1'
+  bay-1:
+    at: [7.59, 202.78]
+    size: [33.81, 160.02]
+    accepts:
+    - 'cisco/a9k-mpa-blank@1'
+    - 'cisco/a9k-mpa-2x10ge@1'
+    - 'cisco/a9k-mpa-4x10ge@1'
+    - 'cisco/a9k-mpa-8x10ge@1'
+    - 'cisco/a9k-mpa-1x40ge@1'
+    - 'cisco/a9k-mpa-2x40ge@1'
+    - 'cisco/a9k-mpa-20x1ge@1'
