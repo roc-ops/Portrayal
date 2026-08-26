@@ -55,6 +55,64 @@ variants, model both - usually as skins of one shell.
 router had a tape measure lying beside the part, which turned two estimated
 depths into measured ones. Look for scale before writing `estimated`.
 
+### Before you write "no document states this", run two searches
+
+**"Not in the document I looked in" is not "not in the intake."** Those are
+different claims and the second is much stronger. Writing the second while
+having checked only the first is the most repeated error in this repository:
+seven times in one vendor's set, every one found later by somebody grepping
+differently, and every one had produced a paragraph of well-written provenance
+explaining a silence that was not there.
+
+Two searches, both cheap, before that sentence is allowed:
+
+**Grep the intake for the FIELD NAME, not the part number.** Searching for
+`A9K-RSP-4G` finds the release-note inventories that mention it and nothing
+else. Searching all 78 documents for the string `Power consumption` finds that
+card's own data sheet, with the dimensions, the depth and the weight that a
+component had been carrying as "NOT STATED ANYWHERE IN THE INTAKE" and had
+taken from a sibling instead. Do the same for `Physical dimensions`,
+`Physical specifications`, and for any wattage figure - the answer is usually
+in a document about a different part, filed under a name you would not have
+guessed.
+
+**Check whether an OLDER REVISION carries a table the current one dropped.**
+Vendors delete content between revisions. The current Ethernet Line Card
+Installation Guide replaced its entire per-part dimensions table with one
+sentence pointing at a URL; the older revision of the same guide, sitting in
+the same intake directory, still has the table - height, width, depth and
+weight for every card in a generation. Anything sized from the newer guide
+alone would have had to guess.
+
+Then **record which searches you ran**, not just the conclusion. "Table 35 has
+no row for any 5th-generation card, and no data sheet carries one either" is a
+statement somebody can check and overturn. "No document states this" is not.
+
+### Before you write "the artwork prints no X", render it
+
+**Text extraction finding nothing and the drawing printing nothing are
+different claims**, and outlined glyphs make the first look exactly like the
+second. A vendor stencil will set some legends as text and convert others to
+paths; a text scan returns the first set and is silent about the second, with
+no indication that a second set exists.
+
+One master printed all twelve of its port numerals as outlined glyphs and the
+extractor returned none of them - so a first draft asserted the card numbered
+no ports, and the numbering had to be reconstructed from a positional rule. A
+later pair of adapters got the same sentence written about them, on the same
+evidence, and rendering the master showed a numeral in vendor blue above each
+cage, an A/L triangle beside it and a STATUS lamp.
+
+So: **render the master and look at it** before any claim about what a drawing
+does or does not carry. What the extractor missed is usually recoverable once
+you know it is there - numerals as small dark ink boxes, indicators as
+triangles, lamps as stroked `fill:none` circles that appear in no filled-shape
+list. Their positions are exact even when their glyphs are not, and glyph
+WIDTHS can carry information the positions do not: on one card the single
+narrow ink box fell where the positional rule said port 1 was, and the only
+two double-width boxes fell on 10 and 11, which turned a guess into three
+independent agreeing facts.
+
 **Reference material stays in `working/`** (gitignored). Transcribe facts; never
 copy a datasheet, stencil or CAD file into the library.
 
