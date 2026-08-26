@@ -47,10 +47,10 @@ provenance:
     and 212.8-377.7 and the band runs y 194-264.5. They are bays and not placements
     because the guide carries both "Removing the DC power entry modules" and "Replacing
     the PEMs" and they slide into openings. NOTE THE VARIANT SPLIT: this is the
-    DC chassis. The C40G also ships AC, with four removable 1100 W PSUs behind the
-    snap-on front cover instead of these two PEMs, drawn in Figures 1-2 and 1-3.
-    The AC variant is NOT modelled - it wants its own configuration and its own
-    PSU component, and inventing either from the DC figures would be guessing'
+    DC chassis, and the AC one is modelled too - see the ac-variant entry. An AC
+    C40G carries four 1100 W PSUs behind the snap-on front cover instead of these
+    two PEMs, which is why these bays default EMPTY and each DC configuration names
+    them.'
   side-faces: 'drawing plus a stated absence, exactly as on the C100G. NO FIGURE
     IN THIS GUIDE SHOWS THE TOP, BOTTOM OR SIDE FACES either - Figures 1-1 through
     1-5 are front and rear elevations and 1-7 is an airflow diagram. So the four
@@ -67,6 +67,15 @@ provenance:
     the air filter side of the fan module"), the fan modules are inserted from the
     front, and no figure shows an opening in either side panel. Drawing vents on
     a guess is the wrong-box outcome these views exist to prevent'
+  redundancy-prose: 'REMOVED, not lost. attrs.other carried `redundancy: "3+1
+    with BDM (slot 1 protects, slot 4 active); classic DOCSIS protects per side
+    at 1 and 4"` - one prose sentence restating what the two redundancy configurations
+    now say structurally, bay by bay. It was worth keeping only while the bays were
+    wrong about it, which they were until the protecting-slots fix: the sentence
+    was the correct statement and the model contradicted it. Now the model IS the
+    statement, and a second copy that no tool can read is the thing rule 8 warns
+    about. The AC axis is a third configuration and was never in this sentence at
+    all'
   ac-variant: 'drawing - the C40G ships AC or DC and the guide draws the rear
     both ways: Figures 1-2 and 1-3 for the AC chassis, 1-4 and 1-5 for the DC one.
     The AC build puts "up to four removable 1100W AC power supply units" in a row
@@ -124,9 +133,6 @@ attrs:
   power:
     power-max-w: '1800'
     power-envelope: fully-configured
-  other:
-    redundancy: 3+1 with BDM (slot 1 protects, slot 4 active); classic DOCSIS protects per side at 1 and
-      4
 chassis:
   width: 432.95
   height: 265.9

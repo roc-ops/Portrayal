@@ -90,12 +90,22 @@ def test_the_requirement_names_a_section_and_not_four_spellings():
     assert reqs[1]["keys"] == ["cpu", "memory"]
 
 
-def test_the_tail_is_counted_so_it_cannot_go_quiet():
+def test_the_tail_is_counted_so_it_cannot_go_quiet(tmp_path):
     """`other` is a section, not an escape hatch, and the difference is that
     somebody counts it. 17 of the 22 keys that fit no section appeared on
     exactly one device, so the tail is real - what must not happen is it going
     quiet and becoming where anything difficult gets put."""
-    man = LIB / "devices/casa/c40g/device.yaml"
+    # The fixture is BUILT, not borrowed. This test is about the COUNTING - that
+    # `other` is reported rather than silently absorbing anything awkward - and
+    # not about which manifest happens to carry an unclassified key today. Pinned
+    # to the live c40g, it failed the moment that device's one tail key was
+    # correctly removed, i.e. because a model got better. It has to be a real
+    # file on disk because the rules are re-run from the path, not from the dict.
+    dev = yaml.safe_load((LIB / "devices/casa/c40g/device.yaml").read_text())
+    dev.setdefault("attrs", {})["other"] = {
+        "redundancy": "3+1 with BDM (slot 1 protects, slot 4 active)"}
+    man = tmp_path / "device.yaml"
+    man.write_text(yaml.safe_dump(dev, sort_keys=False))
     dev = yaml.safe_load(man.read_text())
     assert list(dev["attrs"]["other"]) == ["redundancy"]
 
