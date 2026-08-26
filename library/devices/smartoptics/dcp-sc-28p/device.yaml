@@ -57,6 +57,12 @@ chassis:
   ru: 1
   color: '#1b1e21'
 groups:
+  mgmt:
+    term: Port
+    index-origin: 1
+    mixed: the front management pair - ETH0 on RJ45 and the RS-232 craft console. Two
+      media, one job. They carried no group and so drew a row each beside the port
+      groups; `mgmt` is the word the other seven devices in the library already use
   rj45-1g:
     term: Port
     index-origin: 1
@@ -175,8 +181,8 @@ views:
       placements:
         - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.75], skin: left, optional: ears}
         - {ref: common/rack-ear@1, id: ear-right, at: [440, 0.75], skin: right, optional: ears}
-        - {ref: common/rj45-shielded@2, id: eth0, at: [9.6, 12.4], rotate: 180, attrs: {role: mgmt, speed: 1000base-t}}
-        - {ref: common/rj45-shielded@2, id: rs232, at: [9.6, 26.9], attrs: {role: console, media: rj45-serial}}
+        - {ref: common/rj45-shielded@2, id: eth0, at: [9.6, 12.4], rotate: 180, group: mgmt, attrs: {role: mgmt, speed: 1000base-t}}
+        - {ref: common/rj45-shielded@2, id: rs232, at: [9.6, 26.9], group: mgmt, attrs: {role: console, media: rj45-serial}}
         - {ref: common/led-dot@1, id: led-power, at: [30.2, 33.6], for: chassis, attrs: {function: power}}
         - {ref: common/led-dot@1, id: led-status, at: [36.4, 33.6], for: chassis, attrs: {function: status}}
         - {ref: std/qsfp-ganged@1, id: port-probe, at: [393.95, 29.31], attrs: {media: qsfp-dd, role: probe}}

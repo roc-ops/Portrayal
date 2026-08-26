@@ -136,9 +136,19 @@ groups:
     term: Port
     index-origin: 0
     attrs: {media: sfp28, speed: 25g}
-  optics:
+  timing:
     term: Port
     index-origin: 1
+    mixed: the timing block at the centre of the faceplate - a GNSS antenna on SMA,
+      10MHz and 1PPS on SMB, BITS on RJ48 and ToD on RJ45. Five media, one job.
+      The author already drew it as `region:timing` with exactly these five
+      members and had nowhere else to say it
+  mgmt:
+    term: Port
+    index-origin: 1
+    mixed: the management block at the right-hand end - the out-of-band RJ45, a
+      USB-A service port and the RS-232 console. Same cluster, and the same word
+      for it, as the seven other devices in the library that have one
   fans:
     term: Fan
     index-origin: 1
@@ -257,9 +267,9 @@ views:
         - {id: psu-0, at: [4.5, 1.6], size: {w: 50.5, h: 40.2}, accepts: [ufispace/psu-401-dc@1, ufispace/psu-401-ac@1], group: psus, rel-pos: 1, default: ufispace/psu-401-dc@1}
         - {id: psu-1, at: [63.2, 1.6], size: {w: 50.5, h: 40.2}, accepts: [ufispace/psu-401-dc@1, ufispace/psu-401-ac@1], group: psus, rel-pos: 2, default: ufispace/psu-401-dc@1}
       placements:
-        - {ref: common/sma-jack@1, id: gnss-ant, at: [119.2, 1.4], attrs: {role: gnss-in}}
-        - {ref: common/smb-jack@1, id: clk-10mhz, at: [133.5, 2.4], attrs: {role: 10mhz-io}}
-        - {ref: common/smb-jack@1, id: clk-1pps, at: [143.5, 2.4], attrs: {role: 1pps-io}}
+        - {ref: common/sma-jack@1, id: gnss-ant, at: [119.2, 1.4], group: timing, rel-pos: 1, attrs: {role: gnss-in}}
+        - {ref: common/smb-jack@1, id: clk-10mhz, at: [133.5, 2.4], group: timing, rel-pos: 2, attrs: {role: 10mhz-io}}
+        - {ref: common/smb-jack@1, id: clk-1pps, at: [143.5, 2.4], group: timing, rel-pos: 3, attrs: {role: 1pps-io}}
         - {ref: common/led-rect@1, id: led-gnss, at: [121.4, 16.2], for: gnss-ant,
            states: ['off',
                    {name: survey-complete, color: '#22c55e'},
@@ -306,9 +316,10 @@ views:
              colours and two behaviours - the lamp that put behaviour into the model'}
         - {ref: common/ground-symbol@1, id: ground-mark, at: [431.6, 18.75]}
         - {ref: common/reset-button@1, id: reset, at: [118.8, 34.6], for: chassis}
-        - {ref: common/rj45-bezel@2, id: bits, at: [131.8, 13.4], attrs: {media: rj48, role: bits-io}}
-        - {ref: common/rj45-bezel@2, id: tod, at: [131.8, 28.3], attrs: {media: rj45, role: tod-in}}
-        - {ref: common/rj45-port@4, id: mgmt, at: [152.3, 1.2], attrs: {role: mgmt, speed: 100m-1g},
+        - {ref: common/rj45-bezel@2, id: bits, at: [131.8, 13.4], group: timing, rel-pos: 4, attrs: {media: rj48, role: bits-io}}
+        - {ref: common/rj45-bezel@2, id: tod, at: [131.8, 28.3], group: timing, rel-pos: 5, attrs: {media: rj45, role: tod-in}}
+        - {ref: common/rj45-port@4, id: mgmt, at: [152.3, 1.2], group: mgmt, rel-pos: 1,
+           attrs: {role: mgmt, speed: 100m-1g},
            states: {led-left: ['off', {name: link-1g, color: '#22c55e'},
                                {name: activity-1g, color: '#22c55e', behavior: blinking}],
                     led-right: ['off', {name: link-100m, color: '#f59e0b'},
@@ -318,8 +329,8 @@ views:
              (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity). The two lamps do not
              share a vocabulary, which is why this is declared per element rather than as one
              list'}
-        - {ref: common/usb-a@3, id: usb, at: [152.3, 16.1], attrs: {role: storage, speed: usb3}}
-        - {ref: common/rj45-bezel@2, id: console, at: [152.3, 25.4], attrs: {media: rj45-serial, role: console}}
+        - {ref: common/usb-a@3, id: usb, at: [152.3, 16.1], group: mgmt, rel-pos: 2, attrs: {role: storage, speed: usb3}}
+        - {ref: common/rj45-bezel@2, id: console, at: [152.3, 25.4], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
         - {ref: common/qsfp-cage@2, id: port-0, at: [177.4, 26.2], group: qsfpdd-400g, rel-pos: 0}
         - {ref: common/qsfp-cage@2, id: port-1, at: [204.5, 26.2], group: qsfpdd-400g, rel-pos: 1}
         - {ref: common/led-arrow@1, id: led-port-4, at: [255.975, 18.7], skin: up, for: port-4, attrs: {port: '4'}}

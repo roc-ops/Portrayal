@@ -64,9 +64,12 @@ groups:
   mgmt:
     term: Port
     index-origin: 1
-    mixed: the rear management block - ETH1-4 on RJ45 to the shelf controller, ETH5 as an SFP
-      for optical management access, and the recessed reset beside them. DCP-R User Manual 14.0
-      A section 2.10 lists them as one set of network management interfaces
+    mixed: the unit's management interfaces, on both faces. REAR - ETH1-4 on RJ45 to the
+      shelf controller, ETH5 as an SFP for optical management access, and the recessed
+      reset beside them; DCP-R User Manual 14.0 A section 2.10 lists those as one set of
+      network management interfaces. FRONT - ETH0 on RJ45 and the RS-232 craft console,
+      which were in no group at all and so drew a row each beside the port groups. Two
+      blocks, one job, and the tree separates them by view without needing two words
 views:
   front:
     size:
@@ -271,8 +274,8 @@ views:
       placements:
         - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.75], skin: left, optional: ears}
         - {ref: common/rack-ear@1, id: ear-right, at: [440, 0.75], skin: right, optional: ears}
-        - {ref: common/rj45-shielded@2, id: eth0, at: [9.6, 10.55], rotate: 180, attrs: {role: mgmt, speed: 1000base-t}}
-        - {ref: common/rj45-shielded@2, id: rs232, at: [10, 24.85], attrs: {role: console, media: rj45-serial}}
+        - {ref: common/rj45-shielded@2, id: eth0, at: [9.6, 10.55], rotate: 180, group: mgmt, attrs: {role: mgmt, speed: 1000base-t}}
+        - {ref: common/rj45-shielded@2, id: rs232, at: [10, 24.85], group: mgmt, attrs: {role: console, media: rj45-serial}}
         - {ref: common/led-dot@1, id: led-osc-tx, at: [33.9, 21.8], for: port-osc, attrs: {function: osc-tx}}
         - {ref: common/led-dot@1, id: led-osc-rx, at: [39.7, 21.8], for: port-osc, attrs: {function: osc-rx}}
         - {ref: common/led-dot@1, id: led-power, at: [53.2, 35], for: chassis, attrs: {function: power}}
