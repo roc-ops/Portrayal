@@ -134,6 +134,23 @@ provenance:
     draws a large rounded panel on the top face, very likely a removable cover,
     and that is NOT drawn: its edges would not resolve cleanly enough to place,
     and a cover at a guessed size is worse than none'
+  top-bottom-orientation: 'SETTLED FROM THE FIGURE, and it is a convention rather
+    than an error. Figure 9 (ASR 9006) and Figure 10 (ASR 9904) are both laid out
+    with "Rear of chassis" printed at the TOP and "Front of chassis" at the BOTTOM,
+    and the top and bottom views follow that layout. SO ON A TOP OR BOTTOM VIEW,
+    y = 0 IS THE REAR AND y = depth IS THE FRONT. The rack-mounting-surface strip
+    is therefore measured from y = depth, and the labels'' "from the front" is correct
+    as written. Stated here because the arithmetic reads as a 439.9 mm error to
+    anyone who assumes y = 0 is the front, and it was read that way once already.
+    The bottom view keeps the same depth axis as the top rather than mirroring it:
+    looking at a chassis from below flips LEFT and RIGHT, not front and back, so
+    a strip that runs the full width is unaffected either way - but anything left-right
+    asymmetric on a bottom face would need the flip and does not have it yet, because
+    nothing left-right asymmetric is drawn there. SEPARATELY FIXED: the strip is
+    now CENTRED on the mounting plane. It used to be placed so that on the 9006
+    the dimension landed on its far edge and on the 9904 on its near edge - a 3.9
+    mm inconsistency in which edge of a 3.9 mm strip carried the number. Centring
+    it means neither edge is load-bearing'
   bottom-face: 'DECLARED EMPTY BY VERIFICATION, not by omission, and this is the
     wording the team lead asked for. THERE IS NO BOTTOM VIEW OF ANY ASR 9000 CHASSIS
     IN THE ENTIRE 78-DOCUMENT CORPUS: asr9k-chassis searched every figure caption
@@ -259,17 +276,17 @@ views:
     size: {w: 450.85, h: 725.4}
     panel:
       decor:
-        - {at: [0, 663.2], size: [450.85, 3.9], fill: '#9a9c9e'}
+        - {at: [0, 661.25], size: [450.85, 3.9], fill: '#9a9c9e'}
     regions:
-      - {id: rack-mounting-surface, label: 'Rack mounting surface - 2.45 in (6.22 cm) from the front'}
+      - {id: rack-mounting-surface, label: 'Rack mounting surface - 2.45 in (6.22 cm) from the front, which is y = depth on this view'}
       - {id: top-cover, label: 'Top cover - Figure 10 dimensions the footprint only'}
   bottom:
     size: {w: 450.85, h: 725.4}
     panel:
       decor:
-        - {at: [0, 663.2], size: [450.85, 3.9], fill: '#9a9c9e'}
+        - {at: [0, 661.25], size: [450.85, 3.9], fill: '#9a9c9e'}
     regions:
-      - {id: rack-mounting-surface, label: 'Rack mounting surface - 2.45 in (6.22 cm) from the front'}
+      - {id: rack-mounting-surface, label: 'Rack mounting surface - 2.45 in (6.22 cm) from the front, which is y = depth on this view'}
   left:
     size: {w: 725.4, h: 263.6}
     panel:
