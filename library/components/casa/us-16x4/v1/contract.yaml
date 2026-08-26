@@ -52,6 +52,17 @@ provenance:
     and has no findable data sheet, so the install guide is the only source - but
     it IS a source. The figure is transcribed, not estimated, and it is 50 W below
     the US16x8 sibling it was assumed to match'
+  power-scope: 'READ THIS BEFORE SUMMING. Casa does not state a bare card''s draw.
+    Every figure in Tables A-3 and A-4 is the card PLUS its paired rear RF I/O module
+    - the vendor''s own column headings are ''Maximum consumption with I/O module'',
+    ''Single QAM w/ QAM I/O'' and ''Single DCU w/ RFU I/O''. On a C100G that pairing
+    spans TWO bays, a front DOCSIS card and a rear RF I/O card, so power-draw-max-w
+    here already accounts for both and adding a rear I/O figure to it would double
+    count. That the pairing is what is measured is not an inference: the same US16x8
+    is 200W with the F-connector RFU and 220W with the UPS 32x4 MCX I/O, which is
+    one card and two answers. A single per-card key may be the wrong shape for these
+    devices; that is a schema question, and until it is settled this note is what
+    stops the number being read as something the vendor never said'
 elements:
   status: {at: [4.8, 190.9], size: [3.0, 3.0], class: led}
   alarm: {at: [4.8, 197.5], size: [3.0, 3.0], class: led}

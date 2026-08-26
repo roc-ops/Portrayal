@@ -1,18 +1,19 @@
 format: 1
 kind: module
-name: ds-8x96
+name: ds-8x8
 version: 1.0.0
 class: line-card
 profile: networking
 description: >-
-  Casa DS 8X96 downstream line card for the C100G/C40G CCAP chassis.
+  Casa DS 8X8 downstream line card for the C100G/C40G CCAP chassis.
   DOCSIS QAM downstream module (DQM). Eight downstream QAM ports, but the RF connectors are on the paired rear RF Downstream I/O (RFD) module - this faceplate carries no connectors at all, only the STATUS, ALARM and ACTIVE lamps.
 size: {w: 30.47, h: 345.5, d: 380.0}
 attrs:
-  model: 'DS 8X96'
+  model: 'DS 8X8'
   role: downstream
   rf-ports: '8'
-  power-draw-max-w: 320
+  channels-per-port: '8'
+  power-draw-max-w: 220
 provenance:
   layout: drawing - Figure 1-11 of the Casa C100G Hardware Installation Guide (rev
     07/08/2022) draws US 16X4, US 16X8, DS 8X8, DS 8X96 and DS 8X192 side by side
@@ -47,9 +48,13 @@ provenance:
     of the split. The eight QAM or sixteen burst-receiver ports belong to the rear
     RFD/RFU I/O module, and Tables A-8 and A-9 of the install guide give those their
     F-type and MCX connectors
-  power-draw-max-w: 'datasheet - the Casa DS8x96 data sheet (R4, July 2018) prints
-    ''Total Power 320W'', and Table A-3 of the C100G install guide agrees: ''Maximum
-    consumption with I/O module - DS8x96: 320W''. Two independent sources, one figure'
+  power-draw-max-w: 'install guide - Table A-3 of the C100G install guide, ''Maximum
+    consumption with I/O module - DS8x8: 220W''; Table A-3 of the C40G guide gives
+    the same figure. NOTE THE SCOPE: Casa states this card''s draw as the card PLUS
+    its paired rear RF Downstream I/O module, in its own words ''Single QAM w/ QAM
+    I/O''. On the C100G that pairing spans two bays, front and rear, so this one
+    number covers two modelled modules and must not be added to a rear I/O figure.
+    There is no data sheet for this card - both install guides are the only source'
   power-scope: 'READ THIS BEFORE SUMMING. Casa does not state a bare card''s draw.
     Every figure in Tables A-3 and A-4 is the card PLUS its paired rear RF I/O module
     - the vendor''s own column headings are ''Maximum consumption with I/O module'',
