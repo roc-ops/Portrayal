@@ -161,6 +161,47 @@ def test_supply_does_not_satisfy_draw_or_the_reverse(tmp_path):
     assert len(found(psu, tmp_path, "L27")) == 1
 
 
+def test_a_switch_card_is_asked_because_it_sits_in_a_bay(tmp_path):
+    """`class: switch` is carried by three chassis CARDS - casa/lc-sw-bdm and
+    smm-sw-bdm-a/b - sitting in the same rear slots as the io-6p12 cards that
+    were already counted. Leaving the class out made a C100G's coverage report
+    short by three in its DENOMINATOR, which is the one failure this rule set
+    exists to prevent: a total that omits terms without saying so."""
+    p = plant(tmp_path, "acme/sw-card@1", cls="switch")
+    assert len(found(p, tmp_path, "L27")) == 1
+
+
+def test_a_blank_faceplate_is_never_asked(tmp_path):
+    """A blank draws nothing and is the honest occupant of an empty bay, not a
+    module whose figure is missing. Asking it would turn every unpopulated slot
+    in the portfolio into a debt."""
+    p = plant(tmp_path, "acme/blank@1", cls="blank")
+    assert found(p, tmp_path, "L27") == []
+
+
+def test_a_generic_optic_is_not_asked_for_a_figure_it_cannot_have(tmp_path):
+    """A 40GBASE-SR4 is about 1.5 W and a 400G ZR about 20 W, and they are the
+    same drawing. `common/qsfp-transceiver` is a shape standing in for both, so
+    a figure on it would be a fiction dressed as a fact rather than a missing
+    one - and no contributor could ever close the warning.
+
+    This is L18's argument and it reuses L18's constant: a port inheriting
+    `media: sfp` from a family cage must declare the real media on the placement.
+    Watts are the same - the figure belongs to the optic actually fitted."""
+    for media in sorted(lint.AMBIGUOUS_MEDIA):
+        p = plant(tmp_path, "acme/optic@1", cls="transceiver",
+                  attrs={"media": media})
+        assert found(p, tmp_path, "L27") == [], media
+
+
+def test_an_optic_that_names_a_real_media_is_still_asked(tmp_path):
+    """The exemption is for families, not for optics. A part that says what it
+    is has a wattage and owes it - `rj45` and `lc` answer for themselves, and so
+    would a `common/qsfp-dd-400g-zr` the day somebody adds one."""
+    p = plant(tmp_path, "acme/zr@1", cls="transceiver", attrs={"media": "qsfp-dd-zr"})
+    assert len(found(p, tmp_path, "L27")) == 1
+
+
 def test_classes_that_neither_draw_nor_supply_are_not_asked(tmp_path):
     """A C14 inlet is passive and a sticker draws nothing. A rule that ran over
     every class would report 97 components and mean nothing."""
@@ -525,3 +566,27 @@ def test_the_scope_vocabulary_is_closed_and_defaults_to_module(tmp_path):
     assert errs({"power-draw-scope": "module-with-paired-io"}) == []
     for drift in ("with-io", "pair", "module+io", "Module"):
         assert errs({"power-draw-scope": drift}), drift
+
+
+def test_l29_sends_a_family_optic_to_the_placement_not_the_contract(tmp_path):
+    """L27 stays quiet on a family optic because its contract can never answer,
+    but a chassis that accepts one still cannot total it - so L29 keeps counting
+    it and only the REMEDY changes. Pointing the reader at the contract would be
+    pointing at a door that does not open."""
+    plant(tmp_path, "acme/optic@1", cls="transceiver", attrs={"media": "qsfp"})
+    dev = plant_device(tmp_path, "chassis",
+                       [{"id": "cage-0", "accepts": ["acme/optic@1"]}])
+    msgs = found(dev, tmp_path, "L29")
+    assert len(msgs) == 1
+    assert "on the placement or its group" in msgs[0]
+    assert "family rather than a part" in msgs[0]
+    assert "Add power-draw-max-w to that contract" not in msgs[0]
+
+
+def test_l29_still_sends_a_real_card_to_its_contract(tmp_path):
+    """The family remedy must not leak onto everything else: a line card's
+    figure really does belong on its contract."""
+    plant(tmp_path, "acme/card@1")
+    dev = plant_device(tmp_path, "chassis",
+                       [{"id": "slot-0", "accepts": ["acme/card@1"]}])
+    assert "Add power-draw-max-w to that contract" in found(dev, tmp_path, "L29")[0]

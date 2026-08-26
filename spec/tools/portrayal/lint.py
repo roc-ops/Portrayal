@@ -540,9 +540,20 @@ def lint_component_aperture(path, data, lib_roots):
 # fabric card is a card in a slot that consumes; the only thing separating it
 # from `line-card` is that it forwards between cards rather than off the box,
 # which is not a fact about power.
-DRAW_CLASSES = ("line-card", "supervisor", "fabric", "fan", "cooling",
+DRAW_CLASSES = ("line-card", "supervisor", "fabric", "switch", "fan", "cooling",
                 "transceiver")
 SUPPLY_CLASSES = ("psu", "power")
+# `switch` is here because all three components carrying it are chassis CARDS in
+# rear slots - casa/lc-sw-bdm and smm-sw-bdm-a/b - sitting in the same bays as
+# the io-6p12 cards that ARE counted. Leaving them out made a C100G's coverage
+# report short by three modules in its denominator, which is the one failure
+# this rule set exists to prevent: a total that omits terms without saying so.
+# If a physical toggle ever takes this class it will be asked a question it
+# cannot answer; there is none today, and `common/power-button` is `button`.
+#
+# `blank` is deliberately NOT here. A blank faceplate and a slot cover draw
+# nothing, and a blank is the honest occupant of an empty bay rather than a
+# module whose figure is missing.
 DRAW_KEYS = ("power-draw-typical-w", "power-draw-max-w", "power-draw-min-w")
 SUPPLY_KEYS = ("power-output-w",)
 
@@ -619,6 +630,25 @@ def lint_component_power(path, data, _lib_roots=None):
                              "read off the wrong row")
     cls = data.get("class")
     if cls not in DRAW_CLASSES and cls not in SUPPLY_CLASSES:
+        return
+    # A GENERIC optic is not a part and cannot have a wattage. A 40GBASE-SR4 is
+    # about 1.5 W and a 400G ZR about 20 W, and they are the same drawing -
+    # `common/qsfp-transceiver` is a shape that stands in for both, so any figure
+    # on it would be a fiction dressed as a fact rather than a missing one.
+    #
+    # This is L18's argument exactly, and it reuses L18's constant. There, a port
+    # inheriting `media: sfp` from a family cage must declare the real media on
+    # the placement or the group, because the component can only ever say the
+    # family. Here the same is true of watts: the figure is a property of the
+    # optic actually fitted, so it belongs on the placement, where a device that
+    # knows which optic it ships can source it.
+    #
+    # So the rule stays QUIET rather than warning forever on something no
+    # contributor could ever close - the failure L14 and L21 were recalibrated
+    # for. The chassis-level hole stays visible in L29, which is the right place
+    # for it: a chassis genuinely cannot total optics it has not been told about.
+    # A transceiver with a SPECIFIC media answers for itself and is still asked.
+    if cls == "transceiver" and attrs.get("media") in AMBIGUOUS_MEDIA:
         return
     keys = SUPPLY_KEYS if cls in SUPPLY_CLASSES else DRAW_KEYS
     if any(k in attrs for k in keys):
@@ -1072,7 +1102,7 @@ def lint_device_module_power(path, data, lib_roots):
     """
     by_view = _bay_refs_by_view(data)
     refs = set().union(*by_view.values()) if by_view else set()
-    modules, unsourced = set(), set()
+    modules, unsourced, families = set(), set(), set()
     for ref in sorted(refs):
         found = resolve_component(ref, lib_roots)
         if not found:
@@ -1081,18 +1111,29 @@ def lint_device_module_power(path, data, lib_roots):
         if sub.get("class") not in DRAW_CLASSES:
             continue
         modules.add(ref)
-        if not any(k in (sub.get("attrs") or {}) for k in DRAW_KEYS):
+        sattrs = sub.get("attrs") or {}
+        if sub.get("class") == "transceiver" and sattrs.get("media") in AMBIGUOUS_MEDIA:
+            families.add(ref)
+        if not any(k in sattrs for k in DRAW_KEYS):
             unsourced.add(ref)
     # One warning per unsourced module, not one per chassis. The register turns
     # a rule's warning count into the gap's size, and a chassis that cannot
     # account for five of its cards is a bigger hole than one that cannot
     # account for one - which a single warning per device flattens to 1.
     for ref in sorted(unsourced):
+        # A family optic cannot be fixed on its contract - see L27 - so pointing
+        # the reader at the contract would be pointing at a door that does not
+        # open. The hole is real and stays counted; only the remedy differs.
+        fix = ("Declare power-draw-max-w on the placement or its group, the way "
+               "L18 asks for the real media: this ref is a family rather than a "
+               "part, and the figure belongs to the optic actually fitted"
+               if ref in families else
+               "Add power-draw-max-w to that contract from the vendor's own "
+               "per-card table")
         warn(path, "L29", f"{ref} is accepted by a bay here and states no power "
                           f"draw ({len(unsourced)} of {len(modules)} module(s) this "
                           "chassis accepts), so its module total is a floor and not "
-                          "a total. Add power-draw-max-w to that contract from the "
-                          "vendor's own per-card table; where no document states it, "
+                          f"a total. {fix}; where no document states it, "
                           "this count is the honest report of how much of the "
                           "chassis is unaccounted for")
 
