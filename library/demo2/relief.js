@@ -185,7 +185,22 @@ export async function extractRelief(url) {
   // component instances only (data-ref) - contract elements can share a class
   // name (pull-tab has an element called "tab"), which would shadow the module
   const frus = [];
-  for (const el of svg.querySelectorAll('[data-class="psu"],[data-class="fan"],[data-class="tab"]')) {
+  // WHICH CLASSES GET A BODY. A component is field-replaceable because of what it
+  // IS, and this list is the renderer's view of that. It was psu/fan/tab, which
+  // silently excluded two whole classes that behave identically:
+  //   power    - power ENTRY modules and trays. NOT a mislabelled psu: a PEM is a
+  //              conduit that neither draws nor supplies, and collapsing the two
+  //              would lose a distinction the power model depends on. 5 parts.
+  //   cooling  - casa/ and cisco/ call a fan `cooling` where edgecore/, ufispace/
+  //              and common/ call the same object `fan`. 7 parts against 3. That
+  //              duplication is a DATA defect and is recorded in working/notes/;
+  //              admitting both here is the renderer refusing to be the place it
+  //              gets fixed, not an endorsement of it.
+  // The visible symptom was that every Casa and Cisco fan and PEM drew as art
+  // painted on the chassis plate, with no body and no ejection - and edgecore
+  // "worked in 3D" for no better reason than its choice of word.
+  const BODY_CLASSES = ['psu', 'fan', 'tab', 'power', 'cooling'];
+  for (const el of svg.querySelectorAll(BODY_CLASSES.map(c => `[data-class="${c}"]`).join(','))) {
     if (!el.dataset.ref) continue;
     const path = (el.dataset.path || '').split('/')[0];
     if (!path || frus.some(f => f.path === path)) continue;
