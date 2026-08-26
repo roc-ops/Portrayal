@@ -56,32 +56,24 @@ provenance:
     datasheet - 28.93 in (73.48 cm), stated identically by Table 13 and by Figure 9's own
     dimension line. Two sources, no disagreement. Figure 9 also puts the rack mounting surface
     5.73 in (14.55 cm) back from the front of the chassis
-  bay-sizing-reverted-to-the-measured-opening: >-
-    A BAY IS THE HOLE IN THE METAL. These six were sized to the card's 395.7 mm
-    ENVELOPE and re-centred, under an earlier arbitration that a bay and its
-    occupant should carry the same size so the two could be compared. That made
-    them comparable and made them wrong: the measured cage opening is 352.59 mm
-    (60.94 to 413.53 across the front master), so each bay end sat 21.56 mm
-    outside the metal, and the bay's dark opening was drawn over a card rail the
-    master shows as sheet steel. The owner saw it as black showing past the edges
-    of an installed card.
-    Reverted to the master's own numbers: 352.59 across, six bands of 46.605 down
-    from 104.63, which is the pitch this file already records and which Figure 19
-    independently supports - measured off the front face of that figure the
-    opening reads about 358 wide with a 63.5 mm left inset, against 352.59 and
-    60.94 here.
-    THE ASYMMETRY IS REAL AND IS NOT A BUG. 60.94 mm of metal to the left and
-    30.97 to the right, because the master draws a wide vertical strip on the left
-    carrying the ESD receptacle and only a card rail on the right. Figure 19 shows
-    the same, and the power shelf below - which has no such strip - is symmetric.
-    WHAT THIS EXPOSES RATHER THAN FIXES: a card is now legitimately WIDER than its
-    bay, because a faceplate overlaps the aperture it covers. For a line card that
-    is coherent - a 362.24 mm plate over a 352.59 mm opening, with the ejectors
-    taking it to 395.7. For the RSP-880 family it is not: 428.5 mm needs 37.96 mm
-    of overlap per side, and centred on this cage it reaches 6.99 mm PAST the
-    chassis wall. Nine cards share these slots and two families disagree by 32.8
-    on the one axis that has to fit one opening. That is recorded and NOT resolved
-    here - see the rsp880-width gap.
+  bay-size-is-the-reserved-space-opening-is-the-hole: >-
+    ONE FIELD WAS DOING TWO JOBS. `size` is what the slot RESERVES - where the card
+    is placed and what it is checked against - and on this cage that is the card
+    including its ejector brackets, 395.7 x 41.4. The renderer also painted that
+    rectangle dark, so 21.56 mm of "opening" was drawn over sheet metal at each
+    end, and the owner could see black past the edges of an installed card.
+    `opening` now names the second job: 352.59 x 46.605, the cage measured off the
+    front master at 60.94 to 413.53 across and six bands of 46.605 from 104.63
+    down. The bays are unchanged from the arbitration that a bay and its occupant
+    carry the same size, so nothing about placement or checking moves.
+    CHECKED AGAINST FIGURE 19 BEFORE TRUSTING IT, at the owner's suggestion. That
+    figure's front face has vertical left and right edges, so horizontal fractions
+    off it are valid: the opening reads about 358 wide with a 63.5 mm left inset
+    against 352.59 and 60.94 here. The cage was never the problem.
+    THE ASYMMETRY IS REAL. 60.94 mm of metal left and 30.97 right, because the
+    master draws a wide vertical strip on the left carrying the ESD receptacle and
+    only a card rail on the right. Figure 19 shows the same, and the power shelf
+    below - which has no such strip - is symmetric.
   rotate: >-
     datasheet - this chassis mounts its cards HORIZONTALLY (see card-orientation), so each bay
     carries `rotate: 90` and the rotated footprint. OPEN, and flagged rather than asserted: rotate
@@ -498,12 +490,12 @@ views:
         - {id: pm-0, at: [13.51, 386.33], size: {w: 139.12, h: 44.45}, accepts: ['cisco/a9k-power-module@1'], group: power-modules, rel-pos: 0, default: cisco/a9k-power-module@1}
         - {id: pm-1, at: [152.63, 386.33], size: {w: 139.12, h: 44.45}, accepts: ['cisco/a9k-power-module@1'], group: power-modules, rel-pos: 1, default: cisco/a9k-power-module@1}
         - {id: pm-2, at: [291.75, 386.33], size: {w: 139.12, h: 44.45}, accepts: ['cisco/a9k-power-module@1'], group: power-modules, rel-pos: 2, default: cisco/a9k-power-module@1}
-        - {id: slot-5, at: [60.94, 104.63], size: {w: 352.59, h: 46.605}, rotate: 90, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 5, default: cisco/a9k-slot-cover@1}
-        - {id: slot-4, at: [60.94, 151.235], size: {w: 352.59, h: 46.605}, rotate: 90, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 4, default: cisco/a9k-slot-cover@1}
-        - {id: slot-3, at: [60.94, 197.84], size: {w: 352.59, h: 46.605}, rotate: 90, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 3, default: cisco/a9k-slot-cover@1}
-        - {id: slot-2, at: [60.94, 244.445], size: {w: 352.59, h: 46.605}, rotate: 90, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2, default: cisco/a9k-slot-cover@1}
-        - {id: slot-1, at: [60.94, 291.05], size: {w: 352.59, h: 46.605}, rotate: 90, accepts: ['cisco/a9k-rsp880-se@1', 'cisco/a9k-rsp880-tr@1', 'cisco/a9k-rsp880-lt-se@1', 'cisco/a9k-rsp880-lt-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1, default: cisco/a9k-slot-cover@1}
-        - {id: slot-0, at: [60.94, 337.655], size: {w: 352.59, h: 46.605}, rotate: 90, accepts: ['cisco/a9k-rsp880-se@1', 'cisco/a9k-rsp880-tr@1', 'cisco/a9k-rsp880-lt-se@1', 'cisco/a9k-rsp880-lt-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0, default: cisco/a9k-slot-cover@1}
+        - {id: slot-5, at: [39.38, 107.232], size: {w: 395.7, h: 41.4}, opening: {w: 352.59, h: 46.605}, rotate: 90, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 5, default: cisco/a9k-slot-cover@1}
+        - {id: slot-4, at: [39.38, 153.837], size: {w: 395.7, h: 41.4}, opening: {w: 352.59, h: 46.605}, rotate: 90, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 4, default: cisco/a9k-slot-cover@1}
+        - {id: slot-3, at: [39.38, 200.442], size: {w: 395.7, h: 41.4}, opening: {w: 352.59, h: 46.605}, rotate: 90, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 3, default: cisco/a9k-slot-cover@1}
+        - {id: slot-2, at: [39.38, 247.047], size: {w: 395.7, h: 41.4}, opening: {w: 352.59, h: 46.605}, rotate: 90, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2, default: cisco/a9k-slot-cover@1}
+        - {id: slot-1, at: [39.38, 293.652], size: {w: 395.7, h: 41.4}, opening: {w: 352.59, h: 46.605}, rotate: 90, accepts: ['cisco/a9k-rsp880-se@1', 'cisco/a9k-rsp880-tr@1', 'cisco/a9k-rsp880-lt-se@1', 'cisco/a9k-rsp880-lt-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1, default: cisco/a9k-slot-cover@1}
+        - {id: slot-0, at: [39.38, 340.257], size: {w: 395.7, h: 41.4}, opening: {w: 352.59, h: 46.605}, rotate: 90, accepts: ['cisco/a9k-rsp880-se@1', 'cisco/a9k-rsp880-tr@1', 'cisco/a9k-rsp880-lt-se@1', 'cisco/a9k-rsp880-lt-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0, default: cisco/a9k-slot-cover@1}
       placements:
         - {ref: cisco/a9k-fan-tray-door@1, id: fan-tray-door, at: [0, 33.66], group: doors, rel-pos: 0}
     regions:

@@ -710,6 +710,23 @@
                         }
                       }
                     },
+                    "opening": {
+                      "type": "object",
+                      "required": [
+                        "w",
+                        "h"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "w": {
+                          "type": "number"
+                        },
+                        "h": {
+                          "type": "number"
+                        }
+                      },
+                      "description": "the HOLE IN THE SHEET METAL, when it differs from `size`. `size` is the space the slot RESERVES - what the occupant is placed into and checked against - and on a card cage that is the card including its ejector brackets. The hole the card's plate covers is smaller, and it is the hole you see when the bay is empty. On an ASR 9006 they are 395.70 and 352.59: painting the reserved space dark put 21.5 mm of opening over metal at each end. Absent means the two are the same, which is the common case. Measured only - never inferred from the occupant, which is the mistake this exists to undo."
+                    },
                     "accepts": {
                       "type": "array",
                       "items": {

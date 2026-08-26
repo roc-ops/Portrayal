@@ -805,10 +805,28 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             bay_g.set("data-rel-pos", str(b["rel-pos"]))
         title = ET.SubElement(bay_g, f"{{{SVG_NS}}}title")
         title.text = b["id"]
+        # THE HOLE, NOT THE RESERVED SPACE. `size` is what the slot reserves -
+        # where the occupant is placed and what it is checked against - and on a
+        # card cage that is the card INCLUDING its ejector brackets. The hole its
+        # plate covers is smaller, and the hole is what you see when the bay is
+        # empty. Painting `size` dark put 21.5 mm of opening over sheet metal at
+        # each end of every ASR 9006 slot, which is the black the owner could see
+        # past the edges of an installed card.
+        #
+        # One field was doing two jobs. `opening` names the second one; absent, it
+        # falls back to `size` and nothing changes - which is 140 of the library's
+        # bays, where the two really are the same.
+        #
+        # It is CENTRED on the bay, because a hole and the space reserved around it
+        # share a centre. Nothing here is derived from the occupant: an opening is
+        # measured off the drawing or it is not stated.
+        op = b.get("opening") or b["size"]
+        ox = b["at"][0] + (b["size"]["w"] - op["w"]) / 2.0
+        oy = b["at"][1] + (b["size"]["h"] - op["h"]) / 2.0
         opening = ET.SubElement(bay_g, f"{{{SVG_NS}}}rect")
         opening.set("id", f"{b['id']}--opening")
-        opening.set("x", f"{b['at'][0]:g}"); opening.set("y", f"{b['at'][1]:g}")
-        opening.set("width", f"{b['size']['w']:g}"); opening.set("height", f"{b['size']['h']:g}")
+        opening.set("x", f"{ox:g}"); opening.set("y", f"{oy:g}")
+        opening.set("width", f"{op['w']:g}"); opening.set("height", f"{op['h']:g}")
         opening.set("fill", "#101214")
         default = (config.get("bays") or {}).get(b["id"], b.get("default"))
         if not default:
