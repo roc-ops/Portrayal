@@ -488,33 +488,59 @@ def write(doc, root, target, nos):
     return f
 
 
-def render_image(dist, root, target, doc, dev_name, cfg_name, face):
-    """Rasterise a compiled face into the library's elevation-images tree."""
-    src = Path(dist) / f"{dev_name}.{cfg_name}.{face}.svg"
+def rasterize(src, png, scale):
+    """One compiled drawing to one PNG. None if the drawing or cairosvg is absent.
+
+    Resolves the custom properties first, which cairosvg has no support for -
+    it reads `var(--led-color, #3a3f44)` as a hex literal beginning "ar". Every
+    use in the compiled output is a lamp colour and every one carries a
+    fallback, so taking the fallback yields the unlit faceplate. That is the
+    right picture for a type either way: a type has no live state to show.
+    """
     if not src.exists():
         return None
     try:
         import cairosvg
     except ImportError:
         return None
-    out = Path(root) / target / "elevation-images" / doc["manufacturer"]
-    out.mkdir(parents=True, exist_ok=True)
-    png = out / f"{doc['slug']}.{face}.png"
-
-    # Resolve the custom properties before handing the drawing to cairosvg,
-    # which has no support for them and reads `var(--led-color, #3a3f44)` as a
-    # hex literal beginning "ar". Every use in the compiled output is a lamp
-    # colour and every one carries a fallback, so taking the fallback yields the
-    # unlit faceplate - which is the right picture for an elevation image
-    # anyway: a device type has no live state to show.
     svg = re.sub(r"var\(\s*--[\w-]+\s*,\s*([^)]*)\)", r"\1", src.read_text())
+    png.parent.mkdir(parents=True, exist_ok=True)
+    cairosvg.svg2png(bytestring=svg.encode(), write_to=str(png), scale=scale)
+    return png
 
+
+def render_image(dist, root, target, doc, dev_name, cfg_name, face):
+    """Rasterise a compiled face into the library's elevation-images tree."""
     # 2 px/mm. A 440 mm faceplate lands near 880 px, which is the range the
     # libraries' own elevation images sit in - theirs run 37 KB to 350 KB. At 4
     # px/mm the 13 RU C100G alone came to 1.9 MB, and a contribution that ships
     # 29 MB of PNG is not one anybody wants to merge.
-    cairosvg.svg2png(bytestring=svg.encode(), write_to=str(png), scale=2)
-    return png
+    return rasterize(Path(dist) / f"{dev_name}.{cfg_name}.{face}.svg",
+                     Path(root) / target / "elevation-images" / doc["manufacturer"]
+                     / f"{doc['slug']}.{face}.png", 2)
+
+
+def render_module_image(dist, root, target, doc, ns, name, ver):
+    """Rasterise a module's faceplate into the library's module-images tree.
+
+    Keyed by MODEL, not by slug: a module type has no slug property in either
+    schema, and the libraries' own trees are named for the model. The filename
+    is sanitised the same way the YAML's is, so the pair always agree.
+
+    The drawing keeps its own orientation. A card is drawn as the skin draws it,
+    and which way up it ends up is a property of the chassis it is seated in -
+    an A9K line card is horizontal in a 9010 and vertical in a 9910 - so there
+    is no one rotation that is true of the part itself.
+    """
+    # Scale 1: the drawing at its own size. cairosvg's scale multiplies the CSS
+    # pixel size, so a 41 mm x 396 mm card renders 157 x 1496 - an SFP cage
+    # lands near 53 x 30 px, which reads at thumbnail size. It also keeps the
+    # files in the range the libraries' own module images occupy: theirs average
+    # 58 KB and the Cisco A9K ones are 7 KB, and these come out 10-80 KB. Going
+    # up one stop tripled that for detail nothing displays.
+    return rasterize(Path(dist) / "components" / f"{ns}--{name}--{ver}--default.svg",
+                     Path(root) / target / "module-images" / doc["manufacturer"]
+                     / (doc["model"].replace("/", "-") + ".front.png"), 1)
 
 
 def export_modules(library, root, dist=None):
@@ -532,6 +558,7 @@ def export_modules(library, root, dist=None):
         ns2man.setdefault(ns, yaml.safe_load(f.read_text()).get("manufacturer"))
 
     wrote = skipped = 0
+    imaged = set()
     for f in sorted(lib.glob("components/*/*/*/contract.yaml")):
         contract = yaml.safe_load(f.read_text())
         if contract.get("kind") != "module":
@@ -542,6 +569,7 @@ def export_modules(library, root, dist=None):
             skipped += 1
             continue
         doc = build_module(contract, man)
+        name, ver = f.parts[-3], f.parts[-2]
         for target in TARGETS:
             d = Path(root) / target / "module-types" / man
             d.mkdir(parents=True, exist_ok=True)
@@ -551,10 +579,15 @@ def export_modules(library, root, dist=None):
             out = d / (doc["model"].replace("/", "-") + ".yaml")
             out.write_text("---\n" + yaml.dump(doc, Dumper=Indented, sort_keys=False,
                                                width=100, default_flow_style=False))
+            if dist:
+                if render_module_image(dist, root, target, doc, ns, name, ver):
+                    imaged.add(doc["model"])
         wrote += 1
         print(f"{doc['model']}  ({len(doc.get('interfaces', []))} interfaces, "
               f"{len(doc.get('power-ports', []))} power ports)")
     print(f"module types: {wrote} written, {skipped} skipped for having no manufacturer")
+    if dist:
+        print(f"module images: {len(imaged)} of {wrote} rendered")
 
 
 def main():
