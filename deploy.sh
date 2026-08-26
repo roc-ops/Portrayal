@@ -3,8 +3,12 @@
 #
 #   ./deploy.sh user@host [remote-dir]
 #
-# Ships demo/ + dist/ only. demo/reference/ is deliberately excluded: it holds
+# Ships demo/ + demo2/ + dist/. demo/reference/ is deliberately excluded: it holds
 # vendor photos and 3D models that are not ours to redistribute.
+#
+# BOTH demos ship. demo/ is frozen and stays until v2 is demonstrably better, so
+# replacing it would remove the thing we currently show people in order to test
+# its replacement. They sit side by side and the landing page offers both.
 set -euo pipefail
 cd "$(dirname "$0")"
 TARGET="${1:?usage: deploy.sh user@host [remote-dir]}"
@@ -17,13 +21,27 @@ REMOTE="${2:-/opt/$SERVICE}"
 ./build.sh
 STAGE="$(mktemp -d)"; trap 'rm -rf "$STAGE"' EXIT
 rsync -a --exclude 'reference/' --exclude '.DS_Store' library/demo "$STAGE/"
+rsync -a --exclude '.DS_Store' library/demo2 "$STAGE/"
 rsync -a library/dist "$STAGE/"
 # no-cache static server: stock http.server lets browsers serve a stale build
 install -m 755 tools/serve.py "$STAGE/serve.py"
+# A chooser, not a redirect: with two demos live, silently landing on one of them
+# is how you end up testing the wrong one and reporting a bug against the other.
 cat > "$STAGE/index.html" <<'HTML'
 <!doctype html><meta charset="utf-8"><title>Portrayal</title>
-<meta http-equiv="refresh" content="0; url=demo/">
-<p>Redirecting to <a href="demo/">the Portrayal demo</a>.</p>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+ :root{color-scheme:light dark}
+ body{font:16px/1.55 system-ui,sans-serif;max-width:34rem;margin:12vh auto;padding:0 1.5rem}
+ h1{font-size:1.3rem;margin:0 0 1.5rem}
+ a{display:block;padding:.85rem 1rem;margin:.5rem 0;border:1px solid;border-radius:8px;
+   text-decoration:none;color:inherit}
+ a b{display:block;font-size:1.05rem}
+ a span{opacity:.7;font-size:.9rem}
+</style>
+<h1>Portrayal</h1>
+<a href="demo2/"><b>Demo v2</b><span>Explorer with 2D/3D toggle, states, annotate and export</span></a>
+<a href="demo/"><b>Demo v1</b><span>The original pages. Frozen.</span></a>
 HTML
 
 # COPYFILE_DISABLE stops macOS tar emitting ._ AppleDouble files for xattrs
@@ -49,9 +67,13 @@ fi
 # curl once and report a spurious 000
 for i in $(seq 1 20); do
   code=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:9003/demo/ || true)
-  [ "$code" = "200" ] && { echo "demo: HTTP 200 (ready after ${i} tr(y|ies))"; exit 0; }
+  code2=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:9003/demo2/ || true)
+  # both, because a green light on v1 while v2 404s is the exact failure this
+  # deploy exists to catch
+  [ "$code" = "200" ] && [ "$code2" = "200" ] && {
+    echo "demo: HTTP 200 on /demo/ and /demo2/ (ready after ${i} tr(y|ies))"; exit 0; }
   sleep 0.5
 done
-echo "demo: NOT READY (last code ${code:-none})" >&2
+echo "demo: NOT READY (/demo/=${code:-none} /demo2/=${code2:-none})" >&2
 exit 1
 REMOTE
