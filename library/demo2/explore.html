@@ -82,31 +82,23 @@
 <body>
 <script type="module">
 import { createShell, esc } from '../viewer/shell.js';
+import { statesOfEl } from '../viewer/states.js';
 
 const shell = createShell({title: 'Portrayal explorer'});
 const state = shell.state;
 
 // ---------------------------------------------------------------- state chips
 
-// A state name is meant to be a token, and `state-<name>` on the compiled SVG is
-// what the drawing's own CSS keys off. Several contracts have put a description
-// in the name field instead, so data-states can read "Green = OK, Amber = fault".
-// Splitting that on spaces produces chips called "=" and "OK," that set classes
-// nothing styles. Fixing the data is a separate job; until it lands, a value that
-// is not a list of tokens gets no chips rather than garbage ones.
-const TOKEN = /^[a-z0-9-]+$/;
-function statesOf(el) {
-  const raw = (el.dataset.states || '').trim();
-  if (!raw) return [];
-  const toks = raw.split(/\s+/);
-  return toks.every(t => TOKEN.test(t)) ? toks : [];
-}
-
+// Reading a lamp's vocabulary is states.js's job, and it was this page's and
+// annotate's separately until now - the same comment, the same regex, and two
+// different splits: this copy broke on whitespace only, so a contract that wrote
+// "off, on" got a chip called "on," here and the right two chips there. One
+// function, one answer, and this page gains the comma handling it was missing.
 // Ported from demo/interactive.html: click a chip to set state-<name>, click it
 // again to clear, and `off` always clears - "off" is the absence of a state, not
 // a state of its own.
 function chips(el) {
-  const states = statesOf(el);
+  const states = statesOfEl(el);
   if (!states.length) return null;
   const span = document.createElement('span');
   for (const st of states) {

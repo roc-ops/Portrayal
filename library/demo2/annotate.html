@@ -127,6 +127,11 @@
 <script type="module">
 import { createShell, esc } from '../viewer/shell.js';
 import * as marks from '../viewer/marks.js';
+// The analysis of what a drawing says about its own lamps is not this page's -
+// the gaps register asks the same questions of the same drawings offline. What
+// stays here is the markup and the handlers that put it on screen.
+import { statesOfEl, pathIndex, firstMatch, paints, undocumented,
+         lampCensus, lampable, stateChoices } from '../viewer/states.js';
 
 const shell = createShell({title: 'Portrayal annotate'});
 const state = shell.state;
@@ -299,211 +304,45 @@ function render(opts = {}) {
 
 // ---------------------------------------------------------------- rows
 
-// Which states does the drawing actually PAINT? Applying a state only changes
-// what you see if the stylesheet has a rule for it, and several components
-// declare states nobody wrote CSS for - the AGR400's port LEDs offer `link`,
-// and `state-link` sets a class no rule matches. Rather than hardcode render.py's
-// list (which per-component `palette:` extends anyway), ask the drawing.
+// The markup is this page's; the classification behind it is not. states.js
+// answers which of a lamp's declared states the drawing actually paints, which
+// of the stylesheet's own it never claimed, and whether the value in hand is in
+// neither list - and the gaps register asks it the same thing with no <option>
+// anywhere in sight. Only the labels a reader reads are written here.
 //
-// Asked the wrong way, this lies. The first version parked an empty <g> beside
-// the element and put the class on THAT, which cannot answer for the rules
-// render.py emits self-scoped:
-//
-//   #mgmt--led-left.state-link-1g { --led-color: #22c55e; }
-//
-// id and class on the same element. A stand-in with no id matches nothing of
-// the sort, so it reported "no CSS" for states that work perfectly - and the
-// asymmetry is invisible from here: a placement-level state emits both forms
-// (`#led-gnss.state-learning, #led-gnss .state-learning`) while an element-level
-// state inside a group override emits only the self form.
-//
-// So the question is put to the element itself. Its own state- classes come off
-// for the two readings and go back on immediately, synchronously, before
-// anything can observe them - there is no await between them and no layout is
-// forced, only style. That is exact for both forms and for anything a future
-// palette invents, where any stand-in is a guess about what the selector needed.
-const paintCache = new Map();
-const PROPS = ['--led-color', '--led-color-alt', 'opacity', 'fill', 'stroke',
-               'filter', 'animation-name'];
-
-function paints(el, st) {
-  if (!el || !st) return true;
-  // `off` is the absence of a state, not a state with a rule of its own: an
-  // unlit lamp is what the skin's own fill fallback already draws.
-  if (st === 'off') return true;
-  // Self-scoped rules are keyed on the id, so the id is the cache key wherever
-  // there is one. Without an id the answer can only come from inherited scope -
-  // `g[data-ref^='ufispace/psu-401-dc@'] .state-fail` - which varies by the
-  // component and by the element's own class and nothing else.
-  let ref = '';
-  for (let p = el; p && p.nodeType === 1 && !ref; p = p.parentNode)
-    ref = p.getAttribute('data-ref') || '';
-  const key = el.id ? `${st}|#${el.id}`
-                    : `${st}|${ref}|${el.getAttribute('data-class') || ''}|${el.tagName}`;
-  if (paintCache.has(key)) return paintCache.get(key);
-
-  const read = () => {
-    const cs = getComputedStyle(el);
-    return PROPS.map(p => cs.getPropertyValue(p).trim()).join('|');
-  };
-  const mine = [...el.classList].filter(c => c.startsWith('state-'));
-  el.classList.remove(...mine);
-  const base = read();
-  el.classList.add('state-' + st);
-  const lit = read();
-  el.classList.remove('state-' + st);
-  if (mine.length) el.classList.add(...mine);
-  const ok = base !== lit;
-  paintCache.set(key, ok);
-  return ok;
-}
-
-// ------------------------------------------------- documented vs. undocumented
-
-// Which lamps does the model actually have something to say about?
-//
-// Every LED component in the library declares `states: ['off', 'on']` and
-// nothing else, because a lamp can only know that it is a lamp - what it MEANS
-// is a per-device, per-function fact that lives in the device manifest. So a
-// lamp still carrying exactly off/on is one whose device said nothing: the
-// S9510-28DC's HIG has LED tables for GNSS, SYNC, STAT, FAN, PWR, the PSU and
-// fan FRUs and the management jack, and no table at all for the port lamps, and
-// its thirty port lamps sit on that default as a result.
-//
-// That is the case the colour picker exists for, and the case it must be
-// confined to. `led-pwr`'s off/ok/bmc-power-fail/cpu-power-fail was transcribed
-// from a vendor table; offering to recolour it would turn a fact into a
-// preference and put a false picture into an export.
-//
-// The literal pair is NOT the whole test, because a device may one day declare
-// exactly off and on out of a real document. Two questions are asked:
-//
-//   1. Is the vocabulary anything other than the components' off/on default?
-//      Any override - at the placement, at the group, or in the contract's own
-//      element - lands in data-states, so a longer or different list is somebody
-//      having written something down.
-//   2. Failing that, does the drawing carry a rule that paints one of these
-//      states FOR THIS LAMP IN PARTICULAR? render.py emits a declared colour as
-//      `#lamp-id.state-on` or `g[data-ref^='common/led-dot@'] .state-on`; the
-//      base stylesheet's own `.state-on { --led-color:#22c55e }` is the generic
-//      fallback that every undocumented lamp in the library gets. A scoped rule
-//      means a colour was declared, which means somebody read a table.
-//
-// Today no device in the library declares a coloured off/on, so (2) never fires
-// and (1) carries the whole boundary. It is here because the day it does fire is
-// the day the literal-pair test would start lying, silently, in an export.
-let scopedRules = null;
-
-function stateRules() {
-  if (scopedRules) return scopedRules;
-  scopedRules = [];
-  for (const style of state.svg.querySelectorAll('style')) {
-    let rules;
-    try { rules = style.sheet && style.sheet.cssRules; } catch (e) { rules = null; }
-    for (const rule of rules || []) {
-      if (!rule.selectorText) continue;
-      for (const part of rule.selectorText.split(',')) {
-        const st = /\.state-([a-z0-9-]+)/.exec(part);
-        // '#' and '[data-ref' are the only two scopes render.py emits for a
-        // declared colour. Not any attribute selector: the base sheet's own
-        // `.state-fail[data-class='psu']` is a drop-shadow every PSU gets, and
-        // reading that as a declaration would call every default PSU documented.
-        if (st && (part.includes('#') || part.includes('[data-ref')))
-          scopedRules.push({state: st[1], sel: part.trim()});
-      }
-    }
-  }
-  return scopedRules;
-}
-
-// Does a rule declared for this element in particular paint `st`? Asked by
-// putting the class on the element and letting the browser answer, for the same
-// reason paints() does: a stand-in element cannot match a self-scoped selector.
-function declaredHere(el, st) {
-  const cands = stateRules().filter(r => r.state === st);
-  if (!cands.length) return false;
-  const had = el.classList.contains('state-' + st);
-  if (!had) el.classList.add('state-' + st);
-  const hit = cands.some(r => { try { return el.matches(r.sel); } catch (e) { return false; } });
-  if (!had) el.classList.remove('state-' + st);
-  return hit;
-}
-
-const DEFAULT_VOCAB = ['off', 'on'];
-
-/** True when this element is a lamp whose meaning the model does not record. */
-function undocumented(el) {
-  if (!el || el.getAttribute('data-class') !== 'led') return false;
-  const sts = statesOfEl(el);
-  if (sts.length !== DEFAULT_VOCAB.length ||
-      !DEFAULT_VOCAB.every(s => sts.includes(s))) return false;
-  return !sts.some(st => declaredHere(el, st));
-}
-
-// The stylesheet's own vocabulary, for a state a match does not declare. Offered
-// separately and second: choosing one is a claim about the hardware the model
-// does not support, and marks.js says so in `warning`.
-const GLOBAL_STATES = ['up', 'activity', 'ok', 'fault', 'fail', 'locate', 'absent'];
-
-function firstMatch(sel) {
-  try { return state.svg.querySelector(sel); } catch (e) { return null; }
-}
-
+// The stylesheet's own vocabulary is offered separately and second: choosing one
+// is a claim about the hardware the model does not support, and marks.js says so
+// in `warning`.
 function stateOptions(r, cur) {
-  const el = firstMatch(r.select);
-  const declared = r.states || [];
+  const {declared, global, unknown} = stateChoices(state.svg, r.select, r.states, cur);
   const opt = (v, label, sel) =>
     `<option value="${esc(v)}"${sel ? ' selected' : ''}>${esc(label)}</option>`;
-  let h = opt('', '— no state —', !cur);
+  let h = opt('', '\u2014 no state \u2014', !cur);
   if (declared.length) {
     h += `<optgroup label="declared here">`;
-    for (const s of declared)
-      h += opt(s, paints(el, s) ? s : `${s} — no CSS`, s === cur);
+    for (const d of declared)
+      h += opt(d.name, d.paints ? d.name : `${d.name} \u2014 no CSS`, d.name === cur);
     h += `</optgroup>`;
   }
-  const rest = GLOBAL_STATES.filter(s => !declared.includes(s));
-  if (rest.length) {
+  if (global.length) {
     h += `<optgroup label="${declared.length ? 'not declared here' : 'stylesheet states'}">`;
-    for (const s of rest) h += opt(s, s, s === cur);
+    for (const st of global) h += opt(st, st, st === cur);
     h += `</optgroup>`;
   }
   // a state typed into a share URL, or sent by an MCP client, that is in neither list
-  if (cur && !declared.includes(cur) && !rest.includes(cur))
-    h += opt(cur, `${cur} — unknown`, true);
+  if (unknown) h += opt(unknown, `${unknown} \u2014 unknown`, true);
   return h;
 }
 
 // The panel gets the same picker as the tree, under the same rule, because the
 // interesting way to colour thirty undocumented lamps is not thirty pickers - it
-// is one rule with one picker on it.
-//
-// "The same rule" has to mean the same rule. A selector reaching a mix - say
-// [data-class='led'] on the S9510, which is thirty silent port lamps AND the PWR
-// lamp whose four states came off a vendor table - is not a place the model is
-// silent, and a picker there would recolour the transcribed ones along with the
-// rest. So the control is offered only where EVERY lamp the selector reaches is
-// undocumented; a mixed rule gets no picker and says why.
-function lampCensus(select) {
-  const c = {undoc: 0, doc: 0};
-  if (!select || !state.svg) return c;
-  let els;
-  try { els = state.svg.querySelectorAll(select); } catch (e) { return c; }
-  for (const el of els) {
-    if (el.getAttribute('data-class') !== 'led' || !statesOfEl(el).length) continue;
-    if (undocumented(el)) c.undoc++; else c.doc++;
-  }
-  return c;
-}
-
-const lampable = select => {
-  const c = lampCensus(select);
-  return c.undoc > 0 && c.doc === 0;
-};
-
+// is one rule with one picker on it. lampable() in states.js is that rule: the
+// control is offered only where EVERY lamp the selector reaches is undocumented,
+// and a mixed selection gets no picker and says why.
 const LAMPTIP = 'the model records no meaning for these lamps — choose what they show';
 
 function lampHtml(m) {
-  if (!lampable(m.select)) return '';
+  if (!lampable(state.svg, m.select)) return '';
   // The clear button is always built and hidden rather than added on demand, so
   // that choosing a colour never has to rebuild the control the user is holding.
   return `<input type="color" class="lamp${m.lamp ? '' : ' unset'}"
@@ -527,7 +366,7 @@ function notesHtml(m, r) {
     ${esc(state.view)} view of ${esc(state.device)}${m.label
       ? ' — its legend row is left out rather than claiming a highlight the reader cannot see' : ''}.</div>`);
   if (r.warning) notes.push(`<div class="note warn">${esc(r.warning)}</div>`);
-  if (m.state && !r.error && r.count && !paints(firstMatch(m.select), m.state))
+  if (m.state && !r.error && r.count && !paints(firstMatch(state.svg, m.select), m.state))
     notes.push(`<div class="note warn">nothing in this drawing paints
       <code>state-${esc(m.state)}</code>: the class is set, the picture does not change.</div>`);
   if (m.lamp && r.count) {
@@ -535,7 +374,7 @@ function notesHtml(m, r) {
     // at all, and the selector on a mark made here can be edited afterwards. So
     // the panel says what the colour is currently overriding rather than
     // assuming the control that offered it is still the control that applies.
-    const c = lampCensus(m.select);
+    const c = lampCensus(state.svg, m.select);
     notes.push(c.doc
       ? `<div class="note warn">this colour overrides ${c.doc} lamp${c.doc === 1 ? '' : 's'}
          whose states the model transcribes from the vendor — an export will show
@@ -619,7 +458,7 @@ function paintRows() {
     // operating system's picker.
     const lb = row.querySelector('.lampbox');
     const cur = lb.querySelector('.lamp');
-    if (!!cur !== lampable(m.select)) {
+    if (!!cur !== lampable(state.svg, m.select)) {
       if (!lb.contains(document.activeElement)) lb.innerHTML = lampHtml(m);
     } else if (cur) {
       if (cur !== document.activeElement) cur.value = m.lamp || LAMP_DEFAULT;
@@ -681,17 +520,8 @@ const markOf = el => {
   const hit = [...el.classList].map(c => /^pm-(\d+)$/.exec(c)).filter(Boolean).pop();
   return hit ? +hit[1] : null;
 };
-// one pass over the drawing rather than one query per tree row: the AS7946's
-// front face is 3600 elements and its tree is 200 rows
-function pathIndex() {
-  const byPath = new Map();
-  for (const e of state.svg.querySelectorAll('[data-path]'))
-    if (!byPath.has(e.dataset.path)) byPath.set(e.dataset.path, e);
-  return byPath;
-}
-
 function drawTreeDots() {
-  const byPath = pathIndex();
+  const byPath = pathIndex(state.svg);
   for (const row of shell.el.tree.querySelectorAll('.node[data-path]')) {
     row.querySelector('.pm')?.remove();
     const el = byPath.get(row.dataset.path);
@@ -726,19 +556,7 @@ function drawTreeDots() {
 // highlights are composed in the panel. What they are NOT is two models: a chip
 // writes `state` on a mark in the same document, which is why a share URL and an
 // export still reproduce the condition the drawing was showing.
-const TOKEN = /^[a-z0-9-]+$/;
 const pathSel = path => `[data-path='${path}']`;
-
-// `states:` accepts a bare string and several contracts have put a description
-// where the name goes - "Green = OK, Amber = fault". Splitting that on spaces
-// offers chips called "=" and "OK," that set classes nothing paints, so a value
-// that is not a list of tokens gets no chips rather than garbage ones.
-function statesOfEl(el) {
-  const raw = (el.dataset.states || '').trim();
-  if (!raw) return [];
-  const toks = raw.split(/[\s,]+/);
-  return toks.every(t => TOKEN.test(t)) ? toks : [];
-}
 
 function setState(path, st) {
   const select = pathSel(path);
@@ -833,7 +651,7 @@ shell.on('row', (row, node) => {
 // `off` would light the chip on a row nobody has touched, and pressing it would
 // then appear to do nothing. The chip answers for what this row asserts.
 function drawTreeChips() {
-  const byPath = pathIndex();
+  const byPath = pathIndex(state.svg);
   for (const span of shell.el.tree.querySelectorAll('.chips')) {
     const path = span.closest('.node')?.dataset.path;
     const el = byPath.get(path);
@@ -1228,13 +1046,16 @@ panel.querySelector('.btns').addEventListener('click', async ev => {
 // ---------------------------------------------------------------- wiring
 
 // Every reload of the drawing - device, config, view, a bay swap, drilling into
-// a module - invalidates the matches and the rules, and the marks stay: a
-// selector is written against the hardware, not against one drawing of it, so
-// switching from front to rear SHOULD leave the port rules reading zero rather
-// than quietly deleting them.
+// a module - invalidates the matches, and the marks stay: a selector is written
+// against the hardware, not against one drawing of it, so switching from front
+// to rear SHOULD leave the port rules reading zero rather than quietly deleting
+// them.
+//
+// The state analysis used to be invalidated here too, by hand. It is not any
+// more and must not be again: states.js hangs its caches off the SVG root, so a
+// new drawing is a new key and the old answers are unreachable rather than
+// merely overwritten on time.
 shell.on('load', () => {
-  paintCache.clear();
-  scopedRules = null;                 // a different drawing carries a different sheet
   lastSel = null;
   disarmCrop();
   // A crop is millimetres of THIS drawing. The marks survive a view change on
