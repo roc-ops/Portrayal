@@ -228,6 +228,13 @@
         "power-output-w": {
           "$ref": "#/$defs/watts",
           "description": "continuous output this module is rated to PROVIDE - a PSU or a power-entry module. Deliberately not `power-output-max-w`: draw has a distribution and supply has a rating, and a symmetric name would advertise a `power-output-typical-w` that means nothing"
+        },
+        "power-draw-scope": {
+          "description": "WHAT the power-draw-* figures on this contract cover. Absent means `module` - this module and nothing else - so every figure written before this key existed keeps meaning exactly what it meant. `module-with-paired-io` is for a vendor who measures the pair and publishes no bare figure: Casa heads its C100G table 'Maximum consumption WITH I/O module' and gives the same US16x8 200 W or 220 W depending on which rear module it sits behind, so a bare-card figure may not exist to be divided out. The scope is DATA and not a provenance sentence because it changes the arithmetic: a consumer summing a chassis must not add the rear partner of a card already scoped to include it, and a consumer asking what one card draws must be able to see that the answer contains another card. A prose note is true, well written, and invisible to both of them",
+          "enum": [
+            "module",
+            "module-with-paired-io"
+          ]
         }
       },
       "additionalProperties": true

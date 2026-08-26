@@ -47,6 +47,35 @@ def plant_device(root, name, bays, configurations=None):
     return p
 
 
+def plant_paired_device(root, name, front, rear):
+    """A front/rear chassis: `front` and `rear` are lists of accepted refs.
+
+    Two views, because a paired I/O module lives on the OPPOSITE face from the
+    card it serves - that is what makes it a pairing, and a one-view fixture
+    cannot express the thing L30 looks for.
+    """
+    p = root / "devices" / "acme" / name / "device.yaml"
+    p.parent.mkdir(parents=True, exist_ok=True)
+
+    def view(refs, tag):
+        return {"size": {"w": 440.0, "h": 44.0}, "components": {"bays": [
+            {"id": f"{tag}-{i}", "at": [0.0, 0.0],
+             "size": {"w": 40.0, "h": 20.0}, "accepts": [r]}
+            for i, r in enumerate(refs)]}}
+
+    p.write_text(yaml.safe_dump({
+        "format": 1, "kind": "device", "name": name,
+        "views": {"front": view(front, "front"), "rear": view(rear, "rear")}}))
+    return p
+
+
+def double_count(path, root):
+    lint.WARNINGS.clear()
+    lint.lint_device_double_count(path, yaml.safe_load(path.read_text()),
+                                  [str(root)])
+    return [w for w in lint.WARNINGS if "[L30]" in w]
+
+
 def found(path, root, code):
     """Warnings and errors of one code raised by one manifest, and nothing else."""
     lint.WARNINGS.clear()
@@ -375,3 +404,100 @@ def test_the_register_carries_the_rule(tmp_path):
     what, wanted = capability.RULE_GAPS["L29"]
     assert what == "module-power"
     assert "power-draw-max-w" in wanted
+
+
+# ---------------------------------------------------------------- L30
+
+
+def test_a_pairing_counted_from_both_ends_is_reported(tmp_path):
+    """The defect: a front card whose figure already contains its rear partner,
+    beside a rear partner that states its own. `sum()` over populated bays then
+    counts the pairing twice - a plausible over-count, not an error."""
+    plant(tmp_path, "acme/dqm@1", attrs={"power-draw-max-w": 320.0,
+                                         "power-draw-scope": "module-with-paired-io"})
+    plant(tmp_path, "acme/rf-io@1", attrs={"power-draw-max-w": 30.0})
+    dev = plant_paired_device(tmp_path, "chassis", ["acme/dqm@1"], ["acme/rf-io@1"])
+    ws = double_count(dev, tmp_path)
+    assert len(ws) == 1
+    assert "acme/rf-io@1" in ws[0] and "acme/dqm@1" in ws[0]
+    assert "counts the pairing twice" in ws[0]
+
+
+def test_the_message_offers_both_repairs_not_one(tmp_path):
+    """Either the front scope is wrong or the rear figure is for something the
+    front does not cover. The rule cannot tell which, so it must not accuse
+    one side - that is the recalibration L14 and L21 both needed."""
+    plant(tmp_path, "acme/dqm@1", attrs={"power-draw-max-w": 320.0,
+                                         "power-draw-scope": "module-with-paired-io"})
+    plant(tmp_path, "acme/rf-io@1", attrs={"power-draw-max-w": 30.0})
+    dev = plant_paired_device(tmp_path, "chassis", ["acme/dqm@1"], ["acme/rf-io@1"])
+    msg = double_count(dev, tmp_path)[0]
+    assert "scope is wrong" in msg and "does not cover" in msg
+
+
+def test_a_scoped_card_with_no_rear_figure_is_silent(tmp_path):
+    """The library today: every DQM and BDM is scoped to the pair and no rear
+    I/O module has a figure yet. Nothing is being double-counted, so nothing is
+    reported - the rule fires the moment casa-rear-io lands one."""
+    plant(tmp_path, "acme/dqm@1", attrs={"power-draw-max-w": 320.0,
+                                         "power-draw-scope": "module-with-paired-io"})
+    plant(tmp_path, "acme/rf-io@1")
+    dev = plant_paired_device(tmp_path, "chassis", ["acme/dqm@1"], ["acme/rf-io@1"])
+    assert double_count(dev, tmp_path) == []
+
+
+def test_two_bare_cards_are_not_a_double_count(tmp_path):
+    """Absent scope means `module`, so a front and a rear card that each state
+    their own draw are two independent terms and summing both is correct. This
+    is every other chassis in the library and the rule must stay off it."""
+    plant(tmp_path, "acme/front@1", attrs={"power-draw-max-w": 320.0})
+    plant(tmp_path, "acme/rear@1", attrs={"power-draw-max-w": 30.0})
+    dev = plant_paired_device(tmp_path, "chassis", ["acme/front@1"], ["acme/rear@1"])
+    assert double_count(dev, tmp_path) == []
+
+
+def test_a_rear_fan_or_psu_cannot_trip_it(tmp_path):
+    """The C100G's rear face carries the fans and the PEMs beside the I/O cards,
+    and `casa/fan` states 100 W. A card's figure was never going to include a
+    fan, so restricting both sides to `line-card` is what keeps this rule from
+    crying wolf on the one device it was written for."""
+    plant(tmp_path, "acme/dqm@1", attrs={"power-draw-max-w": 320.0,
+                                         "power-draw-scope": "module-with-paired-io"})
+    plant(tmp_path, "acme/fan@1", cls="fan", attrs={"power-draw-max-w": 100.0})
+    plant(tmp_path, "acme/psu@1", cls="psu", attrs={"power-output-w": 650.0})
+    dev = plant_paired_device(tmp_path, "chassis", ["acme/dqm@1"],
+                              ["acme/fan@1", "acme/psu@1"])
+    assert double_count(dev, tmp_path) == []
+
+
+def test_a_partner_on_the_same_face_is_not_a_pairing(tmp_path):
+    """A pairing spans two faces by definition - the rear module is what the
+    front card's figure absorbed. Two scoped cards sharing one face say nothing
+    about each other."""
+    plant(tmp_path, "acme/dqm@1", attrs={"power-draw-max-w": 320.0,
+                                         "power-draw-scope": "module-with-paired-io"})
+    plant(tmp_path, "acme/other@1", attrs={"power-draw-max-w": 250.0})
+    dev = plant_paired_device(tmp_path, "chassis",
+                              ["acme/dqm@1", "acme/other@1"], [])
+    assert double_count(dev, tmp_path) == []
+
+
+def test_the_scope_vocabulary_is_closed_and_defaults_to_module(tmp_path):
+    """Absent means `module`, which is what makes this key free to add: every
+    figure written before it existed keeps meaning exactly what it meant."""
+    import json
+
+    from jsonschema import Draft202012Validator
+    schema = json.loads((SPEC / "schemas/component.schema.json").read_text())
+    v = Draft202012Validator(schema)
+
+    def errs(attrs):
+        c = {"format": 1, "kind": "component", "name": "card", "version": "1.0.0",
+             "class": "line-card", "size": {"w": 40.0, "h": 20.0}, "attrs": attrs}
+        return [e.message for e in v.iter_errors(c)]
+
+    assert errs({"power-draw-max-w": 320.0}) == []
+    assert errs({"power-draw-scope": "module"}) == []
+    assert errs({"power-draw-scope": "module-with-paired-io"}) == []
+    for drift in ("with-io", "pair", "module+io", "Module"):
+        assert errs({"power-draw-scope": drift}), drift

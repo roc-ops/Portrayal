@@ -27,6 +27,8 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
       are in order
   L29 device: a chassis says how many of the modules it accepts have no figure,
       so a module total is never quoted as one while it is a floor
+  L30 device: a card whose figure already covers its paired I/O module, beside a
+      paired module that states its own - a sum would count the pairing twice
 """
 import argparse
 import json
@@ -923,6 +925,99 @@ def lint_device_attrs(path, data):
                           "is a genuine one-off. Counted so the tail cannot go quiet")
 
 
+def _bay_refs_by_view(data):
+    """{view: {ref, ...}} for everything the bays of that view can hold.
+
+    Per view rather than per device because a paired I/O module lives on the
+    OPPOSITE face from the card it serves - that is what makes it a pairing -
+    so L30 cannot ask its question from a flattened set. A configuration's bay
+    map is keyed by bay id, so it is attributed to the view that declares the
+    bay.
+    """
+    out, owner = {}, {}
+    for vname, view in (data.get("views") or {}).items():
+        refs = set()
+        for bay in view_parts(view or {})["bays"]:
+            refs.update(bay.get("accepts") or [])
+            if bay.get("default"):
+                refs.add(bay["default"])
+            owner[bay["id"]] = vname
+        out[vname] = refs
+    for cfg in (data.get("configurations") or {}).values():
+        for bay_id, ref in (cfg.get("bays") or {}).items():
+            if ref and bay_id in owner:
+                out[owner[bay_id]].add(ref)
+    return out
+
+
+def lint_device_double_count(path, data, lib_roots):
+    """L30 - a chassis whose front and rear figures overlap.
+
+    `power-draw-scope: module-with-paired-io` says a card's figure ALREADY
+    contains its rear partner. If that partner then states a figure of its own,
+    a sum over populated bays counts the pairing twice, and the result is a
+    plausible over-count rather than an error - the failure this whole rule set
+    exists to make impossible to reach silently.
+
+    Keyed on the two faces rather than on `pairs-with`, because `pairs-with` is
+    exactly what the affected cards do NOT carry: casa/bdm names its partner,
+    the five DQM and DCU cards do not, and it is those that the vendor scopes to
+    the pair. A rule that needed the partner named would be silent on the
+    population it was written for.
+
+    Restricted to `line-card` on both sides so a rear fan or PSU cannot trip it.
+    A card's paired I/O module is a line card in this model - casa/io-6p12 is -
+    and a fan is not something a card's figure was ever going to include.
+
+    It finds nothing today, which is the point: no rear I/O module has a figure
+    yet, and this fires the moment one lands.
+    """
+    by_view = _bay_refs_by_view(data)
+    if len(by_view) < 2:
+        return
+
+    def cards(refs):
+        """{ref: (scope, has_figure)} for the line cards among these refs."""
+        out = {}
+        for ref in sorted(refs):
+            found = resolve_component(ref, lib_roots)
+            if not found:
+                continue
+            sub = yaml.safe_load(found.read_text()) or {}
+            if sub.get("class") != "line-card":
+                continue
+            a = sub.get("attrs") or {}
+            out[ref] = (a.get("power-draw-scope", "module"),
+                        any(k in a for k in DRAW_KEYS))
+        return out
+
+    seen = set()
+    for vname, refs in sorted(by_view.items()):
+        paired = sorted(r for r, (sc, fig) in cards(refs).items()
+                        if sc == "module-with-paired-io" and fig)
+        if not paired:
+            continue
+        for other, orefs in sorted(by_view.items()):
+            if other == vname:
+                continue
+            partners = sorted(r for r, (sc, fig) in cards(orefs).items()
+                              if fig and sc == "module")
+            for partner in partners:
+                if (partner, vname) in seen:
+                    continue
+                seen.add((partner, vname))
+                warn(path, "L30",
+                     f"{partner} states its own draw and sits in {other}, while "
+                     f"{len(paired)} card(s) in {vname} ({', '.join(paired[:3])}"
+                     f"{' ...' if len(paired) > 3 else ''}) declare "
+                     "power-draw-scope: module-with-paired-io - their figures "
+                     "already include a paired I/O module. Summing both sides "
+                     "counts the pairing twice. Either the front figures are "
+                     "bare after all and their scope is wrong, or this rear "
+                     f"figure is for something the front does not cover - say "
+                     "which in provenance and set the scopes to match")
+
+
 def lint_device_module_power(path, data, lib_roots):
     """L29 - a chassis says how much of its own draw it can account for.
 
@@ -948,14 +1043,8 @@ def lint_device_module_power(path, data, lib_roots):
     to the supply side of the arithmetic, which is a different sum with a
     different meaning - see L27 for the module itself.
     """
-    refs = set()
-    for view in (data.get("views") or {}).values():
-        for bay in view_parts(view or {})["bays"]:
-            refs.update(bay.get("accepts") or [])
-            if bay.get("default"):
-                refs.add(bay["default"])
-    for cfg in (data.get("configurations") or {}).values():
-        refs.update(r for r in (cfg.get("bays") or {}).values() if r)
+    by_view = _bay_refs_by_view(data)
+    refs = set().union(*by_view.values()) if by_view else set()
     modules, unsourced = set(), set()
     for ref in sorted(refs):
         found = resolve_component(ref, lib_roots)
@@ -999,6 +1088,7 @@ def lint_device(path, validator, lib_roots):
 
     lint_device_attrs(path, data)
     lint_device_module_power(path, data, lib_roots)
+    lint_device_double_count(path, data, lib_roots)
     declared_groups = set((data.get("groups") or {}).keys())
     for gname, gdef in (data.get("groups") or {}).items():
         check_states(path, f"groups/{gname}", (gdef or {}).get("states"),
