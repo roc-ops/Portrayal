@@ -1,0 +1,156 @@
+format: 1
+kind: module
+name: a9903-8hg-pec
+version: 1.0.0
+class: line-card
+profile: networking
+description: >-
+  Cisco ASR 9903 Series 800G (0.8T) Port Expansion Card. Forty-eight physical ports in
+  two rows of twenty-four, grouped into slice 4 and slice 5. All forty-eight run 10GE
+  SFP+ by default; thirty-two of them are multi-rate and can be switched to 25GE SFP28 a
+  slice at a time, and the card supports line-rate MACsec on both rates. One of two
+  optional PECs for the ASR 9903.
+size: {w: 414.27, h: 37.34, d: 383.28}
+attrs:
+  model: 'A9903-8HG-PEC'
+  role: 'port-expansion-card'
+  sfp-plus: 48
+  sfp28: 32
+  throughput: '800 Gbps'
+  weight-kg: 5.82
+  slices: '2 (slice 4 and slice 5)'
+  eol: 'none-announced'
+provenance:
+  size: >-
+    datasheet - Cisco ASR 9903 Compact High-Performance Router Data Sheet, 'Physical
+    dimensions (H x W x D); weight': 1.47 x 16.31 x 15.09 in. (37.34 mm x 414.27 mm x
+    383.28 mm). Both PECs share that envelope; they differ in weight, 6.81 kg for the 2T
+    against 5.82 kg (est.) for the 800G. The stencil master is 436.58 mm across against
+    the stated 414.27, and the difference is the ejector at each end - the same
+    relationship the modular line cards have between their plate and their stated width.
+  orientation: >-
+    modelled LANDSCAPE, as the master draws it and as the card installs: the ASR 9903 is
+    a 3RU fixed-port chassis and its PECs lie flat across the width. So unlike the
+    modular-chassis line cards there is no portrait frame to undo here, and the std/
+    apertures go in unrotated.
+  lamps: >-
+    drawing - two lamps, printed STATUS and OIR READY, read off the master. NO colour
+    table for either is in the intake: the fixed-port Hardware Installation Guide's PEC
+    sections cover installation, online insertion and removal, and port modes, and give
+    no LED table at all. OIR READY therefore carries off/on and nothing more; STATUS
+    carries the four-state card vocabulary the modular line cards use, which is a
+    BORROWING from a sibling part and is flagged as one rather than presented as
+    sourced.
+  ports: >-
+    install guide and datasheet, and they say the same thing two ways - both are
+    recorded because neither sentence alone is the whole fact. The Hardware Installation
+    Guide: 'The Cisco A9903-8HG-PEC is an optional removable module that offers 48
+    physical ports with maximum 800G data bandwidth capacity ... It offers two sets of
+    port combinations: forty-eight 10GE SFP+; thirty-two 25GE SFP28 ports ... By
+    default, all 48 ports are in 10GE mode.' The data sheet: '32 of the 48 physical
+    ports are 25GE/10GE multi-rate SFP28/SFP+ -based ports. The remaining 16 ports are
+    10GE SFP+ -based ports.' Reconciled: all 48 do 10GE, 32 of them also do 25GE, 16 are
+    10GE-only. The master draws 48 cages at 14.30 x 9.54 mm, which is std/sfp-ganged's
+    SFF-8433 aperture of 14.25 x 10.40 to 0.05 mm on the pitch dimension.
+  slices: >-
+    install guide - 'The ports are grouped in slice 4 and slice 5. These slices are
+    marked in blue and purple' and 'A slice is a logical grouping of physical ports.'
+    The colour marking is real printing on the card and is NOT drawn, for the reason the
+    modular cards' group boxes are not: the stencil builds those bands from stroked
+    segments rather than closed shapes.
+  artwork-warning: >-
+    READ THIS BEFORE RE-DERIVING ANYTHING FROM THE MASTER. The a9903-8hg-pec master
+    prints 'A9903-20HG-PEC' on its own faceplate legend - the wrong part number - and
+    index.json carries the same wrong artwork_name for it, which the intake notes flag.
+    The ARTWORK is right for this part and the LEGEND is wrong: this master draws 48 SFP
+    cages, which is the 0.8T card, while the a9903-20hg-pec master draws 20 QSFP cages,
+    which is the 2T card. The model carries the correct part number, not the one printed
+    on the drawing.
+  power: >-
+    NOT STATED. The ASR 9903 data sheet gives a chassis power envelope and no per-card
+    figure, and the fixed-port Hardware Installation Guide's per-card numbers come from
+    a `show environment` example taken on an ASR 9902, which has no PEC. Table 35 of the
+    Ethernet Line Card Installation Guide covers the modular-chassis cards only and has
+    no PEC row.
+  lifecycle: >-
+    searched - no end-of-life notice for this part number is in the intake.
+elements:
+  status:
+    at: [14.5, 19.5]
+    size: [2.6, 2.6]
+    class: led
+    description: >-
+      the STATUS lamp.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  oir-ready:
+    at: [14.5, 26.0]
+    size: [2.6, 2.6]
+    class: led
+    description: >-
+      the OIR READY lamp, printed beside STATUS. No colour table for either lamp is in the
+      intake - the fixed-port guide's PEC sections cover installation and port modes and
+      give no LED table - so OIR READY carries off/on and STATUS carries the four-state
+      card vocabulary the modular line cards use, which is a borrowing and is said so
+      here.
+    states:
+    - 'off'
+    - 'on'
+relief:
+  wall: '#4a4f55'
+parts:
+  - {ref: std/sfp-ganged@1, id: p0, at: [28.48, 2.45]}
+  - {ref: std/sfp-ganged@1, id: p1, at: [28.47, 17.44]}
+  - {ref: std/sfp-ganged@1, id: p2, at: [42.06, 2.45]}
+  - {ref: std/sfp-ganged@1, id: p3, at: [42.05, 17.44]}
+  - {ref: std/sfp-ganged@1, id: p4, at: [55.65, 2.45]}
+  - {ref: std/sfp-ganged@1, id: p5, at: [55.63, 17.44]}
+  - {ref: std/sfp-ganged@1, id: p6, at: [69.25, 2.45]}
+  - {ref: std/sfp-ganged@1, id: p7, at: [69.25, 17.44]}
+  - {ref: std/sfp-ganged@1, id: p8, at: [82.86, 2.45]}
+  - {ref: std/sfp-ganged@1, id: p9, at: [82.84, 17.44]}
+  - {ref: std/sfp-ganged@1, id: p10, at: [96.48, 2.4]}
+  - {ref: std/sfp-ganged@1, id: p11, at: [96.45, 17.47]}
+  - {ref: std/sfp-ganged@1, id: p12, at: [124.4, 2.45]}
+  - {ref: std/sfp-ganged@1, id: p13, at: [124.38, 17.44]}
+  - {ref: std/sfp-ganged@1, id: p14, at: [137.99, 2.45]}
+  - {ref: std/sfp-ganged@1, id: p15, at: [137.97, 17.44]}
+  - {ref: std/sfp-ganged@1, id: p16, at: [151.56, 2.45]}
+  - {ref: std/sfp-ganged@1, id: p17, at: [151.53, 17.44]}
+  - {ref: std/sfp-ganged@1, id: p18, at: [165.18, 2.45]}
+  - {ref: std/sfp-ganged@1, id: p19, at: [165.16, 17.44]}
+  - {ref: std/sfp-ganged@1, id: p20, at: [178.78, 2.45]}
+  - {ref: std/sfp-ganged@1, id: p21, at: [178.76, 17.44]}
+  - {ref: std/sfp-ganged@1, id: p22, at: [192.38, 2.4]}
+  - {ref: std/sfp-ganged@1, id: p23, at: [192.38, 17.47]}
+  - {ref: std/sfp-ganged@1, id: p24, at: [209.97, 2.45]}
+  - {ref: std/sfp-ganged@1, id: p25, at: [209.97, 17.44]}
+  - {ref: std/sfp-ganged@1, id: p26, at: [223.56, 2.45]}
+  - {ref: std/sfp-ganged@1, id: p27, at: [223.53, 17.44]}
+  - {ref: std/sfp-ganged@1, id: p28, at: [237.12, 2.45]}
+  - {ref: std/sfp-ganged@1, id: p29, at: [237.12, 17.44]}
+  - {ref: std/sfp-ganged@1, id: p30, at: [250.74, 2.45]}
+  - {ref: std/sfp-ganged@1, id: p31, at: [250.73, 17.44]}
+  - {ref: std/sfp-ganged@1, id: p32, at: [264.36, 2.45]}
+  - {ref: std/sfp-ganged@1, id: p33, at: [264.33, 17.44]}
+  - {ref: std/sfp-ganged@1, id: p34, at: [277.96, 2.4]}
+  - {ref: std/sfp-ganged@1, id: p35, at: [277.95, 17.47]}
+  - {ref: std/sfp-ganged@1, id: p36, at: [304.73, 2.45]}
+  - {ref: std/sfp-ganged@1, id: p37, at: [304.71, 17.44]}
+  - {ref: std/sfp-ganged@1, id: p38, at: [318.31, 2.45]}
+  - {ref: std/sfp-ganged@1, id: p39, at: [318.3, 17.44]}
+  - {ref: std/sfp-ganged@1, id: p40, at: [331.88, 2.45]}
+  - {ref: std/sfp-ganged@1, id: p41, at: [331.88, 17.44]}
+  - {ref: std/sfp-ganged@1, id: p42, at: [345.5, 2.45]}
+  - {ref: std/sfp-ganged@1, id: p43, at: [345.49, 17.44]}
+  - {ref: std/sfp-ganged@1, id: p44, at: [359.11, 2.45]}
+  - {ref: std/sfp-ganged@1, id: p45, at: [359.08, 17.44]}
+  - {ref: std/sfp-ganged@1, id: p46, at: [372.73, 2.4]}
+  - {ref: std/sfp-ganged@1, id: p47, at: [372.71, 17.47]}
+body:
+  depth: 383.28
+  color: '#b9bec4'
+skins: [default]

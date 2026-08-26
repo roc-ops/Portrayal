@@ -1,0 +1,119 @@
+format: 1
+kind: module
+name: a9903-20hg-pec
+version: 1.0.0
+class: line-card
+profile: networking
+description: >-
+  Cisco ASR 9903 Series 2T Port Expansion Card. Twenty physical ports in two rows of ten
+  - five 400GE QSFP-DD and fifteen 100GE QSFP28 - arranged as five groups of four, each
+  group one QSFP-DD and three QSFP28. Configuring the QSFP-DD port for 400GE leaves the
+  other three ports of its group unused. One of two optional PECs for the ASR 9903.
+size: {w: 414.27, h: 37.34, d: 383.28}
+attrs:
+  model: 'A9903-20HG-PEC'
+  role: 'port-expansion-card'
+  qsfp-dd: 5
+  qsfp28: 15
+  throughput: '2 Tbps'
+  weight-kg: 6.81
+  port-groups: '5 groups of 4 (1 x QSFP-DD + 3 x QSFP28)'
+  eol: 'none-announced'
+provenance:
+  size: >-
+    datasheet - Cisco ASR 9903 Compact High-Performance Router Data Sheet, 'Physical
+    dimensions (H x W x D); weight': 1.47 x 16.31 x 15.09 in. (37.34 mm x 414.27 mm x
+    383.28 mm). Both PECs share that envelope; they differ in weight, 6.81 kg for the 2T
+    against 5.82 kg (est.) for the 800G. The stencil master is 436.58 mm across against
+    the stated 414.27, and the difference is the ejector at each end - the same
+    relationship the modular line cards have between their plate and their stated width.
+  orientation: >-
+    modelled LANDSCAPE, as the master draws it and as the card installs: the ASR 9903 is
+    a 3RU fixed-port chassis and its PECs lie flat across the width. So unlike the
+    modular-chassis line cards there is no portrait frame to undo here, and the std/
+    apertures go in unrotated.
+  lamps: >-
+    drawing - two lamps, printed STATUS and OIR READY, read off the master. NO colour
+    table for either is in the intake: the fixed-port Hardware Installation Guide's PEC
+    sections cover installation, online insertion and removal, and port modes, and give
+    no LED table at all. OIR READY therefore carries off/on and nothing more; STATUS
+    carries the four-state card vocabulary the modular line cards use, which is a
+    BORROWING from a sibling part and is flagged as one rather than presented as
+    sourced.
+  ports: >-
+    install guide - '2T Port Expansion Card: The 2T Port Expansion Card has five 400GE
+    QSFP-DD ports and fifteen 100GE QSFP28 ports. The 2T PEC can provide up to 2-Tbps
+    throughput. You can group the ports into five groups of four ports each. Each group
+    includes one QSFP-DD port and three QSFP28 ports. You can configure the QSFP-DD port
+    with 400GE port rate in which case the other three physical ports in that port group
+    are unused.' The master draws 20 cages at 18.98 x 8.96 mm against std/qsfp-ganged's
+    18.5 x 9.58.
+  which-are-dd: >-
+    INFERRED, and the inference is stated because it is the one thing here that is not
+    read off a document. The guide gives five groups of four with one QSFP-DD each, and
+    prints '400/200/100G' beside some ports and '-/-/100G' or '-/100G/100G' beside
+    others - so the drawing does distinguish them. What the guide does NOT say is which
+    numbered port in each group is the QSFP-DD. Ports 0, 4, 8, 12 and 16 are modelled as
+    the QSFP-DD, which is the first of each group of four; the '400/200/100G' legend
+    does sit beside port 0 on the master. If the real card puts the QSFP-DD elsewhere in
+    the group, this is the assumption to break, and the consequence is one cage 0.5 mm
+    different from its neighbours.
+  power: >-
+    NOT STATED. The ASR 9903 data sheet gives a chassis power envelope and no per-card
+    figure; the fixed-port guide's `show environment` example is from an ASR 9902, which
+    has no PEC; and Table 35 of the Ethernet Line Card Installation Guide covers the
+    modular-chassis cards only.
+  lifecycle: >-
+    searched - no end-of-life notice for this part number is in the intake.
+elements:
+  status:
+    at: [14.5, 19.5]
+    size: [2.6, 2.6]
+    class: led
+    description: >-
+      the STATUS lamp.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  oir-ready:
+    at: [14.5, 26.0]
+    size: [2.6, 2.6]
+    class: led
+    description: >-
+      the OIR READY lamp, printed beside STATUS. No colour table for either lamp is in the
+      intake - the fixed-port guide's PEC sections cover installation and port modes and
+      give no LED table - so OIR READY carries off/on and STATUS carries the four-state
+      card vocabulary the modular line cards use, which is a borrowing and is said so
+      here.
+    states:
+    - 'off'
+    - 'on'
+relief:
+  wall: '#4a4f55'
+parts:
+  - {ref: std/qsfp-dd@1, id: p0, at: [28.65, 17.92]}
+  - {ref: std/qsfp-ganged@1, id: p1, at: [53.0, 18.13]}
+  - {ref: std/qsfp-ganged@1, id: p2, at: [77.02, 1.93]}
+  - {ref: std/qsfp-ganged@1, id: p3, at: [77.02, 18.13]}
+  - {ref: std/qsfp-dd@1, id: p4, at: [101.26, 17.92]}
+  - {ref: std/qsfp-ganged@1, id: p5, at: [125.61, 18.13]}
+  - {ref: std/qsfp-ganged@1, id: p6, at: [149.62, 1.93]}
+  - {ref: std/qsfp-ganged@1, id: p7, at: [149.62, 18.13]}
+  - {ref: std/qsfp-dd@1, id: p8, at: [173.87, 17.92]}
+  - {ref: std/qsfp-ganged@1, id: p9, at: [198.22, 18.13]}
+  - {ref: std/qsfp-ganged@1, id: p10, at: [222.22, 1.93]}
+  - {ref: std/qsfp-ganged@1, id: p11, at: [222.22, 18.13]}
+  - {ref: std/qsfp-dd@1, id: p12, at: [246.47, 17.92]}
+  - {ref: std/qsfp-ganged@1, id: p13, at: [270.83, 18.13]}
+  - {ref: std/qsfp-ganged@1, id: p14, at: [294.83, 1.93]}
+  - {ref: std/qsfp-ganged@1, id: p15, at: [294.83, 18.13]}
+  - {ref: std/qsfp-dd@1, id: p16, at: [319.08, 17.92]}
+  - {ref: std/qsfp-ganged@1, id: p17, at: [343.43, 18.13]}
+  - {ref: std/qsfp-ganged@1, id: p18, at: [367.45, 1.93]}
+  - {ref: std/qsfp-ganged@1, id: p19, at: [367.45, 18.13]}
+body:
+  depth: 383.28
+  color: '#b9bec4'
+skins: [default]

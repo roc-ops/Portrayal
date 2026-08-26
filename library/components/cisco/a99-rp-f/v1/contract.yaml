@@ -1,0 +1,175 @@
+format: 1
+kind: module
+name: a99-rp-f
+version: 1.0.0
+class: supervisor
+profile: networking
+description: >-
+  Cisco ASR 9900 Fixed Chassis Route Processor. The RP for the ASR 9902 and ASR 9903,
+  two per chassis. A compact landscape module: two BITS timing ports, a time-of-day
+  port, two management Ethernet ports, console and auxiliary serial ports, a Class A USB
+  port, 10 MHz and 1 PPS GPS clock inputs, and nine status lamps in a hex-vented
+  faceplate.
+size: {w: 221.84, h: 39.52}
+attrs:
+  model: 'A99-RP-F'
+  role: 'route-processor'
+  cpu: '64-bit Intel'
+  memory: '32 GB'
+  mgmt: '2 x RJ-45 management Ethernet'
+  console: 'RJ-45 serial'
+  timing: '2 x BITS RJ-45, ToD RJ-45, 10 MHz and 1 PPS SMB'
+  usb: '1 x USB class A'
+  power-draw-max-w: 102
+  eol: 'none-announced'
+provenance:
+  ports: >-
+    datasheet - Cisco ASR 9903 Compact High-Performance Router Data Sheet: 'A set of
+    external interfaces on the front panel includes: console and auxiliary serial ports,
+    two management Ethernet interfaces, a Class A USB port, GPS interface (10Mhz, 1PPS,
+    ToD ports), and two BITS interfaces.' That is seven RJ-45s, two SMBs and a USB, and
+    the master draws exactly that: seven jacks at 12.69 x 10.73 mm (std/rj45-ganged's
+    12.7 x 11.0 to a tenth), two 7.55 mm SMB bodies and a USB whose 4.59 x 12.21 mouth
+    is std/usb-a's 12.0 x 4.5 on its side.
+  size: >-
+    drawing - the stencil master at 1:10, 221.84 x 39.52 mm. Shape-box aspect 5.6131
+    against the art's own 5.6195, agreeing to 0.1 percent, so the box is the art box for
+    this master. NO document in the intake gives this card's dimensions: the ASR 9903
+    and ASR 9902 data sheets give the CHASSIS envelope including its RPs and stop. Depth
+    is therefore absent.
+  orientation: >-
+    modelled LANDSCAPE, as the master draws it and as the card installs - the ASR 9902
+    is 2RU and the ASR 9903 3RU, and the RPs lie flat.
+  lamps: >-
+    READ THIS BEFORE TRUSTING A LAMP POSITION. The nine legends - ACTIVE, FAIL, BOOT,
+    SYNC, CRIT on one line and PWR, SSD, GPS, MAJ/MIN below - are extracted text and
+    their positions are exact. The LAMPS THEMSELVES ARE NOT: they are drawn as small
+    strokes that the extractor cannot separate from the hex vent field around them, so
+    each lamp is placed 3.4 mm left and 1.5 mm above its own legend, which is where the
+    rendered artwork puts them by eye. The names and the count are sourced; the
+    coordinates are a consistent offset, and anyone needing better should re-measure
+    from the master. The state vocabularies are Table 5 of the Overview and Reference
+    Guide where a name matches (FAIL, CRIT, SYNC, SSD and the MAJ/MIN pair); ACTIVE,
+    BOOT, PWR and GPS have no row on that table for this card, so PWR, GPS and ACTIVE
+    take the green/off form their names imply and BOOT carries off/on.
+  power: >-
+    install guide - and this figure is NOT from a specification table, so read what it
+    is. The fixed-port Hardware Installation Guide's troubleshooting chapter prints a
+    `show environment` example from an ASR 9902 with two of these cards installed:
+    '0/RP0 A99-RP-F 102 43 ON' under the headings 'Power Allocated Watts' and 'Power
+    Used Watts'. 102 W is the budget the system RESERVES for the card, which is the
+    number a chassis budget wants and is carried as power-draw-max-w. 43 W was one live
+    reading on one router at one moment and is NOT carried as a typical - a single
+    sample is not a distribution. The same output gives ASR-9902-LC 614/283 and
+    ASR-9902-FAN 72/7, so the allocation figures are systematic rather than incidental.
+  lifecycle: >-
+    searched - no end-of-life notice for this part number is in the intake. Cisco's
+    ordering table also lists A99-RP-F-FC, the flexible-consumption variant of the same
+    hardware; it is not modelled separately.
+elements:
+  active:
+    at: [46.27, 30.52]
+    size: [2.2, 2.2]
+    class: led
+    description: >-
+      the lamp printed ACTIVE. Its POSITION is the legend's, not the lamp's - see
+      provenance.lamps.
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  fail:
+    at: [60.76, 30.52]
+    size: [2.2, 2.2]
+    class: led
+    description: >-
+      the lamp printed FAIL. Its POSITION is the legend's, not the lamp's - see
+      provenance.lamps.
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  boot:
+    at: [71.16, 30.52]
+    size: [2.2, 2.2]
+    class: led
+    description: >-
+      the lamp printed BOOT. Its POSITION is the legend's, not the lamp's - see
+      provenance.lamps.
+    states:
+    - 'off'
+    - 'on'
+  sync:
+    at: [82.95, 30.52]
+    size: [2.2, 2.2]
+    class: led
+    description: >-
+      the lamp printed SYNC. Its POSITION is the legend's, not the lamp's - see
+      provenance.lamps.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  crit:
+    at: [95.44, 30.52]
+    size: [2.2, 2.2]
+    class: led
+    description: >-
+      the lamp printed CRIT. Its POSITION is the legend's, not the lamp's - see
+      provenance.lamps.
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  pwr:
+    at: [66.36, 34.02]
+    size: [2.2, 2.2]
+    class: led
+    description: >-
+      the lamp printed PWR. Its POSITION is the legend's, not the lamp's - see
+      provenance.lamps.
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  ssd:
+    at: [78.55, 34.02]
+    size: [2.2, 2.2]
+    class: led
+    description: >-
+      the lamp printed SSD. Its POSITION is the legend's, not the lamp's - see
+      provenance.lamps.
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  gps:
+    at: [90.05, 34.02]
+    size: [2.2, 2.2]
+    class: led
+    description: >-
+      the lamp printed GPS. Its POSITION is the legend's, not the lamp's - see
+      provenance.lamps.
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  maj-min:
+    at: [100.74, 34.02]
+    size: [2.2, 2.2]
+    class: led
+    description: >-
+      the lamp printed MAJ/MIN. Its POSITION is the legend's, not the lamp's - see
+      provenance.lamps.
+    states:
+    - {name: red, color: '#d0021b'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+relief:
+  wall: '#4a4f55'
+parts:
+  - {ref: std/rj45-ganged@1, id: sync-0, at: [55.93, 6.45]}
+  - {ref: std/rj45-ganged@1, id: sync-1, at: [75.83, 6.45]}
+  - {ref: std/rj45-ganged@1, id: tod, at: [96.35, 6.45]}
+  - {ref: std/rj45-ganged@1, id: mgt-lan-0, at: [123.07, 6.85]}
+  - {ref: std/rj45-ganged@1, id: aux, at: [144.48, 6.85]}
+  - {ref: std/rj45-ganged@1, id: mgt-lan-1, at: [123.07, 22.3]}
+  - {ref: std/rj45-ganged@1, id: console, at: [144.48, 22.3]}
+  - {ref: std/smb@1, id: gps-10mhz, at: [43.3, 5.17]}
+  - {ref: std/smb@1, id: gps-1pps, at: [43.3, 14.1]}
+  - {ref: std/usb-a@1, id: usb, at: [163.69, 11.7], rotate: 90}
+skins: [default]
