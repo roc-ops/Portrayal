@@ -322,6 +322,24 @@
               "back-to-front"
             ]
           },
+          "occupants": {
+            "type": "object",
+            "description": "what is PLUGGED IN, keyed by the id of the receptacle it plugs into. A populated port is not a different port - it is the same cage with an optic in it - so this is a configuration the way `bays` is, and a device can be drawn bare or fitted without either being a separate model. Sugar for a `mate-to` placement: the occupant is positioned by its `mate` connection point landing on the host's, and L12 holds the two to the same `interface`, so nothing here is a second positioning path. The value is a component ref, or a mapping carrying `ref` and an explicit `id` where the derived `<host>-occupant` is not the name you want on the row",
+            "additionalProperties": {
+              "oneOf": [
+                {"type": "string"},
+                {"type": "object",
+                 "additionalProperties": false,
+                 "required": ["ref"],
+                 "properties": {
+                   "ref": {"type": "string"},
+                   "id": {"type": "string"},
+                   "attrs": {"type": "object"},
+                   "skin": {"type": "string"}
+                 }}
+              ]
+            }
+          },
           "bays": {
             "type": "object",
             "additionalProperties": {

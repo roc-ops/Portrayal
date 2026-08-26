@@ -475,6 +475,30 @@ configurations:
         model: PSU-401-DISB-1
       fan-402825:
         model: FAN-402825-HD
+  dc-populated:
+    # THE SAME BOX WITH OPTICS IN IT. Everything here except `occupants` is the
+    # `dc` configuration repeated, and that repetition is the point worth
+    # noticing rather than hiding: `configurations` is one axis and this is a
+    # second one. Four SKUs of PSU crossed with fitted-or-bare is eight
+    # configurations describing two facts. Recorded in roc-ops/ndv, not solved
+    # here - #1 asked for occupants to live in a configuration and they do.
+    description: Dual 400W DC PSUs, fitted with 25G optics on the first four SFP28 ports
+    airflow: front-to-back
+    occupants:
+      port-4: common/sfp-lc-duplex@1
+      port-5: common/sfp-lc-duplex@1
+      port-6: common/sfp-lc-duplex@1
+      port-7: common/sfp-lc-duplex@1
+    part-numbers:
+      PSU-401-DISB-1:
+        part: PSU-401-DISB-1
+      FAN-402825-HD:
+        part: FAN-402825-HD
+    component-attrs:
+      psu-401-dc:
+        model: PSU-401-DISB-1
+      fan-402825:
+        model: FAN-402825-HD
   ac:
     description: Dual 400W AC PSUs (PSU-401-AISB), front-to-back airflow
     airflow: front-to-back

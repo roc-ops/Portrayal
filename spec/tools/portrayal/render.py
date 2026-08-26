@@ -506,6 +506,41 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     palette = {}
     inst_palette = {}
     parts = view_parts(view)
+    # WHAT IS PLUGGED IN IS A CONFIGURATION, NOT A DIFFERENT DEVICE. A populated
+    # port is the same cage with an optic in it, so `occupants:` sits beside
+    # `bays:` and the switch can be drawn bare or fitted without either being a
+    # separate model.
+    #
+    # Expanded into `mate-to` placements HERE, before anything reads `parts`, so
+    # there is exactly one positioning path and exactly one interface check. The
+    # occupant lands where its `mate` connection point meets the host's, and L12
+    # holds the two to the same `interface` - none of which this code knows
+    # about, because it is the same code that already runs for a hand-written
+    # `mate-to`. A second path would be one bad afternoon from disagreeing with
+    # the first about where an optic sits.
+    #
+    # Occupants for hosts in another view are skipped rather than an error: the
+    # configuration describes the whole device, and a front-panel optic has no
+    # business appearing in the rear drawing. Lint checks the host exists
+    # SOMEWHERE (L12), which is the check that catches a typo.
+    here = {q.get("id") for q in parts["placements"]}
+    for host, spec in (config.get("occupants") or {}).items():
+        if host not in here:
+            continue
+        if isinstance(spec, str):
+            spec = {"ref": spec}
+        parts["placements"].append({
+            "ref": spec["ref"],
+            "id": spec.get("id") or f"{host}-occupant",
+            "mate-to": host,
+            # nests under the receptacle in the tree, the way an indicator nests
+            # under what it indicates - an optic belongs to its port
+            "for": host,
+            "group": next((q.get("group") for q in parts["placements"]
+                           if q.get("id") == host), None),
+            **({"attrs": spec["attrs"]} if spec.get("attrs") else {}),
+            **({"skin": spec["skin"]} if spec.get("skin") else {}),
+        })
 
     used_patterns = {d.get("pattern") for d in parts["decor"] if d.get("pattern")}
     if used_patterns:

@@ -1040,20 +1040,64 @@ def lint_device_mating(path, view_name, view, lib_roots):
             err(path, "L12", f"{view_name}/{p['id']}: mate-to {target!r} has no "
                              "explicit position (occupants cannot host occupants)")
             continue
-        hp, op = resolve_component(host["ref"], lib_roots), resolve_component(p["ref"], lib_roots)
-        if not hp or not op:
-            continue
-        hc, oc = yaml.safe_load(hp.read_text()), yaml.safe_load(op.read_text())
-        want, have = hc.get("interface"), oc.get("mates")
-        if not have:
-            err(path, "L12", f"{view_name}/{p['id']}: {p['ref']} declares no 'mates', "
-                             "so it cannot occupy anything")
-        if not want:
-            err(path, "L12", f"{view_name}/{p['id']}: host {host['ref']} presents no "
-                             "'interface', so nothing can mate into it")
-        if want and have and want != have:
-            err(path, "L12", f"{view_name}/{p['id']}: {p['ref']} mates {have!r} but "
-                             f"{host['ref']} presents {want!r}")
+        _mate_check(path, f"{view_name}/{p['id']}", p["ref"], host["ref"], lib_roots)
+
+
+def _mate_check(path, where, occ_ref, host_ref, lib_roots):
+    """Do these two agree on an interface? Shared by `mate-to` and `occupants:`.
+
+    One check, called twice, because a second copy would be one bad afternoon
+    away from disagreeing with the first about what fits - and the whole value
+    of an interface key is that everybody asks it the same question.
+    """
+    hp, op = resolve_component(host_ref, lib_roots), resolve_component(occ_ref, lib_roots)
+    if not hp or not op:
+        return
+    hc, oc = yaml.safe_load(hp.read_text()), yaml.safe_load(op.read_text())
+    want, have = hc.get("interface"), oc.get("mates")
+    if not have:
+        err(path, "L12", f"{where}: {occ_ref} declares no 'mates', "
+                         "so it cannot occupy anything")
+    if not want:
+        err(path, "L12", f"{where}: host {host_ref} presents no "
+                         "'interface', so nothing can mate into it")
+    if want and have and want != have:
+        err(path, "L12", f"{where}: {occ_ref} mates {have!r} but "
+                         f"{host_ref} presents {want!r}")
+
+
+def lint_device_occupants(path, data, lib_roots):
+    """L12 for `occupants:`, which the per-view pass cannot see.
+
+    An occupant lives in a CONFIGURATION and names a receptacle that may be in
+    any view, so the view-scoped check never met it: a QSFP transceiver declared
+    into an SFP cage, and an occupant naming a port that does not exist, both
+    linted clean. The renderer expands occupants into `mate-to` placements, so
+    the drawing was right about position and silent about fit.
+
+    Hosts are gathered across every view for the same reason - a configuration
+    describes the whole device, and `port-4` being on the front is not something
+    the configuration should have to know.
+    """
+    hosts = {}
+    for vname, view in (data.get("views") or {}).items():
+        for q in view_parts(view or {})["placements"]:
+            hosts.setdefault(q.get("id"), (vname, q))
+    for cname, cfg in (data.get("configurations") or {}).items():
+        for host_id, spec in ((cfg or {}).get("occupants") or {}).items():
+            ref = spec if isinstance(spec, str) else (spec or {}).get("ref")
+            where = f"configurations/{cname}/occupants/{host_id}"
+            if host_id not in hosts:
+                err(path, "L12", f"{where}: names no placement in any view of this "
+                                 "device. An occupant plugs into something")
+                continue
+            vname, host = hosts[host_id]
+            if not host.get("at"):
+                err(path, "L12", f"{where}: host has no explicit position "
+                                 "(occupants cannot host occupants)")
+                continue
+            if ref:
+                _mate_check(path, where, ref, host["ref"], lib_roots)
 
 
 def lint_device_overlap(path, view_name, view, lib_roots):
@@ -1828,6 +1872,7 @@ def lint_device(path, validator, lib_roots):
                      (gdef or {}).get("attrs"))
     lint_device_groups(path, data, lib_roots)
     lint_device_port_optics(path, data, lib_roots)
+    lint_device_occupants(path, data, lib_roots)
     # Every id each view offers, indexed by view name. A `for:` may name a target
     # in ANOTHER view of the same device (`rear/psu-0`), so the check below cannot
     # be answered from the view it is standing in.
