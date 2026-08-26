@@ -1,0 +1,258 @@
+format: 1
+kind: module
+name: a99-12x100ge
+version: 1.0.0
+class: line-card
+profile: networking
+description: >-
+  Cisco ASR 9000 Series 12-Port 100 Gigabit Ethernet Line Card. Twelve QSFP28 ports
+  arranged as six pairs, staggered in two rows - four pairs on one row and two on the
+  other. The 4th-generation shell, but an earlier card than the 16-port and 32-port
+  QSFP28 pair.
+size: {w: 41.4, h: 395.7, d: 559.3}
+attrs:
+  model: 'A99-12X100GE'
+  role: 'line-card'
+  qsfp28: 12
+  throughput: '1.2 Tbps'
+  weight-kg: 11.7
+  operating-temp: '5 to 40 C'
+  power-draw-max-w: 1200
+  eol: 'none-announced'
+provenance:
+  size: >-
+    datasheet - Cisco ASR 9000 Series 12-Port 100-Gigabit Ethernet Line Cards Data
+    Sheet: '12-port 100 Gigabit Ethernet line card: 14.5 x 1.63 x 22.02 in.; 28 lb
+    (estimated) (368.3 mm x 41.4 mm x 559.3 mm; 11.7 kg)'. Note the axis order and the
+    missing qualifier: H is the LONG dimension here and the heading is a bare (H x W x
+    D) where the 16-port and 32-port sheets say '(includes ejector bracket/lever)'. Same
+    case as the dual-rate 10GE pair, and handled the same way - the card is modelled at
+    the family's 395.7 because its shell is the SAME DRAWING as the 16-port and 32-port
+    masters, seventeen of seventeen shell features agreeing to 0.00 mm, and one shell
+    cannot be two lengths. 368.3 is the plate; both numbers are recorded. Depth is the
+    sheet's own 559.3, which really is shorter than the 100GE cards that came after it.
+  layout: >-
+    drawing - the Cisco Visio master, scaled to the datasheet's own overall dimensions.
+    CAUTION for anyone re-deriving this: index.json's props.height_in and width_in are
+    the Visio SHAPE box, not the card. They read 1.72 x 14.75 in for EVERY card master,
+    against the datasheet's 1.63 x 15.58 in, and are 5 percent out in both axes. The ART
+    is orthographic and does carry geometry: taking Cisco's stated W - which the spec
+    table says 'includes ejector bracket/lever' - as the full long extent of the art
+    puts the faceplate rectangle at 41.6 mm against a stated H of 41.4, inside half a
+    percent, which is the gate-1 check. So the drawing is the ruler and the shape box is
+    not.
+  frame: >-
+    the card is modelled PORTRAIT - x across the card's thickness, y along its width -
+    which is the stencil's own frame and casa's. WHICH WAY A CHASSIS CARRIES IT is the
+    Overview and Reference Guide's 'Chassis Slots' section, quoted because an earlier
+    version of this note had it wrong for three chassis out of seven: 'Cisco ASR 9010
+    Router: All line cards and RSP cards are front-facing and mounted VERTICALLY, with
+    ejector levers and captive screws at the top and bottom of each card. Cisco ASR 9006
+    Router and Cisco ASR 9904 Router: All chassis line cards and RSP cards are
+    front-facing and mounted HORIZONTALLY, with ejector levers and captive screws at the
+    left and right ends of each card. Cisco ASR 9906 Router: ... mounted vertically ...
+    Cisco ASR 9910 Router: ... vertically ... Cisco ASR 9922 Router: ... vertically ...
+    Cisco ASR 9912 Router: ... vertically.' So only the ASR 9006 and the ASR 9904 lay
+    their cards flat and rotate the bay; the other five place this component unrotated.
+    The ejector-lever wording is the tell and it is why the guide is worth quoting
+    rather than paraphrasing - 'top and bottom' means vertical, 'left and right ends'
+    means horizontal, and the RU height of a chassis does not decide it.
+  cages: >-
+    composed from std/, not drawn. Ganged QSFP pitch measures 18.73 mm off the art
+    against the registry's TE-measured 19.0, so Cisco's shared-wall block is about 1.4
+    percent tighter; the measured PITCH is carried and the registry's APERTURE is
+    carried, which leaves a nominal 0.23 mm wall. Aperture size is a governed dimension
+    and a drawing is not the place to take it from.
+  leds: >-
+    install guide - 'Each line card has a single tristate Status LED to display card
+    status. Each ... port on the line card has a port status LED visible on the front
+    panel.' The state vocabulary on both is Table 32, 'Port Status and Line Card Status
+    LEDs', of the Ethernet Line Card Installation Guide, transcribed rather than
+    summarised: the card lamp's amber is TWO states, steady during boot and blinking for
+    a software configuration error.
+  not-drawn: >-
+    one thing on the real faceplate is deliberately NOT modelled: the coloured outlines
+    that box each port group. They are real printing - the install guide spells the
+    scheme out for the 400G combo card, 'Ports 0-5 (blue), 10-15 (red), 20-25 (magenta),
+    30-35 (orange)' - and the stencil draws them per group in solid and dashed strokes.
+    They are omitted because the stencil builds them from many short stroked segments
+    rather than closed rectangles, and guessing at a box that reads as a group boundary
+    would put a line on the drawing that no measurement supports. Port grouping is
+    carried structurally instead, by the port ids and by the lamp clusters that sit at
+    each group's end.
+  numbering: >-
+    THIS MASTER PRINTS NO PORT NUMERALS AS TEXT - all twelve are outlined glyphs, so
+    there is nothing to transcribe and nothing for the numeral matcher every other card
+    here uses. The numbering is therefore taken from the PRINTED POSITION of each glyph,
+    assigned to its nearest bore, and the result is corroborated by the glyph WIDTHS,
+    which is the part that makes it safe rather than merely plausible. The twelve ink
+    boxes all share one cap height of 1.53 mm and differ only in width. On the four-bore
+    column the widths are 0.89, 0.61, 0.92 and 0.92 mm: the one narrow glyph is a figure
+    one, and it falls on the bore that the positional rule numbers 1. On the eight-bore
+    column six glyphs are 0.91-0.99 mm wide and exactly two are double width, 1.89 and
+    1.68 mm, and those two fall on the bores the rule numbers 10 and 11 - in that order,
+    the wider of the pair being the one containing a zero. So three independent facts
+    agree: position, the single-digit-vs-double-digit split, and which digit is narrow.
+    The card is numbered from 0, and the constant cap height with varying width is also
+    what says these numerals are set ACROSS the card rather than along it, unlike the
+    PID.
+  ports: >-
+    install guide - '12-Port 100-Gigabit Ethernet Line Card with QSFP28 ... provides
+    twelve ports for QSFP28 modules that operate at a rate of 100 Gbps', Figure 19
+    callout 3. The master draws twelve bores at 4.33 x 15.2 mm, the same QSFP28 bore
+    signature as the 16-port and 32-port cards.
+  power: >-
+    install guide - Table 35 of the Ethernet Line Card Installation Guide, row '12-Port
+    100-Gigabit Line Card': 1170 W at 27 C, 1150 W at 40 C, 1200 W at 50 C. Note the 40
+    C figure is LOWER than the 27 C one, which is the only non-monotonic row in that
+    table; max takes the highest of the three regardless, which is what max means. Cisco
+    does not qualify these as typical or maximum.
+  fan-tray: >-
+    install guide - 'If the 12-port 100GE line card is inserted in a chassis, it is
+    important to use filler panels that have two screens [A9K-LC-FILR-V2]. This ensures
+    optimal cooling and EMI.' So this card constrains which BLANK its neighbours use,
+    which is a compatibility fact a chassis may want.
+  lifecycle: >-
+    searched - this part number is not in bulletin EOL15321, which covers the 4th
+    generation Ethernet line card family. No other notice for it is in the intake.
+elements:
+  led-p0:
+    at: [9.53, 98.55]
+    size: [3.57, 3.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p1:
+    at: [9.53, 145.57]
+    size: [3.57, 3.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p2:
+    at: [9.53, 196.89]
+    size: [3.57, 3.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p3:
+    at: [9.53, 243.91]
+    size: [3.57, 3.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p4:
+    at: [28.61, 51.02]
+    size: [3.57, 3.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p5:
+    at: [28.61, 98.24]
+    size: [3.57, 3.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p6:
+    at: [28.61, 145.57]
+    size: [3.57, 3.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p7:
+    at: [28.61, 192.49]
+    size: [3.57, 3.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p8:
+    at: [28.61, 243.91]
+    size: [3.57, 3.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p9:
+    at: [28.61, 291.33]
+    size: [3.57, 3.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p10:
+    at: [28.61, 297.34]
+    size: [3.57, 3.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-p11:
+    at: [28.61, 344.96]
+    size: [3.57, 3.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  status:
+    at: [18.61, 371.11]
+    size: [3.72, 3.72]
+    class: led
+    description: >-
+      the single tristate card Status LED (Ethernet Line Card Installation Guide, Table
+      32)
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - {name: amber-blinking, behavior: blinking, color: '#f5a623'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+relief:
+  wall: '#4a4f55'
+parts:
+  - {ref: std/qsfp-ganged@1, id: p0, at: [5.26, 108.78], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p1, at: [5.26, 128.18], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p2, at: [5.26, 208.02], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p3, at: [5.26, 227.43], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p4, at: [20.36, 62.13], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p5, at: [20.36, 81.54], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p6, at: [20.36, 156.77], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p7, at: [20.36, 176.18], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p8, at: [20.36, 254.42], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p9, at: [20.36, 273.83], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p10, at: [20.36, 308.05], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p11, at: [20.36, 327.45], rotate: 90}
+body:
+  depth: 559.3
+  color: '#b9bec4'
+skins: [default]
