@@ -1,0 +1,97 @@
+format: 1
+kind: module
+name: a9k-power-module
+version: 1.0.0
+class: psu
+profile: networking
+description: >-
+  Cisco ASR 9000 version 1 power module for a modular-chassis power tray. Three axial
+  fans behind finger guards across the face, an ejector door with a latch on the right,
+  and Input, Output and Fault lamps. Three of these fill a version 1 tray.
+size: {w: 142.78, h: 44.4}
+attrs:
+  model: 'A9K Power Module (V1)'
+  role: 'power-module'
+  generation: '1'
+  fans: '3'
+  eol: 'none-announced'
+provenance:
+  size: >-
+    drawing - the stencil master 'A9K Power Module' at the stencil's 1:10 inches, 142.78
+    x 44.4 mm. For this master the shape box is usable: box aspect 3.130 against the
+    art's own 3.216, agreeing to three percent, where the line-card masters' box and art
+    disagree by five. No document in the intake gives a power module's dimensions.
+  generation: >-
+    the version is read off the WIDTH, not off the name. This master is 142.78 mm wide
+    and the drawn tray's module openings are 99.05 mm; the 'A9K Power Module V2' master
+    is 95.85 mm and fits them to three percent. The Overview and Reference Guide's own
+    arithmetic agrees: the version 1 tray holds THREE modules ('three 2100 W power
+    modules in a single tray, 6300 W') and the version 2 tray holds four ('four 2100 W
+    DC power modules or 3000 W AC power modules in a single tray'). A 142.78 mm module
+    fits three across a 429 mm tray and not four. So this is the version 1 module and
+    the other master is version 2.
+  lamps: >-
+    install guide - the Overview and Reference Guide's 'Power Module Status Indicators',
+    which gives one table for the version 1 module and a second for version 2 and says
+    'The status indicators for the version 3 power module are similar'. Both tables read
+    the same and are transcribed here: Input LED - 'ON continuously when the input
+    voltage is present and within the correct range. BLINKING when the input voltage is
+    out of acceptable range. OFF when no input voltage is present.' Output LED - 'ON
+    when the power module output voltage is present. BLINKING when the power module is
+    in a power limit or overcurrent condition.' Fault LED - 'ON indicates that a power
+    supply failure has occurred.' Note what Cisco does NOT give: a colour for any of the
+    three. So the states are on/blinking/off and no colour is asserted.
+  power: >-
+    NOT STATED FOR THIS DRAWING, and the reason is worth the paragraph because the
+    numbers themselves are not missing - the attribution is. Cisco's own part numbers
+    give six ratings: PWR-1.6KW-AC and PWR-1.6KW-DC; PWR-2KW-DC-V2 and PWR-3KW-AC-V2;
+    PWR-4.4KW-DC-V3 and PWR-6KW-AC-V3, plus a PWR-3KW-HVDC. The DC output tables in the
+    Overview and Reference Guide give the same figures from the system side - 'four 2100
+    W DC power modules or 3000 W AC power modules in a single tray', 'four 4400 W power
+    modules or three 6000 W AC power modules per tray'. What no document does is connect
+    a rating to a FACEPLATE. The stencil master carries no part number, no legend and no
+    input connector - on these trays the AC receptacles and DC lugs are on the tray, not
+    on the module - so an AC module and a DC module of one version present the same
+    face, and their ratings differ by 900 W at version 2 and 1600 W at version 3.
+    Choosing one would be choosing which product this drawing is. A photograph of a
+    module's own label closes this in one step.
+  lifecycle: >-
+    searched - no end-of-life notice for this part is in the intake.
+elements:
+  input:
+    at: [129.5, 8.0]
+    size: [2.6, 2.6]
+    class: led
+    description: >-
+      Input LED. ON continuously when the input voltage is present and within the correct
+      range; BLINKING when the input voltage is out of acceptable range; OFF when no input
+      voltage is present. Cisco states no colour for it.
+    states:
+    - 'off'
+    - 'on'
+    - 'blinking'
+  output:
+    at: [129.5, 14.6]
+    size: [2.6, 2.6]
+    class: led
+    description: >-
+      Output LED. ON when the power module output voltage is present; BLINKING when the
+      power module is in a power limit or overcurrent condition. Cisco states no colour
+      for it.
+    states:
+    - 'off'
+    - 'on'
+    - 'blinking'
+  fault:
+    at: [129.5, 21.2]
+    size: [2.6, 2.6]
+    class: led
+    description: >-
+      Fault LED. ON indicates that a power supply failure has occurred. Cisco states no
+      colour for it, and gives no off-state sentence.
+    states:
+    - 'off'
+    - 'on'
+relief:
+  wall: '#4a4f55'
+skins: [default]

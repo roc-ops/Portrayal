@@ -1,0 +1,63 @@
+format: 1
+kind: module
+name: a9k-ac-pem-v3
+version: 1.0.0
+class: power
+profile: networking
+description: >-
+  Cisco ASR 9000 version 3 AC power entry module - a power TRAY, not a supply. Three
+  module openings labelled M0 to M2 and an ON/STANDBY switch at the right end. It holds
+  three 6000 W AC power modules. IOS XR inventories the tray itself: it appears in `show
+  platform` as 0/PT0 and 0/PT1 with this part number.
+size: {w: 466.12, h: 48.0}
+attrs:
+  model: 'A9K-AC-PEM-V3'
+  role: 'power-tray'
+  generation: '3'
+  module-bays: 3
+  eol: 'none-announced'
+provenance:
+  size: >-
+    drawing - the stencil master at 1:10. Shape-box aspect and the art's own agree to
+    about one percent for this master, so the box is usable; no document in the intake
+    gives a power tray's dimensions.
+  bays: >-
+    drawing - the module openings and their M0.. legends are measured off the master and
+    counted off it. The count is corroborated by the guide's own arithmetic for this
+    power system version, quoted under `generation`.
+  nesting: >-
+    the modules that seat in this tray are separate components and the schema cannot yet
+    nest them: `bays` on a component is marked 'v0: unused' and nothing in the library
+    uses it. So the tray draws its module openings as faceplate features and the modules
+    are modelled alongside. When component-level bays land, this is the contract to
+    revisit; until then a device that wants a populated tray places the tray.
+  power: >-
+    NOT STATED, and for a tray it may not be a meaningful figure at all. A power tray
+    provides what the modules seated in it provide, and Cisco's tables give the tray
+    only as a product of the two - 'Maximum (four 4400 W power modules or three 6000 W
+    AC power modules per tray)'. So the tray's own power-output-w is left absent and the
+    L27 warning stands, rather than baking a full-house assumption into the contract.
+    The module count IS modelled, as the bay openings the faceplate draws.
+  lifecycle: >-
+    searched - no end-of-life notice is in the intake.
+  generation: >-
+    sourced twice over. The Overview and Reference Guide's version 3 DC output table is
+    the three-AC-module one - 'four 4400 W DC power modules or three 6000 W AC power
+    modules per single tray' - and this master draws exactly three openings against the
+    DC master's four. The part number is Cisco's own and appears verbatim in the
+    Hardware Installation Guide's `show platform` output: '0/PT0 A9K-AC-PEM-V3
+    OPERATIONAL NSHUT'.
+  switch: >-
+    drawing - an ON/STANDBY switch at the right-hand end, its legend printed on a yellow
+    band beside it. The DC tray master draws no such switch, which is the one faceplate
+    difference between the two besides the bay count.
+  modules: >-
+    the modules this tray takes are the 6000 W AC version 3 units, part number PWR-6KW-
+    AC-V3 - named in the Overview and Reference Guide's FPD-upgrade caution, 'the ASR
+    9000 6kW AC Power Module Version 3 (PWR-6KW-AC-V3)'. They are NOT modelled as a
+    component: no stencil master carries a version 3 module, and the two module masters
+    that do exist are 142.78 and 95.85 mm wide against this tray's 139.05 mm module
+    pitch, so neither is it.
+relief:
+  wall: '#4a4f55'
+skins: [default]

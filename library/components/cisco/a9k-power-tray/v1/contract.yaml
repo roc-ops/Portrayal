@@ -1,0 +1,53 @@
+format: 1
+kind: module
+name: a9k-power-tray
+version: 1.0.0
+class: power
+profile: networking
+description: >-
+  Cisco ASR 9000 version 2 power tray for a modular chassis. Four module openings across
+  the full chassis width, labelled M0 to M3, with a grip at each end. The tray is the
+  field-replaceable unit the router inventories; the power modules seat into it.
+size: {w: 463.59, h: 48.0}
+attrs:
+  model: 'A9K Power Tray'
+  role: 'power-tray'
+  generation: '2'
+  module-bays: 4
+  eol: 'none-announced'
+provenance:
+  size: >-
+    drawing - the stencil master at 1:10. Shape-box aspect and the art's own agree to
+    about one percent for this master, so the box is usable; no document in the intake
+    gives a power tray's dimensions.
+  bays: >-
+    drawing - the module openings and their M0.. legends are measured off the master and
+    counted off it. The count is corroborated by the guide's own arithmetic for this
+    power system version, quoted under `generation`.
+  nesting: >-
+    the modules that seat in this tray are separate components and the schema cannot yet
+    nest them: `bays` on a component is marked 'v0: unused' and nothing in the library
+    uses it. So the tray draws its module openings as faceplate features and the modules
+    are modelled alongside. When component-level bays land, this is the contract to
+    revisit; until then a device that wants a populated tray places the tray.
+  power: >-
+    NOT STATED, and for a tray it may not be a meaningful figure at all. A power tray
+    provides what the modules seated in it provide, and Cisco's tables give the tray
+    only as a product of the two - 'Maximum (four 4400 W power modules or three 6000 W
+    AC power modules per tray)'. So the tray's own power-output-w is left absent and the
+    L27 warning stands, rather than baking a full-house assumption into the contract.
+    The module count IS modelled, as the bay openings the faceplate draws.
+  lifecycle: >-
+    searched - no end-of-life notice is in the intake.
+  generation: >-
+    the version is read off the BAY COUNT and the bay width together. This tray draws
+    FOUR openings 99.05 mm wide, and the Overview and Reference Guide's version 2 DC
+    output table is the four-module one: 'Maximum (four 2100 W DC power modules or 3000
+    W AC power modules in a single tray) 8400 W (DC) 12,000 W (AC)'. The version 1 table
+    is a three-module one - 'three 2100 W power modules in a single tray, 6300 W' - and
+    the version 3 trays have their own masters, with three openings on the AC and four
+    narrower ones on the DC. The 'A9K Power Module V2' master is 95.85 mm and fits these
+    bays to three percent.
+relief:
+  wall: '#4a4f55'
+skins: [default]
