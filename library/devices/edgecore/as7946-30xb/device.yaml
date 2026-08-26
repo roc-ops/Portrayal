@@ -605,3 +605,23 @@ gaps:
     gives as the AGR400's maximum, which may mean one of the four figures is a
     copy error
   blocks: []
+
+- what: fru-power-unpublished
+  scope: [edgecore/agr-psu-ac@1, edgecore/agr-psu-dc@1, edgecore/agr-fan@1]
+  reason: vendor-silent
+  note: >-
+    Searched and absent, which is why this is asserted rather than left to L27
+    to imply. Both documents we hold - the datasheet and the QSG - rate the AGR
+    PSUs by INPUT only ("DC Input: -40 to -75V, 40 A, per PS"; "AC Input:
+    100-120 V 12 A or 200-240 V 7.5 A per PS") and state no output wattage
+    anywhere. The fan module gets no power figure at all. Unlike the Casa PEMs,
+    these PSUs genuinely CONVERT, so `power-output-w` is the right key for them
+    and the only thing missing is the number - which is exactly why it must not
+    be derived from the input current, where 12 A at 100-120 V and 7.5 A at
+    200-240 V give different products and neither is an output rating.
+  wanted: >-
+    a photograph of either PSU's nameplate, which is where this figure normally
+    lives, or an Edgecore part datasheet for the PSU and fan FRUs rather than
+    for the chassis. The 550 W CRPS nameplate already in working/intake is the
+    worked example of what would close it
+  blocks: []

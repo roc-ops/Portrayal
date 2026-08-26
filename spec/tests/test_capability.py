@@ -110,11 +110,18 @@ def test_wired_is_not_vacuously_true():
 
 
 def test_declared_gaps_carry_what_no_rule_can_see():
+    """The S9510's port lamps are the worked example, so this asks that THAT
+    gap is carried faithfully - not that it is the only one. Pinning the whole
+    list made the test fail the moment somebody declared a second gap on this
+    device, which is the test punishing the register for being used."""
     dev = load("ufispace/s9510-28dc")
-    gaps = capability.declared_gaps(dev)
-    assert [g["what"] for g in gaps] == ["port-led-semantics"]
-    assert gaps[0]["because"] == "vendor-silent"
-    assert gaps[0]["wanted"], "wanted is the field that makes it actionable"
+    gaps = {g["what"]: g for g in capability.declared_gaps(dev)}
+    assert "port-led-semantics" in gaps
+    lamps = gaps["port-led-semantics"]
+    assert lamps["because"] == "vendor-silent"
+    assert lamps["wanted"], "wanted is the field that makes it actionable"
+    for g in gaps.values():
+        assert g["kind"] == "declared" and g["because"] and g["wanted"]
 
 
 def _derived(slug):

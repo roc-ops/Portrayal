@@ -107,6 +107,19 @@ gaps:
   wanted: >-
     a per-NOS LED table from UfiSpace or from a NOS vendor, or photographs of a
     live unit with the ports in known states (down, 1G/10G/25G link, traffic)
+- what: fru-power-unpublished
+  scope: [ufispace/fan-402825@1]
+  reason: vendor-silent
+  note: >-
+    Searched and absent. The S9510-28DC hardware installation guide dimensions
+    and weighs the fan FRU (51.5 x 57.8 x 42.2 mm) and tables its LED, and gives
+    no power figure for it. The guide's only wattage is a provisioning
+    instruction - "a reserve of at least 400 watts on each power circuit" -
+    which is supply to be provided and not a fan's draw. The PSUs are sourced
+    from their own model numbers (PSU-401); the fan has no equivalent.
+  wanted: >-
+    a photograph of the fan module's label, or a UfiSpace FRU datasheet
+  blocks: []
 groups:
   psus:
     term: PSU
