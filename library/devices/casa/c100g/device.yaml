@@ -60,7 +60,30 @@ provenance:
     confirmed 2026-08-25 that they are NOT printed, so they are regions too. PEM A and PEM B
     stay in silkscreen: they were not part of that question and nothing says they are absent
     from the metal'
-  'slot-compatibility': 'drawing - Table A-2, "C100G capacities", states it directly
+  side-faces: 'drawing plus a stated absence. NO FIGURE IN THE GUIDE SHOWS THESE
+    FOUR FACES - Figures 1-1 and 1-2 are the front and rear, 1-5 is an airflow cross-section,
+    and 2-6 and 2-7 are rack elevations. So they are sized from Table A-1 ("Height:
+    22.5 in. (571 mm), Depth: 15.25 in. (386 mm)"; the table''s 19 in / 482 mm width
+    is the RACK face INCLUDING the mounting flanges, so the 432.95 body width the
+    chassis block already carries is used instead), and they carry only what the
+    guide states is on them. That is: the mounting flanges, which the guide calls
+    integral - "Integrated mounting flanges are included with the chassis" - and
+    fixes at four screws per side, since "You must provide the eight screws that
+    attach the CMTS to the rack"; and the chassis label, which the guide locates
+    precisely at "The C100G product label is affixed to the top front side of the
+    chassis". The flange is integral and runs the full height at the FRONT edge,
+    so it shows on every face that meets that edge - top, bottom, left and right
+    - which is why the same strip appears on all four rather than being decoration
+    invented per face. Orientation convention: top and bottom put the chassis front
+    at y = 0, left puts it at x = 0, and right mirrors it to x = depth. NOTHING
+    ELSE IS DRAWN ON THESE FACES, deliberately. The bottom is bare beyond the flange
+    because the guide says nothing about it except "grab the bottom of the chassis"
+    when lifting - no feet, no vents, no label. No top or bottom vents are drawn
+    either: the guide and Jason disagree about which way the air goes (see the airflow
+    entry), but both readings are front-to-rear or rear-to-front, and neither puts
+    an opening on these two faces. An invented top plate would be the wrong-box
+    outcome these four views exist to prevent'
+  slot-compatibility: 'drawing - Table A-2, "C100G capacities", states it directly
     rather than leaving it to be inferred: "14 line card slots on front - 1 Switch
     and Management (SMM) module, 1 SMM redundant module, 12 DOCSIS modules (any
     combination of DS and US modules)". front-6 and front-7 are the SMM pair, which
@@ -99,8 +122,10 @@ groups:
     term: Slot
     index-origin: 1
   furniture:
+    term: Item
     index-origin: 1
   grounding:
+    term: Point
     index-origin: 1
   rear-slots:
     term: Slot
@@ -219,6 +244,41 @@ views:
       - {id: esd-strap-rear, label: ESD strap receptacle, members: [ground-strap-rear]}
       - {id: fan-tray, label: Fan modules, members: [fan-l, fan-c, fan-r]}
       - {id: grounding-studs, label: Grounding studs, members: [ground-bolts-rear]}
+  top:
+    size: {w: 432.95, h: 386.0}
+    panel:
+      decor:
+        - {at: [0, 0], size: [432.95, 6.0], fill: '#8f9295'}
+    components:
+      placements:
+        - {id: chassis-label, ref: casa/chassis-label@1, at: [156.5, 24.0], group: furniture, rel-pos: 3}
+  bottom:
+    size: {w: 432.95, h: 386.0}
+    panel:
+      decor:
+        - {at: [0, 380.0], size: [432.95, 6.0], fill: '#8f9295'}
+  left:
+    size: {w: 386.0, h: 571.0}
+    panel:
+      decor:
+        - {at: [0, 0], size: [6.0, 571.0], fill: '#8f9295'}
+    components:
+      placements:
+        - {id: flange-l1, ref: common/screw-head@1, at: [1.2, 40.0], group: furniture, rel-pos: 4}
+        - {id: flange-l2, ref: common/screw-head@1, at: [1.2, 190.0], group: furniture, rel-pos: 5}
+        - {id: flange-l3, ref: common/screw-head@1, at: [1.2, 380.0], group: furniture, rel-pos: 6}
+        - {id: flange-l4, ref: common/screw-head@1, at: [1.2, 527.0], group: furniture, rel-pos: 7}
+  right:
+    size: {w: 386.0, h: 571.0}
+    panel:
+      decor:
+        - {at: [380.0, 0], size: [6.0, 571.0], fill: '#8f9295'}
+    components:
+      placements:
+        - {id: flange-r1, ref: common/screw-head@1, at: [381.2, 40.0], group: furniture, rel-pos: 8}
+        - {id: flange-r2, ref: common/screw-head@1, at: [381.2, 190.0], group: furniture, rel-pos: 9}
+        - {id: flange-r3, ref: common/screw-head@1, at: [381.2, 380.0], group: furniture, rel-pos: 10}
+        - {id: flange-r4, ref: common/screw-head@1, at: [381.2, 527.0], group: furniture, rel-pos: 11}
 configurations:
   bdm2m-11plus1:
     description: BDM2m "11+1" - the vendor's name for it. Redundancy collapses to a single protecting
