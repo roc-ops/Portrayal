@@ -54,7 +54,9 @@ provenance:
     sheet metal between the planes the rails bolt to, excluding the front cosmetics that Table 13's
     bare figure includes - but no document says so, and chassis.depth continues to carry Table 13's
     730.8 mm because the spec table is authoritative for overall dimensions. The rail positions are
-    used as stated, measured from the rear, which is the end the figure dimensions from
+    used as stated, measured from the FRONT - see side-view-depth-axes-run-OPPOSITE-ways for how
+    that datum was settled, and note this sentence said "from the rear" through several revisions
+    after the geometry had been corrected
   top-face: >-
     datasheet - Figure 11 "Cisco ASR 9906 Router Chassis Footprint Dimensions - Top Down View",
     b-asr9k-overview-reference-guide.pdf p26, and it is orthographic: its chassis outline measures
@@ -74,14 +76,18 @@ provenance:
     lays it out, front at the BOTTOM edge and rear at the top
   bottom-face: >-
     datasheet - the bottom is NOT featureless after all, and the feature is the one thing every
-    footprint figure dimensions. HIG Figure 17 dimensions two vertical rack rails at 5.00 in (127.0 mm) and 9.45 in (240.0 mm) from the rear. The rack mounting flange is a vertical plate spanning the
+    footprint figure dimensions. HIG Figure 17 dimensions two vertical rack rails at 5.00 in
+    (127.0 mm) and 9.45 in (240.0 mm) from the FRONT. The rack mounting flange is a vertical plate
+    spanning the
     chassis height, so it intersects the BOTTOM plane as well as the top and appears on this face
     as a line across the width at that depth. That is a real dimensioned feature rather than an
     annotation of absence, which is the distinction that matters here - an earlier revision of this
     file said the bottom was unreachable without inventing something, and that was wrong. What
     remains true is that no BOTTOM VIEW of any ASR 9000 chassis exists in the 78-document intake;
     what this face carries is a feature dimensioned in a TOP-down figure whose geometry the bottom
-    necessarily shares. Positions are given from the REAR, which is how the figures dimension them
+    necessarily shares. Positions are given from the FRONT, which is the end Figure 17 dimensions
+    from: the cable management structure protrudes past that edge, and Figure 11 separately
+    dimensions that protrusion as 2.68 in
   top-and-bottom-view-convention: >-
     ON THIS CHASSIS'S TOP AND BOTTOM VIEWS, y = 0 IS THE REAR AND y = depth IS THE FRONT. Verified
     on this chassis's own footprint figure rather than carried across from a sibling: the figure
@@ -137,6 +143,18 @@ provenance:
     on every top or bottom face in this family is full-width and immune. Recorded because
     "symmetric, so it cannot be at the wrong end" is luck rather than care, and the next
     asymmetric feature drawn on a bottom face will not be
+  prose-lagged-the-geometry-by-three-revisions: >-
+    RECORDED AS A PROCESS FAILURE, not just a typo. When the datum misread was found and the
+    geometry corrected from the rear to the front, THREE PROVENANCE SENTENCES AND TWO REGION
+    LABELS kept saying "from the rear". The drawing was right and the words were wrong for several
+    commits, and the words are what a reader trusts most. casa-cards' new L31 caught the two LABELS
+    - it compares a label's stated position against what is drawn at that depth - but it reads
+    labels and not provenance, so the three prose sentences were invisible to it and had to be
+    found by a human reading the file.
+    The lesson is narrow and worth keeping: A CORRECTION IS NOT DONE WHEN THE GEOMETRY MOVES. Grep
+    the whole file for the wrong claim, because the number appears in the coordinates, in the
+    region label and in two or three sentences of prose, and only the first of those is what you
+    were editing
   card-orientation: >-
     datasheet - stated directly, and it had been an inference until now. The Overview and
     Reference Guide's "Chassis Slots" section (b-asr9k-overview-reference-guide.pdf p17) names
