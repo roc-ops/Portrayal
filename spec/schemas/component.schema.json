@@ -211,7 +211,26 @@
     },
     "attrs": {
       "type": "object",
-      "description": "default data-* attributes for instances"
+      "description": "default data-* attributes for instances. Free-form, except that the power figures below are typed: they are the terms of a sum, and a term that is a string is not a number no matter how it reads",
+      "properties": {
+        "power-draw-typical-w": {
+          "$ref": "#/$defs/watts",
+          "description": "load this module IMPOSES in normal operation. Draw and supply are opposite signs of one unit and must never share a key: summing a chassis's `watts` over two PSUs and eight line cards yields a plausible number that is neither"
+        },
+        "power-draw-max-w": {
+          "$ref": "#/$defs/watts",
+          "description": "load at its worst rated case. Where a vendor states one figure per ambient - Cisco gives 25/40/55 C per card - this is the highest, which is what `max` means"
+        },
+        "power-draw-min-w": {
+          "$ref": "#/$defs/watts",
+          "description": "load at idle, with nothing populated"
+        },
+        "power-output-w": {
+          "$ref": "#/$defs/watts",
+          "description": "continuous output this module is rated to PROVIDE - a PSU or a power-entry module. Deliberately not `power-output-max-w`: draw has a distribution and supply has a rating, and a symmetric name would advertise a `power-output-typical-w` that means nothing"
+        }
+      },
+      "additionalProperties": true
     },
     "provenance": {
       "$ref": "#/$defs/provenance"
@@ -358,6 +377,11 @@
     }
   },
   "$defs": {
+    "watts": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "watts, as a number. `watts: '650'` was a string, and that is not cosmetic: '650' + '400' is '650400' in more than one language a consumer might use, and max('650', '1600') is '650' in all of them"
+    },
     "state": {
       "oneOf": [
         {
