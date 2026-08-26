@@ -45,6 +45,14 @@ provenance:
     module and the ''Cisco ASR-9001'' branding, and matches Figure 7 of the guide,
     ''Front Panel of the Cisco ASR 9001 Router''. asr-9001-rear is a plain louvred
     panel'
+  mpa-openings: 'THESE TWO OPENINGS ARE BAYS PENDING A PART, not permanent holes,
+    and the cutout is a placeholder for a bay. They are declared in panel.cutouts
+    only because device.schema.json requires `accepts` on a bay with minItems 1,
+    so a bay cannot exist with nothing legal to accept, and no MPA component or
+    MPA blank is modelled yet. Every measurement needed for the conversion is already
+    here - x 20.0 and 208.9, y 2.6, 163.0 x 35.6 each - so turning them into bays
+    is mechanical the moment a part lands. asr9k-chassis hit the same wall tonight
+    and solved it the same way'
   front-geometry: 'drawing-measured off the stencil master at the calibration
     above, expressed in body coordinates. The two MPA bays are one row at y 2.6
     to 38.2, BAY 0 at x 20.0 to 182.9 and BAY 1 at x 208.9 to 371.9, each 163.0
@@ -59,11 +67,15 @@ provenance:
     and the lower at 62.6 to 71.4, a 16.1 mm pitch, reproduced independently at
     eight different x positions. The SFP cages measure a 15.3 mm belly-to-belly
     pitch against the 15.00 std/sfp-ganged carries from a measured TE part'
-  sfp-plus-numbering: 'READ AT HIGH ZOOM, because it is not the obvious order.
-    The left cage is SFP+ 3 over SFP+ 1 and the right cage is SFP+ 2 over SFP+ 0,
-    so numbering runs RIGHT TO LEFT along the bottom row and then right to left
-    along the top: port 0 bottom-right, 1 bottom-left, 2 top-right, 3 top-left.
-    Modelled exactly as printed'
+  sfp-plus-numbering: 'READ AT HIGH ZOOM, AND DO NOT ''FIX'' IT. The left cage
+    is SFP+ 3 over SFP+ 1 and the right cage is SFP+ 2 over SFP+ 0, so numbering
+    runs RIGHT TO LEFT along the bottom row and then right to left along the top:
+    port 0 bottom-right, 1 bottom-left, 2 top-right, 3 top-left. This looks like
+    a transcription error and is not one - it is what the stencil prints and what
+    the guide''s Figure 13 shows. It is the same class of trap as the rotated crop
+    that once reversed an entire supervisor card in this project: the obvious reading
+    is wrong and looks right. If a future reader is tempted to renumber these left-to-right,
+    the thing to do is re-read the artwork at 4x, not the manifest'
   rear: 'drawing - the rear is a plain louvred panel and that is the finding,
     not an omission. Horizontal vent slots across the full width, six screws and
     the two rack ears. No connectors and no modules: on this chassis the PSUs, the
@@ -248,8 +260,15 @@ gaps:
     panel cutouts at their measured size rather than composed from a std/ part.
     Substituting sma or smb would name a connector Cisco does not.
   wanted: >-
-    a std/din-1-0-2-3 part and its standards.yaml key, from IEC 61169-8 or a
-    manufacturer panel drawing, in the way std/mcx was added from IEC 61169-36
+    a std/din-1-0-2-3 part and its standards.yaml key. THE CONNECTOR IS
+    STANDARDISED, so a sourced dimension exists to be found rather than
+    estimated - DIN 1.0/2.3 is specified in IEC 61169-8, and any manufacturer's
+    bulkhead-jack panel drawing carries the D-hole figure. std/mcx is the worked
+    example of exactly this being done properly earlier tonight: registered from
+    IEC 61169-36 / CECC 22220 at 4.95 x 4.50 with confidence verified, replacing
+    an estimate that was 28 percent too small. This should be done the same way,
+    and until it is, an sma or smb standing in would be a plausible wrong answer
+    - which is the failure mode this project keeps having to dig back out
   blocks: []
 - what: mpa-modules
   scope: [mpa-0, mpa-1]
