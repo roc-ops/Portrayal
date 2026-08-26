@@ -827,6 +827,10 @@ def main():
                  "bays": {v: [{"id": b["id"], "accepts": b.get("accepts") or [],
                                "default": b.get("default"), "group": b.get("group"),
                                "rel-pos": b.get("rel-pos"),
+                               # a viewer swapping an occupant has to place it the
+                               # way this bay holds it. Without `rotate` the C40G's
+                               # horizontal slots re-rendered their card upright.
+                               "rotate": b.get("rotate"),
                                "at": b["at"], "size": b["size"]}
                               for b in view_parts(device["views"][v])["bays"]]
                           for v in device["views"]}}

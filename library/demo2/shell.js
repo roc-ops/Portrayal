@@ -543,7 +543,7 @@ export function createShell(opts = {}) {
     wrap.setAttribute('id', `${bayId}--module`);
     wrap.setAttribute('data-path', `${bayId}/module`);
     wrap.setAttribute('data-ref', ref);
-    wrap.setAttribute('transform', `translate(${bay.at[0]},${bay.at[1]})`);
+    wrap.setAttribute('transform', bayTransform(bay, c));
 
     // A standalone component skin is addressed in its OWN namespace: the file
     // carries `<g id="bdm" data-path="bdm">` plus siblings `bdm--screw-t` and so
@@ -582,6 +582,23 @@ export function createShell(opts = {}) {
       else if (dp && dp.startsWith(name + '/'))
         el.setAttribute('data-path', `${bayId}/module/${dp.slice(name.length + 1)}`);
     }
+  }
+
+  // Place an occupant the way its bay holds it, matching render.py exactly.
+  // A rotated bay is not a translate: render.py rotates the component about its
+  // OWN centre and then translates so the rotated bounding box lands on the
+  // bay's `at`. The C40G is the case that exposes this - its slots are
+  // horizontal, so every card sits at rotate: 90, and a swap that only
+  // translated re-rendered the card upright inside a horizontal slot.
+  function bayTransform(bay, c) {
+    const deg = bay.rotate || 0;
+    if (!deg || !c?.size) return `translate(${bay.at[0]},${bay.at[1]})`;
+    const cx = c.size.w / 2, cy = c.size.h / 2;
+    // 90 and 270 swap the box; 180 leaves it where it is
+    const quarter = ((deg % 360) + 360) % 360 % 180 === 90;
+    const offX = quarter ? cx - cy : 0;
+    const offY = quarter ? cy - cx : 0;
+    return `translate(${bay.at[0] - offX},${bay.at[1] - offY}) rotate(${deg} ${cx} ${cy})`;
   }
 
   function openModule(ref) { state.module = ref; loadStage(); }
