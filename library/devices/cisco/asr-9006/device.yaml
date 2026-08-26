@@ -56,6 +56,23 @@ provenance:
     datasheet - 28.93 in (73.48 cm), stated identically by Table 13 and by Figure 9's own
     dimension line. Two sources, no disagreement. Figure 9 also puts the rack mounting surface
     5.73 in (14.55 cm) back from the front of the chassis
+  bay-sizing-harmonised: >-
+    the card bays are sized to the COMPONENT envelope and positioned on the measured cage, which is
+    the team's arbitration: a module's size is its slot envelope, and a bay and its occupant carry
+    the same size so the two can be checked against each other. An earlier revision of this file
+    sized these bays to the cage OPENING instead, which predated that ruling and left this chassis
+    disagreeing with the ASR 9912 - my own chassis disagreeing with each other being exactly the
+    smell I have been chasing in the vendor's artefacts. The difference between the envelope and
+    the measured pitch is the card guide, which is chassis structure rather than bay.
+  rotate: >-
+    datasheet - this chassis mounts its cards HORIZONTALLY (see card-orientation), so each bay
+    carries `rotate: 90` and the rotated footprint. OPEN, and flagged rather than asserted: rotate
+    90 puts the card's part-number end at the RIGHT of the view, and on a real card the printing
+    reads with that end at the LEFT, which would make `rotate: 270` correct instead. No document we
+    hold fixes which end of an ASR 9006 slot the ejector sits at - the guide says only "ejector
+    levers and captive screws at the left and right ends of each card", i.e. BOTH ends - so 90 is
+    the placeholder and the question is real. It affects only which way the card's own artwork
+    reads, not the bay's position or size.
   card-orientation: >-
     datasheet - stated directly, and it had been an inference until now. The Overview and
     Reference Guide's "Chassis Slots" section (b-asr9k-overview-reference-guide.pdf p17) names
@@ -363,12 +380,12 @@ views:
         - {id: pm-0, at: [13.94, 386.33], size: {w: 138.35, h: 44.40}, accepts: ['cisco/a9k-power-module@1'], group: power-modules, rel-pos: 0}
         - {id: pm-1, at: [153.50, 386.33], size: {w: 137.50, h: 44.40}, accepts: ['cisco/a9k-power-module@1'], group: power-modules, rel-pos: 1}
         - {id: pm-2, at: [292.21, 386.33], size: {w: 138.23, h: 44.40}, accepts: ['cisco/a9k-power-module@1'], group: power-modules, rel-pos: 2}
-        - {id: slot-5, at: [60.94, 104.63], size: {w: 352.59, h: 46.61}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 5}
-        - {id: slot-4, at: [60.94, 151.24], size: {w: 352.59, h: 46.61}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 4}
-        - {id: slot-3, at: [60.94, 197.84], size: {w: 352.59, h: 46.61}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 3}
-        - {id: slot-2, at: [60.94, 244.45], size: {w: 352.59, h: 46.61}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2}
-        - {id: slot-1, at: [60.94, 291.05], size: {w: 352.59, h: 46.61}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1}
-        - {id: slot-0, at: [60.94, 337.66], size: {w: 352.59, h: 46.61}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0}
+        - {id: slot-5, at: [39.38, 107.23], size: {w: 395.70, h: 41.40}, rotate: 90, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 5}
+        - {id: slot-4, at: [39.38, 153.84], size: {w: 395.70, h: 41.40}, rotate: 90, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 4}
+        - {id: slot-3, at: [39.38, 200.44], size: {w: 395.70, h: 41.40}, rotate: 90, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 3}
+        - {id: slot-2, at: [39.38, 247.05], size: {w: 395.70, h: 41.40}, rotate: 90, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2}
+        - {id: slot-1, at: [39.38, 293.65], size: {w: 395.70, h: 41.40}, rotate: 90, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1}
+        - {id: slot-0, at: [39.38, 340.26], size: {w: 395.70, h: 41.40}, rotate: 90, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0}
     regions:
       - {id: rsp-slots, label: Two bottom slots reserved for redundant RSPs, members: [slot-0, slot-1]}
       - {id: lc-slots, label: Four slots for line cards, members: [slot-2, slot-3, slot-4, slot-5]}
