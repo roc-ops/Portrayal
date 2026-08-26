@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: smm-8x10g
-version: 1.1.0
+version: 1.2.0
 class: supervisor
 profile: networking
 description: >-
@@ -25,13 +25,31 @@ provenance:
     unlike the BDM2's 300 W this figure covers exactly this component. Filed as
     max because a single unqualified figure on a card spec table is the number a
     chassis is budgeted with; Casa states no typical
+  lamps: 'CORRECTED. This component used to place alarm at the TOP of the
+    cluster and status at the bottom, while its own description said "STATUS,
+    ACTIVE and ALARM LEDs" - the text and the geometry contradicted each other.
+    Figures 1-7, 1-8 and 1-9 all print STATUS, ACTIVE, ALARM top to bottom, and
+    the CSC8x10G product photograph shows that order at a legible size. The three
+    y positions are unchanged; only which lamp sits at which is'
+  legends: 'CORRECTED. The twelve port legends used to sit BELOW each opening and
+    six of them were invisible, because the cage pitch alternates 17.3 and 20.2
+    while a rotated cage is 16 tall - so on every tight pair the legend fell
+    inside the NEXT opening and the cage installed there painted over it. They
+    now sit BESIDE each opening at x 21.8, clear of both the 20.23 right edge of
+    a rotated cage and the 21.49 edge of the wider RJ45, which is also what the
+    SMM300G photograph shows the real hardware doing'
+  legend-band: 'CORRECTED. The model legend sits between TWO orange bands, not
+    below one. Three product photographs - DS8x96, CSC8x10G and SMM300G - agree
+    on that, and casa/bdm carries the same pair from Figure 1-14. Position and
+    type size are the family values (20.42 and 33.76, baseline 29.84 at 2.84)
+    rather than this component''s previous single band at 20.4'
   size: ESTIMATED, shared with the rest of the family. Absolute numbers come
     from the chassis front view; the isolated card figures are drawn ~17 percent
     narrower than the real card, so their port positions are used as fractions
 elements:
-  alarm: {at: [4.80, 270.30], size: [3.0, 3.0], class: led}
+  status: {at: [4.80, 270.30], size: [3.0, 3.0], class: led}
   active: {at: [4.80, 276.90], size: [3.0, 3.0], class: led}
-  status: {at: [4.80, 283.50], size: [3.0, 3.0], class: led}
+  alarm: {at: [4.80, 283.50], size: [3.0, 3.0], class: led}
 relief:
   wall: '#4a4f55'
 parts:
