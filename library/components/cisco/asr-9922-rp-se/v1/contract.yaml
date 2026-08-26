@@ -1,0 +1,206 @@
+format: 1
+kind: module
+name: asr-9922-rp-se
+version: 1.0.0
+class: supervisor
+profile: networking
+description: >-
+  Cisco ASR 9900 Route Processor, Service Edge optimised, for the ASR 9922 and ASR 9912.
+  Two SYNC timing ports, an IEEE 1588 timestamp port, nV Sync0 and nV Sync1/TOD inter-
+  chassis sync ports, two management LAN ports, a console and an auxiliary port. Nine
+  RJ-45 jacks, 10 MHz and 1 PPS SMB clock inputs under a GPS INTERFACE bracket, a nine-
+  pin alarm output, a USB port, ACO and LAMP TEST push buttons, a discrete lamp cluster
+  and a four-character LED dot-matrix display.
+size: {w: 46.0, h: 428.5, d: 628.9}
+attrs:
+  model: 'ASR-9922-RP-SE'
+  role: 'route-processor'
+  mgmt: '2 x 100/1000 RJ-45'
+  console: 'EIA/TIA-232 RJ-45'
+  timing: '2 x SYNC (BITS/J.211/DTI) RJ-45, IEEE 1588 RJ-45, 2 x nV Sync RJ-45, 10 MHz and 1 PPS SMB'
+  alarm: 'DB9, three dry-contact outputs'
+  usb: '1 x USB 2.0 type A'
+  weight-kg: 5.9
+  power-draw-max-w: 259
+  eol: 'none-announced'
+provenance:
+  size: >-
+    datasheet - Cisco ASR 9900 Route Processor Data Sheet, 'Physical specifications':
+    Height 1.81" (4.60 cm), Width 16.87" (42.85 cm), Depth 24.74" (62.89 cm), Weight 13
+    lb (5.90 kg). That sheet names ASR-9922-RP-SE and -TR alongside ASR-9900-RP-SE and
+    -TR, so the four part numbers share this envelope by Cisco's own scoping.
+  layout: >-
+    drawing - the Cisco Visio master, scaled to the datasheet's own overall dimensions.
+    index.json's shape box is the Visio drawing box, not the card - it reads 1.73 x
+    14.75 in for every control-card master - so the ART is the ruler and the box is not,
+    the same correction the line cards needed. Long axis scaled to the card's stated
+    width, short axis to its stated height, two factors.
+  family: >-
+    these masters are NOT the one-drawing family the RSP5, RSP-880, RP3 and RSP4-S
+    masters are. Each has its own jack column, its own lamp cluster and its own legends
+    - the RSP-440's five upper jacks sit at 42.6, 60.6, 102.6, 121.0 and 139.4 mm where
+    the RSP5's sit at 42.5, 60.4, 117.7 and a stacked pair at 139.3 - so every feature
+    here is read off the master it belongs to. The port IDS come from the legends that
+    master prints, matched by proximity and asserted unique, not from a table of mine:
+    that is how ICS0/ICS1/TOD on the RSP-440 and nV Sync0/nV Sync1/TOD on the
+    ASR-9922-RP came out different without anyone deciding they should.
+  cages: >-
+    composed from std/. RJ-45s are std/rj45-ganged (12.7 x 11.0) rather than std/rj45
+    (16.0 x 14.0): the IEC single-port cutout will not fit twice across a 41 mm card and
+    the drawn jack measures 12.81 x 10.83. Timing coax is std/smb; the USB is std/usb-a;
+    SFP+ is std/sfp-ganged.
+  lamps: >-
+    install guide - Table 4 for the RSP cards and Table 5 for the RP, transcribed per
+    lamp with Cisco's own sentence kept beside the state tokens. WHICH lamp is where is
+    read off this master's own printed legends and matched by position - the RSP-440 has
+    six lamps in two columns and the ASR-9922-RP has more, and neither was assumed from
+    the other.
+  db9: >-
+    the ALARM OUT connector is drawn, not composed, and deliberately not declared
+    `class: cutout`: there is no std/ part for a D-subminiature DE-9, no `db9` key in
+    spec/schemas/standards.yaml, and no document in this intake dimensions the panel
+    opening. A cutout conforming to nothing would corrupt the aperture census L26 keeps.
+  identity: >-
+    this is the card Table 23 calls the 'RP Card', NOT the RP2. The RP2 is
+    A99-RP2-SE/-TR with its own data sheet (Cisco ASR 9900 Route Processor 2) and its
+    own Table 23 row at 390/400/410 W, and it has no stencil master. The two are easy to
+    conflate because they share an envelope to the millimetre - 46.0 x 428.5 x 628.9 -
+    and differ by 4.2 kg and 151 W. The weight is what separates them here: 13 lb on the
+    RP sheet against 17.8 lb on the RP2's.
+  power: >-
+    install guide - Table 23 of the Overview and Reference Guide, row 'RP Card': 227 W
+    at 25 C, 251 W at 40 C, 259 W at 55 C. max is the highest rated ambient. NOT the
+    'RP2 Card' row's 390/400/410 - see `identity`. Table 23 names the CARD and not the
+    part number - its rows are 'RSP-440 Card', 'RP Card' and so on, with no -SE/-TR
+    split anywhere - so one figure serves both variants by Cisco's own scoping rather
+    than by an inference across it.
+  lifecycle: >-
+    searched - no end-of-life notice for this part number is in the intake.
+elements:
+  alarm-out:
+    at: [12.06, 195.3]
+    size: [9.48, 34.14]
+    class: connector
+    description: >-
+      the nine-pin Alarm Out connector, drawn rather than composed: there is no std/ part
+      for a DE-9 and no registry key for its panel opening, and no document in the intake
+      dimensions it. Not declared `class: cutout` for that reason.
+  fail:
+    at: [12.75, 348.11]
+    size: [2.11, 2.11]
+    class: led
+    description: >-
+      Power Fail (FAIL). Red: standby power fail; the LED is turned off by the CAN bus
+      controller once it is up and running. Off: standby power is normal.
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  aco:
+    at: [12.75, 354.89]
+    size: [2.11, 2.11]
+    class: led
+    description: >-
+      Alarm Cutoff (ACO). Amber: alarm cutoff has been enabled - the ACO push button was
+      pressed after at least one alarm occurred.
+    states:
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  sync:
+    at: [12.75, 362.5]
+    size: [2.11, 2.11]
+    class: led
+    description: >-
+      Synchronization (SYNC). Green: system timing is synchronized to an external source.
+      Amber: system timing is free running. Off: no system timing is configured.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  crit:
+    at: [18.04, 348.11]
+    size: [2.11, 2.11]
+    class: led
+    description: >-
+      Critical Alarm (CRIT). Red: a critical alarm has occurred.
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  maj:
+    at: [18.04, 354.89]
+    size: [2.11, 2.11]
+    class: led
+    description: >-
+      Major Alarm (MAJ). Red: a major alarm has occurred.
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  min:
+    at: [18.04, 362.5]
+    size: [2.11, 2.11]
+    class: led
+    description: >-
+      Minor Alarm (MIN). Amber: a minor alarm has occurred.
+    states:
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  ssd:
+    at: [23.61, 348.11]
+    size: [2.11, 2.11]
+    class: led
+    description: >-
+      Internal Solid State Hard Disk Drive (SSD). Green: SSD0 is busy/active.
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  fc-fault:
+    at: [23.61, 354.89]
+    size: [2.11, 2.11]
+    class: led
+    description: >-
+      FC FAULT, printed on the faceplate. No row for it exists in Table 4 or Table 5 of
+      the Overview and Reference Guide, so its colours are unknown and it carries off/on
+      rather than a vocabulary borrowed from a neighbour.
+    states:
+    - 'off'
+    - 'on'
+  led-matrix:
+    at: [14.19, 370.79]
+    size: [19.4, 7.57]
+    class: display
+    description: >-
+      the four-character 5x7 LED dot-matrix display. What it shows is a message vocabulary
+      - the guide gives it two sections, boot-stage/runtime and CAN bus controller errors
+      - not a lamp state list, so it is a display and not an indicator.
+  aco:
+    at: [10.39, 327.03]
+    size: [3.97, 3.9]
+    class: button
+    description: >-
+      the ACO momentary push button.
+  lamp-test:
+    at: [10.39, 337.43]
+    size: [3.97, 3.9]
+    class: button
+    description: >-
+      the LAMP TEST momentary push button.
+relief:
+  wall: '#4a4f55'
+parts:
+  - {ref: std/rj45-ganged@1, id: sync-0, at: [8.96, 47.63], rotate: 90}
+  - {ref: std/rj45-ganged@1, id: sync-1, at: [8.96, 67.09], rotate: 90}
+  - {ref: std/rj45-ganged@1, id: ieee-1588, at: [8.96, 112.55], rotate: 90}
+  - {ref: std/rj45-ganged@1, id: nv-sync-0, at: [8.96, 132.47], rotate: 90}
+  - {ref: std/rj45-ganged@1, id: nv-sync-1-tod, at: [8.96, 152.37], rotate: 90}
+  - {ref: std/rj45-ganged@1, id: mgt-lan-0, at: [8.96, 246.39], rotate: 90}
+  - {ref: std/rj45-ganged@1, id: mgt-lan-1, at: [8.96, 267.17], rotate: 90}
+  - {ref: std/rj45-ganged@1, id: console, at: [8.96, 288.28], rotate: 90}
+  - {ref: std/rj45-ganged@1, id: aux, at: [8.96, 309.05], rotate: 90}
+  - {ref: std/smb@1, id: gps-10mhz, at: [10.98, 175.36]}
+  - {ref: std/smb@1, id: gps-1pps, at: [10.98, 185.66]}
+  - {ref: std/sfp-ganged@1, id: sfp-plus-0, at: [22.05, 90.0], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: sfp-plus-1, at: [9.7, 90.0], rotate: 90}
+  - {ref: std/usb-a@1, id: usb, at: [12.11, 234.04], rotate: 90}
+body:
+  depth: 628.9
+  color: '#b9bec4'
+skins: [default]
