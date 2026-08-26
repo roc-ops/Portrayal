@@ -41,6 +41,8 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
   L37 device: a group says what it is FOR, and a declared group has members
   L38 component: printed text in a skin sits in a silkscreen group, unless the
       part is applied over the panel rather than printed into it
+  L40 device: a pluggable cage says which optics run in it, and optics prose
+      names a port group that exists
   L39 device: the panel's holes agree with what goes in them - no two overlap,
       each matches its occupant's standard, no legend is printed on one, and a
       port on a view that declares cutouts has one
@@ -1297,6 +1299,62 @@ def lint_device_cutouts(path, view_name, view, lib_roots):
                               "panel that declares them. Either punch it or say why")
 
 
+# The cages an optic plugs INTO. A management cluster of RJ45, USB and console
+# takes no pluggable optic and is not asked about one, and neither is the fixed
+# LC fibre on a passive mux - `media: fiber` is a bonded adapter, not a socket.
+PLUGGABLE_CAGES = {"sfp", "sfp-plus", "sfp28", "sfp-dd", "qsfp", "qsfp28",
+                   "qsfp56", "qsfp-dd", "xfp", "cfp", "cfp2"}
+
+
+def lint_device_port_optics(path, data, lib_roots):
+    """L40: what runs in a cage, and whether anything can read it.
+
+    Putting an optic in a port means knowing which optics that port takes. The
+    mating mechanism exists and works - a cage declares `interface: sfp`, a
+    transceiver `mates: sfp`, and L12 holds them to each other - but that only
+    says an SFP-SHAPED THING FITS. Which of them lights up is a different fact
+    and it is not modelled anywhere.
+
+    THREE STATES, NOT TWO, and keeping them apart is the point. Some groups say
+    nothing. Some carry the knowledge as `attrs` prose - `optics-qsfp28:
+    100GBASE-SR4/CWDM4/LR4...` - which is real work somebody did off a datasheet,
+    and scoring it the same as silence throws that away. None are structured yet,
+    and deliberately so: form factor x reach x media x breakout mode is a large
+    vocabulary and deriving it from four devices' marketing prose is how the
+    portfolio taxonomy would have gone wrong. This rule harvests; it does not
+    design. See #13.
+
+    So prose does NOT warn. Silence does, and the register carries the count.
+    """
+    attrs = attrs_mod.flatten(data.get("attrs"))
+    prose = {k for k in attrs if k.startswith(("optics-", "port-modes-"))}
+    groups = data.get("groups") or {}
+    reachable = set()
+    for gid, gdef in groups.items():
+        gdef = gdef or {}
+        if gdef.get("term") != "Port":
+            continue
+        media = (gdef.get("attrs") or {}).get("media")
+        if media not in PLUGGABLE_CAGES:
+            continue
+        hits = {k for k in prose
+                if k in (f"optics-{media}", f"port-modes-{media}")}
+        reachable |= hits
+        if not hits:
+            warn(path, "L40", f"port group {gid} ({media}) does not say which optics "
+                              "run in it. `interface:` says what fits; this is what "
+                              "works")
+    # AN `optics-` KEY THAT NAMES NO GROUP IS THE SAME DEFECT ONE STEP WORSE: the
+    # knowledge was written down and cannot be joined to anything. The AS5912-54X
+    # is the case - it carries `optics-sfp` while its group declares
+    # `media: sfp-plus`, so the one device that recorded its SFP optics is also a
+    # device whose SFP group reads as silent.
+    for k in sorted(prose - reachable):
+        if k.startswith("optics-"):
+            warn(path, "L40", f"`attrs.{k}` names no port group's media. The optics "
+                              "are recorded and nothing can reach them")
+
+
 def lint_device_groups(path, data, lib_roots):
     """L22 and L23 - what a port group promises, and what it actually holds.
 
@@ -1769,6 +1827,7 @@ def lint_device(path, validator, lib_roots):
         check_states(path, f"groups/{gname}", (gdef or {}).get("states"),
                      (gdef or {}).get("attrs"))
     lint_device_groups(path, data, lib_roots)
+    lint_device_port_optics(path, data, lib_roots)
     # Every id each view offers, indexed by view name. A `for:` may name a target
     # in ANOTHER view of the same device (`rear/psu-0`), so the check below cannot
     # be answered from the view it is standing in.

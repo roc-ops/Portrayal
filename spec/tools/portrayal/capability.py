@@ -417,6 +417,18 @@ RULE_GAPS = {
     # nobody counts is where anything difficult ends up, and it stops being a
     # gap the moment it stops being visible - so `other` files a gap per device
     # that has one, and the register is what makes it shrink.
+    # What runs in a cage, as opposed to what fits in it. L12 already holds a
+    # cage and a transceiver to the same `interface:`, which says an SFP-SHAPED
+    # THING FITS and no more. This is the other half, and it is a HARVEST rather
+    # than a specification: nothing is structured yet because form factor x reach
+    # x media x breakout is a large vocabulary and four devices' marketing prose
+    # is not enough to derive it from. The register counts how many groups owe
+    # the fact so that we know when there is enough evidence to design it.
+    "L40": ("port-optics-undeclared",
+            "which optics actually run in each pluggable cage - as prose in "
+            "`attrs.optics-<media>` for now, which at least reaches the group, "
+            "and structurally once enough vendors are in to say what the "
+            "vocabulary has to hold"),
     "L24": ("attrs-unclassified",
             "a section for these facts, or a decision that they are genuine "
             "one-offs and `other` is where they belong"),
