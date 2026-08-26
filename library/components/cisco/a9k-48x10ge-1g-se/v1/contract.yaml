@@ -1,0 +1,170 @@
+format: 1
+kind: module
+name: a9k-48x10ge-1g-se
+version: 1.0.0
+class: line-card
+profile: networking
+description: >-
+  Cisco ASR 9000 Series 48-Port Dual-Rate 10GE/1GE Line Card, Service Edge optimised.
+  Forty-eight SFP+ cages in two rows of twenty-four, each taking a 1 Gigabit SFP or a 10
+  Gigabit SFP+ optic. Even-numbered ports are the upper row, odd the lower.
+size: {w: 41.4, h: 395.7, d: 559.3}
+attrs:
+  model: 'A9K-48X10GE-1G-SE'
+  role: 'line-card'
+  generation: '4th'
+  sfp-plus: 48
+  media: 'SFP (1GE) or SFP+ (10GE), per port'
+  weight-kg: 9.1
+  power-draw-max-w: 850
+  operating-temp: '5 to 40 C'
+  eol: 'none-announced'
+provenance:
+  size: >-
+    READ THIS ONE. The 24-port and 48-port dual-rate data sheet gives 'Physical
+    dimensions (H x W x D)' as '14.5 x 1.63 x 22.02 in.; (368.3 mm x 41.4 mm x 559.3
+    mm)' - and unlike every other line-card sheet in this intake its heading does NOT
+    carry the '(includes ejector bracket/lever)' qualifier. Its 41.4 mm agrees exactly
+    with the family's card thickness; its 368.3 mm is 27.4 mm short of the 395.7 the
+    qualified sheets give. The card is modelled at 395.7 rather than 368.3, and the
+    reason is positive rather than a preference: the shell in this master - plate, both
+    ejector assemblies, both captive screws - is the SAME DRAWING as the 16-port and
+    32-port masters, sixteen of eighteen features agreeing to 0.00 mm when all are
+    anchored at 395.7. One shell cannot be two lengths. So 368.3 is read as the plate
+    without its ejector brackets, which is what the missing qualifier implies, and BOTH
+    numbers are recorded here. Depth is the sheet's own 559.3, which really is shorter
+    than the 100GE cards' 604.5.
+  layout: >-
+    drawing - the Cisco Visio master, scaled to the datasheet's own overall dimensions.
+    index.json's shape box is NOT the card: it reads 1.72 x 14.75 in for every card
+    master against the datasheets' 1.63 x 15.58, five percent out in both axes. The ART
+    is orthographic: taking Cisco's stated W - the spec table says it 'includes ejector
+    bracket/lever' - as the full long extent of the drawing puts the faceplate rectangle
+    at 41.6 mm against a stated H of 41.4, inside half a percent.
+  frame: >-
+    the card is modelled PORTRAIT - x across the 41.4 mm thickness, y along the 395.7 mm
+    width - which is the stencil's own frame. The ASR 9006, 9010, 9906 and 9910 carry
+    their cards flat and the ASR 9912 and 9922 carry them upright; a chassis of the
+    first kind rotates the bay.
+  cages: >-
+    composed from std/, not drawn. These masters draw a cage as a STROKED grey rectangle
+    with no fill, so the dark-bore reader that finds the QSFP cards' apertures finds
+    nothing on them - the cages here come from the outline layer instead. Measured 9.17
+    x 14.2 mm, which rotated is 14.2 x 9.17 against std/sfp-ganged's SFF-8433 aperture
+    of 14.25 x 10.40: the PITCH dimension agrees to 0.05 mm and the height is 12 percent
+    under, which is the drawn opening sitting inside the bezel cutout. The registry
+    figure is what is placed.
+  numbering: >-
+    the port numerals are transcribed from the master, and the way they were matched to
+    cages is worth recording because two simpler rules each failed on a real card.
+    Nearest-numeral-per-cage put three cages of the 48-port card on one number, because
+    a numeral printed outboard of one row can be nearer a cage in the other row than the
+    one it labels. Pairing whole ROWS and zipping by y works for the dual-rate pair and
+    breaks on the 400G combo, whose two rows of 22 cages carry 24 and 20 numerals - its
+    four QSFP ports are numbered 40 to 43 and printed on the opposite side from the SFP
+    ports they sit beside. What is used is closest-pair-first over every numeral and
+    every cage, with an assertion that the result is a permutation of 0..n-1; on all six
+    masters it is, first time.
+  leds: >-
+    install guide - 'All Ethernet line cards have port Status LEDs on their front
+    panels. Each SFP or XFP port has an adjacent LED to indicate the status of the
+    associated port. In addition, each line card has a single tristate Status LED to
+    display card status.' The card lamp's four states are Table 32 of the Ethernet Line
+    Card Installation Guide, transcribed - note its amber is TWO states, steady during
+    boot and blinking for a software configuration error. PER-PORT lamps are NOT
+    modelled on these three cards: the masters draw a narrow 5.4 mm strip between each
+    pair of rows rather than a discrete lamp per port, and which part of that strip
+    belongs to which port is not resolvable from the drawing. That is a gap, and it is
+    different from the QSFP cards, where each port's lamp is drawn separately and IS
+    modelled.
+  ports: >-
+    datasheet - Cisco ASR 9000 Series 24-Port and 48-Port Dual-Rate 10GE/1GE Line Card
+    Data Sheet: 'Port density: 24 ports and 48 ports of 10 Gigabit/1 Gigabit Ethernet
+    ports per line card', and 'The physical interfaces on these line cards support both
+    Small Form-Factor Pluggable (SFP) and Enhanced SFP (SFP+) optics'. The master draws
+    the count the part number claims.
+  power: >-
+    install guide - Table 35 of the Ethernet Line Card Installation Guide, row '48-Port
+    10-Gigabit Ethernet/1-Gigabit Ethernet Line Card (-TR, -SE, -CM)': 700 W at 27 C,
+    810 W at 40 C, 850 W at 50 C. max is the highest rated ambient. This row's heading
+    names THREE part numbers - -TR, -SE and -CM - so unlike the 16-port and 32-port rows
+    it covers this part number explicitly, and the figure is transcription rather than
+    attribution.
+  variants: >-
+    only the -SE has a stencil master. A9K-24X10GE-1G-TR, -1G-FC and the 48-port
+    equivalents are real part numbers - the data sheet's ordering table lists them - and
+    are not modelled, because there is no artwork for them and I will not assume they
+    share this faceplate. On this platform that assumption is sometimes right and
+    sometimes wrong: the 16-port -SE and -TR masters ARE the same drawing to 0.00 mm,
+    and the -X- generation's master is 5.64 mm away from the non-X one.
+  lifecycle: >-
+    searched - no end-of-life notice for this part number is in the intake.
+elements:
+  status:
+    at: [18.61, 371.11]
+    size: [3.72, 3.72]
+    class: led
+    description: >-
+      the single tristate card Status LED (Ethernet Line Card Installation Guide, Table
+      32).
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - {name: amber-blinking, behavior: blinking, color: '#f5a623'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+relief:
+  wall: '#4a4f55'
+parts:
+  - {ref: std/sfp-ganged@1, id: p0, at: [7.07, 31.3], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p1, at: [22.18, 31.3], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p2, at: [7.07, 45.08], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p3, at: [22.18, 45.08], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p4, at: [7.07, 58.86], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p5, at: [22.18, 58.86], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p6, at: [7.07, 72.64], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p7, at: [22.18, 72.64], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p8, at: [7.07, 86.42], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p9, at: [22.18, 86.42], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p10, at: [7.07, 100.19], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p11, at: [22.18, 100.19], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p12, at: [7.07, 114.05], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p13, at: [22.18, 114.05], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p14, at: [7.07, 127.92], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p15, at: [22.18, 127.92], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p16, at: [7.07, 144.39], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p17, at: [22.18, 144.39], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p18, at: [7.07, 158.17], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p19, at: [22.18, 158.17], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p20, at: [7.07, 171.95], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p21, at: [22.18, 171.95], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p22, at: [7.07, 185.73], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p23, at: [22.18, 185.73], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p24, at: [7.07, 199.5], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p25, at: [22.18, 199.5], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p26, at: [7.07, 213.28], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p27, at: [22.18, 213.28], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p28, at: [7.07, 227.13], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p29, at: [22.18, 227.13], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p30, at: [7.07, 241.0], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p31, at: [22.18, 241.0], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p32, at: [7.07, 257.49], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p33, at: [22.18, 257.49], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p34, at: [7.07, 271.27], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p35, at: [22.18, 271.27], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p36, at: [7.07, 285.05], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p37, at: [22.18, 285.05], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p38, at: [7.07, 298.83], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p39, at: [22.18, 298.83], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p40, at: [7.07, 354.1], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p41, at: [22.18, 312.6], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p42, at: [7.07, 312.6], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p43, at: [22.18, 326.37], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p44, at: [7.07, 340.23], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p45, at: [22.18, 340.23], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p46, at: [7.07, 326.37], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p47, at: [22.18, 354.1], rotate: 90}
+body:
+  depth: 559.3
+  color: '#b9bec4'
+skins: [default]
