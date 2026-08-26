@@ -167,6 +167,10 @@ groups:
     term: Slot
     index-origin: 0
     physical-context: NetworkingDevice
+  rp:
+    term: RP
+    index-origin: 0
+    physical-context: NetworkingDevice
   fabric:
     term: FC
     index-origin: 0
@@ -182,14 +186,14 @@ views:
       decor:
         - {at: [0, 193.4], size: [447.0, 148.6], fill: '#d5d7d9'}
       cutouts:
-        - {id: rp-0, at: [11.61, 898.83], size: [44.07, 355.75], shape: rect}
-        - {id: rp-1, at: [392.34, 898.83], size: [44.07, 355.75], shape: rect}
         - {id: ft-0, at: [4.0, 762.3], size: [439.0, 41.5], shape: rect}
         - {id: ft-1, at: [4.0, 808.8], size: [439.0, 41.5], shape: rect}
         - {id: ft-2, at: [4.0, 1276.9], size: [439.0, 41.5], shape: rect}
         - {id: ft-3, at: [4.0, 1323.4], size: [439.0, 41.5], shape: rect}
     components:
       bays:
+        - {id: rp-1, at: [391.38, 878.06], size: {w: 46.00, h: 395.70}, accepts: ['cisco/asr-9922-rp-se@1', 'cisco/asr-9922-rp-tr@1', 'cisco/a99-rp3-se@1', 'cisco/a99-rp3-tr@1', 'cisco/a9k-slot-cover@1'], group: rp, rel-pos: 1}
+        - {id: rp-0, at: [10.64, 878.06], size: {w: 46.00, h: 395.70}, accepts: ['cisco/asr-9922-rp-se@1', 'cisco/asr-9922-rp-tr@1', 'cisco/a99-rp3-se@1', 'cisco/a99-rp3-tr@1', 'cisco/a9k-slot-cover@1'], group: rp, rel-pos: 0}
         - {id: slot-0, at: [7.35, 349.06], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0}
         - {id: slot-1, at: [50.74, 349.06], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1}
         - {id: slot-2, at: [94.13, 349.06], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2}

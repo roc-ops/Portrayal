@@ -73,6 +73,39 @@ provenance:
     disagreeing with the ASR 9912 - my own chassis disagreeing with each other being exactly the
     smell I have been chasing in the vendor's artefacts. The difference between the envelope and
     the measured pitch is the card guide, which is chassis structure rather than bay.
+  rsp-chassis-support: >-
+    datasheet - and it took a second look to find, because the RSP datasheets do NOT carry the
+    "Chassis compatibility" row the line card sheets do. They state it in the OPENING PARAGRAPH
+    instead. An earlier revision of this file said no document names which chassis each RSP serves;
+    that was wrong, and six of eight sheets say it in prose. Verbatim, checked in the extractions:
+    the RSP-880 "is the system processor for the Cisco ASR 9010 Router, ASR 9006 Router, and ASR
+    9904 Router" and "RSP880-LT is the system processor for ASR 9010, ASR 9006, ASR 9904, ASR 9910
+    Router and ASR9906 Router" (c78-733763); the ASR 9900 Route Processor "is the first generation
+    of system processors available for the Cisco ASR 9912 Router and ASR 9922 Router chassis"
+    (c78-733377); the RSP4-S is "the next-generation system processor for the Cisco ASR 9910 and
+    ASR 9906 Routers" (c78-737234). THE RSP5 AND RSP-440 ARE GENERIC - "for the Cisco ASR 9000
+    Series Routers" with no chassis list anywhere in their sheets - so neither is placed here, on
+    the same principle that kept them all out before
+  rsp-slots-are-wider-than-line-card-slots: >-
+    datasheet - RESOLVED, and it changes this cage. Cisco's RSP-880 sheet gives its dimensions as
+    "Height: 1.81 in. (4.60 cm), Width: 16.87 in. (42.85 cm)", so the card is 46.0 mm thick, and
+    the same sheet names the ASR 9010 as one of the chassis it is the system processor for. A card
+    cannot be thicker than its slot. So at least two of this chassis's ten slots are 46.0 mm or
+    more, and THE EVEN TEN-WAY DIVISION AT 44.33 THAT THIS FILE CARRIED IS IMPOSSIBLE - it is
+    narrower than a card Cisco says goes in it.
+    The division now uses the published card thicknesses: eight line card slots at 41.4 and two RSP
+    slots at 46.0 come to 423.2 mm in the measured 443.32 cage, leaving 20.12 mm distributed as
+    eleven equal 1.829 mm guides. Those are LOWER BOUNDS rather than measurements - no per-slot
+    width is stated in the Ethernet Line Card Installation Guide, the Hardware Installation Guide
+    or the Overview and Reference Guide, and the stencil cannot settle it either because the
+    ASR-9010-AC Front master draws its whole cage as one black rectangle with no dividers of any
+    kind. But it is the only division both Cisco's dimensions and the measured cage admit
+  cage-opening-not-drawn-separately: >-
+    the card cage is NOT declared as its own cutout. It was, and it hid the thing it was meant to
+    show: a full-width black opening behind the bays swallowed the guides between them, so ten
+    slots rendered as one black mass. The bays already describe the openings and the cage's
+    measured extent is recorded above, so the separate cutout was redundant as well as harmful.
+    The other five chassis in this family never had one, and this brings these two into line
   card-orientation: >-
     datasheet - stated directly, and it had been an inference until now. The Overview and
     Reference Guide's "Chassis Slots" section (b-asr9k-overview-reference-guide.pdf p17) names
@@ -269,28 +302,27 @@ views:
         - {at: [0, 807.8], size: [444.5, 2.62], fill: '#8d8f91'}
         - {at: [0, 919.32], size: [444.5, 14.13], fill: '#b4b6b8'}
       cutouts:
-        - {id: cage, at: [0.82, 163.76], size: [443.32, 354.95], shape: rect}
         - {id: fan-band, at: [0.82, 566.51], size: [443.32, 107.09], shape: rect}
         - {id: shelf-0, at: [13.96, 811.74], size: [417.7, 46.15], shape: rect}
         - {id: shelf-1, at: [13.96, 873.33], size: [417.7, 45.99], shape: rect}
     components:
       bays:
-        - {id: ps0-pm-0, at: [13.96, 812.60], size: {w: 138.63, h: 44.40}, accepts: ['cisco/a9k-power-module@1'], group: power-modules, rel-pos: 0}
-        - {id: ps0-pm-1, at: [153.91, 812.60], size: {w: 137.80, h: 44.40}, accepts: ['cisco/a9k-power-module@1'], group: power-modules, rel-pos: 1}
-        - {id: ps0-pm-2, at: [292.86, 812.60], size: {w: 138.80, h: 44.40}, accepts: ['cisco/a9k-power-module@1'], group: power-modules, rel-pos: 2}
-        - {id: ps1-pm-0, at: [13.96, 874.20], size: {w: 138.63, h: 44.40}, accepts: ['cisco/a9k-power-module@1'], group: power-modules, rel-pos: 3}
-        - {id: ps1-pm-1, at: [153.91, 874.20], size: {w: 137.80, h: 44.40}, accepts: ['cisco/a9k-power-module@1'], group: power-modules, rel-pos: 4}
-        - {id: ps1-pm-2, at: [292.86, 874.20], size: {w: 138.80, h: 44.40}, accepts: ['cisco/a9k-power-module@1'], group: power-modules, rel-pos: 5}
-        - {id: slot-0, at: [2.28, 143.39], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0}
-        - {id: slot-1, at: [46.61, 143.39], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1}
-        - {id: slot-2, at: [90.94, 143.39], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2}
-        - {id: slot-3, at: [135.28, 143.39], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 3}
-        - {id: slot-4, at: [179.60, 143.39], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 4}
-        - {id: slot-5, at: [223.93, 143.39], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 5}
-        - {id: slot-6, at: [268.26, 143.39], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 6}
-        - {id: slot-7, at: [312.59, 143.39], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 7}
-        - {id: slot-8, at: [356.92, 143.39], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 8}
-        - {id: slot-9, at: [401.25, 143.39], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 9}
+        - {id: ps0-pm-0, at: [14.13, 812.60], size: {w: 139.12, h: 44.45}, accepts: ['cisco/a9k-power-module@1'], group: power-modules, rel-pos: 0}
+        - {id: ps0-pm-1, at: [153.25, 812.60], size: {w: 139.12, h: 44.45}, accepts: ['cisco/a9k-power-module@1'], group: power-modules, rel-pos: 1}
+        - {id: ps0-pm-2, at: [292.37, 812.60], size: {w: 139.12, h: 44.45}, accepts: ['cisco/a9k-power-module@1'], group: power-modules, rel-pos: 2}
+        - {id: ps1-pm-0, at: [14.13, 874.20], size: {w: 139.12, h: 44.45}, accepts: ['cisco/a9k-power-module@1'], group: power-modules, rel-pos: 3}
+        - {id: ps1-pm-1, at: [153.25, 874.20], size: {w: 139.12, h: 44.45}, accepts: ['cisco/a9k-power-module@1'], group: power-modules, rel-pos: 4}
+        - {id: ps1-pm-2, at: [292.37, 874.20], size: {w: 139.12, h: 44.45}, accepts: ['cisco/a9k-power-module@1'], group: power-modules, rel-pos: 5}
+        - {id: slot-0, at: [2.65, 143.39], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0}
+        - {id: slot-1, at: [45.88, 143.39], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1}
+        - {id: slot-2, at: [89.11, 143.39], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2}
+        - {id: slot-3, at: [132.34, 143.39], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 3}
+        - {id: slot-4, at: [175.57, 143.39], size: {w: 46.00, h: 395.70}, accepts: ['cisco/a9k-rsp880-se@1', 'cisco/a9k-rsp880-tr@1', 'cisco/a9k-rsp880-lt-se@1', 'cisco/a9k-rsp880-lt-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 4}
+        - {id: slot-5, at: [223.39, 143.39], size: {w: 46.00, h: 395.70}, accepts: ['cisco/a9k-rsp880-se@1', 'cisco/a9k-rsp880-tr@1', 'cisco/a9k-rsp880-lt-se@1', 'cisco/a9k-rsp880-lt-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 5}
+        - {id: slot-6, at: [271.22, 143.39], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 6}
+        - {id: slot-7, at: [314.45, 143.39], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 7}
+        - {id: slot-8, at: [357.68, 143.39], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 8}
+        - {id: slot-9, at: [400.91, 143.39], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 9}
     regions:
       - {id: rsp-slots, label: Two center slots reserved for redundant RSPs, members: [slot-4, slot-5]}
       - {id: lc-slots-left, label: Line cards 0-3, members: [slot-0, slot-1, slot-2, slot-3]}
@@ -331,29 +363,21 @@ gaps:
     disagree by about 3.7 mm until someone re-measures the master.
   wanted: a re-measurement of the 'A9K Power Module' stencil master, or a Cisco dimension for the
     version 1 power module
-- what: slot-pitch-disagrees-with-the-sibling-chassis
-  scope: [front]
-  reason: sources-disagree
+- what: rsp-slot-width-is-a-lower-bound
+  scope: [slots]
+  reason: needs-drawing
   note: >-
-    THE ASR 9006 AND ASR 9010 TAKE THE SAME CARDS AND MY TWO MEASURED PITCHES DO NOT AGREE. The
-    9006's cage is 279.63 mm over six horizontal slots, giving 46.60; the 9010's is 443.32 mm over
-    ten vertical slots, giving 44.33. They differ by 2.27 mm, and one of them is wrong, because a
-    card that seats in both cannot have two thicknesses. The cards' LONG dimension corroborates
-    across the pair perfectly - 352.59 from the 9006's cage width against 354.95 from the 9010's
-    cage height, 2.4 mm apart - so it is only the pitch that disagrees.
-    THE EVIDENCE LEANS TOWARDS 44.33 BEING THE CARD AND THE 9006 OVER-DIVIDING ITS CAGE. Ten slots
-    at 46.60 would need 466.0 mm and the body is 444.5, so 46.60 is impossible on the 9010; six
-    slots at 44.33 need 266.0 mm and the 9006's cage is 279.63, leaving 13.6 mm which is entirely
-    plausible as card guides or an end rail. The component set gives a third reading and it is the
-    one that surfaced this: a9k-rsp880's slot envelope is 46.0 mm, which fits a 46.60 pitch and
-    NOT a 44.33 one, and the RSP-880 is an original-generation part that belongs in both chassis.
-    So either the 9006's pitch is right and the 9010's cage is not ten equal slots, or the RSP
-    slots on one of them are wider than the line card slots.
-    Neither chassis's figures show a per-slot dimension and neither master prints slot labels - the
-    9904, 9906 and 9910 do, which is how their pitches were confirmed, and these two do not. Both
-    files therefore carry an evenly divided cage and this record of why that is an assumption.
-  wanted: a dimensioned front elevation of either chassis, a per-slot width from any card install
-    guide, or a tape measure on a real ASR 9006 or 9010
+    The two RSP slots are 46.0 mm because that is the RSP-880's published thickness and Cisco names
+    this chassis as one it serves - so 46.0 is a LOWER BOUND on the slot, not a measurement of it.
+    The eight line card slots are 41.4 on the same basis. The 20.12 mm those twenty-two millimetres
+    of card leave over is distributed as eleven equal guides, which is arithmetic rather than
+    observation: the real chassis may well have wider guides between the cages and narrower ones
+    within them. What IS solid is that an even ten-way division is impossible, since 44.33 is
+    thinner than a card Cisco says seats here. Searched and not found: any per-slot width in the
+    Ethernet Line Card Installation Guide, the Hardware Installation Guide or the Overview and
+    Reference Guide, and the stencil master draws the cage as a single undivided rectangle.
+  wanted: a dimensioned front elevation, a per-slot width from any Cisco document, or a tape
+    measure on a real ASR 9010
 - what: fan-tray-split
   scope: [front, fan-trays]
   reason: needs-drawing
