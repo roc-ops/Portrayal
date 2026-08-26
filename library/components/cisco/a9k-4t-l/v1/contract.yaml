@@ -1,0 +1,87 @@
+format: 1
+kind: module
+name: a9k-4t-l
+version: 1.0.0
+class: line-card
+profile: networking
+description: >-
+  Cisco ASR 9000 Series 4-Port 10 Gigabit Ethernet Line Card with XFP, original
+  generation. Four XFP cages down the faceplate, each with an A/L lamp beside it.
+size: {w: 43.7, h: 395.7, d: 520.7}
+attrs:
+  model: 'A9K-4T-L'
+  role: 'line-card'
+  generation: '1st'
+  xfp: 4
+  power-draw-max-w: 350
+  eol: 'none-announced'
+provenance:
+  size: >-
+    datasheet - Cisco ASR 9000 Series Ethernet Line Cards data sheet, 'Physical
+    dimensions (H x W x D); weight: 14 x 1.72 x 20.5 in. (35.56 x 4.37 x 52.07 cm)'. The
+    24-port and 36-port sheets repeat it verbatim, so one envelope covers the whole
+    original generation. NOTE THE AXIS ORDER IS THE OTHER WAY ROUND from the 4th and 5th
+    generation sheets: here H is the LONG dimension and W the thickness, where the newer
+    sheets give H as the thickness. THE THICKNESS IS THE FINDING: 1.72 in = 43.7 mm
+    against the 4th generation's 1.63 in = 41.4. These are physically thicker cards. And
+    43.7 is exactly the shape-box width that had to be DISCARDED as padding for the
+    newer masters - for this generation it is the real number, which is a good reminder
+    that the shape box is not wrong so much as it is not always the same thing.
+  anchor: >-
+    the long axis is anchored at 395.7 mm, which is the 4th generation's stated ejector-
+    inclusive width and NOT this generation's stated 355.6 - so here is the reasoning,
+    because it looks like the wrong number. These masters are a SECOND SHELL: they share
+    zero shell features with the 4th/5th generation masters, different ejector blocks,
+    different screws, the PID band at the other end. But both shells are DRAWN at the
+    same scale, and the standard part inside the art proves it: the SFP cages here
+    measure 14.39 mm against SFF-8433's 14.25, one percent, at the 395.7 anchor. Anchor
+    at 355.6 instead and they come out 12.93, nine percent under, which no SFP cage is.
+    The datasheet's 355.6 is the PLATE - the drawn plate is 358.13, agreeing to 0.7
+    percent - where the newer sheets quote plate plus ejectors. Same card length, two
+    measuring conventions, and the 43.7 thickness is carried from the datasheet because
+    that IS this generation's own number.
+  leds: >-
+    install guide - 'All Ethernet line cards have port Status LEDs on their front
+    panels. Each SFP or XFP port has an adjacent LED to indicate the status of the
+    associated port. In addition, each line card has a single tristate Status LED to
+    display card status.' The card lamp's four states are Table 32, transcribed. The
+    per-port A/L lamps ARE drawn on these masters but as a shared strip between each
+    pair of rows rather than one lamp per port, so which part belongs to which port is
+    not resolvable and they are not modelled - the same gap the newer SFP cards carry.
+  power: >-
+    install guide - Table 35, row '4-Port 10-Gigabit Ethernet Line Card': 310 W at 25 C,
+    320 W at 40 C, 350 W at 55 C.
+  lifecycle: >-
+    searched - no end-of-life notice for this part number is in the intake.
+  variants: >-
+    the -B, -E and -L masters of this card are the SAME DRAWING - extracted cage centres
+    agree at every port - which is what the data sheet says they should be: 'available
+    in base, extended, and low-queue versions. All versions are functionally equivalent,
+    but vary in configuration scale and buffer capacity.' Table 35 gives one power row
+    for the card and does not split by variant, so all three carry the same figure by
+    Cisco's own scoping.
+elements:
+  status:
+    at: [31.43, 372.0]
+    size: [3.2, 3.2]
+    class: led
+    description: >-
+      the single tristate card Status LED (Ethernet Line Card Installation Guide, Table
+      32).
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - {name: amber-blinking, behavior: blinking, color: '#f5a623'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+relief:
+  wall: '#4a4f55'
+parts:
+  - {ref: std/xfp@1, id: p0, at: [20.08, 57.37], rotate: 90}
+  - {ref: std/xfp@1, id: p1, at: [20.08, 94.54], rotate: 90}
+  - {ref: std/xfp@1, id: p2, at: [20.08, 131.71], rotate: 90}
+  - {ref: std/xfp@1, id: p3, at: [20.08, 168.89], rotate: 90}
+body:
+  depth: 520.7
+  color: '#b9bec4'
+skins: [default]
