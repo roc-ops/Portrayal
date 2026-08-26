@@ -44,13 +44,19 @@ provenance:
     positions labelled by NAME and not by slot number - RP0, FC0, FC1, FC2, FC3, FC4, FC5, FC6,
     RP1; then power shelves PS0, PS1, PS2 each M0 to M3. The RP/FC positions are named directly by
     Cisco, so they are named directly here rather than given invented slot numbers
-  slot-pitch-measured-from-the-silkscreen: >-
-    measured - BOTH cages print their positions, and both were read. The ten line card labels
-    centre at 25.08 through 421.61 mm with nine pitches of 44.10, 43.99, 44.09, 44.09, 43.99,
-    44.10, 44.09, 43.99 and 44.09 - a mean of 44.06 with a spread of 0.11 mm. The nine RP/FC labels
-    centre at 47.13 through 399.57 with the same 44.05 pitch, so the two cages share a pitch, which
-    is what makes a fabric card and a line card the same mechanical slot on this chassis. Both
-    cages measure 6.36 to 440.24 mm across the body
+  slot-pitch-measured-from-the-card-guide-rails: >-
+    measured - CORRECTED. An earlier revision of this file said both cages PRINT their positions.
+    They do not: what was measured is the row of bolt heads on each cage's card guide rail, checked
+    by eye at 2400 px after the same reading was found to be wrong on the ASR 9910. The numbers are
+    unchanged, because a uniform rail is a better ruler than printed text - a label's centre moves
+    with its character count, and on the 9910 the text row gives pitches ranging 41.78 to 55.16
+    where its rail gives 43.78 with a spread of 0.2.
+    Ten line card rail bolts centre at 25.08 through 421.61 mm with nine pitches of 44.10, 43.99,
+    44.09, 44.09, 43.99, 44.10, 44.09, 43.99 and 44.09 - a mean of 44.06 with a spread of 0.11 mm.
+    The nine RP/FC positions give the same 44.05, so the two cages share a pitch, which is what
+    makes a fabric card and a line card the same mechanical slot here. Both cages measure 6.36 to
+    440.24 mm across the body. THE SIBLING CONFIRMS IT: the ASR 9922's front master, measured the
+    same way, gives 44.06 with a spread of 0.11 - identical, and the two are the same build
   pitch-against-the-siblings: >-
     NOTE - 44.06 here against 43.78 measured the same way on the ASR 9910 and 43.75 on the ASR
     9906. The 0.28 mm difference is larger than either chassis's own label spread, so it is

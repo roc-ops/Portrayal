@@ -59,15 +59,19 @@ provenance:
     the 9904. CAUTION - Figure 22's rear view RUNS OFF THE RIGHT EDGE OF THE PDF PAGE and is
     clipped, so the fabric slot count is not readable from it. That is a defect in Cisco's own
     document, not a fetch failure
-  slot-pitch-measured-from-the-silkscreen: >-
-    measured - the front master PRINTS its slot IDs in a row beneath the cage, and ten printed
-    labels are a better ruler than one cage edge. The label centres fall at 28.81, 72.60, 116.29,
-    160.18, 203.87, 247.76, 291.45, 335.24, 379.03 and 422.82 mm, giving nine consecutive pitches
-    of 43.79, 43.69, 43.89, 43.69, 43.89, 43.69, 43.79, 43.79 and 43.79 - a mean of 43.78 mm with
-    a total spread of 0.2 mm. Ten times that is 437.8 against the cage's measured 438.70, agreeing
-    to 0.9 mm. THE SIBLING CHASSIS AGREES INDEPENDENTLY: the ASR 9906's printed labels give 43.75.
-    So the ASR 9900 generation slot pitch is 43.76 mm plus or minus 0.02, from two chassis measured
-    separately, and the 38.88 mm this file nearly carried was an artefact of the swapped masters
+  slot-pitch-measured-from-the-card-guide-rail: >-
+    measured - CORRECTED. An earlier revision of this file described these positions as printed
+    slot IDs. THEY ARE NOT: they are the ten bolt heads on the card guide rail immediately beneath
+    the cage, read at 2400 px. This master DOES print its slot IDs - RSP0, LC0 through LC7, RSP1 -
+    but that text sits about 20 mm further down, outside the window that was scanned.
+    THE NUMBERS ARE UNCHANGED AND ARE THE BETTER OF THE TWO ROWS, which is why they stayed. The
+    bolt centres fall at 28.81, 72.60, 116.29, 160.18, 203.87, 247.76, 291.45, 335.24, 379.03 and
+    422.82 mm, giving nine pitches of 43.79, 43.69, 43.89, 43.69, 43.89, 43.69, 43.79, 43.79 and
+    43.79 - a mean of 43.78 with a spread of 0.2 mm. Ten times that is 437.8 against the cage's
+    measured 438.70. The TEXT row measured the same way gives pitches ranging 41.78 to 55.16,
+    because a text label's centre moves with its character count - RSP0 is four characters and LC0
+    is three - so printed IDs locate a slot only as well as their own width allows. A uniform
+    repeated feature is a better ruler than variable-width text, and the rail is uniform
   card-cage: drawing - front cage opening x 4.15 to 442.85 mm, y 274.22 to 639.84 mm. Slots are
     anchored on the printed label centres rather than on an even division of that span
   fabric-cage: >-
