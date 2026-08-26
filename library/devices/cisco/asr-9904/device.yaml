@@ -111,6 +111,31 @@ provenance:
     b-asr9k-hardware-installation-guide.pdf p125, illustrated by Figure 134. TWO receptacles on
     this chassis, not one - the 9006 and 9010 each have a single point. Drawn on the rear at both
     named corners
+  side-faces: 'the 9904 is the only chassis in this family with a SIDE-TO-SIDE
+    cooling path, and that is what puts content on both side faces rather than one.
+    The guide: "The inlet is at the right side of the cage, and the exhaust is at
+    the left side." So the right face is the intake, already carried as regions,
+    and the LEFT face is the exhaust and is drawn as perforation. Its extent is
+    a FRACTION of the known 725.4 x 263.6 side rather than a measurement - no figure
+    held draws that face - so the opening is inset from the edges and its exact
+    bounds are not claimed. The single fan tray sits behind this face: the guide
+    places it "at the left side of the chassis" and says it is accessible from the
+    REAR, which is why the fan tray itself belongs to the rear view and only its
+    region is noted here. NO GROUNDING POINT IS DRAWN on this face, deliberately
+    - unlike the 9006, which has three points including a left-side one, this chassis
+    has two and both are already on the rear view: "Bottom rear right side and rear
+    left side of the chassis"'
+  top-and-bottom-faces: 'sized from the chassis and carrying the one feature Figure
+    10 dimensions on this plane: the rack mounting surface at 2.45 in (6.22 cm),
+    drawn on both the top and the bottom because it is one plane through the chassis
+    rather than a feature of either face. FIGURE 10 IS TO SCALE AND WAS CHECKED
+    - its chassis measures 739 px across for a stated 17.57 in and 1199 px deep
+    for a stated 725.4 mm, which calibrates to 0.6041 and 0.6045 mm/px, agreeing
+    to 0.07 percent on the two axes. It draws a large rounded panel on the top face
+    which is very likely a removable cover, and that is NOT drawn here: its edges
+    could not be resolved cleanly enough to place, and a cover at a guessed size
+    would be worse than none. Nothing else is on either face; no figure held shows
+    the underside'
   front-furniture: >-
     drawing - besides the slot label strip, the master carries a FAN STATUS legend and indicator at
     the top left on chassis metal, an ESD receptacle with a warning triangle at the bottom left of
@@ -219,10 +244,28 @@ views:
       - {id: nebs-ground, label: NEBS bonding and grounding - bottom rear right side and rear left side}
   top:
     size: {w: 450.85, h: 725.4}
+    panel:
+      decor:
+        - {at: [0, 663.2], size: [450.85, 3.9], fill: '#9a9c9e'}
+    regions:
+      - {id: rack-mounting-surface, label: 'Rack mounting surface - 2.45 in (6.22 cm) from the front'}
+      - {id: top-cover, label: 'Top cover - Figure 10 dimensions the footprint only'}
   bottom:
     size: {w: 450.85, h: 725.4}
+    panel:
+      decor:
+        - {at: [0, 663.2], size: [450.85, 3.9], fill: '#9a9c9e'}
+    regions:
+      - {id: rack-mounting-surface, label: 'Rack mounting surface - 2.45 in (6.22 cm) from the front'}
+      - {id: underside, label: 'Underside - no feature documented in any figure held'}
   left:
     size: {w: 725.4, h: 263.6}
+    panel:
+      decor:
+        - {at: [40.0, 26.0], size: [645.0, 210.0], fill: '#b0b2b4', pattern: grille, vent: 60}
+    regions:
+      - {id: side-air-exhaust, label: 'Side air exhaust - outlet at the left side of the cage'}
+      - {id: fan-tray-behind, label: 'Fan tray sits behind this face, fitted from the rear'}
   right:
     size: {w: 725.4, h: 263.6}
     regions:

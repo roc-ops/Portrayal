@@ -240,6 +240,28 @@ provenance:
     so it can be corrected in one line: this view is laid out as Figure 9 lays it out, front at the
     BOTTOM edge (y = 734.8) and rear at the top (y = 0), so the mounting surface line sits at
     734.8 - 145.5 = 589.3. Nothing in the schema or the renderer fixes which edge is the front
+  left-face: 'datasheet + drawing, with the POSITION stated as inferred. This
+    chassis has THREE NEBS bonding and grounding points, not one: the guide says
+    to connect "to one of the three supplemental bonding and grounding connections
+    on the back or side of the router chassis", and Figure 58 callouts them as right
+    side, rear and LEFT side. So a left-side point exists and this face is not blank.
+    Its position is INFERRED - Figure 58 is a three-quarter view from below and
+    draws the pad low and rearward, so it is placed at the rear-lower corner, mirroring
+    the right pad''s x and flipping its y. The grounding RECEPTACLE is a different
+    thing and is separately documented at "Top rear right side of the chassis",
+    which is where the right view already carries it. Orientation: this view mirrors
+    the right, so the REAR is at x = 734.8'
+  left-face-has-no-vent: 'stated rather than left to be wondered about. The cooling
+    path is side-to-top-to-rear - "the inlet is at the right side of the chassis,
+    and the exhaust is at the upper rear" - so unlike the right face, which is mostly
+    perforation, the left face carries no air opening at all. Drawing a grille here
+    to balance the right would be inventing one'
+  bottom-face: 'sized from the chassis and carrying the one feature the documents
+    place on this plane: the rack mounting surface, 5.73 in (14.55 cm) back from
+    the front per Figure 9, the same plane the top view already draws. NOTHING ELSE
+    IS DRAWN - no figure held shows the underside, Figure 9 being a top-down footprint,
+    so there are no feet, labels or vents here and that is a statement rather than
+    an omission'
   card-compatibility: >-
     datasheet - and this is Cisco stating it directly rather than being inferred from geometry.
     The per-card datasheets carry a "Chassis compatibility" row, and datasheet-c78-743580, "Cisco
@@ -413,8 +435,20 @@ views:
       - {id: rack-mounting-surface, label: 'Rack mounting surface - 5.73 in (14.55 cm) from the front'}
   bottom:
     size: {w: 444.5, h: 734.8}
+    panel:
+      decor:
+        - {at: [0, 585.4], size: [444.5, 3.9], fill: '#9a9c9e'}
+    regions:
+      - {id: rack-mounting-surface, label: Rack mounting surface - 5.73 in (14.55 cm) from the front}
+      - {id: underside, label: Underside - no feature documented in any figure held}
   left:
     size: {w: 734.8, h: 444.5}
+    panel:
+      cutouts:
+        - {id: nebs-ground-left, at: [662.8, 410.5], size: [46.0, 20.0], shape: rect}
+    regions:
+      - {id: nebs-ground, label: 'NEBS bonding and grounding point - left side, one of three'}
+      - {id: no-air-path, label: 'Not an air path - inlet right side, exhaust upper rear'}
   right:
     size: {w: 734.8, h: 444.5}
     panel:
