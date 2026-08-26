@@ -239,7 +239,9 @@ provenance:
     the front of the chassis. Drawn as a line across the top plate at that depth. CONVENTION, stated
     so it can be corrected in one line: this view is laid out as Figure 9 lays it out, front at the
     BOTTOM edge (y = 734.8) and rear at the top (y = 0), so the mounting surface line sits at
-    734.8 - 145.5 = 589.3. Nothing in the schema or the renderer fixes which edge is the front
+    734.8 - 145.5 - 1.95 = 587.35, the strip being CENTRED on the plane rather than edged
+    against it. The renderer does fix which edge is the front - see depth-axis-on-side-views,
+    which derives it from viewer3d.js - and it agrees with Figure 9's own layout
   left-face: 'datasheet + drawing, with the POSITION stated as inferred. This
     chassis has THREE NEBS bonding and grounding points, not one: the guide says
     to connect "to one of the three supplemental bonding and grounding connections
@@ -249,8 +251,31 @@ provenance:
     draws the pad low and rearward, so it is placed at the rear-lower corner, mirroring
     the right pad''s x and flipping its y. The grounding RECEPTACLE is a different
     thing and is separately documented at "Top rear right side of the chassis",
-    which is where the right view already carries it. Orientation: this view mirrors
-    the right, so the REAR is at x = 734.8'
+    which is where the right view already carries it. ORIENTATION CORRECTED: this
+    file said "this view mirrors the right, so the REAR is at x = 734.8" and that
+    is backwards. On a LEFT view the rear is at x = 0. See depth-axis-on-side-views'
+  depth-axis-on-side-views: >-
+    FOUR FEATURES ON THIS CHASSIS WERE AT THE WRONG END OF THEIR VIEW, and they
+    were wrong because no file stated which end of a left or right view is the
+    front. The convention is derivable and now is: library/demo2/viewer3d.js
+    builds each face in local coordinates (x right, y up, z out of the face) and
+    orients it with a fixed rotation, front at +z and rear at -z. Right is
+    rot [0, +pi/2, 0], sending local +x to world -z, so ON A RIGHT VIEW x = 0 IS
+    THE FRONT AND x = depth IS THE REAR. Left is rot [0, -pi/2, 0], sending local
+    +x to world +z, so ON A LEFT VIEW x = 0 IS THE REAR. The box-UV path and
+    viewer3d.js's own component-branch comment both give the same answer.
+    WHAT MOVED, all of it derived by subtracting from the 734.8 depth rather than
+    re-measured: the right-side NEBS ground pad from x 26.0 to 662.8, the air
+    filter opening from 8.0 to 674.8, the right intake grille from 64.0 to 110.8
+    so its clearance to the filter is preserved, and the left-side NEBS pad from
+    662.8 to 26.0. Every one of those is a feature this file already DOCUMENTED as
+    being at the rear - the guide puts the ground pad at the "upper rear corner"
+    and Table 17 makes the air filter "accessible from the rear" - so the words
+    were right and only the coordinates were wrong. THE TWO GROUND PADS HAD
+    EXACTLY SWAPPED PLACES, 26.0 and 662.8 each sitting where the other belonged,
+    which is the signature of mirroring left from right by copying x when the
+    correct mirror is depth - x - width. Nothing here needed a new source; the
+    file disagreed with itself and the labels were the half that was right.
   left-face-has-no-vent: 'stated rather than left to be wondered about. The cooling
     path is side-to-top-to-rear - "the inlet is at the right side of the chassis,
     and the exhaust is at the upper rear" - so unlike the right face, which is mostly
@@ -470,7 +495,7 @@ views:
     size: {w: 734.8, h: 444.5}
     panel:
       cutouts:
-        - {id: nebs-ground-left, at: [662.8, 410.5], size: [46.0, 20.0], shape: rect}
+        - {id: nebs-ground-left, at: [26.0, 410.5], size: [46.0, 20.0], shape: rect}
     regions:
       - {id: nebs-ground, label: 'NEBS bonding and grounding point - left side, one of three'}
       - {id: no-air-path, label: 'Not an air path - inlet right side, exhaust upper rear'}
@@ -478,10 +503,10 @@ views:
     size: {w: 734.8, h: 444.5}
     panel:
       decor:
-        - {at: [64.0, 100.0], size: [560.0, 290.0], fill: '#b0b2b4', pattern: grille, vent: 60}
+        - {at: [110.8, 100.0], size: [560.0, 290.0], fill: '#b0b2b4', pattern: grille, vent: 60}
       cutouts:
-        - {id: ground-pad, at: [26.0, 14.0], size: [46.0, 20.0], shape: rect}
-        - {id: air-filter-opening, at: [8.0, 104.63], size: [52.0, 279.63], shape: rect}
+        - {id: ground-pad, at: [662.8, 14.0], size: [46.0, 20.0], shape: rect}
+        - {id: air-filter-opening, at: [674.8, 104.63], size: [52.0, 279.63], shape: rect}
     regions:
       - {id: side-air-intake, label: Side air intake}
       - {id: air-filter, label: 'Air filter - right side, accessible from the rear'}
@@ -578,17 +603,22 @@ gaps:
     It has them; they are waiting. Cisco's own numbering for them is FT0/FT1 and M0-M3 per Figure
     19, and the groups are ready to be reinstated with index-origin 0.
   wanted: an ASR 9006 fan tray, the version 2 AC and DC power modules, and the chassis air filter
-- what: blank-faces
+- what: undocumented-faces
   scope: [bottom, left]
   reason: vendor-silent
   note: >-
-    bottom and left are sized from Table 13 and Figure 9 and are deliberately EMPTY rather than
-    unfinished. No document we hold shows either face of an ASR 9006, and the guide says so about
-    the left in as many words while specifying clearances for the other three: "There is no
-    clearance requirement for the left side of the chassis"
-    (b-asr9k-hardware-installation-guide.pdf p1172), which is consistent with a solid unfeatured
-    panel but does not prove one. The other four faces are NOT blank - front and rear from the
-    stencil masters, the top from Figure 9's mounting-surface dimension, and the right from the
-    intake grille, the air filter and the grounding pad. The sizes here are right, so a rack
-    elevation and the 3D box are right, which is what these two views are carrying.
+    RENAMED FROM blank-faces AND REWORDED, because both faces stopped being blank and the gap was
+    still describing the file as it stood two commits ago. NO DOCUMENT WE HOLD SHOWS EITHER FACE
+    OF AN ASR 9006 - that part is unchanged and is the gap. What each face now carries is derived
+    from a figure of a DIFFERENT face, which is a weaker thing than being drawn and is why the gap
+    stays open. The bottom carries the rack mounting surface, because the plane is dimensioned in
+    Figure 9's top-down view and necessarily cuts the underside at the same depth it cuts the top.
+    The left carries one of the three NEBS bonding points, because Figure 58 callouts a left-side
+    pad and its position is INFERRED from a three-quarter view rather than dimensioned. Neither is
+    a bottom or left drawing; both are a fact about the chassis that has to intersect this face.
+    Everything else about these two faces - feet, labels, vents, plates, the flange profile - is
+    still unknown, and the guide's "There is no clearance requirement for the left side of the
+    chassis" (b-asr9k-hardware-installation-guide.pdf p1172) is consistent with a solid unfeatured
+    panel without proving one. The sizes are from Table 13 and Figure 9 and are right, so the rack
+    elevation and the 3D box are right, which is the load these two views actually carry.
   wanted: a six-face photograph set, or the mechanical drawings behind Figure 9

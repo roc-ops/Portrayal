@@ -561,6 +561,26 @@ configurations: {...}
   whole depth. Write the convention in provenance next to the number. And note
   that a bottom view mirrors LEFT and RIGHT, not front and back - so a full-width
   feature is unaffected but an asymmetric one needs the flip.
+- **LEFT AND RIGHT VIEWS RUN THEIR DEPTH AXIS IN OPPOSITE DIRECTIONS, and this is
+  the one that will bite.** They are two views of the same axis from opposite
+  sides, so a feature at the front sits at one end of one view and the other end
+  of the other. Derive it from the renderer rather than assuming: `viewer3d.js`
+  builds each face in local coordinates and orients it with a fixed rotation,
+  front at +z, and applying those rotations to the local x axis answers it
+  outright - **on a RIGHT view x = 0 is the FRONT; on a LEFT view x = 0 is the
+  REAR**. Mirroring one from the other by copying x is exactly wrong; the correct
+  mirror is `depth - x - width`. Two ASR 9000 chassis had this wrong on seven
+  features between them, including two grounding pads sitting exactly in each
+  other's places, and it survived because the labels were right and only the
+  coordinates were wrong.
+- **A feature that is symmetric about an axis cannot be at the wrong end of it,
+  which is why this class of error is discovered late.** Nothing asymmetric on a
+  bottom face and nothing off-centre on a side face means every convention looks
+  correct. The first grounding pad, drain hole, serial label or asymmetric vent
+  drawn on one of those faces is what exposes the axis - by which time several
+  models share the mistake. When a face carries only symmetric content, say so in
+  provenance: it records that the axis was checked rather than that it happened
+  not to matter.
 - **A test that asserts something is MISSING from a live manifest is pinned to
   that model's incompleteness.** Three tests broke in one session because a
   device got BETTER: two capability tests used the C100G as their "stuck at

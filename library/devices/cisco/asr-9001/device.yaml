@@ -93,6 +93,35 @@ provenance:
   side-faces: 'no figure in either document shows the top, bottom or side faces
     of this chassis, so they are sized from the data sheet and carry only the integral
     rack flanges. Stated rather than left blank, as on the Casa chassis'
+  depth-axis-on-side-views: 'THE FLANGE WAS AT THE WRONG END ON THREE OF THE FOUR
+    SIDE VIEWS AND THE FIX IS DERIVED, NOT GUESSED. This is a front-mounted 2 RU
+    chassis, so its integral flanges are at the FRONT - that half was never in doubt.
+    What was in doubt was which end of each view the front is, because nothing in
+    the schema, the renderer or any device file stated it, and this device answered
+    it four different ways: top had the flange at y = 0, bottom at y = 464, left
+    at x = 0 and right at x = 464. Four faces, one feature, three of them wrong,
+    and no label anywhere to check the geometry against - which is why it survived.
+    THE RENDERER IS THE AUTHORITY AND IT IS UNAMBIGUOUS. library/demo2/viewer3d.js
+    builds each face in local coordinates (x right, y up, z out of the face) and
+    orients it with a fixed rotation, with the front face at +z and the rear at
+    -z. Applying those rotations to the local axes gives the depth direction of
+    every side view outright: right is rot [0, +pi/2, 0], which sends local +x to
+    world -z, so INCREASING x ON A RIGHT VIEW RUNS TOWARDS THE REAR AND x = 0 IS
+    THE FRONT. left is rot [0, -pi/2, 0], which sends local +x to world +z, so
+    x = 0 IS THE REAR AND x = depth IS THE FRONT. top is rot [-pi/2, 0, 0], which
+    sends local +y to world -z; SVG y runs downwards so image y = 0 is local +y,
+    giving y = 0 REAR and y = depth FRONT - the same answer Figure 9 gave for the
+    ASR 9006 and 9904, now confirmed from the code as well as from the drawing.
+    The box-UV path agrees independently, and so does viewer3d.js''s own comment
+    on the component branch, ''face end at image left -> front'' for the right side.
+    Three derivations, one answer. LEFT AND RIGHT ARE OPPOSITE AND THAT IS THE TRAP
+    - they are two views of the same axis from opposite sides, so a feature at the
+    front sits at x = 0 on one and x = depth on the other. Mirroring left from right
+    by copying the x is exactly wrong, and copying it while ALSO negating it is
+    exactly right. TOP AND BOTTOM ARE NOT OPPOSITE, which is the other half of the
+    trap and the one that reads as inconsistent: looking at a chassis from below
+    flips LEFT and RIGHT, not front and back, so top and bottom share a depth axis
+    and a full-width strip has the SAME y on both'
   din-connectors: 'THE 10MHz AND 1PPS PORTS ARE DECLARED AS PANEL CUTOUTS AND
     NOT COMPOSED, deliberately. Table 4 of the guide gives their connector as DIN
     1.0/2.3, and there is no std/ part for it - the registry has sma, smb, mcx and
@@ -251,22 +280,30 @@ views:
     size: {w: 442.0, h: 470.0}
     panel:
       decor:
-        - {at: [0, 0], size: [442.0, 6.0], fill: '#b0b2b4'}
+        - {at: [0, 464.0], size: [442.0, 6.0], fill: '#b0b2b4'}
+    regions:
+      - {id: rack-flange, label: 'Integral rack flange - at the FRONT, which is y = 470.0 on a top view'}
   bottom:
     size: {w: 442.0, h: 470.0}
     panel:
       decor:
         - {at: [0, 464.0], size: [442.0, 6.0], fill: '#b0b2b4'}
+    regions:
+      - {id: rack-flange, label: 'Integral rack flange - at the FRONT, which is y = 470.0 on a bottom view'}
   left:
     size: {w: 470.0, h: 88.2}
     panel:
       decor:
-        - {at: [0, 0], size: [6.0, 88.2], fill: '#b0b2b4'}
+        - {at: [464.0, 0], size: [6.0, 88.2], fill: '#b0b2b4'}
+    regions:
+      - {id: rack-flange, label: 'Integral rack flange - at the FRONT, which is x = 470.0 on a LEFT view'}
   right:
     size: {w: 470.0, h: 88.2}
     panel:
       decor:
-        - {at: [464.0, 0], size: [6.0, 88.2], fill: '#b0b2b4'}
+        - {at: [0, 0], size: [6.0, 88.2], fill: '#b0b2b4'}
+    regions:
+      - {id: rack-flange, label: 'Integral rack flange - at the FRONT, which is x = 0 on a RIGHT view'}
 configurations:
   asr-9001:
     description: >-
