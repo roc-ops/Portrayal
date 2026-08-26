@@ -64,6 +64,42 @@ disk to argue with. Then LOOK at a sample of what you dropped.
 `^Figure \d+:` in the document's text and compare it against what you captured.
 "No figure for this part" means something very different at 62/62 than at 39/62.
 
+### A SUBSTRING TEST OVER PROSE CERTIFIES WHAT IT SHOULD CATCH. RUN IT FIRST.
+
+A check was proposed here to stop a `borrowed` confidence token claiming an
+ancestry that does not exist: resolve the part it names, and see whether that
+part's provenance claims a measurement. It was proposed twice, to two agents,
+and neither time was it RUN. When somebody finally ran it against the six
+origins the library actually cites, it passed FIVE OF SIX - including the
+clearest false claim of the lot, whose only occurrence of the word is inside its
+own denial:
+
+    depth: 'estimated - it stands proud but was NOT MEASURED'
+
+Four different ways to be wrong, in four files:
+
+    negation           the hit is inside the sentence that refutes it
+    wrong object       `measured - 360.7 mm` is the MODULE's depth, not the latch's
+    wrong object       `measured - 132 mm` is the module again, not the handle
+    wrong attribute    `size: photo-measured` is the label's outline, not its thickness
+
+And the ONE that failed was the honest file whose provenance is simply short. So
+the rule punished candour and certified the four that needed catching.
+
+**A check that returns PASS on a false claim is worse than no check**, because it
+converts "nobody looked" into "looked and cleared" - and it does it in a
+machine-readable field a consumer will filter on.
+
+THE FIX IS ALWAYS THE SAME SHAPE: test the STRUCTURE, not the prose. Resolve the
+reference, read the origin's own declared token, and require it to be one of the
+two that mean a caliper touched something. No sentence to parse, so no negation
+problem and no wrong-object problem - the origin states its own confidence or it
+states nothing.
+
+**And run any rule about provenance against the real corpus before proposing
+it.** This is the third time in one session that searching prose has measured the
+searcher's expectations instead of the files.
+
 ### AN EMPTY `relief.features` DOES NOT MEAN A FLAT PART. COMPILE IT AND COUNT.
 
 This has now been got wrong three times in one day, by three different readers,
@@ -757,6 +793,13 @@ configurations: {...}
   (`point` versus `receptacle`) rather than the ones that match (`grounding`).
   The cost of getting this wrong is a fabricated conflict in provenance, which is
   worse than a missing one because it looks like diligence.
+- **A COMMIT IS ATOMIC; THE WORKING TREE IS NOT.** With more than one agent in
+  the repo, a test suite or a lint run is not a verdict - it is a photograph of
+  whatever was half-written when it started. An agent here saw four failures
+  including `test_lint_green` seconds after its own lint run came back clean,
+  because another agent was writing files underneath it. Re-run before believing
+  a failure you cannot explain, and never commit a "fix" for one until you have
+  seen it twice.
 - **TWO SOURCES AGREEING IS EVIDENCE ONLY IF THEY WERE DERIVED INDEPENDENTLY.**
   The C40G's device provenance and `casa/c40g-pem`'s both said the PEM band
   starts at y 194, which read as independent confirmation and was ONE SOURCE
