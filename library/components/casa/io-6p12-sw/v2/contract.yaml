@@ -16,6 +16,22 @@ description: >-
 size: {w: 30.47, h: 345.5, d: 380.0}
 attrs: {model: '6+12 SW IO', media: coax, connector: mcx, downstream: '6', upstream: '12', spectrum: 5-85MHz, switch: 'yes', slot: C100G-rear-8 / C40G-rear-4}
 provenance:
+  power: >-
+    NONE STATED, and the reasoning is the plain card's - see casa/io-6p12, which carries
+    it in full. Restated rather than cross-referenced only, because a contract that sends
+    the reader to another file for why a figure is absent is one step from having no
+    answer at all.
+    THE SHORT FORM: no table in either Casa guide gives an I/O module a power figure, and
+    the BDM's "approximately 300W" already covers the BDM together with its paired I/O
+    card under power-draw-scope: module-with-paired-io. A number here would double count
+    that pairing. The absence is correct rather than merely unsourced.
+    WHAT IS SPECIFIC TO THIS CARD: it is the SWITCH I/O variant, the rear half that goes
+    in the protecting slot, and being the switch variant changes nothing about the
+    argument - it is still an I/O module whose front partner carries the figure, so it
+    inherits the double-count reasoning rather than escaping it. casa/io-6p12-sw-io2 has
+    carried this since it was built and opens with "same as the plain card", asserting it
+    about a file that did not say it; this is that assertion moved to where it applies.
+    An echo of casa/io-6p12's entry, not independent confirmation of it.
   layout: drawing - Figure 1-15 of the Casa C100G Hardware Installation Guide
     (rev 07/08/2022). Twelve U jacks in the left column, six D in the right,
     interleaved. Port COUNT and ARRANGEMENT are read straight off the figure

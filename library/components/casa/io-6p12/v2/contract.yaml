@@ -16,6 +16,20 @@ description: >-
 size: {w: 30.47, h: 345.5, d: 380.0}
 attrs: {model: '6+12 IO', media: coax, connector: mcx, downstream: '6', upstream: '12', spectrum: 5-85MHz}
 provenance:
+  power: >-
+    NONE STATED, AND THIS IS WHERE THAT BELONGS. No table in either Casa guide gives an
+    I/O module a power figure - Tables A-8 and A-9 give the RFD and RFU their connectors
+    and nothing else - and the BDM's "approximately 300W" is scoped to the BDM WITH its
+    paired I/O card, which is why the front half carries that figure under
+    power-draw-scope: module-with-paired-io. Writing a number here would double count the
+    pairing, so the absence is CORRECT rather than merely unsourced and the L27 warning is
+    its record.
+    WHERE THIS CAME FROM: casa/io-6p12-io2 and casa/io-6p12-sw-io2 have carried this
+    reasoning since they were built, and both open it with "same as the plain card" - so
+    they were asserting a fact about THIS file, in their own, where nothing could check it
+    and where this card never said it. Restated here in this card's own terms. It is the
+    same finding, not a second one, and the two io2 entries are echoes of it rather than
+    independent corroboration.
   layout: drawing - Figure 1-15 of the Casa C100G Hardware Installation Guide
     (rev 07/08/2022). Twelve U jacks in the left column, six D in the right,
     interleaved. Port COUNT and ARRANGEMENT are read straight off the figure
