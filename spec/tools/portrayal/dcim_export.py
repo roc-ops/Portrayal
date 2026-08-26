@@ -123,15 +123,13 @@ PART_CONSOLE = {"std/rj45-ganged": "rj-45", "common/rj45-shielded": "rj-45",
 # An appliance inlet that accepts a C13 cord is a C14 on the equipment side, and
 # both DCIMs name it from the inlet.
 #
-# BOTH SPELLINGS ARE ACCEPTED, AND THAT IS TRANSITIONAL. The component was
-# `std/c13-inlet` when this was written and is being renamed to `std/c14-inlet`
-# (roc-ops/ndv#25). Matching only one of them means every PSU power port
-# silently vanishes on whichever side of the rename this lands - and a port that
-# disappears without an error is the worst way for a rename to be noticed.
-# Drop the c13 key once the rename is on main.
+# c20-inlet is here before anything places it. Nothing in the library uses it
+# yet, so the entry is unreachable today - but an unmapped inlet does not raise,
+# it just drops the power port, and a port that disappears without an error is
+# the worst way to find out about a part somebody added.
 PART_POWER = {
     "std/c14-inlet": "iec-60320-c14",
-    "std/c13-inlet": "iec-60320-c14",
+    "std/c20-inlet": "iec-60320-c20",
 }
 
 PART_RF = {
