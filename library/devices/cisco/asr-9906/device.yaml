@@ -38,6 +38,40 @@ provenance:
     measured - the front master passes gate 1. Calibrating x on 482.6 mm (the 19.0 in rack face)
     and y on Table 13's 619.51 mm independently gives 0.20134 and 0.20062 mm/px, agreeing to
     0.36 percent. Origin shifted in by (482.6 - 447.0) / 2 = 17.8 mm to reach the body edge
+  side-faces: >-
+    datasheet - "Figure 17: Cisco ASR 9906 Router Side View showing vertical Rack Rail Locations",
+    b-asr9k-hardware-installation-guide.pdf p31, and it is a dimensioned mechanical drawing rather
+    than a schematic. It gives an overall side extent of 27.00 in (685.8 mm) and locates two
+    vertical rack rails at 9.45 in (240.0 mm) and 5.00 in (127.0 mm) from one end. It also draws
+    two large chassis lift handles high on the face, a hatched panel low toward one end, a warning
+    label and card guide detail along the bottom. The two rails are drawn here; the handles and the
+    panel are named as regions rather than given geometry, because the figure carries no dimension
+    for either
+  side-depth-is-a-third-figure: >-
+    NOTE - Figure 17's 27.00 in (685.8 mm) is a THIRD depth for this chassis and does not match
+    either of Table 13's. Table 13 gives 28.77 in (73.08 cm) bare and 31.45 in (79.88 cm)
+    "including the cable management system"; this figure says 27.00. Most likely it measures the
+    sheet metal between the planes the rails bolt to, excluding the front cosmetics that Table 13's
+    bare figure includes - but no document says so, and chassis.depth continues to carry Table 13's
+    730.8 mm because the spec table is authoritative for overall dimensions. The rail positions are
+    used as stated, measured from the rear, which is the end the figure dimensions from
+  top-face: >-
+    datasheet - Figure 11 "Cisco ASR 9906 Router Chassis Footprint Dimensions - Top Down View",
+    b-asr9k-overview-reference-guide.pdf p26, and it is orthographic: its chassis outline measures
+    315 by 510 px for a stated 17.60 by 28.77 in, an aspect of 0.6176 against the stated 0.6117,
+    inside one percent. So it carries geometry and not just arrangement. What is on the top plate:
+    a regulatory and compliance label block toward the rear, a large rectangular access panel below
+    it, the cisco wordmark printed on the metal toward the front, and scattered bolt positions. The
+    wordmark is real silkscreen on this face and is transcribed as such
+  depth-arithmetic-closes: >-
+    datasheet - Figure 11 also settles Table 13's two depths against each other, which no single
+    number does. It dimensions the chassis at 28.77 in (73.08 cm) and then shows the cable
+    management system protruding a further 2.68 in (6.81 cm) beyond the front of the chassis.
+    28.77 + 2.68 = 31.45, which is exactly Table 13's second figure, "31.45 inches (79.88 cm)
+    including the cable management system". Two independently stated numbers and their difference
+    all agree, so the bare depth this manifest carries is confirmed rather than merely chosen.
+    CONVENTION for this face, stated so it can be corrected in one line: laid out as Figure 11
+    lays it out, front at the BOTTOM edge and rear at the top
   card-orientation: >-
     datasheet - stated directly, and it had been an inference until now. The Overview and
     Reference Guide's "Chassis Slots" section (b-asr9k-overview-reference-guide.pdf p17) names
@@ -214,12 +248,36 @@ views:
       - {id: nebs-ground, label: 'NEBS bonding and grounding - bottom rear and left side'}
   top:
     size: {w: 447.0, h: 730.8}
+    panel:
+      decor:
+        - {at: [42.0, 29.0], size: [152.0, 93.0], fill: '#e8eaec'}
+        - {at: [42.0, 129.0], size: [155.0, 165.0], fill: '#d5d7d9'}
+    silkscreen:
+      - {at: [111.0, 650.0], text: cisco, font-size: 22, anchor: middle}
+    regions:
+      - {id: regulatory-label, label: 'Regulatory and compliance label block'}
+      - {id: top-access-panel, label: 'Top access panel'}
+      - {id: cable-management-protrusion, label: 'Cable management system - protrudes 2.68 in (6.81 cm) beyond the front'}
   bottom:
     size: {w: 447.0, h: 730.8}
   left:
     size: {w: 730.8, h: 619.51}
+    panel:
+      decor:
+        - {at: [490.8, 40.0], size: [14.0, 540.0], fill: '#b0b2b4'}
+        - {at: [603.8, 40.0], size: [14.0, 540.0], fill: '#b0b2b4'}
+    regions:
+      - {id: rack-rails, label: 'Vertical rack rail locations - 5.00 in and 9.45 in from the rear'}
+      - {id: lift-handles, label: 'Chassis lift handles - two per side'}
   right:
     size: {w: 730.8, h: 619.51}
+    panel:
+      decor:
+        - {at: [71.0, 40.0], size: [14.0, 540.0], fill: '#b0b2b4'}
+        - {at: [184.0, 40.0], size: [14.0, 540.0], fill: '#b0b2b4'}
+    regions:
+      - {id: rack-rails, label: 'Vertical rack rail locations - 5.00 in and 9.45 in from the rear'}
+      - {id: lift-handles, label: 'Chassis lift handles - two per side'}
 gaps:
 - what: power-module-openings
   scope: [front]
