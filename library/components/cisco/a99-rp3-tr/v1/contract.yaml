@@ -15,7 +15,7 @@ description: >-
 size: {w: 41.4, h: 428.2, d: 626.6}
 attrs:
   model: 'A99-RP3-TR'
-  role: 'route-switch-processor'
+  role: 'route-processor'
   mgmt: '2 x 10/100/1000 RJ-45'
   console: 'EIA/TIA-232 RJ-45'
   timing: '2 x SYNC (BITS/J.211/DTI) RJ-45, IEEE 1588 RJ-45, 2 x inter-chassis sync RJ-45, 10 MHz and 1 PPS SMB'
@@ -157,15 +157,13 @@ elements:
     size: [2.11, 2.11]
     class: led
     description: >-
-      FC FAULT, printed on the faceplate between SSD and GPS. NO ROW FOR IT EXISTS in
-      Table 4 or Table 5 of the Overview and Reference Guide, which between them describe
-      FAIL, CRIT, MAJ, MIN, SYNC, ACO, HDD, CF, SSD, GPS and the three USB lamps. So its
-      colours are unknown and it carries off/on rather than a vocabulary borrowed from the
-      lamp beside it. This is a gap in the documents, not in the model - the name is
-      legible on the artwork at high zoom and the card really does have nine lamps.
+      FC Fault. Table 5, 'RP and RP2/RP3 Discrete LED Display Definitions' - amber: 'A
+      fault has occurred on any or all of the FC cards installed. This LED will be on
+      during the boot phase of the FC.' Off (default after reset): 'FC cards are booted up
+      and ready.' A real vocabulary, from this card's own table.
     states:
+    - {name: amber, color: '#f5a623'}
     - 'off'
-    - 'on'
   gps:
     at: [20.63, 369.06]
     size: [2.11, 2.11]
@@ -233,8 +231,15 @@ elements:
     size: [2.11, 2.11]
     class: led
     description: >-
-      Synchronization (SYNC). Green: system timing is synchronized to an external timing
-      source. Amber: system timing is free running. Off: no system timing is configured.
+      Synchronization (SYNC). Table 5, 'RP and RP2/RP3 Discrete LED Display Definitions' -
+      this card's own table, not the RSP family's Table 4, and the two differ here. Green:
+      'System timing is synchronized to an external timing source INCLUDING IEEE 1588' -
+      Table 4 omits the 1588 clause. Amber: system timing is free running. Off (default
+      after reset): Cisco writes 'LED never turns off', which contradicts listing Off as a
+      colour at all; off is kept as a declared state because the drawing needs an unlit
+      appearance, and Cisco's sentence is recorded here rather than tidied away. Table 4
+      says 'No system timing is configured' for the same row, which is the RSP family's
+      answer and is not this card's.
     states:
     - {name: green, color: '#39b54a'}
     - {name: amber, color: '#f5a623'}

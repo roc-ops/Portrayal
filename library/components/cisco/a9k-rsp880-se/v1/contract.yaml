@@ -207,12 +207,16 @@ elements:
     size: [2.11, 2.11]
     class: led
     description: >-
-      FC FAULT, printed on the faceplate between SSD and GPS. NO ROW FOR IT EXISTS in
-      Table 4 or Table 5 of the Overview and Reference Guide, which between them describe
-      FAIL, CRIT, MAJ, MIN, SYNC, ACO, HDD, CF, SSD, GPS and the three USB lamps. So its
-      colours are unknown and it carries off/on rather than a vocabulary borrowed from the
-      lamp beside it. This is a gap in the documents, not in the model - the name is
-      legible on the artwork at high zoom and the card really does have nine lamps.
+      FC FAULT, printed on the faceplate between SSD and GPS. THIS CARD'S OWN TABLE HAS NO
+      ROW FOR IT. Table 4 of the Overview and Reference Guide - headed 'RSP, RSP-440,
+      RSP-440 Lite, RSP-880, RSP880-LT, RSP4-S, RSP5', which is this card - describes
+      FAIL, CRIT, MAJ, MIN, SYNC, ACO, HDD, CF, SSD, GPS and the three USB lamps, and
+      stops. TABLE 5 DOES HAVE AN FC FAULT ROW, at amber and off with Cisco's own
+      sentence, but Table 5 is headed 'RP and RP2/RP3' and is a different scope - the same
+      book gives the RSP and RP families different vocabularies for SYNC in those two
+      tables, so they cannot be treated as one. The amber is therefore NOT borrowed across
+      and this lamp carries off/on. An earlier version of this sentence said no row
+      existed in either table, which was simply wrong about Table 5.
     states:
     - 'off'
     - 'on'
