@@ -17,11 +17,16 @@ attrs:
   output-v: '54.5'
 provenance:
   size: estimated (CRPS 1U form factor; verify with calipers)
-  face: STILL ESTIMATED - the fan/latch spacing was tuned around a c13-inlet that
-    was 20 percent undersized, so correcting the inlet to 28 x 20 forced a retighten
-    of the right-hand side. psu-face.jpeg now contains a verified 28mm scale
-    reference (the C14 boss), so the face can be re-derived properly from it
-  face: photo (psu-face.jpeg - fan, C14, purple latch, black handle)
+  face: >-
+    STILL ESTIMATED. The features are read from psu-face.jpeg - fan, C14, purple
+    latch, black handle - but their SPACING is not measured: it was tuned around a
+    c13-inlet that was 20 percent undersized, and correcting that inlet to 28 x 20
+    forced a retighten of the right-hand side. psu-face.jpeg now contains a verified
+    28 mm scale reference (the C14 boss), so the face can be re-derived properly
+    from it and should be. NOTE: this key was DUPLICATED - a second, shorter `face:`
+    reading only "photo (psu-face.jpeg ...)" followed it, and YAML keeps the last, so
+    the file silently claimed the face was photo-sourced while this caveat was
+    discarded at parse time. The two are merged here and the caveat is the survivor
   ratings: FRU label photo (100-127V 13A / 200-240V 10A in; +54.5V 18.35A/29.35A;
     1000W/1600W max depending on input)
   body: photo (six faces captured; card-edge blind-mate connector at the rear)
