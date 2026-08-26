@@ -516,6 +516,13 @@
                       "exclusiveMinimum": 0,
                       "description": "standoff: the raised decor STARTS this many mm off the face, so it spans lift..out instead of 0..out. Without it `out` can only build a solid block from the panel outward, which is wrong for anything with a section - a cable-management hook is a thin plate at the FRONT of a horizontal foot, and extruding its outline from the panel gave a cube where the hardware has an L. `relief.features` has carried `lift` all along; decor not having it was an asymmetry in the vocabulary rather than a decision."
                     },
+                    "confidence": {
+                      "$ref": "#/$defs/confidence"
+                    },
+                    "source": {
+                      "type": "string",
+                      "description": "where precisely, in one phrase. Start with '<ns>/<name>@<major>' when the number came from another part, so the claim can be resolved rather than only read."
+                    },
                     "sink": {
                       "type": "number",
                       "exclusiveMinimum": 0,
@@ -1061,6 +1068,19 @@
       },
       "minItems": 2,
       "maxItems": 2
+    },
+    "confidence": {
+      "enum": [
+        "measured",
+        "photo-measured",
+        "drawing",
+        "datasheet",
+        "registry",
+        "borrowed",
+        "estimated",
+        "known-wrong"
+      ],
+      "description": "where a NUMBER came from. THE SAME VOCABULARY THE COMPONENT SCHEMA USES, deliberately - a device's 3D projections were the one place in the library that could never say where they came from, and giving them a second set of words would have been the defect this vocabulary exists to prevent. See spec/schemas/component.schema.json $defs/confidence for what each token means; `borrowed` in particular asserts that the named origin MEASURED the magnitude, and lint L36 checks it."
     }
   }
 }

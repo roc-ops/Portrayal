@@ -102,6 +102,29 @@ def search_blob(d, ddir=None):
     return " ".join(out)
 
 
+def decor_confidence(d):
+    """{token: n} over every decor entry that projects or recesses in 3D.
+
+    Only the entries that carry a Z - `out`, `lift`, `sink`, `vent`. A flat
+    coloured rectangle is artwork and has no magnitude to source, so counting it
+    would bury the ones that do under the ones that cannot.
+
+    A device's 3D was the ONE PLACE in the library that could never say where its
+    numbers came from: components gained `confidence` on every relief feature and
+    a chassis kept extruding decor with nothing attached. `unstated` here is the
+    same signal it is for a component - a projection nobody sourced looks exactly
+    like a measured one.
+    """
+    counts = {}
+    for view in (d.get("views") or {}).values():
+        for e in ((view.get("panel") or {}).get("decor") or []):
+            if not any(e.get(k) for k in ("out", "lift", "sink", "vent")):
+                continue
+            k = e.get("confidence") or "unstated"
+            counts[k] = counts.get(k, 0) + 1
+    return counts
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--library", action="append", required=True)
@@ -131,13 +154,20 @@ def main():
                 "portfolio": d.get("portfolio") or {},
                 # what the type-ahead filter matches on beyond the fields above
                 "search": search_blob(d, man.parent),
+                # where this chassis's own 3D projections came from, counted
+                "decor-confidence": decor_confidence(d),
             })
     devices.sort(key=lambda x: (x["manufacturer"], x["name"]))
 
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
+    totals = {}
+    for e in devices:
+        for k, n in e["decor-confidence"].items():
+            totals[k] = totals.get(k, 0) + n
     (out / "devices.json").write_text(
-        json.dumps({"devices": devices}, indent=1, sort_keys=True))
+        json.dumps({"devices": devices, "decor-confidence": totals},
+                   indent=1, sort_keys=True))
     print(f"compiled {len(devices)} devices -> {out}/devices.json")
 
 
