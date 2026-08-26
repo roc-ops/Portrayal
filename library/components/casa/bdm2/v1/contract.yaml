@@ -32,9 +32,39 @@ provenance:
     measure 196 x 2610 px against that card''s 197 x 2613, so the whole family shares
     one envelope. The guide figures are schematic rather than to scale, so the absolute
     numbers come from Table A-1 arithmetic. Needs a caliper'
-  'leds': 'drawing - three LEDs in one column. Pitch set to 6.6 against a 3.0 diameter
-    so they read as separate indicators; the figure draws them nearly touching,
-    which does not survive being scaled down into a chassis view'
+  'leds': 'drawing-measured - Figure 1-20 of the C40G Hardware Installation Guide (rev
+    07/07/2022), "BDM module, SMM Switch BDM A, B, and LC Switch BDM", which draws
+    the BDM, BDM2 and BDM2m side by side. All three plates measure 113 x 1417 px
+    and give IDENTICAL feature fractions, which is what confirms the three share
+    one faceplate. THE FIGURE IS SCHEMATIC IN OUTLINE - its 12.54 aspect is 10
+    percent off the real 30.47 / 345.5 = 11.34 - SO ONLY PROPORTIONS ARE TAKEN
+    FROM IT, anchored to the 345.5 height this contract already holds. Lamp
+    centres read y 804.5, 822.5 and 837.5 within a plate spanning y 70 to 1486;
+    the figure''s own pitch wobbles between 18.0 and 15.0 px, which is a drawing
+    slip of a pixel and a half, so the pitch is the group''s span divided evenly:
+    16.5 px = 0.011644 of the height = 4.02 mm, putting the centres at 196.16,
+    200.18 and 204.20. THIS REPLACES A 6.6 mm PITCH THAT WAS NEVER MEASURED - it
+    was chosen so the lamps would read as separate indicators, and it pushed the
+    cluster up against the upper stripe group, leaving 1.66 mm of grey above it
+    and 4.44 mm below. The figure puts the cluster in clean grey between the two
+    groups; at 4.02 the margins are 5.42 above and 5.84 below, against the
+    figure''s own 6.10 and 5.60. THE 3.0 DIAMETER IS UNCHANGED AND IS STILL NOT
+    MEASURED: the figure''s lamp is 12 px tall and 14 px wide, and because the
+    plate outline is anisotropic those scale to 2.93 mm off the height and 3.78
+    mm off the width. A lamp is round, so neither is the answer, and 3.0 sits
+    between them, so it is carried forward unchanged and UNMEASURED. This
+    contract cannot open a gap for that - gaps are device-level in the schema -
+    so the uncertainty is stated here, alongside the same admission the size
+    entry makes: a caliper on the hardware closes both at once'
+  'led-column-x': 'NOT ACTED ON, and this is the gap. The same figure puts the
+    lamp column centre at 0.25221 of the plate width and the label text starting
+    at 0.4336, which anchored to 30.47 would be cx 7.68 and text x 13.21 against
+    the 6.30 and 10.64 drawn here. The vertical fix above is trustworthy because
+    it is anchored to the 345.5 height, which is a dimension the contract already
+    holds; there is no equally trusted width, and the figure''s outline aspect is
+    10 percent off, so an x-fraction off this drawing is the softer number of the
+    two. Left alone deliberately rather than moved on a figure that is known to
+    be wrong about the axis it would be scaled by'
   'variants': 'THREE PRODUCTS, ONE FACEPLATE, and they are now three components.
     casa/bdm@1 used to be all of them at once: it carried attrs model BDM2m while
     its own description said "BDM, BDM2 and BDM2m share it and differ only by label",
@@ -58,9 +88,9 @@ provenance:
     the 300 W between them, so a chassis sum must not add the rear module as
     well. Both vendor statements say "approximately"'
 elements:
-  status: {at: [4.80, 190.90], size: [3.0, 3.0], class: led}
-  alarm: {at: [4.80, 197.50], size: [3.0, 3.0], class: led}
-  active: {at: [4.80, 204.10], size: [3.0, 3.0], class: led}
+  status: {at: [4.80, 194.66], size: [3.0, 3.0], class: led}
+  alarm: {at: [4.80, 198.68], size: [3.0, 3.0], class: led}
+  active: {at: [4.80, 202.70], size: [3.0, 3.0], class: led}
 relief:
   wall: '#4a4f55'
 connection-points:
