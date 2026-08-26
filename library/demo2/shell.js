@@ -544,11 +544,44 @@ export function createShell(opts = {}) {
     wrap.setAttribute('data-path', `${bayId}/module`);
     wrap.setAttribute('data-ref', ref);
     wrap.setAttribute('transform', `translate(${bay.at[0]},${bay.at[1]})`);
-    for (const n of [...doc.documentElement.childNodes]) wrap.appendChild(n);
+
+    // A standalone component skin is addressed in its OWN namespace: the file
+    // carries `<g id="bdm" data-path="bdm">` plus siblings `bdm--screw-t` and so
+    // on. render.py rewrites all of that into the bay's namespace when it builds
+    // a device - `front-0--module`, `front-0/module/status` - and dropping the
+    // file's nodes in verbatim skipped that step, so a swapped bay published a
+    // second root called `bdm` into a drawing that already had one at
+    // `front-0/module`. It showed up as a stray line-card row hanging outside
+    // FRONT-SLOTS, and only after a swap, which is what gave it away.
+    const root = doc.getElementById(c.name);
+    if (root) for (const a of [...root.attributes])
+      if (a.name.startsWith('data-') && a.name !== 'data-path' && !wrap.hasAttribute(a.name))
+        wrap.setAttribute(a.name, a.value);
+    for (const n of [...doc.documentElement.childNodes])
+      (n === root ? [...n.childNodes] : [n]).forEach(k => wrap.appendChild(k));
+    rename(wrap, c.name, bayId);
     g.appendChild(wrap);
     refreshTree();
     select(bayId, true);
     emit('change');
+  }
+
+  // Re-address a component's own namespace into the bay's, matching render.py:
+  //   id="bdm--plate"        -> id="front-0--module--plate"
+  //   data-path="bdm/status" -> data-path="front-0/module/status"
+  // The component's own root id/path is the wrapper's already, so it is dropped
+  // rather than renamed - two nodes claiming one path is the bug this fixes.
+  function rename(wrap, name, bayId) {
+    for (const el of wrap.querySelectorAll('[id],[data-path]')) {
+      const id = el.getAttribute('id');
+      if (id === name) el.removeAttribute('id');
+      else if (id && id.startsWith(name + '--'))
+        el.setAttribute('id', `${bayId}--module--${id.slice(name.length + 2)}`);
+      const dp = el.getAttribute('data-path');
+      if (dp === name) el.setAttribute('data-path', `${bayId}/module`);
+      else if (dp && dp.startsWith(name + '/'))
+        el.setAttribute('data-path', `${bayId}/module/${dp.slice(name.length + 1)}`);
+    }
   }
 
   function openModule(ref) { state.module = ref; loadStage(); }
