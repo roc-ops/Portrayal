@@ -86,7 +86,13 @@ def search_blob(d, ddir=None):
     for f in sorted((ddir / "overlays").glob("*.yaml")) if ddir else []:
         o = yaml.safe_load(f.read_text()) or {}
         words.append(str(o.get("nos") or ""))
-    for ref in refs:                      # 'std/qsfp-dd@1' -> 'qsfp-dd'
+    # sorted, because `refs` is a set and set iteration order varies between
+    # processes. Everything else feeding `words` is already ordered; this was the
+    # one leak, and it made devices.json differ between two builds of an
+    # unchanged tree - same tokens, same count, different order. Harmless to the
+    # filter, which matches tokens, but it defeats verifying a build by checksum,
+    # which is how this project checks that a change moved nothing.
+    for ref in sorted(refs):              # 'std/qsfp-dd@1' -> 'qsfp-dd'
         words.append(ref.split("/")[-1].rsplit("@", 1)[0])
     seen, out = set(), []
     for w in " ".join(words).lower().split():
