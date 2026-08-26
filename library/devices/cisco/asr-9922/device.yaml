@@ -1,0 +1,310 @@
+format: 1
+kind: device
+name: asr-9922
+version: 0.1.0
+maturity: modelled
+manufacturer: Cisco
+model: ASR 9922
+description: >-
+  Cisco ASR 9922 Router - 44 RU and the largest of the family. TWENTY vertical line card slots in
+  two cages, one above and one below a central cage of two route processors flanking seven fabric
+  cards, with four fan trays between the cages and four power shelves across the top. The line
+  cards in the LOWER cage, slots 10 to 19, are installed UPSIDE DOWN. Modelled as a bare cage.
+portfolio:
+  line: Service Provider
+  family: Aggregation Services Router
+  series: ASR 9000 Series
+provenance:
+  chassis: >-
+    datasheet - Table 13, b-asr9k-overview-reference-guide.pdf p130. ASR 9922: chassis height 77.00
+    inches (195.58 cm), chassis width 17.60 inches (44.70 cm) with "19.0 inches (48.3 cm) including
+    chassis rack-mount flanges and front door width", chassis depth 26.3 inches (66.82 cm), "30.00
+    inches (76.20 cm) including the cable management system" and "30.62 inches (77.77 cm) with
+    front doors". Modelled as the BODY, 447.0 x 1955.8 x 668.0 mm
+  ru: datasheet - 77.00 in / 1.75 = exactly 44.00 RU, and the stencil's height_in of 7.7006 agrees
+  faces-verified-independently: >-
+    THIS CHASSIS WAS HELD BACK UNTIL ITS FACES WERE SETTLED, because Cisco's ASR 9910 masters are
+    named front and rear the wrong way round and an unverified face is not a face. Three
+    independent checks now agree that asr-9922-front IS the front. FIRST, the guide states it:
+    "Cisco ASR 9922 Router: All RP, FCs, and LCs are front-facing and mounted vertically, with
+    ejector levers and captive screws at the top and bottom of each card" (Chassis Slots, p17).
+    SECOND, this master carries the CABLE MANAGEMENT TRAY with its diagonal cable slots, which is
+    front-face furniture on every chassis in this family. THIRD, its band order reproduces Figure
+    24 exactly - power shelves, line card cage, a fan pair, the RP/FC cage, a second fan pair, the
+    lower line card cage. The concern that first held it back, that the master named `-rear` shows
+    power modules where Figure 24 puts them on the front, is explained by the power system being at
+    the TOP and reachable from both faces
+  calibration: >-
+    measured - gate 1 passed. Calibrating x on 482.6 mm (the 19.0 in rack face) and y on Table 13's
+    1955.8 mm independently gives 0.20134 and 0.20144 mm/px, agreeing to 0.05 percent
+  slots: >-
+    datasheet - Figure 24 "Cisco ASR 9922 Router Slot Numbering", p39 of
+    b-asr9k-overview-reference-guide.pdf, read at 250 dpi. Top to bottom: power shelves PS0 to PS3
+    each M0 to M3; the upper line card cage, Slot 0 to Slot 9 carrying LC0 to LC9; fan trays FT0
+    and FT1; a cage of nine positions named RP0, FC0 to FC6, RP1; fan trays FT2 and FT3; and the
+    lower line card cage, Slot 10 to Slot 19 carrying LC10 to LC19. As on the ASR 9912 the RP and
+    FC positions are named by Cisco rather than numbered, so they are named here too
+  cards-upside-down: >-
+    datasheet - a real fact about this chassis that no drawing shows and nothing in the model can
+    express yet. The guide states: "For the Cisco ASR 9922 Router, line cards must be installed
+    upside down in slots 10 through 19 of the bottom card cage, whereas in slots 0 though 9 of the
+    top card cage, the line cards are installed right side up" (p26). The bays for slots 10 to 19
+    are geometrically identical to 0 to 9 and carry no rotation, because the card is inverted in
+    its own plane rather than rotated in the panel's - see gaps
+  cage-geometry: >-
+    drawing - three cages measured off the front master. Upper line cards y 367.83 to 726.00, lower
+    line cards y 1422.99 to 1781.15, both spanning x 6.36 to 440.24. The RP/FC cage sits between
+    them at y 898.83 to 1254.58, spanning x 8.98 to 438.02 - very slightly narrower, which is why
+    its nine positions are divided on their own span rather than on the line card cages'
+  slot-pitch: >-
+    measured, and NOT taken from the card guide rail on this chassis even though the rail is there.
+    Its ten rail bolts give a pitch of 44.06 with a spread of 0.11 mm, identical to the ASR 9912's
+    and confirming the two are one mechanical build. But those bolts are NOT aligned to slot
+    centres here: taking them as centres puts slot 0 thirteen millimetres inside the cage and slot
+    9 eighteen millimetres past its right edge, which is asymmetric in a way the 9912's are not.
+    So the bays divide the MEASURED CAGE evenly - 433.88 over ten is 43.388 - and the rail is used
+    only as corroboration that this generation's pitch is about 44. That asymmetry is what stopped
+    this chassis being built on the rail, and it is the same check that caught the 9910's swapped
+    faces and my own mislabelling of these bolts as printed slot IDs
+  fan-band-pitch: >-
+    drawing - the upper pair FT0 and FT1 sit at 762.30 and 808.80 mm, a 46.5 mm pitch. The lower
+    pair is placed on the same pitch from the measured start of its band, 1276.90 and 1323.40. An
+    earlier revision put FT3 at 1317.40, taken from a rule in the band scan that turned out to be
+    internal detail rather than the tray's top edge, and the two openings overlapped by a
+    millimetre - they rendered as one solid bar. LINT DID NOT SEE IT because L13 compares BAYS and
+    these are cutouts, so overlapping holes in the metal are not checked. Only the render showed it
+  power-shelves: >-
+    measured, and the component confirms it. The top band measures 0.20 to 193.40 mm - 193.2 mm for
+    four shelves, so 48.3 mm each. cisco/a9k-power-shelf-cover, built independently from the
+    stencil's own 'Power Shelf Cover' master, is 193.7 mm tall with SIXTEEN positions PM0 to PM15
+    on a 48.7 mm row pitch and a 105.05 mm column pitch. 193.2 against 193.7, and sixteen positions
+    against this chassis's four shelves of four. That settles what had been an open question about
+    which chassis that master belongs to: it is this one. Table 15 agrees on the count - "Version 2
+    power system: Up to sixteen AC power modules per system, four per tray"
+  power-module-columns: >-
+    the four columns are placed on the cover's 105.05 mm column pitch, CENTRED in the body. That
+    centring is an assumption: the cover is a rack-face part 475.12 mm wide and this chassis's body
+    is 447.0, so its column origin cannot be read straight across. Four columns at 105.05 span
+    420.2, leaving 13.4 mm each side of a 447 body, which is a plausible margin but is arithmetic
+    rather than measurement
+  card-orientation: >-
+    datasheet - "Cisco ASR 9922 Router: All RP, FCs, and LCs are front-facing and mounted
+    vertically, with ejector levers and captive screws at the top and bottom of each card"
+    (Chassis Slots, p17). So every bay places its component unrotated
+  card-compatibility: >-
+    datasheet - c78-743580's "Chassis compatibility" row names this chassis: "Compatible with the
+    Cisco ASR 9006, ASR 9010, ASR 9904, ASR 9906, ASR 9910, ASR 9912, and ASR 9922 chassis". Those
+    four flex cards go in all twenty line card bays with the blank. The seven fabric bays take
+    cisco/a99-sfc3@1, which Table 23 names as "A99-SFC3 Card (ASR 9922)" - this chassis by name,
+    and the 340 W it carries is this chassis's figure rather than the 9912's lower one
+  airflow: >-
+    datasheet - "Cisco ASR 9922 Router: Front-to-rear cooling path. The inlet is at the front of
+    the middle cage, and the exhaust is at the upper and lower rear",
+    b-asr9k-overview-reference-guide.pdf p3737. Unique in the family for exhausting at BOTH ends
+  air-filter: >-
+    datasheet - Table 17, b-asr9k-hardware-installation-guide.pdf p228: "Three air filters located
+    on the front of the middle card cage". The guide adds that on this chassis and the 9912 "the
+    three air filters (left, center, and right) contain foam media" and can be removed
+    individually. Not modelled - no figure dimensions them
+  grounding: datasheet - "Top rear right side of the chassis",
+    b-asr9k-hardware-installation-guide.pdf p125, illustrated by Figure 136. The same corner as the
+    ASR 9006's, and unlike the 9010, 9910 and 9912 which put theirs at the bottom
+  environmental: datasheet - Table 14, p131. The 9922 is in the narrower short-term group,
+    23 to 122 degF (-5 to 50 degC)
+  electrical: datasheet - Table 15 (AC) and Table 16 (DC), pp132-135, ASR 9922 columns only
+  weight: >-
+    datasheet - Table 13. "Chassis only - 300 pounds (136 kg)" and "Chassis: fully configured using
+    all card slots and four power modules - 1038 pounds (470.28 kg)". Note "four power modules"
+    against sixteen bays; Cisco's phrasing in this column is not consistent across the family
+  no-chassis-power-figure: NOTE - Cisco publishes no chassis-level draw for any ASR 9000; Table 14
+    says only to use the Cisco Power Calculator, so the module total here is a floor
+  lifecycle: datasheet - searched. No end-of-sale or end-of-life notice for this chassis was found
+  compliance: datasheet - data_sheet_c78-501767.pdf series compliance list, transcribed as printed
+attrs:
+  physical:
+    weight-configured-kg: 470.28
+    weight-configured-scope: fully configured using all card slots and four power modules
+    depth-with-cable-management-mm: 762.0
+    depth-with-front-doors-mm: 777.7
+  environmental:
+    operating-temperature: 41 to 104degF (5 to 40degC)
+    operating-temperature-short-term: 23 to 122degF (-5 to 50degC)
+    non-operating-temperature: -40 to 158degF (-40 to 70degC)
+    humidity-operating: 10 to 85 percent noncondensing
+    altitude-operating: 0 to 13,000 ft (0 to 4,000 m)
+    acoustic-noise: 78 dB at 80.6degF (27degC) maximum
+  power:
+    power-modules-v2: Version 2 power system - up to sixteen AC power modules per system, four per tray
+    power-modules-v3: Version 3 power system - up to twelve AC power modules per system, three per tray
+    power-ac-input-per-module-v2: 3290 VA (3000 W output module)
+    power-ac-input-per-module-v3: 6510 VA (6000 W output module)
+    power-ac-input-voltage: 200-240 VAC nominal (range 180 to 264 VAC); 220-240 VAC (UK)
+    power-ac-redundancy: AC power modules operate in N+N redundancy mode
+  thermal:
+    cooling-path: front-to-rear; inlet at the front of the middle cage, exhaust at the upper AND lower rear
+    fan-trays: four - FT0 and FT1 above the RP/FC cage, FT2 and FT3 below it
+    air-filter-location: three filters (left, center, right) on the front of the middle card cage
+  platform:
+    operating-system: Cisco IOS XR
+    interface-path-id: rack/slot/module/port
+  compliance:
+    nebs: 'SR-3580: NEBS Criteria Levels (Level 3)'
+    nebs-emc-safety: 'GR-1089-CORE: NEBS EMC and Safety'
+    nebs-physical: 'GR-63-CORE: NEBS Physical Protection'
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 447.0
+  height: 1955.8
+  depth: 668.0
+  ru: 44
+  weight-kg: 136.0
+  airflow: front-to-back
+  color: '#c8cacc'
+  silk: '#231f20'
+groups:
+  slots:
+    term: Slot
+    index-origin: 0
+    physical-context: NetworkingDevice
+  fabric:
+    term: FC
+    index-origin: 0
+    physical-context: NetworkingDevice
+  power-modules:
+    term: Power Module
+    index-origin: 0
+    physical-context: PowerSupply
+views:
+  front:
+    size: {w: 447.0, h: 1955.8}
+    panel:
+      decor:
+        - {at: [0, 193.4], size: [447.0, 148.6], fill: '#d5d7d9'}
+      cutouts:
+        - {id: rp-0, at: [11.61, 898.83], size: [44.07, 355.75], shape: rect}
+        - {id: rp-1, at: [392.34, 898.83], size: [44.07, 355.75], shape: rect}
+        - {id: ft-0, at: [4.0, 762.3], size: [439.0, 41.5], shape: rect}
+        - {id: ft-1, at: [4.0, 808.8], size: [439.0, 41.5], shape: rect}
+        - {id: ft-2, at: [4.0, 1276.9], size: [439.0, 41.5], shape: rect}
+        - {id: ft-3, at: [4.0, 1323.4], size: [439.0, 41.5], shape: rect}
+    components:
+      bays:
+        - {id: slot-0, at: [7.35, 349.06], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0}
+        - {id: slot-1, at: [50.74, 349.06], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1}
+        - {id: slot-2, at: [94.13, 349.06], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2}
+        - {id: slot-3, at: [137.52, 349.06], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 3}
+        - {id: slot-4, at: [180.91, 349.06], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 4}
+        - {id: slot-5, at: [224.29, 349.06], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 5}
+        - {id: slot-6, at: [267.68, 349.06], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 6}
+        - {id: slot-7, at: [311.07, 349.06], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 7}
+        - {id: slot-8, at: [354.46, 349.06], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 8}
+        - {id: slot-9, at: [397.85, 349.06], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 9}
+        - {id: slot-10, at: [7.35, 1404.22], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 10}
+        - {id: slot-11, at: [50.74, 1404.22], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 11}
+        - {id: slot-12, at: [94.13, 1404.22], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 12}
+        - {id: slot-13, at: [137.52, 1404.22], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 13}
+        - {id: slot-14, at: [180.91, 1404.22], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 14}
+        - {id: slot-15, at: [224.29, 1404.22], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 15}
+        - {id: slot-16, at: [267.68, 1404.22], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 16}
+        - {id: slot-17, at: [311.07, 1404.22], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 17}
+        - {id: slot-18, at: [354.46, 1404.22], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 18}
+        - {id: slot-19, at: [397.85, 1404.22], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 19}
+        - {id: fc-0, at: [59.79, 878.85], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a99-sfc3@1'], group: fabric, rel-pos: 0}
+        - {id: fc-1, at: [107.46, 878.85], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a99-sfc3@1'], group: fabric, rel-pos: 1}
+        - {id: fc-2, at: [155.13, 878.85], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a99-sfc3@1'], group: fabric, rel-pos: 2}
+        - {id: fc-3, at: [202.80, 878.85], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a99-sfc3@1'], group: fabric, rel-pos: 3}
+        - {id: fc-4, at: [250.47, 878.85], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a99-sfc3@1'], group: fabric, rel-pos: 4}
+        - {id: fc-5, at: [298.14, 878.85], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a99-sfc3@1'], group: fabric, rel-pos: 5}
+        - {id: fc-6, at: [345.81, 878.85], size: {w: 41.40, h: 395.70}, accepts: ['cisco/a99-sfc3@1'], group: fabric, rel-pos: 6}
+        - {id: ps0-pm-0, at: [18.00, 2.95], size: {w: 95.85, h: 42.80}, accepts: ['cisco/a9k-power-module-v2@1'], group: power-modules, rel-pos: 0}
+        - {id: ps0-pm-1, at: [123.05, 2.95], size: {w: 95.85, h: 42.80}, accepts: ['cisco/a9k-power-module-v2@1'], group: power-modules, rel-pos: 1}
+        - {id: ps0-pm-2, at: [228.10, 2.95], size: {w: 95.85, h: 42.80}, accepts: ['cisco/a9k-power-module-v2@1'], group: power-modules, rel-pos: 2}
+        - {id: ps0-pm-3, at: [333.15, 2.95], size: {w: 95.85, h: 42.80}, accepts: ['cisco/a9k-power-module-v2@1'], group: power-modules, rel-pos: 3}
+        - {id: ps1-pm-0, at: [18.00, 51.25], size: {w: 95.85, h: 42.80}, accepts: ['cisco/a9k-power-module-v2@1'], group: power-modules, rel-pos: 4}
+        - {id: ps1-pm-1, at: [123.05, 51.25], size: {w: 95.85, h: 42.80}, accepts: ['cisco/a9k-power-module-v2@1'], group: power-modules, rel-pos: 5}
+        - {id: ps1-pm-2, at: [228.10, 51.25], size: {w: 95.85, h: 42.80}, accepts: ['cisco/a9k-power-module-v2@1'], group: power-modules, rel-pos: 6}
+        - {id: ps1-pm-3, at: [333.15, 51.25], size: {w: 95.85, h: 42.80}, accepts: ['cisco/a9k-power-module-v2@1'], group: power-modules, rel-pos: 7}
+        - {id: ps2-pm-0, at: [18.00, 99.55], size: {w: 95.85, h: 42.80}, accepts: ['cisco/a9k-power-module-v2@1'], group: power-modules, rel-pos: 8}
+        - {id: ps2-pm-1, at: [123.05, 99.55], size: {w: 95.85, h: 42.80}, accepts: ['cisco/a9k-power-module-v2@1'], group: power-modules, rel-pos: 9}
+        - {id: ps2-pm-2, at: [228.10, 99.55], size: {w: 95.85, h: 42.80}, accepts: ['cisco/a9k-power-module-v2@1'], group: power-modules, rel-pos: 10}
+        - {id: ps2-pm-3, at: [333.15, 99.55], size: {w: 95.85, h: 42.80}, accepts: ['cisco/a9k-power-module-v2@1'], group: power-modules, rel-pos: 11}
+        - {id: ps3-pm-0, at: [18.00, 147.85], size: {w: 95.85, h: 42.80}, accepts: ['cisco/a9k-power-module-v2@1'], group: power-modules, rel-pos: 12}
+        - {id: ps3-pm-1, at: [123.05, 147.85], size: {w: 95.85, h: 42.80}, accepts: ['cisco/a9k-power-module-v2@1'], group: power-modules, rel-pos: 13}
+        - {id: ps3-pm-2, at: [228.10, 147.85], size: {w: 95.85, h: 42.80}, accepts: ['cisco/a9k-power-module-v2@1'], group: power-modules, rel-pos: 14}
+        - {id: ps3-pm-3, at: [333.15, 147.85], size: {w: 95.85, h: 42.80}, accepts: ['cisco/a9k-power-module-v2@1'], group: power-modules, rel-pos: 15}
+    regions:
+      - {id: line-cards-upper, label: 'Line cards LC0 to LC9 - slots 0 to 9, right side up'}
+      - {id: line-cards-lower, label: 'Line cards LC10 to LC19 - slots 10 to 19, installed UPSIDE DOWN'}
+      - {id: rp-positions, label: 'Route processors RP0 and RP1 - the outer pair of the middle cage'}
+      - {id: fan-trays, label: 'Fan trays FT0 to FT3 - two above and two below the middle cage'}
+      - {id: power-shelves, label: 'Power shelves PS0 to PS3 - four modules each, M0 to M3'}
+      - {id: air-filters, label: 'Three air filters (left, center, right) on the front of the middle cage'}
+  rear:
+    size: {w: 447.0, h: 1955.8}
+    panel:
+      cutouts:
+        - {id: ground-pad, at: [26.0, 20.0], size: [46.0, 20.0], shape: rect}
+    regions:
+      - {id: rear-air-exhaust, label: 'Rear air exhaust - upper AND lower rear'}
+      - {id: nebs-ground, label: 'NEBS bonding and grounding - top rear right side'}
+  top:
+    size: {w: 447.0, h: 668.0}
+  bottom:
+    size: {w: 447.0, h: 668.0}
+  left:
+    size: {w: 668.0, h: 1955.8}
+  right:
+    size: {w: 668.0, h: 1955.8}
+gaps:
+- what: lower-cage-cards-are-inverted
+  scope: [slots]
+  reason: needs-hardware
+  note: >-
+    The guide states that "line cards must be installed upside down in slots 10 through 19 of the
+    bottom card cage, whereas in slots 0 though 9 of the top card cage, the line cards are
+    installed right side up". This is a real property of the chassis and the model cannot currently
+    express it. The bays for 10 to 19 are geometrically identical to 0 to 9 and carry no rotation,
+    because the card is inverted about its own long axis rather than rotated in the plane of the
+    panel - a `rotate: 180` would spin the faceplate end for end, which is a different thing and
+    would put the ejectors at the wrong ends. So a card rendered in slot 15 will show its ports and
+    its part number the same way up as one in slot 5, and on real hardware it would not. Anyone
+    reading port positions off the lower cage should know that.
+  wanted: a mirror or flip transform on a bay, distinct from rotation, or a photograph settling
+    exactly which way an inverted card reads
+- what: rp-positions-have-no-occupant-that-fits
+  scope: [front]
+  reason: sources-disagree
+  note: >-
+    RP0 and RP1 are CUTOUTS rather than bays. The candidate component is
+    cisco/asr-9922-rp-se/-tr, named for this chassis and carrying Table 23's "RP Card" figure of
+    259 W, but it declares a slot envelope of 46.0 mm and this cage's nine positions divide its
+    measured 429.04 mm span into 47.67 mm each - which the RP would fit - while the LINE CARD cages
+    divide into 43.388 and the rail pitch is 44.06. A 46.0 mm supervisor does not fit a 44 mm slot,
+    and the same 46.0 x 428.5 x 628.9 appears on a9k-rsp880-se/-tr, byte for byte, which suggests
+    one derivation reused rather than two measurements. Until that width is re-derived from the
+    shapesheet these two positions stay openings. The seven fabric positions beside them ARE bays,
+    because a99-sfc3's 41.4 fits comfortably.
+  wanted: a re-derivation of asr-9922-rp's width from the stencil shapesheet, both axes from one source
+- what: fan-tray-openings
+  scope: [front]
+  reason: sources-disagree
+  note: >-
+    The four fan trays are cutouts. cisco/asr-9922-fan-v3 declares 475.96 mm wide and this
+    chassis's BODY is 447.0, so the component is 29 mm wider than the box it goes in. Compare
+    cisco/asr-9910-fan at 445.2, which sits inside its own 447 mm body correctly. Both are class
+    cooling and one of them is measured against the rack face rather than the body - the stencil
+    records rack-face widths for trays and covers, and 475.96 is within a few millimetres of the
+    482.6 mm rack face. The openings here are the measured bands and the component is not placed.
+  wanted: asr-9922-fan-v3's width re-derived against the body, or confirmation that the fan tray
+    really does span the rack face and needs a negative offset like a mounting ear
+- what: blank-faces
+  scope: [top, bottom, left, right]
+  reason: vendor-silent
+  note: >-
+    All four side faces are sized from Table 13 and Figure 13 (the 9922's top-down footprint) and
+    are deliberately EMPTY. This chassis draws air in at the front of its middle cage and exhausts
+    at both ends of the rear, so no side carries a feature the guide names, and its three air
+    filters are on the front. The sizes are right, which is what these views carry for a rack
+    elevation and the 3D box.
+  wanted: a six-face photograph set, or the mechanical drawings behind Figure 13
