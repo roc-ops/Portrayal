@@ -41,3 +41,9 @@ __pycache__/
 *.pyc
 .DS_Store
 .playwright-mcp/
+
+# Agent worktrees. `git worktree add` under .claude/ puts a whole checkout inside
+# the repo, and a broad `git add` swallows it as an embedded git repository -
+# which happened once and had to be amended out. Nothing in here belongs to this
+# tree; it belongs to whoever created the worktree.
+.claude/worktrees/
