@@ -128,6 +128,33 @@ provenance:
     overlap legitimate, because L13 builds its owned-set from placements only. `optional:`
     would hide it everywhere, since build.sh emits no --with variants. So the AC
     rear renders as an empty band today and the part is measured and waiting.'
+  non-redundant-variant: 'drawing plus prose - ADDED, because the guide draws four
+    rear views and the model only had three configurations for them. Figures 1-2
+    and 1-4 are the AC and DC NON-REDUNDANT rears and 1-3 and 1-5 the redundant
+    pair, so the four figures are two axes crossed - AC/DC and redundant/not -
+    not four layouts. The AC/DC axis was already modelled as ac-power; this entry
+    adds the other value of the second axis. The layout is stated in words as
+    well as drawn: "Rear slots (non-redundant system) - Upstream and downstream
+    line card I/O slots: 0, 1, 4 5; Blank filler plates: 2, 3", against the
+    redundant list right below it which reads "I/O slots: 0, 5; LC Switch slots:
+    1, 4; SMM Switch slots: 2, 3". Figure 1-4 is legible at 4x and agrees: slots
+    5 and 4 read QAM IO, 3 and 2 are plain plates with one screw at each end, and
+    1 and 0 read US IO. The chassis overview also says outright that "The Casa
+    C40G chassis is available in both redundant and non-redundant versions".
+    THE FRONT IS NOT MODELLED FROM A NON-REDUNDANT FIGURE - there is no separate
+    front view for it - so front 0/1/4/5 take the DS and US cards Figure 1-1
+    draws (DS 8X96 above, US 16X8 below) on the pairing the rear figure shows,
+    QAM IO behind a DS card and US IO behind a US one, and front 2/3 keep the SMM
+    pair, which the front-slot bullet lists without qualifying it by redundancy.
+    That pairing is an inference from two figures and is the softest part of this
+    entry'
+  switch-slot-print: 'drawing - a free check that PASSES. Figure 1-20 of this
+    guide, "BDM module, SMM Switch BDM A, B, and LC Switch BDM", prints each SMM
+    Switch card''s slot assignment on its own faceplate, for BOTH chassis: A
+    reads "C100G Slot 6 / C40G Slot 2" and B reads "C100G Slot 7 / C40G Slot 3".
+    rear-2 accepts casa/smm-sw-bdm-a@1 and rear-3 accepts casa/smm-sw-bdm-b@1,
+    which is what the card says. The same figure is Figure 1-14 of the C100G
+    guide and that device''s switch-slot-print entry records the other half'
   protecting-slots: 'SETTLED, and the same half-fault as the C100G. The guide
     numbers this one twice over. For the classic scheme the chassis overview reads
     "Rear slots (fully redundant system) - Upstream and downstream line card I/O
@@ -326,6 +353,28 @@ configurations:
       rear-3: casa/smm-sw-bdm-b@1
       rear-4: casa/lc-sw-bdm@1
       rear-5: casa/io-6p12@2
+  docsis-non-redundant:
+    description: 'Non-redundant chassis. The guide: "The Casa C40G chassis is available in both
+      redundant and non-redundant versions." There are no switch modules at all - rear 2 and 3
+      carry blank filler plates where the redundant schemes carry the SMM Switch pair, and rear
+      1 and 4 carry I/O rather than an LC Switch. Front DS cards pair with QAM IO behind them
+      and front US cards with US IO, which is the classic split architecture rather than the
+      BDM one.'
+    bays:
+      front-0: casa/us-16x8@1
+      front-1: casa/us-16x8@1
+      front-2: casa/smm-8x10g@1
+      front-3: casa/smm-8x10g@1
+      front-4: casa/ds-8x96@1
+      front-5: casa/ds-8x96@1
+      pem-1: casa/c40g-pem@1
+      pem-2: casa/c40g-pem@1
+      rear-0: casa/rfu-16x8@1
+      rear-1: casa/rfu-16x8@1
+      rear-2: casa/blank-faceplate@1
+      rear-3: casa/blank-faceplate@1
+      rear-4: casa/rfd@1
+      rear-5: casa/rfd@1
 # What no rule can find, because the manifest looks complete. Both bays are
 # populated, both components render, and nothing in the model can see that the
 # only power figure the vendor publishes for them is a single number covering
