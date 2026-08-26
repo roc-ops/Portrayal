@@ -166,11 +166,13 @@ gaps:
     C100G's stated 3.6 kW whether the 300 W is the pair or the front half with
     small rear cards.
   wanted: >-
-    a mechanism for pairing-scoped figures, which is now the real ask. Asking
-    for "a per-module figure" was close to the wrong question: the C100G HIG
-    heads its DQM row "Maximum consumption WITH I/O module" and gives the SAME
-    upstream card two figures depending on which rear module it is paired with -
-    US16x8 is 200 W with the RFU I/O and 220 W with the RFU UPS 32x4 - so a
-    per-module figure may not exist to be divided out. `pairs-with` already
-    names the partner; what is missing is a pairable unit that can carry
-    properties, and enough vendors doing this to design one from
+    a pairable unit that can carry properties, so that a figure measured on a
+    pair can be attached to the pair. The scope is now DATA - every card here
+    declares `power-draw-scope: module-with-paired-io`, so a chassis sum knows
+    not to add the rear partner and L30 catches it if one gains its own figure -
+    but the scope says only THAT the figure covers a pair, not WHICH pair. The
+    C100G HIG gives the same US16x8 200 W with the RFU I/O and 220 W with the
+    RFU UPS 32x4, and the manifest can carry only one of them. Asking for "a
+    per-module figure" was the wrong question: Casa states none, and one may not
+    exist to be divided out. What is missing is the mechanism, and enough
+    vendors doing this to design one from - Casa is the only one in the corpus.
