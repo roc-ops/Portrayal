@@ -162,6 +162,12 @@ provenance:
     9910, ASR 9906 and ASR 9904" - so the two are not interchangeable even though they share an
     envelope. A component that declares what it fits is a better source than a chassis deciding
     what it will take
+  four-port-100ge: >-
+    datasheet - c78-740092's "Chassis compatibility" row: "Compatible with the Cisco ASR 9006, ASR
+    9010, ASR 9904, ASR 9906, ASR 9910, ASR 9912, and ASR 9922 chassis". All seven, stated outright,
+    and the component's own attrs.chassis carries the same list. At 41.4 mm it fits every line card
+    bay in the family. Added to the line card slots only - a compatibility row names a chassis, not
+    a slot, and this chassis's RSP and RP positions take supervisors
   card-orientation: >-
     datasheet - stated directly, and it had been an inference until now. The Overview and
     Reference Guide's "Chassis Slots" section (b-asr9k-overview-reference-guide.pdf p17) names
@@ -327,10 +333,10 @@ views:
     components:
       bays:
         - {id: slot-0, at: [71.97, 78.40], size: {w: 42.67, h: 395.70}, accepts: ['cisco/a9k-rsp880-lt-se@1', 'cisco/a9k-rsp880-lt-tr@1', 'cisco/a99-rsp-se@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0}
-        - {id: slot-1, at: [115.39, 78.40], size: {w: 42.67, h: 395.70}, accepts: ['cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1}
-        - {id: slot-2, at: [158.81, 78.40], size: {w: 42.67, h: 395.70}, accepts: ['cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2}
-        - {id: slot-3, at: [202.24, 78.40], size: {w: 42.67, h: 395.70}, accepts: ['cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 3}
-        - {id: slot-4, at: [245.66, 78.40], size: {w: 42.67, h: 395.70}, accepts: ['cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 4}
+        - {id: slot-1, at: [115.39, 78.40], size: {w: 42.67, h: 395.70}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1}
+        - {id: slot-2, at: [158.81, 78.40], size: {w: 42.67, h: 395.70}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2}
+        - {id: slot-3, at: [202.24, 78.40], size: {w: 42.67, h: 395.70}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 3}
+        - {id: slot-4, at: [245.66, 78.40], size: {w: 42.67, h: 395.70}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 4}
         - {id: slot-5, at: [289.07, 78.40], size: {w: 42.67, h: 395.70}, accepts: ['cisco/a9k-rsp880-lt-se@1', 'cisco/a9k-rsp880-lt-tr@1', 'cisco/a99-rsp-se@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 5}
     regions:
       - {id: rsp-slots, label: 'RSP cards - the outer pair, slots 0 and 5'}
