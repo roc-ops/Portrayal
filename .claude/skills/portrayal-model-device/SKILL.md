@@ -541,6 +541,27 @@ configurations: {...}
   - **Re-read what you rewrote.** A later pass over the same block quietly
     dropped the system LEDs' state semantics. Diff the rendered output, not just
     the source.
+- **A test that asserts something is MISSING from a live manifest is pinned to
+  that model's incompleteness.** Three tests broke in one session because a
+  device got BETTER: two capability tests used the C100G as their "stuck at
+  level 2" fixture and failed the day it grew its four side faces, and an attrs
+  test used the C40G's one `attrs.other` key and failed the day that key was
+  correctly removed. A test failing because the thing it tests improved is the
+  wrong way round. Build the fixture instead of borrowing it: load a real device
+  and REMOVE exactly what the assertion is about, so the test keeps its strength
+  and stops tracking one model's to-do list. **And check how the code under test
+  reads the manifest before choosing where to build it** - the capability tests
+  take a dict and can be mutated in memory, but `capability._rule_warnings` calls
+  `lint.lint_device(path, ...)` and ignores the dict you hand it, so that fixture
+  has to be written to `tmp_path` as a real file. Getting that wrong looks like
+  the rule not firing.
+- **A commit is atomic; the working tree is not.** Fixing the SMM's lamp order
+  meant editing a contract and a skin, done in two writes. Between them the tree
+  was genuinely inconsistent - the contract said one thing and the skin still
+  said the other - and a reviewer reading at that instant reported a defect that
+  the commit did not contain. In a tree with other agents in it, paired edits
+  belong in ONE write, or behind a check that both landed. The commit being
+  correct is not the same as the tree never having been wrong.
 - **A loop that writes a file and later reads that same file has already
   corrupted it.** Splitting one component into three, the loop copied
   `bdm/v1/skins/bdm.svg` onto `bdm/v1/skins/default.svg` for the first variant -
