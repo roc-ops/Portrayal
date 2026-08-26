@@ -1,0 +1,121 @@
+format: 1
+kind: module
+name: smm-300g
+version: 1.0.0
+class: supervisor
+profile: networking
+description: >-
+  Casa/CommScope SMM300G Switch and Management Module - the 300G supervisor for
+  the C100G and C40G CCAP chassis. Ten 10GigE SFP+ (XG0-XG9) in ganged blocks of
+  six and four, two 100GigE QSFP28 (CG0, CG1), a 10/100BASE-T management RJ45 and
+  an RS-232 console RJ45, plus STATUS, ACTIVE and ALARM lamps. Up to two per
+  chassis in the dedicated active and standby slots, for 600G aggregate.
+size: {w: 30.47, h: 345.5, d: 380.0}
+attrs:
+  model: 'SMM 300G'
+  role: supervisor
+  qsfp28: '2'
+  sfp-plus: '10'
+  mgmt: 10/100BASE-T
+  console: RS-232
+  switching-throughput: 300G bidirectional per module
+  timing: IEEE 1588v2
+  nebs: 'Designed to NEBS level 3 requirements'
+  power-draw-max-w: 160
+provenance:
+  layout: 'drawing - Figure 1-9 of the Casa C100G Hardware Installation Guide (rev
+    07/08/2022) gives the faceplate order top to bottom: SMM 300G, XG0 through XG9,
+    CG0, CG1, 10/100MI, IOIOI, then STATUS, ACTIVE, ALARM. Unlike the SMM 8x10G
+    the management jack is at the BOTTOM, after the ports, not at the top'
+  size: shared with the rest of the C100G front-card family, taken from the chassis
+    slot envelope (30.47 x 345.5, C100G device manifest); the depth is the family
+    estimate carried by casa/smm-8x10g
+  legend: photo-measured - the model legend sits between TWO orange bands, not below
+    one. The DS8x96, CSC8x10G and SMM300G product photographs independently put
+    the upper band at 21.1-22.5 and the lower at 34.1-35.4 as fractions of the 345.5
+    card height, agreeing with each other to within 0.7mm, so 22.0 and 34.8 are
+    carried for the whole family
+  ports: composed from std/ aperture components rather than drawn as rectangles.
+    The ganged blocks use std/sfp-ganged (SFF-8433, the port's share of a continuous
+    1xN slot, so adjacent instances abut with no gap) and std/qsfp-ganged; the two
+    jacks reuse common/rj45-shielded@2 exactly as casa/smm-8x10g does
+  rotation: every cage is ROTATED 90. A ganged SFP opening is 14.25 x 10.4 and the
+    faceplate is only 30.47 wide, so the long axis has to run down the card. The
+    SMM300G photograph measures the openings at 10.1mm across (7.5 to 17.6mm from
+    the plate edge on the CSC, independently), which is the rotated width, and the
+    vertical pitch measures 14.0-14.2 against the 14.25 the standard specifies
+  positions: photo-measured - the SMM300G data sheet product photograph, read as
+    fractions of the known 345.5 card height (the plate renders 3438px for 345.5mm).
+    The ten SFP+ fall into two ganged bezels of six and four, block A from 76.0
+    and block B from 164.4, both on the standard 14.25 pitch; the two QSFP28 measure
+    an 18.8 pitch against the 19.0 std/qsfp-ganged carries from a measured TE part,
+    and the standard figure is used
+  port-lamps: photo-inferred - each optical port carries one lamp ABOVE and one
+    BELOW its legend, in a column to the right of the cages, which is why the cages
+    sit left of the plate centre at 12.6 rather than centred. No document held here
+    gives their colour vocabulary, so no states are declared
+  power-draw-max-w: 'datasheet - both SMM300G data sheets agree on ''Power Consumption:
+    160W'', and Table A-7 of the C100G install guide agrees a third time with ''SMM
+    power consumption 160W''. Three sources, one figure. The transceivers are extra
+    and the guide prices them separately: 1W per SFP-PLUS-SR/LR, 1.5W per SFP-PLUS-ER,
+    2.5-5.0W per QSFP28 depending on reach'
+  two-datasheets: 'THE TWO SMM300G DATA SHEETS ARE DIFFERENT DOCUMENTS AND THEY
+    DISAGREE. Data-Sheet-SMM300G (SMM300G-DS_RevA, 12-2024) is CommScope-branded
+    and covers the SMM300G and the newer SMM300Gm; Casa-Datasheet-SMM300G (SMM300G
+    R2, May 2018) is Casa-branded and covers the SMM300G alone. The dated 2024 sheet
+    is preferred. Where they differ: (1) the 2018 sheet claims ''IEEE 1588v2 Precision
+    Timing AND SyncE'' / ''Synchronous Ethernet support'', the 2024 sheet drops
+    SyncE from the wording entirely, so only 1588v2 is recorded here; (2) the 2018
+    sheet advertises 10G EPON OLT / DPoEv2 service with 16x10G PON cards, which
+    the 2024 sheet does not mention; (3) the 2018 sheet scopes the two-module limit
+    to the C100G, the 2024 sheet to ''a chassis''; (4) the 2024 sheet contradicts
+    ITSELF - its spec table says ten 10GE interfaces while its ordering table describes
+    C100G-SMM-300-GM as ''2X100GbE SFP + 8X10GbE SFP''. The install guide, the figure
+    and the photograph all show ten, so ten is modelled and the ordering line is
+    recorded as the vendor''s error'
+elements:
+  status: {at: [4.8, 298.7], size: [3.0, 3.0], class: led}
+  active: {at: [4.8, 307.2], size: [3.0, 3.0], class: led}
+  alarm: {at: [4.8, 315.7], size: [3.0, 3.0], class: led}
+  p0-led-a: {at: [20.8, 71.8], size: [1.4, 1.4], class: led}
+  p0-led-b: {at: [20.8, 78.8], size: [1.4, 1.4], class: led}
+  p1-led-a: {at: [20.8, 86.05], size: [1.4, 1.4], class: led}
+  p1-led-b: {at: [20.8, 93.05], size: [1.4, 1.4], class: led}
+  p2-led-a: {at: [20.8, 100.3], size: [1.4, 1.4], class: led}
+  p2-led-b: {at: [20.8, 107.3], size: [1.4, 1.4], class: led}
+  p3-led-a: {at: [20.8, 114.55], size: [1.4, 1.4], class: led}
+  p3-led-b: {at: [20.8, 121.55], size: [1.4, 1.4], class: led}
+  p4-led-a: {at: [20.8, 128.8], size: [1.4, 1.4], class: led}
+  p4-led-b: {at: [20.8, 135.8], size: [1.4, 1.4], class: led}
+  p5-led-a: {at: [20.8, 143.05], size: [1.4, 1.4], class: led}
+  p5-led-b: {at: [20.8, 150.05], size: [1.4, 1.4], class: led}
+  p6-led-a: {at: [20.8, 160.2], size: [1.4, 1.4], class: led}
+  p6-led-b: {at: [20.8, 167.2], size: [1.4, 1.4], class: led}
+  p7-led-a: {at: [20.8, 174.45], size: [1.4, 1.4], class: led}
+  p7-led-b: {at: [20.8, 181.45], size: [1.4, 1.4], class: led}
+  p8-led-a: {at: [20.8, 188.7], size: [1.4, 1.4], class: led}
+  p8-led-b: {at: [20.8, 195.7], size: [1.4, 1.4], class: led}
+  p9-led-a: {at: [20.8, 202.95], size: [1.4, 1.4], class: led}
+  p9-led-b: {at: [20.8, 209.95], size: [1.4, 1.4], class: led}
+  p10-led-a: {at: [20.8, 223.6], size: [1.4, 1.4], class: led}
+  p10-led-b: {at: [20.8, 230.6], size: [1.4, 1.4], class: led}
+  p11-led-a: {at: [20.8, 242.6], size: [1.4, 1.4], class: led}
+  p11-led-b: {at: [20.8, 249.6], size: [1.4, 1.4], class: led}
+relief:
+  wall: '#4a4f55'
+parts:
+  - {ref: std/sfp-ganged@1, id: xg0, at: [5.475, 70.8], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg1, at: [5.475, 85.05], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg2, at: [5.475, 99.3], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg3, at: [5.475, 113.55], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg4, at: [5.475, 127.8], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg5, at: [5.475, 142.05], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg6, at: [5.475, 159.2], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg7, at: [5.475, 173.45], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg8, at: [5.475, 187.7], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg9, at: [5.475, 201.95], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/qsfp-ganged@1, id: cg0, at: [3.35, 223.01], rotate: 90, attrs: {media: qsfp28, speed: 100g}}
+  - {ref: std/qsfp-ganged@1, id: cg1, at: [3.35, 242.01], rotate: 90, attrs: {media: qsfp28, speed: 100g}}
+  - {ref: common/rj45-shielded@2, id: mgmt, at: [7.335, 261.05], rotate: 90}
+  - {ref: common/rj45-shielded@2, id: console, at: [7.335, 279.95], rotate: 90}
+skins: [default]
