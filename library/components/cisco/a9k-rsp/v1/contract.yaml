@@ -1,0 +1,227 @@
+format: 1
+kind: module
+name: a9k-rsp
+version: 1.0.0
+class: supervisor
+profile: networking
+description: >-
+  Cisco ASR 9000 Series Route Switch Processor, the ORIGINAL generation - the card the
+  ASR 9006 and ASR 9010 shipped with before the RSP-440. Two SYNC timing ports, two
+  management LAN ports, a console and an auxiliary port, a nine-pin alarm output, ACO
+  and LAMPTEST push buttons and an eight-lamp cluster. No GPS bracket, no virtualization
+  cluster ports and no USB: those arrive with the RSP-440. The faceplate prints
+  A9K-RSP-4G; the A9K-RSP-8G is the same card with more memory and shares this drawing
+  and this Table 23 row.
+size: {w: 42.0, h: 406.0}
+attrs:
+  model: 'A9K-RSP-4G'
+  role: 'route-switch-processor'
+  mgmt: '2 x 100/1000 RJ-45'
+  console: 'EIA/TIA-232 RJ-45'
+  aux: 'EIA/TIA-232 RJ-45'
+  timing: '2 x SYNC (BITS or J.211/UTI) RJ-45'
+  alarm: 'nine-pin, dry-contact outputs'
+  chassis: 'ASR 9006, ASR 9010'
+  power-draw-max-w: 235
+  eol: 'none-announced'
+provenance:
+  size: >-
+    NOT STATED ANYWHERE IN THE INTAKE, and this figure is a SIBLING'S. Say that first
+    because everything else here is measured and this is not. No document gives
+    A9K-RSP-4G's dimensions: Table A-10 of the OL-17500-09 line card guide, which is the
+    only per-part dimensions table in the intake, covers Ethernet line cards and stops
+    before the control cards; Table 22 of the Overview and Reference Guide is headed
+    'RSP/RP Port Specifications' and gives interfaces, not sizes; and there is no
+    A9K-RSP-4G data sheet. The number carried is the A9K-RSP440's stated 42.0 x 406.0
+    mm, on the grounds that both masters are drawn from the same control-card template -
+    raw art box 46.62 x 413.95, which no other master in this stencil uses - and the
+    RSP-440 is the only occupant of that template whose dimensions Cisco states. THAT IS
+    AN INFERENCE FROM A DRAWING TEMPLATE and the A9K-MOD200 is the standing proof that
+    such inferences can be wrong: it sits on the 4th generation's template and is an
+    original-generation 43.7 mm card.
+  ruler-was-tried: >-
+    THE STANDARD-PART RULER WAS TRIED HERE AND IT IS TOO BLUNT, which is worth writing
+    down because the method works elsewhere and its limit is not obvious. This faceplate
+    is full of RJ-45 jacks, and std/rj45's opening is 16.0 x 14.0 mm from IEC 60603-7.
+    Scale this master to 42.0 x 406.0 and its six jacks measure 12.8 x 16.67; scale it
+    to 43.7 x 406.0 and they measure 13.32 x 16.67. Against a rotated 14.0 x 16.0 that
+    is 8.6 percent under and 4.9 percent under - so 43.7 fits BETTER, and 43.7 is the
+    wrong answer, because the same measurement run on the A9K-RSP440 master at its own
+    stated 42.0 x 406.0 gives exactly the same 12.8 x 16.67. What that tells you is that
+    the stencil draws these jacks about eight percent narrow, not that the card is wide.
+    A ruler only discriminates when the drawing is more accurate than the difference you
+    are trying to resolve, and here the difference between the candidates is 4 percent
+    and the drawing's error is 8. Contrast the A9K-MOD200, where the MPA gave 1.2
+    percent against 6.4 and settled it outright.
+  depth: >-
+    NOT MODELLED. The A9K-RSP440's 674.0 mm is emphatically NOT inheritable - it is the
+    deepest control card in this family and a later design - and nothing in the intake
+    gives this card a depth. The component declares a faceplate and no body, and will
+    render as a face rather than a box in 3D, which is the honest depiction of what is
+    known. Note this makes the size above half-borrowed and half-absent; it is the
+    weakest-sourced component in this vendor's set and is marked so deliberately.
+  ports: >-
+    install guide - Table 22, 'RSP/RP Port Specifications', of the Overview and
+    Reference Guide, which is a family table and covers this card: 'Console port:
+    EIA/TIA-232 RJ-45 interface ... 9600 Baud, 8 data, no parity, 2 stop bits with flow
+    control none for all other RSP/RP cards'; 'Auxiliary port: EIA/TIA-232 RJ-45
+    interface, 9600 Baud, 8 data, no parity, 1 stop bit with software handshake
+    (default)'; 'Management ports (0, 1): Dual-speed (100M/1000M) RJ-45'; 'Sync ports
+    (0, 1): can be configured as one of the following: BITS (Building Integrated Timing
+    System) port, J.211 or UTI (Universal Timing Interface) port'. Six RJ-45 jacks,
+    which is exactly what the master draws, and the ids come from the master's own
+    printed legends matched by position.
+  power: >-
+    install guide - Table 23 of the Overview and Reference Guide, row 'RSP Card': 175 W
+    at 25 C, 205 W at 40 C, 235 W at 55 C. max is the highest rated ambient. THE JOIN:
+    Table 23 names generations, not part numbers, and every other row in it carries a
+    suffix - RSP-440, RSP-440 Lite, RSP-880, RSP880-LT, RSP4-S, RSP5 - so the bare 'RSP
+    Card' row is the unsuffixed original. The Hardware Installation Guide names which
+    parts those are: 'ASR 9000 Series Routers with RSP route switch processors (RSP-4G
+    and RSP-8G)'. So the row's scope and this part number are joined by Cisco's own
+    words and not by elimination. The 4G and 8G differ in memory and share one row. No
+    typical is stated.
+  variants: >-
+    install guide - 'ASR 9000 Series Routers with RSP route switch processors (RSP-4G
+    and RSP-8G)'. Two part numbers, A9K-RSP-4G and A9K-RSP-8G, differing in memory. The
+    stencil has ONE master and it prints A9K-RSP-4G, so one component is built under
+    that name. The 8G is not modelled separately because nothing on the faceplate would
+    differ and no second drawing exists to check that against.
+  lifecycle: >-
+    searched - no end-of-life notice for this part number is in the intake, which for a
+    first-generation control card is more likely a gap in the intake than a statement
+    that the part is current.
+elements:
+  disk-0:
+    at: [6.51, 212.16]
+    size: [15.3, 65.61]
+    class: cover
+    description: >-
+      the disk 0 carrier panel, read off the master. Cisco names the media in its lamp
+      table - this card has both an HDD and a CF lamp - but no document in the intake says
+      which panel is which, so the two are identified by position against the lamp column
+      above them and that is an inference, not a citation.
+  disk-1:
+    at: [23.82, 212.14]
+    size: [15.5, 63.99]
+    class: cover
+    description: >-
+      the disk 1 carrier panel, read off the master. Cisco names the media in its lamp
+      table - this card has both an HDD and a CF lamp - but no document in the intake says
+      which panel is which, so the two are identified by position against the lamp column
+      above them and that is an inference, not a citation.
+  alarm-out:
+    at: [8.62, 176.37]
+    size: [8.65, 18.44]
+    class: connector
+    description: >-
+      the nine-pin Alarm Out connector, drawn rather than composed: there is no std/ part
+      for a DE-9 and no registry key for its panel opening, and no document in the intake
+      dimensions it. Not declared `class: cutout` for that reason.
+  fail:
+    at: [13.76, 317.4]
+    size: [2.11, 2.11]
+    class: led
+    description: >-
+      Power Fail (FAIL). Red: standby power fail; the LED is turned off by the CAN bus
+      controller once it is up and running. Off: standby power is normal.
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  sync:
+    at: [19.43, 317.4]
+    size: [2.11, 2.11]
+    class: led
+    description: >-
+      Synchronization (SYNC). Green: system timing is synchronized to an external source.
+      Amber: system timing is free running. Off: no system timing is configured.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  crit:
+    at: [13.76, 324.26]
+    size: [2.11, 2.11]
+    class: led
+    description: >-
+      Critical Alarm (CRIT). Red: a critical alarm has occurred.
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  hdd:
+    at: [19.43, 324.26]
+    size: [2.11, 2.11]
+    class: led
+    description: >-
+      Internal Hard Disk Drive (HDD). Green: the hard disk is busy/active, driven by the
+      SAS controller.
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  maj:
+    at: [13.76, 331.09]
+    size: [2.11, 2.11]
+    class: led
+    description: >-
+      Major Alarm (MAJ). Red: a major alarm has occurred.
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  cf:
+    at: [19.43, 331.09]
+    size: [2.11, 2.11]
+    class: led
+    description: >-
+      External Compact Flash (CF). Green: Compact Flash is busy/active.
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  min:
+    at: [13.76, 337.94]
+    size: [2.11, 2.11]
+    class: led
+    description: >-
+      Minor Alarm (MIN). Amber: a minor alarm has occurred.
+    states:
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  aco:
+    at: [19.43, 337.94]
+    size: [2.11, 2.11]
+    class: led
+    description: >-
+      Alarm Cutoff (ACO). Amber: alarm cutoff has been enabled - the ACO push button was
+      pressed after at least one alarm occurred.
+    states:
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-matrix:
+    at: [14.56, 356.92]
+    size: [17.72, 7.79]
+    class: display
+    description: >-
+      the four-character 5x7 LED dot-matrix display. What it shows is a message vocabulary
+      - the guide gives it two sections, boot-stage/runtime and CAN bus controller errors
+      - not a lamp state list, so it is a display and not an indicator.
+  aco-button:
+    at: [8.12, 295.61]
+    size: [3.63, 3.69]
+    class: button
+    description: >-
+      the ACO momentary push button.
+  lamp-test:
+    at: [8.12, 305.46]
+    size: [3.63, 3.69]
+    class: button
+    description: >-
+      the LAMP TEST momentary push button.
+relief:
+  wall: '#4a4f55'
+parts:
+  - {ref: std/rj45-ganged@1, id: mgt-lan-0, at: [6.01, 42.12], rotate: 90}
+  - {ref: std/rj45-ganged@1, id: mgt-lan-1, at: [6.01, 63.28], rotate: 90}
+  - {ref: std/rj45-ganged@1, id: console, at: [6.01, 84.45], rotate: 90}
+  - {ref: std/rj45-ganged@1, id: aux, at: [6.01, 105.6], rotate: 90}
+  - {ref: std/rj45-ganged@1, id: sync-0, at: [6.01, 126.76], rotate: 90}
+  - {ref: std/rj45-ganged@1, id: sync-1, at: [6.01, 147.93], rotate: 90}
+skins: [default]
