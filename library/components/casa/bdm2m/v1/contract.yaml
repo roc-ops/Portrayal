@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: bdm2m
-version: 1.0.0
+version: 1.1.0
 class: line-card
 profile: networking
 description: >-
@@ -13,6 +13,8 @@ size: {w: 30.47, h: 345.5, d: 380.0}
 attrs:
   model: 'BDM2m'
   role: docsis-line-card
+  power-draw-max-w: 300
+  power-draw-scope: module-with-paired-io
   rf-ports: '0'
   ds-ports: '6'
   us-ports: '12'
@@ -48,15 +50,14 @@ provenance:
     last two: "BDM2m provides identical capabilities as the BDM2 card but uses a
     different packet processor", the same distinction CommScope draws between the
     SMM300G and SMM300Gm'
-  'power': '300 W is stated but is NOT carried in attrs, deliberately, and this
-    matches the decision already recorded in the C100G''s paired-module-power gap.
-    Table A-10 reads "Approximately 300W per BDM" and Table A-11 "Approximately
-    300W per BDM_204MHZ", both under titles scoping them to the BDM WITH its 6+12
-    I/O, and the BDM2/BDM2m data sheet''s "Total Power 300 W" sits in a table headed
-    "BDM2/2 m with 6+12 IO Card". A BDM position is TWO modelled modules - this
-    card in a front bay and casa/io-6p12 in the paired rear bay - and no document
-    divides the 300 W between them. Writing it here would make the chassis total
-    come out right and the answer to "what does this card draw" come out wrong'
+  'power': 'Table A-11 reads "Approximately 300W per BDM2m_204MHZ", under a title scoping it to the
+    BDM WITH its 6+12 I/O, and the BDM2/BDM2m data sheet''s "Total Power 300 W"
+    sits in a table headed "BDM2/2 m with 6+12 IO Card". So the figure is the
+    pair''s, and `power-draw-scope: module-with-paired-io` says so in DATA rather
+    than in this sentence. A BDM position is two modelled modules - this card in
+    a front bay and casa/io-6p12 in the paired rear bay - and no document divides
+    the 300 W between them, so a chassis sum must not add the rear module as
+    well. Both vendor statements say "approximately"'
 elements:
   status: {at: [4.80, 190.90], size: [3.0, 3.0], class: led}
   alarm: {at: [4.80, 197.50], size: [3.0, 3.0], class: led}
