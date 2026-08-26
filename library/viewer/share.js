@@ -111,12 +111,12 @@ export function mountShare(root, baseName, opts = {}) {
       #portrayal-share { position: fixed; right: 0.9rem; bottom: 0.9rem; z-index: 40;
         font-family: system-ui, sans-serif; font-size: 0.74rem; text-align: right; }
       #portrayal-share button { font: inherit; cursor: pointer; margin-left: 0.35rem;
-        background: #23272c; color: #d7dbdf; border: 1px solid #3a4046;
+        background: var(--control, #23272c); color: var(--ink, #d7dbdf); border: 1px solid var(--control-line, #3a4046);
         border-radius: 6px; padding: 0.32rem 0.62rem; }
-      #portrayal-share button:hover:not(:disabled) { background: #2c3137; border-color: #4d545b; }
+      #portrayal-share button:hover:not(:disabled) { background: var(--control-hover, #2c3137); border-color: var(--control-hover-line, #4d545b); }
       #portrayal-share button:disabled { opacity: 0.55; cursor: progress; }
-      #portrayal-share .msg { color: #8d939a; margin-top: 0.3rem; min-height: 1.1em; }
-      #portrayal-share .msg.bad { color: #f59e0b; }
+      #portrayal-share .msg { color: var(--dim, #8d939a); margin-top: 0.3rem; min-height: 1.1em; }
+      #portrayal-share .msg.bad { color: var(--warn, #f59e0b); }
     </style>
     <div>
       <button data-fmt="glb" title="Geometry and textures in one file. Opens in Quick Look, Windows 3D Viewer, PowerPoint, Blender, Sketchfab.">Download GLB</button>

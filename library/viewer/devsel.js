@@ -60,14 +60,14 @@ const cmp = (a, b) => a.localeCompare(b, undefined, {numeric: true});
 const CSS = `
   .devpick { display:flex; gap:0.55rem; align-items:center; flex-wrap:wrap; }
   .devpick label { display:flex; gap:0.3rem; align-items:center;
-                   font-size:0.75rem; color:#8d939a; }
+                   font-size:0.75rem; color:var(--dim, #8d939a); }
   .devpick select, .devpick input {
-      background:#1c1f23; color:#d7dbdf; border:1px solid #33373c; border-radius:6px;
+      background:var(--field, #1c1f23); color:var(--ink, #d7dbdf); border:1px solid var(--field-line, #33373c); border-radius:6px;
       padding:0.22rem 0.35rem; font-size:0.85rem; font-family:inherit; max-width:18rem; }
   .devpick input { width:7.5rem; }
-  .devpick input::placeholder { color:#6b7178; }
-  .devpick input:focus { outline:none; border-color:#4c9aff; }
-  .devpick .none { color:#f59e0b; font-size:0.72rem; }
+  .devpick input::placeholder { color:var(--hint, #6b7178); }
+  .devpick input:focus { outline:none; border-color:var(--accent, #4c9aff); }
+  .devpick .none { color:var(--warn, #f59e0b); font-size:0.72rem; }
 `;
 
 let cssDone = false;

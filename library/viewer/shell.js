@@ -28,6 +28,7 @@ export const SHELL_CSS = `
   :root { --bg:#16181b; --panel:#1c2024; --line:#2b3035; --ink:#d7dbdf; --dim:#8d939a;
           --accent:#4c9aff; --warn:#f59e0b;
           --control:#23272c; --control-line:#3a4046; --control-hover:#2c3137;
+          --control-hover-line:#4d545b; --field:#1c1f23; --field-line:#33373c; --hint:#6b7178;
           --on-bg:#2f4a6d; --on-ink:#eaf1fb; --stage:#101214; --sel-ink:#fff;
           --kid-line:#262b30;
           /* selection colour. Deliberately NOT --accent: the halo has to stand out
