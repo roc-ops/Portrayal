@@ -331,6 +331,15 @@ export function createShell(opts = {}) {
   function labelFor(n) {
     const e = n.el;
     const own = n.path.split('/').pop();
+    // A MARK IS ITS WORDS. `silk:12` names nothing a reader recognises, and the
+    // printing is right there in the element - so a legend rows as what it says.
+    // A printed line or symbol has no words, and says so rather than showing an
+    // index: a leader between a breaker and its terminal is a real mark with
+    // nothing to quote.
+    if (e.dataset.class === 'silkscreen') {
+      const t = (e.textContent || '').trim().replace(/\s+/g, ' ');
+      return t ? `“${t}”` : 'printed line';
+    }
     if (e.dataset.class === 'bay') {
       const occ = e.querySelector('[data-ref]');
       const m = occ && modelOf(occ);
@@ -373,7 +382,12 @@ export function createShell(opts = {}) {
   // with the ports still opened the tree with a console socket. Within a rank,
   // document order stands - it already reads correctly, which is why the Edgecore
   // switches were right all along and needed nothing.
-  const ROLE = {traffic: 0, management: 1, service: 2, indicator: 3, furniture: 4};
+  // `marking` is printing, and it is last on purpose. It is not `indicator` -
+  // a lamp reports a changing state, a legend never changes - and it is not
+  // `furniture` either, because furniture is what you neither connect to nor
+  // read, and reading is the whole job of a legend.
+  const ROLE = {traffic: 0, management: 1, service: 2, indicator: 3,
+                furniture: 4, marking: 5};
   function roleOf(e) {
     const r = e && e.dataset.groupRole;
     return r in ROLE ? ROLE[r] : 0;
@@ -444,7 +458,14 @@ export function createShell(opts = {}) {
             + `<span class="cls">${n.kids.length}</span>`;
           into.appendChild(row);
           const kids = document.createElement('div');
-          kids.className = 'kids';
+          // PRINTING STARTS CLOSED. Every other group at the root is what the
+          // device IS and should be in front of you; a legend block annotates
+          // that, and the AS5912-54X has 58 marks claiming no owner, which
+          // expanded pushes the ports off the screen to show you the words
+          // printed next to them. Open on request, not by default.
+          const shut = n.role === ROLE.marking;
+          kids.className = 'kids' + (shut ? ' hid' : '');
+          if (shut) row.querySelector('.tw').textContent = '▸';
           into.appendChild(kids);
           row.onclick = () => {
             kids.classList.toggle('hid');

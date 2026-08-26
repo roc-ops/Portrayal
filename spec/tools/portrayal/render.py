@@ -702,7 +702,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         silk_g.set("id", "--silkscreen")
         silk_g.set("data-class", "silkscreen")
         silk_default = ch.get("silk", "#c7ccd1")
-        for m in silk_items:
+        for i_m, m in enumerate(silk_items):
             x, y = m["at"]
             if m.get("path"):
                 # a printed line or symbol - a leader, an arrow, an earth mark
@@ -733,6 +733,26 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                     t.set("transform", f"rotate({m['rotate']:g} {x:g} {y:g})")
             if m.get("id"):
                 t.set("id", m["id"])
+            # SILKSCREEN IS A LAYER THE TREE COULD NOT SEE. The marks carried an
+            # optional id and a `for`, and nothing else - no data-path, so the
+            # tree, which builds from data-path, had no row for a single one of
+            # the library's 994 printed marks. A legend that is missing, or that
+            # sits where a module will cover it, was invisible in exactly the
+            # place built to make such things visible.
+            #
+            # Not one mark in the library declares an id, so the path is
+            # positional and namespaced the way `region:` and `cutout:` already
+            # are. Positional identity is weaker than a declared one - reordering
+            # a view's silkscreen list renumbers these - which is an argument for
+            # letting marks carry ids, not for leaving them out of the tree.
+            t.set("data-path", f"silk:{m.get('id') or i_m}")
+            t.set("data-class", "silkscreen")
+            # A mark naming an owner nests under it through the existing `for`
+            # rule. One naming nobody has nowhere to be, so it folds into a
+            # single chassis-level heading rather than adding a row to the root:
+            # on the AS5912-54X that is 58 rows, none of which claim an owner.
+            t.set("data-group", "silkscreen")
+            t.set("data-group-role", "marking")
             # bind the mark to what it annotates, so a viewer can select both at once.
             # A leader line names both ends.
             df = data_for(m.get("for"))
