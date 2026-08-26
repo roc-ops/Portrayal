@@ -553,6 +553,39 @@ configurations: {...}
   (`point` versus `receptacle`) rather than the ones that match (`grounding`).
   The cost of getting this wrong is a fabricated conflict in provenance, which is
   worse than a missing one because it looks like diligence.
+- **TWO SOURCES AGREEING IS EVIDENCE ONLY IF THEY WERE DERIVED INDEPENDENTLY.**
+  The C40G's device provenance and `casa/c40g-pem`'s both said the PEM band
+  starts at y 194, which read as independent confirmation and was ONE SOURCE
+  WEARING TWO HATS - one sentence had been copied from the other, so the second
+  file added no information and only added confidence. Both were wrong by two
+  millimetres. A copied provenance sentence is indistinguishable from a
+  corroborating measurement once it is in the file, and it is worse than no
+  second source, because it converts a single reading into an apparent
+  agreement. Twice in one component the same night: that part's POWER provenance
+  was also the C100G's verbatim, asserting a 30 A nameplate this module does not
+  have. **When you copy a provenance sentence between files, say where it came
+  from in the sentence itself**, so the next reader can tell corroboration from
+  an echo.
+- **Where a bay and a component disagree, THE ANSWER MAY BE IN NEITHER.** Both
+  C40G PEM figures were wrong, and what settled it was the card slot next door -
+  a part with nothing to do with either, whose bottom edge made one of the
+  candidates physically impossible. Then the FRONT face settled the replacement,
+  by showing a measured margin in the equivalent position. When two numbers
+  disagree, look at what constrains them from outside rather than re-reading
+  each of them harder: neither of two disagreeing numbers has to be the right
+  one.
+- **RECONCILING A BAY AND A MODULE SILENCES THE ONLY CHECK THAT CAN SEE THEM.** A
+  fit check compares two numbers to each other and neither to the world, so it is
+  satisfied by both being wrong together exactly as easily as by both being right.
+  If the reconciliation was a judgement rather than a measurement, FILE A GAP -
+  otherwise the library accumulates numbers that agree with each other and no
+  record of which were sourced.
+- **A derived extent stated to two decimal places implies a precision the source
+  cannot support, and the only defence is to say so.** Write the number the
+  subtraction gives, then write what the figure actually resolves to: "stated to
+  the hundredth because that is what the subtraction gives, NOT because the
+  figure resolves to it - the whole disagreement is six pixels at 2.982 px/mm".
+  The number and the sentence together are honest; the number alone is not.
 - **State the axis convention on any face where the arithmetic could read as an
   error.** A top or bottom view laid out from a vendor's footprint figure
   usually has y = 0 at the REAR, because those figures print "Rear of chassis"
