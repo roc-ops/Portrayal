@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: smm-300g
-version: 1.3.0
+version: 1.4.0
 class: supervisor
 profile: networking
 description: >-
@@ -11,6 +11,8 @@ description: >-
   an RS-232 console RJ45, plus STATUS, ACTIVE and ALARM lamps. Up to two per
   chassis in the dedicated active and standby slots, for 600G aggregate.
 size: {w: 30.47, h: 345.5, d: 380.0}
+size-confidence: {d: known-wrong}
+size-notes: 'd 380.0 is IMPOSSIBLE - a front and a rear card mate at a midplane inside a 386.0 chassis and two at 380.0 need 760. See provenance/depth-known-wrong'
 attrs:
   model: 'SMM 300G'
   role: supervisor
@@ -23,6 +25,44 @@ attrs:
   nebs: 'Designed to NEBS level 3 requirements'
   power-draw-max-w: 160
 provenance:
+  depth-known-wrong: 'THE 380.0 IS NOT MERELY UNMEASURED, IT IS IMPOSSIBLE, and this
+    contract now says so in a field a tool can read - size-confidence: {d: known-wrong}.
+    THE CONSTRAINT. Front and rear cards MEET AT A MIDPLANE, which the owner photographed:
+    working/photos/casa/c40g-empty-midplane.png shows the emptied cage with the card guides
+    and the midplane at the back of it, and the opening where the rear I/O card reaches
+    through to the front card. So a front card and its rear partner have to share the
+    chassis depth - 386.0 on the C100G, 388.45 on the C40G. Two cards at 380.0 need 760,
+    which is not a wide error bar, it is twice the box.
+    WHAT THE SHAPE IS, from the owner: "the front card is mostly rectangular, but the I/O
+    card is kind of L SHAPED where the top part of the top connector PASSES THROUGH THE
+    MIDPLANE and plugs into the front card, and the other one is plugged into the midplane.
+    So they ultimately kind of meet in the middle." So the rear card is a body against the
+    midplane PLUS A TONGUE at the top reaching forward through it.
+    NOTE WHAT THAT DOES AND DOES NOT ALLOW, because the obvious rule is wrong. front + rear
+    CAN exceed the chassis depth, by about the tongue length, because the tongue overlaps the
+    front card at a height where the front card is not - they interleave rather than tile. The
+    constraint is therefore an inequality with slack, not an equality. What it cannot absorb
+    is a 374 mm overlap where a tongue is tens of millimetres.
+    ONE PHOTOGRAPH IS USABLE AND IT IS NOT THIS CARD-FAMILY-WIDE. bdm2m-solder-side.jpeg has
+    the faceplate FULLY IN FRAME, so its 345.5 long axis anchors the scale at 5.00 px/mm; the
+    card measures 1336 px from the faceplate to the top of its midplane connectors. Raw that
+    is 267 mm. The shot is NOT orthographic - the PCB reads 4.66 percent wider at the
+    connector end than at the faceplate end, which is perspective, not a taper - so correcting
+    to the mean scale gives about 261, and taking the card top at the outermost connector edge
+    instead pushes it to about 282. CALL IT 270 PLUS OR MINUS 12 AND DO NOT ROUND THAT AWAY.
+    REJECTED, and the rejection is the useful part: bdm2m-top-plan.jpeg and both qam-io-card
+    plan shots have the faceplate CLIPPED BY THE FRAME, so the 345.5 anchor is truncated and
+    every number off them is understated by an unknown amount. Measured anyway, the top-plan
+    gives 227 mm for the same card the solder side gives 270 - a 19 percent disagreement that
+    is entirely the broken anchor. They are not second opinions and must not be averaged in.
+    NOTHING IS REPLACED. 270 plus or minus 12 is one reading of one card from one photograph
+    that fails gate 1, and stamping it on twelve cards would be the family-number pattern
+    doing harm instead of good - these cards share a FACEPLATE, which is established, not a
+    depth, which is not. What is established is that 380.0 cannot be true.
+    WANTED, in order of how much each unlocks: a tape on any one front card (fixes it
+    outright); a tape on any one rear I/O card; an unclipped side-on photograph of a rear card
+    showing where the tongue begins, which would give the midplane position and both halves
+    at once.'
   layout: 'drawing - Figure 1-9 of the Casa C100G Hardware Installation Guide (rev
     07/08/2022) gives the faceplate order top to bottom: SMM 300G, XG0 through XG9,
     CG0, CG1, 10/100MI, IOIOI, then STATUS, ACTIVE, ALARM. Unlike the SMM 8x10G

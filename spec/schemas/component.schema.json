@@ -140,16 +140,7 @@
                 "description": "skin node id"
               },
               "confidence": {
-                "enum": [
-                  "measured",
-                  "photo-measured",
-                  "drawing",
-                  "datasheet",
-                  "registry",
-                  "borrowed",
-                  "estimated"
-                ],
-                "description": "where this feature's MAGNITUDE came from. The relief vocabulary is the library's provenance vocabulary, not a second one: measured (off this part's own hardware), photo-measured, drawing (off this part's own artwork or a vendor figure of it), datasheet, registry (from standards.yaml), estimated (a plausible figure with no source), and `borrowed`. BORROWED IS THE ONE THAT IS NEW AND IT IS THE COMMON CASE: the magnitude is another Portrayal part's MEASURED figure for the same class of hardware - a captive screw head, an ejector latch, a panel lamp - reused here because nobody publishes one for this part. It is an estimate for THIS part, but not a free one, and `source` must name the part it came from. Do not spell it `measured`: the measurement was taken on a different object. Note the enum deliberately omits standards.yaml's `verified`, which answers a different question - whether a CUTOUT matches its governing standard - and cannot apply to a depth no standard states."
+                "$ref": "#/$defs/confidence"
               },
               "source": {
                 "type": "string",
@@ -224,6 +215,26 @@
     "size": {
       "$ref": "#/$defs/wh",
       "description": "faceplate footprint in mm"
+    },
+    "size-confidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "where each of w/h/d came from, per dimension. Keyed by dimension ON PURPOSE: a part can have a measured width and an impossible depth, and one scalar could not say that. Absent means unstated, which is what most of the library is; the component index counts the gap so it cannot go quiet.",
+      "properties": {
+        "w": {
+          "$ref": "#/$defs/confidence"
+        },
+        "h": {
+          "$ref": "#/$defs/confidence"
+        },
+        "d": {
+          "$ref": "#/$defs/confidence"
+        }
+      }
+    },
+    "size-notes": {
+      "type": "string",
+      "description": "one phrase per the `source` convention - what rules a known-wrong value out, or where a sourced one came from. The long argument belongs in provenance; this is the pointer beside the number."
     },
     "insert": {
       "$ref": "#/$defs/wh",
@@ -505,6 +516,19 @@
         "type": "string",
         "description": "field name -> source, e.g. 'datasheet \u00a7Physical', 'photo-inferred', 'measured', 'estimated'"
       }
+    },
+    "confidence": {
+      "enum": [
+        "measured",
+        "photo-measured",
+        "drawing",
+        "datasheet",
+        "registry",
+        "borrowed",
+        "estimated",
+        "known-wrong"
+      ],
+      "description": "where a NUMBER came from. One vocabulary for the library, shared by relief features and by size-confidence: measured (off this part's own hardware), photo-measured, drawing (off this part's own artwork or a vendor figure of it), datasheet, registry (from standards.yaml), borrowed (another Portrayal part's MEASURED figure for the same class of hardware, reused because nobody publishes one for this part - an estimate, but not a free one, and `source` must name the part), estimated (a plausible figure with no source), and `known-wrong`. KNOWN-WRONG IS THE TERMINAL STATE AND IT IS NOT A CONFIDENCE LEVEL: it says the value is not merely unmeasured but IMPOSSIBLE - contradicted by something checkable - and is being carried only because removing it would break the model and no sourced replacement exists. A value that cannot be true must not sit in the same bucket as one nobody has measured. `source` must say what rules it out. Note the enum omits standards.yaml's `verified`, which answers a different question - whether a CUTOUT matches its governing standard."
     }
   }
 }

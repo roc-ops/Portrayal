@@ -48,6 +48,13 @@ def main():
                 "version": data["version"], "kind": data.get("kind"),
                 "class": data.get("class"), "conforms": data.get("conforms"),
                 "size": data["size"], "description": data.get("description", ""),
+                # WHERE EACH DIMENSION CAME FROM, per dimension, and it is here for the
+                # same reason relief-confidence is: without it a value that is IMPOSSIBLE
+                # is indistinguishable from one nobody has measured. `known-wrong` is the
+                # token that says so, and a consumer should be able to find every one of
+                # them without reading 273 files of prose.
+                "size-confidence": data.get("size-confidence") or {},
+                "size-notes": data.get("size-notes", ""),
                 "attrs": data.get("attrs") or {},
                 "provenance": data.get("provenance") or {},
                 "skins": data.get("skins", ["default"]),
@@ -119,8 +126,19 @@ def main():
     for e in index:
         for k, n in e["relief-confidence"].items():
             totals[k] = totals.get(k, 0) + n
+    # every dimension anybody has recorded a confidence for, and - separately and by
+    # name - every one currently known to be wrong. The second list is short on purpose
+    # and should stay short; it is the library's own defect register for geometry.
+    size_totals, known_wrong = {}, []
+    for e in index:
+        for dim, conf in (e["size-confidence"] or {}).items():
+            size_totals[conf] = size_totals.get(conf, 0) + 1
+            if conf == "known-wrong":
+                known_wrong.append(f"{e['ns']}/{e['name']}@{e['major'][1:]} {dim}")
     (out / "components.json").write_text(json.dumps(
-        {"components": index, "relief-confidence": totals}, indent=1, sort_keys=True))
+        {"components": index, "relief-confidence": totals,
+         "size-confidence": size_totals,
+         "known-wrong": sorted(known_wrong)}, indent=1, sort_keys=True))
     print(f"compiled {len(index)} components -> {out}/components.json")
 
 

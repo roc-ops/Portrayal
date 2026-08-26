@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ups-32x4
-version: 1.5.0
+version: 1.6.0
 class: line-card
 profile: networking
 description: >-
@@ -10,8 +10,60 @@ description: >-
   channels each, in two staggered columns, for a US 16x8 line card in the paired
   front slot; it is not supported behind a US 16x4. Silkscreened UPS IO 32.
 size: {w: 30.47, h: 345.5, d: 380.0}
+size-confidence: {d: known-wrong}
+size-notes: 'd 380.0 is IMPOSSIBLE - a front and a rear card mate at a midplane inside a 386.0 chassis and two at 380.0 need 760. See provenance/depth-known-wrong'
 attrs: {model: 'UPS IO 32', role: upstream, media: coax, connector: mcx, rf-ports: '32', channels-per-port: '4', pairs-with: casa/us-16x8}
 provenance:
+  depth-known-wrong: 'THE 380.0 IS NOT MERELY UNMEASURED, IT IS IMPOSSIBLE, and this
+    contract now says so in a field a tool can read - size-confidence: {d: known-wrong}.
+    THE CONSTRAINT. Front and rear cards MEET AT A MIDPLANE, which the owner photographed:
+    working/photos/casa/c40g-empty-midplane.png shows the emptied cage with the card guides
+    and the midplane at the back of it, and the opening where the rear I/O card reaches
+    through to the front card. So a front card and its rear partner have to share the
+    chassis depth - 386.0 on the C100G, 388.45 on the C40G. Two cards at 380.0 need 760,
+    which is not a wide error bar, it is twice the box.
+    WHAT THE SHAPE IS, from the owner: "the front card is mostly rectangular, but the I/O
+    card is kind of L SHAPED where the top part of the top connector PASSES THROUGH THE
+    MIDPLANE and plugs into the front card, and the other one is plugged into the midplane.
+    So they ultimately kind of meet in the middle." So the rear card is a body against the
+    midplane PLUS A TONGUE at the top reaching forward through it.
+    NOTE WHAT THAT DOES AND DOES NOT ALLOW, because the obvious rule is wrong. front + rear
+    CAN exceed the chassis depth, by about the tongue length, because the tongue overlaps the
+    front card at a height where the front card is not - they interleave rather than tile. The
+    constraint is therefore an inequality with slack, not an equality. What it cannot absorb
+    is a 374 mm overlap where a tongue is tens of millimetres.
+    ONE PHOTOGRAPH IS USABLE AND IT IS NOT THIS CARD-FAMILY-WIDE. bdm2m-solder-side.jpeg has
+    the faceplate FULLY IN FRAME, so its 345.5 long axis anchors the scale at 5.00 px/mm; the
+    card measures 1336 px from the faceplate to the top of its midplane connectors. Raw that
+    is 267 mm. The shot is NOT orthographic - the PCB reads 4.66 percent wider at the
+    connector end than at the faceplate end, which is perspective, not a taper - so correcting
+    to the mean scale gives about 261, and taking the card top at the outermost connector edge
+    instead pushes it to about 282. CALL IT 270 PLUS OR MINUS 12 AND DO NOT ROUND THAT AWAY.
+    REJECTED, and the rejection is the useful part: bdm2m-top-plan.jpeg and both qam-io-card
+    plan shots have the faceplate CLIPPED BY THE FRAME, so the 345.5 anchor is truncated and
+    every number off them is understated by an unknown amount. Measured anyway, the top-plan
+    gives 227 mm for the same card the solder side gives 270 - a 19 percent disagreement that
+    is entirely the broken anchor. They are not second opinions and must not be averaged in.
+    NOTHING IS REPLACED. 270 plus or minus 12 is one reading of one card from one photograph
+    that fails gate 1, and stamping it on twelve cards would be the family-number pattern
+    doing harm instead of good - these cards share a FACEPLATE, which is established, not a
+    depth, which is not. What is established is that 380.0 cannot be true.
+    WANTED, in order of how much each unlocks: a tape on any one front card (fixes it
+    outright); a tape on any one rear I/O card; an unclipped side-on photograph of a rear card
+    showing where the tongue begins, which would give the midplane position and both halves
+    at once.'
+  body-shape-not-a-box: 'THIS CARD IS AN L IN SIDE ELEVATION AND PORTRAYAL CANNOT SAY SO.
+    The owner: the rear I/O card has a main body that seats against the midplane plus a TONGUE
+    at the top that passes THROUGH an opening in the midplane and plugs directly into the front
+    card. `body:` takes a depth, a colour, an optional smaller footprint and a plate - all of
+    which describe a BOX. There is no way to declare a body that is full slot height for part
+    of its depth and a narrower section for the rest.
+    So this contract declares NO body rather than declaring a box that is wrong in a way
+    nothing records. That is the same call this library made on the MCX recess: where the
+    vocabulary cannot express the shape, say so and leave the record, because a wrong shape
+    with no note is worse than an absent one.
+    WANTED: either a body section - a list of depth bands with their own footprints - or the
+    honest acknowledgement that a mid-plane-mating card needs its own kind.'
   size: ESTIMATED, and shared with the whole C100G/C40G rear-slot family. Figure
     1-12 is schematic - it draws these three cards 309, 295 and 288 px wide for
     one physical card, and the guide's chassis aspect is 0.936 against a
