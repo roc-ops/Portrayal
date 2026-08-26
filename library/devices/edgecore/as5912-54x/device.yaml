@@ -75,29 +75,36 @@ chassis:
 groups:
   sfp-plus:
     term: Port
+    role: traffic
     index-origin: 1
     attrs: {media: sfp-plus, speed: 10g}
   sfp-plus-leds:
     term: LED
+    role: indicator
     index-origin: 1
   qsfp28:
     term: Port
+    role: traffic
     index-origin: 1
     attrs: {media: qsfp28, speed: 100g}
   qsfp28-leds:
     term: LED
+    role: indicator
     index-origin: 1
   mgmt:
     term: Port
+    role: management
     index-origin: 1
     mixed: the management stack, one block on the faceplate under a single Mgmt/Console legend -
       out-of-band Ethernet over the RJ45 above RS-232 console, with the USB-A service port beside
       them. Splitting it by media would draw three blocks the unit does not have
   psus:
     term: PSU
+    role: service
     index-origin: 1
   fans:
     term: Fan
+    role: service
     index-origin: 1
 views:
   front:

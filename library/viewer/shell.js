@@ -362,6 +362,22 @@ export function createShell(opts = {}) {
     const c = e.dataset.class || '';
     return c in TIER ? TIER[c] : 3;
   }
+  // WHAT A BLOCK IS FOR, which is the one thing data-class cannot say. A PSU bay,
+  // a fan bay and a line-card bay are all class `bay` - the same hole with a
+  // module in it - so ranking by class left the order to however the placements
+  // happened to be written, and the C40G opened with its power supplies while the
+  // AGR420 opened with its air filters.
+  //
+  // `management` is its own rank rather than part of `traffic` because on five
+  // devices the management block is written FIRST in the manifest; folding it in
+  // with the ports still opened the tree with a console socket. Within a rank,
+  // document order stands - it already reads correctly, which is why the Edgecore
+  // switches were right all along and needed nothing.
+  const ROLE = {traffic: 0, management: 1, service: 2, indicator: 3, furniture: 4};
+  function roleOf(e) {
+    const r = e && e.dataset.groupRole;
+    return r in ROLE ? ROLE[r] : 0;
+  }
   function relPos(e) {
     const v = e.dataset.relPos;
     return v === undefined ? Number.POSITIVE_INFINITY : +v;
@@ -384,6 +400,7 @@ export function createShell(opts = {}) {
       if (!seen.has(g)) {
         const head = {path: `${n.path.slice(0, n.path.lastIndexOf('/') + 1)}${g}`,
                       el: null, kids: [], group: g, tier: tierOf(n.el),
+                      role: roleOf(n.el),
                       doc: n.el.__docIdx ?? Infinity};
         seen.set(g, head); out.push(head);
       }
@@ -393,6 +410,7 @@ export function createShell(opts = {}) {
     }
     const docOf = x => x.doc ?? x.el?.__docIdx ?? Infinity;
     const ordered = out.sort((a, b) => (a.tier ?? tierOf(a.el)) - (b.tier ?? tierOf(b.el))
+                                     || (a.role ?? roleOf(a.el)) - (b.role ?? roleOf(b.el))
                                      || docOf(a) - docOf(b));
     // A HEADING THAT NAMES ONE ROW EARNS NOTHING. Nested under the thing it
     // belongs to, `sfp28-leds > led-p1` says what `led-p1` already said and

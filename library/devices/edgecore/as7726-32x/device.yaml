@@ -76,12 +76,14 @@ groups:
   qsfp28:
     index-origin: 1
     term: Port
+    role: traffic
     attrs:
       media: qsfp28
       speed: 100g
   mgmt:
     index-origin: 1
     term: Port
+    role: management
     mixed: the management cluster at the right-hand end of the faceplate - the
       out-of-band RJ45, the RS-232 console, two SFP+ management uplinks and a
       USB-A service port. Four media, one job; the unit draws them as one block
@@ -96,12 +98,15 @@ groups:
   psus:
     index-origin: 1
     term: PSU
+    role: service
   fans:
     index-origin: 1
     term: Fan
+    role: service
   leds:
     index-origin: 1
     term: LED
+    role: indicator
 views:
   front:
     panel:

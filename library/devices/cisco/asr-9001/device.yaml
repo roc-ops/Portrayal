@@ -240,14 +240,14 @@ chassis:
   color: '#c8cacc'
   silk: '#231f20'
 groups:
-  mpa-bays: {term: Bay, index-origin: 0, physical-context: NetworkingDevice}
-  power-modules: {term: Power Supply, index-origin: 0, physical-context: PowerSupply}
-  cooling: {term: Fan Tray, index-origin: 0, physical-context: Fan}
-  sfp-plus: {term: Port, index-origin: 0, attrs: {media: sfp-plus, speed: 10g}}
-  cluster: {term: Port, index-origin: 0, attrs: {media: sfp}}
-  timing: {term: Port, index-origin: 0, attrs: {media: rj45}}
-  mgmt: {term: Port, index-origin: 0, mixed: 'local and remote management access - console, auxiliary, Ethernet and USB'}
-  system-leds: {term: LED, index-origin: 1}
+  mpa-bays: {role: traffic, term: Bay, index-origin: 0, physical-context: NetworkingDevice}
+  power-modules: {role: service, term: Power Supply, index-origin: 0, physical-context: PowerSupply}
+  cooling: {role: service, term: Fan Tray, index-origin: 0, physical-context: Fan}
+  sfp-plus: {role: traffic, term: Port, index-origin: 0, attrs: {media: sfp-plus, speed: 10g}}
+  cluster: {role: traffic, term: Port, index-origin: 0, attrs: {media: sfp}}
+  timing: {role: management, term: Port, index-origin: 0, attrs: {media: rj45}}
+  mgmt: {role: management, term: Port, index-origin: 0, mixed: 'local and remote management access - console, auxiliary, Ethernet and USB'}
+  system-leds: {role: indicator, term: LED, index-origin: 1}
 views:
   front:
     size: {w: 442.0, h: 88.2}

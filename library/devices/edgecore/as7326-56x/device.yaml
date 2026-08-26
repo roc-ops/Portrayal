@@ -92,32 +92,40 @@ chassis:
 groups:
   sfp28-leds:
     term: LED
+    role: indicator
     index-origin: 1
   leds:
     term: LED
+    role: indicator
     index-origin: 1
   sfp28:
     term: Port
+    role: traffic
     index-origin: 1
     attrs: {media: sfp28, speed: 25g}
   qsfp28:
     term: Port
+    role: traffic
     index-origin: 1
     attrs: {media: qsfp28, speed: 100g}
   qsfp28-leds:
     term: LED
+    role: indicator
     index-origin: 1
   mgmt:
     term: Port
+    role: management
     index-origin: 1
     mixed: the management cluster at the right-hand end of the faceplate - two SFP+ management
       uplinks (57/58), a USB-A service port, the out-of-band RJ45, the RS-232 console and a USB-C
       console. Five media, one job; the unit draws them as one block and so do we
   psus:
     term: PSU
+    role: service
     index-origin: 1
   fans:
     term: Fan
+    role: service
     index-origin: 1
 views:
   front:

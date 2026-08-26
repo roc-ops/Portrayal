@@ -51,14 +51,17 @@ chassis:
 groups:
   rj45-1g:
     term: Port
+    role: traffic
     index-origin: 1
     attrs: {media: rj45, speed: 1g}
   sfp28:
     term: Port
+    role: traffic
     index-origin: 1
     attrs: {media: sfp28, speed: 25g}
   mgmt:
     term: Port
+    role: management
     index-origin: 1
     mixed: the uplink and management block at the right-hand end - two USB-A
       service ports, the out-of-band RJ45 and its combo SFP, and the RS-232
@@ -68,6 +71,7 @@ groups:
       name is only ever a label beside the row that owns it
   psus:
     term: PSU
+    role: service
     index-origin: 1
 views:
   front:

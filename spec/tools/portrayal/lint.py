@@ -38,6 +38,7 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
   L35 component: a relief magnitude says where it came from, or is counted as
       unstated - an estimate and a measurement are indistinguishable otherwise
   L36 component: a `borrowed` magnitude names an origin that actually measured it
+  L37 device: a group says what it is FOR, and a declared group has members
 """
 import argparse
 import json
@@ -1790,6 +1791,43 @@ def lint_device(path, validator, lib_roots):
     # L15 - the conformance gate. A device declares how far it has been taken and
     # lint holds it to that standard, so work in progress can be committed without
     # fighting the linter while a device that CLAIMS to be verified has to earn it.
+    # L37 - a group says what it is FOR, and a declared group has members.
+    #
+    # WHY THE GROUP HAS TO SAY IT. A PSU bay, a fan bay and a line-card bay are
+    # all data-class `bay` - the same hole with a module in it - so nothing
+    # reading the drawing can tell which of them is why the box exists and which
+    # two keep it alive. Without `role` the only ordering left is the order the
+    # placements happen to be written in, which opened the C40G with its power
+    # supplies and the AGR420 with its air filters.
+    #
+    # WARNING AT `modelled`, ERROR AT `verified`, the same gate L15 uses: a
+    # device still being drawn should not have to fight the linter, and a device
+    # CLAIMING to be finished has to have answered the question.
+    groups = data.get("groups") or {}
+    if groups:
+        joined = []
+        for vw in (data.get("views") or {}).values():
+            for kind in ("bays", "placements"):
+                for it in ((vw.get("components") or {}).get(kind) or []):
+                    if it.get("group"):
+                        joined.append(it["group"])
+        for gid, gdef in groups.items():
+            gdef = gdef or {}
+            if not gdef.get("role"):
+                (err if maturity == "verified" else warn)(
+                    path, "L37", f"group {gid} does not say what it is for. Add "
+                    "role: traffic|management|service|indicator|furniture - a PSU "
+                    "bay and a line-card bay are the same class, so this is the "
+                    "only thing that can rank them")
+            # A GROUP NOTHING JOINS IS A CATEGORY THE DRAWING PROMISES AND DOES
+            # NOT KEEP. It reads to anyone listing the device as a block the
+            # hardware has, and the hardware does not have it. Always a warning:
+            # the fix is either to populate it or delete it, and which of those
+            # is right is a modelling question, not a lint one.
+            if gid not in joined:
+                warn(path, "L37", f"group {gid} is declared and nothing joins it. "
+                     "Either place something in it or drop it")
+
     maturity = data.get("maturity", "draft")
     if maturity in ("modelled", "verified"):
         prov = data.get("provenance") or {}

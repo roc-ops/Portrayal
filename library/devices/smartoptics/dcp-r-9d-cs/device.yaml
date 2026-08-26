@@ -54,6 +54,7 @@ chassis:
 groups:
   xc:
     term: Port
+    role: traffic
     index-origin: 1
     attrs: {media: fiber, role: cross-connect}
     description: XC1-XC4, the cross-connect ports. DCP-R User Manual 14.0 A section 2.1.2 has
@@ -62,12 +63,14 @@ groups:
       grouping split them
   channels:
     term: Port
+    role: traffic
     index-origin: 1
     attrs: {media: fiber, role: channel}
     description: the 40 add/drop channel ports, silkscreened 921-960. They alternate in pairs
       between the two rows - 921/922 upper, 923/924 lower - so the rows are a layout, not a block
   mgmt:
     term: Port
+    role: management
     index-origin: 1
     mixed: the unit's management interfaces, on both faces. REAR - ETH1-4 on RJ45 to the
       shelf controller, ETH5 as an SFP for optical management access, and the recessed

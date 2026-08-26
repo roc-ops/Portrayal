@@ -59,12 +59,14 @@ chassis:
 groups:
   mgmt:
     term: Port
+    role: management
     index-origin: 1
     mixed: the front management pair - ETH0 on RJ45 and the RS-232 craft console. Two
       media, one job. They carried no group and so drew a row each beside the port
       groups; `mgmt` is the word the other seven devices in the library already use
   rj45-1g:
     term: Port
+    role: traffic
     index-origin: 1
     attrs: {media: rj45, speed: 1g, role: service}
     description: the 24 RJ-45 1G Ethernet ports of DCP-SC-28P User Manual R14.0 A section 2.2.
@@ -72,6 +74,7 @@ groups:
       sitting at 13-16 in the middle of it - so the two apparent rows are one block, not two
   sfp-plus:
     term: Port
+    role: traffic
     index-origin: 1
     attrs: {media: sfp-plus, speed: 10g, role: service}
     description: the 4 SFP+ 10G Ethernet ports of DCP-SC-28P User Manual R14.0 A section 2.2,

@@ -353,8 +353,25 @@ Now populate. **Reuse before building.**
    for: port-1, group: sfp28-leds}`. Never rely on naming to imply it.
 5. Every placement and bay carries `group:` and `rel-pos:`, and every group is
    declared under top-level `groups:` with its `term` (the vendor's word: Port,
-   Slot, Bay) and `index-origin`. That is what gives the tree, the exporter and
-   any DCIM their numbering.
+   Slot, Bay), its `role` and `index-origin`. That is what gives the tree, the
+   exporter and any DCIM their numbering.
+
+   **`role:` is the one thing the drawing cannot work out for itself.** A PSU
+   bay, a fan bay and a line-card bay are all class `bay` - the same hole with a
+   module in it - so nothing reading the compiled SVG can tell which of them is
+   why the box exists and which two keep it alive. Without it the only ordering
+   left is the order the placements happen to be written in, which opened one
+   chassis with its power supplies and another with its air filters.
+   `traffic` is the work the box is bought to do; `management` is how you reach
+   and discipline it (OOB, console, craft, timing and sync); `service` is what
+   keeps it running (PSUs, fans, filters); `indicator` is what you read;
+   `furniture` is what you neither connect to nor read. Management is its own
+   rank rather than part of traffic because it is often written FIRST in a
+   manifest, and folding it in still opens the tree with a console socket.
+   L37 warns at `modelled` and fails at `verified`.
+
+   **Declare a group when you populate it, not before.** A group nothing joins
+   is a category the drawing promises and the hardware does not have; L37 warns.
    **One group per port family, named for the family** - `sfp28`, `qsfp28`,
    `qsfpdd-400g`, with the speed appended where the media token alone does not fix
    it. Then the block declares `attrs: {media, speed}` once instead of on every
@@ -672,9 +689,9 @@ attrs:
   other: {...}
 chassis: {width: , height: , depth: , ru: , color: }
 groups:
-  sfp-plus: {term: Port, index-origin: 1, attrs: {media: sfp-plus, speed: 10g}}
-  sfp-plus-leds: {term: LED, index-origin: 1}
-  mgmt: {term: Port, index-origin: 1, mixed: <the job these ports share>}
+  sfp-plus: {term: Port, role: traffic, index-origin: 1, attrs: {media: sfp-plus, speed: 10g}}
+  sfp-plus-leds: {term: LED, role: indicator, index-origin: 1}
+  mgmt: {term: Port, role: management, index-origin: 1, mixed: <the job these ports share>}
 views:
   front:
     size: {w: , h: }

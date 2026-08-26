@@ -767,6 +767,12 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                                      rotate=p.get("rotate"), palette=palette,
                                      skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                                      resolved=resolved)
+        # WHAT THE BLOCK IS FOR travels with every member, because the consumer
+        # that needs it is looking at a member and has no way back to `groups:`.
+        # A PSU bay and a line-card bay are both data-class `bay`; this is the
+        # only thing that separates them. See L37.
+        if grp.get("role"):
+            g.set("data-group-role", grp["role"])
         # What the lamps on this instance mean. A placement wins over its group,
         # the way attrs already do: a block of eighteen QSFP28 speed lamps says
         # its vocabulary once, and one lamp inside it may still differ.
@@ -801,6 +807,9 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         bay_g.set("data-class", "bay")
         if b.get("group"):
             bay_g.set("data-group", b["group"])
+            brole = (dev_groups.get(b["group"]) or {}).get("role")
+            if brole:
+                bay_g.set("data-group-role", brole)
         if b.get("rel-pos") is not None:
             bay_g.set("data-rel-pos", str(b["rel-pos"]))
         title = ET.SubElement(bay_g, f"{{{SVG_NS}}}title")

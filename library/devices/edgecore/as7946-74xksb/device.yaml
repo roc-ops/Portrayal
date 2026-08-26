@@ -281,40 +281,47 @@ gaps:
 groups:
   qsfpdd-100g:
     term: Port
+    role: traffic
     index-origin: 0
     attrs:
       media: qsfp-dd
       speed: 100g
   qsfp28:
     term: Port
+    role: traffic
     index-origin: 0
     attrs:
       media: qsfp28
       speed: 100g
   sfp28:
     term: Port
+    role: traffic
     index-origin: 0
     attrs:
       media: sfp28
       speed: 25g
   qsfpdd-speed-leds:
     term: LED
+    role: indicator
     index-origin: 0
     states: ['off', {name: 100g, color: '#3b82f6'}]
     description: QSG Front LEDs callout 1 - LED1 (top) - Blue (100G). The QSFP-DD ports run at
       one rate here, so this lamp has one lit state and the guide names no other
   qsfp28-speed-leds:
     term: LED
+    role: indicator
     index-origin: 0
     states: ['off', {name: 100g, color: '#3b82f6'}, {name: 40g, color: '#22c55e'}]
     description: QSG Front LEDs callout 2 - LED1 (left of each pair) - Blue (100G), Green (40G)
   sfp28-speed-leds:
     term: LED
+    role: indicator
     index-origin: 0
     states: ['off', {name: 25g, color: '#3b82f6'}, {name: 10g, color: '#22c55e'}]
     description: QSG Front LEDs callout 3 - LED1 (left of each pair) - Blue (25G), Green (10G)
   qsfp-link-leds:
     term: LED
+    role: indicator
     index-origin: 0
     states: ['off', {name: linked, color: '#3b82f6'}, {name: activity, behavior: blinking}]
     description: 'QSG Front LEDs callouts 1 and 2 - LED2 - Blue (all lanes linked / link), Off
@@ -326,6 +333,7 @@ groups:
       "all lanes linked" for both; one vocabulary is modelled, named `linked`'
   sfp28-link-leds:
     term: LED
+    role: indicator
     index-origin: 0
     states: ['off', {name: linked, color: '#3b82f6'}, {name: activity, behavior: blinking}]
     description: QSG Front LEDs callout 3 - LED2 (right of each pair) - Blue (link), Blinking
@@ -333,46 +341,57 @@ groups:
       a single-lane port has no partial link - so its off state means only unlit
   status-leds:
     term: LED
+    role: indicator
     index-origin: 1
     states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]
     description: QSG Front LEDs callout 4 - Green (OK), Amber (fault). DIAG, FAN, PS0 and PS1
       all read this way; LOC does not, and overrides it on its own placement
   timing:
     term: Port
+    role: management
     index-origin: 0
     mixed: the timing block - BITS and 1PPS/ToD on RJ45 beside 10MHz and 1PPS on coax SMB. What
       makes it one block is the clock, not the connector, and the faceplate legends it as one
   mgmt:
     term: Port
+    role: management
     index-origin: 0
     mixed: the management corner - out-of-band RJ45, RS-232 console on micro-USB-B, a USB-A service
       port and the recessed reset. One cluster on the faceplate, four media
   mgmt-leds:
     term: LED
+    role: indicator
     index-origin: 0
     description: 'QSG Front LEDs callout 5 - "RJ-45 OOB Port - Left (link), Right (activity)".
       That is the whole of what the guide says. It gives these two lamps NO colour, so none is
       declared for them and the block has no shared vocabulary to declare either'
   fasteners:
     term: Rivet
+    role: furniture
     index-origin: 0
   bracket-holes:
     term: Hole
+    role: furniture
     index-origin: 0
   labels:
     term: Label
+    role: furniture
     index-origin: 0
   psus:
     term: PSU
+    role: service
     index-origin: 0
   fans:
     term: Fan
+    role: service
     index-origin: 0
   grounding:
     term: Point
+    role: furniture
     index-origin: 0
   filters:
     term: Filter
+    role: service
     index-origin: 0
 views:
   front:

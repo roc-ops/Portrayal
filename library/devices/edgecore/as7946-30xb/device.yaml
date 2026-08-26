@@ -143,41 +143,48 @@ chassis:
 groups:
   qsfpdd-400g:
     term: Port
+    role: traffic
     index-origin: 0
     attrs:
       media: qsfp-dd
       speed: 400g
   qsfp28:
     term: Port
+    role: traffic
     index-origin: 0
     attrs:
       media: qsfp28
       speed: 100g
   qsfpdd-100g:
     term: Port
+    role: traffic
     index-origin: 0
     attrs:
       media: qsfp-dd
       speed: 100g
   sfp28:
     term: Port
+    role: traffic
     index-origin: 0
     attrs:
       media: sfp28
       speed: 25g
   qsfpdd-speed-leds:
     term: LED
+    role: indicator
     index-origin: 0
     states: ['off', {name: 400g, color: '#22d3ee'}, {name: 100g, color: '#3b82f6'}]
     description: QSG Front LEDs callout 1 - LED1 (top) - Cyan (400G), Blue (100G). All eight
       QSFP-DD ports carry it, including the four wired at 100G
   qsfp28-speed-leds:
     term: LED
+    role: indicator
     index-origin: 0
     states: ['off', {name: 100g, color: '#3b82f6'}, {name: 40g, color: '#22c55e'}]
     description: QSG Front LEDs callout 2 - LED1 (left of each pair) - Blue (100G), Green (40G)
   port-link-leds:
     term: LED
+    role: indicator
     index-origin: 0
     states: ['off', {name: linked, color: '#3b82f6'}, {name: partial, color: '#ef4444'},
              {name: activity, behavior: blinking}]
@@ -187,6 +194,7 @@ groups:
       no colour of its own
   sfp28-port-leds:
     term: LED
+    role: indicator
     index-origin: 0
     states: ['off', {name: 25g, color: '#3b82f6'}, {name: 10g, color: '#22c55e'},
              {name: activity, behavior: blinking}]
@@ -194,45 +202,56 @@ groups:
       lens per SFP28 port, speed and link on the same lamp
   status-leds:
     term: LED
+    role: indicator
     index-origin: 1
     states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]
     description: QSG Front LEDs callout 4 - Green (OK), Amber (fault). LOC does not follow
       this and overrides it on its own placement
   timing:
     term: Port
+    role: management
     index-origin: 0
     mixed: the timing block - BITS and 1PPS/ToD on RJ45 beside 10MHz and 1PPS on coax SMB. What
       makes it one block is the clock, not the connector, and the faceplate legends it as one
   mgmt:
     term: Port
+    role: management
     index-origin: 0
     mixed: the management corner - out-of-band RJ45, RS-232 console on micro-USB-B, a USB-A service
       port and the recessed reset. One cluster on the faceplate, four media
   mgmt-leds:
     term: LED
+    role: indicator
     index-origin: 0
     description: QSG Front LEDs callout 5 - RJ-45 OOB port, left (link), right (activity). The
       guide names no colours, so both lamps keep the component's plain off/on
   fasteners:
     term: Rivet
+    role: furniture
     index-origin: 0
   bracket-holes:
     term: Hole
+    role: furniture
     index-origin: 0
   labels:
     term: Label
+    role: furniture
     index-origin: 0
   psus:
     term: PSU
+    role: service
     index-origin: 0
   fans:
     term: Fan
+    role: service
     index-origin: 0
   grounding:
     term: Point
+    role: furniture
     index-origin: 0
   filters:
     term: Filter
+    role: service
     index-origin: 0
 views:
   front:

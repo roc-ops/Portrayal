@@ -390,6 +390,10 @@
             "type": "string",
             "description": "vendor display word, e.g. 'Port', 'Slot', 'Bay'"
           },
+          "role": {
+            "enum": ["traffic", "management", "service", "indicator", "furniture"],
+            "description": "what this block is FOR - the one thing the drawing cannot work out for itself. A PSU bay, a fan bay and a line-card bay are all data-class `bay`, the same hole with a module in it, so anything ranking the tree by class cannot tell which of them is why the box exists and which two keep it alive. Only the group knows. `traffic` is the work the device is bought to do - line-card slots and the ports that carry user traffic. `management` is how you reach and discipline it - the OOB jack, the console, the craft port, the timing and sync interfaces; a separate bucket rather than part of traffic because on five devices the management block is written FIRST in the manifest, so leaving it in with the traffic ports still opened the tree with a console socket. `service` is what keeps it running - PSUs, fans, filters, power shelves. `indicator` is what you read - LEDs, displays. `furniture` is what you neither connect to nor read - ears, rivets, labels, grounding points, doors. Ordering WITHIN a role stays document order, which already reads correctly; this only says which bucket the block falls in. Lint L37"
+          },
           "physical-context": {
             "type": "string",
             "description": "Redfish PhysicalContext value shared by everything in this block, e.g. 'PowerSupply' for the PSU bays. A whole group is the natural place to say it once"
