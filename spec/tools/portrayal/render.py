@@ -793,6 +793,27 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             if b.get("rotate") in (90, 270):
                 d = (b["size"]["w"] - b["size"]["h"]) / 2.0
                 mod_at = [b["at"][0] + d, b["at"][1] - d]
+            # AN OCCUPANT IS CENTRED IN ITS BAY, not aligned to its corner. A
+            # module sits in the middle of its opening, and a faceplate that is
+            # LARGER than the aperture - which is the normal case once a card has
+            # ejector brackets - overlaps it on both sides rather than hanging off
+            # one. Aligning to the origin made an undersized cover sit flush
+            # top-left with the dark opening showing along two edges, which is the
+            # black seam visible on every ASR RSP slot: a 41.4 x 395.7 cover in a
+            # 46.0 x 406.4 bay.
+            #
+            # This does NOT reconcile the two numbers and must not be read as
+            # doing so. The bay stays the bay and the module stays the module;
+            # L33 still reports every mismatch. All that changes is that the
+            # difference is shared evenly instead of accumulating on one side.
+            try:
+                _c, _ = lib.resolve(default)
+                _e = _c.get("insert") or _c.get("size") or {}
+                if _e.get("w") and _e.get("h") and not b.get("rotate"):
+                    mod_at = [mod_at[0] + (b["size"]["w"] - _e["w"]) / 2.0,
+                              mod_at[1] + (b["size"]["h"] - _e["h"]) / 2.0]
+            except Exception:
+                pass                     # L5 reports an unresolvable ref
             g, contract = instance_group(lib, default, f"{b['id']}--module", mod_at,
                                          None, None, None, None,
                                          rotate=b.get("rotate"), palette=palette,
