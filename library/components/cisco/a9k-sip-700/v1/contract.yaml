@@ -94,15 +94,34 @@ provenance:
     than any other split - 'up to 4 single-width, single-height SPAs' in a 2 x 2 grid -
     but not the exact millimetre, and the printed numerals at x 21.19 and 37.42 fall on
     either side of that middle, which is consistent with it without proving it.
-  bays-are-inert: >-
-    Component-level `bays:` is documented in the schema as 'for modules that themselves
-    host bays (v0: unused)', and nothing in render.py or lint.py reads it. These four
-    are inert, and there is a second reason they would be inert anyway: NO SPA IS
-    MODELLED IN THIS LIBRARY. The stencil has no SPA masters - the two the SIP-700
-    master draws are part of its own artwork, labelled SPA-2XCH0C12I050 - so there is
-    nothing for `accepts` to name and the key is omitted rather than filled with a
-    guess. The geometry and the numbering are recorded because they are sourced and
-    because prose is where a future renderer cannot reach them.
+  bays-were-inert-and-are-not: >-
+    THIS WAS RECORDED AS INERT AND IS NO LONGER. Two things that were true when the
+    geometry was written have both changed: component-level `bays:` is now read by
+    render.py, which seats an occupant into a seated module's own bay, and 24 SPAs
+    are now modelled from the SIP and SPA Hardware Installation Guide's Table 10.
+    So `accepts` can name real parts and does.
+  accepts-is-singles-only: >-
+    THE 22 SINGLE-WIDTH SPAs ARE LISTED AND THE TWO DOUBLES ARE NOT, and that is a
+    limit of the bay model rather than a statement about the hardware.
+    SPA-2XCHOC12/DS0 and SPA-1XCHOC48/DS3 occupy TWO SUBSLOTS SIDE BY SIDE - about
+    34.58 across against a subslot's 17.29 - and an occupant that spans two bays has
+    no representation here: a bay holds one module sized to itself. Listing them
+    would put a 34.58 part in a 17.29 opening and the drawing would lie. They are
+    built and correct as components; what is missing is a way to say a module fills
+    two bays. Note the guide names this class 'double-height' in Table 10 and
+    'double-width' in the SIP-700 chapter - one axis, two vocabularies, which is why
+    the count of affected parts (2 of 24) matters more than either word.
+  blank-is-a-real-part-we-do-not-have: >-
+    NO DEFAULT OCCUPANT IS SET, and the reason is a missing component rather than a
+    missing decision. Cisco requires a filler: 'When a bay is not in use, a blank
+    must fill the empty bay to allow the router or switch to conform to
+    electromagnetic interference requirements... If you plan to install a SPA in a
+    bay that is not in use, you must first remove the blank.' That blank is a real
+    orderable part and this library has no component for it, so the four subslots
+    render as openings. The guide gives it neither a part number nor a dimension in
+    any section searched, so it is not buildable from what we hold. When somebody
+    builds it, the `default` goes on these four bays the way a9k-mpa-blank goes on
+    the MOD carriers' two.
   capacity: >-
     install guide - Table 3, 'SIP Summary', names this part '20G SPA Interface
     Processor, 4 GB memory'.
@@ -170,12 +189,104 @@ bays:
   bay-2:
     at: [6.98, 27.71]
     size: [17.29, 167.87]
+    accepts:
+    - cisco/spa-1choc3-ce-atm@1
+    - cisco/spa-1xchstm1-oc3@1
+    - cisco/spa-1xoc12-atm-v2@1
+    - cisco/spa-1xoc3-atm-v2@1
+    - cisco/spa-1xoc48pos-rpr@1
+    - cisco/spa-24cht1-ce-atm@1
+    - cisco/spa-2cht3-ce-atm@1
+    - cisco/spa-2xoc12-pos@1
+    - cisco/spa-2xoc48pos-rpr@1
+    - cisco/spa-2xt3e3@1
+    - cisco/spa-3xoc3-atm-v2@1
+    - cisco/spa-4xct3-ds0@1
+    - cisco/spa-4xoc12-pos@1
+    - cisco/spa-4xoc3-pos-v2@1
+    - cisco/spa-4xoc48pos-rpr@1
+    - cisco/spa-4xt-serial@1
+    - cisco/spa-4xt3e3@1
+    - cisco/spa-8xcht1-e1-v2@1
+    - cisco/spa-8xcht1-e1@1
+    - cisco/spa-8xoc12-pos@1
+    - cisco/spa-8xoc3-pos@1
+    - cisco/spa-oc192pos-xfp@1
   bay-0:
     at: [24.27, 27.71]
     size: [17.29, 167.87]
+    accepts:
+    - cisco/spa-1choc3-ce-atm@1
+    - cisco/spa-1xchstm1-oc3@1
+    - cisco/spa-1xoc12-atm-v2@1
+    - cisco/spa-1xoc3-atm-v2@1
+    - cisco/spa-1xoc48pos-rpr@1
+    - cisco/spa-24cht1-ce-atm@1
+    - cisco/spa-2cht3-ce-atm@1
+    - cisco/spa-2xoc12-pos@1
+    - cisco/spa-2xoc48pos-rpr@1
+    - cisco/spa-2xt3e3@1
+    - cisco/spa-3xoc3-atm-v2@1
+    - cisco/spa-4xct3-ds0@1
+    - cisco/spa-4xoc12-pos@1
+    - cisco/spa-4xoc3-pos-v2@1
+    - cisco/spa-4xoc48pos-rpr@1
+    - cisco/spa-4xt-serial@1
+    - cisco/spa-4xt3e3@1
+    - cisco/spa-8xcht1-e1-v2@1
+    - cisco/spa-8xcht1-e1@1
+    - cisco/spa-8xoc12-pos@1
+    - cisco/spa-8xoc3-pos@1
+    - cisco/spa-oc192pos-xfp@1
   bay-3:
     at: [6.98, 195.59]
     size: [17.29, 165.47]
+    accepts:
+    - cisco/spa-1choc3-ce-atm@1
+    - cisco/spa-1xchstm1-oc3@1
+    - cisco/spa-1xoc12-atm-v2@1
+    - cisco/spa-1xoc3-atm-v2@1
+    - cisco/spa-1xoc48pos-rpr@1
+    - cisco/spa-24cht1-ce-atm@1
+    - cisco/spa-2cht3-ce-atm@1
+    - cisco/spa-2xoc12-pos@1
+    - cisco/spa-2xoc48pos-rpr@1
+    - cisco/spa-2xt3e3@1
+    - cisco/spa-3xoc3-atm-v2@1
+    - cisco/spa-4xct3-ds0@1
+    - cisco/spa-4xoc12-pos@1
+    - cisco/spa-4xoc3-pos-v2@1
+    - cisco/spa-4xoc48pos-rpr@1
+    - cisco/spa-4xt-serial@1
+    - cisco/spa-4xt3e3@1
+    - cisco/spa-8xcht1-e1-v2@1
+    - cisco/spa-8xcht1-e1@1
+    - cisco/spa-8xoc12-pos@1
+    - cisco/spa-8xoc3-pos@1
+    - cisco/spa-oc192pos-xfp@1
   bay-1:
     at: [24.27, 195.59]
     size: [17.29, 165.47]
+    accepts:
+    - cisco/spa-1choc3-ce-atm@1
+    - cisco/spa-1xchstm1-oc3@1
+    - cisco/spa-1xoc12-atm-v2@1
+    - cisco/spa-1xoc3-atm-v2@1
+    - cisco/spa-1xoc48pos-rpr@1
+    - cisco/spa-24cht1-ce-atm@1
+    - cisco/spa-2cht3-ce-atm@1
+    - cisco/spa-2xoc12-pos@1
+    - cisco/spa-2xoc48pos-rpr@1
+    - cisco/spa-2xt3e3@1
+    - cisco/spa-3xoc3-atm-v2@1
+    - cisco/spa-4xct3-ds0@1
+    - cisco/spa-4xoc12-pos@1
+    - cisco/spa-4xoc3-pos-v2@1
+    - cisco/spa-4xoc48pos-rpr@1
+    - cisco/spa-4xt-serial@1
+    - cisco/spa-4xt3e3@1
+    - cisco/spa-8xcht1-e1-v2@1
+    - cisco/spa-8xcht1-e1@1
+    - cisco/spa-8xoc12-pos@1
+    - cisco/spa-8xoc3-pos@1
+    - cisco/spa-oc192pos-xfp@1
