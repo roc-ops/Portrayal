@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fan
-version: 1.2.0
+version: 1.3.0
 class: cooling
 profile: networking
 description: >-
@@ -11,7 +11,7 @@ description: >-
   handle across the lower third and an indicator panel carrying a hot-swap
   button and HS / alarm / OK indicators. Maximum 100 W each, 300 W across the
   three.
-attrs: {model: 'Fan Assembly'}
+attrs: {model: 'Fan Assembly', power-draw-max-w: 100}
 size: {w: 137.25, h: 91.2, d: 150.0}
 provenance:
   layout: 'drawing - Figure 1-4 of the C100G Hardware Installation Guide, "C100G
@@ -33,6 +33,15 @@ provenance:
   size: 'drawing - Jason''s hand-built rear SVG, group `fanL`: 60.06 x 43.84 in a
     190.26-wide frame, mapped fractionally onto our 432.95 x 571 body and
     symmetrised across the three modules'
+  power: 'CONFLICT, recorded not resolved. The HIG body text states "Each fan
+    assembly module has a maximum power consumption of 100W, totaling 300W across
+    the three fan assemblies", and Table A-2 gives the row "Fan assembly (3)" as
+    "330W maximum, 220W typical" - both statements are about the set of three, and
+    300 is not 330. 100 W is taken because it is the only figure the vendor states
+    PER MODULE, which is the granularity this contract needs; dividing 330 by three
+    would be our arithmetic rather than the vendor''s, and 220/3 would invent a
+    per-module typical nobody published. The C100G carries a fan-power-sources
+    gap naming both figures'
   count: datasheet - the guide names three fan modules, LEFT, CENTER and
     RIGHT, each with two fans designated either front or back
   airflow: 'CONFLICT, unresolved. Figure 1-5 and the body text say the fans draw

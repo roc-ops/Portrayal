@@ -288,8 +288,31 @@ gaps:
     floor. The arithmetic does not settle it either way: 12 x 300 W lands on the
     C100G's stated 3.6 kW whether the 300 W is the pair or the front half with
     small rear cards.
+    The C100G HIG corroborates the assembly reading and hedges it: Tables A-10
+    and A-11 both read "Approximately 300W per BDM" under titles scoping them to
+    the BDM WITH its 6+12 I/O.
   wanted: >-
-    a separate figure for the BDM front module and for the 6+12 I/O card, or any
-    document stating which of the two the 300 W covers. Failing that, a
-    mechanism for assembly-scoped figures - `pairs-with` already declares the
-    relationship, so one example short of a vocabulary is all that is missing
+    a mechanism for pairing-scoped figures, which is now the real ask. Asking
+    for "a per-module figure" was close to the wrong question: the C100G HIG
+    heads its DQM row "Maximum consumption WITH I/O module" and gives the SAME
+    upstream card two figures depending on which rear module it is paired with -
+    US16x8 is 200 W with the RFU I/O and 220 W with the RFU UPS 32x4 - so a
+    per-module figure may not exist to be divided out. `pairs-with` already
+    names the partner; what is missing is a pairable unit that can carry
+    properties, and enough vendors doing this to design one from
+- what: fan-power-sources
+  scope: [casa/fan@1]
+  reason: sources-disagree
+  note: >-
+    The HIG body text states "Each fan assembly module has a maximum power
+    consumption of 100W, totaling 300W across the three fan assemblies". Table
+    A-2 of the same guide gives the row "Fan assembly (3)" as "330W maximum,
+    220W typical". Both are about the set of three and 300 is not 330. The
+    contract takes 100 W because it is the only figure stated PER MODULE, which
+    is the granularity a bay occupant needs; dividing 330 by three would be our
+    arithmetic, not the vendor's. A chassis total is therefore 30 W light
+    against the guide's own set figure, and no per-module typical exists at all.
+  wanted: >-
+    a measurement from a running chassis, a vendor erratum, or a later revision
+    of the guide that drops one of the two figures
+  blocks: []
