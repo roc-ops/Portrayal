@@ -38,6 +38,18 @@ provenance:
     measured - the front master passes gate 1. Calibrating x on 482.6 mm (the 19.0 in rack face)
     and y on Table 13's 619.51 mm independently gives 0.20134 and 0.20062 mm/px, agreeing to
     0.36 percent. Origin shifted in by (482.6 - 447.0) / 2 = 17.8 mm to reach the body edge
+  card-orientation: >-
+    datasheet - stated directly, and it had been an inference until now. The Overview and
+    Reference Guide's "Chassis Slots" section (b-asr9k-overview-reference-guide.pdf p17) names
+    every chassis in the family and gives the ejector position as the tell: "Cisco ASR 9906
+    Router: All line cards and RSP cards are front-facing and mounted vertically, with ejector
+    levers and captive screws at the top and bottom of each card. All FCs are rear-facing and
+    mounted vertically, with ejector levers and captive screws at the top and bottom of each
+    card". A bay therefore places a card component unrotated. Only the ASR 9006 and ASR 9904 are
+    horizontal; the 9010, 9906, 9910, 9912 and 9922 all stand their cards up, including the 21
+    RU 9010. This section supersedes the three-way inference an earlier revision rested on - the
+    slot figures, Figure 2's "four on each side" callout and the measured cage aspect - all of
+    which agreed with it.
   slots: >-
     datasheet - Figure 21 "Cisco ASR 9906 Router Slot ID Numbering", p36 of
     b-asr9k-overview-reference-guide.pdf, read at 250 dpi because the slot IDs are artwork and do
