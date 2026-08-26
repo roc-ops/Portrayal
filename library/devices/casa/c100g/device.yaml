@@ -51,10 +51,14 @@ provenance:
     and the model, with a row of card-guide tabs along its lower lip, then the black slot-number
     strip. Numbers run 0 to 13 with 6 and 7 in RED, which is how both the product photo and Fig
     1-1 mark the SMM pair
-  ground-strap-caption: 'the Ground Strap caption sat below the strap, which is where the
-    cable manager is - moved above it. NOTE: the HIG has no "Ground Strap" text at all; it
-    calls this an ESD strap receptacle. This entry and the Cable Manager L/R ones are
-    captions in silkscreen[], not printing on the chassis'
+  captions: 'the HIG has no "Ground Strap" text anywhere - it says ESD strap receptacle,
+    21 times - and no "Cable Manager" text either. Both were the modeller naming parts, so
+    both have moved out of silkscreen[] (ink on the metal) into regions (author annotation),
+    carrying the vendor word rather than the invented one. STILL UNRESOLVED: Fan L/C/R and
+    Grounding Studs on the rear are the same species and are NOT in the HIG text either, but
+    they sit beside PEM A/PEM B, which a rear panel plausibly does print - and there is no
+    photograph of the chassis rear in the intake to settle it. Left as silkscreen rather than
+    guessed at; a square-on rear photograph closes it'
 attrs:
   physical:
     weight: 132 lb / 61.23 kg fully loaded
@@ -130,9 +134,6 @@ views:
       - {at: [384.05, 102.7], text: '12', for: front-12, font-size: 9, anchor: middle, fill: '#d7dbdf'}
       - {at: [414.52, 102.7], text: '13', for: front-13, font-size: 9, anchor: middle, fill: '#d7dbdf'}
       - {at: [216.475, 464], text: FILTER, font-size: 8, fill: '#d7dbdf', anchor: middle}
-      - {at: [48.9, 553.1], text: Cable Manager L, for: cable-mgr-l}
-      - {at: [384.1, 553.1], text: Cable Manager R, for: cable-mgr-r}
-      - {at: [348.4, 529.8], text: Ground Strap, for: ground-strap-front}
     components:
       bays:
         - {id: front-0, at: [3.17, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/bdm@1], group: front-slots, rel-pos: 0, default: null}
@@ -154,6 +155,9 @@ views:
         - {id: cable-mgr-l, ref: casa/cable-manager@1, at: [13.2, 539.7], group: furniture, rel-pos: 0}
         - {id: cable-mgr-r, ref: casa/cable-manager@1, at: [348.4, 539.7], group: furniture, rel-pos: 1}
         - {id: ground-strap-front, ref: casa/ground-strap@1, at: [348.4, 530.4], group: grounding, rel-pos: 0}
+    regions:
+      - {id: cable-managers, label: Cable managers, members: [cable-mgr-l, cable-mgr-r]}
+      - {id: esd-strap-front, label: ESD strap receptacle, members: [ground-strap-front]}
   rear:
     size:
       w: 432.95
@@ -167,7 +171,6 @@ views:
       - {at: [360.325, 98.3], text: Fan R, for: fan-r}
       - {at: [109.5, 475.7], text: PEM B, for: pem-b}
       - {at: [323.45, 475.7], text: PEM A, for: pem-a}
-      - {at: [13.8, 472.4], text: Ground Strap, for: ground-strap-rear}
       - {at: [407.0, 474.1], text: Grounding Studs, for: ground-bolts-rear}
     components:
       bays:
@@ -193,6 +196,8 @@ views:
       placements:
         - {id: ground-strap-rear, ref: casa/ground-strap@1, at: [6.3, 461.9], group: grounding, rel-pos: 0}
         - {id: ground-bolts-rear, ref: casa/ground-bolts@1, at: [393.2, 460.2], group: grounding, rel-pos: 1}
+    regions:
+      - {id: esd-strap-rear, label: ESD strap receptacle, members: [ground-strap-rear]}
 configurations:
   bdm2m-11plus1:
     description: BDM2m "11+1" - the vendor's name for it. Redundancy collapses to a single protecting

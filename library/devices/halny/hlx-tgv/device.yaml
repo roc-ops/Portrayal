@@ -12,11 +12,11 @@ provenance:
   top-layout: photo-measured (owner capture with ruler; 8 labeled LEDs + 1 unlabeled position)
   bottom-layout: hand-tuned by owner against the physical unit (Inkscape round-trip of the compiled
     SVG, 2026-08-15)
-  pon-caption: 'NOTE - the white plastic underside carries NO printing beside the fibre bay
-    (IMG_2095, IMG_2096). PON SC/APC is a caption, not silkscreen, and it was sitting inside
-    the bay it names where the adapter covers it. Moved to sit centred just below the bay so
-    it can be read; whether a caption belongs in silkscreen[] at all is a modelling question
-    this pass did not settle'
+  pon-caption: 'the white plastic underside carries NO printing beside the fibre bay
+    (IMG_2095, IMG_2096). PON SC/APC was therefore never silkscreen: it is the modeller
+    naming a part, and silkscreen[] means ink on the moulding. It is now a region, which
+    is what this project has for author annotation, so the drawing no longer claims the
+    vendor printed something it did not'
 attrs:
   platform:
     cpu: dual-core-1ghz
@@ -112,12 +112,12 @@ views:
         - {at: [40.1, 23.9], size: [90, 51], rx: 25, stroke: '#c2c7cc', stroke-width: 5}
         - {at: [27.6, 0], size: [9, 43], fill: '#d5d9dc', rx: 2}
         - {at: [0, 86.7], size: [36, 10], fill: '#d5d9dc', rx: 2}
-    silkscreen:
-      - {at: [107.9, 108.3], text: PON SC/APC, font-size: 1.9, anchor: middle, for: pon}
     components:
       placements:
         - {ref: common/device-label@1, id: id-label, at: [44.1, 28.9], rotate: 180}
         - {ref: common/sc-apc@1, id: pon, at: [95.9, 79.3], skin: side, attrs: {speed: 10g-pon}}
+    regions:
+      - {id: fibre-bay, label: PON fibre bay (SC/APC), members: [pon]}
   left:
     size:
       w: 115
