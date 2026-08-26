@@ -1,0 +1,307 @@
+format: 1
+kind: device
+name: asr-9010
+version: 0.1.0
+maturity: modelled
+manufacturer: Cisco
+model: ASR 9010
+part-numbers:
+  ASR-9010-AC-V2: ASR 9010 AC Chassis with PEM Version 2
+  ASR-9010-DC-V2: ASR 9010 DC Chassis with PEM Version 2
+description: >-
+  Cisco ASR 9010 Router - the 21RU, ten-slot member of the ASR 9000 Series Aggregation Services
+  Routers. Cards mount VERTICALLY across the full width of the cage: the two CENTRE slots, 4 and
+  5, are reserved for a redundant RSP pair, with four line card slots either side of them. A
+  cable management tray runs along the top, two stacked fan trays and a front air intake sit
+  below the cage, and two power shelves fill the bottom. Modelled as a BARE CAGE: every slot is a
+  bay a card component drops into, not a traced faceplate.
+portfolio:
+  line: Service Provider
+  family: Aggregation Services Router
+  series: ASR 9000 Series
+provenance:
+  chassis: >-
+    datasheet - Table 13 "Cisco ASR 9000 Series Routers Physical Descriptions",
+    b-asr9k-overview-reference-guide.pdf p130. ASR 9010: chassis height 36.75 inches (93.35 cm),
+    chassis width 17.50 inches (44.45 cm) with "19.0 inches (48.3 cm) including chassis rack-mount
+    flanges and front door width", chassis depth 28.65 inches (72.72 cm) "including the cable
+    management system and front cover". Modelled as the BODY, 444.5 x 933.45 x 727.2 mm, with the
+    flanges deliberately not drawn
+  ru: datasheet - 36.75 in / 1.75 = exactly 21.00 RU, and the stencil's height_in of 3.6749 agrees
+  gate-1-failed-then-passed: >-
+    NOTE, and read this before re-measuring anything below. The ASR-9010-AC Front master FAILS the
+    usual aspect check: rendered at 3000 px its ink bounding box comes out 0.5103 against a true
+    19.0/36.75 = 0.5170, and calibrating x and y independently gives 0.1681 and 0.1643 mm/px, a
+    2.3 percent disagreement that one uniformly scaled drawing cannot have. THE DRAWING IS NOT THE
+    PROBLEM - ITS CANVAS IS. The art is clipped at the right edge: in the card cage band the left
+    rack flange measures 118 px wide and the right one only 48 px before running off the render,
+    and a chassis's two ears are the same width. About 70 px of a 3000 px render is missing, which
+    is the whole of the axis disagreement
+  calibration: >-
+    measured - calibrated instead on a ruler inside the artwork. The stencil draws the rack
+    mounting flange slots, and EIA-310 fixes those absolutely: holes repeat every 1.75 in with the
+    first pair 0.5 in apart. Detecting the slots down the left flange gives 26 holes in 11 pairs,
+    fitting a pitch of 270.4 px with a standard deviation of 1.68 px, and a within-pair gap of
+    77 px. Calling the pair pitch 1.75 in makes the within-pair gap 0.498 in - the EIA half inch,
+    to two thousandths - so two features of one pattern agree and the reading is not a
+    coincidence. At that scale the master's 5683 px ink height comes to 36.78 in against Table
+    13's 36.75, i.e. 0.08 percent, from a ruler owing nothing to the bounding box. Both axes then
+    take 933.45 / 5683 = 0.164253 mm/px, since the drawing is uniform and only the canvas is short
+  calibration-check: >-
+    measured - confirmed on a number never fed into the calibration. Predicting the body's left
+    edge as the left flange outer edge (x = 129 px) plus Table 13's 19.05 mm flange protrusion puts
+    it at 245 px; the measured flange INNER edge is 245-247 px. The body then spans 245 to 2951 px,
+    2951 being where the right flange begins, which is 444.47 mm against Table 13's stated 444.50.
+    A hundredth of a millimetre. The master that failed the aspect check is the best-confirmed of
+    the seven chassis once the right ruler is used
+  slots: >-
+    datasheet - Figure 18 "Cisco ASR 9010 Router Slot ID Numbering", p34 of
+    b-asr9k-overview-reference-guide.pdf, read at 250 dpi because the slot IDs are artwork and do
+    not survive text extraction. Left to right: Slot 0-3 = Line card 0-3, Slot 4 = RSP0,
+    Slot 5 = RSP1, Slot 6-9 = Line card 4-7. Figure 2 says the same in words - "Two center slots
+    reserved for redundant RSPs" and "Eight slots (four on each side) for line cards". THE RSP
+    PAIR IS THE CENTRE PAIR HERE, which is NOT where it sits on any other chassis in this family:
+    the 9006 puts it at the bottom, the 9904 in the middle of four, the 9906 and 9910 at the outer
+    edges. There is no family rule to generalise
+  slot-geometry: >-
+    drawing - the card cage opening spans 0.82 to 444.14 mm across the body and 163.76 to 518.71 mm
+    down it, so it is essentially the full body width. Ten slots of equal width divide that into a
+    44.33 mm pitch. CORROBORATION FROM A SECOND PARTY: the Cisco line card components in
+    library/components/cisco/ carry a width of 44.39 mm, derived independently from Cisco's own
+    card datasheets by another modeller. A 0.06 mm match. The cage HEIGHT of 354.95 mm also
+    matches the ASR 9006's cage WIDTH of 352.59 mm to about 2 mm, which it should - it is the same
+    card lying down
+  cards-are-vertical: >-
+    datasheet - and it has a consequence the skill warns about explicitly: a rear view MIRRORS when
+    the cards are vertical. The ASR 9010's rear slot order therefore runs right to left against the
+    front's, unlike the ASR 9006 whose horizontal cards do not mirror
+  fan-trays: >-
+    drawing - two stacked fan trays between the card guide bar at 566.51 mm and the front air
+    intake grille at 673.60 mm. Unlike the 9006's, these are OPEN TO THE FRONT with their own
+    faceplates: the master draws a FAN STATUS indicator, a yellow "HIGH SPEED MOVING BLADES"
+    warning label and an "ASR-9010-FAN" part label on each. Split evenly because they are the same
+    part stacked twice - see gaps for what that assumption rests on
+  power-shelves: >-
+    drawing + datasheet - two power shelves, PS0 at 811.74 mm and PS1 at 873.33 mm, each about
+    46 mm tall and spanning 13.96 to 431.66 mm across the body. Modelled with FOUR module bays each
+    (M0-M3), which is what Figure 18 numbers
+  power-module-count-conflict: >-
+    NOTE - Figure 18's caption says "The numbering for the AC power system is the same but each
+    power tray only holds three power modules", which reads as a blanket statement about AC. Table
+    15 contradicts it for one generation: the ASR 9010's AC systems are v1 "three per tray", v2
+    "four per tray", v3 "three per tray". So Figure 18's sentence is true of v1 and v3 AC and false
+    of v2 AC, and the DC table has the same v2 exception. Four bays are modelled because that is
+    what Figure 18 NUMBERS and what a version 2 tray holds; a v1 or v3 tray fills only three of
+    them. Recorded rather than resolved silently, because a reader who checks the caption against
+    the model will otherwise think the model is wrong
+  stencil-is-one-generation-behind: >-
+    NOTE - the same trap as the ASR 9006. The ASR-9010-AC Front master draws THREE module bays per
+    shelf, i.e. the version 1 AC tray whose PID reached end of sale in 2014 under Cisco bulletin
+    EOL9675. The four bays here follow the guide's figures, not the artwork
+  cable-management-tray: >-
+    datasheet + drawing - the band above the cage, 0 to 163.76 mm, is the cable management tray.
+    Figure 2 calls it out by name and Figure 15 illustrates it, and Table 13 confirms it is part of
+    this chassis by quoting the 9010's depth "including the cable management system and front
+    cover" - wording the ASR 9006's row does NOT use. The master prints the cisco logo, "ASR 9000
+    Series" and an "OPEN" legend on it. That text belongs to the tray, not to the chassis metal,
+    so it is not in silkscreen here - see gaps
+  airflow: >-
+    datasheet - "Cisco ASR 9010 Router: Front-to-rear cooling path. The inlet is at the bottom
+    front of the chassis, and the exhaust is at the upper rear",
+    b-asr9k-overview-reference-guide.pdf p3722. Hence chassis.airflow front-to-back and the large
+    intake grille on the front at 675.08 to 796.79 mm. This DIFFERS from the ASR 9006, which draws
+    from its right side
+  air-filter: >-
+    datasheet - Table 17 "Air Filter Locations", b-asr9k-hardware-installation-guide.pdf p228:
+    "Cisco ASR 9010 Router - Located underneath the fan trays." Removed "by simply sliding it out
+    of the chassis". Again unlike the 9006, whose filter is on the right side. Not modelled as a
+    bay because no figure we hold dimensions it - see gaps
+  grounding: >-
+    datasheet - "Bottom rear right side of the chassis", b-asr9k-hardware-installation-guide.pdf
+    p125, in the same table that puts the ASR 9006's at the TOP rear right. Figure 132 illustrates
+    it. Placed on the rear view at the bottom, toward the chassis's right side, which on a rear
+    view is the viewer's left
+  environmental: datasheet - Table 14, p131. Note the 9010's short-term operating range is 23 to
+    122 degF (-5 to 50 degC), NOT the 9006's 23 to 131 degF (-5 to 55 degC)
+  electrical: datasheet - Table 15 (AC) and Table 16 (DC), pp132-135, ASR 9010 columns only
+  weight: >-
+    datasheet - Table 13, two figures with two scopes. "Chassis only - 149.5 pounds (67.81 kg)",
+    footnoted as excluding cards, power modules, fan trays, filter and accessories, and "Chassis:
+    fully configured using all card slots and six power modules - 375 pounds (170.5 kg)".
+    chassis.weight-kg carries the bare 67.81 because that is the empty cage this manifest draws
+  no-chassis-power-figure: >-
+    NOTE - Cisco publishes no chassis-level draw for any ASR 9000. Table 14's "Power Dissipation"
+    row says only to use the Cisco Power Calculator. So there is deliberately no power-max-w here
+  lifecycle: >-
+    datasheet - searched. Cisco bulletin EOL9675 (Amended) retires the ASR-9010-AC and ASR-9010-DC
+    VERSION 1 POWER BUNDLE PIDs, not the chassis: "The Cisco ASR 9006 and ASR 9010 chassis continue
+    their regular support as part of the Cisco ASR 9000 Series, and these can continue to be
+    purchased together with the Version 2 AC or DC power trays ... Only those products related to
+    Version 1 power bundles and devices are part of this end-of-sale notice." So none-announced for
+    the chassis
+  compliance: datasheet - data_sheet_c78-501767.pdf series compliance list, transcribed as printed
+attrs:
+  physical:
+    weight-configured-kg: 170.5
+    weight-configured-scope: fully configured using all card slots and six power modules
+  environmental:
+    operating-temperature: 41 to 104degF (5 to 40degC)
+    operating-temperature-short-term: 23 to 122degF (-5 to 50degC)
+    non-operating-temperature: -40 to 158degF (-40 to 70degC)
+    humidity-operating: 10 to 85 percent noncondensing
+    humidity-non-operating: 5 to 95 percent noncondensing
+    altitude-operating: 0 to 13,000 ft (0 to 4,000 m)
+    acoustic-noise: 78 dB at 80.6degF (27degC) maximum
+  power:
+    power-modules-v1: Version 1 power system - up to six modules per system, three per tray
+    power-modules-v2: Version 2 power system - up to eight modules per system, four per tray
+    power-modules-v3-ac: Version 3 AC power system - up to six modules per system, three per tray
+    power-modules-v3-dc: Version 3 DC power system - up to eight modules per system, four per tray
+    power-ac-input-per-module-v2: 3290 VA (3000 W output module)
+    power-ac-input-per-module-v3: 6510 VA (6000 W output module)
+    power-ac-input-voltage: 200-240 VAC nominal (range 180 to 264 VAC); 220-240 VAC (UK)
+    power-ac-input-frequency: 50/60 Hz nominal (range 47 to 63 Hz)
+    power-ac-input-current: 15 A maximum at 200 VAC; 13 A maximum at 220 to 240 VRMS (UK)
+    power-ac-service-requirement: 20 A North America; 16 A international; 13 A United Kingdom
+    power-ac-redundancy: AC power modules operate in N+N redundancy mode
+    power-dc-input-per-module-v1: 1700 W (1500 W output module)
+    power-dc-input-per-module-v2: 2340 W (2100 W output module)
+    power-dc-input-per-module-v3: 4730 W (4400 W output module)
+    power-dc-input-voltage: -48 VDC nominal in North America, -60 VDC nominal in the European
+      Community (range -40.5 to -72 VDC, -75 VDC for 5 ms)
+    power-dc-input-current: 49 A maximum at -48 VDC nominal; 39 A maximum at -60 VDC nominal
+  thermal:
+    cooling-path: front-to-rear; inlet at the bottom front of the chassis, exhaust at the upper rear
+    air-filter-location: underneath the fan trays
+  platform:
+    operating-system: Cisco IOS XR
+    interface-path-id: rack/slot/module/port
+  compliance:
+    nebs: 'SR-3580: NEBS Criteria Levels (Level 3)'
+    nebs-emc-safety: 'GR-1089-CORE: NEBS EMC and Safety'
+    nebs-physical: 'GR-63-CORE: NEBS Physical Protection'
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 444.5
+  height: 933.45
+  depth: 727.2
+  ru: 21
+  weight-kg: 67.81
+  airflow: front-to-back
+  color: '#c8cacc'
+groups:
+  slots:
+    term: Slot
+    index-origin: 0
+  fan-trays:
+    term: Fan Tray
+    index-origin: 0
+    physical-context: Fan
+  power-shelves:
+    term: Power Shelf
+    index-origin: 0
+  power-modules:
+    term: Power Module
+    index-origin: 0
+    physical-context: PowerSupply
+views:
+  front:
+    size: {w: 444.5, h: 933.45}
+    panel:
+      decor:
+        - {at: [0, 0], size: [444.5, 163.76], fill: '#d5d7d9'}
+        - {at: [0, 563.72], size: [444.5, 2.79], fill: '#8d8f91'}
+        - {at: [0.99, 675.08], size: [443.0, 121.71], fill: '#8d8f91', pattern: grille, vent: 65}
+        - {at: [0, 807.8], size: [444.5, 2.62], fill: '#8d8f91'}
+        - {at: [0, 919.32], size: [444.5, 14.13], fill: '#b4b6b8'}
+      cutouts:
+        - {id: cage, at: [0.82, 163.76], size: [443.32, 354.95], shape: rect}
+        - {id: fan-band, at: [0.82, 566.51], size: [443.32, 107.09], shape: rect}
+        - {id: shelf-0, at: [13.96, 811.74], size: [417.7, 46.15], shape: rect}
+        - {id: shelf-1, at: [13.96, 873.33], size: [417.7, 45.99], shape: rect}
+    components:
+      bays:
+        - {id: slot-0, at: [0.82, 163.76], size: {w: 44.33, h: 354.95}, accepts: ['cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0}
+        - {id: slot-1, at: [45.15, 163.76], size: {w: 44.33, h: 354.95}, accepts: ['cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1}
+        - {id: slot-2, at: [89.48, 163.76], size: {w: 44.33, h: 354.95}, accepts: ['cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2}
+        - {id: slot-3, at: [133.81, 163.76], size: {w: 44.33, h: 354.95}, accepts: ['cisco/a9k-slot-cover@1'], group: slots, rel-pos: 3}
+        - {id: slot-4, at: [178.14, 163.76], size: {w: 44.33, h: 354.95}, accepts: ['cisco/a9k-slot-cover@1'], group: slots, rel-pos: 4}
+        - {id: slot-5, at: [222.47, 163.76], size: {w: 44.33, h: 354.95}, accepts: ['cisco/a9k-slot-cover@1'], group: slots, rel-pos: 5}
+        - {id: slot-6, at: [266.8, 163.76], size: {w: 44.33, h: 354.95}, accepts: ['cisco/a9k-slot-cover@1'], group: slots, rel-pos: 6}
+        - {id: slot-7, at: [311.13, 163.76], size: {w: 44.33, h: 354.95}, accepts: ['cisco/a9k-slot-cover@1'], group: slots, rel-pos: 7}
+        - {id: slot-8, at: [355.46, 163.76], size: {w: 44.33, h: 354.95}, accepts: ['cisco/a9k-slot-cover@1'], group: slots, rel-pos: 8}
+        - {id: slot-9, at: [399.79, 163.76], size: {w: 44.33, h: 354.95}, accepts: ['cisco/a9k-slot-cover@1'], group: slots, rel-pos: 9}
+    regions:
+      - {id: rsp-slots, label: Two center slots reserved for redundant RSPs, members: [slot-4, slot-5]}
+      - {id: lc-slots-left, label: Line cards 0-3, members: [slot-0, slot-1, slot-2, slot-3]}
+      - {id: lc-slots-right, label: Line cards 4-7, members: [slot-6, slot-7, slot-8, slot-9]}
+      - {id: cable-management-tray, label: Cable management tray}
+      - {id: front-air-intake, label: Front air intake}
+      - {id: fan-trays, label: 'Two fan trays, ASR-9010-FAN'}
+  rear:
+    size: {w: 444.5, h: 933.45}
+    panel:
+      cutouts:
+        - {id: ground-pad, at: [26.0, 880.0], size: [46.0, 20.0], shape: rect}
+    regions:
+      - {id: nebs-ground, label: NEBS bonding and grounding receptacle - bottom rear right side}
+  top:
+    size: {w: 444.5, h: 727.2}
+  bottom:
+    size: {w: 444.5, h: 727.2}
+  left:
+    size: {w: 727.2, h: 933.45}
+  right:
+    size: {w: 727.2, h: 933.45}
+gaps:
+- what: fan-tray-split
+  scope: [front, fan-trays]
+  reason: needs-drawing
+  note: >-
+    The ASR 9010's two fan trays occupy the band between the card guide bar at 566.51 mm and the
+    front air intake grille at 673.60 mm - 107.09 mm for the pair, which is measured and solid.
+    What is NOT measured is where one ends and the other begins. Scanning that band finds a dark
+    separator at about 605.8 mm, but it does not bisect the band (39.3 mm above it, 66.9 mm below),
+    so it is more likely internal faceplate detail than the boundary. They are not modelled as bays
+    at all yet for want of a component, and when they are, an EVEN split is the right inference
+    rather than a measured fact: the master labels both trays "ASR-9010-FAN", so they are the same
+    part stacked twice and the same part is the same height. Recorded so that inference is visible
+    as an inference.
+  wanted: a dimensioned front elevation, or the ASR-9010-FAN spare-part drawing
+- what: bays-awaiting-components
+  scope: [front, fan-trays, power-shelves, power-modules]
+  reason: needs-drawing
+  note: >-
+    The card slots are bays and accept the line card and RSP blank. The fan trays, the eight power
+    module positions and the air filter are NOT modelled as bays, because a bay must name a
+    component that fits it and library/components/cisco/ carries no ASR 9010 fan tray, no version 2
+    or 3 power module and no filter. Their openings ARE measured and are drawn as cutouts, so the
+    metal is right and only the occupants are missing. The power shelf openings are 13.96 to
+    431.66 mm at y 811.74 and 873.33; the fan band is 566.51 to 673.60. Pointing them at the line
+    card blank would lint clean and claim something false - a 41.4 x 395.7 filler plate does not
+    cover a power module opening.
+  wanted: an ASR 9010 fan tray, the version 2 and 3 AC and DC power modules, and the chassis air filter
+- what: cable-management-tray-branding
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    The cisco logo, the "ASR 9000 Series" wordmark and an "OPEN" legend are printed on the CABLE
+    MANAGEMENT TRAY, not on chassis metal - the stencil master draws them inside that band. Per the
+    skill, text on a part's own face is that part's silkscreen, so this chassis deliberately carries
+    none and the tray is not modelled as a placement for want of a component. The band itself is
+    measured (0 to 163.76 mm) and drawn as decor, so the metal is right and only the printing and
+    the tray are absent. This is the same decision taken on the ASR 9006's fan tray door.
+  wanted: a cable management tray component carrying its own branding
+- what: blank-faces
+  scope: [top, bottom, left, right]
+  reason: vendor-silent
+  note: >-
+    All four side faces are sized from Table 13 and Figure 8 (the 9010's top-down footprint) and
+    are deliberately EMPTY. Figure 8 dimensions the footprint outline but nothing on the top plate,
+    and no document we hold shows the bottom, the left or the right of an ASR 9010. Unlike the ASR
+    9006 - whose right side carries the air intake, the air filter and the grounding pad, all
+    stated by the guide - this chassis draws air through the FRONT, so its sides have no stated
+    features at all. The sizes are right, so a rack elevation and the 3D box are right, which is
+    what these views are carrying. This holds the device at capability 2.
+  wanted: a six-face photograph set, or the mechanical drawings behind Figure 8
