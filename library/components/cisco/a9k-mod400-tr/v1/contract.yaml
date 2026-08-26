@@ -21,19 +21,33 @@ attrs:
   eol: 'none-announced'
 provenance:
   size: >-
-    drawing - the ORIGINAL-generation card shell, and the identification is the evidence
-    rather than an assumption from the chassis it goes in. index.json gives this master
-    the padded 1.72 x 14.75 in shape box that every card-envelope master in this stencil
-    carries and which gate 1 discards; the art measures a plate of 40.82 x 358.13 mm at
-    0.27, 19.19, which is the SAME PLATE, to the hundredth of a millimetre, as the
-    A9K-24X10GE-SE and the rest of the original-generation line cards already in this
-    library. Those are anchored to Cisco's stated 43.7 x 395.7 x 520.7 mm, W including
-    the ejector bracket, so this card takes the same three numbers. Note what that is
-    NOT: no document in the intake gives an A9K-MOD's dimensions. The Ethernet Line Card
-    Installation Guide has a section headed 'Ethernet Line Card Physical Dimensions'
-    whose entire content is 'For physical specifications, refer to the ASR 9000 Series
-    line card data sheets' and a URL. The dimensions here are the shared shell's, and
-    they are sound because one drawing cannot be two sizes.
+    drawing, WITH A STANDARD PART AS THE RULER, because Table A-10 does not reach this
+    card: the OL-17500-09 physical-dimensions table stops at the 160 Gigabyte carrier
+    and the 200 and 400 came later. The measurement is the MPA. An MPA's envelope is
+    33.81 x 160.02 mm, which is index.json's shapesheet for all seven MPA masters and is
+    corroborated independently by the ASR 9001's bay openings. This master draws its two
+    bays as outlines. Scale the art so the card is 43.7 x 395.7 - the original
+    generation's stated dimensions - and those outlines measure 33.23 x 161.21 and 33.23
+    x 160.94 mm, which is 1.2 to 1.7 percent off the MPA. Scale it to the 4th
+    generation's 41.4 instead and they come out 6.4 to 6.9 percent off. The card is 43.7
+    thick, and the depth of 520.7 is the one Table A-10 gives for its 80 and 160
+    Gigabyte siblings, carried across as a sibling's figure and flagged as one rather
+    than measured.
+  art-box-is-not-a-size: >-
+    A TRAP IN THIS STENCIL THAT COST ME A WRONG ARGUMENT, recorded because it will catch
+    the next person. The first version of this provenance said these carriers share a
+    plate 'to the hundredth of a millimetre' with the original-generation line cards.
+    That was CIRCULAR: both had been scaled to 395.7 first, so of course their plates
+    agreed. What is not circular is the RAW art box, and it does carry a signal - the
+    card masters fall into exactly three: 46.55 x 413.95, 46.39 x 413.45 and 46.62 x
+    413.95, and the three contain cards whose data sheets say 43.7, 41.4 and 42.0 mm
+    thick. It is very tempting to read the box as a thickness. IT IS NOT ONE. The
+    A9K-MOD200-SE master is drawn on the 46.39 box, the one whose other occupants are
+    all 41.4 mm 4th-generation cards - and the MPA drawn inside it measures 33.41 mm at
+    a 43.7 anchor and 31.65 at a 41.4 anchor, so the card is 43.7. The art box
+    identifies the TEMPLATE a master was drawn from and nothing more; Cisco reused a
+    newer template for an older-sized card. The standard part inside the art is the
+    authority for the scale, and the outline is not.
   bays: >-
     install guide + drawing, and the two agree. The guide: 'The modular line card
     provides two bays that support the following Modular Port Adapters (MPAs)'. The
@@ -116,6 +130,7 @@ bays:
     - 'cisco/a9k-mpa-8x10ge@1'
     - 'cisco/a9k-mpa-1x40ge@1'
     - 'cisco/a9k-mpa-2x40ge@1'
+    - 'cisco/a9k-mpa-20x10ge@1'
   bay-1:
     at: [7.59, 202.78]
     size: [33.81, 160.02]
@@ -126,3 +141,4 @@ bays:
     - 'cisco/a9k-mpa-8x10ge@1'
     - 'cisco/a9k-mpa-1x40ge@1'
     - 'cisco/a9k-mpa-2x40ge@1'
+    - 'cisco/a9k-mpa-20x10ge@1'
