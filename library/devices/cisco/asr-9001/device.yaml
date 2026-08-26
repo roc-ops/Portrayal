@@ -1,0 +1,271 @@
+format: 1
+kind: device
+name: asr-9001
+version: 0.1.0
+maturity: modelled
+manufacturer: Cisco
+model: ASR 9001
+part-numbers:
+  chassis: ASR-9001
+description: >-
+  Cisco ASR 9000 Series ASR 9001 Router - a 2 RU fixed-port aggregation services
+  router with an integrated route processor, four fixed 10 GE SFP+ ports, two
+  modular port adapter bays and 120 Gbps of fabric. Everything is on the front
+  face: both MPA bays, both power supplies, the side-mounted fan tray and every
+  port. The rear is a plain louvred panel.
+portfolio:
+  line: Service Provider
+  family: Aggregation Services Router
+  series: ASR 9000 Series
+provenance:
+  sources: 'the Cisco ASR 9000 Series Fixed-Port Routers Hardware Installation
+    Guide (b-asr9001-hardware-installation-guide.pdf, retitled from the ASR 9001
+    HIG and now covering the 9001, 9901, 9902 and 9903); the Cisco ASR 9001 Router
+    Data Sheet (c78-685687); and Cisco''s own Visio stencil Routers-Cisco_ASR_9000_11_15_13,
+    masters asr-9001-front and asr-9001-rear'
+  chassis: 'datasheet - the ASR 9001 data sheet''s Table 2: ''Height: 3.472 inches
+    (88.2 mm), Width: 17.42 inches (442 mm), Depth: 18.5 inches (470 mm), Weight
+    of chassis: 30.2032 lbs (13.7 kg)''. THREE SOURCES AGREE ON THE HEIGHT to 0.06
+    percent - the data sheet''s 3.472 in, the install guide''s ''Cisco ASR 9901
+    Router and Cisco ASR 9001 Router is 3.47 inches (8.8 cm)'', and the stencil
+    master''s props.height_in of 0.3472 at 1:10. So the rounding-up trap in stencil-as-metrology.md
+    does not bite this chassis: 2 RU is 3.5 in and the chassis is built 0.028 in
+    under it. chassis.width is the 442 BODY, not the 19 in rack face the stencil
+    box carries'
+  stencil-calibration: 'the asr-9001-front master calibrates to 0.66 percent between
+    its two axes - x on the 19.0 in rack face (0.18562 mm/px over 2600 px) and y
+    on the data sheet''s 88.2 mm (0.18452 mm/px over 478 px). By stencil-as-metrology.md
+    that is trustworthy but not pristine; the ASR 9904 managed 0.06 percent. CONFIRMED
+    ON SOMETHING NEVER USED AS AN INPUT: with x calibrated on the rack face, the
+    body''s left edge measures 21.0 mm, against 20.3 mm predicted by (482.6 - 442)
+    / 2 from two data sheet numbers. That is the note''s third check and it passes'
+  face-check: 'done BEFORE measuring, per the ASR 9910 lesson in stencil-as-metrology.md,
+    where Cisco''s master filenames name the wrong faces. No swap here: asr-9001-front
+    carries the MPA bays, the PSU openings, every port, the LED cluster, the fan
+    module and the ''Cisco ASR-9001'' branding, and matches Figure 7 of the guide,
+    ''Front Panel of the Cisco ASR 9001 Router''. asr-9001-rear is a plain louvred
+    panel'
+  front-geometry: 'drawing-measured off the stencil master at the calibration
+    above, expressed in body coordinates. The two MPA bays are one row at y 2.6
+    to 38.2, BAY 0 at x 20.0 to 182.9 and BAY 1 at x 208.9 to 371.9, each 163.0
+    wide and separated by a 26 mm divider that carries both captive screws and both
+    BAY legends - which is what settles that the bays are SIDE BY SIDE and not stacked,
+    since the two rotated legends sit at opposite ends of one divider. The PSU openings
+    are at y 45.0 to 86.0, x 10.3 to 66.9 and 72.0 to 128.7, so 56.6 x 41.0 - against
+    cisco/a9k-750w-ac''s 55.2 x 39.9, agreeing to 2.5 percent, which is the confirmation
+    that the data sheet''s PSU PID is the part that fits'
+  port-rows: 'drawing-measured - every stacked port pair sits on the SAME two
+    rows, which is what makes the reading safe: the upper row at y 46.5 to 55.4
+    and the lower at 62.6 to 71.4, a 16.1 mm pitch, reproduced independently at
+    eight different x positions. The SFP cages measure a 15.3 mm belly-to-belly
+    pitch against the 15.00 std/sfp-ganged carries from a measured TE part'
+  sfp-plus-numbering: 'READ AT HIGH ZOOM, because it is not the obvious order.
+    The left cage is SFP+ 3 over SFP+ 1 and the right cage is SFP+ 2 over SFP+ 0,
+    so numbering runs RIGHT TO LEFT along the bottom row and then right to left
+    along the top: port 0 bottom-right, 1 bottom-left, 2 top-right, 3 top-left.
+    Modelled exactly as printed'
+  rear: 'drawing - the rear is a plain louvred panel and that is the finding,
+    not an omission. Horizontal vent slots across the full width, six screws and
+    the two rack ears. No connectors and no modules: on this chassis the PSUs, the
+    fan tray, both MPA bays and every port are on the FRONT'
+  airflow: 'drawing - ''the fan tray on Cisco ASR 9001 Router is located along
+    the right side of the router and circulates cool air from right-to-left through
+    the router'', which is why the fan bay sits at the right end of the front face.
+    The guide adds that ''Each power supply is also equipped with fans'''
+  side-faces: 'no figure in either document shows the top, bottom or side faces
+    of this chassis, so they are sized from the data sheet and carry only the integral
+    rack flanges. Stated rather than left blank, as on the Casa chassis'
+  din-connectors: 'THE 10MHz AND 1PPS PORTS ARE DECLARED AS PANEL CUTOUTS AND
+    NOT COMPOSED, deliberately. Table 4 of the guide gives their connector as DIN
+    1.0/2.3, and there is no std/ part for it - the registry has sma, smb, mcx and
+    f-type. Substituting one of those would name a connector Cisco does not. The
+    holes are measured (about 4 mm, centred at y 68.0) and a gap records what is
+    missing'
+  leds: 'drawing - eight discrete indicators, which matches the guide''s callout
+    ''Eight discrete LED indicators'' on Figure 13. Grouped as the stencil draws
+    them: RSP FAIL and LC FAIL in the left column, CRIT / MAJ / MIN in the middle,
+    EUSB / ACO / SYNC on the right. Their POSITIONS are read off the master at a
+    scale where the dots are a few pixels, so treat the grouping and the count as
+    reliable and the millimetres as approximate'
+  lifecycle: 'searched and not found, with a caveat worth stating. No end-of-sale
+    or end-of-life announcement for the ASR 9001 CHASSIS appears in the material
+    held; the one EOL bulletin in the intake covers the ASR 9000 Series 4th Generation
+    Ethernet Line Card Family, announced 2024-03-15, which is a different product.
+    A live check was not possible - cisco.com returns 403 to this machine, which
+    is why the whole intake came from the Wayback Machine - so this records ''nothing
+    found in what we hold'' rather than a confirmed absence'
+attrs:
+  physical:
+    rack-face-width-mm: '482.6'
+    weight-with-two-mpas-kg: '16.5'
+  performance:
+    fabric-bandwidth: 120 Gbps
+    integrated-interfaces: 4 x 10 GE SFP+
+    modular-port-adapters: 20 x 1 GE, 2 x 10 GE, 4 x 10 GE, 1 x 40 GE
+  power:
+    power-typical-w: '425'
+    power-max-w: '525'
+    power-input-ac: 90-265 VAC, 50-60 Hz
+    power-input-dc: -40 to -72 VDC
+    power-supply-pids: A9K-750W-AC, A9K-750W-DC
+  environmental:
+    temperature-operating: 0 to 40 C (32 to 104 F)
+    temperature-storage: -40 to 75 C (-40 to 167 F)
+  platform:
+    route-processor: integrated
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 442.0
+  height: 88.2
+  depth: 470.0
+  ru: 2
+  weight-kg: 13.7
+  airflow: side
+  color: '#c8cacc'
+  silk: '#231f20'
+groups:
+  mpa-bays: {term: Bay, index-origin: 0, physical-context: NetworkingDevice}
+  power-modules: {term: Power Supply, index-origin: 0, physical-context: PowerSupply}
+  cooling: {term: Fan Tray, index-origin: 0, physical-context: Fan}
+  sfp-plus: {term: Port, index-origin: 0, attrs: {media: sfp-plus, speed: 10g}}
+  cluster: {term: Port, index-origin: 0, attrs: {media: sfp}}
+  timing: {term: Port, index-origin: 0, attrs: {media: rj45}}
+  mgmt: {term: Port, index-origin: 0, mixed: 'local and remote management access - console, auxiliary, Ethernet and USB'}
+  system-leds: {term: LED, index-origin: 1}
+views:
+  front:
+    size: {w: 442.0, h: 88.2}
+    panel:
+      decor:
+        - {at: [182.9, 2.6], size: [26.0, 35.6], fill: '#d2d4d6'}
+        - {at: [20.0, 2.6], size: [163.0, 35.6], fill: '#17191c'}
+        - {at: [208.9, 2.6], size: [163.0, 35.6], fill: '#17191c'}
+        - {at: [137.5, 46.1], size: [12.0, 26.8], fill: '#f5d21a'}
+      cutouts:
+        - {id: mpa-0, at: [20.0, 2.6], size: [163.0, 35.6], shape: rect}
+        - {id: mpa-1, at: [208.9, 2.6], size: [163.0, 35.6], shape: rect}
+        - {id: clk-10mhz, at: [180.3, 66.0], size: [4.0, 4.0], shape: circle}
+        - {id: clk-1pps, at: [193.05, 66.0], size: [4.0, 4.0], shape: circle}
+    silkscreen:
+      - {at: [195.9, 9.5], text: 'BAY 0'}
+      - {at: [195.9, 34.5], text: 'BAY 1'}
+      - {at: [38.6, 43.0], text: 'PSU0', for: psu-0}
+      - {at: [100.4, 43.0], text: 'PSU1', for: psu-1}
+      - {at: [141.0, 59.5], text: 'ATTENTION', rotate: 90}
+      - {at: [146.5, 59.5], text: 'ON-OFF FOR ENTIRE SHELF', rotate: 90}
+      - {at: [182.3, 64.0], text: '10MHz'}
+      - {at: [195.05, 64.0], text: '1PPS'}
+      - {at: [414.5, 84.0], text: 'ASR-9001 FAN', for: fan-0}
+      - {at: [340.0, 84.0], text: 'Cisco ASR-9001'}
+      - {at: [166.1, 44.050000000000004], text: 'TOD', for: tod}
+      - {at: [166.1, 60.1], text: 'SVC LAN', for: svc-lan}
+      - {at: [213.7, 44.050000000000004], text: 'SYNC 0', for: sync-0}
+      - {at: [213.7, 60.1], text: 'SYNC 1', for: sync-1}
+      - {at: [234.85, 44.050000000000004], text: 'CONSOLE', for: console}
+      - {at: [234.85, 60.1], text: 'AUX', for: aux}
+      - {at: [257.2, 44.050000000000004], text: 'MGT LAN 1', for: mgt-lan-1}
+      - {at: [257.2, 60.1], text: 'MGT LAN 0', for: mgt-lan-0}
+      - {at: [325.8, 44.35], text: 'CLUSTER 1', for: cluster-1}
+      - {at: [325.8, 60.4], text: 'CLUSTER 0', for: cluster-0}
+      - {at: [348.8, 44.35], text: 'SFP+ 3', for: sfp-plus-3}
+      - {at: [348.8, 60.4], text: 'SFP+ 1', for: sfp-plus-1}
+      - {at: [369.3, 44.35], text: 'SFP+ 2', for: sfp-plus-2}
+      - {at: [369.3, 60.4], text: 'SFP+ 0', for: sfp-plus-0}
+      - {at: [276.5, 57.0], text: 'USB', for: usb}
+      - {at: [288.4, 49.1], text: 'RSP', for: led-rsp-fail}
+      - {at: [288.4, 52.1], text: 'FAIL', for: led-rsp-fail}
+      - {at: [288.4, 65.6], text: 'LC', for: led-lc-fail}
+      - {at: [288.4, 68.6], text: 'FAIL', for: led-lc-fail}
+      - {at: [299.7, 50.7], text: 'CRIT', for: led-crit}
+      - {at: [299.7, 59.0], text: 'MAJ', for: led-maj}
+      - {at: [299.7, 67.2], text: 'MIN', for: led-min}
+      - {at: [310.7, 50.7], text: 'EUSB', for: led-eusb}
+      - {at: [310.7, 59.0], text: 'ACO', for: led-aco}
+      - {at: [310.7, 67.2], text: 'SYNC', for: led-sync}
+    components:
+      bays:
+        - {id: psu-0, at: [10.3, 45.0], size: {w: 56.6, h: 41.0}, accepts: [cisco/a9k-750w-ac@1, cisco/a9k-750w-dc@1], group: power-modules, rel-pos: 0, default: cisco/a9k-750w-ac@1}
+        - {id: psu-1, at: [72.0, 45.0], size: {w: 56.8, h: 41.0}, accepts: [cisco/a9k-750w-ac@1, cisco/a9k-750w-dc@1], group: power-modules, rel-pos: 1, default: cisco/a9k-750w-ac@1}
+        - {id: fan-0, at: [387.1, 0.0], size: {w: 54.86, h: 88.2}, accepts: [cisco/asr-9001-fan@1], group: cooling, rel-pos: 0, default: cisco/asr-9001-fan@1}
+      placements:
+        - {ref: std/rj45-ganged@1, id: tod, at: [159.75, 45.45], group: timing, rel-pos: 0}
+        - {ref: std/rj45-ganged@1, id: svc-lan, at: [159.75, 61.5], group: timing, rel-pos: 1, rotate: 180}
+        - {ref: std/rj45-ganged@1, id: sync-0, at: [207.35, 45.45], group: timing, rel-pos: 2}
+        - {ref: std/rj45-ganged@1, id: sync-1, at: [207.35, 61.5], group: timing, rel-pos: 3, rotate: 180}
+        - {ref: std/rj45-ganged@1, id: console, at: [228.5, 45.45], group: mgmt, rel-pos: 4}
+        - {ref: std/rj45-ganged@1, id: aux, at: [228.5, 61.5], group: mgmt, rel-pos: 5, rotate: 180}
+        - {ref: std/rj45-ganged@1, id: mgt-lan-1, at: [250.85, 45.45], group: mgmt, rel-pos: 6}
+        - {ref: std/rj45-ganged@1, id: mgt-lan-0, at: [250.85, 61.5], group: mgmt, rel-pos: 7, rotate: 180}
+        - {ref: std/sfp-ganged@1, id: cluster-1, at: [318.675, 45.75], group: cluster, rel-pos: 1}
+        - {ref: std/sfp-ganged@1, id: cluster-0, at: [318.675, 61.8], group: cluster, rel-pos: 0}
+        - {ref: std/sfp-ganged@1, id: sfp-plus-3, at: [341.675, 45.75], group: sfp-plus, rel-pos: 3}
+        - {ref: std/sfp-ganged@1, id: sfp-plus-1, at: [341.675, 61.8], group: sfp-plus, rel-pos: 1}
+        - {ref: std/sfp-ganged@1, id: sfp-plus-2, at: [362.175, 45.75], group: sfp-plus, rel-pos: 2}
+        - {ref: std/sfp-ganged@1, id: sfp-plus-0, at: [362.175, 61.8], group: sfp-plus, rel-pos: 0}
+        - {ref: std/usb-a@1, id: usb, at: [270.5, 62.7], rotate: 90, group: mgmt, rel-pos: 8}
+        - {ref: common/led-dot@1, id: led-rsp-fail, at: [281.0, 49.5], group: system-leds, rel-pos: 1, for: chassis, states: ['off', {name: rsp-failed, color: '#d0342c'}, {name: rsp-up, color: '#39b54a'}]}
+        - {ref: common/led-dot@1, id: led-lc-fail, at: [281.0, 66.0], group: system-leds, rel-pos: 2, for: chassis, states: ['off', {name: lc-failed, color: '#d0342c'}, {name: lc-up, color: '#39b54a'}]}
+        - {ref: common/led-dot@1, id: led-crit, at: [295.5, 49.5], group: system-leds, rel-pos: 3, for: chassis, states: ['off', {name: critical-alarm, color: '#d0342c'}]}
+        - {ref: common/led-dot@1, id: led-maj, at: [295.5, 57.8], group: system-leds, rel-pos: 4, for: chassis, states: ['off', {name: major-alarm, color: '#d0342c'}]}
+        - {ref: common/led-dot@1, id: led-min, at: [295.5, 66.0], group: system-leds, rel-pos: 5, for: chassis, states: ['off', {name: minor-alarm, color: '#f5a623'}]}
+        - {ref: common/led-dot@1, id: led-eusb, at: [306.5, 49.5], group: system-leds, rel-pos: 6, for: usb, states: ['off', {name: usb-active, color: '#39b54a'}]}
+        - {ref: common/led-dot@1, id: led-aco, at: [306.5, 57.8], group: system-leds, rel-pos: 7, for: chassis, states: ['off']}
+        - {ref: common/led-dot@1, id: led-sync, at: [306.5, 66.0], group: system-leds, rel-pos: 8, for: chassis, states: ['off', {name: sync-ok, color: '#39b54a'}]}
+  rear:
+    size: {w: 442.0, h: 88.2}
+    panel:
+      decor:
+        - {at: [6.0, 4.0], size: [430.0, 80.2], fill: '#b4b6b8', pattern: grille, vent: 60}
+  top:
+    size: {w: 442.0, h: 470.0}
+    panel:
+      decor:
+        - {at: [0, 0], size: [442.0, 6.0], fill: '#b0b2b4'}
+  bottom:
+    size: {w: 442.0, h: 470.0}
+    panel:
+      decor:
+        - {at: [0, 464.0], size: [442.0, 6.0], fill: '#b0b2b4'}
+  left:
+    size: {w: 470.0, h: 88.2}
+    panel:
+      decor:
+        - {at: [0, 0], size: [6.0, 88.2], fill: '#b0b2b4'}
+  right:
+    size: {w: 470.0, h: 88.2}
+    panel:
+      decor:
+        - {at: [464.0, 0], size: [6.0, 88.2], fill: '#b0b2b4'}
+gaps:
+- what: din-1-0-2-3-connector
+  scope: [clk-10mhz, clk-1pps]
+  reason: vendor-silent
+  note: >-
+    Table 4 of the fixed-port install guide gives the 10MHz and 1PPS connectors
+    as DIN 1.0/2.3. The standards registry has no key for it - sma, smb, mcx and
+    f-type are there, DIN 1.0/2.3 is not - so these two openings are declared as
+    panel cutouts at their measured size rather than composed from a std/ part.
+    Substituting sma or smb would name a connector Cisco does not.
+  wanted: >-
+    a std/din-1-0-2-3 part and its standards.yaml key, from IEC 61169-8 or a
+    manufacturer panel drawing, in the way std/mcx was added from IEC 61169-36
+  blocks: []
+- what: mpa-modules
+  scope: [mpa-0, mpa-1]
+  reason: vendor-silent
+  note: >-
+    The two MPA openings are measured and drawn, but they are declared as panel
+    CUTOUTS rather than as bays, because a bay must accept something and nothing
+    exists for them to accept. The data sheet names the family - 20 x 1 GE, 2 x
+    10 GE, 4 x 10 GE and 1 x 40 GE - but no MPA component is modelled yet, and
+    library/components/cisco/ belongs to another agent this session, so no part
+    was built here. Pointing them at cisco/a9k-slot-cover instead would be worse
+    than leaving them open: that part is 41.4 x 395.7, a modular-chassis line
+    card slot, and does not fit a 163 x 35.6 MPA opening. A blank is wanted as
+    much as the modules are - the guide says the ASR 9001-S ships with BAY 1
+    'disabled and covered with dust caps by default', so a dust cap is a real
+    documented part on this chassis. These become bays the moment either lands.
+  wanted: >-
+    MPA components for the four adapter types, and an MPA-sized blank or dust cap
+  blocks: []
