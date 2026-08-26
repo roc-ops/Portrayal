@@ -21,15 +21,19 @@ provenance:
     figure (1701px embedded image, the one legible source for this panel). Re-anchored to
     end at 130.8; left-anchored at 128.2, BITS and the wordmark ran under the jacks - which
     are themselves modelled ~5mm oversize, see bits-tod-jacks above'
-  qsfpdd-port-numbers: 'UNFIXED, and deliberately. Ports 0-3 keep their numbers at
-    baselines 38.1 and 8.8, which the datasheet front figure says is right: the digit
-    is printed on a blue band just below each QSFP-DD aperture. L21 still reports them
-    because common/qsfp-cage draws that band as tab-accent, a filled rect inside its own
-    13.0mm box, so the number is under the cage rather than on the panel. The figure
-    shows the blue band NARROWER than the aperture and separated from it, which is a
-    printed panel accent, not cage bezel. Paying this means moving tab-accent into
-    panel.decor and shortening the cage - a geometry change on a layout already flagged
-    drawing-inferred and pending photo overlay calibration, not a label move'
+  qsfpdd-port-numbers: 'PAID, by fixing the component rather than the labels. Ports 0-3
+    keep their numbers at baselines 38.1 and 8.8, where the datasheet front figure puts
+    them: the digit is printed on a coloured band just outside each aperture. The band
+    is faceplate paint - vendor-confirmed - so it is now four rects in panel.decor and
+    common/qsfp-cage@2 is 10.18 tall (0.6 flange + the 9.58 std/qsfp-ganged opening)
+    instead of 13.0. Silkscreen paints over decor and under components, so the numbers
+    now read. The cages for ports 0, 1 and 3 did not move. Port-2 is rotate: 180, so its
+    at: is the box top and shortening the box does not free the digit; its at: was
+    recomputed from the new height and lands at 8.8, which puts its aperture 0.08mm
+    lower than the v1 model had it - 0.4 px at the figure''s 4.5 px/mm, and the figure
+    is not self-consistent to better than that: it draws the port-2 digit sitting on the
+    aperture edge rather than clear of it. The band is still NARROWER than the aperture
+    (17.1 against 18.5); it is no longer drawn overlapping it'
   attrs: datasheet (Specifications/Performance/Accessories sections)
   led-semantics: 'HIG section 10, pages 20-21, transcribed rather than only cited - the citation was here and
     the tables were not, so nobody could interpret two of these lamps. Each front-panel lamp
@@ -180,6 +184,16 @@ views:
         - {at: [385.15, 18.2], size: [14.25, 4.2], fill: '#b0b5bb', rx: 0.8}
         - {at: [399.4, 18.2], size: [14.25, 4.2], fill: '#b0b5bb', rx: 0.8}
         - {at: [413.65, 18.2], size: [14.25, 4.2], fill: '#b0b5bb', rx: 0.8}
+        # The coloured band printed on the faceplate under each QSFP aperture -
+        # blue for the two QSFP-DD, green for the two QSFP28. Vendor-confirmed as
+        # PANEL PAINT, not part of the cage assembly, which is why it lives here
+        # and not in common/qsfp-cage: silkscreen paints over decor and under
+        # components, so the port number printed on the band stays readable.
+        # port-2's cage is rotate: 180, so its band is ABOVE its aperture.
+        - {at: [178.6, 36.38], size: [17.1, 2.32], fill: '#2f66b5', rx: 0.4}
+        - {at: [205.7, 36.38], size: [17.1, 2.32], fill: '#2f66b5', rx: 0.4}
+        - {at: [231.0, 6.48], size: [17.1, 2.32], fill: '#2e8b57', rx: 0.4}
+        - {at: [231.0, 36.38], size: [17.1, 2.32], fill: '#2e8b57', rx: 0.4}
     silkscreen:
       - {text: PSU0, at: [58.9, 8], font-size: 2.6, rotate: 90}
       - {text: PSU1, at: [58.9, 27], font-size: 2.6, rotate: 90}
@@ -293,8 +307,8 @@ views:
              list'}
         - {ref: common/usb-a@3, id: usb, at: [152.3, 16.1], attrs: {role: storage, speed: usb3}}
         - {ref: common/rj45-bezel@2, id: console, at: [152.3, 25.4], attrs: {media: rj45-serial, role: console}}
-        - {ref: common/qsfp-cage@1, id: port-0, at: [177.4, 26.2], skin: blue, group: qsfpdd-400g, rel-pos: 0}
-        - {ref: common/qsfp-cage@1, id: port-1, at: [204.5, 26.2], skin: blue, group: qsfpdd-400g, rel-pos: 1}
+        - {ref: common/qsfp-cage@2, id: port-0, at: [177.4, 26.2], group: qsfpdd-400g, rel-pos: 0}
+        - {ref: common/qsfp-cage@2, id: port-1, at: [204.5, 26.2], group: qsfpdd-400g, rel-pos: 1}
         - {ref: common/led-arrow@1, id: led-port-4, at: [255.975, 18.7], skin: up, for: port-4, attrs: {port: '4'}}
         - {ref: common/led-arrow@1, id: led-port-5, at: [261.875, 18.7], skin: down, for: port-5, attrs: {port: '5'}}
         - {ref: common/led-arrow@1, id: led-port-6, at: [270.225, 18.7], skin: up, for: port-6, attrs: {port: '6'}}
@@ -325,8 +339,8 @@ views:
         - {ref: common/led-dot@1, id: led-p1-b, at: [214.5, 21.7], for: port-1, attrs: {port: '1', role: activity}}
         - {ref: common/qsfp-lane-leds@1, id: leds-port-2, at: [229.8, 19.7], for: port-2, attrs: {port: '2'}}
         - {ref: common/qsfp-lane-leds@1, id: leds-port-3, at: [229.8, 39.7], for: port-3, attrs: {port: '3'}}
-        - {ref: common/qsfp-cage@1, id: port-2, at: [229.8, 5.9], rotate: 180, skin: green, group: qsfp28, rel-pos: 2}
-        - {ref: common/qsfp-cage@1, id: port-3, at: [229.8, 26.2], skin: green, group: qsfp28, rel-pos: 3}
+        - {ref: common/qsfp-cage@2, id: port-2, at: [229.8, 8.8], rotate: 180, group: qsfp28, rel-pos: 2}
+        - {ref: common/qsfp-cage@2, id: port-3, at: [229.8, 26.2], group: qsfp28, rel-pos: 3}
         - {ref: std/sfp-ganged@1, id: port-4, at: [253.6, 7], group: sfp28, rel-pos: 4}
         - {ref: std/sfp-ganged@1, id: port-5, at: [253.6, 22.6], group: sfp28, rel-pos: 5}
         - {ref: std/sfp-ganged@1, id: port-6, at: [267.85, 7], group: sfp28, rel-pos: 6}
