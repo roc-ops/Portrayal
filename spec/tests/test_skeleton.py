@@ -47,10 +47,10 @@ def test_compiled_ids_and_attrs(tmp_path):
     # regions are addressable and carry members
     assert 'data-path="region:mgmt-block"' in front
     # bays populated with modules, hierarchically addressable
-    # composed parts flatten through bays: PSU module wraps a std/c13-inlet core
+    # composed parts flatten through bays: PSU module wraps a std/c14-inlet core
     assert 'id="psu-2--module--inlet--opening"' in rear
     assert 'data-path="psu-2/module/inlet/opening"' in rear
-    assert 'data-ref="std/c13-inlet@1:' in rear
+    assert 'data-ref="std/c14-inlet@1:' in rear
     assert rear.count('data-class="fan"') == 6
     # metadata embeds source + resolved versions, no timestamps
     assert '"resolved-components"' in front

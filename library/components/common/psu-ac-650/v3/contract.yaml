@@ -4,18 +4,18 @@ name: psu-ac-650
 version: 3.11.0
 class: psu
 profile: networking
-description: 650W AC PSU module (v3 = composed - bezel art wraps a std/c13-inlet core)
+description: 650W AC PSU module (v3 = composed - bezel art wraps a std/c14-inlet core)
 size: {w: 54.0, h: 40.0}
 attrs: {power-output-w: 650, input: ac}
 provenance:
   size: photo-measured (rear overlay; body ~45mm + fold-out handle)
-  inlet: standard (IEC 60320-1 via std/c13-inlet)
+  inlet: standard (IEC 60320-1 via std/c14-inlet)
 states: [ok, fail, absent]
 elements:
   latch: {at: [0.0, 8.0], size: [7.8, 24.0], class: latch}
   handle: {at: [10.0, 8.0], size: [5.0, 24.0], class: handle}
 parts:
-  - {ref: std/c13-inlet@1, id: inlet, at: [20.5, 10], rotate: 270}
+  - {ref: std/c14-inlet@1, id: inlet, at: [20.5, 10], rotate: 270}
 relief:
   features:
     - node: inlet-frame

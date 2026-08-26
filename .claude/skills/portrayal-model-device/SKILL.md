@@ -353,7 +353,7 @@ Now populate. **Reuse before building.**
 2b. **Reuse applies inside a component too.** A module's own faceplate carries
    standard hardware - an IEC inlet, a jack, an LED - and a component composes
    those through `parts: [{ref, id, at}]` rather than redrawing them in its skin.
-   A PSU here got a hand-drawn "IEC C13" that was not one; `std/c13-inlet` as a
+   A PSU here got a hand-drawn "IEC C13" that was not one; `std/c14-inlet` as a
    `parts:` entry was both correct and shorter.
 3. `components.bays` is for things that seat into an opening; everything else,
    removable or not, is a `components.placements` entry. See rule 6.

@@ -2350,7 +2350,7 @@ class _DupCounting(yaml.SafeLoader):
 
     AND IT CAN BE WORSE THAN LOSS. On celestica/psu-1600 the discarded
     `provenance.face` said the geometry was "STILL ESTIMATED - the fan/latch
-    spacing was tuned around a c13-inlet that was 20 percent undersized" and the
+    spacing was tuned around a c14-inlet that was 20 percent undersized" and the
     surviving one said "photo (psu-face.jpeg ...)". The collapse did not merely
     lose a sentence; it UPGRADED THE APPARENT CONFIDENCE of the component, from
     estimated to photo-sourced, which is exactly what L15 gates `verified` on.
