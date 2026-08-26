@@ -49,12 +49,17 @@ provenance:
     the two cards is the transceiver each socket accepts, not the metal
   rotation: 'every cage is ROTATED 90, as on casa/smm-8x10g and for the same reason:
     the faceplate is 30.47 wide and a 16.0-wide cage has to lie on its side'
-  lamps: drawing - Figure 1-7 prints STATUS, ACTIVE, ALARM top to bottom, as do
-    Figures 1-8 and 1-9, and the CSC8x10G photograph shows the same order at a legible
-    size. casa/smm-8x10g, which this card otherwise inherits its geometry from,
-    draws the three the other way up with ALARM at the top. This card follows the
-    source rather than the sibling, and the disagreement is recorded here rather
-    than propagated
+  lamps: 'drawing - Figure 1-7 prints STATUS, ACTIVE, ALARM top to bottom, as do Figures 1-8 and
+    1-9, and the CSC8x10G photograph shows the same order at a legible size. casa/smm-8x10g
+    once drew the three the other way up with ALARM at the top, and this entry used to
+    record that disagreement as live. IT IS NOT LIVE ANY MORE - that component was corrected
+    to STATUS, ACTIVE, ALARM and its own lamps entry says so, so the two cards now agree and
+    this sentence is kept only to say that they once did not. CONFIRMED INDEPENDENTLY on the
+    C40G side: Figure 1-13 of the C40G guide, the standard SMM 2x10GE, prints STATUS,
+    ACTIVE, ALARM top to bottom, and the lamp COLOURS say it too - the top two are drawn
+    green and the third dark, where on the BDM and the DS/US cards it is the MIDDLE lamp
+    that is dark. The order really is different on the SMM pair, which is worth stating
+    loudly because the next reader will assume a transposition'
   legends: 'placed BESIDE each opening rather than below it, at x 21.0, which the
     SMM300G photograph shows is what the real hardware does. Below does not work
     on this shell: the cage pitch alternates 17.3 and 20.2 while a rotated cage
@@ -65,10 +70,36 @@ provenance:
     consumption 110W'. There is no data sheet for this card, so the install guide
     is the only source - but it IS a source, and 110 W is 50 W below the SMM 8x10G
     sibling whose 160 W it was assumed to share
+  'lamp-pitch': 'drawing-measured, BY A DIFFERENT ANCHOR, and the difference matters. Figure 1-13 of the
+    C40G guide, "Standard SMM 2x10GE (eight GigE, two 10GigE ports)", draws this card, but
+    EVERY FIGURE OF THE SMM PAIR IN BOTH GUIDES IS CLIPPED at the plate edge - C40G Figures
+    1-13 to 1-16 and C100G Figures 1-7 to 1-10 all run the plate grey to the last pixel row
+    - so the drawn plate height cannot be recovered and the plate-fraction method used on
+    casa/bdm and on the DS/US cards is unavailable here. THE TWO CAPTIVE SCREWS ARE THE
+    ANCHOR INSTEAD: this skin places them at cy 6.00 and 339.50, 333.50 mm apart, and the
+    figure draws both. They measure at rows 28.0 and 1390.0, a separation of 1362.0 px,
+    giving 4.08396 px/mm and an implied plate top at row 3.50. The plate box read y 3 to
+    1415 independently, so on this card the anchor recovers the drawn top edge to half a
+    pixel. Lamp centres then land at 272.40, 276.05 and 279.70 for a pitch of 3.65 mm. THE
+    METHOD WAS VALIDATED ON A CONTROL BEFORE BEING TRUSTED HERE: run against the un-clipped
+    BDM in Figure 1-20, the screw anchor puts the plate top at row 71.62 where the plate box
+    reads 70 - agreement to 1.6 px. It carries a systematic though, and it is stated rather
+    than hidden: the two anchors disagree by 0.9 percent, because the drawn plate is 1417 px
+    where the screws imply 1404, so a position taken this way is about 2 mm softer than one
+    taken from a plate box. Both underlying numbers - the 345.5 height and the 6.00/339.50
+    screw positions - are conventions rather than measurements, which is why neither anchor
+    can settle the other. It replaces a 6.6 mm pitch that was never measured on this card or
+    on any other: casa/bdm''s provenance said outright that 6.6 was picked so the lamps
+    would "read as separate indicators", and the same three numbers had been carried onto
+    every Casa front card. This entry is a separate reading of a separate plate and is not
+    that number under a new name. THE 3.0 LAMP DIAMETER IS UNCHANGED AND STILL UNMEASURED,
+    for the reason the BDM gave: these drawings are anisotropic, so a round lamp scales to
+    two different diameters depending on the axis, which tells you the drawing is wrong
+    rather than telling you the size.'
 elements:
-  status: {at: [4.8, 270.3], size: [3.0, 3.0], class: led}
-  active: {at: [4.8, 276.9], size: [3.0, 3.0], class: led}
-  alarm: {at: [4.8, 283.5], size: [3.0, 3.0], class: led}
+  status: {at: [4.8, 270.90], size: [3.0, 3.0], class: led}
+  active: {at: [4.8, 274.55], size: [3.0, 3.0], class: led}
+  alarm: {at: [4.8, 278.20], size: [3.0, 3.0], class: led}
 relief:
   wall: '#4a4f55'
 parts:
