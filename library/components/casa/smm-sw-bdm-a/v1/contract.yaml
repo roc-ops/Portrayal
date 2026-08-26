@@ -64,7 +64,10 @@ provenance:
     WANTED: either a body section - a list of depth bands with their own footprints - or the
     honest acknowledgement that a mid-plane-mating card needs its own kind.'
   psu-monitor: Jason - the Power Supply Monitor is an RJ45 port, which the
-    figure draws only as a dark rectangle
+    figure draws only as a dark rectangle. The signalling is Jason's too - a
+    proprietary monitor link to the rectifier shelf carrying power-plant
+    telemetry. Casa's figure shows the housing and is silent on what runs
+    through it, which is exactly the gap the media token now closes
   layout: drawing - Figure 1-14. Power Supply Monitor, and the faceplate
     itself prints "C100G Slot 6 / C40G Slot 2"
   slot: datasheet - "SMM-SW-BDM-A (slot 6)". The guide adds that correct slot
@@ -90,5 +93,13 @@ relief:
 parts:
   # the Power Supply Monitor is an RJ45, not a blank window. Rotated like every
   # other jack on these cards, because the faceplate is only 30.47 wide.
-  - {ref: common/rj45-shielded@2, id: psu-monitor, at: [7.33, 119.65], rotate: 90}
+  # AN 8P8C SHELL SAYS NOTHING ABOUT WHAT RUNS THROUGH IT, and RJ45 is the worst
+  # offender for it because so many unrelated things reuse the housing - RS-232,
+  # E1/T1, alarm contacts, and plant telemetry like this one. So `media` names the
+  # SIGNALLING, the way `rj45-serial` already does for a console. This is a
+  # proprietary monitor link to the rectifier shelf: it does not speak Ethernet,
+  # has no link speed, and must never be patched into a switch. Left unsaid, a
+  # consumer holding only the part ref has to guess, and the DCIM export was
+  # guessing `console`.
+  - {ref: common/rj45-shielded@2, id: psu-monitor, at: [7.33, 119.65], rotate: 90, attrs: {media: rj45-telemetry, role: psu-monitor}}
 skins: [default]
