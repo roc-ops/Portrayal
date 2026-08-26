@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: io-6p12-sw
-version: 1.0.0
+version: 2.0.0
 class: line-card
 profile: networking
 description: >-
@@ -9,6 +9,10 @@ description: >-
   twelve upstream MCX jacks as the plain 6+12, but it also carries the LC switch
   function, so it goes in the redundancy slot that a BDM scheme frees up: C100G
   rear 8, C40G rear 4. Its RF port section stands proud of the faceplate.
+  (v2 = composed - the eighteen MCX openings are std/mcx@1 at the sourced
+  4.95 x 4.50 D-hole; v1 drew them inline at an ESTIMATED 3.88 x 3.88, so an
+  aperture here is about 28 percent wider in x and 16 percent in y than it was
+  at v1. Jack AXES are unchanged.)
 size: {w: 30.47, h: 345.5, d: 380.0}
 attrs: {model: '6+12 SW IO', media: coax, connector: mcx, downstream: '6', upstream: '12', spectrum: 5-85MHz, switch: 'yes', slot: C100G-rear-8 / C40G-rear-4}
 provenance:
@@ -26,7 +30,17 @@ provenance:
   connector: drawing - the figure's cable note reads "Single quad-shielded
     cable with MCX male snap-on plug; 75 ohm male F-connector on opposite end",
     so the jack on this card is MCX and the F-connector is at the headend end
-  bore: ESTIMATED - no MCX dimension in the guide
+  bore: registry - THIS IS THE VERSION BUMP. v1 drew the eighteen MCX openings
+    inline; v2 COMPOSES std/mcx@1, so the aperture is the registry's `mcx` key (4.95 x
+    4.50 D-hole, Radiall R113.553.000 panel drawing) instead of the estimate this
+    card used to carry. Every jack AXIS is unchanged - only the
+    hole's size and shape moved, from a guessed rectangle to the sourced D-hole
+    (proved by diffing the compiled drawing - 18/18 axes land within 0.005 mm,
+    which is the old skin's two-decimal rounding and not a move). Note the
+    composed part is placed on its AXIS, which sits 2.475 from the top of a
+    4.50-high D-hole rather than at half its height.
+    The two cards had disagreed with each other about the same connector (3.87 x
+    3.14 here against 3.88 x 3.88 on the SW card); they now cannot
   rf-layout: drawing - Figure 1-16, measured separately from Figure 1-15 rather
     than copied. The SW card's port field is SHORTER and more compressed - it spans
     18.6 to 72.7 percent of the plate against the plain card's 12.1 to 73.7, and its
@@ -44,25 +58,23 @@ provenance:
     thick. The comb is notched per port and carries the U0-U11 / D0-D5 silkscreen,
     and the labels appear on BOTH the card face and the comb - the comb
     repeats them where the cable actually lands rather than replacing them
-elements:
-  u0: {at: [6.67, 65.17], size: [3.88, 3.88], class: cutout}
-  u1: {at: [6.67, 81.90], size: [3.88, 3.88], class: cutout}
-  u2: {at: [6.67, 98.63], size: [3.88, 3.88], class: cutout}
-  u3: {at: [6.67, 115.36], size: [3.88, 3.88], class: cutout}
-  u4: {at: [6.67, 132.09], size: [3.88, 3.88], class: cutout}
-  u5: {at: [6.67, 148.82], size: [3.88, 3.88], class: cutout}
-  u6: {at: [6.67, 165.55], size: [3.88, 3.88], class: cutout}
-  u7: {at: [6.67, 182.27], size: [3.88, 3.88], class: cutout}
-  u8: {at: [6.67, 199.00], size: [3.88, 3.88], class: cutout}
-  u9: {at: [6.67, 215.73], size: [3.88, 3.88], class: cutout}
-  u10: {at: [6.67, 232.46], size: [3.88, 3.88], class: cutout}
-  u11: {at: [6.67, 249.19], size: [3.88, 3.88], class: cutout}
-  d0: {at: [17.93, 62.24], size: [3.88, 3.88], class: cutout}
-  d1: {at: [17.93, 94.60], size: [3.88, 3.88], class: cutout}
-  d2: {at: [17.93, 126.95], size: [3.88, 3.88], class: cutout}
-  d3: {at: [17.93, 159.31], size: [3.88, 3.88], class: cutout}
-  d4: {at: [17.93, 191.66], size: [3.88, 3.88], class: cutout}
-  d5: {at: [17.93, 224.02], size: [3.88, 3.88], class: cutout}
+  figure-check: drawing - RE-MEASURED against Figure 1-16 at 600 dpi for the v2
+    bump, rather than trusted because v1 had used them. Twelve U jacks at x 8.685
+    of a 30.47 plate, y 67.11 to 251.00 on a 16.717 pitch, and six D jacks at x
+    19.917, y 64.12 to 225.81 on a 32.339 pitch. What this contract carries -
+    8.61 / 67.11 / 16.729 and 19.87 / 64.18 / 32.356 - agrees with all six to
+    0.08 mm, so the composed apertures land where the FIGURE puts them and not
+    merely where they used to be. It also re-confirms the separate measurement
+    this card's `rf-layout` note records - the SW card's port field really is
+    shorter and tighter than the plain card's.
+    The drawn jack is 7.85 mm across overall (36 radii, spread 0.4 mm) with a
+    3.28 mm coloured centre, the same art as Figure 1-15. That is the connector as
+    seen rather than the panel hole - the Radiall sheet gives an MCX bulkhead
+    flange at 6.5 mm dia - so a 4.95 hole under a 6.5 flange is what the figure
+    draws, and v1's 3.88 x 3.88 was smaller than either.
+    Clearance is not close even here, where the pitch is tightest of the two
+    cards - 16.72 between U jacks and 11.2 between the columns against a 4.95
+    aperture. Nothing had to be compressed.
 relief:
   wall: '#4a4f55'
   features:
@@ -73,6 +85,25 @@ relief:
     - {node: standoff-b, out: 9.5, color: '#b08d57'}
     # the RF section stands proud of the faceplate, which the plain card does not
     - {node: rf-block, out: 15.9, color: '#9aa0a6'}
+parts:
+  - {ref: std/mcx@1, id: u0, at: [6.135, 64.635]}
+  - {ref: std/mcx@1, id: u1, at: [6.135, 81.365]}
+  - {ref: std/mcx@1, id: u2, at: [6.135, 98.095]}
+  - {ref: std/mcx@1, id: u3, at: [6.135, 114.825]}
+  - {ref: std/mcx@1, id: u4, at: [6.135, 131.555]}
+  - {ref: std/mcx@1, id: u5, at: [6.135, 148.285]}
+  - {ref: std/mcx@1, id: u6, at: [6.135, 165.015]}
+  - {ref: std/mcx@1, id: u7, at: [6.135, 181.735]}
+  - {ref: std/mcx@1, id: u8, at: [6.135, 198.465]}
+  - {ref: std/mcx@1, id: u9, at: [6.135, 215.195]}
+  - {ref: std/mcx@1, id: u10, at: [6.135, 231.925]}
+  - {ref: std/mcx@1, id: u11, at: [6.135, 248.655]}
+  - {ref: std/mcx@1, id: d0, at: [17.395, 61.705]}
+  - {ref: std/mcx@1, id: d1, at: [17.395, 94.065]}
+  - {ref: std/mcx@1, id: d2, at: [17.395, 126.415]}
+  - {ref: std/mcx@1, id: d3, at: [17.395, 158.775]}
+  - {ref: std/mcx@1, id: d4, at: [17.395, 191.125]}
+  - {ref: std/mcx@1, id: d5, at: [17.395, 223.485]}
 connection-points:
   mate: {at: [15.23, 172.75], direction: rear}
 skins: [default]
