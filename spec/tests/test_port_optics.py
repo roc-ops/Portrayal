@@ -64,14 +64,34 @@ def test_a_cage_that_takes_no_optic_is_not_asked():
 
 
 def test_optics_prose_must_reach_a_group():
-    """The AS5912-54X is the case the rule was written around: it carries
-    `optics-sfp` while its group declares `media: sfp-plus`, so the one device
-    that recorded its SFP optics is also a device whose SFP group reads silent.
-    Recorded and unreachable is worse than absent, because it looks done."""
-    man = LIB / "devices/edgecore/as5912-54x/device.yaml"
-    ws = warnings_for(man)
-    assert any("names no port group's media" in w for w in ws)
-    assert any("port group sfp-plus" in w for w in ws)
+    """Recorded and unreachable is worse than absent, because it looks done.
+
+    The AS5912-54X was the case the rule was written around - it carried
+    `optics-sfp` while its group declared `media: sfp-plus`, so the one device
+    that had recorded its SFP optics was also a device whose SFP group read as
+    silent. That is FIXED, which is why this builds the shape rather than
+    pointing at the device: a test that pins a real defect passes only for as
+    long as nobody repairs it, and this one broke the hour the key was renamed.
+    """
+    d = {"groups": {"ports": {"term": "Port", "attrs": {"media": "sfp-plus"}}},
+         "attrs": {"performance": {"optics-sfp": "10GBASE-SR, 1000BASE-T"}}}
+    saved = lint.WARNINGS[:]
+    lint.WARNINGS.clear()
+    try:
+        lint.lint_device_port_optics(Path("x"), d, [str(LIB)])
+        ws = [w for w in lint.WARNINGS if "[L40]" in w]
+    finally:
+        lint.WARNINGS[:] = saved
+    assert any("names no port group's media" in w for w in ws), ws
+    assert any("port group ports" in w for w in ws), ws
+
+
+def test_the_library_has_no_unreachable_optics_left():
+    """And the real device is now held to the fixed state, which is the
+    assertion that was actually wanted."""
+    for man in MANIFESTS:
+        assert not [w for w in warnings_for(man)
+                    if "names no port group's media" in w], man
 
 
 def test_nothing_is_structured_yet_and_that_is_the_point():
