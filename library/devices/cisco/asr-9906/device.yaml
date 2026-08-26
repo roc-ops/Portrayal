@@ -391,6 +391,30 @@ views:
       - {id: rack-rails, label: 'Vertical rack rail locations - 5.00 in (127.0 mm) and 9.45 in (240.0 mm) from the front'}
       - {id: lift-handles, label: 'Chassis lift handles - two per side, drawn in HIG Figure 17 but not dimensioned'}
 gaps:
+- what: bay-extents-reconciled-rather-than-measured
+  scope: [slots]
+  reason: needs-drawing
+  note: >-
+    THESE BAY DIMENSIONS WERE GROWN TO MEET A COMPONENT AND ARE NOT MEASUREMENTS. Each was set by
+    taking the size of a card the bay accepts, because a fit check reported the bay as too small.
+    On this chassis:
+    42.67 on 6 bays - a9k-4hg-flex, 42.67 thick
+    403.40 on 6 bays - a99-rsp-se, 403.40 long
+    The danger is specific and it is why they are listed rather than left to look like geometry.
+    A fit check compares a bay to a component and NEITHER of them to the world, so it is satisfied
+    by both being wrong together exactly as easily as by both being right. Every mismatch resolved
+    by moving one side removes the signal without adding any truth, and once resolved nothing will
+    flag it again. These are the entries where that happened, so the record survives the check
+    going quiet.
+    What IS independently grounded and is not in this list: the cage extents, measured off the
+    stencil and confirmed on several chassis by printed slot labels or a card guide rail; the slot
+    pitch; the 395.70 fourth-generation envelope, which is Cisco's own "includes ejector
+    bracket/lever" figure; and the shapesheet sizes for the power modules and fan trays. The
+    ejector arithmetic that explains why a bay legitimately exceeds its cage opening - 355.60
+    against 395.70, 40.10 mm - is also sourced, and it justifies the SHAPE of these numbers
+    without justifying any particular one of them.
+  wanted: a dimensioned figure giving the clear opening of any ASR 9000 card cage, which would
+    replace every reconciled figure above with a measured one
 - what: rsp880-length-also-exceeds-the-cage
   scope: [slots]
   reason: sources-disagree

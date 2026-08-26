@@ -480,6 +480,30 @@ views:
       - {id: lift-handles, label: 'Chassis lift handles - present but NOT dimensioned in any figure for this chassis'}
       - {id: cooling-path, label: 'Front-to-rear cooling path - inlet at the bottom front, exhaust at the upper rear'}
 gaps:
+- what: bay-extents-reconciled-rather-than-measured
+  scope: [slots]
+  reason: needs-drawing
+  note: >-
+    THESE BAY DIMENSIONS WERE GROWN TO MEET A COMPONENT AND ARE NOT MEASUREMENTS. Each was set by
+    taking the size of a card the bay accepts, because a fit check reported the bay as too small.
+    On this chassis:
+    403.10 on 8 bays - the 5th-generation envelope, 403.10 long
+    406.40 on 2 bays - a9k-rsp, 406.40 long
+    The danger is specific and it is why they are listed rather than left to look like geometry.
+    A fit check compares a bay to a component and NEITHER of them to the world, so it is satisfied
+    by both being wrong together exactly as easily as by both being right. Every mismatch resolved
+    by moving one side removes the signal without adding any truth, and once resolved nothing will
+    flag it again. These are the entries where that happened, so the record survives the check
+    going quiet.
+    What IS independently grounded and is not in this list: the cage extents, measured off the
+    stencil and confirmed on several chassis by printed slot labels or a card guide rail; the slot
+    pitch; the 395.70 fourth-generation envelope, which is Cisco's own "includes ejector
+    bracket/lever" figure; and the shapesheet sizes for the power modules and fan trays. The
+    ejector arithmetic that explains why a bay legitimately exceeds its cage opening - 355.60
+    against 395.70, 40.10 mm - is also sourced, and it justifies the SHAPE of these numbers
+    without justifying any particular one of them.
+  wanted: a dimensioned figure giving the clear opening of any ASR 9000 card cage, which would
+    replace every reconciled figure above with a measured one
 - what: neighbour-constraint-excludes-the-control-card-length
   scope: [slots]
   reason: sources-disagree
