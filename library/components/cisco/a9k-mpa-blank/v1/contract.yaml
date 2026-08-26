@@ -1,0 +1,55 @@
+format: 1
+kind: module
+name: a9k-mpa-blank
+version: 1.0.0
+class: blank
+profile: networking
+description: >-
+  Blank filler for an unpopulated Modular Port Adapter bay. A plain plate on the MPA
+  envelope with a captive screw at each end and nothing else on it. It is a documented
+  part rather than tidiness: the ASR 9001-S ships with its second MPA bay disabled and
+  covered by default, and an MPA bay left open breaks the chassis's airflow the way an
+  open card slot does.
+size: {w: 33.81, h: 160.02}
+attrs:
+  model: 'MPA blank'
+  role: 'airflow-blank'
+provenance:
+  purpose: >-
+    install guide - the Cisco ASR 9000 Series Fixed-Port Routers Hardware Installation
+    Guide says the ASR 9001-S ships with BAY 1 'disabled and covered with dust caps by
+    default', which is what makes this a real occupant of a real bay rather than a
+    convenience for the renderer.
+  part-number: >-
+    NONE, and that is a finding rather than an omission. No document in the 78-document
+    intake gives this part an order code; it is referred to only as 'dust caps'. The
+    same was true of the Casa blank and was handled the same way. Anyone holding the
+    hardware can close this by reading the label.
+  size: >-
+    drawing - index.json's shapesheet for the MPA masters, 33.81 x 160.02 mm (the two
+    20-port masters read 33.66, a 0.15 mm difference that is below the drawing's own
+    accuracy). Corroborated by the chassis it goes in: the ASR 9001 front master draws
+    its two MPA openings at 162.56 x 37.80 mm, which is this envelope with 2.5 mm of
+    clearance along its length and 4.0 across - what a bay should give a module. NO
+    document in the intake gives an MPA's dimensions; the ASR 9001 data sheet lists the
+    family by port count and stops.
+  frame: >-
+    modelled PORTRAIT - x across the module's 33.8 mm thickness, y along its 160.0 mm
+    length - which is how most of these masters are drawn and how every other card in
+    this library is modelled. The ASR 9001 lays its two MPAs FLAT, so its bays rotate
+    the component rather than the component carrying two orientations. Note the stencil
+    is not consistent about this: A9K-MPA-1X40GE, -2X40GE and -8x10GE are drawn
+    landscape and the rest portrait, for one physical form factor - which the intake
+    notes flag as a reason to read the artwork rather than assume an orientation from
+    index.json's axis order.
+  cutouts: >-
+    NONE. A blank is unpunched by definition, which is the point of it.
+  depth: >-
+    NOT MODELLED. No document gives an MPA's depth and a dust cap has almost none - it
+    is a plate, not a body. Declaring one would be inventing a number that the 3D view
+    would then draw as a cavity.
+  lifecycle: >-
+    searched - nothing to search for without a part number.
+relief:
+  wall: '#4a4f55'
+skins: [default]

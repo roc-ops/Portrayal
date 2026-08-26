@@ -1,0 +1,110 @@
+format: 1
+kind: module
+name: a9k-mpa-20x1ge
+version: 1.0.0
+class: line-card
+profile: networking
+description: >-
+  Cisco 20-Port Gigabit Ethernet Modular Port Adapter. Twenty SFP cages in two columns
+  of ten - even-numbered ports in one column, odd in the other - with a STATUS lamp and
+  a captive screw at each end. One of the four MPAs the ASR 9001 takes; it also seats in
+  the A9K-MOD carrier line cards.
+size: {w: 33.66, h: 160.02}
+attrs:
+  model: 'A9K-MPA-20X1GE'
+  role: 'modular-port-adapter'
+  sfp: 20
+  media: 'SFP, 1 Gigabit Ethernet'
+  eol: 'none-announced'
+provenance:
+  size: >-
+    drawing - index.json's shapesheet for the MPA masters, 33.81 x 160.02 mm (the two
+    20-port masters read 33.66, a 0.15 mm difference that is below the drawing's own
+    accuracy). Corroborated by the chassis it goes in: the ASR 9001 front master draws
+    its two MPA openings at 162.56 x 37.80 mm, which is this envelope with 2.5 mm of
+    clearance along its length and 4.0 across - what a bay should give a module. NO
+    document in the intake gives an MPA's dimensions; the ASR 9001 data sheet lists the
+    family by port count and stops.
+  frame: >-
+    modelled PORTRAIT - x across the module's 33.8 mm thickness, y along its 160.0 mm
+    length - which is how most of these masters are drawn and how every other card in
+    this library is modelled. The ASR 9001 lays its two MPAs FLAT, so its bays rotate
+    the component rather than the component carrying two orientations. Note the stencil
+    is not consistent about this: A9K-MPA-1X40GE, -2X40GE and -8x10GE are drawn
+    landscape and the rest portrait, for one physical form factor - which the intake
+    notes flag as a reason to read the artwork rather than assume an orientation from
+    index.json's axis order.
+  inset: >-
+    READ THIS BEFORE RESCALING ANYTHING ON THIS MASTER. Its art measures 29.07 mm across
+    where the shapesheet says 33.66, a 16 percent difference - far larger than the sub-
+    millimetre gaps elsewhere in this stencil. The art is NOT stretched to fill the
+    envelope, and the reason is a ruler inside the picture: the drawn SFP cage measures
+    14.4 x 9.24 mm against SFF-8433's 14.25 x 10.40, so the art's own scale is already
+    right to one percent. Stretching x by 1.158 would have made the cage 16.7 mm wide,
+    which no SFP cage is. So the plate is drawn INSET in its shape box and the art is
+    centred in the envelope, 2.30 mm each side. This is the counter-case to the axis
+    rule that a power module taught earlier tonight: both axes still come from one
+    source for the ENVELOPE, but where the art contains a standard part of known size,
+    that part is the authority for the internal SCALE.
+  ports: >-
+    drawing - twenty cages in two columns at x 4.35 and 19.29 and ten rows on a 14.4 to
+    14.67 mm pitch with a gap in the middle where the captive screws sit. Numbering is
+    read off the four numerals the master leaves as text rather than as outlined glyphs:
+    '0' and '1' at the top of the two columns, '18' and '19' at the bottom. So even
+    ports run down the left column and odd down the right, 0 to 19. ONLY THOSE FOUR ARE
+    PRINTED, and only those four are drawn here: an earlier version put a numeral beside
+    all twenty, which is eighteen legends the real faceplate does not carry and which
+    needed a 1.9 mm edge strip to hold them. The other sixteen ports are identified by
+    their ids. The ASR 9001 data sheet names the family '20 x 1 Gigabit Ethernet, 2 x 10
+    Gigabit Ethernet, 4 x 10 Gigabit Ethernet, and 1 x 40 Gigabit Ethernet', which is
+    the port count confirmed from the other side.
+  cages: >-
+    composed from std/sfp-ganged, whose SFF-8433 aperture is 14.25 x 10.40 against the
+    14.4 x 9.24 drawn. The ganged part rather than std/sfp because these ports share
+    walls in two continuous columns - std/sfp is 14.5 wide and explicitly cannot gang.
+  power: >-
+    NOT STATED. Table 35 of the Ethernet Line Card Installation Guide gives per-card
+    power for the modular-chassis line cards including the A9K-MOD carriers, but nothing
+    for the MPAs that go inside them, and the ASR 9001 data sheet gives a chassis figure
+    only (425 W typical, 525 W maximum). So an MPA's own draw is unpublished and the L27
+    warning stands.
+  lifecycle: >-
+    searched - no end-of-life notice for this part number is in the intake.
+elements:
+  status:
+    at: [15.53, 68.0]
+    size: [2.6, 2.6]
+    class: led
+    description: >-
+      the MPA's STATUS lamp. No LED table for the MPAs exists in the intake - the fixed-
+      port guide's MPA sections cover installation and removal only - so the four-state
+      vocabulary here is the modular line cards' and is a BORROWING, flagged as one.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+relief:
+  wall: '#4a4f55'
+parts:
+  - {ref: std/sfp-ganged@1, id: p0, at: [6.06, 5.5], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p1, at: [21.0, 5.5], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p2, at: [6.06, 19.9], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p3, at: [21.0, 19.9], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p4, at: [6.06, 34.3], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p5, at: [21.0, 34.3], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p6, at: [6.06, 48.98], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p7, at: [21.0, 48.98], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p8, at: [6.06, 63.38], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p9, at: [21.0, 63.38], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p10, at: [6.06, 86.75], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p11, at: [21.0, 86.75], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p12, at: [6.06, 101.14], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p13, at: [21.0, 101.14], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p14, at: [6.06, 115.81], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p15, at: [21.0, 115.81], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p16, at: [6.06, 130.21], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p17, at: [21.0, 130.21], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p18, at: [6.06, 144.6], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p19, at: [21.0, 144.6], rotate: 90}
+skins: [default]
