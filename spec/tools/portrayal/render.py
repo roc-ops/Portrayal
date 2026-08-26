@@ -784,6 +784,32 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         opening.set("width", f"{b['size']['w']:g}"); opening.set("height", f"{b['size']['h']:g}")
         opening.set("fill", "#101214")
         default = (config.get("bays") or {}).get(b["id"], b.get("default"))
+        if not default:
+            # AN EMPTY BAY IS A HOLE, NOT A BLACK RECTANGLE. Without a depth the
+            # opening is a flat dark patch painted on the panel, so in 3D an
+            # unpopulated slot reads as a sticker rather than a recess - which is
+            # what the C40G's optional secondary fan slot and its AC power bays
+            # looked like, both of which are CORRECTLY empty.
+            #
+            # The depth is the depth of what the bay ACCEPTS: a bay that takes a
+            # 300 mm power supply is a 300 mm hole whether or not one is fitted.
+            # Taken from the deepest acceptable occupant, because a bay must be at
+            # least as deep as the longest thing that goes in it, and stated as
+            # derived rather than measured - nothing here is a new claim about the
+            # chassis, it is the occupant's own published depth read through the
+            # bay that holds it.
+            depths = []
+            for _ref in (b.get("accepts") or []):
+                try:
+                    _c, _ = lib.resolve(_ref)
+                except Exception:
+                    continue                     # L5 reports the broken ref
+                _d = (_c.get("size") or {}).get("d")
+                if _d:
+                    depths.append(_d)
+            if depths:
+                opening.set("data-depth", f"{max(depths):g}")
+                opening.set("data-wall", "#2a2e31")
         if default:
             # instance_group rotates a component about its OWN centre, so for a
             # rotated bay the card has to be offset or it spins out of the opening.
