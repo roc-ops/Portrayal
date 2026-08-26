@@ -29,6 +29,58 @@ the single most repeated error.
 | **photograph** | colour, finish, construction, confirmation of everything above; count of things | measurement, unless something of known size is in frame - but see below |
 | **standards registry** (`spec/schemas/standards.yaml`) | cage and connector sizes | anything vendor-specific |
 
+### THE FIGURES ARE ALREADY IN THE DOCUMENTS YOU HOLD. EXTRACT THEM FIRST.
+
+Before searching the web, and before declaring a vendor silent about what a face
+looks like, **pull the figures out of the PDFs already in `working/intake/`.**
+This project modelled two vendors and ~250 components before anyone did, and the
+intake turned out to hold **4,500+ figures** - faceplate elevations with every
+port numbered, isometric drawings showing ejectors and rails, and LED callout
+tables sitting under the drawing that names them.
+
+    working/images/extract.py     docling: figure + caption + page + section
+    working/images/INDEX.md       roll-up, grouped by part number
+
+Use docling rather than `pdfimages`. A figure without its caption is an image; a
+figure WITH "Figure 27: 1-Port 100-Gigabit Ethernet Modular Port Adapter with
+CFP2" is evidence, and the callout legend under a faceplate comes through with it.
+
+**A filter that selects figures by size is shaped like the last vendor you looked
+at.** A Cisco line-card faceplate is wide and short (~1080x123); a Casa card is
+tall and narrow; a SPA is wide again. The first filter written here dropped every
+Cisco datasheet faceplate - too short to be a figure, too wide not to be a
+banner - and each datasheet then returned zero figures, which reads exactly like
+"this vendor published no pictures". SAVE EVERY PICTURE FIRST AND CLASSIFY
+SECOND, so retuning costs a second instead of an hour and the rejects stay on
+disk to argue with. Then LOOK at a sample of what you dropped.
+
+**A negative answer is only as good as the extraction's coverage.** Count
+`^Figure \d+:` in the document's text and compare it against what you captured.
+"No figure for this part" means something very different at 62/62 than at 39/62.
+
+### A FIGURE'S OWN ASPECT TELLS YOU WHETHER TO TRUST IT
+
+Before taking any fraction off a drawing, measure the drawing against something
+you already know - usually the part's own outline against its contract size.
+
+    Casa BDM      figure aspect 12.54   real 11.34      10% out
+    Casa PEM      isolated part drawings                10% out
+    Cisco SPA     plate against subslot band             4% out
+
+At 4% you can take fractions along the good axis. At 10% you cannot take absolute
+scale at all, and you should say so rather than quietly using it anyway.
+
+**A round feature that reads two different sizes is measuring the drawing, not
+the feature.** A lamp 15 px across and 17 px down scales to 3.25 mm and 4.16 mm.
+A lamp is round; those are not two candidate diameters, they are one drawing 12%
+out in aspect. Leave the diameter alone and say why. This has settled three
+separate lamp-diameter questions without moving a single number.
+
+**Take proportions on the axis you can anchor, and only that one.** Where a
+contract holds a trusted height and no equally trusted width, an x-fraction off a
+drawing known to be wrong about x is the softer number - fix the y, leave the x,
+and say which is which.
+
 Write the source list into `provenance:` first, before a single number. Every
 number you write afterwards names its source *at the moment you write it*. That
 is not paperwork - it is what makes `maturity` honest and what lets the next
@@ -252,11 +304,35 @@ Now populate. **Reuse before building.**
      silkscreen, because that is where it physically sits.
    Getting this wrong is visible: a non-rectangular part in a bay leaves the
    bay's opening showing around it, like a hole in the chassis that is not there.
-7. **Read the guide's LED section for count AND arrangement, and expect them to
+7. **EVERY BAY GETS A `default:`, OR IT RENDERS AS A HOLE.** A chassis whose bays
+   name no occupant draws as an empty frame: no module means no lamp, so nothing
+   in it is clickable, nothing is addressable, and the 3D viewer - which finds
+   FRUs by looking for `data-path="<bay>/module"` - finds nothing to extrude. All
+   eight ASR 9000 chassis sat like that, 121 bays, while 104 components existed
+   and were never seated. It reads as a broken renderer and it is empty data.
+
+   The rule, which is what a real chassis looks like: **seat a COVER where the
+   vendor makes one, and the REAL PART where it does not.** An empty slot in a
+   shipped router has a blank filler in it, not a void. Where no cover exists as
+   a part - power, fabric, fan - those bays are never empty in a working chassis,
+   so seat the module.
+
+   If the vendor REQUIRES a filler and you have no component for it, that is a
+   missing COMPONENT and should say so, not a missing decision. Leave the default
+   off and record the sentence that says the filler is required.
+
+8. **A CARRIER IS A MODULE WITH BAYS OF ITS OWN.** A modular line card holding
+   MPAs, a SIP holding SPAs - those bays live in the COMPONENT contract and need
+   `accepts` and a `default` exactly as a chassis bay does. Check an occupant is
+   actually seatable before listing it: one that SPANS TWO BAYS has no
+   representation, so naming a double-width part in a single-width subslot draws
+   a part wider than its own opening. List what fits; record what does not, and
+   why.
+9. **Read the guide's LED section for count AND arrangement, and expect them to
    differ per port family.** On one router the QSFP-DD ports carry a stacked
    pair outside each block, the QSFP28 ports four above each column, and the
    SFP28 ports one each. One rule for all of them will be wrong.
-8. **Transcribe the spec table, into SECTIONS.** Switch silicon, CPU, memory,
+10. **Transcribe the spec table, into SECTIONS.** Switch silicon, CPU, memory,
    boot flash, storage, BMC, capacity, buffering, power draw, PSU inputs,
    temperature and humidity all belong in `attrs`. They are why someone opens
    the model. `attrs` is not a flat bag: it is
@@ -359,13 +435,13 @@ Now populate. **Reuse before building.**
    provenances, and asserting a relationship between them is asserting something
    no source states.
 
-9. **Transcribe compliance, and do not tidy the wording.** Every datasheet
+11. **Transcribe compliance, and do not tidy the wording.** Every datasheet
    carries a compliance line and we hold it for two devices in thirteen. The
    AGR420's is the worked example: `nebs: 'NEBS Level 3 (pre-test; certificate
    by request)'` is a materially different claim from "NEBS Level 3", and
    shortening it under a heading called `compliance` would turn a hedge into a
    certification - a false statement about a product.
-10. **Search for an EOL announcement.** Two minutes, and the notices are nearly
+12. **Search for an EOL announcement.** Two minutes, and the notices are nearly
    always public: "<vendor> <model> end of life", "<vendor> <model> end of
    sale", and the vendor's own product-notices page. GA is assumed and GA dates
    are NOT worth hunting; only what has been ANNOUNCED goes in.
