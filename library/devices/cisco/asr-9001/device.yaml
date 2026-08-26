@@ -45,14 +45,20 @@ provenance:
     module and the ''Cisco ASR-9001'' branding, and matches Figure 7 of the guide,
     ''Front Panel of the Cisco ASR 9001 Router''. asr-9001-rear is a plain louvred
     panel'
-  mpa-openings: 'THESE TWO OPENINGS ARE BAYS PENDING A PART, not permanent holes,
-    and the cutout is a placeholder for a bay. They are declared in panel.cutouts
-    only because device.schema.json requires `accepts` on a bay with minItems 1,
-    so a bay cannot exist with nothing legal to accept, and no MPA component or
-    MPA blank is modelled yet. Every measurement needed for the conversion is already
-    here - x 20.0 and 208.9, y 2.6, 163.0 x 35.6 each - so turning them into bays
-    is mechanical the moment a part lands. asr9k-chassis hit the same wall tonight
-    and solved it the same way'
+  mpa-bays: 'NOW BAYS - they were panel cutouts until cisco/a9k-mpa-blank@1 and
+    cisco/a9k-mpa-20x1ge@1 landed, because device.schema.json requires accepts with
+    minItems 1 and there was nothing legal to accept. The conversion was mechanical,
+    as the placeholder note promised: the measurements did not move. TWO INDEPENDENT
+    NUMBERS AGREE without either being fitted to the other - I measured these openings
+    at 163.0 x 35.6 off the front master, and asr9k-cards took 33.81 x 160.02 for
+    the module envelope from the stencil shapesheet. That is a module inside its
+    opening with a couple of millimetres of clearance each way, which is what a
+    bay should give a card. No document in the intake dimensions an MPA at all -
+    the data sheet lists the family by port count and stops - so the agreement of
+    two separately-derived figures is the only check available and it passes. The
+    bays carry rotate 90 because the modules are drawn portrait and this chassis
+    lays them flat; the bay size is the ROTATED footprint, which is the convention
+    asr9k-cards verified with a scratch device rather than asserted'
   front-geometry: 'drawing-measured off the stencil master at the calibration
     above, expressed in body coordinates. The two MPA bays are one row at y 2.6
     to 38.2, BAY 0 at x 20.0 to 182.9 and BAY 1 at x 208.9 to 371.9, each 163.0
@@ -165,12 +171,8 @@ views:
     panel:
       decor:
         - {at: [182.9, 2.6], size: [26.0, 35.6], fill: '#d2d4d6'}
-        - {at: [20.0, 2.6], size: [163.0, 35.6], fill: '#17191c'}
-        - {at: [208.9, 2.6], size: [163.0, 35.6], fill: '#17191c'}
         - {at: [137.5, 46.1], size: [12.0, 26.8], fill: '#f5d21a'}
       cutouts:
-        - {id: mpa-0, at: [20.0, 2.6], size: [163.0, 35.6], shape: rect}
-        - {id: mpa-1, at: [208.9, 2.6], size: [163.0, 35.6], shape: rect}
         - {id: clk-10mhz, at: [180.3, 66.0], size: [4.0, 4.0], shape: circle}
         - {id: clk-1pps, at: [193.05, 66.0], size: [4.0, 4.0], shape: circle}
     silkscreen:
@@ -211,6 +213,8 @@ views:
       - {at: [310.7, 67.2], text: 'SYNC', for: led-sync}
     components:
       bays:
+        - {id: mpa-0, at: [20.0, 2.6], size: {w: 163.0, h: 35.6}, rotate: 90, accepts: [cisco/a9k-mpa-20x1ge@1, cisco/a9k-mpa-blank@1], group: mpa-bays, rel-pos: 0, default: cisco/a9k-mpa-blank@1}
+        - {id: mpa-1, at: [208.9, 2.6], size: {w: 163.0, h: 35.6}, rotate: 90, accepts: [cisco/a9k-mpa-20x1ge@1, cisco/a9k-mpa-blank@1], group: mpa-bays, rel-pos: 1, default: cisco/a9k-mpa-blank@1}
         - {id: psu-0, at: [10.3, 45.0], size: {w: 56.6, h: 41.0}, accepts: [cisco/a9k-750w-ac@1, cisco/a9k-750w-dc@1], group: power-modules, rel-pos: 0, default: cisco/a9k-750w-ac@1}
         - {id: psu-1, at: [72.0, 45.0], size: {w: 56.8, h: 41.0}, accepts: [cisco/a9k-750w-ac@1, cisco/a9k-750w-dc@1], group: power-modules, rel-pos: 1, default: cisco/a9k-750w-ac@1}
         - {id: fan-0, at: [387.1, 0.0], size: {w: 54.86, h: 88.2}, accepts: [cisco/asr-9001-fan@1], group: cooling, rel-pos: 0, default: cisco/asr-9001-fan@1}
