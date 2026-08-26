@@ -19,8 +19,8 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
   L23 device: a port group is one family, or says in `mixed:` why it is not
   L24 device: `attrs.other` is counted, so the long tail cannot go quiet
   L25 device: one attr key is claimed by one section - it flattens to data-<key>
-  L26 component: an aperture is declared once - a `class: cutout` element must
-      conform, or resolve through `parts:` to something that does
+  L26 component: every `class: cutout` element is backed - the contract conforms,
+      or a part at that id resolves to something that does. Counted per CUTOUT
   L27 component: a power-bearing module states its figure, or leaves the record
       that no document holds it
   L28 component: a power figure says which way it points, and its min/typical/max
@@ -489,9 +489,53 @@ def _composes_a_standard(data, lib_roots, depth=0, seen=None):
     return False
 
 
+def _part_backs(part, lib_roots):
+    """Does this `parts:` entry resolve to something that says what it is?"""
+    found = resolve_component(part.get("ref") or "", lib_roots)
+    if not found:
+        return None                        # L10 reports the broken ref
+    sub = yaml.safe_load(found.read_text()) or {}
+    if sub.get("conforms") or sub.get("interface") or \
+            _composes_a_standard(sub, lib_roots):
+        return sub.get("size") or {}
+    return None
+
+
+def _cutout_is_backed(eid, spec, data, lib_roots):
+    """Is THIS opening composed from something that says what it is?
+
+    Matched by ID FIRST and by GEOMETRY otherwise, because the library uses both
+    and neither alone is enough. A `parts:` entry whose id is the cutout's is an
+    explicit statement that the two are the same opening. Where the ids differ -
+    `common/qsfp28-cage` wraps `std/qsfp-ganged`, and a panel assembly wraps the
+    cage under an id of its own - the composed part still SITS ON the opening,
+    and overlapping it is what makes them the same aperture rather than two.
+
+    Geometry rather than id alone matters because a rule that demanded matching
+    ids would punish the library for having a middle layer, which is the
+    defect `test_a_wrapper_of_a_wrapper_still_resolves` exists to prevent.
+    Id alone is kept as the first test because it is an explicit claim and does
+    not depend on a placement being drawn accurately.
+    """
+    at, size = spec.get("at") or [0, 0], spec.get("size") or [0, 0]
+    cx0, cy0, cx1, cy1 = at[0], at[1], at[0] + size[0], at[1] + size[1]
+    for part in data.get("parts") or []:
+        psize = _part_backs(part, lib_roots)
+        if psize is None:
+            continue
+        if part.get("id") == eid:
+            return True
+        pat = part.get("at") or [0, 0]
+        pw, ph = psize.get("w", 0), psize.get("h", 0)
+        if part.get("rotate") in (90, 270):
+            pw, ph = ph, pw
+        if pat[0] < cx1 and pat[0] + pw > cx0 and pat[1] < cy1 and pat[1] + ph > cy0:
+            return True
+    return False
+
+
 def lint_component_aperture(path, data, lib_roots):
-    """L26: an aperture is declared once, in one place, and everything else
-    composes it.
+    """L26: every aperture is backed by something that says what it is.
 
     Keyed on `class: cutout` rather than on `class: port`, because the geometry
     is the population and the class is not. `casa/io-6p12` and `io-6p12-sw` are
@@ -499,15 +543,49 @@ def lint_component_aperture(path, data, lib_roots):
     at an ESTIMATED bore - 252 rendered apertures across the C100G and C40G bays,
     which a rule keyed on `class: port` would never look at.
 
+    THE UNIT IS THE CUTOUT, NOT THE COMPONENT, and it used to be the component.
+    The old gate exited early if the contract composed ANY standard part
+    anywhere, which asks "does this author follow the compose pattern?" when the
+    question the rule exists to answer is "which openings have nothing behind
+    them". A component composing seventeen std/ parts and drawing one unbacked
+    cutout has one unbacked cutout; the seventeen do not make it zero. The rule's
+    own message already counted ELEMENTS while its gate operated on components,
+    so the two disagreed about the unit.
+
+    THE CASE THAT SETTLED IT: cisco/a9k-400g-dwdm-tr composes twenty SFP+ ports
+    from std/sfp and draws two CFP2 openings that no MSA publishes a figure for.
+    Under the old gate it produced no warning at all - the more of a card you
+    model correctly, the better it hid the part you could not, so the rule went
+    quieter as a card got larger.
+
+    THE COUNT'S MEANING CHANGED WITH THE UNIT. Before this, "4" meant four
+    COMPONENTS with no std/ backing anywhere. Now a number means unbacked
+    CUTOUTS' components wherever they sit, so a before-and-after comparison is
+    not like for like - 10 to 26 is the same library described more precisely,
+    not a regression. The four originals - rj11-jack, rj45-jack and
+    rj45-shielded twice - compose nothing and report identically either way.
+
     A warning, not an error, and the message names the registry on purpose. Half
-    of what this finds is true and unfixable the same day: there is no `std/mcx`
-    and no `mcx` key in `standards.yaml`, so the warning is a to-do list for
-    `std/` rather than an accusation. L14 and L21 both had to be recalibrated for
-    firing as accusations too early.
+    of what this finds is true and unfixable the same day: there is no `db9` key
+    in `standards.yaml`, so the warning is a to-do list for `std/` rather than an
+    accusation. L14 and L21 both had to be recalibrated for firing as accusations
+    too early.
+
+    THE COUNT STAYS HOMOGENEOUS - every entry still means "no std/ part exists to
+    compose" - but the entries are not equally closeable, and `wanted:` on each
+    contract is where that distinction lives. Fifteen of the twenty-six are one
+    connector, the DE-9 alarm output, whose panel cutout IS published in
+    MIL-DTL-24308: a runnable errand, the same shape as the MCX and XFP keys that
+    turned out findable once somebody looked outside the vendor's own guide. The
+    CPAK, CFP and CFP2 openings are not: those specifications withhold the figure
+    by design and need MSA membership or a vendor drawing. Same count, different
+    species, and a reader who cannot tell them apart will spend their time on the
+    wrong one.
 
     `std/` is exempt. Those components compose nothing because they ARE the
     bottom of the stack; running the rule on them would flag the foundations for
-    not standing on anything.
+    not standing on anything. A contract that declares `conforms:` is exempt for
+    the same reason - it IS the aperture it draws.
     """
     cutouts = sorted(el for el, spec in (data.get("elements") or {}).items()
                      if (spec or {}).get("class") == "cutout")
@@ -519,15 +597,20 @@ def lint_component_aperture(path, data, lib_roots):
         ns = ""
     if ns == "std" or data.get("conforms"):
         return
-    if _composes_a_standard(data, lib_roots):
+    els = data.get("elements") or {}
+    unbacked = [el for el in cutouts
+                if not _cutout_is_backed(el, els[el] or {}, data, lib_roots)]
+    if not unbacked:
         return
-    shown = ", ".join(cutouts[:4]) + (" ..." if len(cutouts) > 4 else "")
-    warn(path, "L26", f"{len(cutouts)} element(s) declare class: cutout ({shown}) "
-         f"but {data.get('name')} declares no 'conforms:' and composes no part that "
-         "does - the opening is drawn here instead of composed. If no std/ "
-         "component exists for this connector, add the key to "
-         "spec/schemas/standards.yaml and a std/ part carrying it; if the "
-         "dimension cannot be sourced yet, this warning is the record of that")
+    shown = ", ".join(unbacked[:4]) + (" ..." if len(unbacked) > 4 else "")
+    warn(path, "L26", f"{len(unbacked)} of {len(cutouts)} element(s) declaring "
+         f"class: cutout ({shown}) are backed by nothing - {data.get('name')} "
+         "declares no 'conforms:' and composes no part at those ids that does, so "
+         "the opening is drawn here instead of composed. If no std/ component "
+         "exists for this connector, add the key to spec/schemas/standards.yaml "
+         "and a std/ part carrying it; if the dimension cannot be sourced yet, "
+         "this warning is the record of that - and the contract's `wanted:` should "
+         "say which of those two it is")
 
 
 # Which way the power goes, by class. A module that consumes owes a

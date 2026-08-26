@@ -51,7 +51,7 @@ def test_a_redrawn_opening_is_named(tmp_path):
         "class": "line-card", "elements": {**cutout("u0"), **cutout("u1")}})
     ws = warnings_for(p, tmp_path)
     assert len(ws) == 1
-    assert "2 element(s) declare class: cutout" in ws[0]
+    assert "2 of 2 element(s) declaring class: cutout" in ws[0]
     assert "u0, u1" in ws[0]
 
 
@@ -96,6 +96,61 @@ def test_a_leaf_that_names_its_plug_has_said_what_it_is(tmp_path):
     p = plant(tmp_path, "common/lc-adapter@1", elements=cutout(),
               parts=[{"ref": "std/lc-bore@1", "id": "left", "at": [0, 0]}])
     assert warnings_for(p, tmp_path) == []
+
+
+def test_one_backed_opening_does_not_cover_for_an_unbacked_one(tmp_path):
+    """THE UNIT IS THE CUTOUT, NOT THE COMPONENT.
+
+    `cisco/a9k-400g-dwdm-tr` composes twenty SFP+ ports from `std/sfp` and
+    draws two CFP2 openings that no MSA publishes a figure for. Under the old
+    per-component gate it produced no warning at all: composing anything
+    exempted everything, so the more of a card you modelled correctly the
+    better it hid the part you could not, and the rule went quieter as a card
+    got larger. The count here is `1 of 2` - the backed one is named as backed
+    rather than vanishing from the denominator.
+    """
+    plant(tmp_path, "std/mcx@1", conforms="mcx", elements=cutout())
+    p = plant(tmp_path, "acme/combo@1", **{
+        "class": "line-card",
+        "elements": {"backed": {"at": [0.0, 0.0], "size": [3.0, 3.0],
+                                "class": "cutout"},
+                     "orphan": {"at": [20.0, 20.0], "size": [3.0, 3.0],
+                                "class": "cutout"}},
+        "parts": [{"ref": "std/mcx@1", "id": "backed", "at": [0.0, 0.0]}]})
+    ws = warnings_for(p, tmp_path)
+    assert len(ws) == 1
+    assert "1 of 2 element(s) declaring class: cutout" in ws[0]
+    assert "orphan" in ws[0]
+    assert "backed" not in ws[0].split("(", 1)[1].split(")", 1)[0]
+
+
+def test_a_part_that_sits_on_the_opening_backs_it_without_sharing_an_id(tmp_path):
+    """The wrapper case, stated as geometry. `common/qsfp28-cage` wraps
+    `std/qsfp-ganged` under an id of its own; the composed part still SITS ON
+    the opening, and overlapping it is what makes them one aperture rather than
+    two. A rule demanding matching ids would punish the library for having a
+    middle layer."""
+    plant(tmp_path, "std/mcx@1", conforms="mcx", elements=cutout())
+    p = plant(tmp_path, "acme/bezel@1", elements=cutout("bore"),
+              parts=[{"ref": "std/mcx@1", "id": "not-the-same-id",
+                      "at": [0.0, 0.0]}])
+    assert warnings_for(p, tmp_path) == []
+
+
+def test_a_part_elsewhere_on_the_faceplate_backs_nothing(tmp_path):
+    """The other half of the geometry test, and the one that matters for the
+    fifteen ASR 9000 control cards: they compose six to seventeen RJ-45s, SMBs
+    and USB ports and draw ONE nine-pin alarm cutout somewhere else entirely.
+    A composed part that does not sit on the opening has not backed it."""
+    plant(tmp_path, "std/mcx@1", conforms="mcx", elements=cutout())
+    p = plant(tmp_path, "acme/card@1", **{
+        "class": "line-card",
+        "elements": {"alarm": {"at": [50.0, 50.0], "size": [8.0, 30.0],
+                               "class": "cutout"}},
+        "parts": [{"ref": "std/mcx@1", "id": "jack", "at": [0.0, 0.0]}]})
+    ws = warnings_for(p, tmp_path)
+    assert len(ws) == 1
+    assert "alarm" in ws[0]
 
 
 def test_std_is_exempt_because_it_is_the_bottom_of_the_stack(tmp_path):
