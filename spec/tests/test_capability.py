@@ -45,13 +45,31 @@ def test_six_views_are_not_enough_they_must_be_one_box():
     assert "left.w=524" in blocked[3] and "top.h=480" in blocked[3]
 
 
+def _front_and_rear_only(slug):
+    """A device with its four side faces and its group terms taken away.
+
+    These two tests are about the ENGINE - that a level is the longest
+    satisfied prefix, and that the chain is stated once - not about how
+    complete any one manifest happens to be. Pinning them to the live c100g
+    made them fail the day it grew its four missing faces, which is a model
+    getting BETTER. So the fixture is built here instead: take a real device
+    and remove exactly the two things these assertions are about.
+    """
+    dev = load(slug)
+    for face in ("top", "bottom", "left", "right"):
+        dev["views"].pop(face, None)
+    for g in ("furniture", "grounding"):
+        dev["groups"].get(g, {}).pop("term", None)
+    return dev
+
+
 def test_level_is_the_longest_satisfied_prefix():
-    """The c100g carries group and rel-pos on all 39 of its placements and has
-    two views, so it is `faced` however addressable its front panel is. The
-    chain is what makes one number honest; listing every unsatisfied level
-    rather than only the next is what keeps it from being a grade - here it
-    says the shortest real path is four views plus two thin group blocks."""
-    cap = assess(load("casa/c100g"))
+    """A device carrying group and rel-pos on all of its placements but only
+    two views is `faced` however addressable its front panel is. The chain is
+    what makes one number honest; listing every unsatisfied level rather than
+    only the next is what keeps it from being a grade - here it says the
+    shortest real path is four views plus two thin group blocks."""
+    cap = assess(_front_and_rear_only("casa/c100g"))
     assert (cap["level"], cap["name"]) == (2, "faced")
     blocked = {b["level"]: b["needs"] for b in cap["blocked"]}
     assert "top, bottom, left, right" in blocked[3]
@@ -214,6 +232,10 @@ def test_the_chain_is_stated_once():
     printed twice, and left consumers de-duplicating by string equality."""
     man = LIB / "devices/casa/c100g/device.yaml"
     dev = yaml.safe_load(man.read_text())
+    for face in ("top", "bottom", "left", "right"):   # see _front_and_rear_only:
+        dev["views"].pop(face, None)                  # the fixture is built, not
+    for g in ("furniture", "grounding"):              # borrowed from a live model
+        dev["groups"].get(g, {}).pop("term", None)
     cap, flags = capability.assess(dev, profiles=PROFILES)
     assert [b["level"] for b in cap["blocked"]] == [3, 4]
     gaps = capability.derived_gaps(man, dev, [str(LIB)], cap, flags)
