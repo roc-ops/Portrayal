@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: c40g-ac-inlet-panel
-version: 1.0.0
+version: 1.1.0
 class: inlet
 profile: networking
 description: >-
@@ -43,6 +43,24 @@ provenance:
     appliance inlet at the standard 28.0 x 20.0 panel cutout. The figure draws the
     unmistakable C14 shroud, and the guide calls it an "AC power socket 115VAC or
     240VAC auto-adjusting"'
+  relief: 'the four rockers and the seven screws, and nothing else.
+    WHAT: Figure 1-11, "C40G PSU On/Off switch and AC power receptacle", draws a rocker
+    switch and an IEC inlet per PSU with vent mesh above and below; Figures 1-2 and 1-3
+    draw the panel bolted on with screws at its corners, mid-edges and one captive screw
+    at its centre. The four C14 inlets carry their own relief through std/c13-inlet@1
+    and are not re-declared here.
+    HOW FAR: not stated anywhere in the C40G guides - searched "AC power", "receptacle",
+    "On/Off", Appendix A. out 3.0 for a rocker bezel is the SAME number casa/pem carries
+    for its breakers, and it is the same number for the same reason - one estimate for
+    one class of panel-mounted rocker - NOT two independent readings that agreed. cyl 1.6
+    is edgecore/agr-panel-screw@1. The skin gained an id per corner screw so each cyl
+    takes its own radius; as one group of six spread over 340 mm it would have been a
+    single cylinder the width of the panel.
+    NOT GIVEN RELIEF: `vent-top` and `vent-bottom`. They are real openings, but the skin
+    draws the CELLS light on a grey panel, and `vent` punches a node''s DARK cells - so
+    declaring it would assert that the surround is the hole and the cells are metal,
+    which is backwards. Same artwork-polarity problem as casa/c40g-psu-ac''s fans, and
+    the same answer: fix the drawing first, with a source, or leave it.'
   NOT-PLACED: 'THIS COMPONENT IS BUILT BUT NOT PLACED ON THE C40G, and that is
     a format limitation rather than an oversight. It belongs on the rear face ONLY
     in the ac-power configuration, and there is no way to say that: a configuration
@@ -60,4 +78,20 @@ parts:
   - {ref: std/c13-inlet@1, id: inlet-psu4, at: [290.20, 25.2]}
 relief:
   wall: '#4a4f55'
+  features:
+    # Four rocker ON/OFF switches, one per PSU. Same bezel treatment and the same
+    # 3.0 as casa/pem's breakers - one number for one kind of hardware, not two
+    # readings that happened to agree.
+    - {node: psu1-switch, out: 3.0}
+    - {node: psu2-switch, out: 3.0}
+    - {node: psu3-switch, out: 3.0}
+    - {node: psu4-switch, out: 3.0}
+    # The captive centre screw and the six edge screws that bolt the panel on.
+    - {node: screw-mid, cyl: 1.6}
+    - {node: corner-tl, cyl: 1.6}
+    - {node: corner-tr, cyl: 1.6}
+    - {node: corner-ml, cyl: 1.6}
+    - {node: corner-mr, cyl: 1.6}
+    - {node: corner-bl, cyl: 1.6}
+    - {node: corner-br, cyl: 1.6}
 skins: [default]

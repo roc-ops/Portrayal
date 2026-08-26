@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: c40g-psu-cover
-version: 1.0.0
+version: 1.1.0
 class: filter
 profile: networking
 description: >-
@@ -30,8 +30,27 @@ provenance:
   artwork: 'drawing - the face carries four groups of horizontal louvre lines
     with a raised swept form across the middle two. Drawn as read from Figure 1-1
     at 2.858 px/mm; the exact louvre count is at the limit of what that figure resolves'
+  relief: 'one feature and one refusal. The louvres are given `vent` because this
+    part''s whole job is to pass air through a filter - the guide''s own sentence is
+    "PSUs are protected with a serviceable air filter within the removable front" cover
+    - and the skin draws them as dark cells, which is what `vent` needs. Depth 12.0 is
+    this contract''s own ESTIMATED cover depth, restated because the hole opens into the
+    cover, not a new claim.
+    NOT RAISED: `sweep`, the swept form across the middle. The artwork entry above calls
+    it raised and it probably is, but it is three STROKED paths with fill:none, and `out`
+    builds a box from a node''s bounding rect - so raising it would produce a 140 x 23 mm
+    blank slab with three lines painted on top, which is the failure mode the depth notes
+    warn about for bare paths. Making it stand proud needs the swoop drawn as a closed
+    filled shape first. Nothing in any C40G figure gives its height in any case.
+    NO Z DIMENSION for this part exists in either guide; searched "cover", "air filter",
+    "snap-on".'
   power: 'none, and none is expected. This is a cover with a filter in it. The
     four 1100 W AC PSUs behind it are the power-bearing parts and they are not modelled'
 relief:
   wall: '#4a4f55'
+  features:
+    # The louvres are openings - this is the cover that "protects the PSUs with a
+    # serviceable air filter", so the air has to get through it. Depth is the
+    # cover's own already-estimated 12.0, which is what the hole opens into.
+    - {node: louvres, vent: 12.0}
 skins: [default]

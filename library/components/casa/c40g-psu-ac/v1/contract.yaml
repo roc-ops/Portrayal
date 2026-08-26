@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: c40g-psu-ac
-version: 1.0.0
+version: 1.1.0
 class: psu
 profile: networking
 description: >-
@@ -63,6 +63,34 @@ provenance:
     is which - "PSUs are labeled on the front of the chassis as PSU1, PSU2, PSU3
     and PSU4 from right to left". Only the front face is drawn here; the rear face
     is not modelled, because these bays live on the front view'
+  relief: 'the kinds are the guide''s own words; the depths are estimated.
+    Figure 1-10 LABELS three things on this face - "Folding pull handle", "Locking
+    thumb screw", "Status LED" - so which node is what is not a reading at all, it is
+    a caption. What none of it gives is a Z dimension, and neither does Table A-1, the
+    running text, or Figure 1-11 of the other end. Searched both C40G guides for "power
+    supply", "PSU", "handle", "thumb".
+    - handle: modelled FOLDED, because that is how Figure 1-10 draws it, lying across
+      the left fan rather than swung out. bar 1.5 is the drawn stroke width - the wire
+      diameter of the bail - so it is a number off the drawing rather than a guess.
+      `uhandle` was the obvious primitive and is WRONG here: it takes its tube diameter
+      from the node''s SHORT axis, which on this path is the 12.2 mm bracket width, not
+      the 1.5 mm wire, so it would have produced a 12 mm pipe. Recorded because the next
+      person will reach for uhandle too.
+    - thumbscrew: cyl 5.0 with knurl, which is common/fan-module@1''s locking screw
+      exactly - same part doing the same job, and the guide calls both a thumb screw.
+    - status: dome 0.3, common/led-dot@1''s lamp. Note the lamp DIAMETER stays 2.6 and
+      stays unmeasured, for the reason the faceplate entry above gives; this pass adds
+      Z only.
+    NOT GIVEN RELIEF, and the reason is the artwork rather than the sources: the two
+    fan openings. `vent` turns a node''s DARK cells into holes, and this skin draws each
+    fan as a LIGHT disc with dark guard wires over it - the inverse - so a vent here
+    would punch the finger guard and leave the openings solid. Making them work means
+    redrawing the fan as a dark aperture behind a light guard, which is an artwork
+    change with no source behind it and is left alone. The four corner screws per fan
+    that Figure 1-10 shows are still not drawn, for the reason already recorded above.'
+  body: 'the 300.0 is the size entry''s own ESTIMATED depth restated as a body, not a
+    second claim. Unlike the PEMs and the fans this one WILL eject: it is class psu,
+    which is in the viewer''s FRU class list'
   size: 'drawing, as FRACTIONS - Figure 1-10 FAILS the orthographic gate at an
     aspect of 1.918 against the real 1.813, nearly 6 percent out, where Figure 1-1
     passes at 1.795. So only proportions are taken from it and they are anchored
@@ -71,4 +99,17 @@ provenance:
     an 87.2 pitch within it. The depth is ESTIMATED'
 relief:
   wall: '#4a4f55'
+  features:
+    # The three things the guide NAMES on this face, in its own words: "Folding
+    # pull handle", "Locking thumb screw", "Status LED - ON / FAIL".
+    #
+    # The handle is FOLDED in Figure 1-10 - lying flat across the left fan - so it
+    # is modelled lying on the face. bar 1.5 is the drawn stroke width, i.e. the
+    # wire diameter, which is a quantity the drawing actually carries.
+    - {node: handle, bar: 1.5}
+    - {node: thumbscrew, cyl: 5.0, knurl: true}
+    - {node: status, dome: 0.3}
+body:
+  depth: 300.0
+  color: '#e9eaec'
 skins: [default]
