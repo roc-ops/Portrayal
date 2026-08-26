@@ -586,6 +586,23 @@ configurations: {...}
   the hundredth because that is what the subtraction gives, NOT because the
   figure resolves to it - the whole disagreement is six pixels at 2.982 px/mm".
   The number and the sentence together are honest; the number alone is not.
+- **AN INERT CLAIM IS THE HARDEST KIND TO CATCH, BECAUSE NOTHING DEPENDS ON IT.**
+  Six modular carriers and the SIP-700 stated as fact that the adapters seated in
+  them are inside their own power figure. Cisco says no such thing: Table 35's
+  heading names the carrier without saying whether the measurement was taken
+  populated or bare, and both readings are open - populated means adding an
+  adapter's draw DOUBLE-COUNTS, bare means a budget built from it is SHORT. The
+  claim survived review for one reason: no MPA or SPA states a power figure
+  anywhere in the intake, so nothing was being summed and the error could not
+  show up in any total, any lint rule or any test. **A false statement that is
+  currently unused is invisible to every check you have**, and it does not stay
+  unused - it waits for the day someone finds the missing figure, by which point
+  it reads as an established fact with a citation beside it. When an assertion
+  costs nothing today, that is the reason to check it NOW rather than the reason
+  to leave it: the tempting direction is usually the conservative one, which is
+  exactly why it gets written down. Where the source is silent about SCOPE, say
+  the source is silent and record the question - do not pick the safer reading
+  and state it as the vendor's.
 - **State the axis convention on any face where the arithmetic could read as an
   error.** A top or bottom view laid out from a vendor's footprint figure
   usually has y = 0 at the REAR, because those figures print "Rear of chassis"
