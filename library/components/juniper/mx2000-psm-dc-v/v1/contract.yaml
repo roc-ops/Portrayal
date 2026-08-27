@@ -14,9 +14,17 @@ description: >-
   device gaps.
 attrs:
   model: MX2000 DC PSM (-48 V)
+  power-output-w: 2500
   role: dc-power-supply
   redundancy: 8+1
 provenance:
+  power: >-
+    MX2010 hardware guide, Table 82 'Calculating DC Power Budget'. THE RATING DEPENDS ON THE
+    FEED: 'MX2010 DC PSM 60 A (feed to each input) | 2100' and 'MX2010 DC PSM 80 A or DC PSM
+    (240 V China) | 2500'. The 2500 is carried because the column the numbers sit in is
+    headed 'Maximum Output Power of Power Supply Module', and this key is that column. A
+    budget for a 60 A-fed system must use 2100 and this figure will be wrong for it - which
+    is a property of the hardware, not of the record.
   size: 'photo - the MX2010 rear photograph: nine PSMs share ~420 mm of
     width over a ~430 mm bay; ~44 mm each, approximate. No vendor PSM
     dimension in the extraction'

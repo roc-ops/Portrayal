@@ -9,12 +9,24 @@ description: >-
   Juniper MX2K-MPC6E carrier for the MX2010/MX2020 - two MIC6 slots (Table 13). Vertical form for the MX2000 cage.
 attrs:
   model: MX2K-MPC6E
+  power-draw-max-w: 880
 provenance:
   size: 'registry + layout - the face is the slot geometry of its chassis
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
     drawing. carrier face; the MIC windows dominate it'
-  power: 'NOT STATED for this model in the module reference extraction - L27 stands'
+  power: >-
+    guide FRU power table, MX chassis guides: '| Maximum Power Requirements | Power requirement: 20.9 A @52 V (880 W; plus 104 Wfor each MIC) MX2K-MPC6E: • Typical: '. The 55 C rung is
+    carried, being the worst rated case a chassis budget has to survive.
+    The row says 'plus 104 W for each MIC', so this figure is the CARRIER
+    ALONE and the MICs seated in it add on top - which is what composes,
+    since each MIC here answers for itself.
+    Taken by matching the row's OWN LABEL: these tables pair parts with figures
+    in one row - `4-Port: X 8-Port: Y` against `4-Port: 41 W 8-Port: 52 W` - and
+    reading first-wins puts the small card's number on the big one. Aligning on
+    the N-Port label instead is self-checking, and it checks out: 4-port 41 W
+    against 8-port 52 W, 4-port 24 W against 8-port 29 W.
+    Seen in 1 guide(s): mx-module-reference-p0001-0300.
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'

@@ -13,10 +13,17 @@ description: >-
   exhaust vent field and a pull handle. Weighs 1.7 kg.
 attrs:
   model: MX240 DC PSU (normal capacity)
+  power-output-w: 1600
   role: dc-power-supply
   input: -48 VDC and return; dedicated 40 A customer breaker per PEM
   redundancy: 2 required, 4 for redundancy
 provenance:
+  power: >-
+    MX240 hardware guide, Table 23 'Power Supply Electrical Specifications', Normal-Capacity
+    block: 'Maximum output power | 1600W' at -48 VDC nominal. Table 24 repeats it as output
+    per supply. The section is headed 'DC Power Supply Electrical Specifications for MX240
+    AND MX480', so it is one supply serving both chassis. High-Capacity beneath is 2240 W
+    (DIP=0) / 2440 W (DIP=1), a different part.
   size: 'photo - 101.5 x 79.7 mm face measured off the orthographic
     mx240-rear-high photograph (0.7% aspect gate): four equal PEMs across
     x 11-418 on a 101.9 mm pitch, rows 8.9-88.6. No vendor PEM dimension

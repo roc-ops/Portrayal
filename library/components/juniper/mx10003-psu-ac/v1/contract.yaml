@@ -12,9 +12,19 @@ description: >-
   (needs-photo gap on the device).
 attrs:
   model: MX10003 AC PSM
+  power-output-w: 1600
+  power-output-low-line-w: 800
   role: ac-power-supply
   redundancy: n+n
 provenance:
+  power: >-
+    MX10003 hardware guide, Table 11 'AC Power Supply Electrical Specifications': 'Maximum
+    output power | AC high: 1600W AC low: 800W', with the input row confirming the split -
+    '90 through 140 VAC: 800W, 180 through 264 VAC: 1600W'. The DC PSM in Table 13 of the
+    same guide is 1100 W and is a different part.
+    Recorded the way mx304-psu-ac already does it: the HIGH-LINE rating in 
+    power-output-w with the low-line figure beside it, because a supply has a 
+    rating rather than a distribution and the two lines are two ratings.
   size: 'datasheet-table - the guide FRU table gives the AC supply 3.53 x
     9.26 x 1.63 in; 86.7 mm face width (drawn 3.41 in high face - 41.4 mm)'
   power-output: 'NOT STATED per module in the extraction - L27 stands'

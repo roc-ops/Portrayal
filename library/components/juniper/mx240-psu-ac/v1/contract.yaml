@@ -13,10 +13,21 @@ description: >-
   breaker.
 attrs:
   model: MX240 AC PSU (normal capacity)
+  power-output-w: 1590
+  power-output-low-line-w: 1027
   role: ac-power-supply
   input: dedicated AC feed per inlet, 15 A (250 VAC) breaker
   redundancy: high-line 1+1; low-line 2+2
 provenance:
+  power: >-
+    MX240 hardware guide, Table 18 'AC Power Supply Electrical Specifications', the
+    Normal-Capacity block: 'Maximum output power | 1027 W (low line) 1590 W (high line)'.
+    Table 19 repeats it as output per supply. The High-Capacity block directly beneath reads
+    1167/2050 and is a DIFFERENT part this contract does not model - the two blocks sit in
+    one table under repeated headings, which is how a reader takes the wrong row.
+    Recorded the way mx304-psu-ac already does it: the HIGH-LINE rating in 
+    power-output-w with the low-line figure beside it, because a supply has a 
+    rating rather than a distribution and the two lines are two ratings.
   size: 'photo (DC unit) - the AC PEM shares the 101.5 x 79.7 mm bay; face
     layout is from guide Figure 14 line art at page scale and is APPROXIMATE
     (the reference photograph shows the DC variant). Vent field and lamp row

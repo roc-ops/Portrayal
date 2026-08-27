@@ -9,13 +9,25 @@ description: >-
   Juniper MPC5E-100G10G fixed MPC - two 100GbE CFP2 ports and four SFP+; the Q variant shares the faceplate. Authored as the MX240/MX480 horizontal form.
 attrs:
   model: MPC5E-100G10G
+  power-draw-max-w: 607
   model-variants: MPC5EQ-100G10G
 provenance:
   size: 'registry + layout - the face is the slot geometry of its chassis
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
     drawing. No faceplate figure was usable for this model'
-  power: 'NOT STATED for this model in the module reference extraction - L27 stands'
+  power: >-
+    guide FRU power table, MX chassis guides: '| 2x100GE + 4x10GE MPC5E 2x100GE + 4x10GE MPC5EQ | MPC5E-100G10G MPC5EQ-100G10G | With optics: 607 Wat 55° C 541 Wat 4'. The 55 C rung is
+    carried, being the worst rated case a chassis budget has to survive.
+    The row says WITH OPTICS, so the transceivers are already in this figure.
+    Nothing double counts: the `common/` generic optics L27 exempts carry no
+    wattage of their own.
+    Taken by matching the row's OWN LABEL: these tables pair parts with figures
+    in one row - `4-Port: X 8-Port: Y` against `4-Port: 41 W 8-Port: 52 W` - and
+    reading first-wins puts the small card's number on the big one. Aligning on
+    the N-Port label instead is self-checking, and it checks out: 4-port 41 W
+    against 8-port 52 W, 4-port 24 W against 8-port 29 W.
+    Seen in 9 guide(s): mx2008, mx2010-p0001-0300, mx2010-p0301-0600, mx2020-p0001-0300.
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'

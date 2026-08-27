@@ -12,9 +12,19 @@ description: >-
   (PEM0-PEM3); high-line systems use two, low-line four.
 attrs:
   model: MX480 AC PSU (normal capacity)
+  power-output-w: 1590
+  power-output-low-line-w: 1027
   role: ac-power-supply
   redundancy: high-line 2, low-line 2+2
 provenance:
+  power: >-
+    MX480 hardware guide, Table 16 'AC Power Supply Electrical Specifications', Normal-Capacity
+    block: 'Maximum output power | 1027 W (low line) 1590 W (high line)'. Identical to the
+    MX240's supply, which is a check rather than a copy: the two guides were read separately
+    and agree. High-Capacity beneath is 1167/2050, a different part.
+    Recorded the way mx304-psu-ac already does it: the HIGH-LINE rating in 
+    power-output-w with the low-line figure beside it, because a supply has a 
+    rating rather than a distribution and the two lines are two ratings.
   inlet: 'photo-class - the AC supply carries its own appliance inlet on the
     face (the rear photograph resolves the cord entering each PSU); drawn as
     the registry C20 at an approximate position - the photograph cannot fix

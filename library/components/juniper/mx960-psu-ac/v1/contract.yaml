@@ -12,9 +12,18 @@ description: >-
   FAIL / DC OK / AC OK lamps and the exhaust fan at the bottom.
 attrs:
   model: MX960 AC PSU
+  power-output-w: 1700
   role: ac-power-supply
   redundancy: 2+2
 provenance:
+  power: >-
+    MX960 hardware guide, Table 91 'AC Power Supply Electrical Specifications', Normal-Capacity
+    block: 'Maximum output power | 1700W', at 200-240 VAC operating range with no separate
+    low-line rating stated. THIS CONTRACT'S MODEL SAYS ONLY 'MX960 AC PSU' and the guide
+    describes four AC supplies for this chassis - normal-capacity, high-capacity, high-capacity
+    second-generation and high-voltage second-generation. The figure carried is the
+    NORMAL-CAPACITY one; the high-capacity supply in the same table is 4100 W and is a
+    different part that is not modelled here.
   size: 'photo - the rear studio photograph at ~1.55 px/mm: four supplies
     share the 441 mm width (~103 mm each) over a ~480 mm bay; approximate.
     No vendor PSU dimension in the extraction'
