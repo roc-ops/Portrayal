@@ -253,8 +253,13 @@ copy a datasheet, stencil or CAD file into the library.
 
 Establish `chassis.width/height/depth` and each view's `size`.
 
-- The rack face is not the chassis. A 19in / 482mm figure **includes the
-  mounting ears**; the body is narrower. Ears are a separate optional placement.
+- The rack face is not the chassis. **The modelled body is the metal between the
+  ear fold lines, and ears are never drawn** - not bolt-on ones, and not integral
+  flanges either. A 19in / 482mm figure includes them; so does a spec table that
+  calls the chassis 19 inches, which is how the MX204 came to be modelled wearing
+  its flanges and passed every gate. Measure between the folds, record the ear
+  extent in provenance, and subtract it before laying anything out. L43 warns when
+  a front or rear face lands in 480-487mm, which is a rack face under a body's name.
 - Take proportions from a figure only as *fractions* of a dimension you know from
   the datasheet. Two figures in one guide can disagree by 12% on absolute scale.
 - Panel decor (vents, grooves, bezels) goes in `panel.decor`. It is what the
@@ -398,6 +403,23 @@ Now populate. **Reuse before building.**
      silkscreen, because that is where it physically sits.
    Getting this wrong is visible: a non-rectangular part in a bay leaves the
    bay's opening showing around it, like a hole in the chassis that is not there.
+7. **`rotate:` pivots a placement on its OWN pre-rotation centre**, so after
+   turning a part you have to recompute `at` - the landed box is not where the
+   unrotated one sat. Look at the render. The MX204's USB was the right size and
+   the right way round and landed 3.75mm outside its own cutout, because the sizes
+   agreed and only the position was wrong. L39 now compares the landed box with
+   the hole; it did not before, and nothing else does.
+8. **Cable-management accessories are not drawn** - cord-retainer bails, tie
+   anchors, straps, velcro. They are photographed on a real unit, they are not
+   panel facts, and they are noise to every consumer of the drawing. Note them in
+   provenance instead.
+9. **A row of indicators and buttons sharing one baseline on the real device is
+   modelled on one centreline.** A schematic's few-mm scatter is noise, not fact:
+   the MX204's OFFLINE button sat 3mm above its five lamps, faithfully copied from
+   a drawing already known to be 4.6 percent stretched, and read as sloppiness at
+   faceplate scale. Record the deviation if you align them, and the drawing's
+   scatter if you do not. No rule enforces this - on some devices the stagger is
+   real, and a rule here would fight them.
 7. **EVERY BAY GETS A `default:`, OR IT RENDERS AS A HOLE.** A chassis whose bays
    name no occupant draws as an empty frame: no module means no lamp, so nothing
    in it is clickable, nothing is addressable, and the 3D viewer - which finds
@@ -560,6 +582,15 @@ explorer: the tree reads chassis, then groups in tier order, every row
 `id - model`, indicators nested under what they indicate. Then set
 `maturity: modelled` and lint again; L15 will tell you if the provenance is
 not good enough.
+
+**Read the capability level and its `blocked:` reason before calling it done.**
+A view counts toward level 3 `solid` - the level that gets a device into 3D -
+only if something is DRAWN on it. A size-only face is honest and still does not
+count, which is how the MX204 finished at level 2, `blocked: 4 views top, bottom,
+left, right`, with every gate green. Give every face its honest content - a rail,
+a label, a vent field, estimated and marked as such - or accept level 2 and say
+why in provenance. L45 warns about a size-only face at `modelled`. Then open the
+demo and confirm 2D **and** 3D actually load.
 
 **Lint after every structural addition, not just at the end.** The rules see
 what is declared, so a rule can only find a collision once both sides exist.

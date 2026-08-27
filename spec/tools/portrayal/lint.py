@@ -50,6 +50,11 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
       that exist, and does not scope itself to all of them or to none
   L42 device: a silkscreen mark says what it annotates - a part, or `chassis`
       for printing about the whole unit
+  L43 device: a front or rear view as wide as the 19-inch rack face still has
+      its mounting ears in it; the modelled body is the metal between the folds
+  L44 device: panel decor agrees with what is on the face - a patterned field is
+      not buried under the parts, and printing does not run off the edge
+  L45 device: a view at `modelled` draws something, or it is a size with no face
 """
 import argparse
 import json
@@ -1293,6 +1298,35 @@ def lint_device_cutouts(path, view_name, view, lib_roots):
                              f"occupant conforms to {conf} ({sw:g} x {sh:g}). The hole "
                              "and the part disagree")
 
+    # 2b. THE PART HAS TO LAND ON THE HOLE, which is a different question from
+    #     whether it is the right size for it, and 2 above only asks the second.
+    #     `rotate:` spins a placement about its OWN pre-rotation centre, so the
+    #     author has to back-compute `at` - and the MX204's USB, correctly sized
+    #     and correctly rotated, sat 3.75 mm outside its own cutout. Nothing saw
+    #     it: the sizes agreed, so 2 passed, and no other rule compares a
+    #     placement's LANDED box with the opening it is supposed to fill.
+    for cid, c in ((c["id"], c) for c in cuts):
+        q = by_id.get(cid)
+        if not q or not q.get("at") or not c.get("at") or not c.get("size"):
+            continue
+        size = _instance_size(q.get("ref"), lib_roots)
+        if not size:
+            continue
+        w, h = size
+        x, y = q["at"]
+        if q.get("rotate") in (90, 270, -90):
+            cx, cy = x + w / 2, y + h / 2
+            x, y, w, h = cx - h / 2, cy - w / 2, h, w
+        cw, ch = c["size"]
+        miss = max(x - c["at"][0], c["at"][0] + cw - (x + w),
+                   y - c["at"][1], c["at"][1] + ch - (y + h))
+        if miss > 0.3:
+            err(path, "L39", f"{view_name}: {cid} does not cover its own cutout - "
+                             f"the part lands at ({x:g}, {y:g}) {w:g} x {h:g} and the "
+                             f"hole is at ({c['at'][0]:g}, {c['at'][1]:g}) {cw:g} x {ch:g}, "
+                             f"missing by {miss:.2f}mm. `rotate:` pivots on the part's "
+                             "own centre, so `at` has to be recomputed after turning it")
+
     # 3. you cannot print on a hole
     for m in (view.get("silkscreen") or []):
         if m.get("path") or not m.get("at"):
@@ -1365,6 +1399,146 @@ def lint_device_cutouts(path, view_name, view, lib_roots):
 # LC fibre on a passive mux - `media: fiber` is a bonded adapter, not a socket.
 PLUGGABLE_CAGES = {"sfp", "sfp-plus", "sfp28", "sfp-dd", "qsfp", "qsfp28",
                    "qsfp56", "qsfp-dd", "xfp", "cfp", "cfp2"}
+
+
+def lint_device_rack_ears(path, data):
+    """L43: a body as wide as the rack face still has its ears on.
+
+    The library draws devices WITHOUT rack ears - the modelled body is the metal
+    between the ear fold lines - and that convention lived in reviewers' heads.
+    The MX204 has integral ear flanges and its own table calls the chassis 19
+    inches, so the model faithfully included them and nothing said otherwise.
+
+    Structural and cheap: a front or rear face measuring 480-487 mm is almost
+    certainly a rack face rather than a body. The widest body in the library
+    today is 443 mm, so this costs nothing until it fires.
+    """
+    for vname, view in (data.get("views") or {}).items():
+        if vname not in ("front", "rear"):
+            continue
+        w = ((view or {}).get("size") or {}).get("w")
+        if w and 480.0 <= float(w) <= 487.0:
+            warn(path, "L43", f"{vname}: view is {w} wide, which is the 19-inch "
+                 "rack face, not a body. Ears are never drawn - measure between "
+                 "the fold lines and record the ear extent in provenance")
+
+
+def _decor_box(d):
+    at, sz = d.get("at"), d.get("size")
+    if not at or not sz:
+        return None
+    w, h = (sz["w"], sz["h"]) if isinstance(sz, dict) else (sz[0], sz[1])
+    return (at[0], at[1], at[0] + w, at[1] + h)
+
+
+def lint_device_decor(path, view_name, view, lib_roots):
+    """L44: decor is background, and background still has to be true.
+
+    TWO CHECKS, AND ONE OF THEM IS DELIBERATELY NOT THE OBVIOUS ONE. Erroring on
+    any decor that a feature overlaps was the first idea and is wrong: decor IS
+    what sits behind things, and 206 overlaps across 11 devices are correct by
+    construction - a grille band behind a power shelf, a brand band under a
+    wordmark, a colour strip behind a port block. A rule that rejects the model
+    on eleven devices to catch one is the accusing direction, and worse than
+    silence.
+
+    What the MX204 actually did was run a VENT FIELD under an SFP block. The
+    tell is not overlap, it is a patterned field drawn where its pattern cannot
+    be seen: honeycomb or grille that is almost entirely buried is either
+    mismeasured or should not be there. Two fields in the library exceed the
+    threshold, which is the signal-to-noise a warning wants.
+
+    The second check is printing that runs off the face - the MX204's model name
+    was clipped at the view edge. Text extent is ESTIMATED at 0.62 em per
+    character, which is rough; the threshold is set so only a gross overrun
+    fires, because a legend half a millimetre over is measurement noise and a
+    legend ten millimetres over is a mistake.
+    """
+    vp = view_parts(view)
+    boxes = []
+    for b in vp["bays"]:
+        bb = _decor_box(b)
+        if bb:
+            boxes.append(bb)
+    for q in vp["placements"]:
+        c = _instance_size(q.get("ref"), lib_roots)
+        if not c or not q.get("at"):
+            continue
+        w, h = c
+        if q.get("rotate") in (90, 270, -90):
+            cx, cy = q["at"][0] + w / 2, q["at"][1] + h / 2
+            boxes.append((cx - h / 2, cy - w / 2, cx + h / 2, cy + w / 2))
+        else:
+            boxes.append((q["at"][0], q["at"][1], q["at"][0] + w, q["at"][1] + h))
+
+    for d in vp["decor"]:
+        if not d.get("pattern"):
+            continue
+        db = _decor_box(d)
+        if not db:
+            continue
+        area = (db[2] - db[0]) * (db[3] - db[1])
+        if area <= 0:
+            continue
+        covered = 0.0
+        for fb in boxes:
+            ox = min(db[2], fb[2]) - max(db[0], fb[0])
+            oy = min(db[3], fb[3]) - max(db[1], fb[1])
+            if ox > 0 and oy > 0:
+                covered += ox * oy
+        pct = min(100.0, 100.0 * covered / area)
+        if pct >= 80.0:
+            warn(path, "L44", f"{view_name}: the {d['pattern']} field at "
+                 f"{d['at']} is {pct:.0f}% buried under the parts on this face, "
+                 "so its pattern is drawn where nothing can see it. Either the "
+                 "field is mismeasured or it does not belong on this view")
+
+    size = (view or {}).get("size") or {}
+    vw = size.get("w")
+    if not vw:
+        return
+    for m in vp["silkscreen"]:
+        t, at = m.get("text"), m.get("at")
+        if not t or not at:
+            continue
+        # 0.62 em per character is a rough mean for a sans face; only a gross
+        # overrun is reported, because the estimate cannot carry a fine one
+        wid = 0.62 * float(m.get("font-size") or 2.5) * len(str(t))
+        anchor = m.get("anchor") or "start"
+        x0 = at[0] - (wid / 2 if anchor == "middle" else wid if anchor == "end" else 0)
+        over = max(0.0, -x0) + max(0.0, (x0 + wid) - float(vw))
+        if over > 2.0:
+            warn(path, "L44", f"{view_name}: silkscreen {str(t)[:24]!r} runs about "
+                 f"{over:.0f}mm off the face (view is {vw} wide). Printing that "
+                 "leaves the metal is a position error, not a long word")
+
+
+def lint_device_empty_views(path, data):
+    """L45: a face that is only a size is not a face.
+
+    A view counts toward capability level 3 - `solid`, the one that gets a
+    device into 3D - only if something is DRAWN on it. Four size-only faces left
+    the MX204 at level 2 with `blocked: 4 views top, bottom, left, right`, and
+    the modelling skill says an empty view that states why is fine: true for
+    honesty, false for capability, and nothing pointed at the difference.
+
+    A warning rather than an error, because accepting level 2 and saying why is
+    a legitimate choice - the ASR 9000v's underside genuinely is unmeasurable.
+    What is not legitimate is arriving at level 2 without noticing.
+    """
+    if (data.get("maturity") or "draft") == "draft":
+        return
+    for vname, view in (data.get("views") or {}).items():
+        vp = view_parts(view or {})
+        if any(vp[k] for k in ("decor", "cutouts", "silkscreen",
+                               "bays", "placements", "regions")):
+            continue
+        if not ((view or {}).get("size") or {}).get("w"):
+            continue
+        warn(path, "L45", f"{vname}: the face declares a size and nothing else, so "
+             "it does not count as drawn and will not carry this device to "
+             "`solid`. Give it its honest content - a rail, a label, a vent "
+             "field, estimated and marked - or record why it stays empty")
 
 
 def lint_device_silkscreen_owner(path, data):
@@ -1970,6 +2144,8 @@ def lint_device(path, validator, lib_roots):
     lint_device_port_optics(path, data, lib_roots)
     lint_device_config_scope(path, data)
     lint_device_silkscreen_owner(path, data)
+    lint_device_rack_ears(path, data)
+    lint_device_empty_views(path, data)
     lint_device_occupants(path, data, lib_roots)
     # Every id each view offers, indexed by view name. A `for:` may name a target
     # in ANOTHER view of the same device (`rear/psu-0`), so the check below cannot
@@ -1999,6 +2175,7 @@ def lint_device(path, validator, lib_roots):
         lint_device_mating(path, vname, view, lib_roots)
         lint_device_overlap(path, vname, view, lib_roots)
         lint_device_cutouts(path, vname, view, lib_roots)
+        lint_device_decor(path, vname, view, lib_roots)
         vp = view_parts(view)
         seen = set()
         # L17 - every group used is declared. The declaration carries the vendor's
