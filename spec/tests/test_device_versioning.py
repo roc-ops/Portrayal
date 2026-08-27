@@ -238,8 +238,17 @@ def test_every_base_leaves_its_traffic_bays_empty():
         traffic = [b["id"] for v in (d.get("views") or {}).values()
                    for b in (((v or {}).get("components") or {}).get("bays") or [])
                    if roles.get(b.get("group")) == "traffic"]
-        seated = [t for t in traffic if (base.get("bays") or {}).get(t, "x") != ""]
-        assert not seated, f"{p}: base leaves {seated[:3]} populated"
+        # A BLANK IS NOT A POPULATED SLOT. A chassis ships with blanking panels
+        # in its empty bays, for airflow, so a base that left holes would be
+        # drawing something nobody has ever seen on a rack.
+        import yaml as yy
+        blanks = {f"{q.split('components/')[1].split('/')[0]}/{yy.safe_load(open(q))['name']}"
+                  for q in glob.glob(str(ROOT / "library/components/*/*/v*/contract.yaml"))
+                  if (yy.safe_load(open(q)) or {}).get("class") == "blank"}
+        seated = [t for t in traffic
+                  if (base.get("bays") or {}).get(t, "x") not in ("",)
+                  and (base.get("bays") or {}).get(t, "x").split("@")[0] not in blanks]
+        assert not seated, f"{p}: base leaves {seated[:3]} functionally populated"
 
 
 def test_a_base_is_always_the_default():

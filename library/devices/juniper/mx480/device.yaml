@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx480
-version: 0.2.0
+version: 1.0.0
 maturity: modelled
 manufacturer: Juniper
 model: MX480
@@ -85,6 +85,12 @@ groups:
     index-origin: 0
     description: DPC/MPC slots 5-0 and SCB slots 1-0; SCBs carry the Routing
       Engines in their own bays
+  scbs:
+    term: Slot
+    role: service
+    index-origin: 0
+    description: dedicated Switch Control Board slots - they accept an SCB and
+      nothing else, unlike the shared slots that take either an SCB or a DPC
   craft:
     term: Panel
     role: management
@@ -149,10 +155,10 @@ views:
            default: juniper/dpce-r-40ge-sfp@1, group: slots, rel-pos: 2}
         - {id: scb1, at: [11.5, 278.1], size: {w: 420.9, h: 29.5},
            accepts: [juniper/scb-mx@1], default: juniper/scb-mx@1,
-           group: slots, rel-pos: 1}
+           group: scbs, rel-pos: 1}
         - {id: scb0, at: [11.5, 310.0], size: {w: 420.9, h: 29.5},
            accepts: [juniper/scb-mx@1], default: juniper/scb-mx@1,
-           group: slots, rel-pos: 0}
+           group: scbs, rel-pos: 0}
   rear:
     size:
       w: 443.0
@@ -245,14 +251,12 @@ configurations:
       which is the question most people ask first and the one `default` used to answer
       with whatever the drawing happened to be populated with.
     bays:
-      dpc5: ''
-      dpc4: ''
-      dpc3: ''
-      dpc2: ''
-      dpc1: ''
-      dpc0: ''
-      scb1: ''
-      scb0: ''
+      dpc5: juniper/mx-dpc-blank@1
+      dpc4: juniper/mx-dpc-blank@1
+      dpc3: juniper/mx-dpc-blank@1
+      dpc2: juniper/mx-dpc-blank@1
+      dpc1: juniper/mx-dpc-blank@1
+      dpc0: juniper/mx-dpc-blank@1
   ac:
     kind: orderable
     description: AC-powered chassis as photographed - four normal-capacity AC

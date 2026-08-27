@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx10008
-version: 0.2.0
+version: 0.2.1
 maturity: modelled
 manufacturer: Juniper
 model: MX10008
@@ -224,7 +224,11 @@ configurations:
       Chassis only - what you spec before deciding what goes in it. The 8 slot bays are
       EMPTY; cooling, psus, res are populated. Enough to power on and reach the box,
       which is the question most people ask first and the one `default` used to answer
-      with whatever the drawing happened to be populated with.
+      with whatever the drawing happened to be populated with. The line-card slots are
+      drawn EMPTY rather than blanked, which is not the intent: no MX10000-series
+      line-card blank is modelled, and none is named in the staged guides - they
+      document power-supply cover panels only. Every other chassis in the library seats
+      a blank here.
     bays:
       fpc0: ''
       fpc1: ''

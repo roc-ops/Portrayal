@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx304
-version: 0.2.0
+version: 0.2.1
 maturity: modelled
 manufacturer: Juniper
 model: MX304
@@ -146,7 +146,7 @@ chassis:
 groups:
   res:
     term: Slot
-    role: management
+    role: service
     index-origin: 0
     description: Routing Engine slots - RE 0, and RE 1/LMIC2 which accepts a
       Routing Engine or a third LMIC. One RE minimum; slot 0 is primary by
@@ -363,8 +363,8 @@ configurations:
       is the question most people ask first and the one `default` used to answer with
       whatever the drawing happened to be populated with.
     bays:
-      lmic0: ''
-      lmic1: ''
+      lmic0: juniper/jnp304-blnk@1
+      lmic1: juniper/jnp304-blnk@1
   dual-re-ac:
     kind: example
     description: Two Routing Engines, two LMIC16s, AC power - the fully

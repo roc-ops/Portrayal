@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx104
-version: 0.2.0
+version: 0.2.1
 maturity: modelled
 manufacturer: Juniper
 model: MX104
@@ -86,7 +86,7 @@ groups:
     description: MIC slots 1/0 and 1/1 (upper row), 0/0 and 0/1 (lower row)
   res:
     term: Slot
-    role: management
+    role: service
     index-origin: 0
     description: Two slim Routing Engine bays, RE0 below RE1
   timing:
@@ -281,10 +281,10 @@ configurations:
       question most people ask first and the one `default` used to answer with whatever
       the drawing happened to be populated with.
     bays:
-      mic-1-0: ''
-      mic-1-1: ''
-      mic-0-0: ''
-      mic-0-1: ''
+      mic-1-0: juniper/mx-mic-blank@1
+      mic-1-1: juniper/mx-mic-blank@1
+      mic-0-0: juniper/mx-mic-blank@1
+      mic-0-1: juniper/mx-mic-blank@1
 gaps:
   - what: vendor-table-axes
     reason: sources-disagree

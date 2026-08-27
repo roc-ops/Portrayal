@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx240
-version: 0.2.0
+version: 1.0.0
 maturity: modelled
 manufacturer: Juniper
 model: MX240
@@ -113,6 +113,12 @@ groups:
     description: The card cage - DPC/MPC slots 2 and 1, the shared SCB1/DPC0
       slot, and SCB0, numbered on the craft tabs and left flange. SCBs carry
       the Routing Engines in their own bays
+  scbs:
+    term: Slot
+    role: service
+    index-origin: 0
+    description: dedicated Switch Control Board slots - they accept an SCB and
+      nothing else, unlike the shared slots that take either an SCB or a DPC
   craft:
     term: Panel
     role: management
@@ -164,7 +170,7 @@ views:
            default: juniper/scb-mx@1, group: slots, rel-pos: 1}
         - {id: scb0, at: [11.5, 175.95], size: {w: 420.9, h: 29.5},
            accepts: [juniper/scb-mx@1], default: juniper/scb-mx@1,
-           group: slots, rel-pos: 0}
+           group: scbs, rel-pos: 0}
   rear:
     size:
       w: 443.0
@@ -261,10 +267,9 @@ configurations:
       which is the question most people ask first and the one `default` used to answer
       with whatever the drawing happened to be populated with.
     bays:
-      dpc2: ''
-      dpc1: ''
-      scb1-dpc0: ''
-      scb0: ''
+      dpc2: juniper/mx-dpc-blank@1
+      dpc1: juniper/mx-dpc-blank@1
+      scb1-dpc0: juniper/mx-dpc-blank@1
   dc:
     kind: orderable
     description: DC-powered chassis as photographed - four normal-capacity DC
