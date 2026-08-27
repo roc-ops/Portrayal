@@ -8,13 +8,30 @@ profile: networking
 description: >-
   Juniper MPC-3D-16XGE-SFPP fixed MPC - 16 SFP+ in four PIC groups of four. Authored as the MX240/MX480 horizontal form.
 attrs:
-  model: MPC-3D-16XGE-SFP
+  model: MPC-3D-16XGE-SFPP
+  power-draw-max-w: 440
 provenance:
   size: 'registry + layout - the face is the slot geometry of its chassis
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
     drawing. No faceplate figure was usable for this model'
-  power: 'NOT STATED for this model in the module reference extraction - L27 stands'
+  power: >-
+    guide power-budget tables, MX960 and MX2020 chassis guides, and NOT a FRU
+    spec row - no chassis guide's FRU power table carries this card. What they
+    carry is Juniper's own per-card figure used in its worked slot budgets:
+    'MPC - Slot 1 | MPC-3D-16XGE-SFPP-R-B | 440W', and then 440W*6=2640W,
+    440W*5=2200W, 440W*10=4400W and 440W*20=8800W across the zone and
+    full-chassis examples. 440 W per card, consistently, in six independent
+    places.
+    NO AMBIENT IS STATED, which is the difference between this and its siblings:
+    the MPC7E row gives 55, 40 and 25 C and this gives one number. It is carried
+    the way dpc-r-4xge-xfp carries its 310 - the vendor's own figure, with the
+    qualification it lacks named here rather than assumed away. A budget built
+    from it is sound; a comparison against a 55 C figure is not like-for-like.
+    THE MODEL ATTR SAID MPC-3D-16XGE-SFP, one P, which appears nowhere in the
+    corpus against 64 occurrences of MPC-3D-16XGE-SFPP - and was contradicted by
+    this contract's own name and description. Fixed here, because a figure
+    attached to a part number that does not exist is worse than no figure.
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'
