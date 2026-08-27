@@ -1,0 +1,8 @@
+# Intake conversion dependencies. The modelling and build gates need NONE
+# of these - they are for the machine that converts vendor PDFs (which may
+# be a different, beefier box; see the portrayal-vendor-intake skill).
+# GPU is optional: docling uses CUDA when present and is several times
+# slower without it. A 400-page hardware guide converts in ~1-4 minutes
+# on an RTX-class GPU.
+docling>=2.0
+pillow>=10.0
