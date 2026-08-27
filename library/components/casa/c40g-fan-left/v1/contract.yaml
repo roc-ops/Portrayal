@@ -1,18 +1,16 @@
 format: 1
 kind: module
-name: c40g-fan
+name: c40g-fan-left
 version: 1.2.0
 class: cooling
 behaviour: fills
 profile: networking
 description: >-
-  Casa C40G system fan module, RIGHT-hand position. A tall side-mounted assembly
-  of eight fan units with the air filter built into its outboard face, occupying
-  the full height of the card band, and the air INTAKE for the chassis.
-  The chassis takes two and they are NOT the same part: the left-hand position
-  takes casa/c40g-fan-left@1, mechanically identical but printing the six
-  card-slot numbers on its faceplate. That asymmetry is visible in every
-  photograph and is why one part cannot serve both sides.
+  Casa C40G LEFT fan module - the secondary position, and the one that carries
+  the slot numbering. Mechanically the same tall side-mounted assembly as the
+  right-hand system fan module, at the same 34.7 x 205, but its faceplate prints
+  the six card-slot numbers 5 down to 0 with 3 and 2 in red, which the right-hand
+  module does not.
 size: {w: 34.7, h: 205.0, d: 380.0}
 attrs:
   model: 'C40G System Fan Module'
@@ -20,6 +18,22 @@ attrs:
   fans: '8'
   power-draw-max-w: 400
 provenance:
+  identity: 'Jason - the left and right fan positions are separate part numbers and
+    only the left one is printed with the slot numbers. Photographs support it: at 9x
+    on c40g-front-3x the LEFT column carries the hazard triangle AND the slot number
+    on one continuous face with no seam between them, while the RIGHT column at the
+    same magnification carries the triangle and nothing else. Both bays take the same
+    module in the model, so a single part cannot be printed two ways - either the
+    parts differ or the numbers are chassis ink on a bezel too flush to resolve, and
+    a left/right pair is the ordinary way a vendor does this. The guide addresses
+    them by side, "show envm fan" reporting FAN_Tray RIGHT. WANTED - the two Casa
+    part numbers, or one photograph with the left module withdrawn, which would
+    settle it outright by showing whether the numbers leave with it.'
+  slot-numbers: 'drawing-measured - carried over from the device silkscreen, where they
+    were declared at x 20 and buried under this very bay, which is what L21 reported.
+    Y positions are the device values less the bay origin at y 17. X is 26.0 in module
+    coordinates, the centre of the 16.3-35.8 band Figure 1-1 shows the numbers in at
+    2.467 px/mm, which clears the handle this skin draws at 13.4-21.3.'
   layout: 'drawing - Figure 1-1 of the C40G Hardware Installation Guide (rev 07/07/2022),
     "Casa C40G CMTS front view", which PASSES the orthographic gate: the drawn chassis
     measures 1364 x 760 px for an aspect of 1.795 against the real rack face of
