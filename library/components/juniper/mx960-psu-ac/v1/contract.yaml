@@ -1,0 +1,30 @@
+format: 1
+kind: module
+name: mx960-psu-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX960 AC power supply - four tall units fill the rear card
+  cage below the inlet strip (the C20 inlets and their switches sit on
+  the chassis, one above each supply). Nameplate labels mid-body, PS
+  FAIL / DC OK / AC OK lamps and the exhaust fan at the bottom.
+attrs:
+  model: MX960 AC PSU
+  role: ac-power-supply
+  redundancy: 2+2
+provenance:
+  size: 'photo - the rear studio photograph at ~1.55 px/mm: four supplies
+    share the 441 mm width (~103 mm each) over a ~480 mm bay; approximate.
+    No vendor PSU dimension in the extraction'
+  power-output: 'NOT STATED per module in the extraction - L27 stands'
+  face: 'photo - UP arrow chip, pull handle, nameplates, bottom lamp
+    triple and fan'
+states:
+- ok
+- fault
+- absent
+size:
+  w: 103.0
+  h: 480.0

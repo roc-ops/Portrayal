@@ -1,0 +1,238 @@
+format: 1
+kind: device
+name: mx960
+version: 0.1.0
+maturity: modelled
+manufacturer: Juniper
+model: MX960
+portfolio:
+  line: MX Series
+  family: 3D Universal Edge Router
+description: >-
+  Juniper MX960 - the 16RU chassis that turns the MX240/MX480 family
+  vertical: fourteen card slots stand side by side in the cage (six line
+  slots, SCB0/SCB1, then six more, the first of which doubles as SCB2 in
+  redundant fabric configurations). The craft interface spans the top
+  with one status cluster per slot; fan trays sit horizontally above and
+  below the cage behind bezels, and the standard cable manager hangs
+  under it. Four tall AC supplies fill the rear under the inlet strip.
+provenance:
+  sources: MX960 Hardware Guide (extracted into working/images/
+    mx960-p0001-0300 et seq, 868 pages), the MX portfolio datasheet, and
+    the studio front and rear photographs in the image library
+  chassis: 'datasheet-table - 27.75 x 17.37 x 23.0 in (704.9 x 441.1 x
+    584.2 mm), 16RU; the standard cable manager extends depth to 711 mm.
+    Ears NOT MODELLED by convention'
+  front: 'photo - the studio front photograph at ~2.07 px/mm: craft
+    interface ~48 mm tall over the upper fan bezel, a ~405 mm card cage
+    of fourteen ~30.1 mm slots, the lower fan bezel and the cable-manager
+    grille. Cards are VERTICAL: the slot components are authored tall
+    with rotated jacks (the ASR-9010 pattern), and each names its
+    measured horizontal sibling in provenance'
+  slot-order: 'guide + photo - line slots 0-5, SCB0, SCB1, then 6-11;
+    the craft interface prints the SCB positions blue, and slot 6 accepts
+    either a line card or SCB2 (redundant fabric takes a line slot)'
+  rear: 'photo - the rear studio photograph at ~1.55 px/mm: exhaust
+    grille top, the chassis inlet strip (four C20 inlets with their
+    switches, one per supply), a vent band, four ~103 x 480 mm supply
+    bays and the lower tray with its four cable spools'
+  power: 'vendor-silent at chassis level in this extraction - the DC and
+    high-capacity variants exist but no usable wattage table was captured;
+    L27/L29 warnings stand'
+  color: 'photo - dark charcoal chassis and craft, silver cards and
+    supplies, light-blue craft accent line'
+  other-faces: 'near-blank by evidence - rail bands estimated; axis
+    conventions per viewer3d.js as the siblings'
+attrs:
+  physical:
+    weight-max-kg: 169.64
+chassis:
+  width: 441.1
+  height: 704.9
+  depth: 584.2
+  ru: 16
+  color: '#3a3e43'
+groups:
+  craft:
+    term: Panel
+    role: indicator
+    index-origin: 0
+  fpcs:
+    term: Slot
+    role: traffic
+    index-origin: 0
+    description: vertical line-card slots 0-11 (slot 6 doubles as SCB2)
+  scbs:
+    term: Slot
+    role: service
+    index-origin: 0
+    description: Switch Control Board slots SCB0 and SCB1
+  psus:
+    term: PEM
+    role: service
+    index-origin: 0
+    description: four AC supplies at the rear, PEM 0-3
+views:
+  front:
+    size:
+      w: 441.1
+      h: 704.9
+    panel:
+      decor:
+        - {at: [0.0, 0.0], size: [441.1, 8.0], fill: '#33373c'}
+        - {at: [0.0, 56.0], size: [441.1, 89.0], fill: '#2b2f33'}
+        - {at: [0.0, 550.0], size: [441.1, 48.0], fill: '#2b2f33'}
+        - {at: [12.0, 606.0], size: [417.1, 92.0], pattern: holes, fill: '#26292d'}
+    components:
+      bays:
+        - {id: craft, at: [0.05, 8.0], size: {w: 441.0, h: 48.0},
+           accepts: [juniper/mx960-craft@1], default: juniper/mx960-craft@1,
+           group: craft, rel-pos: 0}
+        - {id: fpc0, at: [9.8, 145.0], size: {w: 30.1, h: 405.0},
+           accepts: [juniper/dpce-r-40ge-sfp-v@1, juniper/mx960-blank-v@1],
+           default: juniper/dpce-r-40ge-sfp-v@1, group: fpcs, rel-pos: 0}
+        - {id: fpc1, at: [39.9, 145.0], size: {w: 30.1, h: 405.0},
+           accepts: [juniper/dpce-r-40ge-sfp-v@1, juniper/mx960-blank-v@1],
+           default: juniper/dpce-r-40ge-sfp-v@1, group: fpcs, rel-pos: 1}
+        - {id: fpc2, at: [70.0, 145.0], size: {w: 30.1, h: 405.0},
+           accepts: [juniper/dpce-r-40ge-sfp-v@1, juniper/mx960-blank-v@1],
+           default: juniper/mx960-blank-v@1, group: fpcs, rel-pos: 2}
+        - {id: fpc3, at: [100.1, 145.0], size: {w: 30.1, h: 405.0},
+           accepts: [juniper/dpce-r-40ge-sfp-v@1, juniper/mx960-blank-v@1],
+           default: juniper/mx960-blank-v@1, group: fpcs, rel-pos: 3}
+        - {id: fpc4, at: [130.2, 145.0], size: {w: 30.1, h: 405.0},
+           accepts: [juniper/dpce-r-40ge-sfp-v@1, juniper/mx960-blank-v@1],
+           default: juniper/mx960-blank-v@1, group: fpcs, rel-pos: 4}
+        - {id: fpc5, at: [160.3, 145.0], size: {w: 30.1, h: 405.0},
+           accepts: [juniper/dpce-r-40ge-sfp-v@1, juniper/mx960-blank-v@1],
+           default: juniper/mx960-blank-v@1, group: fpcs, rel-pos: 5}
+        - {id: scb0, at: [190.4, 145.0], size: {w: 30.1, h: 405.0},
+           accepts: [juniper/scb-mx960-v@1], default: juniper/scb-mx960-v@1,
+           group: scbs, rel-pos: 0}
+        - {id: scb1, at: [220.5, 145.0], size: {w: 30.1, h: 405.0},
+           accepts: [juniper/scb-mx960-v@1], default: juniper/scb-mx960-v@1,
+           group: scbs, rel-pos: 1}
+        - {id: fpc6, at: [250.6, 145.0], size: {w: 30.1, h: 405.0},
+           accepts: [juniper/dpce-r-40ge-sfp-v@1, juniper/scb-mx960-v@1, juniper/mx960-blank-v@1],
+           default: juniper/dpce-r-40ge-sfp-v@1, group: fpcs, rel-pos: 6}
+        - {id: fpc7, at: [280.7, 145.0], size: {w: 30.1, h: 405.0},
+           accepts: [juniper/dpce-r-40ge-sfp-v@1, juniper/mx960-blank-v@1],
+           default: juniper/mx960-blank-v@1, group: fpcs, rel-pos: 7}
+        - {id: fpc8, at: [310.8, 145.0], size: {w: 30.1, h: 405.0},
+           accepts: [juniper/dpce-r-40ge-sfp-v@1, juniper/mx960-blank-v@1],
+           default: juniper/mx960-blank-v@1, group: fpcs, rel-pos: 8}
+        - {id: fpc9, at: [340.9, 145.0], size: {w: 30.1, h: 405.0},
+           accepts: [juniper/dpce-r-40ge-sfp-v@1, juniper/mx960-blank-v@1],
+           default: juniper/mx960-blank-v@1, group: fpcs, rel-pos: 9}
+        - {id: fpc10, at: [371.0, 145.0], size: {w: 30.1, h: 405.0},
+           accepts: [juniper/dpce-r-40ge-sfp-v@1, juniper/mx960-blank-v@1],
+           default: juniper/mx960-blank-v@1, group: fpcs, rel-pos: 10}
+        - {id: fpc11, at: [401.1, 145.0], size: {w: 30.1, h: 405.0},
+           accepts: [juniper/dpce-r-40ge-sfp-v@1, juniper/mx960-blank-v@1],
+           default: juniper/mx960-blank-v@1, group: fpcs, rel-pos: 11}
+  rear:
+    size:
+      w: 441.1
+      h: 704.9
+    panel:
+      decor:
+        - {at: [10.0, 4.0], size: [421.1, 86.0], pattern: holes, fill: '#1d2023'}
+        - {at: [4.0, 94.0], size: [433.1, 42.0], fill: '#8a8f95'}
+        - {at: [10.0, 138.0], size: [421.1, 16.0], pattern: holes, fill: '#6d7278'}
+        - {at: [4.0, 642.0], size: [433.1, 58.0], fill: '#cfc9b8'}
+        - {at: [42.0, 656.0], size: [30.0, 30.0], rx: 15.0, fill: '#b8b2a0', confidence: estimated,
+           source: 'photo - cable spool; drawn as its disc'}
+        - {at: [145.0, 656.0], size: [30.0, 30.0], rx: 15.0, fill: '#b8b2a0', confidence: estimated,
+           source: 'photo - cable spool'}
+        - {at: [248.0, 656.0], size: [30.0, 30.0], rx: 15.0, fill: '#b8b2a0', confidence: estimated,
+           source: 'photo - cable spool'}
+        - {at: [351.0, 656.0], size: [30.0, 30.0], rx: 15.0, fill: '#b8b2a0', confidence: estimated,
+           source: 'photo - cable spool'}
+      cutouts:
+        - {id: inlet-0, at: [26.0, 105.0], size: [32.4, 24.4]}
+        - {id: inlet-1, at: [129.0, 105.0], size: [32.4, 24.4]}
+        - {id: inlet-2, at: [232.0, 105.0], size: [32.4, 24.4]}
+        - {id: inlet-3, at: [335.0, 105.0], size: [32.4, 24.4]}
+        - {id: switch-0, at: [66.0, 108.0], size: [16.0, 12.0]}
+        - {id: switch-1, at: [169.0, 108.0], size: [16.0, 12.0]}
+        - {id: switch-2, at: [272.0, 108.0], size: [16.0, 12.0]}
+        - {id: switch-3, at: [375.0, 108.0], size: [16.0, 12.0]}
+    components:
+      bays:
+        - {id: pem0, at: [14.5, 158.0], size: {w: 103.0, h: 480.0},
+           accepts: [juniper/mx960-psu-ac@1], default: juniper/mx960-psu-ac@1,
+           group: psus, rel-pos: 0}
+        - {id: pem1, at: [117.5, 158.0], size: {w: 103.0, h: 480.0},
+           accepts: [juniper/mx960-psu-ac@1], default: juniper/mx960-psu-ac@1,
+           group: psus, rel-pos: 1}
+        - {id: pem2, at: [220.5, 158.0], size: {w: 103.0, h: 480.0},
+           accepts: [juniper/mx960-psu-ac@1], default: juniper/mx960-psu-ac@1,
+           group: psus, rel-pos: 2}
+        - {id: pem3, at: [323.5, 158.0], size: {w: 103.0, h: 480.0},
+           accepts: [juniper/mx960-psu-ac@1], default: juniper/mx960-psu-ac@1,
+           group: psus, rel-pos: 3}
+      placements:
+        - {id: inlet-0, ref: std/c20-inlet@1, at: [26.0, 105.0], for: pem0,
+           attrs: {function: AC inlet PEM 0}}
+        - {id: inlet-1, ref: std/c20-inlet@1, at: [129.0, 105.0], for: pem1,
+           attrs: {function: AC inlet PEM 1}}
+        - {id: inlet-2, ref: std/c20-inlet@1, at: [232.0, 105.0], for: pem2,
+           attrs: {function: AC inlet PEM 2}}
+        - {id: inlet-3, ref: std/c20-inlet@1, at: [335.0, 105.0], for: pem3,
+           attrs: {function: AC inlet PEM 3}}
+  left:
+    size:
+      w: 584.2
+      h: 704.9
+    panel:
+      decor:
+        - {at: [0.0, 330.0], size: [584.2, 30.0], fill: '#33373c', confidence: estimated,
+           source: 'rail band; estimated'}
+  right:
+    size:
+      w: 584.2
+      h: 704.9
+    panel:
+      decor:
+        - {at: [0.0, 330.0], size: [584.2, 30.0], fill: '#33373c', confidence: estimated,
+           source: 'rail band; estimated'}
+  top:
+    size:
+      w: 441.1
+      h: 584.2
+    panel:
+      decor:
+        - {at: [40.0, 420.0], size: [361.1, 140.0], pattern: holes, confidence: estimated,
+           source: 'upper rear exhaust; extent estimated'}
+  bottom:
+    size:
+      w: 441.1
+      h: 584.2
+    panel:
+      decor:
+        - {at: [0.0, 0.0], size: [6.0, 584.2], fill: '#33373c', confidence: estimated,
+           source: 'side edge; estimated'}
+        - {at: [435.1, 0.0], size: [6.0, 584.2], fill: '#33373c', confidence: estimated,
+           source: 'side edge; estimated'}
+gaps:
+  - what: card-catalogue
+    scope: [fpcs]
+    reason: needs-photo
+    wanted: vertical authors for the rest of the MX960 card range (the
+      photographed unit also shows a 4-port tunnel-services card that is
+      not identified in the extraction); only the 40x1GE DPC, SCB and
+      blank are modelled.
+  - what: fan-trays
+    reason: needs-photo
+    wanted: the two horizontal fan trays - they sit behind the front
+      bezels above and below the cage and are drawn as the bezels, not
+      as FRU bays; a tray face photograph would let them become bays.
+  - what: dc-power-variant
+    scope: [psus]
+    reason: needs-photo
+    wanted: the DC PEM and high-capacity variants; only the photographed
+      AC unit is modelled, and no vendor wattage table was captured.
+  - what: chassis-power
+    reason: vendor-silent
+    wanted: a chassis or per-PEM power table - not in the captured text
+      layer of the three-part extraction.
