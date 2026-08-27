@@ -2719,10 +2719,14 @@ def lint_device(path, validator, lib_roots):
             if b["id"] in seen:
                 err(path, "L5", f"duplicate instance id {b['id']} in view {vname}")
             seen.add(b["id"])
-            for acc in b["accepts"]:
+            # A SLOT MAY NAME AN INTERFACE INSTEAD OF A LIST. `accepts` is the
+            # vendor's compatibility matrix, transcribed; an open form factor
+            # like PCIe has no matrix to transcribe, so such a bay says which
+            # interface it presents and carries no list at all.
+            for acc in (b.get("accepts") or []):
                 if not resolve(acc):
                     err(path, "L5", f"unresolvable accepts ref {acc} ({b['id']})")
-            if b.get("default") and b["default"] not in b["accepts"]:
+            if b.get("default") and b["default"] not in (b.get("accepts") or []):
                 err(path, "L6", f"bay {b['id']} default {b['default']} not in accepts")
             # A BAY NOTHING EVER FILLS RENDERS AS A HOLE, and the modelling skill
             # has
@@ -3049,7 +3053,7 @@ def lint_device(path, validator, lib_roots):
     bay_accepts = {}
     for view in (data.get("views") or {}).values():
         for b in view_parts(view)["bays"]:
-            bay_accepts[b["id"]] = b["accepts"]
+            bay_accepts[b["id"]] = b.get("accepts") or []
     for cname, cfg in (data.get("configurations") or {}).items():
         for bid, ref in (cfg.get("bays") or {}).items():
             if bid not in bay_accepts:

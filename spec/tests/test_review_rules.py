@@ -461,3 +461,51 @@ def test_the_library_validates_under_it():
         if not d.get("bays"):
             continue
         assert not list(v.iter_errors(d)), f
+
+
+# --- a bay says what goes in it, one of two ways --------------------------
+
+def _dev_validator():
+    import json
+    from jsonschema import Draft202012Validator
+    return Draft202012Validator(json.loads((SPEC / "schemas/device.schema.json").read_text()))
+
+
+def _with_bay(bay):
+    return {"format": 1, "kind": "device", "name": "x", "version": "0.1.0",
+            "maturity": "draft", "manufacturer": "M", "model": "M",
+            "chassis": {"width": 440.0, "height": 44.0, "depth": 500.0, "ru": 1},
+            "views": {"front": {"size": {"w": 440.0, "h": 44.0},
+                                "components": {"bays": [bay]}}}}
+
+
+def _bay_errs(bay):
+    return [e for e in _dev_validator().iter_errors(_with_bay(bay))
+            if "bays" in [str(x) for x in e.absolute_path]]
+
+
+BASE = {"id": "slot-0", "at": [0.0, 0.0], "size": {"w": 100.0, "h": 20.0}}
+
+
+def test_a_closed_vendor_matrix_still_validates():
+    """476 bays carrying 2648 refs work this way, because a switch's card
+    catalogue is closed and printed and the support tables ARE the lists."""
+    assert not _bay_errs({**BASE, "accepts": ["cisco/spa-2xt3e3@1"]})
+
+
+def test_an_open_form_factor_may_name_an_interface_instead():
+    """Anyone may build a PCIe card, so a list is unbounded and one written
+    anyway asserts something the vendor never said. See ndv#43."""
+    assert not _bay_errs({**BASE, "interface": "pcie-x8"})
+
+
+def test_a_bay_may_say_both():
+    """A slot can be standard and have a published list."""
+    assert not _bay_errs({**BASE, "interface": "pcie-x8",
+                          "accepts": ["cisco/spa-2xt3e3@1"]})
+
+
+def test_a_bay_that_says_neither_is_rejected():
+    """A hole that promises nothing - which is why `accepts` was unconditionally
+    required before, and why relaxing it needed the either/or rather than a drop."""
+    assert _bay_errs(BASE), "a bay naming neither a list nor an interface validated"

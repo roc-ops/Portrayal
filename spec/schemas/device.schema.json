@@ -327,16 +327,30 @@
             "description": "what is PLUGGED IN, keyed by the id of the receptacle it plugs into. A populated port is not a different port - it is the same cage with an optic in it - so this is a configuration the way `bays` is, and a device can be drawn bare or fitted without either being a separate model. Sugar for a `mate-to` placement: the occupant is positioned by its `mate` connection point landing on the host's, and L12 holds the two to the same `interface`, so nothing here is a second positioning path. The value is a component ref, or a mapping carrying `ref` and an explicit `id` where the derived `<host>-occupant` is not the name you want on the row",
             "additionalProperties": {
               "oneOf": [
-                {"type": "string"},
-                {"type": "object",
-                 "additionalProperties": false,
-                 "required": ["ref"],
-                 "properties": {
-                   "ref": {"type": "string"},
-                   "id": {"type": "string"},
-                   "attrs": {"type": "object"},
-                   "skin": {"type": "string"}
-                 }}
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "ref"
+                  ],
+                  "properties": {
+                    "ref": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "attrs": {
+                      "type": "object"
+                    },
+                    "skin": {
+                      "type": "string"
+                    }
+                  }
+                }
               ]
             }
           },
@@ -409,7 +423,13 @@
             "description": "vendor display word, e.g. 'Port', 'Slot', 'Bay'"
           },
           "role": {
-            "enum": ["traffic", "management", "service", "indicator", "furniture"],
+            "enum": [
+              "traffic",
+              "management",
+              "service",
+              "indicator",
+              "furniture"
+            ],
             "description": "what this block is FOR - the one thing the drawing cannot work out for itself. A PSU bay, a fan bay and a line-card bay are all data-class `bay`, the same hole with a module in it, so anything ranking the tree by class cannot tell which of them is why the box exists and which two keep it alive. Only the group knows. `traffic` is the work the device is bought to do - line-card slots and the ports that carry user traffic. `management` is how you reach and discipline it - the OOB jack, the console, the craft port, the timing and sync interfaces; a separate bucket rather than part of traffic because on five devices the management block is written FIRST in the manifest, so leaving it in with the traffic ports still opened the tree with a console socket. `service` is what keeps it running - PSUs, fans, filters, power shelves. `indicator` is what you read - LEDs, displays. `furniture` is what you neither connect to nor read - ears, rivets, labels, grounding points, doors. Ordering WITHIN a role stays document order, which already reads correctly; this only says which bucket the block falls in. Lint L37"
           },
           "physical-context": {
@@ -705,14 +725,15 @@
                   "required": [
                     "id",
                     "at",
-                    "size",
-                    "accepts"
+                    "size"
                   ],
                   "additionalProperties": false,
                   "properties": {
                     "only-in": {
                       "type": "array",
-                      "items": {"$ref": "#/$defs/segment"},
+                      "items": {
+                        "$ref": "#/$defs/segment"
+                      },
                       "minItems": 1,
                       "uniqueItems": true,
                       "description": "THE CONFIGURATIONS IN WHICH THIS PART OF THE METAL EXISTS AT ALL, which is a different question from what goes in it. Absent means every configuration, which is almost always the answer. A C40G ordered for AC has ONE bolted panel across the bottom rear where a DC chassis has two power-entry openings - not two empty openings, different sheet metal - and without this a configuration could vary only its OCCUPANTS: the AC rear drew two empty PEM bays as black rectangles, and the bay picker offered a DC power entry module on a chassis that cannot take one. Scoping lives HERE, on the bay or placement, rather than in the configuration block, because it is a statement about GEOMETRY and geometry is what a view holds - a configuration says what is fitted, not where the holes are. Distinct from `optional`, which is a build-time flag that hides a part from every configuration at once. Lint L41"
@@ -798,8 +819,25 @@
                           }
                         }
                       ]
+                    },
+                    "interface": {
+                      "$ref": "#/$defs/segment",
+                      "description": "THE INTERFACE THIS SLOT PRESENTS, for an opening whose occupants are not a list anyone published. `accepts` is the vendor's compatibility matrix transcribed - it works because a switch's card catalogue is closed and printed, and the module reference's support tables ARE those lists. An open form factor has no table to transcribe: anyone may build a PCIe card, so a list is unbounded, and one written anyway asserts something the vendor never said. Such a bay names the interface instead and carries no list. Occupants declare the same key via `mates`, exactly as they do for a cage. Deliberately not an enum - a new interface is a new key, not a schema change. Electrical detail (a generation, a lane width) belongs in `attrs`, NOT here: a gen3 card seats in a gen4 slot and an x8 card in an x16, so matching on an exact key would refuse hardware that fits. See ndv#43."
                     }
-                  }
+                  },
+                  "anyOf": [
+                    {
+                      "required": [
+                        "accepts"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "interface"
+                      ]
+                    }
+                  ],
+                  "description": "A bay says what goes in it in ONE OF TWO WAYS, and must say it somehow: `accepts` for a closed vendor matrix, `interface` for an open form factor. Both together is fine - a slot can be standard AND have a published list. Neither is a hole that promises nothing."
                 }
               },
               "placements": {
@@ -814,7 +852,9 @@
                   "properties": {
                     "only-in": {
                       "type": "array",
-                      "items": {"$ref": "#/$defs/segment"},
+                      "items": {
+                        "$ref": "#/$defs/segment"
+                      },
                       "minItems": 1,
                       "uniqueItems": true,
                       "description": "THE CONFIGURATIONS IN WHICH THIS PART OF THE METAL EXISTS AT ALL, which is a different question from what goes in it. Absent means every configuration, which is almost always the answer. A C40G ordered for AC has ONE bolted panel across the bottom rear where a DC chassis has two power-entry openings - not two empty openings, different sheet metal - and without this a configuration could vary only its OCCUPANTS: the AC rear drew two empty PEM bays as black rectangles, and the bay picker offered a DC power entry module on a chassis that cannot take one. Scoping lives HERE, on the bay or placement, rather than in the configuration block, because it is a statement about GEOMETRY and geometry is what a view holds - a configuration says what is fitted, not where the holes are. Distinct from `optional`, which is a build-time flag that hides a part from every configuration at once. Lint L41"
