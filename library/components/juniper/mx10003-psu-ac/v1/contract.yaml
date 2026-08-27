@@ -1,0 +1,31 @@
+format: 1
+kind: module
+name: mx10003-psu-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX10003 AC power supply module (PSM) - six seat in two three-high
+  stacks at the rear corners, each with its own C14 inlet and exhaust fan.
+  The DC variant differs only in the terminal face and is not modelled
+  (needs-photo gap on the device).
+attrs:
+  model: MX10003 AC PSM
+  role: ac-power-supply
+  redundancy: n+n
+provenance:
+  size: 'datasheet-table - the guide FRU table gives the AC supply 3.53 x
+    9.26 x 1.63 in; 86.7 mm face width (drawn 3.41 in high face - 41.4 mm)'
+  power-output: 'NOT STATED per module in the extraction - L27 stands'
+  face: 'drawing - the rear elevation (guide Figure, g009801): inlet left,
+    round exhaust fan right, handle bar diagonal'
+states:
+- ok
+- fault
+- absent
+parts:
+- {ref: std/c14-inlet@1, id: inlet, at: [6.0, 10.7]}
+size:
+  w: 86.7
+  h: 41.4

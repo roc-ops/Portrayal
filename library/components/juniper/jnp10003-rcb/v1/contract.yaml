@@ -1,0 +1,39 @@
+format: 1
+kind: module
+name: jnp10003-rcb
+version: 1.0.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX10003 Routing and Control Board (JNP10003-RE) - two run side by
+  side across the top of the chassis. USB, MGMT and CON jacks, the blue SSD
+  carrier (SSD 0 / SSD 1), MST/HA/ALM lamps, ToD and BITS jacks and the
+  PPS / 10MHz OUT-IN SMB quad, with RESET, OK/FAIL and ONLINE on the
+  bottom strip.
+attrs:
+  model: JNP10003-RE
+  power-draw-max-w: 58
+provenance:
+  size: 'datasheet-table - the guide FRU table gives the RCB 7.98 x 22.12 x
+    1.66 in; 202.7 mm is the face width and 42.1 mm the face height'
+  power: 'datasheet-table - the guide power example attributes 116 W to two
+    RCBs; 58 W each'
+  face: 'photo - positions read off the frontwtop photograph at ~2.95 px/mm, approximate to ~2 mm; the module size itself is the vendor FRU dimension table in the MX10003 hardware guide'
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/usb-a@1, id: usb, at: [6.0, 12.75], rotate: 90, attrs: {function: USB service port}}
+- {ref: std/rj45@1, id: mgmt, at: [14.0, 5.0], attrs: {function: out-of-band management}}
+- {ref: std/rj45@1, id: con, at: [34.0, 5.0], attrs: {function: serial console}}
+- {ref: std/rj45@1, id: tod, at: [130.5, 5.0], attrs: {function: time of day}}
+- {ref: std/rj45@1, id: bits, at: [150.5, 5.0], attrs: {function: BITS timing}}
+- {ref: std/smb@1, id: pps-out, at: [174.1, 5.6], attrs: {function: PPS out}}
+- {ref: std/smb@1, id: pps-in, at: [174.1, 14.6], attrs: {function: PPS in}}
+- {ref: std/smb@1, id: mhz-out, at: [186.1, 5.6], attrs: {function: 10MHz out}}
+- {ref: std/smb@1, id: mhz-in, at: [186.1, 14.6], attrs: {function: 10MHz in}}
+size:
+  w: 202.7
+  h: 42.1

@@ -1,0 +1,41 @@
+format: 1
+kind: module
+name: jnp-mic1
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper JNP-MIC1 Multi-Rate Ethernet MIC - 12 QSFP28 cages in two rows of
+  six, seated in the MIC1 slot of the MX10003 MPC. The MACsec variant
+  (JNP-MIC1-MACSEC) shares the faceplate.
+attrs:
+  model: JNP-MIC1
+  power-draw-max-w: 85
+provenance:
+  size: 'datasheet-table - the guide FRU table gives the MIC 7.77 x 8.97 x
+    1.65 in; 197.3 mm face width, 41.9 mm face height'
+  power: 'datasheet-table - the guide power table: 80 W typical, 85 W max
+    (ambient unqualified); the MACsec variant runs 110/120'
+  face: 'photo - positions read off the frontwtop photograph at ~2.95 px/mm, approximate to ~2 mm; the module size itself is the vendor FRU dimension table in the MX10003 hardware guide - cages on a 20.5 mm pitch in two belly-to-belly rows,
+    group lamps L0-L3 and the vertical 12XQSFP28 legend at the right'
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/qsfp28@1, id: port-0, at: [3.50, 6.0], rotate: 180}
+- {ref: std/qsfp28@1, id: port-1, at: [3.50, 24.0]}
+- {ref: std/qsfp28@1, id: port-2, at: [24.00, 6.0], rotate: 180}
+- {ref: std/qsfp28@1, id: port-3, at: [24.00, 24.0]}
+- {ref: std/qsfp28@1, id: port-4, at: [44.50, 6.0], rotate: 180}
+- {ref: std/qsfp28@1, id: port-5, at: [44.50, 24.0]}
+- {ref: std/qsfp28@1, id: port-6, at: [65.00, 6.0], rotate: 180}
+- {ref: std/qsfp28@1, id: port-7, at: [65.00, 24.0]}
+- {ref: std/qsfp28@1, id: port-8, at: [85.50, 6.0], rotate: 180}
+- {ref: std/qsfp28@1, id: port-9, at: [85.50, 24.0]}
+- {ref: std/qsfp28@1, id: port-10, at: [106.00, 6.0], rotate: 180}
+- {ref: std/qsfp28@1, id: port-11, at: [106.00, 24.0]}
+size:
+  w: 197.3
+  h: 41.9

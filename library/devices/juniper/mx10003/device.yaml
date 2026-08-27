@@ -1,0 +1,198 @@
+format: 1
+kind: device
+name: mx10003
+version: 0.1.0
+maturity: modelled
+manufacturer: Juniper
+model: MX10003
+portfolio:
+  line: MX Series
+  family: Universal Routing Platform
+description: >-
+  Juniper MX10003 - a 3RU, 2.4 Tbps edge router. Two Routing and Control
+  Boards run side by side across the top; below them two full-width MPCs
+  (JNP10003-LC2103), each with a JNP-MIC1 12xQSFP28 MIC in its left half
+  and six fixed QSFP+ ports with a GM/PTP jack at the right. The rear is
+  two three-high PSM stacks flanking four vertical fan modules (FT 0-3).
+provenance:
+  sources: MX10003 Hardware Guide (extracted into working/images/mx10003/,
+    223 pages, 66 figures), the MX10003 datasheet, the vendor front and rear
+    line drawings (g009800/g009801) and the frontwtop studio photograph in
+    the image library
+  chassis: 'datasheet-table - 5.21 x 17.6 x 30 in (132.3 x 447 x 762 mm),
+    3RU; the guide physical table repeats it. Ears NOT MODELLED by
+    convention (the rack face is 19 in / 482.6 mm)'
+  fru-sizes: 'datasheet-table - the guide carries a full FRU dimension
+    table (RCB 202.7 x 42.1, MPC 419.1 x 41.9, MIC 197.3 x 41.9, fan module
+    62.5 x 126.7, PSU 86.7 face); every component size is vendor-stated'
+  front: 'photo - the frontwtop photograph measured at ~2.95 px/mm across
+    the 447 mm body: RCBs at x 17.0 and 227.4 over rows y 2.0; MPCs at
+    x 14.0 (centred 419.1 in 447), rows y 46.0 and 89.5; positions
+    approximate to ~2 mm. The photograph and drawing g009800 agree on
+    arrangement; the photograph wins on finish'
+  rear: 'drawing - g009801: three-high PSM stacks at both rear corners and
+    four vertical fan trays between them (FT 0-3). The drawing is
+    schematic, so the stacks are anchored to the vendor PSU and fan module
+    dimensions, not to drawing pixels. PSM slot numbering is not legible in
+    any source - see gaps'
+  power: 'datasheet-table - the guide power example: fully loaded AC router
+    1676 W (4 fans 80 W + 2 MPCs 1320 W + 2 MICs 160 W + 2 RCBs 116 W)'
+  color: 'photo - medium grey chassis and modules, light-blue ejector
+    levers and SSD carrier (Juniper cloud-era styling)'
+  other-faces: 'near-blank by evidence - rail bands estimated; axis
+    conventions per viewer3d.js as the siblings'
+attrs:
+  physical:
+    weight-full-ac-kg: 71.4
+    weight-full-dc-kg: 74.1
+    weight-empty-kg: 22.68
+  power:
+    typical-draw-w: 1676
+    note: guide example - fully loaded AC chassis, idle at 25 C
+chassis:
+  width: 447.0
+  height: 132.3
+  depth: 762.0
+  ru: 3
+  color: '#6a6f75'
+groups:
+  res:
+    term: Slot
+    role: service
+    index-origin: 0
+    description: Routing and Control Board slots RE0 and RE1
+  mpcs:
+    term: Slot
+    role: traffic
+    index-origin: 0
+    description: MPC slots 0 and 1 (MPC0 below MPC1)
+  psus:
+    term: PSM
+    role: service
+    index-origin: 0
+    description: six power supply modules in two three-high rear stacks
+  cooling:
+    term: Tray
+    role: service
+    index-origin: 0
+    description: fan modules FT 0-3
+views:
+  front:
+    size:
+      w: 447.0
+      h: 132.3
+    silkscreen:
+      - {at: [437.5, 8.0], text: MX10003, font-size: 1.6, anchor: middle, fill: '#e8eaec'}
+    components:
+      bays:
+        - {id: re0, at: [17.0, 2.0], size: {w: 202.7, h: 42.1},
+           accepts: [juniper/jnp10003-rcb@1], default: juniper/jnp10003-rcb@1,
+           group: res, rel-pos: 0}
+        - {id: re1, at: [227.4, 2.0], size: {w: 202.7, h: 42.1},
+           accepts: [juniper/jnp10003-rcb@1], default: juniper/jnp10003-rcb@1,
+           group: res, rel-pos: 1}
+        - {id: mpc1, at: [14.0, 46.0], size: {w: 419.1, h: 41.9},
+           accepts: [juniper/jnp10003-lc2103@1], default: juniper/jnp10003-lc2103@1,
+           group: mpcs, rel-pos: 1}
+        - {id: mpc0, at: [14.0, 89.5], size: {w: 419.1, h: 41.9},
+           accepts: [juniper/jnp10003-lc2103@1], default: juniper/jnp10003-lc2103@1,
+           group: mpcs, rel-pos: 0}
+  rear:
+    size:
+      w: 447.0
+      h: 132.3
+    silkscreen:
+      - {at: [129.75, 131.8], text: FT 0, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: ft0}
+      - {at: [192.6, 131.8], text: FT 1, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: ft1}
+      - {at: [255.45, 131.8], text: FT 2, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: ft2}
+      - {at: [318.3, 131.8], text: FT 3, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: ft3}
+    components:
+      bays:
+        - {id: psm0, at: [8.0, 3.0], size: {w: 86.7, h: 41.4},
+           accepts: [juniper/mx10003-psu-ac@1], default: juniper/mx10003-psu-ac@1,
+           group: psus, rel-pos: 0}
+        - {id: psm1, at: [8.0, 45.4], size: {w: 86.7, h: 41.4},
+           accepts: [juniper/mx10003-psu-ac@1], default: juniper/mx10003-psu-ac@1,
+           group: psus, rel-pos: 1}
+        - {id: psm2, at: [8.0, 87.8], size: {w: 86.7, h: 41.4},
+           accepts: [juniper/mx10003-psu-ac@1], default: juniper/mx10003-psu-ac@1,
+           group: psus, rel-pos: 2}
+        - {id: psm3, at: [352.3, 3.0], size: {w: 86.7, h: 41.4},
+           accepts: [juniper/mx10003-psu-ac@1], default: juniper/mx10003-psu-ac@1,
+           group: psus, rel-pos: 3}
+        - {id: psm4, at: [352.3, 45.4], size: {w: 86.7, h: 41.4},
+           accepts: [juniper/mx10003-psu-ac@1], default: juniper/mx10003-psu-ac@1,
+           group: psus, rel-pos: 4}
+        - {id: psm5, at: [352.3, 87.8], size: {w: 86.7, h: 41.4},
+           accepts: [juniper/mx10003-psu-ac@1], default: juniper/mx10003-psu-ac@1,
+           group: psus, rel-pos: 5}
+        - {id: ft0, at: [98.5, 2.8], size: {w: 62.5, h: 126.7},
+           accepts: [juniper/mx10003-fan@1], default: juniper/mx10003-fan@1,
+           group: cooling, rel-pos: 0}
+        - {id: ft1, at: [161.35, 2.8], size: {w: 62.5, h: 126.7},
+           accepts: [juniper/mx10003-fan@1], default: juniper/mx10003-fan@1,
+           group: cooling, rel-pos: 1}
+        - {id: ft2, at: [224.2, 2.8], size: {w: 62.5, h: 126.7},
+           accepts: [juniper/mx10003-fan@1], default: juniper/mx10003-fan@1,
+           group: cooling, rel-pos: 2}
+        - {id: ft3, at: [287.05, 2.8], size: {w: 62.5, h: 126.7},
+           accepts: [juniper/mx10003-fan@1], default: juniper/mx10003-fan@1,
+           group: cooling, rel-pos: 3}
+  left:
+    size:
+      w: 762.0
+      h: 132.3
+    panel:
+      decor:
+        - {at: [0.0, 58.0], size: [762.0, 16.0], fill: '#5d6268', confidence: estimated,
+           source: 'rail band; estimated'}
+  right:
+    size:
+      w: 762.0
+      h: 132.3
+    panel:
+      decor:
+        - {at: [0.0, 58.0], size: [762.0, 16.0], fill: '#5d6268', confidence: estimated,
+           source: 'rail band; the side earthing bracket seats through this
+             rail (guide) but its position is not drawn anywhere - see gaps'}
+  top:
+    size:
+      w: 447.0
+      h: 762.0
+    panel:
+      decor:
+        - {at: [0.0, 0.0], size: [5.0, 762.0], fill: '#5d6268', confidence: estimated,
+           source: 'side edge; estimated'}
+        - {at: [442.0, 0.0], size: [5.0, 762.0], fill: '#5d6268', confidence: estimated,
+           source: 'side edge; estimated'}
+  bottom:
+    size:
+      w: 447.0
+      h: 762.0
+    panel:
+      decor:
+        - {at: [0.0, 0.0], size: [5.0, 762.0], fill: '#5d6268', confidence: estimated,
+           source: 'side edge; estimated'}
+        - {at: [442.0, 0.0], size: [5.0, 762.0], fill: '#5d6268', confidence: estimated,
+           source: 'side edge; estimated'}
+gaps:
+  - what: dc-power-variant
+    scope: [psus]
+    reason: needs-photo
+    wanted: the DC PSM face (the guide's DC figures are isometric line art;
+      the DC supply is also deeper - 274.3 vs 235.2 mm).
+  - what: psm-slot-numbering
+    scope: [psus]
+    reason: needs-photo
+    wanted: the printed PSM slot labels - the rear drawing's edge legends
+      are not legible in any source, so left-stack-top-down 0-2 /
+      right-stack 3-5 is an assumption.
+  - what: side-earthing-bracket
+    reason: vendor-silent
+    wanted: the position of the two-hole protective earthing bracket on the
+      side rail (M4 studs at 19.1 mm centres per the guide, location not
+      drawn).
+  - what: rear-photo
+    reason: needs-photo
+    wanted: a photograph of the rear - only the schematic line drawing
+      g009801 exists in the intake, so rear finish is inferred.

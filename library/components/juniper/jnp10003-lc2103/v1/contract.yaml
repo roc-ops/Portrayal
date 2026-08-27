@@ -1,0 +1,45 @@
+format: 1
+kind: module
+name: jnp10003-lc2103
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX10003 MPC (JNP10003-LC2103) - the full-width line card: MIC1
+  slot at the left (JNP-MIC1 by default), six fixed QSFP+ ports 0-5 with
+  the GM/PTP timing jack at the right, blue ejector levers both ends. The
+  -V2 model shares the faceplate.
+attrs:
+  model: JNP10003-LC2103
+  power-draw-max-w: 715
+provenance:
+  size: 'datasheet-table - the guide FRU table gives the MPC 16.5 x 22.37 x
+    1.65 in; 419.1 mm face width, 41.9 mm face height'
+  power: 'datasheet-table - the guide power table: 660 W typical, 715 W max
+    (the -V2 665/725)'
+  face: 'photo - positions read off the frontwtop photograph at ~2.95 px/mm, approximate to ~2 mm; the module size itself is the vendor FRU dimension table in the MX10003 hardware guide - fixed QSFP+ on a ~23.6 mm pitch; the fixed cages are
+    drawn with the QSFP28 registry opening (QSFP+ and QSFP28 share the
+    SFF-8663 bezel)'
+states:
+- ok
+- fail
+- absent
+bays:
+  mic1:
+    at: [18.0, 0.0]
+    size: [197.3, 41.9]
+    accepts:
+    - juniper/jnp-mic1@1
+    default: juniper/jnp-mic1@1
+parts:
+- {ref: std/qsfp28@1, id: port-0, at: [216.00, 24.0], attrs: {media: qsfp-plus}}
+- {ref: std/qsfp28@1, id: port-1, at: [239.60, 24.0], attrs: {media: qsfp-plus}}
+- {ref: std/qsfp28@1, id: port-2, at: [263.20, 24.0], attrs: {media: qsfp-plus}}
+- {ref: std/qsfp28@1, id: port-3, at: [286.80, 24.0], attrs: {media: qsfp-plus}}
+- {ref: std/qsfp28@1, id: port-4, at: [310.40, 24.0], attrs: {media: qsfp-plus}}
+- {ref: std/qsfp28@1, id: port-5, at: [334.00, 24.0], attrs: {media: qsfp-plus}}
+- {ref: std/rj45@1, id: gm-ptp, at: [363.0, 21.9], attrs: {function: GM/PTP timing}}
+size:
+  w: 419.1
+  h: 41.9
