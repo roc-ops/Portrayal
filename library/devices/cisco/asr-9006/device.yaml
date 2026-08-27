@@ -203,7 +203,14 @@ provenance:
     or chassis accessories", and "Chassis: fully configured using all card slots and six power
     modules - 230 pounds (104.33 kg)". chassis.weight-kg carries the bare 39.69 because that is the
     empty cage this manifest draws; the configured figure is in attrs beside it. Cisco's "six power
-    modules" here is odd for a chassis with four bays and is transcribed as printed
+    modules" here is odd and is transcribed as printed rather than corrected. This
+    chassis takes THREE on the version 1 power tray, which is what this manifest
+    draws, or four on version 2 - never six. Either the datasheet is wrong or that
+    row belongs to a larger chassis: the ASR 9010 has six bays and its own Table 13
+    row carries the identical wording. Treat 104.33 kg as a fully-configured figure
+    of uncertain scope rather than one that can be reconciled against this chassis
+    power system. Reported independently by the Design Studio agent reading this
+    manifest, 2026-08-27
   compliance: >-
     datasheet - data_sheet_c78-501767.pdf, series compliance list: "SR-3580: NEBS Criteria Levels
     (Level 3)", "GR-1089-CORE: NEBS EMC and Safety", "GR-63-CORE: NEBS Physical Protection".
