@@ -2101,6 +2101,25 @@ def lint_device(path, validator, lib_roots):
                 x1, y1 = min(x1, pw), min(y1, ph)
                 if x1 > x0 and y1 > y0:
                     boxes.append((px + x0, py + y0, x1 - x0, y1 - y0, p["id"]))
+        # A BAY PAINTS OVER A LEGEND TOO, and L21 had never looked at one. It
+        # gathered boxes from placements alone, so a mark printed where a card
+        # goes was reported as fine - and the C40G's slot numbers, all six of
+        # them, sit inside `fan-left` and do not appear in the drawing at all.
+        # A bay is the most opaque thing on a faceplate: filled it is a card
+        # front, empty it is a dark cavity, and either way nothing under it can
+        # be read. Its own declared extent is the box, because that is the hole
+        # the module fills whatever is in it.
+        for b in vp["bays"]:
+            if not b.get("at"):
+                continue
+            bs = b.get("size") or {}
+            bw = bs.get("w") if isinstance(bs, dict) else (bs[0] if bs else None)
+            bh = bs.get("h") if isinstance(bs, dict) else (bs[1] if bs else None)
+            if not (bw and bh):
+                continue
+            if str(b.get("rotate", 0)) in ("90", "270", "-90"):
+                bw, bh = bh, bw
+            boxes.append((b["at"][0], b["at"][1], bw, bh, b["id"]))
         for m in vp["silkscreen"]:
             if not m.get("at"):
                 continue
