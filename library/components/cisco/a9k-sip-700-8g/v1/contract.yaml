@@ -130,15 +130,24 @@ provenance:
     than any other split - 'up to 4 single-width, single-height SPAs' in a 2 x 2 grid -
     but not the exact millimetre, and the printed numerals at x 21.19 and 37.42 fall on
     either side of that middle, which is consistent with it without proving it.
-  bays-are-inert: >-
-    Component-level `bays:` is documented in the schema as 'for modules that themselves
-    host bays (v0: unused)', and nothing in render.py or lint.py reads it. These four
-    are inert, and there is a second reason they would be inert anyway: NO SPA IS
-    MODELLED IN THIS LIBRARY. The stencil has no SPA masters - the two the SIP-700
-    master draws are part of its own artwork, labelled SPA-2XCH0C12I050 - so there is
-    nothing for `accepts` to name and the key is omitted rather than filled with a
-    guess. The geometry and the numbering are recorded because they are sourced and
-    because prose is where a future renderer cannot reach them.
+  bays-accept-spas: >-
+    THE NOTE THAT USED TO SIT HERE WAS RIGHT WHEN IT WAS WRITTEN AND WENT STALE, and
+    keeping the shape of it is the point. It said component-level `bays:` was
+    documented as 'v0: unused', that nothing read it, and that in any case NO SPA WAS
+    MODELLED IN THIS LIBRARY - so there was nothing for `accepts` to name and the key
+    was omitted rather than filled with a guess. That was the correct call: an
+    `accepts` list naming parts that do not exist is a promise the tree cannot keep.
+    BOTH HALVES HAVE SINCE CHANGED. Twenty-four SPA components are modelled, the 4 GB
+    twin A9K-SIP-700 lists twenty-two of them in each of its four bays, and lint L48
+    now reads component bays and checks a skin draws each one. This card kept the
+    omission only because nothing looked: its four SPA bays offered nothing while an
+    identical card offered twenty-two, and the schema said `additionalProperties:
+    true` so neither validated nor complained.
+    THE LIST IS THE TWIN'S, and that is sourced rather than assumed - the install
+    guide says 'There are two types of Cisco ASR 9000 SIP-700 available; A9K-SIP-700
+    and A9K-SIP-700-8G ... BOTH TYPES ARE IDENTICAL IN APPEARANCE', the two differ in
+    memory alone, and all four bays here already carry the twin's geometry to the
+    hundredth of a millimetre. What one takes, the other takes.
   capacity: >-
     install guide - Table 3, 'SIP Summary', names this part '20G SPA Interface
     Processor, 8 GB memory'.
@@ -213,12 +222,104 @@ bays:
   bay-2:
     at: [6.98, 27.71]
     size: [17.29, 167.87]
+    accepts:
+    - cisco/spa-1choc3-ce-atm@1
+    - cisco/spa-1xchstm1-oc3@1
+    - cisco/spa-1xoc12-atm-v2@1
+    - cisco/spa-1xoc3-atm-v2@1
+    - cisco/spa-1xoc48pos-rpr@1
+    - cisco/spa-24cht1-ce-atm@1
+    - cisco/spa-2cht3-ce-atm@1
+    - cisco/spa-2xoc12-pos@1
+    - cisco/spa-2xoc48pos-rpr@1
+    - cisco/spa-2xt3e3@1
+    - cisco/spa-3xoc3-atm-v2@1
+    - cisco/spa-4xct3-ds0@1
+    - cisco/spa-4xoc12-pos@1
+    - cisco/spa-4xoc3-pos-v2@1
+    - cisco/spa-4xoc48pos-rpr@1
+    - cisco/spa-4xt-serial@1
+    - cisco/spa-4xt3e3@1
+    - cisco/spa-8xcht1-e1-v2@1
+    - cisco/spa-8xcht1-e1@1
+    - cisco/spa-8xoc12-pos@1
+    - cisco/spa-8xoc3-pos@1
+    - cisco/spa-oc192pos-xfp@1
   bay-0:
     at: [24.27, 27.71]
     size: [17.29, 167.87]
+    accepts:
+    - cisco/spa-1choc3-ce-atm@1
+    - cisco/spa-1xchstm1-oc3@1
+    - cisco/spa-1xoc12-atm-v2@1
+    - cisco/spa-1xoc3-atm-v2@1
+    - cisco/spa-1xoc48pos-rpr@1
+    - cisco/spa-24cht1-ce-atm@1
+    - cisco/spa-2cht3-ce-atm@1
+    - cisco/spa-2xoc12-pos@1
+    - cisco/spa-2xoc48pos-rpr@1
+    - cisco/spa-2xt3e3@1
+    - cisco/spa-3xoc3-atm-v2@1
+    - cisco/spa-4xct3-ds0@1
+    - cisco/spa-4xoc12-pos@1
+    - cisco/spa-4xoc3-pos-v2@1
+    - cisco/spa-4xoc48pos-rpr@1
+    - cisco/spa-4xt-serial@1
+    - cisco/spa-4xt3e3@1
+    - cisco/spa-8xcht1-e1-v2@1
+    - cisco/spa-8xcht1-e1@1
+    - cisco/spa-8xoc12-pos@1
+    - cisco/spa-8xoc3-pos@1
+    - cisco/spa-oc192pos-xfp@1
   bay-3:
     at: [6.98, 195.59]
     size: [17.29, 165.47]
+    accepts:
+    - cisco/spa-1choc3-ce-atm@1
+    - cisco/spa-1xchstm1-oc3@1
+    - cisco/spa-1xoc12-atm-v2@1
+    - cisco/spa-1xoc3-atm-v2@1
+    - cisco/spa-1xoc48pos-rpr@1
+    - cisco/spa-24cht1-ce-atm@1
+    - cisco/spa-2cht3-ce-atm@1
+    - cisco/spa-2xoc12-pos@1
+    - cisco/spa-2xoc48pos-rpr@1
+    - cisco/spa-2xt3e3@1
+    - cisco/spa-3xoc3-atm-v2@1
+    - cisco/spa-4xct3-ds0@1
+    - cisco/spa-4xoc12-pos@1
+    - cisco/spa-4xoc3-pos-v2@1
+    - cisco/spa-4xoc48pos-rpr@1
+    - cisco/spa-4xt-serial@1
+    - cisco/spa-4xt3e3@1
+    - cisco/spa-8xcht1-e1-v2@1
+    - cisco/spa-8xcht1-e1@1
+    - cisco/spa-8xoc12-pos@1
+    - cisco/spa-8xoc3-pos@1
+    - cisco/spa-oc192pos-xfp@1
   bay-1:
     at: [24.27, 195.59]
     size: [17.29, 165.47]
+    accepts:
+    - cisco/spa-1choc3-ce-atm@1
+    - cisco/spa-1xchstm1-oc3@1
+    - cisco/spa-1xoc12-atm-v2@1
+    - cisco/spa-1xoc3-atm-v2@1
+    - cisco/spa-1xoc48pos-rpr@1
+    - cisco/spa-24cht1-ce-atm@1
+    - cisco/spa-2cht3-ce-atm@1
+    - cisco/spa-2xoc12-pos@1
+    - cisco/spa-2xoc48pos-rpr@1
+    - cisco/spa-2xt3e3@1
+    - cisco/spa-3xoc3-atm-v2@1
+    - cisco/spa-4xct3-ds0@1
+    - cisco/spa-4xoc12-pos@1
+    - cisco/spa-4xoc3-pos-v2@1
+    - cisco/spa-4xoc48pos-rpr@1
+    - cisco/spa-4xt-serial@1
+    - cisco/spa-4xt3e3@1
+    - cisco/spa-8xcht1-e1-v2@1
+    - cisco/spa-8xcht1-e1@1
+    - cisco/spa-8xoc12-pos@1
+    - cisco/spa-8xoc3-pos@1
+    - cisco/spa-oc192pos-xfp@1

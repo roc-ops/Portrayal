@@ -412,3 +412,52 @@ def test_a_part_sitting_off_centre_is_reported():
     hits = _cut(_landed((3.75, 0.0), (48.6, 40.0), (0.0, 0.0)))
     assert hits, "an off-centre part went unreported"
     assert "does not sit in its own cutout" in hits[0]
+
+
+# --- component bays: a riser is a bay that holds bays ---------------------
+
+def _validator():
+    import json
+    from jsonschema import Draft202012Validator
+    return Draft202012Validator(json.loads((SPEC / "schemas/component.schema.json").read_text()))
+
+
+def _bay(**kw):
+    b = {"at": [1.0, 2.0], "size": [10.0, 20.0], "accepts": ["cisco/spa-2xt3e3@1"]}
+    b.update(kw)
+    return {"format": 1, "kind": "component", "name": "x", "version": "1.0.0",
+            "size": {"w": 40.0, "h": 40.0}, "bays": {"bay-0": b}}
+
+
+def test_a_component_bay_that_names_nothing_is_rejected():
+    """`bays:` was `additionalProperties: true` and described as 'v0: unused'
+    while 51 bays across 25 components already relied on it. a9k-sip-700-8g's
+    four SPA bays carried geometry and no `accepts`, so they offered nothing
+    while its identical 4GB twin offered twenty-two - and nothing validated it."""
+    d = _bay()
+    del d["bays"]["bay-0"]["accepts"]
+    assert list(_validator().iter_errors(d)), "a bay naming nothing validated"
+
+
+def test_a_component_bay_needs_its_geometry():
+    for missing in ("at", "size"):
+        d = _bay()
+        del d["bays"]["bay-0"][missing]
+        assert list(_validator().iter_errors(d)), f"a bay with no {missing} validated"
+
+
+def test_a_face_only_field_is_rejected_on_a_nested_bay():
+    """A nested bay numbers within its carrier, so `group`/`rel-pos` mean nothing
+    here; a configuration varies a chassis and not a card, so nor does `only-in`."""
+    for stray in ({"group": "spas"}, {"rel-pos": 0}, {"only-in": ["ac"]}):
+        assert list(_validator().iter_errors(_bay(**stray))), f"{stray} validated"
+
+
+def test_the_library_validates_under_it():
+    import glob as _g
+    v = _validator()
+    for f in _g.glob(str(LIB / "components/*/*/v*/contract.yaml")):
+        d = yaml.safe_load(Path(f).read_text()) or {}
+        if not d.get("bays"):
+            continue
+        assert not list(v.iter_errors(d)), f

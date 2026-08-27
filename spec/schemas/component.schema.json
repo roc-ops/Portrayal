@@ -29,12 +29,16 @@
       "type": "string",
       "pattern": "^\\d+\\.\\d+\\.\\d+$"
     },
-        "behaviour": {
-      "enum": ["fills", "occupies", "mounts"],
+    "behaviour": {
+      "enum": [
+        "fills",
+        "occupies",
+        "mounts"
+      ],
       "description": "HOW THIS PART MOVES, which is what a renderer needs and what a catalogue class cannot say. `fills` slides into a chassis aperture - a PSU, a fan, a line card, a blank, a pull-out tab; this is what `bays` holds. `occupies` mates into a receptacle - an optic, a DAC end, a power cord. `mounts` attaches to a surface - a rack ear, a label, a ground lug, a bolted panel. ABSENT means fixed: a cage, a lamp, a button and a printed mark do not come out, and saying nothing is how they say so. Behaviour is per COMPONENT and not per class because two classes are already mixed - `filter` holds five slide-out air filters and one snap-on cover, `inlet` holds two receptacles and one bolted panel - so a class list cannot express what the library already contains. Optic against DAC against AOC stays in `attrs`, where it belongs: those differ in what they are, not in how they move",
       "$comment": "roc-ops/ndv#3"
     },
-"class": {
+    "class": {
       "$ref": "#/$defs/segment",
       "description": "core/profile class identity, e.g. port, psu, fan, blank"
     },
@@ -415,8 +419,44 @@
     },
     "bays": {
       "type": "object",
-      "description": "for modules that themselves host bays (v0: unused)",
-      "additionalProperties": true
+      "description": "MODULES THAT THEMSELVES HOST BAYS - a PCIe riser, a SIP carrying SPAs. Was `additionalProperties: true` and described as unused while 51 bays across 25 components already relied on it, so a malformed one validated and was found, if at all, by a tree that read wrong. Same shape as a device's bay minus the fields that only mean something on a face: no `group` or `rel-pos`, because a nested bay numbers within its carrier, and no `only-in`, because a configuration varies a chassis and not a card. Lint L48 checks that a skin actually draws each one.",
+      "propertyNames": {
+        "$ref": "#/$defs/segment"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "at",
+          "size",
+          "accepts"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "at": {
+            "$ref": "#/$defs/xy",
+            "description": "mm offset from the carrier's origin (top-left, y-down)"
+          },
+          "size": {
+            "$ref": "#/$defs/xy",
+            "description": "[w,h] in mm"
+          },
+          "accepts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "description": "component refs this bay takes. Required, as on a device: a bay that names nothing offers nothing, and the four SPA bays on a9k-sip-700-8g sat empty for exactly that reason while its 4 GB twin listed 22 cards in each"
+          },
+          "default": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "ref populated by default; null = open"
+          }
+        }
+      }
     }
   },
   "$defs": {
