@@ -77,6 +77,17 @@ export const SHELL_CSS = `
             background:none; cursor:pointer; }
   .node .tw { width:0.85rem; color:var(--dim); flex:none; text-align:center; }
   .node .cls { color:var(--dim); font-size:0.68rem; margin-left:auto; padding-left:0.5rem; }
+  /* TAKE IT OFF AND LOOK BEHIND IT. A cover is a real part that hides real parts -
+     the C40G's filter cover sits over four power supplies - and the only way to see
+     what it covers used to be to not draw it. The control appears on rows whose
+     component says how it comes out, so it arrives on every removable part in the
+     library at once rather than being wired up per device. */
+  .node .pull { color:var(--dim); font-size:0.72rem; padding:0 0.35rem; cursor:pointer;
+                border-radius:3px; flex:none; opacity:0.55; }
+  .node .pull:hover { opacity:1; background:var(--hl); color:#fff; }
+  .node.pulled .nm { opacity:0.45; text-decoration:line-through; }
+  .node.pulled .pull { opacity:1; color:var(--warn); }
+  [data-portrayal-pulled] { display:none !important; }
   .node.empty .nm { color:var(--warn); font-style:italic; }
   /* a target in another view: the row cannot nest under it, so it says it */
   .node .xref { color:var(--dim); font-size:0.68rem; padding-left:0.5rem;
@@ -498,6 +509,25 @@ export function createShell(opts = {}) {
           + (xref.length ? `<span class="xref" title="in another view of this device">`
                            + `→ ${xref.join(', ')}</span>` : '')
           + `<span class="cls">${cls}</span>`;
+        // `behaviour` already says whether this part comes out and how - `mounts`
+        // for a bolted cover, `fills` for a module, `occupies` for an optic. A part
+        // that says nothing does not come out, so it gets no control.
+        const behaviour = n.el.dataset.behaviour;
+        if (behaviour) {
+          const pull = document.createElement('span');
+          pull.className = 'pull';
+          pull.textContent = '\u25c9';
+          pull.title = `remove this ${behaviour === 'mounts' ? 'mounted part' : 'module'}`
+                       + ' to see behind it';
+          pull.onclick = ev => {
+            ev.stopPropagation();
+            const off = !n.el.hasAttribute('data-portrayal-pulled');
+            if (off) n.el.setAttribute('data-portrayal-pulled', '');
+            else n.el.removeAttribute('data-portrayal-pulled');
+            row.classList.toggle('pulled', off);
+          };
+          row.querySelector('.cls').before(pull);
+        }
         into.appendChild(row);
         const kids = document.createElement('div');
         kids.className = 'kids' + (depth >= 1 ? ' hid' : '');
