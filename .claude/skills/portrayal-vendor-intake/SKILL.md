@@ -44,6 +44,7 @@ against - without it, "done" means "what I happened to find."
 | **datasheet** (one per family) | overall dimensions, RU, weight, port counts, the box's own power figure | 5-20 |
 | **studio photographs** (vendor image library / DAM) | colour, finish, construction, per-axis measurable elevations when straight-on | 2-3 per SKU |
 | **community elevations** (NetBox devicetype-library) | fills DAM holes; already cropped to the rack face | varies |
+| **document renders** (inside the guides) | when a vendor runs no public DAM (Dell), the manuals' rendered front/rear views per configuration ARE the elevation source - they arrive free at conversion time, so a thin photos/ folder does not mean thin photo coverage | many |
 | **EOL doc archives** | vendors consolidate retired-product docs into zips; the only source for the oldest hardware | 0-1 zip |
 
 ## Finding them: probe, don't browse
@@ -82,6 +83,14 @@ Probe craft, learned the hard way:
 - `-front-high` / `-rear-high` DAM shots are straight-on studio elevations
   (1500-2100 px, port numerals legible); `-frontwtop-` is angled. Both are
   worth keeping; only the former is measurable.
+- **General image search is a modelling-time tool, not a staging-time one.**
+  Bulk image-search results are angled marketing shots, reseller composites
+  and watermarked stock - unmeasurable, uncitable ("found on an image
+  search" is not a provenance token) and often showing a different
+  configuration than labelled. At modelling time, a targeted search answers
+  a specific question ("does this SKU's 24-bay front carry the LCD?"), and
+  a vendor's press/media kit is the official middle ground when a face
+  needs colour or finish the document renders cannot give.
 
 ## The coverage report: say what you did NOT find
 
