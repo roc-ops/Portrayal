@@ -1,0 +1,26 @@
+format: 1
+kind: module
+name: mic-3d-2xge-xfp
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MIC-3D-2XGE-XFP - 2x10GbE XFP Modular Interface Card with per-port
+  LINK lamps, as photographed in the MX104 reference unit's slot 0/0.
+attrs:
+  model: MIC-3D-2XGE-XFP
+provenance:
+  size: 'photo - as the sibling MICs; XFP centres at x 62 and 118,
+    approximate'
+  power: 'NOT STATED in the MX104 extraction for this MIC - L27 stands'
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/xfp@1, id: port-0, at: [52.25, 10.65]}
+- {ref: std/xfp@1, id: port-1, at: [108.25, 10.65]}
+size:
+  w: 168.0
+  h: 31.0

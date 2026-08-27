@@ -1,0 +1,54 @@
+format: 1
+kind: module
+name: mx104-psu-dc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX104 DC power supply - two side-by-side bays at the front lower
+  left, 1+1 redundant. Two-stud terminal block behind a cover, heat-warning
+  chip, and the 24V/-48V-60V 40A/20A nameplate. The MX104 also ships AC
+  variants (guide Figure 9); only the photographed DC face is modelled.
+attrs:
+  model: MX104 DC PSU
+  role: dc-power-supply
+  input: 24 VDC or -48 to -60 VDC, 40 A / 20 A per the nameplate
+  redundancy: 1+1
+provenance:
+  size: 'datasheet-table + photo - the vendor table gives the PSU 4 x 1.75 x
+    8.88 in with the axes scrambled (104 mm is the credible width and 45 mm
+    the face height per the photograph); face drawn 103.7 x 45.0, approximate'
+  power-output: 'NOT STATED per module - L27 stands'
+states:
+- ok
+- fault
+- absent
+elements:
+  terminals:
+    at: [8.0, 20.0]
+    size: [42.0, 20.0]
+    class: terminal
+size:
+  w: 103.7
+  h: 45.0
+relief:
+  features:
+  - node: terminals
+    out: 2.4
+    color: '#17191c'
+    confidence: estimated
+    source: photo - the terminal block stands proud; raised as the group with
+      its stud detail
+  - node: stud-0
+    cyl: 6.0
+    thread: 1.0
+    lift: 2.4
+    confidence: estimated
+    source: photo - terminal studs; height not dimensioned
+  - node: stud-1
+    cyl: 6.0
+    thread: 1.0
+    lift: 2.4
+    confidence: estimated
+    source: photo - as stud-0

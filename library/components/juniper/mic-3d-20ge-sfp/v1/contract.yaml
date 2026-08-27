@@ -1,0 +1,47 @@
+format: 1
+kind: module
+name: mic-3d-20ge-sfp
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MIC-3D-20GE-SFP - 20x1GbE SFP Modular Interface Card, two rows of
+  ten ganged cages, as photographed twice in the MX104 reference unit.
+attrs:
+  model: MIC-3D-20GE-SFP
+  power-draw-max-w: 26
+provenance:
+  size: 'photo - the MX104 front photograph is isotropic at 3.087 px/mm once the mounting brackets are excluded; MIC-slot geometry is a single-pass reading approximate to ~2 mm, and no vendor MIC face dimension is usable (the physical table scrambles w/d/h axes - recorded on the device)'
+  power: 'MX104 guide power table lists the 20x1GE MIC at 26 W maximum
+    (ambient unqualified - max is our reading, recorded)'
+  cages: 'photo - two rows of ten on the registry 14.25 pitch, upper row
+    rotate 180, read off the reference photograph'
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/sfp-ganged@1, id: port-0, at: [20.00, 3.6], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-1, at: [20.00, 15.8]}
+- {ref: std/sfp-ganged@1, id: port-2, at: [34.25, 3.6], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-3, at: [34.25, 15.8]}
+- {ref: std/sfp-ganged@1, id: port-4, at: [48.50, 3.6], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-5, at: [48.50, 15.8]}
+- {ref: std/sfp-ganged@1, id: port-6, at: [62.75, 3.6], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-7, at: [62.75, 15.8]}
+- {ref: std/sfp-ganged@1, id: port-8, at: [77.00, 3.6], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-9, at: [77.00, 15.8]}
+- {ref: std/sfp-ganged@1, id: port-10, at: [91.25, 3.6], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-11, at: [91.25, 15.8]}
+- {ref: std/sfp-ganged@1, id: port-12, at: [105.50, 3.6], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-13, at: [105.50, 15.8]}
+- {ref: std/sfp-ganged@1, id: port-14, at: [119.75, 3.6], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-15, at: [119.75, 15.8]}
+- {ref: std/sfp-ganged@1, id: port-16, at: [134.00, 3.6], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-17, at: [134.00, 15.8]}
+- {ref: std/sfp-ganged@1, id: port-18, at: [148.25, 3.6], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-19, at: [148.25, 15.8]}
+size:
+  w: 168.0
+  h: 31.0
