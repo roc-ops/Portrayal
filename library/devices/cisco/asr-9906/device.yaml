@@ -337,12 +337,12 @@ views:
         - {id: esd, at: [352.0, 512.0], size: [5.0, 5.0], shape: circle}
     silkscreen:
       - {at: [39.48, 487.0], text: PS0, font-size: 6, anchor: middle}
-      - {at: [90.22, 487.0], text: RSP0, font-size: 6, anchor: middle}
-      - {at: [132.29, 487.0], text: LC0, font-size: 6, anchor: middle}
-      - {at: [177.3, 487.0], text: LC1, font-size: 6, anchor: middle}
-      - {at: [220.38, 487.0], text: LC2, font-size: 6, anchor: middle}
-      - {at: [264.77, 487.0], text: LC3, font-size: 6, anchor: middle}
-      - {at: [308.97, 487.0], text: RSP1, font-size: 6, anchor: middle}
+      - {at: [90.22, 487.0], text: RSP0, font-size: 6, anchor: middle, for: slot-0}
+      - {at: [132.29, 487.0], text: LC0, font-size: 6, anchor: middle, for: slot-1}
+      - {at: [177.3, 487.0], text: LC1, font-size: 6, anchor: middle, for: slot-2}
+      - {at: [220.38, 487.0], text: LC2, font-size: 6, anchor: middle, for: slot-3}
+      - {at: [264.77, 487.0], text: LC3, font-size: 6, anchor: middle, for: slot-4}
+      - {at: [308.97, 487.0], text: RSP1, font-size: 6, anchor: middle, for: slot-5}
     components:
       bays:
         - {id: slot-0, at: [71.97, 74.55], size: {w: 42.67, h: 403.40}, opening: {w: 42.67, h: 364.32}, accepts: ['cisco/a9k-rsp880-lt-se@1', 'cisco/a9k-rsp880-lt-tr@1', 'cisco/a99-rsp-se@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0, default: cisco/a9k-slot-cover@1}
@@ -371,7 +371,7 @@ views:
         - {at: [42.0, 29.0], size: [152.0, 93.0], fill: '#e8eaec'}
         - {at: [42.0, 129.0], size: [155.0, 165.0], fill: '#d5d7d9'}
     silkscreen:
-      - {at: [111.0, 650.0], text: cisco, font-size: 22, anchor: middle}
+      - {at: [111.0, 650.0], text: cisco, font-size: 22, anchor: middle, for: chassis}
     regions:
       - {id: rack-mounting-surface, label: 'Rack mounting surface - the same plane the bottom face carries'}
       - {id: regulatory-label, label: 'Regulatory and compliance label block'}

@@ -48,6 +48,8 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
       port on a view that declares cutouts has one
   L41 device: a bay or placement scoped to configurations names configurations
       that exist, and does not scope itself to all of them or to none
+  L42 device: a silkscreen mark says what it annotates - a part, or `chassis`
+      for printing about the whole unit
 """
 import argparse
 import json
@@ -1365,6 +1367,46 @@ PLUGGABLE_CAGES = {"sfp", "sfp-plus", "sfp28", "sfp-dd", "qsfp", "qsfp28",
                    "qsfp56", "qsfp-dd", "xfp", "cfp", "cfp2"}
 
 
+def lint_device_silkscreen_owner(path, data):
+    """L42: a mark says what it annotates, or says it annotates the whole unit.
+
+    L14 is the other half of this and has always been half a rule: it checks a
+    `for:` that IS stated and is silent on one that is not, so a legend with no
+    owner has never been wrong about anything. Rather than fire, the whole
+    mechanism simply did not apply, and the count drifted to 459 of 989 marks.
+
+    WHAT AN UNOWNED MARK COSTS is specific, not tidiness. It cannot be checked
+    for sitting near the thing it annotates - that is L14, which needs a target
+    to measure against. It cannot be hidden by the module that covers it - L21
+    needs to know what covers it, and a legend printed under a card is invisible
+    on real hardware. It cannot nest under its owner in the tree. And no
+    consumer can answer "what is printed next to port 12".
+
+    `for: chassis` IS AN ANSWER, not an escape hatch. A model name on a bezel, a
+    vendor wordmark, a compliance line - these annotate the whole unit, and
+    saying so is a positive claim that the next reader can check. That is why
+    L14 stopped rejecting it: requiring an owner is only fair once chassis-level
+    printing has a way to declare itself.
+
+    Warning at `modelled`, error at `verified`, like L15 and L37 - 459 marks
+    cannot become errors on the day the rule lands.
+    """
+    maturity = data.get("maturity", "draft")
+    if maturity == "draft":
+        return
+    for vname, view in (data.get("views") or {}).items():
+        bare = [m for m in view_parts(view)["silkscreen"] if not m.get("for")]
+        if not bare:
+            continue
+        shown = ", ".join(repr(m.get("text") or m.get("id") or "<path>")
+                          for m in bare[:4])
+        more = f" and {len(bare) - 4} more" if len(bare) > 4 else ""
+        (err if maturity == "verified" else warn)(
+            path, "L42", f"{vname}: {len(bare)} silkscreen mark(s) name nothing - "
+            f"{shown}{more}. Add `for:` naming the part each annotates, or "
+            "`for: chassis` where the printing is about the whole unit")
+
+
 def lint_device_config_scope(path, data):
     """L41: a bay scoped to configurations that do not exist is a bay in none.
 
@@ -1927,6 +1969,7 @@ def lint_device(path, validator, lib_roots):
     lint_device_groups(path, data, lib_roots)
     lint_device_port_optics(path, data, lib_roots)
     lint_device_config_scope(path, data)
+    lint_device_silkscreen_owner(path, data)
     lint_device_occupants(path, data, lib_roots)
     # Every id each view offers, indexed by view name. A `for:` may name a target
     # in ANOTHER view of the same device (`rear/psu-0`), so the check below cannot
@@ -2056,13 +2099,22 @@ def lint_device(path, validator, lib_roots):
         for p in vp["placements"]:
             c = _instance_size(p.get("ref"), lib_roots)
             if c and p.get("at"):
-                boxes[p["id"]] = (p["at"], c, p.get("rotate"))
+                boxes[p["id"]] = (p["at"], c, p.get("rotate"), False)
         for b in vp["bays"]:
-            boxes[b["id"]] = (b["at"], (b["size"]["w"], b["size"]["h"]), b.get("rotate"))
+            # A BAY'S `size` IS ALREADY ITS ON-PANEL FOOTPRINT and must not be
+            # transposed; `rotate` spins the OCCUPANT inside the opening. This is
+            # the same trap L13 records below, and it was live here: every
+            # rotated bay was measured against a footprint spun 90 degrees about
+            # its own centre, so the C40G's rear-0 - a horizontal slot at
+            # x 39.35 - was tested as a vertical one at x 196.865, and the slot
+            # number printed beside it read as 157 mm away. Nothing caught it
+            # because no legend had ever named a rotated bay.
+            boxes[b["id"]] = (b["at"], (b["size"]["w"], b["size"]["h"]),
+                              b.get("rotate"), True)
 
         def footprint(owner):
-            (ax, ay), (bw, bh), rot = boxes[owner]
-            if rot in (90, 270, -90):
+            (ax, ay), (bw, bh), rot, is_bay = boxes[owner]
+            if rot in (90, 270, -90) and not is_bay:
                 d = (bw - bh) / 2.0
                 ax, ay, bw, bh = ax + d, ay - d, bh, bw
             return ax, ay, bw, bh
@@ -2077,10 +2129,23 @@ def lint_device(path, validator, lib_roots):
                 # whose subject is a rail, a timing core or the box itself names
                 # it. Nothing to locate, so nothing to measure against.
                 if owner == "chassis":
-                    if kind == "silkscreen":
-                        err(path, "L14", f"{vname}: silkscreen {ident!r} is for "
-                                         "'chassis'. Printed ink annotates a part, "
-                                         "not the whole unit")
+                    # SILKSCREEN MAY NAME THE WHOLE UNIT, and the ban that used to
+                    # sit here was an over-reach. It was added alongside cross-view
+                    # targets, whose rejection is right and stands: a legend that
+                    # labels a part on another face is ink that means nothing. But
+                    # `chassis` is not cross-view. It is present on every face, and
+                    # a model name silkscreened on a bezel - `C40G`, `HALNY`,
+                    # `Cisco ASR 9000 Series` - is printing about the whole unit, on
+                    # the face it is printed on. The old message said "printed ink
+                    # annotates a part, not the whole unit", and the library holds
+                    # some twenty marks that are exactly the thing it said could not
+                    # exist.
+                    #
+                    # It is also the answer L42 needs. Requiring every mark to
+                    # declare an owner is only fair if chassis-level printing has a
+                    # way to say so, and this is that way - positive, checkable, and
+                    # already wired end to end, since the renderer gives the
+                    # faceplate data-path="chassis" and the tree nests on it.
                     continue
                 vref, oid = split_target(owner)
                 if vref is not None:
