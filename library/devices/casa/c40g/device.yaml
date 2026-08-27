@@ -33,6 +33,26 @@ provenance:
     at x 42.0 width 345.5; the brand band y 196.3-222.9; and the snap-on PSU cover
     y 226.7-264.9. The right fan bay is trimmed to start at x 388.0 so it does not
     overlap the card bays, which end at 387.5'
+  psu-row: >-
+    CENTRED IN THE BAND, and that is a symmetry argument rather than a measurement.
+    The four bays sat at 44.0 to 386.6 inside a band of 37.5 to 386.7 - 6.5 of margin
+    on the left and 0.10 on the right. A 0.10 mm margin is not something anyone drew;
+    it is what falls out when a row is placed from one end. Four identical bays on a
+    uniform 87.2 pitch span 342.6 in a 349.2 band, so the row is centred at 3.3 a side
+    and the bays move to 40.8, 128.0, 215.2, 302.4. Width and pitch are untouched.
+    FIGURE 1-10 CANNOT PLACE THEM, checked and recorded so nobody spends the search
+    again. It is the one figure that shows the row with the cover off, and it fails
+    the orthographic gate at 1.918 - its own box pitch drifts 215, 206, 202 px across
+    the four, a 6 percent spread, and anchoring to the card faces puts psu-1 seven
+    millimetres past the band. It confirms the ARRANGEMENT and the numbering, which is
+    what a schematic is good for, and nothing about position.
+    WHAT THIS DID NOT FIX, because it cannot be fixed from what we hold - see the
+    `band-not-centred-in-chassis` gap. The AC panel's four inlets are meant to sit
+    behind their own supplies. Reflected about the PANEL they now miss by 1.2, better
+    than the 2.0 they missed by before; reflected about the CHASSIS, which is the
+    physically meaningful axis, they miss by 9.95, worse than the 6.75 before. Both
+    cannot be right and centring the row cannot make them so: the two axes disagree
+    because the band is not centred in the chassis, and that is the thing in doubt.
   band-alignment: >-
     REPORTED FROM THE VIEWER twice - the AC panel sitting left with a dark sliver
     past its right edge, then the front looking "off kilter" the same way - and it
@@ -352,10 +372,10 @@ views:
       - {at: [103.8, 214.0], text: casa systems, font-size: 13, fill: '#f2f4f6', anchor: start}
     components:
       bays:
-        - {id: psu-4, at: [44.0, 226.7], size: {w: 81.0, h: 38.2}, accepts: [casa/c40g-psu-ac@1], group: power, rel-pos: 4, default: null}
-        - {id: psu-3, at: [131.2, 226.7], size: {w: 81.0, h: 38.2}, accepts: [casa/c40g-psu-ac@1], group: power, rel-pos: 3, default: null}
-        - {id: psu-2, at: [218.4, 226.7], size: {w: 81.0, h: 38.2}, accepts: [casa/c40g-psu-ac@1], group: power, rel-pos: 2, default: null}
-        - {id: psu-1, at: [305.6, 226.7], size: {w: 81.0, h: 38.2}, accepts: [casa/c40g-psu-ac@1], group: power, rel-pos: 1, default: null}
+        - {id: psu-4, at: [40.8, 226.7], size: {w: 81.0, h: 38.2}, accepts: [casa/c40g-psu-ac@1], group: power, rel-pos: 4, default: null}
+        - {id: psu-3, at: [128.0, 226.7], size: {w: 81.0, h: 38.2}, accepts: [casa/c40g-psu-ac@1], group: power, rel-pos: 3, default: null}
+        - {id: psu-2, at: [215.2, 226.7], size: {w: 81.0, h: 38.2}, accepts: [casa/c40g-psu-ac@1], group: power, rel-pos: 2, default: null}
+        - {id: psu-1, at: [302.4, 226.7], size: {w: 81.0, h: 38.2}, accepts: [casa/c40g-psu-ac@1], group: power, rel-pos: 1, default: null}
         - {id: fan-left, at: [1.5, 17.0], size: {w: 34.7, h: 205.0}, accepts: [casa/c40g-fan-left@1], group: cooling, rel-pos: 0, default: casa/c40g-fan-left@1}
         - {id: fan-right, at: [388.0, 17.0], size: {w: 34.7, h: 205.0}, accepts: [casa/c40g-fan@1], group: cooling, rel-pos: 1, default: casa/c40g-fan@1}
         - {id: front-0, at: [39.35, 164.35], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1, casa/bdm2@1, casa/bdm2m@1, casa/csc-8x10g@1, casa/ds-8x8@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1, casa/blank-faceplate@1], default: casa/bdm@1, group: front-slots, rel-pos: 0}
@@ -507,6 +527,32 @@ configurations:
 # the two of them together. Detectable gaps are derived from the lint rules at
 # build time and must not be listed here.
 gaps:
+- what: band-not-centred-in-chassis
+  scope: [front, rear]
+  reason: needs-drawing
+  note: >-
+    The card band runs 37.5 to 386.7 in a body 432.95 wide, so it sits 37.5 from the left
+    edge and 46.25 from the right - 8.75 mm out of centre, or 4.375 on the band's own
+    centreline. Everything inside the band agrees with everything else; the question is
+    whether the band is really off-centre in the metal, and nothing we hold answers it.
+    IT IS NOT COSMETIC, and the AC input panel is where it bites. Its four C14 inlets sit
+    behind the four front power supplies. Reflect the supply centres about the PANEL and
+    the inlets are 1.2 out; reflect them about the CHASSIS - which is what walking round a
+    box actually does - and they are 9.95 out. The gap between those two answers IS this
+    asymmetry, and no arrangement of the parts inside the band can close it, because the
+    disagreement is between the band and the chassis rather than within either.
+    THE SUPPORTING NUMBERS ARE ALSO ODD IN THE SAME DIRECTION. The two front fan strips
+    measure 36.0 wide each - equal, as you would expect - but leave 1.5 outside them on the
+    left and 10.25 on the right. Two equal strips with unequal surrounds is exactly the
+    shape of a band that has been positioned from one edge.
+    NOT RESOLVED BY GUESSING, deliberately. Re-centring the band would move the two fan
+    strips, the card bays on both faces, the PSU row, the PSU cover and the AC panel - and
+    it would be one estimate reconciled against another, which this device's
+    `pem-band-top-edge` note already records going wrong twice in opposite directions.
+  wanted: a dimensioned C40G front or rear elevation from Casa, or a tape measure across a
+    real chassis from its left edge to the first card slot and from the last card slot to
+    its right edge
+  blocks: []
 - what: pem-band-top-edge
   scope: [pem-1, pem-2]
   reason: needs-drawing

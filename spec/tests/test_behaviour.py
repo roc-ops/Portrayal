@@ -8,6 +8,7 @@ states about itself.
 import sys
 from pathlib import Path
 
+import pytest
 import yaml
 
 SPEC = Path(__file__).resolve().parents[1]
@@ -76,11 +77,25 @@ def test_the_old_class_list_is_a_subset_of_fills():
 # every part; and the renderer drew every placement before every bay, so a part
 # bolted across an opening painted UNDER the opening.
 
+def needs_dist(name):
+    """These read what the build EMITS, which is the only place the claim lives.
+
+    Without the guard a fresh clone reports `FileNotFoundError` from inside
+    pathlib and reads as a broken test rather than an unbuilt tree - which is
+    exactly how it presented the first time it fired, during a build running
+    alongside the suite.
+    """
+    p = LIB / "dist" / name
+    if not p.exists():
+        pytest.skip(f"{p} not built - run ./build.sh")
+    return p
+
+
 def test_the_component_index_actually_emits_behaviour():
     """It was in the contracts and on the SVG as data-behaviour, and absent from
     the one file most consumers read. A field nothing can see is not a field."""
     import json
-    comps = json.loads((LIB / "dist" / "components.json").read_text())["components"]
+    comps = json.loads(needs_dist("components.json").read_text())["components"]
     stated = {f"{c['ns']}/{c['name']}": c.get("behaviour") for c in comps}
     assert any(v for v in stated.values()), "components.json carries no behaviour at all"
     for p in CONTRACTS:
@@ -100,7 +115,7 @@ def test_mounted_parts_paint_after_bays():
     of the cover. Checked on the rendered document rather than on the manifest,
     because document order is the whole claim.
     """
-    svg = (LIB / "dist" / "c40g.docsis-classic.front.svg").read_text()
+    svg = needs_dist("c40g.docsis-classic.front.svg").read_text()
     cover = svg.find('id="psu-cover"')
     assert cover != -1, "psu-cover is not in the C40G front view"
     for bay in ("psu-1", "psu-2", "psu-3", "psu-4"):

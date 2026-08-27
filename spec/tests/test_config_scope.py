@@ -8,6 +8,7 @@ entry module on a chassis that cannot take one.
 """
 from pathlib import Path
 
+import pytest
 import yaml
 
 SPEC = Path(__file__).resolve().parents[1]
@@ -53,8 +54,11 @@ def test_the_panel_and_the_openings_are_the_same_band():
 
 
 def test_ac_and_dc_rears_render_different_metal():
-    ac = (LIB / "dist/c40g.ac-power.rear.svg").read_text()
-    dc = (LIB / "dist/c40g.docsis-classic.rear.svg").read_text()
+    paths = [LIB / "dist/c40g.ac-power.rear.svg", LIB / "dist/c40g.docsis-classic.rear.svg"]
+    for q in paths:
+        if not q.exists():
+            pytest.skip(f"{q} not built - run ./build.sh")
+    ac, dc = (q.read_text() for q in paths)
     for bay in ('id="pem-1"', 'id="pem-2"'):
         assert bay not in ac, f"{bay} rendered on an AC chassis"
         assert bay in dc
