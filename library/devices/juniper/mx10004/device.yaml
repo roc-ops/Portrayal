@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx10004
-version: 0.2.1
+version: 1.0.0
 maturity: modelled
 manufacturer: Juniper
 model: MX10004
@@ -113,16 +113,16 @@ views:
            accepts: [juniper/jnp10k-re1@1], default: juniper/jnp10k-re1@1,
            group: res, rel-pos: 1}
         - {id: fpc0, at: [2.5, 118.0], size: {w: 437.0, h: 48.0},
-           accepts: [juniper/jnp10k-lc9600@1, juniper/jnp10k-lc480@1],
+           accepts: [juniper/jnp10k-lc9600@1, juniper/jnp10k-lc480@1, juniper/jnp10k-lc-blank@1],
            default: juniper/jnp10k-lc9600@1, group: fpcs, rel-pos: 0}
         - {id: fpc1, at: [2.5, 166.0], size: {w: 437.0, h: 48.0},
-           accepts: [juniper/jnp10k-lc9600@1, juniper/jnp10k-lc480@1],
+           accepts: [juniper/jnp10k-lc9600@1, juniper/jnp10k-lc480@1, juniper/jnp10k-lc-blank@1],
            default: juniper/jnp10k-lc480@1, group: fpcs, rel-pos: 1}
         - {id: fpc2, at: [2.5, 214.0], size: {w: 437.0, h: 48.0},
-           accepts: [juniper/jnp10k-lc9600@1, juniper/jnp10k-lc480@1],
+           accepts: [juniper/jnp10k-lc9600@1, juniper/jnp10k-lc480@1, juniper/jnp10k-lc-blank@1],
            default: juniper/jnp10k-lc9600@1, group: fpcs, rel-pos: 2}
         - {id: fpc3, at: [2.5, 262.0], size: {w: 437.0, h: 48.0},
-           accepts: [juniper/jnp10k-lc9600@1, juniper/jnp10k-lc480@1],
+           accepts: [juniper/jnp10k-lc9600@1, juniper/jnp10k-lc480@1, juniper/jnp10k-lc-blank@1],
            default: juniper/jnp10k-lc480@1, group: fpcs, rel-pos: 3}
       placements:
         - {id: led-psus, ref: common/led-dot@1, at: [402.0, 46.0], for: chassis,
@@ -204,6 +204,17 @@ views:
 configurations:
   base:
     kind: base
+    source: >-
+      vendor - Juniper publishes this as an orderable bundle. okf juniper-mx-hw
+      mx10004/029-mx10004-configurations.md lists the components of each configuration,
+      and the line-card covers in this base are its own: it ships sixteen of them on the
+      MX10016 in EVERY configuration, over the note that "Line cards and the cable
+      management system are not part of the base or redundant configurations. You must
+      order them separately." NOT YET FULLY FAITHFUL: the vendor bundle also ships ONE
+      routing engine rather than two, and covers rather than modules in one SFB slot and
+      one power slot. This library seats all of them, because JNP10K-PWR-BLNK and the SF
+      blank are not modelled yet. The line-card half - the part that was drawing holes -
+      is now right.
     default: true
     description: >-
       Chassis only - what you spec before deciding what goes in it. The 4 slot bays are
@@ -215,10 +226,10 @@ configurations:
       document power-supply cover panels only. Every other chassis in the library seats
       a blank here.
     bays:
-      fpc0: ''
-      fpc1: ''
-      fpc2: ''
-      fpc3: ''
+      fpc0: juniper/jnp10k-lc-blank@1
+      fpc1: juniper/jnp10k-lc-blank@1
+      fpc2: juniper/jnp10k-lc-blank@1
+      fpc3: juniper/jnp10k-lc-blank@1
 gaps:
   - what: psu-variants
     scope: [psus]

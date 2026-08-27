@@ -1,0 +1,43 @@
+format: 1
+kind: module
+name: jnp10k-lc-blank
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Line-card slot cover for the MX10000 series - the MX10004, MX10008 and
+  MX10016 share one line-card aperture, so they share one cover. A plain
+  horizontal panel the width of the card cage with a pull at each end.
+attrs:
+  model: JNP10K-LC-BLNK
+provenance:
+  size: >-
+    derived - fills the 437.0 x 48.0 mm line-card aperture, which is the same
+    aperture the JNP10K-LC2101 occupies and is identical across the MX10004,
+    MX10008 and MX10016 in this library. A cover is the shape of the hole it
+    covers, so this is read off the bay rather than being a new claim about
+    the hardware. No vendor drawing of the cover is in the corpus.
+  part-number: >-
+    vendor - JNP10K-LC-BLNK, named in the MX10004 configuration order tables.
+    THIS IS NOT AN OPTIONAL ACCESSORY. The MX10003 guide states the rule
+    plainly - "Blank panels to cover any slots not occupied by a component",
+    "One blank panel for each slot not occupied by a component" - and the
+    MX10016 configuration table ships sixteen line-card covers in EVERY
+    configuration including the redundant MX10016-PREMIUM, over the note that
+    "Line cards and the cable management system are not part of the base or
+    redundant configurations. You must order them separately." A fully
+    specified MX10016 leaves the factory with no line cards and sixteen
+    covers, which is what makes an empty-but-blanked chassis the accurate
+    drawing rather than a placeholder for one.
+  face: >-
+    estimated - no photograph or drawing of this cover is in the intake. The
+    art follows the MX-series slot blanks already in the library: a plain
+    light panel with a pull at each end, at the aperture's own size. The
+    OUTLINE is sourced and the DETAIL is not, which is the honest split.
+states:
+- ok
+- absent
+size:
+  w: 437.0
+  h: 48.0

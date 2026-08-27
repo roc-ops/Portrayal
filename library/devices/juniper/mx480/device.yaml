@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx480
-version: 1.0.0
+version: 1.0.1
 maturity: modelled
 manufacturer: Juniper
 model: MX480
@@ -244,6 +244,12 @@ views:
 configurations:
   base:
     kind: base
+    source: >-
+      derived - built from the group roles rather than from a vendor bundle: every bay
+      whose group is `service` or `management` keeps its seat, every `traffic` bay takes
+      a blank. This vendor publishes no base configuration for this chassis, so the
+      library defines one. Where a vendor DOES publish one, follow it instead and say so
+      here.
     default: true
     description: >-
       Chassis only - what you spec before deciding what goes in it. The 8 slot bays are
