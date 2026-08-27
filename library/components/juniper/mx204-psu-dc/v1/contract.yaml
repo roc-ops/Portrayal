@@ -1,0 +1,64 @@
+format: 1
+kind: module
+name: mx204-psu-dc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX204 DC power supply module, 650 W. Two seat at the rear right in
+  slots 0 and 1; 1+1 redundant and hot-swappable, PS0 fed from source A and
+  PS1 from source B for A/B feed redundancy. The face carries three status
+  lamps labelled IN, OUT and ! at the left, an orange release tab, and a
+  terminal block whose V+ terminals are shunted internally together, as are
+  the V- terminals.
+attrs:
+  model: MX204 DC PSU
+  role: dc-power-supply
+  power-output-w: 650
+  input: dedicated -48 VDC feeds; PS0 from feed A, PS1 from feed B
+  redundancy: 1+1; one PSU carries a fully configured router
+provenance:
+  size: 'datasheet-table - Table 19: DC power supply 2.23 x 1.67 x 14.53 in
+    (56.6 x 42.4 x 369.1 mm), weight 1 kg. Note the DC module is stated 2.3 mm
+    TALLER than the AC (40.1); both drop into the same bay, so the bay is sized
+    to the AC face and the DC difference is recorded here rather than modelled'
+  power-output-w: '650 W - "Maximum output power | 650W" in the guide''s DC power
+    supply electrical specifications. An OUTPUT because a psu PROVIDES power'
+  face: 'drawing + photo - guide fig g009863 (rear, DC) shows the terminal block
+    right of the release tab; stud count and arrangement are taken from that
+    figure at page scale and are approximate. The guide caution establishes the
+    terminals are paired V+ and V- sets shunted internally. Lamp column placed
+    as on the AC module (photo), labels IN / OUT / ! per guide Figure 13'
+  leds: 'guide Table 11 (DC Power Supply Module LEDs): IN green steady =
+    receiving power, off = disconnected; OUT green steady = output good, off =
+    output off; ! amber steady = fault, replace but leave seated for airflow'
+states:
+- ok
+- fault
+- absent
+elements:
+  latch:
+    at: [18.2, 3.4]
+    size: [4.6, 35.6]
+    class: latch
+  terminal-block:
+    at: [26.0, 6.0]
+    size: [27.0, 26.0]
+    class: terminal
+size:
+  w: 56.6
+  h: 42.4
+  d: 369.1
+relief:
+  features:
+  - node: latch
+    out: 1.6
+    color: '#e8731f'
+    confidence: estimated
+    source: photo - the orange release tab stands proud; projection not measured
+  - node: terminal-block
+    out: 3.0
+    color: '#101214'
+    confidence: estimated
+    source: drawing - the terminal block and studs project; depth not stated
