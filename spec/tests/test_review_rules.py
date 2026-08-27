@@ -143,6 +143,27 @@ def test_a_draft_is_not_nagged_about_empty_faces():
     assert not caught("L45", lint.lint_device_empty_views, P, draft)
 
 
+def test_a_face_the_device_has_declared_unknown_is_not_nagged_about():
+    """The ASR 9910's underside carries a `needs-drawing` gap scoped to `bottom`:
+    the author looked, found nothing, and wrote down what would close it.
+
+    Warning at that asks twice for a fact somebody has already said the world is
+    short of - and the gaps register exists precisely so that a declared unknown
+    reads as knowledge rather than as work not done. A rule that fires on one
+    teaches people to ignore the rule.
+    """
+    declared = {"maturity": "modelled",
+                "gaps": [{"what": "rack-mounting-plane-not-dimensioned",
+                          "scope": ["bottom"], "reason": "needs-drawing"}],
+                "views": {"bottom": {"size": {"w": 100.0, "h": 50.0}}}}
+    assert not caught("L45", lint.lint_device_empty_views, P, declared)
+    # the exemption is per FACE, not per device: another empty view still fires
+    two = dict(declared)
+    two["views"] = {"bottom": {"size": {"w": 100.0, "h": 50.0}},
+                    "top": {"size": {"w": 100.0, "h": 50.0}}}
+    assert caught("L45", lint.lint_device_empty_views, P, two)
+
+
 def test_a_face_with_any_content_at_all_is_enough():
     ok = {"maturity": "modelled",
           "views": {"top": {"size": {"w": 100.0, "h": 50.0},

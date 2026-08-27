@@ -1528,7 +1528,26 @@ def lint_device_empty_views(path, data):
     """
     if (data.get("maturity") or "draft") == "draft":
         return
+    # A FACE THE DEVICE HAS ALREADY DECLARED UNKNOWN IS NOT NAGGED ABOUT. The
+    # ASR 9910's underside carries `rack-mounting-plane-not-dimensioned-for-this-
+    # chassis`, reason needs-drawing, scoped to `bottom` - the author looked,
+    # found nothing, and wrote down what would close it. Warning at that is
+    # asking twice for a fact somebody has already said the world is short of,
+    # and a rule that fires on declared unknowns teaches people to ignore it.
+    #
+    # IT OVER-EXEMPTS, and that is chosen rather than overlooked. A gap NAMING a
+    # view is taken as covering it, but scopes hold whatever the gap is about -
+    # the ASR 9006's `chassis-width-sources-disagree` names all four faces and is
+    # about a WIDTH, not about whether those faces are drawn. Nothing in a gap
+    # says "this is why the face is empty", so telling the two apart needs a
+    # field that does not exist. Erring quiet is the right way round here: the
+    # cost is one face not asked about, against a rule nobody reads.
+    declared = set()
+    for g in (data.get("gaps") or []):
+        declared.update(g.get("scope") or [])
     for vname, view in (data.get("views") or {}).items():
+        if vname in declared:
+            continue
         vp = view_parts(view or {})
         if any(vp[k] for k in ("decor", "cutouts", "silkscreen",
                                "bays", "placements", "regions")):
