@@ -1,0 +1,39 @@
+format: 1
+kind: module
+name: mpc4e-3d-2cge-8xge-v960
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MPC4E-3D-2CGE-8XGE fixed MPC - two 100GbE CFP ports and eight SFP+ in interleaved PICs. Authored as the MX960 vertical form (jacks rotated 90).
+attrs:
+  model: MPC4E-3D-2CGE-8XGE
+  power-draw-max-w: 610
+provenance:
+  size: 'registry + layout - the face is the slot geometry of its chassis
+    family; positions are laid out from the module reference port
+    description and registry cage sizes, NOT measured from a faceplate
+    drawing. No faceplate figure was usable for this model'
+  power: 'datasheet-table - the module reference model section states the requirement; 610 W max'
+  numbering: 'guide - ports number within each PIC group with an n/ group
+    legend, per the module reference port-numbering figures (g000930,
+    g100786); the exact print positions are layout-derived'
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/sfp-ganged@1, id: port-0-1, at: [2.18, 32.72], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-0, at: [13.68, 32.72], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-3, at: [2.18, 48.57], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-2, at: [13.68, 48.57], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/cfp@1, id: port-1-0, at: [-25.95, 105.70], rotate: 90, attrs: {media: cfp}}
+- {ref: std/sfp-ganged@1, id: port-2-1, at: [2.18, 166.03], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-2-0, at: [13.68, 166.03], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-2-3, at: [2.18, 181.88], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-2-2, at: [13.68, 181.88], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/cfp@1, id: port-3-0, at: [-25.95, 239.00], rotate: 90, attrs: {media: cfp}}
+size:
+  w: 30.1
+  h: 405.0

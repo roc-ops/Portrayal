@@ -1,0 +1,34 @@
+format: 1
+kind: module
+name: mx2000-cb-re-v
+version: 1.0.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX2000 Control Board and Routing Engine (CB-RE) - a combined
+  vertical FRU, one at each end of the upper cage. Console, management
+  and timing jacks run down the faceplate with the routing-engine lamps
+  at the top.
+attrs:
+  model: MX2K-MPC-CB-RE
+provenance:
+  size: 'photo - the MX2010 studio photographs at ~1.1 px/mm; positions approximate to ~3 mm, and no vendor module dimension is in the extraction'
+  power: 'NOT STATED per module in the extraction - L27 stands'
+  face: 'photo - the jack stack resolves as RJ45 pairs, a USB and an SFP
+    cage on the studio photograph; per-jack legends are below its
+    resolution and are summarised - see the device gaps'
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/rj45@1, id: console, at: [15.0, 55.0], rotate: 90, attrs: {function: serial console}}
+- {ref: std/rj45@1, id: aux, at: [15.0, 78.0], rotate: 90, attrs: {function: auxiliary console}}
+- {ref: std/rj45@1, id: mgmt, at: [15.0, 118.0], rotate: 90, attrs: {function: out-of-band management}}
+- {ref: std/rj45@1, id: bits, at: [15.0, 141.0], rotate: 90, attrs: {function: BITS timing}}
+- {ref: std/usb-a@1, id: usb, at: [20.75, 230.0], attrs: {function: USB service port}}
+- {ref: std/sfp@1, id: sfp-mgmt, at: [15.0, 262.0], rotate: 90, attrs: {function: management SFP}}
+size:
+  w: 55.0
+  h: 405.0

@@ -1,0 +1,33 @@
+format: 1
+kind: module
+name: mx2008-rcb-v
+version: 1.0.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX2008 Routing and Control Board (RCB) - the integrated
+  RE-plus-control-board FRU, one at each end of the short upper cage.
+  Management and console jacks run down the face in two RJ45 pairs
+  with the routing-engine lamps at the top.
+attrs:
+  model: MX2008 RCB
+provenance:
+  size: 'photo - the MX2008 studio front photograph at ~1.39 px/mm; positions approximate to ~3 mm, and no vendor module dimension is in the extraction'
+  power: 'NOT STATED per module in the extraction - L27 stands'
+  face: 'photo - two RJ45 pairs and a lower jack pair resolve; per-jack
+    legends are below the photograph resolution - see the device gaps'
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/rj45@1, id: mgmt0, at: [8.0, 40.0], rotate: 90, attrs: {function: management 0}}
+- {ref: std/rj45@1, id: mgmt1, at: [28.0, 40.0], rotate: 90, attrs: {function: management 1}}
+- {ref: std/rj45@1, id: console, at: [8.0, 62.0], rotate: 90, attrs: {function: serial console}}
+- {ref: std/rj45@1, id: aux, at: [28.0, 62.0], rotate: 90, attrs: {function: auxiliary console}}
+- {ref: std/rj45@1, id: bits, at: [8.0, 100.0], rotate: 90, attrs: {function: BITS timing}}
+- {ref: std/usb-a@1, id: usb, at: [30.25, 102.75], attrs: {function: USB service port}}
+size:
+  w: 57.0
+  h: 170.0

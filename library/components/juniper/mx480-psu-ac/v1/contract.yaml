@@ -1,0 +1,62 @@
+format: 1
+kind: module
+name: mx480-psu-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX480 normal-capacity AC power supply, as photographed - a vented
+  face with the AC input rocker at the lower left, AC OK / DC OK / PS FAIL
+  lamps at the right and a pull handle. Up to four across the rear top
+  (PEM0-PEM3); high-line systems use two, low-line four.
+attrs:
+  model: MX480 AC PSU (normal capacity)
+  role: ac-power-supply
+  redundancy: high-line 2, low-line 2+2
+provenance:
+  inlet: 'photo-class - the AC supply carries its own appliance inlet on the
+    face (the rear photograph resolves the cord entering each PSU); drawn as
+    the registry C20 at an approximate position - the photograph cannot fix
+    it to the millimetre'
+
+  size: 'photo - 101.5 x 66.0 mm face off the orthographic rear photograph
+    (0.8% gate, 3.33 px/mm): four bays on a 103.9 mm pitch. The DC PEM the
+    MX240 photo carries is 79.7 mm tall in the same bay family - the bay is
+    sized to the taller module and this face sits above the chassis label
+    strip'
+  power-output: 'NOT STATED PER MODULE - system output figures only (MX480
+    power-budget tables); no per-module nameplate in the intake. L27 stands
+    as the record'
+  leds: 'guide AC PSU LED table - AC OK green = input ok, DC OK green =
+    output ok, PS FAIL amber/red = failure'
+states:
+- ok
+- fault
+- absent
+elements:
+  handle:
+    at: [42.0, 52.0]
+    size: [34.0, 4.4]
+    class: latch
+  switch:
+    at: [8.0, 34.0]
+    size: [10.0, 18.0]
+    class: switch
+parts:
+- {ref: std/c20-inlet@1, id: inlet, at: [26.0, 33.0], attrs: {function: AC input}}
+size:
+  w: 101.5
+  h: 66.0
+relief:
+  features:
+  - node: handle
+    out: 2.2
+    color: '#26292d'
+    confidence: estimated
+    source: photo - the pull handle stands proud; projection not measured
+  - node: switch
+    out: 2.0
+    color: '#26292d'
+    confidence: estimated
+    source: photo - the input rocker projects; estimated

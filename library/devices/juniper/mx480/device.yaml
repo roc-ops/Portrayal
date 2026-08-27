@@ -1,0 +1,274 @@
+format: 1
+kind: device
+name: mx480
+version: 0.1.0
+maturity: modelled
+manufacturer: Juniper
+model: MX480
+portfolio:
+  line: MX Series
+  family: Universal Routing Platform
+description: >-
+  Juniper MX480 Universal Routing Platform - an 8RU, 7.5 Tbps-class modular
+  edge router with horizontal cards. Eight slots under the craft interface:
+  DPC/MPC slots 5 down to 0 and SCB slots 1 and 0, with the Routing Engines
+  seated inside the SCBs. Up to four power supplies across the rear top, fan
+  tray and air filter vertical at the rear sides.
+provenance:
+  sources: MX480 Universal Routing Platform Hardware Guide (extracted into
+    working/images/mx480/), HPE datasheet a00150825enw, and the Juniper
+    image-library photographs mx480-front-high and mx480-rear-high. No
+    mechanical drawing was available
+  chassis: 'datasheet-table - guide chassis description: 14.0 x 17.45 x 24.5
+    in (355.6 x 443 x 622 mm), 8RU. Ears are NOT MODELLED by project
+    convention'
+  scale: 'photo - the rear photograph passes the orthographic gate at 0.8%
+    (3.33 px/mm isotropic); the front photograph is 5.1% ANISOTROPIC in y
+    and was anchored per axis (x 3.379 px/mm to 443, y 3.214 to 355.6).
+    Feature sizes come from the registry and the shared card family'
+  front-rows: 'photo - vent band 0-38.6, craft 38.6-80.6, card cage
+    87.0-341.9 as eight 31.86 mm slots, top to bottom DPC 5, 4, 3, 2, 1, 0,
+    then SCB 1 and SCB 0 (craft tabs: blue 0/1 for SCBs, white 0-5 for
+    DPCs; left flange numbers match). Card apertures span x 11.5-432.4.
+    NOTE the MX240 photo gave the same card family a 30.45 mm pitch - the
+    5% front-photo anisotropy here bounds the truth; each device is
+    internally consistent and the shared cards fit both'
+  populated-with: 'photo - slot 4 carries DPC 4x10GE (the DPC-R-4XGE-XFP
+    face), slots 3 and 0 carry DPC 40xGE (DPCE-R-40GE-SFP, with transceivers
+    seated in the photo - drawn as empty cages), slots 5/2/1 carry blank
+    covers, SCB 1 carries SCB-MX with RE-S-2000 and SCB 0 with RE-S-1300.
+    Defaults reproduce that configuration except both SCBs default to the
+    RE-S-1300 (the SCB contract carries one default; RE-S-2000 is in
+    accepts and the photo difference is recorded here)'
+  rear: 'photo - four PSU bays across the top on a 103.9 mm pitch (dividers
+    measured at 110.8/214.7/318.2), AC supplies photographed; the vertical
+    air-filter (left) and fan-tray (right) door strips below, estimated at
+    12 x 240; earthing studs and ESD placed at the MX240''s positions and
+    marked estimated - the AC rear photo does not resolve them'
+  power: 'guide power tables - base system 40 W, cooling 110/160 W
+    normal/high (dedicated tap), SCB and card figures on the shared
+    components. No chassis-level draw is published; the vendor instructs a
+    per-configuration budget'
+  lifecycle: 'announced - same per-SKU M/MX milestones situation as the
+    MX240 (trackers list 2020/2026 dates for older base bundles), searched
+    2026-08-27'
+  color: photo - as the MX240 family
+  other-faces: 'near-blank by evidence - rail bands and the right-side
+    exhaust field estimated as on the MX240. Axis conventions per
+    viewer3d.js: LEFT x = 0 REAR, RIGHT x = 0 FRONT, top/bottom y = 0 FRONT'
+attrs:
+  physical:
+    weight: up to 163.5 kg maximum configuration (guide rack text, five per
+      48U rack at 371 kg combined for two - transcribed loosely; see gaps)
+  performance:
+    throughput: 7.5 Tbps-class (datasheet family table)
+  power:
+    base-system-w: 40
+    cooling-system-w: 160 W high-capacity (110 W normal); dedicated PSU tap
+  environmental:
+    operating-temp: 0 C to 40 C
+    storage-temp: -40 C to 70 C
+    humidity: 5-90 percent noncondensing
+  lifecycle:
+    eol: announced
+    eol-announcement: https://support.juniper.net/support/eol/product/m_series/
+chassis:
+  width: 443.0
+  height: 355.6
+  depth: 622.0
+  ru: 8
+  color: '#43474c'
+groups:
+  slots:
+    term: Slot
+    role: traffic
+    index-origin: 0
+    description: DPC/MPC slots 5-0 and SCB slots 1-0; SCBs carry the Routing
+      Engines in their own bays
+  craft:
+    term: Panel
+    role: management
+    index-origin: 0
+  psus:
+    term: PEM
+    role: service
+    index-origin: 0
+  cooling:
+    term: Tray
+    role: service
+    index-origin: 0
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: the protective-earthing stud pair under the rear earth
+      symbol
+views:
+  front:
+    size:
+      w: 443.0
+      h: 355.6
+    panel:
+      decor:
+        - {at: [20.0, 4.0], size: [310.0, 30.0], pattern: vent, vent: 40}
+      cutouts:
+        - {id: esd-front, at: [6.0, 18.0], size: [4.0, 4.0], shape: circle}
+    silkscreen:
+      - {at: [8.0, 27.4], path: 'M -1.4 1.2 L 0 -1.2 L 1.4 1.2 Z M -2.1 2.2
+          L -0.9 2.2 M 0.9 2.2 L 2.1 2.2', fill: '#c7ccd1', for: chassis}
+      - {at: [5.6, 103.7], text: '5', font-size: 2.6, anchor: middle, fill: '#e8eaec', for: dpc5}
+      - {at: [5.6, 135.5], text: '4', font-size: 2.6, anchor: middle, fill: '#e8eaec', for: dpc4}
+      - {at: [5.6, 167.4], text: '3', font-size: 2.6, anchor: middle, fill: '#e8eaec', for: dpc3}
+      - {at: [5.6, 199.3], text: '2', font-size: 2.6, anchor: middle, fill: '#e8eaec', for: dpc2}
+      - {at: [5.6, 231.1], text: '1', font-size: 2.6, anchor: middle, fill: '#e8eaec', for: dpc1}
+      - {at: [5.6, 263.0], text: '0', font-size: 2.6, anchor: middle, fill: '#e8eaec', for: dpc0}
+      - {at: [5.6, 294.8], text: '1', font-size: 2.6, anchor: middle, fill: '#9fc8e8', for: scb1}
+      - {at: [5.6, 326.7], text: '0', font-size: 2.6, anchor: middle, fill: '#9fc8e8', for: scb0}
+    components:
+      bays:
+        - {id: craft, at: [11.5, 38.6], size: {w: 420.9, h: 42.0},
+           accepts: [juniper/mx480-craft@1], default: juniper/mx480-craft@1,
+           group: craft, rel-pos: 0}
+        - {id: dpc5, at: [11.5, 87.0], size: {w: 420.9, h: 29.5},
+           accepts: [juniper/scb-mx@1, juniper/dpc-r-4xge-xfp@1, juniper/dpce-20ge-2xge@1, juniper/dpce-2xge-xfp@1, juniper/dpce-40ge-tx@1, juniper/dpce-q-20ge-sfp@1, juniper/dpce-r-40ge-sfp@1, juniper/mpc-3d-16xge-sfpp@1, juniper/mpc10e-10c-mrate@1, juniper/mpc10e-15c-mrate@1, juniper/mpc1e-3d@1, juniper/mpc2e-3d@1, juniper/mpc3e-3d@1, juniper/mpc4e-3d-2cge-8xge@1, juniper/mpc4e-3d-32xge-sfpp@1, juniper/mpc5e-100g10g@1, juniper/mpc5e-40g10g@1, juniper/mpc7e-10g@1, juniper/mpc7e-mrate@1, juniper/ms-dpc@1, juniper/ms-mpc@1, juniper/mx-dpc-blank@1],
+           default: juniper/mx-dpc-blank@1, group: slots, rel-pos: 7}
+        - {id: dpc4, at: [11.5, 118.9], size: {w: 420.9, h: 29.5},
+           accepts: [juniper/scb-mx@1, juniper/dpc-r-4xge-xfp@1, juniper/dpce-20ge-2xge@1, juniper/dpce-2xge-xfp@1, juniper/dpce-40ge-tx@1, juniper/dpce-q-20ge-sfp@1, juniper/dpce-r-40ge-sfp@1, juniper/mpc-3d-16xge-sfpp@1, juniper/mpc10e-10c-mrate@1, juniper/mpc10e-15c-mrate@1, juniper/mpc1e-3d@1, juniper/mpc2e-3d@1, juniper/mpc3e-3d@1, juniper/mpc4e-3d-2cge-8xge@1, juniper/mpc4e-3d-32xge-sfpp@1, juniper/mpc5e-100g10g@1, juniper/mpc5e-40g10g@1, juniper/mpc7e-10g@1, juniper/mpc7e-mrate@1, juniper/ms-dpc@1, juniper/ms-mpc@1, juniper/mx-dpc-blank@1],
+           default: juniper/dpc-r-4xge-xfp@1, group: slots, rel-pos: 6}
+        - {id: dpc3, at: [11.5, 150.7], size: {w: 420.9, h: 29.5},
+           accepts: [juniper/scb-mx@1, juniper/dpc-r-4xge-xfp@1, juniper/dpce-20ge-2xge@1, juniper/dpce-2xge-xfp@1, juniper/dpce-40ge-tx@1, juniper/dpce-q-20ge-sfp@1, juniper/dpce-r-40ge-sfp@1, juniper/mpc-3d-16xge-sfpp@1, juniper/mpc10e-10c-mrate@1, juniper/mpc10e-15c-mrate@1, juniper/mpc1e-3d@1, juniper/mpc2e-3d@1, juniper/mpc3e-3d@1, juniper/mpc4e-3d-2cge-8xge@1, juniper/mpc4e-3d-32xge-sfpp@1, juniper/mpc5e-100g10g@1, juniper/mpc5e-40g10g@1, juniper/mpc7e-10g@1, juniper/mpc7e-mrate@1, juniper/ms-dpc@1, juniper/ms-mpc@1, juniper/mx-dpc-blank@1],
+           default: juniper/dpce-r-40ge-sfp@1, group: slots, rel-pos: 5}
+        - {id: dpc2, at: [11.5, 182.6], size: {w: 420.9, h: 29.5},
+           accepts: [juniper/scb-mx@1, juniper/dpc-r-4xge-xfp@1, juniper/dpce-20ge-2xge@1, juniper/dpce-2xge-xfp@1, juniper/dpce-40ge-tx@1, juniper/dpce-q-20ge-sfp@1, juniper/dpce-r-40ge-sfp@1, juniper/mpc-3d-16xge-sfpp@1, juniper/mpc10e-10c-mrate@1, juniper/mpc10e-15c-mrate@1, juniper/mpc1e-3d@1, juniper/mpc2e-3d@1, juniper/mpc3e-3d@1, juniper/mpc4e-3d-2cge-8xge@1, juniper/mpc4e-3d-32xge-sfpp@1, juniper/mpc5e-100g10g@1, juniper/mpc5e-40g10g@1, juniper/mpc7e-10g@1, juniper/mpc7e-mrate@1, juniper/ms-dpc@1, juniper/ms-mpc@1, juniper/mx-dpc-blank@1],
+           default: juniper/mx-dpc-blank@1, group: slots, rel-pos: 4}
+        - {id: dpc1, at: [11.5, 214.4], size: {w: 420.9, h: 29.5},
+           accepts: [juniper/scb-mx@1, juniper/dpc-r-4xge-xfp@1, juniper/dpce-20ge-2xge@1, juniper/dpce-2xge-xfp@1, juniper/dpce-40ge-tx@1, juniper/dpce-q-20ge-sfp@1, juniper/dpce-r-40ge-sfp@1, juniper/mpc-3d-16xge-sfpp@1, juniper/mpc10e-10c-mrate@1, juniper/mpc10e-15c-mrate@1, juniper/mpc1e-3d@1, juniper/mpc2e-3d@1, juniper/mpc3e-3d@1, juniper/mpc4e-3d-2cge-8xge@1, juniper/mpc4e-3d-32xge-sfpp@1, juniper/mpc5e-100g10g@1, juniper/mpc5e-40g10g@1, juniper/mpc7e-10g@1, juniper/mpc7e-mrate@1, juniper/ms-dpc@1, juniper/ms-mpc@1, juniper/mx-dpc-blank@1],
+           default: juniper/mx-dpc-blank@1, group: slots, rel-pos: 3}
+        - {id: dpc0, at: [11.5, 246.3], size: {w: 420.9, h: 29.5},
+           accepts: [juniper/scb-mx@1, juniper/dpc-r-4xge-xfp@1, juniper/dpce-20ge-2xge@1, juniper/dpce-2xge-xfp@1, juniper/dpce-40ge-tx@1, juniper/dpce-q-20ge-sfp@1, juniper/dpce-r-40ge-sfp@1, juniper/mpc-3d-16xge-sfpp@1, juniper/mpc10e-10c-mrate@1, juniper/mpc10e-15c-mrate@1, juniper/mpc1e-3d@1, juniper/mpc2e-3d@1, juniper/mpc3e-3d@1, juniper/mpc4e-3d-2cge-8xge@1, juniper/mpc4e-3d-32xge-sfpp@1, juniper/mpc5e-100g10g@1, juniper/mpc5e-40g10g@1, juniper/mpc7e-10g@1, juniper/mpc7e-mrate@1, juniper/ms-dpc@1, juniper/ms-mpc@1, juniper/mx-dpc-blank@1],
+           default: juniper/dpce-r-40ge-sfp@1, group: slots, rel-pos: 2}
+        - {id: scb1, at: [11.5, 278.1], size: {w: 420.9, h: 29.5},
+           accepts: [juniper/scb-mx@1], default: juniper/scb-mx@1,
+           group: slots, rel-pos: 1}
+        - {id: scb0, at: [11.5, 310.0], size: {w: 420.9, h: 29.5},
+           accepts: [juniper/scb-mx@1], default: juniper/scb-mx@1,
+           group: slots, rel-pos: 0}
+  rear:
+    size:
+      w: 443.0
+      h: 355.6
+    panel:
+      decor:
+        - {at: [7.0, 90.0], size: [429.0, 258.0], rx: 1.2, fill: '#b3b7bb'}
+      cutouts:
+        - {id: ground-stud-0, at: [423.2, 18.7], size: [7.0, 7.0], shape: circle}
+        - {id: ground-stud-1, at: [423.2, 31.9], size: [7.0, 7.0], shape: circle}
+        - {id: esd-rear, at: [354.4, 300.0], size: [4.0, 4.0], shape: circle}
+    silkscreen:
+      - {at: [58.0, 100.0], text: PEM 0, font-size: 3.0, anchor: middle, fill: '#3a3e43', for: pem0}
+      - {at: [162.0, 100.0], text: PEM 1, font-size: 3.0, anchor: middle, fill: '#3a3e43', for: pem1}
+      - {at: [266.0, 100.0], text: PEM 2, font-size: 3.0, anchor: middle, fill: '#3a3e43', for: pem2}
+      - {at: [370.0, 100.0], text: PEM 3, font-size: 3.0, anchor: middle, fill: '#3a3e43', for: pem3}
+      - {at: [45.0, 120.0], text: AIR, font-size: 3.0, anchor: middle, fill: '#3a3e43', for: air-filter}
+      - {at: [45.0, 125.0], text: FILTER, font-size: 3.0, anchor: middle, fill: '#3a3e43', for: air-filter}
+      - {at: [398.0, 120.0], text: FAN, font-size: 3.0, anchor: middle, fill: '#3a3e43', for: fan-tray}
+      - {at: [398.0, 125.0], text: TRAY, font-size: 3.0, anchor: middle, fill: '#3a3e43', for: fan-tray}
+      - {at: [431.7, 47.2], path: 'M 0 -4.2 A 4.2 4.2 0 1 0 0.01 -4.2 Z M -2.4
+          -1.1 H 2.4 M -1.6 0.5 H 1.6 M -0.7 2.1 H 0.7', fill: '#43474c', for: chassis}
+    components:
+      bays:
+        - {id: pem0, at: [8.0, 5.0], size: {w: 101.5, h: 79.7},
+           accepts: [juniper/mx480-psu-ac@1, juniper/mx240-psu-dc@1],
+           default: juniper/mx480-psu-ac@1, group: psus, rel-pos: 0}
+        - {id: pem1, at: [111.9, 5.0], size: {w: 101.5, h: 79.7},
+           accepts: [juniper/mx480-psu-ac@1, juniper/mx240-psu-dc@1],
+           default: juniper/mx480-psu-ac@1, group: psus, rel-pos: 1}
+        - {id: pem2, at: [215.8, 5.0], size: {w: 101.5, h: 79.7},
+           accepts: [juniper/mx480-psu-ac@1, juniper/mx240-psu-dc@1],
+           default: juniper/mx480-psu-ac@1, group: psus, rel-pos: 2}
+        - {id: pem3, at: [319.7, 5.0], size: {w: 101.5, h: 79.7},
+           accepts: [juniper/mx480-psu-ac@1, juniper/mx240-psu-dc@1],
+           default: juniper/mx480-psu-ac@1, group: psus, rel-pos: 3}
+        - {id: air-filter, at: [18.0, 95.0], size: {w: 12.0, h: 240.0},
+           accepts: [juniper/mx480-air-filter@1], default: juniper/mx480-air-filter@1,
+           group: cooling, rel-pos: 0}
+        - {id: fan-tray, at: [413.0, 95.0], size: {w: 12.0, h: 240.0},
+           accepts: [juniper/mx480-fan-tray@1], default: juniper/mx480-fan-tray@1,
+           group: cooling, rel-pos: 1}
+      placements:
+        - {id: ground-stud-0, ref: juniper/mx-ground-stud@1, at: [423.20, 18.70], for: chassis, group: grounding, rel-pos: 0}
+        - {id: ground-stud-1, ref: juniper/mx-ground-stud@1, at: [423.20, 31.90], for: chassis, group: grounding, rel-pos: 1}
+
+  left:
+    size:
+      w: 622.0
+      h: 355.6
+    panel:
+      decor:
+        - {at: [0.0, 160.0], size: [622.0, 22.0], fill: '#3a3d42', confidence: estimated,
+           source: 'mounting-rail band along the side; no side drawing exists, estimated'}
+  right:
+    size:
+      w: 622.0
+      h: 355.6
+    panel:
+      decor:
+        - {at: [180.0, 40.0], size: [400.0, 270.0], pattern: holes, confidence: estimated,
+           source: 'right-side air-exhaust field per the family isometric art; extent estimated'}
+  top:
+    size:
+      w: 443.0
+      h: 622.0
+    panel:
+      decor:
+        - {at: [0.0, 0.0], size: [6.0, 622.0], fill: '#3a3d42', confidence: estimated,
+           source: side rail edge seen from above; width estimated}
+        - {at: [437.0, 0.0], size: [6.0, 622.0], fill: '#3a3d42', confidence: estimated,
+           source: side rail edge seen from above; width estimated}
+  bottom:
+    size:
+      w: 443.0
+      h: 622.0
+    panel:
+      decor:
+        - {at: [0.0, 0.0], size: [6.0, 622.0], fill: '#3a3d42', confidence: estimated,
+           source: lower edge of the side rail; mirrored from the top estimate}
+        - {at: [437.0, 0.0], size: [6.0, 622.0], fill: '#3a3d42', confidence: estimated,
+           source: lower edge of the side rail; same estimate}
+configurations:
+  ac:
+    description: AC-powered chassis as photographed - four normal-capacity AC
+      supplies, two SCB-MX with REs, DPC 4x10GE in slot 4, DPC 40xGE in
+      slots 3 and 0, blanks in 5/2/1.
+    default: true
+  dc:
+    description: DC-powered chassis - the shared MX240/MX480 DC PEM family in
+      all four bays.
+    bays:
+      pem0: juniper/mx240-psu-dc@1
+      pem1: juniper/mx240-psu-dc@1
+      pem2: juniper/mx240-psu-dc@1
+      pem3: juniper/mx240-psu-dc@1
+gaps:
+  - what: front-photo-anisotropy
+    scope: [front]
+    reason: needs-drawing
+    wanted: a mechanical drawing or an isotropic front photograph - the DAM
+      front photo is 5.1% compressed in y, so the 31.86 mm slot pitch here
+      and the MX240's 30.45 mm disagree for the same card family; each
+      device is internally consistent and the truth is between them.
+  - what: weight-and-max-config
+    reason: vendor-silent
+    wanted: a clean Table 88-equivalent weight row - the extraction carries
+      the rack-planning prose (five routers > 371 kg combined) but the
+      per-chassis maximum row fell outside the text layer.
+  - what: current-generation-frus
+    scope: [slots]
+    reason: needs-photo
+    wanted: orthographic imagery for MPC/SCBE2-3/RE-S-X6 FRUs (as on the
+      MX240).
+  - what: rear-ground-and-esd
+    scope: [rear]
+    reason: needs-photo
+    wanted: a rear photograph resolving the earthing studs and ESD socket -
+      placed at the MX240's positions, estimated.

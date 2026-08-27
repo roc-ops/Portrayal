@@ -1,0 +1,31 @@
+format: 1
+kind: module
+name: dpc-r-4xge-xfp-v
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper DPC-R-4XGE-XFP as mounted in the MX960 - the same 4x10GbE XFP
+  DPC the MX240/MX480 seat horizontally, authored vertically with the
+  four cages spread down the faceplate, each with its LINK lamp.
+attrs:
+  model: DPC-R-4XGE-XFP
+provenance:
+  size: 'photo - the studio front photograph at ~2.07 px/mm: the card cage is ~405 mm tall and fourteen slots share the 441 mm width on a ~30.1 mm pitch; positions approximate to ~2 mm. No vendor card dimension in the extraction'
+  power: 'NOT STATED per module in the extraction - L27 stands'
+  orientation: 'the horizontal sibling juniper/dpc-r-4xge-xfp@1 carries
+    the measured faceplate; same hardware, rotated author (bays cannot
+    rotate their occupants)'
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/xfp@1, id: port-0, at: [5.30, 65.2], rotate: 90}
+- {ref: std/xfp@1, id: port-1, at: [5.30, 155.2], rotate: 90}
+- {ref: std/xfp@1, id: port-2, at: [5.30, 245.2], rotate: 90}
+- {ref: std/xfp@1, id: port-3, at: [5.30, 335.1], rotate: 90}
+size:
+  w: 30.1
+  h: 405.0

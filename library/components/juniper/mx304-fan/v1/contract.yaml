@@ -1,0 +1,66 @@
+format: 1
+kind: module
+name: mx304-fan
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Hot-swappable fan module for the Juniper MX304. Three across the rear,
+  numbered 0 to 2 left to right; all three must be installed to power up, and
+  a removed module must be replaced within minutes (240 s at 25 C). Each
+  module carries two 80 x 80 mm counter-rotating fans behind a full-face
+  honeycomb grille with an orange X-frame, corner latches and a top-left
+  thumbscrew. Airflow is front-to-back (AIR OUT at this face). The fan status
+  LED is on the chassis strip beside each bay, not on the module.
+attrs:
+  model: MX304 Fan Module
+  airflow: front-to-back
+  power-draw-max-w: 90
+  power-draw-typical-w: 48
+  fans: 2x 80 mm counter-rotating
+provenance:
+  size: 'photo - the drawn face is the 82.0 x 85.5 mm bay aperture measured
+    off mx304-rear-ac-high.jpg at 4.236 px/mm (fan 0''s aperture, the least
+    distorted). NOTE Table 22''s fan module row reads 0.31 x 5.62 x 0.31 in -
+    dimensionally impossible for a module holding two 80 mm fans and treated
+    as a vendor table error; the 5.62 in (143 mm) cell is the only plausible
+    depth and is carried with that caveat'
+  power: 'guide Table 25: fans 48 W each at 25 C, 90 W each at 46 C (quantity
+    3, total row 144/270). Max takes 46 C'
+  face: 'photo - full-face honeycomb with the orange X-frame, AIR OUT chip at
+    the centre, four black corner latch tabs and a thumbscrew top-left.
+    Feature positions are photo-fractions and approximate'
+states:
+- ok
+- fail
+- absent
+elements:
+  screw:
+    at: [3.8, 3.8]
+    size: [5.2, 5.2]
+    class: screw
+  airout-chip:
+    at: [30.0, 36.2]
+    size: [22.0, 8.6]
+    class: label
+size:
+  w: 82.0
+  h: 85.5
+  d: 143.0
+relief:
+  features:
+  - node: grille
+    vent: 10.0
+    confidence: estimated
+    source: photo - the honeycomb is open into the fan cavity; depth estimated
+  - node: airout-chip
+    out: 1.2
+    color: '#5b6066'
+    confidence: estimated
+    source: photo - the AIR OUT chip sits on the frame; projection estimated
+  - node: screw
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: photo - black knurled captive thumbscrew, projection estimated

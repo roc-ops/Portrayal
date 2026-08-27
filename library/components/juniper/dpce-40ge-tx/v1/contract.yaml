@@ -1,0 +1,70 @@
+format: 1
+kind: module
+name: dpce-40ge-tx
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper DPCE 40GE-TX (EOL) - forty tri-rate RJ45 in four PIC groups of ten; the X variant shares the faceplate. Authored as the MX240/MX480 horizontal form.
+attrs:
+  model: DPCE-R-40GE-TX
+  model-variants: DPCE-X-40GE-TX
+  power-draw-max-w: 320
+provenance:
+  size: 'registry + layout - the face is the slot geometry of its chassis
+    family; positions are laid out from the module reference port
+    description and registry cage sizes, NOT measured from a faceplate
+    drawing. No faceplate figure was usable for this model'
+  power: 'datasheet-table - the module reference model section states the requirement; 320 W max'
+  numbering: 'guide - ports number within each PIC group with an n/ group
+    legend, per the module reference port-numbering figures (g000930,
+    g100786); the exact print positions are layout-derived'
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/rj45-ganged@1, id: port-0-0, at: [44.00, 3.60], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-0-1, at: [44.00, 15.80], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-0-2, at: [56.70, 3.60], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-0-3, at: [56.70, 15.80], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-0-4, at: [69.40, 3.60], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-0-5, at: [69.40, 15.80], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-0-6, at: [82.10, 3.60], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-0-7, at: [82.10, 15.80], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-0-8, at: [94.80, 3.60], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-0-9, at: [94.80, 15.80], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-1-0, at: [114.50, 3.60], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-1-1, at: [114.50, 15.80], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-1-2, at: [127.20, 3.60], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-1-3, at: [127.20, 15.80], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-1-4, at: [139.90, 3.60], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-1-5, at: [139.90, 15.80], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-1-6, at: [152.60, 3.60], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-1-7, at: [152.60, 15.80], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-1-8, at: [165.30, 3.60], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-1-9, at: [165.30, 15.80], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-2-0, at: [185.00, 3.60], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-2-1, at: [185.00, 15.80], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-2-2, at: [197.70, 3.60], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-2-3, at: [197.70, 15.80], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-2-4, at: [210.40, 3.60], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-2-5, at: [210.40, 15.80], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-2-6, at: [223.10, 3.60], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-2-7, at: [223.10, 15.80], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-2-8, at: [235.80, 3.60], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-2-9, at: [235.80, 15.80], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-3-0, at: [255.50, 3.60], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-3-1, at: [255.50, 15.80], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-3-2, at: [268.20, 3.60], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-3-3, at: [268.20, 15.80], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-3-4, at: [280.90, 3.60], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-3-5, at: [280.90, 15.80], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-3-6, at: [293.60, 3.60], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-3-7, at: [293.60, 15.80], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-3-8, at: [306.30, 3.60], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-3-9, at: [306.30, 15.80], attrs: {media: rj45}}
+size:
+  w: 420.9
+  h: 29.5

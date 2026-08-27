@@ -1,0 +1,102 @@
+format: 1
+kind: module
+name: mx204-psu-dc
+version: 1.1.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX204 DC power supply module, 650 W. Two seat at the rear right in
+  slots 0 and 1; 1+1 redundant and hot-swappable, PS0 fed from source A and
+  PS1 from source B for A/B feed redundancy. Four terminal studs in a row
+  across the top of the face, labelled V- V- V+ V+; the V+ terminals are
+  shunted internally together, as are the V-. Vent cells at the lower left,
+  IN / OUT / ! status lamps at the lower right, release latch at the right
+  edge.
+attrs:
+  model: MX204 DC PSU
+  role: dc-power-supply
+  power-output-w: 650
+  input: dedicated -48 VDC feeds; PS0 from feed A, PS1 from feed B
+  redundancy: 1+1; one PSU carries a fully configured router
+provenance:
+  size: 'datasheet-table - Table 19: DC power supply 2.23 x 1.67 x 14.53 in
+    (56.6 x 42.4 x 369.1 mm), weight 1 kg. Note the DC module is stated 2.3 mm
+    TALLER than the AC (40.1); both drop into the same bay, so the bay is sized
+    to this taller face and the AC sits in it with clearance'
+  power-output-w: '650 W - "Maximum output power | 650W" in the guide''s DC power
+    supply electrical specifications. An OUTPUT because a psu PROVIDES power'
+  face: 'drawing - guide figs g009872 (the module, isometric) and g009863 (the
+    rear view, DC variant) agree: FOUR terminal studs in ONE ROW across the top
+    with V- V- V+ V+ printed above them, a 2x3 field of square vent cells at
+    the lower left, the three lamps at the lower right, and the release latch
+    at the right edge. Stud pitch and the region extents are page-scale
+    fractions off g009863 against the 56.6 mm module width and are
+    approximate. An earlier revision drew an AC-style left lamp column and a
+    2x3 stud block right of it, from the photo of the AC unit - the DC figures
+    contradict that and the figures win. The hinged plastic terminal cover
+    g009872 shows swung over the studs is NOT drawn (open/absent state chosen,
+    matching how the rear view draws the installed modules); the latch colour
+    is carried from the AC photograph - no colour photo of the DC unit exists
+    in the intake - and is estimated'
+  leds: 'guide Table 11 (DC Power Supply Module LEDs): IN green steady =
+    receiving power, off = disconnected; OUT green steady = output good, off =
+    output off; ! amber steady = fault, replace but leave seated for airflow.
+    Figure g009866 callouts name them Input, Output and Fault'
+states:
+- ok
+- fault
+- absent
+elements:
+  latch:
+    at: [49.4, 3.4]
+    size: [4.6, 35.6]
+    class: latch
+  terminals:
+    at: [1.8, 3.0]
+    size: [45.4, 14.6]
+    class: terminal
+size:
+  w: 56.6
+  h: 42.4
+  d: 369.1
+relief:
+  features:
+  - node: latch
+    out: 1.6
+    color: '#e8731f'
+    confidence: estimated
+    source: photo (AC unit) - the orange release tab stands proud; projection
+      not measured, colour borrowed from the AC module as noted in face
+  - node: terminals
+    out: 2.2
+    color: '#111316'
+    confidence: estimated
+    source: drawing g009872 - the terminal base block stands proud of the face;
+      raised as the GROUP carrying plate and studs so the relief is textured
+      with its own detail, not a blank slab
+  - node: stud-0
+    cyl: 5.5
+    thread: 1.0
+    lift: 2.2
+    confidence: estimated
+    source: drawing g009872 - threaded terminal studs stand proud of the block;
+      stud height not dimensioned anywhere, estimated
+  - node: stud-1
+    cyl: 5.5
+    thread: 1.0
+    lift: 2.2
+    confidence: estimated
+    source: drawing g009872 - as stud-0
+  - node: stud-2
+    cyl: 5.5
+    thread: 1.0
+    lift: 2.2
+    confidence: estimated
+    source: drawing g009872 - as stud-0
+  - node: stud-3
+    cyl: 5.5
+    thread: 1.0
+    lift: 2.2
+    confidence: estimated
+    source: drawing g009872 - as stud-0

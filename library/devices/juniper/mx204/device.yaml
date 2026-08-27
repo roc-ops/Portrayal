@@ -1,0 +1,622 @@
+format: 1
+kind: device
+name: mx204
+version: 0.1.0
+maturity: modelled
+manufacturer: Juniper
+model: MX204
+portfolio:
+  line: MX Series
+  family: Universal Routing Platform
+description: >-
+  Juniper MX204 Universal Routing Platform - a fixed-configuration 1RU, 400
+  Gbps Trio-based edge router. Four rate-selectable ports (100GbE QSFP28, 40GbE
+  QSFP+, or 4x10GbE breakout) and eight 10GbE SFP+ ports, a built-in Routing
+  Engine, a PTP grandmaster SFP port and a full timing block (BITS, ToD, 1PPS
+  and 10 MHz in/out). Two 650 W PSUs (AC or DC, 1+1) and three fan modules at
+  the rear.
+provenance:
+  sources: MX204 Universal Routing Platform Hardware Guide (published 2025-11-12,
+    figures g009860/g009862/g009881/g009897/g100549 among others, extracted with
+    captions into working/images/mx204/), HPE datasheet a00150825enw (MX
+    204/240/480/960), Juniper image-library studio photographs mx204-front-high
+    and mx204-rear-high (straight-on), and the NetBox devicetype-library MX204
+    elevations. No mechanical drawing was available
+  chassis: 'datasheet-table - Table 19: chassis 1.72 x 19 x 18.50 in (43.7 x
+    482.3 x 470 mm), 1RU; the dimension drawing g009881 (top view) reads the
+    width as 18.99 in (48.23 cm) and the depth over fan and power handles as
+    20.41 in (51.84 cm) against Table 19''s 20.43. The rack-requirements table
+    says the MOUNTING BRACKETS "extend the width to 19 in", yet drawing and
+    table agree the body itself is ~482.3 including the integral ear flanges -
+    this chassis is genuinely full-rack-width, with the front face spanning ear
+    to ear. The modelled width is the 437.0 mm BODY between the ear-flange fold
+    lines (ears are not modelled here - see ears)'
+  scale: 'drawing - the guide front view (g009860) rendered at 600 dpi measures
+    2895 x 275 px, aspect 10.53 against the true 482.3/43.7 = 11.04, so the
+    figure is stretched ~4.6% vertically and is SCHEMATIC. All positions below
+    are fractions off it anchored per axis: x at 6.003 px/mm to the 482.3 mm
+    width, y at 6.293 px/mm to the 43.7 mm height. Feature sizes come from the
+    standards registry, never from this drawing. The rear (g009862) is the same
+    art family and was measured the same way'
+  drawing-vs-photo: 'sources-disagree, and the REAL DEVICE (Juniper studio
+    photographs) wins for everything printed: the guide art labels the QSFP
+    ports 0/0-0/3 and the SFP+ ports 1/0-1/7 (CLI interface names), prints
+    10MHz / 1PPS on the SMB columns, orders the LED row ...SSD1 SSD0, puts
+    MX204 beside the Juniper logo and a junos badge at the right. The
+    photographed faceplate prints plain 0-3 and 4/5-10/11 port numbers, PPS
+    and 100MHz under the SMB columns, orders the row SSD0 SSD1, prints MX204
+    at the RIGHT end and carries no junos badge. The silkscreen below follows
+    the photograph; note the guide TEXT unambiguously calls the clock ports
+    10-MHz (pinout table, clocking topic), so the printed 100MHz legend is
+    carried as artwork while the function stays 10 MHz - see gaps'
+  ports: 'drawing + registry - four QSFP cages centred at x 76.7/95.7/114.7/
+    133.7 (measured pitch 18.93, registry qsfp-ganged pitch 19.0), aperture
+    centre y 27.5; eight SFP+ in a 2x4 belly-to-belly block, column centres
+    158.1/172.3/186.6/200.8 (pitch 14.25 per registry, measured 14.3), row
+    centres y 14.25 and 30.15; GM/PTP SFP centred at 53.15, 29.65 (aperture
+    interior read off the labelled drawing). Counts confirmed by the photograph
+    and the guide text (4 + 8 + 1)'
+  port-numbering: 'photo - QSFP ports are silkscreened 0-3; SFP+ columns are
+    silkscreened 4/5, 6/7, 8/9, 10/11 with the UPPER number on the upper port
+    (the guide art writes 1/0 over 1/1 the same way up). CLI names (et-0/0/x,
+    xe-0/1/x) are not printed on the metal'
+  port-leds: 'photo + drawing - each SFP+ column carries a lamp strip between
+    the rows: triangle-up, two lenses, triangle-down (drawing shows the four
+    marks at y 22.1 with lenses at column-centre +/-1.8). The up triangle ties
+    the left lens to the upper port and the down triangle the right lens to the
+    lower port. NO DOCUMENT DESCRIBES THESE LAMPS: searched the guide doc.md
+    for "port LED", "link and activity", "rate-selectable" near LED, and
+    "triangle"; the front-panel LED table (Table 17) covers only system LEDs.
+    States left as the component default, description records the silence. The
+    QSFP ports carry NO per-port faceplate LEDs - confirmed against the
+    photograph, not just the text (the only marks above the cages are vent
+    holes). The GM/PTP port has two stacked lamps at x 63.6 (y 26.6/32.1),
+    also undocumented'
+  mgmt-block: 'drawing - MGMT and BITS RJ45s centred at 267.6/289.7 (y 27.25),
+    CON and ToD at 312.8/336.8 (y 27.4); vertical USB-A at 352.5, 27.8; SMB
+    quad at 366.7/376.5 x 23.8/31.4 (IN row above OUT row); five status lamps
+    at y 34.2, x 387.6 (OK/FAIL), 399.1 (ONLINE), 409.4 (ALM), 417.5, 425.7;
+    recessed OFFLINE button at 435.5 and RESET pinhole at 447.0 (RESET x read
+    off the photograph between OFFLINE and the ear; not resolvable on the
+    drawing - estimated). The drawing draws OFFLINE ~3 mm above the lamp row
+    (31.3 against 34.2); both buttons are MODELLED ON the lamp centreline for
+    visual consistency, a deliberate deviation recorded here'
+  ssd-labels: 'photo - the photographed faceplate labels the 4th and 5th lamps
+    SSD0 then SSD1 left to right; the guide art swaps them. Photo carried'
+  rj45-orientation: 'drawing + photo - CON and ToD are drawn and photographed
+    contacts-UP (keyway down, std/rj45 default); MGMT and BITS are drawn
+    contacts-DOWN with two integrated LED windows at the top corners, so they
+    carry rotate 180 and a lamp pair placed over the top corners. The MGMT
+    lamps are the guide''s own "activity LED and link LED"; BITS lamp roles
+    (Activity left, Link right) are Table 17''s'
+  esd-front: 'drawing + photo - a recessed socket at 31.1, 28.9 with the ESD
+    symbol below; the guide''s "ESD Points" figure (g009865, Figure 5) marks
+    this same location. The guide art draws it as a hex-nut stud; the
+    photograph shows a plain recessed socket - photo carried'
+  ears: 'NOT MODELLED, by project convention - devices in this library are
+    drawn without rack ears. The MX204''s guide art draws integral ear flanges
+    at both ends of both faces (fold lines at x 22.65 and 459.65 on the 482.3
+    mm rack face, each flange carrying two rounded slots and, on the front, a
+    central 8.2 mm hole), and Table 19''s 19 in width is measured over them.
+    The modelled body is the 437.0 mm between the fold lines; all front and
+    rear coordinates were measured on the 482.3 mm drawing and shifted by
+    -22.65. The removable outboard brackets in the photographs are likewise
+    not modelled'
+  rear: 'drawing (g009862 at the same per-axis scales) + photo - recessed left
+    panel 24-97.7 across the full height carrying the grounding plate (lug
+    circles at 38.6 and 54.6, y 17.2), the earth symbol at 46.6, 31.6 and the
+    ESD socket at 81.4, 17.2 with its symbol above at 81.1, 6.7. Three fan
+    bays with apertures ~42 mm on a 49.1 mm pitch at x 107.8/156.9/206.0, each
+    preceded by a chassis strip printed with a fan icon (y 17.1), the bay
+    number (y 21.6) and the fan status lamp (y 28.9) at x 103.2/152.4/201.2.
+    A blank recessed plate spans 256-327.3. Two PSU bays at 334.9 and 396.3
+    (apertures measure 57.0, module width 56.6 per Table 19; the bay is sized
+    42.4 tall for the DC module, the taller of the two occupants per Table 19,
+    so the 40.1 AC face sits in it with clearance), silkscreened 0 and 1 on
+    the chassis left of each bay. A fourth small hole appears at
+    250.0, 28.9 on the drawing right of fan 2 with no icon or number above it;
+    left unmodelled and recorded here'
+  rear-axis: 'the rear view is its own face with x = 0 at ITS left edge (the
+    chassis RIGHT side seen from the front); the fan and PSU modules are
+    horizontal, so nothing mirrors. Positions are direct measurements of the
+    rear drawing, not derived from front coordinates'
+  vents: 'drawing - the hex vent fields are drawn as three simplified decor
+    rects using the shared vent pattern; the real punching follows irregular
+    staggered outlines around every feature (including sparse transition runs
+    between the port groups) that are not reproduced hole-for-hole. The small
+    3-hole columns between the RJ45 jacks are likewise simplified away'
+  color: 'photo - light Juniper grey, sampled from mx204-front-high.jpg
+    (#9a9ea3); module faces near-black charcoal, fan furniture orange'
+  power: 'guide power planning - 240 W typical at 25 C and 280 W maximum at
+    55 C for a fully loaded router (Tables 28 and 31, AC and DC alike; the
+    vendor qualifies both by ambient, not by measure). Table 32 adds the DC
+    INPUT figure at 90% efficiency: 266 W at 25 C; Table 33''s 55 C input
+    value fell outside the text layer of this extraction and is not carried.
+    Table 20 separately states maximum thermal output 1705 BTU/hour (500 W) -
+    a different scope (provisioning ceiling) that is transcribed under thermal
+    and deliberately NOT reconciled with the 280 W draw'
+  serial-label: 'guide Figure 60 shows the chassis serial-number label; its
+    figure crops without a locating dimension and the topic does not name a
+    face. Not modelled; recorded so the next reader knows it was looked for'
+  lifecycle: 'announced - Juniper lists MX204-HW-BASE end-of-sale 2027-06-15
+    and end-of-support 2032-06-30 (support.juniper.net M/MX hardware
+    milestones, mirrored by Park Place and router-switch EOL trackers,
+    searched 2026-08-26)'
+  other-faces: 'near-blank by evidence - no photograph or drawing of the
+    top, bottom or side faces exists in the intake beyond the g009881
+    top-view outline, which shows a plain slab with the mounting rails
+    pre-attached along the sides. Each face carries only its rail band(s),
+    estimated and marked so, which is also what lets the capability chain
+    count the face as drawn. Faces are sized from Table 19. Every face carries only symmetric content as far as
+    the sources show, so the axis conventions have been checked but nothing
+    asymmetric pins them. Axis conventions, checked against viewer3d.js: LEFT
+    view x = 0 is the REAR, RIGHT view x = 0 is the FRONT, top and bottom have
+    y = 0 at the FRONT with left/right mirrored between them'
+attrs:
+  physical:
+    weight: 10.3 kg fully loaded, AC-powered chassis (Table 19)
+    depth-with-handles: 518.9 mm over fan and power-supply handles (Table 19;
+      drawing g009881 reads 518.4)
+  performance:
+    throughput: 400 Gbps (datasheet)
+    power-efficiency: 0.9 W/Gb (datasheet)
+  power:
+    power-typical-w: 240
+    power-max-w: 280
+    power-envelope: fully-configured
+    psu-ac-input: dedicated feed per inlet; breaker min 20 A at 110 VAC or 16 A
+      at 220 VAC
+    psu-dc-input: PS0 from feed A, PS1 from feed B (A/B redundancy)
+  thermal:
+    max-thermal-output: 1705 BTU/hour (500 W) (Table 20; provisioning ceiling,
+      not reconciled with the 280 W maximum draw)
+  environmental:
+    operating-temp: 0 C to 40 C normal; -5 C to 55 C short-term (NEBS
+      GR-63-CORE Issue 4 short-term, up to 96 h, max 15 days/year)
+    storage-temp: -40 C to 70 C in shipping container
+    humidity: 5-90 percent noncondensing
+    altitude: no performance degradation to 3048 m
+  platform:
+    cpu: 1.6-GHz Intel 8-core x86
+    memory: 32-GB DDR4
+    storage: 100-GB SATA SSD (Routing Engine description; the faceplate carries
+      SSD0 and SSD1 activity LEDs, and no sentence in the guide states the
+      drive count)
+    routing-engine: built-in on the baseboard, not replaceable
+  features:
+    rate-selectability: each QSFP port runs 100GbE, 40GbE, or 4x10GbE via
+      breakout; QSA adapter (MAM1Q00A-QSA) converts a port to single 10GbE or
+      1GbE from Junos 18.3R1
+    timing: BITS and ToD RJ45 ports, 1PPS and 10 MHz SMB input and output,
+      PTP grandmaster clock SFP port (GM/PTP)
+  management:
+    oob: MGMT RJ-45, autosensing 10/100/1000 with link and activity LEDs
+    console: CON RJ-45 serial
+    usb: single USB port (guide names no revision)
+  compliance:
+    seismic: Designed to meet Telcordia Technologies Zone 4 earthquake
+      requirements (Table 20 wording, transcribed)
+  lifecycle:
+    eol: announced
+    eol-announcement: https://support.juniper.net/support/eol/product/m_series/
+    end-of-sale: '2027-06-15'
+    end-of-support: '2032-06-30'
+chassis:
+  width: 437.0
+  height: 43.7
+  depth: 470.0
+  ru: 1
+  color: '#9a9ea3'
+groups:
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs:
+      media: qsfp28
+      speed: 100g
+    description: Rate-selectable ports 0-3 - 100GbE QSFP28, 40GbE QSFP+, or
+      4x10GbE via breakout. No per-port faceplate LEDs (photo-confirmed)
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs:
+      media: sfp-plus
+      speed: 10g
+    description: Fixed 10GbE ports numbered 4-11 on the faceplate silkscreen
+      (rel-pos carries the printed number; the origin token cannot express a
+      block that starts at 4). Upper number = upper port of each column
+  sfp-plus-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: One lamp per SFP+ port in the strip between the rows; the
+      silkscreened triangles tie the left lens (up arrow) to the upper port
+      and the right lens (down arrow) to the lower. No document in the intake
+      describes their states - searched "port LED", "link and activity",
+      "triangle" across the guide
+  gm-ptp-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: Two stacked lamps right of the GM/PTP cage; undocumented in
+      the guide (same searches as the port lamps)
+  timing:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: the timing block - BITS and ToD RJ45s, the 1PPS/10 MHz SMB in/out
+      quad, and the GM/PTP grandmaster SFP port. One job (clock), four media
+  bits-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    states: ['off', {name: locked, color: '#22c55e'}, {name: loss, color: '#f59e0b'}]
+    description: Table 17 - BITS jack lamps; Activity (left) green steady when
+      locked, off on loss; Link (right) amber steady on loss of signal or
+      line, off when locked
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: the management corner - out-of-band RJ45, RJ45 serial console, the
+      USB service port, and the recessed OFFLINE and RESET buttons
+  mgmt-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    states: ['off', {name: 1000m, color: '#f59e0b'}, {name: 100m, color: '#22c55e'},
+             {name: activity, behavior: blinking}]
+    description: Routing Engine interface text - link LED amber steady at
+      1000 Mbps, green steady at 100 Mbps, off at 10 Mbps; activity LED green,
+      blinking with traffic
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: The five system lamps; each declares its own states from
+      Table 17 because no two share a vocabulary
+  fans:
+    term: Fan
+    role: service
+    index-origin: 0
+  fan-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    states: ['off', {name: init, color: '#22c55e', behavior: blinking},
+             {name: ok, color: '#22c55e'}, {name: fault, color: '#ef4444'}]
+    description: Table 9 - bicolor fan status LED on the chassis strip beside
+      each bay; green blinking = hardware init complete, green steady = ok,
+      red steady = faulty
+  psus:
+    term: PSU
+    role: service
+    index-origin: 0
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 0
+views:
+  front:
+    size:
+      w: 437.0
+      h: 43.7
+    panel:
+      decor:
+        - {at: [-0.15, 0.0], size: [437.3, 43.7], rx: 0.0, fill: '#9a9ea3'}
+        - {at: [-22.65, 0.0], size: [22.5, 43.7], rx: 0.8, fill: '#94989d'}
+        - {at: [437.15, 0.0], size: [22.5, 43.7], rx: 0.8, fill: '#94989d'}
+        - {at: [54.0, 3.2], size: [72.2, 10.5], pattern: vent, vent: 40}
+        - {at: [192.35, 3.2], size: [231.0, 16.0], pattern: vent, vent: 40}
+        - {at: [3.35, 14.0], size: [30.0, 10.0], pattern: vent, vent: 40}
+      cutouts:
+        - {id: esd-front, at: [6.3, 26.75], size: [4.3, 4.3], shape: circle}
+        - {id: gm-ptp, at: [23.25, 24.65], size: [14.5, 10.0]}
+        - {id: led-gm-ptp-0, at: [39.95, 25.6], size: [2.0, 2.0], shape: circle}
+        - {id: led-gm-ptp-1, at: [39.95, 31.1], size: [2.0, 2.0], shape: circle}
+        - {id: port-0, at: [44.8, 22.71], size: [18.5, 9.58]}
+        - {id: port-1, at: [63.8, 22.71], size: [18.5, 9.58]}
+        - {id: port-2, at: [82.8, 22.71], size: [18.5, 9.58]}
+        - {id: port-3, at: [101.8, 22.71], size: [18.5, 9.58]}
+        - {id: port-4, at: [128.33, 9.05], size: [14.25, 10.4]}
+        - {id: port-6, at: [142.58, 9.05], size: [14.25, 10.4]}
+        - {id: port-8, at: [156.83, 9.05], size: [14.25, 10.4]}
+        - {id: port-10, at: [171.08, 9.05], size: [14.25, 10.4]}
+        - {id: port-5, at: [128.33, 24.95], size: [14.25, 10.4]}
+        - {id: port-7, at: [142.58, 24.95], size: [14.25, 10.4]}
+        - {id: port-9, at: [156.83, 24.95], size: [14.25, 10.4]}
+        - {id: port-11, at: [171.08, 24.95], size: [14.25, 10.4]}
+        - {id: led-port-4, at: [132.65, 21.1], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-5, at: [136.25, 21.1], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-6, at: [146.85, 21.1], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-7, at: [150.45, 21.1], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-8, at: [161.15, 21.1], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-9, at: [164.75, 21.1], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-10, at: [175.35, 21.1], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-11, at: [178.95, 21.1], size: [2.0, 2.0], shape: circle}
+        - {id: mgmt, at: [236.95, 20.25], size: [16.0, 14.0]}
+        - {id: bits, at: [259.05, 20.25], size: [16.0, 14.0]}
+        - {id: con, at: [282.15, 20.4], size: [16.0, 14.0]}
+        - {id: tod, at: [306.15, 20.4], size: [16.0, 14.0]}
+        - {id: usb, at: [327.6, 21.8], size: [4.5, 12.0]}
+        - {id: smb-10mhz-in, at: [341.64, 21.39], size: [4.83, 4.83], shape: circle}
+        - {id: smb-10mhz-out, at: [341.64, 28.99], size: [4.83, 4.83], shape: circle}
+        - {id: smb-1pps-in, at: [351.44, 21.39], size: [4.83, 4.83], shape: circle}
+        - {id: smb-1pps-out, at: [351.44, 28.99], size: [4.83, 4.83], shape: circle}
+        - {id: led-ok-fail, at: [363.75, 33.0], size: [2.4, 2.4], shape: circle}
+        - {id: led-online, at: [375.25, 33.0], size: [2.4, 2.4], shape: circle}
+        - {id: led-alm, at: [385.55, 33.0], size: [2.4, 2.4], shape: circle}
+        - {id: led-ssd0, at: [393.65, 33.0], size: [2.4, 2.4], shape: circle}
+        - {id: led-ssd1, at: [401.85, 33.0], size: [2.4, 2.4], shape: circle}
+        - {id: offline-btn, at: [410.85, 32.2], size: [4.0, 4.0], shape: circle}
+        - {id: reset-btn, at: [422.35, 32.2], size: [4.0, 4.0], shape: circle}
+    silkscreen:
+      - {at: [11.35, 9.4], text: JUNIPER, font-size: 4.0, anchor: start, for: chassis}
+      - {at: [28.75, 11.6], text: NETWORKS, font-size: 1.5, anchor: end, for: chassis}
+      - {at: [434.5, 8.8], text: MX204, font-size: 3.2, anchor: end, for: chassis}
+      - {at: [8.45, 37.6], path: 'M -1.6 0 L 0 -2.8 L 1.6 0 Z M -2.6 1.6 L -1.2
+          1.6 M 1.2 1.6 L 2.6 1.6', for: chassis}
+      - {at: [30.5, 38.8], text: GM/PTP, font-size: 2.2, anchor: middle, for: gm-ptp}
+      - {at: [54.05, 38.8], text: '0', font-size: 2.4, anchor: middle, for: port-0}
+      - {at: [73.05, 38.8], text: '1', font-size: 2.4, anchor: middle, for: port-1}
+      - {at: [92.05, 38.8], text: '2', font-size: 2.4, anchor: middle, for: port-2}
+      - {at: [111.05, 38.8], text: '3', font-size: 2.4, anchor: middle, for: port-3}
+      - {at: [123.85, 31.0], text: '', font-size: 0.1, for: laser-warning}
+      - {at: [130.55, 22.85], path: 'M -0.8 0.7 L 0 -0.7 L 0.8 0.7 Z', for: [led-port-4, port-4]}
+      - {at: [140.35, 22.85], path: 'M -0.8 -0.7 L 0 0.7 L 0.8 -0.7 Z', for: [led-port-5, port-5]}
+      - {at: [144.75, 22.85], path: 'M -0.8 0.7 L 0 -0.7 L 0.8 0.7 Z', for: [led-port-6, port-6]}
+      - {at: [154.55, 22.85], path: 'M -0.8 -0.7 L 0 0.7 L 0.8 -0.7 Z', for: [led-port-7, port-7]}
+      - {at: [159.05, 22.85], path: 'M -0.8 0.7 L 0 -0.7 L 0.8 0.7 Z', for: [led-port-8, port-8]}
+      - {at: [168.85, 22.85], path: 'M -0.8 -0.7 L 0 0.7 L 0.8 -0.7 Z', for: [led-port-9, port-9]}
+      - {at: [173.25, 22.85], path: 'M -0.8 0.7 L 0 -0.7 L 0.8 0.7 Z', for: [led-port-10, port-10]}
+      - {at: [183.05, 22.85], path: 'M -0.8 -0.7 L 0 0.7 L 0.8 -0.7 Z', for: [led-port-11, port-11]}
+      - {at: [135.45, 37.2], text: '4', font-size: 2.2, anchor: middle, for: port-4}
+      - {at: [135.45, 40.4], text: '5', font-size: 2.2, anchor: middle, for: port-5}
+      - {at: [149.65, 37.2], text: '6', font-size: 2.2, anchor: middle, for: port-6}
+      - {at: [149.65, 40.4], text: '7', font-size: 2.2, anchor: middle, for: port-7}
+      - {at: [163.95, 37.2], text: '8', font-size: 2.2, anchor: middle, for: port-8}
+      - {at: [163.95, 40.4], text: '9', font-size: 2.2, anchor: middle, for: port-9}
+      - {at: [178.15, 37.2], text: '10', font-size: 2.2, anchor: middle, for: port-10}
+      - {at: [178.15, 40.4], text: '11', font-size: 2.2, anchor: middle, for: port-11}
+      - {at: [244.95, 38.8], text: MGMT, font-size: 2.2, anchor: middle, for: mgmt}
+      - {at: [267.05, 38.8], text: BITS, font-size: 2.2, anchor: middle, for: bits}
+      - {at: [290.15, 38.8], text: CON, font-size: 2.2, anchor: middle, for: con}
+      - {at: [314.15, 38.8], text: ToD, font-size: 2.2, anchor: middle, for: tod}
+      - {at: [329.85, 38.2], path: 'M -2.2 0 H 2.2 M 0.8 0 L 2.2 0 M -0.9 -1.2
+          L 0.4 -1.2 L 1.2 -0.3 M -0.9 1.2 L 0.4 1.2 L 1.2 0.3 M -2.2 0 L -3.0
+          0', for: usb}
+      - {at: [348.95, 27.3], text: IN, font-size: 2.0, anchor: middle, for: [smb-10mhz-in, smb-1pps-in]}
+      - {at: [348.95, 37.6], text: OUT, font-size: 2.0, anchor: middle, for: [smb-10mhz-out, smb-1pps-out]}
+      - {at: [344.05, 40.6], text: PPS, font-size: 1.9, anchor: middle, for: [smb-10mhz-in, smb-10mhz-out]}
+      - {at: [353.85, 40.6], text: 100MHz, font-size: 1.9, anchor: middle, for: [smb-1pps-in, smb-1pps-out]}
+      - {at: [364.95, 38.8], text: OK/FAIL, font-size: 1.9, anchor: middle, for: led-ok-fail}
+      - {at: [376.45, 38.8], text: ONLINE, font-size: 1.9, anchor: middle, for: led-online}
+      - {at: [386.75, 38.8], text: ALM, font-size: 1.9, anchor: middle, for: led-alm}
+      - {at: [394.85, 38.8], text: SSD0, font-size: 1.9, anchor: middle, for: led-ssd0}
+      - {at: [403.05, 38.8], text: SSD1, font-size: 1.9, anchor: middle, for: led-ssd1}
+      - {at: [412.85, 38.8], text: OFFLINE, font-size: 1.9, anchor: middle, for: offline-btn}
+      - {at: [424.35, 38.8], text: RESET, font-size: 1.9, anchor: middle, for: reset-btn}
+    components:
+      placements:
+        - {id: gm-ptp, ref: std/sfp@1, at: [23.25, 24.65], group: timing, rel-pos: 4,
+           attrs: {media: sfp, function: PTP grandmaster clock port}}
+        - {id: led-gm-ptp-0, ref: common/led-dot@1, at: [39.95, 25.6], for: gm-ptp, group: gm-ptp-leds, rel-pos: 0}
+        - {id: led-gm-ptp-1, ref: common/led-dot@1, at: [39.95, 31.1], for: gm-ptp, group: gm-ptp-leds, rel-pos: 1}
+        - {id: port-0, ref: std/qsfp-ganged@1, at: [44.8, 22.71], group: qsfp28, rel-pos: 0}
+        - {id: port-1, ref: std/qsfp-ganged@1, at: [63.8, 22.71], group: qsfp28, rel-pos: 1}
+        - {id: port-2, ref: std/qsfp-ganged@1, at: [82.8, 22.71], group: qsfp28, rel-pos: 2}
+        - {id: port-3, ref: std/qsfp-ganged@1, at: [101.8, 22.71], group: qsfp28, rel-pos: 3}
+        - {id: laser-warning, ref: common/laser-warning@1, at: [121.15, 25.6], group: grounding, rel-pos: 4}
+        - {id: port-4, ref: std/sfp-ganged@1, at: [128.33, 9.05], rotate: 180, group: sfp-plus, rel-pos: 4}
+        - {id: port-6, ref: std/sfp-ganged@1, at: [142.58, 9.05], rotate: 180, group: sfp-plus, rel-pos: 6}
+        - {id: port-8, ref: std/sfp-ganged@1, at: [156.83, 9.05], rotate: 180, group: sfp-plus, rel-pos: 8}
+        - {id: port-10, ref: std/sfp-ganged@1, at: [171.08, 9.05], rotate: 180, group: sfp-plus, rel-pos: 10}
+        - {id: port-5, ref: std/sfp-ganged@1, at: [128.33, 24.95], group: sfp-plus, rel-pos: 5}
+        - {id: port-7, ref: std/sfp-ganged@1, at: [142.58, 24.95], group: sfp-plus, rel-pos: 7}
+        - {id: port-9, ref: std/sfp-ganged@1, at: [156.83, 24.95], group: sfp-plus, rel-pos: 9}
+        - {id: port-11, ref: std/sfp-ganged@1, at: [171.08, 24.95], group: sfp-plus, rel-pos: 11}
+        - {id: led-port-4, ref: common/led-dot@1, at: [132.65, 21.1], for: port-4, group: sfp-plus-leds, rel-pos: 4}
+        - {id: led-port-5, ref: common/led-dot@1, at: [136.25, 21.1], for: port-5, group: sfp-plus-leds, rel-pos: 5}
+        - {id: led-port-6, ref: common/led-dot@1, at: [146.85, 21.1], for: port-6, group: sfp-plus-leds, rel-pos: 6}
+        - {id: led-port-7, ref: common/led-dot@1, at: [150.45, 21.1], for: port-7, group: sfp-plus-leds, rel-pos: 7}
+        - {id: led-port-8, ref: common/led-dot@1, at: [161.15, 21.1], for: port-8, group: sfp-plus-leds, rel-pos: 8}
+        - {id: led-port-9, ref: common/led-dot@1, at: [164.75, 21.1], for: port-9, group: sfp-plus-leds, rel-pos: 9}
+        - {id: led-port-10, ref: common/led-dot@1, at: [175.35, 21.1], for: port-10, group: sfp-plus-leds, rel-pos: 10}
+        - {id: led-port-11, ref: common/led-dot@1, at: [178.95, 21.1], for: port-11, group: sfp-plus-leds, rel-pos: 11}
+        - {id: mgmt, ref: std/rj45@1, at: [236.95, 20.25], rotate: 180, group: mgmt, rel-pos: 0}
+        - {id: led-mgmt-act, ref: common/led-dot@1, at: [239.85, 20.7], for: mgmt, group: mgmt-leds, rel-pos: 0,
+           attrs: {function: activity}}
+        - {id: led-mgmt-link, ref: common/led-dot@1, at: [248.05, 20.7], for: mgmt, group: mgmt-leds, rel-pos: 1,
+           attrs: {function: link}}
+        - {id: bits, ref: std/rj45@1, at: [259.05, 20.25], rotate: 180, group: timing, rel-pos: 0}
+        - {id: led-bits-act, ref: common/led-dot@1, at: [261.95, 20.7], for: bits, group: bits-leds, rel-pos: 0,
+           attrs: {function: activity}}
+        - {id: led-bits-link, ref: common/led-dot@1, at: [270.15, 20.7], for: bits, group: bits-leds, rel-pos: 1,
+           attrs: {function: link}}
+        - {id: con, ref: std/rj45@1, at: [282.15, 20.4], group: mgmt, rel-pos: 1}
+        - {id: tod, ref: std/rj45@1, at: [306.15, 20.4], group: timing, rel-pos: 1}
+        - {id: usb, ref: std/usb-a@1, at: [323.85, 25.55], rotate: 90, group: mgmt, rel-pos: 2}
+        - {id: smb-10mhz-in, ref: std/smb@1, at: [341.64, 21.39], group: timing, rel-pos: 2,
+           attrs: {function: 10 MHz clock input}}
+        - {id: smb-10mhz-out, ref: std/smb@1, at: [341.64, 28.99], group: timing, rel-pos: 3,
+           attrs: {function: 10 MHz clock output}}
+        - {id: smb-1pps-in, ref: std/smb@1, at: [351.44, 21.39], group: timing, rel-pos: 5,
+           attrs: {function: 1PPS input}}
+        - {id: smb-1pps-out, ref: std/smb@1, at: [351.44, 28.99], group: timing, rel-pos: 6,
+           attrs: {function: 1PPS output}}
+        - {id: led-ok-fail, ref: common/led-dot@1, at: [363.95, 33.2], for: chassis, group: status-leds, rel-pos: 0,
+           states: ['off', {name: ok, color: '#22c55e'}, {name: failed, color: '#ef4444', behavior: blinking}],
+           description: 'Table 17 - green steady: functioning normally; red blinking: failed; off: not powered'}
+        - {id: led-online, ref: common/led-dot@1, at: [375.45, 33.2], for: chassis, group: status-leds, rel-pos: 1,
+           states: ['off', {name: junos, color: '#22c55e'}, {name: junos-boot, color: '#22c55e', behavior: blinking},
+                    {name: linux, color: '#ef4444'}, {name: linux-boot, color: '#ef4444', behavior: blinking}],
+           description: 'Table 17 - green steady: Junos and Linux loaded; green blinking: starting Junos;
+             red steady: Linux loaded; red blinking: starting Linux; off: offline'}
+        - {id: led-alm, ref: common/led-dot@1, at: [385.75, 33.2], for: chassis, group: status-leds, rel-pos: 2,
+           states: ['off', {name: major, color: '#ef4444'}, {name: minor, color: '#f59e0b'},
+                    {name: major-and-minor, color: '#ef4444', behavior: blinking}],
+           description: 'Table 8/17 - red steady: major alarm; yellow steady: minor alarm; red blinking:
+             both present; off: no alarms'}
+        - {id: led-ssd0, ref: common/led-dot@1, at: [393.85, 33.2], for: chassis, group: status-leds, rel-pos: 3,
+           states: ['off', {name: active, color: '#22c55e', behavior: blinking}],
+           description: 'Table 17 - green blinking: SSD0 being accessed; off: not active'}
+        - {id: led-ssd1, ref: common/led-dot@1, at: [402.05, 33.2], for: chassis, group: status-leds, rel-pos: 4,
+           states: ['off', {name: active, color: '#22c55e', behavior: blinking}],
+           description: 'Table 17 - green blinking: SSD1 being accessed; off: not active'}
+        - {id: offline-btn, ref: common/reset-button@1, at: [410.85, 32.2], group: mgmt, rel-pos: 3,
+           for: chassis, attrs: {function: take the router offline}}
+        - {id: reset-btn, ref: common/reset-button@1, at: [422.35, 32.2], group: mgmt, rel-pos: 4,
+           for: chassis, attrs: {function: reset}}
+  rear:
+    size:
+      w: 437.0
+      h: 43.7
+    panel:
+      decor:
+        - {at: [-22.65, 0.0], size: [22.5, 43.7], rx: 0.8, fill: '#94989d'}
+        - {at: [437.15, 0.0], size: [22.5, 43.7], rx: 0.8, fill: '#94989d'}
+        - {at: [1.35, 3.0], size: [73.7, 37.2], rx: 0.8, fill: '#8e9296'}
+        - {at: [233.35, 3.8], size: [71.3, 36.7], rx: 0.8, fill: '#8e9296'}
+      cutouts:
+        - {id: esd-rear, at: [56.6, 15.05], size: [4.3, 4.3], shape: circle}
+        - {id: led-fan-0, at: [79.55, 27.9], size: [2.0, 2.0], shape: circle}
+        - {id: led-fan-1, at: [128.75, 27.9], size: [2.0, 2.0], shape: circle}
+        - {id: led-fan-2, at: [177.55, 27.9], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+      - {at: [23.95, 31.6], path: 'M 0 -4.6 A 4.6 4.6 0 1 0 0.01 -4.6 Z M -2.6 -1.2
+          H 2.6 M -1.7 0.6 H 1.7 M -0.8 2.4 H 0.8', for: ground-plate}
+      - {at: [58.45, 8.4], path: 'M -1.6 1.4 L 0 -1.4 L 1.6 1.4 Z M -2.4 2.6 L -1.0
+          2.6 M 1.0 2.6 L 2.4 2.6', for: chassis}
+      - {at: [80.65, 18.2], path: 'M 0 -1.1 A 1.1 1.1 0 1 0 0.01 -1.1 Z M -1.9 -1.1
+          A 1.1 1.1 0 1 0 -1.89 -1.1 Z M 1.9 -1.1 A 1.1 1.1 0 1 0 1.91 -1.1 Z M
+          -0.95 0.8 A 1.1 1.1 0 1 0 -0.94 0.8 Z M 0.95 0.8 A 1.1 1.1 0 1 0 0.96
+          0.8 Z', for: fan-0}
+      - {at: [80.55, 23.4], text: '0', font-size: 2.4, anchor: middle, for: fan-0}
+      - {at: [129.85, 18.2], path: 'M 0 -1.1 A 1.1 1.1 0 1 0 0.01 -1.1 Z M -1.9 -1.1
+          A 1.1 1.1 0 1 0 -1.89 -1.1 Z M 1.9 -1.1 A 1.1 1.1 0 1 0 1.91 -1.1 Z M
+          -0.95 0.8 A 1.1 1.1 0 1 0 -0.94 0.8 Z M 0.95 0.8 A 1.1 1.1 0 1 0 0.96
+          0.8 Z', for: fan-1}
+      - {at: [129.75, 23.4], text: '1', font-size: 2.4, anchor: middle, for: fan-1}
+      - {at: [178.65, 18.2], path: 'M 0 -1.1 A 1.1 1.1 0 1 0 0.01 -1.1 Z M -1.9 -1.1
+          A 1.1 1.1 0 1 0 -1.89 -1.1 Z M 1.9 -1.1 A 1.1 1.1 0 1 0 1.91 -1.1 Z M
+          -0.95 0.8 A 1.1 1.1 0 1 0 -0.94 0.8 Z M 0.95 0.8 A 1.1 1.1 0 1 0 0.96
+          0.8 Z', for: fan-2}
+      - {at: [178.55, 23.4], text: '2', font-size: 2.4, anchor: middle, for: fan-2}
+      - {at: [309.45, 26.8], text: '0', font-size: 2.4, anchor: middle, for: psu-0}
+      - {at: [371.25, 26.8], text: '1', font-size: 2.4, anchor: middle, for: psu-1}
+    components:
+      bays:
+        - {id: fan-0, at: [85.15, 2.6], size: {w: 42.0, h: 38.5}, accepts: [juniper/mx204-fan@1],
+           default: juniper/mx204-fan@1, group: fans, rel-pos: 0}
+        - {id: fan-1, at: [134.25, 2.6], size: {w: 42.0, h: 38.5}, accepts: [juniper/mx204-fan@1],
+           default: juniper/mx204-fan@1, group: fans, rel-pos: 1}
+        - {id: fan-2, at: [183.35, 2.6], size: {w: 42.0, h: 38.5}, accepts: [juniper/mx204-fan@1],
+           default: juniper/mx204-fan@1, group: fans, rel-pos: 2}
+        - {id: psu-0, at: [312.25, 0.8], size: {w: 56.6, h: 42.4}, accepts: [juniper/mx204-psu-ac@1, juniper/mx204-psu-dc@1],
+           default: juniper/mx204-psu-ac@1, group: psus, rel-pos: 0}
+        - {id: psu-1, at: [373.65, 0.8], size: {w: 56.6, h: 42.4}, accepts: [juniper/mx204-psu-ac@1, juniper/mx204-psu-dc@1],
+           default: juniper/mx204-psu-ac@1, group: psus, rel-pos: 1}
+      placements:
+        - {id: ground-plate, ref: juniper/mx204-ground-plate@1, at: [5.95, 10.0], group: grounding, rel-pos: 0}
+        - {id: led-fan-0, ref: common/led-dot@1, at: [79.55, 27.9], for: fan-0, group: fan-leds, rel-pos: 0}
+        - {id: led-fan-1, ref: common/led-dot@1, at: [128.75, 27.9], for: fan-1, group: fan-leds, rel-pos: 1}
+        - {id: led-fan-2, ref: common/led-dot@1, at: [177.55, 27.9], for: fan-2, group: fan-leds, rel-pos: 2}
+  left:
+    size:
+      w: 470.0
+      h: 43.7
+    panel:
+      decor:
+        - {at: [0.0, 17.4], size: [470.0, 8.9], fill: '#84888c', confidence: estimated,
+           source: 'pre-attached mounting rail along the side (guide Figures 20/27
+           show the rails; the DAM photos show their front ends). Full-length band;
+           height and vertical position estimated - no side drawing exists'}
+  right:
+    size:
+      w: 470.0
+      h: 43.7
+    panel:
+      decor:
+        - {at: [0.0, 17.4], size: [470.0, 8.9], fill: '#84888c', confidence: estimated,
+           source: 'pre-attached mounting rail along the side (guide Figures 20/27);
+           mirror of the left face band, same estimate'}
+  top:
+    size:
+      w: 437.0
+      h: 470.0
+    panel:
+      decor:
+        - {at: [0.0, 0.0], size: [6.0, 470.0], fill: '#84888c', confidence: estimated,
+           source: 'side mounting-rail edge seen from above - the g009881 top view
+           draws the slab with rail lines along both sides; width estimated'}
+        - {at: [431.0, 0.0], size: [6.0, 470.0], fill: '#84888c', confidence: estimated,
+           source: 'side mounting-rail edge seen from above (g009881); width estimated'}
+  bottom:
+    size:
+      w: 437.0
+      h: 470.0
+    panel:
+      decor:
+        - {at: [0.0, 0.0], size: [6.0, 470.0], fill: '#84888c', confidence: estimated,
+           source: 'lower edge of the side mounting rail - no bottom source exists;
+           mirrored from the top view estimate'}
+        - {at: [431.0, 0.0], size: [6.0, 470.0], fill: '#84888c', confidence: estimated,
+           source: 'lower edge of the side mounting rail; same estimate'}
+configurations:
+  ac:
+    description: AC-powered chassis - two 650 W AC PSUs with C14 inlets. SKUs
+      per the datasheet bundle table - MX204-HW-BASE (base HW + standard Junos,
+      perpetual; 3 fan trays, 2 PSUs) and MX204-HWBASE-AC-FS (fixed AC system,
+      R mode, feature rights separate). Spares - JNP204-CHAS chassis,
+      JPSU-650W-AC-AO PSU.
+    default: true
+    part-numbers:
+      MX204-HW-BASE: {}
+      MX204-HWBASE-AC-FS: {}
+  dc:
+    description: DC-powered chassis - two 650 W DC PSUs with terminal blocks;
+      PS0 on feed A, PS1 on feed B. SKU MX204-HWBASE-DC-FS (fixed DC system,
+      IR mode, feature rights separate).
+    bays:
+      psu-0: juniper/mx204-psu-dc@1
+      psu-1: juniper/mx204-psu-dc@1
+    part-numbers:
+      MX204-HWBASE-DC-FS: {}
+gaps:
+  - what: smb-column-legend
+    scope: [timing]
+    reason: sources-disagree
+    wanted: a photograph of a second production unit's SMB legend
+    note: The photographed faceplate prints PPS under the left SMB column and
+      100MHz under the right; the guide art prints 10MHz left and 1PPS right,
+      and the guide text calls the ports 10-MHz throughout (pinouts, clocking
+      topics). The silkscreen follows the photograph; the cutout ids follow the
+      guide's functional naming (smb-10mhz-* left, smb-1pps-* right), which
+      therefore disagrees with the printed legend under them.
+  - what: fan-module-width
+    scope: [fans]
+    reason: sources-disagree
+    wanted: a mechanical drawing or a caliper on the hardware
+    note: Table 19 states the fan module 1.89 in (48.0 mm) wide; the rear
+      drawing's bay apertures measure ~42 mm on a 49.1 mm pitch and the
+      photograph shows the orange face filling the aperture. Modelled at 42.0
+      (drawing aperture); the 48.0 envelope presumably includes body rails
+      behind the panel.
+  - what: rear-extra-hole
+    scope: [rear]
+    reason: vendor-silent
+    wanted: identification of the small hole at x 250.0, y 28.9 right of fan
+      bay 2 (drawing shows it with no icon or number; not modelled)
+  - what: supported-optics
+    scope: [qsfp28, sfp-plus, timing]
+    reason: vendor-silent
+    wanted: the MX204 transceiver list - the guide points at the external
+      Hardware Compatibility Tool ("MX204 Transceivers") and no document in
+      the intake carries the table, so the port groups declare no interface
+  - what: serial-label-location
+    reason: vendor-silent
+    wanted: the face and position of the chassis serial-number label - guide
+      Figure 60 shows the label but names no face and carries no locating
+      dimension

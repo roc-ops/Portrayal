@@ -1,0 +1,36 @@
+format: 1
+kind: module
+name: mx240-fan-tray
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX240 fan tray - a single vertical tray of three fans that slides
+  into the rear right of the chassis; only its narrow door face shows on the
+  rear (the FAN TRAY legend prints on the chassis plate beside it). The
+  high-capacity tray (FANTRAY-MX240-HC) is required for high-density
+  MPCs/DPCs.
+attrs:
+  model: FANTRAY-MX240-HC
+  power-draw-max-w: 85
+  fans: 3
+  airflow: side-to-side (intake beside the filter, exhaust at the fan-tray
+    side)
+provenance:
+  size: 'photo - the visible rear door face is ~12 x 110 mm at the rear right
+    (door outline off the orthographic rear photograph, approximate); the
+    tray body extends into the chassis and no vendor tray dimension exists in
+    the intake'
+  power: 'guide Table 91: high-capacity cooling system 85 W (normal-capacity
+    70 W). The vendor notes cooling power comes from a dedicated PSU tap and
+    is excluded from the output-power budget - transcribed on the device'
+  face: 'estimated - a plain door strip with two screws; guide Figure 9 shows
+    the tray itself (out of chassis), not its installed rear face'
+states:
+- ok
+- fail
+- absent
+size:
+  w: 12.0
+  h: 110.0

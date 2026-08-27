@@ -1,0 +1,61 @@
+format: 1
+kind: module
+name: mx204-psu-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX204 AC power supply module, 650 W. Two seat at the rear right in
+  slots 0 and 1; 1+1 redundant, hot-removable and hot-insertable, and a single
+  unit powers a fully configured router. The face carries three status lamps
+  labelled AC, DC and ! at the left, an orange release tab, and a C14
+  appliance inlet with a wire bail retainer. Each inlet requires a dedicated
+  AC feed and customer-site breaker (min 20 A at 110 VAC / 16 A at 220 VAC).
+attrs:
+  model: MX204 AC PSU
+  role: ac-power-supply
+  power-output-w: 650
+  input: dedicated AC feed per inlet; breaker min 20 A (110 VAC) or 16 A (220 VAC)
+  redundancy: 1+1; one PSU carries a fully configured router
+provenance:
+  size: 'datasheet-table - Table 19: AC power supply 2.23 x 1.58 x 14.50 in
+    (56.6 x 40.1 x 368.3 mm), weight 1 kg. The drawing aperture for each PSU bay
+    off the 600 dpi g009862 render measures 57.0 mm wide, agreeing to 0.7%'
+  power-output-w: '650 W - "Maximum output power | 650W" in the guide''s AC power
+    supply electrical specifications (Table 12 region). An OUTPUT because a psu
+    PROVIDES power; never a draw key'
+  face: 'photo - mx204-rear-high.jpg: three lamps in a column at the left edge
+    labelled AC, DC and ! top to bottom, orange vertical release tab, C14 inlet
+    right of centre. The silver wire cord-retainer bail the photo shows over
+    the inlet is DELIBERATELY NOT DRAWN (reviewer call: cable-management
+    furniture, not panel fact). Lamp and latch positions are
+    photo-fractions against the 56.6 mm module width and are approximate; the
+    inlet is composed from std/c14-inlet@1 rather than drawn'
+  leds: 'guide Table 10 (AC Power Supply Module LEDs), transcribed into states
+    on the device group and summarised here: AC OK green steady = receiving
+    power, off = disconnected; DC OK green steady = output good, off = output
+    off; ! amber steady = fault, replace but leave seated for airflow. The
+    figure callouts name them Input status, Output status and Fault'
+states:
+- ok
+- fault
+- absent
+parts:
+- {ref: std/c14-inlet@1, id: inlet, at: [26.5, 10.0]}
+elements:
+  latch:
+    at: [18.2, 3.2]
+    size: [4.6, 33.6]
+    class: latch
+size:
+  w: 56.6
+  h: 40.1
+  d: 368.3
+relief:
+  features:
+  - node: latch
+    out: 1.6
+    color: '#e8731f'
+    confidence: estimated
+    source: photo - the orange release tab stands proud; projection not measured

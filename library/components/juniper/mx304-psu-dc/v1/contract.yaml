@@ -1,0 +1,79 @@
+format: 1
+kind: module
+name: mx304-psu-dc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX304 DC power supply module. Two stack at the rear left, 1+1
+  redundant and hot-swappable. 2200 W output from -40 to -72 VDC input
+  (nominal -48/-60 VDC, 50 A maximum), with a two-stud terminal block behind
+  a removable cover, the fan grille and orange pull handle at the left, and a
+  single STATUS lamp.
+attrs:
+  envelope: 73.5 x 40.1 x 198.5 mm (Table 22)
+  model: MX304 DC PSU
+  role: dc-power-supply
+  power-output-w: 2200
+  input: -48/-60 VDC nominal (operating -40 to -72 VDC), 50 A maximum
+  redundancy: 1+1
+provenance:
+  size: 'datasheet-table + photo - Table 22: DC power supply 2.89 x 1.57 x
+    7.81 in (73.5 x 40.1 x 198.5 mm); drawn face 66.0 as the AC (same bay),
+    envelope in attrs. Provenance for the drawn-face reading is
+    mx304-psu-ac''s, copied here because the two share the bay - an echo,
+    not corroboration'
+  power-output-w: 'guide DC power specifications: "Maximum output power |
+    2200W". An OUTPUT because a psu PROVIDES power'
+  face: 'drawing - guide figs g?(Figure 21/22, DC Power Supply Components)
+    show the terminal block right of the fan with its cover; stud count (two,
+    -48V and RTN) and arrangement are page-scale readings of that line art
+    and are approximate. The terminal cover is drawn removed, matching how
+    the rear-view figure shows installed modules. No colour photo of the DC
+    unit exists in the intake; grey-scale values are borrowed from the AC
+    photograph and marked estimated'
+  leds: 'guide Table 14 mirrors Table 13''s single STATUS lamp vocabulary
+    (standby / updating / ok / fault / warning / off)'
+states:
+- ok
+- fault
+- absent
+elements:
+  handle:
+    at: [1.2, 24.4]
+    size: [10.5, 13.0]
+    class: latch
+  terminals:
+    at: [35.0, 9.0]
+    size: [28.0, 24.0]
+    class: terminal
+size:
+  w: 66.0
+  h: 40.1
+  d: 198.5
+relief:
+  features:
+  - node: handle
+    out: 2.0
+    color: '#e8731f'
+    confidence: estimated
+    source: photo (AC unit) - the orange pull handle stands proud
+  - node: terminals
+    out: 2.0
+    color: '#111316'
+    confidence: estimated
+    source: drawing - the terminal block stands proud; raised as the group so
+      it carries its own stud detail, not a blank slab
+  - node: stud-0
+    cyl: 5.0
+    thread: 1.0
+    lift: 2.0
+    confidence: estimated
+    source: drawing - threaded terminal studs; height not dimensioned
+  - node: stud-1
+    cyl: 5.0
+    thread: 1.0
+    lift: 2.0
+    confidence: estimated
+    source: drawing - as stud-0

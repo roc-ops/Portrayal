@@ -1,0 +1,68 @@
+format: 1
+kind: module
+name: mx304-psu-hvacdc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX304 high-voltage AC/DC universal power supply module. Two stack
+  at the rear left, 1+1 redundant and hot-swappable. 2200 W output from
+  200-277 VAC or 240-380 VDC nominal input (operating 180-305 VAC / 190-410
+  VDC) through a keyed high-voltage coupler; fan grille and orange pull
+  handle at the left, single STATUS lamp.
+attrs:
+  envelope: 73.5 x 40.1 x 198.5 mm (Table 22)
+  model: MX304 HVAC/DC PSU
+  role: hvac-dc-power-supply
+  power-output-w: 2200
+  input: HVAC 200-277 VAC nominal (180-305 operating); HVDC 240-380 VDC
+    nominal (190-410 operating)
+  redundancy: 1+1
+provenance:
+  size: 'datasheet-table - Table 22: HVAC/DC power supply 2.89 x 1.57 x 7.81
+    in (73.5 x 40.1 x 198.5 mm); drawn face 66.0 as the AC (same bay),
+    envelope in attrs - the same drawn-face reading as mx304-psu-ac, an
+    echo, not corroboration'
+  power-output-w: 'guide HVAC/DC power specifications: "Maximum output power
+    | 2200W"'
+  face: 'drawing - guide Figures 23/24 (High-Voltage Universal Power Supply)
+    show a rectangular keyed HV coupler where the AC unit has its C20; the
+    coupler is drawn schematically from that line art (no std/ part exists
+    for the Saf-D-Grid-style connector and no dimension is published -
+    estimated). Guide Figure (NEMA L7-20P region) covers the cord end, not
+    this face. Colour borrowed from the AC photograph'
+  leds: 'guide Table 15 mirrors Table 13''s single STATUS lamp vocabulary'
+  wanted: 'dimensions and identity of the high-voltage coupler - the guide
+    draws it without naming a connector standard; a photo or the connector
+    datasheet would let it become a std/ part'
+states:
+- ok
+- fault
+- absent
+elements:
+  handle:
+    at: [1.2, 24.4]
+    size: [10.5, 13.0]
+    class: latch
+  hv-inlet:
+    at: [36.0, 12.0]
+    size: [26.0, 16.0]
+    class: cutout
+size:
+  w: 66.0
+  h: 40.1
+  d: 198.5
+relief:
+  features:
+  - node: handle
+    out: 2.0
+    color: '#e8731f'
+    confidence: estimated
+    source: photo (AC unit) - the orange pull handle stands proud
+  - node: hv-inlet
+    out: 2.4
+    color: '#101214'
+    confidence: estimated
+    source: drawing - the HV coupler housing stands proud; raised as the group
+      carrying its socket detail

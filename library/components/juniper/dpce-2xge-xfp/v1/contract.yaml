@@ -1,0 +1,31 @@
+format: 1
+kind: module
+name: dpce-2xge-xfp
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper DPCE-R-2XGE-XFP (EOL) - two 10GbE XFP PICs. Authored as the MX240/MX480 horizontal form.
+attrs:
+  model: DPCE-R-2XGE-XFP
+  power-draw-max-w: 310
+provenance:
+  size: 'registry + layout - the face is the slot geometry of its chassis
+    family; positions are laid out from the module reference port
+    description and registry cage sizes, NOT measured from a faceplate
+    drawing. No faceplate figure was usable for this model'
+  power: 'datasheet-table - the module reference model section states the requirement; 310 W max'
+  numbering: 'guide - ports number within each PIC group with an n/ group
+    legend, per the module reference port-numbering figures (g000930,
+    g100786); the exact print positions are layout-derived'
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/xfp@1, id: port-0-0, at: [44.00, 9.90], attrs: {media: xfp}}
+- {ref: std/xfp@1, id: port-1-0, at: [73.00, 9.90], attrs: {media: xfp}}
+size:
+  w: 420.9
+  h: 29.5

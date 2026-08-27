@@ -1,0 +1,61 @@
+format: 1
+kind: module
+name: mpc3e-3d
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MPC3E carrier - two MIC slots taking MIC3 and selected classic MICs (Table 12); the NG variants share the faceplate. Horizontal MX240/MX480 form.
+attrs:
+  model: MPC3E
+  model-variants: MPC3E-3D-NG, MPC3E-3D-NG-Q
+provenance:
+  size: 'registry + layout - the face is the slot geometry of its chassis
+    family; positions are laid out from the module reference port
+    description and registry cage sizes, NOT measured from a faceplate
+    drawing. carrier face; the MIC windows dominate it'
+  power: 'NOT STATED for this model in the module reference extraction - L27 stands'
+  numbering: 'guide - ports number within each PIC group with an n/ group
+    legend, per the module reference port-numbering figures (g000930,
+    g100786); the exact print positions are layout-derived'
+states:
+- ok
+- fail
+- absent
+bays:
+  mic0:
+    at: [40.0, 1.25]
+    size: [168.0, 27.0]
+    accepts:
+    - juniper/mic-3d-20ge-sfp@1
+    - juniper/mic-3d-2xge-xfp@1
+    - juniper/mic-3d-4xge-xfp@1
+    - juniper/mic-3d-10ge-sfp-e@1
+    - juniper/mic-3d-8oc3-2oc12-atm@1
+    - juniper/mic3-3d-10xge-sfpp@1
+    - juniper/mic3-3d-2x40ge-qsfpp@1
+    - juniper/mic3-3d-1x100ge-cfp@1
+    - juniper/mic3-3d-1x100ge-cxp@1
+    - juniper/mic3-100g-dwdm@1
+    - juniper/mx-mic-blank@1
+    default: juniper/mic3-3d-10xge-sfpp@1
+  mic1:
+    at: [225.0, 1.25]
+    size: [168.0, 27.0]
+    accepts:
+    - juniper/mic-3d-20ge-sfp@1
+    - juniper/mic-3d-2xge-xfp@1
+    - juniper/mic-3d-4xge-xfp@1
+    - juniper/mic-3d-10ge-sfp-e@1
+    - juniper/mic-3d-8oc3-2oc12-atm@1
+    - juniper/mic3-3d-10xge-sfpp@1
+    - juniper/mic3-3d-2x40ge-qsfpp@1
+    - juniper/mic3-3d-1x100ge-cfp@1
+    - juniper/mic3-3d-1x100ge-cxp@1
+    - juniper/mic3-100g-dwdm@1
+    - juniper/mx-mic-blank@1
+    default: juniper/mx-mic-blank@1
+size:
+  w: 420.9
+  h: 29.5

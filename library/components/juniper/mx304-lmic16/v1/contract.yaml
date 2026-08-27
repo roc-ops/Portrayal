@@ -1,0 +1,92 @@
+format: 1
+kind: module
+name: mx304-lmic16
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX304 LMIC16 (MX304-LMIC16-BASE), a hot-swappable half-width line
+  card MIC - 1.6 Tbps of forwarding on a single YT ASIC (two 800 Gbps PFE
+  slices). Sixteen multi-rate cages in four 2x2 blocks: up to 16x100GbE, or
+  400GbE on the four cages silkscreened 400G (ports 0, 6, 8 and 14), or a
+  mix; MACsec inline on all ports and IEEE 1588 Class-C PTP. Up to three per
+  chassis - LMIC 0, LMIC 1, and the RE 1/LMIC2 slot. Port numbering is
+  column-major: the upper cage of each column is the even port, the lower the
+  odd, silkscreened with up/down arrows, one lamp per port between them.
+attrs:
+  envelope: 203.5 x 40.1 x 332 mm (Table 22)
+  model: MX304-LMIC16-BASE
+  power-draw-max-w: 410
+  power-draw-typical-w: 386
+  forwarding-capacity: 1.6 Tbps (single YT ASIC, 2x800 Gbps PFEs)
+  cli-naming: 'Junos 24.4R1+: MIC 0/PIC 0 and MIC 1/PIC 1 (MRATE LC-MIC
+    16x100G/4x400G); earlier: PIC 0/PIC 1'
+provenance:
+  size: 'datasheet-table + photo - Table 22: LMIC envelope 8.01 x 1.58 x 13.07
+    in (203.5 x 40.1 x 332 mm); the drawn face is the 197.6 mm visible plate
+    (see jnp304-re - same slot geometry), envelope carried in attrs'
+  power: 'guide LMIC16 description table: "Approximately 410 W at 46 C, with
+    16x100GbE ports with each transceiver at 5 W each. Approximately 386 W at
+    25 C" - BOTH figures INCLUDE 80 W of transceivers (16 x 5 W); the vendor
+    publishes no bare-card figure. Max takes 46 C; typical is the 25 C figure
+    of the same populated scope, not a vendor "typical"'
+  cages: 'photo - mx304-front-high.jpg: four quad blocks with left edges at
+    20.0/62.1/107.7/150.1 mm (block width 37.7, two 19.0 mm qsfp-dd columns
+    on an 18.7 mm pitch, shared wall), top row y 3.7 rotate 180, bottom row
+    y 22.5, belly to belly. Cage size is the registry''s qsfp-dd'
+  port-speeds: 'guide Figure 27 (port-speed diagram) + photo, agreeing
+    independently: the 400G/100G-capable cages are the TOP-LEFT cage of
+    blocks 1 and 3 and the TOP-RIGHT cage of blocks 2 and 4 - ports 0, 6, 8
+    and 14 - each silkscreened 400G above it. All sixteen run 100G'
+  port-leds: 'guide Table 19 (LMIC port LEDs) names one link lamp per port;
+    the photograph shows it as the dot beside each port number in the strip
+    between the rows, tied by the up/down arrows to the upper/lower cage'
+  leds: 'guide Table 18: OK/FAIL green steady = functioning, link up. OFFLINE
+    lamp beside it; both sit in the centre vent column with their legends'
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/qsfp-dd@1, id: port-0, at: [20.0, 3.7], rotate: 180, attrs: {speed: 400g-capable}}
+- {ref: std/qsfp-dd@1, id: port-1, at: [20.0, 22.5]}
+- {ref: std/qsfp-dd@1, id: port-2, at: [38.7, 3.7], rotate: 180}
+- {ref: std/qsfp-dd@1, id: port-3, at: [38.7, 22.5]}
+- {ref: std/qsfp-dd@1, id: port-4, at: [62.1, 3.7], rotate: 180}
+- {ref: std/qsfp-dd@1, id: port-5, at: [62.1, 22.5]}
+- {ref: std/qsfp-dd@1, id: port-6, at: [80.8, 3.7], rotate: 180, attrs: {speed: 400g-capable}}
+- {ref: std/qsfp-dd@1, id: port-7, at: [80.8, 22.5]}
+- {ref: std/qsfp-dd@1, id: port-8, at: [107.7, 3.7], rotate: 180, attrs: {speed: 400g-capable}}
+- {ref: std/qsfp-dd@1, id: port-9, at: [107.7, 22.5]}
+- {ref: std/qsfp-dd@1, id: port-10, at: [126.4, 3.7], rotate: 180}
+- {ref: std/qsfp-dd@1, id: port-11, at: [126.4, 22.5]}
+- {ref: std/qsfp-dd@1, id: port-12, at: [150.1, 3.7], rotate: 180}
+- {ref: std/qsfp-dd@1, id: port-13, at: [150.1, 22.5]}
+- {ref: std/qsfp-dd@1, id: port-14, at: [168.8, 3.7], rotate: 180, attrs: {speed: 400g-capable}}
+- {ref: std/qsfp-dd@1, id: port-15, at: [168.8, 22.5]}
+elements:
+  lever-left:
+    at: [1.6, 3.3]
+    size: [9.0, 33.0]
+    class: latch
+  lever-right:
+    at: [187.0, 3.3]
+    size: [9.0, 33.0]
+    class: latch
+size:
+  w: 197.6
+  h: 39.7
+  d: 332.0
+relief:
+  features:
+  - node: lever-left
+    out: 2.2
+    color: '#7fb8e4'
+    confidence: estimated
+    source: photo - the ejector levers stand proud; projection not measured
+  - node: lever-right
+    out: 2.2
+    color: '#7fb8e4'
+    confidence: estimated
+    source: photo - as lever-left

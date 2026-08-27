@@ -1,0 +1,39 @@
+format: 1
+kind: module
+name: mic3-3d-10xge-sfpp-v
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper 10GbE MIC3 with SFP+ (10 ports, one PIC). Vertical author for the vertical carriers (MX960/MX2000 MPCs stand on end, and their MICs with them).
+attrs:
+  model: MIC3-3D-10XGE-SFPP
+  power-draw-max-w: 29
+provenance:
+  size: 'registry + layout - the face is the slot geometry of its chassis
+    family; positions are laid out from the module reference port
+    description and registry cage sizes, NOT measured from a faceplate
+    drawing. No faceplate figure was usable for this model'
+  power: 'datasheet-table - the module reference model section states the requirement; 29 W max'
+  numbering: 'guide - ports number within each PIC group with an n/ group
+    legend, per the module reference port-numbering figures (g000930,
+    g100786); the exact print positions are layout-derived'
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/sfp-ganged@1, id: port-0-1, at: [1.07, 14.73], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-0, at: [12.07, 14.73], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-3, at: [1.07, 30.57], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-2, at: [12.07, 30.57], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-5, at: [1.07, 46.42], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-4, at: [12.07, 46.42], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-7, at: [1.07, 62.27], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-6, at: [12.07, 62.27], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-9, at: [1.07, 78.12], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-8, at: [12.07, 78.12], rotate: 90, attrs: {media: sfp-plus}}
+size:
+  w: 27.0
+  h: 168.0

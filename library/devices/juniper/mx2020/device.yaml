@@ -1,0 +1,347 @@
+format: 1
+kind: device
+name: mx2020
+version: 0.1.0
+maturity: modelled
+manufacturer: Juniper
+model: MX2020
+portfolio:
+  line: MX Series
+  family: MX2000 3D Universal Edge Router
+description: >-
+  Juniper MX2020 - the 45RU, two-metre flagship of the MX2000 family:
+  the MX2010 doubled. Craft interface and EMI cover at the top, an upper
+  cage of ten MPC slots (LC 10-19), the fabric cage (CB-RE 0, SFB 0-7,
+  CB-RE 1) in the middle, a lower cage of ten more (LC 0-9), and the
+  intake grille at the base. The rear carries two nine-module PSM walls
+  between four power distribution modules, with fan trays behind the
+  grilles.
+provenance:
+  sources: MX2020 Hardware Guide (extracted into working/images/
+    mx2020-p0001-0300 et seq, 960 pages), the MX2000 datasheet, and the
+    studio front and rear photographs in the image library
+  chassis: 'datasheet-table - 78.75 in (2000 mm) tall, 45U, same 440 mm
+    body width and 919.5 mm depth as the MX2010. Ears NOT MODELLED by
+    convention'
+  front: 'photo - the studio front photograph proportioned per-axis
+    (~1.22 mm/px x, ~1.33 y): craft at y 12, EMI cover to 260, upper LC
+    cage at y 300, the fabric cage at y 770, lower LC cage at y 1225,
+    intake grille at the base; positions approximate to ~5 mm on this
+    face. All MX2000 components are shared with the MX2010'
+  slot-numbering: 'guide + photo - the lower cage is LC 0-9 and the
+    upper LC 10-19 (the label strips under each cage print them); PSM
+    numbering across the two rear walls is not legible - see gaps'
+  rear: 'photo - fan tray 3/2 grille, PDM3 zone, the upper nine-PSM
+    wall, the centre grille, the lower nine-PSM wall, the PDM0 / air
+    filter panel and the bottom grille. The photographed unit is -48 V
+    DC. The PSM bay is drawn at the family 430 mm; this photograph
+    reads nearer 375 and the difference is recorded here rather than
+    silently split'
+  power: 'datasheet-table - the guide power overview: two -48 V pools
+    as the MX2010 (8+1 per wall)'
+  color: 'photo - grey chassis, dark craft band, silver-grey modules'
+  other-faces: 'near-blank by evidence - rail bands estimated; axis
+    conventions per viewer3d.js as the siblings'
+chassis:
+  width: 440.0
+  height: 2000.0
+  depth: 919.5
+  ru: 45
+  color: '#565b61'
+groups:
+  craft:
+    term: Panel
+    role: indicator
+    index-origin: 0
+  res:
+    term: Slot
+    role: service
+    index-origin: 0
+    description: CB-RE slots 0 and 1 at the ends of the fabric cage
+  sfbs:
+    term: Slot
+    role: service
+    index-origin: 0
+    description: Switch Fabric Board slots SFB 0-7
+  fpcs:
+    term: Slot
+    role: traffic
+    index-origin: 0
+    description: MPC slots LC 0-9 (lower cage) and LC 10-19 (upper)
+  psus:
+    term: PSM
+    role: service
+    index-origin: 0
+    description: eighteen power supply modules in two nine-wide walls,
+      8+1 per wall
+views:
+  front:
+    size:
+      w: 440.0
+      h: 2000.0
+    panel:
+      decor:
+        - {at: [0.0, 0.0], size: [440.0, 12.0], fill: '#4a4f55'}
+        - {at: [8.0, 110.0], size: [424.0, 150.0], fill: '#6d7278'}
+        - {at: [0.0, 727.0], size: [440.0, 43.0], fill: '#4a4f55'}
+        - {at: [0.0, 1177.0], size: [440.0, 48.0], fill: '#4a4f55'}
+        - {at: [0.0, 1652.0], size: [440.0, 26.0], fill: '#4a4f55'}
+        - {at: [0.0, 1680.0], size: [440.0, 120.0], fill: '#565b61'}
+        - {at: [14.0, 1810.0], size: [412.0, 150.0], pattern: holes, fill: '#26292d'}
+    silkscreen:
+      - {at: [14.0, 1668.0], text: LC, font-size: 2.6, anchor: middle, fill: '#e8eaec', for: chassis}
+      - {at: [35.5, 1668.0], text: '0', font-size: 2.6, anchor: middle, fill: '#e8eaec', for: fpc0}
+      - {at: [76.5, 1668.0], text: '1', font-size: 2.6, anchor: middle, fill: '#e8eaec', for: fpc1}
+      - {at: [117.5, 1668.0], text: '2', font-size: 2.6, anchor: middle, fill: '#e8eaec', for: fpc2}
+      - {at: [158.5, 1668.0], text: '3', font-size: 2.6, anchor: middle, fill: '#e8eaec', for: fpc3}
+      - {at: [199.5, 1668.0], text: '4', font-size: 2.6, anchor: middle, fill: '#e8eaec', for: fpc4}
+      - {at: [240.5, 1668.0], text: '5', font-size: 2.6, anchor: middle, fill: '#e8eaec', for: fpc5}
+      - {at: [281.5, 1668.0], text: '6', font-size: 2.6, anchor: middle, fill: '#e8eaec', for: fpc6}
+      - {at: [322.5, 1668.0], text: '7', font-size: 2.6, anchor: middle, fill: '#e8eaec', for: fpc7}
+      - {at: [363.5, 1668.0], text: '8', font-size: 2.6, anchor: middle, fill: '#e8eaec', for: fpc8}
+      - {at: [404.5, 1668.0], text: '9', font-size: 2.6, anchor: middle, fill: '#e8eaec', for: fpc9}
+      - {at: [14.0, 743.0], text: LC, font-size: 2.6, anchor: middle, fill: '#e8eaec', for: chassis}
+      - {at: [35.5, 743.0], text: '10', font-size: 2.6, anchor: middle, fill: '#e8eaec', for: fpc10}
+      - {at: [76.5, 743.0], text: '11', font-size: 2.6, anchor: middle, fill: '#e8eaec', for: fpc11}
+      - {at: [117.5, 743.0], text: '12', font-size: 2.6, anchor: middle, fill: '#e8eaec', for: fpc12}
+      - {at: [158.5, 743.0], text: '13', font-size: 2.6, anchor: middle, fill: '#e8eaec', for: fpc13}
+      - {at: [199.5, 743.0], text: '14', font-size: 2.6, anchor: middle, fill: '#e8eaec', for: fpc14}
+      - {at: [240.5, 743.0], text: '15', font-size: 2.6, anchor: middle, fill: '#e8eaec', for: fpc15}
+      - {at: [281.5, 743.0], text: '16', font-size: 2.6, anchor: middle, fill: '#e8eaec', for: fpc16}
+      - {at: [322.5, 743.0], text: '17', font-size: 2.6, anchor: middle, fill: '#e8eaec', for: fpc17}
+      - {at: [363.5, 743.0], text: '18', font-size: 2.6, anchor: middle, fill: '#e8eaec', for: fpc18}
+      - {at: [404.5, 743.0], text: '19', font-size: 2.6, anchor: middle, fill: '#e8eaec', for: fpc19}
+      - {at: [32.5, 766.0], text: CB-RE 0, font-size: 2.0, anchor: middle, fill: '#e8eaec', for: cbre0}
+      - {at: [80.0, 766.0], text: '0', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb0}
+      - {at: [120.0, 766.0], text: '1', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb1}
+      - {at: [160.0, 766.0], text: '2', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb2}
+      - {at: [200.0, 766.0], text: '3', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb3}
+      - {at: [240.0, 766.0], text: '4', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb4}
+      - {at: [280.0, 766.0], text: '5', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb5}
+      - {at: [320.0, 766.0], text: '6', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb6}
+      - {at: [360.0, 766.0], text: '7', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb7}
+      - {at: [407.5, 766.0], text: CB-RE 1, font-size: 2.0, anchor: middle, fill: '#e8eaec', for: cbre1}
+    components:
+      bays:
+        - {id: craft, at: [0.0, 12.0], size: {w: 440.0, h: 95.0},
+           accepts: [juniper/mx2000-craft@1], default: juniper/mx2000-craft@1,
+           group: craft, rel-pos: 0}
+        - {id: fpc10, at: [15.0, 300.0], size: {w: 41.0, h: 425.0},
+           accepts: [juniper/mpc-3d-16xge-sfpp-v2k@1, juniper/mpc1e-3d-v2k@1, juniper/mpc2e-3d-v2k@1, juniper/mpc3e-3d-v2k@1, juniper/mpc4e-3d-2cge-8xge-v2k@1, juniper/mpc4e-3d-32xge-sfpp-v2k@1, juniper/mpc5e-100g10g-v2k@1, juniper/mpc5e-40g10g-v2k@1, juniper/mpc7e-10g-v2k@1, juniper/mpc7e-mrate-v2k@1, juniper/ms-mpc-v2k@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@1, juniper/mx2k-mpc9e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+           default: juniper/mx2000-mpc-blank-v@1, group: fpcs, rel-pos: 10}
+        - {id: fpc11, at: [56.0, 300.0], size: {w: 41.0, h: 425.0},
+           accepts: [juniper/mpc-3d-16xge-sfpp-v2k@1, juniper/mpc1e-3d-v2k@1, juniper/mpc2e-3d-v2k@1, juniper/mpc3e-3d-v2k@1, juniper/mpc4e-3d-2cge-8xge-v2k@1, juniper/mpc4e-3d-32xge-sfpp-v2k@1, juniper/mpc5e-100g10g-v2k@1, juniper/mpc5e-40g10g-v2k@1, juniper/mpc7e-10g-v2k@1, juniper/mpc7e-mrate-v2k@1, juniper/ms-mpc-v2k@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@1, juniper/mx2k-mpc9e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+           default: juniper/mpc4e-3d-32xge-sfpp-v2k@1, group: fpcs, rel-pos: 11}
+        - {id: fpc12, at: [97.0, 300.0], size: {w: 41.0, h: 425.0},
+           accepts: [juniper/mpc-3d-16xge-sfpp-v2k@1, juniper/mpc1e-3d-v2k@1, juniper/mpc2e-3d-v2k@1, juniper/mpc3e-3d-v2k@1, juniper/mpc4e-3d-2cge-8xge-v2k@1, juniper/mpc4e-3d-32xge-sfpp-v2k@1, juniper/mpc5e-100g10g-v2k@1, juniper/mpc5e-40g10g-v2k@1, juniper/mpc7e-10g-v2k@1, juniper/mpc7e-mrate-v2k@1, juniper/ms-mpc-v2k@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@1, juniper/mx2k-mpc9e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+           default: juniper/mx2000-mpc-blank-v@1, group: fpcs, rel-pos: 12}
+        - {id: fpc13, at: [138.0, 300.0], size: {w: 41.0, h: 425.0},
+           accepts: [juniper/mpc-3d-16xge-sfpp-v2k@1, juniper/mpc1e-3d-v2k@1, juniper/mpc2e-3d-v2k@1, juniper/mpc3e-3d-v2k@1, juniper/mpc4e-3d-2cge-8xge-v2k@1, juniper/mpc4e-3d-32xge-sfpp-v2k@1, juniper/mpc5e-100g10g-v2k@1, juniper/mpc5e-40g10g-v2k@1, juniper/mpc7e-10g-v2k@1, juniper/mpc7e-mrate-v2k@1, juniper/ms-mpc-v2k@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@1, juniper/mx2k-mpc9e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+           default: juniper/mpc4e-3d-32xge-sfpp-v2k@1, group: fpcs, rel-pos: 13}
+        - {id: fpc14, at: [179.0, 300.0], size: {w: 41.0, h: 425.0},
+           accepts: [juniper/mpc-3d-16xge-sfpp-v2k@1, juniper/mpc1e-3d-v2k@1, juniper/mpc2e-3d-v2k@1, juniper/mpc3e-3d-v2k@1, juniper/mpc4e-3d-2cge-8xge-v2k@1, juniper/mpc4e-3d-32xge-sfpp-v2k@1, juniper/mpc5e-100g10g-v2k@1, juniper/mpc5e-40g10g-v2k@1, juniper/mpc7e-10g-v2k@1, juniper/mpc7e-mrate-v2k@1, juniper/ms-mpc-v2k@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@1, juniper/mx2k-mpc9e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+           default: juniper/mx2000-mpc-blank-v@1, group: fpcs, rel-pos: 14}
+        - {id: fpc15, at: [220.0, 300.0], size: {w: 41.0, h: 425.0},
+           accepts: [juniper/mpc-3d-16xge-sfpp-v2k@1, juniper/mpc1e-3d-v2k@1, juniper/mpc2e-3d-v2k@1, juniper/mpc3e-3d-v2k@1, juniper/mpc4e-3d-2cge-8xge-v2k@1, juniper/mpc4e-3d-32xge-sfpp-v2k@1, juniper/mpc5e-100g10g-v2k@1, juniper/mpc5e-40g10g-v2k@1, juniper/mpc7e-10g-v2k@1, juniper/mpc7e-mrate-v2k@1, juniper/ms-mpc-v2k@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@1, juniper/mx2k-mpc9e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+           default: juniper/mpc4e-3d-32xge-sfpp-v2k@1, group: fpcs, rel-pos: 15}
+        - {id: fpc16, at: [261.0, 300.0], size: {w: 41.0, h: 425.0},
+           accepts: [juniper/mpc-3d-16xge-sfpp-v2k@1, juniper/mpc1e-3d-v2k@1, juniper/mpc2e-3d-v2k@1, juniper/mpc3e-3d-v2k@1, juniper/mpc4e-3d-2cge-8xge-v2k@1, juniper/mpc4e-3d-32xge-sfpp-v2k@1, juniper/mpc5e-100g10g-v2k@1, juniper/mpc5e-40g10g-v2k@1, juniper/mpc7e-10g-v2k@1, juniper/mpc7e-mrate-v2k@1, juniper/ms-mpc-v2k@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@1, juniper/mx2k-mpc9e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+           default: juniper/mx2000-mpc-blank-v@1, group: fpcs, rel-pos: 16}
+        - {id: fpc17, at: [302.0, 300.0], size: {w: 41.0, h: 425.0},
+           accepts: [juniper/mpc-3d-16xge-sfpp-v2k@1, juniper/mpc1e-3d-v2k@1, juniper/mpc2e-3d-v2k@1, juniper/mpc3e-3d-v2k@1, juniper/mpc4e-3d-2cge-8xge-v2k@1, juniper/mpc4e-3d-32xge-sfpp-v2k@1, juniper/mpc5e-100g10g-v2k@1, juniper/mpc5e-40g10g-v2k@1, juniper/mpc7e-10g-v2k@1, juniper/mpc7e-mrate-v2k@1, juniper/ms-mpc-v2k@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@1, juniper/mx2k-mpc9e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+           default: juniper/mpc4e-3d-32xge-sfpp-v2k@1, group: fpcs, rel-pos: 17}
+        - {id: fpc18, at: [343.0, 300.0], size: {w: 41.0, h: 425.0},
+           accepts: [juniper/mpc-3d-16xge-sfpp-v2k@1, juniper/mpc1e-3d-v2k@1, juniper/mpc2e-3d-v2k@1, juniper/mpc3e-3d-v2k@1, juniper/mpc4e-3d-2cge-8xge-v2k@1, juniper/mpc4e-3d-32xge-sfpp-v2k@1, juniper/mpc5e-100g10g-v2k@1, juniper/mpc5e-40g10g-v2k@1, juniper/mpc7e-10g-v2k@1, juniper/mpc7e-mrate-v2k@1, juniper/ms-mpc-v2k@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@1, juniper/mx2k-mpc9e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+           default: juniper/mx2000-mpc-blank-v@1, group: fpcs, rel-pos: 18}
+        - {id: fpc19, at: [384.0, 300.0], size: {w: 41.0, h: 425.0},
+           accepts: [juniper/mpc-3d-16xge-sfpp-v2k@1, juniper/mpc1e-3d-v2k@1, juniper/mpc2e-3d-v2k@1, juniper/mpc3e-3d-v2k@1, juniper/mpc4e-3d-2cge-8xge-v2k@1, juniper/mpc4e-3d-32xge-sfpp-v2k@1, juniper/mpc5e-100g10g-v2k@1, juniper/mpc5e-40g10g-v2k@1, juniper/mpc7e-10g-v2k@1, juniper/mpc7e-mrate-v2k@1, juniper/ms-mpc-v2k@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@1, juniper/mx2k-mpc9e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+           default: juniper/mpc4e-3d-32xge-sfpp-v2k@1, group: fpcs, rel-pos: 19}
+        - {id: cbre0, at: [5.0, 770.0], size: {w: 55.0, h: 405.0},
+           accepts: [juniper/mx2000-cb-re-v@1], default: juniper/mx2000-cb-re-v@1, group: res, rel-pos: 0}
+        - {id: sfb0, at: [60.0, 770.0], size: {w: 40.0, h: 405.0},
+           accepts: [juniper/mx2000-sfb-v@1],
+           default: juniper/mx2000-sfb-v@1, group: sfbs, rel-pos: 0}
+        - {id: sfb1, at: [100.0, 770.0], size: {w: 40.0, h: 405.0},
+           accepts: [juniper/mx2000-sfb-v@1],
+           default: juniper/mx2000-sfb-v@1, group: sfbs, rel-pos: 1}
+        - {id: sfb2, at: [140.0, 770.0], size: {w: 40.0, h: 405.0},
+           accepts: [juniper/mx2000-sfb-v@1],
+           default: juniper/mx2000-sfb-v@1, group: sfbs, rel-pos: 2}
+        - {id: sfb3, at: [180.0, 770.0], size: {w: 40.0, h: 405.0},
+           accepts: [juniper/mx2000-sfb-v@1],
+           default: juniper/mx2000-sfb-v@1, group: sfbs, rel-pos: 3}
+        - {id: sfb4, at: [220.0, 770.0], size: {w: 40.0, h: 405.0},
+           accepts: [juniper/mx2000-sfb-v@1],
+           default: juniper/mx2000-sfb-v@1, group: sfbs, rel-pos: 4}
+        - {id: sfb5, at: [260.0, 770.0], size: {w: 40.0, h: 405.0},
+           accepts: [juniper/mx2000-sfb-v@1],
+           default: juniper/mx2000-sfb-v@1, group: sfbs, rel-pos: 5}
+        - {id: sfb6, at: [300.0, 770.0], size: {w: 40.0, h: 405.0},
+           accepts: [juniper/mx2000-sfb-v@1],
+           default: juniper/mx2000-sfb-v@1, group: sfbs, rel-pos: 6}
+        - {id: sfb7, at: [340.0, 770.0], size: {w: 40.0, h: 405.0},
+           accepts: [juniper/mx2000-sfb-v@1],
+           default: juniper/mx2000-sfb-v@1, group: sfbs, rel-pos: 7}
+        - {id: cbre1, at: [380.0, 770.0], size: {w: 55.0, h: 405.0},
+           accepts: [juniper/mx2000-cb-re-v@1], default: juniper/mx2000-cb-re-v@1, group: res, rel-pos: 1}
+        - {id: fpc0, at: [15.0, 1225.0], size: {w: 41.0, h: 425.0},
+           accepts: [juniper/mpc-3d-16xge-sfpp-v2k@1, juniper/mpc1e-3d-v2k@1, juniper/mpc2e-3d-v2k@1, juniper/mpc3e-3d-v2k@1, juniper/mpc4e-3d-2cge-8xge-v2k@1, juniper/mpc4e-3d-32xge-sfpp-v2k@1, juniper/mpc5e-100g10g-v2k@1, juniper/mpc5e-40g10g-v2k@1, juniper/mpc7e-10g-v2k@1, juniper/mpc7e-mrate-v2k@1, juniper/ms-mpc-v2k@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@1, juniper/mx2k-mpc9e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+           default: juniper/mpc4e-3d-32xge-sfpp-v2k@1, group: fpcs, rel-pos: 0}
+        - {id: fpc1, at: [56.0, 1225.0], size: {w: 41.0, h: 425.0},
+           accepts: [juniper/mpc-3d-16xge-sfpp-v2k@1, juniper/mpc1e-3d-v2k@1, juniper/mpc2e-3d-v2k@1, juniper/mpc3e-3d-v2k@1, juniper/mpc4e-3d-2cge-8xge-v2k@1, juniper/mpc4e-3d-32xge-sfpp-v2k@1, juniper/mpc5e-100g10g-v2k@1, juniper/mpc5e-40g10g-v2k@1, juniper/mpc7e-10g-v2k@1, juniper/mpc7e-mrate-v2k@1, juniper/ms-mpc-v2k@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@1, juniper/mx2k-mpc9e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+           default: juniper/mx2000-mpc-blank-v@1, group: fpcs, rel-pos: 1}
+        - {id: fpc2, at: [97.0, 1225.0], size: {w: 41.0, h: 425.0},
+           accepts: [juniper/mpc-3d-16xge-sfpp-v2k@1, juniper/mpc1e-3d-v2k@1, juniper/mpc2e-3d-v2k@1, juniper/mpc3e-3d-v2k@1, juniper/mpc4e-3d-2cge-8xge-v2k@1, juniper/mpc4e-3d-32xge-sfpp-v2k@1, juniper/mpc5e-100g10g-v2k@1, juniper/mpc5e-40g10g-v2k@1, juniper/mpc7e-10g-v2k@1, juniper/mpc7e-mrate-v2k@1, juniper/ms-mpc-v2k@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@1, juniper/mx2k-mpc9e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+           default: juniper/mpc4e-3d-32xge-sfpp-v2k@1, group: fpcs, rel-pos: 2}
+        - {id: fpc3, at: [138.0, 1225.0], size: {w: 41.0, h: 425.0},
+           accepts: [juniper/mpc-3d-16xge-sfpp-v2k@1, juniper/mpc1e-3d-v2k@1, juniper/mpc2e-3d-v2k@1, juniper/mpc3e-3d-v2k@1, juniper/mpc4e-3d-2cge-8xge-v2k@1, juniper/mpc4e-3d-32xge-sfpp-v2k@1, juniper/mpc5e-100g10g-v2k@1, juniper/mpc5e-40g10g-v2k@1, juniper/mpc7e-10g-v2k@1, juniper/mpc7e-mrate-v2k@1, juniper/ms-mpc-v2k@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@1, juniper/mx2k-mpc9e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+           default: juniper/mx2000-mpc-blank-v@1, group: fpcs, rel-pos: 3}
+        - {id: fpc4, at: [179.0, 1225.0], size: {w: 41.0, h: 425.0},
+           accepts: [juniper/mpc-3d-16xge-sfpp-v2k@1, juniper/mpc1e-3d-v2k@1, juniper/mpc2e-3d-v2k@1, juniper/mpc3e-3d-v2k@1, juniper/mpc4e-3d-2cge-8xge-v2k@1, juniper/mpc4e-3d-32xge-sfpp-v2k@1, juniper/mpc5e-100g10g-v2k@1, juniper/mpc5e-40g10g-v2k@1, juniper/mpc7e-10g-v2k@1, juniper/mpc7e-mrate-v2k@1, juniper/ms-mpc-v2k@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@1, juniper/mx2k-mpc9e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+           default: juniper/mpc4e-3d-32xge-sfpp-v2k@1, group: fpcs, rel-pos: 4}
+        - {id: fpc5, at: [220.0, 1225.0], size: {w: 41.0, h: 425.0},
+           accepts: [juniper/mpc-3d-16xge-sfpp-v2k@1, juniper/mpc1e-3d-v2k@1, juniper/mpc2e-3d-v2k@1, juniper/mpc3e-3d-v2k@1, juniper/mpc4e-3d-2cge-8xge-v2k@1, juniper/mpc4e-3d-32xge-sfpp-v2k@1, juniper/mpc5e-100g10g-v2k@1, juniper/mpc5e-40g10g-v2k@1, juniper/mpc7e-10g-v2k@1, juniper/mpc7e-mrate-v2k@1, juniper/ms-mpc-v2k@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@1, juniper/mx2k-mpc9e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+           default: juniper/mx2000-mpc-blank-v@1, group: fpcs, rel-pos: 5}
+        - {id: fpc6, at: [261.0, 1225.0], size: {w: 41.0, h: 425.0},
+           accepts: [juniper/mpc-3d-16xge-sfpp-v2k@1, juniper/mpc1e-3d-v2k@1, juniper/mpc2e-3d-v2k@1, juniper/mpc3e-3d-v2k@1, juniper/mpc4e-3d-2cge-8xge-v2k@1, juniper/mpc4e-3d-32xge-sfpp-v2k@1, juniper/mpc5e-100g10g-v2k@1, juniper/mpc5e-40g10g-v2k@1, juniper/mpc7e-10g-v2k@1, juniper/mpc7e-mrate-v2k@1, juniper/ms-mpc-v2k@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@1, juniper/mx2k-mpc9e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+           default: juniper/mpc4e-3d-32xge-sfpp-v2k@1, group: fpcs, rel-pos: 6}
+        - {id: fpc7, at: [302.0, 1225.0], size: {w: 41.0, h: 425.0},
+           accepts: [juniper/mpc-3d-16xge-sfpp-v2k@1, juniper/mpc1e-3d-v2k@1, juniper/mpc2e-3d-v2k@1, juniper/mpc3e-3d-v2k@1, juniper/mpc4e-3d-2cge-8xge-v2k@1, juniper/mpc4e-3d-32xge-sfpp-v2k@1, juniper/mpc5e-100g10g-v2k@1, juniper/mpc5e-40g10g-v2k@1, juniper/mpc7e-10g-v2k@1, juniper/mpc7e-mrate-v2k@1, juniper/ms-mpc-v2k@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@1, juniper/mx2k-mpc9e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+           default: juniper/mx2000-mpc-blank-v@1, group: fpcs, rel-pos: 7}
+        - {id: fpc8, at: [343.0, 1225.0], size: {w: 41.0, h: 425.0},
+           accepts: [juniper/mpc-3d-16xge-sfpp-v2k@1, juniper/mpc1e-3d-v2k@1, juniper/mpc2e-3d-v2k@1, juniper/mpc3e-3d-v2k@1, juniper/mpc4e-3d-2cge-8xge-v2k@1, juniper/mpc4e-3d-32xge-sfpp-v2k@1, juniper/mpc5e-100g10g-v2k@1, juniper/mpc5e-40g10g-v2k@1, juniper/mpc7e-10g-v2k@1, juniper/mpc7e-mrate-v2k@1, juniper/ms-mpc-v2k@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@1, juniper/mx2k-mpc9e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+           default: juniper/mpc4e-3d-32xge-sfpp-v2k@1, group: fpcs, rel-pos: 8}
+        - {id: fpc9, at: [384.0, 1225.0], size: {w: 41.0, h: 425.0},
+           accepts: [juniper/mpc-3d-16xge-sfpp-v2k@1, juniper/mpc1e-3d-v2k@1, juniper/mpc2e-3d-v2k@1, juniper/mpc3e-3d-v2k@1, juniper/mpc4e-3d-2cge-8xge-v2k@1, juniper/mpc4e-3d-32xge-sfpp-v2k@1, juniper/mpc5e-100g10g-v2k@1, juniper/mpc5e-40g10g-v2k@1, juniper/mpc7e-10g-v2k@1, juniper/mpc7e-mrate-v2k@1, juniper/ms-mpc-v2k@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@1, juniper/mx2k-mpc9e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+           default: juniper/mx2000-mpc-blank-v@1, group: fpcs, rel-pos: 9}
+  rear:
+    size:
+      w: 440.0
+      h: 2000.0
+    panel:
+      decor:
+        - {at: [12.0, 13.0], size: [416.0, 240.0], pattern: holes, fill: '#26292d'}
+        - {at: [8.0, 267.0], size: [424.0, 133.0], fill: '#6d7278'}
+        - {at: [8.0, 838.0], size: [424.0, 65.0], fill: '#6d7278'}
+        - {at: [12.0, 905.0], size: [416.0, 110.0], pattern: holes, fill: '#26292d'}
+        - {at: [8.0, 1017.0], size: [424.0, 65.0], fill: '#6d7278'}
+        - {at: [8.0, 1518.0], size: [424.0, 100.0], fill: '#6d7278'}
+        - {at: [8.0, 1640.0], size: [424.0, 170.0], fill: '#9a9ea3'}
+        - {at: [12.0, 1830.0], size: [416.0, 160.0], pattern: holes, fill: '#26292d'}
+    silkscreen:
+      - {at: [300.0, 160.0], text: Fan Tray 3, font-size: 2.4, anchor: middle, fill: '#c7ccd1', for: chassis}
+      - {at: [300.0, 210.0], text: Fan Tray 2, font-size: 2.4, anchor: middle, fill: '#c7ccd1', for: chassis}
+      - {at: [220.0, 262.0], text: PDM3, font-size: 2.6, anchor: middle, fill: '#e8eaec', for: chassis}
+      - {at: [220.0, 1633.0], text: PDM0, font-size: 2.6, anchor: middle, fill: '#3a3e43', for: chassis}
+      - {at: [220.0, 1680.0], text: Air Filter, font-size: 2.6, anchor: middle, fill: '#3a3e43', for: chassis}
+      - {at: [220.0, 1725.0], text: Fan Tray 1, font-size: 2.4, anchor: middle, fill: '#3a3e43', for: chassis}
+      - {at: [220.0, 1765.0], text: Fan Tray 0, font-size: 2.4, anchor: middle, fill: '#3a3e43', for: chassis}
+    components:
+      bays:
+        - {id: psm9, at: [22.0, 405.0], size: {w: 44.0, h: 430.0},
+           accepts: [juniper/mx2000-psm-dc-v@1],
+           default: juniper/mx2000-psm-dc-v@1, group: psus, rel-pos: 9}
+        - {id: psm10, at: [66.0, 405.0], size: {w: 44.0, h: 430.0},
+           accepts: [juniper/mx2000-psm-dc-v@1],
+           default: juniper/mx2000-psm-dc-v@1, group: psus, rel-pos: 10}
+        - {id: psm11, at: [110.0, 405.0], size: {w: 44.0, h: 430.0},
+           accepts: [juniper/mx2000-psm-dc-v@1],
+           default: juniper/mx2000-psm-dc-v@1, group: psus, rel-pos: 11}
+        - {id: psm12, at: [154.0, 405.0], size: {w: 44.0, h: 430.0},
+           accepts: [juniper/mx2000-psm-dc-v@1],
+           default: juniper/mx2000-psm-dc-v@1, group: psus, rel-pos: 12}
+        - {id: psm13, at: [198.0, 405.0], size: {w: 44.0, h: 430.0},
+           accepts: [juniper/mx2000-psm-dc-v@1],
+           default: juniper/mx2000-psm-dc-v@1, group: psus, rel-pos: 13}
+        - {id: psm14, at: [242.0, 405.0], size: {w: 44.0, h: 430.0},
+           accepts: [juniper/mx2000-psm-dc-v@1],
+           default: juniper/mx2000-psm-dc-v@1, group: psus, rel-pos: 14}
+        - {id: psm15, at: [286.0, 405.0], size: {w: 44.0, h: 430.0},
+           accepts: [juniper/mx2000-psm-dc-v@1],
+           default: juniper/mx2000-psm-dc-v@1, group: psus, rel-pos: 15}
+        - {id: psm16, at: [330.0, 405.0], size: {w: 44.0, h: 430.0},
+           accepts: [juniper/mx2000-psm-dc-v@1],
+           default: juniper/mx2000-psm-dc-v@1, group: psus, rel-pos: 16}
+        - {id: psm17, at: [374.0, 405.0], size: {w: 44.0, h: 430.0},
+           accepts: [juniper/mx2000-psm-dc-v@1],
+           default: juniper/mx2000-psm-dc-v@1, group: psus, rel-pos: 17}
+        - {id: psm0, at: [22.0, 1085.0], size: {w: 44.0, h: 430.0},
+           accepts: [juniper/mx2000-psm-dc-v@1],
+           default: juniper/mx2000-psm-dc-v@1, group: psus, rel-pos: 0}
+        - {id: psm1, at: [66.0, 1085.0], size: {w: 44.0, h: 430.0},
+           accepts: [juniper/mx2000-psm-dc-v@1],
+           default: juniper/mx2000-psm-dc-v@1, group: psus, rel-pos: 1}
+        - {id: psm2, at: [110.0, 1085.0], size: {w: 44.0, h: 430.0},
+           accepts: [juniper/mx2000-psm-dc-v@1],
+           default: juniper/mx2000-psm-dc-v@1, group: psus, rel-pos: 2}
+        - {id: psm3, at: [154.0, 1085.0], size: {w: 44.0, h: 430.0},
+           accepts: [juniper/mx2000-psm-dc-v@1],
+           default: juniper/mx2000-psm-dc-v@1, group: psus, rel-pos: 3}
+        - {id: psm4, at: [198.0, 1085.0], size: {w: 44.0, h: 430.0},
+           accepts: [juniper/mx2000-psm-dc-v@1],
+           default: juniper/mx2000-psm-dc-v@1, group: psus, rel-pos: 4}
+        - {id: psm5, at: [242.0, 1085.0], size: {w: 44.0, h: 430.0},
+           accepts: [juniper/mx2000-psm-dc-v@1],
+           default: juniper/mx2000-psm-dc-v@1, group: psus, rel-pos: 5}
+        - {id: psm6, at: [286.0, 1085.0], size: {w: 44.0, h: 430.0},
+           accepts: [juniper/mx2000-psm-dc-v@1],
+           default: juniper/mx2000-psm-dc-v@1, group: psus, rel-pos: 6}
+        - {id: psm7, at: [330.0, 1085.0], size: {w: 44.0, h: 430.0},
+           accepts: [juniper/mx2000-psm-dc-v@1],
+           default: juniper/mx2000-psm-dc-v@1, group: psus, rel-pos: 7}
+        - {id: psm8, at: [374.0, 1085.0], size: {w: 44.0, h: 430.0},
+           accepts: [juniper/mx2000-psm-dc-v@1],
+           default: juniper/mx2000-psm-dc-v@1, group: psus, rel-pos: 8}
+  left:
+    size:
+      w: 919.5
+      h: 2000.0
+    panel:
+      decor:
+        - {at: [0.0, 960.0], size: [919.5, 45.0], fill: '#4a4f55', confidence: estimated,
+           source: 'rail band; estimated'}
+  right:
+    size:
+      w: 919.5
+      h: 2000.0
+    panel:
+      decor:
+        - {at: [0.0, 960.0], size: [919.5, 45.0], fill: '#4a4f55', confidence: estimated,
+           source: 'rail band; estimated'}
+  top:
+    size:
+      w: 440.0
+      h: 919.5
+    panel:
+      decor:
+        - {at: [0.0, 0.0], size: [8.0, 919.5], fill: '#4a4f55', confidence: estimated,
+           source: 'side edge; estimated'}
+        - {at: [432.0, 0.0], size: [8.0, 919.5], fill: '#4a4f55', confidence: estimated,
+           source: 'side edge; estimated'}
+  bottom:
+    size:
+      w: 440.0
+      h: 919.5
+    panel:
+      decor:
+        - {at: [0.0, 0.0], size: [8.0, 919.5], fill: '#4a4f55', confidence: estimated,
+           source: 'side edge; estimated'}
+        - {at: [432.0, 0.0], size: [8.0, 919.5], fill: '#4a4f55', confidence: estimated,
+           source: 'side edge; estimated'}
+gaps:
+  - what: psm-numbering-and-bay-height
+    scope: [psus]
+    reason: needs-photo
+    wanted: the printed PSM slot numbering across the two walls, and a
+      dimensioned PSM - the bay is drawn at the family 430 mm where this
+      photograph reads nearer 375.
+  - what: mpc-catalogue
+    scope: [fpcs]
+    reason: needs-photo
+    wanted: as the MX2010 - vertical authors for the MPC range and the
+      adapter card; the photographed MX2020 front carries blanks in
+      every LC slot.
+  - what: fan-trays-and-pdms
+    reason: needs-photo
+    wanted: the four fan trays and four PDMs as FRU bays - drawn as the
+      grilles and zones they sit behind.

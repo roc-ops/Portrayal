@@ -1,0 +1,32 @@
+format: 1
+kind: module
+name: mx80-psu-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX5/MX10/MX40/MX80 AC power supply - two side-by-side at the front
+  lower left (PS 0 and PS 1), 1+1 redundant. Hex exhaust field, C14 inlet
+  and the I/O rocker switch (the photo's cord-retainer bail is cable
+  furniture and is not drawn, by convention).
+attrs:
+  model: MX80 AC PSU
+  role: ac-power-supply
+  redundancy: 1+1
+provenance:
+  size: 'photo - ~72 x 44 mm face read off the front photograph (per-axis
+    anchoring; approximate). No vendor PSU dimension in the intake'
+  power-output: 'NOT STATED per module in the extraction - L27 stands'
+  face: 'photo - vents left, inlet centre, rocker right; the DC
+    variant (guide Figure 16) is not modelled (needs-photo gap on the
+    device)'
+states:
+- ok
+- fault
+- absent
+parts:
+- {ref: std/c14-inlet@1, id: inlet, at: [31.0, 12.0]}
+size:
+  w: 72.0
+  h: 44.0

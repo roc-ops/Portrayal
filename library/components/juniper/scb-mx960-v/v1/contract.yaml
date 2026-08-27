@@ -1,0 +1,32 @@
+format: 1
+kind: module
+name: scb-mx960-v
+version: 1.0.0
+class: fabric
+behaviour: fills
+profile: networking
+description: >-
+  Juniper SCB-MX Switch Control Board as mounted vertically in the
+  MX960. A carrier: the Routing Engine seats into its bay (RE-S-1300 by
+  default). OK/FAIL and fabric lamps at the top.
+attrs:
+  model: SCB-MX
+provenance:
+  size: 'photo - the studio front photograph at ~2.07 px/mm: the card cage is ~405 mm tall and fourteen slots share the 441 mm width on a ~30.1 mm pitch; positions approximate to ~2 mm. No vendor card dimension in the extraction'
+  power: 'NOT STATED per module in the extraction - L27 stands'
+  orientation: 'the horizontal sibling juniper/scb-mx@1 carries the
+    measured face; same hardware, rotated author (bays cannot rotate)'
+states:
+- ok
+- fail
+- absent
+bays:
+  re:
+    at: [1.5, 70.0]
+    size: [27.0, 262.0]
+    accepts:
+    - juniper/re-s-1300-v@1
+    default: juniper/re-s-1300-v@1
+size:
+  w: 30.1
+  h: 405.0

@@ -1,0 +1,33 @@
+format: 1
+kind: module
+name: mx104-re
+version: 1.0.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX104 Routing Engine (RE-MX-104) - a slim half-height FRU, two
+  stacked at the front right (RE0 below RE1). MASTER / OK-FAIL / ONLINE
+  lamps, RESET and ONLINE/OFFLINE buttons, USB 0/1, AUX and CONSOLE RJ45s
+  and the ETHERNET management port.
+attrs:
+  model: RE-MX-104
+provenance:
+  size: 'photo - ~145 x 22.5 mm read off the reference photograph; the RJ45
+    fit is what bounds the height (a first reading gave 13.9 mm rows, which
+    cannot hold a 14 mm jack - the plausibility check moved the band
+    boundary). No vendor RE dimension in the intake'
+  power: 'NOT STATED per module in the MX104 extraction - L27 stands'
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/usb-a@1, id: usb0, at: [39.0, 9.75], rotate: 90, attrs: {function: USB 0}}
+- {ref: std/usb-a@1, id: usb1, at: [47.0, 9.75], rotate: 90, attrs: {function: USB 1}}
+- {ref: std/rj45@1, id: aux, at: [62.0, 5.75], attrs: {function: auxiliary console}}
+- {ref: std/rj45@1, id: console, at: [80.0, 5.75], attrs: {function: serial console}}
+- {ref: std/rj45@1, id: ethernet, at: [108.0, 5.75], attrs: {function: out-of-band management}}
+size:
+  w: 145.0
+  h: 22.5

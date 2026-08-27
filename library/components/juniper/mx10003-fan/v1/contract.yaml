@@ -1,0 +1,28 @@
+format: 1
+kind: module
+name: mx10003-fan
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX10003 fan module - four vertical trays (FT 0-3) across the
+  centre of the rear, each a tall door of honeycomb exhaust with the AIR
+  OUT chip between the two mesh fields and the pull handle at the bottom.
+attrs:
+  model: MX10003 Fan Module
+  power-draw-max-w: 20
+provenance:
+  size: 'datasheet-table - the guide FRU table gives the fan module 2.46 x
+    9.27 x 4.99 in; the 62.5 x 126.7 mm face is width x height'
+  power: 'datasheet-table - the guide power example attributes 80 W to four
+    fans at normal speed; 20 W each'
+  face: 'drawing - the rear elevation (g009801): two mesh fields, AIR OUT
+    chip, bottom handle'
+states:
+- ok
+- fail
+- absent
+size:
+  w: 62.5
+  h: 126.7
