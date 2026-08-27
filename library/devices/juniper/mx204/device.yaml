@@ -29,8 +29,8 @@ provenance:
     says the MOUNTING BRACKETS "extend the width to 19 in", yet drawing and
     table agree the body itself is ~482.3 including the integral ear flanges -
     this chassis is genuinely full-rack-width, with the front face spanning ear
-    to ear. Width carried as 482.3 (drawing); the 0.3 mm difference from Table
-    19''s 48.26 is below the drawing''s resolution'
+    to ear. The modelled width is the 437.0 mm BODY between the ear-flange fold
+    lines (ears are not modelled here - see ears)'
   scale: 'drawing - the guide front view (g009860) rendered at 600 dpi measures
     2895 x 275 px, aspect 10.53 against the true 482.3/43.7 = 11.04, so the
     figure is stretched ~4.6% vertically and is SCHEMATIC. All positions below
@@ -76,9 +76,11 @@ provenance:
     CON and ToD at 312.8/336.8 (y 27.4); vertical USB-A at 352.5, 27.8; SMB
     quad at 366.7/376.5 x 23.8/31.4 (IN row above OUT row); five status lamps
     at y 34.2, x 387.6 (OK/FAIL), 399.1 (ONLINE), 409.4 (ALM), 417.5, 425.7;
-    recessed OFFLINE button at 435.5, 31.3 and RESET pinhole placed at 447.0,
-    32.0 (RESET read off the photograph between OFFLINE and the ear; its x was
-    not resolvable on the drawing - estimated)'
+    recessed OFFLINE button at 435.5 and RESET pinhole at 447.0 (RESET x read
+    off the photograph between OFFLINE and the ear; not resolvable on the
+    drawing - estimated). The drawing draws OFFLINE ~3 mm above the lamp row
+    (31.3 against 34.2); both buttons are MODELLED ON the lamp centreline for
+    visual consistency, a deliberate deviation recorded here'
   ssd-labels: 'photo - the photographed faceplate labels the 4th and 5th lamps
     SSD0 then SSD1 left to right; the guide art swaps them. Photo carried'
   rj45-orientation: 'drawing + photo - CON and ToD are drawn and photographed
@@ -91,12 +93,15 @@ provenance:
     symbol below; the guide''s "ESD Points" figure (g009865, Figure 5) marks
     this same location. The guide art draws it as a hex-nut stud; the
     photograph shows a plain recessed socket - photo carried'
-  ears: 'drawing - integral ear flanges 0-22.5 and 459.8-482.3 mm, each with
-    two rounded slots (10.3 x 6.7 at y 2.7 and 32.9) and a central 8.2 mm
-    round hole (front face). They are part of the folded chassis face, not a
-    bolt-on bracket, so they are decor + cutouts rather than a rack-ear
-    placement; the removable brackets the photos show screwed outboard are not
-    modelled. Rear flanges show only the two slots at the measured positions'
+  ears: 'NOT MODELLED, by project convention - devices in this library are
+    drawn without rack ears. The MX204''s guide art draws integral ear flanges
+    at both ends of both faces (fold lines at x 22.65 and 459.65 on the 482.3
+    mm rack face, each flange carrying two rounded slots and, on the front, a
+    central 8.2 mm hole), and Table 19''s 19 in width is measured over them.
+    The modelled body is the 437.0 mm between the fold lines; all front and
+    rear coordinates were measured on the 482.3 mm drawing and shifted by
+    -22.65. The removable outboard brackets in the photographs are likewise
+    not modelled'
   rear: 'drawing (g009862 at the same per-axis scales) + photo - recessed left
     panel 24-97.7 across the full height carrying the grounding plate (lug
     circles at 38.6 and 54.6, y 17.2), the earth symbol at 46.6, 31.6 and the
@@ -137,11 +142,12 @@ provenance:
     and end-of-support 2032-06-30 (support.juniper.net M/MX hardware
     milestones, mirrored by Park Place and router-switch EOL trackers,
     searched 2026-08-26)'
-  other-faces: 'deliberately blank - no photograph or drawing of the top,
-    bottom or side faces exists in the intake beyond the g009881 top-view
-    outline, which shows a plain slab with the mounting rails pre-attached
-    along the sides. Faces are sized from Table 19 so the 3D box and rack
-    elevations are right. Every face carries only symmetric content as far as
+  other-faces: 'near-blank by evidence - no photograph or drawing of the
+    top, bottom or side faces exists in the intake beyond the g009881
+    top-view outline, which shows a plain slab with the mounting rails
+    pre-attached along the sides. Each face carries only its rail band(s),
+    estimated and marked so, which is also what lets the capability chain
+    count the face as drawn. Faces are sized from Table 19. Every face carries only symmetric content as far as
     the sources show, so the axis conventions have been checked but nothing
     asymmetric pins them. Axis conventions, checked against viewer3d.js: LEFT
     view x = 0 is the REAR, RIGHT view x = 0 is the FRONT, top and bottom have
@@ -196,7 +202,7 @@ attrs:
     end-of-sale: '2027-06-15'
     end-of-support: '2032-06-30'
 chassis:
-  width: 482.3
+  width: 437.0
   height: 43.7
   depth: 470.0
   ru: 1
@@ -295,254 +301,269 @@ groups:
 views:
   front:
     size:
-      w: 482.3
+      w: 437.0
       h: 43.7
     panel:
       decor:
-        - {at: [22.5, 0.0], size: [437.3, 43.7], rx: 0.0, fill: '#9a9ea3'}
-        - {at: [0.0, 0.0], size: [22.5, 43.7], rx: 0.8, fill: '#94989d'}
-        - {at: [459.8, 0.0], size: [22.5, 43.7], rx: 0.8, fill: '#94989d'}
-        - {at: [60.0, 3.2], size: [142.0, 10.5], pattern: vent, vent: 40}
-        - {at: [215.0, 3.2], size: [240.0, 16.0], pattern: vent, vent: 40}
-        - {at: [26.0, 14.0], size: [30.0, 10.0], pattern: vent, vent: 40}
+        - {at: [-0.15, 0.0], size: [437.3, 43.7], rx: 0.0, fill: '#9a9ea3'}
+        - {at: [-22.65, 0.0], size: [22.5, 43.7], rx: 0.8, fill: '#94989d'}
+        - {at: [437.15, 0.0], size: [22.5, 43.7], rx: 0.8, fill: '#94989d'}
+        - {at: [37.35, 3.2], size: [88.9, 10.5], pattern: vent, vent: 40}
+        - {at: [192.35, 3.2], size: [231.0, 16.0], pattern: vent, vent: 40}
+        - {at: [3.35, 14.0], size: [30.0, 10.0], pattern: vent, vent: 40}
       cutouts:
-        - {id: ear-slot-fl-top, at: [4.3, 2.7], size: [10.3, 6.7], rx: 3.3}
-        - {id: ear-hole-fl, at: [5.6, 17.4], size: [8.2, 8.2], shape: circle}
-        - {id: ear-slot-fl-bot, at: [4.3, 32.9], size: [10.3, 6.5], rx: 3.2}
-        - {id: ear-slot-fr-top, at: [467.3, 2.7], size: [10.3, 6.7], rx: 3.3}
-        - {id: ear-hole-fr, at: [468.4, 17.4], size: [8.2, 8.2], shape: circle}
-        - {id: ear-slot-fr-bot, at: [467.3, 32.9], size: [10.3, 6.5], rx: 3.2}
-        - {id: esd-front, at: [28.95, 26.75], size: [4.3, 4.3], shape: circle}
-        - {id: gm-ptp, at: [45.9, 24.65], size: [14.5, 10.0]}
-        - {id: led-gm-ptp-0, at: [62.6, 25.6], size: [2.0, 2.0], shape: circle}
-        - {id: led-gm-ptp-1, at: [62.6, 31.1], size: [2.0, 2.0], shape: circle}
-        - {id: port-0, at: [67.45, 22.71], size: [18.5, 9.58]}
-        - {id: port-1, at: [86.45, 22.71], size: [18.5, 9.58]}
-        - {id: port-2, at: [105.45, 22.71], size: [18.5, 9.58]}
-        - {id: port-3, at: [124.45, 22.71], size: [18.5, 9.58]}
-        - {id: port-4, at: [150.98, 9.05], size: [14.25, 10.4]}
-        - {id: port-6, at: [165.23, 9.05], size: [14.25, 10.4]}
-        - {id: port-8, at: [179.48, 9.05], size: [14.25, 10.4]}
-        - {id: port-10, at: [193.73, 9.05], size: [14.25, 10.4]}
-        - {id: port-5, at: [150.98, 24.95], size: [14.25, 10.4]}
-        - {id: port-7, at: [165.23, 24.95], size: [14.25, 10.4]}
-        - {id: port-9, at: [179.48, 24.95], size: [14.25, 10.4]}
-        - {id: port-11, at: [193.73, 24.95], size: [14.25, 10.4]}
-        - {id: led-port-4, at: [155.3, 21.1], size: [2.0, 2.0], shape: circle}
-        - {id: led-port-5, at: [158.9, 21.1], size: [2.0, 2.0], shape: circle}
-        - {id: led-port-6, at: [169.5, 21.1], size: [2.0, 2.0], shape: circle}
-        - {id: led-port-7, at: [173.1, 21.1], size: [2.0, 2.0], shape: circle}
-        - {id: led-port-8, at: [183.8, 21.1], size: [2.0, 2.0], shape: circle}
-        - {id: led-port-9, at: [187.4, 21.1], size: [2.0, 2.0], shape: circle}
-        - {id: led-port-10, at: [198.0, 21.1], size: [2.0, 2.0], shape: circle}
-        - {id: led-port-11, at: [201.6, 21.1], size: [2.0, 2.0], shape: circle}
-        - {id: mgmt, at: [259.6, 20.25], size: [16.0, 14.0]}
-        - {id: bits, at: [281.7, 20.25], size: [16.0, 14.0]}
-        - {id: con, at: [304.8, 20.4], size: [16.0, 14.0]}
-        - {id: tod, at: [328.8, 20.4], size: [16.0, 14.0]}
-        - {id: usb, at: [350.25, 21.8], size: [4.5, 12.0]}
-        - {id: smb-10mhz-in, at: [364.29, 21.39], size: [4.83, 4.83], shape: circle}
-        - {id: smb-10mhz-out, at: [364.29, 28.99], size: [4.83, 4.83], shape: circle}
-        - {id: smb-1pps-in, at: [374.09, 21.39], size: [4.83, 4.83], shape: circle}
-        - {id: smb-1pps-out, at: [374.09, 28.99], size: [4.83, 4.83], shape: circle}
-        - {id: led-ok-fail, at: [386.4, 33.0], size: [2.4, 2.4], shape: circle}
-        - {id: led-online, at: [397.9, 33.0], size: [2.4, 2.4], shape: circle}
-        - {id: led-alm, at: [408.2, 33.0], size: [2.4, 2.4], shape: circle}
-        - {id: led-ssd0, at: [416.3, 33.0], size: [2.4, 2.4], shape: circle}
-        - {id: led-ssd1, at: [424.5, 33.0], size: [2.4, 2.4], shape: circle}
-        - {id: offline-btn, at: [433.0, 28.8], size: [5.0, 5.0], shape: circle}
-        - {id: reset-btn, at: [445.0, 30.0], size: [4.0, 4.0], shape: circle}
+        - {id: esd-front, at: [6.3, 26.75], size: [4.3, 4.3], shape: circle}
+        - {id: gm-ptp, at: [23.25, 24.65], size: [14.5, 10.0]}
+        - {id: led-gm-ptp-0, at: [39.95, 25.6], size: [2.0, 2.0], shape: circle}
+        - {id: led-gm-ptp-1, at: [39.95, 31.1], size: [2.0, 2.0], shape: circle}
+        - {id: port-0, at: [44.8, 22.71], size: [18.5, 9.58]}
+        - {id: port-1, at: [63.8, 22.71], size: [18.5, 9.58]}
+        - {id: port-2, at: [82.8, 22.71], size: [18.5, 9.58]}
+        - {id: port-3, at: [101.8, 22.71], size: [18.5, 9.58]}
+        - {id: port-4, at: [128.33, 9.05], size: [14.25, 10.4]}
+        - {id: port-6, at: [142.58, 9.05], size: [14.25, 10.4]}
+        - {id: port-8, at: [156.83, 9.05], size: [14.25, 10.4]}
+        - {id: port-10, at: [171.08, 9.05], size: [14.25, 10.4]}
+        - {id: port-5, at: [128.33, 24.95], size: [14.25, 10.4]}
+        - {id: port-7, at: [142.58, 24.95], size: [14.25, 10.4]}
+        - {id: port-9, at: [156.83, 24.95], size: [14.25, 10.4]}
+        - {id: port-11, at: [171.08, 24.95], size: [14.25, 10.4]}
+        - {id: led-port-4, at: [132.65, 21.1], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-5, at: [136.25, 21.1], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-6, at: [146.85, 21.1], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-7, at: [150.45, 21.1], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-8, at: [161.15, 21.1], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-9, at: [164.75, 21.1], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-10, at: [175.35, 21.1], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-11, at: [178.95, 21.1], size: [2.0, 2.0], shape: circle}
+        - {id: mgmt, at: [236.95, 20.25], size: [16.0, 14.0]}
+        - {id: bits, at: [259.05, 20.25], size: [16.0, 14.0]}
+        - {id: con, at: [282.15, 20.4], size: [16.0, 14.0]}
+        - {id: tod, at: [306.15, 20.4], size: [16.0, 14.0]}
+        - {id: usb, at: [327.6, 21.8], size: [4.5, 12.0]}
+        - {id: smb-10mhz-in, at: [341.64, 21.39], size: [4.83, 4.83], shape: circle}
+        - {id: smb-10mhz-out, at: [341.64, 28.99], size: [4.83, 4.83], shape: circle}
+        - {id: smb-1pps-in, at: [351.44, 21.39], size: [4.83, 4.83], shape: circle}
+        - {id: smb-1pps-out, at: [351.44, 28.99], size: [4.83, 4.83], shape: circle}
+        - {id: led-ok-fail, at: [363.75, 33.0], size: [2.4, 2.4], shape: circle}
+        - {id: led-online, at: [375.25, 33.0], size: [2.4, 2.4], shape: circle}
+        - {id: led-alm, at: [385.55, 33.0], size: [2.4, 2.4], shape: circle}
+        - {id: led-ssd0, at: [393.65, 33.0], size: [2.4, 2.4], shape: circle}
+        - {id: led-ssd1, at: [401.85, 33.0], size: [2.4, 2.4], shape: circle}
+        - {id: offline-btn, at: [410.35, 31.7], size: [5.0, 5.0], shape: circle}
+        - {id: reset-btn, at: [422.35, 32.2], size: [4.0, 4.0], shape: circle}
     silkscreen:
-      - {at: [34.0, 9.0], text: JUNIPER NETWORKS, font-size: 3.0, anchor: start}
-      - {at: [455.5, 8.8], text: MX204, font-size: 3.2, anchor: middle}
-      - {at: [31.1, 37.6], path: 'M -1.6 0 L 0 -2.8 L 1.6 0 Z M -2.6 1.6 L -1.2
+      - {at: [11.35, 9.4], text: JUNIPER, font-size: 4.0, anchor: start}
+      - {at: [28.75, 11.6], text: NETWORKS, font-size: 1.5, anchor: end}
+      - {at: [434.5, 8.8], text: MX204, font-size: 3.2, anchor: end}
+      - {at: [8.45, 37.6], path: 'M -1.6 0 L 0 -2.8 L 1.6 0 Z M -2.6 1.6 L -1.2
           1.6 M 1.2 1.6 L 2.6 1.6'}
-      - {at: [53.15, 38.8], text: GM/PTP, font-size: 2.2, anchor: middle, for: gm-ptp}
-      - {at: [76.7, 38.8], text: '0', font-size: 2.4, anchor: middle, for: port-0}
-      - {at: [95.7, 38.8], text: '1', font-size: 2.4, anchor: middle, for: port-1}
-      - {at: [114.7, 38.8], text: '2', font-size: 2.4, anchor: middle, for: port-2}
-      - {at: [133.7, 38.8], text: '3', font-size: 2.4, anchor: middle, for: port-3}
-      - {at: [146.5, 31.0], text: '', font-size: 0.1, for: laser-warning}
-      - {at: [153.2, 22.85], path: 'M -0.8 0.7 L 0 -0.7 L 0.8 0.7 Z', for: [led-port-4, port-4]}
-      - {at: [163.0, 22.85], path: 'M -0.8 -0.7 L 0 0.7 L 0.8 -0.7 Z', for: [led-port-5, port-5]}
-      - {at: [167.4, 22.85], path: 'M -0.8 0.7 L 0 -0.7 L 0.8 0.7 Z', for: [led-port-6, port-6]}
-      - {at: [177.2, 22.85], path: 'M -0.8 -0.7 L 0 0.7 L 0.8 -0.7 Z', for: [led-port-7, port-7]}
-      - {at: [181.7, 22.85], path: 'M -0.8 0.7 L 0 -0.7 L 0.8 0.7 Z', for: [led-port-8, port-8]}
-      - {at: [191.5, 22.85], path: 'M -0.8 -0.7 L 0 0.7 L 0.8 -0.7 Z', for: [led-port-9, port-9]}
-      - {at: [195.9, 22.85], path: 'M -0.8 0.7 L 0 -0.7 L 0.8 0.7 Z', for: [led-port-10, port-10]}
-      - {at: [205.7, 22.85], path: 'M -0.8 -0.7 L 0 0.7 L 0.8 -0.7 Z', for: [led-port-11, port-11]}
-      - {at: [158.1, 37.2], text: '4', font-size: 2.2, anchor: middle, for: port-4}
-      - {at: [158.1, 40.4], text: '5', font-size: 2.2, anchor: middle, for: port-5}
-      - {at: [172.3, 37.2], text: '6', font-size: 2.2, anchor: middle, for: port-6}
-      - {at: [172.3, 40.4], text: '7', font-size: 2.2, anchor: middle, for: port-7}
-      - {at: [186.6, 37.2], text: '8', font-size: 2.2, anchor: middle, for: port-8}
-      - {at: [186.6, 40.4], text: '9', font-size: 2.2, anchor: middle, for: port-9}
-      - {at: [200.8, 37.2], text: '10', font-size: 2.2, anchor: middle, for: port-10}
-      - {at: [200.8, 40.4], text: '11', font-size: 2.2, anchor: middle, for: port-11}
-      - {at: [267.6, 38.8], text: MGMT, font-size: 2.2, anchor: middle, for: mgmt}
-      - {at: [289.7, 38.8], text: BITS, font-size: 2.2, anchor: middle, for: bits}
-      - {at: [312.8, 38.8], text: CON, font-size: 2.2, anchor: middle, for: con}
-      - {at: [336.8, 38.8], text: ToD, font-size: 2.2, anchor: middle, for: tod}
-      - {at: [352.5, 38.2], path: 'M -2.2 0 H 2.2 M 0.8 0 L 2.2 0 M -0.9 -1.2
+      - {at: [30.5, 38.8], text: GM/PTP, font-size: 2.2, anchor: middle, for: gm-ptp}
+      - {at: [54.05, 38.8], text: '0', font-size: 2.4, anchor: middle, for: port-0}
+      - {at: [73.05, 38.8], text: '1', font-size: 2.4, anchor: middle, for: port-1}
+      - {at: [92.05, 38.8], text: '2', font-size: 2.4, anchor: middle, for: port-2}
+      - {at: [111.05, 38.8], text: '3', font-size: 2.4, anchor: middle, for: port-3}
+      - {at: [123.85, 31.0], text: '', font-size: 0.1, for: laser-warning}
+      - {at: [130.55, 22.85], path: 'M -0.8 0.7 L 0 -0.7 L 0.8 0.7 Z', for: [led-port-4, port-4]}
+      - {at: [140.35, 22.85], path: 'M -0.8 -0.7 L 0 0.7 L 0.8 -0.7 Z', for: [led-port-5, port-5]}
+      - {at: [144.75, 22.85], path: 'M -0.8 0.7 L 0 -0.7 L 0.8 0.7 Z', for: [led-port-6, port-6]}
+      - {at: [154.55, 22.85], path: 'M -0.8 -0.7 L 0 0.7 L 0.8 -0.7 Z', for: [led-port-7, port-7]}
+      - {at: [159.05, 22.85], path: 'M -0.8 0.7 L 0 -0.7 L 0.8 0.7 Z', for: [led-port-8, port-8]}
+      - {at: [168.85, 22.85], path: 'M -0.8 -0.7 L 0 0.7 L 0.8 -0.7 Z', for: [led-port-9, port-9]}
+      - {at: [173.25, 22.85], path: 'M -0.8 0.7 L 0 -0.7 L 0.8 0.7 Z', for: [led-port-10, port-10]}
+      - {at: [183.05, 22.85], path: 'M -0.8 -0.7 L 0 0.7 L 0.8 -0.7 Z', for: [led-port-11, port-11]}
+      - {at: [135.45, 37.2], text: '4', font-size: 2.2, anchor: middle, for: port-4}
+      - {at: [135.45, 40.4], text: '5', font-size: 2.2, anchor: middle, for: port-5}
+      - {at: [149.65, 37.2], text: '6', font-size: 2.2, anchor: middle, for: port-6}
+      - {at: [149.65, 40.4], text: '7', font-size: 2.2, anchor: middle, for: port-7}
+      - {at: [163.95, 37.2], text: '8', font-size: 2.2, anchor: middle, for: port-8}
+      - {at: [163.95, 40.4], text: '9', font-size: 2.2, anchor: middle, for: port-9}
+      - {at: [178.15, 37.2], text: '10', font-size: 2.2, anchor: middle, for: port-10}
+      - {at: [178.15, 40.4], text: '11', font-size: 2.2, anchor: middle, for: port-11}
+      - {at: [244.95, 38.8], text: MGMT, font-size: 2.2, anchor: middle, for: mgmt}
+      - {at: [267.05, 38.8], text: BITS, font-size: 2.2, anchor: middle, for: bits}
+      - {at: [290.15, 38.8], text: CON, font-size: 2.2, anchor: middle, for: con}
+      - {at: [314.15, 38.8], text: ToD, font-size: 2.2, anchor: middle, for: tod}
+      - {at: [329.85, 38.2], path: 'M -2.2 0 H 2.2 M 0.8 0 L 2.2 0 M -0.9 -1.2
           L 0.4 -1.2 L 1.2 -0.3 M -0.9 1.2 L 0.4 1.2 L 1.2 0.3 M -2.2 0 L -3.0
           0', for: usb}
-      - {at: [371.6, 27.3], text: IN, font-size: 2.0, anchor: middle, for: [smb-10mhz-in, smb-1pps-in]}
-      - {at: [371.6, 37.6], text: OUT, font-size: 2.0, anchor: middle, for: [smb-10mhz-out, smb-1pps-out]}
-      - {at: [366.7, 40.6], text: PPS, font-size: 1.9, anchor: middle, for: [smb-10mhz-in, smb-10mhz-out]}
-      - {at: [376.5, 40.6], text: 100MHz, font-size: 1.9, anchor: middle, for: [smb-1pps-in, smb-1pps-out]}
-      - {at: [387.6, 38.8], text: OK/FAIL, font-size: 1.9, anchor: middle, for: led-ok-fail}
-      - {at: [399.1, 38.8], text: ONLINE, font-size: 1.9, anchor: middle, for: led-online}
-      - {at: [409.4, 38.8], text: ALM, font-size: 1.9, anchor: middle, for: led-alm}
-      - {at: [417.5, 38.8], text: SSD0, font-size: 1.9, anchor: middle, for: led-ssd0}
-      - {at: [425.7, 38.8], text: SSD1, font-size: 1.9, anchor: middle, for: led-ssd1}
-      - {at: [435.5, 38.2], text: OFFLINE, font-size: 1.9, anchor: middle, for: offline-btn}
-      - {at: [447.0, 38.8], text: RESET, font-size: 1.9, anchor: middle, for: reset-btn}
+      - {at: [348.95, 27.3], text: IN, font-size: 2.0, anchor: middle, for: [smb-10mhz-in, smb-1pps-in]}
+      - {at: [348.95, 37.6], text: OUT, font-size: 2.0, anchor: middle, for: [smb-10mhz-out, smb-1pps-out]}
+      - {at: [344.05, 40.6], text: PPS, font-size: 1.9, anchor: middle, for: [smb-10mhz-in, smb-10mhz-out]}
+      - {at: [353.85, 40.6], text: 100MHz, font-size: 1.9, anchor: middle, for: [smb-1pps-in, smb-1pps-out]}
+      - {at: [364.95, 38.8], text: OK/FAIL, font-size: 1.9, anchor: middle, for: led-ok-fail}
+      - {at: [376.45, 38.8], text: ONLINE, font-size: 1.9, anchor: middle, for: led-online}
+      - {at: [386.75, 38.8], text: ALM, font-size: 1.9, anchor: middle, for: led-alm}
+      - {at: [394.85, 38.8], text: SSD0, font-size: 1.9, anchor: middle, for: led-ssd0}
+      - {at: [403.05, 38.8], text: SSD1, font-size: 1.9, anchor: middle, for: led-ssd1}
+      - {at: [412.85, 38.8], text: OFFLINE, font-size: 1.9, anchor: middle, for: offline-btn}
+      - {at: [424.35, 38.8], text: RESET, font-size: 1.9, anchor: middle, for: reset-btn}
     components:
       placements:
-        - {id: gm-ptp, ref: std/sfp@1, at: [45.9, 24.65], group: timing, rel-pos: 4,
+        - {id: gm-ptp, ref: std/sfp@1, at: [23.25, 24.65], group: timing, rel-pos: 4,
            attrs: {media: sfp, function: PTP grandmaster clock port}}
-        - {id: led-gm-ptp-0, ref: common/led-dot@1, at: [62.6, 25.6], for: gm-ptp, group: gm-ptp-leds, rel-pos: 0}
-        - {id: led-gm-ptp-1, ref: common/led-dot@1, at: [62.6, 31.1], for: gm-ptp, group: gm-ptp-leds, rel-pos: 1}
-        - {id: port-0, ref: std/qsfp-ganged@1, at: [67.45, 22.71], group: qsfp28, rel-pos: 0}
-        - {id: port-1, ref: std/qsfp-ganged@1, at: [86.45, 22.71], group: qsfp28, rel-pos: 1}
-        - {id: port-2, ref: std/qsfp-ganged@1, at: [105.45, 22.71], group: qsfp28, rel-pos: 2}
-        - {id: port-3, ref: std/qsfp-ganged@1, at: [124.45, 22.71], group: qsfp28, rel-pos: 3}
-        - {id: laser-warning, ref: common/laser-warning@1, at: [143.8, 25.6], group: grounding, rel-pos: 4}
-        - {id: port-4, ref: std/sfp-ganged@1, at: [150.98, 9.05], rotate: 180, group: sfp-plus, rel-pos: 4}
-        - {id: port-6, ref: std/sfp-ganged@1, at: [165.23, 9.05], rotate: 180, group: sfp-plus, rel-pos: 6}
-        - {id: port-8, ref: std/sfp-ganged@1, at: [179.48, 9.05], rotate: 180, group: sfp-plus, rel-pos: 8}
-        - {id: port-10, ref: std/sfp-ganged@1, at: [193.73, 9.05], rotate: 180, group: sfp-plus, rel-pos: 10}
-        - {id: port-5, ref: std/sfp-ganged@1, at: [150.98, 24.95], group: sfp-plus, rel-pos: 5}
-        - {id: port-7, ref: std/sfp-ganged@1, at: [165.23, 24.95], group: sfp-plus, rel-pos: 7}
-        - {id: port-9, ref: std/sfp-ganged@1, at: [179.48, 24.95], group: sfp-plus, rel-pos: 9}
-        - {id: port-11, ref: std/sfp-ganged@1, at: [193.73, 24.95], group: sfp-plus, rel-pos: 11}
-        - {id: led-port-4, ref: common/led-dot@1, at: [155.3, 21.1], for: port-4, group: sfp-plus-leds, rel-pos: 4}
-        - {id: led-port-5, ref: common/led-dot@1, at: [158.9, 21.1], for: port-5, group: sfp-plus-leds, rel-pos: 5}
-        - {id: led-port-6, ref: common/led-dot@1, at: [169.5, 21.1], for: port-6, group: sfp-plus-leds, rel-pos: 6}
-        - {id: led-port-7, ref: common/led-dot@1, at: [173.1, 21.1], for: port-7, group: sfp-plus-leds, rel-pos: 7}
-        - {id: led-port-8, ref: common/led-dot@1, at: [183.8, 21.1], for: port-8, group: sfp-plus-leds, rel-pos: 8}
-        - {id: led-port-9, ref: common/led-dot@1, at: [187.4, 21.1], for: port-9, group: sfp-plus-leds, rel-pos: 9}
-        - {id: led-port-10, ref: common/led-dot@1, at: [198.0, 21.1], for: port-10, group: sfp-plus-leds, rel-pos: 10}
-        - {id: led-port-11, ref: common/led-dot@1, at: [201.6, 21.1], for: port-11, group: sfp-plus-leds, rel-pos: 11}
-        - {id: mgmt, ref: std/rj45@1, at: [259.6, 20.25], rotate: 180, group: mgmt, rel-pos: 0}
-        - {id: led-mgmt-act, ref: common/led-dot@1, at: [262.5, 20.7], for: mgmt, group: mgmt-leds, rel-pos: 0,
+        - {id: led-gm-ptp-0, ref: common/led-dot@1, at: [39.95, 25.6], for: gm-ptp, group: gm-ptp-leds, rel-pos: 0}
+        - {id: led-gm-ptp-1, ref: common/led-dot@1, at: [39.95, 31.1], for: gm-ptp, group: gm-ptp-leds, rel-pos: 1}
+        - {id: port-0, ref: std/qsfp-ganged@1, at: [44.8, 22.71], group: qsfp28, rel-pos: 0}
+        - {id: port-1, ref: std/qsfp-ganged@1, at: [63.8, 22.71], group: qsfp28, rel-pos: 1}
+        - {id: port-2, ref: std/qsfp-ganged@1, at: [82.8, 22.71], group: qsfp28, rel-pos: 2}
+        - {id: port-3, ref: std/qsfp-ganged@1, at: [101.8, 22.71], group: qsfp28, rel-pos: 3}
+        - {id: laser-warning, ref: common/laser-warning@1, at: [121.15, 25.6], group: grounding, rel-pos: 4}
+        - {id: port-4, ref: std/sfp-ganged@1, at: [128.33, 9.05], rotate: 180, group: sfp-plus, rel-pos: 4}
+        - {id: port-6, ref: std/sfp-ganged@1, at: [142.58, 9.05], rotate: 180, group: sfp-plus, rel-pos: 6}
+        - {id: port-8, ref: std/sfp-ganged@1, at: [156.83, 9.05], rotate: 180, group: sfp-plus, rel-pos: 8}
+        - {id: port-10, ref: std/sfp-ganged@1, at: [171.08, 9.05], rotate: 180, group: sfp-plus, rel-pos: 10}
+        - {id: port-5, ref: std/sfp-ganged@1, at: [128.33, 24.95], group: sfp-plus, rel-pos: 5}
+        - {id: port-7, ref: std/sfp-ganged@1, at: [142.58, 24.95], group: sfp-plus, rel-pos: 7}
+        - {id: port-9, ref: std/sfp-ganged@1, at: [156.83, 24.95], group: sfp-plus, rel-pos: 9}
+        - {id: port-11, ref: std/sfp-ganged@1, at: [171.08, 24.95], group: sfp-plus, rel-pos: 11}
+        - {id: led-port-4, ref: common/led-dot@1, at: [132.65, 21.1], for: port-4, group: sfp-plus-leds, rel-pos: 4}
+        - {id: led-port-5, ref: common/led-dot@1, at: [136.25, 21.1], for: port-5, group: sfp-plus-leds, rel-pos: 5}
+        - {id: led-port-6, ref: common/led-dot@1, at: [146.85, 21.1], for: port-6, group: sfp-plus-leds, rel-pos: 6}
+        - {id: led-port-7, ref: common/led-dot@1, at: [150.45, 21.1], for: port-7, group: sfp-plus-leds, rel-pos: 7}
+        - {id: led-port-8, ref: common/led-dot@1, at: [161.15, 21.1], for: port-8, group: sfp-plus-leds, rel-pos: 8}
+        - {id: led-port-9, ref: common/led-dot@1, at: [164.75, 21.1], for: port-9, group: sfp-plus-leds, rel-pos: 9}
+        - {id: led-port-10, ref: common/led-dot@1, at: [175.35, 21.1], for: port-10, group: sfp-plus-leds, rel-pos: 10}
+        - {id: led-port-11, ref: common/led-dot@1, at: [178.95, 21.1], for: port-11, group: sfp-plus-leds, rel-pos: 11}
+        - {id: mgmt, ref: std/rj45@1, at: [236.95, 20.25], rotate: 180, group: mgmt, rel-pos: 0}
+        - {id: led-mgmt-act, ref: common/led-dot@1, at: [239.85, 20.7], for: mgmt, group: mgmt-leds, rel-pos: 0,
            attrs: {function: activity}}
-        - {id: led-mgmt-link, ref: common/led-dot@1, at: [270.7, 20.7], for: mgmt, group: mgmt-leds, rel-pos: 1,
+        - {id: led-mgmt-link, ref: common/led-dot@1, at: [248.05, 20.7], for: mgmt, group: mgmt-leds, rel-pos: 1,
            attrs: {function: link}}
-        - {id: bits, ref: std/rj45@1, at: [281.7, 20.25], rotate: 180, group: timing, rel-pos: 0}
-        - {id: led-bits-act, ref: common/led-dot@1, at: [284.6, 20.7], for: bits, group: bits-leds, rel-pos: 0,
+        - {id: bits, ref: std/rj45@1, at: [259.05, 20.25], rotate: 180, group: timing, rel-pos: 0}
+        - {id: led-bits-act, ref: common/led-dot@1, at: [261.95, 20.7], for: bits, group: bits-leds, rel-pos: 0,
            attrs: {function: activity}}
-        - {id: led-bits-link, ref: common/led-dot@1, at: [292.8, 20.7], for: bits, group: bits-leds, rel-pos: 1,
+        - {id: led-bits-link, ref: common/led-dot@1, at: [270.15, 20.7], for: bits, group: bits-leds, rel-pos: 1,
            attrs: {function: link}}
-        - {id: con, ref: std/rj45@1, at: [304.8, 20.4], group: mgmt, rel-pos: 1}
-        - {id: tod, ref: std/rj45@1, at: [328.8, 20.4], group: timing, rel-pos: 1}
-        - {id: usb, ref: std/usb-a@1, at: [350.25, 21.8], rotate: 90, group: mgmt, rel-pos: 2}
-        - {id: smb-10mhz-in, ref: std/smb@1, at: [364.29, 21.39], group: timing, rel-pos: 2,
+        - {id: con, ref: std/rj45@1, at: [282.15, 20.4], group: mgmt, rel-pos: 1}
+        - {id: tod, ref: std/rj45@1, at: [306.15, 20.4], group: timing, rel-pos: 1}
+        - {id: usb, ref: std/usb-a@1, at: [323.85, 25.55], rotate: 90, group: mgmt, rel-pos: 2}
+        - {id: smb-10mhz-in, ref: std/smb@1, at: [341.64, 21.39], group: timing, rel-pos: 2,
            attrs: {function: 10 MHz clock input}}
-        - {id: smb-10mhz-out, ref: std/smb@1, at: [364.29, 28.99], group: timing, rel-pos: 3,
+        - {id: smb-10mhz-out, ref: std/smb@1, at: [341.64, 28.99], group: timing, rel-pos: 3,
            attrs: {function: 10 MHz clock output}}
-        - {id: smb-1pps-in, ref: std/smb@1, at: [374.09, 21.39], group: timing, rel-pos: 5,
+        - {id: smb-1pps-in, ref: std/smb@1, at: [351.44, 21.39], group: timing, rel-pos: 5,
            attrs: {function: 1PPS input}}
-        - {id: smb-1pps-out, ref: std/smb@1, at: [374.09, 28.99], group: timing, rel-pos: 6,
+        - {id: smb-1pps-out, ref: std/smb@1, at: [351.44, 28.99], group: timing, rel-pos: 6,
            attrs: {function: 1PPS output}}
-        - {id: led-ok-fail, ref: common/led-dot@1, at: [386.4, 33.0], for: chassis, group: status-leds, rel-pos: 0,
+        - {id: led-ok-fail, ref: common/led-dot@1, at: [363.95, 33.2], for: chassis, group: status-leds, rel-pos: 0,
            states: ['off', {name: ok, color: '#22c55e'}, {name: failed, color: '#ef4444', behavior: blinking}],
            description: 'Table 17 - green steady: functioning normally; red blinking: failed; off: not powered'}
-        - {id: led-online, ref: common/led-dot@1, at: [397.9, 33.0], for: chassis, group: status-leds, rel-pos: 1,
+        - {id: led-online, ref: common/led-dot@1, at: [375.45, 33.2], for: chassis, group: status-leds, rel-pos: 1,
            states: ['off', {name: junos, color: '#22c55e'}, {name: junos-boot, color: '#22c55e', behavior: blinking},
                     {name: linux, color: '#ef4444'}, {name: linux-boot, color: '#ef4444', behavior: blinking}],
            description: 'Table 17 - green steady: Junos and Linux loaded; green blinking: starting Junos;
              red steady: Linux loaded; red blinking: starting Linux; off: offline'}
-        - {id: led-alm, ref: common/led-dot@1, at: [408.2, 33.0], for: chassis, group: status-leds, rel-pos: 2,
+        - {id: led-alm, ref: common/led-dot@1, at: [385.75, 33.2], for: chassis, group: status-leds, rel-pos: 2,
            states: ['off', {name: major, color: '#ef4444'}, {name: minor, color: '#f59e0b'},
                     {name: major-and-minor, color: '#ef4444', behavior: blinking}],
            description: 'Table 8/17 - red steady: major alarm; yellow steady: minor alarm; red blinking:
              both present; off: no alarms'}
-        - {id: led-ssd0, ref: common/led-dot@1, at: [416.3, 33.0], for: chassis, group: status-leds, rel-pos: 3,
+        - {id: led-ssd0, ref: common/led-dot@1, at: [393.85, 33.2], for: chassis, group: status-leds, rel-pos: 3,
            states: ['off', {name: active, color: '#22c55e', behavior: blinking}],
            description: 'Table 17 - green blinking: SSD0 being accessed; off: not active'}
-        - {id: led-ssd1, ref: common/led-dot@1, at: [424.5, 33.0], for: chassis, group: status-leds, rel-pos: 4,
+        - {id: led-ssd1, ref: common/led-dot@1, at: [402.05, 33.2], for: chassis, group: status-leds, rel-pos: 4,
            states: ['off', {name: active, color: '#22c55e', behavior: blinking}],
            description: 'Table 17 - green blinking: SSD1 being accessed; off: not active'}
-        - {id: offline-btn, ref: common/reset-button@1, at: [433.0, 28.8], group: mgmt, rel-pos: 3,
+        - {id: offline-btn, ref: common/reset-button@1, at: [410.85, 32.2], group: mgmt, rel-pos: 3,
            for: chassis, attrs: {function: take the router offline}}
-        - {id: reset-btn, ref: common/reset-button@1, at: [445.0, 30.0], group: mgmt, rel-pos: 4,
+        - {id: reset-btn, ref: common/reset-button@1, at: [422.35, 32.2], group: mgmt, rel-pos: 4,
            for: chassis, attrs: {function: reset}}
   rear:
     size:
-      w: 482.3
+      w: 437.0
       h: 43.7
     panel:
       decor:
-        - {at: [0.0, 0.0], size: [482.3, 43.7], rx: 0.0, fill: '#9a9ea3'}
-        - {at: [0.0, 0.0], size: [22.5, 43.7], rx: 0.8, fill: '#94989d'}
-        - {at: [459.8, 0.0], size: [22.5, 43.7], rx: 0.8, fill: '#94989d'}
-        - {at: [24.0, 3.0], size: [73.7, 37.2], rx: 0.8, fill: '#8e9296'}
-        - {at: [256.0, 3.8], size: [71.3, 36.7], rx: 0.8, fill: '#8e9296'}
+        - {at: [-22.65, 0.0], size: [22.5, 43.7], rx: 0.8, fill: '#94989d'}
+        - {at: [437.15, 0.0], size: [22.5, 43.7], rx: 0.8, fill: '#94989d'}
+        - {at: [1.35, 3.0], size: [73.7, 37.2], rx: 0.8, fill: '#8e9296'}
+        - {at: [233.35, 3.8], size: [71.3, 36.7], rx: 0.8, fill: '#8e9296'}
       cutouts:
-        - {id: ear-slot-rl-top, at: [4.3, 2.7], size: [10.3, 6.7], rx: 3.3}
-        - {id: ear-slot-rl-bot, at: [4.3, 32.9], size: [10.3, 6.5], rx: 3.2}
-        - {id: ear-slot-rr-top, at: [467.3, 2.7], size: [10.3, 6.7], rx: 3.3}
-        - {id: ear-slot-rr-bot, at: [467.3, 32.9], size: [10.3, 6.5], rx: 3.2}
-        - {id: esd-rear, at: [79.25, 15.05], size: [4.3, 4.3], shape: circle}
-        - {id: led-fan-0, at: [102.2, 27.9], size: [2.0, 2.0], shape: circle}
-        - {id: led-fan-1, at: [151.4, 27.9], size: [2.0, 2.0], shape: circle}
-        - {id: led-fan-2, at: [200.2, 27.9], size: [2.0, 2.0], shape: circle}
+        - {id: esd-rear, at: [56.6, 15.05], size: [4.3, 4.3], shape: circle}
+        - {id: led-fan-0, at: [79.55, 27.9], size: [2.0, 2.0], shape: circle}
+        - {id: led-fan-1, at: [128.75, 27.9], size: [2.0, 2.0], shape: circle}
+        - {id: led-fan-2, at: [177.55, 27.9], size: [2.0, 2.0], shape: circle}
     silkscreen:
-      - {at: [46.6, 31.6], path: 'M 0 -4.6 A 4.6 4.6 0 1 0 0.01 -4.6 Z M -2.6 -1.2
+      - {at: [23.95, 31.6], path: 'M 0 -4.6 A 4.6 4.6 0 1 0 0.01 -4.6 Z M -2.6 -1.2
           H 2.6 M -1.7 0.6 H 1.7 M -0.8 2.4 H 0.8', for: ground-plate}
-      - {at: [81.1, 8.4], path: 'M -1.6 1.4 L 0 -1.4 L 1.6 1.4 Z M -2.4 2.6 L -1.0
+      - {at: [58.45, 8.4], path: 'M -1.6 1.4 L 0 -1.4 L 1.6 1.4 Z M -2.4 2.6 L -1.0
           2.6 M 1.0 2.6 L 2.4 2.6'}
-      - {at: [103.3, 18.2], path: 'M 0 -1.1 A 1.1 1.1 0 1 0 0.01 -1.1 Z M -1.9 -1.1
+      - {at: [80.65, 18.2], path: 'M 0 -1.1 A 1.1 1.1 0 1 0 0.01 -1.1 Z M -1.9 -1.1
           A 1.1 1.1 0 1 0 -1.89 -1.1 Z M 1.9 -1.1 A 1.1 1.1 0 1 0 1.91 -1.1 Z M
           -0.95 0.8 A 1.1 1.1 0 1 0 -0.94 0.8 Z M 0.95 0.8 A 1.1 1.1 0 1 0 0.96
           0.8 Z', for: fan-0}
-      - {at: [103.2, 23.4], text: '0', font-size: 2.4, anchor: middle, for: fan-0}
-      - {at: [152.5, 18.2], path: 'M 0 -1.1 A 1.1 1.1 0 1 0 0.01 -1.1 Z M -1.9 -1.1
+      - {at: [80.55, 23.4], text: '0', font-size: 2.4, anchor: middle, for: fan-0}
+      - {at: [129.85, 18.2], path: 'M 0 -1.1 A 1.1 1.1 0 1 0 0.01 -1.1 Z M -1.9 -1.1
           A 1.1 1.1 0 1 0 -1.89 -1.1 Z M 1.9 -1.1 A 1.1 1.1 0 1 0 1.91 -1.1 Z M
           -0.95 0.8 A 1.1 1.1 0 1 0 -0.94 0.8 Z M 0.95 0.8 A 1.1 1.1 0 1 0 0.96
           0.8 Z', for: fan-1}
-      - {at: [152.4, 23.4], text: '1', font-size: 2.4, anchor: middle, for: fan-1}
-      - {at: [201.3, 18.2], path: 'M 0 -1.1 A 1.1 1.1 0 1 0 0.01 -1.1 Z M -1.9 -1.1
+      - {at: [129.75, 23.4], text: '1', font-size: 2.4, anchor: middle, for: fan-1}
+      - {at: [178.65, 18.2], path: 'M 0 -1.1 A 1.1 1.1 0 1 0 0.01 -1.1 Z M -1.9 -1.1
           A 1.1 1.1 0 1 0 -1.89 -1.1 Z M 1.9 -1.1 A 1.1 1.1 0 1 0 1.91 -1.1 Z M
           -0.95 0.8 A 1.1 1.1 0 1 0 -0.94 0.8 Z M 0.95 0.8 A 1.1 1.1 0 1 0 0.96
           0.8 Z', for: fan-2}
-      - {at: [201.2, 23.4], text: '2', font-size: 2.4, anchor: middle, for: fan-2}
-      - {at: [332.1, 26.8], text: '0', font-size: 2.4, anchor: middle, for: psu-0}
-      - {at: [393.9, 26.8], text: '1', font-size: 2.4, anchor: middle, for: psu-1}
+      - {at: [178.55, 23.4], text: '2', font-size: 2.4, anchor: middle, for: fan-2}
+      - {at: [309.45, 26.8], text: '0', font-size: 2.4, anchor: middle, for: psu-0}
+      - {at: [371.25, 26.8], text: '1', font-size: 2.4, anchor: middle, for: psu-1}
     components:
       bays:
-        - {id: fan-0, at: [107.8, 2.6], size: {w: 42.0, h: 38.5}, accepts: [juniper/mx204-fan@1],
+        - {id: fan-0, at: [85.15, 2.6], size: {w: 42.0, h: 38.5}, accepts: [juniper/mx204-fan@1],
            default: juniper/mx204-fan@1, group: fans, rel-pos: 0}
-        - {id: fan-1, at: [156.9, 2.6], size: {w: 42.0, h: 38.5}, accepts: [juniper/mx204-fan@1],
+        - {id: fan-1, at: [134.25, 2.6], size: {w: 42.0, h: 38.5}, accepts: [juniper/mx204-fan@1],
            default: juniper/mx204-fan@1, group: fans, rel-pos: 1}
-        - {id: fan-2, at: [206.0, 2.6], size: {w: 42.0, h: 38.5}, accepts: [juniper/mx204-fan@1],
+        - {id: fan-2, at: [183.35, 2.6], size: {w: 42.0, h: 38.5}, accepts: [juniper/mx204-fan@1],
            default: juniper/mx204-fan@1, group: fans, rel-pos: 2}
-        - {id: psu-0, at: [334.9, 0.8], size: {w: 56.6, h: 42.4}, accepts: [juniper/mx204-psu-ac@1, juniper/mx204-psu-dc@1],
+        - {id: psu-0, at: [312.25, 0.8], size: {w: 56.6, h: 42.4}, accepts: [juniper/mx204-psu-ac@1, juniper/mx204-psu-dc@1],
            default: juniper/mx204-psu-ac@1, group: psus, rel-pos: 0}
-        - {id: psu-1, at: [396.3, 0.8], size: {w: 56.6, h: 42.4}, accepts: [juniper/mx204-psu-ac@1, juniper/mx204-psu-dc@1],
+        - {id: psu-1, at: [373.65, 0.8], size: {w: 56.6, h: 42.4}, accepts: [juniper/mx204-psu-ac@1, juniper/mx204-psu-dc@1],
            default: juniper/mx204-psu-ac@1, group: psus, rel-pos: 1}
       placements:
-        - {id: ground-plate, ref: juniper/mx204-ground-plate@1, at: [28.6, 10.0], group: grounding, rel-pos: 0}
-        - {id: led-fan-0, ref: common/led-dot@1, at: [102.2, 27.9], for: fan-0, group: fan-leds, rel-pos: 0}
-        - {id: led-fan-1, ref: common/led-dot@1, at: [151.4, 27.9], for: fan-1, group: fan-leds, rel-pos: 1}
-        - {id: led-fan-2, ref: common/led-dot@1, at: [200.2, 27.9], for: fan-2, group: fan-leds, rel-pos: 2}
+        - {id: ground-plate, ref: juniper/mx204-ground-plate@1, at: [5.95, 10.0], group: grounding, rel-pos: 0}
+        - {id: led-fan-0, ref: common/led-dot@1, at: [79.55, 27.9], for: fan-0, group: fan-leds, rel-pos: 0}
+        - {id: led-fan-1, ref: common/led-dot@1, at: [128.75, 27.9], for: fan-1, group: fan-leds, rel-pos: 1}
+        - {id: led-fan-2, ref: common/led-dot@1, at: [177.55, 27.9], for: fan-2, group: fan-leds, rel-pos: 2}
   left:
     size:
       w: 470.0
       h: 43.7
+    panel:
+      decor:
+        - {at: [0.0, 17.4], size: [470.0, 8.9], fill: '#84888c', confidence: estimated,
+           source: 'pre-attached mounting rail along the side (guide Figures 20/27
+           show the rails; the DAM photos show their front ends). Full-length band;
+           height and vertical position estimated - no side drawing exists'}
   right:
     size:
       w: 470.0
       h: 43.7
+    panel:
+      decor:
+        - {at: [0.0, 17.4], size: [470.0, 8.9], fill: '#84888c', confidence: estimated,
+           source: 'pre-attached mounting rail along the side (guide Figures 20/27);
+           mirror of the left face band, same estimate'}
   top:
     size:
-      w: 482.3
+      w: 437.0
       h: 470.0
+    panel:
+      decor:
+        - {at: [0.0, 0.0], size: [6.0, 470.0], fill: '#84888c', confidence: estimated,
+           source: 'side mounting-rail edge seen from above - the g009881 top view
+           draws the slab with rail lines along both sides; width estimated'}
+        - {at: [431.0, 0.0], size: [6.0, 470.0], fill: '#84888c', confidence: estimated,
+           source: 'side mounting-rail edge seen from above (g009881); width estimated'}
   bottom:
     size:
-      w: 482.3
+      w: 437.0
       h: 470.0
+    panel:
+      decor:
+        - {at: [0.0, 0.0], size: [6.0, 470.0], fill: '#84888c', confidence: estimated,
+           source: 'lower edge of the side mounting rail - no bottom source exists;
+           mirrored from the top view estimate'}
+        - {at: [431.0, 0.0], size: [6.0, 470.0], fill: '#84888c', confidence: estimated,
+           source: 'lower edge of the side mounting rail; same estimate'}
 configurations:
   ac:
     description: AC-powered chassis - two 650 W AC PSUs with C14 inlets. SKUs
