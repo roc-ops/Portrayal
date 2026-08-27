@@ -33,6 +33,42 @@ provenance:
     at x 42.0 width 345.5; the brand band y 196.3-222.9; and the snap-on PSU cover
     y 226.7-264.9. The right fan bay is trimmed to start at x 388.0 so it does not
     overlap the card bays, which end at 387.5'
+  fan-left-is-never-empty: >-
+    REVERSED on the owner's observation, and the previous reasoning is kept in
+    `fan-modules` below rather than deleted. `fan-left` carried an explicit
+    `default: null` on the argument that Figure 1-7 calls the left strip a
+    "Secondary fan module slot (optional with redundancy kit)", so a chassis
+    without the kit shows an empty slot. Jason - "I don't know if I've ever seen
+    a C40G without something in that left slot". Field observation beats an
+    inference drawn from a schematic that draws both columns identically, and
+    every image we hold agrees with him - Figures 1-1 and 1-7 and both front
+    photographs show a module fitted on BOTH sides.
+    WHAT IS STILL UNKNOWN is what a genuinely non-redundant chassis has there. A
+    blank filler is the obvious candidate, and the guide lists "Blank filler
+    plates" for rear slots 2 and 3 and never for this one. No figure shows the
+    left slot empty, and none shows a fan blank. So the default is the fan module
+    - the only occupant with a drawing - and this line is the record that the
+    non-redundant case is unconfirmed rather than decided.
+    WANTED - a photograph of a non-redundant C40G front, or a parts list naming a
+    fan blank.
+  fan-legend-layer: >-
+    UNRESOLVED, and the note below contradicts itself on it. It says the FAN TRAY
+    2 / FAN TRAY 1 / AIR FILTER legend is "printed on the CHASSIS, which is why an
+    empty left slot still shows it" - but both front photographs show that legend
+    clearly WITH a module fitted, and a chassis legend would be covered by the
+    module sitting on it. So the legend travels with the module, or sits on a
+    narrow fixed bezel inside the same column.
+    The same question decides where the six slot numbers belong, which is why it
+    matters. They are declared as device silkscreen at x 20, and L21 now reports
+    all six as buried under `fan-left`, which spans x 1.5-36.2 and covers them.
+    Measured off Figure 1-1 at 2.467 px/mm the left column divides into a grey
+    strip 0.8-10.5, the pull handle 10.9-17.4, and a further band 17.8-37.3 that
+    holds the numbers - and the RIGHT column measures the same 35-36 mm overall,
+    so the bay extent itself is right and narrowing it would be wrong. What the
+    images cannot resolve at this scale is whether that third band is module face
+    or fixed bezel.
+    WANTED - one photograph of the C40G with the left fan module withdrawn. That
+    settles the legend, the slot numbers and the non-redundant fit-out at once.
   fan-modules: 'drawing - Figure 1-7, "C40G fan module location and directional
     air flow", settles which side is which and it is NOT symmetric. The RIGHT strip
     is labelled "System fan module" and "Air filter" with "Air flow direction IN";
@@ -237,7 +273,7 @@ views:
         - {id: psu-3, at: [131.2, 226.7], size: {w: 81.0, h: 38.2}, accepts: [casa/c40g-psu-ac@1], group: power, rel-pos: 3, default: null}
         - {id: psu-2, at: [218.4, 226.7], size: {w: 81.0, h: 38.2}, accepts: [casa/c40g-psu-ac@1], group: power, rel-pos: 2, default: null}
         - {id: psu-1, at: [305.6, 226.7], size: {w: 81.0, h: 38.2}, accepts: [casa/c40g-psu-ac@1], group: power, rel-pos: 1, default: null}
-        - {id: fan-left, at: [1.5, 17.0], size: {w: 34.7, h: 205.0}, accepts: [casa/c40g-fan@1], group: cooling, rel-pos: 0, default: null}
+        - {id: fan-left, at: [1.5, 17.0], size: {w: 34.7, h: 205.0}, accepts: [casa/c40g-fan@1], group: cooling, rel-pos: 0, default: casa/c40g-fan@1}
         - {id: fan-right, at: [388.0, 17.0], size: {w: 34.7, h: 205.0}, accepts: [casa/c40g-fan@1], group: cooling, rel-pos: 1, default: casa/c40g-fan@1}
         - {id: front-0, at: [42.0, 164.35], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1, casa/bdm2@1, casa/bdm2m@1, casa/csc-8x10g@1, casa/ds-8x8@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1, casa/blank-faceplate@1], default: casa/bdm@1, group: front-slots, rel-pos: 0}
         - {id: front-1, at: [42.0, 133.88], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1, casa/bdm2@1, casa/bdm2m@1, casa/csc-8x10g@1, casa/ds-8x8@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1, casa/blank-faceplate@1], default: casa/bdm@1, group: front-slots, rel-pos: 1}

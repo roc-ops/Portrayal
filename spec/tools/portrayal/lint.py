@@ -1881,6 +1881,11 @@ def lint_device(path, validator, lib_roots):
         vpp = view_parts(vv_ or {})
         view_ids[vn_] = ({q["id"] for q in vpp["placements"]}
                          | {b["id"] for b in vpp["bays"]})
+    # every bay any configuration names an occupant for, so the bay rule below
+    # can tell "nothing ever fills this" from "a different build fills it"
+    cfg_filled = set()
+    for _c in (data.get("configurations") or {}).values():
+        cfg_filled.update((_c or {}).get("bays") or {})
     for vname, view in (data.get("views") or {}).items():
         view = view or {}
         # L16 - a view is written in the order the part is made. Not a style
@@ -1956,6 +1961,32 @@ def lint_device(path, validator, lib_roots):
                     err(path, "L5", f"unresolvable accepts ref {acc} ({b['id']})")
             if b.get("default") and b["default"] not in b["accepts"]:
                 err(path, "L6", f"bay {b['id']} default {b['default']} not in accepts")
+            # A BAY NOTHING EVER FILLS RENDERS AS A HOLE, and the modelling skill
+            # has
+            # said so for a while - "no module means no lamp, so nothing in it is
+            # clickable, nothing is addressable, and the 3D viewer finds nothing
+            # to extrude". L6 checked that a default, IF PRESENT, is one the bay
+            # accepts, and never that one was there at all. Every device in the
+            # library followed the convention anyway except one, which is exactly
+            # how an unenforced rule fails: not gradually, but on whichever
+            # manifest nobody re-read.
+            #
+            # CONFIGURATIONS COUNT, and the first cut of this rule missed that.
+            # It flagged the C40G's four front PSU bays and two rear PEM bays,
+            # and all six are correct: `ac-power` fills the PSUs and the three DC
+            # builds fill the PEMs, and each set is genuinely empty in the other
+            # - an AC chassis has no power entry modules and a DC one has no AC
+            # supplies. A bay-level default there would assert a fit-out the
+            # device does not have. What is actually wrong is a bay NO
+            # configuration ever fills, which on this library is one bay.
+            #
+            # A warning, because "what is normally fitted here" is a modelling
+            # decision with a source behind it, and a linter guessing it would be
+            # worse than the hole.
+            if not b.get("default") and b["id"] not in cfg_filled:
+                warn(path, "L6", f"bay {b['id']} names no default and no "
+                                 "configuration fills it, so it draws as an empty "
+                                 "frame in every drawing of this device")
         for r in vp["regions"]:
             check_segment(path, "L2", r["id"])
             for m in r.get("members", []) or []:
