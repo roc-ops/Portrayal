@@ -1,0 +1,89 @@
+format: 1
+kind: module
+name: jnp304-re
+version: 1.0.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX304 Routing Engine (JNP304-RE), a hot-swappable half-width FRU.
+  One or two per chassis - slot RE 0, and slot RE 1/LMIC2 which also accepts a
+  third LMIC. Intel Icelake multicore CPU, 4x32 GB DDR4 (128 GB max), two
+  M.2 SATA SSDs (2x200 GB), TPM 2.0 and secure boot. The face carries a hex
+  vent field, the OK/FAIL / MAJOR-MINOR ALARM lamps, a recessed OFFLINE
+  button, RJ-45 CONSOLE and MGMT ports, a RESET pinhole, a vertical USB 3.0
+  port and the ONLINE-OFFLINE / MASTER / DISK 0 / DISK 1 lamp block, with
+  pale-blue ejector levers at both ends.
+attrs:
+  envelope: 203.5 x 40.1 x 203.2 mm (Table 22)
+  model: JNP304-RE
+  power-draw-max-w: 59
+  power-draw-typical-w: 49
+  cpu: Intel Icelake based multicore processor
+  memory: 4x32-GB DDR4 default, 128 GB maximum, ECC
+  storage: 2x200-GB M.2 SATA SSD
+  platform-security: TPM 2.0, secure boot
+provenance:
+  size: 'datasheet-table + photo - Table 22 states the Routing Engine envelope
+    8.01 x 1.58 x 8.0 in (203.5 x 40.1 x 203.2 mm). The DRAWN face is the
+    197.6 mm visible plate measured off the straight-on DAM front photograph
+    (two equal module columns between the chassis rails); the 203.5 envelope
+    includes side rails behind the panel and is carried as insert. Face height
+    39.7 is the chassis row aperture off the guide front drawing'
+  power: 'guide Table 25 (power requirements per module): Routing Engine 49 W
+    at 25 C, 59 W at 46 C, active and standby alike. Max takes the 46 C figure'
+  face: 'photo - mx304-front-high.jpg at 4.058 px/mm in x (module-local
+    fractions in y; the photo is ~16% anisotropic and fails the orthographic
+    gate for absolute y, so vertical positions are approximate). Guide Figure
+    25 (g101334) names all 13 callouts and its aspect check PASSES at 1.0%,
+    corroborating the arrangement. Feature sizes come from the registry'
+  master-vs-active: 'sources-disagree - the photographed faceplate prints
+    MASTER beside the lower-left lamp of the LED block; guide Figure 25 and
+    Table 16 call the same lamp ACTIVE (green on = Routing Engine is primary).
+    The silkscreen follows the photograph, the state vocabulary is the
+    guide''s, and the two describe the same lamp'
+  leds: 'guide Table 16, transcribed: OK/FAIL green ok / red fault / off
+    offline; MAJOR ALARM red steady; MINOR ALARM amber steady; MGMT jack
+    status lamp yellow 10/100, green 1000, activity lamp green blinking;
+    ONLINE/OFFLINE green on ok, blinking starting Junos, off offline; ACTIVE
+    (printed MASTER) green = primary, off = redundant; DISK 0/1 green
+    blinking on activity'
+  mgmt-lamps: 'guide Figure 25 callouts 1 and 2 - the MGMT port link
+    activity and status lamps sit on the jack itself (photo shows the two
+    windows at its top corners); drawn as two lenses above the composed
+    std/rj45. Their states are Table 16''s MGMT rows'
+  levers: 'photo - pale blue ejector levers with captive screws at both ends
+    of the face; positions photo-read, projection estimated'
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/rj45@1, id: console, at: [82.8, 17.3], attrs: {function: serial console}}
+- {ref: std/rj45@1, id: mgmt, at: [118.3, 17.3], attrs: {function: out-of-band management, speed: 10/100/1000}}
+- {ref: std/usb-a@1, id: usb, at: [137.4, 21.75], rotate: 90, attrs: {function: USB 3.0 service port}}
+elements:
+  lever-left:
+    at: [1.6, 3.3]
+    size: [9.0, 33.0]
+    class: latch
+  lever-right:
+    at: [187.0, 3.3]
+    size: [9.0, 33.0]
+    class: latch
+size:
+  w: 197.6
+  h: 39.7
+  d: 203.2
+relief:
+  features:
+  - node: lever-left
+    out: 2.2
+    color: '#7fb8e4'
+    confidence: estimated
+    source: photo - the ejector levers stand proud; projection not measured
+  - node: lever-right
+    out: 2.2
+    color: '#7fb8e4'
+    confidence: estimated
+    source: photo - as lever-left

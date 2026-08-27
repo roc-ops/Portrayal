@@ -1,0 +1,416 @@
+format: 1
+kind: device
+name: mx304
+version: 0.1.0
+maturity: modelled
+manufacturer: Juniper
+model: MX304
+portfolio:
+  line: MX Series
+  family: Universal Routing Platform
+description: >-
+  Juniper MX304 Universal Routing Platform - a modular 2RU, 4.8 Tbps Trio
+  6-based edge router. Four half-width front slots take one or two
+  hot-swappable Routing Engines (slot RE 0, and slot RE 1/LMIC2 which also
+  accepts a third line card) and two or three LMIC16 multi-rate line cards
+  (16x100GbE or 4x400GbE each). The rear carries two stacked 2200 W PSUs (AC,
+  DC, or HVAC/DC), a fixed timing strip (1PPS and 10 MHz SMB in/out, ToD,
+  BITS, and a GM/PTP SFP), three fan modules and the earthing terminal.
+provenance:
+  sources: MX304 Universal Routing Platform Hardware Guide (figures g101366/
+    g101368/g101334/g101624 among others, extracted with captions into
+    working/images/mx304/), MX304 datasheet (mx304-datasheet.pdf), Juniper
+    image-library studio photographs mx304-front-high, mx304-rear-ac-high and
+    mx304-rear-dc-high, and the NetBox devicetype-library MX304 elevations.
+    No mechanical drawing was available
+  chassis: 'datasheet-table - Table 22: chassis 3.5 x 17.36 x 24.01 in (88.9 x
+    440.8 x 610 mm), 2RU; 78.2 cm deep over cable-management brackets and
+    handles. The chassis-description prose says 17.63 in (44.8 cm) wide - a
+    0.7 cm disagreement with Table 22; the table is carried and the prose
+    recorded here. Fully loaded 32 kg, bare 16 kg. Ears are NOT MODELLED by
+    project convention; the modelled body is the 440.8 mm between the flange
+    folds, and the slot labels (RE 0, LMIC0, RE1/LMIC2, LMIC1) are printed on
+    the REMOVABLE BRACKETS the photographs show, so they appear nowhere on
+    this body - recorded so their absence is not read as an omission'
+  scale: 'photo + drawing, cross-anchored per axis - the guide front drawing
+    (g101366) measures aspect 5.58 against the rack face''s 5.43 and is
+    internally inconsistent in x by ~1.5%, and the front photograph is
+    ~16% COMPRESSED in y (near-axis studio shot) while consistent in x. So:
+    front x positions come from the photograph at 4.058 px/mm anchored to the
+    440.8 body, front y positions from the drawing anchored to the 88.9
+    height. The rear photograph is near-isotropic (3%) and rear positions
+    come from it at 4.236 px/mm (x) / 4.106 (y). Feature sizes come from the
+    registry and Table 22 throughout'
+  slots: 'drawing + photo - four half-width apertures in two columns of two:
+    RE 0 above LMIC 0 on the left, RE 1/LMIC2 above LMIC 1 on the right
+    (guide Figure 2 callouts name all four). Rows y 4.1-43.8 and 44.6-84.3
+    off the drawing; columns x 1.2-198.8 and 205.3-402.9 off the photograph,
+    separated by the centre rail. A one-RE system may seat a THIRD LMIC in
+    the RE 1/LMIC2 slot (guide Figure 3 shows it; hardware overview text:
+    "You can also add a third LMIC into one of the Routing Engine slots").
+    The 197.6 mm apertures take 203.5 mm module envelopes - the modules carry
+    insert: for the difference'
+  badge-strip: 'photo - the dark strip right of the module columns
+    (402.9-440.8) carries two columns of three square vent apertures, the
+    JUNIPER / MX 304 badge mid-height, and the front ESD socket at its top
+    with the symbol beside it. Positions are photo-fractions, approximate'
+  rear: 'photo (mx304-rear-ac-high) - stacked PSU bays at x 10.9 (PSU 0 above
+    PSU 1, labels printed vertically on the chassis strip right of them), the
+    fixed timing strip at 84-116, three 82.0 mm fan bays at x 116.4, 213.4
+    and 334.2, and the earthing plate and rear ESD socket at the right end.
+    THE GAP BETWEEN FAN 1 AND FAN 2 IS WIDER THAN BETWEEN FAN 0 AND FAN 1 -
+    that asymmetry is what the photograph shows and the strip labels confirm
+    (each bay''s icon, number and lamp sit on the chassis to its right).
+    The rear drawing (g101368 family) was measured too but its verticals mix
+    module internals at this threshold and were not used for positions'
+  timing: 'photo + guide timing topic - SMB quad at x 98.6/107.1, y 11.6/22.2
+    (rows 10 MHz above 1PPS, columns OUT left / IN right per the rotated
+    legends), BITS RJ45 centred at 101.9, 35.6, ToD at 101.3, 55.4, and the
+    GM/PTP SFP cage VERTICAL at 100.1, 74.9 with its link lamp to the left.
+    The guide NOTE says BITS and GM/PTP are currently unsupported and
+    reserved for future use - carried in attrs. GM/PTP supports 1-GbE and
+    10-GbE optics per the same topic'
+  grounding: 'guide grounding specifications + photo - two threaded holes for
+    M6 pan-head screws on 16 mm centres at the rear right, under the earth
+    symbol; the protective earthing terminal bracket attaches here. Modelled
+    as juniper/mx304-ground-plate'
+  esd: 'guide Figure 11 (ESD Points) - one point on the front badge strip
+    top, one on the rear right above the earthing plate. Both are plain
+    sockets in the photographs'
+  power: 'guide Table 25, the vendor''s own per-module table at two ambients
+    for the 3.2 Tbps two-RE + two-LMIC 100GbE configuration: REs 49/59 W
+    each, SFB+CB+PMB 155/228 (chassis internals, not a FRU here), LMICs
+    318/410 each with transceivers, fans 48/90 each; total chassis power
+    1033 W at 25 C and 1436 W at 46 C. Those totals are carried as the
+    device figures with that scope in power-envelope; Table 26 gives the
+    400GbE configuration and its totals fell outside this extraction''s text
+    layer - not carried rather than guessed'
+  fan-strips: 'photo - each fan bay''s chassis strip to its right prints the
+    fan icon, the bay number and the bicolour status lamp (Table 12: green
+    blinking = hardware init complete, green steady = ok, yellow steady =
+    faulty). The fourth strip position at the far right shares the ground
+    zone'
+  front-cover: 'not modelled - the optional front cover with air filter
+    (JNP-FLTRDR-2RU + JNP-AIRFLTR-2RU, Table 22) bolts over the entire front
+    face; the guide documents replacement procedures for both. Modelled
+    configuration is the bare front as photographed; see gaps'
+  color: 'photo - medium grey chassis (#8b8f94), bright aluminium module
+    plates, pale blue ejector levers, Juniper orange fan furniture'
+  other-faces: 'near-blank by evidence - no source shows the top, bottom or
+    side faces; each carries only an estimated mounting-rail band so the
+    capability chain counts it as drawn, sized from Table 22. Axis
+    conventions per viewer3d.js: LEFT view x = 0 is the REAR, RIGHT view
+    x = 0 is the FRONT, top and bottom y = 0 at the FRONT'
+  lifecycle: 'none-announced - searched "Juniper MX304 end of life end of
+    sale" 2026-08-26; the third-party EOL trackers list no dates and the 2022
+    NANOG thread names the MX304 as the successor replacing the MX204 and
+    MX10003. Absence of the announcement is the finding'
+attrs:
+  physical:
+    weight: 32 kg fully loaded (two REs, two LMICs); 16 kg without FRUs
+      (Table 22)
+    depth-with-brackets: 782 mm over cable-management brackets, air filter
+      and handles (Table 22)
+  performance:
+    throughput: 4.8 Tbps system capacity; up to 12x400 Gbps or 48x100 Gbps
+      ports (three LMICs)
+    asic: Juniper Trio 6 (one YT ASIC per LMIC)
+  power:
+    power-typical-w: 1033
+    power-max-w: 1436
+    power-envelope: fully-configured
+  environmental:
+    operating-temp: 0 C to 40 C
+    storage-temp: -40 C to 70 C in shipping container
+    humidity: 5-90 percent noncondensing
+    altitude: no performance degradation to 1800 m
+  features:
+    macsec: inline MACsec on all ports at all speeds
+    timing: 1PPS and 10 MHz SMB input and output, ToD and BITS RJ45, GM/PTP
+      SFP (1-GbE/10-GbE); BITS and GM/PTP currently reserved for future use
+      per the guide
+    redundancy: full hardware redundancy - Routing Engines, power supplies
+      and fans
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 440.8
+  height: 88.9
+  depth: 610.0
+  ru: 2
+  color: '#8b8f94'
+groups:
+  res:
+    term: Slot
+    role: management
+    index-origin: 0
+    description: Routing Engine slots - RE 0, and RE 1/LMIC2 which accepts a
+      Routing Engine or a third LMIC. One RE minimum; slot 0 is primary by
+      default
+  lmics:
+    term: Slot
+    role: traffic
+    index-origin: 0
+    description: LMIC slots 0 and 1; a third LMIC seats in the RE 1/LMIC2
+      slot (see res)
+  timing:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: the rear timing strip - 1PPS/10 MHz SMB in-out quad, ToD and BITS
+      RJ45s, and the vertical GM/PTP SFP. One job (clock), three media
+  gm-ptp-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    states: ['off', {name: link, color: '#22c55e'}, {name: beacon, color: '#22c55e', behavior: blinking}]
+    description: Table 9 - GM port link lamp; off = no transceiver, green
+      steady = link up, blinking = beacon enabled
+  psus:
+    term: PSU
+    role: service
+    index-origin: 0
+  fans:
+    term: Fan
+    role: service
+    index-origin: 0
+  fan-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    states: ['off', {name: init, color: '#22c55e', behavior: blinking},
+             {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]
+    description: Table 12 - bicolour fan lamp on the chassis strip beside
+      each bay; green blinking = hardware init complete, green steady = ok,
+      yellow steady = faulty
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 0
+views:
+  front:
+    size:
+      w: 440.8
+      h: 88.9
+    panel:
+      decor:
+        - {at: [198.8, 0.0], size: [6.5, 88.9], rx: 0.0, fill: '#82868b'}
+        - {at: [402.9, 0.0], size: [37.9, 88.9], rx: 0.0, fill: '#3a3d42'}
+      cutouts:
+        - {id: strip-vent-0, at: [406.5, 5.0], size: [8.0, 8.0], rx: 1.0}
+        - {id: strip-vent-1, at: [416.5, 5.0], size: [8.0, 8.0], rx: 1.0}
+        - {id: strip-vent-2, at: [406.5, 15.5], size: [8.0, 8.0], rx: 1.0}
+        - {id: strip-vent-3, at: [416.5, 15.5], size: [8.0, 8.0], rx: 1.0}
+        - {id: strip-vent-4, at: [406.5, 26.0], size: [8.0, 8.0], rx: 1.0}
+        - {id: strip-vent-5, at: [416.5, 26.0], size: [8.0, 8.0], rx: 1.0}
+        - {id: esd-front, at: [431.8, 3.2], size: [4.2, 4.2], shape: circle}
+    silkscreen:
+      - {at: [427.5, 8.2], path: 'M -1.4 1.2 L 0 -1.2 L 1.4 1.2 Z M -2.1 2.2
+          L -0.9 2.2 M 0.9 2.2 L 2.1 2.2', fill: '#c7ccd1'}
+      - {at: [421.8, 36.0], text: JUNIPER, font-size: 3.4, anchor: middle, fill: '#e8eaec'}
+      - {at: [421.8, 38.4], text: NETWORKS, font-size: 1.3, anchor: middle, fill: '#b9bdc2'}
+      - {at: [421.8, 43.2], text: MX 304, font-size: 3.2, anchor: middle, fill: '#e8eaec'}
+    components:
+      bays:
+        - {id: re0, at: [1.2, 4.1], size: {w: 197.6, h: 39.7},
+           accepts: [juniper/jnp304-re@1, juniper/jnp304-blnk@1],
+           default: juniper/jnp304-re@1, group: res, rel-pos: 0}
+        - {id: re1-lmic2, at: [205.3, 4.1], size: {w: 197.6, h: 39.7},
+           accepts: [juniper/jnp304-re@1, juniper/mx304-lmic16@1, juniper/jnp304-blnk@1],
+           default: juniper/jnp304-re@1, group: res, rel-pos: 1}
+        - {id: lmic0, at: [1.2, 44.6], size: {w: 197.6, h: 39.7},
+           accepts: [juniper/mx304-lmic16@1, juniper/jnp304-blnk@1],
+           default: juniper/mx304-lmic16@1, group: lmics, rel-pos: 0}
+        - {id: lmic1, at: [205.3, 44.6], size: {w: 197.6, h: 39.7},
+           accepts: [juniper/mx304-lmic16@1, juniper/jnp304-blnk@1],
+           default: juniper/mx304-lmic16@1, group: lmics, rel-pos: 1}
+  rear:
+    size:
+      w: 440.8
+      h: 88.9
+    panel:
+      decor:
+        - {at: [77.4, 0.0], size: [6.8, 88.9], rx: 0.0, fill: '#82868b'}
+      cutouts:
+        - {id: smb-10mhz-out, at: [96.19, 9.19], size: [4.83, 4.83], shape: circle}
+        - {id: smb-10mhz-in, at: [104.69, 9.19], size: [4.83, 4.83], shape: circle}
+        - {id: smb-1pps-out, at: [96.19, 19.79], size: [4.83, 4.83], shape: circle}
+        - {id: smb-1pps-in, at: [104.69, 19.79], size: [4.83, 4.83], shape: circle}
+        - {id: bits, at: [93.9, 28.6], size: [16.0, 14.0]}
+        - {id: tod, at: [93.3, 48.4], size: [16.0, 14.0]}
+        - {id: gm-ptp, at: [95.1, 67.65], size: [10.0, 14.5]}
+        - {id: led-gm-ptp, at: [92.6, 71.8], size: [2.0, 2.0], shape: circle}
+        - {id: led-fan-0, at: [201.6, 79.1], size: [2.0, 2.0], shape: circle}
+        - {id: led-fan-1, at: [295.0, 79.1], size: [2.0, 2.0], shape: circle}
+        - {id: led-fan-2, at: [419.3, 79.1], size: [2.0, 2.0], shape: circle}
+        - {id: esd-rear, at: [430.0, 8.6], size: [4.2, 4.2], shape: circle}
+    silkscreen:
+      - {at: [80.9, 21.5], text: PSU 0, font-size: 2.0, anchor: middle, rotate: 270, for: psu-0}
+      - {at: [80.9, 63.0], text: PSU 1, font-size: 2.0, anchor: middle, rotate: 270, for: psu-1}
+      - {at: [93.4, 11.6], text: 10Mhz, font-size: 1.7, anchor: middle, rotate: 270, for: [smb-10mhz-out, smb-10mhz-in]}
+      - {at: [93.4, 22.2], text: 1PPS, font-size: 1.7, anchor: middle, rotate: 270, for: [smb-1pps-out, smb-1pps-in]}
+      - {at: [101.6, 16.9], text: OUT, font-size: 1.5, anchor: middle, rotate: 270, for: [smb-10mhz-out, smb-1pps-out]}
+      - {at: [110.6, 16.9], text: IN, font-size: 1.5, anchor: middle, rotate: 270, for: [smb-10mhz-in, smb-1pps-in]}
+      - {at: [91.4, 35.6], text: BITS, font-size: 1.7, anchor: middle, rotate: 270, for: bits}
+      - {at: [91.4, 48.4], text: ToD, font-size: 1.7, anchor: middle, rotate: 270, for: tod}
+      - {at: [111.8, 74.9], text: GM/PTP, font-size: 1.7, anchor: middle, rotate: 270, for: gm-ptp}
+      - {at: [208.3, 78.4], text: '0', font-size: 2.4, anchor: middle, for: fan-0}
+      - {at: [211.8, 82.4], path: 'M 0 -1.1 A 1.1 1.1 0 1 0 0.01 -1.1 Z M -1.9
+          -1.1 A 1.1 1.1 0 1 0 -1.89 -1.1 Z M 1.9 -1.1 A 1.1 1.1 0 1 0 1.91
+          -1.1 Z M -0.95 0.8 A 1.1 1.1 0 1 0 -0.94 0.8 Z M 0.95 0.8 A 1.1 1.1
+          0 1 0 0.96 0.8 Z', for: fan-0}
+      - {at: [301.7, 78.4], text: '1', font-size: 2.4, anchor: middle, for: fan-1}
+      - {at: [305.2, 82.4], path: 'M 0 -1.1 A 1.1 1.1 0 1 0 0.01 -1.1 Z M -1.9
+          -1.1 A 1.1 1.1 0 1 0 -1.89 -1.1 Z M 1.9 -1.1 A 1.1 1.1 0 1 0 1.91
+          -1.1 Z M -0.95 0.8 A 1.1 1.1 0 1 0 -0.94 0.8 Z M 0.95 0.8 A 1.1 1.1
+          0 1 0 0.96 0.8 Z', for: fan-1}
+      - {at: [426.0, 78.4], text: '2', font-size: 2.4, anchor: middle, for: fan-2}
+      - {at: [429.5, 82.4], path: 'M 0 -1.1 A 1.1 1.1 0 1 0 0.01 -1.1 Z M -1.9
+          -1.1 A 1.1 1.1 0 1 0 -1.89 -1.1 Z M 1.9 -1.1 A 1.1 1.1 0 1 0 1.91
+          -1.1 Z M -0.95 0.8 A 1.1 1.1 0 1 0 -0.94 0.8 Z M 0.95 0.8 A 1.1 1.1
+          0 1 0 0.96 0.8 Z', for: fan-2}
+      - {at: [427.3, 66.5], path: 'M 0 -4.2 A 4.2 4.2 0 1 0 0.01 -4.2 Z M -2.4
+          -1.1 H 2.4 M -1.6 0.5 H 1.6 M -0.7 2.1 H 0.7', fill: '#c7ccd1', for: ground-plate}
+      - {at: [423.3, 11.2], path: 'M -1.4 1.2 L 0 -1.2 L 1.4 1.2 Z M -2.1 2.2
+          L -0.9 2.2 M 0.9 2.2 L 2.1 2.2', fill: '#c7ccd1'}
+    components:
+      bays:
+        - {id: psu-0, at: [10.9, 2.4], size: {w: 66.0, h: 40.1},
+           accepts: [juniper/mx304-psu-ac@1, juniper/mx304-psu-dc@1, juniper/mx304-psu-hvacdc@1],
+           default: juniper/mx304-psu-ac@1, group: psus, rel-pos: 0}
+        - {id: psu-1, at: [10.9, 44.4], size: {w: 66.0, h: 40.1},
+           accepts: [juniper/mx304-psu-ac@1, juniper/mx304-psu-dc@1, juniper/mx304-psu-hvacdc@1],
+           default: juniper/mx304-psu-ac@1, group: psus, rel-pos: 1}
+        - {id: fan-0, at: [116.4, 1.5], size: {w: 82.0, h: 85.5},
+           accepts: [juniper/mx304-fan@1], default: juniper/mx304-fan@1, group: fans, rel-pos: 0}
+        - {id: fan-1, at: [213.4, 1.5], size: {w: 82.0, h: 85.5},
+           accepts: [juniper/mx304-fan@1], default: juniper/mx304-fan@1, group: fans, rel-pos: 1}
+        - {id: fan-2, at: [334.2, 1.5], size: {w: 82.0, h: 85.5},
+           accepts: [juniper/mx304-fan@1], default: juniper/mx304-fan@1, group: fans, rel-pos: 2}
+      placements:
+        - {id: smb-10mhz-out, ref: std/smb@1, at: [96.19, 9.19], group: timing, rel-pos: 0,
+           attrs: {function: 10 MHz clock output}}
+        - {id: smb-10mhz-in, ref: std/smb@1, at: [104.69, 9.19], group: timing, rel-pos: 1,
+           attrs: {function: 10 MHz clock input}}
+        - {id: smb-1pps-out, ref: std/smb@1, at: [96.19, 19.79], group: timing, rel-pos: 2,
+           attrs: {function: 1PPS output}}
+        - {id: smb-1pps-in, ref: std/smb@1, at: [104.69, 19.79], group: timing, rel-pos: 3,
+           attrs: {function: 1PPS input}}
+        - {id: bits, ref: std/rj45@1, at: [93.9, 28.6], group: timing, rel-pos: 4,
+           attrs: {function: BITS (reserved for future use per the guide)}}
+        - {id: tod, ref: std/rj45@1, at: [93.3, 48.4], group: timing, rel-pos: 5,
+           attrs: {function: Time of day}}
+        - {id: gm-ptp, ref: std/sfp@1, at: [92.85, 69.9], rotate: 90, group: timing, rel-pos: 6,
+           attrs: {media: sfp, function: PTP grandmaster clock port, speed: 1g/10g
+             (reserved for future use per the guide)}}
+        - {id: led-gm-ptp, ref: common/led-dot@1, at: [92.6, 71.8], for: gm-ptp,
+           group: gm-ptp-leds, rel-pos: 0}
+        - {id: led-fan-0, ref: common/led-dot@1, at: [201.6, 79.1], for: fan-0, group: fan-leds, rel-pos: 0}
+        - {id: led-fan-1, ref: common/led-dot@1, at: [295.0, 79.1], for: fan-1, group: fan-leds, rel-pos: 1}
+        - {id: led-fan-2, ref: common/led-dot@1, at: [419.3, 79.1], for: fan-2, group: fan-leds, rel-pos: 2}
+        - {id: ground-plate, ref: juniper/mx304-ground-plate@1, at: [422.4, 24.5],
+           group: grounding, rel-pos: 0}
+  left:
+    size:
+      w: 610.0
+      h: 88.9
+    panel:
+      decor:
+        - {at: [0.0, 39.0], size: [610.0, 11.0], fill: '#7d8185', confidence: estimated,
+           source: 'mounting-rail band along the side (the guide''s rack topics
+           show pre-installed brackets); full-length band, height and position
+           estimated - no side drawing exists'}
+  right:
+    size:
+      w: 610.0
+      h: 88.9
+    panel:
+      decor:
+        - {at: [0.0, 39.0], size: [610.0, 11.0], fill: '#7d8185', confidence: estimated,
+           source: 'mounting-rail band along the side; mirror of the left face
+           band, same estimate'}
+  top:
+    size:
+      w: 440.8
+      h: 610.0
+    panel:
+      decor:
+        - {at: [0.0, 0.0], size: [6.0, 610.0], fill: '#7d8185', confidence: estimated,
+           source: 'side rail edge seen from above; width estimated'}
+        - {at: [434.8, 0.0], size: [6.0, 610.0], fill: '#7d8185', confidence: estimated,
+           source: 'side rail edge seen from above; width estimated'}
+  bottom:
+    size:
+      w: 440.8
+      h: 610.0
+    panel:
+      decor:
+        - {at: [0.0, 0.0], size: [6.0, 610.0], fill: '#7d8185', confidence: estimated,
+           source: 'lower edge of the side rail; mirrored from the top estimate'}
+        - {at: [434.8, 0.0], size: [6.0, 610.0], fill: '#7d8185', confidence: estimated,
+           source: 'lower edge of the side rail; same estimate'}
+configurations:
+  dual-re-ac:
+    description: Two Routing Engines, two LMIC16s, AC power - the fully
+      redundant configuration the guide photographs. 3.2 Tbps of installed
+      capacity.
+    default: true
+  one-re-3lmic-ac:
+    description: One Routing Engine and three LMIC16s (the third in the
+      RE 1/LMIC2 slot) - the maximum-capacity 4.8 Tbps configuration of guide
+      Figure 3.
+    bays:
+      re1-lmic2: juniper/mx304-lmic16@1
+  dc:
+    description: DC-powered chassis - two 2200 W DC PSUs, dual Routing
+      Engines.
+    bays:
+      psu-0: juniper/mx304-psu-dc@1
+      psu-1: juniper/mx304-psu-dc@1
+  hvac-dc:
+    description: High-voltage AC/DC universal power - two 2200 W HVAC/DC
+      PSUs, dual Routing Engines.
+    bays:
+      psu-0: juniper/mx304-psu-hvacdc@1
+      psu-1: juniper/mx304-psu-hvacdc@1
+gaps:
+  - what: module-envelope-vs-aperture
+    scope: [res, lmics, psus]
+    reason: needs-drawing
+    wanted: a mechanical drawing resolving the module envelopes against the
+      drawn apertures - Table 22 states 203.5 mm module and 73.5 mm PSU
+      envelopes while the photographed apertures measure 197.6 and 66.0; the
+      bays and module faces are both drawn at the aperture and the envelopes
+      live in each contract's attrs. That reconciliation is a judgement (rails
+      hidden behind the panel), not a measurement, and this gap is its record.
+  - what: front-cover-and-air-filter
+    scope: [front]
+    reason: needs-photo
+    wanted: geometry for the optional JNP-FLTRDR-2RU cover and
+      JNP-AIRFLTR-2RU filter that bolt over the front face (Table 22 gives
+      envelopes; no straight-on image exists in the intake). Not modelled;
+      the bare front is the photographed configuration.
+  - what: fan-module-table-error
+    scope: [fans]
+    reason: sources-disagree
+    wanted: a corrected vendor dimension for the fan module - Table 22's row
+      reads 0.31 x 5.62 x 0.31 in, dimensionally impossible for a module
+      holding two 80 mm fans; the model carries the photographed 82.0 x 85.5
+      aperture and the table's 143 mm depth.
+  - what: table-26-totals
+    reason: vendor-silent
+    wanted: the 400GbE-configuration chassis power totals (guide Table 26) -
+      the rows fell outside the docling text layer; only the 100GbE Table 25
+      totals are carried.
+  - what: supported-optics
+    scope: [lmics, timing]
+    reason: vendor-silent
+    wanted: the MX304 transceiver list - the guide points at the external
+      Hardware Compatibility Tool and no document in the intake carries the
+      table.
+  - what: slot-label-brackets
+    scope: [res, lmics]
+    reason: needs-drawing
+    wanted: the removable front brackets carrying the RE 0 / LMIC0 /
+      RE1/LMIC2 / LMIC1 slot legends, should ears-and-brackets modelling ever
+      be wanted; with ears unmodelled the chassis prints no slot names.
