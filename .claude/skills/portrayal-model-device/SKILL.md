@@ -246,6 +246,22 @@ narrow ink box fell where the positional rule said port 1 was, and the only
 two double-width boxes fell on 10 and 11, which turned a guess into three
 independent agreeing facts.
 
+**Measure the repeating features twice, from two different images.** When the
+intake holds two independent shots of the same face - an AC and a DC variant, a
+guide figure and a DAM photograph - measure the pitch in both before recording
+either. The MX304's fans were modelled unevenly spaced because edge detection
+assigned fan 1's edges to its grille internals; the DC-variant rear photograph
+was sitting unused in the same intake and gave the even layout immediately.
+
+**Implausibility is a failed check, not a finding.** If a measurement produces a
+layout no real device has - staggered fans, an off-centre lone port, a slot
+pitch that changes halfway - re-measure before you write the provenance
+sentence. The MX304's asymmetry survived every gate *because* the provenance
+asserted it confidently ("THE GAP BETWEEN FAN 1 AND FAN 2 IS WIDER..."). Lint
+passed, the render matched the mis-read overlay, and the sentence read like
+diligence. A confident sentence is what makes an error permanent. (L49 now
+catches the mechanical half of this; the instinct is still yours.)
+
 **Reference material stays in `working/`** (gitignored). Transcribe facts; never
 copy a datasheet, stencil or CAD file into the library.
 
@@ -263,7 +279,12 @@ Establish `chassis.width/height/depth` and each view's `size`.
 - Take proportions from a figure only as *fractions* of a dimension you know from
   the datasheet. Two figures in one guide can disagree by 12% on absolute scale.
 - Panel decor (vents, grooves, bezels) goes in `panel.decor`. It is what the
-  metal *is*.
+  metal *is* - never what is *installed on* it. If a rectangle has an identity a
+  person could put a part number to (a cover, a door, a filler, a blank), it is a
+  component in a bay, not paint. The MX80's rear cover was a bare white decor
+  rect that a reviewer could not identify because it appeared in no component
+  list, and no rule can tell a cover from a recess by its geometry - only you
+  know which one you meant.
 
 **Gate 1 - prove a figure can be measured before you measure it.** Render the
 guide page at 400-600 dpi (`pdftocairo -png -r 600`), find the panel in it, and
@@ -307,6 +328,12 @@ panel:
 - Positions come from the mechanical drawing. If you only have a guide figure,
   derive **pitch and count** from it and anchor to a datasheet dimension.
 
+A cutout is a promise that something is there. If you punch one and neither
+place a part in it nor draw anything inside it, the render shows a dark empty
+hole - the MX960 rear had four `switch-N` cutouts punched for inlet rockers with
+nothing in them. Either seat something, or draw the thing as decor, or do not
+punch the hole. L39 reports openings nothing fills.
+
 **Gate 2.** Render and overlay again. Every hole lines up with the reference.
 Count them. This is the last cheap moment to fix a pitch error - after
 components are placed, moving 48 holes means moving 48 parts and 48 labels.
@@ -340,6 +367,19 @@ silkscreen:
 - Text printed on a **module's own faceplate** is not chassis silkscreen. It
   belongs in that component's skin, inside `<g id="silkscreen">`.
 - Use `text:` for words and `path:` for lines and symbols. Exactly one.
+
+- **Label what the panel labels.** Every port, lamp and button that carries a
+  printed legend on the hardware gets one here. Missing labels are the single
+  most repeated review finding: a face that renders correctly and says nothing
+  passes every gate, because lint can check a mark that exists and cannot ask
+  for one that does not.
+- **Anchor a mark to the centre of what it names**, not to a corner of it. A ToD
+  label sat on its cutout's top-left edge and looked deliberate. L14 checks that
+  a `for:` target is *nearby*; nothing checks alignment, so this is on you.
+- **One gap per lamp block.** Measure the lamp-to-label distance once from the
+  photograph and reuse it for every lamp in that block. The MX204's RE block had
+  gaps of 6.1 mm and 2.2 mm side by side. A multi-line legend centres on its
+  lamp rather than straddling the row.
 
 **Gate 3.** Render with silkscreen, compare to the reference. Every legend is
 present, spelled as printed, next to its cutout. Lint L14 checks each `for:`
@@ -820,6 +860,11 @@ configurations: {...}
   pair of RJ-45s mirrors: the upper is keyway-up, the lower keyway-down. Check
   which way round each jack is and use `rotate: 180` where it differs. The same
   goes for anything with a keyway, a latch or a pin-1 mark.
+- **Two correct things in one place is still a defect.** Every review has found
+  more of this family than any other: ears over the convention, decor over ports,
+  a USB outside its hole, ejector levers over the model name. The gates check
+  that a thing is present and where a source says. L13, L46 and L48 cover the
+  device and the component; inside a skin's own SVG, nothing does. Look.
 - **An inventory is not a layout.** Knowing a panel has four things called
   "Branch N" does not tell you they are breaker legends with leader lines. Open
   the figure that shows the layout before drawing.

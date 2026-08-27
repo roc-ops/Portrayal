@@ -1017,6 +1017,43 @@ def lint_component_states_render(path, data, lib_roots):
              "hardware")
 
 
+def lint_component_bays_drawn(path, data, lib_roots):
+    """L48: a bay the contract declares but the skin never draws orphans its
+    occupant.
+
+    render.py stamps a nested `data-path` on the skin element whose id matches the
+    bay id. If no skin drew one, there is nothing to stamp: the seated module's
+    parent resolves to nothing and the Explorer hangs it off the chassis root,
+    several tiers from where the hardware puts it. The MX review hit this on eight
+    carriers at once.
+
+    NOTHING ELSE ASKS THIS. The contract validates, the occupant resolves, the
+    render succeeds and the SVG is well-formed - the only symptom is a tree that
+    reads wrong, which is exactly the kind of defect that survives every gate and
+    is found by a human scrolling a panel.
+
+    ZERO HITS TODAY, deliberately. The eight carriers were fixed before this was
+    written and the rest of the library was already right, so this rule is a latch
+    on a door that is currently shut. It is worth having because the failure is
+    silent and the fix - one `<rect id="bay-1">` - is invisible until someone
+    opens the tree.
+    """
+    bays = data.get("bays")
+    if not isinstance(bays, dict) or not bays:
+        return
+    skins = sorted(Path(path).parent.glob("skins/*.svg"))
+    if not skins:
+        return
+    art = "".join(f.read_text() for f in skins)
+    ids = set(re.findall(r'id="([^"]+)"', art))
+    missing = [b for b in sorted(bays) if b not in ids]
+    if missing:
+        warn(path, "L48", f"declares bay(s) {', '.join(missing[:4])} that no skin "
+             "draws an element for. The renderer nests a seated module under the "
+             "element whose id matches its bay; with none, the occupant is hung "
+             "off the root instead of inside this part")
+
+
 def lint_component_collisions(path, data, lib_roots):
     """L46: two things a component composes must not be drawn in one place.
 
@@ -1567,6 +1604,87 @@ def lint_device_cutouts(path, view_name, view, lib_roots):
 # LC fibre on a passive mux - `media: fiber` is a bonded adapter, not a socket.
 PLUGGABLE_CAGES = {"sfp", "sfp-plus", "sfp28", "sfp-dd", "qsfp", "qsfp28",
                    "qsfp56", "qsfp-dd", "xfp", "cfp", "cfp2"}
+
+
+def _bay_pitch_is_uneven(gaps):
+    """Do these consecutive gaps look mis-measured, or like a real cage split?
+
+    Returns the spread as a fraction when the pitch disagrees with itself, and
+    None when the layout is a regular pitch broken by wider cage divisions.
+    """
+    hi, lo = max(gaps), min(gaps)
+    if hi <= 0.05 or (hi - lo) / hi <= 0.15:
+        return None
+    tol = max(0.5, 0.05 * abs(hi))
+    clusters = []
+    for g in sorted(gaps):
+        if clusters and abs(g - clusters[-1][0]) <= tol:
+            clusters[-1].append(g)
+        else:
+            clusters.append([g])
+    # one pitch plus a wider break, and the break is the minority: an MX960's
+    # SCB column, an MX10016's four-slot cages. Real metal, evenly cut.
+    if (len(clusters) == 2 and len(clusters[0]) >= 2
+            and len(clusters[0]) > len(clusters[1])):
+        return None
+    return (hi - lo) / hi
+
+
+def lint_device_bay_pitch(path, data):
+    """L49: members of one group, cut to one size, sit on one pitch.
+
+    The MX304's fan bays were modelled unevenly spaced because photo edge
+    detection assigned fan 1's edges to its grille internals - and the provenance
+    then ASSERTED the asymmetry as a finding, which is what made it survive. Lint
+    passed, the render matched the mis-read overlay, and the sentence read like
+    diligence. It was caught by a reviewer's physical-plausibility instinct:
+    routers do not stagger their fans.
+
+    SHAPE, NOT SPREAD, and the library is why. Spread alone (>15%, as the review
+    proposed) flags three groups today and all three are correct: the MX960's
+    60mm SCB column between slots 5 and 6, and the MX10008/MX10016 cage
+    divisions. Those share a shape - one pitch, plus a wider break that is the
+    minority - which real sheet metal has and a mis-measurement does not. The
+    MX304's two gaps of 15.0 and 38.8mm had no majority to agree with.
+
+    Silent on the whole library; fires on the MX304 as it was written.
+    """
+    for vname, view in (data.get("views") or {}).items():
+        groups = {}
+        for b in view_parts(view or {})["bays"]:
+            if b.get("group") and b.get("at") and b.get("size"):
+                groups.setdefault(b["group"], []).append(b)
+        for gid, bays in sorted(groups.items()):
+            if len(bays) < 3:
+                continue
+            sizes = set()
+            for b in bays:
+                sz = b["size"]
+                pair = ((sz.get("w"), sz.get("h")) if isinstance(sz, dict)
+                        else tuple(sz[:2]) if isinstance(sz, (list, tuple)) else None)
+                sizes.add(None if not pair or None in pair
+                          else (round(pair[0], 2), round(pair[1], 2)))
+            # different-size members have no common pitch to disagree about
+            if len(sizes) != 1 or None in sizes:
+                continue
+            w, h = sizes.pop()
+            for axis, extent, name in ((0, w, "horizontally"), (1, h, "vertically")):
+                # only a single row or column has a pitch to speak of
+                if len({round(b["at"][1 - axis], 1) for b in bays}) != 1:
+                    continue
+                pos = sorted(b["at"][axis] for b in bays)
+                gaps = [round(pos[i + 1] - pos[i] - extent, 3)
+                        for i in range(len(pos) - 1)]
+                if len(gaps) < 2:
+                    continue
+                spread = _bay_pitch_is_uneven(gaps)
+                if spread:
+                    warn(path, "L49", f"{vname}: the {len(bays)} same-size bays of "
+                         f"group {gid} are spaced {name} by {min(gaps):.1f} to "
+                         f"{max(gaps):.1f}mm, a {spread*100:.0f}% disagreement with "
+                         "no majority pitch. Uneven spacing within one group is "
+                         "nearly always a mis-measurement - re-measure against a "
+                         "second image before recording it as a finding")
 
 
 def lint_device_rack_ears(path, data):
@@ -2332,6 +2450,7 @@ def lint_device(path, validator, lib_roots):
     lint_device_config_scope(path, data)
     lint_device_silkscreen_owner(path, data)
     lint_device_rack_ears(path, data)
+    lint_device_bay_pitch(path, data)
     lint_device_empty_views(path, data)
     lint_device_occupants(path, data, lib_roots)
     # Every id each view offers, indexed by view name. A `for:` may name a target
@@ -3090,6 +3209,7 @@ def main():
                 _skin_checks(f, d)
                 lint_component_parts(f, d, args.library)
                 lint_component_collisions(f, d, args.library)
+                lint_component_bays_drawn(f, d, args.library)
                 lint_component_states_render(f, d, args.library)
                 lint_component_mating(f, d, args.library)
                 lint_component_aperture(f, d, args.library)

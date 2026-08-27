@@ -232,3 +232,82 @@ def test_the_search_follows_composition():
                   and lint._lights_up(Path(p), yaml.safe_load(Path(p).read_text()) or {},
                                       [str(LIB)], set())]
     assert delegating, "no component delegates its lamp - fixture assumption is stale"
+
+
+# --- 14. a bay the skin never draws -----------------------------------------
+
+def _carrier(tmp_path, drawn_id):
+    """A one-bay carrier whose skin draws an element with `drawn_id`."""
+    d = tmp_path / "v1"
+    (d / "skins").mkdir(parents=True)
+    (d / "skins/front.svg").write_text(
+        f'<svg xmlns="http://www.w3.org/2000/svg">'
+        f'<rect id="{drawn_id}" x="0" y="0" width="10" height="10"/></svg>')
+    return d / "contract.yaml", {
+        "bays": {"bay-1": {"at": [1.0, 1.0], "size": [8.0, 8.0], "accepts": []}}}
+
+
+def test_a_bay_no_skin_draws_orphans_its_occupant(tmp_path):
+    """render.py nests a seated module under the element whose id matches its
+    bay. With no such element there is nothing to stamp, so the occupant is hung
+    off the chassis root - a tree that reads wrong while every gate passes."""
+    p, d = _carrier(tmp_path, "body")
+    hits = caught("L48", lint.lint_component_bays_drawn, p, d, [str(LIB)])
+    assert hits, "a declared-but-undrawn bay went unreported"
+    assert "bay-1" in hits[0]
+
+
+def test_a_bay_the_skin_does_draw_is_silent(tmp_path):
+    p, d = _carrier(tmp_path, "bay-1")
+    assert not caught("L48", lint.lint_component_bays_drawn, p, d, [str(LIB)])
+
+
+def test_the_library_draws_every_bay_it_declares():
+    """The eight MX carriers were fixed before the rule was written, so L48 is a
+    latch on a door that is already shut. This is the assertion that keeps it
+    shut - the failure is silent at render time and invisible until someone
+    opens the Explorer tree."""
+    import glob as _g
+    for p in _g.glob(str(LIB / "components/*/*/v*/contract.yaml")):
+        d = yaml.safe_load(Path(p).read_text()) or {}
+        assert not caught("L48", lint.lint_component_bays_drawn,
+                          Path(p), d, [str(LIB)]), p
+
+
+# --- 9. a confident mis-measurement, blessed by provenance -------------------
+
+def _fans(*xs):
+    return {"views": {"rear": {"components": {"bays": [
+        {"id": f"fan-{i}", "group": "fans", "at": [x, 1.5],
+         "size": {"w": 82.0, "h": 85.5}} for i, x in enumerate(xs)]}}}}
+
+
+def test_bays_of_one_group_spaced_unevenly_are_reported():
+    """The MX304's fans, as they were written: photo edge detection put fan 1's
+    edges on its grille internals, and the provenance then asserted the
+    asymmetry as a finding, which is what carried it through every gate."""
+    hits = caught("L49", lint.lint_device_bay_pitch, P, _fans(116.4, 213.4, 334.2))
+    assert hits, "a staggered fan row went unreported"
+    assert "no majority pitch" in hits[0]
+
+
+def test_the_even_row_that_replaced_it_is_silent():
+    assert not caught("L49", lint.lint_device_bay_pitch, P, _fans(116.4, 225.4, 334.2))
+
+
+def test_a_pitch_broken_by_a_cage_division_is_not_a_defect():
+    """Spread alone flags three groups in the library and all three are correct.
+    One pitch plus a wider break in the minority - the MX960's SCB column, the
+    MX10016's four-slot cages - is a shape real sheet metal has."""
+    for gaps in ([0.4] * 3 + [7.4] + [0.4] * 3,
+                 ([0.4] * 3 + [7.4]) * 3 + [0.4] * 3,
+                 [0.0] * 5 + [60.2] + [0.0] * 5):
+        assert lint._bay_pitch_is_uneven(gaps) is None, gaps
+    assert lint._bay_pitch_is_uneven([15.0, 38.8]), "the MX304 gaps must still fire"
+
+
+def test_the_library_sits_on_an_even_pitch():
+    import glob as _g
+    for f in _g.glob(str(LIB / "devices/*/*/device.yaml")):
+        d = yaml.safe_load(Path(f).read_text()) or {}
+        assert not caught("L49", lint.lint_device_bay_pitch, Path(f), d), f
