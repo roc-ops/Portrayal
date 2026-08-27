@@ -806,7 +806,41 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     # connection-point lands on its host's, which is what keeps centring offsets
     # out of device manifests entirely
     hosts = {q["id"]: q for q in parts["placements"] if q.get("at")}
-    for p in parts["placements"]:
+
+    # WHAT IS BOLTED TO THE OUTSIDE OF THE METAL PAINTS LAST. A bay draws its
+    # opening - and an empty bay draws it dark - so anything mounted across that
+    # opening has to come after it or the hole paints over the thing covering it.
+    # The C40G is the case that found this: a louvred filter cover snaps over all
+    # four PSU bays, and with the bays empty the renderer put four dark rectangles
+    # on top of the cover that is physically in front of them.
+    #
+    # `mounts` is exactly the right predicate and it is already on every part -
+    # a rack ear, a label, a ground lug, a bolted panel. It is NOT a paint-order
+    # field invented for this bug; the ordering falls out of what the word means.
+    # Across the library only this one cover overlaps a bay at all, so nothing
+    # else moves a pixel.
+    def _mounts(q):
+        # a bad ref is NOT swallowed here - it is left for draw_placement, which
+        # resolves the same ref a few lines down and raises there with the part
+        # in hand. Failing in this ordering pass would report the same problem
+        # from a place that cannot say which placement it was drawing.
+        try:
+            c, _ = lib.resolve(q["ref"])
+        except Exception:
+            return False
+        return (c or {}).get("behaviour") == "mounts"
+
+    deferred_ids = {q["id"] for q in parts["placements"] if _mounts(q)}
+    # an occupant follows its host over the line, so a part mated onto a cover
+    # does not end up painted underneath it
+    for _ in range(len(parts["placements"])):
+        grew = {q["id"] for q in parts["placements"]
+                if q.get("mate-to") in deferred_ids}
+        if grew <= deferred_ids:
+            break
+        deferred_ids |= grew
+
+    def draw_placement(p):
         if p.get("mate-to") and not p.get("at"):
             host = hosts.get(p["mate-to"])
             if host is None:
@@ -822,7 +856,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             p = dict(p, at=[round(host["at"][0] + hm["at"][0] - om["at"][0], 4),
                             round(host["at"][1] + hm["at"][1] - om["at"][1], 4)])
         if p.get("optional") and p["optional"] not in include:
-            continue
+            return
         grp = dev_groups.get(p.get("group")) or {}
         gattrs = grp.get("attrs") or {}
         merged_attrs = {**gattrs, **(p.get("attrs") or {})} or None
@@ -865,6 +899,10 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             x0, y0, x1, y1 = p["at"][0], p["at"][1], p["at"][0] + cw, p["at"][1] + chh_
         extents[0] = min(extents[0], x0); extents[1] = min(extents[1], y0)
         extents[2] = max(extents[2], x1); extents[3] = max(extents[3], y1)
+
+    for p in parts["placements"]:
+        if p["id"] not in deferred_ids:
+            draw_placement(p)
 
     for b in parts["bays"]:
         bay_g = ET.SubElement(svg, f"{{{SVG_NS}}}g")
@@ -959,6 +997,11 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         df = data_for(b.get("for"))
         if df:
             bay_g.set("data-for", df)
+
+    # second pass: the surface-mounted parts, now safely in front of the openings
+    for p in parts["placements"]:
+        if p["id"] in deferred_ids:
+            draw_placement(p)
 
     if palette or inst_palette:
         extra = "".join(

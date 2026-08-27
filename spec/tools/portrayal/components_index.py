@@ -56,6 +56,13 @@ def main():
                 "ns": ns, "name": data["name"], "major": major,
                 "version": data["version"], "kind": data.get("kind"),
                 "class": data.get("class"), "conforms": data.get("conforms"),
+                # HOW IT MOVES, which is a different question from what it is and
+                # the one a consumer needs to decide layering or ejection. It was
+                # written into the contracts and onto the SVG as data-behaviour,
+                # and then not carried here - so anything reading this index saw
+                # `None` on every part and could only fall back to `class`, which
+                # is exactly the fallback the field exists to replace.
+                "behaviour": data.get("behaviour"),
                 "size": data["size"], "description": data.get("description", ""),
                 # WHERE EACH DIMENSION CAME FROM, per dimension, and it is here for the
                 # same reason relief-confidence is: without it a value that is IMPOSSIBLE

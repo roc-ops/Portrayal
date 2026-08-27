@@ -66,3 +66,44 @@ def test_the_old_class_list_is_a_subset_of_fills():
             d = load(p)
             if d.get("class") == cls:
                 assert d.get("behaviour") == "fills", (p, d.get("behaviour"))
+
+
+# --- what the field is FOR, downstream of stating it -------------------------
+#
+# Declaring `behaviour` on 178 parts is worth nothing while no consumer can read
+# it. Two things went wrong in exactly that way and both are pinned below: the
+# component index never emitted the field, so `components.json` said `None` for
+# every part; and the renderer drew every placement before every bay, so a part
+# bolted across an opening painted UNDER the opening.
+
+def test_the_component_index_actually_emits_behaviour():
+    """It was in the contracts and on the SVG as data-behaviour, and absent from
+    the one file most consumers read. A field nothing can see is not a field."""
+    import json
+    comps = json.loads((LIB / "dist" / "components.json").read_text())["components"]
+    stated = {f"{c['ns']}/{c['name']}": c.get("behaviour") for c in comps}
+    assert any(v for v in stated.values()), "components.json carries no behaviour at all"
+    for p in CONTRACTS:
+        d = load(p)
+        key = f"{p.parents[2].name}/{d.get('name')}"
+        if key in stated and d.get("behaviour"):
+            assert stated[key] == d["behaviour"], (key, stated[key], d["behaviour"])
+
+
+def test_mounted_parts_paint_after_bays():
+    """A bay draws its opening, and an empty bay draws it dark. Anything mounted
+    across that opening has to come later in document order or the hole paints
+    over the thing physically in front of it.
+
+    The C40G is the case that found it: a snap-on louvred filter cover spans all
+    four PSU bays, which default to empty, so four dark rectangles landed on top
+    of the cover. Checked on the rendered document rather than on the manifest,
+    because document order is the whole claim.
+    """
+    svg = (LIB / "dist" / "c40g.docsis-classic.front.svg").read_text()
+    cover = svg.find('id="psu-cover"')
+    assert cover != -1, "psu-cover is not in the C40G front view"
+    for bay in ("psu-1", "psu-2", "psu-3", "psu-4"):
+        at = svg.find(f'id="{bay}"')
+        assert at != -1, f"{bay} is not in the C40G front view"
+        assert at < cover, f"{bay} paints after the cover that covers it"
