@@ -32,6 +32,21 @@ python3 spec/tools/portrayal/render.py library/devices/edgecore/as7726-32x/devic
     --library library --out library/dist
 ```
 
+The build and lint gates need only the Python standard library plus what
+`build.sh` already assumes. **Preparing a new vendor line** additionally needs
+[docling](https://github.com/docling-project/docling) to convert vendor PDFs
+into the figure-and-caption sets modelling works from:
+
+```sh
+pip install -r spec/tools/intake/requirements.txt   # docling + pillow; GPU optional
+python3 spec/tools/intake/extract.py <guide.pdf> --out working/images
+```
+
+The full intake process — what to hunt, where vendors keep it, staging rules,
+and the conversion discipline that keeps docling from eating a machine — is
+`.claude/skills/portrayal-vendor-intake/SKILL.md`. The modelling process that
+follows it is `.claude/skills/portrayal-model-device/SKILL.md`.
+
 ## What makes it different
 
 **Provenance is a first-class field, not a comment.** Every dimension records where
