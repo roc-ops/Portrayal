@@ -147,7 +147,40 @@ def module_models(library):
     return out
 
 
-def build(dev, cfg_name, cfg, profile, dist=None, frus=None):
+def scoped(items, cfg_name):
+    """The items a configuration actually has.
+
+    `only-in: [config, ...]` names the configurations a bay or placement exists
+    in; absent means all of them, which is still the answer almost everywhere.
+    The renderer filters both lists before anything reads them, and an export
+    that does not do the same emits bays the chassis has not got.
+    """
+    out = []
+    for it in items:
+        only = it.get("only-in") if isinstance(it, dict) else None
+        if only and cfg_name not in only:
+            continue
+        out.append(it)
+    return out
+
+
+def bay_signature(dev, cfg_name):
+    """Which bays this configuration renders, as a comparable key.
+
+    Two configurations are the same device type only if they are the same
+    CHASSIS. Before `only-in` that could be assumed - configurations differed
+    only in what was seated - but a C40G's `ac-power` genuinely has no pem-1 or
+    pem-2, so collapsing it with the DC configurations would give the AC SKU two
+    module bays that are not on it.
+    """
+    ids = []
+    for view in (dev.get("views") or {}).values():
+        for b in scoped(view_parts(view)["bays"], cfg_name):
+            ids.append(str(b.get("id") or ""))
+    return tuple(sorted(ids))
+
+
+def build(dev, cfg_name, cfg, profile, dist=None, frus=None, label=None):
     ch = dev.get("chassis", {})
     cfg = cfg or {}
 
@@ -174,10 +207,11 @@ def build(dev, cfg_name, cfg, profile, dist=None, frus=None):
     if isinstance(part, dict):
         part = part.get("part")
 
+    model = f"{sku} {label}" if label else sku
     out = {
         "manufacturer": dev["manufacturer"],
-        "model": sku,
-        "slug": slugify(f"{dev['manufacturer']}-{sku}"),
+        "model": model,
+        "slug": slugify(f"{dev['manufacturer']}-{model}"),
         "u_height": float(ch.get("ru", 1)),
         "is_full_depth": True,
     }
@@ -215,7 +249,7 @@ def build(dev, cfg_name, cfg, profile, dist=None, frus=None):
     console, mgmt_rj, mgmt_sfp, bays = [], [], [], []
     for view in (dev.get("views") or {}).values():
         parts = view_parts(view)
-        for p in parts["placements"]:
+        for p in scoped(parts["placements"], cfg_name):
             a = attrs_of(p)
             role, media = a.get("role"), a.get("media")
             if role == "console" and media == "rj45-serial":
@@ -230,7 +264,7 @@ def build(dev, cfg_name, cfg, profile, dist=None, frus=None):
                                  "type": "10gbase-x-sfpp", "mgmt_only": True,
                                  "description": "10G management port (faceplate label; "
                                                 "not presented as a switch interface)"})
-        for b in parts["bays"]:
+        for b in scoped(parts["bays"], cfg_name):
             name = (b["id"].replace("psu-", "PSU ").replace("fan-", "Fan ")
                     .replace("front-", "Front ").replace("rear-", "Rear "))
             bay = {"name": name, "position": b["id"].rsplit("-", 1)[-1]}
@@ -246,7 +280,7 @@ def build(dev, cfg_name, cfg, profile, dist=None, frus=None):
     ifaces = mgmt_rj + sorted(mgmt_sfp, key=lambda i: i["name"])
     ports = []
     for view in (dev.get("views") or {}).values():
-        for p in view_parts(view)["placements"]:
+        for p in scoped(view_parts(view)["placements"], cfg_name):
             if not p["id"].startswith("port-"):
                 continue
             a = attrs_of(p)
@@ -368,24 +402,43 @@ def main():
     # The key has to be the SAME sku build() will name the type after, FRUs
     # filtered out - otherwise two configurations collapse under one key and
     # then get written under two different models, or the reverse.
+    #
+    # Keyed on the SKU and on which bays the configuration renders. The SKU
+    # alone was enough while configurations differed only in what was seated;
+    # `only-in` means they can now differ in which bays EXIST, and a C40G's
+    # `ac-power` has neither pem-1 nor pem-2. Collapsing on the SKU alone hands
+    # the AC chassis two module bays it has not got.
     cfgs = dev.get("configurations") or {}
     by_sku = {}
     for name, cfg in cfgs.items():
         chassis = sorted(k for k in (cfg.get("part-numbers") or {}) if k not in frus)
-        by_sku.setdefault(chassis[0] if chassis else None, (name, cfg))
+        key = (chassis[0] if chassis else None, bay_signature(dev, name))
+        by_sku.setdefault(key, (name, cfg))
     if not by_sku:
-        by_sku = {None: (None, {})}
+        by_sku = {(None, ()): (None, {})}
+
+    # When one SKU yields more than one chassis, the model has to say which -
+    # two files cannot share a name. There is nothing better to name them by:
+    # the C40G's four configurations carry no part numbers at all, so the
+    # configuration name is what is left. A device whose configurations DO carry
+    # part numbers never reaches this and keeps its real SKU as its model.
+    per_sku = {}
+    for sku, _ in by_sku:
+        per_sku[sku] = per_sku.get(sku, 0) + 1
+    labels = {key: (key[1] and by_sku[key][0]) if per_sku[key[0]] > 1 else None
+              for key in by_sku}
 
     wrote = 0
-    for cfg_name, cfg in by_sku.values():
+    for key, (cfg_name, cfg) in by_sku.items():
+        label = labels[key]
         # A NOS names switch interfaces. Emit one document per profile that
         # actually resolves any, and a NOS-neutral one when none does - a device
         # whose ports are all line-card bays still has a device type.
-        _, has_ports = build(dev, cfg_name, cfg, None, args.dist, frus)
+        _, has_ports = build(dev, cfg_name, cfg, None, args.dist, frus, label)
         profiles = list(args.nos) if (args.nos and has_ports) else [None]
 
         for profile in profiles:
-            doc, _ = build(dev, cfg_name, cfg, profile, args.dist, frus)
+            doc, _ = build(dev, cfg_name, cfg, profile, args.dist, frus, label)
             if not any(k in doc for k in
                        ("console-ports", "interfaces", "module-bays")):
                 continue                       # nothing but a header: not worth a file
