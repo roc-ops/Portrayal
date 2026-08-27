@@ -1,0 +1,55 @@
+format: 1
+kind: module
+name: mx240-psu-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX240 normal-capacity AC power supply. High-line (220 V) systems
+  carry one or two in PEM0/PEM2; low-line (110 V) systems two or four in
+  PEM0-PEM3. One C-type appliance inlet with input switch, a fan, and status
+  lamps. Weighs 2.3 kg; each inlet needs a dedicated feed and 15 A (250 VAC)
+  breaker.
+attrs:
+  model: MX240 AC PSU (normal capacity)
+  role: ac-power-supply
+  input: dedicated AC feed per inlet, 15 A (250 VAC) breaker
+  redundancy: high-line 1+1; low-line 2+2
+provenance:
+  size: 'photo (DC unit) - the AC PEM shares the 101.5 x 79.7 mm bay; face
+    layout is from guide Figure 14 line art at page scale and is APPROXIMATE
+    (the reference photograph shows the DC variant). Vent field and lamp row
+    carried from the DC face - an echo, not corroboration'
+  power-output: 'NOT STATED PER MODULE - Table 95 gives system output
+    (2054 W low-line / 1590 W high-line for the normal-capacity set); no
+    per-module nameplate in the intake. L27 stands as the record'
+  leds: 'guide AC PSU LED table, same three-lamp vocabulary as the DC unit'
+states:
+- ok
+- fault
+- absent
+elements:
+  handle:
+    at: [44.0, 63.5]
+    size: [44.0, 4.6]
+    class: latch
+  breaker:
+    at: [10.0, 44.0]
+    size: [14.0, 20.0]
+    class: switch
+size:
+  w: 101.5
+  h: 79.7
+relief:
+  features:
+  - node: handle
+    out: 2.2
+    color: '#26292d'
+    confidence: estimated
+    source: photo (DC unit) - the pull handle stands proud
+  - node: breaker
+    out: 2.4
+    color: '#26292d'
+    confidence: estimated
+    source: drawing - the input switch projects; estimated

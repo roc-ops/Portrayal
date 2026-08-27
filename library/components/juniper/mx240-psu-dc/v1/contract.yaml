@@ -1,0 +1,99 @@
+format: 1
+kind: module
+name: mx240-psu-dc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX240 normal-capacity DC power supply (PEM). Up to four across the
+  rear top in slots PEM0-PEM3; the DC system requires two (nonredundant) or
+  four (redundant). One -48 VDC input with RTN/-48V terminal studs behind the
+  block, a 40 A rotary input breaker, PWR OK / BKR ON / INPUT OK lamps, an
+  exhaust vent field and a pull handle. Weighs 1.7 kg.
+attrs:
+  model: MX240 DC PSU (normal capacity)
+  role: dc-power-supply
+  input: -48 VDC and return; dedicated 40 A customer breaker per PEM
+  redundancy: 2 required, 4 for redundancy
+provenance:
+  size: 'photo - 101.5 x 79.7 mm face measured off the orthographic
+    mx240-rear-high photograph (0.7% aspect gate): four equal PEMs across
+    x 11-418 on a 101.9 mm pitch, rows 8.9-88.6. No vendor PEM dimension
+    exists in the intake - searched the physical-specification tables'
+  power-output: 'NOT STATED PER MODULE - the guide''s Table 95 gives
+    "MX240 DC Normal-capacity 1600W" as MAXIMUM SYSTEM output power for the
+    required PSU set, and the electrical-specification table speaks per
+    input feed; no per-module nameplate output appears anywhere in the
+    intake (searched "output power" through the power chapters). L27 stands
+    as the record rather than dividing the system figure'
+  face: 'photo - vents upper left, RTN/-48V terminal block lower left (four
+    studs behind the clear cover, drawn uncovered), 40 A rotary breaker with
+    white lever, three lamps with legends, pull handle, "Breaker Rating 40A"
+    and "Use Copper Conductors" legends - all placed off the photograph'
+  leds: 'guide DC PSU LED table: PWR OK green = output ok, BKR ON green =
+    breaker on, INPUT OK green = input present; summarised, full rows in the
+    guide'
+states:
+- ok
+- fault
+- absent
+elements:
+  handle:
+    at: [44.0, 63.5]
+    size: [44.0, 4.6]
+    class: latch
+  breaker:
+    at: [47.0, 13.0]
+    size: [26.0, 26.0]
+    class: switch
+  terminals:
+    at: [4.0, 38.0]
+    size: [34.0, 30.0]
+    class: terminal
+size:
+  w: 101.5
+  h: 79.7
+relief:
+  features:
+  - node: handle
+    out: 2.2
+    color: '#26292d'
+    confidence: estimated
+    source: photo - the pull handle stands proud; projection not measured
+  - node: breaker
+    out: 3.0
+    color: '#17191c'
+    confidence: estimated
+    source: photo - the rotary breaker housing projects; raised as the group
+      with its lever detail
+  - node: terminals
+    out: 2.4
+    color: '#26292d'
+    confidence: estimated
+    source: photo - the terminal block stands proud; raised as the group so
+      it carries its stud detail
+  - node: stud-0
+    cyl: 7.0
+    thread: 1.0
+    lift: 2.4
+    confidence: estimated
+    source: photo - terminal studs; height not dimensioned
+  - node: stud-1
+    cyl: 7.0
+    thread: 1.0
+    lift: 2.4
+    confidence: estimated
+    source: photo - as stud-0
+  - node: stud-2
+    cyl: 7.0
+    thread: 1.0
+    lift: 2.4
+    confidence: estimated
+    source: photo - as stud-0
+  - node: stud-3
+    cyl: 7.0
+    thread: 1.0
+    lift: 2.4
+    confidence: estimated
+    source: photo - as stud-0

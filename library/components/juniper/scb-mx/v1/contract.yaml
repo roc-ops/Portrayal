@@ -1,0 +1,54 @@
+format: 1
+kind: module
+name: scb-mx
+version: 1.0.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX Series Switch Control Board (SCB-MX) - the fabric/control
+  carrier for the MX240/MX480. Seats in SCB slot 0 or the shared slot 1/0;
+  the Routing Engine slides into the SCB's own horizontal bay. The face
+  carries the OK/FAIL, FABRIC ONLY and FABRIC ACTIVE lamps at the left with
+  rotated legends, and extraction levers at both ends.
+attrs:
+  model: SCB-MX
+  power-draw-max-w: 185
+  power-draw-typical-w: 155
+provenance:
+  size: 'photo - card face 420.9 x 29.5 mm (slot aperture off the orthographic
+    front photograph; the four-slot cage spans rows 84.6-206.4 of the 221.2 mm
+    chassis at a 30.45 mm pitch). No vendor card dimension exists in the
+    intake - searched "SCB" near dimension rows in the physical-specification
+    tables'
+  power: 'guide Table 92 (Maximum Power Consumption for SCB Models): SCB-MX
+    185 W at 55 C, 160 at 40 C, 155 at 25 C. Max takes 55 C; typical carries
+    the 25 C figure of the same table, not a vendor "typical"'
+  re-bay: 'photo - the Routing Engine bay spans x 108.6-370.4 of the card
+    (261.8 mm), measured off the seated RE-S-1300''s plate edges. "Each
+    Routing Engine must be installed directly into an SCB" (guide RE
+    description) - the bay is the SCB''s, not the chassis''s'
+  lamps: 'photo + guide SCB LED table - OK/FAIL, FABRIC ONLY, FABRIC ACTIVE
+    in a row at the left with vertically-printed legends'
+states:
+- ok
+- fail
+- absent
+elements:
+  lever-left:
+    at: [1.2, 2.2]
+    size: [16.0, 9.0]
+    class: latch
+  lever-right:
+    at: [403.7, 2.2]
+    size: [16.0, 9.0]
+    class: latch
+bays:
+  re:
+    at: [108.6, 1.0]
+    size: [261.8, 27.5]
+    accepts: [juniper/re-s-1300@1]
+    default: juniper/re-s-1300@1
+size:
+  w: 420.9
+  h: 29.5
