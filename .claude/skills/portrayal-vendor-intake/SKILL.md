@@ -18,8 +18,10 @@ a ~100-module catalogue went through review with the defect classes already
 fenced. Same modeller, same gates - different preparation.
 
 **Definition of done:** a staged corpus under `working/intake/<vendor>/<line>/`
-with a `SOURCES.md` naming every artefact and its URL, converted figure sets
-under `working/images/<stem>/`, a per-document caption baseline proving the
+with a `SOURCES.md` naming every artefact and its URL, a **`COVERAGE.md`
+declaring what was found AND what was not** (see below - an intake that ends
+in silence about its gaps is not done), converted figure sets under
+`working/images/<stem>/`, a per-document caption baseline proving the
 conversion is complete, and (for modular platforms) the support tables parsed
 into a machine-readable matrix. Only then does modelling start.
 
@@ -80,6 +82,35 @@ Probe craft, learned the hard way:
 - `-front-high` / `-rear-high` DAM shots are straight-on studio elevations
   (1500-2100 px, port numerals legible); `-frontwtop-` is angled. Both are
   worth keeping; only the former is measurable.
+
+## The coverage report: say what you did NOT find
+
+The intake's most important output after the corpus itself is **`COVERAGE.md`**:
+the expected-artefact grid — every enumerated model crossed with every
+artefact kind (guide, module reference, datasheet, photos) — with each cell
+marked found / missing / not-applicable. Three rules make it honest:
+
+- **A probe miss is a claim about your URL patterns, not about the world.**
+  Every model on the enumerated list HAS a manual and a datasheet somewhere;
+  "missing" means "not found by these methods", and the report says which
+  methods were tried. The Dell intake wrote off an entire host as empty when
+  the host was merely rejecting the probe's user agent — and separately
+  listed models as undocumented that did not exist, because the model list
+  itself had been enumerated from memory instead of the vendor's own pages.
+  Both failure shapes belong in the report explicitly: *is this cell empty
+  because the artefact is hidden, or because the model is imaginary?*
+  Verify the enumeration against the vendor before trusting any zero.
+- **End with a handoff list, not a shrug.** The report's final section is
+  addressed to a human: "these artefacts exist but need a login / a support
+  portal / a browser" (vendor support accounts, HPE PSNow, JS-only portals),
+  with the exact URLs or IDs a person can chase. Someone on the team may
+  have credentials the automation does not. "I'm done and we have part of
+  it" is a failure mode; "here is the corpus, here are the seven holes and
+  where a human can fill them" is the deliverable.
+- **Gate the conversion on the report.** Before docling runs, whoever owns
+  the intake reads COVERAGE.md and decides: fill the holes first, or accept
+  them in writing. Holes accepted at intake become `gaps:` entries at
+  modelling time — the chain of custody for what the library does not know.
 
 ## Staging: where it lives and how it is recorded
 
