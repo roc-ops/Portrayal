@@ -18,6 +18,28 @@ portfolio:
   family: Aggregation Services Router
   series: ASR 9000 Series
 provenance:
+  port-cutouts: >-
+    DERIVED, not measured, and the distinction matters. Every one of the fifteen
+    front ports conforms to a registry standard - `rj45-ganged` 12.7 x 11.0,
+    `sfp-ganged` 14.25 x 10.4, `usb-a` 12.0 x 4.5 - and a standard connector's
+    bezel opening IS its aperture at its position. There was nothing independent
+    to measure: the hole is implied by "there is an SFP cage here", and the only
+    sourced fact is where the cage is, which the placements already carried.
+    SO THE CHECKS THAT PASS HERE ARE CIRCULAR AND SHOULD BE READ THAT WAY. L39
+    compares each hole against the standard its occupant conforms to, and against
+    where that occupant lands; both were used to generate it, so both confirm the
+    arithmetic rather than the model. What they do catch from here on is DRIFT - a
+    port moved without its hole, or a hole resized against its standard.
+    THEY ARE NOT GANGED, which was checked rather than assumed. SFF-8433 gives a
+    1xN SFP+ assembly ONE continuous opening at N x 14.25 + 1.2, and rj45-ganged
+    abuts on a 13.97 pitch. This panel's columns sit 20.5 to 47.6 apart, so no two
+    of these ports share a cutout and fifteen separate holes is right.
+    THE USB IS THE ONE THAT NEEDED THINKING ABOUT. It is placed `rotate: 90`, and
+    `rotate` pivots a part on its own pre-rotation centre, so the hole is the
+    LANDED box - (274.25, 58.95) at 4.5 x 12 - not the placement's `at` with the
+    standard's unrotated size. Deriving it the naive way put the hole 3.75mm off,
+    which is (12.0 - 4.5) / 2 and exactly the error L39 gained a check for in #32.
+    The rule caught it on the first run.
   sources: 'the Cisco ASR 9000 Series Fixed-Port Routers Hardware Installation
     Guide (b-asr9001-hardware-installation-guide.pdf, retitled from the ASR 9001
     HIG and now covering the 9001, 9901, 9902 and 9903); the Cisco ASR 9001 Router
@@ -258,6 +280,21 @@ views:
       cutouts:
         - {id: clk-10mhz, at: [180.3, 66.0], size: [4.0, 4.0], shape: circle}
         - {id: clk-1pps, at: [193.05, 66.0], size: [4.0, 4.0], shape: circle}
+        - {id: tod, at: [159.75, 45.45], size: [12.7, 11.0]}
+        - {id: svc-lan, at: [159.75, 61.5], size: [12.7, 11.0]}
+        - {id: sync-0, at: [207.35, 45.45], size: [12.7, 11.0]}
+        - {id: sync-1, at: [207.35, 61.5], size: [12.7, 11.0]}
+        - {id: console, at: [228.5, 45.45], size: [12.7, 11.0]}
+        - {id: aux, at: [228.5, 61.5], size: [12.7, 11.0]}
+        - {id: mgt-lan-0, at: [250.85, 61.5], size: [12.7, 11.0]}
+        - {id: mgt-lan-1, at: [250.85, 45.45], size: [12.7, 11.0]}
+        - {id: cluster-0, at: [318.675, 61.8], size: [14.25, 10.4]}
+        - {id: cluster-1, at: [318.675, 45.75], size: [14.25, 10.4]}
+        - {id: sfp-plus-0, at: [362.175, 61.8], size: [14.25, 10.4]}
+        - {id: sfp-plus-1, at: [341.675, 61.8], size: [14.25, 10.4]}
+        - {id: sfp-plus-2, at: [362.175, 45.75], size: [14.25, 10.4]}
+        - {id: sfp-plus-3, at: [341.675, 45.75], size: [14.25, 10.4]}
+        - {id: usb, at: [274.25, 58.95], size: [4.5, 12.0], shape: rect}
     silkscreen:
       - {at: [195.9, 9.5], text: 'BAY 0', for: mpa-0}
       - {at: [195.9, 34.5], text: 'BAY 1', for: mpa-1}
