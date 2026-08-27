@@ -13,7 +13,7 @@ description: >-
 size: {w: 30.47, h: 345.5, d: 380.0}
 size-confidence: {d: known-wrong}
 size-notes: 'd 380.0 is IMPOSSIBLE - a front and a rear card mate at a midplane inside a 386.0 chassis and two at 380.0 need 760. See provenance/depth-known-wrong'
-attrs: {model: '6+12 SW-IO2', media: coax, connector: mcx, downstream: '6', upstream: '12', spectrum: 5-204MHz, switch: 'yes', slot: C100G-rear-8 / C40G-rear-4}
+attrs: {power-absent: not-applicable, model: '6+12 SW-IO2', media: coax, connector: mcx, downstream: '6', upstream: '12', spectrum: 5-204MHz, switch: 'yes', slot: C100G-rear-8 / C40G-rear-4}
 provenance:
   depth-known-wrong: 'THE 380.0 IS NOT MERELY UNMEASURED, IT IS IMPOSSIBLE, and this
     contract now says so in a field a tool can read - size-confidence: {d: known-wrong}.
@@ -81,12 +81,16 @@ provenance:
     change. Jack positions and the composed std/mcx@1 aperture are taken from casa/io-6p12@2
     and casa/io-6p12-sw@2 rather than re-derived, so the four cards cannot drift
     apart'
-  power: 'NONE STATED, same as the plain card. No table in either guide gives
-    an I/O module a figure - Tables A-8 and A-9 give the RFD and RFU their connectors
-    and nothing else - and the BDMs "approximately 300W" is scoped to the BDM WITH
-    its I/O card, which is the front halfs figure carrying power-draw-scope: module-with-paired-io.
-    Writing anything here would double count that pairing. The L27 warning is the
-    record'
+  power: >-
+    NOT APPLICABLE, because this part is one half of a pair the vendor measures together and
+    the other half already carries the number. Every Casa power figure in the C40G and C100G
+    hardware guides is scoped to the FRONT card with its I/O module - 'Table 4-1. BDM 6+12
+    (BDM with 6+12 IO) ... Power consumption | Approximately 300W per BDM' - and there is no
+    separate figure for the rear half anywhere in either guide. Recording a wattage here
+    would DOUBLE COUNT: the partner contract carries power-draw-scope: module-with-paired-io
+    precisely so a consumer knows its figure already contains this card. So a chassis total
+    is complete without a number here, which is what separates this from not-published -
+    nothing is missing.
   layout: drawing - Figure 1-15 of the Casa C100G Hardware Installation Guide
     (rev 07/08/2022). Twelve U jacks in the left column, six D in the right,
     interleaved. Port COUNT and ARRANGEMENT are read straight off the figure

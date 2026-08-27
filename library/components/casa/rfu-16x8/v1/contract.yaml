@@ -14,7 +14,7 @@ description: >-
 size: {w: 30.47, h: 345.5, d: 380.0}
 size-confidence: {d: known-wrong}
 size-notes: 'd 380.0 is IMPOSSIBLE - a front and a rear card mate at a midplane inside a 386.0 chassis and two at 380.0 need 760. See provenance/depth-known-wrong'
-attrs: {model: 'US IO', role: upstream, media: coax, connector: f-type, rf-ports: '16', channels-per-port: '8', pairs-with: casa/us-16x8}
+attrs: {power-absent: not-applicable, model: 'US IO', role: upstream, media: coax, connector: f-type, rf-ports: '16', channels-per-port: '8', pairs-with: casa/us-16x8}
 provenance:
   depth-known-wrong: 'THE 380.0 IS NOT MERELY UNMEASURED, IT IS IMPOSSIBLE, and this
     contract now says so in a field a tool can read - size-confidence: {d: known-wrong}.
@@ -101,9 +101,16 @@ provenance:
     top and bottom. The jacks are nickel with a hex nut, which is what std/f-type
     draws. It is a straight-on-ish product shot with nothing of known size in
     frame, so it is used for confirmation and not for measurement
-  power: NO FIGURE. See the RFD note - Table A-9 gives ports and connector only,
-    and Table A-4's US16x8 figures (200 W with this I/O, 220 W with the UPS 32x4
-    I/O) are the PAIR's. L27 stands
+  power: >-
+    NOT APPLICABLE, because this part is one half of a pair the vendor measures together and
+    the other half already carries the number. Every Casa power figure in the C40G and C100G
+    hardware guides is scoped to the FRONT card with its I/O module - 'Table 4-1. BDM 6+12
+    (BDM with 6+12 IO) ... Power consumption | Approximately 300W per BDM' - and there is no
+    separate figure for the rear half anywhere in either guide. Recording a wattage here
+    would DOUBLE COUNT: the partner contract carries power-draw-scope: module-with-paired-io
+    precisely so a consumer knows its figure already contains this card. So a chassis total
+    is complete without a number here, which is what separates this from not-published -
+    nothing is missing.
   f-type-stands-proud: 'THE OWNER, AGAINST THE HARDWARE: "the US I/O and the DS I/Os
     have the F fitting STICKING OUT of the faceplate", against the MCX cards where "the
     MCX connector is RECESSED INTO the faceplate". This card is on the PROUD side of

@@ -13,7 +13,7 @@ description: >-
 size: {w: 30.47, h: 345.5, d: 380.0}
 size-confidence: {d: known-wrong}
 size-notes: 'd 380.0 is IMPOSSIBLE - a front and a rear card mate at a midplane inside a 386.0 chassis and two at 380.0 need 760. See provenance/depth-known-wrong'
-attrs: {model: 'UPS IO 32', role: upstream, media: coax, connector: mcx, rf-ports: '32', channels-per-port: '4', pairs-with: casa/us-16x8}
+attrs: {power-absent: not-applicable, model: 'UPS IO 32', role: upstream, media: coax, connector: mcx, rf-ports: '32', channels-per-port: '4', pairs-with: casa/us-16x8}
 provenance:
   depth-known-wrong: 'THE 380.0 IS NOT MERELY UNMEASURED, IT IS IMPOSSIBLE, and this
     contract now says so in a field a tool can read - size-confidence: {d: known-wrong}.
@@ -121,13 +121,16 @@ provenance:
   rf-field: drawing - the figure outlines the port field with a light rectangle,
     which is the footprint the cable retention plate seats against. Drawn as a
     silkscreen outline, not as relief, because nothing states its depth
-  power: NO FIGURE. Table A-9 gives ports and connector only. Table A-4 gives
-    the row "Single DCU w/ RFU UPS 32x4 I/O" as 220 W for the US16x8 - that is the
-    PAIR's figure and casa/us-16x8 already carries it with
-    `power-draw-scope` of module-with-paired-io. Deriving this card's share by
-    subtracting the 200 W RFU figure from the 220 W UPS 32x4 figure would be OUR
-    arithmetic, not Casa's, and would also be wrong - the two numbers differ by
-    the whole pairing, not by one card. L27 stands
+  power: >-
+    NOT APPLICABLE, because this part is one half of a pair the vendor measures together and
+    the other half already carries the number. Every Casa power figure in the C40G and C100G
+    hardware guides is scoped to the FRONT card with its I/O module - 'Table 4-1. BDM 6+12
+    (BDM with 6+12 IO) ... Power consumption | Approximately 300W per BDM' - and there is no
+    separate figure for the rear half anywhere in either guide. Recording a wattage here
+    would DOUBLE COUNT: the partner contract carries power-draw-scope: module-with-paired-io
+    precisely so a consumer knows its figure already contains this card. So a chassis total
+    is complete without a number here, which is what separates this from not-published -
+    nothing is missing.
   mcx-is-recessed: 'THE OWNER, AGAINST THE HARDWARE: "the MCX connector is RECESSED
     INTO the faceplate, so it actually doesn''t stick out from the faceplate, it''s
     recessed from the faceplate ... whereas the US I/O and the DS I/Os have the F
