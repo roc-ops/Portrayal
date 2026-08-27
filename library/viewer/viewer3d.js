@@ -24,7 +24,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { toGLB, toUSDZ } from './share.js';
-import { configureRelief, svgCanvas, canvasTex, rasterize, svgSource, setSvgOverride, clearSvgOverrides,
+import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, svgSource, setSvgOverride, clearSvgOverrides,
          setNodeStates, nodeStates, restyleText,
          buildFaceRelief, squareFaceplate } from './relief.js';
 import { applyOverrides } from './swap.js';
@@ -334,6 +334,11 @@ export function createViewer(container, opts = {}) {
   }
 
   // --- build ------------------------------------------------------------------
+  // THIS VIEWER'S OWN SWAPS AND LAMPS. Two viewers on one page - a before/after
+  // of the same rack - each need their own; without this the second to build
+  // took the first's occupants, and either one tearing down emptied both.
+  // THREE, the renderer and the fetch cache are still shared, which is right.
+  const SCOPE = createReliefScope();
   let box = null, reliefGroup = null, gen = 0;
   const faceGroups = {};        // view -> the group buildFaceRelief filled
 
@@ -341,7 +346,7 @@ export function createViewer(container, opts = {}) {
     const plain = () => new THREE.MeshLambertMaterial({color: body.color || '#3a3f44'});
     const sideMat = async (name, wmm, hmm, flipX, flipY) => {
       if (!body.sides || !body.sides[name]) return plain();
-      const c = await svgCanvas(DIST + body.sides[name], wmm, hmm, flipX, flipY);
+      const c = await svgCanvas(DIST + body.sides[name], wmm, hmm, flipX, flipY, SCOPE);
       return new THREE.MeshBasicMaterial({map: canvasTex(c)});
     };
     const fp = body.footprint || {at: [0, 0], size: [faceW, faceH]};
@@ -366,7 +371,7 @@ export function createViewer(container, opts = {}) {
   // map ahead of its cache, so reading a face here while a previous build's
   // override still stood would re-swap an already-swapped document.
   async function applyBayOverrides(cfg) {
-    clearSvgOverrides();
+    clearSvgOverrides(SCOPE);
     if (COMP || !devIndex?.bays || !Object.keys(OVERRIDES).length) return 0;
     const byRef = ref => (COMP_INDEX || []).find(
       c => `${c.ns}/${c.name}@${c.major.slice(1)}` === ref.split(':')[0]);
@@ -375,32 +380,33 @@ export function createViewer(container, opts = {}) {
       if (!c) return null;
       const skin = c.skins?.includes('default') ? 'default' : c.skins?.[0];
       const url = `${DIST}components/${c.ns}--${c.name}--${c.major}--${skin}.svg`;
-      return {comp: c, text: await svgSource(url)};
+      return {comp: c, text: await svgSource(url, SCOPE)};
     };
     let total = 0;
     for (const [view, bays] of Object.entries(devIndex.bays)) {
       if (!bays.some(b => Object.prototype.hasOwnProperty.call(OVERRIDES, b.id))) continue;
       const url = `${DIST}${DEV}.${cfg}.${view}.svg`;
       let text;
-      try { text = await svgSource(url); } catch { continue; }
+      try { text = await svgSource(url, SCOPE); } catch { continue; }
       const doc = new DOMParser().parseFromString(text, 'image/svg+xml');
       if (doc.querySelector('parsererror')) continue;
       const n = await applyOverrides(doc.documentElement, bays, OVERRIDES, loadSkin);
       if (!n) continue;
-      setSvgOverride(url, new XMLSerializer().serializeToString(doc));
+      setSvgOverride(url, new XMLSerializer().serializeToString(doc), SCOPE);
       total += n;
     }
     return total;
   }
 
   async function build(cfg) {
-    // the shared relief pipeline is global state; claim it for this build
+    // THREE and the renderer are genuinely shared; the per-document state is not,
+    // and rides on SCOPE rather than being claimed from under the other viewer
     configureRelief({THREE, renderer, PXMM, FRU_PATHS});
     await applyBayOverrides(cfg);
     // the states go in BEFORE anything is extracted, so the faces and the relief
     // are cut from a document that already carries them; a rebuild that dropped
     // them would put out every lamp the user had lit
-    setNodeStates(STATES);
+    setNodeStates(STATES, SCOPE);
     RESTYLE = [];
     gen++;
     const f = v => `${DIST}${DEV}.${cfg}.${v}.svg`;
@@ -412,7 +418,7 @@ export function createViewer(container, opts = {}) {
     if (!COMP) {
       // FRU paths must be known during extraction (owner tagging)
       for (const view of ['front', 'rear']) {
-        const txt = await svgSource(f(view));
+        const txt = await svgSource(f(view), SCOPE);
         for (const m of txt.matchAll(/data-path="([^"\/]+)"[^>]*data-class="(psu|fan|tab)"/g))
           FRU_PATHS.add(m[1]);
         for (const m of txt.matchAll(/data-class="(psu|fan|tab)"[^>]*data-path="([^"\/]+)"/g))
@@ -443,7 +449,7 @@ export function createViewer(container, opts = {}) {
       const before = meshes.length;
       await buildFaceRelief(F, {src: F.url || f(F.view), faceCv, faceSvg, facePunch,
                                 meshes, FRU_GROUPS, FRU_META, BODY_META, D, bodyBoxMesh,
-                                restyle: RESTYLE});
+                                restyle: RESTYLE, scope: SCOPE});
       // a face with no drawing falls back to flat colour and contributes no group
       if (meshes.length > before) built[F.view] = meshes[meshes.length - 1];
     }
@@ -453,7 +459,7 @@ export function createViewer(container, opts = {}) {
       const plain = new THREE.MeshLambertMaterial({color: body.color || '#3a3f44'});
       const sideMat = async (name, wmm, hmm, flipX, flipY) => {
         if (!body.sides || !body.sides[name]) return plain;
-        const c = await svgCanvas(DIST + body.sides[name], wmm, hmm, flipX, flipY);
+        const c = await svgCanvas(DIST + body.sides[name], wmm, hmm, flipX, flipY, SCOPE);
         return new THREE.MeshBasicMaterial({map: canvasTex(c)});
       };
       mats = [
@@ -466,7 +472,7 @@ export function createViewer(container, opts = {}) {
       ];
     } else {
       // the underside gets no relief pass, so square its faceplate here too
-      const bottomTxt = squareFaceplate(await svgSource(f('bottom')));
+      const bottomTxt = squareFaceplate(await svgSource(f('bottom'), SCOPE));
       const bottomCv = await rasterize(bottomTxt, W, D, PXMM, true, true);
       faceSvg.bottom = bottomTxt;
       mats = [faceCv.right, faceCv.left, faceCv.top, bottomCv, faceCv.front, faceCv.rear]
@@ -555,7 +561,7 @@ export function createViewer(container, opts = {}) {
     for (const view of ['front', 'rear']) {
       const div = document.createElement('div');
       div.style.cssText = 'position:absolute;left:-10000px;top:0;width:1000px;visibility:hidden';
-      div.innerHTML = await svgSource(`${DIST}${DEV}.${cfg}.${view}.svg`);
+      div.innerHTML = await svgSource(`${DIST}${DEV}.${cfg}.${view}.svg`, SCOPE);
       document.body.appendChild(div);
       const svg = div.querySelector('svg');
       const inv = svg.getScreenCTM().inverse();
@@ -871,17 +877,17 @@ export function createViewer(container, opts = {}) {
       if (STATES[k] !== next[k]) changed.add(k);
     STATES = next;
     if (!changed.size || !box) return 0;
-    setNodeStates(STATES);
+    setNodeStates(STATES, SCOPE);
     const touches = text => [...changed].some(p => text.includes(`data-path="${p}"`));
     let n = 0;
     for (const e of RESTYLE) {
       if (!touches(e.svgText)) continue;
-      try { await e.run(restyleText(e.svgText)); n++; }
+      try { await e.run(restyleText(e.svgText, SCOPE)); n++; }
       catch (err) { console.warn('[portrayal] restyle failed', err); }
     }
     for (const rec of LOD) {
       if (!touches(rec.svgText)) continue;
-      rec.svgText = restyleText(rec.svgText);
+      rec.svgText = restyleText(rec.svgText, SCOPE);
       const at = rec.level;
       rec.level = 0;                    // refineFace no-ops at the level it holds
       await refineFace(rec, at);

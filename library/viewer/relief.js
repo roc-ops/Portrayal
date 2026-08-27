@@ -31,16 +31,38 @@ const SVG_CACHE = new Map();
 // signatures instead would have meant five chances to miss one, and the one that
 // was missed would look like a rendering fault rather than a plumbing gap.
 //
-// Global, like the rest of this module's per-build state, and cleared at the top
-// of a build for the same reason `configureRelief` is called there.
-const SVG_OVERRIDE = new Map();
-export function setSvgOverride(url, text) {
-  if (text == null) SVG_OVERRIDE.delete(url);
-  else SVG_OVERRIDE.set(url, text);
+// AN OVERRIDE IS AN OPINION, NOT A FACT, and that is what separates it from the
+// cache above. `SVG_CACHE` is keyed by URL and shared on purpose - the same URL
+// really is the same bytes, for everybody. An override says what that URL should
+// render as FOR ONE VIEWER, and a module-level map has exactly one seat.
+//
+// It cost a downstream consumer real work: a before/after comparison of one rack
+// with two occupant sets could not be built in one page, because whichever
+// viewer swapped last won for both. They ran two iframes - two documents, two
+// WebGL contexts - to get two copies of this module. Worse than a race, the old
+// `clearSvgOverrides()` took no argument and emptied everything, so one viewer
+// starting a build silently discarded another's swaps.
+//
+// So a viewer may own a SCOPE: its swapped faces and its lit lamps, the two
+// things here that are per-document rather than per-page. THREE, the renderer
+// and the fetch cache stay module-level, because those genuinely are shared.
+// Passing no scope uses the default one, which is what every existing caller
+// does and what this module did before - so nothing had to change to keep working.
+export function createReliefScope() {
+  return {overrides: new Map(), states: new Map()};
 }
-export function clearSvgOverrides() { SVG_OVERRIDE.clear(); }
-export function svgSource(url) {
-  if (SVG_OVERRIDE.has(url)) return Promise.resolve(SVG_OVERRIDE.get(url));
+const DEFAULT_SCOPE = createReliefScope();
+const _sc = scope => scope || DEFAULT_SCOPE;
+
+export function setSvgOverride(url, text, scope) {
+  const m = _sc(scope).overrides;
+  if (text == null) m.delete(url);
+  else m.set(url, text);
+}
+export function clearSvgOverrides(scope) { _sc(scope).overrides.clear(); }
+export function svgSource(url, scope) {
+  const ov = _sc(scope).overrides;
+  if (ov.has(url)) return Promise.resolve(ov.get(url));
   if (!SVG_CACHE.has(url))
     SVG_CACHE.set(url, fetch(url, {cache: 'no-store'}).then(r => r.text()));
   return SVG_CACHE.get(url);
@@ -67,27 +89,30 @@ export function clearSvgCache() { SVG_CACHE.clear(); }
 // a colour on a cylinder's cap - takes effect for the same reason. `data-z-dome`
 // is how these lamps happen to be modelled today, and a fix that could only see
 // domes would light some of a device's indicators and not others.
-const NODE_STATES = new Map();
+// Scoped for the same reason overrides are: which lamps a viewer has lit is that
+// viewer's opinion about the document, and two comparisons side by side are
+// exactly the case where they differ.
 
 /** Replace the runtime state classes, keyed by data-path. */
-export function setNodeStates(map) {
-  NODE_STATES.clear();
+export function setNodeStates(map, scope) {
+  const st = _sc(scope).states;
+  st.clear();
   for (const [path, cls] of map instanceof Map ? map : Object.entries(map || {}))
-    if (cls) NODE_STATES.set(path, String(cls));
+    if (cls) st.set(path, String(cls));
 }
-export function clearNodeStates() { NODE_STATES.clear(); }
-export function nodeStates() { return new Map(NODE_STATES); }
+export function clearNodeStates(scope) { _sc(scope).states.clear(); }
+export function nodeStates(scope) { return new Map(_sc(scope).states); }
 
 // Applied by CLEARING FIRST, over the whole document rather than over the paths
 // in the registry. Turning a state off is a state change like any other, and it
 // arrives as a path that is no longer in the map - so a version that only
 // visited registered paths would light lamps correctly and never put one out.
 /** Put the registered classes onto the matching elements of a parsed document. */
-export function applyNodeStates(root) {
+export function applyNodeStates(root, scope) {
   if (!root) return root;
   for (const el of root.querySelectorAll('[data-path][class]'))
     for (const c of [...el.classList]) if (c.startsWith('state-')) el.classList.remove(c);
-  for (const [path, cls] of NODE_STATES)
+  for (const [path, cls] of _sc(scope).states)
     for (const el of root.querySelectorAll(`[data-path="${CSS.escape(path)}"]`))
       el.classList.add(...cls.split(/\s+/).filter(Boolean));
   return root;
@@ -97,11 +122,11 @@ export function applyNodeStates(root) {
 // and never re-shapes, so a texture can be redrawn from the text it was built
 // from without re-extracting any geometry - which is the whole reason clicking a
 // state chip does not cost a rebuild.
-export function restyleText(text) {
+export function restyleText(text, scope) {
   if (!text) return text;
   const div = document.createElement('div');
   div.innerHTML = text;
-  applyNodeStates(div);
+  applyNodeStates(div, scope);
   return div.innerHTML;
 }
 
@@ -120,8 +145,8 @@ export function squareFaceplate(text) {
     m => m.replace(/\s(?:rx|ry|stroke|stroke-width)="[^"]*"/g, ''));
 }
 
-export async function svgCanvas(url, wmm, hmm, flipX = false, flipYax = false) {
-  const text = await svgSource(url);
+export async function svgCanvas(url, wmm, hmm, flipX = false, flipYax = false, scope) {
+  const text = await svgSource(url, scope);
   const img = new Image();
   const blobUrl = URL.createObjectURL(new Blob([text], {type: 'image/svg+xml'}));
   await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = blobUrl; });
@@ -188,16 +213,16 @@ export function crop(cv, r) {
 // standards-relief extraction: cavities (with interior features) + outward protrusions.
 // Interior/plate art is re-rendered STANDALONE from its own nodes so bezel plates
 // can carry arbitrary shapes (plug-outline apertures, LED holes) via alpha.
-export async function extractRelief(url) {
+export async function extractRelief(url, scope) {
   const div = document.createElement('div');
   div.style.cssText = 'position:absolute;left:-10000px;top:0;width:1000px;visibility:hidden';
-  div.innerHTML = await svgSource(url);
+  div.innerHTML = await svgSource(url, scope);
   document.body.appendChild(div);
   const svg = div.querySelector('svg');
   // before anything is measured or serialised: cleanText and every nodeSvg below
   // are taken from this document, so applying the runtime states once here is
   // what puts them on the face texture and on every piece of relief at once.
-  applyNodeStates(svg);
+  applyNodeStates(svg, scope);
   const inv = svg.getScreenCTM().inverse();
   const mmRect = el => {
     const b = el.getBBox();
@@ -437,7 +462,7 @@ export async function buildFaceRelief(F, ctx) {
       faceCv[F.view] = cv0;
       return;
     }
-    const {cavities, outs, domes, vents, frus, cleanText} = await extractRelief(src);
+    const {cavities, outs, domes, vents, frus, cleanText} = await extractRelief(src, ctx.scope);
     const faceText = squareFaceplate(cleanText);
     const cv = await rasterize(faceText, fw, fh);
     faceCv[F.view] = cv;
