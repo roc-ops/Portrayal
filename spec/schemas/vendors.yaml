@@ -1,0 +1,149 @@
+# Who made this, who owns it now, and who wrote the software running on it.
+#
+# WHY A REGISTRY AND NOT A FIELD ON EACH DEVICE. A device already states its
+# `manufacturer:` - the name on the metal, which is what ENTITY-MIB's
+# entPhysicalMfgName means and what a technician reads off the label. That name
+# is a fact about the hardware and must not move when a company is sold. But it
+# is not the only name the box is known by: Casa Systems no longer exists and
+# its cable assets are Vistance property, so a search for Vistance that returns
+# nothing is wrong about the world while `casa/c100g` is right about the metal.
+#
+# So directories stay keyed to the manufacturer of record and the lineage lives
+# here, where a consumer can resolve through it. Neither name has to lie.
+#
+# TWO RELATIONSHIPS LIVE IN THIS FILE and they are not the same thing:
+#
+#   `successor` / `parent` / `brands` are CORPORATE LINEAGE. Same metal, same
+#   product, the company changed. Nothing new is manufactured and no new device
+#   exists - this is a lookup.
+#
+#   `role: software` marks a NOS vendor, which is the DISAGGREGATION case. The
+#   same switch running ArcOS and running another NOS is two things you can buy,
+#   from two different companies, and only one of them made the metal. That is
+#   not lineage and it does not belong in `successor`; it is expressed by an
+#   overlay declaring an `identity:`, and this file is only what lets that
+#   overlay name its vendor.
+#
+# EVERY ENTRY CARRIES ITS SOURCE, for the reason every figure in this library
+# does: a corporate lineage claim is a fact about the world, it decays, and the
+# next person needs to know whether it came from a live device, a document, or
+# somebody's memory of a press release.
+
+format: 1
+
+# Reserved namespaces. Not companies - `common/` is the generic shapes that
+# stand in for many vendors' parts, `std/` is the registry-conforming apertures
+# and cages. A part in either has no manufacturer and a DCIM cannot order it.
+namespaces:
+  common: shapes that stand for a class of part rather than one product
+  std: apertures and cages conforming to spec/schemas/standards.yaml
+
+vendors:
+
+  # ---- hardware manufacturers, in the library today ----
+
+  casa:
+    display: Casa Systems
+    role: hardware
+    successor: vistance
+    source: >-
+      lineage per Jason, confirmed while staging the E6000 for ndv#46 - Casa's
+      cable assets (C100G, C40G, BDM2-M, SMM 300G-M) are Vistance property and
+      the documentation now serves from vistancenetworks.com. The metal still
+      says Casa Systems, which is why the directory does.
+
+  celestica:
+    display: Celestica
+    role: hardware
+    source: 'the name on the ES1010 and on its PSU FRU label'
+
+  cisco:
+    display: Cisco
+    aka: [Cisco Systems]
+    role: both
+    source: 'the name on the metal; IOS XR makes it a software vendor too'
+
+  edgecore:
+    display: Edgecore Networks
+    parent: accton
+    role: hardware
+    source: >-
+      the hardware says so itself. `arcos-openconfig-components.json` from
+      as7726-32x reports manufacturer "Accton" and platform
+      "x86_64-accton_as7726_32x-r0", while the faceplate and the datasheets say
+      Edgecore - the ODM parent and the brand it sells under. A DriveNets slide
+      labelling one of these boxes "Vendor: Accton" is the same fact from the
+      other direction.
+
+  halny:
+    display: Halny
+    role: hardware
+    source: 'the name on the metal'
+
+  juniper:
+    display: Juniper Networks
+    aka: [Juniper]
+    role: both
+    source: 'the name on the metal; Junos makes it a software vendor too'
+
+  smartoptics:
+    display: Smartoptics
+    role: hardware
+    source: 'the name on the metal and on the DCP manuals'
+
+  ufispace:
+    display: UfiSpace
+    role: hardware
+    source: 'the name on the metal and on the S9510-28DC hardware guide'
+
+  # ---- lineage targets: companies that own or absorbed the above ----
+  # These manufacture nothing in this library. They are here so a search or an
+  # export can resolve a successor without a device having to claim it.
+
+  accton:
+    display: Accton Technology
+    role: hardware
+    brands: [edgecore]
+    source: 'see edgecore - the box reports Accton as its own manufacturer'
+
+  vistance:
+    display: Vistance Networks
+    role: hardware
+    brands: [aurora-networks]
+    source: >-
+      per Jason - holds the former Casa cable assets, and is the parent under
+      which the Aurora Networks CMTS brand sits after CommScope (Jan 2026).
+
+  commscope:
+    display: CommScope
+    role: hardware
+    successor: vistance
+    source: >-
+      per Jason and ndv#47 - ARRIS was acquired by CommScope in 2019, and the
+      CMTS line moved on to Vistance/Aurora in Jan 2026.
+
+  arris:
+    display: ARRIS
+    role: hardware
+    successor: commscope
+    source: 'per Jason and ndv#47 - acquired by CommScope, 2019'
+
+  aurora-networks:
+    display: Aurora Networks
+    role: hardware
+    parent: vistance
+    source: 'per Jason and ndv#47 - the CMTS brand under Vistance from Jan 2026'
+
+  # ---- software vendors ----
+  # A NOS vendor is named by an overlay's `identity:`, never by a device. The
+  # device is the metal and the metal did not change when the software did.
+
+  arrcus:
+    display: Arrcus
+    role: software
+    products: [arcos]
+    source: >-
+      the running device says so: `arcos-show-version.txt` from roc-spine1, an
+      AS7726-32X, reads "Software: Arrcus ArcOS" with "Firmware MU: EdgeCore MU
+      1.2.3" beneath it - one line naming both the software house and the
+      hardware one.

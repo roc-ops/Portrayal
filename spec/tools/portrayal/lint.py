@@ -59,6 +59,7 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
   L52 component: a stated power figure says where it was read from
   L53 device: content changed without the version bump the change requires
   L54 device: a declared gap scopes something the device does not have
+  L55 library: every vendor namespace is in the vendor registry
       that composes them
   L47 component: a declared lamp state is a promise the drawing can keep - some
       element lights when it is set
@@ -718,6 +719,25 @@ def _load_power_roles(schemas):
 
 
 DRAW_CLASSES, SUPPLY_CLASSES, PASSIVE_CLASSES = _load_power_roles(
+    Path(__file__).resolve().parents[2] / "schemas")
+
+
+def _load_vendors(schemas):
+    """The vendor registry, or an empty one if the checkout is broken.
+
+    Loaded at import beside the power roles, and for the same reason: a rule
+    that silently passes when its registry is missing is worse than one that
+    fails loudly, so L55 reports on every namespace when this comes back empty.
+    """
+    path = Path(schemas) / "vendors.yaml"
+    try:
+        doc = yaml.safe_load(path.read_text()) or {}
+    except (OSError, yaml.YAMLError):
+        return {}, {}
+    return (doc.get("vendors") or {}), (doc.get("namespaces") or {})
+
+
+VENDORS, NAMESPACES = _load_vendors(
     Path(__file__).resolve().parents[2] / "schemas")
 DRAW_KEYS = ("power-draw-typical-w", "power-draw-max-w", "power-draw-min-w")
 SUPPLY_KEYS = ("power-output-w",)
@@ -2227,6 +2247,61 @@ def lint_device_gap_scope(path, data):
              "rather than the scope implying the device already has it")
 
 
+def lint_vendor_registry(root):
+    """L55: a vendor namespace that the registry does not know.
+
+    A device states its `manufacturer:` - the name on the metal, which is what
+    ENTITY-MIB's entPhysicalMfgName means - and that name must not move when a
+    company is sold. So the directory stays put and the lineage lives in
+    spec/schemas/vendors.yaml, where a consumer resolves through it: Casa
+    Systems no longer exists and a search for Vistance that returns nothing is
+    wrong about the world, while `casa/c100g` is right about the metal.
+
+    A namespace with no entry breaks that resolution silently. It is also how
+    the gap arrived in the first place - a vendor gets added during intake, the
+    lineage is known to whoever staged it that week, and it is never written
+    down.
+
+    A WARNING AND NOT AN ERROR, for L51's reason exactly. The minimal entry
+    costs one line, but the entry that matters states a LINEAGE, and a lineage
+    guessed to clear a red gate is worse than an absent one - it is the same
+    number minus the warning. Also reports the registry's own internal breaks,
+    which ARE errors: a `successor` naming nothing is a typo in a file this
+    repository owns, and needs no document to fix.
+    """
+    seen = set()
+    for base in ("components", "devices"):
+        d = root / base
+        if not d.is_dir():
+            continue
+        for child in sorted(d.iterdir()):
+            if not child.is_dir() or child.name in seen:
+                continue
+            seen.add(child.name)
+            if child.name in VENDORS or child.name in NAMESPACES:
+                continue
+            warn(child, "L55", f"namespace {child.name!r} is in no vendor registry. "
+                 "Add it to spec/schemas/vendors.yaml with `display`, `role` "
+                 "(hardware | software | both) and `source` - and, if the company "
+                 "has been renamed, bought or absorbed since the metal was made, "
+                 "`successor`/`parent`/`brands`, because that is the part a "
+                 "consumer cannot derive and nobody writes down later. If this is "
+                 "not a company at all - a generic shape set like `common/` - "
+                 "declare it under `namespaces:` instead")
+    for slug, entry in sorted(VENDORS.items()):
+        entry = entry or {}
+        for key in ("successor", "parent"):
+            target = entry.get(key)
+            if target and target not in VENDORS:
+                err(root / "…", "L55", f"vendor {slug!r} names {key} {target!r}, "
+                    "which is not itself a vendor in the registry. A lineage that "
+                    "points at nothing cannot be resolved through")
+        for brand in (entry.get("brands") or []):
+            if brand not in VENDORS:
+                err(root / "…", "L55", f"vendor {slug!r} lists brand {brand!r}, "
+                    "which is not itself a vendor in the registry")
+
+
 def lint_device_config_scope(path, data):
     """L41: a bay scoped to configurations that do not exist is a bay in none.
 
@@ -3597,6 +3672,7 @@ def main():
     # a partial check would report the unexamined ones as unchanged.
     if not args.device:
         for root in [Path(r) for r in args.library]:
+            lint_vendor_registry(root)
             if not (root / devicelock.LOCK_NAME).exists() and not list(root.glob("devices/*/*/device.yaml")):
                 continue
             for slug_, kind_, msg_ in devicelock.check(root):
