@@ -82,5 +82,11 @@ if [ ${#DEVSEL[@]} -eq 0 ]; then
   ls library/devices/*/*/device.yaml \
     | xargs -P "$JOBS" -I{} python3 spec/tools/portrayal/dcim_export.py {} \
         --out library/exports --nos arcos --nos sonic --dist "$OUT" >/dev/null
+  # Module types are per component, not per device: one pass over the library.
+  # --dist for the same reason the device loop takes it: with it the pass also
+  # renders each card's faceplate into module-images/. *.png is gitignored, so
+  # this costs the repository nothing and gives a local build the pictures.
+  python3 spec/tools/portrayal/dcim_export.py --modules library \
+    --out library/exports --dist "$OUT" >/dev/null
 fi
 echo "built $(ls "$OUT" | wc -l | tr -d ' ') files -> $OUT"

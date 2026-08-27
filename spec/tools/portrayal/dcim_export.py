@@ -54,6 +54,130 @@ IFACE_TYPE = {
 }
 AIRFLOW = {"front-to-back": "front-to-rear", "back-to-front": "rear-to-front"}
 
+# A module's ports are its `parts`. Mapped by component ref, because a cage's
+# ref says what the cage IS while the speed it runs at is a property of the card
+# - a9k-40ge-b's forty std/sfp-ganged are SFP+, and the attrs say so.
+PART_IFACE = {
+    "std/sfp-ganged": "10gbase-x-sfpp",
+    "common/sfp-plus-cage": "10gbase-x-sfpp",
+    "std/sfp": "1000base-x-sfp",
+    "std/xfp": "10gbase-x-xfp",
+    "std/qsfp-ganged": "40gbase-x-qsfpp",
+    "std/qsfp28": "100gbase-x-qsfp28",
+    "std/qsfp-dd": "400gbase-x-qsfpdd",
+}
+# What a cage RUNS AT is a property of the card, not of the cage. So the cage ref
+# gives the family and the card's attrs give the speed within it.
+#
+# Matching by family matters because twelve modules declare more than one: an
+# A9K-8HG-FLEX-TR is qsfp-dd AND qsfp28, in std/qsfp-dd and std/qsfp-ganged
+# cages respectively, and an SMM 300G is qsfp28 in its QSFP cages and sfp-plus
+# in its SFP ones. Applying one declared media to every cage on the card would
+# retype half of them.
+#
+# Two earlier versions of this were wrong in opposite directions. Keeping the
+# cage default unless the attr looked "faster" - compared as strings, which is
+# not an ordering - meant A9K-40GE-B still exported forty 10G interfaces after
+# its contract was corrected to `sfp: 40` (roc-ops/ndv#23). Letting the attr win
+# outright then retyped every QSFP cage on the mixed cards.
+CAGE_FAMILY = {
+    "std/sfp-ganged": "sfp",
+    "common/sfp-plus-cage": "sfp",
+    "std/sfp": "sfp",
+    "std/qsfp-ganged": "qsfp",
+    "std/qsfp28": "qsfp",
+    "std/qsfp-dd": "qsfp-dd",
+    "std/xfp": "xfp",
+}
+# Most specific first: a card declaring both qsfp28 and qsfp is 100G in a QSFP
+# cage, because a QSFP28 cage takes a 40G optic too.
+FAMILY_ATTRS = {
+    "sfp": (("sfp-plus", "10gbase-x-sfpp"), ("sfp", "1000base-x-sfp")),
+    "qsfp": (("qsfp28", "100gbase-x-qsfp28"), ("qsfp", "40gbase-x-qsfpp")),
+    "qsfp-dd": (("qsfp-dd", "400gbase-x-qsfpdd"),),
+    "xfp": (),
+}
+
+
+def cage_type(ref, attrs):
+    """The interface type for one cage on one card."""
+    for attr, t in FAMILY_ATTRS.get(CAGE_FAMILY.get(ref, ""), ()):
+        if attrs.get(attr):
+            return t
+    return PART_IFACE.get(ref)
+
+
+PART_CONSOLE = {"std/rj45-ganged": "rj-45", "common/rj45-shielded": "rj-45",
+                "std/usb-a": "usb-a"}
+
+# RF and timing connectors. These are INTERFACES, not front ports: a front port
+# in both libraries is a patch-panel pass-through and requires a rear_port to
+# terminate on, which a connector on a line card does not have. Emitting them as
+# front ports made 21 module types invalid before this was noticed.
+#
+# The connector is not the signal. Casa's 6+12 I/O cards carry DOCSIS on MCX and
+# its QAM/US I/O cards carry it on F, so both are `docsis` and the label records
+# which connector. The SMB ports on Cisco route processors are gps-10mhz and
+# gps-1pps - timing inputs, not network interfaces - so they take `other`, which
+# says "a thing this schema has no name for" rather than naming a neighbour.
+# An appliance inlet that accepts a C13 cord is a C14 on the equipment side, and
+# both DCIMs name it from the inlet.
+#
+# c20-inlet is here before anything places it. Nothing in the library uses it
+# yet, so the entry is unreachable today - but an unmapped inlet does not raise,
+# it just drops the power port, and a port that disappears without an error is
+# the worst way to find out about a part somebody added.
+PART_POWER = {
+    "std/c14-inlet": "iec-60320-c14",
+    "std/c20-inlet": "iec-60320-c20",
+}
+
+# What the PLACEMENT says runs through the connector, when it says.
+#
+# A housing cannot carry this. Ten identical `common/sfp-plus-cage` can be eight
+# 1G and two 10G, and an 8P8C shell is equally an Ethernet port, a console and a
+# telemetry link - roc-ops/ndv#27 and #29 are the same defect seen twice. The
+# library answers both the same way: `attrs` on the placement, which thirty-odd
+# parts already carried before either issue was filed.
+#
+# Keyed (media, speed) and falling back to (media, None), because a medium that
+# runs at one rate does not repeat it - rj45-telemetry has no speed to give.
+#
+# rj45-telemetry is `other` deliberately. It is the Casa switch BDM's link to a
+# rectifier shelf: an 8P8C housing carrying a proprietary monitoring protocol,
+# which is neither Ethernet nor a console. `other` says "a thing this schema has
+# no name for", and that is exactly true; typing it rj-45 console would invite
+# somebody to patch it into a terminal server.
+PART_MEDIA = {
+    ("sfp", "1g"): "1000base-x-sfp",
+    ("sfp-plus", "10g"): "10gbase-x-sfpp",
+    ("qsfp", "40g"): "40gbase-x-qsfpp",
+    ("qsfp28", "100g"): "100gbase-x-qsfp28",
+    ("qsfp-dd", "400g"): "400gbase-x-qsfpdd",
+    ("rj45-telemetry", None): "other",
+}
+
+
+def placed_type(part):
+    """The interface type the placement itself declares, or None."""
+    a = part.get("attrs") or {}
+    media = a.get("media")
+    if not media:
+        return None
+    speed = a.get("speed")
+    return PART_MEDIA.get((media, speed)) or PART_MEDIA.get((media, None))
+
+
+PART_RF = {
+    "std/f-type": ("docsis", "F"),
+    "std/mcx": ("docsis", "MCX"),
+    "std/smb": ("other", "SMB"),
+}
+
+# std/lc-bore is the rx/tx bore of a QSFP transceiver, not a port on a device:
+# the transceiver IS the module. A pull tab is furniture.
+PART_SKIP = {"common/qsfp-pull-tab", "std/lc-bore"}
+
 # Both libraries take the same device-type document. They differ only in what
 # they REQUIRE - NetBox also demands u_height and is_full_depth, which we always
 # write - and in the airflow enum, where NetBox allows three values we never
@@ -321,6 +445,70 @@ def build(dev, cfg_name, cfg, profile, dist=None, frus=None, label=None):
     return out, bool(ports)
 
 
+def build_module(contract, manufacturer):
+    """A module contract as a DCIM module type."""
+    attrs = contract.get("attrs") or {}
+    model = str(attrs.get("model") or contract["name"])
+    out = {"manufacturer": manufacturer, "model": model}
+
+    if attrs.get("weight-kg"):
+        out["weight"] = round(float(attrs["weight-kg"]), 2)
+        out["weight_unit"] = "kg"
+
+    if contract.get("description"):
+        out["description"] = contract["description"].strip().split(".")[0][:200]
+
+    # Which interface type this card's cages actually run at. The cage ref gives
+    # the floor; an attr naming a faster media raises it.
+    ifaces, consoles, powers = [], [], []
+    for part in contract.get("parts") or []:
+        if not isinstance(part, dict):
+            continue
+        ref = part["ref"].split("@")[0]
+        pid = str(part.get("id") or "")
+        if ref in PART_SKIP:
+            continue
+        # The placement is more specific than the ref, so it is checked first.
+        # Reaching PART_CONSOLE with an rj45-telemetry part would file a
+        # rectifier link as a console port, which is how #29 read before.
+        placed = placed_type(part)
+        if placed:
+            iface = {"name": pid, "type": placed}
+            if placed == "other":
+                iface["label"] = "RJ45"
+            ifaces.append(iface)
+        elif ref in PART_POWER:
+            powers.append({"name": pid or "Inlet", "type": PART_POWER[ref]})
+        elif ref in PART_CONSOLE:
+            consoles.append({"name": pid or "Console", "type": PART_CONSOLE[ref]})
+        elif ref in PART_RF:
+            t, connector = PART_RF[ref]
+            # The type says what the signal is; the label keeps the connector,
+            # which is the part the type cannot express.
+            ifaces.append({"name": pid or t, "type": t, "label": connector})
+        elif ref in PART_IFACE:
+            ifaces.append({"name": pid, "type": cage_type(ref, attrs)})
+
+    if consoles:
+        out["console-ports"] = consoles
+    if ifaces:
+        out["interfaces"] = ifaces
+    if powers:
+        out["power-ports"] = powers
+
+    body = []
+    if contract.get("description"):
+        body += [contract["description"].strip(), ""]
+    facts = [f"- {k}: {v}" for k, v in attrs.items()
+             if k != "model" and isinstance(v, (str, int, float))]
+    if facts:
+        body.append("Facts carried in the model that this schema has no field for:")
+        body += facts
+    if body:
+        out["comments"] = "\n".join(body).strip()
+    return out
+
+
 def _num(s):
     try:
         return int(s)
@@ -343,44 +531,124 @@ def write(doc, root, target, nos):
     return f
 
 
-def render_image(dist, root, target, doc, dev_name, cfg_name, face):
-    """Rasterise a compiled face into the library's elevation-images tree."""
-    src = Path(dist) / f"{dev_name}.{cfg_name}.{face}.svg"
+def rasterize(src, png, scale):
+    """One compiled drawing to one PNG. None if the drawing or cairosvg is absent.
+
+    Resolves the custom properties first, which cairosvg has no support for -
+    it reads `var(--led-color, #3a3f44)` as a hex literal beginning "ar". Every
+    use in the compiled output is a lamp colour and every one carries a
+    fallback, so taking the fallback yields the unlit faceplate. That is the
+    right picture for a type either way: a type has no live state to show.
+    """
     if not src.exists():
         return None
     try:
         import cairosvg
     except ImportError:
         return None
-    out = Path(root) / target / "elevation-images" / doc["manufacturer"]
-    out.mkdir(parents=True, exist_ok=True)
-    png = out / f"{doc['slug']}.{face}.png"
-
-    # Resolve the custom properties before handing the drawing to cairosvg,
-    # which has no support for them and reads `var(--led-color, #3a3f44)` as a
-    # hex literal beginning "ar". Every use in the compiled output is a lamp
-    # colour and every one carries a fallback, so taking the fallback yields the
-    # unlit faceplate - which is the right picture for an elevation image
-    # anyway: a device type has no live state to show.
     svg = re.sub(r"var\(\s*--[\w-]+\s*,\s*([^)]*)\)", r"\1", src.read_text())
+    png.parent.mkdir(parents=True, exist_ok=True)
+    cairosvg.svg2png(bytestring=svg.encode(), write_to=str(png), scale=scale)
+    return png
 
+
+def render_image(dist, root, target, doc, dev_name, cfg_name, face):
+    """Rasterise a compiled face into the library's elevation-images tree."""
     # 2 px/mm. A 440 mm faceplate lands near 880 px, which is the range the
     # libraries' own elevation images sit in - theirs run 37 KB to 350 KB. At 4
     # px/mm the 13 RU C100G alone came to 1.9 MB, and a contribution that ships
     # 29 MB of PNG is not one anybody wants to merge.
-    cairosvg.svg2png(bytestring=svg.encode(), write_to=str(png), scale=2)
-    return png
+    return rasterize(Path(dist) / f"{dev_name}.{cfg_name}.{face}.svg",
+                     Path(root) / target / "elevation-images" / doc["manufacturer"]
+                     / f"{doc['slug']}.{face}.png", 2)
+
+
+def render_module_image(dist, root, target, doc, ns, name, ver):
+    """Rasterise a module's faceplate into the library's module-images tree.
+
+    Keyed by MODEL, not by slug: a module type has no slug property in either
+    schema, and the libraries' own trees are named for the model. The filename
+    is sanitised the same way the YAML's is, so the pair always agree.
+
+    The drawing keeps its own orientation. A card is drawn as the skin draws it,
+    and which way up it ends up is a property of the chassis it is seated in -
+    an A9K line card is horizontal in a 9010 and vertical in a 9910 - so there
+    is no one rotation that is true of the part itself.
+    """
+    # Scale 1: the drawing at its own size. cairosvg's scale multiplies the CSS
+    # pixel size, so a 41 mm x 396 mm card renders 157 x 1496 - an SFP cage
+    # lands near 53 x 30 px, which reads at thumbnail size. It also keeps the
+    # files in the range the libraries' own module images occupy: theirs average
+    # 58 KB and the Cisco A9K ones are 7 KB, and these come out 10-80 KB. Going
+    # up one stop tripled that for detail nothing displays.
+    return rasterize(Path(dist) / "components" / f"{ns}--{name}--{ver}--default.svg",
+                     Path(root) / target / "module-images" / doc["manufacturer"]
+                     / (doc["model"].replace("/", "-") + ".front.png"), 1)
+
+
+def export_modules(library, root, dist=None):
+    """Every module contract in the library, as module types for both targets.
+
+    A module type is an orderable part, so it needs a manufacturer. The
+    namespace gives it - learned from the devices, which are the only place the
+    library states a manufacturer - and the generic `common/` namespace is
+    skipped: a part with no vendor is not something a DCIM can order.
+    """
+    lib = Path(library)
+    ns2man = {}
+    for f in sorted(lib.glob("devices/*/*/device.yaml")):
+        ns = f.parts[-3]
+        ns2man.setdefault(ns, yaml.safe_load(f.read_text()).get("manufacturer"))
+
+    wrote = skipped = 0
+    imaged = set()
+    for f in sorted(lib.glob("components/*/*/*/contract.yaml")):
+        contract = yaml.safe_load(f.read_text())
+        if contract.get("kind") != "module":
+            continue
+        ns = f.parts[-4]
+        man = ns2man.get(ns)
+        if not man:
+            skipped += 1
+            continue
+        doc = build_module(contract, man)
+        name, ver = f.parts[-3], f.parts[-2]
+        for target in TARGETS:
+            d = Path(root) / target / "module-types" / man
+            d.mkdir(parents=True, exist_ok=True)
+            # Cisco ships part numbers with slashes in them - A9K-16T/8-B - and
+            # a slash is a path separator, not a character. The model keeps the
+            # real name; only the filename is sanitised.
+            out = d / (doc["model"].replace("/", "-") + ".yaml")
+            out.write_text("---\n" + yaml.dump(doc, Dumper=Indented, sort_keys=False,
+                                               width=100, default_flow_style=False))
+            if dist:
+                if render_module_image(dist, root, target, doc, ns, name, ver):
+                    imaged.add(doc["model"])
+        wrote += 1
+        print(f"{doc['model']}  ({len(doc.get('interfaces', []))} interfaces, "
+              f"{len(doc.get('power-ports', []))} power ports)")
+    print(f"module types: {wrote} written, {skipped} skipped for having no manufacturer")
+    if dist:
+        print(f"module images: {len(imaged)} of {wrote} rendered")
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("device")
+    ap.add_argument("device", nargs="?")
+    ap.add_argument("--modules", help="export module types from this library root")
     ap.add_argument("--out", required=True, help="root of the exports tree")
     ap.add_argument("--nos", action="append", default=[],
                     help="NOS profile to name interfaces for; repeatable")
     ap.add_argument("--dist", help="compiled SVG directory, for images")
     ap.add_argument("--library", help="library root; inferred from the manifest path")
     args = ap.parse_args()
+
+    if args.modules:
+        export_modules(args.modules, args.out, args.dist)
+        return
+    if not args.device:
+        raise SystemExit("give a device manifest, or --modules LIBRARY")
 
     dev = yaml.safe_load(Path(args.device).read_text())
 
