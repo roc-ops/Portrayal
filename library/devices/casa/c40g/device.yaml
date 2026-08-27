@@ -33,6 +33,31 @@ provenance:
     at x 42.0 width 345.5; the brand band y 196.3-222.9; and the snap-on PSU cover
     y 226.7-264.9. The right fan bay is trimmed to start at x 388.0 so it does not
     overlap the card bays, which end at 387.5'
+  band-alignment: >-
+    REPORTED FROM THE VIEWER twice - the AC panel sitting left with a dark sliver
+    past its right edge, then the front looking "off kilter" the same way - and it
+    was ONE error in one number, repeated fourteen times.
+    THE BAND IS 37.5 TO 386.7, 349.2 WIDE, and three independent things in this
+    model already said so: the two front fan strips end and start exactly there,
+    the PSU cover measures 349.2 at 37.5, and the AC input panel measures the same.
+    Figure 1-1, the one front figure that PASSES the orthographic gate, puts the
+    card faces at 37.49 and 386.66 when read at this file`s own calibration.
+    THE CARD BAYS WERE THE OUTLIER, at 42.0 - 2.65 right of centre. That put 4.5 of
+    dead space at the left of the band and pushed the cards 0.8 PAST the right side
+    strip, which is why every full-width part looked shifted against them.
+    THE CARD IS NOT RESIZED, and that is the whole reason the fix is a position and
+    not a width. 345.5 is the card`s own length and it is SHARED with the C100G,
+    where the same parts stand vertically - so the 3.7 difference between card and
+    band is margin, 1.85 a side, not a mismeasured card. The bays move to 39.35 and
+    the card sits centred in its opening.
+    THE LEFT STRIPS STOPPED AT 40.0, 2.5 inside the band, on both faces. Now 37.5,
+    where the front fan strip already ended.
+    A WRONG FIX WAS MADE FIRST AND IS RECORDED because the reasoning is the useful
+    part: the AC panel was moved to 42.0 and narrowed to 345.5 to line up with the
+    cards, and the right strip pushed to 387.5 to stop them overlapping it. That did
+    make the rear self-consistent, by moving the one part that was measured correctly
+    to match thirteen that were not. It is reverted. Aligning to the majority is not
+    the same as aligning to the evidence.
   pem-legend: >-
     drawing-measured, and THREE separate errors in two lines. The labels read
     `PEM 1` at [4.0, 216] and `PEM 2` at [4.0, 232] - stacked one above the other,
@@ -320,7 +345,7 @@ views:
       h: 265.9
     panel:
       decor:
-        - {at: [0, 0], size: [40.0, 265.9], fill: '#8d949c'}
+        - {at: [0, 0], size: [37.5, 265.9], fill: '#8d949c'}
         - {at: [386.7, 0], size: [46.25, 265.9], fill: '#8d949c'}
     silkscreen:
       - {at: [272.0, 214.0], text: C40G, font-size: 9, fill: '#f2f4f6', anchor: start}
@@ -333,12 +358,12 @@ views:
         - {id: psu-1, at: [305.6, 226.7], size: {w: 81.0, h: 38.2}, accepts: [casa/c40g-psu-ac@1], group: power, rel-pos: 1, default: null}
         - {id: fan-left, at: [1.5, 17.0], size: {w: 34.7, h: 205.0}, accepts: [casa/c40g-fan-left@1], group: cooling, rel-pos: 0, default: casa/c40g-fan-left@1}
         - {id: fan-right, at: [388.0, 17.0], size: {w: 34.7, h: 205.0}, accepts: [casa/c40g-fan@1], group: cooling, rel-pos: 1, default: casa/c40g-fan@1}
-        - {id: front-0, at: [42.0, 164.35], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1, casa/bdm2@1, casa/bdm2m@1, casa/csc-8x10g@1, casa/ds-8x8@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1, casa/blank-faceplate@1], default: casa/bdm@1, group: front-slots, rel-pos: 0}
-        - {id: front-1, at: [42.0, 133.88], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1, casa/bdm2@1, casa/bdm2m@1, casa/csc-8x10g@1, casa/ds-8x8@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1, casa/blank-faceplate@1], default: casa/bdm@1, group: front-slots, rel-pos: 1}
-        - {id: front-2, at: [42.0, 103.41], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-8x10g@1, casa/smm-2x10g@1, casa/smm-300g@1, casa/smm-300gm@1, casa/blank-faceplate@1], default: casa/smm-8x10g@1, group: front-slots, rel-pos: 2}
-        - {id: front-3, at: [42.0, 72.94], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-8x10g@1, casa/smm-2x10g@1, casa/smm-300g@1, casa/smm-300gm@1, casa/blank-faceplate@1], default: casa/smm-8x10g@1, group: front-slots, rel-pos: 3}
-        - {id: front-4, at: [42.0, 42.47], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1, casa/bdm2@1, casa/bdm2m@1, casa/csc-8x10g@1, casa/ds-8x8@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1, casa/blank-faceplate@1], default: casa/bdm@1, group: front-slots, rel-pos: 4}
-        - {id: front-5, at: [42.0, 12.0], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1, casa/bdm2@1, casa/bdm2m@1, casa/csc-8x10g@1, casa/ds-8x8@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1, casa/blank-faceplate@1], default: casa/bdm@1, group: front-slots, rel-pos: 5}
+        - {id: front-0, at: [39.35, 164.35], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1, casa/bdm2@1, casa/bdm2m@1, casa/csc-8x10g@1, casa/ds-8x8@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1, casa/blank-faceplate@1], default: casa/bdm@1, group: front-slots, rel-pos: 0}
+        - {id: front-1, at: [39.35, 133.88], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1, casa/bdm2@1, casa/bdm2m@1, casa/csc-8x10g@1, casa/ds-8x8@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1, casa/blank-faceplate@1], default: casa/bdm@1, group: front-slots, rel-pos: 1}
+        - {id: front-2, at: [39.35, 103.41], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-8x10g@1, casa/smm-2x10g@1, casa/smm-300g@1, casa/smm-300gm@1, casa/blank-faceplate@1], default: casa/smm-8x10g@1, group: front-slots, rel-pos: 2}
+        - {id: front-3, at: [39.35, 72.94], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-8x10g@1, casa/smm-2x10g@1, casa/smm-300g@1, casa/smm-300gm@1, casa/blank-faceplate@1], default: casa/smm-8x10g@1, group: front-slots, rel-pos: 3}
+        - {id: front-4, at: [39.35, 42.47], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1, casa/bdm2@1, casa/bdm2m@1, casa/csc-8x10g@1, casa/ds-8x8@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1, casa/blank-faceplate@1], default: casa/bdm@1, group: front-slots, rel-pos: 4}
+        - {id: front-5, at: [39.35, 12.0], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/bdm@1, casa/bdm2@1, casa/bdm2m@1, casa/csc-8x10g@1, casa/ds-8x8@1, casa/ds-8x96@1, casa/ds-8x192@1, casa/us-16x8@1, casa/us-16x4@1, casa/blank-faceplate@1], default: casa/bdm@1, group: front-slots, rel-pos: 5}
       placements:
         - {id: psu-cover, ref: casa/c40g-psu-cover@1, at: [37.5, 226.7], for: [psu-1, psu-2, psu-3, psu-4], group: furniture, rel-pos: 0}
   rear:
@@ -347,9 +372,9 @@ views:
       h: 265.9
     panel:
       decor:
-        - {at: [0, 0], size: [40.0, 265.9], fill: '#8d949c'}
+        - {at: [0, 0], size: [37.5, 265.9], fill: '#8d949c'}
         - {at: [386.7, 0], size: [46.25, 265.9], fill: '#8d949c'}
-        - {at: [42.0, 200], size: [345.5, 60], fill: '#8d949c', pattern: grille, vent: 50, confidence: estimated, source: 'no Casa document gives a depth for a chassis air grille; searched both guides for grille, vent and air filter. This value predates the confidence key and its origin is unrecorded - marked estimated because that is the honest floor, not because anyone estimated it deliberately'}
+        - {at: [37.5, 200], size: [349.2, 60], fill: '#8d949c', pattern: grille, vent: 50, confidence: estimated, source: 'no Casa document gives a depth for a chassis air grille; searched both guides for grille, vent and air filter. This value predates the confidence key and its origin is unrecorded - marked estimated because that is the honest floor, not because anyone estimated it deliberately'}
     silkscreen:
       - {at: [7.1, 202.0], text: PEM 1, font-size: 4.5, fill: '#f2f4f6', anchor: start}
       - {at: [23.2, 202.0], text: PEM 2, font-size: 4.5, fill: '#f2f4f6', anchor: start}
@@ -363,12 +388,12 @@ views:
       bays:
         - {id: pem-1, at: [44.8, 196.0], size: {w: 158.0, h: 68.5}, accepts: [casa/c40g-pem@1], group: power, rel-pos: 1, default: null, only-in: [bdm-3plus1, docsis-classic, docsis-non-redundant]}
         - {id: pem-2, at: [212.8, 196.0], size: {w: 158.0, h: 68.5}, accepts: [casa/c40g-pem@1], group: power, rel-pos: 2, default: null, only-in: [bdm-3plus1, docsis-classic, docsis-non-redundant]}
-        - {id: rear-0, at: [42.0, 164.35], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1], default: casa/io-6p12@2, group: rear-slots, rel-pos: 0}
-        - {id: rear-1, at: [42.0, 133.88], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/lc-sw-bdm@1, casa/blank-faceplate@1], default: casa/lc-sw-bdm@1, group: rear-slots, rel-pos: 1}
-        - {id: rear-2, at: [42.0, 103.41], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-sw-bdm-a@1, casa/blank-faceplate@1], default: casa/smm-sw-bdm-a@1, group: rear-slots, rel-pos: 2}
-        - {id: rear-3, at: [42.0, 72.94], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-sw-bdm-b@1, casa/blank-faceplate@1], default: casa/smm-sw-bdm-b@1, group: rear-slots, rel-pos: 3}
-        - {id: rear-4, at: [42.0, 42.47], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12-sw@2, casa/io-6p12-sw-io2@1, casa/lc-sw-bdm@1, casa/blank-faceplate@1], default: casa/io-6p12-sw@2, group: rear-slots, rel-pos: 4}
-        - {id: rear-5, at: [42.0, 12.0], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1], default: casa/io-6p12@2, group: rear-slots, rel-pos: 5}
+        - {id: rear-0, at: [39.35, 164.35], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1], default: casa/io-6p12@2, group: rear-slots, rel-pos: 0}
+        - {id: rear-1, at: [39.35, 133.88], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/lc-sw-bdm@1, casa/blank-faceplate@1], default: casa/lc-sw-bdm@1, group: rear-slots, rel-pos: 1}
+        - {id: rear-2, at: [39.35, 103.41], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-sw-bdm-a@1, casa/blank-faceplate@1], default: casa/smm-sw-bdm-a@1, group: rear-slots, rel-pos: 2}
+        - {id: rear-3, at: [39.35, 72.94], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-sw-bdm-b@1, casa/blank-faceplate@1], default: casa/smm-sw-bdm-b@1, group: rear-slots, rel-pos: 3}
+        - {id: rear-4, at: [39.35, 42.47], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12-sw@2, casa/io-6p12-sw-io2@1, casa/lc-sw-bdm@1, casa/blank-faceplate@1], default: casa/io-6p12-sw@2, group: rear-slots, rel-pos: 4}
+        - {id: rear-5, at: [39.35, 12.0], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1], default: casa/io-6p12@2, group: rear-slots, rel-pos: 5}
       placements:
         - {id: ac-inlet-panel, ref: casa/c40g-ac-inlet-panel@1, at: [37.5, 196.0], group: power, rel-pos: 0, only-in: [ac-power]}
   top:
