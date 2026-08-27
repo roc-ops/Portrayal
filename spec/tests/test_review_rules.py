@@ -169,3 +169,66 @@ def test_a_face_with_any_content_at_all_is_enough():
           "views": {"top": {"size": {"w": 100.0, "h": 50.0},
                             "panel": {"decor": [{"at": [0, 0], "size": [10, 10]}]}}}}
     assert not caught("L45", lint.lint_device_empty_views, P, ok)
+
+
+# --- the overlap family, one level down (#32 classes 10 and 12) --------------
+#
+# The MX reviews' own tally: every human-caught defect so far has been an overlap
+# or occlusion, and every recurrence was inside a component skin - the one
+# surface no rule inspected. L13 asks the question for a device's placements;
+# L46 asks it for the parts a component composes.
+
+def _component(parts=(), states=None):
+    return {"name": "fx", "size": {"w": 40.0, "h": 20.0},
+            "parts": list(parts), "states": list(states or [])}
+
+
+def test_composed_parts_that_collide_are_reported():
+    """The MX960's vertical 40GE DPC stacked sfp-ganged cages on a 7.2mm pitch
+    when a rotated cage is 14.25mm tall - a 2:1 overlap that rendered as
+    doubled-up ports and that no rule looked for."""
+    bad = _component([
+        {"id": "p0", "ref": "std/sfp-ganged@1", "at": [0.0, 0.0]},
+        {"id": "p1", "ref": "std/sfp-ganged@1", "at": [0.0, 5.0]},   # 10.4 tall
+    ])
+    assert caught("L46", lint.lint_component_collisions, P, bad, [str(LIB)])
+
+
+def test_ganged_cages_sharing_a_wall_are_not_reported():
+    """261 pairs in the library abut to a hair because a ganged bezel shares
+    walls by design. An absolute tolerance either floods or misses; as a
+    fraction of the smaller part the distribution is empty between 10 and 50
+    percent, which is where the threshold sits."""
+    ok = _component([
+        {"id": "p0", "ref": "std/sfp-ganged@1", "at": [0.0, 0.0]},
+        {"id": "p1", "ref": "std/sfp-ganged@1", "at": [14.2, 0.0]},  # 14.25 wide
+    ])
+    assert not caught("L46", lint.lint_component_collisions, P, ok, [str(LIB)])
+
+
+def test_a_lamp_state_nothing_draws_is_reported():
+    """A part may declare ok/fail, generate CSS, offer the state in the viewer
+    and change no pixel, because only `var(--led-color, ...)` lights anything."""
+    d = yaml.safe_load((LIB / "components/juniper/mx204-psu-ac/v1/contract.yaml").read_text())
+    hits = caught("L47", lint.lint_component_states_render,
+                  LIB / "components/juniper/mx204-psu-ac/v1/contract.yaml", d, [str(LIB)])
+    assert hits, "a static-filled lamp went unreported"
+    assert "never light" in hits[0]
+
+
+def test_a_lamp_that_does_light_is_silent():
+    p = LIB / "components/juniper/dpc-r-4xge-xfp/v1/contract.yaml"
+    d = yaml.safe_load(p.read_text())
+    assert not caught("L47", lint.lint_component_states_render, p, d, [str(LIB)])
+
+
+def test_the_search_follows_composition():
+    """Checking only a part's own skin called 166 components broken when 37 are:
+    a supply whose lamp is a composed led-dot lights correctly."""
+    import glob as _g
+    delegating = [p for p in _g.glob(str(LIB / "components/*/*/v*/contract.yaml"))
+                  if "var(--led-color" not in "".join(
+                      f.read_text() for f in Path(p).parent.glob("skins/*.svg"))
+                  and lint._lights_up(Path(p), yaml.safe_load(Path(p).read_text()) or {},
+                                      [str(LIB)], set())]
+    assert delegating, "no component delegates its lamp - fixture assumption is stale"

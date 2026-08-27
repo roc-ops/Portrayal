@@ -55,6 +55,10 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
   L44 device: panel decor agrees with what is on the face - a patterned field is
       not buried under the parts, and printing does not run off the edge
   L45 device: a view at `modelled` draws something, or it is a size with no face
+  L46 component: composed parts do not collide with each other inside the part
+      that composes them
+  L47 component: a declared lamp state is a promise the drawing can keep - some
+      element lights when it is set
 """
 import argparse
 import json
@@ -938,6 +942,132 @@ def lint_component_relief_confidence(path, data, lib_roots):
                              f"and there it is {'/'.join(got)}. Borrowing does not create a "
                              f"measurement - use `estimated` and say in `source` that the "
                              f"origin did not measure it either")
+
+
+LAMP_STATES = {"ok", "fail", "fault"}
+
+
+def _declared_states(data):
+    st = data.get("states")
+    if isinstance(st, dict):
+        return set(st)
+    if isinstance(st, list):
+        return {s if isinstance(s, str) else str((s or {}).get("name", "")) for s in st}
+    return set()
+
+
+def _lights_up(path, data, lib_roots, seen):
+    """Does anything in this part, or anything it composes, read --led-color?"""
+    for f in sorted(Path(path).parent.glob("skins/*.svg")):
+        if "var(--led-color" in f.read_text():
+            return True
+    for q in (data.get("parts") or []):
+        ref = (q.get("ref") or "").split(":")[0]
+        if not ref or ref in seen:
+            continue
+        seen.add(ref)
+        cp = resolve_component(ref, lib_roots)
+        sub = load_yaml(cp) if cp else None
+        if sub and _lights_up(cp, sub, lib_roots, seen):
+            return True
+    return False
+
+
+def lint_component_states_render(path, data, lib_roots):
+    """L47: a state nothing draws is a state the viewer offers and cannot show.
+
+    Forty components declared `ok`/`fail` and drew the lamp as a flat
+    `fill="#0f1113"`. The states were declared, the CSS was generated, the viewer
+    offered them, and clicking one changed nothing - a lamp only lights if some
+    element fills from `var(--led-color, ...)`.
+
+    Invisible to everything else by construction. `spec/tests/test_state_css.py`
+    checks the OPPOSITE direction, that a state has a CSS class; this is the half
+    that asks whether any pixel consumes it.
+
+    TWO SHAPES, ONE RULE, DIFFERENT SENTENCES, because the fix differs. A part
+    that draws a lamp and fills it statically wants the fill changed. A part that
+    declares a lamp state and draws no lamp at all wants either a lamp or one
+    fewer state - and which is right is a question about the hardware, so the
+    message asks rather than assumes.
+
+    SEARCHED THROUGH COMPOSITION. A supply whose lamp is a composed `led-dot`
+    lights correctly and must not be reported; checking only the part's own skin
+    called 166 components broken when 37 were.
+    """
+    lamps = _declared_states(data) & LAMP_STATES
+    if not lamps:
+        return
+    if _lights_up(path, data, lib_roots, set()):
+        return
+    art = "".join(f.read_text() for f in sorted(Path(path).parent.glob("skins/*.svg")))
+    if not art:
+        return
+    drawn = sorted(set(re.findall(r'id="([^"]*(?:led|lamp)[^"]*)"', art, re.I)))
+    named = ", ".join(sorted(lamps))
+    if drawn:
+        warn(path, "L47", f"declares {named} and draws {len(drawn)} lamp element(s) "
+             f"({', '.join(drawn[:3])}) that never light - none fills from "
+             "var(--led-color, ...), so the viewer offers a state the drawing "
+             "cannot show")
+    else:
+        warn(path, "L47", f"declares {named} and draws no lamp at all. Either the "
+             "drawing is missing the indicator, or the part has none and should "
+             "not declare the state - which of those is a question about the "
+             "hardware")
+
+
+def lint_component_collisions(path, data, lib_roots):
+    """L46: two things a component composes must not be drawn in one place.
+
+    THIS IS THE FAMILY EVERY HUMAN-CAUGHT DEFECT HAS BEEN IN. The MX review's own
+    tally: ears over the convention, decor over ports, text over honeycomb, a USB
+    outside its hole, ejector levers over model-name chips. The gates check that a
+    thing is present and where a source says; nothing checked that two correct
+    things are not in the same place. L13 does it for a device's placements; this
+    is the same question one level down, inside a component.
+
+    The worked case is the MX960's vertical 40GE DPC: sfp-ganged cages stacked on
+    a 7.2 mm pitch when a rotated cage is 14.25 mm tall, so they overlapped 2:1
+    and rendered as doubled-up ports.
+
+    A FRACTION, NOT A DISTANCE, and the library says why. Measuring the overlap of
+    every composed pair gives 261 hairline ones and two gross: ganged cages
+    legitimately share a wall and abut to a hair, so an absolute tolerance either
+    floods or misses. As a fraction of the smaller part the distribution is empty
+    between 10 and 50 percent - hairline contact on one side, real collision on
+    the other - so a threshold in that gap separates them with nothing near it.
+    """
+    boxes = []
+    for q in (data.get("parts") or []):
+        if not q.get("at") or not q.get("ref"):
+            continue
+        size = _instance_size(q["ref"], lib_roots)
+        if not size:
+            continue
+        w, h = size
+        x, y = q["at"]
+        if q.get("rotate") in (90, 270, -90):
+            cx, cy = x + w / 2, y + h / 2
+            x, y, w, h = cx - h / 2, cy - w / 2, h, w
+        boxes.append((q.get("id", "?"), x, y, x + w, y + h))
+
+    for i, a in enumerate(boxes):
+        for b in boxes[i + 1:]:
+            ox = min(a[3], b[3]) - max(a[1], b[1])
+            oy = min(a[4], b[4]) - max(a[2], b[2])
+            if ox <= 0 or oy <= 0:
+                continue
+            smaller = min((a[3] - a[1]) * (a[4] - a[2]), (b[3] - b[1]) * (b[4] - b[2]))
+            if smaller <= 0:
+                continue
+            frac = (ox * oy) / smaller
+            if frac >= 0.25:
+                warn(path, "L46", f"composed parts {a[0]} and {b[0]} overlap by "
+                     f"{ox:.2f}x{oy:.2f}mm, which is {frac*100:.0f}% of the smaller "
+                     "one. Two parts drawn in one place is the commonest defect a "
+                     "human finds and no rule saw; if the layering is deliberate, "
+                     "say so in provenance")
 
 
 def lint_component_parts(path, data, lib_roots, depth=0, seen=None):
@@ -2959,6 +3089,8 @@ def main():
             if d is not None:
                 _skin_checks(f, d)
                 lint_component_parts(f, d, args.library)
+                lint_component_collisions(f, d, args.library)
+                lint_component_states_render(f, d, args.library)
                 lint_component_mating(f, d, args.library)
                 lint_component_aperture(f, d, args.library)
                 lint_component_power(f, d)
