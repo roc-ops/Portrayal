@@ -13,6 +13,7 @@ size: {w: 54.76, h: 88.19}
 attrs:
   model: 'ASR-9001-FAN'
   role: 'fan-module'
+  fans: '14 fans'
   eol: 'none-announced'
 provenance:
   body: >-
@@ -79,6 +80,17 @@ provenance:
     no LED table for this module. So the states are BORROWED from a sibling part and
     that is stated rather than hidden - if the ASR 9001's fan lamp differs, this is the
     assumption to break first.
+  fans: >-
+    install guide - the ASR 9001 Hardware Installation Guide, twice and in the same
+    words: 'The Cisco ASR 9001 uses a single fan tray that contains 14 fans' and
+    'Cisco ASR 9001 Router has one fan tray (with 14 fans)'. NO DIAMETER IS GIVEN,
+    which is why this reads '14 fans' and not '14 x NN mm axial' the way its
+    siblings do - the Overview and Reference Guide states a size for the 9006,
+    9010, 9904, 9906, 9910, 9912 and 9922 trays and says nothing about this one.
+    The count is worth carrying without it: a fan count and a tray envelope
+    together are what caught a fan tray being modelled too short to hold its own
+    fans, and a count that cannot be reconciled with an envelope is a question
+    worth being asked even when the diameter has to be found first.
   power: >-
     NOT STATED. Table 24, 'Fan Tray Power Consumption Specifications', of the Overview
     and Reference Guide covers the ASR 9006, 9010, 9904, 9906, 9910, 9912 and 9922 trays

@@ -441,6 +441,8 @@ views:
         - {id: shelf-1, at: [13.96, 873.33], size: [417.7, 45.99], shape: rect}
     components:
       bays:
+        - {id: fan-0, at: [0.12, 571.44], size: {w: 444.25, h: 33.32}, accepts: ['cisco/asr-9010-fan@1'], group: fan-trays, rel-pos: 0, default: cisco/asr-9010-fan@1}
+        - {id: fan-1, at: [0.12, 605.80], size: {w: 444.25, h: 33.32}, accepts: ['cisco/asr-9010-fan@1'], group: fan-trays, rel-pos: 1, default: cisco/asr-9010-fan@1}
         - {id: ps0-pm-0, at: [14.13, 812.60], size: {w: 139.12, h: 44.45}, accepts: ['cisco/a9k-power-module@1'], group: power-modules, rel-pos: 0, default: cisco/a9k-power-module@1}
         - {id: ps0-pm-1, at: [153.25, 812.60], size: {w: 139.12, h: 44.45}, accepts: ['cisco/a9k-power-module@1'], group: power-modules, rel-pos: 1, default: cisco/a9k-power-module@1}
         - {id: ps0-pm-2, at: [292.37, 812.60], size: {w: 139.12, h: 44.45}, accepts: ['cisco/a9k-power-module@1'], group: power-modules, rel-pos: 2, default: cisco/a9k-power-module@1}
@@ -629,21 +631,30 @@ gaps:
   note: >-
     The ASR 9010's two fan trays occupy the band between the card guide bar at 566.51 mm and the
     front air intake grille at 673.60 mm - 107.09 mm for the pair, which is measured and solid.
-    What is NOT measured is where one ends and the other begins. Scanning that band finds a dark
+    Where one ended and the other began was NOT measured. Scanning that band finds a dark
     separator at about 605.8 mm, but it does not bisect the band (39.3 mm above it, 66.9 mm below),
-    so it is more likely internal faceplate detail than the boundary. They are not modelled as bays
-    at all yet for want of a component, and when they are, an EVEN split is the right inference
-    rather than a measured fact: the master labels both trays "ASR-9010-FAN", so they are the same
-    part stacked twice and the same part is the same height. Recorded so that inference is visible
-    as an inference.
+    so it was read as internal faceplate detail rather than the boundary, and an EVEN split was
+    recorded as the right inference: the master labels both trays "ASR-9010-FAN", so they are the
+    same part stacked twice and the same part is the same height.
+    RESOLVED, AND THE SEPARATOR WAS THE BOUNDARY AFTER ALL. Dismissing it assumed the two trays
+    fill the band, and they do not - two trays of 33.32 come to 66.64 of 107.09. cisco/asr-9010-fan
+    was measured off this chassis's own front master at y 571.44 to 604.76, and that bottom edge
+    and the separator at 605.8 agree to 1.04 mm: two measurements taken for different reasons,
+    landing on the same line. Both trays are seated there now rather than split evenly, so the
+    placement is measured and the inference is retired. What the band holds BELOW them - about
+    34 mm between the second tray and the grille starting at 675.08 - is still unnamed, and the
+    band stays ONE cutout because a single opening with two trays in the top of it and intake
+    beneath is what the guide's own cooling-path figure (Figure 71) draws.
   wanted: a dimensioned front elevation, or the ASR-9010-FAN spare-part drawing
 - what: bays-awaiting-components
   scope: [front, fan-trays, power-shelves, power-modules]
   reason: needs-drawing
   note: >-
-    The card slots are bays and accept the line card and RSP blank. The fan trays, the eight power
-    module positions and the air filter are NOT modelled as bays, because a bay must name a
-    component that fits it and library/components/cisco/ carries no ASR 9010 fan tray, no version 2
+    The card slots are bays and accept the line card and RSP blank. THE FAN TRAYS HAVE SINCE
+    LEFT THIS LIST - cisco/asr-9010-fan now exists and both are seated as bays at the
+    positions its own size provenance measured off this chassis's front master. The eight
+    power module positions and the air filter are still NOT modelled as bays, because a bay
+    must name a component that fits it and library/components/cisco/ carries no version 2
     or 3 power module and no filter. Their openings ARE measured and are drawn as cutouts, so the
     metal is right and only the occupants are missing. The power shelf openings are 13.96 to
     431.66 mm at y 811.74 and 873.33; the fan band is 566.51 to 673.60. Pointing them at the line
