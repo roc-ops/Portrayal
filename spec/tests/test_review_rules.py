@@ -375,3 +375,40 @@ def test_the_library_prints_where_it_can_be_read():
     for f in _g.glob(str(LIB / "components/*/*/v*/contract.yaml")):
         assert not caught("L50", lint.lint_component_skin_printing,
                           Path(f), {}, [str(LIB)]), f
+
+
+# --- L39 2b: concentric, not covering ------------------------------------
+
+FAN = "common/fan-module@1"          # 48.6 x 40
+
+
+def _landed(part_at, hole_wh, hole_at):
+    return {"panel": {"cutouts": [{"id": "p", "at": list(hole_at), "size": list(hole_wh)}]},
+            "components": {"placements": [{"id": "p", "ref": FAN, "at": list(part_at)}]}}
+
+
+def _cut(view):
+    return caught("L39", lint.lint_device_cutouts, P, "front", view, [str(LIB)])
+
+
+def test_a_part_with_clearance_is_not_a_defect():
+    """An ASR 9922 fan tray is 38.1 tall in a 41.5 opening because that is how
+    trays fit; a 9006 tray holds six 92mm fans laid flat, so its height clears a
+    fan\'s thickness and not its frame. The covering test reported both, and
+    reporting correct hardware teaches people to resize correct hardware."""
+    assert not _cut(_landed((1.7, 3.0), (52.0, 46.0), (0.0, 0.0)))
+
+
+def test_a_part_wider_than_its_hole_is_not_a_defect():
+    """That tray\'s end grips land ON the metal - the ASR 9922\'s plate measures
+    434.98 inside a 475.95 envelope, against a 439 opening."""
+    assert not _cut(_landed((0.0, 0.0), (40.0, 34.0), (4.3, 3.0)))
+
+
+def test_a_part_sitting_off_centre_is_reported():
+    """The MX204\'s USB: correctly sized, correctly rotated, 3.75mm out. The
+    sizes agreed so the conforms check passed, and nothing else compared a
+    landed part with the opening it fills."""
+    hits = _cut(_landed((3.75, 0.0), (48.6, 40.0), (0.0, 0.0)))
+    assert hits, "an off-centre part went unreported"
+    assert "does not sit in its own cutout" in hits[0]

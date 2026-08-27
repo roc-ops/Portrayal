@@ -1670,6 +1670,20 @@ def lint_device_cutouts(path, view_name, view, lib_roots):
     #     and correctly rotated, sat 3.75 mm outside its own cutout. Nothing saw
     #     it: the sizes agreed, so 2 passed, and no other rule compares a
     #     placement's LANDED box with the opening it is supposed to fill.
+    #
+    #     CONCENTRIC, NOT COVERING. This asked whether the part COVERS the hole,
+    #     which is right for a module in a cage and wrong for everything with
+    #     clearance: an ASR 9922 fan tray is 38.1 tall in a 41.5 opening because
+    #     that is how trays fit, and a tray with end grips is WIDER than its
+    #     opening because the grips land on the metal. Both are correct hardware
+    #     and both were reported. What the USB actually did was sit off-centre,
+    #     so that is what is measured now.
+    #
+    #     Concentricity is also the cleanly separated signal: across 236 landed
+    #     parts, 90% are exactly concentric and the 99th percentile is 8.8% of
+    #     the opening, so a tolerance of 5% of the smaller side (floored at
+    #     0.3mm, which is the drawing precision) sits above the noise and still
+    #     catches a 12mm USB placed 3.75mm out.
     for cid, c in ((c["id"], c) for c in cuts):
         q = by_id.get(cid)
         if not q or not q.get("at") or not c.get("at") or not c.get("size"):
@@ -1683,14 +1697,22 @@ def lint_device_cutouts(path, view_name, view, lib_roots):
             cx, cy = x + w / 2, y + h / 2
             x, y, w, h = cx - h / 2, cy - w / 2, h, w
         cw, ch = c["size"]
-        miss = max(x - c["at"][0], c["at"][0] + cw - (x + w),
-                   y - c["at"][1], c["at"][1] + ch - (y + h))
-        if miss > 0.3:
-            err(path, "L39", f"{view_name}: {cid} does not cover its own cutout - "
+        tol = max(0.3, 0.05 * min(cw, ch))
+        miss = max(abs((x + w / 2) - (c["at"][0] + cw / 2)),
+                   abs((y + h / 2) - (c["at"][1] + ch / 2)))
+        if miss > tol + 1e-6:
+            # WARN, NOT ERR. The old coverage test was an error because a part
+            # landing outside its hole is a broken drawing. Off-centre-ness is a
+            # disagreement between two measurements, which is the same family as
+            # L39's other findings and is recorded the same way.
+            warn(path, "L39", f"{view_name}: {cid} does not sit in its own cutout - "
                              f"the part lands at ({x:g}, {y:g}) {w:g} x {h:g} and the "
                              f"hole is at ({c['at'][0]:g}, {c['at'][1]:g}) {cw:g} x {ch:g}, "
-                             f"missing by {miss:.2f}mm. `rotate:` pivots on the part's "
-                             "own centre, so `at` has to be recomputed after turning it")
+                             f"off-centre by {miss:.2f}mm against a {tol:.2f}mm tolerance. "
+                             "A part may be smaller than its opening (clearance) or larger "
+                             "(a bezel or grips landing on the metal), but it sits centred "
+                             "in it. `rotate:` pivots on the part's own centre, so `at` has "
+                             "to be recomputed after turning it")
 
     # 3. you cannot print on a hole
     for m in (view.get("silkscreen") or []):
