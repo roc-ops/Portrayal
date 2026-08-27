@@ -1,0 +1,37 @@
+format: 1
+kind: module
+name: jnp10016-fan2
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX10016 fan tray - two full-height doors fill the rear beside
+  the ten-high PSU column; a 4 x 20 grid of rounded exhaust cells with
+  the FAN / FTC / SIB STATUS lamps at the top and two grab bars. Removal
+  exposes the SFBs.
+attrs:
+  model: 'JNP10016-FAN2'
+  power-draw-typical-w: 2220
+  power-draw-max-w: 2340
+provenance:
+  size: 'drawing - the rear line drawing g050702 proportioned against the
+    442 mm chassis width and 930 mm height; ~176 x 924 mm per tray,
+    approximate (isometric drawing, fractions only)'
+  power: >-
+    MX10016 hardware guide, Table 32 'Power Requirements for MX10016 Components', whose two
+    figure columns are headed 'Typical Power' and 'Maximum Power': '| JNP10016-FAN2 |
+    MX10016 fan tray | 2220 Wat 77 F (25 C) | 2340 Wat maximum fan speed |'. The maximum is
+    carried. The guide names exactly two fan trays for this chassis, JNP10016-FAN and its
+    sibling, each with its own controller (JNP10016-FAN-CTRL supports the FAN, JNP10016-FTC2
+    supports the FAN2), and they are FOUR TIMES APART in power. They were one contract until
+    now, which meant the drawing stood for two products with 1790 W between them.
+  face: 'drawing - g050702: 4-column rounded-cell grid, top lamp strip,
+    two bars'
+states:
+- ok
+- fail
+- absent
+size:
+  w: 176.0
+  h: 924.0

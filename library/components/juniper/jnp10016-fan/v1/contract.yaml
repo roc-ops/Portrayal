@@ -11,12 +11,21 @@ description: >-
   the FAN / FTC / SIB STATUS lamps at the top and two grab bars. Removal
   exposes the SFBs.
 attrs:
-  model: MX10016 Fan Tray
+  model: 'JNP10016-FAN'
+  power-draw-typical-w: 375
+  power-draw-max-w: 550
 provenance:
   size: 'drawing - the rear line drawing g050702 proportioned against the
     442 mm chassis width and 930 mm height; ~176 x 924 mm per tray,
     approximate (isometric drawing, fractions only)'
-  power: 'NOT STATED per tray in the extraction - L27 stands'
+  power: >-
+    MX10016 hardware guide, Table 32 'Power Requirements for MX10016 Components', whose two
+    figure columns are headed 'Typical Power' and 'Maximum Power': '| JNP10016-FAN | MX10016
+    fan tray | 375 Wat 77 F (25 C) | 550 Wat maximum fan speed |'. The maximum is carried.
+    The guide names exactly two fan trays for this chassis, JNP10016-FAN2 and its sibling,
+    each with its own controller (JNP10016-FAN-CTRL supports the FAN, JNP10016-FTC2 supports
+    the FAN2), and they are FOUR TIMES APART in power. They were one contract until now,
+    which meant the drawing stood for two products with 1790 W between them.
   face: 'drawing - g050702: 4-column rounded-cell grid, top lamp strip,
     two bars'
 states:

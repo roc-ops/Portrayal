@@ -1,0 +1,40 @@
+format: 1
+kind: module
+name: jnp10008-fan3
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX10008 fan tray - two tall doors fill the rear beside the
+  six-high PSU stack; a 4 x 12 grid of rounded exhaust cells with the
+  FAN / FTC / SIB STATUS lamps at the top and two grab bars. Removal
+  exposes the SFBs.
+attrs:
+  model: 'JNP10008-FAN3'
+  power-draw-max-w: 1620
+provenance:
+  size: 'drawing - the rear line drawing g050553 proportioned against the
+    442 mm chassis width and 574 mm height; ~176 x 560 mm per tray,
+    approximate (the drawing is isometric, so only fractions were taken)'
+  power: >-
+    MX10008 hardware guide, Table 47 'Power Requirements for MX10008 Components', whose
+    columns are 'At 77 F (25 C) | At 104 F (40 C) | At 131 F (55 C)': '| JNP10008-FAN3 |
+    MX10008 fan tray | 1620W | 1620W | 1620W |'. This tray is rated the same at all three
+    ambients. Cross-checked against the guide's own worked example, which totals a chassis
+    from the per-unit figures: '950 W (JNP10008-FAN) + 350 W (RCB, 128G@40 C) + 1410 W
+    (JNP10008-SF) = 2710 W' - 950 being two trays at 475 W, 350 two RCBs at 175 W and 1410
+    six SFBs at 235 W. Every one divides exactly. THE GUIDE NAMES THREE FAN TRAYS for this
+    chassis - JNP10008-FAN, JNP10008-FAN2 and JNP10008-FAN3, each with its own controller
+    (FAN-CTRL, FTC2, FTC3, and the guide warns 'Do not use JNP10008-FAN-CTRL or JNP10008-FTC2
+    with JNP10008-FAN3'). They span 475 W to 1620 W. This contract was one of three products
+    sharing a drawing, under a model field reading 'JNP10K-FAN' that is not a Juniper part
+    number at all.
+  face: 'drawing - g050553: 4x12 rounded cells, top lamp strip, two bars'
+states:
+- ok
+- fail
+- absent
+size:
+  w: 176.0
+  h: 560.0
