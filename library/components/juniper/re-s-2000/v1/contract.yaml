@@ -1,0 +1,41 @@
+format: 1
+kind: module
+name: re-s-2000
+version: 1.0.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  Juniper RE-S-2000 Routing Engine (RE-S-2000-4096, EOL) - 2.0 GHz, 4 GB.
+  Face layout is the RE-S-1300 family faceplate: HDD/MASTER and
+  OK-FAIL/ONLINE lamps, ONLINE/OFFLINE button, RESET, USB, AUX, CONSOLE and
+  ETHERNET (fxp0). Photographed in the MX480's SCB 1.
+attrs:
+  model: RE-S-2000-4096
+  cpu: 2.0 GHz
+  memory: 4 GB
+  lifecycle-note: EOL per TSB16735; modelled because the MX480 reference
+    photograph carries it
+provenance:
+  size: 'photo - same 261.8 x 27.5 mm SCB-bay plate as re-s-1300; the two
+    faces are identical at photo resolution except the model legend, so the
+    geometry is re-s-1300''s (an echo of that measurement, not a second one)'
+  power: 'NOT STATED - no Table 93 row for the EOL RE-S-2000; searched the
+    MX480 power chapter. L27 stands as the record'
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/usb-a@1, id: usb, at: [164.0, 11.5], rotate: 90, attrs: {function: USB service port}}
+- {ref: std/rj45@1, id: aux, at: [179.9, 6.75], attrs: {function: auxiliary console}}
+- {ref: std/rj45@1, id: console, at: [197.3, 6.75], attrs: {function: serial console}}
+- {ref: std/rj45@1, id: ethernet, at: [214.8, 6.75], attrs: {function: fxp0 out-of-band management}}
+elements:
+  latch:
+    at: [1.0, 6.0]
+    size: [5.0, 16.0]
+    class: latch
+size:
+  w: 261.8
+  h: 27.5

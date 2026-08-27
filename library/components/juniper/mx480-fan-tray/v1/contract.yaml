@@ -1,0 +1,29 @@
+format: 1
+kind: module
+name: mx480-fan-tray
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX480 fan tray - a single vertical six-fan tray at the rear right;
+  only its narrow door face shows on the rear. The high-capacity tray is
+  required for high-density DPCs/MPCs.
+attrs:
+  model: MX480 High-Capacity Fan Tray
+  power-draw-max-w: 160
+  fans: 6
+  airflow: side-to-side
+provenance:
+  size: 'photo - vertical door strip ~12 x 240 mm at the rear right,
+    approximate; the tray body extends into the chassis and no vendor tray
+    dimension exists in the intake'
+  power: 'guide Table 91: high-capacity cooling system 160 W (normal 110 W);
+    dedicated PSU tap excluded from the output budget per the guide note'
+states:
+- ok
+- fail
+- absent
+size:
+  w: 12.0
+  h: 240.0
