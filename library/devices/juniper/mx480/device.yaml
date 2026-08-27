@@ -97,6 +97,12 @@ groups:
     term: Tray
     role: service
     index-origin: 0
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: the protective-earthing stud pair under the rear earth
+      symbol
 views:
   front:
     size:
@@ -189,6 +195,10 @@ views:
         - {id: fan-tray, at: [413.0, 95.0], size: {w: 12.0, h: 240.0},
            accepts: [juniper/mx480-fan-tray@1], default: juniper/mx480-fan-tray@1,
            group: cooling, rel-pos: 1}
+      placements:
+        - {id: ground-stud-0, ref: juniper/mx-ground-stud@1, at: [423.20, 18.70], for: chassis, group: grounding, rel-pos: 0}
+        - {id: ground-stud-1, ref: juniper/mx-ground-stud@1, at: [423.20, 31.90], for: chassis, group: grounding, rel-pos: 1}
+
   left:
     size:
       w: 622.0

@@ -1,0 +1,38 @@
+format: 1
+kind: component
+name: mx-ground-stud
+version: 1.0.0
+class: ground
+behaviour: mounts
+profile: networking
+description: >-
+  Juniper MX protective-earthing stud - the threaded terminal the family
+  chassis carry in pairs under the panel earth symbol (MX80, MX104,
+  MX150, MX240, MX480 rears). One part for all ten positions across five
+  chassis, the a9k-ground-pad shape: the guides document one terminal
+  type and vary only where it sits and how far apart the pair is, so the
+  PITCH belongs to each device and only the stud is shared.
+attrs:
+  model: MX earthing stud
+size: {w: 7.0, h: 7.0}
+provenance:
+  size: 'sized to the largest family cutout (the MX240/MX480 7.0 mm
+    circles) so one part covers every opening; the smaller chassis holes
+    (5.5-6.0) centre under it. The stud itself was NOT measured - the
+    photographs resolve a stud with washer, not its diameter'
+  stud-type: 'guide - the MX10003 guide dimensions its family bracket
+    ("studs sized for M4 hex screws"); the MX240 class uses larger UNC
+    hardware per its guide text. Neither is drawn to thread here'
+  relief: 'estimated - the stud stands proud; height not dimensioned
+    anywhere, cyl per the library stud convention'
+relief:
+  wall: '#4a4f55'
+  features:
+  - node: stud
+    cyl: 5.0
+    thread: 0.8
+    lift: 3.0
+    confidence: estimated
+    source: photo-class - a threaded stud with washer stands proud of
+      the panel; height not dimensioned
+skins: [default]

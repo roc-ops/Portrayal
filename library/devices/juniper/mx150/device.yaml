@@ -107,6 +107,12 @@ groups:
     term: Fan
     role: service
     index-origin: 0
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: the protective-earthing stud pair under the rear earth
+      symbol
 views:
   front:
     size:
@@ -231,6 +237,8 @@ views:
          anchor: middle, fill: '#e8eaec', for: chassis}
     components:
       placements:
+        - {id: ground-stud-0, ref: juniper/mx-ground-stud@1, at: [17.50, 3.00], for: chassis, group: grounding, rel-pos: 0}
+        - {id: ground-stud-1, ref: juniper/mx-ground-stud@1, at: [30.50, 3.00], for: chassis, group: grounding, rel-pos: 1}
         - {id: fan-0, ref: common/fan-module@1, at: [48.0, 2.0], skin: default, group: fans, rel-pos: 0,
            attrs: {function: fixed chassis fan}}
         - {id: fan-1, ref: common/fan-module@1, at: [105.0, 2.0], skin: default, group: fans, rel-pos: 1,

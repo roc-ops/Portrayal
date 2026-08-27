@@ -109,6 +109,12 @@ groups:
     term: PEM
     role: service
     index-origin: 0
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: the protective-earthing stud pair under the rear earth
+      symbol
 views:
   front:
     size:
@@ -223,6 +229,11 @@ views:
     silkscreen:
       - {at: [206.0, 124.0], path: 'M 0 -4.2 A 4.2 4.2 0 1 0 0.01 -4.2 Z M -2.4
           -1.1 H 2.4 M -1.6 0.5 H 1.6 M -0.7 2.1 H 0.7', fill: '#e8eaec', for: chassis}
+    components:
+      placements:
+        - {id: ground-stud-0, ref: juniper/mx-ground-stud@1, at: [193.50, 132.50], for: chassis, group: grounding, rel-pos: 0}
+        - {id: ground-stud-1, ref: juniper/mx-ground-stud@1, at: [209.50, 132.50], for: chassis, group: grounding, rel-pos: 1}
+
   left:
     size:
       w: 240.0

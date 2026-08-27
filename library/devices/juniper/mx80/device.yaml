@@ -110,6 +110,12 @@ groups:
     role: furniture
     index-origin: 0
     description: the rear MPC 0 / MIC 1 service cover plate
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: the protective-earthing stud pair under the rear earth
+      symbol
 views:
   front:
     size:
@@ -231,6 +237,8 @@ views:
            accepts: [juniper/mx80-rear-cover@1], default: juniper/mx80-rear-cover@1,
            group: service-covers, rel-pos: 0}
       placements:
+        - {id: ground-stud-0, ref: juniper/mx-ground-stud@1, at: [391.25, 9.25], for: chassis, group: grounding, rel-pos: 0}
+        - {id: ground-stud-1, ref: juniper/mx-ground-stud@1, at: [391.25, 23.25], for: chassis, group: grounding, rel-pos: 1}
         - {id: clk, ref: std/smb@1, at: [65.6, 72.6], group: timing, rel-pos: 0,
            attrs: {function: external clock input}}
         - {id: sync, ref: std/smb@1, at: [102.6, 72.6], group: timing, rel-pos: 1,
