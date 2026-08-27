@@ -109,6 +109,11 @@ groups:
     term: Point
     role: furniture
     index-origin: 0
+  service-covers:
+    term: Cover
+    role: furniture
+    index-origin: 0
+    description: the rear MPC 0 / MIC 1 service cover plate
 views:
   front:
     size:
@@ -211,8 +216,6 @@ views:
       w: 445.0
       h: 88.9
     panel:
-      decor:
-        - {at: [48.0, 8.0], size: [170.0, 32.0], rx: 1.2, fill: '#c9ccd0'}
       cutouts:
         - {id: clk, at: [65.6, 72.6], size: [4.83, 4.83], shape: circle}
         - {id: sync, at: [102.6, 72.6], size: [4.83, 4.83], shape: circle}
@@ -227,6 +230,10 @@ views:
       - {at: [378.0, 22.0], path: 'M 0 -4.2 A 4.2 4.2 0 1 0 0.01 -4.2 Z M -2.4
           -1.1 H 2.4 M -1.6 0.5 H 1.6 M -0.7 2.1 H 0.7', fill: '#3a3e43'}
     components:
+      bays:
+        - {id: rear-cover, at: [48.0, 8.0], size: {w: 170.0, h: 32.0},
+           accepts: [juniper/mx80-rear-cover@1], default: juniper/mx80-rear-cover@1,
+           group: service-covers, rel-pos: 0}
       placements:
         - {id: clk, ref: std/smb@1, at: [65.6, 72.6], group: timing, rel-pos: 0,
            attrs: {function: external clock input}}

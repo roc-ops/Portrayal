@@ -32,7 +32,7 @@ provenance:
     uplinks 0/1 at 323.3/337.5, mini-USB CON at 352.8, vertical USB at
     365.0, MGMT at 381.4, and the SYS/ALM/MST/PH + SPD/DX/EN lamp matrix
     with the white beacon at the right end. LINK/ST lamp pairs sit above
-    the SFP groups and ports 8/9'
+    each SFP port; ports 8/9 carry their lamps inside the jack'
   port-numbering: 'photo - access ports print 0-11 (column pairs 01/23/45/67
     under the RJ block, then 8, 9, 10, 11); the two SFP+ uplinks print 0 and
     1 - a second numbering space (xe-0/1/x in the CLI), carried as printed'
@@ -89,9 +89,9 @@ groups:
     term: LED
     role: indicator
     index-origin: 0
-    description: LINK/ST pairs above the SFP groups and ports 8/9; per-port
-      lamps on the RJ block are integrated in the jacks. States per the
-      guide's port LED tables, drawn generic here
+    description: LINK/ST pairs above each SFP port; the RJ45 ports (block
+      and 8/9) carry their lamps inside the jacks. States per the guide's
+      port LED tables, drawn generic here
   status-leds:
     term: LED
     role: indicator
@@ -119,8 +119,9 @@ views:
     panel:
       decor:
         - {at: [0.0, 0.0], size: [45.2, 43.7], rx: 0.8, fill: '#5f6367'}
-        - {at: [48.0, 2.5], size: [255.0, 12.0], pattern: vent, vent: 40}
-        - {at: [308.0, 2.5], size: [125.0, 10.0], pattern: vent, vent: 40}
+        - {at: [48.0, 2.5], size: [107.0, 12.0], pattern: vent, vent: 40}
+        - {at: [223.0, 2.5], size: [80.0, 12.0], pattern: vent, vent: 40}
+        - {at: [308.0, 2.5], size: [100.0, 10.0], pattern: vent, vent: 40}
       cutouts:
         - {id: port-0, at: [161.35, 9.0], size: [12.7, 11.0]}
         - {id: port-2, at: [177.05, 9.0], size: [12.7, 11.0]}
@@ -159,9 +160,10 @@ views:
       - {at: [365.0, 38.6], path: 'M -2.2 0 H 2.2 M -0.9 -1.2 L 0.4 -1.2 L 1.2
           -0.3 M -0.9 1.2 L 0.4 1.2 L 1.2 0.3', for: usb}
       - {at: [381.4, 37.6], text: MGMT, font-size: 1.6, anchor: middle, for: mgmt}
-      - {at: [236.0, 18.6], text: LINK  ST, font-size: 1.4, anchor: middle, for: [port-8, port-9]}
-      - {at: [287.4, 18.6], text: LINK  ST, font-size: 1.4, anchor: middle, for: [port-10, port-11]}
-      - {at: [330.4, 18.6], text: LINK  ST, font-size: 1.4, anchor: middle, for: [xe-0, xe-1]}
+      - {at: [280.6, 18.6], text: LINK ST, font-size: 1.1, anchor: middle, for: port-10}
+      - {at: [294.9, 18.6], text: LINK ST, font-size: 1.1, anchor: middle, for: port-11}
+      - {at: [323.6, 18.6], text: LINK ST, font-size: 1.1, anchor: middle, for: xe-0}
+      - {at: [337.9, 18.6], text: LINK ST, font-size: 1.1, anchor: middle, for: xe-1}
       - {at: [416.5, 8.6], text: SYS, font-size: 1.5, anchor: end, for: led-sys}
       - {at: [416.5, 13.6], text: ALM, font-size: 1.5, anchor: end, for: led-alm}
       - {at: [416.5, 18.6], text: MST, font-size: 1.5, anchor: end, for: led-mst}
@@ -193,10 +195,6 @@ views:
            attrs: {function: USB service port}}
         - {id: mgmt, ref: std/rj45@1, at: [373.4, 21.5], group: mgmt, rel-pos: 2,
            attrs: {function: out-of-band management}}
-        - {id: led-link-8, ref: common/led-dot@1, at: [227.0, 17.6], for: port-8, group: port-leds, rel-pos: 0}
-        - {id: led-st-8, ref: common/led-dot@1, at: [231.6, 17.6], for: port-8, group: port-leds, rel-pos: 1}
-        - {id: led-link-9, ref: common/led-dot@1, at: [244.7, 17.6], for: port-9, group: port-leds, rel-pos: 2}
-        - {id: led-st-9, ref: common/led-dot@1, at: [249.3, 17.6], for: port-9, group: port-leds, rel-pos: 3}
         - {id: led-link-10, ref: common/led-dot@1, at: [277.3, 17.6], for: port-10, group: port-leds, rel-pos: 4}
         - {id: led-st-10, ref: common/led-dot@1, at: [281.9, 17.6], for: port-10, group: port-leds, rel-pos: 5}
         - {id: led-link-11, ref: common/led-dot@1, at: [291.6, 17.6], for: port-11, group: port-leds, rel-pos: 6}

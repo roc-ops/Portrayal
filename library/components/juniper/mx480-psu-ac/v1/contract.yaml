@@ -15,6 +15,11 @@ attrs:
   role: ac-power-supply
   redundancy: high-line 2, low-line 2+2
 provenance:
+  inlet: 'photo-class - the AC supply carries its own appliance inlet on the
+    face (the rear photograph resolves the cord entering each PSU); drawn as
+    the registry C20 at an approximate position - the photograph cannot fix
+    it to the millimetre'
+
   size: 'photo - 101.5 x 66.0 mm face off the orthographic rear photograph
     (0.8% gate, 3.33 px/mm): four bays on a 103.9 mm pitch. The DC PEM the
     MX240 photo carries is 79.7 mm tall in the same bay family - the bay is
@@ -38,6 +43,8 @@ elements:
     at: [8.0, 34.0]
     size: [10.0, 18.0]
     class: switch
+parts:
+- {ref: std/c20-inlet@1, id: inlet, at: [26.0, 33.0], attrs: {function: AC input}}
 size:
   w: 101.5
   h: 66.0
