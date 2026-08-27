@@ -354,6 +354,10 @@ groups:
     term: Item
     role: furniture
     index-origin: 1
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 1
   rear-slots:
     term: Slot
     role: traffic
@@ -416,6 +420,7 @@ views:
         - {id: rear-5, at: [39.35, 12.0], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1], default: casa/io-6p12@2, group: rear-slots, rel-pos: 5}
       placements:
         - {id: ac-inlet-panel, ref: casa/c40g-ac-inlet-panel@1, at: [37.5, 196.0], group: power, rel-pos: 0, only-in: [ac-power]}
+        - {id: ground-studs-rear, ref: casa/c40g-ground-studs@1, at: [9.0, 219.8], group: grounding, rel-pos: 1}
   top:
     size: {w: 432.95, h: 388.45}
     panel:
@@ -527,6 +532,27 @@ configurations:
 # the two of them together. Detectable gaps are derived from the lint rules at
 # build time and must not be listed here.
 gaps:
+- what: ground-stud-count
+  scope: [ground-studs-rear]
+  reason: sources-disagree
+  note: >-
+    Casa says two things about this terminal and they do not agree. The prose in
+    "Connecting the chassis to ground" says it "provides two M6 screws to connect a
+    double-lug ground terminal cable". Figures 1-2 and 1-4 both DRAW three studs, in a
+    2x2 grid with the protective-earth mark in the fourth corner, and the two figures
+    agree with each other.
+    THE DRAWING IS FOLLOWED, and the model carries three. The figure is the only source
+    that says anything about arrangement at all, so following the prose would mean
+    inventing a layout for the two it describes; and a third stud has easy explanations
+    - a spare, an alternate lug pitch - while a stud drawn twice that is not there has
+    none. That is a judgement, not a reading, which is why it is filed here.
+    THE PITCH IS NOT MEASURED FROM EITHER. It is borrowed from casa/ground-bolts@1,
+    15.3, off Jason`s hand-built C100G rear SVG. Figure 1-4 gives 13.2 across and 14.7
+    down for what must be one square grid - an 11 percent disagreement with itself,
+    which is that figure`s anisotropy rather than a rectangular pattern.
+  wanted: a photograph of the C40G rear lower-left corner, which would settle the count
+    and the pitch together in one look
+  blocks: []
 - what: band-not-centred-in-chassis
   scope: [front, rear]
   reason: needs-drawing

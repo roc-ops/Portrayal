@@ -1,0 +1,65 @@
+format: 1
+kind: component
+name: c40g-ground-studs
+version: 1.0.0
+class: ground
+behaviour: mounts
+profile: networking
+description: >-
+  Casa C40G shelf ground terminal - the grounding landing in the left strip of
+  the rear face, near the bottom. Three studs on a square grid, each a star
+  washer under a hex nut, with the protective-earth mark printed in the fourth
+  corner of that grid.
+attrs: {model: 'C40G Shelf Ground Terminal'}
+size: {w: 27.6, h: 27.6}
+provenance:
+  what-it-is: 'prose - the guide states it outright: "Connecting the C40G chassis to
+    earth ground (GND) is required for all installations. The chassis provides a shelf
+    ground terminal at the LEFT REAR of the system near the bottom." Figures 1-2 and
+    1-4 both draw it in that corner, in the left strip below the slot numbers, and
+    the two figures agree with each other'
+  layout: 'drawing - a 2x2 grid with the earth mark in the TOP-LEFT cell and a stud
+    in each of the other three. Read off Figure 1-4 at that figure`s own scales: the
+    stud centres fall on x 16.2 / 29.4 and y 226.2 / 240.9 in body coordinates, a grid
+    of 13.2 across by 14.7 down. THOSE TWO SHOULD BE EQUAL and are 11 percent apart,
+    which is this figure`s known anisotropy rather than a rectangular grid'
+  pitch: 'BORROWED, and deliberately, from casa/ground-bolts@1 - 15.3 mm, which came
+    off Jason`s hand-built C100G rear SVG and is the standard two-hole lug spacing. A
+    hand-built SVG is authoritative for size and a schematic figure is not, and the two
+    chassis are the same vendor`s grounding hardware. Using the figure`s own 13.2/14.7
+    would have been two different numbers for one square grid, both measured off a
+    drawing that cannot hold a dimension'
+  stud-count: 'SOURCES DISAGREE and the figure is followed - see the device`s
+    `ground-stud-count` gap. Figures 1-2 and 1-4 both draw THREE studs. The prose says
+    the terminal "provides two M6 screws to connect a double-lug ground terminal cable".
+    Three studs are drawn, two are described, and both statements are Casa`s. The
+    drawing is followed because it is the only source that says anything about
+    ARRANGEMENT at all, and because a third stud is easy to explain - a spare, or an
+    alternate lug pitch - while a drawn stud that does not exist is not'
+  artwork: 'the star washer, hex nut and stud are lifted VERBATIM from
+    casa/ground-bolts@1 so that the two Casa chassis draw the same hardware the same
+    way. Only the positions differ. The earth mark is drawn as a stroked symbol rather
+    than transcribed from the figure - it is the standard IEC 60417-5019 protective
+    earth, three bars of decreasing width under a stem, and the figure draws exactly that'
+  depth: 'ABSENT, for the reason casa/ground-bolts@1 records at length: `size.d` on a
+    non-module compiles to data-depth, which the 3D viewer reads as a CAVITY, so a
+    depth here would sink the grounding studs into a pit in the rear panel. A thing
+    that stands proud says so through relief.features'
+  relief: 'estimated, and carried across from casa/ground-bolts@1 unchanged along with
+    the artwork - washer 0.7, nut 2.2 sitting on it, stud 3.5 as a FLOOR because it has
+    to clear the nut. NOT MEASURED and not independently re-estimated here: it is the
+    same hardware drawn the same way, so a second guess would be a second number for
+    one thing. What would settle it is a caliper or any side-on photograph of a C40G rear'
+relief:
+  wall: '#4a4f55'
+  features:
+    - {node: stud-top-tr, cyl: 3.5, thread: 1.0, confidence: estimated, source: 'casa/ground-bolts@1 - NO PRECEDENT beyond it, a grounding stud. A FLOOR: it has to clear the nut'}
+    - {node: washer-tr, cyl: 0.7, confidence: estimated, source: 'casa/ground-bolts@1 star washer - NOT MEASURED there either'}
+    - {node: nut-tr, cyl: 2.2, lift: 0.7, confidence: estimated, source: 'casa/ground-bolts@1 terminal nut - NOT MEASURED there either'}
+    - {node: stud-top-bl, cyl: 3.5, thread: 1.0, confidence: estimated, source: 'casa/ground-bolts@1 - NO PRECEDENT beyond it, a grounding stud. A FLOOR: it has to clear the nut'}
+    - {node: washer-bl, cyl: 0.7, confidence: estimated, source: 'casa/ground-bolts@1 star washer - NOT MEASURED there either'}
+    - {node: nut-bl, cyl: 2.2, lift: 0.7, confidence: estimated, source: 'casa/ground-bolts@1 terminal nut - NOT MEASURED there either'}
+    - {node: stud-top-br, cyl: 3.5, thread: 1.0, confidence: estimated, source: 'casa/ground-bolts@1 - NO PRECEDENT beyond it, a grounding stud. A FLOOR: it has to clear the nut'}
+    - {node: washer-br, cyl: 0.7, confidence: estimated, source: 'casa/ground-bolts@1 star washer - NOT MEASURED there either'}
+    - {node: nut-br, cyl: 2.2, lift: 0.7, confidence: estimated, source: 'casa/ground-bolts@1 terminal nut - NOT MEASURED there either'}
+skins: [default]
