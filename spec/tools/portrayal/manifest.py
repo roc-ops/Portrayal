@@ -5,6 +5,50 @@ nested to say so. Readers do not want to know that; they want the lists. This
 is the only place that knows the nesting, so when the shape changes it changes
 here and nowhere else.
 """
+import yaml
+from pathlib import Path
+
+
+# ONE READING OF A FILE, TOO, AND THE FAST ONE.
+#
+# Two separate costs were paying for the same bytes. The tools each parsed the
+# library in their own process - devices_index, components_index and gaps_index
+# between them did about 938 parses of 275 distinct files - and every one of
+# those parses used PyYAML's pure-Python loader.
+#
+# libyaml does the same job on the same bytes 9.5x faster and returns an equal
+# object; parsing the whole library went 1.95s to 0.21s. It ships with the
+# PyYAML wheel on every platform this runs on, but the import is guarded because
+# a source build without libyaml headers silently omits it, and a tool that dies
+# on `from yaml import CSafeLoader` would be worse than a slow one.
+#
+# CACHED ON (path, mtime) so a file read twice in one process is parsed once,
+# and a file rewritten mid-run is not answered from a stale parse.
+#
+# THE RESULT IS SHARED, NOT COPIED. Callers must treat it as read-only - which
+# is true of every tool here, and was NOT true of one test helper, whose
+# fixtures pop views off a real device. That one still parses for itself.
+try:
+    from yaml import CSafeLoader as _Loader
+except ImportError:                        # pragma: no cover - no libyaml here
+    from yaml import SafeLoader as _Loader
+
+_CACHE = {}
+
+
+def load_yaml(path):
+    """Parse `path` once per process. Read-only: the result is shared."""
+    path = Path(path)
+    try:
+        key = (str(path), path.stat().st_mtime_ns)
+    except OSError:
+        return None
+    hit = _CACHE.get(key)
+    if hit is None:
+        with path.open("rb") as fh:
+            hit = _CACHE[key] = yaml.load(fh, Loader=_Loader)
+    return hit
+
 
 
 def view_parts(view):

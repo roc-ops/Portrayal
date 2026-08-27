@@ -17,6 +17,7 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 import yaml
+from manifest import load_yaml
 
 sys.path.insert(0, str(Path(__file__).parent))
 from render import SVG_NS, STATE_CSS, Library, instance_group, state_rule  # noqa: E402
@@ -48,7 +49,7 @@ def main():
     index = []
     for root in args.library:
         for cf in sorted(Path(root).glob("components/*/*/v*/contract.yaml")):
-            data = yaml.safe_load(cf.read_text())
+            data = load_yaml(cf)
             ns = cf.parents[2].name
             major = cf.parent.name
             ref = f"{ns}/{data['name']}@{major[1:]}"

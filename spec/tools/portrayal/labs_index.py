@@ -11,6 +11,7 @@ import json
 from pathlib import Path
 
 import yaml
+from manifest import load_yaml
 
 
 def main() -> int:
@@ -24,7 +25,7 @@ def main() -> int:
     labs = []
     for root in args.library:
         for f in sorted(Path(root).glob("labs/**/lab.yaml")):
-            d = yaml.safe_load(f.read_text()) or {}
+            d = load_yaml(f) or {}
             labs.append({
                 "name": d["name"],
                 "title": d.get("title") or d["name"],

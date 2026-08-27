@@ -13,7 +13,7 @@ import yaml
 
 import attrsections as attrs_mod
 import capability
-from manifest import view_parts
+from manifest import view_parts, load_yaml
 
 SCHEMAS = Path(__file__).resolve().parents[2] / "schemas"
 
@@ -84,7 +84,7 @@ def search_blob(d, ddir=None):
     # with it. What a device can be joined to is a fact worth searching for, so
     # it is indexed from the overlay itself rather than from a sentence.
     for f in sorted((ddir / "overlays").glob("*.yaml")) if ddir else []:
-        o = yaml.safe_load(f.read_text()) or {}
+        o = load_yaml(f) or {}
         words.append(str(o.get("nos") or ""))
     # sorted, because `refs` is a set and set iteration order varies between
     # processes. Everything else feeding `words` is already ordered; this was the
@@ -134,7 +134,7 @@ def main():
     devices = []
     for root in args.library:
         for man in sorted(Path(root).glob("devices/*/*/device.yaml")):
-            d = yaml.safe_load(man.read_text())
+            d = load_yaml(man)
             if d.get("kind") != "device":
                 continue
             cap = capability.report(man, d, args.library, SCHEMAS)

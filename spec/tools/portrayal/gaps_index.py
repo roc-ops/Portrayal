@@ -19,6 +19,7 @@ import json
 from pathlib import Path
 
 import yaml
+from manifest import load_yaml
 
 import capability
 
@@ -34,7 +35,7 @@ def main():
     gaps, blocked, devices = [], {}, 0
     for root in args.library:
         for man in sorted(Path(root).glob("devices/*/*/device.yaml")):
-            d = yaml.safe_load(man.read_text())
+            d = load_yaml(man)
             if d.get("kind") != "device":
                 continue
             devices += 1

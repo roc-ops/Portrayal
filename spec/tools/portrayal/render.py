@@ -20,7 +20,8 @@ import yaml
 APPLIED_CLASSES = {"sticker", "label", "marking"}
 
 import attrsections as attrs_mod
-from manifest import view_parts, targets, split_target, component_refs
+from manifest import (view_parts, targets, split_target, component_refs,
+                      load_yaml)
 import capability
 
 TOOL_VERSION = "0.1.0"
@@ -84,10 +85,6 @@ def data_for(value):
         return None
     return " ".join("/" + t if split_target(t)[0] else t for t in tg)
 
-
-def load_yaml(path):
-    with open(path) as f:
-        return yaml.safe_load(f)
 
 
 class Library:

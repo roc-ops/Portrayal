@@ -67,7 +67,7 @@ import yaml
 
 import attrsections as attrs_mod
 from manifest import (view_parts, targets, split_target, VIEW_KEY_ORDER,
-                      component_refs,
+                      component_refs, load_yaml,
                       PANEL_KEY_ORDER, COMPONENT_KEY_ORDER)
 from jsonschema import Draft202012Validator
 
@@ -449,43 +449,6 @@ def lint_component(path, validator):
                     err(path, "L9", f"conforms {conf}: cavity {rsz['w']}x{rsz['h']} "
                         f"exceeds aperture {sz['w']}x{sz['h']}")
     return data
-
-
-# PARSE A MANIFEST ONCE PER RUN, NOT ONCE PER QUESTION ASKED OF IT.
-#
-# The rules resolve a component ref, read the contract and throw it away, and
-# they do that from twenty-six call sites. On a 277-file library that came to
-# 10,206 reads of 254 component files - forty times each on average, and
-# std/sfp-ganged alone 1,941 times, once for every port that names it anywhere.
-# Nothing was wrong with any single rule; the cost is the shape of the whole,
-# and it is O(devices x bays x accepts) rather than O(files).
-#
-# It dominated everything. 89 percent of a lint run was yaml.safe_load, lint was
-# 29 s of a build whose renders take 15, and several tests shell out to a full
-# lint pass - so this one function is most of both gates.
-#
-# KEYED ON MTIME, not just the path, because the tests lint the same tree many
-# times in one process and a fixture written mid-run must not be answered from
-# a stale parse. One stat per call against one parse is not a close trade.
-#
-# THE RESULT IS SHARED, NOT COPIED, so callers must treat it as read-only. No
-# rule mutates a contract today - every `setdefault`/`update` in this file is on
-# a local accumulator - and a rule that started to would corrupt every later
-# reader of the same file rather than failing where it stood.
-_YAML_CACHE = {}
-
-
-def load_yaml(path):
-    """Parse `path` once per run. Read-only: the result is shared, not copied."""
-    path = Path(path)
-    try:
-        key = (str(path), path.stat().st_mtime_ns)
-    except OSError:
-        return None
-    hit = _YAML_CACHE.get(key)
-    if hit is None:
-        hit = _YAML_CACHE[key] = yaml.safe_load(path.read_text())
-    return hit
 
 
 def device_dependencies(dev_path, lib_roots):
