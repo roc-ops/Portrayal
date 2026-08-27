@@ -129,14 +129,47 @@ def comments_for(dev, cfg_name, cfg):
     return "\n".join(lines).strip()
 
 
-def build(dev, cfg_name, cfg, profile, dist=None):
+def module_models(library):
+    """Every model the library carries as a MODULE, for telling a FRU part
+    number from a chassis one. Empty set if the library cannot be located,
+    which leaves the old behaviour rather than guessing."""
+    out = set()
+    try:
+        for f in Path(library).glob("components/*/*/*/contract.yaml"):
+            c = yaml.safe_load(f.read_text())
+            if c.get("kind") != "module":
+                continue
+            m = str((c.get("attrs") or {}).get("model") or c.get("name") or "")
+            if m:
+                out.add(m)
+    except OSError:
+        pass
+    return out
+
+
+def build(dev, cfg_name, cfg, profile, dist=None, frus=None):
     ch = dev.get("chassis", {})
     cfg = cfg or {}
 
     # The SKU is the model, which is how both libraries file these: their own
     # Edgecore entries are 5912-54X-O-AC-F rather than one AS5912-54X.
+    #
+    # A `part-numbers` map does not say which of its keys is the CHASSIS. Taking
+    # the alphabetically first exported the S9510-28DC as `FAN-402825-HD`: that
+    # device lists only FRUs - a fan and a PSU - and the fan sorts first, so a
+    # fan tray became a chassis and the switch vanished from both libraries.
+    #
+    # No string rule can separate the two. Edgecore's chassis SKU for the
+    # AS7726-32X is `7726-32X-O-AC-F` and Celestica's for the ES1010 is
+    # `R4048-F91L9-A1`; neither contains the model, and matching on the name
+    # would reject both. What IS knowable is the other side: a part number that
+    # names a module the library already models is a FRU. Drop those, and if
+    # nothing is left fall back to the device's own model - unspecific, but a
+    # switch rather than a fan. model/slug is the one field a DCIM import cannot
+    # recover from; it is the primary key on both sides.
     pns = cfg.get("part-numbers") or {}
-    sku = sorted(pns)[0] if pns else dev["model"].split(" (")[0]
+    chassis_pns = [k for k in pns if k not in (frus or ())]
+    sku = sorted(chassis_pns)[0] if chassis_pns else dev["model"].split(" (")[0]
     part = pns.get(sku)
     if isinstance(part, dict):
         part = part.get("part")
@@ -312,9 +345,15 @@ def main():
     ap.add_argument("--nos", action="append", default=[],
                     help="NOS profile to name interfaces for; repeatable")
     ap.add_argument("--dist", help="compiled SVG directory, for images")
+    ap.add_argument("--library", help="library root; inferred from the manifest path")
     args = ap.parse_args()
 
     dev = yaml.safe_load(Path(args.device).read_text())
+
+    # <library>/devices/<ns>/<name>/device.yaml - so the library is four up.
+    # --library overrides it for a tree laid out differently.
+    lib = args.library or str(Path(args.device).resolve().parents[3])
+    frus = module_models(lib)
 
     # One device type per SKU, not per configuration.
     #
@@ -325,11 +364,15 @@ def main():
     # populated are one type with one picture. The C100G's `bdm2m-11plus1` and
     # `docsis-classic` are two redundancy schemes for one chassis, and treating
     # them as two device types wrote the same file twice.
+    #
+    # The key has to be the SAME sku build() will name the type after, FRUs
+    # filtered out - otherwise two configurations collapse under one key and
+    # then get written under two different models, or the reverse.
     cfgs = dev.get("configurations") or {}
     by_sku = {}
     for name, cfg in cfgs.items():
-        key = sorted(cfg.get("part-numbers") or {})
-        by_sku.setdefault(key[0] if key else None, (name, cfg))
+        chassis = sorted(k for k in (cfg.get("part-numbers") or {}) if k not in frus)
+        by_sku.setdefault(chassis[0] if chassis else None, (name, cfg))
     if not by_sku:
         by_sku = {None: (None, {})}
 
@@ -338,11 +381,11 @@ def main():
         # A NOS names switch interfaces. Emit one document per profile that
         # actually resolves any, and a NOS-neutral one when none does - a device
         # whose ports are all line-card bays still has a device type.
-        _, has_ports = build(dev, cfg_name, cfg, None, args.dist)
+        _, has_ports = build(dev, cfg_name, cfg, None, args.dist, frus)
         profiles = list(args.nos) if (args.nos and has_ports) else [None]
 
         for profile in profiles:
-            doc, _ = build(dev, cfg_name, cfg, profile, args.dist)
+            doc, _ = build(dev, cfg_name, cfg, profile, args.dist, frus)
             if not any(k in doc for k in
                        ("console-ports", "interfaces", "module-bays")):
                 continue                       # nothing but a header: not worth a file
