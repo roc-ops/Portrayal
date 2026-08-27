@@ -1,0 +1,33 @@
+format: 1
+kind: module
+name: mx2000-psm-dc-v
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX2000 DC power supply module (PSM) - nine stand side by side
+  in the rear power cage between the two power distribution modules,
+  8+1 load-sharing. Input breaker at the top, THIS SIDE UP chip, pull
+  handle, nameplate and the input/output/fault lamps at the bottom.
+  The AC, 240V-China and HVAC/HVDC variants share the bay - see the
+  device gaps.
+attrs:
+  model: MX2000 DC PSM (-48 V)
+  role: dc-power-supply
+  redundancy: 8+1
+provenance:
+  size: 'photo - the MX2010 rear photograph: nine PSMs share ~420 mm of
+    width over a ~430 mm bay; ~44 mm each, approximate. No vendor PSM
+    dimension in the extraction'
+  power-output: 'datasheet-table - the guide power overview: the -48 V
+    telecom pool is 22.5 kW with 2.5 kW held for redundancy; per-PSM
+    2.5 kW follows from nine sharing it, and that division is ours'
+  face: 'photo - breaker, THIS SIDE UP, handle, nameplate, bottom lamps'
+states:
+- ok
+- fault
+- absent
+size:
+  w: 44.0
+  h: 430.0
