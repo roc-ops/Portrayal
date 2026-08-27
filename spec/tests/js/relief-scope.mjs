@@ -64,3 +64,23 @@ out.densitiesStaySeparate = [hi.pxmm, lo.pxmm];
 out.fruSetsStaySeparate = [[...hi.fruPaths], [...lo.fruPaths]];
 
 console.log(JSON.stringify(out));
+
+// WHAT A VIEWER HAS TAKEN OFF is per-viewer too. The hiding itself needs a DOM
+// and a WebGL context, so it is verified in a browser rather than here - pulling
+// the C40G's psu-cover takes the face from 3920 distinct colours to 3866, puts
+// it back at 3920 exactly, and survives a configuration rebuild at 3864, the two
+// missing colours being the cover's relief, which a rebuild drops at extraction
+// where a repaint can only hide the paint. What is checked HERE is that one
+// viewer taking a cover off does not take it off another's, which is the same
+// seat-per-holder question the overrides above answer.
+m.setPulled(['psu-1'], a);
+m.setPulled(['psu-2', 'fan-0'], b);
+out.pullIsPerViewer = [[...m.pulledPaths(a)].sort(), [...m.pulledPaths(b)].sort()];
+
+m.clearPulled(a);
+out.clearingOneLeavesTheOther = [[...m.pulledPaths(a)], [...m.pulledPaths(b)].sort()];
+
+// a scope nobody has pulled from is empty, not undefined
+out.defaultPullIsEmpty = [...m.pulledPaths()];
+
+console.log(JSON.stringify(out));

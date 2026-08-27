@@ -55,7 +55,7 @@ const SVG_CACHE = new Map();
 // Passing no scope uses the default one, which is what every existing caller
 // does and what this module did before - so nothing had to change to keep working.
 export function createReliefScope(deps = {}) {
-  return {overrides: new Map(), states: new Map(),
+  return {overrides: new Map(), states: new Map(), pulled: new Set(),
           pxmm: deps.PXMM, fruPaths: deps.FRU_PATHS};
 }
 const DEFAULT_SCOPE = createReliefScope();
@@ -114,6 +114,56 @@ export function setNodeStates(map, scope) {
 export function clearNodeStates(scope) { _sc(scope).states.clear(); }
 export function nodeStates(scope) { return new Map(_sc(scope).states); }
 
+// WHAT A VIEWER HAS TAKEN OFF. A cover hides what is behind it, which is the
+// whole reason it is on the device and the whole reason someone wants it off. In
+// 2D that is a CSS rule; in 3D the face is a rasterised canvas, so the part is
+// baked into a texture and an attribute set after the bake changes nothing. That
+// is why pulling had no effect in 3D at all.
+//
+// So it is applied to the TEXT a texture is painted from, which puts it on the
+// same path a lamp state already takes - repaint, never re-shape.
+//
+// display="none" AND NOT REMOVAL, because a repaint has to be able to put the
+// part back. `applyNodeStates` gets away with clearing state classes because it
+// can always re-add them; an element that has been deleted from the fragment a
+// texture is redrawn from is gone for the session. The marker attribute is what
+// distinguishes a part this viewer hid from one the author authored hidden.
+//
+// NESTED PARTS COME WITH IT. Pulling a supply takes its lamps and its ports,
+// because they are on it - a tree row pointing at geometry that is no longer
+// drawn is exactly the dangling selection this was reported for.
+export function setPulled(paths, scope) {
+  const s = _sc(scope).pulled;
+  s.clear();
+  for (const p of paths || []) if (p) s.add(String(p));
+}
+export function clearPulled(scope) { _sc(scope).pulled.clear(); }
+export function pulledPaths(scope) { return new Set(_sc(scope).pulled); }
+
+/** Is `path` the pulled part itself, or something sitting on it? */
+function _isPulled(path, pulled) {
+  if (!path) return false;
+  for (const p of pulled) if (path === p || path.startsWith(p + "/")) return true;
+  return false;
+}
+
+/** Hide what this viewer has taken off, in a parsed document. */
+export function applyPulled(root, scope) {
+  if (!root) return root;
+  for (const el of root.querySelectorAll("[data-portrayal-pulled]")) {
+    el.removeAttribute("data-portrayal-pulled");
+    el.removeAttribute("display");
+  }
+  const pulled = _sc(scope).pulled;
+  if (!pulled.size) return root;
+  for (const el of root.querySelectorAll("[data-path]"))
+    if (_isPulled(el.getAttribute("data-path"), pulled)) {
+      el.setAttribute("data-portrayal-pulled", "");
+      el.setAttribute("display", "none");
+    }
+  return root;
+}
+
 // Applied by CLEARING FIRST, over the whole document rather than over the paths
 // in the registry. Turning a state off is a state change like any other, and it
 // arrives as a path that is no longer in the map - so a version that only
@@ -138,6 +188,7 @@ export function restyleText(text, scope) {
   const div = document.createElement('div');
   div.innerHTML = text;
   applyNodeStates(div, scope);
+  applyPulled(div, scope);
   return div.innerHTML;
 }
 
@@ -235,6 +286,13 @@ export async function extractRelief(url, scope) {
   // are taken from this document, so applying the runtime states once here is
   // what puts them on the face texture and on every piece of relief at once.
   applyNodeStates(svg, scope);
+  // A part the viewer has taken off is REMOVED here rather than hidden, and only
+  // here: this document is built to be measured and then discarded, so nothing
+  // has to put it back. Left as display:none it would measure 0x0 and extrude a
+  // degenerate feature instead of none at all - a cover that is off should leave
+  // no geometry behind, not a flat one.
+  applyPulled(svg, scope);
+  for (const el of [...svg.querySelectorAll("[data-portrayal-pulled]")]) el.remove();
   const inv = svg.getScreenCTM().inverse();
   const mmRect = el => {
     const b = el.getBBox();

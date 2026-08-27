@@ -26,6 +26,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { toGLB, toUSDZ } from './share.js';
 import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, svgSource, setSvgOverride, clearSvgOverrides,
          setNodeStates, nodeStates, restyleText,
+         setPulled as setReliefPulled, pulledPaths,
          buildFaceRelief, squareFaceplate } from './relief.js';
 import { applyOverrides } from './swap.js';
 import { jdist } from './dist.js';
@@ -90,6 +91,12 @@ export function createViewer(container, opts = {}) {
   // rebuild - a config change, a swap - repaints the states that were set rather
   // than quietly reverting the device to all-dark.
   let STATES = {};
+  // WHAT THE HOST HAS TAKEN OFF, by data-path. Same story as STATES above and for
+  // the same reason: the scene is rasterised from the compiled faces, which know
+  // what the device HAS and have never known what a viewer has removed from it.
+  // Held here so a rebuild - a config change, a swap, turning the chassis around -
+  // does not quietly bolt every cover back on.
+  let PULLED = new Set();
   // How to redraw each texture that came from a node's own art, collected during
   // the build. Emptied on every rebuild: the materials it points at are disposed.
   let RESTYLE = [];
@@ -409,6 +416,9 @@ export function createViewer(container, opts = {}) {
     // are cut from a document that already carries them; a rebuild that dropped
     // them would put out every lamp the user had lit
     setNodeStates(STATES, SCOPE);
+    // and what is off stays off, for the same reason and at the same moment: the
+    // faces and the relief are both cut from a document that already knows
+    setReliefPulled(PULLED, SCOPE);
     RESTYLE = [];
     gen++;
     const f = v => `${DIST}${DEV}.${cfg}.${v}.svg`;
@@ -870,6 +880,51 @@ export function createViewer(container, opts = {}) {
   // own. It already knows how to re-rasterise a face at the current density and
   // re-punch its apertures, and a face repainted by hand here would silently lose
   // its cavities the moment the camera moved.
+  // TAKE PARTS OFF, AND PUT THEM BACK. `paths` is the whole set that should be
+  // off, not a delta, so a host can hand over its own state and a reset is
+  // setPulled([]) rather than a walk over every control.
+  //
+  // It repaints rather than rebuilding, which is the same bargain a lamp state
+  // strikes: a face is a texture drawn from a fragment of SVG, and hiding an
+  // element in that fragment and redrawing costs one raster instead of a
+  // 1.0-1.4 s rebuild. What it cannot do is un-extrude relief that was already
+  // built, so anything with a body gets hidden in the scene as well - and on the
+  // NEXT rebuild it is dropped at extraction and the geometry never exists.
+  async function setPulled(paths) {
+    const next = new Set();
+    for (const p of paths || []) if (p) next.add(String(p));
+    const changed = new Set();
+    for (const p of new Set([...PULLED, ...next]))
+      if (PULLED.has(p) !== next.has(p)) changed.add(p);
+    PULLED = next;
+    if (!changed.size || !box) return 0;
+    setReliefPulled(PULLED, SCOPE);
+    const isOff = path => {
+      for (const p of PULLED) if (path === p || path.startsWith(p + "/")) return true;
+      return false;
+    };
+    // geometry first: a body that was extruded before the part came off is still
+    // in the scene, and no amount of repainting a texture removes it
+    for (const [path, g] of Object.entries(FRU_GROUPS)) g.visible = !isOff(path);
+    // a texture is only touched if the change is actually in it
+    const touches = text => [...changed].some(p => text.includes(`data-path="${p}"`));
+    let n = 0;
+    for (const e of RESTYLE) {
+      if (!touches(e.svgText)) continue;
+      try { await e.run(restyleText(e.svgText, SCOPE)); n++; }
+      catch (err) { console.warn('[portrayal] pull repaint failed', err); }
+    }
+    for (const rec of LOD) {
+      if (!touches(rec.svgText)) continue;
+      rec.svgText = restyleText(rec.svgText, SCOPE);
+      const at = rec.level;
+      rec.level = 0;                    // refineFace no-ops at the level it holds
+      await refineFace(rec, at);
+      n++;
+    }
+    return n;
+  }
+
   async function setStates(map) {
     const next = {};
     for (const [k, v] of map instanceof Map ? map : Object.entries(map || {}))
@@ -901,6 +956,8 @@ export function createViewer(container, opts = {}) {
   return {
     load, select, on, resize, dispose, setStates,
     states: () => ({...STATES}),
+    setPulled,
+    pulled: () => new Set(PULLED),
     // what a host needs to rebuild the chrome this module gave up
     frus, toggleFru, download, exportData, exportName,
     // every path select() can find, for a host without its own tree
