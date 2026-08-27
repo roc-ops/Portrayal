@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: es1010
-version: 0.7.0
+version: 0.7.1
 manufacturer: Celestica
 model: ES1010
 description: Celestica ES1010 - 1U 48-port 1GbE (PoE++) access switch with 4x 25G SFP28 uplinks;
@@ -235,6 +235,7 @@ views:
         - {ref: common/compliance-sticker@1, id: bottom-label, at: [110, 83]}
 configurations:
   poe-b2f:
+    kind: orderable
     description: ES1010-48CP with PoE++, back-to-front airflow (R4048-F91L9-A1)
     default: true
     airflow: back-to-front
@@ -245,18 +246,21 @@ configurations:
       psu-1600:
         model: G1482-1600WRA
   poe-f2b:
+    kind: orderable
     description: ES1010-48CP with PoE++, front-to-back airflow (R4048-F90L9-A1)
     airflow: front-to-back
     part-numbers:
       R4048-F90L9-A1:
         part: R4048-F90L9-A1
   f2b:
+    kind: orderable
     description: ES1010-48C, no PoE, front-to-back airflow (R4048-F90LA-A1)
     airflow: front-to-back
     part-numbers:
       R4048-F90LA-A1:
         part: R4048-F90LA-A1
   b2f:
+    kind: orderable
     description: ES1010-48C, no PoE, back-to-front airflow (R4048-F91LA-A1)
     airflow: back-to-front
     part-numbers:

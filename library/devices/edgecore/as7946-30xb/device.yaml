@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: as7946-30xb
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: Edgecore
 model: AS7946-30XB
@@ -575,12 +575,14 @@ views:
         - {id: rivet-s4, ref: common/rivet@1, at: [40.31, 42], group: fasteners, rel-pos: 4}
 configurations:
   dc-psu:
+    kind: orderable
     description: Modular dual DC PSUs, front-to-back airflow. This is the unit we photographed.
     default: true
     part-numbers:
       AS7946-30XB-O-48V-F:
         part: FNPEC7946005Z
   ac-psu:
+    kind: orderable
     description: Modular dual AC PSUs, front-to-back airflow. Same shell, IEC inlet instead of the
       terminal block.
     bays:

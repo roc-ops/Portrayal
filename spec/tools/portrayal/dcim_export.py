@@ -741,6 +741,18 @@ def main():
     # `ac-power` has neither pem-1 nor pem-2. Collapsing on the SKU alone hands
     # the AC chassis two module bays it has not got.
     cfgs = dev.get("configurations") or {}
+    # AN ILLUSTRATION IS NOT A DEVICE TYPE. `kind: example` is a redundancy
+    # scheme or a worked population - a picture, not a thing anyone can order -
+    # and before configurations said which they were, the C40G exported a device
+    # type called "C40G bdm-3plus1", named after whichever drawing happened to be
+    # listed second while two others collapsed into it silently.
+    #
+    # Kept for rendering: the elevation images still come from every
+    # configuration, because "here is a C40G wired for classic DOCSIS" is worth
+    # looking at. It is only the ORDERABLE identity that examples must not claim.
+    orderable = {n: c for n, c in cfgs.items()
+                 if (c or {}).get("kind") in (None, "base", "orderable", "model")}
+    cfgs = orderable or cfgs
     by_sku = {}
     for name, cfg in cfgs.items():
         chassis = sorted(k for k in (cfg.get("part-numbers") or {}) if k not in frus)

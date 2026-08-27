@@ -61,6 +61,7 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
   L54 device: a declared gap scopes something the device does not have
   L55 library: every vendor namespace is in the vendor registry
   L56 overlay: a NOS identity names a software vendor the registry knows
+  L57 device: configurations say what kind of thing they are, and the base is the default
       that composes them
   L47 component: a declared lamp state is a promise the drawing can keep - some
       element lights when it is set
@@ -2248,6 +2249,65 @@ def lint_device_gap_scope(path, data):
              "rather than the scope implying the device already has it")
 
 
+def lint_device_configuration_kind(path, data):
+    """L57: a configuration says whether you can order it.
+
+    `configurations` was carrying four meanings at once - an orderable SKU, a
+    different product, a regional variant, and somebody's illustration - and
+    nothing distinguished them. The cost was not theoretical: the DCIM export
+    groups by SKU and bay signature and takes the first configuration in each
+    group, so the C40G, whose four configurations carry no part numbers at all,
+    exported a device type named `C40G bdm-3plus1` - after a redundancy DRAWING,
+    chosen because it happened to be listed second. Two other illustrations
+    collapsed into it silently.
+
+    `base` is the shape most people want first: the chassis with enough in it to
+    power on and log in, traffic slots empty. You spec a chassis you can reach,
+    then decide what goes in it. It is the default, and an illustration must not
+    be - four devices in this library opened on one, which is how `default` came
+    to mean "whatever the drawing happens to be populated with".
+
+    WARNING AT `modelled`, ERROR AT `verified`, the gate L15, L37, L42 and L53
+    all use. A device still being drawn should not have to fight the linter over
+    a base configuration it has not built yet; a device claiming to be finished
+    while its default is an illustration has not finished.
+    """
+    cfgs = data.get("configurations") or {}
+    if not cfgs:
+        return
+    maturity = data.get("maturity", "draft")
+    if maturity == "draft":
+        return
+    say = err if maturity == "verified" else warn
+    bases = [n for n, c in cfgs.items() if (c or {}).get("kind") == "base"]
+    unkinded = [n for n, c in cfgs.items() if not (c or {}).get("kind")]
+    if unkinded:
+        say(path, "L57", f"{len(unkinded)} configuration(s) do not say what kind they are "
+            f"- {', '.join(sorted(unkinded)[:4])}. Add `kind:` - base (powers on, traffic "
+            "slots empty), orderable (a SKU of this device), example (an illustration, "
+            "never a device type) or model (really a different product). Without it a "
+            "consumer cannot tell a SKU you can buy from a drawing somebody made")
+    if len(bases) > 1:
+        err(path, "L57", f"configurations {', '.join(sorted(bases))} all claim kind: base. "
+            "There is one chassis-you-can-log-into per device; more than one base means "
+            "the word is being used for something else")
+    declared = [n for n, c in cfgs.items() if (c or {}).get("default")]
+    if len(declared) > 1:
+        err(path, "L57", f"configurations {', '.join(sorted(declared))} all claim default")
+    if bases and declared and declared[0] not in bases:
+        say(path, "L57", f"the default is {declared[0]!r} but the base is {bases[0]!r}. "
+            "The base is what a device opens as - a chassis you can reach, before anything "
+            "is decided about traffic cards")
+    if declared and (cfgs[declared[0]] or {}).get("kind") == "example":
+        say(path, "L57", f"the default configuration {declared[0]!r} is an illustration. "
+            "Opening on one is how `default` came to mean 'whatever the drawing happens to "
+            "be populated with'. Add a `kind: base` configuration and default to that")
+    if not bases and any((c or {}).get("kind") for c in cfgs.values()):
+        say(path, "L57", "no configuration is `kind: base`. The chassis with supplies, fans "
+            "and engines in and the traffic slots empty is the one most people want first, "
+            "and without it the default has to be a variant or an illustration")
+
+
 def lint_overlay_identity(path, data):
     """L56: an overlay's `identity:` names a vendor who could sell it.
 
@@ -3695,6 +3755,7 @@ def main():
             d = lint_device(f, dev_v, args.library); n += 1
             if d is not None and d.get("kind") == "device":
                 lint_device_gap_scope(f, d)
+                lint_device_configuration_kind(f, d)
                 try:
                     dev_maturity[str(f.parent.relative_to(root / "devices"))] = \
                         d.get("maturity", "draft")

@@ -10,6 +10,8 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "tools" / "
 
 import devicelock as dl  # noqa: E402
 
+ROOT = pathlib.Path(__file__).resolve().parents[2]
+
 
 def dev(version="1.0.0", at=(0, 0), extra_bay=None, gaps=None, note="a"):
     bays = [{"id": "slot-0", "at": list(at), "size": {"w": 10, "h": 10},
@@ -157,3 +159,44 @@ def _library(tmp_path, doc):
 def _write(lib, doc):
     import yaml
     (lib / "devices" / "v" / "d" / "device.yaml").write_text(yaml.safe_dump(doc))
+
+
+# ---- configurations say what kind of thing they are (#51) --------------------
+
+def test_no_configuration_is_left_unclassified():
+    """A consumer must be able to tell a SKU you can buy from a drawing."""
+    import glob
+    bad = []
+    for p in glob.glob(str(ROOT / "library/devices/*/*/device.yaml")):
+        import yaml as y
+        d = y.safe_load(open(p)) or {}
+        for n, c in (d.get("configurations") or {}).items():
+            if not (c or {}).get("kind"):
+                bad.append(f"{p.split('devices/')[1]}:{n}")
+    assert not bad, f"unclassified configurations: {bad[:5]}"
+
+
+def test_at_most_one_base_per_device():
+    import glob, yaml as y
+    for p in glob.glob(str(ROOT / "library/devices/*/*/device.yaml")):
+        d = y.safe_load(open(p)) or {}
+        bases = [n for n, c in (d.get("configurations") or {}).items()
+                 if (c or {}).get("kind") == "base"]
+        assert len(bases) <= 1, f"{p}: {bases}"
+
+
+def test_examples_never_become_device_types():
+    """The C40G exported 'C40G bdm-3plus1' - a device type named after a
+    redundancy drawing, chosen because it was listed second."""
+    import glob
+    names = [pathlib.Path(f).stem
+             for f in glob.glob(str(ROOT / "library/exports/*/device-types/*/*.yaml"))]
+    import yaml as y
+    examples = set()
+    for p in glob.glob(str(ROOT / "library/devices/*/*/device.yaml")):
+        d = y.safe_load(open(p)) or {}
+        for n, c in (d.get("configurations") or {}).items():
+            if (c or {}).get("kind") == "example":
+                examples.add(n)
+    leaked = [n for n in names if any(e in n for e in examples)]
+    assert not leaked, f"illustrations exported as device types: {leaked}"

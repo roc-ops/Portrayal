@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: as5912-54x
-version: 0.1.0
+version: 0.1.1
 manufacturer: Edgecore
 model: AS5912-54X
 portfolio:
@@ -385,12 +385,14 @@ views:
         - {ref: common/screw-head@1, id: screw-5, at: [274, 32]}
 configurations:
   ac-f2b:
+    kind: orderable
     airflow: front-to-back
     description: Dual AC PSUs, front-to-back airflow (5912-54X-O-AC-F)
     bays:
       psu-1: common/psu-ac-650@3
       psu-2: common/psu-ac-650@3
   ac-b2f:
+    kind: orderable
     airflow: back-to-front
     description: Dual AC PSUs, back-to-front airflow (5912-54X-O-AC-B)
     region-context:
@@ -400,12 +402,14 @@ configurations:
       psu-1: common/psu-ac-650@3
       psu-2: common/psu-ac-650@3
   dc-f2b:
+    kind: orderable
     airflow: front-to-back
     description: Dual -48V DC PSUs, front-to-back airflow (5912-54X-O-48V-F)
     bays:
       psu-1: common/psu-dc-650@2
       psu-2: common/psu-dc-650@2
   dc-b2f:
+    kind: orderable
     airflow: back-to-front
     description: Dual -48V DC PSUs, back-to-front airflow (5912-54X-O-48V-B)
     region-context:

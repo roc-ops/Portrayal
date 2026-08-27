@@ -1,7 +1,7 @@
 ---
 manufacturer: Casa Systems
-model: C40G bdm-3plus1
-slug: casa-systems-c40g-bdm-3plus1
+model: C40G docsis-non-redundant
+slug: casa-systems-c40g-docsis-non-redundant
 u_height: 6.0
 is_full_depth: true
 description: Casa C40G CMTS/CCAP - 6RU, 6 paired front/rear slots
@@ -72,8 +72,11 @@ comments: 'Casa C40G CMTS/CCAP - 6RU, 6 paired front/rear slots. Takes the same 
   but HORIZONTALLY, so the card is one model placed at rotate 90.
 
 
-  Configuration `bdm-3plus1`: BDM "3+1". Redundancy collapses to a single protecting slot: rear 1 takes
-  the LC-BDM-SWITCH, and rear 4 takes a combined 6+12 SW-IO which frees slot 4 to carry traffic.
+  Configuration `docsis-non-redundant`: Non-redundant chassis. The guide: "The Casa C40G chassis is available
+  in both redundant and non-redundant versions." There are no switch modules at all - rear 2 and 3 carry
+  blank filler plates where the redundant schemes carry the SMM Switch pair, and rear 1 and 4 carry I/O
+  rather than an LC Switch. Front DS cards pair with QAM IO behind them and front US cards with US IO,
+  which is the classic split architecture rather than the BDM one.
 
 
   Facts carried in the model that this schema has no field for:

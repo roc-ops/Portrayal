@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: c40g
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: Casa Systems
 model: C40G
@@ -458,6 +458,7 @@ views:
         - {id: flange-r4, ref: common/screw-head@1, at: [383.65, 228.0], group: furniture, rel-pos: 9}
 configurations:
   ac-power:
+    kind: orderable
     description: AC power. Four 1100 W PSUs in a row across the bottom front behind the snap-on
       cover, instead of the two DC power entry modules at the bottom rear. Redundancy is
       unchanged - this axis is orthogonal to the BDM and classic schemes, and the guide draws
@@ -468,6 +469,7 @@ configurations:
       psu-3: casa/c40g-psu-ac@1
       psu-4: casa/c40g-psu-ac@1
   bdm-3plus1:
+    kind: example
     description: 'BDM "3+1". Redundancy collapses to a single protecting slot: rear 1 takes the LC-BDM-SWITCH,
       and rear 4 takes a combined 6+12 SW-IO which frees slot 4 to carry traffic.'
     default: true
@@ -487,6 +489,7 @@ configurations:
       rear-4: casa/io-6p12-sw@2
       rear-5: casa/io-6p12@2
   docsis-classic:
+    kind: example
     description: Classic DOCSIS. Redundancy is per side - front/rear 1 and 4 - with an LC Switch behind
       both.
     bays:
@@ -505,6 +508,7 @@ configurations:
       rear-4: casa/lc-sw-bdm@1
       rear-5: casa/io-6p12@2
   docsis-non-redundant:
+    kind: orderable
     description: 'Non-redundant chassis. The guide: "The Casa C40G chassis is available in both
       redundant and non-redundant versions." There are no switch modules at all - rear 2 and 3
       carry blank filler plates where the redundant schemes carry the SMM Switch pair, and rear

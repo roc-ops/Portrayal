@@ -302,7 +302,7 @@
     },
     "configurations": {
       "type": "object",
-      "description": "renderable variants: bay population, skin choices, airflow/region context",
+      "description": "renderable variants: bay population, skin choices, airflow/region context. EACH ONE SAYS WHAT KIND OF THING IT IS, because the field was carrying four different meanings at once and a consumer could not tell an orderable SKU from somebody's illustration - the C40G exported a DCIM device type called 'C40G bdm-3plus1', named after whichever redundancy drawing happened to be listed second.",
       "propertyNames": {
         "$ref": "#/$defs/segment"
       },
@@ -314,7 +314,8 @@
             "type": "string"
           },
           "default": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "the configuration a viewer opens with. Where a `base` exists it is the default and nothing else may claim it: opening on an illustration is how `default` came to mean 'whatever the drawing happens to be populated with', which is what four of the library's devices did."
           },
           "airflow": {
             "enum": [
@@ -398,6 +399,15 @@
                 "type": "string"
               }
             }
+          },
+          "kind": {
+            "enum": [
+              "base",
+              "orderable",
+              "example",
+              "model"
+            ],
+            "description": "`base`: the chassis with enough in it to power on and log in - supplies, fans and the routing or supervisory engines populated, TRAFFIC SLOTS EMPTY. On a fixed one-RU switch that is the fans plus one power flavour. At most one per device, and it is the default: what you spec first is a chassis you can reach, before deciding what goes in it. `orderable`: a SKU of this same device - power feed, airflow, region. Named EXPLICITLY even when the base already embodies one of them, so that asking for the DC variant does not mean knowing which flavour the base happens to be. Exports as a device type. `example`: an illustrative population - a redundancy scheme, a worked configuration. Renders as a picture, and NEVER names or creates a device type, because it is not a thing anyone can order. `model`: this configuration is really a different product - the MX80's mx5/mx10/mx40, the ASR-9001-S. Flagged rather than solved: these most likely want to become devices of their own, and until they do this at least stops them reading as variants of one chassis."
           }
         }
       }

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx204
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: Juniper
 model: MX204
@@ -566,6 +566,7 @@ views:
            source: 'lower edge of the side mounting rail; same estimate'}
 configurations:
   ac:
+    kind: orderable
     description: AC-powered chassis - two 650 W AC PSUs with C14 inlets. SKUs
       per the datasheet bundle table - MX204-HW-BASE (base HW + standard Junos,
       perpetual; 3 fan trays, 2 PSUs) and MX204-HWBASE-AC-FS (fixed AC system,
@@ -576,6 +577,7 @@ configurations:
       MX204-HW-BASE: {}
       MX204-HWBASE-AC-FS: {}
   dc:
+    kind: orderable
     description: DC-powered chassis - two 650 W DC PSUs with terminal blocks;
       PS0 on feed A, PS1 on feed B. SKU MX204-HWBASE-DC-FS (fixed DC system,
       IR mode, feature rights separate).

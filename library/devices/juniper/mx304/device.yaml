@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx304
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: Juniper
 model: MX304
@@ -355,23 +355,27 @@ views:
            source: 'lower edge of the side rail; same estimate'}
 configurations:
   dual-re-ac:
+    kind: example
     description: Two Routing Engines, two LMIC16s, AC power - the fully
       redundant configuration the guide photographs. 3.2 Tbps of installed
       capacity.
     default: true
   one-re-3lmic-ac:
+    kind: example
     description: One Routing Engine and three LMIC16s (the third in the
       RE 1/LMIC2 slot) - the maximum-capacity 4.8 Tbps configuration of guide
       Figure 3.
     bays:
       re1-lmic2: juniper/mx304-lmic16@1
   dc:
+    kind: orderable
     description: DC-powered chassis - two 2200 W DC PSUs, dual Routing
       Engines.
     bays:
       psu-0: juniper/mx304-psu-dc@1
       psu-1: juniper/mx304-psu-dc@1
   hvac-dc:
+    kind: orderable
     description: High-voltage AC/DC universal power - two 2200 W HVAC/DC
       PSUs, dual Routing Engines.
     bays:

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9510-28dc
-version: 0.9.1
+version: 0.9.2
 manufacturer: UfiSpace
 model: S9510-28DC
 description: UfiSpace S9510-28DC Disaggregated Cell Site Gateway Router - 1RU, 2x QSFP-DD 400G
@@ -491,6 +491,7 @@ views:
         - {ref: common/ground-lug@1, id: ground-2, at: [253, 15]}
 configurations:
   dc:
+    kind: orderable
     description: Dual 400W DC PSUs (PSU-401-DISB-1), front-to-back airflow
     default: true
     airflow: front-to-back
@@ -503,6 +504,7 @@ configurations:
       fan-402825:
         model: FAN-402825-HD
   dc-populated:
+    kind: example
     # THE SAME BOX WITH OPTICS IN IT. Everything here except `occupants` is the
     # `dc` configuration repeated, and that repetition is the point worth
     # noticing rather than hiding: `configurations` is one axis and this is a
@@ -525,6 +527,7 @@ configurations:
       fan-402825:
         model: FAN-402825-HD
   ac:
+    kind: orderable
     description: Dual 400W AC PSUs (PSU-401-AISB), front-to-back airflow
     airflow: front-to-back
     part-numbers:

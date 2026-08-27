@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: as7946-74xksb
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: Edgecore
 model: AS7946-74XKSB
@@ -1057,12 +1057,14 @@ views:
         - {id: rivet-s4, ref: common/rivet@1, at: [20.0, 42.0], group: fasteners, rel-pos: 4}
 configurations:
   dc-psu:
+    kind: orderable
     description: Modular dual DC PSUs, front-to-back airflow. This is the unit we photographed.
     default: true
     part-numbers:
       AS7946-74XKSB-O-DC-F:
         part: FNPEC7946007Z
   ac-psu:
+    kind: orderable
     description: Modular dual AC PSUs, front-to-back airflow. Same shell, IEC inlet instead of the
       terminal block.
     bays:

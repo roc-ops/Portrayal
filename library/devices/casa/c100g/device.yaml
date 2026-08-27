@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: c100g
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: Casa Systems
 model: C100G
@@ -378,6 +378,7 @@ views:
         - {id: flange-r4, ref: common/screw-head@1, at: [381.2, 527.0], group: furniture, rel-pos: 11}
 configurations:
   bdm2m-11plus1:
+    kind: example
     description: BDM2m "11+1" - the vendor's name for it. Redundancy collapses to a single protecting
       slot. Rear 5 takes the LC-BDM-SWITCH that does the protecting; rear 8 takes a combined 6+12
       SW-IO, which is what frees front/rear 8 to carry traffic instead of standing spare. Neither
@@ -413,6 +414,7 @@ configurations:
       rear-6: casa/smm-sw-bdm-a@1
       rear-7: casa/smm-sw-bdm-b@1
   docsis-classic:
+    kind: example
     description: Classic DOCSIS. Redundancy is per side, one protecting slot each - front/rear 5 and
       8 - with LC Switch behind both.
     bays:

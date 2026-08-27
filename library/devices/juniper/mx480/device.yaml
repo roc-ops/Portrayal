@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx480
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: Juniper
 model: MX480
@@ -237,11 +237,13 @@ views:
            source: lower edge of the side rail; same estimate}
 configurations:
   ac:
+    kind: orderable
     description: AC-powered chassis as photographed - four normal-capacity AC
       supplies, two SCB-MX with REs, DPC 4x10GE in slot 4, DPC 40xGE in
       slots 3 and 0, blanks in 5/2/1.
     default: true
   dc:
+    kind: orderable
     description: DC-powered chassis - the shared MX240/MX480 DC PEM family in
       all four bays.
     bays:
