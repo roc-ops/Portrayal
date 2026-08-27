@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: c40g-ac-inlet-panel
-version: 1.4.0
+version: 1.5.0
 class: inlet
 behaviour: mounts
 profile: networking
@@ -11,7 +11,7 @@ description: >-
   continuous panel, not four module ends: it carries a rocker ON/OFF switch and
   an IEC C14 inlet for each of the four front-loaded PSUs, with vent mesh above
   and below.
-size: {w: 349.2, h: 70.5, d: 20.0}
+size: {w: 349.2, h: 68.5, d: 20.0}
 attrs:
   model: 'C40G AC Input Panel'
   role: ac-input
@@ -37,9 +37,23 @@ provenance:
   size: 'drawing, as FRACTIONS - Figure 1-2 renders at an aspect of 1.756 against
     the real 1.813, about 3 percent out, so it sits between Figure 1-1 (1.795, passes
     the gate) and Figure 1-10 (1.918, fails). Proportions only, anchored to the
-    band already established from the DC rear: the panel occupies the same y 194
-    to 264.5 the two PEMs do, and the same x 37.5 to 386.7 card-region width. The
-    depth is ESTIMATED'
+    band already established from the DC rear: the panel occupies the same band the
+    two PEMs do, and the same x 37.5 to 386.7 card-region width. The depth is ESTIMATED.
+    HEIGHT CORRECTED 70.5 -> 68.5, AND IT IS THE SAME CORRECTION THE PEM BAYS ALREADY
+    HAD. This panel was anchored to a band of y 194.0 to 264.5. The bottom edge is not
+    in doubt, but 194.0 as the top edge is the reading the device`s `pem-band-top-edge`
+    gap calls IMPOSSIBLE - the card slot above ends at 194.82 - and the manifest moved
+    the PEM bays to 196.0 without this part following them. So one band was carrying two
+    heights in one model, 68.5 for the DC openings and 70.5 for the AC panel that
+    replaces them. NO NEW MEASUREMENT was taken and none is claimed: the band is
+    whatever the gap eventually settles it to be, and the only assertion here is that
+    the panel and the openings it stands in for are the SAME band.
+    WHERE THE 2.0 WENT: off the two margins, 1.0 at each edge, so the drawing is still
+    symmetric about its centre. NOT scaled uniformly - the four C14 inlets are an IEC
+    60320 standard at 28.0 x 20.0 and the rockers are hardware, so squeezing the artwork
+    would have shrunk parts that have a real size. The vent fields absorbed it, which is
+    the only slack the drawing has. The corner screws keep their 4.5 inset from whichever
+    edge they bolt to, so the bottom pair moved 2.0 and the top pair did not move at all'
   inlets: 'composed from std/c14-inlet@1 rather than drawn - the IEC 60320 C14
     appliance inlet at the standard 28.0 x 20.0 panel cutout. The figure draws the
     unmistakable C14 shroud, and the guide calls it an "AC power socket 115VAC or
@@ -73,21 +87,25 @@ provenance:
     changing it is a drawing job rather than a relief one.
     NO DEPTH COMES OFF THE PHOTOGRAPH. It is a perspective shot with nothing of known
     size in frame; the 20.0 is this contract own estimate restated.'
-  NOT-PLACED: 'THIS COMPONENT IS BUILT BUT NOT PLACED ON THE C40G, and that is
-    a format limitation rather than an oversight. It belongs on the rear face ONLY
-    in the ac-power configuration, and there is no way to say that: a configuration
-    can carry bays, skins, airflow, region-context and part-numbers, but not placements,
-    so a bolted panel cannot be switched per configuration. Making it a BAY instead
-    would overlap the two PEM bays that occupy the same band, which L13 rejects
-    - and unlike a placement, a bay cannot use `for:` to declare the overlap legitimate,
-    because L13 builds its owned-set from placements only. Marking it `optional:`
-    would hide it everywhere, since build.sh emits no --with variants. So it is
-    measured, recorded and ready for whoever adds config-scoped placements'
+  placement: 'NOW PLACED, on the rear face, scoped `only-in: [ac-power]`. The
+    previous note recorded this part as built-but-unplaced against a real format
+    limitation - a configuration could carry bays, skins, airflow, region-context
+    and part-numbers but NOT placements, so a bolted panel could not be switched
+    per configuration, and marking it `optional:` would have hidden it everywhere
+    because build.sh emits no --with variants.
+    The limitation is gone. `only-in` on the bay or placement itself says which
+    configurations that piece of METAL exists in, which is a different question
+    from what is fitted into it, and it sits in the view because that is where
+    geometry lives. The two PEM bays carry the mirror of it and are absent from
+    ac-power, so nothing overlaps and L13 has nothing to reject: an AC chassis has
+    one bolted panel here, a DC chassis has two module openings, and they are never
+    both present. That also stops the bay picker offering a DC power entry module
+    on a chassis that cannot take one'
 parts:
-  - {ref: std/c14-inlet@1, id: inlet-psu1, at: [28.60, 25.2]}
-  - {ref: std/c14-inlet@1, id: inlet-psu2, at: [115.80, 25.2]}
-  - {ref: std/c14-inlet@1, id: inlet-psu3, at: [203.00, 25.2]}
-  - {ref: std/c14-inlet@1, id: inlet-psu4, at: [290.20, 25.2]}
+  - {ref: std/c14-inlet@1, id: inlet-psu1, at: [28.60, 24.2]}
+  - {ref: std/c14-inlet@1, id: inlet-psu2, at: [115.80, 24.2]}
+  - {ref: std/c14-inlet@1, id: inlet-psu3, at: [203.00, 24.2]}
+  - {ref: std/c14-inlet@1, id: inlet-psu4, at: [290.20, 24.2]}
 relief:
   wall: '#4a4f55'
   features:
