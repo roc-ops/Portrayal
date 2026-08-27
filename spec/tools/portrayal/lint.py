@@ -56,6 +56,7 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
       not buried under the parts, and printing does not run off the edge
   L45 device: a view at `modelled` draws something, or it is a size with no face
   L46 component: composed parts do not collide with each other inside the part
+  L52 component: a stated power figure says where it was read from
       that composes them
   L47 component: a declared lamp state is a promise the drawing can keep - some
       element lights when it is set
@@ -805,6 +806,9 @@ def lint_component_power(path, data, _lib_roots=None):
     """
     attrs = data.get("attrs") or {}
     name = data.get("name")
+    # BEFORE L27's early returns, every one of which fires exactly when a figure
+    # is present - which is when L52 has something to say.
+    _power_provenance(path, data, attrs)
     for key, why in AMBIGUOUS_POWER_KEYS.items():
         if key not in attrs:
             continue
@@ -877,6 +881,52 @@ def lint_component_power(path, data, _lib_roots=None):
                       "total is a floor rather than a total until it lands. Do not "
                       "estimate one - an unsourced watt figure is the same number "
                       "minus the warning")
+
+
+def _power_provenance(path, data, attrs):
+    """L52: a watt figure that does not say where it was read from.
+
+    L27's whole argument is that a number without a source is worse than a
+    warning, because it is "the same number minus the warning". That holds only
+    if the source is WRITTEN DOWN. Twenty-eight figures in the library are not:
+    they state watts and carry no `provenance.power`, so nothing distinguishes a
+    figure read off a vendor table from one somebody remembered.
+
+    THE FAILURE THIS IS FOR is not the missing figure - L27 has that covered, and
+    it fired 249 times without anybody being able to close it. It is the figure
+    that arrives WITHOUT A ROW, because vendor power figures are not scalars.
+    They are ladders by ambient: MIC-3D-4COC3-1COC12 prints 33.96 W in three
+    guides bare and in four more as the 25 C rung of a ladder whose 55 C rung is
+    36.48 W. Both numbers are true. Only one is a maximum, they differ by seven
+    percent, and once the figure is in `attrs` with no row behind it there is no
+    way to tell from the file which one was taken. A re-check means finding the
+    document again from nothing.
+
+    So the rule asks only for the record, and does NOT demand an ambient: plenty
+    of sources publish a bare maximum and inventing a temperature to satisfy a
+    linter would be the L27 failure wearing a different hat. What it demands is
+    that whoever wrote the number says what they read.
+
+    A warning, for the L26 and L27 reason exactly. Twenty-eight files would go
+    red on the day this lands and the fix for most of them is archaeology, not
+    typing - and a red gate that cannot be cleared today is how L14 and L21 both
+    taught people to ignore the linter. It also cannot become an error at
+    `verified` the way L15 and L42 do, because components carry no maturity at
+    all: all 421 of them read `None`. That is worth its own rule one day; it is
+    not this one.
+    """
+    stated = sorted(k for k in (*DRAW_KEYS, *SUPPLY_KEYS) if k in attrs)
+    if not stated:
+        return
+    if str(((data.get("provenance") or {}).get("power")) or "").strip():
+        return
+    warn(path, "L52", f"{data.get('name')} states {', '.join(stated)} and no "
+         "provenance.power says where it came from. Add it, naming the document "
+         "and - if the source gives a ladder by ambient - the row: vendor tables "
+         "commonly print the same part at 25, 40 and 55 C, the figures differ by "
+         "enough to matter, and a bare number cannot say which rung it is. If the "
+         "source states one figure with no temperature, record that; do not invent "
+         "an ambient to fill the sentence")
 
 
 

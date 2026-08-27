@@ -38,7 +38,7 @@ against - without it, "done" means "what I happened to find."
 | artefact | what it uniquely provides | typical count per line |
 |---|---|---|
 | **hardware install guide** (one per chassis family) | THE geometry source: chassis dimensions, FRU dimension tables when you are lucky, faceplate figures with callouts, slot numbering, power tables, grounding/clearance requirements | 10-30 |
-| **module / interface-module reference** (one per line, if it exists) | the card catalogue: every orderable module, per-model power and weight, the chassis-support and module-compatibility tables, port-numbering figures. This ONE document is what let the MX module catalogue be built as data | 0-1 |
+| **module / interface-module reference** (one per line, if it exists) | the card catalogue: every orderable module, its weight, the chassis-support and module-compatibility tables, port-numbering figures. This ONE document is what let the MX module catalogue be built as data. It is NOT the power source - see below | 0-1 |
 | **datasheet** (one per family) | overall dimensions, RU, weight, port counts, the box's own power figure | 5-20 |
 | **studio photographs** (vendor image library / DAM) | colour, finish, construction, per-axis measurable elevations when straight-on | 2-3 per SKU |
 | **community elevations** (NetBox devicetype-library) | fills DAM holes; already cropped to the rack face | varies |
@@ -147,6 +147,34 @@ wired-by-what-was-photographed because this happened first. Docling wraps
 model numbers with stray spaces (`MPC4E-3 D- 32XGE- SFPP`); normalise by
 stripping whitespace, and treat a release number in a cell as "supported",
 `-` as not.
+
+## Power figures: which book, and which rung
+
+Two traps, both of which have already cost a re-do across the Juniper corpus.
+
+**The module reference is not where the watts are.** It is the obvious place to
+look and it is often silent, while the FRU power tables sit in the CHASSIS
+guides - MX2K-MPC8E, MX2K-MPC9E, MIC3-100G-DWDM and SCB-MX were all found there
+after seven contracts had already recorded "NOT STATED for this model in the
+module reference extraction." That sentence was true of the book it named and
+false of the corpus, and it reads as the second. **Never scope an absence claim
+to one document.** Either say which books were searched, or search the corpus
+and say that. An absence claim is a fact about the world and needs the same
+sourcing as a number - it is what tells the next person to stop looking.
+
+**A vendor power figure is a ladder, not a scalar.** The same part is printed at
+25 C, 40 C and 55 C, and the rungs differ by enough to matter:
+MIC-3D-4COC3-1COC12 is 33.96 W at 25 C and 36.48 W at 55 C. Three guides print
+the 25 C figure bare, with no temperature anywhere near it, so an extractor that
+takes the first watts it sees reads seven percent low and looks right. **Take the
+maximum rung and record the ambient in `provenance.power`** - lint L52 asks for
+that record. Two more things the row itself says and the number does not: a card
+figure marked *without MICs* is the one that composes (the MICs answer for
+themselves), and a figure marked *with optics* already includes them.
+
+When extracting power in bulk, require a row to identify its own subject: ONE
+cell exactly a part number, and an explicit temperature. A looser rule put the
+MPC7E's 545 W onto the MPC6E.
 
 ## Then
 

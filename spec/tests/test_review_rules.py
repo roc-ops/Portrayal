@@ -565,3 +565,43 @@ def test_an_undeclared_class_is_reported():
 def test_a_declared_class_is_silent():
     for cls in ("line-card", "psu", "filter"):
         assert not caught("L51", lint.lint_component_role, P, {"class": cls}), cls
+
+
+def _pw(attrs, prov=None):
+    d = {"name": "card-x", "class": "line-card", "attrs": attrs}
+    if prov is not None:
+        d["provenance"] = {"power": prov}
+    return d
+
+
+def test_a_watt_figure_with_no_source_is_reported():
+    """The number is only better than the warning if the row is written down."""
+    hits = caught("L52", lint.lint_component_power, P,
+                  _pw({"power-draw-max-w": 440}))
+    assert hits, "an unsourced watt figure went unreported"
+    assert "power-draw-max-w" in hits[0]
+    # It has to say WHY, because the fix is archaeology and the reader needs to
+    # know a bare number cannot say which rung of the ladder it is.
+    assert "ambient" in hits[0]
+
+
+def test_a_sourced_watt_figure_is_silent():
+    assert not caught("L52", lint.lint_component_power, P,
+                      _pw({"power-draw-max-w": 440}, "chassis guide, 440 W at 55 C"))
+
+
+def test_a_supply_figure_is_asked_the_same_question():
+    """L27 sends draw and supply down different branches; L52 predates the split."""
+    d = _pw({"power-output-w": 2400})
+    d["class"] = "psu"
+    assert caught("L52", lint.lint_component_power, P, d)
+
+
+def test_a_part_with_no_figure_at_all_is_left_to_l27():
+    """L52 is about the number that arrived without a row, not the missing one."""
+    assert not caught("L52", lint.lint_component_power, P, _pw({}))
+
+
+def test_empty_provenance_does_not_count_as_a_source():
+    assert caught("L52", lint.lint_component_power, P,
+                  _pw({"power-draw-max-w": 440}, "   "))
