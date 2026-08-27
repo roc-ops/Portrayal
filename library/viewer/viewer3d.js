@@ -27,7 +27,7 @@ import { toGLB, toUSDZ } from './share.js';
 import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, svgSource, setSvgOverride, clearSvgOverrides,
          setNodeStates, nodeStates, restyleText,
          setPulled as setReliefPulled, pulledPaths,
-         buildFaceRelief, squareFaceplate } from './relief.js';
+         buildFaceRelief } from './relief.js';
 import { applyOverrides } from './swap.js';
 import { jdist } from './dist.js';
 
@@ -446,21 +446,30 @@ export function createViewer(container, opts = {}) {
     // Relief is built in LOCAL face coordinates (x right, y up, z out of the face,
     // face plane at z=0) and oriented by a per-face group transform. flipLY handles
     // views whose y axis runs opposite to the face's local up (top view).
+    // `deep` is how far INTO the box this face looks, and it is a different number
+    // per face - the depth on front and rear, the width on the sides, the height on
+    // the top and the bottom. It used to be the depth everywhere.
     const FACES = COMP ? [
       {view: 'comp', url: DIST + COMP_ENTRY.files[cfg],
-       fw: () => W, fh: () => H, pos: () => [0, 0, D / 2], rot: [0, 0, 0]},
+       fw: () => W, fh: () => H, deep: () => D, pos: () => [0, 0, D / 2], rot: [0, 0, 0]},
     ] : [
-      {view: 'front', fw: () => W, fh: () => H, pos: () => [0, 0, D / 2], rot: [0, 0, 0]},
-      {view: 'rear',  fw: () => W, fh: () => H, pos: () => [0, 0, -D / 2], rot: [0, Math.PI, 0]},
-      {view: 'right', fw: () => D, fh: () => H, pos: () => [W / 2, 0, 0], rot: [0, Math.PI / 2, 0]},
-      {view: 'left',  fw: () => D, fh: () => H, pos: () => [-W / 2, 0, 0], rot: [0, -Math.PI / 2, 0]},
-      {view: 'top',   fw: () => W, fh: () => D, pos: () => [0, H / 2, 0], rot: [-Math.PI / 2, 0, 0]},
+      {view: 'front', fw: () => W, fh: () => H, deep: () => D, pos: () => [0, 0, D / 2], rot: [0, 0, 0]},
+      {view: 'rear',  fw: () => W, fh: () => H, deep: () => D, pos: () => [0, 0, -D / 2], rot: [0, Math.PI, 0]},
+      {view: 'right', fw: () => D, fh: () => H, deep: () => W, pos: () => [W / 2, 0, 0], rot: [0, Math.PI / 2, 0]},
+      {view: 'left',  fw: () => D, fh: () => H, deep: () => W, pos: () => [-W / 2, 0, 0], rot: [0, -Math.PI / 2, 0]},
+      {view: 'top',   fw: () => W, fh: () => D, deep: () => H, pos: () => [0, H / 2, 0], rot: [-Math.PI / 2, 0, 0]},
+      // THE UNDERSIDE GETS A RELIEF PASS TOO NOW. It was the one face left flat, and
+      // 70 components are placed on it - more than on the top. Its art is authored
+      // mirrored in both axes, which is what flipLX/flipLY carry through.
+      {view: 'bottom', fw: () => W, fh: () => D, deep: () => H, pos: () => [0, -H / 2, 0],
+       rot: [Math.PI / 2, 0, 0], flipLX: true, flipLY: true},
     ];
     const built = {};
     for (const F of FACES) {
       const before = meshes.length;
       await buildFaceRelief(F, {src: F.url || f(F.view), faceCv, faceSvg, facePunch,
-                                meshes, FRU_GROUPS, FRU_META, BODY_META, D, bodyBoxMesh,
+                                meshes, FRU_GROUPS, FRU_META, BODY_META, D, deep: F.deep(),
+                                bodyBoxMesh,
                                 restyle: RESTYLE, scope: SCOPE});
       // a face with no drawing falls back to flat colour and contributes no group
       if (meshes.length > before) built[F.view] = meshes[meshes.length - 1];
@@ -483,16 +492,16 @@ export function createViewer(container, opts = {}) {
         await sideMat('rear', W, H),                // -z: as seen from behind
       ];
     } else {
-      // the underside gets no relief pass, so square its faceplate here too
-      const bottomTxt = squareFaceplate(await svgSource(f('bottom'), SCOPE));
-      const bottomCv = await rasterize(bottomTxt, W, D, PXMM, true, true);
-      faceSvg.bottom = bottomTxt;
-      mats = [faceCv.right, faceCv.left, faceCv.top, bottomCv, faceCv.front, faceCv.rear]
+      // The underside used to be rasterised here because it got no relief pass. It
+      // gets one now, so it comes from faceCv like every other face - and if its
+      // drawing is missing, buildFaceRelief falls back to flat colour the same way
+      // the others do rather than this branch having its own answer.
+      mats = [faceCv.right, faceCv.left, faceCv.top, faceCv.bottom, faceCv.front, faceCv.rear]
         .map((c, i) => {
           const m = new THREE.MeshBasicMaterial(
             // alphaTest: punched pixels must not write depth, or they occlude interiors
-            {map: canvasTex(c), transparent: i !== 3, alphaTest: i !== 3 ? 0.1 : 0,
-             alphaToCoverage: i !== 3});
+            {map: canvasTex(c), transparent: true, alphaTest: 0.1,
+             alphaToCoverage: true});
           // The faces are unlit, so with the faceplate outline gone nothing marks a
           // corner: front and side are the same flat grey and the box loses its
           // form. Tint each face instead - the lid catches light, the sides fall

@@ -508,6 +508,15 @@ export async function rasterize(svgText, wmm, hmm, pxmm = PXMM, flipX = false, f
 export async function buildFaceRelief(F, ctx) {
   const {src, faceCv, faceSvg, facePunch, meshes,
          FRU_GROUPS, FRU_META, BODY_META, D, bodyBoxMesh} = ctx;
+    // HOW FAR INTO THE BOX THIS FACE LOOKS, which is not the same number on every
+    // face and was the device's DEPTH on all of them. Depth is right for front and
+    // rear and wrong for the other four: into a top or a bottom you go the chassis
+    // HEIGHT, into a side its WIDTH. Nothing caught it because the parts on those
+    // faces are shallow - a ground lug does not test a depth clamp - but on a 1U
+    // server, H 44 and D 700, a top-face cavity was free to sink 698 mm into a
+    // 44 mm box and come out of the underside. Falls back to D so a caller that
+    // has not been taught the difference behaves exactly as before.
+    const INTO = ctx.deep ?? D;
     // THE ONE THAT WAS MISSED LAST TIME read through ctx and named no scope, and
     // resolved against the default while looking like a rendering fault. Read the
     // density once, here, so every raster below is this viewer's.
@@ -538,14 +547,18 @@ export async function buildFaceRelief(F, ctx) {
     }
     const {cavities, outs, domes, vents, frus, cleanText} = await extractRelief(src, ctx.scope);
     const faceText = squareFaceplate(cleanText);
-    const cv = await rasterize(faceText, fw, fh, PX);
+    const cv = await rasterize(faceText, fw, fh, PX, !!F.flipLX, !!F.flipLY);
     faceCv[F.view] = cv;
     faceSvg[F.view] = faceText;   // LOD re-rasterises from this; keep it squared
     facePunch[F.view] = [];
     const grp = new THREE.Group();
     grp.position.set(...F.pos());
     grp.rotation.set(...F.rot);
-    const LX = (x, w) => x + w / 2 - fw / 2;
+    // A FACE MAY BE AUTHORED MIRRORED and the underside is - a bottom view is drawn
+    // as if the device were rolled towards you, so its art is flipped in both axes
+    // against the face's local frame. `flipLY` was here already and no face ever set
+    // it; `flipLX` is its partner, and the pair is what lets the bottom carry relief.
+    const LX = (x, w) => (F.flipLX ? -1 : 1) * (x + w / 2 - fw / 2);
     const LY = (y, h) => (F.flipLY ? -1 : 1) * (fh / 2 - (y + h / 2));
     const sideMats = c => Array.from({length: 6},
       () => new THREE.MeshLambertMaterial({color: c}));
@@ -561,13 +574,13 @@ export async function buildFaceRelief(F, ctx) {
       // captive modules declare how far they pull out; removable FRUs clear the chassis
       const captive = bd && bd.travel;
       FRU_META[f.path] = {cls: f.cls, view: F.view, body: bd, captive: !!captive,
-                          pull: Math.min(captive || depth * 1.5 + 25, D - 10)};
+                          pull: Math.min(captive || depth * 1.5 + 25, INTO - 10)};
     }
     let curOwner = null;
     const addTo = obj => (curOwner && fruGroups[curOwner] ? fruGroups[curOwner] : grp).add(obj);
     for (const c of cavities) {
       curOwner = c.owner;
-      const d = Math.min(c.d, D - 2);
+      const d = Math.min(c.d, INTO - 2);
       // floor + feature art comes from the cavity group rendered standalone, so
       // raised bezel plates (drawn over the cavity on the face) never leak in
       const gcv = await rasterize(c.grpSvg, c.grpRect.w, c.grpRect.h, PX);
