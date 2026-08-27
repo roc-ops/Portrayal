@@ -512,6 +512,52 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     palette = {}
     inst_palette = {}
     parts = view_parts(view)
+
+    # A CONFIGURATION CAN CHANGE THE SHEET METAL, not only what is fitted into it.
+    # A C40G ordered for AC has one bolted panel across the bottom rear where a DC
+    # chassis has two power-entry openings - so on an AC chassis those two bays do
+    # not exist. Without this they rendered as two empty black rectangles and the
+    # bay picker offered a DC power entry module on a chassis that cannot take one.
+    #
+    # Applied HERE, before anything else reads `parts`, so a scoped-out bay is
+    # invisible to extents, to member boxes, to the silkscreen owner check and to
+    # the tree alike - there is no second place that has to remember.
+    _scoped_out = set()
+    for _sect in ("bays", "placements"):
+        _keep = []
+        for q in parts[_sect]:
+            if q.get("only-in") and config_name not in q["only-in"]:
+                _scoped_out.add(q["id"])
+            else:
+                _keep.append(q)
+        parts[_sect] = _keep
+
+    # A LEGEND FOR AN OPENING THAT IS NOT THERE IS NOT PRINTED EITHER. Dropping it
+    # is not a guess: the mark NAMES the bay it annotates, and that bay was scoped
+    # out of this configuration by the author.
+    #
+    # Only when EVERY local owner is gone. A mark shared between two parts keeps
+    # printing while either survives, and a mark that names nobody - a model name,
+    # a warning, a column heading - is never touched by this.
+    #
+    # NOTHING IN THE LIBRARY NEEDS THIS TODAY, and it is worth saying why rather
+    # than leaving it to look like dead weight. The C40G's "PEM 1"/"PEM 2" looked
+    # like the case for it and are not: Figure 1-2 is the AC rear and prints both
+    # labels in the same place, so they are a legend COLUMN on common sheet metal
+    # and carry no `for:` at all - like the slot numbers 0-5 beside them, which
+    # name six slots spanning the full width from one column. The rule stands
+    # because the invariant is real and the alternative is a silently wrong render
+    # the first time somebody scopes a bay whose label does name it; it is covered
+    # by a synthetic fixture in spec/tests/test_config_scope.py.
+    if _scoped_out:
+        _kept_silk = []
+        for m in parts["silkscreen"]:
+            _own = [t for t in targets(m.get("for")) if not t.startswith("/")]
+            if _own and set(_own) <= _scoped_out:
+                continue
+            _kept_silk.append(m)
+        parts["silkscreen"] = _kept_silk
+
     # WHAT IS PLUGGED IN IS A CONFIGURATION, NOT A DIFFERENT DEVICE. A populated
     # port is the same cage with an optic in it, so `occupants:` sits beside
     # `bays:` and the switch can be drawn bare or fitted without either being a

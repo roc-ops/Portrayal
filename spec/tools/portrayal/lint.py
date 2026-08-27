@@ -46,6 +46,8 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
   L39 device: the panel's holes agree with what goes in them - no two overlap,
       each matches its occupant's standard, no legend is printed on one, and a
       port on a view that declares cutouts has one
+  L41 device: a bay or placement scoped to configurations names configurations
+      that exist, and does not scope itself to all of them or to none
 """
 import argparse
 import json
@@ -1110,6 +1112,14 @@ def lint_device_overlap(path, view_name, view, lib_roots):
 
     Occupants are exempt - a transceiver placed with mate-to is *supposed* to
     sit inside its host's aperture.
+
+    So are two parts that are never both present. `only-in` scopes a piece of
+    metal to a set of configurations, and a C40G ordered for AC has one bolted
+    panel exactly where a DC chassis has its two power-entry openings. Comparing
+    them is comparing two different chassis: the AC panel and the DC bays overlap
+    by their whole area and never coexist in any rendered view. Without this the
+    rule rejects the correct model, which is the more dangerous direction - an
+    author reading a hard error concludes the arrangement is wrong.
     """
     boxes = []
     parts_ = view_parts(view)["placements"]
@@ -1133,7 +1143,7 @@ def lint_device_overlap(path, view_name, view, lib_roots):
         if p.get("rotate") in (90, 270, -90):
             cx, cy = x + w / 2, y + h / 2
             x, y, w, h = cx - h / 2, cy - w / 2, h, w
-        boxes.append((p["id"], x, y, w, h))
+        boxes.append((p["id"], x, y, w, h, p.get("only-in")))
     # Bays occupy faceplate area exactly as placements do. Leaving them out let a
     # rivet row sit on top of five fan bays without a word from the linter.
     for b in view_parts(view)["bays"]:
@@ -1142,7 +1152,8 @@ def lint_device_overlap(path, view_name, view, lib_roots):
         # ON-PANEL footprint already, and `rotate` only spins the occupant inside
         # it. Transposing here reported the C40G's six horizontal card bays as
         # overlapping each other by 300mm.
-        boxes.append((b["id"], b["at"][0], b["at"][1], b["size"]["w"], b["size"]["h"]))
+        boxes.append((b["id"], b["at"][0], b["at"][1], b["size"]["w"], b["size"]["h"],
+                      b.get("only-in")))
     for i, a in enumerate(boxes):
         for b in boxes[i + 1:]:
             ox = min(a[1] + a[3], b[1] + b[3]) - max(a[1], b[1])
@@ -1153,6 +1164,10 @@ def lint_device_overlap(path, view_name, view, lib_roots):
             # ignore the rule. Anything a sheet-metal shop could not hold is noise.
             if ox > 0.05 and oy > 0.05:
                 if b[0] in owned.get(a[0], ()) or a[0] in owned.get(b[0], ()):
+                    continue
+                # never both present, so never actually overlapping. Absent
+                # `only-in` means every configuration, which intersects everything
+                if a[5] and b[5] and not (set(a[5]) & set(b[5])):
                     continue
                 err(path, "L13", f"{view_name}: {a[0]} and {b[0]} overlap by "
                                  f"{ox:.2f}x{oy:.2f}mm")
@@ -1348,6 +1363,45 @@ def lint_device_cutouts(path, view_name, view, lib_roots):
 # LC fibre on a passive mux - `media: fiber` is a bonded adapter, not a socket.
 PLUGGABLE_CAGES = {"sfp", "sfp-plus", "sfp28", "sfp-dd", "qsfp", "qsfp28",
                    "qsfp56", "qsfp-dd", "xfp", "cfp", "cfp2"}
+
+
+def lint_device_config_scope(path, data):
+    """L41: a bay scoped to configurations that do not exist is a bay in none.
+
+    `only-in` REMOVES geometry - it is the one field that can make a bay vanish
+    from every rendered configuration - and it is a free-text list of names. A
+    typo does not fail loudly; it silently deletes the opening everywhere, which
+    is the failure mode `default: null` had before L6 learned to ask whether any
+    configuration filled the bay.
+
+    Two shapes are wrong for opposite reasons. Naming a configuration that is not
+    declared is the typo. Naming ALL of them is a no-op written as a constraint,
+    which reads to the next author as though the scoping means something.
+    """
+    cfgs = set((data.get("configurations") or {}).keys())
+    for vname, view in (data.get("views") or {}).items():
+        parts = view_parts(view)
+        for sect in ("bays", "placements"):
+            for q in parts[sect]:
+                only = q.get("only-in")
+                if not only:
+                    continue
+                if not cfgs:
+                    warn(path, "L41", f"{sect[:-1]} {q['id']} on view {vname} is scoped "
+                                      f"to {sorted(only)}, but the device declares no "
+                                      "configurations at all, so it renders nowhere")
+                    continue
+                missing = sorted(set(only) - cfgs)
+                if missing:
+                    warn(path, "L41", f"{sect[:-1]} {q['id']} on view {vname} is scoped to "
+                                      f"{missing}, which {'are' if len(missing) > 1 else 'is'} "
+                                      "not a declared configuration - the part renders in "
+                                      "fewer configurations than the author meant, or none")
+                if cfgs and set(only) >= cfgs:
+                    warn(path, "L41", f"{sect[:-1]} {q['id']} on view {vname} is scoped to "
+                                      "every configuration the device has, which is what "
+                                      "omitting `only-in` already means. Drop it, or the "
+                                      "next configuration added will silently exclude it")
 
 
 def lint_device_port_optics(path, data, lib_roots):
@@ -1872,6 +1926,7 @@ def lint_device(path, validator, lib_roots):
                      (gdef or {}).get("attrs"))
     lint_device_groups(path, data, lib_roots)
     lint_device_port_optics(path, data, lib_roots)
+    lint_device_config_scope(path, data)
     lint_device_occupants(path, data, lib_roots)
     # Every id each view offers, indexed by view name. A `for:` may name a target
     # in ANOTHER view of the same device (`rear/psu-0`), so the check below cannot

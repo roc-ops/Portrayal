@@ -710,6 +710,13 @@
                   ],
                   "additionalProperties": false,
                   "properties": {
+                    "only-in": {
+                      "type": "array",
+                      "items": {"$ref": "#/$defs/segment"},
+                      "minItems": 1,
+                      "uniqueItems": true,
+                      "description": "THE CONFIGURATIONS IN WHICH THIS PART OF THE METAL EXISTS AT ALL, which is a different question from what goes in it. Absent means every configuration, which is almost always the answer. A C40G ordered for AC has ONE bolted panel across the bottom rear where a DC chassis has two power-entry openings - not two empty openings, different sheet metal - and without this a configuration could vary only its OCCUPANTS: the AC rear drew two empty PEM bays as black rectangles, and the bay picker offered a DC power entry module on a chassis that cannot take one. Scoping lives HERE, on the bay or placement, rather than in the configuration block, because it is a statement about GEOMETRY and geometry is what a view holds - a configuration says what is fitted, not where the holes are. Distinct from `optional`, which is a build-time flag that hides a part from every configuration at once. Lint L41"
+                    },
                     "id": {
                       "$ref": "#/$defs/segment"
                     },
@@ -805,6 +812,13 @@
                   ],
                   "additionalProperties": false,
                   "properties": {
+                    "only-in": {
+                      "type": "array",
+                      "items": {"$ref": "#/$defs/segment"},
+                      "minItems": 1,
+                      "uniqueItems": true,
+                      "description": "THE CONFIGURATIONS IN WHICH THIS PART OF THE METAL EXISTS AT ALL, which is a different question from what goes in it. Absent means every configuration, which is almost always the answer. A C40G ordered for AC has ONE bolted panel across the bottom rear where a DC chassis has two power-entry openings - not two empty openings, different sheet metal - and without this a configuration could vary only its OCCUPANTS: the AC rear drew two empty PEM bays as black rectangles, and the bay picker offered a DC power entry module on a chassis that cannot take one. Scoping lives HERE, on the bay or placement, rather than in the configuration block, because it is a statement about GEOMETRY and geometry is what a view holds - a configuration says what is fitted, not where the holes are. Distinct from `optional`, which is a build-time flag that hides a part from every configuration at once. Lint L41"
+                    },
                     "ref": {
                       "type": "string",
                       "pattern": "^[a-z0-9-]+/[a-z0-9-]+@\\d+$",
