@@ -6,21 +6,25 @@ class: line-card
 behaviour: fills
 profile: networking
 description: >-
-  Juniper MIC-3D-2XGE-XFP - 2x10GbE XFP Modular Interface Card with per-port
-  LINK lamps, as photographed in the MX104 reference unit's slot 0/0.
+  Juniper 2-port 10GbE MIC with XFP. MIC form (168 x 27 window; the earlier 31 mm reading was the bay opening with bezel - a MIC must seat inside the 29.5 mm MPC face, so the window is 27).
 attrs:
   model: MIC-3D-2XGE-XFP
 provenance:
-  size: 'photo - as the sibling MICs; XFP centres at x 62 and 118,
-    approximate'
-  power: 'NOT STATED in the MX104 extraction for this MIC - L27 stands'
+  size: 'registry + layout - the face is the slot geometry of its chassis
+    family; positions are laid out from the module reference port
+    description and registry cage sizes, NOT measured from a faceplate
+    drawing. No faceplate figure was usable for this model'
+  power: 'NOT STATED for this model in the module reference extraction - L27 stands'
+  numbering: 'guide - ports number within each PIC group with an n/ group
+    legend, per the module reference port-numbering figures (g000930,
+    g100786); the exact print positions are layout-derived'
 states:
 - ok
 - fail
 - absent
 parts:
-- {ref: std/xfp@1, id: port-0, at: [52.25, 10.65]}
-- {ref: std/xfp@1, id: port-1, at: [108.25, 10.65]}
+- {ref: std/xfp@1, id: port-0-0, at: [16.00, 8.65], attrs: {media: xfp}}
+- {ref: std/xfp@1, id: port-1-0, at: [45.00, 8.65], attrs: {media: xfp}}
 size:
   w: 168.0
-  h: 31.0
+  h: 27.0

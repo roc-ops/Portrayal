@@ -1,0 +1,45 @@
+format: 1
+kind: module
+name: mic-3d-16che1-t1-ce
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper channelized E1/T1 circuit-emulation MIC - sixteen RJ48 jacks in two rows. MIC form (168 x 27 window; the earlier 31 mm reading was the bay opening with bezel - a MIC must seat inside the 29.5 mm MPC face, so the window is 27).
+attrs:
+  model: MIC-3D-16CHE1-T1-CE
+  model-variants: MIC-3D-16CHE1-T1-CE-H
+provenance:
+  size: 'registry + layout - the face is the slot geometry of its chassis
+    family; positions are laid out from the module reference port
+    description and registry cage sizes, NOT measured from a faceplate
+    drawing. No faceplate figure was usable for this model'
+  power: 'NOT STATED for this model in the module reference extraction - L27 stands'
+  numbering: 'guide - ports number within each PIC group with an n/ group
+    legend, per the module reference port-numbering figures (g000930,
+    g100786); the exact print positions are layout-derived'
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/rj45-ganged@1, id: port-0-0, at: [16.00, 3.60], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-0-1, at: [16.00, 15.80], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-0-2, at: [28.70, 3.60], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-0-3, at: [28.70, 15.80], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-0-4, at: [41.40, 3.60], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-0-5, at: [41.40, 15.80], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-0-6, at: [54.10, 3.60], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-0-7, at: [54.10, 15.80], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-0-8, at: [66.80, 3.60], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-0-9, at: [66.80, 15.80], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-0-10, at: [79.50, 3.60], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-0-11, at: [79.50, 15.80], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-0-12, at: [92.20, 3.60], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-0-13, at: [92.20, 15.80], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-0-14, at: [104.90, 3.60], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@1, id: port-0-15, at: [104.90, 15.80], attrs: {media: rj45}}
+size:
+  w: 168.0
+  h: 27.0

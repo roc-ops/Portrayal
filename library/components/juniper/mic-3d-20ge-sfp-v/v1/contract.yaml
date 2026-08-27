@@ -1,0 +1,50 @@
+format: 1
+kind: module
+name: mic-3d-20ge-sfp-v
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper Gigabit Ethernet MIC with SFP - twenty cages in two PIC groups of ten; the E and EH revisions share the faceplate. Vertical author for the vertical carriers (MX960/MX2000 MPCs stand on end, and their MICs with them).
+attrs:
+  model: MIC-3D-20GE-SFP
+  model-variants: MIC-3D-20GE-SFP-E, MIC-3D-20GE-SFP-EH
+  power-draw-max-w: 37
+provenance:
+  size: 'registry + layout - the face is the slot geometry of its chassis
+    family; positions are laid out from the module reference port
+    description and registry cage sizes, NOT measured from a faceplate
+    drawing. The MIC-3D-20GE-SFP-E port-numbering figure g000930 shows the two-column PIC layout this follows'
+  power: 'datasheet-table - the module reference model section states the requirement; 37 W max'
+  numbering: 'guide - ports number within each PIC group with an n/ group
+    legend, per the module reference port-numbering figures (g000930,
+    g100786); the exact print positions are layout-derived'
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/sfp-ganged@1, id: port-0-1, at: [1.07, 14.12], rotate: 90, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-0, at: [12.07, 14.12], rotate: 90, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-3, at: [1.07, 28.78], rotate: 90, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-2, at: [12.07, 28.78], rotate: 90, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-5, at: [1.07, 43.42], rotate: 90, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-4, at: [12.07, 43.42], rotate: 90, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-7, at: [1.07, 58.08], rotate: 90, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-6, at: [12.07, 58.08], rotate: 90, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-9, at: [1.07, 72.72], rotate: 90, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-8, at: [12.07, 72.72], rotate: 90, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-1-1, at: [1.07, 88.88], rotate: 90, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-1-0, at: [12.07, 88.88], rotate: 90, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-1-3, at: [1.07, 103.53], rotate: 90, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-1-2, at: [12.07, 103.53], rotate: 90, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-1-5, at: [1.07, 118.17], rotate: 90, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-1-4, at: [12.07, 118.17], rotate: 90, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-1-7, at: [1.07, 132.82], rotate: 90, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-1-6, at: [12.07, 132.82], rotate: 90, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-1-9, at: [1.07, 147.47], rotate: 90, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-1-8, at: [12.07, 147.47], rotate: 90, attrs: {media: sfp}}
+size:
+  w: 27.0
+  h: 168.0

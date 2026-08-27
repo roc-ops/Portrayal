@@ -1,0 +1,45 @@
+format: 1
+kind: module
+name: mic-3d-8ds3-e3
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper DS3/E3 MIC - eight ports as sixteen 75-ohm coax pairs (RX over TX); the coax jacks are drawn with the SMB registry opening because no BNC standard exists in the registry yet - recorded. MIC form (168 x 27 window; the earlier 31 mm reading was the bay opening with bezel - a MIC must seat inside the 29.5 mm MPC face, so the window is 27).
+attrs:
+  model: MIC-3D-8DS3-E3
+  model-variants: MIC-3D-8CHDS3-E3-B
+provenance:
+  size: 'registry + layout - the face is the slot geometry of its chassis
+    family; positions are laid out from the module reference port
+    description and registry cage sizes, NOT measured from a faceplate
+    drawing. No faceplate figure was usable for this model'
+  power: 'NOT STATED for this model in the module reference extraction - L27 stands'
+  numbering: 'guide - ports number within each PIC group with an n/ group
+    legend, per the module reference port-numbering figures (g000930,
+    g100786); the exact print positions are layout-derived'
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/smb@1, id: port-0-0, at: [16.00, 3.60], rotate: 180, attrs: {media: coax}}
+- {ref: std/smb@1, id: port-0-1, at: [16.00, 9.63], attrs: {media: coax}}
+- {ref: std/smb@1, id: port-0-2, at: [23.50, 3.60], rotate: 180, attrs: {media: coax}}
+- {ref: std/smb@1, id: port-0-3, at: [23.50, 9.63], attrs: {media: coax}}
+- {ref: std/smb@1, id: port-0-4, at: [31.00, 3.60], rotate: 180, attrs: {media: coax}}
+- {ref: std/smb@1, id: port-0-5, at: [31.00, 9.63], attrs: {media: coax}}
+- {ref: std/smb@1, id: port-0-6, at: [38.50, 3.60], rotate: 180, attrs: {media: coax}}
+- {ref: std/smb@1, id: port-0-7, at: [38.50, 9.63], attrs: {media: coax}}
+- {ref: std/smb@1, id: port-0-8, at: [46.00, 3.60], rotate: 180, attrs: {media: coax}}
+- {ref: std/smb@1, id: port-0-9, at: [46.00, 9.63], attrs: {media: coax}}
+- {ref: std/smb@1, id: port-0-10, at: [53.50, 3.60], rotate: 180, attrs: {media: coax}}
+- {ref: std/smb@1, id: port-0-11, at: [53.50, 9.63], attrs: {media: coax}}
+- {ref: std/smb@1, id: port-0-12, at: [61.00, 3.60], rotate: 180, attrs: {media: coax}}
+- {ref: std/smb@1, id: port-0-13, at: [61.00, 9.63], attrs: {media: coax}}
+- {ref: std/smb@1, id: port-0-14, at: [68.50, 3.60], rotate: 180, attrs: {media: coax}}
+- {ref: std/smb@1, id: port-0-15, at: [68.50, 9.63], attrs: {media: coax}}
+size:
+  w: 168.0
+  h: 27.0

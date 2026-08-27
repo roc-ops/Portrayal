@@ -1,0 +1,32 @@
+format: 1
+kind: module
+name: mic-3d-4choc3-2choc12-v
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper channelized SONET/SDH OC3/STM1 multirate MIC with SFP (four ports). Vertical author for the vertical carriers (MX960/MX2000 MPCs stand on end, and their MICs with them).
+attrs:
+  model: MIC-3D-4CHOC3-2CHOC12
+provenance:
+  size: 'registry + layout - the face is the slot geometry of its chassis
+    family; positions are laid out from the module reference port
+    description and registry cage sizes, NOT measured from a faceplate
+    drawing. No faceplate figure was usable for this model'
+  power: 'NOT STATED for this model in the module reference extraction - L27 stands'
+  numbering: 'guide - ports number within each PIC group with an n/ group
+    legend, per the module reference port-numbering figures (g000930,
+    g100786); the exact print positions are layout-derived'
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/sfp-ganged@1, id: port-0-1, at: [1.07, 14.73], rotate: 90, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-0, at: [12.07, 14.73], rotate: 90, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-3, at: [1.07, 30.57], rotate: 90, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-2, at: [12.07, 30.57], rotate: 90, attrs: {media: sfp}}
+size:
+  w: 27.0
+  h: 168.0

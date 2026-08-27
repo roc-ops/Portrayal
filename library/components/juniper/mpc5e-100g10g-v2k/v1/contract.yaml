@@ -1,0 +1,35 @@
+format: 1
+kind: module
+name: mpc5e-100g10g-v2k
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MPC5E-100G10G fixed MPC - two 100GbE CFP2 ports and four SFP+; the Q variant shares the faceplate. Authored as the MX2000 vertical form, seated through its adapter card (jacks rotated 90).
+attrs:
+  model: MPC5E-100G10G
+  model-variants: MPC5EQ-100G10G
+provenance:
+  size: 'registry + layout - the face is the slot geometry of its chassis
+    family; positions are laid out from the module reference port
+    description and registry cage sizes, NOT measured from a faceplate
+    drawing. No faceplate figure was usable for this model'
+  power: 'NOT STATED for this model in the module reference extraction - L27 stands'
+  numbering: 'guide - ports number within each PIC group with an n/ group
+    legend, per the module reference port-numbering figures (g000930,
+    g100786); the exact print positions are layout-derived'
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/sfp-ganged@1, id: port-0-1, at: [5.38, 26.73], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-0, at: [21.38, 26.73], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-3, at: [5.38, 42.57], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-2, at: [21.38, 42.57], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/cfp2@1, id: port-1-0, at: [-0.25, 80.05], rotate: 90, attrs: {media: cfp2}}
+- {ref: std/cfp2@1, id: port-2-0, at: [-0.25, 132.15], rotate: 90, attrs: {media: cfp2}}
+size:
+  w: 41.0
+  h: 425.0

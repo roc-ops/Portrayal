@@ -1,0 +1,72 @@
+format: 1
+kind: module
+name: mpc2e-3d-v2k
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MPC2 carrier - two MIC slots; the queuing and NG variants share the faceplate. Vertical form for the MX2000 cage.
+attrs:
+  model: MX-MPC2E-3D
+  model-variants: MX-MPC2-3D, MX-MPC2-3D-Q, MX-MPC2-3D-EQ, MX-MPC2E-3D-Q, MX-MPC2E-3D-EQ, MX-MPC2E-3D-P, MX-MPC2E-3D-NG, MX-MPC2E-3D-NG-Q
+  power-draw-max-w: 294
+provenance:
+  size: 'registry + layout - the face is the slot geometry of its chassis
+    family; positions are laid out from the module reference port
+    description and registry cage sizes, NOT measured from a faceplate
+    drawing. carrier face; the MIC windows dominate it'
+  power: 'datasheet-table - the module reference model section states the requirement; 294 W max'
+  numbering: 'guide - ports number within each PIC group with an n/ group
+    legend, per the module reference port-numbering figures (g000930,
+    g100786); the exact print positions are layout-derived'
+states:
+- ok
+- fail
+- absent
+bays:
+  mic0:
+    at: [7.0, 30.0]
+    size: [27.0, 168.0]
+    accepts:
+    - juniper/mic-3d-20ge-sfp-v@1
+    - juniper/mic-macsec-20ge-v@1
+    - juniper/mic-3d-2xge-xfp-v@1
+    - juniper/mic-3d-4xge-xfp-v@1
+    - juniper/mic-3d-10ge-sfp-e-v@1
+    - juniper/mic-3d-1oc192-xfp-v@1
+    - juniper/mic-3d-4choc3-1oc12-v@1
+    - juniper/mic-3d-4choc3-2choc12-v@1
+    - juniper/mic-3d-8choc3-4choc12-v@1
+    - juniper/mic-3d-4oc3oc12-1oc48-v@1
+    - juniper/mic-3d-8oc3oc12-4oc48-v@1
+    - juniper/mic-3d-8oc3-2oc12-atm-v@1
+    - juniper/mic-3d-8ds3-e3-v@1
+    - juniper/mic-3d-16che1-t1-ce-v@1
+    - juniper/ms-mic-16g-v@1
+    - juniper/mx-mic-blank-v@1
+    default: juniper/mic-3d-20ge-sfp-v@1
+  mic1:
+    at: [7.0, 214.0]
+    size: [27.0, 168.0]
+    accepts:
+    - juniper/mic-3d-20ge-sfp-v@1
+    - juniper/mic-macsec-20ge-v@1
+    - juniper/mic-3d-2xge-xfp-v@1
+    - juniper/mic-3d-4xge-xfp-v@1
+    - juniper/mic-3d-10ge-sfp-e-v@1
+    - juniper/mic-3d-1oc192-xfp-v@1
+    - juniper/mic-3d-4choc3-1oc12-v@1
+    - juniper/mic-3d-4choc3-2choc12-v@1
+    - juniper/mic-3d-8choc3-4choc12-v@1
+    - juniper/mic-3d-4oc3oc12-1oc48-v@1
+    - juniper/mic-3d-8oc3oc12-4oc48-v@1
+    - juniper/mic-3d-8oc3-2oc12-atm-v@1
+    - juniper/mic-3d-8ds3-e3-v@1
+    - juniper/mic-3d-16che1-t1-ce-v@1
+    - juniper/ms-mic-16g-v@1
+    - juniper/mx-mic-blank-v@1
+    default: juniper/mx-mic-blank-v@1
+size:
+  w: 41.0
+  h: 425.0
