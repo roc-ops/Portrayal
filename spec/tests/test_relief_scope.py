@@ -42,3 +42,14 @@ def test_two_scopes_do_not_share_overrides_or_states():
     # demo pages working without a line of change
     assert out["defaultIsItsOwnScope"] == ['<svg id="DEFAULT"/>', '<svg id="B"/>']
     assert out["defaultStatesUntouched"] == []
+
+    # The first pass at this scoped the overrides and the lamp states and left
+    # the raster density and the FRU path set module-level - the closing note on
+    # ndv#31 said as much, and a downstream consumer came back still blocked. A
+    # scope that owns half a viewer's state is a scope you cannot reason about.
+    assert out["densitiesStaySeparate"] == [8, 4], \
+        "the second configureRelief reclaimed the first scope's density"
+    assert out["fruSetsStaySeparate"] == [["psu-0"], ["fan-0"]], \
+        "one viewer's FRU path set reached the other"
+    assert out["cropHonoursItsDensity"] == [80, 40], \
+        "crop still took its density from the module instead of its caller"

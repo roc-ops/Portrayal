@@ -400,8 +400,10 @@ export function createViewer(container, opts = {}) {
 
   async function build(cfg) {
     // THREE and the renderer are genuinely shared; the per-document state is not,
-    // and rides on SCOPE rather than being claimed from under the other viewer
-    configureRelief({THREE, renderer, PXMM, FRU_PATHS});
+    // and rides on SCOPE rather than being claimed from under the other viewer.
+    // That now includes the raster density and the FRU path set - until it did,
+    // two viewers at different pxmm could rasterise each other's side faces.
+    configureRelief({THREE, renderer, PXMM, FRU_PATHS}, SCOPE);
     await applyBayOverrides(cfg);
     // the states go in BEFORE anything is extracted, so the faces and the relief
     // are cut from a document that already carries them; a rebuild that dropped

@@ -12,8 +12,14 @@
 
 let THREE, renderer, PXMM, FRU_PATHS;
 
-export function configureRelief(deps) {
+export function configureRelief(deps, scope) {
+  // THREE and the renderer are genuinely per-page and stay module-level. The
+  // raster density and the FRU path set are per-VIEWER, and a second viewer
+  // calling this used to reclaim them from under the first.
   ({THREE, renderer, PXMM, FRU_PATHS} = deps);
+  const sc = _sc(scope);
+  if (deps.PXMM != null) sc.pxmm = deps.PXMM;
+  if (deps.FRU_PATHS) sc.fruPaths = deps.FRU_PATHS;
 }
 
 // Every view SVG was fetched with cache: 'no-store' from four separate call
@@ -48,11 +54,16 @@ const SVG_CACHE = new Map();
 // and the fetch cache stay module-level, because those genuinely are shared.
 // Passing no scope uses the default one, which is what every existing caller
 // does and what this module did before - so nothing had to change to keep working.
-export function createReliefScope() {
-  return {overrides: new Map(), states: new Map()};
+export function createReliefScope(deps = {}) {
+  return {overrides: new Map(), states: new Map(),
+          pxmm: deps.PXMM, fruPaths: deps.FRU_PATHS};
 }
 const DEFAULT_SCOPE = createReliefScope();
 const _sc = scope => scope || DEFAULT_SCOPE;
+// A scope that was never configured falls back to the module-level injection,
+// which is what every pre-scope caller relies on.
+const _px = scope => _sc(scope).pxmm ?? PXMM;
+const _fru = scope => _sc(scope).fruPaths ?? FRU_PATHS;
 
 export function setSvgOverride(url, text, scope) {
   const m = _sc(scope).overrides;
@@ -151,7 +162,8 @@ export async function svgCanvas(url, wmm, hmm, flipX = false, flipYax = false, s
   const blobUrl = URL.createObjectURL(new Blob([text], {type: 'image/svg+xml'}));
   await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = blobUrl; });
   const cv = document.createElement('canvas');
-  cv.width = Math.round(wmm * PXMM); cv.height = Math.round(hmm * PXMM);
+  const px = _px(scope);
+  cv.width = Math.round(wmm * px); cv.height = Math.round(hmm * px);
   const ctx = cv.getContext('2d');
   if (flipX) { ctx.translate(cv.width, 0); ctx.scale(-1, 1); }
   if (flipYax) { ctx.translate(0, cv.height); ctx.scale(1, -1); }
@@ -202,11 +214,11 @@ export function remap(mat, cv) {
 
 // crop a mm-rect out of a face canvas (no mirroring: the rear floor plane's
 // 180-degree rotation and the box rear-face UVs already reverse X to match)
-export function crop(cv, r) {
+export function crop(cv, r, pxmm = PXMM) {
   const c = document.createElement('canvas');
-  c.width = Math.max(1, Math.round(r.w * PXMM)); c.height = Math.max(1, Math.round(r.h * PXMM));
+  c.width = Math.max(1, Math.round(r.w * pxmm)); c.height = Math.max(1, Math.round(r.h * pxmm));
   const ctx = c.getContext('2d');
-  ctx.drawImage(cv, Math.round(r.x * PXMM), Math.round(r.y * PXMM), c.width, c.height, 0, 0, c.width, c.height);
+  ctx.drawImage(cv, Math.round(r.x * pxmm), Math.round(r.y * pxmm), c.width, c.height, 0, 0, c.width, c.height);
   return c;
 }
 
@@ -265,7 +277,7 @@ export async function extractRelief(url, scope) {
     const a = el.closest('[data-path]');
     if (!a) return null;
     const root = a.dataset.path.split('/')[0];
-    return FRU_PATHS.has(root) ? root : null;
+    return _fru(scope).has(root) ? root : null;
   };
   // A NODE RENDERED ALONE LOSES THE SCOPE ITS RULES WERE WRITTEN IN, and that is
   // the third bug of the shape the `lift` note above names. `shared` carries the
@@ -438,6 +450,10 @@ export async function rasterize(svgText, wmm, hmm, pxmm = PXMM, flipX = false, f
 export async function buildFaceRelief(F, ctx) {
   const {src, faceCv, faceSvg, facePunch, meshes,
          FRU_GROUPS, FRU_META, BODY_META, D, bodyBoxMesh} = ctx;
+    // THE ONE THAT WAS MISSED LAST TIME read through ctx and named no scope, and
+    // resolved against the default while looking like a rendering fault. Read the
+    // density once, here, so every raster below is this viewer's.
+    const PX = _px(ctx.scope);
     // Every texture below that was rasterised from a node's OWN art records how
     // to redraw itself. That is the whole cost model for a state change: it
     // repaints and never re-shapes, so nothing here has to be measured, extruded
@@ -456,7 +472,7 @@ export async function buildFaceRelief(F, ctx) {
     // a device need not declare every view; fall back to a plain face
     if (!(await fetch(src, {method: 'HEAD', cache: 'no-store'})).ok) {
       const cv0 = document.createElement('canvas');
-      cv0.width = Math.round(fw * PXMM); cv0.height = Math.round(fh * PXMM);
+      cv0.width = Math.round(fw * PX); cv0.height = Math.round(fh * PX);
       const c0 = cv0.getContext('2d');
       c0.fillStyle = '#3a3f44'; c0.fillRect(0, 0, cv0.width, cv0.height);
       faceCv[F.view] = cv0;
@@ -464,7 +480,7 @@ export async function buildFaceRelief(F, ctx) {
     }
     const {cavities, outs, domes, vents, frus, cleanText} = await extractRelief(src, ctx.scope);
     const faceText = squareFaceplate(cleanText);
-    const cv = await rasterize(faceText, fw, fh);
+    const cv = await rasterize(faceText, fw, fh, PX);
     faceCv[F.view] = cv;
     faceSvg[F.view] = faceText;   // LOD re-rasterises from this; keep it squared
     facePunch[F.view] = [];
@@ -496,16 +512,16 @@ export async function buildFaceRelief(F, ctx) {
       const d = Math.min(c.d, D - 2);
       // floor + feature art comes from the cavity group rendered standalone, so
       // raised bezel plates (drawn over the cavity on the face) never leak in
-      const gcv = await rasterize(c.grpSvg, c.grpRect.w, c.grpRect.h);
-      const floorCv = crop(gcv, {x: c.x - c.grpRect.x, y: c.y - c.grpRect.y, w: c.w, h: c.h});
+      const gcv = await rasterize(c.grpSvg, c.grpRect.w, c.grpRect.h, PX);
+      const floorCv = crop(gcv, {x: c.x - c.grpRect.x, y: c.y - c.grpRect.y, w: c.w, h: c.h}, PX);
       const cavCrops = [];
       const fctx = floorCv.getContext('2d');
       for (const ft of c.features) {
-        ft.faceCv = crop(gcv, {x: ft.x - c.grpRect.x, y: ft.y - c.grpRect.y, w: ft.w, h: ft.h});
+        ft.faceCv = crop(gcv, {x: ft.x - c.grpRect.x, y: ft.y - c.grpRect.y, w: ft.w, h: ft.h}, PX);
         cavCrops.push(ft);
         // remove the feature art from the floor (it lives on its own box now)
-        const px = [Math.round((ft.x - c.x) * PXMM), Math.round((ft.y - c.y) * PXMM),
-                    Math.round(ft.w * PXMM), Math.round(ft.h * PXMM)];
+        const px = [Math.round((ft.x - c.x) * PX), Math.round((ft.y - c.y) * PX),
+                    Math.round(ft.w * PX), Math.round(ft.h * PX)];
         if (ft.kind === 'sink') fctx.clearRect(...px);
         else { fctx.fillStyle = '#0d0f11'; fctx.fillRect(...px); }
       }
@@ -515,8 +531,8 @@ export async function buildFaceRelief(F, ctx) {
         // a hole straight through the faceplate
         const pctx = cv.getContext('2d');
         pctx.globalCompositeOperation = 'destination-out';
-        pctx.drawImage(await rasterize(c.cavSvg, c.w, c.h),
-                       Math.round(c.x * PXMM), Math.round(c.y * PXMM));
+        pctx.drawImage(await rasterize(c.cavSvg, c.w, c.h, PX),
+                       Math.round(c.x * PX), Math.round(c.y * PX));
         pctx.globalCompositeOperation = 'source-over';
         facePunch[F.view].push({kind: 'shape', svg: c.cavSvg,
                                 x: c.x, y: c.y, w: c.w, h: c.h});
@@ -557,11 +573,11 @@ export async function buildFaceRelief(F, ctx) {
       // they are redrawn together from the one group svg they were cut from
       const floorMat = floor.material;
       reg(c.grpSvg, async text => {
-        const g2 = await rasterize(text, c.grpRect.w, c.grpRect.h);
-        remap(floorMat, crop(g2, {x: c.x - c.grpRect.x, y: c.y - c.grpRect.y, w: c.w, h: c.h}));
+        const g2 = await rasterize(text, c.grpRect.w, c.grpRect.h, PX);
+        remap(floorMat, crop(g2, {x: c.x - c.grpRect.x, y: c.y - c.grpRect.y, w: c.w, h: c.h}, PX));
         for (const ft of cavCrops)
           if (ft.mat) remap(ft.mat,
-            crop(g2, {x: ft.x - c.grpRect.x, y: ft.y - c.grpRect.y, w: ft.w, h: ft.h}));
+            crop(g2, {x: ft.x - c.grpRect.x, y: ft.y - c.grpRect.y, w: ft.w, h: ft.h}, PX));
       });
       // closed exterior back, deep enough to clear any sink pockets
       const maxSink = Math.max(0, ...c.features.filter(f => f.kind === 'sink').map(f => f.val));
@@ -604,7 +620,7 @@ export async function buildFaceRelief(F, ctx) {
     for (const dm of domes) { // gentle domes: node art draped on a paraboloid cap
       curOwner = dm.owner;
       // (LED lamps, bulged fan guards); apex proud, rim sunk 0.15 into the face
-      const dcv = await rasterize(dm.svgText, dm.w, dm.h);
+      const dcv = await rasterize(dm.svgText, dm.w, dm.h, PX);
       const geo = new THREE.CircleGeometry(0.5, 48);
       const pos = geo.attributes.position;
       for (let i = 0; i < pos.count; i++) {
@@ -617,11 +633,11 @@ export async function buildFaceRelief(F, ctx) {
       m.scale.set(dm.w, dm.h, dm.dome + 0.15);
       m.position.set(LX(dm.x, dm.w), LY(dm.y, dm.h), (dm.lift || 0) - 0.15);
       addTo(m);
-      reg(dm.svgText, async text => remap(m.material, await rasterize(text, dm.w, dm.h)));
+      reg(dm.svgText, async text => remap(m.material, await rasterize(text, dm.w, dm.h, PX)));
     }
     for (const o of outs) {   // protrusions: bezel plates, handles, studs, tubes
       curOwner = o.owner;
-      const ocv = await rasterize(o.svgText, o.w, o.h);
+      const ocv = await rasterize(o.svgText, o.w, o.h, PX);
       if (!o.color) {   // side color: sample the node's own art
         const px = ocv.getContext('2d').getImageData(
           Math.floor(ocv.width / 2), Math.floor(ocv.height / 2), 1, 1).data;
@@ -629,7 +645,7 @@ export async function buildFaceRelief(F, ctx) {
       }
       const faceTex = new THREE.MeshBasicMaterial(
         {map: canvasTex(ocv), transparent: true, alphaTest: 0.1, alphaToCoverage: true});
-      reg(o.svgText, async text => remap(faceTex, await rasterize(text, o.w, o.h)));
+      reg(o.svgText, async text => remap(faceTex, await rasterize(text, o.w, o.h, PX)));
       if (o.uhandle !== undefined && o.uhandle !== '') {
         const far = +o.uhandle;
         const horizontal = o.w >= o.h;
@@ -733,15 +749,15 @@ export async function buildFaceRelief(F, ctx) {
     curOwner = null;
     for (const f of frus) {   // move the FRU's face art into its group; leave a bay
       const fg = fruGroups[f.path];
-      const faceCrop = crop(cv, f);
+      const faceCrop = crop(cv, f, PX);
       const plane = new THREE.Mesh(new THREE.PlaneGeometry(f.w, f.h),
         new THREE.MeshBasicMaterial({map: canvasTex(faceCrop), transparent: true, alphaTest: 0.1, alphaToCoverage: true}));
       plane.position.set(LX(f.x, f.w), LY(f.y, f.h), 0.3);
       fg.add(plane);
       // CLEAR, never fill: an opaque patch on the chassis face would occlude
       // everything behind it (the module's own cavities, pins, bay interior)
-      cv.getContext('2d').clearRect(Math.round(f.x * PXMM), Math.round(f.y * PXMM),
-                                    Math.round(f.w * PXMM), Math.round(f.h * PXMM));
+      cv.getContext('2d').clearRect(Math.round(f.x * PX), Math.round(f.y * PX),
+                                    Math.round(f.w * PX), Math.round(f.h * PX));
       facePunch[F.view].push({kind: 'rect', x: f.x, y: f.y, w: f.w, h: f.h});
       const meta = FRU_META[f.path];
       if (meta.body) {   // full module body travels with the FRU

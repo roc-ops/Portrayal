@@ -42,4 +42,25 @@ m.setSvgOverride(url, '<svg id="DEFAULT"/>');
 out.defaultIsItsOwnScope = [await m.svgSource(url), await m.svgSource(url, b)];
 out.defaultStatesUntouched = [...m.nodeStates()];
 
+// THE RASTER DENSITY AND THE FRU SET were still module-level after the first
+// pass at this, and the closing note on ndv#31 said so: two viewers at different
+// pxmm would fight over PXMM. configureRelief now writes them onto the scope it
+// is given, so a second viewer configuring cannot reclaim the first's.
+const hi = m.createReliefScope();
+const lo = m.createReliefScope();
+const fruHi = new Set(['psu-0']);
+const fruLo = new Set(['fan-0']);
+m.configureRelief({ THREE: null, renderer: null, PXMM: 8, FRU_PATHS: fruHi }, hi);
+m.configureRelief({ THREE: null, renderer: null, PXMM: 4, FRU_PATHS: fruLo }, lo);
+
+// crop is the one that took the density off the module rather than the caller
+const src = { width: 80, height: 80, getContext: () => ({ drawImage() {} }) };
+globalThis.document = { createElement: () => ({ width: 0, height: 0,
+                                                getContext: () => ({ drawImage() {} }) }) };
+out.cropHonoursItsDensity = [m.crop(src, { x: 0, y: 0, w: 10, h: 10 }, 8).width,
+                             m.crop(src, { x: 0, y: 0, w: 10, h: 10 }, 4).width];
+// the last configureRelief call must not have moved the other scope's density
+out.densitiesStaySeparate = [hi.pxmm, lo.pxmm];
+out.fruSetsStaySeparate = [[...hi.fruPaths], [...lo.fruPaths]];
+
 console.log(JSON.stringify(out));
