@@ -1,0 +1,300 @@
+format: 1
+kind: device
+name: mx150
+version: 0.1.0
+maturity: modelled
+manufacturer: Juniper
+model: MX150
+portfolio:
+  line: MX Series
+  family: Universal Routing Platform
+description: >-
+  Juniper MX150 - a compact fixed-configuration 1RU edge router (EOL). Twelve
+  1GbE access ports (eight RJ45 0-7 in a 2x4 block, RJ45 ports 8 and 9, SFP
+  ports 10 and 11) and two 10GbE SFP+ uplinks silkscreened 0 and 1, with a
+  mini-USB console, USB service port, MGMT RJ45 and the chassis status lamp
+  matrix at the right. Built-in AC supply and two fixed fans on the rear.
+provenance:
+  sources: MX150 Hardware Guide (extracted into working/images/mx150/), the
+    MX-family datasheet (no standalone MX150 datasheet exists - recorded in
+    the intake), and the image-library photographs mx150-front-high and
+    mx150-rear-high. No mechanical drawing was available
+  chassis: 'datasheet-table - guide Table 1: 1.72 x 17.36 x 12 in (43.7 x
+    441 x 305 mm), 4.3 kg. Ears NOT MODELLED by convention'
+  scale: 'photo - both photographs are straight-on but carry extra
+    shadow/bezel rows, so x is anchored to the 441 mm width (front 3.245
+    px/mm, rear 3.184) and y positions are per-face fractions anchored to
+    the 43.7 mm height - approximate to about a millimetre'
+  front: 'photo - recessed JUNIPER/junos panel to x 45.2, hex vent fields
+    above the ports, the 2x4 RJ45 block at column centres 167.7-214.8 (15.7
+    mm measured pitch, upper jacks rotate 180 to keep both release tabs
+    reachable), RJ45 8/9 at 232.6/250.3, SFP 10/11 at 280.3/294.5, SFP+
+    uplinks 0/1 at 323.3/337.5, mini-USB CON at 352.8, vertical USB at
+    365.0, MGMT at 381.4, and the SYS/ALM/MST/PH + SPD/DX/EN lamp matrix
+    with the white beacon at the right end. LINK/ST lamp pairs sit above
+    the SFP groups and ports 8/9'
+  port-numbering: 'photo - access ports print 0-11 (column pairs 01/23/45/67
+    under the RJ block, then 8, 9, 10, 11); the two SFP+ uplinks print 0 and
+    1 - a second numbering space (xe-0/1/x in the CLI), carried as printed'
+  rear: 'photo - earthing plate with two studs at the left (21.0/34.0, y 6.5,
+    approximate), ESD socket below, two fixed fan rotors at x 65/122 (r ~17),
+    the AC INPUT 100-240V 50-60Hz 3A MAX legend, power rocker at 390 and C14
+    inlet at 408. The supply is BUILT IN - no PSU bay exists on this
+    platform'
+  leds: 'guide chassis-status table: SYS green steady = Junos loaded,
+    blinking = booting; MST green steady = functioning; ALM red/amber =
+    alarm (unlit = none); PH unused (off). Port and MGMT lamp tables exist
+    in the guide; the per-port LINK/ST pairs are drawn with generic states'
+  power: 'guide specifications: maximum power consumption 140 W. The vendor
+    does not qualify an ambient - filed as max, and that reading is recorded
+    here'
+  lifecycle: 'announced - the MX150 is EOL (image-library page redirects to
+    the EOL notice; the intake''s datasheet hunt recorded no standalone
+    sheet). Per-SKU dates on the Juniper milestones page'
+  color: photo - medium grey face (#6d7175), aluminium rear
+  other-faces: 'near-blank by evidence - rail bands estimated; axis
+    conventions per viewer3d.js as on the siblings'
+attrs:
+  physical:
+    weight: 4.3 kg (Table 1)
+  power:
+    power-max-w: 140
+    power-envelope: unstated
+    psu-ac-input: 100-240 VAC, 50-60 Hz, 3 A max (rear legend), built-in
+  lifecycle:
+    eol: announced
+    eol-announcement: https://support.juniper.net/support/eol/product/m_series/
+chassis:
+  width: 441.0
+  height: 43.7
+  depth: 305.0
+  ru: 1
+  color: '#6d7175'
+groups:
+  ge:
+    term: Port
+    role: traffic
+    index-origin: 0
+    mixed: the twelve 1GbE access ports - eight RJ45 in the 2x4 block, RJ45
+      8/9, and SFP 10/11. One numbering space, two media
+  xe:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs:
+      media: sfp-plus
+      speed: 10g
+    description: The two SFP+ uplinks, silkscreened 0 and 1
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: LINK/ST pairs above the SFP groups and ports 8/9; per-port
+      lamps on the RJ block are integrated in the jacks. States per the
+      guide's port LED tables, drawn generic here
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: SYS / ALM / MST / PH chassis lamps and the SPD/DX/EN port
+      parameter selectors at the right end, per the guide tables
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: mini-USB console, USB service port and the MGMT RJ45
+  fans:
+    term: Fan
+    role: service
+    index-origin: 0
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 0
+views:
+  front:
+    size:
+      w: 441.0
+      h: 43.7
+    panel:
+      decor:
+        - {at: [0.0, 0.0], size: [45.2, 43.7], rx: 0.8, fill: '#5f6367'}
+        - {at: [48.0, 2.5], size: [255.0, 12.0], pattern: vent, vent: 40}
+        - {at: [308.0, 2.5], size: [125.0, 10.0], pattern: vent, vent: 40}
+      cutouts:
+        - {id: port-0, at: [161.35, 9.0], size: [12.7, 11.0]}
+        - {id: port-2, at: [177.05, 9.0], size: [12.7, 11.0]}
+        - {id: port-4, at: [192.75, 9.0], size: [12.7, 11.0]}
+        - {id: port-6, at: [208.45, 9.0], size: [12.7, 11.0]}
+        - {id: port-1, at: [161.35, 22.5], size: [12.7, 11.0]}
+        - {id: port-3, at: [177.05, 22.5], size: [12.7, 11.0]}
+        - {id: port-5, at: [192.75, 22.5], size: [12.7, 11.0]}
+        - {id: port-7, at: [208.45, 22.5], size: [12.7, 11.0]}
+        - {id: port-8, at: [224.6, 21.5], size: [16.0, 14.0]}
+        - {id: port-9, at: [242.3, 21.5], size: [16.0, 14.0]}
+        - {id: port-10, at: [273.05, 23.1], size: [14.25, 10.4]}
+        - {id: port-11, at: [287.3, 23.1], size: [14.25, 10.4]}
+        - {id: xe-0, at: [316.05, 23.1], size: [14.25, 10.4]}
+        - {id: xe-1, at: [330.3, 23.1], size: [14.25, 10.4]}
+        - {id: con, at: [349.05, 26.6], size: [7.5, 2.75]}
+        - {id: usb, at: [362.75, 21.5], size: [4.5, 12.0]}
+        - {id: mgmt, at: [373.4, 21.5], size: [16.0, 14.0]}
+        - {id: led-beacon, at: [434.0, 26.8], size: [3.2, 3.2], shape: circle}
+    silkscreen:
+      - {at: [6.0, 8.0], text: JUNIPER, font-size: 4.2, anchor: start, fill: '#f0f1f2'}
+      - {at: [22.5, 11.0], text: NETWORKS, font-size: 1.4, anchor: middle, fill: '#d7dadd'}
+      - {at: [6.0, 17.0], text: MX150, font-size: 3.2, anchor: start, fill: '#f0f1f2'}
+      - {at: [16.0, 36.0], text: junos, font-size: 3.0, anchor: middle, fill: '#f0f1f2'}
+      - {at: [171.5, 39.6], text: 0 1, font-size: 1.8, anchor: middle, for: [port-0, port-1]}
+      - {at: [187.2, 39.6], text: 2 3, font-size: 1.8, anchor: middle, for: [port-2, port-3]}
+      - {at: [202.9, 39.6], text: 4 5, font-size: 1.8, anchor: middle, for: [port-4, port-5]}
+      - {at: [218.6, 39.6], text: 6 7, font-size: 1.8, anchor: middle, for: [port-6, port-7]}
+      - {at: [232.6, 39.6], text: '8', font-size: 1.8, anchor: middle, for: port-8}
+      - {at: [250.3, 39.6], text: '9', font-size: 1.8, anchor: middle, for: port-9}
+      - {at: [280.3, 39.6], text: '10', font-size: 1.8, anchor: middle, for: port-10}
+      - {at: [294.5, 39.6], text: '11', font-size: 1.8, anchor: middle, for: port-11}
+      - {at: [323.3, 39.6], text: '0', font-size: 1.8, anchor: middle, for: xe-0}
+      - {at: [337.5, 39.6], text: '1', font-size: 1.8, anchor: middle, for: xe-1}
+      - {at: [352.8, 37.6], text: CON, font-size: 1.6, anchor: middle, for: con}
+      - {at: [365.0, 38.6], path: 'M -2.2 0 H 2.2 M -0.9 -1.2 L 0.4 -1.2 L 1.2
+          -0.3 M -0.9 1.2 L 0.4 1.2 L 1.2 0.3', for: usb}
+      - {at: [381.4, 37.6], text: MGMT, font-size: 1.6, anchor: middle, for: mgmt}
+      - {at: [236.0, 18.6], text: LINK  ST, font-size: 1.4, anchor: middle, for: [port-8, port-9]}
+      - {at: [287.4, 18.6], text: LINK  ST, font-size: 1.4, anchor: middle, for: [port-10, port-11]}
+      - {at: [330.4, 18.6], text: LINK  ST, font-size: 1.4, anchor: middle, for: [xe-0, xe-1]}
+      - {at: [416.5, 8.6], text: SYS, font-size: 1.5, anchor: end, for: led-sys}
+      - {at: [416.5, 13.6], text: ALM, font-size: 1.5, anchor: end, for: led-alm}
+      - {at: [416.5, 18.6], text: MST, font-size: 1.5, anchor: end, for: led-mst}
+      - {at: [416.5, 23.6], text: PH, font-size: 1.5, anchor: end, for: led-ph}
+      - {at: [436.5, 8.6], text: SPD, font-size: 1.5, anchor: end}
+      - {at: [436.5, 13.6], text: DX, font-size: 1.5, anchor: end}
+      - {at: [436.5, 18.6], text: EN, font-size: 1.5, anchor: end}
+    components:
+      placements:
+        - {id: port-0, ref: std/rj45-ganged@1, at: [161.35, 9.0], rotate: 180, group: ge, rel-pos: 0}
+        - {id: port-2, ref: std/rj45-ganged@1, at: [177.05, 9.0], rotate: 180, group: ge, rel-pos: 2}
+        - {id: port-4, ref: std/rj45-ganged@1, at: [192.75, 9.0], rotate: 180, group: ge, rel-pos: 4}
+        - {id: port-6, ref: std/rj45-ganged@1, at: [208.45, 9.0], rotate: 180, group: ge, rel-pos: 6}
+        - {id: port-1, ref: std/rj45-ganged@1, at: [161.35, 22.5], group: ge, rel-pos: 1}
+        - {id: port-3, ref: std/rj45-ganged@1, at: [177.05, 22.5], group: ge, rel-pos: 3}
+        - {id: port-5, ref: std/rj45-ganged@1, at: [192.75, 22.5], group: ge, rel-pos: 5}
+        - {id: port-7, ref: std/rj45-ganged@1, at: [208.45, 22.5], group: ge, rel-pos: 7}
+        - {id: port-8, ref: std/rj45@1, at: [224.6, 21.5], group: ge, rel-pos: 8}
+        - {id: port-9, ref: std/rj45@1, at: [242.3, 21.5], group: ge, rel-pos: 9}
+        - {id: port-10, ref: std/sfp-ganged@1, at: [273.05, 23.3], group: ge, rel-pos: 10,
+           attrs: {media: sfp, speed: 1g}}
+        - {id: port-11, ref: std/sfp-ganged@1, at: [287.3, 23.3], group: ge, rel-pos: 11,
+           attrs: {media: sfp, speed: 1g}}
+        - {id: xe-0, ref: std/sfp-ganged@1, at: [316.05, 23.3], group: xe, rel-pos: 0}
+        - {id: xe-1, ref: std/sfp-ganged@1, at: [330.3, 23.3], group: xe, rel-pos: 1}
+        - {id: con, ref: std/micro-usb@1, at: [349.05, 26.6], group: mgmt, rel-pos: 0,
+           attrs: {function: console}}
+        - {id: usb, ref: std/usb-a@1, at: [359.0, 25.25], rotate: 90, group: mgmt, rel-pos: 1,
+           attrs: {function: USB service port}}
+        - {id: mgmt, ref: std/rj45@1, at: [373.4, 21.5], group: mgmt, rel-pos: 2,
+           attrs: {function: out-of-band management}}
+        - {id: led-link-8, ref: common/led-dot@1, at: [227.0, 17.6], for: port-8, group: port-leds, rel-pos: 0}
+        - {id: led-st-8, ref: common/led-dot@1, at: [231.6, 17.6], for: port-8, group: port-leds, rel-pos: 1}
+        - {id: led-link-9, ref: common/led-dot@1, at: [244.7, 17.6], for: port-9, group: port-leds, rel-pos: 2}
+        - {id: led-st-9, ref: common/led-dot@1, at: [249.3, 17.6], for: port-9, group: port-leds, rel-pos: 3}
+        - {id: led-link-10, ref: common/led-dot@1, at: [277.3, 17.6], for: port-10, group: port-leds, rel-pos: 4}
+        - {id: led-st-10, ref: common/led-dot@1, at: [281.9, 17.6], for: port-10, group: port-leds, rel-pos: 5}
+        - {id: led-link-11, ref: common/led-dot@1, at: [291.6, 17.6], for: port-11, group: port-leds, rel-pos: 6}
+        - {id: led-st-11, ref: common/led-dot@1, at: [296.2, 17.6], for: port-11, group: port-leds, rel-pos: 7}
+        - {id: led-link-x0, ref: common/led-dot@1, at: [320.3, 17.6], for: xe-0, group: port-leds, rel-pos: 8}
+        - {id: led-st-x0, ref: common/led-dot@1, at: [324.9, 17.6], for: xe-0, group: port-leds, rel-pos: 9}
+        - {id: led-link-x1, ref: common/led-dot@1, at: [334.6, 17.6], for: xe-1, group: port-leds, rel-pos: 10}
+        - {id: led-st-x1, ref: common/led-dot@1, at: [339.2, 17.6], for: xe-1, group: port-leds, rel-pos: 11}
+        - {id: led-sys, ref: common/led-dot@1, at: [418.5, 7.1], for: chassis, group: status-leds, rel-pos: 0,
+           states: ['off', {name: junos, color: '#22c55e'}, {name: booting, color: '#22c55e', behavior: blinking}],
+           description: 'guide - green steady: Junos loaded; blinking: booting; off: powered off or halted'}
+        - {id: led-alm, ref: common/led-dot@1, at: [418.5, 12.1], for: chassis, group: status-leds, rel-pos: 1,
+           states: ['off', {name: alarm, color: '#ef4444'}],
+           description: 'guide - lit on alarm; unlit: no alarm or device halted'}
+        - {id: led-mst, ref: common/led-dot@1, at: [418.5, 17.1], for: chassis, group: status-leds, rel-pos: 2,
+           states: ['off', {name: ok, color: '#22c55e'}],
+           description: 'guide - green steady: functioning normally'}
+        - {id: led-ph, ref: common/led-dot@1, at: [418.5, 22.1], for: chassis, group: status-leds, rel-pos: 3,
+           states: ['off'],
+           description: 'guide - not used; always off'}
+  rear:
+    size:
+      w: 441.0
+      h: 43.7
+    panel:
+      decor:
+        - {at: [13.0, 2.5], size: [28.0, 9.0], rx: 1.0, fill: '#c9ccd0'}
+      cutouts:
+        - {id: ground-stud-0, at: [18.0, 3.5], size: [6.0, 6.0], shape: circle}
+        - {id: ground-stud-1, at: [31.0, 3.5], size: [6.0, 6.0], shape: circle}
+        - {id: esd-rear, at: [34.4, 11.6], size: [3.6, 3.6], shape: circle}
+        - {id: fan-0, at: [48.0, 2.0], size: [34.0, 34.0], shape: circle}
+        - {id: fan-1, at: [105.0, 2.0], size: [34.0, 34.0], shape: circle}
+    silkscreen:
+      - {at: [36.2, 20.6], path: 'M -1.4 1.2 L 0 -1.2 L 1.4 1.2 Z M -2.1 2.2
+          L -0.9 2.2 M 0.9 2.2 L 2.1 2.2', fill: '#e8eaec'}
+      - {at: [383.7, 5.0], text: 'AC INPUT: 100-240V, 50-60Hz, 3A Max', font-size: 1.5,
+         anchor: middle, fill: '#e8eaec'}
+    components:
+      placements:
+        - {id: fan-0, ref: common/fan-module@1, at: [48.0, 2.0], skin: default, group: fans, rel-pos: 0,
+           attrs: {function: fixed chassis fan}}
+        - {id: fan-1, ref: common/fan-module@1, at: [105.0, 2.0], skin: default, group: fans, rel-pos: 1,
+           attrs: {function: fixed chassis fan}}
+        - {id: power-switch, ref: common/power-button@1, at: [390.0, 10.0], group: mgmt, rel-pos: 3,
+           attrs: {function: AC power rocker}}
+        - {id: inlet, ref: std/c14-inlet@1, at: [407.5, 11.0], group: mgmt, rel-pos: 4,
+           attrs: {function: AC inlet}}
+  left:
+    size:
+      w: 305.0
+      h: 43.7
+    panel:
+      decor:
+        - {at: [0.0, 17.0], size: [305.0, 9.0], fill: '#5f6367', confidence: estimated,
+           source: 'mounting-bracket screw band along the side; estimated'}
+  right:
+    size:
+      w: 305.0
+      h: 43.7
+    panel:
+      decor:
+        - {at: [0.0, 17.0], size: [305.0, 9.0], fill: '#5f6367', confidence: estimated,
+           source: 'mirror of the left band, same estimate'}
+  top:
+    size:
+      w: 441.0
+      h: 305.0
+    panel:
+      decor:
+        - {at: [0.0, 0.0], size: [5.0, 305.0], fill: '#5f6367', confidence: estimated,
+           source: 'side edge; estimated'}
+        - {at: [436.0, 0.0], size: [5.0, 305.0], fill: '#5f6367', confidence: estimated,
+           source: 'side edge; estimated'}
+  bottom:
+    size:
+      w: 441.0
+      h: 305.0
+    panel:
+      decor:
+        - {at: [0.0, 0.0], size: [5.0, 305.0], fill: '#5f6367', confidence: estimated,
+           source: 'side edge; estimated'}
+        - {at: [436.0, 0.0], size: [5.0, 305.0], fill: '#5f6367', confidence: estimated,
+           source: 'side edge; estimated'}
+gaps:
+  - what: fan-and-switch-representation
+    scope: [rear]
+    reason: needs-drawing
+    wanted: proper MX150 fixed-fan and rocker components - the rear reuses
+      common/fan-module (a generic square FRU face) behind circular grille
+      cutouts and common/power-button for the rocker; both are stand-ins
+      sized to the photo.
+  - what: port-parameter-leds
+    scope: [status-leds]
+    reason: vendor-silent
+    wanted: the SPD/DX/EN selector lamp semantics tied to the mode button -
+      the guide's port-parameter table is transcribed only as legends here.
+  - what: supported-optics
+    scope: [ge, xe]
+    reason: vendor-silent
+    wanted: transceiver list (external compatibility tool).
