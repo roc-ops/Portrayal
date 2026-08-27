@@ -10,7 +10,7 @@ description: >-
   Goes in the rear slot that PROTECTS, which under the C100G 11+1 scheme is
   rear 5 and under the C40G 3+1 scheme is rear 1. A blank faceplate; it
   switches the RF path rather than presenting ports.
-attrs: {model: 'LC-SW-BDM'}
+attrs: {power-absent: not-applicable, model: 'LC-SW-BDM'}
 size: {w: 30.47, h: 345.5, d: 380.0}
 size-confidence: {d: known-wrong}
 size-notes: 'd 380.0 is IMPOSSIBLE - a front and a rear card mate at a midplane inside a 386.0 chassis and two at 380.0 need 760. See provenance/depth-known-wrong'
@@ -66,22 +66,21 @@ provenance:
     WANTED: either a body section - a list of depth bands with their own footprints - or the
     honest acknowledgement that a mid-plane-mating card needs its own kind.'
   power: >-
-    NONE STATED, AND FOR A DIFFERENT REASON THAN THE I/O MODULES, which is worth saying
-    because this card sits in the same L29 warning list as they do. The I/O modules are
-    silent because their figure is already carried by the BDM they pair with, so writing
-    one would double count. NOTHING LIKE THAT APPLIES HERE. This is the protection card,
-    not a paired half: it takes the rear slot that protects a BDM rather than partnering
-    one, so no other component's figure covers it and nothing would be double counted by a
-    number appearing here.
-    IT IS SIMPLY UNSOURCED. LC-BDM-SWITCH appears in both guides only in slot assignments
-    and installation steps - "LC Switch used with the BDM redundant module", "Slot 1 -
-    LC-BDM-SWITCH (for BDM line module redundancy)", "Install the SMM-SW-BDM and
-    LC-BDM-SWITCH modules at the rear side" - and never in a table with a figure beside
-    it. Searched, not assumed.
-    NO NUMBER IS ESTIMATED FROM ITS BEING A SWITCH. It is drawn as a plain plate that
-    switches the RF path rather than presenting ports, which makes a small draw plausible
-    and zero unprovable, and a plausible number is the failure this project keeps having
-    to dig back out. The L27 warning stands as the record.
+    NOT APPLICABLE, for the same reason as every other Casa rear card: it is one half of a
+    pair the vendor measures together, and the front card already carries the number. THIS
+    ONE LOOKS LIKE AN EXCEPTION AND IS NOT. It is a redundancy switch rather than an
+    ordinary I/O module, so it is tempting to treat it as a part in its own right that Casa
+    simply never rated. But it occupies an ORDINARY REAR I/O SLOT - the C100G's rear-5 bay
+    accepts casa/rfd, casa/rfu-16x8, casa/ups-32x4 and this card as alternatives to each
+    other - so it is the rear half of a BDM position exactly as they are, sitting behind the
+    BDM that protects rather than behind one that works. Casa's figure for that position is
+    'Approximately 300W per BDM', stated in a table headed 'BDM 6+12 (BDM with 6+12 IO)',
+    and the front contract carries power-draw-scope: module-with-paired-io to say so. So a
+    chassis total is COMPLETE without a number here rather than a floor, which is the
+    distinction between this value and not-published. Recording a wattage would double
+    count. Contrast the SMM switch BDMs, which ARE not-published: they sit in dedicated bays
+    that take nothing else, and Casa's SMM figures are headed 'SMM power consumption' rather
+    than being scoped to a pair, so nothing upstream accounts for them.
   layout: drawing - Figure 1-14 of the C100G Hardware Installation Guide shows
     LC-SW-BDM as a plain plate with a model band and no connectors
   slot: datasheet - "Slot 5 - LC-BDM-SWITCH (for BDM line module redundancy)"
