@@ -744,7 +744,20 @@ export function createViewer(container, opts = {}) {
       if (devIndex.chassis && devIndex.chassis.w) {
         W = devIndex.chassis.w; H = devIndex.chassis.h; D = devIndex.chassis.d;
       }
-      camera.position.set(W * 0.95, H * 6, D * 1.2);
+      // THE OPENING VIEW IS SET FROM THE WHOLE BOX, NOT FROM ITS HEIGHT.
+      // This was `H * 6`, which reads as a pleasant three-quarter view only
+      // while H is small: at 1RU it puts the eye 261 mm up and 362 mm back,
+      // about 25 degrees above horizontal. On a 13RU chassis the same formula
+      // gives 3426 mm up against 463 mm back - 82 degrees, near plan view - and
+      // the C100G opened as a featureless silver diamond that reads as a broken
+      // render rather than as its own top panel seen from above. A device's
+      // height is the one dimension that varies by more than tenfold across the
+      // portfolio, so it is the worst possible thing to scale the camera by.
+      // The span is stable: every device now opens at about 22 degrees.
+      // The same framing the component path below already uses, rather than a
+      // third set of constants: one opening view, two callers.
+      const span = Math.max(W, H, D);
+      camera.position.set(span * 0.9, span * 0.8, span * 1.6);
       controls.target.set(0, 0, 0);
     }
     CFG = config || devIndex.default;
