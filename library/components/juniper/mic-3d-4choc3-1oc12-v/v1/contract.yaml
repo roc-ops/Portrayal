@@ -9,12 +9,21 @@ description: >-
   Juniper channelized OC3/STM1 circuit-emulation MIC with SFP - eight cages in two 2x2 PIC groups. Vertical author for the vertical carriers (MX960/MX2000 MPCs stand on end, and their MICs with them).
 attrs:
   model: MIC-3D-4COC3-1COC12-CE
+  power-draw-max-w: 36.48
 provenance:
   size: 'registry + layout - the face is the slot geometry of its chassis
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
     drawing. No faceplate figure was usable for this model'
-  power: 'NOT STATED for this model in the module reference extraction - L27 stands'
+  power: >-
+    guide FRU power table, MX chassis guides: '36.48 Wat 131 F (55 C) 35.04 Wat 40 C 33.96 Wat 77 F (25 C)'. The max at 55 C is
+    carried, because the worst rated case is what a chassis budget needs.
+    Read off the row, with the part number alone in its own cell - the looser
+    extraction that preceded this put the MPC7E's number on the MPC6E and took a
+    25 C figure for a max, so a row only counts here when nothing else in it
+    could be the subject.
+    The note this replaces said the module reference does not carry it. True of
+    the book it named; the chassis guides do.
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'
