@@ -9,12 +9,27 @@ description: >-
   Juniper MPC7E-MRATE fixed MPC - twelve multirate QSFP28 cages in two PIC groups of six. Authored as the MX240/MX480 horizontal form.
 attrs:
   model: MPC7E-MRATE
+  power-draw-max-w: 545
 provenance:
   size: 'registry + layout - the face is the slot geometry of its chassis
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
     drawing. No faceplate figure was usable for this model'
-  power: 'NOT STATED for this model in the module reference extraction - L27 stands'
+  power: >-
+    guide FRU power table, MX960 chassis guide and identically in the MX2010,
+    MX2020, MX240 and MX480 siblings: 'With optics: 545 W at 131 F (55 C), 465 W
+    at 104 F (40 C), 440 W at 77 F (25 C)'. The max at 55 C is carried, because
+    the worst rated case is what a chassis budget needs.
+    THE FIGURE INCLUDES OPTICS, which the vendor says and which decides a double
+    count: the transceivers seated in this card are `common/` generics that L27
+    deliberately never asks for a wattage, so nothing else in a total carries
+    them. The same row also gives 400 W typical and 1088 W with MICs and optics;
+    neither is this card's own max, and the MICs are separately modelled parts
+    that answer for themselves. READ OFF THE ROW BY HAND. The module reference does not carry it, which is what the note replaced
+    here said and it was true of the book it named. THE CHASSIS GUIDES DO: every
+    MX chassis guide ends with an FRU power table and this card is in it. That is
+    the intake skill's own lesson arriving late - a second source answering the
+    question the first could not, and nothing going back to ask it.
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'
