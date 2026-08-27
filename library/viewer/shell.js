@@ -255,7 +255,20 @@ export function createShell(opts = {}) {
         if (filled && filled !== n) parent = filled;
       }
       if (!parent && n.el.dataset.for) {
-        const here = n.el.dataset.for.split(' ').find(t => t[0] !== '/');
+        const local = n.el.dataset.for.split(' ').filter(t => t[0] !== '/');
+        // A PART THAT NAMES SEVERAL OWNERS IS NOT A CHILD OF THE FIRST ONE.
+        // The C40G's snap-on filter cover is `for` all four PSU bays, and taking
+        // the first target buried a removable full-width panel inside PSU 1 -
+        // so the owner looking for it in the list could not find it, and the
+        // three other bays it covers said nothing about it.
+        //
+        // Only for PLACED COMPONENTS, which is what data-ref marks. A shared
+        // legend is the opposite case and stays as it was: "0/1" printed between
+        // two ports is a mark, it names both, and nesting it under the first of
+        // an adjacent pair reads correctly. Lifting those out would have put 74
+        // rows back at the top of the AGR420, which is the tree this already fixed.
+        const single = local.length === 1 || !n.el.dataset.ref;
+        const here = single ? local[0] : null;
         const owner = here && byPath.get(here);
         if (owner && owner !== n) parent = owner;
         // AN INDICATOR WITH ONLY CROSS-VIEW TARGETS STILL BELONGS TO SOMETHING.
