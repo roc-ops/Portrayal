@@ -9,12 +9,20 @@ description: >-
   Juniper 12-port multirate QSFP28 MIC for the MX2000 MPC8E/MPC9E; only the vertical author exists.
 attrs:
   model: MIC-MRATE
+  power-draw-max-w: 85
 provenance:
   size: 'registry + layout - the face is the slot geometry of its chassis
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
     drawing. No faceplate figure was usable for this model'
-  power: 'NOT STATED for this model in the module reference extraction - L27 stands'
+  power: >-
+    guide FRU power table, MX chassis guides: '| MIC MRATE | MIC-MRATE | - When installed
+    into MPC8E: 1.250 A @48 V (60 W) - When installed into MPC9E: 1.771 A @48 V (85 W) |'.
+    THIS PART'S DRAW DEPENDS ON ITS CARRIER and the vendor states both cases. The 85 W is
+    carried because this key is the worst rated case; in an MPC8E the same MIC draws 60 W,
+    so a budget for that carrier may take this figure as 25 W pessimistic. The vendor gives
+    current and voltage alongside and its own product agrees with both: 1.250 x 48 = 60.0
+    and 1.771 x 48 = 85.0.
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'
