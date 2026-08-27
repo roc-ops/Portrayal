@@ -1,0 +1,301 @@
+format: 1
+kind: device
+name: mx80
+version: 0.1.0
+maturity: modelled
+manufacturer: Juniper
+model: MX80
+portfolio:
+  line: MX Series
+  family: 3D Universal Edge Router
+description: >-
+  Juniper MX80 modular chassis (EOL) - the 2RU box the MX5, MX10, MX40 and
+  MX80 all share, differing only in licensed capacity. Two MIC slots across
+  the top (1/MIC 0, 1/MIC 1), and below them the two AC supplies (PS 0/PS 1),
+  the fixed blue Routing Engine panel (CONSOLE/AUX, ETHERNET/USB, EXT CLK
+  A/B, SYS/RE lamps) with the four fixed 10GbE XFP ports (0/MIC 0), and the
+  side-pull fan tray behind the JUNIPER-branded door at the right.
+provenance:
+  sources: MX5/MX10/MX40/MX80 Hardware Guide (extracted into
+    working/images/mx5-mx10-mx40-mx80/), and the image-library photographs
+    mx80-front-high and mx80-rear-high (the mx5 set is the same base asset,
+    recorded in the photo catalogue). No mechanical drawing was available
+  chassis: 'datasheet-table - the guide chassis description: 3.5 x 17.5 x
+    23.46 in (88.9 x 445 x 596 mm), 2RU. Ears NOT MODELLED by convention'
+  shared-chassis: 'guide - the MX5, MX10, MX40 and MX80 are one chassis with
+    different capacity licences and MIC entitlements (guide Figures 5-9);
+    they are modelled as ONE device with the SKUs as configurations. The
+    FIXED MX80 variant (Figure 8, 48x1GbE built in) is a different faceplate
+    and is not modelled - see gaps'
+  scale: 'photo - per-axis anchoring of the front photograph (body between
+    the ear wings anchored to 445 mm; rows to 88.9). Positions are
+    single-pass readings approximate to ~2 mm'
+  front: 'photo - MIC row y 7-41.5 with slots at x 25.0 and 193.4 (the
+    reference unit carries the 20x1GE SFP MIC and the 2x10GE XFP MIC);
+    PS 0/PS 1 at x 14.7/86.2 in the lower band; the blue RE panel from
+    162.6 to 406 carrying CONSOLE over AUX (x 190), ETHERNET over USB
+    (x 213), EXT CLK A over B (x 232), the SYS OK / RE lamps and
+    ONLINE/OFFLINE button at its left, and the four fixed XFP cages at
+    centres 261.6-349.7 with LINK lamps, silkscreened 0-3 over 0/MIC 0;
+    the MX80 badge at 355; the fan-tray door at 407-445'
+  rear: 'photo - a blank cover plate over the upper-left aperture labelled
+    MPC 0 / MIC 1, the CLK and SYNC jacks at x 68/105 (y 75), the two-hole
+    earthing plate and ESD at the right. The jacks are drawn as SMB
+    (photograph resolution cannot distinguish SMB from BNC - recorded)'
+  power: 'NOT STATED at chassis level in the extraction; per-module rows
+    were not captured either. The L27/L29 warnings stand as the record'
+  lifecycle: 'announced - the whole MX5-MX80 family is EOL (guide banners
+    and family tables); per-SKU dates on the Juniper milestones page'
+  color: 'photo - dark charcoal chassis, silver MICs, dark blue RE panel and
+    fan door (Juniper''s MX80-era styling)'
+  other-faces: 'near-blank by evidence - rail bands estimated; axis
+    conventions per viewer3d.js as the siblings'
+attrs:
+  physical:
+    weight-note: not captured in this extraction (see gaps)
+  lifecycle:
+    eol: announced
+    eol-announcement: https://support.juniper.net/support/eol/product/m_series/
+chassis:
+  width: 445.0
+  height: 88.9
+  depth: 596.0
+  ru: 2
+  color: '#2b2f36'
+groups:
+  mics:
+    term: Slot
+    role: traffic
+    index-origin: 0
+    description: MIC slots 1/MIC 0 and 1/MIC 1 across the top
+  xe:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs:
+      media: xfp
+      speed: 10g
+    description: The four fixed 10GbE XFP ports (0/MIC 0), silkscreened 0-3
+  xe-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: LINK lamp beside each fixed XFP port
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: the fixed Routing Engine panel - CONSOLE/AUX, ETHERNET/USB, the
+      EXT CLK A/B jacks and the SYS OK / RE lamps with the ONLINE/OFFLINE
+      button
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+  timing:
+    term: Port
+    role: management
+    index-origin: 0
+    description: the rear CLK and SYNC clock jacks
+  psus:
+    term: PSU
+    role: service
+    index-origin: 0
+  cooling:
+    term: Tray
+    role: service
+    index-origin: 0
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 0
+views:
+  front:
+    size:
+      w: 445.0
+      h: 88.9
+    panel:
+      decor:
+        - {at: [157.0, 43.0], size: [249.0, 45.9], rx: 0.0, fill: '#232a45'}
+      cutouts:
+        - {id: xe-0, at: [251.85, 62.15], size: [19.5, 9.7]}
+        - {id: xe-1, at: [281.25, 62.15], size: [19.5, 9.7]}
+        - {id: xe-2, at: [310.55, 62.15], size: [19.5, 9.7]}
+        - {id: xe-3, at: [339.95, 62.15], size: [19.5, 9.7]}
+        - {id: console, at: [182.0, 47.5], size: [16.0, 14.0]}
+        - {id: aux, at: [182.0, 66.5], size: [16.0, 14.0]}
+        - {id: ethernet, at: [205.0, 47.5], size: [16.0, 14.0]}
+        - {id: usb, at: [210.75, 64.5], size: [4.5, 12.0]}
+        - {id: clk-a, at: [224.0, 47.5], size: [16.0, 14.0]}
+        - {id: clk-b, at: [224.0, 66.5], size: [16.0, 14.0]}
+        - {id: led-sys-ok, at: [167.0, 63.0], size: [2.2, 2.2], shape: circle}
+        - {id: led-re, at: [173.5, 63.0], size: [2.2, 2.2], shape: circle}
+        - {id: btn-online, at: [166.5, 75.5], size: [3.4, 3.4], shape: circle}
+    silkscreen:
+      - {at: [96.5, 5.6], text: 1/MIC 0, font-size: 2.2, anchor: middle, fill: '#e8eaec', for: mic-1-0}
+      - {at: [264.5, 5.6], text: 1/MIC 1, font-size: 2.2, anchor: middle, fill: '#e8eaec', for: mic-1-1}
+      - {at: [6.5, 60.0], text: PS 0, font-size: 2.0, anchor: middle, fill: '#e8eaec', for: ps0}
+      - {at: [163.5, 58.5], text: PS 1, font-size: 2.0, anchor: middle, fill: '#e8eaec', for: ps1}
+      - {at: [167.0, 68.0], text: SYS OK, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: led-sys-ok}
+      - {at: [173.5, 68.0], text: RE, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: led-re}
+      - {at: [166.5, 81.5], text: ONLINE, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: btn-online}
+      - {at: [166.5, 83.6], text: OFFLINE, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: btn-online}
+      - {at: [190.0, 45.6], text: CONSOLE, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: console}
+      - {at: [190.0, 84.5], text: AUX, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: aux}
+      - {at: [213.0, 45.6], text: ETHERNET, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: ethernet}
+      - {at: [213.0, 84.5], text: USB, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: usb}
+      - {at: [232.0, 45.6], text: A, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: clk-a}
+      - {at: [240.5, 51.5], text: EXT CLK, font-size: 1.6, anchor: start, fill: '#e8eaec', for: [clk-a, clk-b]}
+      - {at: [232.0, 84.5], text: B, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: clk-b}
+      - {at: [261.6, 59.8], text: '0', font-size: 1.8, anchor: middle, fill: '#e8eaec', for: xe-0}
+      - {at: [291.0, 59.8], text: '1', font-size: 1.8, anchor: middle, fill: '#e8eaec', for: xe-1}
+      - {at: [320.3, 59.8], text: '2', font-size: 1.8, anchor: middle, fill: '#e8eaec', for: xe-2}
+      - {at: [349.7, 59.8], text: '3', font-size: 1.8, anchor: middle, fill: '#e8eaec', for: xe-3}
+      - {at: [305.5, 84.5], text: 0/MIC 0, font-size: 1.8, anchor: middle, fill: '#e8eaec', for: [xe-0, xe-1, xe-2, xe-3]}
+      - {at: [381.0, 56.0], text: MX80, font-size: 5.0, anchor: middle, fill: '#f0f1f2'}
+      - {at: [396.0, 47.0], text: FAN, font-size: 1.8, anchor: middle, fill: '#e8eaec', for: fan-tray}
+      - {at: [277.4, 66.7], text: LINK, font-size: 1.2, anchor: start, fill: '#e8eaec', for: xe-0}
+      - {at: [306.8, 66.7], text: LINK, font-size: 1.2, anchor: start, fill: '#e8eaec', for: xe-1}
+      - {at: [336.1, 66.7], text: LINK, font-size: 1.2, anchor: start, fill: '#e8eaec', for: xe-2}
+      - {at: [365.5, 66.7], text: LINK, font-size: 1.2, anchor: start, fill: '#e8eaec', for: xe-3}
+    components:
+      bays:
+        - {id: mic-1-0, at: [25.0, 7.0], size: {w: 168.0, h: 31.0},
+           accepts: [juniper/mic-3d-20ge-sfp@1, juniper/mic-3d-2xge-xfp@1, juniper/mic-3d-4choc3-1oc12@1],
+           default: juniper/mic-3d-20ge-sfp@1, group: mics, rel-pos: 0}
+        - {id: mic-1-1, at: [193.4, 7.0], size: {w: 168.0, h: 31.0},
+           accepts: [juniper/mic-3d-20ge-sfp@1, juniper/mic-3d-2xge-xfp@1, juniper/mic-3d-4choc3-1oc12@1],
+           default: juniper/mic-3d-2xge-xfp@1, group: mics, rel-pos: 1}
+        - {id: ps0, at: [14.7, 44.0], size: {w: 72.0, h: 44.0},
+           accepts: [juniper/mx80-psu-ac@1], default: juniper/mx80-psu-ac@1,
+           group: psus, rel-pos: 0}
+        - {id: ps1, at: [86.7, 44.0], size: {w: 72.0, h: 44.0},
+           accepts: [juniper/mx80-psu-ac@1], default: juniper/mx80-psu-ac@1,
+           group: psus, rel-pos: 1}
+        - {id: fan-tray, at: [407.0, 0.0], size: {w: 38.0, h: 88.9},
+           accepts: [juniper/mx80-fan-tray@1], default: juniper/mx80-fan-tray@1,
+           group: cooling, rel-pos: 0}
+      placements:
+        - {id: xe-0, ref: std/xfp@1, at: [251.85, 62.15], group: xe, rel-pos: 0}
+        - {id: xe-1, ref: std/xfp@1, at: [281.25, 62.15], group: xe, rel-pos: 1}
+        - {id: xe-2, ref: std/xfp@1, at: [310.55, 62.15], group: xe, rel-pos: 2}
+        - {id: xe-3, ref: std/xfp@1, at: [339.95, 62.15], group: xe, rel-pos: 3}
+        - {id: led-link-0, ref: common/led-dot@1, at: [274.0, 66.0], for: xe-0, group: xe-leds, rel-pos: 0}
+        - {id: led-link-1, ref: common/led-dot@1, at: [303.4, 66.0], for: xe-1, group: xe-leds, rel-pos: 1}
+        - {id: led-link-2, ref: common/led-dot@1, at: [332.7, 66.0], for: xe-2, group: xe-leds, rel-pos: 2}
+        - {id: led-link-3, ref: common/led-dot@1, at: [362.1, 66.0], for: xe-3, group: xe-leds, rel-pos: 3}
+        - {id: console, ref: std/rj45@1, at: [182.0, 47.5], rotate: 180, group: mgmt, rel-pos: 0,
+           attrs: {function: serial console}}
+        - {id: aux, ref: std/rj45@1, at: [182.0, 66.5], group: mgmt, rel-pos: 1,
+           attrs: {function: auxiliary console}}
+        - {id: ethernet, ref: std/rj45@1, at: [205.0, 47.5], rotate: 180, group: mgmt, rel-pos: 2,
+           attrs: {function: out-of-band management}}
+        - {id: usb, ref: std/usb-a@1, at: [207.0, 68.25], rotate: 90, group: mgmt, rel-pos: 3,
+           attrs: {function: USB service port}}
+        - {id: clk-a, ref: std/rj45@1, at: [224.0, 47.5], rotate: 180, group: mgmt, rel-pos: 4,
+           attrs: {function: external clock A}}
+        - {id: clk-b, ref: std/rj45@1, at: [224.0, 66.5], group: mgmt, rel-pos: 5,
+           attrs: {function: external clock B}}
+        - {id: led-sys-ok, ref: common/led-dot@1, at: [167.0, 63.0], for: chassis,
+           group: status-leds, rel-pos: 0,
+           states: ['off', {name: ok, color: '#22c55e'}],
+           description: SYS OK - green when the system is up}
+        - {id: led-re, ref: common/led-dot@1, at: [173.5, 63.0], for: chassis,
+           group: status-leds, rel-pos: 1,
+           states: ['off', {name: ok, color: '#22c55e'}, {name: fail, color: '#ef4444'}],
+           description: RE status lamp}
+        - {id: btn-online, ref: common/reset-button@1, at: [166.5, 75.5], for: chassis,
+           group: mgmt, rel-pos: 6, attrs: {function: online/offline}}
+  rear:
+    size:
+      w: 445.0
+      h: 88.9
+    panel:
+      decor:
+        - {at: [48.0, 8.0], size: [170.0, 32.0], rx: 1.2, fill: '#c9ccd0'}
+      cutouts:
+        - {id: clk, at: [65.6, 72.6], size: [4.83, 4.83], shape: circle}
+        - {id: sync, at: [102.6, 72.6], size: [4.83, 4.83], shape: circle}
+        - {id: ground-stud-0, at: [392.0, 10.0], size: [5.5, 5.5], shape: circle}
+        - {id: ground-stud-1, at: [392.0, 24.0], size: [5.5, 5.5], shape: circle}
+        - {id: esd-rear, at: [428.0, 8.0], size: [4.0, 4.0], shape: circle}
+    silkscreen:
+      - {at: [258.0, 20.0], text: MPC 0, font-size: 3.2, anchor: start, fill: '#3a3e43'}
+      - {at: [262.0, 25.0], text: MIC 1, font-size: 2.0, anchor: start, fill: '#3a3e43'}
+      - {at: [68.0, 68.0], text: CLK, font-size: 1.8, anchor: middle, fill: '#3a3e43', for: clk}
+      - {at: [105.0, 68.0], text: SYNC, font-size: 1.8, anchor: middle, fill: '#3a3e43', for: sync}
+      - {at: [378.0, 22.0], path: 'M 0 -4.2 A 4.2 4.2 0 1 0 0.01 -4.2 Z M -2.4
+          -1.1 H 2.4 M -1.6 0.5 H 1.6 M -0.7 2.1 H 0.7', fill: '#3a3e43'}
+    components:
+      placements:
+        - {id: clk, ref: std/smb@1, at: [65.6, 72.6], group: timing, rel-pos: 0,
+           attrs: {function: external clock input}}
+        - {id: sync, ref: std/smb@1, at: [102.6, 72.6], group: timing, rel-pos: 1,
+           attrs: {function: sync}}
+  left:
+    size:
+      w: 596.0
+      h: 88.9
+    panel:
+      decor:
+        - {at: [0.0, 38.0], size: [596.0, 12.0], fill: '#232730', confidence: estimated,
+           source: 'rail band; estimated'}
+  right:
+    size:
+      w: 596.0
+      h: 88.9
+    panel:
+      decor:
+        - {at: [40.0, 8.0], size: [500.0, 72.0], pattern: holes, confidence: estimated,
+           source: 'fan-tray side exhaust; extent estimated'}
+  top:
+    size:
+      w: 445.0
+      h: 596.0
+    panel:
+      decor:
+        - {at: [0.0, 0.0], size: [5.0, 596.0], fill: '#232730', confidence: estimated,
+           source: 'side edge; estimated'}
+        - {at: [440.0, 0.0], size: [5.0, 596.0], fill: '#232730', confidence: estimated,
+           source: 'side edge; estimated'}
+  bottom:
+    size:
+      w: 445.0
+      h: 596.0
+    panel:
+      decor:
+        - {at: [0.0, 0.0], size: [5.0, 596.0], fill: '#232730', confidence: estimated,
+           source: 'side edge; estimated'}
+        - {at: [440.0, 0.0], size: [5.0, 596.0], fill: '#232730', confidence: estimated,
+           source: 'side edge; estimated'}
+configurations:
+  mx80:
+    description: Full-capacity MX80 - both MIC slots active, 80 Gbps class.
+    default: true
+  mx40:
+    description: MX40 licence tier of the same chassis - 40 Gbps class; the
+      chassis and faceplate are identical (guide Figure 7).
+  mx10:
+    description: MX10 licence tier - 10 Gbps class, same chassis (Figure 6).
+  mx5:
+    description: MX5 licence tier - 5 Gbps class, same chassis (Figure 5);
+      MIC slot availability grows by licence, not by hardware.
+gaps:
+  - what: mx80-fixed-variant
+    reason: needs-photo
+    wanted: the fixed MX80 faceplate (Figure 8, built-in 48x1GbE) - a
+      different front panel that would be a second device or configuration;
+      only the modular chassis is modelled.
+  - what: dc-power-variant
+    scope: [psus]
+    reason: needs-photo
+    wanted: the DC supply face (guide Figure 16 is isometric line art).
+  - what: chassis-weight-and-power
+    reason: vendor-silent
+    wanted: the weight and power tables - outside this extraction's text
+      layer; L27/L29 warnings stand on the modules.
+  - what: rear-clock-jack-type
+    scope: [timing]
+    reason: needs-photo
+    wanted: confirmation whether the rear CLK/SYNC jacks are SMB or BNC -
+      drawn SMB, photo resolution insufficient.
