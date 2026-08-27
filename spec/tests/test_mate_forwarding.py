@@ -104,3 +104,47 @@ def test_the_two_modelled_optics_have_a_cage_that_will_take_them():
             continue
         assert d["mates"] in presented, \
             f"{d['name']} mates {d['mates']!r} and no port presents it"
+
+
+def test_a_composed_port_is_as_deep_as_its_aperture():
+    """With mating working, a module actually seats - and a cage with no depth
+    puts it in a flat patch painted on the panel rather than a recess."""
+    shallow = []
+    for p in sorted(glob.glob(str(ROOT / "library/components/*/*/v*/contract.yaml"))):
+        d = yaml.safe_load(open(p)) or {}
+        if d.get("class") != "port" or d.get("interface"):
+            continue
+        iface, at = presented_interface(d, resolve)
+        if not iface:
+            continue
+        if (d.get("size") or {}).get("d"):
+            continue
+        # only fair to ask when the aperture itself states one
+        deep = {(resolve(part.get("ref")) or {}).get("size", {}).get("d")
+                for part in (d.get("parts") or [])}
+        if deep - {None}:
+            shallow.append(p.split("components/")[1])
+    assert not shallow, f"composed ports with an aperture depth but none of their own: {shallow}"
+
+
+def test_a_component_with_one_skin_does_not_need_it_named():
+    """`qsfp-transceiver` declares `skins: [lc]` and no default, deliberately.
+    Seating it used to fail with a bare FileNotFoundError on default.svg."""
+    import subprocess, tempfile, shutil, re as _re
+    dev = ROOT / "library/devices/edgecore/as7726-32x/device.yaml"
+    original = dev.read_text()
+    try:
+        m = _re.search(r"^  ac-f2b:\n", original, _re.M)
+        dev.write_text(original[:m.end()]
+                       + "    occupants: {port-1: common/qsfp-transceiver@1}\n"
+                       + original[m.end():])
+        out = tempfile.mkdtemp()
+        r = subprocess.run([sys.executable, str(ROOT / "spec/tools/portrayal/render.py"),
+                            str(dev), "--library", str(ROOT / "library"), "--out", out],
+                           capture_output=True, text=True)
+        assert r.returncode == 0, r.stderr[-400:]
+        svg = pathlib.Path(out, "as7726-32x.ac-f2b.front.svg").read_text()
+        assert "port-1-occupant" in svg, "the optic did not seat"
+        shutil.rmtree(out, ignore_errors=True)
+    finally:
+        dev.write_text(original)

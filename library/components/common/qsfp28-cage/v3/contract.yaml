@@ -5,9 +5,16 @@ version: 3.2.0
 class: port
 profile: networking
 description: QSFP28 cage at the measured 19.0mm ganged pitch, four round per-lane LEDs (v3 = composed - cage bezel wraps a std/qsfp-ganged aperture core; ganged cages keep vendor pitch, the aperture is the standard part)
-size: {w: 19.0, h: 14.5}
+size: {w: 19.0, h: 14.5, d: 37.0}
 attrs: {media: qsfp28, speed: 100g, lanes: '4'}
 provenance:
+  depth: >-
+    derived - the std/qsfp-ganged@1 aperture this composes is 37.0 mm deep, and a bezel
+    around an aperture is as deep as the aperture. Stated so the 3D view has a recess to
+    extrude and a seated module has a hole to sit in: with the mating fix in #54 a module
+    now actually seats here, and a cage with no depth put it in a flat patch painted on the
+    panel. Not a new measurement - the number is the aperture's own, read through the part
+    that composes it.
   size: measured (TE 2322551-4 ganged QSFP cage - pitch 19.000, opening 18.500,
     shared wall 0.500). The previous 18.5 was the OPENING width mistaken for the
     pitch, which would have left no cage wall at all between ganged ports

@@ -5,9 +5,16 @@ version: 2.0.0
 class: port
 profile: networking
 description: SFP+ cage (v2 = composed - bezel wraps a std/sfp cutout core)
-size: {w: 16.0, h: 10.0}
+size: {w: 16.0, h: 10.0, d: 41.0}
 attrs: {media: sfp-plus, speed: 10g}
 provenance:
+  depth: >-
+    derived - the std/sfp@1 aperture this composes is 41.0 mm deep, and a bezel around an
+    aperture is as deep as the aperture. Stated so the 3D view has a recess to extrude and a
+    seated module has a hole to sit in: with the mating fix in #54 a module now actually
+    seats here, and a cage with no depth put it in a flat patch painted on the panel. Not a
+    new measurement - the number is the aperture's own, read through the part that composes
+    it.
   size: estimated (bezel margin around standard cutout)
   cutout: standard (SFF-8432 via std/sfp)
 elements: {}

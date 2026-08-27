@@ -7,9 +7,16 @@ profile: networking
 description: RJ45 panel port with jack-outline bezel (v4 = silver plate over the
   cutout leaving a plug-shaped aperture, stepped keyway up; link/activity LEDs sit
   in the bezel corner tabs beside the keyway)
-size: {w: 17.0, h: 14.9}
+size: {w: 17.0, h: 14.9, d: 16.0}
 attrs: {media: rj45}
 provenance:
+  depth: >-
+    derived - the std/rj45@1 aperture this composes is 16.0 mm deep, and a bezel around an
+    aperture is as deep as the aperture. Stated so the 3D view has a recess to extrude and a
+    seated module has a hole to sit in: with the mating fix in #54 a module now actually
+    seats here, and a cage with no depth put it in a flat patch painted on the panel. Not a
+    new measurement - the number is the aperture's own, read through the part that composes
+    it.
   bezel-window: generated from the std cavity silhouette (11.89 x 6.85 body
     + 4.0 x 2.6 keyway, TE 2497310-1 CAD) so the plate frames the recess exactly
     rather than approximating it

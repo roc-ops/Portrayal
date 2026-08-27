@@ -9,9 +9,16 @@ description: Plain QSFP cage (no lane LEDs) - bezel around a std/qsfp-ganged
   ON THE FACEPLATE, not part of the cage assembly, so it moved out to the device's
   panel.decor and the box no longer claims the 3mm of panel it sits on; the skin
   variants existed only to carry that band's colour and collapse into one)
-size: {w: 19.5, h: 10.18}
+size: {w: 19.5, h: 10.18, d: 37.0}
 attrs: {media: qsfp28, speed: 100g}
 provenance:
+  depth: >-
+    derived - the std/qsfp-ganged@1 aperture this composes is 37.0 mm deep, and a bezel
+    around an aperture is as deep as the aperture. Stated so the 3D view has a recess to
+    extrude and a seated module has a hole to sit in: with the mating fix in #54 a module
+    now actually seats here, and a cage with no depth put it in a flat patch painted on the
+    panel. Not a new measurement - the number is the aperture's own, read through the part
+    that composes it.
   size: 'drawing-inferred (S9510-28DC HIG Fig 9) for the 19.5 width and the 0.6
     bezel flange above the opening; the height is then derived, not measured -
     0.6 + the 9.58 standard opening of std/qsfp-ganged = 10.18. The v1 box was

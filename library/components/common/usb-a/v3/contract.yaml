@@ -6,9 +6,16 @@ class: port
 profile: networking
 description: USB Type-A port in a silver panel bezel (v3 = bezel plate spans the
   component so it can abut neighboring port bezels; receptacle centered)
-size: {w: 17.0, h: 9.3}
+size: {w: 17.0, h: 9.3, d: 13.7}
 attrs: {media: usb-a}
 provenance:
+  depth: >-
+    derived - the std/usb-a@1 aperture this composes is 13.7 mm deep, and a bezel around an
+    aperture is as deep as the aperture. Stated so the 3D view has a recess to extrude and a
+    seated module has a hole to sit in: with the mating fix in #54 a module now actually
+    seats here, and a cage with no depth put it in a flat patch painted on the panel. Not a
+    new measurement - the number is the aperture's own, read through the part that composes
+    it.
   size: drawing-inferred (S9510-28DC HIG - bezel bridges mgmt and console jacks)
   opening: standard (USB 3.0 via std/usb-a)
 elements:

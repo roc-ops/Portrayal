@@ -7,9 +7,16 @@ profile: networking
 description: High-density ganged RJ45 port with a jack-outline bezel - silver plate
   over the cutout leaving the plug silhouette open (body plus stepped keyway), two
   link/activity LEDs in the outer corners; the mirrored bottom row is the same part rotated 180 at placement
-size: {w: 14.0, h: 12.0}
+size: {w: 14.0, h: 12.0, d: 16.0}
 attrs: {media: rj45, speed: 1g}
 provenance:
+  depth: >-
+    derived - the std/rj45-ganged@1 aperture this composes is 16.0 mm deep, and a bezel
+    around an aperture is as deep as the aperture. Stated so the 3D view has a recess to
+    extrude and a seated module has a hole to sit in: with the mating fix in #54 a module
+    now actually seats here, and a cage with no depth put it in a flat patch painted on the
+    panel. Not a new measurement - the number is the aperture's own, read through the part
+    that composes it.
   stacking: an RJ45 pair is stacked one of three ways, expressed with rotate at
     placement rather than as separate components, since orientation belongs to
     the pair and not to the jack. This part draws pins up and keyway down when

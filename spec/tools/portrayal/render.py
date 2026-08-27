@@ -265,6 +265,26 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                 if style:
                     palette[(comp, st["name"])] = style
     skin_file = skins / f"{skin_name}.svg"
+    if not skin_file.exists():
+        # A COMPONENT NEED NOT HAVE A SKIN CALLED `default`, and one deliberately
+        # does not: `common/qsfp-transceiver` declares `skins: [lc]` alone,
+        # because parts are emitted per skin and an MPO face would need a second
+        # skin nobody has drawn. Naming that optic as an occupant therefore
+        # failed with a bare FileNotFoundError on default.svg - a stack trace
+        # where the answer is "say which face you want".
+        #
+        # One skin means no choice to make, so make it. More than one is a real
+        # question and the error now asks it by name.
+        declared = [n for n in (contract.get("skins") or [])
+                    if (skins / f"{n}.svg").exists()]
+        if len(declared) == 1 and skin_name == "default":
+            skin_file = skins / f"{declared[0]}.svg"
+        else:
+            raise ValueError(
+                f"{ref}: no skin {skin_name!r}. It has "
+                + (f"{declared} - name one in the configuration's `skins:`, "
+                   f"as `skins: {{{comp_name}: {declared[0]}}}`" if declared
+                   else "no skin files at all"))
     skin = ET.parse(skin_file).getroot()
     path = path or inst_id
     if resolved is not None:
