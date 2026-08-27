@@ -1,0 +1,55 @@
+format: 1
+kind: module
+name: jnp10k-lc2101
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper JNP10K-LC2101 line card - 2.4 Tbps, 24 QSFP28 cages in six 2x2
+  blocks (ports n/0 over n/1), with the 96-lamp per-channel status matrix
+  at the right, for the MX10008/MX10016.
+attrs:
+  model: JNP10K-LC2101
+  power-draw-typical-w: 1335
+  power-draw-max-w: 1425
+provenance:
+  size: 'datasheet-table - the family FRU table: 1.89 x 17.2 x 19.05 in;
+    face drawn 437 x 48 mm'
+  power: 'datasheet-table - guide power table: 1335 W at 25 C, 1425 W at
+    40 C'
+  face: 'photo - six 2x2 QSFP28 blocks on a ~39.4 mm block pitch read off
+    the MX10008 front photograph at ~2.99 px/mm, approximate to ~2 mm;
+    the lamp matrix is drawn as its 12x8 grid without per-lamp ids'
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/qsfp28@1, id: port-0, at: [53.00, 9.5], rotate: 180}
+- {ref: std/qsfp28@1, id: port-1, at: [53.00, 27.5]}
+- {ref: std/qsfp28@1, id: port-2, at: [73.40, 9.5], rotate: 180}
+- {ref: std/qsfp28@1, id: port-3, at: [73.40, 27.5]}
+- {ref: std/qsfp28@1, id: port-4, at: [92.40, 9.5], rotate: 180}
+- {ref: std/qsfp28@1, id: port-5, at: [92.40, 27.5]}
+- {ref: std/qsfp28@1, id: port-6, at: [112.80, 9.5], rotate: 180}
+- {ref: std/qsfp28@1, id: port-7, at: [112.80, 27.5]}
+- {ref: std/qsfp28@1, id: port-8, at: [131.80, 9.5], rotate: 180}
+- {ref: std/qsfp28@1, id: port-9, at: [131.80, 27.5]}
+- {ref: std/qsfp28@1, id: port-10, at: [152.20, 9.5], rotate: 180}
+- {ref: std/qsfp28@1, id: port-11, at: [152.20, 27.5]}
+- {ref: std/qsfp28@1, id: port-12, at: [171.20, 9.5], rotate: 180}
+- {ref: std/qsfp28@1, id: port-13, at: [171.20, 27.5]}
+- {ref: std/qsfp28@1, id: port-14, at: [191.60, 9.5], rotate: 180}
+- {ref: std/qsfp28@1, id: port-15, at: [191.60, 27.5]}
+- {ref: std/qsfp28@1, id: port-16, at: [210.60, 9.5], rotate: 180}
+- {ref: std/qsfp28@1, id: port-17, at: [210.60, 27.5]}
+- {ref: std/qsfp28@1, id: port-18, at: [231.00, 9.5], rotate: 180}
+- {ref: std/qsfp28@1, id: port-19, at: [231.00, 27.5]}
+- {ref: std/qsfp28@1, id: port-20, at: [250.00, 9.5], rotate: 180}
+- {ref: std/qsfp28@1, id: port-21, at: [250.00, 27.5]}
+- {ref: std/qsfp28@1, id: port-22, at: [270.40, 9.5], rotate: 180}
+- {ref: std/qsfp28@1, id: port-23, at: [270.40, 27.5]}
+size:
+  w: 437.0
+  h: 48.0
