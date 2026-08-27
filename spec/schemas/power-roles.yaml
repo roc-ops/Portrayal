@@ -1,0 +1,85 @@
+# Which way a component's watts point, decided once per CLASS.
+#
+# A power-totalling tool walked an MX chassis and stopped at the craft
+# interface: it could not tell "this part draws nothing" from "nobody has said
+# what this part draws". Both look identical in a contract - no power key - and
+# the difference is the whole answer. A filter contributes zero and a line card
+# with no figure makes the total a floor rather than a total.
+#
+# WHY A CLASS AND NOT A CONTRACT. The obvious fix is a marker on every passive
+# part, which is 109 components today and every one added after. But passivity
+# is not a fact about a part, it is a fact about a KIND of part: an air filter
+# draws nothing because filters have no electronics, not because someone
+# measured this filter. Deciding it per class puts it in one file that can be
+# argued with, and a contract that says nothing is then answered by its class
+# rather than by silence. The escape hatch for the exception is unchanged and
+# already exists - a `draw` part that genuinely draws nothing states
+# `power-draw-max-w: 0` and says why in provenance.
+#
+# lint reads this file, so the sets cannot drift from the rule that enforces
+# them, and L51 refuses a class that appears in no role - which is how a new
+# class gets its power question asked at the moment it is invented rather than
+# by a tool falling over months later.
+format: 1
+roles:
+
+  # CONSUMERS: state `power-draw-max-w` (and `power-draw-typical-w` beside it
+  # where the vendor gives one). L27 asks these and warns while they are silent.
+  draw:
+    - line-card
+    - supervisor
+    - fabric
+    # `switch` is here because all three components carrying it are chassis
+    # CARDS in rear slots, sitting in the same bays as the io-6p12 cards that
+    # are counted. Leaving them out made a C100G's coverage report short by
+    # three modules in its denominator.
+    - switch
+    - fan
+    - cooling
+    - transceiver
+    # THE CRAFT INTERFACE, AND THE REASON THIS FILE EXISTS. `panel` and
+    # `display` carry the MX craft interfaces - an LCD, buttons, alarm lamps and
+    # a processor behind them. They were in no set, so L27 never asked, so every
+    # craft contract is silent, so the totalling tool that stopped at "I don't
+    # know how much the craft interface uses" was reading a silence nothing had
+    # ever demanded be filled. That is a class-set omission, not a missing token.
+    - panel
+    - display
+
+  # SUPPLIES: state `power-output-w` and never a draw key - they are opposite
+  # signs of one unit, so a sum over both is a category error that reads as an
+  # answer.
+  supply:
+    - psu
+    - power
+
+  # PASSIVES: contribute zero, and say so by being of a kind that has no
+  # electronics. Nothing is asked of them and a consumer may total them as 0.
+  passive:
+    # sheet metal, plastic and hardware
+    - blank
+    - filter
+    - ground
+    - mechanical
+    - mount
+    - fastener
+    - screw
+    - latch
+    - ear
+    - tab
+    - panel-blank
+    # printing and reference marks - not parts at all, but they carry a class
+    - sticker
+    - marking
+    - silkscreen
+    - reference
+    # connectors and cages. A cage is a hole with a bezel; the OPTIC in it
+    # draws, and `transceiver` is a draw class for exactly that reason.
+    - port
+    - inlet
+    # A button is a switch contact. An indicator's draw sits inside the figure
+    # of the card that lights it, and at hundredths of a watt it is below the
+    # resolution of every published figure in the corpus - counting them
+    # separately would add noise to a total, not accuracy.
+    - button
+    - led

@@ -509,3 +509,59 @@ def test_a_bay_that_says_neither_is_rejected():
     """A hole that promises nothing - which is why `accepts` was unconditionally
     required before, and why relaxing it needed the either/or rather than a drop."""
     assert _bay_errs(BASE), "a bay naming neither a list nor an interface validated"
+
+
+# --- power roles: a class says which way its watts point ------------------
+
+def _roles():
+    return yaml.safe_load((SPEC / "schemas/power-roles.yaml").read_text())["roles"]
+
+
+def test_every_class_in_use_has_a_power_role():
+    """A totalling tool stopped at the MX craft interface. The contract was
+    silent because `panel` and `display` were in neither set, so L27 never asked
+    - a silence nothing had demanded be filled, indistinguishable from a part
+    that draws nothing."""
+    import glob as _g
+    r = _roles()
+    known = set(r["draw"]) | set(r["supply"]) | set(r["passive"])
+    seen = {}
+    for f in _g.glob(str(LIB / "components/*/*/v*/contract.yaml")):
+        d = yaml.safe_load(Path(f).read_text()) or {}
+        if d.get("class"):
+            seen.setdefault(d["class"], f)
+    missing = {c: seen[c] for c in seen if c not in known}
+    assert not missing, f"classes in use with no power role: {sorted(missing)}"
+
+
+def test_a_class_belongs_to_exactly_one_role():
+    r = _roles()
+    allc = r["draw"] + r["supply"] + r["passive"]
+    dupes = {c for c in allc if allc.count(c) > 1}
+    assert not dupes, f"a class in two roles cannot be totalled: {sorted(dupes)}"
+
+
+def test_the_craft_interface_draws():
+    """The class-set omission that caused the bug. A craft interface is an LCD,
+    buttons, alarm lamps and a processor - it is not sheet metal."""
+    r = _roles()
+    for cls in ("panel", "display"):
+        assert cls in r["draw"], f"{cls} carries the MX craft interfaces and they draw"
+
+
+def test_a_cage_is_passive_and_the_optic_in_it_is_not():
+    """A cage is a hole with a bezel; what draws is the thing fitted in it."""
+    r = _roles()
+    assert "port" in r["passive"]
+    assert "transceiver" in r["draw"]
+
+
+def test_an_undeclared_class_is_reported():
+    hits = caught("L51", lint.lint_component_role, P, {"class": "flux-capacitor"})
+    assert hits, "a class in no power role went unreported"
+    assert "in no power role" in hits[0]
+
+
+def test_a_declared_class_is_silent():
+    for cls in ("line-card", "psu", "filter"):
+        assert not caught("L51", lint.lint_component_role, P, {"class": cls}), cls

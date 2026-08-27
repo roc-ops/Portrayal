@@ -692,20 +692,29 @@ def lint_component_aperture(path, data, lib_roots):
 # fabric card is a card in a slot that consumes; the only thing separating it
 # from `line-card` is that it forwards between cards rather than off the box,
 # which is not a fact about power.
-DRAW_CLASSES = ("line-card", "supervisor", "fabric", "switch", "fan", "cooling",
-                "transceiver")
-SUPPLY_CLASSES = ("psu", "power")
-# `switch` is here because all three components carrying it are chassis CARDS in
-# rear slots - casa/lc-sw-bdm and smm-sw-bdm-a/b - sitting in the same bays as
-# the io-6p12 cards that ARE counted. Leaving them out made a C100G's coverage
-# report short by three modules in its denominator, which is the one failure
-# this rule set exists to prevent: a total that omits terms without saying so.
-# If a physical toggle ever takes this class it will be asked a question it
-# cannot answer; there is none today, and `common/power-button` is `button`.
+# LOADED FROM spec/schemas/power-roles.yaml, not written here, so the sets and
+# the rule that enforces them cannot drift - and so a consumer that has to total
+# a chassis can read the same file rather than reimplementing this list. The
+# prose that used to live here moved into it; the registry is the argument.
 #
-# `blank` is deliberately NOT here. A blank faceplate and a slot cover draw
-# nothing, and a blank is the honest occupant of an empty bay rather than a
-# module whose figure is missing.
+# AT IMPORT, not in main(). Loading it only when the CLI parsed --schemas left
+# every other caller - a test, a totalling tool, anything importing this module
+# as a library - holding three empty tuples, which reads as "no class has a
+# power role" and is the exact silence this file exists to end. The CLI still
+# overrides from its own --schemas so an alternate tree can be linted.
+def _load_power_roles(schemas):
+    """The three sets, from the registry. Empty on absence rather than raising -
+    a missing registry is a broken checkout, and L51 will say so on every class."""
+    f = Path(schemas) / "power-roles.yaml"
+    if not f.exists():
+        return (), (), ()
+    r = (load_yaml(f) or {}).get("roles") or {}
+    return (tuple(r.get("draw") or ()), tuple(r.get("supply") or ()),
+            tuple(r.get("passive") or ()))
+
+
+DRAW_CLASSES, SUPPLY_CLASSES, PASSIVE_CLASSES = _load_power_roles(
+    Path(__file__).resolve().parents[2] / "schemas")
 DRAW_KEYS = ("power-draw-typical-w", "power-draw-max-w", "power-draw-min-w")
 SUPPLY_KEYS = ("power-output-w",)
 
@@ -732,6 +741,41 @@ def _power_advice(cls):
     return ("power-draw-max-w",
             "the load it IMPOSES at its worst rated case (and "
             "`power-draw-typical-w` beside it where the vendor states one)")
+
+
+def lint_component_role(path, data, _lib_roots=None):
+    """L51: a class nobody has decided the power question for.
+
+    A power-totalling tool walked an MX chassis and stopped at the craft
+    interface - "I don't know how much the craft interface uses". The contract
+    was silent, and it was silent because `panel` and `display` were in neither
+    the draw set nor the supply set, so L27 never asked. Nothing was wrong with
+    the contract; the question had never been put to it.
+
+    THAT IS THE FAILURE THIS CATCHES, and it is a failure of a CLASS rather than
+    of a part. A silence that nothing demanded be filled reads exactly like a
+    silence that means zero, and a consumer cannot tell a filter that
+    contributes nothing from a card whose figure nobody has looked up. One makes
+    a total correct and the other makes it a floor.
+
+    So every class in use answers to spec/schemas/power-roles.yaml, and a class
+    in none of the three roles is reported HERE rather than discovered later by
+    something trying to add up a chassis. It fires at the moment a class is
+    invented, which is the moment someone knows the answer.
+
+    A warning and not an error: the honest response is sometimes "this needs
+    thinking about", and a red gate would be cleared by guessing.
+    """
+    cls = data.get("class")
+    if not cls or cls in DRAW_CLASSES or cls in SUPPLY_CLASSES or cls in PASSIVE_CLASSES:
+        return
+    warn(path, "L51", f"class {cls!r} is in no power role. spec/schemas/power-roles.yaml "
+                      "sorts every class into draw (states power-draw-max-w), supply "
+                      "(states power-output-w) or passive (contributes zero and is not "
+                      "asked). A class in none of them is never asked for a figure, so "
+                      "its silence is indistinguishable from a part that draws nothing - "
+                      "which is how a chassis total quietly became a floor. Add it to "
+                      "the role it belongs in")
 
 
 def lint_component_power(path, data, _lib_roots=None):
@@ -3362,6 +3406,9 @@ def main():
     std_file = schemas / "standards.yaml"
     if std_file.exists():
         STANDARDS.update(load_yaml(std_file)["standards"])
+    if (schemas / "power-roles.yaml").exists():
+        global DRAW_CLASSES, SUPPLY_CLASSES, PASSIVE_CLASSES
+        DRAW_CLASSES, SUPPLY_CLASSES, PASSIVE_CLASSES = _load_power_roles(schemas)
     # the schemas are YAML too where they are YAML, and a duplicate in the
     # registry would be as silent there as anywhere else
     for f in sorted(schemas.glob("*.yaml")):
@@ -3401,6 +3448,7 @@ def main():
                 lint_component_mating(f, d, args.library)
                 lint_component_aperture(f, d, args.library)
                 lint_component_power(f, d)
+                lint_component_role(f, d)
                 lint_component_relief_confidence(f, d, args.library)
             n += 1
         for f in sorted(root.glob("devices/**/device.yaml")):
