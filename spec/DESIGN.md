@@ -65,6 +65,32 @@ Three layers:
    geometry/IDs=major. Manifests pin major only (`name@2`); majors coexist
    in-tree (`v1/`, `v2/`); linter hashes contract geometry to catch unbumped
    breaks; every file carries `format: 1`.
+
+   **Devices take the same bump rules and not the coexistence.** A device is a
+   root rather than a dependency — nothing pins `mx10016@1` — so majors do not
+   need to live side by side; what a device needs is that the version tells the
+   truth. `library/devices.lock.json` records a fingerprint per device, split so
+   the check can say which bump a change requires rather than only that one
+   happened: `shape` (chassis dimensions, view sizes, and the position, size and
+   wiring of everything placed), `names` (ids, groups, configurations), `surface`
+   (silkscreen, decor, description, attrs, provenance) and `gaps`. Surface alone
+   is a patch; ids added with nothing moved or removed is a minor; anything else
+   about shape or names is a major, because a moved slot invalidates a cached
+   coordinate exactly as a renamed id invalidates a held reference.
+
+   The workflow is: edit, bump `version:`, then `devicelock.py --update`. Lint
+   (L53) fails the loop until the bump covers the change, and re-locking is what
+   records that it was reviewed.
+
+   **A shape change re-opens the device's `gaps`.** Gaps state what no rule can
+   find — facts about documents, not about the file — so nothing can verify one
+   is still true. But a change to the drawing can close a gap, open one, or leave
+   one annotating a slot that no longer exists, and only a reader of the sources
+   can say which. So when `shape` or `names` move and `gaps` do not, L53 asks for
+   them to be re-read: a gap still standing is a fine outcome, as long as it is
+   that on purpose rather than by omission. L54 catches the mechanical half — a
+   gap whose `scope` names no group, view, configuration, id or attribute the
+   device has.
 10. **Repos**: `spec` (schema+tooling, Apache-2.0) and `library`
     (content). Photos/dumps via Git LFS. Layout:
     `components/{common,<vendor>}/`, `devices/<vendor>/<model>/`, `profiles/`.

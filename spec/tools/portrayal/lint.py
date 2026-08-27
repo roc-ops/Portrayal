@@ -57,6 +57,8 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
   L45 device: a view at `modelled` draws something, or it is a size with no face
   L46 component: composed parts do not collide with each other inside the part
   L52 component: a stated power figure says where it was read from
+  L53 device: content changed without the version bump the change requires
+  L54 device: a declared gap scopes something the device does not have
       that composes them
   L47 component: a declared lamp state is a promise the drawing can keep - some
       element lights when it is set
@@ -72,6 +74,7 @@ from pathlib import Path
 import yaml
 
 import attrsections as attrs_mod
+import devicelock
 from manifest import (view_parts, targets, split_target, VIEW_KEY_ORDER,
                       component_refs, load_yaml,
                       PANEL_KEY_ORDER, COMPONENT_KEY_ORDER)
@@ -2195,6 +2198,35 @@ def lint_device_silkscreen_owner(path, data):
             "`for: chassis` where the printing is about the whole unit")
 
 
+def lint_device_gap_scope(path, data):
+    """L54: a declared gap points at something the device does not have.
+
+    A gap describes a DOCUMENT and not the drawing - "the HIG has no port-lamp
+    table" - so no rule can check whether it is still true. What a rule can check
+    is whether it still points at something. A gap scoped to a bay that was
+    renamed, or to a group that was never declared, has drifted from the model it
+    annotates and will be read by the next person as applying to a thing that is
+    not there.
+
+    MEASURED BEFORE IT WAS WRITTEN, because a rule that fires on correct models
+    teaches people to ignore the linter: 166 of the library's 169 scope entries
+    resolve. The three that do not are real - `filters` on a chassis whose groups
+    are doors, grounding, power-modules and slots, and `ports` and `optics` on a
+    device whose port groups are named sfp28 and qsfp28.
+
+    A WARNING AND NOT AN ERROR, because an unresolved scope has an innocent
+    reading: the gap may name something the device does not model YET, which is
+    sometimes the whole point of the gap. The fix is then to say so in `wanted`
+    rather than to delete the scope.
+    """
+    for what, scope in devicelock.stale_gap_scopes(data):
+        warn(path, "L54", f"gap {what!r} is scoped to {scope!r}, which is not a group, "
+             "view, configuration, id or attribute of this device. Either it drifted "
+             "when the model changed - a renamed bay, a group that went away - or it "
+             "names something not modelled yet, in which case `wanted:` should say that "
+             "rather than the scope implying the device already has it")
+
+
 def lint_device_config_scope(path, data):
     """L41: a bay scoped to configurations that do not exist is a bay in none.
 
@@ -3502,6 +3534,7 @@ def main():
 
     n = 0
     matrix = []
+    dev_maturity = {}
     # With --device, check only the components those devices actually reach.
     # Linting all 254 was most of a filtered run - and a component no selected
     # device names cannot affect the answer being asked for.
@@ -3540,6 +3573,12 @@ def main():
             lint_duplicate_keys(f)
             d = lint_device(f, dev_v, args.library); n += 1
             if d is not None and d.get("kind") == "device":
+                lint_device_gap_scope(f, d)
+                try:
+                    dev_maturity[str(f.parent.relative_to(root / "devices"))] = \
+                        d.get("maturity", "draft")
+                except ValueError:
+                    pass
                 matrix.append((f, d))
         if args.device:
             continue
@@ -3553,6 +3592,25 @@ def main():
     # The matrix is a PORTFOLIO view - it ranks devices against each other - so
     # printing it for a subset would invite reading a partial ranking as a whole
     # one. Say what was skipped instead.
+    # L53 IS LIBRARY-WIDE and compares against library/devices.lock.json, so a
+    # --device run cannot do it: the lock is one file describing every device and
+    # a partial check would report the unexamined ones as unchanged.
+    if not args.device:
+        for root in [Path(r) for r in args.library]:
+            if not (root / devicelock.LOCK_NAME).exists() and not list(root.glob("devices/*/*/device.yaml")):
+                continue
+            for slug_, kind_, msg_ in devicelock.check(root):
+                # WARNING WHILE THE DEVICE IS STILL BEING DRAWN, ERROR ONCE IT
+                # CLAIMS TO BE FINISHED - the gate L15, L37 and L42 all use. A
+                # device at `modelled` is work in progress and should not have to
+                # fight the linter mid-edit; a device claiming `verified` while
+                # its geometry moved under an unchanged version has broken the
+                # promise the version exists to make. No device is verified yet,
+                # so this arms itself as the library matures rather than going
+                # red on the day it lands.
+                (err if dev_maturity.get(slug_) == "verified" else warn)(
+                    root / devicelock.LOCK_NAME, "L53", msg_)
+
     if args.device:
         print(f"LINT: {len(matrix)} device(s) matching {args.device} - "
               "PARTIAL RUN, portfolio matrix and cross-device checks skipped. "
