@@ -1,0 +1,35 @@
+format: 1
+kind: module
+name: jnp10k-pwr-ac2
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper JNP10K-PWR-AC2 power supply for the MX10004/MX10008 - 5.5 kW,
+  dual C20 feeds (INP1/INP2) stacked beside the exhaust field, FAULT /
+  PWR OK / INP lamps, the red feed-setting DIP and the power rocker.
+  The AC3/DC2/DC3 variants are not modelled (needs-photo gap on the
+  device).
+attrs:
+  model: JNP10K-PWR-AC2
+  role: ac-power-supply
+  power-output-w: 5500
+provenance:
+  size: 'photo - the rear studio figure g101087 anchored to the 442 mm
+    chassis width gives the PSU face ~84 x 97 mm; the vendor table states
+    only assembly depths for this unit'
+  power-output: 'datasheet-table - the guide capacity table: two supplies
+    at high power deliver 11,000 W; 5,500 W each'
+  face: 'photo - g101087: two inlets left of centre column, lamp strip,
+    DIP, rocker'
+states:
+- ok
+- fault
+- absent
+parts:
+- {ref: std/c20-inlet@1, id: inp2, at: [42.0, 16.0], attrs: {function: feed INP2}}
+- {ref: std/c20-inlet@1, id: inp1, at: [42.0, 64.0], attrs: {function: feed INP1}}
+size:
+  w: 84.0
+  h: 97.0

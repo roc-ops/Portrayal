@@ -1,0 +1,229 @@
+format: 1
+kind: device
+name: mx10004
+version: 0.1.0
+maturity: modelled
+manufacturer: Juniper
+model: MX10004
+portfolio:
+  line: MX Series
+  family: MX10000 Universal Routing Platform
+description: >-
+  Juniper MX10004 - the 7RU, four-slot member of the MX10000 family. Two
+  slim Routing and Control Boards stack under the badge strip beside the
+  system status lamp panel; four full-width horizontal line-card slots
+  (FPC 0-3) fill the lower front. The rear is a three-high PSU stack
+  (PSU 0-2) beside two large fan trays whose removal exposes the six
+  Switch Fabric Boards.
+provenance:
+  sources: MX10004 Hardware Guide (extracted into working/images/mx10004/,
+    424 pages, 182 figures), the shared MX10000 datasheet, the frontwtop
+    studio photograph and the rear studio figure g101087
+  chassis: 'datasheet-table - 12.2 x 17.4 x 36.7 in (310 x 442 x 932 mm
+    with fan trays), 7U; flange extends the rack face to 19 in. Ears NOT
+    MODELLED by convention'
+  front: 'photo - the frontwtop photograph at ~3.11 px/mm across the
+    442 mm body: badge strip 0-20, RCB slots at y 20.0 and 58.1 (guide
+    FRU listing gives the 1.5 in slot height), blank service band to
+    y 118, then four 48 mm line-card rows at y 118/166/214/262 (the
+    1.89 in card height is the vendor FRU table). The status lamp panel
+    at the right of the RCB block is chassis metal, drawn as decor with
+    its lamp column'
+  slot-numbering: 'guide - FPC 0-3; drawn top-down 0-3 to match the
+    MX10000-family convention, but no extracted figure prints the slot
+    labels legibly - see gaps'
+  rear: 'photo - the rear studio figure g101087 anchored per-axis to the
+    442 mm body: PSU stack ~84 mm wide at the left (PSU 0 top, PSU 2
+    bottom, as the printed arrows in the figure), two ~176 mm fan trays
+    filling the rest'
+  power: 'datasheet-table - the guide capacity table: two JNP10K-PWR-AC2
+    at high power deliver 11,000 W, three 16,500 W'
+  color: 'photo - dark grey chassis, silver card faces, light-blue levers
+    and accent line under the badge strip'
+  other-faces: 'near-blank by evidence - rail bands estimated; axis
+    conventions per viewer3d.js as the siblings'
+attrs:
+  physical:
+    weight-base-kg: 99
+    weight-premium-kg: 113
+chassis:
+  width: 442.0
+  height: 310.0
+  depth: 932.0
+  ru: 7
+  color: '#565b61'
+groups:
+  res:
+    term: Slot
+    role: service
+    index-origin: 0
+    description: Routing and Control Board slots RE0 and RE1
+  fpcs:
+    term: Slot
+    role: traffic
+    index-origin: 0
+    description: line-card slots FPC 0-3, numbered top-down
+  psus:
+    term: PSU
+    role: service
+    index-origin: 0
+    description: power supply slots PSU 0-2, top-down at the rear left
+  cooling:
+    term: Tray
+    role: service
+    index-origin: 0
+    description: fan trays FAN 0 and FAN 1
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: the chassis status lamp panel beside the RCBs
+views:
+  front:
+    size:
+      w: 442.0
+      h: 310.0
+    panel:
+      decor:
+        - {at: [0.0, 0.0], size: [442.0, 20.0], fill: '#44484d'}
+        - {at: [0.0, 18.4], size: [442.0, 1.6], fill: '#7bc7e0'}
+        - {at: [392.5, 20.0], size: [47.0, 76.2], fill: '#4a4f55'}
+        - {at: [0.0, 96.2], size: [442.0, 21.8], fill: '#50555b'}
+      cutouts:
+        - {id: led-psus, at: [402.0, 46.0], size: [2.0, 2.0], shape: circle}
+        - {id: led-fans, at: [402.0, 52.0], size: [2.0, 2.0], shape: circle}
+        - {id: led-sibs, at: [402.0, 58.0], size: [2.0, 2.0], shape: circle}
+        - {id: led-lcs, at: [402.0, 64.0], size: [2.0, 2.0], shape: circle}
+        - {id: led-cbs, at: [402.0, 70.0], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+      - {at: [14.0, 13.0], text: JUNIPER, font-size: 6.0, anchor: start, fill: '#f0f1f2'}
+      - {at: [62.0, 13.0], text: MX10004, font-size: 5.0, anchor: start, fill: '#c7ccd1'}
+      - {at: [388.0, 10.0], text: RUNNING JUNOS, font-size: 1.8, anchor: end, fill: '#c7ccd1'}
+      - {at: [406.0, 47.0], text: POWER SUPPLIES, font-size: 1.1, anchor: start, fill: '#e8eaec', for: led-psus}
+      - {at: [406.0, 53.0], text: FANS, font-size: 1.1, anchor: start, fill: '#e8eaec', for: led-fans}
+      - {at: [406.0, 59.0], text: SIBS, font-size: 1.1, anchor: start, fill: '#e8eaec', for: led-sibs}
+      - {at: [406.0, 65.0], text: LINE CARDS, font-size: 1.1, anchor: start, fill: '#e8eaec', for: led-lcs}
+      - {at: [406.0, 71.0], text: CONTROL BOARDS, font-size: 1.1, anchor: start, fill: '#e8eaec', for: led-cbs}
+    components:
+      bays:
+        - {id: re0, at: [2.5, 20.0], size: {w: 389.0, h: 38.1},
+           accepts: [juniper/jnp10k-re1@1], default: juniper/jnp10k-re1@1,
+           group: res, rel-pos: 0}
+        - {id: re1, at: [2.5, 58.1], size: {w: 389.0, h: 38.1},
+           accepts: [juniper/jnp10k-re1@1], default: juniper/jnp10k-re1@1,
+           group: res, rel-pos: 1}
+        - {id: fpc0, at: [2.5, 118.0], size: {w: 437.0, h: 48.0},
+           accepts: [juniper/jnp10k-lc9600@1, juniper/jnp10k-lc480@1],
+           default: juniper/jnp10k-lc9600@1, group: fpcs, rel-pos: 0}
+        - {id: fpc1, at: [2.5, 166.0], size: {w: 437.0, h: 48.0},
+           accepts: [juniper/jnp10k-lc9600@1, juniper/jnp10k-lc480@1],
+           default: juniper/jnp10k-lc480@1, group: fpcs, rel-pos: 1}
+        - {id: fpc2, at: [2.5, 214.0], size: {w: 437.0, h: 48.0},
+           accepts: [juniper/jnp10k-lc9600@1, juniper/jnp10k-lc480@1],
+           default: juniper/jnp10k-lc9600@1, group: fpcs, rel-pos: 2}
+        - {id: fpc3, at: [2.5, 262.0], size: {w: 437.0, h: 48.0},
+           accepts: [juniper/jnp10k-lc9600@1, juniper/jnp10k-lc480@1],
+           default: juniper/jnp10k-lc480@1, group: fpcs, rel-pos: 3}
+      placements:
+        - {id: led-psus, ref: common/led-dot@1, at: [402.0, 46.0], for: chassis,
+           group: status-leds, rel-pos: 0,
+           states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#ef4444'}]}
+        - {id: led-fans, ref: common/led-dot@1, at: [402.0, 52.0], for: chassis,
+           group: status-leds, rel-pos: 1,
+           states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#ef4444'}]}
+        - {id: led-sibs, ref: common/led-dot@1, at: [402.0, 58.0], for: chassis,
+           group: status-leds, rel-pos: 2,
+           states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#ef4444'}]}
+        - {id: led-lcs, ref: common/led-dot@1, at: [402.0, 64.0], for: chassis,
+           group: status-leds, rel-pos: 3,
+           states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#ef4444'}]}
+        - {id: led-cbs, ref: common/led-dot@1, at: [402.0, 70.0], for: chassis,
+           group: status-leds, rel-pos: 4,
+           states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#ef4444'}]}
+  rear:
+    size:
+      w: 442.0
+      h: 310.0
+    silkscreen:
+      - {at: [26.0, 6.5], text: PSU 0, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: psu0}
+      - {at: [26.0, 306.5], text: PSU 2, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: psu2}
+      - {at: [130.0, 6.5], text: FAN 0 / FAN 1, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: [fan0, fan1]}
+    components:
+      bays:
+        - {id: psu0, at: [3.0, 9.0], size: {w: 84.0, h: 97.0},
+           accepts: [juniper/jnp10k-pwr-ac2@1], default: juniper/jnp10k-pwr-ac2@1,
+           group: psus, rel-pos: 0}
+        - {id: psu1, at: [3.0, 106.5], size: {w: 84.0, h: 97.0},
+           accepts: [juniper/jnp10k-pwr-ac2@1], default: juniper/jnp10k-pwr-ac2@1,
+           group: psus, rel-pos: 1}
+        - {id: psu2, at: [3.0, 204.0], size: {w: 84.0, h: 97.0},
+           accepts: [juniper/jnp10k-pwr-ac2@1], default: juniper/jnp10k-pwr-ac2@1,
+           group: psus, rel-pos: 2}
+        - {id: fan0, at: [89.0, 9.0], size: {w: 176.0, h: 293.0},
+           accepts: [juniper/jnp10004-fan2@1], default: juniper/jnp10004-fan2@1,
+           group: cooling, rel-pos: 0}
+        - {id: fan1, at: [266.0, 9.0], size: {w: 176.0, h: 293.0},
+           accepts: [juniper/jnp10004-fan2@1], default: juniper/jnp10004-fan2@1,
+           group: cooling, rel-pos: 1}
+  left:
+    size:
+      w: 932.0
+      h: 310.0
+    panel:
+      decor:
+        - {at: [0.0, 140.0], size: [932.0, 24.0], fill: '#4a4f55', confidence: estimated,
+           source: 'rail band and chassis handles; estimated'}
+  right:
+    size:
+      w: 932.0
+      h: 310.0
+    panel:
+      decor:
+        - {at: [0.0, 140.0], size: [932.0, 24.0], fill: '#4a4f55', confidence: estimated,
+           source: 'rail band and chassis handles; estimated'}
+  top:
+    size:
+      w: 442.0
+      h: 932.0
+    panel:
+      decor:
+        - {at: [0.0, 0.0], size: [6.0, 932.0], fill: '#4a4f55', confidence: estimated,
+           source: 'side edge; estimated'}
+        - {at: [436.0, 0.0], size: [6.0, 932.0], fill: '#4a4f55', confidence: estimated,
+           source: 'side edge; estimated'}
+  bottom:
+    size:
+      w: 442.0
+      h: 932.0
+    panel:
+      decor:
+        - {at: [0.0, 0.0], size: [6.0, 932.0], fill: '#4a4f55', confidence: estimated,
+           source: 'side edge; estimated'}
+        - {at: [436.0, 0.0], size: [6.0, 932.0], fill: '#4a4f55', confidence: estimated,
+           source: 'side edge; estimated'}
+gaps:
+  - what: psu-variants
+    scope: [psus]
+    reason: needs-photo
+    wanted: the JNP10K-PWR-AC3, DC2 and DC3 faces (AC3 adds four feeds
+      A0/A1/B0/B1 and six LEDs; only AC2 is photographed usably).
+  - what: line-card-catalogue
+    scope: [fpcs]
+    reason: needs-photo
+    wanted: LC2101, LC4800 and LC4802 faceplates - the guide names them
+      and gives dimensions and power, but the extraction has no usable
+      face art; only LC9600 and LC480 are modelled.
+  - what: slot-label-print
+    scope: [fpcs]
+    reason: needs-photo
+    wanted: legible FPC slot labels - the top-down 0-3 order follows the
+      family convention, not a readable print.
+  - what: rcb-vendor-width
+    scope: [res]
+    reason: vendor-silent
+    wanted: a vendor dimension for the RCB face - the FRU table covers
+      chassis, cards and PSUs but not the RCB; 389 mm is photo-derived.
+  - what: fan-tray-power
+    scope: [cooling]
+    reason: vendor-silent
+    wanted: per-tray power draw - not in the extraction's text layer.

@@ -1,0 +1,53 @@
+format: 1
+kind: module
+name: jnp10k-lc9600
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX10K-LC9600 line card - 9.6 Tbps, 24 QSFP56-DD cages in two
+  rows of twelve, for the MX10004/MX10008.
+attrs:
+  model: MX10K-LC9600
+  power-draw-typical-w: 1655
+  power-draw-max-w: 1770
+provenance:
+  size: 'datasheet-table - the guide FRU table: 1.89 x 17.2 x 19.05 in;
+    face drawn 437 x 48 mm'
+  power: 'datasheet-table - guide power table, all ports at 400G: 1655 W
+    at 25 C, 1770 W at 40 C'
+  face: 'photo - two rows of twelve on a ~28.4 mm pitch read off the
+    frontwtop photograph at 3.11 px/mm, approximate to ~2 mm'
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/qsfp-dd@1, id: port-0, at: [46.00, 10.5], rotate: 180}
+- {ref: std/qsfp-dd@1, id: port-1, at: [46.00, 27.0]}
+- {ref: std/qsfp-dd@1, id: port-2, at: [74.40, 10.5], rotate: 180}
+- {ref: std/qsfp-dd@1, id: port-3, at: [74.40, 27.0]}
+- {ref: std/qsfp-dd@1, id: port-4, at: [102.80, 10.5], rotate: 180}
+- {ref: std/qsfp-dd@1, id: port-5, at: [102.80, 27.0]}
+- {ref: std/qsfp-dd@1, id: port-6, at: [131.20, 10.5], rotate: 180}
+- {ref: std/qsfp-dd@1, id: port-7, at: [131.20, 27.0]}
+- {ref: std/qsfp-dd@1, id: port-8, at: [159.60, 10.5], rotate: 180}
+- {ref: std/qsfp-dd@1, id: port-9, at: [159.60, 27.0]}
+- {ref: std/qsfp-dd@1, id: port-10, at: [188.00, 10.5], rotate: 180}
+- {ref: std/qsfp-dd@1, id: port-11, at: [188.00, 27.0]}
+- {ref: std/qsfp-dd@1, id: port-12, at: [216.40, 10.5], rotate: 180}
+- {ref: std/qsfp-dd@1, id: port-13, at: [216.40, 27.0]}
+- {ref: std/qsfp-dd@1, id: port-14, at: [244.80, 10.5], rotate: 180}
+- {ref: std/qsfp-dd@1, id: port-15, at: [244.80, 27.0]}
+- {ref: std/qsfp-dd@1, id: port-16, at: [273.20, 10.5], rotate: 180}
+- {ref: std/qsfp-dd@1, id: port-17, at: [273.20, 27.0]}
+- {ref: std/qsfp-dd@1, id: port-18, at: [301.60, 10.5], rotate: 180}
+- {ref: std/qsfp-dd@1, id: port-19, at: [301.60, 27.0]}
+- {ref: std/qsfp-dd@1, id: port-20, at: [330.00, 10.5], rotate: 180}
+- {ref: std/qsfp-dd@1, id: port-21, at: [330.00, 27.0]}
+- {ref: std/qsfp-dd@1, id: port-22, at: [358.40, 10.5], rotate: 180}
+- {ref: std/qsfp-dd@1, id: port-23, at: [358.40, 27.0]}
+size:
+  w: 437.0
+  h: 48.0
