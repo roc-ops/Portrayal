@@ -12,6 +12,7 @@ description: >-
 size: {w: 99.62, h: 42.85}
 attrs:
   model: 'A9K Power Module (V2)'
+  power-output-w: 2100
   role: 'power-module'
   generation: '2'
   fans: '2'
@@ -86,19 +87,16 @@ provenance:
     supply failure has occurred.' Note what Cisco does NOT give: a colour for any of the
     three. So the states are on/blinking/off and no colour is asserted.
   power: >-
-    NOT STATED FOR THIS DRAWING, and the reason is worth the paragraph because the
-    numbers themselves are not missing - the attribution is. Cisco's own part numbers
-    give six ratings: PWR-1.6KW-AC and PWR-1.6KW-DC; PWR-2KW-DC-V2 and PWR-3KW-AC-V2;
-    PWR-4.4KW-DC-V3 and PWR-6KW-AC-V3, plus a PWR-3KW-HVDC. The DC output tables in the
-    Overview and Reference Guide give the same figures from the system side - 'four 2100
-    W DC power modules or 3000 W AC power modules in a single tray', 'four 4400 W power
-    modules or three 6000 W AC power modules per tray'. What no document does is connect
-    a rating to a FACEPLATE. The stencil master carries no part number, no legend and no
-    input connector - on these trays the AC receptacles and DC lugs are on the tray, not
-    on the module - so an AC module and a DC module of one version present the same
-    face, and their ratings differ by 900 W at version 2 and 1600 W at version 3.
-    Choosing one would be choosing which product this drawing is. A photograph of a
-    module's own label closes this in one step.
+    ASR 9000 installation guide, Table A-20 'DC Output Levels for Version 2 Power System':
+    'Minimum (one power module) | 2100W', and the maxima beneath it are stated as 'four 2100
+    W power modules' - 8400 W in a single tray for the ASR 9006 and ASR 9904, 16,800 W over
+    two trays for the ASR 9010, 33,600 W over four for the ASR 9922. Every one of those
+    divides by 2100 exactly, which is the check. THE VERSION 1 MODULE IS DELIBERATELY NOT
+    WRITTEN from the facing table A-19: it gives 'Minimum (one power module) 1500W' while
+    its maxima are stated as 'three 2100 W power modules', and the two cannot both describe
+    one module. A separate PID list in the same corpus carries an A9K-1600W-AC 'ASR 9000
+    1600W AC Power Module', so at least three ratings existed for that generation. Which one
+    this contract models is a question the documents held do not settle.
   superseded-by: >-
     PREFER pwr-3kw-ac-v2 OR pwr-2kw-dc-v2. This component is the version 2 module's
     GEOMETRY with no power figure, because one drawing serves two part numbers and there

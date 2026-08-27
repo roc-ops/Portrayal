@@ -9,9 +9,21 @@ description: >-
   AC-DC hot-swappable PSU for the Edgecore AGR400 (AS7946-30XB) and AGR420
   (AS7946-74XKSB). Same shell as the DC unit with an IEC C14 appliance inlet in
   place of the terminal block.
-attrs: {model: 'AGR PSU (AC)', input: '100-120 V 12 A or 200-240 V 7.5 A, 50-60 Hz per PSU'}
+attrs: {power-absent: not-published, model: 'AGR PSU (AC)', input: '100-120 V 12 A or 200-240 V 7.5 A, 50-60 Hz per PSU'}
 size: {w: 60.1, h: 37.6, d: 360.7}
 provenance:
+  power: >-
+    NOT PUBLISHED. Searched the whole Edgecore corpus held - the AGR400 and AGR420
+    datasheets (AGR400-AS7946-30XB-DS-R05, AGR420-AS7946-74XKSB-DS-R03) and both quick-start
+    guides (AS7946-30XB QSG R04, AS7946-74XKSB QSG R03). What the datasheets give is BOX
+    power, not per-part: 'Power Consumption - Max: 527 W, Typical: 186 W' for the AGR400 and
+    'Max: 692 W, Typical: 201 W' for the AGR420. Those belong to the device, not to this
+    part. The only per-part figure for the supplies is AC INPUT CURRENT - '100V-120V, 12 A,
+    per PS' and '200V-240V, 7.5 A, per PS' - and an output rating cannot be had from an
+    input current without an efficiency the datasheet also does not give. The claim is
+    scoped to the documents named and to nothing else: if an Edgecore hardware guide is ever
+    staged, look there first, because that is where this figure lives for every other vendor
+    in the library.
   face: 'drawing + photo - 60.1 x 37.6 measured off the rear panel figure; the
     arrangement (bail handle LEFT, input centre, red latch RIGHT) is read off
     photographs of the real unit'

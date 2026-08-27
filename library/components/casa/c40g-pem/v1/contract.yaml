@@ -14,6 +14,7 @@ description: >-
 size: {w: 158.0, h: 68.5, d: 200.0}
 attrs:
   model: 'C40G PEM'
+  power-absent: not-applicable
   role: dc-power-entry
   input-voltage: '-40.5 to -60 VDC (-48 VDC nominal)'
   current-per-feed: '20 A nominal'
@@ -45,9 +46,15 @@ provenance:
     part is a quarter narrower - so they are modelled separately rather than shared
     on the strength of a name and a silhouette. If a drawing later shows one part
     in both chassis, this is the assumption to break'
-  power: 'NONE STATED. Neither C40G table gives a PEM figure, and a power ENTRY
-    module is not a supply in the sense power-output-w means - it filters and distributes
-    what the plant feeds it. The L27 warning is left standing as the record'
+  power: >-
+    This part is a TRAY and watts are the wrong unit for it. It does not convert or
+    regulate: it carries and distributes what the modules seated in it produce, so its
+    rating bounds what may PASS THROUGH rather than describing an output. Deriving watts
+    would mean multiplying a current by a voltage across an operating range, which lands on
+    a number that looks like an answer and is not one. The supplies that seat in it state
+    their own output; a chassis total adds those. This is L27's own conduit argument,
+    recorded as data rather than left to prose so that something adding up a chassis can
+    tell it apart from a hole in the total.
   relief: 'estimated, and the two halves of that word are different claims.
     WHAT stands proud is drawing - Figure 1-12, "C40G power entry module": a bolted
     terminal cover plate at the top left with a captive screw at its centre and two

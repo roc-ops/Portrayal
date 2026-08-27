@@ -269,6 +269,13 @@
           "$ref": "#/$defs/watts",
           "description": "continuous output this module is rated to PROVIDE - a PSU or a power-entry module. Deliberately not `power-output-max-w`: draw has a distribution and supply has a rating, and a symmetric name would advertise a `power-output-typical-w` that means nothing"
         },
+        "power-absent": {
+          "description": "WHY this part states no wattage, when the answer is settled rather than pending. Absent means the question is still open, which is what L27's standing warning is for - so writing this key is a claim, and L52 makes it carry provenance saying what was searched. `not-published`: the vendor does not state it in any document held; the part draws power and the figure is genuinely missing, so a chassis total containing it is a floor. `not-applicable`: watts are the wrong unit for this part - a power tray or entry module that only CARRIES current has a rating bounding what may pass through, and deriving watts means multiplying two figures across an input range. The distinction is data and not prose because the two mean opposite things to something adding up a chassis: `not-published` is a hole in the total, `not-applicable` is not",
+          "enum": [
+            "not-published",
+            "not-applicable"
+          ]
+        },
         "power-draw-scope": {
           "description": "WHAT the power-draw-* figures on this contract cover. Absent means `module` - this module and nothing else - so every figure written before this key existed keeps meaning exactly what it meant. `module-with-paired-io` is for a vendor who measures the pair and publishes no bare figure: Casa heads its C100G table 'Maximum consumption WITH I/O module' and gives the same US16x8 200 W or 220 W depending on which rear module it sits behind, so a bare-card figure may not exist to be divided out. The scope is DATA and not a provenance sentence because it changes the arithmetic: a consumer summing a chassis must not add the rear partner of a card already scoped to include it, and a consumer asking what one card draws must be able to see that the answer contains another card. A prose note is true, well written, and invisible to both of them",
           "enum": [

@@ -853,6 +853,14 @@ def lint_component_power(path, data, _lib_roots=None):
     keys = SUPPLY_KEYS if cls in SUPPLY_CLASSES else DRAW_KEYS
     if any(k in attrs for k in keys):
         return
+    # AN ATTESTATION IS AN ANSWER. L27 standing forever is right while the
+    # question is open and wrong once it has been settled - and "the vendor does
+    # not publish it" is a settled answer, not a pending one. Without a way to
+    # say so, a searched-and-genuinely-absent figure is indistinguishable from
+    # one nobody has looked for, which is what made 249 warnings unreadable as a
+    # to-do list. L52 makes the claim carry its provenance.
+    if attrs.get("power-absent"):
+        return
     want, means = _power_advice(cls)
     # A CONDUIT is neither a draw nor a supply, and telling one to state
     # `power-output-w` is advice to write a wrong number - worse than saying
@@ -916,9 +924,24 @@ def _power_provenance(path, data, attrs):
     not this one.
     """
     stated = sorted(k for k in (*DRAW_KEYS, *SUPPLY_KEYS) if k in attrs)
-    if not stated:
+    absent = attrs.get("power-absent")
+    if not stated and not absent:
         return
     if str(((data.get("provenance") or {}).get("power")) or "").strip():
+        return
+    # AN ABSENCE CLAIM IS A FACT ABOUT THE WORLD and needs sourcing exactly as a
+    # number does - more, if anything, because it is what tells the next person
+    # to stop looking. Seven MX contracts said "NOT STATED for this model in the
+    # module reference extraction", which was true of the book it named and
+    # false of the corpus: the FRU power tables were in the chassis guides all
+    # along. An unsourced `power-absent` would make that mistake permanent.
+    if absent and not stated:
+        warn(path, "L52", f"{data.get('name')} claims power-absent: {absent} and "
+             "no provenance.power says what was searched. Name the documents, not "
+             "one document: 'not stated in the module reference' was true of that "
+             "book and false of the corpus, because the FRU power tables live in "
+             "the chassis guides. An absence claim is what stops the next person "
+             "looking, so it has to say where it looked")
         return
     warn(path, "L52", f"{data.get('name')} states {', '.join(stated)} and no "
          "provenance.power says where it came from. Add it, naming the document "

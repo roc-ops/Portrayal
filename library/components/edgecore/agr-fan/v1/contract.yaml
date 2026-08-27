@@ -11,9 +11,19 @@ description: >-
   numbered FAN 0 at the right to FAN 4 at the left. Two counter-rotating rotors
   in tandem behind a circular honeycomb finger guard, with a red D-handle on
   the left of the faceplate.
-attrs: {model: 'AGR Fan'}
+attrs: {power-absent: not-published, model: 'AGR Fan'}
 size: {w: 69.4, h: 69.4, d: 132.0}
 provenance:
+  power: >-
+    NOT PUBLISHED. Searched the whole Edgecore corpus held - the AGR400 and AGR420
+    datasheets (AGR400-AS7946-30XB-DS-R05, AGR420-AS7946-74XKSB-DS-R03) and both quick-start
+    guides (AS7946-30XB QSG R04, AS7946-74XKSB QSG R03). What the datasheets give is BOX
+    power, not per-part: 'Power Consumption - Max: 527 W, Typical: 186 W' for the AGR400 and
+    'Max: 692 W, Typical: 201 W' for the AGR420. Those belong to the device, not to this
+    part. No fan wattage appears anywhere in the corpus; the datasheets describe the cooling
+    by airflow direction and redundancy only. The claim is scoped to the documents named and
+    to nothing else: if an Edgecore hardware guide is ever staged, look there first, because
+    that is where this figure lives for every other vendor in the library.
   face: 'photo - SQUARE, not the rectangle an earlier pass drew, and set with an
     equal 8.8 mm lip above and below on the 87 mm panel. 69.4 square is the only
     size that is both square and fits the measured 70.4 mm bay pitch'

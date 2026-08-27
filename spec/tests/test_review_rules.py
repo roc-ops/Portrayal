@@ -605,3 +605,33 @@ def test_a_part_with_no_figure_at_all_is_left_to_l27():
 def test_empty_provenance_does_not_count_as_a_source():
     assert caught("L52", lint.lint_component_power, P,
                   _pw({"power-draw-max-w": 440}, "   "))
+
+
+def test_an_attestation_answers_l27():
+    """`not-published` is a settled answer; L27's warning is for an open question."""
+    d = _pw({"power-absent": "not-published"})
+    d["provenance"] = {"power": "searched the corpus; the vendor gives input current only"}
+    assert not caught("L27", lint.lint_component_power, P, d)
+
+
+def test_a_part_with_neither_figure_nor_attestation_still_warns():
+    assert caught("L27", lint.lint_component_power, P, _pw({}))
+
+
+def test_an_unsourced_attestation_is_reported():
+    """An absence claim is a fact about the world and needs sourcing like a number."""
+    hits = caught("L52", lint.lint_component_power, P,
+                  _pw({"power-absent": "not-published"}))
+    assert hits, "an unsourced absence claim went unreported"
+    assert "what was searched" in hits[0]
+    # It has to carry the lesson, not just the rule: the seven MX contracts named
+    # one book and read as the corpus.
+    assert "chassis guides" in hits[0]
+
+
+def test_a_tray_can_say_watts_are_the_wrong_unit():
+    d = _pw({"power-absent": "not-applicable"})
+    d["class"] = "power"
+    d["provenance"] = {"power": "a tray: it carries current, it does not convert it"}
+    assert not caught("L27", lint.lint_component_power, P, d)
+    assert not caught("L52", lint.lint_component_power, P, d)

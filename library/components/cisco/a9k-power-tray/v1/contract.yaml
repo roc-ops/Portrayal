@@ -12,6 +12,7 @@ description: >-
 size: {w: 468.12, h: 48.03}
 attrs:
   model: 'A9K Power Tray'
+  power-absent: not-applicable
   role: 'power-tray'
   generation: '2'
   module-bays: 4
@@ -85,12 +86,14 @@ provenance:
     are modelled alongside. When component-level bays land, this is the contract to
     revisit; until then a device that wants a populated tray places the tray.
   power: >-
-    NOT STATED, and for a tray it may not be a meaningful figure at all. A power tray
-    provides what the modules seated in it provide, and Cisco's tables give the tray
-    only as a product of the two - 'Maximum (four 4400 W power modules or three 6000 W
-    AC power modules per tray)'. So the tray's own power-output-w is left absent and the
-    L27 warning stands, rather than baking a full-house assumption into the contract.
-    The module count IS modelled, as the bay openings the faceplate draws.
+    This part is a TRAY and watts are the wrong unit for it. It does not convert or
+    regulate: it carries and distributes what the modules seated in it produce, so its
+    rating bounds what may PASS THROUGH rather than describing an output. Deriving watts
+    would mean multiplying a current by a voltage across an operating range, which lands on
+    a number that looks like an answer and is not one. The supplies that seat in it state
+    their own output; a chassis total adds those. This is L27's own conduit argument,
+    recorded as data rather than left to prose so that something adding up a chassis can
+    tell it apart from a hole in the total.
   lifecycle: >-
     searched - no end-of-life notice is in the intake.
   generation: >-
