@@ -62,6 +62,7 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
   L55 library: every vendor namespace is in the vendor registry
   L56 overlay: a NOS identity names a software vendor the registry knows
   L57 device: configurations say what kind of thing they are, and the base is the default
+  L58 component: a wrapper's own connection point sits where its aperture mates
       that composes them
   L47 component: a declared lamp state is a promise the drawing can keep - some
       element lights when it is set
@@ -78,7 +79,8 @@ import yaml
 
 import attrsections as attrs_mod
 import devicelock
-from manifest import (view_parts, targets, split_target, VIEW_KEY_ORDER,
+from manifest import (view_parts, targets, split_target, presented_interface,
+                      VIEW_KEY_ORDER,
                       component_refs, load_yaml,
                       PANEL_KEY_ORDER, COMPONENT_KEY_ORDER)
 from jsonschema import Draft202012Validator
@@ -1580,7 +1582,17 @@ def _mate_check(path, where, occ_ref, host_ref, lib_roots):
     if not hp or not op:
         return
     hc, oc = load_yaml(hp), load_yaml(op)
-    want, have = hc.get("interface"), oc.get("mates")
+
+    def _res(ref):
+        q = resolve_component(ref, lib_roots)
+        return load_yaml(q) if q else None
+
+    # THE HOST MAY PRESENT ITS INTERFACE THROUGH A COMPOSED APERTURE. A vendor
+    # cage wraps `std/qsfp-ganged`, which is where the interface lives; reading
+    # only the wrapper's own key is why 7,058 ports in this library could not be
+    # populated while the mechanism to populate them worked.
+    want, _ = presented_interface(hc, _res)
+    have = oc.get("mates")
     if not have:
         err(path, "L12", f"{where}: {occ_ref} declares no 'mates', "
                          "so it cannot occupy anything")
@@ -2218,6 +2230,55 @@ def lint_device_silkscreen_owner(path, data):
             path, "L42", f"{vname}: {len(bare)} silkscreen mark(s) name nothing - "
             f"{shown}{more}. Add `for:` naming the part each annotates, or "
             "`for: chassis` where the printing is about the whole unit")
+
+
+def lint_component_forwarded_mate(path, data, lib_roots):
+    """L58: a cage's own connection point disagrees with the aperture inside it.
+
+    A vendor cage wraps a standard aperture and presents that aperture's
+    interface - see manifest.presented_interface - so the point a module enters
+    is the aperture's `mate`, offset by where the wrapper puts it. The wrapper
+    usually ALSO declares its own point, named for what plugs in: `net`, `rf`,
+    `usb`.
+
+    Those two should be the same place, and almost always are. Measured across
+    the library before this rule was written: of thirteen port wrappers composing
+    an aperture that carries an interface, TEN agree to within 0.05 mm, which is
+    the evidence that forwarding recovers a name rather than inventing geometry.
+
+    When they disagree the wrapper's own point was placed by eye and the
+    aperture's was measured, so the drawing and the mating will part company: a
+    cable drawn to the declared point and a module seated on the forwarded one.
+    `common/qsfp-cage@2` is out by 0.54 mm vertically, which is small, real, and
+    exactly the kind of thing nobody finds by looking.
+
+    A warning: which of the two is right is a question about the part, and the
+    fix is sometimes to move the declared point and sometimes to correct the
+    composition offset.
+    """
+    if data.get("class") != "port" or data.get("interface"):
+        return
+
+    def _res(ref):
+        q = resolve_component(ref, lib_roots)
+        return load_yaml(q) if q else None
+
+    iface, at = presented_interface(data, _res)
+    if not iface or not at:
+        return
+    own = [(k, v.get("at")) for k, v in (data.get("connection-points") or {}).items()
+           if isinstance(v, dict) and v.get("at")]
+    if not own:
+        return
+    if any(all(abs(a - b) <= 0.05 for a, b in zip(o, at)) for _, o in own):
+        return
+    name, point = own[0]
+    off = [round(point[0] - at[0], 3), round(point[1] - at[1], 3)]
+    warn(path, "L58", f"connection-point {name!r} is at {point} but the composed aperture "
+         f"presents {iface!r} at {at} - {off} apart. A module seats on the aperture's "
+         "point and a cable is drawn to this one, so they should be the same place. "
+         "Either the declared point was placed by eye, or the part's `at` offset is "
+         "wrong; the aperture's own figure is the measured one")
 
 
 def lint_device_gap_scope(path, data):
@@ -3756,6 +3817,7 @@ def main():
                 lint_component_aperture(f, d, args.library)
                 lint_component_power(f, d)
                 lint_component_role(f, d)
+                lint_component_forwarded_mate(f, d, args.library)
                 lint_component_relief_confidence(f, d, args.library)
             n += 1
         for f in sorted(root.glob("devices/**/device.yaml")):

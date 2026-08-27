@@ -21,6 +21,7 @@ APPLIED_CLASSES = {"sticker", "label", "marking"}
 
 import attrsections as attrs_mod
 from manifest import (view_parts, targets, split_target, component_refs,
+                      presented_interface,
                       load_yaml)
 import capability
 
@@ -891,13 +892,23 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                                  "placement with an explicit position in this view")
             hc, _ = lib.resolve(host["ref"])
             oc, _ = lib.resolve(p["ref"])
-            hm = (hc.get("connection-points") or {}).get("mate")
+            def _res(ref):
+                try:
+                    return lib.resolve(ref)[0]
+                except Exception:
+                    return None
+
+            # The host's mate point may be FORWARDED from a composed aperture -
+            # see manifest.presented_interface. The occupant's is its own: a
+            # module is the thing that mates, not a wrapper around one.
+            _, hm_at = presented_interface(hc, _res)
             om = (oc.get("connection-points") or {}).get("mate")
-            if hm is None or om is None:
+            if hm_at is None or om is None:
                 raise ValueError(f"{p['id']}: mate-to needs a 'mate' connection-point "
-                                 f"on both {p['ref']} and {host['ref']}")
-            p = dict(p, at=[round(host["at"][0] + hm["at"][0] - om["at"][0], 4),
-                            round(host["at"][1] + hm["at"][1] - om["at"][1], 4)])
+                                 f"on both {p['ref']} and {host['ref']} - the host may "
+                                 "also present one through a composed aperture")
+            p = dict(p, at=[round(host["at"][0] + hm_at[0] - om["at"][0], 4),
+                            round(host["at"][1] + hm_at[1] - om["at"][1], 4)])
         if p.get("optional") and p["optional"] not in include:
             return
         grp = dev_groups.get(p.get("group")) or {}

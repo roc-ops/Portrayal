@@ -125,3 +125,55 @@ def component_refs(device):
             if ref:
                 out.add(str(ref).split(":")[0])
     return out
+
+
+def presented_interface(contract, resolve):
+    """What a receptacle presents to a module, and where the module mates into it.
+
+    Returns `(interface, mate_at)` - or `(None, None)` when nothing does.
+
+    WHY THIS LOOKS THROUGH `parts`. Seating an optic worked end to end and was
+    used by exactly one configuration on one device, out of 7,058 ports. Not
+    because authors had not got to it, but because on most ports it could not be
+    written: a port that PLACES `std/sfp-ganged` can host, and a port that
+    COMPOSES the same aperture inside a vendor cage cannot, because the checks
+    read only the wrapper's own top-level `interface` and its own `mate` point.
+
+    The knowledge was never missing. It sat one level down, in the standard
+    aperture the wrapper wraps, where nothing looked.
+
+    THE FORWARDED POINT IS NOT A NEW CLAIM ABOUT GEOMETRY, and the corpus says
+    so: of the thirteen port wrappers that compose an aperture carrying an
+    interface, TEN already declare a connection-point at exactly the position
+    this computes - `qsfp28-cage`'s own `net` is at [9.5, 9.0] and the aperture's
+    `mate`, offset by the part's `at`, lands on [9.5, 8.99]. The authors had
+    already put the point in the right place. What they could not do was give it
+    the name the mating code looks for.
+
+    `resolve` takes a component ref and returns its contract, or None. It is
+    passed in because lint and render each have their own resolver and neither
+    should grow a second one.
+    """
+    mate = (contract.get("connection-points") or {}).get("mate")
+    if contract.get("interface") and mate:
+        return contract["interface"], list(mate["at"])
+    # A wrapper may compose several parts - a duplex adapter holds two bores -
+    # and only one aperture can be the thing a module seats into. Take the first
+    # that presents an interface, in declaration order, and leave the multi-mate
+    # case alone: `lc-duplex-adapter` composes two LC bores and its own point is
+    # their midpoint, which is a fibre landing on a ferrule rather than a module
+    # entering a cage. Different question, not this one.
+    cores = []
+    for part in (contract.get("parts") or []):
+        core = resolve(part.get("ref")) if part.get("ref") else None
+        if not core or not core.get("interface"):
+            continue
+        cm = (core.get("connection-points") or {}).get("mate")
+        if not cm:
+            continue
+        at = part.get("at") or [0, 0]
+        cores.append((core["interface"],
+                      [round(at[0] + cm["at"][0], 4), round(at[1] + cm["at"][1], 4)]))
+    if len(cores) == 1:
+        return cores[0]
+    return contract.get("interface"), (list(mate["at"]) if mate else None)
