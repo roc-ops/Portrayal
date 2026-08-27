@@ -9,13 +9,22 @@ description: >-
   Juniper MPC3E carrier - two MIC slots taking MIC3 and selected classic MICs (Table 12); the NG variants share the faceplate. Vertical form for the MX2000 cage.
 attrs:
   model: MPC3E
+  power-draw-max-w: 440
   model-variants: MPC3E-3D-NG, MPC3E-3D-NG-Q
 provenance:
   size: 'registry + layout - the face is the slot geometry of its chassis
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
     drawing. carrier face; the MIC windows dominate it'
-  power: 'NOT STATED for this model in the module reference extraction - L27 stands'
+  power: >-
+    guide FRU power table (Component | Model Number | Maximum Power Requirement), MX chassis
+    guides: '| MPC3E | MX-MPC3E-3D | 440W With MICs and optics: 500 Wat 55 C, two 40 W MICs
+    ... |'. The cell LEADS with the card-alone figure and the 'With MICs and optics' figures
+    follow it; the leading number is what composes, because the MICs seated in this carrier
+    are separately modelled parts that answer for themselves. THE GUIDES DISAGREE ON THE
+    WITH-MICs FIGURE - 500 W at 55 C in the MX2008 and MX2010 books, 520 W in others, both
+    against 'two 40 W MICs' - which is a reason to carry the card-alone number rather than a
+    composite. The 440 W itself is identical in every guide that prints the row.
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'

@@ -9,12 +9,19 @@ description: >-
   Juniper MX2K-MPC11E fixed MPC for the MX2010/MX2020 - forty QSFP28 cages in four five-row PIC segments. Authored as the MX2000 vertical form, seated through its adapter card (jacks rotated 90).
 attrs:
   model: MX2K-MPC11E
+  power-draw-max-w: 1980
 provenance:
   size: 'registry + layout - the face is the slot geometry of its chassis
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
     drawing. The MX2K-MPC11E figure g100786 shows the four five-port PIC segments this layout follows'
-  power: 'NOT STATED for this model in the module reference extraction - L27 stands'
+  power: >-
+    guide FRU power table (Component | Model Number | Maximum Power Requirement), MX chassis
+    guides: '| MPC | MX2K-MPC11E | 1980W * 10 = 19800W |'. The row carries its own
+    arithmetic and it checks twice: 1980x10=19800 in the MX2010 guide (ten slots) and
+    1980x20=39600 in the MX2020 guide (twenty). The typical figure of 1800 W is printed
+    beside it and is explicitly labelled '(Typical)', which is the number this key is
+    not.
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'

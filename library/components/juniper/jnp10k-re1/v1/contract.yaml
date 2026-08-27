@@ -12,12 +12,19 @@ description: >-
   USB, the SSD door and four SFP+ ports 0-3 at the right.
 attrs:
   model: JNP10K-RE1
+  power-draw-max-w: 175
 provenance:
   size: 'photo - the RCB face spans 389 mm of the 442 mm chassis on the
     frontwtop photograph at 3.11 px/mm, and the guide FRU listing gives
     the 1.5 in (38.1 mm) slot height. Vendor width for the RCB itself is
     not in the extraction'
-  power: 'NOT STATED per module in the extraction - L27 stands'
+  power: >-
+    guide FRU power table (Component | Model Number | Maximum Power Requirement), MX chassis
+    guides: '| JNP10K-RE1 | MX10004 RCB | 100W | 175W | 175W |'. MX10004 guide, Table 55
+    'Power Requirements for MX10004 Components', whose header reads 'At 77 F (25 C) | At 104
+    F (40 C) | At 131 F (55 C)'. The 55 C column is carried; the 25 C figure for this part
+    is 100 W, so reading the wrong end of the row would have been 43 percent low. Stated as
+    being under typical voltage and optics.
   face: 'photo - lamp column, CON, SMB quad, MGMT, SFP, USB, SSD door,
     ports 0-3; positions approximate to ~2 mm'
 states:

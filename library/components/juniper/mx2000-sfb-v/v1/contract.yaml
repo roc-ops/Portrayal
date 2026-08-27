@@ -12,9 +12,16 @@ description: >-
   buttons print on the chassis beside each slot.
 attrs:
   model: MX2000-SFB-S
+  power-draw-max-w: 220
 provenance:
   size: 'photo - the MX2010 studio photographs at ~1.1 px/mm; positions approximate to ~3 mm, and no vendor module dimension is in the extraction'
-  power: 'NOT STATED per module in the extraction - L27 stands'
+  power: >-
+    guide FRU power table (Component | Model Number | Maximum Power Requirement), MX chassis
+    guides: '| SFB-slots 0 through 7 | MX2000-SFB-S | 220W*8=1760W |'. The row states the
+    per-SFB figure and its own multiplication, and 220x8=1760 is the check. A DIFFERENT row
+    in the MX2020 guide puts 7360 W and 5662 W beside this part number; those are SYSTEM
+    power with droop sharing across power zones, not this board, and taking the first
+    wattage on a line would have written one of them here.
 states:
 - ok
 - fail
