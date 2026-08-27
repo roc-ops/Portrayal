@@ -13,6 +13,7 @@ description: >-
 size: {w: 17.29, h: 167.87}
 attrs:
   model: 'SPA-8XOC12-POS'
+  power-absent: not-published
   role: 'shared-port-adapter'
   form-factor: 'single-width, single-height (one SIP-700 subslot)'
   ports: 8
@@ -134,14 +135,20 @@ provenance:
     measured CENTRE at the size the registry gives it rather than at the size the figure
     draws it.
   power: >-
-    NOT STATED. No document in this intake gives a power figure for any SPA: not the SIP and
-    SPA Hardware Installation Guide, which has no power table at all; not
-    data_sheet_c78-688005, the SPA data sheet, which is an ordering list; and not Table 35
-    of the Ethernet Line Card Installation Guide, whose rows are line cards and carriers. So
-    no power-draw key is written and lint L27 stands - that warning is the record. AND THE
-    SCOPE QUESTION IS OPEN AT THE OTHER END TOO: the SIP-700 states 375 W maximum without
-    saying whether the measurement was taken with SPAs seated or bare, so a budget cannot be
-    closed from this end either. See a9k-sip-700's provenance.power.
+    NOT PUBLISHED in the corpus held. The canonical document for this part is the Cisco ASR
+    9000 SIP and SPA Hardware Installation Guide, which is staged and converted: it carries
+    a per-SPA specification section for each card, and those sections give physical
+    dimensions, shipping weight, operating and storage temperature and relative humidity -
+    and no power figure. There is not one wattage token in its 3301 lines. Searched wider
+    than that one book, which is the mistake this library has already made once: every one
+    of the 199 converted documents was scanned for this part number with a twelve-line
+    window either side, and the only wattage tokens anywhere near a SPA mention were a '630
+    Watts' inside a `show platform summary` CLI transcript - a slot reading in a worked
+    example, not a specification. Where to look if this is ever needed: Cisco states
+    per-card power for the OLDER ASR 9000 cards in the chassis installation guide's Table
+    A-22 'Card and Fan Tray Power Consumption Specifications', which is staged and does not
+    list SPAs. A SPA-specific datasheet, or the same appendix from a SIP-700-bearing
+    platform's guide, is the thing to stage next.
   lifecycle: >-
     searched - no end-of-life notice for SPA-8XOC12-POS is in this intake. Table 10 gives
     this part a minimum IOS XR release of 4.0.0 and a minimum hardware revision of 1.0,
