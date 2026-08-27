@@ -104,20 +104,50 @@ def test_l14_does_not_spin_a_rotated_bay():
     assert bay["at"][1] <= mark["at"][1] <= bay["at"][1] + bay["size"]["h"] + 25
 
 
-def test_the_modelled_devices_are_nearly_all_owned():
-    """The eight that are not each name something the model does not hold yet -
-    an unmodelled filter, an ESD jack that is a bare cutout, a fan tray. L42 is
-    pointing at modelling debt, which is what it is for; it is not noise to be
-    silenced with a false owner.
-    """
+def _ownership(modelled_only):
     tot = own = 0
     for p in sorted(LIB.glob("devices/*/*/device.yaml")):
         d = yaml.safe_load(p.read_text()) or {}
-        if (d.get("maturity") or "draft") == "draft":
+        if modelled_only and (d.get("maturity") or "draft") == "draft":
             continue
         for v in (d.get("views") or {}).values():
             for m in view_parts(v)["silkscreen"]:
                 tot += 1
                 own += 1 if m.get("for") else 0
+    return own, tot
+
+
+def test_the_modelled_devices_are_nearly_all_owned():
+    """The few that are not each name something the model does not hold yet -
+    an unmodelled filter, an ESD jack that is a bare cutout, a fan tray. L42 is
+    pointing at modelling debt, which is what it is for; it is not noise to be
+    silenced with a false owner.
+    """
+    own, tot = _ownership(True)
     assert tot - own <= 8, f"{tot - own} unowned marks on modelled devices"
     assert own / tot > 0.95
+
+
+def test_the_whole_library_stays_owned():
+    """The draft devices were backfilled too, and L42 does not gate them - so
+    nothing but this test stops them drifting back. 989 marks, 53 percent owned
+    when the sweep started."""
+    own, tot = _ownership(False)
+    assert own / tot > 0.97, f"only {own}/{tot} marks name anything"
+
+
+def test_a_wordmark_names_the_whole_unit_and_not_whatever_is_beside_it():
+    """The backfill leaned on proximity for direction and number labels, and
+    proximity is exactly wrong for printing that belongs to no part: it bound
+    `smartoptics` to an ethernet jack and `DCP-R-34D-CS` to a port, because
+    those happened to be nearest. A wordmark names the chassis or nothing.
+    """
+    for p in sorted(LIB.glob("devices/*/*/device.yaml")):
+        d = yaml.safe_load(p.read_text()) or {}
+        flat = lambda s: str(s).lower().replace(" ", "").replace("-", "")
+        names = {flat(d.get("model")), flat(d.get("manufacturer"))}
+        for v in (d.get("views") or {}).values():
+            for m in view_parts(v)["silkscreen"]:
+                if flat(m.get("text") or "\x00") in names:
+                    assert m.get("for") in (None, "chassis"), \
+                        f"{d['name']}: {m.get('text')!r} names {m.get('for')!r}"
