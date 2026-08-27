@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx480
-version: 0.1.1
+version: 0.2.0
 maturity: modelled
 manufacturer: Juniper
 model: MX480
@@ -236,12 +236,28 @@ views:
         - {at: [437.0, 0.0], size: [6.0, 622.0], fill: '#3a3d42', confidence: estimated,
            source: lower edge of the side rail; same estimate}
 configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      Chassis only - what you spec before deciding what goes in it. The 8 slot bays are
+      EMPTY; cooling, craft, psus are populated. Enough to power on and reach the box,
+      which is the question most people ask first and the one `default` used to answer
+      with whatever the drawing happened to be populated with.
+    bays:
+      dpc5: ''
+      dpc4: ''
+      dpc3: ''
+      dpc2: ''
+      dpc1: ''
+      dpc0: ''
+      scb1: ''
+      scb0: ''
   ac:
     kind: orderable
     description: AC-powered chassis as photographed - four normal-capacity AC
       supplies, two SCB-MX with REs, DPC 4x10GE in slot 4, DPC 40xGE in
       slots 3 and 0, blanks in 5/2/1.
-    default: true
   dc:
     kind: orderable
     description: DC-powered chassis - the shared MX240/MX480 DC PEM family in

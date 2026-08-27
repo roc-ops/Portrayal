@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9910
-version: 0.1.0
+version: 0.2.0
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9910
@@ -279,7 +279,7 @@ groups:
     physical-context: NetworkingDevice
   fabric:
     term: Slot
-    role: traffic
+    role: service
     index-origin: 0
     physical-context: NetworkingDevice
   fan-trays:
@@ -371,6 +371,26 @@ views:
       - {id: rack-rails, label: 'Vertical rack rail locations - present but NOT dimensioned in any figure for this chassis'}
       - {id: lift-handles, label: 'Chassis lift handles - present but NOT dimensioned in any figure for this chassis'}
       - {id: cooling-path, label: 'Front-to-rear cooling path - inlet at the bottom front, exhaust at the upper rear'}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      Chassis only - what you spec before deciding what goes in it. The 10 slot bays are
+      EMPTY; fabric, fan-trays are populated. Enough to power on and reach the box,
+      which is the question most people ask first and the one `default` used to answer
+      with whatever the drawing happened to be populated with.
+    bays:
+      slot-0: ''
+      slot-1: ''
+      slot-2: ''
+      slot-3: ''
+      slot-4: ''
+      slot-5: ''
+      slot-6: ''
+      slot-7: ''
+      slot-8: ''
+      slot-9: ''
 gaps:
 - what: bay-extents-reconciled-rather-than-measured
   scope: [slots]

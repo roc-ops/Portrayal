@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx10003
-version: 0.1.0
+version: 0.2.0
 maturity: modelled
 manufacturer: Juniper
 model: MX10003
@@ -175,6 +175,18 @@ views:
            source: 'side edge; estimated'}
         - {at: [442.0, 0.0], size: [5.0, 762.0], fill: '#5d6268', confidence: estimated,
            source: 'side edge; estimated'}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      Chassis only - what you spec before deciding what goes in it. The 2 slot bays are
+      EMPTY; cooling, psus, res are populated. Enough to power on and reach the box,
+      which is the question most people ask first and the one `default` used to answer
+      with whatever the drawing happened to be populated with.
+    bays:
+      mpc1: ''
+      mpc0: ''
 gaps:
   - what: dc-power-variant
     scope: [psus]

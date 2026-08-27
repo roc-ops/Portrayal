@@ -7,6 +7,8 @@ is_full_depth: true
 weight: 64.92
 weight_unit: kg
 description: Cisco ASR 9910 Router - the 21 RU, ten-slot member of the ASR 9900 generation
+front_image: true
+rear_image: true
 module-bays:
   - name: fc-0
     position: '0'
@@ -72,6 +74,12 @@ comments: 'Cisco ASR 9910 Router - the 21 RU, ten-slot member of the ASR 9900 ge
   between them. The REAR carries a separate cage of five fabric cards with its own numbering restarting
   at 0, two fan trays and a rear exhaust. Modelled as a BARE CAGE; the fan trays are real bays and the
   card openings are cutouts - see gaps.
+
+
+  Configuration `base`: Chassis only - what you spec before deciding what goes in it. The 10 slot bays
+  are EMPTY; fabric, fan-trays are populated. Enough to power on and reach the box, which is the question
+  most people ask first and the one `default` used to answer with whatever the drawing happened to be
+  populated with.
 
 
   Facts carried in the model that this schema has no field for:

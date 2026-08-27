@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx2008
-version: 0.1.0
+version: 0.2.0
 maturity: modelled
 manufacturer: Juniper
 model: MX2008
@@ -251,6 +251,26 @@ views:
            source: 'side edge; estimated'}
         - {at: [432.0, 0.0], size: [8.0, 784.9], fill: '#4a4f55', confidence: estimated,
            source: 'side edge; estimated'}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      Chassis only - what you spec before deciding what goes in it. The 10 slot bays are
+      EMPTY; psus, res, sfbs are populated. Enough to power on and reach the box, which
+      is the question most people ask first and the one `default` used to answer with
+      whatever the drawing happened to be populated with.
+    bays:
+      fpc0: ''
+      fpc1: ''
+      fpc2: ''
+      fpc3: ''
+      fpc4: ''
+      fpc5: ''
+      fpc6: ''
+      fpc7: ''
+      fpc8: ''
+      fpc9: ''
 gaps:
   - what: rear-photo
     reason: needs-photo

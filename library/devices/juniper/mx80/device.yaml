@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx80
-version: 0.1.1
+version: 0.2.0
 maturity: modelled
 manufacturer: Juniper
 model: MX80
@@ -280,10 +280,20 @@ views:
         - {at: [440.0, 0.0], size: [5.0, 596.0], fill: '#232730', confidence: estimated,
            source: 'side edge; estimated'}
 configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      Chassis only - what you spec before deciding what goes in it. The 2 slot bays are
+      EMPTY; cooling, psus are populated. Enough to power on and reach the box, which is
+      the question most people ask first and the one `default` used to answer with
+      whatever the drawing happened to be populated with.
+    bays:
+      mic-1-0: ''
+      mic-1-1: ''
   mx80:
     kind: model
     description: Full-capacity MX80 - both MIC slots active, 80 Gbps class.
-    default: true
   mx40:
     kind: model
     description: MX40 licence tier of the same chassis - 40 Gbps class; the

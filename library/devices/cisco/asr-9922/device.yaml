@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9922
-version: 0.1.0
+version: 0.2.0
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9922
@@ -282,12 +282,12 @@ groups:
     physical-context: NetworkingDevice
   rp:
     term: RP
-    role: traffic
+    role: service
     index-origin: 0
     physical-context: NetworkingDevice
   fabric:
     term: FC
-    role: traffic
+    role: service
     index-origin: 0
     physical-context: NetworkingDevice
   power-modules:
@@ -403,6 +403,36 @@ views:
       - {id: rack-rails, label: 'Vertical rack rail locations - present but NOT dimensioned in any figure for this chassis'}
       - {id: lift-handles, label: 'Chassis lift handles - present but NOT dimensioned in any figure for this chassis'}
       - {id: cooling-path, label: 'Front-to-rear cooling path - inlet at the front of the middle cage, exhaust at the upper AND lower rear'}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      Chassis only - what you spec before deciding what goes in it. The 20 slot bays are
+      EMPTY; fabric, power-modules, rp are populated. Enough to power on and reach the
+      box, which is the question most people ask first and the one `default` used to
+      answer with whatever the drawing happened to be populated with.
+    bays:
+      slot-0: ''
+      slot-1: ''
+      slot-2: ''
+      slot-3: ''
+      slot-4: ''
+      slot-5: ''
+      slot-6: ''
+      slot-7: ''
+      slot-8: ''
+      slot-9: ''
+      slot-10: ''
+      slot-11: ''
+      slot-12: ''
+      slot-13: ''
+      slot-14: ''
+      slot-15: ''
+      slot-16: ''
+      slot-17: ''
+      slot-18: ''
+      slot-19: ''
 gaps:
 - what: bay-extents-reconciled-rather-than-measured
   scope: [slots]

@@ -124,7 +124,15 @@ def buckets(doc):
 
 
 def entry(doc):
-    e = {"version": str(doc.get("version") or ""), "ids": sorted(_placements(doc))}
+    # The three NAME SETS are recorded separately, not only hashed, because
+    # `required_bump` has to tell an addition from a removal and a hash cannot.
+    # Adding a `base` configuration moves the `names` hash while every id stays
+    # put, and reading that as "same ids, different geometry" called twenty-three
+    # additive changes major.
+    e = {"version": str(doc.get("version") or ""),
+         "ids": sorted(_placements(doc)),
+         "groups": sorted((doc.get("groups") or {}).keys()),
+         "configs": sorted((doc.get("configurations") or {}).keys())}
     e.update(buckets(doc))
     return e
 
@@ -142,10 +150,13 @@ def required_bump(old, new):
     if old.get("shape") == new["shape"] and old.get("names") == new["names"]:
         return "patch" if old.get("surface") != new["surface"] or \
                           old.get("gaps") != new["gaps"] else None
-    before, after = set(old.get("ids") or []), set(new["ids"])
-    if before - after:
-        return "major"          # something a consumer could be holding is gone
-    if before == after:
+    # ANYTHING REMOVED IS BREAKING, whichever set it left: an id, a group or a
+    # configuration name can each be held by something outside this repository.
+    for key in ("ids", "groups", "configs"):
+        if set(old.get(key) or []) - set(new.get(key) or []):
+            return "major"
+    if old.get("shape") != new["shape"] and \
+            set(old.get("ids") or []) == set(new["ids"]):
         return "major"          # same ids, different geometry: a slot moved
     return "minor"              # strictly additive
 

@@ -200,3 +200,55 @@ def test_examples_never_become_device_types():
                 examples.add(n)
     leaked = [n for n in names if any(e in n for e in examples)]
     assert not leaked, f"illustrations exported as device types: {leaked}"
+
+
+def test_adding_a_configuration_is_minor_not_major():
+    """A `base` added to every modular chassis moved the names hash while every
+    id stayed put, and the first version of this rule called all 23 major."""
+    a = dev()
+    b = dev()
+    b["configurations"] = {"base": {"kind": "base"}}
+    assert dl.required_bump(dl.entry(a), dl.entry(b)) == "minor"
+
+
+def test_removing_a_configuration_is_major():
+    """A configuration name can be held by something outside this repository."""
+    a = dev(); a["configurations"] = {"base": {"kind": "base"}, "dc": {"kind": "orderable"}}
+    b = dev(); b["configurations"] = {"base": {"kind": "base"}}
+    assert dl.required_bump(dl.entry(a), dl.entry(b)) == "major"
+
+
+def test_removing_a_group_is_major():
+    a = dev()
+    b = dev(); b["groups"] = {}
+    assert dl.required_bump(dl.entry(a), dl.entry(b)) == "major"
+
+
+def test_every_base_leaves_its_traffic_bays_empty():
+    """The point of a base: a chassis you can log into, with nothing decided
+    about traffic cards yet."""
+    import glob, yaml as y
+    for p in glob.glob(str(ROOT / "library/devices/*/*/device.yaml")):
+        d = y.safe_load(open(p)) or {}
+        base = next((c for c in (d.get("configurations") or {}).values()
+                     if (c or {}).get("kind") == "base"), None)
+        if not base:
+            continue
+        roles = {g: (gd or {}).get("role") for g, gd in (d.get("groups") or {}).items()}
+        traffic = [b["id"] for v in (d.get("views") or {}).values()
+                   for b in (((v or {}).get("components") or {}).get("bays") or [])
+                   if roles.get(b.get("group")) == "traffic"]
+        seated = [t for t in traffic if (base.get("bays") or {}).get(t, "x") != ""]
+        assert not seated, f"{p}: base leaves {seated[:3]} populated"
+
+
+def test_a_base_is_always_the_default():
+    import glob, yaml as y
+    for p in glob.glob(str(ROOT / "library/devices/*/*/device.yaml")):
+        d = y.safe_load(open(p)) or {}
+        cfgs = d.get("configurations") or {}
+        bases = [n for n, c in cfgs.items() if (c or {}).get("kind") == "base"]
+        if not bases:
+            continue
+        dflt = [n for n, c in cfgs.items() if (c or {}).get("default")]
+        assert dflt == bases, f"{p}: base={bases} default={dflt}"

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: c40g
-version: 0.1.1
+version: 0.2.0
 maturity: modelled
 manufacturer: Casa Systems
 model: C40G
@@ -457,6 +457,27 @@ views:
         - {id: flange-r3, ref: common/screw-head@1, at: [383.65, 186.0], group: furniture, rel-pos: 8}
         - {id: flange-r4, ref: common/screw-head@1, at: [383.65, 228.0], group: furniture, rel-pos: 9}
 configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      Chassis only - what you spec before deciding what goes in it. The 12 slot bays are
+      EMPTY; cooling, power are populated. Enough to power on and reach the box, which
+      is the question most people ask first and the one `default` used to answer with
+      whatever the drawing happened to be populated with.
+    bays:
+      front-0: ''
+      front-1: ''
+      front-2: ''
+      front-3: ''
+      front-4: ''
+      front-5: ''
+      rear-0: ''
+      rear-1: ''
+      rear-2: ''
+      rear-3: ''
+      rear-4: ''
+      rear-5: ''
   ac-power:
     kind: orderable
     description: AC power. Four 1100 W PSUs in a row across the bottom front behind the snap-on
@@ -472,7 +493,6 @@ configurations:
     kind: example
     description: 'BDM "3+1". Redundancy collapses to a single protecting slot: rear 1 takes the LC-BDM-SWITCH,
       and rear 4 takes a combined 6+12 SW-IO which frees slot 4 to carry traffic.'
-    default: true
     bays:
       front-0: casa/bdm2m@1
       front-1: casa/bdm2m@1

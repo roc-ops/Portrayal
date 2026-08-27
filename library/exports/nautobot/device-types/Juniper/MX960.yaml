@@ -7,6 +7,8 @@ is_full_depth: true
 description: 'Juniper MX960 - the 16RU chassis that turns the MX240/MX480 family vertical: fourteen card
   slots stand side by side in the cage (six line slots, SCB0/SCB1, then six more, the first of which doubles
   as'
+front_image: true
+rear_image: true
 module-bays:
   - name: craft
     position: craft
@@ -94,6 +96,12 @@ comments: 'Juniper MX960 - the 16RU chassis that turns the MX240/MX480 family ve
   as SCB2 in redundant fabric configurations). The craft interface spans the top with one status cluster
   per slot; fan trays sit horizontally above and below the cage behind bezels, and the standard cable
   manager hangs under it. Four tall AC supplies fill the rear under the inlet strip.
+
+
+  Configuration `base`: Chassis only - what you spec before deciding what goes in it. The 12 slot bays
+  are EMPTY; psus, scbs are populated. Enough to power on and reach the box, which is the question most
+  people ask first and the one `default` used to answer with whatever the drawing happened to be populated
+  with.
 
 
   Facts carried in the model that this schema has no field for:

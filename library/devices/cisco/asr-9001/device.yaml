@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9001
-version: 0.1.1
+version: 0.2.0
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9001
@@ -396,12 +396,22 @@ views:
     regions:
       - {id: rack-flange, label: 'Integral rack flange - at the FRONT, which is x = 0 on a RIGHT view'}
 configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      Chassis only - what you spec before deciding what goes in it. The 2 bay bays are
+      EMPTY; cooling, power-modules are populated. Enough to power on and reach the box,
+      which is the question most people ask first and the one `default` used to answer
+      with whatever the drawing happened to be populated with.
+    bays:
+      mpa-0: ''
+      mpa-1: ''
   asr-9001:
     kind: model
     description: >-
       The full ASR 9001. 120 Gbps fabric, four fixed 10 GE SFP+ ports and both
       modular bays usable.
-    default: true
     part-numbers:
       ASR 9001 Router:
         part: ASR-9001

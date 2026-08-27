@@ -3398,8 +3398,18 @@ def lint_device(path, validator, lib_roots):
         for bid, ref in (cfg.get("bays") or {}).items():
             if bid not in bay_accepts:
                 err(path, "L8", f"config {cname}: unknown bay {bid}")
+            elif ref == "":
+                # AN EMPTY STRING MEANS THE BAY IS EMPTY, which is a legitimate
+                # thing for a configuration to say and the only way a `kind: base`
+                # can leave the traffic slots open while the supplies, fans and
+                # engines stay seated. The renderer has always honoured it - it
+                # draws the opening as a real hole with the depth of whatever the
+                # bay accepts - but nothing had ever written one, so this check
+                # had never met the case and rejected the emptiest possible ref
+                # for not being a module the bay accepts.
+                continue
             elif ref not in bay_accepts[bid]:
-                err(path, "L8", f"config {cname}: bay {bid} ref {ref} not in accepts")
+                err(path, "L8", f"config {cname}: bay {bid} ref {ref!r} not in accepts")
     return data
 
 

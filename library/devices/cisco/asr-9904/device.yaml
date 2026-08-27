@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9904
-version: 0.1.0
+version: 0.2.0
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9904
@@ -355,6 +355,20 @@ views:
     regions:
       - {id: side-air-intake, label: Side air intake - inlet at the right side of the cage}
       - {id: air-filter, label: 'Single air filter, accessible from the rear'}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      Chassis only - what you spec before deciding what goes in it. The 4 slot bays are
+      EMPTY; nothing else is fitted. Enough to power on and reach the box, which is the
+      question most people ask first and the one `default` used to answer with whatever
+      the drawing happened to be populated with.
+    bays:
+      slot-0: ''
+      slot-1: ''
+      slot-2: ''
+      slot-3: ''
 gaps:
 - what: power-module-openings
   scope: [front]
