@@ -20,7 +20,7 @@ import yaml
 APPLIED_CLASSES = {"sticker", "label", "marking"}
 
 import attrsections as attrs_mod
-from manifest import view_parts, targets, split_target
+from manifest import view_parts, targets, split_target, component_refs
 import capability
 
 TOOL_VERSION = "0.1.0"
@@ -1127,12 +1127,67 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     return svg
 
 
+def _inputs(device, device_yaml, lib):
+    """Every file this drawing is made from.
+
+    OVER-INCLUSIVE ON PURPOSE. All of a component's skins are counted, not the
+    one a given placement picks, and this file and manifest.py are counted too.
+    The failure modes are not symmetric: rebuilding something that did not need
+    it costs a second, and skipping something that did leaves a stale drawing
+    that looks fresh and is believed. When in doubt, rebuild.
+    """
+    files = {Path(device_yaml), Path(__file__),
+             Path(__file__).with_name("manifest.py")}
+    seen, queue = set(), list(component_refs(device))
+    while queue:
+        ref = queue.pop()
+        if ref in seen:
+            continue
+        seen.add(ref)
+        try:
+            contract, skins = lib.resolve(ref)
+        except Exception:
+            continue                      # a bad ref is the linter's to report
+        if skins is not None:
+            files.add(Path(skins).parent / "contract.yaml")
+            files.update(Path(skins).glob("*.svg"))
+        for part in ((contract or {}).get("parts") or []):
+            if part.get("ref"):
+                queue.append(part["ref"].split(":")[0])
+    return {f for f in files if f.exists()}
+
+
+def _outputs(device, configs, default_cfg, outdir):
+    names = {f"{device['name']}.configs.json"}
+    for cfg_name in configs:
+        for view_name in device.get("views") or {}:
+            names.add(f"{device['name']}.{cfg_name}.{view_name}.svg")
+            if cfg_name == default_cfg:
+                names.add(f"{device['name']}.{view_name}.svg")
+    return {outdir / n for n in names}
+
+
+def is_stale(device, device_yaml, lib, configs, default_cfg, outdir):
+    """True unless every output exists and is newer than every input."""
+    outs = _outputs(device, configs, default_cfg, outdir)
+    if not all(o.exists() for o in outs):
+        return True
+    newest_in = max(f.stat().st_mtime_ns for f in _inputs(device, device_yaml, lib))
+    oldest_out = min(o.stat().st_mtime_ns for o in outs)
+    return newest_in >= oldest_out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("device_yaml")
     ap.add_argument("--library", action="append", required=True,
                     help="library root (repeatable, searched in order)")
     ap.add_argument("--out", default="dist")
+    # SKIP A DEVICE WHOSE DRAWING IS ALREADY NEWER THAN EVERYTHING IT IS MADE
+    # FROM. `build.sh` wipes dist and re-renders all of them, so editing one
+    # manifest costs a full rebuild - fine at 21 devices, not at 200.
+    ap.add_argument("--if-stale", action="store_true",
+                    help="do nothing when every output is newer than every input")
     ap.add_argument("--without", dest="without", action="append", default=[],
                     choices=["silkscreen"],
                     help="omit a layer. --without silkscreen emits the punched panel and "
@@ -1148,6 +1203,11 @@ def main():
     outdir.mkdir(parents=True, exist_ok=True)
     configs = device.get("configurations") or {"default": {"default": True}}
     default_cfg = next((n for n, c in configs.items() if c.get("default")), next(iter(configs)))
+    if args.if_stale and not is_stale(device, args.device_yaml, lib,
+                                      configs, default_cfg, outdir):
+        print(f"up to date {device['name']}")
+        return
+
     for cfg_name, cfg in configs.items():
         for view_name, view in device["views"].items():
             svg = render_view(device, view_name, view or {}, lib, include=tuple(args.include),

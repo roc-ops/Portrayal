@@ -49,3 +49,35 @@ def split_target(t):
 VIEW_KEY_ORDER = ("size", "panel", "silkscreen", "components", "regions")
 PANEL_KEY_ORDER = ("decor", "cutouts")
 COMPONENT_KEY_ORDER = ("bays", "placements")
+
+
+def component_refs(device):
+    """Every `ns/name@major` a device manifest names, from anywhere it can.
+
+    A device depends on more than its own file, and the places a ref can hide
+    are not obvious: a placement's `ref`, a bay's `accepts` list AND its
+    `default`, a configuration's `bays` map and its `occupants` - which may be a
+    bare string or a mapping carrying `ref`. Miss one and a dependency graph
+    built on this silently under-reports, which for an incremental build means a
+    stale drawing that looks fresh.
+    """
+    out = set()
+    for view in (device.get("views") or {}).values():
+        parts = view_parts(view or {})
+        for q in parts["placements"]:
+            if q.get("ref"):
+                out.add(q["ref"].split(":")[0])
+        for b in parts["bays"]:
+            for a in (b.get("accepts") or []):
+                out.add(a.split(":")[0])
+            if b.get("default"):
+                out.add(str(b["default"]).split(":")[0])
+    for cfg in (device.get("configurations") or {}).values():
+        for v in ((cfg or {}).get("bays") or {}).values():
+            if v:
+                out.add(str(v).split(":")[0])
+        for v in ((cfg or {}).get("occupants") or {}).values():
+            ref = v.get("ref") if isinstance(v, dict) else v
+            if ref:
+                out.add(str(ref).split(":")[0])
+    return out

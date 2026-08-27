@@ -67,6 +67,7 @@ import yaml
 
 import attrsections as attrs_mod
 from manifest import (view_parts, targets, split_target, VIEW_KEY_ORDER,
+                      component_refs,
                       PANEL_KEY_ORDER, COMPONENT_KEY_ORDER)
 from jsonschema import Draft202012Validator
 
@@ -485,6 +486,43 @@ def load_yaml(path):
     if hit is None:
         hit = _YAML_CACHE[key] = yaml.safe_load(path.read_text())
     return hit
+
+
+def device_dependencies(dev_path, lib_roots):
+    """Every file a device's drawing depends on: its manifest, the contracts of
+    every component it names, those components' own `parts`, and every skin any
+    of them draws with.
+
+    TRANSITIVE, because a component may compose others - the C40G's AC inlet
+    panel carries four std/c14-inlet - and a build that re-rendered only on a
+    direct ref would go stale the moment somebody edited an inlet.
+
+    SKINS COUNT. They are the actual artwork; a contract can be untouched while
+    the drawing it produces changes completely.
+    """
+    dev = load_yaml(dev_path)
+    if not dev:
+        return {Path(dev_path)}
+    files = {Path(dev_path)}
+    seen, queue = set(), list(component_refs(dev))
+    while queue:
+        ref = queue.pop()
+        if ref in seen:
+            continue
+        seen.add(ref)
+        cp = resolve_component(ref, lib_roots)
+        if not cp:
+            continue
+        files.add(cp)
+        spec = load_yaml(cp) or {}
+        for sk in (spec.get("skins") or []):
+            sp = cp.parent / "skins" / f"{sk}.svg"
+            if sp.exists():
+                files.add(sp)
+        for part in (spec.get("parts") or []):
+            if part.get("ref"):
+                queue.append(part["ref"].split(":")[0])
+    return files
 
 
 def resolve_component(ref, lib_roots):
@@ -2904,6 +2942,23 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--schemas", required=True)
     ap.add_argument("--library", action="append", required=True)
+    # LINT ONE DEVICE WHILE YOU ARE WORKING ON IT. A full pass reads every
+    # component in the library because most rules are about a device AGAINST the
+    # library, and that is right for a gate - but it is the wrong unit for the
+    # edit-check loop, where one manifest changed and the answer wanted is about
+    # that manifest.
+    #
+    # It narrows the DEVICE pass only. Components are still linted in full,
+    # because a device's rules resolve refs into them and half-checked
+    # components would make the device answer unreliable; and because that pass
+    # is the cheap half once parses are cached.
+    #
+    # NOT A SUBSTITUTE FOR THE FULL RUN, and the output says so. Cross-device
+    # facts - a component nothing accepts, the portfolio matrix - cannot be
+    # computed from one device, so they are skipped rather than computed wrongly.
+    ap.add_argument("--device", action="append", default=[], metavar="NAME",
+                    help="lint only these devices by name or path fragment; "
+                         "components are still checked in full")
     args = ap.parse_args()
     schemas = Path(args.schemas)
     std_file = schemas / "standards.yaml"
@@ -2919,9 +2974,21 @@ def main():
 
     n = 0
     matrix = []
+    # With --device, check only the components those devices actually reach.
+    # Linting all 254 was most of a filtered run - and a component no selected
+    # device names cannot affect the answer being asked for.
+    wanted = None
+    if args.device:
+        wanted = set()
+        for root in args.library:
+            for f in sorted(Path(root).glob("devices/**/device.yaml")):
+                if any(sel in str(f) for sel in args.device):
+                    wanted |= device_dependencies(f, args.library)
     for root in args.library:
         root = Path(root)
         for f in sorted(root.glob("components/**/contract.yaml")):
+            if wanted is not None and f not in wanted:
+                continue
             lint_duplicate_keys(f)
             d = lint_component(f, comp_v)
             # a file that would not parse has already been reported; running the
@@ -2935,10 +3002,14 @@ def main():
                 lint_component_relief_confidence(f, d, args.library)
             n += 1
         for f in sorted(root.glob("devices/**/device.yaml")):
+            if args.device and not any(sel in str(f) for sel in args.device):
+                continue
             lint_duplicate_keys(f)
             d = lint_device(f, dev_v, args.library); n += 1
             if d is not None and d.get("kind") == "device":
                 matrix.append((f, d))
+        if args.device:
+            continue
         for f in sorted(root.glob("devices/**/overlays/*.yaml")):
             lint_duplicate_keys(f)
             data = load_yaml(f)
@@ -2946,7 +3017,15 @@ def main():
                 err(f, "L1", f"{'/'.join(str(p) for p in e.path)}: {e.message}")
             n += 1
 
-    print_matrix(matrix, schemas)
+    # The matrix is a PORTFOLIO view - it ranks devices against each other - so
+    # printing it for a subset would invite reading a partial ranking as a whole
+    # one. Say what was skipped instead.
+    if args.device:
+        print(f"LINT: {len(matrix)} device(s) matching {args.device} - "
+              "PARTIAL RUN, portfolio matrix and cross-device checks skipped. "
+              "Run without --device before committing")
+    else:
+        print_matrix(matrix, schemas)
 
     if WARNINGS:
         by_code = {}

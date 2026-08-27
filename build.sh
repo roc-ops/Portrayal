@@ -2,12 +2,40 @@
 # Build the full demo bundle: rendered device SVGs + the two JSON indexes.
 set -euo pipefail
 cd "$(dirname "$0")"
+# `--fast` renders only what changed. FULL IS THE DEFAULT and stays that way:
+# a staleness check that is wrong produces a drawing that looks fresh and is
+# believed, which is worse than a slow build, so the gate does not depend on it.
+# The dependency walk errs the other way - all of a component's skins count,
+# and so does the renderer itself - so `--fast` rebuilds more than it must.
+#
+# `--device NAME` is the edit-check loop: lint that device against only the
+# components it reaches, re-render just it, and refresh the indexes so the
+# viewer is consistent. It does NOT run the DCIM export, which is a consumer
+# artifact nothing on the page reads. Repeatable.
+FAST=0
+DEVSEL=()
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --fast|-f) FAST=1; shift ;;
+    --device) DEVSEL+=("$2"); FAST=1; shift 2 ;;
+    --) shift; break ;;
+    *) break ;;
+  esac
+done
 OUT="${1:-library/dist}"
 
 # Lint first. A broken manifest used to render as an empty or partial dist that
 # looked like a successful build - failing here instead means that cannot happen.
-python3 spec/tools/portrayal/lint.py --schemas spec/schemas --library library
-rm -rf "$OUT"
+LINTSEL=()
+for d in ${DEVSEL+"${DEVSEL[@]}"}; do LINTSEL+=(--device "$d"); done
+python3 spec/tools/portrayal/lint.py --schemas spec/schemas --library library \
+  ${LINTSEL+"${LINTSEL[@]}"}
+STALE=()
+if [ "$FAST" = 1 ]; then
+  STALE=(--if-stale)
+else
+  rm -rf "$OUT"
+fi
 # ONE PROCESS PER DEVICE, RUN IN PARALLEL. Each device renders from its own
 # manifest and writes its own files, so nothing here shares state and the loop
 # was serial only because it was written as one. 21 devices went 9.3s -> 1.5s on
@@ -16,9 +44,16 @@ rm -rf "$OUT"
 # `-P 0` would use as many workers as there is work, which on a few hundred
 # devices means a few hundred interpreters at once. Capped at the core count.
 JOBS="${JOBS:-$(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 4)}"
-ls library/devices/*/*/device.yaml \
+device_list() {
+  if [ ${#DEVSEL[@]} -eq 0 ]; then
+    ls library/devices/*/*/device.yaml
+  else
+    for d in "${DEVSEL[@]}"; do ls library/devices/*/*/device.yaml | grep -- "$d"; done
+  fi
+}
+device_list \
   | xargs -P "$JOBS" -I{} python3 spec/tools/portrayal/render.py {} \
-      --library library --out "$OUT" >/dev/null
+      --library library --out "$OUT" ${STALE+"${STALE[@]}"} >/dev/null
 # The four index passes each walk the whole library and each writes its own
 # file - devices.json, components.json, labs.json, gaps.json - and none of them
 # reads another's output, so they were serial only by habit. Together they were
@@ -36,10 +71,12 @@ for pid in "${pids[@]}"; do wait "$pid"; done
 # Two NOS profiles x every device is 42 interpreter starts for about 3 seconds
 # of actual work, so the same cap applies. `|| true` per item is kept: a device
 # that exports nothing is not a build failure.
+if [ ${#DEVSEL[@]} -eq 0 ]; then
 ls library/devices/*/*/device.yaml \
   | xargs -P "$JOBS" -I{} sh -c '\
       for nos in arcos sonic; do \
         python3 spec/tools/portrayal/nautobot_export.py "$1" --nos "$nos" \
           --out library/exports/nautobot 2>/dev/null || true; \
       done' _ {}
+fi
 echo "built $(ls "$OUT" | wc -l | tr -d ' ') files -> $OUT"
