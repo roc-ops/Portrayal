@@ -13,6 +13,7 @@ description: >-
 size: {w: 43.7, h: 395.7, d: 616.0}
 attrs:
   model: 'A9K-MOD200-TR'
+  power-absent: not-published
   role: 'modular-line-card'
   capacity: '200 Gbps'
   mpa-bays: 2
@@ -142,17 +143,27 @@ provenance:
     card power row is headed '(-TR or -SE)', so Cisco itself gives one figure for the
     pair.
   power: >-
-    NOT CARRIED, and the elimination argument is set out so a reader can weigh it. Table
-    35 has exactly four modular line card rows and this family has exactly four
-    capacities. Three rows name theirs - '80 Gigabyte 2-NPU', '160 Gigabyte 4-NPU', '400
-    Gigabyte' - and the fourth is headed 'Modular 4-NPU Line Card (-TR or -SE)', 520 W
-    at 25 C, 590 at 40, 620 at 55. By elimination that row is the 200 Gigabyte card, and
-    it is very likely right. It is NOT carried, because the heading is ambiguous ON ITS
-    FACE: the 160 Gigabyte row ALSO says 4-NPU, so 'Modular 4-NPU Line Card' names a
-    description that Table 35 has already used for a different card. An argument from
-    what is left over is not a citation, and the same restraint is what kept a figure
-    off cisco/a9k-16x100ge-se and cisco/asr-9922-sfc110. The L27 warning stands and is
-    the correct signal.
+    NOT PUBLISHED. Cisco does not state per-card power for this generation in any document
+    that could be found, and the search was thorough enough to say so.
+    WHAT WAS SEARCHED. All 199 converted documents, for this part number, with a
+    twelve-line window either side and again with a thirty-line window against any line
+    introducing a power requirement or consumption - no hit. The CANONICAL DATASHEETS are
+    staged and converted (datasheet-c78-743580 for the 5th-generation high-density
+    multi-rate cards, c78-743579, c78-744662 for the 400 GbE multi-rate card, c78-744663)
+    and their product-specification tables run chassis compatibility, port density,
+    performance, dimensions, weight, operating and storage temperature, humidity, EMC,
+    immunity, safety and NEBS - and then stop. There is no power row.
+    Cisco's own per-card power appendix EXISTS and does not cover this card: the ASR
+    9000 Ethernet Line Card Installation Guide, Table 35 'Ethernet Line Card Power
+    Consumption Values', gives 25/40/55 C figures for the previous generation and has no row
+    for a 200 Gigabyte modular card, a 400G combo card or any FLEX part. That was checked
+    against the guide's own part-number-to-description mapping table rather than by reading
+    the prose.
+    A web search in August 2026 returned only reseller listings, which are not a source
+    for this library.
+    THIS IS A VENDOR DISCLOSURE GAP, NOT AN INTAKE GAP - staging more documents will not
+    close it. The remaining routes are the Cisco Power Calculator or asking Cisco directly,
+    and if either produces a figure it belongs here.
   mpas: >-
     install guide - 'The modular line card provides two bays that support the following
     Modular Port Adapters (MPAs)', followed by the chapter's own MPA sections. NO PER-

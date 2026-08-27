@@ -7,8 +7,19 @@ behaviour: fills
 profile: networking
 description: Hot-swappable 1U fan module — 44.6mm square unioned with a 4mm left mounting tab (captive screw), honeycomb grille, pull bar in the lower third
 size: {w: 48.6, h: 40.0}
-attrs: {airflow: front-to-back}
+attrs: {power-absent: not-applicable, airflow: front-to-back}
 provenance:
+  power: >-
+    NOT APPLICABLE, because this contract is a GENERIC and not a part. It is a shape that
+    stands in for every module of its kind, so there is no one figure to state: a 40GBASE-SR4
+    is about 1.5 W and a 400G ZR about 20 W, and this single drawing is both of them. Any
+    wattage written here would be a fiction dressed as a fact rather than a missing one. The
+    figure belongs on the PLACEMENT, where a device that knows which module it ships can
+    source it - the same division of labour L18 already draws for `media`, where a port
+    inheriting a family from its cage must declare the real media on the placement. L27 has
+    always exempted this contract in code; this records the reason in the data, so that a
+    consumer totalling a chassis can tell a deliberate silence from an unanswered question.
+    The chassis-level hole stays visible in L29, which is the right place for it.
   size: photo-measured (red bar 36.6mm wide -> square 44.6mm; pitch 48.6mm)
   elements: photo-measured (bar rows 29.4-32.7mm abs)
 states: [ok, fail, absent]

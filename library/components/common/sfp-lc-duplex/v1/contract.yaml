@@ -9,9 +9,20 @@ profile: networking
 description: SFP transceiver with an LC duplex face - two recessed bores with the
   fiber ferrules standing in them, and a bail latch that pivots to release
 size: {w: 13.5, h: 8.5}
-attrs: {media: sfp, form-factor: sfp, connector: lc-duplex, mode: single-mode,
+attrs: {power-absent: not-applicable, media: sfp, form-factor: sfp, connector: lc-duplex, mode: single-mode,
         reach: 30km, speed: 100m}
 provenance:
+  power: >-
+    NOT APPLICABLE, because this contract is a GENERIC and not a part. It is a shape that
+    stands in for every module of its kind, so there is no one figure to state: a 40GBASE-SR4
+    is about 1.5 W and a 400G ZR about 20 W, and this single drawing is both of them. Any
+    wattage written here would be a fiction dressed as a fact rather than a missing one. The
+    figure belongs on the PLACEMENT, where a device that knows which module it ships can
+    source it - the same division of labour L18 already draws for `media`, where a port
+    inheriting a family from its cage must declare the real media on the placement. L27 has
+    always exempted this contract in code; this records the reason in the data, so that a
+    consumer totalling a chassis can tell a deliberate silence from an unanswered question.
+    The chassis-level hole stays visible in L29, which is the right place for it.
   size: drawing (SFP-30K-FSF, AutomationDirect, full scale - 0.53 in [13.5] wide by
     0.33 in [8.5] high), confirmed by the STEP solid at 13.46 x 8.48
   lc-spacing: measured (STEP front face - bore centres at x +/-3.175, i.e. 0.125 in

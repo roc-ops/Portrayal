@@ -9,12 +9,21 @@ description: >-
   Juniper MPC7E-10G fixed MPC - forty SFP+ in four PIC groups of ten. Authored as the MX960 vertical form (jacks rotated 90).
 attrs:
   model: MPC7E-10G
+  power-draw-max-w: 500
 provenance:
   size: 'registry + layout - the face is the slot geometry of its chassis
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
     drawing. No faceplate figure was usable for this model'
-  power: 'NOT STATED for this model in the module reference extraction - L27 stands'
+  power: >-
+    MX module reference, the MPC7E-10G section (headed 'Model number: MPC7E-10G', 'Name in
+    the CLI: MPC7E 3D 40XGE'): '| Power requirements | - Typical: 405W - At different
+    temperatures: 55 C: 500W 40 C: 465W 25 C: 430W |'. The 55 C rung is carried as the worst
+    rated case; the typical is 405 W. Found only after widening the search from table ROWS
+    to per-model SECTIONS - this figure is not in a row keyed by part number, it is a spec
+    line eight lines below the section heading, which is why three earlier passes over the
+    same corpus missed it. Distinct from MPC7E-MRATE, the sibling card, which is 545
+    W.
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'

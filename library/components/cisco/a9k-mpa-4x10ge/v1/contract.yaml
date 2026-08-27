@@ -13,6 +13,7 @@ description: >-
 size: {w: 34.54, h: 161.8, d: 170.18}
 attrs:
   model: 'A9K-MPA-4X10GE'
+  power-absent: not-published
   role: 'modular-port-adapter'
   xfp: 4
   media: 'XFP, 10 Gigabit Ethernet'
@@ -98,10 +99,27 @@ provenance:
     with XFP' - which is where the XFP rather than SFP+ comes from; the 8-port MPA in
     the same list is SFP+ and is a different aperture entirely.
   power: >-
-    NOT STATED. Table 35 of the Ethernet Line Card Installation Guide gives per-card
-    power for the modular-chassis line cards including the A9K-MOD carriers, but nothing
-    for the MPAs that go inside them, and the ASR 9001 data sheet gives a chassis figure
-    only (425 W typical, 525 W maximum).
+    NOT PUBLISHED. Cisco does not state per-card power for this generation in any document
+    that could be found, and the search was thorough enough to say so.
+    WHAT WAS SEARCHED. All 199 converted documents, for this part number, with a
+    twelve-line window either side and again with a thirty-line window against any line
+    introducing a power requirement or consumption - no hit. The CANONICAL DATASHEETS are
+    staged and converted (datasheet-c78-743580 for the 5th-generation high-density
+    multi-rate cards, c78-743579, c78-744662 for the 400 GbE multi-rate card, c78-744663)
+    and their product-specification tables run chassis compatibility, port density,
+    performance, dimensions, weight, operating and storage temperature, humidity, EMC,
+    immunity, safety and NEBS - and then stop. There is no power row.
+    Cisco's own per-card power appendix EXISTS and does not cover this card: the ASR
+    9000 Ethernet Line Card Installation Guide, Table 35 'Ethernet Line Card Power
+    Consumption Values', gives 25/40/55 C figures for the previous generation and has no row
+    for a 200 Gigabyte modular card, a 400G combo card or any FLEX part. That was checked
+    against the guide's own part-number-to-description mapping table rather than by reading
+    the prose.
+    A web search in August 2026 returned only reseller listings, which are not a source
+    for this library.
+    THIS IS A VENDOR DISCLOSURE GAP, NOT AN INTAKE GAP - staging more documents will not
+    close it. The remaining routes are the Cisco Power Calculator or asking Cisco directly,
+    and if either produces a figure it belongs here.
   lifecycle: >-
     searched - no end-of-life notice for this part number is in the intake.
   weight: >-

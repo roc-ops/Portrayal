@@ -12,8 +12,19 @@ description: >-
   the label area underneath.
 size: {w: 18.35, h: 8.5, d: 83.2}
 mates: qsfp
-attrs: {media: qsfp, form-factor: qsfp}
+attrs: {power-absent: not-applicable, media: qsfp, form-factor: qsfp}
 provenance:
+  power: >-
+    NOT APPLICABLE, because this contract is a GENERIC and not a part. It is a shape that
+    stands in for every module of its kind, so there is no one figure to state: a 40GBASE-SR4
+    is about 1.5 W and a 400G ZR about 20 W, and this single drawing is both of them. Any
+    wattage written here would be a fiction dressed as a fact rather than a missing one. The
+    figure belongs on the PLACEMENT, where a device that knows which module it ships can
+    source it - the same division of labour L18 already draws for `media`, where a port
+    inheriting a family from its cage must declare the real media on the placement. L27 has
+    always exempted this contract in code; this records the reason in the data, so that a
+    consumer totalling a chassis can tell a deliberate silence from an unanswered question.
+    The chassis-level hole stays visible in L29, which is the right place for it.
   size: drawing - 18.35 +/-0.10 wide by 8.50 +/-0.10 high are called out
     directly. Depth 83.2 is the 118 reference overall less the 34.80 MAX tab
     reach, so it follows from the drawing rather than from a standard
