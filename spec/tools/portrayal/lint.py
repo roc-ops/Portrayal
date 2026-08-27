@@ -927,7 +927,17 @@ def _power_provenance(path, data, attrs):
     absent = attrs.get("power-absent")
     if not stated and not absent:
         return
-    if str(((data.get("provenance") or {}).get("power")) or "").strip():
+    # ANY power-named provenance key counts, not just `power`. Contracts written
+    # before this rule existed key the note by the ATTRIBUTE it explains -
+    # `power-draw-max-w:`, `power-output-w:`, `power-output:` - which is at least
+    # as precise as `power:` and arguably more so when a contract states several
+    # figures. Reading only `power` accused eighteen contracts that had done the
+    # work, including one quoting its guide verbatim: "The fan module has a power
+    # draw of approximately 400W." A rule that fires on correct models teaches
+    # people to ignore the linter, which is the failure L14 and L21 were both
+    # recalibrated out of.
+    prov = data.get("provenance") or {}
+    if any(str(v or "").strip() for k, v in prov.items() if k.startswith("power")):
         return
     # AN ABSENCE CLAIM IS A FACT ABOUT THE WORLD and needs sourcing exactly as a
     # number does - more, if anything, because it is what tells the next person

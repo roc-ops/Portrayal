@@ -11,12 +11,22 @@ description: Gospower G1482-1600WRA 1600W AC PSU (Celestica ES1010 FRU) - 54.5V
 size: {w: 73.5, h: 40.0}
 attrs:
   power-output-w: 1600
+  power-output-low-line-w: 1000
   input: ac
   model: G1482-1600WRA
   part-number: PR0B
   vendor: Gospower
   output-v: '54.5'
 provenance:
+  power: >-
+    photo - the unit's own FRU label, captured in the intake photographs and transcribed on
+    this contract under provenance.ratings: input 100-127 V 13 A or 200-240 V 10 A, output
+    +54.5 V at 18.35 A or 29.35 A, and '1000W/1600W max depending on input'. THE LOW-LINE
+    FIGURE IS NOW RECORDED ALONGSIDE, which it was not before: 1600 W is the 200-240 V
+    rating and the supply delivers 1000 W on a 100-127 V feed, so a budget drawn on low line
+    while assuming 1600 W would be 600 W over. Both check against the output rail - 54.5 x
+    29.35 = 1600 and 54.5 x 18.35 = 1000. Recorded the way mx304-psu-ac and mx240-psu-ac
+    already do it: high line in power-output-w, low line beside it.
   size: estimated (CRPS 1U form factor; verify with calipers)
   face: >-
     STILL ESTIMATED. The features are read from psu-face.jpeg - fan, C14, purple

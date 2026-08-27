@@ -635,3 +635,22 @@ def test_a_tray_can_say_watts_are_the_wrong_unit():
     d["provenance"] = {"power": "a tray: it carries current, it does not convert it"}
     assert not caught("L27", lint.lint_component_power, P, d)
     assert not caught("L52", lint.lint_component_power, P, d)
+
+
+def test_provenance_keyed_by_the_attribute_counts():
+    """Contracts predating L52 key the note by the attr, which is no less a source."""
+    d = _pw({"power-draw-max-w": 400})
+    d["provenance"] = {"power-draw-max-w": "guide: 'a power draw of approximately 400W'"}
+    assert not caught("L52", lint.lint_component_power, P, d)
+
+
+def test_a_power_named_key_on_an_attestation_counts_too():
+    d = _pw({"power-absent": "not-published"})
+    d["provenance"] = {"power-output-w": "searched the corpus; the vendor gives current only"}
+    assert not caught("L52", lint.lint_component_power, P, d)
+
+
+def test_an_unrelated_provenance_key_does_not_count():
+    d = _pw({"power-draw-max-w": 400})
+    d["provenance"] = {"size": "measured off the rear panel figure"}
+    assert caught("L52", lint.lint_component_power, P, d)

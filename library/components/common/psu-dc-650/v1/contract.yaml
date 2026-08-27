@@ -9,6 +9,14 @@ description: 650W -48V DC PSU module (Edgecore PSU-DC-650B family) — same foot
 size: {w: 56.0, h: 40.0}
 attrs: {power-output-w: 650, input: dc, voltage: '-48v'}
 provenance:
+  power: >-
+    datasheet - the Edgecore boxes this generic serves state it directly. The DCS204
+    datasheet (AS7726-32X): 'PSUs: 2 redundant, load-sharing, hot-swappable 650W AC or -48
+    VDC', with the DC input line '-36 - -72 VDC (16A/650 W max.)'. The DCS203 quick-start
+    guide repeats '-36 VDC to -72 VDC, 650 Watts'. The AC and DC supplies are rated alike.
+    NO MODEL IS SET ON THIS CONTRACT and that is deliberate: this is a `common/` generic
+    standing for the 650 W CRPS supply across three Edgecore chassis. What the datasheets
+    fix is the RATING, which the form factor and the chassis both share.
   size: same footprint as psu-ac-650 (datasheet lists AC and DC PSU SKUs; no DC photo available)
   elements: 'photo-inferred (angled install-guide photo: blue latch + blue terminal cover)'
 states: [ok, fail, absent]

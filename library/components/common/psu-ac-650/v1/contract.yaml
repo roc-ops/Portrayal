@@ -9,6 +9,16 @@ description: 650W AC PSU module (Edgecore PSU-AC-650B family) — release tab, p
 size: {w: 56.0, h: 40.0}
 attrs: {power-output-w: 650, input: ac}
 provenance:
+  power: >-
+    datasheet - the Edgecore boxes this generic serves state it directly. The DCS204
+    datasheet (AS7726-32X): 'PSUs: 2 redundant, load-sharing, hot-swappable 650W AC or -48
+    VDC', with the input line '100-240 VAC at 50-60 Hz (6A/650 W max.)'. The DCS203
+    datasheet (AS7326-56X) lists the FRU itself - 'YM-2651Y | 650 W AC Power Supply FRU' -
+    in both airflow directions, and its quick-start guide repeats '100-240 VAC, 50-60 Hz,
+    650 Watts'. NO MODEL IS SET ON THIS CONTRACT and that is deliberate: this is a `common/`
+    generic standing for the 650 W CRPS supply across three Edgecore chassis, and the vendor
+    ships it as at least two FRU part numbers differing only in airflow direction. What the
+    datasheets fix is the RATING, which the form factor and the chassis both share.
   size: photo-inferred
   elements: photo-inferred (human-reviewed 2026-08-15)
 states: [ok, fail, absent]
