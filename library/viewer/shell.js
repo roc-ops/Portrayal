@@ -87,6 +87,11 @@ export const SHELL_CSS = `
   .node .pull:hover { opacity:1; background:var(--hl); color:#fff; }
   .node.pulled .nm { opacity:0.45; text-decoration:line-through; }
   .node.pulled .pull { opacity:1; color:var(--warn); }
+  /* Absent entirely when nothing is off: a chip that always reads "0 removed" is
+     one more thing to read past on a header that is already seven items wide. */
+  #pulled { color:var(--warn); cursor:pointer; border:1px solid var(--warn);
+            border-radius:4px; padding:0.1rem 0.4rem; font-size:0.74rem; }
+  #pulled:hover { background:var(--warn); color:#16181b; }
   [data-portrayal-pulled] { display:none !important; }
   .node.empty .nm { color:var(--warn); font-style:italic; }
   /* a target in another view: the row cannot nest under it, so it says it */
@@ -124,6 +129,7 @@ const SHELL_HTML = `
   <label class="f">view <select id="view"></select></label>
   <span class="f" id="hl" title="Selection colour - pick one that stands out against this chassis"></span>
   <button id="fit">Fit</button>
+  <span class="f" id="pulled" hidden></span>
   <span class="f" id="status"></span>
 </header>
 <main>
@@ -153,7 +159,7 @@ export function createShell(opts = {}) {
   const el = {
     header: $('header'), main: $('main'), stage: $('#stage'), svgHost: $('#stage-svg'),
     aside: $('aside'), crumb: $('#crumb'), tree: $('#tree'), inspect: $('#inspect'),
-    status: $('#status'), dev: $('#devpick'), cfg: $('#cfg'), view: $('#view'), fit: $('#fit'),
+    status: $('#status'), pulled: $('#pulled'), dev: $('#devpick'), cfg: $('#cfg'), view: $('#view'), fit: $('#fit'),
   };
   $('header h1').textContent = opts.title || 'Portrayal';
 
@@ -193,6 +199,7 @@ export function createShell(opts = {}) {
     applyTransform();
   }
   el.fit.onclick = fit;
+  el.pulled.onclick = restoreAllPulled;
   el.svgHost.addEventListener('wheel', e => {
     e.preventDefault();
     const k = e.deltaY < 0 ? 1.12 : 1 / 1.12;
@@ -465,6 +472,29 @@ export function createShell(opts = {}) {
                   : ordered.map(n => (!n.el && n.kids.length === 1) ? n.kids[0] : n);
   }
 
+  // WHAT IS OFF, SAID ONCE, WHERE IT CAN BE SEEN. Thirteen controls on one C40G
+  // face is enough that a struck-through row scrolls out of sight and a viewer
+  // forgets a cover is off - which is the same wrong picture the cover was hiding.
+  // The chip is absent when nothing is pulled rather than reading "0 removed",
+  // and it restores on click, so the indication and the way back are one control.
+  function refreshPulled() {
+    const off = state.svg ? state.svg.querySelectorAll('[data-portrayal-pulled]') : [];
+    const n = off.length;
+    el.pulled.hidden = !n;
+    el.pulled.textContent = `\u27f2 ${n} removed`;
+    el.pulled.title = n === 1 ? 'one part is off - click to put it back'
+                              : `${n} parts are off - click to put them all back`;
+  }
+
+  function restoreAllPulled() {
+    if (!state.svg) return;
+    for (const e of [...state.svg.querySelectorAll('[data-portrayal-pulled]')])
+      e.removeAttribute('data-portrayal-pulled');
+    for (const r of el.tree.querySelectorAll('.node.pulled')) r.classList.remove('pulled');
+    refreshPulled();
+    emit('pulled', {paths: []});
+  }
+
   function renderTree(roots) {
     const box = el.tree; box.innerHTML = '';
     // `fold` is true for a fresh list and false for a group's own children: those
@@ -517,14 +547,23 @@ export function createShell(opts = {}) {
           const pull = document.createElement('span');
           pull.className = 'pull';
           pull.textContent = '\u25c9';
-          pull.title = `remove this ${behaviour === 'mounts' ? 'mounted part' : 'module'}`
-                       + ' to see behind it';
+          // A COVER AND A MODULE COME OFF FOR DIFFERENT REASONS, and `behaviour`
+          // already knows which this is. Taking a filter cover off to look behind
+          // it and unseating a line card are not the same intent, and a person
+          // reading a tree of thirteen of these can tell them apart by the verb.
+          pull.title = behaviour === 'mounts' ? 'take off this cover to see behind it'
+                                              : 'unseat this module to see behind it';
           pull.onclick = ev => {
             ev.stopPropagation();
             const off = !n.el.hasAttribute('data-portrayal-pulled');
             if (off) n.el.setAttribute('data-portrayal-pulled', '');
             else n.el.removeAttribute('data-portrayal-pulled');
             row.classList.toggle('pulled', off);
+            refreshPulled();
+            // a host driving a 3D scene needs the whole set, not this one part:
+            // viewer3d's setPulled takes what should be off, so a reset is []
+            emit('pulled', {paths: [...state.svg.querySelectorAll('[data-portrayal-pulled]')]
+                                   .map(e => e.dataset.path).filter(Boolean)});
           };
           row.querySelector('.cls').before(pull);
         }
@@ -711,7 +750,7 @@ export function createShell(opts = {}) {
 
   // ---------------------------------------------------------------- loading
 
-  function refreshTree() { renderTree(buildTree(state.svg)); }
+  function refreshTree() { renderTree(buildTree(state.svg)); refreshPulled(); }
 
   async function loadStage() {
     el.svgHost.innerHTML = '';
