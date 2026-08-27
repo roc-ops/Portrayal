@@ -33,6 +33,19 @@ provenance:
     at x 42.0 width 345.5; the brand band y 196.3-222.9; and the snap-on PSU cover
     y 226.7-264.9. The right fan bay is trimmed to start at x 388.0 so it does not
     overlap the card bays, which end at 387.5'
+  wordmarks: >-
+    drawing-measured off Figure 1-1, and a CORRECTION. `C40G` was at [6, 250]
+    in near-black - x 6 puts it inside the left fan strip, which runs x 1.5-37.5,
+    and y 250 puts it inside the snap-on PSU cover, which runs y 226.7-264.9. So
+    the model name was printed across two parts it is not printed on, in a colour
+    that would not read against either. On the figure both marks sit on the brand
+    band, the dark strip at y 196.3-222.9 measured in `front-furniture` above,
+    which is what they are light-coloured FOR. Baselines at y 214.0; `casa systems`
+    begins at x 103.8 and `C40G` at x 272.0, left and right of centre respectively.
+    The word sizes are drawing-measured; the TYPEFACE is not modelled and the
+    vendor's swoosh device beside `casa systems` is not drawn - neither is
+    recoverable from a 2.858 px/mm figure, and both are trademark artwork rather
+    than geometry.
   fan-left-is-never-empty: >-
     REVERSED on the owner's observation, and the previous reasoning is kept in
     `fan-modules` below rather than deleted. `fan-left` carried an explicit
@@ -282,7 +295,8 @@ views:
         - {at: [0, 0], size: [40.0, 265.9], fill: '#8d949c'}
         - {at: [386.7, 0], size: [46.25, 265.9], fill: '#8d949c'}
     silkscreen:
-      - {at: [6, 250], text: C40G, font-size: 9, fill: '#231f20', anchor: start}
+      - {at: [272.0, 214.0], text: C40G, font-size: 9, fill: '#f2f4f6', anchor: start}
+      - {at: [103.8, 214.0], text: casa systems, font-size: 13, fill: '#f2f4f6', anchor: start}
     components:
       bays:
         - {id: psu-4, at: [44.0, 226.7], size: {w: 81.0, h: 38.2}, accepts: [casa/c40g-psu-ac@1], group: power, rel-pos: 4, default: null}
