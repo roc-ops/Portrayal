@@ -56,13 +56,17 @@ provenance:
     with the symbol beside it. Positions are photo-fractions, approximate'
   rear: 'photo (mx304-rear-ac-high) - stacked PSU bays at x 10.9 (PSU 0 above
     PSU 1, labels printed vertically on the chassis strip right of them), the
-    fixed timing strip at 84-116, three 82.0 mm fan bays at x 116.4, 213.4
-    and 334.2, and the earthing plate and rear ESD socket at the right end.
-    THE GAP BETWEEN FAN 1 AND FAN 2 IS WIDER THAN BETWEEN FAN 0 AND FAN 1 -
-    that asymmetry is what the photograph shows and the strip labels confirm
-    (each bay''s icon, number and lamp sit on the chassis to its right).
-    The rear drawing (g101368 family) was measured too but its verticals mix
-    module internals at this threshold and were not used for positions'
+    fixed timing strip at 84-116, three 82.0 mm fan bays EVENLY spaced at x
+    116.4, 225.4 and 334.5 (26.9 mm label strips between and after, each
+    printing the bay''s number, lamp and fan icon), and the earthing plate
+    and rear ESD socket at the right end. A FIRST READING PUT FAN 1 AT 213.4
+    AND CALLED THE SPACING ASYMMETRIC - it had mis-assigned fan 1''s edges
+    to its grille internals; the DC rear photograph (independent shot, same
+    chassis) and a zoom on the strip between fans 1 and 2 both give the even
+    layout, and the reviewer''s instinct that routers do not stagger their
+    fans was what triggered the re-measure. The rear drawing (g101368
+    family) was measured too but its verticals mix module internals at this
+    threshold and were not used for positions'
   timing: 'photo + guide timing topic - SMB quad at x 98.6/107.1, y 11.6/22.2
     (rows 10 MHz above 1PPS, columns OUT left / IN right per the rotated
     legends), BITS RJ45 centred at 101.9, 35.6, ToD at 101.3, 55.4, and the
@@ -240,9 +244,9 @@ views:
         - {id: tod, at: [93.3, 48.4], size: [16.0, 14.0]}
         - {id: gm-ptp, at: [95.1, 67.65], size: [10.0, 14.5]}
         - {id: led-gm-ptp, at: [92.6, 71.8], size: [2.0, 2.0], shape: circle}
-        - {id: led-fan-0, at: [201.6, 79.1], size: [2.0, 2.0], shape: circle}
-        - {id: led-fan-1, at: [295.0, 79.1], size: [2.0, 2.0], shape: circle}
-        - {id: led-fan-2, at: [419.3, 79.1], size: [2.0, 2.0], shape: circle}
+        - {id: led-fan-0, at: [201.6, 77.6], size: [2.0, 2.0], shape: circle}
+        - {id: led-fan-1, at: [310.7, 77.6], size: [2.0, 2.0], shape: circle}
+        - {id: led-fan-2, at: [419.3, 77.6], size: [2.0, 2.0], shape: circle}
         - {id: esd-rear, at: [430.0, 8.6], size: [4.2, 4.2], shape: circle}
     silkscreen:
       - {at: [80.9, 21.5], text: PSU 0, font-size: 2.0, anchor: middle, rotate: 270, for: psu-0}
@@ -252,20 +256,20 @@ views:
       - {at: [101.6, 16.9], text: OUT, font-size: 1.5, anchor: middle, rotate: 270, for: [smb-10mhz-out, smb-1pps-out]}
       - {at: [110.6, 16.9], text: IN, font-size: 1.5, anchor: middle, rotate: 270, for: [smb-10mhz-in, smb-1pps-in]}
       - {at: [91.4, 35.6], text: BITS, font-size: 1.7, anchor: middle, rotate: 270, for: bits}
-      - {at: [91.4, 48.4], text: ToD, font-size: 1.7, anchor: middle, rotate: 270, for: tod}
+      - {at: [91.4, 55.4], text: ToD, font-size: 1.7, anchor: middle, rotate: 270, for: tod}
       - {at: [111.8, 74.9], text: GM/PTP, font-size: 1.7, anchor: middle, rotate: 270, for: gm-ptp}
-      - {at: [208.3, 78.4], text: '0', font-size: 2.4, anchor: middle, for: fan-0}
-      - {at: [211.8, 82.4], path: 'M 0 -1.1 A 1.1 1.1 0 1 0 0.01 -1.1 Z M -1.9
+      - {at: [208.3, 76.6], text: '0', font-size: 2.4, anchor: middle, for: fan-0}
+      - {at: [211.8, 82.2], path: 'M 0 -1.1 A 1.1 1.1 0 1 0 0.01 -1.1 Z M -1.9
           -1.1 A 1.1 1.1 0 1 0 -1.89 -1.1 Z M 1.9 -1.1 A 1.1 1.1 0 1 0 1.91
           -1.1 Z M -0.95 0.8 A 1.1 1.1 0 1 0 -0.94 0.8 Z M 0.95 0.8 A 1.1 1.1
           0 1 0 0.96 0.8 Z', for: fan-0}
-      - {at: [301.7, 78.4], text: '1', font-size: 2.4, anchor: middle, for: fan-1}
-      - {at: [305.2, 82.4], path: 'M 0 -1.1 A 1.1 1.1 0 1 0 0.01 -1.1 Z M -1.9
+      - {at: [317.4, 76.6], text: '1', font-size: 2.4, anchor: middle, for: fan-1}
+      - {at: [320.9, 82.2], path: 'M 0 -1.1 A 1.1 1.1 0 1 0 0.01 -1.1 Z M -1.9
           -1.1 A 1.1 1.1 0 1 0 -1.89 -1.1 Z M 1.9 -1.1 A 1.1 1.1 0 1 0 1.91
           -1.1 Z M -0.95 0.8 A 1.1 1.1 0 1 0 -0.94 0.8 Z M 0.95 0.8 A 1.1 1.1
           0 1 0 0.96 0.8 Z', for: fan-1}
-      - {at: [426.0, 78.4], text: '2', font-size: 2.4, anchor: middle, for: fan-2}
-      - {at: [429.5, 82.4], path: 'M 0 -1.1 A 1.1 1.1 0 1 0 0.01 -1.1 Z M -1.9
+      - {at: [426.0, 76.6], text: '2', font-size: 2.4, anchor: middle, for: fan-2}
+      - {at: [429.5, 82.2], path: 'M 0 -1.1 A 1.1 1.1 0 1 0 0.01 -1.1 Z M -1.9
           -1.1 A 1.1 1.1 0 1 0 -1.89 -1.1 Z M 1.9 -1.1 A 1.1 1.1 0 1 0 1.91
           -1.1 Z M -0.95 0.8 A 1.1 1.1 0 1 0 -0.94 0.8 Z M 0.95 0.8 A 1.1 1.1
           0 1 0 0.96 0.8 Z', for: fan-2}
@@ -283,7 +287,7 @@ views:
            default: juniper/mx304-psu-ac@1, group: psus, rel-pos: 1}
         - {id: fan-0, at: [116.4, 1.5], size: {w: 82.0, h: 85.5},
            accepts: [juniper/mx304-fan@1], default: juniper/mx304-fan@1, group: fans, rel-pos: 0}
-        - {id: fan-1, at: [213.4, 1.5], size: {w: 82.0, h: 85.5},
+        - {id: fan-1, at: [225.4, 1.5], size: {w: 82.0, h: 85.5},
            accepts: [juniper/mx304-fan@1], default: juniper/mx304-fan@1, group: fans, rel-pos: 1}
         - {id: fan-2, at: [334.2, 1.5], size: {w: 82.0, h: 85.5},
            accepts: [juniper/mx304-fan@1], default: juniper/mx304-fan@1, group: fans, rel-pos: 2}
@@ -305,9 +309,9 @@ views:
              (reserved for future use per the guide)}}
         - {id: led-gm-ptp, ref: common/led-dot@1, at: [92.6, 71.8], for: gm-ptp,
            group: gm-ptp-leds, rel-pos: 0}
-        - {id: led-fan-0, ref: common/led-dot@1, at: [201.6, 79.1], for: fan-0, group: fan-leds, rel-pos: 0}
-        - {id: led-fan-1, ref: common/led-dot@1, at: [295.0, 79.1], for: fan-1, group: fan-leds, rel-pos: 1}
-        - {id: led-fan-2, ref: common/led-dot@1, at: [419.3, 79.1], for: fan-2, group: fan-leds, rel-pos: 2}
+        - {id: led-fan-0, ref: common/led-dot@1, at: [201.6, 77.6], for: fan-0, group: fan-leds, rel-pos: 0}
+        - {id: led-fan-1, ref: common/led-dot@1, at: [310.7, 77.6], for: fan-1, group: fan-leds, rel-pos: 1}
+        - {id: led-fan-2, ref: common/led-dot@1, at: [419.3, 77.6], for: fan-2, group: fan-leds, rel-pos: 2}
         - {id: ground-plate, ref: juniper/mx304-ground-plate@1, at: [422.4, 24.5],
            group: grounding, rel-pos: 0}
   left:
