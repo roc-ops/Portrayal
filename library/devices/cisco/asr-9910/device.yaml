@@ -287,6 +287,10 @@ groups:
     role: service
     index-origin: 0
     physical-context: Fan
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 1
 views:
   front:
     size: {w: 447.0, h: 932.18}
@@ -342,6 +346,8 @@ views:
         - {id: fc-4, at: [346.57, 258.31], size: {w: 76.2, h: 492.10}, accepts: ['cisco/a99-sfc3-s@1', 'cisco/a99-sfc-s@1'], group: fabric, rel-pos: 4, default: cisco/a99-sfc3-s@1}
         - {id: ft-0, at: [-0.05, 121.06], size: {w: 447.09, h: 41.07}, accepts: ['cisco/asr-9910-fan@1'], group: fan-trays, rel-pos: 0, default: cisco/asr-9910-fan@1}
         - {id: ft-1, at: [-0.05, 174.84], size: {w: 447.09, h: 41.07}, accepts: ['cisco/asr-9910-fan@1'], group: fan-trays, rel-pos: 1, default: cisco/asr-9910-fan@1}
+      placements:
+        - {id: ground-pad, ref: cisco/a9k-ground-pad@1, at: [26.0, 880.0], group: grounding}
     regions:
       - {id: fabric-cards, label: 'Fabric card cage - FC0 to FC4, numbering restarts at Slot 0'}
       - {id: rear-air-exhaust, label: 'Rear air exhaust - upper rear'}

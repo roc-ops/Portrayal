@@ -295,6 +295,10 @@ groups:
     role: service
     index-origin: 0
     physical-context: PowerSupply
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 1
 views:
   front:
     size: {w: 447.0, h: 1955.8}
@@ -365,6 +369,9 @@ views:
     panel:
       cutouts:
         - {id: ground-pad, at: [26.0, 20.0], size: [46.0, 20.0], shape: rect}
+    components:
+      placements:
+        - {id: ground-pad, ref: cisco/a9k-ground-pad@1, at: [26.0, 20.0], group: grounding}
     regions:
       - {id: rear-air-exhaust, label: 'Rear air exhaust - upper AND lower rear'}
       - {id: nebs-ground, label: 'NEBS bonding and grounding - top rear right side'}

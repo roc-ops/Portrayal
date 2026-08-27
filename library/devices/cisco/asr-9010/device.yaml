@@ -421,6 +421,10 @@ groups:
     term: Power Shelf
     role: service
     index-origin: 0
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 1
 views:
   front:
     size: {w: 444.5, h: 933.45}
@@ -465,6 +469,9 @@ views:
     panel:
       cutouts:
         - {id: ground-pad, at: [26.0, 880.0], size: [46.0, 20.0], shape: rect}
+    components:
+      placements:
+        - {id: ground-pad, ref: cisco/a9k-ground-pad@1, at: [26.0, 880.0], group: grounding}
     regions:
       - {id: nebs-ground, label: NEBS bonding and grounding receptacle - bottom rear right side}
   top:

@@ -1,0 +1,53 @@
+format: 1
+kind: component
+name: a9k-ground-pad
+version: 1.0.0
+class: ground
+behaviour: mounts
+profile: networking
+description: >-
+  Cisco ASR 9000 NEBS bonding and grounding pad - the two-hole lug landing every
+  chassis in the family cuts, with the flat lug bolted across it by two screws.
+  One part for all eight positions across seven chassis, because the guide
+  documents one receptacle type and varies only where it sits.
+attrs: {model: 'NEBS Bonding and Grounding Pad'}
+size: {w: 46.0, h: 20.0}
+parts:
+  - {ref: common/screw-head@1, id: screw-left, at: [13.55, 8.2]}
+  - {ref: common/screw-head@1, id: screw-right, at: [28.85, 8.2]}
+provenance:
+  what-it-is: 'datasheet + drawing. The install guide (b-asr9k-hardware-installation-guide.pdf
+    p125) tables a grounding receptacle location for every chassis in the family, and the
+    ASR 9006 entry is the one that says what the thing IS: Figure 133, "NEBS Bonding and
+    Grounding for the Cisco ASR 9006 Router", draws a TWO-HOLE LUG PAD with a detail circle
+    showing two screws through a flat lug. Every other chassis has its own figure - 132 for
+    the 9010 and 9910, 134 for the 9904, 136 for the 9922, 137 for the 9912 - and none of
+    them contradicts it'
+  size: 'the 46.0 x 20.0 is NOT measured here. It is the extent every one of these devices
+    already carries for its `ground-pad` cutout, and this part is built to fill those holes
+    rather than to assert a new figure. All eight agree, which is either one measurement
+    propagated or one reading of a family that really is uniform - the guide describes a
+    single receptacle type and varies only WHERE it sits, so uniform is the expected answer.
+    If the pad is ever measured properly and differs, the cutouts move with it'
+  hole-pitch: 'BORROWED AND WEAKER THAN THE C40G BORROW, which is why it says so. 15.3 mm
+    comes from casa/ground-bolts@1, off Jason''s hand-built C100G rear SVG, described there
+    as "the standard two-hole lug spacing" - but that is CASA hardware and this is Cisco, so
+    it is a convention borrowed across vendors rather than a measurement of this part. The
+    two-hole telecom lug is a standardised interface and 15.3 sits within a millimetre of the
+    0.625 inch spacing the practice is built around, so the risk is small and the alternative
+    was inventing a number. WHAT WOULD SETTLE IT: a caliper on any ASR 9000 ground pad, or a
+    Cisco drawing that dimensions one'
+  artwork: 'the pad plate and the lug across it are drawn from Figure 133''s detail circle -
+    a flat lug over a pad, two screws through it. The screws are common/screw-head@1 rather
+    than drawn again. The earth mark is IEC 60417-5019, placed left of the lug where the
+    figure shows a marking; its exact position on the metal is not dimensioned anywhere and
+    is drawn to read rather than to measure'
+  depth: 'ABSENT, for the reason casa/ground-bolts@1 records: size.d on a non-module compiles
+    to data-depth, which the 3D viewer reads as a CAVITY - so a depth here would sink the
+    grounding pad into a pit in the panel. What stands proud says so through relief.features,
+    and the screws carry their own'
+relief:
+  wall: '#4a4f55'
+  features:
+    - {node: lug, out: 1.6, confidence: estimated, source: 'NO PRECEDENT - a flat bonding lug over a pad. Invented here; the guide dimensions no Z on this part and Figure 133 is a three-quarter view'}
+skins: [default]

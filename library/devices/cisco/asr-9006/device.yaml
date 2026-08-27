@@ -477,6 +477,10 @@ groups:
     role: furniture
     index-origin: 0
     physical-context: Chassis
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 1
 views:
   front:
     size: {w: 444.5, h: 444.5}
@@ -538,6 +542,9 @@ views:
     panel:
       cutouts:
         - {id: nebs-ground-left, at: [26.0, 410.5], size: [46.0, 20.0], shape: rect}
+    components:
+      placements:
+        - {id: nebs-ground-left, ref: cisco/a9k-ground-pad@1, at: [26.0, 410.5], group: grounding}
     regions:
       - {id: nebs-ground, label: 'NEBS bonding and grounding point - left side, one of three'}
       - {id: no-air-path, label: 'Not an air path - inlet right side, exhaust upper rear'}
@@ -549,6 +556,9 @@ views:
       cutouts:
         - {id: ground-pad, at: [662.8, 14.0], size: [46.0, 20.0], shape: rect}
         - {id: air-filter-opening, at: [674.8, 104.63], size: [52.0, 279.63], shape: rect}
+    components:
+      placements:
+        - {id: ground-pad, ref: cisco/a9k-ground-pad@1, at: [662.8, 14.0], group: grounding}
     regions:
       - {id: side-air-intake, label: Side air intake}
       - {id: air-filter, label: 'Air filter - right side, accessible from the rear'}
