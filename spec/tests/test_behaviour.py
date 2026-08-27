@@ -5,6 +5,7 @@ so every new removable type meant editing that list - and a transceiver, which i
 removable, was not on it. `behaviour` replaces the list with a fact the component
 states about itself.
 """
+import functools
 import sys
 from pathlib import Path
 
@@ -18,6 +19,11 @@ CONTRACTS = sorted(LIB.glob("components/*/*/*/contract.yaml"))
 VALID = {"fills", "occupies", "mounts"}
 
 
+# 253 contracts, parsed once each rather than once per question. The set
+# comprehension below calls this TWICE per file, and five tests here walk the
+# whole library - which made this file 12.7s of a 38s suite, all of it re-reading
+# bytes that had not changed since the last read a microsecond earlier.
+@functools.lru_cache(maxsize=None)
 def load(p):
     return yaml.safe_load(p.read_text()) or {}
 

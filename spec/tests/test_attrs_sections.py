@@ -6,6 +6,7 @@ with it. Sectioning is only an improvement if the predicate it enables is a
 better predicate and if the tail it creates stays visible - so those are what
 these test, not the shape of the YAML.
 """
+import functools
 import sys
 from pathlib import Path
 
@@ -23,6 +24,7 @@ PROFILES = capability.load_profiles(SPEC / "schemas")
 MANIFESTS = sorted(LIB.glob("devices/*/*/device.yaml"))
 
 
+@functools.lru_cache(maxsize=None)
 def load(rel):
     return yaml.safe_load((LIB / "devices" / rel / "device.yaml").read_text())
 

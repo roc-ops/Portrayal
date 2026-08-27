@@ -14,6 +14,11 @@ PROFILES = capability.load_profiles(SPEC / "schemas")
 
 
 def load(rel):
+    # NOT memoised, and the two tests that broke when it was are the reason: the
+    # fixtures here are built by POPPING views and groups off a real device, so a
+    # shared parse is mutated by whoever ran first. A cache is only safe where the
+    # callers are read-only - which is true of lint.py and of test_behaviour, and
+    # is not true here. Re-parsing is the cheaper mistake.
     return yaml.safe_load((LIB / "devices" / rel / "device.yaml").read_text())
 
 

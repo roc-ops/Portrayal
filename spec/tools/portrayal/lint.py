@@ -134,7 +134,7 @@ def contract_class(ref, lib_roots):
     for r in lib_roots:
         f = Path(r) / "components" / nsname / f"v{major}" / "contract.yaml"
         if f.exists():
-            cls = (yaml.safe_load(f.read_text()) or {}).get("class")
+            cls = (load_yaml(f) or {}).get("class")
             break
     _CLASS_CACHE[ref] = cls
     return cls
@@ -154,7 +154,7 @@ def contract_size(ref, lib_roots):
     for r in lib_roots:
         f = Path(r) / "components" / nsname / f"v{major}" / "contract.yaml"
         if f.exists():
-            size = (yaml.safe_load(f.read_text()) or {}).get("size")
+            size = (load_yaml(f) or {}).get("size")
             break
     _SIZE_CACHE[ref] = size
     return size
@@ -168,7 +168,7 @@ def contract_attrs(ref, lib_roots):
     for r in lib_roots:
         f = Path(r) / "components" / nsname / f"v{major}" / "contract.yaml"
         if f.exists():
-            attrs = (yaml.safe_load(f.read_text()) or {}).get("attrs") or {}
+            attrs = (load_yaml(f) or {}).get("attrs") or {}
             break
     _ATTRS_CACHE[ref] = attrs
     return attrs
@@ -183,7 +183,7 @@ def contract_elements(ref, lib_roots):
     for r in lib_roots:
         f = Path(r) / "components" / nsname / f"v{major}" / "contract.yaml"
         if f.exists():
-            els = set(((yaml.safe_load(f.read_text()) or {}).get("elements") or {}).keys())
+            els = set(((load_yaml(f) or {}).get("elements") or {}).keys())
             break
     _ELEMENTS_CACHE[ref] = els
     return els
@@ -279,7 +279,7 @@ def paint_boxes(ref, skin, lib_roots):
         # A component composes standard hardware through `parts:`; that art paints
         # too, and the skin does not contain it.
         if boxes is not None:
-            contract = yaml.safe_load((base / "contract.yaml").read_text()) or {}
+            contract = load_yaml(base / "contract.yaml") or {}
             for p in contract.get("parts") or []:
                 psz = contract_size(p.get("ref", ""), lib_roots) or {}
                 if not (psz.get("w") and psz.get("h")):
@@ -404,7 +404,7 @@ def lint_component(path, validator):
     # scalar just as easily, and an unhandled ScannerError is a traceback rather
     # than a message that tells you which line to look at
     try:
-        data = yaml.safe_load(path.read_text())
+        data = load_yaml(path)
     except yaml.YAMLError as exc:
         err(path, "L0", f"will not parse: {str(exc).splitlines()[0]}")
         scalar_colon_hint(path, exc)
@@ -450,6 +450,43 @@ def lint_component(path, validator):
     return data
 
 
+# PARSE A MANIFEST ONCE PER RUN, NOT ONCE PER QUESTION ASKED OF IT.
+#
+# The rules resolve a component ref, read the contract and throw it away, and
+# they do that from twenty-six call sites. On a 277-file library that came to
+# 10,206 reads of 254 component files - forty times each on average, and
+# std/sfp-ganged alone 1,941 times, once for every port that names it anywhere.
+# Nothing was wrong with any single rule; the cost is the shape of the whole,
+# and it is O(devices x bays x accepts) rather than O(files).
+#
+# It dominated everything. 89 percent of a lint run was yaml.safe_load, lint was
+# 29 s of a build whose renders take 15, and several tests shell out to a full
+# lint pass - so this one function is most of both gates.
+#
+# KEYED ON MTIME, not just the path, because the tests lint the same tree many
+# times in one process and a fixture written mid-run must not be answered from
+# a stale parse. One stat per call against one parse is not a close trade.
+#
+# THE RESULT IS SHARED, NOT COPIED, so callers must treat it as read-only. No
+# rule mutates a contract today - every `setdefault`/`update` in this file is on
+# a local accumulator - and a rule that started to would corrupt every later
+# reader of the same file rather than failing where it stood.
+_YAML_CACHE = {}
+
+
+def load_yaml(path):
+    """Parse `path` once per run. Read-only: the result is shared, not copied."""
+    path = Path(path)
+    try:
+        key = (str(path), path.stat().st_mtime_ns)
+    except OSError:
+        return None
+    hit = _YAML_CACHE.get(key)
+    if hit is None:
+        hit = _YAML_CACHE[key] = yaml.safe_load(path.read_text())
+    return hit
+
+
 def resolve_component(ref, lib_roots):
     """Locate a component contract from a `ns/name@major` ref."""
     nsname, major = ref.rsplit("@", 1)
@@ -474,7 +511,7 @@ def lint_component_mating(path, data, lib_roots):
         found = resolve_component(part["ref"], lib_roots)
         if not found:
             continue
-        sub = yaml.safe_load(found.read_text())
+        sub = load_yaml(found)
         sub_if = sub.get("interface")
         if not sub_if:
             continue
@@ -505,7 +542,7 @@ def _composes_a_standard(data, lib_roots, depth=0, seen=None):
         found = resolve_component(ref, lib_roots)
         if not found:
             continue                       # L10 reports the broken ref
-        sub = yaml.safe_load(found.read_text()) or {}
+        sub = load_yaml(found) or {}
         if sub.get("conforms") or sub.get("interface"):
             return True
         if _composes_a_standard(sub, lib_roots, depth + 1, seen | {ref}):
@@ -518,7 +555,7 @@ def _part_backs(part, lib_roots):
     found = resolve_component(part.get("ref") or "", lib_roots)
     if not found:
         return None                        # L10 reports the broken ref
-    sub = yaml.safe_load(found.read_text()) or {}
+    sub = load_yaml(found) or {}
     if sub.get("conforms") or sub.get("interface") or \
             _composes_a_standard(sub, lib_roots):
         return sub.get("size") or {}
@@ -885,7 +922,7 @@ def lint_component_relief_confidence(path, data, lib_roots):
             err(path, "L36", f"{node}: `borrowed` from {ref}, which does not resolve")
             continue
         mine = _feature_magnitude(f)
-        origin = yaml.safe_load(found.read_text()) or {}
+        origin = load_yaml(found) or {}
         ofeats = ((origin.get("relief") or {}).get("features") or [])
         matches = [o for o in ofeats
                    if mine and (_feature_magnitude(o) or (None, None))[1] == mine[1]]
@@ -923,7 +960,7 @@ def lint_component_parts(path, data, lib_roots, depth=0, seen=None):
         if not found:
             err(path, "L10", f"unresolvable part ref {part['ref']}")
             continue
-        sub = yaml.safe_load(found.read_text())
+        sub = load_yaml(found)
         if part["ref"] in seen:
             err(path, "L10", f"composition cycle via {part['ref']}")
             continue
@@ -1025,7 +1062,7 @@ def _instance_size(ref, lib_roots):
     if c is None:
         return None
     try:
-        d = yaml.safe_load(c.read_text()) or {}
+        d = load_yaml(c) or {}
     except yaml.YAMLError:
         return None
     sz = d.get("size")
@@ -1062,7 +1099,7 @@ def _mate_check(path, where, occ_ref, host_ref, lib_roots):
     hp, op = resolve_component(host_ref, lib_roots), resolve_component(occ_ref, lib_roots)
     if not hp or not op:
         return
-    hc, oc = yaml.safe_load(hp.read_text()), yaml.safe_load(op.read_text())
+    hc, oc = load_yaml(hp), load_yaml(op)
     want, have = hc.get("interface"), oc.get("mates")
     if not have:
         err(path, "L12", f"{where}: {occ_ref} declares no 'mates', "
@@ -1140,7 +1177,7 @@ def lint_device_overlap(path, view_name, view, lib_roots):
         cp = resolve_component(p["ref"], lib_roots)
         if not cp:
             continue
-        sz = (yaml.safe_load(cp.read_text()) or {}).get("size") or {}
+        sz = (load_yaml(cp) or {}).get("size") or {}
         if "w" not in sz or "h" not in sz:
             continue
         w, h = sz["w"], sz["h"]
@@ -1218,7 +1255,7 @@ def _footprint(item, lib_roots):
         w, h = sz[0], sz[1]
     else:
         cp = resolve_component(item.get("ref", ""), lib_roots)
-        spec = (yaml.safe_load(cp.read_text()) or {}) if cp else {}
+        spec = (load_yaml(cp) or {}) if cp else {}
         csz = spec.get("size") or {}
         w, h = csz.get("w"), csz.get("h")
     if not w or not h:
@@ -1284,7 +1321,7 @@ def lint_device_cutouts(path, view_name, view, lib_roots):
         if not q:
             continue
         cp = resolve_component(q.get("ref", ""), lib_roots)
-        spec = (yaml.safe_load(cp.read_text()) or {}) if cp else {}
+        spec = (load_yaml(cp) or {}) if cp else {}
         conf = spec.get("conforms")
         std = STANDARDS.get(conf) if isinstance(conf, str) else None
         if not std or std.get("w") is None:
@@ -1385,7 +1422,7 @@ def lint_device_cutouts(path, view_name, view, lib_roots):
     #    modelling convention held consistently, not 163 omissions.
     for q in placements:
         cp = resolve_component(q.get("ref", ""), lib_roots)
-        if not cp or (yaml.safe_load(cp.read_text()) or {}).get("class") != "port":
+        if not cp or (load_yaml(cp) or {}).get("class") != "port":
             continue
         if q.get("mate-to"):
             continue          # an occupant sits in its host, not in the metal
@@ -2035,7 +2072,7 @@ def lint_device_double_count(path, data, lib_roots):
             found = resolve_component(ref, lib_roots)
             if not found:
                 continue
-            sub = yaml.safe_load(found.read_text()) or {}
+            sub = load_yaml(found) or {}
             if sub.get("class") != "line-card":
                 continue
             a = sub.get("attrs") or {}
@@ -2102,7 +2139,7 @@ def lint_device_module_power(path, data, lib_roots):
         found = resolve_component(ref, lib_roots)
         if not found:
             continue                       # L5 reports the broken ref
-        sub = yaml.safe_load(found.read_text()) or {}
+        sub = load_yaml(found) or {}
         if sub.get("class") not in DRAW_CLASSES:
             continue
         modules.add(ref)
@@ -2135,7 +2172,7 @@ def lint_device_module_power(path, data, lib_roots):
 
 def lint_device(path, validator, lib_roots):
     try:
-        data = yaml.safe_load(path.read_text())
+        data = load_yaml(path)
     except yaml.YAMLError as exc:
         err(path, "L0", f"will not parse: {str(exc).splitlines()[0]}")
         scalar_colon_hint(path, exc)
@@ -2568,7 +2605,7 @@ def lint_device(path, validator, lib_roots):
             if c is None:
                 continue
             try:
-                cd = yaml.safe_load(c.read_text()) or {}
+                cd = load_yaml(c) or {}
             except yaml.YAMLError:
                 continue
             ce = estimated_keys(cd)
@@ -2688,7 +2725,7 @@ def lint_device_bay_fit(path, data, lib_roots):
                 found = resolve_component(ref, lib_roots)
                 if not found:
                     continue                   # L5 reports the broken ref
-                sub = yaml.safe_load(found.read_text()) or {}
+                sub = load_yaml(found) or {}
                 ext = sub.get("insert") or sub.get("size") or {}
                 w, h = ext.get("w"), ext.get("h")
                 if w is None or h is None:
@@ -2768,7 +2805,7 @@ def lint_device_midplane_depth(path, data, lib_roots):
             found = resolve_component(ref, lib_roots)
             if not found:
                 continue
-            sub = yaml.safe_load(found.read_text()) or {}
+            sub = load_yaml(found) or {}
             d = (sub.get("size") or {}).get("d")
             if d and (best[0] is None or d > best[0]):
                 conf = (sub.get("size-confidence") or {}).get("d")
@@ -2871,7 +2908,7 @@ def main():
     schemas = Path(args.schemas)
     std_file = schemas / "standards.yaml"
     if std_file.exists():
-        STANDARDS.update(yaml.safe_load(std_file.read_text())["standards"])
+        STANDARDS.update(load_yaml(std_file)["standards"])
     # the schemas are YAML too where they are YAML, and a duplicate in the
     # registry would be as silent there as anywhere else
     for f in sorted(schemas.glob("*.yaml")):
@@ -2904,7 +2941,7 @@ def main():
                 matrix.append((f, d))
         for f in sorted(root.glob("devices/**/overlays/*.yaml")):
             lint_duplicate_keys(f)
-            data = yaml.safe_load(f.read_text())
+            data = load_yaml(f)
             for e in ovl_v.iter_errors(data):
                 err(f, "L1", f"{'/'.join(str(p) for p in e.path)}: {e.message}")
             n += 1
