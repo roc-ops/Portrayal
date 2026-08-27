@@ -62,6 +62,7 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
 """
 import argparse
 import json
+import math
 import re
 import sys
 import xml.etree.ElementTree as ET
@@ -1052,6 +1053,165 @@ def lint_component_bays_drawn(path, data, lib_roots):
              "draws an element for. The renderer nests a seated module under the "
              "element whose id matches its bay; with none, the occupant is hung "
              "off the root instead of inside this part")
+
+
+_SVG_NS = "{http://www.w3.org/2000/svg}"
+_DRAWABLE = ("rect", "circle", "ellipse", "polygon", "path", "text", "line")
+
+
+def _svg_rot(b, el):
+    """SVG rotates about the point named in the transform, not the box centre.
+
+    Getting this wrong called 38 correctly-placed labels off-canvas: a vertical
+    model name is rotated about its own anchor, so spinning its box about its
+    centre throws it clear of the part.
+    """
+    m = re.match(r"rotate\(\s*(-?[\d.]+)(?:[ ,]+(-?[\d.]+)[ ,]+(-?[\d.]+))?\s*\)",
+                 (el.get("transform") or "").strip())
+    if not m:
+        return b
+    a = math.radians(float(m.group(1)))
+    cx = float(m.group(2) or 0.0)
+    cy = float(m.group(3) or 0.0)
+    ca, sa = math.cos(a), math.sin(a)
+    pts = [(cx + (x - cx) * ca - (y - cy) * sa, cy + (x - cx) * sa + (y - cy) * ca)
+           for x in (b[0], b[2]) for y in (b[1], b[3])]
+    xs = [q[0] for q in pts]
+    ys = [q[1] for q in pts]
+    return (min(xs), min(ys), max(xs), max(ys))
+
+
+def _svg_box(tag, el):
+    """Bounding box of one drawable, in the skin's own user units.
+
+    Text is ESTIMATED - 0.6em per character - because measuring a glyph run
+    needs a font engine. That estimate runs about 20% wide, which is why the
+    thresholds below are loose and why nothing here reports a near miss.
+    """
+    def g(k, d=0.0):
+        try:
+            return float(el.get(k, d) or d)
+        except (TypeError, ValueError):
+            return d
+    if tag == "rect":
+        return _svg_rot((g("x"), g("y"), g("x") + g("width"), g("y") + g("height")), el)
+    if tag in ("circle", "ellipse"):
+        rx = g("r") or g("rx")
+        ry = g("r") or g("ry")
+        cx, cy = g("cx"), g("cy")
+        return _svg_rot((cx - rx, cy - ry, cx + rx, cy + ry), el)
+    if tag == "polygon":
+        pts = [float(v) for v in re.findall(r"-?[\d.]+", el.get("points", ""))]
+        if len(pts) < 4:
+            return None
+        return _svg_rot((min(pts[0::2]), min(pts[1::2]),
+                         max(pts[0::2]), max(pts[1::2])), el)
+    if tag == "text":
+        txt = "".join(el.itertext()).strip()
+        if not txt:
+            return None
+        fs = g("font-size", 3.0) or 3.0
+        w = 0.6 * fs * len(txt)
+        x = g("x")
+        anchor = el.get("text-anchor", "start")
+        x0 = x - w / 2 if anchor == "middle" else x - w if anchor == "end" else x
+        y = g("y")
+        return _svg_rot((x0, y - fs * 0.8, x0 + w, y + fs * 0.2), el)
+    return None
+
+
+def _svg_drawables(el, fill=None, out=None):
+    """Every drawable in paint order, carrying the fill it inherits."""
+    out = [] if out is None else out
+    for ch in el:
+        tag = ch.tag.replace(_SVG_NS, "")
+        inherited = ch.get("fill", fill)
+        if tag == "g":
+            _svg_drawables(ch, inherited, out)
+        elif tag in _DRAWABLE:
+            out.append((tag, ch, inherited))
+    return out
+
+
+def _paints_over(tag, el, fill):
+    if tag in ("text", "line") or not fill or fill == "none":
+        return False
+    for k in ("opacity", "fill-opacity"):
+        try:
+            if float(el.get(k, 1) or 1) < 0.9:
+                return False
+        except (TypeError, ValueError):
+            pass
+    return True
+
+
+def lint_component_skin_printing(path, data, lib_roots):
+    """L50: printing inside a skin that cannot be read is printing that is not there.
+
+    THE SURFACE NO RULE INSPECTED. Four reviews running, the defects humans find
+    are two correct things in one place, and every rule that answers that -
+    L13 on a device, L46 between composed parts, L48 on carriers - stops at the
+    edge of a component's own SVG. Inside the skin, the modeller is alone. The
+    reviews call this the highest-value single check.
+
+    L44 is this rule's counterpart one level up, where it asks whether a device's
+    silkscreen runs off the face. This asks the same of a part's own printing:
+    does it fall off the part, or vanish under paint applied after it.
+
+    LOOSE ON PURPOSE. Text width is estimated at 0.6em per character with no font
+    engine, which runs about 20% wide, so a rule that reported near misses would
+    report the estimate. Measured over 487 skins: the deepest burial is 22% (a
+    STATUS legend beside its own lamp, entirely legible) and overhang runs to 34%
+    on long model names printed to the panel edge - then jumps to `common/pull-tab`,
+    whose SERVICE INFO is set at 5.44 in a 16-wide tab and overflows by more than
+    double. Half is the empty band between the artefacts and the one real defect.
+    """
+    for skin in sorted(Path(path).parent.glob("skins/*.svg")):
+        try:
+            root = ET.parse(skin).getroot()
+        except (ET.ParseError, OSError):
+            continue          # a malformed skin is already _skin_checks' business
+        items = [(t, e, f, _svg_box(t, e)) for t, e, f in _svg_drawables(root)]
+        vb = (root.get("viewBox") or "").split()
+        face = None
+        if len(vb) == 4:
+            try:
+                vx, vy, vw, vh = (float(v) for v in vb)
+                face = (vx, vy, vx + vw, vy + vh)
+            except ValueError:
+                face = None
+
+        for i, (tag, el, fill, b) in enumerate(items):
+            if tag != "text" or not b:
+                continue
+            area = (b[2] - b[0]) * (b[3] - b[1])
+            if area <= 0:
+                continue
+            words = "".join(el.itertext()).strip()[:24]
+            if face:
+                inside = (max(0.0, min(b[2], face[2]) - max(b[0], face[0]))
+                          * max(0.0, min(b[3], face[3]) - max(b[1], face[1])))
+                if inside / area < 0.5:
+                    warn(path, "L50", f"{skin.name}: {words!r} is set at "
+                         f"font-size {el.get('font-size', '?')} and runs mostly off "
+                         f"the part - about {inside/area*100:.0f}% of it lands on the "
+                         "face. Printing that falls off the edge is printing the "
+                         "viewer never sees")
+                    continue
+            for tag2, el2, fill2, b2 in items[i + 1:]:
+                if not b2 or not _paints_over(tag2, el2, fill2):
+                    continue
+                ox = min(b[2], b2[2]) - max(b[0], b2[0])
+                oy = min(b[3], b2[3]) - max(b[1], b2[1])
+                if ox <= 0 or oy <= 0:
+                    continue
+                if (ox * oy) / area >= 0.5:
+                    warn(path, "L50", f"{skin.name}: {words!r} is painted over by "
+                         f"<{tag2} id={el2.get('id', '')!r}> drawn after it, which "
+                         f"covers {(ox*oy)/area*100:.0f}% of the text. Two correct "
+                         "things in one place is the defect humans keep finding and "
+                         "no rule inside a skin looked for")
+                    break
 
 
 def lint_component_collisions(path, data, lib_roots):
@@ -3210,6 +3370,7 @@ def main():
                 lint_component_parts(f, d, args.library)
                 lint_component_collisions(f, d, args.library)
                 lint_component_bays_drawn(f, d, args.library)
+                lint_component_skin_printing(f, d, args.library)
                 lint_component_states_render(f, d, args.library)
                 lint_component_mating(f, d, args.library)
                 lint_component_aperture(f, d, args.library)

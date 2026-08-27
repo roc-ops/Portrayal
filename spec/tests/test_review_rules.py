@@ -311,3 +311,67 @@ def test_the_library_sits_on_an_even_pitch():
     for f in _g.glob(str(LIB / "devices/*/*/device.yaml")):
         d = yaml.safe_load(Path(f).read_text()) or {}
         assert not caught("L49", lint.lint_device_bay_pitch, Path(f), d), f
+
+
+# --- 7. inside a skin's own geometry -----------------------------------------
+
+def _skin(tmp_path, body):
+    d = tmp_path / "v1"
+    (d / "skins").mkdir(parents=True)
+    (d / "skins/default.svg").write_text(
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 40">'
+        '<rect x="0" y="0" width="16" height="40" fill="#4fb832"/>' + body + "</svg>")
+    return d / "contract.yaml", {}
+
+
+def test_printing_that_runs_off_the_part_is_reported():
+    """common/pull-tab set SERVICE INFO at 5.44 across a 16mm-wide tab; it
+    overflowed by more than double and every gate passed, because no rule
+    looked inside a component's own SVG."""
+    import tempfile
+    with tempfile.TemporaryDirectory() as td:
+        p, d = _skin(Path(td), '<text x="8" y="20" font-size="5.44" '
+                     'text-anchor="middle" fill="#000">SERVICE INFO</text>')
+        hits = caught("L50", lint.lint_component_skin_printing, p, d, [str(LIB)])
+        assert hits, "a label overflowing its part went unreported"
+        assert "runs mostly off the part" in hits[0]
+
+
+def test_printing_painted_over_after_it_is_reported():
+    import tempfile
+    with tempfile.TemporaryDirectory() as td:
+        p, d = _skin(Path(td), '<text x="2" y="20" font-size="2" fill="#000">ABC</text>'
+                     '<rect id="chip" x="0" y="16" width="12" height="8" fill="#333"/>')
+        hits = caught("L50", lint.lint_component_skin_printing, p, d, [str(LIB)])
+        assert hits, "a buried label went unreported"
+        assert "painted over" in hits[0]
+
+
+def test_a_label_beside_its_own_lamp_is_not_buried():
+    """The deepest overlap in the library is 22% - a STATUS legend next to its
+    lamp, entirely legible. Text width is estimated at 0.6em per character with
+    no font engine and runs about 20% wide, so the threshold is deliberately
+    loose: a rule reporting near misses would be reporting the estimate."""
+    import tempfile
+    with tempfile.TemporaryDirectory() as td:
+        p, d = _skin(Path(td), '<text x="2" y="20" font-size="2" fill="#000">STATUS</text>'
+                     '<circle id="lamp" cx="9.5" cy="19" r="1.3" fill="#8d949c"/>')
+        assert not caught("L50", lint.lint_component_skin_printing, p, d, [str(LIB)])
+
+
+def test_a_rotated_label_is_measured_where_it_actually_lands():
+    """SVG rotates about the point named in the transform, not the box centre.
+    Spinning a vertical model name about its centre threw 38 correctly-placed
+    labels clear of their parts."""
+    import tempfile
+    with tempfile.TemporaryDirectory() as td:
+        p, d = _skin(Path(td), '<text x="14" y="4" transform="rotate(90 14 4)" '
+                     'font-size="2" fill="#000">A9K-MPA-1X40GE</text>')
+        assert not caught("L50", lint.lint_component_skin_printing, p, d, [str(LIB)])
+
+
+def test_the_library_prints_where_it_can_be_read():
+    import glob as _g
+    for f in _g.glob(str(LIB / "components/*/*/v*/contract.yaml")):
+        assert not caught("L50", lint.lint_component_skin_printing,
+                          Path(f), {}, [str(LIB)]), f
