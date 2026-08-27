@@ -9,22 +9,33 @@ description: UfiSpace S9510-28DC Disaggregated Cell Site Gateway Router - 1RU, 2
   front-service
 provenance:
   part-numbers: >-
-    REMOVED, and the field now says nothing rather than saying the wrong thing.
-    Each configuration listed `PSU-401-DISB-1` / `PSU-401-AISB` and `FAN-402825-HD`
-    under `part-numbers`, whose schema is "orderable SKUs for this CONFIGURATION:
-    model -> {part, power-cord}" - a chassis SKU. Those three are FRU part numbers,
-    and they already live where a FRU part number belongs: ufispace/psu-401-dc,
-    psu-401-ac and fan-402825 each carry their own in `attrs.model`. So this was a
-    duplicate in a field that means something else.
+    CORRECTED TWICE, and the second correction reverses part of the first, so both
+    are kept. This device listed `PSU-401-DISB-1` / `PSU-401-AISB` and
+    `FAN-402825-HD` here - FRU part numbers in a field whose schema is "orderable
+    SKUs for this CONFIGURATION: model -> {part, power-cord}", meaning the CHASSIS.
+    They were a duplicate too: ufispace/psu-401-dc, psu-401-ac and fan-402825 each
+    carry their own in `attrs.model`, which is where a FRU part number belongs.
     IT WAS NOT HARMLESS. A DCIM exporter reading the first key as the chassis model
     filed this router as a device type called FAN-402825-HD in both target
     libraries, and the S9510-28DC appeared in neither under its own name - see
     roc-ops/ndv#21. A field carrying the wrong KIND of value is worse than an empty
     one, because every consumer has to guess which kind it got.
-    NO CHASSIS SKU IS RECORDED because the guide does not give one. R1.9 names the
-    product `S9510-28DC` throughout - in the title, the overview and the dimensions
-    table - and nowhere prints an orderable part number for the chassis. `model:` is
-    therefore the whole answer, and a consumer that falls back to it is right rather
+    THE FIRST FIX SAID NO CHASSIS SKU EXISTS AND THAT WAS WRONG. It is a true
+    statement about the HARDWARE INSTALLATION GUIDE - R1.9 names the product
+    `S9510-28DC` in its title, its overview and its dimensions table and prints no
+    orderable number anywhere - and a false one about the world. Two exist and Jason
+    supplied them: `S9510-28DC-BN0B` for DC and `S9510-28DC-BR1B` for AC. Searching
+    one document and concluding the fact does not exist is the same error the gaps
+    register records against the XFP bezel opening, made again here.
+    THE TWO DC CONFIGURATIONS SHARE A SKU because they are one chassis differently
+    populated - `dc-populated` fits optics into the first four SFP28 cages and is
+    not a different thing to order. AC is, and carries its own. That is exactly the
+    distinction #21 collapses on, so the two DC entries should fold into one device
+    type and the AC one should stand alone.
+    SOURCE IS THE OWNER, NOT A DOCUMENT WE HOLD, and that is recorded rather than
+    dressed up: no PDF in `working/intake/ufispace` contains either string. If a
+    UfiSpace ordering guide ever lands, it should confirm these two and may add the
+    regional variants the Edgecore SKUs show for the same class of box.
     than merely coping.
   chassis: datasheet (440 x 302 x 43.5mm, 4.9kg without FRU)
   layout: drawing-inferred (HIG Fig 5/9 front drawing measured at 4.5 px/mm; pending photo overlay
@@ -483,6 +494,9 @@ configurations:
     description: Dual 400W DC PSUs (PSU-401-DISB-1), front-to-back airflow
     default: true
     airflow: front-to-back
+    part-numbers:
+      S9510-28DC-BN0B:
+        part: S9510-28DC-BN0B
     component-attrs:
       psu-401-dc:
         model: PSU-401-DISB-1
@@ -497,6 +511,9 @@ configurations:
     # here - #1 asked for occupants to live in a configuration and they do.
     description: Dual 400W DC PSUs, fitted with 25G optics on the first four SFP28 ports
     airflow: front-to-back
+    part-numbers:
+      S9510-28DC-BN0B:
+        part: S9510-28DC-BN0B
     occupants:
       port-4: common/sfp-lc-duplex@1
       port-5: common/sfp-lc-duplex@1
@@ -510,6 +527,9 @@ configurations:
   ac:
     description: Dual 400W AC PSUs (PSU-401-AISB), front-to-back airflow
     airflow: front-to-back
+    part-numbers:
+      S9510-28DC-BR1B:
+        part: S9510-28DC-BR1B
     bays:
       psu-0: ufispace/psu-401-ac@1
       psu-1: ufispace/psu-401-ac@1
