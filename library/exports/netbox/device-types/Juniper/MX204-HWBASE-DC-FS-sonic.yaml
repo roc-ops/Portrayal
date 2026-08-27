@@ -1,0 +1,128 @@
+---
+manufacturer: Juniper
+model: MX204-HWBASE-DC-FS
+slug: juniper-mx204-hwbase-dc-fs
+u_height: 1.0
+is_full_depth: true
+description: Juniper MX204 Universal Routing Platform - a fixed-configuration 1RU, 400 Gbps Trio-based
+  edge router
+front_image: true
+rear_image: true
+interfaces:
+  - name: Ethernet0
+    type: 100gbase-x-qsfp28
+  - name: Ethernet4
+    type: 100gbase-x-qsfp28
+  - name: Ethernet8
+    type: 100gbase-x-qsfp28
+  - name: Ethernet12
+    type: 100gbase-x-qsfp28
+  - name: Ethernet16
+    type: 10gbase-x-sfpp
+  - name: Ethernet20
+    type: 10gbase-x-sfpp
+  - name: Ethernet24
+    type: 10gbase-x-sfpp
+  - name: Ethernet28
+    type: 10gbase-x-sfpp
+  - name: Ethernet32
+    type: 10gbase-x-sfpp
+  - name: Ethernet36
+    type: 10gbase-x-sfpp
+  - name: Ethernet40
+    type: 10gbase-x-sfpp
+  - name: Ethernet44
+    type: 10gbase-x-sfpp
+module-bays:
+  - name: Fan 0
+    position: '0'
+    description: 'Accepts: mx204-fan'
+  - name: Fan 1
+    position: '1'
+    description: 'Accepts: mx204-fan'
+  - name: Fan 2
+    position: '2'
+    description: 'Accepts: mx204-fan'
+  - name: PSU 0
+    position: '0'
+    description: 'Accepts: mx204-psu-ac, mx204-psu-dc'
+  - name: PSU 1
+    position: '1'
+    description: 'Accepts: mx204-psu-ac, mx204-psu-dc'
+comments: 'Juniper MX204 Universal Routing Platform - a fixed-configuration 1RU, 400 Gbps Trio-based edge
+  router. Four rate-selectable ports (100GbE QSFP28, 40GbE QSFP+, or 4x10GbE breakout) and eight 10GbE
+  SFP+ ports, a built-in Routing Engine, a PTP grandmaster SFP port and a full timing block (BITS, ToD,
+  1PPS and 10 MHz in/out). Two 650 W PSUs (AC or DC, 1+1) and three fan modules at the rear.
+
+
+  Configuration `dc`: DC-powered chassis - two 650 W DC PSUs with terminal blocks; PS0 on feed A, PS1
+  on feed B. SKU MX204-HWBASE-DC-FS (fixed DC system, IR mode, feature rights separate).
+
+
+  Facts carried in the model that this schema has no field for:
+
+  - physical.weight: 10.3 kg fully loaded, AC-powered chassis (Table 19)
+
+  - physical.depth-with-handles: 518.9 mm over fan and power-supply handles (Table 19; drawing g009881
+  reads 518.4)
+
+  - performance.throughput: 400 Gbps (datasheet)
+
+  - performance.power-efficiency: 0.9 W/Gb (datasheet)
+
+  - power.power-typical-w: 240
+
+  - power.power-max-w: 280
+
+  - power.power-envelope: fully-configured
+
+  - power.psu-ac-input: dedicated feed per inlet; breaker min 20 A at 110 VAC or 16 A at 220 VAC
+
+  - power.psu-dc-input: PS0 from feed A, PS1 from feed B (A/B redundancy)
+
+  - thermal.max-thermal-output: 1705 BTU/hour (500 W) (Table 20; provisioning ceiling, not reconciled
+  with the 280 W maximum draw)
+
+  - environmental.operating-temp: 0 C to 40 C normal; -5 C to 55 C short-term (NEBS GR-63-CORE Issue 4
+  short-term, up to 96 h, max 15 days/year)
+
+  - environmental.storage-temp: -40 C to 70 C in shipping container
+
+  - environmental.humidity: 5-90 percent noncondensing
+
+  - environmental.altitude: no performance degradation to 3048 m
+
+  - platform.cpu: 1.6-GHz Intel 8-core x86
+
+  - platform.memory: 32-GB DDR4
+
+  - platform.storage: 100-GB SATA SSD (Routing Engine description; the faceplate carries SSD0 and SSD1
+  activity LEDs, and no sentence in the guide states the drive count)
+
+  - platform.routing-engine: built-in on the baseboard, not replaceable
+
+  - features.rate-selectability: each QSFP port runs 100GbE, 40GbE, or 4x10GbE via breakout; QSA adapter
+  (MAM1Q00A-QSA) converts a port to single 10GbE or 1GbE from Junos 18.3R1
+
+  - features.timing: BITS and ToD RJ45 ports, 1PPS and 10 MHz SMB input and output, PTP grandmaster clock
+  SFP port (GM/PTP)
+
+  - management.oob: MGMT RJ-45, autosensing 10/100/1000 with link and activity LEDs
+
+  - management.console: CON RJ-45 serial
+
+  - management.usb: single USB port (guide names no revision)
+
+  - compliance.seismic: Designed to meet Telcordia Technologies Zone 4 earthquake requirements (Table
+  20 wording, transcribed)
+
+  - lifecycle.eol: announced
+
+  - lifecycle.eol-announcement: https://support.juniper.net/support/eol/product/m_series/
+
+  - lifecycle.end-of-sale: 2027-06-15
+
+  - lifecycle.end-of-support: 2032-06-30
+
+
+  Model maturity: modelled. Every dimension in the source records where it came from.'
