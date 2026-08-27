@@ -60,6 +60,7 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
   L53 device: content changed without the version bump the change requires
   L54 device: a declared gap scopes something the device does not have
   L55 library: every vendor namespace is in the vendor registry
+  L56 overlay: a NOS identity names a software vendor the registry knows
       that composes them
   L47 component: a declared lamp state is a promise the drawing can keep - some
       element lights when it is set
@@ -2247,6 +2248,51 @@ def lint_device_gap_scope(path, data):
              "rather than the scope implying the device already has it")
 
 
+def lint_overlay_identity(path, data):
+    """L56: an overlay's `identity:` names a vendor who could sell it.
+
+    An overlay with `identity:` says the device running this NOS is a distinct
+    orderable thing whose vendor is the SOFTWARE house - the buyer's asset
+    register says IP Infusion even though Edgecore made the metal. That only
+    works if the named vendor exists and is a software vendor: filing a device
+    type under a company that makes no software would put the disaggregated SKU
+    back under a hardware brand, which is the thing the field exists to avoid.
+
+    AN ERROR AND NOT A WARNING, unlike L55 next door. L55 is soft because the
+    entry that matters states a lineage, and a lineage guessed to clear a gate
+    is worse than an absent one. Here nothing is being guessed: the overlay has
+    already made the claim, and the only question is whether the registry agrees
+    the claimed vendor exists and writes software. That needs no document.
+    """
+    ident = data.get("identity")
+    if not ident:
+        return                      # opt-in: an overlay without one is a naming layer
+    vendor = ident.get("vendor")
+    entry = VENDORS.get(vendor)
+    if entry is None:
+        err(path, "L56", f"identity.vendor {vendor!r} is in no vendor registry. Add it "
+            "to spec/schemas/vendors.yaml with role: software and a source saying how "
+            "the pairing is known - a NOS vendor is named here and nowhere else, because "
+            "the device's own `manufacturer:` is the metal and does not move when the "
+            "software changes")
+        return
+    if entry.get("role") not in ("software", "both"):
+        err(path, "L56", f"identity.vendor {vendor!r} has role {entry.get('role')!r}. "
+            "An identity names the company that sells this NOS on this hardware, so it "
+            "has to be a software vendor. If this company does write a NOS, correct its "
+            "role in the registry; if the intent was to say who MADE the metal, that is "
+            "the device's `manufacturer:` and it belongs there")
+    dev = data.get("device")
+    if dev and ident.get("model") and dev.split("/")[-1].lower() in \
+            ident["model"].lower().replace(" ", "-"):
+        return
+    if ident.get("model") and data.get("nos") and \
+            ident["model"].strip().lower() == str(data["nos"]).strip().lower():
+        warn(path, "L56", f"identity.model {ident['model']!r} names only the NOS. The "
+             "same NOS runs on other metal, so a model that does not say which hardware "
+             "it is paired with cannot be told from its siblings in a DCIM")
+
+
 def lint_vendor_registry(root):
     """L55: a vendor namespace that the registry does not know.
 
@@ -3662,6 +3708,8 @@ def main():
             data = load_yaml(f)
             for e in ovl_v.iter_errors(data):
                 err(f, "L1", f"{'/'.join(str(p) for p in e.path)}: {e.message}")
+            if isinstance(data, dict):
+                lint_overlay_identity(f, data)
             n += 1
 
     # The matrix is a PORTFOLIO view - it ranks devices against each other - so

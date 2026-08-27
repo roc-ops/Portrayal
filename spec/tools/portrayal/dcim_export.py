@@ -34,6 +34,7 @@ nautobot/devicetype-library#24).
 """
 import argparse
 import re
+import pathlib
 from pathlib import Path
 
 import yaml
@@ -521,6 +522,69 @@ class Indented(yaml.SafeDumper):              # match the library's list indenta
         return super().increase_indent(flow, False)
 
 
+def overlay_identity(device_yaml, profile):
+    """What the device is SOLD AS when it runs this NOS, or None.
+
+    A disaggregated box is two products from two companies: Edgecore made the
+    metal and the buyer's asset register may well say the software house, because
+    that is who invoiced them. Modelling that by duplicating the hardware means
+    keeping two full definitions in step forever, so the hardware is modelled once
+    and the overlay carries only what the software changes - here, who sells it.
+
+    Absence is meaningful and is the default: an overlay without `identity:` is a
+    naming and mapping layer, and its export stays under the manufacturer of
+    record exactly as before.
+    """
+    if not profile:
+        return None
+    f = pathlib.Path(device_yaml).resolve().parent / "overlays" / f"{profile}.yaml"
+    if not f.exists():
+        return None
+    doc = yaml.safe_load(f.read_text()) or {}
+    return doc.get("identity") or None
+
+
+def apply_identity(doc, identity, vendors):
+    """Re-file a device type under the software vendor that sells it."""
+    if not identity:
+        return doc
+    display = ((vendors.get(identity["vendor"]) or {}).get("display")
+               or identity["vendor"])
+    hw_model = doc["model"]
+    name = identity["model"]
+    if "{model}" in name:
+        name = name.replace("{model}", hw_model)
+    elif hw_model.lower() not in name.lower():
+        # THE HARDWARE'S SKUs DO NOT COLLAPSE. One device can be four orderable
+        # things - AC and 48 V, front-to-back and back-to-front - and they are
+        # four device types on the hardware side. A NOS identity that names none
+        # of them would write four documents to one filename, keeping whichever
+        # happened to be last. Appending the hardware model is not elegant; it is
+        # the option that loses nothing, and `{model}` exists so an author who
+        # cares about the phrasing never reaches this branch.
+        name = f"{name} ({hw_model})"
+    doc["manufacturer"] = display
+    doc["model"] = name
+    doc["slug"] = slugify(f"{display}-{name}")
+    if identity.get("part-number"):
+        doc["part_number"] = identity["part-number"]
+    else:
+        # The hardware's part number is the METAL's, and this document is no
+        # longer about the metal alone. Leaving it would attribute an Edgecore
+        # SKU to an Arrcus product.
+        doc.pop("part_number", None)
+    return doc
+
+
+def load_vendors(schemas=None):
+    root = pathlib.Path(schemas) if schemas else \
+        pathlib.Path(__file__).resolve().parents[2] / "schemas"
+    try:
+        return (yaml.safe_load((root / "vendors.yaml").read_text()) or {}).get("vendors") or {}
+    except (OSError, yaml.YAMLError):
+        return {}
+
+
 def write(doc, root, target, nos):
     d = Path(root) / target / "device-types" / doc["manufacturer"]
     d.mkdir(parents=True, exist_ok=True)
@@ -697,6 +761,7 @@ def main():
               for key in by_sku}
 
     wrote = 0
+    vendors = load_vendors()
     for key, (cfg_name, cfg) in by_sku.items():
         label = labels[key]
         # A NOS names switch interfaces. Emit one document per profile that
@@ -707,11 +772,13 @@ def main():
 
         for profile in profiles:
             doc, _ = build(dev, cfg_name, cfg, profile, args.dist, frus, label)
+            ident = overlay_identity(args.device, profile)
+            doc = apply_identity(doc, ident, vendors)
             if not any(k in doc for k in
                        ("console-ports", "interfaces", "module-bays")):
                 continue                       # nothing but a header: not worth a file
             for target in TARGETS:
-                f = write(doc, args.out, target, profile)
+                f = write(doc, args.out, target, None if ident else profile)
                 for face in ("front", "rear"):
                     if doc.get(f"{face}_image"):
                         render_image(args.dist, args.out, target, doc,

@@ -89,3 +89,68 @@ def test_the_accton_claim_is_backed_by_the_dump_it_cites():
     text = dump.read_text()
     assert "Accton" in text and "accton_as7726_32x" in text
     assert VENDORS["edgecore"]["parent"] == "accton"
+
+
+# ---- overlay identity: the disaggregation case -------------------------------
+
+import importlib  # noqa: E402
+dx = importlib.import_module("dcim_export")
+
+OVERLAYS = sorted((ROOT / "library" / "devices").glob("*/*/overlays/*.yaml"))
+
+
+def test_every_overlay_identity_names_a_software_vendor():
+    """Filing a disaggregated SKU under a hardware brand is the thing the field
+    exists to avoid, so the vendor it names has to write software."""
+    for f in OVERLAYS:
+        ident = (yaml.safe_load(f.read_text()) or {}).get("identity")
+        if not ident:
+            continue
+        v = VENDORS.get(ident["vendor"])
+        assert v, f"{f.name}: identity.vendor {ident['vendor']} is not in the registry"
+        assert v["role"] in ("software", "both"), \
+            f"{f.name}: identity.vendor {ident['vendor']} has role {v['role']}"
+        assert str(ident.get("source") or "").strip(), f"{f.name}: identity states no source"
+
+
+def test_the_model_placeholder_expands_to_the_hardware_sku():
+    doc = {"manufacturer": "Edgecore", "model": "7726-32X-O-AC-F", "part_number": "X"}
+    out = dx.apply_identity(dict(doc),
+                            {"vendor": "arrcus", "model": "ArcOS on {model}", "source": "s"},
+                            VENDORS)
+    assert out["manufacturer"] == "Arrcus"
+    assert out["model"] == "ArcOS on 7726-32X-O-AC-F"
+    assert out["slug"] == "arrcus-arcos-on-7726-32x-o-ac-f"
+
+
+def test_four_hardware_skus_do_not_collapse_onto_one_name():
+    """One device can be four orderable things. A NOS identity naming none of
+    them would write four documents to one filename and keep the last."""
+    names = set()
+    for sku in ("7726-32X-O-AC-F", "7726-32X-O-AC-B", "7726-32X-O-48V-F", "7726-32X-O-48V-B"):
+        out = dx.apply_identity({"manufacturer": "Edgecore", "model": sku},
+                                {"vendor": "arrcus", "model": "ArcOS on {model}", "source": "s"},
+                                VENDORS)
+        names.add(out["slug"])
+    assert len(names) == 4
+
+
+def test_a_model_without_the_placeholder_still_does_not_collide():
+    """The fallback appends the hardware model rather than losing a document."""
+    a = dx.apply_identity({"manufacturer": "E", "model": "SKU-A"},
+                          {"vendor": "arrcus", "model": "ArcOS", "source": "s"}, VENDORS)
+    b = dx.apply_identity({"manufacturer": "E", "model": "SKU-B"},
+                          {"vendor": "arrcus", "model": "ArcOS", "source": "s"}, VENDORS)
+    assert a["slug"] != b["slug"]
+
+
+def test_the_hardware_part_number_is_not_attributed_to_the_software_vendor():
+    out = dx.apply_identity({"manufacturer": "Edgecore", "model": "M", "part_number": "7726-X"},
+                            {"vendor": "arrcus", "model": "ArcOS on {model}", "source": "s"},
+                            VENDORS)
+    assert "part_number" not in out
+
+
+def test_no_identity_leaves_the_document_alone():
+    doc = {"manufacturer": "Edgecore", "model": "M", "slug": "edgecore-m", "part_number": "P"}
+    assert dx.apply_identity(dict(doc), None, VENDORS) == doc
