@@ -8,6 +8,24 @@ description: UfiSpace S9510-28DC Disaggregated Cell Site Gateway Router - 1RU, 2
   + 2x QSFP28 100G + 24x SFP28 25G, full timing (GNSS/1PPS/ 10MHz/ToD/BITS), temperature hardened,
   front-service
 provenance:
+  part-numbers: >-
+    REMOVED, and the field now says nothing rather than saying the wrong thing.
+    Each configuration listed `PSU-401-DISB-1` / `PSU-401-AISB` and `FAN-402825-HD`
+    under `part-numbers`, whose schema is "orderable SKUs for this CONFIGURATION:
+    model -> {part, power-cord}" - a chassis SKU. Those three are FRU part numbers,
+    and they already live where a FRU part number belongs: ufispace/psu-401-dc,
+    psu-401-ac and fan-402825 each carry their own in `attrs.model`. So this was a
+    duplicate in a field that means something else.
+    IT WAS NOT HARMLESS. A DCIM exporter reading the first key as the chassis model
+    filed this router as a device type called FAN-402825-HD in both target
+    libraries, and the S9510-28DC appeared in neither under its own name - see
+    roc-ops/ndv#21. A field carrying the wrong KIND of value is worse than an empty
+    one, because every consumer has to guess which kind it got.
+    NO CHASSIS SKU IS RECORDED because the guide does not give one. R1.9 names the
+    product `S9510-28DC` throughout - in the title, the overview and the dimensions
+    table - and nowhere prints an orderable part number for the chassis. `model:` is
+    therefore the whole answer, and a consumer that falls back to it is right rather
+    than merely coping.
   chassis: datasheet (440 x 302 x 43.5mm, 4.9kg without FRU)
   layout: drawing-inferred (HIG Fig 5/9 front drawing measured at 4.5 px/mm; pending photo overlay
     calibration - marketing photos are low resolution)
@@ -465,11 +483,6 @@ configurations:
     description: Dual 400W DC PSUs (PSU-401-DISB-1), front-to-back airflow
     default: true
     airflow: front-to-back
-    part-numbers:
-      PSU-401-DISB-1:
-        part: PSU-401-DISB-1
-      FAN-402825-HD:
-        part: FAN-402825-HD
     component-attrs:
       psu-401-dc:
         model: PSU-401-DISB-1
@@ -489,11 +502,6 @@ configurations:
       port-5: common/sfp-lc-duplex@1
       port-6: common/sfp-lc-duplex@1
       port-7: common/sfp-lc-duplex@1
-    part-numbers:
-      PSU-401-DISB-1:
-        part: PSU-401-DISB-1
-      FAN-402825-HD:
-        part: FAN-402825-HD
     component-attrs:
       psu-401-dc:
         model: PSU-401-DISB-1
@@ -505,11 +513,6 @@ configurations:
     bays:
       psu-0: ufispace/psu-401-ac@1
       psu-1: ufispace/psu-401-ac@1
-    part-numbers:
-      PSU-401-AISB:
-        part: PSU-401-AISB
-      FAN-402825-HD:
-        part: FAN-402825-HD
     component-attrs:
       psu-401-ac:
         model: PSU-401-AISB
