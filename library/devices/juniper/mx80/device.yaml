@@ -105,10 +105,6 @@ groups:
     term: Tray
     role: service
     index-origin: 0
-  grounding:
-    term: Point
-    role: furniture
-    index-origin: 0
   service-covers:
     term: Cover
     role: furniture
@@ -157,7 +153,7 @@ views:
       - {at: [320.3, 59.8], text: '2', font-size: 1.8, anchor: middle, fill: '#e8eaec', for: xe-2}
       - {at: [349.7, 59.8], text: '3', font-size: 1.8, anchor: middle, fill: '#e8eaec', for: xe-3}
       - {at: [305.5, 84.5], text: 0/MIC 0, font-size: 1.8, anchor: middle, fill: '#e8eaec', for: [xe-0, xe-1, xe-2, xe-3]}
-      - {at: [381.0, 56.0], text: MX80, font-size: 5.0, anchor: middle, fill: '#f0f1f2'}
+      - {at: [381.0, 56.0], text: MX80, font-size: 5.0, anchor: middle, fill: '#f0f1f2', for: chassis}
       - {at: [396.0, 47.0], text: FAN, font-size: 1.8, anchor: middle, fill: '#e8eaec', for: fan-tray}
       - {at: [277.4, 66.7], text: LINK, font-size: 1.2, anchor: start, fill: '#e8eaec', for: xe-0}
       - {at: [306.8, 66.7], text: LINK, font-size: 1.2, anchor: start, fill: '#e8eaec', for: xe-1}
@@ -223,12 +219,12 @@ views:
         - {id: ground-stud-1, at: [392.0, 24.0], size: [5.5, 5.5], shape: circle}
         - {id: esd-rear, at: [428.0, 8.0], size: [4.0, 4.0], shape: circle}
     silkscreen:
-      - {at: [258.0, 20.0], text: MPC 0, font-size: 3.2, anchor: start, fill: '#3a3e43'}
-      - {at: [262.0, 25.0], text: MIC 1, font-size: 2.0, anchor: start, fill: '#3a3e43'}
+      - {at: [258.0, 20.0], text: MPC 0, font-size: 3.2, anchor: start, fill: '#3a3e43', for: chassis}
+      - {at: [262.0, 25.0], text: MIC 1, font-size: 2.0, anchor: start, fill: '#3a3e43', for: chassis}
       - {at: [68.0, 68.0], text: CLK, font-size: 1.8, anchor: middle, fill: '#3a3e43', for: clk}
       - {at: [105.0, 68.0], text: SYNC, font-size: 1.8, anchor: middle, fill: '#3a3e43', for: sync}
       - {at: [378.0, 22.0], path: 'M 0 -4.2 A 4.2 4.2 0 1 0 0.01 -4.2 Z M -2.4
-          -1.1 H 2.4 M -1.6 0.5 H 1.6 M -0.7 2.1 H 0.7', fill: '#3a3e43'}
+          -1.1 H 2.4 M -1.6 0.5 H 1.6 M -0.7 2.1 H 0.7', fill: '#3a3e43', for: chassis}
     components:
       bays:
         - {id: rear-cover, at: [48.0, 8.0], size: {w: 170.0, h: 32.0},
