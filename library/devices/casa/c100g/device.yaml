@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: c100g
-version: 0.2.2
+version: 0.3.0
 maturity: modelled
 manufacturer: Casa Systems
 model: C100G
@@ -261,6 +261,8 @@ views:
         - {at: [142.0, 455.5], size: [24.5, 10.3], fill: '#d7dbdf', rx: 1.2}
         - {at: [266.5, 455.5], size: [24.5, 10.3], fill: '#d7dbdf', rx: 1.2}
         - {at: [6, 470], size: [420.95, 96.0], fill: '#8d949c', pattern: grille, vent: 60, confidence: estimated, source: 'no Casa document gives a depth for a chassis air grille; searched both guides for grille, vent and air filter. This value predates the confidence key and its origin is unrecorded - marked estimated because that is the honest floor, not because anyone estimated it deliberately'}
+      cutouts:
+        - {id: ground-strap-front, at: [348.4, 530.4], size: [15, 7.9], shape: rect}
     silkscreen:
       - {at: [26, 30], text: casa systems, font-size: 13, fill: '#d7dbdf', anchor: start, for: chassis}
       - {at: [417.9, 30], text: C100G, font-size: 13, fill: '#d7dbdf', anchor: end, for: chassis}
@@ -310,6 +312,8 @@ views:
     panel:
       decor:
         - {at: [0, 470.0], size: [432.95, 101.0], fill: '#4a4f55'}
+      cutouts:
+        - {id: ground-strap-rear, at: [6.3, 461.9], size: [15, 7.9], shape: rect}
     silkscreen:
       - {at: [109.5, 475.7], text: PEM B, for: pem-b}
       - {at: [323.45, 475.7], text: PEM A, for: pem-a}

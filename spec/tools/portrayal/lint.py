@@ -1761,6 +1761,11 @@ def _footprint(item, lib_roots):
     return (x, y, x + w, y + h)
 
 
+def _is_class(placement, cls, lib_roots):
+    cp = resolve_component(placement.get("ref", ""), lib_roots)
+    return bool(cp) and (load_yaml(cp) or {}).get("class") == cls
+
+
 def lint_device_cutouts(path, view_name, view, lib_roots):
     """L39: the panel's holes must agree with what goes in them.
 
@@ -1933,18 +1938,57 @@ def lint_device_cutouts(path, view_name, view, lib_roots):
     # 5. a port on a panel that has been punched should have its own hole.
     #    WARNING, not an error: it reports incomplete work rather than wrong work,
     #    and the ASR 9001 has fifteen of them because it declares two cutouts for
-    #    clock connectors and none for its ports. Restricted to `port` because no
-    #    lamp in the library has a cutout and no button does either - that is a
-    #    modelling convention held consistently, not 163 omissions.
+    #    clock connectors and none for its ports.
+    #
+    #    LAMPS AND BUTTONS ARE IN NOW, AND THE REASON THEY WERE NOT USED TO BE
+    #    FALSE. This read "no lamp in the library has a cutout and no button does
+    #    either - that is a modelling convention held consistently". There were
+    #    46, across nine devices; the MX204 alone punched twenty. The real
+    #    position was that the library disagreed with itself - Juniper cut its
+    #    lamps, Cisco and Edgecore did not - and #68 settled it by measuring
+    #    rather than by preference: 35 of those 46 already used the same rule as
+    #    every port, so cutting the rest was not a new convention but the one
+    #    already in use. A faceplate lamp penetrates the metal, and the drawing
+    #    may as well say so.
+    def _covered(fb):
+        """Is this footprint already accounted for by a hole or a connector?"""
+        area = (fb[2] - fb[0]) * (fb[3] - fb[1])
+        if not area:
+            return True
+        for b in list(boxes.values()) + [_footprint(x, lib_roots) for x in placements
+                                         if _is_class(x, "port", lib_roots)]:
+            if not b:
+                continue
+            ix = min(fb[2], b[2]) - max(fb[0], b[0])
+            iy = min(fb[3], b[3]) - max(fb[1], b[1])
+            if ix > 0 and iy > 0 and (ix * iy) / area > 0.5:
+                return True
+        return False
+
     for q in placements:
         cp = resolve_component(q.get("ref", ""), lib_roots)
-        if not cp or (load_yaml(cp) or {}).get("class") != "port":
+        cls = (load_yaml(cp) or {}).get("class") if cp else None
+        if cls not in ("port", "led", "button"):
             continue
         if q.get("mate-to"):
             continue          # an occupant sits in its host, not in the metal
-        if q.get("id") not in boxes:
-            warn(path, "L39", f"{view_name}: port {q.get('id')} has no cutout, on a "
-                              "panel that declares them. Either punch it or say why")
+        if q.get("id") in boxes:
+            continue
+        if cls in ("led", "button"):
+            # TWO WAYS A LAMP IS ALREADY PUNCHED, and both are real hardware
+            # rather than bookkeeping. The AS7946-30XB's mgmt link and activity
+            # LEDs sit wholly inside the RJ45 - moulded into the jack housing,
+            # which is where they are on the metal. And four Juniper files break
+            # the shared-id convention, declaring the hole as `esd-rear` while
+            # the part is `esd-rear-jack`; going by id alone punched the same
+            # hole twice, which L39 itself then reported as two holes sharing
+            # metal. Both are found by asking where the thing sits.
+            fb = _footprint(q, lib_roots)
+            if fb and _covered(fb):
+                continue
+        what = "port" if cls == "port" else "lamp"
+        warn(path, "L39", f"{view_name}: {what} {q.get('id')} has no cutout, on a "
+                          "panel that declares them. Either punch it or say why")
 
 
 # The cages an optic plugs INTO. A management cluster of RJ45, USB and console
