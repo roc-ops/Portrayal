@@ -28,6 +28,17 @@ export function configureRelief(deps, scope) {
 // times. On the demo host that was 9.4 of the 11.8 seconds a switch took. The
 // URL already carries the config name, so memoising per URL is safe; a build
 // tool writes new files under new names.
+//
+// AND THE FLAG ITSELF IS GONE NOW, for the reason dist.js already gave about the
+// JSON: `no-store` kept a rebuilt dist from going stale during development, and
+// the memo below does that job within a load - but it also meant the browser
+// could not reuse the file across page loads, forever. Entering the 3D tab on
+// one switch is 24 requests and 284 KB of face SVG, none of it revalidatable.
+// The drawings are much larger than the JSON that argument was made about.
+//
+// If you are iterating on the build and want the next load to see new bytes,
+// hard-reload. That is the tool for it, not a permanent header on every
+// drawing.
 const SVG_CACHE = new Map();
 // A FACE CAN BE OVERRIDDEN FOR A BUILD. A runtime bay swap changes what the device
 // looks like without changing any file on disk, and everything downstream here -
@@ -93,8 +104,7 @@ export function svgSource(url, scope) {
   // the node, `parseFromString('')` raises a parsererror the caller already
   // checks for, and a Blob of '' fails the image load exactly as a 404 page did.
   if (!SVG_CACHE.has(url))
-    SVG_CACHE.set(url, fetch(url, {cache: 'no-store'})
-      .then(r => r.ok ? r.text() : ''));
+    SVG_CACHE.set(url, fetch(url).then(r => r.ok ? r.text() : ''));
   return SVG_CACHE.get(url);
 }
 export function clearSvgCache() { SVG_CACHE.clear(); }

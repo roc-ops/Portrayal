@@ -40,3 +40,10 @@ def test_a_missing_face_costs_one_request_and_is_remembered():
     assert out["requests"] == 2, \
         f"asked {out['requests']} times for 2 URLs - the miss is not being memoised"
     assert out["urls"] == ["missing.svg", "present.svg"]
+
+    # #62: `cache: 'no-store'` kept a rebuilt dist from going stale in
+    # development and cost every visitor a re-download of every drawing on every
+    # page load, forever. dist.js already dropped it for the JSON; the drawings
+    # are much larger than the JSON that argument was made about.
+    assert out["cacheModes"] == ["default"], \
+        f"a drawing is fetched with cache {out['cacheModes']} and cannot be reused across loads"

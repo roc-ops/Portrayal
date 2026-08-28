@@ -10,7 +10,7 @@ globalThis.location = { search: '' };
 
 const calls = [];
 globalThis.fetch = async (url, opts = {}) => {
-  calls.push({ url, method: opts.method || 'GET' });
+  calls.push({ url, method: opts.method || 'GET', cache: opts.cache });
   if (url === 'present.svg')
     return { ok: true, text: async () => '<svg id="PRESENT"/>' };
   return { ok: false, status: 404, text: async () => '<html>404 Not Found</html>' };
@@ -33,6 +33,8 @@ console.log(JSON.stringify({
   missingIsFalsy: !missing,
   // every existing caller degrades on '' rather than throwing
   matchAllSurvives: [...missing.matchAll(/x/g)].length,
+  // #62: the browser must be allowed to reuse a drawing across page loads
+  cacheModes: [...new Set(calls.map(c => c.cache ?? 'default'))],
   requests: calls.length,
   methods: [...new Set(calls.map(c => c.method))],
   urls: calls.map(c => c.url).sort(),

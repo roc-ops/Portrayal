@@ -738,8 +738,19 @@ export function createShell(opts = {}) {
     if (!ref) { refreshTree(); select(bayId, true); emit('change'); return; }
     const c = compByRef(ref);
     const skin = c?.skins?.includes('default') ? 'default' : c?.skins?.[0];
+    // NO `cache: 'no-store'`, for the reason dist.js gives about the JSON and
+    // relief.js now gives about the face drawings: the flag kept a rebuilt dist
+    // from going stale in development and cost every visitor a re-download of
+    // every drawing on every page load, forever. Hard-reload is the development
+    // tool for that; a permanent header is not.
+    //
+    // These two fetches are still NOT memoised - they do not go through
+    // relief.js's SVG_CACHE - so seating the same module twice in one page still
+    // asks twice. Routing them through svgSource would fix that and would also
+    // subject them to the runtime override map, which is a behaviour change
+    // rather than a caching one, so it is left alone here.
     const file = `${DIST}/components/${c.ns}--${c.name}--${c.major}--${skin}.svg`;
-    const txt = await (await fetch(file, {cache: 'no-store'})).text();
+    const txt = await (await fetch(file)).text();
     g.appendChild(seatModule(document, bayId, bay, ref, c, txt));
     refreshTree();
     select(bayId, true);
@@ -762,7 +773,7 @@ export function createShell(opts = {}) {
     } else {
       file = `${DIST}/${state.device}.${state.cfg}.${state.view}.svg`;
     }
-    const txt = await (await fetch(file, {cache: 'no-store'})).text();
+    const txt = await (await fetch(file)).text();
     const doc = new DOMParser().parseFromString(txt, 'image/svg+xml');
     const svg = document.importNode(doc.documentElement, true);
     el.svgHost.appendChild(svg);
