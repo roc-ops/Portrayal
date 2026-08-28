@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9006
-version: 0.3.0
+version: 0.4.0
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9006
@@ -508,6 +508,7 @@ views:
         - {id: slot-1, at: [39.38, 293.652], size: {w: 395.7, h: 41.4}, opening: {w: 352.59, h: 46.605}, rotate: 90, accepts: ['cisco/a9k-rsp880-se@1', 'cisco/a9k-rsp880-tr@1', 'cisco/a9k-rsp880-lt-se@1', 'cisco/a9k-rsp880-lt-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1, default: cisco/a9k-slot-cover@1}
         - {id: slot-0, at: [39.38, 340.257], size: {w: 395.7, h: 41.4}, opening: {w: 352.59, h: 46.605}, rotate: 90, accepts: ['cisco/a9k-rsp880-se@1', 'cisco/a9k-rsp880-tr@1', 'cisco/a9k-rsp880-lt-se@1', 'cisco/a9k-rsp880-lt-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0, default: cisco/a9k-slot-cover@1}
       placements:
+        - {id: esd-jack, ref: common/esd-jack@1, at: [30.0, 300.0], for: chassis, group: grounding, rel-pos: 0}
         - {ref: cisco/a9k-fan-tray-door@1, id: fan-tray-door, at: [0, 33.66], group: doors, rel-pos: 0}
     regions:
       - {id: rsp-slots, label: Two bottom slots reserved for redundant RSPs, members: [slot-0, slot-1]}

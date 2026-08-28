@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx304
-version: 1.0.0
+version: 1.1.0
 maturity: modelled
 manufacturer: Juniper
 model: MX304
@@ -228,6 +228,8 @@ views:
         - {id: lmic1, at: [205.3, 44.6], size: {w: 197.6, h: 39.7},
            accepts: [juniper/mx304-lmic16@1, juniper/jnp304-blnk@1],
            default: juniper/mx304-lmic16@1, group: lmics, rel-pos: 1}
+      placements:
+        - {id: esd-front-jack, ref: common/esd-jack@1, at: [430.9, 2.3], for: chassis, group: grounding, rel-pos: 0}
   rear:
     size:
       w: 440.8
@@ -292,6 +294,7 @@ views:
         - {id: fan-2, at: [334.2, 1.5], size: {w: 82.0, h: 85.5},
            accepts: [juniper/mx304-fan@1], default: juniper/mx304-fan@1, group: fans, rel-pos: 2}
       placements:
+        - {id: esd-rear-jack, ref: common/esd-jack@1, at: [429.1, 7.7], for: chassis, group: grounding, rel-pos: 0}
         - {id: smb-10mhz-out, ref: std/smb@1, at: [96.19, 9.19], group: timing, rel-pos: 0,
            attrs: {function: 10 MHz clock output}}
         - {id: smb-10mhz-in, ref: std/smb@1, at: [104.69, 9.19], group: timing, rel-pos: 1,

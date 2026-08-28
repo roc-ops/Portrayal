@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx204
-version: 0.1.1
+version: 0.2.0
 maturity: modelled
 manufacturer: Juniper
 model: MX204
@@ -400,6 +400,7 @@ views:
       - {at: [424.35, 38.8], text: RESET, font-size: 1.9, anchor: middle, for: reset-btn}
     components:
       placements:
+        - {id: esd-front-jack, ref: common/esd-jack@1, at: [5.45, 25.9], for: chassis, group: grounding, rel-pos: 0}
         - {id: gm-ptp, ref: std/sfp@1, at: [23.25, 24.65], group: timing, rel-pos: 4,
            attrs: {media: sfp, function: PTP grandmaster clock port}}
         - {id: led-gm-ptp-0, ref: common/led-dot@1, at: [39.95, 25.6], for: gm-ptp, group: gm-ptp-leds, rel-pos: 0}
@@ -519,6 +520,7 @@ views:
         - {id: psu-1, at: [373.65, 0.8], size: {w: 56.6, h: 42.4}, accepts: [juniper/mx204-psu-ac@1, juniper/mx204-psu-dc@1],
            default: juniper/mx204-psu-ac@1, group: psus, rel-pos: 1}
       placements:
+        - {id: esd-rear-jack, ref: common/esd-jack@1, at: [55.75, 14.2], for: chassis, group: grounding, rel-pos: 0}
         - {id: ground-plate, ref: juniper/mx204-ground-plate@1, at: [5.95, 10.0], group: grounding, rel-pos: 0}
         - {id: led-fan-0, ref: common/led-dot@1, at: [79.55, 27.9], for: fan-0, group: fan-leds, rel-pos: 0}
         - {id: led-fan-1, ref: common/led-dot@1, at: [128.75, 27.9], for: fan-1, group: fan-leds, rel-pos: 1}

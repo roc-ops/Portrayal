@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx240
-version: 1.0.1
+version: 1.1.0
 maturity: modelled
 manufacturer: Juniper
 model: MX240
@@ -171,6 +171,8 @@ views:
         - {id: scb0, at: [11.5, 175.95], size: {w: 420.9, h: 29.5},
            accepts: [juniper/scb-mx@1], default: juniper/scb-mx@1,
            group: scbs, rel-pos: 0}
+      placements:
+        - {id: esd-front-jack, ref: common/esd-jack@1, at: [5.0, 14.0], for: chassis, group: grounding, rel-pos: 0}
   rear:
     size:
       w: 443.0
@@ -216,6 +218,7 @@ views:
            accepts: [juniper/mx240-fan-tray@1], default: juniper/mx240-fan-tray@1,
            group: cooling, rel-pos: 1}
       placements:
+        - {id: esd-rear-jack, ref: common/esd-jack@1, at: [353.4, 170.6], for: chassis, group: grounding, rel-pos: 0}
         - {id: ground-stud-0, ref: juniper/mx-ground-stud@1, at: [423.20, 18.70], for: chassis, group: grounding, rel-pos: 0}
         - {id: ground-stud-1, ref: juniper/mx-ground-stud@1, at: [423.20, 31.90], for: chassis, group: grounding, rel-pos: 1}
 

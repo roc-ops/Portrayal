@@ -1,0 +1,40 @@
+format: 1
+kind: component
+name: esd-jack
+version: 1.0.0
+class: ground
+behaviour: mounts
+profile: networking
+description: >-
+  ESD wrist-strap grounding jack - the socket you clip an antistatic strap into
+  before handling cards. A 4 mm banana receptacle in a small bezel, with the
+  standard ESD symbol printed beside it on the chassis rather than on the part.
+attrs:
+  media: esd
+provenance:
+  interface: >-
+    standard - the equipment-side ESD ground point is a 4 mm BANANA receptacle.
+    That is the industry connection for wrist straps, mats and bench points; the
+    3.5 mm stereo jack often remembered alongside it belongs to the DUAL-WIRE
+    coil cord, and the adapters sold for it are explicitly stereo-plug-to-banana,
+    which is the giveaway that the banana end is the equipment end.
+  size: >-
+    photo-inferred, and the number is the BEZEL rather than the panel hole. The
+    thirteen ESD cutouts in this library measure 3.6 to 6.0 mm and split by
+    vendor - Juniper 3.6 to 4.3, Cisco 5.0 to 6.0 - which is too consistent
+    within a vendor to be measurement noise and too wide to be one feature. The
+    reading that fits both is that what was drawn is the visible SOCKET BORE, and
+    a 4 mm bore is exactly what the standard fixes; the Cisco figures show a
+    little more of the surrounding bezel. 6.0 is taken from the largest of them,
+    the ASR 9006, so the part covers every opening it is placed in.
+  not-the-panel-hole: >-
+    OPEN, and worth saying rather than smoothing over. A common INSULATED
+    panel-mount 4 mm banana jack needs a 7.5 mm panel hole, which is larger than
+    every cutout here. So these chassis use a compact or non-insulated variant
+    whose body is smaller, or the guides draw the bore and not the hole. Nothing
+    in the intake settles it, and a caliper on any of these chassis would.
+states:
+- ok
+size:
+  w: 6.0
+  h: 6.0

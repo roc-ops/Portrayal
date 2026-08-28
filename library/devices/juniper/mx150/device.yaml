@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx150
-version: 0.1.0
+version: 0.2.0
 maturity: modelled
 manufacturer: Juniper
 model: MX150
@@ -237,6 +237,7 @@ views:
          anchor: middle, fill: '#e8eaec', for: chassis}
     components:
       placements:
+        - {id: esd-rear-jack, ref: common/esd-jack@1, at: [33.2, 10.4], for: chassis, group: grounding, rel-pos: 0}
         - {id: ground-stud-0, ref: juniper/mx-ground-stud@1, at: [17.50, 3.00], for: chassis, group: grounding, rel-pos: 0}
         - {id: ground-stud-1, ref: juniper/mx-ground-stud@1, at: [30.50, 3.00], for: chassis, group: grounding, rel-pos: 1}
         - {id: fan-0, ref: common/fan-module@1, at: [48.0, 2.0], skin: default, group: fans, rel-pos: 0,
