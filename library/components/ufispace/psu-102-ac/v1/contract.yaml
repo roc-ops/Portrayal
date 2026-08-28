@@ -1,0 +1,107 @@
+format: 1
+kind: module
+name: psu-102-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: UfiSpace PSU-102-AISB-1 1000W AC PSU - hexagonal vent field on the left, a
+  black tube handle standing beside it, a C14 inlet mounted on its side so the cord enters
+  vertically, a blue release latch at the bottom right and a status LED in the vent field;
+  intake airflow (S9620-40DG)
+size: {w: 52.9, h: 39.7}
+attrs: {power-output-w: 1000, input: ac, model: PSU-102-AISB-1, airflow: intake}
+provenance:
+  power: >-
+    datasheet - UfiSpace states the rating in the part number's own ordering line:
+    'PSU-102-AISB-1, 1000W AC, intake air flow', beside its DC sibling 'PSU-102-DISB-1,
+    1000W DC, intake air flow'. No ambient is stated with it - a supply has a rating rather
+    than a draw measured against temperature - so none is recorded. The chassis input
+    ratings printed elsewhere in the same datasheet ('AC input: 100 to 240V, 12A') belong to
+    the SYSTEM and are carried on the device, not here.
+  size: >-
+    photo-measured - THIS PART HAS NO HARDWARE INSTALLATION GUIDE. UfiSpace has published
+    only a datasheet for the S9620-40DG, so there is no component table and no dimensioned
+    drawing; the face comes off the vendor's own front render, the 649 x 130 px image
+    embedded on page 1 of the datasheet (the same picture appears on page 2 at 510 px and
+    in the product gallery at 488 px, and this is the largest of the three). That image is
+    exactly the chassis with no margin, 649 x 130 for 440 x 89 mm: aspect 4.992 against a
+    true 4.944, 1.0 % out, so it is orthographic enough to measure at 1.4750 px/mm across
+    and 1.4607 down. It is still under one and a half pixels per millimetre, so nothing
+    here resolves better than about 0.7 mm.
+    The upper module's silver plate runs x 21-99 px and y 3-61 px, giving 52.9 x 39.7 mm;
+    the lower one repeats it at y 65-123, and the two agree to a pixel. The bay pitch
+    between them is 42.4 mm. NOTHING IN THE LIBRARY FITTED: the existing UfiSpace supplies
+    are 33.3, 50.5, 68.0, 73.0, 73.2 and 73.5 mm wide and this is 52.9, which is 3.5 mm
+    clear of the nearest (50.5) - about five pixels in the image it was measured on, well
+    outside the reading error.
+  art: >-
+    photo-measured on the same render, upper module, local coordinates with the plate's
+    top-left corner as origin. The column profile across the plate separates five bands
+    cleanly: bright plate edge x 21-25 px, hexagonal vent field 26-46, dark tube handle
+    47-57, the inlet's dark frame 58-92, bright plate edge 93-99. Vertically the vent runs
+    rows 6-58 and the inlet frame rows 5-49. So: vent field x 3.4-17.0, y 2.0-37.7; handle
+    x 17.6-23.1, y 2.5-37.0; inlet frame x 25.1-48.1, y 1.4-31.5; blue latch x 40.0-50.9,
+    y 31.5-37.0 (measured as blue pixels, x 80-96 px, y 49-57); status lamp centre
+    (8.5, 8.6) (measured as green pixels, x 32-35 px, y 14-17). The vendor's isometric
+    render s9620-40dg-1-angle.png shows the same five features in the same places and is
+    what confirmed that the pale bar between the vent and the inlet is a HANDLE rather than
+    a seam.
+  inlet: >-
+    standard (IEC 60320-1 via std/c14-inlet), MOUNTED ON ITS SIDE. The inlet's dark frame
+    measures 23.0 wide by 30.1 tall on this face - taller than wide - where a C14 flange is
+    28 x 20, so the connector is rotated a quarter turn and the cord enters vertically. The
+    isometric render shows the same: the C14 outline stands on end. Which way up the earth
+    pin points is not resolvable at 1.47 px/mm and the placement's 90-degree rotation is a
+    choice between two that look identical here; the device files it as a gap.
+  led-states: >-
+    NOT PUBLISHED, and deliberately left without states. The render shows one lit green
+    lamp in the top-left corner of the vent field on both modules, which fixes its position
+    and its healthy colour; no document states the vocabulary. The six-state table
+    ufispace/psu-401-ac carries comes from the S9510-28DC HIG - a different platform's
+    guide for a different supply - and copying it here would be inventing a citation.
+elements:
+  status-led:
+    at: [7.3, 7.4]
+    size: [2.4, 2.4]
+    class: led
+    description: >-
+      the lamp inside the top-left corner of the vent field, lit green on both modules in
+      the vendor's front render. No UfiSpace document published for this platform tables
+      its states, so none are claimed - see provenance.led-states
+  latch: {at: [40.0, 31.5], size: [10.9, 5.5], class: latch}
+  handle: {at: [17.6, 2.5], size: [5.5, 34.5], class: handle}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [22.6, 6.4], rotate: 90}
+relief:
+  features:
+    - node: latch
+      out: 2.2
+      confidence: estimated
+      source: >-
+        ufispace/psu-102-ac@1 - unsourced. This platform has no installation guide, so
+        nothing is dimensioned off the face. 2.2 is what ufispace/psu-401-ac uses for the
+        same vendor's latch, reused as a precedent and marked estimated because that is
+        what it is.
+    - node: handle
+      uhandle: 27
+      confidence: estimated
+      source: >-
+        ufispace/psu-102-ac@1 - NOT SOURCED FOR THIS PART. The S9510-28DC HIG publishes
+        27 mm for the PSU-401 handle ('the handle for the power supplies will extend
+        outwards by 1.06 inches'), and ufispace/psu-401-ac carries it at datasheet
+        confidence. This is a different supply on a chassis with no guide, so the same
+        number is used at ESTIMATED confidence.
+    - node: vent-field
+      vent: 30
+      confidence: estimated
+      source: >-
+        ufispace/psu-102-ac@1 - unsourced; no document dimensions anything off this face.
+    - node: status-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/psu-102-ac@1 - unsourced. 0.4 is the dome the other UfiSpace FRUs carry.
+connection-points:
+  power: {at: [36.6, 16.4], direction: front}
+skins: [default]
