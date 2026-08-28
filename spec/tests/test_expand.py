@@ -26,7 +26,11 @@ def placements(dev, group):
     out = [p for v in (d.get("views") or {}).values()
            for p in ((v.get("components") or {}).get("placements") or [])
            if p.get("group") == group]
-    out.sort(key=lambda p: int(str(p["id"]).rsplit("-", 1)[-1]))
+    def n(p):
+        tail = "".join(c for c in str(p["id"]).rsplit("-", 1)[-1] if c.isdigit())
+        return int(tail) if tail else -1
+
+    out.sort(key=n)
     return out
 
 
@@ -59,6 +63,60 @@ def test_a_generated_block_lands_where_the_library_puts_it(dev, group, start, co
     for r, g in zip(real, gen):
         assert abs(r["at"][0] - g["at"][0]) <= 0.011, (r["id"], r["at"], g["at"])
         assert abs(r["at"][1] - g["at"][1]) <= 0.011, (r["id"], r["at"], g["at"])
+
+
+def test_a_lamp_brackets_its_ganged_shell_rather_than_following_its_port():
+    """The offset a lamp takes is not always from its own port.
+
+    On s9705-48d the lamps bracket each two-column shell: the left column's lamp
+    sits 3.97mm outside it to the LEFT, the right column's 20.97mm to the RIGHT.
+    Read as a single per-port offset, half the lamps land 21mm from where the
+    device puts them - and they would still lint, still render, and still look
+    deliberate. The numerals print with their lamps and take the same list.
+
+    Checked against every one of the 48, so the alternation cannot silently
+    apply to the first shell and stop.
+    """
+    real = {p["id"]: p for p in placements("ufispace/s9705-48d", "port-leds")
+            if p["id"].startswith("led-p")}
+    nums = {}
+    d = yaml.safe_load((LIB / "devices/ufispace/s9705-48d/device.yaml").read_text())
+    for s in (d["views"]["front"].get("silkscreen") or []):
+        if str(s.get("for", "")).startswith("port-"):
+            nums[s["for"]] = s
+
+    led = {"ref": "common/led-dot@1", "id-format": "led-p{n}",
+           "dx-by-col": [-3.97, 20.97], "dy-top": 3.7, "dy-bottom": 4.68,
+           "group": "port-leds"}
+    num = {"dx-by-col": [-2.97, 21.97], "dy-top": 2.4, "dy-bottom": 9.43,
+           "font-size": 1.9, "anchor": "middle", "fill": "#f2f2f2"}
+    block = {"id": "fabric", "ref": "std/qsfp-dd@1", "at": [85.7, 9.65],
+             "count": 24, "rows": 2, "row-pitch": 13.16, "gang": 2,
+             "gutter": 13.16, "pitch": {"registry": "qsfp-ganged"},
+             "led": led, "numerals": num, "number-from": 0}
+    gen, _, silks = E.block_items(block, LIB, STD)
+    lamps = [p for p in gen if p.get("group") == "port-leds"]
+    assert len(lamps) == 24
+    for g in lamps:
+        r = real[g["id"]]
+        assert abs(r["at"][0] - g["at"][0]) <= 0.011, (g["id"], r["at"], g["at"])
+        assert abs(r["at"][1] - g["at"][1]) <= 0.011, (g["id"], r["at"], g["at"])
+    for s in silks:
+        r = nums[s["for"]]
+        assert abs(r["at"][0] - s["at"][0]) <= 0.011, (s["for"], r["at"], s["at"])
+
+
+def test_a_block_lands_where_its_marker_is_and_not_at_the_end():
+    """Paint order is meaning, and the device fingerprint is order-sensitive, so
+    a tool that appends its output reports a geometry change on a file nothing
+    moved in. The author puts `{block: <id>}` where the items belong."""
+    layout = {"views": {"front": {"components": {
+        "placements": [{"id": "first"}, {"block": "p"}, {"id": "last"}],
+        "blocks": [{"id": "p", "ref": "std/sfp-ganged@1", "at": [0, 0],
+                    "count": 2, "rows": 1, "pitch": "registry"}]}}}}
+    out = E.expand(layout, LIB, STD)
+    ids = [p["id"] for p in out["views"]["front"]["components"]["placements"]]
+    assert ids == ["first", "port-0", "port-1", "last"]
 
 
 def test_the_registry_states_pitch_two_ways_and_both_are_read():

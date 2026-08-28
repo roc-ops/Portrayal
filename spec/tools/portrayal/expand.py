@@ -231,8 +231,13 @@ def block_items(block, library, standards):
                             "shape": block.get("cutout-shape", "rect")})
 
         if num:
+            # numerals bracket a ganged shell the same way lamps do, because on
+            # these faces the numeral is printed with its lamp rather than over
+            # its cage - so it takes the same per-column offset list
+            nby = num.get("dx-by-col")
+            ndx = nby[col % len(nby)] if nby else num.get("dx", 0.0)
             silks.append({
-                "at": [round(x + num.get("dx", 0.0), 2),
+                "at": [round(x + ndx, 2),
                        round(y + (num.get("dy-top", num.get("dy", 0.0)) if row == 0
                                   else num.get("dy-bottom", num.get("dy", 0.0))), 2)],
                 "text": str(n), "font-size": num.get("font-size", 1.8),
@@ -240,8 +245,17 @@ def block_items(block, library, standards):
                 "fill": num.get("fill", "#1a1d1f"), "for": pid})
 
         if led:
+            # A LAMP IS NOT ALWAYS OFFSET FROM ITS OWN PORT. On a ganged block
+            # the lamps commonly BRACKET the shell - the left column's lamp
+            # sitting outside it to the left, the right column's outside to the
+            # right - so the offset depends on where the port falls within its
+            # gang, not on the port alone. `dx-by-col` is that list, indexed by
+            # the column's position in its shell; a plain `dx` is the degenerate
+            # case of one value for every column.
+            by_col = led.get("dx-by-col")
+            dx = by_col[col % len(by_col)] if by_col else led.get("dx", 0.0)
             lp = {"ref": led["ref"], "id": led.get("id-format", "led-{n}").format(n=n),
-                  "at": [round(x + led.get("dx", 0.0), 2),
+                  "at": [round(x + dx, 2),
                          round(y + (led.get("dy-top", led.get("dy", 0.0)) if row == 0
                                     else led.get("dy-bottom", led.get("dy", 0.0))), 2)]}
             skin = led.get("skin-top") if row == 0 else led.get("skin-bottom")
@@ -255,6 +269,26 @@ def block_items(block, library, standards):
     return placements + lamps, cutouts, silks
 
 
+def _splice(seq, made):
+    """Replace each `{block: <name>}` marker with that block's items, in place.
+
+    ORDER IS THE AUTHOR'S TO CHOOSE, not the tool's, for two reasons. Paint order
+    is meaning - a later item draws over an earlier one - so appending generated
+    ports after a hand-written cluster silently changes what covers what. And the
+    device fingerprint in devices.lock.json is order-sensitive, so a tool that
+    reorders a converted device reports a MAJOR change on a file whose content
+    did not move at all, which would make every conversion look like a
+    geometry break.
+    """
+    out = []
+    for item in seq or []:
+        if isinstance(item, dict) and set(item) == {"block"}:
+            out += made.get(item["block"], [])
+        else:
+            out.append(item)
+    return out
+
+
 def expand(layout, library, standards):
     """layout.yaml -> the device dict a consumer reads."""
     doc = copy.deepcopy(layout)
@@ -264,20 +298,41 @@ def expand(layout, library, standards):
         blocks = comps.pop("blocks", None)
         if not blocks:
             continue
-        panel = view.setdefault("panel", {})
-        gen_p, gen_c, gen_s = [], [], []
+        made_p, made_c, made_s = {}, {}, {}
         for b in blocks:
+            key = b.get("as") or b["id"]
             p, c, s = block_items(b, library, standards)
-            gen_p += p
-            gen_c += c
-            gen_s += s
-        # Generated items come after anything written longhand, so an
-        # irregular block an author wrote out keeps its place in the file.
-        comps["placements"] = (comps.get("placements") or []) + gen_p
-        if gen_c:
-            panel["cutouts"] = (panel.get("cutouts") or []) + gen_c
-        if gen_s:
-            view["silkscreen"] = (view.get("silkscreen") or []) + gen_s
+            made_p.setdefault(key, []).extend(p)
+            made_c.setdefault(key, []).extend(c)
+            made_s.setdefault(key, []).extend(s)
+
+        panel = view.setdefault("panel", {})
+        named = set()
+        for seq in (comps.get("placements"), view.get("silkscreen"),
+                    panel.get("cutouts")):
+            for item in seq or []:
+                if isinstance(item, dict) and set(item) == {"block"}:
+                    named.add(item["block"])
+
+        comps["placements"] = _splice(comps.get("placements"), made_p)
+        view["silkscreen"] = _splice(view.get("silkscreen"), made_s)
+        if panel.get("cutouts"):
+            panel["cutouts"] = _splice(panel.get("cutouts"), made_c)
+
+        # A block nobody placed appends, so a layout that names no markers still
+        # works - but say which, because a silent append is how paint order goes
+        # wrong without anybody choosing it.
+        for key in made_p:
+            if key not in named:
+                comps["placements"] = comps["placements"] + made_p[key]
+                if made_s[key]:
+                    view["silkscreen"] = (view.get("silkscreen") or []) + made_s[key]
+                if made_c[key]:
+                    panel["cutouts"] = (panel.get("cutouts") or []) + made_c[key]
+                print(f"  note: block {key!r} had no {{block: {key}}} marker; "
+                      f"appended at the end of its lists")
+        if not view.get("silkscreen"):
+            view.pop("silkscreen", None)
         view["components"] = comps
     return doc
 
@@ -285,7 +340,36 @@ def expand(layout, library, standards):
 # ------------------------------------------------------------------- emit ---
 
 class Dumper(yaml.SafeDumper):
-    """House style: repeated items are one flow map per line, prose is folded."""
+    """House style, which is not decoration - it is what makes a diff readable.
+
+    A placement is ONE LINE: `- {ref: std/qsfp-dd@1, id: port-0, at: [85.7, 9.65]}`.
+    Written as PyYAML's default block mapping it becomes five lines, and a
+    64-port face that should read as a table of ports turns into 2000 lines of
+    scrolling - longer than the hand-written file it replaces, which is the
+    opposite of the point. Leaf maps and coordinate pairs go flow; prose folds.
+    """
+
+
+def _is_leaf(data):
+    """A map with nothing nested in it and no prose - safe to put on one line."""
+    for v in data.values():
+        if isinstance(v, dict):
+            return False
+        if isinstance(v, list) and any(isinstance(i, (dict, list)) for i in v):
+            return False
+        if isinstance(v, str) and (len(v) > 60 or "\n" in v):
+            return False
+    return True
+
+
+def _dict(dumper, data):
+    return dumper.represent_mapping("tag:yaml.org,2002:map", data,
+                                    flow_style=_is_leaf(data))
+
+
+def _list(dumper, data):
+    flow = all(isinstance(i, (int, float)) for i in data) and len(data) <= 4
+    return dumper.represent_sequence("tag:yaml.org,2002:seq", data, flow_style=flow)
 
 
 def _str(dumper, data):
@@ -294,11 +378,13 @@ def _str(dumper, data):
     return dumper.represent_scalar("tag:yaml.org,2002:str", data)
 
 
+Dumper.add_representer(dict, _dict)
+Dumper.add_representer(list, _list)
 Dumper.add_representer(str, _str)
 
 
 def dump(doc):
-    return yaml.dump(doc, Dumper=Dumper, sort_keys=False, width=94,
+    return yaml.dump(doc, Dumper=Dumper, sort_keys=False, width=100,
                      default_flow_style=False, allow_unicode=True)
 
 
