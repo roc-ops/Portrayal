@@ -54,15 +54,16 @@ device_list() {
 device_list \
   | xargs -P "$JOBS" -I{} python3 spec/tools/portrayal/render.py {} \
       --library library --out "$OUT" ${STALE+"${STALE[@]}"} >/dev/null
-# The four index passes each walk the whole library and each writes its own
-# file - devices.json, components.json, labs.json, gaps.json - and none of them
-# reads another's output, so they were serial only by habit. Together they were
-# 8.5s of a 17.8s build, the largest single block once lint was fixed.
+# The five index passes each walk the whole library and each writes its own
+# file - devices.json, components.json, labs.json, gaps.json, and vendors.json
+# + overlays.json - and none of them reads another's output, so they were serial
+# only by habit. Together they were 8.5s of a 17.8s build, the largest single
+# block once lint was fixed.
 #
 # `wait` without a guard would report success even if one of them failed, so
 # each pid is waited on by hand and the first non-zero exit stops the build.
 pids=()
-for ix in devices_index components_index labs_index gaps_index; do
+for ix in devices_index components_index labs_index gaps_index registry_index; do
   python3 "spec/tools/portrayal/$ix.py" --library library --out "$OUT" &
   pids+=("$!")
 done

@@ -1,0 +1,132 @@
+"""A consumer holding only `dist/` can export DCIM YAML.
+
+THE POINT. Exporting a NetBox document used to require a checkout: the exporter
+read `spec/schemas/vendors.yaml` and `devices/*/*/overlays/*.yaml` off the source
+tree. Everything else it needed already shipped - the compiled SVG embeds the
+whole device manifest in its <metadata>, and components.json carries every
+contract field the exporter takes off a component - so those two files were the
+entire distance between "download the development environment" and "fetch some
+JSON". registry_index.py publishes them; these tests are what keeps them
+published, and keeps them whole.
+
+Each test below names the artifact a consumer would be missing if it failed.
+"""
+import json
+import pathlib
+import re
+import sys
+
+import pytest
+import yaml
+
+ROOT = pathlib.Path(__file__).resolve().parents[2]
+DIST = ROOT / "library" / "dist"
+sys.path.insert(0, str(ROOT / "spec" / "tools" / "portrayal"))
+
+pytestmark = pytest.mark.skipif(
+    not (DIST / "vendors.json").exists(),
+    reason="dist/ not built; run ./build.sh")
+
+
+def load(name):
+    return json.loads((DIST / name).read_text())
+
+
+# ---- the two newly published files ------------------------------------------
+
+def test_every_vendor_in_the_registry_ships():
+    src = yaml.safe_load((ROOT / "spec/schemas/vendors.yaml").read_text())
+    assert set(load("vendors.json")["vendors"]) == set(src["vendors"] or {})
+
+
+def test_the_namespaces_ship_too():
+    """`common` and `std` are not companies, and a consumer resolving a component
+    ref hits them first. Publishing vendors without them exports a document that
+    attributes a standard SFP cage to a manufacturer called 'std'."""
+    assert load("vendors.json")["namespaces"], "namespaces were dropped"
+
+
+def test_every_overlay_on_disk_is_published():
+    on_disk = {f"{f.parents[2].name}/{f.parents[1].name}:{f.stem}"
+               for f in ROOT.glob("library/devices/*/*/overlays/*.yaml")}
+    shipped = {f"{dev}:{prof}"
+               for dev, profs in load("overlays.json")["overlays"].items()
+               for prof in profs}
+    assert on_disk == shipped
+
+
+def test_an_overlay_ships_whole_not_just_its_identity():
+    """The exporter reads `identity:` today. `terms`, `interfaces` and
+    `entity-map` are the NOS mapping - what says the port silkscreened 1 is
+    called swp1 and answers to sfp1 over OpenConfig - and a consumer joining a
+    drawing to a live device wants precisely that. Publishing half of a document
+    only buys a second pass later to publish the other half."""
+    ov = load("overlays.json")["overlays"]["edgecore/as7726-32x"]["arcos"]
+    src = yaml.safe_load(
+        (ROOT / "library/devices/edgecore/as7726-32x/overlays/arcos.yaml").read_text())
+    assert ov == src, "the published overlay is not the overlay"
+
+
+def test_an_identitys_vendor_resolves_in_the_published_registry():
+    """The join the exporter actually performs: an overlay names a vendor key,
+    the registry turns it into a display name. If a key resolved only in the
+    source tree, a consumer would export the raw key - 'arrcus', not 'Arrcus'."""
+    vendors = load("vendors.json")["vendors"]
+    seen = 0
+    for _, profs in load("overlays.json")["overlays"].items():
+        for doc in profs.values():
+            ident = doc.get("identity")
+            if not ident:
+                continue
+            seen += 1
+            assert ident["vendor"] in vendors, \
+                f"overlay names vendor {ident['vendor']!r}, absent from the registry"
+    assert seen, "no overlay declares an identity; this test proved nothing"
+
+
+# ---- what already shipped, asserted so it keeps shipping ---------------------
+
+# The five keys dcim_export reads off a resolved component contract.
+CONTRACT_FIELDS = ("attrs", "description", "kind", "name", "parts")
+
+
+def test_components_json_carries_every_contract_field_the_exporter_reads():
+    comps = load("components.json")["components"]
+    entries = comps if isinstance(comps, list) else list(comps.values())
+    for field in CONTRACT_FIELDS:
+        assert any(field in e for e in entries), \
+            f"no component publishes {field!r}; the exporter reads it off contract.yaml"
+
+
+def test_the_compiled_svg_embeds_the_device_manifest():
+    """Why a consumer needs no device.yaml. Not a stripped summary - the source
+    manifest, every view of it."""
+    svg = (DIST / "as7726-32x.ac-f2b.front.svg").read_text()
+    meta = json.loads(re.search(r"<metadata[^>]*>(.*?)</metadata>", svg, re.S).group(1))
+    src = meta["source"]
+    for key in ("attrs", "chassis", "configurations", "groups", "manufacturer", "model"):
+        assert key in src, f"the embedded manifest is missing {key!r}"
+    assert len(src["views"]) > 1, "only one view embedded; a consumer sees one face"
+
+
+# ---- the gap this did NOT close ---------------------------------------------
+
+def test_the_overlays_declared_interface_names_agree_with_the_exporter():
+    """A DUPLICATION, pinned so it cannot drift silently.
+
+    `nos_name()` hardcodes arcos as swp{n}/ma1 in Python. The arcos overlay
+    already declares exactly that, as `name: 'swp{n}'` - so the overlay is the
+    source of truth and the exporter reimplements it. Nothing joins them, which
+    means renaming the interface in the overlay would leave the exporter happily
+    emitting the old name.
+
+    Until the exporter reads the overlay, this test is the join. It also marks
+    the remaining distance to a pure-artifact exporter: a JS consumer can read
+    these names from overlays.json, but only for a NOS that HAS an overlay -
+    `sonic` is named in nos_name and has no overlay anywhere.
+    """
+    from dcim_export import nos_name
+    doc = load("overlays.json")["overlays"]["edgecore/as7726-32x"]["arcos"]
+    declared = {i["physical"]: i["name"] for i in doc["interfaces"]}
+    assert declared["port-{n}"].replace("{n}", "7") == nos_name("arcos", "switch", 7)
+    assert declared["mgmt-eth"] == nos_name("arcos", "mgmt", 0)
