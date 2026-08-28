@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build the full demo bundle: rendered device SVGs + the two JSON indexes.
+# Build the publishable artifacts: rendered device SVGs + the JSON indexes.
 set -euo pipefail
 cd "$(dirname "$0")"
 # `--fast` renders only what changed. FULL IS THE DEFAULT and stays that way:

@@ -22,7 +22,7 @@ docs/          how the model works
 
 ```sh
 ./build.sh                                    # lint, then compile every device
-python3 tools/serve.py 8931                   # open http://localhost:8931/library/demo/
+python3 tools/serve.py 8931                   # browse http://localhost:8931/library/dist/
 ```
 
 To compile one device:
