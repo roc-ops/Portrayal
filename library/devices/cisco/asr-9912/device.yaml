@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9912
-version: 0.2.2
+version: 1.0.0
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9912
@@ -262,6 +262,11 @@ chassis:
   color: '#c8cacc'
   silk: '#231f20'
 groups:
+  power-modules:
+    term: PM
+    role: service
+    index-origin: 0
+    physical-context: Power Module
   slots:
     term: Slot
     role: traffic
@@ -290,11 +295,20 @@ views:
       cutouts:
         - {id: lc-cage, at: [6.36, 324.31], size: [433.88, 357.35], shape: rect}
         - {id: rpfc-cage, at: [6.36, 759.21], size: [433.88, 358.15], shape: rect}
-        - {id: shelf-0, at: [10.0, 1136.50], size: [427.0, 63.0], shape: rect}
-        - {id: shelf-1, at: [10.0, 1202.17], size: [427.0, 63.0], shape: rect}
-        - {id: shelf-2, at: [10.0, 1267.84], size: [427.0, 63.0], shape: rect}
     components:
       bays:
+        - {id: ps0-pm-0, at: [16.12, 1146.58], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 0}
+        - {id: ps0-pm-1, at: [121.17, 1146.58], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 1}
+        - {id: ps0-pm-2, at: [226.22, 1146.58], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 2}
+        - {id: ps0-pm-3, at: [331.26, 1146.58], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 3}
+        - {id: ps1-pm-0, at: [16.12, 1212.25], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 4}
+        - {id: ps1-pm-1, at: [121.17, 1212.25], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 5}
+        - {id: ps1-pm-2, at: [226.22, 1212.25], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 6}
+        - {id: ps1-pm-3, at: [331.26, 1212.25], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 7}
+        - {id: ps2-pm-0, at: [16.12, 1277.91], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 8}
+        - {id: ps2-pm-1, at: [121.17, 1277.91], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 9}
+        - {id: ps2-pm-2, at: [226.22, 1277.91], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 10}
+        - {id: ps2-pm-3, at: [331.26, 1277.91], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 11}
         - {id: slot-0, at: [3.74, 301.43], size: {w: 42.67, h: 403.10}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0, default: cisco/a9k-slot-cover@1}
         - {id: slot-1, at: [47.84, 301.43], size: {w: 42.67, h: 403.10}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1, default: cisco/a9k-slot-cover@1}
         - {id: slot-2, at: [91.83, 301.43], size: {w: 42.67, h: 403.10}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2, default: cisco/a9k-slot-cover@1}
