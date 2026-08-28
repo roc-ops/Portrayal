@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx150
-version: 0.2.0
+version: 0.3.0
 maturity: modelled
 manufacturer: Juniper
 model: MX150
@@ -170,9 +170,9 @@ views:
       - {at: [416.5, 13.6], text: ALM, font-size: 1.5, anchor: end, for: led-alm}
       - {at: [416.5, 18.6], text: MST, font-size: 1.5, anchor: end, for: led-mst}
       - {at: [416.5, 23.6], text: PH, font-size: 1.5, anchor: end, for: led-ph}
-      - {at: [436.5, 8.6], text: SPD, font-size: 1.5, anchor: end, for: chassis}
-      - {at: [436.5, 13.6], text: DX, font-size: 1.5, anchor: end, for: chassis}
-      - {at: [436.5, 18.6], text: EN, font-size: 1.5, anchor: end, for: chassis}
+      - {at: [436.5, 8.6], text: SPD, font-size: 1.5, anchor: end, for: led-spd}
+      - {at: [436.5, 13.6], text: DX, font-size: 1.5, anchor: end, for: led-dx}
+      - {at: [436.5, 18.6], text: EN, font-size: 1.5, anchor: end, for: led-en}
     components:
       placements:
         - {id: port-0, ref: std/rj45-ganged@1, at: [161.35, 9.0], rotate: 180, group: ge, rel-pos: 0}
@@ -217,6 +217,27 @@ views:
         - {id: led-ph, ref: common/led-dot@1, at: [418.5, 22.1], for: chassis, group: status-leds, rel-pos: 3,
            states: ['off'],
            description: 'guide - not used; always off'}
+        - {id: led-spd, ref: common/led-dot@1, at: [438.5, 7.1], for: chassis, group: status-leds, rel-pos: 4,
+           states: ['off', {name: speed-10m, color: '#22c55e', behavior: blinking},
+                    {name: speed-100m, color: '#22c55e', behavior: blinking},
+                    {name: speed-1g, color: '#22c55e', behavior: blinking}],
+           description: 'guide - SPD (speed), read by blink rate: one blink per second 10 Mbps,
+             two 100 Mbps, three 1000 Mbps. A MODE lamp for the port LEDs, not a port lamp'}
+        - {id: led-dx, ref: common/led-dot@1, at: [438.5, 12.1], for: chassis, group: status-leds, rel-pos: 5,
+           states: ['off', {name: full-duplex, color: '#22c55e'}],
+           description: 'guide - DX (duplex mode): on steadily full-duplex, off half-duplex'}
+        - {id: led-en, ref: common/led-dot@1, at: [438.5, 17.1], for: chassis, group: status-leds, rel-pos: 6,
+           states: ['off', {name: enabled, color: '#22c55e'}],
+           description: 'guide - EN (administrative status): on steadily administratively enabled,
+             off administratively disabled'}
+        - {id: led-beacon, ref: common/led-indicator@1, at: [432.6, 25.4], for: chassis, group: status-leds, rel-pos: 7,
+           states: ['off', {name: locate, color: '#f5f7fa'}],
+           description: 'photo - the white beacon at the right end of the lamp matrix, seated in the
+             3.2 mm opening the front panel measurement recorded. THE GUIDE DOES NOT LIST IT: its
+             chassis-LED table runs SYS, ALM, MST and PH and stops, so the colour and the position
+             are the photograph and the behaviour is the name. common/led-indicator is used rather
+             than the led-dot the other seven carry because a beacon is the larger lamp - 4.0 mm
+             against 2.0 - which is also why it has an opening of its own and they do not'}
   rear:
     size:
       w: 441.0
