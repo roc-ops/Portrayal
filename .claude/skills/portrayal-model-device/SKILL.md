@@ -297,6 +297,21 @@ frame, you are measuring the projection and not the part. Switch to something
 painted on the surface - a badge, a legend, a lamp, a screw head - and
 corroborate in a second image.
 
+**A FIGURE IN THE RIGHT DOCUMENT CAN BE A PICTURE OF THE WRONG PRODUCT.**
+Where a vendor ships near-twin models, its documents get illustrated with
+whichever artwork existed first. One guide's port figures, its datasheet's
+front and rear views and all three of its product renders lettered the
+faceplate with the SIBLING's model number - while the dimensions, port table,
+LED table and callouts in that same guide were written for the device on the
+cover. The document was right and its pictures were of something else.
+
+So **read the model name printed in the artwork and check it against the
+document you found it in.** When they disagree, the text is usually the
+device you want and the geometry may or may not be; say which parts you took
+from which, and if you print the correct name on a panel every held image
+letters differently, SAY THAT IS A JUDGEMENT rather than letting the drawing
+imply you read it somewhere. A photograph of a real unit closes it.
+
 **Measure the repeating features twice, from two different images.** When the
 intake holds two independent shots of the same face - an AC and a DC variant, a
 guide figure and a DAM photograph - measure the pitch in both before recording
