@@ -1,0 +1,90 @@
+format: 1
+kind: module
+name: fan-803816-hi
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: UfiSpace FAN-803816-HI hot-swap fan module (S9600-28DX 2RU aggregation
+  family) - red loop handle down the middle, red release tab on the left edge, a red
+  'E' exhaust badge and the status LED below it at the top left, and a hexagonal
+  grille across the whole face with the twin rotors behind it; exhaust airflow
+size: {w: 80.0, h: 81.5}
+attrs: {power-absent: not-published, model: FAN-803816-HI, airflow: exhaust}
+provenance:
+  power: >-
+    NOT PUBLISHED. The S9600-28DX datasheet names the part only as an ordering line -
+    'Fan Types: FAN-803816-HI, exhaust air flow' - with no wattage beside it, and the
+    S9600-28DX HIG R1.x carries no fan wattage either. Its Connecting Power sections
+    give the SYSTEM maxima (894 W on DC, 890 W on AC, both qualified 45 C / fully
+    populated optics / 100% traffic) and the provisioning reserve (1300 W per circuit);
+    all three are the box, not this module. Searched the datasheet and the HIG for
+    'watt', 'W)' and 'Power' - every hit belongs to the system figures or to the
+    PSU-132 ordering lines. Same silence the sibling ufispace/fan-808012@1 records.
+  size: >-
+    HIG - Component Physical Information table, 'Fan (W x D x H) 3.15 x 4.8 x 3.15 in
+    (80 x 113 x 81.5mm)', so the FACE is 80 x 81.5. Weight 1.1 lb (498 g), same table.
+    THE FIGURE DRAWS IT WIDER: the rear elevation (HIG Figure 7, extracted as fig-0014,
+    panel 1312 px for 436 mm and an aspect 0.04% from the stated 436 x 87.7) puts the
+    four bay seams on an 84.1 mm pitch and the visible face at about 82 mm across.
+    Those are two scopes, not two readings of one - the table gives the module envelope
+    and the figure the bezel flange in its slot. The table wins for `size`, exactly as
+    ufispace/fan-808012@1 records for the same disagreement on its own family.
+  art: >-
+    drawing-measured from the S9600-28DX HIG Figure 7 rear elevation at 3.009 px/mm.
+    Positions within the face are offsets from the bay origin derived from the four
+    status lamps, which are a repeated feature: colour-detected at x 19.1, 103.15,
+    187.25, 271.35 (an 84.07 mm pitch, i.e. the bay pitch to 0.04%) and y 23.6.
+    The 'E' badge, the loop handle and the left-edge release tab were measured on the
+    same figure at 20x. Construction is the same family as ufispace/fan-808012@1 -
+    hex grille, red loop handle, red left tab, red 'E' badge - but this is NOT that
+    part: it is a different SKU (FAN-803816-HI against FAN-808012-HCE), 80 mm wide
+    rather than 81, 113 mm deep rather than 154.8, and its lamp sits below the badge
+    rather than beside it. Drawn from this device's own figure, not copied.
+  led-states: HIG section 10, Fan FRU LED table, transcribed in full
+  handle-projection: >-
+    datasheet - HIG Space Clearance, 'The handle for the fan units will extend outwards
+    by 1.15 inch (2.9cm)', published by the vendor for this chassis's fan.
+elements:
+  status-led:
+    at: [7.7, 19.1]
+    size: [2.8, 2.8]
+    class: led
+    states: ['off',
+             {name: ok, color: '#22c55e'},
+             {name: fault, color: '#eab308'}]
+    description: >-
+      HIG Fan FRU LED table - Off (no input power), Green (fan FRU function normal),
+      Amber (fan FRU abnormal, service is required). Three rows, no blink states:
+      this table is shorter than the S9510-28DC family's and is transcribed as it
+      stands rather than filled out from a sibling
+relief:
+  features:
+    - node: grille
+      vent: 30
+      confidence: estimated
+      source: >-
+        ufispace/fan-803816-hi@1 - the HIG dimensions the 80 x 81.5 face and the handle
+        projection and nothing else off the face. This open-area fraction is not in it.
+    - node: handle
+      uhandle: 29
+      confidence: datasheet
+      source: >-
+        UfiSpace S9600-28DX HIG, Space Clearance: 'The handle for the fan units will
+        extend outwards by 1.15 inch (2.9cm)'. 29 mm exactly, published by the vendor
+        for this chassis's fan.
+    - node: release-tab
+      out: 2.0
+      confidence: estimated
+      source: >-
+        ufispace/fan-803816-hi@1 - unsourced. The HIG's fan chapter says to 'press and
+        hold the release tab' and dimensions nothing about it. Same 2.0 as the other
+        UfiSpace fan tabs.
+    - node: status-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/fan-803816-hi@1 - unsourced. The HIG's Fan FRU LED table gives the
+        lamp's states and nothing about its lens. The same 0.4 estimate the other
+        UfiSpace FRU lamps carry.
+skins: [default]
