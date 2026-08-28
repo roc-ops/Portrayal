@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9601-102xc
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: UfiSpace
 model: S9601-102XC
@@ -391,6 +391,15 @@ attrs:
     asic: Broadcom Qumran2c BCM88820
     lookup-engine: Broadcom OP2 BCM16K
     bmc: ASPEED AST2620
+    oem-alias: >-
+      DriveNets NCP-96X6C-S (Network Cloud Packet forwarder, 96x1/10/25 + 6x100). NOT A
+      UFISPACE CLAIM - no UfiSpace document mentions DriveNets. The mapping is internal
+      analysis: the okf `drivenets-ddc` bundle's 'DriveNets NCF/NCP to white-box hardware map
+      (shipping platforms)' matches the roadmap slide's NCP-96X6C-S (Q2C 2.4T) to this
+      chassis on published silicon and port configuration. The map names the S9600-102XC OR
+      this Ice Lake refresh for the same DriveNets name, so the alias is not unique to one of
+      the pair. Recorded so a search for either name finds this box; no DriveNets figure or
+      artwork is transcribed anywhere in this file.
   features:
     timing: Stratum 3E OCXO, ITU-T SyncE, IEEE 1588v2 (G.8265.1 default, G.8275.1,
       G.8275.2, SMPTE ST 2059-2 with additional licence; T-GM, T-BC/OC, T-TC), Time

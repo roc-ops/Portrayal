@@ -787,11 +787,82 @@ what makes the comparison work: the same feature lands in the same place in both
 images, and anything that differs stands out immediately. When something looks
 off, crop that feature alone at 4-5x from both and confirm before claiming it.
 
+**Do this for EVERY face the vendor photographed, not just the front.** A batch
+verifier used across three dozen devices in one run compared only front faces,
+so every rear went to commit on trust - and the rear is where the fans, the
+supply inlets, the ground stud and the airflow tags live, none of which the
+front can vouch for. Front-only checking does not announce itself: the report
+line looks identical whether the rear was compared and matched or never compared
+at all. If a face has no reference image, say so in the report rather than
+letting a short list read as a clean result.
+
 This is how the AGR400's RJ-45s were caught. At matched scale it was obvious
 that four of six jacks were upside down - a 2-high ganged jack mirrors its rows
 so both release tabs stay reachable, and the component draws only one
 orientation. Nothing in the manifest was wrong; nothing would ever have linted.
 Only looking found it.
+
+### A RULE YOU APPLIED TO PART OF A FACE MUST REACH THE END OF IT
+
+The most common defect that survives lint is not a wrong feature - it is a right
+feature that stops early. A numbering scheme printed under fifty ports and not
+the last four. Per-port lamps counted across one block and not carried onto the
+block beside it. A shell drawn on the ganged cages at one end of the panel and
+not the other.
+
+It happens because the rule is derived where the evidence is strongest - the
+dense repeating block that made the pitch obvious, the band where the colour
+sampling worked - and the tail of the face is a different block, sampled
+separately, finished later. By then the rule feels like something already done.
+
+Nothing catches this. Lint sees a legal face. A name audit sees every port
+present, because the ports ARE present - it is their *printing* that stopped.
+And the provenance usually reads perfectly, because the sentence describing the
+rule was written while it was still true of everything the writer was looking at.
+
+So at Gate 5, for each rule you applied - numbering, lamps, shells, decor bands,
+legends - **find the last element it covers and check what comes after it.** If
+the rule stops, the file must say which of the two is true:
+
+    the rule really stops there            say so, in provenance or a gap
+    the rule was not carried to the end    carry it
+
+A reader comparing your render against a photograph cannot tell those apart, and
+will read the second one as an error in the model. Four unprinted numerals among
+fifty printed ones is indistinguishable from four ports you got wrong.
+
+**But do not assume the answer is "carry it".** Real faceplates stop rules all
+the time - a block identified by band colour and a row symbol instead of by
+number, a legend the vendor prints on one bank and not its neighbour. Going and
+looking is the requirement; extending the rule is only one of its two outcomes.
+A device was sent back on exactly this finding and came back correct as drawn,
+because the metal genuinely carries no printing there. **Printing ink that is
+not on the device is the one thing silkscreen must never do**, and it is the
+harder error to detect later, because it looks like diligence.
+
+### A NEGATIVE READING OFF A COARSE IMAGE NEEDS A CONTROL IN THE SAME IMAGE
+
+Which raises the real problem: at low resolution, "this area carries no
+printing" and "this image cannot resolve the printing here" produce an
+identical pixel field. You cannot separate them by looking harder at the area
+in question.
+
+**Find something in the same image, at the same scale and similar contrast,
+whose printing you KNOW is there - and check that it survives.** If the known
+printing resolves and the questioned area is uniform, the silence is a reading.
+If the known printing has also dissolved, you have learned the image's limit and
+nothing about the device.
+
+    questioned area is blank                     proves nothing on its own
+    + a comparable known-printed area resolves   now it is evidence
+
+Pick the control for similarity, not convenience: same darkness of ground, same
+glyph size, same distance from the lens. A crisp black-on-white legend elsewhere
+on the panel is not a control for pale grey text on a dark band.
+
+This also tells you when to stop arguing. If no suitable control exists in any
+image you hold, the honest output is a gap saying the area is unresolved - not a
+confident sentence in either direction.
 
 ### Against a second party, for completeness only
 
@@ -883,6 +954,16 @@ configurations: {...}
   legend that looks like `0<up>1` at page scale turned out to be `0<up><down>1`
   at 7x - two arrows, not one - which inverts which row is even. Zoom until the
   glyphs are unambiguous, then decide.
+- **The advice to draw a symbol as strokes is about SYMBOLS, not letters.**
+  Non-ASCII shapes like solid triangles are worth drawing as paths because they
+  rasterise unreliably. An ordinary letter is not: set it as `<text>`. A fan
+  module in this library had its exhaust tag - a plain capital E, the letter the
+  vendor prints - drawn as three horizontal strokes with the spine left off, so
+  it rendered as a mathematical identity sign. Every other fan in the same
+  library sets that glyph as text and reads correctly. When you hand-draw a
+  letterform you take on the job of a typeface and will usually lose a stroke;
+  the check is to rasterise it and ask whether you would recognise the character
+  with no idea what it was supposed to say.
 - **A `path:` silkscreen mark is stroked, not filled.** The renderer sets
   `fill: none`, so a solid triangle or arrow comes out as an outline. Anchor the
   path at its `at` and draw the geometry relative to that, or L14 has nothing to

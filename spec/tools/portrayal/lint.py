@@ -2158,12 +2158,20 @@ def lint_device_decor(path, view_name, view, lib_roots):
         t, at = m.get("text"), m.get("at")
         if not t or not at:
             continue
-        # 0.62 em per character is a rough mean for a sans face; only a gross
-        # overrun is reported, because the estimate cannot carry a fine one
-        wid = 0.62 * float(m.get("font-size") or 2.5) * len(str(t))
-        anchor = m.get("anchor") or "start"
-        x0 = at[0] - (wid / 2 if anchor == "middle" else wid if anchor == "end" else 0)
-        over = max(0.0, -x0) + max(0.0, (x0 + wid) - float(vw))
+        # USE THE SHARED EXTENT, WHICH KNOWS ABOUT `rotate`. This branch used to
+        # compute its own width along x and never look at the rotation, so a
+        # legend printed DOWN the face - the usual way a PSU bay is labelled at
+        # the right-hand edge - had its full length added to x, where the metal
+        # ends, instead of to y, where there is room. Two identical marks then
+        # behaved differently for no reason but their x: the inboard one passed
+        # and the outboard one was reported as running off a face it never
+        # touched. A rule that fabricates an error is worse than one that misses,
+        # because somebody goes and 'fixes' correct artwork.
+        x0, _, x1, _ = _text_extent({"at": at, "text": t,
+                                     "font-size": float(m.get("font-size") or 2.5),
+                                     "anchor": m.get("anchor") or "start",
+                                     "rotate": m.get("rotate", 0)})
+        over = max(0.0, -x0) + max(0.0, x1 - float(vw))
         if over > 2.0:
             warn(path, "L44", f"{view_name}: silkscreen {str(t)[:24]!r} runs about "
                  f"{over:.0f}mm off the face (view is {vw} wide). Printing that "
