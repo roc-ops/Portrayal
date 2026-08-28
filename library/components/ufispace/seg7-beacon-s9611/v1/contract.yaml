@@ -1,0 +1,44 @@
+format: 1
+kind: component
+name: seg7-beacon-s9611
+version: 1.0.0
+class: display
+profile: networking
+description: Two-digit seven-segment beacon readout in a dark bezel, each digit with
+  its own decimal point - the numeric display UfiSpace prints under the model name at
+  the top left of the S9611-36D faceplate, drawn with every segment lit as the
+  vendor's own artwork draws it
+size: {w: 12.8, h: 7.0}
+provenance:
+  size: >-
+    drawing - UfiSpace's orthographic S9611-36D front elevation (the vendor front view
+    staged as working/intake/ufispace/photos/s9611-36d-2-front.png), whose body measures
+    1668 x 337 px against the datasheet's 436 x 87.7 mm, aspect 4.950 against a true
+    4.9715 (0.43% out), so 3.8257 px/mm across and 3.8427 down. The black bezel measures
+    x 28-76 px and y 63-89 px, i.e. 12.81 x 7.03 mm, and is drawn here at 12.8 x 7.0.
+    The two digit windows measure x 34-48 and x 60-75, y 66-85, so 3.7-3.9 wide and
+    4.9 tall on a 6.9 mm pitch; they are drawn symmetric at 6.3 mm pitch because the
+    difference between the two measured widths is one segment of glyph, not two
+    different windows.
+  why-not-seg7-status-2: >-
+    ufispace/seg7-status-2@1 is the same IDEA on a different platform and is 17.2 x 9.5,
+    a third larger than the 12.8 x 7.0 measured here, and it draws no decimal points.
+    A component cannot be scaled at placement, so reusing it would have put a display
+    4.4 mm too wide over this faceplate's model name. This contract is named for the
+    device it was measured on rather than for the family, because the S9610-36D and
+    S9611-36D artwork is shared and a second reading of it belongs beside this one
+    rather than silently on top of it.
+  semantics: >-
+    partially named. HIG Figure 4's overview callout list points at this display and
+    calls it 'Beacon LED' - that is the only thing any held document says about it.
+    Section 10's Front Panel LED table covers SYNC, SYS, FAN, PS0 and PS1 and stops, so
+    what the two digits SHOW - a beacon/chassis id, a POST code, a fault code - is not
+    stated and no state vocabulary is claimed here. The artwork draws '8.8.', which is
+    the all-segments lamp test, not a value.
+  colour: >-
+    drawing - the digits are drawn light blue on near-black, sampled off the same front
+    elevation; the datasheet's own smaller front view draws them the same way.
+elements:
+  digit-1: {at: [1.5, 1.0], size: [4.3, 5.0], class: display}
+  digit-2: {at: [7.8, 1.0], size: [4.3, 5.0], class: display}
+skins: [default]
