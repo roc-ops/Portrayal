@@ -16,7 +16,7 @@ globalThis.fetch = async (url, opts = {}) => {
   return { ok: false, status: 404, text: async () => '<html>404 Not Found</html>' };
 };
 
-const m = await import('../../../library/viewer/relief.js');
+const m = await import('../../../kit/relief.js');
 const scope = m.createReliefScope();
 
 const present = await m.svgSource('present.svg', scope);

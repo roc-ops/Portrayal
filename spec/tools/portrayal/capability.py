@@ -92,8 +92,19 @@ def _has_content(view):
     six of thirteen devices have views with no `panel` block and all of them
     render. Requiring it would have put the best-modelled device in the
     portfolio at level 0.
+
+    A face that declares `empty` counts. Six faces have to describe one box, and
+    an undocumented underside is still one of the six - but the only way to pass
+    a content check on a face with nothing published about it is to draw
+    something, and drawing something you have no source for is the failure this
+    whole library is built to avoid. So the face says where it was looked for
+    instead, and that sentence is the content: it is a claim about a search,
+    which is exactly what a reader of an empty face needs.
     """
-    vp = view_parts(view or {})
+    view = view or {}
+    if str(view.get("empty") or "").strip():
+        return True
+    vp = view_parts(view)
     return any(vp[k] for k in ("decor", "cutouts", "silkscreen", "bays",
                                "placements", "regions"))
 

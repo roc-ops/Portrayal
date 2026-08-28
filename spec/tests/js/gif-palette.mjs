@@ -7,7 +7,7 @@
 // still count toward the 256 budget and every one of them takes the [0,0,0]
 // palette branch, so a 1642-colour drawing encoded to four colours and lost
 // every lamp in it - which is the one thing an animated export exists to show.
-import { encodeGif } from '../../../library/viewer/gif.js';
+import { encodeGif } from '../../../kit/gif.js';
 
 const W = 200, H = 200, N = W * H;
 const frame = new Uint8ClampedArray(N * 4);

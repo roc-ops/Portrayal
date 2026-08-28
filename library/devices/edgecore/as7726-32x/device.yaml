@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: as7726-32x
-version: 0.29.1
+version: 0.30.0
 manufacturer: Edgecore
 model: AS7726-32X
 portfolio:
@@ -73,6 +73,19 @@ chassis:
   ru: 1
   weight-kg: 10.87
 groups:
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 1
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 1
+    description: >-
+      rack ears, flange screws, the pull-out info tab and the two underside
+      labels. One catch-all rather than a group per kind, following the Casa
+      chassis: none of it is addressable as a function, and a reader looking
+      for a screw is looking for furniture rather than for `screws`.
   qsfp28:
     index-origin: 1
     term: Port
@@ -172,8 +185,8 @@ views:
       - {at: [370.5, 41.5], text: CONSOLE, for: console}
     components:
       placements:
-        - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0], skin: left, optional: ears}
-        - {ref: common/rack-ear@1, id: ear-right, at: [438.4, 0], skin: right, optional: ears}
+        - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0], skin: left, optional: ears, group: furniture, rel-pos: 1}
+        - {ref: common/rack-ear@1, id: ear-right, at: [438.4, 0], skin: right, optional: ears, group: furniture, rel-pos: 2}
         - {ref: common/qsfp28-cage@3, id: port-1, at: [46, 10], group: qsfp28, rel-pos: 1}
         - {ref: common/qsfp28-cage@3, id: port-2, at: [46, 25.5], rotate: 180, group: qsfp28, rel-pos: 2}
         - {ref: common/qsfp28-cage@3, id: port-3, at: [65, 10], group: qsfp28, rel-pos: 3}
@@ -211,14 +224,14 @@ views:
         - {ref: common/led-indicator@1, id: led-diag, at: [40, 15], group: leds, rel-pos: 1, for: chassis}
         - {ref: common/led-indicator@1, id: led-psu2, at: [33, 23], group: leds, rel-pos: 5, for: rear/psu-2}
         - {ref: common/led-indicator@1, id: led-fan, at: [40, 23], group: leds, rel-pos: 3, for: [rear/fan-1, rear/fan-2, rear/fan-3, rear/fan-4, rear/fan-5, rear/fan-6]}
-        - {ref: common/reset-button@1, id: reset, at: [36.5, 32], for: chassis}
+        - {ref: common/reset-button@1, id: reset, at: [36.5, 32], for: chassis, group: mgmt, rel-pos: 6}
         - {ref: common/rj45-port@4, id: mgmt-eth, at: [362, 9.1], group: mgmt, rel-pos: 1, attrs: {role: mgmt, speed: 1000base-t}}
         - {ref: common/rj45-bezel@2, id: console, at: [362, 25.2], group: mgmt, rel-pos: 2, attrs: {media: rj45-serial, role: console}}
         - {ref: common/sfp-led-pair@1, id: sfp-leds, at: [383, 9], group: leds, rel-pos: 6, for: [mgmt-sfp-1, mgmt-sfp-2]}
         - {ref: common/sfp-plus-cage@2, id: mgmt-sfp-1, at: [381, 14.5], group: mgmt, rel-pos: 3, attrs: {media: sfp-plus, speed: 10g, role: mgmt-uplink}}
         - {ref: common/sfp-plus-cage@2, id: mgmt-sfp-2, at: [381, 25.5], group: mgmt, rel-pos: 4, attrs: {media: sfp-plus, speed: 10g, role: mgmt-uplink}}
         - {ref: common/usb-a@2, id: usb, at: [394, 16.5], group: mgmt, rel-pos: 5, rotate: 270}
-        - {ref: common/pull-tab@1, id: info-tab, at: [381, 38.6]}
+        - {ref: common/pull-tab@1, id: info-tab, at: [381, 38.6], group: furniture, rel-pos: 3}
     regions:
       - {id: mgmt-block, at: [360, 1], size: {w: 52, h: 42}, label: Management, members: [mgmt-eth, console, mgmt-sfp-1, mgmt-sfp-2, sfp-leds, usb, info-tab]}
       - {id: status-leds, at: [32, 2], size: {w: 15, h: 38}, label: Status LEDs, members: [led-loc, led-psu1, led-diag, led-psu2, led-fan, reset]}
@@ -246,10 +259,10 @@ views:
         - {id: fan-1, at: [314.1, 2], size: {w: 48.6, h: 40}, accepts: [common/fan-module@1], group: fans, rel-pos: 1, default: common/fan-module@1}
         - {id: psu-1, at: [366.6, 2], size: {w: 54, h: 40}, accepts: [common/psu-ac-650@3, common/psu-dc-650@2], group: psus, rel-pos: 1, default: common/psu-ac-650@3}
       placements:
-        - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0], skin: left, optional: ears}
-        - {ref: common/rack-ear@1, id: ear-right, at: [438.4, 0], skin: right, optional: ears}
-        - {ref: common/ground-lug@1, id: ground-left, at: [1.2, 27]}
-        - {ref: common/ground-lug@1, id: ground-right, at: [430.2, 27]}
+        - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0], skin: left, optional: ears, group: furniture, rel-pos: 4}
+        - {ref: common/rack-ear@1, id: ear-right, at: [438.4, 0], skin: right, optional: ears, group: furniture, rel-pos: 5}
+        - {ref: common/ground-lug@1, id: ground-left, at: [1.2, 27], group: grounding, rel-pos: 1}
+        - {ref: common/ground-lug@1, id: ground-right, at: [430.2, 27], group: grounding, rel-pos: 2}
     regions:
       - {id: exhaust, at: [71, 0], size: {w: 292, h: 43.5}, physical-context: Exhaust, label: Fan tray exhaust, members: [fan-1, fan-2, fan-3, fan-4, fan-5, fan-6]}
   top:
@@ -272,8 +285,8 @@ views:
       h: 515
     components:
       placements:
-        - {ref: common/compliance-sticker@1, id: bottom-label, at: [109.7, 154.5]}
-        - {ref: common/device-label@1, id: bottom-serial-label, at: [25, 30], attrs: {role: serial-label}}
+        - {ref: common/compliance-sticker@1, id: bottom-label, at: [109.7, 154.5], group: furniture, rel-pos: 6}
+        - {ref: common/device-label@1, id: bottom-serial-label, at: [25, 30], attrs: {role: serial-label}, group: furniture, rel-pos: 7}
   left:
     size:
       w: 515
@@ -289,11 +302,11 @@ views:
         - {at: [486, 35], size: [5, 4], fill: '#17191c', vent: 25}
     components:
       placements:
-        - {ref: common/screw-head@1, id: screw-1, at: [502.4, 8.5]}
-        - {ref: common/screw-head@1, id: screw-2, at: [502.4, 20]}
-        - {ref: common/screw-head@1, id: screw-3, at: [361.4, 20]}
-        - {ref: common/screw-head@1, id: screw-4, at: [211.4, 20]}
-        - {ref: common/screw-head@1, id: screw-5, at: [51.4, 20]}
+        - {ref: common/screw-head@1, id: screw-1, at: [502.4, 8.5], group: furniture, rel-pos: 8}
+        - {ref: common/screw-head@1, id: screw-2, at: [502.4, 20], group: furniture, rel-pos: 9}
+        - {ref: common/screw-head@1, id: screw-3, at: [361.4, 20], group: furniture, rel-pos: 10}
+        - {ref: common/screw-head@1, id: screw-4, at: [211.4, 20], group: furniture, rel-pos: 11}
+        - {ref: common/screw-head@1, id: screw-5, at: [51.4, 20], group: furniture, rel-pos: 12}
   right:
     size:
       w: 515
@@ -309,11 +322,11 @@ views:
         - {at: [24, 35], size: [5, 4], fill: '#17191c', vent: 25}
     components:
       placements:
-        - {ref: common/screw-head@1, id: screw-1, at: [9, 8.5]}
-        - {ref: common/screw-head@1, id: screw-2, at: [9, 20]}
-        - {ref: common/screw-head@1, id: screw-3, at: [150, 20]}
-        - {ref: common/screw-head@1, id: screw-4, at: [300, 20]}
-        - {ref: common/screw-head@1, id: screw-5, at: [460, 20]}
+        - {ref: common/screw-head@1, id: screw-1, at: [9, 8.5], group: furniture, rel-pos: 13}
+        - {ref: common/screw-head@1, id: screw-2, at: [9, 20], group: furniture, rel-pos: 14}
+        - {ref: common/screw-head@1, id: screw-3, at: [150, 20], group: furniture, rel-pos: 15}
+        - {ref: common/screw-head@1, id: screw-4, at: [300, 20], group: furniture, rel-pos: 16}
+        - {ref: common/screw-head@1, id: screw-5, at: [460, 20], group: furniture, rel-pos: 17}
 configurations:
   ac-f2b:
     kind: orderable

@@ -65,6 +65,7 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
   L58 component: a wrapper's own connection point sits where its aperture mates
   L59 device: top-level part-numbers are not read by anything
       that composes them
+  L60 device: a view that says it is empty has to be empty
   L47 component: a declared lamp state is a promise the drawing can keep - some
       element lights when it is set
 """
@@ -2311,6 +2312,44 @@ def lint_device_gap_scope(path, data):
              "rather than the scope implying the device already has it")
 
 
+def lint_device_empty_declaration(path, data):
+    """L60: a face that declares itself empty must actually be bare.
+
+    `empty` exists so that a face nobody has published anything about can still
+    count as finished - see `capability._has_content`. That makes it the one
+    field in a device that can turn a failing check green without drawing
+    anything, so it needs the matching guard: the claim is "there is nothing on
+    this face", and if something is drawn there the claim is false.
+
+    The likely way this goes wrong is not fraud, it is time: a source turns up,
+    the feature gets drawn, and the sentence saying nobody could find one stays
+    behind and quietly contradicts the drawing above it.
+
+    NOTE FOR L45, which is about the same faces from the other side. Its comment
+    records that it over-exempts on purpose - it takes any gap NAMING a view as
+    covering it, because "nothing in a gap says 'this is why the face is empty',
+    so telling the two apart needs a field that does not exist". That field now
+    exists and is this one. Tightening L45 to exempt on `empty` rather than on
+    gap scope is deliberately NOT done here: it would start warning on every face
+    currently covered by a scope, which is a change worth making on its own.
+    """
+    for vname, view in (data.get("views") or {}).items():
+        view = view or {}
+        if not str(view.get("empty") or "").strip():
+            continue
+        parts = view_parts(view)
+        drawn = {k: len(parts[k]) for k in
+                 ("decor", "cutouts", "silkscreen", "bays", "placements", "regions")
+                 if parts[k]}
+        if drawn:
+            listed = ", ".join(f"{n} {k}" for k, n in sorted(drawn.items()))
+            warn(path, "L60", f"view '{vname}' declares itself empty and draws "
+                 f"{listed}. `empty` says a search found nothing published about this "
+                 "face, so anything drawn on it contradicts the sentence - which is how "
+                 "it reads once a source turns up and the note is left behind. Either "
+                 "the note goes, or what is drawn does")
+
+
 def lint_device_top_level_skus(path, data):
     """L59: SKUs at the top level, where no consumer looks.
 
@@ -3871,6 +3910,7 @@ def main():
                 lint_device_gap_scope(f, d)
                 lint_device_configuration_kind(f, d)
                 lint_device_top_level_skus(f, d)
+                lint_device_empty_declaration(f, d)
                 try:
                     dev_maturity[str(f.parent.relative_to(root / "devices"))] = \
                         d.get("maturity", "draft")

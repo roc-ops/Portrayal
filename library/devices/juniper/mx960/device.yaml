@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx960
-version: 0.2.2
+version: 0.3.0
 maturity: modelled
 manufacturer: Juniper
 model: MX960
@@ -72,6 +72,15 @@ groups:
     role: service
     index-origin: 0
     description: four AC supplies at the rear, PEM 0-3
+  inlets:
+    term: Inlet
+    role: service
+    index-origin: 0
+    description: >-
+      the four C20 receptacles at the rear, one per PEM. A separate group from
+      `psus` because they are separate objects - the inlet is the cord's end and
+      stays with the chassis while a PEM comes out - and because sharing `psus`
+      would put two things at every rel-pos 0-3.
 views:
   front:
     size:
@@ -183,13 +192,13 @@ views:
            group: psus, rel-pos: 3}
       placements:
         - {id: inlet-0, ref: std/c20-inlet@1, at: [26.0, 105.0], for: pem0,
-           attrs: {function: AC inlet PEM 0}}
+           group: inlets, rel-pos: 0, attrs: {function: AC inlet PEM 0}}
         - {id: inlet-1, ref: std/c20-inlet@1, at: [129.0, 105.0], for: pem1,
-           attrs: {function: AC inlet PEM 1}}
+           group: inlets, rel-pos: 1, attrs: {function: AC inlet PEM 1}}
         - {id: inlet-2, ref: std/c20-inlet@1, at: [232.0, 105.0], for: pem2,
-           attrs: {function: AC inlet PEM 2}}
+           group: inlets, rel-pos: 2, attrs: {function: AC inlet PEM 2}}
         - {id: inlet-3, ref: std/c20-inlet@1, at: [335.0, 105.0], for: pem3,
-           attrs: {function: AC inlet PEM 3}}
+           group: inlets, rel-pos: 3, attrs: {function: AC inlet PEM 3}}
   left:
     size:
       w: 584.2

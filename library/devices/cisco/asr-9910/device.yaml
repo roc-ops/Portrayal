@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9910
-version: 0.2.2
+version: 0.2.4
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9910
@@ -78,7 +78,7 @@ provenance:
     outline and the rack mounting brackets, and Figure 75 (the chassis cooling path side view) shows the
     airflow through the side. Both name what is on those faces; NEITHER dimensions any feature on
     them, so nothing here carries coordinates. Contrast the ASR 9906, whose HIG Figure 17 gives
-    explicit rail positions at 9.45 in and 5.00 in from the rear and where those rails ARE drawn.
+    explicit rail positions at 5.00 in and 9.45 in from the front and where those rails ARE drawn.
     The distinction is deliberate: a region says "this is here" and decor says "this is here, at
     this size, in this place", and only the second needs a dimension behind it
   bottom-face-figure-12-checked-directly: >-
@@ -347,7 +347,7 @@ views:
         - {id: ft-0, at: [-0.05, 121.06], size: {w: 447.09, h: 41.07}, accepts: ['cisco/asr-9910-fan@1'], group: fan-trays, rel-pos: 0, default: cisco/asr-9910-fan@1}
         - {id: ft-1, at: [-0.05, 174.84], size: {w: 447.09, h: 41.07}, accepts: ['cisco/asr-9910-fan@1'], group: fan-trays, rel-pos: 1, default: cisco/asr-9910-fan@1}
       placements:
-        - {id: ground-pad, ref: cisco/a9k-ground-pad@1, at: [26.0, 880.0], group: grounding}
+        - {id: ground-pad, ref: cisco/a9k-ground-pad@1, at: [26.0, 880.0], group: grounding, rel-pos: 0}
     regions:
       - {id: fabric-cards, label: 'Fabric card cage - FC0 to FC4, numbering restarts at Slot 0'}
       - {id: rear-air-exhaust, label: 'Rear air exhaust - upper rear'}
@@ -358,6 +358,17 @@ views:
       - {id: top-plate, label: 'Top plate - outline and rack mounting brackets dimensioned in Figure 12'}
       - {id: rack-mounting-brackets, label: 'Rack mounting brackets'}
   bottom:
+    empty: >-
+      Searched and not published. There is no bottom view of ANY ASR 9000 chassis
+      in the 78-document intake - every figure caption in all 65 PDFs was checked
+      for "Bottom View", "underside" and "bottom of the chassis", returning
+      nothing. The one feature a sibling can carry here, the rack mounting plane,
+      is dimensioned for the 9906 and the 9912 and is NOT dimensioned for this
+      chassis: Figure 12 gives only the overall width, and its top view cannot be
+      calibrated to recover the position - drawn aspect 0.6268 against a stated
+      0.5629, out by 11.3 percent. See the two `bottom-face-*` provenance entries.
+      The face is sized correctly from Table 13, so the rack elevation and the 3D
+      box are the right shape; what is absent is any statement of what is on it.
     size: {w: 447.0, h: 800.1}
   left:
     size: {w: 800.1, h: 932.18}

@@ -69,6 +69,60 @@ def test_key_order_and_integral_floats_are_not_changes():
     assert dl.entry(a)["shape"] == dl.entry(b)["shape"]
 
 
+# ---- a placement's group is addressing, not geometry -------------------------
+
+def _grouped(g, **kw):
+    """A device whose one placement carries group `g` (None = unlabelled)."""
+    d = dev(**kw)
+    p = {"id": "esd-jack", "at": [1, 1], "ref": "common/esd-jack@1"}
+    if g is not None:
+        p["group"] = g
+    d["groups"]["grounding"] = {"term": "Point", "index-origin": 1}
+    d["views"]["front"]["components"]["placements"] = [p]
+    return d
+
+
+def test_labelling_an_unlabelled_placement_is_minor_not_major():
+    """THE BACKFILL. `group` used to sit in the shape bucket beside the
+    coordinates, so adding one read as "same ids, different geometry: a slot
+    moved". Backfilling the library is 174 placements across 11 devices, and
+    every one of them took a 1.0.0 for metadata that moves nothing."""
+    a = dl.entry(_grouped(None))
+    b = dl.entry(_grouped("grounding"))
+    assert dl.required_bump(a, b) == "minor"
+
+
+def test_moving_a_placement_between_groups_is_still_major():
+    """The other half. A consumer that addressed this thing by its group loses
+    it, which is exactly what major is for."""
+    a = dl.entry(_grouped("grounding"))
+    b = dl.entry(_grouped("slots"))
+    assert dl.required_bump(a, b) == "major"
+
+
+def test_a_group_label_does_not_move_the_shape_hash():
+    """Stated directly, so a future edit that puts `group` back into `_placements`
+    fails here rather than quietly re-inflating every bump."""
+    assert dl.entry(_grouped(None))["shape"] == dl.entry(_grouped("grounding"))["shape"]
+
+
+def test_rel_pos_alone_is_not_a_change_at_all():
+    """Six of the eight devices in this backfill needed only `rel-pos`, and
+    nothing should have asked them for a version."""
+    a = dev()
+    b = dev()
+    b["views"]["front"]["components"]["bays"][0]["rel-pos"] = 3
+    assert dl.required_bump(dl.entry(a), dl.entry(b)) is None
+
+
+def test_a_lock_written_before_the_field_existed_does_not_fire():
+    """Old entries carry no `placement-groups`. That must read as 'unknown', not
+    as 'every placement was reassigned'."""
+    a = dl.entry(_grouped("grounding"))
+    del a["placement-groups"]
+    assert dl.required_bump(a, dl.entry(_grouped("grounding"))) is None
+
+
 # ---- was the bump the author took big enough? -------------------------------
 
 def test_a_patch_does_not_cover_a_moved_slot():
@@ -261,3 +315,13 @@ def test_a_base_is_always_the_default():
             continue
         dflt = [n for n, c in cfgs.items() if (c or {}).get("default")]
         assert dflt == bases, f"{p}: base={bases} default={dflt}"
+
+
+def test_editing_a_faces_empty_declaration_is_at_least_a_patch():
+    """`empty` decides whether a face counts as finished, so rewriting it moves a
+    capability level. Unfingerprinted it could be edited - or deleted - with
+    nothing asking for a version."""
+    a = dev()
+    b = dev()
+    b["views"]["front"]["empty"] = "searched the whole corpus and found nothing at all about this face"
+    assert dl.required_bump(dl.entry(a), dl.entry(b)) == "patch"

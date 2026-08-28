@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcp-sc-28p
-version: 0.1.0
+version: 0.2.0
 manufacturer: Smartoptics
 model: DCP-SC-28P
 description: 28-port service channel unit, 1RU. Twenty-four RJ-45 1G Ethernet ports (ETH1-12
@@ -57,6 +57,28 @@ chassis:
   ru: 1
   color: '#1b1e21'
 groups:
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 1
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+  probe:
+    term: Port
+    role: management
+    index-origin: 1
+    description: >-
+      the QSFP-DD probe port. `management` rather than `traffic` is an
+      INTERPRETATION and is recorded as one: no customer path runs through it,
+      it exists to attach test equipment. If the manual calls it a traffic port,
+      this is the line to change.
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the chassis indicators, which report the unit rather than any one port
   mgmt:
     term: Port
     role: management
@@ -182,41 +204,41 @@ views:
       - {at: [403.2, 26.9], text: 29. PROBE, font-size: 1.6, for: port-probe}
     components:
       placements:
-        - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.75], skin: left, optional: ears}
-        - {ref: common/rack-ear@1, id: ear-right, at: [440, 0.75], skin: right, optional: ears}
-        - {ref: common/rj45-shielded@2, id: eth0, at: [9.6, 12.4], rotate: 180, group: mgmt, attrs: {role: mgmt, speed: 1000base-t}}
-        - {ref: common/rj45-shielded@2, id: rs232, at: [9.6, 26.9], group: mgmt, attrs: {role: console, media: rj45-serial}}
-        - {ref: common/led-dot@1, id: led-power, at: [30.2, 33.6], for: chassis, attrs: {function: power}}
-        - {ref: common/led-dot@1, id: led-status, at: [36.4, 33.6], for: chassis, attrs: {function: status}}
-        - {ref: std/qsfp-ganged@1, id: port-probe, at: [393.95, 29.31], attrs: {media: qsfp-dd, role: probe}}
-        - {ref: common/rj45-hd@1, id: port-1, at: [58.6, 12.7], rotate: 180, group: rj45-1g}
-        - {ref: common/rj45-hd@1, id: port-3, at: [72.92, 12.7], rotate: 180, group: rj45-1g}
-        - {ref: common/rj45-hd@1, id: port-5, at: [87.24, 12.7], rotate: 180, group: rj45-1g}
-        - {ref: common/rj45-hd@1, id: port-7, at: [101.56, 12.7], rotate: 180, group: rj45-1g}
-        - {ref: common/rj45-hd@1, id: port-9, at: [115.88, 12.7], rotate: 180, group: rj45-1g}
-        - {ref: common/rj45-hd@1, id: port-11, at: [130.2, 12.7], rotate: 180, group: rj45-1g}
-        - {ref: std/sfp@1, id: port-13, at: [149.78, 13.7], group: sfp-plus}
-        - {ref: std/sfp@1, id: port-15, at: [164.57, 13.7], group: sfp-plus}
-        - {ref: common/rj45-hd@1, id: port-17, at: [184.6, 12.7], rotate: 180, group: rj45-1g}
-        - {ref: common/rj45-hd@1, id: port-19, at: [198.94, 12.7], rotate: 180, group: rj45-1g}
-        - {ref: common/rj45-hd@1, id: port-21, at: [213.28, 12.7], rotate: 180, group: rj45-1g}
-        - {ref: common/rj45-hd@1, id: port-23, at: [227.62, 12.7], rotate: 180, group: rj45-1g}
-        - {ref: common/rj45-hd@1, id: port-25, at: [241.96, 12.7], rotate: 180, group: rj45-1g}
-        - {ref: common/rj45-hd@1, id: port-27, at: [256.3, 12.7], rotate: 180, group: rj45-1g}
-        - {ref: common/rj45-hd@1, id: port-2, at: [58.6, 25.3], group: rj45-1g}
-        - {ref: common/rj45-hd@1, id: port-4, at: [72.92, 25.3], group: rj45-1g}
-        - {ref: common/rj45-hd@1, id: port-6, at: [87.24, 25.3], group: rj45-1g}
-        - {ref: common/rj45-hd@1, id: port-8, at: [101.56, 25.3], group: rj45-1g}
-        - {ref: common/rj45-hd@1, id: port-10, at: [115.88, 25.3], group: rj45-1g}
-        - {ref: common/rj45-hd@1, id: port-12, at: [130.2, 25.3], group: rj45-1g}
-        - {ref: std/sfp@1, id: port-14, at: [149.78, 26.3], group: sfp-plus}
-        - {ref: std/sfp@1, id: port-16, at: [164.57, 26.3], group: sfp-plus}
-        - {ref: common/rj45-hd@1, id: port-18, at: [184.6, 25.3], group: rj45-1g}
-        - {ref: common/rj45-hd@1, id: port-20, at: [198.94, 25.3], group: rj45-1g}
-        - {ref: common/rj45-hd@1, id: port-22, at: [213.28, 25.3], group: rj45-1g}
-        - {ref: common/rj45-hd@1, id: port-24, at: [227.62, 25.3], group: rj45-1g}
-        - {ref: common/rj45-hd@1, id: port-26, at: [241.96, 25.3], group: rj45-1g}
-        - {ref: common/rj45-hd@1, id: port-28, at: [256.3, 25.3], group: rj45-1g}
+        - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.75], skin: left, optional: ears, group: furniture, rel-pos: 1}
+        - {ref: common/rack-ear@1, id: ear-right, at: [440, 0.75], skin: right, optional: ears, group: furniture, rel-pos: 2}
+        - {ref: common/rj45-shielded@2, id: eth0, at: [9.6, 12.4], rotate: 180, group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 1}
+        - {ref: common/rj45-shielded@2, id: rs232, at: [9.6, 26.9], group: mgmt, attrs: {role: console, media: rj45-serial}, rel-pos: 2}
+        - {ref: common/led-dot@1, id: led-power, at: [30.2, 33.6], for: chassis, attrs: {function: power}, group: status-leds, rel-pos: 1}
+        - {ref: common/led-dot@1, id: led-status, at: [36.4, 33.6], for: chassis, attrs: {function: status}, group: status-leds, rel-pos: 2}
+        - {ref: std/qsfp-ganged@1, id: port-probe, at: [393.95, 29.31], attrs: {media: qsfp-dd, role: probe}, group: probe, rel-pos: 1}
+        - {ref: common/rj45-hd@1, id: port-1, at: [58.6, 12.7], rotate: 180, group: rj45-1g, rel-pos: 1}
+        - {ref: common/rj45-hd@1, id: port-3, at: [72.92, 12.7], rotate: 180, group: rj45-1g, rel-pos: 2}
+        - {ref: common/rj45-hd@1, id: port-5, at: [87.24, 12.7], rotate: 180, group: rj45-1g, rel-pos: 3}
+        - {ref: common/rj45-hd@1, id: port-7, at: [101.56, 12.7], rotate: 180, group: rj45-1g, rel-pos: 4}
+        - {ref: common/rj45-hd@1, id: port-9, at: [115.88, 12.7], rotate: 180, group: rj45-1g, rel-pos: 5}
+        - {ref: common/rj45-hd@1, id: port-11, at: [130.2, 12.7], rotate: 180, group: rj45-1g, rel-pos: 6}
+        - {ref: std/sfp@1, id: port-13, at: [149.78, 13.7], group: sfp-plus, rel-pos: 1}
+        - {ref: std/sfp@1, id: port-15, at: [164.57, 13.7], group: sfp-plus, rel-pos: 2}
+        - {ref: common/rj45-hd@1, id: port-17, at: [184.6, 12.7], rotate: 180, group: rj45-1g, rel-pos: 7}
+        - {ref: common/rj45-hd@1, id: port-19, at: [198.94, 12.7], rotate: 180, group: rj45-1g, rel-pos: 8}
+        - {ref: common/rj45-hd@1, id: port-21, at: [213.28, 12.7], rotate: 180, group: rj45-1g, rel-pos: 9}
+        - {ref: common/rj45-hd@1, id: port-23, at: [227.62, 12.7], rotate: 180, group: rj45-1g, rel-pos: 10}
+        - {ref: common/rj45-hd@1, id: port-25, at: [241.96, 12.7], rotate: 180, group: rj45-1g, rel-pos: 11}
+        - {ref: common/rj45-hd@1, id: port-27, at: [256.3, 12.7], rotate: 180, group: rj45-1g, rel-pos: 12}
+        - {ref: common/rj45-hd@1, id: port-2, at: [58.6, 25.3], group: rj45-1g, rel-pos: 13}
+        - {ref: common/rj45-hd@1, id: port-4, at: [72.92, 25.3], group: rj45-1g, rel-pos: 14}
+        - {ref: common/rj45-hd@1, id: port-6, at: [87.24, 25.3], group: rj45-1g, rel-pos: 15}
+        - {ref: common/rj45-hd@1, id: port-8, at: [101.56, 25.3], group: rj45-1g, rel-pos: 16}
+        - {ref: common/rj45-hd@1, id: port-10, at: [115.88, 25.3], group: rj45-1g, rel-pos: 17}
+        - {ref: common/rj45-hd@1, id: port-12, at: [130.2, 25.3], group: rj45-1g, rel-pos: 18}
+        - {ref: std/sfp@1, id: port-14, at: [149.78, 26.3], group: sfp-plus, rel-pos: 3}
+        - {ref: std/sfp@1, id: port-16, at: [164.57, 26.3], group: sfp-plus, rel-pos: 4}
+        - {ref: common/rj45-hd@1, id: port-18, at: [184.6, 25.3], group: rj45-1g, rel-pos: 19}
+        - {ref: common/rj45-hd@1, id: port-20, at: [198.94, 25.3], group: rj45-1g, rel-pos: 20}
+        - {ref: common/rj45-hd@1, id: port-22, at: [213.28, 25.3], group: rj45-1g, rel-pos: 21}
+        - {ref: common/rj45-hd@1, id: port-24, at: [227.62, 25.3], group: rj45-1g, rel-pos: 22}
+        - {ref: common/rj45-hd@1, id: port-26, at: [241.96, 25.3], group: rj45-1g, rel-pos: 23}
+        - {ref: common/rj45-hd@1, id: port-28, at: [256.3, 25.3], group: rj45-1g, rel-pos: 24}
   rear:
     size:
       w: 440
@@ -226,10 +248,10 @@ views:
         - {at: [78, 5], size: [285, 35], pattern: vent, vent: 9}
     components:
       placements:
-        - {ref: common/rack-ear@1, id: ear-left-r, at: [-14, 0.75], skin: left, optional: ears}
-        - {ref: common/rack-ear@1, id: ear-right-r, at: [440, 0.75], skin: right, optional: ears}
-        - {ref: common/psu-550w@2, id: psu-1, at: [0, 2.5], attrs: {slot: '1'}}
-        - {ref: common/psu-550w@2, id: psu-2, at: [366.5, 2.5], attrs: {slot: '2'}}
+        - {ref: common/rack-ear@1, id: ear-left-r, at: [-14, 0.75], skin: left, optional: ears, group: furniture, rel-pos: 3}
+        - {ref: common/rack-ear@1, id: ear-right-r, at: [440, 0.75], skin: right, optional: ears, group: furniture, rel-pos: 4}
+        - {ref: common/psu-550w@2, id: psu-1, at: [0, 2.5], attrs: {slot: '1'}, group: psus, rel-pos: 1}
+        - {ref: common/psu-550w@2, id: psu-2, at: [366.5, 2.5], attrs: {slot: '2'}, group: psus, rel-pos: 2}
   left:
     size:
       w: 505

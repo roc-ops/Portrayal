@@ -83,9 +83,17 @@ def test_level_is_the_longest_satisfied_prefix():
 
 
 def test_blocked_says_how_to_fix_it_in_words():
-    """A capability report that does not say how to fix it is a scoreboard."""
-    cap = assess(load("ufispace/s9510-28dc"))
-    needs = cap["blocked"][0]["needs"]
+    """A capability report that does not say how to fix it is a scoreboard.
+
+    THE SUBJECT IS BUILT, NOT BORROWED. This read s9510-28dc, which happened to
+    be missing `rel-pos` at the time; backfilling that device fixed it and left
+    this asserting on an empty list. A test whose subject is a defect has to own
+    the defect, or the library improving is indistinguishable from the check
+    breaking."""
+    dev = load("ufispace/s9510-28dc")
+    for it in dev["views"]["front"]["components"]["placements"]:
+        it.pop("rel-pos", None)
+    needs = assess(dev)["blocked"][0]["needs"]
     assert "`rel-pos`" in needs and "front" in needs
 
 
@@ -329,3 +337,38 @@ def test_a_declared_gap_may_block_nothing():
     one that is sometimes empty."""
     gaps = capability.declared_gaps(load("ufispace/s9510-28dc"))
     assert gaps[0]["blocks"] == []
+
+
+# ---- a face can be finished by being verifiably bare ------------------------
+
+def test_a_view_declaring_itself_empty_counts_as_content():
+    """The ASR 9910's underside. Six faces have to describe one box, and an
+    undocumented bottom is still one of the six - but the only way to pass a
+    content check on a face with nothing published about it was to draw
+    something, and drawing what you have no source for is the failure this
+    library exists to avoid. Two devices asked for this in their provenance
+    before it existed."""
+    dev = load("cisco/asr-9910")
+    assert not capability.view_parts(dev["views"]["bottom"])["regions"], \
+        "the fixture is meant to be a BARE face; it now draws something"
+    assert dev["views"]["bottom"]["empty"]
+    assert assess(dev)["level"] == 4
+
+
+def test_a_bare_view_without_the_declaration_still_does_not_count():
+    """`empty` is the one field that turns a failing check green without drawing
+    anything, so absence of the sentence has to keep failing - otherwise the
+    check is measuring nothing."""
+    dev = load("cisco/asr-9910")
+    dev["views"]["bottom"].pop("empty")
+    cap = assess(dev)
+    assert cap["level"] < 3
+    assert "bottom" in cap["blocked"][0]["needs"]
+
+
+def test_an_empty_sentence_does_not_satisfy_it():
+    """Whitespace is not a search. The schema's minLength stops `empty: yes` at
+    validation; this stops it at the check."""
+    dev = load("cisco/asr-9910")
+    dev["views"]["bottom"]["empty"] = "   "
+    assert assess(dev)["level"] < 3

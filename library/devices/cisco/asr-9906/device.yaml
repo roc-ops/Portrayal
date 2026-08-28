@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9906
-version: 0.3.0
+version: 0.4.0
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9906
@@ -326,6 +326,10 @@ groups:
     role: traffic
     index-origin: 0
     physical-context: NetworkingDevice
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 1
 views:
   front:
     size: {w: 447.0, h: 619.51}
@@ -352,7 +356,7 @@ views:
         - {id: slot-4, at: [245.65, 74.55], size: {w: 42.67, h: 403.40}, opening: {w: 42.67, h: 364.32}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 4, default: cisco/a9k-slot-cover@1}
         - {id: slot-5, at: [289.07, 74.55], size: {w: 42.67, h: 403.40}, opening: {w: 42.67, h: 364.32}, accepts: ['cisco/a9k-rsp880-lt-se@1', 'cisco/a9k-rsp880-lt-tr@1', 'cisco/a99-rsp-se@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 5, default: cisco/a9k-slot-cover@1}
       placements:
-        - {id: esd-jack, ref: common/esd-jack@1, at: [351.5, 511.5], for: chassis}
+        - {id: esd-jack, ref: common/esd-jack@1, at: [351.5, 511.5], for: chassis, group: grounding, rel-pos: 0}
     regions:
       - {id: rsp-slots, label: 'RSP cards - the outer pair, slots 0 and 5'}
       - {id: lc-slots, label: Line cards 0 to 3 - slots 1 to 4}
@@ -530,10 +534,11 @@ gaps:
     shape; what it lacks is any statement of what is on it. Nothing is invented to fill it, and no
     region is added naming the absence, because a check passed by annotating that you have nothing
     is worse than a check failed honestly.
-    THIS HOLDS THE CHASSIS AT CAPABILITY 2. Front, rear, top, left and right all now carry sourced
-    content; the bottom alone does not, and level 3's implementation requires content on all six.
-    The written design asks only that six faces be "present, sized, and mutually consistent", which
-    this file satisfies - the content requirement comes from `_has_content`, which was written for
-    level 1. See working/notes/deliberately-empty-faces.md.
-  wanted: a bottom elevation, a photograph of the underside, or a way for a view to declare itself
-    deliberately empty so that empty-by-verification counts where empty-by-omission does not
+    THIS NO LONGER HOLDS THE CHASSIS BACK, and the reason is worth recording rather than deleting.
+    The face now carries what IS sourced about it - the two rack mounting surfaces, at 5.00 in and
+    9.45 in from the front - so it is no longer content-free and the chassis reads at capability 4.
+    That is not the gap closing. The bottom still has no elevation and nothing is drawn of what sits
+    between those rails; what changed is that the little which is published got written down. The
+    sibling ASR 9910, which has no bottom view at all, is the one still held at capability 2.
+  wanted: a bottom elevation or a photograph of the underside. What is on this face between the
+    rack rails remains unstated by every document in the intake

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9904
-version: 1.0.0
+version: 1.0.1
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9904
@@ -203,8 +203,10 @@ provenance:
     rack flange shows on every face it meets. THE ABSENCE IS NOT ANNOTATED AS CONTENT
     - there is no region here saying the underside is undocumented, because passing
     a content check by describing a hole is the thing this project has spent the
-    session removing. If the capability change under discussion lands, this face
-    should be read as deliberately empty'
+    session removing. A view may now declare itself `empty` when a search found
+    nothing published, which is what the ASR 9910''s underside does. THIS face
+    does not use it and must not: it carries the rack mounting surface, so it is
+    not bare, and L60 would call that claim false'
   front-furniture: >-
     drawing - besides the slot label strip, the master carries a FAN STATUS legend and indicator at
     the top left on chassis metal, an ESD receptacle with a warning triangle at the bottom left of
@@ -332,8 +334,8 @@ views:
         - {id: ground-pad-left, at: [385.0, 235.0], size: [46.0, 20.0], shape: rect}
     components:
       placements:
-        - {id: ground-pad-left, ref: cisco/a9k-ground-pad@1, at: [385.0, 235.0], group: grounding}
-        - {id: ground-pad-right, ref: cisco/a9k-ground-pad@1, at: [20.0, 235.0], group: grounding}
+        - {id: ground-pad-left, ref: cisco/a9k-ground-pad@1, at: [385.0, 235.0], group: grounding, rel-pos: 2}
+        - {id: ground-pad-right, ref: cisco/a9k-ground-pad@1, at: [20.0, 235.0], group: grounding, rel-pos: 1}
     regions:
       - {id: fan-tray, label: Single fan tray - fitted from the rear}
       - {id: nebs-ground, label: NEBS bonding and grounding - bottom rear right side and rear left side}
