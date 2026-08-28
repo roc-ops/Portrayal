@@ -1,0 +1,339 @@
+format: 1
+kind: device
+name: gl-8xep
+version: 0.1.0
+maturity: modelled
+manufacturer: ReadyLinks
+model: GL-8xEP
+description: >-
+  Fanless micro-edge PoE++ switch - 8x GbE PoE++ RJ45, 2x 10G SFP+ uplinks,
+  a stacked 2.5G RJ45 pair (one PoE-PD, so the unit can be powered over a
+  single upstream PoE++ run) and dual USB-C power inputs, in a palm-sized
+  IP30 wall-mount chassis with finned heatsink side walls. All connectors
+  are on the front face; the other five faces are heatsink and lid.
+profile: networking
+provenance:
+  sources: >-
+    vendor GLB 3D model (KeyShot CAD export, working/intake/readylinks/
+    3d-models/gl-8xep.glb - 728 nodes, 435k triangles, per-part meshes at
+    millimetre scale), vendor datasheet (ReadyLinks-GL-8xEP-Datasheet.pdf,
+    converted), vendor front render (photos/gl-8xep-1-front.png), catalog
+    API snapshot (gen/readylinks-catalog.json). First device in the library
+    modelled with vendor CAD geometry as the position source.
+  chassis: >-
+    drawing (GLB body extents 160.0 x 45.32 x 165.0 mm W/H/D; front face is
+    the +x plane of the GLB scene, face width = scene z extent). The
+    datasheet states 166 x 177 x 48.3 mm overall (6.55 x 6.95 x 1.9 in) -
+    the deltas are per-axis (3.7/7.3/6.0 percent), NOT a uniform scale
+    factor, so they are protrusions and mounting furniture outside the
+    metal body (wall-mount bosses, jack noses, feet), not a unit error.
+    The modelled body is the GLB metal; the datasheet overall is recorded
+    here, unresolved per-axis, in the spirit of body-between-the-ear-folds.
+  front-layout: >-
+    drawing - every position measured from GLB mesh bounding boxes in face
+    coordinates (x from left as in the vendor render, y down from top).
+    Jack columns at x 92.6/106.5/120.5/134.5 (13.95 mm pitch), rows at
+    y 15.3/28.8; stacked rows are mirrored - the render at 15.96 px/mm
+    zoom shows the TOP row keyway-UP (rotate 180 from the std default)
+    and the bottom row keyway-down; a first draft had it inverted and
+    only the zoomed crop settled it. SFP pair is belly-to-belly with its
+    four lamp band at y 21.7; the 2.5G pair is one tall stacked
+    connector (jacks touching, centres y 13.5/26.7 - vendor render at
+    9.0 px/mm agreeing with the GLB corner-LED rows at 10.3/31.6), NOT
+    on the GbE rows; USB-C pair at x 25.3; status lamps at
+    x 12.7, y 22.2/26.9/32.0; reset button at (150.1, 30.2). The render
+    confirms every feature and the port legends. The jacks are drawn
+    with std/rj45-ganged (12.7 x 11.0, the bezel-less opening) because
+    the GLB jack bodies are 13.4 mm on a 13.95 mm pitch inside one
+    ganged shell strip per row (58.4 x 14.9 in the GLB) - std/rj45's
+    16 mm bezel physically cannot sit on that pitch, which L39 proved
+    by overlap before the swap.
+  port-leds: >-
+    drawing - 3.0 mm lenses above the top jack row (y 6.4) and below the
+    bottom row (y 37.2), one per column; datasheet 'ReadyLighting: 64
+    color LED per port'. Drawn with common/led-dot (2.0 mm) - lens reads
+    3.0 mm in the GLB, the closest library part is used and the delta
+    recorded here.
+  sfp-leds: >-
+    drawing - four 2.0 mm lamps in the cage centre band at y 21.7, x
+    41.5/44.3/47.9/50.8; the 3.6 mm gap splits them into pairs. WHICH pair
+    belongs to which cage is stated nowhere - assigned by adjacency (left
+    pair to the top cage XG2, right pair to XG1) and registered as a gap.
+  silkscreen: >-
+    photo-measured - legends transcribed from the vendor front render
+    (RL/SYS/PWR, USB1/USB2, XG1/XG2, 2.5G1/2.5G2, port numerals: even
+    ports numbered above the top row, odd below the bottom row). The
+    ReadyLinks wordmark is printed as plain text like the halny HALNY
+    precedent; the render's wifi-arc logo graphic is deliberately not
+    reproduced (community-skin logo rule).
+  rear-layout: >-
+    drawing - the GLB rear is the finned end cap (15 mm deep, full width)
+    with no connectors, openings or printing; drawn as a rib field.
+    Content is symmetric, so the horizontal axis convention could not be
+    exposed by any feature - noted per the symmetric-face rule.
+  side-layout: >-
+    drawing - both sides are 15 mm finned heatsink walls running the full
+    depth (GLB side blocks 156.3 x 45.0 x 15.0). Drawn as rib fields. An
+    unidentified 9.2 x 10.2 x 7.7 mm boss sits on the right side wall near
+    the front (GLB idx22, y 7.9-18.1) - likely a security-slot or mount
+    boss, identity stated nowhere, NOT drawn; registered as a gap. On a
+    RIGHT view x=0 is the front; on a LEFT view x=0 is the rear.
+  top-layout: >-
+    drawing - lid plate (150.3 x 147.7 inset) with six 5.3 mm torx screws
+    in a 3x2 pattern; positions from GLB screw meshes. Axis convention:
+    y=0 is the REAR of the chassis, y=165 the front, matching the halny
+    top-view precedent. Screws drawn with common/screw-head (3.6 mm) -
+    GLB reads 5.3 mm, delta recorded.
+  bottom-layout: >-
+    drawing - the GLB bottom is the base pan (no openings; the internal
+    vent-grid meshes at y 9-11 are inside the enclosure, not surface
+    features). Deliberately drawn plain; only symmetric content, axis
+    noted per the symmetric-face rule.
+  power: >-
+    datasheet - 'Maxpower consumption 20W (Excluding PoE output) 240W
+    (Full PoE load)'; power-max-w carries the 240 W full-PoE-load figure
+    (envelope fully-configured, which is what a budget needs) and
+    power-self-max-w the 20 W excluding-PoE-output figure. PoE budget
+    218 W max at 25 C. Input 44-56 V DC 1.86 A is the PoE-PD electrical
+    spec; supply is dual USB-C adapters or PoE++ up to 90 W in.
+  pd-port-identity: >-
+    datasheet lists '(1) 2.5G RJ45 port (1) 2.5G RJ45 PoE PD port' but no
+    document says whether 2.5G1 or 2.5G2 is the PD port - registered as a
+    gap; neither placement claims the PD role.
+attrs:
+  physical:
+    weight-kg: 1.0
+    enclosure: IP30 metal chassis
+    overall-dimensions: 166 x 177 x 48.3 mm including protrusions (datasheet; body modelled from CAD is 160 x 45.32 x 165)
+  performance:
+    switching-capacity: 33 Gbps non-blocking
+  power:
+    power-max-w: 240
+    power-envelope: fully-configured
+    power-self-max-w: 20
+    poe-budget-w: 218
+    poe-budget-scope: maximum at 25 C ambient
+    poe-per-port: 'max per PSE class: 8 ports at PoE 15.4 W, 7 at PoE+ 30 W, 2 at PoE++ 90 W'
+    power-input: 44-56 V DC 1.86 A (PoE-PD)
+    power-supply: dual USB-C power adapter, or PoE++ up to 90 W input via the PD port
+  thermal:
+    cooling: fanless (finned heatsink side walls)
+  environmental:
+    operating-temp-c: 0 to 40
+    operating-humidity: 5 to 95 percent noncondensing
+  features:
+    readylighting: 64 color LED per port
+    optics-sfp-plus: 'vendor optics line per the ReadyLinks Optics datasheet: SFP-1/10G-MM, SFP-1/10G-SM, SFP-1/10G-SM-SF-23 and -SF-32 (BiDi) 1/10G transceivers; no third-party support statement published'
+  management:
+    interfaces: ReadyView cloud; Ethernet/Fiber in-band; Ethernet/Fiber out-of-band
+    button-functions: factory reset, LED dark mode
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 160.0
+  height: 45.32
+  depth: 165.0
+  color: '#17191c'
+  edge: '#0e0f11'
+groups:
+  gbe-poe:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g, poe: 802.3af/at/bt}
+  rj45-2g5:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 2.5g}
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+  usbc-power:
+    term: Port
+    role: service
+    index-origin: 1
+    attrs: {media: usb-c}
+  buttons:
+    term: Button
+    role: management
+    index-origin: 1
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+  rj45-2g5-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+  sfp-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+  lid-screws:
+    term: Screw
+    role: furniture
+    index-origin: 1
+views:
+  front:
+    size: {w: 160.0, h: 45.32}
+    panel:
+      cutouts:
+      - {id: port-2, at: [86.25, 9.8], size: [12.7, 11.0], shape: rect}
+      - {id: port-4, at: [100.15, 9.8], size: [12.7, 11.0], shape: rect}
+      - {id: port-6, at: [114.15, 9.8], size: [12.7, 11.0], shape: rect}
+      - {id: port-8, at: [128.15, 9.8], size: [12.7, 11.0], shape: rect}
+      - {id: port-1, at: [86.25, 23.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-3, at: [100.15, 23.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-5, at: [114.15, 23.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-7, at: [128.15, 23.3], size: [12.7, 11.0], shape: rect}
+      - {id: eth-2g5-2, at: [62.35, 8.0], size: [12.7, 11.0], shape: rect}
+      - {id: eth-2g5-1, at: [62.35, 21.2], size: [12.7, 11.0], shape: rect}
+      - {id: xg2, at: [38.9, 9.7], size: [14.5, 10.0], shape: rect}
+      - {id: xg1, at: [38.9, 23.7], size: [14.5, 10.0], shape: rect}
+      - {id: usb2, at: [21.1, 20.5], size: [8.34, 2.56], shape: rect}
+      - {id: usb1, at: [21.1, 31.4], size: [8.34, 2.56], shape: rect}
+      - {id: led-rl, at: [11.2, 20.7], size: [3.0, 3.0], shape: circle}
+      - {id: led-sys, at: [11.2, 25.4], size: [3.0, 3.0], shape: circle}
+      - {id: led-pwr, at: [11.2, 30.5], size: [3.0, 3.0], shape: circle}
+      - {id: led-p2, at: [91.1, 4.9], size: [3.0, 3.0], shape: circle}
+      - {id: led-p4, at: [105.1, 4.9], size: [3.0, 3.0], shape: circle}
+      - {id: led-p6, at: [119.0, 4.9], size: [3.0, 3.0], shape: circle}
+      - {id: led-p8, at: [133.0, 4.9], size: [3.0, 3.0], shape: circle}
+      - {id: led-p1, at: [91.1, 35.7], size: [3.0, 3.0], shape: circle}
+      - {id: led-p3, at: [105.1, 35.7], size: [3.0, 3.0], shape: circle}
+      - {id: led-p5, at: [119.0, 35.7], size: [3.0, 3.0], shape: circle}
+      - {id: led-p7, at: [133.0, 35.7], size: [3.0, 3.0], shape: circle}
+      - {id: led-xg2-a, at: [40.5, 20.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-xg2-b, at: [43.3, 20.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-xg1-a, at: [46.9, 20.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-xg1-b, at: [49.8, 20.7], size: [2.0, 2.0], shape: circle}
+      - {id: reset, at: [147.9, 28.0], size: [4.5, 4.5], shape: circle}
+    silkscreen:
+    - {at: [19.0, 11.5], text: ReadyLinks, font-size: 3.8, anchor: middle, for: chassis}
+    - {at: [6.5, 22.2], text: RL, font-size: 2.2, for: led-rl}
+    - {at: [6.5, 26.9], text: SYS, font-size: 2.2, for: led-sys}
+    - {at: [6.5, 32.0], text: PWR, font-size: 2.2, for: led-pwr}
+    - {at: [33.8, 21.8], text: USB2, font-size: 2.2, for: usb2}
+    - {at: [33.8, 32.7], text: USB1, font-size: 2.2, for: usb1}
+    - {at: [45.5, 2.6], text: XG2, font-size: 2.4, for: xg2}
+    - {at: [45.5, 42.8], text: XG1, font-size: 2.4, for: xg1}
+    - {at: [68.5, 2.6], text: 2.5G2, font-size: 2.4, for: eth-2g5-2}
+    - {at: [68.5, 42.8], text: 2.5G1, font-size: 2.4, for: eth-2g5-1}
+    - {id: xg2-leader, at: [45.5, 4.0], path: 'M 0 0 V 4.5', for: xg2}
+    - {id: xg1-leader, at: [45.5, 41.4], path: 'M 0 0 V -6.9', for: xg1}
+    - {id: g2-leader, at: [68.5, 4.0], path: 'M 0 0 V 3.5', for: eth-2g5-2}
+    - {id: g1-leader, at: [68.5, 41.4], path: 'M 0 0 V -4.9', for: eth-2g5-1}
+    - {at: [92.6, 2.8], text: '2', font-size: 2.6, for: port-2}
+    - {at: [106.5, 2.8], text: '4', font-size: 2.6, for: port-4}
+    - {at: [120.5, 2.8], text: '6', font-size: 2.6, for: port-6}
+    - {at: [134.5, 2.8], text: '8', font-size: 2.6, for: port-8}
+    - {at: [92.6, 42.8], text: '1', font-size: 2.6, for: port-1}
+    - {at: [106.5, 42.8], text: '3', font-size: 2.6, for: port-3}
+    - {at: [120.5, 42.8], text: '5', font-size: 2.6, for: port-5}
+    - {at: [134.5, 42.8], text: '7', font-size: 2.6, for: port-7}
+    components:
+      placements:
+      - {ref: std/rj45-ganged@1, id: port-2, at: [86.25, 9.8], rotate: 180, group: gbe-poe, rel-pos: 2}
+      - {ref: std/rj45-ganged@1, id: port-4, at: [100.15, 9.8], rotate: 180, group: gbe-poe, rel-pos: 4}
+      - {ref: std/rj45-ganged@1, id: port-6, at: [114.15, 9.8], rotate: 180, group: gbe-poe, rel-pos: 6}
+      - {ref: std/rj45-ganged@1, id: port-8, at: [128.15, 9.8], rotate: 180, group: gbe-poe, rel-pos: 8}
+      - {ref: std/rj45-ganged@1, id: port-1, at: [86.25, 23.3], group: gbe-poe, rel-pos: 1}
+      - {ref: std/rj45-ganged@1, id: port-3, at: [100.15, 23.3], group: gbe-poe, rel-pos: 3}
+      - {ref: std/rj45-ganged@1, id: port-5, at: [114.15, 23.3], group: gbe-poe, rel-pos: 5}
+      - {ref: std/rj45-ganged@1, id: port-7, at: [128.15, 23.3], group: gbe-poe, rel-pos: 7}
+      - {ref: std/rj45-ganged@1, id: eth-2g5-2, at: [62.35, 8.0], rotate: 180, group: rj45-2g5, rel-pos: 2}
+      - {ref: std/rj45-ganged@1, id: eth-2g5-1, at: [62.35, 21.2], group: rj45-2g5, rel-pos: 1}
+      - {ref: std/sfp@1, id: xg2, at: [38.9, 9.7], rotate: 180, group: sfp-plus, rel-pos: 2}
+      - {ref: std/sfp@1, id: xg1, at: [38.9, 23.7], group: sfp-plus, rel-pos: 1}
+      - {ref: std/usb-c@1, id: usb2, at: [21.1, 20.5], group: usbc-power, rel-pos: 2}
+      - {ref: std/usb-c@1, id: usb1, at: [21.1, 31.4], group: usbc-power, rel-pos: 1}
+      - {ref: common/reset-button@1, id: reset, at: [148.1, 28.2], for: chassis, group: buttons, rel-pos: 1}
+      - {ref: common/led-dot@1, id: led-rl, at: [11.7, 21.2], for: chassis, group: status-leds, rel-pos: 1}
+      - {ref: common/led-dot@1, id: led-sys, at: [11.7, 25.9], for: chassis, group: status-leds, rel-pos: 2}
+      - {ref: common/led-dot@1, id: led-pwr, at: [11.7, 31.0], for: chassis, group: status-leds, rel-pos: 3}
+      - {ref: common/led-dot@1, id: led-p2, at: [91.6, 5.4], for: port-2, group: port-leds, rel-pos: 2}
+      - {ref: common/led-dot@1, id: led-p4, at: [105.6, 5.4], for: port-4, group: port-leds, rel-pos: 4}
+      - {ref: common/led-dot@1, id: led-p6, at: [119.5, 5.4], for: port-6, group: port-leds, rel-pos: 6}
+      - {ref: common/led-dot@1, id: led-p8, at: [133.5, 5.4], for: port-8, group: port-leds, rel-pos: 8}
+      - {ref: common/led-dot@1, id: led-p1, at: [91.6, 36.2], for: port-1, group: port-leds, rel-pos: 1}
+      - {ref: common/led-dot@1, id: led-p3, at: [105.6, 36.2], for: port-3, group: port-leds, rel-pos: 3}
+      - {ref: common/led-dot@1, id: led-p5, at: [119.5, 36.2], for: port-5, group: port-leds, rel-pos: 5}
+      - {ref: common/led-dot@1, id: led-p7, at: [133.5, 36.2], for: port-7, group: port-leds, rel-pos: 7}
+      - {ref: common/led-dot@1, id: led-xg2-a, at: [40.5, 20.7], for: xg2, group: sfp-leds, rel-pos: 1}
+      - {ref: common/led-dot@1, id: led-xg2-b, at: [43.3, 20.7], for: xg2, group: sfp-leds, rel-pos: 2}
+      - {ref: common/led-dot@1, id: led-xg1-a, at: [46.9, 20.7], for: xg1, group: sfp-leds, rel-pos: 3}
+      - {ref: common/led-dot@1, id: led-xg1-b, at: [49.8, 20.7], for: xg1, group: sfp-leds, rel-pos: 4}
+      - {ref: common/led-dot@1, id: led-2g5-2a, at: [62.3, 9.3], for: eth-2g5-2, group: rj45-2g5-leds, rel-pos: 3}
+      - {ref: common/led-dot@1, id: led-2g5-2b, at: [73.2, 9.3], for: eth-2g5-2, group: rj45-2g5-leds, rel-pos: 4}
+      - {ref: common/led-dot@1, id: led-2g5-1a, at: [62.3, 30.6], for: eth-2g5-1, group: rj45-2g5-leds, rel-pos: 1}
+      - {ref: common/led-dot@1, id: led-2g5-1b, at: [73.2, 30.6], for: eth-2g5-1, group: rj45-2g5-leds, rel-pos: 2}
+  rear:
+    size: {w: 160.0, h: 45.32}
+    panel:
+      decor:
+      - {at: [2.0, 2.0], size: [156.0, 41.3], pattern: ribs}
+  left:
+    size: {w: 165.0, h: 45.32}
+    panel:
+      decor:
+      - {at: [2.0, 2.0], size: [161.0, 41.3], pattern: ribs}
+  right:
+    size: {w: 165.0, h: 45.32}
+    panel:
+      decor:
+      - {at: [2.0, 2.0], size: [161.0, 41.3], pattern: ribs}
+  top:
+    size: {w: 160.0, h: 165.0}
+    panel:
+      decor:
+      - {at: [4.9, 8.7], size: [150.3, 147.7], fill: '#1b1d20'}
+    components:
+      placements:
+      - {ref: common/screw-head@1, id: screw-fl, at: [9.0, 149.7], for: chassis, group: lid-screws, rel-pos: 1}
+      - {ref: common/screw-head@1, id: screw-fr, at: [147.4, 149.7], for: chassis, group: lid-screws, rel-pos: 2}
+      - {ref: common/screw-head@1, id: screw-ml, at: [9.0, 80.7], for: chassis, group: lid-screws, rel-pos: 3}
+      - {ref: common/screw-head@1, id: screw-mr, at: [147.4, 80.7], for: chassis, group: lid-screws, rel-pos: 4}
+      - {ref: common/screw-head@1, id: screw-rl, at: [9.0, 8.7], for: chassis, group: lid-screws, rel-pos: 5}
+      - {ref: common/screw-head@1, id: screw-rr, at: [147.4, 8.7], for: chassis, group: lid-screws, rel-pos: 6}
+  bottom:
+    size: {w: 160.0, h: 165.0}
+    panel:
+      decor:
+      - {at: [5.2, 8.8], size: [149.7, 147.4], fill: '#141619'}
+gaps:
+- what: pd-port-identity
+  scope: [eth-2g5-1, eth-2g5-2]
+  reason: vendor-silent
+  wanted: >-
+    Which of the panel's 2.5G1 / 2.5G2 jacks is the PoE-PD port. The
+    datasheet lists one 2.5G RJ45 port and one 2.5G RJ45 PoE-PD port and
+    no document maps that to the panel labels; neither placement claims
+    the PD role until a source or a live unit says.
+- what: sfp-led-pairing
+  scope: [sfp-leds]
+  reason: vendor-silent
+  wanted: >-
+    Which centre-band lamp pair serves XG1 vs XG2. The four lamps split
+    into pairs at the 3.6 mm gap; assigned by adjacency (left pair to the
+    top cage XG2) - verify against a live unit.
+- what: right-side-boss
+  scope: [right]
+  reason: vendor-silent
+  wanted: >-
+    Identity of the 9.2 x 10.2 x 7.7 mm boss on the right side wall near
+    the front (GLB mesh idx22, y 7.9-18.1) - likely a security slot or
+    wall-mount feature. No document names it; not drawn until identified.
+configurations:
+  base:
+    kind: base
+    description: GL-8xEP fanless micro-edge PoE++ switch
+    default: true
+    part-numbers:
+      GL-8xEP: {}
