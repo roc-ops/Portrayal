@@ -1,0 +1,63 @@
+format: 1
+kind: module
+name: psu-120-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: UfiSpace 120W AC fixed dual-feed PSU input (S9502 family) - the front-panel
+  window of a NON-REMOVABLE supply, carrying one IEC 60320 C14 inlet for 100-240V
+size: {w: 33.3, h: 21.0}
+attrs: {power-output-w: 120, input: ac, model: '120W AC PSU, fixed dual feed'}
+provenance:
+  removability: >-
+    THIS IS NOT A FIELD-REPLACEABLE UNIT, exactly as its DC sibling is not. The
+    datasheet's Redundancy row is 'Fixed, 1+1 redundant PSU', its ordering line is
+    '120W AC PSU, fixed dual feed', and the HIG's section 4 heading is 'AC Version PSU
+    Overview - 1+1, Fixed power supply unit (PSU)'. The supply is internal and the panel
+    carries its inlet. It is modelled as a bay occupant only because `bays` is the
+    library's one mechanism for swapping a part per configuration; the device's gaps
+    entry says so too. (This sentence is written here and in ufispace/psu-120-dc from
+    the same three sources, not copied from one file to the other - both were read off
+    the datasheet's Redundancy row and the HIG's two section headings.)
+  power: >-
+    datasheet Fixed Power Supply Types: '120W AC PSU, fixed dual feed'. The HIG's
+    Installation Environment section asks for 'a reserve of at least 120 watts on each
+    power circuit', the same number as a per-feed requirement. No ambient stated.
+  size: >-
+    drawing - the panel window is shared with the DC build and is 33.3 x 21.0; see
+    ufispace/psu-120-dc, whose 33.3 x 15.9 terminal block sits in the same opening. The
+    C14 aperture itself measures 26.8 x 18.7 at chassis x 21.34-48.12, y 15.35-34.08 on
+    HIG Figure 5's AC front elevation (rendered at 600 dpi; the strip's chassis is
+    2350 px across 440 mm, 5.341 px/mm, and its drawn height is 1.6% out so only the x
+    axis is taken as scale and the y as a fraction). std/c14-inlet's registry opening is
+    28.0 x 20.0 - 1.2 and 1.3 mm larger - and the standard part is seated on the
+    measured centre rather than resized, because IEC 60320-1 governs the cutout and this
+    figure does not.
+  inlet: >-
+    standard (IEC 60320-1 via std/c14-inlet). HIG Figure 7 draws the face with the
+    legend '100 - 240V ~' under each inlet and the datasheet gives 'AC input: 100 to
+    240V, 2A'. The HIG's Connecting Power, AC Version section adds a built-in 5 A
+    fast-acting fuse and 12V/5VSB delivered on connection.
+  led: >-
+    NONE DRAWN. The HIG says 'the LED on the PSU will light up with a Green color
+    designating normal operation' in the Connecting Power section, but the front-panel
+    LED table has no per-PSU lamp and neither HIG Figure 7 nor the AC front elevation
+    shows one on this window; the panel's PSU lamp is a system lamp on the device.
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [1.23, 1.2]}
+relief:
+  features:
+    - node: inlet-bezel
+      out: 14
+      confidence: datasheet
+      source: >-
+        S9502-12SM HIG, Space Clearance: 'The connectors for the power supplies and
+        interfaces will extend outwards from the front panel by 0.55 inches (1.4cm)',
+        and HIG Figure 5's top view dimensions the same 14 mm as the difference between
+        D = 9.84" (250 mm) over the body and D = 10.39" (264 mm) over the connectors.
+        Carried on the skin's own inlet-bezel node rather than on the composed
+        std/c14-inlet part, because relief resolves against nodes in this skin.
+connection-points:
+  power: {at: [15.23, 11.2], direction: front}
+skins: [default]

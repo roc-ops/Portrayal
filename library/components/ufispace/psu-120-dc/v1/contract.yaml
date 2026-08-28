@@ -1,0 +1,70 @@
+format: 1
+kind: module
+name: psu-120-dc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: UfiSpace 120W DC fixed dual-feed PSU input (S9502 family) - the front-panel
+  window of a NON-REMOVABLE supply, carrying a three-pole screw terminal block for
+  RTN / -36 to -75V / earth
+size: {w: 33.3, h: 15.9}
+attrs: {power-output-w: 120, input: dc, model: '120W DC PSU, fixed dual feed'}
+provenance:
+  removability: >-
+    THIS IS NOT A FIELD-REPLACEABLE UNIT and the model should not be read as saying it
+    is. The datasheet's Redundancy row is 'Fixed, 1+1 redundant PSU', its ordering line
+    is '120W DC PSU, fixed dual feed', and the HIG's section 4 heading is 'DC Version
+    PSU Overview - 1+1, Fixed power supply unit (PSU)'. The supply is internal; what the
+    front panel carries is its input connector, and that is what this part draws. It is
+    a PLACEMENT on the device, not a bay occupant, precisely so that nothing implies it
+    pulls out. (The HIG's Installation Environment
+    paragraph does call it a 'field replaceable unit' - that is the one place in either
+    document that says so, against three that say fixed, and it is a boilerplate
+    sentence carried over from the S6301/S9510 guides.)
+  power: >-
+    datasheet Fixed Power Supply Types: '120W DC PSU, fixed dual feed'. The rating is
+    per supply and the pair is active-active; the HIG's Installation Environment
+    section asks for 'a reserve of at least 120 watts on each power circuit', which is
+    the same number read as a per-feed requirement. No ambient is stated with it.
+  size: >-
+    photo-measured - the vendor front render s9502-12sm-2-front.png (1717 px across the
+    440 mm face, aspect 10.10 against a true 10.115, 0.15% out, 3.902 px/mm). The
+    terminal block measures 33.3 x 15.9 at chassis y 18.1-34.0 and that is the part's
+    size. It is NOT sized to share a window with the AC sibling: the AC build prints its
+    'PSU n' legend at y 11.0 and opens its C14 window at y 11.9, against 17.1 and 18.1
+    here, so the two builds are different panels rather than one panel with two
+    connectors - see the device's gaps entry.
+  terminal-block: >-
+    photo-measured - three screw terminals at chassis x 22.29-28.70, 31.78-38.18 and
+    41.26-47.66 (a 9.49 pitch, each 6.4 across), all at y 21.78-30.50, read as silver
+    blobs on the front render. HIG Figure 6 draws the same three at the same spacing.
+    The printed legend under them, 'RTN -36 — -75 ⎓ ⏚', is chassis silkscreen and lives
+    on the device rather than here.
+  input-spec: >-
+    datasheet 'DC input: -36 to -75V, 4.5A'; HIG Connecting Power, DC Version - UL 1015
+    18 AWG stranded copper to a screw-type terminal block, torque 7.0 +/- 0.5 kgf.cm,
+    a built-in 6 A fast-acting fuse, and 12V/5VSB delivered to the system on connection.
+  led: >-
+    NONE DRAWN, and the HIG is why rather than an oversight: 'the LED on the PSU will
+    light up with a Green color designating normal operation' appears in the Connecting
+    Power section, but the front-panel LED table has no per-PSU lamp and neither Figure
+    6 nor the front render shows one on this window. The panel's PSU lamp (green /
+    yellow / blinking yellow for which feed is good) is a system lamp in the device's
+    own status block, not a lamp on this part.
+elements:
+  terminal-block: {at: [0.0, 0.0], size: [33.3, 15.9], class: terminal}
+relief:
+  features:
+    - node: terminal-block
+      out: 14
+      confidence: datasheet
+      source: >-
+        S9502-12SM HIG, Space Clearance: 'The connectors for the power supplies and
+        interfaces will extend outwards from the front panel by 0.55 inches (1.4cm)',
+        and HIG Figure 5's top view dimensions the same 14 mm as the difference between
+        D = 9.84" (250 mm) over the body and D = 10.39" (264 mm) over the connectors.
+        Published by the vendor for this platform's front-panel connectors.
+connection-points:
+  power: {at: [16.65, 8.0], direction: front}
+skins: [default]
