@@ -262,22 +262,27 @@ gaps:
   wanted: >-
     a per-NOS LED table from UfiSpace or a NOS vendor, or photographs of a live unit
     with ports in known states
-- what: fan-402825-lamp-position
+- what: fan-402825-face
   scope: [ufispace/fan-402825@1, fans]
   reason: sources-disagree
   note: >-
     THIS IS A DEFECT IN A SHARED COMPONENT, NOT IN THIS DEVICE, and it is recorded here
-    because this device is where the evidence turned up. ufispace/fan-402825@1 places
-    its status lamp at [2.0, 1.6] - top left of the face - and its own provenance cites
-    'HIG Fig 8 drawing' for the geometry. This device's HIG Figure 8 (fig-0014) and this
-    device's rear photograph both put the lamp at the BOTTOM of the fan's right-hand
-    flange, below the thumbscrew and the red airflow tag. The two guides' Figure 8 is
-    the same image file, so the component contradicts the figure it names. The component
-    was reused unchanged rather than forked or edited, because it is shared with the
-    S9510-28DC and the correction belongs to whoever owns both.
+    because this device is where the evidence turned up - specifically in the matched-
+    scale comparison of the rendered rear against the rear photograph, which is the only
+    check that could have found it. ufispace/fan-402825@1 places its status lamp at
+    [2.0, 1.6] - top left of the face - and its own provenance cites 'HIG Fig 8 drawing'
+    for the geometry. This device's HIG Figure 8 (fig-0014) and this device's rear
+    photograph both put the lamp at the BOTTOM of the fan's right-hand flange, below a
+    knurled thumbscrew and a red 'E' airflow tag that the component does not draw at
+    all; the component also draws a plain round rotor where both images show a hex
+    grille, and a straight handle bar where both show a curved tube. The two guides'
+    Figure 8 is byte-for-byte the same image, so the component contradicts the figure it
+    names. It was reused unchanged rather than forked or edited, because it is shared
+    with the S9510-28DC and a correction would change that device's rendering on this
+    device's reading.
   wanted: >-
-    a decision on ufispace/fan-402825's element positions, or a photograph of the FRU
-    out of the chassis
+    a decision on ufispace/fan-402825's element positions and face art, or a photograph
+    of the FRU out of the chassis
 - what: rear-fan-origin
   scope: [fans, rear]
   reason: sources-disagree
