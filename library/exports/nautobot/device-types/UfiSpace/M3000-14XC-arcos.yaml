@@ -1,0 +1,83 @@
+---
+manufacturer: UfiSpace
+model: M3000-14XC
+slug: ufispace-m3000-14xc
+u_height: 1.0
+is_full_depth: true
+weight: 4.18
+weight_unit: kg
+airflow: front-to-rear
+description: UfiSpace M3000-14XC 25G/100G Fronthaul Multiplexer - 1RU O-RAN shared-cell FHM, 12x SFP+
+  10G (8 to O-RU, 4 to O-DU) + 2x QSFP28 (reserved), full timing (GNSS/1PPS/10MHz/ToD/BITS), Stratum 3E
+  OCXO, dua
+front_image: true
+rear_image: true
+console-ports:
+  - name: Console
+    type: rj-45
+interfaces:
+  - name: swp0
+    type: 10gbase-x-sfpp
+  - name: swp1
+    type: 10gbase-x-sfpp
+  - name: swp2
+    type: 10gbase-x-sfpp
+  - name: swp3
+    type: 10gbase-x-sfpp
+  - name: swp4
+    type: 10gbase-x-sfpp
+  - name: swp5
+    type: 10gbase-x-sfpp
+  - name: swp6
+    type: 10gbase-x-sfpp
+  - name: swp7
+    type: 10gbase-x-sfpp
+  - name: swp8
+    type: 10gbase-x-sfpp
+  - name: swp9
+    type: 10gbase-x-sfpp
+  - name: swp10
+    type: 10gbase-x-sfpp
+  - name: swp11
+    type: 10gbase-x-sfpp
+  - name: swp12
+    type: 100gbase-x-qsfp28
+  - name: swp13
+    type: 100gbase-x-qsfp28
+module-bays:
+  - name: PSU 0
+    position: '0'
+    description: 'Accepts: psu-201-dc, psu-201-ac'
+  - name: PSU 1
+    position: '1'
+    description: 'Accepts: psu-201-dc, psu-201-ac'
+comments: "UfiSpace M3000-14XC 25G/100G Fronthaul Multiplexer - 1RU O-RAN shared-cell FHM, 12x SFP+ 10G\
+  \ (8 to O-RU, 4 to O-DU) + 2x QSFP28 (reserved), full timing (GNSS/1PPS/10MHz/ToD/BITS), Stratum 3E\
+  \ OCXO, dual 200W PSUs, 4 fixed fans, front-to-back airflow\n\nConfiguration `dc`: Dual 200W DC PSUs\
+  \ (PSU-201-DISB), front-to-back airflow - the DC orderable build, which is also the bare working chassis\
+  \ (the traffic cages ship empty and the fans are fixed)\n\nDatasheet: UfiSpace M3000-14XC Datasheet\n\
+  \  https://www.ufispace.com/products/telco/fronthaul/m3000-14xc-25g-100g-fronthaul-multiplexer\n\nFacts\
+  \ carried in the model that this schema has no field for:\n- performance.coverage: One FHM supports\
+  \ up to 8 RUs; cascading can be used to extend coverage\n- performance.jumbo-frame: up to 9000 bytes\n\
+  - performance.reach-sfp-plus: 80 km max (HIG port overview, ports 0-11)\n- performance.reach-qsfp28:\
+  \ 10 km max at 40/100G (HIG port overview, ports 12-13)\n- performance.optics-sfp-plus: 10G SFP+ SR,\
+  \ LR, ER (datasheet supported accessories)\n- performance.optics-qsfp28: none published - the QSFP28\
+  \ ports are reserved and the datasheet's supported-accessories list carries only 10G SFP+ optics\n-\
+  \ power.power-max-w: 103.9\n- power.power-envelope: unstated\n- power.psus: 2x 200 W 1+1 active-active,\
+  \ hot-swappable (intake airflow)\n- power.psu-ac-input: 100-240 VAC, 3 A max\n- power.psu-dc-input:\
+  \ -36 to -75 VDC, 8 A max\n- thermal.fans: 4 fixed fans, front-to-back airflow\n- environmental.operating-temp:\
+  \ -40 to 70 C (datasheet; HIG checklist says -40 to 65 C - see gaps)\n- environmental.storage-temp:\
+  \ -40 to 70 C\n- environmental.operating-humidity: 5% to 95% RH, non-condensing\n- environmental.storage-humidity:\
+  \ 5% to 93% RH, non-condensing\n- platform.cpu: ARM Cortex-A53 4-core 64-bit @ 1.0 GHz\n- platform.memory:\
+  \ 4 GB DDR4\n- platform.fpga: Intel Stratix 10 TX (O-RAN shared cell function)\n- features.oran: O-RAN\
+  \ shared cell, Cascade-FHM mode\n- features.fronthaul: various fiber length delay compensation; configurable\
+  \ data compression mode, IQ data width and U/C plane VLAN ID\n- features.timing: Stratum 3E OCXO, ITU-T\
+  \ SyncE, IEEE 1588v2 T-TC (G.8275.1; T-BC, T-GM and G.8264 ESMC available with future premium versions),\
+  \ Class C\n- features.timing-interfaces: GNSS SMA in, 1PPS SMB in/out, 10MHz SMB in/out, BITS RJ48 in/out,\
+  \ ToD RJ45 in/out\n- features.gnss: GPS L1C/A, GLONASS L1OF, BeiDou B1, Galileo E1B/C; passive or active\
+  \ antenna auto-detected (active supply 5 V DC / 150 mA, min RF sensitivity -166 dBm); activated with\
+  \ a software license key on future premium versions\n- management.protocols: CLI, SNMP, NETCONF\n- management.console:\
+  \ RJ45 serial, 115200 8N1, no flow control\n- compliance.safety: UL 62368-1; IEC 62368-1; BSMI\n- compliance.emc:\
+  \ FCC Part 15 Subpart B Class A; ICES-003 Class A; EN 55032 Class A; EN 300 386; EN 55035; EN 303 413;\
+  \ EN 301 489; BSMI; VCCI CISPR 32 Class A; KS C 9832 Class A; KS C 9835\n- lifecycle.eol: none-announced\n\
+  \nModel maturity: modelled. Every dimension in the source records where it came from."

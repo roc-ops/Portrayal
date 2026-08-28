@@ -1,0 +1,100 @@
+---
+manufacturer: UfiSpace
+model: S9501-18SMT
+slug: ufispace-s9501-18smt
+u_height: 1.0
+is_full_depth: true
+weight: 4.34
+weight_unit: kg
+airflow: front-to-rear
+description: UfiSpace S9501-18SMT 10G Disaggregated Cell Site Gateway Router - 1RU, 4x 100M/1G RJ45 +
+  8x 100M/1G SFP + 6x 1/10G SFP+, full timing (GNSS/1PPS/10MHz/ToD) with Stratum 3E OCXO, dual 200W hot-swap
+  PSUs
+front_image: true
+rear_image: true
+console-ports:
+  - name: Console
+    type: rj-45
+interfaces:
+  - name: Ethernet0
+    type: 1000base-t
+  - name: Ethernet4
+    type: 1000base-t
+  - name: Ethernet8
+    type: 1000base-t
+  - name: Ethernet12
+    type: 1000base-t
+  - name: Ethernet16
+    type: 1000base-x-sfp
+  - name: Ethernet20
+    type: 1000base-x-sfp
+  - name: Ethernet24
+    type: 1000base-x-sfp
+  - name: Ethernet28
+    type: 1000base-x-sfp
+  - name: Ethernet32
+    type: 1000base-x-sfp
+  - name: Ethernet36
+    type: 1000base-x-sfp
+  - name: Ethernet40
+    type: 1000base-x-sfp
+  - name: Ethernet44
+    type: 1000base-x-sfp
+  - name: Ethernet48
+    type: 10gbase-x-sfpp
+  - name: Ethernet52
+    type: 10gbase-x-sfpp
+  - name: Ethernet56
+    type: 10gbase-x-sfpp
+  - name: Ethernet60
+    type: 10gbase-x-sfpp
+  - name: Ethernet64
+    type: 10gbase-x-sfpp
+  - name: Ethernet68
+    type: 10gbase-x-sfpp
+module-bays:
+  - name: Fan 0
+    position: '0'
+    description: 'Accepts: fan-402825'
+  - name: Fan 1
+    position: '1'
+    description: 'Accepts: fan-402825'
+  - name: Fan 2
+    position: '2'
+    description: 'Accepts: fan-402825'
+  - name: PSU 0
+    position: '0'
+    description: 'Accepts: psu-201-dc, psu-201-ac'
+  - name: PSU 1
+    position: '1'
+    description: 'Accepts: psu-201-dc, psu-201-ac'
+comments: "UfiSpace S9501-18SMT 10G Disaggregated Cell Site Gateway Router - 1RU, 4x 100M/1G RJ45 + 8x\
+  \ 100M/1G SFP + 6x 1/10G SFP+, full timing (GNSS/1PPS/10MHz/ToD) with Stratum 3E OCXO, dual 200W hot-swap\
+  \ PSUs, three hot-swap fans, temperature hardened to -40/+65 C, front-service\n\nConfiguration `dc`:\
+  \ Dual 200W DC PSUs (PSU-201-DISB, intake airflow) with three FAN-402818-HC exhaust fans - the DC build,\
+  \ which is also the bare working chassis, since the traffic cages ship empty\n\nDatasheet: UfiSpace\
+  \ S9501-18SMT Disaggregated Cell Site Gateway Router Datasheet\n  https://www.ufispace.com/products/telco/access/s9501-18smt-10g-disaggregated-cell-site-gateway\n\
+  \nFacts carried in the model that this schema has no field for:\n- performance.switching-capacity: 64\
+  \ Gbps\n- performance.packet-buffer: 1 GB\n- performance.reach-rj45: 100 m (HIG Port Overview, ports\
+  \ 0-3)\n- performance.reach-sfp: 70 km max (HIG Port Overview, ports 4-11)\n- performance.reach-sfp-plus:\
+  \ 80 km max (HIG Port Overview, ports 12-17)\n- performance.optics-sfp: 1G SFP SX, LX, EX, ZX (datasheet\
+  \ compatible transceiver types)\n- performance.optics-sfp-plus: 10G SFP+ SR, LR, ER, ZR (datasheet compatible\
+  \ transceiver types)\n- power.power-typical-w: 52\n- power.power-max-w: 85\n- power.power-envelope:\
+  \ unstated\n- power.psus: 2x 200 W 1+1 redundant, hot-swappable (intake airflow)\n- power.psu-ac-input:\
+  \ 100-240 VAC, 3 A max\n- power.psu-dc-input: -36 to -75 VDC, 8 A max\n- thermal.fans: 3x hot-swappable\
+  \ 2+1 redundant, exhaust airflow; system front-to-back\n- environmental.operating-temp: -40 to 65 C\
+  \ (temperature hardened)\n- environmental.storage-temp: -40 to 70 C\n- environmental.operating-humidity:\
+  \ 5% to 85% RH, non-condensing\n- environmental.storage-humidity: 5% to 93% RH, non-condensing\n- platform.cpu:\
+  \ Intel Denverton-NS 4-core @ 1.6 GHz\n- platform.memory: 8 GB DDR4\n- platform.storage: 32 GB SSD\n\
+  - platform.asic: Broadcom Qumran-UX BCM88272\n- platform.bmc: ASPEED AST2620\n- features.timing: Stratum\
+  \ 3E OCXO, ITU-T SyncE, IEEE 1588v2 (G.8265.1 default, G.8275.1, G.8275.2, SMPTE ST 2059-2 with additional\
+  \ licence; T-GM, T-BC/OC, T-TC), Class C accuracy\n- features.timing-interfaces: GNSS SMA in, 1PPS SMB\
+  \ in/out, 10MHz SMB in/out, ToD RJ45 in/out\n- features.gnss: internal receiver for master clock implementations,\
+  \ enabling a T-GM source at the cell site without additional equipment\n- features.timing-cables: 50\
+  \ ohm SMA coax with 1/4-36UNS-2B for GNSS; 50 ohm SMB coax with 10-32UNF-2A for 1PPS and 10MHz; shielded\
+  \ RJ45 for ToD\n- features.nos: NOS integration is necessary to activate the timing features\n- management.console:\
+  \ RJ45 serial, 115200 8N1, no flow control\n- management.bmc-role: individual BMC for automatic and\
+  \ remote platform health monitoring\n- compliance.safety: UL 62368-1; IEC 60950-1; IEC 62368-1; BSMI\n\
+  - compliance.emc: FCC Part 15 Subpart B Class A; ICES-003 Class A; EN 55032 Class A; EN 55035; EN 300\
+  \ 386; EN 301 489; EN 303 413; BSMI\n- compliance.environment: WEEE; RoHS\n- lifecycle.eol: none-announced\n\
+  \nModel maturity: modelled. Every dimension in the source records where it came from."

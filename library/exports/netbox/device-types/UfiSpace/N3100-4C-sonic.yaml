@@ -1,0 +1,91 @@
+---
+manufacturer: UfiSpace
+model: N3100-4C
+slug: ufispace-n3100-4c
+u_height: 1.0
+is_full_depth: true
+description: 5G timing adapter - a PCIe Gen4 x16 add-in card (not a rack device) that offloads the PTP
+  stack and servo from a COTS server for O-RAN fronthaul timing
+front_image: true
+rear_image: true
+interfaces:
+  - name: Ethernet0
+    type: 25gbase-x-sfp28
+  - name: Ethernet4
+    type: 25gbase-x-sfp28
+  - name: Ethernet8
+    type: 25gbase-x-sfp28
+  - name: Ethernet12
+    type: 25gbase-x-sfp28
+comments: '5G timing adapter - a PCIe Gen4 x16 add-in card (not a rack device) that offloads the PTP stack
+  and servo from a COTS server for O-RAN fronthaul timing. Stratum 3E OCXO, Cyclone V SoC FPGA and an
+  Intel E-810 controller behind 4x 10G/25G SFP28 ports, with GNSS in on SMA and 1PPS / 10MHz in/out on
+  SMB. Class C timing accuracy (G.8273.2), T-GM / T-BC / OC roles, SyncE and G.8275.1. The modelled body
+  is the card enclosure behind the I/O plate; the full-height PCIe bracket and the gold edge connector
+  extend beyond it and are mounting furniture, not drawn.
+
+
+  Configuration `base`: N3100-4C 5G timing adapter, PCIe Gen4 x16 add-in card
+
+
+  Facts carried in the model that this schema has no field for:
+
+  - physical.weight-kg: 0.44
+
+  - physical.slot-compatibility: fits x4/x8/x16 PCIe slots, Gen3/Gen4
+
+  - performance.timing-accuracy: ITU-T G.8273.2 Class C
+
+  - power.power-max-w: 48
+
+  - power.power-typical-w: 34
+
+  - power.power-envelope: unstated
+
+  - power.power-input: host PCIe slot
+
+  - thermal.cooling: host airflow, 500 LFM required (no onboard fans)
+
+  - environmental.operating-temp-c: 0 to 55
+
+  - environmental.operating-humidity: 5 to 95 percent RH noncondensing
+
+  - environmental.storage-temp-c: -40 to 70
+
+  - environmental.storage-humidity: 5 to 93 percent RH noncondensing
+
+  - platform.controller: Intel E-810
+
+  - platform.fpga: Intel Cyclone V SoC
+
+  - platform.bus: PCIe Gen4 x16 (Gen3 compatible)
+
+  - platform.oscillator: Stratum 3E OCXO
+
+  - platform.os-support: CentOS, Ubuntu (ice driver 1.7.16+, NVM 3.20+)
+
+  - features.timing-roles: IEEE 1588v2 T-GM, T-BC/OC (G.8275.1 telecom profile); SyncE with ESMC; PTP
+  offload and redundancy; Assisted FTS
+
+  - features.clock-specs: G.8271.1, G.8272 PRTC, G.8273.2 T-BC/T-TSC, G.8273.4 APTS (via firmware upgrade),
+  G.8262 EEC, G.8262.1 eEEC, G.8264 ESMC
+
+  - features.oran-sync: O-RAN LLS C1, C2, C3 synchronization topologies
+
+  - features.optics-sfp28: 25G SFP28 SR/LR, 25G SFP28 CR DAC, 10G SFP+ SR/LR, SFP+ Twinax (datasheet supported-accessories
+  list)
+
+  - features.timing-cables: SMA coax with 1/4-36UNS-2B connector for GNSS; SMB coax with 10-32UNF-2A connector
+  for 1PPS and 10MHz
+
+  - management.interfaces: managed from the host DU server - ufiCardMgmt CLI over the E-810 network interface
+  to the card''s management IP; UFI PTP Timing Software
+
+  - compliance.safety: UL 62368-1, IEC 62368-1
+
+  - compliance.emc: FCC Part 15, Subpart B, Class A
+
+  - lifecycle.eol: none-announced
+
+
+  Model maturity: modelled. Every dimension in the source records where it came from.'
