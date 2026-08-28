@@ -1,0 +1,86 @@
+format: 1
+kind: module
+name: psu-162-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: UfiSpace PSU-162-AESR 1600W AC PSU (S9600-30DX) - dark face with a
+  silver mesh intake grille on the left under a curved red bail handle, a green
+  status lamp, a portrait C20 appliance inlet on the right and a red release
+  latch on the right edge; exhaust airflow
+size: {w: 50.5, h: 40.0}
+attrs: {power-output-w: 1600, input: ac, model: PSU-162-AESR, airflow: exhaust}
+provenance:
+  power: >-
+    datasheet - UfiSpace states the rating in the part number's own ordering line:
+    'Power Supply Types PSU-162-AESR, 1600W AC, exhaust air flow', beside its DC sibling
+    'PSU-162-DESR, 1600W DC, exhaust air flow'. The HIG's AC section repeats the
+    magnitude as provisioning guidance ('a reserve of at least 1600 watts on each power
+    circuit'). No ambient is stated with the rating - a supply has a rating rather than a
+    draw measured against temperature - so none is recorded. The HIG adds a derating
+    note that is about the INPUT and not this nameplate: on a single 110 VAC source both
+    supplies give 1000 W each for 2000 W total.
+  size: >-
+    HIG - the Component Physical Information table gives the PSU 50.5 x 360 x 40 mm
+    (W x D x H), and the face here is the 50.5 x 40. Note the face is the same as the
+    400 W PSU-401 this vendor uses in its 1RU boxes; what differs is the 360 mm body,
+    nearly twice as deep, which is where the extra 1200 W lives.
+  layout: >-
+    drawing - HIG Figure 7's rear elevation (fig-0012) at 3.115 px/mm, positions
+    relative to the face's own top-left: silver mesh grille filling the left 40% under a
+    curved red bail handle, green status lamp at the grille's top-left corner, the C20
+    aperture at x 24.0-43.6 spanning nearly the full face height, and the red release
+    latch straddling the right edge. The bail handle is drawn as a rounded bar rather
+    than the curved tube the figure shows, which is this library's convention for the
+    vendor's handles and is NOT the shape of the part.
+  inlet: >-
+    standard (IEC 60320-1 via std/c20-inlet, rotated 270 so the earth pin lies on the
+    LEFT). The aperture measures 19.6 x 36.5 mm off Figure 7, which is portrait and
+    close to the registry's 24.4 x 32.4 rotated cutout; the guide never names the cord,
+    unlike the S9311-64D's, so the C20 identification rests on the drawn three-slot
+    pattern and the 200-240 V 10 A input the datasheet specifies. See the device's
+    ac-inlet-standard gap.
+  led-states: >-
+    NOT TABLED FOR THIS PLATFORM. The S9600-30DX HIG has no PSU FRU LED table - unlike
+    the S9500-30XS and S9510-28DC guides. The lamp is drawn because Figure 7 draws it,
+    and it keeps a plain off/on vocabulary rather than borrowing another platform's
+    table; see the device's fru-led-semantics gap.
+elements:
+  handle: {at: [10.5, 3.0], size: [8.0, 34.0], class: handle}
+  latch: {at: [44.0, 2.0], size: [5.5, 14.0], class: latch}
+  status-led:
+    at: [7.0, 3.4]
+    size: [3.0, 3.0]
+    class: led
+    states: ['off', 'on']
+    description: >-
+      Present in HIG Figure 7 and given no table anywhere in this guide, so the states
+      are the component default rather than a vocabulary borrowed from another platform
+parts:
+  - {ref: std/c20-inlet@1, id: inlet, at: [17.6, 7.9], rotate: 270}
+relief:
+  features:
+    - node: mesh-grille
+      vent: 25
+      confidence: estimated
+      source: >-
+        ufispace/psu-162-ac@1 - the HIG dimensions the face and the body length and
+        nothing off the face.
+    - node: handle
+      uhandle: 30
+      confidence: datasheet
+      source: >-
+        UfiSpace S9600-30DX HIG, Space Clearance: 'the handle for the power supplies
+        will extend outwards by 1.19 inches (3cm)'. 30 mm, published by the vendor for
+        this module.
+    - node: latch
+      out: 1.2
+      confidence: estimated
+      source: >-
+        ufispace/psu-162-ac@1 - the latch is pressed to release; nothing dimensions it.
+    - node: status-led
+      dome: 0.4
+      confidence: estimated
+      source: ufispace/psu-162-ac@1 - unsourced, as for the vendor's other FRUs.
+skins: [default]

@@ -1,0 +1,90 @@
+format: 1
+kind: module
+name: psu-162-dc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: UfiSpace PSU-162-DESR 1600W -48V DC PSU (S9600-30DX) - shares the AC
+  unit's face, silver mesh intake grille, bail handle, lamp and latch, with a
+  two-post DC terminal block in place of the appliance inlet; exhaust airflow
+size: {w: 50.5, h: 40.0}
+attrs: {power-output-w: 1600, input: dc, model: PSU-162-DESR, airflow: exhaust}
+provenance:
+  power: >-
+    datasheet - UfiSpace states the rating in the part number's own ordering line:
+    'Power Supply Types PSU-162-DESR, 1600W DC, exhaust air flow', beside its AC sibling
+    'PSU-162-AESR, 1600W AC, exhaust air flow'. This sentence has the same shape as
+    ufispace/psu-162-ac's because both are the same document's ordering block, not
+    because one was copied from the other - the two rows are different lines with
+    different part numbers. No ambient is stated, so none is recorded.
+  size: >-
+    HIG - the Component Physical Information table gives the PSU 50.5 x 360 x 40 mm
+    (W x D x H), and the face here is the 50.5 x 40. Note the face is the same as the
+    400 W PSU-401 this vendor uses in its 1RU boxes; what differs is the 360 mm body,
+    nearly twice as deep, which is where the extra 1200 W lives.
+  layout: >-
+    drawing - HIG Figure 7's rear elevation (fig-0012) at 3.115 px/mm, positions
+    relative to the face's own top-left: silver mesh grille filling the left 40% under a
+    curved red bail handle, green status lamp at the grille's top-left corner, the C20
+    aperture at x 24.0-43.6 spanning nearly the full face height, and the red release
+    latch straddling the right edge. The bail handle is drawn as a rounded bar rather
+    than the curved tube the figure shows, which is this library's convention for the
+    vendor's handles and is NOT the shape of the part.
+  inlet: >-
+    NOT DRAWN FROM A FIGURE OF THIS PART. No held figure shows a DC build seated in the
+    chassis: HIG Figure 7's rear elevation and every product render show the AC unit
+    with its appliance inlet, and the guide's DC section illustrates cable routing
+    rather than the faceplate. The face here is the AC unit's, measured, with a two-post
+    terminal block substituted on the inlet's own footprint because the datasheet rates
+    the DC input at -40 to -72 V and 50 A, which is a stud-and-lug interface rather than
+    a coupler. The block's geometry is inferred, not measured; see the device's
+    dc-psu-face gap.
+  led-states: >-
+    NOT TABLED FOR THIS PLATFORM. The S9600-30DX HIG has no PSU FRU LED table - unlike
+    the S9500-30XS and S9510-28DC guides. The lamp is drawn because Figure 7 draws it,
+    and it keeps a plain off/on vocabulary rather than borrowing another platform's
+    table; see the device's fru-led-semantics gap.
+elements:
+  handle: {at: [10.5, 3.0], size: [8.0, 34.0], class: handle}
+  latch: {at: [44.0, 2.0], size: [5.5, 14.0], class: latch}
+  dc-input: {at: [24.0, 4.0], size: [19.0, 32.0], class: inlet}
+  status-led:
+    at: [7.0, 3.4]
+    size: [3.0, 3.0]
+    class: led
+    states: ['off', 'on']
+    description: >-
+      Present in HIG Figure 7 and given no table anywhere in this guide, so the states
+      are the component default rather than a vocabulary borrowed from another platform
+relief:
+  features:
+    - node: mesh-grille
+      vent: 25
+      confidence: estimated
+      source: >-
+        ufispace/psu-162-dc@1 - the HIG dimensions the face and the body length and
+        nothing off the face.
+    - node: handle
+      uhandle: 30
+      confidence: datasheet
+      source: >-
+        UfiSpace S9600-30DX HIG, Space Clearance: 'the handle for the power supplies
+        will extend outwards by 1.19 inches (3cm)'. 30 mm, published by the vendor for
+        this module.
+    - node: latch
+      out: 1.2
+      confidence: estimated
+      source: >-
+        ufispace/psu-162-dc@1 - the latch is pressed to release; nothing dimensions it.
+    - node: status-led
+      dome: 0.4
+      confidence: estimated
+      source: ufispace/psu-162-dc@1 - unsourced, as for the vendor's other FRUs.
+    - node: dc-input
+      out: 0.8
+      confidence: estimated
+      source: >-
+        ufispace/psu-162-dc@1 - the terminal block stands slightly proud; nothing in
+        either held document dimensions it, and no figure shows this face at all.
+skins: [default]
