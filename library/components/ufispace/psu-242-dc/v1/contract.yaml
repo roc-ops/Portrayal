@@ -1,0 +1,114 @@
+format: 1
+kind: module
+name: psu-242-dc
+version: 1.0.1
+class: psu
+behaviour: fills
+profile: networking
+description: UfiSpace PSU-242-DEERN 2400W -48V DC PSU (S9311-64D) - CRPS form
+  factor sharing the AC unit's black face, square intake-fan frame and horizontal
+  pull bar, with a two-row DC input connector and its lug screws in place of the
+  appliance inlet; red release latch on the right edge, status lamp below it;
+  front-to-back (exhaust) airflow
+size: {w: 73.5, h: 40.0}
+attrs: {power-output-w: 2400, input: dc, model: PSU-242-DEERN, airflow: exhaust}
+provenance:
+  power: >-
+    datasheet - the S9311-64D datasheet's Available to Order block states the rating
+    in the part number's own row: 'PSU-242-DEERN 2400W, DC, exhaust air, CRPS type,
+    red colored latch'. HIG Figure 6's mechanical drawing prints 2400W on the fan
+    frame of the front-to-back DC unit, which is the same figure independently. A
+    supply has a rating rather than a draw against an ambient, so no temperature is
+    recorded. This sentence is written to the same shape as ufispace/psu-242-ac's
+    because both are the same document's ordering block, not because one was copied
+    from the other - the two rows are different lines with different part numbers.
+  size: >-
+    HIG - the Component Physical Information table gives the PSU 73.5 x 185 x 40 mm
+    (W x D x H) without distinguishing AC from DC, and the HIG says explicitly that
+    'The DC power supply units are the same size for both back-to-front airflow and
+    front-to-back airflow'. HIG Figure 6's drawing of the DC unit dimensions the
+    body at 185.6 +/- 0.5 long. Face here is the 73.5 x 40.
+  layout: >-
+    drawing-inferred, and weaker than the AC unit's. No held figure shows a DC build
+    SEATED in the chassis - HIG Figure 9 and the datasheet rear render both show the
+    AC unit, so the fan frame, pull bar, latch and lamp positions are carried over
+    from ufispace/psu-242-ac, where they were measured off that elevation at
+    2.449 px/mm. What is specific to this unit comes from HIG Figure 6's Front View
+    (a Delta CAD sheet reproduced at about 2.31 px/mm): the input connector is a
+    two-row block, upper row V+ and lower row V-, three contacts each, sitting where
+    the AC unit's inlet sits, with two round screw/lug holes above it (the sheet
+    calls them 'PE LUG' and '2-M4 SCREW PEM TYPE FH4-M4-L8'). Its exact extent on
+    the assembled face is NOT measurable from a CAD sheet whose own aspect is only
+    good to a couple of percent, so the block is drawn on the AC inlet's measured
+    footprint rather than on the sheet's scale; see the device's dc-psu-face gap.
+  connector: >-
+    vendor-named, not modelled as a standard part. The datasheet gives the DC input
+    connector by name for the intake variant only - 'PSU-242-DIEB-NN 2400W, DC,
+    intake air, CRPS TE 2204535-3 ELON Mini' - and names no connector for this
+    exhaust variant; HIG Figure 6 prints 'INPUT CONNECTOR PN3072980925'. The library
+    has no ELON Mini part and the registry carries no DC blade-block standard, so
+    the block is drawn from the figure rather than resolved to a std/ part.
+  led-states: >-
+    HIG section 10, PSU FRU LED table (page 25) - the same table serves both AC and
+    DC supplies, and this contract carries the same five states as
+    ufispace/psu-242-ac for that reason, not by transcription from that file.
+elements:
+  handle: {at: [1.2, 15.9], size: [40.4, 6.6], class: handle}
+  latch: {at: [67.0, 11.4], size: [4.5, 18.4], class: latch}
+  dc-input: {at: [43.5, 12.6], size: [22.0, 22.6], class: inlet}
+  status-led:
+    at: [68.6, 32.0]
+    size: [2.9, 2.9]
+    class: led
+    states: ['off',
+             {name: ok, color: '#22c55e'},
+             {name: standby, color: '#22c55e', behavior: blinking},
+             {name: critical, color: '#eab308'},
+             {name: warning, color: '#eab308', behavior: blinking}]
+    description: >-
+      HIG PSU FRU LED table - Off (no input power to all power supplies), Solid
+      Green (output ON and OK), Blinking Green (input power present / only +12VSB
+      on; the 2 Hz firmware-updating row is visually identical and shares this
+      state), Solid Amber (input out of range with a second supply in parallel
+      still fed, and separately a critical event causing shutdown - OTP, OVP, UVP,
+      OCP), Blinking Amber at 1 Hz (warning events where the supply keeps
+      operating - high temp, high power, high current, slow fan)
+relief:
+  features:
+    - node: rotor-grille
+      vent: 25
+      confidence: estimated
+      source: >-
+        ufispace/psu-242-dc@1 - HIG Figure 6 dimensions the face and the module
+        length and gives nothing off the face.
+    - node: rotor-bulge
+      dome: 3.0
+      confidence: estimated
+      source: >-
+        ufispace/psu-242-dc@1 - unsourced; same estimate as the AC unit's.
+    - node: handle
+      out: 3.5
+      confidence: estimated
+      source: >-
+        ufispace/psu-242-dc@1 - the pull bar stands off the face in HIG Figure 5's
+        isometric; no Space Clearance sentence projects it.
+    - node: latch
+      out: 1.2
+      confidence: estimated
+      source: >-
+        ufispace/psu-242-dc@1 - the latch is pressed to release (HIG section 7);
+        nothing dimensions it.
+    - node: dc-input
+      out: 0.8
+      confidence: estimated
+      source: >-
+        ufispace/psu-242-dc@1 - HIG Figure 6 notes 'The "teeth" shall not exceed
+        chassis surface when fully pressed', which says the block is near flush and
+        does not give a number.
+    - node: status-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/psu-242-dc@1 - unsourced. Same 0.4 estimate as the other UfiSpace
+        FRUs.
+skins: [default]

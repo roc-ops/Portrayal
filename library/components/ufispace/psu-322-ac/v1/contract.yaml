@@ -1,0 +1,90 @@
+format: 1
+kind: module
+name: psu-322-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: UfiSpace PSU-322-AECR-NN 3200W AC PSU (S9620-32E) - CRPS form factor,
+  black face with a square intake-fan frame filling the left half under two captive
+  Phillips screws, a portrait C20 appliance inlet, a red release latch on the right
+  edge and a status lamp ABOVE it; front-to-back (exhaust) airflow
+size: {w: 73.2, h: 39.8}
+attrs: {power-output-w: 3200, input: ac, model: PSU-322-AECR-NN, airflow: exhaust}
+provenance:
+  power: >-
+    datasheet - the S9620-32E datasheet's Available to Order block states the rating
+    in the part number's own row: 'PSU-322-AECR-NN, 3200W AC, exhaust air flow'. A
+    supply has a nameplate rating rather than a draw measured against an ambient, so
+    no temperature is recorded with it. The datasheet's Environmental block gives the
+    system feed as 'AC input: 200 to 240V, 16A', which is the input to provision and
+    is NOT this nameplate; nothing in the intake derates this supply at 110 V, and no
+    such sentence is invented here. There is no hardware installation guide for the
+    S9620 family, so the derating notes a UfiSpace HIG normally carries for a CRPS
+    supply are simply absent.
+  size: >-
+    measured, and it is the ONLY dimensional source for this part - UfiSpace has
+    published no hardware installation guide for the S9620-32E, so there is no
+    Component Physical Information table to check it against. The face is measured
+    off the datasheet's own embedded rear render (page 2, object 85, 6250 x 4419 px,
+    extracted with pdfimages rather than taken from the docling downsample), whose
+    chassis measures 2759 x 558 px for the datasheet's 436 x 87.7 mm - aspect 4.944
+    against a true 4.9715, 0.55% out, so it is orthographic and carries geometry at
+    6.328 px/mm across and 6.363 down. The upper supply's face bounds x 343.55-416.75
+    and y 3.77-43.57 in body coordinates: 73.2 x 39.8. That is the industry CRPS
+    envelope to within half a percent, and this library already carries three CRPS
+    UfiSpace supplies drawn at the vendor-stated 73.5 x 40.0 (psu-132-crps-ac,
+    psu-242-ac, psu-921-ac). The MEASURED figure is what is written here rather than
+    the stated CRPS one, so that a bay sized from the same image and this face are not
+    two numbers reconciled against each other with nothing behind them.
+  layout: >-
+    measured off the same render at 6.328 px/mm across and 6.363 down, positions
+    relative to the face's own top-left: the square fan frame bounds x 0.4-38.8 and
+    y 0.3-39.5 with a captive Phillips screw boss at each top corner (centres 5.3 and
+    34.8 at y 3.5, read off a per-millimetre luminance raster of the top band); the
+    rotor disc centres (20.8, 20.5); the C20 aperture's moulded body measures
+    26.4 x 34.1 at x 40.6-67.0 y 2.4-36.5; the red latch is x 67.2-71.7 y 12.3-30.2
+    and the status lamp x 69.1-71.4 y 7.1-9.6.
+  lamp-position: >-
+    THIS IS WHERE THE PART DIFFERS FROM ITS SIBLING AND IT IS WORTH SAYING PLAINLY.
+    ufispace/psu-242-ac, the 2400W CRPS supply in the same envelope, puts its status
+    lamp BELOW the latch at y 32.0 and crosses its fan frame with a horizontal pull
+    bar. On this render the lamp is unambiguously ABOVE the latch, at y 7.1-9.6 on
+    both stacked supplies, and there is no pull bar - the fan frame carries two
+    captive screws instead. So this is a different faceplate, not a skin of that one,
+    and it was drawn from this device's own image rather than copied.
+  led-states: >-
+    NOT PUBLISHED for this SKU. The datasheet does not table the PSU FRU lamp at all,
+    and there is no hardware installation guide for the S9620 family to carry the
+    table a UfiSpace HIG normally does. The lamp is therefore drawn with its default
+    colour and NO states: inventing the five-row Off/Green/Blinking-Green/Amber/
+    Blinking-Amber vocabulary that psu-242-ac transcribes from the S9311-64D HIG
+    would be asserting this supply's behaviour from a different part number's
+    document. Recorded on the device as the psu-led-states gap.
+  inlet: >-
+    standard (IEC 60320-1 via std/c20-inlet, rotated 270 so the earth slot lies on the
+    LEFT, which is where the render puts the single slot against the pair - read at 8x
+    zoom on the 6.328 px/mm image). The registry cutout is 32.4 x 24.4 and the drawn
+    moulded body is 34.1 x 26.4, which is the moulding around that opening rather than
+    a disagreement about it. ONE DELIBERATE DISAGREEMENT WITH THE RENDER, found by
+    putting the two side by side at matched scale: the vendor draws the three blade
+    slots as VERTICAL bars while the body is turned on its side, and rotating a real
+    C20 turns its blades with it, so the standard part rotated 270 draws them
+    horizontal. The ARRANGEMENT is what matters and it agrees exactly - earth alone on
+    the left, line and neutral on the right - so the standard part is kept and the
+    render is treated as having stylised the slots. No cord type is named anywhere in
+    the intake for this
+    device; a C19 cord mates a C20 inlet and that is a property of the standard, not a
+    claim transcribed from a UfiSpace document.
+elements:
+  latch: {at: [67.2, 12.3], size: [4.5, 17.9], class: latch}
+  status-led:
+    at: [69.1, 7.1]
+    size: [2.4, 2.5]
+    class: led
+    description: >-
+      the supply's single status lamp, above the release latch. The datasheet tables
+      no LED vocabulary for this SKU and there is no hardware installation guide for
+      the S9620 family, so it carries no states - see the device's psu-led-states gap.
+parts:
+  - {ref: std/c20-inlet@1, id: inlet, at: [37.6, 7.25], rotate: 270}

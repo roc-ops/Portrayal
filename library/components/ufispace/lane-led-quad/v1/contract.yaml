@@ -1,0 +1,43 @@
+format: 1
+kind: component
+name: lane-led-quad
+version: 1.0.0
+class: led
+profile: networking
+description: Four round port lamps in a row on a 3.94 mm pitch - the per-QSFP28
+  indicator cluster the S9110-32X prints above each cage column (one row per
+  port, top row for the upper port, bottom row for the lower)
+size: {w: 14.4, h: 2.6}
+provenance:
+  size: photo-measured - S9110-32X front product render (1676 px / 440 mm =
+    3.809 px/mm), first block's top quad at 79.1-90.9 mm centre to centre,
+    3.94 mm pitch, ~2.4 mm lamp diameter. No vendor drawing dimensions these
+    lamps; the HIG's Figure 11 port overview draws them without callouts.
+  semantics: vendor-silent - the S9110-32X datasheet says only 'Link and
+    Activity LEDs per port' and the HIG's section 10 tables SYS/FAN/PSU/ID,
+    the FRU lamps and the RJ45 management jack, and nothing for the port
+    lamps. Whether the four dots are four lanes or link+activity pairs is
+    not stated, so each lamp keeps the off/on default rather than an
+    invented vocabulary. See the device's port-led-semantics gap.
+elements:
+  lane-1:
+    at: [0.1, 0.1]
+    size: [2.4, 2.4]
+    class: led
+    states: ['off', 'on']
+  lane-2:
+    at: [4.04, 0.1]
+    size: [2.4, 2.4]
+    class: led
+    states: ['off', 'on']
+  lane-3:
+    at: [7.98, 0.1]
+    size: [2.4, 2.4]
+    class: led
+    states: ['off', 'on']
+  lane-4:
+    at: [11.92, 0.1]
+    size: [2.4, 2.4]
+    class: led
+    states: ['off', 'on']
+skins: [default]

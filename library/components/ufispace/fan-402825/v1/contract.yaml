@@ -1,16 +1,51 @@
 format: 1
 kind: module
 name: fan-402825
-version: 1.1.0
+version: 1.1.1
 class: fan
 behaviour: fills
 profile: networking
 description: UfiSpace FAN-402825-HD hot-swap fan module (S9510-28DC family) -
-  red tube handle on the left, knurled captive thumbscrew on the right,
-  status LED top-left; exhaust airflow
+  red tube pull handle looped on the left, a hexagonal grille across the rest of
+  the face, and a right-hand flange carrying a red 'E' exhaust tag, a knurled
+  captive thumbscrew and the status LED beneath it; exhaust airflow
 size: {w: 51.5, h: 42.2}
 attrs: {power-absent: not-published, model: FAN-402825-HD, airflow: exhaust}
 provenance:
+  art: >-
+    CORRECTED - THE OLD ART DID NOT MATCH THE FIGURE THIS FILE ALREADY CITED, and that is
+    the part worth recording, because the citation was right and only the drawing was
+    wrong. Version 1.1.0 drew the status LED at [2.0, 1.6] (top left), a round rotor with
+    a domed bulge and hub, a straight red bar handle at x 2.6, a thumbscrew at mid-height,
+    and no exhaust tag. The S9510-28DC HIG Figure 8 - the drawing named in `size` below -
+    shows none of that: a looped red tube handle on the LEFT, a flat hexagonal grille with
+    no visible rotor, and a right-hand flange carrying a red 'E' tag, the thumbscrew below
+    it and the status LED at the BOTTOM. Found by another agent's matched-scale rear
+    comparison on the S9500-30XS and corrected here.
+    MEASURED, on that figure, at 3.1795 px/mm derived from its own 440 mm chassis width
+    (1399 px), with module 0 bounded by the dark seams at x 61.5 and 224.5 px - 51.27 mm
+    apart against the component's 51.5, which is what says the anchor is right. Local
+    positions: handle x 6.1-15.9, y 3.3-33.5; 'E' tag x 44.5-50.8, y 10.4-17.7; thumbscrew
+    centre (43.9, 23.9) at 6.3 across; status LED centre (49.4, 32.85). The five modules
+    in that strip corroborate each other - the 'E' tags keep a constant 8.5 px drawn width
+    across the frame and step 166.7 px, while the handles shrink from 32 to 15 px because
+    they project 25 mm and are seen at increasing angle, so only the flat features were
+    used as anchors.
+    THE TWO GUIDES PRINT THIS FIGURE IDENTICALLY. The S9510-28DC and S9510-30XC HIGs both
+    carry it as their Figure 8 and it is the same image in both, so this is not two sources
+    disagreeing about one part - it was art that contradicted its own stated source, and
+    there is no second reading to weigh against it.
+  exhaust-tag: >-
+    the red 'E' marks EXHAUST airflow, which is what distinguishes FAN-402825-HD from its
+    intake sibling FAN-402825-CD ('FAN-402825-HD, exhaust air flow' beside 'FAN-402825-CD,
+    intake air flow' in the ordering tables). It is drawn in the default skin because that
+    skin IS the exhaust unit and this component's attrs say so. If an intake variant is
+    ever drawn it belongs in its own skin carrying 'I', not in this one - the tag is a
+    per-variant mark and putting it in shared base art would be a claim about both.
+  fan-position-legends: >-
+    NOT DRAWN, deliberately. Each module in the figure also carries a 'FAN ◄n' legend above
+    the 'E' tag, where n is the bay number. That is per-position printing on a shared part,
+    which no single skin can carry, and several devices seating this fan file it as a gap.
   power: >-
     NOT PUBLISHED. FAN-402825-HD is in the corpus - eight UfiSpace datasheets name it - but
     only ever as an ordering line: 'FAN-402825-HD, exhaust air flow', beside its intake-flow
@@ -22,9 +57,15 @@ provenance:
     not be read as this one's.
   size: HIG (component table 51.5 x 57.8 x 42.2; Fig 8 drawing)
   led-states: HIG section 10, Fan FRU LED table (page 21), transcribed in full
+  led-position: >-
+    measured on HIG Figure 8 - the lit green lamp sits at local (49.4, 32.85), at the
+    BOTTOM of the right-hand flange under the thumbscrew, not top-left where 1.1.0 put it.
+    All five modules in the strip put it at the same offset (chassis x 216-221, 382-387,
+    549-554, 715-721, 881-887 px on a 166.7 px module step), so the position is five
+    readings and not one.
 elements:
   status-led:
-    at: [2.0, 1.6]
+    at: [47.9, 31.35]
     size: [3.0, 3.0]
     class: led
     states: ['off',
@@ -37,27 +78,15 @@ elements:
       N/A and are deliberately not modelled
 relief:
   features:
-    - node: rotor-grille
+    - node: grille
       vent: 25
       confidence: estimated
       source: >-
         ufispace/fan-402825@1 - the HIG's Fig 8 drawing gives the 51.5 x 42.2 FACE and, for
         the fan and PSU handles, a projection; it dimensions nothing else off the face. This
-        magnitude is not in it.
-    - node: rotor-behind
-      vent: 25
-      confidence: estimated
-      source: >-
-        ufispace/fan-402825@1 - the HIG's Fig 8 drawing gives the 51.5 x 42.2 FACE and, for
-        the fan and PSU handles, a projection; it dimensions nothing else off the face. This
-        magnitude is not in it.
-    - node: rotor-bulge
-      dome: 3.2
-      confidence: estimated
-      source: >-
-        ufispace/fan-402825@1 - the HIG's Fig 8 drawing gives the 51.5 x 42.2 FACE and, for
-        the fan and PSU handles, a projection; it dimensions nothing else off the face. This
-        magnitude is not in it.
+        magnitude is not in it. (Was two features, `rotor-grille` and `rotor-behind`, when
+        the art drew a round rotor cut into the honeycomb; the figure shows one flat
+        hexagonal grille with no rotor visible, so there is one node now.)
     - node: handle
       uhandle: 25
       confidence: datasheet

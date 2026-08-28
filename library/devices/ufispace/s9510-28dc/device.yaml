@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9510-28dc
-version: 0.12.0
+version: 0.12.1
 manufacturer: UfiSpace
 model: S9510-28DC
 description: UfiSpace S9510-28DC Disaggregated Cell Site Gateway Router - 1RU, 2x QSFP-DD 400G
@@ -121,6 +121,18 @@ chassis:
 # to be asserted. Detectable gaps are derived from the lint rules at build time
 # and must not be listed here.
 gaps:
+- what: fan-position-legends
+  scope: [fan-1, fan-2, fan-3, fan-4, fan-5]
+  reason: needs-drawing
+  wanted: >-
+    The FAN-1..FAN-5 legends were carried here as device silkscreen and are
+    not: HIG Figure 8 - the same figure that corrected ufispace/fan-402825's
+    art - shows that text printed on each module's own flange, not on the
+    chassis behind it. Lint had reported all five as sitting inside their own
+    bays, which was the symptom. Removed rather than nudged clear. The shared
+    fan component cannot carry a per-position digit, so drawing them at all
+    needs either a per-position skin or a component that takes its index from
+    the bay.
 - what: port-led-semantics
   scope: [sfp28, qsfp28, qsfpdd-400g, port-leds]
   reason: vendor-silent
@@ -529,12 +541,6 @@ views:
     panel:
       decor:
         - {at: [281, 2], size: [147, 39.5], pattern: vent, vent: 25}
-    silkscreen:
-      - {at: [16.0, 4.8], text: FAN-1, for: fan-1}
-      - {at: [69.2, 4.8], text: FAN-2, for: fan-2}
-      - {at: [122.4, 4.8], text: FAN-3, for: fan-3}
-      - {at: [175.6, 4.8], text: FAN-4, for: fan-4}
-      - {at: [228.8, 4.8], text: FAN-5, for: fan-5}
     components:
       bays:
         - {id: fan-1, at: [8.0, 0.8], size: {w: 51.5, h: 42.2}, accepts: [ufispace/fan-402825@1], group: fans, rel-pos: 1, default: ufispace/fan-402825@1}

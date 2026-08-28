@@ -1,0 +1,94 @@
+format: 1
+kind: module
+name: psu-151-dc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: UfiSpace PSU-151-DESR 150W DC PSU (S6301-56ST family) - screw-terminal
+  block, red release latch (exhaust / front-to-back airflow; the intake sibling
+  PSU-151-DISB wears blue), black wire pull strap, status LED top-right
+size: {w: 50.5, h: 40.2}
+attrs: {power-output-w: 150, input: dc, model: PSU-151-DESR}
+provenance:
+  power: >-
+    datasheet - UfiSpace states the rating in the part number's own ordering line, in the
+    S6301-56ST datasheet's Available to Order section: 'PSU-151-DESR, 150W DC, exhaust air
+    flow', beside 'PSU-151-DISB, 150W DC, intake air flow' and the AC siblings at the same
+    150 W. No ambient is stated with it - a supply has a rating rather than a draw measured
+    against temperature - so none is recorded.
+  size: >-
+    drawing - S6301-56ST HIG Figure 7 (DC PSU dimension drawing): face 50.5 x 40.2 mm, body
+    196.0 mm (203.5 mm over the latch), drawn in the PSU's own orientation with 50.5
+    vertical; in the chassis it mounts with 50.5 horizontal, which is how the HIG component
+    table rounds it to 'PSU (W x D x H) 50.5 x 196 x 40 mm'. Same face as the S9510
+    family's PSU-401 and drawn to the same layout, from the S6301-56ST rear photograph
+    (1510 px straight-on render, 3.43 px/mm, aspect within 0.5% of true).
+  latch-color: >-
+    photo + HIG section 4 - 'The picture on the right is the DC PSU for front-to-back
+    airflow, identified with a red latch'; blue identifies back-to-front. This skin draws
+    the red exhaust unit to match the fan family's exhaust skin; the intake variant is not
+    separately drawn.
+  led-states: S6301-56ST HIG section 10, PSU FRU LED table (page 22), transcribed in full
+elements:
+  status-led:
+    at: [43.4, 5.1]
+    size: [3.2, 3.2]
+    class: led
+    states: ['off',
+             {name: ok, color: '#22c55e'},
+             {name: standby, color: '#22c55e', behavior: blinking},
+             {name: fw-update, color: '#22c55e', behavior: blinking},
+             {name: critical, color: '#eab308'},
+             {name: input-lost, color: '#eab308', behavior: blinking},
+             {name: warning, color: '#22c55e', behavior: {mode: alternating, color: '#eab308'}}]
+    description: >-
+      S6301-56ST HIG PSU FRU LED table - Off (no input power to all power supplies), Green
+      (output ON and OK), Blinking Green 1/sec (standby state, input present, only +5VSB
+      on), Blinking Green 2/sec (power supply firmware updating, boot-loader mode - same
+      colour and behaviour token as standby, the table separates them only by blink rate),
+      Yellow (critical event causing shutdown: failure, over current, short circuit, over
+      voltage, fan failure, over temperature), Blinking Yellow 1/sec (DC power cord
+      unplugged or DC power lost with the second supply still fed; or DC present with 5VSB
+      and 12V off via system control), Blinking between Green and Yellow (warning events
+      where the supply continues to operate: high temp, high power, high current, slow fan)
+  latch: {at: [0.4, 0.6], size: [6.4, 3.6], class: latch}
+  handle: {at: [28.0, 2.0], size: [4.6, 36.5], class: handle}
+  terminal-block: {at: [3.0, 16.5], size: [24.6, 19.2], class: inlet}
+relief:
+  features:
+    - node: latch
+      out: 2.2
+      confidence: estimated
+      source: >-
+        ufispace/psu-151-dc@1 - the HIG's Figure 7 drawing gives the face and the body
+        length and dimensions nothing else off the face; 2.2 follows the psu-401 family
+        estimate.
+    - node: handle
+      uhandle: 38
+      confidence: datasheet
+      source: >-
+        S6301-56ST HIG, Space Clearance: 'the handle for the power supplies will extend
+        outwards by 1.5 inches (3.8cm)'. 38 mm, published by the vendor for THIS device's
+        supplies - NOT the 27 mm of the S9510's PSU-401, which is that HIG's own figure.
+    - node: terminal-block
+      out: 8
+      confidence: estimated
+      source: >-
+        ufispace/psu-151-dc@1 - unsourced; the HIG dimensions the face outline only. Same 8
+        mm estimate the psu-401-dc carries for the same style of block.
+    - node: status-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/psu-151-dc@1 - unsourced. The HIG's PSU FRU LED table gives the lamp's
+        states and nothing about its lens; 0.4 follows the UfiSpace FRU family estimate.
+    - node: vent-field
+      vent: 30
+      confidence: estimated
+      source: >-
+        ufispace/psu-151-dc@1 - the vent depth is not in any held drawing; follows the
+        psu-401 family estimate.
+connection-points:
+  power: {at: [15.3, 26.1], direction: front}
+skins: [default]

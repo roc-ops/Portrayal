@@ -1,0 +1,36 @@
+format: 1
+kind: component
+name: seg7-status-2
+version: 1.0.0
+class: display
+profile: networking
+description: Two-digit seven-segment status display in a dark bezel - the numeric
+  readout UfiSpace prints at the right of the S9600-72XC faceplate, drawn with both
+  digits showing all segments as the vendor's own artwork draws them
+size: {w: 17.2, h: 9.5}
+provenance:
+  size: >-
+    drawing - S9600-72XC HIG Figure 8 (port overview, page 11 rendered at 600 dpi,
+    9.585 px/mm from the stated 87.7 mm chassis height): the black bezel measures
+    411.79-429.00 mm across and 8.41-17.90 mm down the faceplate, so 17.21 x 9.49.
+    The two blue digit windows inside it measure 413.4-419.4 and 421.6-427.4 across
+    and 9.9-17.0 down; they are drawn here at 5.7 x 6.9 on a symmetric 8.0 mm pitch
+    rather than the 8.25 the two blobs give, because the left digit's glyph is one
+    segment wider than the right's in the artwork and the difference is a glyph, not
+    a window.
+  semantics: >-
+    vendor-silent - the HIG names this display nowhere. Section 4's Figure 4 overview
+    calls out GNSS, 1PPS, 10MHz, SFP+, ToD, the management port, USB 3.0, the system
+    LED, the console ports, QSFP and QSFP28, and stops; section 10's Verifying System
+    Operation tables the five front-panel lamps and the PSU and fan FRU lamps and says
+    nothing about a numeric readout. What the two digits show - a POST code, a stack
+    or chassis ID, a fault code - is therefore not stated, and no state vocabulary is
+    claimed here. The artwork draws '88', which is the all-segments-lit lamp test every
+    vendor renders, not a value.
+  colour: >-
+    drawing - the digits are drawn in a light blue on near-black; sampled off the same
+    figure. UfiSpace's own front render in the datasheet draws them the same way.
+elements:
+  digit-1: {at: [1.75, 1.5], size: [5.7, 6.9], class: display}
+  digit-2: {at: [9.75, 1.5], size: [5.7, 6.9], class: display}
+skins: [default]

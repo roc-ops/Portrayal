@@ -26,8 +26,42 @@ the single most repeated error.
 | **install guide figure** | *what* is on a face and *how it is arranged*; port order; legends | absolute geometry - these figures are schematic and their aspect is wrong |
 | **install / reference guide appendix** | per-card and per-fan-tray power, and the ambient each figure assumes | anything the datasheet answers better |
 | **mechanical drawing** (vendor or hand-built from the hardware) | size and placement of every feature | colour, legend text |
+| **vendor 3D model** (GLB/glTF, STEP, USDZ) | size and placement of every feature, at CAD truth - see below | which of two adjacent lamps belongs to which port, and anything the geometry does not name |
 | **photograph** | colour, finish, construction, confirmation of everything above; count of things | measurement, unless something of known size is in frame - but see below |
 | **standards registry** (`spec/schemas/standards.yaml`) | cage and connector sizes | anything vendor-specific |
+
+### A VENDOR 3D MODEL OUTRANKS EVERY FIGURE. LOOK FOR ONE FIRST.
+
+Product pages increasingly embed a 3D model to drive an in-page viewer, and
+it is often an **export of the actual CAD** rather than a display proxy: one
+mesh per physical part, at millimetre scale, with hundreds of thousands of
+triangles. Where one exists, port pitch, lamp positions, cage depths and
+screw locations come off it directly and Gate 1 does not apply, because
+there is no projection to be wrong about. Scrape the product page for
+`.glb`, `.gltf`, `.usdz` and for a `model-viewer` element before concluding
+you only have figures.
+
+Parsing a GLB needs no library: a 12-byte header, a JSON chunk, a BIN chunk.
+Walk `scenes -> nodes`, compose each node's TRS (or `matrix`) down the tree,
+and transform the eight corners of each primitive's accessor `min`/`max` to
+get world-space boxes. Then pick the face plane and convert to view
+coordinates once, in one place - getting that mapping wrong once is cheap
+and getting it wrong per-feature is not. (Working parsers live in the
+intake's `gen/` directory alongside whichever vendor first needed them.)
+
+**Expect the datasheet's overall dimensions to disagree with the CAD body,
+and read the SHAPE of the disagreement.** If the three deltas are unequal
+per axis, they are protrusions and mounting furniture outside the metal -
+handles, jack noses, feet, bosses - and the CAD body is what you model. If
+they are equal, you have a scale or unit error and must stop. This is the
+ear-fold rule arriving from a different direction: model the body, record
+the stated overall, say which is which.
+
+**What CAD cannot tell you is anything with a name rather than a shape** -
+which of four adjacent lamps serves which cage, what an unlabelled boss on a
+side wall is for, which of two identical jacks carries the special role.
+Geometry has no labels. Those stay `vendor-silent` gaps no matter how good
+the mesh is.
 
 ### THE FIGURES ARE ALREADY IN THE DOCUMENTS YOU HOLD. EXTRACT THEM FIRST.
 
@@ -245,6 +279,38 @@ WIDTHS can carry information the positions do not: on one card the single
 narrow ink box fell where the positional rule said port 1 was, and the only
 two double-width boxes fell on 10 and 11, which turned a guess into three
 independent agreeing facts.
+
+**MEASURE PITCH FROM FLAT FEATURES, NEVER FROM PROJECTING ONES.** In any image
+with perspective - and that is every photograph and most isometric renders - a
+feature that STANDS OUT of the face is seen at a different angle in each
+repeat, so its drawn width shrinks across the frame while a feature painted
+FLAT on the same face does not. Five identical modules gave handle widths of
+10.4, 8.8, 6.6, 5.0 and 4.7 because the handles project 25 mm; the flat badges
+beside them held constant width and gave a pitch of 52.49 against 52.45 from a
+second image, agreeing to four hundredths. A step taken from the handles would
+have been 54.4 and wrong by two millimetres per bay, compounding across the
+row.
+
+**The monotonic shrink is the tell, and it is diagnostic rather than annoying**:
+if a repeated feature's measured width slides in one direction across the
+frame, you are measuring the projection and not the part. Switch to something
+painted on the surface - a badge, a legend, a lamp, a screw head - and
+corroborate in a second image.
+
+**A FIGURE IN THE RIGHT DOCUMENT CAN BE A PICTURE OF THE WRONG PRODUCT.**
+Where a vendor ships near-twin models, its documents get illustrated with
+whichever artwork existed first. One guide's port figures, its datasheet's
+front and rear views and all three of its product renders lettered the
+faceplate with the SIBLING's model number - while the dimensions, port table,
+LED table and callouts in that same guide were written for the device on the
+cover. The document was right and its pictures were of something else.
+
+So **read the model name printed in the artwork and check it against the
+document you found it in.** When they disagree, the text is usually the
+device you want and the geometry may or may not be; say which parts you took
+from which, and if you print the correct name on a panel every held image
+letters differently, SAY THAT IS A JUDGEMENT rather than letting the drawing
+imply you read it somewhere. A photograph of a real unit closes it.
 
 **Measure the repeating features twice, from two different images.** When the
 intake holds two independent shots of the same face - an AC and a DC variant, a
@@ -645,6 +711,22 @@ that a deploy had already fixed.
 
 ## Gate 5 - audit against the source, twice
 
+**A DEVICE THAT STOPPED HALFWAY AND A FINISHED ONE ARE INDISTINGUISHABLE TO
+EVERY AUTOMATED CHECK.** Several models built in parallel were interrupted
+mid-task. Some had already written a `device.yaml` that lint passed, carried
+six views, said `maturity: modelled` and rendered plausibly - and one of
+those carried a defect that a reviewer had caught by eye on a different
+device an hour before. The rest were genuinely finished. **Nothing in the
+files, and nothing any rule could compute, separated them.**
+
+So the completion signal cannot be the artifact. It has to be a statement
+about what was DONE to it: *"I put the render beside the reference at
+matched scale, and here is what it showed."* A model that cannot produce
+that sentence is not finished however green it lints; if you are reviewing
+someone else's, ask for the sentence before you believe the file; and if you
+are delegating, require it back, because "lint clean, six views" is exactly
+what an interrupted attempt leaves behind.
+
 ### By name
 
 **When you audit your OWN files, ask a structural question, not a string one.**
@@ -705,11 +787,82 @@ what makes the comparison work: the same feature lands in the same place in both
 images, and anything that differs stands out immediately. When something looks
 off, crop that feature alone at 4-5x from both and confirm before claiming it.
 
+**Do this for EVERY face the vendor photographed, not just the front.** A batch
+verifier used across three dozen devices in one run compared only front faces,
+so every rear went to commit on trust - and the rear is where the fans, the
+supply inlets, the ground stud and the airflow tags live, none of which the
+front can vouch for. Front-only checking does not announce itself: the report
+line looks identical whether the rear was compared and matched or never compared
+at all. If a face has no reference image, say so in the report rather than
+letting a short list read as a clean result.
+
 This is how the AGR400's RJ-45s were caught. At matched scale it was obvious
 that four of six jacks were upside down - a 2-high ganged jack mirrors its rows
 so both release tabs stay reachable, and the component draws only one
 orientation. Nothing in the manifest was wrong; nothing would ever have linted.
 Only looking found it.
+
+### A RULE YOU APPLIED TO PART OF A FACE MUST REACH THE END OF IT
+
+The most common defect that survives lint is not a wrong feature - it is a right
+feature that stops early. A numbering scheme printed under fifty ports and not
+the last four. Per-port lamps counted across one block and not carried onto the
+block beside it. A shell drawn on the ganged cages at one end of the panel and
+not the other.
+
+It happens because the rule is derived where the evidence is strongest - the
+dense repeating block that made the pitch obvious, the band where the colour
+sampling worked - and the tail of the face is a different block, sampled
+separately, finished later. By then the rule feels like something already done.
+
+Nothing catches this. Lint sees a legal face. A name audit sees every port
+present, because the ports ARE present - it is their *printing* that stopped.
+And the provenance usually reads perfectly, because the sentence describing the
+rule was written while it was still true of everything the writer was looking at.
+
+So at Gate 5, for each rule you applied - numbering, lamps, shells, decor bands,
+legends - **find the last element it covers and check what comes after it.** If
+the rule stops, the file must say which of the two is true:
+
+    the rule really stops there            say so, in provenance or a gap
+    the rule was not carried to the end    carry it
+
+A reader comparing your render against a photograph cannot tell those apart, and
+will read the second one as an error in the model. Four unprinted numerals among
+fifty printed ones is indistinguishable from four ports you got wrong.
+
+**But do not assume the answer is "carry it".** Real faceplates stop rules all
+the time - a block identified by band colour and a row symbol instead of by
+number, a legend the vendor prints on one bank and not its neighbour. Going and
+looking is the requirement; extending the rule is only one of its two outcomes.
+A device was sent back on exactly this finding and came back correct as drawn,
+because the metal genuinely carries no printing there. **Printing ink that is
+not on the device is the one thing silkscreen must never do**, and it is the
+harder error to detect later, because it looks like diligence.
+
+### A NEGATIVE READING OFF A COARSE IMAGE NEEDS A CONTROL IN THE SAME IMAGE
+
+Which raises the real problem: at low resolution, "this area carries no
+printing" and "this image cannot resolve the printing here" produce an
+identical pixel field. You cannot separate them by looking harder at the area
+in question.
+
+**Find something in the same image, at the same scale and similar contrast,
+whose printing you KNOW is there - and check that it survives.** If the known
+printing resolves and the questioned area is uniform, the silence is a reading.
+If the known printing has also dissolved, you have learned the image's limit and
+nothing about the device.
+
+    questioned area is blank                     proves nothing on its own
+    + a comparable known-printed area resolves   now it is evidence
+
+Pick the control for similarity, not convenience: same darkness of ground, same
+glyph size, same distance from the lens. A crisp black-on-white legend elsewhere
+on the panel is not a control for pale grey text on a dark band.
+
+This also tells you when to stop arguing. If no suitable control exists in any
+image you hold, the honest output is a gap saying the area is unresolved - not a
+confident sentence in either direction.
 
 ### Against a second party, for completeness only
 
@@ -801,10 +954,50 @@ configurations: {...}
   legend that looks like `0<up>1` at page scale turned out to be `0<up><down>1`
   at 7x - two arrows, not one - which inverts which row is even. Zoom until the
   glyphs are unambiguous, then decide.
+- **The advice to draw a symbol as strokes is about SYMBOLS, not letters.**
+  Non-ASCII shapes like solid triangles are worth drawing as paths because they
+  rasterise unreliably. An ordinary letter is not: set it as `<text>`. A fan
+  module in this library had its exhaust tag - a plain capital E, the letter the
+  vendor prints - drawn as three horizontal strokes with the spine left off, so
+  it rendered as a mathematical identity sign. Every other fan in the same
+  library sets that glyph as text and reads correctly. When you hand-draw a
+  letterform you take on the job of a typeface and will usually lose a stroke;
+  the check is to rasterise it and ask whether you would recognise the character
+  with no idea what it was supposed to say.
 - **A `path:` silkscreen mark is stroked, not filled.** The renderer sets
   `fill: none`, so a solid triangle or arrow comes out as an outline. Anchor the
   path at its `at` and draw the geometry relative to that, or L14 has nothing to
   test against.
+- **Three lint-geometry facts that will each cost you a cycle.** They are
+  mechanical, they are not in any rule's message, and they are why a mark
+  that renders perfectly still warns. (1) `_text_extent` assumes
+  `anchor: start` unless the mark SAYS otherwise, so a legend you centred
+  reads as extending a full width to its right and collides with whatever is
+  there - write `anchor: middle` explicitly rather than nudging `at` to
+  silence it. (2) The path extent parser reads coordinate PAIRS: `M 0 0 V 4.5`
+  contributes a stray number and misplaces the box, `M 0 0 L 0 4.5` does not.
+  (3) An L-shaped mark is measured by its bounding box, not its stroke, so a
+  bracket drawn as one path claims the whole rectangle it spans and paints
+  over the ports inside it. Split it: the bar as one mark `for: [a, b]`, each
+  drop as its own mark `for:` its port.
+- **A WARNING ABOUT A LEGEND CAN BE A WARNING ABOUT AN ABSTRACTION. FOLLOW IT
+  TO THE FIGURE.** A device with FIXED supplies had its input connectors
+  modelled as bays, so that a configuration could swap one input type for the
+  other. L21 then reported that the supply's own legend sat inside its bay and
+  would be painted over - an ordinary-looking text-position complaint. Going
+  back to the guide to move the text is what found the real error: the two
+  input variants print that legend at DIFFERENT HEIGHTS and open their windows
+  at different heights. They are two different front panels, not one panel
+  with two occupants, and a bay was claiming both that the supply pulls out
+  and that everything around it is identical. Draw the panel you have sources
+  for, file the other as a gap, and keep the component you built for it.
+  **When a rule complains about where a mark sits, check what the mark is
+  attached to before you move the mark.**
+- **One label serving two ports is usually a BRACKET, not two leaders.**
+  Where a faceplate names a pair once, the printing is typically a horizontal
+  bar with a drop at each end, not a separate leader per port. Both render
+  plausibly and only one is what the metal says; a high-zoom crop or the
+  vendor's own 3D viewer settles it in seconds.
 - **Where two sources disagree, carry both numbers.** One datasheet said 480 mm
   deep and 16 kg; its own quick start guide said 524 mm and 14.5 kg. Record the
   disagreement in provenance rather than silently choosing, and say which you
@@ -846,6 +1039,61 @@ configurations: {...}
   selectors switch CONFIG, not skin, so a variant like an AC versus DC PSU needs
   a `configurations:` entry carrying `skins: {component: variant}` or nobody can
   see it.
+- **A `std/` PORT DRAWS THE OPENING. THE SHELL AROUND IT IS YOURS TO DRAW.**
+  A standard part draws the aperture and what is inside it, and stops there.
+  Where the real faceplate carries a bright metal connector shell - the strip
+  a ganged jack block sits in, the flange around a stacked pair, the collar
+  on a USB receptacle - that metal is PANEL, not part, and belongs in
+  `panel.decor` as a light fill sized from the placements it sits behind plus
+  the flange the photograph shows. Skip it and a dark connector on a dark
+  faceplate is simply INVISIBLE, which no rule can see and every reviewer
+  can. It has been the single most repeated by-eye finding, on unrelated
+  devices from unrelated vendors, and it renders and lints perfectly each
+  time. **Measure the flange, not the cage**: what is visible on the outside
+  of the panel is narrower than the connector body behind it, and using the
+  body swallows the lamps that sit just above and below the strip.
+- **THE FILLED RECTANGLE IN A GUIDE FIGURE IS THE MODULE, NOT THE PORT.** A
+  cage drawing shows the transceiver's own face as a solid block, and the
+  port owns more of the panel than that block does - the EMI gasket band, the
+  shell lip, the gap the latch needs. Measure centre-to-centre between those
+  fills and you get the MODULE pitch, which is wider than the port pitch, and
+  every column in the block drifts outward from the one before it. The
+  symptom is unmistakable once you have seen it: a regular gutter down the
+  middle of each block that the reference does not have, repeated identically
+  in every block. Take pitch from a feature that repeats once per PORT - the
+  lamp above it, the numeral, the cutout edge - and check the total span
+  against the panel width before you place anything.
+- **A repeated block's PITCH decides which part you may use.** A standard
+  connector with a moulded bezel needs bezel-width spacing; a shared shell
+  presents bezel-less openings on a tighter pitch, and the library carries
+  both (`...-ganged` variants). If the pitch you measured is smaller than the
+  part's own width, the part is wrong - and L39 will say so once per adjacent
+  pair, so a wall of overlap messages on one block means one wrong `ref`,
+  not fifty bad coordinates. Check the pitch against the part before
+  believing you mis-measured.
+- **A LIBRARY PART CAN SIMPLY NOT FIT, AND THE RIGHT PITCH BEATS THE RIGHT
+  SHAPE.** Indicator and lamp parts are drawn at whatever size their first
+  device needed, and a denser panel will have pitches none of them can sit on -
+  a lane-LED strip that spans a whole band where you measured two lamps inside
+  it, a lamp pair moulded 8 mm apart where the hardware's are 3.4, an arrow
+  wider than the gap between two of them. Lint finds these as collisions
+  (L13), which is the good case; the bad case is nudging parts apart until the
+  warning stops and shipping a row that is subtly wrong everywhere.
+  **Fall back to the simplest part that fits the measured pitch** - usually a
+  plain dot - and say in provenance that the shape is a compromise and what the
+  real lamp looks like. A part at the right pitch in the wrong shape is closer
+  to the hardware than a part in the right shape at the wrong pitch, and only
+  the second kind collides with its neighbour. If the panel deserves better,
+  the answer is a new component sized from this device, not a shoehorned one.
+- **A LEGEND PRINTED ON A MODULE'S FACE IS NOT THE CHASSIS'S SILKSCREEN.**
+  Vendors letter the FRU, not the frame: the position number on a fan, the
+  rating on a supply, the model on a line card. Put it in `silkscreen[]` and
+  two things go wrong at once - the mark sits inside the bay and paints over
+  the module (L21 says so), and the drawing now claims the chassis carries
+  printing it does not. The mark belongs in the component's own skin, inside
+  its `<g id="silkscreen">`. Where the part is shared across positions and
+  cannot carry a per-position digit, that is a gap to file, not a reason to
+  print it on the chassis.
 - **Prefer `std/` over `common/`.** `std/` parts are derived from a published
   standard; `common/` ones were drawn by hand and can be wrong. One
   `common/` RJ-45 puts its integrated LEDs on the contacts side, which no real
@@ -894,6 +1142,15 @@ configurations: {...}
   (`point` versus `receptacle`) rather than the ones that match (`grounding`).
   The cost of getting this wrong is a fabricated conflict in provenance, which is
   worse than a missing one because it looks like diligence.
+- **`git add -A` IS A SNAPSHOT OF EVERY AGENT'S WORK, NOT YOURS.** The
+  corollary of the rule below, and it bites the one holding the commit. With
+  four agents writing devices underneath, `git add -A library` swept a device
+  nobody had verified into a commit whose message named a different one -
+  so the log now asserted, in the place people go to find out, that a file
+  had been reviewed when it had not. Stage the explicit paths you verified
+  (`git add library/devices/<vendor>/<model>`), and if you do catch one late,
+  amend the message to name what the commit actually holds rather than
+  leaving the record wrong.
 - **A COMMIT IS ATOMIC; THE WORKING TREE IS NOT.** With more than one agent in
   the repo, a test suite or a lint run is not a verdict - it is a photograph of
   whatever was half-written when it started. An agent here saw four failures

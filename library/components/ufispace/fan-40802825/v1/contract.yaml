@@ -1,0 +1,118 @@
+format: 1
+kind: module
+name: fan-40802825
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: UfiSpace FAN-40802825-HD hot-swap fan module (S9620-40DG) - a full-height
+  2RU module with a hexagonal grille over almost the whole face, a red tube pull handle
+  standing in the middle of it, and a right-hand flange carrying a red 'E' exhaust tag,
+  a knurled captive thumbscrew and the status LED beneath it; exhaust airflow
+size: {w: 52.4, h: 87.2}
+attrs: {power-absent: not-published, model: FAN-40802825-HD, airflow: exhaust}
+provenance:
+  size: >-
+    photo-measured - THIS PART HAS NO HARDWARE INSTALLATION GUIDE. UfiSpace has published
+    a datasheet for the S9620-40DG and nothing else, so there is no component table and no
+    dimensioned drawing anywhere in the intake; everything below comes from the vendor's
+    own rear render (working/intake/ufispace/photos/s9620-40dg-3-rear.png, 520 x 150 px).
+    That image passes the aspect gate well: the chassis body in it spans x 20-499 and
+    y 28-124 px, 480 x 97 px for the datasheet's 440 x 89 mm, giving 1.0909 px/mm across
+    and 1.0899 down - a 0.1 % difference between the two axes, which is what an
+    orthographic render looks like. It is still only ONE PIXEL PER MILLIMETRE, so every
+    number here is quantised to about 0.9 mm and none of it deserves a second decimal.
+    The five modules' seams fall at x 30, 88.5, 146.5, 203.5, 260.5 and 318 px - steps of
+    58.5 / 58 / 57 / 57 / 57.5, scattered about an even 57.6 px = 52.80 mm, which is the
+    bay pitch the device carries. The face is drawn 58 px wide and is recorded as 52.4 so
+    that it sits inside that pitch with a seam. Height is the module's own extent,
+    y 29-124 px = 87.2 mm, i.e. all but a millimetre of the 89 mm chassis - this is a
+    full-height 2RU fan, which is what makes it a different part from the 51.5 x 42.2
+    ufispace/fan-402825 despite the near-identical face design.
+  part-number: >-
+    datasheet, Available to Order / Fan Types: 'FAN-40802825-HD, exhaust air flow'. That is
+    the whole of what the vendor says about this part - one ordering line, no dimensions,
+    no wattage, no LED table. NOT THE SAME PART AS FAN-402825-HD, which eight other
+    UfiSpace datasheets offer and which ufispace/fan-402825 already models: the numbers
+    differ (40802825 against 402825) and so do the faces (87.2 mm tall against 42.2).
+  art: >-
+    photo-measured on the same rear render, module 0 (bay x 30-88 px, y 29-124 px), with
+    the other four modules used as corroboration - they are the same drawing repeated, and
+    the red 'E' tags, the thumbscrews and the lit lamps all step by the same 57.6 px.
+    Local positions: hexagonal grille x 0.9-43.1, y 0.9-84.4; red tube handle x 11.9-15.6,
+    y 30.3-59.6; red 'E' tag x 44.9-52.1, y 11.0-17.4; thumbscrew centre (47.2, 37.6) at
+    5.8 across; status lamp centre (48.6, 77.1). The design is the same family as
+    ufispace/fan-402825 - handle left of centre, grille, right flange with tag, screw and
+    lamp stacked down it - and where that component's own provenance describes the same
+    arrangement this file agrees with it because BOTH WERE MEASURED, on different images of
+    different hardware; the sentence is not copied and the numbers are not shared.
+  exhaust-tag: >-
+    the red 'E' marks EXHAUST airflow, the same convention ufispace/fan-402825 records for
+    this vendor ('FAN-402825-HD, exhaust air flow' beside 'FAN-402825-CD, intake air
+    flow'). This device's datasheet offers only the -HD line, so only the exhaust unit is
+    drawn and attrs.airflow says so. An intake sibling, if UfiSpace ever lists one, belongs
+    in its own skin carrying 'I'.
+  fan-position-legends: >-
+    NOT DRAWN, deliberately. Each module in the render also carries a 'FAN <n' legend on
+    its flange above the 'E' tag, and the five read 0, 1, 2, 3, 4 left to right - the
+    middle three are legible at 10x and the outer two are inferred from the run. That is
+    per-position printing on a shared part, which no single skin can carry; the device
+    files it as a gap.
+  power: >-
+    NOT PUBLISHED. The datasheet names FAN-40802825-HD only as an ordering line and states
+    no wattage for it. The only power figures the document carries are the two PSU ordering
+    lines (1000 W each), the AC and DC input ratings and one system figure, 'Typical power:
+    268 Watts (no transceiver)'. There is no hardware installation guide for this platform
+    to carry a per-FRU table, and there is no wattage beside any FAN- part number in any
+    UfiSpace document in the intake. L27/L29 stand as the record.
+  led-states: >-
+    NOT PUBLISHED, and deliberately left without states. The render shows one lit green
+    lamp at the bottom of the flange on every module, which fixes its POSITION and its
+    colour when healthy; no document states the vocabulary. ufispace/fan-402825 carries a
+    three-state table taken from the S9510-28DC HIG - a different platform's guide for a
+    different fan - and copying it here would be inventing a citation, so the lamp is drawn
+    and left unstated.
+elements:
+  status-led:
+    at: [47.4, 75.9]
+    size: [2.4, 2.4]
+    class: led
+    description: >-
+      the lamp at the bottom of the right-hand flange, lit green on all five modules in the
+      vendor's rear render. No UfiSpace document published for this platform tables its
+      states, so none are claimed - see provenance.led-states
+  handle: {at: [11.9, 30.3], size: [3.7, 29.3], class: handle}
+relief:
+  features:
+    - node: grille
+      vent: 25
+      confidence: estimated
+      source: >-
+        ufispace/fan-40802825@1 - unsourced. This platform has no installation guide, so
+        there is no Space Clearance section and no dimension off the face at all. 25 is the
+        depth ufispace/fan-402825 uses for the same vendor's grille, reused as the nearest
+        thing to a precedent and marked estimated because it is one.
+    - node: handle
+      uhandle: 25
+      confidence: estimated
+      source: >-
+        ufispace/fan-40802825@1 - NOT SOURCED FOR THIS PART. The S9510-28DC HIG publishes
+        25 mm for the FAN-402825 handle ('The handle for the fan units will extend outwards
+        by 1 inch'), and ufispace/fan-402825 carries that as a datasheet-confidence figure.
+        This is a different module on a different chassis with no guide of its own, so the
+        same number is used at ESTIMATED confidence. The difference between the two
+        confidence tokens is the whole point of writing this down.
+    - node: thumbscrew
+      cyl: 5
+      knurl: true
+      confidence: estimated
+      source: >-
+        ufispace/fan-40802825@1 - unsourced; no document dimensions anything off this
+        module's face.
+    - node: status-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/fan-40802825@1 - unsourced. 0.4 is the dome the three existing UfiSpace
+        FRUs carry; one estimate now written four times.
+skins: [default]

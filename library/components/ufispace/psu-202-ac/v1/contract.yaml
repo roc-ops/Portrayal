@@ -1,0 +1,122 @@
+format: 1
+kind: module
+name: psu-202-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: UfiSpace PSU-202-AESR 2000W AC PSU (S9600-56DX 2RU aggregation family) -
+  black face with a square-grid intake vent filling the left third under the status
+  lamp, a portrait C20 appliance inlet with its cord clip to the right of it, a black
+  pull strap across the inlet bracket and a red release latch on the right edge;
+  exhaust airflow
+size: {w: 50.5, h: 40.2}
+attrs: {power-output-w: 2000, input: ac, model: PSU-202-AESR, airflow: exhaust}
+provenance:
+  power: >-
+    datasheet - the S9600-56DX datasheet's Available to Order block states the rating in
+    the part number's own row: 'PSU-202-AESR, 2000W AC, exhaust air flow', beside the DC
+    sibling 'PSU-202-DESR, 2000W DC, exhaust air flow'. A supply carries a nameplate
+    rating and not a draw measured against an ambient, so no temperature is recorded with
+    it. The HIG's AC section adds a derating note that is about the INPUT and not about
+    this nameplate - 'If only a single 110VAC power source is available, the S9600-56DX
+    can still be powered using both PSUs (1000 watts each for a total output of 2000
+    watts)' - and a 15 A fast-acting fuse built into the supply. The 2000 W here is the
+    200-240 V nameplate.
+  size: >-
+    HIG - Component Physical Information table, 'PSU (W x D x H) 1.99 x 12.64 x 1.58 in
+    (50.5 x 321 x 40.2 mm)', so the FACE is 50.5 x 40.2. Weight 2.6 lb (1.2 kg) for the
+    AC unit, same table. WHICH WAY ROUND WAS SETTLED FROM OUTSIDE, not from the drawing:
+    HIG Figure 5's end view labels 40.0 across and 50.5 down, which would make the face
+    taller than it is wide, and two of those stacked need 101 mm in an 87.7 mm chassis.
+    Two fit at 40.2 tall, so the table's W and H are the way round the hardware is and
+    the end view is drawn rotated. THE REAR ELEVATION DRAWS IT WIDER: HIG Figure 7's rear
+    elevation (fig-0014, body 1325 x 264 px against the datasheet's 436 x 87.7, aspect
+    0.96% out, 3.039 px/mm across) puts the drawn bezel and its overhanging latch across
+    about 55 mm. That is bay clearance plus the latch standing proud of the module's own
+    width, not a second reading of the module - the same disagreement, in the same
+    direction, that ufispace/fan-803816-hi@1 records for the fan on this chassis. The
+    table wins for `size`.
+  depth-disagreement: >-
+    SOURCES DISAGREE and both are carried rather than reconciled: the HIG's Component
+    Physical Information table gives the PSU 321 mm deep, and HIG Figure 5's own
+    mechanical drawing of this AC unit dimensions the body at 360.0 mm and 369.8 mm over
+    the handle. `size` here is the face only, so nothing in this contract depends on it,
+    but a reader sizing a rack should know. Recorded on the device as a gap.
+  layout: >-
+    drawing - HIG Figure 7's rear elevation at 3.039 px/mm across and 3.010 down,
+    positions taken relative to the drawn bay's own left edge and then compressed by the
+    50.5/55 ratio above so they land inside the table's face: the square-grid vent occupies
+    the left third, the status lamp sits on its top-right at 8.5 mm from the left edge and
+    5.1 mm down (measured directly off the green blob at figure x 1181.6, y 78.4), the
+    C20 aperture fills the middle, and the red latch stands at the right edge. The lamp
+    is the only element measured rather than proportioned, because it is the one feature
+    the colour detector resolves unambiguously.
+  inlet: >-
+    standard (IEC 60320-1 via std/c20-inlet, rotated 270 so the earth pin lies on the
+    LEFT). The HIG's Connecting Power / AC Version section names the cord outright -
+    'plug the AC power cable (250VAC 15A, IEC60320 C19) into the AC inlet connector' -
+    and a C19 cord mates a C20 inlet, so the standard part is the right one and nothing
+    was interpolated. The registry cutout is 32.4 x 24.4; rotated it is 24.4 wide and
+    32.4 tall, against the roughly 24.7 x 32 the figure draws.
+  led-states: >-
+    HIG section 10, PSU FRU LED table, transcribed in full. The table prints Blinking
+    Green TWICE with different causes - standby state with only +5VSB on, and firmware
+    updating in boot-loader mode - which are one appearance at this fidelity and share one
+    state, said so in the element description rather than invented as two.
+  handle-projection: >-
+    datasheet - HIG Space Clearance, 'the handle for the power supplies will extend
+    outwards by 1.19 inches (3cm)', published by the vendor for this chassis's supply.
+elements:
+  status-led:
+    at: [7.05, 3.65]
+    size: [2.9, 2.9]
+    class: led
+    states: ['off',
+             {name: ok, color: '#22c55e'},
+             {name: critical, color: '#ef4444'},
+             {name: standby, color: '#22c55e', behavior: blinking},
+             {name: input-lost, color: '#ef4444', behavior: blinking},
+             {name: warning, color: '#22c55e', behavior: {mode: alternating, color: '#ef4444'}}]
+    description: >-
+      HIG PSU FRU LED table - Off (no input power to all power supplies), Green (output ON
+      and OK), Red (a critical event causing a shutdown - failure, overcurrent, short
+      circuit, over voltage, fan failure or over temperature), Blinking Green (standby
+      state, input power present and only +5VSB on; the firmware-updating boot-loader row
+      is visually identical and shares this state), Blinking Red (input cord unplugged or
+      input lost with a second supply in parallel still fed), Blinking between Green and
+      Red (warning events where the supply keeps operating - high temp, high power, high
+      current, slow fan)
+  handle: {at: [20.4, 35.6], size: [23.2, 3.6], class: handle}
+  latch: {at: [45.4, 11.0], size: [4.3, 18.2], class: latch}
+parts:
+  - {ref: std/c20-inlet@1, id: inlet, at: [15.8, 6.3], rotate: 270}
+relief:
+  features:
+    - node: vent-grid
+      vent: 30
+      confidence: estimated
+      source: >-
+        ufispace/psu-202-ac@1 - HIG Figure 5 dimensions the face, the body length and the
+        handle projection and gives nothing about the open area of the intake grid. Same
+        estimate the other UfiSpace supplies carry.
+    - node: handle
+      uhandle: 30
+      confidence: datasheet
+      source: >-
+        UfiSpace S9600-56DX HIG, Space Clearance: 'the handle for the power supplies will
+        extend outwards by 1.19 inches (3cm)'. 30 mm exactly, published by the vendor for
+        this chassis's supply.
+    - node: latch
+      out: 1.2
+      confidence: estimated
+      source: >-
+        ufispace/psu-202-ac@1 - the latch is pressed to release (HIG section 7) so it must
+        stand proud; nothing dimensions it.
+    - node: status-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/psu-202-ac@1 - unsourced. The HIG's PSU FRU LED table gives the lamp's
+        states and nothing about its lens. Same 0.4 estimate as the other UfiSpace FRUs.
+skins: [default]

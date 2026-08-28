@@ -389,13 +389,30 @@ def _path_extent(path_d, at):
 def _text_extent(m):
     """Bounding box of a text mark. `at` is the BASELINE, not the top edge - which
     is the whole reason this rule exists: 2.2mm digits anchored 1.2mm below a port
-    still reached up into it."""
+    still reached up into it.
+
+    A ROTATED MARK RUNS ALONG A DIFFERENT AXIS, and measuring it as if it did not
+    is how a label printed neatly down a chassis's right edge gets reported as
+    running off the face: its length was being added to x, where the metal ends,
+    instead of to y, where there is room. The same arithmetic accused rotated
+    module legends of painting over the modules beside them. Only the right
+    angles are handled - anything else is rare enough that the unrotated box is
+    the safer approximation, and being slightly too generous costs a missed
+    warning rather than a fabricated one."""
     x, y = m["at"]
     fs = m.get("font-size", 2.2)
     w = len(str(m["text"])) * fs * ADV_EM
+    up, down = fs * CAP_EM, fs * DESC_EM
     anchor = m.get("anchor", "start")
-    x0 = x - w if anchor == "end" else (x - w / 2 if anchor == "middle" else x)
-    return (x0, y - fs * CAP_EM, x0 + w, y + fs * DESC_EM)
+    lead = w if anchor == "end" else (w / 2 if anchor == "middle" else 0.0)
+    rot = int(m.get("rotate", 0)) % 360
+    if rot == 90:            # runs downward, cap side to the LEFT of the baseline
+        return (x - up, y - lead, x + down, y - lead + w)
+    if rot == 270:           # runs upward, cap side to the right
+        return (x - down, y + lead - w, x + up, y + lead)
+    if rot == 180:           # runs leftward, cap side below
+        return (x - w + lead, y - down, x + lead, y + up)
+    return (x - lead, y - up, x - lead + w, y + down)
 
 
 def check_segment(path, code, value):
@@ -1994,8 +2011,14 @@ def lint_device_cutouts(path, view_name, view, lib_roots):
 # The cages an optic plugs INTO. A management cluster of RJ45, USB and console
 # takes no pluggable optic and is not asked about one, and neither is the fixed
 # LC fibre on a passive mux - `media: fiber` is a bonded adapter, not a socket.
+# Media that name a pluggable cage. A form factor missing from this set is
+# invisible to L40 in BOTH directions: its groups are never asked which optics
+# run in them, and an `optics-<media>` key naming it reads as unreachable
+# knowledge. So a device modelled correctly with a new form factor gets accused
+# of the defect it does not have - which is how `osfp` was found, on the first
+# 800G box the library carried.
 PLUGGABLE_CAGES = {"sfp", "sfp-plus", "sfp28", "sfp-dd", "qsfp", "qsfp28",
-                   "qsfp56", "qsfp-dd", "xfp", "cfp", "cfp2"}
+                   "qsfp56", "qsfp-dd", "osfp", "xfp", "cfp", "cfp2"}
 
 
 def _bay_pitch_is_uneven(gaps):
@@ -2179,12 +2202,20 @@ def lint_device_decor(path, view_name, view, lib_roots):
         t, at = m.get("text"), m.get("at")
         if not t or not at:
             continue
-        # 0.62 em per character is a rough mean for a sans face; only a gross
-        # overrun is reported, because the estimate cannot carry a fine one
-        wid = 0.62 * float(m.get("font-size") or 2.5) * len(str(t))
-        anchor = m.get("anchor") or "start"
-        x0 = at[0] - (wid / 2 if anchor == "middle" else wid if anchor == "end" else 0)
-        over = max(0.0, -x0) + max(0.0, (x0 + wid) - float(vw))
+        # USE THE SHARED EXTENT, WHICH KNOWS ABOUT `rotate`. This branch used to
+        # compute its own width along x and never look at the rotation, so a
+        # legend printed DOWN the face - the usual way a PSU bay is labelled at
+        # the right-hand edge - had its full length added to x, where the metal
+        # ends, instead of to y, where there is room. Two identical marks then
+        # behaved differently for no reason but their x: the inboard one passed
+        # and the outboard one was reported as running off a face it never
+        # touched. A rule that fabricates an error is worse than one that misses,
+        # because somebody goes and 'fixes' correct artwork.
+        x0, _, x1, _ = _text_extent({"at": at, "text": t,
+                                     "font-size": float(m.get("font-size") or 2.5),
+                                     "anchor": m.get("anchor") or "start",
+                                     "rotate": m.get("rotate", 0)})
+        over = max(0.0, -x0) + max(0.0, x1 - float(vw))
         if over > 2.0:
             warn(path, "L44", f"{view_name}: silkscreen {str(t)[:24]!r} runs about "
                  f"{over:.0f}mm off the face (view is {vw} wide). Printing that "

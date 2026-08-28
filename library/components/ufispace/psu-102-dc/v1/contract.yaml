@@ -1,0 +1,79 @@
+format: 1
+kind: module
+name: psu-102-dc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: UfiSpace PSU-102-DISB-1 1000W DC PSU - the AC unit's shell with a three-post
+  terminal block where the C14 inlet sits; hexagonal vent field, black tube handle, blue
+  release latch and status LED as on the AC sibling; intake airflow (S9620-40DG)
+size: {w: 52.9, h: 39.7}
+attrs: {power-output-w: 1000, input: dc, model: PSU-102-DISB-1, airflow: intake}
+provenance:
+  power: >-
+    datasheet - 'PSU-102-DISB-1, 1000W DC, intake air flow' in the S9620-40DG datasheet's
+    Available to Order / Power Supply Types list, beside the AC sibling. The chassis DC
+    input rating in the same datasheet ('DC input: -40 to -72V, 30A') is a SYSTEM figure and
+    is carried on the device.
+  size: >-
+    borrowed from ufispace/psu-102-ac@1, which measured 52.9 x 39.7 off the vendor's front
+    render. THE ENVELOPE IS THE ONLY THING THIS SHARES WITH A MEASUREMENT: the two supplies
+    seat in the same two bays of the same chassis, so they must share the face, and that is
+    a mechanical certainty rather than a reading of this SKU.
+  art: >-
+    ESTIMATED, AND THE WEAKEST THING IN THIS MODEL. No image of the PSU-102-DISB-1 face
+    exists anywhere in the intake: the S9620-40DG has no hardware installation guide, and
+    both vendor renders held for it - the front elevation and the isometric - show the AC
+    build with C14 inlets. So the vent field, handle, latch and lamp are the AC sibling's
+    MEASURED positions, and the terminal block is not measured at all. It is drawn as a
+    three-post block filling the space the C14 frame occupies on the AC unit
+    (x 25.1-48.1, y 1.4-31.5), on the pattern ufispace/psu-401-dc uses for the same
+    vendor's DC supplies. Read it as 'a DC supply of the right size in the right bay', not
+    as a drawing of this part. The device files it as a needs-drawing gap.
+  led-states: >-
+    NOT PUBLISHED. As on the AC sibling, the lamp's position is taken from the render and
+    no state vocabulary is claimed, because no UfiSpace document for this platform tables
+    one.
+elements:
+  status-led:
+    at: [7.3, 7.4]
+    size: [2.4, 2.4]
+    class: led
+    description: >-
+      the status lamp, in the same place as on ufispace/psu-102-ac@1. No document published
+      for this platform tables its states - see provenance.led-states
+  latch: {at: [40.0, 31.5], size: [10.9, 5.5], class: latch}
+  handle: {at: [17.6, 2.5], size: [5.5, 34.5], class: handle}
+relief:
+  features:
+    - node: latch
+      out: 2.2
+      confidence: estimated
+      source: >-
+        ufispace/psu-102-ac@1 - the same unsourced 2.2 the AC sibling carries.
+    - node: handle
+      uhandle: 27
+      confidence: estimated
+      source: >-
+        ufispace/psu-102-ac@1 - the same 27 mm, itself borrowed from the S9510-28DC HIG's
+        figure for a different supply and marked estimated there for that reason.
+    - node: terminal-block
+      out: 2.4
+      confidence: estimated
+      source: >-
+        ufispace/psu-102-dc@1 - unsourced, and the block itself is estimated, so this is a
+        projection off a feature whose outline is a guess.
+    - node: vent-field
+      vent: 30
+      confidence: estimated
+      source: >-
+        ufispace/psu-102-ac@1 - the same unsourced 30.
+    - node: status-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/psu-102-ac@1 - the same unsourced 0.4.
+connection-points:
+  power: {at: [36.6, 16.4], direction: front}
+skins: [default]

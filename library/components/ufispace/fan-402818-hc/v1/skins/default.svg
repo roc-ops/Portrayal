@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="51.5mm" height="42.2mm" viewBox="0 0 51.5 42.2">
+  <defs>
+    <pattern id="hex818" width="4.43" height="2.555" patternUnits="userSpaceOnUse">
+      <path d="M 1.275 0 L 0.6375 1.104 L -0.6375 1.104 L -1.275 0 L -0.6375 -1.104 L 0.6375 -1.104 Z" fill="#0d0f11"/>
+      <path d="M 5.705 0 L 5.0675 1.104 L 3.7925 1.104 L 3.155 0 L 3.7925 -1.104 L 5.0675 -1.104 Z" fill="#0d0f11"/>
+      <path d="M 3.49 1.2775 L 2.8525 2.3815 L 1.5775 2.3815 L 0.94 1.2775 L 1.5775 0.1735 L 2.8525 0.1735 Z" fill="#0d0f11"/>
+      <path d="M 1.275 2.555 L 0.6375 3.659 L -0.6375 3.659 L -1.275 2.555 L -0.6375 1.451 L 0.6375 1.451 Z" fill="#0d0f11"/>
+      <path d="M 5.705 2.555 L 5.0675 3.659 L 3.7925 3.659 L 3.155 2.555 L 3.7925 1.451 L 5.0675 1.451 Z" fill="#0d0f11"/>
+    </pattern>
+    <mask id="fanmask818" maskUnits="userSpaceOnUse">
+      <circle cx="24.0" cy="21.1" r="15.4" fill="white"/>
+      <rect x="8" y="2.4" width="32" height="37.4" fill="url(#hex818)"/>
+    </mask>
+  </defs>
+  <rect id="body" x="0" y="0" width="51.5" height="42.2" rx="0.6" fill="#2b2f33" stroke="#1a1d20" stroke-width="0.4"/>
+  <rect id="bezel-seam" x="40.6" y="0.5" width="0.35" height="41.2" fill="#17191c"/>
+  <circle id="rotor-behind" cx="24.0" cy="21.1" r="15.4" fill="#0b0d0f"/>
+  <path id="rotor-grille" fill-rule="evenodd" fill="url(#hex818)"
+    d="M 8 2.4 h 32 v 37.4 h -32 z
+       M 24.0 5.7 a 15.4 15.4 0 1 0 0.001 0 z"/>
+  <g id="rotor-bulge">
+    <circle cx="24.0" cy="21.1" r="15.4" fill="#17191c" mask="url(#fanmask818)"/>
+    <circle id="rotor-hub" cx="24.0" cy="21.1" r="4.2" fill="#22262a"/>
+    <circle id="rotor-ring" cx="24.0" cy="21.1" r="15.4" fill="none" stroke="#4a4f55" stroke-width="0.4"/>
+  </g>
+  <circle id="boss" cx="35.5" cy="9.0" r="2.2" fill="#1c1f22" stroke="#3a3f44" stroke-width="0.25"/>
+  <g id="handle">
+    <path d="M 13.5 6.0 L 7.0 6.0 A 2.0 2.0 0 0 0 5.0 8.0 L 5.0 30.5 A 2.0 2.0 0 0 0 7.0 32.5 L 13.5 32.5"
+          fill="none" stroke="#c22f2f" stroke-width="2.6" stroke-linecap="round"/>
+  </g>
+  <g id="airflow-badge">
+    <rect x="43.2" y="11.6" width="5.4" height="7.4" rx="0.4" fill="#d32020"/>
+    <g id="silkscreen">
+      <text x="45.9" y="17.6" font-family="Helvetica, Arial, sans-serif" font-size="5.6"
+            font-weight="bold" text-anchor="middle" fill="#141618">E</text>
+    </g>
+  </g>
+  <g id="thumbscrew">
+    <circle cx="45.9" cy="24.6" r="2.5" fill="#9aa1a8" stroke="#4a4f55" stroke-width="0.3"/>
+    <circle cx="45.9" cy="24.6" r="1.5" fill="none" stroke="#6b7178" stroke-width="0.3"/>
+  </g>
+  <circle id="status-led" cx="45.9" cy="32.4" r="1.4" fill="var(--led-color, #3a3f44)"/>
+</svg>

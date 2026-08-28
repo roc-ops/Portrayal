@@ -1,0 +1,703 @@
+format: 1
+kind: device
+name: s9600-28dx
+version: 0.1.0
+maturity: modelled
+manufacturer: UfiSpace
+model: S9600-28DX
+description: UfiSpace S9600-28DX 100G/400G Open Aggregation Router - 2RU, 24x QSFP28
+  100G + 4x QSFP-DD 400G (ZR/ZR+ capable) + 4x SFP28 25G breakout sharing 100G port 0,
+  full timing (GNSS/1PPS/10MHz/ToD), Stratum 3E OCXO, SRv6, dual 1300 W PSUs and four
+  hot-swap fans at the rear, front-to-back airflow
+provenance:
+  sources: >-
+    datasheet (s9600-28dx-datasheet, converted) and the Hardware Installation Guide
+    (s9600-28dx-hig, converted, Figures 1-35), plus three vendor images:
+    s9600-28dx-2-front.png, -3-rear.png and -1-angle.png. THE TWO GUIDE ELEVATIONS ARE
+    THE BEST GEOMETRY IN THIS VENDOR'S INTAKE and are what this model is measured from;
+    the photographs were used only to confirm colour and counts.
+  chassis: >-
+    datasheet - '2RU, 436 x 762 x 87.7 mm', 'Weight: 17.66kg or 38.93lb (without FRU)',
+    repeated verbatim by the HIG's Component Physical Information table. The 436 mm is
+    the BODY, not a rack face: the HIG's Space Clearance section says the width 'is
+    17.16 inches (43.6cm) and shipped with a rack mount brackets suitable for 19 inch
+    (48.3cm) wide racks'. Ears are therefore not drawn - and note this chassis mounts on
+    slide rails with five key-shaped attachment pins per flank, not on fixed brackets.
+    Depth 762 is 'without the field replaceable units'; the HIG adds that the fan
+    handles project 29 mm and the PSU handles 30 mm beyond it.
+  front-figure-scale: >-
+    drawing - GATE 1 PASSED CLEANLY ON BOTH AXES, which is rare in this intake. HIG
+    Figure 8 (the port overview, extracted as fig-0015) draws the faceplate
+    1394 x 280 px for 436 x 87.7 mm: aspect 4.979 against a true 4.971, 0.16% out,
+    i.e. 3.197 px/mm across and 3.193 down. The figure is orthographic and carries real
+    geometry, so every front position below is a measurement rather than a fraction.
+    THE FIRST READING OF THE SAME FIGURE WAS WRONG AND IS RECORDED SO IT IS NOT
+    REPEATED: a page rule three pixels below the panel put the detected height at
+    303 px and the aspect at 4.60, which reads exactly like a schematic figure that may
+    not be measured at all.
+  rear-figure-scale: >-
+    drawing - HIG Figure 7 (fig-0014) draws the rear 1312 x 264 px for the same
+    436 x 87.7 mm: aspect 4.9697 against 4.9715, 0.04% out, 3.009 / 3.010 px/mm.
+    Also orthographic, so the rear positions below are measurements too.
+  timing-block: >-
+    figure-measured - three jacks in one column at x centre 13.0, each labelled ABOVE
+    its own jack rather than below (the S9501-28SMT prints its labels beneath):
+    1PPS SMB centre y 7.99, 10MHZ SMB centre y 22.40, GNSS ANT SMA centre y 36.65.
+    Drawn circles 7.2, 7.2 and 9.4 mm across - the SMA reads larger than the two SMBs,
+    which is the correct relationship - but the outlines drawn are common/smb-jack and
+    common/sma-jack's own contract sizes, not these numbers. THERE IS NO BITS JACK on
+    this device: the datasheet's timing list is GNSS, 10MHz, 1PPS and ToD only, and the
+    faceplate carries no fifth timing connector. Its cell-site siblings all have one,
+    so its absence is stated rather than left to be noticed.
+  mgmt-block: >-
+    figure-measured, jack by jack at 22x. TOD is a full-size RJ45 whose bezel measures
+    15.33 x 13.16 at (23.46-38.78, 26.94-40.09), keyway DOWN, labelled TOD above. The
+    USB 3.0 socket is MOUNTED ON ITS SIDE - the blue insert is a 1.3 x 9.4 mm vertical
+    bar at (46.9-48.2, 29.1-38.5) inside a 5.3 x 13.4 receptacle - so std/usb-a is
+    placed with rotate: 90 and its `at` recomputed from the landed centre
+    (47.05, 33.05), which is the trap the skill records against the MX204's USB.
+    Below them the RESET button (centre 31.28, 46.51) and, along the bottom, the
+    micro-USB console (18.9-26.4, 70.2-73.0), the RJ45 console (bezel centre
+    37.69, 66.40, keyway DOWN, labelled IOIOI) and the RJ45 management jack (bezel
+    centre 57.71, 66.56, keyway DOWN, green lamps at its two BOTTOM corners, labelled
+    with a network icon). Both consoles reach the same CLI: 'The console can be
+    connected either with the IOIO port or the micro USB port', the micro-USB needing
+    a CP210x driver.
+  status-leds: >-
+    figure-measured - six lamps in one column at x 10.95-14.39, colour-detected centres
+    y 58.26 to 70.63 on a 2.474 mm pitch, with the sixth lamp drawn BLUE where the
+    other five are green: that is the ID beacon, and it is why the colour detection had
+    to include blue as well as green or the column would have read as five. Labels are
+    printed dark on a white strip to their LEFT (x 5.94-11.26, y 56.38-72.35), reading
+    SYNC SYS FAN PS0 PS1 ID top to bottom - the same six and the same order as the
+    HIG's Front Panel LED table. DRAWN AT A 2.7 mm PITCH, NOT THE MEASURED 2.474:
+    common/led-rect is 2.6 mm tall and cannot sit on a 2.474 pitch without overlapping
+    its neighbour (L13), so the column is stretched 1.13 mm overall and re-centred on
+    the measured centre 64.45. Same compromise, same reason, as ufispace/m3000-14xc and
+    ufispace/s9501-28smt record.
+  sfp28-block: >-
+    figure-measured - the four breakout ports are one 2 x 2 ganged block in a white
+    shell at x 51.2-86.0, y 14.09-39.78. Column centres 60.1 and 77.2 (a 17.1 mm
+    pitch, wider than the 14.25 mm std/sfp-ganged part, so the cages sit centred in
+    their columns with a visible wall between them); row centres 20.49 and 33.39 about
+    the shell centre 26.94, a 12.9 mm pitch. Bottom row mirrored. NUMBERING IS 0/1 0/3
+    ON TOP AND 0/2 0/4 BELOW - it runs down the columns, read off the yellow band's own
+    tiny legends rather than off the HIG's large overlay digits, and the HIG port table
+    confirms only the range '0/1 ~ 0/4'. These four are not extra ports: the datasheet
+    calls them '4 x 1/10/25G SFP28 (In-band port share with 100GE Port 0)'.
+  qsfp28-block: >-
+    figure-measured, and this is the layout that has to be got right or the numbering
+    is nonsense. Six columns on a 19.9 mm pitch (three abutting shells of two columns
+    each, measured 91.95-131.68, 131.99-171.71 and 172.02-211.43, i.e. 39.72, 39.72 and
+    39.41 mm wide) and FOUR rows in two bands: an upper band y 14.41-40.40 and a lower
+    band y 45.73-71.41, each holding two cage rows about a bright white centre bar
+    (26.94-28.50 and 58.26-59.82). Cage faces measure 11.9 mm tall on a 13.46 mm row
+    pitch, which is the same row pitch ufispace/s9321-64e measured on its own 2RU front.
+    NUMBERING RUNS DOWN EACH COLUMN, not along the rows: column k holds 4k in the upper
+    band's top row, 4k+1 in its bottom row, 4k+2 in the lower band's top row and 4k+3 in
+    its bottom row, so the leftmost column is 0/1/2/3 and the rightmost 20/21/22/23.
+    Read off the HIG's own overlay digits, which print 0 4 8 12 16 20 across the first
+    row and 1 5 9 13 17 21 across the second. The top row of each band is mirrored
+    (rotate: 180) - the cage gaskets of both rows face the centre bar.
+  qsfpdd-block: >-
+    figure-measured - the four 400G cages are a 2 x 2 block at x 216.3-256.0,
+    y 29.44-55.44, sitting between the two QSFP28 bands rather than in either of them
+    and to their right. Columns at 217.3 and 237.0 (a 19.7 mm pitch), rows about the
+    centre bar at 41.66-42.91 on the same 13.46 mm pitch as the QSFP28 rows. Numbering
+    runs down the columns again: 24 over 25, 26 over 27. Immediately to their left a
+    blue light-pipe strip carries the port lamps, drawn with
+    ufispace/qsfpdd-led-strip-2x4 - one strip per cage row, each standing beside the two
+    same-row ports, which is the arrangement that component was built for on the
+    S9300-32D.
+  port-lamp-bands: >-
+    figure-measured - a continuous PCB lamp strip runs above the upper QSFP28 band
+    (y 6.89-14.72) and below the lower one (y 71.9-79.24), each carrying two rows of
+    four-lamp clusters, one row per port: ufispace/lane-led-quad, whose 14.4 mm width
+    matches the measured 14.5 mm four-dot span to 0.7%. THE STRIP IS COLOUR-CODED AND
+    THE COLOURS MEAN SOMETHING: it is yellow from x 53.8 (over the SFP28 block) to
+    110.4, with its lower half orange from 86.6, and dark green from 110.4 to 214.9.
+    The yellow and orange run covers exactly the SFP28 block and the first QSFP28
+    column - which is port 0, the 100G port those four SFP28 breakout ports share. The
+    vendor is marking the shared group on the metal. Sampled RGB: yellow 233/216/60,
+    orange 218/108/48, green PCB about 70/95/58.
+  vents: >-
+    figure-measured extent, SIMPLIFIED SHAPE. The faceplate is a square-perforation
+    field over most of its area, and the perforated region was measured by dark-run
+    scanning per row band (top strip y 0.6-6.3 from x 16 to 435; bottom strip y 79.3-87
+    full width; the whole right-hand block x 256-435 between them; the band between the
+    two QSFP28 rows x 0.6-216 at y 40.7-45.4; and patches around the left-hand
+    connectors). It is drawn as seven rectangles covering those measured regions rather
+    than cell by cell, so the boundaries are the measurement and the cell grid is the
+    renderer's vent pattern, not the vendor's.
+  rear: >-
+    figure-measured - four fan bays on an 84.1 mm pitch, the pitch taken from the four
+    status lamps (colour-detected at x 19.1, 103.15, 187.25, 271.35) and confirmed by
+    the bay seams at 6.3, 90.4, 174.5, 258.5 and 342.6. The 80 mm module sits
+    right-aligned in its 84.1 mm slot, giving bay origins 10.2, 94.3, 178.4 and 262.5.
+    The two PSUs are stacked at the right, their origins derived from their own lamps
+    (383.0, 9.3) and (383.0, 51.8) against ufispace/psu-132-ac's status-led at
+    [8.7, 4.3]: x 372.8, y 3.5 and 46.0, a 42.5 mm pitch. THE FACE EDGES GIVE 4.3 AND
+    45.4 INSTEAD, a 41.1 mm pitch, so the two readings differ by about 1 mm; the
+    midpoint (y 4.0 and 45.7) is carried and the disagreement recorded here rather than
+    hidden. Between the fans and the PSUs sit the grounding pad (a silver plate at
+    x 347.3-357.9, y 6.6-31.9, which the HIG says ships 'covered with a protective
+    label'), the earth symbol beside it, and the FAN 0|1|2|3 legend naming all four bays.
+  psu-airflow-variant: >-
+    THE PART NUMBERS DO NOT MATCH THE CONTRACTS AND THAT IS DELIBERATE. This chassis
+    orders PSU-132-DESR and PSU-132-AESR, both 'exhaust air flow'; ufispace/psu-132-dc
+    and psu-132-ac were drawn for the S9300-32D, which orders the intake-flow
+    PSU-132-DISB1 / AISB1 of the same 1300 W family, and their contracts carry those
+    model strings and airflow. The face is the same 50.5 x 40 module with the same red
+    latch, square vent grid, cord inlet and lamp, so the components are reused and both
+    `model` and `airflow` are overridden per configuration. See the psu-variant-attrs
+    gap: the override makes this device right and leaves the contracts' own attrs saying
+    intake, which is correct for the part they were drawn from.
+  top: >-
+    drawing-fraction - the HIG Figure 4 top view is dimensioned (W 436, D 762) but its
+    own drawn aspect is 0.527 against a true 0.572, 8% out, so it does NOT pass Gate 1
+    and only fractions are taken from it. Seven shallow full-width channels were
+    edge-detected down the lid, spanning x 14.3-422.9, at depths 121-139, 218-236,
+    314-332, 411-429, 507-525, 604-622 and 683-701 mm as fractions of the drawn depth.
+    AXIS: y = 0 is the REAR, per the house top-view convention.
+  bottom: >-
+    estimated - no figure or photograph in the intake shows the underside. The
+    compliance sticker is the house convention and its position is estimated. A bottom
+    view mirrors LEFT and RIGHT, not front and back; the sticker is the only content and
+    sits off-centre, so the mirror was applied rather than left to chance.
+  sides: >-
+    HIG text, positioned by estimate. Section 5 states the mounting explicitly: 'The
+    chassis has 5 attachment pins on each side, for a total of 10 pins', engaging
+    key-shaped holes in the slide rails, plus one M4 screw per side locking the inner
+    rail. Five pin heads and one screw are therefore drawn per flank - the count and the
+    kind are sourced, the spacing is not. AXIS: on a RIGHT view x = 0 is the FRONT and
+    on a LEFT view x = 0 is the REAR (viewer3d.js convention), so the two lists run in
+    opposite directions; both faces here are symmetric front-to-back, which is stated so
+    that the axis is on record as checked rather than as happening not to matter.
+  power: >-
+    datasheet for typical, HIG for maximum, and the HIG's maximum is unusually well
+    qualified. Datasheet Environmental: 'Typical power: 324 Watts (no transceiver)' -
+    scope stated. HIG Connecting Power: 894 W maximum on the DC version and 890 W on the
+    AC version, each with an explicit note - 'Testing criteria for maximum power are as
+    follows: Temperature 45 C, Optics: full populated, Traffic: 100% load' - so
+    power-envelope is fully-configured rather than unstated, which is the first device in
+    this vendor set that can honestly say so. The two maxima are 4 W apart and are two
+    measurements of two different builds, not a conflict; the DC figure is carried as the
+    higher and both are named in attrs. PSU inputs from the datasheet (AC 100-240 V 12 A,
+    DC -40 to -75 V 40 A) with the HIG's fuse ratings.
+  attrs: >-
+    datasheet (Specifications / Performance / Environmental / Regulatory Compliance /
+    Accessories) and HIG (port overview for reach, section 11 for the console settings
+    and the CP210x driver note). Compliance transcribed verbatim, not tidied - note the
+    datasheet lists NOM and WEEE under Environment and carries no RoHS line, which is
+    what it says. The datasheet writes 'IEEE 1558v2' in its feature bullets and
+    'IEEE 1588v2' in the specification table; the correct spelling is carried.
+  part-numbers: >-
+    none stated - neither the datasheet nor the HIG prints an orderable chassis SKU. The
+    accessory lists name only the FRUs (PSU-132-DESR, PSU-132-AESR, FAN-803816-HI),
+    which are the modules' own part numbers and live on their contracts. No SKU is
+    invented here.
+  lifecycle: >-
+    searched 2026-08-28, 'UfiSpace S9600-28DX end of life' - no announcement of any kind;
+    the product page and datasheet are live and the unit is actively marketed.
+    none-announced is a real finding, not an omission.
+attrs:
+  performance:
+    switching-capacity: 2.4 Tbps
+    packet-buffer: 4 GB deep buffer
+    reach-sfp28: 40 km max (HIG port overview, ports 0/1-0/4)
+    reach-qsfp28: 80 km max (HIG port overview, ports 0-23)
+    reach-qsfp-dd: 600 km max (HIG port overview, ports 24-27)
+    optics-qsfp-dd: 400G QSFP-DD SR, LR, ER, ZR, OpenZR+
+    optics-qsfp28: 100G QSFP28 SR, LR, ER, ZR
+    optics-sfp28: 25G SFP28 SR, LR, ER; 10G SFP+ SR, LR, ER; 1G SFP SX, LX, EX
+  power:
+    power-typical-w: 324
+    power-max-w: 894
+    power-envelope: fully-configured
+    power-max-scope: 45 C ambient, optics fully populated, 100% traffic load (HIG);
+      894 W on the DC version and 890 W on the AC version
+    power-typical-scope: no transceiver installed (datasheet's own qualifier)
+    psus: 2x 1300 W 1+1 redundant, hot-swappable (exhaust airflow)
+    psu-ac-input: 100-240 VAC, 12 A max; 16 A fast-acting fuse in the PSU
+    psu-dc-input: -40 to -75 VDC, 40 A max; 60 A fast-acting fuse in the PSU
+  thermal:
+    fans: 4 hot-swappable modules, 3+1 redundant, exhaust; front-to-back airflow
+  environmental:
+    operating-temp: 0 to 45 C
+    storage-temp: -40 to 70 C
+    operating-humidity: 5% to 85% RH, non-condensing
+    storage-humidity: 5% to 93% RH, non-condensing
+    altitude: rated for operation up to 5000 m (HIG, Connecting Power)
+  platform:
+    asic: Broadcom Qumran2c BCM88820
+    cpu: Intel Icelake-D 8-core @ 2.1 GHz
+    memory: 32 GB DDR4
+    storage: 128 GB SSD
+    bmc: ASPEED AST2620
+  features:
+    srv6: full Segment Routing over IPv6
+    breakout: ports 0/1-0/4 are 25G SFP28 in-band ports sharing 100GE port 0
+    coherent: the four QSFP-DD ports support 400G ZR and OpenZR+ transceivers
+    timing: Stratum 3E OCXO with optional holdover, ITU-T SyncE, IEEE 1588v2
+      (G.8265.1 default, G.8275.1, G.8275.2, SMPTE ST 2059-2 with an additional
+      licence), T-GM, T-BC/OC, T-TC, Class C accuracy, TSN
+    timing-interfaces: GNSS SMA in, 10MHz SMB in/out, 1PPS SMB in/out, ToD RJ45 in/out
+    timing-caveat: NOS integration is necessary to activate the specific feature
+      (datasheet footnote)
+    gnss: internal receiver for master clock; edge Grandmaster with PRTC, distributing
+      phase and time via PTP G.8275.1
+  management:
+    console: RJ45 serial and micro-USB, 115200 8N1, no flow control; the micro-USB
+      console needs a Silicon Labs CP210x USB-to-UART driver
+    usb: USB 3.0 Type-A port
+  compliance:
+    safety: UL 62368-1; IEC 62368-1
+    emc: FCC Part 15 Subpart B Class A; ICES-003 Class A; EN 55032 Class A; EN 55035;
+      EN 300 386; EN 301 489; EN 303 413; EN 62479; EN 50663
+    environment: WEEE; NOM
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 436
+  height: 87.7
+  depth: 762
+  ru: 2
+  weight-kg: 17.66
+gaps:
+- what: psu-variant-attrs
+  scope: [psu-0, psu-1]
+  reason: needs-hardware
+  note: >-
+    This chassis orders PSU-132-DESR and PSU-132-AESR, both stated 'exhaust air flow'
+    in the datasheet's Power Supply Types list. The components seated here,
+    ufispace/psu-132-dc and psu-132-ac, were drawn for the S9300-32D and carry that
+    device's intake-flow siblings PSU-132-DISB1 / PSU-132-AISB1 in `attrs.model` and
+    `airflow: intake`. Both are overridden per configuration so this device reads
+    correctly, but the contracts still describe the intake parts, and nothing in the
+    intake shows a DESR or AESR face: whether the exhaust variants differ visually
+    (the S9300-32D HIG says latch colour distinguishes airflow - red for
+    front-to-back, blue for back-to-front) is unresolved, and this chassis's own rear
+    figure draws a RED latch on a module the ordering line calls exhaust. Either the
+    colour convention differs between families or one of the two documents is loose.
+  wanted: >-
+    a photograph or drawing of a PSU-132-AESR/DESR face, or a UfiSpace PSU-132
+    datasheet covering all four suffixes
+- what: port-led-semantics
+  scope: [qsfp28, qsfpdd-400g, sfp28-breakout, port-leds]
+  reason: vendor-silent
+  note: >-
+    HIG section 10 tables the six system lamps (SYNC, SYS, FAN, PS0, PS1, ID), the PSU
+    FRU lamp and the Fan FRU lamp, and gives no table at all for the port lamps. The
+    twenty-four four-lamp clusters on the two PCB strips, the two blue QSFP-DD light
+    pipes and the arrows over the SFP28 block therefore keep their components' default
+    of off/on rather than an invented link/activity vocabulary. Whether each cluster's
+    four dots are four lanes or something else is not stated anywhere, which is the
+    same silence ufispace/lane-led-quad records on its own contract.
+  wanted: >-
+    a per-NOS LED table from UfiSpace or a NOS vendor, or photographs of a live unit
+    with ports in known states
+- what: management-jack-led-semantics
+  scope: [led-mgmt-l, led-mgmt-r]
+  reason: vendor-silent
+  note: >-
+    The management RJ45 carries two green lamps at its bottom corners, plainly drawn in
+    HIG Figure 8. Unlike the S9501-28SMT and M3000-14XC guides, this HIG's section 10
+    has NO 'Management port LED' table - it stops after the Fan FRU LED. So the two
+    lamps are placed where the figure puts them and keep the component default rather
+    than borrowing the sibling devices' left-green-1G / right-amber-100M vocabulary,
+    which would be an assumption dressed as a citation. Note also that both lamps are
+    drawn GREEN here where the siblings draw one green and one amber.
+  wanted: this family's management port LED table, or a photograph of a linked unit
+- what: sfp28-breakout-relationship
+  scope: [sfp28-breakout, port-0]
+  reason: vendor-silent
+  note: >-
+    The datasheet says the four SFP28 ports are 'In-band port share with 100GE Port 0'
+    and the HIG's overview calls the same thing '25G (through breakout cable)'. The
+    faceplate agrees, colouring the lamp strip yellow and orange across exactly the
+    SFP28 block and the port-0 column. What is NOT stated is the electrical rule:
+    whether fitting the SFP28 ports disables port 0, whether they are a fixed 4x25G
+    breakout of it, or whether they are separately switched. The model draws them as
+    their own group and records the shared relationship in the group description and in
+    attrs; it does not assert a rule the vendor has not written.
+  wanted: a UfiSpace port-mapping note or a NOS interface listing from a live unit
+- what: side-and-underside-detail
+  scope: [left, right, bottom]
+  reason: needs-photo
+  note: >-
+    No figure or photograph in the intake shows the underside, and the flanks appear
+    only in the rack-mounting perspectives. The HIG states the flank hardware in words -
+    five key-shaped attachment pins per side plus one M4 inner-rail screw - so the count
+    and the kind are sourced and only the spacing is estimated. The underside carries
+    only the house compliance sticker at an estimated position.
+  wanted: straight-on photographs of a flank and of the underside
+groups:
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 1
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 1
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the chassis indicators - SYNC, SYS, FAN, PS0, PS1, ID as printed on the
+      white label strip beside them
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: every indicator that belongs to a particular port, ordered by that port
+  psus:
+    term: PSU
+    role: service
+    index-origin: 0
+    description: the vendor spells the bays PSU0 and PSU1 on the rear panel
+  fans:
+    term: Fan
+    role: service
+    index-origin: 0
+    description: the vendor numbers the fans 0|1|2|3 in one legend on the rear panel
+  sfp28-breakout:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp28, speed: 25g}
+    description: ports 0/1-0/4, the four 1/10/25G in-band ports that share 100GE port 0
+      through a breakout cable; the faceplate marks the shared group with a yellow and
+      orange lamp band running across them and port 0
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: qsfp28, speed: 100g}
+    description: ports 0-23, six columns of four - 40/100G, up to 80 km
+  qsfpdd-400g:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: qsfp-dd, speed: 400g}
+    description: ports 24-27, the 100/400G uplinks - up to 600 km with 400G ZR and
+      OpenZR+ coherent optics
+  timing:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: the timing column at the left-hand edge - a GNSS antenna on SMA, 1PPS and
+      10MHz on SMB and ToD on RJ45. Four media, one job, and no BITS on this platform
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: the management cluster - the RJ45 out-of-band jack, the USB 3.0 port, and
+      two consoles that reach the same CLI (an RJ45 serial and a micro-USB), plus the
+      recessed reset button
+views:
+  front:
+    size:
+      w: 436
+      h: 87.7
+    panel:
+      decor:
+        # perforated fields, measured by dark-run scanning and drawn as seven
+        # rectangles over the measured regions rather than cell by cell
+        - {at: [16.0, 0.6], size: [419.4, 5.7], pattern: vent, vent: 30}
+        - {at: [4.0, 79.3], size: [431.4, 7.8], pattern: vent, vent: 30}
+        - {at: [256.2, 6.3], size: [179.2, 73.0], pattern: vent, vent: 30}
+        - {at: [90.0, 40.9], size: [126.1, 4.4], pattern: vent, vent: 30}
+        - {at: [17.5, 6.6], size: [32.5, 13.4], pattern: vent, vent: 30}
+        - {at: [4.0, 41.5], size: [46.0, 12.5], pattern: vent, vent: 30}
+        - {at: [66.5, 41.5], size: [23.5, 37.5], pattern: vent, vent: 30}
+        # white label strip carrying the six system-lamp legends
+        - {at: [5.94, 56.0], size: [5.4, 16.4], fill: '#e8eaed', rx: 0.3}
+        # the port-lamp PCB strips: yellow and orange over the SFP28 block and the
+        # port-0 column (the group they share), dark green over the rest
+        - {at: [53.8, 6.9], size: [56.6, 3.9], fill: '#e9d83c', rx: 0.3}
+        - {at: [53.8, 10.8], size: [32.8, 3.4], fill: '#e9d83c', rx: 0.3}
+        - {at: [86.6, 10.8], size: [23.8, 3.4], fill: '#da6c30', rx: 0.3}
+        - {at: [110.4, 6.9], size: [104.5, 7.3], fill: '#465f3a', rx: 0.3}
+        - {at: [88.5, 71.9], size: [122.0, 7.3], fill: '#465f3a', rx: 0.3}
+        # ganged connector shells: SFP28 2x2, the two QSFP28 bands, the QSFP-DD 2x2
+        - {at: [51.2, 14.1], size: [34.8, 25.7], fill: '#dfe3e6', rx: 0.8}
+        - {at: [91.95, 14.4], size: [119.5, 26.0], fill: '#b0b5bb', rx: 0.8}
+        - {at: [91.95, 45.7], size: [119.5, 26.0], fill: '#b0b5bb', rx: 0.8}
+        - {at: [216.3, 29.5], size: [39.7, 25.9], fill: '#b0b5bb', rx: 0.8}
+        # the bright bar dividing the two cage rows inside each band
+        - {at: [91.95, 26.94], size: [119.5, 1.56], fill: '#f2f4f6'}
+        - {at: [91.95, 58.26], size: [119.5, 1.56], fill: '#f2f4f6'}
+        - {at: [216.3, 41.66], size: [39.7, 1.25], fill: '#f2f4f6'}
+        - {at: [51.2, 26.31], size: [34.8, 1.6], fill: '#f2f4f6'}
+    silkscreen:
+      - {text: 1PPS, at: [13.0, 3.6], font-size: 2.4, anchor: middle, for: clk-1pps}
+      - {text: 10MHZ, at: [13.0, 17.6], font-size: 2.4, anchor: middle, for: clk-10mhz}
+      - {text: GNSS ANT, at: [13.0, 31.2], font-size: 2.4, anchor: middle, for: gnss-ant}
+      - {text: TOD, at: [31.1, 24.4], font-size: 2.6, anchor: middle, for: tod}
+      - {id: usb-mark, at: [47.05, 23.6], path: 'M -3.5 0 L 3.5 0 M -2 -1.6 L 0 -1.6 L 0 0 M 2 1.6 L 0 1.6 L 0 0', for: usb}
+      - {text: RESET, at: [31.3, 51.2], font-size: 2.2, anchor: middle, for: reset}
+      - {text: SYNC, at: [6.4, 58.25], font-size: 1.5, anchor: start, fill: '#17191c', for: led-sync}
+      - {text: SYS, at: [6.4, 60.95], font-size: 1.5, anchor: start, fill: '#17191c', for: led-sys}
+      - {text: FAN, at: [6.4, 63.65], font-size: 1.5, anchor: start, fill: '#17191c', for: led-fan}
+      - {text: PS0, at: [6.4, 66.35], font-size: 1.5, anchor: start, fill: '#17191c', for: led-ps0}
+      - {text: PS1, at: [6.4, 69.05], font-size: 1.5, anchor: start, fill: '#17191c', for: led-ps1}
+      - {text: ID, at: [6.4, 71.75], font-size: 1.5, anchor: start, fill: '#17191c', for: led-id}
+      - {text: IOIOI, at: [22.65, 78.4], font-size: 2.0, anchor: middle, for: console-usb}
+      - {text: IOIOI, at: [37.7, 78.4], font-size: 2.0, anchor: middle, for: console}
+      - {id: oob-mark, at: [57.7, 77.0], path: 'M -1 -2.1 L 1 -2.1 L 1 -0.8 L -1 -0.8 L -1 -2.1 M 0 -0.8 L 0 0 M -2 0 L 2 0 M -2 0 L -2 0.6 M -3 0.6 L -1 0.6 L -1 1.9 L -3 1.9 L -3 0.6 M 2 0 L 2 0.6 M 1 0.6 L 3 0.6 L 3 1.9 L 1 1.9 L 1 0.6', for: mgmt}
+      - {id: arrow-0-1, at: [57.5, 9.0], path: 'M -1.1 1.1 L 1.1 1.1 L 0 -1.1 L -1.1 1.1', for: port-0-1}
+      - {id: arrow-0-2, at: [62.5, 9.0], path: 'M -1.1 -1.1 L 1.1 -1.1 L 0 1.1 L -1.1 -1.1', for: port-0-2}
+      - {id: arrow-0-3, at: [74.5, 9.0], path: 'M -1.1 1.1 L 1.1 1.1 L 0 -1.1 L -1.1 1.1', for: port-0-3}
+      - {id: arrow-0-4, at: [79.5, 9.0], path: 'M -1.1 -1.1 L 1.1 -1.1 L 0 1.1 L -1.1 -1.1', for: port-0-4}
+      - {text: '0/1', at: [57.5, 13.4], font-size: 2.0, anchor: middle, fill: '#17191c', for: port-0-1}
+      - {text: '0/2', at: [62.5, 13.4], font-size: 2.0, anchor: middle, fill: '#17191c', for: port-0-2}
+      - {text: '0/3', at: [74.5, 13.4], font-size: 2.0, anchor: middle, fill: '#17191c', for: port-0-3}
+      - {text: '0/4', at: [79.5, 13.4], font-size: 2.0, anchor: middle, fill: '#17191c', for: port-0-4}
+      - {text: S9600-28DX, at: [414.4, 85.0], font-size: 3.4, anchor: start, for: chassis}
+    components:
+      placements:
+        - {ref: common/smb-jack@1, id: clk-1pps, at: [9.48, 4.49], group: timing, rel-pos: 1, attrs: {role: 1pps-io}}
+        - {ref: common/smb-jack@1, id: clk-10mhz, at: [9.48, 18.90], group: timing, rel-pos: 2, attrs: {role: 10mhz-io}}
+        - {ref: common/sma-jack@1, id: gnss-ant, at: [8.39, 31.90], group: timing, rel-pos: 3, attrs: {role: gnss-in}}
+        - {ref: std/rj45@1, id: tod, at: [23.12, 26.52], group: timing, rel-pos: 4, attrs: {media: rj45, role: tod-io}}
+        - {ref: std/usb-a@1, id: usb, at: [41.05, 30.80], rotate: 90, group: mgmt, rel-pos: 3, attrs: {role: maintenance, speed: usb3}}
+        - {ref: common/reset-button@1, id: reset, at: [29.28, 44.51], for: chassis, group: mgmt, rel-pos: 5}
+        - {ref: common/led-rect@1, id: led-sync, for: chassis, at: [11.3, 56.40],
+           states: ['off',
+                   {name: synced, color: '#22c55e'},
+                   {name: free-run, color: '#eab308'}],
+           description: 'HIG SYNC row - Off (system timing/clock synchronization is disabled
+             or unsynchronized), Solid Green (synchronized to an external reference such as
+             GNSS, 1PPS or PTP), Solid Amber (free-run or holdover mode). This table has no
+             blink states at all, unlike the cell-site siblings, and is transcribed as it
+             stands', group: status-leds, rel-pos: 1}
+        - {ref: common/led-rect@1, id: led-sys, for: chassis, at: [11.3, 59.10],
+           states: ['off',
+                   {name: boot-complete, color: '#22c55e'},
+                   {name: cpu-not-up, color: '#eab308'}],
+           description: 'HIG SYS row - Off (no power), Solid Green (host CPU/BMC boot
+             complete), Solid Amber (power is up but host CPU/BMC is not up)',
+           group: status-leds, rel-pos: 2}
+        - {ref: common/led-rect@1, id: led-fan, for: [rear/fan-0, rear/fan-1, rear/fan-2, rear/fan-3], at: [11.3, 61.80],
+           states: ['off',
+                   {name: ok, color: '#22c55e'},
+                   {name: service, color: '#eab308'}],
+           description: 'HIG FAN row - Off (no FAN modules present or FAN modules are not
+             initialized), Solid Green (all FAN modules are working normal), Solid Amber
+             (one or more FAN module(s) need service)', group: status-leds, rel-pos: 3}
+        - {ref: common/led-rect@1, id: led-ps0, for: rear/psu-0, at: [11.3, 64.50],
+           states: ['off',
+                   {name: ok, color: '#22c55e'},
+                   {name: fail, color: '#eab308'}],
+           description: 'HIG PS0 row - Off (no power), Solid Green (PSU0 is working normal),
+             Solid Amber (PSU0 fail, PSU0 need service). This platform gives each supply its
+             own front lamp rather than one shared PWR lamp', group: status-leds, rel-pos: 4}
+        - {ref: common/led-rect@1, id: led-ps1, for: rear/psu-1, at: [11.3, 67.20],
+           states: ['off',
+                   {name: ok, color: '#22c55e'},
+                   {name: fail, color: '#eab308'}],
+           description: 'HIG PS1 row - Off (no power), Solid Green (PSU1 is working normal),
+             Solid Amber (PSU1 fail, PSU1 need service)', group: status-leds, rel-pos: 5}
+        - {ref: common/led-rect@1, id: led-id, for: chassis, at: [11.3, 69.90],
+           states: ['off',
+                   {name: beacon, color: '#3b82f6', behavior: blinking}],
+           description: 'HIG ID row - Off (no power), Blinking Blue (enabled beacon feature).
+             Drawn blue in the figure where the five lamps above it are green',
+           group: status-leds, rel-pos: 6}
+        - {ref: std/micro-usb@1, id: console-usb, at: [18.9, 70.2], group: mgmt, rel-pos: 2, attrs: {media: micro-usb, role: console}}
+        - {ref: std/rj45@1, id: console, at: [29.69, 59.40], group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
+        - {ref: std/rj45@1, id: mgmt, at: [49.71, 59.56], group: mgmt, rel-pos: 4, attrs: {role: oob, speed: 100m-1g}}
+        - {ref: common/led-dot@1, id: led-mgmt-l, at: [50.6, 70.5], for: mgmt, group: port-leds, rel-pos: 1}
+        - {ref: common/led-dot@1, id: led-mgmt-r, at: [62.9, 70.5], for: mgmt, group: port-leds, rel-pos: 2}
+        - {ref: std/sfp-ganged@1, id: port-0-1, at: [52.98, 15.29], group: sfp28-breakout, rel-pos: 1}
+        - {ref: std/sfp-ganged@1, id: port-0-2, at: [52.98, 28.19], rotate: 180, group: sfp28-breakout, rel-pos: 2}
+        - {ref: std/sfp-ganged@1, id: port-0-3, at: [70.08, 15.29], group: sfp28-breakout, rel-pos: 3}
+        - {ref: std/sfp-ganged@1, id: port-0-4, at: [70.08, 28.19], rotate: 180, group: sfp28-breakout, rel-pos: 4}
+        - {ref: std/qsfp-ganged@1, id: port-0, at: [92.65, 16.2], rotate: 180, group: qsfp28, rel-pos: 0}
+        - {ref: std/qsfp-ganged@1, id: port-1, at: [92.65, 29.66], group: qsfp28, rel-pos: 1}
+        - {ref: std/qsfp-ganged@1, id: port-2, at: [92.65, 47.52], rotate: 180, group: qsfp28, rel-pos: 2}
+        - {ref: std/qsfp-ganged@1, id: port-3, at: [92.65, 60.98], group: qsfp28, rel-pos: 3}
+        - {ref: std/qsfp-ganged@1, id: port-4, at: [112.55, 16.2], rotate: 180, group: qsfp28, rel-pos: 4}
+        - {ref: std/qsfp-ganged@1, id: port-5, at: [112.55, 29.66], group: qsfp28, rel-pos: 5}
+        - {ref: std/qsfp-ganged@1, id: port-6, at: [112.55, 47.52], rotate: 180, group: qsfp28, rel-pos: 6}
+        - {ref: std/qsfp-ganged@1, id: port-7, at: [112.55, 60.98], group: qsfp28, rel-pos: 7}
+        - {ref: std/qsfp-ganged@1, id: port-8, at: [132.45, 16.2], rotate: 180, group: qsfp28, rel-pos: 8}
+        - {ref: std/qsfp-ganged@1, id: port-9, at: [132.45, 29.66], group: qsfp28, rel-pos: 9}
+        - {ref: std/qsfp-ganged@1, id: port-10, at: [132.45, 47.52], rotate: 180, group: qsfp28, rel-pos: 10}
+        - {ref: std/qsfp-ganged@1, id: port-11, at: [132.45, 60.98], group: qsfp28, rel-pos: 11}
+        - {ref: std/qsfp-ganged@1, id: port-12, at: [152.35, 16.2], rotate: 180, group: qsfp28, rel-pos: 12}
+        - {ref: std/qsfp-ganged@1, id: port-13, at: [152.35, 29.66], group: qsfp28, rel-pos: 13}
+        - {ref: std/qsfp-ganged@1, id: port-14, at: [152.35, 47.52], rotate: 180, group: qsfp28, rel-pos: 14}
+        - {ref: std/qsfp-ganged@1, id: port-15, at: [152.35, 60.98], group: qsfp28, rel-pos: 15}
+        - {ref: std/qsfp-ganged@1, id: port-16, at: [172.25, 16.2], rotate: 180, group: qsfp28, rel-pos: 16}
+        - {ref: std/qsfp-ganged@1, id: port-17, at: [172.25, 29.66], group: qsfp28, rel-pos: 17}
+        - {ref: std/qsfp-ganged@1, id: port-18, at: [172.25, 47.52], rotate: 180, group: qsfp28, rel-pos: 18}
+        - {ref: std/qsfp-ganged@1, id: port-19, at: [172.25, 60.98], group: qsfp28, rel-pos: 19}
+        - {ref: std/qsfp-ganged@1, id: port-20, at: [192.15, 16.2], rotate: 180, group: qsfp28, rel-pos: 20}
+        - {ref: std/qsfp-ganged@1, id: port-21, at: [192.15, 29.66], group: qsfp28, rel-pos: 21}
+        - {ref: std/qsfp-ganged@1, id: port-22, at: [192.15, 47.52], rotate: 180, group: qsfp28, rel-pos: 22}
+        - {ref: std/qsfp-ganged@1, id: port-23, at: [192.15, 60.98], group: qsfp28, rel-pos: 23}
+        - {ref: std/qsfp-dd@1, id: port-24, at: [217.3, 30.6], rotate: 180, group: qsfpdd-400g, rel-pos: 24}
+        - {ref: std/qsfp-dd@1, id: port-25, at: [217.3, 44.1], group: qsfpdd-400g, rel-pos: 25}
+        - {ref: std/qsfp-dd@1, id: port-26, at: [237.0, 30.6], rotate: 180, group: qsfpdd-400g, rel-pos: 26}
+        - {ref: std/qsfp-dd@1, id: port-27, at: [237.0, 44.1], group: qsfpdd-400g, rel-pos: 27}
+        - {ref: ufispace/lane-led-quad@1, id: leds-port-0, at: [94.7, 7.48], for: port-0, attrs: {port: '0'}, group: port-leds, rel-pos: 5}
+        - {ref: ufispace/lane-led-quad@1, id: leds-port-1, at: [94.7, 11.23], for: port-1, attrs: {port: '1'}, group: port-leds, rel-pos: 6}
+        - {ref: ufispace/lane-led-quad@1, id: leds-port-2, at: [94.7, 72.4], for: port-2, attrs: {port: '2'}, group: port-leds, rel-pos: 7}
+        - {ref: ufispace/lane-led-quad@1, id: leds-port-3, at: [94.7, 76.05], for: port-3, attrs: {port: '3'}, group: port-leds, rel-pos: 8}
+        - {ref: ufispace/lane-led-quad@1, id: leds-port-4, at: [114.6, 7.48], for: port-4, attrs: {port: '4'}, group: port-leds, rel-pos: 9}
+        - {ref: ufispace/lane-led-quad@1, id: leds-port-5, at: [114.6, 11.23], for: port-5, attrs: {port: '5'}, group: port-leds, rel-pos: 10}
+        - {ref: ufispace/lane-led-quad@1, id: leds-port-6, at: [114.6, 72.4], for: port-6, attrs: {port: '6'}, group: port-leds, rel-pos: 11}
+        - {ref: ufispace/lane-led-quad@1, id: leds-port-7, at: [114.6, 76.05], for: port-7, attrs: {port: '7'}, group: port-leds, rel-pos: 12}
+        - {ref: ufispace/lane-led-quad@1, id: leds-port-8, at: [134.5, 7.48], for: port-8, attrs: {port: '8'}, group: port-leds, rel-pos: 13}
+        - {ref: ufispace/lane-led-quad@1, id: leds-port-9, at: [134.5, 11.23], for: port-9, attrs: {port: '9'}, group: port-leds, rel-pos: 14}
+        - {ref: ufispace/lane-led-quad@1, id: leds-port-10, at: [134.5, 72.4], for: port-10, attrs: {port: '10'}, group: port-leds, rel-pos: 15}
+        - {ref: ufispace/lane-led-quad@1, id: leds-port-11, at: [134.5, 76.05], for: port-11, attrs: {port: '11'}, group: port-leds, rel-pos: 16}
+        - {ref: ufispace/lane-led-quad@1, id: leds-port-12, at: [154.4, 7.48], for: port-12, attrs: {port: '12'}, group: port-leds, rel-pos: 17}
+        - {ref: ufispace/lane-led-quad@1, id: leds-port-13, at: [154.4, 11.23], for: port-13, attrs: {port: '13'}, group: port-leds, rel-pos: 18}
+        - {ref: ufispace/lane-led-quad@1, id: leds-port-14, at: [154.4, 72.4], for: port-14, attrs: {port: '14'}, group: port-leds, rel-pos: 19}
+        - {ref: ufispace/lane-led-quad@1, id: leds-port-15, at: [154.4, 76.05], for: port-15, attrs: {port: '15'}, group: port-leds, rel-pos: 20}
+        - {ref: ufispace/lane-led-quad@1, id: leds-port-16, at: [174.3, 7.48], for: port-16, attrs: {port: '16'}, group: port-leds, rel-pos: 21}
+        - {ref: ufispace/lane-led-quad@1, id: leds-port-17, at: [174.3, 11.23], for: port-17, attrs: {port: '17'}, group: port-leds, rel-pos: 22}
+        - {ref: ufispace/lane-led-quad@1, id: leds-port-18, at: [174.3, 72.4], for: port-18, attrs: {port: '18'}, group: port-leds, rel-pos: 23}
+        - {ref: ufispace/lane-led-quad@1, id: leds-port-19, at: [174.3, 76.05], for: port-19, attrs: {port: '19'}, group: port-leds, rel-pos: 24}
+        - {ref: ufispace/lane-led-quad@1, id: leds-port-20, at: [194.2, 7.48], for: port-20, attrs: {port: '20'}, group: port-leds, rel-pos: 25}
+        - {ref: ufispace/lane-led-quad@1, id: leds-port-21, at: [194.2, 11.23], for: port-21, attrs: {port: '21'}, group: port-leds, rel-pos: 26}
+        - {ref: ufispace/lane-led-quad@1, id: leds-port-22, at: [194.2, 72.4], for: port-22, attrs: {port: '22'}, group: port-leds, rel-pos: 27}
+        - {ref: ufispace/lane-led-quad@1, id: leds-port-23, at: [194.2, 76.05], for: port-23, attrs: {port: '23'}, group: port-leds, rel-pos: 28}
+        - {ref: ufispace/qsfpdd-led-strip-2x4@1, id: leds-dd-top, at: [210.75, 29.6], for: [port-24, port-26], group: port-leds, rel-pos: 29}
+        - {ref: ufispace/qsfpdd-led-strip-2x4@1, id: leds-dd-bot, at: [210.75, 42.6], for: [port-25, port-27], group: port-leds, rel-pos: 30}
+    regions:
+      - {id: timing, at: [4, 1], size: {w: 44, h: 44}, label: Timing block, members: [clk-1pps, clk-10mhz, gnss-ant, tod]}
+      - {id: mgmt-block, at: [17, 55], size: {w: 51, h: 25}, label: Management, members: [console-usb, console, mgmt]}
+      - {id: uplinks, at: [215, 28], size: {w: 42, h: 30}, label: 400G uplinks, members: [port-24, port-25, port-26, port-27]}
+  rear:
+    size:
+      w: 436
+      h: 87.7
+    panel:
+      decor:
+        # the grounding pad, which ships covered with a protective label (HIG section 8)
+        - {at: [347.3, 6.6], size: [10.6, 25.3], fill: '#b8bec4', rx: 0.6}
+    silkscreen:
+      - {text: FAN, at: [347.6, 50.0], font-size: 8.0, anchor: start, for: [fan-0, fan-1, fan-2, fan-3]}
+      - {text: '0|1|2|3', at: [347.6, 62.5], font-size: 5.5, anchor: start, for: [fan-0, fan-1, fan-2, fan-3]}
+      - {text: PSU0, at: [424.6, 28.2], font-size: 3.9, anchor: start, for: psu-0}
+      - {text: PSU1, at: [424.6, 67.4], font-size: 3.9, anchor: start, for: psu-1}
+    components:
+      bays:
+        - {id: fan-0, at: [10.2, 3.1], size: {w: 80.0, h: 81.5}, accepts: [ufispace/fan-803816-hi@1], group: fans, rel-pos: 0, default: ufispace/fan-803816-hi@1}
+        - {id: fan-1, at: [94.3, 3.1], size: {w: 80.0, h: 81.5}, accepts: [ufispace/fan-803816-hi@1], group: fans, rel-pos: 1, default: ufispace/fan-803816-hi@1}
+        - {id: fan-2, at: [178.4, 3.1], size: {w: 80.0, h: 81.5}, accepts: [ufispace/fan-803816-hi@1], group: fans, rel-pos: 2, default: ufispace/fan-803816-hi@1}
+        - {id: fan-3, at: [262.5, 3.1], size: {w: 80.0, h: 81.5}, accepts: [ufispace/fan-803816-hi@1], group: fans, rel-pos: 3, default: ufispace/fan-803816-hi@1}
+        - {id: psu-0, at: [372.8, 4.0], size: {w: 50.5, h: 40.0}, accepts: [ufispace/psu-132-dc@1, ufispace/psu-132-ac@1], group: psus, rel-pos: 0, default: ufispace/psu-132-dc@1}
+        - {id: psu-1, at: [372.8, 45.7], size: {w: 50.5, h: 40.0}, accepts: [ufispace/psu-132-dc@1, ufispace/psu-132-ac@1], group: psus, rel-pos: 1, default: ufispace/psu-132-dc@1}
+      placements:
+        - {ref: common/ground-lug@1, id: ground-1, at: [348.5, 12.0], group: grounding, rel-pos: 1,
+           description: 'the designated grounding location of HIG section 8 - two tapped M4
+             holes on the rear, between the fans and the PSUs, shipped covered with a
+             protective label that is removed before the accessory lug (29 x 37.5 x 12.5 mm,
+             #6 AWG) is bolted on. Measured off HIG Figure 7 at x 347.3-357.9, y 6.6-31.9'}
+        - {ref: common/ground-symbol@1, id: ground-mark, at: [358.5, 18.9], group: grounding, rel-pos: 2}
+    regions:
+      - {id: exhaust, at: [6, 0], size: {w: 337, h: 87.7}, physical-context: Exhaust, label: Fan exhaust, members: [fan-0, fan-1, fan-2, fan-3]}
+      - {id: power, at: [372, 3], size: {w: 52, h: 83}, label: Power, members: [psu-0, psu-1]}
+  top:
+    size:
+      w: 436
+      h: 762
+    panel:
+      decor:
+        - {at: [14.3, 121.4], size: [408.6, 17.4], rx: 8.7, fill: '#2e3236', sink: 0.5}
+        - {at: [14.3, 218.1], size: [408.6, 17.5], rx: 8.7, fill: '#2e3236', sink: 0.5}
+        - {at: [14.3, 314.3], size: [408.6, 18.0], rx: 9.0, fill: '#2e3236', sink: 0.5}
+        - {at: [14.3, 410.5], size: [408.6, 18.6], rx: 9.3, fill: '#2e3236', sink: 0.5}
+        - {at: [14.3, 507.3], size: [408.6, 18.0], rx: 9.0, fill: '#2e3236', sink: 0.5}
+        - {at: [14.3, 603.5], size: [408.6, 18.0], rx: 9.0, fill: '#2e3236', sink: 0.5}
+        - {at: [14.3, 683.3], size: [408.6, 17.5], rx: 8.7, fill: '#2e3236', sink: 0.5}
+    components:
+      placements:
+        - {ref: common/screw-head@1, id: screw-t1, at: [22, 60], group: furniture, rel-pos: 1}
+        - {ref: common/screw-head@1, id: screw-t2, at: [410, 60], group: furniture, rel-pos: 2}
+        - {ref: common/screw-head@1, id: screw-t3, at: [22, 730], group: furniture, rel-pos: 3}
+        - {ref: common/screw-head@1, id: screw-t4, at: [410, 730], group: furniture, rel-pos: 4}
+  bottom:
+    size:
+      w: 436
+      h: 762
+    components:
+      placements:
+        - {ref: common/compliance-sticker@1, id: bottom-label, at: [108.5, 300], group: furniture, rel-pos: 5}
+  left:
+    size:
+      w: 762
+      h: 87.7
+    components:
+      placements:
+        - {ref: common/rivet@1, id: pin-l1, at: [90, 42], group: furniture, rel-pos: 6}
+        - {ref: common/rivet@1, id: pin-l2, at: [230, 42], group: furniture, rel-pos: 7}
+        - {ref: common/rivet@1, id: pin-l3, at: [370, 42], group: furniture, rel-pos: 8}
+        - {ref: common/rivet@1, id: pin-l4, at: [510, 42], group: furniture, rel-pos: 9}
+        - {ref: common/rivet@1, id: pin-l5, at: [650, 42], group: furniture, rel-pos: 10}
+        - {ref: common/screw-head@1, id: screw-l1, at: [706, 41.5], group: furniture, rel-pos: 11}
+  right:
+    size:
+      w: 762
+      h: 87.7
+    components:
+      placements:
+        - {ref: common/rivet@1, id: pin-r1, at: [90, 42], group: furniture, rel-pos: 12}
+        - {ref: common/rivet@1, id: pin-r2, at: [230, 42], group: furniture, rel-pos: 13}
+        - {ref: common/rivet@1, id: pin-r3, at: [370, 42], group: furniture, rel-pos: 14}
+        - {ref: common/rivet@1, id: pin-r4, at: [510, 42], group: furniture, rel-pos: 15}
+        - {ref: common/rivet@1, id: pin-r5, at: [650, 42], group: furniture, rel-pos: 16}
+        - {ref: common/screw-head@1, id: screw-r1, at: [52, 41.5], group: furniture, rel-pos: 17}
+configurations:
+  dc:
+    kind: base
+    description: Dual 1300 W DC PSUs (PSU-132-DESR), four FAN-803816-HI exhaust fan
+      modules, front-to-back airflow. This is the bare working chassis - the traffic
+      cages ship empty.
+    default: true
+    airflow: front-to-back
+    component-attrs:
+      psu-132-dc:
+        model: PSU-132-DESR
+        airflow: exhaust
+      fan-803816-hi:
+        model: FAN-803816-HI
+  ac:
+    kind: orderable
+    description: Dual 1300 W AC PSUs (PSU-132-AESR), four FAN-803816-HI exhaust fan
+      modules, front-to-back airflow
+    airflow: front-to-back
+    bays:
+      psu-0: ufispace/psu-132-ac@1
+      psu-1: ufispace/psu-132-ac@1
+    component-attrs:
+      psu-132-ac:
+        model: PSU-132-AESR
+        airflow: exhaust
+      fan-803816-hi:
+        model: FAN-803816-HI
+  dc-populated:
+    kind: example
+    description: The DC build with 25G optics fitted in the four SFP28 breakout ports
+    airflow: front-to-back
+    occupants:
+      port-0-1: common/sfp-lc-duplex@1
+      port-0-2: common/sfp-lc-duplex@1
+      port-0-3: common/sfp-lc-duplex@1
+      port-0-4: common/sfp-lc-duplex@1
+    component-attrs:
+      psu-132-dc:
+        model: PSU-132-DESR
+        airflow: exhaust
+      fan-803816-hi:
+        model: FAN-803816-HI
+datasheet:
+  title: UfiSpace S9600-28DX 100G/400G Open Aggregation Router Datasheet
+  url: https://www.ufispace.com/products/telco/aggregation/s9600-28dx-100g-400g-open-aggregation-router
+references:
+  - {title: UfiSpace S9600-28DX Open Aggregation Router Hardware Installation Guide}

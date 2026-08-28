@@ -1,0 +1,97 @@
+format: 1
+kind: module
+name: fan-402818-hc
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: UfiSpace FAN-402818-HC hot-swap fan module (S9501-28SMT) - red U-bail
+  handle on the left, hex rotor grille, and a right-hand strip carrying a red 'E'
+  exhaust-airflow badge, a knurled captive thumbscrew and the status LED at the
+  bottom; exhaust airflow
+size: {w: 51.5, h: 42.2}
+attrs: {power-absent: not-published, model: FAN-402818-HC, airflow: exhaust}
+provenance:
+  power: >-
+    NOT PUBLISHED. The S9501-28SMT datasheet names this part only as an ordering line -
+    'Fan Types: FAN-402818-HC, exhaust air flow' - with no wattage beside it, and the
+    S9501-28SMT hardware installation guide R1.9 carries no fan wattage either: its only
+    watt figures are the system maximum (96.9 W, Connecting Power) and the provisioning
+    reserve (200 W per circuit), both of which are the box, not this module. Searched the
+    guide and the datasheet for 'watt', 'W)' and 'power' and neither attaches a figure to
+    a fan. Same silence the sibling ufispace/fan-402825@1 records for its own part number.
+  size: >-
+    HIG - Component Physical Information table, 'Fan (W x D x H) 2.03 x 2.28 x 1.66 in
+    (51.5 x 57.8 x 42.2 mm)', so the FACE is 51.5 x 42.2. Weight 0.2 lb (90 g), same
+    table. NOTE this is the same face as ufispace/fan-402825@1 - the two part numbers
+    are different fans (40x28x18 against 40x28x25) in what the vendor's own dimension
+    tables give as the same carrier.
+  art: >-
+    drawing and photo-measured from the S9501-28SMT HIG rear elevation (Fig 8, extracted
+    as fig-0013, panel 1382 px for 440 mm = 3.14 px/mm) and its isometric pair, plus the
+    Fig 22 zoom inset which shows the 'E' badge and the cross-recessed captive screw at
+    high magnification. THE FIGURE'S ASPECT IS 8% OUT (1382 x 149 px against 440 x 43.5),
+    so x positions are measurements at 3.14 px/mm and y positions are the same
+    measurements divided by that stretch - they are proportions, not calipers. The layout
+    is NOT borrowed from ufispace/fan-402825@1: that part carries its lamp top-left and
+    no airflow badge, this one carries the lamp bottom-right under the thumbscrew, which
+    is what the rear figure and the rear photograph both show.
+  led-states: HIG section 10, Fan FRU LED table (page 20), transcribed in full
+  handle-projection: >-
+    datasheet - HIG Space Clearance, 'The handle for the fan units will extend outwards by
+    1 inch (2.5cm)', published by the vendor for this chassis's fan.
+elements:
+  status-led:
+    at: [44.5, 31.0]
+    size: [2.8, 2.8]
+    class: led
+    states: ['off',
+             {name: ok, color: '#22c55e'},
+             {name: fault, color: '#eab308', behavior: blinking}]
+    description: >-
+      HIG Fan FRU LED table - Off (main board 3.3V power fail, or fan not present),
+      Solid Green (fan present and interrupt de-assert), Blinking Yellow (fan present
+      but interrupt assert). The table's Blinking Green and Solid Yellow rows read
+      N/A and are deliberately not modelled
+relief:
+  features:
+    - node: rotor-grille
+      vent: 25
+      confidence: estimated
+      source: >-
+        ufispace/fan-402818-hc@1 - the HIG dimensions the 51.5 x 42.2 face and the handle
+        projection, and nothing else off the face. This open-area fraction is not in it.
+    - node: rotor-behind
+      vent: 25
+      confidence: estimated
+      source: >-
+        ufispace/fan-402818-hc@1 - the HIG dimensions the 51.5 x 42.2 face and the handle
+        projection, and nothing else off the face. This open-area fraction is not in it.
+    - node: rotor-bulge
+      dome: 3.2
+      confidence: estimated
+      source: >-
+        ufispace/fan-402818-hc@1 - unsourced; the HIG gives no depth on this face.
+        Same estimate as ufispace/fan-402825@1.
+    - node: handle
+      uhandle: 25
+      confidence: datasheet
+      source: >-
+        UfiSpace S9501-28SMT HIG, Space Clearance: 'The handle for the fan units will
+        extend outwards by 1 inch (2.5cm)'. 25 mm exactly, published by the vendor for
+        this chassis's fan.
+    - node: thumbscrew
+      cyl: 5
+      knurl: true
+      confidence: estimated
+      source: >-
+        ufispace/fan-402818-hc@1 - unsourced. The Fig 22 inset shows a cross-recessed
+        captive screw standing proud of the bezel and dimensions nothing.
+    - node: status-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/fan-402818-hc@1 - unsourced. The HIG's Fan FRU LED table gives the
+        lamp's states and nothing about its lens. Same estimate as the other two
+        UfiSpace FRU lamps in the library: one estimate written three times.
+skins: [default]

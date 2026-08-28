@@ -1,0 +1,61 @@
+format: 1
+kind: component
+name: qsfpdd-led-cluster
+version: 1.0.0
+class: led
+profile: networking
+description: Port-LED cluster printed above (or below) one 2-high QSFP-DD stacked
+  cage on the S9311-64D - a blue light-pipe at each end of the cage width, each
+  carrying an upper and a lower window, with a round lamp inboard of each pipe
+size: {w: 19.8, h: 5.8}
+provenance:
+  size: >-
+    drawing - S9311-64D HIG Figure 12 port overview (fig-0020), whose body measures
+    1344 x 272 px against the datasheet's 436 x 87.7 mm chassis, aspect within 0.6%,
+    so 3.083 px/mm across and 3.102 px/mm down. The cluster sits on the drawn cage
+    bezel, 62 px (20.1 mm) wide; this contract is 19.8 wide so it lands on the
+    19.0 mm std/qsfp-dd cage without hanging over the neighbouring column. The two
+    light pipes measure 7 px (2.3 mm) wide and 18 px (5.8 mm) tall at the bezel's
+    two ends (pixel centres 135 and 194 in the first column); the round lamps sit
+    inboard at pixel centres 144.5 and 183.5 and measure 6 px (1.9 mm) across.
+    Measured on the FIRST column and confirmed against all sixteen - the 32 blue and
+    32 green runs the colour detector returns across the band repeat on a 75.53 px
+    (24.50 mm) pitch with no outlier over 1.5 px.
+  arrangement: >-
+    drawing - the same four-lamp cluster appears above the upper band and below the
+    lower band, drawn the SAME way up in both (blue window over pale window in each
+    pipe, read off fig-0019 rows 29-46 for the upper band and rows 231-247 for the
+    lower). It is therefore NOT mirrored between bands and this contract is placed
+    unrotated in both.
+  semantics: >-
+    vendor-silent - the HIG's section 10 tables the six front-panel lamps (SYNC, SYS,
+    FAN, PS0, PS1, ID), the PSU and Fan FRU lamps and the RJ45 management jack, and
+    says nothing about the port lamps. Nothing states which half of the cluster
+    serves the upper port and which the lower, nor what the pipe's two windows mean
+    against the round lamp. Every lamp therefore keeps the plain off/on default
+    rather than an invented vocabulary; see the device's port-led-semantics gap.
+    This sentence is the same finding as ufispace/qsfpdd-led-strip-2x4's, reached
+    independently from a different document (that one reads the S9300-32D HIG), not
+    copied from it.
+elements:
+  pipe-l-1: {at: [0.0, 0.2], size: [2.2, 4.1], class: led, states: ['off', 'on']}
+  pipe-l-2: {at: [0.0, 4.5], size: [2.2, 1.1], class: led, states: ['off', 'on']}
+  lamp-l: {at: [2.5, 0.9], size: [1.9, 1.9], class: led, states: ['off', 'on']}
+  lamp-r: {at: [15.2, 0.9], size: [1.9, 1.9], class: led, states: ['off', 'on']}
+  pipe-r-1: {at: [17.6, 0.2], size: [2.2, 4.1], class: led, states: ['off', 'on']}
+  pipe-r-2: {at: [17.6, 4.5], size: [2.2, 1.1], class: led, states: ['off', 'on']}
+relief:
+  features:
+    - node: pipe-l
+      out: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/qsfpdd-led-cluster@1 - the light pipes read as raised blocks in the
+        vendor front render; no document dimensions the projection. Same 0.4 estimate
+        the other UfiSpace light pipes carry.
+    - node: pipe-r
+      out: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/qsfpdd-led-cluster@1 - as pipe-l.
+skins: [default]

@@ -1,0 +1,92 @@
+format: 1
+kind: module
+name: psu-201-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: UfiSpace PSU-201-AISB 200W AC PSU - C14 inlet, blue release latch,
+  black tube handle, status LED (M3000-14XC fronthaul family)
+size: {w: 50.5, h: 40.2}
+attrs: {power-output-w: 200, input: ac, model: PSU-201-AISB}
+provenance:
+  power: >-
+    datasheet - the M3000-14XC datasheet's accessory list states the rating in the part
+    number's own ordering line: 'PSU-201-AISB, 200W AC PSU, intake air flow', beside the DC
+    sibling 'PSU-201-DISB, 200W DC PSU, intake air flow'. Consistent with the HIG's
+    provisioning instruction, 'a reserve of at least 200 watts on each power circuit'.
+    READ THE DEVICE GAP BEFORE REUSING THIS NUMBER: the HIG's Figure 5 callout prints
+    '2 x 120W AC or DC PSU' for these same bays - recorded on the m3000-14xc device as a
+    sources-disagree gap. The 200 W ordering line is carried here because it names this
+    exact part number. AC input 100-240 V, 3 A max (datasheet).
+  size: >-
+    HIG - Component Physical Information table, 'PSU (W x D x H) 1.99 x 8.31 x 1.58 in
+    (50.5 x 211 x 40.2 mm)', and the Fig 7 drawing (AC version overview). Weight
+    1.58 lb (716 g), same table.
+  art: >-
+    borrowed - face layout (latch, hex vent field, C14 inlet, tube handle, lamp) copied
+    from ufispace/psu-401-ac@1, whose art was drawn from the S9510-28DC HIG. The
+    M3000-14XC HIG's Fig 7 drawing and the port-overview figure (Fig 9, AC unit fitted)
+    show the same construction at the same 50.5 x 40.2 face; element positions were not
+    re-measured against this family's drawing beyond that visual match.
+  inlet: standard (IEC 60320-1 via std/c14-inlet)
+  led-states: HIG section 10, PSU FRU LED table (page 21), transcribed in full
+elements:
+  status-led:
+    at: [44.2, 2.2]
+    size: [3.2, 3.2]
+    class: led
+    states: ['off',
+             {name: ok, color: '#22c55e'},
+             {name: fail, color: '#ef4444'},
+             {name: standby, color: '#22c55e', behavior: blinking},
+             {name: no-dc, color: '#ef4444', behavior: blinking},
+             {name: warning, color: '#22c55e', behavior: {mode: alternating, color: '#ef4444'}}]
+    description: >-
+      HIG PSU FRU LED table - Off (no power to any PSU), Green (PSU output on and
+      OK), Red (PSU failure), Flashing Green (input present, only standby output on -
+      poor contact), Flashing Red (no input to this PSU), Flashing between Green
+      and Red (warning: working condition not satisfied, check voltage, current and
+      temperature)
+  latch: {at: [0.6, 4.5], size: [3.6, 14.0], class: latch}
+  handle: {at: [38.6, 6.0], size: [3.4, 26.0], class: handle}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [6.25, 18.9]}
+relief:
+  features:
+    - node: latch
+      out: 2.2
+      confidence: estimated
+      source: >-
+        ufispace/psu-201-ac@1 - the M3000-14XC HIG's Fig 7 drawing shows the face without
+        dimensioning projections other than the handle. Same estimate as
+        ufispace/psu-401-ac@1, from which the art is copied.
+    - node: handle
+      uhandle: 10
+      confidence: drawing
+      source: >-
+        M3000-14XC HIG Fig 6 drawing (the DC sibling's elevation; the AC unit shares the
+        chassis) - the module is dimensioned at 211 mm to the face and 221 mm over the
+        handle, so the handle stands 10 mm proud of this module's own face. NOT the 27 mm
+        of ufispace/psu-401-ac@1, which is the S9510-28DC family's published clearance.
+    - node: inlet-frame
+      out: 2.4
+      confidence: estimated
+      source: >-
+        ufispace/psu-201-ac@1 - unsourced projection, same estimate as
+        ufispace/psu-401-ac@1.
+    - node: status-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/psu-201-ac@1 - unsourced. The HIG's PSU FRU LED table gives the lamp's
+        states and nothing about its lens. Same estimate as the psu-401 family.
+    - node: vent-field
+      vent: 30
+      confidence: estimated
+      source: >-
+        ufispace/psu-201-ac@1 - unsourced open-area fraction; the HIG's drawing shows the
+        hex field without dimensioning it. Same estimate as the psu-401 family.
+connection-points:
+  power: {at: [20.25, 29.5], direction: front}
+skins: [default]

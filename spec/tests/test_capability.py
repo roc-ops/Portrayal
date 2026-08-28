@@ -305,8 +305,14 @@ def test_search_finds_what_a_device_is_not_how_it_was_phrased():
     # a form factor, from the component ref rather than any sentence
     assert "as7946-30xb" in find("qsfp-dd")
     # 400G is declared ONLY in groups.qsfpdd-400g.attrs.speed on the AGR400 -
-    # device attrs say "2.4 Tb/s" and never mention it
-    assert find("400g") == {"as7946-30xb", "s9510-28dc"}
+    # device attrs say "2.4 Tb/s" and never mention it.
+    # ASSERTED AS MEMBERSHIP, NOT EQUALITY: an exact set here is pinned to how
+    # much of the portfolio has been modelled, so it fails the day somebody adds
+    # a 400G box that the index correctly finds - a test breaking because the
+    # library grew is the wrong way round. What this test is about is that the
+    # speed is reachable from a GROUP attr with no device-level sentence, and
+    # membership says that.
+    assert {"as7946-30xb", "s9510-28dc"} <= find("400g")
     # and it must not find the AGR420, whose QSFP-DD ports are declared 100g
     assert "as7946-74xksb" not in find("400g")
     # transcribed vendor prose is deliberately NOT indexed: `states` holds

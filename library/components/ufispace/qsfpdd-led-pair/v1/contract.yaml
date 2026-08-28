@@ -1,0 +1,103 @@
+format: 1
+kind: component
+name: qsfpdd-led-pair
+version: 1.0.0
+class: led
+profile: networking
+description: Port-LED cluster printed in the gutter between two neighbouring QSFP-DD
+  cage columns on the S9710-76D - a tall two-cell light-pipe window over each of the
+  two ports in that row, with a pair of small round green lamps stacked between them.
+  The window lens is the bank marker - RED on the fabric band, BLUE on the service
+  band - which is the one cue on this faceplate that tells the two banks apart, hence
+  one skin per bank and no neutral default
+size: {w: 9.2, h: 6.0}
+provenance:
+  size: >-
+    drawing - S9710-76D HIG Figure 10a (page 13 rendered at 600 dpi; the chassis body
+    measures 3522 x 706 px against the datasheet's 436 x 87.7 mm, aspect 4.989 against
+    a true 4.971 - 0.36% out, so 8.078 px/mm across and 8.050 down). In the strip above
+    the fabric band the two outer windows read at 38.3 and 44.8 mm with the cage-column
+    centres either side of them at 32.36 and 51.36, i.e. +/-3.25 mm about the gutter
+    centre, each window about 2.6 mm wide and 5.6 mm tall; the round lamps between them
+    read 2.0 mm across on the gutter centre itself. 9.2 x 6.0 is that extent rounded
+    out. The same feature repeats at every one of the ten fabric gutters and every one
+    of the nine service gutters at the same offsets, in all four lamp strips.
+  arrangement: >-
+    drawing+render - one cluster per PAIR of cage columns, not per column. The colour
+    detector finds the centre lamps at exactly ten x positions across the twenty-column
+    fabric band (41.5, 79.8, 123.6, 161.9, 205.6, 243.5, 287.4, 325.3, 369.6, 407.0)
+    and at nine across the eighteen-column service band, and every one of those falls
+    on a gutter between an EVEN and the following ODD column, never on the gutter
+    between an odd and the next even one. The vendor front render
+    s9710-76d-2-view.png shows the same thing independently: a pale window, two small
+    green dots, a pale window, repeating every second cage. Four strips x (10 or 9)
+    clusters x 2 windows = 76 windows against 76 ports, which is why the two windows
+    are modelled as one lamp for each of the two ports the cluster sits between.
+  semantics: >-
+    vendor-silent - the S9710-76D HIG's section 10 tables the five front-panel lamps
+    (SYNC, SYS, FAN, PS0, PS1), the PSU FRU lamps, the Fan FRU lamp and the management
+    jack's pair, and says nothing at all about the port lamps: not what a window shows,
+    not what the two round lamps between them are for, and not which of the two windows
+    serves which cage. Every element therefore keeps the plain off/on default rather
+    than an invented vocabulary; see the device's port-led-semantics gap. Reached from
+    this device's own guide, not carried over from ufispace/qsfpdd-led-cluster's
+    identically-shaped finding on the S9311-64D.
+  colour: >-
+    measured, and it is the LENS rather than a lit state - which is why this part has
+    two skins and no neutral one. Counted over the vendor front render
+    s9710-76d-2-view.png (no highlight overlay of any kind on it), the two strips
+    flanking the FABRIC band carry 20 red windows and 20 red windows and ZERO blue
+    between them, and the two flanking the SERVICE band carry 18 blue and 16 blue and
+    zero red - four strips, 74 windows, not one crossing over. A lit state does not
+    sort itself perfectly by bank in four independent strips. HIG Figure 10a says the
+    same thing on its uncontaminated bands (fabric strips red-only, service bottom strip
+    blue-only). Lens means, taken over every matching pixel in the render: fabric
+    #d87e8e, service #6590c4, and the round lamps #326f08 in both. So `fabric` and
+    `service` differ in exactly one value each and nothing else.
+  amber-is-a-state-not-a-third-lens: >-
+    three of the nine clusters in the service band's LOWER strip - at gutter centres
+    79.9, 243.6 and 407.3, serving service ports 1/3, 21/23 and 33/35 - read amber
+    (#b88e41) as well as blue in the same run. Enlarged 16x, those windows are BLUE in
+    their lower cell and amber in their upper cell, while the same three clusters are
+    blue in both cells in the strip above; so the amber is one cell of a blue window
+    lit, not a differently-coloured lens. It is not the OP2 set either (that is ports
+    1, 17, 19 and 35, and 17/19 are not amber while 21/23/33 are). Nothing is drawn
+    amber here and the observation is filed in the device's port-led-semantics gap,
+    because the vendor publishes no vocabulary that would say what an amber upper cell
+    means. The horizontal seam between the two cells IS drawn, in both skins, because
+    it is what the enlargement shows.
+elements:
+  win-left:
+    at: [0.0, 0.0]
+    size: [2.6, 6.0]
+    class: led
+    states: ['off', 'on']
+  lamp-upper:
+    at: [3.9, 0.3]
+    size: [1.4, 1.4]
+    class: led
+    states: ['off', 'on']
+  lamp-lower:
+    at: [3.9, 4.3]
+    size: [1.4, 1.4]
+    class: led
+    states: ['off', 'on']
+  win-right:
+    at: [6.6, 0.0]
+    size: [2.6, 6.0]
+    class: led
+    states: ['off', 'on']
+relief:
+  features:
+    - node: win-left
+      out: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/qsfpdd-led-pair@1 - the light pipes read as slightly raised blocks in
+        the vendor front render; no document dimensions the projection. 0.4 is the
+        estimate every UfiSpace light pipe in this library carries.
+    - node: win-right
+      out: 0.4
+      confidence: estimated
+      source: ufispace/qsfpdd-led-pair@1 - as win-left. One estimate written twice.
+skins: [fabric, service]

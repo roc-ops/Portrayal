@@ -1,0 +1,113 @@
+format: 1
+kind: module
+name: psu-132-crps-dc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: UfiSpace PSU-132-DEGR-NN 1300W DC PSU (S9601-104BC) - CRPS form factor,
+  black face with a square intake-fan frame filling the left half under a horizontal
+  pull bar, a two-post screw terminal block under a hinged clear cover, a red release
+  latch on the right edge and a status lamp above it; front-to-back (exhaust) airflow
+size: {w: 73.5, h: 40.0}
+attrs: {power-output-w: 1300, input: dc, model: PSU-132-DEGR-NN, airflow: exhaust}
+provenance:
+  power: >-
+    datasheet - the S9601-104BC datasheet's Available to Order block states the rating
+    in the part number's own row: 'PSU-132-DEGR-NN, 1300W DC, exhaust air flow'. The
+    HIG adds two figures that are NOT this nameplate and are not recorded as it: a
+    built-in '60A, fast acting fuse based on the PSU maximum capacity' (a protection
+    device rating) and a suggested 30 A PDU fuse for the whole system.
+  size: >-
+    HIG - Component Physical Information table, 'PSU (W x D x H) 2.89 x 7.28 x 1.57 in
+    (73.5 x 185 x 40mm)'; the table gives one PSU size for both input types and the
+    AC and DC weights are equal (2.2 lb / 1.0 kg each), so the face is the same
+    73.5 x 40 as ufispace/psu-132-crps-ac@1. THIS IS NOT ufispace/psu-132-dc@1, which
+    is the same 1300 W rating in a 50.5 x 40 face.
+  layout: >-
+    drawing - the fan frame, pull bar, red latch and lamp are the same features in the
+    same places as ufispace/psu-132-crps-ac@1 and were measured there, on HIG Figure
+    4's rear elevation at 3.6159 px/mm; THAT ELEVATION SHOWS THE AC BUILD, so those
+    positions are carried across on the strength of HIG Figures 5 and 6 drawing the
+    two supplies as one mechanical part differing only in the input, and that is a
+    borrowed measurement rather than a second one. The terminal block itself is
+    drawn from Figure 6, which is a PORTRAIT mechanical view (fan at the top) at
+    about 1.3 px/mm: it names the parts - 'INPUT TERMINAL BLOCK', 'TERMINAL HOUSING
+    COLOR: BLACK', 'TERMINAL COVER COLOR: CLEAR', 'LATCH COVER COLOR: RED (PANTONE
+    199C)' - and letters the two posts DC-(-48V) and DC+(-48V RETURN), but does not
+    dimension them. The posts sit side by side in that portrait view, so they stack
+    vertically here, DC+ above DC-. Their size and spacing are ESTIMATED to fill the
+    same 20 x 28 window the AC build gives its inlet.
+  led-states: >-
+    HIG section 10, PSU FRU LED table (page 23) - one table for both input types,
+    transcribed in full and identical to the AC sibling's.
+  terminal-cover: >-
+    HIG section 9, DC Version: 'Remove the plastic cover that is protecting the
+    terminal block by pushing from the top or bottom of the cover and flipping open
+    the cover outwards.' The cover is drawn CLOSED, which is how the unit ships and
+    how Figure 6 draws it; it is a hinged part of this module and not a separate FRU,
+    so it is artwork here rather than an occupant.
+elements:
+  handle: {at: [1.2, 16.4], size: [40.4, 6.6], class: handle}
+  latch: {at: [62.5, 12.7], size: [5.3, 18.8], class: latch}
+  dc-input: {at: [41.7, 6.0], size: [20.0, 28.0], class: terminal}
+  status-led:
+    at: [66.5, 7.3]
+    size: [3.0, 3.0]
+    class: led
+    states: ['off',
+             {name: ok, color: '#22c55e'},
+             {name: standby, color: '#22c55e', behavior: blinking},
+             {name: critical, color: '#eab308'},
+             {name: warning, color: '#eab308', behavior: blinking}]
+    description: >-
+      HIG PSU FRU LED table - Off (no input power to all power supplies), Green
+      (output ON and OK), Blinking Green (standby: input power present with only
+      +12VSB on, or the supply in smart standby; the boot-loader firmware-update row
+      is visually identical and shares this state), Amber (a critical event causing
+      shutdown - failure, overcurrent, short circuit, overvoltage, fan failure,
+      overtemperature - and separately an input feed lost with a second supply still
+      fed), Blinking Amber (warning events where the supply keeps operating - high
+      temp, high power, high current, slow fan). The HIG's own DC procedure adds the
+      plain-language version: 'when turned on, the LED on the PSU will light up with
+      a Green color designating normal operation.'
+relief:
+  features:
+    - node: rotor-grille
+      vent: 25
+      confidence: estimated
+      source: >-
+        ufispace/psu-132-crps-dc@1 - nothing in the HIG dimensions anything off the
+        face. Same treatment as its AC sibling.
+    - node: rotor-bulge
+      dome: 3.0
+      confidence: estimated
+      source: >-
+        ufispace/psu-132-crps-dc@1 - unsourced; the impeller stands slightly behind
+        the frame in HIG Figure 6's isometric.
+    - node: handle
+      out: 3.5
+      confidence: estimated
+      source: >-
+        ufispace/psu-132-crps-dc@1 - the pull bar stands off the face in HIG Figure
+        6's isometric; nothing dimensions it.
+    - node: dc-input
+      out: 2.0
+      confidence: estimated
+      source: >-
+        ufispace/psu-132-crps-dc@1 - the terminal block and its hinged cover stand
+        proud of the face (they have to, to be flipped open), by an amount no
+        document gives.
+    - node: latch
+      out: 1.2
+      confidence: estimated
+      source: >-
+        ufispace/psu-132-crps-dc@1 - the latch is pressed to release (HIG section 7)
+        so it must stand proud; nothing dimensions it.
+    - node: status-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/psu-132-crps-dc@1 - unsourced. Same 0.4 estimate as the other
+        UfiSpace FRUs.
+skins: [default]

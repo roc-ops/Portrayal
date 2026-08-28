@@ -1,0 +1,98 @@
+format: 1
+kind: module
+name: psu-132-dc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: UfiSpace PSU-132-DISB1 1300W DC PSU (S9300-32D family) - silver face,
+  red release latch, two-pole screw-terminal block with flip-open plastic cover,
+  square-hole vent grid, wire bail handle, status LED; front-to-back (intake)
+  airflow
+size: {w: 50.5, h: 40.0}
+attrs: {power-output-w: 1300, input: dc, model: PSU-132-DISB1}
+provenance:
+  power: >-
+    datasheet - the ordering line states the rating in the part number's own row: 'Power
+    Supply Types PSU-132-DESR-3N, 1300W DC, exhaust air flow / PSU-132-DISB1, 1300W DC,
+    intake air flow', beside the AC pair at the same 1300 W. Input per datasheet: DC -40
+    to -75 V, 40 A. The HIG adds a built-in 60 A fast-acting fuse and that 12 V and 5VSB
+    are live the moment input is connected.
+  size: >-
+    datasheet/drawing - the HIG component table gives the PSU 50.5 x 321 x 40 mm (W x D x
+    H); the HIG Fig 7 DC PSU drawing dimensions the body (321 mm, 316.2 mm to the latch
+    shoulder, 331.2 mm overall with handle, face 50.0 x 39.9 drawn) - the drawing's face
+    view is printed rotated 90 degrees, its 39.9 being the installed HEIGHT. Face taken
+    as 50.5 x 40 per the table; the 43.8 mm chassis leaves a 1.9 mm margin top and bottom.
+  terminal-block: >-
+    drawing/photo - HIG Fig 32/33 show the screw-type terminal block behind a flip-open
+    plastic cover, taking two one-hole lugs on M-studs torqued to 14.0 +/- 0.5 kgf.cm;
+    the datasheet rear view draws the two clamps side by side in the centre of the face.
+    Two poles (-48V and return); positions photo-measured off the datasheet rear render,
+    which is 6% off in aspect, so they are proportions, not measurements.
+  led-states: HIG section 10, PSU FRU LED table (page 25), transcribed in full
+  airflow: >-
+    datasheet ordering line ('intake air flow') plus HIG Fig 6: PSUs for front-to-back
+    airflow are identified with a red latch, back-to-front with blue. The DESR-3N sibling
+    (exhaust / back-to-front, blue latch) is not modelled; this skin draws the red-latched
+    DISB1.
+elements:
+  status-led:
+    at: [6.4, 31.4]
+    size: [3.0, 3.0]
+    class: led
+    states: ['off',
+             {name: ok, color: '#22c55e'},
+             {name: standby, color: '#22c55e', behavior: blinking},
+             {name: fail, color: '#ef4444'},
+             {name: input-lost, color: '#ef4444', behavior: blinking},
+             {name: warning, color: '#22c55e', behavior: {mode: alternating, color: '#ef4444'}}]
+    description: >-
+      HIG PSU FRU LED table - Off (no input power to all power supplies), Green (output
+      on and OK), Blinking Green (standby state / only +5VSB on, or firmware updating),
+      Red (critical event causing shutdown - failure, over current, short circuit, over
+      voltage, fan failure, over temperature), Blinking Red (input power lost with a
+      second supply in parallel still powered), Blinking between Green and Red (warning
+      event, supply continues to operate - high temp, high power, high current, slow fan)
+  latch: {at: [0.6, 3.5], size: [4.2, 14.5], class: latch}
+  handle: {at: [40.6, 3.0], size: [3.2, 24.0], class: handle}
+  terminal-block: {at: [13.0, 8.0], size: [24.0, 28.0], class: inlet}
+relief:
+  features:
+    - node: latch
+      out: 2.2
+      confidence: estimated
+      source: >-
+        ufispace/psu-132-dc@1 - the HIG Fig 7 drawing gives the face and the body depth
+        and projects only the handle; the latch's proudness is not in it. Same 2.2 as
+        ufispace/psu-401-dc.
+    - node: handle
+      uhandle: 38
+      confidence: datasheet
+      source: >-
+        UfiSpace S9300-32D HIG, Space Clearance: 'the handle for the power supplies will
+        extend outwards by 1.5 inches (3.8cm)'. 38 mm, published by the vendor for the PSU
+        handle specifically (the fan handle's 1 inch is the other half of the same
+        sentence).
+    - node: terminal-block
+      out: 8
+      confidence: estimated
+      source: >-
+        ufispace/psu-132-dc@1 - unsourced. The HIG dimensions the body and projects the
+        handle; the block's proudness is not in it. Same 8 as ufispace/psu-401-dc's block:
+        one estimate written twice.
+    - node: status-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/psu-132-dc@1 - unsourced. The HIG's PSU FRU LED table gives the lamp's
+        states and nothing about its lens. Same 0.4 as every other UfiSpace FRU lamp.
+    - node: vent-field
+      vent: 30
+      confidence: estimated
+      source: >-
+        ufispace/psu-132-dc@1 - the HIG dimensions nothing off the face but the handle;
+        the vent depth is not in it.
+connection-points:
+  power: {at: [25.0, 24.0], direction: front}
+skins: [default]

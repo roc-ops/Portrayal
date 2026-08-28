@@ -1,0 +1,49 @@
+format: 1
+kind: component
+name: osfp
+version: 1.0.0
+class: port
+profile: networking
+interface: osfp
+description: OSFP cage cutout (800G, one port per opening; the belly-to-belly rows of a
+  2RU face are two of these, not one tall one)
+size: {w: 23.1, h: 13.5, d: 47.0}
+attrs: {media: osfp}
+provenance:
+  size: >-
+    drawing - measured on the UfiSpace S9321-64EO Hardware Installation Guide Figure 8,
+    whose S9321-64EO elevation spans 1365 x 273 px across the datasheet's 436 x 87.7 mm
+    face (aspect 5.000 against a true 4.971, 0.57% out, so it carries geometry). Sixteen
+    cage columns sit on a 23.10 mm pitch with the cages abutting inside each group of
+    four, and the four cage rows measure 13.5 mm tall between their bezel bands. That
+    23.10 x 13.5 aperture brackets the OSFP MSA module envelope of 22.58 x 13.0 mm, which
+    is what a cage has to clear, so the two readings corroborate rather than conflict -
+    but the number here is the vendor drawing's, not the MSA's.
+  depth: >-
+    estimated - the OSFP module is 107.8 mm long and a receptacle swallows roughly half of
+    it, so 47 mm is a guess of the same shape as the 37 mm SFF-8663 figure the QSFP cages
+    carry. NO HELD DOCUMENT DIMENSIONS THE OSFP CAGE DEPTH. Anything built on this number
+    should treat it as a placeholder.
+  registry: >-
+    spec/schemas/standards.yaml HAS NO `osfp` KEY, so this contract declares
+    `interface: osfp` rather than `conforms:` - the weaker of the two forms, and the
+    honest one while the registry entry does not exist. Adding the key needs the OSFP MSA
+    faceplate-opening figure, which is not in the intake. Recorded as a gap on
+    ufispace/s9321-64eo.
+elements:
+  opening: {at: [0.0, 0.0], size: [23.1, 13.5], class: cutout}
+relief:
+  wall: '#aab0b7'
+  features:
+    - node: collar
+      out: 1.0
+      color: '#7d848c'
+      confidence: estimated
+      source: >-
+        std/ cage collars - the same one figure std/sfp@1, std/xfp@1, std/qsfp28@1,
+        std/qsfp56@1 and std/qsfp-dd@1 carry. No cage specification dimensions how far the
+        lip stands proud of the panel, and this is that estimate written a sixth time, not
+        a sixth reading.
+connection-points:
+  mate: {at: [11.55, 6.75], direction: front}
+skins: [default]

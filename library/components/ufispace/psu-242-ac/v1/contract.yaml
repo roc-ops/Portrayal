@@ -1,0 +1,115 @@
+format: 1
+kind: module
+name: psu-242-ac
+version: 1.0.1
+class: psu
+behaviour: fills
+profile: networking
+description: UfiSpace PSU-242-AECRN 2400W AC PSU (S9311-64D) - CRPS form factor,
+  black face with a square intake-fan frame filling the left half under a
+  horizontal pull bar, a portrait C20 appliance inlet, a red release latch on the
+  right edge and a status lamp below it; front-to-back (exhaust) airflow
+size: {w: 73.5, h: 40.0}
+attrs: {power-output-w: 2400, input: ac, model: PSU-242-AECRN, airflow: exhaust}
+provenance:
+  power: >-
+    datasheet - the S9311-64D datasheet's Available to Order block states the rating
+    in the part number's own row: 'PSU-242-AECRN 2400W, AC, exhaust air, CRPS type,
+    red colored latch'. A supply has a rating rather than a draw measured against an
+    ambient, so no temperature is recorded with it. The HIG adds two derating notes
+    that are about the INPUT and not about this nameplate: at a 110 V feed each
+    supply delivers 1000 W and hot-swap redundancy is not guaranteed, and its AC
+    section says two supplies on 110 V give 1200 W each for 2400 W total. Those two
+    HIG sentences disagree with each other about the 110 V per-supply figure (1000
+    against 1200); neither is this contract's number, which is the 220-240 V
+    nameplate, and the disagreement is recorded on the device as a gap.
+  size: >-
+    HIG - the Component Physical Information table gives the PSU 73.5 x 185 x 40 mm
+    (W x D x H), and the face here is the 73.5 x 40. HIG Figure 8's mechanical
+    drawing of the AC unit corroborates the body length at 185.6 +/- 0.5. Measured
+    back against HIG Figure 9's rear elevation at 2.449 px/mm the drawn face is
+    73.5 wide and 40.8 tall - the width is exact and the height is 2% over the
+    table, which is bay clearance rather than a different number.
+  layout: >-
+    drawing - HIG Figure 9 rear elevation at 2.449 px/mm across and 2.4515 down,
+    positions relative to the face's own top-left: the square fan frame's four
+    corner bosses bound x 0.4-40.8 and y 0-39.2, the horizontal pull bar crosses it
+    at y 15.9-22.5, the C20 aperture measures 24.1 x 31.4 at x 43.7-67.4 y 4.1-35.1,
+    the red latch is x 67.0-71.5 y 11.4-29.8 and the lamp x 68.6-71.5 y 31.8-35.5.
+    HIG Figure 7's isometric of the AC unit shows the same face from three-quarter
+    view. The inlet is drawn 0.4 mm left of its measured centre so that it does not
+    run under the latch, which the figure lets it do by about that much.
+  inlet: >-
+    standard (IEC 60320-1 via std/c20-inlet, rotated 270 so the earth pin lies on
+    the LEFT, which is where the figure puts the single slot against the pair). The
+    HIG's Connecting Power section names the cord: 'plug the AC power cable (250VAC
+    15A, IEC60320 C19) into the AC inlet connector' - a C19 cord mates a C20 inlet,
+    so the standard part is the right one and no interpolation was needed. The
+    registry cutout is 32.4 x 24.4 and the figure draws 31.4 x 24.1, which is the
+    same opening to within a pixel.
+  led-states: >-
+    HIG section 10, PSU FRU LED table (page 25), transcribed in full. The table's
+    two Blinking Green rows - input power present with only +12VSB on, and firmware
+    updating in boot-loader mode at 2 Hz - are visually one behaviour at this
+    fidelity and share one state, said so in the element description rather than
+    invented as two. The table also prints Solid Amber TWICE with different causes
+    (input out of range with the parallel supply still fed, and a critical shutdown
+    event); those likewise share one state.
+elements:
+  handle: {at: [1.2, 15.9], size: [40.4, 6.6], class: handle}
+  latch: {at: [67.0, 11.4], size: [4.5, 18.4], class: latch}
+  status-led:
+    at: [68.6, 32.0]
+    size: [2.9, 2.9]
+    class: led
+    states: ['off',
+             {name: ok, color: '#22c55e'},
+             {name: standby, color: '#22c55e', behavior: blinking},
+             {name: critical, color: '#eab308'},
+             {name: warning, color: '#eab308', behavior: blinking}]
+    description: >-
+      HIG PSU FRU LED table - Off (no input power to all power supplies), Solid
+      Green (output ON and OK), Blinking Green (input power present / only +12VSB
+      on; the 2 Hz firmware-updating row is visually identical and shares this
+      state), Solid Amber (input out of range with a second supply in parallel
+      still fed, and separately a critical event causing shutdown - OTP, OVP, UVP,
+      OCP; the table prints both under one appearance), Blinking Amber at 1 Hz
+      (warning events where the supply keeps operating - high temp, high power,
+      high current, slow fan)
+parts:
+  - {ref: std/c20-inlet@1, id: inlet, at: [38.6, 7.4], rotate: 270}
+relief:
+  features:
+    - node: rotor-grille
+      vent: 25
+      confidence: estimated
+      source: >-
+        ufispace/psu-242-ac@1 - HIG Figure 8 dimensions the 73.5 x 40 face and the
+        module length and gives nothing off the face. Same treatment as
+        ufispace/psu-921-ac.
+    - node: rotor-bulge
+      dome: 3.0
+      confidence: estimated
+      source: >-
+        ufispace/psu-242-ac@1 - unsourced; the impeller stands slightly behind the
+        frame in HIG Figure 7 and no document dimensions it.
+    - node: handle
+      out: 3.5
+      confidence: estimated
+      source: >-
+        ufispace/psu-242-ac@1 - the pull bar stands off the face in HIG Figure 7's
+        isometric. The S9311-64D HIG has no Space Clearance sentence projecting it,
+        so this magnitude is an estimate and NOT a vendor figure.
+    - node: latch
+      out: 1.2
+      confidence: estimated
+      source: >-
+        ufispace/psu-242-ac@1 - the latch is pressed to release (HIG section 7) so
+        it must stand proud; nothing dimensions it.
+    - node: status-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/psu-242-ac@1 - unsourced. Same 0.4 estimate as the other UfiSpace
+        FRUs.
+skins: [default]

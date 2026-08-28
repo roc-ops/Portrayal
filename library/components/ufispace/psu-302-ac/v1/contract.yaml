@@ -1,0 +1,116 @@
+format: 1
+kind: module
+name: psu-302-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: UfiSpace PSU-302-AESR 3000W AC PSU (S9321-64E/EO family) - IEC 60320 C20
+  inlet, Input and Output status LEDs stacked at the left, black wire pull handle
+  across the foot, red release clip on the right edge; exhaust (front-to-back) airflow
+size: {w: 68.0, h: 40.6}
+attrs: {power-output-w: 3000, input: ac, model: PSU-302-AESR}
+provenance:
+  power: >-
+    datasheet - the rating is in the part number's own ordering line, in the S9321-64E
+    datasheet's Available to Order section: 'PSU-302-AESR, 3000W AC, exhaust air flow',
+    beside the DC sibling at the same 3000 W. No ambient is stated with it - a supply
+    has a rating rather than a draw measured against temperature - so none is recorded.
+    The HIG adds a derating the number alone does not carry and which belongs with it:
+    'If power input for AC power supply is only 110V, there will only be 1500 watts per
+    power supply', so 3000 W is the 200-240 V figure.
+  size: >-
+    drawing - S9321-64E HIG Figure 5 (AC PSU dimension drawing): the face view is
+    dimensioned 68.0 mm wide and 40.6 mm high, and the body 452.4 mm (458.8 over the
+    retainer, 19.6 mm for the rear tang). The HIG Component Physical Information table
+    rounds the same part to 'PSU (W x D x H) 2.67 x 17.66' x 1.60' (68 x 448.7 x
+    40.6mm)' - the two agree on the face to the tenth and differ only in which body
+    length they quote, which is a scope difference and not a disagreement.
+  face-layout: >-
+    drawing - S9321-64E HIG Figure 4's rear elevation, measured at 3.654 px/mm against
+    a chassis whose drawn aspect is 0.1% from true, with positions taken relative to
+    the module's own left edge (chassis x 360.0). The C20 aperture measures x 20.5-51.7,
+    y 4.6-27.1 - 31.2 x 22.5 against the standard opening's 32.4 x 24.4, so the standard
+    part is seated on the measured centre rather than resized. The black handle bar
+    measures x 11.5-56.1, y 29.8-37.5; the red release clip x 63.7-69.4, y 10.1-26.8,
+    which runs 1.4 mm past the module's own 68 mm edge in the figure and is drawn to
+    the edge here. The two lamps sit at x 6.0, y 5.2 and 12.7, averaged over both fitted
+    PSUs (they read 8.26/15.77 and 51.17/58.57 in chassis coordinates against bay tops
+    of 3.3 and 45.7).
+  inlet: >-
+    standard (IEC 60320-1 via std/c20-inlet) and named by both sources: HIG Figure 5
+    labels the face drawing 'Input Socket C20', and the Connecting Power section says
+    'plug the AC power cable (250VAC 15A, IEC60320 C19) into the AC inlet connector' -
+    a C19 cable connector mates a C20 inlet, so the two statements agree.
+  led-states: >-
+    S9321-64E HIG section 10, PSU FRU LED table (page 23), transcribed in full. The
+    table names two lamps, Input and Output, which is why two are drawn.
+  clip-color: >-
+    drawing - HIG Figures 5 and 6 both call out a 'Red Clip' and a 'Black Handle' by
+    name on the AC and the DC unit alike. This platform ships only exhaust-flow FRUs
+    (the datasheet lists one fan and two PSUs, all 'exhaust air flow'), so unlike the
+    S6301 and S9510 families there is no blue intake sibling and red is not a variant
+    marker here.
+elements:
+  input-led:
+    at: [4.7, 3.9]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off', {name: in-range, color: '#22c55e'}]
+    description: >-
+      S9321-64E HIG PSU FRU LED table, Input LED - Green (input within range), Off
+      (input out of range, or firmware upgrading); the table gives those two rows and
+      folds the FW-upgrading case into Off
+  output-led:
+    at: [4.7, 11.4]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off',
+             {name: ok, color: '#22c55e'},
+             {name: standby, color: '#22c55e', behavior: blinking},
+             {name: over-temp, color: '#f59e0b', behavior: blinking},
+             {name: fault, color: '#f59e0b'}]
+    description: >-
+      S9321-64E HIG PSU FRU LED table, Output LED - Solid Green (12.3V main output OK),
+      Blinking Green (12.3V main output in standby mode), Off (12.3V main output off due
+      to input out of range), Blinking Amber (over temp warning, or fan error), Solid
+      Amber (12.3V main output or 12VSB out of range; OTP, OVP, UVP, OCP)
+  handle: {at: [11.5, 29.8], size: [44.6, 7.7], class: handle}
+  clip: {at: [62.0, 10.1], size: [5.5, 16.7], class: latch}
+parts:
+  - {ref: std/c20-inlet@1, id: inlet, at: [19.8, 3.9]}
+relief:
+  features:
+    - node: handle
+      uhandle: 30
+      confidence: datasheet
+      source: >-
+        S9321-64E HIG, Space Clearance: 'the handle of the PSU FRU is 1.2 inches
+        (3.0cm)'. 30 mm exactly, published by the vendor for THIS platform's supplies.
+    - node: clip
+      out: 2.2
+      confidence: estimated
+      source: >-
+        ufispace/psu-302-ac@1 - the HIG publishes the handle projection and dimensions
+        nothing else off this face; 2.2 follows the UfiSpace FRU family estimate.
+    - node: vent-field
+      vent: 30
+      confidence: estimated
+      source: >-
+        ufispace/psu-302-ac@1 - the vent depth is in no held drawing; follows the
+        UfiSpace PSU family estimate.
+    - node: input-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/psu-302-ac@1 - unsourced. The HIG's PSU FRU LED table gives both lamps'
+        states and nothing about their lenses; 0.4 is the UfiSpace FRU family estimate.
+    - node: output-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/psu-302-ac@1 - unsourced, the same estimate as input-led. One number
+        written twice, not two readings.
+connection-points:
+  power: {at: [36.0, 16.1], direction: front}
+skins: [default]
