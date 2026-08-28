@@ -15,7 +15,7 @@ live in one table and the failure mode is somebody adding a face without a
 import re
 from pathlib import Path
 
-VIEWER = Path(__file__).resolve().parents[1].parent / "library/viewer/viewer3d.js"
+VIEWER = Path(__file__).resolve().parents[1].parent / "kit/viewer3d.js"
 
 # what each face looks into: front/rear the depth, sides the width, lid and
 # underside the height

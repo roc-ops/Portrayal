@@ -266,4 +266,4 @@ the next render — no device file is touched.
 | `spec/tools/portrayal/render.py` | emits `data-depth`, `data-z-*`, `data-vent`, `data-groove` |
 | `spec/tools/portrayal/lint.py` | L9 (registry match incl. depth), L11 (relief nodes exist) |
 | `spec/tools/portrayal/components_index.py` | publishes compiled components + body side art, and both halves of the index |
-| `library/viewer/viewer3d.js` | the viewer: device mode and `?component=ns/name@major` |
+| `kit/viewer3d.js` | the viewer: device mode and `?component=ns/name@major` |

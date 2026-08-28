@@ -14,7 +14,7 @@ globalThis.location = { search: '' };
 // a 404 page's body as if it were a drawing, so a stub Response needs it.
 globalThis.fetch = async () => ({ ok: true, text: async () => '<svg id="FETCHED"/>' });
 
-const m = await import('../../../library/viewer/relief.js');
+const m = await import('../../../kit/relief.js');
 
 const url = 'face.svg';
 const a = m.createReliefScope();

@@ -15,8 +15,14 @@ The core is domain-neutral. Networking is the first profile, not the only one.
 ```
 spec/          schemas, compiler, linter, tests
 library/       component contracts + skins, device manifests, NOS overlays
+kit/           portrayal-kit: the JS consumer — draw, inspect, export
 docs/          how the model works
 ```
+
+The split is a line about who reads what. `spec/` and `library/` are the source
+of truth and the compiler; they read YAML. `kit/` reads only what `build.sh`
+publishes into `library/dist/`, which is a documented contract — so a consumer
+needs the artifacts, not a checkout of this repository.
 
 ## Try it
 
