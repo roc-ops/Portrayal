@@ -32,37 +32,36 @@ the single most repeated error.
 
 ### A VENDOR 3D MODEL OUTRANKS EVERY FIGURE. LOOK FOR ONE FIRST.
 
-Vendors increasingly ship a GLB on the product page to drive a
-`<model-viewer>` on the web, and it is usually a **KeyShot or equivalent
-export of the actual CAD** - not a display proxy. The ReadyLinks GL-8xEP's
-is 728 nodes, 495 meshes, 435k triangles, one mesh per physical part, at
-millimetre scale. Jack columns on a 13.95 mm pitch, the lamp band inside an
-SFP cage, every lens and lid screw, read straight off mesh bounding boxes.
-No aspect gate needed, because there is no projection to be wrong about.
+Product pages increasingly embed a 3D model to drive an in-page viewer, and
+it is often an **export of the actual CAD** rather than a display proxy: one
+mesh per physical part, at millimetre scale, with hundreds of thousands of
+triangles. Where one exists, port pitch, lamp positions, cage depths and
+screw locations come off it directly and Gate 1 does not apply, because
+there is no projection to be wrong about. Scrape the product page for
+`.glb`, `.gltf`, `.usdz` and for a `model-viewer` element before concluding
+you only have figures.
 
-    scrape the product page for  \.glb|\.gltf|\.usdz  and for model-viewer
-    working/intake/readylinks/gen/glb_inspect.py   header, node tree, counts
-    working/intake/readylinks/gen/glb_features.py  features in FACE coordinates
+Parsing a GLB needs no library: a 12-byte header, a JSON chunk, a BIN chunk.
+Walk `scenes -> nodes`, compose each node's TRS (or `matrix`) down the tree,
+and transform the eight corners of each primitive's accessor `min`/`max` to
+get world-space boxes. Then pick the face plane and convert to view
+coordinates once, in one place - getting that mapping wrong once is cheap
+and getting it wrong per-feature is not. (Working parsers live in the
+intake's `gen/` directory alongside whichever vendor first needed them.)
 
-Parsing needs no library: a GLB is a 12-byte header, a JSON chunk and a BIN
-chunk. Walk `scenes -> nodes`, compose each node's TRS (or `matrix`) down
-the tree, and transform the eight corners of each primitive's accessor
-`min`/`max`. That gives world-space boxes; pick the face plane and convert
-to view coordinates once.
+**Expect the datasheet's overall dimensions to disagree with the CAD body,
+and read the SHAPE of the disagreement.** If the three deltas are unequal
+per axis, they are protrusions and mounting furniture outside the metal -
+handles, jack noses, feet, bosses - and the CAD body is what you model. If
+they are equal, you have a scale or unit error and must stop. This is the
+ear-fold rule arriving from a different direction: model the body, record
+the stated overall, say which is which.
 
-**The datasheet's overall dimensions and the CAD body will disagree, and
-the shape of the disagreement is the evidence.** The GL-8xEP reads
-160 x 45.32 x 165 from CAD against a stated 166 x 177 x 48.3. Those deltas
-are 3.7 / 7.3 / 6.0 percent - *per-axis and unequal*, which is what says
-protrusions and mount furniture rather than a unit error or a scale factor.
-Had they been equal, the model would be in the wrong units. Model the CAD
-body, record the stated overall, and say which is which. This is the same
-rule as the ear folds, arriving from a different direction.
-
-**What the CAD still cannot tell you** is which of four adjacent lamps
-serves which cage, what an unnamed boss on a side wall is for, or which of
-two identical jacks is the PoE-PD one. Geometry has no labels. Those stay
-`vendor-silent` gaps.
+**What CAD cannot tell you is anything with a name rather than a shape** -
+which of four adjacent lamps serves which cage, what an unlabelled boss on a
+side wall is for, which of two identical jacks carries the special role.
+Geometry has no labels. Those stay `vendor-silent` gaps no matter how good
+the mesh is.
 
 ### THE FIGURES ARE ALREADY IN THE DOCUMENTS YOU HOLD. EXTRACT THEM FIRST.
 
@@ -681,21 +680,20 @@ that a deploy had already fixed.
 ## Gate 5 - audit against the source, twice
 
 **A DEVICE THAT STOPPED HALFWAY AND A FINISHED ONE ARE INDISTINGUISHABLE TO
-EVERY AUTOMATED CHECK.** Eight agents modelling in parallel were killed
-mid-turn by a usage limit; four had already written a `device.yaml` that
-lint passed, carried six views, said `maturity: modelled` and rendered
-plausibly. One of those four had its ganged jacks drawn dark-on-dark with no
-shells - the defect a human had caught by eye on a different device an hour
-earlier. The other three were genuinely fine. **Nothing in the file, and
-nothing any rule could compute, separated the four from each other.**
+EVERY AUTOMATED CHECK.** Several models built in parallel were interrupted
+mid-task. Some had already written a `device.yaml` that lint passed, carried
+six views, said `maturity: modelled` and rendered plausibly - and one of
+those carried a defect that a reviewer had caught by eye on a different
+device an hour before. The rest were genuinely finished. **Nothing in the
+files, and nothing any rule could compute, separated them.**
 
 So the completion signal cannot be the artifact. It has to be a statement
-about what was DONE to it: *"I put the render beside the vendor photo at
-matched scale and here is what it showed."* A model that cannot produce that
-sentence is not finished, however green it lints - and if you are reviewing
-somebody else's, ask for the sentence before you believe the file. When
-delegating, say this out loud in the brief and require the sentence back;
-"lint clean, six views" is what an interrupted agent leaves behind.
+about what was DONE to it: *"I put the render beside the reference at
+matched scale, and here is what it showed."* A model that cannot produce
+that sentence is not finished however green it lints; if you are reviewing
+someone else's, ask for the sentence before you believe the file; and if you
+are delegating, require it back, because "lint clean, six views" is exactly
+what an interrupted attempt leaves behind.
 
 ### By name
 
@@ -869,13 +867,11 @@ configurations: {...}
   bracket drawn as one path claims the whole rectangle it spans and paints
   over the ports inside it. Split it: the bar as one mark `for: [a, b]`, each
   drop as its own mark `for:` its port.
-- **A label serving two ports is usually a BRACKET, not two leaders.** Where
-  a faceplate names a stacked pair once - `XG1` under two cages, `2.5G2` over
-  a stacked jack - the vendor typically prints a horizontal bar with a drop
-  at each end. Four separate leaders look plausible in a render and are
-  simply not what the metal says. The vendor's own 3D viewer or a high-zoom
-  crop settles it, and this was found by a reviewer looking at a picture, not
-  by any gate.
+- **One label serving two ports is usually a BRACKET, not two leaders.**
+  Where a faceplate names a pair once, the printing is typically a horizontal
+  bar with a drop at each end, not a separate leader per port. Both render
+  plausibly and only one is what the metal says; a high-zoom crop or the
+  vendor's own 3D viewer settles it in seconds.
 - **Where two sources disagree, carry both numbers.** One datasheet said 480 mm
   deep and 16 kg; its own quick start guide said 524 mm and 14.5 kg. Record the
   disagreement in provenance rather than silently choosing, and say which you
@@ -918,25 +914,26 @@ configurations: {...}
   a `configurations:` entry carrying `skins: {component: variant}` or nobody can
   see it.
 - **A `std/` PORT DRAWS THE OPENING. THE SHELL AROUND IT IS YOURS TO DRAW.**
-  This is the most repeated defect of the whole ReadyLinks/UfiSpace night and
-  it is invisible to every rule. `std/rj45-ganged`, `std/sfp`, `std/usb-c` and
-  friends draw the aperture and what is inside it; the bright metal
-  connector shell that surrounds a ganged block on the real faceplate is
-  panel metal, so it belongs in `panel.decor` - a fill of `#b0b5bb` with
-  `rx: 0.8`, sized from the placements it sits behind plus the flange the
-  photograph shows (about 1.1 mm in x and 1.2 mm in y on the two devices
-  measured so far). Miss it and a dark connector on a dark faceplate simply
-  DISAPPEARS: the GL-8xEP shipped its first draft that way, so did the
-  S6301-56STP an hour later, and both linted clean and rendered "fine".
-  Note the flange is not the cage: the visible strip measured 13.0 mm on a
-  cage whose body is 14.9 mm, and using the body would have swallowed the
-  port lamps that sit on black above and below it.
-- **A ganged block's pitch decides which part you may use.** Eight jacks on a
-  13.95 mm pitch cannot be `std/rj45`, whose bezel is 16 mm wide - the holes
-  overlap and L39 says so in as many messages as you have adjacent pairs.
-  `std/rj45-ganged` is 12.7 x 11.0, which is the bezel-less opening a shared
-  shell presents. When L39 reports a wall of overlaps on a port block, the
-  part is wrong, not the pitch.
+  A standard part draws the aperture and what is inside it, and stops there.
+  Where the real faceplate carries a bright metal connector shell - the strip
+  a ganged jack block sits in, the flange around a stacked pair, the collar
+  on a USB receptacle - that metal is PANEL, not part, and belongs in
+  `panel.decor` as a light fill sized from the placements it sits behind plus
+  the flange the photograph shows. Skip it and a dark connector on a dark
+  faceplate is simply INVISIBLE, which no rule can see and every reviewer
+  can. It has been the single most repeated by-eye finding, on unrelated
+  devices from unrelated vendors, and it renders and lints perfectly each
+  time. **Measure the flange, not the cage**: what is visible on the outside
+  of the panel is narrower than the connector body behind it, and using the
+  body swallows the lamps that sit just above and below the strip.
+- **A repeated block's PITCH decides which part you may use.** A standard
+  connector with a moulded bezel needs bezel-width spacing; a shared shell
+  presents bezel-less openings on a tighter pitch, and the library carries
+  both (`...-ganged` variants). If the pitch you measured is smaller than the
+  part's own width, the part is wrong - and L39 will say so once per adjacent
+  pair, so a wall of overlap messages on one block means one wrong `ref`,
+  not fifty bad coordinates. Check the pitch against the part before
+  believing you mis-measured.
 - **Prefer `std/` over `common/`.** `std/` parts are derived from a published
   standard; `common/` ones were drawn by hand and can be wrong. One
   `common/` RJ-45 puts its integrated LEDs on the contacts side, which no real
