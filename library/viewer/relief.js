@@ -74,8 +74,27 @@ export function clearSvgOverrides(scope) { _sc(scope).overrides.clear(); }
 export function svgSource(url, scope) {
   const ov = _sc(scope).overrides;
   if (ov.has(url)) return Promise.resolve(ov.get(url));
+  // A MISS IS MEMOISED AS THE EMPTY STRING, which does two things at once.
+  //
+  // It removes the HEAD probe. `buildFaceRelief` used to ask whether a view
+  // existed with a HEAD and then fetch the same URL again, so every face cost
+  // two round trips and the second proved nothing the first had not. Measured on
+  // a six-device rack: 66 requests of which 30 were duplicates, one HEAD and one
+  // GET per face per device. On localhost that is 287 ms of a 7.4 s build; over
+  // a 50 ms link it is 30 serial round trips, about 1.5 s of pure latency, and
+  // it scales with the devices on screen.
+  //
+  // It also fixes a quieter bug: this used to call `r.text()` whatever the
+  // status, so a 404's HTML was handed back as if it were a drawing, to be
+  // parsed as SVG and fail somewhere further away from the cause.
+  //
+  // EMPTY STRING RATHER THAN NULL, because every existing caller then degrades
+  // instead of throwing: `''.matchAll` yields nothing, `innerHTML = ''` empties
+  // the node, `parseFromString('')` raises a parsererror the caller already
+  // checks for, and a Blob of '' fails the image load exactly as a 404 page did.
   if (!SVG_CACHE.has(url))
-    SVG_CACHE.set(url, fetch(url, {cache: 'no-store'}).then(r => r.text()));
+    SVG_CACHE.set(url, fetch(url, {cache: 'no-store'})
+      .then(r => r.ok ? r.text() : ''));
   return SVG_CACHE.get(url);
 }
 export function clearSvgCache() { SVG_CACHE.clear(); }
@@ -536,8 +555,11 @@ export async function buildFaceRelief(F, ctx) {
     const restyle = ctx.restyle || [];
     const reg = (svgText, run) => { if (svgText) restyle.push({svgText, run}); };
     const fw = F.fw(), fh = F.fh();
-    // a device need not declare every view; fall back to a plain face
-    if (!(await fetch(src, {method: 'HEAD', cache: 'no-store'})).ok) {
+    // A device need not declare every view; fall back to a plain face. Asked
+    // through svgSource so the answer is cached: when the view DOES exist this
+    // is the same fetch extractRelief is about to want, and when it does not the
+    // miss is remembered rather than re-probed on the next LOD pass.
+    if (!(await svgSource(src, ctx.scope))) {
       const cv0 = document.createElement('canvas');
       cv0.width = Math.round(fw * PX); cv0.height = Math.round(fh * PX);
       const c0 = cv0.getContext('2d');

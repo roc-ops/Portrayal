@@ -1,0 +1,178 @@
+"""The intake figure filter, which could not be tested until now (#41).
+
+`extract.py` imported docling at module scope while `convert` was its only
+consumer, so on exactly the machines that run this suite `import extract`
+raised and none of the filter logic could be exercised.
+
+That matters more here than for most tooling. The banner filter carries the
+most expensive history in the repository, recorded in its own comments:
+matching on width and aspect cost the ASR 9900 RP elevation and the SIP-700
+with its numbered callouts; pooling hashes across vendors rather than per
+publisher cost the ASR 9001 DC power tray. Those are regressions a test catches
+and a comment does not - so each one below is named for what it protects.
+"""
+import builtins
+import importlib
+import json
+import pathlib
+import sys
+
+import pytest
+
+ROOT = pathlib.Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "spec" / "tools" / "intake"))
+
+import extract  # noqa: E402
+
+
+# ---- the fix itself ---------------------------------------------------------
+
+def test_the_module_imports_with_docling_unavailable():
+    """The point of #41. Blocked rather than assumed, because docling happens to
+    be installed on this machine and a passing import would prove nothing."""
+    real = builtins.__import__
+
+    def blocked(name, *a, **k):
+        if name.split(".")[0] == "docling":
+            raise ImportError("docling is not installed")
+        return real(name, *a, **k)
+
+    saved = {k: v for k, v in sys.modules.items() if k.split(".")[0] == "docling"}
+    for k in saved:
+        del sys.modules[k]
+    sys.modules.pop("extract", None)
+    builtins.__import__ = blocked
+    try:
+        mod = importlib.import_module("extract")
+        assert callable(mod.classify), "imported, but the filter is not there"
+        with pytest.raises(ImportError):
+            mod.convert(pathlib.Path("x.pdf"), pathlib.Path("."), 3.0)
+    finally:
+        builtins.__import__ = real
+        sys.modules.update(saved)
+        sys.modules.pop("extract", None)
+        importlib.import_module("extract")
+
+
+# ---- hashing ----------------------------------------------------------------
+
+def test_hamming_counts_differing_bits():
+    assert extract.hamming("0000", "0000") == 0
+    assert extract.hamming("0000", "0001") == 1
+    assert extract.hamming("0000", "ffff") == 16
+
+
+def test_ahash_is_stable_and_ignores_a_few_pixels():
+    """An average hash over an 8x8 thumbnail has to survive the crop wobble
+    between chapters, which is the whole reason it was chosen over dimensions."""
+    Image = pytest.importorskip("PIL.Image")
+    a = Image.new("RGB", (400, 100), "white")
+    for x in range(0, 200):
+        for y in range(0, 100):
+            a.putpixel((x, y), (0, 0, 0))
+    b = a.copy()
+    b.putpixel((399, 99), (128, 128, 128))          # one pixel of wobble
+    assert extract.ahash(a) == extract.ahash(b)
+    c = Image.new("RGB", (400, 100), "black")
+    assert extract.ahash(a) != extract.ahash(c)
+
+
+# ---- the filter -------------------------------------------------------------
+
+def pic(w, h, caption="", ahash="0000000000000000", **kw):
+    return dict(w=w, h=h, caption=caption, ahash=ahash, **kw)
+
+
+def test_an_icon_is_dropped():
+    kept, rejected = extract.classify([pic(60, 60)])
+    assert not kept and rejected[0]["drop_reason"] == "icon"
+
+
+def test_a_small_picture_with_a_caption_is_kept():
+    """`not cap` guards the icon rule. A captioned figure is a figure whatever
+    its size - the caption is the publisher saying so."""
+    kept, _ = extract.classify([pic(60, 60, caption="Figure 3: latch detail")])
+    assert len(kept) == 1
+
+
+def test_a_repeated_wide_uncaptioned_picture_is_dropped_as_a_banner():
+    pics = [pic(900, 200, ahash="ffffffffffffffff") for _ in range(extract.BANNER_CLUSTER)]
+    kept, rejected = extract.classify(pics)
+    assert not kept
+    assert {r["drop_reason"] for r in rejected} == {"banner"}
+
+
+def test_the_same_picture_below_the_cluster_threshold_is_KEPT():
+    """THE ASR 9900 RP ELEVATION. A wide uncaptioned drawing that repeats a few
+    times is a real figure - a run of power cordsets, one per country - and the
+    cluster threshold is the only thing separating it from furniture."""
+    pics = [pic(900, 200, ahash="ffffffffffffffff")
+            for _ in range(extract.BANNER_CLUSTER - 1)]
+    kept, rejected = extract.classify(pics)
+    assert len(kept) == len(pics), "a small cluster of real drawings was dropped"
+    assert not rejected
+
+
+def test_a_wide_picture_with_a_caption_is_never_a_banner():
+    """A banner is furniture and furniture is uncaptioned. Dimensions alone
+    cannot tell a chapter header from a line-card faceplate, which is what
+    matching on width and aspect got wrong."""
+    pics = [pic(900, 200, caption="Figure 12: chassis front", ahash="ffffffffffffffff")
+            for _ in range(extract.BANNER_CLUSTER * 2)]
+    kept, _ = extract.classify(pics)
+    assert len(kept) == len(pics)
+
+
+def test_banner_rule_off_keeps_every_wide_figure():
+    """THE CASA CASE. On the C100G guide every wide figure shares a width, so
+    the rule dropped fig-0038 - the fan tray face with its HS button and three
+    status LEDs. Casa prints no repeated header at all, so for Casa the rule can
+    only subtract."""
+    pics = [pic(900, 200, ahash="ffffffffffffffff") for _ in range(extract.BANNER_CLUSTER)]
+    kept, rejected = extract.classify(pics, banner_rule=False)
+    assert len(kept) == len(pics) and not rejected
+
+
+def test_an_external_pool_is_what_makes_the_rule_corpus_wide():
+    """THE POINT OF THE POOL. One document under-detects; the rule needs the
+    publisher's whole corpus. A single picture here is a banner only because the
+    pool says the same image appears everywhere else."""
+    pool = ["ffffffffffffffff"] * extract.BANNER_CLUSTER
+    kept, rejected = extract.classify([pic(900, 200, ahash="ffffffffffffffff")], pool=pool)
+    assert not kept and rejected[0]["drop_reason"] == "banner"
+
+
+def test_a_near_miss_hash_still_clusters():
+    """The threshold is Hamming 3, so a few flipped bits still count as the same
+    picture - that is the crop wobble the hash exists to absorb."""
+    near = f"{(int('f' * 16, 16) ^ 0b111):016x}"      # three bits away
+    assert extract.hamming(near, "f" * 16) == 3
+    pool = ["f" * 16] * extract.BANNER_CLUSTER
+    kept, _ = extract.classify([pic(900, 200, ahash=near)], pool=pool)
+    assert not kept
+
+
+# ---- sectioning and the index ----------------------------------------------
+
+def test_a_record_is_tagged_with_the_heading_above_its_caption():
+    md = "# One\n\ntext\n\n## Cooling\n\nFigure 4: fan tray\n"
+    recs = [pic(900, 200, caption="Figure 4: fan tray")]
+    extract.sections(md, recs)
+    assert recs[0]["section"] == "Cooling"
+
+
+def test_a_record_with_no_caption_gets_no_section():
+    recs = [pic(900, 200)]
+    extract.sections("# One\n", recs)
+    assert recs[0]["section"] == ""
+
+
+def test_write_index_records_why_things_were_dropped(tmp_path):
+    pics = ([pic(60, 60)]
+            + [pic(900, 200, ahash="ffffffffffffffff") for _ in range(extract.BANNER_CLUSTER)]
+            + [pic(900, 200, caption="Figure 1: real")])
+    n = extract.write_index(pathlib.Path("x.pdf"), tmp_path, pics, "# H\n")
+    doc = json.loads((tmp_path / "index.json").read_text())
+    assert n == 1
+    assert doc["drops_by_reason"] == {"icon": 1, "banner": extract.BANNER_CLUSTER}
+    assert doc["dropped"] == extract.BANNER_CLUSTER + 1

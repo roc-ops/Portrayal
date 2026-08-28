@@ -28,9 +28,20 @@ from pathlib import Path
 
 from PIL import Image
 
-from docling.datamodel.base_models import InputFormat
-from docling.datamodel.pipeline_options import PdfPipelineOptions
-from docling.document_converter import DocumentConverter, PdfFormatOption
+# DOCLING IS IMPORTED INSIDE `convert`, NOT HERE, and the reason is testing.
+# `convert` is the only consumer; everything else in this file - ahash, hamming,
+# classify, sections, write_index - is pure and needs nothing but pillow. The
+# README is deliberate that the build and lint gates require none of the intake
+# dependencies, which is right, and the consequence was that on exactly the
+# machines that run the test suite `import extract` raised at line 31 and none
+# of that logic could be exercised.
+#
+# That matters more here than it would for most tooling. The banner filter is
+# the part of this repository with the most expensive history recorded in its
+# own comments: matching on width and aspect cost the ASR 9900 RP elevation and
+# the SIP-700 with its numbered callouts; pooling hashes across vendors instead
+# of per-publisher cost more. Those are exactly the regressions a test catches
+# and a comment does not.
 
 # What a figure is NOT.
 #
@@ -136,6 +147,10 @@ def sections(md, recs):
 
 
 def convert(pdf: Path, out: Path, scale: float):
+    from docling.datamodel.base_models import InputFormat
+    from docling.datamodel.pipeline_options import PdfPipelineOptions
+    from docling.document_converter import DocumentConverter, PdfFormatOption
+
     opts = PdfPipelineOptions()
     opts.images_scale = scale
     opts.generate_picture_images = True

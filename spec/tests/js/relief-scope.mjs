@@ -10,7 +10,9 @@
 // falls through to fetch when nothing is overridden. Both are stubbed so the
 // real module can be exercised under node rather than asserting on its text.
 globalThis.location = { search: '' };
-globalThis.fetch = async () => ({ text: async () => '<svg id="FETCHED"/>' });
+// `ok` matters now: svgSource memoises a miss as '' rather than handing back
+// a 404 page's body as if it were a drawing, so a stub Response needs it.
+globalThis.fetch = async () => ({ ok: true, text: async () => '<svg id="FETCHED"/>' });
 
 const m = await import('../../../library/viewer/relief.js');
 
