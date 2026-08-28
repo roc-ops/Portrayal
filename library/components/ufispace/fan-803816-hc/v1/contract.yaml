@@ -1,0 +1,111 @@
+format: 1
+kind: module
+name: fan-803816-hc
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: UfiSpace FAN-803816-HC hot-swap fan module (S9700 disaggregated core-router
+  family) - a narrow flange strip down the left edge carrying the red release tab, a
+  red 'E' exhaust badge with the status LED below it, a red loop handle standing proud
+  of the hex grille that covers the rest of the face, and twin rotors behind it;
+  exhaust airflow
+size: {w: 81.0, h: 81.5}
+attrs: {power-absent: not-published, model: FAN-803816-HC, airflow: exhaust}
+provenance:
+  size: >-
+    datasheet/table - S9700-23D HIG Component Physical Information table, 'Fan (W x D
+    x H) 3.19" x 4.45" x 3.21" (81 x 113 x 81.5mm)', so the FACE is 81 x 81.5. Weight
+    498 g (1.10 lb), same table. THIS IS NOT ufispace/fan-803816-hi@1: that part is
+    FAN-803816-HI, the S9600-28DX's fan, 80 mm wide against this one's 81, and the two
+    are separate ordering lines (the S9700-23D and S9700-53DX datasheets both name
+    'FAN-803816-HC, exhaust air flow' in Available to Order, the S9600-28DX names
+    '-HI'). The construction is the same family and the artwork here was measured on
+    this device's own figure rather than copied from the -HI contract.
+  art: >-
+    drawing-measured from S9700-23D HIG Figure 7 (fig-0014) rear elevation. That figure
+    is a render with the lid visible, so the projecting features are foreshortened and
+    only FLAT ones were used as the ruler: the four green status lamps sit at x 74.5,
+    332.5, 590.5 and 848.5 px and the four red 'E' badges at 54-78, 312-336, 571-595
+    and 829-853 px, both giving a bay pitch of 258.0 px with no interval off it, while
+    the red release tabs measure 42, 34, 29 and 26 px across the same four bays - the
+    monotonic shrink that says a projecting part is being measured. Panel body x
+    18.5-1348 px for 436 mm (3.0505 px/mm) and the rear FACE, below the lid band,
+    y 53-317 px for 87.7 mm (3.0217 px/mm), an aspect 1.6% from the stated 4.9715.
+    The module's own extent is the seam-to-seam unit: the fan 0/fan 1 seam reads
+    265 px and 81 mm back from it is 17.9 px, which is the chassis's own left edge, so
+    the flange strip that carries the release tab is part of the module and not a
+    chassis rail. Within the face: lamp centre (18.5, 21.0), 'E' badge 11.8-19.7 across
+    and 4.7-11.8 down, loop handle 26.2-39.0 across and 22.8-62.5 down, grille from
+    x 10.5 to the right edge. Sub-millimetre positions are stated because that is what
+    the arithmetic gives, NOT because a 3 px/mm render resolves them.
+    THE HANDLE WAS DRAWN MIRRORED IN THE FIRST CUT OF THIS SKIN AND WAS CORRECTED ON
+    2026-08-28, when the render was put beside the elevation at matched scale for the
+    S9700-23D and the bracket opened the wrong way. The extent in the sentence above was
+    right; the arrangement inside it was not. What settles it is the red mask's column
+    profile across the handle: columns 26.02-32.57 carry 105-122 red pixels each and
+    columns 32.89-39.11 carry 42 falling to 3, so the THICK VERTICAL BAR IS ON THE LEFT,
+    nearer the release tab, and the two thin arms reach RIGHT - the bracket opens away
+    from the tab. The bar measures y 23.3-63.7; the arms sit at y 22.3-29.6 and
+    54.5-62.1, which is taller than the arms really are because the handle projects 25 mm
+    and is seen obliquely, so they are drawn 4.0 mm tall centred on those runs. Nothing
+    else in the skin moved.
+  power: >-
+    NOT PUBLISHED. The S9700-23D datasheet names the part only as an ordering line -
+    'Fan Types: FAN-803816-HC, exhaust air flow' - with no wattage, and the HIG carries
+    no per-FRU wattage either. Its Connecting Power sections give the SYSTEM maxima
+    (993 W on DC, 987 W on AC, both qualified 45 C / fully populated optics / 100%
+    traffic) and the provisioning reserve (2000 W per circuit); all three are the box,
+    not this module. Searched the datasheet and the HIG for 'watt', 'W)' and 'Power' -
+    every hit belongs to the system figures or to the PSU-202 ordering lines. Same
+    silence ufispace/fan-803816-hi@1 and ufispace/fan-808012@1 record for their own
+    families.
+  led-states: HIG section 10, Fan FRU LED table, transcribed in full
+  handle-projection: >-
+    datasheet - HIG Space Clearance, 'The handle of fan FRU is 1 inch (2.5cm)'. 25 mm,
+    published by the vendor for this chassis's fan. Note this is NOT the 29 mm the
+    S9600-28DX publishes for FAN-803816-HI, which is a second reason the two parts are
+    not interchanged here.
+elements:
+  status-led:
+    at: [17.2, 19.7]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off',
+             {name: ok, color: '#22c55e'},
+             {name: fault, color: '#eab308'}]
+    description: >-
+      HIG section 10, Fan FRU LED table - Off (BMC is not up), Green (fan FRU function
+      normal), Amber (fan FRU is abnormal, the fan speed is under 4500 rpm). Three rows
+      and no blink states; transcribed as it stands rather than filled out from a
+      sibling guide's longer table
+relief:
+  features:
+    - node: grille
+      vent: 30
+      confidence: estimated
+      source: >-
+        ufispace/fan-803816-hc@1 - unsourced. The HIG dimensions the 81 x 81.5 face and
+        the handle projection and nothing else off the face; this open-area fraction is
+        not in it. Same 30 the other UfiSpace fan grilles carry.
+    - node: handle
+      uhandle: 25
+      confidence: datasheet
+      source: >-
+        UfiSpace S9700-23D HIG, Space Clearance: 'The handle of fan FRU is 1 inch
+        (2.5cm)'. 25 mm exactly, published by the vendor for this chassis's fan.
+    - node: release-tab
+      out: 2.0
+      confidence: estimated
+      source: >-
+        ufispace/fan-803816-hc@1 - unsourced. The HIG's fan chapter says to 'press and
+        hold the release tab' and dimensions nothing about it. Same 2.0 as the other
+        UfiSpace fan tabs.
+    - node: status-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/fan-803816-hc@1 - unsourced. The HIG's Fan FRU LED table gives the
+        lamp's states and nothing about its lens. The same 0.4 estimate the other
+        UfiSpace FRU lamps carry.
+skins: [default]
