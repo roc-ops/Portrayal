@@ -926,6 +926,17 @@ configurations: {...}
   time. **Measure the flange, not the cage**: what is visible on the outside
   of the panel is narrower than the connector body behind it, and using the
   body swallows the lamps that sit just above and below the strip.
+- **THE FILLED RECTANGLE IN A GUIDE FIGURE IS THE MODULE, NOT THE PORT.** A
+  cage drawing shows the transceiver's own face as a solid block, and the
+  port owns more of the panel than that block does - the EMI gasket band, the
+  shell lip, the gap the latch needs. Measure centre-to-centre between those
+  fills and you get the MODULE pitch, which is wider than the port pitch, and
+  every column in the block drifts outward from the one before it. The
+  symptom is unmistakable once you have seen it: a regular gutter down the
+  middle of each block that the reference does not have, repeated identically
+  in every block. Take pitch from a feature that repeats once per PORT - the
+  lamp above it, the numeral, the cutout edge - and check the total span
+  against the panel width before you place anything.
 - **A repeated block's PITCH decides which part you may use.** A standard
   connector with a moulded bezel needs bezel-width spacing; a shared shell
   presents bezel-less openings on a tighter pitch, and the library carries
