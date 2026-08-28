@@ -63,6 +63,20 @@ provenance:
     both blocks, and at 9x zoom on the render the top cage reads 9.9-19.2 and the bottom
     25.5-34.7. std/sfp-ganged's 10.4 mm opening is seated against those edges: top row
     at y 8.8, bottom at 25.5.
+  port-leds: >-
+    measured - one lamp per port, a ▲▼ pair in each column's centre silver band at
+    y 21.9-22.3, the ▲ at the column centre minus 1.69 and the ▼ at plus 1.69. THREE
+    LIBRARY INDICATOR PARTS WERE TRIED AND ALL THREE ARE TOO BIG FOR THIS PANEL, which
+    is worth recording as one finding rather than three excuses: common/sfp-led-pair
+    puts its two lamps 8 mm apart inside a 12 mm part against a measured 3.38 mm pair
+    spacing; common/led-arrow, which the sibling S9510-28DC uses for exactly this job at
+    a 5.9 mm spacing, is 3.6 mm wide and two of them at 3.38 apart overlap; and
+    common/qsfp-lane-leds is one 19.5 mm part that swallows the two round lamps measured
+    inside the QSFP band. All 38 port lamps are therefore placed individually with
+    common/led-dot (2.0 mm), which fits every measured pitch on this face. The cost is
+    shape - the real lamps are triangles - and it is paid deliberately: a part at the
+    right pitch in the wrong shape is closer to the hardware than a part in the right
+    shape at the wrong pitch, and only the second kind collides with its neighbour.
   port-orientation: >-
     REASONED, NOT MEASURED, and the distinction matters. At 9x the render draws both
     cage rows as plain rectangles with a faint centre line and does not resolve the
@@ -537,70 +551,84 @@ views:
            attrs: {media: rj45-serial, role: console}}
         - {ref: common/qsfp-cage@2, id: port-0, at: [199.60, 8.60], rotate: 180, group: qsfp28, rel-pos: 0}
         - {ref: common/qsfp-cage@2, id: port-1, at: [199.60, 24.00], group: qsfp28, rel-pos: 1}
-        - {ref: common/led-dot@1, id: led-p0-l1, at: [201.04, 21.49], for: port-0, attrs: {port: '0', role: lane}, group: port-leds, rel-pos: 15}
-        - {ref: common/led-dot@1, id: led-p0-l2, at: [203.34, 21.49], for: port-0, attrs: {port: '0', role: lane}, group: port-leds, rel-pos: 16}
-        - {ref: common/led-dot@1, id: led-p0-l3, at: [213.40, 21.49], for: port-0, attrs: {port: '0', role: lane}, group: port-leds, rel-pos: 17}
-        - {ref: common/led-dot@1, id: led-p0-l4, at: [215.70, 21.49], for: port-0, attrs: {port: '0', role: lane}, group: port-leds, rel-pos: 18}
-        - {ref: common/led-dot@1, id: led-qsfp-x1, at: [206.30, 21.49], for: port-0, group: port-leds, rel-pos: 19,
+        - {ref: common/led-dot@1, id: led-p0-l1, at: [201.04, 21.49], for: port-0, attrs: {port: '0', role: lane}, group: port-leds, rel-pos: 29}
+        - {ref: common/led-dot@1, id: led-p0-l2, at: [203.34, 21.49], for: port-0, attrs: {port: '0', role: lane}, group: port-leds, rel-pos: 30}
+        - {ref: common/led-dot@1, id: led-p0-l3, at: [213.40, 21.49], for: port-0, attrs: {port: '0', role: lane}, group: port-leds, rel-pos: 31}
+        - {ref: common/led-dot@1, id: led-p0-l4, at: [215.70, 21.49], for: port-0, attrs: {port: '0', role: lane}, group: port-leds, rel-pos: 32}
+        - {ref: common/led-dot@1, id: led-qsfp-x1, at: [206.30, 21.49], for: port-0, group: port-leds, rel-pos: 33,
            description: 'one of the two ROUND lamps sitting between the four lane
              triangles in the QSFP block''s centre band; nothing in either document
              says what it shows or which port owns it - the attachment here is a
              guess and is filed in gaps'}
-        - {ref: common/led-dot@1, id: led-qsfp-x2, at: [210.30, 21.49], for: port-1, group: port-leds, rel-pos: 20,
+        - {ref: common/led-dot@1, id: led-qsfp-x2, at: [210.30, 21.49], for: port-1, group: port-leds, rel-pos: 34,
            description: 'one of the two ROUND lamps sitting between the four lane
              triangles in the QSFP block''s centre band; nothing in either document
              says what it shows or which port owns it - the attachment here is a
              guess and is filed in gaps'}
-        - {ref: common/led-dot@1, id: led-p1-l1, at: [201.12, 38.72], for: port-1, attrs: {port: '1', role: lane}, group: port-leds, rel-pos: 21}
-        - {ref: common/led-dot@1, id: led-p1-l2, at: [203.48, 38.72], for: port-1, attrs: {port: '1', role: lane}, group: port-leds, rel-pos: 22}
-        - {ref: common/led-dot@1, id: led-p1-l3, at: [213.39, 38.72], for: port-1, attrs: {port: '1', role: lane}, group: port-leds, rel-pos: 23}
-        - {ref: common/led-dot@1, id: led-p1-l4, at: [215.76, 38.72], for: port-1, attrs: {port: '1', role: lane}, group: port-leds, rel-pos: 24}
+        - {ref: common/led-dot@1, id: led-p1-l1, at: [201.12, 38.72], for: port-1, attrs: {port: '1', role: lane}, group: port-leds, rel-pos: 35}
+        - {ref: common/led-dot@1, id: led-p1-l2, at: [203.48, 38.72], for: port-1, attrs: {port: '1', role: lane}, group: port-leds, rel-pos: 36}
+        - {ref: common/led-dot@1, id: led-p1-l3, at: [213.39, 38.72], for: port-1, attrs: {port: '1', role: lane}, group: port-leds, rel-pos: 37}
+        - {ref: common/led-dot@1, id: led-p1-l4, at: [215.76, 38.72], for: port-1, attrs: {port: '1', role: lane}, group: port-leds, rel-pos: 38}
         - {ref: common/ground-symbol@1, id: ground-mark, at: [430.40, 18.70], for: right/ground-1, group: grounding, rel-pos: 1,
            description: 'the earth symbol printed at the right-hand end of the front
              panel, marking the grounding lug that HIG Figure 5''s callout inset shows
              on the right side wall'}
         - {ref: std/sfp-ganged@1, id: port-2, at: [224.82, 8.80], rotate: 180, group: sfp28, rel-pos: 2}
         - {ref: std/sfp-ganged@1, id: port-3, at: [224.82, 25.10], group: sfp28, rel-pos: 3}
-        - {ref: common/sfp-led-pair@1, id: leds-p2-p3, at: [225.94, 20.15], for: [port-2, port-3], group: port-leds, rel-pos: 1}
+        - {ref: common/led-dot@1, id: led-port-2, at: [229.25, 21.10], for: port-2, attrs: {port: '2'}, group: port-leds, rel-pos: 1}
+        - {ref: common/led-dot@1, id: led-port-3, at: [232.63, 21.10], for: port-3, attrs: {port: '3'}, group: port-leds, rel-pos: 2}
         - {ref: std/sfp-ganged@1, id: port-4, at: [239.07, 8.80], rotate: 180, group: sfp28, rel-pos: 4}
         - {ref: std/sfp-ganged@1, id: port-5, at: [239.07, 25.10], group: sfp28, rel-pos: 5}
-        - {ref: common/sfp-led-pair@1, id: leds-p4-p5, at: [240.19, 20.15], for: [port-4, port-5], group: port-leds, rel-pos: 2}
+        - {ref: common/led-dot@1, id: led-port-4, at: [243.50, 21.10], for: port-4, attrs: {port: '4'}, group: port-leds, rel-pos: 3}
+        - {ref: common/led-dot@1, id: led-port-5, at: [246.88, 21.10], for: port-5, attrs: {port: '5'}, group: port-leds, rel-pos: 4}
         - {ref: std/sfp-ganged@1, id: port-6, at: [253.32, 8.80], rotate: 180, group: sfp28, rel-pos: 6}
         - {ref: std/sfp-ganged@1, id: port-7, at: [253.32, 25.10], group: sfp28, rel-pos: 7}
-        - {ref: common/sfp-led-pair@1, id: leds-p6-p7, at: [254.44, 20.15], for: [port-6, port-7], group: port-leds, rel-pos: 3}
+        - {ref: common/led-dot@1, id: led-port-6, at: [257.75, 21.10], for: port-6, attrs: {port: '6'}, group: port-leds, rel-pos: 5}
+        - {ref: common/led-dot@1, id: led-port-7, at: [261.13, 21.10], for: port-7, attrs: {port: '7'}, group: port-leds, rel-pos: 6}
         - {ref: std/sfp-ganged@1, id: port-8, at: [267.57, 8.80], rotate: 180, group: sfp28, rel-pos: 8}
         - {ref: std/sfp-ganged@1, id: port-9, at: [267.57, 25.10], group: sfp28, rel-pos: 9}
-        - {ref: common/sfp-led-pair@1, id: leds-p8-p9, at: [268.69, 20.15], for: [port-8, port-9], group: port-leds, rel-pos: 4}
+        - {ref: common/led-dot@1, id: led-port-8, at: [272.00, 21.10], for: port-8, attrs: {port: '8'}, group: port-leds, rel-pos: 7}
+        - {ref: common/led-dot@1, id: led-port-9, at: [275.38, 21.10], for: port-9, attrs: {port: '9'}, group: port-leds, rel-pos: 8}
         - {ref: std/sfp-ganged@1, id: port-10, at: [281.82, 8.80], rotate: 180, group: sfp28, rel-pos: 10}
         - {ref: std/sfp-ganged@1, id: port-11, at: [281.82, 25.10], group: sfp28, rel-pos: 11}
-        - {ref: common/sfp-led-pair@1, id: leds-p10-p11, at: [282.94, 20.15], for: [port-10, port-11], group: port-leds, rel-pos: 5}
+        - {ref: common/led-dot@1, id: led-port-10, at: [286.25, 21.10], for: port-10, attrs: {port: '10'}, group: port-leds, rel-pos: 9}
+        - {ref: common/led-dot@1, id: led-port-11, at: [289.63, 21.10], for: port-11, attrs: {port: '11'}, group: port-leds, rel-pos: 10}
         - {ref: std/sfp-ganged@1, id: port-12, at: [296.07, 8.80], rotate: 180, group: sfp28, rel-pos: 12}
         - {ref: std/sfp-ganged@1, id: port-13, at: [296.07, 25.10], group: sfp28, rel-pos: 13}
-        - {ref: common/sfp-led-pair@1, id: leds-p12-p13, at: [297.19, 20.15], for: [port-12, port-13], group: port-leds, rel-pos: 6}
+        - {ref: common/led-dot@1, id: led-port-12, at: [300.50, 21.10], for: port-12, attrs: {port: '12'}, group: port-leds, rel-pos: 11}
+        - {ref: common/led-dot@1, id: led-port-13, at: [303.88, 21.10], for: port-13, attrs: {port: '13'}, group: port-leds, rel-pos: 12}
         - {ref: std/sfp-ganged@1, id: port-14, at: [310.32, 8.80], rotate: 180, group: sfp28, rel-pos: 14}
         - {ref: std/sfp-ganged@1, id: port-15, at: [310.32, 25.10], group: sfp28, rel-pos: 15}
-        - {ref: common/sfp-led-pair@1, id: leds-p14-p15, at: [311.44, 20.15], for: [port-14, port-15], group: port-leds, rel-pos: 7}
+        - {ref: common/led-dot@1, id: led-port-14, at: [314.75, 21.10], for: port-14, attrs: {port: '14'}, group: port-leds, rel-pos: 13}
+        - {ref: common/led-dot@1, id: led-port-15, at: [318.13, 21.10], for: port-15, attrs: {port: '15'}, group: port-leds, rel-pos: 14}
         - {ref: std/sfp-ganged@1, id: port-16, at: [324.57, 8.80], rotate: 180, group: sfp28, rel-pos: 16}
         - {ref: std/sfp-ganged@1, id: port-17, at: [324.57, 25.10], group: sfp28, rel-pos: 17}
-        - {ref: common/sfp-led-pair@1, id: leds-p16-p17, at: [325.69, 20.15], for: [port-16, port-17], group: port-leds, rel-pos: 8}
+        - {ref: common/led-dot@1, id: led-port-16, at: [329.00, 21.10], for: port-16, attrs: {port: '16'}, group: port-leds, rel-pos: 15}
+        - {ref: common/led-dot@1, id: led-port-17, at: [332.38, 21.10], for: port-17, attrs: {port: '17'}, group: port-leds, rel-pos: 16}
         - {ref: std/sfp-ganged@1, id: port-18, at: [344.03, 8.80], rotate: 180, group: sfp28, rel-pos: 18}
         - {ref: std/sfp-ganged@1, id: port-19, at: [344.03, 25.10], group: sfp28, rel-pos: 19}
-        - {ref: common/sfp-led-pair@1, id: leds-p18-p19, at: [345.15, 20.15], for: [port-18, port-19], group: port-leds, rel-pos: 9}
+        - {ref: common/led-dot@1, id: led-port-18, at: [348.46, 21.10], for: port-18, attrs: {port: '18'}, group: port-leds, rel-pos: 17}
+        - {ref: common/led-dot@1, id: led-port-19, at: [351.84, 21.10], for: port-19, attrs: {port: '19'}, group: port-leds, rel-pos: 18}
         - {ref: std/sfp-ganged@1, id: port-20, at: [358.28, 8.80], rotate: 180, group: sfp28, rel-pos: 20}
         - {ref: std/sfp-ganged@1, id: port-21, at: [358.28, 25.10], group: sfp28, rel-pos: 21}
-        - {ref: common/sfp-led-pair@1, id: leds-p20-p21, at: [359.40, 20.15], for: [port-20, port-21], group: port-leds, rel-pos: 10}
+        - {ref: common/led-dot@1, id: led-port-20, at: [362.71, 21.10], for: port-20, attrs: {port: '20'}, group: port-leds, rel-pos: 19}
+        - {ref: common/led-dot@1, id: led-port-21, at: [366.09, 21.10], for: port-21, attrs: {port: '21'}, group: port-leds, rel-pos: 20}
         - {ref: std/sfp-ganged@1, id: port-22, at: [372.53, 8.80], rotate: 180, group: sfp28, rel-pos: 22}
         - {ref: std/sfp-ganged@1, id: port-23, at: [372.53, 25.10], group: sfp28, rel-pos: 23}
-        - {ref: common/sfp-led-pair@1, id: leds-p22-p23, at: [373.65, 20.15], for: [port-22, port-23], group: port-leds, rel-pos: 11}
+        - {ref: common/led-dot@1, id: led-port-22, at: [376.96, 21.10], for: port-22, attrs: {port: '22'}, group: port-leds, rel-pos: 21}
+        - {ref: common/led-dot@1, id: led-port-23, at: [380.34, 21.10], for: port-23, attrs: {port: '23'}, group: port-leds, rel-pos: 22}
         - {ref: std/sfp-ganged@1, id: port-24, at: [386.78, 8.80], rotate: 180, group: sfp28, rel-pos: 24}
         - {ref: std/sfp-ganged@1, id: port-25, at: [386.78, 25.10], group: sfp28, rel-pos: 25}
-        - {ref: common/sfp-led-pair@1, id: leds-p24-p25, at: [387.90, 20.15], for: [port-24, port-25], group: port-leds, rel-pos: 12}
+        - {ref: common/led-dot@1, id: led-port-24, at: [391.21, 21.10], for: port-24, attrs: {port: '24'}, group: port-leds, rel-pos: 23}
+        - {ref: common/led-dot@1, id: led-port-25, at: [394.59, 21.10], for: port-25, attrs: {port: '25'}, group: port-leds, rel-pos: 24}
         - {ref: std/sfp-ganged@1, id: port-26, at: [401.03, 8.80], rotate: 180, group: sfp28, rel-pos: 26}
         - {ref: std/sfp-ganged@1, id: port-27, at: [401.03, 25.10], group: sfp28, rel-pos: 27}
-        - {ref: common/sfp-led-pair@1, id: leds-p26-p27, at: [402.15, 20.15], for: [port-26, port-27], group: port-leds, rel-pos: 13}
+        - {ref: common/led-dot@1, id: led-port-26, at: [405.46, 21.10], for: port-26, attrs: {port: '26'}, group: port-leds, rel-pos: 25}
+        - {ref: common/led-dot@1, id: led-port-27, at: [408.84, 21.10], for: port-27, attrs: {port: '27'}, group: port-leds, rel-pos: 26}
         - {ref: std/sfp-ganged@1, id: port-28, at: [415.28, 8.80], rotate: 180, group: sfp28, rel-pos: 28}
         - {ref: std/sfp-ganged@1, id: port-29, at: [415.28, 25.10], group: sfp28, rel-pos: 29}
-        - {ref: common/sfp-led-pair@1, id: leds-p28-p29, at: [416.40, 20.15], for: [port-28, port-29], group: port-leds, rel-pos: 14}
+        - {ref: common/led-dot@1, id: led-port-28, at: [419.71, 21.10], for: port-28, attrs: {port: '28'}, group: port-leds, rel-pos: 27}
+        - {ref: common/led-dot@1, id: led-port-29, at: [423.09, 21.10], for: port-29, attrs: {port: '29'}, group: port-leds, rel-pos: 28}
     regions:
       - {id: intake, at: [4, 0], size: {w: 112, h: 43.5}, physical-context: Intake, label: PSU intake, members: [psu-0, psu-1]}
       - {id: timing, at: [116, 1], size: {w: 36, h: 42}, label: Timing block, members: [gnss-ant, clk-10mhz, clk-1pps, bits, tod]}
@@ -696,5 +724,6 @@ configurations:
 datasheet:
   title: UfiSpace S9510-30XC Datasheet
   url: https://www.ufispace.com/products/telco/access/s9510-30xc-flexe-tsn-disaggregated-cell-site-gateway
+  sha256: 15ce46c5e24db8bcf7415acc712b599d856eadbe9d5fc03fddc5ffcddd67e0a8
 references:
-  - {title: UfiSpace S9510-30XC Hardware Installation Guide}
+  - {title: UfiSpace S9510-30XC Hardware Installation Guide, sha256: 4e570e61a75b44c5a04c93feaae4ac9ac9d6ebb791443db8bd644ef2f9fdeb70}
