@@ -1,0 +1,348 @@
+#!/usr/bin/env python3
+"""Expand a device's `layout.yaml` into its `device.yaml`.
+
+WHY THIS EXISTS. 41% of every device.yaml in this library is repeated
+single-line items - one placement, one cutout, one numeral and one lamp per
+port - and none of it carries a decision. A 64-port face is 400-odd lines that
+say the same thing sixty-four times, and they are written by hand, which is why
+the failures they produce are the ones no rule catches: a numbering that stops
+four ports short of the end, fans that come out unevenly spaced because one
+edge was measured wrong, a lamp pattern carried across one block and not its
+neighbour. A loop does not get tired near the end of a face.
+
+WHAT IT DOES NOT DO. It does not decide anything. Every number it emits comes
+from the layout the author wrote or from the standards registry: the pitch of a
+ganged cage is `standards.yaml`'s business and has been all along, and re-deriving
+it from a 520-pixel render was always the wrong way to get it. Where a block is
+not regular - and six blocks in this library are not - the author writes the
+placements out longhand and this passes them through untouched. A generator that
+insists on covering everything is a generator that starts inventing.
+
+    layout.yaml   authored, reviewable, ~40 lines for a face
+    device.yaml   generated, committed, what every consumer already reads
+
+Consumers change nothing: render.py, lint.py, dcim_export, devicelock and the
+viewer keep reading device.yaml exactly as before. `--check` re-expands and
+compares, so the pair cannot drift.
+
+MEASURED AGAINST THE LIBRARY BEFORE IT WAS WRITTEN: the bank/rows/pitch/gang/
+gutter model reproduces 39 of 56 existing port blocks to the 0.01mm the files
+carry, and 48 of 56 to within 0.11mm - the residue being independent rounding in
+hand-authored numbers rather than disagreement about the shape.
+"""
+import argparse
+import copy
+import pathlib
+import sys
+
+import yaml
+
+
+# ---------------------------------------------------------------- registry ---
+
+def load_standards(schemas: pathlib.Path):
+    return yaml.safe_load((schemas / "standards.yaml").read_text())["standards"]
+
+
+def contract_for(library: pathlib.Path, ref: str):
+    """`std/qsfp-dd@1` -> its contract, or None."""
+    try:
+        ns, rest = ref.split("/", 1)
+        name, major = rest.split("@")
+    except ValueError:
+        return None
+    hits = sorted((library / "components" / ns / name).glob(f"v{major}/contract.yaml"))
+    return yaml.safe_load(hits[-1].read_text()) if hits else None
+
+
+def aperture_of(library, standards, ref, depth=0):
+    """The opening a part presents, forwarding through a composed cage.
+
+    Mirrors the rule the cutout tests hold: a cutout restates the aperture the
+    component already declares, so the hole is never a second measurement.
+    """
+    ct = contract_for(library, ref)
+    if not ct or depth > 3:
+        return None
+    conf = ct.get("conforms")
+    if conf in standards:
+        st = standards[conf]
+        return (st["w"], st["h"]), (0.0, 0.0)
+    found = []
+    for part in (ct.get("parts") or []):
+        sub = aperture_of(library, standards, part.get("ref", ""), depth + 1)
+        if sub:
+            off = part.get("at") or [0, 0]
+            found.append((sub[0], (off[0] + sub[1][0], off[1] + sub[1][1])))
+    if len(found) == 1:
+        return found[0]
+    size = ct.get("size") or {}
+    if size.get("w"):
+        return (size["w"], size["h"]), (0.0, 0.0)
+    return None
+
+
+def _pitch_of(std):
+    """A standard states its pitch one of two ways, and the difference matters.
+
+    `qsfp-ganged` carries an explicit `pitch: 19.0` beside an 18.5 opening: the
+    cages share a wall, so the pitch is wider than the hole. `sfp-ganged` carries
+    no pitch key at all, because for that family `w` IS the pitch - 14.25 Basic,
+    with adjacent instances abutting exactly - and the registry says so in its
+    own provenance. Reading only the `pitch` key finds one and misses the other;
+    reading only `w` silently narrows every ganged QSFP block by half a
+    millimetre per port, which over 32 columns is most of a port.
+    """
+    if std.get("pitch"):
+        return std["pitch"], "pitch"
+    if std.get("w"):
+        return std["w"], "w (instances abut)"
+    return None, None
+
+
+def standard_of(library, standards, ref):
+    """The standard a part conforms to, following a single composed part down."""
+    ct = contract_for(library, ref)
+    seen = []
+    while ct:
+        conf = ct.get("conforms")
+        if conf in standards:
+            return conf
+        parts = ct.get("parts") or []
+        if len(parts) != 1 or parts[0].get("ref") in seen:
+            return None
+        seen.append(parts[0].get("ref"))
+        ct = contract_for(library, parts[0]["ref"])
+    return None
+
+
+def registry_pitch(library, standards, ref, named=None):
+    """The pitch a ganged block is built on - a LOOKUP, not a measurement.
+
+    This is the single most re-derived number in the whole modelling process,
+    and it has been sitting in the registry with a confidence token and a
+    paragraph of derivation the entire time.
+
+    `named` exists because a part and the block it sits in are not the same
+    thing: `std/qsfp-dd` conforms to `qsfp-dd`, which describes ONE cage and
+    states no pitch, while a row of them abutting is `qsfp-ganged`. The author
+    names which standard governs the block rather than the tool guessing from a
+    suffix.
+    """
+    key = named or standard_of(library, standards, ref)
+    if not key or key not in standards:
+        return None, None
+    return _pitch_of(standards[key])
+
+
+def registry_row_pitch(library, standards, ref, named=None):
+    """Belly-to-belly row spacing, where the registry states it."""
+    key = named or standard_of(library, standards, ref)
+    if not key or key not in standards:
+        return None
+    return standards[key].get("row-pitch")
+
+
+# -------------------------------------------------------------- expansion ---
+
+def block_items(block, library, standards):
+    """One regular block -> its placements, cutouts, numerals and lamps.
+
+    The layout says how the block REPEATS; everything else follows.
+    """
+    ref = block["ref"]
+    at = block["at"]
+    count = int(block["count"])
+    rows = int(block.get("rows", 1))
+    gang = int(block.get("gang", 0))
+    gutter = float(block.get("gutter", 0.0))
+
+    # `pitch: registry` | `pitch: {registry: qsfp-ganged}` | `pitch: 19.0`
+    spec = block.get("pitch", "registry")
+    named = spec.get("registry") if isinstance(spec, dict) else None
+    if spec == "registry" or named:
+        pitch, how = registry_pitch(library, standards, ref, named)
+        if pitch is None:
+            raise SystemExit(
+                f"block {block.get('id')}: pitch from the registry, but "
+                f"{named or ref} names no standard that states one. Either name the "
+                f"ganged standard - pitch: {{registry: qsfp-ganged}} - or give a "
+                f"number and say in provenance where it was measured.")
+    else:
+        pitch = spec
+    pitch = float(pitch)
+
+    rp = block.get("row-pitch", "registry" if rows > 1 else 0.0)
+    if rp == "registry":
+        rp = registry_row_pitch(library, standards, ref, named)
+        if rp is None:
+            raise SystemExit(
+                f"block {block.get('id')}: row-pitch from the registry, but "
+                f"{named or ref} names no standard that states one. Belly-to-belly "
+                f"spacing is specified nowhere for most families - measure it and "
+                f"give a number.")
+    row_pitch = float(rp)
+
+    first = int(block.get("number-from", 0))
+    idfmt = block.get("id-format", "port-{n}")
+    rot = block.get("rotate") or {}
+    rot_by_row = [rot.get("top", 0) if r == 0 else rot.get("bottom", 0)
+                  for r in range(rows)]
+
+    ap = aperture_of(library, standards, ref) if block.get("cutouts") else None
+    ct = contract_for(library, ref) or {}
+    csize = ct.get("size") or {}
+
+    placements, cutouts, silks, lamps = [], [], [], []
+    led = block.get("led")
+    num = block.get("numerals")
+
+    for i in range(count):
+        col, row = divmod(i, rows)
+        x = round(at[0] + col * pitch + (col // gang if gang else 0) * gutter, 2)
+        y = round(at[1] + row * row_pitch, 2)
+        n = first + i
+        pid = idfmt.format(n=n)
+
+        p = {"ref": ref, "id": pid, "at": [x, y]}
+        if rot_by_row[row]:
+            p["rotate"] = rot_by_row[row]
+        p["group"] = block["id"]
+        p["rel-pos"] = n
+        placements.append(p)
+
+        if ap:
+            (aw, ah), (ax, ay) = ap
+            deg = rot_by_row[row] % 360
+            cw = csize.get("w", aw)
+            ch = csize.get("h", ah)
+            # a placement turns about the WRAPPER's centre, not the hole's
+            if deg == 180:
+                hx, hy = cw - ax - aw, ch - ay - ah
+            elif deg == 90:
+                hx, hy = (cw - ay - ah), ax
+            elif deg == 270:
+                hx, hy = ay, (ch - ax - aw)
+            else:
+                hx, hy = ax, ay
+            sw, sh = (ah, aw) if deg in (90, 270) else (aw, ah)
+            cutouts.append({"id": pid, "at": [round(x + hx, 2), round(y + hy, 2)],
+                            "size": [round(sw, 2), round(sh, 2)],
+                            "shape": block.get("cutout-shape", "rect")})
+
+        if num:
+            silks.append({
+                "at": [round(x + num.get("dx", 0.0), 2),
+                       round(y + (num.get("dy-top", num.get("dy", 0.0)) if row == 0
+                                  else num.get("dy-bottom", num.get("dy", 0.0))), 2)],
+                "text": str(n), "font-size": num.get("font-size", 1.8),
+                "anchor": num.get("anchor", "middle"),
+                "fill": num.get("fill", "#1a1d1f"), "for": pid})
+
+        if led:
+            lp = {"ref": led["ref"], "id": led.get("id-format", "led-{n}").format(n=n),
+                  "at": [round(x + led.get("dx", 0.0), 2),
+                         round(y + (led.get("dy-top", led.get("dy", 0.0)) if row == 0
+                                    else led.get("dy-bottom", led.get("dy", 0.0))), 2)]}
+            skin = led.get("skin-top") if row == 0 else led.get("skin-bottom")
+            if skin:
+                lp["skin"] = skin
+            lp["for"] = pid
+            lp["group"] = led.get("group", "port-leds")
+            lp["rel-pos"] = n
+            lamps.append(lp)
+
+    return placements + lamps, cutouts, silks
+
+
+def expand(layout, library, standards):
+    """layout.yaml -> the device dict a consumer reads."""
+    doc = copy.deepcopy(layout)
+    doc.pop("layout-format", None)
+    for view in (doc.get("views") or {}).values():
+        comps = view.get("components") or {}
+        blocks = comps.pop("blocks", None)
+        if not blocks:
+            continue
+        panel = view.setdefault("panel", {})
+        gen_p, gen_c, gen_s = [], [], []
+        for b in blocks:
+            p, c, s = block_items(b, library, standards)
+            gen_p += p
+            gen_c += c
+            gen_s += s
+        # Generated items come after anything written longhand, so an
+        # irregular block an author wrote out keeps its place in the file.
+        comps["placements"] = (comps.get("placements") or []) + gen_p
+        if gen_c:
+            panel["cutouts"] = (panel.get("cutouts") or []) + gen_c
+        if gen_s:
+            view["silkscreen"] = (view.get("silkscreen") or []) + gen_s
+        view["components"] = comps
+    return doc
+
+
+# ------------------------------------------------------------------- emit ---
+
+class Dumper(yaml.SafeDumper):
+    """House style: repeated items are one flow map per line, prose is folded."""
+
+
+def _str(dumper, data):
+    if "\n" in data or len(data) > 88:
+        return dumper.represent_scalar("tag:yaml.org,2002:str", data, style=">")
+    return dumper.represent_scalar("tag:yaml.org,2002:str", data)
+
+
+Dumper.add_representer(str, _str)
+
+
+def dump(doc):
+    return yaml.dump(doc, Dumper=Dumper, sort_keys=False, width=94,
+                     default_flow_style=False, allow_unicode=True)
+
+
+# ------------------------------------------------------------------- main ---
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    ap.add_argument("--library", default="library", type=pathlib.Path)
+    ap.add_argument("--schemas", default="spec/schemas", type=pathlib.Path)
+    ap.add_argument("--check", action="store_true",
+                    help="re-expand every layout.yaml and report any that "
+                         "disagrees with its committed device.yaml")
+    ap.add_argument("layout", nargs="*", type=pathlib.Path)
+    a = ap.parse_args()
+
+    standards = load_standards(a.schemas)
+    paths = a.layout or sorted((a.library / "devices").glob("*/*/layout.yaml"))
+    if not paths:
+        print("expand: no layout.yaml found - nothing to do")
+        return 0
+
+    bad = 0
+    for lp in paths:
+        layout = yaml.safe_load(lp.read_text())
+        doc = expand(layout, a.library, standards)
+        dp = lp.with_name("device.yaml")
+        if a.check:
+            if not dp.exists():
+                print(f"{dp}: MISSING - layout.yaml has never been expanded")
+                bad += 1
+                continue
+            if yaml.safe_load(dp.read_text()) != doc:
+                print(f"{dp}: DIFFERS from its layout.yaml - re-run expand.py")
+                bad += 1
+            continue
+        dp.write_text(dump(doc))
+        n = sum(len((v.get("components") or {}).get("placements") or [])
+                for v in (doc.get("views") or {}).values())
+        print(f"{dp}: {n} placements from {len(lp.read_text().splitlines())} "
+              f"lines of layout")
+    if a.check:
+        print(f"expand: {len(paths) - bad}/{len(paths)} in step with their layout")
+    return 1 if bad else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
