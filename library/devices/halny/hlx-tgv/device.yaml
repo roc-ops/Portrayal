@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: hlx-tgv
-version: 0.10.0
+version: 0.11.0
 manufacturer: Halny
 model: HLX-TGV
 description: XGS-PON ONT (SFU/HGU) - 1x 10G RJ45, 1x GbE RJ45, 2x FXS, SC/APC PON, VoIP
@@ -86,6 +86,8 @@ views:
         - {id: eth-lan, at: [91.1, 11.5], size: [15.8, 13.2], shape: rect}
         - {id: tel-2, at: [123, 12.5], size: [14, 13.5], shape: rect}
         - {id: tel-1, at: [142, 12.5], size: [14, 13.5], shape: rect}
+        - {id: power-btn, at: [12, 13], size: [12, 12], shape: rect}
+        - {id: reset, at: [113, 16], size: [4, 4], shape: rect}
     silkscreen:
       - {at: [18.0, 27.6], text: ON/OFF, font-size: 1.9, for: power-btn}
       - {at: [38.0, 28.1], text: POWER, font-size: 1.9, for: dc-in}
@@ -111,6 +113,15 @@ views:
       decor:
         - {at: [12, 8], size: [148, 84], pattern: slots-h}
         - {at: [76.8, 104.6], size: [1.8, 1.8], fill: '#3c4046'}
+      cutouts:
+        - {id: led-power, at: [20, 102], size: [4, 4], shape: rect}
+        - {id: led-pon, at: [26.6, 102], size: [4, 4], shape: rect}
+        - {id: led-los, at: [33.2, 102], size: [4, 4], shape: rect}
+        - {id: led-net, at: [39.8, 102], size: [4, 4], shape: rect}
+        - {id: led-lan, at: [46.4, 102], size: [4, 4], shape: rect}
+        - {id: led-10g, at: [53, 102], size: [4, 4], shape: rect}
+        - {id: led-tel1, at: [59.6, 102], size: [4, 4], shape: rect}
+        - {id: led-tel2, at: [66.2, 102], size: [4, 4], shape: rect}
     silkscreen:
       - {at: [131, 100], text: HALNY, font-size: 6.5, for: chassis}
       - {at: [131, 104], text: High Availability Local Networks, font-size: 1.9, for: chassis}
