@@ -1,0 +1,111 @@
+format: 1
+kind: module
+name: psu-ac-1300
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  1300 W AC CRPS module for the Edgecore DCS510 (AS9716-32D) - bezel art wraps a
+  std/c14-inlet core. Same 1U CRPS envelope as common/psu-ac-650@3, different rating
+size: {w: 54.0, h: 40.0}
+attrs: {power-output-w: 1300, input: ac}
+provenance:
+  power: >-
+    datasheet - the DCS510 (AS9716-32D) data sheet key-features list says
+    'Hot-swappable, load-sharing, redundant 1300 W PSUs', and its Power section adds
+    'PSUs: 2 redundant, load-sharing, hot-swappable AC / AC Input Range: 100~240 VAC at
+    50-60 Hz'. The quick start guide's AC PSU table gives the input rating rather than the
+    output: '100-120 VAC, 50-60 Hz, 12 A max. / 200-240 VAC, 50-60 Hz, 7.5 A max. /
+    190-310 VDC, 8-5 A'. NO MODEL OR PART NUMBER IS SET, and that is deliberate - neither
+    document I hold names the PSU FRU, and the datasheet's ordering table sells the
+    chassis by airflow and region without listing the supply as a separate line. What the
+    datasheets fix is the RATING and the form factor
+  size: >-
+    borrowed geometry, own identity - the face is the same 1U CRPS envelope as
+    common/psu-ac-650@3 (54 x 40, photo-measured off a rear overlay) and the DCS510's own
+    rear elevation measures 53.8mm wide across the PSU, so the shape is carried rather
+    than re-derived. Measured from the QSG rear figure (dcs510-qsg fig-0066) at 1.822
+    px/mm: PS1 spans 371.0 to 424.8mm across a 438.4mm panel
+  inlet: standard (IEC 60320-1 via std/c14-inlet) - the DCS510 rear figures show a C14
+    inlet on both supplies
+  status-lamp: >-
+    photo-measured - the DCS510 datasheet rear elevation (dcs510-datasheet fig-0007)
+    shows a single small round indicator on the supply's face between the handle bar and
+    the inlet frame, at 20.8mm from the module's left edge and 6.1mm down, measured at
+    3.287 px/mm. WHAT IT SIGNALS IS NOT STATED - the QSG tables PS1 and PS2 on the FRONT
+    panel (green OK, amber fault) and says nothing about a lamp on the supply itself, so
+    this one carries the contract's own ok/fail/absent states and no colour vocabulary
+    of its own
+  airflow: >-
+    the QSG's Airflow Reversal page states the convention this library's skins already
+    follow - 'Remove front-to-back (F2B) airflow fan trays (red handles) and PSUs (red
+    release latches). Install back-to-front (B2F) airflow fan trays (blue handles) and
+    PSUs (blue release latches)' - so `default` is the F2B part and `blue` the B2F one
+states: [ok, fail, absent]
+elements:
+  status: {at: [19.7, 5.0], size: [2.2, 2.2], class: led, states: ['off', ok, fail]}
+  latch: {at: [0.0, 8.0], size: [7.8, 24.0], class: latch}
+  handle: {at: [10.0, 8.0], size: [5.0, 24.0], class: handle}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [20.5, 10], rotate: 270}
+relief:
+  features:
+    - node: inlet-frame
+      out: 3.4
+      color: '#181b1f'
+      confidence: estimated
+      source: >-
+        edgecore/psu-ac-1300@1 itself - unsourced. Its provenance covers the part's FACE (size,
+        photo-measured off a rear overlay) and carries no key about how far anything stands
+        off it.
+    - node: vent-field
+      vent: 30
+      confidence: estimated
+      source: >-
+        edgecore/psu-ac-1300@1 itself - unsourced. Its provenance covers the part's FACE (size,
+        photo-measured off a rear overlay) and carries no key about how far anything stands
+        off it.
+    - node: face-frame
+      out: 1.6
+      confidence: estimated
+      source: >-
+        edgecore/psu-ac-1300@1 itself - unsourced. Its provenance covers the part's FACE (size,
+        photo-measured off a rear overlay) and carries no key about how far anything stands
+        off it.
+    - node: latch-hinge
+      out: 6.4
+      confidence: estimated
+      source: >-
+        edgecore/psu-ac-1300@1 itself - unsourced. Its provenance covers the part's FACE (size,
+        photo-measured off a rear overlay) and carries no key about how far anything stands
+        off it.
+    - node: latch-plate
+      out: 6.4
+      lift: 4.8
+      confidence: estimated
+      source: >-
+        edgecore/psu-ac-1300@1 itself - unsourced. Its provenance covers the part's FACE (size,
+        photo-measured off a rear overlay) and carries no key about how far anything stands
+        off it.
+    - node: latch-lip
+      out: 4.8
+      lift: 3.2
+      confidence: estimated
+      source: >-
+        edgecore/psu-ac-1300@1 itself - unsourced. Its provenance covers the part's FACE (size,
+        photo-measured off a rear overlay) and carries no key about how far anything stands
+        off it.
+    - node: handle-bar
+      uhandle: 9.5
+      confidence: estimated
+      source: >-
+        edgecore/psu-ac-1300@1 itself - unsourced. Its provenance covers the part's FACE (size,
+        photo-measured off a rear overlay) and carries no key about how far anything stands
+        off it.
+connection-points:
+  power: {at: [35.5, 20.0], direction: rear}
+skins: [default, blue]
+body:
+  depth: 195
+  color: '#b9bec4'

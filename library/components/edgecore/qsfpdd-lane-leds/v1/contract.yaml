@@ -1,0 +1,90 @@
+format: 1
+kind: component
+name: qsfpdd-lane-leds
+version: 1.0.0
+class: led
+profile: networking
+description: >-
+  QSFP-DD port lane LED column - four round lamps stacked VERTICALLY beside the cage,
+  one per breakout lane, as the Edgecore DCS510 (AS9716-32D) faceplate arranges them
+size: {w: 1.7, h: 10.7}
+provenance:
+  arrangement: >-
+    drawing + photo - this is a COLUMN, not the horizontal strip common/qsfp-lane-leds@1
+    draws, which is why it is a separate part rather than that one rotated. The DCS510
+    datasheet front elevation (dcs510-datasheet fig-0007) and the QSG system-LED close-up
+    (dcs510-qsg fig-0005) both show four lamps stacked vertically in the metal outboard of
+    each two-column ganged shell, the left column's port lit on the left of the shell and
+    the right column's on the right
+  lane-count: >-
+    datasheet - the DCS510 QSG's Port LEDs page reads '400G: 1 LED Blue / 200G Breakout:
+    1 LED White, 1-2 LEDs Green / 100G Breakout: 1-4 LEDs Green / 50G Breakout: 1 LED
+    Cyan', so four lamps is the vendor's own maximum and one per 100G breakout lane is
+    what they count. Four is also what both figures resolve
+  size: >-
+    photo-measured - lamp pitch 3.0mm and diameter ~1.7mm, from dcs510-qsg fig-0005 at
+    10.0 px/mm (scale set by the 19.0mm registry cage pitch measured in the same image at
+    190 px) and corroborated in dcs510-datasheet fig-0007 at 3.287 px/mm, where the same
+    column reads a 10.5 px (3.19mm) pitch
+  states: >-
+    NOT SOURCED beyond off/on. The QSG gives the lamps COLOURS per breakout mode - blue,
+    white, green, cyan - but never says what a lit lamp means (link? activity? lane up?),
+    and no table in either document I hold declares the state vocabulary. Rather than
+    invent one, the lamps carry the library's off/on default; the colour-by-mode mapping
+    is recorded in the device's attrs where it can be read as prose
+elements:
+  lane-1:
+    at: [0.0, 0.0]
+    size: [1.7, 1.7]
+    class: led
+    states: ['off', 'on']
+  lane-2:
+    at: [0.0, 3.0]
+    size: [1.7, 1.7]
+    class: led
+    states: ['off', 'on']
+  lane-3:
+    at: [0.0, 6.0]
+    size: [1.7, 1.7]
+    class: led
+    states: ['off', 'on']
+  lane-4:
+    at: [0.0, 9.0]
+    size: [1.7, 1.7]
+    class: led
+    states: ['off', 'on']
+relief:
+  features:
+    - node: lane-1
+      dome: 0.25
+      confidence: estimated
+      source: >-
+        edgecore/qsfpdd-lane-leds@1 itself - unsourced. Its provenance covers the part's
+        FACE (lamp pitch and diameter, photo-measured) and carries no key about how far a
+        light pipe stands off it. 0.25 is the library's proportional figure for a lamp of
+        this drawn diameter, between led-arrow's 0.25 and led-dot's 0.3
+    - node: lane-2
+      dome: 0.25
+      confidence: estimated
+      source: >-
+        edgecore/qsfpdd-lane-leds@1 itself - unsourced. Its provenance covers the part's
+        FACE (lamp pitch and diameter, photo-measured) and carries no key about how far a
+        light pipe stands off it. 0.25 is the library's proportional figure for a lamp of
+        this drawn diameter, between led-arrow's 0.25 and led-dot's 0.3
+    - node: lane-3
+      dome: 0.25
+      confidence: estimated
+      source: >-
+        edgecore/qsfpdd-lane-leds@1 itself - unsourced. Its provenance covers the part's
+        FACE (lamp pitch and diameter, photo-measured) and carries no key about how far a
+        light pipe stands off it. 0.25 is the library's proportional figure for a lamp of
+        this drawn diameter, between led-arrow's 0.25 and led-dot's 0.3
+    - node: lane-4
+      dome: 0.25
+      confidence: estimated
+      source: >-
+        edgecore/qsfpdd-lane-leds@1 itself - unsourced. Its provenance covers the part's
+        FACE (lamp pitch and diameter, photo-measured) and carries no key about how far a
+        light pipe stands off it. 0.25 is the library's proportional figure for a lamp of
+        this drawn diameter, between led-arrow's 0.25 and led-dot's 0.3
+skins: [default]

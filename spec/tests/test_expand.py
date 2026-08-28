@@ -158,6 +158,76 @@ def test_a_generated_cutout_is_the_aperture_and_not_a_second_measurement():
         assert c["at"] == p["at"], "unrotated, the hole sits at the placement"
 
 
+def test_a_generated_lamp_gets_a_hole_too():
+    """FOUND BY THE FIRST FACE THIS TOOL EVER GENERATED. It punched 32 ports and
+    left 32 lamps unpunched, and lint said so 32 times: on a panel that declares
+    cutouts, a lamp needs one as much as the port beside it.
+
+    It is the same failure the tool exists to prevent, committed by the tool -
+    a rule applied to the thing being counted and not to what gets emitted
+    alongside it. A loop does not get tired, but it does only do what it was
+    told, and it had been told about ports.
+    """
+    led = {"ref": "common/led-dot@1", "id-format": "led-p{n}", "dx": -3.0,
+           "dy": 2.0, "group": "port-leds"}
+    block = {"id": "p", "ref": "std/qsfp-dd@1", "at": [10.0, 10.0], "count": 4,
+             "rows": 2, "row-pitch": 13.0, "pitch": {"registry": "qsfp-ganged"},
+             "cutouts": True, "led": led}
+    pl, cuts, _ = E.block_items(block, LIB, STD)
+    ports = [p for p in pl if p["id"].startswith("port-")]
+    lamps = [p for p in pl if p["id"].startswith("led-p")]
+    assert len(ports) == 4 and len(lamps) == 4
+    holes = {c["id"] for c in cuts}
+    assert holes == {p["id"] for p in ports} | {p["id"] for p in lamps}, \
+        "every generated part on a punched panel needs its own opening"
+
+    lamp_cut = next(c for c in cuts if c["id"] == "led-p0")
+    lamp = next(p for p in lamps if p["id"] == "led-p0")
+    assert lamp_cut["at"] == lamp["at"], "the hole sits where the lamp sits"
+    assert lamp_cut["size"] == [2.0, 2.0], "the hole is the lamp's own aperture"
+    assert lamp_cut["shape"] == "circle"
+
+
+def test_a_lamp_with_several_windows_is_left_for_a_person_to_punch():
+    """THE FIX FOR THE ABOVE WAS WRITTEN, RUN, AND WAS WRONG, so this holds the
+    line it taught.
+
+    A lamp column holding four windows in one body has no single aperture to
+    derive. The size lookup falls back to the BODY, so the generator emitted one
+    1.7 x 10.7 hole and called it a circle - a 1:6 round hole, and a claim that
+    the metal carries one long slot rather than four windows, which the vendor's
+    images at 10 px/mm cannot settle either way. It silenced 32 lint warnings by
+    drawing something false, which is strictly worse than the warnings.
+
+    Where a component declares more than one opening the tool now punches
+    nothing and the warning stands. A rule that cannot be satisfied honestly
+    should stay unsatisfied.
+    """
+    multi = LIB / "components/edgecore/qsfpdd-lane-leds/v1/contract.yaml"
+    if not multi.exists():
+        pytest.skip("multi-window lamp part not in this library")
+    assert not E._single_opening(LIB, STD, "edgecore/qsfpdd-lane-leds@1")
+    led = {"ref": "edgecore/qsfpdd-lane-leds@1", "id-format": "led-p{n}",
+           "dx": -3.0, "dy": 0.0, "group": "port-leds"}
+    block = {"id": "p", "ref": "std/qsfp-dd@1", "at": [10.0, 10.0], "count": 4,
+             "rows": 2, "row-pitch": 13.0, "pitch": {"registry": "qsfp-ganged"},
+             "cutouts": True, "led": led}
+    _, cuts, _ = E.block_items(block, LIB, STD)
+    assert {c["id"] for c in cuts} == {f"port-{i}" for i in range(4)}, \
+        "ports are punched; a four-window lamp column is not guessed at"
+
+
+def test_a_block_with_no_cutouts_generates_no_lamp_holes():
+    """The rule is conditional on the panel declaring cutouts at all. Punching
+    holes into a face that has none would invent a construction the device does
+    not have."""
+    led = {"ref": "common/led-dot@1", "id-format": "led-p{n}", "dx": -3.0}
+    block = {"id": "p", "ref": "std/qsfp-dd@1", "at": [0, 0], "count": 2,
+             "rows": 1, "pitch": {"registry": "qsfp-ganged"}, "led": led}
+    _, cuts, _ = E.block_items(block, LIB, STD)
+    assert cuts == []
+
+
 def test_numbering_covers_the_whole_block_or_none_of_it():
     """The defect this tool exists to make impossible: a numbering rule applied
     to fifty ports and stopped four short. A loop does not get tired."""

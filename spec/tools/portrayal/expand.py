@@ -116,6 +116,30 @@ def standard_of(library, standards, ref):
     return None
 
 
+def _single_opening(library, standards, ref):
+    """Does this part present ONE opening, or several?
+
+    `aperture_of` answers 'how big is the opening' and falls back to the whole
+    body when it cannot find one - which is right for sizing and dangerous for
+    punching. A part holding four lamps in a column has a body and four windows,
+    and a hole the size of the body is a statement about the sheet metal that
+    nobody has verified. Ask the different question here: how many openings does
+    the contract actually declare?
+    """
+    ct = contract_for(library, ref)
+    if not ct:
+        return False
+    if ct.get("conforms") in standards:
+        return True
+    els = [e for e in (ct.get("elements") or {}).values()] \
+        if isinstance(ct.get("elements"), dict) else (ct.get("elements") or [])
+    holes = [e for e in els
+             if isinstance(e, dict) and e.get("class") in ("cutout", "led", "window")]
+    if holes:
+        return len(holes) == 1
+    return len(ct.get("parts") or []) <= 1
+
+
 def registry_pitch(library, standards, ref, named=None):
     """The pitch a ganged block is built on - a LOOKUP, not a measurement.
 
@@ -265,6 +289,34 @@ def block_items(block, library, standards):
             lp["group"] = led.get("group", "port-leds")
             lp["rel-pos"] = n
             lamps.append(lp)
+
+            # A LAMP IS A HOLE TOO - but ONLY WHERE THE PART DECLARES ONE HOLE.
+            #
+            # The first face this tool generated punched 32 ports and left 32
+            # lamps unpunched, and the obvious fix - derive the lamp's opening
+            # the way the port's is derived - was written, run, and was WRONG.
+            # The lamp component there is a COLUMN OF FOUR: a 1.7 x 10.7 body
+            # holding four 1.7mm windows. With no single aperture to resolve,
+            # the derivation fell back to the body size and emitted one
+            # 1.7 x 10.7 hole, described as a circle. That is a 1:6 round hole,
+            # and worse, it is a claim - that the metal has one long slot rather
+            # than four windows - which the images at 10 px/mm cannot settle
+            # either way. It silenced 32 warnings by drawing something false.
+            #
+            # So the tool punches a lamp only when the component declares
+            # exactly one opening. Where it declares several, the geometry is a
+            # question for a person: the warning stands, and standing is the
+            # correct outcome until somebody reads the metal.
+            if ap and _single_opening(library, standards, led["ref"]):
+                lap = aperture_of(library, standards, led["ref"])
+                (lw, lh), (lax, lay) = lap
+                cutouts.append({
+                    "id": lp["id"],
+                    "at": [round(lp["at"][0] + lax, 2),
+                           round(lp["at"][1] + lay, 2)],
+                    "size": [round(lw, 2), round(lh, 2)],
+                    # a lamp aperture is round unless the author says otherwise
+                    "shape": led.get("cutout-shape", "circle")})
 
     return placements + lamps, cutouts, silks
 

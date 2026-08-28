@@ -102,6 +102,41 @@ def test_ordering_lines_are_picked_out_because_they_decide_which_part(tmp_path):
     assert fan["section"] == "Fan Types"
 
 
+def test_a_value_whose_label_is_on_another_line_is_still_found(tmp_path):
+    """FOUND BY THE FIRST DEVICE THIS TOOL WAS TRUSTED ON. The converter reflows
+    a two-column spec block into `Power Consumption`, blank, `1300 Watts
+    maximum`. A rule wanting the label and the number in one line finds neither
+    and reports the chassis's whole power figure as absent - and an agent that
+    believed the empty field would ship a model with no wattage at all."""
+    make(tmp_path, "x-qsg",
+         "## SPECS\n\nPower Consumption\n\n1300 Watts maximum\n")
+    f = F.collect(tmp_path, "x")
+    hit = [e for e in f["power"] if e.get("watts") == 1300.0]
+    assert hit, f["power"]
+    assert hit[0]["label"].startswith("Power Consumption")
+    assert hit[0]["source"].endswith(":5")
+
+
+def test_an_ordering_table_is_read_as_well_as_ordering_lines(tmp_path):
+    """Vendors write the same fact two ways. One lists `PSU-202-AESR, 2000W AC`;
+    another gives a five-column markdown table of model and part numbers. Both
+    name what the chassis can actually be BOUGHT with, which is what decides
+    which library component a bay may seat - so a tool that reads only one
+    format is silently empty for half the corpus."""
+    make(tmp_path, "x-datasheet",
+         "## Ordering Information\n\n"
+         "| ModelNumber | PartNumber | PSU | Airflow |\n"
+         "|---|---|---|---|\n"
+         "| 9716-32D-O-AC-F-US | FP5ZZ8632400A | DualACPSUs | Front-to-Back |\n"
+         "| 9716-32D-O-AC-B-EU | FP5ZZ8632201A | DualACPSUs | Back-to-Front |\n")
+    f = F.collect(tmp_path, "x")
+    parts = f["summary"]["ordering-parts"]
+    assert "9716-32D-O-AC-F-US" in parts and "9716-32D-O-AC-B-EU" in parts
+    assert "ModelNumber" not in parts, "the header row is not a part"
+    row = [e for e in f["ordering"] if e["part"].endswith("F-US")][0]
+    assert "FP5ZZ8632400A" in row["row"], "the whole row is kept, not just the id"
+
+
 def test_the_summary_never_says_the_vendor_is_silent(tmp_path):
     """The one sentence this file must always carry: absence is the tool's, not
     the vendor's."""

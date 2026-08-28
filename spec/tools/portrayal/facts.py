@@ -65,13 +65,40 @@ def scan(path):
            "ordering": [], "asic": []}
     lines = path.read_text(errors="replace").splitlines()
     section = None
+    prev = None          # last non-empty, non-heading line
     for i, line in enumerate(lines, 1):
         s = line.strip()
         if s.startswith("##"):
             section = s.lstrip("#").strip()
+            prev = None
             continue
         if not s:
             continue
+
+        # A LABEL AND ITS VALUE ARE OFTEN ON DIFFERENT LINES. The converter
+        # reflows a two-column spec block into `Power Consumption`, blank,
+        # `1300 Watts maximum`, so a rule wanting both in one line finds neither
+        # and reports the most consequential figure on the page as absent.
+        #
+        # Look in BOTH rather than deciding which of the two IS the label. The
+        # first attempt asked whether this line looked wordy enough to be its
+        # own label, and `1300 Watts maximum` passed that test - so the value
+        # became its own label, matched no keyword, and the figure stayed
+        # missing for a second reason on top of the first.
+        context = f"{s} {prev or ''}"
+
+        # AN ORDERING TABLE IS A TABLE, not a list of comma-separated SKUs.
+        # One vendor writes `PSU-202-AESR, 2000W AC, exhaust air flow`; another
+        # writes a five-column markdown table of model numbers, part numbers and
+        # airflow. Both name what the chassis can actually be bought with, which
+        # is what decides WHICH library component a bay may seat - so both have
+        # to be read, or the field is silently empty for half the corpus.
+        if s.startswith("|") and section and re.search(r"order|model|part", section, re.I):
+            cells = [c.strip() for c in s.strip("|").split("|")]
+            if len(cells) > 1 and not set("".join(cells)) <= set("-: "):
+                if any(re.search(r"[A-Z0-9]{5,}", c) for c in cells):
+                    out["ordering"].append(dict(_cite(path, i, s), section=section,
+                                                part=cells[0], row=cells))
 
         for m in DIMS.finditer(s):
             trio = [_num(m.group(k)) for k in (1, 2, 3)]
@@ -89,13 +116,17 @@ def scan(path):
         if m and not s.startswith("|"):
             out["ports"].append(dict(_cite(path, i, s), count=int(m.group(1)),
                                      what=m.group(2)))
-        if re.search(r"\b(power|input)\b", s, re.I):
-            w = WATTS.search(s)
-            if w and _num(w.group(1)):
-                out["power"].append(dict(_cite(path, i, s), watts=_num(w.group(1)),
-                                         section=section))
-            elif re.search(r"input\s*:", s, re.I):
-                out["power"].append(dict(_cite(path, i, s), section=section))
+        # Match on the VALUE and take the label from wherever it is, rather than
+        # requiring both in one line.
+        w = WATTS.search(s)
+        if w and _num(w.group(1)) and re.search(r"\b(power|consumption|input|psu|"
+                                                r"supply|rating)\b", context, re.I):
+            out["power"].append(dict(_cite(path, i, s), watts=_num(w.group(1)),
+                                     label=(prev or s)[:80], section=section))
+        elif re.search(r"\b(input|rating)\b", context, re.I) and \
+                re.search(r"\d\s*(V|VAC|VDC|A\b)", s):
+            out["power"].append(dict(_cite(path, i, s), label=(prev or s)[:80],
+                                     section=section))
         # An ordering line names a part a device can actually be bought with,
         # which is what decides WHICH library component a bay may seat. This is
         # the discrimination that keeps one wrong SKU out of ten devices.
@@ -105,6 +136,7 @@ def scan(path):
         if re.search(r"\b(Broadcom|Marvell|Intel|Qumran|Jericho|Ramon|Tomahawk|Trident)"
                      r"\b.*\b[A-Z]{2,}\d{3,}", s):
             out["asic"].append(_cite(path, i, s))
+        prev = s
     return out
 
 
