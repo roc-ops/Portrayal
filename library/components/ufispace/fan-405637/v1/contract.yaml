@@ -1,0 +1,100 @@
+format: 1
+kind: module
+name: fan-405637
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: UfiSpace FAN-405637 hot-swap fan module (S9110-32X) - tube handle
+  over a hex rotor grille, and a narrow right flange carrying the airflow
+  letter tag, the captive thumbscrew and the status LED. Default skin is the
+  red-handled FAN-405637-HD (exhaust, front-to-back systems); the blue skin is
+  the FAN-405637-CD intake unit
+size: {w: 50.7, h: 40.0}
+attrs: {power-absent: not-published, model: FAN-405637-HD, airflow: exhaust}
+provenance:
+  power: >-
+    NOT PUBLISHED. The S9110-32X datasheet names FAN-405637-HD and FAN-405637-CD only as
+    ordering lines ('FAN-405637-HD, exhaust air flow'), and the S9110-32X hardware
+    installation guide weighs the module (0.41 lb / 185 g), dimensions it and tables its
+    LED without ever stating a wattage. The only watts near it are the PSU ordering lines
+    (PSU-751-*, 750W) and the system figures (184 W typical, 530.7 W max), none of which
+    is this fan's draw. Same situation, same vendor, as ufispace/fan-402825.
+  size: >-
+    photo-measured face, datasheet body - and they are DIFFERENT OBJECTS, which is why
+    both numbers are here. The HIG's component table gives the fan module 43.4 x 100 x
+    40 mm (W x D x H), and 43.4 matches the hex-grille section of the face (42.3 mm
+    between seams in the rear product render at 3.807 px/mm). The FACE this contract
+    draws also includes the ~8 mm right flange that carries the airflow tag, captive
+    thumbscrew and LED - HIG Figure 15 puts the tag and captive screw on the module, not
+    the chassis - and the whole repeating unit measures 50.1-50.7 mm across on a 50.9 mm
+    bay pitch in both rear renders. No vendor drawing dimensions the flange; see the
+    device's fan-faceplate-width gap. Height 40 mm from the HIG table (39.1 measured).
+  airflow-tag: >-
+    photo - the red (front-to-back / exhaust) unit wears a red tag printed 'E' and the
+    blue (back-to-front / intake) unit a blue tag printed 'I', read at 8x zoom off the
+    two rear renders. Handle, latch-tag and airflow pair the same way on the PSUs (HIG
+    Figures 6 and 8: blue = back-to-front, red = front-to-back).
+  led-states: HIG section 10, Fan FRU LED table (page 21), transcribed in full. Note the
+    fault row is SOLID amber here, where the S9510-28DC's fan blinks - two different
+    tables, not a copy.
+elements:
+  status-led:
+    at: [45.5, 34.0]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off',
+             {name: ok, color: '#22c55e'},
+             {name: fault, color: '#f59e0b'}]
+    description: >-
+      HIG Fan FRU LED table - Off (no input power), Solid Green (fan is functioning
+      normal), Solid Amber (fan is abnormal, service is required)
+  handle: {at: [10.9, 3.5], size: [3.4, 33.0], class: handle}
+  thumbscrew: {at: [44.2, 26.1], size: [5.2, 5.2], class: screw}
+  airflow-label: {at: [43.9, 19.8], size: [4.2, 4.7], class: label}
+relief:
+  features:
+    - node: rotor-behind
+      vent: 25
+      confidence: estimated
+      source: >-
+        ufispace/fan-405637@1 - the HIG dimensions the module's box and projects its
+        handle, and gives nothing else off the face. Same treatment as fan-402825.
+    - node: rotor-grille
+      vent: 25
+      confidence: estimated
+      source: >-
+        ufispace/fan-405637@1 - the HIG dimensions the module's box and projects its
+        handle, and gives nothing else off the face.
+    - node: rotor-bulge
+      dome: 3.2
+      confidence: estimated
+      source: >-
+        ufispace/fan-405637@1 - unsourced magnitude; the rotor stands slightly proud of
+        the grille in the renders and no document dimensions it.
+    - node: handle
+      uhandle: 25
+      confidence: datasheet
+      source: >-
+        UfiSpace S9110-32X HIG, Space Clearance: 'The handle for the fan units will
+        extend outwards by 1 inch (2.5cm)'. 25 mm, published by the vendor for this
+        module.
+    - node: thumbscrew
+      cyl: 5
+      knurl: true
+      confidence: estimated
+      source: >-
+        ufispace/fan-405637@1 - the captive screw is HIG Figure 15's inset callout, so
+        its presence is documented; its projection is not.
+    - node: airflow-label
+      out: 0.3
+      confidence: estimated
+      source: >-
+        ufispace/fan-405637@1 - a stick-on tag; thickness unsourced.
+    - node: status-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/fan-405637@1 - unsourced. The HIG's Fan FRU LED table gives the lamp's
+        states and nothing about its lens. Same 0.4 estimate as the other UfiSpace FRUs.
+skins: [default, blue]

@@ -1,0 +1,45 @@
+format: 1
+kind: component
+name: qsfpdd-led-strip-2x4
+version: 1.0.0
+class: led
+profile: networking
+description: Vertical QSFP-DD port-LED strip (S9300-32D) - a blue light-pipe
+  bezel carrying two columns of four lamps, one strip per cage row at every
+  boundary of the 2x2 cage groups, so each strip stands between (or beside)
+  two same-row ports
+size: {w: 5.6, h: 12.7}
+provenance:
+  size: >-
+    drawing-inferred - S9300-32D HIG Figure 11 port overview (1316 px across the 436 mm
+    chassis, aspect within 1% of the datasheet 436 x 43.8, 3.02 px/mm): nine blue strips
+    per row on a 45.1 mm group pitch, each ~17 px (5.6 mm) wide spanning ~38 px (12.7 mm)
+    vertically, confirmed by the datasheet front render and the front photograph. The
+    2 x 4 lamp grid is read off the datasheet render at 2x zoom; no vendor drawing
+    dimensions the lamps, so the grid inside the bezel is proportioned, not measured.
+  semantics: >-
+    vendor-silent - neither the datasheet nor the HIG's section 10 LED tables (SYS, FAN,
+    PSU0, PSU1, ID, the FRU lamps, the RJ45 management jack) says anything about the port
+    lamps: not which column serves which neighbouring cage, nor whether the four rows are
+    four lanes or something else. Eight strips would serve 32 ports at one column per
+    port only if the two end strips use a single column, which the nine-strip count
+    supports but no document states. Every lamp keeps the off/on default rather than an
+    invented vocabulary; see the device's port-led-semantics gap.
+elements:
+  left-1: {at: [0.8, 1.5], size: [1.6, 1.6], class: led, states: ['off', 'on']}
+  left-2: {at: [0.8, 4.3], size: [1.6, 1.6], class: led, states: ['off', 'on']}
+  left-3: {at: [0.8, 7.1], size: [1.6, 1.6], class: led, states: ['off', 'on']}
+  left-4: {at: [0.8, 9.9], size: [1.6, 1.6], class: led, states: ['off', 'on']}
+  right-1: {at: [3.2, 1.5], size: [1.6, 1.6], class: led, states: ['off', 'on']}
+  right-2: {at: [3.2, 4.3], size: [1.6, 1.6], class: led, states: ['off', 'on']}
+  right-3: {at: [3.2, 7.1], size: [1.6, 1.6], class: led, states: ['off', 'on']}
+  right-4: {at: [3.2, 9.9], size: [1.6, 1.6], class: led, states: ['off', 'on']}
+relief:
+  features:
+    - node: bezel
+      out: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/qsfpdd-led-strip-2x4@1 - the light-pipe block stands slightly proud of
+        the faceplate in the front photograph; no document dimensions it.
+skins: [default]

@@ -1,0 +1,100 @@
+format: 1
+kind: module
+name: psu-751-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: UfiSpace PSU-751 750W AC PSU (S9110-32X) - IEC C14 inlet, release
+  latch, black tube handle, status LED. Default skin is the red-latched
+  PSU-751-AESR (exhaust, front-to-back systems); the blue skin is the
+  PSU-751-AISB intake unit
+size: {w: 50.5, h: 40.2}
+attrs: {power-output-w: 750, input: ac, model: PSU-751-AESR}
+provenance:
+  power: >-
+    datasheet - UfiSpace states the rating in the part number's own ordering lines:
+    'PSU-751-AESR, 750W AC, exhaust air flow' and 'PSU-751-AISB, 750W AC, intake air
+    flow'. Input 100-240 VAC, 10 A max per feed (datasheet); the HIG's checklist adds
+    a 190-310 VDC, 5 A HVDC alternative for the AC unit and its power-up step notes a
+    built-in 12.5 A fast-acting fuse. No ambient is stated with the rating, so none
+    is recorded.
+  size: >-
+    HIG - the component table gives the PSU 50.5 x 263 x 40.2 mm (W x D x H) and
+    Figure 9 dimensions the AC unit's body; the AC and DC units are the same size
+    (HIG, AC Version PSU Overview). Face verified at 49.9 mm across in the rear
+    product render at 3.807 px/mm.
+  airflow: >-
+    HIG Figure 8 - blue latch is the back-to-front unit, red latch the front-to-back
+    unit. Same size both ways; only the latch colour and SKU differ.
+  inlet: standard (IEC 60320-1 via std/c14-inlet). The cord-retainer bail visible in
+    HIG Figure 8 is a cable-management accessory and is deliberately not drawn.
+  layout: photo-measured off the rear renders for the shell (latch, lamp, vents,
+    handle, right-margin slots and label); the inlet position is estimated within
+    the lower-left area the DC unit's terminal block occupies, as the AC face is
+    only shown in isometric.
+  led-states: HIG section 10, PSU FRU LED table (page 21), transcribed in full.
+elements:
+  status-led:
+    at: [11.2, 4.6]
+    size: [3.2, 3.2]
+    class: led
+    states: ['off',
+             {name: ok, color: '#22c55e'},
+             {name: fail, color: '#ef4444'},
+             {name: standby, color: '#22c55e', behavior: blinking},
+             {name: fw-update, color: '#22c55e', behavior: blinking},
+             {name: input-lost, color: '#ef4444', behavior: blinking},
+             {name: warning, color: '#22c55e', behavior: {mode: alternating, color: '#ef4444'}}]
+    description: >-
+      HIG PSU FRU LED table - Off (no input power to all power supplies), Green
+      (output ON and OK), Blinking Green 1/sec (standby state, only +5VSB on),
+      Blinking Green 2/sec (power supply firmware updating, boot-loader mode), Red
+      (critical event causing a shutdown - failure, over current, short circuit,
+      over voltage, fan failure, over temperature), Blinking Red 1/sec (input power
+      cord unplugged or input power lost with a second supply still fed), Blinking
+      between Green and Red (warning while still operating - high temp, high power,
+      high current, slow fan)
+  latch: {at: [0.0, 4.0], size: [2.5, 12.0], class: latch}
+  handle: {at: [36.2, 2.5], size: [3.6, 35.0], class: handle}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [4.0, 17.6]}
+relief:
+  features:
+    - node: latch
+      out: 2.2
+      confidence: estimated
+      source: >-
+        ufispace/psu-751-ac@1 - the HIG dimensions the body and projects the handle;
+        nothing else off the face is dimensioned. Same 2.2 estimate as the psu-401
+        family.
+    - node: handle
+      uhandle: 38
+      confidence: datasheet
+      source: >-
+        UfiSpace S9110-32X HIG, Space Clearance: 'the handle for the power supplies
+        will extend outwards by 1.5 inches (3.8cm)'. 38 mm, published by the vendor
+        for this PSU.
+    - node: inlet-frame
+      out: 2.4
+      confidence: estimated
+      source: >-
+        ufispace/psu-751-ac@1 - unsourced; the inlet shroud stands proud in HIG
+        Figure 8's isometric and no document dimensions it. Same 2.4 estimate as
+        psu-401-ac.
+    - node: status-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/psu-751-ac@1 - unsourced. The HIG's PSU FRU LED table gives the
+        lamp's states and nothing about its lens. Same 0.4 estimate as the other
+        UfiSpace FRUs.
+    - node: vent-field
+      vent: 30
+      confidence: estimated
+      source: >-
+        ufispace/psu-751-ac@1 - the vent field is visible in both rear renders;
+        its open fraction is not documented.
+connection-points:
+  power: {at: [18.0, 27.6], direction: front}
+skins: [default, blue]

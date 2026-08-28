@@ -1,0 +1,106 @@
+format: 1
+kind: module
+name: psu-921-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: UfiSpace PSU-921-AECR1 920W AC PSU (S6301-56STP) - silver face, round
+  intake fan on the left, black bail handle, portrait C14 inlet, red release tab
+  top-right, status LED; front-to-back (exhaust) airflow
+size: {w: 73.0, h: 40.0}
+attrs: {power-output-w: 920, input: ac, model: PSU-921-AECR1, airflow: exhaust}
+provenance:
+  power: >-
+    datasheet - the S6301-56STP datasheet's ordering line states the rating in the
+    part number's own row: 'PSU-921-AECR1, 920W AC, exhaust air flow'. The HIG's
+    Installation Environment Requirements repeats the magnitude as provisioning
+    guidance ('a reserve of at least 920 watts on each power circuit'). No ambient
+    is stated with the rating - a supply has a rating rather than a draw measured
+    against temperature - so none is recorded.
+  size: >-
+    datasheet+HIG - the HIG Component Physical Information table gives the PSU as
+    2.87 x 7.28 x 1.57 in (73 x 185 x 40 mm, W x D x H); the face here is the
+    73 x 40. The HIG Fig 6 mechanical drawing corroborates the face at
+    73.5+/-0.5 x 40.0+/-0.5 (drawing tolerances as printed).
+  layout: >-
+    photo-measured - the S6301-56STP rear photograph at ~9.4 px/mm: fan grille on
+    the left third (centre ~x16), black bail handle bar at x ~33-39, portrait
+    inlet centred ~ (53.5, 20.5), red release tab top-right, small status lamp on
+    the right column. The HIG Fig 16/17 PSU figures corroborate the arrangement.
+    Fig 6's dimension drawing calls the release tab colour 'RED (PANTONE 186C)'
+    and the handle 'COLOR: BLACK', which is where the two fills come from.
+  inlet: >-
+    standard (IEC 60320-1 via std/c14-inlet, rotated 90 - the photograph and HIG
+    Fig 16 show the inlet portrait). HIG Connecting Power: 'plug the AC power
+    cable (125VAC 13A, IEC60320 C13) into the AC inlet connector', so the inlet
+    is a C14 despite the datasheet's '100 to 240V, 12A' input line.
+  led-states: HIG section 10, PSU FRU LED table, transcribed in full. The table's
+    two Blinking Green rows (standby input present; firmware updating) share one
+    modelled state because they are visually identical - noted in the element
+    description rather than duplicated.
+elements:
+  handle: {at: [33.2, 2.5], size: [3.6, 35.0], class: handle}
+  latch: {at: [63.8, 4.5], size: [8.6, 9.5], class: latch}
+  status-led:
+    at: [67.6, 19.1]
+    size: [2.8, 2.8]
+    class: led
+    states: ['off',
+             {name: ok, color: '#22c55e'},
+             {name: standby, color: '#22c55e', behavior: blinking},
+             {name: critical, color: '#eab308'},
+             {name: input-lost, color: '#eab308', behavior: blinking},
+             {name: warning, color: '#22c55e', behavior: {mode: alternating, color: '#eab308'}}]
+    description: >-
+      HIG PSU FRU LED table - Off (no input power to all power supplies), Green
+      (output ON and OK), Blinking Green (standby state input power present; the
+      table's second Blinking Green row, firmware updating in boot-loader mode,
+      is visually identical and shares this state), Yellow (critical event
+      causing shutdown - failure, over current, short circuit, over voltage,
+      fan failure, over temperature), Blinking Yellow (AC cord unplugged or AC
+      lost with the second supply still fed), Blinking between Green and Yellow
+      (warning events where the supply keeps operating - high temp, high power,
+      high current, slow fan)
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [39.5, 10.5], rotate: 90}
+relief:
+  features:
+    - node: rotor-grille
+      vent: 25
+      confidence: estimated
+      source: >-
+        ufispace/psu-921-ac@1 - the HIG's Fig 6 drawing dimensions the 73 x 40
+        face and the module depth, and nothing off the face. This magnitude is
+        not in it.
+    - node: rotor-bulge
+      dome: 3.2
+      confidence: estimated
+      source: >-
+        ufispace/psu-921-ac@1 - unsourced; same treatment as the fan FRU's
+        rotor. Not in any drawing held.
+    - node: handle
+      uhandle: 38
+      confidence: datasheet
+      source: >-
+        UfiSpace S6301-56STP HIG, Space Clearance: 'the handle for the power
+        supplies will extend outwards by 1.5 inches (3.8cm)'. 38 mm, published
+        by the vendor for THIS part. The HIG states it as clearance beyond the
+        chassis and the PSU face sits flush with the chassis rear, so it is
+        also the handle's proudness off this module's own face.
+    - node: latch
+      out: 2.2
+      confidence: estimated
+      source: >-
+        ufispace/psu-921-ac@1 - the HIG's Fig 6 drawing dimensions the face and
+        depth only; the tab's proudness is not in it.
+    - node: status-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/psu-921-ac@1 - unsourced. The HIG's PSU FRU LED table gives
+        the lamp's states and nothing about its lens. Same 0.4 dome as the
+        UfiSpace FRUs in the S9510-28DC family: one estimate written again.
+connection-points:
+  power: {at: [53.5, 20.5], direction: front}
+skins: [default]

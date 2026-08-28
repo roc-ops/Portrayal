@@ -1,0 +1,385 @@
+format: 1
+kind: device
+name: n3100-4c
+version: 0.1.0
+maturity: modelled
+manufacturer: UfiSpace
+model: N3100-4C
+description: >-
+  5G timing adapter - a PCIe Gen4 x16 add-in card (not a rack device) that
+  offloads the PTP stack and servo from a COTS server for O-RAN fronthaul
+  timing. Stratum 3E OCXO, Cyclone V SoC FPGA and an Intel E-810 controller
+  behind 4x 10G/25G SFP28 ports, with GNSS in on SMA and 1PPS / 10MHz
+  in/out on SMB. Class C timing accuracy (G.8273.2), T-GM / T-BC / OC roles,
+  SyncE and G.8275.1. The modelled body is the card enclosure behind the
+  I/O plate; the full-height PCIe bracket and the gold edge connector
+  extend beyond it and are mounting furniture, not drawn.
+profile: networking
+provenance:
+  sources: >-
+    vendor datasheet (working/intake/ufispace/converted/n3100-4c-datasheet -
+    dimensions row, interfaces, power, environment, compliance), installation
+    guide v1.1 17-Jul-2023 (n3100-4c-hig - faceplate render fig-0005 with the
+    Sync LED callout, LED behaviour tables, PCIe slot requirements,
+    installation CAD in fig-0004), vendor render photo
+    (photos/n3100-4c-1-view.jpg, single angled card shot - counts and colour
+    only), angled datasheet render (datasheet fig-0002 - left-edge micro-USB,
+    rear-edge connector).
+  chassis: >-
+    datasheet - 'Dimension (WxDxH) 126.35 x 181.07 x 21.95 mm', transcribed
+    as width 126.35 / depth 181.07 / height 21.95 with the card lying flat as
+    the vendor draws it (PCB horizontal, I/O plate at the front). The
+    full-height PCIe bracket (right end) and the PCIe x16 gold edge
+    connector (right side, in the PCB plane) both extend beyond these
+    figures and are not modelled, per the body-between-the-ear-folds rule -
+    they are how the card mounts, not what it is. Whether the vendor's
+    126.35 includes any bracket metal is unstated; the plate drawn in the
+    HIG faceplate figure measures consistently with 126.35 excluding the
+    bracket tab.
+  front-layout: >-
+    drawing - HIG fig-0005 (straight-on faceplate render, 1471x259 px).
+    Gate 1: the plate face measures 1172 x 200 px against the datasheet
+    126.35 x 21.95 mm - aspect 5.86 vs 5.76, 1.8 percent - so fractions
+    were taken per-axis at 9.276 px/mm (x, plate left edge at px 68) and
+    9.112 px/mm (y, top edge at px 7). SMB jack centres at x 18.65 / 31.37,
+    y 11.0 (visually centred, plate centre 10.97); SMA centre (119.42,
+    9.77); SFP28 cage block px 426-1096 giving centres x 47.62 / 65.68 /
+    83.74 / 101.80 on an 18.06 mm pitch, cage vertical centre y 11.85;
+    port LEDs (green, one per port, left of each number tag) centres
+    x 43.99 / 61.88 / 79.67 / 97.46 at y 4.17. The photo confirms every
+    count and the left-to-right order (1PPS, 10MHz, ports 0-3, GNSS ANT).
+    The bracket retention screw head on the plate's left end reads 6.5 mm
+    at centre (6.41, 7.46); drawn with common/screw-head at its 3.6 mm
+    contract size, delta recorded here.
+  cutouts: >-
+    registry - SMB openings at 4.83 (10-32UNF-2A), SMA at 6.35
+    (1/4-36UNS-2B), SFP apertures 14.5 x 10.0 (SFF-8432), all centred on
+    the drawing-measured jack/cage centres above. LED holes 2.0 nominal at
+    the measured lamp centres (drawn lens ~2.2 in the figure).
+  vents: >-
+    drawing - square perforations around the SMB pair, ~2.5 mm squares on a
+    4.15 mm pitch: a six-square top row from x 12.72 (the row's right end
+    is washed out by glare in the render; six is what both the render and
+    the photo resolve), a three-square column at x 11.10 left of the 1PPS
+    jack, and a two-square column at x 23.72 between the jacks. Sizes and
+    pitch measured from fig-0005; the photo confirms the arrangement.
+  sync-led: >-
+    drawing - the HIG fig-0005 callout leader points at a small dark
+    rectangular lamp (px 289-310 x 168-178, ~2.3 x 1.1 mm) between the
+    1PPS and 10MHZ legends, centre (24.96, 18.22); the HIG names it the
+    Sync LED. It carries NO printed legend on the plate - the name exists
+    only in the guide. Drawn with common/led-dot (2.0 round), the closest
+    library part; the rectangular 2.3 x 1.1 lens and the delta are
+    recorded here. States from the HIG section 3.1 table.
+  port-leds: >-
+    drawing - one green lamp per SFP28 port, above the cage's left half
+    beside the yellow port-number tag (HIG fig-0005; photo confirms).
+    HIG 3.1: Off = no cable/no traffic, blinking green = 25G TX/RX,
+    blinking amber = 10G or less TX/RX. The yellow number tags (5.9 x
+    2.85 mm, measured from the figure) are drawn as decor with the numeral
+    as silkscreen ink on top.
+  silkscreen: >-
+    drawing - 1PPS, 10MHZ (spelled with a capital Z as printed) and GNSS
+    ANT in dark ink below their jacks, port numerals 0-3 in black on the
+    yellow tags; transcribed from fig-0005 and confirmed against the
+    photo. The Sync LED is unlabelled on the hardware.
+  rear-layout: >-
+    estimated - no straight-on rear source. The rear is the enclosure's
+    plain end with the PCB edge below it; drawn as the cover band over a
+    PCB strip, sizes from the chassis contract. Angled renders (datasheet
+    fig-0002, HIG fig-0003) show an unidentified SFP-cage-like connector
+    standing on the rear edge near the left corner - no document names it,
+    so it is NOT drawn; registered as a gap per the
+    unidentified-feature precedent (gl-8xep right-side boss).
+  side-layout: >-
+    estimated - both sides are the enclosure cover over the PCB edge; only
+    the angled renders show them, so positions are estimates. LEFT side
+    (x=0 = REAR per house convention) carries a micro-USB receptacle on
+    the PCB near the front (datasheet fig-0002 bottom-left; centre
+    estimated 13 mm behind the faceplate at PCB level) - the part is
+    unmistakably a micro-USB, its function is stated nowhere (gap).
+    RIGHT side (x=0 = FRONT) is the PCIe edge: the gold x16 edge
+    connector extends beyond this face in the PCB plane and is not drawn;
+    the face shows the cover over the PCB strip.
+  top-layout: >-
+    estimated - the top is the sheet-metal cover; angled renders show it
+    plain with the green PCB margin visible along the right (PCIe) edge.
+    Axis convention: y=0 is the REAR, per the house top-view precedent.
+    Cover screw positions are not resolvable from the angled renders and
+    are not drawn.
+  bottom-layout: >-
+    estimated - the PCB underside, drawn as plain board; no source shows
+    it. The gold edge-connector tab is outside the body footprint and
+    does not appear on this face. Only symmetric content is drawn, so the
+    left-right mirror convention could not be exposed by any feature -
+    noted per the symmetric-face rule.
+  power: >-
+    datasheet - 'Max power Consumption: 48 Watts, Typical Power
+    Consumption: 34 Watts' under the Power Supply row; the HIG repeats
+    the 48 W maximum. Neither document states what configuration the
+    figures assume (optics population), so power-envelope is unstated.
+    Power is drawn from the host PCIe slot; there is no PSU.
+  environment: >-
+    datasheet - operating 0-55 C, 5-95 percent RH; storage humidity 5-93
+    percent. Storage temperature DISAGREES between the two documents:
+    the datasheet says -40 to 70 C, the HIG installation requirements say
+    -40 to 65 C - same measure, same scope, different value. The manifest
+    carries the datasheet figure (the spec-table source); registered in
+    gaps as sources-disagree.
+  weight: 'datasheet - net weight 0.44 kg / 0.97 lbs.'
+attrs:
+  physical:
+    weight-kg: 0.44
+    form-factor: PCIe add-in card, full-height bracket; fits x4/x8/x16 slots, PCIe Gen3/Gen4
+  performance:
+    timing-accuracy: ITU-T G.8273.2 Class C
+  power:
+    power-max-w: 48
+    power-typical-w: 34
+    power-envelope: unstated
+    power-input: host PCIe slot
+  thermal:
+    cooling: host airflow, 500 LFM required (no onboard fans)
+  environmental:
+    operating-temp-c: 0 to 55
+    operating-humidity: 5 to 95 percent RH noncondensing
+    storage-temp-c: -40 to 70
+    storage-humidity: 5 to 93 percent RH noncondensing
+  platform:
+    controller: Intel E-810
+    fpga: Intel Cyclone V SoC
+    bus: PCIe Gen4 x16 (Gen3 compatible)
+    oscillator: Stratum 3E OCXO
+    os-support: CentOS, Ubuntu (ice driver 1.7.16+, NVM 3.20+)
+  features:
+    timing-roles: IEEE 1588v2 T-GM, T-BC/OC (G.8275.1 telecom profile); SyncE with ESMC; PTP offload and redundancy; Assisted FTS
+    clock-specs: G.8271.1, G.8272 PRTC, G.8273.2 T-BC/T-TSC, G.8273.4 APTS (via firmware upgrade), G.8262 EEC, G.8262.1 eEEC, G.8264 ESMC
+    oran-sync: O-RAN LLS C1, C2, C3 synchronization topologies
+    optics-sfp28: '25G SFP28 SR/LR, 25G SFP28 CR DAC, 10G SFP+ SR/LR, SFP+ Twinax (datasheet supported-accessories list)'
+    timing-cables: SMA coax with 1/4-36UNS-2B connector for GNSS; SMB coax with 10-32UNF-2A connector for 1PPS and 10MHz
+  management:
+    interfaces: managed from the host DU server - ufiCardMgmt CLI over the E-810 network interface to the card's management IP; UFI PTP Timing Software
+  compliance:
+    safety: UL 62368-1, IEC 62368-1
+    emc: FCC Part 15, Subpart B, Class A
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 126.35
+  height: 21.95
+  depth: 181.07
+  color: '#b4b7b9'
+  edge: '#8f9396'
+  silk: '#2b2d2f'
+groups:
+  sfp28:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp28, speed: 25g}
+  sfp28-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+  timing:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: external timing references - GNSS antenna in on SMA, 1PPS and 10MHz in/out on SMB
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+  micro-usb:
+    term: Port
+    role: management
+    index-origin: 1
+  plate-screws:
+    term: Screw
+    role: furniture
+    index-origin: 1
+views:
+  front:
+    size: {w: 126.35, h: 21.95}
+    panel:
+      decor:
+      - {at: [12.72, 3.29], size: [2.6, 2.5], fill: '#17191c'}
+      - {at: [16.87, 3.29], size: [2.6, 2.5], fill: '#17191c'}
+      - {at: [21.02, 3.29], size: [2.6, 2.5], fill: '#17191c'}
+      - {at: [25.17, 3.29], size: [2.6, 2.5], fill: '#17191c'}
+      - {at: [29.32, 3.29], size: [2.6, 2.5], fill: '#17191c'}
+      - {at: [33.47, 3.29], size: [2.6, 2.5], fill: '#17191c'}
+      - {at: [11.10, 7.46], size: [2.4, 2.5], fill: '#17191c'}
+      - {at: [11.10, 11.74], size: [2.4, 2.5], fill: '#17191c'}
+      - {at: [11.10, 15.91], size: [2.4, 2.5], fill: '#17191c'}
+      - {at: [23.72, 7.57], size: [2.5, 2.5], fill: '#17191c'}
+      - {at: [23.72, 11.85], size: [2.5, 2.5], fill: '#17191c'}
+      - {at: [48.36, 2.09], size: [5.9, 2.85], fill: '#e0cd3c', rx: 0.3}
+      - {at: [66.15, 2.09], size: [5.9, 2.85], fill: '#e0cd3c', rx: 0.3}
+      - {at: [83.95, 2.09], size: [5.9, 2.85], fill: '#e0cd3c', rx: 0.3}
+      - {at: [101.95, 2.09], size: [5.9, 2.85], fill: '#e0cd3c', rx: 0.3}
+      cutouts:
+      - {id: clk-1pps, at: [16.24, 8.59], size: [4.83, 4.83], shape: circle}
+      - {id: clk-10mhz, at: [28.96, 8.59], size: [4.83, 4.83], shape: circle}
+      - {id: gnss-ant, at: [116.25, 6.60], size: [6.35, 6.35], shape: circle}
+      - {id: port-0, at: [40.37, 6.85], size: [14.5, 10.0], shape: rect}
+      - {id: port-1, at: [58.43, 6.85], size: [14.5, 10.0], shape: rect}
+      - {id: port-2, at: [76.49, 6.85], size: [14.5, 10.0], shape: rect}
+      - {id: port-3, at: [94.55, 6.85], size: [14.5, 10.0], shape: rect}
+      - {id: led-p0, at: [42.99, 3.17], size: [2.0, 2.0], shape: circle}
+      - {id: led-p1, at: [60.88, 3.17], size: [2.0, 2.0], shape: circle}
+      - {id: led-p2, at: [78.67, 3.17], size: [2.0, 2.0], shape: circle}
+      - {id: led-p3, at: [96.46, 3.17], size: [2.0, 2.0], shape: circle}
+      - {id: led-sync, at: [23.96, 17.22], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+    - {at: [18.65, 18.3], text: 1PPS, font-size: 2.4, anchor: middle, for: clk-1pps}
+    - {at: [31.37, 18.3], text: 10MHZ, font-size: 2.4, anchor: middle, for: clk-10mhz}
+    - {at: [119.42, 18.3], text: GNSS ANT, font-size: 2.4, anchor: middle, for: gnss-ant}
+    - {at: [51.31, 4.4], text: '0', font-size: 2.2, anchor: middle, fill: '#141414', for: port-0}
+    - {at: [69.10, 4.4], text: '1', font-size: 2.2, anchor: middle, fill: '#141414', for: port-1}
+    - {at: [86.90, 4.4], text: '2', font-size: 2.2, anchor: middle, fill: '#141414', for: port-2}
+    - {at: [104.90, 4.4], text: '3', font-size: 2.2, anchor: middle, fill: '#141414', for: port-3}
+    components:
+      placements:
+      - {ref: std/sfp@1, id: port-0, at: [40.37, 6.85], group: sfp28, rel-pos: 0}
+      - {ref: std/sfp@1, id: port-1, at: [58.43, 6.85], group: sfp28, rel-pos: 1}
+      - {ref: std/sfp@1, id: port-2, at: [76.49, 6.85], group: sfp28, rel-pos: 2}
+      - {ref: std/sfp@1, id: port-3, at: [94.55, 6.85], group: sfp28, rel-pos: 3}
+      - {ref: common/smb-jack@1, id: clk-1pps, at: [15.15, 7.5], group: timing, rel-pos: 2, attrs: {role: 1pps-io}}
+      - {ref: common/smb-jack@1, id: clk-10mhz, at: [27.87, 7.5], group: timing, rel-pos: 3, attrs: {role: 10mhz-io}}
+      - {ref: common/sma-jack@1, id: gnss-ant, at: [114.67, 5.02], group: timing, rel-pos: 1, attrs: {role: gnss-in}}
+      - ref: common/led-dot@1
+        id: led-p0
+        at: [42.99, 3.17]
+        for: port-0
+        group: sfp28-leds
+        rel-pos: 0
+        states: ['off',
+                 {name: activity-25g, color: '#22c55e', behavior: blinking},
+                 {name: activity-10g, color: '#eab308', behavior: blinking}]
+        description: 'HIG Ethernet I/O Port row - Off (cable not plugged in / no
+          traffic), Blinking Green (25G TX/RX activity), Blinking Amber (10G or
+          less TX/RX activity)'
+      - ref: common/led-dot@1
+        id: led-p1
+        at: [60.88, 3.17]
+        for: port-1
+        group: sfp28-leds
+        rel-pos: 1
+        states: ['off',
+                 {name: activity-25g, color: '#22c55e', behavior: blinking},
+                 {name: activity-10g, color: '#eab308', behavior: blinking}]
+        description: 'HIG Ethernet I/O Port row - Off (cable not plugged in / no
+          traffic), Blinking Green (25G TX/RX activity), Blinking Amber (10G or
+          less TX/RX activity)'
+      - ref: common/led-dot@1
+        id: led-p2
+        at: [78.67, 3.17]
+        for: port-2
+        group: sfp28-leds
+        rel-pos: 2
+        states: ['off',
+                 {name: activity-25g, color: '#22c55e', behavior: blinking},
+                 {name: activity-10g, color: '#eab308', behavior: blinking}]
+        description: 'HIG Ethernet I/O Port row - Off (cable not plugged in / no
+          traffic), Blinking Green (25G TX/RX activity), Blinking Amber (10G or
+          less TX/RX activity)'
+      - ref: common/led-dot@1
+        id: led-p3
+        at: [96.46, 3.17]
+        for: port-3
+        group: sfp28-leds
+        rel-pos: 3
+        states: ['off',
+                 {name: activity-25g, color: '#22c55e', behavior: blinking},
+                 {name: activity-10g, color: '#eab308', behavior: blinking}]
+        description: 'HIG Ethernet I/O Port row - Off (cable not plugged in / no
+          traffic), Blinking Green (25G TX/RX activity), Blinking Amber (10G or
+          less TX/RX activity)'
+      - ref: common/led-dot@1
+        id: led-sync
+        at: [23.96, 17.22]
+        for: chassis
+        group: status-leds
+        rel-pos: 1
+        states: ['off',
+                 {name: synced, color: '#22c55e'},
+                 {name: link-down, color: '#eab308'},
+                 {name: free-run, color: '#22c55e', behavior: blinking},
+                 {name: thermal-alert, color: '#eab308', behavior: blinking}]
+        description: 'HIG Sync row - Off (card not activated or not fully seated
+          in the PCIe slot), Solid Green (an Ethernet port is up and synchronized
+          to timing source), Solid Amber (Ethernet and synchronization link
+          status down/lost), Blinking Green (Ethernet up but system timing sync
+          disabled or in free-run/holdover), Blinking Amber 1/sec (thermal
+          alert), Blinking Amber 4/sec (thermal NMI, all Ethernet ports
+          disabled)'
+      - {ref: common/screw-head@1, id: plate-screw, at: [4.61, 5.66], for: chassis, group: plate-screws, rel-pos: 1}
+  rear:
+    size: {w: 126.35, h: 21.95}
+    panel:
+      decor:
+      - {at: [0, 0], size: [126.35, 18.0], fill: '#c3c6c8'}
+      - {at: [0, 18.0], size: [126.35, 1.8], fill: '#2f7d3a'}
+  left:
+    size: {w: 181.07, h: 21.95}
+    panel:
+      decor:
+      - {at: [0, 0], size: [181.07, 18.0], fill: '#c3c6c8'}
+      - {at: [0, 18.0], size: [181.07, 1.8], fill: '#2f7d3a'}
+    components:
+      placements:
+      - {ref: std/micro-usb@1, id: usb-mgmt, at: [164.32, 14.6], group: micro-usb, rel-pos: 1}
+  right:
+    size: {w: 181.07, h: 21.95}
+    panel:
+      decor:
+      - {at: [0, 0], size: [181.07, 18.0], fill: '#c3c6c8'}
+      - {at: [0, 18.0], size: [181.07, 1.8], fill: '#2f7d3a'}
+  top:
+    size: {w: 126.35, h: 181.07}
+    panel:
+      decor:
+      - {at: [0, 0], size: [120.4, 181.07], fill: '#c3c6c8'}
+      - {at: [120.4, 0], size: [5.95, 181.07], fill: '#2f7d3a'}
+  bottom:
+    size: {w: 126.35, h: 181.07}
+    panel:
+      decor:
+      - {at: [0, 0], size: [126.35, 181.07], fill: '#1e5c2b'}
+gaps:
+- what: rear-edge-connector
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    Identity of the SFP-cage-like connector standing on the card's rear
+    edge near the left corner (visible in datasheet fig-0002 and HIG
+    fig-0003 angled renders, ~15 mm wide silver shell with a black
+    slot face). The interface list (GNSS SMA, 1PPS/10MHz SMB, 4x SFP28)
+    does not include it and no document names it; not drawn until
+    identified.
+- what: micro-usb-function
+  scope: [usb-mgmt]
+  reason: vendor-silent
+  wanted: >-
+    The function of the micro-USB receptacle on the left edge near the
+    faceplate (datasheet fig-0002) - likely a console/debug port, but no
+    document mentions it. Its position is also only estimated from an
+    angled render; a straight-on side drawing or a caliper would settle
+    both.
+- what: storage-temp
+  scope: [storage-temp-c]
+  reason: sources-disagree
+  wanted: >-
+    Storage temperature upper bound: the datasheet environmental table
+    says -40 to 70 C, the installation guide's requirements list says
+    -40 to 65 C - same measure, same scope, different value. The manifest
+    carries the datasheet 70; a vendor errata or newer revision would
+    settle it.
+configurations:
+  base:
+    kind: base
+    description: N3100-4C 5G timing adapter, PCIe Gen4 x16 add-in card
+    default: true
+    part-numbers:
+      N3100-4C: {}
