@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: sma-jack
-version: 1.0.0
+version: 1.0.1
 class: port
 profile: networking
 description: Panel-mount SMA jack with gold jam nut (bezel) around a std/sma core
@@ -9,6 +9,14 @@ size: {w: 9.5, h: 9.5}
 attrs: {media: coax-sma}
 provenance:
   size: drawing-inferred (S9510-28DC HIG Fig 9, ~9.5mm nut envelope)
+  bore: >-
+    standard - the nut is drawn as an ANNULUS whose hole is the std/sma core's own
+    6.35mm opening, centred. It was a solid hexagon until a reviewer opened the SVG
+    and found the jack missing on sixteen devices: the nut declares `cyl` in its
+    relief, and the renderer raises a protruding feature over a component's composed
+    parts so that a bezel plate can cover them - correct for a plate, fatal for a nut,
+    which is supposed to surround its connector rather than hide it. With a real bore
+    the paint order stops mattering.
   core: standard (via std/sma)
 elements: {}
 parts:
