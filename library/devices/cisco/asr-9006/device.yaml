@@ -1,13 +1,10 @@
 format: 1
 kind: device
 name: asr-9006
-version: 0.2.2
+version: 0.3.0
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9006
-part-numbers:
-  ASR-9006-AC-V2: ASR 9006 AC Chassis with PEM Version 2
-  ASR-9006-DC-V2: ASR 9006 DC Chassis with PEM Version 2
 description: >-
   Cisco ASR 9006 Router - the 10RU, six-slot member of the ASR 9000 Series Aggregation Services
   Routers. Cards mount HORIZONTALLY: slots 0 and 1 at the bottom of the cage are reserved for a
@@ -564,6 +561,32 @@ views:
       - {id: air-filter, label: 'Air filter - right side, accessible from the rear'}
       - {id: nebs-ground, label: NEBS bonding and grounding receptacle}
 configurations:
+  ac:
+    kind: orderable
+    description: >-
+      ASR 9006 AC Chassis with PEM Version 2 - the chassis ordered with a version 3 AC power feed. The
+      difference is which modules seat in the power tray; the chassis is the
+      same metal either way, which is why this is a configuration and not a
+      separate device.
+    part-numbers:
+      ASR-9006-AC-V2: {part: ASR-9006-AC-V2, power-cord: none}
+    bays:
+      pm-0: cisco/a9k-pwr-3kw-ac@1
+      pm-1: cisco/a9k-pwr-3kw-ac@1
+      pm-2: cisco/a9k-pwr-3kw-ac@1
+  dc:
+    kind: orderable
+    description: >-
+      ASR 9006 DC Chassis with PEM Version 2 - the chassis ordered with a version 2 DC power feed. The
+      difference is which modules seat in the power tray; the chassis is the
+      same metal either way, which is why this is a configuration and not a
+      separate device.
+    part-numbers:
+      ASR-9006-DC-V2: {part: ASR-9006-DC-V2, power-cord: none}
+    bays:
+      pm-0: cisco/a9k-pwr-2kw-dc@1
+      pm-1: cisco/a9k-pwr-2kw-dc@1
+      pm-2: cisco/a9k-pwr-2kw-dc@1
   base:
     kind: base
     source: >-

@@ -63,6 +63,7 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
   L56 overlay: a NOS identity names a software vendor the registry knows
   L57 device: configurations say what kind of thing they are, and the base is the default
   L58 component: a wrapper's own connection point sits where its aperture mates
+  L59 device: top-level part-numbers are not read by anything
       that composes them
   L47 component: a declared lamp state is a promise the drawing can keep - some
       element lights when it is set
@@ -2310,6 +2311,47 @@ def lint_device_gap_scope(path, data):
              "rather than the scope implying the device already has it")
 
 
+def lint_device_top_level_skus(path, data):
+    """L59: SKUs at the top level, where no consumer looks.
+
+    `part-numbers` exists at two levels and the consumers disagreed about which
+    to read. The old nautobot exporter read only the top level; `dcim_export.py`
+    reads only the per-configuration form. The result was two devices exporting
+    under a name nobody can order - `AS5912-54X` and `AS7326-56X` - with ten real
+    SKUs each sitting in the file, at the top level, invisible.
+
+    PER-CONFIGURATION IS THE HOME, and not by preference: a SKU that encodes
+    airflow and power feed IS a configuration-level fact, and it is what lets one
+    device type be emitted per orderable thing. The per-configuration form also
+    carries `{part, power-cord}`, which is what distinguishes a regional variant
+    from a different machine; the top-level form is a flat string map that cannot
+    say it.
+
+    A warning, and one that should be closable: moving the entries is mechanical
+    where a configuration exists to move them into. Where none does, the SKU is
+    usually describing a variant nobody has modelled yet - which is worth knowing
+    and is the more interesting half of what this finds.
+    """
+    pns = data.get("part-numbers")
+    if not pns:
+        return
+    cfgs = data.get("configurations") or {}
+    below = set()
+    for cfg in cfgs.values():
+        below |= set((cfg or {}).get("part-numbers") or {})
+    orphan = sorted(set(pns) - below)
+    if not orphan:
+        warn(path, "L59", f"{len(pns)} top-level part-number(s) duplicate what the "
+             "configurations already carry. Nothing reads the top level, so this is a "
+             "second place to edit the same fact and a second place for it to go stale")
+        return
+    warn(path, "L59", f"top-level part-number(s) {', '.join(orphan[:4])} are not on any "
+         "configuration, and nothing reads the top level - so they never reach the DCIM "
+         "export, which is why a device with real SKUs in the file can still export under "
+         "a model name nobody can order. Move them onto the configuration they describe; "
+         "if no configuration describes them, the variant they name is not modelled yet")
+
+
 def lint_device_configuration_kind(path, data):
     """L57: a configuration says whether you can order it.
 
@@ -3828,6 +3870,7 @@ def main():
             if d is not None and d.get("kind") == "device":
                 lint_device_gap_scope(f, d)
                 lint_device_configuration_kind(f, d)
+                lint_device_top_level_skus(f, d)
                 try:
                     dev_maturity[str(f.parent.relative_to(root / "devices"))] = \
                         d.get("maturity", "draft")

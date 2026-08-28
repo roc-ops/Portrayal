@@ -767,6 +767,19 @@ def main():
     orderable = {n: c for n, c in cfgs.items()
                  if (c or {}).get("kind") in (None, "base", "orderable", "model")}
     cfgs = orderable or cfgs
+    # A CONFIGURATION WITH NO SKU, ON A DEVICE THAT HAS THEM, IS NOT A PRODUCT.
+    # The ASR 9006's `base` carries no part number of its own - you order the AC
+    # chassis or the DC one - so it fell back to the model name and emitted a
+    # second device type called "ASR 9006", for the same hardware, under a name
+    # nobody can order. That is the complaint this whole issue is about, arriving
+    # by a different route.
+    #
+    # Only when SOMETHING here has a SKU. A device whose configurations carry no
+    # part numbers at all still exports, under its model, because a descriptive
+    # name beats no device type.
+    with_sku = {n: c for n, c in cfgs.items() if (c or {}).get("part-numbers")}
+    if with_sku and len(with_sku) < len(cfgs):
+        cfgs = with_sku
     by_sku = {}
     for name, cfg in cfgs.items():
         chassis = sorted(k for k in (cfg.get("part-numbers") or {}) if k not in frus)

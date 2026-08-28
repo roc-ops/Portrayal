@@ -1,13 +1,10 @@
 format: 1
 kind: device
 name: asr-9010
-version: 0.2.2
+version: 0.3.0
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9010
-part-numbers:
-  ASR-9010-AC-V2: ASR 9010 AC Chassis with PEM Version 2
-  ASR-9010-DC-V2: ASR 9010 DC Chassis with PEM Version 2
 description: >-
   Cisco ASR 9010 Router - the 21RU, ten-slot member of the ASR 9000 Series Aggregation Services
   Routers. Cards mount VERTICALLY across the full width of the cage: the two CENTRE slots, 4 and
@@ -505,6 +502,38 @@ views:
       - {id: lift-handles, label: 'Chassis lift handles - present but NOT dimensioned in any figure for this chassis'}
       - {id: cooling-path, label: 'Front-to-rear cooling path - inlet at the bottom front, exhaust at the upper rear'}
 configurations:
+  ac:
+    kind: orderable
+    description: >-
+      ASR 9010 AC Chassis with PEM Version 2 - the chassis ordered with a version 3 AC power feed. The
+      difference is which modules seat in the power tray; the chassis is the
+      same metal either way, which is why this is a configuration and not a
+      separate device.
+    part-numbers:
+      ASR-9010-AC-V2: {part: ASR-9010-AC-V2, power-cord: none}
+    bays:
+      ps0-pm-0: cisco/a9k-pwr-3kw-ac@1
+      ps0-pm-1: cisco/a9k-pwr-3kw-ac@1
+      ps0-pm-2: cisco/a9k-pwr-3kw-ac@1
+      ps1-pm-0: cisco/a9k-pwr-3kw-ac@1
+      ps1-pm-1: cisco/a9k-pwr-3kw-ac@1
+      ps1-pm-2: cisco/a9k-pwr-3kw-ac@1
+  dc:
+    kind: orderable
+    description: >-
+      ASR 9010 DC Chassis with PEM Version 2 - the chassis ordered with a version 2 DC power feed. The
+      difference is which modules seat in the power tray; the chassis is the
+      same metal either way, which is why this is a configuration and not a
+      separate device.
+    part-numbers:
+      ASR-9010-DC-V2: {part: ASR-9010-DC-V2, power-cord: none}
+    bays:
+      ps0-pm-0: cisco/a9k-pwr-2kw-dc@1
+      ps0-pm-1: cisco/a9k-pwr-2kw-dc@1
+      ps0-pm-2: cisco/a9k-pwr-2kw-dc@1
+      ps1-pm-0: cisco/a9k-pwr-2kw-dc@1
+      ps1-pm-1: cisco/a9k-pwr-2kw-dc@1
+      ps1-pm-2: cisco/a9k-pwr-2kw-dc@1
   base:
     kind: base
     source: >-
