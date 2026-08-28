@@ -280,6 +280,23 @@ narrow ink box fell where the positional rule said port 1 was, and the only
 two double-width boxes fell on 10 and 11, which turned a guess into three
 independent agreeing facts.
 
+**MEASURE PITCH FROM FLAT FEATURES, NEVER FROM PROJECTING ONES.** In any image
+with perspective - and that is every photograph and most isometric renders - a
+feature that STANDS OUT of the face is seen at a different angle in each
+repeat, so its drawn width shrinks across the frame while a feature painted
+FLAT on the same face does not. Five identical modules gave handle widths of
+10.4, 8.8, 6.6, 5.0 and 4.7 because the handles project 25 mm; the flat badges
+beside them held constant width and gave a pitch of 52.49 against 52.45 from a
+second image, agreeing to four hundredths. A step taken from the handles would
+have been 54.4 and wrong by two millimetres per bay, compounding across the
+row.
+
+**The monotonic shrink is the tell, and it is diagnostic rather than annoying**:
+if a repeated feature's measured width slides in one direction across the
+frame, you are measuring the projection and not the part. Switch to something
+painted on the surface - a badge, a legend, a lamp, a screw head - and
+corroborate in a second image.
+
 **Measure the repeating features twice, from two different images.** When the
 intake holds two independent shots of the same face - an AC and a DC variant, a
 guide figure and a DAM photograph - measure the pitch in both before recording
@@ -958,6 +975,29 @@ configurations: {...}
   pair, so a wall of overlap messages on one block means one wrong `ref`,
   not fifty bad coordinates. Check the pitch against the part before
   believing you mis-measured.
+- **A LIBRARY PART CAN SIMPLY NOT FIT, AND THE RIGHT PITCH BEATS THE RIGHT
+  SHAPE.** Indicator and lamp parts are drawn at whatever size their first
+  device needed, and a denser panel will have pitches none of them can sit on -
+  a lane-LED strip that spans a whole band where you measured two lamps inside
+  it, a lamp pair moulded 8 mm apart where the hardware's are 3.4, an arrow
+  wider than the gap between two of them. Lint finds these as collisions
+  (L13), which is the good case; the bad case is nudging parts apart until the
+  warning stops and shipping a row that is subtly wrong everywhere.
+  **Fall back to the simplest part that fits the measured pitch** - usually a
+  plain dot - and say in provenance that the shape is a compromise and what the
+  real lamp looks like. A part at the right pitch in the wrong shape is closer
+  to the hardware than a part in the right shape at the wrong pitch, and only
+  the second kind collides with its neighbour. If the panel deserves better,
+  the answer is a new component sized from this device, not a shoehorned one.
+- **A LEGEND PRINTED ON A MODULE'S FACE IS NOT THE CHASSIS'S SILKSCREEN.**
+  Vendors letter the FRU, not the frame: the position number on a fan, the
+  rating on a supply, the model on a line card. Put it in `silkscreen[]` and
+  two things go wrong at once - the mark sits inside the bay and paints over
+  the module (L21 says so), and the drawing now claims the chassis carries
+  printing it does not. The mark belongs in the component's own skin, inside
+  its `<g id="silkscreen">`. Where the part is shared across positions and
+  cannot carry a per-position digit, that is a gap to file, not a reason to
+  print it on the chassis.
 - **Prefer `std/` over `common/`.** `std/` parts are derived from a published
   standard; `common/` ones were drawn by hand and can be wrong. One
   `common/` RJ-45 puts its integrated LEDs on the contacts side, which no real
