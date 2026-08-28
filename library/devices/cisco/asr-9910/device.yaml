@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9910
-version: 0.2.3
+version: 0.2.4
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9910
@@ -358,6 +358,17 @@ views:
       - {id: top-plate, label: 'Top plate - outline and rack mounting brackets dimensioned in Figure 12'}
       - {id: rack-mounting-brackets, label: 'Rack mounting brackets'}
   bottom:
+    empty: >-
+      Searched and not published. There is no bottom view of ANY ASR 9000 chassis
+      in the 78-document intake - every figure caption in all 65 PDFs was checked
+      for "Bottom View", "underside" and "bottom of the chassis", returning
+      nothing. The one feature a sibling can carry here, the rack mounting plane,
+      is dimensioned for the 9906 and the 9912 and is NOT dimensioned for this
+      chassis: Figure 12 gives only the overall width, and its top view cannot be
+      calibrated to recover the position - drawn aspect 0.6268 against a stated
+      0.5629, out by 11.3 percent. See the two `bottom-face-*` provenance entries.
+      The face is sized correctly from Table 13, so the rack elevation and the 3D
+      box are the right shape; what is absent is any statement of what is on it.
     size: {w: 447.0, h: 800.1}
   left:
     size: {w: 800.1, h: 932.18}

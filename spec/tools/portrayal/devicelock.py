@@ -143,6 +143,11 @@ def buckets(doc):
                       for v, w in (doc.get("views") or {}).items()},
             "regions": {v: (w or {}).get("regions")
                         for v, w in (doc.get("views") or {}).items()},
+            # A face's `empty` decides whether it counts as finished, so editing
+            # it moves a capability LEVEL. Unfingerprinted, that could be
+            # rewritten - or quietly deleted - with nothing asking for a version.
+            "empty": {v: (w or {}).get("empty")
+                      for v, w in (doc.get("views") or {}).items()},
             "configurations": doc.get("configurations"),
         }),
         "gaps": _digest(doc.get("gaps") or []),

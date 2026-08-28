@@ -315,3 +315,13 @@ def test_a_base_is_always_the_default():
             continue
         dflt = [n for n, c in cfgs.items() if (c or {}).get("default")]
         assert dflt == bases, f"{p}: base={bases} default={dflt}"
+
+
+def test_editing_a_faces_empty_declaration_is_at_least_a_patch():
+    """`empty` decides whether a face counts as finished, so rewriting it moves a
+    capability level. Unfingerprinted it could be edited - or deleted - with
+    nothing asking for a version."""
+    a = dev()
+    b = dev()
+    b["views"]["front"]["empty"] = "searched the whole corpus and found nothing at all about this face"
+    assert dl.required_bump(dl.entry(a), dl.entry(b)) == "patch"

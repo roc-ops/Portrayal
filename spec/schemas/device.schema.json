@@ -506,6 +506,11 @@
         "additionalProperties": false,
         "description": "one face of the device, written in the order the part is made: size the panel, punch it, print it, populate it. Key order is linted (L16).",
         "properties": {
+          "empty": {
+            "type": "string",
+            "minLength": 40,
+            "description": "this face was LOOKED FOR AND IS NOT DOCUMENTED, and this says where you looked. A face with nothing on it is otherwise indistinguishable from a face nobody got to, so the capability check counted both as unfinished and the only way to pass was to draw something - which on an undocumented face means inventing it. Prose rather than a boolean, and long enough that a bare `empty: yes` will not validate, because the claim being made is about a search rather than about the drawing. A view declaring this must actually be bare (L60); if a source turns up, the sentence goes and the feature is drawn."
+          },
           "size": {
             "type": "object",
             "description": "view dimensions in mm when not the chassis front elevation (e.g. top = width x depth)",
