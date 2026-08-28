@@ -1,0 +1,973 @@
+format: 1
+kind: device
+name: s9600-72xc
+version: 0.1.0
+maturity: modelled
+manufacturer: UfiSpace
+model: S9600-72XC
+description: >-
+  UfiSpace S9600-72XC open aggregation router - 2RU disaggregated white box on
+  Broadcom Qumran2c with an optional external OP2 TCAM (premium SKU), 2.4 Tbps and
+  4 GB of deep buffer, carrying 64x 1/10/25G SFP28 in four ganged blocks and 8x
+  40/100G QSFP28, plus 2x 10G SFP+ management ports and a timing block (GNSS on SMA,
+  1PPS and 10MHz on SMB, ToD on RJ45, Stratum 3E OCXO, SyncE, 1588v2 Class C and
+  TSN); four hot-swap fans (3+1) and dual 1300W supplies (1+1) at the rear. Built for
+  5G C-RAN fronthaul aggregation, BBU-pooling backhaul and BNG
+profile: networking
+provenance:
+  sources: >-
+    UfiSpace S9600-72XC datasheet (working/intake/ufispace/converted/s9600-72xc-datasheet)
+    for dimensions, weight, port inventory, platform, timing, power, environment,
+    compliance and the FRU ordering lines; S9600-72XC Hardware Installation Guide
+    (s9600-72xc-hig) for the overview and port figures, the accessory and component
+    tables, the PSU and fan mechanical drawings, the LED tables and grounding. All
+    front and top geometry is measured on the HIG's own pages re-rendered from the
+    source PDF at 600 dpi (pdftocairo), not on the docling extracts, because the
+    extracted figure is CROPPED at the page margin and its bounding box therefore
+    cannot be aspect-gated. Three vendor product renders (photos/s9600-72xc-1-view,
+    -2-view, -3-view) are 520 px wide and were used for colour and counts only.
+    Checked for a vendor 3D model before trusting any figure, per the skill: the
+    intake stages GLBs for ReadyLinks only and none for UfiSpace.
+  scale-gate: >-
+    THE FIRST READING OF THIS FIGURE WAS 7% WRONG AND THE ERROR WAS CAUGHT BY AN
+    IMPLAUSIBLE PITCH, so it is recorded rather than quietly fixed. HIG Figure 8's
+    panel appeared to run from py 1668 to py 2567 on the 600 dpi page, which gives
+    10.262 px/mm and an SFP28 column pitch of 13.35 mm - smaller than SFF-8433's
+    14.25 mm ganged pitch, which is to say smaller than the part that has to fit in
+    it. Re-reading the column showed py 2567 is the figure's own black RULE, three
+    millimetres of white below the chassis; the chassis ends at py 2508.6. The
+    corrected scale is 840.6 px / 87.7 mm = 9.585 px/mm, on which the same
+    triangles measure 14.276 mm and the standard is recovered to two hundredths.
+    Every number on the front and top faces is on the corrected scale.
+    The figure passes Gate 1 by a CIRCULAR feature rather than by its outline,
+    because the outline is clipped: the GNSS nut measures 9.81 x 9.81 mm and the
+    two SMB nuts 7.72 x 7.72 and 7.72 x 7.72, so x and y scales are equal to the
+    pixel. On that scale the right-hand clip is 5.4 mm, which is exactly the width
+    of the 'S9600-72XC' legend the figure cuts through mid-glyph. The TOP view in
+    HIG Figure 4 gates on its outline conventionally: 1211 x 1700 px against the
+    stated 436 x 609.6 mm is 612.1 mm computed against 609.6 stated, 0.4% out.
+  chassis: >-
+    datasheet - 'Chassis (W x D x H) 2 RU, 436 x 609.6 x 87.7 mm or 17.17" x 24" x
+    3.45"', weight 15.19 kg without FRU. The HIG's Component Physical Information
+    table repeats the same triple, but note that its Dimension row is LABELLED
+    'S9701-82DC (W x D x H)' - a copy-paste from another product's guide. The
+    numbers are this product's (they match the datasheet and Figure 4's own
+    dimension callouts, W = 17.17" / 436 mm and D = 24" / 609.6 mm); the label is
+    not, and it is recorded here so nobody later reads it as a second source. That
+    table gives the chassis weight as 15.06 kg against the datasheet's 15.19 kg, a
+    130 g difference recorded here rather than as a conflict - the manifest carries
+    the datasheet figure. 436 is the body and not a rack face: Figure 4 dimensions
+    436 mm across the chassis itself and the guide ships separate adjustable
+    mounting rails (626 x 44 x 22 mm) for 19 inch racks, so the mounting hardware is
+    additional to 436 and is not drawn.
+  row-grid: >-
+    drawing - THE SFP28 AND QSFP28 ROWS SIT ON ONE GRID, measured independently in
+    two columns of the figure and agreeing. Profiling inside an SFP28 block gives the
+    upper ganged shell running 16.95-43.45 mm with its shared cage wall at 30.2, and
+    the lower shell 44.65-71.30 with its wall at 58.0: four cells of 13.28 mm.
+    Profiling the QSFP28 block, 250 mm away on the same face, gives the identical
+    numbers - shell top 16.95, wall 30.0-30.2, shell bottom 43.45, second shell
+    44.65-71.30, wall 58.0-58.6. The two blocks are therefore laid out on the same
+    centrelines (23.58, 36.83, 51.33, 64.65) and each opening is centred in its cell.
+  sfp28-layout: >-
+    drawing - four ganged blocks of four columns, each column two ports high in each
+    of the two shells, so 4 x 4 x 4 = 64. THE PITCH IS TAKEN FROM THE PRINTED
+    TRIANGLES, not from the drawn module faces, because the triangles are flat
+    artwork on the yellow legend band and repeat once per column. Their sixteen
+    midpoints are 52.84, 67.03, 81.12, 95.41 | 114.09, 128.43, 142.72, 157.02 |
+    175.69, 190.04, 204.33, 218.57 | 237.45, 251.85, 266.09, 280.39, which is an
+    in-block pitch of 14.276 mm (twelve intervals, spread 14.09 to 14.40) and a
+    block-to-block step of 18.75 mm. 14.276 is SFF-8433's 14.25 port pitch to two
+    hundredths, so std/sfp-ganged is placed on the standard's own 14.25 and the
+    block origins are the measured ones; the residual against the triangles is
+    under 0.3 mm anywhere in the row. The white cage walls corroborate: they fall
+    at 42.29 and 45.22 (block 1 outer and inner), 165.6, 289.5 - the same four
+    block boundaries the triangles imply.
+  numbering: >-
+    drawing - NUMBERING RUNS DOWN EACH COLUMN AND THE TWO SHELLS ARE TWO RUNS. The
+    top yellow band prints '0 ▲▼ 1', '2 ▲▼ 3' ... '30 ▲▼ 31' across sixteen columns
+    and the bottom band prints '32 ▲▼ 33' ... '62 ▲▼ 63', so column k carries 2k over
+    2k+1 in the upper shell and 32+2k over 33+2k in the lower. HIG Figure 8's module
+    faces print the same assignment stated the other way round (0 2 4 6 across the
+    first row, 1 3 5 7 beneath), and the guide's Port Overview table agrees on the
+    ranges: '0 ~ 63 SFP28 1/10/25G, 64 ~ 71 QSFP28 40/100G'. The band numerals are
+    what is drawn here; the module-face numerals are on the schematic transceivers
+    and would be covered by a real one.
+  mirror: >-
+    drawing - the two shells MIRROR EACH OTHER, and the mirror is per SHELL rather
+    than per row, which is not what the AGR400 lesson would predict and is therefore
+    stated plainly. In HIG Figure 8 both rows of the upper shell draw their module
+    latch tab at the BOTTOM of the cell and both rows of the lower shell draw it at
+    the TOP. Rows 3 and 4 therefore carry rotate: 180 and rows 1 and 2 do not.
+    std/sfp-ganged is very nearly symmetric about its own centre, so this changes
+    little in the render; it is recorded because it is what the artwork says and
+    because getting it backwards is invisible to every rule.
+  qsfp28-layout: >-
+    drawing - one ganged block, two columns by four rows, on the row grid above. Its
+    white cage walls measure at 289.4/290.9 (outer and inner), 313.5 (shared) and
+    336.15 (right), so the two columns are 22.5 and 22.65 mm wide on a 22.58 mm
+    pitch and std/qsfp28 (registry 20.0 x 10.15) is centred in each at 302.25 and
+    324.83. Numbering is column-major within each shell exactly as the SFP28 field:
+    64 over 65 and 66 over 67 in the upper shell, 68 over 69 and 70 over 71 in the
+    lower, read off the module faces in Figure 8. NO PORT NUMERALS ARE PRINTED ON
+    THE PANEL for these eight - the yellow legend band stops at 288 mm and the green
+    light-pipe strips beside the block carry lamps and no digits - so none are drawn
+    here. That is a statement about the artwork, checked at 12x, not an omission.
+  qsfp28-leds: >-
+    drawing - a green light-pipe strip runs above and below the QSFP28 block, each
+    carrying two rows of four round lamps per column. The lamps' dark rings give
+    centres at 295.25, 299.2, 303.2, 307.1 in the left column and 318.6, 322.5,
+    326.5, 330.6 in the right: a 3.95 mm pitch, which is ufispace/lane-led-quad's
+    own 3.94 to a hundredth, so that part is reused rather than a new one drawn. The
+    four rows sit at y 10.05 and 13.45 above the block and 74.0 and 77.4 below it.
+    WHICH ROW SERVES WHICH PORT IS INFERRED, not stated: the upper strip is bound to
+    the upper shell's two ports and the lower strip to the lower shell's, top row to
+    the upper port of each pair. Nothing in the guide says so - see the
+    port-led-semantics gap. A white diamond light-pipe closes the right end of each
+    strip (x 310.8 and 334.1, spanning the strip's height); it is drawn as decor
+    because no source says what it indicates.
+  left-cluster: >-
+    drawing - measured on the 600 dpi page at 9.585 px/mm and cross-read at 12x.
+    Across the top, three round timing jacks with their legends to the left of each:
+    GNSS ANT at x 21.70 (nut 9.81 mm), 10MHZ at 39.33 and 1PPS at 56.81 (nuts 7.72
+    mm), all on y 7.57. Below and left, a four-hex vent row, then the ToD RJ45
+    (aperture 8.35-21.07 x 30.84-41.27), a recessed reset pinhole at (14.7, 46.15),
+    a triangular hex vent field, the five-lamp system LED legend block (white block
+    x 15.13-19.51, y 66.52-76.33 with its lamp column at x 13.88 outside it) and the
+    micro-USB console at the bottom. In the second column, the stacked SFP+
+    management pair (apertures x 27.13-39.96, centres y 21.61 and 35.59, a 13.98 mm
+    pitch) over the out-of-band RJ45 (aperture y 49.8-60.3, two integral green lamps
+    at its top corners), the USB 3.0 Type-A (aperture 23.27-36.10 x 62.14-67.67) and
+    the RS-232 console RJ45 (aperture y 69.5-80.2). All three RJ45s are drawn CONTACTS
+    UP AND LATCH DOWN - checked in a 12x crop of each, where the gold contact fingers
+    sit along the top edge and the latch channel steps out of the bottom - which is
+    std/rj45-ganged's own orientation, so none of them is rotated. std/rj45-ganged
+    (12.7 x 11.0) is used rather than std/rj45 (16.0 x 14.0) because the measured
+    apertures are 12.7-13.0 x 10.4-10.5 and a 16 mm part cannot sit in them.
+  timing-block: >-
+    drawing/datasheet - the datasheet is explicit that GNSS is SMA while 1PPS and
+    10MHz are SMB ('1 x GNSS input SMA, 1 x 10MHz input/output SMB, 1 x 1PPS
+    input/output SMB'), and the drawn nuts agree in proportion: the GNSS nut is 9.81
+    mm across and the two SMB nuts 7.72. AND THERE IS NO BITS PORT ON THIS DEVICE -
+    the sibling S9600-30DX has one on RJ48 and this one does not; the datasheet's
+    Timing Interfaces block lists four lines and stops at ToD, and Figure 8 draws
+    nothing in that position. The jacks are drawn as round bezels, so std/sma and
+    std/smb sit on gold decor discs at the measured nut diameters rather than
+    common/sma-jack, which draws a hex nut this hardware does not have - the same
+    construction the S9311-64D, S9500-30XS and S9600-30DX needed.
+  status-leds: >-
+    drawing/HIG - five lamps, not six, and the count is checked twice. The legend
+    block at the lower left carries five rows against a column of five green lamps
+    at x 13.88 on a 1.96 mm pitch from y 67.5 to 75.34, and HIG section 10's Front
+    Panel LED table names exactly five - SYNC, SYS, FAN, PS0, PS1 - in that order,
+    with a full state vocabulary for each. There is NO ID beacon here, which is
+    where this device differs from the S9600-30DX's six-lamp block. The legend text
+    itself is illegible at the figure's own resolution; the row order is the table's.
+  seg7: >-
+    drawing - a two-digit seven-segment display sits at the right of the faceplate,
+    bezel x 411.79-429.00 and y 8.41-17.90. The HIG never names it: Figure 4's
+    callout list runs GNSS, 1PPS, 10MHz, SFP+, ToD, Mgt. Port, USB 3.0, System LED,
+    Console Ports, QSFP, QSFP28 and stops, and section 10 tables the five panel
+    lamps and the two FRU lamps and nothing else. It is modelled as a component
+    (ufispace/seg7-status-2@1) rather than as decor because it is a part a person
+    could put a number to, but it carries no state vocabulary - see the
+    seg7-semantics gap.
+  vents: >-
+    drawing - hexagonal perforation. A band runs the width above the port field (x
+    44-406, y 0.5-10.8) and deepens to y 21.2 over the blank metal right of the
+    QSFP28 block, and a second band runs below (x 44-430, y 76.2-87.2). The left
+    cluster carries a four-hex row at y 15.5-20.8 and a triangular field at x
+    4.8-18.5, y 53.3-72.2 - drawn here as a RECTANGULAR vent patch, which is the
+    only shape panel.decor has; the real field tapers to a point at its lower left
+    and that is a simplification, recorded rather than hidden. Four of the hexes at
+    x 388-402 in the upper right band read green in the figure, which is an internal
+    PCB seen through the perforation rather than four lamps: they are not in any LED
+    table, they are not aligned with anything, and no lamp is drawn there.
+  rear-layout: >-
+    drawing, and WEAKER THAN THE FRONT - said plainly because the difference matters.
+    HIG Figure 4's rear elevation is drawn in three-quarter perspective with the
+    chassis top surface visible above the face, so the face is 341 px tall at its left
+    edge and 357 px at its right; there is no single vertical scale. The horizontal
+    scale is the face width (2500 to 4176 px = 436 mm, 3.844 px/mm) and on it the
+    four fan modules repeat cleanly: the flat red airflow badge - chosen over the
+    projecting handle, whose drawn width shrinks 43, 31, 23, 29 px across the frame
+    exactly as a projecting feature must - sits on an 84.3 mm pitch with the first at
+    x 16.1, putting fan bay 0 at x 1.55. THAT IS AN INDEPENDENT CORROBORATION OF THE
+    S9600-30DX, which measured 84.4 and 1.5 off its own guide's figure; the two
+    devices share a chassis width, a height and a fan bank, and this reading was taken
+    before that one was consulted. Vertically the bays are placed on the S9600-30DX's
+    numbers, which this figure can neither confirm nor refute better than about a
+    millimetre. The right-hand third of the face is magnified by the perspective and
+    the PSU stack is therefore anchored on its left edge (the red latch at 372.8 less
+    the component's own 0.6 latch inset) rather than on the chassis edge; see the
+    rear-perspective gap.
+  psus: >-
+    datasheet/HIG - two 1300 W supplies, 1+1 hot-swap, ordered as PSU-132-AESR (AC,
+    exhaust) or PSU-132-DESR (DC, exhaust). THE MODELLED COMPONENTS ARE THE INTAKE
+    SIBLINGS. ufispace/psu-132-ac@1 and @1's DC pair were drawn for the S9300-32D as
+    PSU-132-AISB1 and PSU-132-DISB1, and that component's own provenance records a
+    vendor rule that intake supplies carry a red latch and back-to-front ones blue.
+    This device's Figure 4 draws its PSUs with RED latches while its datasheet orders
+    the exhaust SKUs, so either the rule does not hold or the figure is generic. The
+    faces are otherwise the same 50.5 x 40 mm unit - the HIG's component table gives
+    50.5 x 321 x 39.9 mm here too, and its Figure 5 dimensions the AC body at 321 mm
+    with 331.2 mm over the handle, the same drawing the S9300-32D guide carries. The
+    part numbers are corrected per configuration through component-attrs; the latch
+    colour is filed as a gap rather than repainted.
+  psu-inlet: >-
+    HIG - 'Attach the power cable. Locate the AC inlet connector on the PSU and plug
+    the AC power cable (250VAC 15A, IEC60320 C15) into the AC inlet connector.' A C15
+    cord mates a C16 inlet, the notched high-temperature variant of the C14;
+    ufispace/psu-132-ac@1 composes std/c14-inlet and records the same caveat, because
+    the library holds no std/c16 and the two are indistinguishable at faceplate scale.
+    Carried forward here as a gap rather than restated as fact.
+  fans: >-
+    datasheet/HIG - four FAN-803816-HI exhaust modules, 3+1 redundant. The HIG's
+    component table gives the fan 81 x 113 x 81.5 mm, so the face is 81 x 81.5. The
+    library holds two components for this part number, ufispace/fan-803816@1 at 82.5
+    mm (drawn for the S9600-30DX from an 84.4 mm bay pitch) and
+    ufispace/fan-803816-hi@1 at 80 mm (drawn for the S9600-28DX, whose guide states
+    80). Neither is 81. The 82.5 part is used because the bay pitch measured HERE is
+    84.3 mm, the same repeating unit the 82.5 face was derived from, and a 80 mm face
+    on an 84.3 mm pitch leaves a 4.3 mm seam the figure does not show. This is the
+    third UfiSpace guide to state a fan width its own rear elevation contradicts and
+    the likely resolution is the same one - the table measures the fan BODY behind a
+    wider flange - but no document says so. See the fan-face-width gap.
+  grounding: >-
+    HIG section 8 - 'The location for securing the grounding lug is at the rear of the
+    case and is covered with a protective label', with two M4 screws and washers and a
+    #6 AWG lug from the accessory kit. Figure 4's rear elevation calls it out by name
+    ('Ground Lug') with a leader to the silver plate between the fan bank and the PSU
+    stack, and the plate is drawn there with two bolt bosses. Figures 20 and 21 show
+    the lug fitted. The plate is drawn as decor at x 344.5-360.0 and the earth symbol
+    is placed beside it.
+  views: >-
+    Six views. TOP is the strongest face after the front: HIG Figure 4's footprint
+    drawing passes the aspect gate at 0.4% and gives five long stadium recesses across
+    the lid at y 122.4, 217.8, 312.5, 407.9 and 502.6 (pitch 95.1, each 23.4 mm deep
+    and 406.5 mm across from x 15.0), plus three small bosses near the rear and a
+    screw row along the front edge. Y = 0 IS THE REAR on that face, per the house
+    convention and per the drawing itself, which prints the fan-module handles along
+    its top edge. BOTTOM carries the compliance sticker at an estimated position - no
+    held figure shows the underside. LEFT (x = 0 is the REAR) and RIGHT (x = 0 is the
+    FRONT) carry the rail screws the HIG's rack-mounting section describes, at
+    estimated positions; both side faces otherwise carry only symmetric content, so
+    the depth-axis conventions are stated here rather than exposed by any asymmetric
+    feature. This chassis has no documented air filter - the HIG has no filter section
+    and no filter appears in any figure - which is a real difference from the
+    S9600-30DX rather than an omission here.
+  colour: >-
+    photo-measured - the faceplate samples #484848 in the 520 px product render and
+    #474747 in the HIG figure, a neutral dark grey rather than the blue-grey
+    (#3c3f42) the S9600-30DX carries. The yellow legend band samples #c2b339 and the
+    QSFP28 light-pipe strips #4b6332.
+  attrs: >-
+    datasheet - Specifications, Performance, Environmental, Regulatory Compliance and
+    Accessories sections, transcribed into sections. Compliance strings kept verbatim,
+    semicolon-separated, untidied.
+  power: >-
+    datasheet 'Typical power: 328 Watts (no transceiver)' - the vendor's own scope, so
+    power-envelope is bare. The HIG's AC connection step states the maximum once:
+    'Ensure there is enough power to supply the system. The maximum system power
+    consumption is 685 watts', unqualified as to optics or ambient, and the DC section
+    states no maximum at all. 685 is carried as power-max-w because a single unqualified
+    figure on a provisioning instruction is what a chassis is budgeted with, AND THE
+    VENDOR DID NOT QUALIFY IT. The 1300 W beside it is the supply's rating, not a draw.
+    These are the vendor's figures as the vendor states them and are NOT reconciled
+    against the module set; the fans publish no draw anywhere in the intake, so any
+    total built from the modelled modules is a floor.
+  lifecycle: >-
+    searched 2026-08-28 for 'UfiSpace S9600-72XC end of life end of sale announcement':
+    the results are the live product page, the current datasheet, an FAQ and reseller
+    listings, and no notice of any kind. none-announced is a real finding, not an
+    absence.
+attrs:
+  performance:
+    switching-capacity: 2.4 Tbps
+    packet-buffer: 4 GB deep buffer
+  power:
+    power-typical-w: '328'
+    power-max-w: '685'
+    power-envelope: bare
+    input-ac: 100 to 240 V, 12 A
+    input-dc: -40 to -75 V, 40 A
+    psu-redundancy: 1+1 hot-swappable
+  thermal:
+    fan-redundancy: 3+1 hot-swappable
+    airflow: front-to-back (exhaust fans and supplies at the rear)
+  environmental:
+    operating-temp: 0 to 45 C
+    operating-humidity: 5 to 85% RH non-condensing
+    storage-temp: -40 to 70 C
+    storage-humidity: 5 to 93% RH non-condensing
+  platform:
+    asic: Broadcom Qumran2c BCM88820 with optional Broadcom OP2 BCM16K external TCAM (premium SKU only)
+    cpu: Intel Skylake-D 8-core @ 1.9 GHz
+    memory: 32 GB DDR4 (up to 64 GB)
+    storage: 128 GB SSD
+    bmc: ASPEED AST2400
+  features:
+    timing: >-
+      Stratum 3E OCXO with optional holdover; SyncE (ITU-T); IEEE 1588v2 default,
+      G.8265.1, G.8275.1, G.8275.2, SMPTE ST 2059-2 (additional licence), T-GM,
+      T-BC/OC, T-TC; Time Sensitive Networking (TSN); Class C timing accuracy. NOS
+      integration is required to activate these, which the datasheet states with an
+      asterisk against the whole timing block
+    gnss: internal receiver for master clock implementations
+    routing: full Segment Routing over IPv6 (SRv6)
+    compliance-programme: IEEE 802.1CM fronthaul; ITU-T G.8273.2 T-BC Class C
+    roles: >-
+      C-RAN hub 5G fronthaul transport aggregation; backhaul aggregation for BBU
+      pooling; programmable as a Broadband Network Gateway (BNG)
+    optics-qsfp28: 100G QSFP28 SR4/LR4/ER4/ZR4, up to 80 km per the HIG port table
+    optics-sfp28: >-
+      25G SFP28 SR/LR/ER; 10G SFP+ SR/LR/ER; 1G SFP SX/LX/EX - the same cages take
+      all three speeds, and the HIG's port table rates ports 0-63 to 40 km
+    timing-cables: >-
+      the datasheet's Compatible Timing Cable Types row - 50 ohm SMA coaxial with a
+      1/4-36UNS-2B connector for GNSS; 50 ohm SMB coaxial with a 10-32UNF-2A connector
+      for 1PPS and 10MHz; shielded RJ45 for ToD. The accessory kit ships two SMB-to-BNC
+      converter cables
+    optics-sfp-plus: >-
+      10G on the two SFP+ management ports. The datasheet's Compatible Transceiver
+      Types list is one list for the whole box and names no management-only part, so
+      the speed here is the port list's ('2 x 10G SFP+ management ports')
+  management:
+    console: RJ45 RS-232 plus a micro-USB serial console
+    oob: 1x RJ45 100/1000M management port
+    timing-interfaces: GNSS SMA in; 1PPS SMB in/out; 10MHz SMB in/out; ToD RJ45 in/out
+  compliance:
+    safety: UL 62368-1; IEC 60950-1; IEC 62368-1; BSMI
+    emc: >-
+      FCC Part 15, Subpart B, Class A; ICES-003, Class A; EN 55032, Class A; EN 55024;
+      EN 55035; EN 62479; EN 50663; EN 300 386; EN 301 489; EN 303 413; BSMI; MTCTE;
+      VCCI CISPR 32, Class A
+    nebs: NEBS GR-1089, GR-3108 (EMC); NEBS GR-63 (environment)
+    environment: ETSI 300 019; ETSI 300 132-2; RoHS; WEEE; MTCTE
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 436
+  height: 87.7
+  depth: 609.6
+  ru: 2
+  color: '#484848'
+  weight-kg: 15.19
+gaps:
+- what: port-led-semantics
+  scope: [qsfp28, port-leds]
+  reason: vendor-silent
+  note: >-
+    HIG section 10 tables the five front-panel lamps, the PSU FRU lamp and the fan FRU
+    lamp in full, and says nothing at all about the port lamps. So the eight
+    four-lamp strips beside the QSFP28 block are drawn because the figure draws them,
+    at a pitch that matches ufispace/lane-led-quad's own to a hundredth, but what the
+    four dots mean - four lanes, link and activity pairs, something else - is not
+    stated, and neither is which of the two rows in each strip belongs to which port
+    of the pair. The binding written here (upper row to the upper port) is the
+    natural reading and is an inference. Every lamp keeps the component's off/on
+    default rather than a vocabulary borrowed from a sibling guide.
+  wanted: >-
+    a per-NOS LED table from UfiSpace or a NOS vendor, or photographs of a live unit
+    with ports in known states
+- what: sfp28-port-leds
+  scope: [sfp28, port-leds]
+  reason: needs-photo
+  note: >-
+    THE 64 SFP28 PORTS ARE MODELLED WITH NO LAMPS AND THE HARDWARE ALMOST CERTAINLY
+    HAS THEM. HIG Figure 8 draws a pale strip under each upper-row module carrying two
+    small marks that read as a lamp pair at 2x on the docling extract, and the same
+    strip appears in the lower shell. At the source's own resolution - 9.585 px/mm,
+    which is all the 600 dpi page render can give - those marks resolve to about two
+    pixels and a green cast that is indistinguishable from the JPEG ringing around the
+    module faces beside them. Sampling the green channel across the whole mid-band of
+    both shells returns a smooth gradient, not 64 discrete pairs. Rather than invent
+    128 lamp positions on a 14.25 mm pitch that no reading supports, none are drawn.
+    The three product renders are 520 px wide and settle nothing.
+  wanted: >-
+    a square-on photograph of the faceplate at 1000 px or better, or a vendor
+    mechanical drawing of the SFP28 bezel
+- what: seg7-semantics
+  scope: [ufispace/seg7-status-2@1, display]
+  reason: vendor-silent
+  note: >-
+    The two-digit seven-segment display at x 411.8-429.0 is drawn in every figure and
+    named in none. Figure 4's callout list ends at QSFP28 and section 10's Verifying
+    System Operation covers the five panel lamps and the two FRU lamps only. Whether
+    it shows a POST code, a chassis or stack ID, or a fault code is unstated, so the
+    component carries no state vocabulary and its skin draws the all-segments '88'
+    the vendor's own artwork draws.
+  wanted: a NOS or BMC reference that documents the front-panel numeric display
+- what: fan-face-width
+  scope: [ufispace/fan-803816@1, fans]
+  reason: sources-disagree
+  note: >-
+    The HIG's Component Physical Information table gives the fan module 81 x 113 x
+    81.5 mm. This guide's own rear elevation puts the flat red airflow badge on an
+    84.3 mm pitch across the four modules, so the repeating unit is 84.3 and the
+    visible face is that less a small web. The manifest carries the 82.5 mm face of
+    ufispace/fan-803816@1 on an 84.3 mm pitch. Two library components claim this part
+    number at two widths (82.5 and 80) and the three UfiSpace guides that describe it
+    state three (81 here, 81 on the S9600-30DX, 80 on the S9600-28DX). The likely
+    resolution is that the table measures the fan BODY behind a wider flange, which
+    is an inference and which no document states.
+  wanted: a vendor mechanical drawing of FAN-803816-HI, or a caliper on the FRU
+- what: rear-perspective
+  scope: [rear, psus, fans]
+  reason: needs-drawing
+  note: >-
+    The only held view of the rear is HIG Figure 4's three-quarter render. Its face
+    is 341 px tall at the left edge and 357 at the right, so there is no single
+    vertical scale, and the right-hand third is magnified: the PSU's own drawn width
+    exceeds the 50.5 mm its component table states. The fan bank is safe because it
+    sits in the middle of the frame and its flat badges repeat, and it independently
+    reproduces the S9600-30DX's 84.4 mm pitch. Everything to the right of x 340 - the
+    grounding plate, the vent column, the PSU stack's left edge - is anchored on the
+    latch position and is good to a few millimetres, not to a tenth, and the 13.3 mm
+    of blank metal the manifest leaves right of the PSU stack is what that anchoring
+    gives rather than something the figure shows.
+  wanted: a dimensioned rear elevation, or an orthographic rear photograph
+- what: psu-latch-colour
+  scope: [ufispace/psu-132-ac@1, ufispace/psu-132-dc@1, psus]
+  reason: sources-disagree
+  note: >-
+    ufispace/psu-132-ac@1's provenance records a vendor convention that a supply built
+    for front-to-back (intake) airflow carries a RED release latch and a back-to-front
+    one BLUE, and that component draws the red-latched PSU-132-AISB1. This device's
+    datasheet orders only the EXHAUST SKUs, PSU-132-AESR and PSU-132-DESR, and its own
+    Figure 4 draws their latches RED. Either the colour convention does not hold across
+    the range, or Figure 4 reuses the intake unit's art. The manifest seats the existing
+    components and corrects the part numbers per configuration; it does not repaint the
+    latch, because that would assert a colour on no better evidence than the figure it
+    contradicts.
+  wanted: a photograph of a PSU-132-AESR, or a UfiSpace ordering guide that states the code
+- what: ac-inlet-standard
+  scope: [ufispace/psu-132-ac@1, psus]
+  reason: needs-hardware
+  note: >-
+    The HIG names the cord exactly - '250VAC 15A, IEC60320 C15' - and a C15 cord mates a
+    C16 appliance inlet, not the C14 the modelled PSU composes. The library holds no
+    std/c16; C14 and C16 differ by a notch below the earth pin and are the same 24 x 16
+    body, so at faceplate scale the drawing is right and the part reference is not.
+    Recorded on the S9300-32D component too.
+  wanted: a std/c16-inlet component, or a close-up photograph of the PSU-132 inlet
+- what: chassis-sku
+  scope: [base, ac, dc]
+  reason: vendor-silent
+  note: >-
+    No held document prints an orderable chassis part number - the datasheet and the HIG
+    name the product only as S9600-72XC, and the Available to Order block names only the
+    two PSUs and one fan. The datasheet's own footnote says 'OP2 available for premium
+    SKU only' and its ASIC row lists the OP2 BCM16K as '(Premium)', so at least two
+    SKUs exist and neither is named; the memory row's 'up to 64GB' implies another
+    option with no part number either. The S9510-28DC precedent applies: that model's
+    SKUs surfaced from the owner and from no held PDF, so the configurations carry no
+    part numbers rather than invented ones.
+  wanted: a UfiSpace ordering guide, or the premium-TCAM and memory option SKUs
+groups:
+  sfp28:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp28, speed: 25g}
+    description: >-
+      ports 0-63, the datasheet's '64 x 1/10/25G SFP28 ports' and the HIG port table's
+      '0 ~ 63', in four ganged blocks of four columns. Numbering runs DOWN each column
+      and the upper shell (0-31) is a separate run from the lower (32-63), so port 1
+      sits under port 0 and port 32 under neither
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: qsfp28, speed: 100g}
+    description: >-
+      ports 64-71, the datasheet's '8 x 40/100G QSFP28 ports', two columns of four at
+      the right of the faceplate - the uplinks, and the only ports on this box the
+      guide gives an 80 km reach for
+  sfp-plus:
+    term: Port
+    role: management
+    index-origin: 0
+    attrs: {media: sfp-plus, speed: 10g}
+    description: >-
+      the stacked SFP+ pair at the left of the faceplate, numbered 0 and 1 in their own
+      run on the panel's own '0 ▲▼ 1' legend - the datasheet's '2 x 10G SFP+ management
+      ports'
+  timing:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the timing block across the top left - a GNSS antenna on SMA, 1PPS and 10MHz on
+      SMB and ToD on RJ45. Three media, four jacks, one job: this is the block that
+      makes an aggregation router a Class C boundary clock. Note there is no BITS jack
+      here, unlike the S9600-30DX
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the management block down the left of the faceplate - the out-of-band RJ45, the
+      RS-232 console RJ45, the micro-USB serial console, the USB 3.0 service port and
+      the recessed reset button
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: >-
+      the five chassis indicators the faceplate legends SYNC, SYS, FAN, PS0 and PS1,
+      each with a published state table in HIG section 10
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: >-
+      the four-lamp light-pipe strips above and below the QSFP28 block, one row per
+      port. The 64 SFP28 ports carry no modelled lamps - see the sfp28-port-leds gap
+  display:
+    term: Display
+    role: indicator
+    index-origin: 1
+    description: the two-digit seven-segment readout at the right of the faceplate
+  psus:
+    term: PSU
+    role: service
+    index-origin: 0
+    description: the two rear supplies, which the front panel legends PS0 and PS1
+  fans:
+    term: Fan
+    role: service
+    index-origin: 0
+    description: the four rear fans, which the rear panel numbers 0 to 3
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 1
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 1
+views:
+  front:
+    size:
+      w: 436
+      h: 87.7
+    panel:
+      decor:
+        - {at: [44.0, 0.5], size: [296.0, 10.3], pattern: vent, vent: 25}
+        - {at: [340.0, 0.5], size: [66.0, 20.7], pattern: vent, vent: 25}
+        - {at: [44.0, 76.2], size: [386.0, 11.0], pattern: vent, vent: 25}
+        - {at: [4.5, 15.5], size: [19.0, 5.3], pattern: vent, vent: 25}
+        - {at: [4.8, 53.3], size: [13.7, 18.9], pattern: vent, vent: 25}
+        - {at: [43.60, 11.85], size: [245.90, 3.97], fill: '#c2b339', rx: 0.3}
+        - {at: [43.60, 71.70], size: [245.90, 3.60], fill: '#c2b339', rx: 0.3}
+        - {at: [291.70, 8.20], size: [18.90, 7.40], fill: '#4b6332', rx: 0.3}
+        - {at: [311.70, 8.20], size: [26.10, 7.40], fill: '#4b6332', rx: 0.3}
+        - {at: [291.70, 72.00], size: [18.90, 7.30], fill: '#4b6332', rx: 0.3}
+        - {at: [311.70, 72.00], size: [26.10, 7.30], fill: '#4b6332', rx: 0.3}
+        - {at: [310.80, 8.50], size: [1.50, 6.80], fill: '#eef2f5', rx: 0.7}
+        - {at: [334.10, 8.50], size: [1.50, 6.80], fill: '#eef2f5', rx: 0.7}
+        - {at: [310.80, 72.40], size: [1.50, 6.60], fill: '#eef2f5', rx: 0.7}
+        - {at: [334.10, 72.40], size: [1.50, 6.60], fill: '#eef2f5', rx: 0.7}
+        - {at: [44.32, 16.95], size: [59.80, 26.50], fill: '#b0b5bb', rx: 0.6}
+        - {at: [44.32, 44.65], size: [59.80, 26.65], fill: '#b0b5bb', rx: 0.6}
+        - {at: [105.56, 16.95], size: [59.80, 26.50], fill: '#b0b5bb', rx: 0.6}
+        - {at: [105.56, 44.65], size: [59.80, 26.65], fill: '#b0b5bb', rx: 0.6}
+        - {at: [167.16, 16.95], size: [59.80, 26.50], fill: '#b0b5bb', rx: 0.6}
+        - {at: [167.16, 44.65], size: [59.80, 26.65], fill: '#b0b5bb', rx: 0.6}
+        - {at: [228.92, 16.95], size: [59.80, 26.50], fill: '#b0b5bb', rx: 0.6}
+        - {at: [228.92, 44.65], size: [59.80, 26.65], fill: '#b0b5bb', rx: 0.6}
+        - {at: [289.40, 16.95], size: [47.40, 26.50], fill: '#b0b5bb', rx: 0.6}
+        - {at: [289.40, 44.65], size: [47.40, 26.65], fill: '#b0b5bb', rx: 0.6}
+        - {at: [26.00, 15.30], size: [15.20, 26.60], fill: '#b0b5bb', rx: 0.8}
+        - {at: [7.20, 28.34], size: [14.92, 12.83], fill: '#b0b5bb', rx: 0.8}
+        - {at: [21.50, 48.60], size: [16.20, 32.00], fill: '#b0b5bb', rx: 0.8}
+        - {at: [9.00, 79.50], size: [8.00, 4.00], fill: '#b0b5bb', rx: 0.6}
+        - {at: [15.13, 66.52], size: [4.38, 9.81], fill: '#c4c3c4', rx: 0.3}
+        - {at: [16.80, 2.67], size: [9.81, 9.81], fill: '#c8a02e', rx: 4.9}
+        - {at: [35.47, 3.71], size: [7.72, 7.72], fill: '#c8a02e', rx: 3.86}
+        - {at: [52.95, 3.71], size: [7.72, 7.72], fill: '#c8a02e', rx: 3.86}
+    silkscreen:
+      - {at: [424.0, 82.8], text: S9600-72XC, font-size: 2.8, anchor: middle, fill: '#e6e8ea', for: chassis}
+      - {at: [11.7, 6.5], text: GNSS, font-size: 1.6, anchor: middle, fill: '#e6e8ea', for: gnss-ant}
+      - {at: [11.4, 9.1], text: ANT, font-size: 1.6, anchor: middle, fill: '#e6e8ea', for: gnss-ant}
+      - {at: [29.2, 7.0], text: 10MHZ, font-size: 1.6, anchor: middle, fill: '#e6e8ea', for: mhz}
+      - {at: [46.9, 7.0], text: 1PPS, font-size: 1.6, anchor: middle, fill: '#e6e8ea', for: pps}
+      - {at: [29.5, 15.1], text: '0', font-size: 2.2, anchor: middle, fill: '#e6e8ea', for: mgmt-sfp-0}
+      - {at: [33.3, 15.1], text: '▲▼', font-size: 2.4, anchor: middle, fill: '#e6e8ea', for: [mgmt-sfp-0, mgmt-sfp-1]}
+      - {at: [38.8, 15.1], text: '1', font-size: 2.2, anchor: middle, fill: '#e6e8ea', for: mgmt-sfp-1}
+      - {at: [12.2, 25.0], text: TOD, font-size: 2.0, anchor: middle, fill: '#e6e8ea', for: tod}
+      - {at: [14.7, 50.0], text: RESET, font-size: 1.7, anchor: middle, fill: '#e6e8ea', for: reset}
+      - {id: oob-network-symbol, at: [22.3, 44.4],
+         path: 'M -0.9 0 L 0.9 0 L 0.9 1.1 L -0.9 1.1 L -0.9 0 M 0 1.1 L 0 1.7 M -1.4 1.7 L 1.4 1.7 M -1.4 1.7 L -1.4 2.3 M 1.4 1.7 L 1.4 2.3',
+         for: oob}
+      - {at: [26.0, 47.2], text: '▲▼', font-size: 2.4, anchor: middle, fill: '#e6e8ea', for: oob}
+      - {at: [30.8, 47.2], text: 'SS', font-size: 2.0, anchor: middle, fill: '#e6e8ea', for: usb}
+      - {at: [29.8, 84.2], text: IOIOI, font-size: 1.8, anchor: middle, fill: '#e6e8ea', for: console}
+      - {at: [13.4, 85.0], text: IOIOI, font-size: 1.8, anchor: middle, fill: '#e6e8ea', for: micro-usb}
+      - {at: [17.3, 68.0], text: SYNC, font-size: 1.3, anchor: middle, fill: '#17191c', for: led-sync}
+      - {at: [17.3, 69.96], text: SYS, font-size: 1.3, anchor: middle, fill: '#17191c', for: led-sys}
+      - {at: [17.3, 71.92], text: FAN, font-size: 1.3, anchor: middle, fill: '#17191c', for: led-fan}
+      - {at: [17.3, 73.88], text: PS0, font-size: 1.3, anchor: middle, fill: '#17191c', for: led-ps0}
+      - {at: [17.3, 75.84], text: PS1, font-size: 1.3, anchor: middle, fill: '#17191c', for: led-ps1}
+      - {at: [48.44, 13.90], text: '0', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-0}
+      - {at: [52.84, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-0, port-1]}
+      - {at: [57.24, 13.90], text: '1', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-1}
+      - {at: [48.44, 73.90], text: '32', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-32}
+      - {at: [52.84, 73.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-32, port-33]}
+      - {at: [57.24, 73.90], text: '33', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-33}
+      - {at: [62.69, 13.90], text: '2', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-2}
+      - {at: [67.09, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-2, port-3]}
+      - {at: [71.49, 13.90], text: '3', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-3}
+      - {at: [62.69, 73.90], text: '34', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-34}
+      - {at: [67.09, 73.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-34, port-35]}
+      - {at: [71.49, 73.90], text: '35', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-35}
+      - {at: [76.94, 13.90], text: '4', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-4}
+      - {at: [81.34, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-4, port-5]}
+      - {at: [85.74, 13.90], text: '5', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-5}
+      - {at: [76.94, 73.90], text: '36', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-36}
+      - {at: [81.34, 73.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-36, port-37]}
+      - {at: [85.74, 73.90], text: '37', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-37}
+      - {at: [91.19, 13.90], text: '6', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-6}
+      - {at: [95.59, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-6, port-7]}
+      - {at: [99.99, 13.90], text: '7', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-7}
+      - {at: [91.19, 73.90], text: '38', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-38}
+      - {at: [95.59, 73.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-38, port-39]}
+      - {at: [99.99, 73.90], text: '39', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-39}
+      - {at: [109.69, 13.90], text: '8', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-8}
+      - {at: [114.09, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-8, port-9]}
+      - {at: [118.49, 13.90], text: '9', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-9}
+      - {at: [109.69, 73.90], text: '40', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-40}
+      - {at: [114.09, 73.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-40, port-41]}
+      - {at: [118.49, 73.90], text: '41', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-41}
+      - {at: [123.94, 13.90], text: '10', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-10}
+      - {at: [128.34, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-10, port-11]}
+      - {at: [132.74, 13.90], text: '11', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-11}
+      - {at: [123.94, 73.90], text: '42', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-42}
+      - {at: [128.34, 73.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-42, port-43]}
+      - {at: [132.74, 73.90], text: '43', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-43}
+      - {at: [138.19, 13.90], text: '12', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-12}
+      - {at: [142.59, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-12, port-13]}
+      - {at: [146.99, 13.90], text: '13', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-13}
+      - {at: [138.19, 73.90], text: '44', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-44}
+      - {at: [142.59, 73.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-44, port-45]}
+      - {at: [146.99, 73.90], text: '45', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-45}
+      - {at: [152.44, 13.90], text: '14', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-14}
+      - {at: [156.84, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-14, port-15]}
+      - {at: [161.24, 13.90], text: '15', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-15}
+      - {at: [152.44, 73.90], text: '46', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-46}
+      - {at: [156.84, 73.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-46, port-47]}
+      - {at: [161.24, 73.90], text: '47', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-47}
+      - {at: [171.29, 13.90], text: '16', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-16}
+      - {at: [175.69, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-16, port-17]}
+      - {at: [180.09, 13.90], text: '17', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-17}
+      - {at: [171.29, 73.90], text: '48', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-48}
+      - {at: [175.69, 73.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-48, port-49]}
+      - {at: [180.09, 73.90], text: '49', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-49}
+      - {at: [185.54, 13.90], text: '18', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-18}
+      - {at: [189.94, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-18, port-19]}
+      - {at: [194.34, 13.90], text: '19', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-19}
+      - {at: [185.54, 73.90], text: '50', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-50}
+      - {at: [189.94, 73.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-50, port-51]}
+      - {at: [194.34, 73.90], text: '51', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-51}
+      - {at: [199.79, 13.90], text: '20', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-20}
+      - {at: [204.19, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-20, port-21]}
+      - {at: [208.59, 13.90], text: '21', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-21}
+      - {at: [199.79, 73.90], text: '52', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-52}
+      - {at: [204.19, 73.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-52, port-53]}
+      - {at: [208.59, 73.90], text: '53', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-53}
+      - {at: [214.04, 13.90], text: '22', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-22}
+      - {at: [218.44, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-22, port-23]}
+      - {at: [222.84, 13.90], text: '23', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-23}
+      - {at: [214.04, 73.90], text: '54', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-54}
+      - {at: [218.44, 73.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-54, port-55]}
+      - {at: [222.84, 73.90], text: '55', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-55}
+      - {at: [233.05, 13.90], text: '24', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-24}
+      - {at: [237.45, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-24, port-25]}
+      - {at: [241.85, 13.90], text: '25', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-25}
+      - {at: [233.05, 73.90], text: '56', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-56}
+      - {at: [237.45, 73.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-56, port-57]}
+      - {at: [241.85, 73.90], text: '57', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-57}
+      - {at: [247.30, 13.90], text: '26', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-26}
+      - {at: [251.70, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-26, port-27]}
+      - {at: [256.10, 13.90], text: '27', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-27}
+      - {at: [247.30, 73.90], text: '58', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-58}
+      - {at: [251.70, 73.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-58, port-59]}
+      - {at: [256.10, 73.90], text: '59', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-59}
+      - {at: [261.55, 13.90], text: '28', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-28}
+      - {at: [265.95, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-28, port-29]}
+      - {at: [270.35, 13.90], text: '29', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-29}
+      - {at: [261.55, 73.90], text: '60', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-60}
+      - {at: [265.95, 73.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-60, port-61]}
+      - {at: [270.35, 73.90], text: '61', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-61}
+      - {at: [275.80, 13.90], text: '30', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-30}
+      - {at: [280.20, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-30, port-31]}
+      - {at: [284.60, 13.90], text: '31', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-31}
+      - {at: [275.80, 73.90], text: '62', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-62}
+      - {at: [280.20, 73.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-62, port-63]}
+      - {at: [284.60, 73.90], text: '63', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-63}
+    components:
+      placements:
+        - {ref: common/reset-button@1, id: reset, at: [12.29, 43.74], for: chassis, group: mgmt, rel-pos: 5}
+        - {ref: common/led-dot@1, id: led-sync, for: chassis, at: [12.88, 66.50],
+           states: ['off',
+                    {name: locked, color: '#22c55e'},
+                    {name: frequency-locked, color: '#22c55e', behavior: blinking},
+                    {name: acquiring, color: '#f59e0b'},
+                    {name: fail, color: '#f59e0b', behavior: blinking}],
+           description: 'Legended SYNC. HIG section 10 Front Panel LED table - Off (timing
+             synchronization disabled or free-run), Solid Green (timing core synchronized
+             to PTP phase or an external source, frequency also locked), Blinking Green
+             (synchronized with a PTP frequency profile or an external SyncE source),
+             Solid Amber (acquiring or holdover), Blinking Amber (synchronization failed,
+             or acquiring/holdover timed out)',
+           group: status-leds, rel-pos: 1}
+        - {ref: common/led-dot@1, id: led-sys, for: chassis, at: [12.88, 68.46],
+           states: ['off', {name: ok, color: '#22c55e'}, {name: boot-failed, color: '#f59e0b'}],
+           description: 'Legended SYS. HIG table - Off (no power), Solid Green (host CPU/BMC
+             boot complete), Solid Amber (power is up but host CPU/BMC boot failed)',
+           group: status-leds, rel-pos: 2}
+        - {ref: common/led-dot@1, id: led-fan, for: [rear/fan-0, rear/fan-1, rear/fan-2, rear/fan-3], at: [12.88, 70.42],
+           states: ['off', {name: ok, color: '#22c55e'}, {name: fail, color: '#f59e0b', behavior: blinking}],
+           description: 'Legended FAN. HIG table - Off (fan modules not initialized), Solid
+             Green (all fan modules working normally), Blinking Amber (one or more fans
+             need service)',
+           group: status-leds, rel-pos: 3}
+        - {ref: common/led-dot@1, id: led-ps0, for: rear/psu-0, at: [12.88, 72.38],
+           states: ['off', {name: ok, color: '#22c55e'}, {name: fail, color: '#f59e0b', behavior: blinking}],
+           description: 'Legended PS0. HIG table - Off (no power), Solid Green (PSU0 working
+             normally), Blinking Amber (PSU0 failed, needs service)',
+           group: status-leds, rel-pos: 4}
+        - {ref: common/led-dot@1, id: led-ps1, for: rear/psu-1, at: [12.88, 74.34],
+           states: ['off', {name: ok, color: '#22c55e'}, {name: fail, color: '#f59e0b', behavior: blinking}],
+           description: 'Legended PS1. HIG table - Off (no power), Solid Green (PSU1 working
+             normally), Blinking Amber (PSU1 failed, needs service)',
+           group: status-leds, rel-pos: 5}
+        - {ref: ufispace/seg7-status-2@1, id: status-display, at: [411.79, 8.41], for: chassis,
+           group: display, rel-pos: 1}
+        - {ref: std/sfp-ganged@1, id: mgmt-sfp-0, at: [26.42, 16.41], group: sfp-plus, rel-pos: 0}
+        - {ref: std/sfp-ganged@1, id: mgmt-sfp-1, at: [26.42, 30.39], rotate: 180, group: sfp-plus, rel-pos: 1}
+        - {ref: std/rj45-ganged@1, id: tod, at: [8.40, 30.56], group: timing, rel-pos: 4,
+           attrs: {media: rj45, role: tod-io}}
+        - {ref: std/sma@1, id: gnss-ant, at: [19.70, 5.57], group: timing, rel-pos: 1, attrs: {role: gnss-in}}
+        - {ref: std/smb@1, id: mhz, at: [36.16, 4.40], group: timing, rel-pos: 3, attrs: {role: 10mhz-io}}
+        - {ref: std/smb@1, id: pps, at: [53.64, 4.40], group: timing, rel-pos: 2, attrs: {role: 1pps-io}}
+        - {ref: std/rj45-ganged@1, id: oob, at: [22.65, 49.55], group: mgmt, rel-pos: 1,
+           attrs: {role: mgmt, speed: 100m-1g}}
+        - {ref: common/led-dot@1, id: led-oob-l, at: [23.83, 49.82], for: oob,
+           group: port-leds, rel-pos: 9}
+        - {ref: common/led-dot@1, id: led-oob-r, at: [34.26, 50.24], for: oob,
+           group: port-leds, rel-pos: 10}
+        - {ref: std/usb-a@1, id: usb, at: [23.69, 62.66], group: mgmt, rel-pos: 3,
+           attrs: {role: storage, speed: usb3}}
+        - {ref: std/rj45-ganged@1, id: console, at: [23.25, 69.35], group: mgmt, rel-pos: 2,
+           attrs: {media: rj45-serial, role: console}}
+        - {ref: std/micro-usb@1, id: micro-usb, at: [9.25, 80.43], group: mgmt, rel-pos: 4,
+           attrs: {media: micro-usb-b, role: console}}
+        - {ref: ufispace/lane-led-quad@1, id: led-p64, at: [293.95, 8.75], for: port-64, group: port-leds, rel-pos: 1}
+        - {ref: ufispace/lane-led-quad@1, id: led-p65, at: [293.95, 12.15], for: port-65, group: port-leds, rel-pos: 2}
+        - {ref: ufispace/lane-led-quad@1, id: led-p66, at: [317.30, 8.75], for: port-66, group: port-leds, rel-pos: 3}
+        - {ref: ufispace/lane-led-quad@1, id: led-p67, at: [317.30, 12.15], for: port-67, group: port-leds, rel-pos: 4}
+        - {ref: ufispace/lane-led-quad@1, id: led-p68, at: [293.95, 72.70], for: port-68, group: port-leds, rel-pos: 5}
+        - {ref: ufispace/lane-led-quad@1, id: led-p69, at: [293.95, 76.10], for: port-69, group: port-leds, rel-pos: 6}
+        - {ref: ufispace/lane-led-quad@1, id: led-p70, at: [317.30, 72.70], for: port-70, group: port-leds, rel-pos: 7}
+        - {ref: ufispace/lane-led-quad@1, id: led-p71, at: [317.30, 76.10], for: port-71, group: port-leds, rel-pos: 8}
+        - {ref: std/sfp-ganged@1, id: port-0, at: [45.72, 18.38], group: sfp28, rel-pos: 0}
+        - {ref: std/sfp-ganged@1, id: port-1, at: [45.72, 31.63], group: sfp28, rel-pos: 1}
+        - {ref: std/sfp-ganged@1, id: port-2, at: [59.97, 18.38], group: sfp28, rel-pos: 2}
+        - {ref: std/sfp-ganged@1, id: port-3, at: [59.97, 31.63], group: sfp28, rel-pos: 3}
+        - {ref: std/sfp-ganged@1, id: port-4, at: [74.22, 18.38], group: sfp28, rel-pos: 4}
+        - {ref: std/sfp-ganged@1, id: port-5, at: [74.22, 31.63], group: sfp28, rel-pos: 5}
+        - {ref: std/sfp-ganged@1, id: port-6, at: [88.47, 18.38], group: sfp28, rel-pos: 6}
+        - {ref: std/sfp-ganged@1, id: port-7, at: [88.47, 31.63], group: sfp28, rel-pos: 7}
+        - {ref: std/sfp-ganged@1, id: port-8, at: [106.97, 18.38], group: sfp28, rel-pos: 8}
+        - {ref: std/sfp-ganged@1, id: port-9, at: [106.97, 31.63], group: sfp28, rel-pos: 9}
+        - {ref: std/sfp-ganged@1, id: port-10, at: [121.22, 18.38], group: sfp28, rel-pos: 10}
+        - {ref: std/sfp-ganged@1, id: port-11, at: [121.22, 31.63], group: sfp28, rel-pos: 11}
+        - {ref: std/sfp-ganged@1, id: port-12, at: [135.47, 18.38], group: sfp28, rel-pos: 12}
+        - {ref: std/sfp-ganged@1, id: port-13, at: [135.47, 31.63], group: sfp28, rel-pos: 13}
+        - {ref: std/sfp-ganged@1, id: port-14, at: [149.72, 18.38], group: sfp28, rel-pos: 14}
+        - {ref: std/sfp-ganged@1, id: port-15, at: [149.72, 31.63], group: sfp28, rel-pos: 15}
+        - {ref: std/sfp-ganged@1, id: port-16, at: [168.56, 18.38], group: sfp28, rel-pos: 16}
+        - {ref: std/sfp-ganged@1, id: port-17, at: [168.56, 31.63], group: sfp28, rel-pos: 17}
+        - {ref: std/sfp-ganged@1, id: port-18, at: [182.81, 18.38], group: sfp28, rel-pos: 18}
+        - {ref: std/sfp-ganged@1, id: port-19, at: [182.81, 31.63], group: sfp28, rel-pos: 19}
+        - {ref: std/sfp-ganged@1, id: port-20, at: [197.06, 18.38], group: sfp28, rel-pos: 20}
+        - {ref: std/sfp-ganged@1, id: port-21, at: [197.06, 31.63], group: sfp28, rel-pos: 21}
+        - {ref: std/sfp-ganged@1, id: port-22, at: [211.31, 18.38], group: sfp28, rel-pos: 22}
+        - {ref: std/sfp-ganged@1, id: port-23, at: [211.31, 31.63], group: sfp28, rel-pos: 23}
+        - {ref: std/sfp-ganged@1, id: port-24, at: [230.32, 18.38], group: sfp28, rel-pos: 24}
+        - {ref: std/sfp-ganged@1, id: port-25, at: [230.32, 31.63], group: sfp28, rel-pos: 25}
+        - {ref: std/sfp-ganged@1, id: port-26, at: [244.57, 18.38], group: sfp28, rel-pos: 26}
+        - {ref: std/sfp-ganged@1, id: port-27, at: [244.57, 31.63], group: sfp28, rel-pos: 27}
+        - {ref: std/sfp-ganged@1, id: port-28, at: [258.82, 18.38], group: sfp28, rel-pos: 28}
+        - {ref: std/sfp-ganged@1, id: port-29, at: [258.82, 31.63], group: sfp28, rel-pos: 29}
+        - {ref: std/sfp-ganged@1, id: port-30, at: [273.07, 18.38], group: sfp28, rel-pos: 30}
+        - {ref: std/sfp-ganged@1, id: port-31, at: [273.07, 31.63], group: sfp28, rel-pos: 31}
+        - {ref: std/sfp-ganged@1, id: port-32, at: [45.72, 46.13], rotate: 180, group: sfp28, rel-pos: 32}
+        - {ref: std/sfp-ganged@1, id: port-33, at: [45.72, 59.45], rotate: 180, group: sfp28, rel-pos: 33}
+        - {ref: std/sfp-ganged@1, id: port-34, at: [59.97, 46.13], rotate: 180, group: sfp28, rel-pos: 34}
+        - {ref: std/sfp-ganged@1, id: port-35, at: [59.97, 59.45], rotate: 180, group: sfp28, rel-pos: 35}
+        - {ref: std/sfp-ganged@1, id: port-36, at: [74.22, 46.13], rotate: 180, group: sfp28, rel-pos: 36}
+        - {ref: std/sfp-ganged@1, id: port-37, at: [74.22, 59.45], rotate: 180, group: sfp28, rel-pos: 37}
+        - {ref: std/sfp-ganged@1, id: port-38, at: [88.47, 46.13], rotate: 180, group: sfp28, rel-pos: 38}
+        - {ref: std/sfp-ganged@1, id: port-39, at: [88.47, 59.45], rotate: 180, group: sfp28, rel-pos: 39}
+        - {ref: std/sfp-ganged@1, id: port-40, at: [106.97, 46.13], rotate: 180, group: sfp28, rel-pos: 40}
+        - {ref: std/sfp-ganged@1, id: port-41, at: [106.97, 59.45], rotate: 180, group: sfp28, rel-pos: 41}
+        - {ref: std/sfp-ganged@1, id: port-42, at: [121.22, 46.13], rotate: 180, group: sfp28, rel-pos: 42}
+        - {ref: std/sfp-ganged@1, id: port-43, at: [121.22, 59.45], rotate: 180, group: sfp28, rel-pos: 43}
+        - {ref: std/sfp-ganged@1, id: port-44, at: [135.47, 46.13], rotate: 180, group: sfp28, rel-pos: 44}
+        - {ref: std/sfp-ganged@1, id: port-45, at: [135.47, 59.45], rotate: 180, group: sfp28, rel-pos: 45}
+        - {ref: std/sfp-ganged@1, id: port-46, at: [149.72, 46.13], rotate: 180, group: sfp28, rel-pos: 46}
+        - {ref: std/sfp-ganged@1, id: port-47, at: [149.72, 59.45], rotate: 180, group: sfp28, rel-pos: 47}
+        - {ref: std/sfp-ganged@1, id: port-48, at: [168.56, 46.13], rotate: 180, group: sfp28, rel-pos: 48}
+        - {ref: std/sfp-ganged@1, id: port-49, at: [168.56, 59.45], rotate: 180, group: sfp28, rel-pos: 49}
+        - {ref: std/sfp-ganged@1, id: port-50, at: [182.81, 46.13], rotate: 180, group: sfp28, rel-pos: 50}
+        - {ref: std/sfp-ganged@1, id: port-51, at: [182.81, 59.45], rotate: 180, group: sfp28, rel-pos: 51}
+        - {ref: std/sfp-ganged@1, id: port-52, at: [197.06, 46.13], rotate: 180, group: sfp28, rel-pos: 52}
+        - {ref: std/sfp-ganged@1, id: port-53, at: [197.06, 59.45], rotate: 180, group: sfp28, rel-pos: 53}
+        - {ref: std/sfp-ganged@1, id: port-54, at: [211.31, 46.13], rotate: 180, group: sfp28, rel-pos: 54}
+        - {ref: std/sfp-ganged@1, id: port-55, at: [211.31, 59.45], rotate: 180, group: sfp28, rel-pos: 55}
+        - {ref: std/sfp-ganged@1, id: port-56, at: [230.32, 46.13], rotate: 180, group: sfp28, rel-pos: 56}
+        - {ref: std/sfp-ganged@1, id: port-57, at: [230.32, 59.45], rotate: 180, group: sfp28, rel-pos: 57}
+        - {ref: std/sfp-ganged@1, id: port-58, at: [244.57, 46.13], rotate: 180, group: sfp28, rel-pos: 58}
+        - {ref: std/sfp-ganged@1, id: port-59, at: [244.57, 59.45], rotate: 180, group: sfp28, rel-pos: 59}
+        - {ref: std/sfp-ganged@1, id: port-60, at: [258.82, 46.13], rotate: 180, group: sfp28, rel-pos: 60}
+        - {ref: std/sfp-ganged@1, id: port-61, at: [258.82, 59.45], rotate: 180, group: sfp28, rel-pos: 61}
+        - {ref: std/sfp-ganged@1, id: port-62, at: [273.07, 46.13], rotate: 180, group: sfp28, rel-pos: 62}
+        - {ref: std/sfp-ganged@1, id: port-63, at: [273.07, 59.45], rotate: 180, group: sfp28, rel-pos: 63}
+        - {ref: std/qsfp28@1, id: port-64, at: [292.25, 18.50], group: qsfp28, rel-pos: 64}
+        - {ref: std/qsfp28@1, id: port-65, at: [292.25, 31.75], group: qsfp28, rel-pos: 65}
+        - {ref: std/qsfp28@1, id: port-66, at: [314.83, 18.50], group: qsfp28, rel-pos: 66}
+        - {ref: std/qsfp28@1, id: port-67, at: [314.83, 31.75], group: qsfp28, rel-pos: 67}
+        - {ref: std/qsfp28@1, id: port-68, at: [292.25, 46.25], group: qsfp28, rel-pos: 68}
+        - {ref: std/qsfp28@1, id: port-69, at: [292.25, 59.58], group: qsfp28, rel-pos: 69}
+        - {ref: std/qsfp28@1, id: port-70, at: [314.83, 46.25], group: qsfp28, rel-pos: 70}
+        - {ref: std/qsfp28@1, id: port-71, at: [314.83, 59.58], group: qsfp28, rel-pos: 71}
+    regions:
+      - {id: mgmt-block, at: [1.0, 42.0], size: {w: 40.0, h: 45.0}, label: Management and console,
+         members: [reset, oob, usb, console, micro-usb]}
+      - {id: timing-block, at: [1.0, 1.0], size: {w: 62.0, h: 14.0}, label: Timing block,
+         members: [gnss-ant, mhz, pps]}
+  rear:
+    size:
+      w: 436
+      h: 87.7
+    panel:
+      decor:
+        - {at: [361.0, 3.0], size: [10.0, 82.0], pattern: vent, vent: 25}
+        - {at: [344.5, 5.0], size: [15.5, 41.0], fill: '#b9bec4', rx: 0.8}
+        - {at: [348.5, 9.0], size: [4.4, 4.4], fill: '#5a5f64', rx: 2.2}
+        - {at: [347.8, 25.5], size: [5.8, 5.8], fill: '#5a5f64', rx: 2.9}
+        - {at: [351.6, 40.8], size: [3.0, 3.0], fill: '#5a5f64', rx: 1.5}
+    silkscreen:
+      - {at: [352.3, 57.0], text: FAN, font-size: 3.4, anchor: middle, for: [fan-0, fan-1, fan-2, fan-3]}
+      - {at: [352.3, 62.8], text: '0 1 2 3', font-size: 3.0, anchor: middle, for: [fan-0, fan-1, fan-2, fan-3]}
+      - {at: [428.0, 26.0], text: PSU0, font-size: 2.4, anchor: middle, for: psu-0}
+      - {at: [428.0, 69.0], text: PSU1, font-size: 2.4, anchor: middle, for: psu-1}
+    components:
+      bays:
+        - {id: fan-0, at: [1.5, 3.0], size: {w: 82.5, h: 81.5}, accepts: [ufispace/fan-803816@1], group: fans, rel-pos: 0, default: ufispace/fan-803816@1}
+        - {id: fan-1, at: [85.9, 3.0], size: {w: 82.5, h: 81.5}, accepts: [ufispace/fan-803816@1], group: fans, rel-pos: 1, default: ufispace/fan-803816@1}
+        - {id: fan-2, at: [170.3, 3.0], size: {w: 82.5, h: 81.5}, accepts: [ufispace/fan-803816@1], group: fans, rel-pos: 2, default: ufispace/fan-803816@1}
+        - {id: fan-3, at: [254.7, 3.0], size: {w: 82.5, h: 81.5}, accepts: [ufispace/fan-803816@1], group: fans, rel-pos: 3, default: ufispace/fan-803816@1}
+        - {id: psu-0, at: [372.2, 2.0], size: {w: 50.5, h: 40.0}, accepts: [ufispace/psu-132-ac@1, ufispace/psu-132-dc@1], group: psus, rel-pos: 0, default: ufispace/psu-132-ac@1}
+        - {id: psu-1, at: [372.2, 45.0], size: {w: 50.5, h: 40.0}, accepts: [ufispace/psu-132-ac@1, ufispace/psu-132-dc@1], group: psus, rel-pos: 1, default: ufispace/psu-132-ac@1}
+      placements:
+        - {ref: common/ground-symbol@1, id: ground-mark, at: [355.5, 15.0], group: grounding, rel-pos: 1}
+    regions:
+      - {id: exhaust, at: [1.0, 2.0], size: {w: 336.5, h: 83.5}, physical-context: Exhaust,
+         label: Fan exhaust, members: [fan-0, fan-1, fan-2, fan-3]}
+  top:
+    size:
+      w: 436
+      h: 609.6
+    panel:
+      decor:
+        - {at: [15.0, 122.4], size: [406.5, 23.4], fill: '#2e3236', rx: 11.7, sink: 1}
+        - {at: [15.0, 217.8], size: [406.5, 23.4], fill: '#2e3236', rx: 11.7, sink: 1}
+        - {at: [15.0, 312.5], size: [406.5, 23.4], fill: '#2e3236', rx: 11.7, sink: 1}
+        - {at: [15.0, 407.9], size: [406.5, 23.4], fill: '#2e3236', rx: 11.7, sink: 1}
+        - {at: [15.0, 502.6], size: [406.5, 23.4], fill: '#2e3236', rx: 11.7, sink: 1}
+        - {at: [107.4, 86.9], size: [4.0, 4.0], fill: '#17191c', rx: 2.0}
+        - {at: [215.4, 86.9], size: [4.0, 4.0], fill: '#17191c', rx: 2.0}
+        - {at: [323.5, 86.9], size: [4.0, 4.0], fill: '#17191c', rx: 2.0}
+        - {at: [39.8, 43.7], size: [4.0, 4.0], fill: '#17191c', rx: 0.5}
+        - {at: [17.3, 596.0], size: [3.6, 3.6], fill: '#17191c', rx: 1.8}
+        - {at: [111.6, 596.0], size: [3.6, 3.6], fill: '#17191c', rx: 1.8}
+        - {at: [227.2, 596.0], size: [3.6, 3.6], fill: '#17191c', rx: 1.8}
+        - {at: [324.0, 596.0], size: [3.6, 3.6], fill: '#17191c', rx: 1.8}
+        - {at: [420.2, 596.0], size: [3.6, 3.6], fill: '#17191c', rx: 1.8}
+        - {at: [75.8, 43.7], size: [4.0, 4.0], fill: '#17191c', rx: 0.5}
+  bottom:
+    size:
+      w: 436
+      h: 609.6
+    components:
+      placements:
+        - {ref: common/compliance-sticker@1, id: bottom-label, at: [110.0, 250.0], group: furniture, rel-pos: 1}
+  left:
+    size:
+      w: 609.6
+      h: 87.7
+    components:
+      placements:
+        - {ref: common/screw-head@1, id: screw-l1, at: [100.0, 42.0], group: furniture, rel-pos: 2}
+        - {ref: common/screw-head@1, id: screw-l2, at: [260.0, 42.0], group: furniture, rel-pos: 3}
+        - {ref: common/screw-head@1, id: screw-l3, at: [420.0, 42.0], group: furniture, rel-pos: 4}
+        - {ref: common/screw-head@1, id: screw-l4, at: [540.0, 42.0], group: furniture, rel-pos: 5}
+  right:
+    size:
+      w: 609.6
+      h: 87.7
+    components:
+      placements:
+        - {ref: common/screw-head@1, id: screw-r1, at: [60.0, 42.0], group: furniture, rel-pos: 6}
+        - {ref: common/screw-head@1, id: screw-r2, at: [180.0, 42.0], group: furniture, rel-pos: 7}
+        - {ref: common/screw-head@1, id: screw-r3, at: [340.0, 42.0], group: furniture, rel-pos: 8}
+        - {ref: common/screw-head@1, id: screw-r4, at: [500.0, 42.0], group: furniture, rel-pos: 9}
+configurations:
+  base:
+    kind: base
+    description: >-
+      The router as HIG Figure 4 draws it - four FAN-803816-HI exhaust fans and two
+      1300 W AC supplies at the rear, and the seventy-two traffic ports empty. No
+      orderable chassis part number appears in any held document; see the chassis-sku
+      gap.
+    default: true
+    airflow: front-to-back
+  ac:
+    kind: orderable
+    description: >-
+      Dual 1300 W AC supplies (PSU-132-AESR, exhaust airflow) with four FAN-803816-HI
+      fans. The datasheet's AC input rating is 100 to 240 V at 12 A; the HIG's maximum
+      system consumption is 685 W and it specifies a 250 VAC 15 A IEC60320 C15 cord,
+      with a 16 A fast-acting fuse built into each supply.
+    airflow: front-to-back
+    component-attrs:
+      psu-132-ac:
+        model: PSU-132-AESR
+      fan-803816:
+        model: FAN-803816-HI
+  dc:
+    kind: orderable
+    description: >-
+      Dual 1300 W -48 V DC supplies (PSU-132-DESR, exhaust airflow) with four
+      FAN-803816-HI fans. The datasheet's DC input rating is -40 to -75 V at 40 A and
+      each supply carries a 60 A fast-acting fuse; the DC build ships four #8 AWG input
+      lugs in addition to the grounding lug kit (HIG accessory list). The HIG publishes
+      no separate maximum for the DC build.
+    airflow: front-to-back
+    bays:
+      psu-0: ufispace/psu-132-dc@1
+      psu-1: ufispace/psu-132-dc@1
+    component-attrs:
+      psu-132-dc:
+        model: PSU-132-DESR
+      fan-803816:
+        model: FAN-803816-HI
+datasheet:
+  title: UfiSpace S9600-72XC 25G/100G Open Aggregation Router Datasheet
+  url: https://www.ufispace.com/products/telco/aggregation/s9600-72xc-25g-100g-open-aggregation-router-tcam
+references:
+  - {title: UfiSpace S9600-72XC Hardware Installation Guide}
