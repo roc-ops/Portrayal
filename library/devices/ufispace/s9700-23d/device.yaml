@@ -351,10 +351,12 @@ attrs:
     bmc: Aspeed AST2400
     oem-alias: DriveNets NCP-10CD (Network Cloud Packet forwarder, 10x400 NIF + 13x400 FIF)
   features:
-    role: >-
+    deployment: >-
       standalone core or edge router, or a packet-forwarding building block of a
       distributed disaggregated chassis (DDC) when its fabric ports are cabled to a
-      UfiSpace S9705-48D or S9725-64E fabric switch
+      UfiSpace S9705-48D or S9725-64E fabric switch. (Keyed `deployment` rather than
+      `role`: `role` is reserved for the structural one each GROUP carries, and two
+      different meanings under one key is what that rule exists to stop)
     fabric-ports: >-
       the 13 QSFP-DD ports of the fabric block are 400GE only and connect ONLY to the
       fabric ports of an S9705-48D or S9725-64E - the HIG's Port Overview says so

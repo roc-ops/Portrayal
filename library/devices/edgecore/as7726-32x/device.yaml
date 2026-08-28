@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: as7726-32x
-version: 0.30.0
+version: 0.32.0
 manufacturer: Edgecore
 model: AS7726-32X
 portfolio:
@@ -142,6 +142,51 @@ views:
         - {at: [426, 37.5], size: [5.5, 4], fill: '#0d0f11', vent: 25}
         - {at: [46, 9.6], size: [314, 3.8], fill: '#26292d'}
         - {at: [46, 37.2], size: [314, 3.8], fill: '#26292d'}
+      cutouts:
+        - {id: port-1, at: [46.25, 14.2], size: [18.5, 9.58], shape: rect}
+        - {id: port-2, at: [46.25, 26.22], size: [18.5, 9.58], shape: rect}
+        - {id: port-3, at: [65.25, 14.2], size: [18.5, 9.58], shape: rect}
+        - {id: port-4, at: [65.25, 26.22], size: [18.5, 9.58], shape: rect}
+        - {id: port-5, at: [84.25, 14.2], size: [18.5, 9.58], shape: rect}
+        - {id: port-6, at: [84.25, 26.22], size: [18.5, 9.58], shape: rect}
+        - {id: port-7, at: [103.25, 14.2], size: [18.5, 9.58], shape: rect}
+        - {id: port-8, at: [103.25, 26.22], size: [18.5, 9.58], shape: rect}
+        - {id: port-9, at: [126.25, 14.2], size: [18.5, 9.58], shape: rect}
+        - {id: port-10, at: [126.25, 26.22], size: [18.5, 9.58], shape: rect}
+        - {id: port-11, at: [145.25, 14.2], size: [18.5, 9.58], shape: rect}
+        - {id: port-12, at: [145.25, 26.22], size: [18.5, 9.58], shape: rect}
+        - {id: port-13, at: [164.25, 14.2], size: [18.5, 9.58], shape: rect}
+        - {id: port-14, at: [164.25, 26.22], size: [18.5, 9.58], shape: rect}
+        - {id: port-15, at: [183.25, 14.2], size: [18.5, 9.58], shape: rect}
+        - {id: port-16, at: [183.25, 26.22], size: [18.5, 9.58], shape: rect}
+        - {id: port-17, at: [206.25, 14.2], size: [18.5, 9.58], shape: rect}
+        - {id: port-18, at: [206.25, 26.22], size: [18.5, 9.58], shape: rect}
+        - {id: port-19, at: [225.25, 14.2], size: [18.5, 9.58], shape: rect}
+        - {id: port-20, at: [225.25, 26.22], size: [18.5, 9.58], shape: rect}
+        - {id: port-21, at: [244.25, 14.2], size: [18.5, 9.58], shape: rect}
+        - {id: port-22, at: [244.25, 26.22], size: [18.5, 9.58], shape: rect}
+        - {id: port-23, at: [263.25, 14.2], size: [18.5, 9.58], shape: rect}
+        - {id: port-24, at: [263.25, 26.22], size: [18.5, 9.58], shape: rect}
+        - {id: port-25, at: [286.25, 14.2], size: [18.5, 9.58], shape: rect}
+        - {id: port-26, at: [286.25, 26.22], size: [18.5, 9.58], shape: rect}
+        - {id: port-27, at: [305.25, 14.2], size: [18.5, 9.58], shape: rect}
+        - {id: port-28, at: [305.25, 26.22], size: [18.5, 9.58], shape: rect}
+        - {id: port-29, at: [324.25, 14.2], size: [18.5, 9.58], shape: rect}
+        - {id: port-30, at: [324.25, 26.22], size: [18.5, 9.58], shape: rect}
+        - {id: port-31, at: [343.25, 14.2], size: [18.5, 9.58], shape: rect}
+        - {id: port-32, at: [343.25, 26.22], size: [18.5, 9.58], shape: rect}
+        - {id: mgmt-eth, at: [362.5, 9.6], size: [16, 14], shape: rect}
+        - {id: console, at: [362.5, 25.7], size: [16, 14], shape: rect}
+        - {id: mgmt-sfp-1, at: [381.75, 14.5], size: [14.5, 10], shape: rect}
+        - {id: mgmt-sfp-2, at: [381.75, 25.5], size: [14.5, 10], shape: rect}
+        - {id: usb, at: [400.25, 12.5], size: [4.5, 12], shape: rect}
+        - {id: led-loc, at: [40, 7], size: [4, 4], shape: rect}
+        - {id: led-psu1, at: [33, 15], size: [4, 4], shape: rect}
+        - {id: led-diag, at: [40, 15], size: [4, 4], shape: rect}
+        - {id: led-psu2, at: [33, 23], size: [4, 4], shape: rect}
+        - {id: led-fan, at: [40, 23], size: [4, 4], shape: rect}
+        - {id: reset, at: [36.5, 32], size: [4, 4], shape: rect}
+        - {id: sfp-leds, at: [383, 9], size: [12, 4], shape: rect}
     silkscreen:
       - {at: [55.25, 12.35], text: '1', for: port-1}
       - {at: [55.25, 39.4], text: '2', for: port-2}
@@ -237,6 +282,10 @@ views:
       - {id: status-leds, at: [32, 2], size: {w: 15, h: 38}, label: Status LEDs, members: [led-loc, led-psu1, led-diag, led-psu2, led-fan, reset]}
       - {id: intake, at: [0, 0], size: {w: 438.4, h: 43.5}, physical-context: Intake, label: Front airflow (intake on F2B SKUs)}
   rear:
+    panel:
+      cutouts:
+        - {id: ground-left, at: [1.2, 27], size: [7, 14], shape: rect}
+        - {id: ground-right, at: [430.2, 27], size: [7, 14], shape: rect}
     silkscreen:
       - {at: [122.0, 9.6], text: '6', font-size: 4.4, for: fan-6}
       - {at: [170.6, 9.6], text: '5', font-size: 4.4, for: fan-5}
