@@ -1,0 +1,90 @@
+format: 1
+kind: module
+name: fan-808012
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: UfiSpace FAN-808012-HCE hot-swap fan module (S9321-64E/EO 800G family) -
+  red loop handle, red release tab on the left edge, red 'E' exhaust badge and a
+  status LED top-left, a flat hexagonal grille across the whole face with the twin
+  rotors behind it; exhaust (front-to-back) airflow
+size: {w: 81.0, h: 81.5}
+attrs: {power-absent: not-published, model: FAN-808012-HCE, airflow: exhaust}
+provenance:
+  power: >-
+    NOT PUBLISHED. The S9321-64E datasheet names the part only as an ordering line -
+    'FAN-808012-HCE, exhaust air flow' - with no wattage beside it, and the S9321-64E
+    HIG dimensions the fan FRU (81 x 154.8 x 81.5 mm), weighs it (741 g) and tables its
+    LED without a power figure. Searched the S9321-64E and S9321-64EO datasheets and
+    HIGs for 'watt', 'W)' and 'power consumption': every hit belongs either to the
+    PSU-302 ordering lines (3000W) or to the two system maxima (2496 / 2589 W). The
+    only fan-adjacent number in the intake is the LED table's '4500rpm' threshold.
+  size: >-
+    HIG Component Physical Information table - 'Fan (W x D x H) 3.19' x 6.09' x 3.21'
+    (81 x 154.8 x 81.5mm)'. The rear elevation (HIG Figure 4, measured at 3.654 px/mm
+    against a chassis whose drawn aspect is 0.1% from true) draws the faceplate 83.2 mm
+    across and about 83 tall, i.e. roughly 1.1 mm proud of the 81 mm body on each side.
+    Those are two different scopes, not two readings of one: the table gives the module
+    envelope and the figure the flange. The table wins for `size` because that is the
+    vendor's own dimension for the part; the 2.2 mm is recorded here rather than
+    averaged away.
+  face-layout: >-
+    drawing+photo - HIG Figure 4's rear elevation at 3.654 px/mm, positions taken
+    relative to the module's own left edge, and corroborated on the vendor rear render
+    s9321-64e-3-rear.png (507 px across the 436 mm face, aspect 4.971 against a true
+    4.971 - exact). The red 'E' airflow badge measures x 2.2-12.0, y 3.7-11.4 from the
+    module's top-left; the red release tab x 0.5-5.7, y 30.6-51.9; the red loop handle
+    x 23.0-28.5, y 22.4-59.6. The status lamp is drawn unlit in the HIG figure and lit
+    in the photograph, which is where its position comes from: the four modules put it
+    at chassis x 17.10 / 101.38 / 185.44 / 269.60 on a step of 84.2, i.e. 9.5 mm from
+    each module's own left edge and 19.6 mm down.
+  led-states: S9321-64E HIG section 10, Fan FRU LED table (page 23), transcribed in full
+  airflow: >-
+    datasheet Available to Order lists ONE fan for this platform, 'FAN-808012-HCE,
+    exhaust air flow', and the HIG's Cooling paragraph says 'The S9321-64E/EO airflow
+    direction is front-to-back' with no alternative. Unlike the S6301 and S9510
+    families there is no intake-flow sibling to skin, so the red handle is the only
+    colour this part has.
+elements:
+  status-led:
+    at: [8.0, 18.1]
+    size: [3.0, 3.0]
+    class: led
+    states: ['off',
+             {name: ok, color: '#22c55e'},
+             {name: fault, color: '#f59e0b'}]
+    description: >-
+      S9321-64E HIG Fan FRU LED table - Off (BMC is not up), Green (Fan FRU function
+      normal), Amber (Fan FRU is abnormal, the fan speed is under 4500rpm)
+  release-tab: {at: [0.5, 30.6], size: [5.2, 21.3], class: latch}
+  handle: {at: [23.0, 22.4], size: [5.5, 37.2], class: handle}
+relief:
+  features:
+    - node: grille
+      vent: 25
+      confidence: estimated
+      source: >-
+        ufispace/fan-808012@1 - the HIG dimensions the module (81 x 154.8 x 81.5) and
+        publishes one projection off the face (the handle); it says nothing about how
+        deep the grille is. 25 follows the ufispace/fan-402825 family estimate.
+    - node: handle
+      uhandle: 29
+      confidence: datasheet
+      source: >-
+        S9321-64E HIG, Space Clearance: 'The handle of fan FRU is 1.1 inch (2.9cm)'.
+        29 mm exactly, published by the vendor for THIS part - not carried over from the
+        S9510's 25 mm, which is a different fan in a different guide.
+    - node: release-tab
+      out: 2.2
+      confidence: estimated
+      source: >-
+        ufispace/fan-808012@1 - the HIG publishes the handle projection and nothing else
+        off this face; 2.2 follows the UfiSpace FRU family estimate.
+    - node: status-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/fan-808012@1 - unsourced. The HIG's Fan FRU LED table gives the lamp's
+        states and nothing about its lens; 0.4 is the UfiSpace FRU family estimate.
+skins: [default]

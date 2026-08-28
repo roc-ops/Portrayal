@@ -1,0 +1,117 @@
+format: 1
+kind: module
+name: psu-302-dc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: UfiSpace PSU-302-DESR 3000W DC PSU (S9321-64E/EO family) - two-stud
+  screw-terminal block under a hinged plastic cover, Input and Output status LEDs
+  stacked at the left, black wire pull handle across the foot, red release clip on
+  the right edge; exhaust (front-to-back) airflow
+size: {w: 68.0, h: 40.6}
+attrs: {power-output-w: 3000, input: dc, model: PSU-302-DESR}
+provenance:
+  power: >-
+    datasheet - the rating is in the part number's own ordering line, in the S9321-64E
+    datasheet's Available to Order section: 'PSU-302-DESR, 3000W DC, exhaust air flow',
+    beside the AC sibling at the same 3000 W. No ambient is stated with it, so none is
+    recorded.
+  size: >-
+    drawing - S9321-64E HIG Figure 6 (DC PSU dimension drawing): the face view is
+    dimensioned 68.0 mm wide and 40.6 mm high, and the body 452.4 mm (458.9 over the
+    retainer, 19.6 mm for the rear tang) - the same envelope the AC unit is drawn in,
+    which is why the HIG's component table carries one PSU row for both.
+  face-layout: >-
+    estimated - and this is the honest difference from the AC sibling. HIG Figure 4's
+    rear elevation and the vendor rear render both show the AC build, so the DC face
+    has no straight-on source: only HIG Figure 6's isometric, which shows the terminal
+    block at the left of the face with two studs, the red clip on the right edge and
+    the black wire handle across the foot, and the small unscaled face thumbnail beside
+    the dimension drawing. The lamp and handle positions are taken from the AC unit,
+    which shares this envelope and this vendor's face layout; the terminal block's own
+    size and position are estimated from the isometric's proportions. If the DC face
+    is ever photographed straight on, this is the part of the model to re-measure - see
+    the device's gaps.
+  terminal-block: >-
+    HIG Connecting Power, DC Version: 'Locate the DC power screw-type terminal block
+    located on the PSU. Remove the plastic cover that is protecting the terminal block
+    by pushing from the top or bottom of the cover and flipping open the cover
+    outwards. Secure the two-hole lug (with the DC power cable attached) to the terminal
+    block' - two studs, torque 14.0 +/- 0.5 kgf.cm, fed from a -40 to -72 V source
+    through a built-in 150 A fuse. The cover is drawn closed, which is how the unit
+    ships and how Figure 6 draws it.
+  led-states: >-
+    S9321-64E HIG section 10, PSU FRU LED table (page 23), transcribed in full. The
+    table is written for the PSU FRU without distinguishing AC from DC, so both units
+    carry the same two lamps and the same vocabulary.
+  clip-color: >-
+    drawing - HIG Figure 6 calls out 'Red Clip' and 'Black Handle' on the DC unit by
+    name, exactly as Figure 5 does on the AC one. This platform ships only exhaust-flow
+    FRUs, so red is not a variant marker here.
+elements:
+  input-led:
+    at: [4.7, 3.9]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off', {name: in-range, color: '#22c55e'}]
+    description: >-
+      S9321-64E HIG PSU FRU LED table, Input LED - Green (input within range), Off
+      (input out of range, or firmware upgrading)
+  output-led:
+    at: [4.7, 11.4]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off',
+             {name: ok, color: '#22c55e'},
+             {name: standby, color: '#22c55e', behavior: blinking},
+             {name: over-temp, color: '#f59e0b', behavior: blinking},
+             {name: fault, color: '#f59e0b'}]
+    description: >-
+      S9321-64E HIG PSU FRU LED table, Output LED - Solid Green (12.3V main output OK),
+      Blinking Green (12.3V main output in standby mode), Off (12.3V main output off due
+      to input out of range), Blinking Amber (over temp warning, or fan error), Solid
+      Amber (12.3V main output or 12VSB out of range; OTP, OVP, UVP, OCP)
+  terminal-block: {at: [19.8, 5.4], size: [30.0, 21.4], class: terminal}
+  handle: {at: [11.5, 29.8], size: [44.6, 7.7], class: handle}
+  clip: {at: [62.0, 10.1], size: [5.5, 16.7], class: latch}
+relief:
+  features:
+    - node: handle
+      uhandle: 30
+      confidence: datasheet
+      source: >-
+        S9321-64E HIG, Space Clearance: 'the handle of the PSU FRU is 1.2 inches
+        (3.0cm)'. 30 mm exactly, published by the vendor for THIS platform's supplies.
+    - node: terminal-block
+      out: 3.0
+      confidence: estimated
+      source: >-
+        ufispace/psu-302-dc@1 - the HIG dimensions the face and the body and nothing
+        that stands off the face except the handle. The block plus its hinged cover
+        clearly stands proud in Figure 6's isometric; 3.0 is a guess at how far.
+    - node: clip
+      out: 2.2
+      confidence: estimated
+      source: >-
+        ufispace/psu-302-dc@1 - unsourced, the same 2.2 the AC sibling carries. One
+        estimate written twice.
+    - node: vent-field
+      vent: 30
+      confidence: estimated
+      source: >-
+        ufispace/psu-302-dc@1 - the vent depth is in no held drawing; follows the
+        UfiSpace PSU family estimate.
+    - node: input-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/psu-302-dc@1 - unsourced; 0.4 is the UfiSpace FRU family estimate.
+    - node: output-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/psu-302-dc@1 - unsourced, the same estimate as input-led.
+connection-points:
+  power: {at: [34.8, 16.1], direction: front}
+skins: [default]
