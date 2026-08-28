@@ -38,9 +38,21 @@ provenance:
     and the bottom row keyway-down; a first draft had it inverted and
     only the zoomed crop settled it. SFP pair is belly-to-belly with its
     four lamp band at y 21.7; the 2.5G pair is one tall stacked
-    connector (jacks touching, centres y 13.5/26.7 - vendor render at
-    9.0 px/mm agreeing with the GLB corner-LED rows at 10.3/31.6), NOT
-    on the GbE rows; USB-C pair at x 25.3; status lamps at
+    connector in one tall shell (GLB shell face 60.1..77.3 x 7.3..34.5;
+    contact strips at y 15.2-18.2 and 23.7-26.7 place the mouths at
+    centres ~13.5 and ~28.4, so the BOTTOM 2.5G jack nearly aligns with
+    the GbE bottom row while the top one sits ~1.8 mm above the GbE top
+    row - Jason's review caught the first draft placing the pair too
+    high); the silver ganged-connector shells (two 58.4 x 14.9 row
+    strips and the 2.5G shell) are drawn as decor per the s9510-28dc
+    silver-band precedent, since std/rj45-ganged draws the opening only
+    (the USB-C receptacles get the same treatment - the real parts are
+    silver shells on the black face, so a silver pill sits behind each
+    std/usb-c slot, which Jason's review asked for after the bare slots
+    vanished into the background; row-shell VISIBLE faces photo-measured at 9.0 px/mm - 13 mm flanges
+    starting y 9.2/22.4, so the port lamps sit on black above and below
+    them as the render shows; the GLB 14.9 mm figure is the cage body
+    behind the panel); USB-C pair at x 25.3; status lamps at
     x 12.7, y 22.2/26.9/32.0; reset button at (150.1, 30.2). The render
     confirms every feature and the port legends. The jacks are drawn
     with std/rj45-ganged (12.7 x 11.0, the bezel-less opening) because
@@ -62,7 +74,11 @@ provenance:
   silkscreen: >-
     photo-measured - legends transcribed from the vendor front render
     (RL/SYS/PWR, USB1/USB2, XG1/XG2, 2.5G1/2.5G2, port numerals: even
-    ports numbered above the top row, odd below the bottom row). The
+    ports numbered above the top row, odd below the bottom row; the
+    XG/2.5G labels join their ports through one BRACKET per row - a
+    horizontal bar under the label pair with a vertical drop to each
+    port, per the vendor 3D view Jason supplied - not four separate
+    leaders). The
     ReadyLinks wordmark is printed as plain text like the halny HALNY
     precedent; the render's wifi-arc logo graphic is deliberately not
     reproduced (community-skin logo rule).
@@ -184,6 +200,12 @@ views:
   front:
     size: {w: 160.0, h: 45.32}
     panel:
+      decor:
+      - {at: [84.3, 9.2], size: [58.4, 13.0], fill: '#b0b5bb', rx: 0.8}
+      - {at: [84.3, 22.4], size: [58.4, 13.2], fill: '#b0b5bb', rx: 0.8}
+      - {at: [60.1, 7.3], size: [17.2, 27.2], fill: '#b0b5bb', rx: 0.8}
+      - {at: [20.0, 19.6], size: [10.6, 4.4], fill: '#b0b5bb', rx: 2.2}
+      - {at: [20.0, 30.5], size: [10.6, 4.4], fill: '#b0b5bb', rx: 2.2}
       cutouts:
       - {id: port-2, at: [86.25, 9.8], size: [12.7, 11.0], shape: rect}
       - {id: port-4, at: [100.15, 9.8], size: [12.7, 11.0], shape: rect}
@@ -194,7 +216,7 @@ views:
       - {id: port-5, at: [114.15, 23.3], size: [12.7, 11.0], shape: rect}
       - {id: port-7, at: [128.15, 23.3], size: [12.7, 11.0], shape: rect}
       - {id: eth-2g5-2, at: [62.35, 8.0], size: [12.7, 11.0], shape: rect}
-      - {id: eth-2g5-1, at: [62.35, 21.2], size: [12.7, 11.0], shape: rect}
+      - {id: eth-2g5-1, at: [62.35, 22.9], size: [12.7, 11.0], shape: rect}
       - {id: xg2, at: [38.9, 9.7], size: [14.5, 10.0], shape: rect}
       - {id: xg1, at: [38.9, 23.7], size: [14.5, 10.0], shape: rect}
       - {id: usb2, at: [21.1, 20.5], size: [8.34, 2.56], shape: rect}
@@ -226,10 +248,10 @@ views:
     - {at: [45.5, 42.8], text: XG1, font-size: 2.4, for: xg1}
     - {at: [68.5, 2.6], text: 2.5G2, font-size: 2.4, for: eth-2g5-2}
     - {at: [68.5, 42.8], text: 2.5G1, font-size: 2.4, for: eth-2g5-1}
-    - {id: xg2-leader, at: [45.5, 4.0], path: 'M 0 0 V 4.5', for: xg2}
-    - {id: xg1-leader, at: [45.5, 41.4], path: 'M 0 0 V -6.9', for: xg1}
-    - {id: g2-leader, at: [68.5, 4.0], path: 'M 0 0 V 3.5', for: eth-2g5-2}
-    - {id: g1-leader, at: [68.5, 41.4], path: 'M 0 0 V -4.9', for: eth-2g5-1}
+    - {id: top-bracket, at: [45.5, 5.2], path: 'M 0 0 L 23 0 L 23 1.9', for: [xg2, eth-2g5-2]}
+    - {id: top-bracket-drop, at: [45.5, 5.2], path: 'M 0 0 L 0 3.9', for: xg2}
+    - {id: bottom-bracket, at: [45.5, 40.0], path: 'M 0 0 L 23 0 L 23 -5.3', for: [xg1, eth-2g5-1]}
+    - {id: bottom-bracket-drop, at: [45.5, 40.0], path: 'M 0 0 L 0 -5.5', for: xg1}
     - {at: [92.6, 2.8], text: '2', font-size: 2.6, for: port-2}
     - {at: [106.5, 2.8], text: '4', font-size: 2.6, for: port-4}
     - {at: [120.5, 2.8], text: '6', font-size: 2.6, for: port-6}
@@ -249,7 +271,7 @@ views:
       - {ref: std/rj45-ganged@1, id: port-5, at: [114.15, 23.3], group: gbe-poe, rel-pos: 5}
       - {ref: std/rj45-ganged@1, id: port-7, at: [128.15, 23.3], group: gbe-poe, rel-pos: 7}
       - {ref: std/rj45-ganged@1, id: eth-2g5-2, at: [62.35, 8.0], rotate: 180, group: rj45-2g5, rel-pos: 2}
-      - {ref: std/rj45-ganged@1, id: eth-2g5-1, at: [62.35, 21.2], group: rj45-2g5, rel-pos: 1}
+      - {ref: std/rj45-ganged@1, id: eth-2g5-1, at: [62.35, 22.9], group: rj45-2g5, rel-pos: 1}
       - {ref: std/sfp@1, id: xg2, at: [38.9, 9.7], rotate: 180, group: sfp-plus, rel-pos: 2}
       - {ref: std/sfp@1, id: xg1, at: [38.9, 23.7], group: sfp-plus, rel-pos: 1}
       - {ref: std/usb-c@1, id: usb2, at: [21.1, 20.5], group: usbc-power, rel-pos: 2}
