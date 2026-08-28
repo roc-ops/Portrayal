@@ -1,0 +1,676 @@
+format: 1
+kind: device
+name: s6301-56st
+version: 0.1.0
+maturity: modelled
+manufacturer: UfiSpace
+model: S6301-56ST
+description: UfiSpace S6301-56ST - 1RU 48-port 1G RJ45 L2/L3 OOB management switch
+  with 8x 1G/10G SFP+ uplinks; Broadcom Trident3-X2, Intel Denverton, 1+1 hot-swap
+  150W AC or DC PSUs, 1+1 hot-swap fans, front-to-back or back-to-front airflow
+provenance:
+  chassis: >-
+    datasheet - 'Chassis (WxDxH) 1RU, 440 x 440 x 43.8 mm', weight 5.62 kg without
+    FRU; the HIG Component Physical Information table repeats all three
+    ('S6301-56ST (W x D x H) 440 x 440 x 43.8mm', 'Chassis without FRU 12.39lbs
+    (5.62kg)'). 440 is the body between the ear folds, not a rack face: the HIG
+    Space Clearance section separates 'The S6301-56ST width is 17.32 inches
+    (44.0cm)' from the 'rack mount brackets suitable for 19 inch (48.3cm) wide
+    racks', and the brackets ship loose (88 x 43 x 20 mm accessories, 8 M4 screws),
+    so there is no ear extent to subtract. Depth 440 is likewise 'without the field
+    replaceable units (FRUs)'; the HIG says the fan handle projects 25 mm and the
+    PSU handle 38 mm beyond it, and those are carried as relief on the FRU
+    contracts rather than in the chassis depth.
+  front-layout: >-
+    drawing - HIG Figure 5, the front elevation carried under the H = 1.72"
+    dimension, rendered from the PDF at 600 dpi (page 9). GATE 1: the chassis in it
+    measures 2140 x 214 px, aspect 10.00 against the datasheet's 10.046 (440/43.8) -
+    0.46% out, so it is orthographic and carries geometry at 4.864 px/mm. Every
+    front number below is measured on that image. The 48 RJ45 jacks sit in four
+    6-column ganged blocks whose silver shells read directly off the drawing:
+    block left edges 26.32 / 113.91 / 201.29 / 288.67 (three independent steps of
+    87.59, 87.38, 87.38), block width 84.1, within-block column pitch 13.98 taken
+    from the silver dividers between jacks. The shell band runs y 11.5-36.0 with a
+    continuous silver bar between the rows at y 22.0-24.9; the two 11.0 mm
+    rj45-ganged rows are set inside it at y 12.0 and 24.5, which is the softer
+    axis and is recorded as drawing-constrained rather than measured. The SFP+
+    block's silver spans x 376.5-434.0 (57.6, four columns on the std 14.25 pitch)
+    with its own centre band at y 20.6-26.1. Vent holes run in two rows from
+    x 84.3 to 436.5, y 2.4-4.6 and 6.0-8.5.
+  jack-orientation: >-
+    drawing+photo - HIG Figure 5's front elevation at 3x zoom, corroborated by the
+    vendor angle render (s6301-56st-1-angle.png): the TOP RJ45 row has its keyway
+    notch UP and the gold contacts toward the centre band (rotate 180 from the std
+    default), the bottom row keyway-down; the SFP+ top row's latch nubs face the
+    centre lamp band (rotate 180), bottom row default. Read from this device's own
+    figure, not carried over from the S6301-56STP, although the two agree.
+  port-numbering: >-
+    HIG Port Overview table: 'Port ID 0~47 RJ45 ... 48~55 SFP+', and the printed
+    strip under each column pair reads '▲n  n+1▼' - even numbers top row, odd
+    bottom - read at 3x zoom off the front elevation, where '▲0  1▼ ▲2  3▼' is
+    legible under the first block. The photographs show no numerals on the ganged
+    shells themselves, so only the strip is modelled.
+  port-leds: >-
+    drawing - each RJ45 jack carries integrated lamps in the corners of its own
+    aperture (the datasheet's LED row: 'Link and Activity LEDs per port').
+    std/rj45-ganged draws the opening only and the lamps sit INSIDE the aperture,
+    so they are not drawn - the MX150 and S6301-56STP treatment, recorded on the
+    ge group and in gaps. The SFP+ lamps sit in the centre band between the cage
+    rows, one ▲▼ pair per column for the upper and lower port, and are drawn with
+    common/sfp-led-pair.
+  left-cluster: >-
+    drawing - HIG Figure 5 at 4.864 px/mm, with the figure's own callouts naming
+    the three ports top to bottom: 'Mgmt. Port', 'USB', 'Console'. The silver bezel
+    plate measures x 6.4-21.2, y 7.4-38.2, and its two internal silver rails at
+    y 18.3-19.7 and 25.9-27.8 divide it into the three openings the parts are set
+    in. The management and console jacks are drawn with std/rj45-ganged inside the
+    shared plate decor because the plate is one piece of metal - three 16 mm
+    single-port bezels would not fit a 30.8 mm stack. Management jack keyway-up
+    (rotate 180), console keyway-down, both read from the figure's tab notches at
+    3x zoom. The left-edge network pictogram and the USB / IOIOI legend row under
+    the plate are approximated with the nearest glyphs, as the S9510-28DC does.
+  jack-shells: >-
+    drawing+photo - the four 12-port RJ45 blocks and the SFP+ block sit in SILVER
+    ganged shells. Measured on HIG Figure 5 as a grey (max-min < 40, max > 170)
+    mask, which returns the block outlines, the per-jack dividers on the 13.98
+    pitch and the continuous bar between the rows; corroborated in colour by the
+    vendor angle render s6301-56st-1-angle.png, where the four blocks read light
+    against the dark chassis. std/rj45-ganged and std/sfp-ganged draw the opening
+    only, so each block's shell is a panel.decor fill (#b0b5bb) sized from the
+    measurement, per the s9510-28dc silver-band precedent. Measured here on this
+    device's own figure; the S6301-56STP reached the same construction and its
+    provenance says so, but no number was copied from it.
+  buttons: >-
+    drawing - HIG Figure 5's callout 'Reset' points at a single recessed circular
+    button whose centre measures (46.3, 6.2) and whose ring is ~3.3 mm across;
+    drawn with common/reset-button (4 mm recessed pinhole), legend under it. This
+    device has NO Mode button - it has no PoE, so the S6301-56STP's LNK/SPD-vs-PoE
+    lamp toggle does not exist here, and the HIG front-panel LED table lists no
+    mode row.
+  system-leds: >-
+    drawing - HIG Figure 5: five lamps, four in a row at y centre 4.73 with x
+    centres 53.77 / 60.45 / 67.23 / 73.92, and a fifth directly under the fourth at
+    y centre 7.20, measured as green blobs on the lit render. That is exactly the
+    five the HIG front-panel LED table defines - SYS, FAN, PSU0, PSU1, ID - and the
+    table's order matches the lamp order left to right. Drawn with common/led-dot
+    (2.0 mm, nearest part) on one centreline; the drawing puts lamp 4 about 0.2 mm
+    lower than its three neighbours, which is noise at this resolution and is
+    aligned rather than copied. States transcribed from the HIG table on each
+    placement. The printed legend strings beside the lamps are below the resolution
+    of every held image - see gaps - so the table's own names are used.
+  rear-layout: >-
+    photo-measured - the vendor rear render s6301-56st-4-rear.png (1510 x 151 px,
+    aspect 10.00 vs true 10.046, 0.5% out, 3.432 px/mm), with s6301-56st-3-rear.png
+    (the blue back-to-front variant) as a second reading of the same face and HIG
+    Figure 5's rear strips as a third. Grounding column at the left edge (two M4
+    holes at (6.8, 7.9) and (6.8, 24.3) with the earth symbol below - one of the
+    HIG's two lug locations, its Figure 24). Fan module faces measured 15.2-66.7
+    and 67.65-119.15, i.e. width 51.5 exactly as the HIG component table states,
+    on a step of 52.45 recovered by cross-correlating the two identical modules
+    (correlation 0.992) rather than by eye - an eyeball read of the same image gave
+    51.3 and was wrong. PSU faces measured 322.9-373.4 and 382.9-433.4, width 50.5
+    against the table's 50.5, step 60.03. The vertical is the softer axis: the fan
+    face reads 39.9 tall against the contract's 42.2 and the PSU face 40.9 against
+    40.2, so both bays are set to the contract size centred in the 43.8 opening and
+    the difference is recorded here rather than reconciled. Vertical 'PSU0 ◄' /
+    'PSU1 ◄' legends sit on the chassis strips right of each bay. The 'FAN ◄0' /
+    'FAN ◄1' texts sit ON the fan modules' own faces in all three sources, not on
+    the chassis, and the shared fan component cannot carry a per-position legend -
+    not modelled, see gaps.
+  psu-fru: >-
+    ufispace/psu-151-dc@1 and ufispace/psu-151-ac@1 already existed in the library,
+    built from this device's own HIG (Figures 7 and 9, the Component Physical
+    Information table and this same rear render) - their contracts cite the
+    S6301-56ST by name. The rear photographs held here show the DC unit (three
+    screw terminals), which is why the DC build is the base configuration. The fan
+    FRU reuses ufispace/fan-402825@1 (S9510-28DC family): this datasheet orders
+    FAN-402825-HDN where the S9510 orders -HD, same drawn 51.5 x 42.2 face, and the
+    configuration overrides the model attr. Two skin-level deltas on that shared
+    part showed up in the matched-scale comparison against this device's rear
+    render and are recorded rather than fixed: the S6301's fan face is a hexagonal
+    honeycomb grille where the component draws a circular fan aperture, and its
+    status lamp sits low on the right-hand strip where the component draws it
+    top-left. Both belong to the shared component's art, not to this chassis's
+    geometry, and changing them would move every S9510-family device.
+  top: >-
+    drawing - HIG Figure 5's top view (D and W both dimensioned 440 mm). GATE 1
+    FAILS on this one: the drawn cover measures 2350 x 2148 px for a square object,
+    9.4% out, so no absolute scale is taken from it - every position below is a
+    FRACTION of the measured extent multiplied by 440. Four recessed stiffening
+    grooves, centres at y 130.6 / 213.1 / 292.8 / 372.5 from the rear; the two
+    nearer the rear span x 173-389, the two nearer the front x 9-397. The cover
+    screws are placed from the same fractions to about a millimetre. AXIS: y = 0 is
+    the REAR, as the figure is printed - its top edge carries the fan and PSU
+    handles. The figure also puts those fan handles at ITS left, i.e. on the same
+    side as the rear view puts them, so the vendor's top view is laid out to agree
+    with its rear elevation rather than as a true plan; it is transcribed as
+    printed, which is what the S6301-56STP and S9510-28DC top faces do, and this
+    sentence is the record that the handedness was checked rather than assumed.
+    Groove depth is not dimensioned anywhere, drawn as sink decor.
+  sides: >-
+    drawing - HIG Figure 13, which is a genuine side elevation of this chassis with
+    'Front side' and 'Rear side' labelled and a 220.5 mm dimension on it. The
+    chassis body in it measures 763 x 77 px, aspect 9.91 against the true 10.046,
+    1.4% out, so it carries geometry at 1.734 px/mm. Two rows of M4 bracket holes
+    at y 9.5 and 34.9; the four mid-chassis holes measure x 226.4 / 252.1 / 277.6 /
+    303.1, a pitch of 25.5 against the figure's own '1 inch' callout (25.4), and
+    the first of them is where the 220.5 mm dimension lands. The front bracket zone
+    is highlighted in cyan from x 1.2 to 90.0 and the rear zone symmetrically, and
+    the highlight hides the holes inside it, so the three front and three rear hole
+    pairs are placed on the measured 25.4 pitch inside the measured zone and are
+    ESTIMATED, not measured. AXIS CONVENTION: on the RIGHT view x = 0 is the FRONT;
+    on the LEFT view x = 0 is the REAR (renderer convention), so the left view
+    carries the same pattern mirrored as depth - x - width. The hole pattern is the
+    only content and it is symmetric front-to-rear about the chassis centre, so
+    getting the mirror wrong would be invisible - said here so that the axis is on
+    record as checked rather than as not mattering.
+  bottom: >-
+    deliberately size-only - no photograph or drawing of the underside exists in
+    the intake. HIG Figure 5 shows top, front and rear only; Figures 12-15 and 27
+    show the chassis from above and from the front-left; no held image looks at the
+    base. Inventing the label field this class of device usually carries would be a
+    guess. L45's size-only warning stands as the record.
+  attrs: >-
+    datasheet Specifications table and Available to Order section, with the HIG's
+    Connecting Power sections for the system maxima and its Preparation Check List
+    for the input currents. The processor and memory rows carry the vendor's two
+    build grades verbatim ('Standard : Intel Denverton 2-Core @1.6GHz Premium :
+    Intel Denverton 4-Core @1.6GHz'), because collapsing them would state a
+    configuration the vendor does not sell alone.
+  power: >-
+    datasheet gives 'Typical power: 64 Watts (no transceiver)'. The HIG's two
+    Connecting Power sections give the maxima with the testing criteria printed
+    beside them - 45C ambient, optics fully populated, 100% traffic load - hence
+    power-envelope: fully-configured. They differ by input type, not by measure or
+    scope: 'The maximum system power consumption is 111 watts' (DC Version) and
+    'The maximum system power consumption is 111.5 watts with an input voltage of
+    100-240V AC' (AC Version). That is two variants of one box, not a source
+    disagreement, so both are carried - power-max-w takes the higher AC figure and
+    power-max-dc-w the DC one. The vendor qualifies all three; nothing here is an
+    unqualified reading.
+  usb-version: >-
+    the datasheet says '1 x USB 2 .0 Type-A port' and the HIG's cabling section
+    agrees - 'Connect the USB 2.0 A Type plug'. The accessory list ships a 'USB 3.0
+    cable', which is the CABLE's rating and not the port's, so the two are not in
+    conflict and no gap is filed. (The sibling S6301-56STP does have a real
+    disagreement here, its datasheet saying USB 1.0; this device's does not.)
+  lifecycle: >-
+    searched 2026-08-28, 'UfiSpace S6301-56ST end of life' - no announcement. The
+    vendor still lists the product (ufispace.com S6301-56ST product page) and
+    distributors STORDIS, EPS Global, Pine Networks and Hardware Nation all carry
+    it as current. none-announced is a checked state, not an absence.
+attrs:
+  performance:
+    switching-capacity: 130 Gbps
+    packet-buffer: 4 MB
+  power:
+    power-typical-w: '64'
+    power-max-w: '111.5'
+    power-max-dc-w: '111'
+    power-envelope: fully-configured
+    input: AC 100 to 240V, 3A max x2; DC -36 to -72V, 6A max x2
+  environmental:
+    operating-temp: 0 to 45 C
+    operating-humidity: 5% to 95% RH non-condensing
+    storage-temp: -40 to 70 C
+    storage-humidity: 5% to 95% RH non-condensing
+  platform:
+    asic: Broadcom Trident3-X2 BCM56277
+    cpu: Standard - Intel Denverton 2-core @1.6GHz; Premium - Intel Denverton 4-core @1.6GHz
+    memory: Standard - 8GB DDR4; Premium - 8GB DDR4 (up to 16GB)
+    storage: 32 GB SSD
+  features:
+    optics-sfp-plus: 10G SFP+ SR/LR/ER/ZR (datasheet Compatible Transceivers; 80 km / 1G-10G per HIG Port Overview)
+  management:
+    console: RJ45 RS-232 serial, 115200 8N1 (port labelled IOIO)
+    oob: 1x 100M/1G RJ45 OOB management port
+    usb: 1 x USB 2.0 Type-A port
+  compliance:
+    safety: UL 62368-1, IEC 62368-1
+    emc: FCC Part 15 Subpart B Class A; ICES-003 Class A; EN 55032 Class A; EN 300 386;
+      EN 55035; VCCI CISPR 32 Class A; BSMI; MTCTE
+    environment: WEEE
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 440
+  height: 43.8
+  depth: 440
+  ru: 1
+  weight-kg: 5.62
+gaps:
+- what: rj45-port-lamps-not-drawn
+  scope: [ge]
+  reason: needs-drawing
+  note: >-
+    the datasheet's LED row promises 'Link and Activity LEDs per port' and the
+    front elevation shows lit corners inside every RJ45 aperture;
+    std/rj45-ganged draws the bare opening and any lamp sits inside that
+    aperture, so 48 jacks' worth of lamps exist on the hardware and none in the
+    drawing - the MX150 and S6301-56STP treatment, recorded so the absence is a
+    decision rather than an oversight.
+  wanted: an rj45-ganged variant (or overlay mechanism) that can draw a corner
+    lamp inside the aperture without colliding with the placement.
+- what: front-panel-led-legends
+  scope: [status-leds]
+  reason: needs-photo
+  note: >-
+    the five front lamps are printed with legends beside them, but the highest
+    resolution any held image reaches on that strip is HIG Figure 5 at 4.864
+    px/mm on an embedded raster of about 1.8 px/mm of real data, where the
+    glyphs are a grey smear. The names carried here (SYS, FAN, PSU0, PSU1, ID)
+    are the HIG front-panel LED table's own, in the table's order, which the
+    lamp order matches; the sibling S6301-56STP prints 'PS0'/'PS1' where its
+    table says the same thing, so the printed strings on this device could
+    differ from its table too.
+  wanted: a straight-on photograph of the left end of the front panel at
+    something better than 5 px/mm.
+- what: fan-position-legends
+  scope: [fans]
+  reason: needs-hardware
+  note: >-
+    'FAN ◄0' / 'FAN ◄1' appear at the top of each fan module's right-hand strip
+    in both rear renders and in HIG Figure 5. If they are chassis printing they
+    are hidden behind the modules; if module printing, the shared fan-402825
+    component cannot carry a per-position digit. A photo of the bay with the
+    module out would settle which metal carries the ink.
+  wanted: photograph of an empty S6301-56ST fan bay.
+- what: second-grounding-location
+  scope: [grounding]
+  reason: needs-photo
+  note: >-
+    the HIG says 'there are two locations on the case in which the grounding lug
+    may be fixed' and its Figure 23 shows one under a peel-off label on a side
+    wall, but no held source locates it measurably; only the rear location,
+    photographed, is modelled.
+  wanted: a photograph or drawing locating the second lug position.
+- what: fru-power-unpublished
+  scope: [fans]
+  reason: vendor-silent
+  note: >-
+    ufispace/fan-402825 states no draw and its own contract records the search:
+    eight UfiSpace datasheets name the part only as an ordering line, with no
+    wattage anywhere near it; this device's HIG likewise dimensions and weighs
+    the fan FRU and tables its LED without a power figure. L29's standing
+    warning is the live count of how much of the chassis total is a floor.
+  wanted: a photograph of the fan module's label, or a UfiSpace FRU datasheet.
+- what: intake-airflow-skins-not-drawn
+  scope: [fans, psus]
+  reason: needs-drawing
+  note: >-
+    the datasheet orders both directions - FAN-402825-HDN / -CDN and
+    PSU-151-DESR / -DISB / -AESR / -AISB - and the HIG says the two are told
+    apart by handle colour, red for front-to-back and blue for back-to-front.
+    The rear render s6301-56st-3-rear.png shows the blue set. Every held
+    component draws only the red exhaust unit, so the back-to-front build can be
+    ordered but cannot be skinned, and no configuration is declared for it
+    rather than declare one that would render identically to the red.
+  wanted: blue-handle skins on ufispace/fan-402825, psu-151-dc and psu-151-ac.
+groups:
+  ge:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: rj45, speed: 1g}
+    description: the 48 10M/100M/1G RJ45 access ports, ports 0-47; every jack
+      carries integrated link and activity lamps inside its aperture, not drawn
+      (see gaps)
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp-plus, speed: 10g}
+    description: the eight 1G/10G SFP+ uplinks, ports 48-55
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the SFP+ column lamp pairs in the centre band - left lamp
+      upper port, right lamp lower port - plus the two management-port lamps
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the five front-panel system lamps - SYS FAN PSU0 PSU1 in a row
+      with ID below the last
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: the management cluster at the left-hand end - OOB RJ45, USB-A and
+      RS-232 console in one bezel plate - plus the RESET button above it
+  psus:
+    term: PSU
+    role: service
+    index-origin: 0
+  fans:
+    term: Fan
+    role: service
+    index-origin: 0
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 1
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 1
+views:
+  front:
+    size:
+      w: 440
+      h: 43.8
+    panel:
+      decor:
+        - {at: [6.4, 7.4], size: [14.8, 30.8], fill: '#b0b5bb', rx: 0.8}
+        - {at: [84.3, 2.4], size: [352.2, 2.2], pattern: vent, vent: 25}
+        - {at: [84.3, 6.0], size: [352.2, 2.5], pattern: vent, vent: 25}
+        - {at: [26.32, 11.5], size: [84.1, 24.5], fill: '#b0b5bb', rx: 0.8}
+        - {at: [113.91, 11.5], size: [84.1, 24.5], fill: '#b0b5bb', rx: 0.8}
+        - {at: [201.29, 11.5], size: [84.1, 24.5], fill: '#b0b5bb', rx: 0.8}
+        - {at: [288.67, 11.5], size: [84.1, 24.5], fill: '#b0b5bb', rx: 0.8}
+        - {at: [375.9, 9.7], size: [58.6, 27.3], fill: '#b0b5bb', rx: 0.8}
+        - {at: [376.4, 10.16], size: [57.6, 26.35], fill: '#22262a'}
+        - {at: [376.4, 20.56], size: [57.6, 5.55], fill: '#b0b5bb'}
+        - {at: [376.0, 37.2], size: [58.2, 5.2], fill: '#2f7fc1', rx: 0.4}
+    silkscreen:
+      - {at: [3.2, 5.2], text: S6301-56ST, font-size: 2.2, anchor: start, fill: '#f5f7fa', for: chassis}
+      - {at: [3.1, 15.4], text: '⧉', font-size: 2.6, anchor: middle, for: mgmt}
+      - {at: [11.6, 42.3], text: '▲▼', font-size: 1.6, anchor: start, for: chassis}
+      - {at: [16.4, 42.3], text: IOIOI, font-size: 1.4, anchor: start, for: console}
+      - {at: [46.3, 9.9], text: RESET, font-size: 1.4, anchor: middle, for: reset}
+      - {at: [55.6, 5.4], text: SYS, font-size: 1.4, anchor: start, for: led-sys}
+      - {at: [62.25, 5.4], text: FAN, font-size: 1.4, anchor: start, for: led-fan}
+      - {at: [69.0, 5.4], text: PSU0, font-size: 1.4, anchor: start, for: led-psu0}
+      - {at: [75.7, 5.4], text: PSU1, font-size: 1.4, anchor: start, for: led-psu1}
+      - {at: [75.7, 7.9], text: ID, font-size: 1.4, anchor: start, for: led-id}
+      - {at: [26.92, 40.6], text: '▲0', font-size: 1.6, anchor: start, for: port-0}
+      - {at: [39.72, 40.6], text: '1▼', font-size: 1.6, anchor: end, for: port-1}
+      - {at: [40.90, 40.6], text: '▲2', font-size: 1.6, anchor: start, for: port-2}
+      - {at: [53.70, 40.6], text: '3▼', font-size: 1.6, anchor: end, for: port-3}
+      - {at: [54.88, 40.6], text: '▲4', font-size: 1.6, anchor: start, for: port-4}
+      - {at: [67.68, 40.6], text: '5▼', font-size: 1.6, anchor: end, for: port-5}
+      - {at: [68.86, 40.6], text: '▲6', font-size: 1.6, anchor: start, for: port-6}
+      - {at: [81.66, 40.6], text: '7▼', font-size: 1.6, anchor: end, for: port-7}
+      - {at: [82.84, 40.6], text: '▲8', font-size: 1.6, anchor: start, for: port-8}
+      - {at: [95.64, 40.6], text: '9▼', font-size: 1.6, anchor: end, for: port-9}
+      - {at: [96.82, 40.6], text: '▲10', font-size: 1.6, anchor: start, for: port-10}
+      - {at: [109.62, 40.6], text: '11▼', font-size: 1.6, anchor: end, for: port-11}
+      - {at: [114.51, 40.6], text: '▲12', font-size: 1.6, anchor: start, for: port-12}
+      - {at: [127.31, 40.6], text: '13▼', font-size: 1.6, anchor: end, for: port-13}
+      - {at: [128.49, 40.6], text: '▲14', font-size: 1.6, anchor: start, for: port-14}
+      - {at: [141.29, 40.6], text: '15▼', font-size: 1.6, anchor: end, for: port-15}
+      - {at: [142.47, 40.6], text: '▲16', font-size: 1.6, anchor: start, for: port-16}
+      - {at: [155.27, 40.6], text: '17▼', font-size: 1.6, anchor: end, for: port-17}
+      - {at: [156.45, 40.6], text: '▲18', font-size: 1.6, anchor: start, for: port-18}
+      - {at: [169.25, 40.6], text: '19▼', font-size: 1.6, anchor: end, for: port-19}
+      - {at: [170.43, 40.6], text: '▲20', font-size: 1.6, anchor: start, for: port-20}
+      - {at: [183.23, 40.6], text: '21▼', font-size: 1.6, anchor: end, for: port-21}
+      - {at: [184.41, 40.6], text: '▲22', font-size: 1.6, anchor: start, for: port-22}
+      - {at: [197.21, 40.6], text: '23▼', font-size: 1.6, anchor: end, for: port-23}
+      - {at: [201.89, 40.6], text: '▲24', font-size: 1.6, anchor: start, for: port-24}
+      - {at: [214.69, 40.6], text: '25▼', font-size: 1.6, anchor: end, for: port-25}
+      - {at: [215.87, 40.6], text: '▲26', font-size: 1.6, anchor: start, for: port-26}
+      - {at: [228.67, 40.6], text: '27▼', font-size: 1.6, anchor: end, for: port-27}
+      - {at: [229.85, 40.6], text: '▲28', font-size: 1.6, anchor: start, for: port-28}
+      - {at: [242.65, 40.6], text: '29▼', font-size: 1.6, anchor: end, for: port-29}
+      - {at: [243.83, 40.6], text: '▲30', font-size: 1.6, anchor: start, for: port-30}
+      - {at: [256.63, 40.6], text: '31▼', font-size: 1.6, anchor: end, for: port-31}
+      - {at: [257.81, 40.6], text: '▲32', font-size: 1.6, anchor: start, for: port-32}
+      - {at: [270.61, 40.6], text: '33▼', font-size: 1.6, anchor: end, for: port-33}
+      - {at: [271.79, 40.6], text: '▲34', font-size: 1.6, anchor: start, for: port-34}
+      - {at: [284.59, 40.6], text: '35▼', font-size: 1.6, anchor: end, for: port-35}
+      - {at: [289.27, 40.6], text: '▲36', font-size: 1.6, anchor: start, for: port-36}
+      - {at: [302.07, 40.6], text: '37▼', font-size: 1.6, anchor: end, for: port-37}
+      - {at: [303.25, 40.6], text: '▲38', font-size: 1.6, anchor: start, for: port-38}
+      - {at: [316.05, 40.6], text: '39▼', font-size: 1.6, anchor: end, for: port-39}
+      - {at: [317.23, 40.6], text: '▲40', font-size: 1.6, anchor: start, for: port-40}
+      - {at: [330.03, 40.6], text: '41▼', font-size: 1.6, anchor: end, for: port-41}
+      - {at: [331.21, 40.6], text: '▲42', font-size: 1.6, anchor: start, for: port-42}
+      - {at: [344.01, 40.6], text: '43▼', font-size: 1.6, anchor: end, for: port-43}
+      - {at: [345.19, 40.6], text: '▲44', font-size: 1.6, anchor: start, for: port-44}
+      - {at: [357.99, 40.6], text: '45▼', font-size: 1.6, anchor: end, for: port-45}
+      - {at: [359.17, 40.6], text: '▲46', font-size: 1.6, anchor: start, for: port-46}
+      - {at: [371.97, 40.6], text: '47▼', font-size: 1.6, anchor: end, for: port-47}
+      - {at: [377.60, 40.6], text: '▲48', font-size: 1.4, anchor: start, fill: '#f5f7fa', for: port-48}
+      - {at: [390.70, 40.6], text: '49▼', font-size: 1.4, fill: '#f5f7fa', anchor: end, for: port-49}
+      - {at: [391.85, 40.6], text: '▲50', font-size: 1.4, anchor: start, fill: '#f5f7fa', for: port-50}
+      - {at: [404.95, 40.6], text: '51▼', font-size: 1.4, fill: '#f5f7fa', anchor: end, for: port-51}
+      - {at: [406.10, 40.6], text: '▲52', font-size: 1.4, anchor: start, fill: '#f5f7fa', for: port-52}
+      - {at: [419.20, 40.6], text: '53▼', font-size: 1.4, fill: '#f5f7fa', anchor: end, for: port-53}
+      - {at: [420.35, 40.6], text: '▲54', font-size: 1.4, anchor: start, fill: '#f5f7fa', for: port-54}
+      - {at: [433.45, 40.6], text: '55▼', font-size: 1.4, fill: '#f5f7fa', anchor: end, for: port-55}
+    components:
+      placements:
+        - {ref: std/rj45-ganged@1, id: mgmt, at: [7.45, 7.65], rotate: 180, group: mgmt, rel-pos: 1,
+           attrs: {role: mgmt, speed: 100m-1g},
+           description: 'the OOB management jack, HIG Figure 5 callout
+             ''Mgmt. Port'', reached by ''the RJ45 OOB port marked a symbol'';
+             its two integrated lamps (HIG Management Port LED table - left
+             green for 1G, right amber for 10M/100M) sit inside this aperture
+             and are not drawn, see gaps'}
+        - {ref: std/usb-a@1, id: usb, at: [7.8, 20.55], group: mgmt, rel-pos: 2, attrs: {role: storage}}
+        - {ref: std/rj45-ganged@1, id: console, at: [7.45, 26.5], group: mgmt, rel-pos: 3,
+           attrs: {media: rj45-serial, role: console}}
+        - {ref: common/usb-symbol@1, id: usb-mark, at: [5.2, 39.4], for: usb, group: furniture, rel-pos: 1}
+        - {ref: common/reset-button@1, id: reset, at: [44.3, 4.2], for: chassis, group: mgmt, rel-pos: 4}
+        - {ref: common/led-dot@1, id: led-sys, at: [52.77, 3.73], for: chassis,
+           states: ['off', {name: boot-complete, color: '#22c55e'},
+                    {name: cpu-boot-failed, color: '#f59e0b'}],
+           description: 'HIG SYS row - Off (no power), Solid Green (Host CPU/BMC
+             boot complete), Solid Amber (power is up but Host CPU boot failed)',
+           group: status-leds, rel-pos: 1}
+        - {ref: common/led-dot@1, id: led-fan, at: [59.45, 3.73], for: [rear/fan-0, rear/fan-1],
+           states: ['off', {name: ok, color: '#22c55e'},
+                    {name: fault, color: '#f59e0b', behavior: blinking}],
+           description: 'HIG FAN row - Off (fans are not initialized), Solid
+             Green (all fans are work normal), Blinking Amber (fan fail: one or
+             more fans need service)', group: status-leds, rel-pos: 2}
+        - {ref: common/led-dot@1, id: led-psu0, at: [66.23, 3.73], for: rear/psu-0,
+           states: ['off', {name: ok, color: '#22c55e'},
+                    {name: fail, color: '#f59e0b', behavior: blinking}],
+           description: 'HIG PSU0 row - Solid Green (PSU0 working normal),
+             Blinking Amber (PSU0 fail, PSU0 needs service); the table lists no
+             Off row for the PSU lamps, the dark state exists physically',
+           group: status-leds, rel-pos: 3}
+        - {ref: common/led-dot@1, id: led-psu1, at: [72.92, 3.73], for: rear/psu-1,
+           states: ['off', {name: ok, color: '#22c55e'},
+                    {name: fail, color: '#f59e0b', behavior: blinking}],
+           description: 'HIG PSU1 row - Solid Green (PSU1 working normal),
+             Blinking Amber (PSU1 fail, PSU1 needs service)',
+           group: status-leds, rel-pos: 4}
+        - {ref: common/led-dot@1, id: led-id, at: [72.92, 6.20], for: chassis,
+           states: ['off', {name: beacon, color: '#3b82f6', behavior: blinking}],
+           description: 'HIG ID row - Off (no power), Blinking Blue (beacon
+             feature is enabled on the switch)', group: status-leds, rel-pos: 5}
+        - {ref: std/rj45-ganged@1, id: port-0, at: [26.96, 12.0], rotate: 180, group: ge, rel-pos: 0}
+        - {ref: std/rj45-ganged@1, id: port-1, at: [26.96, 24.5], group: ge, rel-pos: 1}
+        - {ref: std/rj45-ganged@1, id: port-2, at: [40.94, 12.0], rotate: 180, group: ge, rel-pos: 2}
+        - {ref: std/rj45-ganged@1, id: port-3, at: [40.94, 24.5], group: ge, rel-pos: 3}
+        - {ref: std/rj45-ganged@1, id: port-4, at: [54.92, 12.0], rotate: 180, group: ge, rel-pos: 4}
+        - {ref: std/rj45-ganged@1, id: port-5, at: [54.92, 24.5], group: ge, rel-pos: 5}
+        - {ref: std/rj45-ganged@1, id: port-6, at: [68.90, 12.0], rotate: 180, group: ge, rel-pos: 6}
+        - {ref: std/rj45-ganged@1, id: port-7, at: [68.90, 24.5], group: ge, rel-pos: 7}
+        - {ref: std/rj45-ganged@1, id: port-8, at: [82.88, 12.0], rotate: 180, group: ge, rel-pos: 8}
+        - {ref: std/rj45-ganged@1, id: port-9, at: [82.88, 24.5], group: ge, rel-pos: 9}
+        - {ref: std/rj45-ganged@1, id: port-10, at: [96.86, 12.0], rotate: 180, group: ge, rel-pos: 10}
+        - {ref: std/rj45-ganged@1, id: port-11, at: [96.86, 24.5], group: ge, rel-pos: 11}
+        - {ref: std/rj45-ganged@1, id: port-12, at: [114.55, 12.0], rotate: 180, group: ge, rel-pos: 12}
+        - {ref: std/rj45-ganged@1, id: port-13, at: [114.55, 24.5], group: ge, rel-pos: 13}
+        - {ref: std/rj45-ganged@1, id: port-14, at: [128.53, 12.0], rotate: 180, group: ge, rel-pos: 14}
+        - {ref: std/rj45-ganged@1, id: port-15, at: [128.53, 24.5], group: ge, rel-pos: 15}
+        - {ref: std/rj45-ganged@1, id: port-16, at: [142.51, 12.0], rotate: 180, group: ge, rel-pos: 16}
+        - {ref: std/rj45-ganged@1, id: port-17, at: [142.51, 24.5], group: ge, rel-pos: 17}
+        - {ref: std/rj45-ganged@1, id: port-18, at: [156.49, 12.0], rotate: 180, group: ge, rel-pos: 18}
+        - {ref: std/rj45-ganged@1, id: port-19, at: [156.49, 24.5], group: ge, rel-pos: 19}
+        - {ref: std/rj45-ganged@1, id: port-20, at: [170.47, 12.0], rotate: 180, group: ge, rel-pos: 20}
+        - {ref: std/rj45-ganged@1, id: port-21, at: [170.47, 24.5], group: ge, rel-pos: 21}
+        - {ref: std/rj45-ganged@1, id: port-22, at: [184.45, 12.0], rotate: 180, group: ge, rel-pos: 22}
+        - {ref: std/rj45-ganged@1, id: port-23, at: [184.45, 24.5], group: ge, rel-pos: 23}
+        - {ref: std/rj45-ganged@1, id: port-24, at: [201.93, 12.0], rotate: 180, group: ge, rel-pos: 24}
+        - {ref: std/rj45-ganged@1, id: port-25, at: [201.93, 24.5], group: ge, rel-pos: 25}
+        - {ref: std/rj45-ganged@1, id: port-26, at: [215.91, 12.0], rotate: 180, group: ge, rel-pos: 26}
+        - {ref: std/rj45-ganged@1, id: port-27, at: [215.91, 24.5], group: ge, rel-pos: 27}
+        - {ref: std/rj45-ganged@1, id: port-28, at: [229.89, 12.0], rotate: 180, group: ge, rel-pos: 28}
+        - {ref: std/rj45-ganged@1, id: port-29, at: [229.89, 24.5], group: ge, rel-pos: 29}
+        - {ref: std/rj45-ganged@1, id: port-30, at: [243.87, 12.0], rotate: 180, group: ge, rel-pos: 30}
+        - {ref: std/rj45-ganged@1, id: port-31, at: [243.87, 24.5], group: ge, rel-pos: 31}
+        - {ref: std/rj45-ganged@1, id: port-32, at: [257.85, 12.0], rotate: 180, group: ge, rel-pos: 32}
+        - {ref: std/rj45-ganged@1, id: port-33, at: [257.85, 24.5], group: ge, rel-pos: 33}
+        - {ref: std/rj45-ganged@1, id: port-34, at: [271.83, 12.0], rotate: 180, group: ge, rel-pos: 34}
+        - {ref: std/rj45-ganged@1, id: port-35, at: [271.83, 24.5], group: ge, rel-pos: 35}
+        - {ref: std/rj45-ganged@1, id: port-36, at: [289.31, 12.0], rotate: 180, group: ge, rel-pos: 36}
+        - {ref: std/rj45-ganged@1, id: port-37, at: [289.31, 24.5], group: ge, rel-pos: 37}
+        - {ref: std/rj45-ganged@1, id: port-38, at: [303.29, 12.0], rotate: 180, group: ge, rel-pos: 38}
+        - {ref: std/rj45-ganged@1, id: port-39, at: [303.29, 24.5], group: ge, rel-pos: 39}
+        - {ref: std/rj45-ganged@1, id: port-40, at: [317.27, 12.0], rotate: 180, group: ge, rel-pos: 40}
+        - {ref: std/rj45-ganged@1, id: port-41, at: [317.27, 24.5], group: ge, rel-pos: 41}
+        - {ref: std/rj45-ganged@1, id: port-42, at: [331.25, 12.0], rotate: 180, group: ge, rel-pos: 42}
+        - {ref: std/rj45-ganged@1, id: port-43, at: [331.25, 24.5], group: ge, rel-pos: 43}
+        - {ref: std/rj45-ganged@1, id: port-44, at: [345.23, 12.0], rotate: 180, group: ge, rel-pos: 44}
+        - {ref: std/rj45-ganged@1, id: port-45, at: [345.23, 24.5], group: ge, rel-pos: 45}
+        - {ref: std/rj45-ganged@1, id: port-46, at: [359.21, 12.0], rotate: 180, group: ge, rel-pos: 46}
+        - {ref: std/rj45-ganged@1, id: port-47, at: [359.21, 24.5], group: ge, rel-pos: 47}
+        - {ref: std/sfp-ganged@1, id: port-48, at: [377.00, 10.16], rotate: 180, group: sfp-plus, rel-pos: 48}
+        - {ref: std/sfp-ganged@1, id: port-49, at: [377.00, 26.11], group: sfp-plus, rel-pos: 49}
+        - {ref: std/sfp-ganged@1, id: port-50, at: [391.25, 10.16], rotate: 180, group: sfp-plus, rel-pos: 50}
+        - {ref: std/sfp-ganged@1, id: port-51, at: [391.25, 26.11], group: sfp-plus, rel-pos: 51}
+        - {ref: std/sfp-ganged@1, id: port-52, at: [405.50, 10.16], rotate: 180, group: sfp-plus, rel-pos: 52}
+        - {ref: std/sfp-ganged@1, id: port-53, at: [405.50, 26.11], group: sfp-plus, rel-pos: 53}
+        - {ref: std/sfp-ganged@1, id: port-54, at: [419.75, 10.16], rotate: 180, group: sfp-plus, rel-pos: 54}
+        - {ref: std/sfp-ganged@1, id: port-55, at: [419.75, 26.11], group: sfp-plus, rel-pos: 55}
+        - {ref: common/sfp-led-pair@1, id: leds-p48-p49, at: [378.10, 21.3], for: [port-48, port-49], group: port-leds, rel-pos: 1}
+        - {ref: common/sfp-led-pair@1, id: leds-p50-p51, at: [392.35, 21.3], for: [port-50, port-51], group: port-leds, rel-pos: 2}
+        - {ref: common/sfp-led-pair@1, id: leds-p52-p53, at: [406.60, 21.3], for: [port-52, port-53], group: port-leds, rel-pos: 3}
+        - {ref: common/sfp-led-pair@1, id: leds-p54-p55, at: [420.85, 21.3], for: [port-54, port-55], group: port-leds, rel-pos: 4}
+    regions:
+      - {id: mgmt-block, at: [6.0, 7.0], size: {w: 16, h: 32}, label: Management, members: [mgmt, usb, console]}
+      - {id: uplinks, at: [375.5, 9.3], size: {w: 59.5, h: 33.5}, label: SFP+ uplinks, members: [port-48, port-49, port-50, port-51, port-52, port-53, port-54, port-55]}
+  rear:
+    size:
+      w: 440
+      h: 43.8
+    panel:
+      decor:
+        - {at: [5.2, 6.3], size: [3.2, 3.2], fill: '#17191c', rx: 1.6}
+        - {at: [5.2, 22.7], size: [3.2, 3.2], fill: '#17191c', rx: 1.6}
+    silkscreen:
+      - {at: [378.0, 16.7], text: PSU0, font-size: 2.2, rotate: 90, anchor: middle, for: psu-0}
+      - {at: [436.5, 16.7], text: PSU1, font-size: 2.2, rotate: 90, anchor: middle, for: psu-1}
+      - {id: psu0-arrow, at: [378.0, 26.0], path: 'M 378.0 26.0 L 376.8 28.0 L 379.2 28.0 L 378.0 26.0', for: psu-0}
+      - {id: psu1-arrow, at: [436.5, 26.0], path: 'M 436.5 26.0 L 435.3 28.0 L 437.7 28.0 L 436.5 26.0', for: psu-1}
+    components:
+      bays:
+        - {id: fan-0, at: [15.2, 0.8], size: {w: 51.5, h: 42.2}, accepts: [ufispace/fan-402825@1], group: fans, rel-pos: 0, default: ufispace/fan-402825@1}
+        - {id: fan-1, at: [67.65, 0.8], size: {w: 51.5, h: 42.2}, accepts: [ufispace/fan-402825@1], group: fans, rel-pos: 1, default: ufispace/fan-402825@1}
+        - {id: psu-0, at: [322.9, 1.8], size: {w: 50.5, h: 40.2}, accepts: [ufispace/psu-151-dc@1, ufispace/psu-151-ac@1], group: psus, rel-pos: 0, default: ufispace/psu-151-dc@1}
+        - {id: psu-1, at: [382.9, 1.8], size: {w: 50.5, h: 40.2}, accepts: [ufispace/psu-151-dc@1, ufispace/psu-151-ac@1], group: psus, rel-pos: 1, default: ufispace/psu-151-dc@1}
+      placements:
+        - {ref: common/ground-symbol@1, id: ground-rear, at: [3.3, 32.8], group: grounding, rel-pos: 1}
+    regions:
+      - {id: fan-exhaust, at: [15, 0], size: {w: 105, h: 43.8}, physical-context: Exhaust, label: Fan bay, members: [fan-0, fan-1]}
+      - {id: psu-bank, at: [322, 0], size: {w: 112, h: 43.8}, physical-context: Exhaust, label: PSU bank, members: [psu-0, psu-1]}
+  top:
+    size:
+      w: 440
+      h: 440
+    panel:
+      decor:
+        - {at: [173.6, 114.0], size: [215.1, 33.2], fill: '#26292d', rx: 16, sink: 1}
+        - {at: [172.6, 197.0], size: [216.1, 32.1], fill: '#26292d', rx: 16, sink: 1}
+        - {at: [8.8, 276.7], size: [379.9, 32.1], fill: '#26292d', rx: 16, sink: 1}
+        - {at: [10.8, 355.9], size: [386.2, 33.2], fill: '#26292d', rx: 16, sink: 1}
+    components:
+      placements:
+        - {ref: common/screw-head@1, id: screw-r1, at: [55.9, 5.7], group: furniture, rel-pos: 2}
+        - {ref: common/screw-head@1, id: screw-r2, at: [96.0, 5.7], group: furniture, rel-pos: 3}
+        - {ref: common/screw-head@1, id: screw-r3, at: [119.4, 5.7], group: furniture, rel-pos: 4}
+        - {ref: common/screw-head@1, id: screw-r4, at: [165.4, 5.7], group: furniture, rel-pos: 5}
+        - {ref: common/screw-head@1, id: screw-m1, at: [54.4, 45.3], group: furniture, rel-pos: 6}
+        - {ref: common/screw-head@1, id: screw-m2, at: [109.7, 135.8], group: furniture, rel-pos: 7}
+        - {ref: common/screw-head@1, id: screw-f1, at: [25.1, 421.1], group: furniture, rel-pos: 8}
+        - {ref: common/screw-head@1, id: screw-f2, at: [140.0, 421.1], group: furniture, rel-pos: 9}
+        - {ref: common/screw-head@1, id: screw-f3, at: [258.3, 421.1], group: furniture, rel-pos: 10}
+        - {ref: common/screw-head@1, id: screw-f4, at: [382.0, 421.1], group: furniture, rel-pos: 11}
+  bottom:
+    size:
+      w: 440
+      h: 440
+  left:
+    size:
+      w: 440
+      h: 43.8
+    panel:
+      decor:
+        - {at: [418.3, 8.2], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [418.3, 33.6], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [392.9, 8.2], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [392.9, 33.6], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [367.5, 8.2], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [367.5, 33.6], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [212.3, 8.2], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [212.3, 33.6], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [186.6, 8.2], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [186.6, 33.6], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [161.1, 8.2], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [161.1, 33.6], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [135.6, 8.2], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [135.6, 33.6], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [69.9, 8.2], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [69.9, 33.6], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [44.5, 8.2], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [44.5, 33.6], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [19.1, 8.2], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [19.1, 33.6], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+  right:
+    size:
+      w: 440
+      h: 43.8
+    panel:
+      decor:
+        - {at: [19.1, 8.2], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [19.1, 33.6], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [44.5, 8.2], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [44.5, 33.6], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [69.9, 8.2], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [69.9, 33.6], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [225.1, 8.2], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [225.1, 33.6], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [250.8, 8.2], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [250.8, 33.6], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [276.3, 8.2], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [276.3, 33.6], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [301.8, 8.2], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [301.8, 33.6], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [367.5, 8.2], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [367.5, 33.6], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [392.9, 8.2], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [392.9, 33.6], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [418.3, 8.2], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+        - {at: [418.3, 33.6], size: [2.6, 2.6], fill: '#17191c', rx: 1.3}
+configurations:
+  dc:
+    kind: base
+    description: Dual 150W DC PSUs (PSU-151-DESR) 1+1, dual FAN-402825-HDN fan
+      modules 1+1, front-to-back airflow - the build the vendor's rear render shows
+    default: true
+    airflow: front-to-back
+    component-attrs:
+      fan-402825:
+        model: FAN-402825-HDN
+  ac:
+    kind: orderable
+    description: Dual 150W AC PSUs (PSU-151-AESR) 1+1, dual FAN-402825-HDN fan
+      modules 1+1, front-to-back airflow
+    airflow: front-to-back
+    bays:
+      psu-0: ufispace/psu-151-ac@1
+      psu-1: ufispace/psu-151-ac@1
+    component-attrs:
+      fan-402825:
+        model: FAN-402825-HDN
+datasheet:
+  title: UfiSpace S6301-56ST Datasheet
+  url: https://www.ufispace.com/products/datacenter/1g/s6301-56st-l2-l3-management-switch
+  sha256: 33f30099fea8cf14cb6cbab74eeeba2f89a28344530545ae57bb37ee6ed65ffb
+references:
+  - {title: UfiSpace S6301-56ST L2+/OOB Management Switch Hardware Installation Guide R1.10, sha256: ad5db7ca0cc25f5f2f7dce5d1d562f7544cc07195b745de1564371ef8f4dbd37}
