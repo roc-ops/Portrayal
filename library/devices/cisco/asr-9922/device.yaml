@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9922
-version: 0.2.2
+version: 1.0.0
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9922
@@ -275,6 +275,11 @@ chassis:
   color: '#c8cacc'
   silk: '#231f20'
 groups:
+  fan-trays:
+    term: Fan Tray
+    role: service
+    index-origin: 0
+    physical-context: Fan
   slots:
     term: Slot
     role: traffic
@@ -305,13 +310,12 @@ views:
     panel:
       decor:
         - {at: [0, 193.4], size: [447.0, 148.6], fill: '#d5d7d9'}
-      cutouts:
-        - {id: ft-0, at: [4.0, 762.3], size: [439.0, 41.5], shape: rect}
-        - {id: ft-1, at: [4.0, 808.8], size: [439.0, 41.5], shape: rect}
-        - {id: ft-2, at: [4.0, 1276.9], size: [439.0, 41.5], shape: rect}
-        - {id: ft-3, at: [4.0, 1323.4], size: [439.0, 41.5], shape: rect}
     components:
       bays:
+        - {id: ft-0, at: [4.0, 762.3], size: {w: 439.0, h: 41.5}, accepts: ['cisco/asr-9922-fan-v3@1'], default: cisco/asr-9922-fan-v3@1, group: fan-trays, rel-pos: 0}
+        - {id: ft-1, at: [4.0, 808.8], size: {w: 439.0, h: 41.5}, accepts: ['cisco/asr-9922-fan-v3@1'], default: cisco/asr-9922-fan-v3@1, group: fan-trays, rel-pos: 1}
+        - {id: ft-2, at: [4.0, 1276.9], size: {w: 439.0, h: 41.5}, accepts: ['cisco/asr-9922-fan-v3@1'], default: cisco/asr-9922-fan-v3@1, group: fan-trays, rel-pos: 2}
+        - {id: ft-3, at: [4.0, 1323.4], size: {w: 439.0, h: 41.5}, accepts: ['cisco/asr-9922-fan-v3@1'], default: cisco/asr-9922-fan-v3@1, group: fan-trays, rel-pos: 3}
         - {id: rp-1, at: [391.18, 878.06], size: {w: 46.00, h: 395.70}, opening: {w: 46, h: 355.75}, accepts: ['cisco/asr-9922-rp-se@1', 'cisco/asr-9922-rp-tr@1', 'cisco/a99-rp3-se@1', 'cisco/a99-rp3-tr@1', 'cisco/a9k-slot-cover@1'], group: rp, rel-pos: 1, default: cisco/a9k-slot-cover@1}
         - {id: rp-0, at: [9.82, 878.06], size: {w: 46.00, h: 395.70}, opening: {w: 46, h: 355.75}, accepts: ['cisco/asr-9922-rp-se@1', 'cisco/asr-9922-rp-tr@1', 'cisco/a99-rp3-se@1', 'cisco/a99-rp3-tr@1', 'cisco/a9k-slot-cover@1'], group: rp, rel-pos: 0, default: cisco/a9k-slot-cover@1}
         - {id: slot-0, at: [8.04, 345.36], size: {w: 42.67, h: 403.10}, opening: {w: 42.67, h: 358.17}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0, default: cisco/a9k-slot-cover@1}
@@ -561,7 +565,11 @@ gaps:
   scope: [front]
   reason: sources-disagree
   note: >-
-    The four fan trays are cutouts. cisco/asr-9922-fan-v3 declares 475.96 mm wide and this
+    The four fan trays are BAYS now, seating cisco/asr-9922-fan-v3, which is how the
+    ASR 9910 and ASR 9010 already model theirs - a fan tray is a module you pull, not a
+    hole in a plate. That moved the complaint from L39, which could only say the opening
+    had nothing in it, to L33, which says the thing that goes in it is 36.95 mm too wide.
+    Same disagreement, stated where the numbers are. cisco/asr-9922-fan-v3 declares 475.96 mm wide and this
     chassis's BODY is 447.0, so the component is 29 mm wider than the box it goes in. Compare
     cisco/asr-9910-fan at 445.2, which sits inside its own 447 mm body correctly. Both are class
     cooling and one of them is measured against the rack face rather than the body - the stencil
