@@ -83,9 +83,17 @@ def test_level_is_the_longest_satisfied_prefix():
 
 
 def test_blocked_says_how_to_fix_it_in_words():
-    """A capability report that does not say how to fix it is a scoreboard."""
-    cap = assess(load("ufispace/s9510-28dc"))
-    needs = cap["blocked"][0]["needs"]
+    """A capability report that does not say how to fix it is a scoreboard.
+
+    THE SUBJECT IS BUILT, NOT BORROWED. This read s9510-28dc, which happened to
+    be missing `rel-pos` at the time; backfilling that device fixed it and left
+    this asserting on an empty list. A test whose subject is a defect has to own
+    the defect, or the library improving is indistinguishable from the check
+    breaking."""
+    dev = load("ufispace/s9510-28dc")
+    for it in dev["views"]["front"]["components"]["placements"]:
+        it.pop("rel-pos", None)
+    needs = assess(dev)["blocked"][0]["needs"]
     assert "`rel-pos`" in needs and "front" in needs
 
 

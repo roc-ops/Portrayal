@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcp-r-34d-cs
-version: 0.1.0
+version: 0.2.0
 manufacturer: Smartoptics
 model: DCP-R-34D-CS
 description: 34-channel colourless/directionless cross-connect ROADM line unit, 1RU. Two rows
@@ -55,6 +55,40 @@ chassis:
   ru: 1
   color: '#1b1e21'
 groups:
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 1
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+  line:
+    term: Port
+    role: traffic
+    index-origin: 1
+    description: >-
+      the line side, as opposed to the add/drop channels and the cross-connects:
+      the DWDM Line port, the 1510 filter that splits the optical supervisory
+      channel off it, and the SFP that terminates that channel.
+    mixed: >-
+      TWO CONNECTOR FAMILIES, ONE JOB. Line and 1510 are LC duplex adapters and
+      the OSC is an SFP cage, so the block declares no media of its own and each
+      port carries its own. They are grouped by what they are FOR - everything
+      facing the line, rather than the channels added and dropped from it - and
+      splitting them by connector would put the filter and the transceiver it
+      feeds in different blocks, which is the one relationship a reader of this
+      face needs to see.
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the chassis indicators, which report the unit rather than any one port
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: every indicator that belongs to a particular port, ordered by that port
   xc:
     term: Port
     role: traffic
@@ -274,53 +308,53 @@ views:
       - {at: [392.05, 38.35], text: XC34, font-size: 1.5, for: xc34}
     components:
       placements:
-        - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.75], skin: left, optional: ears}
-        - {ref: common/rack-ear@1, id: ear-right, at: [440, 0.75], skin: right, optional: ears}
-        - {ref: common/rj45-shielded@2, id: eth0, at: [9.6, 10.55], rotate: 180, group: mgmt, attrs: {role: mgmt, speed: 1000base-t}}
-        - {ref: common/rj45-shielded@2, id: rs232, at: [10, 24.85], group: mgmt, attrs: {role: console, media: rj45-serial}}
-        - {ref: common/led-dot@1, id: led-osc-tx, at: [33.9, 21.8], for: port-osc, attrs: {function: osc-tx}}
-        - {ref: common/led-dot@1, id: led-osc-rx, at: [39.7, 21.8], for: port-osc, attrs: {function: osc-rx}}
-        - {ref: common/led-dot@1, id: led-power, at: [53.2, 35], for: chassis, attrs: {function: power}}
-        - {ref: common/led-dot@1, id: led-status, at: [58.8, 35], for: chassis, attrs: {function: status}}
-        - {ref: common/lc-duplex-adapter@3, id: port-1510, at: [52.7, 9.6], attrs: {role: osc-filter, media: fiber}}
-        - {ref: common/lc-duplex-adapter@3, id: port-line, at: [104.71, 11.1], attrs: {role: line, media: fiber}}
-        - {ref: std/sfp@1, id: port-osc, at: [30.7, 27.5], attrs: {media: sfp, role: osc}}
-        - {ref: common/lc-duplex-adapter@3, id: xc01, at: [134.79, 11.1], group: xc, attrs: {channel: '1'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc02, at: [152.81, 11.1], group: xc, attrs: {channel: '2'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc03, at: [166.12, 11.1], group: xc, attrs: {channel: '3'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc04, at: [183.22, 11.1], group: xc, attrs: {channel: '4'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc05, at: [196.55, 11.1], group: xc, attrs: {channel: '5'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc06, at: [213.91, 11.1], group: xc, attrs: {channel: '6'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc07, at: [227.22, 11.1], group: xc, attrs: {channel: '7'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc08, at: [244.12, 11.1], group: xc, attrs: {channel: '8'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc09, at: [257.39, 11.1], group: xc, attrs: {channel: '9'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc10, at: [280, 11.1], group: xc, attrs: {channel: '10'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc11, at: [293.34, 11.1], group: xc, attrs: {channel: '11'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc12, at: [311.21, 11.1], group: xc, attrs: {channel: '12'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc13, at: [324.44, 11.1], group: xc, attrs: {channel: '13'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc14, at: [341.36, 11.1], group: xc, attrs: {channel: '14'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc15, at: [354.68, 11.1], group: xc, attrs: {channel: '15'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc16, at: [372.05, 11.1], group: xc, attrs: {channel: '16'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc17, at: [385.45, 11.1], group: xc, attrs: {channel: '17'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc18, at: [134.79, 22.6], group: xc, attrs: {channel: '18'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc19, at: [152.81, 22.6], group: xc, attrs: {channel: '19'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc20, at: [166.12, 22.6], group: xc, attrs: {channel: '20'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc21, at: [183.22, 22.6], group: xc, attrs: {channel: '21'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc22, at: [196.55, 22.6], group: xc, attrs: {channel: '22'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc23, at: [213.91, 22.6], group: xc, attrs: {channel: '23'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc24, at: [227.22, 22.6], group: xc, attrs: {channel: '24'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc25, at: [244.12, 22.6], group: xc, attrs: {channel: '25'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc26, at: [257.39, 22.6], group: xc, attrs: {channel: '26'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc27, at: [280, 22.6], group: xc, attrs: {channel: '27'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc28, at: [293.34, 22.6], group: xc, attrs: {channel: '28'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc29, at: [311.21, 22.6], group: xc, attrs: {channel: '29'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc30, at: [324.44, 22.6], group: xc, attrs: {channel: '30'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc31, at: [341.36, 22.6], group: xc, attrs: {channel: '31'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc32, at: [354.68, 22.6], group: xc, attrs: {channel: '32'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc33, at: [372.05, 22.6], group: xc, attrs: {channel: '33'}}
-        - {ref: common/lc-duplex-adapter@3, id: xc34, at: [385.45, 22.6], group: xc, attrs: {channel: '34'}}
-        - {ref: common/laser-warning@1, id: laser-warn-top, at: [271.6, 5.4]}
-        - {ref: common/laser-warning@1, id: laser-warn-bottom, at: [271.6, 34.6]}
+        - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.75], skin: left, optional: ears, group: furniture, rel-pos: 1}
+        - {ref: common/rack-ear@1, id: ear-right, at: [440, 0.75], skin: right, optional: ears, group: furniture, rel-pos: 2}
+        - {ref: common/rj45-shielded@2, id: eth0, at: [9.6, 10.55], rotate: 180, group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 1}
+        - {ref: common/rj45-shielded@2, id: rs232, at: [10, 24.85], group: mgmt, attrs: {role: console, media: rj45-serial}, rel-pos: 2}
+        - {ref: common/led-dot@1, id: led-osc-tx, at: [33.9, 21.8], for: port-osc, attrs: {function: osc-tx}, group: port-leds, rel-pos: 1}
+        - {ref: common/led-dot@1, id: led-osc-rx, at: [39.7, 21.8], for: port-osc, attrs: {function: osc-rx}, group: port-leds, rel-pos: 2}
+        - {ref: common/led-dot@1, id: led-power, at: [53.2, 35], for: chassis, attrs: {function: power}, group: status-leds, rel-pos: 1}
+        - {ref: common/led-dot@1, id: led-status, at: [58.8, 35], for: chassis, attrs: {function: status}, group: status-leds, rel-pos: 2}
+        - {ref: common/lc-duplex-adapter@3, id: port-1510, at: [52.7, 9.6], attrs: {role: osc-filter, media: fiber}, group: line, rel-pos: 1}
+        - {ref: common/lc-duplex-adapter@3, id: port-line, at: [104.71, 11.1], attrs: {role: line, media: fiber}, group: line, rel-pos: 2}
+        - {ref: std/sfp@1, id: port-osc, at: [30.7, 27.5], attrs: {media: sfp, role: osc}, group: line, rel-pos: 3}
+        - {ref: common/lc-duplex-adapter@3, id: xc01, at: [134.79, 11.1], group: xc, attrs: {channel: '1'}, rel-pos: 1}
+        - {ref: common/lc-duplex-adapter@3, id: xc02, at: [152.81, 11.1], group: xc, attrs: {channel: '2'}, rel-pos: 2}
+        - {ref: common/lc-duplex-adapter@3, id: xc03, at: [166.12, 11.1], group: xc, attrs: {channel: '3'}, rel-pos: 3}
+        - {ref: common/lc-duplex-adapter@3, id: xc04, at: [183.22, 11.1], group: xc, attrs: {channel: '4'}, rel-pos: 4}
+        - {ref: common/lc-duplex-adapter@3, id: xc05, at: [196.55, 11.1], group: xc, attrs: {channel: '5'}, rel-pos: 5}
+        - {ref: common/lc-duplex-adapter@3, id: xc06, at: [213.91, 11.1], group: xc, attrs: {channel: '6'}, rel-pos: 6}
+        - {ref: common/lc-duplex-adapter@3, id: xc07, at: [227.22, 11.1], group: xc, attrs: {channel: '7'}, rel-pos: 7}
+        - {ref: common/lc-duplex-adapter@3, id: xc08, at: [244.12, 11.1], group: xc, attrs: {channel: '8'}, rel-pos: 8}
+        - {ref: common/lc-duplex-adapter@3, id: xc09, at: [257.39, 11.1], group: xc, attrs: {channel: '9'}, rel-pos: 9}
+        - {ref: common/lc-duplex-adapter@3, id: xc10, at: [280, 11.1], group: xc, attrs: {channel: '10'}, rel-pos: 10}
+        - {ref: common/lc-duplex-adapter@3, id: xc11, at: [293.34, 11.1], group: xc, attrs: {channel: '11'}, rel-pos: 11}
+        - {ref: common/lc-duplex-adapter@3, id: xc12, at: [311.21, 11.1], group: xc, attrs: {channel: '12'}, rel-pos: 12}
+        - {ref: common/lc-duplex-adapter@3, id: xc13, at: [324.44, 11.1], group: xc, attrs: {channel: '13'}, rel-pos: 13}
+        - {ref: common/lc-duplex-adapter@3, id: xc14, at: [341.36, 11.1], group: xc, attrs: {channel: '14'}, rel-pos: 14}
+        - {ref: common/lc-duplex-adapter@3, id: xc15, at: [354.68, 11.1], group: xc, attrs: {channel: '15'}, rel-pos: 15}
+        - {ref: common/lc-duplex-adapter@3, id: xc16, at: [372.05, 11.1], group: xc, attrs: {channel: '16'}, rel-pos: 16}
+        - {ref: common/lc-duplex-adapter@3, id: xc17, at: [385.45, 11.1], group: xc, attrs: {channel: '17'}, rel-pos: 17}
+        - {ref: common/lc-duplex-adapter@3, id: xc18, at: [134.79, 22.6], group: xc, attrs: {channel: '18'}, rel-pos: 18}
+        - {ref: common/lc-duplex-adapter@3, id: xc19, at: [152.81, 22.6], group: xc, attrs: {channel: '19'}, rel-pos: 19}
+        - {ref: common/lc-duplex-adapter@3, id: xc20, at: [166.12, 22.6], group: xc, attrs: {channel: '20'}, rel-pos: 20}
+        - {ref: common/lc-duplex-adapter@3, id: xc21, at: [183.22, 22.6], group: xc, attrs: {channel: '21'}, rel-pos: 21}
+        - {ref: common/lc-duplex-adapter@3, id: xc22, at: [196.55, 22.6], group: xc, attrs: {channel: '22'}, rel-pos: 22}
+        - {ref: common/lc-duplex-adapter@3, id: xc23, at: [213.91, 22.6], group: xc, attrs: {channel: '23'}, rel-pos: 23}
+        - {ref: common/lc-duplex-adapter@3, id: xc24, at: [227.22, 22.6], group: xc, attrs: {channel: '24'}, rel-pos: 24}
+        - {ref: common/lc-duplex-adapter@3, id: xc25, at: [244.12, 22.6], group: xc, attrs: {channel: '25'}, rel-pos: 25}
+        - {ref: common/lc-duplex-adapter@3, id: xc26, at: [257.39, 22.6], group: xc, attrs: {channel: '26'}, rel-pos: 26}
+        - {ref: common/lc-duplex-adapter@3, id: xc27, at: [280, 22.6], group: xc, attrs: {channel: '27'}, rel-pos: 27}
+        - {ref: common/lc-duplex-adapter@3, id: xc28, at: [293.34, 22.6], group: xc, attrs: {channel: '28'}, rel-pos: 28}
+        - {ref: common/lc-duplex-adapter@3, id: xc29, at: [311.21, 22.6], group: xc, attrs: {channel: '29'}, rel-pos: 29}
+        - {ref: common/lc-duplex-adapter@3, id: xc30, at: [324.44, 22.6], group: xc, attrs: {channel: '30'}, rel-pos: 30}
+        - {ref: common/lc-duplex-adapter@3, id: xc31, at: [341.36, 22.6], group: xc, attrs: {channel: '31'}, rel-pos: 31}
+        - {ref: common/lc-duplex-adapter@3, id: xc32, at: [354.68, 22.6], group: xc, attrs: {channel: '32'}, rel-pos: 32}
+        - {ref: common/lc-duplex-adapter@3, id: xc33, at: [372.05, 22.6], group: xc, attrs: {channel: '33'}, rel-pos: 33}
+        - {ref: common/lc-duplex-adapter@3, id: xc34, at: [385.45, 22.6], group: xc, attrs: {channel: '34'}, rel-pos: 34}
+        - {ref: common/laser-warning@1, id: laser-warn-top, at: [271.6, 5.4], group: furniture, rel-pos: 3}
+        - {ref: common/laser-warning@1, id: laser-warn-bottom, at: [271.6, 34.6], group: furniture, rel-pos: 4}
   rear:
     size:
       w: 440
@@ -339,18 +373,18 @@ views:
       - {at: [347, 34.4], text: RESET, font-size: 1.5, for: reset}
     components:
       placements:
-        - {ref: common/rack-ear@1, id: ear-left-r, at: [-14, 0.75], skin: left, optional: ears}
-        - {ref: common/rack-ear@1, id: ear-right-r, at: [440, 0.75], skin: right, optional: ears}
-        - {ref: common/psu-550w@2, id: psu-1, at: [0, 2.5], attrs: {slot: '1'}}
-        - {ref: common/psu-550w@2, id: psu-2, at: [366.5, 2.5], attrs: {slot: '2'}}
-        - {ref: common/rj45-hd@1, id: eth2, at: [276, 8.5], group: mgmt, attrs: {role: mgmt, speed: 1000base-t}}
-        - {ref: common/rj45-hd@1, id: eth4, at: [291, 8.5], group: mgmt, attrs: {role: mgmt, speed: 1000base-t}}
-        - {ref: common/rj45-hd@1, id: eth1, at: [276, 22], group: mgmt, attrs: {role: mgmt, speed: 1000base-t}}
-        - {ref: common/rj45-hd@1, id: eth3, at: [291, 22], group: mgmt, attrs: {role: mgmt, speed: 1000base-t}}
-        - {ref: common/led-dot@1, id: led-eth5-tx, at: [320, 14], for: eth5, attrs: {function: tx}}
-        - {ref: common/led-dot@1, id: led-eth5-rx, at: [332, 14], for: eth5, attrs: {function: rx}}
-        - {ref: std/sfp@1, id: eth5, at: [318.75, 22], group: mgmt, attrs: {role: mgmt, media: sfp, speed: 100m-1g}}
-        - {ref: common/reset-button@1, id: reset, at: [345, 26], group: mgmt, for: chassis}
+        - {ref: common/rack-ear@1, id: ear-left-r, at: [-14, 0.75], skin: left, optional: ears, group: furniture, rel-pos: 5}
+        - {ref: common/rack-ear@1, id: ear-right-r, at: [440, 0.75], skin: right, optional: ears, group: furniture, rel-pos: 6}
+        - {ref: common/psu-550w@2, id: psu-1, at: [0, 2.5], attrs: {slot: '1'}, group: psus, rel-pos: 1}
+        - {ref: common/psu-550w@2, id: psu-2, at: [366.5, 2.5], attrs: {slot: '2'}, group: psus, rel-pos: 2}
+        - {ref: common/rj45-hd@1, id: eth2, at: [276, 8.5], group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 3}
+        - {ref: common/rj45-hd@1, id: eth4, at: [291, 8.5], group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 4}
+        - {ref: common/rj45-hd@1, id: eth1, at: [276, 22], group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 5}
+        - {ref: common/rj45-hd@1, id: eth3, at: [291, 22], group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 6}
+        - {ref: common/led-dot@1, id: led-eth5-tx, at: [320, 14], for: eth5, attrs: {function: tx}, group: port-leds, rel-pos: 3}
+        - {ref: common/led-dot@1, id: led-eth5-rx, at: [332, 14], for: eth5, attrs: {function: rx}, group: port-leds, rel-pos: 4}
+        - {ref: std/sfp@1, id: eth5, at: [318.75, 22], group: mgmt, attrs: {role: mgmt, media: sfp, speed: 100m-1g}, rel-pos: 7}
+        - {ref: common/reset-button@1, id: reset, at: [345, 26], group: mgmt, for: chassis, rel-pos: 8}
   left:
     size:
       w: 505

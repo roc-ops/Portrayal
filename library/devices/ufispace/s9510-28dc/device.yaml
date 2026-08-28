@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9510-28dc
-version: 0.9.2
+version: 0.10.0
 manufacturer: UfiSpace
 model: S9510-28DC
 description: UfiSpace S9510-28DC Disaggregated Cell Site Gateway Router - 1RU, 2x QSFP-DD 400G
@@ -122,7 +122,7 @@ chassis:
 # and must not be listed here.
 gaps:
 - what: port-led-semantics
-  scope: [sfp28, qsfp28, qsfpdd-400g]
+  scope: [sfp28, qsfp28, qsfpdd-400g, port-leds]
   reason: vendor-silent
   note: >-
     HIG section 10 (pages 20-21) tables the GNSS, SYNC, STAT, FAN and PWR system
@@ -151,6 +151,24 @@ gaps:
     a photograph of the fan module's label, or a UfiSpace FRU datasheet
   blocks: []
 groups:
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 1
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 1
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the chassis indicators, which report the unit rather than any one port
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: every indicator that belongs to a particular port, ordered by that port
   psus:
     term: PSU
     role: service
@@ -316,7 +334,7 @@ views:
            description: 'HIG GNSS row - Off (not configured), Solid Green (normal state, self-survey
              complete), Blinking Green (learning state, self-survey not complete), Solid Yellow
              (power up, not tracking any satellite), Blinking Yellow (antenna short to ground).
-             Every row but Solid Yellow is annotated "need NOS to activate this feature"'}
+             Every row but Solid Yellow is annotated "need NOS to activate this feature"', group: status-leds, rel-pos: 1}
         - {ref: common/led-rect@1, id: led-sync, for: chassis, at: [121.4, 19.1],
            states: ['off',
                    {name: synced, color: '#22c55e'},
@@ -326,21 +344,21 @@ views:
            description: 'HIG SYNC row - Off (timing synchronization disabled or free-run), Solid Green
              (timing core, 1588 and SyncE, synchronized to an external source), Blinking Green
              (synchronized in SyncE mode), Solid Yellow (acquiring state or holdover), Blinking
-             Yellow (synchronization fail)'}
+             Yellow (synchronization fail)', group: status-leds, rel-pos: 2}
         - {ref: common/led-rect@1, id: led-stat, for: chassis, at: [121.4, 22.0],
            states: ['off',
                    {name: boot-complete, color: '#22c55e'},
                    {name: booting, color: '#22c55e', behavior: blinking}],
            description: 'HIG STAT row - Off (X86 and BMC initializing, or not powered), Solid Green (boot
              complete), Blinking Green (system is booting). The table lists no yellow for this
-             lamp'}
+             lamp', group: status-leds, rel-pos: 3}
         - {ref: common/led-rect@1, id: led-fan, for: [rear/fan-1, rear/fan-2, rear/fan-3, rear/fan-4, rear/fan-5], at: [121.4, 24.9],
            states: ['off',
                    {name: ok, color: '#22c55e'},
                    {name: fault, color: '#eab308', behavior: blinking}],
            description: 'HIG FAN row - Off (X86 and BMC initializing, or not powered), Solid Green (all fan
              modules work well), Blinking Yellow (one or more fan modules fail or no fan module
-             present)'}
+             present)', group: status-leds, rel-pos: 4}
         - {ref: common/led-rect@1, id: led-pwr, for: chassis, at: [121.4, 27.8],
            states: ['off',
                    {name: ok, color: '#22c55e'},
@@ -350,9 +368,9 @@ views:
            description: 'HIG PWR row - Off (no power or shutdown), Solid Green (system power good), Blinking
              Green (system power good but BMC power fail), Solid Yellow (system power good but
              CPU power fail), Blinking Yellow (system power fail). Four meanings out of two
-             colours and two behaviours - the lamp that put behaviour into the model'}
-        - {ref: common/ground-symbol@1, id: ground-mark, at: [431.6, 18.75]}
-        - {ref: common/reset-button@1, id: reset, at: [118.8, 34.6], for: chassis}
+             colours and two behaviours - the lamp that put behaviour into the model', group: status-leds, rel-pos: 5}
+        - {ref: common/ground-symbol@1, id: ground-mark, at: [431.6, 18.75], group: grounding, rel-pos: 1}
+        - {ref: common/reset-button@1, id: reset, at: [118.8, 34.6], for: chassis, group: mgmt, rel-pos: 4}
         - {ref: common/rj45-bezel@2, id: bits, at: [131.8, 13.4], group: timing, rel-pos: 4, attrs: {media: rj48, role: bits-io}}
         - {ref: common/rj45-bezel@2, id: tod, at: [131.8, 28.3], group: timing, rel-pos: 5, attrs: {media: rj45, role: tod-in}}
         - {ref: common/rj45-port@4, id: mgmt, at: [152.3, 1.2], group: mgmt, rel-pos: 1,
@@ -370,36 +388,36 @@ views:
         - {ref: common/rj45-bezel@2, id: console, at: [152.3, 25.4], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
         - {ref: common/qsfp-cage@2, id: port-0, at: [177.4, 26.2], group: qsfpdd-400g, rel-pos: 0}
         - {ref: common/qsfp-cage@2, id: port-1, at: [204.5, 26.2], group: qsfpdd-400g, rel-pos: 1}
-        - {ref: common/led-arrow@1, id: led-port-4, at: [255.975, 18.7], skin: up, for: port-4, attrs: {port: '4'}}
-        - {ref: common/led-arrow@1, id: led-port-5, at: [261.875, 18.7], skin: down, for: port-5, attrs: {port: '5'}}
-        - {ref: common/led-arrow@1, id: led-port-6, at: [270.225, 18.7], skin: up, for: port-6, attrs: {port: '6'}}
-        - {ref: common/led-arrow@1, id: led-port-7, at: [276.125, 18.7], skin: down, for: port-7, attrs: {port: '7'}}
-        - {ref: common/led-arrow@1, id: led-port-8, at: [284.475, 18.7], skin: up, for: port-8, attrs: {port: '8'}}
-        - {ref: common/led-arrow@1, id: led-port-9, at: [290.375, 18.7], skin: down, for: port-9, attrs: {port: '9'}}
-        - {ref: common/led-arrow@1, id: led-port-10, at: [298.725, 18.7], skin: up, for: port-10, attrs: {port: '10'}}
-        - {ref: common/led-arrow@1, id: led-port-11, at: [304.625, 18.7], skin: down, for: port-11, attrs: {port: '11'}}
-        - {ref: common/led-arrow@1, id: led-port-12, at: [312.975, 18.7], skin: up, for: port-12, attrs: {port: '12'}}
-        - {ref: common/led-arrow@1, id: led-port-13, at: [318.875, 18.7], skin: down, for: port-13, attrs: {port: '13'}}
-        - {ref: common/led-arrow@1, id: led-port-14, at: [327.225, 18.7], skin: up, for: port-14, attrs: {port: '14'}}
-        - {ref: common/led-arrow@1, id: led-port-15, at: [333.125, 18.7], skin: down, for: port-15, attrs: {port: '15'}}
-        - {ref: common/led-arrow@1, id: led-port-16, at: [344.775, 18.7], skin: up, for: port-16, attrs: {port: '16'}}
-        - {ref: common/led-arrow@1, id: led-port-17, at: [350.675, 18.7], skin: down, for: port-17, attrs: {port: '17'}}
-        - {ref: common/led-arrow@1, id: led-port-18, at: [359.025, 18.7], skin: up, for: port-18, attrs: {port: '18'}}
-        - {ref: common/led-arrow@1, id: led-port-19, at: [364.925, 18.7], skin: down, for: port-19, attrs: {port: '19'}}
-        - {ref: common/led-arrow@1, id: led-port-20, at: [373.275, 18.7], skin: up, for: port-20, attrs: {port: '20'}}
-        - {ref: common/led-arrow@1, id: led-port-21, at: [379.175, 18.7], skin: down, for: port-21, attrs: {port: '21'}}
-        - {ref: common/led-arrow@1, id: led-port-22, at: [387.525, 18.7], skin: up, for: port-22, attrs: {port: '22'}}
-        - {ref: common/led-arrow@1, id: led-port-23, at: [393.425, 18.7], skin: down, for: port-23, attrs: {port: '23'}}
-        - {ref: common/led-arrow@1, id: led-port-24, at: [401.775, 18.7], skin: up, for: port-24, attrs: {port: '24'}}
-        - {ref: common/led-arrow@1, id: led-port-25, at: [407.675, 18.7], skin: down, for: port-25, attrs: {port: '25'}}
-        - {ref: common/led-arrow@1, id: led-port-26, at: [416.025, 18.7], skin: up, for: port-26, attrs: {port: '26'}}
-        - {ref: common/led-arrow@1, id: led-port-27, at: [421.925, 18.7], skin: down, for: port-27, attrs: {port: '27'}}
-        - {ref: common/led-dot@1, id: led-p0-a, at: [182.9, 21.7], for: port-0, attrs: {port: '0', role: link}}
-        - {ref: common/led-dot@1, id: led-p0-b, at: [187.4, 21.7], for: port-0, attrs: {port: '0', role: activity}}
-        - {ref: common/led-dot@1, id: led-p1-a, at: [210.0, 21.7], for: port-1, attrs: {port: '1', role: link}}
-        - {ref: common/led-dot@1, id: led-p1-b, at: [214.5, 21.7], for: port-1, attrs: {port: '1', role: activity}}
-        - {ref: common/qsfp-lane-leds@1, id: leds-port-2, at: [229.8, 19.7], for: port-2, attrs: {port: '2'}}
-        - {ref: common/qsfp-lane-leds@1, id: leds-port-3, at: [229.8, 39.7], for: port-3, attrs: {port: '3'}}
+        - {ref: common/led-arrow@1, id: led-port-4, at: [255.975, 18.7], skin: up, for: port-4, attrs: {port: '4'}, group: port-leds, rel-pos: 7}
+        - {ref: common/led-arrow@1, id: led-port-5, at: [261.875, 18.7], skin: down, for: port-5, attrs: {port: '5'}, group: port-leds, rel-pos: 8}
+        - {ref: common/led-arrow@1, id: led-port-6, at: [270.225, 18.7], skin: up, for: port-6, attrs: {port: '6'}, group: port-leds, rel-pos: 9}
+        - {ref: common/led-arrow@1, id: led-port-7, at: [276.125, 18.7], skin: down, for: port-7, attrs: {port: '7'}, group: port-leds, rel-pos: 10}
+        - {ref: common/led-arrow@1, id: led-port-8, at: [284.475, 18.7], skin: up, for: port-8, attrs: {port: '8'}, group: port-leds, rel-pos: 11}
+        - {ref: common/led-arrow@1, id: led-port-9, at: [290.375, 18.7], skin: down, for: port-9, attrs: {port: '9'}, group: port-leds, rel-pos: 12}
+        - {ref: common/led-arrow@1, id: led-port-10, at: [298.725, 18.7], skin: up, for: port-10, attrs: {port: '10'}, group: port-leds, rel-pos: 13}
+        - {ref: common/led-arrow@1, id: led-port-11, at: [304.625, 18.7], skin: down, for: port-11, attrs: {port: '11'}, group: port-leds, rel-pos: 14}
+        - {ref: common/led-arrow@1, id: led-port-12, at: [312.975, 18.7], skin: up, for: port-12, attrs: {port: '12'}, group: port-leds, rel-pos: 15}
+        - {ref: common/led-arrow@1, id: led-port-13, at: [318.875, 18.7], skin: down, for: port-13, attrs: {port: '13'}, group: port-leds, rel-pos: 16}
+        - {ref: common/led-arrow@1, id: led-port-14, at: [327.225, 18.7], skin: up, for: port-14, attrs: {port: '14'}, group: port-leds, rel-pos: 17}
+        - {ref: common/led-arrow@1, id: led-port-15, at: [333.125, 18.7], skin: down, for: port-15, attrs: {port: '15'}, group: port-leds, rel-pos: 18}
+        - {ref: common/led-arrow@1, id: led-port-16, at: [344.775, 18.7], skin: up, for: port-16, attrs: {port: '16'}, group: port-leds, rel-pos: 19}
+        - {ref: common/led-arrow@1, id: led-port-17, at: [350.675, 18.7], skin: down, for: port-17, attrs: {port: '17'}, group: port-leds, rel-pos: 20}
+        - {ref: common/led-arrow@1, id: led-port-18, at: [359.025, 18.7], skin: up, for: port-18, attrs: {port: '18'}, group: port-leds, rel-pos: 21}
+        - {ref: common/led-arrow@1, id: led-port-19, at: [364.925, 18.7], skin: down, for: port-19, attrs: {port: '19'}, group: port-leds, rel-pos: 22}
+        - {ref: common/led-arrow@1, id: led-port-20, at: [373.275, 18.7], skin: up, for: port-20, attrs: {port: '20'}, group: port-leds, rel-pos: 23}
+        - {ref: common/led-arrow@1, id: led-port-21, at: [379.175, 18.7], skin: down, for: port-21, attrs: {port: '21'}, group: port-leds, rel-pos: 24}
+        - {ref: common/led-arrow@1, id: led-port-22, at: [387.525, 18.7], skin: up, for: port-22, attrs: {port: '22'}, group: port-leds, rel-pos: 25}
+        - {ref: common/led-arrow@1, id: led-port-23, at: [393.425, 18.7], skin: down, for: port-23, attrs: {port: '23'}, group: port-leds, rel-pos: 26}
+        - {ref: common/led-arrow@1, id: led-port-24, at: [401.775, 18.7], skin: up, for: port-24, attrs: {port: '24'}, group: port-leds, rel-pos: 27}
+        - {ref: common/led-arrow@1, id: led-port-25, at: [407.675, 18.7], skin: down, for: port-25, attrs: {port: '25'}, group: port-leds, rel-pos: 28}
+        - {ref: common/led-arrow@1, id: led-port-26, at: [416.025, 18.7], skin: up, for: port-26, attrs: {port: '26'}, group: port-leds, rel-pos: 29}
+        - {ref: common/led-arrow@1, id: led-port-27, at: [421.925, 18.7], skin: down, for: port-27, attrs: {port: '27'}, group: port-leds, rel-pos: 30}
+        - {ref: common/led-dot@1, id: led-p0-a, at: [182.9, 21.7], for: port-0, attrs: {port: '0', role: link}, group: port-leds, rel-pos: 1}
+        - {ref: common/led-dot@1, id: led-p0-b, at: [187.4, 21.7], for: port-0, attrs: {port: '0', role: activity}, group: port-leds, rel-pos: 2}
+        - {ref: common/led-dot@1, id: led-p1-a, at: [210.0, 21.7], for: port-1, attrs: {port: '1', role: link}, group: port-leds, rel-pos: 3}
+        - {ref: common/led-dot@1, id: led-p1-b, at: [214.5, 21.7], for: port-1, attrs: {port: '1', role: activity}, group: port-leds, rel-pos: 4}
+        - {ref: common/qsfp-lane-leds@1, id: leds-port-2, at: [229.8, 19.7], for: port-2, attrs: {port: '2'}, group: port-leds, rel-pos: 5}
+        - {ref: common/qsfp-lane-leds@1, id: leds-port-3, at: [229.8, 39.7], for: port-3, attrs: {port: '3'}, group: port-leds, rel-pos: 6}
         - {ref: common/qsfp-cage@2, id: port-2, at: [229.8, 8.8], rotate: 180, group: qsfp28, rel-pos: 2}
         - {ref: common/qsfp-cage@2, id: port-3, at: [229.8, 26.2], group: qsfp28, rel-pos: 3}
         - {ref: std/sfp-ganged@1, id: port-4, at: [253.6, 7], group: sfp28, rel-pos: 4}
@@ -467,16 +485,16 @@ views:
       h: 302
     components:
       placements:
-        - {ref: common/compliance-sticker@1, id: bottom-label, at: [110.5, 48]}
+        - {ref: common/compliance-sticker@1, id: bottom-label, at: [110.5, 48], group: furniture, rel-pos: 1}
   left:
     size:
       w: 302
       h: 43.5
     components:
       placements:
-        - {ref: common/screw-head@1, id: screw-l1, at: [40, 20]}
-        - {ref: common/screw-head@1, id: screw-l2, at: [150, 20]}
-        - {ref: common/screw-head@1, id: screw-l3, at: [260, 20]}
+        - {ref: common/screw-head@1, id: screw-l1, at: [40, 20], group: furniture, rel-pos: 2}
+        - {ref: common/screw-head@1, id: screw-l2, at: [150, 20], group: furniture, rel-pos: 3}
+        - {ref: common/screw-head@1, id: screw-l3, at: [260, 20], group: furniture, rel-pos: 4}
   right:
     size:
       w: 302
@@ -485,10 +503,10 @@ views:
       - {at: [251, 12.8], text: GND, font-size: 2.4, for: ground-1}
     components:
       placements:
-        - {ref: common/screw-head@1, id: screw-r1, at: [40, 20]}
-        - {ref: common/screw-head@1, id: screw-r2, at: [150, 20]}
-        - {ref: common/ground-lug@1, id: ground-1, at: [242, 15]}
-        - {ref: common/ground-lug@1, id: ground-2, at: [253, 15]}
+        - {ref: common/screw-head@1, id: screw-r1, at: [40, 20], group: furniture, rel-pos: 5}
+        - {ref: common/screw-head@1, id: screw-r2, at: [150, 20], group: furniture, rel-pos: 6}
+        - {ref: common/ground-lug@1, id: ground-1, at: [242, 15], group: grounding, rel-pos: 2}
+        - {ref: common/ground-lug@1, id: ground-2, at: [253, 15], group: grounding, rel-pos: 3}
 configurations:
   dc:
     kind: orderable

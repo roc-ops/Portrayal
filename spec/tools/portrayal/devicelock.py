@@ -363,7 +363,7 @@ def check(library: pathlib.Path):
         moved = was.get("shape") != now["shape"] or was.get("names") != now["names"]
         if moved and was.get("gaps") == now["gaps"] and (doc.get("gaps") or []):
             findings.append((name, "gaps-unreviewed",
-                             f"{name} changed shape and its {len(doc['gaps'])} declared "
+                             f"{name} changed shape or addressing and its {len(doc['gaps'])} declared "
                              "gap(s) did not change. Re-read them: a gap the change closed "
                              "must go, a gap the change opened must be added, and a gap "
                              "still true is fine - but it has to be the third one on "
