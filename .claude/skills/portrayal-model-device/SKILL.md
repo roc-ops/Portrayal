@@ -26,8 +26,43 @@ the single most repeated error.
 | **install guide figure** | *what* is on a face and *how it is arranged*; port order; legends | absolute geometry - these figures are schematic and their aspect is wrong |
 | **install / reference guide appendix** | per-card and per-fan-tray power, and the ambient each figure assumes | anything the datasheet answers better |
 | **mechanical drawing** (vendor or hand-built from the hardware) | size and placement of every feature | colour, legend text |
+| **vendor 3D model** (GLB/glTF, STEP, USDZ) | size and placement of every feature, at CAD truth - see below | which of two adjacent lamps belongs to which port, and anything the geometry does not name |
 | **photograph** | colour, finish, construction, confirmation of everything above; count of things | measurement, unless something of known size is in frame - but see below |
 | **standards registry** (`spec/schemas/standards.yaml`) | cage and connector sizes | anything vendor-specific |
+
+### A VENDOR 3D MODEL OUTRANKS EVERY FIGURE. LOOK FOR ONE FIRST.
+
+Vendors increasingly ship a GLB on the product page to drive a
+`<model-viewer>` on the web, and it is usually a **KeyShot or equivalent
+export of the actual CAD** - not a display proxy. The ReadyLinks GL-8xEP's
+is 728 nodes, 495 meshes, 435k triangles, one mesh per physical part, at
+millimetre scale. Jack columns on a 13.95 mm pitch, the lamp band inside an
+SFP cage, every lens and lid screw, read straight off mesh bounding boxes.
+No aspect gate needed, because there is no projection to be wrong about.
+
+    scrape the product page for  \.glb|\.gltf|\.usdz  and for model-viewer
+    working/intake/readylinks/gen/glb_inspect.py   header, node tree, counts
+    working/intake/readylinks/gen/glb_features.py  features in FACE coordinates
+
+Parsing needs no library: a GLB is a 12-byte header, a JSON chunk and a BIN
+chunk. Walk `scenes -> nodes`, compose each node's TRS (or `matrix`) down
+the tree, and transform the eight corners of each primitive's accessor
+`min`/`max`. That gives world-space boxes; pick the face plane and convert
+to view coordinates once.
+
+**The datasheet's overall dimensions and the CAD body will disagree, and
+the shape of the disagreement is the evidence.** The GL-8xEP reads
+160 x 45.32 x 165 from CAD against a stated 166 x 177 x 48.3. Those deltas
+are 3.7 / 7.3 / 6.0 percent - *per-axis and unequal*, which is what says
+protrusions and mount furniture rather than a unit error or a scale factor.
+Had they been equal, the model would be in the wrong units. Model the CAD
+body, record the stated overall, and say which is which. This is the same
+rule as the ear folds, arriving from a different direction.
+
+**What the CAD still cannot tell you** is which of four adjacent lamps
+serves which cage, what an unnamed boss on a side wall is for, or which of
+two identical jacks is the PoE-PD one. Geometry has no labels. Those stay
+`vendor-silent` gaps.
 
 ### THE FIGURES ARE ALREADY IN THE DOCUMENTS YOU HOLD. EXTRACT THEM FIRST.
 
@@ -645,6 +680,23 @@ that a deploy had already fixed.
 
 ## Gate 5 - audit against the source, twice
 
+**A DEVICE THAT STOPPED HALFWAY AND A FINISHED ONE ARE INDISTINGUISHABLE TO
+EVERY AUTOMATED CHECK.** Eight agents modelling in parallel were killed
+mid-turn by a usage limit; four had already written a `device.yaml` that
+lint passed, carried six views, said `maturity: modelled` and rendered
+plausibly. One of those four had its ganged jacks drawn dark-on-dark with no
+shells - the defect a human had caught by eye on a different device an hour
+earlier. The other three were genuinely fine. **Nothing in the file, and
+nothing any rule could compute, separated the four from each other.**
+
+So the completion signal cannot be the artifact. It has to be a statement
+about what was DONE to it: *"I put the render beside the vendor photo at
+matched scale and here is what it showed."* A model that cannot produce that
+sentence is not finished, however green it lints - and if you are reviewing
+somebody else's, ask for the sentence before you believe the file. When
+delegating, say this out loud in the brief and require the sentence back;
+"lint clean, six views" is what an interrupted agent leaves behind.
+
 ### By name
 
 **When you audit your OWN files, ask a structural question, not a string one.**
@@ -805,6 +857,25 @@ configurations: {...}
   `fill: none`, so a solid triangle or arrow comes out as an outline. Anchor the
   path at its `at` and draw the geometry relative to that, or L14 has nothing to
   test against.
+- **Three lint-geometry facts that will each cost you a cycle.** They are
+  mechanical, they are not in any rule's message, and they are why a mark
+  that renders perfectly still warns. (1) `_text_extent` assumes
+  `anchor: start` unless the mark SAYS otherwise, so a legend you centred
+  reads as extending a full width to its right and collides with whatever is
+  there - write `anchor: middle` explicitly rather than nudging `at` to
+  silence it. (2) The path extent parser reads coordinate PAIRS: `M 0 0 V 4.5`
+  contributes a stray number and misplaces the box, `M 0 0 L 0 4.5` does not.
+  (3) An L-shaped mark is measured by its bounding box, not its stroke, so a
+  bracket drawn as one path claims the whole rectangle it spans and paints
+  over the ports inside it. Split it: the bar as one mark `for: [a, b]`, each
+  drop as its own mark `for:` its port.
+- **A label serving two ports is usually a BRACKET, not two leaders.** Where
+  a faceplate names a stacked pair once - `XG1` under two cages, `2.5G2` over
+  a stacked jack - the vendor typically prints a horizontal bar with a drop
+  at each end. Four separate leaders look plausible in a render and are
+  simply not what the metal says. The vendor's own 3D viewer or a high-zoom
+  crop settles it, and this was found by a reviewer looking at a picture, not
+  by any gate.
 - **Where two sources disagree, carry both numbers.** One datasheet said 480 mm
   deep and 16 kg; its own quick start guide said 524 mm and 14.5 kg. Record the
   disagreement in provenance rather than silently choosing, and say which you
@@ -846,6 +917,26 @@ configurations: {...}
   selectors switch CONFIG, not skin, so a variant like an AC versus DC PSU needs
   a `configurations:` entry carrying `skins: {component: variant}` or nobody can
   see it.
+- **A `std/` PORT DRAWS THE OPENING. THE SHELL AROUND IT IS YOURS TO DRAW.**
+  This is the most repeated defect of the whole ReadyLinks/UfiSpace night and
+  it is invisible to every rule. `std/rj45-ganged`, `std/sfp`, `std/usb-c` and
+  friends draw the aperture and what is inside it; the bright metal
+  connector shell that surrounds a ganged block on the real faceplate is
+  panel metal, so it belongs in `panel.decor` - a fill of `#b0b5bb` with
+  `rx: 0.8`, sized from the placements it sits behind plus the flange the
+  photograph shows (about 1.1 mm in x and 1.2 mm in y on the two devices
+  measured so far). Miss it and a dark connector on a dark faceplate simply
+  DISAPPEARS: the GL-8xEP shipped its first draft that way, so did the
+  S6301-56STP an hour later, and both linted clean and rendered "fine".
+  Note the flange is not the cage: the visible strip measured 13.0 mm on a
+  cage whose body is 14.9 mm, and using the body would have swallowed the
+  port lamps that sit on black above and below it.
+- **A ganged block's pitch decides which part you may use.** Eight jacks on a
+  13.95 mm pitch cannot be `std/rj45`, whose bezel is 16 mm wide - the holes
+  overlap and L39 says so in as many messages as you have adjacent pairs.
+  `std/rj45-ganged` is 12.7 x 11.0, which is the bezel-less opening a shared
+  shell presents. When L39 reports a wall of overlaps on a port block, the
+  part is wrong, not the pitch.
 - **Prefer `std/` over `common/`.** `std/` parts are derived from a published
   standard; `common/` ones were drawn by hand and can be wrong. One
   `common/` RJ-45 puts its integrated LEDs on the contacts side, which no real
@@ -894,6 +985,15 @@ configurations: {...}
   (`point` versus `receptacle`) rather than the ones that match (`grounding`).
   The cost of getting this wrong is a fabricated conflict in provenance, which is
   worse than a missing one because it looks like diligence.
+- **`git add -A` IS A SNAPSHOT OF EVERY AGENT'S WORK, NOT YOURS.** The
+  corollary of the rule below, and it bites the one holding the commit. With
+  four agents writing devices underneath, `git add -A library` swept a device
+  nobody had verified into a commit whose message named a different one -
+  so the log now asserted, in the place people go to find out, that a file
+  had been reviewed when it had not. Stage the explicit paths you verified
+  (`git add library/devices/<vendor>/<model>`), and if you do catch one late,
+  amend the message to name what the commit actually holds rather than
+  leaving the record wrong.
 - **A COMMIT IS ATOMIC; THE WORKING TREE IS NOT.** With more than one agent in
   the repo, a test suite or a lint run is not a verdict - it is a photograph of
   whatever was half-written when it started. An agent here saw four failures
