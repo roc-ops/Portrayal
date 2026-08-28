@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: c40g
-version: 0.3.0
+version: 0.4.0
 maturity: modelled
 manufacturer: Casa Systems
 model: C40G
@@ -413,8 +413,8 @@ views:
       - {at: [20, 31.0], text: '5', font-size: 11, anchor: middle, fill: '#231f20', for: rear-5}
     components:
       bays:
-        - {id: pem-1, at: [44.8, 196.0], size: {w: 158.0, h: 68.5}, accepts: [casa/c40g-pem@1], group: power, rel-pos: 1, default: null, only-in: [bdm-3plus1, docsis-classic, docsis-non-redundant]}
-        - {id: pem-2, at: [212.8, 196.0], size: {w: 158.0, h: 68.5}, accepts: [casa/c40g-pem@1], group: power, rel-pos: 2, default: null, only-in: [bdm-3plus1, docsis-classic, docsis-non-redundant]}
+        - {id: pem-1, at: [44.8, 196.0], size: {w: 158.0, h: 68.5}, accepts: [casa/c40g-pem@1], group: power, rel-pos: 1, default: null, only-in: [dc-power, bdm-3plus1, docsis-classic, docsis-non-redundant]}
+        - {id: pem-2, at: [212.8, 196.0], size: {w: 158.0, h: 68.5}, accepts: [casa/c40g-pem@1], group: power, rel-pos: 2, default: null, only-in: [dc-power, bdm-3plus1, docsis-classic, docsis-non-redundant]}
         - {id: rear-0, at: [39.35, 164.35], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1], default: casa/io-6p12@2, group: rear-slots, rel-pos: 0}
         - {id: rear-1, at: [39.35, 133.88], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/lc-sw-bdm@1, casa/blank-faceplate@1], default: casa/lc-sw-bdm@1, group: rear-slots, rel-pos: 1}
         - {id: rear-2, at: [39.35, 103.41], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-sw-bdm-a@1, casa/blank-faceplate@1], default: casa/smm-sw-bdm-a@1, group: rear-slots, rel-pos: 2}
@@ -489,15 +489,34 @@ configurations:
       rear-5: casa/blank-faceplate@1
   ac-power:
     kind: orderable
+    source: >-
+      vendor - CommScope C40G data sheet, C40G_DS_RevA (2024), ORDERING INFORMATION.
+      Supplied by the library owner with the sheet it came from.
     description: AC power. Four 1100 W PSUs in a row across the bottom front behind the snap-on
       cover, instead of the two DC power entry modules at the bottom rear. Redundancy is
       unchanged - this axis is orthogonal to the BDM and classic schemes, and the guide draws
       the rear both ways (Figures 1-2 and 1-3 AC, 1-4 and 1-5 DC).
+    part-numbers:
+      C40G-CHASSIS-AC: {part: C40G-CHASSIS-AC}
     bays:
       psu-1: casa/c40g-psu-ac@1
       psu-2: casa/c40g-psu-ac@1
       psu-3: casa/c40g-psu-ac@1
       psu-4: casa/c40g-psu-ac@1
+  dc-power:
+    kind: orderable
+    source: >-
+      vendor - CommScope C40G data sheet, C40G_DS_RevA (2024), ORDERING INFORMATION.
+      Supplied by the library owner with the sheet it came from.
+    description: >-
+      DC power. The two power entry modules at the bottom rear, where the AC chassis carries
+      its inlet panel. THIS EXISTS TO CARRY A SKU THAT THE OTHER CONFIGURATIONS COULD NOT:
+      the ordering sheet sells the chassis by power feed, and the three DOCSIS configurations
+      happen to be drawn DC because their figures are, which made a line-card population the
+      only place a power part number could have gone. It draws no cards for the same reason
+      `ac-power` draws none - the power feed is orthogonal to what is in the slots.
+    part-numbers:
+      C40G-CHASSIS-DC: {part: C40G-CHASSIS-DC}
   bdm-3plus1:
     kind: example
     description: 'BDM "3+1". Redundancy collapses to a single protecting slot: rear 1 takes the LC-BDM-SWITCH,
@@ -565,6 +584,24 @@ configurations:
 # the two of them together. Detectable gaps are derived from the lint rules at
 # build time and must not be listed here.
 gaps:
+- what: redundant-power-and-cooling-variants
+  scope: [ac-power, dc-power, power, fans]
+  reason: vendor-silent
+  note: >-
+    THE ORDERING SHEET SELLS FOUR CHASSIS AND THIS LIBRARY MODELS TWO. C40G_DS_RevA
+    lists C40G-CHASSIS-AC and C40G-CHASSIS-DC, which are here, and C40G-CHASSIS-ACR
+    and C40G-CHASSIS-DCR, described as "with Redundant Power and Cooling", which are
+    not. The sheet gives the phrase and nothing else - no count, no which modules, no
+    dimensions - and the installation guide never uses the word for a chassis variant.
+    What the guide DOES say is that the C40G takes up to four 1100 W PSUs operating
+    concurrently and that fewer than two cannot power a C40G-20, which tells you the
+    supplies are redundant by population rather than by chassis. That makes the R
+    variants most likely a populated bundle rather than different metal - but "most
+    likely" is not a source, and inventing two configurations from a four-word
+    description would put a guess where a part number goes.
+  wanted: >-
+    a Casa or CommScope ordering guide saying what the R bundles contain - how many
+    PSUs and fan modules, and whether the chassis itself differs at all
 - what: ground-stud-count
   scope: [ground-studs-rear]
   reason: sources-disagree
