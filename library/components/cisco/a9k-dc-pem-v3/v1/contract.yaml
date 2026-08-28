@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-dc-pem-v3
-version: 1.0.0
+version: 1.1.0
 class: power
 behaviour: fills
 profile: networking
@@ -18,6 +18,28 @@ attrs:
   module-bays: 4
   eol: 'none-announced'
 provenance:
+  module-count: >-
+    CONFIRMED AGAINST THE GUIDE, independently of whatever this description was
+    read off. The Overview and Reference Guide's "Cisco ASR 9910 Router Power
+    Modules" says the chassis "supports two power tray with up to six version 3
+    AC power modules or up to eight version 3 DC power modules" - six AC over two
+    trays is THREE per tray, eight DC over two is FOUR. This part's own opening
+    count was arrived at separately and agrees.
+    THE OPENINGS ARE NOT MODELLED AS BAYS, and cannot be yet: a bay needs the
+    module that goes in it, and no version 3 power MODULE exists in this library
+    because Cisco publishes no dimensions for PWR-6KW-AC-V3 or PWR-4.4KW-DC-V3.
+    The stencil carries this tray but no module master; the guides give counts,
+    redundancy and wattage but no millimetres; a web search in August 2026 turned
+    up only reseller listings, whose one dimensional claim (5.8 x 2 x 4.4 in) is
+    the wrong shape for a module that seats in a 468.12 x 48.03 tray.
+    WHAT COULD BE DERIVED, AND DELIBERATELY IS NOT: the version 2 tray is the
+    same 468.12 wide and holds four modules of 99.62 on a 105.05 pitch, so its
+    usable band is 420.2 and its frame 47.9. Carrying that band across gives
+    140.07 per opening here, a module about 134.6 wide - close enough to the
+    version 1 module's 139.12 to be suggestive. That is arithmetic about a
+    different tray, not a measurement of this one, and a module drawn from it
+    would be a guess with a bay around it. One caliper, or one Cisco mechanical
+    drawing, settles it.
   body: >-
     NO `body:` BLOCK, AND THIS IS THE RECORD OF WHY. The renderer now admits class `power`
     to the set that draws a solid body and ejects (relief.js, commit 9e3d0cb), so this part
