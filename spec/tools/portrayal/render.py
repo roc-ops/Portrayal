@@ -666,8 +666,45 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             gap = ET.SubElement(pat, f"{{{SVG_NS}}}rect")
             gap.set("x", "5.4"); gap.set("y", "0"); gap.set("width", "1.8"); gap.set("height", "6")
             gap.set("fill", "#6a7075")
+    # DECOR USED TO LAND AS LOOSE, UNNAMED RECTS ON THE ROOT. Opening a
+    # faceplate in an XML editor showed twenty anonymous rectangles above
+    # everything that IS named, and the only way to find out whether one was a
+    # port shell, a recess plate or a hole in the sheet metal was to click it
+    # and watch what highlighted. The geometry was right and the file could not
+    # be read.
+    #
+    # They are now one group in DOCUMENT ORDER - not sorted by kind, because
+    # paint order is meaning here: several of these deliberately overlap, and
+    # hoisting every vent into its own group would change which one covers
+    # which. Each carries what it IS.
+    #
+    # `vent-field` is the one that says something the geometry cannot: it is not
+    # a grey texture, it is PERFORATION - holes going through the sheet that air
+    # passes down. Airflow direction is deliberately not recorded: a chassis is
+    # ordered front-to-back or back-to-front as a build option, so the same hole
+    # is an intake on one SKU and an exhaust on another, and only the
+    # configuration knows which.
+    deco_g = ET.SubElement(svg, f"{{{SVG_NS}}}g")
+    deco_g.set("id", "--decor")
+    deco_g.set("data-class", "decor")
+    seen_kinds = {}
     for d in parts["decor"]:
-        r = ET.SubElement(svg, f"{{{SVG_NS}}}rect")
+        r = ET.SubElement(deco_g, f"{{{SVG_NS}}}rect")
+        if d.get("pattern") == "vent" or d.get("vent"):
+            kind = "vent-field"
+        elif d.get("stroke"):
+            kind = "outline"
+        elif d.get("pattern"):
+            kind = f"{d['pattern']}-field"
+        else:
+            kind = d.get("kind") or "plate"
+        n = seen_kinds[kind] = seen_kinds.get(kind, -1) + 1
+        r.set("id", d.get("id") or f"{kind}-{n}")
+        r.set("data-kind", kind)
+        if kind == "vent-field":
+            # a hole, not a texture - stated for anything reading the drawing
+            # rather than looking at it
+            r.set("data-aperture", "air")
         r.set("x", f"{d['at'][0]:g}"); r.set("y", f"{d['at'][1]:g}")
         r.set("width", f"{d['size'][0]:g}"); r.set("height", f"{d['size'][1]:g}")
         r.set("rx", f"{d.get('rx', 0.6):g}")
@@ -811,12 +848,29 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             x, y = m["at"]
             if m.get("path"):
                 # a printed line or symbol - a leader, an arrow, an earth mark
+                #
+                # A LEADER IS A LINE AND A TRIANGLE IS A SHAPE, and until now
+                # both were stroked with `fill: none`. That makes every solid
+                # symbol in this library an OUTLINE held shut by a fat stroke:
+                # a 1.2mm arrowhead under a 0.6mm stroke leaves a pinhole in
+                # the middle that only shows when somebody zooms in, and it
+                # cannot be scaled, because the stroke does not grow with the
+                # shape - at twice the size the hole is four times as obvious.
+                # `filled: true` says this path encloses ink rather than
+                # tracing a route.
                 t = ET.Element(f"{{{SVG_NS}}}path")
                 t.set("d", m["path"])
-                t.set("fill", "none")
-                t.set("stroke", m.get("fill") or silk_default)
-                t.set("stroke-width", f"{m.get('stroke-width', 0.6):g}")
-                t.set("stroke-linecap", "round"); t.set("stroke-linejoin", "round")
+                if m.get("filled"):
+                    t.set("fill", m.get("fill") or silk_default)
+                    t.set("stroke", "none")
+                    if m.get("fill-rule"):
+                        t.set("fill-rule", m["fill-rule"])
+                else:
+                    t.set("fill", "none")
+                    t.set("stroke", m.get("fill") or silk_default)
+                    t.set("stroke-width", f"{m.get('stroke-width', 0.6):g}")
+                    t.set("stroke-linecap", "round")
+                t.set("stroke-linejoin", "round")
                 if x or y:
                     t.set("transform", f"translate({x:g} {y:g})")
             else:

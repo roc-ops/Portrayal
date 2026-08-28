@@ -119,6 +119,45 @@ def test_a_block_lands_where_its_marker_is_and_not_at_the_end():
     assert ids == ["first", "port-0", "port-1", "last"]
 
 
+def test_a_named_mark_is_centred_on_its_anchor():
+    """The reason to have named marks at all, beyond not writing 468 triangles.
+
+    The hand-drawn arrow pairs in this library sit 0.3mm BELOW their `at`, so
+    aligning one with anything means knowing that and compensating - which is
+    how a legend row came to be centred on nothing at all. A named mark's ink
+    is centred on its anchor, so `at` means what a person assumes it means.
+    """
+    p, filled = E.mark_path("arrow-pair", 1.2, 1.4)
+    assert filled, "a solid symbol must be filled, not stroked"
+    ys = [float(t) for t in p.replace("M", " ").replace("L", " ")
+          .replace("Z", " ").split()][1::2]
+    assert abs((min(ys) + max(ys)) / 2) < 1e-9, "ink must straddle y=0"
+    xs = [float(t) for t in p.replace("M", " ").replace("L", " ")
+          .replace("Z", " ").split()][0::2]
+    assert abs((min(xs) + max(xs)) / 2) < 1e-9, "ink must straddle x=0"
+    up, _ = E.mark_path("arrow-up", 2.0)
+    assert up.count("L") == 2 and up.endswith("Z")
+
+
+def test_an_unknown_mark_is_refused_rather_than_drawn_as_nothing():
+    """A typo must not silently produce an empty legend - which is exactly what
+    a missing font glyph does, and the reason these are paths and not text."""
+    with pytest.raises(SystemExit) as e:
+        E.mark_path("arrow-sideways")
+    assert "unknown silkscreen mark" in str(e.value)
+
+
+def test_marks_expand_on_views_that_have_no_blocks():
+    """Marks are not a property of a port block - a rear face with two legends
+    and no repeating anything still wants them."""
+    layout = {"views": {"rear": {"silkscreen": [
+        {"at": [10.0, 5.0], "mark": "arrow-up", "size": 1.6, "for": "fan-0"}]}}}
+    out = E.expand(layout, LIB, STD)
+    m = out["views"]["rear"]["silkscreen"][0]
+    assert "mark" not in m and m["path"].startswith("M ")
+    assert m["for"] == "fan-0"
+
+
 def test_the_registry_states_pitch_two_ways_and_both_are_read():
     """`qsfp-ganged` carries an explicit pitch beside a narrower opening because
     its cages share a wall. `sfp-ganged` carries none, because for that family

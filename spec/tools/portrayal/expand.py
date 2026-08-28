@@ -321,6 +321,122 @@ def block_items(block, library, standards):
     return placements + lamps, cutouts, silks
 
 
+# --------------------------------------------------------------- marks ---
+#
+# WHY NOT JUST WRITE `▲`? It is one character and this is a dozen numbers, so
+# the question deserves a real answer rather than a rule.
+#
+# A text glyph is resolved by whatever font the RENDERER picks. This library's
+# drawings are read by browsers, by cairosvg, by Inkscape and by a 3D viewer,
+# and each resolves fonts differently - U+25B2 came out as an empty box in the
+# first tool that met it, and an empty box is a defect nobody notices until a
+# reviewer zooms in. Worse for this project: a glyph's SIZE AND POSITION inside
+# its em box are the typeface's business, so the same mark lands differently in
+# two renderers. Every finding in this review has been a fraction of a
+# millimetre; a symbol whose position is a font's opinion cannot be aligned.
+# And lint estimates text width as characters x 0.62em, which is meaningless
+# for a triangle, so a glyph is invisible to the rule that checks for overlap.
+#
+# But the pain is real, and it has a cost the pain hides: the library carries
+# 593 hand-written path marks, 116 of them distinct, 468 of which are plain
+# triangles - the same two symbols drawn hundreds of times at six different
+# sizes. Hand-authoring is how a letter E became three strokes with no spine.
+#
+# So: keep paths, stop writing them. A named mark expands here, in the authored
+# file, and the generated device.yaml still carries the explicit path every
+# consumer already reads. Nothing downstream changes.
+#
+# The named marks are CENTRED ON THEIR `at`, which the hand-written ones were
+# not - the existing arrow pairs sit 0.3mm below their anchor, which is exactly
+# how a legend row came to be centred on nothing.
+
+def _tri(w, h, up, cx=0.0):
+    y0, y1 = -h / 2, h / 2
+    if up:
+        return (f"M {cx - w / 2:g} {y1:g} L {cx + w / 2:g} {y1:g} "
+                f"L {cx:g} {y0:g} Z")
+    return (f"M {cx - w / 2:g} {y0:g} L {cx + w / 2:g} {y0:g} "
+            f"L {cx:g} {y1:g} Z")
+
+
+def _ground(w):
+    """IEC 60417-5019 earth: three stacked bars, each shorter, on a stem."""
+    s, out = w / 2, [f"M 0 {-w * 0.55:g} L 0 {-w * 0.10:g}"]
+    for i, (frac, y) in enumerate(((1.00, -0.10), (0.62, 0.12), (0.28, 0.34))):
+        out.append(f"M {-s * frac:g} {w * y:g} L {s * frac:g} {w * y:g}")
+    return " ".join(out)
+
+
+def _usb(w):
+    """USB trident: the shaft, the arrowhead, and the two branch terminals.
+
+    Drawn rather than described because a reviewer found this symbol
+    hand-authored several different ways across one vendor's devices, one of
+    them clearly an attempt at a shape whose author had not worked out what it
+    was meant to be.
+    """
+    s = w / 2
+    return (f"M 0 {s:g} L 0 {-s * 0.55:g} "                     # shaft
+            f"M {-s * 0.28:g} {-s * 0.55:g} L {s * 0.28:g} {-s * 0.55:g} "
+            f"L 0 {-s:g} Z "                                    # arrowhead
+            f"M 0 {s * 0.10:g} L {-s * 0.55:g} {-s * 0.30:g} "  # left branch
+            f"M 0 {-s * 0.10:g} L {s * 0.55:g} {s * 0.20:g}")   # right branch
+
+
+def _bolt(w):
+    """IEC 60417-5036 hazardous voltage: the flash, filled."""
+    s = w / 2
+    return (f"M {s * 0.35:g} {-s:g} L {-s * 0.55:g} {s * 0.15:g} "
+            f"L {-s * 0.05:g} {s * 0.15:g} L {-s * 0.35:g} {s:g} "
+            f"L {s * 0.55:g} {-s * 0.15:g} L {s * 0.05:g} {-s * 0.15:g} Z")
+
+
+# name -> (path builder, is the ink enclosed by the path or traced along it)
+MARKS = {
+    "arrow-up":   (lambda w, g: _tri(w, w * 0.889, True), True),
+    "arrow-down": (lambda w, g: _tri(w, w * 0.889, False), True),
+    "arrow-pair": (lambda w, g: "%s %s" % (
+        _tri(w, w * 0.889, True, -(w + g) / 2),
+        _tri(w, w * 0.889, False, (w + g) / 2)), True),
+    "ground":     (lambda w, g: _ground(w), False),
+    "usb":        (lambda w, g: _usb(w), False),
+    "bolt":       (lambda w, g: _bolt(w), True),
+}
+
+
+def mark_path(name, size=1.8, gap=None):
+    """Canonical geometry for a named silkscreen mark, centred on its anchor.
+
+    Returns (path, filled). `size` is the mark's WIDTH in mm; an arrow's height
+    follows the 0.889 ratio the library's most common hand-drawn ones use.
+    """
+    if name not in MARKS:
+        raise SystemExit(f"unknown silkscreen mark {name!r} - known: "
+                         + ", ".join(sorted(MARKS)))
+    w = float(size)
+    g = w * 0.45 if gap is None else float(gap)
+    build, filled = MARKS[name]
+    return build(w, g), filled
+
+
+def _expand_marks(seq):
+    out = []
+    for m in seq or []:
+        if isinstance(m, dict) and m.get("mark"):
+            m = dict(m)
+            path, filled = mark_path(m.pop("mark"), m.pop("size", 1.8),
+                                     m.pop("gap", None))
+            m["path"] = path
+            # a solid symbol says so, so the renderer fills it instead of
+            # tracing its outline and leaving a pinhole in the middle
+            if filled:
+                m["filled"] = True
+            elif "stroke-width" not in m:
+                m["stroke-width"] = 0.28
+        out.append(m)
+    return out
+
+
 def _splice(seq, made):
     """Replace each `{block: <name>}` marker with that block's items, in place.
 
@@ -346,6 +462,9 @@ def expand(layout, library, standards):
     doc = copy.deepcopy(layout)
     doc.pop("layout-format", None)
     for view in (doc.get("views") or {}).values():
+        # named marks expand on every view, whether or not it has blocks
+        if view.get("silkscreen"):
+            view["silkscreen"] = _expand_marks(view["silkscreen"])
         comps = view.get("components") or {}
         blocks = comps.pop("blocks", None)
         if not blocks:
