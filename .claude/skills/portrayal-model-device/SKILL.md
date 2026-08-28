@@ -867,6 +867,19 @@ configurations: {...}
   bracket drawn as one path claims the whole rectangle it spans and paints
   over the ports inside it. Split it: the bar as one mark `for: [a, b]`, each
   drop as its own mark `for:` its port.
+- **A WARNING ABOUT A LEGEND CAN BE A WARNING ABOUT AN ABSTRACTION. FOLLOW IT
+  TO THE FIGURE.** A device with FIXED supplies had its input connectors
+  modelled as bays, so that a configuration could swap one input type for the
+  other. L21 then reported that the supply's own legend sat inside its bay and
+  would be painted over - an ordinary-looking text-position complaint. Going
+  back to the guide to move the text is what found the real error: the two
+  input variants print that legend at DIFFERENT HEIGHTS and open their windows
+  at different heights. They are two different front panels, not one panel
+  with two occupants, and a bay was claiming both that the supply pulls out
+  and that everything around it is identical. Draw the panel you have sources
+  for, file the other as a gap, and keep the component you built for it.
+  **When a rule complains about where a mark sits, check what the mark is
+  attached to before you move the mark.**
 - **One label serving two ports is usually a BRACKET, not two leaders.**
   Where a faceplate names a pair once, the printing is typically a horizontal
   bar with a drop at each end, not a separate leader per port. Both render
