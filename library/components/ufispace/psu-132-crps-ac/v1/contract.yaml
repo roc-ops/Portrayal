@@ -1,0 +1,116 @@
+format: 1
+kind: module
+name: psu-132-crps-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: UfiSpace PSU-132-AEAR-NN 1300W AC PSU (S9601-104BC) - CRPS form factor,
+  black face with a square intake-fan frame filling the left half under a horizontal
+  pull bar, a portrait C14 appliance inlet, a red release latch on the right edge and
+  a status lamp above it; front-to-back (exhaust) airflow
+size: {w: 73.5, h: 40.0}
+attrs: {power-output-w: 1300, input: ac, model: PSU-132-AEAR-NN, airflow: exhaust}
+provenance:
+  power: >-
+    datasheet - the S9601-104BC datasheet's Available to Order block states the rating
+    in the part number's own row: 'PSU-132-AEAR-NN, 1300W AC, exhaust air flow'. A
+    supply has a rating rather than a draw measured against an ambient, so no
+    temperature is recorded with it. The HIG's Installation Environment Requirements
+    section asks for 'a reserve of at least 1300 watts on each power circuit', which is
+    this same nameplate seen from the provisioning side and not a second figure.
+  size: >-
+    HIG - Component Physical Information table, 'PSU (W x D x H) 2.89 x 7.28 x 1.57 in
+    (73.5 x 185 x 40mm)', so the FACE is 73.5 x 40. Corroborated on the S9601-104BC
+    HIG Figure 4 rear elevation, which passes the aspect gate at 3.6164 px/mm across
+    and 3.6830 down and draws this face 73.2 x 40.1 at the width scale - 0.4 percent
+    from the table on both axes. THIS IS NOT ufispace/psu-132-ac@1: that part is the
+    same 1300 W rating in a 50.5 x 40 face (S9300-32D family, 321 mm long). Same
+    rating, different mechanics, so it is a different component and not a skin.
+  layout: >-
+    drawing-measured from HIG Figure 4's rear elevation at 3.6159 px/mm, positions
+    relative to the face's own top-left: the light fan frame bounds x 0.8-41.0 and
+    y 1.1-39.8, the red release latch x 62.5-67.8 y 12.7-31.5, and the status lamp
+    reads a 3.0 mm disc centred at (68.0, 8.8). AT 3.6 px/mm A MILLIMETRE IS FOUR
+    PIXELS, so these carry about a third of a millimetre of uncertainty and the
+    figures are written to the tenth only because that is what the division gives.
+    HIG Figure 5 is a proper mechanical drawing of this supply but in a PORTRAIT view
+    (fan at the top) at 1.27 px/mm, which is coarser still; it was used for
+    CONSTRUCTION - which features exist and in what order - and not for geometry.
+  inlet: >-
+    standard (IEC 60320-1 via std/c14-inlet, rotated 270 so the earth pin lies on the
+    LEFT). HIG Figure 5 letters the socket 'SOCKET C14' beside it, and the HIG's AC
+    section names the cord to match - 'plug the AC power cable (250VAC 15A, IEC60320
+    C13) into the AC inlet connector' - and a C13 cord mates a C14 inlet, so the
+    standard part is the right one. WHICH WAY UP comes from Figure 5's portrait view,
+    where the earth pin is at the top of the socket; rotating that view anticlockwise
+    to the landscape orientation the chassis shows puts the earth pin on the left.
+  latch-colour: >-
+    drawing - HIG Figure 5 annotates the latch 'Color: RED (PANTONE 199C)'. The
+    rear elevation and the vendor rear photograph both render it a light pink-red,
+    which is that Pantone under the render's lighting rather than a second colour.
+  led-states: >-
+    HIG section 10, PSU FRU LED table (page 23), transcribed in full. The table prints
+    Blinking Green TWICE with different causes - standby with only +12VSB on, and
+    firmware updating in boot-loader mode - and those are one appearance at this
+    fidelity, so they share one state and the description names both.
+elements:
+  handle: {at: [1.2, 16.4], size: [40.4, 6.6], class: handle}
+  latch: {at: [62.5, 12.7], size: [5.3, 18.8], class: latch}
+  status-led:
+    at: [66.5, 7.3]
+    size: [3.0, 3.0]
+    class: led
+    states: ['off',
+             {name: ok, color: '#22c55e'},
+             {name: standby, color: '#22c55e', behavior: blinking},
+             {name: critical, color: '#eab308'},
+             {name: warning, color: '#eab308', behavior: blinking}]
+    description: >-
+      HIG PSU FRU LED table - Off (no input power to all power supplies), Green
+      (output ON and OK), Blinking Green (standby: input power present with only
+      +12VSB on, or the supply in smart standby; the boot-loader firmware-update row
+      is visually identical and shares this state), Amber (a critical event causing
+      shutdown - failure, overcurrent, short circuit, overvoltage, fan failure,
+      overtemperature - and separately an input cord unplugged or input lost with a
+      second supply still fed), Blinking Amber (warning events where the supply keeps
+      operating - high temp, high power, high current, slow fan)
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [37.7, 10.0], rotate: 270}
+relief:
+  features:
+    - node: rotor-grille
+      vent: 25
+      confidence: estimated
+      source: >-
+        ufispace/psu-132-crps-ac@1 - neither the HIG's Component Physical Information
+        table nor Figure 5 dimensions anything off the face, so the grille recess is
+        an estimate. Same treatment as ufispace/psu-242-ac@1.
+    - node: rotor-bulge
+      dome: 3.0
+      confidence: estimated
+      source: >-
+        ufispace/psu-132-crps-ac@1 - unsourced; the impeller stands slightly behind
+        the frame in HIG Figure 5's isometric and no document dimensions it.
+    - node: handle
+      out: 3.5
+      confidence: estimated
+      source: >-
+        ufispace/psu-132-crps-ac@1 - the pull bar stands off the face in HIG Figure
+        5's isometric. The HIG's Space Clearance sentence says 'the handle for the
+        power supplies will extend outwards by 1.19 inches (3cm)', but THAT IS THE
+        BAIL HANDLE ON THE END OF THE MODULE, not this bar, so it is not used here
+        and this magnitude stays an estimate.
+    - node: latch
+      out: 1.2
+      confidence: estimated
+      source: >-
+        ufispace/psu-132-crps-ac@1 - the latch is pressed to release (HIG section 7)
+        so it must stand proud; nothing dimensions it.
+    - node: status-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/psu-132-crps-ac@1 - unsourced. Same 0.4 estimate as the other
+        UfiSpace FRUs.
+skins: [default]
