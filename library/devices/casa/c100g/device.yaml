@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: c100g
-version: 0.3.0
+version: 0.4.0
 maturity: modelled
 manufacturer: Casa Systems
 model: C100G
@@ -384,11 +384,17 @@ configurations:
   base:
     kind: base
     source: >-
-      derived - built from the group roles rather than from a vendor bundle: every bay
-      whose group is `service` or `management` keeps its seat, every `traffic` bay takes
-      a blank. This vendor publishes no base configuration for this chassis, so the
-      library defines one. Where a vendor DOES publish one, follow it instead and say so
-      here.
+      derived, and the SKU is not: the POPULATION here is built from the group roles
+      rather than from a vendor bundle - every bay whose group is `service` or
+      `management` keeps its seat, every `traffic` bay takes a blank, because this vendor
+      publishes no base configuration for this chassis. The PART NUMBER is the vendor's,
+      from the CommScope C100G data sheet C100G_DS_RevA (2024) ORDERING INFORMATION,
+      supplied by the library owner with the sheet it came from. It sits on the base
+      rather than on a variant because there is only one: the sheet sells exactly one
+      C100G chassis and it is DC. Where a vendor DOES publish a base configuration,
+      follow it instead and say so here.
+    part-numbers:
+      C100G-CHASSIS: {part: C100G-CHASSIS}
     default: true
     description: >-
       Chassis only - what you spec before deciding what goes in it. The 28 slot bays are

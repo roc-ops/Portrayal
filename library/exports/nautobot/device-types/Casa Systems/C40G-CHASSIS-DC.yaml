@@ -1,9 +1,10 @@
 ---
 manufacturer: Casa Systems
-model: C40G base
-slug: casa-systems-c40g-base
+model: C40G-CHASSIS-DC
+slug: casa-systems-c40g-chassis-dc
 u_height: 6.0
 is_full_depth: true
+part_number: C40G-CHASSIS-DC
 description: Casa C40G CMTS/CCAP - 6RU, 6 paired front/rear slots
 front_image: true
 rear_image: true
@@ -62,14 +63,22 @@ module-bays:
   - name: Rear 5
     position: '5'
     description: 'Accepts: rfd, rfu-16x8, ups-32x4, io-6p12, io-6p12-io2, blank-faceplate'
+  - name: pem-1
+    position: '1'
+    description: 'Accepts: c40g-pem'
+  - name: pem-2
+    position: '2'
+    description: 'Accepts: c40g-pem'
 comments: 'Casa C40G CMTS/CCAP - 6RU, 6 paired front/rear slots. Takes the same line cards as the C100G
   but HORIZONTALLY, so the card is one model placed at rotate 90.
 
 
-  Configuration `base`: Chassis only - what you spec before deciding what goes in it. The 12 slot bays
-  are EMPTY; cooling, power are populated. Enough to power on and reach the box, which is the question
-  most people ask first and the one `default` used to answer with whatever the drawing happened to be
-  populated with.
+  Configuration `dc-power`: DC power. The two power entry modules at the bottom rear, where the AC chassis
+  carries its inlet panel. THIS EXISTS TO CARRY A SKU THAT THE OTHER CONFIGURATIONS COULD NOT: the ordering
+  sheet sells the chassis by power feed, and the three DOCSIS configurations happen to be drawn DC because
+  their figures are, which made a line-card population the only place a power part number could have gone.
+  It draws no cards for the same reason `ac-power` draws none - the power feed is orthogonal to what is
+  in the slots.
 
 
   Facts carried in the model that this schema has no field for:
