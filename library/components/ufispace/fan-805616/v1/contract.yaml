@@ -1,0 +1,105 @@
+format: 1
+kind: module
+name: fan-805616
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: UfiSpace FAN-805616 hot-swap fan module (S9311-64D) - a hex rotor
+  grille with a long vertical tube handle, a release tab standing on the left
+  edge, and an airflow letter tag over a status lamp at the top left. Default
+  skin is the red-handled FAN-805616-HCE (exhaust air, front-to-back systems);
+  the blue skin is the FAN-805616-CCD intake unit
+size: {w: 83.7, h: 80.0}
+attrs: {power-absent: not-published, model: FAN-805616-HCE, airflow: exhaust}
+provenance:
+  power: >-
+    NOT PUBLISHED. The S9311-64D datasheet names FAN-805616-CCD and FAN-805616-HCE
+    only as ordering lines ('FAN-805616-CCD intake air / FAN-805616-HCE exhaust
+    air'); the HIG weighs the module (1.41 lb / 638 g) and dimensions it and tables
+    its LED without ever stating a wattage. The only watts anywhere near it are the
+    system figures (387.5 W typical, 2097/2096 W maximum) and the PSU ratings
+    (2400 W), none of which is this fan's draw. A regex sweep of both S9311-64D
+    documents for any number followed by W/Watt/watts returns exactly six values -
+    387.5, 1000, 1200, 2096, 2097 and 2400 - and every one of them is a system or
+    supply figure. Same situation, same vendor, as ufispace/fan-405637 and
+    ufispace/fan-402825.
+  size: >-
+    drawing-measured FACE, and the HIG's table measures a DIFFERENT OBJECT - see the
+    device's fan-face-width gap. The HIG Component Physical Information table gives
+    the fan module 81 x 176.53 x 81.5 mm (W x D x H). The face drawn here is
+    83.7 x 80.0, measured off HIG Figure 9 (fig-0018), whose rear elevation is
+    1064 x 215 px against the 436 x 87.7 mm chassis - aspect within 0.5%, so
+    2.449 px/mm across and 2.4515 px/mm down. Four identical faces abut with no
+    chassis web between them from x 17 to x 837 px, and every repeated feature (the
+    airflow tag, the status lamp, the handle and the release tab) sits on a 205.33 px
+    pitch, which is 83.84 mm - a ruler already in the picture, agreeing with the
+    face width to a fifth of a millimetre. Height 196 px = 80.0 mm against the
+    table's 81.5.
+  layout: >-
+    drawing - HIG Figure 9 rear elevation at 2.449 px/mm, positions relative to the
+    face's own top-left: red release tab standing proud on the left edge
+    (0.8, 30.2), red airflow tag (7.8, 4.1), status lamp below it (12.3, 18.4),
+    long vertical tube handle (27.0, 21.6). The whole face right of the handle is
+    hex grille. HIG Figure 15/16 (installing fan modules) show the same tab and
+    handle from three-quarter view.
+  airflow-tag: >-
+    drawing - the red (front-to-back / exhaust) unit wears a red tag printed 'E',
+    read at 8x zoom off Figure 9; the blue (back-to-front / intake) unit is stated
+    by the HIG Fan Overview to be 'the same' outline 'identified with a blue latch',
+    so the blue skin mirrors the red one with an 'I' tag. The letter on the blue
+    unit is NOT shown in any held figure - it is taken from the same vendor's
+    FAN-405637, where the intake tag prints 'I'.
+  led-states: >-
+    HIG section 10, Fan FRU LED table (page 25), transcribed in full. The fault row
+    is SOLID yellow here; note this table's wording is 'Solid Yellow', not the
+    amber the front-panel table uses.
+elements:
+  status-led:
+    at: [12.3, 18.4]
+    size: [2.9, 2.9]
+    class: led
+    states: ['off',
+             {name: ok, color: '#22c55e'},
+             {name: fault, color: '#eab308'}]
+    description: >-
+      HIG Fan FRU LED table - Off (no input power), Solid Green (fan is functioning
+      normal), Solid Yellow (fan is abnormal, service is required)
+  handle: {at: [27.0, 21.6], size: [5.7, 37.1], class: handle}
+  release-tab: {at: [0.8, 30.2], size: [9.0, 20.4], class: latch}
+  airflow-label: {at: [7.8, 4.1], size: [8.2, 6.1], class: label}
+relief:
+  features:
+    - node: rotor-grille
+      vent: 25
+      confidence: estimated
+      source: >-
+        ufispace/fan-805616@1 - the HIG dimensions the module's box and nothing off
+        its face. Same treatment as ufispace/fan-405637.
+    - node: handle
+      uhandle: 22
+      confidence: estimated
+      source: >-
+        ufispace/fan-805616@1 - the S9311-64D HIG has no Space Clearance sentence
+        projecting the handle, unlike the S9110-32X's (which states 25 mm for
+        FAN-405637). 22 mm is an estimate from Figures 15 and 16's three-quarter
+        views and is NOT a vendor figure.
+    - node: release-tab
+      out: 1.2
+      confidence: estimated
+      source: >-
+        ufispace/fan-805616@1 - the tab stands off the face in HIG Figure 15; no
+        document dimensions it.
+    - node: airflow-label
+      out: 0.3
+      confidence: estimated
+      source: >-
+        ufispace/fan-805616@1 - a stick-on tag; thickness unsourced.
+    - node: status-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/fan-805616@1 - unsourced. The HIG's Fan FRU LED table gives the
+        lamp's states and nothing about its lens. Same 0.4 estimate as the other
+        UfiSpace FRUs.
+skins: [default, blue]
