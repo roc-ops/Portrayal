@@ -1,0 +1,93 @@
+format: 1
+kind: module
+name: fan-803816
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: UfiSpace FAN-803816-HI hot-swap fan module (S9600-30DX) - hex rotor
+  grille behind a curved red tube handle, a red release tab standing on the left
+  edge, and a red airflow letter tag over a status lamp at the top left; exhaust
+  airflow
+size: {w: 82.5, h: 81.5}
+attrs: {power-absent: not-published, model: FAN-803816-HI, airflow: exhaust}
+provenance:
+  power: >-
+    NOT PUBLISHED. The S9600-30DX datasheet names FAN-803816-HI only as an ordering line
+    ('Fan Types FAN-803816-HI, exhaust air flow'); the HIG's Component Physical
+    Information table dimensions the module and weighs it and gives no wattage. A regex
+    sweep of both S9600-30DX documents for any number followed by W/Watt/watts returns
+    exactly seven values - 464, 1000, 1276, 1300, 1600, 1600 and 2000 - and every one is
+    a system figure, a supply rating or a 110 V derating note. None is a per-FRU draw.
+    Same situation, same vendor, as ufispace/fan-805616, fan-405637 and fan-402825.
+  size: >-
+    drawing-measured FACE against a table that measures the BODY, the same split this
+    vendor's other fans show. The HIG Component Physical Information table gives the fan
+    81 x 113 x 81.5 mm (W x D x H). The face drawn here is 82.5 x 81.5: HIG Figure 7's
+    rear elevation (fig-0012), scaled 1358 px = 436 mm across the chassis, puts the
+    airflow tag on an 84.44 mm pitch and the status lamp on an 84.33 mm pitch across the
+    four modules - two independent repeated features agreeing to a tenth of a
+    millimetre - so the repeating unit is 84.4 mm and the face is that less a ~1.9 mm
+    chassis web. Height is the table's 81.5, which the elevation corroborates to within
+    a millimetre. See the device's fan-face-width gap.
+  layout: >-
+    drawing - HIG Figure 7 at 3.115 px/mm, positions relative to the face's own
+    top-left: red release tab standing on the left edge (0.0, 30.7), red airflow tag
+    (10.4, 3.1), status lamp below it (16.2, 18.5), curved red tube handle spanning
+    (23.9, 21.4) to (37.4, 62.2). The handle is drawn as a U-tube in the elevation and
+    as a curved bail in the same figure's two isometric views; it is drawn here as a
+    rounded bar, which is the library's convention for this vendor's fan handles and is
+    NOT the shape the figure shows.
+  airflow-tag: >-
+    drawing - the exhaust unit wears a red tag printed 'E', read at 6x off Figure 7.
+    FAN-803816-HI is the only fan the datasheet lists for this platform, so no intake
+    counterpart is modelled and there is no blue skin; if UfiSpace ships one, it is not
+    in either held document.
+  led-states: >-
+    NOT TABLED FOR THIS PLATFORM. The S9600-30DX HIG has no Fan FRU LED table - unlike
+    the S9500-30XS and S9510-28DC guides, which both carry one. The lamp is drawn
+    because Figure 7 draws it, and it keeps a plain off/on vocabulary rather than
+    borrowing another platform's table; see the device's fru-led-semantics gap.
+elements:
+  status-led:
+    at: [16.2, 18.5]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off', 'on']
+    description: >-
+      Present in HIG Figure 7 and given no table anywhere in this guide, so the states
+      are the component default rather than a vocabulary borrowed from another platform
+  handle: {at: [23.9, 21.4], size: [13.5, 40.8], class: handle}
+  release-tab: {at: [0.0, 30.7], size: [8.5, 22.8], class: latch}
+  airflow-label: {at: [10.4, 3.1], size: [8.3, 7.4], class: label}
+relief:
+  features:
+    - node: rotor-grille
+      vent: 25
+      confidence: estimated
+      source: >-
+        ufispace/fan-803816@1 - the HIG dimensions the module's box and nothing off its
+        face. Same treatment as the vendor's other fan modules.
+    - node: handle
+      uhandle: 29
+      confidence: datasheet
+      source: >-
+        UfiSpace S9600-30DX HIG, Space Clearance: 'The handle for the fan units will
+        extend outwards by 1.15 inch (2.9cm)'. 29 mm, published by the vendor for this
+        module.
+    - node: release-tab
+      out: 1.2
+      confidence: estimated
+      source: >-
+        ufispace/fan-803816@1 - the tab stands off the face in Figure 7's isometrics; no
+        document dimensions it.
+    - node: airflow-label
+      out: 0.3
+      confidence: estimated
+      source: ufispace/fan-803816@1 - a stick-on tag; thickness unsourced.
+    - node: status-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/fan-803816@1 - unsourced. Same 0.4 estimate as the other UfiSpace FRUs.
+skins: [default]
