@@ -327,7 +327,21 @@ def build(dev, cfg_name, cfg, profile, dist=None, frus=None, label=None):
     # recover from; it is the primary key on both sides.
     pns = cfg.get("part-numbers") or {}
     chassis_pns = [k for k in pns if k not in (frus or ())]
-    sku = sorted(chassis_pns)[0] if chassis_pns else dev["model"].split(" (")[0]
+    # PREFER THE CORDLESS SKU, which is the rule render.py:519 already uses to
+    # stamp `data-sku` on the faceplate. The two disagreed: render named the
+    # variant that ships without a cord - the chassis itself - while this took
+    # whichever sorted first, so one drawing and its device type could carry
+    # different part numbers for the same thing.
+    #
+    # Where every SKU in a configuration carries a cord, as on the AS5912-54X
+    # whose AC variants are all regional, there is no cordless one to prefer and
+    # the first sorted stands. That names the type after a region, which is
+    # arbitrary but ORDERABLE - and orderable was the whole complaint.
+    cordless = [m for m in chassis_pns
+                if ((pns.get(m) or {}) if isinstance(pns.get(m), dict) else {})
+                .get("power-cord") in (None, "", "none")]
+    sku = (sorted(cordless) or sorted(chassis_pns) or
+           [dev["model"].split(" (")[0]])[0]
     part = pns.get(sku)
     if isinstance(part, dict):
         part = part.get("part")
