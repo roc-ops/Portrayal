@@ -1933,9 +1933,16 @@ def lint_device_cutouts(path, view_name, view, lib_roots):
     # 5. a port on a panel that has been punched should have its own hole.
     #    WARNING, not an error: it reports incomplete work rather than wrong work,
     #    and the ASR 9001 has fifteen of them because it declares two cutouts for
-    #    clock connectors and none for its ports. Restricted to `port` because no
+    #    clock connectors and none for its ports.
+    #
+    #    RESTRICTED TO `port`, AND THE REASON HERE USED TO BE FALSE. It read "no
     #    lamp in the library has a cutout and no button does either - that is a
-    #    modelling convention held consistently, not 163 omissions.
+    #    modelling convention held consistently". There are 46 of them across
+    #    nine devices; the MX204 alone punches twenty. What is actually true is
+    #    that THE LIBRARY DISAGREES WITH ITSELF - Juniper cuts its lamps, Cisco
+    #    and Edgecore do not - so lamps stay out of this rule until that is
+    #    settled once for everything, rather than by whichever devices happen to
+    #    get modelled next. A port is not in doubt: something plugs through it.
     for q in placements:
         cp = resolve_component(q.get("ref", ""), lib_roots)
         if not cp or (load_yaml(cp) or {}).get("class") != "port":

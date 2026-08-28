@@ -100,8 +100,15 @@ def test_blocked_says_how_to_fix_it_in_words():
 def test_a_view_needs_no_panel_block_to_count():
     """`panel` carries decor and cutouts, both optional, and the faceplate is
     drawn from the size regardless. Requiring it put the best-modelled device in
-    the portfolio at level 0 while it rendered perfectly."""
+    the portfolio at level 0 while it rendered perfectly.
+
+    THE FIXTURE IS STRIPPED, NOT FOUND. This asserted that as7946-30xb HAD no
+    panel block anywhere, which was true until its cutouts were backfilled -
+    and then a device gaining detail read as this check breaking. The claim is
+    about a view with no panel, so the test makes one."""
     dev = load("edgecore/as7946-30xb")
+    for v in dev["views"].values():
+        v.pop("panel", None)
     assert not any("panel" in v for v in dev["views"].values())
     assert assess(dev)["level"] == 4
 

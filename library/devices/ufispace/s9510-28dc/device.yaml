@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9510-28dc
-version: 0.10.0
+version: 0.11.0
 manufacturer: UfiSpace
 model: S9510-28DC
 description: UfiSpace S9510-28DC Disaggregated Cell Site Gateway Router - 1RU, 2x QSFP-DD 400G
@@ -272,6 +272,44 @@ views:
         - {at: [205.7, 36.38], size: [17.1, 2.32], fill: '#2f66b5', rx: 0.4}
         - {at: [231.0, 6.48], size: [17.1, 2.32], fill: '#2e8b57', rx: 0.4}
         - {at: [231.0, 36.38], size: [17.1, 2.32], fill: '#2e8b57', rx: 0.4}
+      cutouts:
+        - {id: gnss-ant, at: [120.775, 2.975], size: [6.35, 6.35], shape: circle}
+        - {id: clk-10mhz, at: [134.585, 3.485], size: [4.83, 4.83], shape: circle}
+        - {id: clk-1pps, at: [144.585, 3.485], size: [4.83, 4.83], shape: circle}
+        - {id: ground-mark, at: [431.6, 18.75], size: [6, 6], shape: rect}
+        - {id: bits, at: [132.3, 13.9], size: [16, 14], shape: rect}
+        - {id: tod, at: [132.3, 28.8], size: [16, 14], shape: rect}
+        - {id: mgmt, at: [152.8, 1.7], size: [16, 14], shape: rect}
+        - {id: usb, at: [154.8, 18.5], size: [12, 4.5], shape: rect}
+        - {id: console, at: [152.8, 25.9], size: [16, 14], shape: rect}
+        - {id: port-0, at: [177.975, 26.8], size: [18.5, 9.58], shape: rect}
+        - {id: port-1, at: [205.075, 26.8], size: [18.5, 9.58], shape: rect}
+        - {id: port-2, at: [230.225, 8.8], size: [18.5, 9.58], shape: rect}
+        - {id: port-3, at: [230.375, 26.8], size: [18.5, 9.58], shape: rect}
+        - {id: port-4, at: [253.6, 7], size: [14.25, 10.4], shape: rect}
+        - {id: port-5, at: [253.6, 22.6], size: [14.25, 10.4], shape: rect}
+        - {id: port-6, at: [267.85, 7], size: [14.25, 10.4], shape: rect}
+        - {id: port-7, at: [267.85, 22.6], size: [14.25, 10.4], shape: rect}
+        - {id: port-8, at: [282.1, 7], size: [14.25, 10.4], shape: rect}
+        - {id: port-9, at: [282.1, 22.6], size: [14.25, 10.4], shape: rect}
+        - {id: port-10, at: [296.35, 7], size: [14.25, 10.4], shape: rect}
+        - {id: port-11, at: [296.35, 22.6], size: [14.25, 10.4], shape: rect}
+        - {id: port-12, at: [310.6, 7], size: [14.25, 10.4], shape: rect}
+        - {id: port-13, at: [310.6, 22.6], size: [14.25, 10.4], shape: rect}
+        - {id: port-14, at: [324.85, 7], size: [14.25, 10.4], shape: rect}
+        - {id: port-15, at: [324.85, 22.6], size: [14.25, 10.4], shape: rect}
+        - {id: port-16, at: [342.4, 7], size: [14.25, 10.4], shape: rect}
+        - {id: port-17, at: [342.4, 22.6], size: [14.25, 10.4], shape: rect}
+        - {id: port-18, at: [356.65, 7], size: [14.25, 10.4], shape: rect}
+        - {id: port-19, at: [356.65, 22.6], size: [14.25, 10.4], shape: rect}
+        - {id: port-20, at: [370.9, 7], size: [14.25, 10.4], shape: rect}
+        - {id: port-21, at: [370.9, 22.6], size: [14.25, 10.4], shape: rect}
+        - {id: port-22, at: [385.15, 7], size: [14.25, 10.4], shape: rect}
+        - {id: port-23, at: [385.15, 22.6], size: [14.25, 10.4], shape: rect}
+        - {id: port-24, at: [399.4, 7], size: [14.25, 10.4], shape: rect}
+        - {id: port-25, at: [399.4, 22.6], size: [14.25, 10.4], shape: rect}
+        - {id: port-26, at: [413.65, 7], size: [14.25, 10.4], shape: rect}
+        - {id: port-27, at: [413.65, 22.6], size: [14.25, 10.4], shape: rect}
     silkscreen:
       - {text: PSU0, at: [58.9, 8], font-size: 2.6, rotate: 90, for: psu-0}
       - {text: PSU1, at: [58.9, 27], font-size: 2.6, rotate: 90, for: psu-1}
@@ -499,6 +537,10 @@ views:
     size:
       w: 302
       h: 43.5
+    panel:
+      cutouts:
+        - {id: ground-1, at: [242, 15], size: [7, 14], shape: rect}
+        - {id: ground-2, at: [253, 15], size: [7, 14], shape: rect}
     silkscreen:
       - {at: [251, 12.8], text: GND, font-size: 2.4, for: ground-1}
     components:
