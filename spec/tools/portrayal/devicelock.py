@@ -61,9 +61,11 @@ def _placements(doc):
         for kind in ("bays", "placements"):
             for item in ((view.get("components") or {}).get(kind) or []):
                 key = f"{vname}/{kind}/{item.get('id')}"
+                # `group` is DELIBERATELY ABSENT. It is addressing, not
+                # geometry - see `_placement_groups`.
                 out[key] = {
                     "at": item.get("at"), "size": item.get("size"),
-                    "rotate": item.get("rotate"), "group": item.get("group"),
+                    "rotate": item.get("rotate"),
                     "ref": item.get("ref"), "accepts": item.get("accepts"),
                     "default": item.get("default"), "mate-to": item.get("mate-to"),
                 }
@@ -72,6 +74,29 @@ def _placements(doc):
                 "at": cut.get("at"), "size": cut.get("size"),
                 "shape": cut.get("shape"),
             }
+    return out
+
+
+def _placement_groups(doc):
+    """Which group each placed thing belongs to, keyed the same way.
+
+    This used to live in `shape`, beside the coordinates, and that made LABELLING
+    an unlabelled placement read as "a slot moved" - a major bump for adding
+    metadata that moves nothing and removes nothing. Backfilling `group` across
+    the library is 174 placements on 11 devices; under the old reading every one
+    of those devices took a breaking version for it, which is how `major` stops
+    meaning anything to a consumer.
+
+    So it sits in `names` instead, where the ids and group names already live,
+    and `required_bump` tells the two cases apart: ADDING a group where there was
+    none is additive, and REASSIGNING one from A to B is not.
+    """
+    out = {}
+    for vname, view in (doc.get("views") or {}).items():
+        view = view or {}
+        for kind in ("bays", "placements"):
+            for item in ((view.get("components") or {}).get(kind) or []):
+                out[f"{vname}/{kind}/{item.get('id')}"] = item.get("group")
     return out
 
 
@@ -104,6 +129,7 @@ def buckets(doc):
             "ids": sorted(placed),
             "groups": sorted((doc.get("groups") or {}).keys()),
             "configurations": sorted((doc.get("configurations") or {}).keys()),
+            "placement-groups": _placement_groups(doc),
         }),
         "surface": _digest({
             "description": doc.get("description"),
@@ -132,7 +158,8 @@ def entry(doc):
     e = {"version": str(doc.get("version") or ""),
          "ids": sorted(_placements(doc)),
          "groups": sorted((doc.get("groups") or {}).keys()),
-         "configs": sorted((doc.get("configurations") or {}).keys())}
+         "configs": sorted((doc.get("configurations") or {}).keys()),
+         "placement-groups": _placement_groups(doc)}
     e.update(buckets(doc))
     return e
 
@@ -154,6 +181,14 @@ def required_bump(old, new):
     # configuration name can each be held by something outside this repository.
     for key in ("ids", "groups", "configs"):
         if set(old.get(key) or []) - set(new.get(key) or []):
+            return "major"
+    # A placement MOVING GROUP is breaking - a consumer addressing it by group
+    # loses it. A placement GAINING a group it never had cannot break anyone,
+    # because there was nothing there to hold. Absent on both sides of a lock
+    # written before this field existed, which is why the guard is `if was`.
+    new_pg = new.get("placement-groups") or {}
+    for key, was in (old.get("placement-groups") or {}).items():
+        if was and key in new_pg and new_pg[key] != was:
             return "major"
     if old.get("shape") != new["shape"] and \
             set(old.get("ids") or []) == set(new["ids"]):
