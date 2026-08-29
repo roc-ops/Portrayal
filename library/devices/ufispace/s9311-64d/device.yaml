@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9311-64d
-version: 1.0.0
+version: 2.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9311-64D
@@ -485,8 +485,8 @@ views:
         - {at: [407.68, 56.8], size: [19, 5], fill: '#9aa0a8', rx: 0.3}
     silkscreen:
       - {at: [2.6, 5.7], text: S9311-64D, font-size: 3.6, anchor: start, fill: '#f5f7fa', for: chassis}
-      - {at: [10.06, 9.4], text: 1PPS, font-size: 1.6, anchor: middle, for: smb-1pps}
-      - {at: [10.06, 21.3], text: 10MHz, font-size: 1.6, anchor: middle, for: smb-10mhz}
+      - {at: [10.06, 9.4], text: 1PPS, font-size: 1.6, anchor: middle, for: clk-1pps}
+      - {at: [10.06, 21.3], text: 10MHz, font-size: 1.6, anchor: middle, for: clk-10mhz}
       - {at: [10.5, 43.7], text: RESET, font-size: 1.6, anchor: middle, for: reset}
       - {at: [6.0, 48.1], text: SYNC, font-size: 1.5, anchor: middle, fill: '#17191c', for: led-sync}
       - {at: [6.0, 50.2], text: SYS, font-size: 1.5, anchor: middle, fill: '#17191c', for: led-sys}
@@ -494,7 +494,7 @@ views:
       - {at: [6.0, 55.2], text: PS0, font-size: 1.5, anchor: middle, fill: '#17191c', for: led-ps0}
       - {at: [6.0, 57.6], text: PS1, font-size: 1.5, anchor: middle, fill: '#17191c', for: led-ps1}
       - {at: [6.0, 59.7], text: ID, font-size: 1.5, anchor: middle, fill: '#17191c', for: led-id}
-      - {at: [13.47, 51], text: MICRO USB, font-size: 1.3, anchor: middle, for: micro-usb}
+      - {at: [13.47, 51], text: MICRO USB, font-size: 1.3, anchor: middle, for: console-usb}
       - {at: [24.7, 15.3], text: '▲', font-size: 2.2, anchor: middle, for: port-64}
       - {at: [30.5, 15.3], text: '▼', font-size: 2.2, anchor: middle, for: port-65}
       - {at: [27.1, 79.8], text: '▲', font-size: 2.0, anchor: middle, for: console}
@@ -504,9 +504,9 @@ views:
          for: oob}
     components:
       placements:
-        - {ref: std/smb@1, id: smb-1pps, at: [7.645, 11.445], group: timing, rel-pos: 1,
+        - {ref: std/smb@1, id: clk-1pps, at: [7.645, 11.445], group: timing, rel-pos: 1,
            attrs: {role: timing, signal: 1pps}}
-        - {ref: std/smb@1, id: smb-10mhz, at: [7.645, 23.215], group: timing, rel-pos: 2,
+        - {ref: std/smb@1, id: clk-10mhz, at: [7.645, 23.215], group: timing, rel-pos: 2,
            attrs: {role: timing, signal: 10mhz}}
         - {ref: common/reset-button@1, id: reset, at: [8.5, 38.5], for: chassis, group: mgmt, rel-pos: 5}
         - {ref: common/led-dot@1, id: led-sync, for: chassis, at: [5.33, 60.47],
@@ -556,7 +556,7 @@ views:
            description: 'HIG Front Panel LED table, ID row - Off (no power), Blinking Blue
              (beacon feature is enabled on the switch)',
            group: status-leds, rel-pos: 6}
-        - {ref: std/micro-usb@1, id: micro-usb, at: [9.72, 46.5], group: mgmt, rel-pos: 2,
+        - {ref: std/micro-usb@1, id: console-usb, at: [9.72, 46.5], group: mgmt, rel-pos: 2,
            attrs: {media: micro-usb-b, role: console}}
         - {ref: std/usb-a@1, id: usb, at: [7.63, 66.91], rotate: 90, group: mgmt, rel-pos: 3,
            attrs: {role: storage, speed: usb3}}
@@ -682,7 +682,7 @@ views:
         - {ref: std/qsfp-dd@1, id: port-63, at: [407.68, 61.91], rotate: 180, group: qsfpdd-400g, rel-pos: 63}
     regions:
       - {id: mgmt-block, at: [1.5, 1.0], size: {w: 17.5, h: 85.5}, label: Timing and management,
-         members: [smb-1pps, smb-10mhz, reset, micro-usb, usb, led-sync, led-sys, led-fan, led-ps0, led-ps1, led-id]}
+         members: [clk-1pps, clk-10mhz, reset, console-usb, usb, led-sync, led-sys, led-fan, led-ps0, led-ps1, led-id]}
       - {id: rj45-sfp-block, at: [19.5, 14.0], size: {w: 17.0, h: 64.0}, label: SFP+ and RJ45 stacks,
          members: [port-64, port-65, console, oob]}
   rear:

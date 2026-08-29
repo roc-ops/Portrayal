@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9611-36d
-version: 1.0.0
+version: 2.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9611-36D
@@ -655,8 +655,8 @@ views:
     silkscreen:
       - {at: [3.48, 15.40], text: S9611-36D, font-size: 3.5, anchor: start, fill: '#f5f7fa', for: chassis}
       - {at: [15.40, 6.90], text: RESET, font-size: 1.7, anchor: middle, for: reset}
-      - {at: [9.02, 37.40], text: 1PPS, font-size: 1.9, anchor: middle, for: smb-1pps}
-      - {at: [9.02, 51.30], text: 10MHZ, font-size: 1.9, anchor: middle, for: smb-10mhz}
+      - {at: [9.02, 37.40], text: 1PPS, font-size: 1.9, anchor: middle, for: clk-1pps}
+      - {at: [9.02, 51.30], text: 10MHZ, font-size: 1.9, anchor: middle, for: clk-10mhz}
       - {id: oob-network-symbol, at: [20.81, 42.40],
          path: 'M -1 0 L 1 0 L 1 1.2 L -1 1.2 L -1 0 M 0 1.2 L 0 1.8 M -1.5 1.8 L 1.5 1.8 M -1.5 1.8 L -1.5 2.4 M 1.5 1.8 L 1.5 2.4',
          for: oob}
@@ -672,7 +672,7 @@ views:
       - {at: [14.9, 71.96], text: PS0, font-size: 1.7, anchor: middle, fill: '#17191c', for: led-ps0}
       - {at: [14.9, 74.46], text: PS1, font-size: 1.7, anchor: middle, fill: '#17191c', for: led-ps1}
       - {at: [26.92, 82.2], text: IOIOI, font-size: 1.8, anchor: middle, for: console}
-      - {at: [10.89, 82.8], text: IOIOI, font-size: 1.8, anchor: middle, for: micro-usb}
+      - {at: [10.89, 82.8], text: IOIOI, font-size: 1.8, anchor: middle, for: console-usb}
       - {id: arrow-p0, at: [76.57, 45.13], path: 'M 0.8 -0.9 L 0.8 0.9 L -0.8 0 L 0.8 -0.9', for: port-0}
       - {at: [82.47, 45.98], text: '0', font-size: 2.4, anchor: middle, fill: '#ffffff', for: port-0}
       - {id: arrow-p2, at: [76.57, 48.56], path: 'M -0.8 -0.9 L -0.8 0.9 L 0.8 0 L -0.8 -0.9', for: port-2}
@@ -747,9 +747,9 @@ views:
       - {at: [410.38, 83.76], text: '35', font-size: 2.4, anchor: middle, fill: '#ffffff', for: port-35}
     components:
       placements:
-        - {ref: std/smb@1, id: smb-1pps, at: [6.61, 40.56], group: timing, rel-pos: 1,
+        - {ref: std/smb@1, id: clk-1pps, at: [6.61, 40.56], group: timing, rel-pos: 1,
            attrs: {role: timing, signal: 1pps}}
-        - {ref: std/smb@1, id: smb-10mhz, at: [6.61, 54.50], group: timing, rel-pos: 2,
+        - {ref: std/smb@1, id: clk-10mhz, at: [6.61, 54.50], group: timing, rel-pos: 2,
            attrs: {role: timing, signal: 10mhz}}
         - {ref: common/reset-button@1, id: reset, at: [13.42, 7.71], for: chassis, group: mgmt, rel-pos: 5}
         - {ref: ufispace/seg7-beacon-s9611@1, id: beacon, at: [4.70, 16.39], for: chassis,
@@ -816,7 +816,7 @@ views:
            group: furniture, rel-pos: 1}
         - {ref: std/rj45-ganged@1, id: console, at: [20.57, 67.00], group: mgmt,
            rel-pos: 2, attrs: {media: rj45-serial, role: console}}
-        - {ref: std/micro-usb@1, id: micro-usb, at: [7.14, 77.29], group: mgmt, rel-pos: 4,
+        - {ref: std/micro-usb@1, id: console-usb, at: [7.14, 77.29], group: mgmt, rel-pos: 4,
            attrs: {media: micro-usb-b, role: console}}
         - {ref: std/sfp-ganged@1, id: sfp-0, at: [42.10, 51.40], rotate: 180, group: sfp-plus, rel-pos: 0}
         - {ref: std/sfp-ganged@1, id: sfp-1, at: [42.10, 66.05], group: sfp-plus, rel-pos: 1}
@@ -899,8 +899,8 @@ views:
     regions:
       - {id: mgmt-column, at: [1.0, 1.0], size: {w: 36.5, h: 85.7},
          label: 'Management, timing and status',
-         members: [reset, beacon, smb-1pps, smb-10mhz, led-sync, led-sys, led-fan, led-ps0,
-                   led-ps1, oob, usb, console, micro-usb]}
+         members: [reset, beacon, clk-1pps, clk-10mhz, led-sync, led-sys, led-fan, led-ps0,
+                   led-ps1, oob, usb, console, console-usb]}
       - {id: sfp-stack, at: [40.5, 43.0], size: {w: 17.5, h: 34.5}, label: SFP+ stack,
          members: [sfp-0, sfp-1]}
   rear:

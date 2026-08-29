@@ -71,6 +71,9 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
   L62 device: an id names the FUNCTION a thing serves, not the connector it is
       built from - the connector is already in `ref:`; and a port lamp is
       spelled the way the library spells it
+  L64 device: nothing is bolted to, or printed on, a vent - a perforation is a
+      hole in the faceplate and not a surface, so a legend there is printed on
+      nothing and a jack there is mounted to nothing
 """
 import argparse
 import json
@@ -3392,6 +3395,127 @@ def _aperture_of(ref, lib_roots, depth=0):
     return ((sz["w"], sz["h"]), (0.0, 0.0)) if sz.get("w") else None
 
 
+def _air_fraction(box, decor, grid=9):
+    """How much of `box` lies over open perforation, reading decor in PAINT ORDER.
+
+    Not an overlap test. A vent field is often the widest rectangle on a face and
+    almost everything else is drawn on top of it: the S9600-72XC lays its bottom
+    vent from x=44 to x=406 and then paints the QSFP cage panels over it, so two
+    port lamps that overlap the vent by area sit on solid green metal and are
+    perfectly fine. Asking `does this overlap a vent` reports those; asking
+    `what is the topmost thing under this point` does not.
+
+    So sample the item's own footprint, and for each point take the LAST decor
+    rectangle that contains it - which is the one a viewer sees. The fraction of
+    points whose topmost decor is a vent is the fraction of the item hanging over
+    air. A coarse grid is enough: the answers that matter are near 0 and near 1,
+    and a 2mm lamp does not need sub-millimetre sampling.
+    """
+    x0, y0, x1, y1 = box
+    if x1 <= x0 or y1 <= y0 or not decor:
+        return 0.0
+    air = 0
+    for i in range(grid):
+        px = x0 + (x1 - x0) * (i + 0.5) / grid
+        for j in range(grid):
+            py = y0 + (y1 - y0) * (j + 0.5) / grid
+            top = None
+            for d in decor:
+                b = _decor_box(d)
+                if b and b[0] <= px <= b[2] and b[1] <= py <= b[3]:
+                    # an outline draws a line, not a surface - it hides nothing
+                    if d.get("stroke") and not d.get("fill"):
+                        continue
+                    top = d
+            if top is not None and (top.get("pattern") == "vent" or top.get("vent")):
+                air += 1
+    return air / (grid * grid)
+
+
+def lint_device_air_aperture(path, data, lib_roots):
+    """L64: nothing is bolted to, or printed on, a hole.
+
+    A vent field is not a texture. It is a perforation - the metal is absent -
+    and `render.py` says so in the drawing it emits, stamping `data-aperture=
+    "air"` on it for anything reading the file rather than looking at it. So a
+    legend printed there is printed on nothing, and a jack seated there is
+    mounted to nothing.
+
+    EVERY ONE OF THESE WAS FOUND BY A PERSON OPENING A FINISHED DRAWING. On the
+    S9600-72XC the 1PPS jack sat wholly inside a 296mm perforated strip, the
+    SYNC and SYS lamps inside another, and the model name `S9600-72XC` in the
+    middle of a third - a legend on air, which is what the reviewer's screenshot
+    showed and what no rule here could see.
+
+    L44 ALREADY LOOKS AT VENTS AND PARTS TOGETHER AND CANNOT CATCH THIS. It
+    fires when a patterned field is 80% BURIED, which finds a vent measured
+    across a face that is really covered in parts. That is the other direction:
+    it says the FIELD is wrong, never that one small thing is sitting on a large
+    correct one. A 4.8mm jack on a 296mm vent buries 0.03% of it.
+
+    THE REMEDY IS THE AUTHOR'S, and there are three. The vent is mismeasured and
+    stops short of the part - much the commonest. Or the part is in the wrong
+    place. Or the metal really is punched through the perforation for it, and
+    the drawing has to say so with a cutout, which is why a cutout that contains
+    the item silences this.
+
+    Bays are not checked. A bay IS an opening in the metal by construction, and
+    a fan bay abutting the vent field that feeds it is the normal way a chassis
+    is built rather than a mistake.
+    """
+    ON_AIR = 0.6          # how much of an item has to hang over air to count
+
+    for vname, view in (data.get("views") or {}).items():
+        if not view:
+            continue
+        decor = ((view.get("panel") or {}).get("decor")) or []
+        if not any(d.get("pattern") == "vent" or d.get("vent") for d in decor):
+            continue
+        cuts = []
+        for c in (((view.get("panel") or {}).get("cutouts")) or []):
+            b = _decor_box(c)
+            if b:
+                cuts.append(b)
+
+        def punched(box):
+            """The author has declared a hole in the metal here on purpose."""
+            return any(box[0] >= c[0] - 0.3 and box[2] <= c[2] + 0.3
+                       and box[1] >= c[1] - 0.3 and box[3] <= c[3] + 0.3
+                       for c in cuts)
+
+        items = []
+        for q in (((view.get("components") or {}).get("placements")) or []):
+            sz = contract_size(q.get("ref", ""), lib_roots) if q.get("ref") else None
+            if not (q.get("at") and sz):
+                continue
+            w, h = sz["w"], sz["h"]
+            if q.get("rotate") in (90, 270, -90):
+                w, h = h, w
+            items.append(("part", str(q.get("id")),
+                          (q["at"][0], q["at"][1], q["at"][0] + w, q["at"][1] + h)))
+        for m in (view.get("silkscreen") or []):
+            ext = (_text_extent(m) if m.get("text")
+                   else (_path_box(m) if m.get("path") else None))
+            if ext:
+                items.append(("legend", str(m.get("text") or m.get("id") or "mark"), ext))
+
+        for kind, name, box in items:
+            if punched(box):
+                continue
+            frac = _air_fraction(box, decor)
+            if frac < ON_AIR:
+                continue
+            what = ("sits on a vent, which is a hole in the faceplate, not a "
+                    "surface it can be mounted to" if kind == "part" else
+                    "is printed on a vent, so it is printed on nothing")
+            warn(path, "L64",
+                 f"{vname}: {kind} {name!r} {what} - {frac * 100:.0f}% of its "
+                 f"footprint is over open perforation. Either the vent is "
+                 f"measured across metal it does not reach, or this belongs "
+                 f"somewhere else; if the metal really is punched through the "
+                 f"perforation here, declare the cutout and this goes quiet")
+
+
 def lint_device_cutout_derivation(path, data, lib_roots):
     """L63: a hole drawn around a part rather than derived from it.
 
@@ -3485,9 +3609,39 @@ def alignment_slips(data, lib_roots):
     itself has no identity a text search could rely on.
     """
     SLIP = (0.08, 2.0)    # off by at least this, and at most this, to be a slip
-    for a in alignment_targets(data, lib_roots):
-        if a["axis"] and SLIP[0] <= a["off"] <= SLIP[1]:
-            yield a
+    BAND = 2.5            # how far across the axis still counts as the same row
+    BALANCED = 0.15       # how near the set's midpoint has to be to be centred
+
+    every = list(alignment_targets(data, lib_roots))
+    for a in every:
+        if not a["axis"] or not (SLIP[0] <= a["off"] <= SLIP[1]):
+            continue
+
+        # A LEGEND ON TWO LINES IS ONE LEGEND, and it is centred as a BLOCK.
+        # `GNSS` over `ANT` straddles its jack, 1.29mm above and 1.31mm below,
+        # and measuring each line on its own reported the same correct label
+        # twice as wrong. Across the corpus that was 296 of 1288 warnings - very
+        # nearly a quarter of this rule's whole backlog, every one of them a
+        # legend a person would have to open, measure and dismiss.
+        #
+        # So when several marks OF THE SAME KIND name one target from the same
+        # row, what has to sit on the target's centre is their midpoint. A set
+        # that straddles evenly is finished; one that does not is still
+        # reported, and each member still carries its own offset - the S8901's
+        # arrow lamps sit 1.38 and 2.22 out, a midpoint 0.42 off centre, and
+        # they stay reported because that pair really is lopsided.
+        key = "tcy" if a["axis"] == "vertically" else "tcx"
+        got = "cy" if a["axis"] == "vertically" else "cx"
+        perp = "cx" if a["axis"] == "vertically" else "cy"
+        peers = [t for t in every
+                 if t["view"] == a["view"] and t["kind"] == a["kind"]
+                 and abs(t[key] - a["want"]) <= 0.001
+                 and abs(t[perp] - a[perp]) < BAND]
+        if len(peers) >= 2:
+            mid = sum(p[got] for p in peers) / len(peers)
+            if abs(mid - a["want"]) <= BALANCED:
+                continue
+        yield a
 
 
 def alignment_targets(data, lib_roots):
@@ -3740,6 +3894,7 @@ def lint_device(path, validator, lib_roots):
     lint_device_label_geometry(path, data)
     lint_device_alignment(path, data, lib_roots)
     lint_device_cutout_derivation(path, data, lib_roots)
+    lint_device_air_aperture(path, data, lib_roots)
     lint_device_id_convention(path, data, lib_roots)
     declared_groups = set((data.get("groups") or {}).keys())
     for gname, gdef in (data.get("groups") or {}).items():

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9610-46dx
-version: 1.0.0
+version: 2.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9610-46DX
@@ -625,7 +625,7 @@ views:
       - {at: [6.96, 66.3], text: PS0, font-size: 1.3, anchor: middle, fill: '#17191c', for: led-ps0}
       - {at: [6.96, 68.85], text: PS1, font-size: 1.3, anchor: middle, fill: '#17191c', for: led-ps1}
       - {at: [6.96, 71.41], text: ID, font-size: 1.3, anchor: middle, fill: '#17191c', for: led-id}
-      - {at: [20.89, 76.2], text: IOIOI, font-size: 1.2, anchor: middle, for: micro-usb}
+      - {at: [20.89, 76.2], text: IOIOI, font-size: 1.2, anchor: middle, for: console-usb}
       - {at: [35.81, 76.2], text: IOIOI, font-size: 1.2, anchor: middle, for: console}
       - {at: [55.20, 74.60], path: 'M 0.00 0.00 L 3.00 0.00', for: oob}
       - {at: [55.20, 74.60], path: 'M 0.00 0.00 L 0.00 1.30', for: oob}
@@ -744,7 +744,7 @@ views:
         - {ref: std/rj45-ganged@1, id: bits, at: [24.99, 15.03], rotate: 180, group: timing, rel-pos: 4, attrs: {media: rj48, role: bits-io}}
         - {ref: std/rj45-ganged@1, id: tod, at: [24.99, 27.95], group: timing, rel-pos: 5, attrs: {media: rj45, role: tod-io}}
         - {ref: std/rj45@1, id: console, at: [27.81, 59.10], group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
-        - {ref: std/micro-usb@1, id: micro-usb, at: [17.14, 69.64], group: mgmt, rel-pos: 2, attrs: {media: micro-usb-b, role: console}}
+        - {ref: std/micro-usb@1, id: console-usb, at: [17.14, 69.64], group: mgmt, rel-pos: 2, attrs: {media: micro-usb-b, role: console}}
         - {ref: std/usb-a@1, id: usb, at: [40.75, 30.80], rotate: 90, group: mgmt, rel-pos: 3, attrs: {role: storage, speed: usb3}}
         - {ref: std/rj45@1, id: oob, at: [47.53, 59.10], group: mgmt, rel-pos: 4, attrs: {media: rj45, role: mgmt, speed: 100m-1g}}
         - {ref: common/reset-button@1, id: reset, at: [29.17, 44.63], for: chassis, group: mgmt, rel-pos: 5}
@@ -914,7 +914,7 @@ views:
       - {id: timing-block, at: [1.5, 1.0], size: {w: 42.0, h: 44.0}, label: Timing,
          members: [clk-1pps, clk-10mhz, gnss-ant, tod, bits]}
       - {id: mgmt-block, at: [1.5, 44.5], size: {w: 66.0, h: 32.0}, label: Management,
-         members: [reset, micro-usb, console, oob]}
+         members: [reset, console-usb, console, oob]}
   rear:
     size:
       w: 436

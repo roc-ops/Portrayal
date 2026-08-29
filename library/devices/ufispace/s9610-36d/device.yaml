@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9610-36d
-version: 1.0.0
+version: 2.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9610-36D
@@ -570,14 +570,14 @@ views:
     silkscreen:
       - {at: [3.4, 15.3], text: S9610-36D, font-size: 3.2, anchor: start, fill: '#f5f7fa', for: chassis}
       - {at: [15.4, 7.9], text: RESET, font-size: 1.7, anchor: middle, for: reset}
-      - {at: [9.15, 37.7], text: 1PPS, font-size: 2.0, anchor: middle, for: smb-1pps}
-      - {at: [9.15, 51.3], text: 10MHZ, font-size: 2.0, anchor: middle, for: smb-10mhz}
+      - {at: [9.15, 37.7], text: 1PPS, font-size: 2.0, anchor: middle, for: clk-1pps}
+      - {at: [9.15, 51.3], text: 10MHZ, font-size: 2.0, anchor: middle, for: clk-10mhz}
       - {at: [15.03, 64.52], text: SYNC, font-size: 1.6, anchor: middle, fill: '#17191c', for: led-sync}
       - {at: [15.03, 67.03], text: SYS, font-size: 1.6, anchor: middle, fill: '#17191c', for: led-sys}
       - {at: [15.03, 69.54], text: FAN, font-size: 1.6, anchor: middle, fill: '#17191c', for: led-fan}
       - {at: [15.03, 72.05], text: PS0, font-size: 1.6, anchor: middle, fill: '#17191c', for: led-ps0}
       - {at: [15.03, 74.56], text: PS1, font-size: 1.6, anchor: middle, fill: '#17191c', for: led-ps1}
-      - {at: [10.95, 84.5], text: IOIOI, font-size: 2.0, anchor: middle, for: micro-usb}
+      - {at: [10.95, 84.5], text: IOIOI, font-size: 2.0, anchor: middle, for: console-usb}
       - {at: [27.1, 84.5], text: IOIOI, font-size: 2.0, anchor: middle, for: console}
       - {id: oob-network-symbol, at: [20.85, 42.6], path: 'M -0.9 0 L 0.9 0 L 0.9 1.1 L -0.9 1.1 L -0.9 0 M 0 1.1 L 0 1.7 M -1.4 1.7 L 1.4 1.7 M -1.4 1.7 L -1.4 2.3 M 1.4 1.7 L 1.4 2.3', for: oob}
       - {id: oob-up-arrow, at: [25.6, 44.3], path: 'M -1.0 0.8 L 1.0 0.8 L 0 -0.9 L -1.0 0.8', for: oob}
@@ -662,8 +662,8 @@ views:
       placements:
         - {ref: common/reset-button@1, id: reset, at: [13.4, 8.0], for: chassis, group: mgmt, rel-pos: 5}
         - {ref: ufispace/seg7-status-2-sm@1, id: status-display, at: [4.7, 16.66], for: chassis, group: display, rel-pos: 1}
-        - {ref: std/smb@1, id: smb-1pps, at: [6.735, 40.635], group: timing, rel-pos: 1, attrs: {role: timing, signal: 1pps}}
-        - {ref: std/smb@1, id: smb-10mhz, at: [6.735, 54.535], group: timing, rel-pos: 2, attrs: {role: timing, signal: 10mhz}}
+        - {ref: std/smb@1, id: clk-1pps, at: [6.735, 40.635], group: timing, rel-pos: 1, attrs: {role: timing, signal: 1pps}}
+        - {ref: std/smb@1, id: clk-10mhz, at: [6.735, 54.535], group: timing, rel-pos: 2, attrs: {role: timing, signal: 10mhz}}
         - {ref: common/led-dot@1, id: led-sync, for: chassis, at: [9.85, 63.02],
            states: ['off', {name: locked, color: '#22c55e'}, {name: holdover, color: '#f59e0b'}],
            description: 'HIG Front Panel LED table, SYNC row - Off (system timing/clock synchronization is disabled or unsynchronized), Solid Green (synchronized to an external reference), Solid Amber (free-run or holdover)',
@@ -684,7 +684,7 @@ views:
            states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}],
            description: 'HIG Front Panel LED table, PS1 row - Off (no power), Solid Green (PSU1 working normal), Solid Amber (PSU1 fail, PSU1 needs service)',
            group: status-leds, rel-pos: 5}
-        - {ref: std/micro-usb@1, id: micro-usb, at: [7.2, 76.4], group: mgmt, rel-pos: 4, attrs: {media: micro-usb-b, role: console}}
+        - {ref: std/micro-usb@1, id: console-usb, at: [7.2, 76.4], group: mgmt, rel-pos: 4, attrs: {media: micro-usb-b, role: console}}
         - {ref: std/rj45-ganged@1, id: oob, at: [20.8, 47.1], rotate: 180, group: mgmt, rel-pos: 1, attrs: {role: mgmt, speed: 100m-1g}}
         - {ref: std/usb-a@1, id: usb, at: [21.1, 60.2], group: mgmt, rel-pos: 2, attrs: {role: maintenance, speed: usb3}}
         - {ref: std/rj45-ganged@1, id: console, at: [20.8, 66.5], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
@@ -775,7 +775,7 @@ views:
         - {ref: std/qsfp-dd@1, id: port-35, at: [407.31, 66.2], group: qsfpdd-400g, rel-pos: 35}
     regions:
       - {id: mgmt-block, at: [1.0, 1.0], size: {w: 17.5, h: 85.7}, label: Management and timing,
-         members: [reset, status-display, smb-1pps, smb-10mhz, micro-usb, led-sync, led-sys,
+         members: [reset, status-display, clk-1pps, clk-10mhz, console-usb, led-sync, led-sys,
                    led-fan, led-ps0, led-ps1]}
       - {id: stack-block, at: [18.0, 46.0], size: {w: 18.1, h: 32.8}, label: RJ45 and USB stack,
          members: [oob, usb, console]}

@@ -67,3 +67,46 @@ def test_component_skins_declare_state_rules_for_their_own_states():
     assert not silent, (
         f"{len(silent)} component skin(s) declare a state with no rule to "
         "render it:\n  " + "\n  ".join(silent[:12]))
+
+
+def _render():
+    import sys
+    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]
+                           / "tools" / "portrayal"))
+    import render
+    return render
+
+
+def test_a_segment_state_names_the_segments_it_leaves_off():
+    """A SEVEN-SEGMENT DIGIT CHANGES SHAPE, NOT COLOUR, so its states drive
+    `opacity` per segment rather than a colour variable - and each state has to
+    be a COMPLETE statement of the face.
+
+    The bug this locks: a rule that only turns segments ON leaves whatever the
+    previous state lit still lit, so selecting `1` after `8` still reads `8`.
+    Every state therefore names the segments it lights and, separately, every
+    other segment in the component's vocabulary as off.
+    """
+    r = _render()
+    style = r.state_style({"name": "1", "lights": ["b", "c"]},
+                          {"a", "b", "c", "d", "e", "f", "g"})
+    assert style is not None, "a state that lights segments needs CSS"
+    css = r.state_rule("SEL", "SEL", *style)
+    on = [s for s in css.split("\n") if "opacity: 1" in s]
+    off = [s for s in css.split("\n") if "opacity: 0" in s]
+    assert len(on) == 1 and len(off) == 1, css
+    for seg in ("b", "c"):
+        assert f"[data-seg='{seg}']" in on[0], (seg, on[0])
+    for seg in ("a", "d", "e", "f", "g"):
+        assert f"[data-seg='{seg}']" in off[0], (seg, off[0])
+    assert "--led-color" not in css, "a digit is not a coloured lamp"
+
+
+def test_a_colour_state_is_unchanged_by_the_segment_support():
+    """The half that keeps the old shape honest: an ordinary lamp state carries
+    no `lights`, emits no opacity rule, and still sets its colour."""
+    r = _render()
+    css = r.state_rule("SEL", "SEL", *r.state_style({"name": "ok",
+                                                     "color": "#22c55e"}))
+    assert "--led-color: #22c55e;" in css
+    assert "opacity" not in css and "data-seg" not in css

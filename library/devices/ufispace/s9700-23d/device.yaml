@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9700-23d
-version: 0.1.1
+version: 1.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9700-23D
@@ -694,7 +694,7 @@ views:
       - {at: [32.77, 39.63], text: PS0, font-size: 1.4, anchor: middle, fill: '#17191c', for: led-ps0}
       - {at: [32.77, 41.94], text: PS1, font-size: 1.4, anchor: middle, fill: '#17191c', for: led-ps1}
       - {at: [28.6, 47.05], text: RESET, font-size: 1.5, anchor: middle, for: reset}
-      - {at: [32.90, 54.90], text: IOIO, font-size: 1.8, anchor: middle, for: micro-usb}
+      - {at: [32.90, 54.90], text: IOIO, font-size: 1.8, anchor: middle, for: console-usb}
       - {at: [44.30, 47.60], text: '0', font-size: 2.0, anchor: middle, for: sfp-0}
       - {at: [48.20, 47.05], path: 'M -1.10 1.35 L 1.10 1.35 L 0.00 -1.35 L -1.10 1.35', for: sfp-0}
       - {at: [52.05, 47.05], path: 'M -1.10 -1.35 L 1.10 -1.35 L 0.00 1.35 L -1.10 -1.35', for: sfp-1}
@@ -713,7 +713,7 @@ views:
         - {ref: std/sfp-ganged@1, id: sfp-0, at: [42.53, 18.40], rotate: 180, group: sfp-plus, rel-pos: 0}
         - {ref: std/sfp-ganged@1, id: sfp-1, at: [42.53, 33.45], group: sfp-plus, rel-pos: 1}
         - {ref: std/rj45-ganged@1, id: console, at: [43.15, 51.66], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
-        - {ref: std/micro-usb@1, id: micro-usb, at: [29.15, 55.13], group: mgmt, rel-pos: 2, attrs: {media: micro-usb-b, role: console}}
+        - {ref: std/micro-usb@1, id: console-usb, at: [29.15, 55.13], group: mgmt, rel-pos: 2, attrs: {media: micro-usb-b, role: console}}
         - {ref: std/rj45-ganged@1, id: oob, at: [43.15, 64.26], group: mgmt, rel-pos: 3, attrs: {media: rj45, role: mgmt, speed: 100m-1g}}
         - {ref: std/usb-a@1, id: usb, at: [27.25, 66.45], rotate: 90, group: mgmt, rel-pos: 4, attrs: {role: storage, speed: usb2}}
         - {ref: common/reset-button@1, id: reset, at: [26.60, 41.30], for: chassis, group: mgmt, rel-pos: 5}
@@ -804,7 +804,7 @@ views:
         - {ref: common/led-dot@1, id: led-fabric-12, at: [380.87, 30.13], for: fabric-12, attrs: {port: '12'}, group: port-leds, rel-pos: 23}
     regions:
       - {id: mgmt-block, at: [24.0, 16.0], size: {w: 36.0, h: 66.0}, label: Management,
-         members: [sfp-0, sfp-1, console, micro-usb, oob, usb, reset]}
+         members: [sfp-0, sfp-1, console, console-usb, oob, usb, reset]}
       - {id: service-block, at: [97.5, 27.5], size: {w: 107.0, h: 32.5}, label: Service ports,
          members: [port-0, port-2, port-4, port-6, port-8]}
       - {id: fabric-block, at: [245.5, 27.5], size: {w: 148.0, h: 32.5}, label: Fabric ports,

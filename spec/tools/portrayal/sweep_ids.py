@@ -40,6 +40,7 @@ ap.add_argument("--library", default="library")
 ap.add_argument("--schemas", default="spec/schemas")
 ap.add_argument("--apply", action="store_true",
                 help="write the renames; without it, report only")
+ap.add_argument("only", nargs="*", help="limit to devices matching these fragments")
 ARGS = ap.parse_args()
 APPLY, LIB = ARGS.apply, ARGS.library
 
@@ -47,20 +48,44 @@ if not L.STANDARDS:
     L.STANDARDS.update(yaml.safe_load(
         (pathlib.Path(ARGS.schemas) / "standards.yaml").read_text())['standards'])
 
-# `{vname}/{pid}: a port lamp is spelled ... Rename it 'led-port-3'`
-RENAME = re.compile(r"\[L62\] ([a-z]+)/([\w.-]+): a port lamp .*Rename it '([\w.-]+)'",
-                    re.S)
+# BOTH HALVES OF THE RULE, and only where it commits to a replacement.
+#
+#   `{vname}/{pid}: a port lamp is spelled ... Rename it 'led-port-3'`
+#   `{vname}/{pid}: the id opens with 'smb' ... use 'clk-1pps-in', which is ...`
+#
+# The connector half was left out while the rule could still propose a name the
+# device already used or a leftover that named nothing; both of those now report
+# without offering a replacement, so a message that says `use '...'` is one the
+# rule is prepared to stand behind and this can apply it.
+RENAME = re.compile(
+    r"\[L62\] ([a-z]+)/([\w.-]+): (?:a port lamp .*?Rename it|the id opens with .*? - use) "
+    r"'([\w.-]+)'", re.S)
 
 
 def token(name):
-    """The id as a whole word - not as the head of a longer one."""
-    return re.compile(r"(?<![A-Za-z0-9-])" + re.escape(name) + r"(?![A-Za-z0-9-])")
+    """The id as a whole word - not as the head of a longer one, and NEVER as
+    the name of a component.
+
+    `micro-usb` is both a placement id and half of `std/micro-usb@1`, so a
+    file-wide substitution renamed the PART as well as the placement and wrote
+    `ref: std/console-usb@1` into eleven devices - a ref to a component that
+    does not exist, which is the one thing an id sweep must never produce. The
+    lamp half never hit this because no lamp id is also a component name.
+
+    A component ref is `<namespace>/<name>@<major>`, and the `@` is what tells
+    it apart from a cross-view reference like `for: rear/fan-3`, which IS a
+    placement id and does have to be renamed. So: a match followed by `@` is a
+    part, not a placement, and is left alone.
+    """
+    return re.compile(r"(?<![A-Za-z0-9-])" + re.escape(name) + r"(?![A-Za-z0-9-])(?!@)")
 
 
 total_files = total_ids = total_edits = 0
 skipped = []
 
 for path in sorted(glob.glob(f'{LIB}/devices/*/*/device.yaml')):
+    if ARGS.only and not any(o in path for o in ARGS.only):
+        continue
     data = yaml.safe_load(open(path))
     L.WARNINGS.clear()
     L.lint_device_id_convention(path, data, [LIB])

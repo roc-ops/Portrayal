@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9700-53dx
-version: 1.0.0
+version: 2.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9700-53DX
@@ -634,7 +634,7 @@ views:
       - {at: [12.46, 32.26], text: FAN, font-size: 1.3, anchor: middle, fill: '#17191c', for: led-fan}
       - {at: [12.46, 34.89], text: PS0, font-size: 1.3, anchor: middle, fill: '#17191c', for: led-ps0}
       - {at: [12.46, 37.53], text: PS1, font-size: 1.3, anchor: middle, fill: '#17191c', for: led-ps1}
-      - {at: [13.08, 49.75], text: IOIOI, font-size: 1.4, anchor: middle, fill: '#f5f7fa', for: micro-usb}
+      - {at: [13.08, 49.75], text: IOIOI, font-size: 1.4, anchor: middle, fill: '#f5f7fa', for: console-usb}
       - {at: [13.4, 73.5], path: 'M -2.2 0 L 2.2 0 M -0.9 0 L 0.2 -1.1 L 1.2 -1.1 M -0.1 0 L 0.9 1.1 L 1.8 1.1', fill: '#f5f7fa', for: usb}
       - {at: [23.67, 75.95], text: IOIOI, font-size: 1.4, anchor: middle, fill: '#f5f7fa', for: console}
       - {at: [28.77, 75.00], path: 'M -0.9 0.8 L 0.9 0.8 L 0 -0.8 L -0.9 0.8', fill: '#f5f7fa', for: console}
@@ -752,7 +752,7 @@ views:
         - {ref: std/sfp-ganged@1, id: mgmt-sfp-1, at: [23.23, 27.36], group: sfp-plus, rel-pos: 1}
         - {ref: std/rj45-ganged@1, id: console, at: [23.20, 47.72], rotate: 180, group: mgmt, rel-pos: 1,
            attrs: {media: rj45-serial, role: console}}
-        - {ref: std/micro-usb@1, id: micro-usb, at: [9.33, 51.52], group: mgmt, rel-pos: 2,
+        - {ref: std/micro-usb@1, id: console-usb, at: [9.33, 51.52], group: mgmt, rel-pos: 2,
            attrs: {media: micro-usb-b, role: console}}
         - {ref: std/usb-a@1, id: usb, at: [7.40, 61.65], rotate: 90, group: mgmt, rel-pos: 3,
            attrs: {role: storage, speed: usb2}}
@@ -906,7 +906,7 @@ views:
         - {ref: common/led-dot@1, id: leds-f12, at: [417.47, 25.60], for: fab-12, attrs: {port: '12'}, group: port-leds, rel-pos: 53}
     regions:
       - {id: mgmt-block, at: [1.0, 7.6], size: {w: 40.0, h: 70.0}, label: Management,
-         members: [mgmt-sfp-0, mgmt-sfp-1, console, micro-usb, usb, oob, reset]}
+         members: [mgmt-sfp-0, mgmt-sfp-1, console, console-usb, usb, oob, reset]}
       - {id: service-ports, at: [42.0, 7.6], size: {w: 232.5, h: 69.0}, label: Service ports,
          members: [port-0, port-19, port-20, port-39]}
       - {id: fabric-ports, at: [281.0, 22.5], size: {w: 150.0, h: 34.0}, label: Fabric ports,

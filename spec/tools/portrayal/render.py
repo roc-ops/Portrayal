@@ -142,11 +142,17 @@ def bay_size(bay):
 MAX_BAY_DEPTH = 3
 
 
-def state_style(st):
-    """(color, alt-color, mode) for one state, or None if it needs no CSS.
+def state_style(st, vocabulary=()):
+    """(color, alt-color, mode, lit) for one state, or None if it needs no CSS.
 
     A bare token needs none: it names a state with no declared presentation, and
     whatever the base stylesheet says about `state-<name>` still applies.
+
+    `lit` is the tuple of segment names a SHAPE-CHANGING state turns on. A lamp
+    state says what colour one element is; a seven-segment digit showing `4` is
+    not a colour at all, it is four of seven bars. `vocabulary` is every segment
+    the component draws, so the rule can turn the rest off explicitly rather than
+    relying on whatever the previous state left behind.
     """
     if not isinstance(st, dict):
         return None
@@ -154,13 +160,23 @@ def state_style(st):
     mode = beh if isinstance(beh, str) else (beh or {}).get("mode", "solid")
     alt = None if isinstance(beh, str) else (beh or {}).get("color")
     color = st.get("color")
+    lit = tuple(st.get("lights") or ())
+    if lit:
+        return (color, alt, mode, (lit, tuple(sorted(vocabulary))))
     if not color and mode == "solid":
         return None
-    return (color, alt, mode)
+    return (color, alt, mode, None)
 
 
-def state_rule(sel_color, sel_anim, color, alt, mode):
-    """The CSS for one state at one scope: what colour, and how it is lit."""
+def state_rule(sel_color, sel_anim, color, alt, mode, segments=None):
+    """The CSS for one state at one scope: what colour, how it is lit, and - for a
+    segment display - which of its segments are on.
+
+    THE OFF ONES ARE WRITTEN OUT TOO. A rule that only turns segments on leaves
+    whatever the last state lit still lit, so `8` followed by `1` reads as `8`.
+    Naming every segment in the component's vocabulary makes each state a
+    complete statement of the face rather than a difference from an unknown one.
+    """
     out = ""
     decls = [d for d in (f"--led-color: {color};" if color else "",
                          f"--led-color-alt: {alt};" if alt else "") if d]
@@ -169,6 +185,15 @@ def state_rule(sel_color, sel_anim, color, alt, mode):
     if mode in BLINK_KEYFRAMES:
         out += (f"\n    {sel_anim} {{ animation: {BLINK_KEYFRAMES[mode]} "
                 f"1s linear infinite; }}")
+    if segments:
+        lit, vocabulary = segments
+        on = " ,".join(f"{sel_color} [data-seg='{s}']" for s in lit)
+        off = " ,".join(f"{sel_color} [data-seg='{s}']"
+                        for s in vocabulary if s not in lit)
+        if on:
+            out += f"\n    {on} {{ opacity: 1; }}"
+        if off:
+            out += f"\n    {off} {{ opacity: 0; }}"
     return out
 
 
@@ -259,9 +284,16 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     extra_attrs = (attr_overrides or {}).get(comp_name)
     if palette is not None:
         comp = ref.split("@")[0]
+        # every segment name this component's artwork draws, so a shape-changing
+        # state can turn the unlit ones off by name rather than by omission
+        vocabulary = set()
         for spec in (contract.get("elements") or {}).values():
             for st in spec.get("states") or []:
-                style = state_style(st)
+                if isinstance(st, dict):
+                    vocabulary.update(st.get("lights") or ())
+        for spec in (contract.get("elements") or {}).values():
+            for st in spec.get("states") or []:
+                style = state_style(st, vocabulary)
                 if style:
                     palette[(comp, st["name"])] = style
     skin_file = skins / f"{skin_name}.svg"
@@ -380,6 +412,7 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                 if feat.get("thread"):
                     node.set("data-z-thread", str(feat["thread"]))
                 break
+    part_groups = []
     for part in contract.get("parts") or []:
         pg, _ = instance_group(lib, part["ref"], f"{inst_id}--{part['id']}",
                                part["at"], None, part.get("attrs"), None, None,
@@ -391,6 +424,7 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         if part.get("lift"):
             pg.set("data-z-lift", str(part["lift"]))
         g.append(pg)
+        part_groups.append(pg)
     for feat in (contract.get("relief") or {}).get("features") or []:
         want = f"{inst_id}--{feat['node']}"
         for node in g.iter():
@@ -414,6 +448,26 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                     g.remove(node)
                     g.append(node)
                 break
+
+    # AND THEN THE COMPOSED PARTS GO BACK ON TOP, because the raise above put
+    # the very thing it was meant to protect them from in front of them.
+    #
+    # `ufispace/psu-132-ac` composes a C14 inlet and declares `inlet-recess` as
+    # a bezel standing 1.8mm proud. The recess is an opaque 28.6 x 31.4 slab and
+    # the inlet is 28 x 20 inside it, so raising the bezel to the end of the
+    # group painted the inlet out completely: twenty-eight UfiSpace and Juniper
+    # supplies drew a blank grey panel where the keyed shroud and three pins
+    # should be. The part was in the contract, in the SVG and in the DCIM
+    # export - missing only from the picture, which is the one place anybody
+    # looks to see whether a supply takes a cord.
+    #
+    # A composed part is mounted IN its parent, so it is never hidden by the
+    # parent's own artwork. The bezel keeps its raise relative to the skin,
+    # which is what that code is for.
+    for pg in part_groups:
+        if pg in list(g):
+            g.remove(pg)
+            g.append(pg)
 
     # A CARRIER IS A MODULE WITH BAYS OF ITS OWN. The A9K-MOD80/160/200/400 hold
     # two MPAs each and the SIP-700 holds four SPAs, and until this loop existed
@@ -1154,7 +1208,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
 
         extra += "".join(
             state_rule(*sels(ids, name), color, alt, mode)
-            for (name, color, alt, mode), ids in sorted(
+            for (name, color, alt, mode, _seg), ids in sorted(
                 inst_palette.items(), key=lambda kv: tuple(str(x) for x in kv[0])))
         style.text = STATE_CSS + extra + "\n"
 

@@ -1,12 +1,13 @@
 format: 1
 kind: component
 name: seg7-status-2
-version: 1.0.0
+version: 1.1.0
 class: display
 profile: networking
 description: Two-digit seven-segment status display in a dark bezel - the numeric
-  readout UfiSpace prints at the right of the S9600-72XC faceplate, drawn with both
-  digits showing all segments as the vendor's own artwork draws them
+  readout UfiSpace prints at the right of the S9600-72XC faceplate. Each digit is
+  addressable through the sixteen characters a seven-segment cell can form, and the
+  drawing's own face is '00'
 size: {w: 17.2, h: 9.5}
 provenance:
   size: >-
@@ -24,13 +25,47 @@ provenance:
     LED, the console ports, QSFP and QSFP28, and stops; section 10's Verifying System
     Operation tables the five front-panel lamps and the PSU and fan FRU lamps and says
     nothing about a numeric readout. What the two digits show - a POST code, a stack
-    or chassis ID, a fault code - is therefore not stated, and no state vocabulary is
-    claimed here. The artwork draws '88', which is the all-segments-lit lamp test every
-    vendor renders, not a value.
+    or chassis ID, a fault code - is therefore not stated, so the states declared here
+    are THE SIXTEEN CHARACTERS THE CELL CAN FORM and not a meaning: what a device puts
+    on them is the device's business, and a viewer may set any of them. The vendor's
+    figure draws '88', which is the all-segments-lit lamp test every vendor renders
+    rather than a value; this draws '0' on each digit, which is a readout a reader can
+    believe, and the lamp test remains available as the state '8'.
   colour: >-
     drawing - the digits are drawn in a light blue on near-black; sampled off the same
     figure. UfiSpace's own front render in the datasheet draws them the same way.
 elements:
-  digit-1: {at: [1.75, 1.5], size: [5.7, 6.9], class: display}
-  digit-2: {at: [9.75, 1.5], size: [5.7, 6.9], class: display}
+  digit-1:
+    at: [1.75, 1.5]
+    size: [5.7, 6.9]
+    class: display
+    description: >-
+      the left digit. Its states are the characters a seven-segment cell can form,
+      and each names the segments it lights - a top, b top-right, c bottom-right,
+      d bottom, e bottom-left, f top-left, g middle. A lamp state says what colour
+      one element is; this says which of seven elements are lit, which is what a
+      digit actually varies. The drawing's own face is `0`.
+    states: &digit-states
+      - {name: '0', lights: [a, b, c, d, e, f]}
+      - {name: '1', lights: [b, c]}
+      - {name: '2', lights: [a, b, g, e, d]}
+      - {name: '3', lights: [a, b, g, c, d]}
+      - {name: '4', lights: [f, g, b, c]}
+      - {name: '5', lights: [a, f, g, c, d]}
+      - {name: '6', lights: [a, f, g, e, c, d]}
+      - {name: '7', lights: [a, b, c]}
+      - {name: '8', lights: [a, b, c, d, e, f, g]}
+      - {name: '9', lights: [a, b, c, d, f, g]}
+      - {name: a, lights: [a, b, c, e, f, g]}
+      - {name: b, lights: [f, g, e, c, d]}
+      - {name: c, lights: [a, f, e, d]}
+      - {name: d, lights: [b, g, e, c, d]}
+      - {name: e, lights: [a, f, g, e, d]}
+      - {name: f, lights: [a, f, g, e]}
+  digit-2:
+    at: [9.75, 1.5]
+    size: [5.7, 6.9]
+    class: display
+    description: the right digit, with the same sixteen characters as digit-1
+    states: *digit-states
 skins: [default]
