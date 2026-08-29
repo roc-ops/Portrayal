@@ -381,7 +381,7 @@ views:
       - {block: qsfpdd-400g}
       - {id: mgmt-eth, at: [389.9, 1.2], size: [15.8, 12.5], shape: rect}
       - {id: usb, at: [391.8, 17.0], size: [12.0, 4.5], shape: rect}
-      - {id: console, at: [390.4, 27.1], size: [16.0, 14.0], shape: rect}
+      - {id: console, at: [389.8, 27.1], size: [16.0, 14.0], shape: rect}
       - {id: mgmt-sfp-1, at: [410.05, 12.0], size: [14.5, 10.0], shape: rect}
       - {id: mgmt-sfp-2, at: [410.05, 26.5], size: [14.5, 10.0], shape: rect}
     silkscreen:
@@ -395,7 +395,7 @@ views:
     - {at: [31.7, 14.69], text: PS1, font-size: 1.1, anchor: end, fill: '#e8eaec', for: led-ps1}
     - {at: [31.7, 17.69], text: PS2, font-size: 1.1, anchor: end, fill: '#e8eaec', for: led-ps2}
     - {at: [33.0, 24.0], text: Reset, font-size: 1.5, anchor: middle, fill: '#e8eaec', for: reset}
-    - {at: [31.2, 33.81], text: ToD, font-size: 1.6, anchor: middle, rotate: 90, fill: '#e8eaec', for: tod}
+    - {at: [31.2, 33.25], text: ToD, font-size: 1.6, anchor: middle, rotate: 90, fill: '#e8eaec', for: tod}
     - {at: [44.2, 24.92], text: '1', font-size: 1.9, anchor: middle, fill: '#e8eaec', for: port-1}
     - {at: [47.8, 24.25], mark: arrow-pair, size: 1.2, gap: 1.4, fill: '#e8eaec', for: [port-1, port-2]}
     - {at: [51.4, 24.92], text: '2', font-size: 1.9, anchor: middle, fill: '#e8eaec', for: port-2}
@@ -447,8 +447,8 @@ views:
     - {at: [395.4, 25.7], text: Mgmt, font-size: 1.3, anchor: end, fill: '#e8eaec', for: mgmt-eth}
     - {at: [397.8, 25.25], mark: arrow-pair, size: 1.1, gap: 1.0, fill: '#e8eaec', for: [mgmt-eth, console]}
     - {at: [400.2, 25.7], text: Console, font-size: 1.3, anchor: start, fill: '#e8eaec', for: console}
-    - {at: [416.9, 24.9], text: 10G Mgmt, font-size: 1.5, anchor: middle, fill: '#e8eaec', for: [mgmt-sfp-1, mgmt-sfp-2]}
-    - {at: [416.9, 10.45], mark: arrow-pair, size: 1.1, gap: 1.0, fill: '#e8eaec', for: [mgmt-sfp-1, mgmt-sfp-2]}
+    - {at: [417.3, 24.75], text: 10G Mgmt, font-size: 1.5, anchor: middle, fill: '#e8eaec', for: [mgmt-sfp-1, mgmt-sfp-2]}
+    - {at: [417.3, 10.45], mark: arrow-pair, size: 1.1, gap: 1.0, fill: '#e8eaec', for: [mgmt-sfp-1, mgmt-sfp-2]}
     components:
       blocks:
       - id: qsfpdd-400g
@@ -487,7 +487,7 @@ views:
       - {block: qsfpdd-400g}
       - {ref: common/rj45-shielded@2, id: mgmt-eth, at: [389.9, 1.2], group: mgmt, rel-pos: 1, attrs: {media: rj45, role: mgmt, speed: 1000base-t}}
       - {ref: common/usb-a@3, id: usb, at: [389.3, 14.6], group: mgmt, rel-pos: 5, attrs: {role: storage}}
-      - {ref: common/rj45-bezel@2, id: console, at: [389.9, 26.6], group: mgmt, rel-pos: 2, attrs: {media: rj45-serial, role: console}}
+      - {ref: common/rj45-bezel@2, id: console, at: [389.3, 26.6], group: mgmt, rel-pos: 2, attrs: {media: rj45-serial, role: console}}
       - {ref: common/led-dot@1, id: led-sfp-1, at: [411.9, 9.6], group: status-leds, rel-pos: 6, for: mgmt-sfp-1}
       - {ref: common/led-dot@1, id: led-sfp-2, at: [420.0, 9.6], group: status-leds, rel-pos: 7, for: mgmt-sfp-2}
       - {ref: common/sfp-plus-cage@2, id: mgmt-sfp-1, at: [409.3, 12.0], group: mgmt, rel-pos: 3, attrs: {media: sfp-plus, speed: 10g, role: mgmt-uplink}}

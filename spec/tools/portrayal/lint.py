@@ -3027,6 +3027,143 @@ def lint_device_label_geometry(path, data):
                      f"there - nearest is {near[0]} at {lo:.1f}-{hi:.1f} mm from the front")
 
 
+def _path_box(mark):
+    """Bounding box of a `path:` mark, relative to its own `at`.
+
+    Only M/L/Z with absolute coordinates, which is all this library uses and all
+    the marks generator emits. Anything with a curve or a relative command is
+    skipped rather than guessed at.
+    """
+    d = str(mark.get("path") or "")
+    if re.search(r"[aAcCqQsStTvVhH]", d):
+        return None
+    nums = [float(t) for t in re.findall(r"-?\d+(?:\.\d+)?", d)]
+    if len(nums) < 4 or len(nums) % 2:
+        return None
+    xs, ys = nums[0::2], nums[1::2]
+    return min(xs), min(ys), max(xs), max(ys)
+
+
+def _mark_centre(mark):
+    """Where a silkscreen mark's ink actually sits, as (cx, cy) or None."""
+    at = mark.get("at")
+    if not at:
+        return None
+    if mark.get("path"):
+        box = _path_box(mark)
+        if not box:
+            return None
+        return at[0] + (box[0] + box[2]) / 2, at[1] + (box[1] + box[3]) / 2
+    if mark.get("text") is None:
+        return None
+    x0, y0, x1, y1 = _text_extent(mark)
+    return (x0 + x1) / 2, (y0 + y1) / 2
+
+
+def lint_device_alignment(path, data, lib_roots):
+    """L61: a legend that is ALMOST centred on the thing it names.
+
+    Every one of these was found by a person opening the drawing and zooming
+    in, and every one is arithmetic: a lamp column 1.35mm high on its port
+    because a 10.7mm part was offset as though it were 10.0; port numerals
+    0.28mm below the gap they sit in, with their arrows 0.55mm below that, so
+    the legend row was centred on nothing at all; five status legends 0.21mm
+    high on their 2.0mm lamps. None of it is visible at page scale, all of it is
+    visible at 4x, and none of it was catchable by any rule here.
+
+    THE RULE ONLY FIRES ON NEAR MISSES. A legend deliberately placed elsewhere -
+    a column heading under two rows of jacks, `Reset` beneath its button - is
+    not trying to centre on anything, and a rule that nags about those gets
+    switched off. So: the mark has to be close enough to be reaching for the
+    part (within its extent plus a small margin on the perpendicular axis), and
+    then off by enough to see and little enough to be a slip. Dead centre is
+    quiet, and so is deliberately somewhere else.
+    """
+    NEAR = 3.0            # how far off-axis still counts as 'beside' the part
+    SLIP = (0.08, 2.0)    # off by at least this, and at most this, to be a slip
+
+    for vname, view in (data.get("views") or {}).items():
+        if not view:
+            continue
+        boxes = {}
+        for q in ((view.get("components") or {}).get("placements") or []):
+            sz = contract_size(q.get("ref", ""), lib_roots) if q.get("ref") else None
+            if q.get("at") and sz:
+                boxes[q["id"]] = (q["at"][0], q["at"][1],
+                                  q["at"][0] + sz["w"], q["at"][1] + sz["h"])
+
+        def target_box(for_):
+            """The box a `for:` names - the union when it names several, which is
+            how a mark that sits BETWEEN two ports declares what it belongs to."""
+            names = for_ if isinstance(for_, list) else [for_]
+            got = [boxes[n] for n in names if isinstance(n, str) and n in boxes]
+            if not got:
+                return None
+            return (min(b[0] for b in got), min(b[1] for b in got),
+                    max(b[2] for b in got), max(b[3] for b in got))
+
+        # marks, and placements that name another placement (a lamp on its port)
+        items = [("silkscreen", m, _mark_centre(m)) for m in (view.get("silkscreen") or [])]
+        for q in ((view.get("components") or {}).get("placements") or []):
+            b = boxes.get(q.get("id"))
+            if q.get("for") and b:
+                items.append(("placement", q, ((b[0] + b[2]) / 2, (b[1] + b[3]) / 2)))
+
+        for kind, m, centre in items:
+            if not centre or not m.get("for"):
+                continue
+            tb = target_box(m["for"])
+            if not tb:
+                continue
+            if kind == "placement" and m.get("id") in (
+                    m["for"] if isinstance(m["for"], list) else [m["for"]]):
+                continue
+            tcx, tcy = (tb[0] + tb[2]) / 2, (tb[1] + tb[3]) / 2
+            cx, cy = centre
+            label = m.get("text") or m.get("id") or "mark"
+
+            # WHICH AXIS IS THE ONE THAT SHOULD LINE UP depends on where the mark
+            # sits, and getting it backwards makes the rule silent rather than
+            # wrong - the first version of this checked a lamp sitting BESIDE its
+            # port for horizontal alignment, which is the axis it is deliberately
+            # offset on, so it never fired on the defect it was written for.
+            #
+            #   beside the part  (x clear, y overlapping)  -> the Y centres match
+            #   above or below   (y clear, x overlapping)  -> the X centres match
+            #   between several  (inside the union of what it names, outside each)
+            #                                              -> both, against the union
+            near_x = tb[0] - NEAR <= cx <= tb[2] + NEAR
+            near_y = tb[1] - NEAR <= cy <= tb[3] + NEAR
+            in_x = tb[0] <= cx <= tb[2]
+            in_y = tb[1] <= cy <= tb[3]
+            names = m["for"] if isinstance(m["for"], list) else [m["for"]]
+
+            if near_y and not in_x:                    # beside
+                off, axis, got, want = abs(cy - tcy), "vertically", cy, tcy
+            elif near_x and not in_y:                  # above or below
+                off, axis, got, want = abs(cx - tcx), "horizontally", cx, tcx
+            elif len(names) > 1 and in_x and in_y and not any(
+                    b[0] <= cx <= b[2] and b[1] <= cy <= b[3]
+                    for b in (boxes[n] for n in names if n in boxes)):
+                # a legend printed BETWEEN the parts it names - the numerals and
+                # arrows in the gap between two rows of ports. Its target is the
+                # middle of what it spans, which is the one thing nothing else
+                # in this file states.
+                dy, dx = abs(cy - tcy), abs(cx - tcx)
+                off, axis, got, want = ((dy, "vertically", cy, tcy) if dy >= dx
+                                        else (dx, "horizontally", cx, tcx))
+            else:
+                continue
+            if not (SLIP[0] <= off <= SLIP[1]):
+                continue
+            warn(path, "L61",
+                 f"{vname}: {str(label)[:18]!r} is {off:.2f}mm off centre "
+                 f"{axis} against {'+'.join(str(n) for n in names)} - it sits at "
+                 f"{got:.2f} and the part's centre is {want:.2f}. Close enough to be "
+                 f"reaching for it and far enough to see at 4x; either centre it or "
+                 f"move it somewhere it is plainly not trying to line up")
+
+
 def lint_device_double_count(path, data, lib_roots):
     """L30 - a chassis whose front and rear figures overlap.
 
@@ -3180,6 +3317,7 @@ def lint_device(path, validator, lib_roots):
     lint_device_bay_fit(path, data, lib_roots)
     lint_device_midplane_depth(path, data, lib_roots)
     lint_device_label_geometry(path, data)
+    lint_device_alignment(path, data, lib_roots)
     declared_groups = set((data.get("groups") or {}).keys())
     for gname, gdef in (data.get("groups") or {}).items():
         check_states(path, f"groups/{gname}", (gdef or {}).get("states"),
