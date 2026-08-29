@@ -3291,6 +3291,90 @@ def lint_device_id_convention(path, data, lib_roots):
                      f"leds-pN. Rename it {instead!r}")
 
 
+def _aperture_of(ref, lib_roots, depth=0):
+    """The opening a part presents, forwarding through a composed cage."""
+    ct = contract_for_ref(ref, lib_roots) if "contract_for_ref" in globals() else None
+    if ct is None:
+        nsname = None
+        try:
+            nsname, major = ref.rsplit("@", 1)
+        except ValueError:
+            return None
+        for r in lib_roots:
+            f = Path(r) / "components" / nsname / f"v{major}" / "contract.yaml"
+            if f.exists():
+                try:
+                    ct = load_yaml(f) or {}
+                except yaml.YAMLError:
+                    return None
+                break
+    if not ct or depth > 3:
+        return None
+    conf = ct.get("conforms")
+    if conf and conf in STANDARDS:
+        st = STANDARDS[conf]
+        return (st["w"], st["h"]), (0.0, 0.0)
+    found = []
+    for part in (ct.get("parts") or []):
+        sub = _aperture_of(part.get("ref", ""), lib_roots, depth + 1)
+        if sub:
+            o = part.get("at") or [0, 0]
+            found.append((sub[0], (o[0] + sub[1][0], o[1] + sub[1][1])))
+    if len(found) == 1:
+        return found[0]
+    sz = ct.get("size") or {}
+    return ((sz["w"], sz["h"]), (0.0, 0.0)) if sz.get("w") else None
+
+
+def lint_device_cutout_derivation(path, data, lib_roots):
+    """L63: a hole drawn around a part rather than derived from it.
+
+    THREE INDEPENDENT MODELLING RUNS OF ONE DEVICE MADE THIS EXACT MISTAKE, and
+    all three passed lint. The rule existed - as a test, `test_cutout_derivation`
+    - and a modelling run does not run the test suite, so it sat exactly where
+    nobody working on a device would look. An agent on the third run put it
+    plainly: it ran lint seven times and never saw the three holes it had drawn
+    wrong.
+
+    A cutout RESTATES the aperture its component already declares. Drawn instead
+    around what the opening looks like, with a little clearance, it becomes a
+    second and disagreeing record of one fact - and the drawing believes
+    whichever is wrong. A 2.0mm lamp gets a 2.0mm hole, not a 2.4mm one.
+    """
+    for vname, view in (data.get("views") or {}).items():
+        if not view:
+            continue
+        panel = (view or {}).get("panel") or {}
+        cuts = {c["id"]: c for c in (panel.get("cutouts") or []) if c.get("id")}
+        if not cuts:
+            continue                       # a face that punches nothing is fine
+        for q in ((view.get("components") or {}).get("placements") or []):
+            c = cuts.get(q.get("id"))
+            if not c or not q.get("at") or not c.get("at") or not c.get("size"):
+                continue
+            ap = _aperture_of(str(q.get("ref") or ""), lib_roots)
+            if not ap:
+                continue
+            (aw, ah), (ax, ay) = ap
+            deg = int(q.get("rotate") or 0) % 360
+            if deg in (90, 270):
+                aw, ah = ah, aw
+            want_at = [round(q["at"][0] + ax, 2), round(q["at"][1] + ay, 2)]
+            want_sz = [round(aw, 2), round(ah, 2)]
+            dpos = max(abs(want_at[0] - c["at"][0]), abs(want_at[1] - c["at"][1]))
+            dsz = max(abs(want_sz[0] - c["size"][0]), abs(want_sz[1] - c["size"][1]))
+            if dpos <= 0.02 and dsz <= 0.02:
+                continue
+            if deg not in (0, 180) or ax or ay:
+                continue                   # rotated/offset apertures: L39's business
+            warn(path, "L63",
+                 f"{vname}/{q['id']}: the cutout is {c['size']} at {c['at']}, and "
+                 f"the component {q.get('ref')} declares an opening of {want_sz} "
+                 f"at {want_at}. A cutout RESTATES its component's aperture - drawn "
+                 f"with clearance it is a second record of one fact, and the drawing "
+                 f"believes whichever is wrong. Derive it, do not measure it again.")
+
+
 def lint_device_alignment(path, data, lib_roots):
     """L61: a legend that is ALMOST centred on the thing it names.
 
@@ -3549,6 +3633,7 @@ def lint_device(path, validator, lib_roots):
     lint_device_midplane_depth(path, data, lib_roots)
     lint_device_label_geometry(path, data)
     lint_device_alignment(path, data, lib_roots)
+    lint_device_cutout_derivation(path, data, lib_roots)
     lint_device_id_convention(path, data, lib_roots)
     declared_groups = set((data.get("groups") or {}).keys())
     for gname, gdef in (data.get("groups") or {}).items():

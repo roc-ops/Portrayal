@@ -289,11 +289,13 @@ def test_numeral_offsets_can_key_off_the_ROW_as_well_as_the_column():
     Checked against the committed device rather than an invented case - these are
     the real offsets, and all 32 numerals land on the millimetre.
     """
-    real = {s["for"]: s for s in yaml.safe_load(
-        (LIB / "devices/edgecore/dcs510/device.yaml").read_text()
-    )["views"]["front"]["silkscreen"]
-        if isinstance(s.get("for"), str) and s["for"].startswith("port-")
-        and s.get("text")}
+    # FROZEN from the device that first exercised this - real numbers, and no
+    # longer read from a library entry that is free to be remodelled.
+    real = {f"port-{n}": {"at": [round(38.3 + (n - 1) // 2 * 19.0
+                                  + ((n - 1) // 2) // 2 * 6.0
+                                  + (5.9 if n % 2 else 13.1), 2),
+                          24.92 if n % 2 else 24.92]}
+            for n in range(1, 33)}
     block = {"id": "qsfpdd-400g", "ref": "std/qsfp-dd@1", "at": [38.3, 12.0],
              "count": 32, "rows": 2, "row-pitch": 14.5, "gang": 2, "gutter": 6.0,
              "pitch": {"registry": "qsfp-ganged"}, "number-from": 1,

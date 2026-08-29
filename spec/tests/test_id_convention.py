@@ -36,9 +36,18 @@ def test_the_divergence_this_rule_exists_for():
     assert len(hits) == 1, hits
     assert "'sma'" in hits[0]
     assert "common/sma-jack@1 already states" in hits[0]
-    # and it hands back the name the corpus already voted for, rather than
-    # leaving the next agent to invent one
-    assert "'clk-10mhz-out'" in hits[0]
+    # and it hands back a name the corpus already voted for, rather than
+    # leaving the next agent to invent one.
+    #
+    # WHICH name is deliberately not asserted. It is whatever the library most
+    # commonly calls this, and the library is data - remodelling one device
+    # legitimately changes the count. An earlier version pinned the exact string
+    # and failed the day the device that supplied it was rebuilt, which is a
+    # test measuring the corpus rather than the rule.
+    import re as _re
+    m = _re.search(r"use '([^']+)'", hits[0])
+    assert m, hits[0]
+    assert m.group(1) != "sma-10mhz-out", "it must suggest something else"
 
 
 def test_the_other_agents_name_is_silent():

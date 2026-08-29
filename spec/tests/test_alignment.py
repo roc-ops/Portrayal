@@ -39,8 +39,14 @@ def test_a_lamp_offset_from_its_port_is_caught():
     at dy -0.35. It was written at -1.7, so every lamp on the face sat 1.35mm
     high - which a reviewer described, to two decimal places, as 'a sixteenth of
     an inch too high on both rows'."""
-    lamp = {"ref": "edgecore/qsfpdd-lane-leds@1", "id": "led-p1",
-            "at": [35.75, 10.3], "for": "port-1"}
+    # `common/led-dot@1` is 2.0 x 2.0 and is in every checkout. An earlier
+    # version of this test named a lane-column part that one device happened to
+    # create; the next run of that device named it something else and the test
+    # failed for a reason unrelated to the rule. Twice.
+    # port centre is 17.0; a 2.0mm lamp centred there sits at 16.0, so 14.65 is
+    # the same 1.35mm miss a reviewer found by eye.
+    lamp = {"ref": "common/led-dot@1", "id": "led-p1",
+            "at": [35.75, 14.65], "for": "port-1"}
     hits = run(view([PORT, lamp]))
     assert len(hits) == 1, hits
     assert "1.35mm off centre vertically" in hits[0]
@@ -48,8 +54,8 @@ def test_a_lamp_offset_from_its_port_is_caught():
 
 
 def test_the_same_lamp_centred_is_silent():
-    lamp = {"ref": "edgecore/qsfpdd-lane-leds@1", "id": "led-p1",
-            "at": [35.75, 11.65], "for": "port-1"}
+    lamp = {"ref": "common/led-dot@1", "id": "led-p1",
+            "at": [35.75, 16.0], "for": "port-1"}
     assert run(view([PORT, lamp])) == []
 
 
