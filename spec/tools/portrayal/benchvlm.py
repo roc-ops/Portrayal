@@ -32,8 +32,12 @@ import argparse
 import json
 import pathlib
 import re
+import sys
 
 from PIL import Image
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import benchtile  # noqa: E402
 
 # THE PROMPT IS IN THE MODEL'S OWN DIALECT, AND THAT IS NOT A DETAIL.
 #
@@ -57,25 +61,10 @@ PROMPT = (
 )
 
 
-def tiles(w, h, aspect=2.0, overlap=0.25):
-    """Cut a long panel into overlapping windows about `aspect` to one.
-
-    A whole 10:1 strip gives a model a few pixels per port; one tile per port
-    gives it no context to see a row with. Two-to-one is the middle, and the
-    overlap is what stops a cage that straddles a seam from being lost by both
-    tiles.
-    """
-    tw = max(1, int(round(h * aspect)))
-    if tw >= w:
-        return [(0, 0, w, h)]
-    step = max(1, int(round(tw * (1 - overlap))))
-    out, x = [], 0
-    while True:
-        if x + tw >= w:
-            out.append((w - tw, 0, tw, h))
-            return out
-        out.append((x, 0, tw, h))
-        x += step
+# The cut lives in benchtile so the training set and this harness cannot
+# disagree about it - they were two copies kept in step by a test, and the copy
+# here only ever cut in x, which returned a chassis router's face whole.
+tiles = benchtile.tiles
 
 
 def parse_boxes(text, sx, sy, ox, oy):

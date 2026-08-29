@@ -22,9 +22,12 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "spec" / "tools" / "portrayal"))
 
+import pytest  # noqa: E402
+
 import benchdata  # noqa: E402
 import benchgt  # noqa: E402
 import benchscore  # noqa: E402
+import benchtile  # noqa: E402
 import benchvlm  # noqa: E402
 
 
@@ -185,29 +188,75 @@ def test_no_matches_is_not_the_same_as_no_error():
 
 # ---- the tiling -------------------------------------------------------------
 
-def test_a_panel_is_covered_end_to_end():
-    """Every column of a 1455 px panel must fall inside some tile, or the ports
-    in the gap are unfindable and the score blames the model."""
-    ts = benchvlm.tiles(1455, 145)
-    covered = set()
-    for x, _, w, _ in ts:
-        covered |= set(range(x, x + w))
-    assert covered == set(range(1455))
+def _covers(w, h, **kw):
+    """Does every row and every column of the face fall inside some window?"""
+    cx, cy = set(), set()
+    for x, y, tw, th in benchtile.tiles(w, h, **kw):
+        cx |= set(range(x, x + tw))
+        cy |= set(range(y, y + th))
+    return cx == set(range(w)) and cy == set(range(h))
 
 
-def test_the_tiles_overlap_so_a_cage_on_a_seam_is_whole_somewhere():
-    ts = benchvlm.tiles(1455, 145, overlap=0.25)
+# every shape band the library actually contains, so a face cannot be
+# unreachable to a detector because nobody tried its proportions
+SHAPES = [("1RU ribbon", 1455, 145), ("patch panel", 1455, 88),
+          ("3RU", 1300, 385), ("mx480", 1330, 1066),
+          ("mx2020, taller than wide", 440, 2000),
+          ("asr-9006, square", 1340, 1340), ("small face", 200, 145)]
+
+
+@pytest.mark.parametrize("name,w,h", SHAPES)
+def test_every_shape_in_the_library_is_covered(name, w, h):
+    assert _covers(w, h), name
+
+
+@pytest.mark.parametrize("name,w,h", SHAPES)
+def test_no_window_hangs_off_the_face(name, w, h):
+    for x, y, tw, th in benchtile.tiles(w, h):
+        assert x >= 0 and y >= 0 and x + tw <= w and y + th <= h, name
+
+
+def test_a_face_taller_than_it_is_wide_is_cut_too():
+    """The defect this file exists for. Cutting only in x returned the MX2020's
+    440 x 2000 face as ONE window - the same 10:1 problem the cutting is for,
+    turned on its side. Twelve modelled devices are taller than they are wide."""
+    ts = benchtile.tiles(440, 2000)
     assert len(ts) > 1
-    assert ts[1][0] < ts[0][0] + ts[0][2], "the second tile must start inside the first"
+    assert len({y for _, y, _, _ in ts}) > 1, "it must cut in y, not only in x"
 
 
-def test_a_panel_shorter_than_a_tile_is_one_tile():
-    assert benchvlm.tiles(200, 145) == [(0, 0, 200, 145)]
+def test_a_square_face_is_cut_as_well():
+    """Thirteen devices sit between 0.6:1 and 3.5:1, where there is no long side
+    to lay a window along, and taking the short side returns the face whole."""
+    assert len(benchtile.tiles(1340, 1340)) > 1
 
 
-def test_the_last_tile_is_pulled_back_rather_than_running_off_the_end():
-    for x, _, w, _ in benchvlm.tiles(1455, 145):
-        assert x >= 0 and x + w <= 1455
+def test_a_small_face_is_read_whole_rather_than_shredded():
+    """Cutting exists to keep features legible once enlarged. A 200 x 145 face
+    at 2x is 400 x 290 and fine; six 144 x 72 windows split the very features
+    it was meant to show."""
+    assert benchtile.tiles(200, 145) == [(0, 0, 200, 145)]
+
+
+def test_the_ribbon_cut_is_unchanged_by_all_of_that():
+    """The 1RU case is the one with a measured result behind it - 0.892 F1 and
+    0.27 mm - so it must come out byte for byte as it did."""
+    assert benchtile.tiles(1455, 145) == [
+        (0, 0, 290, 145), (218, 0, 290, 145), (436, 0, 290, 145),
+        (654, 0, 290, 145), (872, 0, 290, 145), (1090, 0, 290, 145),
+        (1165, 0, 290, 145)]
+
+
+def test_the_windows_overlap_so_a_cage_on_a_seam_is_whole_somewhere():
+    ts = benchtile.tiles(1455, 145, overlap=0.25)
+    assert ts[1][0] < ts[0][0] + ts[0][2], "the second window starts inside the first"
+
+
+def test_the_harness_and_the_dataset_cut_identically():
+    """Two copies of this function, kept in step by a test, is how the x-only
+    cut survived: fixing one would have left the other. Now there is one."""
+    assert benchvlm.tiles is benchtile.tiles
+    assert benchdata.tiles is benchtile.tiles
 
 
 # ---- reading the model's reply ----------------------------------------------

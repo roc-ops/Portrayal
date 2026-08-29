@@ -21,25 +21,18 @@ the same as reading a faceplate. Say so wherever the number is quoted.
 import argparse
 import json
 import pathlib
+import sys
 
 from PIL import Image
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import benchtile  # noqa: E402
+
 CLASSES = ["port"]
 
-
-def tiles(w, h, aspect=2.0, overlap=0.25):
-    """Same cut as the harness sends a model, so train and test see one shape."""
-    tw = max(1, int(round(h * aspect)))
-    if tw >= w:
-        return [(0, 0, w, h)]
-    step = max(1, int(round(tw * (1 - overlap))))
-    out, x = [], 0
-    while True:
-        if x + tw >= w:
-            out.append((w - tw, 0, tw, h))
-            return out
-        out.append((x, 0, tw, h))
-        x += step
+# The same cut the harness sends a model, from the same place - train and test
+# must see one shape or the score is of a different task.
+tiles = benchtile.tiles
 
 
 def clip(box, tx, ty, tw, th, keep=0.6):
