@@ -164,6 +164,25 @@ def _truth(boxes):
             "boxes": [{"px": b, "term": "Port"} for b in boxes]}
 
 
+def test_the_error_is_reported_in_millimetres_not_pixels():
+    """IoU says two rectangles agree; a modelling pipeline needs to know the
+    proposed number would be a quarter of a millimetre out. At 2 px/mm a box
+    four pixels adrift is two millimetres, and only one of those is a fact
+    about the device."""
+    truth = {"a/one": _truth([[0, 0, 10, 10]])}
+    truth["a/one"]["px_per_mm"] = 2.0
+    err = benchscore.mm_error(truth, {"a/one": [[4, 0, 10, 10, 1.0]]}, thresh=0.3)
+    assert err["dx"] == [2.0]
+    assert err["dy"] == [0.0]
+
+
+def test_no_matches_is_not_the_same_as_no_error():
+    """An empty quantile must not print as 0.00 mm - that would read as a
+    perfect detector where in fact nothing was found at all."""
+    assert benchscore.quantile([], 0.5) is None
+    assert benchscore.quantile([1.0], 0.5) == 1.0
+
+
 # ---- the tiling -------------------------------------------------------------
 
 def test_a_panel_is_covered_end_to_end():

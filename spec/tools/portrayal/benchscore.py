@@ -71,6 +71,44 @@ def prf(hits, npred, ntrue):
     return p, r, f
 
 
+def mm_error(truth, preds, thresh=0.5, term="Port"):
+    """How far off, in the device's own millimetres, are the matched boxes?
+
+    IOU IS THE WRONG UNIT FOR THIS PROJECT. An overlap score says whether two
+    rectangles agree; a modelling pipeline needs to know that if this detector
+    proposed a port's position, the number would be a quarter of a millimetre
+    out - which is inside the tolerance L61 argues about and far inside what a
+    reader can see. Every other measurement in this library is defended in
+    millimetres and so is this one.
+
+    It measures agreement with the LIBRARY, not with the hardware. A device
+    modelled wrongly and detected 'correctly' will show a large error, and the
+    detector may well be the one that is right.
+    """
+    out = {"dx": [], "dy": [], "dw": [], "dh": []}
+    for dev, got in preds.items():
+        v = truth.get(dev)
+        if not v:
+            continue
+        ppm = v["px_per_mm"]
+        boxes = [b["px"] for b in v["boxes"] if not term or b.get("term") == term]
+        for p, t, _ in match(got, boxes, thresh)[1]:
+            out["dx"].append(abs(p[0] - t[0]) / ppm)
+            out["dy"].append(abs(p[1] - t[1]) / ppm)
+            out["dw"].append(abs(p[2] - t[2]) / ppm)
+            out["dh"].append(abs(p[3] - t[3]) / ppm)
+    return out
+
+
+def quantile(values, q):
+    """The q-th value of a sorted list. Empty gives None rather than a zero,
+    because 'no matches' and 'no error' must not print the same."""
+    if not values:
+        return None
+    s = sorted(values)
+    return s[min(len(s) - 1, int(q * len(s)))]
+
+
 def score_all(truth, preds, thresh=0.5, term="Port", baseline=False):
     """Every device with a prediction, scored. Returns (rows, totals, unrun).
 
@@ -137,6 +175,14 @@ def main(argv=None):
     if rows:
         mean = sum(x["f1"] for x in rows) / len(rows)
         print(f"  mean per device F1 {mean:.3f}")
+    err = mm_error(truth, preds, args.iou, args.term)
+    if err["dx"]:
+        n = len(err["dx"])
+        print(f"\n  {n} matched ports, error in the device's own millimetres")
+        for label, q in (("median", 0.5), ("p90", 0.9)):
+            vals = " ".join(f"|d{k[1]}| {quantile(err[k], q):.2f}" for k in
+                            ("dx", "dy", "dw", "dh"))
+            print(f"  {label:6s} {vals}  mm")
     if rows:
         lo = min(rows, key=lambda x: x["px_per_mm"])
         hi = max(rows, key=lambda x: x["px_per_mm"])
