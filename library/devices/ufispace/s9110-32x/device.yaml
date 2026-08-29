@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9110-32x
-version: 0.1.1
+version: 1.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9110-32X
@@ -301,12 +301,12 @@ views:
         - {at: [434.2, 11.5], size: [4.0, 24.0], pattern: vent, vent: 25}
     silkscreen:
       - {at: [15.6, 29.6], path: 'M -4.2 -7.5 L 4.2 -7.5 L 4.2 7.5 L -4.2 7.5 Z', stroke-width: 0.25, for: chassis}
-      - {at: [11.9, 24.2], text: SYS, font-size: 1.4, for: led-sys}
-      - {at: [11.9, 27.2], text: FAN, font-size: 1.4, for: led-fan}
-      - {at: [11.9, 30.2], text: PS0, font-size: 1.4, for: led-ps0}
-      - {at: [11.9, 33.2], text: PS1, font-size: 1.4, for: led-ps1}
-      - {at: [11.9, 36.2], text: ID, font-size: 1.4, for: led-id}
-      - {at: [9.6, 41.4], text: RESET, font-size: 1.5, anchor: middle, for: reset}
+      - {at: [11.9, 24.03], text: SYS, font-size: 1.4, for: led-sys}
+      - {at: [11.9, 27.03], text: FAN, font-size: 1.4, for: led-fan}
+      - {at: [11.9, 30.03], text: PS0, font-size: 1.4, for: led-ps0}
+      - {at: [11.9, 33.03], text: PS1, font-size: 1.4, for: led-ps1}
+      - {at: [11.9, 36.03], text: ID, font-size: 1.4, for: led-id}
+      - {at: [9.4, 41.4], text: RESET, font-size: 1.5, anchor: middle, for: reset}
       - {at: [31.65, 3.6], path: 'M -0.9 -1.7 L 0.9 -1.7 L 0.9 -0.5 L -0.9 -0.5 L -0.9 -1.7 M 0 -0.5 L 0 0.3 M -2.4 0.3 L 2.4 0.3 M -2.4 0.3 L -2.4 1.1 M 2.4 0.3 L 2.4 1.1 M -3.3 1.1 L -1.5 1.1 L -1.5 2.3 L -3.3 2.3 L -3.3 1.1 M 1.5 1.1 L 3.3 1.1 L 3.3 2.3 L 1.5 2.3 L 1.5 1.1', stroke-width: 0.25, for: oob}
       - {at: [24.9, 42.6], text: SS, font-size: 1.6, anchor: middle, for: usb}
       - {at: [28.8, 41.9], path: 'M -1.0 1.0 L 0 -1.0 L 1.0 1.0 Z', fill: '#f5f7fa', stroke-width: 0.2, for: chassis}
@@ -408,68 +408,68 @@ views:
         - {ref: common/led-rect@1, id: led-id, at: [15.0, 34.3], for: chassis, group: status-leds, rel-pos: 5,
            states: ['off', {name: beacon, color: '#3b82f6', behavior: blinking}],
            description: 'HIG ID row - Off (no power), Blinking Blue (beacon feature is enabled on the switch)'}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-0, at: [76.85, 3.3], for: port-0, attrs: {port: '0'}, group: port-leds, rel-pos: 0}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-1, at: [76.85, 6.9], for: port-1, attrs: {port: '1'}, group: port-leds, rel-pos: 1}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-0, at: [76.85, 3.3], for: port-0, attrs: {port: '0'}, group: port-leds, rel-pos: 0}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-1, at: [76.85, 6.9], for: port-1, attrs: {port: '1'}, group: port-leds, rel-pos: 1}
         - {ref: std/qsfp-ganged@1, id: port-0, at: [74.8, 10.9], group: qsfp28, rel-pos: 0}
         - {ref: std/qsfp-ganged@1, id: port-1, at: [74.8, 26.1], rotate: 180, group: qsfp28, rel-pos: 1}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-2, at: [97.65, 3.3], for: port-2, attrs: {port: '2'}, group: port-leds, rel-pos: 2}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-3, at: [97.65, 6.9], for: port-3, attrs: {port: '3'}, group: port-leds, rel-pos: 3}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-2, at: [97.65, 3.3], for: port-2, attrs: {port: '2'}, group: port-leds, rel-pos: 2}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-3, at: [97.65, 6.9], for: port-3, attrs: {port: '3'}, group: port-leds, rel-pos: 3}
         - {ref: std/qsfp-ganged@1, id: port-2, at: [95.6, 10.9], group: qsfp28, rel-pos: 2}
         - {ref: std/qsfp-ganged@1, id: port-3, at: [95.6, 26.1], rotate: 180, group: qsfp28, rel-pos: 3}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-4, at: [122.4, 3.3], for: port-4, attrs: {port: '4'}, group: port-leds, rel-pos: 4}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-5, at: [122.4, 6.9], for: port-5, attrs: {port: '5'}, group: port-leds, rel-pos: 5}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-4, at: [122.4, 3.3], for: port-4, attrs: {port: '4'}, group: port-leds, rel-pos: 4}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-5, at: [122.4, 6.9], for: port-5, attrs: {port: '5'}, group: port-leds, rel-pos: 5}
         - {ref: std/qsfp-ganged@1, id: port-4, at: [120.35, 10.9], group: qsfp28, rel-pos: 4}
         - {ref: std/qsfp-ganged@1, id: port-5, at: [120.35, 26.1], rotate: 180, group: qsfp28, rel-pos: 5}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-6, at: [143.2, 3.3], for: port-6, attrs: {port: '6'}, group: port-leds, rel-pos: 6}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-7, at: [143.2, 6.9], for: port-7, attrs: {port: '7'}, group: port-leds, rel-pos: 7}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-6, at: [143.2, 3.3], for: port-6, attrs: {port: '6'}, group: port-leds, rel-pos: 6}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-7, at: [143.2, 6.9], for: port-7, attrs: {port: '7'}, group: port-leds, rel-pos: 7}
         - {ref: std/qsfp-ganged@1, id: port-6, at: [141.15, 10.9], group: qsfp28, rel-pos: 6}
         - {ref: std/qsfp-ganged@1, id: port-7, at: [141.15, 26.1], rotate: 180, group: qsfp28, rel-pos: 7}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-8, at: [167.95, 3.3], for: port-8, attrs: {port: '8'}, group: port-leds, rel-pos: 8}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-9, at: [167.95, 6.9], for: port-9, attrs: {port: '9'}, group: port-leds, rel-pos: 9}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-8, at: [167.95, 3.3], for: port-8, attrs: {port: '8'}, group: port-leds, rel-pos: 8}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-9, at: [167.95, 6.9], for: port-9, attrs: {port: '9'}, group: port-leds, rel-pos: 9}
         - {ref: std/qsfp-ganged@1, id: port-8, at: [165.9, 10.9], group: qsfp28, rel-pos: 8}
         - {ref: std/qsfp-ganged@1, id: port-9, at: [165.9, 26.1], rotate: 180, group: qsfp28, rel-pos: 9}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-10, at: [188.75, 3.3], for: port-10, attrs: {port: '10'}, group: port-leds, rel-pos: 10}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-11, at: [188.75, 6.9], for: port-11, attrs: {port: '11'}, group: port-leds, rel-pos: 11}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-10, at: [188.75, 3.3], for: port-10, attrs: {port: '10'}, group: port-leds, rel-pos: 10}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-11, at: [188.75, 6.9], for: port-11, attrs: {port: '11'}, group: port-leds, rel-pos: 11}
         - {ref: std/qsfp-ganged@1, id: port-10, at: [186.7, 10.9], group: qsfp28, rel-pos: 10}
         - {ref: std/qsfp-ganged@1, id: port-11, at: [186.7, 26.1], rotate: 180, group: qsfp28, rel-pos: 11}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-12, at: [213.5, 3.3], for: port-12, attrs: {port: '12'}, group: port-leds, rel-pos: 12}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-13, at: [213.5, 6.9], for: port-13, attrs: {port: '13'}, group: port-leds, rel-pos: 13}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-12, at: [213.5, 3.3], for: port-12, attrs: {port: '12'}, group: port-leds, rel-pos: 12}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-13, at: [213.5, 6.9], for: port-13, attrs: {port: '13'}, group: port-leds, rel-pos: 13}
         - {ref: std/qsfp-ganged@1, id: port-12, at: [211.45, 10.9], group: qsfp28, rel-pos: 12}
         - {ref: std/qsfp-ganged@1, id: port-13, at: [211.45, 26.1], rotate: 180, group: qsfp28, rel-pos: 13}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-14, at: [234.3, 3.3], for: port-14, attrs: {port: '14'}, group: port-leds, rel-pos: 14}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-15, at: [234.3, 6.9], for: port-15, attrs: {port: '15'}, group: port-leds, rel-pos: 15}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-14, at: [234.3, 3.3], for: port-14, attrs: {port: '14'}, group: port-leds, rel-pos: 14}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-15, at: [234.3, 6.9], for: port-15, attrs: {port: '15'}, group: port-leds, rel-pos: 15}
         - {ref: std/qsfp-ganged@1, id: port-14, at: [232.25, 10.9], group: qsfp28, rel-pos: 14}
         - {ref: std/qsfp-ganged@1, id: port-15, at: [232.25, 26.1], rotate: 180, group: qsfp28, rel-pos: 15}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-16, at: [259.05, 3.3], for: port-16, attrs: {port: '16'}, group: port-leds, rel-pos: 16}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-17, at: [259.05, 6.9], for: port-17, attrs: {port: '17'}, group: port-leds, rel-pos: 17}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-16, at: [259.05, 3.3], for: port-16, attrs: {port: '16'}, group: port-leds, rel-pos: 16}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-17, at: [259.05, 6.9], for: port-17, attrs: {port: '17'}, group: port-leds, rel-pos: 17}
         - {ref: std/qsfp-ganged@1, id: port-16, at: [257.0, 10.9], group: qsfp28, rel-pos: 16}
         - {ref: std/qsfp-ganged@1, id: port-17, at: [257.0, 26.1], rotate: 180, group: qsfp28, rel-pos: 17}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-18, at: [279.85, 3.3], for: port-18, attrs: {port: '18'}, group: port-leds, rel-pos: 18}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-19, at: [279.85, 6.9], for: port-19, attrs: {port: '19'}, group: port-leds, rel-pos: 19}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-18, at: [279.85, 3.3], for: port-18, attrs: {port: '18'}, group: port-leds, rel-pos: 18}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-19, at: [279.85, 6.9], for: port-19, attrs: {port: '19'}, group: port-leds, rel-pos: 19}
         - {ref: std/qsfp-ganged@1, id: port-18, at: [277.8, 10.9], group: qsfp28, rel-pos: 18}
         - {ref: std/qsfp-ganged@1, id: port-19, at: [277.8, 26.1], rotate: 180, group: qsfp28, rel-pos: 19}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-20, at: [304.6, 3.3], for: port-20, attrs: {port: '20'}, group: port-leds, rel-pos: 20}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-21, at: [304.6, 6.9], for: port-21, attrs: {port: '21'}, group: port-leds, rel-pos: 21}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-20, at: [304.6, 3.3], for: port-20, attrs: {port: '20'}, group: port-leds, rel-pos: 20}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-21, at: [304.6, 6.9], for: port-21, attrs: {port: '21'}, group: port-leds, rel-pos: 21}
         - {ref: std/qsfp-ganged@1, id: port-20, at: [302.55, 10.9], group: qsfp28, rel-pos: 20}
         - {ref: std/qsfp-ganged@1, id: port-21, at: [302.55, 26.1], rotate: 180, group: qsfp28, rel-pos: 21}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-22, at: [325.4, 3.3], for: port-22, attrs: {port: '22'}, group: port-leds, rel-pos: 22}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-23, at: [325.4, 6.9], for: port-23, attrs: {port: '23'}, group: port-leds, rel-pos: 23}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-22, at: [325.4, 3.3], for: port-22, attrs: {port: '22'}, group: port-leds, rel-pos: 22}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-23, at: [325.4, 6.9], for: port-23, attrs: {port: '23'}, group: port-leds, rel-pos: 23}
         - {ref: std/qsfp-ganged@1, id: port-22, at: [323.35, 10.9], group: qsfp28, rel-pos: 22}
         - {ref: std/qsfp-ganged@1, id: port-23, at: [323.35, 26.1], rotate: 180, group: qsfp28, rel-pos: 23}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-24, at: [350.15, 3.3], for: port-24, attrs: {port: '24'}, group: port-leds, rel-pos: 24}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-25, at: [350.15, 6.9], for: port-25, attrs: {port: '25'}, group: port-leds, rel-pos: 25}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-24, at: [350.15, 3.3], for: port-24, attrs: {port: '24'}, group: port-leds, rel-pos: 24}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-25, at: [350.15, 6.9], for: port-25, attrs: {port: '25'}, group: port-leds, rel-pos: 25}
         - {ref: std/qsfp-ganged@1, id: port-24, at: [348.1, 10.9], group: qsfp28, rel-pos: 24}
         - {ref: std/qsfp-ganged@1, id: port-25, at: [348.1, 26.1], rotate: 180, group: qsfp28, rel-pos: 25}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-26, at: [370.95, 3.3], for: port-26, attrs: {port: '26'}, group: port-leds, rel-pos: 26}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-27, at: [370.95, 6.9], for: port-27, attrs: {port: '27'}, group: port-leds, rel-pos: 27}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-26, at: [370.95, 3.3], for: port-26, attrs: {port: '26'}, group: port-leds, rel-pos: 26}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-27, at: [370.95, 6.9], for: port-27, attrs: {port: '27'}, group: port-leds, rel-pos: 27}
         - {ref: std/qsfp-ganged@1, id: port-26, at: [368.9, 10.9], group: qsfp28, rel-pos: 26}
         - {ref: std/qsfp-ganged@1, id: port-27, at: [368.9, 26.1], rotate: 180, group: qsfp28, rel-pos: 27}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-28, at: [395.7, 3.3], for: port-28, attrs: {port: '28'}, group: port-leds, rel-pos: 28}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-29, at: [395.7, 6.9], for: port-29, attrs: {port: '29'}, group: port-leds, rel-pos: 29}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-28, at: [395.7, 3.3], for: port-28, attrs: {port: '28'}, group: port-leds, rel-pos: 28}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-29, at: [395.7, 6.9], for: port-29, attrs: {port: '29'}, group: port-leds, rel-pos: 29}
         - {ref: std/qsfp-ganged@1, id: port-28, at: [393.65, 10.9], group: qsfp28, rel-pos: 28}
         - {ref: std/qsfp-ganged@1, id: port-29, at: [393.65, 26.1], rotate: 180, group: qsfp28, rel-pos: 29}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-30, at: [416.5, 3.3], for: port-30, attrs: {port: '30'}, group: port-leds, rel-pos: 30}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-31, at: [416.5, 6.9], for: port-31, attrs: {port: '31'}, group: port-leds, rel-pos: 31}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-30, at: [416.5, 3.3], for: port-30, attrs: {port: '30'}, group: port-leds, rel-pos: 30}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-31, at: [416.5, 6.9], for: port-31, attrs: {port: '31'}, group: port-leds, rel-pos: 31}
         - {ref: std/qsfp-ganged@1, id: port-30, at: [414.45, 10.9], group: qsfp28, rel-pos: 30}
         - {ref: std/qsfp-ganged@1, id: port-31, at: [414.45, 26.1], rotate: 180, group: qsfp28, rel-pos: 31}
     regions:
@@ -544,7 +544,7 @@ views:
         - {at: [434, 10], size: [38, 26], pattern: vent, vent: 25}
         - {at: [6, 9], size: [15, 26], fill: '#d9c92e', rx: 0.5}
     silkscreen:
-      - {at: [13.5, 23.5], text: GND, font-size: 2.0, rotate: 90, for: ground-side}
+      - {at: [13.5, 22], text: GND, font-size: 2.0, rotate: 90, for: ground-side}
     components:
       placements:
         - {ref: common/ground-symbol@1, id: ground-side, at: [23.5, 19], group: grounding, rel-pos: 2,

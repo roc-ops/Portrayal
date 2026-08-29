@@ -3394,8 +3394,51 @@ def lint_device_alignment(path, data, lib_roots):
     then off by enough to see and little enough to be a slip. Dead centre is
     quiet, and so is deliberately somewhere else.
     """
-    NEAR = 3.0            # how far off-axis still counts as 'beside' the part
+    for s in alignment_slips(data, lib_roots):
+        warn(path, "L61",
+             f"{s['view']}: {str(s['label'])[:18]!r} is {s['off']:.2f}mm off centre "
+             f"{s['axis']} against {'+'.join(str(n) for n in s['names'])} - it sits at "
+             f"{s['got']:.2f} and the part's centre is {s['want']:.2f}. Close enough to be "
+             f"reaching for it and far enough to see at 4x; either centre it or "
+             f"move it somewhere it is plainly not trying to line up")
+
+
+def alignment_slips(data, lib_roots):
+    """Every near-miss L61 reports, as data rather than as a sentence.
+
+    THE RULE AND THE SWEEP THAT FIXES IT MUST NOT BE TWO IMPLEMENTATIONS. A
+    corrector that re-derives which axis should line up is a second opinion
+    about the same question, and the day the two disagree the sweep moves marks
+    the rule never complained about while leaving the ones it did. That is the
+    divergence L62 exists to stop, one level up.
+
+    So the decision lives here, once. `lint_device_alignment` turns each slip
+    into prose; the sweep reads `axis`, `got` and `want` and shifts the item by
+    the difference. Each slip carries the list its item came from and the index
+    within it, which is what lets a caller find the line in the file - the mark
+    itself has no identity a text search could rely on.
+    """
     SLIP = (0.08, 2.0)    # off by at least this, and at most this, to be a slip
+    for a in alignment_targets(data, lib_roots):
+        if a["axis"] and SLIP[0] <= a["off"] <= SLIP[1]:
+            yield a
+
+
+def alignment_targets(data, lib_roots):
+    """Every item that names something to line up with, slipping or not.
+
+    L61 only reports NEAR misses, and a caller that needs to know what else is
+    reaching for the same part cannot get it from the reported ones alone. On
+    the S8901 each port carries a PAIR of arrow lamps straddling its centre,
+    2.22mm out one way and 1.38mm the other; only the second is inside the
+    window, so a reader of slips alone sees a lone lamp 1.38mm off its port and
+    centres it - straight into the partner it could not see.
+
+    So the geometry is computed once, for every item, and `alignment_slips`
+    keeps the near misses. `axis` is None for an item that is not lined up
+    against anything on either axis; `off` is 0.0 there and means nothing.
+    """
+    NEAR = 3.0            # how far off-axis still counts as 'beside' the part
 
     for vname, view in (data.get("views") or {}).items():
         if not view:
@@ -3418,13 +3461,14 @@ def lint_device_alignment(path, data, lib_roots):
                     max(b[2] for b in got), max(b[3] for b in got))
 
         # marks, and placements that name another placement (a lamp on its port)
-        items = [("silkscreen", m, _mark_centre(m)) for m in (view.get("silkscreen") or [])]
-        for q in ((view.get("components") or {}).get("placements") or []):
+        items = [("silkscreen", i, m, _mark_centre(m))
+                 for i, m in enumerate(view.get("silkscreen") or [])]
+        for i, q in enumerate(((view.get("components") or {}).get("placements") or [])):
             b = boxes.get(q.get("id"))
             if q.get("for") and b:
-                items.append(("placement", q, ((b[0] + b[2]) / 2, (b[1] + b[3]) / 2)))
+                items.append(("placement", i, q, ((b[0] + b[2]) / 2, (b[1] + b[3]) / 2)))
 
-        for kind, m, centre in items:
+        for kind, index, m, centre in items:
             if not centre or not m.get("for"):
                 continue
             tb = target_box(m["for"])
@@ -3468,15 +3512,11 @@ def lint_device_alignment(path, data, lib_roots):
                 off, axis, got, want = ((dy, "vertically", cy, tcy) if dy >= dx
                                         else (dx, "horizontally", cx, tcx))
             else:
-                continue
-            if not (SLIP[0] <= off <= SLIP[1]):
-                continue
-            warn(path, "L61",
-                 f"{vname}: {str(label)[:18]!r} is {off:.2f}mm off centre "
-                 f"{axis} against {'+'.join(str(n) for n in names)} - it sits at "
-                 f"{got:.2f} and the part's centre is {want:.2f}. Close enough to be "
-                 f"reaching for it and far enough to see at 4x; either centre it or "
-                 f"move it somewhere it is plainly not trying to line up")
+                off, axis, got, want = 0.0, None, cx, tcx
+            yield {"view": vname, "kind": kind, "index": index, "item": m,
+                   "label": label, "names": names, "axis": axis,
+                   "off": off, "got": got, "want": want, "cx": cx, "cy": cy,
+                   "tcx": tcx, "tcy": tcy}
 
 
 def lint_device_double_count(path, data, lib_roots):

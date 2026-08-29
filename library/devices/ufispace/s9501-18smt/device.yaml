@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9501-18smt
-version: 0.1.0
+version: 1.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9501-18SMT
@@ -493,24 +493,24 @@ views:
       - {at: [60.1, 23.5], path: 'M -1.2 0 L 1.2 0 M 1.2 0 L 0 2.0 M 0 2.0 L -1.2 0', for: psu-1}
       - {text: PSU1, at: [60.0, 33.2], font-size: 2.4, anchor: middle, rotate: 90, for: psu-1}
       - {text: 1PPS, at: [125.3, 15.1], font-size: 1.9, anchor: middle, for: clk-1pps}
-      - {text: 10MHZ, at: [125.3, 25.8], font-size: 1.9, anchor: middle, for: clk-10mhz}
-      - {text: GNSS ANT, at: [125.0, 40.1], font-size: 1.9, anchor: middle, for: gnss-ant}
+      - {text: 10MHZ, at: [125.4, 25.8], font-size: 1.9, anchor: middle, for: clk-10mhz}
+      - {text: GNSS ANT, at: [125.35, 40.1], font-size: 1.9, anchor: middle, for: gnss-ant}
       - {text: S9501-18SMT, at: [134.5, 10.4], font-size: 2.6, anchor: start, for: chassis}
-      - {text: GNSS, at: [138.6, 19.9], font-size: 1.5, anchor: start, fill: '#17191c', for: led-gnss}
-      - {text: SYNC, at: [138.6, 22.6], font-size: 1.5, anchor: start, fill: '#17191c', for: led-sync}
-      - {text: STAT, at: [138.6, 25.3], font-size: 1.5, anchor: start, fill: '#17191c', for: led-stat}
-      - {text: FAN, at: [138.6, 28.0], font-size: 1.5, anchor: start, fill: '#17191c', for: led-fan}
-      - {text: PWR, at: [138.6, 30.7], font-size: 1.5, anchor: start, fill: '#17191c', for: led-pwr}
-      - {text: RST, at: [138.4, 39.5], font-size: 1.8, anchor: start, for: reset}
+      - {text: GNSS, at: [138.6, 19.77], font-size: 1.5, anchor: start, fill: '#17191c', for: led-gnss}
+      - {text: SYNC, at: [138.6, 22.46], font-size: 1.5, anchor: start, fill: '#17191c', for: led-sync}
+      - {text: STAT, at: [138.6, 25.16], font-size: 1.5, anchor: start, fill: '#17191c', for: led-stat}
+      - {text: FAN, at: [138.6, 27.87], font-size: 1.5, anchor: start, fill: '#17191c', for: led-fan}
+      - {text: PWR, at: [138.6, 30.57], font-size: 1.5, anchor: start, fill: '#17191c', for: led-pwr}
+      - {text: RST, at: [138.4, 39.36], font-size: 1.8, anchor: start, for: reset}
       # The network icon above the OOB jack and the USB trident below the socket.
       # PATH GEOMETRY IS RELATIVE TO `at` - the renderer translates by it and the
       # lint extent adds it - so these are drawn from 0,0 with explicit L pairs.
-      - {at: [173.6, 9.3], path: 'M 0 0 L 0 0.9 M -1.7 0.9 L 1.7 0.9 M -1.7 0.9 L -1.7 1.7
+      - {at: [173.95, 9.3], path: 'M 0 0 L 0 0.9 M -1.7 0.9 L 1.7 0.9 M -1.7 0.9 L -1.7 1.7
           M 0 0.9 L 0 1.7 M 1.7 0.9 L 1.7 1.7', for: mgmt}
-      - {at: [173.3, 37.5], path: 'M 0 -1.6 L 0 1.6 M 0 -0.1 L -1.4 -1.3 M -1.4 -1.3 L -1.9 -1.3
+      - {at: [173.85, 37.5], path: 'M 0 -1.6 L 0 1.6 M 0 -0.1 L -1.4 -1.3 M -1.4 -1.3 L -1.9 -1.3
           M 0 0.5 L 1.4 -0.7 M 1.4 -0.7 L 1.4 -1.2 M 0 -1.6 L -0.5 -0.9 M 0 -1.6 L 0.5 -0.9',
          for: usb}
-      - {text: TOD, at: [194.9, 8.7], font-size: 1.9, anchor: middle, for: tod}
+      - {text: TOD, at: [194.55, 8.7], font-size: 1.9, anchor: middle, for: tod}
       - {text: IOIO, at: [194.5, 38.6], font-size: 1.9, anchor: middle, for: console}
       - {text: '0', at: [215.95, 8.4], font-size: 2.4, anchor: middle, fill: '#f5f7fa', for: port-0}
       - {text: '1', at: [215.95, 37.6], font-size: 2.4, anchor: middle, fill: '#f5f7fa', for: port-1}
@@ -610,14 +610,14 @@ views:
         - {ref: std/rj45-ganged@1, id: port-1, at: [209.6, 23.9], group: rj45-1g, rel-pos: 1}
         - {ref: std/rj45-ganged@1, id: port-2, at: [223.5, 10.0], rotate: 180, group: rj45-1g, rel-pos: 2}
         - {ref: std/rj45-ganged@1, id: port-3, at: [223.5, 23.9], group: rj45-1g, rel-pos: 3}
-        - {ref: common/led-dot@1, id: led-p0-l, at: [211.0, 10.9], for: port-0, attrs: {port: '0'}, group: port-leds, rel-pos: 1}
-        - {ref: common/led-dot@1, id: led-p0-r, at: [220.9, 10.9], for: port-0, attrs: {port: '0'}, group: port-leds, rel-pos: 2}
-        - {ref: common/led-dot@1, id: led-p1-l, at: [211.0, 32.6], for: port-1, attrs: {port: '1'}, group: port-leds, rel-pos: 3}
-        - {ref: common/led-dot@1, id: led-p1-r, at: [220.9, 32.6], for: port-1, attrs: {port: '1'}, group: port-leds, rel-pos: 4}
-        - {ref: common/led-dot@1, id: led-p2-l, at: [224.9, 10.9], for: port-2, attrs: {port: '2'}, group: port-leds, rel-pos: 5}
-        - {ref: common/led-dot@1, id: led-p2-r, at: [234.8, 10.9], for: port-2, attrs: {port: '2'}, group: port-leds, rel-pos: 6}
-        - {ref: common/led-dot@1, id: led-p3-l, at: [224.9, 32.6], for: port-3, attrs: {port: '3'}, group: port-leds, rel-pos: 7}
-        - {ref: common/led-dot@1, id: led-p3-r, at: [234.8, 32.6], for: port-3, attrs: {port: '3'}, group: port-leds, rel-pos: 8}
+        - {ref: common/led-dot@1, id: led-port-0-l, at: [211.0, 10.9], for: port-0, attrs: {port: '0'}, group: port-leds, rel-pos: 1}
+        - {ref: common/led-dot@1, id: led-port-0-r, at: [220.9, 10.9], for: port-0, attrs: {port: '0'}, group: port-leds, rel-pos: 2}
+        - {ref: common/led-dot@1, id: led-port-1-l, at: [211.0, 32.6], for: port-1, attrs: {port: '1'}, group: port-leds, rel-pos: 3}
+        - {ref: common/led-dot@1, id: led-port-1-r, at: [220.9, 32.6], for: port-1, attrs: {port: '1'}, group: port-leds, rel-pos: 4}
+        - {ref: common/led-dot@1, id: led-port-2-l, at: [224.9, 10.9], for: port-2, attrs: {port: '2'}, group: port-leds, rel-pos: 5}
+        - {ref: common/led-dot@1, id: led-port-2-r, at: [234.8, 10.9], for: port-2, attrs: {port: '2'}, group: port-leds, rel-pos: 6}
+        - {ref: common/led-dot@1, id: led-port-3-l, at: [224.9, 32.6], for: port-3, attrs: {port: '3'}, group: port-leds, rel-pos: 7}
+        - {ref: common/led-dot@1, id: led-port-3-r, at: [234.8, 32.6], for: port-3, attrs: {port: '3'}, group: port-leds, rel-pos: 8}
         - {ref: std/sfp-ganged@1, id: port-4, at: [304.9, 9.1], group: sfp-1g, rel-pos: 4}
         - {ref: std/sfp-ganged@1, id: port-5, at: [304.9, 25.1], group: sfp-1g, rel-pos: 5}
         - {ref: std/sfp-ganged@1, id: port-6, at: [319.15, 9.1], group: sfp-1g, rel-pos: 6}

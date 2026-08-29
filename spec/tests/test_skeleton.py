@@ -71,14 +71,14 @@ def test_declared_states_reach_the_lamp_and_paint(tmp_path):
     front = (tmp_path / "as7946-30xb.front.svg").read_text()
     # declared once on the group, reaching all eighteen QSFP28 speed lamps...
     assert front.count('data-states="off 100g 40g"') == 36     # instance + lamp, x18
-    assert 'id="led-p4-a--lamp" ' in front
+    assert 'id="led-port-4-a--lamp" ' in front
     assert front.count('data-states="off 400g 100g"') == 16    # the eight QSFP-DD, x2
     assert front.count('data-states="off linked partial activity"') == 52   # 26 link lamps
     # ...and a placement still overrides its group: LOC is not Green/Amber ok/fault
     assert 'id="led-loc"' in front and 'data-states="off locate"' in front
     assert 'data-states="off ok fault"' in front               # the other four status lamps
     # a declared state paints: an id rule beats the component's own rule
-    assert "#led-p4-a .state-100g" in front and "--led-color: #3b82f6" in front
+    assert "#led-port-4-a .state-100g" in front and "--led-color: #3b82f6" in front
     assert "#led-loc .state-locate" in front
     # the prose is kept, as prose, beside the tokens - not instead of them
     assert 'data-description="QSG Front LEDs callout 2' in front

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9501-28smt
-version: 0.1.0
+version: 1.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9501-28SMT
@@ -477,12 +477,12 @@ views:
       - {text: 10MHZ, at: [127.1, 26.0], font-size: 1.9, anchor: middle, for: clk-10mhz}
       - {text: GNSS ANT, at: [127.1, 39.9], font-size: 1.9, anchor: middle, for: gnss-ant}
       - {text: S9501-28SMT, at: [136.6, 10.0], font-size: 2.6, anchor: start, for: chassis}
-      - {text: GNSS, at: [140.6, 19.5], font-size: 1.5, anchor: start, fill: '#17191c', for: led-gnss}
-      - {text: SYNC, at: [140.6, 22.2], font-size: 1.5, anchor: start, fill: '#17191c', for: led-sync}
-      - {text: STAT, at: [140.6, 24.9], font-size: 1.5, anchor: start, fill: '#17191c', for: led-stat}
-      - {text: FAN, at: [140.6, 27.6], font-size: 1.5, anchor: start, fill: '#17191c', for: led-fan}
-      - {text: PWR, at: [140.6, 30.3], font-size: 1.5, anchor: start, fill: '#17191c', for: led-pwr}
-      - {text: RST, at: [140.2, 40.2], font-size: 1.6, anchor: start, for: reset}
+      - {text: GNSS, at: [140.6, 19.41], font-size: 1.5, anchor: start, fill: '#17191c', for: led-gnss}
+      - {text: SYNC, at: [140.6, 22.12], font-size: 1.5, anchor: start, fill: '#17191c', for: led-sync}
+      - {text: STAT, at: [140.6, 24.82], font-size: 1.5, anchor: start, fill: '#17191c', for: led-stat}
+      - {text: FAN, at: [140.6, 27.52], font-size: 1.5, anchor: start, fill: '#17191c', for: led-fan}
+      - {text: PWR, at: [140.6, 30.21], font-size: 1.5, anchor: start, fill: '#17191c', for: led-pwr}
+      - {text: RST, at: [140.2, 39.65], font-size: 1.6, anchor: start, for: reset}
       - {text: BITS, at: [153.95, 37.3], font-size: 1.9, anchor: middle, for: bits}
       - {id: oob-mark, at: [174.55, 10.6], path: 'M -1 -2.1 L 1 -2.1 L 1 -0.8 L -1 -0.8 L -1 -2.1 M 0 -0.8 L 0 0 M -2 0 L 2 0 M -2 0 L -2 0.6 M -3 0.6 L -1 0.6 L -1 1.9 L -3 1.9 L -3 0.6 M 2 0 L 2 0.6 M 1 0.6 L 3 0.6 L 3 1.9 L 1 1.9 L 1 0.6', for: mgmt}
       - {id: usb-mark, at: [174.55, 37.2], path: 'M -3.5 0 L 3.5 0 M -2 -1.6 L 0 -1.6 L 0 0 M 2 1.6 L 0 1.6 L 0 0', for: usb}
@@ -594,14 +594,14 @@ views:
         - {ref: std/rj45-ganged@1, id: port-1, at: [211.18, 23.4], group: rj45-1g, rel-pos: 1}
         - {ref: std/rj45-ganged@1, id: port-2, at: [225.18, 9.5], rotate: 180, group: rj45-1g, rel-pos: 2}
         - {ref: std/rj45-ganged@1, id: port-3, at: [225.18, 23.4], group: rj45-1g, rel-pos: 3}
-        - {ref: common/led-dot@1, id: led-p0-l, at: [211.6, 10.15], for: port-0, attrs: {port: '0'}, group: port-leds, rel-pos: 3}
-        - {ref: common/led-dot@1, id: led-p0-r, at: [221.5, 10.15], for: port-0, attrs: {port: '0'}, group: port-leds, rel-pos: 4}
-        - {ref: common/led-dot@1, id: led-p1-l, at: [211.6, 32.2], for: port-1, attrs: {port: '1'}, group: port-leds, rel-pos: 5}
-        - {ref: common/led-dot@1, id: led-p1-r, at: [221.5, 32.2], for: port-1, attrs: {port: '1'}, group: port-leds, rel-pos: 6}
-        - {ref: common/led-dot@1, id: led-p2-l, at: [225.6, 10.15], for: port-2, attrs: {port: '2'}, group: port-leds, rel-pos: 7}
-        - {ref: common/led-dot@1, id: led-p2-r, at: [235.5, 10.15], for: port-2, attrs: {port: '2'}, group: port-leds, rel-pos: 8}
-        - {ref: common/led-dot@1, id: led-p3-l, at: [225.6, 32.2], for: port-3, attrs: {port: '3'}, group: port-leds, rel-pos: 33}
-        - {ref: common/led-dot@1, id: led-p3-r, at: [235.5, 32.2], for: port-3, attrs: {port: '3'}, group: port-leds, rel-pos: 34}
+        - {ref: common/led-dot@1, id: led-port-0-l, at: [211.6, 10.15], for: port-0, attrs: {port: '0'}, group: port-leds, rel-pos: 3}
+        - {ref: common/led-dot@1, id: led-port-0-r, at: [221.5, 10.15], for: port-0, attrs: {port: '0'}, group: port-leds, rel-pos: 4}
+        - {ref: common/led-dot@1, id: led-port-1-l, at: [211.6, 32.2], for: port-1, attrs: {port: '1'}, group: port-leds, rel-pos: 5}
+        - {ref: common/led-dot@1, id: led-port-1-r, at: [221.5, 32.2], for: port-1, attrs: {port: '1'}, group: port-leds, rel-pos: 6}
+        - {ref: common/led-dot@1, id: led-port-2-l, at: [225.6, 10.15], for: port-2, attrs: {port: '2'}, group: port-leds, rel-pos: 7}
+        - {ref: common/led-dot@1, id: led-port-2-r, at: [235.5, 10.15], for: port-2, attrs: {port: '2'}, group: port-leds, rel-pos: 8}
+        - {ref: common/led-dot@1, id: led-port-3-l, at: [225.6, 32.2], for: port-3, attrs: {port: '3'}, group: port-leds, rel-pos: 33}
+        - {ref: common/led-dot@1, id: led-port-3-r, at: [235.5, 32.2], for: port-3, attrs: {port: '3'}, group: port-leds, rel-pos: 34}
         - {ref: std/sfp-ganged@1, id: port-4, at: [244.2, 9.25], group: sfp-1g, rel-pos: 4}
         - {ref: std/sfp-ganged@1, id: port-5, at: [244.2, 24.25], rotate: 180, group: sfp-1g, rel-pos: 5}
         - {ref: std/sfp-ganged@1, id: port-6, at: [258.45, 9.25], group: sfp-1g, rel-pos: 6}

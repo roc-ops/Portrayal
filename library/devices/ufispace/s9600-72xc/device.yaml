@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-72xc
-version: 0.1.1
+version: 1.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-72XC
@@ -598,25 +598,25 @@ views:
       - {at: [424.0, 82.8], text: S9600-72XC, font-size: 2.8, anchor: middle, fill: '#e6e8ea', for: chassis}
       - {at: [11.7, 6.5], text: GNSS, font-size: 1.6, anchor: middle, fill: '#e6e8ea', for: gnss-ant}
       - {at: [11.4, 9.1], text: ANT, font-size: 1.6, anchor: middle, fill: '#e6e8ea', for: gnss-ant}
-      - {at: [29.2, 7.0], text: 10MHZ, font-size: 1.6, anchor: middle, fill: '#e6e8ea', for: mhz}
-      - {at: [46.9, 7.0], text: 1PPS, font-size: 1.6, anchor: middle, fill: '#e6e8ea', for: pps}
+      - {at: [29.2, 7.31], text: 10MHZ, font-size: 1.6, anchor: middle, fill: '#e6e8ea', for: mhz}
+      - {at: [46.9, 7.31], text: 1PPS, font-size: 1.6, anchor: middle, fill: '#e6e8ea', for: pps}
       - {at: [29.5, 15.1], text: '0', font-size: 2.2, anchor: middle, fill: '#e6e8ea', for: mgmt-sfp-0}
       - {at: [33.3, 15.1], text: '▲▼', font-size: 2.4, anchor: middle, fill: '#e6e8ea', for: [mgmt-sfp-0, mgmt-sfp-1]}
       - {at: [38.8, 15.1], text: '1', font-size: 2.2, anchor: middle, fill: '#e6e8ea', for: mgmt-sfp-1}
       - {at: [12.2, 25.0], text: TOD, font-size: 2.0, anchor: middle, fill: '#e6e8ea', for: tod}
-      - {at: [14.7, 50.0], text: RESET, font-size: 1.7, anchor: middle, fill: '#e6e8ea', for: reset}
+      - {at: [14.29, 50], text: RESET, font-size: 1.7, anchor: middle, fill: '#e6e8ea', for: reset}
       - {id: oob-network-symbol, at: [22.3, 44.4],
          path: 'M -0.9 0 L 0.9 0 L 0.9 1.1 L -0.9 1.1 L -0.9 0 M 0 1.1 L 0 1.7 M -1.4 1.7 L 1.4 1.7 M -1.4 1.7 L -1.4 2.3 M 1.4 1.7 L 1.4 2.3',
          for: oob}
       - {at: [26.0, 47.2], text: '▲▼', font-size: 2.4, anchor: middle, fill: '#e6e8ea', for: oob}
-      - {at: [30.8, 47.2], text: 'SS', font-size: 2.0, anchor: middle, fill: '#e6e8ea', for: usb}
-      - {at: [29.8, 84.2], text: IOIOI, font-size: 1.8, anchor: middle, fill: '#e6e8ea', for: console}
-      - {at: [13.4, 85.0], text: IOIOI, font-size: 1.8, anchor: middle, fill: '#e6e8ea', for: micro-usb}
-      - {at: [17.3, 68.0], text: SYNC, font-size: 1.3, anchor: middle, fill: '#17191c', for: led-sync}
-      - {at: [17.3, 69.96], text: SYS, font-size: 1.3, anchor: middle, fill: '#17191c', for: led-sys}
-      - {at: [17.3, 71.92], text: FAN, font-size: 1.3, anchor: middle, fill: '#17191c', for: led-fan}
-      - {at: [17.3, 73.88], text: PS0, font-size: 1.3, anchor: middle, fill: '#17191c', for: led-ps0}
-      - {at: [17.3, 75.84], text: PS1, font-size: 1.3, anchor: middle, fill: '#17191c', for: led-ps1}
+      - {at: [29.69, 47.2], text: 'SS', font-size: 2.0, anchor: middle, fill: '#e6e8ea', for: usb}
+      - {at: [29.6, 84.2], text: IOIOI, font-size: 1.8, anchor: middle, fill: '#e6e8ea', for: console}
+      - {at: [13, 85], text: IOIOI, font-size: 1.8, anchor: middle, fill: '#e6e8ea', for: micro-usb}
+      - {at: [17.3, 67.9], text: SYNC, font-size: 1.3, anchor: middle, fill: '#17191c', for: led-sync}
+      - {at: [17.3, 69.86], text: SYS, font-size: 1.3, anchor: middle, fill: '#17191c', for: led-sys}
+      - {at: [17.3, 71.82], text: FAN, font-size: 1.3, anchor: middle, fill: '#17191c', for: led-fan}
+      - {at: [17.3, 73.78], text: PS0, font-size: 1.3, anchor: middle, fill: '#17191c', for: led-ps0}
+      - {at: [17.3, 75.74], text: PS1, font-size: 1.3, anchor: middle, fill: '#17191c', for: led-ps1}
       - {at: [48.44, 13.90], text: '0', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-0}
       - {at: [52.84, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-0, port-1]}
       - {at: [57.24, 13.90], text: '1', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-1}
@@ -771,14 +771,14 @@ views:
            attrs: {media: rj45-serial, role: console}}
         - {ref: std/micro-usb@1, id: micro-usb, at: [9.25, 80.43], group: mgmt, rel-pos: 4,
            attrs: {media: micro-usb-b, role: console}}
-        - {ref: ufispace/lane-led-quad@1, id: led-p64, at: [293.95, 8.75], for: port-64, group: port-leds, rel-pos: 1}
-        - {ref: ufispace/lane-led-quad@1, id: led-p65, at: [293.95, 12.15], for: port-65, group: port-leds, rel-pos: 2}
-        - {ref: ufispace/lane-led-quad@1, id: led-p66, at: [317.30, 8.75], for: port-66, group: port-leds, rel-pos: 3}
-        - {ref: ufispace/lane-led-quad@1, id: led-p67, at: [317.30, 12.15], for: port-67, group: port-leds, rel-pos: 4}
-        - {ref: ufispace/lane-led-quad@1, id: led-p68, at: [293.95, 72.70], for: port-68, group: port-leds, rel-pos: 5}
-        - {ref: ufispace/lane-led-quad@1, id: led-p69, at: [293.95, 76.10], for: port-69, group: port-leds, rel-pos: 6}
-        - {ref: ufispace/lane-led-quad@1, id: led-p70, at: [317.30, 72.70], for: port-70, group: port-leds, rel-pos: 7}
-        - {ref: ufispace/lane-led-quad@1, id: led-p71, at: [317.30, 76.10], for: port-71, group: port-leds, rel-pos: 8}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-64, at: [295.05, 8.75], for: port-64, group: port-leds, rel-pos: 1}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-65, at: [295.05, 12.15], for: port-65, group: port-leds, rel-pos: 2}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-66, at: [317.63, 8.75], for: port-66, group: port-leds, rel-pos: 3}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-67, at: [317.63, 12.15], for: port-67, group: port-leds, rel-pos: 4}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-68, at: [295.05, 72.7], for: port-68, group: port-leds, rel-pos: 5}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-69, at: [295.05, 76.1], for: port-69, group: port-leds, rel-pos: 6}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-70, at: [317.63, 72.7], for: port-70, group: port-leds, rel-pos: 7}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-71, at: [317.63, 76.1], for: port-71, group: port-leds, rel-pos: 8}
         - {ref: std/sfp-ganged@1, id: port-0, at: [45.72, 18.38], group: sfp28, rel-pos: 0}
         - {ref: std/sfp-ganged@1, id: port-1, at: [45.72, 31.63], group: sfp28, rel-pos: 1}
         - {ref: std/sfp-ganged@1, id: port-2, at: [59.97, 18.38], group: sfp28, rel-pos: 2}

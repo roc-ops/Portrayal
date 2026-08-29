@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9705-48d
-version: 0.1.0
+version: 1.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9705-48D
@@ -651,15 +651,15 @@ views:
       - {at: [382.47, 55.87], text: '46', font-size: 1.9, anchor: middle, fill: '#f2f2f2', for: port-46}
       - {at: [382.47, 75.76], text: '47', font-size: 1.9, anchor: middle, fill: '#f2f2f2', for: port-47}
       - {at: [12.30, 68.30], text: 'RESET', font-size: 1.9, anchor: middle, for: reset}
-      - {at: [23.00, 53.90], text: 'SYS', font-size: 1.7, anchor: middle, fill: '#1a1a1a', for: led-sys}
-      - {at: [23.00, 56.14], text: 'FAN', font-size: 1.7, anchor: middle, fill: '#1a1a1a', for: led-fan}
-      - {at: [23.00, 58.70], text: 'PS0', font-size: 1.7, anchor: middle, fill: '#1a1a1a', for: led-ps0}
-      - {at: [23.00, 61.11], text: 'PS1', font-size: 1.7, anchor: middle, fill: '#1a1a1a', for: led-ps1}
+      - {at: [23, 53.82], text: 'SYS', font-size: 1.7, anchor: middle, fill: '#1a1a1a', for: led-sys}
+      - {at: [23, 56.06], text: 'FAN', font-size: 1.7, anchor: middle, fill: '#1a1a1a', for: led-fan}
+      - {at: [23, 58.62], text: 'PS0', font-size: 1.7, anchor: middle, fill: '#1a1a1a', for: led-ps0}
+      - {at: [23, 61.03], text: 'PS1', font-size: 1.7, anchor: middle, fill: '#1a1a1a', for: led-ps1}
       - {at: [27.85, 67.60], text: '0', font-size: 2.1, anchor: middle, for: mgmt-sfp-0}
       - {id: sfp-up, at: [30.85, 66.60], path: 'M -1.10 0.90 L 1.10 0.90 L 0.00 -0.90 L -1.10 0.90', for: mgmt-sfp-0}
       - {id: sfp-down, at: [34.90, 66.60], path: 'M -1.10 -0.90 L 1.10 -0.90 L 0.00 0.90 L -1.10 -0.90', for: mgmt-sfp-1}
       - {at: [38.85, 67.60], text: '1', font-size: 2.1, anchor: middle, for: mgmt-sfp-1}
-      - {at: [49.00, 42.40], text: 'IOIO', font-size: 2.4, anchor: middle, for: usb-console}
+      - {at: [49.25, 42.4], text: 'IOIO', font-size: 2.4, anchor: middle, for: usb-console}
       - {at: [59.40, 72.00], text: 'IOIO', font-size: 2.2, anchor: middle, for: console}
       - {id: rj45-up, at: [64.20, 71.05], path: 'M -1.00 0.85 L 1.00 0.85 L 0.00 -0.85 L -1.00 0.85', for: console}
       - {id: rj45-down, at: [68.70, 71.05], path: 'M -1.00 -0.85 L 1.00 -0.85 L 0.00 0.85 L -1.00 -0.85', for: oob}
@@ -715,54 +715,54 @@ views:
         - {ref: std/qsfp-dd@1, id: port-45, at: [341.50, 66.64], group: fabric, rel-pos: 45}
         - {ref: std/qsfp-dd@1, id: port-46, at: [360.50, 53.48], group: fabric, rel-pos: 46}
         - {ref: std/qsfp-dd@1, id: port-47, at: [360.50, 66.64], group: fabric, rel-pos: 47}
-        - {ref: common/led-dot@1, id: led-p0, at: [81.73, 13.35], for: port-0, group: port-leds, rel-pos: 1}
-        - {ref: common/led-dot@1, id: led-p1, at: [81.73, 27.49], for: port-1, group: port-leds, rel-pos: 2}
-        - {ref: common/led-dot@1, id: led-p2, at: [125.67, 13.35], for: port-2, group: port-leds, rel-pos: 3}
-        - {ref: common/led-dot@1, id: led-p3, at: [125.67, 27.49], for: port-3, group: port-leds, rel-pos: 4}
-        - {ref: common/led-dot@1, id: led-p24, at: [81.73, 57.17], for: port-24, group: port-leds, rel-pos: 25}
-        - {ref: common/led-dot@1, id: led-p25, at: [81.73, 71.01], for: port-25, group: port-leds, rel-pos: 26}
-        - {ref: common/led-dot@1, id: led-p26, at: [125.67, 57.17], for: port-26, group: port-leds, rel-pos: 27}
-        - {ref: common/led-dot@1, id: led-p27, at: [125.67, 71.01], for: port-27, group: port-leds, rel-pos: 28}
-        - {ref: common/led-dot@1, id: led-p4, at: [132.89, 13.35], for: port-4, group: port-leds, rel-pos: 5}
-        - {ref: common/led-dot@1, id: led-p5, at: [132.89, 27.49], for: port-5, group: port-leds, rel-pos: 6}
-        - {ref: common/led-dot@1, id: led-p6, at: [176.83, 13.35], for: port-6, group: port-leds, rel-pos: 7}
-        - {ref: common/led-dot@1, id: led-p7, at: [176.83, 27.49], for: port-7, group: port-leds, rel-pos: 8}
-        - {ref: common/led-dot@1, id: led-p28, at: [132.89, 57.17], for: port-28, group: port-leds, rel-pos: 29}
-        - {ref: common/led-dot@1, id: led-p29, at: [132.89, 71.01], for: port-29, group: port-leds, rel-pos: 30}
-        - {ref: common/led-dot@1, id: led-p30, at: [176.83, 57.17], for: port-30, group: port-leds, rel-pos: 31}
-        - {ref: common/led-dot@1, id: led-p31, at: [176.83, 71.01], for: port-31, group: port-leds, rel-pos: 32}
-        - {ref: common/led-dot@1, id: led-p8, at: [184.05, 13.35], for: port-8, group: port-leds, rel-pos: 9}
-        - {ref: common/led-dot@1, id: led-p9, at: [184.05, 27.49], for: port-9, group: port-leds, rel-pos: 10}
-        - {ref: common/led-dot@1, id: led-p10, at: [227.99, 13.35], for: port-10, group: port-leds, rel-pos: 11}
-        - {ref: common/led-dot@1, id: led-p11, at: [227.99, 27.49], for: port-11, group: port-leds, rel-pos: 12}
-        - {ref: common/led-dot@1, id: led-p32, at: [184.05, 57.17], for: port-32, group: port-leds, rel-pos: 33}
-        - {ref: common/led-dot@1, id: led-p33, at: [184.05, 71.01], for: port-33, group: port-leds, rel-pos: 34}
-        - {ref: common/led-dot@1, id: led-p34, at: [227.99, 57.17], for: port-34, group: port-leds, rel-pos: 35}
-        - {ref: common/led-dot@1, id: led-p35, at: [227.99, 71.01], for: port-35, group: port-leds, rel-pos: 36}
-        - {ref: common/led-dot@1, id: led-p12, at: [235.21, 13.35], for: port-12, group: port-leds, rel-pos: 13}
-        - {ref: common/led-dot@1, id: led-p13, at: [235.21, 27.49], for: port-13, group: port-leds, rel-pos: 14}
-        - {ref: common/led-dot@1, id: led-p14, at: [279.15, 13.35], for: port-14, group: port-leds, rel-pos: 15}
-        - {ref: common/led-dot@1, id: led-p15, at: [279.15, 27.49], for: port-15, group: port-leds, rel-pos: 16}
-        - {ref: common/led-dot@1, id: led-p36, at: [235.21, 57.17], for: port-36, group: port-leds, rel-pos: 37}
-        - {ref: common/led-dot@1, id: led-p37, at: [235.21, 71.01], for: port-37, group: port-leds, rel-pos: 38}
-        - {ref: common/led-dot@1, id: led-p38, at: [279.15, 57.17], for: port-38, group: port-leds, rel-pos: 39}
-        - {ref: common/led-dot@1, id: led-p39, at: [279.15, 71.01], for: port-39, group: port-leds, rel-pos: 40}
-        - {ref: common/led-dot@1, id: led-p16, at: [286.37, 13.35], for: port-16, group: port-leds, rel-pos: 17}
-        - {ref: common/led-dot@1, id: led-p17, at: [286.37, 27.49], for: port-17, group: port-leds, rel-pos: 18}
-        - {ref: common/led-dot@1, id: led-p18, at: [330.31, 13.35], for: port-18, group: port-leds, rel-pos: 19}
-        - {ref: common/led-dot@1, id: led-p19, at: [330.31, 27.49], for: port-19, group: port-leds, rel-pos: 20}
-        - {ref: common/led-dot@1, id: led-p40, at: [286.37, 57.17], for: port-40, group: port-leds, rel-pos: 41}
-        - {ref: common/led-dot@1, id: led-p41, at: [286.37, 71.01], for: port-41, group: port-leds, rel-pos: 42}
-        - {ref: common/led-dot@1, id: led-p42, at: [330.31, 57.17], for: port-42, group: port-leds, rel-pos: 43}
-        - {ref: common/led-dot@1, id: led-p43, at: [330.31, 71.01], for: port-43, group: port-leds, rel-pos: 44}
-        - {ref: common/led-dot@1, id: led-p20, at: [337.53, 13.35], for: port-20, group: port-leds, rel-pos: 21}
-        - {ref: common/led-dot@1, id: led-p21, at: [337.53, 27.49], for: port-21, group: port-leds, rel-pos: 22}
-        - {ref: common/led-dot@1, id: led-p22, at: [381.47, 13.35], for: port-22, group: port-leds, rel-pos: 23}
-        - {ref: common/led-dot@1, id: led-p23, at: [381.47, 27.49], for: port-23, group: port-leds, rel-pos: 24}
-        - {ref: common/led-dot@1, id: led-p44, at: [337.53, 57.17], for: port-44, group: port-leds, rel-pos: 45}
-        - {ref: common/led-dot@1, id: led-p45, at: [337.53, 71.01], for: port-45, group: port-leds, rel-pos: 46}
-        - {ref: common/led-dot@1, id: led-p46, at: [381.47, 57.17], for: port-46, group: port-leds, rel-pos: 47}
-        - {ref: common/led-dot@1, id: led-p47, at: [381.47, 71.01], for: port-47, group: port-leds, rel-pos: 48}
+        - {ref: common/led-dot@1, id: led-port-0, at: [81.73, 13.35], for: port-0, group: port-leds, rel-pos: 1}
+        - {ref: common/led-dot@1, id: led-port-1, at: [81.73, 27.49], for: port-1, group: port-leds, rel-pos: 2}
+        - {ref: common/led-dot@1, id: led-port-2, at: [125.67, 13.35], for: port-2, group: port-leds, rel-pos: 3}
+        - {ref: common/led-dot@1, id: led-port-3, at: [125.67, 27.49], for: port-3, group: port-leds, rel-pos: 4}
+        - {ref: common/led-dot@1, id: led-port-24, at: [81.73, 57.17], for: port-24, group: port-leds, rel-pos: 25}
+        - {ref: common/led-dot@1, id: led-port-25, at: [81.73, 71.01], for: port-25, group: port-leds, rel-pos: 26}
+        - {ref: common/led-dot@1, id: led-port-26, at: [125.67, 57.17], for: port-26, group: port-leds, rel-pos: 27}
+        - {ref: common/led-dot@1, id: led-port-27, at: [125.67, 71.01], for: port-27, group: port-leds, rel-pos: 28}
+        - {ref: common/led-dot@1, id: led-port-4, at: [132.89, 13.35], for: port-4, group: port-leds, rel-pos: 5}
+        - {ref: common/led-dot@1, id: led-port-5, at: [132.89, 27.49], for: port-5, group: port-leds, rel-pos: 6}
+        - {ref: common/led-dot@1, id: led-port-6, at: [176.83, 13.35], for: port-6, group: port-leds, rel-pos: 7}
+        - {ref: common/led-dot@1, id: led-port-7, at: [176.83, 27.49], for: port-7, group: port-leds, rel-pos: 8}
+        - {ref: common/led-dot@1, id: led-port-28, at: [132.89, 57.17], for: port-28, group: port-leds, rel-pos: 29}
+        - {ref: common/led-dot@1, id: led-port-29, at: [132.89, 71.01], for: port-29, group: port-leds, rel-pos: 30}
+        - {ref: common/led-dot@1, id: led-port-30, at: [176.83, 57.17], for: port-30, group: port-leds, rel-pos: 31}
+        - {ref: common/led-dot@1, id: led-port-31, at: [176.83, 71.01], for: port-31, group: port-leds, rel-pos: 32}
+        - {ref: common/led-dot@1, id: led-port-8, at: [184.05, 13.35], for: port-8, group: port-leds, rel-pos: 9}
+        - {ref: common/led-dot@1, id: led-port-9, at: [184.05, 27.49], for: port-9, group: port-leds, rel-pos: 10}
+        - {ref: common/led-dot@1, id: led-port-10, at: [227.99, 13.35], for: port-10, group: port-leds, rel-pos: 11}
+        - {ref: common/led-dot@1, id: led-port-11, at: [227.99, 27.49], for: port-11, group: port-leds, rel-pos: 12}
+        - {ref: common/led-dot@1, id: led-port-32, at: [184.05, 57.17], for: port-32, group: port-leds, rel-pos: 33}
+        - {ref: common/led-dot@1, id: led-port-33, at: [184.05, 71.01], for: port-33, group: port-leds, rel-pos: 34}
+        - {ref: common/led-dot@1, id: led-port-34, at: [227.99, 57.17], for: port-34, group: port-leds, rel-pos: 35}
+        - {ref: common/led-dot@1, id: led-port-35, at: [227.99, 71.01], for: port-35, group: port-leds, rel-pos: 36}
+        - {ref: common/led-dot@1, id: led-port-12, at: [235.21, 13.35], for: port-12, group: port-leds, rel-pos: 13}
+        - {ref: common/led-dot@1, id: led-port-13, at: [235.21, 27.49], for: port-13, group: port-leds, rel-pos: 14}
+        - {ref: common/led-dot@1, id: led-port-14, at: [279.15, 13.35], for: port-14, group: port-leds, rel-pos: 15}
+        - {ref: common/led-dot@1, id: led-port-15, at: [279.15, 27.49], for: port-15, group: port-leds, rel-pos: 16}
+        - {ref: common/led-dot@1, id: led-port-36, at: [235.21, 57.17], for: port-36, group: port-leds, rel-pos: 37}
+        - {ref: common/led-dot@1, id: led-port-37, at: [235.21, 71.01], for: port-37, group: port-leds, rel-pos: 38}
+        - {ref: common/led-dot@1, id: led-port-38, at: [279.15, 57.17], for: port-38, group: port-leds, rel-pos: 39}
+        - {ref: common/led-dot@1, id: led-port-39, at: [279.15, 71.01], for: port-39, group: port-leds, rel-pos: 40}
+        - {ref: common/led-dot@1, id: led-port-16, at: [286.37, 13.35], for: port-16, group: port-leds, rel-pos: 17}
+        - {ref: common/led-dot@1, id: led-port-17, at: [286.37, 27.49], for: port-17, group: port-leds, rel-pos: 18}
+        - {ref: common/led-dot@1, id: led-port-18, at: [330.31, 13.35], for: port-18, group: port-leds, rel-pos: 19}
+        - {ref: common/led-dot@1, id: led-port-19, at: [330.31, 27.49], for: port-19, group: port-leds, rel-pos: 20}
+        - {ref: common/led-dot@1, id: led-port-40, at: [286.37, 57.17], for: port-40, group: port-leds, rel-pos: 41}
+        - {ref: common/led-dot@1, id: led-port-41, at: [286.37, 71.01], for: port-41, group: port-leds, rel-pos: 42}
+        - {ref: common/led-dot@1, id: led-port-42, at: [330.31, 57.17], for: port-42, group: port-leds, rel-pos: 43}
+        - {ref: common/led-dot@1, id: led-port-43, at: [330.31, 71.01], for: port-43, group: port-leds, rel-pos: 44}
+        - {ref: common/led-dot@1, id: led-port-20, at: [337.53, 13.35], for: port-20, group: port-leds, rel-pos: 21}
+        - {ref: common/led-dot@1, id: led-port-21, at: [337.53, 27.49], for: port-21, group: port-leds, rel-pos: 22}
+        - {ref: common/led-dot@1, id: led-port-22, at: [381.47, 13.35], for: port-22, group: port-leds, rel-pos: 23}
+        - {ref: common/led-dot@1, id: led-port-23, at: [381.47, 27.49], for: port-23, group: port-leds, rel-pos: 24}
+        - {ref: common/led-dot@1, id: led-port-44, at: [337.53, 57.17], for: port-44, group: port-leds, rel-pos: 45}
+        - {ref: common/led-dot@1, id: led-port-45, at: [337.53, 71.01], for: port-45, group: port-leds, rel-pos: 46}
+        - {ref: common/led-dot@1, id: led-port-46, at: [381.47, 57.17], for: port-46, group: port-leds, rel-pos: 47}
+        - {ref: common/led-dot@1, id: led-port-47, at: [381.47, 71.01], for: port-47, group: port-leds, rel-pos: 48}
         - {ref: std/sfp-ganged@1, id: mgmt-sfp-0, at: [25.90, 36.89], group: sfp-plus, rel-pos: 0}
         - {ref: std/sfp-ganged@1, id: mgmt-sfp-1, at: [25.90, 52.73], rotate: 180, group: sfp-plus, rel-pos: 1}
         - {ref: common/led-dot@1, id: led-sfp-0, at: [29.90, 48.90], for: mgmt-sfp-0, group: port-leds, rel-pos: 49}
