@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx80
-version: 0.4.1
+version: 0.5.0
 maturity: modelled
 manufacturer: Juniper
 model: MX80
@@ -217,6 +217,12 @@ views:
            description: RE status lamp}
         - {id: btn-online, ref: common/reset-button@1, at: [166.5, 75.5], for: chassis,
            group: mgmt, rel-pos: 6, attrs: {function: online/offline}}
+        - {ref: common/led-dot@1, id: led-ethernet-l, at: [206.2, 47.77], for: ethernet, group: status-leds, rel-pos: 901}
+        - {ref: common/led-dot@1, id: led-ethernet-r, at: [217.8, 47.77], for: ethernet, group: status-leds, rel-pos: 902}
+        - {ref: common/led-dot@1, id: led-clk-a-l, at: [225.2, 47.77], for: clk-a, group: status-leds, rel-pos: 903}
+        - {ref: common/led-dot@1, id: led-clk-a-r, at: [236.8, 47.77], for: clk-a, group: status-leds, rel-pos: 904}
+        - {ref: common/led-dot@1, id: led-clk-b-l, at: [225.2, 78.23], for: clk-b, group: status-leds, rel-pos: 905}
+        - {ref: common/led-dot@1, id: led-clk-b-r, at: [236.8, 78.23], for: clk-b, group: status-leds, rel-pos: 906}
   rear:
     size:
       w: 445.0

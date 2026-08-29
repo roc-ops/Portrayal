@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-64x
-version: 1.0.0
+version: 1.1.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-64X
@@ -778,6 +778,8 @@ views:
         - {ref: ufispace/lane-led-quad@1, id: led-port-61, at: [391.15, 77.20], for: port-61, attrs: {port: '61'}, group: port-leds, rel-pos: 62}
         - {ref: ufispace/lane-led-quad@1, id: led-port-62, at: [410.15, 73.35], for: port-62, attrs: {port: '62'}, group: port-leds, rel-pos: 63}
         - {ref: ufispace/lane-led-quad@1, id: led-port-63, at: [410.15, 77.20], for: port-63, attrs: {port: '63'}, group: port-leds, rel-pos: 64}
+        - {ref: common/led-dot@1, id: led-mgmt-l, at: [50.7, 59.61], for: mgmt, group: port-leds, rel-pos: 901}
+        - {ref: common/led-dot@1, id: led-mgmt-r, at: [63.3, 59.61], for: mgmt, group: port-leds, rel-pos: 902}
     regions:
       - {id: timing-block, at: [6.5, 3.0], size: {w: 34.0, h: 42.0}, label: Timing block, members: [clk-1pps, clk-10mhz, gnss-ant, tod]}
       - {id: mgmt-block, at: [6.5, 55.0], size: {w: 62.0, h: 21.0}, label: Management, members: [mgmt, console, usb-console]}

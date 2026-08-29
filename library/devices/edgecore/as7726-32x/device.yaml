@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: as7726-32x
-version: 0.32.0
+version: 0.33.0
 manufacturer: Edgecore
 model: AS7726-32X
 portfolio:
@@ -277,6 +277,8 @@ views:
         - {ref: common/sfp-plus-cage@2, id: mgmt-sfp-2, at: [381, 25.5], group: mgmt, rel-pos: 4, attrs: {media: sfp-plus, speed: 10g, role: mgmt-uplink}}
         - {ref: common/usb-a@2, id: usb, at: [394, 16.5], group: mgmt, rel-pos: 5, rotate: 270}
         - {ref: common/pull-tab@1, id: info-tab, at: [381, 38.6], group: furniture, rel-pos: 3}
+        - {ref: common/led-dot@1, id: led-mgmt-eth-l, at: [363.2, 21.73], for: mgmt-eth, group: leds, rel-pos: 901}
+        - {ref: common/led-dot@1, id: led-mgmt-eth-r, at: [375.8, 21.73], for: mgmt-eth, group: leds, rel-pos: 902}
     regions:
       - {id: mgmt-block, at: [360, 1], size: {w: 52, h: 42}, label: Management, members: [mgmt-eth, console, mgmt-sfp-1, mgmt-sfp-2, sfp-leds, usb, info-tab]}
       - {id: status-leds, at: [32, 2], size: {w: 15, h: 38}, label: Status LEDs, members: [led-loc, led-psu1, led-diag, led-psu2, led-fan, reset]}

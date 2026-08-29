@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcp-r-9d-cs
-version: 0.4.1
+version: 0.5.0
 manufacturer: Smartoptics
 model: DCP-R-9D-CS
 description: 40-channel colourless/directionless ROADM line unit, 1RU. Two rows of LC duplex adapters
@@ -475,6 +475,8 @@ views:
         - {ref: common/lc-duplex-adapter@3, id: port-960, at: [414.48, 21.89], group: channels, rel-pos: 40}
         - {ref: common/laser-warning@1, id: laser-warn-top, at: [269.5, 4.6], group: furniture, rel-pos: 3}
         - {ref: common/laser-warning@1, id: laser-warn-bottom, at: [269.5, 35.4], group: furniture, rel-pos: 4}
+        - {ref: common/led-dot@1, id: led-eth0-l, at: [10.8, 10.47], for: eth0, group: port-leds, rel-pos: 901}
+        - {ref: common/led-dot@1, id: led-eth0-r, at: [22.2, 10.47], for: eth0, group: port-leds, rel-pos: 902}
   rear:
     size:
       w: 440
@@ -514,6 +516,14 @@ views:
         - {ref: common/led-dot@1, id: led-eth5-rx, at: [332, 14], for: eth5, attrs: {function: rx}, group: port-leds, rel-pos: 4}
         - {ref: std/sfp@1, id: eth5, at: [318.75, 22], group: mgmt, attrs: {role: mgmt, media: sfp, speed: 100m-1g}, rel-pos: 7}
         - {ref: common/reset-button@1, id: reset, at: [345, 26], group: mgmt, for: chassis, rel-pos: 8}
+        - {ref: common/led-dot@1, id: led-eth2-l, at: [277.2, 18.23], for: eth2, group: port-leds, rel-pos: 901}
+        - {ref: common/led-dot@1, id: led-eth2-r, at: [286.8, 18.23], for: eth2, group: port-leds, rel-pos: 902}
+        - {ref: common/led-dot@1, id: led-eth4-l, at: [292.2, 18.23], for: eth4, group: port-leds, rel-pos: 903}
+        - {ref: common/led-dot@1, id: led-eth4-r, at: [301.8, 18.23], for: eth4, group: port-leds, rel-pos: 904}
+        - {ref: common/led-dot@1, id: led-eth1-l, at: [277.2, 31.73], for: eth1, group: port-leds, rel-pos: 905}
+        - {ref: common/led-dot@1, id: led-eth1-r, at: [286.8, 31.73], for: eth1, group: port-leds, rel-pos: 906}
+        - {ref: common/led-dot@1, id: led-eth3-l, at: [292.2, 31.73], for: eth3, group: port-leds, rel-pos: 907}
+        - {ref: common/led-dot@1, id: led-eth3-r, at: [301.8, 31.73], for: eth3, group: port-leds, rel-pos: 908}
   left:
     size:
       w: 505

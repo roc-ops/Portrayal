@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-30dx
-version: 2.0.0
+version: 2.1.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-30DX
@@ -611,6 +611,8 @@ views:
         - {ref: std/qsfp-dd@1, id: port-27, at: [262.1, 45.23], group: qsfpdd-400g, rel-pos: 27}
         - {ref: std/qsfp-dd@1, id: port-28, at: [292.45, 30.52], group: qsfpdd-400g, rel-pos: 28}
         - {ref: std/qsfp-dd@1, id: port-29, at: [292.45, 45.23], group: qsfpdd-400g, rel-pos: 29}
+        - {ref: common/led-dot@1, id: led-oob-l, at: [24.23, 70.53], for: oob, group: port-leds, rel-pos: 901}
+        - {ref: common/led-dot@1, id: led-oob-r, at: [32.53, 70.53], for: oob, group: port-leds, rel-pos: 902}
     regions:
       - {id: mgmt-block, at: [1.0, 1.0], size: {w: 40.0, h: 85.5}, label: Management and SFP+,
          members: [reset, console-usb, usb, console, oob, mgmt-sfp-0, mgmt-sfp-1]}
