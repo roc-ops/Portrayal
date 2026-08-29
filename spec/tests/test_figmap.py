@@ -159,6 +159,61 @@ def test_a_blank_page_has_no_device_in_it(tmp_path):
     assert figmap.outline(p) is None
 
 
+# ---- more than one face in a figure -----------------------------------------
+
+def _stacked(tmp_path, gap=250):
+    """A datasheet page: two faces one above the other, with a callout bubble."""
+    from PIL import Image, ImageDraw
+    im = Image.new("L", (1000, 200 + gap), 255)
+    d = ImageDraw.Draw(im)
+    d.rectangle([50, 20, 950, 90], fill=0)                    # the front
+    d.rectangle([50, 110 + gap, 950, 180 + gap], fill=0)      # the rear
+    d.ellipse([480, 0, 510, 18], fill=0)                      # a callout bubble
+    p = tmp_path / "stacked.png"
+    im.save(p)
+    return p
+
+
+def test_two_faces_in_one_figure_come_back_separately(tmp_path):
+    """Edgecore's EPS203 draws its front above its rear. Taking the ink box of
+    the whole page measured that device at 325% out - one rectangle of which
+    the device is a tenth, and nothing in it measurable."""
+    assert len(figmap.bands(_stacked(tmp_path))) == 2
+
+
+def test_a_callout_bubble_is_not_a_face(tmp_path):
+    """A faceplate is dark across nearly the whole frame; a numbered circle
+    across a few percent. That is the whole of the distinction."""
+    for y0, y1 in figmap.bands(_stacked(tmp_path)):
+        assert y1 - y0 > 30, "a bubble is not tall or wide enough to be a face"
+
+
+def test_a_face_split_by_pale_metal_is_rejoined(tmp_path):
+    """The EPS203's front splits into four - a vent strip, each row of jacks,
+    and the printed numbering - because the metal between the rows is pale,
+    while its rear came back whole. The difference is the drawing, not the
+    device."""
+    from PIL import Image, ImageDraw
+    im = Image.new("L", (1000, 200), 255)
+    d = ImageDraw.Draw(im)
+    d.rectangle([50, 20, 950, 60], fill=0)
+    d.rectangle([50, 72, 950, 110], fill=0)      # 12px of pale metal between
+    p = tmp_path / "split.png"
+    im.save(p)
+    assert figmap.bands(p) == [(20, 110)]
+
+
+def test_two_faces_are_not_rejoined(tmp_path):
+    """The same rule must not swallow the gap between a front and a rear."""
+    assert len(figmap.bands(_stacked(tmp_path, gap=250))) == 2
+
+
+def test_a_band_becomes_a_full_rectangle(tmp_path):
+    p = _stacked(tmp_path)
+    y0, y1 = figmap.bands(p)[0]
+    assert figmap.band_box(p, y0, y1) == (50, 950, y0, y1)
+
+
 def test_the_box_is_the_dark_body_not_the_page(tmp_path):
     from PIL import Image
     p = tmp_path / "panel.png"

@@ -80,6 +80,57 @@ def wants(context, view):
     return bool(want.search(context)) and not other.search(context)
 
 
+def bands(path, min_frac=0.55, gap=6, join=30):
+    """The horizontal strips of device-like ink in a figure, top to bottom.
+
+    A DATASHEET FIGURE OFTEN HOLDS TWO FACES. Edgecore's EPS203 draws the front
+    above the rear with numbered callout bubbles around both, and `outline`
+    takes the ink bounding box of the lot - one rectangle spanning 780 px of
+    which the device is a tenth, measurable as nothing. Split it first and each
+    face is exact: 1.87% and 0.85% against the datasheet's own W/H.
+
+    `min_frac` is what separates a face from a callout: a faceplate is dark
+    across nearly the whole frame, a numbered bubble across a few percent.
+
+    A FACE IS NOT ONE UNBROKEN BAND, which is why the strips are then joined.
+    That same front splits into four - a vent strip, each row of jacks, and the
+    printed numbering - because the metal between the rows is pale, while its
+    REAR came back whole. The difference is the drawing, not the device, so
+    bands a few pixels apart are one face and the 250 px between two faces is
+    not.
+    """
+    a = np.asarray(Image.open(path).convert('L'), dtype=float)
+    h, w = a.shape
+    dark = (a < 200).sum(axis=1) > w * min_frac
+    out, start = [], None
+    for y in range(h):
+        if dark[y] and start is None:
+            start = y
+        elif not dark[y] and start is not None:
+            if y - start > gap:
+                out.append((start, y - 1))
+            start = None
+    if start is not None and h - start > gap:
+        out.append((start, h - 1))
+    merged = []
+    for b in out:
+        if merged and b[0] - merged[-1][1] <= join:
+            merged[-1] = (merged[-1][0], b[1])
+        else:
+            merged.append(b)
+    return merged
+
+
+def band_box(path, y0, y1, min_frac=0.30):
+    """One band's left and right edges, so a face becomes a full rectangle."""
+    a = np.asarray(Image.open(path).convert('L'), dtype=float)[y0:y1 + 1]
+    hh, w = a.shape
+    cols = np.where((a < 200).sum(axis=0) > hh * min_frac)[0]
+    if not len(cols):
+        return None
+    return int(cols[0]), int(cols[-1]), y0, y1
+
+
 def outline(path):
     """The device box within a figure, or None if nothing device-shaped is there."""
     try:
