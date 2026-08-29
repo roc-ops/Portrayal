@@ -372,6 +372,20 @@ def _tri(w, h, up, cx=0.0):
             f"L {cx:g} {y1:g} Z")
 
 
+def _tri_h(w, h, left):
+    """A chevron pointing sideways - an airflow arrow on a rear face.
+
+    Added because an agent needed one, found only up/down/pair, and hand-drew
+    two paths against an instruction not to. A mark set that covers most cases
+    still sends people back to hand-authoring for the rest, and hand-authoring
+    is what put three strokes where a letter E belonged.
+    """
+    x0, x1 = -w / 2, w / 2
+    if left:
+        return f"M {x1:g} {-h / 2:g} L {x1:g} {h / 2:g} L {x0:g} 0 Z"
+    return f"M {x0:g} {-h / 2:g} L {x0:g} {h / 2:g} L {x1:g} 0 Z"
+
+
 def _ground(w):
     """IEC 60417-5019 earth: three stacked bars, each shorter, on a stem."""
     s, out = w / 2, [f"M 0 {-w * 0.55:g} L 0 {-w * 0.10:g}"]
@@ -411,6 +425,8 @@ MARKS = {
     "arrow-pair": (lambda w, g: "%s %s" % (
         _tri(w, w * 0.889, True, -(w + g) / 2),
         _tri(w, w * 0.889, False, (w + g) / 2)), True),
+    "arrow-left":  (lambda w, g: _tri_h(w * 0.889, w, True), True),
+    "arrow-right": (lambda w, g: _tri_h(w * 0.889, w, False), True),
     "ground":     (lambda w, g: _ground(w), False),
     "usb":        (lambda w, g: _usb(w), False),
     "bolt":       (lambda w, g: _bolt(w), True),
