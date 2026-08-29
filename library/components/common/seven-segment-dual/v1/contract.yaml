@@ -1,0 +1,45 @@
+format: 1
+kind: component
+name: seven-segment-dual
+version: 1.0.0
+class: display
+profile: networking
+description: Two-digit seven-segment status display behind one window - the code
+  readout an Accton/Edgecore faceplate prints beside its system LEDs
+size: {w: 17.4, h: 12.1}
+provenance:
+  size: >-
+    photo-measured - COR580/AS9926-24D. The lit window reads x 138.1-195 px in
+    cor580-datasheet/fig-0007.png panel 0 (3.198 px/mm on x, box [8,111,1410,251])
+    for 17.8 mm, and y 148.1-186.25 px for 11.7 mm once mapped through the
+    orthographic front elevation cor580-qsg/fig-0007.png (1.8329 px/mm on y). The
+    quick-start's own line art gives 40.4-56.5 x 12.0-22.8 mm for the same window,
+    which agrees to 1.4 mm on width. 17.4 x 12.1 is the pair, rounded to the
+    datasheet's better x scale and the quick-start's better y.
+  digits: >-
+    drawing - two digits under one filter, the split between them read at 49.7 mm
+    in the same figure, which puts it 0.6 mm right of the window's own centre.
+    Drawn on the centre: at 3.2 px/mm that offset is two pixels.
+  semantics: >-
+    datasheet - 'Dual 7-Segment LED' is listed among the COR580's key components
+    (cor580-datasheet/doc.md:83) and callout 2 of its interface drawing names it
+    'Dual 7-segment LED'. WHAT THE DIGITS MEAN is stated nowhere in either
+    document - not a POST code, not a stack ID, not a fabric slot number - so
+    this part draws a two-digit readout and claims nothing about what it reads
+    out.
+elements:
+  window:
+    at: [0.4, 0.4]
+    size: [16.6, 11.3]
+    class: display
+  digit-1:
+    at: [2.3, 1.65]
+    size: [5.0, 8.8]
+    class: display
+    states: ['off', 'on']
+  digit-2:
+    at: [10.1, 1.65]
+    size: [5.0, 8.8]
+    class: display
+    states: ['off', 'on']
+skins: [default]

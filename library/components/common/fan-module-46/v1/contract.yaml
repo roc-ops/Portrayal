@@ -1,0 +1,84 @@
+format: 1
+kind: module
+name: fan-module-46
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: Hot-swappable 1U fan module, 46.6mm pitch - 44.6mm square unioned with a 2mm
+  left mounting tab (captive screw), honeycomb grille, pull bar in the lower third
+size: {w: 46.6, h: 40.0}
+attrs: {power-absent: not-applicable, airflow: front-to-back}
+provenance:
+  power: >-
+    NOT APPLICABLE, because this contract is a GENERIC and not a part. It is a shape that
+    stands in for every module of its kind, so there is no one figure to state: a 40GBASE-SR4
+    is about 1.5 W and a 400G ZR about 20 W, and this single drawing is both of them. Any
+    wattage written here would be a fiction dressed as a fact rather than a missing one. The
+    figure belongs on the PLACEMENT, where a device that knows which module it ships can
+    source it - the same division of labour L18 already draws for `media`, where a port
+    inheriting a family from its cage must declare the real media on the placement. L27 has
+    always exempted this contract in code; this records the reason in the data, so that a
+    consumer totalling a chassis can tell a deliberate silence from an unanswered question.
+    The chassis-level hole stays visible in L29, which is the right place for it.
+  size: >-
+    photo-measured - common/fan-module@1 narrowed by 2 mm at the mounting tab, for
+    chassis whose fan bays are on a pitch that leaves a printed divider between the
+    trays. On the Edgecore DCS510 the tray frame reads 45.7-46.7 mm on a 48.8 mm
+    pitch (dcs510-datasheet/fig-0007 panel 1 at 3.2801 px/mm, frame left edges 73.2,
+    122.0 and grille left edges 76.2, 125.0, 173.8), leaving a ~2.2 mm chassis
+    divider that carries the fan numeral. Drawn with the 48.6 generic, all six
+    numerals were painted under their own trays and L21 said so. The 44.6 mm SQUARE
+    and every feature on it are unchanged from common/fan-module@1 - only the tab is
+    shorter - so the rotor stays round rather than being scaled to fit.
+  elements: photo-measured via common/fan-module@1 (bar rows 29.4-32.7mm abs), shifted
+    2mm left with the tab
+states: [ok, fail, absent]
+elements:
+  screw: {at: [0.0, 18.4], size: [2.2, 2.2], class: screw}
+  rotor: {at: [5.5, 0.8], size: [37.6, 37.6], class: rotor}
+  handle: {at: [6.0, 27.4], size: [36.6, 3.3], class: latch}
+relief:
+  features:
+    - node: rotor-grille
+      vent: 25
+      confidence: estimated
+      source: >-
+        common/fan-module-46@1 itself - unsourced (inherited from common/fan-module@1). Its provenance covers the part's FACE (size
+        and element positions, both photo-measured) and carries no key about how far
+        anything stands off it.
+    - node: rotor-behind
+      vent: 25
+      confidence: estimated
+      source: >-
+        common/fan-module-46@1 itself - unsourced (inherited from common/fan-module@1). Its provenance covers the part's FACE (size
+        and element positions, both photo-measured) and carries no key about how far
+        anything stands off it.
+    - node: rotor-bulge
+      dome: 3.2
+      confidence: estimated
+      source: >-
+        common/fan-module-46@1 itself - unsourced (inherited from common/fan-module@1). Its provenance covers the part's FACE (size
+        and element positions, both photo-measured) and carries no key about how far
+        anything stands off it.
+    - node: handle
+      uhandle: 12.7
+      confidence: estimated
+      source: >-
+        common/fan-module-46@1 itself - unsourced (inherited from common/fan-module@1). Its provenance covers the part's FACE (size
+        and element positions, both photo-measured) and carries no key about how far
+        anything stands off it.
+    - node: screw
+      cyl: 5
+      knurl: true
+      confidence: estimated
+      source: >-
+        common/fan-module-46@1 itself - unsourced (inherited from common/fan-module@1). Its provenance covers the part's FACE (size
+        and element positions, both photo-measured) and carries no key about how far
+        anything stands off it.
+skins: [default, blue]
+body:
+  depth: 56
+  color: '#26292d'
+  footprint: {at: [2, 0], size: [44.6, 40]}
+  plate: {at: [0, 0], size: [46.6, 40]}
