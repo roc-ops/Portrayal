@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: seven-segment-dual
-version: 1.0.0
+version: 1.1.1
 class: display
 profile: networking
 description: Two-digit seven-segment status display behind one window - the code
@@ -36,10 +36,49 @@ elements:
     at: [2.3, 1.65]
     size: [5.0, 8.8]
     class: display
-    states: ['off', 'on']
+    description: >-
+      the left digit. Its states are the characters a seven-segment cell can form, each naming the segments it lights - a top, b top-right, c bottom-right, d bottom, e bottom-left, f top-left, g middle. The drawing's own face is '0'.
+    states: &digit-states
+      - {name: '0', lights: [a, b, c, d, e, f]}
+      - {name: '1', lights: [b, c]}
+      - {name: '2', lights: [a, b, g, e, d]}
+      - {name: '3', lights: [a, b, g, c, d]}
+      - {name: '4', lights: [f, g, b, c]}
+      - {name: '5', lights: [a, f, g, c, d]}
+      - {name: '6', lights: [a, f, g, e, c, d]}
+      - {name: '7', lights: [a, b, c]}
+      - {name: '8', lights: [a, b, c, d, e, f, g]}
+      - {name: '9', lights: [a, b, c, d, f, g]}
+      - {name: 'a', lights: [a, b, c, e, f, g]}
+      - {name: 'b', lights: [f, g, e, c, d]}
+      - {name: 'c', lights: [a, f, e, d]}
+      - {name: 'd', lights: [b, g, e, c, d]}
+      - {name: 'e', lights: [a, f, g, e, d]}
+      - {name: 'f', lights: [a, f, g, e]}
+      - {name: 'blank', lights: []}
   digit-2:
     at: [10.1, 1.65]
     size: [5.0, 8.8]
     class: display
-    states: ['off', 'on']
+    description: >-
+      the right digit. Its states are the characters a seven-segment cell can form, each naming the segments it lights - a top, b top-right, c bottom-right, d bottom, e bottom-left, f top-left, g middle. The drawing's own face is '0'.
+    states: *digit-states
+  point-1:
+    at: [7.6, 9.75]
+    size: [0.7, 0.7]
+    class: display
+    description: >-
+      the left digit's decimal point, driven separately from the digit as it is on the part. Unlit in the drawing, which is why the face reads '00' and not the vendor artwork's '8.8.'
+    states:
+      - {name: 'on', lights: [dp]}
+      - {name: 'off', lights: []}
+  point-2:
+    at: [15.4, 9.75]
+    size: [0.7, 0.7]
+    class: display
+    description: >-
+      the right digit's decimal point, driven separately from the digit as it is on the part. Unlit in the drawing, which is why the face reads '00' and not the vendor artwork's '8.8.'
+    states:
+      - {name: 'on', lights: [dp]}
+      - {name: 'off', lights: []}
 skins: [default]

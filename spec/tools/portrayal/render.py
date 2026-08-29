@@ -160,9 +160,11 @@ def state_style(st, vocabulary=()):
     mode = beh if isinstance(beh, str) else (beh or {}).get("mode", "solid")
     alt = None if isinstance(beh, str) else (beh or {}).get("color")
     color = st.get("color")
-    lit = tuple(st.get("lights") or ())
-    if lit:
-        return (color, alt, mode, (lit, tuple(sorted(vocabulary))))
+    # `is not None`, not truthiness: `lights: []` is a state that lights NOTHING -
+    # a blank digit, an unlit decimal point - and is as real as any other.
+    lit = st.get("lights")
+    if lit is not None:
+        return (color, alt, mode, (tuple(lit), tuple(sorted(vocabulary))))
     if not color and mode == "solid":
         return None
     return (color, alt, mode, None)
