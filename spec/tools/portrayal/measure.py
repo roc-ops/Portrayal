@@ -99,10 +99,31 @@ def panel_box(path, thresh=200, share=0.55):
     for r in runs:
         if len(r) < 6:                      # a caption underline is not a panel
             continue
-        xs0 = [rows[y][1] for y in r if rows[y][1] is not None]
-        xs1 = [rows[y][2] for y in r if rows[y][2] is not None]
-        if xs0:
-            out.append((min(xs0), r[0], max(xs1), r[-1]))
+        # A LEADER LINE REACHING THE PANEL IS NOT PART OF THE PANEL. A single
+        # callout arrow extended one band's right edge from 1449 to 1534 px,
+        # which made an ORTHOGRAPHIC front elevation report 2.68% axis
+        # disagreement and 'NOT orthographic' - so the tool condemned a usable
+        # figure, and an agent that trusted it would have thrown away a good x
+        # axis. That is the dangerous direction for this rule to fail in.
+        #
+        # Take the x extent each row VOTES for, not the widest single row: a
+        # face contributes its full width on most rows, a leader on one or two.
+        left = collections.Counter(rows[y][1] for y in r if rows[y][1] is not None)
+        right = collections.Counter(rows[y][2] for y in r if rows[y][2] is not None)
+        if not left:
+            continue
+        # the modal edge, with a small tolerance so antialiasing does not split
+        # the vote across neighbouring columns
+        def modal(counter, pick):
+            best, hits = None, 0
+            for v in counter:
+                n = sum(c for u, c in counter.items() if abs(u - v) <= 2)
+                if n > hits or (n == hits and pick(v, best)):
+                    best, hits = v, n
+            return best
+        x0 = modal(left, lambda v, b: b is None or v < b)
+        x1 = modal(right, lambda v, b: b is None or v > b)
+        out.append((x0, r[0], x1, r[-1]))
 
     # A FACE IS NOT ONE UNBROKEN BAND OF INK. Between two rows of ports there is
     # bare metal, and a row-coverage test reads that as the end of the panel - so
@@ -122,7 +143,29 @@ def panel_box(path, thresh=200, share=0.55):
                 merged[-1] = (min(p[0], b[0]), p[1], max(p[2], b[2]), b[3])
                 continue
         merged.append(b)
-    return merged
+
+    # Re-vote the x extent over the WHOLE merged band. Doing it per sub-band and
+    # then taking the widest let a single leader-heavy strip set the edge for the
+    # entire face - the very overrun the modal vote was added to stop.
+    final = []
+    for x0, y0, x1, y1 in merged:
+        span = range(y0, y1 + 1)
+        left = collections.Counter(rows[y][1] for y in span if rows[y][1] is not None)
+        right = collections.Counter(rows[y][2] for y in span if rows[y][2] is not None)
+        if not left:
+            final.append((x0, y0, x1, y1))
+            continue
+
+        def modal(counter, prefer_low):
+            best, hits = None, -1
+            for v in counter:
+                n = sum(c for u, c in counter.items() if abs(u - v) <= 2)
+                if n > hits or (n == hits and best is not None
+                                and ((v < best) if prefer_low else (v > best))):
+                    best, hits = v, n
+            return best
+        final.append((modal(left, True), y0, modal(right, False), y1))
+    return final
 
 
 def cmd_panel(a):

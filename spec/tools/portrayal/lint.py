@@ -403,7 +403,14 @@ def _text_extent(m):
     fs = m.get("font-size", 2.2)
     w = len(str(m["text"])) * fs * ADV_EM
     up, down = fs * CAP_EM, fs * DESC_EM
-    anchor = m.get("anchor", "start")
+    # THE DEFAULT HAS TO BE THE ONE THE RENDERER USES. render.py draws an
+    # unanchored silkscreen mark CENTRED on its `at` (render.py:880); this read
+    # it as running rightward from `at`, so every extent check on the 433 marks
+    # in this library that state no anchor was off by half a text width - in the
+    # direction that hides an overlap on the left and invents one on the right.
+    # A mark then lints as one thing and draws as another, and no rule reports
+    # the difference because both halves are working from their own assumption.
+    anchor = m.get("anchor", "middle")
     lead = w if anchor == "end" else (w / 2 if anchor == "middle" else 0.0)
     rot = int(m.get("rotate", 0)) % 360
     if rot == 90:            # runs downward, cap side to the LEFT of the baseline
@@ -2213,7 +2220,7 @@ def lint_device_decor(path, view_name, view, lib_roots):
         # because somebody goes and 'fixes' correct artwork.
         x0, _, x1, _ = _text_extent({"at": at, "text": t,
                                      "font-size": float(m.get("font-size") or 2.5),
-                                     "anchor": m.get("anchor") or "start",
+                                     "anchor": m.get("anchor") or "middle",
                                      "rotate": m.get("rotate", 0)})
         over = max(0.0, -x0) + max(0.0, x1 - float(vw))
         if over > 2.0:
