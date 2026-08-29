@@ -203,6 +203,99 @@ def cmd_panel(a):
     return 0
 
 
+# ------------------------------------------------------------------ rows ---
+
+def cmd_rows(a):
+    """The horizontal bands of a face, measured against the panel this same call
+    found - which is the point.
+
+    TWO CAREFUL RUNS OF ONE DEVICE DISAGREED ON EXACTLY TWO NUMBERS: the block
+    origin y and the row pitch. Every other block parameter matched, because
+    every other one is a registry lookup. These two were eyeball, and the chain
+    behind them - find the panel edge, derive px/mm, find the feature row,
+    subtract - was re-made independently each run, with a one-pixel judgement at
+    every link.
+
+    The corpus says row pitch cannot be a lookup: 134 stacked QSFP-DD columns
+    across 15 devices run from 12.86 to 17.30mm, so belly-to-belly spacing is a
+    cage-assembly choice and not a standard. Inventing a registry value would
+    make fifteen honest measurements look like deviations.
+
+    So it is measured - but measured ONCE, here, with the panel edge and the
+    scale that produced it printed alongside, so two runs start from identical
+    pixels instead of two independent readings of the same edge.
+    """
+    boxes = panel_box(a.image, a.threshold, a.share)
+    if not boxes:
+        print("rows: no panel found")
+        return 1
+    if a.panel >= len(boxes):
+        print(f"rows: --panel {a.panel} but only {len(boxes)} band(s) found")
+        return 1
+    x0, y0, x1, y1 = boxes[a.panel]
+    im = Image.open(a.image).convert("L")
+    px = im.load()
+    inset = max(2, (x1 - x0) // 40)          # skip the panel's own side walls
+    xs = range(x0 + inset, x1 - inset)
+    prof = [sum(px[x, y] for x in xs) / max(1, len(list(xs))) for y in range(y0, y1 + 1)]
+
+    scale = None
+    if a.height:
+        scale = (y1 - y0) / a.height
+    print(f"panel: {a.panel}  box-px: [{x0}, {y0}, {x1}, {y1}]")
+    if scale:
+        print(f"y-px-per-mm: {scale:.4f}   # from this box and --height {a.height}")
+    print(f"# brightness averaged across x {x0 + inset}..{x1 - inset}, "
+          f"one value per row")
+
+    # A cage opening is DARK and its bezel is BRIGHT, so a face reads as
+    # alternating bands. BOTH polarities are reported, because which one is the
+    # feature depends on the drawing: one agent read this face off its bright
+    # bezel highlights, and a dark-only listing does not contain the rows it
+    # used.
+    #
+    # WHAT THIS TOOL DECIDES AND WHAT IT DOES NOT. It decides where the bands
+    # are, to the pixel, from a stated panel box and a stated scale. It does NOT
+    # decide which band is your port row - that is the drawing's meaning and
+    # yours to read. The point is that the choice becomes an INDEX into a list
+    # both runs see identically, instead of two independent judgements about
+    # where an edge sits. Picking band-3 twice gives the same millimetres;
+    # eyeballing the same edge twice does not.
+    mean = sum(prof) / len(prof)
+    bands, start, pol = [], 0, prof[0] < mean
+    for i, v in enumerate(prof):
+        p = v < mean
+        if p != pol:
+            if i - start >= a.min_band:
+                bands.append((start, i - 1, pol))
+            start, pol = i, p
+    if len(prof) - start >= a.min_band:
+        bands.append((start, len(prof) - 1, pol))
+
+    print(f"bands: {len(bands)}   # dark = opening or shadow, light = bezel or plate")
+    prev = {}
+    for n, (b0, b1, isdark) in enumerate(bands):
+        c = (b0 + b1) / 2
+        kind = "dark " if isdark else "light"
+        line = (f"  band-{n:<2d} {kind} rows {y0 + b0}..{y0 + b1}"
+                f"  centre-px {y0 + c:7.1f}  h-px {b1 - b0 + 1:3d}")
+        if scale:
+            line += (f"  centre-mm {c / scale:6.2f}"
+                     f"  h-mm {(b1 - b0 + 1) / scale:5.2f}")
+        if isdark in prev:
+            step = c - prev[isdark]
+            line += f"  step-to-previous-{kind.strip()} {step / scale:.2f}mm" if scale \
+                else f"  step-px {step:.1f}"
+        print(line)
+        prev[isdark] = c
+    print("# `at.y` = that band's centre-mm minus half the component's height."
+          "\n# `row-pitch` = the step between the two bands of the same kind that"
+          "\n# are your two port rows. Quote the band index and this box in"
+          "\n# provenance, and the next run reproduces the number instead of"
+          "\n# re-deriving it.")
+    return 0
+
+
 # ----------------------------------------------------------------- pitch ---
 
 def column_profile(path, band=None, thresh=200):
@@ -402,6 +495,15 @@ def main():
     p.add_argument("--threshold", type=int, default=200)
     p.add_argument("--share", type=float, default=0.55)
     p.set_defaults(fn=cmd_panel)
+
+    p = sub.add_parser("rows", help="horizontal bands of a face, against its own panel")
+    p.add_argument("image", type=pathlib.Path)
+    p.add_argument("--height", type=float, help="stated body height in mm")
+    p.add_argument("--panel", type=int, default=0, help="which band, when a page stacks two")
+    p.add_argument("--threshold", type=int, default=200)
+    p.add_argument("--share", type=float, default=0.55)
+    p.add_argument("--min-band", type=int, default=3)
+    p.set_defaults(fn=cmd_rows)
 
     p = sub.add_parser("pitch", help="dominant repeat period across a band")
     p.add_argument("image", type=pathlib.Path)

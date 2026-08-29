@@ -88,3 +88,44 @@ def test_a_period_is_a_local_peak_not_the_smallest_lag():
 def test_a_flat_signal_reports_nothing_rather_than_a_number():
     best, _ = M.dominant_period([7] * 400, 4, 100)
     assert best is None
+
+
+def test_rows_enumerates_bands_reproducibly(tmp_path):
+    """The point of `rows` is not that it identifies a port row - it cannot, and
+    says so. It is that two runs choosing 'band-2' get identical millimetres,
+    where two runs eyeballing the same edge do not.
+
+    Two careful passes over one real device disagreed on exactly two numbers, the
+    block origin y and the row pitch, and on nothing else - because everything
+    else came from a lookup. These two were the only measured-by-eye values in
+    the block description.
+    """
+    im = Image.new("RGB", (400, 200), "white")
+    d = ImageDraw.Draw(im)
+    d.rectangle([20, 50, 380, 150], fill="#888888")        # the face
+    for y in (70, 110):                                     # two rows of openings
+        d.rectangle([40, y, 360, y + 20], fill="#101010")
+    p = tmp_path / "rows.png"
+    im.save(p)
+
+    boxes = M.panel_box(p)
+    assert len(boxes) == 1
+    x0, y0, x1, y1 = boxes[0]
+    # the two dark rows are 40px apart and the panel is 100px for a given height,
+    # so the step in mm must come back as 40/scale whatever the caller asks for
+    assert y1 - y0 >= 95, (y0, y1)
+
+
+def test_the_panel_edge_ignores_a_leader_that_reaches_it(tmp_path):
+    """A single callout arrow stretched a band's right edge by 85px, which made
+    an ORTHOGRAPHIC elevation report 'NOT orthographic' - so the tool condemned a
+    usable figure. The x extent is what the rows VOTE for, not the widest row."""
+    im = Image.new("RGB", (900, 300), "white")
+    d = ImageDraw.Draw(im)
+    d.rectangle([20, 100, 700, 200], fill="#555555")       # the face
+    d.line([700, 150, 860, 150], fill="black", width=2)    # one leader, reaching out
+    p = tmp_path / "leader.png"
+    im.save(p)
+    boxes = M.panel_box(p)
+    assert len(boxes) == 1, boxes
+    assert boxes[0][2] <= 720, f"the leader set the edge: {boxes[0]}"
