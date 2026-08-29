@@ -106,3 +106,36 @@ def test_a_curved_path_is_skipped_rather_than_guessed_at():
     library uses. Anything with an arc gets no opinion rather than a wrong one."""
     assert L._path_box({"path": "M 0 0 A 1 1 0 1 0 2 0"}) is None
     assert L._path_box({"path": "M -1 0.5 L 1 0.5 L 0 -0.5 Z"}) == (-1.0, -0.5, 1.0, 0.5)
+
+
+def test_a_two_line_legend_is_centred_as_a_block():
+    """`GNSS` over `ANT` is ONE label, straddling the jack it names - 1.29mm
+    above the centre and 1.31mm below it. Measuring each line alone reported the
+    same correct legend twice as wrong, and across the corpus that shape was 642
+    of 1287 warnings: half this rule's backlog, every one of them a label a
+    person would have to open, measure and dismiss.
+
+    What has to sit on the target's centre is the SET's midpoint.
+    """
+    # beside the port, so the rule is measuring the axis it means to: both lines
+    # 1.30mm off the jack's centre, one above and one below.
+    a = {"at": [34.0, 16.196], "text": "GNSS", "font-size": 1.6,
+         "anchor": "middle", "for": "port-1"}
+    b = {"at": [34.0, 18.796], "text": "ANT", "font-size": 1.6,
+         "anchor": "middle", "for": "port-1"}
+    assert run(view([PORT], [a, b])) == []
+    # and each line ALONE is still a slip, so this is the set rule doing the
+    # work rather than the offsets being too small to report
+    assert run(view([PORT], [a])) != []
+
+
+def test_a_lopsided_pair_is_still_reported():
+    """THE HALF THAT KEEPS THE RULE HONEST. The S8901 carries two arrow lamps
+    per port, 1.38mm out one way and 2.22mm the other. That midpoint is 0.42mm
+    off centre, so the pair is not straddling anything - it is simply askew, and
+    it stays reported."""
+    a = {"at": [34.0, 16.116], "text": "L", "font-size": 1.6,
+         "anchor": "middle", "for": "port-1"}     # 1.38 above
+    b = {"at": [34.0, 19.716], "text": "R", "font-size": 1.6,
+         "anchor": "middle", "for": "port-1"}     # 2.22 below
+    assert run(view([PORT], [a, b])) != []

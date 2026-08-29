@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx304
-version: 1.1.0
+version: 2.0.0
 maturity: modelled
 manufacturer: Juniper
 model: MX304
@@ -238,10 +238,10 @@ views:
       decor:
         - {at: [77.4, 0.0], size: [6.8, 88.9], rx: 0.0, fill: '#82868b'}
       cutouts:
-        - {id: smb-10mhz-out, at: [96.19, 9.19], size: [4.83, 4.83], shape: circle}
-        - {id: smb-10mhz-in, at: [104.69, 9.19], size: [4.83, 4.83], shape: circle}
-        - {id: smb-1pps-out, at: [96.19, 19.79], size: [4.83, 4.83], shape: circle}
-        - {id: smb-1pps-in, at: [104.69, 19.79], size: [4.83, 4.83], shape: circle}
+        - {id: clk-10mhz-out, at: [96.19, 9.19], size: [4.83, 4.83], shape: circle}
+        - {id: clk-10mhz-in, at: [104.69, 9.19], size: [4.83, 4.83], shape: circle}
+        - {id: clk-1pps-out, at: [96.19, 19.79], size: [4.83, 4.83], shape: circle}
+        - {id: clk-1pps-in, at: [104.69, 19.79], size: [4.83, 4.83], shape: circle}
         - {id: bits, at: [93.9, 28.6], size: [16.0, 14.0]}
         - {id: tod, at: [93.3, 48.4], size: [16.0, 14.0]}
         - {id: gm-ptp, at: [95.1, 67.65], size: [10.0, 14.5]}
@@ -253,10 +253,10 @@ views:
     silkscreen:
       - {at: [80.9, 21.5], text: PSU 0, font-size: 2.0, anchor: middle, rotate: 270, for: psu-0}
       - {at: [80.9, 63.0], text: PSU 1, font-size: 2.0, anchor: middle, rotate: 270, for: psu-1}
-      - {at: [93.4, 11.6], text: 10Mhz, font-size: 1.7, anchor: middle, rotate: 270, for: [smb-10mhz-out, smb-10mhz-in]}
-      - {at: [93.4, 22.2], text: 1PPS, font-size: 1.7, anchor: middle, rotate: 270, for: [smb-1pps-out, smb-1pps-in]}
-      - {at: [101.6, 16.9], text: OUT, font-size: 1.5, anchor: middle, rotate: 270, for: [smb-10mhz-out, smb-1pps-out]}
-      - {at: [110.6, 16.9], text: IN, font-size: 1.5, anchor: middle, rotate: 270, for: [smb-10mhz-in, smb-1pps-in]}
+      - {at: [93.4, 11.6], text: 10Mhz, font-size: 1.7, anchor: middle, rotate: 270, for: [clk-10mhz-out, clk-10mhz-in]}
+      - {at: [93.4, 22.2], text: 1PPS, font-size: 1.7, anchor: middle, rotate: 270, for: [clk-1pps-out, clk-1pps-in]}
+      - {at: [101.6, 16.9], text: OUT, font-size: 1.5, anchor: middle, rotate: 270, for: [clk-10mhz-out, clk-1pps-out]}
+      - {at: [110.6, 16.9], text: IN, font-size: 1.5, anchor: middle, rotate: 270, for: [clk-10mhz-in, clk-1pps-in]}
       - {at: [91.4, 35.6], text: BITS, font-size: 1.7, anchor: middle, rotate: 270, for: bits}
       - {at: [91.4, 55.4], text: ToD, font-size: 1.7, anchor: middle, rotate: 270, for: tod}
       - {at: [111.8, 74.9], text: GM/PTP, font-size: 1.7, anchor: middle, rotate: 270, for: gm-ptp}
@@ -295,13 +295,13 @@ views:
            accepts: [juniper/mx304-fan@1], default: juniper/mx304-fan@1, group: fans, rel-pos: 2}
       placements:
         - {id: esd-rear-jack, ref: common/esd-jack@1, at: [429.1, 7.7], for: chassis, group: grounding, rel-pos: 0}
-        - {id: smb-10mhz-out, ref: std/smb@1, at: [96.19, 9.19], group: timing, rel-pos: 0,
+        - {id: clk-10mhz-out, ref: std/smb@1, at: [96.19, 9.19], group: timing, rel-pos: 0,
            attrs: {function: 10 MHz clock output}}
-        - {id: smb-10mhz-in, ref: std/smb@1, at: [104.69, 9.19], group: timing, rel-pos: 1,
+        - {id: clk-10mhz-in, ref: std/smb@1, at: [104.69, 9.19], group: timing, rel-pos: 1,
            attrs: {function: 10 MHz clock input}}
-        - {id: smb-1pps-out, ref: std/smb@1, at: [96.19, 19.79], group: timing, rel-pos: 2,
+        - {id: clk-1pps-out, ref: std/smb@1, at: [96.19, 19.79], group: timing, rel-pos: 2,
            attrs: {function: 1PPS output}}
-        - {id: smb-1pps-in, ref: std/smb@1, at: [104.69, 19.79], group: timing, rel-pos: 3,
+        - {id: clk-1pps-in, ref: std/smb@1, at: [104.69, 19.79], group: timing, rel-pos: 3,
            attrs: {function: 1PPS input}}
         - {id: bits, ref: std/rj45@1, at: [93.9, 28.6], group: timing, rel-pos: 4,
            attrs: {function: BITS (reserved for future use per the guide)}}

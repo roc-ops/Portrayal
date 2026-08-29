@@ -3485,9 +3485,39 @@ def alignment_slips(data, lib_roots):
     itself has no identity a text search could rely on.
     """
     SLIP = (0.08, 2.0)    # off by at least this, and at most this, to be a slip
-    for a in alignment_targets(data, lib_roots):
-        if a["axis"] and SLIP[0] <= a["off"] <= SLIP[1]:
-            yield a
+    BAND = 2.5            # how far across the axis still counts as the same row
+    BALANCED = 0.15       # how near the set's midpoint has to be to be centred
+
+    every = list(alignment_targets(data, lib_roots))
+    for a in every:
+        if not a["axis"] or not (SLIP[0] <= a["off"] <= SLIP[1]):
+            continue
+
+        # A LEGEND ON TWO LINES IS ONE LEGEND, and it is centred as a BLOCK.
+        # `GNSS` over `ANT` straddles its jack, 1.29mm above and 1.31mm below,
+        # and measuring each line on its own reported the same correct label
+        # twice as wrong. Across the corpus that was 296 of 1288 warnings - very
+        # nearly a quarter of this rule's whole backlog, every one of them a
+        # legend a person would have to open, measure and dismiss.
+        #
+        # So when several marks OF THE SAME KIND name one target from the same
+        # row, what has to sit on the target's centre is their midpoint. A set
+        # that straddles evenly is finished; one that does not is still
+        # reported, and each member still carries its own offset - the S8901's
+        # arrow lamps sit 1.38 and 2.22 out, a midpoint 0.42 off centre, and
+        # they stay reported because that pair really is lopsided.
+        key = "tcy" if a["axis"] == "vertically" else "tcx"
+        got = "cy" if a["axis"] == "vertically" else "cx"
+        perp = "cx" if a["axis"] == "vertically" else "cy"
+        peers = [t for t in every
+                 if t["view"] == a["view"] and t["kind"] == a["kind"]
+                 and abs(t[key] - a["want"]) <= 0.001
+                 and abs(t[perp] - a[perp]) < BAND]
+        if len(peers) >= 2:
+            mid = sum(p[got] for p in peers) / len(peers)
+            if abs(mid - a["want"]) <= BALANCED:
+                continue
+        yield a
 
 
 def alignment_targets(data, lib_roots):

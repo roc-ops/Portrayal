@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-30dx
-version: 1.0.0
+version: 2.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-30DX
@@ -448,7 +448,7 @@ views:
       - {at: [12.5, 36.23], text: PS1, font-size: 1.4, anchor: middle, fill: '#17191c', for: led-ps1}
       - {at: [12.5, 38.73], text: ID, font-size: 1.4, anchor: middle, fill: '#17191c', for: led-id}
       - {at: [8.9, 43.1], text: RESET, font-size: 1.6, anchor: middle, for: reset}
-      - {at: [12.69, 51.3], text: IOIOI, font-size: 1.6, anchor: middle, for: micro-usb}
+      - {at: [12.69, 51.3], text: IOIOI, font-size: 1.6, anchor: middle, for: console-usb}
       - {at: [13.36, 76.9], text: '⚡', font-size: 2.0, anchor: middle, for: usb}
       - {at: [24.5, 12.4], text: '0', font-size: 1.9, anchor: middle, for: mgmt-sfp-0}
       - {at: [30.1, 12.4], text: '▲▼', font-size: 1.9, anchor: middle, for: [mgmt-sfp-0, mgmt-sfp-1]}
@@ -536,7 +536,7 @@ views:
            group: status-leds, rel-pos: 6}
         - {ref: std/sfp-ganged@1, id: mgmt-sfp-0, at: [22.95, 14.51], rotate: 180, group: sfp-plus, rel-pos: 0}
         - {ref: std/sfp-ganged@1, id: mgmt-sfp-1, at: [22.95, 29.63], group: sfp-plus, rel-pos: 1}
-        - {ref: std/micro-usb@1, id: micro-usb, at: [8.94, 52.14], group: mgmt, rel-pos: 4,
+        - {ref: std/micro-usb@1, id: console-usb, at: [8.94, 52.14], group: mgmt, rel-pos: 4,
            attrs: {media: micro-usb-b, role: console}}
         - {ref: std/usb-a@1, id: usb, at: [7.36, 65.25], rotate: 90, group: mgmt, rel-pos: 3,
            attrs: {role: storage, speed: usb2}}
@@ -613,7 +613,7 @@ views:
         - {ref: std/qsfp-dd@1, id: port-29, at: [292.45, 45.23], group: qsfpdd-400g, rel-pos: 29}
     regions:
       - {id: mgmt-block, at: [1.0, 1.0], size: {w: 40.0, h: 85.5}, label: Management and SFP+,
-         members: [reset, micro-usb, usb, console, oob, mgmt-sfp-0, mgmt-sfp-1]}
+         members: [reset, console-usb, usb, console, oob, mgmt-sfp-0, mgmt-sfp-1]}
       - {id: timing-block, at: [323.0, 20.0], size: {w: 90.0, h: 26.0}, label: Timing block,
          members: [bits, tod, pps, mhz, gnss-ant]}
   rear:

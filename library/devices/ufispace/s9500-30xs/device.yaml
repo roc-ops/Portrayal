@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9500-30xs
-version: 0.1.1
+version: 1.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9500-30XS
@@ -450,7 +450,7 @@ views:
       - {at: [139.6, 40.66], text: IN, font-size: 1.7, anchor: middle, for: mhz-in}
       - {at: [147.3, 40.66], text: 10MHZ, font-size: 1.7, anchor: middle, for: [mhz-in, mhz-out]}
       - {at: [155.05, 40.66], text: OUT, font-size: 1.7, anchor: middle, for: mhz-out}
-      - {at: [172.06, 6.14], text: IOIOI, font-size: 1.7, anchor: middle, for: micro-usb}
+      - {at: [172.06, 6.14], text: IOIOI, font-size: 1.7, anchor: middle, for: console-usb}
       - {at: [166.5, 14.61], text: BITS, font-size: 1.7, anchor: middle, for: bits}
       - {at: [172.4, 14.61], text: '▲▼', font-size: 1.7, anchor: middle, for: [bits, tod]}
       - {at: [178.0, 14.61], text: TOD, font-size: 1.7, anchor: middle, for: tod}
@@ -548,7 +548,7 @@ views:
         - {ref: std/sma@1, id: gnss-ant, at: [121.66, 28.8], group: timing, rel-pos: 1, attrs: {role: gnss-in}}
         - {ref: std/sma@1, id: mhz-in, at: [136.42, 28.8], group: timing, rel-pos: 4, attrs: {role: 10mhz-in}}
         - {ref: std/sma@1, id: mhz-out, at: [151.88, 28.8], group: timing, rel-pos: 5, attrs: {role: 10mhz-out}}
-        - {ref: std/micro-usb@1, id: micro-usb, at: [168.31, 7.58], group: mgmt, rel-pos: 4, attrs: {media: micro-usb-b, role: console}}
+        - {ref: std/micro-usb@1, id: console-usb, at: [168.31, 7.58], group: mgmt, rel-pos: 4, attrs: {media: micro-usb-b, role: console}}
         - {ref: std/rj45-ganged@1, id: bits, at: [165.7, 15.9], rotate: 180, group: timing, rel-pos: 6, attrs: {media: rj48, role: bits-in}}
         - {ref: std/rj45-ganged@1, id: tod, at: [165.7, 28.48], group: timing, rel-pos: 7, attrs: {media: rj45, role: tod-in}}
         - {ref: std/rj45-ganged@1, id: oob, at: [185.46, 5.92], rotate: 180, group: mgmt, rel-pos: 1, attrs: {role: mgmt, speed: 100m-1g}}

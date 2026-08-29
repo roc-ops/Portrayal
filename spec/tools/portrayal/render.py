@@ -380,6 +380,7 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                 if feat.get("thread"):
                     node.set("data-z-thread", str(feat["thread"]))
                 break
+    part_groups = []
     for part in contract.get("parts") or []:
         pg, _ = instance_group(lib, part["ref"], f"{inst_id}--{part['id']}",
                                part["at"], None, part.get("attrs"), None, None,
@@ -391,6 +392,7 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         if part.get("lift"):
             pg.set("data-z-lift", str(part["lift"]))
         g.append(pg)
+        part_groups.append(pg)
     for feat in (contract.get("relief") or {}).get("features") or []:
         want = f"{inst_id}--{feat['node']}"
         for node in g.iter():
@@ -414,6 +416,26 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                     g.remove(node)
                     g.append(node)
                 break
+
+    # AND THEN THE COMPOSED PARTS GO BACK ON TOP, because the raise above put
+    # the very thing it was meant to protect them from in front of them.
+    #
+    # `ufispace/psu-132-ac` composes a C14 inlet and declares `inlet-recess` as
+    # a bezel standing 1.8mm proud. The recess is an opaque 28.6 x 31.4 slab and
+    # the inlet is 28 x 20 inside it, so raising the bezel to the end of the
+    # group painted the inlet out completely: twenty-eight UfiSpace and Juniper
+    # supplies drew a blank grey panel where the keyed shroud and three pins
+    # should be. The part was in the contract, in the SVG and in the DCIM
+    # export - missing only from the picture, which is the one place anybody
+    # looks to see whether a supply takes a cord.
+    #
+    # A composed part is mounted IN its parent, so it is never hidden by the
+    # parent's own artwork. The bezel keeps its raise relative to the skin,
+    # which is what that code is for.
+    for pg in part_groups:
+        if pg in list(g):
+            g.remove(pg)
+            g.append(pg)
 
     # A CARRIER IS A MODULE WITH BAYS OF ITS OWN. The A9K-MOD80/160/200/400 hold
     # two MPAs each and the SIP-700 holds four SPAs, and until this loop existed

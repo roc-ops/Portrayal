@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx104
-version: 0.2.3
+version: 1.0.0
 maturity: modelled
 manufacturer: Juniper
 model: MX104
@@ -134,10 +134,10 @@ views:
         - {id: btn-online, at: [153.8, 28.0], size: [3.6, 3.6], shape: circle}
         - {id: ext-ref-clock, at: [260.9, 8.0], size: [16.0, 14.0]}
         - {id: tod, at: [277.9, 8.0], size: [16.0, 14.0]}
-        - {id: smb-1pps-in, at: [309.09, 10.09], size: [4.83, 4.83], shape: circle}
-        - {id: smb-1pps-out, at: [316.29, 10.09], size: [4.83, 4.83], shape: circle}
-        - {id: smb-10mhz-in, at: [324.59, 10.09], size: [4.83, 4.83], shape: circle}
-        - {id: smb-10mhz-out, at: [331.79, 10.09], size: [4.83, 4.83], shape: circle}
+        - {id: clk-1pps-in, at: [309.09, 10.09], size: [4.83, 4.83], shape: circle}
+        - {id: clk-1pps-out, at: [316.29, 10.09], size: [4.83, 4.83], shape: circle}
+        - {id: clk-10mhz-in, at: [324.59, 10.09], size: [4.83, 4.83], shape: circle}
+        - {id: clk-10mhz-out, at: [331.79, 10.09], size: [4.83, 4.83], shape: circle}
     silkscreen:
       - {at: [12.0, 10.0], text: JUNIPER, font-size: 3.8, anchor: start, fill: '#f0f1f2', for: chassis}
       - {at: [27.0, 12.6], text: NETWORKS, font-size: 1.3, anchor: middle, fill: '#d7dadd', for: chassis}
@@ -154,12 +154,12 @@ views:
       - {at: [269.9, 26.6], text: EXT REF, font-size: 1.4, anchor: middle, fill: '#e8eaec', for: ext-ref-clock}
       - {at: [269.9, 28.7], text: CLOCK, font-size: 1.4, anchor: middle, fill: '#e8eaec', for: ext-ref-clock}
       - {at: [285.9, 27.6], text: ToD, font-size: 1.4, anchor: middle, fill: '#e8eaec', for: tod}
-      - {at: [315.1, 6.4], text: 1PPS, font-size: 1.5, anchor: middle, fill: '#e8eaec', for: [smb-1pps-in, smb-1pps-out]}
-      - {at: [330.61, 6.4], text: 10MHz, font-size: 1.5, anchor: middle, fill: '#e8eaec', for: [smb-10mhz-in, smb-10mhz-out]}
-      - {at: [311.5, 19.0], text: IN, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: smb-1pps-in}
-      - {at: [318.7, 19.0], text: OUT, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: smb-1pps-out}
-      - {at: [327.0, 19.0], text: IN, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: smb-10mhz-in}
-      - {at: [334.2, 19.0], text: OUT, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: smb-10mhz-out}
+      - {at: [315.1, 6.4], text: 1PPS, font-size: 1.5, anchor: middle, fill: '#e8eaec', for: [clk-1pps-in, clk-1pps-out]}
+      - {at: [330.61, 6.4], text: 10MHz, font-size: 1.5, anchor: middle, fill: '#e8eaec', for: [clk-10mhz-in, clk-10mhz-out]}
+      - {at: [311.5, 19.0], text: IN, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: clk-1pps-in}
+      - {at: [318.7, 19.0], text: OUT, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: clk-1pps-out}
+      - {at: [327.0, 19.0], text: IN, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: clk-10mhz-in}
+      - {at: [334.2, 19.0], text: OUT, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: clk-10mhz-out}
       - {at: [365.0, 10.0], text: junos, font-size: 3.0, anchor: middle, fill: '#f0f1f2', for: chassis}
       - {at: [8.0, 50.0], text: '1/0', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: mic-1-0}
       - {at: [430.0, 50.0], text: '1/1', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: mic-1-1}
@@ -202,13 +202,13 @@ views:
            attrs: {function: external reference clock}}
         - {id: tod, ref: std/rj45@1, at: [277.9, 8.0], group: timing, rel-pos: 1,
            attrs: {function: time of day}}
-        - {id: smb-1pps-in, ref: std/smb@1, at: [309.09, 10.09], group: timing, rel-pos: 2,
+        - {id: clk-1pps-in, ref: std/smb@1, at: [309.09, 10.09], group: timing, rel-pos: 2,
            attrs: {function: 1PPS input}}
-        - {id: smb-1pps-out, ref: std/smb@1, at: [316.29, 10.09], group: timing, rel-pos: 3,
+        - {id: clk-1pps-out, ref: std/smb@1, at: [316.29, 10.09], group: timing, rel-pos: 3,
            attrs: {function: 1PPS output}}
-        - {id: smb-10mhz-in, ref: std/smb@1, at: [324.59, 10.09], group: timing, rel-pos: 4,
+        - {id: clk-10mhz-in, ref: std/smb@1, at: [324.59, 10.09], group: timing, rel-pos: 4,
            attrs: {function: 10 MHz input}}
-        - {id: smb-10mhz-out, ref: std/smb@1, at: [331.79, 10.09], group: timing, rel-pos: 5,
+        - {id: clk-10mhz-out, ref: std/smb@1, at: [331.79, 10.09], group: timing, rel-pos: 5,
            attrs: {function: 10 MHz output}}
         - {id: led-sys-ok, ref: common/led-dot@1, at: [155.0, 21.0], for: chassis,
            group: status-leds, rel-pos: 0,

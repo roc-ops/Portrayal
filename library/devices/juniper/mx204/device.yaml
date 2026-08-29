@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx204
-version: 0.3.0
+version: 1.0.0
 maturity: modelled
 manufacturer: Juniper
 model: MX204
@@ -341,10 +341,10 @@ views:
         - {id: con, at: [282.15, 20.4], size: [16.0, 14.0]}
         - {id: tod, at: [306.15, 20.4], size: [16.0, 14.0]}
         - {id: usb, at: [327.6, 21.8], size: [4.5, 12.0]}
-        - {id: smb-10mhz-in, at: [341.64, 21.39], size: [4.83, 4.83], shape: circle}
-        - {id: smb-10mhz-out, at: [341.64, 28.99], size: [4.83, 4.83], shape: circle}
-        - {id: smb-1pps-in, at: [351.44, 21.39], size: [4.83, 4.83], shape: circle}
-        - {id: smb-1pps-out, at: [351.44, 28.99], size: [4.83, 4.83], shape: circle}
+        - {id: clk-10mhz-in, at: [341.64, 21.39], size: [4.83, 4.83], shape: circle}
+        - {id: clk-10mhz-out, at: [341.64, 28.99], size: [4.83, 4.83], shape: circle}
+        - {id: clk-1pps-in, at: [351.44, 21.39], size: [4.83, 4.83], shape: circle}
+        - {id: clk-1pps-out, at: [351.44, 28.99], size: [4.83, 4.83], shape: circle}
         - {id: led-ok-fail, at: [363.75, 33.0], size: [2.4, 2.4], shape: circle}
         - {id: led-online, at: [375.25, 33.0], size: [2.4, 2.4], shape: circle}
         - {id: led-alm, at: [385.55, 33.0], size: [2.4, 2.4], shape: circle}
@@ -387,10 +387,10 @@ views:
       - {at: [329.85, 38.2], path: 'M -2.2 0 H 2.2 M 0.8 0 L 2.2 0 M -0.9 -1.2
           L 0.4 -1.2 L 1.2 -0.3 M -0.9 1.2 L 0.4 1.2 L 1.2 0.3 M -2.2 0 L -3.0
           0', for: usb}
-      - {at: [348.95, 27.3], text: IN, font-size: 2.0, anchor: middle, for: [smb-10mhz-in, smb-1pps-in]}
-      - {at: [348.95, 37.6], text: OUT, font-size: 2.0, anchor: middle, for: [smb-10mhz-out, smb-1pps-out]}
-      - {at: [344.05, 40.6], text: PPS, font-size: 1.9, anchor: middle, for: [smb-10mhz-in, smb-10mhz-out]}
-      - {at: [353.85, 40.6], text: 100MHz, font-size: 1.9, anchor: middle, for: [smb-1pps-in, smb-1pps-out]}
+      - {at: [348.95, 27.3], text: IN, font-size: 2.0, anchor: middle, for: [clk-10mhz-in, clk-1pps-in]}
+      - {at: [348.95, 37.6], text: OUT, font-size: 2.0, anchor: middle, for: [clk-10mhz-out, clk-1pps-out]}
+      - {at: [344.05, 40.6], text: PPS, font-size: 1.9, anchor: middle, for: [clk-10mhz-in, clk-10mhz-out]}
+      - {at: [353.85, 40.6], text: 100MHz, font-size: 1.9, anchor: middle, for: [clk-1pps-in, clk-1pps-out]}
       - {at: [364.95, 38.8], text: OK/FAIL, font-size: 1.9, anchor: middle, for: led-ok-fail}
       - {at: [376.45, 38.8], text: ONLINE, font-size: 1.9, anchor: middle, for: led-online}
       - {at: [386.75, 38.8], text: ALM, font-size: 1.9, anchor: middle, for: led-alm}
@@ -439,13 +439,13 @@ views:
         - {id: con, ref: std/rj45@1, at: [282.15, 20.4], group: mgmt, rel-pos: 1}
         - {id: tod, ref: std/rj45@1, at: [306.15, 20.4], group: timing, rel-pos: 1}
         - {id: usb, ref: std/usb-a@1, at: [323.85, 25.55], rotate: 90, group: mgmt, rel-pos: 2}
-        - {id: smb-10mhz-in, ref: std/smb@1, at: [341.64, 21.39], group: timing, rel-pos: 2,
+        - {id: clk-10mhz-in, ref: std/smb@1, at: [341.64, 21.39], group: timing, rel-pos: 2,
            attrs: {function: 10 MHz clock input}}
-        - {id: smb-10mhz-out, ref: std/smb@1, at: [341.64, 28.99], group: timing, rel-pos: 3,
+        - {id: clk-10mhz-out, ref: std/smb@1, at: [341.64, 28.99], group: timing, rel-pos: 3,
            attrs: {function: 10 MHz clock output}}
-        - {id: smb-1pps-in, ref: std/smb@1, at: [351.44, 21.39], group: timing, rel-pos: 5,
+        - {id: clk-1pps-in, ref: std/smb@1, at: [351.44, 21.39], group: timing, rel-pos: 5,
            attrs: {function: 1PPS input}}
-        - {id: smb-1pps-out, ref: std/smb@1, at: [351.44, 28.99], group: timing, rel-pos: 6,
+        - {id: clk-1pps-out, ref: std/smb@1, at: [351.44, 28.99], group: timing, rel-pos: 6,
            attrs: {function: 1PPS output}}
         - {id: led-ok-fail, ref: common/led-dot@1, at: [363.95, 33.2], for: chassis, group: status-leds, rel-pos: 0,
            states: ['off', {name: ok, color: '#22c55e'}, {name: failed, color: '#ef4444', behavior: blinking}],

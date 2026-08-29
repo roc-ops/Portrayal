@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-56dx
-version: 1.0.0
+version: 2.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-56DX
@@ -532,7 +532,7 @@ views:
       - {at: [8.41, 65.93], text: PS0, font-size: 1.3, anchor: middle, fill: '#17191c', for: led-ps0}
       - {at: [8.41, 68.5], text: PS1, font-size: 1.3, anchor: middle, fill: '#17191c', for: led-ps1}
       - {at: [8.41, 70.91], text: ID, font-size: 1.3, anchor: middle, fill: '#17191c', for: led-id}
-      - {at: [22.39, 77.30], text: IOIOI, font-size: 1.2, anchor: middle, for: micro-usb}
+      - {at: [22.39, 77.30], text: IOIOI, font-size: 1.2, anchor: middle, for: console-usb}
       - {at: [37.15, 77.30], text: IOIOI, font-size: 1.2, anchor: middle, for: console}
       - {at: [55.82, 74.60], path: 'M 55.82 74.60 L 58.82 74.60', for: oob}
       - {at: [55.82, 74.60], path: 'M 55.82 74.60 L 55.82 75.90', for: oob}
@@ -555,7 +555,7 @@ views:
         - {ref: std/smb@1, id: clk-1pps, at: [10.13, 5.14], group: timing, rel-pos: 3, attrs: {media: coax-smb, role: 1pps-io}}
         - {ref: std/rj45@1, id: tod, at: [22.80, 26.57], group: timing, rel-pos: 4, attrs: {media: rj45, role: tod-io}}
         - {ref: std/rj45@1, id: console, at: [29.15, 58.88], group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
-        - {ref: std/micro-usb@1, id: micro-usb, at: [18.64, 70.26], group: mgmt, rel-pos: 2, attrs: {media: micro-usb-b, role: console}}
+        - {ref: std/micro-usb@1, id: console-usb, at: [18.64, 70.26], group: mgmt, rel-pos: 2, attrs: {media: micro-usb-b, role: console}}
         - {ref: std/usb-a@1, id: usb, at: [40.20, 30.35], rotate: 90, group: mgmt, rel-pos: 3, attrs: {role: storage, speed: usb3}}
         - {ref: std/rj45@1, id: oob, at: [49.32, 57.89], group: mgmt, rel-pos: 4, attrs: {media: rj45, role: mgmt, speed: 100m-1g}}
         - {ref: common/reset-button@1, id: reset, at: [28.64, 43.94], for: chassis, group: mgmt, rel-pos: 5}
@@ -726,7 +726,7 @@ views:
       - {id: timing-block, at: [1.5, 1.0], size: {w: 40.0, h: 55.0}, label: Timing,
          members: [clk-1pps, clk-10mhz, gnss-ant, tod]}
       - {id: mgmt-block, at: [1.5, 40.0], size: {w: 68.0, h: 46.5}, label: Management,
-         members: [reset, micro-usb, console, oob, usb]}
+         members: [reset, console-usb, console, oob, usb]}
   rear:
     size:
       w: 436
