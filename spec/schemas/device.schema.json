@@ -568,6 +568,14 @@
                       "$ref": "#/$defs/xy",
                       "description": "shift the pattern phase under this rect (align lattice rows across corners)"
                     },
+                    "id": {
+                      "type": "string",
+                      "description": "name this rect in the drawing. Without one it is numbered by kind, and somebody opening the SVG in an editor finds an anonymous rectangle they can only identify by clicking it and watching what highlights"
+                    },
+                    "kind": {
+                      "type": "string",
+                      "description": "what this rect IS - port-shell, recess, label-plate, bezel. A vent field and a stroked outline name themselves from `pattern` and `stroke`; everything else is an unlabelled grey box unless the author says otherwise. It reaches the drawing as data-kind, so the file can be READ rather than clicked through"
+                    },
                     "out": {
                       "type": "number",
                       "exclusiveMinimum": 0,
@@ -714,6 +722,14 @@
                 "path": {
                   "type": "string",
                   "description": "printed line or symbol as an SVG path in view mm - a leader line, a polarity arrow, an earth mark. Exactly one of text or path"
+                },
+                "filled": {
+                  "type": "boolean",
+                  "description": "this path ENCLOSES ink rather than tracing a route. A leader line is stroked; a solid arrowhead is filled. Without it every symbol is an outline held shut by its own stroke width, which leaves a pinhole in anything small and cannot be scaled - at twice the size the hole is four times as obvious"
+                },
+                "fill-rule": {
+                  "enum": ["nonzero", "evenodd"],
+                  "description": "evenodd where a filled mark has a hole in it - a bored nut, a ring"
                 },
                 "stroke-width": {
                   "type": "number"

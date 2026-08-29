@@ -1,4 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="9.5mm" height="9.5mm" viewBox="0 0 9.5 9.5">
-  <path id="nut" fill="#d4af37" stroke="#8a7118" stroke-width="0.3"
-    d="M 7.125 0.639 L 9.486 4.75 L 7.125 8.861 L 2.375 8.861 L 0.014 4.75 L 2.375 0.639 z"/>
+  <!-- A JAM NUT IS AN ANNULUS. Drawn as a solid hexagon it hid the jack it is
+       supposed to surround: the nut carries `cyl` in its relief, and render.py
+       raises a protruding feature to the end of its group so a bezel plate can
+       paint over composed parts - which for a solid nut means painting over the
+       whole connector. The bore is the std/sma core's own 6.35mm opening,
+       centred, so the jack shows through it whatever the paint order is. -->
+  <path id="nut" fill="#d4af37" stroke="#8a7118" stroke-width="0.3" fill-rule="evenodd"
+    d="M 7.125 0.639 L 9.486 4.75 L 7.125 8.861 L 2.375 8.861 L 0.014 4.75 L 2.375 0.639 z
+       M 1.575 4.75 A 3.175 3.175 0 1 0 7.925 4.75 A 3.175 3.175 0 1 0 1.575 4.75 z"/>
 </svg>

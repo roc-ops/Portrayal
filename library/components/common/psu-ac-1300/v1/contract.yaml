@@ -1,0 +1,100 @@
+format: 1
+kind: module
+name: psu-ac-1300
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: 1300W AC PSU module, CRPS form factor (composed - bezel art wraps a
+  std/c14-inlet core)
+size: {w: 57.0, h: 40.0}
+attrs: {power-output-w: 1300, input: ac}
+provenance:
+  power: >-
+    datasheet - the DCS510 datasheet's key-features list states 'Hot-swappable,
+    load-sharing, redundant 1300 W PSUs' (dcs510-datasheet/doc.md:18), and its Power
+    section 'PSUs: 2 redundant, load-sharing, hot-swappable AC / AC Input Range:
+    100~240 VAC at 50-60 Hz' (doc.md:124-125). The quick-start guide's AC PSU block
+    gives the input rating rather than the output - '100-120 VAC, 50-60 Hz, 12 A max.
+    / 200-240 VAC, 50-60 Hz, 7.5 A max. / 190-310 VDC, 8-5 A' (dcs510-qsg/doc.md:256-260)
+    - which is the supply side of the meter and is NOT the 1300 W. NO MODEL NUMBER IS
+    SET and that is deliberate: neither document names the PSU FRU, and Edgecore ships
+    this chassis with two airflow variants of it (red latch front-to-back, blue latch
+    back-to-front, dcs510-qsg/doc.md:116-120) which differ in nothing this contract
+    carries.
+  size: >-
+    photo-measured - the module occupies 9.0-66.0 mm of the rear face in the datasheet
+    rear elevation (dcs510-datasheet/fig-0007.png panel 1, box [10,536,1448,676],
+    3.2801 px/mm on x; bright module/chassis boundary at x 223-226 px = 65.4 mm), and
+    the same span in the quick-start rear (dcs510-qsg/fig-0009.png). 40 mm high is the
+    chassis interior between the 1.5 mm folds, not a separate reading.
+  inlet: standard (IEC 60320-1 C14 via std/c14-inlet, identified from the datasheet
+    rear elevation's three-pin D-shaped inlet)
+  status-lamp: >-
+    photo-measured - a single bicolour lamp on the supply's own face, at 25.0-28.7 mm
+    of the rear elevation and 4.6-8.3 mm down (dcs510-datasheet/fig-0007 panel 1,
+    3.2801 px/mm on x), which is 16.0-19.7 mm into the module. Neither document
+    tabulates its colours; the chassis's own PS1/PS2 lamps are the documented
+    reading of supply health (dcs510-qsg/doc.md:36-38) and nothing more is claimed
+    for this one than that it is there and it is the supply's.
+  latch-handle: >-
+    photo-measured - the red release latch spans 6.1-17.1 mm of the rear face and the
+    black wire bail sits immediately right of it (dcs510-qsg/fig-0006.png, the PSU
+    replacement photograph). Drawn on the module's own origin, so the latch reads
+    2.9 mm right of where the elevation puts it; the bay had to clear the grounding
+    screw below it, and that trade is recorded in the device's provenance.
+states: [ok, fail, absent]
+elements:
+  status: {at: [16.0, 3.6], size: [2.4, 2.4], class: led, states: ['off', 'ok', 'fail']}
+  latch: {at: [0.0, 3.0], size: [7.6, 22.0], class: latch}
+  handle: {at: [10.0, 8.0], size: [5.0, 24.0], class: handle}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [26.0, 10.0]}
+relief:
+  features:
+    - node: inlet-frame
+      out: 3.4
+      confidence: estimated
+      source: >-
+        common/psu-ac-1300@1 itself - unsourced. Its provenance covers the part's FACE
+        (width photo-measured off the rear elevation) and carries no key about how far
+        anything stands off it. The figures are common/psu-ac-650@3's, which is the same
+        CRPS envelope in the same vendor's 1RU chassis.
+    - node: vent-field
+      vent: 30
+      confidence: estimated
+      source: >-
+        common/psu-ac-1300@1 itself - unsourced; see inlet-frame.
+    - node: face-frame
+      out: 1.6
+      confidence: estimated
+      source: >-
+        common/psu-ac-1300@1 itself - unsourced; see inlet-frame.
+    - node: latch-hinge
+      out: 6.4
+      confidence: estimated
+      source: >-
+        common/psu-ac-1300@1 itself - unsourced; see inlet-frame.
+    - node: latch-plate
+      out: 6.4
+      lift: 4.8
+      confidence: estimated
+      source: >-
+        common/psu-ac-1300@1 itself - unsourced; see inlet-frame.
+    - node: latch-lip
+      out: 4.8
+      lift: 3.2
+      confidence: estimated
+      source: >-
+        common/psu-ac-1300@1 itself - unsourced; see inlet-frame.
+    - node: handle-bar
+      uhandle: 9.5
+      confidence: estimated
+      source: >-
+        common/psu-ac-1300@1 itself - unsourced; see inlet-frame.
+connection-points:
+  power: {at: [40.0, 20.0], direction: rear}
+skins: [default, blue]
+body:
+  depth: 240
+  color: '#b9bec4'

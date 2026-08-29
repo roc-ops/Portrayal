@@ -68,6 +68,9 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
   L60 device: a view that says it is empty has to be empty
   L47 component: a declared lamp state is a promise the drawing can keep - some
       element lights when it is set
+  L62 device: an id names the FUNCTION a thing serves, not the connector it is
+      built from - the connector is already in `ref:`; and a port lamp is
+      spelled the way the library spells it
 """
 import argparse
 import json
@@ -403,7 +406,14 @@ def _text_extent(m):
     fs = m.get("font-size", 2.2)
     w = len(str(m["text"])) * fs * ADV_EM
     up, down = fs * CAP_EM, fs * DESC_EM
-    anchor = m.get("anchor", "start")
+    # THE DEFAULT HAS TO BE THE ONE THE RENDERER USES. render.py draws an
+    # unanchored silkscreen mark CENTRED on its `at` (render.py:880); this read
+    # it as running rightward from `at`, so every extent check on the 433 marks
+    # in this library that state no anchor was off by half a text width - in the
+    # direction that hides an overlap on the left and invents one on the right.
+    # A mark then lints as one thing and draws as another, and no rule reports
+    # the difference because both halves are working from their own assumption.
+    anchor = m.get("anchor", "middle")
     lead = w if anchor == "end" else (w / 2 if anchor == "middle" else 0.0)
     rot = int(m.get("rotate", 0)) % 360
     if rot == 90:            # runs downward, cap side to the LEFT of the baseline
@@ -2213,7 +2223,7 @@ def lint_device_decor(path, view_name, view, lib_roots):
         # because somebody goes and 'fixes' correct artwork.
         x0, _, x1, _ = _text_extent({"at": at, "text": t,
                                      "font-size": float(m.get("font-size") or 2.5),
-                                     "anchor": m.get("anchor") or "start",
+                                     "anchor": m.get("anchor") or "middle",
                                      "rotate": m.get("rotate", 0)})
         over = max(0.0, -x0) + max(0.0, x1 - float(vw))
         if over > 2.0:
@@ -3027,6 +3037,448 @@ def lint_device_label_geometry(path, data):
                      f"there - nearest is {near[0]} at {lo:.1f}-{hi:.1f} mm from the front")
 
 
+def _path_box(mark):
+    """Bounding box of a `path:` mark, relative to its own `at`.
+
+    Only M/L/Z with absolute coordinates, which is all this library uses and all
+    the marks generator emits. Anything with a curve or a relative command is
+    skipped rather than guessed at.
+    """
+    d = str(mark.get("path") or "")
+    if re.search(r"[aAcCqQsStTvVhH]", d):
+        return None
+    nums = [float(t) for t in re.findall(r"-?\d+(?:\.\d+)?", d)]
+    if len(nums) < 4 or len(nums) % 2:
+        return None
+    xs, ys = nums[0::2], nums[1::2]
+    return min(xs), min(ys), max(xs), max(ys)
+
+
+def _mark_centre(mark):
+    """Where a silkscreen mark's ink actually sits, as (cx, cy) or None."""
+    at = mark.get("at")
+    if not at:
+        return None
+    if mark.get("path"):
+        box = _path_box(mark)
+        if not box:
+            return None
+        return at[0] + (box[0] + box[2]) / 2, at[1] + (box[1] + box[3]) / 2
+    if mark.get("text") is None:
+        return None
+    x0, y0, x1, y1 = _text_extent(mark)
+    return (x0 + x1) / 2, (y0 + y1) / 2
+
+
+_ID_VOCAB_CACHE = {}
+
+
+def _id_corpus(lib_roots):
+    """What this library calls things - the two facts L62 needs, read off the
+    corpus itself rather than written down here. Returns (connector words, the
+    name the corpus prefers for a given id tail).
+
+    THE CONNECTOR WORDS.
+
+    Not a list written here. A hardcoded list would be shaped like the examples
+    that prompted the rule - sma, rj45 - and would say nothing about the next
+    form factor someone adds. So the vocabulary is whatever the corpus already
+    calls a physical standard:
+
+      * every `conforms:` value, which is exactly the field a component uses to
+        name the standard it is built to, and
+      * every slug-shaped `attrs.media` value on a component whose `class` is
+        `port`.
+
+    The class filter is what keeps FUNCTION words out. `common/esd-jack` states
+    `media: esd` and `std/c14-inlet` states `media: ac`, and neither is a
+    connector: esd is what the jack is FOR and ac is what comes down the cord.
+    They are classed `ground` and `inlet`, so they never enter the vocabulary,
+    and `esd-jack` and `ac-inlet-panel` stay quiet - which they should, because
+    both of those ids name a function.
+
+    Each standard also contributes its leading segment, because that is the
+    level an id borrows at: `sfp-plus-3` borrows from `sfp`, `micro-usb` from
+    `micro-usb-b`, `qsfp-0` from `qsfp-dd`.
+    """
+    key = tuple(str(r) for r in lib_roots)
+    if key in _ID_VOCAB_CACHE:
+        return _ID_VOCAB_CACHE[key]
+    slug = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
+    words = set()
+
+    def offer(value):
+        v = str(value)
+        if slug.match(v):
+            words.add(v)
+            head = v.split("-")[0]
+            if head != v:
+                words.add(head)
+
+    for root in lib_roots:
+        for f in (Path(root) / "components").rglob("contract.yaml"):
+            c = load_yaml(f) or {}
+            if c.get("conforms"):
+                offer(c["conforms"])
+            if c.get("class") == "port":
+                media = (c.get("attrs") or {}).get("media")
+                if media:
+                    offer(media)
+
+    # AND THEN THE CORPUS GETS A VETO. A word that devices already use as a
+    # COMPLETE id is a function name in this library whatever else it is: `usb`
+    # is the name of the service a USB-A receptacle provides, and it stands
+    # alone as an id on dozens of devices. Firing on `usb-1` would be the rule
+    # arguing with the convention it was written to state. Three devices, so
+    # that one sloppy file cannot silence a word everywhere.
+    bare, tails = {}, {}
+    for root in lib_roots:
+        for f in (Path(root) / "devices").rglob("*.yaml"):
+            d = load_yaml(f) or {}
+            if d.get("kind") not in (None, "device"):
+                continue
+            for view in (d.get("views") or {}).values():
+                for q in (((view or {}).get("components") or {}).get("placements") or []):
+                    i = q.get("id")
+                    if not isinstance(i, str):
+                        continue
+                    if i in words:
+                        bare.setdefault(i, set()).add(str(f))
+                    # every way this id divides into <lead>-<tail>, which is how
+                    # the preferred name below is looked up
+                    t = i.split("-")
+                    for k in range(1, len(t)):
+                        c = tails.setdefault("-".join(t[k:]), {})
+                        c["-".join(t[:k])] = c.get("-".join(t[:k]), 0) + 1
+    words -= {w for w, files in bare.items() if len(files) >= 3}
+
+    # THE PREFERRED NAME. What does the library already call the thing on the
+    # other end of `smb-10mhz-out`? It calls it `clk-10mhz-out`, on three
+    # placements, and `clk-10mhz` on twenty-one more - the vote was taken before
+    # this rule existed. So for each id tail, the commonest lead that is NOT a
+    # connector word is the function name the corpus settled on, and the warning
+    # can hand that back instead of leaving an agent to invent one. Two
+    # placements minimum: one is a precedent of nothing.
+    preferred = {}
+    for tail, leads in tails.items():
+        best = max(((n, lead) for lead, n in leads.items() if lead not in words),
+                   default=None)
+        if best and best[0] >= 2:
+            preferred[tail] = best
+    _ID_VOCAB_CACHE[key] = (words, preferred)
+    return words, preferred
+
+
+def _contract(ref, lib_roots):
+    """The whole contract behind a ref, or {}. load_yaml caches by path, so the
+    repeat asks below cost a dict lookup."""
+    try:
+        f = resolve_component(ref, lib_roots)
+    except ValueError:          # a ref with no @major - L5 reports that itself
+        return {}
+    return (load_yaml(f) or {}) if f else {}
+
+
+def _states_connector(ref, placement, lib_roots):
+    """Every connector word this placement's own `ref:` already states - from the
+    component's name, its `conforms:`, and the media on either the contract or
+    the placement. The id can only be duplicating something that is written
+    down somewhere else, and this is that somewhere else."""
+    stated = set()
+    base = ref.split("@")[0].split("/")[-1]
+    stated.add(base)
+    stated.update(base.split("-"))
+    c = _contract(ref, lib_roots)
+    for value in (c.get("conforms"), (c.get("attrs") or {}).get("media"),
+                  (placement.get("attrs") or {}).get("media")):
+        if value:
+            stated.add(str(value))
+            stated.update(str(value).split("-"))
+    return stated
+
+
+def lint_device_id_convention(path, data, lib_roots):
+    """L62: an id that names its connector, and a port lamp spelled a fourth way.
+
+    Written after the same device was modelled twice, by two agents who agreed
+    on the chassis to the millimetre and on all nine group names and diverged
+    on NAMES: `clk-10mhz-out` against `sma-10mhz-out`. Neither was careless.
+    Nothing in the library told either of them which to pick, so the diff
+    between two correct models read larger than the disagreement was.
+
+    THE RULE: AN ID NAMES THE FUNCTION, NOT THE CONNECTOR. The connector is
+    already in `ref:`, and putting it in the id states one fact twice - so the
+    day the part changes, the id lies. Exactly the failure a cutout has when it
+    restates an aperture instead of deriving it.
+
+    The corpus voted for this before the rule existed: 2326 `port-N`; timing
+    jacks named `clk-10mhz`, `clk-1pps`, `tod`, `gnss-ant`, `bits` for what
+    they carry rather than for the SMA or SMB they carry it through; singletons
+    at `reset`, `usb`, `console`; lamps at `led-fan`, `led-sys`, `led-psN`.
+
+    TWO THINGS ARE REPORTED AND NOTHING ELSE.
+
+    1. An id whose leading segment repeats a connector word its own ref already
+       states, with something else following it - `sma-10mhz-out`, `smb-1pps-in`,
+       `sfp-plus-3`. A bare `usb` or `micro-usb-b`-shaped id that is ONLY the
+       standard is left alone: it has no function half to keep, and renaming it
+       is a different decision from de-duplicating one.
+
+    2. A port lamp not spelled `led-port-N`. The library spells this four ways
+       (led-port-N, led-pN, leds-port-N, leds-pN) and the plurality wins.
+
+    Namespace choice - `edgecore/qsfpdd-lane-leds` against
+    `common/qsfp-dd-lane-column` - is the other half of that divergence and is
+    NOT here. Whether a four-lamp column beside a cage is Edgecore-specific is a
+    judgement about the part, and every mechanical proxy for it (used by one
+    vendor, so far) is a fact about the corpus today rather than about the part.
+
+    BOTH ARE WARNINGS. The lamp check alone lands on ~1180 existing placements;
+    that is a cleanup backlog beside L61's, not a reason to edit the library.
+    """
+    words, preferred = _id_corpus(lib_roots)
+    for vname, view in (data.get("views") or {}).items():
+        for q in (((view or {}).get("components") or {}).get("placements") or []):
+            pid, ref = str(q.get("id") or ""), str(q.get("ref") or "")
+            toks = pid.split("-")
+
+            # 1. the id repeats its own connector
+            if ref and len(toks) > 1:
+                stated = _states_connector(ref, q, lib_roots)
+                for n in (1, 2, 3):
+                    lead = "-".join(toks[:n])
+                    if n < len(toks) and lead in words and lead in stated:
+                        # THE WHOLE CONNECTOR, NOT ITS FIRST WORD. `sfp-plus-3`
+                        # matches on `sfp` because that is the media the ganged
+                        # cage states, but the qualifier is part of the connector
+                        # too - so the id left over is `3` and the name it wants
+                        # back is `port-3`, not `plus-3`.
+                        while n + 1 < len(toks) and "-".join(toks[:n + 1]) in words:
+                            n += 1
+                        lead = "-".join(toks[:n])
+                        rest = "-".join(toks[n:])
+                        # WHAT TO CALL IT INSTEAD, in the corpus's own words: the
+                        # commonest function name in front of this same tail
+                        # (`clk-` in front of `10mhz-out`, `port-` in front of a
+                        # bare numeral), falling back to the tail alone.
+                        vote = preferred.get(rest)
+                        if vote:
+                            instead = f"{vote[1]}-{rest}"
+                            why = (f", which is what {vote[0]} other placement(s) in the "
+                                   f"library call this")
+                        else:
+                            instead, why = rest, ""
+                        role = ((q.get("attrs") or {}).get("role")
+                                or (_contract(ref, lib_roots).get("attrs") or {}).get("role"))
+                        alt = (f", or {role!r}, which is the role this placement states"
+                               if role and role != instead else "")
+                        warn(path, "L62",
+                             f"{vname}/{pid}: the id opens with {lead!r}, which is the "
+                             f"connector {ref} already states. An id names the FUNCTION, "
+                             f"not the connector - use {instead!r}{why}{alt}, and let ref: "
+                             f"carry the connector, which is the only place it stays true "
+                             f"when the part is changed")
+                        break
+
+            # 2. a port lamp spelled some other way
+            m = re.match(r"^(led|leds)-(p\d+|port-\d+)(-.*)?$", pid)
+            if m and not pid.startswith("led-port-"):
+                instead = "led-" + re.sub(r"(?<![a-z0-9])p(\d+)(?![a-z0-9])",
+                                          r"port-\1", pid.split("-", 1)[1])
+                warn(path, "L62",
+                     f"{vname}/{pid}: a port lamp is spelled 'led-port-N' - the "
+                     f"library's plurality spelling, against led-pN, leds-port-N and "
+                     f"leds-pN. Rename it {instead!r}")
+
+
+def _aperture_of(ref, lib_roots, depth=0):
+    """The opening a part presents, forwarding through a composed cage."""
+    ct = contract_for_ref(ref, lib_roots) if "contract_for_ref" in globals() else None
+    if ct is None:
+        nsname = None
+        try:
+            nsname, major = ref.rsplit("@", 1)
+        except ValueError:
+            return None
+        for r in lib_roots:
+            f = Path(r) / "components" / nsname / f"v{major}" / "contract.yaml"
+            if f.exists():
+                try:
+                    ct = load_yaml(f) or {}
+                except yaml.YAMLError:
+                    return None
+                break
+    if not ct or depth > 3:
+        return None
+    conf = ct.get("conforms")
+    if conf and conf in STANDARDS:
+        st = STANDARDS[conf]
+        return (st["w"], st["h"]), (0.0, 0.0)
+    found = []
+    for part in (ct.get("parts") or []):
+        sub = _aperture_of(part.get("ref", ""), lib_roots, depth + 1)
+        if sub:
+            o = part.get("at") or [0, 0]
+            found.append((sub[0], (o[0] + sub[1][0], o[1] + sub[1][1])))
+    if len(found) == 1:
+        return found[0]
+    sz = ct.get("size") or {}
+    return ((sz["w"], sz["h"]), (0.0, 0.0)) if sz.get("w") else None
+
+
+def lint_device_cutout_derivation(path, data, lib_roots):
+    """L63: a hole drawn around a part rather than derived from it.
+
+    THREE INDEPENDENT MODELLING RUNS OF ONE DEVICE MADE THIS EXACT MISTAKE, and
+    all three passed lint. The rule existed - as a test, `test_cutout_derivation`
+    - and a modelling run does not run the test suite, so it sat exactly where
+    nobody working on a device would look. An agent on the third run put it
+    plainly: it ran lint seven times and never saw the three holes it had drawn
+    wrong.
+
+    A cutout RESTATES the aperture its component already declares. Drawn instead
+    around what the opening looks like, with a little clearance, it becomes a
+    second and disagreeing record of one fact - and the drawing believes
+    whichever is wrong. A 2.0mm lamp gets a 2.0mm hole, not a 2.4mm one.
+    """
+    for vname, view in (data.get("views") or {}).items():
+        if not view:
+            continue
+        panel = (view or {}).get("panel") or {}
+        cuts = {c["id"]: c for c in (panel.get("cutouts") or []) if c.get("id")}
+        if not cuts:
+            continue                       # a face that punches nothing is fine
+        for q in ((view.get("components") or {}).get("placements") or []):
+            c = cuts.get(q.get("id"))
+            if not c or not q.get("at") or not c.get("at") or not c.get("size"):
+                continue
+            ap = _aperture_of(str(q.get("ref") or ""), lib_roots)
+            if not ap:
+                continue
+            (aw, ah), (ax, ay) = ap
+            deg = int(q.get("rotate") or 0) % 360
+            if deg in (90, 270):
+                aw, ah = ah, aw
+            want_at = [round(q["at"][0] + ax, 2), round(q["at"][1] + ay, 2)]
+            want_sz = [round(aw, 2), round(ah, 2)]
+            dpos = max(abs(want_at[0] - c["at"][0]), abs(want_at[1] - c["at"][1]))
+            dsz = max(abs(want_sz[0] - c["size"][0]), abs(want_sz[1] - c["size"][1]))
+            if dpos <= 0.02 and dsz <= 0.02:
+                continue
+            if deg not in (0, 180) or ax or ay:
+                continue                   # rotated/offset apertures: L39's business
+            warn(path, "L63",
+                 f"{vname}/{q['id']}: the cutout is {c['size']} at {c['at']}, and "
+                 f"the component {q.get('ref')} declares an opening of {want_sz} "
+                 f"at {want_at}. A cutout RESTATES its component's aperture - drawn "
+                 f"with clearance it is a second record of one fact, and the drawing "
+                 f"believes whichever is wrong. Derive it, do not measure it again.")
+
+
+def lint_device_alignment(path, data, lib_roots):
+    """L61: a legend that is ALMOST centred on the thing it names.
+
+    Every one of these was found by a person opening the drawing and zooming
+    in, and every one is arithmetic: a lamp column 1.35mm high on its port
+    because a 10.7mm part was offset as though it were 10.0; port numerals
+    0.28mm below the gap they sit in, with their arrows 0.55mm below that, so
+    the legend row was centred on nothing at all; five status legends 0.21mm
+    high on their 2.0mm lamps. None of it is visible at page scale, all of it is
+    visible at 4x, and none of it was catchable by any rule here.
+
+    THE RULE ONLY FIRES ON NEAR MISSES. A legend deliberately placed elsewhere -
+    a column heading under two rows of jacks, `Reset` beneath its button - is
+    not trying to centre on anything, and a rule that nags about those gets
+    switched off. So: the mark has to be close enough to be reaching for the
+    part (within its extent plus a small margin on the perpendicular axis), and
+    then off by enough to see and little enough to be a slip. Dead centre is
+    quiet, and so is deliberately somewhere else.
+    """
+    NEAR = 3.0            # how far off-axis still counts as 'beside' the part
+    SLIP = (0.08, 2.0)    # off by at least this, and at most this, to be a slip
+
+    for vname, view in (data.get("views") or {}).items():
+        if not view:
+            continue
+        boxes = {}
+        for q in ((view.get("components") or {}).get("placements") or []):
+            sz = contract_size(q.get("ref", ""), lib_roots) if q.get("ref") else None
+            if q.get("at") and sz:
+                boxes[q["id"]] = (q["at"][0], q["at"][1],
+                                  q["at"][0] + sz["w"], q["at"][1] + sz["h"])
+
+        def target_box(for_):
+            """The box a `for:` names - the union when it names several, which is
+            how a mark that sits BETWEEN two ports declares what it belongs to."""
+            names = for_ if isinstance(for_, list) else [for_]
+            got = [boxes[n] for n in names if isinstance(n, str) and n in boxes]
+            if not got:
+                return None
+            return (min(b[0] for b in got), min(b[1] for b in got),
+                    max(b[2] for b in got), max(b[3] for b in got))
+
+        # marks, and placements that name another placement (a lamp on its port)
+        items = [("silkscreen", m, _mark_centre(m)) for m in (view.get("silkscreen") or [])]
+        for q in ((view.get("components") or {}).get("placements") or []):
+            b = boxes.get(q.get("id"))
+            if q.get("for") and b:
+                items.append(("placement", q, ((b[0] + b[2]) / 2, (b[1] + b[3]) / 2)))
+
+        for kind, m, centre in items:
+            if not centre or not m.get("for"):
+                continue
+            tb = target_box(m["for"])
+            if not tb:
+                continue
+            if kind == "placement" and m.get("id") in (
+                    m["for"] if isinstance(m["for"], list) else [m["for"]]):
+                continue
+            tcx, tcy = (tb[0] + tb[2]) / 2, (tb[1] + tb[3]) / 2
+            cx, cy = centre
+            label = m.get("text") or m.get("id") or "mark"
+
+            # WHICH AXIS IS THE ONE THAT SHOULD LINE UP depends on where the mark
+            # sits, and getting it backwards makes the rule silent rather than
+            # wrong - the first version of this checked a lamp sitting BESIDE its
+            # port for horizontal alignment, which is the axis it is deliberately
+            # offset on, so it never fired on the defect it was written for.
+            #
+            #   beside the part  (x clear, y overlapping)  -> the Y centres match
+            #   above or below   (y clear, x overlapping)  -> the X centres match
+            #   between several  (inside the union of what it names, outside each)
+            #                                              -> both, against the union
+            near_x = tb[0] - NEAR <= cx <= tb[2] + NEAR
+            near_y = tb[1] - NEAR <= cy <= tb[3] + NEAR
+            in_x = tb[0] <= cx <= tb[2]
+            in_y = tb[1] <= cy <= tb[3]
+            names = m["for"] if isinstance(m["for"], list) else [m["for"]]
+
+            if near_y and not in_x:                    # beside
+                off, axis, got, want = abs(cy - tcy), "vertically", cy, tcy
+            elif near_x and not in_y:                  # above or below
+                off, axis, got, want = abs(cx - tcx), "horizontally", cx, tcx
+            elif len(names) > 1 and in_x and in_y and not any(
+                    b[0] <= cx <= b[2] and b[1] <= cy <= b[3]
+                    for b in (boxes[n] for n in names if n in boxes)):
+                # a legend printed BETWEEN the parts it names - the numerals and
+                # arrows in the gap between two rows of ports. Its target is the
+                # middle of what it spans, which is the one thing nothing else
+                # in this file states.
+                dy, dx = abs(cy - tcy), abs(cx - tcx)
+                off, axis, got, want = ((dy, "vertically", cy, tcy) if dy >= dx
+                                        else (dx, "horizontally", cx, tcx))
+            else:
+                continue
+            if not (SLIP[0] <= off <= SLIP[1]):
+                continue
+            warn(path, "L61",
+                 f"{vname}: {str(label)[:18]!r} is {off:.2f}mm off centre "
+                 f"{axis} against {'+'.join(str(n) for n in names)} - it sits at "
+                 f"{got:.2f} and the part's centre is {want:.2f}. Close enough to be "
+                 f"reaching for it and far enough to see at 4x; either centre it or "
+                 f"move it somewhere it is plainly not trying to line up")
+
+
 def lint_device_double_count(path, data, lib_roots):
     """L30 - a chassis whose front and rear figures overlap.
 
@@ -3180,6 +3632,9 @@ def lint_device(path, validator, lib_roots):
     lint_device_bay_fit(path, data, lib_roots)
     lint_device_midplane_depth(path, data, lib_roots)
     lint_device_label_geometry(path, data)
+    lint_device_alignment(path, data, lib_roots)
+    lint_device_cutout_derivation(path, data, lib_roots)
+    lint_device_id_convention(path, data, lib_roots)
     declared_groups = set((data.get("groups") or {}).keys())
     for gname, gdef in (data.get("groups") or {}).items():
         check_states(path, f"groups/{gname}", (gdef or {}).get("states"),

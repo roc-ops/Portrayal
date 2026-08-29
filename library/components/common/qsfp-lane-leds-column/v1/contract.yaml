@@ -1,0 +1,80 @@
+format: 1
+kind: component
+name: qsfp-lane-leds-column
+version: 1.0.0
+class: led
+profile: networking
+description: QSFP port lane LED column - four round lamps stacked VERTICALLY, one per
+  100G lane, for faceplates that stand the lamp strip on end beside its cage
+size: {w: 1.8, h: 11.4}
+provenance:
+  size: >-
+    photo-measured - DCS510/AS9716-32D. The four lamps of one port read at
+    x 266-277, y 164/174/184/194 px in the datasheet front elevation
+    (dcs510-datasheet/fig-0007.png panel 0, 3.2892 px/mm on x) and again at
+    x 709-712, y 51/56.5/62/67 px in the quick-start front elevation
+    (dcs510-qsg/fig-0004.png, 1.8225 px/mm on x, 1.8097 on y). Two independent
+    figures agree on a 3.0 mm lamp pitch and a ~1.6 mm lamp, which fixes the
+    column at 11.4 mm tall over four lanes. The 2.4 mm WIDTH is the lamp plus a
+    symmetric margin, not a reading - at 1.8 px/mm the column's own edges are
+    inside one pixel of the lamp's - but the two sub-columns of a shell boundary
+    are 1.8 mm apart centre to centre (9 px in dcs510-qsg/fig-0011 at 5.13 px/mm,
+    6 px in the datasheet elevation at 3.2892 px/mm), so 1.8 is what the part is
+    allowed to be wide and the lamp is drawn at 1.4.
+  semantics: >-
+    datasheet - 'QSFP-DD Port LEDs: Blue (400G), White (200G), Green (100G),
+    Green (50G)' (dcs510-datasheet/doc.md:112) and the quick-start's port-LED
+    panel, '400G: 1 LED Blue / 200G Breakout: 1 LED White, 1-2 LEDs Green /
+    100G Breakout: 1-4 LEDs Green / 50G Breakout: 1 LED Cyan'
+    (dcs510-qsg/doc.md:90-98). Four lamps, one per breakout lane; the vendor
+    states colours per SPEED rather than per lamp state, so the states here are
+    the off/on default that common/qsfp-lane-leds@1 settled on and nothing more
+    is claimed.
+elements:
+  lane-1:
+    at: [0.2, 0.5]
+    size: [1.4, 1.4]
+    class: led
+    states: ['off', 'on']
+  lane-2:
+    at: [0.2, 3.5]
+    size: [1.4, 1.4]
+    class: led
+    states: ['off', 'on']
+  lane-3:
+    at: [0.2, 6.5]
+    size: [1.4, 1.4]
+    class: led
+    states: ['off', 'on']
+  lane-4:
+    at: [0.2, 9.5]
+    size: [1.4, 1.4]
+    class: led
+    states: ['off', 'on']
+relief:
+  features:
+    - node: lane-1
+      dome: 0.3
+      confidence: estimated
+      source: >-
+        common/qsfp-lane-leds-column@1 itself - unsourced. Its provenance covers the
+        part's FACE (lamp pitch and diameter, photo-measured off two DCS510 front
+        elevations) and carries no key about how far a lamp stands off the metal. 0.3
+        is common/led-dot@1's figure, which is the library's value for a lamp of this
+        drawn diameter.
+    - node: lane-2
+      dome: 0.3
+      confidence: estimated
+      source: >-
+        common/qsfp-lane-leds-column@1 itself - unsourced; see lane-1.
+    - node: lane-3
+      dome: 0.3
+      confidence: estimated
+      source: >-
+        common/qsfp-lane-leds-column@1 itself - unsourced; see lane-1.
+    - node: lane-4
+      dome: 0.3
+      confidence: estimated
+      source: >-
+        common/qsfp-lane-leds-column@1 itself - unsourced; see lane-1.
+skins: [default]

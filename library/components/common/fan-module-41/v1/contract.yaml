@@ -1,0 +1,95 @@
+format: 1
+kind: module
+name: fan-module-41
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: Hot-swappable 1U fan tray, 40.9mm opening on a 48.8mm pitch - honeycomb
+  grille over one rotor, crossed by a full-width moulded pull handle carrying the
+  airflow-code plate. The Edgecore AS9926 tray, wider-handled and narrower-bodied
+  than common/fan-module-46@1
+size: {w: 40.9, h: 40.0}
+attrs: {power-absent: not-applicable, airflow: front-to-back}
+provenance:
+  power: >-
+    NOT APPLICABLE, because this contract is a GENERIC and not a part - the same
+    reasoning common/fan-module-46@1 records. Neither COR580 document states a
+    per-tray figure; the chassis hole stays visible in L29, which is the right
+    place for it.
+  size: >-
+    photo-measured - Edgecore COR580/AS9926-24D, FRU AS9926-24D/24DB-FAN.
+    cor580-datasheet/fig-0007 panel 1 at 3.198 px/mm on x. Tray 6's opening runs
+    75.2 to 116.1 mm (a dark shadow line at each end, profiled at x 248-254 and
+    379-385 px), the chassis pillar that carries the '6' runs 116.4 to 124.4, and
+    tray 5's opening starts at 124.8 - so the OPENING is 40.9 mm on a 48.79 mm
+    pitch and the divider between trays is 8.3 mm. The six red handles measured
+    independently start at 75.98, 124.77, 173.55, 222.95, 271.73 and 320.51,
+    confirming that pitch to 0.6 mm and sitting 0.7-1.4 mm inside each opening.
+    THIS IS NOT common/fan-module-46@1's SHAPE. That part is 46.6 wide with a
+    2.2 mm divider, taken from the Edgecore DCS510 which shares this chassis
+    shell; drawn here it would be 5.7 mm too wide, 2 mm too far left, and would
+    leave no metal for the numeral. The 8.3 mm divider is what the vendor's own
+    3.4 mm fan numerals are printed on and they are centred in it (the '6' reads
+    at 120.1 against the divider's centre of 120.4).
+  handle: >-
+    photo-measured - a moulded grab bar 39.4 mm wide and 11.0 mm tall spanning
+    almost the full tray, read at y 19.5-30.5 mm on the PANEL and so at 18.0 in
+    this part's own frame, the bay it fills starting at panel y 1.5. A black
+    airflow-code plate (printed 'F2B 21400') 7.0 x 7.2 mm is let into its middle,
+    at x 15.2-22.2 of the tray. This
+    is the largest visible difference from common/fan-module-46@1, whose handle
+    is a 3.3 mm bar in the lower third. Read at 25.7 px/mm on an 8x crop of
+    cor580-datasheet/fig-0007 panel 1.
+  rotor: >-
+    the 18.6 mm rotor radius is UNCHANGED from common/fan-module@1 and its
+    descendants - the tray narrowed, the fan did not, which is the same rule
+    common/fan-module-46@1 states: keep the rotor round rather than scaling it to
+    fit. It leaves 0.85 mm of frame either side, which is what the photograph
+    shows.
+  height: >-
+    CARRIED from common/fan-module-46@1 at 40.0 mm and NOT measured here. The rear
+    elevation's panel box is the non-orthographic one (2.93 percent axis
+    disagreement), so it is the worst surface on this device for a vertical
+    number; the tray reads roughly full-height on it, which 40.0 in a 43.1 chassis
+    is consistent with, and that is as far as this figure can be pushed.
+  skins: >-
+    ONE skin, not the sibling's default/blue pair. Every ordering line for this
+    chassis is front-to-back and the fan FRU AS9926-24D/24DB-FAN is listed only
+    as 'Front-to-Back airflow' (cor580-datasheet/doc.md:194), so there is no blue
+    B2F tray to draw and none is invented.
+  elements: positions derived from the face measurements above
+states: [ok, fail, absent]
+elements:
+  rotor: {at: [1.85, 0.6], size: [37.2, 37.2], class: rotor}
+  handle: {at: [0.75, 18.0], size: [39.4, 11.0], class: latch}
+  code-plate: {at: [15.2, 20.7], size: [7.0, 7.2], class: label}
+relief:
+  features:
+    - node: rotor-grille
+      vent: 25
+      confidence: estimated
+      source: >-
+        common/fan-module-41@1 itself - unsourced (inherited from
+        common/fan-module@1). Its provenance covers the part's FACE and carries no
+        key about how far anything stands off it.
+    - node: rotor-behind
+      vent: 25
+      confidence: estimated
+      source: >-
+        common/fan-module-41@1 itself - unsourced (inherited from
+        common/fan-module@1).
+    - node: rotor-bulge
+      dome: 3.2
+      confidence: estimated
+      source: >-
+        common/fan-module-41@1 itself - unsourced (inherited from
+        common/fan-module@1).
+    - node: handle
+      uhandle: 12.7
+      confidence: estimated
+      source: >-
+        common/fan-module-41@1 itself - unsourced (inherited from
+        common/fan-module@1). The handle's FACE is measured here; how far it
+        stands proud of the tray is not.
+skins: [default]
