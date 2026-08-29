@@ -276,3 +276,45 @@ def test_numbering_covers_the_whole_block_or_none_of_it():
     _, _, silks = E.block_items(block, LIB, STD)
     assert [s["text"] for s in silks] == [str(i) for i in range(54)]
     assert {s["for"] for s in silks} == {f"port-{i}" for i in range(54)}
+
+
+def test_numeral_offsets_can_key_off_the_ROW_as_well_as_the_column():
+    """The gap two separate modelling runs each hand-wrote 48 lines around.
+
+    A face that prints `1 (up)(down) 2` on ONE baseline between its two rows puts
+    the odd port's numeral left of centre and the even port's right of it: same
+    y, different x, keyed to the ROW. `dx-by-col` cannot say that, so both runs
+    wrote the marks out longhand on a face where everything else generated.
+
+    Checked against the committed device rather than an invented case - these are
+    the real offsets, and all 32 numerals land on the millimetre.
+    """
+    real = {s["for"]: s for s in yaml.safe_load(
+        (LIB / "devices/edgecore/dcs510/device.yaml").read_text()
+    )["views"]["front"]["silkscreen"]
+        if isinstance(s.get("for"), str) and s["for"].startswith("port-")
+        and s.get("text")}
+    block = {"id": "qsfpdd-400g", "ref": "std/qsfp-dd@1", "at": [38.3, 12.0],
+             "count": 32, "rows": 2, "row-pitch": 14.5, "gang": 2, "gutter": 6.0,
+             "pitch": {"registry": "qsfp-ganged"}, "number-from": 1,
+             "numerals": {"dx-by-row": [5.9, 13.1], "dy-top": 12.92,
+                          "dy-bottom": -1.58, "font-size": 1.9,
+                          "anchor": "middle", "fill": "#e8eaec"}}
+    _, _, silks = E.block_items(block, LIB, STD)
+    assert len(silks) == 32
+    for s in silks:
+        r = real[s["for"]]
+        assert abs(r["at"][0] - s["at"][0]) <= 0.011, (s["for"], r["at"], s["at"])
+        assert abs(r["at"][1] - s["at"][1]) <= 0.011, (s["for"], r["at"], s["at"])
+
+
+def test_row_and_column_offsets_add_when_both_are_given():
+    """A numeral on such a face is displaced by which shell it sits in AND which
+    row it names, so the two lists compose rather than one overriding."""
+    block = {"id": "p", "ref": "std/sfp-ganged@1", "at": [0.0, 0.0], "count": 4,
+             "rows": 2, "row-pitch": 10.0, "pitch": "registry",
+             "numerals": {"dx-by-col": [1.0, 2.0], "dx-by-row": [10.0, 20.0]}}
+    _, _, silks = E.block_items(block, LIB, STD)
+    # port 0: col 0 row 0 -> 1.0 + 10.0 ; port 1: col 0 row 1 -> 1.0 + 20.0
+    assert silks[0]["at"][0] == 11.0, silks[0]
+    assert silks[1]["at"][0] == 21.0, silks[1]

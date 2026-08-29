@@ -257,9 +257,22 @@ def block_items(block, library, standards):
         if num:
             # numerals bracket a ganged shell the same way lamps do, because on
             # these faces the numeral is printed with its lamp rather than over
-            # its cage - so it takes the same per-column offset list
+            # its cage - so it takes the same per-column offset list.
+            #
+            # AND SOMETIMES THE OFFSET DEPENDS ON THE ROW INSTEAD. A face that
+            # prints `1 (up)(down) 2` on ONE baseline between its two rows puts
+            # the odd port's numeral left of centre and the even port's right of
+            # it - the same y, a different x, keyed to the row. That is not
+            # expressible as a per-column list, and two separate modelling runs
+            # each hand-wrote 48 silkscreen marks for want of it, on a face where
+            # everything else generated. `dx-by-row` is the missing knob; where
+            # both are given they add, because a numeral on such a face is
+            # displaced by which shell it is in AND which row it names.
             nby = num.get("dx-by-col")
             ndx = nby[col % len(nby)] if nby else num.get("dx", 0.0)
+            nbr = num.get("dx-by-row")
+            if nbr:
+                ndx += nbr[row % len(nbr)]
             silks.append({
                 "at": [round(x + ndx, 2),
                        round(y + (num.get("dy-top", num.get("dy", 0.0)) if row == 0
