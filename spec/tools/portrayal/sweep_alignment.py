@@ -29,6 +29,30 @@ getting quieter is the only accepted outcome.
 Moving a placement moves a box other marks are measured against, so a single
 pass can expose a slip that was previously out of range. Iterate to a fixpoint.
 
+WHAT IS LEFT AFTER THIS IS NOT SWEEPABLE, AND A SECOND PASS WAS TRIED AND
+REJECTED. The residue is columns - a numeral and its lamp beside one port - where
+no member can move alone because it would land on its neighbour. Shifting the
+whole SET by one delta, so its midpoint lands on the target, looks like the
+obvious answer: the members keep their spacing, so nothing inside the set can
+collide, and it took L61 from 656 warnings to 36.
+
+IT MADE THE DRAWINGS WORSE. Measured across the corpus, 704 items moved closer
+to what they name and 626 moved FURTHER away - on most devices an exact one for
+one trade, 84 better and 84 worse, 66 and 66, 50 and 50. That is the signature
+of centring a two-member set: one member improves and the other degrades by the
+same amount. On the S9705-48D a lamp sitting 0.30mm off its port was dragged to
+1.44mm off so that its numeral could meet it in the middle.
+
+The reason it is not a fix is that the members are not always meant to straddle.
+That device's numerals sit near the top of each port and its lamps at the middle,
+by design; the S9720-56ED's numerals and lamps straddle. Nothing in the file says
+which, so no tool can tell them apart - and the acceptance test cannot catch the
+damage either, because once a set straddles evenly L61 goes quiet and the sweep
+reads its own vandalism as success.
+
+A rule going quiet is not the same as a drawing getting better. What the residue
+needs is a reader with the figure open.
+
     sweep_alignment.py --library library --schemas spec/schemas [device ...]
     sweep_alignment.py --library library --schemas spec/schemas --apply
 

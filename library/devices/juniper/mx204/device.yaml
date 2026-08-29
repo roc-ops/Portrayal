@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx204
-version: 1.0.0
+version: 1.1.0
 maturity: modelled
 manufacturer: Juniper
 model: MX204
@@ -470,6 +470,8 @@ views:
            for: chassis, attrs: {function: take the router offline}}
         - {id: reset-btn, ref: common/reset-button@1, at: [422.35, 32.2], group: mgmt, rel-pos: 4,
            for: chassis, attrs: {function: reset}}
+        - {ref: common/led-dot@1, id: led-con-l, at: [283.35, 32.13], for: con, group: mgmt-leds, rel-pos: 901}
+        - {ref: common/led-dot@1, id: led-con-r, at: [294.95, 32.13], for: con, group: mgmt-leds, rel-pos: 902}
   rear:
     size:
       w: 437.0

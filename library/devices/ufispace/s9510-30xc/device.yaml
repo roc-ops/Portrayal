@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9510-30xc
-version: 1.0.0
+version: 1.1.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9510-30XC
@@ -629,6 +629,8 @@ views:
         - {ref: std/sfp-ganged@1, id: port-29, at: [415.28, 25.10], group: sfp28, rel-pos: 29}
         - {ref: common/led-dot@1, id: led-port-28, at: [419.71, 21.10], for: port-28, attrs: {port: '28'}, group: port-leds, rel-pos: 27}
         - {ref: common/led-dot@1, id: led-port-29, at: [423.09, 21.10], for: port-29, attrs: {port: '29'}, group: port-leds, rel-pos: 28}
+        - {ref: common/led-dot@1, id: led-mgmt-l, at: [156.44, 6.27], for: mgmt, group: port-leds, rel-pos: 901}
+        - {ref: common/led-dot@1, id: led-mgmt-r, at: [164.74, 6.27], for: mgmt, group: port-leds, rel-pos: 902}
     regions:
       - {id: intake, at: [4, 0], size: {w: 112, h: 43.5}, physical-context: Intake, label: PSU intake, members: [psu-0, psu-1]}
       - {id: timing, at: [116, 1], size: {w: 36, h: 42}, label: Timing block, members: [gnss-ant, clk-10mhz, clk-1pps, bits, tod]}

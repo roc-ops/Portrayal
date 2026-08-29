@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9502-12sm
-version: 1.0.0
+version: 1.1.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9502-12SM
@@ -482,6 +482,8 @@ views:
            description: 'the earth symbol printed at the right-hand end of the front
              panel, marking the side-mounted grounding lug position that HIG Figure 15
              details on the right side wall'}
+        - {ref: common/led-dot@1, id: led-mgmt-l, at: [168.47, 14.37], for: mgmt, group: port-leds, rel-pos: 901}
+        - {ref: common/led-dot@1, id: led-mgmt-r, at: [176.77, 14.37], for: mgmt, group: port-leds, rel-pos: 902}
     regions:
       - {id: power-inputs, at: [18.0, 12.0], size: {w: 92, h: 30}, label: Fixed 1+1 power inputs, members: [psu-0, psu-1]}
       - {id: mgmt-block, at: [120.0, 4.0], size: {w: 85, h: 38}, label: Management and timing, members: [pps, mhz, mgmt, usb, tod, console]}

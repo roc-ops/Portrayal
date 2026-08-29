@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9510-28dc
-version: 1.0.0
+version: 1.1.0
 manufacturer: UfiSpace
 model: S9510-28DC
 description: UfiSpace S9510-28DC Disaggregated Cell Site Gateway Router - 1RU, 2x QSFP-DD 400G
@@ -530,6 +530,8 @@ views:
         - {ref: std/sfp-ganged@1, id: port-25, at: [399.4, 22.6], group: sfp28, rel-pos: 25}
         - {ref: std/sfp-ganged@1, id: port-26, at: [413.65, 7], group: sfp28, rel-pos: 26}
         - {ref: std/sfp-ganged@1, id: port-27, at: [413.65, 22.6], group: sfp28, rel-pos: 27}
+        - {ref: common/led-dot@1, id: led-mgmt-l, at: [153.5, 13.83], for: mgmt, group: port-leds, rel-pos: 901}
+        - {ref: common/led-dot@1, id: led-mgmt-r, at: [166.1, 13.83], for: mgmt, group: port-leds, rel-pos: 902}
     regions:
       - {id: timing, at: [116, 1], size: {w: 36, h: 42}, label: Timing block, members: [gnss-ant, clk-10mhz, clk-1pps, bits, tod]}
       - {id: mgmt-block, at: [151, 1], size: {w: 19, h: 42}, label: Management, members: [mgmt, usb, console]}

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9300-32d
-version: 0.1.0
+version: 0.2.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9300-32D
@@ -450,6 +450,8 @@ views:
         - {ref: std/qsfp-dd@1, id: port-29, at: [388.0, 26.05], rotate: 180, group: qsfpdd-400g, rel-pos: 29}
         - {ref: std/qsfp-dd@1, id: port-30, at: [407.5, 8.75], group: qsfpdd-400g, rel-pos: 30}
         - {ref: std/qsfp-dd@1, id: port-31, at: [407.5, 26.05], rotate: 180, group: qsfpdd-400g, rel-pos: 31}
+        - {ref: common/led-dot@1, id: led-oob-l, at: [14.8, 39.83], for: oob, group: port-leds, rel-pos: 901}
+        - {ref: common/led-dot@1, id: led-oob-r, at: [27.4, 39.83], for: oob, group: port-leds, rel-pos: 902}
     regions:
       - {id: mgmt-block, at: [1, 1], size: {w: 31, h: 42}, label: Management, members: [reset, console, usb, oob]}
       - {id: sfp-block, at: [35, 1], size: {w: 31, h: 42}, label: SFP+ OOB and MGMT, members: [oob-sfp-0, oob-sfp-1, port-sfp-0, port-sfp-1]}
