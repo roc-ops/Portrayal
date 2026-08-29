@@ -248,6 +248,15 @@ def comments_for(dev, cfg_name, cfg):
         lines += facts
         lines.append("")
 
+    # WHICH DRAWING THIS RECORD CAME FROM. #48 made a device's version move when
+    # its model does, and classifies a moved slot or a renamed id as a MAJOR -
+    # which is exactly what invalidates a coordinate or a reference somebody
+    # took out of an earlier export. A DCIM record outlives the export that made
+    # it, so without this a holder cannot tell a current type from a stale one.
+    if dev.get("version"):
+        lines.append(f"Drawing version {dev['version']}. A major bump means a "
+                     f"slot moved or an id was renamed, so anything cached from "
+                     f"an earlier export may no longer line up.")
     if dev.get("maturity"):
         lines.append(f"Model maturity: {dev['maturity']}. Every dimension in the "
                      f"source records where it came from.")
@@ -519,6 +528,11 @@ def build_module(contract, manufacturer):
     if facts:
         body.append("Facts carried in the model that this schema has no field for:")
         body += facts
+        body.append("")
+    # Same reasoning as the device stamp: a module type is cached in a DCIM too,
+    # and its faceplate can move under it.
+    if contract.get("version"):
+        body.append(f"Contract version {contract['version']}.")
     if body:
         out["comments"] = "\n".join(body).strip()
     return out
