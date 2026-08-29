@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9601-104bc
-version: 0.1.0
+version: 1.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9601-104BC
@@ -442,8 +442,8 @@ gaps:
     ink, so no silkscreen mark is written for them.
   wanted: a straight-on high-resolution front photograph, or a vendor 3D model
 - what: qsfp-lane-lamp-ownership
-  scope: [leds-port-96, leds-port-97, leds-port-98, leds-port-99, leds-port-100,
-    leds-port-101, leds-port-102, leds-port-103]
+  scope: [led-port-96, led-port-97, led-port-98, led-port-99, led-port-100,
+    led-port-101, led-port-102, led-port-103]
   reason: vendor-silent
   note: >-
     The land between each QSFP pair carries a dot matrix that resolves as dots but not as
@@ -660,13 +660,13 @@ views:
         - {at: [393.4, 76.2], size: [19.8, 2.7], pattern: vent, vent: 22}
         - {at: [415.2, 76.2], size: [18.8, 2.7], pattern: vent, vent: 22}
     silkscreen:
-      - {text: GNSS ANT, at: [17.1, 8.4], font-size: 1.9, anchor: end, for: gnss-ant}
-      - {text: 10MHZ, at: [37.1, 8.4], font-size: 1.9, anchor: end, for: clk-10mhz}
+      - {text: GNSS ANT, at: [17.1, 8.3], font-size: 1.9, anchor: end, for: gnss-ant}
+      - {text: 10MHZ, at: [37.1, 8.3], font-size: 1.9, anchor: end, for: clk-10mhz}
       - {text: 1PPS, at: [53.5, 8.4], font-size: 1.9, anchor: end, for: clk-1pps}
       - {text: TOD, at: [16.8, 26.2], font-size: 1.9, anchor: middle, for: tod}
       - {text: '0', at: [29.2, 14.7], font-size: 1.7, anchor: start, for: mport-0}
       - {text: '1', at: [41.7, 14.7], font-size: 1.7, anchor: end, for: mport-1}
-      - {text: RESET, at: [16.0, 49.9], font-size: 1.5, anchor: middle, for: reset}
+      - {text: RESET, at: [16.76, 49.9], font-size: 1.5, anchor: middle, for: reset}
       # The three icons printed above the management bezel. PATH GEOMETRY IS RELATIVE TO
       # `at` - the renderer translates by it and the lint extent adds it.
       - {at: [25.25, 44.6], path: 'M 0 0 L 0 0.9 M -1.3 0.9 L 1.3 0.9 M -1.3 0.9 L -1.3 1.7
@@ -677,13 +677,13 @@ views:
       - {at: [36.2, 45.9], path: 'M -1.6 0 L 1.6 0 M 1.6 0 L 0.9 -0.7 M 1.6 0 L 0.9 0.7
           M 0.1 0 L -0.7 -0.8 M -0.7 -0.8 L -1.2 -0.8 M 0.7 0 L -0.1 0.8
           M -0.1 0.8 L -0.5 0.8', for: usb}
-      - {text: SYNC, at: [19.2, 63.8], font-size: 1.15, anchor: start, fill: '#17191c', for: led-sync}
-      - {text: SYS, at: [19.2, 66.3], font-size: 1.15, anchor: start, fill: '#17191c', for: led-sys}
-      - {text: FAN, at: [19.2, 68.8], font-size: 1.15, anchor: start, fill: '#17191c', for: led-fan}
+      - {text: SYNC, at: [19.2, 63.68], font-size: 1.15, anchor: start, fill: '#17191c', for: led-sync}
+      - {text: SYS, at: [19.2, 66.2], font-size: 1.15, anchor: start, fill: '#17191c', for: led-sys}
+      - {text: FAN, at: [19.2, 68.72], font-size: 1.15, anchor: start, fill: '#17191c', for: led-fan}
       - {text: PS0, at: [19.2, 71.3], font-size: 1.15, anchor: start, fill: '#17191c', for: led-ps0}
       - {text: PS1, at: [19.2, 73.8], font-size: 1.15, anchor: start, fill: '#17191c', for: led-ps1}
       - {text: ID, at: [19.2, 76.3], font-size: 1.15, anchor: start, fill: '#17191c', for: led-id}
-      - {text: IOIOI, at: [32.1, 83.6], font-size: 1.8, anchor: middle, for: console}
+      - {text: IOIOI, at: [32.19, 83.6], font-size: 1.8, anchor: middle, for: console}
       - {text: S9601-104BC, at: [355.0, 83.7], font-size: 2.4, anchor: middle, for: chassis}
       # SFP28 port numerals on the yellow (ports 0-47) and cream (48-95) bands
       - {text: '0', at: [46.8, 14.9], font-size: 1.7, anchor: start, fill: '#17191c', for: port-0}
@@ -871,14 +871,14 @@ views:
         - {ref: std/qsfp-ganged@1, id: port-101, at: [393.7, 61.61], group: qsfp28, rel-pos: 101}
         - {ref: std/qsfp-ganged@1, id: port-102, at: [412.8, 46.81], group: qsfp56, rel-pos: 102}
         - {ref: std/qsfp-ganged@1, id: port-103, at: [412.8, 61.61], group: qsfp56, rel-pos: 103}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-96, at: [395.75, 26.3], for: port-96, attrs: {port: '96'}, group: port-leds, rel-pos: 101}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-97, at: [395.75, 29.3], for: port-97, attrs: {port: '97'}, group: port-leds, rel-pos: 102}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-98, at: [414.85, 26.3], for: port-98, attrs: {port: '98'}, group: port-leds, rel-pos: 103}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-99, at: [414.85, 29.3], for: port-99, attrs: {port: '99'}, group: port-leds, rel-pos: 104}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-100, at: [395.75, 56.2], for: port-100, attrs: {port: '100'}, group: port-leds, rel-pos: 105}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-101, at: [395.75, 59.2], for: port-101, attrs: {port: '101'}, group: port-leds, rel-pos: 106}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-102, at: [414.85, 56.2], for: port-102, attrs: {port: '102'}, group: port-leds, rel-pos: 107}
-        - {ref: ufispace/lane-led-quad@1, id: leds-port-103, at: [414.85, 59.2], for: port-103, attrs: {port: '103'}, group: port-leds, rel-pos: 108}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-96, at: [395.75, 26.3], for: port-96, attrs: {port: '96'}, group: port-leds, rel-pos: 101}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-97, at: [395.75, 29.3], for: port-97, attrs: {port: '97'}, group: port-leds, rel-pos: 102}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-98, at: [414.85, 26.3], for: port-98, attrs: {port: '98'}, group: port-leds, rel-pos: 103}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-99, at: [414.85, 29.3], for: port-99, attrs: {port: '99'}, group: port-leds, rel-pos: 104}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-100, at: [395.75, 56.2], for: port-100, attrs: {port: '100'}, group: port-leds, rel-pos: 105}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-101, at: [395.75, 59.2], for: port-101, attrs: {port: '101'}, group: port-leds, rel-pos: 106}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-102, at: [414.85, 56.2], for: port-102, attrs: {port: '102'}, group: port-leds, rel-pos: 107}
+        - {ref: ufispace/lane-led-quad@1, id: led-port-103, at: [414.85, 59.2], for: port-103, attrs: {port: '103'}, group: port-leds, rel-pos: 108}
         # SFP28 cages
         - {ref: std/sfp-ganged@1, id: port-0, at: [45.6, 16.3], group: sfp28, rel-pos: 0}
         - {ref: std/sfp-ganged@1, id: port-1, at: [45.6, 31.1], group: sfp28, rel-pos: 1}

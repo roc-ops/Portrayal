@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s6301-56stp
-version: 0.1.2
+version: 1.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S6301-56STP
@@ -329,13 +329,13 @@ views:
       - {at: [16.6, 42.3], text: IOIOI, font-size: 1.4, for: console}
       - {at: [37.4, 8.2], text: MODE, font-size: 1.4, anchor: middle, for: mode}
       - {at: [47.1, 8.2], text: RESET, font-size: 1.4, anchor: middle, for: reset}
-      - {at: [55.0, 5.2], text: SYS, font-size: 1.4, for: led-sys}
-      - {at: [61.9, 5.2], text: FAN, font-size: 1.4, for: led-fan}
-      - {at: [68.6, 5.2], text: PS0, font-size: 1.4, for: led-ps0}
-      - {at: [75.4, 5.2], text: PS1, font-size: 1.4, for: led-ps1}
-      - {at: [54.4, 7.8], text: LNK/SPD, font-size: 1.4, for: led-lnk-spd}
-      - {at: [67.9, 7.8], text: POE, font-size: 1.4, for: led-poe}
-      - {at: [74.6, 7.8], text: ID, font-size: 1.4, for: led-id}
+      - {at: [55, 4.93], text: SYS, font-size: 1.4, for: led-sys}
+      - {at: [61.9, 4.93], text: FAN, font-size: 1.4, for: led-fan}
+      - {at: [68.6, 4.93], text: PS0, font-size: 1.4, for: led-ps0}
+      - {at: [75.4, 4.93], text: PS1, font-size: 1.4, for: led-ps1}
+      - {at: [54.4, 7.53], text: LNK/SPD, font-size: 1.4, for: led-lnk-spd}
+      - {at: [67.9, 7.53], text: POE, font-size: 1.4, for: led-poe}
+      - {at: [74.6, 7.53], text: ID, font-size: 1.4, for: led-id}
       - {at: [26, 40.9], text: '▲0', font-size: 1.6, for: port-0}
       - {at: [38.3, 40.9], text: '1▼', font-size: 1.6, anchor: end, for: port-1}
       - {at: [39.9, 40.9], text: '▲2', font-size: 1.6, for: port-2}
@@ -513,10 +513,10 @@ views:
         - {ref: std/sfp-ganged@1, id: port-53, at: [404.9, 27.4], group: sfp-plus, rel-pos: 53}
         - {ref: std/sfp-ganged@1, id: port-54, at: [419.15, 12.4], rotate: 180, group: sfp-plus, rel-pos: 54}
         - {ref: std/sfp-ganged@1, id: port-55, at: [419.15, 27.4], group: sfp-plus, rel-pos: 55}
-        - {ref: common/sfp-led-pair@1, id: leds-p48-p49, at: [377.5, 23.1], for: [port-48, port-49], group: port-leds, rel-pos: 1}
-        - {ref: common/sfp-led-pair@1, id: leds-p50-p51, at: [391.75, 23.1], for: [port-50, port-51], group: port-leds, rel-pos: 2}
-        - {ref: common/sfp-led-pair@1, id: leds-p52-p53, at: [406, 23.1], for: [port-52, port-53], group: port-leds, rel-pos: 3}
-        - {ref: common/sfp-led-pair@1, id: leds-p54-p55, at: [420.25, 23.1], for: [port-54, port-55], group: port-leds, rel-pos: 4}
+        - {ref: common/sfp-led-pair@1, id: led-port-48-port-49, at: [377.5, 23.1], for: [port-48, port-49], group: port-leds, rel-pos: 1}
+        - {ref: common/sfp-led-pair@1, id: led-port-50-port-51, at: [391.75, 23.1], for: [port-50, port-51], group: port-leds, rel-pos: 2}
+        - {ref: common/sfp-led-pair@1, id: led-port-52-port-53, at: [406, 23.1], for: [port-52, port-53], group: port-leds, rel-pos: 3}
+        - {ref: common/sfp-led-pair@1, id: led-port-54-port-55, at: [420.25, 23.1], for: [port-54, port-55], group: port-leds, rel-pos: 4}
     regions:
       - {id: mgmt-block, at: [5.5, 3.5], size: {w: 17, h: 39.5}, label: Management, members: [mgmt, usb, console]}
       - {id: uplinks, at: [375.5, 11.5], size: {w: 59, h: 31}, label: SFP+ uplinks, members: [port-48, port-49, port-50, port-51, port-52, port-53, port-54, port-55]}

@@ -85,7 +85,7 @@ def test_a_lamp_brackets_its_ganged_shell_rather_than_following_its_port():
         if str(s.get("for", "")).startswith("port-"):
             nums[s["for"]] = s
 
-    led = {"ref": "common/led-dot@1", "id-format": "led-p{n}",
+    led = {"ref": "common/led-dot@1", "id-format": "led-port-{n}",
            "dx-by-col": [-3.97, 20.97], "dy-top": 3.7, "dy-bottom": 4.68,
            "group": "port-leds"}
     num = {"dx-by-col": [-2.97, 21.97], "dy-top": 2.4, "dy-bottom": 9.43,

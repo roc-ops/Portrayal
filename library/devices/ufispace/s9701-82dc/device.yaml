@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9701-82dc
-version: 0.1.0
+version: 1.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9701-82DC
@@ -731,21 +731,21 @@ views:
     silkscreen:
       - {at: [12.19, 6.55], text: 'GNSS', anchor: middle, font-size: 2, fill: '#f0f0f0', for: gnss-ant}
       - {at: [12.19, 9.55], text: 'ANT', anchor: middle, font-size: 2, fill: '#f0f0f0', for: gnss-ant}
-      - {at: [31.94, 7.95], text: '10MHZ', anchor: middle, font-size: 2, fill: '#f0f0f0', for: mhz-10}
+      - {at: [31.94, 8.2], text: '10MHZ', anchor: middle, font-size: 2, fill: '#f0f0f0', for: mhz-10}
       - {at: [49.72, 7.95], text: '1PPS', anchor: middle, font-size: 2, fill: '#f0f0f0', for: pps-1}
       - {at: [14.88, 25.15], text: 'TOD', anchor: middle, font-size: 2, fill: '#f0f0f0', for: tod}
       - {at: [28.8, 14.5], text: '0', anchor: middle, font-size: 2, fill: '#f0f0f0', for: mgmt-sfp-0}
       - {at: [32.89, 13.74], path: 'M -1.15 0.78 L 1.15 0.78 L 0 -0.78 L -1.15 0.78', stroke-width: 0.45, fill: '#f0f0f0', for: mgmt-sfp-0}
       - {at: [35.63, 13.74], path: 'M -1.15 -0.78 L 1.15 -0.78 L 0 0.78 L -1.15 -0.78', stroke-width: 0.45, fill: '#f0f0f0', for: mgmt-sfp-1}
       - {at: [39.7, 14.5], text: '1', anchor: middle, font-size: 2, fill: '#f0f0f0', for: mgmt-sfp-1}
-      - {at: [13.9, 51], text: 'RESET', anchor: middle, font-size: 1.8, fill: '#f0f0f0', for: reset}
+      - {at: [14.88, 51], text: 'RESET', anchor: middle, font-size: 1.8, fill: '#f0f0f0', for: reset}
       - {at: [23.55, 46.3], path: 'M -1.0 -1.7 L 1.0 -1.7 L 1.0 -0.5 L -1.0 -0.5 L -1.0 -1.7 M 0 -0.5 L 0 0 M -1.8 0 L 1.8 0 M -1.8 0 L -1.8 0.6 M 1.8 0 L 1.8 0.6 M -2.8 0.6 L -0.8 0.6 L -0.8 1.8 L -2.8 1.8 L -2.8 0.6 M 0.8 0.6 L 2.8 0.6 L 2.8 1.8 L 0.8 1.8 L 0.8 0.6', stroke-width: 0.35, fill: '#f0f0f0', for: mgmt-oob}
       - {at: [28.35, 46.35], path: 'M -1.25 0.95 L 1.25 0.95 L 0 -0.95 L -1.25 0.95', stroke-width: 0.45, fill: '#f0f0f0', for: mgmt-oob}
       - {at: [30.98, 46.35], path: 'M -1.25 -0.95 L 1.25 -0.95 L 0 0.95 L -1.25 -0.95', stroke-width: 0.45, fill: '#f0f0f0', for: console-rj45}
       - {at: [34.35, 47.15], text: 'SS', anchor: middle, font-size: 1.9, fill: '#f0f0f0', for: usb3}
       - {at: [37.55, 46.3], path: 'M -1.6 0 L 1.6 0 M 1.6 0 L 0.9 -0.55 M 1.6 0 L 0.9 0.55 M -0.6 0 L 0.1 -1.1 M 0.1 -1.1 L 0.75 -1.1 M -0.2 0 L 0.5 1.1 M 0.5 1.1 L 1.1 1.1', stroke-width: 0.32, fill: '#f0f0f0', for: usb3}
-      - {at: [13.59, 85.4], text: 'IOIOI', anchor: middle, font-size: 1.8, fill: '#f0f0f0', for: console-usb}
-      - {at: [29.59, 85.4], text: 'IOIOI', anchor: middle, font-size: 1.8, fill: '#f0f0f0', for: console-rj45}
+      - {at: [13.71, 85.4], text: 'IOIOI', anchor: middle, font-size: 1.8, fill: '#f0f0f0', for: console-usb}
+      - {at: [29.9, 85.4], text: 'IOIOI', anchor: middle, font-size: 1.8, fill: '#f0f0f0', for: console-rj45}
       - {at: [17.39, 68.74], text: 'SYNC', anchor: middle, font-size: 1.6, fill: '#20242a', for: led-sync}
       - {at: [17.39, 71.14], text: 'SYS', anchor: middle, font-size: 1.6, fill: '#20242a', for: led-sys}
       - {at: [17.39, 73.54], text: 'FAN', anchor: middle, font-size: 1.6, fill: '#20242a', for: led-fan}
@@ -1017,82 +1017,82 @@ views:
       - {ref: common/led-dot@1, id: led-ps0, at: [12.53, 74.38], for: rear/psu-0, group: status-leds, rel-pos: 4, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b', behavior: blinking}], description: 'HIG PS0 row - OFF (no power), Solid Green (PSU 0 is working well), Blinking Amber (PSU 0 fail, PSU0 needs service)'}
       - {ref: common/led-dot@1, id: led-ps1, at: [12.53, 76.78], for: rear/psu-1, group: status-leds, rel-pos: 5, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b', behavior: blinking}], description: 'HIG PS1 row - OFF (no power), Solid Green (PSU 1 is working well), Blinking Amber (PSU 1 fail, PSU1 needs service)'}
       - {ref: ufispace/seg7-beacon-s9611@1, id: beacon, at: [414.28, 9.68], for: chassis, group: status-leds, rel-pos: 6, description: 'the two-digit blue display at the top right of the faceplate. It appears in HIG Figure 8 and in both product renders and is named in no callout list and no LED table, so it carries no state vocabulary; see the beacon-display gap'}
-      - {ref: common/led-arrow-sm@1, id: led-p0, at: [49.51, 27.7], skin: up, for: port-0, group: port-leds, rel-pos: 1}
-      - {ref: common/led-arrow-sm@1, id: led-p1, at: [53.25, 27.7], skin: down, for: port-1, group: port-leds, rel-pos: 2}
-      - {ref: common/led-arrow-sm@1, id: led-p2, at: [63.76, 27.7], skin: up, for: port-2, group: port-leds, rel-pos: 3}
-      - {ref: common/led-arrow-sm@1, id: led-p3, at: [67.5, 27.7], skin: down, for: port-3, group: port-leds, rel-pos: 4}
-      - {ref: common/led-arrow-sm@1, id: led-p4, at: [78.01, 27.7], skin: up, for: port-4, group: port-leds, rel-pos: 5}
-      - {ref: common/led-arrow-sm@1, id: led-p5, at: [81.75, 27.7], skin: down, for: port-5, group: port-leds, rel-pos: 6}
-      - {ref: common/led-arrow-sm@1, id: led-p6, at: [92.26, 27.7], skin: up, for: port-6, group: port-leds, rel-pos: 7}
-      - {ref: common/led-arrow-sm@1, id: led-p7, at: [96, 27.7], skin: down, for: port-7, group: port-leds, rel-pos: 8}
-      - {ref: common/led-arrow-sm@1, id: led-p8, at: [111.14, 27.7], skin: up, for: port-8, group: port-leds, rel-pos: 9}
-      - {ref: common/led-arrow-sm@1, id: led-p9, at: [114.88, 27.7], skin: down, for: port-9, group: port-leds, rel-pos: 10}
-      - {ref: common/led-arrow-sm@1, id: led-p10, at: [125.39, 27.7], skin: up, for: port-10, group: port-leds, rel-pos: 11}
-      - {ref: common/led-arrow-sm@1, id: led-p11, at: [129.13, 27.7], skin: down, for: port-11, group: port-leds, rel-pos: 12}
-      - {ref: common/led-arrow-sm@1, id: led-p12, at: [139.64, 27.7], skin: up, for: port-12, group: port-leds, rel-pos: 13}
-      - {ref: common/led-arrow-sm@1, id: led-p13, at: [143.38, 27.7], skin: down, for: port-13, group: port-leds, rel-pos: 14}
-      - {ref: common/led-arrow-sm@1, id: led-p14, at: [153.89, 27.7], skin: up, for: port-14, group: port-leds, rel-pos: 15}
-      - {ref: common/led-arrow-sm@1, id: led-p15, at: [157.63, 27.7], skin: down, for: port-15, group: port-leds, rel-pos: 16}
-      - {ref: common/led-arrow-sm@1, id: led-p16, at: [172.77, 27.7], skin: up, for: port-16, group: port-leds, rel-pos: 17}
-      - {ref: common/led-arrow-sm@1, id: led-p17, at: [176.51, 27.7], skin: down, for: port-17, group: port-leds, rel-pos: 18}
-      - {ref: common/led-arrow-sm@1, id: led-p18, at: [187.02, 27.7], skin: up, for: port-18, group: port-leds, rel-pos: 19}
-      - {ref: common/led-arrow-sm@1, id: led-p19, at: [190.76, 27.7], skin: down, for: port-19, group: port-leds, rel-pos: 20}
-      - {ref: common/led-arrow-sm@1, id: led-p20, at: [201.27, 27.7], skin: up, for: port-20, group: port-leds, rel-pos: 21}
-      - {ref: common/led-arrow-sm@1, id: led-p21, at: [205.01, 27.7], skin: down, for: port-21, group: port-leds, rel-pos: 22}
-      - {ref: common/led-arrow-sm@1, id: led-p22, at: [215.52, 27.7], skin: up, for: port-22, group: port-leds, rel-pos: 23}
-      - {ref: common/led-arrow-sm@1, id: led-p23, at: [219.26, 27.7], skin: down, for: port-23, group: port-leds, rel-pos: 24}
-      - {ref: common/led-arrow-sm@1, id: led-p24, at: [234.29, 27.7], skin: up, for: port-24, group: port-leds, rel-pos: 25}
-      - {ref: common/led-arrow-sm@1, id: led-p25, at: [238.03, 27.7], skin: down, for: port-25, group: port-leds, rel-pos: 26}
-      - {ref: common/led-arrow-sm@1, id: led-p26, at: [248.54, 27.7], skin: up, for: port-26, group: port-leds, rel-pos: 27}
-      - {ref: common/led-arrow-sm@1, id: led-p27, at: [252.28, 27.7], skin: down, for: port-27, group: port-leds, rel-pos: 28}
-      - {ref: common/led-arrow-sm@1, id: led-p28, at: [262.79, 27.7], skin: up, for: port-28, group: port-leds, rel-pos: 29}
-      - {ref: common/led-arrow-sm@1, id: led-p29, at: [266.53, 27.7], skin: down, for: port-29, group: port-leds, rel-pos: 30}
-      - {ref: common/led-arrow-sm@1, id: led-p30, at: [277.04, 27.7], skin: up, for: port-30, group: port-leds, rel-pos: 31}
-      - {ref: common/led-arrow-sm@1, id: led-p31, at: [280.78, 27.7], skin: down, for: port-31, group: port-leds, rel-pos: 32}
-      - {ref: common/led-arrow-sm@1, id: led-p32, at: [49.51, 57.9], skin: up, for: port-32, group: port-leds, rel-pos: 33}
-      - {ref: common/led-arrow-sm@1, id: led-p33, at: [53.25, 57.9], skin: down, for: port-33, group: port-leds, rel-pos: 34}
-      - {ref: common/led-arrow-sm@1, id: led-p34, at: [63.76, 57.9], skin: up, for: port-34, group: port-leds, rel-pos: 35}
-      - {ref: common/led-arrow-sm@1, id: led-p35, at: [67.5, 57.9], skin: down, for: port-35, group: port-leds, rel-pos: 36}
-      - {ref: common/led-arrow-sm@1, id: led-p36, at: [78.01, 57.9], skin: up, for: port-36, group: port-leds, rel-pos: 37}
-      - {ref: common/led-arrow-sm@1, id: led-p37, at: [81.75, 57.9], skin: down, for: port-37, group: port-leds, rel-pos: 38}
-      - {ref: common/led-arrow-sm@1, id: led-p38, at: [92.26, 57.9], skin: up, for: port-38, group: port-leds, rel-pos: 39}
-      - {ref: common/led-arrow-sm@1, id: led-p39, at: [96, 57.9], skin: down, for: port-39, group: port-leds, rel-pos: 40}
-      - {ref: common/led-arrow-sm@1, id: led-p40, at: [111.14, 57.9], skin: up, for: port-40, group: port-leds, rel-pos: 41}
-      - {ref: common/led-arrow-sm@1, id: led-p41, at: [114.88, 57.9], skin: down, for: port-41, group: port-leds, rel-pos: 42}
-      - {ref: common/led-arrow-sm@1, id: led-p42, at: [125.39, 57.9], skin: up, for: port-42, group: port-leds, rel-pos: 43}
-      - {ref: common/led-arrow-sm@1, id: led-p43, at: [129.13, 57.9], skin: down, for: port-43, group: port-leds, rel-pos: 44}
-      - {ref: common/led-arrow-sm@1, id: led-p44, at: [139.64, 57.9], skin: up, for: port-44, group: port-leds, rel-pos: 45}
-      - {ref: common/led-arrow-sm@1, id: led-p45, at: [143.38, 57.9], skin: down, for: port-45, group: port-leds, rel-pos: 46}
-      - {ref: common/led-arrow-sm@1, id: led-p46, at: [153.89, 57.9], skin: up, for: port-46, group: port-leds, rel-pos: 47}
-      - {ref: common/led-arrow-sm@1, id: led-p47, at: [157.63, 57.9], skin: down, for: port-47, group: port-leds, rel-pos: 48}
-      - {ref: common/led-arrow-sm@1, id: led-p48, at: [172.77, 57.9], skin: up, for: port-48, group: port-leds, rel-pos: 49}
-      - {ref: common/led-arrow-sm@1, id: led-p49, at: [176.51, 57.9], skin: down, for: port-49, group: port-leds, rel-pos: 50}
-      - {ref: common/led-arrow-sm@1, id: led-p50, at: [187.02, 57.9], skin: up, for: port-50, group: port-leds, rel-pos: 51}
-      - {ref: common/led-arrow-sm@1, id: led-p51, at: [190.76, 57.9], skin: down, for: port-51, group: port-leds, rel-pos: 52}
-      - {ref: common/led-arrow-sm@1, id: led-p52, at: [201.27, 57.9], skin: up, for: port-52, group: port-leds, rel-pos: 53}
-      - {ref: common/led-arrow-sm@1, id: led-p53, at: [205.01, 57.9], skin: down, for: port-53, group: port-leds, rel-pos: 54}
-      - {ref: common/led-arrow-sm@1, id: led-p54, at: [215.52, 57.9], skin: up, for: port-54, group: port-leds, rel-pos: 55}
-      - {ref: common/led-arrow-sm@1, id: led-p55, at: [219.26, 57.9], skin: down, for: port-55, group: port-leds, rel-pos: 56}
-      - {ref: common/led-arrow-sm@1, id: led-p56, at: [234.29, 57.9], skin: up, for: port-56, group: port-leds, rel-pos: 57}
-      - {ref: common/led-arrow-sm@1, id: led-p57, at: [238.03, 57.9], skin: down, for: port-57, group: port-leds, rel-pos: 58}
-      - {ref: common/led-arrow-sm@1, id: led-p58, at: [248.54, 57.9], skin: up, for: port-58, group: port-leds, rel-pos: 59}
-      - {ref: common/led-arrow-sm@1, id: led-p59, at: [252.28, 57.9], skin: down, for: port-59, group: port-leds, rel-pos: 60}
-      - {ref: common/led-arrow-sm@1, id: led-p60, at: [262.79, 57.9], skin: up, for: port-60, group: port-leds, rel-pos: 61}
-      - {ref: common/led-arrow-sm@1, id: led-p61, at: [266.53, 57.9], skin: down, for: port-61, group: port-leds, rel-pos: 62}
-      - {ref: common/led-arrow-sm@1, id: led-p62, at: [277.04, 57.9], skin: up, for: port-62, group: port-leds, rel-pos: 63}
-      - {ref: common/led-arrow-sm@1, id: led-p63, at: [280.78, 57.9], skin: down, for: port-63, group: port-leds, rel-pos: 64}
-      - {ref: ufispace/lane-led-quad@1, id: led-p64, at: [293.44, 8.97], for: port-64, group: port-leds, rel-pos: 65}
-      - {ref: ufispace/lane-led-quad@1, id: led-p65, at: [293.44, 12.21], for: port-65, group: port-leds, rel-pos: 66}
-      - {ref: ufispace/lane-led-quad@1, id: led-p66, at: [317.15, 8.97], for: port-66, group: port-leds, rel-pos: 67}
-      - {ref: ufispace/lane-led-quad@1, id: led-p67, at: [317.15, 12.21], for: port-67, group: port-leds, rel-pos: 68}
-      - {ref: ufispace/lane-led-quad@1, id: led-p68, at: [340.75, 8.97], for: port-68, group: port-leds, rel-pos: 69}
-      - {ref: ufispace/lane-led-quad@1, id: led-p69, at: [340.75, 12.21], for: port-69, group: port-leds, rel-pos: 70}
-      - {ref: ufispace/lane-led-quad@1, id: led-p70, at: [293.44, 73], for: port-70, group: port-leds, rel-pos: 71}
-      - {ref: ufispace/lane-led-quad@1, id: led-p71, at: [293.44, 76.53], for: port-71, group: port-leds, rel-pos: 72}
-      - {ref: ufispace/lane-led-quad@1, id: led-p72, at: [317.15, 73], for: port-72, group: port-leds, rel-pos: 73}
-      - {ref: ufispace/lane-led-quad@1, id: led-p73, at: [317.15, 76.53], for: port-73, group: port-leds, rel-pos: 74}
-      - {ref: ufispace/lane-led-quad@1, id: led-p74, at: [340.75, 73], for: port-74, group: port-leds, rel-pos: 75}
-      - {ref: ufispace/lane-led-quad@1, id: led-p75, at: [340.75, 76.53], for: port-75, group: port-leds, rel-pos: 76}
+      - {ref: common/led-arrow-sm@1, id: led-port-0, at: [49.51, 27.7], skin: up, for: port-0, group: port-leds, rel-pos: 1}
+      - {ref: common/led-arrow-sm@1, id: led-port-1, at: [53.25, 27.7], skin: down, for: port-1, group: port-leds, rel-pos: 2}
+      - {ref: common/led-arrow-sm@1, id: led-port-2, at: [63.76, 27.7], skin: up, for: port-2, group: port-leds, rel-pos: 3}
+      - {ref: common/led-arrow-sm@1, id: led-port-3, at: [67.5, 27.7], skin: down, for: port-3, group: port-leds, rel-pos: 4}
+      - {ref: common/led-arrow-sm@1, id: led-port-4, at: [78.01, 27.7], skin: up, for: port-4, group: port-leds, rel-pos: 5}
+      - {ref: common/led-arrow-sm@1, id: led-port-5, at: [81.75, 27.7], skin: down, for: port-5, group: port-leds, rel-pos: 6}
+      - {ref: common/led-arrow-sm@1, id: led-port-6, at: [92.26, 27.7], skin: up, for: port-6, group: port-leds, rel-pos: 7}
+      - {ref: common/led-arrow-sm@1, id: led-port-7, at: [96, 27.7], skin: down, for: port-7, group: port-leds, rel-pos: 8}
+      - {ref: common/led-arrow-sm@1, id: led-port-8, at: [111.14, 27.7], skin: up, for: port-8, group: port-leds, rel-pos: 9}
+      - {ref: common/led-arrow-sm@1, id: led-port-9, at: [114.88, 27.7], skin: down, for: port-9, group: port-leds, rel-pos: 10}
+      - {ref: common/led-arrow-sm@1, id: led-port-10, at: [125.39, 27.7], skin: up, for: port-10, group: port-leds, rel-pos: 11}
+      - {ref: common/led-arrow-sm@1, id: led-port-11, at: [129.13, 27.7], skin: down, for: port-11, group: port-leds, rel-pos: 12}
+      - {ref: common/led-arrow-sm@1, id: led-port-12, at: [139.64, 27.7], skin: up, for: port-12, group: port-leds, rel-pos: 13}
+      - {ref: common/led-arrow-sm@1, id: led-port-13, at: [143.38, 27.7], skin: down, for: port-13, group: port-leds, rel-pos: 14}
+      - {ref: common/led-arrow-sm@1, id: led-port-14, at: [153.89, 27.7], skin: up, for: port-14, group: port-leds, rel-pos: 15}
+      - {ref: common/led-arrow-sm@1, id: led-port-15, at: [157.63, 27.7], skin: down, for: port-15, group: port-leds, rel-pos: 16}
+      - {ref: common/led-arrow-sm@1, id: led-port-16, at: [172.77, 27.7], skin: up, for: port-16, group: port-leds, rel-pos: 17}
+      - {ref: common/led-arrow-sm@1, id: led-port-17, at: [176.51, 27.7], skin: down, for: port-17, group: port-leds, rel-pos: 18}
+      - {ref: common/led-arrow-sm@1, id: led-port-18, at: [187.02, 27.7], skin: up, for: port-18, group: port-leds, rel-pos: 19}
+      - {ref: common/led-arrow-sm@1, id: led-port-19, at: [190.76, 27.7], skin: down, for: port-19, group: port-leds, rel-pos: 20}
+      - {ref: common/led-arrow-sm@1, id: led-port-20, at: [201.27, 27.7], skin: up, for: port-20, group: port-leds, rel-pos: 21}
+      - {ref: common/led-arrow-sm@1, id: led-port-21, at: [205.01, 27.7], skin: down, for: port-21, group: port-leds, rel-pos: 22}
+      - {ref: common/led-arrow-sm@1, id: led-port-22, at: [215.52, 27.7], skin: up, for: port-22, group: port-leds, rel-pos: 23}
+      - {ref: common/led-arrow-sm@1, id: led-port-23, at: [219.26, 27.7], skin: down, for: port-23, group: port-leds, rel-pos: 24}
+      - {ref: common/led-arrow-sm@1, id: led-port-24, at: [234.29, 27.7], skin: up, for: port-24, group: port-leds, rel-pos: 25}
+      - {ref: common/led-arrow-sm@1, id: led-port-25, at: [238.03, 27.7], skin: down, for: port-25, group: port-leds, rel-pos: 26}
+      - {ref: common/led-arrow-sm@1, id: led-port-26, at: [248.54, 27.7], skin: up, for: port-26, group: port-leds, rel-pos: 27}
+      - {ref: common/led-arrow-sm@1, id: led-port-27, at: [252.28, 27.7], skin: down, for: port-27, group: port-leds, rel-pos: 28}
+      - {ref: common/led-arrow-sm@1, id: led-port-28, at: [262.79, 27.7], skin: up, for: port-28, group: port-leds, rel-pos: 29}
+      - {ref: common/led-arrow-sm@1, id: led-port-29, at: [266.53, 27.7], skin: down, for: port-29, group: port-leds, rel-pos: 30}
+      - {ref: common/led-arrow-sm@1, id: led-port-30, at: [277.04, 27.7], skin: up, for: port-30, group: port-leds, rel-pos: 31}
+      - {ref: common/led-arrow-sm@1, id: led-port-31, at: [280.78, 27.7], skin: down, for: port-31, group: port-leds, rel-pos: 32}
+      - {ref: common/led-arrow-sm@1, id: led-port-32, at: [49.51, 57.9], skin: up, for: port-32, group: port-leds, rel-pos: 33}
+      - {ref: common/led-arrow-sm@1, id: led-port-33, at: [53.25, 57.9], skin: down, for: port-33, group: port-leds, rel-pos: 34}
+      - {ref: common/led-arrow-sm@1, id: led-port-34, at: [63.76, 57.9], skin: up, for: port-34, group: port-leds, rel-pos: 35}
+      - {ref: common/led-arrow-sm@1, id: led-port-35, at: [67.5, 57.9], skin: down, for: port-35, group: port-leds, rel-pos: 36}
+      - {ref: common/led-arrow-sm@1, id: led-port-36, at: [78.01, 57.9], skin: up, for: port-36, group: port-leds, rel-pos: 37}
+      - {ref: common/led-arrow-sm@1, id: led-port-37, at: [81.75, 57.9], skin: down, for: port-37, group: port-leds, rel-pos: 38}
+      - {ref: common/led-arrow-sm@1, id: led-port-38, at: [92.26, 57.9], skin: up, for: port-38, group: port-leds, rel-pos: 39}
+      - {ref: common/led-arrow-sm@1, id: led-port-39, at: [96, 57.9], skin: down, for: port-39, group: port-leds, rel-pos: 40}
+      - {ref: common/led-arrow-sm@1, id: led-port-40, at: [111.14, 57.9], skin: up, for: port-40, group: port-leds, rel-pos: 41}
+      - {ref: common/led-arrow-sm@1, id: led-port-41, at: [114.88, 57.9], skin: down, for: port-41, group: port-leds, rel-pos: 42}
+      - {ref: common/led-arrow-sm@1, id: led-port-42, at: [125.39, 57.9], skin: up, for: port-42, group: port-leds, rel-pos: 43}
+      - {ref: common/led-arrow-sm@1, id: led-port-43, at: [129.13, 57.9], skin: down, for: port-43, group: port-leds, rel-pos: 44}
+      - {ref: common/led-arrow-sm@1, id: led-port-44, at: [139.64, 57.9], skin: up, for: port-44, group: port-leds, rel-pos: 45}
+      - {ref: common/led-arrow-sm@1, id: led-port-45, at: [143.38, 57.9], skin: down, for: port-45, group: port-leds, rel-pos: 46}
+      - {ref: common/led-arrow-sm@1, id: led-port-46, at: [153.89, 57.9], skin: up, for: port-46, group: port-leds, rel-pos: 47}
+      - {ref: common/led-arrow-sm@1, id: led-port-47, at: [157.63, 57.9], skin: down, for: port-47, group: port-leds, rel-pos: 48}
+      - {ref: common/led-arrow-sm@1, id: led-port-48, at: [172.77, 57.9], skin: up, for: port-48, group: port-leds, rel-pos: 49}
+      - {ref: common/led-arrow-sm@1, id: led-port-49, at: [176.51, 57.9], skin: down, for: port-49, group: port-leds, rel-pos: 50}
+      - {ref: common/led-arrow-sm@1, id: led-port-50, at: [187.02, 57.9], skin: up, for: port-50, group: port-leds, rel-pos: 51}
+      - {ref: common/led-arrow-sm@1, id: led-port-51, at: [190.76, 57.9], skin: down, for: port-51, group: port-leds, rel-pos: 52}
+      - {ref: common/led-arrow-sm@1, id: led-port-52, at: [201.27, 57.9], skin: up, for: port-52, group: port-leds, rel-pos: 53}
+      - {ref: common/led-arrow-sm@1, id: led-port-53, at: [205.01, 57.9], skin: down, for: port-53, group: port-leds, rel-pos: 54}
+      - {ref: common/led-arrow-sm@1, id: led-port-54, at: [215.52, 57.9], skin: up, for: port-54, group: port-leds, rel-pos: 55}
+      - {ref: common/led-arrow-sm@1, id: led-port-55, at: [219.26, 57.9], skin: down, for: port-55, group: port-leds, rel-pos: 56}
+      - {ref: common/led-arrow-sm@1, id: led-port-56, at: [234.29, 57.9], skin: up, for: port-56, group: port-leds, rel-pos: 57}
+      - {ref: common/led-arrow-sm@1, id: led-port-57, at: [238.03, 57.9], skin: down, for: port-57, group: port-leds, rel-pos: 58}
+      - {ref: common/led-arrow-sm@1, id: led-port-58, at: [248.54, 57.9], skin: up, for: port-58, group: port-leds, rel-pos: 59}
+      - {ref: common/led-arrow-sm@1, id: led-port-59, at: [252.28, 57.9], skin: down, for: port-59, group: port-leds, rel-pos: 60}
+      - {ref: common/led-arrow-sm@1, id: led-port-60, at: [262.79, 57.9], skin: up, for: port-60, group: port-leds, rel-pos: 61}
+      - {ref: common/led-arrow-sm@1, id: led-port-61, at: [266.53, 57.9], skin: down, for: port-61, group: port-leds, rel-pos: 62}
+      - {ref: common/led-arrow-sm@1, id: led-port-62, at: [277.04, 57.9], skin: up, for: port-62, group: port-leds, rel-pos: 63}
+      - {ref: common/led-arrow-sm@1, id: led-port-63, at: [280.78, 57.9], skin: down, for: port-63, group: port-leds, rel-pos: 64}
+      - {ref: ufispace/lane-led-quad@1, id: led-port-64, at: [293.44, 8.97], for: port-64, group: port-leds, rel-pos: 65}
+      - {ref: ufispace/lane-led-quad@1, id: led-port-65, at: [293.44, 12.21], for: port-65, group: port-leds, rel-pos: 66}
+      - {ref: ufispace/lane-led-quad@1, id: led-port-66, at: [317.15, 8.97], for: port-66, group: port-leds, rel-pos: 67}
+      - {ref: ufispace/lane-led-quad@1, id: led-port-67, at: [317.15, 12.21], for: port-67, group: port-leds, rel-pos: 68}
+      - {ref: ufispace/lane-led-quad@1, id: led-port-68, at: [340.75, 8.97], for: port-68, group: port-leds, rel-pos: 69}
+      - {ref: ufispace/lane-led-quad@1, id: led-port-69, at: [340.75, 12.21], for: port-69, group: port-leds, rel-pos: 70}
+      - {ref: ufispace/lane-led-quad@1, id: led-port-70, at: [293.44, 73], for: port-70, group: port-leds, rel-pos: 71}
+      - {ref: ufispace/lane-led-quad@1, id: led-port-71, at: [293.44, 76.53], for: port-71, group: port-leds, rel-pos: 72}
+      - {ref: ufispace/lane-led-quad@1, id: led-port-72, at: [317.15, 73], for: port-72, group: port-leds, rel-pos: 73}
+      - {ref: ufispace/lane-led-quad@1, id: led-port-73, at: [317.15, 76.53], for: port-73, group: port-leds, rel-pos: 74}
+      - {ref: ufispace/lane-led-quad@1, id: led-port-74, at: [340.75, 73], for: port-74, group: port-leds, rel-pos: 75}
+      - {ref: ufispace/lane-led-quad@1, id: led-port-75, at: [340.75, 76.53], for: port-75, group: port-leds, rel-pos: 76}
       - {ref: common/led-dot@1, id: led-f0, at: [367.96, 27.72], for: fabric-0, group: port-leds, rel-pos: 77}
       - {ref: common/led-dot@1, id: led-f1, at: [372.16, 27.72], for: fabric-1, group: port-leds, rel-pos: 78}
       - {ref: common/led-dot@1, id: led-f2, at: [391.78, 27.72], for: fabric-2, group: port-leds, rel-pos: 79}

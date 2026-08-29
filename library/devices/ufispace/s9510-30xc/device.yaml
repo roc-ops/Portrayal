@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9510-30xc
-version: 0.1.1
+version: 1.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9510-30XC
@@ -436,16 +436,16 @@ views:
       - {at: [123.94, 14.6], text: GNSS ANT, font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: gnss-ant}
       - {at: [135.96, 13.2], text: 10MHZ, font-size: 1.8, anchor: middle, fill: '#f5f7fa', for: clk-10mhz}
       - {at: [146.90, 13.2], text: 1PPS, font-size: 1.8, anchor: middle, fill: '#f5f7fa', for: clk-1pps}
-      - {at: [117.9, 20.5], text: GNSS, font-size: 1.5, anchor: start, fill: '#22262a', for: led-gnss}
-      - {at: [117.9, 22.97], text: SYNC, font-size: 1.5, anchor: start, fill: '#22262a', for: led-sync}
-      - {at: [117.9, 25.44], text: STAT, font-size: 1.5, anchor: start, fill: '#22262a', for: led-stat}
-      - {at: [117.9, 27.90], text: FAN, font-size: 1.5, anchor: start, fill: '#22262a', for: led-fan}
-      - {at: [117.9, 30.37], text: PWR, font-size: 1.5, anchor: start, fill: '#22262a', for: led-pwr}
-      - {at: [133.6, 23.6], text: BITS, font-size: 1.8, anchor: end, fill: '#f5f7fa', for: bits}
+      - {at: [117.9, 20.36], text: GNSS, font-size: 1.5, anchor: start, fill: '#22262a', for: led-gnss}
+      - {at: [117.9, 22.84], text: SYNC, font-size: 1.5, anchor: start, fill: '#22262a', for: led-sync}
+      - {at: [117.9, 25.3], text: STAT, font-size: 1.5, anchor: start, fill: '#22262a', for: led-stat}
+      - {at: [117.9, 27.77], text: FAN, font-size: 1.5, anchor: start, fill: '#22262a', for: led-fan}
+      - {at: [117.9, 30.23], text: PWR, font-size: 1.5, anchor: start, fill: '#22262a', for: led-pwr}
+      - {at: [133.6, 22.36], text: BITS, font-size: 1.8, anchor: end, fill: '#f5f7fa', for: bits}
       - {at: [133.6, 26.6], text: '▲▼', font-size: 1.8, anchor: end, fill: '#f5f7fa', for: chassis}
       - {at: [133.6, 29.6], text: TOD, font-size: 1.8, anchor: end, fill: '#f5f7fa', for: tod}
       - {at: [117.5, 35.4], text: S9510-30XC, font-size: 2.2, anchor: start, fill: '#f5f7fa', for: chassis}
-      - {at: [127.2, 39.4], text: RESET, font-size: 1.8, anchor: start, fill: '#f5f7fa', for: reset}
+      - {at: [127.2, 39.16], text: RESET, font-size: 1.8, anchor: start, fill: '#f5f7fa', for: reset}
       - {at: [173.1, 4.4], text: '⧉', font-size: 2.4, anchor: middle, for: mgmt}
       - {at: [151.8, 40.8], text: 'SS⚡ ▲▼ IOIOI', font-size: 1.7, anchor: start, fill: '#f5f7fa', for: console}
       - {at: [209.3, 8.4], text: '0', font-size: 2.2, anchor: middle, fill: '#f5f7fa', for: port-0}
@@ -486,7 +486,7 @@ views:
         - {ref: common/sma-jack@1, id: gnss-ant, at: [119.19, 3.76], group: timing, rel-pos: 1, attrs: {role: gnss-in}}
         - {ref: common/smb-jack@1, id: clk-10mhz, at: [132.46, 5.12], group: timing, rel-pos: 2, attrs: {role: 10mhz-io}}
         - {ref: common/smb-jack@1, id: clk-1pps, at: [143.40, 5.14], group: timing, rel-pos: 3, attrs: {role: 1pps-io}}
-        - {ref: common/led-dot@1, id: led-gnss, at: [123.40, 18.90], for: gnss-ant,
+        - {ref: common/led-dot@1, id: led-gnss, at: [122.94, 18.9], for: gnss-ant,
            states: ['off', {name: survey-complete, color: '#22c55e'},
                     {name: learning, color: '#22c55e', behavior: blinking},
                     {name: no-satellite, color: '#eab308'},
@@ -551,10 +551,10 @@ views:
            attrs: {media: rj45-serial, role: console}}
         - {ref: common/qsfp-cage@2, id: port-0, at: [199.60, 8.60], rotate: 180, group: qsfp28, rel-pos: 0}
         - {ref: common/qsfp-cage@2, id: port-1, at: [199.60, 24.00], group: qsfp28, rel-pos: 1}
-        - {ref: common/led-dot@1, id: led-p0-l1, at: [201.04, 21.49], for: port-0, attrs: {port: '0', role: lane}, group: port-leds, rel-pos: 29}
-        - {ref: common/led-dot@1, id: led-p0-l2, at: [203.34, 21.49], for: port-0, attrs: {port: '0', role: lane}, group: port-leds, rel-pos: 30}
-        - {ref: common/led-dot@1, id: led-p0-l3, at: [213.40, 21.49], for: port-0, attrs: {port: '0', role: lane}, group: port-leds, rel-pos: 31}
-        - {ref: common/led-dot@1, id: led-p0-l4, at: [215.70, 21.49], for: port-0, attrs: {port: '0', role: lane}, group: port-leds, rel-pos: 32}
+        - {ref: common/led-dot@1, id: led-port-0-l1, at: [201.04, 21.49], for: port-0, attrs: {port: '0', role: lane}, group: port-leds, rel-pos: 29}
+        - {ref: common/led-dot@1, id: led-port-0-l2, at: [203.34, 21.49], for: port-0, attrs: {port: '0', role: lane}, group: port-leds, rel-pos: 30}
+        - {ref: common/led-dot@1, id: led-port-0-l3, at: [213.40, 21.49], for: port-0, attrs: {port: '0', role: lane}, group: port-leds, rel-pos: 31}
+        - {ref: common/led-dot@1, id: led-port-0-l4, at: [215.70, 21.49], for: port-0, attrs: {port: '0', role: lane}, group: port-leds, rel-pos: 32}
         - {ref: common/led-dot@1, id: led-qsfp-x1, at: [206.30, 21.49], for: port-0, group: port-leds, rel-pos: 33,
            description: 'one of the two ROUND lamps sitting between the four lane
              triangles in the QSFP block''s centre band; nothing in either document
@@ -565,10 +565,10 @@ views:
              triangles in the QSFP block''s centre band; nothing in either document
              says what it shows or which port owns it - the attachment here is a
              guess and is filed in gaps'}
-        - {ref: common/led-dot@1, id: led-p1-l1, at: [201.12, 38.72], for: port-1, attrs: {port: '1', role: lane}, group: port-leds, rel-pos: 35}
-        - {ref: common/led-dot@1, id: led-p1-l2, at: [203.48, 38.72], for: port-1, attrs: {port: '1', role: lane}, group: port-leds, rel-pos: 36}
-        - {ref: common/led-dot@1, id: led-p1-l3, at: [213.39, 38.72], for: port-1, attrs: {port: '1', role: lane}, group: port-leds, rel-pos: 37}
-        - {ref: common/led-dot@1, id: led-p1-l4, at: [215.76, 38.72], for: port-1, attrs: {port: '1', role: lane}, group: port-leds, rel-pos: 38}
+        - {ref: common/led-dot@1, id: led-port-1-l1, at: [201.12, 38.72], for: port-1, attrs: {port: '1', role: lane}, group: port-leds, rel-pos: 35}
+        - {ref: common/led-dot@1, id: led-port-1-l2, at: [203.48, 38.72], for: port-1, attrs: {port: '1', role: lane}, group: port-leds, rel-pos: 36}
+        - {ref: common/led-dot@1, id: led-port-1-l3, at: [213.39, 38.72], for: port-1, attrs: {port: '1', role: lane}, group: port-leds, rel-pos: 37}
+        - {ref: common/led-dot@1, id: led-port-1-l4, at: [215.76, 38.72], for: port-1, attrs: {port: '1', role: lane}, group: port-leds, rel-pos: 38}
         - {ref: common/ground-symbol@1, id: ground-mark, at: [430.40, 18.70], for: right/ground-1, group: grounding, rel-pos: 1,
            description: 'the earth symbol printed at the right-hand end of the front
              panel, marking the grounding lug that HIG Figure 5''s callout inset shows

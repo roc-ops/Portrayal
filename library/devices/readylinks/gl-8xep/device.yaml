@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: gl-8xep
-version: 0.1.0
+version: 1.0.0
 maturity: modelled
 manufacturer: ReadyLinks
 model: GL-8xEP
@@ -224,14 +224,14 @@ views:
       - {id: led-rl, at: [11.7, 21.2], size: [2.0, 2.0], shape: circle}
       - {id: led-sys, at: [11.7, 25.9], size: [2.0, 2.0], shape: circle}
       - {id: led-pwr, at: [11.7, 31.0], size: [2.0, 2.0], shape: circle}
-      - {id: led-p2, at: [91.6, 5.4], size: [2.0, 2.0], shape: circle}
-      - {id: led-p4, at: [105.6, 5.4], size: [2.0, 2.0], shape: circle}
-      - {id: led-p6, at: [119.5, 5.4], size: [2.0, 2.0], shape: circle}
-      - {id: led-p8, at: [133.5, 5.4], size: [2.0, 2.0], shape: circle}
-      - {id: led-p1, at: [91.6, 36.2], size: [2.0, 2.0], shape: circle}
-      - {id: led-p3, at: [105.6, 36.2], size: [2.0, 2.0], shape: circle}
-      - {id: led-p5, at: [119.5, 36.2], size: [2.0, 2.0], shape: circle}
-      - {id: led-p7, at: [133.5, 36.2], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-2, at: [91.6, 5.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-4, at: [105.5, 5.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-6, at: [119.5, 5.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-8, at: [133.5, 5.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-1, at: [91.6, 36.2], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-3, at: [105.5, 36.2], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-5, at: [119.5, 36.2], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-7, at: [133.5, 36.2], size: [2.0, 2.0], shape: circle}
       - {id: led-xg2-a, at: [40.5, 20.7], size: [2.0, 2.0], shape: circle}
       - {id: led-xg2-b, at: [43.3, 20.7], size: [2.0, 2.0], shape: circle}
       - {id: led-xg1-a, at: [46.9, 20.7], size: [2.0, 2.0], shape: circle}
@@ -239,19 +239,19 @@ views:
       - {id: reset, at: [148.1, 28.2], size: [4.0, 4.0], shape: circle}
     silkscreen:
     - {at: [19.0, 11.5], text: ReadyLinks, font-size: 3.8, anchor: middle, for: chassis}
-    - {at: [6.5, 22.2], text: RL, font-size: 2.2, for: led-rl}
-    - {at: [6.5, 26.9], text: SYS, font-size: 2.2, for: led-sys}
-    - {at: [6.5, 32.0], text: PWR, font-size: 2.2, for: led-pwr}
-    - {at: [33.8, 21.8], text: USB2, font-size: 2.2, for: usb2}
-    - {at: [33.8, 32.7], text: USB1, font-size: 2.2, for: usb1}
-    - {at: [45.5, 2.6], text: XG2, font-size: 2.4, for: xg2}
-    - {at: [45.5, 42.8], text: XG1, font-size: 2.4, for: xg1}
-    - {at: [68.5, 2.6], text: 2.5G2, font-size: 2.4, for: eth-2g5-2}
-    - {at: [68.5, 42.8], text: 2.5G1, font-size: 2.4, for: eth-2g5-1}
+    - {at: [6.5, 22.88], text: RL, font-size: 2.2, for: led-rl}
+    - {at: [6.5, 27.58], text: SYS, font-size: 2.2, for: led-sys}
+    - {at: [6.5, 32.68], text: PWR, font-size: 2.2, for: led-pwr}
+    - {at: [33.8, 22.46], text: USB2, font-size: 2.2, for: usb2}
+    - {at: [33.8, 33.36], text: USB1, font-size: 2.2, for: usb1}
+    - {at: [46.15, 2.6], text: XG2, font-size: 2.4, for: xg2}
+    - {at: [46.15, 42.8], text: XG1, font-size: 2.4, for: xg1}
+    - {at: [68.7, 2.6], text: 2.5G2, font-size: 2.4, for: eth-2g5-2}
+    - {at: [68.7, 42.8], text: 2.5G1, font-size: 2.4, for: eth-2g5-1}
     - {id: top-bracket, at: [45.5, 5.2], path: 'M 0 0 L 23 0 L 23 1.9', for: [xg2, eth-2g5-2]}
-    - {id: top-bracket-drop, at: [45.5, 5.2], path: 'M 0 0 L 0 3.9', for: xg2}
+    - {id: top-bracket-drop, at: [46.15, 5.2], path: 'M 0 0 L 0 3.9', for: xg2}
     - {id: bottom-bracket, at: [45.5, 40.0], path: 'M 0 0 L 23 0 L 23 -5.3', for: [xg1, eth-2g5-1]}
-    - {id: bottom-bracket-drop, at: [45.5, 40.0], path: 'M 0 0 L 0 -5.5', for: xg1}
+    - {id: bottom-bracket-drop, at: [46.15, 40], path: 'M 0 0 L 0 -5.5', for: xg1}
     - {at: [92.6, 2.8], text: '2', font-size: 2.6, for: port-2}
     - {at: [106.5, 2.8], text: '4', font-size: 2.6, for: port-4}
     - {at: [120.5, 2.8], text: '6', font-size: 2.6, for: port-6}
@@ -280,14 +280,14 @@ views:
       - {ref: common/led-dot@1, id: led-rl, at: [11.7, 21.2], for: chassis, group: status-leds, rel-pos: 1}
       - {ref: common/led-dot@1, id: led-sys, at: [11.7, 25.9], for: chassis, group: status-leds, rel-pos: 2}
       - {ref: common/led-dot@1, id: led-pwr, at: [11.7, 31.0], for: chassis, group: status-leds, rel-pos: 3}
-      - {ref: common/led-dot@1, id: led-p2, at: [91.6, 5.4], for: port-2, group: port-leds, rel-pos: 2}
-      - {ref: common/led-dot@1, id: led-p4, at: [105.6, 5.4], for: port-4, group: port-leds, rel-pos: 4}
-      - {ref: common/led-dot@1, id: led-p6, at: [119.5, 5.4], for: port-6, group: port-leds, rel-pos: 6}
-      - {ref: common/led-dot@1, id: led-p8, at: [133.5, 5.4], for: port-8, group: port-leds, rel-pos: 8}
-      - {ref: common/led-dot@1, id: led-p1, at: [91.6, 36.2], for: port-1, group: port-leds, rel-pos: 1}
-      - {ref: common/led-dot@1, id: led-p3, at: [105.6, 36.2], for: port-3, group: port-leds, rel-pos: 3}
-      - {ref: common/led-dot@1, id: led-p5, at: [119.5, 36.2], for: port-5, group: port-leds, rel-pos: 5}
-      - {ref: common/led-dot@1, id: led-p7, at: [133.5, 36.2], for: port-7, group: port-leds, rel-pos: 7}
+      - {ref: common/led-dot@1, id: led-port-2, at: [91.6, 5.4], for: port-2, group: port-leds, rel-pos: 2}
+      - {ref: common/led-dot@1, id: led-port-4, at: [105.5, 5.4], for: port-4, group: port-leds, rel-pos: 4}
+      - {ref: common/led-dot@1, id: led-port-6, at: [119.5, 5.4], for: port-6, group: port-leds, rel-pos: 6}
+      - {ref: common/led-dot@1, id: led-port-8, at: [133.5, 5.4], for: port-8, group: port-leds, rel-pos: 8}
+      - {ref: common/led-dot@1, id: led-port-1, at: [91.6, 36.2], for: port-1, group: port-leds, rel-pos: 1}
+      - {ref: common/led-dot@1, id: led-port-3, at: [105.5, 36.2], for: port-3, group: port-leds, rel-pos: 3}
+      - {ref: common/led-dot@1, id: led-port-5, at: [119.5, 36.2], for: port-5, group: port-leds, rel-pos: 5}
+      - {ref: common/led-dot@1, id: led-port-7, at: [133.5, 36.2], for: port-7, group: port-leds, rel-pos: 7}
       - {ref: common/led-dot@1, id: led-xg2-a, at: [40.5, 20.7], for: xg2, group: sfp-leds, rel-pos: 1}
       - {ref: common/led-dot@1, id: led-xg2-b, at: [43.3, 20.7], for: xg2, group: sfp-leds, rel-pos: 2}
       - {ref: common/led-dot@1, id: led-xg1-a, at: [46.9, 20.7], for: xg1, group: sfp-leds, rel-pos: 3}

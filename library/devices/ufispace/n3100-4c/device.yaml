@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: n3100-4c
-version: 0.1.0
+version: 1.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: N3100-4C
@@ -226,10 +226,10 @@ views:
       - {id: port-1, at: [58.43, 6.85], size: [14.5, 10.0], shape: rect}
       - {id: port-2, at: [76.49, 6.85], size: [14.5, 10.0], shape: rect}
       - {id: port-3, at: [94.55, 6.85], size: [14.5, 10.0], shape: rect}
-      - {id: led-p0, at: [42.99, 3.17], size: [2.0, 2.0], shape: circle}
-      - {id: led-p1, at: [60.88, 3.17], size: [2.0, 2.0], shape: circle}
-      - {id: led-p2, at: [78.67, 3.17], size: [2.0, 2.0], shape: circle}
-      - {id: led-p3, at: [96.46, 3.17], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-0, at: [42.99, 3.17], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-1, at: [60.88, 3.17], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-2, at: [78.67, 3.17], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-3, at: [96.46, 3.17], size: [2.0, 2.0], shape: circle}
       - {id: led-sync, at: [23.96, 17.22], size: [2.0, 2.0], shape: circle}
     silkscreen:
     - {at: [18.65, 18.3], text: 1PPS, font-size: 2.4, anchor: middle, for: clk-1pps}
@@ -249,7 +249,7 @@ views:
       - {ref: common/smb-jack@1, id: clk-10mhz, at: [27.87, 7.5], group: timing, rel-pos: 3, attrs: {role: 10mhz-io}}
       - {ref: common/sma-jack@1, id: gnss-ant, at: [114.67, 5.02], group: timing, rel-pos: 1, attrs: {role: gnss-in}}
       - ref: common/led-dot@1
-        id: led-p0
+        id: led-port-0
         at: [42.99, 3.17]
         for: port-0
         group: sfp28-leds
@@ -261,7 +261,7 @@ views:
           traffic), Blinking Green (25G TX/RX activity), Blinking Amber (10G or
           less TX/RX activity)'
       - ref: common/led-dot@1
-        id: led-p1
+        id: led-port-1
         at: [60.88, 3.17]
         for: port-1
         group: sfp28-leds
@@ -273,7 +273,7 @@ views:
           traffic), Blinking Green (25G TX/RX activity), Blinking Amber (10G or
           less TX/RX activity)'
       - ref: common/led-dot@1
-        id: led-p2
+        id: led-port-2
         at: [78.67, 3.17]
         for: port-2
         group: sfp28-leds
@@ -285,7 +285,7 @@ views:
           traffic), Blinking Green (25G TX/RX activity), Blinking Amber (10G or
           less TX/RX activity)'
       - ref: common/led-dot@1
-        id: led-p3
+        id: led-port-3
         at: [96.46, 3.17]
         for: port-3
         group: sfp28-leds

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9510-28dc
-version: 0.12.1
+version: 1.0.0
 manufacturer: UfiSpace
 model: S9510-28DC
 description: UfiSpace S9510-28DC Disaggregated Cell Site Gateway Router - 1RU, 2x QSFP-DD 400G
@@ -322,7 +322,7 @@ views:
         - {id: port-25, at: [399.4, 22.6], size: [14.25, 10.4], shape: rect}
         - {id: port-26, at: [413.65, 7], size: [14.25, 10.4], shape: rect}
         - {id: port-27, at: [413.65, 22.6], size: [14.25, 10.4], shape: rect}
-        - {id: led-gnss, at: [121.4, 16.2], size: [4.6, 2.6], shape: rect}
+        - {id: led-gnss, at: [121.65, 16.2], size: [4.6, 2.6], shape: rect}
         - {id: led-sync, at: [121.4, 19.1], size: [4.6, 2.6], shape: rect}
         - {id: led-stat, at: [121.4, 22], size: [4.6, 2.6], shape: rect}
         - {id: led-fan, at: [121.4, 24.9], size: [4.6, 2.6], shape: rect}
@@ -352,19 +352,19 @@ views:
         - {id: led-port-25, at: [407.675, 18.7], size: [3.6, 3.2], shape: rect}
         - {id: led-port-26, at: [416.025, 18.7], size: [3.6, 3.2], shape: rect}
         - {id: led-port-27, at: [421.925, 18.7], size: [3.6, 3.2], shape: rect}
-        - {id: led-p0-a, at: [182.9, 21.7], size: [2, 2], shape: rect}
-        - {id: led-p0-b, at: [187.4, 21.7], size: [2, 2], shape: rect}
-        - {id: led-p1-a, at: [210, 21.7], size: [2, 2], shape: rect}
-        - {id: led-p1-b, at: [214.5, 21.7], size: [2, 2], shape: rect}
-        - {id: leds-port-2, at: [229.8, 19.7], size: [19.5, 3.4], shape: rect}
-        - {id: leds-port-3, at: [229.8, 39.7], size: [19.5, 3.4], shape: rect}
+        - {id: led-port-0-a, at: [182.9, 21.7], size: [2, 2], shape: rect}
+        - {id: led-port-0-b, at: [187.4, 21.7], size: [2, 2], shape: rect}
+        - {id: led-port-1-a, at: [210, 21.7], size: [2, 2], shape: rect}
+        - {id: led-port-1-b, at: [214.5, 21.7], size: [2, 2], shape: rect}
+        - {id: led-port-2, at: [229.8, 19.7], size: [19.5, 3.4], shape: rect}
+        - {id: led-port-3, at: [229.8, 39.7], size: [19.5, 3.4], shape: rect}
     silkscreen:
       - {text: PSU0, at: [58.9, 8], font-size: 2.6, rotate: 90, for: psu-0}
       - {text: PSU1, at: [58.9, 27], font-size: 2.6, rotate: 90, for: psu-1}
       - {text: S9510-28DC, at: [130.8, 32.6], font-size: 1.9, anchor: end, for: chassis}
-      - {text: BITS, at: [130.8, 19.8], font-size: 1.9, anchor: end, for: bits}
+      - {text: BITS, at: [130.8, 21.44], font-size: 1.9, anchor: end, for: bits}
       - {text: ▲▼, at: [130.8, 29.0], font-size: 1.9, anchor: end}
-      - {text: TOD, at: [130.8, 36.2], font-size: 1.9, anchor: end, for: tod}
+      - {text: TOD, at: [130.8, 36.34], font-size: 1.9, anchor: end, for: tod}
       - {text: SS⚡ ▲▼ IOIOI, at: [160.8, 42.8], font-size: 1.7}
       - {at: [123.95, 12.8], text: GNSS ANT, font-size: 1.9, for: gnss-ant}
       - {at: [137.0, 11.2], text: 10MHZ, font-size: 1.9, for: clk-10mhz}
@@ -374,7 +374,7 @@ views:
       - {at: [116.8, 23.9], text: STAT, font-size: 1.7, for: led-stat}
       - {at: [116.8, 26.8], text: FAN, font-size: 1.7, for: led-fan}
       - {at: [116.8, 29.7], text: PWR, font-size: 1.7, for: led-pwr}
-      - {at: [126.2, 37.8], text: RESET, font-size: 1.8, for: reset}
+      - {at: [126.2, 37.16], text: RESET, font-size: 1.8, for: reset}
       - {at: [187.15, 38.1], text: '0', font-size: 2.6, fill: '#f5f7fa', for: port-0}
       - {at: [214.25, 38.1], text: '1', font-size: 2.6, fill: '#f5f7fa', for: port-1}
       - {at: [239.55, 8.8], text: '2', font-size: 2.6, fill: '#f5f7fa', for: port-2}
@@ -411,7 +411,7 @@ views:
         - {ref: common/sma-jack@1, id: gnss-ant, at: [119.2, 1.4], group: timing, rel-pos: 1, attrs: {role: gnss-in}}
         - {ref: common/smb-jack@1, id: clk-10mhz, at: [133.5, 2.4], group: timing, rel-pos: 2, attrs: {role: 10mhz-io}}
         - {ref: common/smb-jack@1, id: clk-1pps, at: [143.5, 2.4], group: timing, rel-pos: 3, attrs: {role: 1pps-io}}
-        - {ref: common/led-rect@1, id: led-gnss, at: [121.4, 16.2], for: gnss-ant,
+        - {ref: common/led-rect@1, id: led-gnss, at: [121.65, 16.2], for: gnss-ant,
            states: ['off',
                    {name: survey-complete, color: '#22c55e'},
                    {name: learning, color: '#22c55e', behavior: blinking},
@@ -498,12 +498,12 @@ views:
         - {ref: common/led-arrow@1, id: led-port-25, at: [407.675, 18.7], skin: down, for: port-25, attrs: {port: '25'}, group: port-leds, rel-pos: 28}
         - {ref: common/led-arrow@1, id: led-port-26, at: [416.025, 18.7], skin: up, for: port-26, attrs: {port: '26'}, group: port-leds, rel-pos: 29}
         - {ref: common/led-arrow@1, id: led-port-27, at: [421.925, 18.7], skin: down, for: port-27, attrs: {port: '27'}, group: port-leds, rel-pos: 30}
-        - {ref: common/led-dot@1, id: led-p0-a, at: [182.9, 21.7], for: port-0, attrs: {port: '0', role: link}, group: port-leds, rel-pos: 1}
-        - {ref: common/led-dot@1, id: led-p0-b, at: [187.4, 21.7], for: port-0, attrs: {port: '0', role: activity}, group: port-leds, rel-pos: 2}
-        - {ref: common/led-dot@1, id: led-p1-a, at: [210.0, 21.7], for: port-1, attrs: {port: '1', role: link}, group: port-leds, rel-pos: 3}
-        - {ref: common/led-dot@1, id: led-p1-b, at: [214.5, 21.7], for: port-1, attrs: {port: '1', role: activity}, group: port-leds, rel-pos: 4}
-        - {ref: common/qsfp-lane-leds@1, id: leds-port-2, at: [229.8, 19.7], for: port-2, attrs: {port: '2'}, group: port-leds, rel-pos: 5}
-        - {ref: common/qsfp-lane-leds@1, id: leds-port-3, at: [229.8, 39.7], for: port-3, attrs: {port: '3'}, group: port-leds, rel-pos: 6}
+        - {ref: common/led-dot@1, id: led-port-0-a, at: [182.9, 21.7], for: port-0, attrs: {port: '0', role: link}, group: port-leds, rel-pos: 1}
+        - {ref: common/led-dot@1, id: led-port-0-b, at: [187.4, 21.7], for: port-0, attrs: {port: '0', role: activity}, group: port-leds, rel-pos: 2}
+        - {ref: common/led-dot@1, id: led-port-1-a, at: [210.0, 21.7], for: port-1, attrs: {port: '1', role: link}, group: port-leds, rel-pos: 3}
+        - {ref: common/led-dot@1, id: led-port-1-b, at: [214.5, 21.7], for: port-1, attrs: {port: '1', role: activity}, group: port-leds, rel-pos: 4}
+        - {ref: common/qsfp-lane-leds@1, id: led-port-2, at: [229.8, 19.7], for: port-2, attrs: {port: '2'}, group: port-leds, rel-pos: 5}
+        - {ref: common/qsfp-lane-leds@1, id: led-port-3, at: [229.8, 39.7], for: port-3, attrs: {port: '3'}, group: port-leds, rel-pos: 6}
         - {ref: common/qsfp-cage@2, id: port-2, at: [229.8, 8.8], rotate: 180, group: qsfp28, rel-pos: 2}
         - {ref: common/qsfp-cage@2, id: port-3, at: [229.8, 26.2], group: qsfp28, rel-pos: 3}
         - {ref: std/sfp-ganged@1, id: port-4, at: [253.6, 7], group: sfp28, rel-pos: 4}

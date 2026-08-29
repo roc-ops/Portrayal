@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s6301-56st
-version: 0.1.1
+version: 1.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S6301-56ST
@@ -374,15 +374,15 @@ views:
         - {at: [376.0, 37.2], size: [58.2, 5.2], fill: '#2f7fc1', rx: 0.4}
     silkscreen:
       - {at: [3.2, 5.2], text: S6301-56ST, font-size: 2.2, anchor: start, fill: '#f5f7fa', for: chassis}
-      - {at: [3.1, 15.4], text: '⧉', font-size: 2.6, anchor: middle, for: mgmt}
+      - {at: [3.1, 13.96], text: '⧉', font-size: 2.6, anchor: middle, for: mgmt}
       - {at: [11.6, 42.3], text: '▲▼', font-size: 1.6, anchor: start, for: chassis}
       - {at: [16.4, 42.3], text: IOIOI, font-size: 1.4, anchor: start, for: console}
       - {at: [46.3, 9.9], text: RESET, font-size: 1.4, anchor: middle, for: reset}
-      - {at: [55.6, 5.4], text: SYS, font-size: 1.4, anchor: start, for: led-sys}
-      - {at: [62.25, 5.4], text: FAN, font-size: 1.4, anchor: start, for: led-fan}
-      - {at: [69.0, 5.4], text: PSU0, font-size: 1.4, anchor: start, for: led-psu0}
-      - {at: [75.7, 5.4], text: PSU1, font-size: 1.4, anchor: start, for: led-psu1}
-      - {at: [75.7, 7.9], text: ID, font-size: 1.4, anchor: start, for: led-id}
+      - {at: [55.6, 5.16], text: SYS, font-size: 1.4, anchor: start, for: led-sys}
+      - {at: [62.25, 5.16], text: FAN, font-size: 1.4, anchor: start, for: led-fan}
+      - {at: [69, 5.16], text: PSU0, font-size: 1.4, anchor: start, for: led-psu0}
+      - {at: [75.7, 5.16], text: PSU1, font-size: 1.4, anchor: start, for: led-psu1}
+      - {at: [75.7, 7.63], text: ID, font-size: 1.4, anchor: start, for: led-id}
       - {at: [26.92, 40.6], text: '▲0', font-size: 1.6, anchor: start, for: port-0}
       - {at: [39.72, 40.6], text: '1▼', font-size: 1.6, anchor: end, for: port-1}
       - {at: [40.90, 40.6], text: '▲2', font-size: 1.6, anchor: start, for: port-2}
@@ -538,10 +538,10 @@ views:
         - {ref: std/sfp-ganged@1, id: port-53, at: [405.50, 26.11], group: sfp-plus, rel-pos: 53}
         - {ref: std/sfp-ganged@1, id: port-54, at: [419.75, 10.16], rotate: 180, group: sfp-plus, rel-pos: 54}
         - {ref: std/sfp-ganged@1, id: port-55, at: [419.75, 26.11], group: sfp-plus, rel-pos: 55}
-        - {ref: common/sfp-led-pair@1, id: leds-p48-p49, at: [378.10, 21.3], for: [port-48, port-49], group: port-leds, rel-pos: 1}
-        - {ref: common/sfp-led-pair@1, id: leds-p50-p51, at: [392.35, 21.3], for: [port-50, port-51], group: port-leds, rel-pos: 2}
-        - {ref: common/sfp-led-pair@1, id: leds-p52-p53, at: [406.60, 21.3], for: [port-52, port-53], group: port-leds, rel-pos: 3}
-        - {ref: common/sfp-led-pair@1, id: leds-p54-p55, at: [420.85, 21.3], for: [port-54, port-55], group: port-leds, rel-pos: 4}
+        - {ref: common/sfp-led-pair@1, id: led-port-48-port-49, at: [378.10, 21.3], for: [port-48, port-49], group: port-leds, rel-pos: 1}
+        - {ref: common/sfp-led-pair@1, id: led-port-50-port-51, at: [392.35, 21.3], for: [port-50, port-51], group: port-leds, rel-pos: 2}
+        - {ref: common/sfp-led-pair@1, id: led-port-52-port-53, at: [406.60, 21.3], for: [port-52, port-53], group: port-leds, rel-pos: 3}
+        - {ref: common/sfp-led-pair@1, id: led-port-54-port-55, at: [420.85, 21.3], for: [port-54, port-55], group: port-leds, rel-pos: 4}
     regions:
       - {id: mgmt-block, at: [6.0, 7.0], size: {w: 16, h: 32}, label: Management, members: [mgmt, usb, console]}
       - {id: uplinks, at: [375.5, 9.3], size: {w: 59.5, h: 33.5}, label: SFP+ uplinks, members: [port-48, port-49, port-50, port-51, port-52, port-53, port-54, port-55]}
