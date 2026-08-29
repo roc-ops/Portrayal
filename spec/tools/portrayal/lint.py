@@ -3131,7 +3131,7 @@ def _id_corpus(lib_roots):
     # alone as an id on dozens of devices. Firing on `usb-1` would be the rule
     # arguing with the convention it was written to state. Three devices, so
     # that one sloppy file cannot silence a word everywhere.
-    bare, tails = {}, {}
+    bare, tails, whole_ids = {}, {}, {}
     for root in lib_roots:
         for f in (Path(root) / "devices").rglob("*.yaml"):
             d = load_yaml(f) or {}
@@ -3144,6 +3144,7 @@ def _id_corpus(lib_roots):
                         continue
                     if i in words:
                         bare.setdefault(i, set()).add(str(f))
+                    whole_ids[i] = whole_ids.get(i, 0) + 1
                     # every way this id divides into <lead>-<tail>, which is how
                     # the preferred name below is looked up
                     t = i.split("-")
@@ -3159,14 +3160,43 @@ def _id_corpus(lib_roots):
     # connector word is the function name the corpus settled on, and the warning
     # can hand that back instead of leaving an agent to invent one. Two
     # placements minimum: one is a precedent of nothing.
+    # A QUALIFIER MUST NOT SPLIT THE VOTE. Counting only the EXACT tail made
+    # `1pps` and `1pps-in` two separate questions with two different answers:
+    # the library says `clk-1pps` twenty-one times, but the only ids ending
+    # `1pps-in` were two on a single device added last week, so that device won
+    # its tail unopposed and the rule told every Juniper modeller to write
+    # `timing-1pps-in`. A vote in which the newest file always wins its own
+    # spelling is not a vote; it is an echo, and it would have split the corpus
+    # permanently along whichever vendor was modelled first.
+    #
+    # So a lead is credited with what it is called in front of this tail AND in
+    # front of the tail this one qualifies - `1pps-in` is a directional `1pps`.
+    # `clk` then carries 21 against `timing`'s 2 and the suggestion is
+    # `clk-1pps-in`, which is both the library's word and this port's direction.
+    def votes_for(tail):
+        agg, parts = {}, tail.split("-")
+        for k in range(len(parts), 0, -1):
+            for lead, n in tails.get("-".join(parts[:k]), {}).items():
+                if lead not in words:
+                    agg[lead] = agg.get(lead, 0) + n
+        return agg
+
     preferred = {}
-    for tail, leads in tails.items():
-        best = max(((n, lead) for lead, n in leads.items() if lead not in words),
-                   default=None)
+    for tail in tails:
+        best = max(((n, lead) for lead, n in votes_for(tail).items()), default=None)
         if best and best[0] >= 2:
             preferred[tail] = best
-    _ID_VOCAB_CACHE[key] = (words, preferred)
-    return words, preferred
+
+    # AND WHAT COUNTS AS A NAME AT ALL. `sfp-leds` leaves `leds` once its
+    # connector is taken off, and with nothing voting on that tail the rule used
+    # to hand back the bare remainder - so it proposed renaming a lamp pair to
+    # `leds`, which names no function, duplicates the group it is already in,
+    # and is worse than the id it replaces. A remainder is only offerable if the
+    # library uses it as a whole id somewhere, which is what makes it a name
+    # rather than a leftover.
+    whole = {i for i, n in whole_ids.items() if n >= 2}
+    _ID_VOCAB_CACHE[key] = (words, preferred, whole)
+    return words, preferred, whole
 
 
 def _contract(ref, lib_roots):
@@ -3236,9 +3266,11 @@ def lint_device_id_convention(path, data, lib_roots):
     BOTH ARE WARNINGS. The lamp check alone lands on ~1180 existing placements;
     that is a cleanup backlog beside L61's, not a reason to edit the library.
     """
-    words, preferred = _id_corpus(lib_roots)
+    words, preferred, whole = _id_corpus(lib_roots)
     for vname, view in (data.get("views") or {}).items():
-        for q in (((view or {}).get("components") or {}).get("placements") or []):
+        placements = (((view or {}).get("components") or {}).get("placements") or [])
+        taken = {str(x.get("id")) for x in placements if x.get("id")}
+        for q in placements:
             pid, ref = str(q.get("id") or ""), str(q.get("ref") or "")
             toks = pid.split("-")
 
@@ -3262,14 +3294,48 @@ def lint_device_id_convention(path, data, lib_roots):
                         # (`clk-` in front of `10mhz-out`, `port-` in front of a
                         # bare numeral), falling back to the tail alone.
                         vote = preferred.get(rest)
-                        if vote:
-                            instead = f"{vote[1]}-{rest}"
-                            why = (f", which is what {vote[0]} other placement(s) in the "
-                                   f"library call this")
-                        else:
-                            instead, why = rest, ""
                         role = ((q.get("attrs") or {}).get("role")
                                 or (_contract(ref, lib_roots).get("attrs") or {}).get("role"))
+                        instead = f"{vote[1]}-{rest}" if vote else (
+                            rest if rest in whole else None)
+
+                        # A SUGGESTION THAT COLLIDES IS NOT A SUGGESTION. Sixteen
+                        # findings proposed a name the device was already using -
+                        # `sfp-0` -> `port-0` on a switch whose `port-0` is a
+                        # QSFP - and following one merges two placements into one
+                        # id, which the schema forbids. The duplication in the id
+                        # is still real; what the corpus calls this is simply
+                        # taken here, and only a reader of the drawing can say
+                        # what distinguishes the two.
+                        if instead and instead in taken:
+                            warn(path, "L62",
+                                 f"{vname}/{pid}: the id opens with {lead!r}, which is the "
+                                 f"connector {ref} already states, but {instead!r} - what "
+                                 f"the library calls this - IS ALREADY THIS DEVICE'S "
+                                 f"{instead}. Two things here need telling apart and the "
+                                 f"connector is doing it; name this one for what it does "
+                                 f"instead"
+                                 + (f" ({role!r} is the role it states)" if role else ""))
+                            break
+
+                        # AND A LEFTOVER IS NOT A NAME. With nothing voting on
+                        # the tail, the rule used to hand back the bare remainder
+                        # - proposing that `sfp-leds` become `leds`, which names
+                        # no function and duplicates the group it sits in. Say
+                        # the id restates its connector, which is true, and stop
+                        # short of inventing the replacement.
+                        if instead is None:
+                            warn(path, "L62",
+                                 f"{vname}/{pid}: the id opens with {lead!r}, which is the "
+                                 f"connector {ref} already states. An id names the FUNCTION, "
+                                 f"not the connector - and the library has no settled name "
+                                 f"for a {rest!r}, so this one has to be read off the drawing"
+                                 + (f"; the placement states the role {role!r}"
+                                    if role else ""))
+                            break
+
+                        why = (f", which is what {vote[0]} other placement(s) in the "
+                               f"library call this") if vote else ""
                         alt = (f", or {role!r}, which is the role this placement states"
                                if role and role != instead else "")
                         warn(path, "L62",

@@ -114,6 +114,50 @@ def test_a_function_word_that_is_not_a_connector_stays_out_of_the_vocabulary():
     assert run([p("ac-inlet-panel", "casa/c40g-ac-inlet-panel@1")]) == []
 
 
+# --- 1b. the three ways the suggestion itself was wrong ----------------------
+
+def test_a_suggestion_the_device_already_uses_is_not_offered():
+    """Sixteen findings proposed a name the device was already using - `sfp-0`
+    -> `port-0` on a switch whose port-0 is a QSFP. Following one merges two
+    placements into a single id, which the schema forbids, so a rule that
+    prints it is telling an agent to break the file. The duplication is still
+    reported; the REPLACEMENT is what it declines to invent."""
+    hits = run([p("port-0", "std/qsfp-dd@1"), p("sfp-0", "std/sfp-ganged@1")])
+    assert len(hits) == 1, hits
+    assert "IS ALREADY THIS DEVICE'S port-0" in hits[0]
+    assert "use 'port-0'" not in hits[0], "it must not propose the collision"
+
+
+def test_a_leftover_is_not_offered_as_a_name():
+    """`sfp-leds` leaves `leds` once the connector comes off, and nothing in the
+    library votes on that tail. The rule used to hand back the bare remainder,
+    proposing a lamp pair be renamed `leds` - which names no function and
+    duplicates the group it sits in."""
+    hits = run([p("sfp-leds", "common/sfp-led-pair@1")])
+    assert len(hits) == 1, hits
+    assert "no settled name" in hits[0]
+    assert "use 'leds'" not in hits[0]
+
+
+def test_a_qualifier_does_not_split_the_vote():
+    """THE ONE THAT WOULD HAVE SPLIT THE CORPUS PERMANENTLY.
+
+    The library calls a one-pulse-per-second jack `clk-1pps` eighteen times. It
+    also had two `timing-1pps-in` on a single device added last week - and
+    because the vote was taken on the EXACT tail, `1pps-in` was a question only
+    that device had ever answered, so it won unopposed and the rule told every
+    Juniper modeller to write `timing-1pps-in`. The newest file always winning
+    its own spelling is an echo, not a vote.
+
+    A directional `1pps-in` is a qualified `1pps`, so the lead is credited with
+    both.
+    """
+    hits = run([p("smb-1pps-in", "std/smb@1")])
+    assert len(hits) == 1, hits
+    assert "'clk-1pps-in'" in hits[0], hits[0]
+    assert "timing" not in hits[0], hits[0]
+
+
 # --- 2. the port lamp spelled some other way --------------------------------
 
 def test_the_three_minority_spellings_fire():
