@@ -142,11 +142,17 @@ def bay_size(bay):
 MAX_BAY_DEPTH = 3
 
 
-def state_style(st):
-    """(color, alt-color, mode) for one state, or None if it needs no CSS.
+def state_style(st, vocabulary=()):
+    """(color, alt-color, mode, lit) for one state, or None if it needs no CSS.
 
     A bare token needs none: it names a state with no declared presentation, and
     whatever the base stylesheet says about `state-<name>` still applies.
+
+    `lit` is the tuple of segment names a SHAPE-CHANGING state turns on. A lamp
+    state says what colour one element is; a seven-segment digit showing `4` is
+    not a colour at all, it is four of seven bars. `vocabulary` is every segment
+    the component draws, so the rule can turn the rest off explicitly rather than
+    relying on whatever the previous state left behind.
     """
     if not isinstance(st, dict):
         return None
@@ -154,13 +160,23 @@ def state_style(st):
     mode = beh if isinstance(beh, str) else (beh or {}).get("mode", "solid")
     alt = None if isinstance(beh, str) else (beh or {}).get("color")
     color = st.get("color")
+    lit = tuple(st.get("lights") or ())
+    if lit:
+        return (color, alt, mode, (lit, tuple(sorted(vocabulary))))
     if not color and mode == "solid":
         return None
-    return (color, alt, mode)
+    return (color, alt, mode, None)
 
 
-def state_rule(sel_color, sel_anim, color, alt, mode):
-    """The CSS for one state at one scope: what colour, and how it is lit."""
+def state_rule(sel_color, sel_anim, color, alt, mode, segments=None):
+    """The CSS for one state at one scope: what colour, how it is lit, and - for a
+    segment display - which of its segments are on.
+
+    THE OFF ONES ARE WRITTEN OUT TOO. A rule that only turns segments on leaves
+    whatever the last state lit still lit, so `8` followed by `1` reads as `8`.
+    Naming every segment in the component's vocabulary makes each state a
+    complete statement of the face rather than a difference from an unknown one.
+    """
     out = ""
     decls = [d for d in (f"--led-color: {color};" if color else "",
                          f"--led-color-alt: {alt};" if alt else "") if d]
@@ -169,6 +185,15 @@ def state_rule(sel_color, sel_anim, color, alt, mode):
     if mode in BLINK_KEYFRAMES:
         out += (f"\n    {sel_anim} {{ animation: {BLINK_KEYFRAMES[mode]} "
                 f"1s linear infinite; }}")
+    if segments:
+        lit, vocabulary = segments
+        on = " ,".join(f"{sel_color} [data-seg='{s}']" for s in lit)
+        off = " ,".join(f"{sel_color} [data-seg='{s}']"
+                        for s in vocabulary if s not in lit)
+        if on:
+            out += f"\n    {on} {{ opacity: 1; }}"
+        if off:
+            out += f"\n    {off} {{ opacity: 0; }}"
     return out
 
 
@@ -259,9 +284,16 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     extra_attrs = (attr_overrides or {}).get(comp_name)
     if palette is not None:
         comp = ref.split("@")[0]
+        # every segment name this component's artwork draws, so a shape-changing
+        # state can turn the unlit ones off by name rather than by omission
+        vocabulary = set()
         for spec in (contract.get("elements") or {}).values():
             for st in spec.get("states") or []:
-                style = state_style(st)
+                if isinstance(st, dict):
+                    vocabulary.update(st.get("lights") or ())
+        for spec in (contract.get("elements") or {}).values():
+            for st in spec.get("states") or []:
+                style = state_style(st, vocabulary)
                 if style:
                     palette[(comp, st["name"])] = style
     skin_file = skins / f"{skin_name}.svg"
@@ -1176,7 +1208,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
 
         extra += "".join(
             state_rule(*sels(ids, name), color, alt, mode)
-            for (name, color, alt, mode), ids in sorted(
+            for (name, color, alt, mode, _seg), ids in sorted(
                 inst_palette.items(), key=lambda kv: tuple(str(x) for x in kv[0])))
         style.text = STATE_CSS + extra + "\n"
 

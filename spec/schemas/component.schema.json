@@ -522,6 +522,14 @@
             "color": {
               "type": "string",
               "description": "LED color for this state, emitted as scoped CSS"
+            },
+            "lights": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/segment"
+              },
+              "minItems": 1,
+              "description": "the sub-elements this state lights, by their `data-seg` name. A lamp state changes what COLOUR one element is; a segment display changes WHICH elements are lit, and a seven-segment digit showing '4' is not a colour at all. Naming the lit segments lets the same state machinery drive both: the renderer emits one rule per state setting every named segment opaque and every other one transparent. The skin draws the default character, so a reader that applies no CSS still sees a sensible face rather than every segment lit at once."
             }
           }
         }

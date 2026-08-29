@@ -1,21 +1,36 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="17.2mm" height="9.5mm" viewBox="0 0 17.2 9.5">
+  <!-- A SEVEN-SEGMENT DIGIT DOES NOT CHANGE COLOUR, IT CHANGES SHAPE, so the ink
+       is a plain fill and the states switch `opacity` per segment rather than a
+       CSS colour variable. That also renders correctly in an editor: Inkscape
+       does not resolve a var() reference inside a presentation attribute and
+       falls back to black, which is why these digits read as unlit there while a
+       browser drew them blue.
+
+       Segments carry the standard letters - a top, b top-right, c bottom-right,
+       d bottom, e bottom-left, f top-left, g middle - and the contract's states
+       name the ones each character lights.
+
+       The face is drawn as `0`, not as the all-segments `88` of the vendor's lamp
+       test, so a reader applying no CSS at all sees a plausible readout. `g` is
+       the only segment off in a `0`, and it is held off by a presentation
+       attribute that any CSS rule outranks. -->
   <rect id="bezel" x="0" y="0" width="17.2" height="9.5" rx="0.4" fill="#0b0d12"/>
-  <g id="digit-1" fill="var(--display-color, #6ea8e8)">
-    <rect x="2.6" y="1.5" width="4.0" height="0.85" rx="0.2"/>
-    <rect x="1.75" y="2.25" width="0.85" height="2.55" rx="0.2"/>
-    <rect x="6.6" y="2.25" width="0.85" height="2.55" rx="0.2"/>
-    <rect x="2.6" y="4.55" width="4.0" height="0.85" rx="0.2"/>
-    <rect x="1.75" y="5.4" width="0.85" height="2.55" rx="0.2"/>
-    <rect x="6.6" y="5.4" width="0.85" height="2.55" rx="0.2"/>
-    <rect x="2.6" y="7.55" width="4.0" height="0.85" rx="0.2"/>
+  <g id="digit-1" fill="#6ea8e8">
+    <rect data-seg="a" x="2.6"  y="1.5"  width="4.0"  height="0.85" rx="0.2"/>
+    <rect data-seg="f" x="1.75" y="2.25" width="0.85" height="2.55" rx="0.2"/>
+    <rect data-seg="b" x="6.6"  y="2.25" width="0.85" height="2.55" rx="0.2"/>
+    <rect data-seg="g" x="2.6"  y="4.55" width="4.0"  height="0.85" rx="0.2" opacity="0"/>
+    <rect data-seg="e" x="1.75" y="5.4"  width="0.85" height="2.55" rx="0.2"/>
+    <rect data-seg="c" x="6.6"  y="5.4"  width="0.85" height="2.55" rx="0.2"/>
+    <rect data-seg="d" x="2.6"  y="7.55" width="4.0"  height="0.85" rx="0.2"/>
   </g>
-  <g id="digit-2" fill="var(--display-color, #6ea8e8)">
-    <rect x="10.6" y="1.5" width="4.0" height="0.85" rx="0.2"/>
-    <rect x="9.75" y="2.25" width="0.85" height="2.55" rx="0.2"/>
-    <rect x="14.6" y="2.25" width="0.85" height="2.55" rx="0.2"/>
-    <rect x="10.6" y="4.55" width="4.0" height="0.85" rx="0.2"/>
-    <rect x="9.75" y="5.4" width="0.85" height="2.55" rx="0.2"/>
-    <rect x="14.6" y="5.4" width="0.85" height="2.55" rx="0.2"/>
-    <rect x="10.6" y="7.55" width="4.0" height="0.85" rx="0.2"/>
+  <g id="digit-2" fill="#6ea8e8">
+    <rect data-seg="a" x="10.6" y="1.5"  width="4.0"  height="0.85" rx="0.2"/>
+    <rect data-seg="f" x="9.75" y="2.25" width="0.85" height="2.55" rx="0.2"/>
+    <rect data-seg="b" x="14.6" y="2.25" width="0.85" height="2.55" rx="0.2"/>
+    <rect data-seg="g" x="10.6" y="4.55" width="4.0"  height="0.85" rx="0.2" opacity="0"/>
+    <rect data-seg="e" x="9.75" y="5.4"  width="0.85" height="2.55" rx="0.2"/>
+    <rect data-seg="c" x="14.6" y="5.4"  width="0.85" height="2.55" rx="0.2"/>
+    <rect data-seg="d" x="10.6" y="7.55" width="4.0"  height="0.85" rx="0.2"/>
   </g>
 </svg>
