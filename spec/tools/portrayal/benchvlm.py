@@ -35,16 +35,25 @@ import re
 
 from PIL import Image
 
+# THE PROMPT IS IN THE MODEL'S OWN DIALECT, AND THAT IS NOT A DETAIL.
+#
+# The first version here was a careful specification - what a cage is, what to
+# ignore, and a JSON schema to answer in. On a tile showing twelve RJ45 jacks
+# it returned `{"ports": []}`, every time, at every size. The same tile, asked
+# in the phrasing Qwen's grounding was trained on - "outline the position of
+# ... and output all the coordinates in JSON format" - returned boxes.
+#
+# So a zero from a vision model is three different findings until you check
+# which: it did not answer, it answered in a coordinate system you did not
+# expect, or it genuinely cannot see. Only the third is about the model.
+#
+# "each individual ... one box per port" is here because without it the model
+# returns ONE box around a whole row of twenty-four cages. It has some idea
+# that ports are there; itemising them is the part it does not do.
 PROMPT = (
-    "This is a close-up of part of a network switch front panel.\n"
-    "Find every PORT: the transceiver cages (SFP, QSFP, QSFP-DD) and the RJ45 "
-    "sockets. A cage is a rectangular opening in the metal, usually dark, and "
-    "they sit in evenly spaced rows.\n"
-    "Do NOT report the small round or rectangular indicator lamps, the printed "
-    "numbers, the vent holes, or the panel itself.\n"
-    'Reply with JSON only: {"ports": [{"bbox": [x1, y1, x2, y2]}, ...]} '
-    "using pixel coordinates in this image. If there are none, reply "
-    '{"ports": []}.'
+    "Outline the position of each individual ethernet port, transceiver cage "
+    "and socket, one box per port, and output all the coordinates in JSON "
+    "format."
 )
 
 
@@ -138,7 +147,13 @@ def main(argv=None):
     ap.add_argument("--intake", required=True)
     ap.add_argument("--out", required=True)
     ap.add_argument("--model", default="mlx-community/Qwen2.5-VL-7B-Instruct-4bit")
-    ap.add_argument("--scale", type=float, default=4.0,
+    # 2x, MEASURED, NOT ASSUMED. Enlarging looked free and is not: at 4x the
+    # model called a switch faceplate "a digital clock or timer interface",
+    # where at 2x it read the port numbers off the same tile. A sweep of
+    # aspect x scale x phrasing on one device put 2.0/2 ahead of the other
+    # eleven combinations, so these defaults are the model's best showing and
+    # not the first thing that ran.
+    ap.add_argument("--scale", type=float, default=2.0,
                     help="how much to enlarge each tile before sending it")
     ap.add_argument("--aspect", type=float, default=2.0, help="tile width / height")
     ap.add_argument("--only", help="one device, by substring")

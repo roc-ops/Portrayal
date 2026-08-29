@@ -22,6 +22,7 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "spec" / "tools" / "portrayal"))
 
+import benchdata  # noqa: E402
 import benchgt  # noqa: E402
 import benchscore  # noqa: E402
 import benchvlm  # noqa: E402
@@ -195,6 +196,40 @@ def test_two_neighbouring_cages_are_not_merged():
     a = [10, 10, 20, 20, 1.0]
     b = [30, 10, 20, 20, 1.0]
     assert len(benchvlm.merge([a, b])) == 2
+
+
+# ---- the training tiles -----------------------------------------------------
+
+def test_a_cage_wholly_inside_a_tile_keeps_its_whole_box():
+    assert benchdata.clip([100, 10, 20, 20], 90, 0, 200, 145) == (10, 10, 20, 20)
+
+
+def test_three_quarters_of_a_cage_is_still_a_cage():
+    """The threshold has to admit the common case - a cage clipped by a seam is
+    the reason the tiles overlap in the first place."""
+    assert benchdata.clip([85, 10, 20, 20], 90, 0, 200, 145) == (0, 10, 15, 20)
+
+
+def test_a_sliver_on_a_seam_is_not_labelled_as_a_cage():
+    """Half a cage teaches a detector that half a cage is a cage, and on a face
+    of forty-eight identical cages it will apply that everywhere."""
+    assert benchdata.clip([80, 10, 20, 20], 90, 0, 200, 145) is None
+
+
+def test_a_cage_the_tile_does_not_touch_is_not_in_it():
+    assert benchdata.clip([500, 10, 20, 20], 0, 0, 200, 145) is None
+
+
+def test_the_label_is_in_tile_coordinates_not_panel_ones():
+    """The tile is what the detector sees, so an unshifted label puts every box
+    on the wrong side of every tile after the first."""
+    x, y, _, _ = benchdata.clip([210, 30, 20, 20], 200, 10, 200, 145)
+    assert (x, y) == (10, 20)
+
+
+def test_the_dataset_tiles_the_way_the_harness_does():
+    """Train and test must see the same shape, or the score is of another task."""
+    assert benchdata.tiles(1455, 145) == benchvlm.tiles(1455, 145)
 
 
 # ---- a library of one part, so the tests state their own inputs -------------
