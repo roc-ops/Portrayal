@@ -71,6 +71,42 @@ def prf(hits, npred, ntrue):
     return p, r, f
 
 
+def score_all(truth, preds, thresh=0.5, term="Port", baseline=False):
+    """Every device with a prediction, scored. Returns (rows, totals, unrun).
+
+    A DEVICE THE DETECTOR NEVER SAW IS NOT A DEVICE IT FAILED. An entry holding
+    an empty list is a real zero and is scored as one; a device ABSENT from the
+    prediction file was not run - held out, skipped, or still going - and
+    folding those into the average buries the score under devices nobody gave
+    it. Scoring eight held-out faceplates against all thirty-one turned a mean
+    per-device F1 of 0.871 into a micro of 0.357, and the second number would
+    have gone into a commit message as the result.
+    """
+    rows, tot, unrun = [], [0, 0, 0], []
+    for dev, v in sorted(truth.items()):
+        boxes = [b["px"] for b in v["boxes"]
+                 if not term or b.get("term") == term]
+        if not boxes:
+            continue
+        got = preds.get(dev)
+        if got is None and baseline:
+            got = [[v["origin"][0], v["origin"][1], v["box"][0], v["box"][1], 1.0]]
+        if got is None:
+            unrun.append(dev)
+            continue
+        hits, _ = match(got, boxes, thresh)
+        p, r, f = prf(hits, len(got), len(boxes))
+        tot[0] += hits
+        tot[1] += len(got)
+        tot[2] += len(boxes)
+        rows.append({"device": dev, "px_per_mm": v["px_per_mm"],
+                     "gate1_error": v["gate1_error"], "truth": len(boxes),
+                     "pred": len(got), "hits": hits,
+                     "precision": round(p, 3), "recall": round(r, 3),
+                     "f1": round(f, 3), "figure": v["figure"]})
+    return rows, tot, unrun
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--truth", required=True)
@@ -84,28 +120,7 @@ def main(argv=None):
 
     truth = json.loads(pathlib.Path(args.truth).read_text())
     preds = json.loads(pathlib.Path(args.pred).read_text()) if args.pred else {}
-
-    rows, tot = [], [0, 0, 0]
-    for dev, v in sorted(truth.items()):
-        boxes = [b["px"] for b in v["boxes"]
-                 if not args.term or b.get("term") == args.term]
-        if not boxes:
-            continue
-        got = preds.get(dev)
-        if got is None and args.baseline:
-            got = [[v["origin"][0], v["origin"][1], v["box"][0], v["box"][1], 1.0]]
-        got = got or []
-        hits, _ = match(got, boxes, args.iou)
-        p, r, f = prf(hits, len(got), len(boxes))
-        tot[0] += hits
-        tot[1] += len(got)
-        tot[2] += len(boxes)
-        rows.append({"device": dev, "px_per_mm": v["px_per_mm"],
-                     "gate1_error": v["gate1_error"], "truth": len(boxes),
-                     "pred": len(got), "hits": hits,
-                     "precision": round(p, 3), "recall": round(r, 3),
-                     "f1": round(f, 3),
-                     "figure": v["figure"]})
+    rows, tot, unrun = score_all(truth, preds, args.iou, args.term, args.baseline)
 
     print(f"  IoU >= {args.iou}   term {args.term or '(all)'}\n")
     print(f"  {'px/mm':>6} {'truth':>6} {'pred':>6} {'hit':>5} "
@@ -114,8 +129,14 @@ def main(argv=None):
         print(f"  {x['px_per_mm']:6.2f} {x['truth']:6d} {x['pred']:6d} {x['hits']:5d} "
               f"{x['precision']:6.3f} {x['recall']:6.3f} {x['f1']:6.3f}  {x['device']}")
     p, r, f = prf(*tot)
-    print(f"\n  {len(rows)} devices, {tot[2]} boxes, {tot[1]} predictions")
+    print(f"\n  {len(rows)} devices scored, {tot[2]} boxes, {tot[1]} predictions")
+    if unrun:
+        print(f"  {len(unrun)} device(s) in the truth had no prediction entry and "
+              f"are not in this average")
     print(f"  micro  P {p:.3f}  R {r:.3f}  F1 {f:.3f}")
+    if rows:
+        mean = sum(x["f1"] for x in rows) / len(rows)
+        print(f"  mean per device F1 {mean:.3f}")
     if rows:
         lo = min(rows, key=lambda x: x["px_per_mm"])
         hi = max(rows, key=lambda x: x["px_per_mm"])

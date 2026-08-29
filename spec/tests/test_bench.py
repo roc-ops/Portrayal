@@ -124,6 +124,46 @@ def test_finding_nothing_scores_zero_rather_than_dividing_by_it():
     assert benchscore.prf(0, 10, 0) == (0.0, 0.0, 0.0)
 
 
+def test_a_device_that_was_not_run_is_not_a_device_that_failed():
+    """The distinction that nearly went into a commit message as the result:
+    eight held-out faceplates scored against all thirty-one read as F1 0.357
+    where the detector had actually managed 0.892 on what it was given."""
+    truth = {
+        "a/one": _truth([[0, 0, 10, 10]]),
+        "b/two": _truth([[0, 0, 10, 10]]),
+    }
+    rows, tot, unrun = benchscore.score_all(truth, {"a/one": [[0, 0, 10, 10, 1.0]]})
+    assert [r["device"] for r in rows] == ["a/one"]
+    assert unrun == ["b/two"]
+    assert benchscore.prf(*tot)[2] == 1.0
+
+
+def test_a_device_run_and_found_nothing_is_scored_as_a_zero():
+    """An empty list is an answer. Treating it like an absent device would let a
+    detector improve its average by declining to answer."""
+    truth = {"a/one": _truth([[0, 0, 10, 10]])}
+    rows, _, unrun = benchscore.score_all(truth, {"a/one": []})
+    assert unrun == []
+    assert rows[0]["f1"] == 0.0
+
+
+def test_only_the_named_class_is_scored():
+    """Half the truth is lamps four pixels across; scoring them would report the
+    figure's resolution as the model's eyesight."""
+    truth = {"a/one": {"px_per_mm": 3.0, "gate1_error": 0.0, "origin": [0, 0],
+                       "box": [100, 50], "figure": "f.png", "boxes": [
+                           {"px": [0, 0, 10, 10], "term": "Port"},
+                           {"px": [20, 0, 4, 4], "term": "LED"}]}}
+    rows, _, _ = benchscore.score_all(truth, {"a/one": [[0, 0, 10, 10, 1.0]]})
+    assert rows[0]["truth"] == 1 and rows[0]["f1"] == 1.0
+
+
+def _truth(boxes):
+    return {"px_per_mm": 3.0, "gate1_error": 0.0, "origin": [0, 0],
+            "box": [100, 50], "figure": "f.png",
+            "boxes": [{"px": b, "term": "Port"} for b in boxes]}
+
+
 # ---- the tiling -------------------------------------------------------------
 
 def test_a_panel_is_covered_end_to_end():
