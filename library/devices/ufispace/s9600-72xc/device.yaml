@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-72xc
-version: 4.0.0
+version: 4.1.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-72XC
@@ -377,23 +377,29 @@ gaps:
   wanted: >-
     a per-NOS LED table from UfiSpace or a NOS vendor, or photographs of a live unit
     with ports in known states
-- what: sfp28-port-leds
+- what: sfp28-port-led-semantics
   scope: [sfp28, port-leds]
-  reason: needs-photo
+  reason: vendor-silent
   note: >-
-    THE 64 SFP28 PORTS ARE MODELLED WITH NO LAMPS AND THE HARDWARE ALMOST CERTAINLY
-    HAS THEM. HIG Figure 8 draws a pale strip under each upper-row module carrying two
-    small marks that read as a lamp pair at 2x on the docling extract, and the same
-    strip appears in the lower shell. At the source's own resolution - 9.585 px/mm,
-    which is all the 600 dpi page render can give - those marks resolve to about two
-    pixels and a green cast that is indistinguishable from the JPEG ringing around the
-    module faces beside them. Sampling the green channel across the whole mid-band of
-    both shells returns a smooth gradient, not 64 discrete pairs. Rather than invent
-    128 lamp positions on a 14.25 mm pitch that no reading supports, none are drawn.
-    The three product renders are 520 px wide and settle nothing.
+    THE 64 SFP28 LAMPS ARE THE TRIANGLES IN THE YELLOW BAND, and this gap used to say
+    they did not exist. It said the hardware almost certainly had them, that HIG Figure
+    8's pale strip UNDER each module resolved to about two pixels at 9.585 px/mm, and
+    that rather than invent 128 positions no reading supported, none were drawn. The
+    search was in the wrong place: the lamps are above the modules, not below them, and
+    the drawing already carried them - as 32 silkscreen marks reading `▲▼`, one per port
+    pair, printed on the band. An up triangle for the top-row port and a down triangle
+    for the bottom, which is the idiom the sibling S8901-54XC models correctly with
+    common/led-arrow.
+    Measured off the same figure, from the dark ink inside the yellow band rather than
+    from a green cast beside it: each triangle is 2.35 x 1.47 mm, the two of a pair sit
+    2.79 mm apart, and the pairs repeat on a 14.37 mm pitch which is the port pitch.
+    What remains unknown is only what they MEAN. HIG section 10 tables SYNC, SYS, FAN,
+    PS0 and PS1 in full and says nothing about any port lamp, so all 64 keep
+    common/led-arrow-sm's own off/on default rather than a link/activity or speed
+    vocabulary borrowed from a sibling guide.
   wanted: >-
-    a square-on photograph of the faceplate at 1000 px or better, or a vendor
-    mechanical drawing of the SFP28 bezel
+    a UfiSpace statement of what the S9600-72XC's port triangles indicate - link,
+    activity, speed, or the pair together
 - what: seg7-semantics
   scope: [ufispace/seg7-status-2@1, display]
   reason: vendor-silent
@@ -530,7 +536,8 @@ groups:
     index-origin: 1
     description: >-
       the four-lamp light-pipe strips above and below the QSFP28 block, one row per
-      port. The 64 SFP28 ports carry no modelled lamps - see the sfp28-port-leds gap
+      port, and the 64 arrow lamps in the yellow bands - an up triangle for each
+      top-row SFP28 and a down triangle for the bottom-row one it is paired with
   display:
     term: Display
     role: indicator
@@ -618,100 +625,68 @@ views:
       - {at: [17.3, 73.78], text: PS0, font-size: 1.3, anchor: middle, fill: '#17191c', for: led-ps0}
       - {at: [17.3, 75.74], text: PS1, font-size: 1.3, anchor: middle, fill: '#17191c', for: led-ps1}
       - {at: [48.44, 13.90], text: '0', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-0}
-      - {at: [52.84, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-0, port-1]}
       - {at: [57.24, 13.90], text: '1', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-1}
       - {at: [48.44, 73.90], text: '32', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-32}
-      - {at: [52.84, 73.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-32, port-33]}
       - {at: [57.24, 73.90], text: '33', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-33}
       - {at: [62.69, 13.90], text: '2', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-2}
-      - {at: [67.09, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-2, port-3]}
       - {at: [71.49, 13.90], text: '3', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-3}
       - {at: [62.69, 73.90], text: '34', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-34}
-      - {at: [67.09, 73.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-34, port-35]}
       - {at: [71.49, 73.90], text: '35', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-35}
       - {at: [76.94, 13.90], text: '4', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-4}
-      - {at: [81.34, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-4, port-5]}
       - {at: [85.74, 13.90], text: '5', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-5}
       - {at: [76.94, 73.90], text: '36', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-36}
-      - {at: [81.34, 73.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-36, port-37]}
       - {at: [85.74, 73.90], text: '37', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-37}
       - {at: [91.19, 13.90], text: '6', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-6}
-      - {at: [95.59, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-6, port-7]}
       - {at: [99.99, 13.90], text: '7', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-7}
       - {at: [91.19, 73.90], text: '38', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-38}
-      - {at: [95.59, 73.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-38, port-39]}
       - {at: [99.99, 73.90], text: '39', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-39}
       - {at: [109.69, 13.90], text: '8', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-8}
-      - {at: [114.09, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-8, port-9]}
       - {at: [118.49, 13.90], text: '9', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-9}
       - {at: [109.69, 73.90], text: '40', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-40}
-      - {at: [114.09, 73.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-40, port-41]}
       - {at: [118.49, 73.90], text: '41', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-41}
       - {at: [123.94, 13.90], text: '10', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-10}
-      - {at: [128.34, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-10, port-11]}
       - {at: [132.74, 13.90], text: '11', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-11}
       - {at: [123.94, 73.90], text: '42', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-42}
-      - {at: [128.34, 73.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-42, port-43]}
       - {at: [132.74, 73.90], text: '43', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-43}
       - {at: [138.19, 13.90], text: '12', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-12}
-      - {at: [142.59, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-12, port-13]}
       - {at: [146.99, 13.90], text: '13', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-13}
       - {at: [138.19, 73.90], text: '44', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-44}
-      - {at: [142.59, 73.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-44, port-45]}
       - {at: [146.99, 73.90], text: '45', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-45}
       - {at: [152.44, 13.90], text: '14', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-14}
-      - {at: [156.84, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-14, port-15]}
       - {at: [161.24, 13.90], text: '15', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-15}
       - {at: [152.44, 73.90], text: '46', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-46}
-      - {at: [156.84, 73.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-46, port-47]}
       - {at: [161.24, 73.90], text: '47', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-47}
       - {at: [171.29, 13.90], text: '16', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-16}
-      - {at: [175.69, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-16, port-17]}
       - {at: [180.09, 13.90], text: '17', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-17}
       - {at: [171.29, 73.90], text: '48', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-48}
-      - {at: [175.69, 73.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-48, port-49]}
       - {at: [180.09, 73.90], text: '49', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-49}
       - {at: [185.54, 13.90], text: '18', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-18}
-      - {at: [189.94, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-18, port-19]}
       - {at: [194.34, 13.90], text: '19', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-19}
       - {at: [185.54, 73.90], text: '50', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-50}
-      - {at: [189.94, 73.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-50, port-51]}
       - {at: [194.34, 73.90], text: '51', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-51}
       - {at: [199.79, 13.90], text: '20', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-20}
-      - {at: [204.19, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-20, port-21]}
       - {at: [208.59, 13.90], text: '21', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-21}
       - {at: [199.79, 73.90], text: '52', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-52}
-      - {at: [204.19, 73.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-52, port-53]}
       - {at: [208.59, 73.90], text: '53', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-53}
       - {at: [214.04, 13.90], text: '22', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-22}
-      - {at: [218.44, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-22, port-23]}
       - {at: [222.84, 13.90], text: '23', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-23}
       - {at: [214.04, 73.90], text: '54', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-54}
-      - {at: [218.44, 73.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-54, port-55]}
       - {at: [222.84, 73.90], text: '55', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-55}
       - {at: [233.05, 13.90], text: '24', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-24}
-      - {at: [237.45, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-24, port-25]}
       - {at: [241.85, 13.90], text: '25', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-25}
       - {at: [233.05, 73.90], text: '56', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-56}
-      - {at: [237.45, 73.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-56, port-57]}
       - {at: [241.85, 73.90], text: '57', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-57}
       - {at: [247.30, 13.90], text: '26', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-26}
-      - {at: [251.70, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-26, port-27]}
       - {at: [256.10, 13.90], text: '27', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-27}
       - {at: [247.30, 73.90], text: '58', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-58}
-      - {at: [251.70, 73.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-58, port-59]}
       - {at: [256.10, 73.90], text: '59', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-59}
       - {at: [261.55, 13.90], text: '28', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-28}
-      - {at: [265.95, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-28, port-29]}
       - {at: [270.35, 13.90], text: '29', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-29}
       - {at: [261.55, 73.90], text: '60', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-60}
-      - {at: [265.95, 73.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-60, port-61]}
       - {at: [270.35, 73.90], text: '61', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-61}
       - {at: [275.80, 13.90], text: '30', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-30}
-      - {at: [280.20, 13.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-30, port-31]}
       - {at: [284.60, 13.90], text: '31', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-31}
       - {at: [275.80, 73.90], text: '62', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-62}
-      - {at: [280.20, 73.90], text: '▲▼', font-size: 2.0, anchor: middle, fill: '#1a1a12', for: [port-62, port-63]}
       - {at: [284.60, 73.90], text: '63', font-size: 1.7, anchor: middle, fill: '#1a1a12', for: port-63}
     components:
       placements:
@@ -771,6 +746,70 @@ views:
            attrs: {media: rj45-serial, role: console}}
         - {ref: std/micro-usb@1, id: console-usb, at: [9.25, 80.43], group: mgmt, rel-pos: 4,
            attrs: {media: micro-usb-b, role: console}}
+        - {ref: common/led-arrow-sm@1, id: led-port-0, at: [50.32, 12.835], skin: up, for: port-0, attrs: {port: '0'}, group: port-leds, rel-pos: 101}
+        - {ref: common/led-arrow-sm@1, id: led-port-1, at: [53.11, 12.835], skin: down, for: port-1, attrs: {port: '1'}, group: port-leds, rel-pos: 102}
+        - {ref: common/led-arrow-sm@1, id: led-port-32, at: [50.32, 72.5], skin: up, for: port-32, attrs: {port: '32'}, group: port-leds, rel-pos: 103}
+        - {ref: common/led-arrow-sm@1, id: led-port-33, at: [53.11, 72.5], skin: down, for: port-33, attrs: {port: '33'}, group: port-leds, rel-pos: 104}
+        - {ref: common/led-arrow-sm@1, id: led-port-2, at: [64.57, 12.835], skin: up, for: port-2, attrs: {port: '2'}, group: port-leds, rel-pos: 105}
+        - {ref: common/led-arrow-sm@1, id: led-port-3, at: [67.36, 12.835], skin: down, for: port-3, attrs: {port: '3'}, group: port-leds, rel-pos: 106}
+        - {ref: common/led-arrow-sm@1, id: led-port-34, at: [64.57, 72.5], skin: up, for: port-34, attrs: {port: '34'}, group: port-leds, rel-pos: 107}
+        - {ref: common/led-arrow-sm@1, id: led-port-35, at: [67.36, 72.5], skin: down, for: port-35, attrs: {port: '35'}, group: port-leds, rel-pos: 108}
+        - {ref: common/led-arrow-sm@1, id: led-port-4, at: [78.82, 12.835], skin: up, for: port-4, attrs: {port: '4'}, group: port-leds, rel-pos: 109}
+        - {ref: common/led-arrow-sm@1, id: led-port-5, at: [81.61, 12.835], skin: down, for: port-5, attrs: {port: '5'}, group: port-leds, rel-pos: 110}
+        - {ref: common/led-arrow-sm@1, id: led-port-36, at: [78.82, 72.5], skin: up, for: port-36, attrs: {port: '36'}, group: port-leds, rel-pos: 111}
+        - {ref: common/led-arrow-sm@1, id: led-port-37, at: [81.61, 72.5], skin: down, for: port-37, attrs: {port: '37'}, group: port-leds, rel-pos: 112}
+        - {ref: common/led-arrow-sm@1, id: led-port-6, at: [93.07, 12.835], skin: up, for: port-6, attrs: {port: '6'}, group: port-leds, rel-pos: 113}
+        - {ref: common/led-arrow-sm@1, id: led-port-7, at: [95.86, 12.835], skin: down, for: port-7, attrs: {port: '7'}, group: port-leds, rel-pos: 114}
+        - {ref: common/led-arrow-sm@1, id: led-port-38, at: [93.07, 72.5], skin: up, for: port-38, attrs: {port: '38'}, group: port-leds, rel-pos: 115}
+        - {ref: common/led-arrow-sm@1, id: led-port-39, at: [95.86, 72.5], skin: down, for: port-39, attrs: {port: '39'}, group: port-leds, rel-pos: 116}
+        - {ref: common/led-arrow-sm@1, id: led-port-8, at: [111.57, 12.835], skin: up, for: port-8, attrs: {port: '8'}, group: port-leds, rel-pos: 117}
+        - {ref: common/led-arrow-sm@1, id: led-port-9, at: [114.36, 12.835], skin: down, for: port-9, attrs: {port: '9'}, group: port-leds, rel-pos: 118}
+        - {ref: common/led-arrow-sm@1, id: led-port-40, at: [111.57, 72.5], skin: up, for: port-40, attrs: {port: '40'}, group: port-leds, rel-pos: 119}
+        - {ref: common/led-arrow-sm@1, id: led-port-41, at: [114.36, 72.5], skin: down, for: port-41, attrs: {port: '41'}, group: port-leds, rel-pos: 120}
+        - {ref: common/led-arrow-sm@1, id: led-port-10, at: [125.82, 12.835], skin: up, for: port-10, attrs: {port: '10'}, group: port-leds, rel-pos: 121}
+        - {ref: common/led-arrow-sm@1, id: led-port-11, at: [128.61, 12.835], skin: down, for: port-11, attrs: {port: '11'}, group: port-leds, rel-pos: 122}
+        - {ref: common/led-arrow-sm@1, id: led-port-42, at: [125.82, 72.5], skin: up, for: port-42, attrs: {port: '42'}, group: port-leds, rel-pos: 123}
+        - {ref: common/led-arrow-sm@1, id: led-port-43, at: [128.61, 72.5], skin: down, for: port-43, attrs: {port: '43'}, group: port-leds, rel-pos: 124}
+        - {ref: common/led-arrow-sm@1, id: led-port-12, at: [140.07, 12.835], skin: up, for: port-12, attrs: {port: '12'}, group: port-leds, rel-pos: 125}
+        - {ref: common/led-arrow-sm@1, id: led-port-13, at: [142.86, 12.835], skin: down, for: port-13, attrs: {port: '13'}, group: port-leds, rel-pos: 126}
+        - {ref: common/led-arrow-sm@1, id: led-port-44, at: [140.07, 72.5], skin: up, for: port-44, attrs: {port: '44'}, group: port-leds, rel-pos: 127}
+        - {ref: common/led-arrow-sm@1, id: led-port-45, at: [142.86, 72.5], skin: down, for: port-45, attrs: {port: '45'}, group: port-leds, rel-pos: 128}
+        - {ref: common/led-arrow-sm@1, id: led-port-14, at: [154.32, 12.835], skin: up, for: port-14, attrs: {port: '14'}, group: port-leds, rel-pos: 129}
+        - {ref: common/led-arrow-sm@1, id: led-port-15, at: [157.11, 12.835], skin: down, for: port-15, attrs: {port: '15'}, group: port-leds, rel-pos: 130}
+        - {ref: common/led-arrow-sm@1, id: led-port-46, at: [154.32, 72.5], skin: up, for: port-46, attrs: {port: '46'}, group: port-leds, rel-pos: 131}
+        - {ref: common/led-arrow-sm@1, id: led-port-47, at: [157.11, 72.5], skin: down, for: port-47, attrs: {port: '47'}, group: port-leds, rel-pos: 132}
+        - {ref: common/led-arrow-sm@1, id: led-port-16, at: [173.17, 12.835], skin: up, for: port-16, attrs: {port: '16'}, group: port-leds, rel-pos: 133}
+        - {ref: common/led-arrow-sm@1, id: led-port-17, at: [175.96, 12.835], skin: down, for: port-17, attrs: {port: '17'}, group: port-leds, rel-pos: 134}
+        - {ref: common/led-arrow-sm@1, id: led-port-48, at: [173.17, 72.5], skin: up, for: port-48, attrs: {port: '48'}, group: port-leds, rel-pos: 135}
+        - {ref: common/led-arrow-sm@1, id: led-port-49, at: [175.96, 72.5], skin: down, for: port-49, attrs: {port: '49'}, group: port-leds, rel-pos: 136}
+        - {ref: common/led-arrow-sm@1, id: led-port-18, at: [187.42, 12.835], skin: up, for: port-18, attrs: {port: '18'}, group: port-leds, rel-pos: 137}
+        - {ref: common/led-arrow-sm@1, id: led-port-19, at: [190.21, 12.835], skin: down, for: port-19, attrs: {port: '19'}, group: port-leds, rel-pos: 138}
+        - {ref: common/led-arrow-sm@1, id: led-port-50, at: [187.42, 72.5], skin: up, for: port-50, attrs: {port: '50'}, group: port-leds, rel-pos: 139}
+        - {ref: common/led-arrow-sm@1, id: led-port-51, at: [190.21, 72.5], skin: down, for: port-51, attrs: {port: '51'}, group: port-leds, rel-pos: 140}
+        - {ref: common/led-arrow-sm@1, id: led-port-20, at: [201.67, 12.835], skin: up, for: port-20, attrs: {port: '20'}, group: port-leds, rel-pos: 141}
+        - {ref: common/led-arrow-sm@1, id: led-port-21, at: [204.46, 12.835], skin: down, for: port-21, attrs: {port: '21'}, group: port-leds, rel-pos: 142}
+        - {ref: common/led-arrow-sm@1, id: led-port-52, at: [201.67, 72.5], skin: up, for: port-52, attrs: {port: '52'}, group: port-leds, rel-pos: 143}
+        - {ref: common/led-arrow-sm@1, id: led-port-53, at: [204.46, 72.5], skin: down, for: port-53, attrs: {port: '53'}, group: port-leds, rel-pos: 144}
+        - {ref: common/led-arrow-sm@1, id: led-port-22, at: [215.92, 12.835], skin: up, for: port-22, attrs: {port: '22'}, group: port-leds, rel-pos: 145}
+        - {ref: common/led-arrow-sm@1, id: led-port-23, at: [218.71, 12.835], skin: down, for: port-23, attrs: {port: '23'}, group: port-leds, rel-pos: 146}
+        - {ref: common/led-arrow-sm@1, id: led-port-54, at: [215.92, 72.5], skin: up, for: port-54, attrs: {port: '54'}, group: port-leds, rel-pos: 147}
+        - {ref: common/led-arrow-sm@1, id: led-port-55, at: [218.71, 72.5], skin: down, for: port-55, attrs: {port: '55'}, group: port-leds, rel-pos: 148}
+        - {ref: common/led-arrow-sm@1, id: led-port-24, at: [234.93, 12.835], skin: up, for: port-24, attrs: {port: '24'}, group: port-leds, rel-pos: 149}
+        - {ref: common/led-arrow-sm@1, id: led-port-25, at: [237.72, 12.835], skin: down, for: port-25, attrs: {port: '25'}, group: port-leds, rel-pos: 150}
+        - {ref: common/led-arrow-sm@1, id: led-port-56, at: [234.93, 72.5], skin: up, for: port-56, attrs: {port: '56'}, group: port-leds, rel-pos: 151}
+        - {ref: common/led-arrow-sm@1, id: led-port-57, at: [237.72, 72.5], skin: down, for: port-57, attrs: {port: '57'}, group: port-leds, rel-pos: 152}
+        - {ref: common/led-arrow-sm@1, id: led-port-26, at: [249.18, 12.835], skin: up, for: port-26, attrs: {port: '26'}, group: port-leds, rel-pos: 153}
+        - {ref: common/led-arrow-sm@1, id: led-port-27, at: [251.97, 12.835], skin: down, for: port-27, attrs: {port: '27'}, group: port-leds, rel-pos: 154}
+        - {ref: common/led-arrow-sm@1, id: led-port-58, at: [249.18, 72.5], skin: up, for: port-58, attrs: {port: '58'}, group: port-leds, rel-pos: 155}
+        - {ref: common/led-arrow-sm@1, id: led-port-59, at: [251.97, 72.5], skin: down, for: port-59, attrs: {port: '59'}, group: port-leds, rel-pos: 156}
+        - {ref: common/led-arrow-sm@1, id: led-port-28, at: [263.43, 12.835], skin: up, for: port-28, attrs: {port: '28'}, group: port-leds, rel-pos: 157}
+        - {ref: common/led-arrow-sm@1, id: led-port-29, at: [266.22, 12.835], skin: down, for: port-29, attrs: {port: '29'}, group: port-leds, rel-pos: 158}
+        - {ref: common/led-arrow-sm@1, id: led-port-60, at: [263.43, 72.5], skin: up, for: port-60, attrs: {port: '60'}, group: port-leds, rel-pos: 159}
+        - {ref: common/led-arrow-sm@1, id: led-port-61, at: [266.22, 72.5], skin: down, for: port-61, attrs: {port: '61'}, group: port-leds, rel-pos: 160}
+        - {ref: common/led-arrow-sm@1, id: led-port-30, at: [277.68, 12.835], skin: up, for: port-30, attrs: {port: '30'}, group: port-leds, rel-pos: 161}
+        - {ref: common/led-arrow-sm@1, id: led-port-31, at: [280.47, 12.835], skin: down, for: port-31, attrs: {port: '31'}, group: port-leds, rel-pos: 162}
+        - {ref: common/led-arrow-sm@1, id: led-port-62, at: [277.68, 72.5], skin: up, for: port-62, attrs: {port: '62'}, group: port-leds, rel-pos: 163}
+        - {ref: common/led-arrow-sm@1, id: led-port-63, at: [280.47, 72.5], skin: down, for: port-63, attrs: {port: '63'}, group: port-leds, rel-pos: 164}
         - {ref: ufispace/lane-led-quad@1, id: led-port-64, at: [295.05, 8.75], for: port-64, group: port-leds, rel-pos: 1}
         - {ref: ufispace/lane-led-quad@1, id: led-port-65, at: [295.05, 12.15], for: port-65, group: port-leds, rel-pos: 2}
         - {ref: ufispace/lane-led-quad@1, id: led-port-66, at: [317.63, 8.75], for: port-66, group: port-leds, rel-pos: 3}
