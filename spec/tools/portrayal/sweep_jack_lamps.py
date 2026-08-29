@@ -76,10 +76,27 @@ def cls(ref):
     return CLS[ref]
 
 
-def lamp_group(data):
-    """The device's own LED group, so these join the vocabulary it already has."""
+NUMBERED = re.compile(r"(port|ge|xe|eth)-\d+")
+
+
+def lamp_group(data, target):
+    """The group a lamp belongs in, chosen by WHAT IT NAMES.
+
+    The first version of this took the first group it recognised out of
+    port-leds, mgmt-leds and status-leds - so on a device with no `port-leds` at
+    all, 146 lamps carrying `for: port-N` were filed under `status-leds`, which
+    is where SYS, FAN and the PSU lamps live. No rule objects to that, which is
+    why a reviewer had to catch it.
+
+    A lamp on a numbered port goes in `port-leds` or nowhere. Returning None
+    reports the device rather than putting it somewhere convenient: a group is a
+    statement about what a thing IS, and the wrong one is worse than an absent
+    one because it reads as deliberate.
+    """
     groups = data.get("groups") or {}
-    for name in ("port-leds", "mgmt-leds", "status-leds"):
+    if NUMBERED.fullmatch(str(target) or ""):
+        return "port-leds" if "port-leds" in groups else None
+    for name in ("mgmt-leds", "port-leds", "status-leds"):
         if name in groups:
             return name
     for name, g in groups.items():
@@ -94,7 +111,6 @@ for path in sorted(glob.glob(f'{LIB}/devices/*/*/device.yaml')):
         continue
     dev = path.split('devices/')[1].replace('/device.yaml', '')
     data = yaml.safe_load(open(path))
-    grp = lamp_group(data)
     lines = pathlib.Path(path).read_text().split("\n")
     made = []
 
@@ -128,9 +144,15 @@ for path in sorted(glob.glob(f'{LIB}/devices/*/*/device.yaml')):
             x, y = q["at"]
             ly = (y + KEYWAY_INSET if q.get("rotate") == 180
                   else y + h - LAMP_W - KEYWAY_INSET)
+            grp = lamp_group(data, pid)
+            if grp is None:
+                print(f"  ! {dev}: {pid} wants a `port-leds` group and the device "
+                      f"declares none - add it and re-run rather than filing "
+                      f"a port lamp under a status group")
+                continue
             for side, lx in (("l", x + MARGIN), ("r", x + w - MARGIN - LAMP_W)):
                 rel += 1
-                g = f", group: {grp}" if grp else ""
+                g = f", group: {grp}"
                 made.append((vname, f"- {{ref: {LAMP_REF}, id: led-{pid}-{side}, "
                              f"at: [{round(lx, 2)}, {round(ly, 2)}], for: {pid}"
                              f"{g}, rel-pos: {rel}}}"))
