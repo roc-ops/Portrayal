@@ -68,6 +68,9 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
   L60 device: a view that says it is empty has to be empty
   L47 component: a declared lamp state is a promise the drawing can keep - some
       element lights when it is set
+  L62 device: an id names the FUNCTION a thing serves, not the connector it is
+      built from - the connector is already in `ref:`; and a port lamp is
+      spelled the way the library spells it
 """
 import argparse
 import json
@@ -3067,6 +3070,227 @@ def _mark_centre(mark):
     return (x0 + x1) / 2, (y0 + y1) / 2
 
 
+_ID_VOCAB_CACHE = {}
+
+
+def _id_corpus(lib_roots):
+    """What this library calls things - the two facts L62 needs, read off the
+    corpus itself rather than written down here. Returns (connector words, the
+    name the corpus prefers for a given id tail).
+
+    THE CONNECTOR WORDS.
+
+    Not a list written here. A hardcoded list would be shaped like the examples
+    that prompted the rule - sma, rj45 - and would say nothing about the next
+    form factor someone adds. So the vocabulary is whatever the corpus already
+    calls a physical standard:
+
+      * every `conforms:` value, which is exactly the field a component uses to
+        name the standard it is built to, and
+      * every slug-shaped `attrs.media` value on a component whose `class` is
+        `port`.
+
+    The class filter is what keeps FUNCTION words out. `common/esd-jack` states
+    `media: esd` and `std/c14-inlet` states `media: ac`, and neither is a
+    connector: esd is what the jack is FOR and ac is what comes down the cord.
+    They are classed `ground` and `inlet`, so they never enter the vocabulary,
+    and `esd-jack` and `ac-inlet-panel` stay quiet - which they should, because
+    both of those ids name a function.
+
+    Each standard also contributes its leading segment, because that is the
+    level an id borrows at: `sfp-plus-3` borrows from `sfp`, `micro-usb` from
+    `micro-usb-b`, `qsfp-0` from `qsfp-dd`.
+    """
+    key = tuple(str(r) for r in lib_roots)
+    if key in _ID_VOCAB_CACHE:
+        return _ID_VOCAB_CACHE[key]
+    slug = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
+    words = set()
+
+    def offer(value):
+        v = str(value)
+        if slug.match(v):
+            words.add(v)
+            head = v.split("-")[0]
+            if head != v:
+                words.add(head)
+
+    for root in lib_roots:
+        for f in (Path(root) / "components").rglob("contract.yaml"):
+            c = load_yaml(f) or {}
+            if c.get("conforms"):
+                offer(c["conforms"])
+            if c.get("class") == "port":
+                media = (c.get("attrs") or {}).get("media")
+                if media:
+                    offer(media)
+
+    # AND THEN THE CORPUS GETS A VETO. A word that devices already use as a
+    # COMPLETE id is a function name in this library whatever else it is: `usb`
+    # is the name of the service a USB-A receptacle provides, and it stands
+    # alone as an id on dozens of devices. Firing on `usb-1` would be the rule
+    # arguing with the convention it was written to state. Three devices, so
+    # that one sloppy file cannot silence a word everywhere.
+    bare, tails = {}, {}
+    for root in lib_roots:
+        for f in (Path(root) / "devices").rglob("*.yaml"):
+            d = load_yaml(f) or {}
+            if d.get("kind") not in (None, "device"):
+                continue
+            for view in (d.get("views") or {}).values():
+                for q in (((view or {}).get("components") or {}).get("placements") or []):
+                    i = q.get("id")
+                    if not isinstance(i, str):
+                        continue
+                    if i in words:
+                        bare.setdefault(i, set()).add(str(f))
+                    # every way this id divides into <lead>-<tail>, which is how
+                    # the preferred name below is looked up
+                    t = i.split("-")
+                    for k in range(1, len(t)):
+                        c = tails.setdefault("-".join(t[k:]), {})
+                        c["-".join(t[:k])] = c.get("-".join(t[:k]), 0) + 1
+    words -= {w for w, files in bare.items() if len(files) >= 3}
+
+    # THE PREFERRED NAME. What does the library already call the thing on the
+    # other end of `smb-10mhz-out`? It calls it `clk-10mhz-out`, on three
+    # placements, and `clk-10mhz` on twenty-one more - the vote was taken before
+    # this rule existed. So for each id tail, the commonest lead that is NOT a
+    # connector word is the function name the corpus settled on, and the warning
+    # can hand that back instead of leaving an agent to invent one. Two
+    # placements minimum: one is a precedent of nothing.
+    preferred = {}
+    for tail, leads in tails.items():
+        best = max(((n, lead) for lead, n in leads.items() if lead not in words),
+                   default=None)
+        if best and best[0] >= 2:
+            preferred[tail] = best
+    _ID_VOCAB_CACHE[key] = (words, preferred)
+    return words, preferred
+
+
+def _contract(ref, lib_roots):
+    """The whole contract behind a ref, or {}. load_yaml caches by path, so the
+    repeat asks below cost a dict lookup."""
+    try:
+        f = resolve_component(ref, lib_roots)
+    except ValueError:          # a ref with no @major - L5 reports that itself
+        return {}
+    return (load_yaml(f) or {}) if f else {}
+
+
+def _states_connector(ref, placement, lib_roots):
+    """Every connector word this placement's own `ref:` already states - from the
+    component's name, its `conforms:`, and the media on either the contract or
+    the placement. The id can only be duplicating something that is written
+    down somewhere else, and this is that somewhere else."""
+    stated = set()
+    base = ref.split("@")[0].split("/")[-1]
+    stated.add(base)
+    stated.update(base.split("-"))
+    c = _contract(ref, lib_roots)
+    for value in (c.get("conforms"), (c.get("attrs") or {}).get("media"),
+                  (placement.get("attrs") or {}).get("media")):
+        if value:
+            stated.add(str(value))
+            stated.update(str(value).split("-"))
+    return stated
+
+
+def lint_device_id_convention(path, data, lib_roots):
+    """L62: an id that names its connector, and a port lamp spelled a fourth way.
+
+    Written after the same device was modelled twice, by two agents who agreed
+    on the chassis to the millimetre and on all nine group names and diverged
+    on NAMES: `clk-10mhz-out` against `sma-10mhz-out`. Neither was careless.
+    Nothing in the library told either of them which to pick, so the diff
+    between two correct models read larger than the disagreement was.
+
+    THE RULE: AN ID NAMES THE FUNCTION, NOT THE CONNECTOR. The connector is
+    already in `ref:`, and putting it in the id states one fact twice - so the
+    day the part changes, the id lies. Exactly the failure a cutout has when it
+    restates an aperture instead of deriving it.
+
+    The corpus voted for this before the rule existed: 2326 `port-N`; timing
+    jacks named `clk-10mhz`, `clk-1pps`, `tod`, `gnss-ant`, `bits` for what
+    they carry rather than for the SMA or SMB they carry it through; singletons
+    at `reset`, `usb`, `console`; lamps at `led-fan`, `led-sys`, `led-psN`.
+
+    TWO THINGS ARE REPORTED AND NOTHING ELSE.
+
+    1. An id whose leading segment repeats a connector word its own ref already
+       states, with something else following it - `sma-10mhz-out`, `smb-1pps-in`,
+       `sfp-plus-3`. A bare `usb` or `micro-usb-b`-shaped id that is ONLY the
+       standard is left alone: it has no function half to keep, and renaming it
+       is a different decision from de-duplicating one.
+
+    2. A port lamp not spelled `led-port-N`. The library spells this four ways
+       (led-port-N, led-pN, leds-port-N, leds-pN) and the plurality wins.
+
+    Namespace choice - `edgecore/qsfpdd-lane-leds` against
+    `common/qsfp-dd-lane-column` - is the other half of that divergence and is
+    NOT here. Whether a four-lamp column beside a cage is Edgecore-specific is a
+    judgement about the part, and every mechanical proxy for it (used by one
+    vendor, so far) is a fact about the corpus today rather than about the part.
+
+    BOTH ARE WARNINGS. The lamp check alone lands on ~1180 existing placements;
+    that is a cleanup backlog beside L61's, not a reason to edit the library.
+    """
+    words, preferred = _id_corpus(lib_roots)
+    for vname, view in (data.get("views") or {}).items():
+        for q in (((view or {}).get("components") or {}).get("placements") or []):
+            pid, ref = str(q.get("id") or ""), str(q.get("ref") or "")
+            toks = pid.split("-")
+
+            # 1. the id repeats its own connector
+            if ref and len(toks) > 1:
+                stated = _states_connector(ref, q, lib_roots)
+                for n in (1, 2, 3):
+                    lead = "-".join(toks[:n])
+                    if n < len(toks) and lead in words and lead in stated:
+                        # THE WHOLE CONNECTOR, NOT ITS FIRST WORD. `sfp-plus-3`
+                        # matches on `sfp` because that is the media the ganged
+                        # cage states, but the qualifier is part of the connector
+                        # too - so the id left over is `3` and the name it wants
+                        # back is `port-3`, not `plus-3`.
+                        while n + 1 < len(toks) and "-".join(toks[:n + 1]) in words:
+                            n += 1
+                        lead = "-".join(toks[:n])
+                        rest = "-".join(toks[n:])
+                        # WHAT TO CALL IT INSTEAD, in the corpus's own words: the
+                        # commonest function name in front of this same tail
+                        # (`clk-` in front of `10mhz-out`, `port-` in front of a
+                        # bare numeral), falling back to the tail alone.
+                        vote = preferred.get(rest)
+                        if vote:
+                            instead = f"{vote[1]}-{rest}"
+                            why = (f", which is what {vote[0]} other placement(s) in the "
+                                   f"library call this")
+                        else:
+                            instead, why = rest, ""
+                        role = ((q.get("attrs") or {}).get("role")
+                                or (_contract(ref, lib_roots).get("attrs") or {}).get("role"))
+                        alt = (f", or {role!r}, which is the role this placement states"
+                               if role and role != instead else "")
+                        warn(path, "L62",
+                             f"{vname}/{pid}: the id opens with {lead!r}, which is the "
+                             f"connector {ref} already states. An id names the FUNCTION, "
+                             f"not the connector - use {instead!r}{why}{alt}, and let ref: "
+                             f"carry the connector, which is the only place it stays true "
+                             f"when the part is changed")
+                        break
+
+            # 2. a port lamp spelled some other way
+            m = re.match(r"^(led|leds)-(p\d+|port-\d+)(-.*)?$", pid)
+            if m and not pid.startswith("led-port-"):
+                instead = "led-" + re.sub(r"(?<![a-z0-9])p(\d+)(?![a-z0-9])",
+                                          r"port-\1", pid.split("-", 1)[1])
+                warn(path, "L62",
+                     f"{vname}/{pid}: a port lamp is spelled 'led-port-N' - the "
+                     f"library's plurality spelling, against led-pN, leds-port-N and "
+                     f"leds-pN. Rename it {instead!r}")
+
+
 def lint_device_alignment(path, data, lib_roots):
     """L61: a legend that is ALMOST centred on the thing it names.
 
@@ -3325,6 +3549,7 @@ def lint_device(path, validator, lib_roots):
     lint_device_midplane_depth(path, data, lib_roots)
     lint_device_label_geometry(path, data)
     lint_device_alignment(path, data, lib_roots)
+    lint_device_id_convention(path, data, lib_roots)
     declared_groups = set((data.get("groups") or {}).keys())
     for gname, gdef in (data.get("groups") or {}).items():
         check_states(path, f"groups/{gname}", (gdef or {}).get("states"),
