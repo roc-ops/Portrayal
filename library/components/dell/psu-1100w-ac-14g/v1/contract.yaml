@@ -42,6 +42,17 @@ provenance:
     no rung is invented to fill the sentence. The Information Update tech sheet
     gives this family's heat dissipation (4100 BTU/hr for 1100 W AC) and its
     current draw, also without an ambient.
+  inlet: >-
+    COMPOSED, NOT DRAWN, AND THAT TOOK THREE WRONG DRAFTS TO REACH. std/c14-inlet
+    already exists - 28.0 x 20.0, the panel cutout from SCHURTER 6100-3 against
+    IEC 60320-1 - and NINE other supplies in this library compose it. This part
+    drew its own instead and got it wrong three separate ways: first as a rounded
+    rectangle with three slots, which reads as a BS 1363 outlet; then chamfered on
+    the top corners like an upright C14; then re-chamfered to the right.
+    The last of those was the correct ORIENTATION and still the wrong practice.
+    A connector with a standard, a datasheet and an existing part is never
+    something to redraw from a photograph - the photograph can only say which way
+    up it goes, which here is `rotate: 90`.
   handle-is-the-lamp: >-
     NOT A LAMP BESIDE A HANDLE. ISM: "AC power supply units (PSUs) have an
     illuminated translucent handle that serves as an indicator." So the handle
@@ -62,6 +73,12 @@ provenance:
     estimated. A CRPS-form supply is around 185 mm deep and no document held here
     states it for this one. Not recorded rather than guessed.
 size: {w: 90.46, h: 41.8}
+parts:
+  # THE INLET IS THE LIBRARY'S, TURNED. `rotate: 90` puts the chamfered pair of
+  # corners on the RIGHT and the earth pin centre-right with line and neutral
+  # stacked to its left, which is how Dell mounts it and what figure 9 shows at
+  # 4x. common/psu-ac-650 composes the same part at 270 for the mirror case.
+  - {ref: std/c14-inlet@1, id: inlet, at: [3.4, 11.0], rotate: 90}
 elements:
   handle:
     at: [2.0, 13.0]
@@ -97,18 +114,13 @@ elements:
       2 second tail is this library's reading of "and turns off".
       NO RATE IS PUBLISHED for the amber fault or the firmware blink, so 1 Hz is
       a reading and not a figure - unlike the mismatch, where 4 Hz is stated.
-  inlet:
-    at: [6.0, 5.0]
-    size: [23.0, 32.0]
+  inlet-bezel:
+    at: [4.6, 3.6]
+    size: [26.0, 34.8]
     class: inlet
     description: >-
-      the C14 appliance inlet, MOUNTED ON ITS SIDE. The chamfered pair of
-      corners is on the RIGHT and the earth pin sits centre-right with line and
-      neutral stacked to its left - measured off the R740 ISM figure 9 at 4x,
-      where the pins read at 16.4/16.5, 20.9/21.5 and 16.4/26.5 relative to this
-      part. Two earlier drafts had it as a BS 1363 outlet and then as an upright
-      C14; the chamfer is the whole identity of the connector, so which way it
-      faces is not a detail.
+      the recess the C14 sits back inside. The CONNECTOR is std/c14-inlet@1,
+      composed rather than drawn - see `inlet` in provenance.
   fan:
     at: [49.5, 4.0]
     size: [33.0, 33.8]
