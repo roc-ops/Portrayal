@@ -1,0 +1,56 @@
+format: 1
+kind: module
+name: drive-blank-25
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: server
+description: >-
+  Filler for a 2.5 inch SFF drive bay - the carrier moulding without the drive:
+  same release with its orange ring, same rails, same three windows onto the
+  tray honeycomb, and nothing at the head, because the glyphs on a populated
+  carrier are its lamps and a blank has nothing to report
+attrs:
+  media: sff-2.5
+  form-factor: '2.5-inch SFF'
+provenance:
+  size: >-
+    WIDTH AND HEIGHT ARE THE CARRIER'S, and deliberately so: a blank fills the
+    same bay on the same pitch, so its face is the same 17.868 x 79.4 and the
+    same 16.79 body inside it. See common/drive-carrier-25, which carries the
+    measurement - photo-measured against Dell's face-on render at 1.5997 px/mm
+    and corroborated to 0.13% by the pitch read off the 15G r750-24d-2-5-front
+    Visio master, a line drawing that passes Gate 1 at 0.67%.
+  face: >-
+    THE SAME GENERATOR DRAWS BOTH FACES. A blank and a populated carrier are one
+    moulding differing in one thing, and two files drawing "the same part except"
+    drift silently - nothing fails, the faces just stop matching, and a viewer
+    reading a row of 24 bays sees a seam that is not on the hardware. The
+    proportions are therefore the carrier's, transcribed from Dell's 14g-2-5-sas-v-1
+    master: ring centred at 16.1% of the length, rails 23.1-98.3% down BOTH long
+    edges, windows at 34.4-48.1, 49.9-63.7 and 65.6-77.1%.
+  no-lamps: >-
+    OPERATOR REPORT, from the part in hand: the blank is the same as the carrier
+    except that it has no LEDs at the head - same release mechanism, everything
+    else identical. That is the only difference modelled, and no drawing held
+    here contradicts or confirms it. THE STENCIL DOES NOT SETTLE IT: Dell's rack
+    server stencil has no 14G blank master at all, and its only 2.5 inch filler
+    is 17G, a different generation, drawn as four paths and a plain rectangle
+    with no features to compare.
+  depth: >-
+    estimated, AND DELIBERATELY NOT THE CARRIER'S 105. A blank holds no drive,
+    so there is no reason for it to run the length of one, and copying the
+    carrier's figure would assert a depth nothing measured. No document held here
+    states it. 25 is a placeholder for a face with a short airflow shroud behind
+    it and should be replaced by a measurement, not defended.
+  power: >-
+    a blank draws nothing. It is not that the figure is unknown - there is no
+    figure, which is why no power-draw attribute is stated rather than a zero
+    that would read as a measurement.
+size: {w: 17.868, h: 79.4, d: 25.0}
+elements:
+  release: {at: [4.53, 9.4], size: [8.8, 6.7], class: control}
+  window-1: {at: [1.02, 27.3], size: [15.3, 10.9], class: vent}
+  window-2: {at: [1.02, 39.6], size: [15.3, 11.0], class: vent}
+  window-3: {at: [1.02, 52.1], size: [15.3, 9.1], class: vent}
+skins: [default]
