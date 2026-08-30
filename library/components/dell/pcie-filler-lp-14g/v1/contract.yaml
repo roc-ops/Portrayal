@@ -1,12 +1,12 @@
 format: 1
 kind: module
-name: pcie-filler-fh-14g
+name: pcie-filler-lp-14g
 version: 1.0.0
 class: blank
 behaviour: fills
 profile: server
 description: >-
-  Full-height PCIe slot filler bracket for a 14th-generation PowerEdge riser -
+  Low-profile (half-height) PCIe slot filler bracket for a 14th-generation PowerEdge riser -
   vented sheet metal closing a slot no card occupies
 provenance:
   size: >-
@@ -21,13 +21,13 @@ provenance:
     as corroboration: a published pitch beats a reading of a picture, and the
     reading is what tells you the published one applies here.
   vents: >-
-    TWO SHAPES AND NOT ONE, which is the detail that makes a Dell filler read as
-    a Dell filler. The slots sit inside a ROUNDED WINDOW that encloses most of
-    them - and the outboard pair sits OUTSIDE it, past the window's end. A first
-    draft drew a plain rectangle with two even rows: close enough to pass a
-    glance and wrong, and the operator caught it by looking at Dell's own image.
-    The COUNT of columns is read off the figure; the slot proportions and corner
-    radii are drawn, because at 7.2074 px/mm a 3 mm slot is twenty pixels.
+    two rows of slots, counted off the figure. The COUNT is what was read; the
+    slot proportions are drawn, because at 7.2074 px/mm a 3 mm slot is twenty
+    pixels and its corner radii are not in the image.
+  which-slot: >-
+    riser 2 slot 6, the only half-height slot on this chassis. The R740 ISM
+    table 10 item 2 names it: "The PCIe expansion card slot (riser 2) connects
+    one half-height PCIe expansion cards to the system."
   what-it-is-not: >-
     NOT A CARD AND NOT A BEZEL. It is the blank that ships in an unused slot, so
     it is `class: blank` and draws nothing. A populated slot has a card's own
@@ -36,5 +36,5 @@ provenance:
   depth: >-
     a bracket is sheet metal a millimetre or so thick and nothing held here
     states it, so no depth is recorded rather than a guess being made.
-size: {w: 103.0, h: 12.2}
+size: {w: 85.0, h: 12.2}
 skins: [default]

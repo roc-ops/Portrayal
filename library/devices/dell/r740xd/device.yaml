@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 0.7.0
+version: 0.9.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -147,6 +147,19 @@ provenance:
     above and below, which is the operator's description of where it sits and is
     what fixed its size - see dell/bezel-2u-14g, whose master aspect fails Gate 1
     against a rack face precisely because a rack face is not what it covers.
+  riser-configurations: >-
+    THREE REARS ARE DRAWN AND THE MACHINE HAS FAR MORE THAN THREE. The
+    Information Update tech sheet's table 3 enumerates TWELVE riser
+    configurations - 0, 1, 2, 3, 4, 5, 6, 9, 15, 16 and 17 - each naming which
+    slots exist on risers 1, 2 and 3 and at what height and length: riser
+    configuration 0 has no PCIe slots at all and only rear storage, 1 and 2 give
+    four slots with or without it, 4 and 5 and 15 give eight.
+    WHAT IS DRAWN HERE IS THE SHAPE OF THE ANSWER, not the whole of it. The three
+    configurations modelled - no rear storage, four 2.5 inch rear, two 3.5 inch
+    rear - establish that competing slot sets and drive bays are METAL scoped by
+    `only-in` rather than different occupants of one hole. Extending that to
+    twelve is transcription against table 3 and not a new mechanism; every slot
+    already carries an id a configuration can name.
   not-yet-modelled: >-
     THIS IS A FRONT-FACE DRAFT AND SAYS SO. No rear view, no top view with the
     lid off, no riser configurations - the tech sheet documents twelve of those
@@ -221,6 +234,17 @@ groups:
       HBAs, the accelerators - which is the nearest of the five roles to what a
       network device calls a traffic port. Riser 2's half-height slot is not
       drawn yet.
+  drives-rear:
+    term: Drive
+    role: service
+    index-origin: 0
+    description: >-
+      the rear drive bays, which exist only on a rear-storage chassis. DELL
+      NUMBERS THEM 12 TO 15, continuing the front row rather than starting again,
+      and that numbering is carried in each bay's `rel-pos`; `index-origin` takes
+      only 0 or 1 so it cannot express a run beginning at 12, and it is left at 0
+      rather than made to lie.
+    attrs: {media: sff-2.5}
   ndc:
     term: Card
     role: service
@@ -238,18 +262,6 @@ groups:
     term: PSU
     role: service
     index-origin: 1
-  drives-rear:
-    term: Drive
-    role: service
-    index-origin: 0
-    description: >-
-      the four rear bays. DELL NUMBERS THEM 12 TO 15, printed on the metal beside
-      them in figure 8 - they continue the front row's count rather than starting
-      again, and a drawing that renumbered them from zero would disagree with the
-      chassis. That numbering is carried in each bay's `rel-pos`; `index-origin`
-      only takes 0 or 1, so it cannot express a run that starts at 12 and is left
-      at 0 rather than made to lie.
-    attrs: {media: sff-2.5}
   mgmt-rear:
     term: Control
     role: management
@@ -437,72 +449,108 @@ views:
       h: 86.8
     panel:
       decor:
-        # the riser 1 field and the I/O panel it sits above
-        - {at: [4.0, 3.0], size: [116.0, 62.0], fill: '#7d848c'}
-        - {at: [4.0, 66.0], size: [232.0, 19.0], fill: '#6f767d'}
-        # the teal and blue Dell prints behind the serial and the VGA - colour
-        # is how these two are told apart on a crowded panel, and it is paint
-        # on the metal rather than part of either connector
-        - {at: [50.0, 70.5], size: [32.5, 14.0], fill: '#0f6f78'}
-        - {at: [80.0, 71.5], size: [29.0, 13.0], fill: '#1f4f9e'}
+        - {at: [3.0, 3.0], size: [120.0, 61.0], fill: '#7d848c'}
+        - {at: [160.0, 3.0], size: [112.0, 61.0], fill: '#7d848c'}
+        - {at: [313.0, 3.0], size: [118.0, 40.0], fill: '#7d848c'}
+        - {at: [3.0, 64.5], size: [233.0, 21.0], fill: '#6f767d'}
+        # the teal and the blue Dell paints behind the serial and the VGA. It is
+        # how the two D-subs are told apart on a crowded panel at arm's length,
+        # and it is paint on the metal rather than part of either connector.
+        - {at: [46.5, 65.5], size: [37.0, 19.5], fill: '#0f6f78'}
+        - {at: [84.0, 65.5], size: [31.5, 19.5], fill: '#1f4f9e'}
       cutouts:
-        - {id: idrac9, at: [28.32, 68.9], size: [15.8, 13.2], shape: rect}
-        - {id: serial, at: [55.465, 72.25], size: [20.47, 11.4], shape: rect}
-        - {id: vga, at: [86.565, 72.65], size: [20.47, 11.4], shape: rect}
-        - {id: usb-1, at: [119.0, 67.2], size: [12.0, 4.5], shape: rect}
-        - {id: usb-2, at: [119.0, 75.6], size: [12.0, 4.5], shape: rect}
-        - {id: sys-id, at: [8.0, 72.0], size: [7.0, 7.0], shape: circle}
+        - {id: idrac9, at: [27.2, 66.80], size: [15.8, 13.2], shape: rect}
+        - {id: serial, at: [55.165, 68.60], size: [20.47, 11.4], shape: rect}
+        - {id: vga, at: [90.665, 68.60], size: [20.47, 11.4], shape: rect}
+        - {id: usb-1, at: [119.0, 66.50], size: [12.0, 4.5], shape: rect}
+        - {id: usb-2, at: [119.0, 75.50], size: [12.0, 4.5], shape: rect}
+        - {id: sys-id, at: [6.5, 68.5], size: [7.0, 7.0], shape: circle}
+    silkscreen:
+      - {at: [9.6, 16.40], text: '1', font-size: 3.4, for: slot-1}
+      - {at: [9.6, 36.72], text: '2', font-size: 3.4, for: slot-2}
+      - {at: [9.6, 57.04], text: '3', font-size: 3.4, for: slot-3}
+      - {at: [271.4, 16.40], text: '4', font-size: 3.4, for: slot-4}
+      - {at: [271.4, 36.72], text: '5', font-size: 3.4, for: slot-5}
+      - {at: [424.4, 16.40], text: '7', font-size: 3.4, for: slot-7}
+      - {at: [424.4, 36.72], text: '8', font-size: 3.4, for: slot-8}
+      - {at: [162.6, 57.04], text: '6', font-size: 3.4, for: slot-6}
     components:
       bays:
-        - {id: slot-1, at: [12.0, 9.99], size: {w: 103.0, h: 12.2},
+        - {id: slot-1, at: [14.0, 9.00], size: {w: 103.0, h: 12.2},
            accepts: [dell/pcie-filler-fh-14g@1], default: dell/pcie-filler-fh-14g@1,
            group: pcie, rel-pos: 1}
-        - {id: slot-2, at: [12.0, 30.31], size: {w: 103.0, h: 12.2},
+        - {id: slot-2, at: [14.0, 29.32], size: {w: 103.0, h: 12.2},
            accepts: [dell/pcie-filler-fh-14g@1], default: dell/pcie-filler-fh-14g@1,
            group: pcie, rel-pos: 2}
-        - {id: slot-3, at: [12.0, 50.63], size: {w: 103.0, h: 12.2},
+        - {id: slot-3, at: [14.0, 49.64], size: {w: 103.0, h: 12.2},
            accepts: [dell/pcie-filler-fh-14g@1], default: dell/pcie-filler-fh-14g@1,
            group: pcie, rel-pos: 3}
-        - {id: ndc, at: [139.6, 67.8], size: {w: 90.3, h: 14.5},
+        - {id: slot-4, at: [167.0, 9.00], size: {w: 103.0, h: 12.2},
+           accepts: [dell/pcie-filler-fh-14g@1], default: dell/pcie-filler-fh-14g@1,
+           group: pcie, rel-pos: 4, only-in: [no-rear-storage]}
+        - {id: slot-5, at: [167.0, 29.32], size: {w: 103.0, h: 12.2},
+           accepts: [dell/pcie-filler-fh-14g@1], default: dell/pcie-filler-fh-14g@1,
+           group: pcie, rel-pos: 5, only-in: [no-rear-storage]}
+        - {id: slot-7, at: [320.0, 9.00], size: {w: 103.0, h: 12.2},
+           accepts: [dell/pcie-filler-fh-14g@1], default: dell/pcie-filler-fh-14g@1,
+           group: pcie, rel-pos: 7, only-in: [no-rear-storage]}
+        - {id: slot-8, at: [320.0, 29.32], size: {w: 103.0, h: 12.2},
+           accepts: [dell/pcie-filler-fh-14g@1], default: dell/pcie-filler-fh-14g@1,
+           group: pcie, rel-pos: 8, only-in: [no-rear-storage]}
+        - {id: slot-6, at: [167.0, 49.64], size: {w: 85.0, h: 12.2},
+           accepts: [dell/pcie-filler-lp-14g@1], default: dell/pcie-filler-lp-14g@1,
+           group: pcie, rel-pos: 6}
+        - {id: ndc, at: [139.6, 66.4], size: {w: 90.3, h: 14.5},
            accepts: [dell/ndc-4x-rj45-14g@1], default: dell/ndc-4x-rj45-14g@1,
            group: ndc, rel-pos: 1}
-        - {id: psu-1, at: [253.08, 43.4], size: {w: 90.46, h: 43.4},
+        - {id: psu-1, at: [253.08, 45.0], size: {w: 90.46, h: 41.8},
            accepts: [dell/psu-1100w-ac-14g@1], default: dell/psu-1100w-ac-14g@1,
            group: psus, rel-pos: 1}
-        - {id: psu-2, at: [343.54, 43.4], size: {w: 90.46, h: 43.4},
+        - {id: psu-2, at: [343.54, 45.0], size: {w: 90.46, h: 41.8},
            accepts: [dell/psu-1100w-ac-14g@1], default: dell/psu-1100w-ac-14g@1,
            group: psus, rel-pos: 2}
         - {id: drive-r0, at: [173.0, 4.9], size: {w: 79.4, h: 17.868},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
-           rotate: 270, group: drives-rear, rel-pos: 12}
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1],
+           default: common/drive-blank-25@1, rotate: 270,
+           only-in: [rear-4-sff], group: drives-rear, rel-pos: 12}
         - {id: drive-r1, at: [173.0, 22.8], size: {w: 79.4, h: 17.868},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
-           rotate: 270, group: drives-rear, rel-pos: 13}
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1],
+           default: common/drive-blank-25@1, rotate: 270,
+           only-in: [rear-4-sff], group: drives-rear, rel-pos: 13}
         - {id: drive-r2, at: [331.0, 4.9], size: {w: 79.4, h: 17.868},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
-           rotate: 270, group: drives-rear, rel-pos: 14}
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1],
+           default: common/drive-blank-25@1, rotate: 270,
+           only-in: [rear-4-sff], group: drives-rear, rel-pos: 14}
         - {id: drive-r3, at: [331.0, 22.8], size: {w: 79.4, h: 17.868},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
-           rotate: 270, group: drives-rear, rel-pos: 15}
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1],
+           default: common/drive-blank-25@1, rotate: 270,
+           only-in: [rear-4-sff], group: drives-rear, rel-pos: 15}
       placements:
-        - {ref: common/rj45-jack@2, id: idrac9, at: [28.32, 68.9],
+        - {ref: common/rj45-jack@2, id: idrac9, at: [27.2, 66.80],
            attrs: {role: management}, group: mgmt-ports, rel-pos: 1}
-        - {ref: common/db9-receptacle@1, id: serial, at: [50.3, 71.7],
+        - {ref: common/db9-receptacle@1, id: serial, at: [50.0, 68.05],
            group: mgmt-ports, rel-pos: 2}
-        - {ref: common/vga-receptacle@1, id: vga, at: [81.4, 72.1],
+        - {ref: common/vga-receptacle@1, id: vga, at: [85.5, 68.05],
            group: mgmt-ports, rel-pos: 3}
-        - {ref: std/usb-a@1, id: usb-1, at: [119.0, 67.2],
+        - {ref: std/usb-a@1, id: usb-1, at: [119.0, 66.50],
            attrs: {speed: usb-3.0}, group: mgmt-ports, rel-pos: 4}
-        - {ref: std/usb-a@1, id: usb-2, at: [119.0, 75.6],
+        - {ref: std/usb-a@1, id: usb-2, at: [119.0, 75.50],
            attrs: {speed: usb-3.0}, group: mgmt-ports, rel-pos: 5}
-        - {ref: dell/system-id-button-14g@1, id: sys-id, at: [8.0, 72.0],
+        - {ref: dell/system-id-button-14g@1, id: sys-id, at: [6.5, 68.5],
            for: chassis, group: mgmt-rear, rel-pos: 1}
-        - {ref: dell/idrac-direct-symbol@1, id: mark-idrac9, at: [34.1, 63.6],
+        - {ref: common/led-indicator@1, id: sys-status, at: [18.5, 70.0],
+           for: chassis, group: leds, rel-pos: 2,
+           states: ['off', {name: 'on', color: '#2563eb'}]}
+        - {ref: dell/idrac-direct-symbol@1, id: mark-idrac9, at: [33.2, 81.0],
            for: idrac9, group: marks, rel-pos: 10}
-        - {ref: common/vga-symbol@1, id: mark-vga-r, at: [91.5, 66.4],
-           for: vga, group: marks, rel-pos: 11}
-        - {ref: common/usb-symbol@1, id: mark-usb-r, at: [132.8, 71.3],
-           for: usb-1, group: marks, rel-pos: 12}
+        - {ref: common/serial-symbol@1, id: mark-serial, at: [61.8, 81.4],
+           for: serial, group: marks, rel-pos: 11}
+        - {ref: common/vga-symbol@1, id: mark-vga-r, at: [97.9, 81.0],
+           for: vga, group: marks, rel-pos: 12}
+        - {ref: common/usb-symbol@1, id: mark-usb-r, at: [121.8, 81.3],
+           for: usb-1, group: marks, rel-pos: 13}
+        - {ref: common/nic-symbol@1, id: mark-nic, at: [182.0, 81.2],
+           for: ndc, group: marks, rel-pos: 14}
 configurations:
   base:
     kind: base
@@ -523,6 +571,33 @@ configurations:
       slot-1: dell/pcie-filler-fh-14g@1
       slot-2: dell/pcie-filler-fh-14g@1
       slot-3: dell/pcie-filler-fh-14g@1
+      slot-4: dell/pcie-filler-fh-14g@1
+      slot-5: dell/pcie-filler-fh-14g@1
+      slot-6: dell/pcie-filler-lp-14g@1
+      slot-7: dell/pcie-filler-fh-14g@1
+      slot-8: dell/pcie-filler-fh-14g@1
+  no-rear-storage:
+    kind: orderable
+    description: >-
+      the three-riser rear: seven full-height PCIe slots across risers 1, 2 and
+      3, one half-height, and no rear drives. Drawn from the R740 ISM figure 9,
+      "Back view of three riser system", which passes Gate 1 at 0.26%.
+  rear-4-sff:
+    kind: orderable
+    description: >-
+      four 2.5 inch drives in the rear, which costs riser 2's two full-height
+      slots and all of riser 3 - the R740xd ISM figure 8. THE BAYS ARE METAL AND
+      NOT OCCUPANCY: this configuration has holes the other does not, which is
+      why the competing sets carry `only-in` rather than differing by what is
+      plugged into them.
+  rear-2-lff:
+    kind: orderable
+    description: >-
+      NAMED AND NOT YET DRAWN. The R740xd ISM figure 9 shows two 3.5 inch drives
+      in the rear, and this library has no 3.5 inch carrier - so the
+      configuration is recorded and left unfinished rather than quietly drawn
+      with a 2.5 inch drive standing in for one, which would be a picture of a
+      machine nobody can order.
   full-24:
     kind: example
     description: >-
