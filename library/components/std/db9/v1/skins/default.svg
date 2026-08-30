@@ -1,20 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="20.47mm" height="11.4mm" viewBox="0 0 20.47 11.4">
-  <!-- The D of D-subminiature: 10 degrees of taper a side per TE 114-40010
-       Figure 3, so an 11.40 drop insets each edge by 11.40*tan(10) = 2.01 and
-       the narrow edge comes out at 16.45. Wide edge up is the usual mounting. -->
-  <path id="opening" d="M0 0 H20.47 L18.46 11.4 H2.01 Z" fill="#17191c"/>
+  <!-- The D of D-subminiature, with the radii the specification gives and an
+       earlier draft did not. TE 114-40010 Figure 3: 10 degrees +/-2 of taper a
+       side, which over an 11.40 drop insets each edge by 2.01 for a 16.45
+       narrow edge, and a 3.35 RADIUS IN FOUR PLACES at the corners where the
+       flats meet the slopes. A bare polygon reads wrong immediately - the
+       shell of a real D-sub is visibly round-cornered. -->
+  <path id="opening"
+        d="M0.693 3.932 A3.350 3.350 0 0 1 3.992 0.000 L16.478 0.000
+           A3.350 3.350 0 0 1 19.777 3.932 L18.948 8.632
+           A3.350 3.350 0 0 1 15.649 11.400 L4.821 11.400
+           A3.350 3.350 0 0 1 1.522 8.632 Z"
+        fill="#17191c" stroke="#9aa0a6" stroke-width="0.35"/>
   <!-- Nine contacts, five over four. NOT SOURCED - neither document held here
        dimensions the contact pitch or the row separation, so this field is
        decoration and the contract says so. -->
   <g fill="#8b9199">
-    <circle cx="4.4" cy="4.0" r="0.55"/>
-    <circle cx="7.4" cy="4.0" r="0.55"/>
-    <circle cx="10.4" cy="4.0" r="0.55"/>
-    <circle cx="13.4" cy="4.0" r="0.55"/>
-    <circle cx="16.4" cy="4.0" r="0.55"/>
-    <circle cx="5.9" cy="7.4" r="0.55"/>
-    <circle cx="8.9" cy="7.4" r="0.55"/>
-    <circle cx="11.9" cy="7.4" r="0.55"/>
-    <circle cx="14.9" cy="7.4" r="0.55"/>
+    <circle cx="4.9" cy="4.1" r="0.55"/>
+    <circle cx="7.6" cy="4.1" r="0.55"/>
+    <circle cx="10.3" cy="4.1" r="0.55"/>
+    <circle cx="13.0" cy="4.1" r="0.55"/>
+    <circle cx="15.7" cy="4.1" r="0.55"/>
+    <circle cx="6.3" cy="7.5" r="0.55"/>
+    <circle cx="9.0" cy="7.5" r="0.55"/>
+    <circle cx="11.7" cy="7.5" r="0.55"/>
+    <circle cx="14.4" cy="7.5" r="0.55"/>
   </g>
 </svg>
