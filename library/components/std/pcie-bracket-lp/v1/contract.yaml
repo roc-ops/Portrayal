@@ -1,26 +1,104 @@
 format: 1
 kind: component
 name: pcie-bracket-lp
-version: 1.0.0
+version: 1.1.0
 class: bracket
 conforms: pcie-bracket-lp
 description: >-
   Low profile PCI Express add-in card I/O bracket - the faceplate every PCIe
   card presents at the chassis wall, with the connector opening its I/O looks
-  through
+  through and the retention tab that drops into the chassis card-guide slot
 size: {w: 79.2, h: 18.42}
 attrs:
   material: '0.86 mm (20 GA) low carbon steel, zinc plated'
   card-height-max: 68.09
   chassis-opening: 65.34
+  return-flange-depth: 9.40
+  return-flange-length: 21.59
+  tapped-hole-pitch: 53.9
 provenance:
   size: >-
     standard - PCI Express Card Electromechanical Specification Revision 5.0,
     June 2021, figure 11-9 "Low profile I/O Bracket" on page 177.
-    Overall 79.2 +/-0.38 by 18.42 wide, connector opening 54.53,
-    tapped hole spacing 53.9, material 0.86 +/-0.08 mm (20 GA) low carbon
-    steel, zinc plated. Every figure here is dimensioned; nothing is read off a
-    picture.
+    Overall 79.2 +/-0.38 by 18.42 wide, material 0.86 +/-0.08 mm (20 GA) low
+    carbon steel, zinc plated.
+  outline: >-
+    measured - the page rendered at 400 dpi. The plate's own 18.42 width fixes the
+    scale, and at that scale the section view's horizontal edges land on the
+    printed 71.46 and 79.2 to better than a tenth of a millimetre, which
+    is what licenses reading the undimensioned features off the same pixels.
+  the-retention-tab: >-
+    A BRACKET DOES NOT END AT THE PLATE. The last 7.74 is a
+    tab 10.20 wide, centred, reached by two 45 degree chamfers
+    4.11 long and finished with 2X R1.90. The spec dimensions it as 14.31
+    from one edge and 4.11 from the other, and 18.42 - 14.31 = 4.11, so it is
+    centred. This tab is what locates the card in the chassis card guide - it is
+    the part of the shape that has to fit, and a first version of this component
+    that drew a plain rounded rectangle had none of it.
+  the-connector-opening: >-
+    54.53 long, starting 9.04 from the flange end, and
+    12.060000000000002 WIDE. The width is not called out beside the opening but it is not a
+    guess either: 18.42 - 2 x 3.18 = 12.060000000000002, the section views of both
+    figure 11-5 and figure 11-9 measure 12.060000000000002 across the hatched band, and
+    figure 11-9 prints 3.18 for the metal each side. An earlier version
+    eyeballed 15.0 off the figure's proportions and was 3 mm out.
+  the-neck-at-the-flange-end: >-
+    THE PLATE IS NOT FULL WIDTH ALL THE WAY. Where it meets the flange it runs
+    narrower and opens back out to 18.42 over a 45 degree chamfer - on this bracket
+    the far edge is inset 1.27 and opens out between
+    9.9 and 11.17 from the flange datum.
+  which-figure-specifies-the-neck: >-
+    FIGURE 11-13, NOT THIS PART'S OWN. "Detailed Two-Slot I/O Bracket Design" on
+    page 181 draws a bracket horizontally, dimensions it by ordinates off one
+    datum, and marks 45 degrees at BOTH ends - 2.57 and 5.33 for the two
+    flange-end chamfers. It also prints 3.18 for the opening inset and
+    places its two retention tabs at 4.11-14.30 and 24.43-34.62, which is the
+    same 10.20 tab twice on the 20.32 slot pitch, corroborating
+    both from a second drawing. THE PROSE AROUND FIGURES 11-5 AND 11-9 IS SILENT
+    ABOUT THE NECK, and reading only that prose produced a first draft of this
+    contract asserting the specification never describes it - a much stronger
+    claim than the one page checked could support. The values above stay measured
+    off figure 11-9, because a two-slot bracket's outer edges are not a
+    single bracket's, but figure 11-5 prints 2.54 for its near chamfer and both
+    single-bracket figures print (17.15) for the far edge, which is 18.42 - 1.27.
+    The drawing puts a small S-hook at the transition - the edge dips in about
+    half a millimetre before sweeping out - which is below what a face view can
+    resolve and is drawn here as a clean 45 degree chamfer.
+  corroborated-by-a-second-reading: >-
+    A community fabrication guide in the knowledge base - "Drawing PCIe brackets
+    and ATX/mATX/mITX rear-IO apertures", SaintsEnd on overclock.net 2016, which
+    cites page and figure into CEM 1.1 - independently states almost every number
+    here: bracket 79.2 by 18.42, material 0.86, the opening starting 10.16 above the
+    IO aperture, the bottom tab's 45 degree cuts beginning at 112.75 with insets
+    of 4.11 and 4.12 (18.42 - 14.30), corners rounded R1.91, and the 20.32
+    slot-to-slot pitch. Two readings of the same drawing taken years and methods
+    apart agreeing to a hundredth of a millimetre is worth more than either alone.
+  what-the-guide-explained-that-the-figure-did-not: >-
+    THE RETURN FLANGE IS 21.59 LONG, WHICH IS LONGER THAN THE BRACKET IS WIDE,
+    and figure 11-5 prints 21.59 with no hint why. The guide says why: the flange
+    is deliberately longer than the 20.32 slot pitch so that it KEYS OVER THE
+    ADJACENT SLOT. That is the reason a bracket cannot simply be as wide as its
+    own slot, and it is carried in attrs as return-flange-length. It also places
+    the bracket across the card: 1.27 on the solder side and 17.15 toward the
+    component side, which is what figure 11-5's otherwise puzzling "2X (17.15)"
+    is measuring - NOT a neck width, which is how a first pass read it.
+  the-return-flange-is-not-on-this-face: >-
+    At the flange end the metal turns 90 degrees out of the plate and runs 9.40
+    into the chassis; the hold-down screw goes through THAT tab, not through
+    anything visible here. It is perpendicular to this elevation and points AWAY
+    from the viewer, into the chassis, so it is neither something the face can
+    show nor something `relief` can raise - relief features stand proud toward
+    the viewer. It is carried as attrs.return-flange-depth and drawn on the face
+    only as the fold line. Drawing it flat would make the part 9.40 too long.
+  the-tapped-ears-are-not-drawn: >-
+    THE TWO #4-40 EARS ARE NOT ON THIS FACE EITHER. They sit 53.9 apart,
+    are 12.57 long, and bend the opposite way - toward the card board they screw
+    to. A first draft put the holes on the front and they landed INSIDE the
+    connector opening, which is the giveaway: the hole pitch is SHORTER than the
+    opening is long. Each ear does leave a shallow notch in one long edge of the
+    plate, and that notch is left off deliberately: WHICH edge depends on which
+    way round the card is installed, and a guessed side is worse than an absent
+    feature at this scale.
   why-a-standard-part: >-
     EVERY PCIe CARD SHARES THIS OUTLINE, which is the point of the form factor -
     "to enable the reuse of existing chassis slots" in the specification's own
@@ -31,42 +109,25 @@ provenance:
     MEASURING A PHOTOGRAPH GIVES THE OPENING, NOT THE BRACKET. Reading Dell's
     rear figure produced a "bracket" of about 90 mm on one riser and 110 on
     another - impossible for a standard part, and it sent two rounds of modelling
-    chasing per-riser widths that do not exist. 89.90 is the CONNECTOR OPENING:
-    the hole is what the eye picks out and the metal around it recedes into the
-    chassis. The specification settles in one page what no amount of measuring
-    the photograph could.
-  tapped-ears: >-
-    THE TWO #4-40 HOLES ARE NOT ON THIS FACE and are not drawn. They sit on the
-    RETURN FLANGE that screws to the card board, facing into the chassis. A first
-    draft put them on the face and they landed INSIDE the connector opening -
-    which is the giveaway, since the hole spacing is SHORTER than the opening is
-    long. The spacing is recorded above because it identifies the part; it is not
-    geometry this view carries.
-  confirmed-against-the-part: >-
-    A PHOTOGRAPH OF A LOOSE BLANKING BRACKET agrees with the specification: the
-    hooked tab at one end, the plain tab at the other, and between them a vent
-    field of TWO ROWS inside a rounded window with the outboard pair of holes
-    sitting outside that window. The outline is the spec's; what a vendor does
-    inside the opening is the vendor's, which is why the vent field belongs to
-    dell/pcie-filler-* and not here.
+    chasing per-riser widths that do not exist. 54.53 is the CONNECTOR
+    OPENING: the hole is what the eye picks out and the metal around it recedes
+    into the chassis.
   orientation: >-
-    drawn LONG-AXIS HORIZONTAL, which is how a 2U rear presents it and how the
-    rest of std/ is drawn. A tower stands it on end; that is a device's `rotate`
-    and not a property of the part.
+    drawn LONG-AXIS HORIZONTAL WITH THE RETENTION TIP AT THE LEFT, which is how a
+    2U rear presents it. The specification draws the bracket vertically with the
+    tip at the bottom, so every dimension it takes from the flange datum maps to
+    L - x here.
   chassis-opening: >-
-    65.34 REF is the chassis opening dimension K from the same
-    specification's figure 11-35 table - the MINIMUM aperture, which it says
-    explicitly "will vary based on system implementation". It is carried in attrs
-    for a device that needs to punch one, and is deliberately not this part's
-    `size`.
+    65.34 REF is the chassis opening dimension from the same
+    specification - the MINIMUM aperture, which it says explicitly "will vary
+    based on system implementation". It is carried in attrs for a device that
+    needs to punch one, and is deliberately not this part's `size`.
 elements:
   opening:
-    at: [12.07, 1.71]
-    size: [54.53, 15.0]
+    at: [15.63, 3.18]
+    size: [54.53, 12.060000000000002]
     class: cutout
     description: >-
-      the connector opening in the bracket, 54.53 along its length. Its
-      width across the bracket is NOT dimensioned in the figure the way the
-      length is, so 15.0 is drawn to the proportion shown and the length is the
-      number that carries weight.
+      the connector opening, 54.53 by 12.060000000000002, sitting 3.18 in
+      from each long edge
 skins: [default]
