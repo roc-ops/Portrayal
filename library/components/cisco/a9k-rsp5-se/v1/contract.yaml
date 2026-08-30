@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-rsp5-se
-version: 1.0.0
+version: 1.1.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -26,6 +26,16 @@ attrs:
   eol: 'none-announced'
   weight-kg: 9.25
 provenance:
+  usb-orientation: >-
+    CORRECTED at 1.1.0 - the USB-A carried `rotate: 90`, which stands a 12.0 x
+    4.5 receptacle on end as 4.5 x 12.0 and makes it 2.23 mm taller than the
+    18.89 x 9.77 `usb-bezel` it sits in. The placement's own anchor is what
+    refutes the rotation: `at` is a top-left, so centred against that bezel the
+    UNROTATED part lands on its centre to 0.010 mm where the rotated one is
+    7.51 mm out. The coordinate was computed for a horizontal port and the
+    rotation was applied over the top of it. No photograph was needed and none
+    was used - the two numbers already in the file disagree, and only one of
+    them can be right.
   relief: >-
     RELIEF IS DECLARED, AND WHAT MATTERS ABOUT IT IS THAT IT IS A HANDFUL OF NUMBERS AND NOT
     A HANDFUL PER PART. This face carries: 9 panel lamps at dome 0.3 (one number, carried by
@@ -418,7 +428,7 @@ parts:
   - {ref: std/rj45-ganged@1, id: aux, at: [7.3, 290.28], rotate: 90}
   - {ref: std/smb@1, id: gps-10mhz, at: [9.55, 163.19]}
   - {ref: std/smb@1, id: gps-1pps, at: [9.55, 172.91]}
-  - {ref: std/usb-a@1, id: usb, at: [10.16, 219.87], rotate: 90}
+  - {ref: std/usb-a@1, id: usb, at: [10.16, 219.87]}
 body:
   depth: 625.3
   color: '#b9bec4'
