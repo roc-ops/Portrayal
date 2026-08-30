@@ -143,7 +143,8 @@ MAX_BAY_DEPTH = 3
 
 
 def state_style(st, vocabulary=()):
-    """(color, alt-color, mode, lit) for one state, or None if it needs no CSS.
+    """(color, alt, mode, lit, rate, phases) for one state, or None if it needs
+    no CSS.
 
     A bare token needs none: it names a state with no declared presentation, and
     whatever the base stylesheet says about `state-<name>` still applies.
@@ -153,24 +154,87 @@ def state_style(st, vocabulary=()):
     not a colour at all, it is four of seven bars. `vocabulary` is every segment
     the component draws, so the rule can turn the rest off explicitly rather than
     relying on whatever the previous state left behind.
+
+    `rate` and `phases` are what a real lamp needed that three modes could not
+    say. Dell documents its drive status lamp as seven conditions, of which
+    `blinking amber` had to stand for two - 'blinks amber four times per second,
+    drive failure' and 'blinks green, amber, and turns off, PREDICTED failure' -
+    which is a fault and a warning rendering identically.
     """
     if not isinstance(st, dict):
         return None
     beh = st.get("behavior")
-    mode = beh if isinstance(beh, str) else (beh or {}).get("mode", "solid")
-    alt = None if isinstance(beh, str) else (beh or {}).get("color")
+    obj = {} if isinstance(beh, str) else (beh or {})
+    mode = beh if isinstance(beh, str) else obj.get("mode", "solid")
+    alt = obj.get("color")
+    rate = obj.get("rate")
+    phases = tuple((p.get("color"), p.get("seconds"))
+                   for p in obj.get("phases") or ()) or None
     color = st.get("color")
     # `is not None`, not truthiness: `lights: []` is a state that lights NOTHING -
     # a blank digit, an unlit decimal point - and is as real as any other.
     lit = st.get("lights")
     if lit is not None:
-        return (color, alt, mode, (tuple(lit), tuple(sorted(vocabulary))))
+        return (color, alt, mode, (tuple(lit), tuple(sorted(vocabulary))),
+                rate, phases)
     if not color and mode == "solid":
         return None
-    return (color, alt, mode, None)
+    return (color, alt, mode, None, rate, phases)
 
 
-def state_rule(sel_color, sel_anim, color, alt, mode, segments=None):
+def seq_css_name(*parts):
+    """The @keyframes name for one state's sequence.
+
+    A sequence needs its own keyframes, so it needs its own NAME: the cycle is
+    per state, and two states sharing a name animate each other. Built from the
+    component and state so it is stable across builds rather than an ordinal
+    that moves when a part is added.
+
+    THIS LIVES HERE BECAUSE TWO GENERATORS FOR ONE OUTPUT DRIFT. render.py and
+    components_index.py both emit state rules, and the last time the second one
+    grew its own copy of that logic every component skin carried a Python tuple
+    where a colour belonged. When the sequence name was passed in only one of
+    them, the other emitted `@keyframes None` - twice, colliding - which is a
+    stylesheet that parses and a lamp that does not animate.
+    """
+    return "portrayal-seq-" + re.sub(r"[^a-zA-Z0-9]+", "-",
+                                     "-".join(str(p) for p in parts)).strip("-")
+
+
+def sequence_keyframes(name, phases):
+    """A named @keyframes walking one lamp through an ordered cycle.
+
+    A phase with no colour is the lamp OFF, which is a phase like any other -
+    'blinks green, amber, and turns off' is three of them and the third is the
+    point. Durations may be absent, in which case the phases divide the cycle
+    evenly: some vendors give the order without the timing, and dividing evenly
+    records that rather than inventing seconds.
+
+    Opacity carries the off phases and fill carries the colours, which is the
+    same split the fixed blink and alternate keyframes already use.
+    """
+    total = sum(s for _, s in phases if s) or 0.0
+    if not total:                       # no timings given: even division
+        each = 100.0 / len(phases)
+        bounds = [(i * each, (i + 1) * each) for i in range(len(phases))]
+        total = float(len(phases))
+    else:
+        bounds, at = [], 0.0
+        for _, s in phases:
+            span = (s or 0) / total * 100.0
+            bounds.append((at, at + span))
+            at += span
+    steps = []
+    for (start, end), (color, _) in zip(bounds, phases):
+        lit = "opacity: 1;" if color else "opacity: 0;"
+        fill = f" fill: {color};" if color else ""
+        steps.append(f"      {start:g}%, {max(start, end - 0.1):g}% "
+                     f"{{ {lit}{fill} }}")
+    return f"    @keyframes {name} {{\n" + "\n".join(steps) + "\n    }", total
+
+
+def state_rule(sel_color, sel_anim, color, alt, mode, segments=None,
+               rate=None, phases=None, seq_name=None):
     """The CSS for one state at one scope: what colour, how it is lit, and - for a
     segment display - which of its segments are on.
 
@@ -184,9 +248,17 @@ def state_rule(sel_color, sel_anim, color, alt, mode, segments=None):
                          f"--led-color-alt: {alt};" if alt else "") if d]
     if decls:
         out += f"\n    {sel_color} {{ {' '.join(decls)} }}"
-    if mode in BLINK_KEYFRAMES:
+    if mode == "sequence" and phases:
+        kf, total = sequence_keyframes(seq_name, phases)
+        out += "\n" + kf
+        out += (f"\n    {sel_anim} {{ animation: {seq_name} "
+                f"{total:g}s steps(1, end) infinite; }}")
+    elif mode in BLINK_KEYFRAMES:
+        # a rate is a frequency, so the period is its reciprocal; no rate keeps
+        # the one second every state written before `rate` existed meant
+        period = 1.0 / rate if rate else 1.0
         out += (f"\n    {sel_anim} {{ animation: {BLINK_KEYFRAMES[mode]} "
-                f"1s linear infinite; }}")
+                f"{period:g}s linear infinite; }}")
     if segments:
         lit, vocabulary = segments
         on = " ,".join(f"{sel_color} [data-seg='{s}']" for s in lit)
@@ -1188,9 +1260,11 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             draw_placement(p)
 
     if palette or inst_palette:
+        kf_name = seq_css_name
         extra = "".join(
             state_rule(f"g[data-ref^='{comp}@'] .state-{name}",
-                       f"g[data-ref^='{comp}@'] .state-{name}", *style)
+                       f"g[data-ref^='{comp}@'] .state-{name}", *style,
+                       seq_name=kf_name(comp, name))
             for (comp, name), style in sorted(palette.items()))
         # An instance rule has to beat the component rule for the same name, so it
         # is written as an id selector: one id beats any number of attribute
@@ -1209,9 +1283,11 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             return ", ".join(color), ", ".join(anim)
 
         extra += "".join(
-            state_rule(*sels(ids, name), color, alt, mode)
-            for (name, color, alt, mode, _seg), ids in sorted(
-                inst_palette.items(), key=lambda kv: tuple(str(x) for x in kv[0])))
+            state_rule(*sels(ids, name), color, alt, mode, rate=rate,
+                       phases=phases, seq_name=kf_name("inst", name, i))
+            for i, ((name, color, alt, mode, _seg, rate, phases), ids) in
+            enumerate(sorted(inst_palette.items(),
+                             key=lambda kv: tuple(str(x) for x in kv[0]))))
         style.text = STATE_CSS + extra + "\n"
 
     # A component's own <g id="silkscreen"> is printed on ITS faceplate, so it

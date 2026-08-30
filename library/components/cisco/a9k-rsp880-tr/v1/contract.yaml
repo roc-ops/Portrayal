@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-rsp880-tr
-version: 1.0.0
+version: 1.2.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -28,6 +28,16 @@ attrs:
   weight-kg: 8.07
   sfp-plus: 4
 provenance:
+  usb-orientation: >-
+    CORRECTED at 1.1.0 - the USB-A carried `rotate: 90`, which stands a 12.0 x
+    4.5 receptacle on end as 4.5 x 12.0 and makes it 1.60 mm taller than the
+    21.19 x 10.40 `usb-bezel` it sits in. The placement's own anchor is what
+    refutes the rotation: `at` is a top-left, so centred against that bezel the
+    UNROTATED part lands on its centre to 0.005 mm where the rotated one is
+    7.49 mm out. The coordinate was computed for a horizontal port and the
+    rotation was applied over the top of it. No photograph was needed and none
+    was used - the two numbers already in the file disagree, and only one of
+    them can be right.
   relief: >-
     RELIEF IS DECLARED, AND WHAT MATTERS ABOUT IT IS THAT IT IS A HANDFUL OF NUMBERS AND NOT
     A HANDFUL PER PART. This face carries: 13 panel lamps at dome 0.3 (one number, carried
@@ -159,24 +169,19 @@ provenance:
     normally-closed contacts are available. Only the active RSP/RP drives the alarm
     outputs.'
   db9: >-
-    the ALARM OUT connector is DRAWN, not composed, and it IS declared `class: cutout` -
-    which is a reversal of what these components said until now and the reversal is the
-    point. There is no std/ part for a D-subminiature DE-9, no `db9` key in
-    spec/schemas/standards.yaml, and no document in this intake dimensions the panel
-    opening; the geometry here is transcribed from the master. The earlier version
-    withheld `class: cutout` on the reasoning that a cutout conforming to nothing would
-    corrupt the aperture census L26 keeps. THAT WAS BACKWARDS. L26's own message ends
-    'if the dimension cannot be sourced yet, this warning is the record of that', and
-    its docstring calls the rule a to-do list for std/ rather than an accusation.
-    Withholding the declaration did not keep the census clean, it kept a real gap OUT of
-    the one rule built to hold it - a count kept tidy by routing around the detector. So
-    the cutout is declared, the L26 warning stands, and the register is one entry more
-    honest. WHAT WOULD CLOSE IT: a `db9` key in standards.yaml carrying the D-sub panel
-    cutout from MIL-DTL-24308 or its commercial equivalent, plus a std/db9 part. That is
-    a real errand somebody can run, unlike the CFP family's, and nobody has run it.
-    CONTRAST cisco/a9k-750w-dc, whose DC terminal block is correctly NOT a cutout: that
-    is hardware bolted to the face rather than a hole punched in it, and the distinction
-    is between a thing that needs an opening and a thing that does not.
+    CLOSED. The ALARM OUT is composed from common/db9-receptacle@1, which frames
+    std/db9@1 and its sourced size E aperture, so this card no longer draws a
+    connector nobody had dimensioned. What closed it: TE application
+    specification 114-40010 Rev G Figure 3 for the panel cutout - 20.47 x 11.40
+    with 10 degrees of taper a side and a 3.35 radius in four places - and
+    customer drawing C-747905 Rev AB1 for the flange, shell and the 24.99
+    mounting centres the standoffs sit on. Both are now carried by the `db9` key
+    in spec/schemas/standards.yaml.
+    WHAT THE DRAWN ONE HAD BEEN: 11.86 x 35.65, which is not any DE-9. The
+    master this family traces is scaled to each card's envelope by two separate
+    factors, so the connector came out stretched along the card's long axis and
+    differently on every card - 18.46 to 35.65 mm long across the fifteen for a
+    part that is one size in reality. The centre was kept; only the size moved.
   lamps: >-
     install guide - Table 4, 'RSP, RSP-440, RSP-440 Lite, RSP-880, RSP880-LT, RSP4-S,
     RSP5 Discrete LED Display Definitions', and Table 5 for the RP, transcribed per lamp
@@ -250,10 +255,6 @@ elements:
     states:
     - {name: green, color: '#39b54a'}
     - 'off'
-  alarm-out:
-    at: [10.89, 194.06]
-    size: [11.86, 35.65]
-    class: cutout
   led-matrix:
     at: [15.96, 376.86]
     size: [19.43, 8.23]
@@ -523,11 +524,12 @@ parts:
   - {ref: std/rj45-ganged@1, id: aux, at: [8.97, 309.15], rotate: 90}
   - {ref: std/smb@1, id: gps-10mhz, at: [11.0, 173.75]}
   - {ref: std/smb@1, id: gps-1pps, at: [11.0, 184.09]}
-  - {ref: std/usb-a@1, id: usb, at: [12.13, 234.04], rotate: 90}
+  - {ref: std/usb-a@1, id: usb, at: [12.13, 234.04]}
   - {ref: std/sfp-ganged@1, id: sfp-plus-0, at: [22.64, 89.83], rotate: 90}
   - {ref: std/sfp-ganged@1, id: sfp-plus-1, at: [9.18, 89.83], rotate: 90}
   - {ref: std/sfp-ganged@1, id: sfp-plus-2, at: [22.64, 105.43], rotate: 90}
   - {ref: std/sfp-ganged@1, id: sfp-plus-3, at: [9.18, 105.43], rotate: 90}
+  - {ref: common/db9-receptacle@1, id: alarm-out, at: [1.42, 205.635], rotate: 90}
 body:
   depth: 628.9
   color: '#b9bec4'

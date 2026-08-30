@@ -20,7 +20,8 @@ import yaml
 from manifest import load_yaml
 
 sys.path.insert(0, str(Path(__file__).parent))
-from render import SVG_NS, STATE_CSS, Library, instance_group, state_rule  # noqa: E402
+from render import (SVG_NS, STATE_CSS, Library, instance_group,  # noqa: E402
+                    seq_css_name, state_rule)
 
 
 def _confidence_counts(data):
@@ -122,7 +123,8 @@ def main():
                 # swapped card was the one case a user could actually click.
                 extra = "".join(
                     state_rule(f"g[data-ref^='{comp}@'] .state-{name}",
-                               f"g[data-ref^='{comp}@'] .state-{name}", *style)
+                               f"g[data-ref^='{comp}@'] .state-{name}", *style,
+                               seq_name=seq_css_name(comp, name))
                     for (comp, name), style in sorted(palette.items()))
                 style.text = STATE_CSS + extra
                 svg.append(g)

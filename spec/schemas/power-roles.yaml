@@ -27,6 +27,7 @@ roles:
   # where the vendor gives one). L27 asks these and warns while they are silent.
   draw:
     - line-card
+    - drive
     - supervisor
     - fabric
     # `switch` is here because all three components carrying it are chassis
@@ -45,6 +46,11 @@ roles:
     # ever demanded be filled. That is a class-set omission, not a missing token.
     - panel
     - display
+    # a control panel is lamps, buttons and a flex cable to the board. It draws
+    # little and no document held here says how little - which is exactly the
+    # case this list exists for, because a class in no role is never asked and
+    # its silence then reads as zero rather than as unknown.
+    - control-panel
 
   # SUPPLIES: state `power-output-w` and never a draw key - they are opposite
   # signs of one unit, so a sum over both is a category error that reads as an
@@ -68,6 +74,10 @@ roles:
     - ear
     - tab
     - panel-blank
+    # a plain front bezel is a sheet of metal with a lock in it. The LCD variant
+    # is NOT this class - it carries a display and would draw - which is part of
+    # why the two are separate parts rather than skins of one.
+    - bezel
     # printing and reference marks - not parts at all, but they carry a class
     - sticker
     - marking

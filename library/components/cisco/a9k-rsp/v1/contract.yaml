@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-rsp
-version: 1.0.0
+version: 1.1.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -170,15 +170,6 @@ elements:
       table - this card has both an HDD and a CF lamp - but no document in the intake says
       which panel is which, so the two are identified by position against the lamp column
       above them and that is an inference, not a citation.
-  alarm-out:
-    at: [8.6, 176.55]
-    size: [8.63, 18.46]
-    class: cutout
-    description: >-
-      the nine-pin Alarm Out connector, drawn rather than composed: there is no std/ part
-      for a DE-9 and no registry key for its panel opening, and no document in the intake
-      dimensions it. Declared `class: cutout` all the same - see provenance.db9 for why
-      withholding that was the wrong way round.
   fail:
     at: [13.73, 317.72]
     size: [2.11, 2.11]
@@ -382,6 +373,7 @@ parts:
   - {ref: std/rj45-ganged@1, id: aux, at: [5.98, 105.71], rotate: 90}
   - {ref: std/rj45-ganged@1, id: sync-0, at: [5.98, 126.89], rotate: 90}
   - {ref: std/rj45-ganged@1, id: sync-1, at: [5.98, 148.08], rotate: 90}
+  - {ref: common/db9-receptacle@1, id: alarm-out, at: [-2.485, 179.53], rotate: 90}
 body:
   depth: 673.8
   color: '#b9bec4'

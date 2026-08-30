@@ -100,7 +100,7 @@ SEGMENT = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 STATE_TOKEN = re.compile(r"^[a-z0-9-]+$")
 # Solid, on and off, or flashing between two colours. Rate is not here yet -
 # see the note on `behavior` in the schema.
-STATE_BEHAVIORS = {"solid", "blinking", "alternating"}
+STATE_BEHAVIORS = {"solid", "blinking", "alternating", "sequence"}
 ERRORS = []
 WARNINGS = []
 
@@ -361,6 +361,33 @@ def check_states(path, where, states, attrs, elements=None):
         if mode == "alternating" and not (isinstance(beh, dict) and beh.get("color")):
             err(path, "L20", f"{where}/{name}: behavior alternating flashes between "
                              f"two colours - give the second as behavior.color")
+        # `sequence` says the pattern IS the phase list, so the phase list has to
+        # carry it. A sequence whose phases are all dark is a lamp that never
+        # lights, and a colour on the state itself is a colour nothing draws -
+        # every frame of the cycle sets its own fill, so the base is overwritten.
+        if mode == "sequence":
+            phases = beh.get("phases") if isinstance(beh, dict) else None
+            if not isinstance(phases, list) or len(phases) < 2:
+                err(path, "L20", f"{where}/{name}: behavior sequence is a cycle of "
+                                 f"phases - give at least two as behavior.phases, "
+                                 f"each {{color, seconds}}, a phase with no colour "
+                                 f"being the lamp off")
+            elif not any(isinstance(p, dict) and p.get("color") for p in phases):
+                err(path, "L20", f"{where}/{name}: every phase of this sequence is "
+                                 f"dark, so the lamp never lights. That is state "
+                                 f"'off' with extra steps")
+            elif isinstance(st, dict) and st.get("color"):
+                warn(path, "L20", f"{where}/{name}: state names colour "
+                                  f"{st['color']!r} AND a sequence. The phases set "
+                                  f"the fill on every frame, so the state colour "
+                                  f"reaches nothing - put it in a phase")
+        # A rate is a blink frequency. On anything that does not blink it is a
+        # number the drawing cannot use, which reads as modelled and is not.
+        if isinstance(beh, dict) and beh.get("rate") is not None \
+                and mode not in ("blinking", "alternating"):
+            warn(path, "L20", f"{where}/{name}: behavior {mode!r} carries a rate, "
+                              f"but only blinking and alternating have one. For a "
+                              f"sequence the timing is `seconds` on each phase")
     prose = (attrs or {}).get("states")
     if prose is not None:
         warn(path, "L20", f"{where}: attrs.states = {str(prose)[:60]!r} - state "
@@ -2115,6 +2142,29 @@ def lint_device_bay_pitch(path, data):
                          "second image before recording it as a finding")
 
 
+EAR_ZONE_MM = 25.0
+
+
+def _seated_in_an_ear(view, w):
+    """Anything installed within EAR_ZONE_MM of either end of the face.
+
+    25 mm because that is what an ear is: a 19-inch face is 482.6 mm and the
+    bodies behind one run 434 to 448 mm, so the flange each side is between 17
+    and 24 mm. Anchors are compared rather than full extents - a part's width
+    lives in its contract and this rule does not need to resolve one to know
+    that something was seated out there.
+    """
+    parts = view_parts(view)
+    for item in parts["placements"] + parts["bays"] + parts["cutouts"]:
+        at = item.get("at")
+        if not at:
+            continue
+        x = float(at[0])
+        if x <= EAR_ZONE_MM or x >= w - EAR_ZONE_MM:
+            return item.get("id") or item.get("ref") or "a component"
+    return None
+
+
 def lint_device_rack_ears(path, data):
     """L43: a body as wide as the rack face still has its ears on.
 
@@ -2126,15 +2176,33 @@ def lint_device_rack_ears(path, data):
     Structural and cheap: a front or rear face measuring 480-487 mm is almost
     certainly a rack face rather than a body. The widest body in the library
     today is 443 mm, so this costs nothing until it fires.
+
+    UNLESS THE EARS CARRY COMPONENTS, WHICH IS A DIFFERENT DEVICE. The rule was
+    written for the MX204, whose flanges are bare metal - subtract them and
+    nothing is lost. Dell builds the ears into the faceplate and PUTS PORTS IN
+    THEM: a PowerEdge R740xd has a VGA and a USB in the right-hand ear and the
+    power button and status indicators in the left, and its front measures
+    482.6 x 86.8, which Gate 1 confirms against the render at 2.10% where the
+    434 mm body fails at 13.5%. Modelling that face at 434 mm would leave real,
+    addressable, field-visible ports with nowhere to live.
+
+    So the test is what is SEATED out there, not how wide the face is. Bare
+    flanges have nothing in the outer 25 mm; populated ears do. No new field to
+    author and nothing to remember - the drawing says which kind of device it is.
     """
     for vname, view in (data.get("views") or {}).items():
         if vname not in ("front", "rear"):
             continue
         w = ((view or {}).get("size") or {}).get("w")
-        if w and 480.0 <= float(w) <= 487.0:
-            warn(path, "L43", f"{vname}: view is {w} wide, which is the 19-inch "
-                 "rack face, not a body. Ears are never drawn - measure between "
-                 "the fold lines and record the ear extent in provenance")
+        if not (w and 480.0 <= float(w) <= 487.0):
+            continue
+        if _seated_in_an_ear(view or {}, float(w)):
+            continue
+        warn(path, "L43", f"{vname}: view is {w} wide, which is the 19-inch "
+             "rack face, not a body. Ears are never drawn - measure between "
+             "the fold lines and record the ear extent in provenance. If this "
+             "device's ears are integral AND carry components, seat them "
+             f"within {EAR_ZONE_MM:g}mm of an end and this rule will stand down")
 
 
 def _decor_box(d):

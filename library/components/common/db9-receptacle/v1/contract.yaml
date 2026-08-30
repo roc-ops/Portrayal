@@ -1,0 +1,49 @@
+format: 1
+kind: component
+name: db9-receptacle
+version: 1.0.0
+class: port
+profile: networking
+description: >-
+  DE-9 receptacle as a faceplate sees it - the shell with a jackscrew standoff
+  either side of it, which is what an RS-232 or alarm-out port on equipment
+  looks like. No bezel: that is the device's, not the connector's
+size: {w: 30.8, h: 12.5, d: 6.73}
+attrs: {media: db9}
+provenance:
+  size: >-
+    drawing - TE customer drawing C-747905 Rev AB1, 'Receptacle Assembly, Solder
+    Cup, Size 1, 9 Position, AMPLIMITE': flange 30.8 x 12.5, shell 16.30
+    +/-0.25, mounting holes of diameter 3.1 on 24.99 centres. The 30.8 x 12.5
+    is the extent the part occupies on a face, standoff to standoff.
+  standoffs: >-
+    Position sourced, size estimated. C-747905 puts the two mounting holes on
+    24.99 centres and 114-40010 section 3.3 describes the 4-40 screwlocks that
+    thread into them. THE HEX IS SOURCED TOO, from Cisco's ASR 9000 Visio
+    master, which draws these as hex nuts on the ALARM OUT of every route
+    processor in the stencil - so the shape is not a guess even though the
+    across-corners figure is. Drawn 4.6 across corners, which fits inside the
+    4.83 panel clearance 114-40010 allows where screwlocks are fitted; the head
+    itself is dimensioned in no document held here. The bore is 2.3, which is
+    the 4-40 tap drill.
+  no-bezel: >-
+    THIS PART DELIBERATELY CARRIES NO PLATE. A first draft drew the dogbone
+    flange from Cisco's ASR 9000 master, and that was the wrong place for it: a
+    D-subminiature receptacle is a shell and two standoffs, and the plate around
+    Cisco's is Cisco's own bezel cut to a shape nothing else uses. Putting one
+    vendor's trim in a shared part would have pushed it onto every device that
+    ever seats a DE-9. A device with a bezel around its D-sub draws that bezel
+    itself, like any other decoration behind the parts seated on it.
+  aperture: >-
+    composed - the D-shaped opening is std/db9@1, which carries the sourced size
+    E panel cutout from TE 114-40010 Figure 3. This part frames it; it does not
+    redefine it.
+  depth: >-
+    carried from std/db9@1, where 6.73 is 114-40010's mating dimension standing
+    in for a recess neither document gives.
+elements: {}
+parts:
+  - {ref: std/db9@1, id: shell, at: [5.165, 0.55]}
+connection-points:
+  mate: {at: [15.4, 6.25], direction: front}
+skins: [default]

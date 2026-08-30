@@ -1,0 +1,80 @@
+format: 1
+kind: module
+name: bezel-2u-14g
+version: 1.0.0
+class: bezel
+behaviour: mounts
+profile: server
+description: >-
+  The optional metal front bezel for a 2U 14th-generation PowerEdge - a
+  honeycomb of large hexagonal openings between two end flanges, with a keylock
+  and a release button at the left end. Unbranded
+size: {w: 434.0, h: 82.35, d: 14.0}
+provenance:
+  size: >-
+    THE MASTER'S ASPECT, ANCHORED BY WHERE THE PART FITS. Dell's 2u-14g-bezel
+    Visio master draws 21720.3 x 4121.7 units, an aspect of 5.2698, and NO
+    document held here dimensions the bezel - the ISM describes it, gives its
+    removal procedure and never states a size.
+    That aspect fails Gate 1 against a 482.6 x 86.8 rack face by 5.22%, AND IT
+    SHOULD: the operator reports that the bezel clears both ears and does not
+    cover the whole front, so a rack face was never the right thing to test it
+    against. Clearing the ears bounds the width at the 434 mm body, and 434 at
+    the master's aspect is 82.35 tall - which leaves 24.3 mm of ear showing each
+    side and 2.2 mm of face above and below. A failed gate against the wrong
+    reference is not a bad drawing; it is the drawing saying the reference is
+    wrong.
+  flanges: >-
+    drawing - the master's outer path runs the full 21720.3 and the next one in
+    starts 1241.9 units from each end, which at 50.05 units/mm is a 24.8 mm end
+    flange on each side and a 384.4 mm honeycomb field between them. The field is
+    narrower than the 428.8 mm drive array, so the flanges sit over the outermost
+    carriers - they are opaque bezel metal and the drives behind them are covered
+    either way.
+  honeycomb: >-
+    counted, not measured. The master draws the honeycomb as gradient-filled
+    regions rather than as individual cells - its busiest path has seven
+    subpaths and they are the logo - so there is no cell geometry to extract.
+    Counting dark runs across the rendered master gives twelve crossings through
+    the upper band and eighteen through the middle, which is a flat-top grid of
+    about nine columns over the field and two offset rows. Cell size follows from
+    the count and the field width; it is not a dimension anything states.
+  lock: >-
+    ISM 'Removing the front bezel': unlock with the bezel key, press the release
+    button, pull the LEFT end, unhook the RIGHT. So the lock and the release are
+    at the left end and the hooks at the right, which is why this drawing puts
+    them there rather than mirroring them - the removal procedure is the source
+    for the handedness.
+  material: >-
+    the ISM calls it 'an optional metal bezel'. Metal and not plastic, which is
+    why it is drawn with a machined edge rather than a moulded one.
+  no-branding: >-
+    DELIBERATELY UNBRANDED. The master carries a Dell EMC wordmark across the
+    middle and it is not reproduced: vendor artwork stays in working/ and what
+    crosses into the library is geometry. The operator asked for it left off as
+    well, so the drawing and the rule agree.
+  lcd-variant: >-
+    NOT MODELLED. The ISM says two versions exist, with and without an LCD panel,
+    and that the LCD one is hot pluggable. Only the plain bezel is drawn here; a
+    bezel with an LCD is a different part with a display element and states, and
+    modelling it as a skin of this one would give it a screen that cannot light.
+  depth: >-
+    estimated. It stands proud of the face and no document held here says by how
+    much. 14 is a placeholder.
+elements:
+  lock:
+    at: [8.0, 12.0]
+    size: [9.0, 9.0]
+    class: control
+    description: >-
+      the keylock. ISM: 'A lock on the bezel is used to protect unauthorized
+      access to the drives', and step 1 of removal is to unlock it with the
+      bezel key.
+  release:
+    at: [3.2, 30.0]
+    size: [4.6, 22.0]
+    class: control
+    description: >-
+      the release button on the left flange - step 2 of removal, pressed before
+      the left end is pulled away.
+skins: [default]

@@ -1,0 +1,39 @@
+format: 1
+kind: component
+name: vga
+version: 1.0.0
+class: port
+profile: networking
+conforms: hd15
+interface: hd15
+description: >-
+  VGA video receptacle - a female high-density DE-15, fifteen contacts in three
+  rows inside the D-subminiature size E shell
+size: {w: 20.47, h: 11.40, d: 6.73}
+attrs: {media: vga}
+provenance:
+  size: >-
+    standard - the size E panel cutout, 20.47 x 11.40 with 10 degrees of taper a
+    side and a 3.35 radius, from TE application specification 114-40010 Rev G
+    Figure 3. HD-15 sits in that shell rather than a larger one: Amphenol's High
+    Density D-Subminiature datasheet puts its 15-position part on a 30.81 flange
+    at 24.99 mounting centres, and TE's standard-density DE-9 drawing C-747905
+    Rev AB1 gives 30.8 and 24.99 for the same shell. See spec/schemas/
+    standards.yaml `hd15` for why the 15 row of a standard-density table is a
+    different connector.
+  gender: >-
+    female on equipment - VGA is a receptacle with sockets, where the DE-9 alarm
+    and serial ports on router processors are usually male with pins. The shell
+    and therefore the aperture are the same either way; only the insert differs.
+  depth: >-
+    estimated - carried from `db9`, where 6.73 is 114-40010's mating dimension
+    for 9 and 15 position rather than a measured recess.
+  pins: >-
+    NOT SOURCED. Fifteen contacts are drawn in the three-row arrangement HD-15
+    uses, five per row, but no document held here dimensions the contact pitch
+    or the row separation. The field is decoration and must not be measured off.
+elements:
+  opening: {at: [0.0, 0.0], size: [20.47, 11.40], class: cutout}
+connection-points:
+  mate: {at: [10.235, 5.7], direction: front}
+skins: [default]

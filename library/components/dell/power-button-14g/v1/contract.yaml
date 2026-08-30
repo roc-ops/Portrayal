@@ -1,0 +1,41 @@
+format: 1
+kind: component
+name: power-button-14g
+version: 1.0.0
+class: button
+description: >-
+  The backlit power button on a 14th-generation PowerEdge control panel - a
+  square recess with the IEC power symbol lit through it, so the button is also
+  the lamp that says the system is on
+size: {w: 8.34, h: 8.31}
+provenance:
+  size: >-
+    drawing - Dell's r750-24d-2-5-front Visio master, which passes Gate 1 at
+    0.67% against a 482.6 x 86.8 rack face, draws this recess at x 458.80..467.14
+    by y 4.46..12.82. Square to 0.03 mm, which is the drawing agreeing with
+    itself rather than two candidate sizes.
+    CORROBORATED ON THE MODELLED GENERATION: the R740xd's own ISM figure 2,
+    rendered at 600 dpi where it passes Gate 1 at 1.03%, puts the green symbol's
+    centre 0.5 mm from where this master puts the button's centre. That agreement
+    across two documents and two machines is what licenses a 15G drawing to size
+    a 14G part.
+  why-not-common-power-button: >-
+    common/power-button is 12 x 12 and is a different part. Seating it here would
+    have meant punching a 12 mm hole where Dell punched 8.34, and the mismatch
+    would have been invisible in the drawing while being wrong by 44% in area.
+  states: >-
+    ISM table 7 says only that the button 'indicates if the system is turned on
+    or off'. No blink vocabulary is published for it, so none is invented - `on`
+    and `off` and nothing finer, in the same way common/drive-carrier-25's
+    activity lamp gets no patterns Dell does not state.
+elements:
+  lamp:
+    at: [1.67, 1.66]
+    size: [5.0, 5.0]
+    class: led
+    states: ['off', {name: 'on', color: '#22c55e'}]
+    description: >-
+      the power symbol itself, lit from behind. It is the glyph that lights, not
+      a separate indicator beside it, which is why the element is the symbol's
+      own box rather than a dot.
+skins: [default]

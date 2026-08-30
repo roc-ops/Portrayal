@@ -110,3 +110,51 @@ def test_a_colour_state_is_unchanged_by_the_segment_support():
                                                      "color": "#22c55e"}))
     assert "--led-color: #22c55e;" in css
     assert "opacity" not in css and "data-seg" not in css
+
+
+def test_every_animation_names_a_keyframes_that_exists():
+    """An animation is a promise that a @keyframes of that name is defined.
+
+    The bug this locks: the sequence keyframes name was threaded through
+    render.py's call site and NOT through components_index.py's, so every
+    component skin carrying a sequence emitted
+
+        @keyframes None { ... }
+        .state-predicted-failure { animation: None 3s steps(1, end) infinite; }
+
+    twice over, with the second definition of `None` silently replacing the
+    first. `None` is a valid CSS identifier, so the stylesheet parsed, the class
+    landed, and both lamps ran whichever cycle happened to be defined last.
+
+    The general shape is the one at the top of this file - two generators for
+    one output drift - and it recurred in the SAME PAIR OF FILES, which is why
+    the name is now built by a single function both import. This test does not
+    care which function that is: it asserts the output is coherent.
+    """
+    missing = []
+    for f in svgs():
+        t = f.read_text()
+        defined = set(re.findall(r"@keyframes\s+([^\s{]+)", t))
+        for name in re.findall(r"animation:\s*([^\s;]+)", t):
+            if name not in defined:
+                missing.append(f"{f.relative_to(DIST)}: animation {name!r} has "
+                               f"no @keyframes (defined: "
+                               f"{', '.join(sorted(defined)) or 'none'})")
+    assert not missing, "\n  ".join([""] + missing[:12])
+
+
+def test_no_two_states_share_one_keyframes_name():
+    """A sequence's cycle is per state, so its name must be too - two states
+    sharing one means the second definition wins and the first lamp animates
+    somebody else's pattern. Defining a name twice in one stylesheet is the
+    signature, and it is what `None` did."""
+    dupes = []
+    for f in svgs():
+        seen = {}
+        for name in re.findall(r"@keyframes\s+([^\s{]+)", f.read_text()):
+            seen[name] = seen.get(name, 0) + 1
+        for name, n in seen.items():
+            if n > 1:
+                dupes.append(f"{f.relative_to(DIST)}: @keyframes {name!r} "
+                             f"defined {n} times")
+    assert not dupes, "\n  ".join([""] + dupes[:12])
