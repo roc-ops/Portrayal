@@ -222,6 +222,77 @@ standards:
       panel drawing for the mounting style a chassis faceplate uses, not a
       figure the F standard fixes, and a card documented to a different hole
       should say so rather than be forced onto this key.
+  db9:
+    registry: TE 114-40010 Rev G, D-subminiature shell size E (DE-9)
+    w: 20.47
+    h: 11.40
+    radius: 3.35
+    confidence: verified
+    depth: 6.73
+    depth-confidence: estimated
+    notes: >-
+      The errand fifteen Cisco RSP and RP components have been waiting on: each
+      draws its own ALARM OUT connector because there was no std/ part and no key
+      here, and cisco/a99-rp3-se's own gap note names exactly this entry as what
+      would close it.
+
+      THE APERTURE IS THE SLOT, NOT THE FLANGE. TE application specification
+      114-40010 Rev G Figure 3 gives the mounting panel cutout as a D-shaped
+      opening 20.47 wide by 11.40 high with 10 degrees +/- 2 of taper on the two
+      sloped sides and a 3.35 radius in four places; the shell passes through it.
+      The connector's FLANGE is larger and sits on the panel face covering the
+      hole - customer drawing C-747905 Rev AB1 puts it at 30.8 x 12.5 for a
+      9-position receptacle, with a 16.30 +/-0.25 shell. So a component's `size`
+      is 20.47 x 11.40 and what a viewer sees painted on the faceplate is the
+      30.8 x 12.5 flange, which is a skin rather than an aperture.
+
+      Mounting holes are a separate feature at 24.99 centres, diameter 3.05
+      plain or 4.83 with screwlocks (114-40010) and 3.1 on the part drawing.
+      Both documents agree on the 24.99, which is what reconciles them.
+
+      Width is per shell size and this key is the E shell only. 114-40010 also
+      gives 33.32 for 15 positions, 47.04 for 25 and 63.50 for 37 - but those
+      are the mounting-hole spacings of the A, B and C shells at STANDARD
+      density, and searching that 15 row for VGA is the wrong row. See `hd15`,
+      which shares this aperture.
+
+      Depth 6.73 is the MATING dimension from Figure 4 - 'needed to ensure full
+      mating of connectors' for 9 and 15 position, 6.50 for 25 and 37. It is how
+      far a plug engages, not a measured recess, and stands in because neither
+      document dimensions the insert's setback from the panel face.
+  hd15:
+    registry: D-subminiature high density, 15 position, shell size E (HD-15 / DE-15)
+    w: 20.47
+    h: 11.40
+    radius: 3.35
+    confidence: verified
+    depth: 6.73
+    depth-confidence: estimated
+    notes: >-
+      The VGA connector. SAME APERTURE AS `db9` AND THAT IS THE POINT - high
+      density means more contacts in the SAME shell, not a bigger shell, so
+      fifteen pins in three rows sit in the size E opening that nine pins in two
+      rows do.
+
+      Sourced rather than assumed. Amphenol's High Density D-Subminiature
+      datasheet (io_dsub_highdensity.pdf) tabulates its 15-position part at a
+      30.81 flange on 24.99 mounting centres; TE's standard-density DE-9
+      customer drawing C-747905 Rev AB1 gives 30.8 and 24.99. Identical. The
+      same table then puts HD-26 on 33.32 centres and HD-44 on 47.04, which are
+      the A and B shells - so the high density line walks the same shell ladder
+      with more contacts in each, and the 15-position part is unambiguously on
+      the E rung.
+
+      THE 15 ROW OF A STANDARD-DENSITY TABLE IS THE WRONG ROW, which is what
+      made this hard to find: DA-15 is fifteen pins in two rows in the A shell
+      at 33.32 centres, a different connector that shares only a number. Look up
+      D-subs by SHELL, not by pin count.
+
+      Aperture, taper, radius and depth all as `db9` - see that entry for the
+      114-40010 Figure 3 derivation and for what is not sourced. The difference
+      between the two parts is the insert and the gender, and on equipment VGA
+      is a female receptacle where the alarm and serial DE-9s are usually male.
+      Neither changes the hole.
   crps-1u:
     registry: CRPS (Common Redundant Power Supply) 1U module envelope
     w: 73.5

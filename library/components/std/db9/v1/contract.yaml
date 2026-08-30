@@ -1,0 +1,42 @@
+format: 1
+kind: component
+name: db9
+version: 1.0.0
+class: port
+profile: networking
+conforms: db9
+interface: db9
+description: >-
+  D-subminiature DE-9 receptacle - the nine-pin shell used for RS-232 serial
+  ports and for the dry-contact ALARM OUT connector on router route processors
+size: {w: 20.47, h: 11.40, d: 6.73}
+attrs: {media: db9}
+provenance:
+  size: >-
+    standard - TE application specification 114-40010 Rev G, Figure 3, mounting
+    panel cutout for D-subminiature shell size E: 20.47 wide by 11.40 high, with
+    10 degrees +/-2 of taper on the two sloped sides and a 3.35 radius in four
+    places. That is the hole the shell passes through, which is what `size`
+    means here.
+  flange: >-
+    drawing - TE customer drawing C-747905 Rev AB1, 'Receptacle Assembly, Solder
+    Cup, Size 1, 9 Position, AMPLIMITE', gives the flange as 30.8 x 12.5 with a
+    16.30 +/-0.25 shell and mounting holes of diameter 3.1 at 24.99 centres. The
+    flange sits ON the panel rather than in it, so it is drawn in the skin and is
+    not the aperture.
+  depth: >-
+    estimated - 6.73 is the MATING DIMENSION from 114-40010 Figure 4, 'needed to
+    ensure full mating of connectors' for 9 and 15 position (6.50 for 25 and 37).
+    It is how far the plug engages, not a measured recess, and it is used here
+    because neither document dimensions how far the insert sits back from the
+    panel face. A real reading should replace it.
+  pins: >-
+    NOT SOURCED. The nine contacts are drawn on the standard two-row DE-9
+    arrangement, five above four, but neither document held here dimensions the
+    contact pitch or the row separation. The pin field is decoration at this
+    revision and should not be measured off.
+elements:
+  opening: {at: [0.0, 0.0], size: [20.47, 11.40], class: cutout}
+connection-points:
+  mate: {at: [10.235, 5.7], direction: front}
+skins: [default]
