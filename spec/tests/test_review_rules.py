@@ -53,6 +53,66 @@ def test_a_side_face_is_never_mistaken_for_a_rack_face():
     assert not caught("L43", lint.lint_device_rack_ears, P, deep)
 
 
+def _rackface(placements=(), bays=(), cutouts=(), w=482.6):
+    return {"views": {"front": {
+        "size": {"w": w, "h": 86.8},
+        "panel": {"cutouts": list(cutouts)},
+        "components": {"placements": list(placements), "bays": list(bays)}}}}
+
+
+def test_a_populated_ear_is_part_of_the_face():
+    """Dell builds the ears into the faceplate and puts ports in them. A
+    PowerEdge R740xd carries a VGA and a USB in the right-hand ear; its front
+    measures 482.6 x 86.8, which the render confirms at 2.10% against Gate 1
+    where the 434 mm body fails at 13.5%. Modelling it at 434 would leave real
+    addressable ports with nowhere to live."""
+    dell = _rackface(placements=[
+        {"ref": "std/usb-a@1", "id": "usb-front", "at": [465.0, 30.0]},
+        {"ref": "std/vga@1", "id": "vga-front", "at": [462.0, 52.0]}])
+    assert not caught("L43", lint.lint_device_rack_ears, P, dell)
+
+
+def test_a_bare_flange_is_still_an_ear():
+    """The MX204 case, which is why the rule exists: 482 mm of face with
+    everything seated well inboard of both ends is a body wearing its ears."""
+    mx = _rackface(placements=[
+        {"ref": "std/sfp@1", "id": "p1", "at": [120.0, 20.0]},
+        {"ref": "std/sfp@1", "id": "p2", "at": [360.0, 20.0]}])
+    assert caught("L43", lint.lint_device_rack_ears, P, mx)
+
+
+def test_either_ear_counts():
+    """Dell's power button and status lamps live in the LEFT ear; the ports are
+    in the right. One populated end is enough to say the ears are integral."""
+    left = _rackface(placements=[{"ref": "x/y@1", "id": "pwr", "at": [8.0, 20.0]}])
+    assert not caught("L43", lint.lint_device_rack_ears, P, left)
+
+
+def test_a_bay_or_a_cutout_in_an_ear_counts_too():
+    """A hole punched in the ear is the same evidence as a part seated in it -
+    both say the vendor treated that metal as face rather than flange."""
+    bay = _rackface(bays=[{"id": "ear-bay", "at": [460.0, 10.0],
+                           "size": {"w": 18.0, "h": 20.0}}])
+    assert not caught("L43", lint.lint_device_rack_ears, P, bay)
+    cut = _rackface(cutouts=[{"id": "vga", "at": [4.0, 30.0], "size": [16.0, 8.0]}])
+    assert not caught("L43", lint.lint_device_rack_ears, P, cut)
+
+
+def test_the_exemption_does_not_apply_to_a_narrow_face():
+    """The stand-down only exists inside the 480-487 band. A 443 mm body was
+    never going to fire, and a part near its edge must not start it firing."""
+    body = _rackface(placements=[{"ref": "x/y@1", "id": "p", "at": [2.0, 10.0]}],
+                     w=443.0)
+    assert not caught("L43", lint.lint_device_rack_ears, P, body)
+
+
+def test_a_placement_with_no_anchor_is_not_read_as_an_ear():
+    """An item missing `at` says nothing about where it sits, and treating a
+    silence as evidence would let the rule be switched off by an omission."""
+    vague = _rackface(placements=[{"ref": "x/y@1", "id": "somewhere"}])
+    assert caught("L43", lint.lint_device_rack_ears, P, vague)
+
+
 # --- 2. decor --------------------------------------------------------------
 
 def _view(decor=(), placements=(), silk=(), w=100.0):

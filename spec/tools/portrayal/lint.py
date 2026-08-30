@@ -2115,6 +2115,29 @@ def lint_device_bay_pitch(path, data):
                          "second image before recording it as a finding")
 
 
+EAR_ZONE_MM = 25.0
+
+
+def _seated_in_an_ear(view, w):
+    """Anything installed within EAR_ZONE_MM of either end of the face.
+
+    25 mm because that is what an ear is: a 19-inch face is 482.6 mm and the
+    bodies behind one run 434 to 448 mm, so the flange each side is between 17
+    and 24 mm. Anchors are compared rather than full extents - a part's width
+    lives in its contract and this rule does not need to resolve one to know
+    that something was seated out there.
+    """
+    parts = view_parts(view)
+    for item in parts["placements"] + parts["bays"] + parts["cutouts"]:
+        at = item.get("at")
+        if not at:
+            continue
+        x = float(at[0])
+        if x <= EAR_ZONE_MM or x >= w - EAR_ZONE_MM:
+            return item.get("id") or item.get("ref") or "a component"
+    return None
+
+
 def lint_device_rack_ears(path, data):
     """L43: a body as wide as the rack face still has its ears on.
 
@@ -2126,15 +2149,33 @@ def lint_device_rack_ears(path, data):
     Structural and cheap: a front or rear face measuring 480-487 mm is almost
     certainly a rack face rather than a body. The widest body in the library
     today is 443 mm, so this costs nothing until it fires.
+
+    UNLESS THE EARS CARRY COMPONENTS, WHICH IS A DIFFERENT DEVICE. The rule was
+    written for the MX204, whose flanges are bare metal - subtract them and
+    nothing is lost. Dell builds the ears into the faceplate and PUTS PORTS IN
+    THEM: a PowerEdge R740xd has a VGA and a USB in the right-hand ear and the
+    power button and status indicators in the left, and its front measures
+    482.6 x 86.8, which Gate 1 confirms against the render at 2.10% where the
+    434 mm body fails at 13.5%. Modelling that face at 434 mm would leave real,
+    addressable, field-visible ports with nowhere to live.
+
+    So the test is what is SEATED out there, not how wide the face is. Bare
+    flanges have nothing in the outer 25 mm; populated ears do. No new field to
+    author and nothing to remember - the drawing says which kind of device it is.
     """
     for vname, view in (data.get("views") or {}).items():
         if vname not in ("front", "rear"):
             continue
         w = ((view or {}).get("size") or {}).get("w")
-        if w and 480.0 <= float(w) <= 487.0:
-            warn(path, "L43", f"{vname}: view is {w} wide, which is the 19-inch "
-                 "rack face, not a body. Ears are never drawn - measure between "
-                 "the fold lines and record the ear extent in provenance")
+        if not (w and 480.0 <= float(w) <= 487.0):
+            continue
+        if _seated_in_an_ear(view or {}, float(w)):
+            continue
+        warn(path, "L43", f"{vname}: view is {w} wide, which is the 19-inch "
+             "rack face, not a body. Ears are never drawn - measure between "
+             "the fold lines and record the ear extent in provenance. If this "
+             "device's ears are integral AND carry components, seat them "
+             f"within {EAR_ZONE_MM:g}mm of an end and this rule will stand down")
 
 
 def _decor_box(d):
