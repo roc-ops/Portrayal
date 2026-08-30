@@ -86,21 +86,41 @@ provenance:
     failure; blinks green slowly - drive rebuilding; steady green - drive
     online; blinks green three seconds, amber three seconds, off six seconds -
     rebuild aborted; off - ready for insertion, removal, or not detected.
-    TWO LIMITS THE ARTICLE STATES ITSELF and which are carried rather than
-    smoothed over: the table applies to RAID configurations only, and the
-    article documents NO patterns for the activity lamp beyond saying the drive
-    manages it. So the activity lamp gets on and off and nothing finer, because
-    nothing finer is published.
+    ONE LIMIT THE ARTICLE STATES ITSELF and which is carried rather than smoothed
+    over: the table applies to RAID configurations only.
+  led-states-corroborated: >-
+    A SECOND DOCUMENT, ABOUT THIS EXACT MACHINE, AND IT AGREES ON ALL SEVEN. The
+    PowerFlex / ScaleIO Ready Node R740xd Owner's Guide, 'Drive indicator codes',
+    gives: flashes green twice per second - identifying or preparing for removal;
+    off - ready for removal; flashes green, amber, then off - predicted failure;
+    flashes amber four times per second - failed; flashes green slowly -
+    rebuilding; solid green - online; flashes green 3 sec, amber 3 sec, off after
+    6 sec - rebuild stopped. Same seven codes and the same timings as the generic
+    KB article, now from a guide for the R740xd itself rather than for PowerEdge
+    at large.
+    AND IT ADDS TWO THINGS THE KB DID NOT SAY. The activity lamp has a published
+    behaviour after all - "The activity LED flashes whenever the drive is
+    accessed" - so `active` is BLINKING here and not solid, which an earlier
+    draft got wrong by concluding from one document's silence that nothing was
+    published. No rate is given, so none is stated.
+    And `off` has a condition beyond an empty or unseated bay: "The drive status
+    indicator remains off until all drives are initialized after the system is
+    turned on." A dark status lamp on a running machine can mean the array is
+    still coming up.
 elements:
   lamp-activity:
     at: [3.1, 1.7]
     size: [3.4, 3.0]
     class: led
-    states: ['off', {name: active, color: '#22c55e'}]
+    states: ['off',
+             {name: active, color: '#22c55e', behavior: blinking}]
     description: >-
       The pulse glyph, which is itself the lamp. Dell KB 000413096 puts the
-      activity indicator on the left and says only that the drive manages it -
-      no blink vocabulary is published, so none is invented here.
+      activity indicator on the left; the R740xd Owner's Guide says what it does
+      - "The activity LED flashes whenever the drive is accessed" - so it BLINKS
+      rather than sitting solid. NO RATE IS PUBLISHED and none is stated: access
+      is not periodic, so a frequency here would be a decoration pretending to be
+      a measurement.
   lamp-status:
     at: [11.4, 1.7]
     size: [3.4, 3.0]
@@ -131,6 +151,10 @@ elements:
       phases divide evenly; `rebuild-aborted` has Dell's three, three and six
       seconds. `rebuilding` is 'blinks green slowly', and 0.5 Hz is this
       library's reading of slowly rather than a figure Dell states.
+      `off` IS NOT ONLY AN EMPTY BAY: the Owner's Guide adds that the status
+      indicator "remains off until all drives are initialized after the system is
+      turned on", so a dark lamp on a running machine can also mean the array is
+      still coming up.
   release: {at: [4.53, 9.4], size: [8.8, 6.7], class: control}
   window-1: {at: [2.83, 27.3], size: [12.2, 10.9], class: vent}
   window-2: {at: [2.83, 39.6], size: [12.2, 11.0], class: vent}

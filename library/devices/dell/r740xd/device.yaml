@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 0.4.0
+version: 0.5.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -85,6 +85,33 @@ provenance:
     Mode, so there is no single chassis figure to record; the draw belongs to
     whichever PSU is fitted, and that is a rear-face question this draft does not
     reach.
+  idrac-direct-led: >-
+    STATED IN WORDS AND NOT DRAWN BY ANY FIGURE HELD HERE. The ISM says plainly
+    that "iDRAC Direct LED indicator is located below the iDRAC Direct port on
+    the right control panel", and gives its codes in table 8 - solid green for
+    two seconds when a laptop or tablet connects, flashing green on for two and
+    off for two when the connected device is recognised, off when it is
+    unplugged. So the lamp EXISTS and its neighbour is known.
+    ITS GEOMETRY IS NOT. Figure 2 at 6.5644 px/mm resolves the micro USB port and
+    the mark above it and shows nothing at all beneath them, so the position here
+    is the ISM's sentence turned into a coordinate - 2.5 mm below the port, on
+    its centreline - and the size is common/led-dot's 2 mm, which that part
+    itself calls estimated. A reader should treat this lamp's PLACE as
+    approximate and its EXISTENCE and CODES as sourced; they are not the same
+    confidence and it would be wrong to let the drawing imply they are.
+  status-leds-are-dark-when-healthy: >-
+    THE FIVE STATUS LAMPS HAVE EXACTLY TWO STATES AND THAT IS NOT A SHORTCUT.
+    Dell publishes off and solid amber for each of drive, temperature,
+    electrical, memory and PCIe, and nothing else: the ISM's own note above the
+    table reads "The indicators display solid amber if any error occurs", every
+    row says "turns solid amber", and the identical wording appears in the R740,
+    R640, R750 and R760 manuals. Every occurrence of "blink" in this device's
+    manual belongs to some other lamp - the health bar, Quick Sync, the NIC
+    indicators or a PSU handle.
+    SO DARKNESS IS THE HEALTHY STATE HERE, which is worth saying out loud because
+    it is the opposite of most of this library: a dark lamp on this column means
+    nothing is wrong, where a dark lamp on a line card usually means nothing is
+    there.
   rack-latches: >-
     BOTH EARS CARRY ONE. The r750 master draws the same 12.16 x 37.99 section at
     x 2.80 and x 469.04, both starting at y 46.91 - 54% down an 86.8 face - and
@@ -165,6 +192,13 @@ groups:
       of the metal - the ISM carries removal and installation procedures for
       each. The right-hand one is still drawn as loose placements and is the next
       thing to become a module.
+  leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: >-
+      indicators that are not part of a control panel module. Only one on this
+      face: the iDRAC Direct lamp under its port.
   latches:
     term: Latch
     role: furniture
@@ -211,36 +245,11 @@ views:
         - {at: [13.41, 2.7], size: [11.59, 81.4], fill: '#23272b'}
         - {at: [457.8, 2.7], size: [10.6, 81.4], fill: '#23272b'}
       cutouts:
-        - {id: drive-0, at: [26.884, 4.0], size: [17.868, 79.4], shape: rect}
-        - {id: drive-1, at: [44.752, 4.0], size: [17.868, 79.4], shape: rect}
-        - {id: drive-2, at: [62.620, 4.0], size: [17.868, 79.4], shape: rect}
-        - {id: drive-3, at: [80.488, 4.0], size: [17.868, 79.4], shape: rect}
-        - {id: drive-4, at: [98.356, 4.0], size: [17.868, 79.4], shape: rect}
-        - {id: drive-5, at: [116.224, 4.0], size: [17.868, 79.4], shape: rect}
-        - {id: drive-6, at: [134.092, 4.0], size: [17.868, 79.4], shape: rect}
-        - {id: drive-7, at: [151.960, 4.0], size: [17.868, 79.4], shape: rect}
-        - {id: drive-8, at: [169.828, 4.0], size: [17.868, 79.4], shape: rect}
-        - {id: drive-9, at: [187.696, 4.0], size: [17.868, 79.4], shape: rect}
-        - {id: drive-10, at: [205.564, 4.0], size: [17.868, 79.4], shape: rect}
-        - {id: drive-11, at: [223.432, 4.0], size: [17.868, 79.4], shape: rect}
-        - {id: drive-12, at: [241.300, 4.0], size: [17.868, 79.4], shape: rect}
-        - {id: drive-13, at: [259.168, 4.0], size: [17.868, 79.4], shape: rect}
-        - {id: drive-14, at: [277.036, 4.0], size: [17.868, 79.4], shape: rect}
-        - {id: drive-15, at: [294.904, 4.0], size: [17.868, 79.4], shape: rect}
-        - {id: drive-16, at: [312.772, 4.0], size: [17.868, 79.4], shape: rect}
-        - {id: drive-17, at: [330.640, 4.0], size: [17.868, 79.4], shape: rect}
-        - {id: drive-18, at: [348.508, 4.0], size: [17.868, 79.4], shape: rect}
-        - {id: drive-19, at: [366.376, 4.0], size: [17.868, 79.4], shape: rect}
-        - {id: drive-20, at: [384.244, 4.0], size: [17.868, 79.4], shape: rect}
-        - {id: drive-21, at: [402.112, 4.0], size: [17.868, 79.4], shape: rect}
-        - {id: drive-22, at: [419.980, 4.0], size: [17.868, 79.4], shape: rect}
-        - {id: drive-23, at: [437.848, 4.0], size: [17.868, 79.4], shape: rect}
         - {id: power-btn, at: [458.80, 3.17], size: [8.34, 8.31], shape: rect}
         - {id: usb-1, at: [460.40, 19.54], size: [4.5, 12.0], shape: rect}
         - {id: usb-2, at: [460.40, 45.56], size: [4.5, 12.0], shape: rect}
         - {id: idrac-direct, at: [462.13, 63.43], size: [2.75, 7.5], shape: rect}
-        - {id: vga, at: [469.43, 16.70], size: [11.40, 20.47], shape: rect}
-        - {id: panel-left, at: [13.41, 5.3], size: [11.59, 30.0], shape: rect}
+        - {id: vga, at: [469.435, 16.665], size: [11.40, 20.47], shape: rect}
     components:
       bays:
         - {id: panel-left, at: [13.41, 5.3], size: {w: 11.59, h: 30.0},
@@ -339,6 +348,12 @@ views:
            for: vga, group: marks, rel-pos: 4}
         - {ref: dell/control-panel-grid-14g@1, id: panel-grid, at: [458.65, 35.80],
            for: chassis, group: marks, rel-pos: 5}
+        - {ref: common/led-dot@1, id: idrac-direct-led, at: [462.50, 72.30],
+           for: idrac-direct, group: leds, rel-pos: 1,
+           states: ['off',
+                    {name: connected, color: '#22c55e'},
+                    {name: recognised, color: '#22c55e',
+                     behavior: {mode: blinking, rate: 0.25}}]}
         - {ref: dell/rack-latch-14g@1, id: latch-left, at: [0.63, 46.91],
            for: chassis, group: latches, rel-pos: 1}
         - {ref: dell/rack-latch-14g@1, id: latch-right, at: [469.04, 46.91],
