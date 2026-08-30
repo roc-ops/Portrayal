@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 0.1.0
+version: 0.3.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -85,6 +85,21 @@ provenance:
     Mode, so there is no single chassis figure to record; the draw belongs to
     whichever PSU is fitted, and that is a rear-face question this draft does not
     reach.
+  bezel: >-
+    DRAWN FITTED, AND IT DECLARES WHAT IT HIDES. `for:` names all 24 drive bays
+    and the left control panel, which is how the C40G's snap-on PSU cover says it
+    sits over four supplies - the same construction, and the reason L13 does not
+    read a cover as a sizing mistake. A viewer can then hide it and see what is
+    behind, which is the point.
+    An earlier draft made it an `optional:` placement, the mechanism the
+    SmartOptics rack ears use, and that was the wrong tool: `optional:` is for
+    something absent unless asked for, and this is something PRESENT that a
+    reader chooses to look past.
+    IT CLEARS BOTH EARS AND DOES NOT COVER THE WHOLE FACE. At 434 x 82.35 centred
+    on the 482.6 x 86.8 face it leaves 24.3 mm of ear showing each side and 2.2
+    above and below, which is the operator's description of where it sits and is
+    what fixed its size - see dell/bezel-2u-14g, whose master aspect fails Gate 1
+    against a rack face precisely because a rack face is not what it covers.
   not-yet-modelled: >-
     THIS IS A FRONT-FACE DRAFT AND SAYS SO. No rear view, no top view with the
     lid off, no riser configurations - the tech sheet documents twelve of those
@@ -124,6 +139,32 @@ groups:
       Splitting them by media would draw three groups where the faceplate has
       one. None of them is traffic; this chassis carries no network port on its
       front face.
+  panels:
+    term: Panel
+    role: service
+    index-origin: 1
+    description: >-
+      the control panels, which are field-replaceable units rather than features
+      of the metal - the ISM carries removal and installation procedures for
+      each. The right-hand one is still drawn as loose placements and is the next
+      thing to become a module.
+  covers:
+    term: Cover
+    role: service
+    index-origin: 1
+    description: >-
+      removable covers over the face. The bezel is the only one, and it is drawn
+      only when asked for: it hides the drives it protects, which is the whole
+      point of it and exactly why the default drawing leaves it off.
+  marks:
+    term: Mark
+    role: furniture
+    index-origin: 1
+    description: >-
+      printed and moulded marks that say what the opening beside them is for.
+      They are `furniture` because nothing plugs into them and nothing lights -
+      a mark that lit would be a lamp, and this panel has one of those and it is
+      the power button.
   mgmt:
     term: Control
     role: management
@@ -173,8 +214,12 @@ views:
         - {id: usb-2, at: [460.40, 45.56], size: [4.5, 12.0], shape: rect}
         - {id: idrac-direct, at: [462.13, 63.43], size: [2.75, 7.5], shape: rect}
         - {id: vga, at: [469.43, 16.70], size: [11.40, 20.47], shape: rect}
+        - {id: panel-left, at: [16.7, 5.3], size: [8.6, 30.0], shape: rect}
     components:
       bays:
+        - {id: panel-left, at: [16.7, 5.3], size: {w: 8.6, h: 30.0},
+           accepts: [dell/control-panel-left-14g@1], default: dell/control-panel-left-14g@1,
+           group: panels, rel-pos: 1}
         - {id: drive-0, at: [26.884, 4.0], size: {w: 17.868, h: 79.4},
            accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
            group: drives, rel-pos: 0}
@@ -256,8 +301,21 @@ views:
            attrs: {speed: usb-2.0}, group: ports, rel-pos: 2}
         - {ref: std/micro-usb@1, id: idrac-direct, at: [459.75, 65.81], rotate: 90,
            group: ports, rel-pos: 3}
-        - {ref: std/vga@1, id: vga, at: [464.90, 21.20], rotate: 90,
+        - {ref: std/vga@1, id: vga, at: [464.90, 21.20], rotate: 270,
            group: ports, rel-pos: 4}
+        - {ref: common/usb-symbol@1, id: mark-usb-1, at: [459.45, 14.40],
+           for: usb-1, group: marks, rel-pos: 1}
+        - {ref: common/usb-symbol@1, id: mark-usb-2, at: [459.45, 40.90],
+           for: usb-2, group: marks, rel-pos: 2}
+        - {ref: common/usb-symbol@1, id: mark-idrac, at: [460.30, 59.00], rotate: 45,
+           for: idrac-direct, group: marks, rel-pos: 3}
+        - {ref: common/vga-symbol@1, id: mark-vga, at: [472.13, 12.00],
+           for: vga, group: marks, rel-pos: 4}
+        - {ref: dell/control-panel-grid-14g@1, id: panel-grid, at: [458.65, 35.80],
+           for: chassis, group: marks, rel-pos: 5}
+        - {ref: dell/bezel-2u-14g@1, id: bezel, at: [24.30, 2.23],
+           for: [drive-0, drive-1, drive-2, drive-3, drive-4, drive-5, drive-6, drive-7, drive-8, drive-9, drive-10, drive-11, drive-12, drive-13, drive-14, drive-15, drive-16, drive-17, drive-18, drive-19, drive-20, drive-21, drive-22, drive-23, panel-left],
+           group: covers, rel-pos: 0}
 configurations:
   base:
     kind: base

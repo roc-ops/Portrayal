@@ -1,0 +1,145 @@
+format: 1
+kind: module
+name: control-panel-left-14g
+version: 1.0.0
+class: control-panel
+behaviour: fills
+profile: server
+description: >-
+  Left control panel of a 14th-generation PowerEdge - five status glyphs that
+  are themselves lamps, the system health and system ID bar, and the optional
+  iDRAC Quick Sync 2 bar below it. Both bars are buttons as well as indicators
+size: {w: 8.6, h: 30.0, d: 40.0}
+provenance:
+  identity: >-
+    A FIELD-REPLACEABLE UNIT, which is why it is a component and not a handful
+    of placements on the chassis. The R740xd Installation and Service Manual
+    carries 'Removing the left control panel' and 'Installing the left control
+    panel', and its own summary line reads 'Left control panel: Contains status
+    LEDs, system ID button, and iDRAC Quick Sync 2 (optional).'
+  size: >-
+    photo-measured from ISM figure 2 at 6.5644 px/mm, which passes Gate 1 at
+    1.03%. This is the ACTIVE FACE - the glyph column and the bar - and not the
+    whole moulding: the panel's metal runs the height of the chassis and carries
+    nothing below y 33, so drawing the module as its populated area is what makes
+    the placement legible. The moulding's full extent is not stated by anything
+    held here.
+  not-from-the-r750: >-
+    DELIBERATELY NOT READ ACROSS. The r750-24d-2-5-front master licensed the
+    RIGHT control panel of this machine, because the two documents put its VGA
+    within 0.16 mm and its power button within 0.5. That agreement does not hold
+    here: the master puts the light bar 1.9 mm away in x, so this is a different
+    panel and using the same trick anyway would have been the same evidence used
+    twice with the negative result discarded.
+  bar: >-
+    photo-measured - the lit bar runs y 11.08..28.16 on the face at x 20.7..23.0,
+    blue above and white below with the split at about 20.5. The blue reads 3.50
+    wide against the white's 1.68 in the same image, which is GLOW rather than
+    two widths: a lit blue LED blooms into the surrounding pixels and a dimmer
+    white one does not. One bar, one width, and the brighter measurement is the
+    one to distrust.
+  glyphs: >-
+    ISM table 4 names the five status indicators in order - Drive, Temperature,
+    Electrical, Memory, PCIe - and says each 'turns solid amber' on its fault.
+    They are LAMPS AND NOT LABELS: the glyph itself lights, which is the same
+    construction as the drive carrier's two head glyphs, and is why each is an
+    element with states rather than a mark beside one.
+  buttons: >-
+    BOTH BARS ARE PRESSED, not only watched. ISM table 5: 'Press the system
+    health and system ID button to switch to system ID mode.' ISM table 6: 'Press
+    the iDRAC Quick Sync 2 button to turn on the iDRAC Quick Sync 2 feature.'
+    The indicator and the button are the same physical part in each case.
+  quick-sync-optional: >-
+    the ISM calls iDRAC Quick Sync 2 optional throughout. The bar is drawn
+    because the panel that has it is the one photographed; a machine without the
+    option has the same moulding and a dark lower bar, which is what state `off`
+    already draws.
+elements:
+  lamp-drive:
+    at: [0.8, 1.3]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off', {name: fault, color: '#eab308'}]
+    description: >-
+      the drive glyph, lit. ISM table 4 - solid amber if there is a drive error.
+  lamp-temperature:
+    at: [0.8, 5.9]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off', {name: fault, color: '#eab308'}]
+    description: >-
+      the thermometer glyph. Solid amber on a thermal error - ambient out of
+      range, or a fan failure.
+  lamp-electrical:
+    at: [0.8, 10.5]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off', {name: fault, color: '#eab308'}]
+    description: >-
+      the lightning glyph. Solid amber on voltage out of range, a failed PSU or
+      a failed voltage regulator.
+  lamp-memory:
+    at: [0.8, 15.1]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off', {name: fault, color: '#eab308'}]
+    description: the memory glyph. Solid amber on a memory error.
+  lamp-pcie:
+    at: [0.8, 19.7]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off', {name: fault, color: '#eab308'}]
+    description: the PCIe glyph. Solid amber when a PCIe card errors.
+  lamp-health:
+    at: [4.0, 5.4]
+    size: [2.3, 9.0]
+    class: led
+    states: ['off',
+             {name: healthy, color: '#2563eb'},
+             {name: identify, color: '#2563eb',
+              behavior: {mode: blinking, rate: 1}},
+             {name: fail-safe, color: '#eab308'},
+             {name: fault, color: '#eab308',
+              behavior: {mode: blinking, rate: 1}}]
+    description: >-
+      the system health and system ID bar, and the button that switches between
+      the two modes. ISM table 5 in full: solid blue - on, healthy, ID mode not
+      active; blinking blue - ID mode active; solid amber - fail-safe mode;
+      blinking amber - a fault, check the event log. NO RATE IS PUBLISHED for
+      either blink, so 1 Hz is this library's reading and is not a figure Dell
+      states - unlike the drive lamp, where the article gives twice and four
+      times a second and the model carries them.
+  lamp-quicksync:
+    at: [4.0, 14.7]
+    size: [2.3, 8.2]
+    class: led
+    states: ['off',
+             {name: ready, color: '#f8fafc'},
+             {name: transfer, color: '#f8fafc',
+              behavior: {mode: blinking, rate: 4}},
+             {name: updating, color: '#f8fafc',
+              behavior: {mode: blinking, rate: 0.5}},
+             {name: disabled,
+              behavior: {mode: sequence,
+                         phases: [{color: '#f8fafc', seconds: 0.12},
+                                  {seconds: 0.12},
+                                  {color: '#f8fafc', seconds: 0.12},
+                                  {seconds: 0.12},
+                                  {color: '#f8fafc', seconds: 0.12},
+                                  {seconds: 0.12},
+                                  {color: '#f8fafc', seconds: 0.12},
+                                  {seconds: 0.12},
+                                  {color: '#f8fafc', seconds: 0.12},
+                                  {seconds: 2.5}]}},
+             {name: fail-safe, color: '#eab308'},
+             {name: unresponsive, color: '#eab308',
+              behavior: {mode: blinking, rate: 1}}]
+    description: >-
+      the iDRAC Quick Sync 2 bar, and the button that turns the feature on and
+      off. Every code in ISM table 6, at the shape that table gives.
+      `disabled` IS WHY THE SEQUENCE MECHANISM EXISTS: Dell's wording is 'blinks
+      white five times rapidly and then turns off', which is five on-phases, five
+      off-phases and a long dark tail - a pattern no colour and rate can say. The
+      2.5 second tail is this library's reading of 'and then turns off'; the five
+      blinks are Dell's own count.
+skins: [default]
