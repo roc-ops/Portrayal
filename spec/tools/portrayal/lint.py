@@ -498,11 +498,18 @@ def lint_component(path, validator):
             err(path, "L9", f"conforms: unknown standards key {conf!r}")
         else:
             sz = data["size"]
+            # THE ERROR PATH MUST NOT BE THE THING THAT BREAKS. An entry written
+            # with `source:` instead of `registry:` used to take down the whole
+            # run with a KeyError - and only ever when a component ALREADY
+            # disagreed with the registry, so the one moment the message was
+            # needed was the one moment it could not be printed. Second time a
+            # missing key in a message has crashed lint; name it and carry on.
+            origin = std.get("registry") or std.get("source") or "no source recorded"
             if abs(sz["w"] - std["w"]) > 0.05 or abs(sz["h"] - std["h"]) > 0.05:
-                err(path, "L9", f"conforms {conf}: size {sz['w']}x{sz['h']} != registry {std['w']}x{std['h']} ({std['registry']})")
+                err(path, "L9", f"conforms {conf}: size {sz['w']}x{sz['h']} != registry {std['w']}x{std['h']} ({origin})")
             if sz.get("d") is not None and std.get("depth") is not None \
                     and abs(sz["d"] - std["depth"]) > 0.05:
-                err(path, "L9", f"conforms {conf}: depth {sz['d']} != registry {std['depth']} ({std['registry']})")
+                err(path, "L9", f"conforms {conf}: depth {sz['d']} != registry {std['depth']} ({origin})")
             # aperture vs cavity: registry cavity means the opening steps in, so the
             # component must declare the recess cross-section and a node drawing it
             cav = std.get("cavity")
@@ -514,7 +521,7 @@ def lint_component(path, validator):
                         f"{cav['w']}x{cav['h']} - component must declare relief.size")
                 elif abs(rsz["w"] - cav["w"]) > 0.05 or abs(rsz["h"] - cav["h"]) > 0.05:
                     err(path, "L9", f"conforms {conf}: relief.size {rsz['w']}x{rsz['h']} "
-                        f"!= registry cavity {cav['w']}x{cav['h']} ({std['registry']})")
+                        f"!= registry cavity {cav['w']}x{cav['h']} ({origin})")
                 if rsz is not None and not rel.get("cavity"):
                     err(path, "L9", f"conforms {conf}: relief.size set without relief.cavity "
                         "- name the skin node whose art is the recess silhouette")
