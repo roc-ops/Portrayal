@@ -478,6 +478,15 @@ views:
         - {id: sys-id, at: [6.5, 68.5], size: [7.0, 7.0], shape: circle}
     components:
       bays:
+        # THE BAY IS THE PLATE, NOT THE BRACKET ENVELOPE. Each riser now holds
+        # std/pcie-bracket-fh and -lp at their real 120.02 and 79.20, which run
+        # on past the riser's own 95 mm plate at both ends - so the riser
+        # declares `insert` for what a slot must reserve and `size` for what it
+        # draws. Sizing these bays to the envelope instead was tried and put
+        # five overlaps on this face: riser 3 across the power supply, riser 1
+        # down over the iDRAC port. None are collisions between PARTS - they are
+        # boxes of things that sit at different heights, and the fix is to say
+        # which number is which rather than to move anything.
         - {id: riser-1, at: [17.0, 4.0], size: {w: 95.0, h: 62.0},
            accepts: [dell/riser-1-3fh-14g@1, dell/riser-1-2fh-14g@1],
            default: dell/riser-1-3fh-14g@1,
