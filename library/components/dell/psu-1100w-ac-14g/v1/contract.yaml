@@ -1,0 +1,108 @@
+format: 1
+kind: module
+name: psu-1100w-ac-14g
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: server
+description: >-
+  1100 W AC hot-plug power supply for a 14th-generation PowerEdge - C14 inlet,
+  a fan, and a translucent handle that is itself the status indicator
+attrs:
+  power-output-w: 1100
+  form-factor: crps
+  inlet: c14
+  efficiency: platinum
+provenance:
+  size: >-
+    photo-measured from ISM figure 8, which passes Gate 1 at 0.38% against a
+    434 x 86.8 rear face - the best-scaled source held for this machine. THE
+    WIDTH IS A PITCH RATHER THAN AN OUTLINE, which is the more reliable of the
+    two: the two orange handles sit 90.46 mm apart, and two supplies filling the
+    right-hand end of the face therefore run 253.1..343.5 and 343.5..434.0.
+    Height is the bottom half of the face - the supplies occupy y 43.4..86.8 with
+    the rear drive bays above them.
+  output: >-
+    the figure prints "EPP 1100W 94.5% efficiency" on the fan label of both
+    supplies, which is where 1100 comes from. THE R740xd TAKES THIRTEEN DIFFERENT
+    SUPPLIES - the Information Update tech sheet (Rev 2, Nov 2022) lists 495 W
+    through 2600 W across AC, DC, HVDC and Mixed Mode - so this part is one of
+    them and not "the" R740xd supply. The others are not modelled and the device
+    accepts this one.
+  power: >-
+    power-output-w 1100 is READ OFF THE PART'S OWN LABEL in ISM figure 8, which
+    prints "EPP 1100W 94.5% efficiency" on the fan of both supplies. It is a
+    RATING and not a draw - this class states output and never a draw key,
+    because the two are opposite signs of one unit.
+    NO AMBIENT QUALIFIES IT. Vendor tables commonly print the same supply at 25,
+    40 and 55 C and the figures differ by enough to matter; the label in this
+    figure carries one number and no temperature, so one number is recorded and
+    no rung is invented to fill the sentence. The Information Update tech sheet
+    gives this family's heat dissipation (4100 BTU/hr for 1100 W AC) and its
+    current draw, also without an ambient.
+  handle-is-the-lamp: >-
+    NOT A LAMP BESIDE A HANDLE. ISM: "AC power supply units (PSUs) have an
+    illuminated translucent handle that serves as an indicator." So the handle
+    carries the state class, in the same construction as the drive carrier's
+    glyphs and the left control panel's - three places on this chassis where the
+    thing you look at is the thing that lights.
+    THE DC SUPPLY IS DIFFERENT and is not this part: the ISM says "The DC PSUs
+    have an LED that serves as an indicator", a separate lamp rather than a lit
+    handle, so a DC variant is a different component and not a skin of this one.
+  face: >-
+    photo-measured, and only to the level figure 8 resolves at 7.2074 px/mm: the
+    handle, the C14 inlet, the release latch and the fan aperture are placed from
+    it; the fan blade count, the label text and the inlet's internal detail are
+    drawn rather than measured. No vector master for a 14G supply is held - the
+    stencil's PSU masters are 15G and later wattages (700, 800, 1100, 1400, 1800,
+    2400, 2800 W on C14 through C22) and none of them is this unit.
+  depth: >-
+    estimated. A CRPS-form supply is around 185 mm deep and no document held here
+    states it for this one. Not recorded rather than guessed.
+size: {w: 90.46, h: 43.4}
+elements:
+  handle:
+    at: [4.97, 11.0]
+    size: [5.45, 26.0]
+    class: led
+    states: ['off',
+             {name: 'ok', color: '#22c55e'},
+             {name: fault, color: '#eab308', behavior: {mode: blinking, rate: 1}},
+             {name: updating, color: '#22c55e',
+              behavior: {mode: blinking, rate: 1}},
+             {name: mismatch,
+              behavior: {mode: sequence,
+                         phases: [{color: '#22c55e', seconds: 0.125},
+                                  {seconds: 0.125},
+                                  {color: '#22c55e', seconds: 0.125},
+                                  {seconds: 0.125},
+                                  {color: '#22c55e', seconds: 0.125},
+                                  {seconds: 0.125},
+                                  {color: '#22c55e', seconds: 0.125},
+                                  {seconds: 0.125},
+                                  {color: '#22c55e', seconds: 0.125},
+                                  {seconds: 2.0}]}}]
+    description: >-
+      The translucent handle, lit from within. ISM table 12 entire: green - a
+      valid source is connected and the supply is operational; blinking amber - a
+      problem with the supply; not illuminated - no power connected; blinking
+      green - firmware is being updated.
+      `mismatch` IS WHY THE SEQUENCE MECHANISM EXISTS, for the fourth time on
+      this chassis: Dell's wording is "the PSU handle blinks green five times at
+      a rate of 4 Hz and turns off", which gives the phase length exactly -
+      4 Hz is 0.125 s lit and 0.125 s dark - and then a dark tail that the
+      article does not time. The five blinks and their rate are Dell's; the
+      2 second tail is this library's reading of "and turns off".
+      NO RATE IS PUBLISHED for the amber fault or the firmware blink, so 1 Hz is
+      a reading and not a figure - unlike the mismatch, where 4 Hz is stated.
+  inlet:
+    at: [14.5, 8.5]
+    size: [30.0, 26.0]
+    class: inlet
+    description: the C14 appliance inlet
+  fan:
+    at: [56.0, 5.0]
+    size: [30.0, 33.0]
+    class: vent
+    description: the exhaust aperture
+skins: [default]

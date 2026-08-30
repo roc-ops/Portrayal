@@ -1589,7 +1589,16 @@ def _skin_checks(path, data):
         if rmissing:
             err(sp, "L11", f"skin lacks relief node ids: {sorted(rmissing)}")
         vb = (root.get("viewBox") or "").split()
-        size = data["size"]
+        # A contract with no `size` used to raise KeyError here and take the
+        # WHOLE RUN down - 570-odd files linted, one omission, no output at all
+        # and a traceback instead of the finding that names the file. A linter
+        # that cannot survive the mistake it exists to catch is worse than one
+        # that misses it, because the author is left with no report to read.
+        size = data.get("size")
+        if not size:
+            err(sp, "L4", "contract states no size, so nothing can check the "
+                          "skin's viewBox against it")
+            return data
         if len(vb) == 4 and (float(vb[2]) != size["w"] or float(vb[3]) != size["h"]):
             err(sp, "L4", f"viewBox {vb} != contract size {size['w']}x{size['h']}")
     return data

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 0.6.0
+version: 0.7.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -211,6 +211,61 @@ groups:
       chassis from the rail so it can be drawn out - so they are pressed, but
       they release the BOX rather than operating anything in it, which is why
       they are furniture and not `mgmt`.
+  pcie:
+    term: Slot
+    role: traffic
+    index-origin: 1
+    description: >-
+      the full-height PCIe slots on riser 1. `traffic` because on a server the
+      expansion slots are where the revenue-bearing cards go - the NICs, the
+      HBAs, the accelerators - which is the nearest of the five roles to what a
+      network device calls a traffic port. Riser 2's half-height slot is not
+      drawn yet.
+  ndc:
+    term: Card
+    role: service
+    index-origin: 1
+    description: >-
+      the network daughter card slot, and the only fixed NIC this chassis has.
+      THE GROUP HOLDS THE CARD, NOT ITS PORTS, and that is why it is `service`
+      rather than `traffic`. The four RJ45s are elements of the part and they do
+      carry traffic; the SLOT is standard equipment that ships filled, in the way
+      a supervisory engine does, rather than an expansion choice a buyer makes.
+      A base configuration is a chassis you can log into with nothing decided
+      about expansion - and it cannot be logged into over a NIC that the base
+      left out.
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+  drives-rear:
+    term: Drive
+    role: service
+    index-origin: 0
+    description: >-
+      the four rear bays. DELL NUMBERS THEM 12 TO 15, printed on the metal beside
+      them in figure 8 - they continue the front row's count rather than starting
+      again, and a drawing that renumbered them from zero would disagree with the
+      chassis. That numbering is carried in each bay's `rel-pos`; `index-origin`
+      only takes 0 or 1, so it cannot express a run that starts at 12 and is left
+      at 0 rather than made to lie.
+    attrs: {media: sff-2.5}
+  mgmt-rear:
+    term: Control
+    role: management
+    index-origin: 1
+    description: >-
+      the rear system identification button - what you press, not what you plug
+      into, which is why it is not in `mgmt-ports` with the sockets.
+  mgmt-ports:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: rear service access
+    description: >-
+      the rear I/O: iDRAC9 dedicated, serial, VGA and two USB 3.0. Four families
+      in one block deliberately, the same reason as the front - Dell's table
+      calls them one panel and they do one job.
   covers:
     term: Cover
     role: service
@@ -376,6 +431,78 @@ views:
         - {ref: dell/bezel-2u-14g@1, id: bezel, at: [24.30, 2.23],
            for: [drive-0, drive-1, drive-2, drive-3, drive-4, drive-5, drive-6, drive-7, drive-8, drive-9, drive-10, drive-11, drive-12, drive-13, drive-14, drive-15, drive-16, drive-17, drive-18, drive-19, drive-20, drive-21, drive-22, drive-23, panel-left],
            group: covers, rel-pos: 0}
+  rear:
+    size:
+      w: 434.0
+      h: 86.8
+    panel:
+      decor:
+        # the riser 1 field and the I/O panel it sits above
+        - {at: [4.0, 3.0], size: [116.0, 62.0], fill: '#7d848c'}
+        - {at: [4.0, 66.0], size: [232.0, 19.0], fill: '#6f767d'}
+        # the teal and blue Dell prints behind the serial and the VGA - colour
+        # is how these two are told apart on a crowded panel, and it is paint
+        # on the metal rather than part of either connector
+        - {at: [50.0, 70.5], size: [32.5, 14.0], fill: '#0f6f78'}
+        - {at: [80.0, 71.5], size: [29.0, 13.0], fill: '#1f4f9e'}
+      cutouts:
+        - {id: idrac9, at: [28.32, 68.9], size: [15.8, 13.2], shape: rect}
+        - {id: serial, at: [55.465, 72.25], size: [20.47, 11.4], shape: rect}
+        - {id: vga, at: [86.565, 72.65], size: [20.47, 11.4], shape: rect}
+        - {id: usb-1, at: [119.0, 67.2], size: [12.0, 4.5], shape: rect}
+        - {id: usb-2, at: [119.0, 75.6], size: [12.0, 4.5], shape: rect}
+        - {id: sys-id, at: [8.0, 72.0], size: [7.0, 7.0], shape: circle}
+    components:
+      bays:
+        - {id: slot-1, at: [12.0, 9.99], size: {w: 103.0, h: 12.2},
+           accepts: [dell/pcie-filler-fh-14g@1], default: dell/pcie-filler-fh-14g@1,
+           group: pcie, rel-pos: 1}
+        - {id: slot-2, at: [12.0, 30.31], size: {w: 103.0, h: 12.2},
+           accepts: [dell/pcie-filler-fh-14g@1], default: dell/pcie-filler-fh-14g@1,
+           group: pcie, rel-pos: 2}
+        - {id: slot-3, at: [12.0, 50.63], size: {w: 103.0, h: 12.2},
+           accepts: [dell/pcie-filler-fh-14g@1], default: dell/pcie-filler-fh-14g@1,
+           group: pcie, rel-pos: 3}
+        - {id: ndc, at: [139.6, 67.8], size: {w: 90.3, h: 14.5},
+           accepts: [dell/ndc-4x-rj45-14g@1], default: dell/ndc-4x-rj45-14g@1,
+           group: ndc, rel-pos: 1}
+        - {id: psu-1, at: [253.08, 43.4], size: {w: 90.46, h: 43.4},
+           accepts: [dell/psu-1100w-ac-14g@1], default: dell/psu-1100w-ac-14g@1,
+           group: psus, rel-pos: 1}
+        - {id: psu-2, at: [343.54, 43.4], size: {w: 90.46, h: 43.4},
+           accepts: [dell/psu-1100w-ac-14g@1], default: dell/psu-1100w-ac-14g@1,
+           group: psus, rel-pos: 2}
+        - {id: drive-r0, at: [173.0, 4.9], size: {w: 79.4, h: 17.868},
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
+           rotate: 270, group: drives-rear, rel-pos: 12}
+        - {id: drive-r1, at: [173.0, 22.8], size: {w: 79.4, h: 17.868},
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
+           rotate: 270, group: drives-rear, rel-pos: 13}
+        - {id: drive-r2, at: [331.0, 4.9], size: {w: 79.4, h: 17.868},
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
+           rotate: 270, group: drives-rear, rel-pos: 14}
+        - {id: drive-r3, at: [331.0, 22.8], size: {w: 79.4, h: 17.868},
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
+           rotate: 270, group: drives-rear, rel-pos: 15}
+      placements:
+        - {ref: common/rj45-jack@2, id: idrac9, at: [28.32, 68.9],
+           attrs: {role: management}, group: mgmt-ports, rel-pos: 1}
+        - {ref: common/db9-receptacle@1, id: serial, at: [50.3, 71.7],
+           group: mgmt-ports, rel-pos: 2}
+        - {ref: common/vga-receptacle@1, id: vga, at: [81.4, 72.1],
+           group: mgmt-ports, rel-pos: 3}
+        - {ref: std/usb-a@1, id: usb-1, at: [119.0, 67.2],
+           attrs: {speed: usb-3.0}, group: mgmt-ports, rel-pos: 4}
+        - {ref: std/usb-a@1, id: usb-2, at: [119.0, 75.6],
+           attrs: {speed: usb-3.0}, group: mgmt-ports, rel-pos: 5}
+        - {ref: dell/system-id-button-14g@1, id: sys-id, at: [8.0, 72.0],
+           for: chassis, group: mgmt-rear, rel-pos: 1}
+        - {ref: dell/idrac-direct-symbol@1, id: mark-idrac9, at: [34.1, 63.6],
+           for: idrac9, group: marks, rel-pos: 10}
+        - {ref: common/vga-symbol@1, id: mark-vga-r, at: [91.5, 66.4],
+           for: vga, group: marks, rel-pos: 11}
+        - {ref: common/usb-symbol@1, id: mark-usb-r, at: [132.8, 71.3],
+           for: usb-1, group: marks, rel-pos: 12}
 configurations:
   base:
     kind: base
@@ -386,6 +513,16 @@ configurations:
       blank. DERIVED and not sourced - Dell publishes no default drive count for
       this chassis, so this is the library populating bays by role rather than
       following an orderable bundle, and the two are not equally good.
+      THE PCIe SLOTS ARE NAMED HERE RATHER THAN LEFT TO THE BAY DEFAULT. A base
+      is a chassis you can log into with nothing decided about expansion, so its
+      traffic slots have to be EMPTY - and empty on real hardware means a filler
+      bracket, not a hole, because the airflow depends on it. Saying so
+      explicitly is what distinguishes "nobody has chosen a card yet" from
+      "somebody forgot to write the bays down".
+    bays:
+      slot-1: dell/pcie-filler-fh-14g@1
+      slot-2: dell/pcie-filler-fh-14g@1
+      slot-3: dell/pcie-filler-fh-14g@1
   full-24:
     kind: example
     description: >-
