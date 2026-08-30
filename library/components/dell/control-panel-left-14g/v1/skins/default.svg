@@ -1,48 +1,53 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="8.6mm" height="30.0mm" viewBox="0 0 8.6 30.0">
+<svg xmlns="http://www.w3.org/2000/svg" width="11.59mm" height="30.0mm" viewBox="0 0 11.59 30.0">
   <!-- Left control panel, 14G PowerEdge. Five status glyphs that ARE the
        lamps (ISM table 4: drive, temperature, electrical, memory, PCIe),
        the system health / system ID bar, and the iDRAC Quick Sync 2 bar.
-       Both bars are buttons as well as indicators. -->
-  <rect x="0" y="0" width="8.6" height="30.0" rx="0.5" fill="#15181b"/>
-  <g id="lamp-drive" fill="none" stroke="#8b9299" stroke-width="0.22">
-    <ellipse cx="2.10" cy="1.88" rx="0.86" ry="0.34"/>
-    <path d="M1.24 1.88 v1.42 a0.86 0.34 0 0 0 1.72 0 v-1.42"/>
+       Both bars are buttons as well as indicators. The bar sits FLUSH
+       RIGHT - measured, see the module docstring. -->
+  <rect x="0" y="0" width="11.59" height="30.0" rx="0.5" fill="#15181b"/>
+  <g id="lamp-drive" fill="none" stroke="#8b9299" stroke-width="0.26" stroke-linejoin="round">
+    <ellipse cx="2.45" cy="1.97" rx="1.02" ry="0.40"/>
+    <path d="M1.43 1.97 v1.56 a1.02 0.40 0 0 0 2.04 0 v-1.56"/>
+    <path d="M1.43 2.77 a1.02 0.40 0 0 0 2.04 0" stroke-width="0.20"/>
   </g>
-  <g id="lamp-temperature" fill="none" stroke="#8b9299" stroke-width="0.22" stroke-linecap="round">
-    <path d="M2.10 6.20 v1.35"/>
-    <circle cx="2.10" cy="7.92" r="0.52"/>
-    <path d="M1.76 6.20 a0.34 0.34 0 0 1 0.68 0"/>
+  <g id="lamp-temperature" fill="none" stroke="#8b9299" stroke-width="0.24" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M2.03 7.65 V6.17 a0.42 0.42 0 0 1 0.84 0 V7.65"/>
+    <circle cx="2.45" cy="8.21" r="0.66"/>
+    <path d="M2.87 6.63 h0.44 M2.87 7.15 h0.44 M2.87 7.67 h0.44" stroke-width="0.18"/>
+    <circle cx="2.45" cy="8.21" r="0.26" fill="#8b9299" stroke="none"/>
   </g>
   <g id="lamp-electrical">
-    <rect x="1.10" y="10.80" width="2.0" height="2.0" rx="0.34" fill="none" stroke="#8b9299" stroke-width="0.22"/>
-    <path d="M2.32 11.18 l-0.72 0.86 h0.52 l-0.30 0.72 l0.78 -0.90 h-0.54 Z" fill="#8b9299"/>
+    <rect x="1.35" y="10.85" width="2.20" height="2.20" rx="0.38" fill="none" stroke="#8b9299" stroke-width="0.24"/>
+    <path d="M2.75 11.23 L1.93 12.07 h0.52 l-0.30 0.72 l0.86 -0.94 h-0.56 Z" fill="#8b9299"/>
   </g>
-  <g id="lamp-memory" fill="none" stroke="#8b9299" stroke-width="0.20" stroke-linejoin="round">
-    <path d="M2.10 15.44 l1.05 0.42 l-1.05 0.42 l-1.05 -0.42 Z"/>
-    <path d="M2.10 16.08 l1.05 0.42 l-1.05 0.42 l-1.05 -0.42 Z"/>
-    <path d="M2.10 16.72 l1.05 0.42 l-1.05 0.42 l-1.05 -0.42 Z"/>
+  <g id="lamp-memory" fill="none" stroke="#8b9299" stroke-width="0.24" stroke-linejoin="round">
+    <path d="M1.21 15.63 h2.48 v1.30 h-2.48 Z"/>
+    <path d="M1.21 16.93 h0.86 v0.34 h0.76 v-0.34 h0.86" stroke-width="0.22"/>
+    <path d="M1.83 15.97 v0.62 M2.45 15.97 v0.62 M3.07 15.97 v0.62" stroke-width="0.18"/>
   </g>
-  <g id="lamp-pcie" fill="none" stroke="#8b9299" stroke-width="0.22" stroke-linejoin="round">
-    <path d="M1.10 20.14 h2.0 v1.50 h-2.0 Z"/>
-    <path d="M1.68 21.64 h0.84 v0.34 h-0.84 Z"/>
+  <g id="lamp-pcie" fill="none" stroke="#8b9299" stroke-width="0.24" stroke-linejoin="round">
+    <path d="M1.25 20.09 h1.92 v1.72 h-1.92 Z"/>
+    <path d="M1.73 21.81 h0.62 v0.42 h-0.62 Z" fill="#8b9299" stroke="none"/>
+    <path d="M3.17 19.85 v2.60" stroke-width="0.34"/>
   </g>
 
-  <!-- the bar: blue above, white below, one moulding. Both halves are
-       buttons too - ISM tables 5 and 6 both say "press". -->
-  <rect x="3.70" y="5.00" width="2.90" height="18.00" rx="1.15" fill="#0c0e10" stroke="#2a2e32" stroke-width="0.18"/>
-  <rect id="lamp-health" x="4.00" y="5.40" width="2.30" height="9.00" rx="1.0" fill="#1e3a5f"/>
-  <rect id="lamp-quicksync" x="4.00" y="14.70" width="2.30" height="8.20" rx="1.0" fill="#3a3f44"/>
+  <!-- the bar: blue above, white below, one moulding, flush with the
+       panel edge. Both halves are buttons - ISM tables 5 and 6 both
+       say "press". -->
+  <rect x="6.94" y="4.85" width="4.30" height="18.30" rx="1.6" fill="#0c0e10" stroke="#4a5157" stroke-width="0.22"/>
+  <rect id="lamp-health" x="7.59" y="5.40" width="3.00" height="9.00" rx="1.3" fill="#1e3a5f"/>
+  <rect id="lamp-quicksync" x="7.59" y="14.70" width="3.00" height="8.20" rx="1.3" fill="#3a3f44"/>
 
   <!-- printed marks, NOT lamps: they say what the bar beside them means.
        The ISM lists three items on this panel and neither of these is
        one of them. -->
   <g fill="#8b9299">
-    <circle cx="5.15" cy="1.85" r="0.30"/>
-    <path d="M4.85 2.55 h0.62 v2.05 h-0.62 Z"/>
+    <circle cx="9.09" cy="1.65" r="0.32"/>
+    <path d="M8.77 2.40 h0.64 v2.15 h-0.64 Z"/>
   </g>
-  <g fill="none" stroke="#8b9299" stroke-width="0.24" stroke-linecap="round">
-    <path d="M3.83 24.80 a1.32 1.32 0 0 1 2.64 0"/>
-    <path d="M4.29 24.80 a0.86 0.86 0 0 1 1.72 0"/>
-    <path d="M4.75 24.80 a0.40 0.40 0 0 1 0.80 0"/>
+  <g fill="none" stroke="#8b9299" stroke-width="0.26" stroke-linecap="round">
+    <path d="M7.54 25.35 a1.55 1.55 0 0 1 3.10 0"/>
+    <path d="M8.07 25.35 a1.02 1.02 0 0 1 2.04 0"/>
   </g>
+  <circle cx="9.09" cy="25.53" r="0.30" fill="#8b9299"/>
 </svg>

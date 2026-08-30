@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 0.3.0
+version: 0.4.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -85,6 +85,16 @@ provenance:
     Mode, so there is no single chassis figure to record; the draw belongs to
     whichever PSU is fitted, and that is a rear-face question this draft does not
     reach.
+  rack-latches: >-
+    BOTH EARS CARRY ONE. The r750 master draws the same 12.16 x 37.99 section at
+    x 2.80 and x 469.04, both starting at y 46.91 - 54% down an 86.8 face - and
+    the operator describes the hardware the same way, "a little bit lower than
+    midway down, and from there to the bottom". A drawing of the successor and a
+    machine in a rack agreeing on where a feature starts is what fixed it.
+    An earlier reading took the right-hand one for the information tag. It is
+    not: the ISM puts the information tag's callout in the middle of the drive
+    row at the bottom, where it slides out from between the bays, and the tag is
+    still not drawn.
   bezel: >-
     DRAWN FITTED, AND IT DECLARES WHAT IT HIDES. `for:` names all 24 drive bays
     and the left control panel, which is how the C40G's snap-on PSU cover says it
@@ -148,6 +158,15 @@ groups:
       of the metal - the ISM carries removal and installation procedures for
       each. The right-hand one is still drawn as loose placements and is the next
       thing to become a module.
+  latches:
+    term: Latch
+    role: furniture
+    index-origin: 1
+    description: >-
+      the rack release rockers, one built into each ear. Pressed to free the
+      chassis from the rail so it can be drawn out - so they are pressed, but
+      they release the BOX rather than operating anything in it, which is why
+      they are furniture and not `mgmt`.
   covers:
     term: Cover
     role: service
@@ -179,10 +198,10 @@ views:
       decor:
         # the two ear flanges. Bare metal outboard of the control panels,
         # and the only reason they are drawn at all is what sits in them.
-        - {at: [0, 0], size: [17.0, 86.8], fill: '#3a4045'}
+        - {at: [0, 0], size: [13.41, 86.8], fill: '#3a4045'}
         - {at: [468.54, 0], size: [14.06, 86.8], fill: '#3a4045'}
         # the recessed strips the panels sit in
-        - {at: [16.0, 2.7], size: [10.9, 81.4], fill: '#23272b'}
+        - {at: [13.41, 2.7], size: [11.59, 81.4], fill: '#23272b'}
         - {at: [457.8, 2.7], size: [10.6, 81.4], fill: '#23272b'}
       cutouts:
         - {id: drive-0, at: [26.884, 4.0], size: [17.868, 79.4], shape: rect}
@@ -214,10 +233,10 @@ views:
         - {id: usb-2, at: [460.40, 45.56], size: [4.5, 12.0], shape: rect}
         - {id: idrac-direct, at: [462.13, 63.43], size: [2.75, 7.5], shape: rect}
         - {id: vga, at: [469.43, 16.70], size: [11.40, 20.47], shape: rect}
-        - {id: panel-left, at: [16.7, 5.3], size: [8.6, 30.0], shape: rect}
+        - {id: panel-left, at: [13.41, 5.3], size: [11.59, 30.0], shape: rect}
     components:
       bays:
-        - {id: panel-left, at: [16.7, 5.3], size: {w: 8.6, h: 30.0},
+        - {id: panel-left, at: [13.41, 5.3], size: {w: 11.59, h: 30.0},
            accepts: [dell/control-panel-left-14g@1], default: dell/control-panel-left-14g@1,
            group: panels, rel-pos: 1}
         - {id: drive-0, at: [26.884, 4.0], size: {w: 17.868, h: 79.4},
@@ -313,6 +332,10 @@ views:
            for: vga, group: marks, rel-pos: 4}
         - {ref: dell/control-panel-grid-14g@1, id: panel-grid, at: [458.65, 35.80],
            for: chassis, group: marks, rel-pos: 5}
+        - {ref: dell/rack-latch-14g@1, id: latch-left, at: [2.80, 46.91],
+           for: chassis, group: latches, rel-pos: 1}
+        - {ref: dell/rack-latch-14g@1, id: latch-right, at: [469.04, 46.91],
+           for: chassis, group: latches, rel-pos: 2}
         - {ref: dell/bezel-2u-14g@1, id: bezel, at: [24.30, 2.23],
            for: [drive-0, drive-1, drive-2, drive-3, drive-4, drive-5, drive-6, drive-7, drive-8, drive-9, drive-10, drive-11, drive-12, drive-13, drive-14, drive-15, drive-16, drive-17, drive-18, drive-19, drive-20, drive-21, drive-22, drive-23, panel-left],
            group: covers, rel-pos: 0}

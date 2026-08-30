@@ -9,7 +9,7 @@ description: >-
   Left control panel of a 14th-generation PowerEdge - five status glyphs that
   are themselves lamps, the system health and system ID bar, and the optional
   iDRAC Quick Sync 2 bar below it. Both bars are buttons as well as indicators
-size: {w: 8.6, h: 30.0, d: 40.0}
+size: {w: 11.59, h: 30.0, d: 40.0}
 provenance:
   identity: >-
     A FIELD-REPLACEABLE UNIT, which is why it is a component and not a handful
@@ -19,11 +19,15 @@ provenance:
     LEDs, system ID button, and iDRAC Quick Sync 2 (optional).'
   size: >-
     photo-measured from ISM figure 2 at 6.5644 px/mm, which passes Gate 1 at
-    1.03%. This is the ACTIVE FACE - the glyph column and the bar - and not the
-    whole moulding: the panel's metal runs the height of the chassis and carries
-    nothing below y 33, so drawing the module as its populated area is what makes
-    the placement legible. The moulding's full extent is not stated by anything
-    held here.
+    1.03%.
+    WIDTH IS THE PANEL'S OWN, 13.41..25.0 on the face, so the module fills its
+    recess rather than floating in it - an earlier draft made it 8.6 and left a
+    strip of the darker ground showing down the right-hand side, which read as
+    two parts where the hardware has one.
+    HEIGHT IS THE ACTIVE FACE and not the whole moulding: the panel's metal runs
+    the height of the chassis and carries nothing below y 33, so drawing the
+    module as its populated area is what makes the placement legible. The
+    moulding's full extent is not stated by anything held here.
   not-from-the-r750: >-
     DELIBERATELY NOT READ ACROSS. The r750-24d-2-5-front master licensed the
     RIGHT control panel of this machine, because the two documents put its VGA
@@ -32,12 +36,27 @@ provenance:
     panel and using the same trick anyway would have been the same evidence used
     twice with the negative result discarded.
   bar: >-
-    photo-measured - the lit bar runs y 11.08..28.16 on the face at x 20.7..23.0,
-    blue above and white below with the split at about 20.5. The blue reads 3.50
-    wide against the white's 1.68 in the same image, which is GLOW rather than
-    two widths: a lit blue LED blooms into the surrounding pixels and a dimmer
-    white one does not. One bar, one width, and the brighter measurement is the
-    one to distrust.
+    photo-measured, AND FLUSH WITH THE PANEL'S RIGHT EDGE. A brightness profile
+    across the face at 6.5644 px/mm reads: mid out to 13.41 (the ear flange),
+    DARK from 13.41 where the panel begins, lit from 20.11, and the last lit
+    column at 24.98 against a panel edge at 25.0.
+    AN EARLIER DRAFT PUT IT 3.9 MM SHORT OF THAT EDGE because it measured only
+    the BLUE segment and stopped at 23.61 - the white half and the channel's lip
+    run on past where blue stops being blue. Measuring one colour of a two-colour
+    bar measures the colour, not the bar. The blue also reads 3.50 wide against
+    the white's 1.68 in the same image, which is GLOW rather than two widths: a
+    lit blue LED blooms and a dimmer white one does not.
+  glyph-shapes: >-
+    THE GLYPHS ARE DRAWN TO READ AS WHAT THEY NAME, which took a second pass.
+    The first temperature mark was a bare stem and a circle and read as a pin;
+    a thermometer needs the bulb, the column and the scale ticks. The first
+    memory mark was three chevrons and read as layers or as a network; it is now
+    a DIMM, with a notched card edge and contact fingers. The first PCIe mark
+    was a plain rectangle with a tab and read as a MONITOR - which is the mark
+    that belongs beside the VGA and nowhere near this one - so it is now a card
+    with its bracket. None of these shapes is dimensioned by anything: the ISM
+    figure resolves the boxes and not their contents, so the boxes are measured
+    and the figures inside them are drawn.
   glyphs: >-
     ISM table 4 names the five status indicators in order - Drive, Temperature,
     Electrical, Memory, PCIe - and says each 'turns solid amber' on its fault.
@@ -56,43 +75,43 @@ provenance:
     already draws.
 elements:
   lamp-drive:
-    at: [0.8, 1.3]
-    size: [2.6, 2.6]
+    at: [1.0, 1.3]
+    size: [2.9, 2.9]
     class: led
     states: ['off', {name: fault, color: '#eab308'}]
     description: >-
       the drive glyph, lit. ISM table 4 - solid amber if there is a drive error.
   lamp-temperature:
-    at: [0.8, 5.9]
-    size: [2.6, 2.6]
+    at: [1.0, 5.9]
+    size: [2.9, 2.9]
     class: led
     states: ['off', {name: fault, color: '#eab308'}]
     description: >-
       the thermometer glyph. Solid amber on a thermal error - ambient out of
       range, or a fan failure.
   lamp-electrical:
-    at: [0.8, 10.5]
-    size: [2.6, 2.6]
+    at: [1.0, 10.5]
+    size: [2.9, 2.9]
     class: led
     states: ['off', {name: fault, color: '#eab308'}]
     description: >-
       the lightning glyph. Solid amber on voltage out of range, a failed PSU or
       a failed voltage regulator.
   lamp-memory:
-    at: [0.8, 15.1]
-    size: [2.6, 2.6]
+    at: [1.0, 15.1]
+    size: [2.9, 2.9]
     class: led
     states: ['off', {name: fault, color: '#eab308'}]
     description: the memory glyph. Solid amber on a memory error.
   lamp-pcie:
-    at: [0.8, 19.7]
-    size: [2.6, 2.6]
+    at: [1.0, 19.7]
+    size: [2.9, 2.9]
     class: led
     states: ['off', {name: fault, color: '#eab308'}]
     description: the PCIe glyph. Solid amber when a PCIe card errors.
   lamp-health:
-    at: [4.0, 5.4]
-    size: [2.3, 9.0]
+    at: [7.59, 5.4]
+    size: [3.0, 9.0]
     class: led
     states: ['off',
              {name: healthy, color: '#2563eb'},
@@ -110,8 +129,8 @@ elements:
       states - unlike the drive lamp, where the article gives twice and four
       times a second and the model carries them.
   lamp-quicksync:
-    at: [4.0, 14.7]
-    size: [2.3, 8.2]
+    at: [7.59, 14.7]
+    size: [3.0, 8.2]
     class: led
     states: ['off',
              {name: ready, color: '#f8fafc'},
