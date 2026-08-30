@@ -1,0 +1,60 @@
+format: 1
+kind: module
+name: riser-2-1lp-14g
+version: 1.0.0
+class: riser
+behaviour: fills
+profile: server
+description: >-
+  PCIe expansion card riser for a 14th-generation PowerEdge - presents
+  1 slot and carries a bay for each
+attrs:
+  supported-risers: '2B and 2C'
+provenance:
+  identity: >-
+    A REMOVABLE ASSEMBLY THAT BRINGS ITS OWN SLOTS, which is why it is a module
+    with `bays` rather than openings drawn on the chassis. The ISM carries
+    removal and installation procedures for risers 1, 2, 2A, 2B and 3, and the
+    component schema names exactly this case: `bays` is for "MODULES THAT
+    THEMSELVES HOST BAYS - a PCIe riser, a SIP carrying SPAs".
+  which-part-numbers: >-
+    THIS FACE IS SHARED BY 2B and 2C. ISM table 25 names eleven riser part numbers
+    across the three positions and they present only FIVE distinct arrangements
+    of slots; within a face the variants differ in LANE WIDTH and which processor
+    each slot is wired to. Those are facts about the electronics, recorded in
+    attrs, and they do not change the drawing. Drawing eleven would be drawing
+    five things twice and calling the duplicates evidence.
+  slot-numbering: >-
+    THE NUMBERS BELONG TO THE RISER, NOT THE CHASSIS, and that is what resolves
+    the puzzle in table 25: the low-profile slot is numbered 4 when riser 2
+    presents only that one, and 6 when riser 2 presents three. An opening cannot
+    change size in place - a full-height card will not fit where the half-height
+    one goes, with the power supply directly beneath it - so the metal is fixed
+    and the numbering travels with the part. The two rear figures confirm the
+    metal: the same window cropped from each gives the same bracket in the same
+    place.
+  size: >-
+    photo-measured from the R740 ISM figure 9, which passes Gate 1 at 0.26%
+    against a 434 x 86.8 rear face. The bracket pitch is the PCI standard
+    20.32 mm and the figure confirms it at 20.535 (1.06%); a published pitch
+    beats a reading of a picture, and the reading is what says the published one
+    applies here.
+    THE BRACKET WIDTH WAS RE-MEASURED PER RISER and the first pass had it wrong.
+    Reading the vent fields row by row gives riser 1 at x 25.0..108.8, riser 2 at
+    171.5..251.4 and riser 3 at 324.1..410.7 - and riser 2's field STOPS where
+    the power supply begins. A first draft gave every riser riser 1's 103 mm
+    bracket, which pushed riser 2 straight through the supply beside it and L13
+    said so. A PCI full-height bracket is a standard length, so the three are the
+    same part; what differs is where each riser sits, and riser 2 sits against
+    the supply.
+    THE OUTLINE IS THE AREA THE RISER OCCUPIES ON THE FACE, not the assembly
+    behind it. Nothing held here dimensions the riser's depth or its board, so
+    no depth is recorded.
+size: {w: 95.0, h: 62.0}
+bays:
+  slot-4:
+    at: [2.5, 45.64]
+    size: [78.0, 12.2]
+    accepts: [dell/pcie-filler-lp-14g@1]
+    default: dell/pcie-filler-lp-14g@1
+skins: [default]
