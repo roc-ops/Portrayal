@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 0.10.0
+version: 0.11.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -291,6 +291,15 @@ groups:
       removable covers over the face. The bezel is the only one, and it is drawn
       only when asked for: it hides the drives it protects, which is the whole
       point of it and exactly why the default drawing leaves it off.
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 1
+    description: >-
+      removable ironmongery that is neither a port nor a lamp. The rear handle is
+      the only one: the ISM says it comes off to let cables out of PCIe slot 6,
+      but gives it no removal procedure of its own, so it is documented as
+      removable without being a serviceable unit.
   marks:
     term: Mark
     role: furniture
@@ -517,6 +526,8 @@ views:
            attrs: {speed: usb-3.0}, group: mgmt-ports, rel-pos: 4}
         - {ref: std/usb-a@1, id: usb-2, at: [119.0, 75.50],
            attrs: {speed: usb-3.0}, group: mgmt-ports, rel-pos: 5}
+        - {ref: dell/rear-handle-14g@1, id: rear-handle, at: [133.0, 43.0],
+           for: [riser-2, ndc], group: furniture, rel-pos: 1}
         - {ref: dell/system-id-button-14g@1, id: sys-id, at: [6.5, 68.5],
            for: chassis, group: mgmt-rear, rel-pos: 1}
         - {ref: common/led-indicator@1, id: sys-status, at: [18.5, 70.0],

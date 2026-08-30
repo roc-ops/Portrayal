@@ -1,0 +1,51 @@
+format: 1
+kind: component
+name: rear-handle-14g
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+profile: server
+description: >-
+  The removable rear handle on a 14th-generation PowerEdge - a captive-screwed
+  block, a bar running above the NIC ports, and an arm angling down to the
+  chassis wall
+size: {w: 117.0, h: 37.0}
+provenance:
+  identity: >-
+    ISM table 9 item 3, and ISM-740 table 10 item 3: "The rear handle can be
+    removed to enable any external cabling of PCIe cards that are installed in
+    the PCIe expansion card slot 6." So it is REMOVABLE and it is in the way of
+    slot 6's cabling, which is what makes it a part rather than a moulding.
+    IT IS NOT IN THE ISM'S REMOVAL PROCEDURES. The manual's 46 "Removing X"
+    sections do not include it, so it is documented as removable without being
+    documented as a serviceable unit. `mechanical` rather than a FRU class for
+    that reason.
+  size: >-
+    photo-measured from the R740 ISM figure 9 - "Back view of three riser system",
+    which passes Gate 1 at 0.26% against a 434 x 86.8 rear face and is the
+    best-scaled rear source held - at 7.2074 px/mm. The bounding box runs
+    x 133..250, y 43..80.
+  shape: >-
+    IT IS NOT A RECTANGLE and the bounding box badly overstates what it covers.
+    Three parts, read off the figure: a block at x 133..152 y 43..62 with a
+    captive screw in it; a bar from x 152 to 232 at y 59..68, which runs directly
+    above the four NIC ports; and an arm angling down from x 232 to 250, y 62..80,
+    to the chassis wall beside the first supply. The metal between those is air,
+    which is why this part declares what it passes over rather than pretending to
+    be a slab.
+  what-it-crosses: >-
+    the riser 2 position and the network daughter card. Both are declared in the
+    device's `for:` so L13 reads the overlap as a part crossing others rather
+    than as a sizing mistake - the same construction the front bezel uses over
+    the drive bays, and the riser 2 and 3 blank over riser 3.
+  depth: >-
+    not recorded. Nothing held here dimensions how far it stands off the face.
+elements:
+  screw:
+    at: [4.0, 5.0]
+    size: [11.0, 11.0]
+    class: fastener
+    description: >-
+      the captive screw in the block, which is what holds the handle on. The
+      figure resolves a knurled head and a cross slot and nothing finer.
+skins: [default]
