@@ -1,0 +1,37 @@
+format: 1
+kind: component
+name: vga-receptacle
+version: 1.0.0
+class: port
+profile: networking
+description: >-
+  VGA receptacle as a faceplate sees it - the female HD-15 shell with a
+  jackscrew standoff either side, which is how video is presented on server and
+  switch panels
+size: {w: 30.8, h: 12.5, d: 6.73}
+attrs: {media: vga}
+provenance:
+  size: >-
+    drawing - the same size E flange as a DE-9, because HD-15 is the same shell:
+    Amphenol's High Density D-Subminiature datasheet puts its 15-position part
+    on a 30.81 flange at 24.99 mounting centres, and TE's standard-density
+    C-747905 Rev AB1 gives 30.8 and 24.99. High density means more contacts in
+    one shell, not a bigger one.
+  standoffs: >-
+    Position sourced from those 24.99 mounting centres; the hex outline is drawn
+    4.6 across corners to fit inside the 4.83 panel clearance TE 114-40010
+    allows where screwlocks are fitted, and the bore is the 4-40 tap drill. Same
+    reasoning as common/db9-receptacle, which this mirrors.
+  no-bezel: >-
+    Carries no plate, for the reason common/db9-receptacle records: a D-sub
+    receptacle is a shell and two standoffs, and any plate around one is the
+    device's own trim rather than the connector's.
+  aperture: >-
+    composed - std/vga@1 carries the size E cutout from TE 114-40010 Figure 3.
+    This part frames it and does not redefine it.
+elements: {}
+parts:
+  - {ref: std/vga@1, id: shell, at: [5.165, 0.55]}
+connection-points:
+  mate: {at: [15.4, 6.25], direction: front}
+skins: [default]

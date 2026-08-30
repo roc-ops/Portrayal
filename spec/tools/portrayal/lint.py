@@ -100,7 +100,7 @@ SEGMENT = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 STATE_TOKEN = re.compile(r"^[a-z0-9-]+$")
 # Solid, on and off, or flashing between two colours. Rate is not here yet -
 # see the note on `behavior` in the schema.
-STATE_BEHAVIORS = {"solid", "blinking", "alternating"}
+STATE_BEHAVIORS = {"solid", "blinking", "alternating", "sequence"}
 ERRORS = []
 WARNINGS = []
 
@@ -361,6 +361,33 @@ def check_states(path, where, states, attrs, elements=None):
         if mode == "alternating" and not (isinstance(beh, dict) and beh.get("color")):
             err(path, "L20", f"{where}/{name}: behavior alternating flashes between "
                              f"two colours - give the second as behavior.color")
+        # `sequence` says the pattern IS the phase list, so the phase list has to
+        # carry it. A sequence whose phases are all dark is a lamp that never
+        # lights, and a colour on the state itself is a colour nothing draws -
+        # every frame of the cycle sets its own fill, so the base is overwritten.
+        if mode == "sequence":
+            phases = beh.get("phases") if isinstance(beh, dict) else None
+            if not isinstance(phases, list) or len(phases) < 2:
+                err(path, "L20", f"{where}/{name}: behavior sequence is a cycle of "
+                                 f"phases - give at least two as behavior.phases, "
+                                 f"each {{color, seconds}}, a phase with no colour "
+                                 f"being the lamp off")
+            elif not any(isinstance(p, dict) and p.get("color") for p in phases):
+                err(path, "L20", f"{where}/{name}: every phase of this sequence is "
+                                 f"dark, so the lamp never lights. That is state "
+                                 f"'off' with extra steps")
+            elif isinstance(st, dict) and st.get("color"):
+                warn(path, "L20", f"{where}/{name}: state names colour "
+                                  f"{st['color']!r} AND a sequence. The phases set "
+                                  f"the fill on every frame, so the state colour "
+                                  f"reaches nothing - put it in a phase")
+        # A rate is a blink frequency. On anything that does not blink it is a
+        # number the drawing cannot use, which reads as modelled and is not.
+        if isinstance(beh, dict) and beh.get("rate") is not None \
+                and mode not in ("blinking", "alternating"):
+            warn(path, "L20", f"{where}/{name}: behavior {mode!r} carries a rate, "
+                              f"but only blinking and alternating have one. For a "
+                              f"sequence the timing is `seconds` on each phase")
     prose = (attrs or {}).get("states")
     if prose is not None:
         warn(path, "L20", f"{where}: attrs.states = {str(prose)[:60]!r} - state "
