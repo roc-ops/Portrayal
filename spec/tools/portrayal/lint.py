@@ -79,8 +79,8 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
       nothing and a jack there is mounted to nothing
   L67 device: a control-plane or fabric group with more than one bay says
       whether the second card is a working one or a spare
-  L68 library: one measurement is spelled one way across devices, and a fact
-      worth comparing has a name the comparison layer knows
+  L68 library: one measurement is spelled one way across devices (ERROR), and a
+      fact worth comparing has a name the comparison layer knows (census)
   L69 device: a cooling group with more than one bay says how many of those
       fans the box can lose
 """
@@ -2678,10 +2678,16 @@ def lint_library_comparable_facts(roots, docs):
         where = homes[key]
         if len(where) > 1:
             named = ", ".join(f"{s} ({len(where[s])})" for s in sorted(where))
-            warn(roots[0], "L68", f"attrs key {key!r} is filed under more than one "
-                 f"section across the library - {named}. L25 only sees one device at "
-                 f"a time, so this passes it while making the key unfindable by "
-                 f"section. One fact, one section")
+            # AN ERROR, and it was a warning for exactly as long as it took to
+            # empty. L25 is already an error for the same defect inside one
+            # device; being lenient across devices made the section axis a
+            # suggestion, which is how 17 keys came to have two homes. The
+            # library is at zero, so this can hold the line rather than
+            # describe a backlog.
+            err(roots[0], "L68", f"attrs key {key!r} is filed under more than one "
+                f"section across the library - {named}. L25 only sees one device at "
+                f"a time, so this passes it while making the key unfindable by "
+                f"section. One fact, one section")
 
     if tail:
         top = sorted(tail.items(), key=lambda kv: (-kv[1], kv[0]))[:8]

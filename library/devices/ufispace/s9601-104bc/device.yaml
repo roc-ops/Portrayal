@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9601-104bc
-version: 1.0.3
+version: 1.0.4
 maturity: modelled
 manufacturer: UfiSpace
 model: S9601-104BC
@@ -328,14 +328,6 @@ attrs:
     reach-sfp28: 40 km max (HIG Port Overview, ports 0-95)
     reach-qsfp28: 80 km max (HIG Port Overview, ports 96/97/100/101)
     reach-qsfp56: 80 km max (HIG Port Overview, ports 98/99/102/103)
-    optics-sfp28: 25G SFP28 SR, LR, ER; 10G SFP+ SR, LR, ER; 1G SFP SX, LX, EX
-      (datasheet compatible transceiver types)
-    optics-qsfp28: 100G QSFP28 SR4, LR4, ER4, ZR4 (datasheet compatible transceiver
-      types)
-    optics-qsfp56: 200G QSFP56 SR4, FR4 (datasheet compatible transceiver types; the
-      QSFP56 cages also take the QSFP28 optics at 40/100G)
-    optics-sfp-plus: 10G SFP+ SR, LR, ER (datasheet compatible transceiver types; the
-      two 10G management ports take the same optics as the SFP28 cages do at 10G)
   power:
     power-typical-w: 282.2
     power-max-w: 811
@@ -362,8 +354,6 @@ attrs:
     asic: Broadcom Qumran2c BCM88820
     lookup-engine: Broadcom OP2 BCM16K
     bmc: ASPEED AST2620
-    boot-time: approx 80 s from power-on under Ubuntu Linux; OOB Ethernet relinks in
-      approx 40 s (HIG NEBS statements, both qualified as NOS-dependent)
   features:
     timing: Stratum 3E OCXO, ITU-T SyncE, IEEE 1588v2 (G.8265.1 default, G.8275.1,
       G.8275.2, SMPTE ST 2059-2 with additional licence; T-GM, T-BC/OC, T-TC), Time
@@ -380,8 +370,18 @@ attrs:
     routing: full Segment Routing over IPv6 (SRv6); programmable as a Broadband
       Network Gateway
     nos: NOS integration is necessary to activate the timing features
+    optics-sfp28: 25G SFP28 SR, LR, ER; 10G SFP+ SR, LR, ER; 1G SFP SX, LX, EX
+      (datasheet compatible transceiver types)
+    optics-qsfp28: 100G QSFP28 SR4, LR4, ER4, ZR4 (datasheet compatible transceiver
+      types)
+    optics-qsfp56: 200G QSFP56 SR4, FR4 (datasheet compatible transceiver types; the
+      QSFP56 cages also take the QSFP28 optics at 40/100G)
+    optics-sfp-plus: 10G SFP+ SR, LR, ER (datasheet compatible transceiver types; the
+      two 10G management ports take the same optics as the SFP28 cages do at 10G)
   management:
     console: RJ45 serial, 115200 8N1
+    boot-time: approx 80 s from power-on under Ubuntu Linux; OOB Ethernet relinks in
+      approx 40 s (HIG NEBS statements, both qualified as NOS-dependent)
   compliance:
     safety: IEC/EN 60825-1 laser Class 1 pluggables only (UL/CSA recognised modules);
       installation restricted to service personnel, indoors only

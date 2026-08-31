@@ -65,13 +65,13 @@ comments: "UfiSpace S9321-64EO 800G AI/ML data center switch - 2RU white box, 64
   \ OpenZR+/ZR/2xLR4/2xFR4/DR8+/DR8/SR8 and 400GE OSFP OpenZR+/ZR/ER4/LR4/FR4/SR8/DR4/DR4+/PLR4 (datasheet\
   \ compatible transceiver list); the HIG port table gives ports 0~63 as 400G/800G up to 2 km\n- features.optics-sfp28:\
   \ 1G/10G/25G on the management pair, up to 40 km per the HIG Port Overview table; the datasheet calls\
-  \ the same pair '2 x 10/25G SFP28 ports' and no module list is published for it\n- lifecycle.eol: none-announced\n\
-  - management.console: RJ45 RS-232 and micro-USB, both labelled IOIO, 115200 8N1 no flow control; the\
-  \ micro-USB needs a Silicon Labs CP210x driver (HIG Initial System Setup)\n- management.oob: 1x RJ45\
-  \ 100/1000M plus the 2x SFP28 management pair\n- management.timing: 1PPS and 10MHz SMB input/output\
-  \ (premium), 50 ohm, cable not to exceed 3 m; Stratum 3E OCXO holdover and ITU-T Synchronous Ethernet\
-  \ (SyncE). The datasheet's compatible cable row names 'SMB coaxial cable with 10-32UNF-2A connector\
-  \ for 1PPS and 10MHz', and the HIG offers a converter where the far end is BNC\n- performance.packet-buffer:\
+  \ the same pair '2 x 10/25G SFP28 ports' and no module list is published for it\n- features.timing:\
+  \ 1PPS and 10MHz SMB input/output (premium), 50 ohm, cable not to exceed 3 m; Stratum 3E OCXO holdover\
+  \ and ITU-T Synchronous Ethernet (SyncE). The datasheet's compatible cable row names 'SMB coaxial cable\
+  \ with 10-32UNF-2A connector for 1PPS and 10MHz', and the HIG offers a converter where the far end is\
+  \ BNC\n- lifecycle.eol: none-announced\n- management.console: RJ45 RS-232 and micro-USB, both labelled\
+  \ IOIO, 115200 8N1 no flow control; the micro-USB needs a Silicon Labs CP210x driver (HIG Initial System\
+  \ Setup)\n- management.oob: 1x RJ45 100/1000M plus the 2x SFP28 management pair\n- performance.packet-buffer:\
   \ 165.2 MB\n- performance.switching-capacity: 51.2 Tbps\n- platform.asic: Broadcom Tomahawk 5 BCM78900\n\
   - platform.bmc: Aspeed AST2620\n- platform.cpu: Intel Xeon-D 4-core @ 1.9 GHz\n- platform.memory: 32\
   \ GB DDR4\n- platform.storage: 1x 128 GB M.2 SSD\n- power.input-ac: 200 to 240 V, 16 A per feed\n- power.input-dc:\
@@ -79,6 +79,6 @@ comments: "UfiSpace S9321-64EO 800G AI/ML data center switch - 2RU white box, 64
   \ HIG Connecting Power - measured at 40 C ambient, optics fully populated and 100% traffic load; 2545\
   \ W is the AC figure and 2279 W the DC one\n- power.power-max-w: 2545\n- power.power-typical-w: 925\n\
   - power.psu-redundancy: 1+1 active-active hot-swappable\n- thermal.airflow: front-to-back only\n- thermal.fan-redundancy:\
-  \ 3+1 hot-swappable\n\nDrawing version 0.2.3. A major bump means a slot moved or an id was renamed,\
+  \ 3+1 hot-swappable\n\nDrawing version 0.2.4. A major bump means a slot moved or an id was renamed,\
   \ so anything cached from an earlier export may no longer line up.\nModel maturity: modelled. Every\
   \ dimension in the source records where it came from."

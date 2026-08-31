@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9610-46dx
-version: 2.0.3
+version: 2.0.4
 maturity: modelled
 manufacturer: UfiSpace
 model: S9610-46DX
@@ -341,6 +341,7 @@ attrs:
       chassis on published silicon and port configuration. Recorded so a search for either
       name finds this box; no DriveNets figure or artwork is transcribed anywhere in this
       file.
+    tcam: TCAM option available to meet diverse deployment requirements (datasheet)
   features:
     timing: >-
       Stratum 3E OCXO with optional holdover performance, ITU-T SyncE, IEEE 1588v2
@@ -348,7 +349,6 @@ attrs:
       licence), T-GM, T-BC/OC, T-TC, Class C timing accuracy; NOS integration is
       required to activate any of it
     macsec: MACsec supported on all ports (datasheet key benefits)
-    tcam: TCAM option available to meet diverse deployment requirements (datasheet)
     optics-qsfp-dd: 400G QSFP-DD SR/LR/ER/ZR/OpenZR+, up to 600 km (HIG port table, ports 40-45)
     optics-qsfp28: 100G QSFP28 SR/LR/ER/ZR/OpenZR+, up to 80 km; 40G (HIG port table, ports 0-39)
     optics-sfp28: 25G SFP28 SR/LR; 10G SFP+ SR/LR, up to 40 km (HIG port table, ports 46-49)
@@ -364,13 +364,13 @@ attrs:
       50 ohm SMA coaxial with a 1/4-36UNS-2B connector for GNSS, 50 ohm SMB coaxial with
       a 10-32UNF-2A connector for 1PPS and 10MHz, shielded RJ45 for ToD, shielded RJ48
       for BITS (datasheet Compatible Timing Cable Types)
+    timing-interfaces: >-
+      GNSS in on SMA, 10MHz in/out on SMB, 1PPS in/out on SMB, ToD in/out on RJ45,
+      BITS in/out on RJ48
   management:
     console: RJ45 RS-232 plus a micro-USB serial console
     oob: 1x RJ45 100/1000M
     sfp-plus-management: 4x 10G SFP+ management ports, numbered 0-3 in their own run
-    timing-interfaces: >-
-      GNSS in on SMA, 10MHz in/out on SMB, 1PPS in/out on SMB, ToD in/out on RJ45,
-      BITS in/out on RJ48
   compliance:
     safety: UL 62368-1; IEC 62368-1
     emc: >-
