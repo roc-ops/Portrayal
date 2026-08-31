@@ -212,3 +212,39 @@ def test_the_dcim_export_needs_no_source_tree():
         doc = yaml.safe_load((sand / "out").rglob("ArcOS on *.yaml").__next__().read_text())
         assert doc["manufacturer"] == "Arrcus", doc["manufacturer"]
         assert doc.get("interfaces"), "no interfaces named for the NOS"
+
+
+def test_a_module_image_is_asked_for_by_a_name_the_build_publishes():
+    """The export's own filename construction, checked against the real tree.
+
+    A module's picture is `{ns}--{name}--{major}--default.svg` in `dist/`, and
+    `major` arrives from components.json ALREADY prefixed - it is the version
+    directory's name. Prefixing it again yields `--vv1--`, which no build
+    produces, and `rasterize` answers None for an absent drawing rather than
+    raising: the whole pass rendered 0 of 376 and said so on a line `publish.sh`
+    sends to /dev/null.
+
+    So this asserts the name rather than the count. `rasterize` is stood in for,
+    because what is being checked is which path the export asks for - not
+    whether cairosvg is installed.
+    """
+    import dcim_export
+
+    asked = []
+    real, dcim_export.rasterize = dcim_export.rasterize, (
+        lambda src, png, scale: asked.append(pathlib.Path(src)) or src)
+    try:
+        dist = dcim_export.Dist(DIST)
+        contracts = [c for c in dist.modules() if dist.manufacturer_of(c.get("ns"))]
+        assert contracts, "no module contracts with a manufacturer"
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmp:
+            dcim_export.export_modules(dist, tmp, images=str(DIST))
+    finally:
+        dcim_export.rasterize = real
+
+    assert asked, "no module image was even attempted"
+    missing = sorted({p.name for p in asked if not p.exists()})
+    assert not missing, (
+        f"{len(missing)} of {len(asked)} module images named a drawing that is "
+        f"not in the build: {missing[:4]}")
