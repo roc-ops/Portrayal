@@ -470,11 +470,11 @@ views:
         - {at: [46.5, 65.5], size: [37.0, 19.5], fill: '#0f6f78'}
         - {at: [84.0, 65.5], size: [31.5, 19.5], fill: '#1f4f9e'}
       cutouts:
-        - {id: idrac9, at: [27.2, 66.00], size: [16.0, 14.0], shape: rect}
-        - {id: serial, at: [55.165, 68.60], size: [20.47, 11.4], shape: rect}
-        - {id: vga, at: [90.665, 68.60], size: [20.47, 11.4], shape: rect}
-        - {id: usb-1, at: [119.0, 66.50], size: [12.0, 4.5], shape: rect}
-        - {id: usb-2, at: [119.0, 75.50], size: [12.0, 4.5], shape: rect}
+        - {id: idrac9, at: [28.60, 66.00], size: [16.0, 14.0], shape: rect}
+        - {id: serial, at: [50.99, 68.60], size: [20.47, 11.4], shape: rect}
+        - {id: vga, at: [87.30, 68.60], size: [20.47, 11.4], shape: rect}
+        - {id: usb-1, at: [120.20, 72.60], size: [12.0, 4.5], shape: rect}
+        - {id: usb-2, at: [120.20, 81.60], size: [12.0, 4.5], shape: rect}
         - {id: sys-id, at: [6.5, 68.5], size: [7.0, 7.0], shape: circle}
     components:
       bays:
@@ -546,15 +546,15 @@ views:
         # not its corner: the iDRAC, serial and VGA share a baseline at y 80
         # (fact sheet B.3) and that is the fact worth preserving, so y moves
         # from 66.80 to 66.00 to keep the taller part sitting on the same line.
-        - {ref: std/rj45@1, id: idrac9, at: [27.2, 66.00],
+        - {ref: std/rj45@1, id: idrac9, at: [28.60, 66.00], rotate: 180,
            attrs: {role: management}, group: mgmt-ports, rel-pos: 1}
-        - {ref: common/db9-receptacle@1, id: serial, at: [50.0, 68.05],
+        - {ref: common/db9-receptacle@1, id: serial, at: [45.83, 68.05],
            group: mgmt-ports, rel-pos: 2}
-        - {ref: common/vga-receptacle@1, id: vga, at: [85.5, 68.05],
+        - {ref: common/vga-receptacle@1, id: vga, at: [82.13, 68.05],
            group: mgmt-ports, rel-pos: 3}
-        - {ref: std/usb-a@1, id: usb-1, at: [119.0, 66.50],
+        - {ref: std/usb-a@1, id: usb-1, at: [120.20, 72.60],
            attrs: {speed: usb-3.0}, group: mgmt-ports, rel-pos: 4}
-        - {ref: std/usb-a@1, id: usb-2, at: [119.0, 75.50],
+        - {ref: std/usb-a@1, id: usb-2, at: [120.20, 81.60],
            attrs: {speed: usb-3.0}, group: mgmt-ports, rel-pos: 5}
         # `for:` names BOTH riser-2 bays. The handle crosses riser 2 whichever
         # of its two holes this configuration has, and listing only the tall one
@@ -572,7 +572,13 @@ views:
            for: serial, group: marks, rel-pos: 11}
         - {ref: common/vga-symbol@1, id: mark-vga-r, at: [97.9, 81.0],
            for: vga, group: marks, rel-pos: 12}
-        - {ref: common/usb-symbol@1, id: mark-usb-r, at: [121.8, 81.3],
+        # THE MARK MOVED BECAUSE THE PORTS DID. It sat under the lower socket,
+        # which was fine while the stack rode 2.6 mm high and was a collision the
+        # moment the stack dropped to where figure 8 puts it. The figure has a
+        # small feature at x 111.6..115.8 in this band, left of the sockets,
+        # which is where a legend belongs on a stack this close to the chassis
+        # edge - so it goes beside them rather than beneath.
+        - {ref: common/usb-symbol@1, id: mark-usb-r, at: [113.20, 80.60],
            for: usb-1, group: marks, rel-pos: 13}
         - {ref: common/nic-symbol@1, id: mark-nic, at: [182.0, 81.2],
            for: ndc, group: marks, rel-pos: 14}
