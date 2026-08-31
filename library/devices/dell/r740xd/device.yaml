@@ -672,6 +672,18 @@ views:
         # render.py reads to draw this part in front of the openings.
         - {ref: dell/rear-handle-14g@1, id: rear-handle, at: [137.73, 42.35],
            group: furniture, rel-pos: 20}
+        # THE TWO BLUE THUMBSCREWS that retain the rear drive cage. Positions
+        # from Dell's service model and confirmed by a hue sweep of ISM figure 8
+        # - 150.41, 11.10 and 288.34, 31.75 against 149.85, 11.39 and 288.47,
+        # 31.92, two sources agreeing to under a millimetre.
+        # ONLY TWO ON THIS FACE. The sweep found 42 blue regions and exactly two
+        # that are round, this size and identical; the rest are the VGA insert,
+        # the paint behind it, and the riser latch, which is blue but is not
+        # round. A panel that looks like it should have four has two.
+        - {ref: dell/thumbscrew-blue-14g@1, id: cage-screw-left,
+           at: [144.66, 5.35], group: furniture, rel-pos: 21}
+        - {ref: dell/thumbscrew-blue-14g@1, id: cage-screw-right,
+           at: [282.59, 26.00], group: furniture, rel-pos: 22}
 configurations:
   base:
     # the serial port's insulator is teal on this machine, not the
