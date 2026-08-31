@@ -16,15 +16,27 @@ provenance:
     measured - Dell's service model, `R740XD_GPU_Brackets_01-1`, clipped to the
     panel plane at z 713.5. A vendor solid measured in software, in the sense
     std/sma@1's barrel key sets out.
-  it-covers-the-bracket-and-that-is-the-point: >-
-    dell/pcie-retention-bracket-14g@1 was modelled first and is UNDERNEATH this.
-    Two numbers say so: this stands 17.76 proud against the bracket's 17.53, and
-    it spans the riser's full height - 64.43 against 43.00 - where the bracket
-    covers two thirds of it. Modelling the bracket alone drew the inside of the
-    assembly, which is not what a person standing behind the rack can see.
-    The bracket is composed here with `behind: true` rather than dropped: it is
-    real hardware, its own relief matters in 3D, and it simply must not be drawn
-    over the thing that covers it.
+  what-is-behind-it-is-not-modelled: >-
+    `R740XD_Expansioncard_Clip-1.001` sits behind this skin - the retention
+    bracket the cards' flanges are held into, face 112.34..136.28, y 1.81..44.81,
+    standing 17.53 proud. It was drawn first, alone, which put the inside of the
+    assembly on the face; then composed here with `behind: true`; and now
+    removed, because NOTHING OF IT IS VISIBLE. This shroud is 0.23 more proud
+    and spans the riser's full height - 64.43 against 43.00 - so it covers the
+    bracket completely from every angle a face view has.
+    Recorded rather than forgotten: the part exists in the service model, its
+    geometry is recoverable in one command, and if this library ever renders an
+    exploded or cutaway view it should come back. A part that cannot be seen is
+    not a part that is not there.
+  the-slots-were-drawn-twice-and-need-not-be-now: >-
+    While the bracket WAS composed here, the slot column had to be both holes in
+    this plate and a group beneath it. render.py raises any node carrying an
+    `out` feature to the end of its group when a component has composed parts -
+    the rule that stops a bezel being painted over by what it frames - and this
+    plate was painting over its own slots. With no composed parts the raise does
+    not fire and the plain form works.
+    IF A PART IS EVER COMPOSED INTO THIS COMPONENT AGAIN, the slots must be cut
+    back into the plate as evenodd holes or they will disappear.
   the-slots-are-not-in-the-model: >-
     photo-measured - and the search is recorded rather than the conclusion.
     Cutting the part at 729.0, just under its own front face, leaves 120 of 897
@@ -58,10 +70,6 @@ relief:
       Unsourced. The slot column is not in the model at any plane - see the
       slots key - so how deep the recesses go is not known. 2.0 reads as a
       pocket against a 17.76 face and is not a measurement.
-parts:
-  # BEHIND THE SKIN. The bracket is what this metal covers.
-  - {ref: dell/pcie-retention-bracket-14g@1, id: bracket,
-     at: [0.64, 0.00], behind: true}
 elements:
   shroud: {at: [0.0, 0.0], size: [25.62, 64.43], class: bezel}
   slots: {at: [16.30, 15.94], size: [3.4, 26.03], class: vent}
