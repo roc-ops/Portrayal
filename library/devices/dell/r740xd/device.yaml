@@ -321,22 +321,13 @@ views:
       h: 86.8
     panel:
       decor:
-        # THE SHELLS' OWN COLOUR, not panel paint - Dell moulds the DE-9
-        # teal and the VGA blue, and these patches stand in for that until
-        # the components carry it themselves. Sized to each shell, which is
-        # why they are not the wide rectangles that were here before.
-        - {at: [53.63, 71.95], size: [20.47, 8.05], fill: '#0f6f78'}
-        - {at: [87.30, 73.49], size: [20.47, 6.51], fill: '#1f4f9e'}
-        # a dark recess around the iDRAC jack, as the figure shows
-        - {at: [26.70, 65.60], size: [19.50, 18.70], fill: '#1b1f22'}
-        # THE BAND: 4.3 mm tall and low on the panel, with bare metal under
-        # it. A first attempt drew it enclosing the ports, which came from
-        # reading a connector's own teal shell as part of the band.
-        - {at: [53.10, 80.0], size: [28.50, 4.30], fill: '#0f6f78'}
-        - {at: [81.60, 80.0], size: [26.50, 4.30], fill: '#1f4f9e'}
-        - {at: [108.10, 80.0], size: [4.40, 4.30], fill: '#1b1f22'}
-        # the NDC is labelled with a rule and nothing else
-        - {at: [139.60, 80.0], size: [0.6, 4.30], fill: '#7d848b'}
+        # the two ear flanges. Bare metal outboard of the control panels,
+        # and the only reason they are drawn at all is what sits in them.
+        - {at: [0, 0], size: [13.41, 86.8], fill: '#3a4045'}
+        - {at: [468.54, 0], size: [14.06, 86.8], fill: '#3a4045'}
+        # the recessed strips the panels sit in
+        - {at: [13.41, 2.7], size: [11.59, 81.4], fill: '#23272b'}
+        - {at: [457.8, 2.7], size: [10.6, 81.4], fill: '#23272b'}
       cutouts:
         - {id: power-btn, at: [458.80, 3.17], size: [8.34, 8.31], shape: rect}
         - {id: usb-1, at: [460.40, 19.54], size: [4.5, 12.0], shape: rect}
@@ -482,8 +473,12 @@ views:
         # the teal and the blue Dell paints behind the serial and the VGA. It is
         # how the two D-subs are told apart on a crowded panel at arm's length,
         # and it is paint on the metal rather than part of either connector.
-        - {at: [46.5, 65.5], size: [37.0, 19.5], fill: '#0f6f78'}
-        - {at: [84.0, 65.5], size: [31.5, 19.5], fill: '#1f4f9e'}
+        # ONE BAR, AN EIGHTH OF AN INCH TALL, and both ends computed from
+        # the parts it labels: from an eighth past the iDRAC jack's left
+        # edge to an eighth past the VGA's outer standoff. A port that moves
+        # takes the end of the bar with it. Colour is a plain dark for now -
+        # the shape is what is being established.
+        - {id: legend-bar, at: [25.43, 80.0], size: [90.67, 3.175], fill: '#33383d'}
       cutouts:
         - {id: idrac9, at: [28.60, 66.00], size: [16.0, 14.0], shape: rect}
         - {id: serial, at: [53.63, 68.60], size: [20.47, 11.4], shape: rect}
@@ -491,11 +486,6 @@ views:
         - {id: usb-1, at: [120.20, 71.47], size: [12.0, 4.5], shape: rect}
         - {id: usb-2, at: [120.20, 79.59], size: [12.0, 4.5], shape: rect}
         - {id: sys-id, at: [8.36, 72.04], size: [7.0, 7.0], shape: circle}
-    silkscreen:
-      # iDRAC is SPELLED OUT. The wrench this face printed belongs to the
-      # FRONT panel's iDRAC Direct port; ISM table 9 puts no wrench on the
-      # rear, and the figure prints the word.
-      - {id: mark-idrac, at: [36.45, 83.30], text: 'iDRAC', font-size: 2.6, anchor: middle, fill: '#c8ced3'}
     components:
       bays:
         # THE BAY IS THE PLATE, NOT THE BRACKET ENVELOPE. Each riser now holds
