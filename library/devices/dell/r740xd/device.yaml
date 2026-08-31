@@ -479,6 +479,22 @@ views:
         # takes the end of the bar with it. Colour is a plain dark for now -
         # the shape is what is being established.
         - {id: legend-bar, at: [25.43, 80.5], size: [90.67, 3.175], fill: '#33383d'}
+        # LEFT OF RISER 1: the card retention clips, three pairs of tabs on
+        # a 20.0 pitch, one pair per slot. Measured off ISM figure 8 by
+        # thresholding - the blob scan returns each pair merged with the left
+        # rail into one region, and the tabs are its top and bottom 3.0.
+        - {id: card-clip-1t, at: [2.5, 7.75], size: [7.5, 3.0], rx: 0.6, fill: '#3a4045', kind: retention-clip}
+        - {id: card-clip-1b, at: [2.5, 21.25], size: [7.5, 3.0], rx: 0.6, fill: '#3a4045', kind: retention-clip}
+        - {id: card-clip-2t, at: [2.5, 27.75], size: [7.5, 3.0], rx: 0.6, fill: '#3a4045', kind: retention-clip}
+        - {id: card-clip-2b, at: [2.5, 41.25], size: [7.5, 3.0], rx: 0.6, fill: '#3a4045', kind: retention-clip}
+        - {id: card-clip-3t, at: [2.5, 47.75], size: [7.5, 3.0], rx: 0.6, fill: '#3a4045', kind: retention-clip}
+        - {id: card-clip-3b, at: [2.5, 61.5], size: [7.5, 3.0], rx: 0.6, fill: '#3a4045', kind: retention-clip}
+        # TWO RIVETS beside the management area. Round to a quarter of a
+        # millimetre, which is what says they are rivets rather than marks, and
+        # drawn as rings because that is how the figure shows them. A rect with
+        # rx at half its width IS a circle - decor has no circle shape.
+        - {id: rivet-1, at: [4.73, 66.54], size: [4.60, 4.60], rx: 2.30, stroke: '#4a5057', stroke-width: 0.8, kind: rivet}
+        - {id: rivet-2, at: [4.25, 77.86], size: [5.20, 5.20], rx: 2.60, stroke: '#4a5057', stroke-width: 0.8, kind: rivet}
         # THE PAINT BEHIND THE TWO D-SUBS. Measured off ISM figure 8 at
         # 4 px/mm WITH THE TWO APERTURES MASKED OUT, which is what it takes:
         # the DE-9's own insulator is teal on this machine, so connector and
@@ -516,6 +532,24 @@ views:
       # NO WRENCH ON THIS PANEL. The ISM's back-view CALLOUT carries an icon
       # for the iDRAC port, which is what made a wrench look plausible here;
       # the panel's own legend is the word, and that is what is drawn.
+      # THE SLOT NUMBERS, printed on the chassis left of riser 1 rather than
+      # on the riser - they number the chassis's slots and stay when a riser is
+      # swapped. Measured at x 11.75..14.00, y 12.00 / 32.00 / 52.00, which is
+      # the SAME 20.0 pitch the vent rows and the clip pairs come back on, not
+      # the openings' 20.32. Three independent features agreeing at 20.0 is why
+      # both readings are left standing rather than reconciled.
+      - {id: silk-slot-1, at: [12.88, 13.00], text: '1', font-size: 2.6, anchor: middle, fill: '#4a5057'}
+      - {id: silk-slot-2, at: [12.88, 33.00], text: '2', font-size: 2.6, anchor: middle, fill: '#4a5057'}
+      - {id: silk-slot-3, at: [12.88, 53.00], text: '3', font-size: 2.6, anchor: middle, fill: '#4a5057'}
+      # THE INFORMATION TAG LEGEND - a circled i on a dark ground, between
+      # the identification button and the status lamp and below both. Two marks
+      # because `filled` applies to a whole path: the disc, then the letter.
+      # NO `size` ON A SILKSCREEN MARK - the path is the shape, and L1 says so.
+      - {id: silk-info-disc, at: [14.97, 79.03],
+         filled: true, fill: '#2a2f34',
+         path: 'M1.80 0 A1.80 1.80 0 1 1 1.79 0 Z'}
+      - {id: silk-info, at: [16.77, 81.78], text: i,
+         font-size: 2.4, anchor: middle, fill: '#dfe4e8'}
       - {id: silk-idrac, at: [36.60, 82.88], text: iDRAC, for: idrac9,
          font-size: 2.3, anchor: middle, fill: '#d7dde3'}
       - {id: silk-serial, at: [63.87, 82.88], text: IOIOI, for: serial,
