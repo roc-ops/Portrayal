@@ -94,35 +94,35 @@ comments: "UfiSpace S9501-28SMT 10G Disaggregated Cell Site Gateway Router - 1RU
   \nConfiguration `dc`: Dual 200 W DC PSUs (PSU-201-DISB), three FAN-402818-HC exhaust fan modules, front-to-back\
   \ airflow. This is the bare working chassis - the traffic cages ship empty.\n\nDatasheet: UfiSpace S9501-28SMT\
   \ Disaggregated Cell Site Gateway Router Datasheet\n  https://www.ufispace.com/products/telco/access/s9501-28smt-10g-dcsg\n\
-  \nFacts carried in the model that this schema has no field for:\n- performance.switching-capacity: 120\
-  \ Gbps\n- performance.packet-buffer: 1 GB deep buffer\n- performance.reach-rj45: 100 m (HIG port overview,\
-  \ ports 0-3)\n- performance.reach-sfp: 70 km max (HIG port overview, ports 4-19)\n- performance.reach-sfp-plus:\
-  \ 80 km max (HIG port overview, ports 20-27)\n- performance.optics-sfp-plus: 10G SFP+ SR, LR, ER, ZR\
-  \ (datasheet compatible transceiver types)\n- performance.optics-sfp: 1G SFP SX, LX, EX, ZX (datasheet\
-  \ compatible transceiver types)\n- power.power-typical-w: 60\n- power.power-max-w: 96.9\n- power.power-envelope:\
-  \ unstated\n- power.power-typical-scope: no transceiver installed (datasheet's own qualifier)\n- power.psus:\
-  \ 2x 200 W 1+1 active-active, hot-swappable (intake airflow)\n- power.psu-ac-input: 100-240 VAC, 3 A\
-  \ max; 12 A fast-acting fuse in the PSU\n- power.psu-dc-input: -36 to -75 VDC, 8 A max; 20 A fast-acting\
-  \ fuse in the PSU\n- thermal.fans: 3 hot-swappable modules, 2+1 redundant, exhaust; front-to-back airflow\n\
-  - environmental.operating-temp: -40 to 65 C, temperature hardened\n- environmental.storage-temp: -40\
-  \ to 70 C\n- environmental.operating-humidity: 5% to 85% RH, non-condensing\n- environmental.storage-humidity:\
-  \ 5% to 93% RH, non-condensing\n- environmental.altitude: rated for operation up to 5000 m (HIG, Connecting\
-  \ Power)\n- platform.asic: Broadcom Qumran-UX BCM88270\n- platform.cpu: Intel Denverton-NS 4-core @\
-  \ 1.6 GHz\n- platform.memory: 8 GB DDR4\n- platform.storage: 32 GB SSD\n- platform.bmc: ASPEED AST2620\n\
-  - features.macsec: supported; the two cyan-banded SFP+ ports 26-27 are the MACsec pair\n- features.timing:\
-  \ Stratum 3E OCXO with optional holdover, ITU-T SyncE, IEEE 1588v2 (G.8265.1 default, G.8275.1, G.8275.2,\
-  \ SMPTE ST 2059-2 with an additional licence), T-GM, T-BC/OC, T-TC, T-TSC, Class C accuracy\n- features.timing-interfaces:\
-  \ GNSS SMA in, 1PPS SMB in/out, 10MHz SMB in/out, ToD RJ45 in/out, BITS RJ48 in\n- features.timing-caveat:\
-  \ NOS integration is necessary to activate the specific feature (datasheet footnote, and nine rows of\
-  \ the HIG LED tables repeat it)\n- features.gnss: internal receiver for master clock; GPS/QZSS L1 C/A,\
-  \ GLONASS L1OF, BeiDou B1, SBAS L1 C/A (WAAS, EGNOS, MSAS, GAGAN), Galileo E1B/C; passive or active\
-  \ antenna auto-detected, active supply 5 V DC / 150 mA, minimum RF sensitivity -166 dBm, 30 dB minimum\
-  \ signal strength\n- features.cable-limits: ToD, BITS, 1PPS and 10MHz cables must not exceed 3 m (HIG\
-  \ section 12)\n- management.console: RJ45 serial, 115200 8N1, no flow control\n- management.usb: USB\
-  \ 2.0 Type-A maintenance port\n- management.bmc-scope: individual BMC for automatic and remote platform\
-  \ health monitoring\n- compliance.safety: UL 62368-1; IEC 60950-1; IEC 62368-1; BSMI\n- compliance.emc:\
-  \ FCC Part 15 Subpart B Class A; ICES-003 Class A; EN 55032 Class A; EN 55035; EN 62479; EN 50663; EN\
-  \ 300 386; EN 301 489; EN 303 413; BSMI; VCCI CISPR 32 Class A\n- compliance.environment: RoHS; WEEE\n\
-  - lifecycle.eol: none-announced\n\nDrawing version 1.0.0. A major bump means a slot moved or an id was\
-  \ renamed, so anything cached from an earlier export may no longer line up.\nModel maturity: modelled.\
-  \ Every dimension in the source records where it came from."
+  \nFacts carried in the model that this schema has no field for:\n- compliance.emc: FCC Part 15 Subpart\
+  \ B Class A; ICES-003 Class A; EN 55032 Class A; EN 55035; EN 62479; EN 50663; EN 300 386; EN 301 489;\
+  \ EN 303 413; BSMI; VCCI CISPR 32 Class A\n- compliance.environment: RoHS; WEEE\n- compliance.safety:\
+  \ UL 62368-1; IEC 60950-1; IEC 62368-1; BSMI\n- environmental.altitude: rated for operation up to 5000\
+  \ m (HIG, Connecting Power)\n- environmental.operating-humidity: 5% to 85% RH, non-condensing\n- environmental.operating-temp:\
+  \ -40 to 65 C, temperature hardened\n- environmental.storage-humidity: 5% to 93% RH, non-condensing\n\
+  - environmental.storage-temp: -40 to 70 C\n- features.cable-limits: ToD, BITS, 1PPS and 10MHz cables\
+  \ must not exceed 3 m (HIG section 12)\n- features.gnss: internal receiver for master clock; GPS/QZSS\
+  \ L1 C/A, GLONASS L1OF, BeiDou B1, SBAS L1 C/A (WAAS, EGNOS, MSAS, GAGAN), Galileo E1B/C; passive or\
+  \ active antenna auto-detected, active supply 5 V DC / 150 mA, minimum RF sensitivity -166 dBm, 30 dB\
+  \ minimum signal strength\n- features.macsec: supported; the two cyan-banded SFP+ ports 26-27 are the\
+  \ MACsec pair\n- features.timing: Stratum 3E OCXO with optional holdover, ITU-T SyncE, IEEE 1588v2 (G.8265.1\
+  \ default, G.8275.1, G.8275.2, SMPTE ST 2059-2 with an additional licence), T-GM, T-BC/OC, T-TC, T-TSC,\
+  \ Class C accuracy\n- features.timing-caveat: NOS integration is necessary to activate the specific\
+  \ feature (datasheet footnote, and nine rows of the HIG LED tables repeat it)\n- features.timing-interfaces:\
+  \ GNSS SMA in, 1PPS SMB in/out, 10MHz SMB in/out, ToD RJ45 in/out, BITS RJ48 in\n- lifecycle.eol: none-announced\n\
+  - management.bmc-scope: individual BMC for automatic and remote platform health monitoring\n- management.console:\
+  \ RJ45 serial, 115200 8N1, no flow control\n- management.usb: USB 2.0 Type-A maintenance port\n- performance.optics-sfp:\
+  \ 1G SFP SX, LX, EX, ZX (datasheet compatible transceiver types)\n- performance.optics-sfp-plus: 10G\
+  \ SFP+ SR, LR, ER, ZR (datasheet compatible transceiver types)\n- performance.packet-buffer: 1 GB deep\
+  \ buffer\n- performance.reach-rj45: 100 m (HIG port overview, ports 0-3)\n- performance.reach-sfp: 70\
+  \ km max (HIG port overview, ports 4-19)\n- performance.reach-sfp-plus: 80 km max (HIG port overview,\
+  \ ports 20-27)\n- performance.switching-capacity: 120 Gbps\n- platform.asic: Broadcom Qumran-UX BCM88270\n\
+  - platform.bmc: ASPEED AST2620\n- platform.cpu: Intel Denverton-NS 4-core @ 1.6 GHz\n- platform.memory:\
+  \ 8 GB DDR4\n- platform.storage: 32 GB SSD\n- power.power-envelope: unstated\n- power.power-max-w: 96.9\n\
+  - power.power-typical-scope: no transceiver installed (datasheet's own qualifier)\n- power.power-typical-w:\
+  \ 60\n- power.psu-ac-input: 100-240 VAC, 3 A max; 12 A fast-acting fuse in the PSU\n- power.psu-dc-input:\
+  \ -36 to -75 VDC, 8 A max; 20 A fast-acting fuse in the PSU\n- power.psus: 2x 200 W 1+1 active-active,\
+  \ hot-swappable (intake airflow)\n- thermal.fans: 3 hot-swappable modules, 2+1 redundant, exhaust; front-to-back\
+  \ airflow\n\nDrawing version 1.0.0. A major bump means a slot moved or an id was renamed, so anything\
+  \ cached from an earlier export may no longer line up.\nModel maturity: modelled. Every dimension in\
+  \ the source records where it came from."

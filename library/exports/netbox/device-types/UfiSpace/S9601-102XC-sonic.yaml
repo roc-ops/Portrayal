@@ -247,39 +247,39 @@ comments: "UfiSpace S9601-102XC 25G/100G Disaggregated Open Aggregation Router -
   \ exhaust airflow) with four FAN-803816-HI exhaust fans - the DC build, which is also the bare working\
   \ chassis, since the traffic cages ship empty\n\nDatasheet: UfiSpace S9601-102XC Disaggregated Open\
   \ Aggregation Router Datasheet\n  https://www.ufispace.com/products/telco/aggregation/s9601-102xc\n\n\
-  Facts carried in the model that this schema has no field for:\n- performance.switching-capacity: 2.4\
-  \ Tbps\n- performance.packet-buffer: 4 GB\n- performance.reach-sfp28: 40 km max (HIG Port Overview,\
-  \ ports 0-95)\n- performance.reach-qsfp28: 80 km max (HIG Port Overview, ports 96-101)\n- performance.optics-sfp28:\
-  \ 25G SFP28 SR, LR, ER; 10G SFP+ SR, LR, ER; 1G SFP SX, LX, EX (datasheet Compatible Transceivers Types)\n\
-  - performance.optics-qsfp28: 100G QSFP28 SR4, LR4, ER4, ZR4 (datasheet Compatible Transceivers Types)\n\
-  - performance.optics-sfp-plus: 10G SFP+ SR, LR, ER (datasheet Compatible Transceivers Types; the two\
-  \ 10G management ports take the same optics as the SFP28 cages do at 10G)\n- power.power-typical-w:\
-  \ 399\n- power.power-envelope: bare\n- power.psus: 2x 1300 W 1+1 redundant, hot-swappable (exhaust airflow)\n\
-  - power.psu-ac-input: 100-240 VAC, 12 A max\n- power.psu-dc-input: -40 to -75 VDC, 40 A max\n- thermal.fans:\
-  \ 4x hot-swappable 3+1 redundant, exhaust airflow; system front-to-back\n- environmental.operating-temp:\
-  \ 0 to 45 C\n- environmental.storage-temp: -40 to 70 C\n- environmental.operating-humidity: 5% to 85%\
-  \ RH, non-condensing\n- environmental.storage-humidity: 5% to 93% RH, non-condensing\n- platform.cpu:\
-  \ Intel Icelake-D 8-core @ 2.1 GHz (Standard) or Icelake-D 16-core @ 2.0 GHz (Premium), with VROC support\n\
-  - platform.memory: 64 GB DDR4 R-DIMM with ECC\n- platform.storage: 2x 256 GB SSD\n- platform.asic: Broadcom\
-  \ Qumran2c BCM88820\n- platform.lookup-engine: Broadcom OP2 BCM16K\n- platform.bmc: ASPEED AST2620\n\
-  - platform.oem-alias: DriveNets NCP-96X6C-S (Network Cloud Packet forwarder, 96x1/10/25 + 6x100). NOT\
-  \ A UFISPACE CLAIM - no UfiSpace document mentions DriveNets. The mapping is internal analysis: the\
-  \ okf `drivenets-ddc` bundle's 'DriveNets NCF/NCP to white-box hardware map (shipping platforms)' matches\
-  \ the roadmap slide's NCP-96X6C-S (Q2C 2.4T) to this chassis on published silicon and port configuration.\
-  \ The map names the S9600-102XC OR this Ice Lake refresh for the same DriveNets name, so the alias is\
-  \ not unique to one of the pair. Recorded so a search for either name finds this box; no DriveNets figure\
-  \ or artwork is transcribed anywhere in this file.\n- features.timing: Stratum 3E OCXO, ITU-T SyncE,\
-  \ IEEE 1588v2 (G.8265.1 default, G.8275.1, G.8275.2, SMPTE ST 2059-2 with additional licence; T-GM,\
-  \ T-BC/OC, T-TC), Time Sensitive Networking, Class C accuracy\n- features.timing-interfaces: GNSS SMA\
-  \ in, 1PPS SMB in/out, 10MHz SMB in/out, ToD RJ45 in/out\n- features.gnss: internal receiver for master\
-  \ clock implementations\n- features.timing-cables: 50 ohm SMA coax with 1/4-36UNS-2B for GNSS; 50 ohm\
-  \ SMB coax with 10-32UNF-2A for 1PPS and 10MHz; shielded RJ45 for ToD\n- features.routing: full Segment\
-  \ Routing over IPv6 (SRv6)\n- features.nos: NOS integration is necessary to activate the timing features\n\
+  Facts carried in the model that this schema has no field for:\n- compliance.emc: FCC Part 15 Subpart\
+  \ B Class A; ICES-003 Class A; EN 55032 Class A; EN 55035; EN 300 386; EN 301 489; EN 303 413; BSMI\n\
+  - compliance.environment: WEEE; ETSI 300 019; ETSI 300 132-2\n- compliance.safety: UL 62368-1; IEC 62368-1\n\
+  - environmental.operating-humidity: 5% to 85% RH, non-condensing\n- environmental.operating-temp: 0\
+  \ to 45 C\n- environmental.storage-humidity: 5% to 93% RH, non-condensing\n- environmental.storage-temp:\
+  \ -40 to 70 C\n- features.gnss: internal receiver for master clock implementations\n- features.nos:\
+  \ NOS integration is necessary to activate the timing features\n- features.routing: full Segment Routing\
+  \ over IPv6 (SRv6)\n- features.timing: Stratum 3E OCXO, ITU-T SyncE, IEEE 1588v2 (G.8265.1 default,\
+  \ G.8275.1, G.8275.2, SMPTE ST 2059-2 with additional licence; T-GM, T-BC/OC, T-TC), Time Sensitive\
+  \ Networking, Class C accuracy\n- features.timing-cables: 50 ohm SMA coax with 1/4-36UNS-2B for GNSS;\
+  \ 50 ohm SMB coax with 10-32UNF-2A for 1PPS and 10MHz; shielded RJ45 for ToD\n- features.timing-interfaces:\
+  \ GNSS SMA in, 1PPS SMB in/out, 10MHz SMB in/out, ToD RJ45 in/out\n- lifecycle.eol: none-announced\n\
   - management.console: RJ45 serial, 115200 8N1\n- management.reset: recessed front-panel pinhole, warm-resets\
   \ the host CPU when held for less than 10 seconds; HIG section 4.5 warns against sharp tools and asks\
-  \ for the UfiSpace fixture or a flat paperclip\n- compliance.safety: UL 62368-1; IEC 62368-1\n- compliance.emc:\
-  \ FCC Part 15 Subpart B Class A; ICES-003 Class A; EN 55032 Class A; EN 55035; EN 300 386; EN 301 489;\
-  \ EN 303 413; BSMI\n- compliance.environment: WEEE; ETSI 300 019; ETSI 300 132-2\n- lifecycle.eol: none-announced\n\
-  \nDrawing version 1.0.0. A major bump means a slot moved or an id was renamed, so anything cached from\
-  \ an earlier export may no longer line up.\nModel maturity: modelled. Every dimension in the source\
-  \ records where it came from."
+  \ for the UfiSpace fixture or a flat paperclip\n- performance.optics-qsfp28: 100G QSFP28 SR4, LR4, ER4,\
+  \ ZR4 (datasheet Compatible Transceivers Types)\n- performance.optics-sfp-plus: 10G SFP+ SR, LR, ER\
+  \ (datasheet Compatible Transceivers Types; the two 10G management ports take the same optics as the\
+  \ SFP28 cages do at 10G)\n- performance.optics-sfp28: 25G SFP28 SR, LR, ER; 10G SFP+ SR, LR, ER; 1G\
+  \ SFP SX, LX, EX (datasheet Compatible Transceivers Types)\n- performance.packet-buffer: 4 GB\n- performance.reach-qsfp28:\
+  \ 80 km max (HIG Port Overview, ports 96-101)\n- performance.reach-sfp28: 40 km max (HIG Port Overview,\
+  \ ports 0-95)\n- performance.switching-capacity: 2.4 Tbps\n- platform.asic: Broadcom Qumran2c BCM88820\n\
+  - platform.bmc: ASPEED AST2620\n- platform.cpu: Intel Icelake-D 8-core @ 2.1 GHz (Standard) or Icelake-D\
+  \ 16-core @ 2.0 GHz (Premium), with VROC support\n- platform.lookup-engine: Broadcom OP2 BCM16K\n- platform.memory:\
+  \ 64 GB DDR4 R-DIMM with ECC\n- platform.oem-alias: DriveNets NCP-96X6C-S (Network Cloud Packet forwarder,\
+  \ 96x1/10/25 + 6x100). NOT A UFISPACE CLAIM - no UfiSpace document mentions DriveNets. The mapping is\
+  \ internal analysis: the okf `drivenets-ddc` bundle's 'DriveNets NCF/NCP to white-box hardware map (shipping\
+  \ platforms)' matches the roadmap slide's NCP-96X6C-S (Q2C 2.4T) to this chassis on published silicon\
+  \ and port configuration. The map names the S9600-102XC OR this Ice Lake refresh for the same DriveNets\
+  \ name, so the alias is not unique to one of the pair. Recorded so a search for either name finds this\
+  \ box; no DriveNets figure or artwork is transcribed anywhere in this file.\n- platform.storage: 2x\
+  \ 256 GB SSD\n- power.power-envelope: bare\n- power.power-typical-w: 399\n- power.psu-ac-input: 100-240\
+  \ VAC, 12 A max\n- power.psu-dc-input: -40 to -75 VDC, 40 A max\n- power.psus: 2x 1300 W 1+1 redundant,\
+  \ hot-swappable (exhaust airflow)\n- thermal.fans: 4x hot-swappable 3+1 redundant, exhaust airflow;\
+  \ system front-to-back\n\nDrawing version 1.0.0. A major bump means a slot moved or an id was renamed,\
+  \ so anything cached from an earlier export may no longer line up.\nModel maturity: modelled. Every\
+  \ dimension in the source records where it came from."

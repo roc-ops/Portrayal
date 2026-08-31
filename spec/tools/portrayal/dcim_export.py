@@ -39,6 +39,8 @@ from pathlib import Path
 
 import yaml
 
+from artifacts import Dist
+
 from manifest import view_parts
 
 # Portrayal media/speed -> DCIM interface type. Every value here is valid in
@@ -263,22 +265,14 @@ def comments_for(dev, cfg_name, cfg):
     return "\n".join(lines).strip()
 
 
-def module_models(library):
+def module_models(dist):
     """Every model the library carries as a MODULE, for telling a FRU part
-    number from a chassis one. Empty set if the library cannot be located,
-    which leaves the old behaviour rather than guessing."""
-    out = set()
-    try:
-        for f in Path(library).glob("components/*/*/*/contract.yaml"):
-            c = yaml.safe_load(f.read_text())
-            if c.get("kind") != "module":
-                continue
-            m = str((c.get("attrs") or {}).get("model") or c.get("name") or "")
-            if m:
-                out.add(m)
-    except OSError:
-        pass
-    return out
+    number from a chassis one.
+
+    Reads components.json rather than globbing contracts: the index carries
+    `kind` and `attrs` for every component, which is all this needs, and it is
+    published where a checkout is not."""
+    return dist.module_models()
 
 
 def scoped(items, cfg_name):
@@ -550,7 +544,7 @@ class Indented(yaml.SafeDumper):              # match the library's list indenta
         return super().increase_indent(flow, False)
 
 
-def overlay_identity(device_yaml, profile):
+def overlay_identity(dist, ns, model, profile):
     """What the device is SOLD AS when it runs this NOS, or None.
 
     A disaggregated box is two products from two companies: Edgecore made the
@@ -565,11 +559,8 @@ def overlay_identity(device_yaml, profile):
     """
     if not profile:
         return None
-    f = pathlib.Path(device_yaml).resolve().parent / "overlays" / f"{profile}.yaml"
-    if not f.exists():
-        return None
-    doc = yaml.safe_load(f.read_text()) or {}
-    return doc.get("identity") or None
+    ov = dist.overlay(ns, model, profile)
+    return (ov or {}).get("identity") or None
 
 
 def apply_identity(doc, identity, vendors):
@@ -604,13 +595,10 @@ def apply_identity(doc, identity, vendors):
     return doc
 
 
-def load_vendors(schemas=None):
-    root = pathlib.Path(schemas) if schemas else \
-        pathlib.Path(__file__).resolve().parents[2] / "schemas"
-    try:
-        return (yaml.safe_load((root / "vendors.yaml").read_text()) or {}).get("vendors") or {}
-    except (OSError, yaml.YAMLError):
-        return {}
+def load_vendors(dist):
+    """The vendor registry, as published. `vendors.json` is the same content as
+    spec/schemas/vendors.yaml and is in the build."""
+    return dist.vendors
 
 
 def write(doc, root, target, nos):
@@ -678,7 +666,7 @@ def render_module_image(dist, root, target, doc, ns, name, ver):
                      / (doc["model"].replace("/", "-") + ".front.png"), 1)
 
 
-def export_modules(library, root, dist=None):
+def export_modules(dist, root, images=None):
     """Every module contract in the library, as module types for both targets.
 
     A module type is an orderable part, so it needs a manufacturer. The
@@ -686,25 +674,20 @@ def export_modules(library, root, dist=None):
     library states a manufacturer - and the generic `common/` namespace is
     skipped: a part with no vendor is not something a DCIM can order.
     """
-    lib = Path(library)
-    ns2man = {}
-    for f in sorted(lib.glob("devices/*/*/device.yaml")):
-        ns = f.parts[-3]
-        ns2man.setdefault(ns, yaml.safe_load(f.read_text()).get("manufacturer"))
-
     wrote = skipped = 0
     imaged = set()
-    for f in sorted(lib.glob("components/*/*/*/contract.yaml")):
-        contract = yaml.safe_load(f.read_text())
-        if contract.get("kind") != "module":
-            continue
-        ns = f.parts[-4]
-        man = ns2man.get(ns)
+    # components.json in place of a glob over contracts, and devices.json in
+    # place of one over manifests. The index carries `ns` on both sides, which is
+    # what the namespace-to-manufacturer join needs and what a checkout used to
+    # be opened for.
+    for contract in sorted(dist.modules(), key=lambda c: (c.get("ns") or "", c.get("name") or "")):
+        ns = contract.get("ns")
+        man = dist.manufacturer_of(ns)
         if not man:
             skipped += 1
             continue
         doc = build_module(contract, man)
-        name, ver = f.parts[-3], f.parts[-2]
+        name, ver = contract.get("name"), f"v{contract.get('major')}"
         for target in TARGETS:
             d = Path(root) / target / "module-types" / man
             d.mkdir(parents=True, exist_ok=True)
@@ -714,40 +697,63 @@ def export_modules(library, root, dist=None):
             out = d / (doc["model"].replace("/", "-") + ".yaml")
             out.write_text("---\n" + yaml.dump(doc, Dumper=Indented, sort_keys=False,
                                                width=100, default_flow_style=False))
-            if dist:
-                if render_module_image(dist, root, target, doc, ns, name, ver):
+            if images:
+                if render_module_image(images, root, target, doc, ns, name, ver):
                     imaged.add(doc["model"])
         wrote += 1
         print(f"{doc['model']}  ({len(doc.get('interfaces', []))} interfaces, "
               f"{len(doc.get('power-ports', []))} power ports)")
     print(f"module types: {wrote} written, {skipped} skipped for having no manufacturer")
-    if dist:
+    if images:
         print(f"module images: {len(imaged)} of {wrote} rendered")
 
 
 def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("device", nargs="?")
-    ap.add_argument("--modules", help="export module types from this library root")
+    ap = argparse.ArgumentParser(description=__doc__)
+    # THE INPUT IS A PUBLISHED BUILD, NOT A CHECKOUT. Everything this reads is in
+    # `dist/`: the compiled SVG carries the device manifest, components.json the
+    # contract fields, vendors.json and overlays.json the registries. That is
+    # what lets the export live outside the repository that produces them.
+    ap.add_argument("--dist", required=True, help="a published build (library/dist)")
     ap.add_argument("--out", required=True, help="root of the exports tree")
+    ap.add_argument("--device", help="one device by name; default is every device")
+    ap.add_argument("--modules", action="store_true", help="export module types instead")
     ap.add_argument("--nos", action="append", default=[],
                     help="NOS profile to name interfaces for; repeatable")
-    ap.add_argument("--dist", help="compiled SVG directory, for images")
-    ap.add_argument("--library", help="library root; inferred from the manifest path")
+    ap.add_argument("--images", action="store_true",
+                    help="rasterise elevations and module faces from the same build")
     args = ap.parse_args()
 
+    dist = Dist(args.dist)
+    images = args.dist if args.images else None
+
     if args.modules:
-        export_modules(args.modules, args.out, args.dist)
+        export_modules(dist, args.out, images)
         return
-    if not args.device:
-        raise SystemExit("give a device manifest, or --modules LIBRARY")
 
-    dev = yaml.safe_load(Path(args.device).read_text())
+    names = [args.device] if args.device else [d["name"] for d in dist.devices]
+    for name in names:
+        export_device(dist, name, args.out, args.nos, images)
 
-    # <library>/devices/<ns>/<name>/device.yaml - so the library is four up.
-    # --library overrides it for a tree laid out differently.
-    lib = args.library or str(Path(args.device).resolve().parents[3])
-    frus = module_models(lib)
+
+def _config_rank(cfg):
+    """Which of two collapsing configurations should name the device type.
+
+    Lower wins, and ties keep the one already there so the order inside a rank
+    is still the file's. A device states its own default; failing that, `base` is
+    the chassis-as-you-order-it and the next best answer.
+    """
+    cfg = cfg or {}
+    if cfg.get("default"):
+        return 0
+    if cfg.get("kind") == "base":
+        return 1
+    return 2
+
+
+def export_device(dist, device_name, out_root, nos, images):
+    dev = dist.manifest(device_name)
+    frus = module_models(dist)
 
     # One device type per SKU, not per configuration.
     #
@@ -798,7 +804,17 @@ def main():
     for name, cfg in cfgs.items():
         chassis = sorted(k for k in (cfg.get("part-numbers") or {}) if k not in frus)
         key = (chassis[0] if chassis else None, bay_signature(dev, name))
-        by_sku.setdefault(key, (name, cfg))
+        # WHEN SEVERAL CONFIGURATIONS COLLAPSE, THE DEFAULT ONE NAMES THE TYPE.
+        # They share a SKU and share their bays, so the exporter is right to emit
+        # one type - but they can still differ in what the type SAYS, and the
+        # S7801-54XS is the case: `base` is front-to-rear and `ac-back-to-front`
+        # is not, so whichever won supplied the airflow. That was decided by dict
+        # order, which is the source file's key order, which is not a decision at
+        # all - and it changed the moment the manifest arrived sorted.
+        # `default` is the device's own answer to "which one is this, normally".
+        prev = by_sku.get(key)
+        if prev is None or _config_rank(cfg) < _config_rank(prev[1]):
+            by_sku[key] = (name, cfg)
     if not by_sku:
         by_sku = {(None, ()): (None, {})}
 
@@ -814,27 +830,31 @@ def main():
               for key in by_sku}
 
     wrote = 0
-    vendors = load_vendors()
+    vendors = load_vendors(dist)
     for key, (cfg_name, cfg) in by_sku.items():
         label = labels[key]
         # A NOS names switch interfaces. Emit one document per profile that
         # actually resolves any, and a NOS-neutral one when none does - a device
         # whose ports are all line-card bays still has a device type.
-        _, has_ports = build(dev, cfg_name, cfg, None, args.dist, frus, label)
-        profiles = list(args.nos) if (args.nos and has_ports) else [None]
+        _, has_ports = build(dev, cfg_name, cfg, None, images, frus, label)
+        profiles = list(nos) if (nos and has_ports) else [None]
 
         for profile in profiles:
-            doc, _ = build(dev, cfg_name, cfg, profile, args.dist, frus, label)
-            ident = overlay_identity(args.device, profile)
+            doc, _ = build(dev, cfg_name, cfg, profile, images, frus, label)
+            # DEVICE name, not the configuration's. `name` is rebound by the
+            # by-SKU loop above and means a configuration from there on, which
+            # silently looked up an overlay that does not exist and filed every
+            # ArcOS box under Edgecore instead of Arrcus.
+            ident = overlay_identity(dist, dev.get("ns"), device_name, profile)
             doc = apply_identity(doc, ident, vendors)
             if not any(k in doc for k in
                        ("console-ports", "interfaces", "module-bays")):
                 continue                       # nothing but a header: not worth a file
             for target in TARGETS:
-                f = write(doc, args.out, target, None if ident else profile)
+                f = write(doc, out_root, target, None if ident else profile)
                 for face in ("front", "rear"):
                     if doc.get(f"{face}_image"):
-                        render_image(args.dist, args.out, target, doc,
+                        render_image(images, out_root, target, doc,
                                      dev["name"], cfg_name, face)
                 wrote += 1
                 print(f"{f}  ({len(doc.get('interfaces', []))} interfaces, "

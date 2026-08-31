@@ -99,9 +99,19 @@ comments: 'Cisco ASR 9010 Router - the 21RU, ten-slot member of the ASR 9000 Ser
 
   Facts carried in the model that this schema has no field for:
 
-  - physical.weight-configured-kg: 170.5
+  - compliance.nebs: SR-3580: NEBS Criteria Levels (Level 3)
 
-  - physical.weight-configured-scope: fully configured using all card slots and six power modules
+  - compliance.nebs-emc-safety: GR-1089-CORE: NEBS EMC and Safety
+
+  - compliance.nebs-physical: GR-63-CORE: NEBS Physical Protection
+
+  - environmental.acoustic-noise: 78 dB at 80.6degF (27degC) maximum
+
+  - environmental.altitude-operating: 0 to 13,000 ft (0 to 4,000 m)
+
+  - environmental.humidity-non-operating: 5 to 95 percent noncondensing
+
+  - environmental.humidity-operating: 10 to 85 percent noncondensing
 
   - environmental.operating-temp: 41 to 104degF (5 to 40degC)
 
@@ -109,21 +119,19 @@ comments: 'Cisco ASR 9010 Router - the 21RU, ten-slot member of the ASR 9000 Ser
 
   - environmental.storage-temp: -40 to 158degF (-40 to 70degC)
 
-  - environmental.humidity-operating: 10 to 85 percent noncondensing
+  - lifecycle.eol: none-announced
 
-  - environmental.humidity-non-operating: 5 to 95 percent noncondensing
+  - physical.weight-configured-kg: 170.5
 
-  - environmental.altitude-operating: 0 to 13,000 ft (0 to 4,000 m)
+  - physical.weight-configured-scope: fully configured using all card slots and six power modules
 
-  - environmental.acoustic-noise: 78 dB at 80.6degF (27degC) maximum
+  - platform.interface-path-id: rack/slot/module/port
 
-  - power.power-modules-v1: Version 1 power system - up to six modules per system, three per tray
+  - platform.operating-system: Cisco IOS XR
 
-  - power.power-modules-v2: Version 2 power system - up to eight modules per system, four per tray
+  - power.power-ac-input-current: 15 A maximum at 200 VAC; 13 A maximum at 220 to 240 VRMS (UK)
 
-  - power.power-modules-v3-ac: Version 3 AC power system - up to six modules per system, three per tray
-
-  - power.power-modules-v3-dc: Version 3 DC power system - up to eight modules per system, four per tray
+  - power.power-ac-input-frequency: 50/60 Hz nominal (range 47 to 63 Hz)
 
   - power.power-ac-input-per-module-v2: 3290 VA (3000 W output module)
 
@@ -131,13 +139,11 @@ comments: 'Cisco ASR 9010 Router - the 21RU, ten-slot member of the ASR 9000 Ser
 
   - power.power-ac-input-voltage: 200-240 VAC nominal (range 180 to 264 VAC); 220-240 VAC (UK)
 
-  - power.power-ac-input-frequency: 50/60 Hz nominal (range 47 to 63 Hz)
-
-  - power.power-ac-input-current: 15 A maximum at 200 VAC; 13 A maximum at 220 to 240 VRMS (UK)
+  - power.power-ac-redundancy: AC power modules operate in N+N redundancy mode
 
   - power.power-ac-service-requirement: 20 A North America; 16 A international; 13 A United Kingdom
 
-  - power.power-ac-redundancy: AC power modules operate in N+N redundancy mode
+  - power.power-dc-input-current: 49 A maximum at -48 VDC nominal; 39 A maximum at -60 VDC nominal
 
   - power.power-dc-input-per-module-v1: 1700 W (1500 W output module)
 
@@ -148,24 +154,18 @@ comments: 'Cisco ASR 9010 Router - the 21RU, ten-slot member of the ASR 9000 Ser
   - power.power-dc-input-voltage: -48 VDC nominal in North America, -60 VDC nominal in the European Community
   (range -40.5 to -72 VDC, -75 VDC for 5 ms)
 
-  - power.power-dc-input-current: 49 A maximum at -48 VDC nominal; 39 A maximum at -60 VDC nominal
+  - power.power-modules-v1: Version 1 power system - up to six modules per system, three per tray
 
-  - thermal.cooling-path: front-to-rear; inlet at the bottom front of the chassis, exhaust at the upper
-  rear
+  - power.power-modules-v2: Version 2 power system - up to eight modules per system, four per tray
+
+  - power.power-modules-v3-ac: Version 3 AC power system - up to six modules per system, three per tray
+
+  - power.power-modules-v3-dc: Version 3 DC power system - up to eight modules per system, four per tray
 
   - thermal.air-filter-location: underneath the fan trays
 
-  - platform.operating-system: Cisco IOS XR
-
-  - platform.interface-path-id: rack/slot/module/port
-
-  - compliance.nebs: SR-3580: NEBS Criteria Levels (Level 3)
-
-  - compliance.nebs-emc-safety: GR-1089-CORE: NEBS EMC and Safety
-
-  - compliance.nebs-physical: GR-63-CORE: NEBS Physical Protection
-
-  - lifecycle.eol: none-announced
+  - thermal.cooling-path: front-to-rear; inlet at the bottom front of the chassis, exhaust at the upper
+  rear
 
 
   Drawing version 0.3.0. A major bump means a slot moved or an id was renamed, so anything cached from
