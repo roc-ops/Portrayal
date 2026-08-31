@@ -407,7 +407,7 @@ def rewrite_ids(el, prefix, contract, path_prefix, skip=None):
                     lambda m: f"url(#{renamed.get(m.group(1), m.group(1))})", val))
 
 
-def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None):
+def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None):
     contract, skins = lib.resolve(ref)
     comp_name = ref.split("/")[-1].split("@")[0]
     if skin_overrides and comp_name in skin_overrides:
@@ -557,8 +557,18 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                                part["at"], None, part.get("attrs"), None, None,
                                skin_name=part.get("skin", "default"),
                                rotate=part.get("rotate"), palette=palette,
+                               inst_palette=inst_palette,
                                skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                                path=f"{path}/{part['id']}", resolved=resolved)
+        # WHAT A COMPOSED LAMP MEANS IS THE COMPOSER'S TO SAY. A component
+        # declares what a lamp IS and can only guess what it MEANS - the same
+        # reasoning apply_states already carries for device placements, and the
+        # same need one level down: a card composing a generic jack has an
+        # indicator table for it and had no way to attach one. Without this the
+        # only route was a wrapper that redraws the lamps over the ones it
+        # composes, which is two nodes for one indicator.
+        if part.get("states"):
+            apply_states(pg, part["states"], inst_palette)
         # a part on a protruding parent recesses from THAT surface, not the panel
         if part.get("lift"):
             pg.set("data-z-lift", str(part["lift"]))
@@ -653,6 +663,7 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         sub, _ = instance_group(
             lib, occupant, f"{inst_id}--{bay_id}--module", b_at,
             None, None, None, None, rotate=bay.get("rotate"), palette=palette,
+            inst_palette=inst_palette,
             skin_overrides=skin_overrides, attr_overrides=attr_overrides,
             path=f"{path}/{bay_id}/module", resolved=resolved, depth=depth + 1)
         # BEHIND THE FACEPLATE, NOT ON IT. Appending is right for a drive in a
@@ -1235,6 +1246,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                                      p.get("group"), p.get("rel-pos"),
                                      skin_name=p.get("skin", "default"),
                                      rotate=p.get("rotate"), palette=palette,
+                                     inst_palette=inst_palette,
                                      skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                                      resolved=resolved)
         # WHAT THE BLOCK IS FOR travels with every member, because the consumer
@@ -1360,6 +1372,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             g, contract = instance_group(lib, default, f"{b['id']}--module", b["at"],
                                          None, None, None, None,
                                          rotate=b.get("rotate"), palette=palette,
+                                         inst_palette=inst_palette,
                                          centre=bay_centre,
                                          skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                                          path=f"{b['id']}/module", resolved=resolved)

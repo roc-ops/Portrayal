@@ -41,17 +41,25 @@ provenance:
     master drew rather than corner-aligned to it, because the governed jack is
     16.0 x 14.0 where that bezel was 15.54 x 11.4 and aligning corners would
     have moved every port.
-  the-lamps-stay-here-and-that-is-deliberate: >-
-    std/rj45 HAS NO LAMPS, because a bare modular jack has none. These eight are
-    in the housing Dell fits and ISM table 11 gives their codes, so they remain
-    this card's own until the library has a `common/` jack carrying a bezel with
-    lamps in it. That part should exist - the combination is far too common not
-    to - and this card should compose it the day it does.
-  which-card: >-
-    ONE OF SEVERAL, and the device accepts it rather than asserting it. The
-    stencil holds four NDC faces - 2x10Gb BASE-T + 2x1Gb, 2x10Gb SFP+ + 2x1Gb,
-    2x10Gb SFP+, and 4x10Gb SFP+ - and figure 8 draws four RJ45s, which matches
-    the first. The SFP variants are not modelled here.
+  the-lamps-moved-into-the-jack-as-promised: >-
+    THE IOU IS REDEEMED. This key used to read: std/rj45 has no lamps, so these
+    eight "remain this card's own until the library has a common/ jack carrying
+    a bezel with lamps in it. That part should exist - the combination is far
+    too common not to - and this card should compose it the day it does."
+    common/rj45-port had existed the whole time. What it could not carry was ISM
+    table 11, because `parts:` had no way to say what a composed lamp MEANS - so
+    this card went on drawing its own beside the jacks, and drew them VERTICALLY,
+    1.7 x 2.6, where the real indicators are horizontal.
+    dell/rj45-port-14g@1 holds the table now and this card composes it. The
+    eight elements are gone from here; each port carries its own two.
+  positions-are-held-by-the-ink: >-
+    std/rj45 is 16.0 x 14.0 and paints all of it. dell/rj45-port-14g declares
+    17.0 x 14.9 and paints the same 16.0 x 14.0, inset 0.5 - the rest is empty
+    margin around a bezel. Seating it at the old coordinates would have slid
+    every jack 0.5 right and 0.5 down, so each placement is offset by that inset
+    and the four stay on the 22.2 pitch measured off ISM figure 8.
+    A DECLARED SIZE IS A FOOTPRINT, NOT A SILHOUETTE. The same confusion had
+    already produced a false report that this port would not fit this card.
   lamps: >-
     ISM table 11, per port: the link indicator is green at the port's maximum
     speed, amber below it, blinking green when NIC identify is enabled through
@@ -64,36 +72,11 @@ provenance:
   depth: >-
     estimated. Nothing held here dimensions the card behind its faceplate.
 parts:
-  # FOUR OF THE LIBRARY'S RJ45, not four drawings of one. Centred on
-  # the bezels the stencil master drew, so the lamps do not move.
-  - {ref: std/rj45@1, id: port-1, at: [2.47, 0.2], rotate: 180}
-  - {ref: std/rj45@1, id: port-2, at: [24.67, 0.2], rotate: 180}
-  - {ref: std/rj45@1, id: port-3, at: [46.87, 0.2], rotate: 180}
-  - {ref: std/rj45@1, id: port-4, at: [69.07, 0.2], rotate: 180}
-elements:
-  lamp-link-1: {at: [3.6, 1.9], size: [1.7, 2.6], class: led,
-    states: ['off', {name: 'up', color: '#22c55e'},
-             {name: degraded, color: '#eab308'},
-             {name: identify, color: '#22c55e', behavior: blinking}]}
-  lamp-act-1: {at: [15.6, 1.9], size: [1.7, 2.6], class: led,
-    states: ['off', {name: active, color: '#22c55e', behavior: blinking}]}
-  lamp-link-2: {at: [25.8, 1.9], size: [1.7, 2.6], class: led,
-    states: ['off', {name: 'up', color: '#22c55e'},
-             {name: degraded, color: '#eab308'},
-             {name: identify, color: '#22c55e', behavior: blinking}]}
-  lamp-act-2: {at: [37.8, 1.9], size: [1.7, 2.6], class: led,
-    states: ['off', {name: active, color: '#22c55e', behavior: blinking}]}
-  lamp-link-3: {at: [48.0, 1.9], size: [1.7, 2.6], class: led,
-    states: ['off', {name: 'up', color: '#22c55e'},
-             {name: degraded, color: '#eab308'},
-             {name: identify, color: '#22c55e', behavior: blinking}]}
-  lamp-act-3: {at: [60.0, 1.9], size: [1.7, 2.6], class: led,
-    states: ['off', {name: active, color: '#22c55e', behavior: blinking}]}
-  lamp-link-4: {at: [70.2, 1.9], size: [1.7, 2.6], class: led,
-    states: ['off', {name: 'up', color: '#22c55e'},
-             {name: degraded, color: '#eab308'},
-             {name: identify, color: '#22c55e', behavior: blinking}]}
-  lamp-act-4: {at: [82.2, 1.9], size: [1.7, 2.6], class: led,
-    states: ['off', {name: active, color: '#22c55e', behavior: blinking}]}
+  # FOUR DELL PORTS, not four drawings of one. Each carries its own
+  # two lamps and ISM table 11 with them.
+  - {ref: dell/rj45-port-14g@1, id: port-1, at: [1.97, -0.3]}
+  - {ref: dell/rj45-port-14g@1, id: port-2, at: [24.17, -0.3]}
+  - {ref: dell/rj45-port-14g@1, id: port-3, at: [46.37, -0.3]}
+  - {ref: dell/rj45-port-14g@1, id: port-4, at: [68.57, -0.3]}
 size: {w: 90.3, h: 14.5, d: 60.0}
 skins: [default]
