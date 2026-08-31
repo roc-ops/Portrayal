@@ -532,15 +532,6 @@ views:
       # NO WRENCH ON THIS PANEL. The ISM's back-view CALLOUT carries an icon
       # for the iDRAC port, which is what made a wrench look plausible here;
       # the panel's own legend is the word, and that is what is drawn.
-      # THE SLOT NUMBERS, printed on the chassis left of riser 1 rather than
-      # on the riser - they number the chassis's slots and stay when a riser is
-      # swapped. Measured at x 11.75..14.00, y 12.00 / 32.00 / 52.00, which is
-      # the SAME 20.0 pitch the vent rows and the clip pairs come back on, not
-      # the openings' 20.32. Three independent features agreeing at 20.0 is why
-      # both readings are left standing rather than reconciled.
-      - {id: silk-slot-1, at: [12.88, 13.00], text: '1', font-size: 2.6, anchor: middle, fill: '#4a5057'}
-      - {id: silk-slot-2, at: [12.88, 33.00], text: '2', font-size: 2.6, anchor: middle, fill: '#4a5057'}
-      - {id: silk-slot-3, at: [12.88, 53.00], text: '3', font-size: 2.6, anchor: middle, fill: '#4a5057'}
       # THE INFORMATION TAG LEGEND - a circled i on a dark ground, between
       # the identification button and the status lamp and below both. Two marks
       # because `filled` applies to a whole path: the disc, then the letter.
@@ -714,13 +705,15 @@ views:
         # that are round, this size and identical; the rest are the VGA insert,
         # the paint behind it, and the riser latch, which is blue but is not
         # round. A panel that looks like it should have four has two.
-        # THE CARD RETENTION CLIPS, in front of the brackets they hold down.
-        # They were chassis decor, which paints BEFORE components, so they went
-        # under the cards. `behaviour: mounts` on the part defers them past the
-        # bays; on the hardware the bracket's tab slides beneath the clip.
-        - {ref: dell/pcie-retention-clip-14g@1, id: card-clip-1, at: [2.5, 7.75], group: furniture, rel-pos: 23}
-        - {ref: dell/pcie-retention-clip-14g@1, id: card-clip-2, at: [2.5, 27.75], group: furniture, rel-pos: 24}
-        - {ref: dell/pcie-retention-clip-14g@1, id: card-clip-3, at: [2.5, 47.75], group: furniture, rel-pos: 25}
+        # THE SLOT-NUMBER STRIP, between the clips and the riser plate and
+        # IN FRONT of the cards. Its numerals were chassis silkscreen and never
+        # rendered: silkscreen prints before components, correctly, but these
+        # are not covered on the hardware - they sit on metal that is in front
+        # of the card. They live in this part's own skin now.
+        # Placed BEFORE the clips so the clips draw on top of it, which is the
+        # order the hardware is assembled in.
+        - {ref: dell/pcie-slot-strip-14g@1, id: slot-strip, at: [3.5, 4.0],
+           group: furniture, rel-pos: 22}
         - {ref: dell/thumbscrew-blue-14g@1, id: cage-screw-left,
            at: [144.66, 5.35], group: furniture, rel-pos: 21}
         - {ref: dell/thumbscrew-blue-14g@1, id: cage-screw-right,
