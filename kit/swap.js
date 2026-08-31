@@ -61,15 +61,38 @@ export function bayTransform(bay, c) {
 // The component's own root id/path is the wrapper's already, so it is dropped
 // rather than renamed - two nodes claiming one path is the bug this fixes.
 export function rename(wrap, name, bayId) {
+  const renamed = new Map();
   for (const el of wrap.querySelectorAll('[id],[data-path]')) {
     const id = el.getAttribute('id');
     if (id === name) el.removeAttribute('id');
-    else if (id && id.startsWith(name + '--'))
-      el.setAttribute('id', `${bayId}--module--${id.slice(name.length + 2)}`);
+    else if (id && id.startsWith(name + '--')) {
+      const to = `${bayId}--module--${id.slice(name.length + 2)}`;
+      renamed.set(id, to);
+      el.setAttribute('id', to);
+    }
     const dp = el.getAttribute('data-path');
     if (dp === name) el.setAttribute('data-path', `${bayId}/module`);
     else if (dp && dp.startsWith(name + '/'))
       el.setAttribute('data-path', `${bayId}/module/${dp.slice(name.length + 1)}`);
+  }
+  // RENAMING A DEFINITION IS HALF THE JOB. A skin that clips, masks or fills by
+  // reference carries `clip-path="url(#drive-carrier-25--w0)"` beside the
+  // `<clipPath id="drive-carrier-25--w0">` it names. Moving the definition into
+  // the bay's namespace and leaving the reference behind leaves it dangling -
+  // and SVG does not fail a dangling clip-path, it draws the element UNCLIPPED.
+  // So a swapped drive carrier rendered its honeycomb across the whole card
+  // instead of through the three windows, and nothing anywhere said why.
+  //
+  // render.py has always done this - it collects the renames, then makes a
+  // second pass rewriting every `url(#...)` it can see. This is that pass. 47
+  // of the library's component skins carry such a reference.
+  if (!renamed.size) return;
+  for (const el of wrap.querySelectorAll('*')) {
+    for (const {name: attr, value} of [...el.attributes]) {
+      if (!value.includes('url(#')) continue;
+      el.setAttribute(attr, value.replace(
+        /url\(#([^)]*)\)/g, (m, id) => `url(#${renamed.get(id) || id})`));
+    }
   }
 }
 
