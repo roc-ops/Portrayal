@@ -1,0 +1,54 @@
+format: 1
+kind: component
+name: riser-1-top-shelf-14g
+version: 1.0.0
+class: mechanical
+# It stands proud of the panel and covers what is behind it, so it draws after
+# the bays.
+behaviour: mounts
+profile: compute
+description: >-
+  The shelf of chassis metal closing the top of riser 1's bay on a 14G
+  PowerEdge, between the riser shroud and the rear drive cage
+size: {w: 25.25, h: 14.0, d: 14.68}
+provenance:
+  size: >-
+    photo-measured - ISM figure 8 at 4 px/mm, by tone. It reads BRIGHTER than
+    everything around it, which is what a surface tilted toward the light looks
+    like and is why it separates at all: a row at face y 10 runs bright from
+    116.75 to 142.00, and a column at x 132 runs bright from 0.75 to 14.75.
+  the-pip-is-the-check: >-
+    TWO SOURCES THAT NEVER MET, AGREEING ON A 3 mm DETAIL. The figure shows a
+    small dark mark at face 121.25..124.00 on this shelf. Dell's service model
+    puts two small features of `Dell_PowerEdge_740_Shell-1.001` at face
+    120.45..125.20, y 7.61..12.18. That is what identifies this shelf as part of
+    the chassis shell rather than of the riser or the cage.
+  the-cad-cannot-give-its-outline-and-here-is-why: >-
+    Asking which part covers face (130, 10) in front of the panel returns the
+    SYSTEM COVER first, at 18.78 proud - and that part is posed. It measures
+    444.02 wide against a 434 chassis, its rear edge sits 23.4 past the shell
+    body's, and it covers the entire top 16 mm of the face uniformly, which no
+    seated cover does. Behind it the shell contributes thin rails and the two
+    small features above, not a plate.
+    So the outline is the figure's and the depth is the model's, which is the
+    usual division of labour between these two sources.
+  depth: >-
+    measured - 14.68, the shell's own front at this point, from Dell's service
+    model. A straight-on figure cannot show protrusion at all, and this shelf
+    plainly stands off the panel.
+    NOT TAKEN FROM THE COVER'S 18.78, which is the frontmost thing here and is
+    posed. A number from a posed part is worse than no number.
+relief:
+  wall: '#4a5057'
+  features:
+  - node: shelf
+    out: 14.68
+    color: '#a6adb4'
+    confidence: measured
+    source: >-
+      dell/riser-1-top-shelf-14g@1's own depth key - the chassis shell's own
+      front at face (130, 10) and (140, 10) in Dell's service model, 14.68 proud
+      of the panel plane at z 713.5.
+elements:
+  shelf: {at: [0.0, 0.0], size: [25.25, 14.0], class: bezel}
+skins: [default]

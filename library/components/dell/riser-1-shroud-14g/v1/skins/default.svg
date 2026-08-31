@@ -15,8 +15,10 @@
        8: five at face x 128.00..131.40, first at y 17.75, pitch 5.47. A sixth
        above at about 12.25 reads only 0.75 tall, mostly obscured, and is not
        drawn. -->
-  <path id="shroud" fill-rule="evenodd" fill="#9aa1a8" stroke="#6d747c"
-        stroke-width="0.3" d="M0.00 1.50 L0.00 2.50 L8.94 2.56 L8.94 63.19 L10.19 63.25 L9.38 63.38 L9.38 64.38 L25.19 64.38 L25.19 63.38 L24.38 63.25 L25.56 63.19 L25.56 2.69 L22.88 2.62 L23.38 0.00 L13.25 0.00 L13.19 2.69 L10.06 2.69 L10.00 1.50 Z"/>
+  <!-- HOLES IN THE PLATE AND A GROUP BENEATH, both - because this
+       component composes a part again. render.py raises an `out` node to the
+       end of the group when there are composed parts, so the plate would
+       otherwise paint over its own slots. The contract predicted this. -->
   <g id="slots" fill="#1b1f23">
     <rect x="16.30" y="15.94" width="3.4" height="4.15" rx="0.35"/>
     <rect x="16.30" y="21.41" width="3.4" height="4.15" rx="0.35"/>
@@ -24,4 +26,6 @@
     <rect x="16.30" y="32.35" width="3.4" height="4.15" rx="0.35"/>
     <rect x="16.30" y="37.82" width="3.4" height="4.15" rx="0.35"/>
   </g>
+  <path id="shroud" fill-rule="evenodd" fill="#9aa1a8" stroke="#6d747c"
+        stroke-width="0.3" d="M0.00 1.50 L0.00 2.50 L8.94 2.56 L8.94 63.19 L10.19 63.25 L9.38 63.38 L9.38 64.38 L25.19 64.38 L25.19 63.38 L24.38 63.25 L25.56 63.19 L25.56 2.69 L22.88 2.62 L23.38 0.00 L13.25 0.00 L13.19 2.69 L10.06 2.69 L10.00 1.50 Z M16.65 15.94 H19.35 A0.35 0.35 0 0 1 19.70 16.29 V19.74 A0.35 0.35 0 0 1 19.35 20.09 H16.65 A0.35 0.35 0 0 1 16.30 19.74 V16.29 A0.35 0.35 0 0 1 16.65 15.94 Z M16.65 21.41 H19.35 A0.35 0.35 0 0 1 19.70 21.76 V25.21 A0.35 0.35 0 0 1 19.35 25.56 H16.65 A0.35 0.35 0 0 1 16.30 25.21 V21.76 A0.35 0.35 0 0 1 16.65 21.41 Z M16.65 26.88 H19.35 A0.35 0.35 0 0 1 19.70 27.23 V30.68 A0.35 0.35 0 0 1 19.35 31.03 H16.65 A0.35 0.35 0 0 1 16.30 30.68 V27.23 A0.35 0.35 0 0 1 16.65 26.88 Z M16.65 32.35 H19.35 A0.35 0.35 0 0 1 19.70 32.70 V36.15 A0.35 0.35 0 0 1 19.35 36.50 H16.65 A0.35 0.35 0 0 1 16.30 36.15 V32.70 A0.35 0.35 0 0 1 16.65 32.35 Z M16.65 37.82 H19.35 A0.35 0.35 0 0 1 19.70 38.17 V41.62 A0.35 0.35 0 0 1 19.35 41.97 H16.65 A0.35 0.35 0 0 1 16.30 41.62 V38.17 A0.35 0.35 0 0 1 16.65 37.82 Z"/>
 </svg>
