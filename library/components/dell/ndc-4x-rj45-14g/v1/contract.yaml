@@ -32,6 +32,21 @@ provenance:
     grey at 7.2074 px/mm - which is the whole reason to reach for the master. The
     jack width of 15.54 mm is measured directly off the figure, where a bright
     bezel against dark metal reads cleanly, and agrees with an RJ45's 15.9 mm.
+  the-jacks-are-composed-now: >-
+    THIS CARD USED TO DRAW ITS OWN FOUR - bezel, cavity, latch keyway and eight
+    gold pins each, at the right pitch and the right size, and none of it
+    std/rj45. Four hand-drawn jacks are four chances to disagree with the
+    governed part and with each other. The measured pitch and plate stay; the
+    jack art is gone and std/rj45@1 sits at each port, CENTRED on the bezel the
+    master drew rather than corner-aligned to it, because the governed jack is
+    16.0 x 14.0 where that bezel was 15.54 x 11.4 and aligning corners would
+    have moved every port.
+  the-lamps-stay-here-and-that-is-deliberate: >-
+    std/rj45 HAS NO LAMPS, because a bare modular jack has none. These eight are
+    in the housing Dell fits and ISM table 11 gives their codes, so they remain
+    this card's own until the library has a `common/` jack carrying a bezel with
+    lamps in it. That part should exist - the combination is far too common not
+    to - and this card should compose it the day it does.
   which-card: >-
     ONE OF SEVERAL, and the device accepts it rather than asserting it. The
     stencil holds four NDC faces - 2x10Gb BASE-T + 2x1Gb, 2x10Gb SFP+ + 2x1Gb,
@@ -48,6 +63,13 @@ provenance:
     placements on the chassis.
   depth: >-
     estimated. Nothing held here dimensions the card behind its faceplate.
+parts:
+  # FOUR OF THE LIBRARY'S RJ45, not four drawings of one. Centred on
+  # the bezels the stencil master drew, so the lamps do not move.
+  - {ref: std/rj45@1, id: port-1, at: [2.47, 0.2]}
+  - {ref: std/rj45@1, id: port-2, at: [24.67, 0.2]}
+  - {ref: std/rj45@1, id: port-3, at: [46.87, 0.2]}
+  - {ref: std/rj45@1, id: port-4, at: [69.07, 0.2]}
 elements:
   lamp-link-1: {at: [3.6, 1.9], size: [1.7, 2.6], class: led,
     states: ['off', {name: 'up', color: '#22c55e'},

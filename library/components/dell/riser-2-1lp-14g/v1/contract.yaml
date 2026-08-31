@@ -6,73 +6,48 @@ class: riser
 behaviour: fills
 profile: server
 description: >-
-  PCIe expansion card riser for a 14th-generation PowerEdge - presents
-  1 slot and carries a bay for each
+  PCIe expansion card riser for a 14th-generation PowerEdge - the one-slot
+  variant, a short plate carrying a single low-profile slot
 attrs:
   supported-risers: '2B and 2C'
-  bracket-envelope: '112.46 x 62.0'
 provenance:
   identity: >-
-    A REMOVABLE ASSEMBLY THAT BRINGS ITS OWN SLOTS, which is why it is a module
-    with `bays` rather than openings drawn on the chassis. The ISM carries
-    removal and installation procedures for risers 1, 2, 2A, 2B and 3, and the
-    component schema names exactly this case: `bays` is for "MODULES THAT
-    THEMSELVES HOST BAYS - a PCIe riser, a SIP carrying SPAs".
-  the-slots-hold-the-standard-bracket-now: >-
-    THEY USED TO HOLD A PLATE THIS PROJECT DREW, sized to the connector opening.
-    The 90.0 x 12.2 rectangles read off the figure were RIGHT - they are the PCIe
-    opening, 89.90 x 12.06, to a tenth of a percent - but an opening is not a
-    bracket. std/pcie-bracket-fh is 120.02 long: 19.96 of it runs on past the
-    opening at the tip end and 10.16 at the flange end, behind this riser's own
-    sheet, which is why a face-on reading never sees it. Each slot is positioned
-    by its OPENING, so what shows through the window has not moved; the module
-    grew instead, to hold the metal that was always there.
+    A REMOVABLE ASSEMBLY THAT BRINGS ITS OWN SLOT, which is why it is a module
+    with a bay rather than an opening drawn on the chassis.
+  it-is-a-short-plate-and-that-is-the-point: >-
+    THIS USED TO BE 95 x 62, the same outline as the three-slot riser with two of
+    its holes left out, and that put the plate straight through the two rear
+    drive bays above it. ISM figure 8 shows why: in the 4 x 2.5 machine the top
+    of riser 2's column IS the drive bays and this riser is the band underneath
+    them. L13 reported the collision twice and it was a real one - metal through
+    metal, not two bounding boxes at different heights.
+    THE SLOT DID NOT MOVE. A bay at y 46.0 plus this plate's local 0.46
+    is 46.46, which is where the three-slot riser puts its own low-profile slot,
+    and that agreement is the check that the rearrangement changed nothing.
+  the-slot-holds-the-standard-bracket: >-
+    std/pcie-bracket-lp is 79.20 long and its connector opening is 54.53, so
+    15.63 of it runs on past the opening at the tip end - behind this plate's own
+    sheet, which is why a face-on reading never sees it. The bay is positioned by
+    the OPENING and x comes out negative, at -13.13: the bracket starts to the left
+    of the plate's own edge. Sliding it to zero to avoid the minus sign would
+    move the opening, which is the one thing that must not move.
   size: >-
-    size is 95.0 x 62.0, the plate the skin DRAWS; insert is 112.46 x 62.0, what a
-    slot has to reserve. THOSE ARE DIFFERENT THINGS and the difference is the
-    whole point here: the plate is what a photograph shows, the insert is what
-    the brackets need. Growing `size` to the envelope instead was tried and put
-    five false overlaps on the rear face - riser 3's box across the power supply,
-    riser 1's down over the iDRAC port - none of them collisions between parts,
-    all of them collisions between boxes of things at different heights. The plate and the slot pitch come from the R740 ISM figure 9, which
-    passes Gate 1 at 0.26% against a 434 x 86.8 rear face; the pitch is the PCI
-    standard 20.32 and the figure confirms it at 20.535 (1.06%).
-    THE OUTLINE IS AREA ON THE FACE, not the assembly behind it. Nothing held
-    here dimensions the riser's depth or its board, so no depth is recorded.
-  slot-numbering: >-
-    THE NUMBERS BELONG TO THE RISER, NOT THE CHASSIS, and that is what resolves
-    the puzzle in ISM table 25: the low-profile slot is numbered 4 when riser 2
-    presents only that one, and 6 when riser 2 presents three. An opening cannot
-    change size in place - a full-height card will not fit where the half-height
-    one goes, with the power supply directly beneath it - so the metal is fixed
-    and the numbering travels with the part.
-  which-part-numbers: >-
-    THIS FACE IS SHARED BY 2B and 2C. ISM table 25 names eleven riser part numbers
-    across the three positions and they present only FIVE distinct arrangements
-    of slots; within a face the variants differ in LANE WIDTH and which processor
-    each slot is wired to. Those are facts about the electronics, recorded in
-    attrs, and they do not change the drawing.
-  adjacent-brackets-overlap-by-1.27-on-purpose: >-
-    THE SLOT BAYS OVERLAP IN Y AND THE PARTS STILL FIT. A PCIe bracket is 21.59
-    across overall on a 20.32 slot pitch, because its flange end is KEYED - the
-    top of the plate is offset sideways so the mounting tab reaches over the
-    neighbouring slot and keys against it. Consecutive brackets interleave by
-    exactly 1.27 and that is why a row of them nests. Any overlap check working
-    on bounding boxes will report these; it is the check unable to express a real
-    interlock, not a fault in the placement.
-  the-low-profile-slot-was-the-one-that-was-wrong: >-
-    IT WAS 78.0 WIDE, which is neither of the two numbers it could have been. An
-    LP connector opening is 54.53; an LP bracket is 79.20. 78.0 is within a
-    millimetre of the bracket and 23 mm from the opening - so this slot appears
-    to have been measured as a BRACKET while the full-height slots beside it were
-    measured as OPENINGS, at the same x, which cannot both be true of one
-    drawing. It is placed here by its opening, aligned with the others, and the
-    78.0 reading is recorded as unresolved rather than quietly kept.
-size: {w: 95.0, h: 62.0}
-insert: {w: 112.46, h: 62.0}
+    size is 95.0 x 20.0, the plate the skin draws; insert is 95.0 x
+    18.42, what a slot has to reserve. The width and the slot's place come from
+    the three-slot riser this is cut down from, whose plate and 20.32 pitch are
+    read off the R740 ISM figure 9 at Gate 1 0.26%.
+  the-78.0-reading-is-still-unresolved: >-
+    The slot was 78.0 wide before any of this. An LP connector opening is 54.53
+    and an LP bracket is 79.20, so 78.0 is 23 mm from the opening and within a
+    millimetre of the bracket - it appears to have been measured as a BRACKET
+    while the full-height slots beside it were measured as OPENINGS, at the same
+    x, which cannot both be true of one drawing. Placed by its opening here, and
+    the 78.0 recorded rather than quietly kept.
+size: {w: 95.0, h: 20.0}
+insert: {w: 95.0, h: 18.42}
 bays:
   slot-4:
-    at: [-13.13, 42.46]
+    at: [-13.13, -2.72]
     size: [79.2, 18.42]
     accepts: [std/pcie-bracket-lp@1]
     default: std/pcie-bracket-lp@1

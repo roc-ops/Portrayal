@@ -470,7 +470,7 @@ views:
         - {at: [46.5, 65.5], size: [37.0, 19.5], fill: '#0f6f78'}
         - {at: [84.0, 65.5], size: [31.5, 19.5], fill: '#1f4f9e'}
       cutouts:
-        - {id: idrac9, at: [27.2, 66.80], size: [15.8, 13.2], shape: rect}
+        - {id: idrac9, at: [27.2, 66.00], size: [16.0, 14.0], shape: rect}
         - {id: serial, at: [55.165, 68.60], size: [20.47, 11.4], shape: rect}
         - {id: vga, at: [90.665, 68.60], size: [20.47, 11.4], shape: rect}
         - {id: usb-1, at: [119.0, 66.50], size: [12.0, 4.5], shape: rect}
@@ -491,10 +491,25 @@ views:
            accepts: [dell/riser-1-3fh-14g@1, dell/riser-1-2fh-14g@1],
            default: dell/riser-1-3fh-14g@1,
            group: risers, rel-pos: 1}
+        # RISER 2 IS TWO DIFFERENT HOLES, not one hole with two occupants. The
+        # standards-only render against ISM figure 8 caught this: the figure
+        # shows a low-profile slot at x 170..230, y 49.5..62.5 in the 4 x 2.5
+        # machine, where the model showed bare panel - riser 2 carried
+        # only-in: [no-rear-storage] and vanished, contradicting the rear-4-sff
+        # description below, which costs riser 2 its "two full-height slots"
+        # and not riser 2 itself. Dropping the only-in put a 62 mm plate
+        # straight through both rear drive bays, and L13 was right to say so.
+        # So: a TALL bay where the whole column is riser, and a SHORT one under
+        # the drives where only the bottom band is. Both put slot 4's opening at
+        # the same y 46.46, which is the check that nothing moved.
         - {id: riser-2, at: [161.0, 4.0], size: {w: 95.0, h: 62.0},
-           accepts: [dell/riser-2-2fh-1lp-14g@1, dell/riser-2-1lp-14g@1, dell/riser-2-3-blank-14g@1],
+           accepts: [dell/riser-2-2fh-1lp-14g@1, dell/riser-2-3-blank-14g@1],
            default: dell/riser-2-2fh-1lp-14g@1,
            group: risers, rel-pos: 2, only-in: [no-rear-storage]}
+        - {id: riser-2-lp, at: [161.0, 46.0], size: {w: 95.0, h: 20.0},
+           accepts: [dell/riser-2-1lp-14g@1],
+           default: dell/riser-2-1lp-14g@1,
+           group: risers, rel-pos: 2, only-in: [rear-4-sff]}
         - {id: riser-3, at: [318.0, 4.0], size: {w: 95.0, h: 41.0},
            accepts: [dell/riser-3-2fh-14g@1, dell/riser-3-blank-14g@1],
            default: dell/riser-3-2fh-14g@1,
@@ -525,7 +540,13 @@ views:
            default: common/drive-blank-25@1, rotate: 270,
            only-in: [rear-4-sff], group: drives-rear, rel-pos: 15}
       placements:
-        - {ref: common/rj45-jack@2, id: idrac9, at: [27.2, 66.80],
+        # THE LIBRARY'S RJ45, not a second opinion about what one looks like.
+        # This was common/rj45-jack, which draws its own face at 15.8 x 13.2
+        # where the governed aperture is 16.0 x 14.0. HELD BY ITS BOTTOM EDGE,
+        # not its corner: the iDRAC, serial and VGA share a baseline at y 80
+        # (fact sheet B.3) and that is the fact worth preserving, so y moves
+        # from 66.80 to 66.00 to keep the taller part sitting on the same line.
+        - {ref: std/rj45@1, id: idrac9, at: [27.2, 66.00],
            attrs: {role: management}, group: mgmt-ports, rel-pos: 1}
         - {ref: common/db9-receptacle@1, id: serial, at: [50.0, 68.05],
            group: mgmt-ports, rel-pos: 2}
@@ -535,8 +556,11 @@ views:
            attrs: {speed: usb-3.0}, group: mgmt-ports, rel-pos: 4}
         - {ref: std/usb-a@1, id: usb-2, at: [119.0, 75.50],
            attrs: {speed: usb-3.0}, group: mgmt-ports, rel-pos: 5}
+        # `for:` names BOTH riser-2 bays. The handle crosses riser 2 whichever
+        # of its two holes this configuration has, and listing only the tall one
+        # left the short one unexempted the moment it existed.
         - {ref: dell/rear-handle-14g@1, id: rear-handle, at: [133.0, 43.0],
-           for: [riser-2, ndc], group: furniture, rel-pos: 1}
+           for: [riser-2, riser-2-lp, ndc], group: furniture, rel-pos: 1}
         - {ref: dell/system-id-button-14g@1, id: sys-id, at: [6.5, 68.5],
            for: chassis, group: mgmt-rear, rel-pos: 1}
         - {ref: common/led-indicator@1, id: sys-status, at: [18.5, 70.0],
