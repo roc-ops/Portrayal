@@ -123,6 +123,27 @@ provenance:
     indicator remains off until all drives are initialized after the system is
     turned on." A dark status lamp on a running machine can mean the array is
     still coming up.
+  the-label-rows-are-right-aligned: >-
+    photo-measured - every row inside the label block ends on the same right
+    edge, and the block runs 2.83..15.03 with the ink stopping about 13% of its
+    width in, at 13.43. The rows were LEFT-aligned at 3.73 or centred at 8.93,
+    which is not what the printed label does.
+    THE RPM CIRCLE STAYS LEFT. It sits at cx 4.73 while the "7.2K" beside it is
+    right-aligned, so that row is ragged in the middle rather than set as a
+    unit. Moving the circle across with the text was the tidy assumption and the
+    figure does not support it.
+    THE 13% IS READ OFF A BLURRED FIGURE and is the soft number here. A scan for
+    the block edge and the ink extents returned nonsense - it found a 16.75-wide
+    block where the component says 12.20, because the carrier's own dark body
+    reads the same as the label plate at 4 px/mm - so the margin was taken by
+    eye off a 8x crop instead. The ALIGNMENT is certain; the margin is not.
+  the-per-skin-magic-x-is-gone: >-
+    The capacity unit used to carry a hand-computed x measured off the number
+    beside it - 9.93 for "1920", 8.38 for "960", 5.28 for "2" - one per skin,
+    re-derived by hand whenever a capacity changed, checked by nothing.
+    Anchoring to the block's right edge removed all five: text-anchor="end"
+    makes the renderer measure the glyphs. Right-aligning was asked for and
+    dropping five unverifiable constants came free with it.
 elements:
   lamp-activity:
     at: [3.1, 1.7]
