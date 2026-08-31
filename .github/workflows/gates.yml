@@ -31,14 +31,22 @@ jobs:
         with:
           python-version: '3.12'
 
-      # The library tools need exactly two third-party packages; pillow is for
-      # the intake tests that hash figures. numpy, opencv, pxr and docling
-      # belong to the intake side, which no gate touches, and installing them
-      # here would trade minutes for nothing.
+      # WHAT THE SUITE ACTUALLY NEEDS, which is not what the TOOLS need. The
+      # library tools import only yaml and jsonschema, and reasoning from that
+      # is how the second run of this workflow died: test_figmap imports figmap,
+      # which imports numpy at module scope, and a module-scope import in a
+      # collected test file is a COLLECTION ERROR - it takes the whole suite
+      # down rather than skipping one file.
+      #
+      # Derived by walking every test module's top-level imports one hop through
+      # the local modules, rather than by guessing: PIL and numpy are needed at
+      # collection, and cairosvg, docling, mlx_vlm and rapidocr are imported
+      # lazily and stay optional. mlx_vlm could not be installed here anyway -
+      # it is Apple-silicon only.
       - name: install
         run: |
           python -m pip install --upgrade pip
-          pip install pytest pyyaml jsonschema pillow
+          pip install pytest pyyaml jsonschema pillow numpy
 
       # pdftoppm gates the OCR tests. Without it they SKIP, which is the one
       # thing this workflow exists to stop happening quietly.
