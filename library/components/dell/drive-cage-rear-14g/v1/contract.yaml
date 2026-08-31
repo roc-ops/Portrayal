@@ -32,6 +32,21 @@ provenance:
     own 144.26..155.26. The extra quarter-millimetre each side is halo: a bright
     feature against bright metal at 4 px/mm, which is the one thing this figure
     is worst at.
+  the-tongue-is-bent-not-just-shaded: >-
+    photo-measured for its OUTLINE, estimated for its ANGLE. Below the screw pad
+    and the bar, the same tab carries a third face at face 146.00..156.80,
+    y 29.50..39.00. It is not duller than the bar, it is DARK - tone falls from
+    about 178 to about 110 - and no flat surface beside another flat surface in
+    the same plane does that. It is also slightly narrower and shifted right,
+    10.80 against 11.75, which is what a pressed tongue coming off a wider strip
+    looks like.
+    THE ANGLE IS THE OPERATOR'S READING, about 12 degrees down into the chassis,
+    and it is a guess made deliberately rather than a measurement: the figure
+    cannot show an angle at all and the service model has no cage face in front
+    of the panel to read one from. At 12 degrees over 9.50 the far edge drops
+    1.98, so the relief carries 0.99 - the MEAN of a ramp, since
+    `sink` is a uniform recess and there is no bend in the vocabulary. Say
+    plainly: one number standing in for a slope, on an angle nobody measured.
   outline: >-
     measured - extracted by spec/tools/intake/cad-outline.py, rasterised at
     16 px/mm and simplified at 0.40 mm. THAT 0.40 IS A SIMPLIFICATION TOLERANCE
@@ -53,6 +68,16 @@ provenance:
 relief:
   wall: '#4a5057'
   features:
+  - node: screw-tab-tongue
+    sink: 0.99
+    color: '#626971'
+    confidence: estimated
+    source: >-
+      dell/drive-cage-rear-14g@1's own tongue key - a 12 degree bend on the
+      operator's reading, over a 9.50 face, dropping 1.98 at its far edge.
+      0.99 is the MEAN of that ramp, because `sink` is a uniform
+      recess and this vocabulary has no bend. The outline is measured; the angle
+      is not.
   - node: frame
     out: 14.13
     color: '#8c939b'
