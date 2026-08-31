@@ -32,24 +32,6 @@ provenance:
     grey at 7.2074 px/mm - which is the whole reason to reach for the master. The
     jack width of 15.54 mm is measured directly off the figure, where a bright
     bezel against dark metal reads cleanly, and agrees with an RJ45's 15.9 mm.
-  the-jacks-wear-the-shared-bezel-and-keep-their-own-lamps: >-
-    common/rj45-bezel@2 IS THE PLATE WITHOUT LAMPS, and that is why it is the
-    one here. The library also has common/rj45-port@4, the same silver plate
-    with a link and an activity lamp in its corner tabs, and composing THAT
-    would have drawn eight lamps over these eight and traded states sourced
-    from ISM table 11 - link, degraded, identify - for a generic 'off, up,
-    activity'. A dressing layer is supposed to add trim, not overwrite
-    measurements.
-    ROTATED 180 because rj45-bezel draws its keyway down and this card's jacks
-    face the other way; the plate itself is symmetric, so turning the whole
-    part is enough. That moves the inner aperture's offset from 0.5 to 0.4 in
-    y, which is why each plate sits at -0.2 rather than 0.0 - worked back from
-    where the aperture already is, so nothing measured moved.
-    THE PLATE IS 14.9 ON A 14.5 CARD and so it overhangs 0.2 top and bottom.
-    The card's height came from anchoring a stencil master to the measured
-    22.2 pitch and the bezel's 14.9 is that part's own estimate, so this is two
-    soft numbers disagreeing by less than either is worth. Recorded rather than
-    reconciled by moving one to meet the other.
   the-jacks-are-composed-now: >-
     THIS CARD USED TO DRAW ITS OWN FOUR - bezel, cavity, latch keyway and eight
     gold pins each, at the right pitch and the right size, and none of it
@@ -84,10 +66,10 @@ provenance:
 parts:
   # FOUR OF THE LIBRARY'S RJ45, not four drawings of one. Centred on
   # the bezels the stencil master drew, so the lamps do not move.
-  - {ref: common/rj45-bezel@2, id: port-1, at: [1.97, -0.3], rotate: 180}
-  - {ref: common/rj45-bezel@2, id: port-2, at: [24.17, -0.3], rotate: 180}
-  - {ref: common/rj45-bezel@2, id: port-3, at: [46.37, -0.3], rotate: 180}
-  - {ref: common/rj45-bezel@2, id: port-4, at: [68.57, -0.3], rotate: 180}
+  - {ref: std/rj45@1, id: port-1, at: [2.47, 0.2], rotate: 180}
+  - {ref: std/rj45@1, id: port-2, at: [24.67, 0.2], rotate: 180}
+  - {ref: std/rj45@1, id: port-3, at: [46.87, 0.2], rotate: 180}
+  - {ref: std/rj45@1, id: port-4, at: [69.07, 0.2], rotate: 180}
 elements:
   lamp-link-1: {at: [3.6, 1.9], size: [1.7, 2.6], class: led,
     states: ['off', {name: 'up', color: '#22c55e'},

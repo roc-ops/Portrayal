@@ -475,7 +475,7 @@ views:
         - {id: vga, at: [87.30, 68.60], size: [20.47, 11.4], shape: rect}
         - {id: usb-1, at: [120.20, 71.47], size: [12.0, 4.5], shape: rect}
         - {id: usb-2, at: [120.20, 79.59], size: [12.0, 4.5], shape: rect}
-        - {id: sys-id, at: [6.5, 68.5], size: [7.0, 7.0], shape: circle}
+        - {id: sys-id, at: [6.77, 72.04], size: [7.0, 7.0], shape: circle}
     components:
       bays:
         # THE BAY IS THE PLATE, NOT THE BRACKET ENVELOPE. Each riser now holds
@@ -487,10 +487,7 @@ views:
         # down over the iDRAC port. None are collisions between PARTS - they are
         # boxes of things that sit at different heights, and the fix is to say
         # which number is which rather than to move anything.
-        # 61.5, NOT 62: the iDRAC's bezel plate reaches 0.5 above its aperture
-        # and the riser opening cannot extend into the I/O row beneath it.
-        # The riser's own slots end at local 43.73, so nothing is lost.
-        - {id: riser-1, at: [17.0, 4.0], size: {w: 95.0, h: 61.5},
+        - {id: riser-1, at: [17.0, 4.0], size: {w: 95.0, h: 62.0},
            accepts: [dell/riser-1-3fh-14g@1, dell/riser-1-2fh-14g@1],
            default: dell/riser-1-3fh-14g@1,
            group: risers, rel-pos: 1}
@@ -549,7 +546,7 @@ views:
         # not its corner: the iDRAC, serial and VGA share a baseline at y 80
         # (fact sheet B.3) and that is the fact worth preserving, so y moves
         # from 66.80 to 66.00 to keep the taller part sitting on the same line.
-        - {ref: common/rj45-port@4, id: idrac9, at: [28.10, 65.50],
+        - {ref: std/rj45@1, id: idrac9, at: [28.60, 66.00], rotate: 180,
            attrs: {role: management}, group: mgmt-ports, rel-pos: 1}
         - {ref: common/db9-receptacle@1, id: serial, at: [48.47, 68.05],
            group: mgmt-ports, rel-pos: 2}
@@ -559,14 +556,9 @@ views:
            attrs: {speed: usb-3.0}, group: mgmt-ports, rel-pos: 4}
         - {ref: std/usb-a@1, id: usb-2, at: [120.20, 79.59],
            attrs: {speed: usb-3.0}, group: mgmt-ports, rel-pos: 5}
-        # `for:` names BOTH riser-2 bays. The handle crosses riser 2 whichever
-        # of its two holes this configuration has, and listing only the tall one
-        # left the short one unexempted the moment it existed.
-        - {ref: dell/rear-handle-14g@1, id: rear-handle, at: [133.0, 43.0],
-           for: [riser-2, riser-2-lp, ndc], group: furniture, rel-pos: 1}
-        - {ref: dell/system-id-button-14g@1, id: sys-id, at: [6.5, 68.5],
+        - {ref: dell/system-id-button-14g@1, id: sys-id, at: [6.77, 72.04],
            for: chassis, group: mgmt-rear, rel-pos: 1}
-        - {ref: common/led-indicator@1, id: sys-status, at: [18.5, 70.0],
+        - {ref: common/led-indicator@1, id: sys-status, at: [19.43, 73.73],
            for: chassis, group: leds, rel-pos: 2,
            states: ['off', {name: 'on', color: '#2563eb'}]}
         - {ref: dell/idrac-direct-symbol@1, id: mark-idrac9, at: [33.2, 81.0],
