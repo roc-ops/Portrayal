@@ -68,13 +68,20 @@ TEXT = "text"
 
 
 class Fact:
-    def __init__(self, name, section, unit, kind, sources, note=None):
+    def __init__(self, name, section, unit, kind, sources, note=None, scopes=()):
         self.name = name
         self.section = section
         self.unit = unit
         self.kind = kind
         self.sources = sources          # list of (attrs-key, basis, qualifier)
         self.note = note
+        # A SCOPE IS NOT A FACT. `power-envelope` is on 52 devices and says
+        # whether a power figure is for a bare chassis, a fully-configured one,
+        # or was never qualified - which changes what the number MEANS without
+        # being a measurement of its own. Given a column it would invite exactly
+        # the mistake that started all this, where "fully-configured" turned up
+        # under PSU redundancy. So it annotates the fact it qualifies instead.
+        self.scopes = scopes
 
     def __repr__(self):                 # pragma: no cover - debugging only
         return f"<Fact {self.name}>"
@@ -124,10 +131,11 @@ FACTS = [
         A("power-max-dc-zr-w", basis="dc", qualifier="zr-optics"),
         A("power-max-no-poe-w", qualifier="no-poe"),
         A("power-self-max-w", qualifier="self"),
-    ], note="NOT typical draw. See rule 1 - there is no fallback between them"),
+    ], note="NOT typical draw. See rule 1 - there is no fallback between them",
+       scopes=("power-max-scope", "power-envelope")),
     Fact("typical-power-w", "power", "W", NUMBER, [
         A("power-typical-w"), A("typical-draw-w"),
-    ]),
+    ], scopes=("power-typical-scope", "power-envelope")),
     Fact("minimum-power-w", "power", "W", NUMBER, [
         A("power-min-w"), A("power-min-ac-w", basis="ac"),
     ]),
@@ -205,6 +213,48 @@ FACTS = [
     Fact("eol", "lifecycle", None, TEXT, [A("eol")]),
     Fact("end-of-sale", "lifecycle", None, TEXT, [A("end-of-sale")]),
     Fact("end-of-support", "lifecycle", None, TEXT, [A("end-of-support")]),
+
+    # ---- what it plugs into ------------------------------------------------
+    #
+    # Promoted from the unclaimed census, which is what the tail is for: these
+    # recur on 20 to 46 devices each, so a comparison that cannot line them up
+    # is leaving real answers on the floor. The long tail stays unclaimed - 102
+    # of 211 spellings appear on exactly one device, and a fact per one-off is
+    # a taxonomy of nothing.
+    Fact("console", "management", None, TEXT, [
+        A("console"), A("console-serial"),
+    ]),
+    Fact("oob-management", "management", None, TEXT, [
+        A("oob"), A("oob-sfp", qualifier="sfp"),
+    ]),
+    Fact("bmc", "platform", None, TEXT, [A("bmc")]),
+
+    # ---- timing, which is the whole point on a cell-site router -------------
+    Fact("timing", "features", None, TEXT, [A("timing"), A("timing-support")]),
+    Fact("timing-interfaces", "features", None, TEXT, [A("timing-interfaces")]),
+    Fact("gnss", "features", None, TEXT, [A("gnss")]),
+
+    # ---- the paperwork a reader actually compares --------------------------
+    Fact("emc", "compliance", None, TEXT, [A("emc")]),
+    Fact("safety", "compliance", None, TEXT, [A("safety")]),
+    Fact("nebs", "compliance", None, TEXT, [A("nebs")]),
+    Fact("environmental-directives", "compliance", None, TEXT, [
+        A("environment"), A("rohs"),
+    ], note="RoHS, WEEE and the like - not the operating environment, which is "
+            "operating-temperature and its neighbours"),
+
+    # ---- which optics actually light up ------------------------------------
+    #
+    # One fact per media, because that is the axis a reader compares on: two
+    # boxes both have SFP28 cages and the question is what runs in them. L40
+    # already governs these keys; this makes them reachable.
+    Fact("optics-sfp", "features", None, TEXT, [A("optics-sfp")]),
+    Fact("optics-sfp-plus", "features", None, TEXT, [A("optics-sfp-plus")]),
+    Fact("optics-sfp28", "features", None, TEXT, [A("optics-sfp28")]),
+    Fact("optics-qsfp28", "features", None, TEXT, [A("optics-qsfp28")]),
+    Fact("optics-qsfp56", "features", None, TEXT, [A("optics-qsfp56")]),
+    Fact("optics-qsfp-dd", "features", None, TEXT, [A("optics-qsfp-dd")]),
+    Fact("optics-osfp", "features", None, TEXT, [A("optics-osfp")]),
 ]
 
 BY_NAME = {f.name: f for f in FACTS}
@@ -212,7 +262,26 @@ BY_NAME = {f.name: f for f in FACTS}
 # Every attrs spelling any fact claims. The lint rule reports the ones nothing
 # claims, which is how the vocabulary gets harvested instead of designed - the
 # same stance L40 takes for optics.
-CLAIMED = {k for f in FACTS for (k, _, _) in f.sources}
+CLAIMED = ({k for f in FACTS for (k, _, _) in f.sources}
+           | {k for f in FACTS for k in f.scopes})
+
+# SUPERSEDED, AND DELIBERATELY UNCLAIMABLE. These are the prose forms of facts
+# that are now read structurally off the groups, and rule 2 forbids reaching
+# them. Left in the plain census they would sit at the TOP of it - 23 devices
+# each - nominating themselves for a column they must never have, and the next
+# person to work through the list would promote them and quietly undo the rule.
+# So they are named here, counted separately, and excluded from the tail.
+SUPERSEDED = {
+    "psu-redundancy": "psu-redundancy (from groups.*.attrs.redundancy)",
+    "psus": "psu-redundancy (from groups.*.attrs.redundancy)",
+    "psu-options": "psu-redundancy (from groups.*.attrs.redundancy)",
+    "power-ac-redundancy": "psu-redundancy (from groups.*.attrs.redundancy)",
+    "fan-redundancy": "fan-redundancy (from groups.*.attrs.redundancy)",
+    "fans": "fan-redundancy (from groups.*.attrs.redundancy)",
+    "fan-options": "fan-redundancy (from groups.*.attrs.redundancy)",
+    "fan-controller-redundancy": "fan-redundancy (from groups.*.attrs.redundancy)",
+    "redundancy": "psu-redundancy and fan-redundancy, stated per group",
+}
 
 # Facts that resolve from somewhere other than attrs, so "no sources" is
 # correct rather than an omission.
@@ -292,6 +361,14 @@ def resolve(doc):
             entry = {"unit": f.unit, "section": f.section, "readings": readings}
             if f.note:
                 entry["note"] = f.note
+            # the first scope key present wins: a per-figure scope is more
+            # specific than the chassis-wide envelope and is listed first
+            for key in f.scopes:
+                if key in flat and str(flat[key][1]).strip():
+                    section, raw = flat[key]
+                    entry["scope"] = {"value": str(raw),
+                                      "from": f"{section}/{key}" if section else key}
+                    break
             facts[name] = entry
 
     # the chassis block is structural and needs no spelling rules
@@ -332,5 +409,16 @@ def resolve(doc):
 
 def unclaimed(doc):
     """attrs spellings no fact claims, for the harvest rule. Not a complaint -
-    a census, so the tail cannot go quiet."""
-    return sorted(k for k in _flat(doc) if k not in CLAIMED)
+    a census, so the tail cannot go quiet.
+
+    Superseded keys are excluded: they are claimed, by a fact that reads them
+    from somewhere better."""
+    return sorted(k for k in _flat(doc) if k not in CLAIMED and k not in SUPERSEDED)
+
+
+def superseded(doc):
+    """Prose this device still carries for a fact now read off its groups. Kept
+    visible - it is not wrong to have the sentence, only wrong to compare on
+    it - and worth watching in case the prose and the structured form ever
+    disagree."""
+    return sorted(k for k in _flat(doc) if k in SUPERSEDED)
