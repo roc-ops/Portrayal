@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: rj45-hd
-version: 1.5.0
+version: 1.6.0
 class: port
 profile: networking
 description: High-density ganged RJ45 port with a jack-outline bezel - silver plate
@@ -47,7 +47,7 @@ elements:
     states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#f59e0b'},
              {name: poe, color: '#f5c542'}]
 parts:
-  - {ref: std/rj45-ganged@1, id: jack, at: [0.65, 0.5]}
+  - {ref: std/rj45-ganged@1, id: jack, at: [0.65, 0.5], behind: true}
 relief:
   features:
     - node: bezel
