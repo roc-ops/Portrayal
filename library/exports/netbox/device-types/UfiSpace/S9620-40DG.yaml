@@ -58,22 +58,22 @@ comments: "UfiSpace S9620-40DG - 2RU 40-port open aggregation router on Broadcom
   \ ZR4/ER4/SR4/LR4\n- features.segment-routing: full Segment Routing over IPv6 (SRv6)\n- features.timing:\
   \ Stratum 3E OCXO; ITU-T Synchronous Ethernet (SyncE); IEEE 1588v2 (Default Profile, G.8265.1, G.8275.1,\
   \ G.8275.2); T-TC, T-BC/OC, T-GM; Class C timing accuracy; internal GNSS receiver for master clock\n\
-  - features.transceivers-sfp56: 50GE SFP56 SR/LR/ER; 25GE SFP28 SR/LR/ER; 10GE SFP+ SR/LR/ER; 1GE SFP\
-  \ SX/LX (datasheet Compatible Transceivers Types). Filed under this key rather than the house `optics-sfp56`\
-  \ because `sfp56` is not one of the pluggable-cage media tokens L40 harvests, so an `optics-` key here\
-  \ would join to nothing. THAT WORKAROUND IS NOT MINE - it was worked out on library/devices/ufispace/s9620-54dc,\
-  \ whose own attrs carry the same key and the same explanation, and is followed here so the two sibling\
-  \ platforms file the same fact the same way\n- features.tsn: Time Sensitive Networking for low packet\
-  \ loss and low delay variation\n- lifecycle.eol: none-announced\n- management.console: 1x RJ45 serial\
-  \ console port\n- management.oob: 1x 100/1000M RJ-45 OOB management port\n- management.timing-cables:\
-  \ 50 ohm SMA coaxial with 1/4-36UNS-2B for GNSS; 50 ohm SMB coaxial with 10-32UNF-2A for 1PPS and 10MHz;\
-  \ shielded RJ45 for ToD; shielded RJ48 for BITS\n- management.timing-inputs: 1x GNSS input SMA, 1x 10MHz\
-  \ input/output SMB, 1x 1PPS input/output SMB, 1x ToD input/output RJ45, 1x BITS input RJ48\n- management.usb:\
-  \ 1x USB 3.0 Type-A port\n- performance.packet-buffer: 16 GB external deep buffer\n- performance.switching-capacity:\
-  \ 2.4 Tb/s\n- platform.asic: Broadcom Qumran3a BCM88490\n- platform.bmc: Aspeed AST2620\n- platform.cpu:\
-  \ Intel Xeon D 8 cores @ 1.9GHz\n- platform.memory: 2x16GB DDR4 SO-DIMM with ECC (Standard); 2x32GB\
-  \ DDR4 SO-DIMM with ECC (Premium)\n- platform.storage: 160G SSD\n- power.input: AC 100 to 240V, 12A;\
-  \ DC -40 to -72V, 30A\n- power.power-envelope: bare\n- power.power-typical-w: 268\n\nDrawing version\
-  \ 0.2.2. A major bump means a slot moved or an id was renamed, so anything cached from an earlier export\
-  \ may no longer line up.\nModel maturity: modelled. Every dimension in the source records where it came\
-  \ from."
+  - features.timing-cables: 50 ohm SMA coaxial with 1/4-36UNS-2B for GNSS; 50 ohm SMB coaxial with 10-32UNF-2A\
+  \ for 1PPS and 10MHz; shielded RJ45 for ToD; shielded RJ48 for BITS\n- features.transceivers-sfp56:\
+  \ 50GE SFP56 SR/LR/ER; 25GE SFP28 SR/LR/ER; 10GE SFP+ SR/LR/ER; 1GE SFP SX/LX (datasheet Compatible\
+  \ Transceivers Types). Filed under this key rather than the house `optics-sfp56` because `sfp56` is\
+  \ not one of the pluggable-cage media tokens L40 harvests, so an `optics-` key here would join to nothing.\
+  \ THAT WORKAROUND IS NOT MINE - it was worked out on library/devices/ufispace/s9620-54dc, whose own\
+  \ attrs carry the same key and the same explanation, and is followed here so the two sibling platforms\
+  \ file the same fact the same way\n- features.tsn: Time Sensitive Networking for low packet loss and\
+  \ low delay variation\n- lifecycle.eol: none-announced\n- management.console: 1x RJ45 serial console\
+  \ port\n- management.oob: 1x 100/1000M RJ-45 OOB management port\n- management.timing-inputs: 1x GNSS\
+  \ input SMA, 1x 10MHz input/output SMB, 1x 1PPS input/output SMB, 1x ToD input/output RJ45, 1x BITS\
+  \ input RJ48\n- management.usb: 1x USB 3.0 Type-A port\n- performance.packet-buffer: 16 GB external\
+  \ deep buffer\n- performance.switching-capacity: 2.4 Tb/s\n- platform.asic: Broadcom Qumran3a BCM88490\n\
+  - platform.bmc: Aspeed AST2620\n- platform.cpu: Intel Xeon D 8 cores @ 1.9GHz\n- platform.memory: 2x16GB\
+  \ DDR4 SO-DIMM with ECC (Standard); 2x32GB DDR4 SO-DIMM with ECC (Premium)\n- platform.storage: 160G\
+  \ SSD\n- power.input: AC 100 to 240V, 12A; DC -40 to -72V, 30A\n- power.power-envelope: bare\n- power.power-typical-w:\
+  \ 268\n\nDrawing version 0.2.3. A major bump means a slot moved or an id was renamed, so anything cached\
+  \ from an earlier export may no longer line up.\nModel maturity: modelled. Every dimension in the source\
+  \ records where it came from."

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9502-12sm
-version: 1.1.1
+version: 1.1.2
 maturity: modelled
 manufacturer: UfiSpace
 model: S9502-12SM
@@ -199,6 +199,10 @@ attrs:
     power-max-dc-w: '45'
     power-envelope: unstated
     input: AC 100 to 240V, 2A max x2; DC -36 to -75V, 4.5A max x2
+  thermal:
+    cooling: fanless; the rack must supply at least 1 m/s of airflow in any direction
+      without recirculation (HIG Cooling), and 43.5 mm of clear space is required above
+      and below the unit when the ambient is between 45 and 65 C
   environmental:
     operating-temp: -40 to 65 C
     operating-humidity: 5% to 85% RH non-condensing
@@ -217,9 +221,6 @@ attrs:
     timing: Stratum 3E OCXO; SyncE; IEEE 1588v2 (default, G.8265.1, G.8275.1, G.8275.2,
       SMPTE ST 2059-2, T-BC/OC, T-TC) - NOS integration required to activate, and
       SMPTE ST 2059-2 needs an additional licence (the vendor's own footnotes)
-    cooling: fanless; the rack must supply at least 1 m/s of airflow in any direction
-      without recirculation (HIG Cooling), and 43.5 mm of clear space is required above
-      and below the unit when the ambient is between 45 and 65 C
   management:
     console: RJ45 RS-232 serial, 115200 8N1 (port labelled IOIO)
     oob: 1x 100M/1G RJ45 OOB management port

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9720-56ed
-version: 0.2.3
+version: 0.2.4
 maturity: modelled
 manufacturer: UfiSpace
 model: S9720-56ED
@@ -312,9 +312,6 @@ provenance:
     lists the platform as current on both its Telecom Core/Edge and its AI Networking
     800G DDC product pages. none-announced is a checked state, not an absence.
 attrs:
-  physical:
-    redundancy: 1+1 hot-swappable active-active PSUs and 3+1 hot-swappable fan modules
-      (datasheet Redundancy row and HIG Installation Environment Requirements)
   performance:
     switching-capacity: 14.4 Tbps
     packet-buffer: 16 GB deep buffer
@@ -363,6 +360,8 @@ attrs:
     forwarding: full Segment Routing over IPv6 (SRv6), flexibly configured fabric pipes
       for upstream connectivity, automatic fault detection and recovery, nonstop routing
       for control and data plane (datasheet KEY BENEFITS and KEY FEATURES)
+    redundancy: 1+1 hot-swappable active-active PSUs and 3+1 hot-swappable fan modules
+      (datasheet Redundancy row and HIG Installation Environment Requirements)
   management:
     console: 1x RJ45 RS-232 and 1x micro-USB, both labelled IOIOI; 115200 8N1, no flow
       control. The micro-USB path needs a Silicon Labs CP210x driver

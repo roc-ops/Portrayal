@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9725-64e
-version: 0.2.3
+version: 0.2.4
 maturity: modelled
 manufacturer: UfiSpace
 model: S9725-64E
@@ -366,10 +366,6 @@ attrs:
     memory: 32 GB DDR4 (2x 16 GB DDR4 R-DIMM with ECC)
     storage: 2x 256 GB M.2 SSD
     bmc: ASPEED AST2620
-    deployment: DDC fabric element - a backplane switch fabric for UfiSpace S9700-series
-      disaggregated open core/edge routers, not a customer-facing router. Keyed
-      `deployment` rather than `role`, which is reserved for the structural role each
-      GROUP carries
     oem-alias: DriveNets NCF-64E (Network Cloud Fabric, 64x800G)
   features:
     optics-qsfp-dd: 800GE QSFP-DD SR8/LR8/DR4/FR4 and 400GE QSFP-DD SR8; 800GE and 400GE
@@ -384,6 +380,10 @@ attrs:
     cell-switching: cell-based rather than Ethernet switching, which removes the Ethernet
       overhead and load-balances every fabric link; three flexibly configured fabric
       pipes manage upstream connectivity
+    deployment: DDC fabric element - a backplane switch fabric for UfiSpace S9700-series
+      disaggregated open core/edge routers, not a customer-facing router. Keyed
+      `deployment` rather than `role`, which is reserved for the structural role each
+      GROUP carries
   management:
     console: RJ45 RS-232 and micro-USB, both labelled IOIOI
     oob: 1x 100M/1G RJ45 OOB management port

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcs510
-version: 0.2.1
+version: 0.2.2
 maturity: modelled
 manufacturer: Edgecore
 model: DCS510
@@ -197,8 +197,6 @@ attrs:
     vlan-ids: 4 K (NOS-dependent)
     l3-host-table: IPv4 UC 16 K / IPv4 MC 8 K / IPv6 UC 8 K / IPv6 MC 4 K (NOS-dependent)
     port-modes-qsfpdd: 1x 400G, 1x 100G, or breakout 4x 100G / 4x 25G
-    optics-qsfp-dd: >-
-      400GBASE-SR8/DR4/FR4, 400G-DAC/AOC, 100GBASE-SR4/CWDM4/LR4, 100G-DAC/AOC, 40GBASE-SR4/LR4, 40G-DAC
   power: {power-max-w: 1300, power-envelope: unstated, power-input-ac: '100-240 VAC, 50-60 Hz', power-input-ac-current: 12
       A max at 100-120 VAC; 7.5 A max at 200-240 VAC, power-input-dc: '190-310 VDC, 8-5 A'}
   thermal:
@@ -208,7 +206,10 @@ attrs:
   platform: {asic: Broadcom BCM56980 Tomahawk 3, cpu: 'Intel Xeon D-1518, 4-core', memory: 16 GB DDR4
       (2x 8 GB SO-DIMM), boot-flash: 2x 16 MB SPI, storage: 50 GB M.2 SSD (MLC), software: 'ONIE installer,
       open-source and commercial NOS options'}
-  features: {vendor-alias: AS9716-32D}
+  features:
+    vendor-alias: AS9716-32D
+    optics-qsfp-dd: >-
+      400GBASE-SR8/DR4/FR4, 400G-DAC/AOC, 100GBASE-SR4/CWDM4/LR4, 100G-DAC/AOC, 40GBASE-SR4/LR4, 40G-DAC
   management:
     mgmt-ports: >-
       1x RJ-45 console, 1x RJ-45 1000BASE-T, 2x SFP+ 10G, 1x USB-A storage, 10 MHz / 1PPS / ToD timing
