@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx10003
-version: 0.2.2
+version: 0.2.3
 maturity: modelled
 manufacturer: Juniper
 model: MX10003
@@ -71,6 +71,9 @@ groups:
     role: service
     index-origin: 0
     description: six power supply modules in two three-high rear stacks
+    attrs:
+      redundancy: 'n+n'
+      redundancy-note: 'n+n - six supply bays. Minimum for NON-redundant operation is 2 for AC high line, 3 for DC and 4 for AC low line; with additional supplies the system provides N+1 and N+N, and n+n is the fully redundant mode where one supply carries the router indefinitely'
   cooling:
     term: Tray
     role: service

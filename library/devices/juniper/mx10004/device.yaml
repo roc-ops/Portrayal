@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx10004
-version: 1.0.1
+version: 1.0.2
 maturity: modelled
 manufacturer: Juniper
 model: MX10004
@@ -68,6 +68,9 @@ groups:
     role: service
     index-origin: 0
     description: power supply slots PSU 0-2, top-down at the rear left
+    attrs:
+      redundancy: 'n+1'
+      redundancy-note: 'n+1 - maintain n+1 power supplies in the router at all times'
   cooling:
     term: Tray
     role: service

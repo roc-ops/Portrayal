@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: cor580
-version: 0.2.0
+version: 0.2.1
 maturity: modelled
 manufacturer: Edgecore
 model: COR580
@@ -318,7 +318,13 @@ groups:
       we.
   leds: {term: LED, role: indicator, index-origin: 1}
   displays: {term: Display, role: indicator, index-origin: 1}
-  psus: {term: PSU, role: service, index-origin: 1}
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 redundant, load-sharing, hot-swappable'
   fans: {term: Fan, role: service, index-origin: 1}
   grounding: {term: Point, role: furniture, index-origin: 1}
   furniture:

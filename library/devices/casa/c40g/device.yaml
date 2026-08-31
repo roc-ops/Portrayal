@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: c40g
-version: 0.5.0
+version: 0.5.1
 maturity: modelled
 manufacturer: Casa Systems
 model: C40G
@@ -350,6 +350,9 @@ groups:
     term: PEM
     role: service
     index-origin: 1
+    attrs:
+      redundancy: 'n+1'
+      redundancy-note: 'n+1. The C40G ships as two power variants and this group holds the bays for both: the AC chassis carries four front PSUs at n+1, the DC chassis two rear PEMs at 1+1 (HIG: wire the second PEM to a secondary supply for redundant power applications). Which bays are populated is a property of the configuration, not of the group'
   furniture:
     term: Item
     role: furniture
