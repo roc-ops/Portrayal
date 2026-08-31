@@ -485,17 +485,16 @@ views:
         # paint are the same colour and a first reading took the connector's
         # insert for paint rising to wrap the standoffs. Masked, the figure is
         # plain - no paint above y 76.75 outside the connectors, and above
-        # y 80.50 only BETWEEN the two ports. So: a flat band with one hump.
-        # Ends at x 52.50 and 109.25, about 1 mm INSIDE the outer standoff
-        # centres - the paint stops just short of the standoffs it appears to
-        # wrap. The lobes are each shell's own D outline dropped 1.00, which is
-        # why the paint below a connector follows its contour rather than
-        # cutting straight across.
+        # y 80.50 only BETWEEN the two ports.
+        # ONLY THE BAND IS KEPT. A hump between the ports and a D-shaped lobe
+        # under each shell were modelled from that measurement and both were
+        # chasing an outline this figure cannot resolve - the paint and the
+        # connectors are the same colour at 2.6 px/mm. The band is the part
+        # that reads correctly and the part that carries the meaning; the
+        # legends printed on it do the rest. Ends at x 52.50 and 109.25, about
+        # 1 mm INSIDE the outer standoff centres.
         - {id: paint-serial, at: [52.50, 80.5], size: [28.20, 3.175], rx: 0, fill: '#0f6a76', kind: port-paint}
         - {id: paint-vga, at: [80.70, 80.5], size: [28.55, 3.175], rx: 0, fill: '#145d8f', kind: port-paint}
-        - {id: paint-bridge, at: [78.00, 76.75], size: [6.00, 3.75], rx: 1.8, fill: '#1c6b81', kind: port-paint}
-        - {id: paint-serial-lobe, at: [53.63, 70.10], size: [20.47, 11.40], shape: d-sub, fill: '#0f6a76', kind: port-paint}
-        - {id: paint-vga-lobe, at: [87.3, 70.10], size: [20.47, 11.40], shape: d-sub, fill: '#145d8f', kind: port-paint}
       cutouts:
         - {id: idrac9, at: [28.60, 66.50], size: [16.0, 14.0], shape: rect}
         - {id: serial, at: [53.63, 69.10], size: [20.47, 11.4], shape: d-sub}
@@ -503,6 +502,28 @@ views:
         - {id: usb-1, at: [120.20, 71.47], size: [12.0, 4.5], shape: rect}
         - {id: usb-2, at: [120.20, 79.59], size: [12.0, 4.5], shape: rect}
         - {id: sys-id, at: [8.36, 72.04], size: [7.0, 7.0], shape: circle}
+    silkscreen:
+      # WHAT THE PAINT IS FOR. The band tells a person at arm's length which
+      # of three similar-looking sockets is which, and the legends are how it
+      # does that - so they matter more than the patch outline, which is what
+      # the previous two rounds were chasing.
+      # THE GLYPHS ARE NOT TRANSCRIBED. ISM figure 8 is 2.6 px/mm and its
+      # lettering does not survive; what is legible is that each section
+      # carries a mark and roughly where. These are the standard marks for
+      # what each port IS, set under the port they name. Re-read them off a
+      # legible photograph if one turns up - and do not measure them off this
+      # file in the meantime.
+      - {id: silk-idrac, at: [36.60, 82.88], text: iDRAC, for: idrac9,
+         font-size: 2.3, anchor: middle, fill: '#d7dde3'}
+      - {id: silk-serial, at: [63.87, 82.88], text: IOIOI, for: serial,
+         font-size: 2.3, anchor: middle, fill: '#d7dde3'}
+      # the monitor: screen, neck, foot. `filled` with an evenodd hole rather
+      # than a stroked outline, because at this size a stroked box closes on
+      # itself and leaves a pinhole.
+      - {id: silk-vga, at: [97.53, 80.72], for: vga,
+         filled: true, fill-rule: evenodd,
+         fill: '#d7dde3', path: 'M-1.80 0.00 H1.80 V1.80 H-1.80 Z M-1.38 0.42 H1.38 V1.38 H-1.38 Z M-0.35 1.80 H0.35 V2.35 H-0.35 Z M-1.10 2.35 H1.10 V2.75 H-1.10 Z'}
+
     components:
       bays:
         # THE BAY IS THE PLATE, NOT THE BRACKET ENVELOPE. Each riser now holds
