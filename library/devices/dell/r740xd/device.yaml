@@ -487,7 +487,10 @@ views:
         # down over the iDRAC port. None are collisions between PARTS - they are
         # boxes of things that sit at different heights, and the fix is to say
         # which number is which rather than to move anything.
-        - {id: riser-1, at: [17.0, 4.0], size: {w: 95.0, h: 62.0},
+        # 61.5, NOT 62: the iDRAC's bezel plate reaches 0.5 above its aperture
+        # and the riser opening cannot extend into the I/O row beneath it.
+        # The riser's own slots end at local 43.73, so nothing is lost.
+        - {id: riser-1, at: [17.0, 4.0], size: {w: 95.0, h: 61.5},
            accepts: [dell/riser-1-3fh-14g@1, dell/riser-1-2fh-14g@1],
            default: dell/riser-1-3fh-14g@1,
            group: risers, rel-pos: 1}
@@ -546,7 +549,7 @@ views:
         # not its corner: the iDRAC, serial and VGA share a baseline at y 80
         # (fact sheet B.3) and that is the fact worth preserving, so y moves
         # from 66.80 to 66.00 to keep the taller part sitting on the same line.
-        - {ref: std/rj45@1, id: idrac9, at: [28.60, 66.00], rotate: 180,
+        - {ref: common/rj45-port@4, id: idrac9, at: [28.10, 65.50],
            attrs: {role: management}, group: mgmt-ports, rel-pos: 1}
         - {ref: common/db9-receptacle@1, id: serial, at: [48.47, 68.05],
            group: mgmt-ports, rel-pos: 2}

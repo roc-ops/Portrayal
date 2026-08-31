@@ -487,6 +487,14 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                     node.set("data-z-thread", str(feat["thread"]))
                 break
     part_groups = []
+    # WHERE A COMPOSED PART SITS IN THE STACK IS A PROPERTY OF WHAT IT IS.
+    # A bezel frames an aperture, so the aperture belongs ON TOP of the plate
+    # and the default - skin first, parts after - is right for it. A BLANKING
+    # PLATE IS THE OTHER WAY ROUND: it composes the bracket for its outline and
+    # then covers the connector opening with vented metal, and drawn in the
+    # default order the bracket's own dark opening lands back over the vents and
+    # the plate renders as an empty slot. `behind: true` says which.
+    behind_at = 1                       # after the <title>, before the skin
     for part in contract.get("parts") or []:
         pg, _ = instance_group(lib, part["ref"], f"{inst_id}--{part['id']}",
                                part["at"], None, part.get("attrs"), None, None,
@@ -497,8 +505,19 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         # a part on a protruding parent recesses from THAT surface, not the panel
         if part.get("lift"):
             pg.set("data-z-lift", str(part["lift"]))
-        g.append(pg)
-        part_groups.append(pg)
+        if part.get("behind"):
+            g.insert(behind_at, pg)
+            behind_at += 1
+        else:
+            g.append(pg)
+        # A `behind` PART MUST NOT JOIN part_groups. That list exists so the
+        # re-raise below can put composed parts back on top of a raised bezel,
+        # and a part that asked to sit UNDER this component's art would be
+        # dragged to the front by it - which is exactly what happened: the
+        # blanking plates' vents were drawn, and then the bracket they compose
+        # was raised over them again and the slot rendered empty.
+        if not part.get("behind"):
+            part_groups.append(pg)
     for feat in (contract.get("relief") or {}).get("features") or []:
         want = f"{inst_id}--{feat['node']}"
         for node in g.iter():
