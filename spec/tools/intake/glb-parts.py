@@ -174,7 +174,15 @@ def main():
                                    'drop straight into a device.yaml')
     ap.add_argument('--names', action='store_true',
                     help='just list what is named, with instance counts')
-    ap.add_argument('--sort', default='name', choices=('name', 'size', 'depth'))
+    ap.add_argument('--sort', default='name', choices=('name', 'size', 'depth', 'z'))
+    ap.add_argument('--zone', choices=('front', 'rear'),
+                    help='only parts REACHING that face of the chassis. Which '
+                         'face a part is on is the question a bounding box '
+                         'answers worst and a name answers not at all, so it is '
+                         'answered here by where the part ENDS along z')
+    ap.add_argument('--tol', type=float, default=25.0,
+                    help='mm from the face a part may stop and still count as '
+                         'reaching it (default 25)')
     a = ap.parse_args()
 
     sc = Scene(a.file)
@@ -212,23 +220,38 @@ def main():
         if key in seen:
             continue
         seen.add(key)
-        rows.append((name, size, lo, i in nested))
+        rows.append((name, size, lo, i in nested, lo[2] + size[2]))
 
     if not rows:
         print('nothing named matches')
         return
 
+    # WHICH FACE A PART IS ON is the question the model most needs and the one
+    # a name answers worst - `DELL_R740XD_ Rear Handle` says it, `Body_4_4.004`
+    # does not. It is answered by geometry: the scene's z extent gives the two
+    # faces, and a part reaching within `--tol` of one is on it.
+    zmin = min(r[2][2] for r in rows)
+    zmax = max(r[4] for r in rows)
+    if a.zone:
+        plane, pick = (zmin, lambda r: r[2][2]) if a.zone == 'front' else \
+                      (zmax, lambda r: r[4])
+        rows = [r for r in rows if abs(pick(r) - plane) <= a.tol]
+        print(f'# parts reaching the {a.zone} face: z within {a.tol} of '
+              f'{plane:.1f} (scene z {zmin:.1f}..{zmax:.1f})\n')
+
     keyf = {'name': lambda r: r[0].lower(),
             'size': lambda r: -max(r[1]),
-            'depth': lambda r: -r[1][2]}[a.sort]
+            'depth': lambda r: -r[1][2],
+            'z': lambda r: r[2][2]}[a.sort]
     rows.sort(key=keyf)
 
     dup = Counter(r[0] for r in rows)
     hdr = f'{"part":<46} {"w":>8} {"h":>7} {"depth":>7}'
     hdr += f'   {"face x":>8} {"face y":>7}' if fw else f'   {"cad x":>8} {"cad y":>7}'
+    hdr += f'   {"z0":>7} {"z1":>7}'
     print(hdr)
     print('-' * len(hdr))
-    for name, size, lo, is_asm in rows:
+    for name, size, lo, is_asm, z1 in rows:
         if fw:
             # CAD is chassis-centred with y up; a face is left-origin with y down
             px, py = fw / 2 + lo[0], fh - (lo[1] + size[1])
@@ -237,7 +260,7 @@ def main():
         flag = ' assembly' if is_asm else ''
         flag += f'  x{dup[name]}' if dup[name] > 1 else ''
         print(f'{name[:46]:<46} {size[0]:8.1f} {size[1]:7.1f} {size[2]:7.1f}'
-              f'   {px:8.1f} {py:7.1f}{flag}')
+              f'   {px:8.1f} {py:7.1f}   {lo[2]:7.1f} {z1:7.1f}{flag}')
 
     n_asm = sum(1 for r in rows if r[3])
     print(f'\n{len(rows)} part(s); {n_asm} flagged `assembly` - a named node '
