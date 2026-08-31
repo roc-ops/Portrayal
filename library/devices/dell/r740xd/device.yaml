@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 0.12.1
+version: 0.12.2
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -845,6 +845,23 @@ views:
 # so yet. Recorded as a gap rather than left for the next person to rediscover
 # from a bay number that does not add up.
 gaps:
+  - what: mid-drive-tray
+    scope: [front, rear]
+    reason: needs-drawing
+    note: >-
+      ISM table 28 puts a MID DRIVE TRAY in three of its ten backplane rows -
+      2.5 inch x4 behind the 24-bay front, 3.5 inch x4 behind the 12-bay one.
+      This device models no mid bay at all, so a third of the orderable
+      combinations cannot be expressed and a whole drive location is absent.
+      IT IS NOT A FACE. The tray sits under the lid between the fans and the
+      backplane, so it belongs to a top view with the cover off, which this
+      device does not have either. Recorded here because a reader counting drive
+      bays against a spec sheet will find this device short and no view will
+      explain why.
+    wanted: >-
+      A top-with-cover-off view and a mid-tray bay group, or an explicit
+      statement that this library models only externally visible bays. Either
+      answers the question; leaving it unsaid does not.
   - what: front-panel-variants
     scope: [front, lff-12-rear-2, lff-12-rear-4]
     reason: needs-drawing
@@ -866,25 +883,42 @@ gaps:
     scope: [front, rear, rear-4-sff, rear-2-lff]
     reason: vendor-silent
     note: >-
-      ISM figure 19, the service information label, panel "Rear View
-      Configurations", draws four rears and numbers two of them 12,13/14,15 and
-      24,25/26,27. Figures 17 and 18 on the same label number the fronts: 24 x
-      2.5 inch is bays 0-23 and 12 x 3.5 inch is 0-11. So the rear numbering is
-      DECIDED BY THE FRONT - 24-27 behind a 24-bay front, 12-15 behind a
-      12-bay one - and this device carries a 24-bay front, which is why its rear
-      now reads 24-27.
-      WHAT NO SOURCE HERE STATES is the rule itself. Dell prints the two
-      pairings on a label and never writes down that they are pairings; it is
-      read off the arithmetic of the bay numbers. Nor does any document say
-      which front/rear combinations are orderable together.
+      DELL ENUMERATES THEM. ISM table 28, "Supported backplane options for
+      PowerEdge R740XD systems", lists front, mid and rear together - ten rows,
+      and the coupling falls straight out:
+        2.5in x24                                      no rear
+        2.5in x24  + 2.5in x4 mid  + 2.5in x4 rear
+        2.5in x24 (20 SAS/SATA + 4 NVMe)               no rear
+        3.5in x12                                      no rear
+        3.5in x12  + 3.5in x4 mid  + 3.5in x2 rear
+        3.5in x12  + 3.5in x4 mid  + 2.5in x4 rear
+        3.5in x12                  + 3.5in x2 rear
+        3.5in x12                  + 2.5in x4 rear
+        2.5in x24 NVMe                                 no rear
+        3.5in x12 Hybrid with NVMe U.2                 no rear
+      The 24-bay front takes ONE rear, the 4 x 2.5 inch, which figure 19 numbers
+      24-27. The 12-bay front takes either, and figure 19 numbers both from 12.
+      This device carries the 24-bay front, which is why its rear reads 24-27.
+      THE ARITHMETIC GOT THERE FIRST AND IS NOW REDUNDANT. Bays numbered 12-15
+      imply eleven bays this model does not have; that is how the error was
+      found. Table 28 is how it is now SOURCED, and a guess agreeing with a
+      document afterwards is worth more than either alone.
+      THE RISER SIDE IS TABLE 25, and its discriminator is riser 2 rather than
+      riser 3. Rear storage is offered in riser configurations 0, 1 and 2 and no
+      others: 1 and 2 fit a one-slot low-profile riser 2 (2B or 2C, slot 4
+      only), while configuration 3 fits a three-slot 2A (slots 4, 5, 6) and has
+      NO rear storage despite fitting no riser 3 at all. It is riser 2's
+      full-height section that occupies the bay the rear cage needs. This
+      device's `no-rear-storage` and `rear-4-sff` already encode exactly that.
+      TWO SOURCES DISAGREE AND ARE LEFT DISAGREEING. The system information
+      label draws FIVE fronts - 24, 16 and 8 x 2.5 inch, 12 and 8 x 3.5 inch -
+      where table 28 lists TWO front backplanes. Whether the 16- and 8-bay
+      fronts are different chassis or one backplane drawn part-populated,
+      nothing held here says.
+      AND TABLE 28 HAS A MID DRIVE TRAY in three of its ten rows. This device
+      models no mid bay at all, which is a whole third drive location missing
+      rather than a detail.
     wanted: >-
-      THE PAIRINGS THEMSELVES, from a source that states them. What is known is
-      read off the bay numbers and nothing more: a rear starting at 24 needs a
-      front ending at 23, and a rear starting at 12 needs one ending at 11, so
-      the 24 x 2.5 inch front goes with the 24-27 rear and the 12 x 3.5 inch
-      front with the 12-15 or the 12-13. The 16- and 8-bay fronts appear against
-      no numbered rear at all, which may mean they accept none or may mean Dell
-      did not draw them; nothing here can tell those apart.
       A way for a configuration to constrain more than one view at once. Today
       `only-in` scopes a bay to a configuration and every view chooses
       independently, so nothing stops a consumer selecting a 24-bay front and a
