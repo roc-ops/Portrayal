@@ -139,7 +139,8 @@ def buckets(doc):
     moving it, which is why DESIGN.md puts geometry and IDs in the same bucket.
 
     `surface` is everything a reader sees and no consumer computes with -
-    silkscreen text, decor, description, provenance, maturity, attrs. Patch.
+    silkscreen text, decor, description, provenance, maturity, attrs, portfolio.
+    Patch.
 
     `gaps` is hashed on its own because it is the one part of a device that
     makes a CLAIM ABOUT THE WORLD rather than about the drawing, so it needs to
@@ -161,6 +162,15 @@ def buckets(doc):
         }),
         "surface": _digest({
             "description": doc.get("description"),
+            # WHERE THE DEVICE SITS IN ITS VENDOR'S CATALOGUE. Unfingerprinted,
+            # `portfolio` could be rewritten - a family relabelled, a series
+            # corrected, a whole block deleted - and nothing would ask for a
+            # version. That is not hypothetical: 45 UfiSpace devices gained the
+            # block, two had wrong values corrected, and devicelock reported
+            # zero findings for the lot. It is `surface` and not `names`
+            # because it is catalogue metadata a reader sees rather than an
+            # identifier anything addresses by, so a patch is the right size.
+            "portfolio": doc.get("portfolio"),
             "maturity": doc.get("maturity"),
             "attrs": doc.get("attrs"),
             "provenance": doc.get("provenance"),
@@ -377,7 +387,7 @@ def check(library: pathlib.Path):
             if was.get("names") != now["names"]:
                 what.append("ids or groups")
             if was.get("surface") != now["surface"]:
-                what.append("surface (silkscreen, decor, provenance, attrs)")
+                what.append("surface (silkscreen, decor, provenance, attrs, portfolio)")
             if was.get("gaps") != now["gaps"]:
                 what.append("gaps")
             gone = sorted(set(was.get("ids") or []) - set(now["ids"]))

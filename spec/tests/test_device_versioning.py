@@ -13,7 +13,8 @@ import devicelock as dl  # noqa: E402
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 
 
-def dev(version="1.0.0", at=(0, 0), extra_bay=None, gaps=None, note="a"):
+def dev(version="1.0.0", at=(0, 0), extra_bay=None, gaps=None, note="a",
+        portfolio=None):
     bays = [{"id": "slot-0", "at": list(at), "size": {"w": 10, "h": 10},
              "group": "slots", "accepts": ["x/y@1"]}]
     if extra_bay:
@@ -21,6 +22,7 @@ def dev(version="1.0.0", at=(0, 0), extra_bay=None, gaps=None, note="a"):
                      "group": "slots", "accepts": ["x/y@1"]})
     return {
         "kind": "device", "name": "d", "version": version,
+        **({"portfolio": portfolio} if portfolio else {}),
         "chassis": {"width": 100, "height": 40, "depth": 30},
         "groups": {"slots": {"term": "Slot", "index-origin": 0}},
         "provenance": {"size": note},
@@ -395,3 +397,56 @@ def test_a_lock_predating_the_field_cannot_manufacture_a_major():
     a = dl.entry(_accepting("x/y@1", "x/z@1"))
     del a["bay-accepts"]
     assert dl.required_bump(a, dl.entry(_accepting("x/y@1"))) == "minor"
+
+
+# ---- portfolio is fingerprinted ---------------------------------------------
+#
+# It was not, and that is the whole reason these exist. 45 UfiSpace devices
+# gained a `portfolio` block, two of them had wrong values corrected, and
+# devicelock reported ZERO findings for the lot - catalogue metadata could be
+# rewritten, or deleted outright, and no version would be asked for. It sits in
+# `surface` rather than `names` because it is metadata a reader sees rather than
+# an identifier anything addresses by, so a patch is the right size.
+
+def test_relabelling_a_family_is_a_patch():
+    """The case that went unnoticed: `series: S9620` corrected to `S9600
+    Series`, which is the difference between matching the vendor's site and
+    not."""
+    a = dl.entry(dev(portfolio={"line": "Telecoms", "family": "Open Aggregation Router",
+                                "series": "S9620"}))
+    b = dl.entry(dev(portfolio={"line": "Telecoms", "family": "Open Aggregation Router",
+                                "series": "S9600 Series"}))
+    assert dl.required_bump(a, b) == "patch"
+
+
+def test_gaining_a_portfolio_block_is_a_patch():
+    a = dl.entry(dev())
+    b = dl.entry(dev(portfolio={"line": "Telecoms", "family": "Open Aggregation Router"}))
+    assert dl.required_bump(a, b) == "patch"
+
+
+def test_DELETING_a_portfolio_block_is_also_asked_for():
+    """The direction that matters most. A field that only fires when it gains a
+    value can be emptied for free, and silence reads as 'no answer' rather than
+    'the answer was removed'."""
+    a = dl.entry(dev(portfolio={"line": "Telecoms", "family": "Open Aggregation Router"}))
+    assert dl.required_bump(a, dl.entry(dev())) == "patch"
+
+
+def test_adding_a_second_category_is_a_patch():
+    """`also-listed-in` decides whether a box appears in a second filtered list,
+    so editing it changes what a consumer sees."""
+    a = dl.entry(dev(portfolio={"line": "Telecoms", "family": "F"}))
+    b = dl.entry(dev(portfolio={"line": "Telecoms", "family": "F",
+                                "also-listed-in": ["AI Networking"]}))
+    assert dl.required_bump(a, b) == "patch"
+
+
+def test_portfolio_moves_surface_and_not_geometry_or_ids():
+    """Severity, not just detection. A relabelled family must never read as a
+    moved slot - that would call a metadata edit major and teach people to
+    ignore the tool."""
+    a = dl.entry(dev(portfolio={"line": "Telecoms", "family": "A"}))
+    b = dl.entry(dev(portfolio={"line": "Telecoms", "family": "B"}))
+    assert a["shape"] == b["shape"] and a["names"] == b["names"]
+    assert a["surface"] != b["surface"]
