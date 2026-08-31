@@ -739,6 +739,94 @@ views:
         - {ref: dell/drive-cage-rear-14g@1, id: drive-cage-rear,
            at: [144.26, 1.71], frames: [drive-r0, drive-r1, drive-r2, drive-r3],
            only-in: [rear-4-sff], group: furniture, rel-pos: 19}
+  # THE FOUR FACES THAT WERE MISSING. 83 of the library's 84 devices carry all
+  # six views and this one carried two, which is what stops it being opened in
+  # the 3D explorer at all.
+  # WHAT THE SERVICE MODEL CONFIRMED: `Dell_PowerEdge_740_Shell-1.001` runs
+  # x -216.9..217.1, which is 434.0 - the chassis width this entire device is
+  # laid out on, taken from the datasheet and never before checked against a
+  # second source. It now has one.
+  # WHAT IT COULD NOT GIVE: anything along the DEPTH. This GLB poses parts and
+  # it poses the ones that matter here - the system cover reads 444.0 wide
+  # against the shell's 434.0 and runs to z 732.3 where the rear panel plane is
+  # 713.5, so it is slid back. Every depth on these four faces is therefore
+  # estimated, and each band says so in its own source rather than inheriting a
+  # blanket disclaimer.
+  # THE EDGE BANDS ARE #1a1d21 AND WENT IN AT #25292e, which is 41 grey against
+  # this chassis's 52 - eleven levels, and invisible. Caught before anyone had
+  # to report it, because three separate features on this device have already
+  # been drawn in a tone that could not be seen against what they sit on.
+  top:
+    size: {w: 434.0, h: 737.5}
+    panel:
+      decor:
+        - {id: edge-left, at: [0.0, 0.0], size: [6.0, 737.5],
+           fill: '#1a1d21', confidence: estimated,
+           source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the 6.0 is not measured"}
+        - {id: edge-right, at: [428.0, 0.0], size: [6.0, 737.5],
+           fill: '#1a1d21', confidence: estimated,
+           source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the 6.0 is not measured"}
+        - {id: edge-front, at: [0.0, 0.0], size: [434.0, 6.0],
+           fill: '#1a1d21', confidence: estimated,
+           source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the 6.0 is not measured"}
+        - {id: edge-rear, at: [0.0, 731.5], size: [434.0, 6.0],
+           fill: '#1a1d21', confidence: estimated,
+           source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the 6.0 is not measured"}
+        # THE COVER LATCH. Its WIDTH is measured - Dell's service model,
+        # `DELL_R740XD_Systemcover_Latch-1.001`, x -12.4..12.6, which is 25.0
+        # and symmetric about the centreline to a tenth. Symmetry is what says
+        # that axis has not been posed.
+        # ITS DEPTH IS NOT. The same model slides the system cover back: 444.0
+        # wide against the shell's 434.0, running to z 732.3 where the rear
+        # panel plane is 713.5. A latch riding on a posed cover cannot say where
+        # along the depth it sits, so 150.0 is a placement and not a reading.
+        - {id: cover-latch, at: [204.5, 150.0], size: [25.0, 64.0],
+           rx: 2.0, fill: '#3a4045', confidence: estimated,
+           source: "width measured from Dell's service model; DEPTH POSITION
+             ESTIMATED because the cover carrying it is posed in that axis"}
+  bottom:
+    size: {w: 434.0, h: 737.5}
+    panel:
+      decor:
+        - {id: edge-left, at: [0.0, 0.0], size: [6.0, 737.5],
+           fill: '#1a1d21', confidence: estimated,
+           source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the 6.0 is not measured"}
+        - {id: edge-right, at: [428.0, 0.0], size: [6.0, 737.5],
+           fill: '#1a1d21', confidence: estimated,
+           source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the 6.0 is not measured"}
+        - {id: edge-front, at: [0.0, 0.0], size: [434.0, 6.0],
+           fill: '#1a1d21', confidence: estimated,
+           source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the 6.0 is not measured"}
+        - {id: edge-rear, at: [0.0, 731.5], size: [434.0, 6.0],
+           fill: '#1a1d21', confidence: estimated,
+           source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the 6.0 is not measured"}
+  left:
+    size: {w: 737.5, h: 86.8}
+    panel:
+      decor:
+        - {id: rail-land, at: [0.0, 33.4], size: [737.5, 20.0],
+           fill: '#3a4045', confidence: estimated,
+           source: "the sliding-rail land along this side. ESTIMATED: no figure in the intake shows this face and the service model's side geometry is behind the shell, so the band's width is a plausible rail land and not a reading"}
+        - {id: edge-top, at: [0.0, 0.0], size: [737.5, 4.0],
+           fill: '#1a1d21', confidence: estimated,
+           source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the 6.0 is not measured"}
+        - {id: edge-bottom, at: [0.0, 82.8], size: [737.5, 4.0],
+           fill: '#1a1d21', confidence: estimated,
+           source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the 6.0 is not measured"}
+  right:
+    size: {w: 737.5, h: 86.8}
+    panel:
+      decor:
+        - {id: rail-land, at: [0.0, 33.4], size: [737.5, 20.0],
+           fill: '#3a4045', confidence: estimated,
+           source: "the sliding-rail land along this side. ESTIMATED: no figure in the intake shows this face and the service model's side geometry is behind the shell, so the band's width is a plausible rail land and not a reading"}
+        - {id: edge-top, at: [0.0, 0.0], size: [737.5, 4.0],
+           fill: '#1a1d21', confidence: estimated,
+           source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the 6.0 is not measured"}
+        - {id: edge-bottom, at: [0.0, 82.8], size: [737.5, 4.0],
+           fill: '#1a1d21', confidence: estimated,
+           source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the 6.0 is not measured"}
+
 configurations:
   base:
     # the serial port's insulator is teal on this machine, not the
