@@ -77,7 +77,10 @@ def effective_size(name, view, chassis):
     s = (view or {}).get("size") or {}
     if s.get("w") and s.get("h"):
         return (float(s["w"]), float(s["h"]))
-    if name in ("front", "rear"):
+    # A VARIANT IS THE FACE IT DECLARES. `front-12-lff` is a front; sizing it
+    # by its name would fall through to "unsized" and cost a device a level for
+    # drawing more than it did before.
+    if ((view or {}).get("face") or name) in ("front", "rear"):
         w, h = (chassis or {}).get("width"), (chassis or {}).get("height")
         if w and h:
             return (float(w), float(h))

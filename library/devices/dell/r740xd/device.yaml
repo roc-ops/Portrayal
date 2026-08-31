@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 0.12.0
+version: 0.12.1
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -845,6 +845,23 @@ views:
 # so yet. Recorded as a gap rather than left for the next person to rediscover
 # from a bay number that does not add up.
 gaps:
+  - what: front-panel-variants
+    scope: [front, lff-12-rear-2, lff-12-rear-4]
+    reason: needs-drawing
+    note: >-
+      ISM figures 17 and 18 number five fronts - 24, 16 and 8 x 2.5 inch at bays
+      0-23, 0-15 and 0-7, and 12 and 8 x 3.5 inch at 0-11 and 0-7. This device
+      draws ONE of them, the 24 x 2.5 inch. The others are not modelled and the
+      12 x 3.5 inch is the one that matters, because it is the front the rears
+      numbered 12-15 and 12-13 belong to.
+      IT IS BLOCKED ON A CARRIER, not on the format: a 3.5 inch drive carrier
+      does not exist in this library, which is the same thing `rear-2-lff` has
+      been waiting on since it was named.
+    wanted: >-
+      common/drive-carrier-35 and a 12 x 3.5 inch front view declaring
+      `face: front`, after which `lff-12-rear-2` and `lff-12-rear-4` can bind it
+      and the two rear numberings stop being mutually exclusive readings of one
+      drawing.
   - what: front-rear-configuration-coupling
     scope: [front, rear, rear-4-sff, rear-2-lff]
     reason: vendor-silent
@@ -861,6 +878,13 @@ gaps:
       read off the arithmetic of the bay numbers. Nor does any document say
       which front/rear combinations are orderable together.
     wanted: >-
+      THE PAIRINGS THEMSELVES, from a source that states them. What is known is
+      read off the bay numbers and nothing more: a rear starting at 24 needs a
+      front ending at 23, and a rear starting at 12 needs one ending at 11, so
+      the 24 x 2.5 inch front goes with the 24-27 rear and the 12 x 3.5 inch
+      front with the 12-15 or the 12-13. The 16- and 8-bay fronts appear against
+      no numbered rear at all, which may mean they accept none or may mean Dell
+      did not draw them; nothing here can tell those apart.
       A way for a configuration to constrain more than one view at once. Today
       `only-in` scopes a bay to a configuration and every view chooses
       independently, so nothing stops a consumer selecting a 24-bay front and a

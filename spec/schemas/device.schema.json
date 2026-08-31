@@ -413,6 +413,23 @@
           "source": {
             "type": "string",
             "description": "where this configuration comes from. A `base` is either DERIVED - built from the group roles, populating everything `service` and `management` and blanking everything `traffic` - or SOURCED, when the vendor publishes the configuration as an orderable bundle and the library should follow it rather than invent one. Juniper publishes MX10016-BASE and MX10016-PREMIUM with their exact component counts; Cisco and Casa do not, for the chassis here. The two are not equally good and a consumer should be able to tell them apart, which is what this says."
+          },
+          "views": {
+            "type": "object",
+            "propertyNames": {
+              "enum": [
+                "front",
+                "rear",
+                "top",
+                "bottom",
+                "left",
+                "right"
+              ]
+            },
+            "additionalProperties": {
+              "$ref": "#/$defs/segment"
+            },
+            "description": "which panel each face wears in this configuration, as {face: view name}. Faces not named fall back to the view named after them, so a configuration that overrides only the front keeps the standard rear and sides. THIS IS WHAT COUPLES THE FACES: a front and a rear that do not go together on real hardware cannot both be named here, so the impossible machine has nowhere to live. Scoping a bay with `only-in` cannot do that - it varies occupants within one panel and says nothing about any other face."
           }
         }
       }
@@ -1076,6 +1093,17 @@
                 }
               }
             }
+          },
+          "face": {
+            "enum": [
+              "front",
+              "rear",
+              "top",
+              "bottom",
+              "left",
+              "right"
+            ],
+            "description": "which face this view draws, when the view is not NAMED after one. A view called `front` needs no `face`; a second front - a different panel for the same face, say a 12 x 3.5 inch front beside a 24 x 2.5 inch one - declares `face: front` and is a VARIANT. A variant draws only when a configuration binds it, and draws under the face's name, so a consumer still asks for `front` and gets whichever front that configuration wears."
           }
         }
       }

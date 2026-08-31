@@ -1518,6 +1518,28 @@ def is_stale(device, device_yaml, lib, configs, default_cfg, outdir):
     return newest_in >= oldest_out
 
 
+
+def resolve_views(device, cfg):
+    """{face: (view-name, view)} for one configuration.
+
+    A view carrying `face:` is a VARIANT and appears only when bound, because
+    rendering it unbound would emit `<device>.<config>.front-12-lff.svg` - a
+    file named after a panel rather than a face, which no consumer asks for.
+    Everything else keeps its own name, so a device with no bindings behaves
+    exactly as it did before this existed.
+    """
+    views = device.get("views") or {}
+    out = {}
+    for face, vname in ((cfg or {}).get("views") or {}).items():
+        if vname in views:
+            out[face] = (vname, views[vname] or {})
+    for vname, v in views.items():
+        if (v or {}).get("face"):
+            continue
+        out.setdefault(vname, (vname, v or {}))
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("device_yaml")
@@ -1550,7 +1572,9 @@ def main():
         return
 
     for cfg_name, cfg in configs.items():
-        for view_name, view in device["views"].items():
+        # THE FACE IS THE NAME, whichever panel this configuration binds to it.
+        # A consumer asks for `front` and gets this configuration's front.
+        for view_name, (_src, view) in resolve_views(device, cfg).items():
             svg = render_view(device, view_name, view or {}, lib, include=tuple(args.include),
                               silkscreen=("silkscreen" not in args.without),
                               config_name=cfg_name, config=cfg)

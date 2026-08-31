@@ -3663,6 +3663,41 @@ def _states_connector(ref, placement, lib_roots):
     return stated
 
 
+def lint_device_face_bindings(path, data, lib_roots):
+    """L63: a configuration binds each face to a view that draws that face.
+
+    The binding is what makes an impossible front/rear pairing unrepresentable -
+    a configuration names both faces at once, so a front and a rear that do not
+    go together on real hardware cannot both be listed. A binding that names
+    nothing is therefore worse than no binding: it reads as though the coupling
+    is declared, and the renderer quietly falls back to the view named after the
+    face.
+    """
+    views = data.get("views") or {}
+    for cname, cfg in (data.get("configurations") or {}).items():
+        for face, vname in ((cfg or {}).get("views") or {}).items():
+            if vname not in views:
+                err(path, "L63", f"configuration {cname} binds {face} to view "
+                                 f"{vname!r}, which does not exist")
+                continue
+            draws = (views[vname] or {}).get("face") or vname
+            if draws != face:
+                err(path, "L63", f"configuration {cname} binds {face} to view "
+                                 f"{vname!r}, which draws {draws}. A face can "
+                                 "wear several panels; it cannot wear another "
+                                 "face's")
+    # A VARIANT NOTHING BINDS NEVER DRAWS. A warning and not an error - it may
+    # be work in progress - but silence would leave a whole panel in the file
+    # unreachable, which is the failure this rule exists to make visible.
+    bound = {v for cfg in (data.get("configurations") or {}).values()
+             for v in ((cfg or {}).get("views") or {}).values()}
+    for vname, v in views.items():
+        if (v or {}).get("face") and vname not in bound:
+            warn(path, "L63", f"view {vname!r} declares face "
+                              f"{(v or {}).get('face')} and no configuration "
+                              "binds it, so it is never drawn")
+
+
 def lint_device_id_convention(path, data, lib_roots):
     """L62: an id that names its connector, and a port lamp spelled a fourth way.
 
@@ -4329,6 +4364,7 @@ def lint_device(path, validator, lib_roots):
     lint_device_cutout_derivation(path, data, lib_roots)
     lint_device_air_aperture(path, data, lib_roots)
     lint_device_id_convention(path, data, lib_roots)
+    lint_device_face_bindings(path, data, lib_roots)
     declared_groups = set((data.get("groups") or {}).keys())
     for gname, gdef in (data.get("groups") or {}).items():
         check_states(path, f"groups/{gname}", (gdef or {}).get("states"),
@@ -5050,6 +5086,7 @@ def lint_duplicate_keys(path):
             "declared is gone before any rule or schema sees this file. Give them "
             "distinct names, or merge them into one statement if they are two "
             "accounts of the same fact")
+
 
 
 def main():
