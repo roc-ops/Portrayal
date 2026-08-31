@@ -1,0 +1,38 @@
+format: 1
+kind: component
+name: pcie-retention-clip-14g
+version: 1.0.0
+class: latch
+# FASTENED TO THE OUTSIDE OF THE PANEL, over the bracket tab it holds down.
+# render.py draws placements first and bays second, so this must defer to the
+# second pass or it paints UNDER the card it retains - which is what happened
+# while it was chassis decor. Same key the rear handle and the thumbscrews use.
+behaviour: mounts
+profile: compute
+description: >-
+  The chassis-side retention clip for a PCIe card bracket on a 14G PowerEdge -
+  a pair of tabs the bracket's own tab passes between
+size: {w: 7.5, h: 16.5, d: 3.0}
+provenance:
+  size: >-
+    photo-measured - ISM figure 8 at 4 px/mm, by thresholding rather than by
+    reading a zoom. The blob scan returns each clip merged with the chassis's
+    left rail into one region per slot - face y 7.75..24.25, 27.75..44.25 and
+    47.75..64.50 on a 20.0 pitch - and the tabs are that region's top and
+    bottom 3.00, with the bracket passing through the gap between.
+  it-is-a-pair-and-not-a-block: >-
+    The gap is the point. A solid clip would cover the bracket tab it retains,
+    and on the hardware the two INTERLEAVE - the tab slides beneath the clip and
+    the clip is what a person sees. A flat drawing has to say which is on top,
+    which is what `behaviour: mounts` says here.
+  it-was-decor-and-should-not-have-been: >-
+    Drawn first as two chassis decor rects, which put it under the bracket for
+    the reason above. Panel decor is for what the metal IS; a clip is a piece of
+    hardware somebody could hold, so it is a part.
+  depth: >-
+    estimated - 3.0 is the tab thickness a clip of this size would have and is
+    not measured. Nothing held here dimensions how far it stands off the panel;
+    a straight-on figure cannot show it at all.
+elements:
+  tabs: {at: [0.0, 0.0], size: [7.5, 16.5], class: latch}
+skins: [default]

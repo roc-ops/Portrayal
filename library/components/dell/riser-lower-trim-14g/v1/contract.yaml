@@ -1,0 +1,56 @@
+format: 1
+kind: component
+name: riser-lower-trim-14g
+version: 1.0.0
+class: mechanical
+# IN FRONT OF THE CARD, so it must draw after the bays. A plain placement draws
+# before them and the bracket would cover this instead.
+behaviour: mounts
+profile: compute
+description: >-
+  The strip of chassis metal below riser 1 on a 14G PowerEdge, covering the
+  bottom card's keyed end
+size: {w: 112.2, h: 2.05, d: 2.0}
+provenance:
+  size: >-
+    derived - its height is exactly the overhang it has to cover, and that comes
+    from geometry rather than from a reading. A full-height PCIe bracket is
+    21.59 tall on a 20.32 pitch, so consecutive brackets overlap by the 1.27
+    key; the BOTTOM one has no neighbour below it and its key runs past the
+    riser plate's bottom edge. Riser 1's plate covers face y 4.00..66.00 and its
+    third bracket sits at 46.46..68.05, so 2.05 is exposed. Width spans the
+    bracket's own footprint, face -0.46..119.56, rounded out to -0.50..120.00.
+  it-is-broken-where-things-pass-through-it: >-
+    THE FOUR RIVETS OF THE y 68.85 ROW ARE PRESSED THROUGH THIS METAL and their
+    heads stand proud of it, at face 7.03, 50.72, 86.47 and 113.58. Drawn as one
+    continuous strip this part sliced the top off every one of them: the rivets
+    are chassis decor and paint before components, this draws after the bays, so
+    it won over all four. The strip is segments with a gap at each head.
+    That is the same ordering fact that has been the answer repeatedly on this
+    face - what a part is drawn AFTER decides what it can cover - showing up
+    once more as a part covering something it should be pierced by.
+    IT ALSO STOPS AT 111.70 rather than 120.50. dell/riser-1-shroud-14g@1 starts
+    there and stands 17.76 proud, covering the key from that point on, so the
+    two were overlapping for no reason and the rivet at 113.58 needs no gap.
+  the-gap-is-the-idrac: >-
+    The strip is one piece of metal with the iDRAC jack's aperture cut through
+    it, at face 28.60..44.60 - the same span the panel already declares as that
+    port's cutout. It is drawn as two rects because this part draws AFTER the
+    bays, so a continuous strip would paint over the jack it should be framing.
+  it-is-not-measured-and-says-so: >-
+    NO FIGURE SHOWS THIS EDGE. At face y 66..68 the riser's bottom, the chassis
+    band and the port row all meet within two millimetres, and ISM figure 8
+    resolves that at 2.6 px/mm. What is known is that the bottom card's key must
+    be covered - it is behind metal on the hardware and was showing here - and
+    this is the smallest piece that does it. If a legible photograph turns up,
+    the whole band between the riser and the ports should be read properly and
+    this part replaced by it.
+  depth: >-
+    estimated - 2.0 is a sheet-metal thickness, not a measurement.
+elements:
+  trim-1: {at: [0.00, 0.0], size: [4.93, 2.05], class: bezel}
+  trim-2: {at: [10.13, 0.0], size: [18.97, 2.05], class: bezel}
+  trim-3: {at: [45.10, 0.0], size: [3.52, 2.05], class: bezel}
+  trim-4: {at: [53.82, 0.0], size: [30.55, 2.05], class: bezel}
+  trim-5: {at: [89.57, 0.0], size: [22.63, 2.05], class: bezel}
+skins: [default]

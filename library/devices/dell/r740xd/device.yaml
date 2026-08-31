@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 0.6.0
+version: 0.11.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -147,6 +147,19 @@ provenance:
     above and below, which is the operator's description of where it sits and is
     what fixed its size - see dell/bezel-2u-14g, whose master aspect fails Gate 1
     against a rack face precisely because a rack face is not what it covers.
+  riser-configurations: >-
+    THREE REARS ARE DRAWN AND THE MACHINE HAS FAR MORE THAN THREE. The
+    Information Update tech sheet's table 3 enumerates TWELVE riser
+    configurations - 0, 1, 2, 3, 4, 5, 6, 9, 15, 16 and 17 - each naming which
+    slots exist on risers 1, 2 and 3 and at what height and length: riser
+    configuration 0 has no PCIe slots at all and only rear storage, 1 and 2 give
+    four slots with or without it, 4 and 5 and 15 give eight.
+    WHAT IS DRAWN HERE IS THE SHAPE OF THE ANSWER, not the whole of it. The three
+    configurations modelled - no rear storage, four 2.5 inch rear, two 3.5 inch
+    rear - establish that competing slot sets and drive bays are METAL scoped by
+    `only-in` rather than different occupants of one hole. Extending that to
+    twelve is transcription against table 3 and not a new mechanism; every slot
+    already carries an id a configuration can name.
   not-yet-modelled: >-
     THIS IS A FRONT-FACE DRAFT AND SAYS SO. No rear view, no top view with the
     lid off, no riser configurations - the tech sheet documents twelve of those
@@ -211,6 +224,65 @@ groups:
       chassis from the rail so it can be drawn out - so they are pressed, but
       they release the BOX rather than operating anything in it, which is why
       they are furniture and not `mgmt`.
+  risers:
+    term: Riser
+    role: service
+    index-origin: 1
+    description: >-
+      the three expansion card riser positions. `service` AND NOT `traffic`,
+      which is the same distinction the NDC group makes: the group holds the
+      RISER, and a riser is infrastructure that ships fitted. The traffic choice
+      is the CARD, and cards live in the riser's own nested bays - so a base
+      configuration seats risers without deciding anything about expansion,
+      exactly as it should.
+      THE SLOTS ARE NOT IN THIS GROUP because they are not on the chassis: each
+      riser carries its own bays, so a slot is numbered within its riser and the
+      riser is numbered within the chassis. That nesting is what lets the same
+      low-profile opening be slot 4 under one riser and slot 6 under another.
+  drives-rear:
+    term: Drive
+    role: service
+    index-origin: 0
+    description: >-
+      the rear drive bays, which exist only on a rear-storage chassis. DELL
+      NUMBERS THEM 12 TO 15, continuing the front row rather than starting again,
+      and that numbering is carried in each bay's `rel-pos`; `index-origin` takes
+      only 0 or 1 so it cannot express a run beginning at 12, and it is left at 0
+      rather than made to lie.
+    attrs: {media: sff-2.5}
+  ndc:
+    term: Card
+    role: service
+    index-origin: 1
+    description: >-
+      the network daughter card slot, and the only fixed NIC this chassis has.
+      THE GROUP HOLDS THE CARD, NOT ITS PORTS, and that is why it is `service`
+      rather than `traffic`. The four RJ45s are elements of the part and they do
+      carry traffic; the SLOT is standard equipment that ships filled, in the way
+      a supervisory engine does, rather than an expansion choice a buyer makes.
+      A base configuration is a chassis you can log into with nothing decided
+      about expansion - and it cannot be logged into over a NIC that the base
+      left out.
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+  mgmt-rear:
+    term: Control
+    role: management
+    index-origin: 1
+    description: >-
+      the rear system identification button - what you press, not what you plug
+      into, which is why it is not in `mgmt-ports` with the sockets.
+  mgmt-ports:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: rear service access
+    description: >-
+      the rear I/O: iDRAC9 dedicated, serial, VGA and two USB 3.0. Four families
+      in one block deliberately, the same reason as the front - Dell's table
+      calls them one panel and they do one job.
   covers:
     term: Cover
     role: service
@@ -219,6 +291,15 @@ groups:
       removable covers over the face. The bezel is the only one, and it is drawn
       only when asked for: it hides the drives it protects, which is the whole
       point of it and exactly why the default drawing leaves it off.
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 1
+    description: >-
+      removable ironmongery that is neither a port nor a lamp. The rear handle is
+      the only one: the ISM says it comes off to let cables out of PCIe slot 6,
+      but gives it no removal procedure of its own, so it is documented as
+      removable without being a serviceable unit.
   marks:
     term: Mark
     role: furniture
@@ -259,76 +340,76 @@ views:
            accepts: [dell/control-panel-left-14g@1], default: dell/control-panel-left-14g@1,
            group: panels, rel-pos: 1}
         - {id: drive-0, at: [26.884, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
            group: drives, rel-pos: 0}
         - {id: drive-1, at: [44.752, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
            group: drives, rel-pos: 1}
         - {id: drive-2, at: [62.620, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
            group: drives, rel-pos: 2}
         - {id: drive-3, at: [80.488, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
            group: drives, rel-pos: 3}
         - {id: drive-4, at: [98.356, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
            group: drives, rel-pos: 4}
         - {id: drive-5, at: [116.224, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
            group: drives, rel-pos: 5}
         - {id: drive-6, at: [134.092, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
            group: drives, rel-pos: 6}
         - {id: drive-7, at: [151.960, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
            group: drives, rel-pos: 7}
         - {id: drive-8, at: [169.828, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
            group: drives, rel-pos: 8}
         - {id: drive-9, at: [187.696, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
            group: drives, rel-pos: 9}
         - {id: drive-10, at: [205.564, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
            group: drives, rel-pos: 10}
         - {id: drive-11, at: [223.432, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
            group: drives, rel-pos: 11}
         - {id: drive-12, at: [241.300, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
            group: drives, rel-pos: 12}
         - {id: drive-13, at: [259.168, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
            group: drives, rel-pos: 13}
         - {id: drive-14, at: [277.036, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
            group: drives, rel-pos: 14}
         - {id: drive-15, at: [294.904, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
            group: drives, rel-pos: 15}
         - {id: drive-16, at: [312.772, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
            group: drives, rel-pos: 16}
         - {id: drive-17, at: [330.640, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
            group: drives, rel-pos: 17}
         - {id: drive-18, at: [348.508, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
            group: drives, rel-pos: 18}
         - {id: drive-19, at: [366.376, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
            group: drives, rel-pos: 19}
         - {id: drive-20, at: [384.244, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
            group: drives, rel-pos: 20}
         - {id: drive-21, at: [402.112, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
            group: drives, rel-pos: 21}
         - {id: drive-22, at: [419.980, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
            group: drives, rel-pos: 22}
         - {id: drive-23, at: [437.848, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
            group: drives, rel-pos: 23}
       placements:
         - {ref: dell/power-button-14g@1, id: power-btn, at: [458.80, 3.17], for: chassis,
@@ -376,8 +457,384 @@ views:
         - {ref: dell/bezel-2u-14g@1, id: bezel, at: [24.30, 2.23],
            for: [drive-0, drive-1, drive-2, drive-3, drive-4, drive-5, drive-6, drive-7, drive-8, drive-9, drive-10, drive-11, drive-12, drive-13, drive-14, drive-15, drive-16, drive-17, drive-18, drive-19, drive-20, drive-21, drive-22, drive-23, panel-left],
            group: covers, rel-pos: 0}
+  rear:
+    size:
+      w: 434.0
+      h: 86.8
+    panel:
+      decor:
+        # THE REAR OF THIS MACHINE IS BARE METAL. `chassis.color` is one
+        # value for every view and the FRONT genuinely is dark, so the
+        # chassis was not wrong - this face was borrowing it. Painted
+        # here as what it is: the same matte silver as the brackets and
+        # supplies bolted to it. The grey band that ran under the I/O row
+        # is gone with it; that row is not a different colour.
+        - {at: [0, 0], size: [434.0, 86.8], fill: '#9aa1a8'}
+        # the teal and the blue Dell paints behind the serial and the VGA. It is
+        # how the two D-subs are told apart on a crowded panel at arm's length,
+        # and it is paint on the metal rather than part of either connector.
+        # ONE BAR, AN EIGHTH OF AN INCH TALL, and both ends computed from
+        # the parts it labels: from an eighth past the iDRAC jack's left
+        # edge to an eighth past the VGA's outer standoff. A port that moves
+        # takes the end of the bar with it. Colour is a plain dark for now -
+        # the shape is what is being established.
+        - {id: legend-bar, at: [25.43, 80.5], size: [90.67, 3.175], fill: '#33383d'}
+        # FIVE RIVETS, four of them in one row. A sweep of face y 66.5..70.5
+        # across the whole width returns four identical regions, 5.00 x 4.75
+        # each, at x 7.03, 50.72, 86.47 and 113.58, all at y 68.85 - above the
+        # serial and the VGA. Only the first had been drawn. The fifth sits
+        # lower at 6.85, 80.46.
+        # DRAWN QUIETLY ON PURPOSE. At #4a5057 on 0.8 they read as components
+        # sitting ON the panel; they are pressed marks IN it, so the line is
+        # light and thin, a shade off the panel's own #9aa1a8. Contrast is how a
+        # drawing says "there is something here", and these should be saying
+        # "the metal is not quite flat here".
+        # A rect with rx at half its width IS a circle - decor has no circle.
+        - {id: rivet-1, at: [4.66, 66.47], size: [4.75, 4.75], rx: 2.38, stroke: '#8b9299', stroke-width: 0.5, kind: rivet}
+        - {id: rivet-2, at: [48.34, 66.47], size: [4.75, 4.75], rx: 2.38, stroke: '#8b9299', stroke-width: 0.5, kind: rivet}
+        - {id: rivet-3, at: [84.09, 66.47], size: [4.75, 4.75], rx: 2.38, stroke: '#8b9299', stroke-width: 0.5, kind: rivet}
+        - {id: rivet-4, at: [111.20, 66.47], size: [4.75, 4.75], rx: 2.38, stroke: '#8b9299', stroke-width: 0.5, kind: rivet}
+        - {id: rivet-5, at: [4.25, 77.86], size: [5.20, 5.20], rx: 2.60, stroke: '#8b9299', stroke-width: 0.5, kind: rivet}
+        # THE PAINT BEHIND THE TWO D-SUBS. Measured off ISM figure 8 at
+        # 4 px/mm WITH THE TWO APERTURES MASKED OUT, which is what it takes:
+        # the DE-9's own insulator is teal on this machine, so connector and
+        # paint are the same colour and a first reading took the connector's
+        # insert for paint rising to wrap the standoffs. Masked, the figure is
+        # plain - no paint above y 76.75 outside the connectors, and above
+        # y 80.50 only BETWEEN the two ports.
+        # ONLY THE BAND IS KEPT. A hump between the ports and a D-shaped lobe
+        # under each shell were modelled from that measurement and both were
+        # chasing an outline this figure cannot resolve - the paint and the
+        # connectors are the same colour at 2.6 px/mm. The band is the part
+        # that reads correctly and the part that carries the meaning; the
+        # legends printed on it do the rest. Ends at x 52.50 and 109.25, about
+        # 1 mm INSIDE the outer standoff centres.
+        - {id: paint-serial, at: [52.50, 80.5], size: [28.20, 3.175], rx: 0, fill: '#0f6a76', kind: port-paint}
+        - {id: paint-vga, at: [80.70, 80.5], size: [28.55, 3.175], rx: 0, fill: '#145d8f', kind: port-paint}
+      cutouts:
+        - {id: idrac9, at: [28.60, 66.50], size: [16.0, 14.0], shape: rect}
+        - {id: serial, at: [53.63, 69.10], size: [20.47, 11.4], shape: d-sub}
+        - {id: vga, at: [87.30, 69.10], size: [20.47, 11.4], shape: d-sub}
+        - {id: usb-1, at: [120.20, 71.47], size: [12.0, 4.5], shape: rect}
+        - {id: usb-2, at: [120.20, 79.59], size: [12.0, 4.5], shape: rect}
+        - {id: sys-id, at: [8.36, 72.04], size: [7.0, 7.0], shape: circle}
+    silkscreen:
+      # WHAT THE PAINT IS FOR. The band tells a person at arm's length which
+      # of three similar-looking sockets is which, and the legends are how it
+      # does that - so they matter more than the patch outline, which is what
+      # the previous two rounds were chasing.
+      # THE GLYPHS ARE NOT TRANSCRIBED. ISM figure 8 is 2.6 px/mm and its
+      # lettering does not survive; what is legible is that each section
+      # carries a mark and roughly where. These are the standard marks for
+      # what each port IS, set under the port they name. Re-read them off a
+      # legible photograph if one turns up - and do not measure them off this
+      # file in the meantime.
+      # NO WRENCH ON THIS PANEL. The ISM's back-view CALLOUT carries an icon
+      # for the iDRAC port, which is what made a wrench look plausible here;
+      # the panel's own legend is the word, and that is what is drawn.
+      # THE INFORMATION TAG LEGEND - a circled i on a dark ground, between
+      # the identification button and the status lamp and below both. Two marks
+      # because `filled` applies to a whole path: the disc, then the letter.
+      # NO `size` ON A SILKSCREEN MARK - the path is the shape, and L1 says so.
+      - {id: silk-info-disc, at: [14.97, 79.03],
+         filled: true, fill: '#2a2f34',
+         path: 'M1.80 0 A1.80 1.80 0 1 1 1.79 0 Z'}
+      - {id: silk-info, at: [16.77, 81.78], text: i,
+         font-size: 2.4, anchor: middle, fill: '#dfe4e8'}
+      - {id: silk-idrac, at: [36.60, 82.88], text: iDRAC, for: idrac9,
+         font-size: 2.3, anchor: middle, fill: '#d7dde3'}
+      - {id: silk-serial, at: [63.87, 82.88], text: IOIOI, for: serial,
+         font-size: 2.3, anchor: middle, fill: '#d7dde3'}
+      # SS IS ONLY HALF THE MARK. The SuperSpeed logo is the letters and
+      # the USB trident together; the letters alone say 'SuperSpeed' without
+      # saying 'USB', which on a panel of eleven connectors is the half that
+      # matters. The trident's three prongs end in three DIFFERENT terminals -
+      # arrowhead, square, circle, off a circle-ended stem - and that is the
+      # symbol rather than an ornament on it.
+      # Two paths because the stem is stroked and the four terminals are
+      # filled, and `filled` applies to a whole path. Sizes are chosen to fit
+      # the 6.85 of dark run, not read off anything.
+      - {id: silk-usb, at: [109.70, 82.79], text: SS,
+         for: [usb-1, usb-2], font-size: 2.0, anchor: start,
+         fill: '#c7ccd1'}
+      - {id: silk-usb-trident, at: [112.65, 82.09],
+         for: [usb-1, usb-2], stroke-width: 0.28, fill: '#c7ccd1',
+         path: 'M0 0 H2.25 M1.15 0 L1.95 -0.85 M0.75 0 L1.55 0.85'}
+      - {id: silk-usb-trident-tips, at: [112.65, 82.09],
+         for: [usb-1, usb-2], filled: true, fill: '#c7ccd1',
+         path: 'M-0.35 0 a0.35 0.35 0 1 0 0.70 0 a0.35 0.35 0 1 0 -0.70 0 Z M2.25 -0.45 L3.00 0 L2.25 0.45 Z M1.80 -1.30 h0.60 v0.60 h-0.60 Z M1.35 1.00 a0.35 0.35 0 1 0 0.70 0 a0.35 0.35 0 1 0 -0.70 0 Z'}
+      # the monitor: screen, neck, foot. `filled` with an evenodd hole rather
+      # than a stroked outline, because at this size a stroked box closes on
+      # itself and leaves a pinhole.
+      - {id: silk-vga, at: [97.53, 80.72], for: vga,
+         filled: true, fill-rule: evenodd,
+         fill: '#d7dde3', path: 'M-1.80 0.00 H1.80 V1.80 H-1.80 Z M-1.38 0.42 H1.38 V1.38 H-1.38 Z M-0.35 1.80 H0.35 V2.35 H-0.35 Z M-1.10 2.35 H1.10 V2.75 H-1.10 Z'}
+
+    components:
+      bays:
+        # THE BAY IS THE PLATE, NOT THE BRACKET ENVELOPE. Each riser now holds
+        # std/pcie-bracket-fh and -lp at their real 120.02 and 79.20, which run
+        # on past the riser's own 95 mm plate at both ends - so the riser
+        # declares `insert` for what a slot must reserve and `size` for what it
+        # draws. Sizing these bays to the envelope instead was tried and put
+        # five overlaps on this face: riser 3 across the power supply, riser 1
+        # down over the iDRAC port. None are collisions between PARTS - they are
+        # boxes of things that sit at different heights, and the fix is to say
+        # which number is which rather than to move anything.
+        - {id: riser-1, at: [17.0, 4.0], size: {w: 102.50, h: 62.0},
+           accepts: [dell/riser-1-3fh-14g@1, dell/riser-1-2fh-14g@1],
+           default: dell/riser-1-3fh-14g@1,
+           group: risers, rel-pos: 1}
+        # RISER 2 IS TWO DIFFERENT HOLES, not one hole with two occupants. The
+        # standards-only render against ISM figure 8 caught this: the figure
+        # shows a low-profile slot at x 170..230, y 49.5..62.5 in the 4 x 2.5
+        # machine, where the model showed bare panel - riser 2 carried
+        # only-in: [no-rear-storage] and vanished, contradicting the rear-4-sff
+        # description below, which costs riser 2 its "two full-height slots"
+        # and not riser 2 itself. Dropping the only-in put a 62 mm plate
+        # straight through both rear drive bays, and L13 was right to say so.
+        # So: a TALL bay where the whole column is riser, and a SHORT one under
+        # the drives where only the bottom band is. Both put slot 4's opening at
+        # the same y 46.46, which is the check that nothing moved.
+        # 89.70 WIDE, NOT 95: the supply beside it starts at 250.70 and this
+        # bay starts at 161.0, so 95 does not fit. The riser plate was
+        # photo-measured at 95 and the supply's left edge at 250.70, and both
+        # cannot be right - recorded here as the bay the chassis has room for,
+        # with the disagreement left visible rather than split between them.
+        - {id: riser-2, at: [161.0, 4.0], size: {w: 89.70, h: 62.0},
+           accepts: [dell/riser-2-2fh-1lp-14g@1, dell/riser-2-3-blank-14g@1],
+           default: dell/riser-2-2fh-1lp-14g@1,
+           group: risers, rel-pos: 2, only-in: [no-rear-storage]}
+        # A 12 mm DISAGREEMENT WAS REPORTED AGAINST THE CAD HERE AND IT WAS
+        # NOT REAL. It came from the rear handle's upper 'window', read off a
+        # silhouette of the WHOLE handle shell at 159.7-242.0 and compared with
+        # this bay's 147.87-227.07. That window is a hole in the handle's
+        # MOUNTING FLANGE, which sits behind the panel; cut the projection at
+        # the panel plane and it disappears entirely, because the real handle
+        # has no upper opening at all. Nothing in the service model reaches the
+        # rear face anywhere near this slot - the riser assemblies in that scene
+        # are posed away from the chassis - so the CAD says NOTHING about where
+        # this bay goes, in either direction.
+        # The 78.0 reading against 79.2 stands as the open question it was.
+        - {id: riser-2-lp, at: [147.87, 46.93], size: {w: 79.2, h: 18.42},
+           accepts: [dell/riser-2-1lp-14g@1],
+           default: dell/riser-2-1lp-14g@1,
+           group: risers, rel-pos: 2, only-in: [rear-4-sff]}
+        - {id: riser-3, at: [318.0, 4.0], size: {w: 95.0, h: 41.0},
+           accepts: [dell/riser-3-2fh-14g@1, dell/riser-3-blank-14g@1],
+           default: dell/riser-3-2fh-14g@1,
+           group: risers, rel-pos: 3, only-in: [no-rear-storage]}
+        - {id: ndc, at: [139.6, 66.4], size: {w: 90.3, h: 14.5},
+           accepts: [dell/ndc-4x-rj45-14g@1], default: dell/ndc-4x-rj45-14g@1,
+           group: ndc, rel-pos: 1}
+        - {id: psu-1, at: [251.30, 46.20], size: {w: 86.3, h: 39.1},
+           accepts: [dell/psu-1100w-ac-14g@1], default: dell/psu-1100w-ac-14g@1,
+           group: psus, rel-pos: 1}
+        - {id: psu-2, at: [341.10, 46.20], size: {w: 86.3, h: 39.1},
+           accepts: [dell/psu-1100w-ac-14g@1], default: dell/psu-1100w-ac-14g@1,
+           group: psus, rel-pos: 2}
+        - {id: drive-r0, at: [173.0, 4.9], size: {w: 79.4, h: 17.868},
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
+           default: common/drive-blank-25@1, rotate: 270,
+           only-in: [rear-4-sff], group: drives-rear, rel-pos: 12}
+        - {id: drive-r1, at: [173.0, 22.8], size: {w: 79.4, h: 17.868},
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
+           default: common/drive-blank-25@1, rotate: 270,
+           only-in: [rear-4-sff], group: drives-rear, rel-pos: 13}
+        - {id: drive-r2, at: [331.0, 4.9], size: {w: 79.4, h: 17.868},
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
+           default: common/drive-blank-25@1, rotate: 270,
+           only-in: [rear-4-sff], group: drives-rear, rel-pos: 14}
+        - {id: drive-r3, at: [331.0, 22.8], size: {w: 79.4, h: 17.868},
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
+           default: common/drive-blank-25@1, rotate: 270,
+           only-in: [rear-4-sff], group: drives-rear, rel-pos: 15}
+      placements:
+        # THE LIBRARY'S RJ45, not a second opinion about what one looks like.
+        # This was common/rj45-jack, which draws its own face at 15.8 x 13.2
+        # where the governed aperture is 16.0 x 14.0. HELD BY ITS BOTTOM EDGE,
+        # not its corner: the iDRAC, serial and VGA share a baseline (fact
+        # sheet B.3) and that is the fact worth preserving, so y is set from
+        # the line rather than from each part's own top edge.
+        # THE LINE ITSELF IS NOW 80.5. All three sat 0.5 high against the ISM
+        # figure 8 overlay - the same 0.5, on all three, which is what says it
+        # is the shared baseline that was out and not three separate readings.
+        # The legend bar under them moved with them, because it labels them.
+        - {ref: std/rj45@1, id: idrac9, at: [28.60, 66.50], rotate: 180,
+           attrs: {role: management}, group: mgmt-ports, rel-pos: 1}
+        - {ref: common/db9-receptacle@1, id: serial, at: [48.47, 68.55],
+           group: mgmt-ports, rel-pos: 2}
+        - {ref: common/vga-receptacle@1, id: vga, at: [82.13, 68.55],
+           group: mgmt-ports, rel-pos: 3}
+        - {ref: std/usb-a@1, id: usb-1, at: [120.20, 71.47],
+           attrs: {speed: usb-3.0}, group: mgmt-ports, rel-pos: 4}
+        - {ref: std/usb-a@1, id: usb-2, at: [120.20, 79.59],
+           attrs: {speed: usb-3.0}, group: mgmt-ports, rel-pos: 5}
+        - {ref: dell/system-id-button-14g@1, id: sys-id, at: [8.36, 72.04],
+           for: chassis, group: mgmt-rear, rel-pos: 1}
+        - {ref: common/led-indicator@1, id: sys-status, at: [19.43, 73.73],
+           for: chassis, group: leds, rel-pos: 2,
+           states: ['off', {name: 'on', color: '#2563eb'}]}
+        # THE REAR HANDLE, and it is a FRAME rather than a bar. Its middle rail
+        # is what the chassis is pulled out by; the two windows in it clear the
+        # low-profile riser slot above and the four NIC ports below, which is
+        # why it can be drawn over both without hiding either.
+        # ONLY WHAT STANDS IN FRONT OF THE PANEL. A first version traced the
+        # whole shell and came out a solid frame with two windows - a third of
+        # this moulding is inside the chassis and a face view cannot see it.
+        # Traced from Dell's own service model. ISM figure 8 resolves this face
+        # at 2.6 px/mm and this is a dark part on a dark ground, which is why an
+        # earlier attempt at this handle was abandoned rather than recorded
+        # badly. Its position is CHECKED and not assumed: the CAD's lower window
+        # lands within about 1.5 mm of the NDC bay this device placed off the
+        # figure - two readings that knew nothing of each other.
+        # LAST IN THE LIST because placements draw after bays and on the
+        # hardware this part is in front of both of them.
+        # IT LIES ACROSS THREE BAYS AND THAT IS THE HARDWARE. The rail covers
+        # 4.96 mm of riser-2, 4.31 of riser-2-lp and 1.14 of the NDC - real ink,
+        # because the handle is bolted to the outside of the panel in front of
+        # all three. L13 allows it on `behaviour: mounts`, which is the same key
+        # render.py reads to draw this part in front of the openings.
+        - {ref: dell/rear-handle-14g@1, id: rear-handle, at: [137.73, 42.35],
+           group: furniture, rel-pos: 20}
+        # THE TWO BLUE THUMBSCREWS that retain the rear drive cage. Positions
+        # from Dell's service model and confirmed by a hue sweep of ISM figure 8
+        # - 150.41, 11.10 and 288.34, 31.75 against 149.85, 11.39 and 288.47,
+        # 31.92, two sources agreeing to under a millimetre.
+        # ONLY TWO ON THIS FACE. The sweep found 42 blue regions and exactly two
+        # that are round, this size and identical; the rest are the VGA insert,
+        # the paint behind it, and the riser latch, which is blue but is not
+        # round. A panel that looks like it should have four has two.
+        # THE SHEET METAL RIGHT OF RISER 1, and the retention bracket behind
+        # it. Only the skin is visible from outside: it stands 17.76 proud
+        # against the bracket's 17.53 and spans the riser's full height where
+        # the bracket covers two thirds. The bracket was modelled first, on its
+        # own, which drew the inside of the assembly.
+        - {ref: dell/riser-1-shroud-14g@1, id: riser-1-shroud,
+           at: [111.7, 1.81], group: furniture, rel-pos: 18}
+        # THE TRIM UNDER RISER 1, covering the bottom card's keyed end. A
+        # full-height bracket is 21.59 tall on a 20.32 pitch, so each overlaps
+        # its neighbour by the 1.27 key - and the bottom one has no neighbour,
+        # so 2.05 of its key ran past the plate and showed beside the rivet.
+        - {ref: dell/riser-lower-trim-14g@1, id: riser-1-trim, at: [-0.5, 66.0],
+           group: furniture, rel-pos: 21}
+        # THE SLOT-NUMBER STRIP, between the clips and the riser plate and
+        # IN FRONT of the cards. Its numerals were chassis silkscreen and never
+        # rendered: silkscreen prints before components, correctly, but these
+        # are not covered on the hardware - they sit on metal that is in front
+        # of the card. They live in this part's own skin now.
+        # Placed BEFORE the clips so the clips draw on top of it, which is the
+        # order the hardware is assembled in.
+        - {ref: dell/pcie-slot-strip-14g@1, id: slot-strip, at: [3.5, 4.0],
+           group: furniture, rel-pos: 22}
+        - {ref: dell/thumbscrew-blue-14g@1, id: cage-screw-left,
+           at: [144.66, 5.35], group: furniture, rel-pos: 21}
+        - {ref: dell/thumbscrew-blue-14g@1, id: cage-screw-right,
+           at: [282.59, 26.00], group: furniture, rel-pos: 22}
+        # THE REAR DRIVE CAGE'S OWN FACEPLATE, which the two thumbscrews above
+        # are turned into. A frame: top rail, bottom rail and two tabs, with the
+        # drive openings between them, standing 14.13 proud of the panel.
+        # NOT `behaviour: mounts` - the drives are inserted INTO this, so it
+        # must draw behind them, which a plain placement does.
+        - {ref: dell/drive-cage-rear-14g@1, id: drive-cage-rear,
+           at: [144.26, 1.71], frames: [drive-r0, drive-r1, drive-r2, drive-r3],
+           only-in: [rear-4-sff], group: furniture, rel-pos: 19}
+  # THE FOUR FACES THAT WERE MISSING. 83 of the library's 84 devices carry all
+  # six views and this one carried two, which is what stops it being opened in
+  # the 3D explorer at all.
+  # WHAT THE SERVICE MODEL CONFIRMED: `Dell_PowerEdge_740_Shell-1.001` runs
+  # x -216.9..217.1, which is 434.0 - the chassis width this entire device is
+  # laid out on, taken from the datasheet and never before checked against a
+  # second source. It now has one.
+  # WHAT IT COULD NOT GIVE: anything along the DEPTH. This GLB poses parts and
+  # it poses the ones that matter here - the system cover reads 444.0 wide
+  # against the shell's 434.0 and runs to z 732.3 where the rear panel plane is
+  # 713.5, so it is slid back. Every depth on these four faces is therefore
+  # estimated, and each band says so in its own source rather than inheriting a
+  # blanket disclaimer.
+  # THE EDGE BANDS ARE #1a1d21 AND WENT IN AT #25292e, which is 41 grey against
+  # this chassis's 52 - eleven levels, and invisible. Caught before anyone had
+  # to report it, because three separate features on this device have already
+  # been drawn in a tone that could not be seen against what they sit on.
+  top:
+    size: {w: 434.0, h: 737.5}
+    panel:
+      decor:
+        - {id: edge-left, at: [0.0, 0.0], size: [6.0, 737.5],
+           fill: '#1a1d21', confidence: estimated,
+           source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the 6.0 is not measured"}
+        - {id: edge-right, at: [428.0, 0.0], size: [6.0, 737.5],
+           fill: '#1a1d21', confidence: estimated,
+           source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the 6.0 is not measured"}
+        - {id: edge-front, at: [0.0, 0.0], size: [434.0, 6.0],
+           fill: '#1a1d21', confidence: estimated,
+           source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the 6.0 is not measured"}
+        - {id: edge-rear, at: [0.0, 731.5], size: [434.0, 6.0],
+           fill: '#1a1d21', confidence: estimated,
+           source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the 6.0 is not measured"}
+        # THE COVER LATCH. Its WIDTH is measured - Dell's service model,
+        # `DELL_R740XD_Systemcover_Latch-1.001`, x -12.4..12.6, which is 25.0
+        # and symmetric about the centreline to a tenth. Symmetry is what says
+        # that axis has not been posed.
+        # ITS DEPTH IS NOT. The same model slides the system cover back: 444.0
+        # wide against the shell's 434.0, running to z 732.3 where the rear
+        # panel plane is 713.5. A latch riding on a posed cover cannot say where
+        # along the depth it sits, so 150.0 is a placement and not a reading.
+        - {id: cover-latch, at: [204.5, 150.0], size: [25.0, 64.0],
+           rx: 2.0, fill: '#3a4045', confidence: estimated,
+           source: "width measured from Dell's service model; DEPTH POSITION
+             ESTIMATED because the cover carrying it is posed in that axis"}
+  bottom:
+    size: {w: 434.0, h: 737.5}
+    panel:
+      decor:
+        - {id: edge-left, at: [0.0, 0.0], size: [6.0, 737.5],
+           fill: '#1a1d21', confidence: estimated,
+           source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the 6.0 is not measured"}
+        - {id: edge-right, at: [428.0, 0.0], size: [6.0, 737.5],
+           fill: '#1a1d21', confidence: estimated,
+           source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the 6.0 is not measured"}
+        - {id: edge-front, at: [0.0, 0.0], size: [434.0, 6.0],
+           fill: '#1a1d21', confidence: estimated,
+           source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the 6.0 is not measured"}
+        - {id: edge-rear, at: [0.0, 731.5], size: [434.0, 6.0],
+           fill: '#1a1d21', confidence: estimated,
+           source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the 6.0 is not measured"}
+  left:
+    size: {w: 737.5, h: 86.8}
+    panel:
+      decor:
+        - {id: rail-land, at: [0.0, 33.4], size: [737.5, 20.0],
+           fill: '#3a4045', confidence: estimated,
+           source: "the sliding-rail land along this side. ESTIMATED: no figure in the intake shows this face and the service model's side geometry is behind the shell, so the band's width is a plausible rail land and not a reading"}
+        - {id: edge-top, at: [0.0, 0.0], size: [737.5, 4.0],
+           fill: '#1a1d21', confidence: estimated,
+           source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the 6.0 is not measured"}
+        - {id: edge-bottom, at: [0.0, 82.8], size: [737.5, 4.0],
+           fill: '#1a1d21', confidence: estimated,
+           source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the 6.0 is not measured"}
+  right:
+    size: {w: 737.5, h: 86.8}
+    panel:
+      decor:
+        - {id: rail-land, at: [0.0, 33.4], size: [737.5, 20.0],
+           fill: '#3a4045', confidence: estimated,
+           source: "the sliding-rail land along this side. ESTIMATED: no figure in the intake shows this face and the service model's side geometry is behind the shell, so the band's width is a plausible rail land and not a reading"}
+        - {id: edge-top, at: [0.0, 0.0], size: [737.5, 4.0],
+           fill: '#1a1d21', confidence: estimated,
+           source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the 6.0 is not measured"}
+        - {id: edge-bottom, at: [0.0, 82.8], size: [737.5, 4.0],
+           fill: '#1a1d21', confidence: estimated,
+           source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the 6.0 is not measured"}
+
 configurations:
   base:
+    # the serial port's insulator is teal on this machine, not the
+    # near-black a DE-9 usually carries - std/db9@1's `teal` skin. Named in
+    # every configuration because a skin override has no device-wide default
+    # and all five of these show this rear.
+    skins:
+      db9: teal
     kind: base
     source: derived
     default: true
@@ -386,7 +843,71 @@ configurations:
       blank. DERIVED and not sourced - Dell publishes no default drive count for
       this chassis, so this is the library populating bays by role rather than
       following an orderable bundle, and the two are not equally good.
+      THE PCIe SLOTS ARE NAMED HERE RATHER THAN LEFT TO THE BAY DEFAULT. A base
+      is a chassis you can log into with nothing decided about expansion, so its
+      traffic slots have to be EMPTY - and empty on real hardware means a filler
+      bracket, not a hole, because the airflow depends on it. Saying so
+      explicitly is what distinguishes "nobody has chosen a card yet" from
+      "somebody forgot to write the bays down".
+    bays:
+      riser-1: dell/riser-1-3fh-14g@1
+      riser-2: dell/riser-2-2fh-1lp-14g@1
+      riser-3: dell/riser-3-2fh-14g@1
+  no-rear-storage:
+    # the serial port's insulator is teal on this machine, not the
+    # near-black a DE-9 usually carries - std/db9@1's `teal` skin. Named in
+    # every configuration because a skin override has no device-wide default
+    # and all five of these show this rear.
+    skins:
+      db9: teal
+    kind: orderable
+    description: >-
+      the three-riser rear: seven full-height PCIe slots across risers 1, 2 and
+      3, one half-height, and no rear drives. Drawn from the R740 ISM figure 9,
+      "Back view of three riser system", which passes Gate 1 at 0.26%.
+  rear-4-sff:
+    kind: orderable
+    # THE BAYS ARE SEATED HERE, and `bays:` was there all along. An earlier note
+    # in this file claimed a configuration could not say which accepted module
+    # fills a bay, and put an override on a command line instead. It can, and
+    # render.py has honoured it the whole time: bay id to component ref, with an
+    # empty string for a deliberately empty bay. riser-2 is not listed because
+    # it is not in THIS build - riser-2-lp is, and it already defaults right.
+    bays:
+      drive-r0: common/drive-carrier-25@1
+      drive-r1: common/drive-carrier-25@1
+      drive-r2: common/drive-carrier-25@1
+      drive-r3: common/drive-carrier-25@1
+    skins:
+      drive-carrier-25: default
+      db9: teal
+    description: >-
+      four 2.5 inch drives in the rear, which costs riser 2's two full-height
+      slots and all of riser 3 - the R740xd ISM figure 8. THE BAYS ARE METAL AND
+      NOT OCCUPANCY: this configuration has holes the other does not, which is
+      why the competing sets carry `only-in` rather than differing by what is
+      plugged into them.
+  rear-2-lff:
+    # the serial port's insulator is teal on this machine, not the
+    # near-black a DE-9 usually carries - std/db9@1's `teal` skin. Named in
+    # every configuration because a skin override has no device-wide default
+    # and all five of these show this rear.
+    skins:
+      db9: teal
+    kind: orderable
+    description: >-
+      NAMED AND NOT YET DRAWN. The R740xd ISM figure 9 shows two 3.5 inch drives
+      in the rear, and this library has no 3.5 inch carrier - so the
+      configuration is recorded and left unfinished rather than quietly drawn
+      with a 2.5 inch drive standing in for one, which would be a picture of a
+      machine nobody can order.
   full-24:
+    # the serial port's insulator is teal on this machine, not the
+    # near-black a DE-9 usually carries - std/db9@1's `teal` skin. Named in
+    # every configuration because a skin override has no device-wide default
+    # and all five of these show this rear.
+    skins:
+      db9: teal
     kind: example
     description: >-
       all 24 bays carrying a drive. An ILLUSTRATION and not a SKU: the number of

@@ -32,8 +32,60 @@ provenance:
     NOT SOURCED. Fifteen contacts are drawn in the three-row arrangement HD-15
     uses, five per row, but no document held here dimensions the contact pitch
     or the row separation. The field is decoration and must not be measured off.
+    The middle row is offset by half its own pitch so the rows interleave, which
+    is HD-15's arrangement and not a measurement: drawn without it the three
+    rows read as a grid. The offset carries the consequence that the middle row
+    ends further right than the top row and is inset further on the left.
+  shell: >-
+    photo-measured - THE OUTLINE DRAWN IS THE SHELL, NOT THE APERTURE. `size`
+    stays 20.47 x 11.40 because that is what TE 114-40010 Figure 3 gives as the
+    mounting panel cutout, and this registry entry is `verified`; the shell
+    passes through that hole rather than filling it, and is drawn 20.22 x 10.50
+    inside it. The clearance - 0.125 a side in x, 0.45 in y - is read off the
+    R740xd rear reference, where the port had been rendering as large as its own
+    hole. An earlier skin painted the cutout outline solid, which is where the
+    extra 0.9 of height came from.
+  insert: >-
+    estimated - the insulator is a separate path from the shell because it is a
+    separate part, and 0.90 inside it is proportional rather than dimensioned.
+    ITS DEPTH IS THE POINT OF THE SPLIT: on a female HD-15 the insert face sits
+    LEVEL with the shell's front, which is why `top` equals the full 6.73 cavity
+    and why this port reads flat where std/db9 reads recessed. Neither document
+    held here dimensions either setback.
 elements:
   opening: {at: [0.0, 0.0], size: [20.47, 11.40], class: cutout}
+relief:
+  wall: '#3a3e43'
+  cavity: opening
+  features:
+  - node: insert
+    top: 6.73
+    color: '#1f4f9e'
+    confidence: estimated
+    source: >-
+      std/vga@1's own insert key. 6.73 is this contract's `d`, so the insert
+      face lands FLUSH with the panel - the shell makes no recess in front of
+      it. That is the female half of the pair: a receptacle presents its
+      insulator at the face, and std/db9@1 sets its insert back instead. The
+      flush/recessed distinction is sourced from what the two connectors are;
+      the millimetres are not dimensioned anywhere held here.
+  - node: sockets-outer
+    sink: 3.0
+    color: '#0b1526'
+    confidence: estimated
+    source: >-
+      HD-15 is FEMALE - these are holes the plug's pins enter, so they sink
+      rather than stand proud, which is the whole difference from std/db9@1's
+      pins. 3.0 is deep enough to read as a bore against a flush insert and is
+      not a dimension.
+  - node: sockets-mid
+    sink: 3.0
+    color: '#0b1526'
+    confidence: estimated
+    source: >-
+      The middle row, carried as its own node only because it is offset by half
+      a pitch. Same estimate as sockets-outer, written twice because the drawing
+      needs two groups - not a second reading.
 connection-points:
   mate: {at: [10.235, 5.7], direction: front}
 skins: [default]

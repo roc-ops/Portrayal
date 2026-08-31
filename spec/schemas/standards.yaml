@@ -222,6 +222,28 @@ standards:
       panel drawing for the mounting style a chassis faceplate uses, not a
       figure the F standard fixes, and a card documented to a different hole
       should say so rather than be forced onto this key.
+  drive-25:
+    w: 15.0
+    h: 69.85
+    depth: 100.45
+    description: >-
+      2.5 inch form factor drive - the drive body, not the bay it sits in nor
+      the carrier that holds it
+    confidence: verified
+    registry: SFF-8201 Rev 3.4 table 2-1
+    source: >-
+      SFF-8201 "2.5\" Form Factor Drive Dimensions" Revision 3.4, SFF-TA TWG:
+      A4 = 69.85 [2.750] width, A1 = 15.00 [0.591] thickness for the server
+      form factor, A6 = 100.45 [3.955] maximum length. Note 1 gives A4+A5 =
+      70.10 as the maximum width with tolerance; note 2 a nominal length of
+      100.20. A1 also admits 17.00, 15.00, 9.50, 7.00 and 5.00 - 15 is
+      registered because that is the height a 2.5 inch hot-swap bay is cut for.
+      w AND h ARE THE DRAWN ORIENTATION, NOT THE SPEC'S AXES: the part stands on
+      edge at 15.00 across by 69.85 tall, which is how a front-loading server bay
+      presents a drive. A bay that lays it down says so with `rotate`.
+      THREE DIFFERENT THINGS GET CALLED "a 2.5 inch drive bay" and only this one
+      is standard: the chassis OPENING is the chassis's, the CARRIER is the
+      vendor's, and the DRIVE is everybody's.
   db9:
     registry: TE 114-40010 Rev G, D-subminiature shell size E (DE-9)
     w: 20.47
@@ -511,3 +533,51 @@ standards:
     notes: >-
       CXP (InfiniBand Vol 2 Annex A6 / SFF-8642 class) - module ~27 wide x ~10 high; the MSA documents in this intake do not dimension the bezel, so the opening is the approximate module envelope. Pitch is a layout floor read from vendor faceplates, not an
       MSA figure.
+  pcie-bracket-fh:
+    w: 120.02
+    h: 21.59
+    description: >-
+      PCI Express standard (full height) add-in card I/O bracket - 21.59 overall
+      across, of which the body is 18.42 and the keyed top the rest
+    confidence: verified
+    registry: PCIe CEM 5.0 fig 11-5 / fig 11-13
+    source: >-
+      PCI Express Card Electromechanical Specification Revision 5.0, June 2021,
+      figure 11-5 "Standard Add-in Card I/O Bracket", page 172, and figure 11-13
+      "Detailed Two-Slot I/O Bracket Design", page 181. 120.02 +/-0.38 long;
+      connector opening 89.90 by 12.06; tapped hole spacing 85.40; 0.86 +/-0.08
+      mm (20 GA) low carbon steel.
+      h IS 21.59, NOT 18.42. The body is 18.42 for almost the whole length, but
+      the flange end is KEYED - the top 2.84 is the same width and offset 2.54
+      sideways, so the outline steps OUT past the body and the overall across
+      extent is 21.59. That is what the specification's otherwise unattributable
+      21.59 measures, and it is why nothing inside the bracket is 21.59 on its
+      own. In inches: body 0.725, key 0.750, offset 0.100, overall 0.850.
+      IT IS THE INTERLOCK: slots are on a 20.32 pitch and the part is 21.59
+      across, so adjacent brackets interleave by 1.27 at their keyed tops.
+      THE OPENING IS NOT THE BRACKET: measuring a photograph gives 89.90 because
+      the hole is what the eye finds, and that mistake produced impossible
+      per-riser bracket widths before the spec was read. Reading figure 11-5's
+      crowded top then produced a second wrong shape - a NECK, the opposite of
+      the key - because the extension lines for the four dimensions printed there
+      trace like an outline. An extension line runs above the part; an outline
+      edge starts at it.
+  pcie-bracket-lp:
+    w: 79.20
+    h: 18.42
+    description: >-
+      PCI Express low profile add-in card I/O bracket
+    confidence: verified
+    registry: PCIe CEM 5.0 fig 11-9
+    source: >-
+      PCI Express Card Electromechanical Specification Revision 5.0, June 2021,
+      figure 11-9 "Low Profile I/O Bracket", page 177. 79.20 +/-0.38 by 18.42,
+      connector opening 54.53 by 12.06, tapped hole spacing 53.90, same 20 GA
+      steel as the full-height bracket.
+      ITS TOP IS NOT THE FULL-HEIGHT BRACKET'S. Figure 11-9's far edge reads
+      16.41 - inset 2.01, not offset out - holding for 8.87 before returning to
+      18.42 by 11.17, with the near edge straight throughout, so h stays 18.42.
+      The drawing guide that settled the standard bracket's keyed top does not
+      cover the low profile one. Two figures disagreeing is a fact about the
+      parts until something settles it, and it is recorded here rather than
+      smoothed over.

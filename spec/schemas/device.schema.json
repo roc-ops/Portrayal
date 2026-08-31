@@ -615,6 +615,16 @@
                     "rotate": {
                       "type": "number",
                       "description": "text decor rotation in degrees about its anchor"
+                    },
+                    "shape": {
+                      "enum": [
+                        "rect",
+                        "circle",
+                        "d-sub",
+                        "slot"
+                      ],
+                      "default": "rect",
+                      "description": "outline of the painted patch. `rect` (with optional `rx`) is the default; `d-sub` is the D-subminiature outline of TE 114-40010 Figure 3 and `slot` a stadium. THE SAME VOCABULARY A CUTOUT'S `shape` TAKES, because paint printed around a connector takes the connector's shape and until now had no way to say so - a patch behind a D-sub could only be a rectangle or a rounded one. `circle` is accepted for symmetry and still draws as a rect; decor has `rx`."
                     }
                   }
                 }
@@ -987,6 +997,21 @@
                           }
                         }
                       ]
+                    },
+                    "frames": {
+                      "oneOf": [
+                        {
+                          "$ref": "#/$defs/segment"
+                        },
+                        {
+                          "type": "array",
+                          "minItems": 1,
+                          "items": {
+                            "$ref": "#/$defs/segment"
+                          }
+                        }
+                      ],
+                      "description": "ids this part SURROUNDS rather than covers - a frame whose bounding box takes in openings its ink does not. L13 compares boxes, which is right for almost every part and wrong for a frame; this is the declaration that makes the difference checkable instead of assumed. Name only what the openings actually clear. NOT a way to silence a real overlap: a part that genuinely paints over another is an error. Distinct from `behaviour: mounts`, which says a part lies OVER what is behind it and draws after the bays - a drive cage surrounds its drives and must draw BEFORE them, so the two are not interchangeable."
                     }
                   },
                   "oneOf": [

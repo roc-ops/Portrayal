@@ -1,0 +1,67 @@
+format: 1
+kind: component
+name: thumbscrew-blue-14g
+version: 1.0.0
+class: screw
+# Bolted onto whatever it retains, so it draws after the bays rather than under
+# them - the same claim common/screw-head@1 makes for the same reason.
+behaviour: mounts
+profile: compute
+description: >-
+  Dell's blue captive thumbscrew - the ringed hand-turned fastener that retains
+  a rear drive cage on a 14G PowerEdge
+size: {w: 11.5, h: 11.5, d: 16.0}
+provenance:
+  size: >-
+    measured - Dell's service model, r740xd.glb, `DELL_R740XD_3.5 Drive Rear
+    Cage_Screws`: an 11.5 x 11.5 head, 16.0 along z. A vendor solid measured in
+    software rather than a caliper on hardware, in the sense std/sma@1's barrel
+    key sets out.
+  two-sources-that-did-not-consult-each-other: >-
+    THE POSITIONS AGREE TO UNDER A MILLIMETRE. The service model puts the two
+    heads at face 144.66, 5.35 and 282.59, 26.00, which centres them at 150.41,
+    11.10 and 288.34, 31.75. A hue sweep of ISM figure 8 finds two round blue
+    regions centred 149.85, 11.39 and 288.47, 31.92. A solid model and a
+    picture, agreeing on both - which is the check this part rests on, because
+    neither alone would carry it.
+    SIZE IS THE CAD'S. The figure reads 12.50 x 12.25, but that is a blue halo
+    on a grey ground at 4 px/mm; the model's 11.5 is the harder number and the
+    0.9 difference is the halo, not a disagreement about the part.
+  the-blue-is-the-part: >-
+    photo-measured - #6d92b5, the ring's median in ISM figure 8. Dell paints the
+    things a person turns or pulls without a tool, and that mark is why this
+    fastener is findable at all: at 2.6 px/mm its outline is three pixels across
+    and its shape says nothing, while its colour separates it from the panel in
+    one pass. The head reads #838489 and is drawn a little lighter so the cross
+    carries.
+  only-two-on-this-face: >-
+    The sweep found 42 blue regions on the rear and exactly TWO that are round,
+    of this size, and identical. The rest are the VGA insert, the paint band
+    behind it, and the riser latch - which is blue but 17.50 x 11.50 and not
+    round. Recorded because a panel that looks like it ought to have four has
+    two, and the next reader should not go hunting for the others.
+  depth: >-
+    measured - the head spans z 721.6 to 737.6 against a rear panel at 713.5, so
+    it stands 8.1 clear of the panel before it starts and reaches 24.1. IT IS
+    NOT FLOATING: it is mounted on the drive cage, whose own face is at that
+    721.6, which is what `lift` says here. NOT A POSE - unlike the riser clips
+    in the same model, which are drawn lifted out and were rejected for it, this
+    head sits where both sources agree it does.
+relief:
+  wall: '#15181b'
+  features:
+  - node: ring
+    cyl: 16.0
+    lift: 8.1
+    color: '#6d92b5'
+    confidence: measured
+    source: >-
+      dell/thumbscrew-blue-14g@1's own depth key - the service model puts this
+      head at z 721.6..737.6 against a panel at 713.5. `lift` carries the 8.1
+      because the screw is mounted on the drive cage's face rather than on the
+      panel, which is exactly the case `lift` exists for: without it a cylinder
+      can only grow from the panel outward and would fill the gap the cage
+      occupies.
+elements:
+  head: {at: [0.0, 0.0], size: [11.5, 11.5], class: fastener}
+skins: [default]

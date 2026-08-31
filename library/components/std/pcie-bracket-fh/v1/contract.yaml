@@ -1,0 +1,172 @@
+format: 1
+kind: component
+name: pcie-bracket-fh
+version: 1.1.0
+class: bracket
+conforms: pcie-bracket-fh
+description: >-
+  Standard (full height) PCI Express add-in card I/O bracket - the faceplate every PCIe
+  card presents at the chassis wall, with the connector opening its I/O looks
+  through and the retention tab that drops into the chassis card-guide slot
+size: {w: 120.02, h: 21.59}
+attrs:
+  material: '0.86 mm (20 GA) low carbon steel, zinc plated'
+  card-height-max: 111.28
+  chassis-opening: 100.71
+  return-flange-depth: 9.40
+  return-flange-length: 21.59
+  tapped-hole-pitch: 85.4
+provenance:
+  size: >-
+    standard - PCI Express Card Electromechanical Specification Revision 5.0,
+    June 2021, figure 11-5 "Standard (full height) I/O Bracket" on page 172.
+    Overall 120.02 +/-0.38 by 18.42 wide, material 0.86 +/-0.08 mm (20 GA) low
+    carbon steel, zinc plated.
+  outline: >-
+    measured - the page rendered at 400 dpi. The plate's own 18.42 width fixes the
+    scale, and at that scale the section view's horizontal edges land on the
+    printed 112.75 and 120.02 to better than a tenth of a millimetre, which
+    is what licenses reading the undimensioned features off the same pixels.
+  the-retention-tab: >-
+    A BRACKET DOES NOT END AT THE PLATE. The last 7.27 is a
+    tab 10.20 wide, centred, reached by two 45 degree chamfers
+    4.11 long and finished with 2X R1.90. The spec dimensions it as 14.31
+    from one edge and 4.11 from the other, and 18.42 - 14.31 = 4.11, so it is
+    centred. This tab is what locates the card in the chassis card guide - it is
+    the part of the shape that has to fit, and a first version of this component
+    that drew a plain rounded rectangle had none of it.
+  the-connector-opening: >-
+    89.9 long, starting 10.16 from the flange end, and
+    12.06 WIDE. The width is not called out beside the opening but it is not a
+    guess either: 18.42 - 2 x 3.18 = 12.06, the section views of both
+    figure 11-5 and figure 11-9 measure 12.06 across the hatched band, and
+    figure 11-9 prints 3.18 for the metal each side. An earlier version
+    eyeballed 15.0 off the figure's proportions and was 3 mm out.
+  the-body-is-18.42-but-the-part-is-not: >-
+    size.h is 21.59, not 18.42. The BODY is 18.42 for almost its whole length,
+    but the keyed top steps outside it, and a part is as wide as its widest
+    feature. This is what the specification's otherwise unattributable 21.59 is
+    measuring - body edge to keyed-top edge - and it is why nothing inside the
+    bracket measures 21.59 on its own.
+  the-keyed-top: >-
+    THE FLANGE END IS KEYED, NOT NECKED - the two are opposite shapes and an
+    earlier version of this part had the wrong one. The top 2.84 of the
+    plate is the same width as the body and OFFSET sideways, spanning
+    2.54 to 21.59, so the outline steps OUT past 18.42 rather than in;
+    two 45 degree diagonals bring it back, the near edge reaching the body by
+    5.74 and the far edge by 4.73. In inches the standard
+    bracket reads body 0.725, key 0.750, offset 0.100, overall 0.850 - clean
+    quarters and tenths, which is the sign of having read it right at last.
+  why-the-keyed-top-matters: >-
+    IT IS THE INTERLOCK. Slots are on a 20.32 pitch and the bracket's overall
+    across extent is 21.59, so ADJACENT BRACKETS INTERLEAVE BY 1.27 at their
+    keyed tops - the mounting tab reaches over the neighbouring slot and keys
+    against it. A row of eight nests because of this. Model the top as a plain
+    rectangle and the row still draws, but the reason the parts fit is gone.
+  how-the-wrong-shape-survived-three-passes: >-
+    FIGURE 11-5's TOP IS UNMEASURABLE and I measured it anyway, three times. The
+    four dimensions printed there - 2.54, 21.59, 2X (17.15) and 18.42 - each drop
+    an extension line through the drawing, and those got traced as if they were
+    the outline; the reading that came out was a neck, which is the opposite of
+    what is there. THE TEST THAT SEPARATES THEM IS ONE LINE OF CODE: an extension
+    line runs ABOVE the part, an outline edge starts at it. Run against figure
+    11-5 it reports that EVERY line below the flange is an extension line, which
+    is the honest answer - that figure cannot settle the top. Run against the
+    finished outline in the knowledge base's drawing guide it reports real edges
+    at 2.65 and 21.57, and identifies 15.52 and 17.16 as the card PCB seen
+    edge-on, 1.64 apart, which is the 1.57 board. Measuring harder was never
+    going to fix this; separating the line types did, immediately.
+  which-figure-specifies-the-shape: >-
+    FIGURE 11-13, NOT THIS PART'S OWN. "Detailed Two-Slot I/O Bracket Design" on
+    page 181 draws a bracket horizontally, dimensions it by ordinates off one
+    datum, and marks 45 degrees at BOTH ends - 2.57 and 5.33 for the two
+    flange-end chamfers. It also prints 3.18 for the opening inset and
+    places its two retention tabs at 4.11-14.30 and 24.43-34.62, which is the
+    same 10.20 tab twice on the 20.32 slot pitch, corroborating
+    both from a second drawing. THE PROSE AROUND FIGURES 11-5 AND 11-9 IS SILENT
+    ABOUT THE NECK, and reading only that prose produced a first draft of this
+    contract asserting the specification never describes it - a much stronger
+    claim than the one page checked could support. The values above stay measured
+    off figure 11-5, because a two-slot bracket's outer edges are not a
+    single bracket's, but figure 11-5 prints 2.54 for its near chamfer and both
+    single-bracket figures print (17.15) for the far edge, which is 18.42 - 1.27.
+    The drawing puts a small S-hook at the transition - the edge dips in about
+    half a millimetre before sweeping out - which is below what a face view can
+    resolve and is drawn here as a clean 45 degree chamfer.
+  corroborated-by-a-second-reading: >-
+    A community fabrication guide in the knowledge base - "Drawing PCIe brackets
+    and ATX/mATX/mITX rear-IO apertures", SaintsEnd on overclock.net 2016, which
+    cites page and figure into CEM 1.1 - independently states almost every number
+    here: bracket 120.02 by 18.42, material 0.86, the opening starting 10.16 above the
+    IO aperture, the bottom tab's 45 degree cuts beginning at 112.75 with insets
+    of 4.11 and 4.12 (18.42 - 14.30), corners rounded R1.91, and the 20.32
+    slot-to-slot pitch. Two readings of the same drawing taken years and methods
+    apart agreeing to a hundredth of a millimetre is worth more than either alone.
+  what-the-guide-explained-that-the-figure-did-not: >-
+    THE RETURN FLANGE IS 21.59 LONG, WHICH IS LONGER THAN THE BRACKET IS WIDE,
+    and figure 11-5 prints 21.59 with no hint why. The guide says why: the flange
+    is deliberately longer than the 20.32 slot pitch so that it KEYS OVER THE
+    ADJACENT SLOT. That is the reason a bracket cannot simply be as wide as its
+    own slot, and it is carried in attrs as return-flange-length. It also places
+    the bracket across the card: 1.27 on the solder side and 17.15 toward the
+    component side, which is what figure 11-5's otherwise puzzling "2X (17.15)"
+    is measuring - NOT a neck width, which is how a first pass read it.
+  the-return-flange-is-not-on-this-face: >-
+    At the flange end the metal turns 90 degrees out of the plate and runs 9.40
+    into the chassis; the hold-down screw goes through THAT tab, not through
+    anything visible here. It is perpendicular to this elevation and points AWAY
+    from the viewer, into the chassis, so it is neither something the face can
+    show nor something `relief` can raise - relief features stand proud toward
+    the viewer. It is carried as attrs.return-flange-depth and drawn on the face
+    only as the fold line. Drawing it flat would make the part 9.40 too long.
+  the-tapped-ears-are-in-neither-the-face-nor-relief: >-
+    THE TWO #4-40 EARS ARE NOT ON THIS FACE EITHER. They sit 85.4 apart,
+    are 12.57 long, and bend the opposite way - toward the card board they screw
+    to. A first draft put the holes on the front and they landed INSIDE the
+    connector opening, which is the giveaway: the hole pitch is SHORTER than the
+    opening is long. Each ear does leave a shallow notch in one long edge of the
+    plate, and that notch is left off deliberately: WHICH edge depends on which
+    way round the card is installed, and a guessed side is worse than an absent
+    feature at this scale.
+  why-a-standard-part: >-
+    EVERY PCIe CARD SHARES THIS OUTLINE, which is the point of the form factor -
+    "to enable the reuse of existing chassis slots" in the specification's own
+    words. A blanking plate, a NIC, an HBA and a GPU differ in what is printed on
+    the bracket and in nothing else about its shape, so they compose this rather
+    than each carrying a traced copy.
+  the-trap-it-closes: >-
+    MEASURING A PHOTOGRAPH GIVES THE OPENING, NOT THE BRACKET. Reading Dell's
+    rear figure produced a "bracket" of about 90 mm on one riser and 110 on
+    another - impossible for a standard part, and it sent two rounds of modelling
+    chasing per-riser widths that do not exist. 89.9 is the CONNECTOR
+    OPENING: the hole is what the eye picks out and the metal around it recedes
+    into the chassis.
+  orientation: >-
+    drawn LONG-AXIS HORIZONTAL WITH THE RETENTION TIP AT THE LEFT, which is how a
+    2U rear presents it. The specification draws the bracket vertically with the
+    tip at the bottom, so every dimension it takes from the flange datum maps to
+    L - x here.
+  chassis-opening: >-
+    100.71 REF is the chassis opening dimension from the same
+    specification - the MINIMUM aperture, which it says explicitly "will vary
+    based on system implementation". It is carried in attrs for a device that
+    needs to punch one, and is deliberately not this part's `size`.
+elements:
+  opening:
+    at: [19.96, 3.18]
+    size: [89.9, 12.06]
+    class: cutout
+    description: >-
+      the connector opening, 89.9 by 12.06, sitting 3.18 in
+      from each long edge
+relief:
+  wall: '#8a9199'
+  features:
+  - node: flange-fold
+    sink: 9.40
+    confidence: drawing
+    source: >-
+      the fold at the flange end, PCIe CEM 5.0 figure 11-5 side view - the
+      metal turns 90 degrees here and runs 9.40 back into the chassis, carrying
+      the hold-down screw slot. On the face it is a line; 9.40 is what it is.
+skins: [default]

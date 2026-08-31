@@ -111,6 +111,63 @@ def local(tag):
     return tag.split("}")[-1]
 
 
+# 10 degrees +/-2 of taper a side and a 3.35 radius in four places, TE
+# application specification 114-40010 Rev G Figure 3 - the mounting panel cutout
+# every D-subminiature shell passes through, which is the same shape at every
+# shell size. The radius is absolute in the specification rather than
+# proportional; it is clamped only so a box too small to carry it still closes.
+DSUB_TAPER = 0.17632698070846498          # tan(10 degrees)
+DSUB_RADIUS = 3.35
+
+
+def _dsub_path(x, y, w, h):
+    """The D of D-subminiature: wide edge at top, both flanks raked in."""
+    import math
+    t = h * DSUB_TAPER
+    # DERIVED, NOT GUESSED. A first draft clamped at 0.29 * h and the clamp bit
+    # at exactly the standard size - 0.29 * 11.40 is 3.306, a hair under the
+    # 3.35 the specification gives - so the shape came out subtly wrong for the
+    # one box that matters most. The real limits are where the fillets meet:
+    # 2.03r along a raked side of length h/cos(10), and 1.68r along the narrow
+    # bottom edge. Inside those the specification's radius stands.
+    r = min(DSUB_RADIUS, 0.49 * h, (w - 2 * t) / 1.7)
+    pts = [(x, y), (x + w, y), (x + w - t, y + h), (x + t, y + h)]
+    tang = []
+    for i, p in enumerate(pts):
+        a, b = pts[i - 1], pts[(i + 1) % 4]
+
+        def unit(q):
+            dx, dy = q[0] - p[0], q[1] - p[1]
+            d = math.hypot(dx, dy) or 1.0
+            return dx / d, dy / d
+        ua, ub = unit(a), unit(b)
+        half = math.acos(max(-1.0, min(1.0, ua[0] * ub[0] + ua[1] * ub[1]))) / 2
+        d = r / math.tan(half)
+        tang.append(((p[0] + ua[0] * d, p[1] + ua[1] * d),
+                     (p[0] + ub[0] * d, p[1] + ub[1] * d)))
+    seg = [f"M{tang[0][0][0]:.3f} {tang[0][0][1]:.3f}"]
+    for i in range(4):
+        to = tang[i][1]
+        seg.append(f"A{r:.3f} {r:.3f} 0 0 1 {to[0]:.3f} {to[1]:.3f}")
+        nxt = tang[(i + 1) % 4][0]
+        seg.append(f"L{nxt[0]:.3f} {nxt[1]:.3f}")
+    seg[-1] = "Z"
+    return " ".join(seg)
+
+
+def _slot_path(x, y, w, h):
+    """A stadium: semicircular ends on the short axis."""
+    if w >= h:
+        r = h / 2
+        return (f"M{x + r:.3f} {y:.3f} H{x + w - r:.3f} "
+                f"A{r:.3f} {r:.3f} 0 0 1 {x + w - r:.3f} {y + h:.3f} "
+                f"H{x + r:.3f} A{r:.3f} {r:.3f} 0 0 1 {x + r:.3f} {y:.3f} Z")
+    r = w / 2
+    return (f"M{x + w:.3f} {y + r:.3f} V{y + h - r:.3f} "
+            f"A{r:.3f} {r:.3f} 0 0 1 {x:.3f} {y + h - r:.3f} "
+            f"V{y + r:.3f} A{r:.3f} {r:.3f} 0 0 1 {x + w:.3f} {y + r:.3f} Z")
+
+
 URL_REF = re.compile(r"url\(#([A-Za-z0-9_-]+)\)")
 
 
@@ -487,6 +544,14 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                     node.set("data-z-thread", str(feat["thread"]))
                 break
     part_groups = []
+    # WHERE A COMPOSED PART SITS IN THE STACK IS A PROPERTY OF WHAT IT IS.
+    # A bezel frames an aperture, so the aperture belongs ON TOP of the plate
+    # and the default - skin first, parts after - is right for it. A BLANKING
+    # PLATE IS THE OTHER WAY ROUND: it composes the bracket for its outline and
+    # then covers the connector opening with vented metal, and drawn in the
+    # default order the bracket's own dark opening lands back over the vents and
+    # the plate renders as an empty slot. `behind: true` says which.
+    behind_at = 1                       # after the <title>, before the skin
     for part in contract.get("parts") or []:
         pg, _ = instance_group(lib, part["ref"], f"{inst_id}--{part['id']}",
                                part["at"], None, part.get("attrs"), None, None,
@@ -497,8 +562,19 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         # a part on a protruding parent recesses from THAT surface, not the panel
         if part.get("lift"):
             pg.set("data-z-lift", str(part["lift"]))
-        g.append(pg)
-        part_groups.append(pg)
+        if part.get("behind"):
+            g.insert(behind_at, pg)
+            behind_at += 1
+        else:
+            g.append(pg)
+        # A `behind` PART MUST NOT JOIN part_groups. That list exists so the
+        # re-raise below can put composed parts back on top of a raised bezel,
+        # and a part that asked to sit UNDER this component's art would be
+        # dragged to the front by it - which is exactly what happened: the
+        # blanking plates' vents were drawn, and then the bracket they compose
+        # was raised over them again and the slot rendered empty.
+        if not part.get("behind"):
+            part_groups.append(pg)
     for feat in (contract.get("relief") or {}).get("features") or []:
         want = f"{inst_id}--{feat['node']}"
         for node in g.iter():
@@ -579,7 +655,18 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
             None, None, None, None, rotate=bay.get("rotate"), palette=palette,
             skin_overrides=skin_overrides, attr_overrides=attr_overrides,
             path=f"{path}/{bay_id}/module", resolved=resolved, depth=depth + 1)
-        g.append(sub)
+        # BEHIND THE FACEPLATE, NOT ON IT. Appending is right for a drive in a
+        # cage and wrong for a card in a riser: what shows of a PCIe bracket is
+        # its working area through a punched window and its retention tab clear
+        # of the plate, with the flange end covered by the metal. `behind: true`
+        # inserts the occupant before the skin - the same word and the same
+        # mechanism `parts:` has carried all along. It only means anything if
+        # the skin has real holes; over a stroked outline the occupant vanishes.
+        if bay.get("behind"):
+            g.insert(behind_at, sub)
+            behind_at += 1
+        else:
+            g.append(sub)
     return g, contract
 
 
@@ -817,7 +904,15 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     deco_g.set("data-class", "decor")
     seen_kinds = {}
     for d in parts["decor"]:
-        r = ET.SubElement(deco_g, f"{{{SVG_NS}}}rect")
+        # PAINT FOLLOWS THE HARDWARE IT SITS BEHIND. Decor could draw a
+        # rectangle and a rounded rectangle and nothing else, so a patch printed
+        # around a D-subminiature connector - which is what Dell puts behind the
+        # serial and VGA ports on this generation - had no shape to be. Same
+        # four values the cutouts take, drawn by the same two helpers, so the
+        # vocabulary means one thing in both places.
+        shape = d.get("shape")
+        as_path = shape in ("d-sub", "slot")
+        r = ET.SubElement(deco_g, f"{{{SVG_NS}}}{'path' if as_path else 'rect'}")
         if d.get("pattern") == "vent" or d.get("vent"):
             kind = "vent-field"
         elif d.get("stroke"):
@@ -833,9 +928,14 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             # a hole, not a texture - stated for anything reading the drawing
             # rather than looking at it
             r.set("data-aperture", "air")
-        r.set("x", f"{d['at'][0]:g}"); r.set("y", f"{d['at'][1]:g}")
-        r.set("width", f"{d['size'][0]:g}"); r.set("height", f"{d['size'][1]:g}")
-        r.set("rx", f"{d.get('rx', 0.6):g}")
+        if as_path:
+            dx, dy = d["at"]; dw, dh = d["size"]
+            r.set("d", _dsub_path(dx, dy, dw, dh) if shape == "d-sub"
+                  else _slot_path(dx, dy, dw, dh))
+        else:
+            r.set("x", f"{d['at'][0]:g}"); r.set("y", f"{d['at'][1]:g}")
+            r.set("width", f"{d['size'][0]:g}"); r.set("height", f"{d['size'][1]:g}")
+            r.set("rx", f"{d.get('rx', 0.6):g}")
         if d.get("stroke"):
             r.set("fill", "none")
             r.set("stroke", d["stroke"]); r.set("stroke-width", f"{d.get('stroke-width', 1):g}")
@@ -945,10 +1045,24 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         cut_g.set("data-class", "cutouts")
         for c in parts["cutouts"]:
             x, y = c["at"]; cw_, ch_ = c["size"]
-            if c.get("shape") == "circle":
+            shape = c.get("shape")
+            if shape == "circle":
                 e = ET.SubElement(cut_g, f"{{{SVG_NS}}}ellipse")
                 e.set("cx", f"{x + cw_ / 2:g}"); e.set("cy", f"{y + ch_ / 2:g}")
                 e.set("rx", f"{cw_ / 2:g}"); e.set("ry", f"{ch_ / 2:g}")
+            elif shape in ("d-sub", "slot"):
+                # THE SCHEMA OFFERED FOUR SHAPES AND THIS DREW TWO. `d-sub` and
+                # `slot` fell through to the rect branch and were punched as
+                # rectangles - so a D-subminiature aperture rendered as a black
+                # box with the connector's D sitting inside it, and the corners
+                # the hole does not have showed as ink. An enum whose values are
+                # accepted and then silently ignored is worse than a smaller
+                # enum, because the model says the right thing and the drawing
+                # does not. Nothing in the library used either value, so this
+                # changes no existing render.
+                e = ET.SubElement(cut_g, f"{{{SVG_NS}}}path")
+                e.set("d", _dsub_path(x, y, cw_, ch_) if shape == "d-sub"
+                      else _slot_path(x, y, cw_, ch_))
             else:
                 e = ET.SubElement(cut_g, f"{{{SVG_NS}}}rect")
                 e.set("x", f"{x:g}"); e.set("y", f"{y:g}")

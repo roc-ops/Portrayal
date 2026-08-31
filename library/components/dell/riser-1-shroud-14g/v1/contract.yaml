@@ -1,0 +1,111 @@
+format: 1
+kind: component
+name: riser-1-shroud-14g
+version: 1.0.0
+class: mechanical
+# The outer skin of this assembly: it draws after the bays, and the cards'
+# flange ends go behind it.
+behaviour: mounts
+profile: compute
+description: >-
+  The sheet metal right of riser 1 on a 14G PowerEdge - the outer skin over the
+  PCIe retention bracket, and the only part of that assembly seen from outside
+size: {w: 25.62, h: 64.43, d: 17.76}
+provenance:
+  size: >-
+    measured - Dell's service model, `R740XD_GPU_Brackets_01-1`, clipped to the
+    panel plane at z 713.5. A vendor solid measured in software, in the sense
+    std/sma@1's barrel key sets out.
+  what-is-behind-it-is-not-modelled: >-
+    `R740XD_Expansioncard_Clip-1.001` sits behind this skin - the retention
+    bracket the cards' flanges are held into, face 112.34..136.28, y 1.81..44.81,
+    standing 17.53 proud. It was drawn first, alone, which put the inside of the
+    assembly on the face; then composed here with `behind: true`; and now
+    removed, because NOTHING OF IT IS VISIBLE. This shroud is 0.23 more proud
+    and spans the riser's full height - 64.43 against 43.00 - so it covers the
+    bracket completely from every angle a face view has.
+    Recorded rather than forgotten: the part exists in the service model, its
+    geometry is recoverable in one command, and if this library ever renders an
+    exploded or cutaway view it should come back. A part that cannot be seen is
+    not a part that is not there.
+  the-slots-are-holes-again-and-that-was-predicted: >-
+    render.py raises any node carrying an `out` feature to the END of its group
+    when a component has composed parts - the rule that stops a bezel being
+    painted over by what it frames - so this plate paints over its own slot
+    column whenever anything is composed here.
+    That happened once with the retention bracket, was worked around, and when
+    the bracket was removed the contract recorded the condition: "if a part is
+    ever composed into this component again, the slots must be cut back into the
+    plate as evenodd holes or they will disappear". A part has been - the shelf -
+    and they are, without anybody having to rediscover it from a render. That is
+    what the note was for.
+  the-slots-are-not-in-the-model: >-
+    photo-measured - and the search is recorded rather than the conclusion.
+    Cutting the part at 729.0, just under its own front face, leaves 120 of 897
+    triangles and two small tabs: the recess walls are not cut cleanly, so the
+    slot column never appears as holes at any plane. Read off ISM figure 8
+    instead - five slots at face x 128.00..131.40, first at y 17.75, on a 5.47
+    pitch, 3.40 x 4.15. A SIXTH sits above at about 12.25 and reads only 0.75
+    tall, mostly obscured; it is not drawn, and that is a gap rather than a
+    finding.
+  the-retention-clip-and-the-bar-above-it: >-
+    photo-measured - two blue prongs at face 125.80..133.20, y 54.60..62.30,
+    splayed at the top and leaning together at the bottom either side of a dark
+    slot at 128.25..130.75; above them a plain dark bar at 126.50..132.50,
+    y 48.30..50.30.
+    THE BAR IS TURNED AND THAT IS THE POINT OF IT: 6.00 x 2.00 where the five
+    slots below are 3.40 x 4.15. Read as a sixth slot it would have gone in
+    upright and in the column, and it is neither.
+    BLUE IS DELL'S USER-SERVICEABLE COLOUR, so this is what a person grips to
+    release the riser - which is what the operator meant by pulling the clips
+    out from the top, and it makes the clip a control rather than decoration.
+    #5c7b99, SAMPLED, AND NOT THE THUMBSCREW'S #7098be, in the same figure -
+    this one sits in a recess and is lit differently. The library already
+    carries #6d92b5 for a Dell blue and reusing it was the obvious move; it is
+    the third borrowed grey-blue on this device to be checked and fail.
+  the-clip-is-windowed-through-the-outline: >-
+    RECORDED BECAUSE IT RENDERED AS NOTHING AT ALL FIRST. This component
+    composes dell/pcie-retention-bracket-14g@1, and composing a part re-triggers
+    render.py's raise rule, so the `shroud` outline is moved to the END of its
+    group and repaints over everything drawn before it. The clip went in, the
+    render came back unchanged, and no error was reported anywhere.
+    Drawn before the outline and let through a window cut in it - the same
+    pattern the slot column already uses in this file, for the same reason. The
+    window is real anyway: the figure shows the clip sitting in a recess.
+  depth: >-
+    measured - 17.76 proud of the panel plane. This is the number the model was
+    consulted for: the assembly has to stand off far enough to contain the L of
+    a PCIe bracket's flange, and a straight-on figure cannot show protrusion at
+    all. The section behind the front face is not modelled.
+relief:
+  wall: '#4a5057'
+  features:
+  - node: shroud
+    out: 17.76
+    color: '#9aa1a8'
+    confidence: measured
+    source: >-
+      dell/riser-1-shroud-14g@1's own depth key - Dell's service model, from the
+      panel plane at z 713.5 to this part's own front. One number for the whole
+      outline, which the depth key records as an approximation.
+  - node: slots
+    sink: 2.0
+    color: '#1b1f23'
+    confidence: estimated
+    source: >-
+      Unsourced. The slot column is not in the model at any plane - see the
+      slots key - so how deep the recesses go is not known. 2.0 reads as a
+      pocket against a 17.76 face and is not a measurement.
+parts:
+  # THE SHELF SITS ON THIS, and they interleave in depth rather than stacking
+  # cleanly: at face (130, 2) this shroud is 17.76 proud and in front, at
+  # (130, 10) it is only 9.06 and the shelf's 14.68 is in front. A flat drawing
+  # has to choose, and the figure shows the shelf - it reads bright across
+  # 116.75..142.00 - so the shelf goes on top.
+  # Composed rather than placed beside: as two `mounts` placements their boxes
+  # overlapped by 20.57 x 12.94 and L13 said so, correctly.
+  - {ref: dell/riser-1-top-shelf-14g@1, id: shelf, at: [-0.20, -1.81]}
+elements:
+  shroud: {at: [0.0, 0.0], size: [25.62, 64.43], class: bezel}
+  slots: {at: [16.30, 15.94], size: [3.4, 26.03], class: vent}
+skins: [default]

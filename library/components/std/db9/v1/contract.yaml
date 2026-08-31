@@ -34,9 +34,68 @@ provenance:
     NOT SOURCED. The nine contacts are drawn on the standard two-row DE-9
     arrangement, five above four, but neither document held here dimensions the
     contact pitch or the row separation. The pin field is decoration at this
-    revision and should not be measured off.
+    revision and should not be measured off. They are drawn LIGHT because a DE-9
+    on equipment is male: these are pins that catch light, and the sockets on
+    std/vga@1 beside it are holes that do not. That much is sourced from what
+    the two connectors are, even though the pitch is not.
+  the-insert-colour-is-a-skin: >-
+    photo-measured - a DE-9's insulator is usually near-black and `default`
+    draws it so. THE R740xd's IS TEAL: Dell paints that connector and the patch
+    printed behind it the same colour, so the two D-subs sitting side by side on
+    a crowded panel are told apart at arm's length. #055760 is the median of the
+    insert in ISM figure 8 read at 4 px/mm. It is a skin rather than the part
+    because it is true of that device and not of DE-9s in general - a device
+    asks for it with `skins: {db9: teal}` in its configuration, which reaches
+    the composed shell through common/db9-receptacle@1 rather than needing a
+    Dell-specific copy of either.
+  shell: >-
+    photo-measured - THE OUTLINE DRAWN IS THE SHELL, NOT THE APERTURE. `size`
+    stays 20.47 x 11.40, the Figure 3 panel cutout; the shell passes through
+    that hole rather than filling it, and is drawn 20.22 x 10.50 inside it. The
+    clearance - 0.125 a side in x, 0.45 in y - is read off the R740xd rear
+    reference, where the port had been rendering as large as its own hole
+    because an earlier skin painted the cutout outline solid. The flange this
+    contract's `flange` key describes is drawn by common/db9-receptacle@1, not
+    here.
+  insert: >-
+    estimated - the insulator is a separate path from the shell because it is a
+    separate part, and 0.90 inside it is proportional rather than dimensioned.
+    ITS DEPTH IS THE POINT OF THE SPLIT: on a male DE-9 the insert sits BACK
+    from the shell's front so the shell guards the pins, where std/vga@1's
+    female insert sits flush. 4.20 of the 6.73 cavity puts it 2.53 behind the
+    face; the pins then stand to 6.40, just inside the shell, so nothing
+    protrudes past the panel. The recessed/flush distinction is sourced from
+    what the two connectors are. The millimetres are not - this contract's own
+    `depth` key already records that 6.73 is a mating dimension standing in for
+    a setback nobody here has measured, and these two numbers are fractions of
+    that stand-in.
 elements:
   opening: {at: [0.0, 0.0], size: [20.47, 11.40], class: cutout}
+relief:
+  wall: '#3a3e43'
+  cavity: opening
+  features:
+  - node: insert
+    top: 4.2
+    color: '#17191c'
+    confidence: estimated
+    source: >-
+      std/db9@1's own insert key. The insert sits 2.53 behind the panel face in
+      a 6.73 cavity, because a male DE-9's shell stands in front of its
+      insulator to guard the pins - the opposite of std/vga@1, whose female
+      insert is flush. The distinction is sourced; the millimetres are a
+      fraction of a mating dimension standing in for a setback nobody here has
+      measured.
+  - node: pins
+    top: 6.4
+    color: '#cfd6dd'
+    confidence: estimated
+    source: >-
+      DE-9 ON EQUIPMENT IS MALE - the contacts are pins, so they stand off the
+      insert where std/vga@1's sockets sink into it. 6.40 leaves them 0.33 short
+      of the panel face, which keeps them inside the shell as the shell exists
+      to do. Not dimensioned anywhere held here; 114-40010 fixes the mating
+      depth and not the pin length.
 connection-points:
   mate: {at: [10.235, 5.7], direction: front}
-skins: [default]
+skins: [default, teal]

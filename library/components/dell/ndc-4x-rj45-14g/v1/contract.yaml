@@ -1,0 +1,99 @@
+format: 1
+kind: module
+name: ndc-4x-rj45-14g
+version: 1.0.0
+class: nic
+behaviour: fills
+profile: server
+description: >-
+  Network daughter card for a 14th-generation PowerEdge - four RJ45 ports, each
+  with its own link and activity lamps in the jack housing
+attrs:
+  ports: 4
+  media: rj45
+provenance:
+  identity: >-
+    A FIELD-REPLACEABLE MODULE, which is why it is a component with a bay rather
+    than four jacks placed on the chassis. The ISM carries 'Removing the network
+    daughter card' and 'Installing the network daughter card', and describes the
+    NIC ports as "integrated on the network daughter card (NDC)".
+    NDC AND NOT OCP, which is a generation fact worth stating because the two are
+    easy to confuse: OCP 3.0 arrives with 15G. Dell's own stencil says the same -
+    its NDC masters carry no generation prefix but its OCP3 masters sit beside
+    17G parts, and the 15G rear masters draw an OCP slot where this machine has
+    an NDC.
+  size: >-
+    THE OUTLINE COMES FROM A VECTOR MASTER AND THE SCALE FROM THE DEVICE. Dell's
+    2x10gb-bt-2x1gb-ndc stencil master carries the faceplate and its four jacks
+    as exact coordinates but no absolute scale; ISM figure 8, which passes Gate 1
+    at 0.38%, puts the four jacks on a 22.2 mm pitch. Anchoring the master's
+    pitch to that gives a 90.3 x 14.5 mm plate.
+    A PHOTO COULD NOT HAVE SETTLED THE PLATE'S OWN EDGES - they are grey against
+    grey at 7.2074 px/mm - which is the whole reason to reach for the master. The
+    jack width of 15.54 mm is measured directly off the figure, where a bright
+    bezel against dark metal reads cleanly, and agrees with an RJ45's 15.9 mm.
+  the-jacks-are-composed-now: >-
+    THIS CARD USED TO DRAW ITS OWN FOUR - bezel, cavity, latch keyway and eight
+    gold pins each, at the right pitch and the right size, and none of it
+    std/rj45. Four hand-drawn jacks are four chances to disagree with the
+    governed part and with each other. The measured pitch and plate stay; the
+    jack art is gone and std/rj45@1 sits at each port, CENTRED on the bezel the
+    master drew rather than corner-aligned to it, because the governed jack is
+    16.0 x 14.0 where that bezel was 15.54 x 11.4 and aligning corners would
+    have moved every port.
+  the-lamps-stay-here-and-that-is-deliberate: >-
+    std/rj45 HAS NO LAMPS, because a bare modular jack has none. These eight are
+    in the housing Dell fits and ISM table 11 gives their codes, so they remain
+    this card's own until the library has a `common/` jack carrying a bezel with
+    lamps in it. That part should exist - the combination is far too common not
+    to - and this card should compose it the day it does.
+  which-card: >-
+    ONE OF SEVERAL, and the device accepts it rather than asserting it. The
+    stencil holds four NDC faces - 2x10Gb BASE-T + 2x1Gb, 2x10Gb SFP+ + 2x1Gb,
+    2x10Gb SFP+, and 4x10Gb SFP+ - and figure 8 draws four RJ45s, which matches
+    the first. The SFP variants are not modelled here.
+  lamps: >-
+    ISM table 11, per port: the link indicator is green at the port's maximum
+    speed, amber below it, blinking green when NIC identify is enabled through
+    the configuration utility, and off when the NIC is not connected; the
+    activity indicator blinks green when data is moving and is off when it is
+    not. NO RATE IS PUBLISHED for either blink and none is stated.
+    THE LAMPS ARE IN THE JACK, not beside it - the ISM's figure 10 labels them on
+    the housing - so they are elements of this part rather than separate
+    placements on the chassis.
+  depth: >-
+    estimated. Nothing held here dimensions the card behind its faceplate.
+parts:
+  # FOUR OF THE LIBRARY'S RJ45, not four drawings of one. Centred on
+  # the bezels the stencil master drew, so the lamps do not move.
+  - {ref: std/rj45@1, id: port-1, at: [2.47, 0.2], rotate: 180}
+  - {ref: std/rj45@1, id: port-2, at: [24.67, 0.2], rotate: 180}
+  - {ref: std/rj45@1, id: port-3, at: [46.87, 0.2], rotate: 180}
+  - {ref: std/rj45@1, id: port-4, at: [69.07, 0.2], rotate: 180}
+elements:
+  lamp-link-1: {at: [3.6, 1.9], size: [1.7, 2.6], class: led,
+    states: ['off', {name: 'up', color: '#22c55e'},
+             {name: degraded, color: '#eab308'},
+             {name: identify, color: '#22c55e', behavior: blinking}]}
+  lamp-act-1: {at: [15.6, 1.9], size: [1.7, 2.6], class: led,
+    states: ['off', {name: active, color: '#22c55e', behavior: blinking}]}
+  lamp-link-2: {at: [25.8, 1.9], size: [1.7, 2.6], class: led,
+    states: ['off', {name: 'up', color: '#22c55e'},
+             {name: degraded, color: '#eab308'},
+             {name: identify, color: '#22c55e', behavior: blinking}]}
+  lamp-act-2: {at: [37.8, 1.9], size: [1.7, 2.6], class: led,
+    states: ['off', {name: active, color: '#22c55e', behavior: blinking}]}
+  lamp-link-3: {at: [48.0, 1.9], size: [1.7, 2.6], class: led,
+    states: ['off', {name: 'up', color: '#22c55e'},
+             {name: degraded, color: '#eab308'},
+             {name: identify, color: '#22c55e', behavior: blinking}]}
+  lamp-act-3: {at: [60.0, 1.9], size: [1.7, 2.6], class: led,
+    states: ['off', {name: active, color: '#22c55e', behavior: blinking}]}
+  lamp-link-4: {at: [70.2, 1.9], size: [1.7, 2.6], class: led,
+    states: ['off', {name: 'up', color: '#22c55e'},
+             {name: degraded, color: '#eab308'},
+             {name: identify, color: '#22c55e', behavior: blinking}]}
+  lamp-act-4: {at: [82.2, 1.9], size: [1.7, 2.6], class: led,
+    states: ['off', {name: active, color: '#22c55e', behavior: blinking}]}
+size: {w: 90.3, h: 14.5, d: 60.0}
+skins: [default]

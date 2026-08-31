@@ -14,6 +14,22 @@ attrs:
   media: sff-2.5
   form-factor: '2.5-inch SFF'
 provenance:
+  the-label-is-text-and-a-skin: >-
+    IT LOOKED LIKE A QR CODE AND IT IS FOUR LINES OF TYPE. At the resolution the
+    first reading was done, a dense block of small white glyphs on a dark square
+    is indistinguishable from a matrix barcode, and it was drawn as one - a grid
+    of squares carrying no information whatever. At 24x the figure resolves it:
+    capacity with the unit small beside it, interface, link rate, and a spindle
+    glyph with the rotational speed.
+    THAT MAKES IT THE SAME KIND OF THING AS THE SUPPLY'S WATTAGE. A carrier is
+    one moulding whatever is in it, and this label is the only thing on the face
+    saying whether the bay holds a 10 TB 7.2K SATA drive or a 1.92 TB SSD. So it
+    is a skin: the geometry is the part, the text is the variant, and a device
+    names a skin rather than seating a different carrier.
+    THE GLYPHS ARE NOT READ FROM THE FIGURE - the LAYOUT is. Four lines, this
+    order, this emphasis. The values in each skin are the ones that figure shows
+    plus common orderable sizes, and a drive this library holds no document for
+    should get a skin when it gets a document rather than a guess.
   size: >-
     photo-measured, anchored to a standard. WIDTH is the bay pitch, and the
     pitch is arithmetic rather than a reading: the R740xd's face-on render
@@ -107,6 +123,27 @@ provenance:
     indicator remains off until all drives are initialized after the system is
     turned on." A dark status lamp on a running machine can mean the array is
     still coming up.
+  the-label-rows-are-right-aligned: >-
+    photo-measured - every row inside the label block ends on the same right
+    edge, and the block runs 2.83..15.03 with the ink stopping about 13% of its
+    width in, at 13.43. The rows were LEFT-aligned at 3.73 or centred at 8.93,
+    which is not what the printed label does.
+    THE RPM CIRCLE STAYS LEFT. It sits at cx 4.73 while the "7.2K" beside it is
+    right-aligned, so that row is ragged in the middle rather than set as a
+    unit. Moving the circle across with the text was the tidy assumption and the
+    figure does not support it.
+    THE 13% IS READ OFF A BLURRED FIGURE and is the soft number here. A scan for
+    the block edge and the ink extents returned nonsense - it found a 16.75-wide
+    block where the component says 12.20, because the carrier's own dark body
+    reads the same as the label plate at 4 px/mm - so the margin was taken by
+    eye off a 8x crop instead. The ALIGNMENT is certain; the margin is not.
+  the-per-skin-magic-x-is-gone: >-
+    The capacity unit used to carry a hand-computed x measured off the number
+    beside it - 9.93 for "1920", 8.38 for "960", 5.28 for "2" - one per skin,
+    re-derived by hand whenever a capacity changed, checked by nothing.
+    Anchoring to the block's right edge removed all five: text-anchor="end"
+    makes the renderer measure the glyphs. Right-aligning was asked for and
+    dropping five unverifiable constants came free with it.
 elements:
   lamp-activity:
     at: [3.1, 1.7]
@@ -159,4 +196,4 @@ elements:
   window-1: {at: [2.83, 27.3], size: [12.2, 10.9], class: vent}
   window-2: {at: [2.83, 39.6], size: [12.2, 11.0], class: vent}
   window-3: {at: [2.83, 52.1], size: [12.2, 9.1], class: vent}
-skins: [default]
+skins: [default, d2tb-sas, d1200gb-sas, d960gb-ssd, d1920gb-ssd]

@@ -507,11 +507,18 @@ def lint_component(path, validator):
             err(path, "L9", f"conforms: unknown standards key {conf!r}")
         else:
             sz = data["size"]
+            # THE ERROR PATH MUST NOT BE THE THING THAT BREAKS. An entry written
+            # with `source:` instead of `registry:` used to take down the whole
+            # run with a KeyError - and only ever when a component ALREADY
+            # disagreed with the registry, so the one moment the message was
+            # needed was the one moment it could not be printed. Second time a
+            # missing key in a message has crashed lint; name it and carry on.
+            origin = std.get("registry") or std.get("source") or "no source recorded"
             if abs(sz["w"] - std["w"]) > 0.05 or abs(sz["h"] - std["h"]) > 0.05:
-                err(path, "L9", f"conforms {conf}: size {sz['w']}x{sz['h']} != registry {std['w']}x{std['h']} ({std['registry']})")
+                err(path, "L9", f"conforms {conf}: size {sz['w']}x{sz['h']} != registry {std['w']}x{std['h']} ({origin})")
             if sz.get("d") is not None and std.get("depth") is not None \
                     and abs(sz["d"] - std["depth"]) > 0.05:
-                err(path, "L9", f"conforms {conf}: depth {sz['d']} != registry {std['depth']} ({std['registry']})")
+                err(path, "L9", f"conforms {conf}: depth {sz['d']} != registry {std['depth']} ({origin})")
             # aperture vs cavity: registry cavity means the opening steps in, so the
             # component must declare the recess cross-section and a node drawing it
             cav = std.get("cavity")
@@ -523,7 +530,7 @@ def lint_component(path, validator):
                         f"{cav['w']}x{cav['h']} - component must declare relief.size")
                 elif abs(rsz["w"] - cav["w"]) > 0.05 or abs(rsz["h"] - cav["h"]) > 0.05:
                     err(path, "L9", f"conforms {conf}: relief.size {rsz['w']}x{rsz['h']} "
-                        f"!= registry cavity {cav['w']}x{cav['h']} ({std['registry']})")
+                        f"!= registry cavity {cav['w']}x{cav['h']} ({origin})")
                 if rsz is not None and not rel.get("cavity"):
                     err(path, "L9", f"conforms {conf}: relief.size set without relief.cavity "
                         "- name the skin node whose art is the recess silhouette")
@@ -1656,7 +1663,16 @@ def _skin_checks(path, data):
         if rmissing:
             err(sp, "L11", f"skin lacks relief node ids: {sorted(rmissing)}")
         vb = (root.get("viewBox") or "").split()
-        size = data["size"]
+        # A contract with no `size` used to raise KeyError here and take the
+        # WHOLE RUN down - 570-odd files linted, one omission, no output at all
+        # and a traceback instead of the finding that names the file. A linter
+        # that cannot survive the mistake it exists to catch is worse than one
+        # that misses it, because the author is left with no report to read.
+        size = data.get("size")
+        if not size:
+            err(sp, "L4", "contract states no size, so nothing can check the "
+                          "skin's viewBox against it")
+            return data
         if len(vb) == 4 and (float(vb[2]) != size["w"] or float(vb[3]) != size["h"]):
             err(sp, "L4", f"viewBox {vb} != contract size {size['w']}x{size['h']}")
     return data
@@ -1775,6 +1791,18 @@ def lint_device_overlap(path, view_name, view, lib_roots):
     Occupants are exempt - a transceiver placed with mate-to is *supposed* to
     sit inside its host's aperture.
 
+    So is a part that FRAMES another: a rear drive cage's face is two rails and
+    two tabs, its box contains four drive bays, and its ink touches none of
+    them. `frames:` names what its openings clear. This is not the same claim as
+    `mounts` - a cage surrounds its drives and draws BEFORE them.
+
+    So is a SURFACE-MOUNTED part, which is supposed to lie over what is behind
+    it: a PowerEdge's rear handle is bolted to the outside of the panel and its
+    rail crosses two riser slots and a NIC card. `behaviour: mounts` is the
+    declaration, and it is the same key render.py reads to draw such a part in
+    front of the openings - so a part drawn on top is exactly a part allowed to
+    be on top. Two MOUNTED parts overlapping each other is still reported.
+
     So are two parts that are never both present. `only-in` scopes a piece of
     metal to a set of configurations, and a C40G ordered for AC has one bolted
     panel exactly where a DC chassis has its two power-entry openings. Comparing
@@ -1789,6 +1817,31 @@ def lint_device_overlap(path, view_name, view, lib_roots):
     # jack's bezel overlaps the jack by construction. `for:` is the declaration,
     # so honour it here the same way mate-to is honoured.
     owned = {p["id"]: set(targets(p.get("for"))) for p in parts_}
+    # A SURFACE-MOUNTED PART IS SUPPOSED TO LIE OVER WHAT IS BEHIND IT. The
+    # R740xd's rear handle is bolted to the outside of the panel and its rail
+    # crosses a riser slot, a low-profile slot and the NIC card by 4.96, 4.31
+    # and 1.14 mm of real ink. That is the hardware, not a sizing mistake.
+    # `behaviour: mounts` is the declaration - the same key render.py reads to
+    # draw the part in its second pass, in front of the openings - so the two
+    # cannot drift apart: a part drawn on top is a part allowed to be on top.
+    # TWO MOUNTED PARTS OVERLAPPING EACH OTHER IS STILL REPORTED. Exempting the
+    # whole class would hide two labels printed on the same square millimetre,
+    # which is a real error and a common one.
+    # A FRAME'S BOUNDING BOX IS NOT ITS FOOTPRINT. The rear drive cage's face is
+    # a top rail, a bottom rail and two thumbscrew tabs; its box contains four
+    # drive bays and its ink touches none of them. `frames:` is the declaration,
+    # honoured exactly as `for:` and `mate-to` are. It is NOT interchangeable
+    # with `behaviour: mounts` below - that says a part lies OVER what is behind
+    # it and draws after the bays, where a cage surrounds its drives and must
+    # draw before them.
+    framed = {p["id"]: set(targets(p.get("frames"))) for p in parts_}
+
+    def _mounted(pid):
+        q = next((z for z in parts_ if z.get("id") == pid), None)
+        if not q:
+            return False
+        cp = resolve_component(q["ref"], lib_roots)
+        return bool(cp) and (load_yaml(cp) or {}).get("behaviour") == "mounts"
     for p in parts_:
         if not p.get("at") or p.get("mate-to"):
             continue
@@ -1826,6 +1879,10 @@ def lint_device_overlap(path, view_name, view, lib_roots):
             # ignore the rule. Anything a sheet-metal shop could not hold is noise.
             if ox > 0.05 and oy > 0.05:
                 if b[0] in owned.get(a[0], ()) or a[0] in owned.get(b[0], ()):
+                    continue
+                if b[0] in framed.get(a[0], ()) or a[0] in framed.get(b[0], ()):
+                    continue
+                if _mounted(a[0]) != _mounted(b[0]):
                     continue
                 # never both present, so never actually overlapping. Absent
                 # `only-in` means every configuration, which intersects everything

@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="102.5mm" height="62.0mm" viewBox="0 0 102.5 62.0">
+  <!-- riser-1-2fh-14g: the riser plate and its slot windows. The plate sits
+       drawn at the module origin. The BRACKETS behind it are 120.02
+       long and start 17.46 to the LEFT of this plate, behind the
+       neighbouring metal - see `insert` in the contract. -->
+  <!-- THE PLATE IS THE SAME METAL AS THE CHASSIS. It was #7d848c against a
+       #9aa1a8 panel, which read as a dark box laid on the face; ISM figure 8
+       measures the plate at #acaeb3 and the chassis beside it at #afb0b5 -
+       three parts in 255, a hair darker and no more. The value here keeps that
+       relationship against this library's own panel colour rather than copying
+       the figure's absolute level. -->
+  <!-- THE WINDOW FRAMES THE BRACKET, NOT THE VENT FIELD. It was drawn at
+       89.90 x 12.20 - the PCIe OPENING, which is the hole a connector needs
+       rather than the hole the sheet metal has - so it cropped the card to its
+       vents. Measured off ISM figure 8 by tone, in a column at face x 21 and 24
+       where the only transition is plate to card: slot 1 shows card from y 5.0
+       to 22.75, 17.75 tall, and a row at y 15 puts the right edge at local
+       90.75 with no plate band left of the vents at all. 90.00 x 18.00,
+       centred on the opening. -->
+  <!-- THE PLATE REACHES PAST THE CARD'S OUTBOARD VENTS. It stopped at 95.0,
+       face 112, and the card runs to 119.56 - so its flange end showed. A row
+       at face y 15 finds the outboard vent pair dark to 114.75, bracket metal
+       to 118.50, and bright sheet metal from there: the metal that covers the
+       flange begins at 118.5, so the plate is 102.50 and its right edge lands
+       at 119.50. The LEFT edge stays at face 17; the slot numerals at
+       11.75..14.00 are on the chassis, left of this plate. -->
+  <path id="plate" fill-rule="evenodd" d="M1.50 0.30 H101.00 A1.20 1.20 0 0 1 102.20 1.50 V60.50 A1.20 1.20 0 0 1 101.00 61.70 H1.50 A1.20 1.20 0 0 1 0.30 60.50 V1.50 A1.20 1.20 0 0 1 1.50 0.30 Z M1.50 0.50 H97.50 A2.00 2.00 0 0 1 99.50 2.50 V16.50 A2.00 2.00 0 0 1 97.50 18.50 H1.50 A2.00 2.00 0 0 1 -0.50 16.50 V2.50 A2.00 2.00 0 0 1 1.50 0.50 Z M1.50 41.14 H97.50 A2.00 2.00 0 0 1 99.50 43.14 V57.14 A2.00 2.00 0 0 1 97.50 59.14 H1.50 A2.00 2.00 0 0 1 -0.50 57.14 V43.14 A2.00 2.00 0 0 1 1.50 41.14 Z" fill="#969da4" stroke="#4f565d" stroke-width="0.5"/>
+  <!-- THE OPENINGS KEEP THEIR IDS AND STOP DRAWING. render.py hangs each
+       bay's data-path on the node with this id, so they must exist; they kept a
+       stroke as well, which drew a second outline just inside every window.
+       That doubled rectangle was one shape drawn twice, not a shape read
+       wrong. -->
+  <rect id="slot-1" x="2.50" y="5.00" width="89.9" height="12.2" rx="1.4" fill="none" stroke="none"/>
+  <rect id="slot-3" x="2.50" y="45.64" width="89.9" height="12.2" rx="1.4" fill="none" stroke="none"/>
+  <!-- THE LOUVRE ROW, AND IT IS ON THIS PLATE. It was moved to the card on
+       the argument that the figure puts it inside a window and a hole cannot
+       carry ink - but the card is BEHIND this plate, so anything on the card in
+       the metal between windows is covered by definition, and the row vanished.
+       That settles ownership the other way: only the plate can show ink here.
+       THEY ARE LOUVRES, NOT PUNCHED RECTANGLES - a raised cell with the opening
+       in its lower half. Drawn flat and dark, sixteen of them read as a dashed
+       line, which is exactly how they looked.
+       PLACED BY THE GEOMETRY THEY MUST FIT, not by their own reading: the
+       figure puts the row at face 24.75 and the metal between windows is
+       22.50..24.82, about 2 mm apart. The window is measured off tone at
+       4 px/mm and the card pitch is standard and exact, so the gap is the
+       harder number. The relief - the cells stand proud - is not modelled. -->
+  <g id="louvres-1">
+    <rect x="3.59" y="18.56" width="4.06" height="2.2" rx="0.5" fill="#a8afb6" stroke="#818891" stroke-width="0.18"/>
+    <rect x="4.02" y="19.64" width="3.2" height="0.9" rx="0.25" fill="#15181b"/>
+    <rect x="9.08" y="18.56" width="4.06" height="2.2" rx="0.5" fill="#a8afb6" stroke="#818891" stroke-width="0.18"/>
+    <rect x="9.51" y="19.64" width="3.2" height="0.9" rx="0.25" fill="#15181b"/>
+    <rect x="14.57" y="18.56" width="4.06" height="2.2" rx="0.5" fill="#a8afb6" stroke="#818891" stroke-width="0.18"/>
+    <rect x="15.00" y="19.64" width="3.2" height="0.9" rx="0.25" fill="#15181b"/>
+    <rect x="20.07" y="18.56" width="4.06" height="2.2" rx="0.5" fill="#a8afb6" stroke="#818891" stroke-width="0.18"/>
+    <rect x="20.50" y="19.64" width="3.2" height="0.9" rx="0.25" fill="#15181b"/>
+    <rect x="25.56" y="18.56" width="4.06" height="2.2" rx="0.5" fill="#a8afb6" stroke="#818891" stroke-width="0.18"/>
+    <rect x="25.99" y="19.64" width="3.2" height="0.9" rx="0.25" fill="#15181b"/>
+    <rect x="31.05" y="18.56" width="4.06" height="2.2" rx="0.5" fill="#a8afb6" stroke="#818891" stroke-width="0.18"/>
+    <rect x="31.48" y="19.64" width="3.2" height="0.9" rx="0.25" fill="#15181b"/>
+    <rect x="36.54" y="18.56" width="4.06" height="2.2" rx="0.5" fill="#a8afb6" stroke="#818891" stroke-width="0.18"/>
+    <rect x="36.97" y="19.64" width="3.2" height="0.9" rx="0.25" fill="#15181b"/>
+    <rect x="42.03" y="18.56" width="4.06" height="2.2" rx="0.5" fill="#a8afb6" stroke="#818891" stroke-width="0.18"/>
+    <rect x="42.46" y="19.64" width="3.2" height="0.9" rx="0.25" fill="#15181b"/>
+    <rect x="47.53" y="18.56" width="4.06" height="2.2" rx="0.5" fill="#a8afb6" stroke="#818891" stroke-width="0.18"/>
+    <rect x="47.96" y="19.64" width="3.2" height="0.9" rx="0.25" fill="#15181b"/>
+    <rect x="53.02" y="18.56" width="4.06" height="2.2" rx="0.5" fill="#a8afb6" stroke="#818891" stroke-width="0.18"/>
+    <rect x="53.45" y="19.64" width="3.2" height="0.9" rx="0.25" fill="#15181b"/>
+    <rect x="58.51" y="18.56" width="4.06" height="2.2" rx="0.5" fill="#a8afb6" stroke="#818891" stroke-width="0.18"/>
+    <rect x="58.94" y="19.64" width="3.2" height="0.9" rx="0.25" fill="#15181b"/>
+    <rect x="64.00" y="18.56" width="4.06" height="2.2" rx="0.5" fill="#a8afb6" stroke="#818891" stroke-width="0.18"/>
+    <rect x="64.43" y="19.64" width="3.2" height="0.9" rx="0.25" fill="#15181b"/>
+    <rect x="69.49" y="18.56" width="4.06" height="2.2" rx="0.5" fill="#a8afb6" stroke="#818891" stroke-width="0.18"/>
+    <rect x="69.92" y="19.64" width="3.2" height="0.9" rx="0.25" fill="#15181b"/>
+    <rect x="74.99" y="18.56" width="4.06" height="2.2" rx="0.5" fill="#a8afb6" stroke="#818891" stroke-width="0.18"/>
+    <rect x="75.42" y="19.64" width="3.2" height="0.9" rx="0.25" fill="#15181b"/>
+    <rect x="80.48" y="18.56" width="4.06" height="2.2" rx="0.5" fill="#a8afb6" stroke="#818891" stroke-width="0.18"/>
+    <rect x="80.91" y="19.64" width="3.2" height="0.9" rx="0.25" fill="#15181b"/>
+    <rect x="85.97" y="18.56" width="4.06" height="2.2" rx="0.5" fill="#a8afb6" stroke="#818891" stroke-width="0.18"/>
+    <rect x="86.40" y="19.64" width="3.2" height="0.9" rx="0.25" fill="#15181b"/>
+  </g>
+  <g id="louvres-2">
+    <rect x="3.59" y="38.88" width="4.06" height="2.2" rx="0.5" fill="#a8afb6" stroke="#818891" stroke-width="0.18"/>
+    <rect x="4.02" y="39.96" width="3.2" height="0.9" rx="0.25" fill="#15181b"/>
+    <rect x="9.08" y="38.88" width="4.06" height="2.2" rx="0.5" fill="#a8afb6" stroke="#818891" stroke-width="0.18"/>
+    <rect x="9.51" y="39.96" width="3.2" height="0.9" rx="0.25" fill="#15181b"/>
+    <rect x="14.57" y="38.88" width="4.06" height="2.2" rx="0.5" fill="#a8afb6" stroke="#818891" stroke-width="0.18"/>
+    <rect x="15.00" y="39.96" width="3.2" height="0.9" rx="0.25" fill="#15181b"/>
+    <rect x="20.07" y="38.88" width="4.06" height="2.2" rx="0.5" fill="#a8afb6" stroke="#818891" stroke-width="0.18"/>
+    <rect x="20.50" y="39.96" width="3.2" height="0.9" rx="0.25" fill="#15181b"/>
+    <rect x="25.56" y="38.88" width="4.06" height="2.2" rx="0.5" fill="#a8afb6" stroke="#818891" stroke-width="0.18"/>
+    <rect x="25.99" y="39.96" width="3.2" height="0.9" rx="0.25" fill="#15181b"/>
+    <rect x="31.05" y="38.88" width="4.06" height="2.2" rx="0.5" fill="#a8afb6" stroke="#818891" stroke-width="0.18"/>
+    <rect x="31.48" y="39.96" width="3.2" height="0.9" rx="0.25" fill="#15181b"/>
+    <rect x="36.54" y="38.88" width="4.06" height="2.2" rx="0.5" fill="#a8afb6" stroke="#818891" stroke-width="0.18"/>
+    <rect x="36.97" y="39.96" width="3.2" height="0.9" rx="0.25" fill="#15181b"/>
+    <rect x="42.03" y="38.88" width="4.06" height="2.2" rx="0.5" fill="#a8afb6" stroke="#818891" stroke-width="0.18"/>
+    <rect x="42.46" y="39.96" width="3.2" height="0.9" rx="0.25" fill="#15181b"/>
+    <rect x="47.53" y="38.88" width="4.06" height="2.2" rx="0.5" fill="#a8afb6" stroke="#818891" stroke-width="0.18"/>
+    <rect x="47.96" y="39.96" width="3.2" height="0.9" rx="0.25" fill="#15181b"/>
+    <rect x="53.02" y="38.88" width="4.06" height="2.2" rx="0.5" fill="#a8afb6" stroke="#818891" stroke-width="0.18"/>
+    <rect x="53.45" y="39.96" width="3.2" height="0.9" rx="0.25" fill="#15181b"/>
+    <rect x="58.51" y="38.88" width="4.06" height="2.2" rx="0.5" fill="#a8afb6" stroke="#818891" stroke-width="0.18"/>
+    <rect x="58.94" y="39.96" width="3.2" height="0.9" rx="0.25" fill="#15181b"/>
+    <rect x="64.00" y="38.88" width="4.06" height="2.2" rx="0.5" fill="#a8afb6" stroke="#818891" stroke-width="0.18"/>
+    <rect x="64.43" y="39.96" width="3.2" height="0.9" rx="0.25" fill="#15181b"/>
+    <rect x="69.49" y="38.88" width="4.06" height="2.2" rx="0.5" fill="#a8afb6" stroke="#818891" stroke-width="0.18"/>
+    <rect x="69.92" y="39.96" width="3.2" height="0.9" rx="0.25" fill="#15181b"/>
+    <rect x="74.99" y="38.88" width="4.06" height="2.2" rx="0.5" fill="#a8afb6" stroke="#818891" stroke-width="0.18"/>
+    <rect x="75.42" y="39.96" width="3.2" height="0.9" rx="0.25" fill="#15181b"/>
+    <rect x="80.48" y="38.88" width="4.06" height="2.2" rx="0.5" fill="#a8afb6" stroke="#818891" stroke-width="0.18"/>
+    <rect x="80.91" y="39.96" width="3.2" height="0.9" rx="0.25" fill="#15181b"/>
+    <rect x="85.97" y="38.88" width="4.06" height="2.2" rx="0.5" fill="#a8afb6" stroke="#818891" stroke-width="0.18"/>
+    <rect x="86.40" y="39.96" width="3.2" height="0.9" rx="0.25" fill="#15181b"/>
+  </g>
+</svg>

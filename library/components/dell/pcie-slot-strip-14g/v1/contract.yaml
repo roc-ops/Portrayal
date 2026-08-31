@@ -1,0 +1,48 @@
+format: 1
+kind: component
+name: pcie-slot-strip-14g
+version: 1.0.0
+class: mechanical
+# IN FRONT OF THE CARD. The bracket runs behind this strip and shows again to
+# its left; drawn behind, the strip and its numerals disappear under the card.
+behaviour: mounts
+profile: compute
+description: >-
+  The strip of chassis metal between the PCIe card retention clips and the riser
+  plate on a 14G PowerEdge, carrying the slot numbers
+size: {w: 10.75, h: 62.0, d: 2.0}
+provenance:
+  size: >-
+    photo-measured - ISM figure 8 at 4 px/mm, reading tone along face y 15
+    across the left end of slot 1: the bracket's retention tip and clip are dark
+    to 3.50, BRIGHT METAL runs 3.50 to 14.25, and the card resumes at 14.25
+    where the riser's window begins. So the strip is 10.75 wide at face 3.50.
+    Its height is taken from the riser bay it runs beside, 62.0, and is the
+    softer number - the figure's own top and bottom edges here are lost against
+    the chassis.
+  the-numerals-are-on-this-part: >-
+    photo-measured - at face x 11.75..14.00, y 12.00 / 32.00 / 52.00, on the
+    20.0 pitch that this face's vent rows and clip pairs both return.
+    THEY WERE CHASSIS SILKSCREEN AND NEVER RENDERED. Chassis silkscreen prints
+    before components, correctly - a legend a module covers is invisible on the
+    hardware too - but these are not covered on the hardware, they sit on metal
+    that is in front of the card. The printing moves into this part's own skin,
+    inside `<g id="silkscreen">`, which is the mechanism for ink that travels
+    with a part rather than with the panel.
+  depth: >-
+    estimated - 2.0 is a sheet-metal thickness and is not measured. A
+    straight-on figure cannot show it, and the service model has no riser cage
+    in front of the panel to read it from.
+parts:
+  # THE CLIPS ARE BOLTED TO THIS STRIP, so they are composed into it
+  # rather than placed beside it. As three separate `mounts`
+  # placements their boxes overlapped this one and L13 reported it -
+  # correctly, because two mounted parts in the same place is usually
+  # two labels on one square millimetre. Composing says what is
+  # actually true: one piece of metal carrying three clips.
+  - {ref: dell/pcie-retention-clip-14g@1, id: clip-1, at: [-1.00, 3.75]}
+  - {ref: dell/pcie-retention-clip-14g@1, id: clip-2, at: [-1.00, 23.75]}
+  - {ref: dell/pcie-retention-clip-14g@1, id: clip-3, at: [-1.00, 43.75]}
+elements:
+  strip: {at: [0.0, 0.0], size: [10.75, 62.0], class: bezel}
+skins: [default]

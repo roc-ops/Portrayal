@@ -1,0 +1,63 @@
+format: 1
+kind: component
+name: pcie-filler-lp-14g
+version: 1.2.0
+class: bracket
+behaviour: fills
+profile: server
+description: >-
+  low-profile PCIe slot blanking plate for a 14th-generation PowerEdge - the standard
+  bracket with a 8 x 2 vent field punched where a card's connectors
+  would be
+size: {w: 79.2, h: 18.42}
+attrs:
+  vent-holes: 16
+provenance:
+  identity: >-
+    A BLANK IS THE SAME BRACKET AS A CARD, with metal where the connectors would
+    be and holes in that metal for air. So it composes std/pcie-bracket-lp@1 rather than
+    redrawing the outline: the retention tip, the keyed top, the 45 degree
+    chamfers and the connector opening all come from the standard. A correction
+    to the bracket reaches this part and every card without either being edited.
+  behind-and-why: >-
+    THE BRACKET IS COMPOSED *BEHIND* THIS PART'S OWN ART, which is the opposite
+    of how a bezel composes an aperture and is the whole difference between the
+    two. A bezel FRAMES a hole, so the hole belongs on top of the plate. A
+    blanking plate FILLS one. Composed the default way round the bracket's own
+    dark opening draws back over the vents and the plate renders as an empty
+    slot - which is exactly what happened, and is why `behind` exists.
+  vent-field: >-
+    measured - ISM figure 8 at 2.5991 px/mm, scanned across the WHOLE bracket
+    rather than across the connector opening. That distinction is the finding:
+    the first pass scanned only the opening, read the run as evenly spaced, and
+    drew one block of holes. Across the full plate it is 8 columns on an
+    even 5.39 pitch with a 4.23 square hole.
+  the-frame-is-centred-on-what-it-encloses: >-
+    4.5 clear at each end of the 8 columns it contains, which is
+    what fixes its extent rather than an eyeballed margin - the first pass left
+    far too much room at the left-hand end. Its ends are STADIUM ROUNDED, radius
+    half its height: at 14x the right-hand end is a full half-circle with a
+    column of plain metal inside it before the last hole, not the mild corner
+    a first pass drew.
+  the-plate-is-drawn-seamless: >-
+    NO STROKE, THE BRACKET'S OWN COLOUR, AND 0.3 PROUD ON EVERY SIDE - because
+    the bracket's opening carries a 0.35 stroke that straddles its edge, and a
+    plate cut exactly to the opening leaves the outer half of that stroke
+    showing as a ghost rectangle around the vents. The plate is metal filling the
+    connector opening, not a part sitting in it, and given an outline it read as
+    a second rounded rectangle around the vent frame - so the drawing showed two
+    where the figure has one.
+  no-slot-at-the-lead-in: >-
+    A NARROW VERTICAL SLOT WAS DRAWN THERE AND IS NOT IN THE FIGURE. It came from
+    a first reading of the left-hand end, where the frame's own rounded end sits
+    close to the first hole; read as a separate feature it became a slot, and
+    read again at 14x it is the frame.
+  the-middle-gap-is-the-handle: >-
+    The scan reads a 6.54 break in this plate's run and it is NOT a break in the
+    punching: the rear handle passes in front of the plate at exactly that x in
+    the photograph. The eight columns are modelled continuous. No equivalent of
+    the full-height plate's lone fifteenth column is resolvable here, and none is
+    invented.
+parts:
+  - {ref: std/pcie-bracket-lp@1, id: bracket, at: [0, 0], behind: true}
+skins: [default]

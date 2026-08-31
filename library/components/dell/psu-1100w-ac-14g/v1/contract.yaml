@@ -1,0 +1,248 @@
+format: 1
+kind: module
+name: psu-1100w-ac-14g
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: server
+description: >-
+  1100 W AC hot-plug power supply for a 14th-generation PowerEdge - C14 inlet,
+  a fan, and a translucent handle that is itself the status indicator
+attrs:
+  power-output-w: 1100
+  form-factor: crps
+  inlet: c14
+  efficiency: platinum
+provenance:
+  the-inlet-is-composed-behind-so-the-lever-can-cross-it: >-
+    THE LEVER SWEEPS OVER THE CONNECTOR, and a skin paints BEFORE its composed
+    parts - so a 12.87 tab was being clipped to the 2.63 of it that cleared the
+    inlet, and widening it changed nothing visible. The inlet is composed
+    `behind` and the bezel cut as a FRAME with the connector's footprint knocked
+    out of it, so the connector still shows through the recess it sits in and
+    the lever, drawn later in the skin, lands on top of both. That is the order
+    the hardware has: recess, connector, lever across it.
+  what-the-vendor-cad-settles-and-what-it-cannot: >-
+    THE SHAPES ARE CONFIRMED AND THE PROTRUSIONS ARE NOT, and the reason is the
+    pose. Dell's interactive service model for this machine
+    (r740xd, 740XD_Powersupply_Unit-1.001) draws the supply with its handle
+    SWUNG OPEN, because the guide is a removal procedure - which is why the unit
+    boxes 132.6 wide against a body that is 86.3. Anything measured from the
+    face in that pose is measuring an open handle.
+    CONFIRMED: the withdrawal handle really is a U standing off the faceplate,
+    which is what the side view shows and what `uhandle` was chosen for; and the
+    release lever really is a Z - a rounded head at the rear, a dogleg, and a
+    long shaft running back into the supply. Both were described from the
+    hardware before the model was read, and both are there.
+    NOT SETTLED: how far either stands proud when the supply is SEATED and the
+    handle closed. 19.05 and 25.4 stay as they are - operator estimates, marked
+    `estimated` - until a guide poses this supply home. A number taken from an
+    open handle would be `vendor-cad` and wrong, which is worse than an estimate
+    that says it is one.
+    ALSO READ, and not applied: the supply's own body measures 86.3 x 39.1 x
+    195.5 against the 87.5 x 41.8 this part carries from ISM figure 8. Those are
+    close enough to be the same supply and far enough apart to be worth
+    re-reading; the figure is this device's own source and stays until something
+    settles it.
+  the-latch-is-a-z-and-we-see-its-end: >-
+    THE ORANGE RECTANGLE IS THE TOP OF A LEVER, NOT A TAB. Behind the face it
+    runs about three-quarters of an inch out, turns to run PARALLEL to the
+    faceplate across to the inlet bezel, and turns again back into the supply -
+    a Z. Pushed sideways the middle leg sweeps over the coupler and traps the
+    cord; pulled back it releases the cord and the supply together, which is why
+    it is the same part as the handle you withdraw the unit by. It is roughly
+    three-eighths to half an inch across that middle leg.
+    RELIEF CAN ONLY SAY HOW FAR IT STANDS OFF. `out: 19.05` carries the first
+    leg and nothing expresses the other two, so the shape is written here rather
+    than approximated by a primitive that does not mean it.
+  the-latch-travels-in-two-slots: >-
+    measured - ISM figure 8 at 2.5991 px/mm, supply-local x 1.00..5.30 with one
+    slot at y 14.00 and one at 27.80, each 2.80 tall. They are OPENINGS, not
+    paint: they are what the lever's leg moves through, and without them the
+    orange reads as a coloured rectangle rather than the end of a mechanism.
+  the-bezel-is-centred-now: >-
+    IT WAS NOT, AND THE INLET SHOWED IT. The composed connector's footprint is
+    local y 7.00..35.00 and the bezel ran 7.07..38.68, so the connector's top
+    edge sat 0.07 from the bezel's top and 3.68 clear of its bottom. Centred on
+    the supply at 5.00..36.80 the connector sits centred in it, and the gap above
+    the bezel matches the gap below.
+  the-wattage-is-a-skin: >-
+    ACROSS DELL'S AC SUPPLIES FOR THIS GENERATION THE FACEPLATE IS ONE CASTING -
+    same inlet, same release lever, same octagonal fan opening, same latch bar -
+    and the only thing that tells a 495 from a 1100 apart at the back of a rack
+    is the number printed on the fan label. So the number is the variable and
+    everything else is the part: `skins` carries default (1100), w495, w750,
+    w1400 and w2400, and a configuration picks one without anything else in the
+    drawing moving. Supplies that differ in more than the label - a DC terminal
+    block instead of an IEC inlet - are a different part, because then the
+    casting differs too.
+    EPP is Dell's "Extended Power Performance" mark. It is branding rather than
+    a measurement; the wordmark's own artwork is Dell's and is not reproduced.
+  size: >-
+    photo-measured from ISM figure 8, which passes Gate 1 at 0.38% against a
+    434 x 86.8 rear face - the best-scaled source held for this machine. THE
+    WIDTH IS A PITCH RATHER THAN AN OUTLINE, which is the more reliable of the
+    two: the handles sit about 90 mm apart on both rear figures. WIDTH IS THEN
+    CONSTRAINED BY WHAT ELSE IS ON THE FACE: riser 2's vent field stops at
+    x 251.4, so the first supply cannot begin before it, and the second must end
+    at the 434 edge. 88.7 each from 256.6 is what fits, and it sits inside the
+    handle pitch's own spread (89.9 on one figure, 90.5 on the other).
+    HEIGHT IS 41.8 AND THE MODULE TOP IS y 45.0, read off the R740 ISM figure 9
+    - "Back view of three riser system" - which passes Gate 1 at 0.26% and is
+    the best-scaled rear source held. An earlier draft made it 43.4 by halving
+    the face, which is a derivation and not a measurement.
+  output: >-
+    the figure prints "EPP 1100W 94.5% efficiency" on the fan label of both
+    supplies, which is where 1100 comes from. THE R740xd TAKES THIRTEEN DIFFERENT
+    SUPPLIES - the Information Update tech sheet (Rev 2, Nov 2022) lists 495 W
+    through 2600 W across AC, DC, HVDC and Mixed Mode - so this part is one of
+    them and not "the" R740xd supply. The others are not modelled and the device
+    accepts this one.
+  power: >-
+    power-output-w 1100 is READ OFF THE PART'S OWN LABEL in ISM figure 8, which
+    prints "EPP 1100W 94.5% efficiency" on the fan of both supplies. It is a
+    RATING and not a draw - this class states output and never a draw key,
+    because the two are opposite signs of one unit.
+    NO AMBIENT QUALIFIES IT. Vendor tables commonly print the same supply at 25,
+    40 and 55 C and the figures differ by enough to matter; the label in this
+    figure carries one number and no temperature, so one number is recorded and
+    no rung is invented to fill the sentence. The Information Update tech sheet
+    gives this family's heat dissipation (4100 BTU/hr for 1100 W AC) and its
+    current draw, also without an ambient.
+  inlet: >-
+    COMPOSED, NOT DRAWN, AND THAT TOOK THREE WRONG DRAFTS TO REACH. std/c14-inlet
+    already exists - 28.0 x 20.0, the panel cutout from SCHURTER 6100-3 against
+    IEC 60320-1 - and NINE other supplies in this library compose it. This part
+    drew its own instead and got it wrong three separate ways: first as a rounded
+    rectangle with three slots, which reads as a BS 1363 outlet; then chamfered on
+    the top corners like an upright C14; then re-chamfered to the right.
+    The last of those was the correct ORIENTATION and still the wrong practice.
+    A connector with a standard, a datasheet and an existing part is never
+    something to redraw from a photograph - the photograph can only say which way
+    up it goes, which here is `rotate: 90`.
+  handle-is-the-lamp: >-
+    AND IT IS THE WITHDRAWAL HANDLE, NOT THE RELEASE LEVER. Two parts of this
+    supply were both being called a handle - the orange Z you push sideways to
+    release the unit, and the U in the middle you pull it out by - so the lamp
+    with all five of Dell's states on it sat on the orange lever, and the thing
+    that actually glows green in a rack was inert. mkpsu.py had it written down
+    as settled ("THE HANDLE IS STILL THE INDICATOR ... and that is the orange
+    lever"), which is how it survived. The skin's lever node is named `lever`
+    now so the two cannot be confused by name again, and the lamp carries the
+    grip's own box, 33.04, 3.65, 8.24 x 34.64.
+    NOT A LAMP BESIDE A HANDLE. ISM: "AC power supply units (PSUs) have an
+    illuminated translucent handle that serves as an indicator." So the handle
+    carries the state class, in the same construction as the drive carrier's
+    glyphs and the left control panel's - three places on this chassis where the
+    thing you look at is the thing that lights.
+    THE DC SUPPLY IS DIFFERENT and is not this part: the ISM says "The DC PSUs
+    have an LED that serves as an indicator", a separate lamp rather than a lit
+    handle, so a DC variant is a different component and not a skin of this one.
+  face: >-
+    photo-measured, and only to the level figure 8 resolves at 7.2074 px/mm: the
+    handle, the C14 inlet, the release latch and the fan aperture are placed from
+    it; the fan blade count, the label text and the inlet's internal detail are
+    drawn rather than measured. No vector master for a 14G supply is held - the
+    stencil's PSU masters are 15G and later wattages (700, 800, 1100, 1400, 1800,
+    2400, 2800 W on C14 through C22) and none of them is this unit.
+  depth: >-
+    estimated. A CRPS-form supply is around 185 mm deep and no document held here
+    states it for this one. Not recorded rather than guessed.
+size: {w: 86.3, h: 39.1}
+relief:
+  wall: '#3a4045'
+  features:
+  # ALL FOUR ARE THE OPERATOR'S READINGS OFF THE HARDWARE, which is a better
+  # source than a photograph for how far something stands off a face: a
+  # straight-on figure cannot show protrusion at all. `estimated` says so.
+  - node: lever
+    out: 19.05
+    color: '#e8a33d'
+    confidence: estimated
+    source: >-
+      operator, from the machine - the orange release lever stands about
+      three-quarters of an inch proud. It is pushed sideways to lock the cord
+      in, so it has to stand off the face far enough to get a thumb on, and a
+      flat tab would not work.
+  - node: grip
+    uhandle: 25.4
+    color: '#c9ced3'
+    confidence: estimated
+    source: >-
+      operator, from the machine - about an inch proud and a U rather than the
+      flat rectangle this was drawn as, the same shape as the handles already
+      in this library. It is what the supply is pulled out by.
+  - node: screw-1
+    dome: 1.6
+    color: '#c3c8cd'
+    confidence: estimated
+    source: operator - rounded head, about a sixteenth proud
+  - node: screw-2
+    dome: 1.6
+    color: '#c3c8cd'
+    confidence: estimated
+    source: operator - rounded head, about a sixteenth proud
+  - node: screw-3
+    dome: 1.6
+    color: '#c3c8cd'
+    confidence: estimated
+    source: operator - rounded head, about a sixteenth proud
+  - node: screw-4
+    dome: 1.6
+    color: '#c3c8cd'
+    confidence: estimated
+    source: operator - rounded head, about a sixteenth proud
+parts:
+  # THE INLET IS THE LIBRARY'S, TURNED. `rotate: 90` puts the chamfered pair of
+  # corners on the RIGHT and the earth pin centre-right with line and neutral
+  # stacked to its left, which is how Dell mounts it and what figure 9 shows at
+  # 4x. common/psu-ac-650 composes the same part at 270 for the mirror case.
+  - {ref: std/c14-inlet@1, id: inlet, at: [6.70, 11.0], rotate: 90, behind: true}
+elements:
+  grip:
+    at: [33.04, 3.65]
+    size: [8.24, 34.64]
+    class: led
+    states: ['off',
+             {name: 'ok', color: '#22c55e'},
+             {name: fault, color: '#eab308', behavior: {mode: blinking, rate: 1}},
+             {name: updating, color: '#22c55e',
+              behavior: {mode: blinking, rate: 1}},
+             {name: mismatch,
+              behavior: {mode: sequence,
+                         phases: [{color: '#22c55e', seconds: 0.125},
+                                  {seconds: 0.125},
+                                  {color: '#22c55e', seconds: 0.125},
+                                  {seconds: 0.125},
+                                  {color: '#22c55e', seconds: 0.125},
+                                  {seconds: 0.125},
+                                  {color: '#22c55e', seconds: 0.125},
+                                  {seconds: 0.125},
+                                  {color: '#22c55e', seconds: 0.125},
+                                  {seconds: 2.0}]}}]
+    description: >-
+      The translucent handle, lit from within. ISM table 12 entire: green - a
+      valid source is connected and the supply is operational; blinking amber - a
+      problem with the supply; not illuminated - no power connected; blinking
+      green - firmware is being updated.
+      `mismatch` IS WHY THE SEQUENCE MECHANISM EXISTS, for the fourth time on
+      this chassis: Dell's wording is "the PSU handle blinks green five times at
+      a rate of 4 Hz and turns off", which gives the phase length exactly -
+      4 Hz is 0.125 s lit and 0.125 s dark - and then a dark tail that the
+      article does not time. The five blinks and their rate are Dell's; the
+      2 second tail is this library's reading of "and turns off".
+      NO RATE IS PUBLISHED for the amber fault or the firmware blink, so 1 Hz is
+      a reading and not a figure - unlike the mismatch, where 4 Hz is stated.
+  inlet-bezel:
+    at: [7.55, 3.50]
+    size: [24.24, 31.80]
+    class: inlet
+    description: >-
+      the recess the C14 sits back inside. The CONNECTOR is std/c14-inlet@1,
+      composed rather than drawn - see `inlet` in provenance.
+  fan:
+    at: [43.03, 1.80]
+    size: [33.0, 33.8]
+    class: vent
+    description: the exhaust aperture
+skins: [default, w495, w750, w1400, w2400]

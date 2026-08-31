@@ -51,6 +51,12 @@ roles:
     # case this list exists for, because a class in no role is never asked and
     # its silence then reads as zero rather than as unknown.
     - control-panel
+    # a network daughter card is silicon and optics: it draws, and Dell publishes
+    # no figure for it in anything held here, so the warning is the record.
+    - nic
+    # a PCIe riser is a board with connectors and, on some variants, a switch.
+    # Nothing held here states a figure for one, so the warning is the record.
+    - riser
 
   # SUPPLIES: state `power-output-w` and never a draw key - they are opposite
   # signs of one unit, so a sum over both is a category error that reads as an
@@ -74,6 +80,9 @@ roles:
     - ear
     - tab
     - panel-blank
+    # a PCIe I/O bracket is 20 GA steel and nothing else - the CARD behind it
+    # draws, and the card is a different part.
+    - bracket
     # a plain front bezel is a sheet of metal with a lock in it. The LCD variant
     # is NOT this class - it carries a display and would draw - which is part of
     # why the two are separate parts rather than skins of one.
