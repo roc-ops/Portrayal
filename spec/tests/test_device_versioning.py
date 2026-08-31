@@ -245,6 +245,14 @@ def test_examples_never_become_device_types():
     import glob
     names = [pathlib.Path(f).stem
              for f in glob.glob(str(ROOT / "library/exports/*/device-types/*/*.yaml"))]
+    # THE COMMITTED EXPORTS, which is what this can see. `build.sh` stopped
+    # producing them when the export moved to `publish.sh`, so a run here checks
+    # what is in the tree rather than what the exporter would make right now.
+    # That is the right thing to check - they are committed data and a consumer
+    # reads them as they are - but it means an exporter change is only caught
+    # once somebody runs ./publish.sh. Asserted non-empty so the check cannot
+    # pass by finding nothing.
+    assert names, "no exported device types found; run ./publish.sh"
     import yaml as y
     examples = set()
     for p in glob.glob(str(ROOT / "library/devices/*/*/device.yaml")):

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Build the publishable artifacts: rendered device SVGs + the JSON indexes.
+# Build what the tests, the linter and the viewer read: rendered device SVGs
+# and the JSON indexes. NOT the DCIM exports - see publish.sh.
 set -euo pipefail
 cd "$(dirname "$0")"
 # `--fast` renders only what changed. FULL IS THE DEFAULT and stays that way:
@@ -10,8 +11,7 @@ cd "$(dirname "$0")"
 #
 # `--device NAME` is the edit-check loop: lint that device against only the
 # components it reaches, re-render just it, and refresh the indexes so the
-# viewer is consistent. It does NOT run the DCIM export, which is a consumer
-# artifact nothing on the page reads. Repeatable.
+# viewer is consistent. Repeatable.
 FAST=0
 DEVSEL=()
 while [ $# -gt 0 ]; do
@@ -68,31 +68,8 @@ for ix in devices_index components_index labs_index gaps_index registry_index; d
   pids+=("$!")
 done
 for pid in "${pids[@]}"; do wait "$pid"; done
-# DCIM exports: Portrayal is the source of truth, a DCIM is one consumer.
-#
-# One device type per SKU, for NetBox and Nautobot alike, with elevation images
-# rendered from the compiled faces. Errors are NOT swallowed: the old loop hid
-# every failure behind `2>/dev/null || true`, which is how a device silently
-# stopped exporting.
-#
-# Runs one process per device under the same worker cap as the render pass, and
-# skips entirely on a --device build: the exports are a whole-library artefact
-# and half of one is worse than yesterday's.
-#
-# IT READS THE BUILD, NOT THE LIBRARY. The export takes `--dist` and opens
-# nothing under library/devices or library/components: the compiled SVG carries
-# the device manifest, components.json the contract fields, vendors.json and
-# overlays.json the registries. That is what lets it move out of this repository
-# without moving the library with it.
-if [ ${#DEVSEL[@]} -eq 0 ]; then
-  rm -rf library/exports
-  python3 spec/tools/portrayal/dcim_export.py --dist "$OUT" \
-    --out library/exports --nos arcos --nos sonic --images >/dev/null
-  # Module types are per component, not per device: one pass over the index.
-  # --images for the same reason the device pass takes it: it also renders each
-  # card's faceplate into module-images/. *.png is gitignored, so this costs the
-  # repository nothing and gives a local build the pictures.
-  python3 spec/tools/portrayal/dcim_export.py --dist "$OUT" --modules \
-    --out library/exports --images >/dev/null
-fi
+# THE DCIM EXPORT IS NOT PART OF THIS BUILD, and used to be half of it: 39
+# seconds against 41 for everything else, on a stage whose output exactly one
+# test reads and nothing on the page does. `./publish.sh` is this plus the
+# exports, and is what runs when the artifacts are published.
 echo "built $(ls "$OUT" | wc -l | tr -d ' ') files -> $OUT"
