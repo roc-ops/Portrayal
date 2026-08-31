@@ -112,10 +112,19 @@ def test_every_multi_bay_power_group_in_the_library_is_stated_but_one():
 
 
 def test_a_stated_form_is_one_the_vendors_actually_use():
+    """SCOPED TO POWER GROUPS, and it was not always. It swept every group in the
+    device and passed for as long as power was the only thing stating a form. The
+    day L67 landed and the control-plane and fabric groups started stating theirs,
+    this failed on 2+1, 6+1 and 7+1 - real vendor notation belonging to a rule
+    that is not this one. A rollout test has to look only at its own rollout."""
     forms = set()
     for f in sorted(LIB.glob("devices/**/device.yaml")):
-        for g in (yaml.safe_load(f.read_text()).get("groups") or {}).values():
-            r = ((g or {}).get("attrs") or {}).get("redundancy")
+        for name, g in (yaml.safe_load(f.read_text()).get("groups") or {}).items():
+            g = g or {}
+            term = str(g.get("term") or "").lower()
+            if not any(w in name.lower() or w in term for w in ("psu", "power", "pem")):
+                continue
+            r = (g.get("attrs") or {}).get("redundancy")
             if r:
                 forms.add(r)
     assert forms <= {"1+1", "2+2", "n+1", "n+n"}, forms
