@@ -1724,6 +1724,13 @@ def lint_device_overlap(path, view_name, view, lib_roots):
     Occupants are exempt - a transceiver placed with mate-to is *supposed* to
     sit inside its host's aperture.
 
+    So is a part that FRAMES another. A moulding with windows in it covers area
+    its ink does not, and `frames:` says which ids its openings clear. Without
+    it the rear handle of a PowerEdge reports three overlaps for a drawing that
+    has none, and the only workaround was to misuse `for:` - which says an
+    indicator BELONGS to what it sits on, and would have claimed the handle
+    annotates the network card.
+
     So are two parts that are never both present. `only-in` scopes a piece of
     metal to a set of configurations, and a C40G ordered for AC has one bolted
     panel exactly where a DC chassis has its two power-entry openings. Comparing
@@ -1738,6 +1745,13 @@ def lint_device_overlap(path, view_name, view, lib_roots):
     # jack's bezel overlaps the jack by construction. `for:` is the declaration,
     # so honour it here the same way mate-to is honoured.
     owned = {p["id"]: set(targets(p.get("for"))) for p in parts_}
+    # A FRAME'S BOUNDING BOX IS NOT ITS FOOTPRINT. A moulding with windows in it
+    # - the R740xd's rear handle, whose two openings clear a riser slot and four
+    # NIC ports - covers area its ink does not, and comparing boxes reports
+    # three overlaps where the drawing has none. `frames:` is the declaration,
+    # honoured here exactly as `for:` and `mate-to` are: a stated relationship,
+    # not a guess from geometry.
+    framed = {p["id"]: set(targets(p.get("frames"))) for p in parts_}
     for p in parts_:
         if not p.get("at") or p.get("mate-to"):
             continue
@@ -1775,6 +1789,8 @@ def lint_device_overlap(path, view_name, view, lib_roots):
             # ignore the rule. Anything a sheet-metal shop could not hold is noise.
             if ox > 0.05 and oy > 0.05:
                 if b[0] in owned.get(a[0], ()) or a[0] in owned.get(b[0], ()):
+                    continue
+                if b[0] in framed.get(a[0], ()) or a[0] in framed.get(b[0], ()):
                     continue
                 # never both present, so never actually overlapping. Absent
                 # `only-in` means every configuration, which intersects everything

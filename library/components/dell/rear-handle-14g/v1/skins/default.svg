@@ -1,26 +1,24 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="117mm" height="37mm" viewBox="0 0 117 37">
-  <!-- The rear handle, measured off the R740 ISM figure 9 at 7.2074 px/mm.
-       THREE PARTS AND NOT A SLAB: a screwed block on the left, a bar that runs
-       above the four NIC ports, and an arm angling down to the chassis wall. The
-       space between them is air - the bounding box is 117 x 37 and the metal
-       fills perhaps a third of it, which is why the device declares what this
-       part crosses instead of the drawing pretending to a rectangle. -->
-  <g fill="#26292d" stroke="#15181b" stroke-width="0.5" stroke-linejoin="round">
-    <!-- block, x 133..152 y 43..62 on the face -->
-    <path d="M0.4 0.4 H19.4 V19.4 H0.4 Z" rx="1"/>
-    <!-- bar above the NIC ports, x 152..232 y 59..68 -->
-    <path d="M15.0 16.0 H99.5 V25.0 H15.0 Z"/>
-    <!-- arm down to the wall, x 232..250 y 62..80 -->
-    <path d="M96.0 19.0 L116.6 33.0 V36.6 H108.0 L92.0 25.6 Z"/>
-  </g>
-  <!-- the captive screw: a knurled head with a cross slot, which is all the
-       figure resolves -->
-  <g id="screw">
-    <circle cx="9.5" cy="10.5" r="5.1" fill="#3a3f44" stroke="#5f666d"
-            stroke-width="0.5"/>
-    <circle cx="9.5" cy="10.5" r="3.0" fill="#22262a" stroke="#4a5157"
-            stroke-width="0.4"/>
-    <path d="M9.5 8.3 V12.7 M7.3 10.5 H11.7" stroke="#7d848a"
-          stroke-width="0.7" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="113.55mm" height="43.25mm" viewBox="0 0 113.55 43.25">
+  <!-- Traced from the vendor service model's own silhouette, not from ISM
+       figure 8 - the figure resolves this face at 2.6 px/mm and this is a dark
+       part on a dark ground, which is why earlier attempts were abandoned.
+       Filling the shell's 9,354 triangles flat gives the outline directly.
+       A FRAME, NOT A BAR: the middle rail is what you grab, and it runs into a
+       post rising on the LEFT and a leg falling on the RIGHT. The two windows
+       clear the low-profile riser slot above and the four NIC ports below.
+       The lower window's top-right sweep - 215.5 out to 228.5 over y 67.7 to
+       71.2 in face terms - is drawn as one large radius rather than traced. -->
+  <path id="frame" fill-rule="evenodd" fill="#2a2d31" stroke="#15181b"
+        stroke-width="0.4"
+        d="M1.60 0.00 H111.95 A1.60 1.60 0 0 1 113.55 1.60 V41.65 A1.60 1.60 0 0 1 111.95 43.25 H1.60 A1.60 1.60 0 0 1 0.00 41.65 V1.60 A1.60 1.60 0 0 1 1.60 0.00 Z M25.90 5.05 H103.20 A2.50 2.50 0 0 1 105.70 7.55 V18.05 A2.50 2.50 0 0 1 103.20 20.55 H25.90 A2.50 2.50 0 0 1 23.40 18.05 V7.55 A2.50 2.50 0 0 1 25.90 5.05 Z M4.20 24.85 H80.20 A12.00 12.00 0 0 1 92.20 36.85 V37.85 A2.50 2.50 0 0 1 89.70 40.35 H4.20 A2.50 2.50 0 0 1 1.70 37.85 V27.35 A2.50 2.50 0 0 1 4.20 24.85 Z"/>
+  <!-- THE RAIL IS ITS OWN NODE because it is its own thing: the frame is what
+       clears the riser and the ports, and this is what a person actually holds.
+       Naming it is also what lets relief say the rail stands off and the frame
+       does not, the day somebody measures that off the hardware. -->
+  <g id="rail">
+    <rect x="0.4" y="20.85" width="112.75" height="3.95" rx="0.5"
+          fill="#2a2d31"/>
+    <rect x="1.2" y="21.10" width="111.15" height="0.55" rx="0.27"
+          fill="#4a4f55"/>
   </g>
 </svg>

@@ -639,6 +639,25 @@ views:
         - {ref: common/led-indicator@1, id: sys-status, at: [19.43, 73.73],
            for: chassis, group: leds, rel-pos: 2,
            states: ['off', {name: 'on', color: '#2563eb'}]}
+        # THE REAR HANDLE, and it is a FRAME rather than a bar. Its middle rail
+        # is what the chassis is pulled out by; the two windows in it clear the
+        # low-profile riser slot above and the four NIC ports below, which is
+        # why it can be drawn over both without hiding either.
+        # Traced from Dell's own service model. ISM figure 8 resolves this face
+        # at 2.6 px/mm and this is a dark part on a dark ground, which is why an
+        # earlier attempt at this handle was abandoned rather than recorded
+        # badly. Its position is CHECKED and not assumed: the CAD's lower window
+        # lands within about 1.5 mm of the NDC bay this device placed off the
+        # figure - two readings that knew nothing of each other.
+        # LAST IN THE LIST because placements draw after bays and on the
+        # hardware this part is in front of both of them.
+        # `frames:` NOT `for:`. Its box takes in 113.55 x 43.25 of the face
+        # and its ink takes in a good deal less - the two windows are what let
+        # it sit over these three without hiding any of them. `for:` would have
+        # said this handle ANNOTATES the network card, which is a different
+        # claim and not true.
+        - {ref: dell/rear-handle-14g@1, id: rear-handle, at: [136.30, 42.35],
+           frames: [riser-2, riser-2-lp, ndc], group: furniture, rel-pos: 20}
 configurations:
   base:
     # the serial port's insulator is teal on this machine, not the

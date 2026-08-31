@@ -997,6 +997,21 @@
                           }
                         }
                       ]
+                    },
+                    "frames": {
+                      "oneOf": [
+                        {
+                          "$ref": "#/$defs/segment"
+                        },
+                        {
+                          "type": "array",
+                          "minItems": 1,
+                          "items": {
+                            "$ref": "#/$defs/segment"
+                          }
+                        }
+                      ],
+                      "description": "ids this part SURROUNDS rather than covers - a moulding with windows in it, whose bounding box takes in area its ink does not. L13 compares boxes, which is right for almost every part and wrong for a frame; this is the declaration that makes the difference checkable instead of assumed. Name only what the windows actually clear. It is not a way to silence a real overlap: a part that genuinely paints over another is an error, and `for:` - which says an indicator BELONGS to the part it sits on - means something else and should not be borrowed for this."
                     }
                   },
                   "oneOf": [
