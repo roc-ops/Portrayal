@@ -655,7 +655,18 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
             None, None, None, None, rotate=bay.get("rotate"), palette=palette,
             skin_overrides=skin_overrides, attr_overrides=attr_overrides,
             path=f"{path}/{bay_id}/module", resolved=resolved, depth=depth + 1)
-        g.append(sub)
+        # BEHIND THE FACEPLATE, NOT ON IT. Appending is right for a drive in a
+        # cage and wrong for a card in a riser: what shows of a PCIe bracket is
+        # its working area through a punched window and its retention tab clear
+        # of the plate, with the flange end covered by the metal. `behind: true`
+        # inserts the occupant before the skin - the same word and the same
+        # mechanism `parts:` has carried all along. It only means anything if
+        # the skin has real holes; over a stroked outline the occupant vanishes.
+        if bay.get("behind"):
+            g.insert(behind_at, sub)
+            behind_at += 1
+        else:
+            g.append(sub)
     return g, contract
 
 
