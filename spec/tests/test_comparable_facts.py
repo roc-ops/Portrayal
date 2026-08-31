@@ -218,3 +218,120 @@ def test_the_vocabulary_is_published_with_the_values():
     assert set(doc["vocabulary"]) == set(F.BY_NAME)
     assert doc["vocabulary"]["throughput-gbps"]["note"]
     assert doc["devices"] and "unclaimed" in doc
+
+
+# ---- a scope is not a fact --------------------------------------------------
+
+def test_the_power_envelope_annotates_the_figure_it_qualifies():
+    """`power-envelope` is on 52 devices and says whether a power figure is for
+    a bare chassis or a fully-configured one. It changes what the number MEANS
+    without being a measurement, and given a column of its own it invites the
+    original bug - "fully-configured" turning up under PSU redundancy. So it
+    rides on the fact it qualifies."""
+    res = F.resolve(dev({"power": {"power-max-w": 280,
+                                   "power-envelope": "fully-configured"}}))
+    assert res["peak-power-w"]["scope"]["value"] == "fully-configured"
+    assert res["peak-power-w"]["scope"]["from"] == "power/power-envelope"
+    assert "power-envelope" not in res
+
+
+def test_a_per_figure_scope_beats_the_chassis_wide_one():
+    """`power-max-scope` is about the maximum specifically; `power-envelope` is
+    about the chassis. The specific one wins."""
+    res = F.resolve(dev({"power": {"power-max-w": 500,
+                                   "power-max-scope": "with 400G optics",
+                                   "power-envelope": "bare"}}))
+    assert res["peak-power-w"]["scope"]["value"] == "with 400G optics"
+
+
+def test_unstated_is_kept_as_a_scope_because_it_is_an_answer():
+    """Ten devices say `unstated`, which records that somebody looked and the
+    vendor did not qualify the figure. Dropping it would make that
+    indistinguishable from nobody having asked."""
+    res = F.resolve(dev({"power": {"power-max-w": 100, "power-envelope": "unstated"}}))
+    assert res["peak-power-w"]["scope"]["value"] == "unstated"
+
+
+def test_a_scope_key_is_not_reported_as_unclaimed():
+    """It IS claimed - by the fact it annotates. Leaving it in the census would
+    keep nominating it for a column it must never have."""
+    assert "power-envelope" in F.CLAIMED
+    assert "power-envelope" not in F.unclaimed(
+        dev({"power": {"power-max-w": 1, "power-envelope": "bare"}}))
+
+
+# ---- what promotion was for -------------------------------------------------
+
+def test_the_promoted_facts_reach_the_devices_that_carry_them():
+    """The census ranked these; each recurs on 20 to 46 devices, which is what
+    made them worth a name. Read off the built index so it also proves the
+    vocabulary and the values agree."""
+    import json
+    p = LIB / "dist" / "comparable-facts.json"
+    if not p.exists():
+        import pytest
+        pytest.skip("library/dist not built - run ./build.sh")
+    cov = json.loads(p.read_text())["coverage"]
+    for name, least in (("emc", 40), ("safety", 40), ("console", 40), ("bmc", 38),
+                        ("environmental-directives", 38), ("timing", 30),
+                        ("oob-management", 30), ("optics-sfp-plus", 30),
+                        ("nebs", 20), ("gnss", 18), ("timing-interfaces", 18)):
+        assert cov.get(name, 0) >= least, (name, cov.get(name, 0))
+
+
+def test_optics_are_one_fact_per_media():
+    """The axis a reader compares on: two boxes both have SFP28 cages and the
+    question is what runs in them. Folding them into one `optics` blob would
+    make that unanswerable."""
+    medias = [n for n in F.BY_NAME if n.startswith("optics-")]
+    assert len(medias) >= 6
+    for n in medias:
+        assert len(F.BY_NAME[n].sources) == 1, n
+
+
+def test_the_long_tail_is_still_left_alone():
+    """102 of 211 spellings appear on exactly one device. Promoting those would
+    be a taxonomy of nothing, so the census is expected to stay non-empty."""
+    import json
+    p = LIB / "dist" / "comparable-facts.json"
+    if not p.exists():
+        import pytest
+        pytest.skip("library/dist not built")
+    unc = json.loads(p.read_text())["unclaimed"]
+    assert unc, "the census emptied - either everything was promoted or it broke"
+    assert sum(1 for n in unc.values() if n == 1) > len(unc) // 3
+
+
+# ---- superseded prose is claimed, not unclaimed -----------------------------
+
+def test_the_prose_forms_of_a_structural_fact_are_not_nominated():
+    """THE CENSUS MUST NOT NOMINATE WHAT RULE 2 FORBIDS. `fan-redundancy` and
+    `psu-redundancy` are on 23 devices each as prose, which put them at the TOP
+    of the tail - so the next person working down the list would promote them
+    and quietly undo the rule that keeps a scope qualifier out of a redundancy
+    column. They are named as superseded and counted separately instead."""
+    d = dev(attrs={"power": {"psu-redundancy": "1+1 hot-swappable"},
+                   "thermal": {"fan-redundancy": "3+1 hot-swappable"}})
+    assert F.unclaimed(d) == []
+    assert F.superseded(d) == ["fan-redundancy", "psu-redundancy"]
+
+
+def test_a_superseded_key_never_becomes_a_source():
+    """Held structurally: if one ever appeared in a fact's source list, rule 2
+    would be broken by construction."""
+    claimed = {k for f in F.FACTS for (k, _, _) in f.sources}
+    assert not (claimed & set(F.SUPERSEDED)), claimed & set(F.SUPERSEDED)
+
+
+def test_the_superseded_prose_is_still_visible():
+    """It is not wrong to carry the vendor's sentence - only wrong to compare
+    on it. Keeping the count published means a disagreement between the prose
+    and the structured form stays findable."""
+    import json
+    p = LIB / "dist" / "comparable-facts.json"
+    if not p.exists():
+        import pytest
+        pytest.skip("library/dist not built")
+    doc = json.loads(p.read_text())
+    assert doc["superseded"], "superseded census vanished"
+    assert doc["superseded"].get("fan-redundancy", 0) >= 20

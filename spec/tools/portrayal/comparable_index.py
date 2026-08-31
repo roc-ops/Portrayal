@@ -31,6 +31,7 @@ def main():
             continue
         resolved = facts_mod.resolve(d)
         tail = facts_mod.unclaimed(d)
+        old = facts_mod.superseded(d)
         for k in tail:
             census[k] = census.get(k, 0) + 1
         devices.append({
@@ -43,6 +44,9 @@ def main():
             # reader chasing a missing row can see whether the answer is absent
             # or merely unclaimed.
             "unclaimed": tail,
+            # prose kept for a fact now read off the groups - not an error,
+            # just never the source
+            "superseded": old,
         })
     devices.sort(key=lambda x: (x["manufacturer"], x["name"]))
 
@@ -59,6 +63,11 @@ def main():
             entry["note"] = f.note
         vocab[f.name] = entry
 
+    sup = {}
+    for e in devices:
+        for k in e["superseded"]:
+            sup[k] = sup.get(k, 0) + 1
+
     stated = {}
     for e in devices:
         for k in e["facts"]:
@@ -73,6 +82,7 @@ def main():
         # emerge or it stays visibly unshrunk
         "unclaimed": dict(sorted(census.items(), key=lambda kv: (-kv[1], kv[0]))),
         "coverage": dict(sorted(stated.items(), key=lambda kv: (-kv[1], kv[0]))),
+        "superseded": dict(sorted(sup.items(), key=lambda kv: (-kv[1], kv[0]))),
     }, indent=1, sort_keys=True))
     print(f"compiled {len(vocab)} comparable facts across {len(devices)} devices "
           f"-> {out}/comparable-facts.json ({len(census)} unclaimed spelling(s))")
