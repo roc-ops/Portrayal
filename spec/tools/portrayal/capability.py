@@ -24,6 +24,62 @@ import yaml
 
 from manifest import view_parts
 
+# A RACK FACE IS NOT A BODY, and two rules need to agree about which they are
+# looking at. L43 asks the question first - a front or rear face measuring
+# 480-487 mm is the 19-inch rack face rather than the metal between the ear
+# folds - and stands down when something is SEATED in the flange, because a
+# device whose ears carry ports has to draw them.
+#
+# The definition lives here, and lint imports it, because lint already imports
+# this module and the reverse would be circular. That direction is the whole
+# point: one definition of "this is a rack face with things on it", not two that
+# can drift. Before this, the linter accepted the Dell R740xd's 482.6 mm face
+# and the grader called the same face a chassis-width disagreement, so a device
+# with six good views could not be extruded.
+EAR_ZONE_MM = 25.0
+RACK_FACE_MM = (480.0, 487.0)
+
+
+def seated_in_an_ear(view, w):
+    """Anything installed within EAR_ZONE_MM of either end of the face.
+
+    25 mm because that is what an ear is: a 19-inch face is 482.6 mm and the
+    bodies behind one run 434 to 448 mm, so the flange each side is between 17
+    and 24 mm. Anchors are compared rather than full extents - a part's width
+    lives in its contract and this rule does not need to resolve one to know
+    that something was seated out there.
+    """
+    parts = view_parts(view or {})
+    for item in parts["placements"] + parts["bays"] + parts["cutouts"]:
+        at = item.get("at")
+        if not at:
+            continue
+        x = float(at[0])
+        if x <= EAR_ZONE_MM or x >= w - EAR_ZONE_MM:
+            return item.get("id") or item.get("ref") or "a component"
+    return None
+
+
+def is_populated_rack_face(view, width, chassis_width):
+    """True when this face is the rack face of a device whose ears carry parts.
+
+    All three conditions, and each one is load-bearing. The width must be in the
+    rack-face band, so an arbitrarily wide face is still an error. Something
+    must be seated in the flange, which is L43's test and the only evidence that
+    the ears are real rather than a mistake. And it must exceed the body, so a
+    device whose body genuinely IS 482.6 mm wide is compared normally rather
+    than excused.
+    """
+    if width is None or chassis_width is None:
+        return False
+    w = float(width)
+    if not (RACK_FACE_MM[0] <= w <= RACK_FACE_MM[1]):
+        return False
+    if w <= float(chassis_width) + DIM_TOL:
+        return False
+    return seated_in_an_ear(view, w) is not None
+
+
 # The chain. Each step strictly requires the one before it, which is what makes
 # a single number honest: you cannot have six consistent faces without two.
 LEVELS = ((1, "flat"), (2, "faced"), (3, "solid"), (4, "addressable"))
@@ -127,9 +183,26 @@ def _consistency(views, chassis):
         s = sz.get(view)
         return None if s is None else s[axis]
 
+    # A POPULATED RACK FACE IS NOT A DISAGREEMENT. The Dell R740xd draws its
+    # front at 482.6 mm because Dell builds the mounting flanges into the
+    # faceplate and puts the VGA, the power button and the health lamp in them -
+    # a 434 mm face would leave real, field-visible ports with nowhere to live.
+    # Comparing that against the body and calling the 48.6 mm a modelling error
+    # left a device with six good views unable to be extruded, while L43 looked
+    # at the same face and correctly accepted it. Two rules, one face, opposite
+    # answers; this is them agreeing.
+    #
+    # The face is LEFT OUT of the set rather than adjusted, because the ear span
+    # is not measured anywhere and inferring it from the difference would be
+    # assuming the answer. What still holds it honest: L43 requires the ears to
+    # carry something, the band requires the face to be a rack face, and the
+    # other three faces plus chassis.width still have to agree with each other.
+    def eared(v):
+        return is_populated_rack_face(views.get(v), member(v, 0), ch.get("width"))
+
     sets = (
         ("chassis width", [(f"{v}.w", member(v, 0)) for v in
-                           ("front", "rear", "top", "bottom")]
+                           ("front", "rear", "top", "bottom") if not eared(v)]
                           + [("chassis.width", ch.get("width"))]),
         ("chassis height", [(f"{v}.h", member(v, 1)) for v in
                             ("front", "rear", "left", "right")]

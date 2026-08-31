@@ -97,6 +97,7 @@ from pathlib import Path
 import yaml
 
 import attrsections as attrs_mod
+import capability
 import devicelock
 from manifest import (view_parts, targets, split_target, presented_interface,
                       VIEW_KEY_ORDER,
@@ -2268,27 +2269,15 @@ def lint_device_bay_pitch(path, data):
                          "second image before recording it as a finding")
 
 
-EAR_ZONE_MM = 25.0
-
-
-def _seated_in_an_ear(view, w):
-    """Anything installed within EAR_ZONE_MM of either end of the face.
-
-    25 mm because that is what an ear is: a 19-inch face is 482.6 mm and the
-    bodies behind one run 434 to 448 mm, so the flange each side is between 17
-    and 24 mm. Anchors are compared rather than full extents - a part's width
-    lives in its contract and this rule does not need to resolve one to know
-    that something was seated out there.
-    """
-    parts = view_parts(view)
-    for item in parts["placements"] + parts["bays"] + parts["cutouts"]:
-        at = item.get("at")
-        if not at:
-            continue
-        x = float(at[0])
-        if x <= EAR_ZONE_MM or x >= w - EAR_ZONE_MM:
-            return item.get("id") or item.get("ref") or "a component"
-    return None
+# THE DEFINITION LIVES IN capability.py AND IS IMPORTED, not copied. It used to
+# live here, and the grader had its own idea of the same face: the linter
+# accepted the Dell R740xd's 482.6 mm front because its ears carry a VGA and a
+# power button, while the capability grader called that a chassis-width
+# disagreement and stopped the device at level 2 with six good views. One face,
+# two rules, opposite answers. See issue #105.
+EAR_ZONE_MM = capability.EAR_ZONE_MM
+RACK_FACE_MM = capability.RACK_FACE_MM
+_seated_in_an_ear = capability.seated_in_an_ear
 
 
 def lint_device_rack_ears(path, data):
@@ -2320,7 +2309,7 @@ def lint_device_rack_ears(path, data):
         if vname not in ("front", "rear"):
             continue
         w = ((view or {}).get("size") or {}).get("w")
-        if not (w and 480.0 <= float(w) <= 487.0):
+        if not (w and RACK_FACE_MM[0] <= float(w) <= RACK_FACE_MM[1]):
             continue
         if _seated_in_an_ear(view or {}, float(w)):
             continue
@@ -4833,7 +4822,6 @@ def print_matrix(matrix, schemas):
     Nothing here is declared. Every column is computed from the manifest, so it
     cannot be optimistic and cannot go stale.
     """
-    import capability
     profiles = capability.load_profiles(schemas)
     rows = []
     for path, d in matrix:
