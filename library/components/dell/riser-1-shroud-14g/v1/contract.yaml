@@ -1,0 +1,68 @@
+format: 1
+kind: component
+name: riser-1-shroud-14g
+version: 1.0.0
+class: mechanical
+# The outer skin of this assembly: it draws after the bays, and the cards'
+# flange ends go behind it.
+behaviour: mounts
+profile: compute
+description: >-
+  The sheet metal right of riser 1 on a 14G PowerEdge - the outer skin over the
+  PCIe retention bracket, and the only part of that assembly seen from outside
+size: {w: 25.62, h: 64.43, d: 17.76}
+provenance:
+  size: >-
+    measured - Dell's service model, `R740XD_GPU_Brackets_01-1`, clipped to the
+    panel plane at z 713.5. A vendor solid measured in software, in the sense
+    std/sma@1's barrel key sets out.
+  it-covers-the-bracket-and-that-is-the-point: >-
+    dell/pcie-retention-bracket-14g@1 was modelled first and is UNDERNEATH this.
+    Two numbers say so: this stands 17.76 proud against the bracket's 17.53, and
+    it spans the riser's full height - 64.43 against 43.00 - where the bracket
+    covers two thirds of it. Modelling the bracket alone drew the inside of the
+    assembly, which is not what a person standing behind the rack can see.
+    The bracket is composed here with `behind: true` rather than dropped: it is
+    real hardware, its own relief matters in 3D, and it simply must not be drawn
+    over the thing that covers it.
+  the-slots-are-not-in-the-model: >-
+    photo-measured - and the search is recorded rather than the conclusion.
+    Cutting the part at 729.0, just under its own front face, leaves 120 of 897
+    triangles and two small tabs: the recess walls are not cut cleanly, so the
+    slot column never appears as holes at any plane. Read off ISM figure 8
+    instead - five slots at face x 128.00..131.40, first at y 17.75, on a 5.47
+    pitch, 3.40 x 4.15. A SIXTH sits above at about 12.25 and reads only 0.75
+    tall, mostly obscured; it is not drawn, and that is a gap rather than a
+    finding.
+  depth: >-
+    measured - 17.76 proud of the panel plane. This is the number the model was
+    consulted for: the assembly has to stand off far enough to contain the L of
+    a PCIe bracket's flange, and a straight-on figure cannot show protrusion at
+    all. The section behind the front face is not modelled.
+relief:
+  wall: '#4a5057'
+  features:
+  - node: shroud
+    out: 17.76
+    color: '#9aa1a8'
+    confidence: measured
+    source: >-
+      dell/riser-1-shroud-14g@1's own depth key - Dell's service model, from the
+      panel plane at z 713.5 to this part's own front. One number for the whole
+      outline, which the depth key records as an approximation.
+  - node: slots
+    sink: 2.0
+    color: '#1b1f23'
+    confidence: estimated
+    source: >-
+      Unsourced. The slot column is not in the model at any plane - see the
+      slots key - so how deep the recesses go is not known. 2.0 reads as a
+      pocket against a 17.76 face and is not a measurement.
+parts:
+  # BEHIND THE SKIN. The bracket is what this metal covers.
+  - {ref: dell/pcie-retention-bracket-14g@1, id: bracket,
+     at: [0.64, 0.00], behind: true}
+elements:
+  shroud: {at: [0.0, 0.0], size: [25.62, 64.43], class: bezel}
+  slots: {at: [16.30, 15.94], size: [3.4, 26.03], class: vent}
+skins: [default]
