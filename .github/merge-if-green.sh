@@ -15,8 +15,24 @@
 # That is what `strict` means in branch protection - the branch must be up to
 # date with the base before its result counts - and it is checked here.
 #
+# ON FIRST USE, RUN IT FROM THE PR BRANCH. The script cannot merge its own PR
+# from the base branch, because the base branch does not have the file yet -
+# merging #104 is what put it on main. The same holds for any PR that adds or
+# changes it. Everywhere else, invoke it from anywhere: it locates the
+# repository from its own path rather than from the caller's directory.
+#
+# CI TAKES ABOUT TWENTY MINUTES, not the ten it looks like it should. A poll
+# loop around this with a ten-minute timeout will give up while the run is still
+# going, which is how the first use of this script nearly reported a failure
+# that had not happened.
+#
 #   .github/merge-if-green.sh 104
 set -euo pipefail
+# From the SCRIPT's location, not the caller's. `git rev-parse --show-toplevel`
+# reads the current directory, so invoking this from anywhere outside a
+# repository made it cd to an empty string - which is the opposite of working
+# from anywhere. build.sh has done it this way all along.
+cd "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PR="${1:?usage: merge-if-green.sh <pr-number> [extra gh pr merge args...]}"
 shift || true
 REPO=$(gh repo view --json nameWithOwner -q .nameWithOwner)
@@ -40,6 +56,19 @@ echo "$runs" | grep -q "^gates	completed	success$" || {
   echo "the 'gates' check has not completed successfully on $SHA"; exit 1; }
 bad=$(echo "$runs" | awk -F'\t' '$2=="completed" && $3!="success" && $3!="neutral" && $3!="skipped"' | wc -l | tr -d ' ')
 [ "$bad" = "0" ] || { echo "$bad check(s) did not pass"; exit 1; }
+
+# A CHECK THAT HAS NOT FINISHED IS NOT A CHECK THAT PASSED. The first version
+# looked only at `completed` rows, so a second workflow still in flight was
+# invisible and the merge went ahead on the strength of the one that had
+# finished. That never fired, because `gates` is the only check today - which is
+# exactly the kind of hole that waits for the day somebody adds a second one.
+running=$(echo "$runs" | awk -F'\t' '$2!="completed"' | wc -l | tr -d ' ')
+if [ "$running" != "0" ]; then
+  echo "$running check(s) still running - wait for them rather than merging on"
+  echo "the strength of the ones that have finished:"
+  echo "$runs" | awk -F'\t' '$2!="completed" {printf "  %s (%s)\n", $1, $2}'
+  exit 1
+fi
 
 # 2. the branch must have been tested against the current base. See above.
 git fetch -q origin "$BASE"
