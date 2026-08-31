@@ -10,30 +10,41 @@
        small bar at the top right. `evenodd` is what makes the hole a hole.
        DO NOT MEASURE THE 0.30 BACK OFF THIS OUTLINE as though it were a
        chamfer - it is the simplification tolerance. -->
+  <!-- THE RELEASE LATCH at this handle's right end, and it is BEHIND the handle
+       - drawn before the body so the body's own metal cuts across it, which is
+       what the figure shows and what the first version had backwards.
+       THE BLUE IS A U OPENING TO THE LEFT, not a closed ring. Closed and
+       rounded on the right at face 248.0, with two straight arms running left
+       to about 229.75 at y 51.00 and 59.75. Drawn as a stroked centreline
+       rather than a filled outline, because a bracket of even wall is what it
+       is; a ring drawn as a rectangle with a hole gets the corners wrong.
+       INSIDE IT IS A THIN BLACK Y, not an arrow. Stem running LEFT from the
+       fork at face 238.00 to 232.50, branches opening RIGHT to 241.50 at
+       y 52.60 and 58.15. The first version read it as a solid left-pointing
+       triangle, which is what a Y this thin looks like at 4 px/mm once the fork
+       and the stem blur together - the shape is right at the tip and wrong
+       everywhere else.
+       ON THE FAR LEFT, a black plastic piece running top to bottom at face
+       229.75..231.75. It reads as a hinge: something flipped out before the
+       handle is pulled. THAT FUNCTION IS THE OPERATOR'S READING OF THE
+       HARDWARE, not something the figure or the service model states.
+       #6785a4, sampled - a third distinct blue on this face, with #7098be on
+       the thumbscrews and #5c7b99 on the riser clip. -->
+  <g id="latch">
+    <rect x="92.02" y="7.4" width="18.25" height="11.25" rx="1.6"
+          fill="#232c38"/>
+    <path d="M92.77 8.65 H105.27 A4.375 4.375 0 0 1 105.27 17.4 H92.77"
+          fill="none" stroke="#6785a4" stroke-width="2.0"
+          stroke-linecap="round"/>
+    <path d="M94.77 13.03 H100.27 M100.27 13.03 L103.77 10.25 M100.27 13.03 L103.77 15.8"
+          stroke="#14161a" stroke-width="0.8" fill="none"
+          stroke-linecap="round"/>
+    <rect x="92.02" y="7.4" width="2.00" height="11.25" rx="0.5"
+          fill="#17191d"/>
+  </g>
   <path id="body" fill-rule="evenodd" fill="#2a2d31" stroke="#15181b"
         stroke-width="0.35"
         d="M79.81 2.69 L79.81 3.94 L89.06 3.94 L89.12 4.50 L110.12 4.50 L110.12 2.69 Z M0.00 0.00 L0.31 19.94 L9.81 19.94 L12.06 19.25 L13.12 18.44 L14.31 16.38 L14.56 10.31 L15.00 10.25 L15.31 21.38 L16.50 23.56 L18.44 24.88 L20.00 25.19 L76.81 25.19 L82.00 25.69 L87.19 27.00 L90.50 28.38 L98.06 33.00 L98.50 41.69 L110.94 41.81 L111.38 41.31 L111.69 25.75 L108.00 21.88 L104.56 19.88 L98.69 18.69 L22.19 18.69 L21.88 4.00 L29.31 3.94 L29.31 2.69 L21.94 2.69 L21.81 0.00 L13.44 0.00 L13.12 0.75 L2.81 0.75 L2.75 0.00 Z M6.50 10.38 L8.19 10.88 L8.94 12.25 L8.44 13.81 L7.19 14.56 L5.81 14.31 L4.75 12.94 L5.00 11.38 Z"/>
-  <!-- THE RELEASE LATCH at this handle's right end - the operator's "little blue
-       clip, looks like a release latch". Blue is Dell's user-serviceable
-       colour, so it is a thing a person is meant to pull.
-       A blue ring around a dark recess, face 229.75..248.00, y 50.00..60.75,
-       with a lighter chevron pointing LEFT inside it - away from the power
-       supply, which is the direction the handle swings out.
-       #6785a4, sampled. It is a third distinct blue on this one face: #7098be
-       for the thumbscrews, #5c7b99 for the riser clip, #6785a4 here. They are
-       the same paint under three different lightings, and a single library
-       "Dell blue" would have flattened all three.
-       WHAT IS DRAWN IS THE FACE OF IT. How far it stands proud, and which way
-       it travels, are not in the figure and not in the service model's posed
-       handle - so there is no relief feature for it. -->
-  <g id="latch">
-    <rect x="92.02" y="7.65" width="18.25" height="10.75" rx="2.5"
-          fill="#182639" stroke="#6785a4" stroke-width="1.25"/>
-    <path d="M101.77 9.65 L96.27 12.9 L101.77 16.15 Z"
-          fill="#5a6068"/>
-    <rect x="104.27" y="10.15" width="2.50" height="5.00" rx="0.4"
-          fill="#2b3340"/>
-  </g>
   <!-- The captive screws. The LEFT one lands in the outline's own hole, which
        is why that hole is drawn and then covered: the CAD says where the screw
        goes and the screw is what a person sees there. -->
