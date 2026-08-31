@@ -78,16 +78,21 @@ for pid in "${pids[@]}"; do wait "$pid"; done
 # Runs one process per device under the same worker cap as the render pass, and
 # skips entirely on a --device build: the exports are a whole-library artefact
 # and half of one is worse than yesterday's.
+#
+# IT READS THE BUILD, NOT THE LIBRARY. The export takes `--dist` and opens
+# nothing under library/devices or library/components: the compiled SVG carries
+# the device manifest, components.json the contract fields, vendors.json and
+# overlays.json the registries. That is what lets it move out of this repository
+# without moving the library with it.
 if [ ${#DEVSEL[@]} -eq 0 ]; then
   rm -rf library/exports
-  ls library/devices/*/*/device.yaml \
-    | xargs -P "$JOBS" -I{} python3 spec/tools/portrayal/dcim_export.py {} \
-        --out library/exports --nos arcos --nos sonic --dist "$OUT" >/dev/null
-  # Module types are per component, not per device: one pass over the library.
-  # --dist for the same reason the device loop takes it: with it the pass also
-  # renders each card's faceplate into module-images/. *.png is gitignored, so
-  # this costs the repository nothing and gives a local build the pictures.
-  python3 spec/tools/portrayal/dcim_export.py --modules library \
-    --out library/exports --dist "$OUT" >/dev/null
+  python3 spec/tools/portrayal/dcim_export.py --dist "$OUT" \
+    --out library/exports --nos arcos --nos sonic --images >/dev/null
+  # Module types are per component, not per device: one pass over the index.
+  # --images for the same reason the device pass takes it: it also renders each
+  # card's faceplate into module-images/. *.png is gitignored, so this costs the
+  # repository nothing and gives a local build the pictures.
+  python3 spec/tools/portrayal/dcim_export.py --dist "$OUT" --modules \
+    --out library/exports --images >/dev/null
 fi
 echo "built $(ls "$OUT" | wc -l | tr -d ' ') files -> $OUT"

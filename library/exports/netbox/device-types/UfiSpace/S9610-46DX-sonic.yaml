@@ -151,42 +151,42 @@ comments: "UfiSpace S9610-46DX 100G/400G open aggregation router - 2RU white box
   \ delivers 1000 W. Maximum system consumption 1263 W under 400G MSA optics, 1534 W with OpenZR+. No\
   \ orderable chassis part number appears in any held document; see the chassis-sku gap.\n\nDatasheet:\
   \ UfiSpace S9610-46DX 46-Port 100G/400G Open Aggregation Router Datasheet\n  https://www.ufispace.com/products/telco/aggregation/s9610-46dx-46-port-100-400g-open-aggregation-router\n\
-  \nFacts carried in the model that this schema has no field for:\n- performance.switching-capacity: 7.2\
-  \ Tbps\n- performance.packet-buffer: 8 GB\n- power.power-typical-w: 626\n- power.power-max-w: 1534\n\
-  - power.power-envelope: bare\n- power.input-ac: 200 to 240 V, 12.5 A\n- power.input-dc: -40 to -72 V,\
-  \ 60 A\n- power.psu-redundancy: 1+1 hot-swappable\n- thermal.fan-redundancy: 3+1 hot-swappable\n- thermal.airflow:\
-  \ front-to-back (exhaust fans and exhaust PSUs)\n- environmental.operating-temp: 0 to 45 C\n- environmental.operating-humidity:\
-  \ 5 to 85% RH non-condensing\n- environmental.storage-temp: -40 to 70 C\n- environmental.storage-humidity:\
-  \ 5 to 93% RH non-condensing\n- platform.asic: Broadcom Qumran2c+ BCM88840 with a Broadcom OP2 BCM16K\
-  \ external TCAM\n- platform.cpu: Intel Icelake-D 8-core @ 2.1 GHz\n- platform.memory: 64 GB DDR4 (up\
-  \ to 128 GB)\n- platform.storage: 128 GB SSD (up to 2x 256 GB)\n- platform.bmc: Aspeed AST2620\n- platform.oem-alias:\
-  \ DriveNets NCP-40C6CD-S (Network Cloud Packet forwarder, 4x10/25 + 40x100 + 6x400). NOT A UFISPACE\
-  \ CLAIM - no UfiSpace document mentions DriveNets. The mapping is internal analysis: the okf `drivenets-ddc`\
-  \ bundle's 'DriveNets NCF/NCP to white-box hardware map (shipping platforms)' matches the roadmap slide's\
-  \ NCP-40C6CD-S (Q2C+ 6.4T) to this chassis on published silicon and port configuration. Recorded so\
-  \ a search for either name finds this box; no DriveNets figure or artwork is transcribed anywhere in\
-  \ this file.\n- features.timing: Stratum 3E OCXO with optional holdover performance, ITU-T SyncE, IEEE\
-  \ 1588v2 (default, G.8265.1, G.8275.1, G.8275.2, SMPTE ST 2059-2 with an additional licence), T-GM,\
-  \ T-BC/OC, T-TC, Class C timing accuracy; NOS integration is required to activate any of it\n- features.macsec:\
-  \ MACsec supported on all ports (datasheet key benefits)\n- features.tcam: TCAM option available to\
-  \ meet diverse deployment requirements (datasheet)\n- features.optics-qsfp-dd: 400G QSFP-DD SR/LR/ER/ZR/OpenZR+,\
+  \nFacts carried in the model that this schema has no field for:\n- compliance.emc: FCC Part 15, Subpart\
+  \ B, Class A; ICES-003, Class A; EN 55032, Class A; EN 300 386; EN 301 489; EN 303 413; EN 55035; EN\
+  \ 62479; EN 50663; VCCI CISPR 32, Class A\n- compliance.environment: WEEE\n- compliance.nebs: NEBS GR-1089;\
+  \ NEBS GR-63\n- compliance.safety: UL 62368-1; IEC 62368-1\n- environmental.operating-humidity: 5 to\
+  \ 85% RH non-condensing\n- environmental.operating-temp: 0 to 45 C\n- environmental.storage-humidity:\
+  \ 5 to 93% RH non-condensing\n- environmental.storage-temp: -40 to 70 C\n- features.macsec: MACsec supported\
+  \ on all ports (datasheet key benefits)\n- features.optics-qsfp-dd: 400G QSFP-DD SR/LR/ER/ZR/OpenZR+,\
   \ up to 600 km (HIG port table, ports 40-45)\n- features.optics-qsfp28: 100G QSFP28 SR/LR/ER/ZR/OpenZR+,\
-  \ up to 80 km; 40G (HIG port table, ports 0-39)\n- features.optics-sfp28: 25G SFP28 SR/LR; 10G SFP+\
-  \ SR/LR, up to 40 km (HIG port table, ports 46-49)\n- features.optics-sfp-plus: NOT STATED. The four\
-  \ SFP+ management ports are named '4 x 10G SFP+ management ports' by the datasheet and '4x SFP+ Management'\
+  \ up to 80 km; 40G (HIG port table, ports 0-39)\n- features.optics-sfp-plus: NOT STATED. The four SFP+\
+  \ management ports are named '4 x 10G SFP+ management ports' by the datasheet and '4x SFP+ Management'\
   \ by HIG Figure 4, and the HIG's Port Overview table - the only place that gives reach and supported\
   \ optics per port - has no row for them at all. 10G SFP+ is the form factor and speed the vendor states;\
   \ which reaches are qualified in them is recorded as a gap rather than assumed from the SFP28 row above\n\
+  - features.optics-sfp28: 25G SFP28 SR/LR; 10G SFP+ SR/LR, up to 40 km (HIG port table, ports 46-49)\n\
   - features.sfp28-sharing: the four SFP28/SFP-DD ports are in-band port share with 100GE port 0 (datasheet)\n\
-  - features.timing-cable: 50 ohm SMA coaxial with a 1/4-36UNS-2B connector for GNSS, 50 ohm SMB coaxial\
-  \ with a 10-32UNF-2A connector for 1PPS and 10MHz, shielded RJ45 for ToD, shielded RJ48 for BITS (datasheet\
-  \ Compatible Timing Cable Types)\n- management.console: RJ45 RS-232 plus a micro-USB serial console\n\
-  - management.oob: 1x RJ45 100/1000M\n- management.sfp-plus-management: 4x 10G SFP+ management ports,\
-  \ numbered 0-3 in their own run\n- management.timing-interfaces: GNSS in on SMA, 10MHz in/out on SMB,\
-  \ 1PPS in/out on SMB, ToD in/out on RJ45, BITS in/out on RJ48\n- compliance.safety: UL 62368-1; IEC\
-  \ 62368-1\n- compliance.emc: FCC Part 15, Subpart B, Class A; ICES-003, Class A; EN 55032, Class A;\
-  \ EN 300 386; EN 301 489; EN 303 413; EN 55035; EN 62479; EN 50663; VCCI CISPR 32, Class A\n- compliance.nebs:\
-  \ NEBS GR-1089; NEBS GR-63\n- compliance.environment: WEEE\n- lifecycle.eol: none-announced\n\nDrawing\
-  \ version 2.0.0. A major bump means a slot moved or an id was renamed, so anything cached from an earlier\
-  \ export may no longer line up.\nModel maturity: modelled. Every dimension in the source records where\
-  \ it came from."
+  - features.tcam: TCAM option available to meet diverse deployment requirements (datasheet)\n- features.timing:\
+  \ Stratum 3E OCXO with optional holdover performance, ITU-T SyncE, IEEE 1588v2 (default, G.8265.1, G.8275.1,\
+  \ G.8275.2, SMPTE ST 2059-2 with an additional licence), T-GM, T-BC/OC, T-TC, Class C timing accuracy;\
+  \ NOS integration is required to activate any of it\n- features.timing-cable: 50 ohm SMA coaxial with\
+  \ a 1/4-36UNS-2B connector for GNSS, 50 ohm SMB coaxial with a 10-32UNF-2A connector for 1PPS and 10MHz,\
+  \ shielded RJ45 for ToD, shielded RJ48 for BITS (datasheet Compatible Timing Cable Types)\n- lifecycle.eol:\
+  \ none-announced\n- management.console: RJ45 RS-232 plus a micro-USB serial console\n- management.oob:\
+  \ 1x RJ45 100/1000M\n- management.sfp-plus-management: 4x 10G SFP+ management ports, numbered 0-3 in\
+  \ their own run\n- management.timing-interfaces: GNSS in on SMA, 10MHz in/out on SMB, 1PPS in/out on\
+  \ SMB, ToD in/out on RJ45, BITS in/out on RJ48\n- performance.packet-buffer: 8 GB\n- performance.switching-capacity:\
+  \ 7.2 Tbps\n- platform.asic: Broadcom Qumran2c+ BCM88840 with a Broadcom OP2 BCM16K external TCAM\n\
+  - platform.bmc: Aspeed AST2620\n- platform.cpu: Intel Icelake-D 8-core @ 2.1 GHz\n- platform.memory:\
+  \ 64 GB DDR4 (up to 128 GB)\n- platform.oem-alias: DriveNets NCP-40C6CD-S (Network Cloud Packet forwarder,\
+  \ 4x10/25 + 40x100 + 6x400). NOT A UFISPACE CLAIM - no UfiSpace document mentions DriveNets. The mapping\
+  \ is internal analysis: the okf `drivenets-ddc` bundle's 'DriveNets NCF/NCP to white-box hardware map\
+  \ (shipping platforms)' matches the roadmap slide's NCP-40C6CD-S (Q2C+ 6.4T) to this chassis on published\
+  \ silicon and port configuration. Recorded so a search for either name finds this box; no DriveNets\
+  \ figure or artwork is transcribed anywhere in this file.\n- platform.storage: 128 GB SSD (up to 2x\
+  \ 256 GB)\n- power.input-ac: 200 to 240 V, 12.5 A\n- power.input-dc: -40 to -72 V, 60 A\n- power.power-envelope:\
+  \ bare\n- power.power-max-w: 1534\n- power.power-typical-w: 626\n- power.psu-redundancy: 1+1 hot-swappable\n\
+  - thermal.airflow: front-to-back (exhaust fans and exhaust PSUs)\n- thermal.fan-redundancy: 3+1 hot-swappable\n\
+  \nDrawing version 2.0.0. A major bump means a slot moved or an id was renamed, so anything cached from\
+  \ an earlier export may no longer line up.\nModel maturity: modelled. Every dimension in the source\
+  \ records where it came from."

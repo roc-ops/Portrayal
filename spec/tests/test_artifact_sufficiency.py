@@ -98,6 +98,36 @@ def test_components_json_carries_every_contract_field_the_exporter_reads():
             f"no component publishes {field!r}; the exporter reads it off contract.yaml"
 
 
+def test_a_published_part_is_shaped_like_the_one_it_stands_for():
+    """PRESENCE IS NOT SUFFICIENCY, which is how this file was wrong once.
+
+    The check above asks whether `parts` is published and passed while the index
+    flattened every part to a bare ref string. The exporter reads `ref`, `id` and
+    `attrs` off a part - the id because `d0` is a downstream port and `u0` an
+    upstream one where the ref says only that both are MCX, and the attrs because
+    a placement is more specific than its cage: the same SFP is 1G or 10G
+    depending on `attrs.speed`.
+
+    Reading the index instead of the contract therefore dropped all eighteen
+    interfaces off a 6+12 I/O card and exported ten Casa SMM ports at the wrong
+    speed. Both were caught by diffing output, not by this file - so it now
+    checks the shape.
+    """
+    comps = load("components.json")["components"]
+    entries = comps if isinstance(comps, list) else list(comps.values())
+    withparts = [e for e in entries if e.get("parts")]
+    assert withparts, "no component publishes any parts"
+    for e in withparts:
+        for part in e["parts"]:
+            assert isinstance(part, dict), \
+                f"{e.get('ns')}/{e.get('name')}: a part is {type(part).__name__}, not a mapping"
+            assert "ref" in part, f"{e.get('name')}: a part with no ref"
+    # and the two fields that carry meaning beyond the ref are actually present
+    # somewhere, or the drop would go unnoticed again
+    assert any(p.get("id") for e in withparts for p in e["parts"]), "no part carries an id"
+    assert any(p.get("attrs") for e in withparts for p in e["parts"]), "no part carries attrs"
+
+
 def test_the_compiled_svg_embeds_the_device_manifest():
     """Why a consumer needs no device.yaml. Not a stripped summary - the source
     manifest, every view of it."""
@@ -130,3 +160,55 @@ def test_the_overlays_declared_interface_names_agree_with_the_exporter():
     declared = {i["physical"]: i["name"] for i in doc["interfaces"]}
     assert declared["port-{n}"].replace("{n}", "7") == nos_name("arcos", "switch", 7)
     assert declared["mgmt-eth"] == nos_name("arcos", "mgmt", 0)
+
+
+# ---- the export runs against a build, with no library in sight --------------
+
+def test_the_dcim_export_needs_no_source_tree():
+    """THE CLAIM THIS FILE EXISTS TO MAKE, RUN RATHER THAN ARGUED.
+
+    The export is copied into a bare directory with `dist/` beside it and
+    NOTHING ELSE - no library/, no spec/ - and asked to produce a device type.
+    If it opens a contract, a manifest or vendors.yaml, it cannot find one and
+    the test fails.
+
+    That is what makes the exporter portable rather than merely relocatable: the
+    same run works from a release tarball, which is the whole point of publishing
+    the artifacts in the first place.
+    """
+    import shutil
+    import subprocess
+    import tempfile
+
+    tools = ROOT / "spec/tools/portrayal"
+    with tempfile.TemporaryDirectory() as tmp:
+        sand = pathlib.Path(tmp)
+        (sand / "tools").mkdir()
+        # CODE travels with the exporter; DATA is what must come from dist.
+        # manifest.py is imported for `view_parts`, which flattens a view dict
+        # and opens nothing - a helper, not a route back into the library.
+        for f in ("dcim_export.py", "artifacts.py", "manifest.py"):
+            shutil.copy(tools / f, sand / "tools" / f)
+        # dist/ is the ONLY input. Copied by name so that anything not on the
+        # published contract is genuinely absent rather than merely unused.
+        (sand / "dist").mkdir()
+        for name in ("devices.json", "components.json", "vendors.json", "overlays.json"):
+            shutil.copy(DIST / name, sand / "dist" / name)
+        for svg in DIST.glob("as7726-32x.*.svg"):
+            shutil.copy(svg, sand / "dist" / svg.name)
+
+        r = subprocess.run(
+            [sys.executable, str(sand / "tools" / "dcim_export.py"),
+             "--dist", str(sand / "dist"), "--out", str(sand / "out"),
+             "--device", "as7726-32x", "--nos", "arcos"],
+            capture_output=True, text=True, cwd=tmp)
+        assert r.returncode == 0, f"export failed away from the tree:\n{r.stderr[-800:]}"
+
+        made = sorted(p.name for p in (sand / "out").rglob("*.yaml"))
+        assert made, "no device type written"
+        # the overlay identity has to survive the journey too: this device is
+        # sold as ArcOS on Edgecore metal, and that fact lives in overlays.json
+        assert any(n.startswith("ArcOS on ") for n in made), made[:4]
+        doc = yaml.safe_load((sand / "out").rglob("ArcOS on *.yaml").__next__().read_text())
+        assert doc["manufacturer"] == "Arrcus", doc["manufacturer"]
+        assert doc.get("interfaces"), "no interfaces named for the NOS"

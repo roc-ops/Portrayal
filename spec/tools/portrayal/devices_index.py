@@ -147,6 +147,20 @@ def main():
                 "gaps": cap["gaps"],
                 "model": d.get("model", d["name"]),
                 "manufacturer": d.get("manufacturer", ""),
+                # THE NAMESPACE, because a consumer cannot recover it. `name` is
+                # bare - `c100g`, not `casa/c100g` - and components.json keys its
+                # own entries by `ns`, so without this there is nothing to join
+                # them on. The DCIM export needs exactly that join: it maps a
+                # component's namespace to the manufacturer that ships it, and
+                # built the map by walking devices/<ns>/<model>/ off the source
+                # tree because the index did not carry it.
+                "ns": man.parent.parent.name,
+                # THE CITATION, which is a fact about the world rather than about
+                # the drawing, and the only field of the manifest that reached no
+                # artifact at all. 49 of 84 devices carry one. The export puts it
+                # in a DCIM record's comments so the person reading that record
+                # can get back to the document the numbers came from.
+                "datasheet": d.get("datasheet") or {},
                 "version": d.get("version", ""),
                 "description": d.get("description", ""),
                 # where it sits in the vendor's catalogue. The picker groups on
