@@ -81,6 +81,8 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
       whether the second card is a working one or a spare
   L68 library: one measurement is spelled one way across devices, and a fact
       worth comparing has a name the comparison layer knows
+  L69 device: a cooling group with more than one bay says how many of those
+      fans the box can lose
 """
 import argparse
 import json
@@ -2561,6 +2563,12 @@ CONTROL_PLANE_WORDS = {
 FABRIC_WORDS = {
     "fabric", "fabrics", "fc", "fcs", "sfb", "sfbs", "sib", "sibs", "sfc", "sfcs",
 }
+# Whole words here too, and for the same reason: `fan` is inside "fanless",
+# which several access switches are. `cooling` and `thermal` are what the
+# chassis vendors call the same tray.
+FAN_WORDS = {
+    "fan", "fans", "fantray", "fantrays", "cooling", "thermal", "blower", "blowers",
+}
 
 
 def _group_words(name, term):
@@ -2682,6 +2690,55 @@ def lint_library_comparable_facts(roots, docs):
              f"comparable fact, so nothing can line them up between two devices. "
              f"Most-used: {shown}. A census, not a complaint - promote the ones "
              f"that recur into comparable.py, leave the genuine one-offs alone")
+
+
+def lint_device_fan_redundancy(path, data):
+    """L69: a cooling group with more than one bay says how many fans it can lose.
+
+    The third of the family, after L66 for power and L67 for the cards that run
+    and switch the box, and it closes the set: every group whose bays hold
+    interchangeable redundant modules now states whether the spare is spare.
+
+    WHY IT WAS WORTH DOING SEPARATELY. The comparison layer resolved
+    `fan-redundancy` on 0 of 84 devices while 23 of them carried the figure as
+    `attrs.fan-redundancy` prose and 14 more had it in their own description.
+    The data was in the library the whole time and no consumer could reach it,
+    because prose is not a field - which is the same gap `power-envelope`
+    filled badly when a redundancy column went looking for something to show.
+
+    THE ARITHMETIC IS NOT POLICED, and deliberately. A form is the vendor's
+    claim and a bay count is ours; on the 40 stated here they happen to agree
+    exactly - a six-bay tray says 5+1 - but the ASR 9910 states 6+1 for a
+    five-bay cage because Cisco counts planes across the RSP pair, and a rule
+    that demanded the sum would have called that an error. Where the two
+    disagree it is a question, not a fault.
+
+    WHAT THE CONFLICTS TAUGHT. Four Edgecore chassis are left unstated on
+    purpose. Their staged datasheets hold TWO different fan figures each, and
+    in every case exactly one of them fills the bay count - so the tempting move
+    is to take the one that fits. That is arithmetic wearing a citation, the
+    same move refused for the ASR 9000 power trays, and it stays refused.
+    """
+    groups = data.get("groups") or {}
+    bays = {}
+    for view in (data.get("views") or {}).values():
+        for b in ((view or {}).get("components") or {}).get("bays") or []:
+            g = b.get("group")
+            if g:
+                bays[g] = bays.get(g, 0) + 1
+    for name, g in groups.items():
+        g = g or {}
+        if (g.get("role") or "") != "service" or bays.get(name, 0) < 2:
+            continue
+        # whole words: `fan` is inside "fanless" and this rule is about trays
+        if not (_group_words(name, str(g.get("term") or "")) & FAN_WORDS):
+            continue
+        if str(((g.get("attrs") or {}).get("redundancy")) or "").strip():
+            continue
+        warn(path, "L69", f"group '{name}' has {bays[name]} cooling bays and does not "
+             f"say how many fans the box can lose. Set attrs.redundancy to the "
+             f"vendor's form ('3+1', '5+1', 'n+1') with a redundancy-note quoting "
+             f"the sentence and naming where it came from")
 
 
 def lint_device_gap_scope(path, data):
@@ -5017,6 +5074,7 @@ def main():
                 lint_device_top_level_skus(f, d)
                 lint_device_empty_declaration(f, d)
                 lint_device_power_redundancy(f, d)
+                lint_device_fan_redundancy(f, d)
                 lint_device_control_plane_redundancy(f, d)
                 try:
                     dev_maturity[str(f.parent.relative_to(root / "devices"))] = \

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9501-18smt
-version: 1.0.2
+version: 1.0.3
 maturity: modelled
 manufacturer: UfiSpace
 model: S9501-18SMT
@@ -428,6 +428,9 @@ groups:
     role: service
     index-origin: 0
     description: vendor numbers the modules FAN 0, FAN 1, FAN 2 on the rear face
+    attrs:
+      redundancy: '2+1'
+      redundancy-note: '2+1 - hot swappable fan modules with 2+1 redundancy support (UfiSpace datasheet, staged intake)'
   rj45-1g:
     term: Port
     role: traffic
