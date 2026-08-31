@@ -321,13 +321,22 @@ views:
       h: 86.8
     panel:
       decor:
-        # the two ear flanges. Bare metal outboard of the control panels,
-        # and the only reason they are drawn at all is what sits in them.
-        - {at: [0, 0], size: [13.41, 86.8], fill: '#3a4045'}
-        - {at: [468.54, 0], size: [14.06, 86.8], fill: '#3a4045'}
-        # the recessed strips the panels sit in
-        - {at: [13.41, 2.7], size: [11.59, 81.4], fill: '#23272b'}
-        - {at: [457.8, 2.7], size: [10.6, 81.4], fill: '#23272b'}
+        # THE SHELLS' OWN COLOUR, not panel paint - Dell moulds the DE-9
+        # teal and the VGA blue, and these patches stand in for that until
+        # the components carry it themselves. Sized to each shell, which is
+        # why they are not the wide rectangles that were here before.
+        - {at: [53.63, 71.95], size: [20.47, 8.05], fill: '#0f6f78'}
+        - {at: [87.30, 73.49], size: [20.47, 6.51], fill: '#1f4f9e'}
+        # a dark recess around the iDRAC jack, as the figure shows
+        - {at: [26.70, 65.60], size: [19.50, 18.70], fill: '#1b1f22'}
+        # THE BAND: 4.3 mm tall and low on the panel, with bare metal under
+        # it. A first attempt drew it enclosing the ports, which came from
+        # reading a connector's own teal shell as part of the band.
+        - {at: [53.10, 80.0], size: [28.50, 4.30], fill: '#0f6f78'}
+        - {at: [81.60, 80.0], size: [26.50, 4.30], fill: '#1f4f9e'}
+        - {at: [108.10, 80.0], size: [4.40, 4.30], fill: '#1b1f22'}
+        # the NDC is labelled with a rule and nothing else
+        - {at: [139.60, 80.0], size: [0.6, 4.30], fill: '#7d848b'}
       cutouts:
         - {id: power-btn, at: [458.80, 3.17], size: [8.34, 8.31], shape: rect}
         - {id: usb-1, at: [460.40, 19.54], size: [4.5, 12.0], shape: rect}
@@ -482,6 +491,11 @@ views:
         - {id: usb-1, at: [120.20, 71.47], size: [12.0, 4.5], shape: rect}
         - {id: usb-2, at: [120.20, 79.59], size: [12.0, 4.5], shape: rect}
         - {id: sys-id, at: [8.36, 72.04], size: [7.0, 7.0], shape: circle}
+    silkscreen:
+      # iDRAC is SPELLED OUT. The wrench this face printed belongs to the
+      # FRONT panel's iDRAC Direct port; ISM table 9 puts no wrench on the
+      # rear, and the figure prints the word.
+      - {id: mark-idrac, at: [36.45, 83.30], text: 'iDRAC', font-size: 2.6, anchor: middle, fill: '#c8ced3'}
     components:
       bays:
         # THE BAY IS THE PLATE, NOT THE BRACKET ENVELOPE. Each riser now holds
@@ -567,22 +581,6 @@ views:
         - {ref: common/led-indicator@1, id: sys-status, at: [19.43, 73.73],
            for: chassis, group: leds, rel-pos: 2,
            states: ['off', {name: 'on', color: '#2563eb'}]}
-        - {ref: dell/idrac-direct-symbol@1, id: mark-idrac9, at: [33.2, 81.0],
-           for: idrac9, group: marks, rel-pos: 10}
-        - {ref: common/serial-symbol@1, id: mark-serial, at: [61.8, 81.4],
-           for: serial, group: marks, rel-pos: 11}
-        - {ref: common/vga-symbol@1, id: mark-vga-r, at: [97.9, 81.0],
-           for: vga, group: marks, rel-pos: 12}
-        # THE MARK MOVED BECAUSE THE PORTS DID. It sat under the lower socket,
-        # which was fine while the stack rode 2.6 mm high and was a collision the
-        # moment the stack dropped to where figure 8 puts it. The figure has a
-        # small feature at x 111.6..115.8 in this band, left of the sockets,
-        # which is where a legend belongs on a stack this close to the chassis
-        # edge - so it goes beside them rather than beneath.
-        - {ref: common/usb-symbol@1, id: mark-usb-r, at: [113.20, 80.60],
-           for: usb-1, group: marks, rel-pos: 13}
-        - {ref: common/nic-symbol@1, id: mark-nic, at: [182.0, 81.2],
-           for: ndc, group: marks, rel-pos: 14}
 configurations:
   base:
     kind: base
