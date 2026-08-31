@@ -660,7 +660,21 @@ views:
         # figure 8 overlay - the same 0.5, on all three, which is what says it
         # is the shared baseline that was out and not three separate readings.
         # The legend bar under them moved with them, because it labels them.
-        - {ref: std/rj45@1, id: idrac9, at: [28.60, 66.50], rotate: 180,
+        # THE iDRAC PORT IS A HOUSING, NOT A BARE JACK. std/rj45 is the modular
+        # jack on its own - black, no bezel, no lamps - and drawn on a black
+        # panel it read as a hole with nothing in it. The real port has a silver
+        # bezel and two indicators in its top corners.
+        # common/rj45-port@4 already carried exactly that and had done for four
+        # versions. THE LAMPS BELONG TO THE PORT and arrive with it rather than
+        # being placed beside it, which is what the hardware does.
+        # NO ROTATION NOW. std/rj45 draws its keyway DOWN and needed 180 to sit
+        # right; rj45-port@4 draws it UP already, so the rotation would have put
+        # the two lamps at the bottom.
+        # RE-CENTRED, NOT MOVED. The bezel is 17.0 x 14.9 over a 16.0 x 14.0
+        # opening, so it overlaps the cutout by half a millimetre a side - which
+        # is what a bezel does. Placed at 28.10, 66.05 so its centre still lands
+        # on the cutout's at 36.60, 73.50.
+        - {ref: common/rj45-port@4, id: idrac9, at: [28.10, 66.05],
            attrs: {role: management}, group: mgmt-ports, rel-pos: 1}
         - {ref: common/db9-receptacle@1, id: serial, at: [48.47, 68.55],
            group: mgmt-ports, rel-pos: 2}

@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: rj45-port
-version: 4.2.0
+version: 4.3.0
 class: port
 profile: networking
 description: RJ45 panel port with jack-outline bezel (v4 = silver plate over the
@@ -24,17 +24,25 @@ provenance:
   cutout: standard (IEC 60603-7 via std/rj45)
 elements:
   led-left:
-    at: [2.45, 1.05]
-    size: [2.3, 1.3]
+    at: [1.95, 0.75]
+    size: [3.3, 1.9]
     class: led
     states: ['off', up, activity]
   led-right:
-    at: [12.25, 1.05]
-    size: [2.3, 1.3]
+    at: [11.75, 0.75]
+    size: [3.3, 1.9]
     class: led
     states: ['off', up, activity]
 parts:
-  - {ref: std/rj45@1, id: jack, at: [0.5, 0.5], rotate: 180}
+  # BEHIND THE BEZEL. Composed parts draw AFTER the skin, so this
+  # 16.0 x 14.0 jack was landing on top of a 17.0 x 14.9 bezel and
+  # covering all but a half-millimetre margin of it - which is why
+  # this port rendered as a black hole with gold pins and no silver
+  # anywhere. The bezel's aperture is an evenodd hole, so with the
+  # jack behind it the cavity and its eight conductors show THROUGH
+  # the plate, which is what the hardware does.
+  - {ref: std/rj45@1, id: jack, at: [0.5, 0.5], rotate: 180,
+     behind: true}
 relief:
   features:
     - node: bezel
