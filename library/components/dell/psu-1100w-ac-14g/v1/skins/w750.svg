@@ -5,24 +5,31 @@
        with a circle in it, which reads as a fan at a glance and as a
        different part up close. The label was 9.14 left of where it sits -
        three-eighths of an inch, called by eye before it was measured. -->
-  <rect x="0.2" y="0.2" width="87.10" height="41.40" rx="1.0" fill="#8d949c" stroke="#5f666d" stroke-width="0.4"/>
+  <!-- the body carries the same knockout as the bezel. `behind` puts a
+       composed part under the WHOLE skin, base plate included, so
+       without this hole the inlet is drawn and then painted over. -->
+  <path id="body" fill-rule="evenodd" d="M0.2 1.2 a1 1 0 0 1 1 -1 h85.10 a1 1 0 0 1 1 1 v39.40 a1 1 0 0 1 -1 1 h-85.10 a1 1 0 0 1 -1 -1 Z M10.70 7.00 h20.00 v28.00 h-20.00 Z" fill="#8d949c" stroke="#5f666d" stroke-width="0.4"/>
   <!-- The inlet is std/c14-inlet@1, COMPOSED and not drawn - see the
        contract. This is the BEZEL around it: a recess the coupler sits back
        inside. Three earlier drafts drew the connector by hand and got it
        wrong three different ways while the library already held the part. -->
-  <rect id="inlet-bezel" x="8.15" y="5.0" width="24.24" height="31.8" rx="1.2" fill="#1b1f22" stroke="#41474d" stroke-width="0.4"/>
+  <path id="inlet-bezel" fill-rule="evenodd" d="M8.15 6.20 a1.2 1.2 0 0 1 1.2 -1.2 h21.84 a1.2 1.2 0 0 1 1.2 1.2 v29.40 a1.2 1.2 0 0 1 -1.2 1.2 h-21.84 a1.2 1.2 0 0 1 -1.2 -1.2 Z M10.70 7.00 h20.00 v28.00 h-20.00 Z" fill="#1b1f22" stroke="#41474d" stroke-width="0.4"/>
   <!-- THE RELEASE TAB IS A LEVER AND IT OVERLAPS THE INLET. It slides across
        to lock the cord in, so only its rounded right-hand half shows and it
        sits ON the bezel rather than beside it. It is also the indicator: the
        ISM calls this "an illuminated translucent handle that serves as an
        indicator", which is why it carries the LED colour variable. -->
-  <path id="handle" d="M8.07 14.49 h4.55 a2.6 2.6 0 0 1 2.6 2.6 v10.47 a2.6 2.6 0 0 1 -2.6 2.6 h-4.55 Z"
+  <path id="handle" d="M8.07 14.49 h3.20 a2.6 2.6 0 0 1 2.6 2.6 v10.47 a2.6 2.6 0 0 1 -2.6 2.6 h-3.20 Z"
         fill="var(--led-color, #e8a33d)" stroke="#9a6a1e" stroke-width="0.35"/>
   <!-- THE SLOTS THE LEVER TRAVELS IN, straddling the tab above and below.
        They are openings rather than paint: without them the orange reads as
        a coloured tab instead of the top of a mechanism. -->
   <rect id="latch-slot-top" x="1.0" y="14.0" width="4.3" height="2.8" rx="0.4" fill="#141719"/>
   <rect id="latch-slot-bottom" x="1.0" y="27.8" width="4.3" height="2.8" rx="0.4" fill="#141719"/>
+  <!-- THE LEVER'S LEG, between the two slots. It is the same metal as the
+       face and so the same colour, which left the holes reading and the part
+       moving through them invisible. A faint outline is the whole of the fix. -->
+  <rect id="latch-leg" x="1.0" y="16.80" width="4.3" height="11.00" rx="0.4" fill="#9aa1a8" stroke="#7a8189" stroke-width="0.3"/>
   <!-- the latch bar between the inlet and the fan -->
   <rect id="grip" x="33.64" y="5.15" width="8.24" height="34.64" rx="1.2" fill="#c9ced3" stroke="#8b9299" stroke-width="0.35"/>
   <!-- the fan opening: an octagon, four cut corners, four screws -->
