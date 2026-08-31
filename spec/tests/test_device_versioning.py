@@ -325,3 +325,57 @@ def test_editing_a_faces_empty_declaration_is_at_least_a_patch():
     b = dev()
     b["views"]["front"]["empty"] = "searched the whole corpus and found nothing at all about this face"
     assert dl.required_bump(dl.entry(a), dl.entry(b)) == "patch"
+
+
+# ---- a bay's `accepts` is addressing, not geometry ---------------------------
+
+def _accepting(*refs):
+    """A device whose one bay accepts `refs`."""
+    d = dev()
+    d["views"]["front"]["components"]["bays"][0]["accepts"] = list(refs)
+    return d
+
+
+def test_a_bay_learning_it_accepts_more_is_minor():
+    """THE MODULE CATALOGUE. `accepts` used to sit in the shape bucket beside the
+    coordinates, so adding one card to a bay read as "same ids, different
+    geometry: a slot moved". One new Casa rear card put two chassis at 1.0.0, and
+    the MX catalogue alone has some sixty cards still to model."""
+    a = dl.entry(_accepting("x/y@1"))
+    b = dl.entry(_accepting("x/y@1", "x/z@1"))
+    assert dl.required_bump(a, b) == "minor"
+
+
+def test_a_bay_that_stops_accepting_something_is_major():
+    """The other half. A configuration elsewhere may seat exactly that module."""
+    a = dl.entry(_accepting("x/y@1", "x/z@1"))
+    b = dl.entry(_accepting("x/y@1"))
+    assert dl.required_bump(a, b) == "major"
+
+
+def test_accepts_does_not_move_the_shape_hash():
+    """Stated directly, so putting it back into `_placements` fails here rather
+    than quietly re-inflating every bump."""
+    assert dl.entry(_accepting("x/y@1"))["shape"] == \
+           dl.entry(_accepting("x/y@1", "x/z@1"))["shape"]
+
+
+def test_reordering_accepts_is_not_a_change():
+    """The list is a set of claims, not a sequence; re-sorting it is not news."""
+    a = dl.entry(_accepting("x/y@1", "x/z@1"))
+    b = dl.entry(_accepting("x/z@1", "x/y@1"))
+    assert dl.required_bump(a, b) is None
+
+
+def test_a_lock_predating_the_field_cannot_manufacture_a_major():
+    """An entry written before `bay-accepts` existed carries no map, so the
+    removal check has nothing to compare and must not guess. It still reports a
+    bump - the names hash moved when the field joined it - but a MINOR one, which
+    is the safe direction: it asks to be looked at rather than either crying
+    breakage or saying nothing.
+
+    The first version of this test asserted None and was simply wrong: deleting
+    the recorded map does not un-hash the contribution it already made."""
+    a = dl.entry(_accepting("x/y@1", "x/z@1"))
+    del a["bay-accepts"]
+    assert dl.required_bump(a, dl.entry(_accepting("x/y@1"))) == "minor"
