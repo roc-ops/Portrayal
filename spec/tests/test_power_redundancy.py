@@ -96,11 +96,14 @@ def test_bays_are_counted_across_views():
 
 # ---- what the library actually says -----------------------------------------
 
-def test_every_multi_bay_power_group_in_the_library_is_stated_but_one():
-    """The rollout. One holdout is deliberate: the ASR 9001's own 750 W modules
-    have no redundancy statement in its guide - the 2+2 and 3+1 tables there
-    belong to other chassis in the series - so it stays unstated rather than
-    borrowing a figure from a neighbour."""
+def test_every_multi_bay_power_group_in_the_library_is_stated():
+    """The rollout, complete.
+
+    The ASR 9001 was the last holdout and stayed unstated for a while on
+    purpose: the 2+2 and 3+1 tables in its install guide describe four-module
+    chassis, and borrowing one for a two-bay box would have been a guess wearing
+    a citation. The answer was in a different document - the ASR-9001 FAQ says
+    "Two AC or two DC power modules for redundancy" outright."""
     unstated = []
     for f in sorted(LIB.glob("devices/**/device.yaml")):
         d = yaml.safe_load(f.read_text())
@@ -108,17 +111,24 @@ def test_every_multi_bay_power_group_in_the_library_is_stated_but_one():
             continue
         if run(d):
             unstated.append(f"{f.parent.parent.name}/{f.parent.name}")
-    assert unstated == ["cisco/asr-9001"], unstated
+    assert unstated == [], unstated
 
 
 def test_a_stated_form_is_one_the_vendors_actually_use():
+    """A pattern, not a fixed list. The vocabulary is wider than the four common
+    forms - the ASR 9910 reference guide gives 4+2 for its AC power trays and
+    5+3 for its DC ones - so the rule is that the form is the vendor's own
+    notation, N+M with n allowed on either side, and not that it comes from a
+    menu we happened to have seen."""
+    import re
     forms = set()
     for f in sorted(LIB.glob("devices/**/device.yaml")):
         for g in (yaml.safe_load(f.read_text()).get("groups") or {}).values():
             r = ((g or {}).get("attrs") or {}).get("redundancy")
             if r:
                 forms.add(r)
-    assert forms <= {"1+1", "2+2", "n+1", "n+n"}, forms
+    bad = [f for f in forms if not re.fullmatch(r"(\d+|n)\+(\d+|n)", f)]
+    assert not bad, bad
 
 
 def test_a_stated_group_carries_the_sentence_it_was_read_from():
