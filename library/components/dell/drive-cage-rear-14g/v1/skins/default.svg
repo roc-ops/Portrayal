@@ -8,58 +8,37 @@
        tolerance, not a radius. -->
   <path id="frame" fill-rule="evenodd" fill="#8c939b" stroke="#5a6069"
         stroke-width="0.3" d="M2.50 40.69 L2.50 41.88 L123.19 41.88 L123.19 40.69 Z M135.19 2.69 L135.19 41.88 L151.00 41.88 L151.06 42.94 L162.94 42.94 L162.94 41.94 L152.00 41.88 L152.00 2.69 Z M286.12 1.38 L286.12 12.12 L287.12 12.12 L287.12 1.38 Z M0.00 1.38 L0.00 38.88 L1.31 38.88 L1.31 26.88 L11.00 26.81 L11.00 6.00 L10.25 4.38 L8.88 3.44 L1.38 3.38 L1.31 1.38 Z M5.44 6.75 L7.62 7.12 L8.69 8.56 L8.38 10.75 L6.88 11.88 L4.81 11.62 L3.62 10.06 L3.88 8.00 Z M2.00 0.00 L2.00 1.19 L285.12 1.19 L285.12 0.00 Z"/>
-  <!-- THE FOLD IS DRAWN AS A LINE BECAUSE THAT IS WHAT IT IS. This shape was
-       first given a fill and no stroke, on the reasoning that the figure shows
-       a tone difference - and it then could not be seen at all. Two numbers
-       say why, and the second one is the bad one:
-         land #9ba2aa against the cage's #8c939b   15 levels
-         land #9ba2aa against the CHASSIS #9aa1a8   1 level
-       The raised section steps UP into chassis metal, and the tone chosen for
-       it was picked by ratio against the cage without ever being checked
-       against the chassis it would sit beside. So the most important edge on
-       the part - the step that makes it a shape rather than a rectangle - had
-       no contrast at all, and what remained visible was the dimple.
-       THIS IS THE THIRD TIME IN THIS ONE FILE. The rings went in at a grey that
-       was invisible on their panel, the ring ink was inherited from a sibling
-       on a different ground, and now this. A colour is only dull RELATIVE TO
-       WHAT IT SITS ON, and a shape that borders two different things has to be
-       checked against BOTH of them.
-       The fold line is also the honest reading: the boundary measures as a dark
-       line, not a brightness step - that is written in the key below and was
-       then not drawn. -->
-  <!-- ONE PIECE, NOT TWO LANDS AND A TAB. The two vent grounds and the metal
-       between them sample 187 and 188 - the same tone, against the cage's 169 -
-       so what was drawn as a pair of separate lands either side of a mounting
-       tab is a single raised sheet running right across the middle of the face.
-       WHAT SEPARATES THEM IS A DARK LINE, NOT A STEP, which is why a scan for a
-       brightness edge across the rows found nothing and reported a flat plate.
-       Looking for a local MINIMUM down each column instead finds a fold at
-       y 4.25-5.25 from face 263.0 to 269.5, and a fold at y 1.50 holding dead
-       flat from 278.0 all the way to 297.5 - the piece steps UP in the middle.
-       THE SHOULDERS ARE NOT A SMALL NOTCH, and the first trace said they were.
-       Searching y 1.5..8.0 for the darkest pixel let the vents' own top row at
-       7.5 win every column between 270 and 277.5, so the shoulder was reported
-       as masked and drawn as a 2.85 mm step with a 2.50 radius. Stopping the
-       search at 7.2 - above the vents and below nothing - shows the real shape:
-       the top edge DROPS from 4.25 to 6.70 across 268.0..270.5, runs flat along
-       6.70 to 275.0, and only then rises to 1.71. That is a 5.2 mm sweep, and
-       it is why the figure shows a long curve where the model had a step.
-       A SEARCH WINDOW THAT INCLUDES A DEEPER FEATURE MEASURES THAT FEATURE.
-       The fix was one number, and the wrong number produced a confident trace
-       with no gaps in it.
-       THE STEP IS CENTRED ON THE CAGE. Its midpoint is 287.75 against the
-       cage's own centre at 287.85 and the vent groups' mirror axis at 287.25 -
-       three numbers from three unrelated measurements landing within 0.6 mm.
-       ITS TOP IS CLAMPED. The fold reads y 1.50 and this cage starts at 1.71,
-       so the raised section would stand 0.21 proud of the part carrying it.
-       Drawn flush with the cage's own top edge, and the 0.21 recorded rather
-       than silently absorbed - it is inside what a 4 px/mm figure resolves. -->
-  <path id="cage-land" d="M 119.24 2.54 L 123.74 2.54 Q 126.24 2.54 126.24 4.99 L 129.74 4.99 Q 131.24 4.99 131.24 3.49 L 131.24 1.5 Q 131.24 0.0 132.74 0.0 L 153.74 0.0 Q 155.24 0.0 155.24 1.5 L 155.24 3.49 Q 155.24 4.99 156.74 4.99 L 160.24 4.99 Q 162.74 4.99 162.74 2.54 L 167.24 2.54 L 167.24 40.79 L 119.24 40.79 Z"
+  <!-- A T, AND AN ASYMMETRIC ONE. Three passes drew this as a raised strip
+       with shoulders - low outside, high in the middle - and it was wrong in
+       shape, not in tone or in draw order. The operator described it plainly
+       and the reading that finally matched was theirs: a horizontal BAR across
+       the top with a vertical STEM hanging from it, joined by 45 degree
+       chamfers, and the stem is NOT centred on the bar.
+       bar    face 258.75 .. 308.1, underside at y 4.9
+       stem   face 280.0 .. 296.75, running to the bottom rail
+       stem centre 288.38 sits 60% across the bar, which is the
+       operator's "60 to 70 percent" and the reason no symmetric shape fitted.
+       THE TWO FLANKS ARE NOT THE SAME JOINT, which is the operator's "on the
+       right it goes all the way to the edge, on the left it stops about 25%
+       away". On the RIGHT there is no underside at all: the outline runs from
+       the bar's top corner at 308.1, 1.71 straight down to the stem at
+       296.75, 10.25. On the LEFT the bar keeps an underside at y 5.25
+       from 258.75 to 265.0, and only then falls away to 280.0, 15.5.
+       BOTH ARE NEAR 45 DEGREES AND NEITHER IS EXACTLY 45 - 37 on the right, 34
+       on the left. The endpoints are traced and the angle falls out of them;
+       forcing both to a clean 45 would have moved the joints to make the
+       description tidy, which is the wrong way round.
+       WHY THE TRACES KEPT MISSING IT: every one of them looked for the piece's
+       TOP edge, and the top edge is the full-width bar, which runs into chassis
+       metal of nearly the same tone and reads as no edge at all. The shape is
+       carried by its UNDERSIDE and by the two chamfers, and none of the column
+       scans were pointed at those. A measurement can be repeated three times
+       and stay wrong when it is the wrong measurement. -->
+  <path id="cage-land" d="M 114.49 0.0 L 163.84 0.0 L 152.49 8.54 L 152.49 40.79 L 135.74 40.79 L 135.74 13.79 L 120.74 3.54 L 114.49 3.54 Z"
         fill="#9ba2aa" stroke="#626971" stroke-width="0.4"/>
-  <!-- A dimple on the raised section, face 288.50, 10.00 - directly above the
-       thumbscrew at 288.34 and on the same centre line. Uniform #898a8e, so a
-       filled dimple rather than a ring. Drawn dull for the same reason the
-       rings are: it is formed metal, not something to identify. -->
+  <!-- The dimple, face 288.50, 10.00 - on the stem, and on the thumbscrew's
+       centre line at 288.34. That it lands centred on the stem is a check the
+       earlier shapes could not offer. -->
   <circle id="cage-land-dimple" cx="144.24" cy="8.29" r="1.38" fill="#8a9199"/>
   <!-- THE SCREW SITS ON A PAD, and the tab was drawn as one flat block. The
        figure separates them by tone rather than by outline: a brighter pad from
