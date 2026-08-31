@@ -1,0 +1,57 @@
+format: 1
+kind: component
+name: drive-cage-rear-14g
+version: 1.0.0
+class: mechanical
+profile: compute
+description: >-
+  The rear drive cage's own faceplate on a 14G PowerEdge - a top rail, a bottom
+  rail and two thumbscrew tabs, standing proud of the rear panel with the drive
+  openings between them
+size: {w: 287.18, h: 42.98, d: 14.13}
+provenance:
+  size: >-
+    measured - Dell's service model, r740xd.glb, `DELL_R740XD_2.5 Drive Rear
+    Cage-1`, clipped to the panel plane at z 713.5. A vendor solid measured in
+    software rather than a caliper on hardware, in the sense std/sma@1's barrel
+    key sets out. THE SIZE IS OF WHAT IS VISIBLE: 1,304 of the part's 8,644
+    triangles stand in front of the panel and the rest are inside the chassis.
+  it-is-a-frame-and-that-is-why-it-was-missing: >-
+    Its face is a top rail, a bottom rail and two mounting tabs; the drives fill
+    everything between, so on a populated rear almost none of it shows. Modelled
+    as nothing, the carriers floated on bare chassis and the two thumbscrews sat
+    on air - which `lift: 8.1` in their own relief was already describing before
+    the thing it lifts off was drawn.
+  outline: >-
+    measured - extracted by spec/tools/intake/cad-outline.py, rasterised at
+    16 px/mm and simplified at 0.40 mm. THAT 0.40 IS A SIMPLIFICATION TOLERANCE
+    and must not be measured back off this outline as though it were a radius.
+  the-tabs-are-the-check: >-
+    THE CAGE WAS EXTRACTED WITHOUT REFERENCE TO THE SCREWS AND PUTS ITS HOLES
+    UNDER THEM. The left tab carries a hole centred at local 6.25, 9.35, which
+    is face 150.51, 11.06; dell/thumbscrew-blue-14g@1 sits at face 150.41,
+    11.10, placed from the CAD's screw node and confirmed by a hue sweep of ISM
+    figure 8. A tenth of a millimetre apart, from readings that never met. The
+    middle tab at local 135..152 sits between the two drive bays and under the
+    other screw at 288.34.
+  depth: >-
+    measured - 14.13 proud of the panel at its highest. THE FACE IS NOT FLAT and
+    `out` cannot say so: the thumbscrews seat at 8.1 proud, which is a lower
+    shelf of this same part, so extruding the whole outline to 14.13 is a first
+    approximation. Recorded here rather than left for somebody to discover from
+    a 3D view that looks a little too solid.
+relief:
+  wall: '#4a5057'
+  features:
+  - node: frame
+    out: 14.13
+    color: '#8c939b'
+    confidence: measured
+    source: >-
+      dell/drive-cage-rear-14g@1's own depth key - Dell's service model, from
+      the panel plane at z 713.5 to the cage's own front at 727.6. One number
+      for the whole outline, which the depth key records as an approximation
+      because the screw shelf sits 6 mm below it.
+elements:
+  frame: {at: [0.0, 0.0], size: [287.18, 42.98], class: bezel}
+skins: [default]

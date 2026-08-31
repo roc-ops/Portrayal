@@ -1724,6 +1724,11 @@ def lint_device_overlap(path, view_name, view, lib_roots):
     Occupants are exempt - a transceiver placed with mate-to is *supposed* to
     sit inside its host's aperture.
 
+    So is a part that FRAMES another: a rear drive cage's face is two rails and
+    two tabs, its box contains four drive bays, and its ink touches none of
+    them. `frames:` names what its openings clear. This is not the same claim as
+    `mounts` - a cage surrounds its drives and draws BEFORE them.
+
     So is a SURFACE-MOUNTED part, which is supposed to lie over what is behind
     it: a PowerEdge's rear handle is bolted to the outside of the panel and its
     rail crosses two riser slots and a NIC card. `behaviour: mounts` is the
@@ -1755,6 +1760,15 @@ def lint_device_overlap(path, view_name, view, lib_roots):
     # TWO MOUNTED PARTS OVERLAPPING EACH OTHER IS STILL REPORTED. Exempting the
     # whole class would hide two labels printed on the same square millimetre,
     # which is a real error and a common one.
+    # A FRAME'S BOUNDING BOX IS NOT ITS FOOTPRINT. The rear drive cage's face is
+    # a top rail, a bottom rail and two thumbscrew tabs; its box contains four
+    # drive bays and its ink touches none of them. `frames:` is the declaration,
+    # honoured exactly as `for:` and `mate-to` are. It is NOT interchangeable
+    # with `behaviour: mounts` below - that says a part lies OVER what is behind
+    # it and draws after the bays, where a cage surrounds its drives and must
+    # draw before them.
+    framed = {p["id"]: set(targets(p.get("frames"))) for p in parts_}
+
     def _mounted(pid):
         q = next((z for z in parts_ if z.get("id") == pid), None)
         if not q:
@@ -1798,6 +1812,8 @@ def lint_device_overlap(path, view_name, view, lib_roots):
             # ignore the rule. Anything a sheet-metal shop could not hold is noise.
             if ox > 0.05 and oy > 0.05:
                 if b[0] in owned.get(a[0], ()) or a[0] in owned.get(b[0], ()):
+                    continue
+                if b[0] in framed.get(a[0], ()) or a[0] in framed.get(b[0], ()):
                     continue
                 if _mounted(a[0]) != _mounted(b[0]):
                     continue

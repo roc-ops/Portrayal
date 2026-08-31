@@ -997,6 +997,21 @@
                           }
                         }
                       ]
+                    },
+                    "frames": {
+                      "oneOf": [
+                        {
+                          "$ref": "#/$defs/segment"
+                        },
+                        {
+                          "type": "array",
+                          "minItems": 1,
+                          "items": {
+                            "$ref": "#/$defs/segment"
+                          }
+                        }
+                      ],
+                      "description": "ids this part SURROUNDS rather than covers - a frame whose bounding box takes in openings its ink does not. L13 compares boxes, which is right for almost every part and wrong for a frame; this is the declaration that makes the difference checkable instead of assumed. Name only what the openings actually clear. NOT a way to silence a real overlap: a part that genuinely paints over another is an error. Distinct from `behaviour: mounts`, which says a part lies OVER what is behind it and draws after the bays - a drive cage surrounds its drives and must draw BEFORE them, so the two are not interchangeable."
                     }
                   },
                   "oneOf": [

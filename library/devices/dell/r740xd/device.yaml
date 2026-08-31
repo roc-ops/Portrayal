@@ -684,6 +684,14 @@ views:
            at: [144.66, 5.35], group: furniture, rel-pos: 21}
         - {ref: dell/thumbscrew-blue-14g@1, id: cage-screw-right,
            at: [282.59, 26.00], group: furniture, rel-pos: 22}
+        # THE REAR DRIVE CAGE'S OWN FACEPLATE, which the two thumbscrews above
+        # are turned into. A frame: top rail, bottom rail and two tabs, with the
+        # drive openings between them, standing 14.13 proud of the panel.
+        # NOT `behaviour: mounts` - the drives are inserted INTO this, so it
+        # must draw behind them, which a plain placement does.
+        - {ref: dell/drive-cage-rear-14g@1, id: drive-cage-rear,
+           at: [144.26, 1.71], frames: [drive-r0, drive-r1, drive-r2, drive-r3],
+           only-in: [rear-4-sff], group: furniture, rel-pos: 19}
 configurations:
   base:
     # the serial port's insulator is teal on this machine, not the
