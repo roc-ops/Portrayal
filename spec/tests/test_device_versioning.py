@@ -280,8 +280,23 @@ def test_removing_a_group_is_major():
 
 def test_every_base_leaves_its_traffic_bays_empty():
     """The point of a base: a chassis you can log into, with nothing decided
-    about traffic cards yet."""
+    about traffic cards yet.
+
+    A BLANK IS NOT A POPULATED SLOT. A chassis ships with blanking panels in its
+    empty bays, for airflow, so a base that left holes would be drawing something
+    nobody has ever seen on a rack.
+
+    The blank set is built ONCE. It used to be rebuilt inside the device loop and
+    every contract was parsed twice per rebuild - about thirty-five thousand YAML
+    loads to recompute the same constant - which made this single test 125 of the
+    suite's 293 seconds. It is the same set every time round.
+    """
     import glob, yaml as y
+    blanks = set()
+    for q in glob.glob(str(ROOT / "library/components/*/*/v*/contract.yaml")):
+        c = y.safe_load(open(q)) or {}
+        if c.get("class") == "blank":
+            blanks.add(f"{q.split('components/')[1].split('/')[0]}/{c['name']}")
     for p in glob.glob(str(ROOT / "library/devices/*/*/device.yaml")):
         d = y.safe_load(open(p)) or {}
         base = next((c for c in (d.get("configurations") or {}).values()
@@ -292,13 +307,6 @@ def test_every_base_leaves_its_traffic_bays_empty():
         traffic = [b["id"] for v in (d.get("views") or {}).values()
                    for b in (((v or {}).get("components") or {}).get("bays") or [])
                    if roles.get(b.get("group")) == "traffic"]
-        # A BLANK IS NOT A POPULATED SLOT. A chassis ships with blanking panels
-        # in its empty bays, for airflow, so a base that left holes would be
-        # drawing something nobody has ever seen on a rack.
-        import yaml as yy
-        blanks = {f"{q.split('components/')[1].split('/')[0]}/{yy.safe_load(open(q))['name']}"
-                  for q in glob.glob(str(ROOT / "library/components/*/*/v*/contract.yaml"))
-                  if (yy.safe_load(open(q)) or {}).get("class") == "blank"}
         seated = [t for t in traffic
                   if (base.get("bays") or {}).get(t, "x") not in ("",)
                   and (base.get("bays") or {}).get(t, "x").split("@")[0] not in blanks]
