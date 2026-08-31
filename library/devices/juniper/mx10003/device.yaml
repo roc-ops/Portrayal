@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx10003
-version: 0.2.3
+version: 0.2.4
 maturity: modelled
 manufacturer: Juniper
 model: MX10003
@@ -61,6 +61,9 @@ groups:
     role: service
     index-origin: 0
     description: Routing and Control Board slots RE0 and RE1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 - mx10003 hardware guide, "MX10003 Component Redundancy": "The host subsystem consists of two Routing and Control Boards (RCBs). ... The router can have one or two host subsystems. If two host subsystems are installed, one functions as the primary and the other functions as the backup. If the primary host subsystem (or either of its components) fails, the backup can take over as the primary. The RCB installed in slot 0 functions as the default primary." So the pair is primary/backup and not load-sharing'
   mpcs:
     term: Slot
     role: traffic

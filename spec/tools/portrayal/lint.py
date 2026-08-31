@@ -77,6 +77,8 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
   L64 device: nothing is bolted to, or printed on, a vent - a perforation is a
       hole in the faceplate and not a surface, so a legend there is printed on
       nothing and a jack there is mounted to nothing
+  L67 device: a control-plane or fabric group with more than one bay says
+      whether the second card is a working one or a spare
 """
 import argparse
 import json
@@ -2543,6 +2545,87 @@ def lint_device_power_redundancy(path, data):
              f"('1+1', 'n+1', 'n+n', '2+2') with a redundancy-note quoting the source")
 
 
+
+# The words that make a service group a CONTROL-PLANE or a FABRIC group. Matched
+# as whole tokens of the group name and of the words of its term, never as
+# substrings: `re` inside "furniture" and `fc` inside any three-letter run would
+# otherwise drag in half the library. Each vendor gets to keep its own spelling -
+# Cisco RSP/RP, Juniper RE/RCB/SCB/SFB/SIB, a supervisor, a Casa SMM.
+CONTROL_PLANE_WORDS = {
+    "re", "res", "rp", "rps", "rsp", "rsps", "scb", "scbs", "rcb", "rcbs",
+    "sup", "sups", "supervisor", "supervisors", "smm", "smms",
+    "routing", "engine", "engines", "processor", "processors", "control",
+}
+FABRIC_WORDS = {
+    "fabric", "fabrics", "fc", "fcs", "sfb", "sfbs", "sib", "sibs", "sfc", "sfcs",
+}
+
+
+def _group_words(name, term):
+    return set(re.split(r"[^a-z0-9]+", f"{name} {term}".lower())) - {""}
+
+
+def lint_device_control_plane_redundancy(path, data):
+    """L67: a control-plane or fabric group with more than one bay states its
+    redundancy.
+
+    WHAT THIS IS FOR. L66 next door settled the power question - two supplies are
+    either twice the capacity or the same capacity twice - and the cards that run
+    and switch the box are ambiguous the same way, for higher stakes. A chassis
+    with two RSPs is either two working processors or one processor plus a spare,
+    and the CARD cannot say which: the ASR 9000's RSP is one part number that is
+    active/standby for control and active/active for fabric on the same chassis,
+    on the same day. Only the chassis knows. A reader who counts the bays gets
+    the capacity wrong in the direction that hurts - "we have seven fabric cards,
+    so we have seven planes of headroom", when six of them carry the traffic and
+    the seventh exists so that losing one costs nothing.
+
+    So the group states it, in the vendor's own notation, with
+    `redundancy-note` carrying the sentence it was read from. The forms here are
+    wider than power's: 1+1 for an RSP/RP or Routing Engine pair, 2+1 for the
+    MX960's three SCBs, 6+1 for the ASR 9912/9922's seven FC cards, 7+1 for the
+    MX2008's eight SFBs, n+1 where the guide itself declines to spell the n.
+
+    THE FORM DOES NOT HAVE TO MATCH THE BAY COUNT, and two entries in the library
+    deliberately do not. The ASR 9910 has five FC bays and states 6+1, because
+    Cisco counts fabric planes across the RSP pair as well as the FCs. The MX960
+    has two dedicated SCB bays and states 2+1, because the third SCB seats in
+    line-card slot 6. Both notes say so. Arithmetic on the bay count is exactly
+    the reasoning this rule exists to replace, so a rule that policed the sum
+    would be enforcing the mistake.
+
+    WHAT GOING WRONG LOOKS LIKE - and this is why the match is on whole tokens
+    rather than substrings. The first pass at the sibling power rule keyed on any
+    `N+M` in the file and read a fan tray's "5+1" as a power figure. The same
+    trap is worse here because the abbreviations are two letters long: a naive
+    substring search for `re` matches "furniture", and one for `fc` matches
+    nothing useful but would match anything. So the group's name and term are
+    split into words and only whole words count.
+    """
+    groups = data.get("groups") or {}
+    bays = {}
+    for view in (data.get("views") or {}).values():
+        for b in ((view or {}).get("components") or {}).get("bays") or []:
+            g = b.get("group")
+            if g:
+                bays[g] = bays.get(g, 0) + 1
+    for name, g in groups.items():
+        g = g or {}
+        if (g.get("role") or "") != "service" or bays.get(name, 0) < 2:
+            continue
+        words = _group_words(name, str(g.get("term") or ""))
+        kind = ("control-plane" if words & CONTROL_PLANE_WORDS else
+                "fabric" if words & FABRIC_WORDS else None)
+        if kind is None:
+            continue
+        if str(((g.get("attrs") or {}).get("redundancy")) or "").strip():
+            continue
+        warn(path, "L67", f"group '{name}' has {bays[name]} {kind} bays and does not say "
+             f"whether the second card is a working one or a spare. Set attrs.redundancy "
+             f"to the vendor's form ('1+1', '2+1', '6+1', 'n+1') with a redundancy-note "
+             f"quoting the sentence and naming the guide it came from")
+
+
 def lint_device_gap_scope(path, data):
     """L54: a declared gap points at something the device does not have.
 
@@ -4876,6 +4959,7 @@ def main():
                 lint_device_top_level_skus(f, d)
                 lint_device_empty_declaration(f, d)
                 lint_device_power_redundancy(f, d)
+                lint_device_control_plane_redundancy(f, d)
                 try:
                     dev_maturity[str(f.parent.relative_to(root / "devices"))] = \
                         d.get("maturity", "draft")

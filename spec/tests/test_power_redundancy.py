@@ -115,16 +115,32 @@ def test_every_multi_bay_power_group_in_the_library_is_stated():
 
 
 def test_a_stated_form_is_one_the_vendors_actually_use():
-    """A pattern, not a fixed list. The vocabulary is wider than the four common
-    forms - the ASR 9910 reference guide gives 4+2 for its AC power trays and
-    5+3 for its DC ones - so the rule is that the form is the vendor's own
-    notation, N+M with n allowed on either side, and not that it comes from a
-    menu we happened to have seen."""
+    """Two things at once, and both were learned the hard way.
+
+    SCOPED TO POWER GROUPS, and it was not always. It swept every group in the
+    device and passed only for as long as power was the sole thing stating a
+    form. The day L67 landed and the control-plane and fabric groups started
+    stating theirs, it failed on 2+1, 6+1 and 7+1 - real vendor notation
+    belonging to a rule that is not this one. A rollout test looks only at its
+    own rollout.
+
+    A PATTERN, NOT A FIXED LIST. The power vocabulary is itself wider than the
+    four common forms: the ASR 9910 reference guide gives 4+2 for its AC power
+    trays and 5+3 for its DC ones. Neither is in the library yet only because
+    that chassis models no power trays at all - the day it does, a fixed list
+    would reject a figure the vendor prints. The form is whatever the vendor
+    writes, N+M with n allowed on either side, and not a menu we happened to
+    have seen.
+    """
     import re
     forms = set()
     for f in sorted(LIB.glob("devices/**/device.yaml")):
-        for g in (yaml.safe_load(f.read_text()).get("groups") or {}).values():
-            r = ((g or {}).get("attrs") or {}).get("redundancy")
+        for name, g in (yaml.safe_load(f.read_text()).get("groups") or {}).items():
+            g = g or {}
+            term = str(g.get("term") or "").lower()
+            if not any(w in name.lower() or w in term for w in ("psu", "power", "pem")):
+                continue
+            r = (g.get("attrs") or {}).get("redundancy")
             if r:
                 forms.add(r)
     bad = [f for f in forms if not re.fullmatch(r"(\d+|n)\+(\d+|n)", f)]
