@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 0.11.1
+version: 0.12.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -633,19 +633,19 @@ views:
         - {id: psu-2, at: [341.10, 46.20], size: {w: 86.3, h: 39.1},
            accepts: [dell/psu-1100w-ac-14g@1], default: dell/psu-1100w-ac-14g@1,
            group: psus, rel-pos: 2}
-        - {id: drive-r0, at: [173.0, 4.9], size: {w: 79.4, h: 17.868},
+        - {id: drive-24, at: [173.0, 4.9], size: {w: 79.4, h: 17.868},
            accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
            default: common/drive-blank-25@1, rotate: 270,
            only-in: [rear-4-sff], group: drives-rear, rel-pos: 12}
-        - {id: drive-r1, at: [173.0, 22.8], size: {w: 79.4, h: 17.868},
+        - {id: drive-25, at: [173.0, 22.8], size: {w: 79.4, h: 17.868},
            accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
            default: common/drive-blank-25@1, rotate: 270,
            only-in: [rear-4-sff], group: drives-rear, rel-pos: 13}
-        - {id: drive-r2, at: [331.0, 4.9], size: {w: 79.4, h: 17.868},
+        - {id: drive-26, at: [331.0, 4.9], size: {w: 79.4, h: 17.868},
            accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
            default: common/drive-blank-25@1, rotate: 270,
            only-in: [rear-4-sff], group: drives-rear, rel-pos: 14}
-        - {id: drive-r3, at: [331.0, 22.8], size: {w: 79.4, h: 17.868},
+        - {id: drive-27, at: [331.0, 22.8], size: {w: 79.4, h: 17.868},
            accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
            default: common/drive-blank-25@1, rotate: 270,
            only-in: [rear-4-sff], group: drives-rear, rel-pos: 15}
@@ -751,7 +751,7 @@ views:
         # NOT `behaviour: mounts` - the drives are inserted INTO this, so it
         # must draw behind them, which a plain placement does.
         - {ref: dell/drive-cage-rear-14g@1, id: drive-cage-rear,
-           at: [144.26, 1.71], frames: [drive-r0, drive-r1, drive-r2, drive-r3],
+           at: [144.26, 1.71], frames: [drive-24, drive-25, drive-26, drive-27],
            only-in: [rear-4-sff], group: furniture, rel-pos: 19}
   # THE FOUR FACES THAT WERE MISSING. 83 of the library's 84 devices carry all
   # six views and this one carried two, which is what stops it being opened in
@@ -841,6 +841,35 @@ views:
            fill: '#1a1d21', confidence: estimated,
            source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the 6.0 is not measured"}
 
+# THE FRONT AND THE REAR ARE NOT INDEPENDENT, and nothing in this file can say
+# so yet. Recorded as a gap rather than left for the next person to rediscover
+# from a bay number that does not add up.
+gaps:
+  - what: front-rear-configuration-coupling
+    scope: [front, rear, rear-4-sff, rear-2-lff]
+    reason: vendor-silent
+    note: >-
+      ISM figure 19, the service information label, panel "Rear View
+      Configurations", draws four rears and numbers two of them 12,13/14,15 and
+      24,25/26,27. Figures 17 and 18 on the same label number the fronts: 24 x
+      2.5 inch is bays 0-23 and 12 x 3.5 inch is 0-11. So the rear numbering is
+      DECIDED BY THE FRONT - 24-27 behind a 24-bay front, 12-15 behind a
+      12-bay one - and this device carries a 24-bay front, which is why its rear
+      now reads 24-27.
+      WHAT NO SOURCE HERE STATES is the rule itself. Dell prints the two
+      pairings on a label and never writes down that they are pairings; it is
+      read off the arithmetic of the bay numbers. Nor does any document say
+      which front/rear combinations are orderable together.
+    wanted: >-
+      A way for a configuration to constrain more than one view at once. Today
+      `only-in` scopes a bay to a configuration and every view chooses
+      independently, so nothing stops a consumer selecting a 24-bay front and a
+      rear numbered 12-15 - a machine that cannot be bought. The library needs
+      either configurations that span views, or a declared incompatibility
+      between them; and this device needs its 12 x 3.5 inch front modelled
+      before either can be exercised, which is the same gap `rear-2-lff` already
+      stands on.
+
 configurations:
   base:
     # the serial port's insulator is teal on this machine, not the
@@ -888,10 +917,10 @@ configurations:
     # empty string for a deliberately empty bay. riser-2 is not listed because
     # it is not in THIS build - riser-2-lp is, and it already defaults right.
     bays:
-      drive-r0: common/drive-carrier-25@1
-      drive-r1: common/drive-carrier-25@1
-      drive-r2: common/drive-carrier-25@1
-      drive-r3: common/drive-carrier-25@1
+      drive-24: common/drive-carrier-25@1
+      drive-25: common/drive-carrier-25@1
+      drive-26: common/drive-carrier-25@1
+      drive-27: common/drive-carrier-25@1
     skins:
       drive-carrier-25: default
       db9: teal
