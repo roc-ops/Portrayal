@@ -687,7 +687,13 @@ def export_modules(dist, root, images=None):
             skipped += 1
             continue
         doc = build_module(contract, man)
-        name, ver = contract.get("name"), f"v{contract.get('major')}"
+        # `major` ARRIVES PREFIXED. It is the version directory's own name, so
+        # components.json carries `v1` and not `1` - every other reader strips
+        # with `major[1:]` rather than adding. Prefixing again asked for
+        # `casa--oob-2p8--vv1--default.svg`, which no build produces, and
+        # `rasterize` answers None for an absent drawing rather than raising,
+        # so all 376 module images stopped rendering without a word.
+        name, ver = contract.get("name"), contract.get("major")
         for target in TARGETS:
             d = Path(root) / target / "module-types" / man
             d.mkdir(parents=True, exist_ok=True)
