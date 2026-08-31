@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-28dx
-version: 1.0.2
+version: 1.0.3
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-28DX
@@ -368,6 +368,9 @@ groups:
     role: service
     index-origin: 0
     description: the vendor numbers the fans 0|1|2|3 in one legend on the rear panel
+    attrs:
+      redundancy: '3+1'
+      redundancy-note: '3+1 - hot swappable fan modules with 3+1 redundancy support (UfiSpace datasheet, staged intake)'
   sfp28-breakout:
     term: Port
     role: traffic

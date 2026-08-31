@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s7801-54xs
-version: 1.1.2
+version: 1.1.3
 maturity: modelled
 manufacturer: UfiSpace
 model: S7801-54XS
@@ -315,6 +315,9 @@ groups:
     role: service
     index-origin: 0
     description: vendor numbers them FAN 0-4 on the rear silkscreen
+    attrs:
+      redundancy: '4+1'
+      redundancy-note: '4+1 - 4+1, hot-swappable (attrs fan-redundancy)'
 views:
   front:
     size:

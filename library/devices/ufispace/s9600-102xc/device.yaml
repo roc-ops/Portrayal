@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-102xc
-version: 1.0.2
+version: 1.0.3
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-102XC
@@ -424,6 +424,9 @@ groups:
     role: service
     index-origin: 0
     description: vendor numbers the modules FAN 0 1 2 3 on the rear face, left to right
+    attrs:
+      redundancy: '3+1'
+      redundancy-note: '3+1 - hot swappable fan modules with 3+1 redundancy support (UfiSpace datasheet, staged intake)'
   sfp28:
     term: Port
     role: traffic
