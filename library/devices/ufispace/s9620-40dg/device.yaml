@@ -1,14 +1,14 @@
 format: 1
 kind: device
 name: s9620-40dg
-version: 0.2.0
+version: 0.2.3
 maturity: modelled
 manufacturer: UfiSpace
 model: S9620-40DG
 portfolio:
-  line: Telecom Networking Solutions
+  line: Telecoms
   family: Open Aggregation Router
-  series: S9620
+  series: S9600 Series
 description: UfiSpace S9620-40DG - 2RU 40-port open aggregation router on Broadcom
   Qumran3a BCM88490 with a 16 GB external deep buffer; 24x 1/10/25/50G SFP56, 12x
   40/100G QSFP28 and 4x 400G (or 2x 800G) QSFP-DD, full timing (GNSS/1PPS/10MHz/ToD/BITS)
@@ -355,14 +355,14 @@ attrs:
     tsn: Time Sensitive Networking for low packet loss and low delay variation
     nos-caveat: NOS integration is necessary to activate the specific feature; some
       features need an additional licence (datasheet footnotes, carried rather than dropped)
+    timing-cables: 50 ohm SMA coaxial with 1/4-36UNS-2B for GNSS; 50 ohm SMB coaxial with
+      10-32UNF-2A for 1PPS and 10MHz; shielded RJ45 for ToD; shielded RJ48 for BITS
   management:
     console: 1x RJ45 serial console port
     oob: 1x 100/1000M RJ-45 OOB management port
     usb: 1x USB 3.0 Type-A port
     timing-inputs: 1x GNSS input SMA, 1x 10MHz input/output SMB, 1x 1PPS input/output SMB,
       1x ToD input/output RJ45, 1x BITS input RJ48
-    timing-cables: 50 ohm SMA coaxial with 1/4-36UNS-2B for GNSS; 50 ohm SMB coaxial with
-      10-32UNF-2A for 1PPS and 10MHz; shielded RJ45 for ToD; shielded RJ48 for BITS
   compliance:
     safety: UL 62368-1, IEC 62368-1
     emc: FCC Part 15 Subpart B Class A; ICES-003 Class A; EN 55032 Class A; EN 300 386;
@@ -536,6 +536,9 @@ groups:
     term: PSU
     role: service
     index-origin: 0
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 redundant, hot-swappable'
   fans:
     term: Fan
     role: service

@@ -1,10 +1,14 @@
 format: 1
 kind: device
 name: s9500-30xs
-version: 1.0.0
+version: 1.0.4
 maturity: modelled
 manufacturer: UfiSpace
 model: S9500-30XS
+portfolio:
+  line: Telecoms
+  family: Disaggregated Cell Site Gateway Router
+  series: S9500 Series
 description: >-
   UfiSpace S9500-30XS disaggregated cell site gateway router - 1RU
   temperature-hardened white box for outside-plant cell-site backhaul, with 20x
@@ -226,10 +230,10 @@ attrs:
     optics-sfp-plus: 10G SR/LR/ER/ZR; 1G SX/LX/EX/ZX
     macsec: MACsec on the backhaul uplinks, up to 120 km long-reach applications
     compliance-programme: OCP Accepted and TIP DCSG compliant
+    timing-interfaces: GNSS SMA in; 1PPS SMA in/out; 10MHz SMA in/out; ToD RJ45 in; BITS RJ48 in
   management:
     console: RJ45 RS-232 plus a micro-USB serial console
     oob: 1x RJ45 100/1000M
-    timing-interfaces: GNSS SMA in; 1PPS SMA in/out; 10MHz SMA in/out; ToD RJ45 in; BITS RJ48 in
   compliance:
     safety: UL 62368-1; IEC 60950-1; IEC 62368-1; BSMI
     emc: >-
@@ -339,6 +343,9 @@ groups:
     description: >-
       the two front-serviced 400W supplies; the faceplate prints PSU0 and PSU1 in the
       gutter beside each bay, which is why this group is origin 0
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 hot-swappable'
   timing:
     term: Port
     role: management
@@ -399,6 +406,9 @@ groups:
     role: service
     index-origin: 0
     description: the five rear fans, which the rear panel numbers 0 to 4
+    attrs:
+      redundancy: '4+1'
+      redundancy-note: '4+1 - 4+1 hot-swappable (attrs fan-redundancy)'
   grounding:
     term: Point
     role: furniture

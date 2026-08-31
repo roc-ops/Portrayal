@@ -187,42 +187,42 @@ comments: "UfiSpace S9600-72XC open aggregation router - 2RU disaggregated white
   \ it - four FAN-803816-HI exhaust fans and two 1300 W AC supplies at the rear, and the seventy-two traffic\
   \ ports empty. No orderable chassis part number appears in any held document; see the chassis-sku gap.\n\
   \nDatasheet: UfiSpace S9600-72XC 25G/100G Open Aggregation Router Datasheet\n  https://www.ufispace.com/products/telco/aggregation/s9600-72xc-25g-100g-open-aggregation-router-tcam\n\
-  \nFacts carried in the model that this schema has no field for:\n- performance.switching-capacity: 2.4\
-  \ Tbps\n- performance.packet-buffer: 4 GB deep buffer\n- power.power-typical-w: 328\n- power.power-max-w:\
-  \ 685\n- power.power-envelope: bare\n- power.input-ac: 100 to 240 V, 12 A\n- power.input-dc: -40 to\
-  \ -75 V, 40 A\n- power.psu-redundancy: 1+1 hot-swappable\n- thermal.fan-redundancy: 3+1 hot-swappable\n\
-  - thermal.airflow: front-to-back (exhaust fans and supplies at the rear)\n- environmental.operating-temp:\
-  \ 0 to 45 C\n- environmental.operating-humidity: 5 to 85% RH non-condensing\n- environmental.storage-temp:\
-  \ -40 to 70 C\n- environmental.storage-humidity: 5 to 93% RH non-condensing\n- platform.asic: Broadcom\
-  \ Qumran2c BCM88820 with optional Broadcom OP2 BCM16K external TCAM (premium SKU only)\n- platform.cpu:\
-  \ Intel Skylake-D 8-core @ 1.9 GHz\n- platform.memory: 32 GB DDR4 (up to 64 GB)\n- platform.storage:\
-  \ 128 GB SSD\n- platform.bmc: ASPEED AST2400\n- platform.oem-alias: DriveNets NCP-64X8C-S (Network Cloud\
+  \nFacts carried in the model that this schema has no field for:\n- compliance.emc: FCC Part 15, Subpart\
+  \ B, Class A; ICES-003, Class A; EN 55032, Class A; EN 55024; EN 55035; EN 62479; EN 50663; EN 300 386;\
+  \ EN 301 489; EN 303 413; BSMI; MTCTE; VCCI CISPR 32, Class A\n- compliance.environment: ETSI 300 019;\
+  \ ETSI 300 132-2; RoHS; WEEE; MTCTE\n- compliance.nebs: NEBS GR-1089, GR-3108 (EMC); NEBS GR-63 (environment)\n\
+  - compliance.safety: UL 62368-1; IEC 60950-1; IEC 62368-1; BSMI\n- environmental.operating-humidity:\
+  \ 5 to 85% RH non-condensing\n- environmental.operating-temp: 0 to 45 C\n- environmental.storage-humidity:\
+  \ 5 to 93% RH non-condensing\n- environmental.storage-temp: -40 to 70 C\n- features.compliance-programme:\
+  \ IEEE 802.1CM fronthaul; ITU-T G.8273.2 T-BC Class C\n- features.gnss: internal receiver for master\
+  \ clock implementations\n- features.optics-qsfp28: 100G QSFP28 SR4/LR4/ER4/ZR4, up to 80 km per the\
+  \ HIG port table\n- features.optics-sfp-plus: 10G on the two SFP+ management ports. The datasheet's\
+  \ Compatible Transceiver Types list is one list for the whole box and names no management-only part,\
+  \ so the speed here is the port list's ('2 x 10G SFP+ management ports')\n- features.optics-sfp28: 25G\
+  \ SFP28 SR/LR/ER; 10G SFP+ SR/LR/ER; 1G SFP SX/LX/EX - the same cages take all three speeds, and the\
+  \ HIG's port table rates ports 0-63 to 40 km\n- features.roles: C-RAN hub 5G fronthaul transport aggregation;\
+  \ backhaul aggregation for BBU pooling; programmable as a Broadband Network Gateway (BNG)\n- features.routing:\
+  \ full Segment Routing over IPv6 (SRv6)\n- features.timing: Stratum 3E OCXO with optional holdover;\
+  \ SyncE (ITU-T); IEEE 1588v2 default, G.8265.1, G.8275.1, G.8275.2, SMPTE ST 2059-2 (additional licence),\
+  \ T-GM, T-BC/OC, T-TC; Time Sensitive Networking (TSN); Class C timing accuracy. NOS integration is\
+  \ required to activate these, which the datasheet states with an asterisk against the whole timing block\n\
+  - features.timing-cables: the datasheet's Compatible Timing Cable Types row - 50 ohm SMA coaxial with\
+  \ a 1/4-36UNS-2B connector for GNSS; 50 ohm SMB coaxial with a 10-32UNF-2A connector for 1PPS and 10MHz;\
+  \ shielded RJ45 for ToD. The accessory kit ships two SMB-to-BNC converter cables\n- features.timing-interfaces:\
+  \ GNSS SMA in; 1PPS SMB in/out; 10MHz SMB in/out; ToD RJ45 in/out\n- lifecycle.eol: none-announced\n\
+  - management.console: RJ45 RS-232 plus a micro-USB serial console\n- management.oob: 1x RJ45 100/1000M\
+  \ management port\n- performance.packet-buffer: 4 GB deep buffer\n- performance.switching-capacity:\
+  \ 2.4 Tbps\n- platform.asic: Broadcom Qumran2c BCM88820 with optional Broadcom OP2 BCM16K external TCAM\
+  \ (premium SKU only)\n- platform.bmc: ASPEED AST2400\n- platform.cpu: Intel Skylake-D 8-core @ 1.9 GHz\n\
+  - platform.memory: 32 GB DDR4 (up to 64 GB)\n- platform.oem-alias: DriveNets NCP-64X8C-S (Network Cloud\
   \ Packet forwarder, 64x1/10 + 8x100). NOT A UFISPACE CLAIM - no UfiSpace document mentions DriveNets.\
   \ The mapping is internal analysis: the okf `drivenets-ddc` bundle's 'DriveNets NCF/NCP to white-box\
   \ hardware map (shipping platforms)' matches the roadmap slide's NCP-64X8C-S (Q2C 2.4T) to this chassis\
   \ on published silicon and port configuration. Recorded so a search for either name finds this box;\
-  \ no DriveNets figure or artwork is transcribed anywhere in this file.\n- features.timing: Stratum 3E\
-  \ OCXO with optional holdover; SyncE (ITU-T); IEEE 1588v2 default, G.8265.1, G.8275.1, G.8275.2, SMPTE\
-  \ ST 2059-2 (additional licence), T-GM, T-BC/OC, T-TC; Time Sensitive Networking (TSN); Class C timing\
-  \ accuracy. NOS integration is required to activate these, which the datasheet states with an asterisk\
-  \ against the whole timing block\n- features.gnss: internal receiver for master clock implementations\n\
-  - features.routing: full Segment Routing over IPv6 (SRv6)\n- features.compliance-programme: IEEE 802.1CM\
-  \ fronthaul; ITU-T G.8273.2 T-BC Class C\n- features.roles: C-RAN hub 5G fronthaul transport aggregation;\
-  \ backhaul aggregation for BBU pooling; programmable as a Broadband Network Gateway (BNG)\n- features.optics-qsfp28:\
-  \ 100G QSFP28 SR4/LR4/ER4/ZR4, up to 80 km per the HIG port table\n- features.optics-sfp28: 25G SFP28\
-  \ SR/LR/ER; 10G SFP+ SR/LR/ER; 1G SFP SX/LX/EX - the same cages take all three speeds, and the HIG's\
-  \ port table rates ports 0-63 to 40 km\n- features.timing-cables: the datasheet's Compatible Timing\
-  \ Cable Types row - 50 ohm SMA coaxial with a 1/4-36UNS-2B connector for GNSS; 50 ohm SMB coaxial with\
-  \ a 10-32UNF-2A connector for 1PPS and 10MHz; shielded RJ45 for ToD. The accessory kit ships two SMB-to-BNC\
-  \ converter cables\n- features.optics-sfp-plus: 10G on the two SFP+ management ports. The datasheet's\
-  \ Compatible Transceiver Types list is one list for the whole box and names no management-only part,\
-  \ so the speed here is the port list's ('2 x 10G SFP+ management ports')\n- management.console: RJ45\
-  \ RS-232 plus a micro-USB serial console\n- management.oob: 1x RJ45 100/1000M management port\n- management.timing-interfaces:\
-  \ GNSS SMA in; 1PPS SMB in/out; 10MHz SMB in/out; ToD RJ45 in/out\n- compliance.safety: UL 62368-1;\
-  \ IEC 60950-1; IEC 62368-1; BSMI\n- compliance.emc: FCC Part 15, Subpart B, Class A; ICES-003, Class\
-  \ A; EN 55032, Class A; EN 55024; EN 55035; EN 62479; EN 50663; EN 300 386; EN 301 489; EN 303 413;\
-  \ BSMI; MTCTE; VCCI CISPR 32, Class A\n- compliance.nebs: NEBS GR-1089, GR-3108 (EMC); NEBS GR-63 (environment)\n\
-  - compliance.environment: ETSI 300 019; ETSI 300 132-2; RoHS; WEEE; MTCTE\n- lifecycle.eol: none-announced\n\
-  \nDrawing version 4.1.0. A major bump means a slot moved or an id was renamed, so anything cached from\
-  \ an earlier export may no longer line up.\nModel maturity: modelled. Every dimension in the source\
-  \ records where it came from."
+  \ no DriveNets figure or artwork is transcribed anywhere in this file.\n- platform.storage: 128 GB SSD\n\
+  - power.input-ac: 100 to 240 V, 12 A\n- power.input-dc: -40 to -75 V, 40 A\n- power.power-envelope:\
+  \ bare\n- power.power-max-w: 685\n- power.power-typical-w: 328\n- power.psu-redundancy: 1+1 hot-swappable\n\
+  - thermal.airflow: front-to-back (exhaust fans and supplies at the rear)\n- thermal.fan-redundancy:\
+  \ 3+1 hot-swappable\n\nDrawing version 4.1.4. A major bump means a slot moved or an id was renamed,\
+  \ so anything cached from an earlier export may no longer line up.\nModel maturity: modelled. Every\
+  \ dimension in the source records where it came from."

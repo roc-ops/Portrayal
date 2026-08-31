@@ -50,44 +50,44 @@ comments: "UfiSpace S9720-56ED - 2RU 800G disaggregated core and edge router wit
   \ IEC 60320 C20 inlets, four FAN-808012-HCE fan modules 3+1, front-to-back airflow - the build HIG Figure\
   \ 7's rear elevation and the vendor rear render both show. Maximum system power 2035 W with MSA optics\
   \ and 2280 W with Open ZR+\n\nDatasheet: UfiSpace Core Edge Router S9720-56ED Datasheet\n  https://www.ufispace.com/files/43/UfiSpace-Core-Edge-Router-S9720-56ED%20Datasheet.pdf\n\
-  \nFacts carried in the model that this schema has no field for:\n- physical.redundancy: 1+1 hot-swappable\
-  \ active-active PSUs and 3+1 hot-swappable fan modules (datasheet Redundancy row and HIG Installation\
-  \ Environment Requirements)\n- performance.switching-capacity: 14.4 Tbps\n- performance.packet-buffer:\
-  \ 16 GB deep buffer\n- performance.cluster-capacity: up to 921.6 Tbps as a DDC cluster of S9720-56ED\
-  \ line-card elements with an S9705-48D or S9725-64E fabric\n- power.power-typical-w: 887\n- power.power-max-w:\
-  \ 2339\n- power.power-envelope: fully-configured\n- power.power-max-conditions: HIG section 9 - 2339\
-  \ W is the DC build with Open ZR+ optics; the vendor's other three published maxima for the same chassis\
-  \ are DC 2088 W and AC 2035 W under MSA optics and AC 2280 W with Open ZR+. All four are measured at\
-  \ 45 C ambient, fully populated optics and 100% traffic load\n- power.input: AC 200 to 240V, 16A; DC\
-  \ -40 to -72V, 80A. At 110V AC each supply delivers only 1500 W and hot-swap redundancy is lost, so\
-  \ 220V is required for 1+1 operation\n- thermal.airflow: front-to-back; all FRUs are the exhaust build\n\
-  - environmental.operating-temp: 0 to 45 C\n- environmental.operating-humidity: 5% to 85% RH non-condensing\n\
-  - environmental.storage-temp: -40 to 70 C\n- environmental.storage-humidity: 5% to 93% RH non-condensing\n\
-  - platform.asic: Broadcom Jericho 3 BCM88860\n- platform.cpu: Intel Ice Lake-D 8-core @ 2.1GHz\n- platform.memory:\
-  \ 64 GB DDR4 (up to 128 GB)\n- platform.storage: 2 x 256 GB M.2 SSD\n- platform.bmc: ASPEED AST2620\n\
-  - features.optics-qsfp-dd: 800GE QSFP-DD OpenZR+/ZR/2xLR4/2xFR4/DR8+/DR8/SR8; 400GE QSFP-DD OpenZR+/ZR/ER4/LR4/FR4/SR8/DR4/DR4+/PLR4;\
-  \ 200GE QSFP56 SR4/FR4; 100GE QSFP28 ZR4/ER4/SR4/LR4 (datasheet Compatible Transceiver Types). HIG Port\
-  \ Overview gives the reach as up to 500 km on the service ports\n- features.fabric-cabling: the 20 fabric\
-  \ ports take 800GE QSFP-DD AEC, DAC, ACC and AOC cable assemblies (datasheet Compatible Fabric Cable\
-  \ Types); HIG Port Overview caps their link length at 300 m, which is why they are cabled rather than\
-  \ optical\n- features.optics-sfp28: the HIG's Port Overview lists ports 36-37 as SFP28 1/10/25G with\
-  \ up to 40 km reach; the datasheet's Compatible Transceiver Types block covers only the QSFP-DD field,\
-  \ so no module list is published for them and none is inferred\n- features.optics-sfp-plus: the datasheet\
-  \ lists the management pair only as '2 x 10G SFP+ management ports' and publishes no module list for\
-  \ them\n- features.timing: Stratum 3E OCXO; SyncE; IEEE 1588v2 (Default, G.8265.1, G.8275.1, G.8275.2,\
-  \ SMPTE ST 2059-2), T-BC/OC, T-TC; timing synchronization over fabric. The datasheet footnotes the whole\
-  \ row 'NOS integration is necessary to activate the specific feature' and marks SMPTE ST 2059-2 'Additional\
-  \ license is required'\n- features.forwarding: full Segment Routing over IPv6 (SRv6), flexibly configured\
+  \nFacts carried in the model that this schema has no field for:\n- compliance.emc: FCC Part 15 Subpart\
+  \ B Class A\n- compliance.environment: WEEE\n- compliance.safety: UL 62368-1, IEC 62368-1\n- environmental.operating-humidity:\
+  \ 5% to 85% RH non-condensing\n- environmental.operating-temp: 0 to 45 C\n- environmental.storage-humidity:\
+  \ 5% to 93% RH non-condensing\n- environmental.storage-temp: -40 to 70 C\n- features.fabric-cabling:\
+  \ the 20 fabric ports take 800GE QSFP-DD AEC, DAC, ACC and AOC cable assemblies (datasheet Compatible\
+  \ Fabric Cable Types); HIG Port Overview caps their link length at 300 m, which is why they are cabled\
+  \ rather than optical\n- features.forwarding: full Segment Routing over IPv6 (SRv6), flexibly configured\
   \ fabric pipes for upstream connectivity, automatic fault detection and recovery, nonstop routing for\
-  \ control and data plane (datasheet KEY BENEFITS and KEY FEATURES)\n- management.console: 1x RJ45 RS-232\
-  \ and 1x micro-USB, both labelled IOIOI; 115200 8N1, no flow control. The micro-USB path needs a Silicon\
-  \ Labs CP210x driver\n- management.oob: 1x 100/1000M RJ45 management port\n- management.oob-sfp: 2x\
-  \ 10G SFP+ management uplinks, numbered 0 and 1 under an Ethernet icon, separate from the 36-37 SFP28\
-  \ traffic ports beside them\n- management.usb: 1x USB 3.0 Type-A maintenance port\n- management.timing-inputs:\
-  \ 1x 1PPS input/output SMB and 1x 10MHz input/output SMB; the datasheet's Compatible Timing Cable Types\
-  \ names 'SMB coaxial cable with 10-32UNF-2A connector', and the HIG caps either cable at 3 m and the\
-  \ 1PPS coax at 50 ohms\n- compliance.safety: UL 62368-1, IEC 62368-1\n- compliance.emc: FCC Part 15\
-  \ Subpart B Class A\n- compliance.environment: WEEE\n- lifecycle.eol: none-announced\n\nDrawing version\
-  \ 0.2.0. A major bump means a slot moved or an id was renamed, so anything cached from an earlier export\
-  \ may no longer line up.\nModel maturity: modelled. Every dimension in the source records where it came\
-  \ from."
+  \ control and data plane (datasheet KEY BENEFITS and KEY FEATURES)\n- features.optics-qsfp-dd: 800GE\
+  \ QSFP-DD OpenZR+/ZR/2xLR4/2xFR4/DR8+/DR8/SR8; 400GE QSFP-DD OpenZR+/ZR/ER4/LR4/FR4/SR8/DR4/DR4+/PLR4;\
+  \ 200GE QSFP56 SR4/FR4; 100GE QSFP28 ZR4/ER4/SR4/LR4 (datasheet Compatible Transceiver Types). HIG Port\
+  \ Overview gives the reach as up to 500 km on the service ports\n- features.optics-sfp-plus: the datasheet\
+  \ lists the management pair only as '2 x 10G SFP+ management ports' and publishes no module list for\
+  \ them\n- features.optics-sfp28: the HIG's Port Overview lists ports 36-37 as SFP28 1/10/25G with up\
+  \ to 40 km reach; the datasheet's Compatible Transceiver Types block covers only the QSFP-DD field,\
+  \ so no module list is published for them and none is inferred\n- features.redundancy: 1+1 hot-swappable\
+  \ active-active PSUs and 3+1 hot-swappable fan modules (datasheet Redundancy row and HIG Installation\
+  \ Environment Requirements)\n- features.timing: Stratum 3E OCXO; SyncE; IEEE 1588v2 (Default, G.8265.1,\
+  \ G.8275.1, G.8275.2, SMPTE ST 2059-2), T-BC/OC, T-TC; timing synchronization over fabric. The datasheet\
+  \ footnotes the whole row 'NOS integration is necessary to activate the specific feature' and marks\
+  \ SMPTE ST 2059-2 'Additional license is required'\n- lifecycle.eol: none-announced\n- management.console:\
+  \ 1x RJ45 RS-232 and 1x micro-USB, both labelled IOIOI; 115200 8N1, no flow control. The micro-USB path\
+  \ needs a Silicon Labs CP210x driver\n- management.oob: 1x 100/1000M RJ45 management port\n- management.oob-sfp:\
+  \ 2x 10G SFP+ management uplinks, numbered 0 and 1 under an Ethernet icon, separate from the 36-37 SFP28\
+  \ traffic ports beside them\n- management.timing-inputs: 1x 1PPS input/output SMB and 1x 10MHz input/output\
+  \ SMB; the datasheet's Compatible Timing Cable Types names 'SMB coaxial cable with 10-32UNF-2A connector',\
+  \ and the HIG caps either cable at 3 m and the 1PPS coax at 50 ohms\n- management.usb: 1x USB 3.0 Type-A\
+  \ maintenance port\n- performance.cluster-capacity: up to 921.6 Tbps as a DDC cluster of S9720-56ED\
+  \ line-card elements with an S9705-48D or S9725-64E fabric\n- performance.packet-buffer: 16 GB deep\
+  \ buffer\n- performance.switching-capacity: 14.4 Tbps\n- platform.asic: Broadcom Jericho 3 BCM88860\n\
+  - platform.bmc: ASPEED AST2620\n- platform.cpu: Intel Ice Lake-D 8-core @ 2.1GHz\n- platform.memory:\
+  \ 64 GB DDR4 (up to 128 GB)\n- platform.storage: 2 x 256 GB M.2 SSD\n- power.input: AC 200 to 240V,\
+  \ 16A; DC -40 to -72V, 80A. At 110V AC each supply delivers only 1500 W and hot-swap redundancy is lost,\
+  \ so 220V is required for 1+1 operation\n- power.power-envelope: fully-configured\n- power.power-max-conditions:\
+  \ HIG section 9 - 2339 W is the DC build with Open ZR+ optics; the vendor's other three published maxima\
+  \ for the same chassis are DC 2088 W and AC 2035 W under MSA optics and AC 2280 W with Open ZR+. All\
+  \ four are measured at 45 C ambient, fully populated optics and 100% traffic load\n- power.power-max-w:\
+  \ 2339\n- power.power-typical-w: 887\n- thermal.airflow: front-to-back; all FRUs are the exhaust build\n\
+  \nDrawing version 0.2.4. A major bump means a slot moved or an id was renamed, so anything cached from\
+  \ an earlier export may no longer line up.\nModel maturity: modelled. Every dimension in the source\
+  \ records where it came from."

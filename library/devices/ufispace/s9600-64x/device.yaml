@@ -1,10 +1,14 @@
 format: 1
 kind: device
 name: s9600-64x
-version: 1.1.0
+version: 1.1.4
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-64X
+portfolio:
+  line: Telecoms
+  family: Open Aggregation Router
+  series: S9600 Series
 description: UfiSpace S9600-64X Open Aggregation Router - 2RU, 64x QSFP28 40/100G in eight
   2x4 ganged blocks plus a 4x SFP28 1/10/25G quad that breaks out of QSFP28 port 0, full
   timing (GNSS/1PPS/10MHz/ToD) on a Stratum 3E OCXO, four hot-swap fans and two hot-swap
@@ -206,8 +210,6 @@ attrs:
     packet-buffer: 8 GB
     port-modes-qsfp28: 40/100G
     port-modes-sfp28: 1/10/25G
-    optics-qsfp28: 100G SR4/LR4/ER4/ZR4, up to 40 km
-    optics-sfp28: 25G SR/LR/ER, 10G SFP+ SR/LR/ER, up to 40 km
   power:
     power-typical-w: 565
     power-max-dc-w: 1140
@@ -244,6 +246,8 @@ attrs:
     srv6: full Segment Routing over IPv6
     breakout: SFP28 ports 0-3 break out of QSFP28 port 0; enabling them disables port 0
     nos-required: NOS integration is necessary to activate the timing and sync features
+    optics-qsfp28: 100G SR4/LR4/ER4/ZR4, up to 40 km
+    optics-sfp28: 25G SR/LR/ER, 10G SFP+ SR/LR/ER, up to 40 km
   management:
     console-serial: 115200 8N1, no parity, no flow control
     console-usb-driver: Silicon Labs CP210x USB-to-UART bridge
@@ -396,11 +400,17 @@ groups:
     role: service
     index-origin: 0
     physical-context: PowerSupply
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 redundant, hot-swappable'
   fans:
     term: Fan
     role: service
     index-origin: 0
     physical-context: Fan
+    attrs:
+      redundancy: '3+1'
+      redundancy-note: '3+1 - hot swappable fan modules with 3+1 redundancy support (UfiSpace datasheet, staged intake)'
   grounding:
     term: Point
     role: furniture

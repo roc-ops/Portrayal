@@ -1,10 +1,13 @@
 format: 1
 kind: device
 name: s9110-32x
-version: 1.0.0
+version: 1.0.4
 maturity: modelled
 manufacturer: UfiSpace
 model: S9110-32X
+portfolio:
+  line: 'Cloud & Data Centers'
+  family: Data Center Switch
 description: >-
   UfiSpace S9110-32X open-networking 100G data-center switch - 1RU, 32x QSFP28
   40/100G in eight 2x2 ganged blocks, with an OOB RJ45, a 10G SFP+ management
@@ -176,9 +179,9 @@ attrs:
     bmc: ASPEED AST2620
   features:
     optics-qsfp28: 100G QSFP28 SR4, LR4, ER4, ZR4
-    console: RJ45 RS-232, 115200 8N1
   management:
     mgmt-ports: 1x RJ45 100/1000M OOB, 1x 10G SFP+ management, 1x RJ45 serial console, 1x USB 3.0 Type-A
+    console: RJ45 RS-232, 115200 8N1
   compliance:
     safety: UL 62368-1; IEC 62368-1
     emc: FCC Part 15 Subpart B Class A; ICES-003 Class A; EN 55032 Class A; EN 300 386; EN 55035; VCCI CISPR 32 Class A
@@ -264,10 +267,16 @@ groups:
     term: PSU
     role: service
     index-origin: 0
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '2x 750 W 1+1 redundant, hot-swappable'
   fans:
     term: Fan
     role: service
     index-origin: 0
+    attrs:
+      redundancy: '2+1'
+      redundancy-note: '2+1 - hot swappable fan modules with 2+1 redundancy support (UfiSpace datasheet, staged intake)'
 views:
   front:
     size:

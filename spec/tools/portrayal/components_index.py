@@ -91,7 +91,20 @@ def main():
                 # that is how a vendor modelled entirely from estimates comes to
                 # look more complete than one that honestly declared nothing.
                 "relief-confidence": _confidence_counts(data),
-                "parts": [p["ref"] for p in data.get("parts") or []],
+                # REF AND ID, not the ref alone. A consumer that has to say
+                # what a card's ports ARE needs the id - `d0` is a downstream
+                # port and `u0` an upstream one, and the ref they share says
+                # only that both are MCX. Publishing refs alone made the DCIM
+                # export lose all eighteen interfaces off a 6+12 I/O card the
+                # moment it started reading this index instead of the contract.
+                # ATTRS TOO, because a placement is more specific than its ref:
+                # the same SFP cage is 1G or 10G depending on `attrs.media` and
+                # `attrs.speed` on the PART, and without them ten Casa SMM ports
+                # exported as 1000base-x when they are 10gbase-x. `at` stays
+                # absent: nothing outside the renderer needs a part's position,
+                # and this file is fetched on every page load.
+                "parts": [{k: p[k] for k in ("ref", "id", "attrs") if k in p}
+                          for p in data.get("parts") or []],
                 # SPLIT OFF BELOW, not dropped. Both are carried on the entry so
                 # everything downstream of here (relief-confidence, the defect
                 # register) still reads one object; _split() lifts them out into

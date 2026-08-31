@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9010
-version: 0.3.0
+version: 0.3.2
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9010
@@ -409,6 +409,9 @@ groups:
     role: service
     index-origin: 0
     physical-context: PowerSupply
+    attrs:
+      redundancy: 'n+n'
+      redundancy-note: 'n+n on AC, n+1 on DC - the AC power trays in the ASR 9010 provide N+N redundancy and the DC power trays provide N+1 (Overview and Reference Guide, Power System). The form here is the AC one'
   fan-trays:
     term: Fan Tray
     role: service

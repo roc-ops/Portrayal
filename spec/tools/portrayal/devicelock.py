@@ -61,12 +61,13 @@ def _placements(doc):
         for kind in ("bays", "placements"):
             for item in ((view.get("components") or {}).get(kind) or []):
                 key = f"{vname}/{kind}/{item.get('id')}"
-                # `group` is DELIBERATELY ABSENT. It is addressing, not
-                # geometry - see `_placement_groups`.
+                # `group` and `accepts` are DELIBERATELY ABSENT. Both are
+                # addressing rather than geometry - see `_placement_groups` and
+                # `_bay_accepts`.
                 out[key] = {
                     "at": item.get("at"), "size": item.get("size"),
                     "rotate": item.get("rotate"),
-                    "ref": item.get("ref"), "accepts": item.get("accepts"),
+                    "ref": item.get("ref"),
                     "default": item.get("default"), "mate-to": item.get("mate-to"),
                 }
         for cut in ((view.get("panel") or {}).get("cutouts") or []):
@@ -100,6 +101,32 @@ def _placement_groups(doc):
     return out
 
 
+def _bay_accepts(doc):
+    """What each bay says it will take, keyed the same way.
+
+    This used to sit in `shape` beside the coordinates, so ADDING a module to a
+    bay's `accepts` read as "same ids, different geometry: a slot moved" and
+    demanded a major bump. Nothing moves. The Casa chassis hit it first - one new
+    rear card put two of them at 1.0.0 - and it would have hit every future
+    module: the MX catalogue alone has some sixty cards still to model, each one
+    landing in the `accepts` of whatever chassis takes it.
+
+    So it lives in `names`, and `required_bump` tells the two cases apart: a bay
+    LEARNING it accepts something more cannot invalidate anything a consumer
+    holds, while a bay that stops accepting something can - a configuration
+    elsewhere may seat exactly that module.
+    """
+    out = {}
+    for vname, view in (doc.get("views") or {}).items():
+        view = view or {}
+        for kind in ("bays", "placements"):
+            for item in ((view.get("components") or {}).get(kind) or []):
+                acc = item.get("accepts")
+                if acc:
+                    out[f"{vname}/{kind}/{item.get('id')}"] = sorted(acc)
+    return out
+
+
 def buckets(doc):
     """The four things a device change can be, hashed apart.
 
@@ -112,7 +139,8 @@ def buckets(doc):
     moving it, which is why DESIGN.md puts geometry and IDs in the same bucket.
 
     `surface` is everything a reader sees and no consumer computes with -
-    silkscreen text, decor, description, provenance, maturity, attrs. Patch.
+    silkscreen text, decor, description, provenance, maturity, attrs, portfolio.
+    Patch.
 
     `gaps` is hashed on its own because it is the one part of a device that
     makes a CLAIM ABOUT THE WORLD rather than about the drawing, so it needs to
@@ -130,9 +158,19 @@ def buckets(doc):
             "groups": sorted((doc.get("groups") or {}).keys()),
             "configurations": sorted((doc.get("configurations") or {}).keys()),
             "placement-groups": _placement_groups(doc),
+            "bay-accepts": _bay_accepts(doc),
         }),
         "surface": _digest({
             "description": doc.get("description"),
+            # WHERE THE DEVICE SITS IN ITS VENDOR'S CATALOGUE. Unfingerprinted,
+            # `portfolio` could be rewritten - a family relabelled, a series
+            # corrected, a whole block deleted - and nothing would ask for a
+            # version. That is not hypothetical: 45 UfiSpace devices gained the
+            # block, two had wrong values corrected, and devicelock reported
+            # zero findings for the lot. It is `surface` and not `names`
+            # because it is catalogue metadata a reader sees rather than an
+            # identifier anything addresses by, so a patch is the right size.
+            "portfolio": doc.get("portfolio"),
             "maturity": doc.get("maturity"),
             "attrs": doc.get("attrs"),
             "provenance": doc.get("provenance"),
@@ -164,7 +202,8 @@ def entry(doc):
          "ids": sorted(_placements(doc)),
          "groups": sorted((doc.get("groups") or {}).keys()),
          "configs": sorted((doc.get("configurations") or {}).keys()),
-         "placement-groups": _placement_groups(doc)}
+         "placement-groups": _placement_groups(doc),
+         "bay-accepts": _bay_accepts(doc)}
     e.update(buckets(doc))
     return e
 
@@ -194,6 +233,13 @@ def required_bump(old, new):
     new_pg = new.get("placement-groups") or {}
     for key, was in (old.get("placement-groups") or {}).items():
         if was and key in new_pg and new_pg[key] != was:
+            return "major"
+    # A BAY THAT STOPS ACCEPTING SOMETHING IS BREAKING; one that accepts more is
+    # not. A configuration elsewhere may seat exactly the module just withdrawn.
+    old_acc = old.get("bay-accepts") or {}
+    new_acc = new.get("bay-accepts") or {}
+    for key, was in old_acc.items():
+        if set(was or []) - set(new_acc.get(key) or []):
             return "major"
     if old.get("shape") != new["shape"] and \
             set(old.get("ids") or []) == set(new["ids"]):
@@ -341,7 +387,7 @@ def check(library: pathlib.Path):
             if was.get("names") != now["names"]:
                 what.append("ids or groups")
             if was.get("surface") != now["surface"]:
-                what.append("surface (silkscreen, decor, provenance, attrs)")
+                what.append("surface (silkscreen, decor, provenance, attrs, portfolio)")
             if was.get("gaps") != now["gaps"]:
                 what.append("gaps")
             gone = sorted(set(was.get("ids") or []) - set(now["ids"]))

@@ -1,10 +1,13 @@
 format: 1
 kind: device
 name: s6301-56st
-version: 1.1.0
+version: 1.1.3
 maturity: modelled
 manufacturer: UfiSpace
 model: S6301-56ST
+portfolio:
+  line: 'Cloud & Data Centers'
+  family: L2/L3 Management Switch
 description: UfiSpace S6301-56ST - 1RU 48-port 1G RJ45 L2/L3 OOB management switch
   with 8x 1G/10G SFP+ uplinks; Broadcom Trident3-X2, Intel Denverton, 1+1 hot-swap
   150W AC or DC PSUs, 1+1 hot-swap fans, front-to-back or back-to-front airflow
@@ -342,10 +345,16 @@ groups:
     term: PSU
     role: service
     index-origin: 0
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 redundant, hot-swappable'
   fans:
     term: Fan
     role: service
     index-origin: 0
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 - 1+1 hot-swap fans (the device description)'
   grounding:
     term: Point
     role: furniture

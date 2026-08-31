@@ -28,6 +28,7 @@ needs the artifacts, not a checkout of this repository.
 
 ```sh
 ./build.sh                                    # lint, then compile every device
+./publish.sh                                  # the same, plus the DCIM exports
 python3 tools/serve.py 8931                   # browse http://localhost:8931/library/dist/
 ```
 

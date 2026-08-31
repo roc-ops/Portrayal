@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: c100g
-version: 0.4.0
+version: 0.5.1
 maturity: modelled
 manufacturer: Casa Systems
 model: C100G
@@ -212,6 +212,9 @@ groups:
     term: PEM
     role: service
     index-origin: 1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: 'two power entry modules provide optional redundancy'
 views:
   front:
     size:
@@ -319,20 +322,20 @@ views:
       - {at: [323.45, 475.7], text: PEM A, for: pem-a}
     components:
       bays:
-        - {id: rear-0, at: [399.29, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1], group: rear-slots, rel-pos: 0, default: casa/blank-faceplate@1}
-        - {id: rear-1, at: [368.81, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1], group: rear-slots, rel-pos: 1, default: casa/blank-faceplate@1}
-        - {id: rear-2, at: [338.34, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1], group: rear-slots, rel-pos: 2, default: casa/blank-faceplate@1}
-        - {id: rear-3, at: [307.88, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1], group: rear-slots, rel-pos: 3, default: casa/blank-faceplate@1}
-        - {id: rear-4, at: [277.41, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1], group: rear-slots, rel-pos: 4, default: casa/blank-faceplate@1}
-        - {id: rear-5, at: [246.94, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/lc-sw-bdm@1, casa/blank-faceplate@1], group: rear-slots, rel-pos: 5, default: casa/lc-sw-bdm@1}
+        - {id: rear-0, at: [399.29, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1, 'casa/oob-2p8@1'], group: rear-slots, rel-pos: 0, default: casa/blank-faceplate@1}
+        - {id: rear-1, at: [368.81, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1, 'casa/oob-2p8@1'], group: rear-slots, rel-pos: 1, default: casa/blank-faceplate@1}
+        - {id: rear-2, at: [338.34, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1, 'casa/oob-2p8@1'], group: rear-slots, rel-pos: 2, default: casa/blank-faceplate@1}
+        - {id: rear-3, at: [307.88, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1, 'casa/oob-2p8@1'], group: rear-slots, rel-pos: 3, default: casa/blank-faceplate@1}
+        - {id: rear-4, at: [277.41, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1, 'casa/oob-2p8@1'], group: rear-slots, rel-pos: 4, default: casa/blank-faceplate@1}
+        - {id: rear-5, at: [246.94, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/lc-sw-bdm@1, casa/blank-faceplate@1, 'casa/oob-2p8@1'], group: rear-slots, rel-pos: 5, default: casa/lc-sw-bdm@1}
         - {id: rear-6, at: [216.47, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/smm-sw-bdm-a@1, casa/blank-faceplate@1], group: rear-slots, rel-pos: 6, default: casa/smm-sw-bdm-a@1}
         - {id: rear-7, at: [186.0, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/smm-sw-bdm-b@1, casa/blank-faceplate@1], group: rear-slots, rel-pos: 7, default: casa/smm-sw-bdm-b@1}
-        - {id: rear-8, at: [155.53, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12-sw@2, casa/io-6p12-sw-io2@1, casa/lc-sw-bdm@1, casa/blank-faceplate@1], group: rear-slots, rel-pos: 8, default: casa/io-6p12-sw@2}
-        - {id: rear-9, at: [125.05, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1], group: rear-slots, rel-pos: 9, default: casa/blank-faceplate@1}
-        - {id: rear-10, at: [94.58, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1], group: rear-slots, rel-pos: 10, default: casa/blank-faceplate@1}
-        - {id: rear-11, at: [64.11, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1], group: rear-slots, rel-pos: 11, default: casa/blank-faceplate@1}
-        - {id: rear-12, at: [33.64, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1], group: rear-slots, rel-pos: 12, default: casa/blank-faceplate@1}
-        - {id: rear-13, at: [3.17, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1], group: rear-slots, rel-pos: 13, default: casa/blank-faceplate@1}
+        - {id: rear-8, at: [155.53, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12-sw@2, casa/io-6p12-sw-io2@1, casa/lc-sw-bdm@1, casa/blank-faceplate@1, 'casa/oob-2p8@1'], group: rear-slots, rel-pos: 8, default: casa/io-6p12-sw@2}
+        - {id: rear-9, at: [125.05, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1, 'casa/oob-2p8@1'], group: rear-slots, rel-pos: 9, default: casa/blank-faceplate@1}
+        - {id: rear-10, at: [94.58, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1, 'casa/oob-2p8@1'], group: rear-slots, rel-pos: 10, default: casa/blank-faceplate@1}
+        - {id: rear-11, at: [64.11, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1, 'casa/oob-2p8@1'], group: rear-slots, rel-pos: 11, default: casa/blank-faceplate@1}
+        - {id: rear-12, at: [33.64, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1, 'casa/oob-2p8@1'], group: rear-slots, rel-pos: 12, default: casa/blank-faceplate@1}
+        - {id: rear-13, at: [3.17, 108.1], size: {w: 30.47, h: 345.5}, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1, 'casa/oob-2p8@1'], group: rear-slots, rel-pos: 13, default: casa/blank-faceplate@1}
         - {id: fan-l, at: [4.0, 4.5], size: {w: 137.25, h: 91.2}, accepts: [casa/fan@1], group: fans, rel-pos: 0, default: casa/fan@1}
         - {id: fan-c, at: [147.85, 4.5], size: {w: 137.25, h: 91.2}, accepts: [casa/fan@1], group: fans, rel-pos: 1, default: casa/fan@1}
         - {id: fan-r, at: [291.7, 4.5], size: {w: 137.25, h: 91.2}, accepts: [casa/fan@1], group: fans, rel-pos: 2, default: casa/fan@1}

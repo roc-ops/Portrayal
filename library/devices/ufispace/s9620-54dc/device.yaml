@@ -1,10 +1,14 @@
 format: 1
 kind: device
 name: s9620-54dc
-version: 2.0.0
+version: 2.0.4
 maturity: modelled
 manufacturer: UfiSpace
 model: S9620-54DC
+portfolio:
+  line: Telecoms
+  family: Open Aggregation Router
+  series: S9600 Series
 description: >-
   UfiSpace S9620-54DC 400G open aggregation router - a 1RU 440 x 480 mm white box
   on Broadcom Qumran3u BCM88400 at 1.2 Tbps with 4 GB of deep buffer, carrying 54
@@ -267,13 +271,13 @@ attrs:
     timing-cable: >-
       50 ohm SMA coaxial with a 1/4-36UNS-2B connector for GNSS; 50 ohm SMB coaxial
       with a 10-32UNF-2A connector for 1PPS and 10MHz; shielded RJ45 for ToD
-  management:
-    console: RJ45 serial console (datasheet port list; not on the front face)
-    oob: 1x RJ45 100/1000M (datasheet port list; not on the front face)
     timing: >-
       GNSS SMA, 1PPS and 10MHz SMB and a ToD RJ45, each input/output; SyncE and IEEE
       1588v2 with the Default, G.8265.1, G.8275.1 and G.8275.2 profiles, T-TC, T-BC/OC
       and T-GM, Class C accuracy
+  management:
+    console: RJ45 serial console (datasheet port list; not on the front face)
+    oob: 1x RJ45 100/1000M (datasheet port list; not on the front face)
   compliance:
     safety: UL 62368-1; IEC 62368-1
     emc: >-
@@ -600,10 +604,16 @@ groups:
     term: PSU
     role: service
     index-origin: 0
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 hot-swappable'
   fans:
     term: Fan
     role: service
     index-origin: 0
+    attrs:
+      redundancy: '4+1'
+      redundancy-note: '4+1 - 4+1 hot-swappable (attrs fan-redundancy)'
   furniture:
     term: Item
     role: furniture

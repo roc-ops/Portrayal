@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9001
-version: 0.4.0
+version: 0.4.1
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9001
@@ -261,7 +261,14 @@ chassis:
   silk: '#231f20'
 groups:
   mpa-bays: {role: traffic, term: Bay, index-origin: 0, physical-context: NetworkingDevice}
-  power-modules: {role: service, term: Power Supply, index-origin: 0, physical-context: PowerSupply}
+  power-modules:
+    role: service
+    term: Power Supply
+    index-origin: 0
+    physical-context: PowerSupply
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 - two AC or two DC power modules for redundancy. The ASR 9001 FAQ states this directly; the 2+2 and 3+1 tables in the series install guide describe four-module chassis and do not apply to this two-bay one'
   cooling: {role: service, term: Fan Tray, index-origin: 0, physical-context: Fan}
   sfp-plus: {role: traffic, term: Port, index-origin: 0, attrs: {media: sfp-plus, speed: 10g}}
   cluster: {role: traffic, term: Port, index-origin: 0, attrs: {media: sfp}}

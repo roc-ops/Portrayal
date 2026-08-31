@@ -148,41 +148,41 @@ comments: "UfiSpace S9705-48D disaggregated fabric switch - the 2RU 436 x 762 mm
   \ vendor's rear render draw the supply with a C20 appliance inlet, a cord clip and a pull strap, which\
   \ is the AC unit, not the DC terminal block. No orderable chassis part number appears in any held document.\n\
   \nDatasheet: UfiSpace S9705-48D 400G Disaggregated Fabric Switch Datasheet\n  https://www.ufispace.com/products/telco/core-edge/s9705-48d-400g-disaggregated-core-router\n\
-  \nFacts carried in the model that this schema has no field for:\n- performance.switching-capacity: 8\
-  \ billion cells per second\n- performance.cluster-capacity: up to 691 Tb/s in an S9700-series DDC cluster\n\
-  - power.power-typical-w: 377\n- power.power-max-w: 1433\n- power.power-max-ac-w: 1229\n- power.power-envelope:\
-  \ fully-configured\n- power.input-ac: 200 to 240 V, 12.5 A\n- power.input-dc: -40 to -72 V, 60 A\n-\
-  \ power.psu-redundancy: 1+1 hot-swappable, active-active\n- power.circuit-reserve: 2000 W recommended\
-  \ on each of two feeds\n- thermal.fan-redundancy: 3+1 hot-swappable\n- thermal.airflow: front-to-back\n\
-  - environmental.operating-temp: 0 to 45 C\n- environmental.operating-humidity: 5 to 85% RH non-condensing\n\
-  - environmental.storage-temp: -40 to 70 C\n- environmental.storage-humidity: 5 to 93% RH non-condensing\n\
-  - platform.asic: Broadcom Ramon BCM88790\n- platform.cpu: Intel Broadwell-DE 8-core @ 2.0 GHz\n- platform.memory:\
-  \ 64 GB DDR4 R-DIMM with ECC\n- platform.storage: 128 GB SSD\n- platform.bmc: Aspeed AST2400\n- platform.oem-alias:\
+  \nFacts carried in the model that this schema has no field for:\n- compliance.emc: FCC Part 15, Subpart\
+  \ B, Class A; ICES-003, Class A; EN 55032, Class A; EN 300 386; EN 301 489; EN 303 413; EN 55024; EN\
+  \ 55035; EN 62479; EN 50663; BSMI; VCCI CISPR 32, Class A; RCM AS/NZS CISPR 32, Class A; Anatel\n- compliance.environment:\
+  \ WEEE; RoHS (EU 2011/65/EU with amendment 2015/863)\n- compliance.nebs: NEBS GR-1089 (EMC); NEBS GR-63\
+  \ (environment)\n- compliance.safety: UL 62368-1; IEC 62368-1; IEC 60950-1; BSMI; NOM\n- environmental.operating-humidity:\
+  \ 5 to 85% RH non-condensing\n- environmental.operating-temp: 0 to 45 C\n- environmental.storage-humidity:\
+  \ 5 to 93% RH non-condensing\n- environmental.storage-temp: -40 to 70 C\n- features.cell-switching:\
+  \ cell-based switching eliminates Ethernet overhead and load-balances every fabric link, at 8 billion\
+  \ cells per second, with internal data-cell memory\n- features.ddc: backplane switch fabric for a Distributed\
+  \ Disaggregated Chassis built from S9700-series routers, scaling horizontally in a pay-as-you-grow model\n\
+  - features.fabric-only: the forty-eight QSFP-DD ports are CELL-BASED fabric ports and the guide says\
+  \ they 'should only be used to interconnect with other fabric ports of the S9700 series' - they are\
+  \ not general Ethernet ports\n- features.optics-qsfp-dd: 400GE QSFP-DD SR8, LR8, DR4 and FR4; 400GE\
+  \ QSFP-DD DAC, AEC and AOC (datasheet Compatible Fabric Transceiver Types and Compatible Fabric Cable\
+  \ Types)\n- features.optics-sfp-plus: NOT PUBLISHED FOR THESE PORTS. The datasheet's Compatible Fabric\
+  \ Transceiver Types and Compatible Fabric Cable Types blocks cover the forty-eight QSFP-DD fabric ports\
+  \ only; no held document names a single optic for the two 10G SFP+ management ports, which the port\
+  \ list describes as '2 x 10G SFP+ management ports' and nothing more. The cages are drawn to the SFP/SFP+\
+  \ standard on that description\n- lifecycle.eol: none-announced\n- management.boot-time: approximately\
+  \ 110 s from power-on and 40 s for the OOB port to link, both measured on Ubuntu Linux and NOS-dependent\
+  \ (HIG NEBS statements)\n- management.console: RJ45 serial console and micro USB, both legended IOIO\
+  \ on the faceplate; 115200 8N1, no parity, no flow control (HIG Initial System Setup). The micro USB\
+  \ needs the Silicon Labs CP210x driver\n- management.oob: 1x RJ45 100/1000M out-of-band management port\
+  \ with link and activity lamps\n- management.sfp-management: 2x 10G SFP+ management ports\n- performance.cluster-capacity:\
+  \ up to 691 Tb/s in an S9700-series DDC cluster\n- performance.switching-capacity: 8 billion cells per\
+  \ second\n- platform.asic: Broadcom Ramon BCM88790\n- platform.bmc: Aspeed AST2400\n- platform.cpu:\
+  \ Intel Broadwell-DE 8-core @ 2.0 GHz\n- platform.memory: 64 GB DDR4 R-DIMM with ECC\n- platform.oem-alias:\
   \ DriveNets NCF-48CD (Network Cloud Fabric, 48x400GE FIF). NOT A UFISPACE CLAIM - no UfiSpace document\
   \ names DriveNets. The mapping is internal analysis: the okf `drivenets-ddc` bundle's 'DriveNets NCF/NCP\
   \ to white-box hardware map (shipping platforms)' matches the roadmap slide's NCF-48CD (Ramon 19.2T,\
   \ 48x400GE fabric) to this chassis on silicon and port configuration. Recorded so a search for either\
-  \ name finds this box\n- features.optics-qsfp-dd: 400GE QSFP-DD SR8, LR8, DR4 and FR4; 400GE QSFP-DD\
-  \ DAC, AEC and AOC (datasheet Compatible Fabric Transceiver Types and Compatible Fabric Cable Types)\n\
-  - features.optics-sfp-plus: NOT PUBLISHED FOR THESE PORTS. The datasheet's Compatible Fabric Transceiver\
-  \ Types and Compatible Fabric Cable Types blocks cover the forty-eight QSFP-DD fabric ports only; no\
-  \ held document names a single optic for the two 10G SFP+ management ports, which the port list describes\
-  \ as '2 x 10G SFP+ management ports' and nothing more. The cages are drawn to the SFP/SFP+ standard\
-  \ on that description\n- features.fabric-only: the forty-eight QSFP-DD ports are CELL-BASED fabric ports\
-  \ and the guide says they 'should only be used to interconnect with other fabric ports of the S9700\
-  \ series' - they are not general Ethernet ports\n- features.cell-switching: cell-based switching eliminates\
-  \ Ethernet overhead and load-balances every fabric link, at 8 billion cells per second, with internal\
-  \ data-cell memory\n- features.ddc: backplane switch fabric for a Distributed Disaggregated Chassis\
-  \ built from S9700-series routers, scaling horizontally in a pay-as-you-grow model\n- management.console:\
-  \ RJ45 serial console and micro USB, both legended IOIO on the faceplate; 115200 8N1, no parity, no\
-  \ flow control (HIG Initial System Setup). The micro USB needs the Silicon Labs CP210x driver\n- management.oob:\
-  \ 1x RJ45 100/1000M out-of-band management port with link and activity lamps\n- management.sfp-management:\
-  \ 2x 10G SFP+ management ports\n- management.boot-time: approximately 110 s from power-on and 40 s for\
-  \ the OOB port to link, both measured on Ubuntu Linux and NOS-dependent (HIG NEBS statements)\n- compliance.safety:\
-  \ UL 62368-1; IEC 62368-1; IEC 60950-1; BSMI; NOM\n- compliance.emc: FCC Part 15, Subpart B, Class A;\
-  \ ICES-003, Class A; EN 55032, Class A; EN 300 386; EN 301 489; EN 303 413; EN 55024; EN 55035; EN 62479;\
-  \ EN 50663; BSMI; VCCI CISPR 32, Class A; RCM AS/NZS CISPR 32, Class A; Anatel\n- compliance.nebs: NEBS\
-  \ GR-1089 (EMC); NEBS GR-63 (environment)\n- compliance.environment: WEEE; RoHS (EU 2011/65/EU with\
-  \ amendment 2015/863)\n- lifecycle.eol: none-announced\n\nDrawing version 1.0.0. A major bump means\
-  \ a slot moved or an id was renamed, so anything cached from an earlier export may no longer line up.\n\
-  Model maturity: modelled. Every dimension in the source records where it came from."
+  \ name finds this box\n- platform.storage: 128 GB SSD\n- power.circuit-reserve: 2000 W recommended on\
+  \ each of two feeds\n- power.input-ac: 200 to 240 V, 12.5 A\n- power.input-dc: -40 to -72 V, 60 A\n\
+  - power.power-envelope: fully-configured\n- power.power-max-ac-w: 1229\n- power.power-max-w: 1433\n\
+  - power.power-typical-w: 377\n- power.psu-redundancy: 1+1 hot-swappable, active-active\n- thermal.airflow:\
+  \ front-to-back\n- thermal.fan-redundancy: 3+1 hot-swappable\n\nDrawing version 1.0.3. A major bump\
+  \ means a slot moved or an id was renamed, so anything cached from an earlier export may no longer line\
+  \ up.\nModel maturity: modelled. Every dimension in the source records where it came from."

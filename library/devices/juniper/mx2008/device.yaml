@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx2008
-version: 0.2.2
+version: 0.2.4
 maturity: modelled
 manufacturer: Juniper
 model: MX2008
@@ -57,11 +57,17 @@ groups:
     role: service
     index-origin: 0
     description: RCB slots 0 and 1 at the ends of the upper cage
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 - mx2008 hardware guide, "MX2008 Component Redundancy": "The host subsystem consists of two Routing and Control Boards (RCBs). The RCB is an integrated board and a single FRU that provides Routing Engine and Control Board functionality. The router can have one or two host subsystems. If two host subsystems are installed, one functions as the primary and the other functions as the backup." The guide''s "System Overview" adds that all major components including the RCBs are fully redundant'
   sfbs:
     term: Slot
     role: service
     index-origin: 0
     description: Switch Fabric Board slots SFB 0-7, 7+1 redundant
+    attrs:
+      redundancy: '7+1'
+      redundancy-note: '7+1 - mx2008 hardware guide, "System Overview": "The router contains 8 Switch Fabric Boards (SFBs) that provides 7+1 redundancy." Unlike the RCB pair this is not a standby: the MX2000 fabric is all-active, so the spare is a working plane whose loss costs no throughput. The 9-PSM figure quoted alongside it in the same paragraph is 8+1 and belongs to `psus`, not here'
   fpcs:
     term: Slot
     role: traffic
@@ -73,6 +79,9 @@ groups:
     role: service
     index-origin: 0
     description: nine power supply modules, 8+1 load-sharing
+    attrs:
+      redundancy: 'n+1'
+      redundancy-note: 'n+1 PSM, N+N feed redundancy'
 views:
   front:
     size:

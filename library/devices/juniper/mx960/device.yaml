@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx960
-version: 0.3.0
+version: 0.3.2
 maturity: modelled
 manufacturer: Juniper
 model: MX960
@@ -67,11 +67,17 @@ groups:
     role: service
     index-origin: 0
     description: Switch Control Board slots SCB0 and SCB1
+    attrs:
+      redundancy: '2+1'
+      redundancy-note: '2+1 - mx960 hardware guide, "The MX-Series SCB": "The MX240 and MX480 require two SCBs for 1+1 redundancy, whereas the MX960 requires three SCBs for 2+1 redundancy." THE FORM COUNTS THREE CARDS AND THIS GROUP HOLDS TWO BAYS: SCB0 and SCB1 are the dedicated ones, and the third SCB seats in line-card slot 6 (see `fpcs`), which is why the count here does not match the form. One form covers control and fabric together because the SCB does both - "The switch fabric is Integrated into the SCB ... The routing engine installs directly into the SCB" - and "MX960 Component Redundancy" gives the control half as a primary/backup host-subsystem pair'
   psus:
     term: PEM
     role: service
     index-origin: 0
     description: four AC supplies at the rear, PEM 0-3
+    attrs:
+      redundancy: '2+2'
+      redundancy-note: '2+2 for the high-voltage second-generation universal supply, per its Redundancy row. Earlier high-capacity supplies are zoned and run 3+1 per system, three sharing the load evenly with a fourth providing full redundancy - the figure here is the second-generation one'
   inlets:
     term: Inlet
     role: service

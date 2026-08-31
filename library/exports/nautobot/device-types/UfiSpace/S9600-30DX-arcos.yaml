@@ -103,32 +103,32 @@ comments: "UfiSpace S9600-30DX open ZR aggregation router - 2RU disaggregated wh
   \ and two PSU-162-AESR 1600W AC supplies at the rear, and the thirty traffic ports empty. No orderable\
   \ chassis part number appears in any held document; see the chassis-sku gap.\n\nDatasheet: UfiSpace\
   \ S9600-30DX Open ZR Aggregation Router Datasheet\n  https://www.ufispace.com/products/telco/aggregation/s9600-30dx-open-zr-aggregation-router\n\
-  \nFacts carried in the model that this schema has no field for:\n- performance.switching-capacity: 4.8\
-  \ Tbps\n- performance.packet-buffer: 8 GB deep buffer\n- power.power-typical-w: 464\n- power.power-max-w:\
-  \ 1300\n- power.power-envelope: bare\n- power.input-ac: 200 to 240 V, 10 A\n- power.input-dc: -40 to\
-  \ -72 V, 50 A\n- power.psu-redundancy: 1+1 hot-swappable\n- thermal.fan-redundancy: 3+1 hot-swappable\n\
-  - thermal.airflow: front-to-back (exhaust fans and supplies at the rear)\n- environmental.operating-temp:\
-  \ 0 to 45 C\n- environmental.operating-humidity: 5 to 85% RH non-condensing\n- environmental.storage-temp:\
-  \ -40 to 70 C\n- environmental.storage-humidity: 5 to 93% RH non-condensing\n- platform.asic: Broadcom\
-  \ Jericho2 BCM88690 with Broadcom OP2 BCM16K external TCAM\n- platform.cpu: Intel Skylake-D 8-core @\
-  \ 1.9 GHz\n- platform.memory: 32 GB DDR4 (up to 64 GB)\n- platform.storage: 128 GB SSD\n- platform.bmc:\
-  \ ASPEED AST2620\n- features.timing: Stratum 3E OCXO with optional holdover; SyncE (ITU-T); IEEE 1588v2\
-  \ default, G.8265.1, G.8275.1, G.8275.2, SMPTE ST 2059-2 (additional licence), T-GM, T-BC/OC, T-TC;\
-  \ Time Sensitive Networking (TSN); Class C timing accuracy. NOS integration is required to activate\
-  \ these, which the datasheet states with an asterisk against the whole timing block\n- features.gnss:\
-  \ internal receiver for master clock implementations\n- features.coherent: 400G ZR and OpenZR+ on the\
-  \ six 100/400G QSFP-DD, OpenZR+ on the eight 40/100G QSFP-DD - the capability the platform is named\
-  \ for\n- features.optics-qsfp-dd: 400G QSFP-DD OpenZR+/ZR/SR8/FR4/LR4/ER4/DR4/DR4+/PLR4; 200G QSFP56\
-  \ SR4/FR4\n- features.optics-qsfp28: 100G QSFP28 SR4/LR4/ER4/ZR4; 100G OpenZR+\n- features.optics-sfp-plus:\
+  \nFacts carried in the model that this schema has no field for:\n- compliance.emc: FCC Part 15, Subpart\
+  \ B, Class A; ICES-003, Class A; EN 55032, Class A; EN 300 386; EN 55035; EN 301 489; EN 303 413; EN\
+  \ 62479; EN 50663; VCCI CISPR 32, Class A\n- compliance.environment: ETSI 300 019; RoHS; WEEE\n- compliance.safety:\
+  \ UL 62368-1; IEC 62368-1\n- environmental.operating-humidity: 5 to 85% RH non-condensing\n- environmental.operating-temp:\
+  \ 0 to 45 C\n- environmental.storage-humidity: 5 to 93% RH non-condensing\n- environmental.storage-temp:\
+  \ -40 to 70 C\n- features.coherent: 400G ZR and OpenZR+ on the six 100/400G QSFP-DD, OpenZR+ on the\
+  \ eight 40/100G QSFP-DD - the capability the platform is named for\n- features.compliance-programme:\
+  \ IEEE 802.1CM fronthaul; ITU-T G.8273.2 T-BC Class C\n- features.gnss: internal receiver for master\
+  \ clock implementations\n- features.optics-qsfp-dd: 400G QSFP-DD OpenZR+/ZR/SR8/FR4/LR4/ER4/DR4/DR4+/PLR4;\
+  \ 200G QSFP56 SR4/FR4\n- features.optics-qsfp28: 100G QSFP28 SR4/LR4/ER4/ZR4; 100G OpenZR+\n- features.optics-sfp-plus:\
   \ 10G on the two SFP+ management ports. The datasheet's Compatible Transceiver Types list names QSFP-DD,\
   \ QSFP56 and QSFP28 optics only and no SFP+ part at all, so the speed here is the port list's ('2 x\
   \ 10G SFP+ management ports') and no specific module is claimed for it\n- features.routing: full Segment\
-  \ Routing over IPv6 (SRv6)\n- features.compliance-programme: IEEE 802.1CM fronthaul; ITU-T G.8273.2\
-  \ T-BC Class C\n- management.console: RJ45 RS-232 plus a micro-USB serial console\n- management.oob:\
-  \ 1x RJ45 100/1000M plus 2x SFP+ 10G management ports\n- management.timing-interfaces: GNSS SMA in;\
-  \ 1PPS SMB in/out; 10MHz SMB in/out; ToD RJ45 in/out; BITS RJ48 in/out\n- compliance.safety: UL 62368-1;\
-  \ IEC 62368-1\n- compliance.emc: FCC Part 15, Subpart B, Class A; ICES-003, Class A; EN 55032, Class\
-  \ A; EN 300 386; EN 55035; EN 301 489; EN 303 413; EN 62479; EN 50663; VCCI CISPR 32, Class A\n- compliance.environment:\
-  \ ETSI 300 019; RoHS; WEEE\n- lifecycle.eol: none-announced\n\nDrawing version 2.1.0. A major bump means\
-  \ a slot moved or an id was renamed, so anything cached from an earlier export may no longer line up.\n\
-  Model maturity: modelled. Every dimension in the source records where it came from."
+  \ Routing over IPv6 (SRv6)\n- features.timing: Stratum 3E OCXO with optional holdover; SyncE (ITU-T);\
+  \ IEEE 1588v2 default, G.8265.1, G.8275.1, G.8275.2, SMPTE ST 2059-2 (additional licence), T-GM, T-BC/OC,\
+  \ T-TC; Time Sensitive Networking (TSN); Class C timing accuracy. NOS integration is required to activate\
+  \ these, which the datasheet states with an asterisk against the whole timing block\n- features.timing-interfaces:\
+  \ GNSS SMA in; 1PPS SMB in/out; 10MHz SMB in/out; ToD RJ45 in/out; BITS RJ48 in/out\n- lifecycle.eol:\
+  \ none-announced\n- management.console: RJ45 RS-232 plus a micro-USB serial console\n- management.oob:\
+  \ 1x RJ45 100/1000M plus 2x SFP+ 10G management ports\n- performance.packet-buffer: 8 GB deep buffer\n\
+  - performance.switching-capacity: 4.8 Tbps\n- platform.asic: Broadcom Jericho2 BCM88690 with Broadcom\
+  \ OP2 BCM16K external TCAM\n- platform.bmc: ASPEED AST2620\n- platform.cpu: Intel Skylake-D 8-core @\
+  \ 1.9 GHz\n- platform.memory: 32 GB DDR4 (up to 64 GB)\n- platform.storage: 128 GB SSD\n- power.input-ac:\
+  \ 200 to 240 V, 10 A\n- power.input-dc: -40 to -72 V, 50 A\n- power.power-envelope: bare\n- power.power-max-w:\
+  \ 1300\n- power.power-typical-w: 464\n- power.psu-redundancy: 1+1 hot-swappable\n- thermal.airflow:\
+  \ front-to-back (exhaust fans and supplies at the rear)\n- thermal.fan-redundancy: 3+1 hot-swappable\n\
+  \nDrawing version 2.1.4. A major bump means a slot moved or an id was renamed, so anything cached from\
+  \ an earlier export may no longer line up.\nModel maturity: modelled. Every dimension in the source\
+  \ records where it came from."

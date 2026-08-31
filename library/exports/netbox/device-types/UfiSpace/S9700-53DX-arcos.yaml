@@ -132,47 +132,47 @@ comments: "UfiSpace S9700-53DX 100G open disaggregated core and edge router - 2R
   \ hot-swapping a supply is no longer supported. No orderable chassis part number appears in any held\
   \ document; see the chassis-sku gap.\n\nDatasheet: UfiSpace S9700-53DX 100G Disaggregated Core and Edge\
   \ Router Datasheet\n  https://www.ufispace.com/products/telco/core-edge/s9700-53dx-100g-core-router\n\
-  \nFacts carried in the model that this schema has no field for:\n- performance.switching-capacity: 4.8\
-  \ Tbps\n- performance.packet-buffer: 8 GB\n- power.power-typical-w: 563\n- power.power-max-w: 1434\n\
-  - power.power-envelope: bare\n- power.input-ac: 200 to 240 V, 12.5 A\n- power.input-dc: -40 to -72 V,\
-  \ 60 A\n- power.psu-redundancy: 1+1 hot-swappable, active-active\n- thermal.fan-redundancy: 3+1 hot-swappable\n\
-  - thermal.airflow: front-to-back (exhaust fans and exhaust PSUs)\n- environmental.operating-temp: 0\
-  \ to 45 C\n- environmental.operating-humidity: 5 to 85% RH non-condensing\n- environmental.storage-temp:\
-  \ -40 to 70 C\n- environmental.storage-humidity: 5 to 93% RH non-condensing\n- platform.asic: Broadcom\
-  \ Jericho2 BCM88690\n- platform.tcam: Broadcom OP2 BCM16K external TCAM for additional table sizes\n\
-  - platform.cpu: Intel Broadwell-DE 8-core @ 2.0 GHz\n- platform.memory: 64 GB DDR4\n- platform.storage:\
-  \ 128 GB SSD\n- platform.bmc: Aspeed AST2400\n- platform.oem-alias: DriveNets NCP-40C (Network Cloud\
-  \ Packet forwarder, 40x100 NIF + 13x400 FIF). NOT A UFISPACE CLAIM - no UfiSpace document mentions DriveNets.\
-  \ The mapping is internal analysis: the okf `drivenets-ddc` bundle's 'DriveNets NCF/NCP to white-box\
-  \ hardware map (shipping platforms)' matches the roadmap slide's NCP-40C (J2 4T) to this chassis on\
-  \ published silicon and port configuration. The slide's photo matches this chassis rather than the Edgecore\
-  \ COR550, which publishes the identical 40x100 + 13x400 J2 configuration. Recorded so a search for either\
-  \ name finds this box; no DriveNets figure or artwork is transcribed anywhere in this file.\n- features.deployment:\
-  \ functions standalone or as a node in a cluster from 4 Tbps up to 192 Tbps; interoperable with the\
-  \ rest of the S9700 series using an S9705-48D or S9725-64E as the fabric (datasheet Key Features). Keyed\
-  \ `deployment` rather than `role`, which is reserved for the structural role each GROUP carries\n- features.fabric-ports:\
+  \nFacts carried in the model that this schema has no field for:\n- compliance.emc: FCC Part 15, Subpart\
+  \ B, Class A; ICES-003, Class A; EN 55032, Class A; EN 55024; EN 55035; EN 62479; EN 50663; EN 300 386;\
+  \ EN 301 489; EN 303 413; BSMI; VCCI CISPR 32, Class A; AS/NZS CISPR 32, Class A; Anatel; NEBS GR-1089\n\
+  - compliance.environment: RoHS; WEEE; NEBS GR-63\n- compliance.nebs: the Regulatory Compliance table\
+  \ lists NEBS GR-1089 under EMC and NEBS GR-63 under Environment; separately the datasheet's Key Benefits\
+  \ line reads 'Ideal for Core, Edge, and Central Office deployments (NEBS Level 3)'. Both wordings are\
+  \ carried because they are different claims and neither document reconciles them\n- compliance.safety:\
+  \ UL 62368-1; IEC 62368-1; BSMI; NOM\n- environmental.operating-humidity: 5 to 85% RH non-condensing\n\
+  - environmental.operating-temp: 0 to 45 C\n- environmental.storage-humidity: 5 to 93% RH non-condensing\n\
+  - environmental.storage-temp: -40 to 70 C\n- features.breakout: service ports 0-19 can individually\
+  \ break out into 4x25GE or 4x10GE; if any of ports 0-19 is in breakout mode the corresponding lower-column\
+  \ port is disabled (HIG Port Overview). Ports 20-39 are 40GE/100GE only\n- features.deployment: functions\
+  \ standalone or as a node in a cluster from 4 Tbps up to 192 Tbps; interoperable with the rest of the\
+  \ S9700 series using an S9705-48D or S9725-64E as the fabric (datasheet Key Features). Keyed `deployment`\
+  \ rather than `role`, which is reserved for the structural role each GROUP carries\n- features.fabric-ports:\
   \ the thirteen 400G QSFP-DD ports are FABRIC ports and are for connecting to the fabric ports of an\
-  \ S9705-48D fabric switch only, not for service traffic (HIG Port Overview)\n- features.breakout: service\
-  \ ports 0-19 can individually break out into 4x25GE or 4x10GE; if any of ports 0-19 is in breakout mode\
-  \ the corresponding lower-column port is disabled (HIG Port Overview). Ports 20-39 are 40GE/100GE only\n\
-  - features.routing: full Segment Routing over IPv6 (SRv6) support (datasheet Key Features)\n- features.optics-qsfp28:\
-  \ 100GE QSFP28 SR4, LR4, ER4 and ZR4, up to 80 km (datasheet Compatible Transceiver Types)\n- features.optics-sfp-plus:\
+  \ S9705-48D fabric switch only, not for service traffic (HIG Port Overview)\n- features.optics-qsfp-dd:\
+  \ 400GE QSFP-DD DAC, AEC and AOC up to 100 m - the fabric ports take cables, and the datasheet's Compatible\
+  \ Fabric Cable Types list carries no optical transceiver\n- features.optics-qsfp28: 100GE QSFP28 SR4,\
+  \ LR4, ER4 and ZR4, up to 80 km (datasheet Compatible Transceiver Types)\n- features.optics-sfp-plus:\
   \ NOT STATED. The datasheet's Compatible Transceiver Types block lists 100GE QSFP28 SR4/LR4/ER4/ZR4\
   \ only and its Compatible Fabric Cable Types block lists 400GE QSFP-DD DAC/AEC/AOC; neither names anything\
   \ for the two 10G SFP+ management ports, and the HIG's Connecting the Transceiver section names no part\
   \ either. The cage takes what an SFP+ cage takes; which optics UfiSpace qualifies in it is unrecorded\
-  \ here rather than inferred - see the sfp-plus-optics gap\n- features.optics-qsfp-dd: 400GE QSFP-DD\
-  \ DAC, AEC and AOC up to 100 m - the fabric ports take cables, and the datasheet's Compatible Fabric\
-  \ Cable Types list carries no optical transceiver\n- management.console: RJ45 RS-232 plus a micro-USB\
-  \ serial console, both lettered IOIOI\n- management.oob: 1x RJ45 100/1000M out-of-band\n- management.inband-mgmt:\
-  \ 2x 10G SFP+ management ports numbered 0 and 1\n- management.service-port: 1x USB 2.0 Type-A\n- compliance.safety:\
-  \ UL 62368-1; IEC 62368-1; BSMI; NOM\n- compliance.emc: FCC Part 15, Subpart B, Class A; ICES-003, Class\
-  \ A; EN 55032, Class A; EN 55024; EN 55035; EN 62479; EN 50663; EN 300 386; EN 301 489; EN 303 413;\
-  \ BSMI; VCCI CISPR 32, Class A; AS/NZS CISPR 32, Class A; Anatel; NEBS GR-1089\n- compliance.environment:\
-  \ RoHS; WEEE; NEBS GR-63\n- compliance.nebs: the Regulatory Compliance table lists NEBS GR-1089 under\
-  \ EMC and NEBS GR-63 under Environment; separately the datasheet's Key Benefits line reads 'Ideal for\
-  \ Core, Edge, and Central Office deployments (NEBS Level 3)'. Both wordings are carried because they\
-  \ are different claims and neither document reconciles them\n- lifecycle.eol: none-announced\n\nDrawing\
-  \ version 2.0.0. A major bump means a slot moved or an id was renamed, so anything cached from an earlier\
-  \ export may no longer line up.\nModel maturity: modelled. Every dimension in the source records where\
-  \ it came from."
+  \ here rather than inferred - see the sfp-plus-optics gap\n- features.routing: full Segment Routing\
+  \ over IPv6 (SRv6) support (datasheet Key Features)\n- lifecycle.eol: none-announced\n- management.console:\
+  \ RJ45 RS-232 plus a micro-USB serial console, both lettered IOIOI\n- management.inband-mgmt: 2x 10G\
+  \ SFP+ management ports numbered 0 and 1\n- management.oob: 1x RJ45 100/1000M out-of-band\n- management.service-port:\
+  \ 1x USB 2.0 Type-A\n- performance.packet-buffer: 8 GB\n- performance.switching-capacity: 4.8 Tbps\n\
+  - platform.asic: Broadcom Jericho2 BCM88690\n- platform.bmc: Aspeed AST2400\n- platform.cpu: Intel Broadwell-DE\
+  \ 8-core @ 2.0 GHz\n- platform.memory: 64 GB DDR4\n- platform.oem-alias: DriveNets NCP-40C (Network\
+  \ Cloud Packet forwarder, 40x100 NIF + 13x400 FIF). NOT A UFISPACE CLAIM - no UfiSpace document mentions\
+  \ DriveNets. The mapping is internal analysis: the okf `drivenets-ddc` bundle's 'DriveNets NCF/NCP to\
+  \ white-box hardware map (shipping platforms)' matches the roadmap slide's NCP-40C (J2 4T) to this chassis\
+  \ on published silicon and port configuration. The slide's photo matches this chassis rather than the\
+  \ Edgecore COR550, which publishes the identical 40x100 + 13x400 J2 configuration. Recorded so a search\
+  \ for either name finds this box; no DriveNets figure or artwork is transcribed anywhere in this file.\n\
+  - platform.storage: 128 GB SSD\n- platform.tcam: Broadcom OP2 BCM16K external TCAM for additional table\
+  \ sizes\n- power.input-ac: 200 to 240 V, 12.5 A\n- power.input-dc: -40 to -72 V, 60 A\n- power.power-envelope:\
+  \ bare\n- power.power-max-w: 1434\n- power.power-typical-w: 563\n- power.psu-redundancy: 1+1 hot-swappable,\
+  \ active-active\n- thermal.airflow: front-to-back (exhaust fans and exhaust PSUs)\n- thermal.fan-redundancy:\
+  \ 3+1 hot-swappable\n\nDrawing version 2.0.3. A major bump means a slot moved or an id was renamed,\
+  \ so anything cached from an earlier export may no longer line up.\nModel maturity: modelled. Every\
+  \ dimension in the source records where it came from."

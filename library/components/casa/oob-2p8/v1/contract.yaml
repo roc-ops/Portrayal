@@ -1,0 +1,90 @@
+format: 1
+kind: module
+name: oob-2p8
+version: 0.1.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Casa CSC Out-of-Band (OOB) 2+8 I/O module - the rear half of a CSC 8x10G
+  position, carrying two Narrowband Digital Forward downstream jacks (NDF0,
+  NDF1) and eight Narrowband Digital Return upstream jacks (NDR0-NDR7). It
+  gives a Remote PHY deployment the SCTE 55-1 / 55-2 signalling path that
+  two-way legacy set-top boxes still need: analogue OOB carriers are digitised
+  in the headend and turned back into RF at the node. One NDF and one NDR as a
+  set (NDF0 with NDR0) is the minimum connection; NDF1/NDR1 drive a second
+  signalling device.
+size: {w: 30.47, h: 345.5, d: 380.0}
+size-confidence: {d: known-wrong}
+size-notes: 'd 380.0 is inherited from the rear-card family and is IMPOSSIBLE for the same reason - see casa/io-6p12 provenance/depth-known-wrong'
+attrs: {power-absent: not-applicable, model: OOB 2+8 I/O, media: coax, connector: f-type, downstream: '2', upstream: '8', role: oob-signalling}
+provenance:
+  layout: >-
+    datasheet - C100G Hardware Installation Guide section 3-3 "CSC 8x10G and OOB 2+8
+    I/O modules", and its Figure 3-2 which draws the CSC and the OOB faceplates side
+    by side. The prose fixes the COUNT and the NAMES exactly: "two NDF downstream
+    ports (labeled NDF0, NDF1), and eight NDR upstream ports (labeled NDR 0 to
+    NDR7)". The figure fixes the ORDER, reading down a single column: NDF0, NDF1,
+    then NDR0 upward through NDR7.
+  figure-labels-disagree-with-the-prose: >-
+    THE FIGURE CALLOUTS READ NDF0 NDF1 NDR0 NDR1 **NDF2 NDF3** NDR4 NDR5 NDR6 NDR7,
+    and the prose says two NDF and eight NDR. Those cannot both be true. The prose
+    is followed, because the figure reading fails on its own terms: it names four
+    NDF against a card the same page calls "2+8", and it leaves NDR2 and NDR3 out
+    of a run that is otherwise complete from NDR0 to NDR7. NDF2/NDF3 sit exactly
+    where NDR2/NDR3 belong in the sequence, which is what an R misread as an F
+    looks like in a converted figure callout. Recorded rather than silently
+    resolved: if a photograph ever shows four NDF jacks, this entry is where to
+    start.
+  connector: >-
+    owner - F fittings, not MCX. THIS IS THE ONE THING A DOCUMENT WOULD HAVE GOT
+    WRONG HERE. The C100G guide tables an MCX 75-ohm connector for the BDM 6+12,
+    and nothing in either guide states a connector for the OOB, so inheriting the
+    BDM's MCX from the same chassis and the same rear-card family is the obvious
+    move and it is incorrect. The owner has the hardware. An F bulkhead is more
+    than twice the width of an MCX (9.7 against 4.95), which is why this card
+    carries ONE column of ten where the 6+12 I/O carries two of eighteen.
+  port-positions: >-
+    estimated. NO FIGURE DIMENSIONS THIS FACEPLATE. Figure 3-2 is schematic - it
+    establishes one column and the order and nothing else - and there is no OOB
+    specification table anywhere in the C100G or C40G guides, unlike the BDM which
+    has two. So the ten jacks are distributed evenly across the SAME vertical band
+    the measured 6+12 I/O occupies on the identical card, 39.455 to 252.195, at a
+    pitch of 23.638. That band is measured; its use here is an assumption, and the
+    even distribution inside it is an assumption. What is NOT assumed is that they
+    fit: 23.638 clears the 9.7 F aperture with room to spare.
+  size: >-
+    drawing - the card is a rear I/O module in the C100G and C40G rear cage, so it
+    takes the cage's own 30.47 x 345.5, the figure every rear card in this library
+    uses and the size the bays declare. Only the depth is doubtful, and it is
+    doubtful for the whole family rather than for this card.
+  power: >-
+    NOT APPLICABLE, and searched rather than assumed. This is the rear half of a
+    CSC position, and Casa scopes every power figure in these guides to the FRONT
+    card - the BDM tables read "BDM 6+12 (BDM with 6+12 IO) ... Approximately 300W
+    per BDM", counting the pair together. Searched for an OOB figure specifically:
+    the C100G and C40G hardware installation guides carry no OOB specification
+    table at all (the BDM has two, Table 4-1 and Table A-10; the OOB has none),
+    and no wattage appears anywhere near the "CSC 8x10G and OOB 2+8 I/O modules"
+    section. The csc-8x10g contract carries 250 W as the CSC's own figure. Putting
+    a number here would either invent one or double count that one.
+  pairing: >-
+    datasheet - C100G HIG "Remote PHY CSC, OOB I/O module, and SMM Switch usage in
+    R8.6" tables the valid slot combinations: front slots 0-5 and 8-13 take a CSC
+    module and the matching rear slots take an OOB I/O module. So this card is the
+    rear half of a CSC position exactly as the 6+12 I/O is the rear half of a BDM
+    position.
+parts:
+  - {ref: std/f-type@1, id: ndf0, at: [10.385, 39.455]}
+  - {ref: std/f-type@1, id: ndf1, at: [10.385, 63.093]}
+  - {ref: std/f-type@1, id: ndr0, at: [10.385, 86.731]}
+  - {ref: std/f-type@1, id: ndr1, at: [10.385, 110.368]}
+  - {ref: std/f-type@1, id: ndr2, at: [10.385, 134.006]}
+  - {ref: std/f-type@1, id: ndr3, at: [10.385, 157.644]}
+  - {ref: std/f-type@1, id: ndr4, at: [10.385, 181.282]}
+  - {ref: std/f-type@1, id: ndr5, at: [10.385, 204.919]}
+  - {ref: std/f-type@1, id: ndr6, at: [10.385, 228.557]}
+  - {ref: std/f-type@1, id: ndr7, at: [10.385, 252.195]}
+connection-points:
+  mate: {at: [15.23, 172.75], direction: rear}
+skins: [default]

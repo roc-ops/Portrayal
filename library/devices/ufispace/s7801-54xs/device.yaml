@@ -1,13 +1,13 @@
 format: 1
 kind: device
 name: s7801-54xs
-version: 1.1.0
+version: 1.1.4
 maturity: modelled
 manufacturer: UfiSpace
 model: S7801-54XS
 portfolio:
-  line: Data Center
-  family: Ethernet Switch
+  line: 'Cloud & Data Centers'
+  family: Data Center Switch
 description: >-
   UfiSpace S7801-54XS data center ToR/leaf switch - 1RU, 48x 1/10G SFP+ +
   6x 40/100G QSFP28, Broadcom Trident3-X5, rear-serviced 4+1 fans and 1+1
@@ -190,8 +190,6 @@ attrs:
     packet-buffer: 32 MB
     port-modes-sfp-plus: 1G/10G
     port-modes-qsfp28: 40G/100G
-    optics-sfp-plus: 10G SFP+ SR/LR/ER
-    optics-qsfp28: 100G QSFP28 SR/LR/ER
   power:
     power-typical-w: '111.3'
     power-max-w: '203.3'
@@ -212,6 +210,9 @@ attrs:
     memory: 8 GB DDR4 (Up to 32GB)
     storage-ssd: 32 GB SSD
     bmc: AST2620
+  features:
+    optics-sfp-plus: 10G SFP+ SR/LR/ER
+    optics-qsfp28: 100G QSFP28 SR/LR/ER
   compliance:
     safety: UL 62368-1; IEC 62368-1
     emc: FCC Part 15, Subpart B, Class A; ICES-003, Class A; EN 55032, Class A;
@@ -307,11 +308,17 @@ groups:
     role: service
     index-origin: 0
     description: vendor numbers them PSU0 and PSU1 on the faceplate
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 active-active, hot-swappable'
   fans:
     term: Fan
     role: service
     index-origin: 0
     description: vendor numbers them FAN 0-4 on the rear silkscreen
+    attrs:
+      redundancy: '4+1'
+      redundancy-note: '4+1 - 4+1, hot-swappable (attrs fan-redundancy)'
 views:
   front:
     size:

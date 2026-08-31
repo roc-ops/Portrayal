@@ -1,10 +1,13 @@
 format: 1
 kind: device
 name: s8901-54xc
-version: 1.1.0
+version: 1.1.4
 maturity: modelled
 manufacturer: UfiSpace
 model: S8901-54XC
+portfolio:
+  line: 'Cloud & Data Centers'
+  family: Data Center Switch
 description: >-
   UfiSpace S8901-54XC data center ToR/leaf switch - 1RU, 48x SFP28 25G + 6x QSFP28
   100G, Broadcom Trident3-X5, rear 5x hot-swap fans (4+1) and 2x hot-swap 400W
@@ -133,8 +136,6 @@ attrs:
     packet-buffer: 32 MB
     port-modes-sfp28: 1/10/25G
     port-modes-qsfp28: 40/100G
-    optics-sfp28: 25G SR/LR/ER, per datasheet Compatible Transceivers
-    optics-qsfp28: 100G SR/LR/ER
   power:
     power-typical-w: '120'
     power-max-w: '396.5'
@@ -156,6 +157,9 @@ attrs:
     memory: 8 GB DDR4 (up to 32 GB)
     storage: 32 GB SSD
     bmc: ASPEED AST2620
+  features:
+    optics-qsfp28: 100G SR/LR/ER
+    optics-sfp28: 25G SR/LR/ER, per datasheet Compatible Transceivers
   management:
     console: RJ45 serial, 115200 8N1
   compliance:
@@ -237,10 +241,16 @@ groups:
     term: PSU
     role: service
     index-origin: 0
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 redundant, hot-swappable'
   fans:
     term: Fan
     role: service
     index-origin: 0
+    attrs:
+      redundancy: '4+1'
+      redundancy-note: '4+1 - 4+1 hot-swappable (attrs fan-redundancy)'
   qsfp28:
     term: Port
     role: traffic

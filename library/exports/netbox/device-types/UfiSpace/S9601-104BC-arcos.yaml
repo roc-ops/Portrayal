@@ -241,48 +241,49 @@ comments: "UfiSpace S9601-104BC 25G/100G/200G Disaggregated Open Aggregation Rou
   \ Dual 1300W DC PSUs (PSU-132-DEGR-NN, exhaust airflow) with four FAN-803816-HI exhaust fans - the DC\
   \ build, which is also the bare working chassis, since the traffic cages ship empty\n\nDatasheet: UfiSpace\
   \ S9601-104BC 25G/100G/200G Open Aggregation Router Datasheet\n  https://www.ufispace.com/products/telco/aggregation/s9601-104bc-25g-100g-200g-open-aggregation-router\n\
-  \nFacts carried in the model that this schema has no field for:\n- performance.switching-capacity: 2.4\
-  \ Tbps\n- performance.packet-buffer: 4 GB\n- performance.reach-sfp28: 40 km max (HIG Port Overview,\
-  \ ports 0-95)\n- performance.reach-qsfp28: 80 km max (HIG Port Overview, ports 96/97/100/101)\n- performance.reach-qsfp56:\
-  \ 80 km max (HIG Port Overview, ports 98/99/102/103)\n- performance.optics-sfp28: 25G SFP28 SR, LR,\
-  \ ER; 10G SFP+ SR, LR, ER; 1G SFP SX, LX, EX (datasheet compatible transceiver types)\n- performance.optics-qsfp28:\
-  \ 100G QSFP28 SR4, LR4, ER4, ZR4 (datasheet compatible transceiver types)\n- performance.optics-qsfp56:\
-  \ 200G QSFP56 SR4, FR4 (datasheet compatible transceiver types; the QSFP56 cages also take the QSFP28\
-  \ optics at 40/100G)\n- performance.optics-sfp-plus: 10G SFP+ SR, LR, ER (datasheet compatible transceiver\
-  \ types; the two 10G management ports take the same optics as the SFP28 cages do at 10G)\n- power.power-typical-w:\
-  \ 282.2\n- power.power-max-w: 811\n- power.power-envelope: unstated\n- power.psus: 2x 1300 W 1+1 redundant,\
-  \ hot-swappable (exhaust airflow)\n- power.psu-ac-input: 100-240 VAC, 12 A max per supply\n- power.psu-dc-input:\
-  \ -48 to -60 VDC, 37 A max per supply\n- power.power-max-w-ac: 808 (HIG AC section; the DC build's 811\
-  \ is the figure carried as power-max-w)\n- power.pdu-fuse-suggested: 30 A DC, 15 A AC (HIG provisioning\
-  \ guidance, not a draw)\n- thermal.fans: 4x hot-swappable 3+1 redundant, exhaust airflow; system front-to-back\n\
-  - environmental.operating-temp: 0 to 50 C\n- environmental.storage-temp: -40 to 70 C\n- environmental.operating-humidity:\
-  \ 5% to 85% RH, non-condensing\n- environmental.storage-humidity: 5% to 93% RH, non-condensing\n- environmental.altitude:\
-  \ rated for operation up to 5000 m (HIG Connecting Power, both input types)\n- platform.cpu: Intel Denverton\
-  \ 8-core @ 1.7 GHz\n- platform.memory: 32 GB DDR4\n- platform.storage: 128 GB SSD\n- platform.asic:\
-  \ Broadcom Qumran2c BCM88820\n- platform.lookup-engine: Broadcom OP2 BCM16K\n- platform.bmc: ASPEED\
-  \ AST2620\n- platform.boot-time: approx 80 s from power-on under Ubuntu Linux; OOB Ethernet relinks\
-  \ in approx 40 s (HIG NEBS statements, both qualified as NOS-dependent)\n- features.timing: Stratum\
-  \ 3E OCXO, ITU-T SyncE, IEEE 1588v2 (G.8265.1 default, G.8275.1, G.8275.2, SMPTE ST 2059-2 with additional\
-  \ licence; T-GM, T-BC/OC, T-TC), Time Sensitive Networking, ITU-T G.8273.2 T-BC Class C accuracy, IEEE\
-  \ 802.1CM\n- features.timing-interfaces: GNSS SMA in, 1PPS SMB in/out, 10MHz SMB in/out, ToD RJ45 in/out\n\
-  - features.gnss: internal receiver for master clock implementations - GPS/QZSS L1 C/A, GLONASS L1OF,\
-  \ BeiDou B1, SBAS L1 C/A (WAAS, EGNOS, MSAS, GAGAN), Galileo E1B/C; minimum RF sensitivity -166 dBm,\
-  \ and the port supplies up to 5 V DC / 150 mA to an active antenna\n- features.gnss-exclusivity: the\
-  \ platform supports either GNSS or SMA-10MHz input at a time; the 10MHz input is disabled when the GNSS\
-  \ antenna is connected (HIG section 12)\n- features.timing-cables: 50 ohm SMA coax with 1/4-36UNS-2B\
-  \ for GNSS; 50 ohm SMB coax with 10-32UNF-2A for 1PPS and 10MHz; shielded RJ45 for ToD, 3 m maximum\n\
-  - features.routing: full Segment Routing over IPv6 (SRv6); programmable as a Broadband Network Gateway\n\
-  - features.nos: NOS integration is necessary to activate the timing features\n- management.console:\
-  \ RJ45 serial, 115200 8N1\n- compliance.safety: IEC/EN 60825-1 laser Class 1 pluggables only (UL/CSA\
-  \ recognised modules); installation restricted to service personnel, indoors only\n- compliance.emc:\
-  \ FCC Part 15 Subpart B Class A; CAN ICES-003 (A)/NMB-003(A); CISPR 32 Class A; VCCI Class A\n- compliance.nebs:\
-  \ NEBS statements only, not a stated certification level: suitable for installation as part of the Common\
+  \nFacts carried in the model that this schema has no field for:\n- compliance.emc: FCC Part 15 Subpart\
+  \ B Class A; CAN ICES-003 (A)/NMB-003(A); CISPR 32 Class A; VCCI Class A\n- compliance.installation:\
+  \ suitable for Information Technology Rooms per NEC Article 645 and NFPA 75\n- compliance.nebs: NEBS\
+  \ statements only, not a stated certification level: suitable for installation as part of the Common\
   \ Bonding Network (CBN); installable in Network Telecommunications Facilities where the National Electric\
   \ Code applies; DC input terminals are DC-I (isolated DC return) and the RTN terminal is to be isolated\
   \ from the chassis or rack; the intra-building OOB Ethernet port is for unexposed intra-building wiring\
   \ only (GR-1089 Type 2, 4 or 4a) and must not be metallically connected to OSP wiring for more than\
   \ 6 m. An external Surge Protection Device must be used with AC powered equipment, installed at the\
-  \ AC service entrance.\n- compliance.installation: suitable for Information Technology Rooms per NEC\
-  \ Article 645 and NFPA 75\n- lifecycle.eol: none-announced\n\nDrawing version 1.0.0. A major bump means\
-  \ a slot moved or an id was renamed, so anything cached from an earlier export may no longer line up.\n\
-  Model maturity: modelled. Every dimension in the source records where it came from."
+  \ AC service entrance.\n- compliance.safety: IEC/EN 60825-1 laser Class 1 pluggables only (UL/CSA recognised\
+  \ modules); installation restricted to service personnel, indoors only\n- environmental.altitude: rated\
+  \ for operation up to 5000 m (HIG Connecting Power, both input types)\n- environmental.operating-humidity:\
+  \ 5% to 85% RH, non-condensing\n- environmental.operating-temp: 0 to 50 C\n- environmental.storage-humidity:\
+  \ 5% to 93% RH, non-condensing\n- environmental.storage-temp: -40 to 70 C\n- features.gnss: internal\
+  \ receiver for master clock implementations - GPS/QZSS L1 C/A, GLONASS L1OF, BeiDou B1, SBAS L1 C/A\
+  \ (WAAS, EGNOS, MSAS, GAGAN), Galileo E1B/C; minimum RF sensitivity -166 dBm, and the port supplies\
+  \ up to 5 V DC / 150 mA to an active antenna\n- features.gnss-exclusivity: the platform supports either\
+  \ GNSS or SMA-10MHz input at a time; the 10MHz input is disabled when the GNSS antenna is connected\
+  \ (HIG section 12)\n- features.nos: NOS integration is necessary to activate the timing features\n-\
+  \ features.optics-qsfp28: 100G QSFP28 SR4, LR4, ER4, ZR4 (datasheet compatible transceiver types)\n\
+  - features.optics-qsfp56: 200G QSFP56 SR4, FR4 (datasheet compatible transceiver types; the QSFP56 cages\
+  \ also take the QSFP28 optics at 40/100G)\n- features.optics-sfp-plus: 10G SFP+ SR, LR, ER (datasheet\
+  \ compatible transceiver types; the two 10G management ports take the same optics as the SFP28 cages\
+  \ do at 10G)\n- features.optics-sfp28: 25G SFP28 SR, LR, ER; 10G SFP+ SR, LR, ER; 1G SFP SX, LX, EX\
+  \ (datasheet compatible transceiver types)\n- features.routing: full Segment Routing over IPv6 (SRv6);\
+  \ programmable as a Broadband Network Gateway\n- features.timing: Stratum 3E OCXO, ITU-T SyncE, IEEE\
+  \ 1588v2 (G.8265.1 default, G.8275.1, G.8275.2, SMPTE ST 2059-2 with additional licence; T-GM, T-BC/OC,\
+  \ T-TC), Time Sensitive Networking, ITU-T G.8273.2 T-BC Class C accuracy, IEEE 802.1CM\n- features.timing-cables:\
+  \ 50 ohm SMA coax with 1/4-36UNS-2B for GNSS; 50 ohm SMB coax with 10-32UNF-2A for 1PPS and 10MHz; shielded\
+  \ RJ45 for ToD, 3 m maximum\n- features.timing-interfaces: GNSS SMA in, 1PPS SMB in/out, 10MHz SMB in/out,\
+  \ ToD RJ45 in/out\n- lifecycle.eol: none-announced\n- management.boot-time: approx 80 s from power-on\
+  \ under Ubuntu Linux; OOB Ethernet relinks in approx 40 s (HIG NEBS statements, both qualified as NOS-dependent)\n\
+  - management.console: RJ45 serial, 115200 8N1\n- performance.packet-buffer: 4 GB\n- performance.reach-qsfp28:\
+  \ 80 km max (HIG Port Overview, ports 96/97/100/101)\n- performance.reach-qsfp56: 80 km max (HIG Port\
+  \ Overview, ports 98/99/102/103)\n- performance.reach-sfp28: 40 km max (HIG Port Overview, ports 0-95)\n\
+  - performance.switching-capacity: 2.4 Tbps\n- platform.asic: Broadcom Qumran2c BCM88820\n- platform.bmc:\
+  \ ASPEED AST2620\n- platform.cpu: Intel Denverton 8-core @ 1.7 GHz\n- platform.lookup-engine: Broadcom\
+  \ OP2 BCM16K\n- platform.memory: 32 GB DDR4\n- platform.storage: 128 GB SSD\n- power.pdu-fuse-suggested:\
+  \ 30 A DC, 15 A AC (HIG provisioning guidance, not a draw)\n- power.power-envelope: unstated\n- power.power-max-w:\
+  \ 811\n- power.power-max-w-ac: 808 (HIG AC section; the DC build's 811 is the figure carried as power-max-w)\n\
+  - power.power-typical-w: 282.2\n- power.psu-ac-input: 100-240 VAC, 12 A max per supply\n- power.psu-dc-input:\
+  \ -48 to -60 VDC, 37 A max per supply\n- power.psus: 2x 1300 W 1+1 redundant, hot-swappable (exhaust\
+  \ airflow)\n- thermal.fans: 4x hot-swappable 3+1 redundant, exhaust airflow; system front-to-back\n\n\
+  Drawing version 1.0.4. A major bump means a slot moved or an id was renamed, so anything cached from\
+  \ an earlier export may no longer line up.\nModel maturity: modelled. Every dimension in the source\
+  \ records where it came from."

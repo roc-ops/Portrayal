@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx2010
-version: 0.2.2
+version: 0.2.4
 maturity: modelled
 manufacturer: Juniper
 model: MX2010
@@ -61,11 +61,17 @@ groups:
     role: service
     index-origin: 0
     description: CB-RE slots 0 and 1 at the ends of the upper cage
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 - mx2010 hardware guide, "MX2010 Component Redundancy": "The host subsystem consists of a combined Control Board and Routing Engine (CB-RE) functioning together. The router can have one or two host subsystems. If two host subsystems are installed, one functions as the primary and the other functions as the backup. If the primary host subsystem (or either of its components) fails, the backup can take over as the primary." Fabric is NOT on this card on this chassis - it is on the eight SFBs, see `sfbs`'
   sfbs:
     term: Slot
     role: service
     index-origin: 0
     description: Switch Fabric Board slots SFB 0-7
+    attrs:
+      redundancy: 'n+1'
+      redundancy-note: 'n+1 - mx2010 hardware guide, "MX2000-SFB-S Switch Fabric Board Description": "Throughput of 6Tbps, with a minimum of 7 SFBs installed. An additional SFB is recommended for N+1 redundancy." The same entry gives the slot count these eight bays come from - "You can install up to eight SFBs in an MX2000 router" - and the redundancy row, "For line rate operation, the MX2000 series router must have at least seven SFBs installed. Although MX2000 routers can operate with fewer than seven SFBs, packet forwarding performance is impacted." The fabric is all-active, so the spare is a working plane. RECORDED AS THE GUIDE WRITES IT: seven-plus-one would be an arithmetic reading of two sentences and the guide itself says N+1'
   fpcs:
     term: Slot
     role: traffic
@@ -77,6 +83,9 @@ groups:
     role: service
     index-origin: 0
     description: nine power supply modules, 8+1 load-sharing
+    attrs:
+      redundancy: 'n+1'
+      redundancy-note: 'n+1 PSM, N+N feed redundancy'
 views:
   front:
     size:

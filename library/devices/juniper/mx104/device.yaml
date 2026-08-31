@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx104
-version: 1.0.0
+version: 1.0.2
 maturity: modelled
 manufacturer: Juniper
 model: MX104
@@ -89,6 +89,9 @@ groups:
     role: service
     index-origin: 0
     description: Two slim Routing Engine bays, RE0 below RE1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 - mx104 hardware guide, "MX104 Component Redundancy": "Routing Engine-If two Routing Engines are installed, one functions as the primary and the other functions as the backup. If the primary Routing Engine fails, the backup can take over as the primary." The same section opens with "The hardware system is fully redundant, including power supplies, Routing Engines, and cooling system"'
   timing:
     term: Port
     role: management
@@ -109,6 +112,9 @@ groups:
     term: PEM
     role: service
     index-origin: 0
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 - the power supplies sit at the front of the chassis and offer 1+1 redundancy; when two are present they share power almost equally within a fully populated system'
   grounding:
     term: Point
     role: furniture

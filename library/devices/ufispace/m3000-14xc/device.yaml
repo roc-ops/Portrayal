@@ -1,10 +1,14 @@
 format: 1
 kind: device
 name: m3000-14xc
-version: 1.0.0
+version: 1.0.3
 maturity: modelled
 manufacturer: UfiSpace
 model: M3000-14XC
+portfolio:
+  line: Telecoms
+  family: Fronthaul Multiplexer
+  series: Fronthaul Series
 description: UfiSpace M3000-14XC 25G/100G Fronthaul Multiplexer - 1RU O-RAN
   shared-cell FHM, 12x SFP+ 10G (8 to O-RU, 4 to O-DU) + 2x QSFP28 (reserved),
   full timing (GNSS/1PPS/10MHz/ToD/BITS), Stratum 3E OCXO, dual 200W PSUs,
@@ -166,9 +170,6 @@ attrs:
     jumbo-frame: up to 9000 bytes
     reach-sfp-plus: 80 km max (HIG port overview, ports 0-11)
     reach-qsfp28: 10 km max at 40/100G (HIG port overview, ports 12-13)
-    optics-sfp-plus: 10G SFP+ SR, LR, ER (datasheet supported accessories)
-    optics-qsfp28: none published - the QSFP28 ports are reserved and the datasheet's
-      supported-accessories list carries only 10G SFP+ optics
   power:
     power-max-w: 103.9
     power-envelope: unstated
@@ -197,6 +198,9 @@ attrs:
     gnss: GPS L1C/A, GLONASS L1OF, BeiDou B1, Galileo E1B/C; passive or active antenna
       auto-detected (active supply 5 V DC / 150 mA, min RF sensitivity -166 dBm);
       activated with a software license key on future premium versions
+    optics-sfp-plus: 10G SFP+ SR, LR, ER (datasheet supported accessories)
+    optics-qsfp28: none published - the QSFP28 ports are reserved and the datasheet's
+      supported-accessories list carries only 10G SFP+ optics
   management:
     protocols: CLI, SNMP, NETCONF
     console: RJ45 serial, 115200 8N1, no flow control
@@ -303,6 +307,9 @@ groups:
     role: service
     index-origin: 0
     description: vendor spells the bays PSU0 and PSU1 on the divider strip
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '2x 200 W 1+1 active-active, hot-swappable (intake airflow)'
   sfp-plus-ru:
     term: Port
     role: traffic

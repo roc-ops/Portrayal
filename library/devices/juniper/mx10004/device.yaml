@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx10004
-version: 1.0.1
+version: 1.0.3
 maturity: modelled
 manufacturer: Juniper
 model: MX10004
@@ -58,6 +58,9 @@ groups:
     role: service
     index-origin: 0
     description: Routing and Control Board slots RE0 and RE1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 - mx10004 hardware guide, "MX10004 Component Redundancy": "The MX10004 router can have one or two RCBs. When two RCBs are installed, one functions as the primary RCB, and the other functions as the backup RCB. If the primary RCB (or either of its components) fails, the backup RCB can take over as primary." The RCB consolidates the Routing Engine function with the control plane function in a single unit, so this one form covers both'
   fpcs:
     term: Slot
     role: traffic
@@ -68,6 +71,9 @@ groups:
     role: service
     index-origin: 0
     description: power supply slots PSU 0-2, top-down at the rear left
+    attrs:
+      redundancy: 'n+1'
+      redundancy-note: 'n+1 - maintain n+1 power supplies in the router at all times'
   cooling:
     term: Tray
     role: service

@@ -1,10 +1,14 @@
 format: 1
 kind: device
 name: s9601-104bc
-version: 1.0.0
+version: 1.0.4
 maturity: modelled
 manufacturer: UfiSpace
 model: S9601-104BC
+portfolio:
+  line: Telecoms
+  family: Open Aggregation Router
+  series: S9600 Series
 description: UfiSpace S9601-104BC 25G/100G/200G Disaggregated Open Aggregation Router -
   2RU, 96x 1/10/25G SFP28 + 4x 40/100G QSFP28 + 4x 40/100/200G QSFP56 + 2x 10G SFP+
   management, full timing (GNSS/1PPS/10MHz/ToD) with Stratum 3E OCXO and Class C
@@ -324,14 +328,6 @@ attrs:
     reach-sfp28: 40 km max (HIG Port Overview, ports 0-95)
     reach-qsfp28: 80 km max (HIG Port Overview, ports 96/97/100/101)
     reach-qsfp56: 80 km max (HIG Port Overview, ports 98/99/102/103)
-    optics-sfp28: 25G SFP28 SR, LR, ER; 10G SFP+ SR, LR, ER; 1G SFP SX, LX, EX
-      (datasheet compatible transceiver types)
-    optics-qsfp28: 100G QSFP28 SR4, LR4, ER4, ZR4 (datasheet compatible transceiver
-      types)
-    optics-qsfp56: 200G QSFP56 SR4, FR4 (datasheet compatible transceiver types; the
-      QSFP56 cages also take the QSFP28 optics at 40/100G)
-    optics-sfp-plus: 10G SFP+ SR, LR, ER (datasheet compatible transceiver types; the
-      two 10G management ports take the same optics as the SFP28 cages do at 10G)
   power:
     power-typical-w: 282.2
     power-max-w: 811
@@ -358,8 +354,6 @@ attrs:
     asic: Broadcom Qumran2c BCM88820
     lookup-engine: Broadcom OP2 BCM16K
     bmc: ASPEED AST2620
-    boot-time: approx 80 s from power-on under Ubuntu Linux; OOB Ethernet relinks in
-      approx 40 s (HIG NEBS statements, both qualified as NOS-dependent)
   features:
     timing: Stratum 3E OCXO, ITU-T SyncE, IEEE 1588v2 (G.8265.1 default, G.8275.1,
       G.8275.2, SMPTE ST 2059-2 with additional licence; T-GM, T-BC/OC, T-TC), Time
@@ -376,8 +370,18 @@ attrs:
     routing: full Segment Routing over IPv6 (SRv6); programmable as a Broadband
       Network Gateway
     nos: NOS integration is necessary to activate the timing features
+    optics-sfp28: 25G SFP28 SR, LR, ER; 10G SFP+ SR, LR, ER; 1G SFP SX, LX, EX
+      (datasheet compatible transceiver types)
+    optics-qsfp28: 100G QSFP28 SR4, LR4, ER4, ZR4 (datasheet compatible transceiver
+      types)
+    optics-qsfp56: 200G QSFP56 SR4, FR4 (datasheet compatible transceiver types; the
+      QSFP56 cages also take the QSFP28 optics at 40/100G)
+    optics-sfp-plus: 10G SFP+ SR, LR, ER (datasheet compatible transceiver types; the
+      two 10G management ports take the same optics as the SFP28 cages do at 10G)
   management:
     console: RJ45 serial, 115200 8N1
+    boot-time: approx 80 s from power-on under Ubuntu Linux; OOB Ethernet relinks in
+      approx 40 s (HIG NEBS statements, both qualified as NOS-dependent)
   compliance:
     safety: IEC/EN 60825-1 laser Class 1 pluggables only (UL/CSA recognised modules);
       installation restricted to service personnel, indoors only
@@ -562,12 +566,18 @@ groups:
     index-origin: 0
     description: vendor spells the rear bays PSU0 (upper) and PSU1 (lower) on the strip
       beside them; the front panel's PS0 and PS1 lamps use the same numbering
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '2x 1300 W 1+1 redundant, hot-swappable (exhaust airflow)'
   fans:
     term: Fan
     role: service
     index-origin: 0
     description: vendor numbers the modules 0 1 2 3 on the rear face, left to right, on
       the same strip as the PSU labels
+    attrs:
+      redundancy: '3+1'
+      redundancy-note: '3+1 - hot swappable fan modules with 3+1 redundancy support (UfiSpace datasheet, staged intake)'
   sfp28:
     term: Port
     role: traffic

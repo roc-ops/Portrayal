@@ -13,7 +13,8 @@ import devicelock as dl  # noqa: E402
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 
 
-def dev(version="1.0.0", at=(0, 0), extra_bay=None, gaps=None, note="a"):
+def dev(version="1.0.0", at=(0, 0), extra_bay=None, gaps=None, note="a",
+        portfolio=None):
     bays = [{"id": "slot-0", "at": list(at), "size": {"w": 10, "h": 10},
              "group": "slots", "accepts": ["x/y@1"]}]
     if extra_bay:
@@ -21,6 +22,7 @@ def dev(version="1.0.0", at=(0, 0), extra_bay=None, gaps=None, note="a"):
                      "group": "slots", "accepts": ["x/y@1"]})
     return {
         "kind": "device", "name": "d", "version": version,
+        **({"portfolio": portfolio} if portfolio else {}),
         "chassis": {"width": 100, "height": 40, "depth": 30},
         "groups": {"slots": {"term": "Slot", "index-origin": 0}},
         "provenance": {"size": note},
@@ -245,6 +247,14 @@ def test_examples_never_become_device_types():
     import glob
     names = [pathlib.Path(f).stem
              for f in glob.glob(str(ROOT / "library/exports/*/device-types/*/*.yaml"))]
+    # THE COMMITTED EXPORTS, which is what this can see. `build.sh` stopped
+    # producing them when the export moved to `publish.sh`, so a run here checks
+    # what is in the tree rather than what the exporter would make right now.
+    # That is the right thing to check - they are committed data and a consumer
+    # reads them as they are - but it means an exporter change is only caught
+    # once somebody runs ./publish.sh. Asserted non-empty so the check cannot
+    # pass by finding nothing.
+    assert names, "no exported device types found; run ./publish.sh"
     import yaml as y
     examples = set()
     for p in glob.glob(str(ROOT / "library/devices/*/*/device.yaml")):
@@ -280,8 +290,23 @@ def test_removing_a_group_is_major():
 
 def test_every_base_leaves_its_traffic_bays_empty():
     """The point of a base: a chassis you can log into, with nothing decided
-    about traffic cards yet."""
+    about traffic cards yet.
+
+    A BLANK IS NOT A POPULATED SLOT. A chassis ships with blanking panels in its
+    empty bays, for airflow, so a base that left holes would be drawing something
+    nobody has ever seen on a rack.
+
+    The blank set is built ONCE. It used to be rebuilt inside the device loop and
+    every contract was parsed twice per rebuild - about thirty-five thousand YAML
+    loads to recompute the same constant - which made this single test 125 of the
+    suite's 293 seconds. It is the same set every time round.
+    """
     import glob, yaml as y
+    blanks = set()
+    for q in glob.glob(str(ROOT / "library/components/*/*/v*/contract.yaml")):
+        c = y.safe_load(open(q)) or {}
+        if c.get("class") == "blank":
+            blanks.add(f"{q.split('components/')[1].split('/')[0]}/{c['name']}")
     for p in glob.glob(str(ROOT / "library/devices/*/*/device.yaml")):
         d = y.safe_load(open(p)) or {}
         base = next((c for c in (d.get("configurations") or {}).values()
@@ -292,13 +317,6 @@ def test_every_base_leaves_its_traffic_bays_empty():
         traffic = [b["id"] for v in (d.get("views") or {}).values()
                    for b in (((v or {}).get("components") or {}).get("bays") or [])
                    if roles.get(b.get("group")) == "traffic"]
-        # A BLANK IS NOT A POPULATED SLOT. A chassis ships with blanking panels
-        # in its empty bays, for airflow, so a base that left holes would be
-        # drawing something nobody has ever seen on a rack.
-        import yaml as yy
-        blanks = {f"{q.split('components/')[1].split('/')[0]}/{yy.safe_load(open(q))['name']}"
-                  for q in glob.glob(str(ROOT / "library/components/*/*/v*/contract.yaml"))
-                  if (yy.safe_load(open(q)) or {}).get("class") == "blank"}
         seated = [t for t in traffic
                   if (base.get("bays") or {}).get(t, "x") not in ("",)
                   and (base.get("bays") or {}).get(t, "x").split("@")[0] not in blanks]
@@ -325,3 +343,110 @@ def test_editing_a_faces_empty_declaration_is_at_least_a_patch():
     b = dev()
     b["views"]["front"]["empty"] = "searched the whole corpus and found nothing at all about this face"
     assert dl.required_bump(dl.entry(a), dl.entry(b)) == "patch"
+
+
+# ---- a bay's `accepts` is addressing, not geometry ---------------------------
+
+def _accepting(*refs):
+    """A device whose one bay accepts `refs`."""
+    d = dev()
+    d["views"]["front"]["components"]["bays"][0]["accepts"] = list(refs)
+    return d
+
+
+def test_a_bay_learning_it_accepts_more_is_minor():
+    """THE MODULE CATALOGUE. `accepts` used to sit in the shape bucket beside the
+    coordinates, so adding one card to a bay read as "same ids, different
+    geometry: a slot moved". One new Casa rear card put two chassis at 1.0.0, and
+    the MX catalogue alone has some sixty cards still to model."""
+    a = dl.entry(_accepting("x/y@1"))
+    b = dl.entry(_accepting("x/y@1", "x/z@1"))
+    assert dl.required_bump(a, b) == "minor"
+
+
+def test_a_bay_that_stops_accepting_something_is_major():
+    """The other half. A configuration elsewhere may seat exactly that module."""
+    a = dl.entry(_accepting("x/y@1", "x/z@1"))
+    b = dl.entry(_accepting("x/y@1"))
+    assert dl.required_bump(a, b) == "major"
+
+
+def test_accepts_does_not_move_the_shape_hash():
+    """Stated directly, so putting it back into `_placements` fails here rather
+    than quietly re-inflating every bump."""
+    assert dl.entry(_accepting("x/y@1"))["shape"] == \
+           dl.entry(_accepting("x/y@1", "x/z@1"))["shape"]
+
+
+def test_reordering_accepts_is_not_a_change():
+    """The list is a set of claims, not a sequence; re-sorting it is not news."""
+    a = dl.entry(_accepting("x/y@1", "x/z@1"))
+    b = dl.entry(_accepting("x/z@1", "x/y@1"))
+    assert dl.required_bump(a, b) is None
+
+
+def test_a_lock_predating_the_field_cannot_manufacture_a_major():
+    """An entry written before `bay-accepts` existed carries no map, so the
+    removal check has nothing to compare and must not guess. It still reports a
+    bump - the names hash moved when the field joined it - but a MINOR one, which
+    is the safe direction: it asks to be looked at rather than either crying
+    breakage or saying nothing.
+
+    The first version of this test asserted None and was simply wrong: deleting
+    the recorded map does not un-hash the contribution it already made."""
+    a = dl.entry(_accepting("x/y@1", "x/z@1"))
+    del a["bay-accepts"]
+    assert dl.required_bump(a, dl.entry(_accepting("x/y@1"))) == "minor"
+
+
+# ---- portfolio is fingerprinted ---------------------------------------------
+#
+# It was not, and that is the whole reason these exist. 45 UfiSpace devices
+# gained a `portfolio` block, two of them had wrong values corrected, and
+# devicelock reported ZERO findings for the lot - catalogue metadata could be
+# rewritten, or deleted outright, and no version would be asked for. It sits in
+# `surface` rather than `names` because it is metadata a reader sees rather than
+# an identifier anything addresses by, so a patch is the right size.
+
+def test_relabelling_a_family_is_a_patch():
+    """The case that went unnoticed: `series: S9620` corrected to `S9600
+    Series`, which is the difference between matching the vendor's site and
+    not."""
+    a = dl.entry(dev(portfolio={"line": "Telecoms", "family": "Open Aggregation Router",
+                                "series": "S9620"}))
+    b = dl.entry(dev(portfolio={"line": "Telecoms", "family": "Open Aggregation Router",
+                                "series": "S9600 Series"}))
+    assert dl.required_bump(a, b) == "patch"
+
+
+def test_gaining_a_portfolio_block_is_a_patch():
+    a = dl.entry(dev())
+    b = dl.entry(dev(portfolio={"line": "Telecoms", "family": "Open Aggregation Router"}))
+    assert dl.required_bump(a, b) == "patch"
+
+
+def test_DELETING_a_portfolio_block_is_also_asked_for():
+    """The direction that matters most. A field that only fires when it gains a
+    value can be emptied for free, and silence reads as 'no answer' rather than
+    'the answer was removed'."""
+    a = dl.entry(dev(portfolio={"line": "Telecoms", "family": "Open Aggregation Router"}))
+    assert dl.required_bump(a, dl.entry(dev())) == "patch"
+
+
+def test_adding_a_second_category_is_a_patch():
+    """`also-listed-in` decides whether a box appears in a second filtered list,
+    so editing it changes what a consumer sees."""
+    a = dl.entry(dev(portfolio={"line": "Telecoms", "family": "F"}))
+    b = dl.entry(dev(portfolio={"line": "Telecoms", "family": "F",
+                                "also-listed-in": ["AI Networking"]}))
+    assert dl.required_bump(a, b) == "patch"
+
+
+def test_portfolio_moves_surface_and_not_geometry_or_ids():
+    """Severity, not just detection. A relabelled family must never read as a
+    moved slot - that would call a metadata edit major and teach people to
+    ignore the tool."""
+    a = dl.entry(dev(portfolio={"line": "Telecoms", "family": "A"}))
+    b = dl.entry(dev(portfolio={"line": "Telecoms", "family": "B"}))
+    assert a["shape"] == b["shape"] and a["names"] == b["names"]
+    assert a["surface"] != b["surface"]

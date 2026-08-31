@@ -1,10 +1,14 @@
 format: 1
 kind: device
 name: s9600-72xc
-version: 4.1.0
+version: 4.1.4
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-72XC
+portfolio:
+  line: Telecoms
+  family: Open Aggregation Router
+  series: S9600 Series
 description: >-
   UfiSpace S9600-72XC open aggregation router - 2RU disaggregated white box on
   Broadcom Qumran2c with an optional external OP2 TCAM (premium SKU), 2.4 Tbps and
@@ -339,10 +343,10 @@ attrs:
       10G on the two SFP+ management ports. The datasheet's Compatible Transceiver
       Types list is one list for the whole box and names no management-only part, so
       the speed here is the port list's ('2 x 10G SFP+ management ports')
+    timing-interfaces: GNSS SMA in; 1PPS SMB in/out; 10MHz SMB in/out; ToD RJ45 in/out
   management:
     console: RJ45 RS-232 plus a micro-USB serial console
     oob: 1x RJ45 100/1000M management port
-    timing-interfaces: GNSS SMA in; 1PPS SMB in/out; 10MHz SMB in/out; ToD RJ45 in/out
   compliance:
     safety: UL 62368-1; IEC 60950-1; IEC 62368-1; BSMI
     emc: >-
@@ -548,11 +552,17 @@ groups:
     role: service
     index-origin: 0
     description: the two rear supplies, which the front panel legends PS0 and PS1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 hot-swappable'
   fans:
     term: Fan
     role: service
     index-origin: 0
     description: the four rear fans, which the rear panel numbers 0 to 3
+    attrs:
+      redundancy: '3+1'
+      redundancy-note: '3+1 - 3+1 hot-swappable (attrs fan-redundancy)'
   grounding:
     term: Point
     role: furniture

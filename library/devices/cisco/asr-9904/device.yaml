@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9904
-version: 1.0.1
+version: 1.0.3
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9904
@@ -286,6 +286,9 @@ groups:
     role: service
     index-origin: 0
     physical-context: Power Module
+    attrs:
+      redundancy: 'n+1'
+      redundancy-note: 'n+1 - the AC and DC power trays in the ASR 9006 and ASR 9904 both provide N+1 redundancy (Overview and Reference Guide, Power System). The install guide adds that at least two AC power modules are required for N+1 on a fully configured system'
   slots:
     term: Slot
     role: traffic

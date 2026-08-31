@@ -45,35 +45,35 @@ comments: "UfiSpace S9620-40DG - 2RU 40-port open aggregation router on Broadcom
   \ 1000W AC supplies (PSU-102-AISB-1) and five FAN-40802825-HD fans, front-to-back airflow, no optics\
   \ fitted - which is also the scope of the datasheet's 268 W typical figure\n\nDatasheet: UfiSpace S9620-40DG\
   \ Open Aggregation Router Datasheet (20260810V01)\n  https://www.ufispace.com/products/telco/aggregation/s9620-40dg\n\
-  \nFacts carried in the model that this schema has no field for:\n- performance.switching-capacity: 2.4\
-  \ Tb/s\n- performance.packet-buffer: 16 GB external deep buffer\n- power.power-typical-w: 268\n- power.power-envelope:\
-  \ bare\n- power.input: AC 100 to 240V, 12A; DC -40 to -72V, 30A\n- environmental.operating-temp: -40\
-  \ to 70 C\n- environmental.operating-humidity: 5% to 85% RH non-condensing\n- environmental.storage-temp:\
-  \ -40 to 70 C\n- environmental.storage-humidity: 5% to 93% RH non-condensing\n- platform.asic: Broadcom\
-  \ Qumran3a BCM88490\n- platform.cpu: Intel Xeon D 8 cores @ 1.9GHz\n- platform.memory: 2x16GB DDR4 SO-DIMM\
-  \ with ECC (Standard); 2x32GB DDR4 SO-DIMM with ECC (Premium)\n- platform.storage: 160G SSD\n- platform.bmc:\
-  \ Aspeed AST2620\n- features.optics-qsfp-dd: 800GE QSFP-DD OpenZR+/ZR/2xLR4/2xFR4/DR8+/DR8/SR8; 400GE\
-  \ QSFP-DD OpenZR+/ZR/ER4/LR4/FR4/SR8/DR4/DR4+; 100GE QSFP-DD ZR+ (datasheet Compatible Transceivers\
-  \ Types)\n- features.optics-qsfp28: 100GE QSFP28 ZR4/ER4/SR4/LR4\n- features.transceivers-sfp56: 50GE\
-  \ SFP56 SR/LR/ER; 25GE SFP28 SR/LR/ER; 10GE SFP+ SR/LR/ER; 1GE SFP SX/LX (datasheet Compatible Transceivers\
-  \ Types). Filed under this key rather than the house `optics-sfp56` because `sfp56` is not one of the\
-  \ pluggable-cage media tokens L40 harvests, so an `optics-` key here would join to nothing. THAT WORKAROUND\
-  \ IS NOT MINE - it was worked out on library/devices/ufispace/s9620-54dc, whose own attrs carry the\
-  \ same key and the same explanation, and is followed here so the two sibling platforms file the same\
-  \ fact the same way\n- features.timing: Stratum 3E OCXO; ITU-T Synchronous Ethernet (SyncE); IEEE 1588v2\
-  \ (Default Profile, G.8265.1, G.8275.1, G.8275.2); T-TC, T-BC/OC, T-GM; Class C timing accuracy; internal\
-  \ GNSS receiver for master clock\n- features.macsec: hardware-accelerated MACsec and IPsec across all\
-  \ ports, Layer 2 and Layer 3\n- features.segment-routing: full Segment Routing over IPv6 (SRv6)\n- features.tsn:\
-  \ Time Sensitive Networking for low packet loss and low delay variation\n- features.nos-caveat: NOS\
-  \ integration is necessary to activate the specific feature; some features need an additional licence\
-  \ (datasheet footnotes, carried rather than dropped)\n- management.console: 1x RJ45 serial console port\n\
-  - management.oob: 1x 100/1000M RJ-45 OOB management port\n- management.usb: 1x USB 3.0 Type-A port\n\
-  - management.timing-inputs: 1x GNSS input SMA, 1x 10MHz input/output SMB, 1x 1PPS input/output SMB,\
-  \ 1x ToD input/output RJ45, 1x BITS input RJ48\n- management.timing-cables: 50 ohm SMA coaxial with\
-  \ 1/4-36UNS-2B for GNSS; 50 ohm SMB coaxial with 10-32UNF-2A for 1PPS and 10MHz; shielded RJ45 for ToD;\
-  \ shielded RJ48 for BITS\n- compliance.safety: UL 62368-1, IEC 62368-1\n- compliance.emc: FCC Part 15\
-  \ Subpart B Class A; ICES-003 Class A; EN 55032 Class A; EN 300 386; EN 55035; EN 301 489; EN 303 413;\
-  \ VCCI CISPR 32 Class A\n- compliance.environment: WEEE\n- lifecycle.eol: none-announced\n\nDrawing\
-  \ version 0.2.0. A major bump means a slot moved or an id was renamed, so anything cached from an earlier\
-  \ export may no longer line up.\nModel maturity: modelled. Every dimension in the source records where\
-  \ it came from."
+  \nFacts carried in the model that this schema has no field for:\n- compliance.emc: FCC Part 15 Subpart\
+  \ B Class A; ICES-003 Class A; EN 55032 Class A; EN 300 386; EN 55035; EN 301 489; EN 303 413; VCCI\
+  \ CISPR 32 Class A\n- compliance.environment: WEEE\n- compliance.safety: UL 62368-1, IEC 62368-1\n-\
+  \ environmental.operating-humidity: 5% to 85% RH non-condensing\n- environmental.operating-temp: -40\
+  \ to 70 C\n- environmental.storage-humidity: 5% to 93% RH non-condensing\n- environmental.storage-temp:\
+  \ -40 to 70 C\n- features.macsec: hardware-accelerated MACsec and IPsec across all ports, Layer 2 and\
+  \ Layer 3\n- features.nos-caveat: NOS integration is necessary to activate the specific feature; some\
+  \ features need an additional licence (datasheet footnotes, carried rather than dropped)\n- features.optics-qsfp-dd:\
+  \ 800GE QSFP-DD OpenZR+/ZR/2xLR4/2xFR4/DR8+/DR8/SR8; 400GE QSFP-DD OpenZR+/ZR/ER4/LR4/FR4/SR8/DR4/DR4+;\
+  \ 100GE QSFP-DD ZR+ (datasheet Compatible Transceivers Types)\n- features.optics-qsfp28: 100GE QSFP28\
+  \ ZR4/ER4/SR4/LR4\n- features.segment-routing: full Segment Routing over IPv6 (SRv6)\n- features.timing:\
+  \ Stratum 3E OCXO; ITU-T Synchronous Ethernet (SyncE); IEEE 1588v2 (Default Profile, G.8265.1, G.8275.1,\
+  \ G.8275.2); T-TC, T-BC/OC, T-GM; Class C timing accuracy; internal GNSS receiver for master clock\n\
+  - features.timing-cables: 50 ohm SMA coaxial with 1/4-36UNS-2B for GNSS; 50 ohm SMB coaxial with 10-32UNF-2A\
+  \ for 1PPS and 10MHz; shielded RJ45 for ToD; shielded RJ48 for BITS\n- features.transceivers-sfp56:\
+  \ 50GE SFP56 SR/LR/ER; 25GE SFP28 SR/LR/ER; 10GE SFP+ SR/LR/ER; 1GE SFP SX/LX (datasheet Compatible\
+  \ Transceivers Types). Filed under this key rather than the house `optics-sfp56` because `sfp56` is\
+  \ not one of the pluggable-cage media tokens L40 harvests, so an `optics-` key here would join to nothing.\
+  \ THAT WORKAROUND IS NOT MINE - it was worked out on library/devices/ufispace/s9620-54dc, whose own\
+  \ attrs carry the same key and the same explanation, and is followed here so the two sibling platforms\
+  \ file the same fact the same way\n- features.tsn: Time Sensitive Networking for low packet loss and\
+  \ low delay variation\n- lifecycle.eol: none-announced\n- management.console: 1x RJ45 serial console\
+  \ port\n- management.oob: 1x 100/1000M RJ-45 OOB management port\n- management.timing-inputs: 1x GNSS\
+  \ input SMA, 1x 10MHz input/output SMB, 1x 1PPS input/output SMB, 1x ToD input/output RJ45, 1x BITS\
+  \ input RJ48\n- management.usb: 1x USB 3.0 Type-A port\n- performance.packet-buffer: 16 GB external\
+  \ deep buffer\n- performance.switching-capacity: 2.4 Tb/s\n- platform.asic: Broadcom Qumran3a BCM88490\n\
+  - platform.bmc: Aspeed AST2620\n- platform.cpu: Intel Xeon D 8 cores @ 1.9GHz\n- platform.memory: 2x16GB\
+  \ DDR4 SO-DIMM with ECC (Standard); 2x32GB DDR4 SO-DIMM with ECC (Premium)\n- platform.storage: 160G\
+  \ SSD\n- power.input: AC 100 to 240V, 12A; DC -40 to -72V, 30A\n- power.power-envelope: bare\n- power.power-typical-w:\
+  \ 268\n\nDrawing version 0.2.3. A major bump means a slot moved or an id was renamed, so anything cached\
+  \ from an earlier export may no longer line up.\nModel maturity: modelled. Every dimension in the source\
+  \ records where it came from."

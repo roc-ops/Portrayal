@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx304
-version: 2.0.0
+version: 2.0.3
 maturity: modelled
 manufacturer: Juniper
 model: MX304
@@ -118,7 +118,6 @@ attrs:
   performance:
     throughput: 4.8 Tbps system capacity; up to 12x400 Gbps or 48x100 Gbps
       ports (three LMICs)
-    asic: Juniper Trio 6 (one YT ASIC per LMIC)
   power:
     power-typical-w: 1033
     power-max-w: 1436
@@ -128,6 +127,8 @@ attrs:
     storage-temp: -40 C to 70 C in shipping container
     humidity: 5-90 percent noncondensing
     altitude: no performance degradation to 1800 m
+  platform:
+    asic: Juniper Trio 6 (one YT ASIC per LMIC)
   features:
     macsec: inline MACsec on all ports at all speeds
     timing: 1PPS and 10 MHz SMB input and output, ToD and BITS RJ45, GM/PTP
@@ -151,6 +152,9 @@ groups:
     description: Routing Engine slots - RE 0, and RE 1/LMIC2 which accepts a
       Routing Engine or a third LMIC. One RE minimum; slot 0 is primary by
       default
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 - mx304 hardware guide, "MX304 Component Redundancy": "Routing Engines-A redundant system consists of two Routing Engines which are available as field-replaceable units (FRUs). One Routing Engine functions as the primary and the other functions as the backup. If the primary host subsystem (or either of its components) fails, the backup takes over as the primary. The Routing Engine installed in slot 0 functions as the default primary Routing Engine." The form assumes the second bay holds a Routing Engine; on this chassis that bay can instead take a third LMIC, in which case the router runs on one RE and there is no redundancy to state'
   lmics:
     term: Slot
     role: traffic
@@ -174,6 +178,9 @@ groups:
     term: PSU
     role: service
     index-origin: 0
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 - Table 5 Power Redundancy gives AC 1+1 and DC 1+1; the router requires two power modules for 1+1 redundancy'
   fans:
     term: Fan
     role: service

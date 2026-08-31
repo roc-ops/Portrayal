@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: c40g
-version: 0.4.0
+version: 0.5.1
 maturity: modelled
 manufacturer: Casa Systems
 model: C40G
@@ -350,6 +350,9 @@ groups:
     term: PEM
     role: service
     index-origin: 1
+    attrs:
+      redundancy: 'n+1'
+      redundancy-note: 'n+1. The C40G ships as two power variants and this group holds the bays for both: the AC chassis carries four front PSUs at n+1, the DC chassis two rear PEMs at 1+1 (HIG: wire the second PEM to a secondary supply for redundant power applications). Which bays are populated is a property of the configuration, not of the group'
   furniture:
     term: Item
     role: furniture
@@ -415,12 +418,12 @@ views:
       bays:
         - {id: pem-1, at: [44.8, 196.0], size: {w: 158.0, h: 68.5}, accepts: [casa/c40g-pem@1], group: power, rel-pos: 1, default: null, only-in: [dc-power, bdm-3plus1, docsis-classic, docsis-non-redundant]}
         - {id: pem-2, at: [212.8, 196.0], size: {w: 158.0, h: 68.5}, accepts: [casa/c40g-pem@1], group: power, rel-pos: 2, default: null, only-in: [dc-power, bdm-3plus1, docsis-classic, docsis-non-redundant]}
-        - {id: rear-0, at: [39.35, 164.35], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1], default: casa/io-6p12@2, group: rear-slots, rel-pos: 0}
-        - {id: rear-1, at: [39.35, 133.88], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/lc-sw-bdm@1, casa/blank-faceplate@1], default: casa/lc-sw-bdm@1, group: rear-slots, rel-pos: 1}
+        - {id: rear-0, at: [39.35, 164.35], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1, 'casa/oob-2p8@1'], default: casa/io-6p12@2, group: rear-slots, rel-pos: 0}
+        - {id: rear-1, at: [39.35, 133.88], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/lc-sw-bdm@1, casa/blank-faceplate@1, 'casa/oob-2p8@1'], default: casa/lc-sw-bdm@1, group: rear-slots, rel-pos: 1}
         - {id: rear-2, at: [39.35, 103.41], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-sw-bdm-a@1, casa/blank-faceplate@1], default: casa/smm-sw-bdm-a@1, group: rear-slots, rel-pos: 2}
         - {id: rear-3, at: [39.35, 72.94], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/smm-sw-bdm-b@1, casa/blank-faceplate@1], default: casa/smm-sw-bdm-b@1, group: rear-slots, rel-pos: 3}
-        - {id: rear-4, at: [39.35, 42.47], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12-sw@2, casa/io-6p12-sw-io2@1, casa/lc-sw-bdm@1, casa/blank-faceplate@1], default: casa/io-6p12-sw@2, group: rear-slots, rel-pos: 4}
-        - {id: rear-5, at: [39.35, 12.0], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1], default: casa/io-6p12@2, group: rear-slots, rel-pos: 5}
+        - {id: rear-4, at: [39.35, 42.47], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12-sw@2, casa/io-6p12-sw-io2@1, casa/lc-sw-bdm@1, casa/blank-faceplate@1, 'casa/oob-2p8@1'], default: casa/io-6p12-sw@2, group: rear-slots, rel-pos: 4}
+        - {id: rear-5, at: [39.35, 12.0], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1, 'casa/oob-2p8@1'], default: casa/io-6p12@2, group: rear-slots, rel-pos: 5}
       placements:
         - {id: ac-inlet-panel, ref: casa/c40g-ac-inlet-panel@1, at: [37.5, 196.0], group: power, rel-pos: 0, only-in: [ac-power]}
         - {id: ground-studs-rear, ref: casa/c40g-ground-studs@1, at: [9.0, 219.8], group: grounding, rel-pos: 1}

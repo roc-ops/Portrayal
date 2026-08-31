@@ -1,10 +1,14 @@
 format: 1
 kind: device
 name: s9600-56dx
-version: 2.0.0
+version: 2.0.4
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-56DX
+portfolio:
+  line: Telecoms
+  family: Open Aggregation Router
+  series: S9600 Series
 description: >-
   UfiSpace S9600-56DX 100G/400G open disaggregated aggregation router - 2RU white
   box on Broadcom Qumran2c at 4.8 Tbps with an 8 GB deep buffer, 48x QSFP28
@@ -278,10 +282,10 @@ attrs:
     antenna: >-
       an active GNSS antenna is required - 50 ohm impedance match, 5 V DC, noise figure
       1.5 dB maximum, internal LNA gain 35-42 dB (HIG Installing an Antenna)
+    timing-interfaces: GNSS in on SMA, 10MHz in/out on SMB, 1PPS in/out on SMB, ToD in/out on RJ45
   management:
     console: RJ45 RS-232 plus a micro-USB serial console
     oob: 1x RJ45 100/1000M
-    timing-interfaces: GNSS in on SMA, 10MHz in/out on SMB, 1PPS in/out on SMB, ToD in/out on RJ45
   compliance:
     safety: UL 62368-1; IEC 62368-1
     emc: >-
@@ -434,10 +438,16 @@ groups:
     term: PSU
     role: service
     index-origin: 0
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 hot-swappable'
   fans:
     term: Fan
     role: service
     index-origin: 0
+    attrs:
+      redundancy: '3+1'
+      redundancy-note: '3+1 - 3+1 hot-swappable (attrs fan-redundancy)'
   grounding:
     term: Point
     role: furniture

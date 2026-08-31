@@ -1,10 +1,13 @@
 format: 1
 kind: device
 name: s9311-64d
-version: 2.0.0
+version: 2.0.4
 maturity: modelled
 manufacturer: UfiSpace
 model: S9311-64D
+portfolio:
+  line: 'Cloud & Data Centers'
+  family: Data Center Switch
 description: >-
   UfiSpace S9311-64D 400G data center spine switch - 2RU white box, 64x QSFP-DD
   400G in four rows of sixteen (two 2-high stacked cage banks) plus 2x SFP+
@@ -228,10 +231,10 @@ attrs:
       up to 32 QSFP-DD ZR+ modules; the HIG's Figure 12 shades one 32-port band to mark
       which ports they are - see the zr-port-set gap
     timing-cable: SMB coaxial with a 10-32UNF-2A connector, for 1PPS and 10MHz
+    timing: 1PPS and 10MHz SMB (Premium), each input/output
   management:
     console: RJ45 RS-232 plus a micro-USB serial console
     oob: 1x RJ45 100/1000M
-    timing: 1PPS and 10MHz SMB (Premium), each input/output
   compliance:
     safety: UL 62368-1; IEC 62368-1
     emc: >-
@@ -422,10 +425,16 @@ groups:
     term: PSU
     role: service
     index-origin: 0
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 hot-swappable'
   fans:
     term: Fan
     role: service
     index-origin: 0
+    attrs:
+      redundancy: '3+1'
+      redundancy-note: '3+1 - 3+1 hot-swappable (attrs fan-redundancy)'
   grounding:
     term: Point
     role: furniture

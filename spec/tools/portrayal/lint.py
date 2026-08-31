@@ -71,9 +71,18 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
   L62 device: an id names the FUNCTION a thing serves, not the connector it is
       built from - the connector is already in `ref:`; and a port lamp is
       spelled the way the library spells it
+  L65 component: a DC power part that holds nothing states what it can pass
+  L66 device: a power group with more than one bay says whether those bays
+      add up or stand in for each other
   L64 device: nothing is bolted to, or printed on, a vent - a perforation is a
       hole in the faceplate and not a surface, so a legend there is printed on
       nothing and a jack there is mounted to nothing
+  L67 device: a control-plane or fabric group with more than one bay says
+      whether the second card is a working one or a spare
+  L68 library: one measurement is spelled one way across devices (ERROR), and a
+      fact worth comparing has a name the comparison layer knows (census)
+  L69 device: a cooling group with more than one bay says how many of those
+      fans the box can lose
 """
 import argparse
 import json
@@ -870,6 +879,64 @@ def lint_component_role(path, data, _lib_roots=None):
                       "its silence is indistinguishable from a part that draws nothing - "
                       "which is how a chassis total quietly became a floor. Add it to "
                       "the role it belongs in")
+
+
+def lint_component_dc_capacity(path, data, _lib_roots=None):
+    """L65: a DC power part with nothing seated in it says what it can pass.
+
+    THE DISTINCTION THIS EXISTS TO HOLD. A power TRAY carries what the supplies
+    seated in it produce, so watts are the wrong unit for it and `power-absent`
+    is the honest answer - the Cisco a9k trays declare `module-bays: 4` and those
+    four supplies each state their own output. A POWER ENTRY MODULE holds
+    nothing. On a DC chassis it is the only path power takes into the box, so
+    there is no other part to carry the figure, and a chassis whose input
+    capacity is stated nowhere cannot answer "how much can this take".
+
+    Both had the same `power-absent: not-applicable` and the same conduit
+    argument in their provenance, because the argument was written for the tray
+    and inherited by the PEM. Nothing caught it: the Casa PEMs sat unrated until
+    somebody looked at a chassis in another tool and asked where the wattage was.
+
+    So the test is not the class or the word DC in a role - it is whether
+    anything SEATS in it. A part that holds modules may defer to them; one that
+    holds nothing may not.
+
+    A CEILING COUNTS. `power-output-w` with `power-output-scope:
+    pass-through-ceiling` is a real answer for a part that neither converts nor
+    regulates - it bounds what the metal may pass. What is not an answer is
+    silence.
+    """
+    attrs = data.get("attrs") or {}
+    if data.get("class") not in SUPPLY_CLASSES:
+        return
+    role = str(attrs.get("role") or "")
+    inp = f"{attrs.get('input') or ''} {attrs.get('input-voltage') or ''}".lower()
+    dc = "dc" in role.lower().split("-") or "vdc" in inp or attrs.get("input") == "dc"
+    if not dc:
+        return
+    # anything seated in it may carry the figure instead
+    if attrs.get("module-bays") or data.get("module-bays") or data.get("accepts"):
+        return
+    if any(str(attrs.get(k) or "").strip() for k in SUPPLY_KEYS):
+        return
+    # `not-published` IS AN ANSWER and is left alone. It says the figure was
+    # looked for and the vendor does not give it, and L52 already makes it name
+    # the documents - the Edgecore AGR DC supply lists four and explains why an
+    # output cannot be had from an input current. What this rule is about is the
+    # OTHER claim: `not-applicable` means watts are the wrong unit, and a part
+    # that holds nothing cannot say that, because there is nothing else to hold
+    # the number.
+    if str(attrs.get("power-absent") or "") == "not-published":
+        return
+    warn(path, "L65", f"{data.get('name')} takes DC and holds nothing, and states no "
+         f"{SUPPLY_KEYS[0]}. A tray may defer to the supplies seated in it; a part with "
+         "no bays cannot, and on a DC chassis this is the only place the input capacity "
+         "can be stated. If it neither converts nor regulates, a pass-through ceiling "
+         "derived from the feeds and their fusing is a real answer - say so with "
+         "`power-output-scope: pass-through-ceiling` and show the arithmetic in "
+         "provenance. If the vendor really publishes nothing, say `power-absent: "
+         "not-published` and name the documents - that is an answer. "
+         "`not-applicable` is not, for a part with no bays")
 
 
 def lint_component_power(path, data, _lib_roots=None):
@@ -2494,6 +2561,247 @@ def lint_component_forwarded_mate(path, data, lib_roots):
          "point and a cable is drawn to this one, so they should be the same place. "
          "Either the declared point was placed by eye, or the part's `at` offset is "
          "wrong; the aperture's own figure is the measured one")
+
+
+def lint_device_power_redundancy(path, data):
+    """L66: a power group with more than one bay states its redundancy.
+
+    WHAT THIS IS FOR. `power-output-w` on a supply says what one module makes.
+    Two of them in a chassis is then ambiguous in exactly the way that matters:
+    2 x 1600 W is either a 3200 W box or a 1600 W box that survives losing a
+    supply, and the modules cannot tell you which - only the chassis knows. A
+    reader summing the bays gets the wrong number half the time, and it is the
+    half where the answer is "this box draws twice what you provisioned".
+
+    So the module states what it passes and the GROUP states whether they add.
+    One bay needs no such statement: there is nothing to add and nothing to
+    stand in.
+
+    The form is the vendor's own notation - `1+1`, `2+2`, `n+1`, `n+n` - and
+    `redundancy-note` carries the sentence it was read from, because the forms
+    collapse detail that the note keeps: whether the pair is active-active or
+    standby, and, on a chassis sold in two power variants, which variant the
+    figure belongs to.
+    """
+    groups = data.get("groups") or {}
+    bays = {}
+    for view in (data.get("views") or {}).values():
+        for b in ((view or {}).get("components") or {}).get("bays") or []:
+            g = b.get("group")
+            if g:
+                bays[g] = bays.get(g, 0) + 1
+    for name, g in groups.items():
+        g = g or {}
+        if (g.get("role") or "") != "service" or bays.get(name, 0) < 2:
+            continue
+        # the group has to actually hold power - a fan group is service too
+        term = str(g.get("term") or "").lower()
+        if not any(w in name.lower() or w in term for w in ("psu", "power", "pem")):
+            continue
+        if str(((g.get("attrs") or {}).get("redundancy")) or "").strip():
+            continue
+        warn(path, "L66", f"group '{name}' has {bays[name]} power bays and does not say "
+             f"whether they add up. Two supplies are either twice the capacity or the "
+             f"same capacity twice - set attrs.redundancy to the vendor's form "
+             f"('1+1', 'n+1', 'n+n', '2+2') with a redundancy-note quoting the source")
+
+
+
+# The words that make a service group a CONTROL-PLANE or a FABRIC group. Matched
+# as whole tokens of the group name and of the words of its term, never as
+# substrings: `re` inside "furniture" and `fc` inside any three-letter run would
+# otherwise drag in half the library. Each vendor gets to keep its own spelling -
+# Cisco RSP/RP, Juniper RE/RCB/SCB/SFB/SIB, a supervisor, a Casa SMM.
+CONTROL_PLANE_WORDS = {
+    "re", "res", "rp", "rps", "rsp", "rsps", "scb", "scbs", "rcb", "rcbs",
+    "sup", "sups", "supervisor", "supervisors", "smm", "smms",
+    "routing", "engine", "engines", "processor", "processors", "control",
+}
+FABRIC_WORDS = {
+    "fabric", "fabrics", "fc", "fcs", "sfb", "sfbs", "sib", "sibs", "sfc", "sfcs",
+}
+# Whole words here too, and for the same reason: `fan` is inside "fanless",
+# which several access switches are. `cooling` and `thermal` are what the
+# chassis vendors call the same tray.
+FAN_WORDS = {
+    "fan", "fans", "fantray", "fantrays", "cooling", "thermal", "blower", "blowers",
+}
+
+
+def _group_words(name, term):
+    return set(re.split(r"[^a-z0-9]+", f"{name} {term}".lower())) - {""}
+
+
+def lint_device_control_plane_redundancy(path, data):
+    """L67: a control-plane or fabric group with more than one bay states its
+    redundancy.
+
+    WHAT THIS IS FOR. L66 next door settled the power question - two supplies are
+    either twice the capacity or the same capacity twice - and the cards that run
+    and switch the box are ambiguous the same way, for higher stakes. A chassis
+    with two RSPs is either two working processors or one processor plus a spare,
+    and the CARD cannot say which: the ASR 9000's RSP is one part number that is
+    active/standby for control and active/active for fabric on the same chassis,
+    on the same day. Only the chassis knows. A reader who counts the bays gets
+    the capacity wrong in the direction that hurts - "we have seven fabric cards,
+    so we have seven planes of headroom", when six of them carry the traffic and
+    the seventh exists so that losing one costs nothing.
+
+    So the group states it, in the vendor's own notation, with
+    `redundancy-note` carrying the sentence it was read from. The forms here are
+    wider than power's: 1+1 for an RSP/RP or Routing Engine pair, 2+1 for the
+    MX960's three SCBs, 6+1 for the ASR 9912/9922's seven FC cards, 7+1 for the
+    MX2008's eight SFBs, n+1 where the guide itself declines to spell the n.
+
+    THE FORM DOES NOT HAVE TO MATCH THE BAY COUNT, and two entries in the library
+    deliberately do not. The ASR 9910 has five FC bays and states 6+1, because
+    Cisco counts fabric planes across the RSP pair as well as the FCs. The MX960
+    has two dedicated SCB bays and states 2+1, because the third SCB seats in
+    line-card slot 6. Both notes say so. Arithmetic on the bay count is exactly
+    the reasoning this rule exists to replace, so a rule that policed the sum
+    would be enforcing the mistake.
+
+    WHAT GOING WRONG LOOKS LIKE - and this is why the match is on whole tokens
+    rather than substrings. The first pass at the sibling power rule keyed on any
+    `N+M` in the file and read a fan tray's "5+1" as a power figure. The same
+    trap is worse here because the abbreviations are two letters long: a naive
+    substring search for `re` matches "furniture", and one for `fc` matches
+    nothing useful but would match anything. So the group's name and term are
+    split into words and only whole words count.
+    """
+    groups = data.get("groups") or {}
+    bays = {}
+    for view in (data.get("views") or {}).values():
+        for b in ((view or {}).get("components") or {}).get("bays") or []:
+            g = b.get("group")
+            if g:
+                bays[g] = bays.get(g, 0) + 1
+    for name, g in groups.items():
+        g = g or {}
+        if (g.get("role") or "") != "service" or bays.get(name, 0) < 2:
+            continue
+        words = _group_words(name, str(g.get("term") or ""))
+        kind = ("control-plane" if words & CONTROL_PLANE_WORDS else
+                "fabric" if words & FABRIC_WORDS else None)
+        if kind is None:
+            continue
+        if str(((g.get("attrs") or {}).get("redundancy")) or "").strip():
+            continue
+        warn(path, "L67", f"group '{name}' has {bays[name]} {kind} bays and does not say "
+             f"whether the second card is a working one or a spare. Set attrs.redundancy "
+             f"to the vendor's form ('1+1', '2+1', '6+1', 'n+1') with a redundancy-note "
+             f"quoting the sentence and naming the guide it came from")
+
+
+def lint_library_comparable_facts(roots, docs):
+    """L68: a measurement keeps one name, and one section, across the library.
+
+    WHAT THIS IS FOR. A side-by-side of the MX204 and the S9510-28DC printed
+    "Max draw: 280 vs 137", which reads as the UfiSpace box drawing half what
+    the Juniper does. It draws more - 306 W on DC, 301.2 on AC, filed under
+    `power-max-dc-w` and `power-max-ac-w`. The comparison asked for
+    `power-max-w`, did not find it, and reached for the closest key it could
+    see. The defect was not a missing number; it was a WRONG one, and nothing
+    on the page could have told a reader.
+
+    Two halves, and both are censuses rather than complaints - the same stance
+    L24 and L40 take, because a vocabulary harvested from what accumulates is
+    worth more than one designed from a dozen devices.
+
+    THE TAIL. A spelling no fact in facts.py claims cannot appear in a
+    comparison at all. Reported per key with the count of devices carrying it,
+    so the ones worth promoting are the ones that show up.
+
+    THE DRIFT, and this one is an error the existing rules cannot see. L25 is
+    an ERROR for two sections claiming one key - but it reads ONE DEVICE, so
+    `optics-qsfp28` under `features` here and `performance` there passes it
+    while making the key unfindable by section. The module docstring of
+    attrsections says keys are globally unique; this is what actually holds
+    them to it.
+    """
+    import comparable as facts_mod
+
+    homes, tail = {}, {}
+    for path, doc in docs:
+        for section, body in (doc.get("attrs") or {}).items():
+            if not isinstance(body, dict):
+                continue
+            for k in body:
+                homes.setdefault(k, {}).setdefault(section, []).append(path)
+        for k in facts_mod.unclaimed(doc):
+            tail[k] = tail.get(k, 0) + 1
+
+    for key in sorted(homes):
+        where = homes[key]
+        if len(where) > 1:
+            named = ", ".join(f"{s} ({len(where[s])})" for s in sorted(where))
+            # AN ERROR, and it was a warning for exactly as long as it took to
+            # empty. L25 is already an error for the same defect inside one
+            # device; being lenient across devices made the section axis a
+            # suggestion, which is how 17 keys came to have two homes. The
+            # library is at zero, so this can hold the line rather than
+            # describe a backlog.
+            err(roots[0], "L68", f"attrs key {key!r} is filed under more than one "
+                f"section across the library - {named}. L25 only sees one device at "
+                f"a time, so this passes it while making the key unfindable by "
+                f"section. One fact, one section")
+
+    if tail:
+        top = sorted(tail.items(), key=lambda kv: (-kv[1], kv[0]))[:8]
+        shown = ", ".join(f"{k} ({n})" for k, n in top)
+        warn(roots[0], "L68", f"{len(tail)} attrs spelling(s) are claimed by no "
+             f"comparable fact, so nothing can line them up between two devices. "
+             f"Most-used: {shown}. A census, not a complaint - promote the ones "
+             f"that recur into comparable.py, leave the genuine one-offs alone")
+
+
+def lint_device_fan_redundancy(path, data):
+    """L69: a cooling group with more than one bay says how many fans it can lose.
+
+    The third of the family, after L66 for power and L67 for the cards that run
+    and switch the box, and it closes the set: every group whose bays hold
+    interchangeable redundant modules now states whether the spare is spare.
+
+    WHY IT WAS WORTH DOING SEPARATELY. The comparison layer resolved
+    `fan-redundancy` on 0 of 84 devices while 23 of them carried the figure as
+    `attrs.fan-redundancy` prose and 14 more had it in their own description.
+    The data was in the library the whole time and no consumer could reach it,
+    because prose is not a field - which is the same gap `power-envelope`
+    filled badly when a redundancy column went looking for something to show.
+
+    THE ARITHMETIC IS NOT POLICED, and deliberately. A form is the vendor's
+    claim and a bay count is ours; on the 40 stated here they happen to agree
+    exactly - a six-bay tray says 5+1 - but the ASR 9910 states 6+1 for a
+    five-bay cage because Cisco counts planes across the RSP pair, and a rule
+    that demanded the sum would have called that an error. Where the two
+    disagree it is a question, not a fault.
+
+    WHAT THE CONFLICTS TAUGHT. Four Edgecore chassis are left unstated on
+    purpose. Their staged datasheets hold TWO different fan figures each, and
+    in every case exactly one of them fills the bay count - so the tempting move
+    is to take the one that fits. That is arithmetic wearing a citation, the
+    same move refused for the ASR 9000 power trays, and it stays refused.
+    """
+    groups = data.get("groups") or {}
+    bays = {}
+    for view in (data.get("views") or {}).values():
+        for b in ((view or {}).get("components") or {}).get("bays") or []:
+            g = b.get("group")
+            if g:
+                bays[g] = bays.get(g, 0) + 1
+    for name, g in groups.items():
+        g = g or {}
+        if (g.get("role") or "") != "service" or bays.get(name, 0) < 2:
+            continue
+        # whole words: `fan` is inside "fanless" and this rule is about trays
+        if not (_group_words(name, str(g.get("term") or "")) & FAN_WORDS):
+            continue
+        if str(((g.get("attrs") or {}).get("redundancy")) or "").strip():
+            continue
+        warn(path, "L69", f"group '{name}' has {bays[name]} cooling bays and does not "
+             f"say how many fans the box can lose. Set attrs.redundancy to the "
+             f"vendor's form ('3+1', '5+1', 'n+1') with a redundancy-note quoting "
+             f"the sentence and naming where it came from")
 
 
 def lint_device_gap_scope(path, data):
@@ -4813,6 +5121,7 @@ def main():
                 lint_component_mating(f, d, args.library)
                 lint_component_aperture(f, d, args.library)
                 lint_component_power(f, d)
+                lint_component_dc_capacity(f, d)
                 lint_component_role(f, d)
                 lint_component_forwarded_mate(f, d, args.library)
                 lint_component_relief_confidence(f, d, args.library)
@@ -4827,6 +5136,9 @@ def main():
                 lint_device_configuration_kind(f, d)
                 lint_device_top_level_skus(f, d)
                 lint_device_empty_declaration(f, d)
+                lint_device_power_redundancy(f, d)
+                lint_device_fan_redundancy(f, d)
+                lint_device_control_plane_redundancy(f, d)
                 try:
                     dev_maturity[str(f.parent.relative_to(root / "devices"))] = \
                         d.get("maturity", "draft")
@@ -4851,6 +5163,7 @@ def main():
     # --device run cannot do it: the lock is one file describing every device and
     # a partial check would report the unexamined ones as unchanged.
     if not args.device:
+        lint_library_comparable_facts([Path(r) for r in args.library], matrix)
         for root in [Path(r) for r in args.library]:
             lint_vendor_registry(root)
             if not (root / devicelock.LOCK_NAME).exists() and not list(root.glob("devices/*/*/device.yaml")):

@@ -1,10 +1,14 @@
 format: 1
 kind: device
 name: s9710-76d
-version: 0.2.0
+version: 0.2.4
 maturity: modelled
 manufacturer: UfiSpace
 model: S9710-76D
+portfolio:
+  line: Telecoms
+  family: Disaggregated Core and Edge Router
+  series: S9700 Series
 description: UfiSpace S9710-76D - 2RU high-density 400G disaggregated core and edge
   router with 36 QSFP-DD service ports and 40 QSFP-DD fabric ports, 2x 10G SFP+
   management uplinks and a full timing block; Broadcom Jericho2c+ BCM88850 at
@@ -279,8 +283,6 @@ provenance:
     none-announced is a checked state, not an absence.
 attrs:
   physical:
-    airflow: front-to-back (exhaust FRUs only; the datasheet lists one fan and two PSUs,
-      all 'exhaust air flow')
     weight-shipping-kg: '36.5'
   performance:
     switching-capacity: 14.4 Tbps
@@ -292,6 +294,9 @@ attrs:
     power-max-dc-w: '2351'
     power-envelope: fully-configured
     input: AC 200 to 240V, 16A max x2; DC -40 to -72V, 80A max x2
+  thermal:
+    airflow: front-to-back (exhaust FRUs only; the datasheet lists one fan and two PSUs,
+      all 'exhaust air flow')
   environmental:
     operating-temp: 0 to 45 C
     operating-humidity: 5% to 85% RH non-condensing
@@ -522,10 +527,16 @@ groups:
     term: PSU
     role: service
     index-origin: 0
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 redundant, hot-swappable, active-active'
   fans:
     term: Fan
     role: service
     index-origin: 0
+    attrs:
+      redundancy: '3+1'
+      redundancy-note: '3+1 - 3+1 hot-swap fans (the device description)'
   grounding:
     term: Point
     role: furniture

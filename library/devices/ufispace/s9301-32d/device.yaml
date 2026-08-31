@@ -1,10 +1,13 @@
 format: 1
 kind: device
 name: s9301-32d
-version: 0.1.0
+version: 0.1.3
 maturity: modelled
 manufacturer: UfiSpace
 model: S9301-32D
+portfolio:
+  line: 'Cloud & Data Centers'
+  family: Data Center Switch
 description: >-
   UfiSpace S9301-32D 400G data center spine switch - 1RU white box, 32x QSFP-DD
   400G in two belly-to-belly rows plus a 2x2 SFP+ block (a 10G out-of-band pair
@@ -388,10 +391,16 @@ groups:
     term: PSU
     role: service
     index-origin: 0
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 hot-swappable active-active'
   fans:
     term: Fan
     role: service
     index-origin: 0
+    attrs:
+      redundancy: '5+1'
+      redundancy-note: '5+1 - 5+1 hot-swappable (attrs fan-redundancy)'
   grounding:
     term: Point
     role: furniture

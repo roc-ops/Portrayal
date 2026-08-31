@@ -1,10 +1,14 @@
 format: 1
 kind: device
 name: s9501-28smt
-version: 1.0.0
+version: 1.0.3
 maturity: modelled
 manufacturer: UfiSpace
 model: S9501-28SMT
+portfolio:
+  line: Telecoms
+  family: Disaggregated Cell Site Gateway
+  series: S9500 Series
 description: UfiSpace S9501-28SMT 10G Disaggregated Cell Site Gateway Router - 1RU,
   4x 1G RJ45 + 16x 1G SFP + 8x 10G SFP+ (the last two MACsec-capable), full timing
   (GNSS/1PPS/10MHz/ToD/BITS), Stratum 3E OCXO, dual 200 W PSUs, three hot-swap fans,
@@ -232,8 +236,6 @@ attrs:
     reach-rj45: 100 m (HIG port overview, ports 0-3)
     reach-sfp: 70 km max (HIG port overview, ports 4-19)
     reach-sfp-plus: 80 km max (HIG port overview, ports 20-27)
-    optics-sfp-plus: 10G SFP+ SR, LR, ER, ZR (datasheet compatible transceiver types)
-    optics-sfp: 1G SFP SX, LX, EX, ZX (datasheet compatible transceiver types)
   power:
     power-typical-w: 60
     power-max-w: 96.9
@@ -270,6 +272,8 @@ attrs:
       active antenna auto-detected, active supply 5 V DC / 150 mA, minimum RF
       sensitivity -166 dBm, 30 dB minimum signal strength
     cable-limits: ToD, BITS, 1PPS and 10MHz cables must not exceed 3 m (HIG section 12)
+    optics-sfp-plus: 10G SFP+ SR, LR, ER, ZR (datasheet compatible transceiver types)
+    optics-sfp: 1G SFP SX, LX, EX, ZX (datasheet compatible transceiver types)
   management:
     console: RJ45 serial, 115200 8N1, no flow control
     usb: USB 2.0 Type-A maintenance port
@@ -395,6 +399,9 @@ groups:
     role: service
     index-origin: 0
     description: the vendor spells the bays PSU0 and PSU1 on the divider strip between them
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '2x 200 W 1+1 active-active, hot-swappable (intake airflow)'
   fans:
     term: Fan
     role: service

@@ -1096,6 +1096,15 @@
         "series": {
           "type": "string",
           "description": "marketing series, e.g. 'AGR400'; the model is the SKU root"
+        },
+        "also-listed-in": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "other catalogue categories the vendor ALSO files this device under, in the vendor's own words. `line` is the category of the vendor's own canonical product URL; this is everywhere else it appears. A consumer filtering by category should union the two, so a box the vendor lists twice shows up in both lists."
         }
       }
     },
