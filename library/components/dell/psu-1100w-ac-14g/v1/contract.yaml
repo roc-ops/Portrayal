@@ -121,6 +121,15 @@ provenance:
     something to redraw from a photograph - the photograph can only say which way
     up it goes, which here is `rotate: 90`.
   handle-is-the-lamp: >-
+    AND IT IS THE WITHDRAWAL HANDLE, NOT THE RELEASE LEVER. Two parts of this
+    supply were both being called a handle - the orange Z you push sideways to
+    release the unit, and the U in the middle you pull it out by - so the lamp
+    with all five of Dell's states on it sat on the orange lever, and the thing
+    that actually glows green in a rack was inert. mkpsu.py had it written down
+    as settled ("THE HANDLE IS STILL THE INDICATOR ... and that is the orange
+    lever"), which is how it survived. The skin's lever node is named `lever`
+    now so the two cannot be confused by name again, and the lamp carries the
+    grip's own box, 33.04, 3.65, 8.24 x 34.64.
     NOT A LAMP BESIDE A HANDLE. ISM: "AC power supply units (PSUs) have an
     illuminated translucent handle that serves as an indicator." So the handle
     carries the state class, in the same construction as the drive carrier's
@@ -146,7 +155,7 @@ relief:
   # ALL FOUR ARE THE OPERATOR'S READINGS OFF THE HARDWARE, which is a better
   # source than a photograph for how far something stands off a face: a
   # straight-on figure cannot show protrusion at all. `estimated` says so.
-  - node: handle
+  - node: lever
     out: 19.05
     color: '#e8a33d'
     confidence: estimated
@@ -190,9 +199,9 @@ parts:
   # 4x. common/psu-ac-650 composes the same part at 270 for the mirror case.
   - {ref: std/c14-inlet@1, id: inlet, at: [6.70, 11.0], rotate: 90, behind: true}
 elements:
-  handle:
-    at: [2.0, 13.0]
-    size: [7.0, 15.0]
+  grip:
+    at: [33.04, 3.65]
+    size: [8.24, 34.64]
     class: led
     states: ['off',
              {name: 'ok', color: '#22c55e'},
@@ -225,14 +234,14 @@ elements:
       NO RATE IS PUBLISHED for the amber fault or the firmware blink, so 1 Hz is
       a reading and not a figure - unlike the mismatch, where 4 Hz is stated.
   inlet-bezel:
-    at: [4.6, 3.6]
-    size: [26.0, 34.8]
+    at: [7.55, 3.50]
+    size: [24.24, 31.80]
     class: inlet
     description: >-
       the recess the C14 sits back inside. The CONNECTOR is std/c14-inlet@1,
       composed rather than drawn - see `inlet` in provenance.
   fan:
-    at: [49.5, 4.0]
+    at: [43.03, 1.80]
     size: [33.0, 33.8]
     class: vent
     description: the exhaust aperture
