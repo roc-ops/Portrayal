@@ -39,6 +39,14 @@ THREE THINGS WILL GIVE YOU A CONFIDENT WRONG NUMBER, and all three have.
                     measurement of a fan and is a measurement of the fan BAY.
                     Instances are listed separately and never merged.
 
+A SCENE THAT LOOKS EMPTY IS PROBABLY DRACO. Counting accessors that carry a
+`bufferView` is a tempting one-pass test for "does this file have geometry" and
+it is wrong: KHR_draco_mesh_compression puts the vertices in a blob the
+extension points at, and leaves POSITION with no bufferView BY DESIGN. 212 of
+the R740XD scene's 411 meshes read as empty that way and every one of them is
+readable - see glb-view.py, which draws them. Boxes are unaffected either way,
+because min/max live in the accessor regardless.
+
 AND THE SCENE IS EXPLODED. Each guide is posed for its own procedure - the
 battery guide has the cover lifted clear, which is why the scene bounds exceed
 the chassis. Sizes survive that; POSITIONS do not. Take a position only from a
