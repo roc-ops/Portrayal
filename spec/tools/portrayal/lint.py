@@ -79,6 +79,8 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
       nothing and a jack there is mounted to nothing
   L67 device: a control-plane or fabric group with more than one bay says
       whether the second card is a working one or a spare
+  L68 library: one measurement is spelled one way across devices, and a fact
+      worth comparing has a name the comparison layer knows
 """
 import argparse
 import json
@@ -2626,6 +2628,62 @@ def lint_device_control_plane_redundancy(path, data):
              f"quoting the sentence and naming the guide it came from")
 
 
+def lint_library_comparable_facts(roots, docs):
+    """L68: a measurement keeps one name, and one section, across the library.
+
+    WHAT THIS IS FOR. A side-by-side of the MX204 and the S9510-28DC printed
+    "Max draw: 280 vs 137", which reads as the UfiSpace box drawing half what
+    the Juniper does. It draws more - 306 W on DC, 301.2 on AC, filed under
+    `power-max-dc-w` and `power-max-ac-w`. The comparison asked for
+    `power-max-w`, did not find it, and reached for the closest key it could
+    see. The defect was not a missing number; it was a WRONG one, and nothing
+    on the page could have told a reader.
+
+    Two halves, and both are censuses rather than complaints - the same stance
+    L24 and L40 take, because a vocabulary harvested from what accumulates is
+    worth more than one designed from a dozen devices.
+
+    THE TAIL. A spelling no fact in facts.py claims cannot appear in a
+    comparison at all. Reported per key with the count of devices carrying it,
+    so the ones worth promoting are the ones that show up.
+
+    THE DRIFT, and this one is an error the existing rules cannot see. L25 is
+    an ERROR for two sections claiming one key - but it reads ONE DEVICE, so
+    `optics-qsfp28` under `features` here and `performance` there passes it
+    while making the key unfindable by section. The module docstring of
+    attrsections says keys are globally unique; this is what actually holds
+    them to it.
+    """
+    import comparable as facts_mod
+
+    homes, tail = {}, {}
+    for path, doc in docs:
+        for section, body in (doc.get("attrs") or {}).items():
+            if not isinstance(body, dict):
+                continue
+            for k in body:
+                homes.setdefault(k, {}).setdefault(section, []).append(path)
+        for k in facts_mod.unclaimed(doc):
+            tail[k] = tail.get(k, 0) + 1
+
+    for key in sorted(homes):
+        where = homes[key]
+        if len(where) > 1:
+            named = ", ".join(f"{s} ({len(where[s])})" for s in sorted(where))
+            warn(roots[0], "L68", f"attrs key {key!r} is filed under more than one "
+                 f"section across the library - {named}. L25 only sees one device at "
+                 f"a time, so this passes it while making the key unfindable by "
+                 f"section. One fact, one section")
+
+    if tail:
+        top = sorted(tail.items(), key=lambda kv: (-kv[1], kv[0]))[:8]
+        shown = ", ".join(f"{k} ({n})" for k, n in top)
+        warn(roots[0], "L68", f"{len(tail)} attrs spelling(s) are claimed by no "
+             f"comparable fact, so nothing can line them up between two devices. "
+             f"Most-used: {shown}. A census, not a complaint - promote the ones "
+             f"that recur into comparable.py, leave the genuine one-offs alone")
+
+
 def lint_device_gap_scope(path, data):
     """L54: a declared gap points at something the device does not have.
 
@@ -4984,6 +5042,7 @@ def main():
     # --device run cannot do it: the lock is one file describing every device and
     # a partial check would report the unexamined ones as unchanged.
     if not args.device:
+        lint_library_comparable_facts([Path(r) for r in args.library], matrix)
         for root in [Path(r) for r in args.library]:
             lint_vendor_registry(root)
             if not (root / devicelock.LOCK_NAME).exists() and not list(root.glob("devices/*/*/device.yaml")):
