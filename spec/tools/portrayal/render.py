@@ -893,7 +893,15 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     deco_g.set("data-class", "decor")
     seen_kinds = {}
     for d in parts["decor"]:
-        r = ET.SubElement(deco_g, f"{{{SVG_NS}}}rect")
+        # PAINT FOLLOWS THE HARDWARE IT SITS BEHIND. Decor could draw a
+        # rectangle and a rounded rectangle and nothing else, so a patch printed
+        # around a D-subminiature connector - which is what Dell puts behind the
+        # serial and VGA ports on this generation - had no shape to be. Same
+        # four values the cutouts take, drawn by the same two helpers, so the
+        # vocabulary means one thing in both places.
+        shape = d.get("shape")
+        as_path = shape in ("d-sub", "slot")
+        r = ET.SubElement(deco_g, f"{{{SVG_NS}}}{'path' if as_path else 'rect'}")
         if d.get("pattern") == "vent" or d.get("vent"):
             kind = "vent-field"
         elif d.get("stroke"):
@@ -909,9 +917,14 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             # a hole, not a texture - stated for anything reading the drawing
             # rather than looking at it
             r.set("data-aperture", "air")
-        r.set("x", f"{d['at'][0]:g}"); r.set("y", f"{d['at'][1]:g}")
-        r.set("width", f"{d['size'][0]:g}"); r.set("height", f"{d['size'][1]:g}")
-        r.set("rx", f"{d.get('rx', 0.6):g}")
+        if as_path:
+            dx, dy = d["at"]; dw, dh = d["size"]
+            r.set("d", _dsub_path(dx, dy, dw, dh) if shape == "d-sub"
+                  else _slot_path(dx, dy, dw, dh))
+        else:
+            r.set("x", f"{d['at'][0]:g}"); r.set("y", f"{d['at'][1]:g}")
+            r.set("width", f"{d['size'][0]:g}"); r.set("height", f"{d['size'][1]:g}")
+            r.set("rx", f"{d.get('rx', 0.6):g}")
         if d.get("stroke"):
             r.set("fill", "none")
             r.set("stroke", d["stroke"]); r.set("stroke-width", f"{d.get('stroke-width', 1):g}")

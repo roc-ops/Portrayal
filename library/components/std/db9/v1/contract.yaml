@@ -38,6 +38,16 @@ provenance:
     on equipment is male: these are pins that catch light, and the sockets on
     std/vga@1 beside it are holes that do not. That much is sourced from what
     the two connectors are, even though the pitch is not.
+  the-insert-colour-is-a-skin: >-
+    photo-measured - a DE-9's insulator is usually near-black and `default`
+    draws it so. THE R740xd's IS TEAL: Dell paints that connector and the patch
+    printed behind it the same colour, so the two D-subs sitting side by side on
+    a crowded panel are told apart at arm's length. #055760 is the median of the
+    insert in ISM figure 8 read at 4 px/mm. It is a skin rather than the part
+    because it is true of that device and not of DE-9s in general - a device
+    asks for it with `skins: {db9: teal}` in its configuration, which reaches
+    the composed shell through common/db9-receptacle@1 rather than needing a
+    Dell-specific copy of either.
   shell: >-
     photo-measured - THE OUTLINE DRAWN IS THE SHELL, NOT THE APERTURE. `size`
     stays 20.47 x 11.40, the Figure 3 panel cutout; the shell passes through
@@ -88,4 +98,4 @@ relief:
       depth and not the pin length.
 connection-points:
   mate: {at: [10.235, 5.7], direction: front}
-skins: [default]
+skins: [default, teal]

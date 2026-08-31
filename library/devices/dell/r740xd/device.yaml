@@ -479,6 +479,23 @@ views:
         # takes the end of the bar with it. Colour is a plain dark for now -
         # the shape is what is being established.
         - {id: legend-bar, at: [25.43, 80.5], size: [90.67, 3.175], fill: '#33383d'}
+        # THE PAINT BEHIND THE TWO D-SUBS. Measured off ISM figure 8 at
+        # 4 px/mm WITH THE TWO APERTURES MASKED OUT, which is what it takes:
+        # the DE-9's own insulator is teal on this machine, so connector and
+        # paint are the same colour and a first reading took the connector's
+        # insert for paint rising to wrap the standoffs. Masked, the figure is
+        # plain - no paint above y 76.75 outside the connectors, and above
+        # y 80.50 only BETWEEN the two ports. So: a flat band with one hump.
+        # Ends at x 52.50 and 109.25, about 1 mm INSIDE the outer standoff
+        # centres - the paint stops just short of the standoffs it appears to
+        # wrap. The lobes are each shell's own D outline dropped 1.00, which is
+        # why the paint below a connector follows its contour rather than
+        # cutting straight across.
+        - {id: paint-serial, at: [52.50, 80.5], size: [28.20, 3.175], rx: 0, fill: '#0f6a76', kind: port-paint}
+        - {id: paint-vga, at: [80.70, 80.5], size: [28.55, 3.175], rx: 0, fill: '#145d8f', kind: port-paint}
+        - {id: paint-bridge, at: [78.00, 76.75], size: [6.00, 3.75], rx: 1.8, fill: '#1c6b81', kind: port-paint}
+        - {id: paint-serial-lobe, at: [53.63, 70.10], size: [20.47, 11.40], shape: d-sub, fill: '#0f6a76', kind: port-paint}
+        - {id: paint-vga-lobe, at: [87.3, 70.10], size: [20.47, 11.40], shape: d-sub, fill: '#145d8f', kind: port-paint}
       cutouts:
         - {id: idrac9, at: [28.60, 66.50], size: [16.0, 14.0], shape: rect}
         - {id: serial, at: [53.63, 69.10], size: [20.47, 11.4], shape: d-sub}
@@ -582,6 +599,12 @@ views:
            states: ['off', {name: 'on', color: '#2563eb'}]}
 configurations:
   base:
+    # the serial port's insulator is teal on this machine, not the
+    # near-black a DE-9 usually carries - std/db9@1's `teal` skin. Named in
+    # every configuration because a skin override has no device-wide default
+    # and all five of these show this rear.
+    skins:
+      db9: teal
     kind: base
     source: derived
     default: true
@@ -601,6 +624,12 @@ configurations:
       riser-2: dell/riser-2-2fh-1lp-14g@1
       riser-3: dell/riser-3-2fh-14g@1
   no-rear-storage:
+    # the serial port's insulator is teal on this machine, not the
+    # near-black a DE-9 usually carries - std/db9@1's `teal` skin. Named in
+    # every configuration because a skin override has no device-wide default
+    # and all five of these show this rear.
+    skins:
+      db9: teal
     kind: orderable
     description: >-
       the three-riser rear: seven full-height PCIe slots across risers 1, 2 and
@@ -621,6 +650,7 @@ configurations:
       drive-r3: common/drive-carrier-25@1
     skins:
       drive-carrier-25: default
+      db9: teal
     description: >-
       four 2.5 inch drives in the rear, which costs riser 2's two full-height
       slots and all of riser 3 - the R740xd ISM figure 8. THE BAYS ARE METAL AND
@@ -628,6 +658,12 @@ configurations:
       why the competing sets carry `only-in` rather than differing by what is
       plugged into them.
   rear-2-lff:
+    # the serial port's insulator is teal on this machine, not the
+    # near-black a DE-9 usually carries - std/db9@1's `teal` skin. Named in
+    # every configuration because a skin override has no device-wide default
+    # and all five of these show this rear.
+    skins:
+      db9: teal
     kind: orderable
     description: >-
       NAMED AND NOT YET DRAWN. The R740xd ISM figure 9 shows two 3.5 inch drives
@@ -636,6 +672,12 @@ configurations:
       with a 2.5 inch drive standing in for one, which would be a picture of a
       machine nobody can order.
   full-24:
+    # the serial port's insulator is teal on this machine, not the
+    # near-black a DE-9 usually carries - std/db9@1's `teal` skin. Named in
+    # every configuration because a skin override has no device-wide default
+    # and all five of these show this rear.
+    skins:
+      db9: teal
     kind: example
     description: >-
       all 24 bays carrying a drive. An ILLUSTRATION and not a SKU: the number of
