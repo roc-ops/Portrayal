@@ -71,6 +71,9 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
   L62 device: an id names the FUNCTION a thing serves, not the connector it is
       built from - the connector is already in `ref:`; and a port lamp is
       spelled the way the library spells it
+  L65 component: a DC power part that holds nothing states what it can pass
+  L66 device: a power group with more than one bay says whether those bays
+      add up or stand in for each other
   L64 device: nothing is bolted to, or printed on, a vent - a perforation is a
       hole in the faceplate and not a surface, so a legend there is printed on
       nothing and a jack there is mounted to nothing
@@ -863,6 +866,64 @@ def lint_component_role(path, data, _lib_roots=None):
                       "its silence is indistinguishable from a part that draws nothing - "
                       "which is how a chassis total quietly became a floor. Add it to "
                       "the role it belongs in")
+
+
+def lint_component_dc_capacity(path, data, _lib_roots=None):
+    """L65: a DC power part with nothing seated in it says what it can pass.
+
+    THE DISTINCTION THIS EXISTS TO HOLD. A power TRAY carries what the supplies
+    seated in it produce, so watts are the wrong unit for it and `power-absent`
+    is the honest answer - the Cisco a9k trays declare `module-bays: 4` and those
+    four supplies each state their own output. A POWER ENTRY MODULE holds
+    nothing. On a DC chassis it is the only path power takes into the box, so
+    there is no other part to carry the figure, and a chassis whose input
+    capacity is stated nowhere cannot answer "how much can this take".
+
+    Both had the same `power-absent: not-applicable` and the same conduit
+    argument in their provenance, because the argument was written for the tray
+    and inherited by the PEM. Nothing caught it: the Casa PEMs sat unrated until
+    somebody looked at a chassis in another tool and asked where the wattage was.
+
+    So the test is not the class or the word DC in a role - it is whether
+    anything SEATS in it. A part that holds modules may defer to them; one that
+    holds nothing may not.
+
+    A CEILING COUNTS. `power-output-w` with `power-output-scope:
+    pass-through-ceiling` is a real answer for a part that neither converts nor
+    regulates - it bounds what the metal may pass. What is not an answer is
+    silence.
+    """
+    attrs = data.get("attrs") or {}
+    if data.get("class") not in SUPPLY_CLASSES:
+        return
+    role = str(attrs.get("role") or "")
+    inp = f"{attrs.get('input') or ''} {attrs.get('input-voltage') or ''}".lower()
+    dc = "dc" in role.lower().split("-") or "vdc" in inp or attrs.get("input") == "dc"
+    if not dc:
+        return
+    # anything seated in it may carry the figure instead
+    if attrs.get("module-bays") or data.get("module-bays") or data.get("accepts"):
+        return
+    if any(str(attrs.get(k) or "").strip() for k in SUPPLY_KEYS):
+        return
+    # `not-published` IS AN ANSWER and is left alone. It says the figure was
+    # looked for and the vendor does not give it, and L52 already makes it name
+    # the documents - the Edgecore AGR DC supply lists four and explains why an
+    # output cannot be had from an input current. What this rule is about is the
+    # OTHER claim: `not-applicable` means watts are the wrong unit, and a part
+    # that holds nothing cannot say that, because there is nothing else to hold
+    # the number.
+    if str(attrs.get("power-absent") or "") == "not-published":
+        return
+    warn(path, "L65", f"{data.get('name')} takes DC and holds nothing, and states no "
+         f"{SUPPLY_KEYS[0]}. A tray may defer to the supplies seated in it; a part with "
+         "no bays cannot, and on a DC chassis this is the only place the input capacity "
+         "can be stated. If it neither converts nor regulates, a pass-through ceiling "
+         "derived from the feeds and their fusing is a real answer - say so with "
+         "`power-output-scope: pass-through-ceiling` and show the arithmetic in "
+         "provenance. If the vendor really publishes nothing, say `power-absent: "
+         "not-published` and name the documents - that is an answer. "
+         "`not-applicable` is not, for a part with no bays")
 
 
 def lint_component_power(path, data, _lib_roots=None):
@@ -2437,6 +2498,49 @@ def lint_component_forwarded_mate(path, data, lib_roots):
          "point and a cable is drawn to this one, so they should be the same place. "
          "Either the declared point was placed by eye, or the part's `at` offset is "
          "wrong; the aperture's own figure is the measured one")
+
+
+def lint_device_power_redundancy(path, data):
+    """L66: a power group with more than one bay states its redundancy.
+
+    WHAT THIS IS FOR. `power-output-w` on a supply says what one module makes.
+    Two of them in a chassis is then ambiguous in exactly the way that matters:
+    2 x 1600 W is either a 3200 W box or a 1600 W box that survives losing a
+    supply, and the modules cannot tell you which - only the chassis knows. A
+    reader summing the bays gets the wrong number half the time, and it is the
+    half where the answer is "this box draws twice what you provisioned".
+
+    So the module states what it passes and the GROUP states whether they add.
+    One bay needs no such statement: there is nothing to add and nothing to
+    stand in.
+
+    The form is the vendor's own notation - `1+1`, `2+2`, `n+1`, `n+n` - and
+    `redundancy-note` carries the sentence it was read from, because the forms
+    collapse detail that the note keeps: whether the pair is active-active or
+    standby, and, on a chassis sold in two power variants, which variant the
+    figure belongs to.
+    """
+    groups = data.get("groups") or {}
+    bays = {}
+    for view in (data.get("views") or {}).values():
+        for b in ((view or {}).get("components") or {}).get("bays") or []:
+            g = b.get("group")
+            if g:
+                bays[g] = bays.get(g, 0) + 1
+    for name, g in groups.items():
+        g = g or {}
+        if (g.get("role") or "") != "service" or bays.get(name, 0) < 2:
+            continue
+        # the group has to actually hold power - a fan group is service too
+        term = str(g.get("term") or "").lower()
+        if not any(w in name.lower() or w in term for w in ("psu", "power", "pem")):
+            continue
+        if str(((g.get("attrs") or {}).get("redundancy")) or "").strip():
+            continue
+        warn(path, "L66", f"group '{name}' has {bays[name]} power bays and does not say "
+             f"whether they add up. Two supplies are either twice the capacity or the "
+             f"same capacity twice - set attrs.redundancy to the vendor's form "
+             f"('1+1', 'n+1', 'n+n', '2+2') with a redundancy-note quoting the source")
 
 
 def lint_device_gap_scope(path, data):
@@ -4756,6 +4860,7 @@ def main():
                 lint_component_mating(f, d, args.library)
                 lint_component_aperture(f, d, args.library)
                 lint_component_power(f, d)
+                lint_component_dc_capacity(f, d)
                 lint_component_role(f, d)
                 lint_component_forwarded_mate(f, d, args.library)
                 lint_component_relief_confidence(f, d, args.library)
@@ -4770,6 +4875,7 @@ def main():
                 lint_device_configuration_kind(f, d)
                 lint_device_top_level_skus(f, d)
                 lint_device_empty_declaration(f, d)
+                lint_device_power_redundancy(f, d)
                 try:
                     dev_maturity[str(f.parent.relative_to(root / "devices"))] = \
                         d.get("maturity", "draft")

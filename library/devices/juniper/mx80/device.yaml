@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx80
-version: 0.5.0
+version: 0.5.1
 maturity: modelled
 manufacturer: Juniper
 model: MX80
@@ -101,6 +101,9 @@ groups:
     term: PSU
     role: service
     index-origin: 0
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 - when two power supplies are present they share power almost equally within a fully populated system, and if one in a redundant configuration fails the other carries the router'
   cooling:
     term: Tray
     role: service

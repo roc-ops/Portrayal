@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcs510
-version: 0.2.0
+version: 0.2.1
 maturity: modelled
 manufacturer: Edgecore
 model: DCS510
@@ -248,7 +248,13 @@ groups:
       the RS-232 console, two SFP+ 10G management uplinks and a USB-A service port. Four media, one job;
       the vendor draws them as one block under one legend and so do we.
   leds: {term: LED, role: indicator, index-origin: 1}
-  psus: {term: PSU, role: service, index-origin: 1}
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '2 pcs 1+1 redundant, load-sharing, hot-swappable 1200 W AC'
   fans: {term: Fan, role: service, index-origin: 1}
   grounding: {term: Point, role: furniture, index-origin: 1}
   furniture:

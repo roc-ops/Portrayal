@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: pem
-version: 1.5.0
+version: 1.6.0
 class: power
 behaviour: fills
 profile: networking
@@ -14,7 +14,9 @@ description: >-
   each branch's terminal-cover screw up to the breaker that protects it.
 attrs:
   model: 'PEM'
-  power-absent: not-applicable
+  power-output-w: 3840
+  power-per-branch-w: 960
+  power-output-scope: pass-through-ceiling
   role: dc-power-entry
   input-voltage: '-42 to -60 VDC (-48 VDC nominal)'
   current-per-feed: '20 A nominal, 30 A rating'
@@ -23,14 +25,28 @@ attrs:
 size: {w: 207.0, h: 91.6, d: 250.0}
 provenance:
   power: >-
-    This part is a TRAY and watts are the wrong unit for it. It does not convert or
-    regulate: it carries and distributes what the modules seated in it produce, so its
-    rating bounds what may PASS THROUGH rather than describing an output. Deriving watts
-    would mean multiplying a current by a voltage across an operating range, which lands on
-    a number that looks like an answer and is not one. The supplies that seat in it state
-    their own output; a chassis total adds those. This is L27's own conduit argument,
-    recorded as data rather than left to prose so that something adding up a chassis can
-    tell it apart from a hole in the total.
+    THIS IS A POWER ENTRY MODULE AND THE CONDUIT ARGUMENT DOES NOT FIT IT. That
+    argument - a tray carries what the modules seated in it produce, so watts are
+    the wrong unit - was written for the Cisco power trays and is right about them:
+    `a9k-power-tray` and `a9k-dc-pem-v3` both declare `module-bays: 4`, and those
+    four supplies each state their own output. NOTHING SEATS IN A CASA PEM. It has
+    no module bays, it holds no supplies, and on a DC chassis it is the only path
+    power takes into the box - so there is no other part to carry the figure, and
+    "the supplies that seat in it state their own output" is simply false here.
+    DERIVED, AND THE ARITHMETIC IS THE WHOLE OF IT: four branches x 20 A NOMINAL x 48 V = 3840 W, which is 960 W a branch. Both inputs are the
+    vendor's - "Each PEM provides power terminals for four 30A power branches", C100G HIG 6-14, where the 30 A is the BREAKER and 20 A the nominal the same guide gives per feed - and -48 VDC is the stated nominal. Casa publishes no
+    watt rating for the PEM itself, in either hardware guide or either data sheet.
+    THE BREAKER IS NOT THE LOAD, and using it here was wrong once already: four
+    times the 30 A trip current gives 5760 W, which is the sum of the protection
+    and not a capacity anything draws. A breaker is sized ABOVE continuous load by
+    design. The nominal 20 A is the figure per branch, and four of them at 48 V
+    come to 3840 W - within 2 percent of what Casa says to provision, which is the
+    check that the right current was used. It is recorded because a DC chassis has nowhere
+    else to state its input capacity, and a consumer asking "how much can this
+    take" would otherwise get silence.
+    IT CROSS-CHECKS: the C100G guide asks for a supply "rated to provide -48VDC at
+    a minimum 3900W", and 3840 W lands on it - the two PEMs are redundant, not additive - which is what the two of
+    them being redundant means.
   electrical: 'datasheet - Table A-1 of the C100G install guide gives "Voltage
     -42 to -60VDC" and "Current 20A nominal per feed"; the chassis nameplate reproduced
     at Figure 1-3 gives "-48VDC, 30A per Feed (4+4 Feeds)". Four feeds per PEM,

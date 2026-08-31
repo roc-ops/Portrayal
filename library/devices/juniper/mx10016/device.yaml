@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx10016
-version: 1.0.1
+version: 1.0.2
 maturity: modelled
 manufacturer: Juniper
 model: MX10016
@@ -66,6 +66,9 @@ groups:
     index-origin: 0
     description: ten power supply slots, one full-height stack at the
       rear left (five populated in the base configuration)
+    attrs:
+      redundancy: 'n+1'
+      redundancy-note: 'n+1 - size for a non-redundant system and add one supply for redundancy (2n source redundancy on the feeds)'
   cooling:
     term: Tray
     role: service

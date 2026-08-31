@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx960
-version: 0.3.0
+version: 0.3.1
 maturity: modelled
 manufacturer: Juniper
 model: MX960
@@ -72,6 +72,9 @@ groups:
     role: service
     index-origin: 0
     description: four AC supplies at the rear, PEM 0-3
+    attrs:
+      redundancy: '2+2'
+      redundancy-note: '2+2 for the high-voltage second-generation universal supply, per its Redundancy row. Earlier high-capacity supplies are zoned and run 3+1 per system, three sharing the load evenly with a fourth providing full redundancy - the figure here is the second-generation one'
   inlets:
     term: Inlet
     role: service

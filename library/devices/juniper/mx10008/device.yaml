@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx10008
-version: 1.0.1
+version: 1.0.2
 maturity: modelled
 manufacturer: Juniper
 model: MX10008
@@ -64,6 +64,9 @@ groups:
     role: service
     index-origin: 0
     description: six power supply slots, one stack at the rear left
+    attrs:
+      redundancy: 'n+1'
+      redundancy-note: 'n+1 - three power supplies for minimum operation; additional supplies provide n+1 redundancy (2n source redundancy on the feeds)'
   cooling:
     term: Tray
     role: service
