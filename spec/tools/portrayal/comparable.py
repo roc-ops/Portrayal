@@ -344,12 +344,53 @@ def _group_readings(doc, words):
     return out
 
 
+SILENT_SCOPE = "fact:"
+
+
+def declared_silence(doc):
+    """Facts a person has recorded the vendor as not publishing.
+
+    THE THIRD STATE. A blank in a comparison meant two different things and
+    looked identical: the vendor publishes no figure, or nobody has looked yet.
+    Six ASR 9000 chassis carry the first case in their provenance - "Cisco
+    publishes NO chassis-level power draw for any ASR 9000 ... this is the
+    vendor being silent, not this model being thin" - which is a real finding,
+    written down, that no consumer could reach.
+
+    It rides on `gaps`, which already exists for exactly this and already
+    carries `vendor-silent` on 190 entries. A gap claims a fact by scoping
+    itself `fact:<name>`; the prefix keeps it apart from the group, view and
+    component-ref scopes that are already in there.
+    """
+    out = {}
+    for g in doc.get("gaps") or []:
+        if (g or {}).get("reason") != "vendor-silent":
+            continue
+        for s in g.get("scope") or []:
+            if not str(s).startswith(SILENT_SCOPE):
+                continue
+            name = str(s)[len(SILENT_SCOPE):]
+            out.setdefault(name, {"reason": "vendor-silent",
+                                  "what": g.get("what"),
+                                  "note": g.get("note") or "",
+                                  "wanted": g.get("wanted") or ""})
+    return out
+
+
 def resolve(doc):
     """Every comparable fact this device states, as canonical name -> readings.
 
-    A fact with no readings is OMITTED rather than emitted empty: "we did not
-    find one" and "the vendor publishes none" are different claims and this
-    layer is not entitled to make the second.
+    THREE STATES, and keeping them apart is the point:
+
+      readings          the device states it
+      absent            somebody looked and the vendor publishes none, per a
+                        `vendor-silent` gap scoped `fact:<name>`
+      omitted entirely  nobody has looked yet
+
+    A fact with neither readings nor a declared silence is OMITTED rather than
+    emitted empty. "We did not find one" and "the vendor publishes none" are
+    different claims, and this layer may only make the second when a person
+    has already made it.
     """
     flat = _flat(doc)
     chassis = doc.get("chassis") or {}
@@ -404,6 +445,17 @@ def resolve(doc):
 
     put("psu-redundancy", _group_readings(doc, POWER_WORDS))
     put("fan-redundancy", _group_readings(doc, FAN_WORDS))
+
+    # A DECLARED SILENCE NEVER OVERWRITES A READING. If both are present the
+    # device contradicts itself, and the linter says so rather than this
+    # quietly preferring one - a fact that is both stated and unpublished is a
+    # question for a person.
+    for name, why in declared_silence(doc).items():
+        f = BY_NAME.get(name)
+        if f is None or name in facts:
+            continue
+        facts[name] = {"unit": f.unit, "section": f.section,
+                       "readings": [], "absent": why}
     return facts
 
 

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9006
-version: 0.4.3
+version: 0.4.4
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9006
@@ -613,6 +613,20 @@ configurations:
       slot-1: cisco/a9k-slot-cover@1
       slot-0: cisco/a9k-slot-cover@1
 gaps:
+- what: chassis-power-figure
+  scope:
+  - fact:peak-power-w
+  - fact:typical-power-w
+  reason: vendor-silent
+  note: >-
+    Cisco publishes no chassis-level power draw for any ASR 9000. Table 14's "Power Dissipation"
+    row says only "Use the Cisco Power Calculator ... to estimate the maximum power
+    distribution", so the chassis total is whatever its occupants sum to. Recorded in provenance
+    as no-chassis-power-figure since the family was modelled; scoped here so a comparison can
+    tell this apart from a figure nobody has looked for
+  wanted: >-
+    a chassis-level maximum and typical draw from Cisco, or confirmation that the Power
+    Calculator is the only answer the vendor will give
 - what: power-module-width-disagrees-with-the-component
   scope: [power-modules]
   reason: sources-disagree

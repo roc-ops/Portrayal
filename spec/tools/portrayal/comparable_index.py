@@ -68,10 +68,13 @@ def main():
         for k in e["superseded"]:
             sup[k] = sup.get(k, 0) + 1
 
-    stated = {}
+    stated, silent = {}, {}
     for e in devices:
-        for k in e["facts"]:
-            stated[k] = stated.get(k, 0) + 1
+        for k, v in e["facts"].items():
+            if v.get("readings"):
+                stated[k] = stated.get(k, 0) + 1
+            elif v.get("absent"):
+                silent[k] = silent.get(k, 0) + 1
 
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
@@ -82,6 +85,10 @@ def main():
         # emerge or it stays visibly unshrunk
         "unclaimed": dict(sorted(census.items(), key=lambda kv: (-kv[1], kv[0]))),
         "coverage": dict(sorted(stated.items(), key=lambda kv: (-kv[1], kv[0]))),
+        # facts a person has recorded the vendor as not publishing. The
+        # difference between this and a blank is the whole point: one is an
+        # answer, the other is an open question.
+        "declared-silent": dict(sorted(silent.items(), key=lambda kv: (-kv[1], kv[0]))),
         "superseded": dict(sorted(sup.items(), key=lambda kv: (-kv[1], kv[0]))),
     }, indent=1, sort_keys=True))
     print(f"compiled {len(vocab)} comparable facts across {len(devices)} devices "
