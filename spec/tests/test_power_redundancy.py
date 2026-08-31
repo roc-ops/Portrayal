@@ -96,11 +96,14 @@ def test_bays_are_counted_across_views():
 
 # ---- what the library actually says -----------------------------------------
 
-def test_every_multi_bay_power_group_in_the_library_is_stated_but_one():
-    """The rollout. One holdout is deliberate: the ASR 9001's own 750 W modules
-    have no redundancy statement in its guide - the 2+2 and 3+1 tables there
-    belong to other chassis in the series - so it stays unstated rather than
-    borrowing a figure from a neighbour."""
+def test_every_multi_bay_power_group_in_the_library_is_stated():
+    """The rollout, complete.
+
+    The ASR 9001 was the last holdout and stayed unstated for a while on
+    purpose: the 2+2 and 3+1 tables in its install guide describe four-module
+    chassis, and borrowing one for a two-bay box would have been a guess wearing
+    a citation. The answer was in a different document - the ASR-9001 FAQ says
+    "Two AC or two DC power modules for redundancy" outright."""
     unstated = []
     for f in sorted(LIB.glob("devices/**/device.yaml")):
         d = yaml.safe_load(f.read_text())
@@ -108,15 +111,28 @@ def test_every_multi_bay_power_group_in_the_library_is_stated_but_one():
             continue
         if run(d):
             unstated.append(f"{f.parent.parent.name}/{f.parent.name}")
-    assert unstated == ["cisco/asr-9001"], unstated
+    assert unstated == [], unstated
 
 
 def test_a_stated_form_is_one_the_vendors_actually_use():
-    """SCOPED TO POWER GROUPS, and it was not always. It swept every group in the
-    device and passed for as long as power was the only thing stating a form. The
-    day L67 landed and the control-plane and fabric groups started stating theirs,
-    this failed on 2+1, 6+1 and 7+1 - real vendor notation belonging to a rule
-    that is not this one. A rollout test has to look only at its own rollout."""
+    """Two things at once, and both were learned the hard way.
+
+    SCOPED TO POWER GROUPS, and it was not always. It swept every group in the
+    device and passed only for as long as power was the sole thing stating a
+    form. The day L67 landed and the control-plane and fabric groups started
+    stating theirs, it failed on 2+1, 6+1 and 7+1 - real vendor notation
+    belonging to a rule that is not this one. A rollout test looks only at its
+    own rollout.
+
+    A PATTERN, NOT A FIXED LIST. The power vocabulary is itself wider than the
+    four common forms: the ASR 9910 reference guide gives 4+2 for its AC power
+    trays and 5+3 for its DC ones. Neither is in the library yet only because
+    that chassis models no power trays at all - the day it does, a fixed list
+    would reject a figure the vendor prints. The form is whatever the vendor
+    writes, N+M with n allowed on either side, and not a menu we happened to
+    have seen.
+    """
+    import re
     forms = set()
     for f in sorted(LIB.glob("devices/**/device.yaml")):
         for name, g in (yaml.safe_load(f.read_text()).get("groups") or {}).items():
@@ -127,7 +143,8 @@ def test_a_stated_form_is_one_the_vendors_actually_use():
             r = (g.get("attrs") or {}).get("redundancy")
             if r:
                 forms.add(r)
-    assert forms <= {"1+1", "2+2", "n+1", "n+n"}, forms
+    bad = [f for f in forms if not re.fullmatch(r"(\d+|n)\+(\d+|n)", f)]
+    assert not bad, bad
 
 
 def test_a_stated_group_carries_the_sentence_it_was_read_from():
