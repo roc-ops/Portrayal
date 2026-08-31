@@ -18,6 +18,8 @@ import sys
 
 import yaml
 
+import libdata
+
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "spec" / "tools" / "portrayal"))
 import comparable as C  # noqa: E402
@@ -119,10 +121,8 @@ def test_a_well_formed_silence_is_quiet():
 # ---- the library -------------------------------------------------------------
 
 def devices():
-    for f in sorted(LIB.glob("devices/**/device.yaml")):
-        d = yaml.safe_load(f.read_text())
-        if d.get("kind") == "device":
-            yield f"{f.parent.parent.name}/{f.parent.name}", d
+    """Over the once-parsed library - see libdata."""
+    return libdata.devices()
 
 
 def test_the_asr_chassis_declare_their_power_silence():

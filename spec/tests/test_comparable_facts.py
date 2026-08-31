@@ -18,6 +18,8 @@ import sys
 
 import yaml
 
+import libdata
+
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "spec" / "tools" / "portrayal"))
 import comparable as F  # noqa: E402
@@ -196,10 +198,7 @@ def test_no_device_resolves_a_peak_that_equals_its_own_typical_by_accident():
     creeps back in, the first symptom is a peak reading that IS the typical
     one, sourced from a typical key."""
     bad = []
-    for f in sorted(LIB.glob("devices/**/device.yaml")):
-        d = yaml.safe_load(f.read_text())
-        if d.get("kind") != "device":
-            continue
+    for _slug, f, d in libdata.library():
         for r in F.resolve(d).get("peak-power-w", {}).get("readings", []):
             if "typical" in r["from"]:
                 bad.append(f"{f.parent.name}: {r['from']}")

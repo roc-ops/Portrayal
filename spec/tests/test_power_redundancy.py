@@ -19,6 +19,8 @@ import sys
 
 import yaml
 
+import libdata
+
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "spec" / "tools" / "portrayal"))
 import lint  # noqa: E402
@@ -105,10 +107,7 @@ def test_every_multi_bay_power_group_in_the_library_is_stated():
     a citation. The answer was in a different document - the ASR-9001 FAQ says
     "Two AC or two DC power modules for redundancy" outright."""
     unstated = []
-    for f in sorted(LIB.glob("devices/**/device.yaml")):
-        d = yaml.safe_load(f.read_text())
-        if d.get("kind") != "device":
-            continue
+    for _slug, f, d in libdata.library():
         if run(d):
             unstated.append(f"{f.parent.parent.name}/{f.parent.name}")
     assert unstated == [], unstated

@@ -22,6 +22,8 @@ import sys
 
 import yaml
 
+import libdata
+
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "spec" / "tools" / "portrayal"))
 import capability as C  # noqa: E402
@@ -115,10 +117,7 @@ def test_the_other_axes_are_untouched():
 def test_the_r740xd_is_solid_and_nothing_else_regressed():
     profiles = C.load_profiles(ROOT / "spec" / "schemas")
     levels, dim_blocked = {}, []
-    for f in sorted(LIB.glob("devices/**/device.yaml")):
-        d = yaml.safe_load(f.read_text())
-        if d.get("kind") != "device":
-            continue
+    for _slug, f, d in libdata.library():
         cap, _ = C.assess(d, profiles=profiles)
         slug = f"{f.parent.parent.name}/{f.parent.name}"
         levels[slug] = cap["level"]

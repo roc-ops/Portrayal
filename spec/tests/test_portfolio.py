@@ -21,15 +21,15 @@ import sys
 
 import yaml
 
+import libdata
+
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
 
 
 def devices(ns=None):
-    for f in sorted(LIB.glob("devices/**/device.yaml")):
-        d = yaml.safe_load(f.read_text())
-        if d.get("kind") != "device":
-            continue
+    """Over the once-parsed library - see libdata."""
+    for slug, f, d in libdata.library():
         if ns and f.parent.parent.name != ns:
             continue
         yield f, d
