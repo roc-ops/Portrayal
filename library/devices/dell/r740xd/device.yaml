@@ -520,13 +520,24 @@ views:
          font-size: 2.3, anchor: middle, fill: '#d7dde3'}
       - {id: silk-serial, at: [63.87, 82.88], text: IOIOI, for: serial,
          font-size: 2.3, anchor: middle, fill: '#d7dde3'}
-      # SS, THE SUPERSPEED MARK, in the dark run at the right-hand end of
-      # the band: the paint stops at 109.25 and the band goes on to 116.10,
-      # which leaves an unpainted section immediately left of the two stacked
-      # USB ports at x 120.20. The ports sit outside the band and cannot carry
-      # a legend themselves. The ISM calls them '9-pin and 3.0-compliant'.
-      - {id: silk-usb, at: [112.67, 82.88], text: SS, for: [usb-1, usb-2],
-         font-size: 2.3, anchor: middle, fill: '#c7ccd1'}
+      # SS IS ONLY HALF THE MARK. The SuperSpeed logo is the letters and
+      # the USB trident together; the letters alone say 'SuperSpeed' without
+      # saying 'USB', which on a panel of eleven connectors is the half that
+      # matters. The trident's three prongs end in three DIFFERENT terminals -
+      # arrowhead, square, circle, off a circle-ended stem - and that is the
+      # symbol rather than an ornament on it.
+      # Two paths because the stem is stroked and the four terminals are
+      # filled, and `filled` applies to a whole path. Sizes are chosen to fit
+      # the 6.85 of dark run, not read off anything.
+      - {id: silk-usb, at: [109.70, 82.79], text: SS,
+         for: [usb-1, usb-2], font-size: 2.0, anchor: start,
+         fill: '#c7ccd1'}
+      - {id: silk-usb-trident, at: [112.65, 82.09],
+         for: [usb-1, usb-2], stroke-width: 0.28, fill: '#c7ccd1',
+         path: 'M0 0 H2.25 M1.15 0 L1.95 -0.85 M0.75 0 L1.55 0.85'}
+      - {id: silk-usb-trident-tips, at: [112.65, 82.09],
+         for: [usb-1, usb-2], filled: true, fill: '#c7ccd1',
+         path: 'M-0.35 0 a0.35 0.35 0 1 0 0.70 0 a0.35 0.35 0 1 0 -0.70 0 Z M2.25 -0.45 L3.00 0 L2.25 0.45 Z M1.80 -1.30 h0.60 v0.60 h-0.60 Z M1.35 1.00 a0.35 0.35 0 1 0 0.70 0 a0.35 0.35 0 1 0 -0.70 0 Z'}
       # the monitor: screen, neck, foot. `filled` with an evenodd hole rather
       # than a stroked outline, because at this size a stroked box closes on
       # itself and leaves a pinhole.
