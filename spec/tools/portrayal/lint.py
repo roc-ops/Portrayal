@@ -83,6 +83,8 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
       fact worth comparing has a name the comparison layer knows (census)
   L69 device: a cooling group with more than one bay says how many of those
       fans the box can lose
+  L70 device: a declared vendor silence names a fact that exists, and is not
+      contradicted by the device stating that fact anyway
 """
 import argparse
 import json
@@ -2804,6 +2806,47 @@ def lint_device_fan_redundancy(path, data):
              f"the sentence and naming where it came from")
 
 
+def lint_device_declared_silence(path, data):
+    """L70: a `fact:` gap names a real fact, and does not contradict the device.
+
+    THE THIRD STATE, and the reason it needs guarding. A blank in a comparison
+    meant two things that looked identical - the vendor publishes nothing, or
+    nobody has looked. Six ASR 9000 chassis had the first case written down in
+    provenance ("this is the vendor being silent, not this model being thin")
+    where no consumer could reach it. Scoping a `vendor-silent` gap
+    `fact:<name>` makes that reachable.
+
+    Which buys two ways to be wrong, and both are silent without this rule.
+
+    A MISSPELLED FACT NAME claims nothing. `fact:peak-power` resolves to no
+    fact, the gap looks discharged in the file and the comparison still shows a
+    bare blank - the worst outcome, because somebody did the work and it did
+    not land.
+
+    A CONTRADICTION is worse than either state alone: the device states a
+    figure AND says the vendor publishes none. One of the two is wrong and
+    nothing here can tell which, so the resolver refuses to prefer one and this
+    asks a person. It is an error rather than a warning because a reader shown
+    a number has no way to know a retraction was filed against it.
+    """
+    import comparable as facts_mod
+
+    stated = facts_mod.resolve(data)
+    for name, why in facts_mod.declared_silence(data).items():
+        if name not in facts_mod.BY_NAME:
+            err(path, "L70", f"a vendor-silent gap is scoped 'fact:{name}', which is "
+                f"not a comparable fact. The gap reads as discharged and the comparison "
+                f"still shows a blank, so the work does not land. Known names are in "
+                f"comparable.py")
+            continue
+        if stated.get(name, {}).get("readings"):
+            got = stated[name]["readings"][0]
+            err(path, "L70", f"the device states {name} as {got['value']!r} from "
+                f"{got['from']} AND declares the vendor silent on it "
+                f"({why.get('what')}). One of the two is wrong; a reader shown the "
+                f"number cannot know a retraction was filed against it")
+
+
 def lint_device_gap_scope(path, data):
     """L54: a declared gap points at something the device does not have.
 
@@ -5138,6 +5181,7 @@ def main():
                 lint_device_empty_declaration(f, d)
                 lint_device_power_redundancy(f, d)
                 lint_device_fan_redundancy(f, d)
+                lint_device_declared_silence(f, d)
                 lint_device_control_plane_redundancy(f, d)
                 try:
                     dev_maturity[str(f.parent.relative_to(root / "devices"))] = \
