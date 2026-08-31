@@ -463,7 +463,13 @@ views:
       h: 86.8
     panel:
       decor:
-        - {at: [3.0, 64.5], size: [233.0, 21.0], fill: '#6f767d'}
+        # THE REAR OF THIS MACHINE IS BARE METAL. `chassis.color` is one
+        # value for every view and the FRONT genuinely is dark, so the
+        # chassis was not wrong - this face was borrowing it. Painted
+        # here as what it is: the same matte silver as the brackets and
+        # supplies bolted to it. The grey band that ran under the I/O row
+        # is gone with it; that row is not a different colour.
+        - {at: [0, 0], size: [434.0, 86.8], fill: '#9aa1a8'}
         # the teal and the blue Dell paints behind the serial and the VGA. It is
         # how the two D-subs are told apart on a crowded panel at arm's length,
         # and it is paint on the metal rather than part of either connector.
@@ -475,7 +481,7 @@ views:
         - {id: vga, at: [87.30, 68.60], size: [20.47, 11.4], shape: rect}
         - {id: usb-1, at: [120.20, 71.47], size: [12.0, 4.5], shape: rect}
         - {id: usb-2, at: [120.20, 79.59], size: [12.0, 4.5], shape: rect}
-        - {id: sys-id, at: [6.77, 72.04], size: [7.0, 7.0], shape: circle}
+        - {id: sys-id, at: [8.36, 72.04], size: [7.0, 7.0], shape: circle}
     components:
       bays:
         # THE BAY IS THE PLATE, NOT THE BRACKET ENVELOPE. Each riser now holds
@@ -556,7 +562,7 @@ views:
            attrs: {speed: usb-3.0}, group: mgmt-ports, rel-pos: 4}
         - {ref: std/usb-a@1, id: usb-2, at: [120.20, 79.59],
            attrs: {speed: usb-3.0}, group: mgmt-ports, rel-pos: 5}
-        - {ref: dell/system-id-button-14g@1, id: sys-id, at: [6.77, 72.04],
+        - {ref: dell/system-id-button-14g@1, id: sys-id, at: [8.36, 72.04],
            for: chassis, group: mgmt-rear, rel-pos: 1}
         - {ref: common/led-indicator@1, id: sys-status, at: [19.43, 73.73],
            for: chassis, group: leds, rel-pos: 2,
@@ -605,6 +611,19 @@ configurations:
       "Back view of three riser system", which passes Gate 1 at 0.26%.
   rear-4-sff:
     kind: orderable
+    # THE BAYS ARE SEATED HERE, and `bays:` was there all along. An earlier note
+    # in this file claimed a configuration could not say which accepted module
+    # fills a bay, and put an override on a command line instead. It can, and
+    # render.py has honoured it the whole time: bay id to component ref, with an
+    # empty string for a deliberately empty bay. riser-2 is not listed because
+    # it is not in THIS build - riser-2-lp is, and it already defaults right.
+    bays:
+      drive-r0: common/drive-carrier-25@1
+      drive-r1: common/drive-carrier-25@1
+      drive-r2: common/drive-carrier-25@1
+      drive-r3: common/drive-carrier-25@1
+    skins:
+      drive-carrier-25: default
     description: >-
       four 2.5 inch drives in the rear, which costs riser 2's two full-height
       slots and all of riser 3 - the R740xd ISM figure 8. THE BAYS ARE METAL AND

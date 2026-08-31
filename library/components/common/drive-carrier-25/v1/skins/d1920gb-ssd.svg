@@ -15,9 +15,18 @@
 
   <rect x="1.50" y="0" width="14.86" height="7.15" rx="0.5" fill="#33383d"/>
 
-  <!-- no glyphs: the glyphs on a populated carrier ARE its lamps,
-       and a blank holds no drive to report on. The head band
-       itself is the same moulding and stays. -->
+  <!-- head: the two glyphs ARE the lamps - they light up
+       themselves, which is why there is no third dot between
+       them. Dell KB 000413096 puts activity on the LEFT and
+       status on the right. A BLANK HAS NEITHER: no drive to
+       report on, so nothing to report it with. -->
+  <g id="lamp-activity" fill="none" stroke="#c9ced3" stroke-width="0.34">
+    <path d="M3.03 3.2 l1.0 0 0.6 -1.6 0.8 3.1 0.6 -1.5 0.9 0"/>
+  </g>
+  <g id="lamp-status" fill="none" stroke="#c9ced3" stroke-width="0.3">
+    <ellipse cx="13.13" cy="2.4" rx="1.5" ry="0.55"/>
+    <path d="M11.63 2.4 v1.7 a1.5 0.55 0 0 0 3.0 0 v-1.7"/>
+  </g>
 
   <!-- rails down BOTH edges, 23.1% to 98.3% -->
   <rect x="1.75" y="18.34" width="1.15" height="59.71" rx="0.5" fill="#c9ced3" stroke="#9aa0a6" stroke-width="0.15"/>
@@ -126,10 +135,12 @@
   </g>
   <rect x="2.83" y="52.09" width="12.20" height="9.13" rx="0.35" fill="none" stroke="#2a2e32" stroke-width="0.3"/>
 
-  <!-- THE LABEL FIELD IS EMPTY ON A BLANK. It inherited the carrier's
-       block of squares, which was read as a QR code and is really four
-       lines naming the drive - and a blank holds no drive, so there is
-       nothing for it to say. The recess itself stays: it is moulded into
-       the plastic whether or not anything is printed in it. -->
-  <rect id="label" x="5.13" y="62.73" width="7.60" height="7.60" rx="0.25" fill="#8f959b" stroke="#787f85" stroke-width="0.16"/>
+  <!-- WHAT DRIVE IS IN THIS CARRIER, in four lines of type. It was
+       drawn as a QR code: at low resolution a dense block of small
+       white glyphs on a dark square is indistinguishable from a
+       matrix barcode, and the grid that replaced it carried no
+       information at all. The values are this skin's; the layout is
+       read from the figure. Rotated 90 so it reads along the
+       carrier's long axis, as the figure shows it. -->
+  <g id="drive-label" transform="rotate(90 8.93 66.50)"><rect id="label" x="2.83" y="62.2" width="12.2" height="8.6" rx="0.3" fill="#33383d" stroke="#22262a" stroke-width="0.2"/><g id="silkscreen"><text x="3.73" y="65.10" font-family="sans-serif" font-size="2.5" font-weight="bold" fill="#e7ebee">1920</text><text x="9.93" y="65.10" font-family="sans-serif" font-size="1.4" fill="#c8ced3">GB</text><text x="8.93" y="67.30" font-family="sans-serif" font-size="1.7" fill="#e7ebee" text-anchor="middle">SSD</text><text x="8.93" y="69.10" font-family="sans-serif" font-size="1.5" fill="#c8ced3" text-anchor="middle">12Gb</text></g></g>
 </svg>
