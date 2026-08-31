@@ -580,6 +580,17 @@ views:
            accepts: [dell/riser-2-2fh-1lp-14g@1, dell/riser-2-3-blank-14g@1],
            default: dell/riser-2-2fh-1lp-14g@1,
            group: risers, rel-pos: 2, only-in: [no-rear-storage]}
+        # A 12 mm DISAGREEMENT WAS REPORTED AGAINST THE CAD HERE AND IT WAS
+        # NOT REAL. It came from the rear handle's upper 'window', read off a
+        # silhouette of the WHOLE handle shell at 159.7-242.0 and compared with
+        # this bay's 147.87-227.07. That window is a hole in the handle's
+        # MOUNTING FLANGE, which sits behind the panel; cut the projection at
+        # the panel plane and it disappears entirely, because the real handle
+        # has no upper opening at all. Nothing in the service model reaches the
+        # rear face anywhere near this slot - the riser assemblies in that scene
+        # are posed away from the chassis - so the CAD says NOTHING about where
+        # this bay goes, in either direction.
+        # The 78.0 reading against 79.2 stands as the open question it was.
         - {id: riser-2-lp, at: [147.87, 46.93], size: {w: 79.2, h: 18.42},
            accepts: [dell/riser-2-1lp-14g@1],
            default: dell/riser-2-1lp-14g@1,
@@ -654,13 +665,13 @@ views:
         # figure - two readings that knew nothing of each other.
         # LAST IN THE LIST because placements draw after bays and on the
         # hardware this part is in front of both of them.
-        # `frames:` NOT `for:`. Its box takes in 113.55 x 43.25 of the face
-        # and its ink takes in a good deal less - the two windows are what let
-        # it sit over these three without hiding any of them. `for:` would have
-        # said this handle ANNOTATES the network card, which is a different
-        # claim and not true.
+        # IT LIES ACROSS THREE BAYS AND THAT IS THE HARDWARE. The rail covers
+        # 4.96 mm of riser-2, 4.31 of riser-2-lp and 1.14 of the NDC - real ink,
+        # because the handle is bolted to the outside of the panel in front of
+        # all three. L13 allows it on `behaviour: mounts`, which is the same key
+        # render.py reads to draw this part in front of the openings.
         - {ref: dell/rear-handle-14g@1, id: rear-handle, at: [137.73, 42.35],
-           frames: [riser-2, riser-2-lp, ndc], group: furniture, rel-pos: 20}
+           group: furniture, rel-pos: 20}
 configurations:
   base:
     # the serial port's insulator is teal on this machine, not the
