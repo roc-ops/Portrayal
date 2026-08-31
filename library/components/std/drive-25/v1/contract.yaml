@@ -1,0 +1,46 @@
+format: 1
+kind: component
+name: drive-25
+version: 1.0.0
+class: drive
+profile: server
+conforms: drive-25
+description: >-
+  2.5 inch form factor drive per SFF-8201 - the drive itself, not a carrier:
+  69.85 wide by 15.00 thick, drawn standing on edge, presenting its plain front
+  edge at the bay
+size: {w: 15.0, h: 69.85, d: 100.45}
+attrs:
+  form-factor: 2.5-inch
+  thickness-options: '17.00, 15.00, 9.50, 7.00, 5.00'
+provenance:
+  size: >-
+    standard - SFF-8201 "2.5\" Form Factor Drive Dimensions" Rev 3.4, SFF-TA
+    TWG, table 2-1: A4 = 69.85 [2.750] width, A1 = 15.00 [0.591] for this form
+    factor, A6 = 100.45 [3.955] maximum length. DRAWN STANDING ON EDGE - size is
+    15.0 across by 69.85 tall - because that is how a front-loading server bay
+    presents the drive and how common/drive-carrier-25 is drawn; a bay that
+    lays it down says so with `rotate`. Note 1 gives A4+A5 = 70.10 as the
+    maximum width including tolerance and note 2 a nominal length of 100.20; the
+    nominal width and the maximum length are carried here because a bay is cut
+    for the nominal part and has to clear the longest one.
+  which-thickness: >-
+    15.00 BY DEFAULT AND THE OTHERS ARE EQUALLY REAL. SFF-8201 lists 17.00,
+    15.00, 9.50, 7.00 and 5.00 for A1. 15 is the rotating server drive and the
+    height a 2.5 inch hot-swap bay is built around, 7 is where most solid-state
+    drives sit, 9.50 is the older notebook drive. The registry carries 15
+    because that is what a bay of this pitch is cut for; the rest are in attrs
+    so a device can say which it means rather than this part guessing.
+  the-face-is-blank-on-purpose: >-
+    A HOT-SWAP DRIVE GOES IN CONNECTOR FIRST, so what a chassis wall shows is the
+    drive's plain front edge - no connector, no label, no lamp, no latch. Every
+    one of those belongs to the CARRIER, which is the vendor's part and not this
+    one. A first instinct is to draw the thing you see in a photograph of a
+    populated bay; almost all of that is Dell's plastic.
+  what-this-is-not: >-
+    NOT A BAY AND NOT A CARRIER. The opening a chassis punches for a 2.5 inch
+    drive is larger than the drive and is the chassis's own dimension; the
+    carrier that holds the drive is the vendor's. This part is the governed
+    object between them, and it is the only one of the three that is the same
+    for everybody.
+skins: [default]

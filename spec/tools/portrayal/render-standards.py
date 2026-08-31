@@ -76,9 +76,33 @@ def walk(ref, x, y, rot, path, out):
     for bid, bay in (c.get('bays') or {}).items():
         sub = bay.get('default') or (bay.get('accepts') or [None])[0]
         if sub:
-            bx, by = bay.get('at', [0, 0])
+            bx, by = seat(bay, sub)
             walk(sub, x + bx, y + by, bay.get('rotate') or rot,
                  f'{path}/{bid}', out)
+
+
+def seat(bay, ref):
+    """Where a bay's occupant actually lands: CENTRED, not corner-aligned.
+
+    render.py hangs a bay's occupant by its centre - translate(centre) rotate
+    translate(-w/2,-h/2) - so a part smaller than its bay sits in the middle of
+    it. Reading `at` as the occupant's top-left agrees only when the two are the
+    same size, which every bay on this device happened to be until a 69.85 drive
+    went into a 79.4 slot and sat 4.8 mm left of where it renders.
+    """
+    bx, by = bay.get('at', [0, 0])
+    bw, bh = bay.get('size', [None, None])
+    c, _ = load(ref)
+    if c is None or bw is None:
+        return bx, by
+    # THE UNROTATED SIZE, deliberately. The emitted transform is
+    # translate(at) rotate(deg, w/2, h/2), which turns the part about its own
+    # UNROTATED centre - so `at` is where the unrotated box would sit and the
+    # centre lands at at + (w/2, h/2) whatever the angle. Swapping w and h here
+    # for a rotated bay looks right and is not: it put a 2.5 inch drive 35 mm
+    # from its bay, because the swap and the rotation then applied twice.
+    pw, ph = c['size']['w'], c['size']['h']
+    return bx + bw / 2 - pw / 2, by + bh / 2 - ph / 2
 
 
 def wanted(item, config):
@@ -117,7 +141,10 @@ def collect(dev, vname, config=None, fit=None):
         sub = fit.get(b['id']) or b.get('default') or (
             b.get('accepts') or [None])[0]
         if sub:
-            walk(sub, *b.get('at', [0, 0]), b.get('rotate'), b['id'], found)
+            bx, by = seat({'at': b.get('at', [0, 0]),
+                           'size': [b['size']['w'], b['size']['h']],
+                           'rotate': b.get('rotate')}, sub)
+            walk(sub, bx, by, b.get('rotate'), b['id'], found)
     return view, found
 
 
