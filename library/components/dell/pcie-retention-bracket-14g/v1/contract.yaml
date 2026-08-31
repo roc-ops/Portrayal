@@ -1,0 +1,56 @@
+format: 1
+kind: component
+name: pcie-retention-bracket-14g
+version: 1.0.0
+class: mechanical
+# It stands 17.53 proud of the panel and the cards' flanges go behind it, so it
+# draws after the bays.
+behaviour: mounts
+profile: compute
+description: >-
+  The vertical retention bracket right of riser 1 on a 14G PowerEdge - the metal
+  the PCIe cards' flange ends are held into, standing well proud of the panel
+size: {w: 23.94, h: 43.0, d: 17.53}
+provenance:
+  size: >-
+    measured - Dell's service model, `R740XD_Expansioncard_Clip-1.001`, clipped
+    to the panel plane at z 713.5: 13,170 of its 14,009 triangles stand in front
+    of the panel. A vendor solid measured in software, in the sense std/sma@1's
+    barrel key sets out.
+  it-was-rejected-once-and-the-reason-was-bad: >-
+    RECORDED BECAUSE THE ERROR WAS IN THE CHECK, NOT THE DATA. This part was
+    thrown out of an earlier pass with "clip-1 does not appear in the figure at
+    all at its CAD position; that region is plain metal and bracket vents". It
+    is not plain metal - that region carries this bracket and its column of
+    slots, which is plainly in the figure.
+    The rejection came from glancing at a crop. The check that settles it is to
+    project the part at the panel plane and lay the silhouette beside the figure
+    AT THE SAME SCALE: the CAD's main bar lands at face 123.6..134.5 and the
+    figure's slot column runs 126.8..132.4, one inside the other. A comparison,
+    where the first was an impression.
+    The lesson generalises to the other rejected clip, which was dismissed in
+    the same breath and deserves the same test before it is trusted either way.
+  outline: >-
+    measured - extracted by spec/tools/intake/cad-outline.py, rasterised at
+    16 px/mm and simplified at 0.35 mm. THAT 0.35 IS A SIMPLIFICATION TOLERANCE
+    and must not be read back off the outline as a radius.
+  depth: >-
+    measured - 17.53 proud of the panel plane, and this is why the model was
+    worth consulting: the part has to stand off far enough to contain the L of a
+    PCIe bracket's flange, and no straight-on figure can show that at all.
+    WHAT IS NOT MODELLED is the section behind its front face; extruding the
+    outline is a first approximation and says so.
+relief:
+  wall: '#4a5057'
+  features:
+  - node: bracket
+    out: 17.53
+    color: '#8a9199'
+    confidence: measured
+    source: >-
+      dell/pcie-retention-bracket-14g@1's own depth key - Dell's service model,
+      from the panel plane at z 713.5 to this part's own front. One number for
+      the whole outline, which the depth key records as an approximation.
+elements:
+  bracket: {at: [0.0, 0.0], size: [23.94, 43.0], class: bezel}
+skins: [default]
