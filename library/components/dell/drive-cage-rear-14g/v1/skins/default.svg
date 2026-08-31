@@ -180,9 +180,20 @@
        outlines where the figure has two of the darkest marks on this strip.
        That is the third time on this device that a colour carried over from a
        sibling has been wrong, and the third time sampling took a minute. -->
-  <circle id="cage-left-rivet-1" cx="128.74" cy="26.79" r="2.90" fill="none" stroke="#4d5055" stroke-width="0.90"/>
-  <circle id="cage-left-rivet-2" cx="128.74" cy="35.04" r="2.30" fill="none" stroke="#38393f" stroke-width="1.15"/>
-  <circle id="cage-left-stud" cx="128.74" cy="35.04" r="0.70" fill="#2f3035"/>
+  <!-- DRAWN DULL ON PURPOSE, AND THE MEASUREMENT SAYS DARKER. The figure gives
+       #4d5055 and #38393f, two of the darkest marks on this strip, and drawn at
+       that weight they read as named hardware - a port, a lamp, something a
+       viewer should be able to identify. They are neither. They are pressed
+       into the metal, and the drawing's job is to say "formed metal, nothing to
+       look up" rather than to match a photograph's contrast.
+       So the SIZES stay measured - 2.90 and 2.30 radius, 0.90 and 1.15 wall,
+       which a radial profile separated and which no eye would have guessed -
+       and only the tone is pulled back, to one step off the land the way the
+       cage's other rings sit one step off their panel. What was measured and
+       what was chosen are different things and both are recorded. -->
+  <circle id="cage-left-rivet-1" cx="128.74" cy="26.79" r="2.90" fill="none" stroke="#868d95" stroke-width="0.90"/>
+  <circle id="cage-left-rivet-2" cx="128.74" cy="35.04" r="2.30" fill="none" stroke="#868d95" stroke-width="1.15"/>
+  <circle id="cage-left-stud" cx="128.74" cy="35.04" r="0.70" fill="#7d848c"/>
   <!-- THE PANEL OVER THE RIGHT OF IT IS REAL AND ITS OUTLINE IS NOT MEASURABLE.
        The operator saw metal lying over part of this group, and the figure
        agrees in the only way it can: a duller band at face 277.75..279.75 that
@@ -209,22 +220,51 @@
        three sweeps for dark-on-light and for light-on-dark found nothing here.
        Read off a character map of raw grey values instead. -->
   <g id="drive-labels">
-    <rect x="110.24" y="6.04" width="8.50" height="31.75" rx="0.5" fill="#4d5055"/>
+    <!-- THE TWO SIDES ARE ONE PART MIRRORED, and the left one was drawn from
+         its own measurements first, which made it 8.50 wide against the right's
+         11.00 and a different grey.
+         MIRRORING ABOUT face 289.75 IS WHAT SETTLES IT. That axis is fixed by
+         the two arrow apexes, 256.50 and 323.00, which are the sharpest
+         features either plate carries - and it then puts the right plate's far
+         edge at 254.75, against 254.5 measured. A quarter of a millimetre,
+         from a number that took no part in choosing the axis.
+         THE DISAGREEMENT IS ALL ON ONE SIDE. The mirror says this plate reaches
+         265.75 and the figure shows it stopping at 263.00 - 2.75 short, on the
+         right, which is the edge the flange lies over. A plate that measures
+         short on exactly the side something covers is a plate that is being
+         measured through an obstruction, not a plate of a different size.
+         SO THE FIGURE'S OWN NUMBERS ARE SET ASIDE HERE, deliberately: width
+         from the mirror rather than from the measurement, and the same
+         #696d72 as its opposite number rather than the #4d5055 this one
+         sampled, because that darker grey is the flange's shadow and not the
+         paint. Both readings are real; what changed is which question they were
+         answering. -->
+    <rect x="110.49" y="6.04" width="11.00" height="31.75" rx="0.5" fill="#696d72"/>
     <rect x="169.49" y="6.04" width="11.00" height="31.75" rx="0.5" fill="#696d72"/>
-    <!-- A pressed pad with a hole between 12 and 13, straddling the bay
-         boundary at y 22.8 so it belongs to neither. Its opposite number beside
-         the second plate is INFERRED FROM A BROKEN HIGHLIGHT ARC - two bright
-         patches at face 312.0..313.5 and 314.5..315.5 - not from an outline. -->
-    <rect x="112.74" y="19.79" width="5.50" height="6.25" rx="0.6" fill="#b9c0c6"/>
-    <circle cx="115.49" cy="22.79" r="0.3" fill="#7a8188"/>
+    <!-- THE WHITE PAD WITH A DOT IS NOT DRAWN, and it was measured cleanly.
+         It is the flange lying over this plate - the thing that made the plate
+         read short - so drawing it means drawing an obstruction across the
+         label it obscures. Left off so the numbering reads, which is what this
+         face is for; the plate behind it is shown whole instead.
+         The round fitting is kept on BOTH sides. On the right it is inferred
+         from a broken highlight arc rather than an outline; on the left it is
+         not measured at all, only mirrored, and sits where the flange would
+         have hidden it. -->
+    <circle cx="121.94" cy="24.89" r="1.5" fill="#c1c6ca"/>
+    <circle cx="121.94" cy="24.89" r="0.3" fill="#6d747c"/>
     <circle cx="169.04" cy="24.89" r="1.5" fill="#c1c6ca"/>
     <circle cx="169.04" cy="24.89" r="0.3" fill="#6d747c"/>
   </g>
+  <!-- THE DIGITS SIT AT THE MIRROR'S x, NOT THE FIGURE'S. Mirroring the right
+       pair's 319.00 about face 289.75 gives 260.50 where this side measured
+       259.80 - seven tenths, on glyphs 3.3 mm tall at 4 px/mm, which is inside
+       what this figure can resolve. The arrows mirror to their measured
+       positions exactly, so the axis is not in question and the 0.70 is. -->
   <g id="silkscreen" fill="#15181b">
     <path transform="translate(112.24 11.04)" d="M2.5 0 L0 1.65 L2.5 3.3 Z"/>
-    <text x="115.54" y="14.34" font-family="sans-serif" font-size="4.6" text-anchor="start">12</text>
+    <text x="116.24" y="14.34" font-family="sans-serif" font-size="4.6" text-anchor="start">12</text>
     <path transform="translate(112.24 28.79)" d="M2.5 0 L0 1.65 L2.5 3.3 Z"/>
-    <text x="115.54" y="32.09" font-family="sans-serif" font-size="4.6" text-anchor="start">13</text>
+    <text x="116.24" y="32.09" font-family="sans-serif" font-size="4.6" text-anchor="start">13</text>
     <path transform="translate(176.24 11.04)" d="M0 0 L2.5 1.65 L0 3.3 Z"/>
     <text x="174.74" y="14.34" font-family="sans-serif" font-size="4.6" text-anchor="end">14</text>
     <path transform="translate(176.24 28.79)" d="M0 0 L2.5 1.65 L0 3.3 Z"/>
