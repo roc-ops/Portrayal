@@ -478,11 +478,11 @@ views:
         # edge to an eighth past the VGA's outer standoff. A port that moves
         # takes the end of the bar with it. Colour is a plain dark for now -
         # the shape is what is being established.
-        - {id: legend-bar, at: [25.43, 80.0], size: [90.67, 3.175], fill: '#33383d'}
+        - {id: legend-bar, at: [25.43, 80.5], size: [90.67, 3.175], fill: '#33383d'}
       cutouts:
-        - {id: idrac9, at: [28.60, 66.00], size: [16.0, 14.0], shape: rect}
-        - {id: serial, at: [53.63, 68.60], size: [20.47, 11.4], shape: rect}
-        - {id: vga, at: [87.30, 68.60], size: [20.47, 11.4], shape: rect}
+        - {id: idrac9, at: [28.60, 66.50], size: [16.0, 14.0], shape: rect}
+        - {id: serial, at: [53.63, 69.10], size: [20.47, 11.4], shape: d-sub}
+        - {id: vga, at: [87.30, 69.10], size: [20.47, 11.4], shape: d-sub}
         - {id: usb-1, at: [120.20, 71.47], size: [12.0, 4.5], shape: rect}
         - {id: usb-2, at: [120.20, 79.59], size: [12.0, 4.5], shape: rect}
         - {id: sys-id, at: [8.36, 72.04], size: [7.0, 7.0], shape: circle}
@@ -558,14 +558,18 @@ views:
         # THE LIBRARY'S RJ45, not a second opinion about what one looks like.
         # This was common/rj45-jack, which draws its own face at 15.8 x 13.2
         # where the governed aperture is 16.0 x 14.0. HELD BY ITS BOTTOM EDGE,
-        # not its corner: the iDRAC, serial and VGA share a baseline at y 80
-        # (fact sheet B.3) and that is the fact worth preserving, so y moves
-        # from 66.80 to 66.00 to keep the taller part sitting on the same line.
-        - {ref: std/rj45@1, id: idrac9, at: [28.60, 66.00], rotate: 180,
+        # not its corner: the iDRAC, serial and VGA share a baseline (fact
+        # sheet B.3) and that is the fact worth preserving, so y is set from
+        # the line rather than from each part's own top edge.
+        # THE LINE ITSELF IS NOW 80.5. All three sat 0.5 high against the ISM
+        # figure 8 overlay - the same 0.5, on all three, which is what says it
+        # is the shared baseline that was out and not three separate readings.
+        # The legend bar under them moved with them, because it labels them.
+        - {ref: std/rj45@1, id: idrac9, at: [28.60, 66.50], rotate: 180,
            attrs: {role: management}, group: mgmt-ports, rel-pos: 1}
-        - {ref: common/db9-receptacle@1, id: serial, at: [48.47, 68.05],
+        - {ref: common/db9-receptacle@1, id: serial, at: [48.47, 68.55],
            group: mgmt-ports, rel-pos: 2}
-        - {ref: common/vga-receptacle@1, id: vga, at: [82.13, 68.05],
+        - {ref: common/vga-receptacle@1, id: vga, at: [82.13, 68.55],
            group: mgmt-ports, rel-pos: 3}
         - {ref: std/usb-a@1, id: usb-1, at: [120.20, 71.47],
            attrs: {speed: usb-3.0}, group: mgmt-ports, rel-pos: 4}

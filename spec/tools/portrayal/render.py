@@ -111,6 +111,63 @@ def local(tag):
     return tag.split("}")[-1]
 
 
+# 10 degrees +/-2 of taper a side and a 3.35 radius in four places, TE
+# application specification 114-40010 Rev G Figure 3 - the mounting panel cutout
+# every D-subminiature shell passes through, which is the same shape at every
+# shell size. The radius is absolute in the specification rather than
+# proportional; it is clamped only so a box too small to carry it still closes.
+DSUB_TAPER = 0.17632698070846498          # tan(10 degrees)
+DSUB_RADIUS = 3.35
+
+
+def _dsub_path(x, y, w, h):
+    """The D of D-subminiature: wide edge at top, both flanks raked in."""
+    import math
+    t = h * DSUB_TAPER
+    # DERIVED, NOT GUESSED. A first draft clamped at 0.29 * h and the clamp bit
+    # at exactly the standard size - 0.29 * 11.40 is 3.306, a hair under the
+    # 3.35 the specification gives - so the shape came out subtly wrong for the
+    # one box that matters most. The real limits are where the fillets meet:
+    # 2.03r along a raked side of length h/cos(10), and 1.68r along the narrow
+    # bottom edge. Inside those the specification's radius stands.
+    r = min(DSUB_RADIUS, 0.49 * h, (w - 2 * t) / 1.7)
+    pts = [(x, y), (x + w, y), (x + w - t, y + h), (x + t, y + h)]
+    tang = []
+    for i, p in enumerate(pts):
+        a, b = pts[i - 1], pts[(i + 1) % 4]
+
+        def unit(q):
+            dx, dy = q[0] - p[0], q[1] - p[1]
+            d = math.hypot(dx, dy) or 1.0
+            return dx / d, dy / d
+        ua, ub = unit(a), unit(b)
+        half = math.acos(max(-1.0, min(1.0, ua[0] * ub[0] + ua[1] * ub[1]))) / 2
+        d = r / math.tan(half)
+        tang.append(((p[0] + ua[0] * d, p[1] + ua[1] * d),
+                     (p[0] + ub[0] * d, p[1] + ub[1] * d)))
+    seg = [f"M{tang[0][0][0]:.3f} {tang[0][0][1]:.3f}"]
+    for i in range(4):
+        to = tang[i][1]
+        seg.append(f"A{r:.3f} {r:.3f} 0 0 1 {to[0]:.3f} {to[1]:.3f}")
+        nxt = tang[(i + 1) % 4][0]
+        seg.append(f"L{nxt[0]:.3f} {nxt[1]:.3f}")
+    seg[-1] = "Z"
+    return " ".join(seg)
+
+
+def _slot_path(x, y, w, h):
+    """A stadium: semicircular ends on the short axis."""
+    if w >= h:
+        r = h / 2
+        return (f"M{x + r:.3f} {y:.3f} H{x + w - r:.3f} "
+                f"A{r:.3f} {r:.3f} 0 0 1 {x + w - r:.3f} {y + h:.3f} "
+                f"H{x + r:.3f} A{r:.3f} {r:.3f} 0 0 1 {x + r:.3f} {y:.3f} Z")
+    r = w / 2
+    return (f"M{x + w:.3f} {y + r:.3f} V{y + h - r:.3f} "
+            f"A{r:.3f} {r:.3f} 0 0 1 {x:.3f} {y + h - r:.3f} "
+            f"V{y + r:.3f} A{r:.3f} {r:.3f} 0 0 1 {x + w:.3f} {y + r:.3f} Z")
+
+
 URL_REF = re.compile(r"url\(#([A-Za-z0-9_-]+)\)")
 
 
@@ -964,10 +1021,24 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         cut_g.set("data-class", "cutouts")
         for c in parts["cutouts"]:
             x, y = c["at"]; cw_, ch_ = c["size"]
-            if c.get("shape") == "circle":
+            shape = c.get("shape")
+            if shape == "circle":
                 e = ET.SubElement(cut_g, f"{{{SVG_NS}}}ellipse")
                 e.set("cx", f"{x + cw_ / 2:g}"); e.set("cy", f"{y + ch_ / 2:g}")
                 e.set("rx", f"{cw_ / 2:g}"); e.set("ry", f"{ch_ / 2:g}")
+            elif shape in ("d-sub", "slot"):
+                # THE SCHEMA OFFERED FOUR SHAPES AND THIS DREW TWO. `d-sub` and
+                # `slot` fell through to the rect branch and were punched as
+                # rectangles - so a D-subminiature aperture rendered as a black
+                # box with the connector's D sitting inside it, and the corners
+                # the hole does not have showed as ink. An enum whose values are
+                # accepted and then silently ignored is worse than a smaller
+                # enum, because the model says the right thing and the drawing
+                # does not. Nothing in the library used either value, so this
+                # changes no existing render.
+                e = ET.SubElement(cut_g, f"{{{SVG_NS}}}path")
+                e.set("d", _dsub_path(x, y, cw_, ch_) if shape == "d-sub"
+                      else _slot_path(x, y, cw_, ch_))
             else:
                 e = ET.SubElement(cut_g, f"{{{SVG_NS}}}rect")
                 e.set("x", f"{x:g}"); e.set("y", f"{y:g}")
