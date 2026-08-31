@@ -512,11 +512,16 @@ views:
         # So: a TALL bay where the whole column is riser, and a SHORT one under
         # the drives where only the bottom band is. Both put slot 4's opening at
         # the same y 46.46, which is the check that nothing moved.
-        - {id: riser-2, at: [161.0, 4.0], size: {w: 95.0, h: 62.0},
+        # 89.70 WIDE, NOT 95: the supply beside it starts at 250.70 and this
+        # bay starts at 161.0, so 95 does not fit. The riser plate was
+        # photo-measured at 95 and the supply's left edge at 250.70, and both
+        # cannot be right - recorded here as the bay the chassis has room for,
+        # with the disagreement left visible rather than split between them.
+        - {id: riser-2, at: [161.0, 4.0], size: {w: 89.70, h: 62.0},
            accepts: [dell/riser-2-2fh-1lp-14g@1, dell/riser-2-3-blank-14g@1],
            default: dell/riser-2-2fh-1lp-14g@1,
            group: risers, rel-pos: 2, only-in: [no-rear-storage]}
-        - {id: riser-2-lp, at: [161.0, 46.0], size: {w: 95.0, h: 20.0},
+        - {id: riser-2-lp, at: [147.87, 46.93], size: {w: 79.2, h: 18.42},
            accepts: [dell/riser-2-1lp-14g@1],
            default: dell/riser-2-1lp-14g@1,
            group: risers, rel-pos: 2, only-in: [rear-4-sff]}
@@ -527,10 +532,10 @@ views:
         - {id: ndc, at: [139.6, 66.4], size: {w: 90.3, h: 14.5},
            accepts: [dell/ndc-4x-rj45-14g@1], default: dell/ndc-4x-rj45-14g@1,
            group: ndc, rel-pos: 1}
-        - {id: psu-1, at: [256.6, 45.0], size: {w: 88.7, h: 41.8},
+        - {id: psu-1, at: [250.70, 45.0], size: {w: 87.5, h: 41.8},
            accepts: [dell/psu-1100w-ac-14g@1], default: dell/psu-1100w-ac-14g@1,
            group: psus, rel-pos: 1}
-        - {id: psu-2, at: [345.3, 45.0], size: {w: 88.7, h: 41.8},
+        - {id: psu-2, at: [340.90, 45.0], size: {w: 87.5, h: 41.8},
            accepts: [dell/psu-1100w-ac-14g@1], default: dell/psu-1100w-ac-14g@1,
            group: psus, rel-pos: 2}
         - {id: drive-r0, at: [173.0, 4.9], size: {w: 79.4, h: 17.868},
