@@ -7,67 +7,85 @@ profile: compute
 # SURFACE-MOUNTED, AND THAT IS A DRAWING FACT AS WELL AS A MECHANICAL ONE.
 # render.py draws placements first and bays second, so a placement can never sit
 # in front of a bay - which put this handle UNDER the riser plate and the NIC
-# card it is bolted over, with its rail three-quarters hidden. `behaviour:
-# mounts` defers a part to the second pass, "now safely in front of the
-# openings", which is where a handle screwed to the outside of the panel belongs.
-# The vocabulary already existed for labels and panel screws; a handle is the
-# same kind of claim about how the part attaches, not a rendering trick.
+# card it is bolted over. `behaviour: mounts` defers a part to the second pass,
+# "now safely in front of the openings", which is where a handle screwed to the
+# outside of the panel belongs. The vocabulary already existed for labels and
+# panel screws; a handle is the same kind of claim about how a part attaches.
 behaviour: mounts
 description: >-
-  The moulded rear grab handle of a 14G PowerEdge - a frame around the NIC
-  daughter card and the low-profile riser slot, whose middle rail is what the
-  chassis is pulled out by
-size: {w: 113.55, h: 43.25, d: 74.5}
+  The moulded rear grab handle of a 14G PowerEdge - a block on the left, a rail
+  running right and a leg falling at the far end, bolted over the NIC daughter
+  card and the low-profile riser slot, and pulled to draw the chassis out
+size: {w: 111.69, h: 41.85, d: 49.59}
 provenance:
+  the-token-is-measured-and-that-is-deliberate: >-
+    A VENDOR CAD FILE MEASURED IN SOFTWARE IS `measured`, NOT `drawing`, and the
+    precedent is std/sma@1's barrel key, which says it in as many words: it is
+    the geometry the vendor ships rather than a reading off artwork. There is no
+    `vendor-cad` token and this part does not invent one - what matters
+    downstream is that no caliper touched hardware here, and that belongs in the
+    source line where a reader will see it, not in an enum value that would have
+    to be taught to every consumer.
   size: >-
-    vendor-cad - Dell's own service model, r740xd.glb, named shell
-    `DELL_R740XD_ Rear Handle-1.002`, 9,354 triangles. NOT MEASURED OFF THE
-    FIGURE: ISM figure 8 resolves this face at 2.6 px/mm and this is a dark part
-    on a dark ground, which is why an earlier attempt at this handle was
-    abandoned as too approximate rather than recorded badly.
+    measured - Dell's own service model, r740xd.glb, named shell
+    `DELL_R740XD_ Rear Handle-1.002`. NOT MEASURED OFF THE FIGURE: ISM figure 8
+    resolves this face at 2.6 px/mm and this is a dark part on a dark ground,
+    which is why an earlier attempt at this handle was abandoned as too
+    approximate rather than recorded badly.
+    THE SIZE IS OF WHAT IS VISIBLE, not of the part. The shell's own box is
+    113.55 x 43.25 x 74.5; a third of that depth is inside the chassis and does
+    not belong in a face view. See the outline key.
   outline: >-
-    vendor-cad - filling the shell's triangles flat gives the silhouette, and a
-    silhouette IS a face view. Read at 8 px/mm:
-    45.2-47.2 a full-width top rail; 47.4-62.9 a left post out to 159.7 and a
-    right post from 242.0, leaving the upper window; 63.2-67.2 the full-width
-    MIDDLE RAIL, which is the part a person holds; 67.2-84.2 a left edge to
-    138.0 and the right leg from 228.5, leaving the lower window; 84.7-85.6 the
-    full-width bottom edge. Face coordinates, so they drop straight into a
-    device.
+    measured - extracted by spec/tools/intake/cad-outline.py, which projects
+    ONLY the geometry standing in front of the panel, rasterises it at 16 px/mm
+    and simplifies the contours at 0.30 mm.
+    THE CUT PLANE IS z 713.5, the PSU body's front face - the one part in this
+    scene known to sit in the panel plane. The handle's own flange agrees: split
+    by region, its lower left and bottom edges stop dead at 709.6-709.7 while
+    every other region reaches 763, and a region that stops at one z while the
+    rest reaches much further IS what bolts to the panel.
+    Three subpaths survive: the body, the screw hole in the left block, and a
+    small bar at the top right. THE 0.30 IS A SIMPLIFICATION TOLERANCE and must
+    not be measured back off this outline as though it were a chamfer.
+  the-first-trace-was-the-whole-part: >-
+    RECORDED BECAUSE IT LOOKED RIGHT AND WAS NOT. Projecting the entire shell -
+    flange, bosses, returns and all - gives a solid frame 113.55 x 43.25 with
+    two windows in it, and that frame lints clean, places cleanly and renders
+    without complaint. It is simply not the hardware. A face view shows what a
+    person standing behind the rack can see, and geometry behind the sheet metal
+    is not visible however faithfully it was traced. The region-z table already
+    said so - two of seven regions stopping at 709 while the rest reached 763 -
+    and it was read straight past.
   the-position-is-checkable-and-checks-out: >-
-    THE CAD IS NOT POSED IN X OR Y HERE, and that is not assumed. The handle's
-    lower window lands at face 138.0-228.5, 67.2-82.7; the R740xd had already
-    placed its NDC bay from the figure at 139.6-229.9, 66.4-80.9. Agreement to
-    about 1.5 mm between two readings that knew nothing of each other is what
-    licenses the rest of these numbers. Whatever this scene does along z, it
-    does not move this part across the face.
-  the-sweep-is-simplified: >-
-    drawing - the lower window's top-right corner sweeps from 215.5 out to 228.5
-    between y 67.7 and 71.2, which is where the rail turns into the leg and is
-    the S a photograph shows. The CAD gives that curve exactly; it is drawn as
-    one 12.00 corner radius instead. A deliberate simplification, recorded so
-    nobody measures the radius back off this part.
+    THE CAD IS NOT POSED IN X OR Y HERE, and that is not assumed. The full
+    shell's lower opening lands at face 138.0-228.5, 67.2-82.7; the R740xd had
+    already placed its NDC bay off the figure at 139.6-229.9, 66.4-80.9.
+    Agreement to about 1.5 mm between two readings that knew nothing of each
+    other is what licenses the rest of these numbers.
   depth: >-
-    vendor-cad for the BOX and nothing more - 74.5 along z. How much of that
-    stands proud is a different question and this contract does not answer it;
-    see the relief key.
-  relief-is-NOT-taken-from-this-pose: >-
-    THE MEASUREMENT IS IMPLAUSIBLE AND THAT IS A FAILED CHECK, NOT A FINDING.
-    Split by region, the handle has two clear z populations: its lower left edge
-    and bottom edge stop at 709.6-709.7, which is the chassis shell's own rear
-    face at 708.9 - so the mounting flange IS correctly seated, and the part is
-    not simply dragged backwards. Everything else - top rail, both posts, the
-    middle rail - ends flat at 762.7-763.1, which is 53.4 proud of that flange.
-    Nearly two and an eighth inches. A rear handle standing that far off the
-    panel would foul a rack door.
-    AND THIS SCENE DEMONSTRABLY POSES PARTS DEPLOYED: the power supply in the
-    same file boxes 132.6 wide against an 86.3 body because its own handle is
-    swung open. So a fold-out handle drawn deployed fits every observation,
-    including the flat 763 front plane across all four regions.
-    No protrusion is recorded rather than a guessed one. The operator called the
-    PSU lever and grip off the hardware and should call this one the same way;
-    until then the handle draws flat, which is honest about what is known.
+    measured - 49.59 proud of the panel plane, and that is the whole point of
+    going to the model for this part: a straight-on figure cannot show
+    protrusion at all. Nearly two inches, which was queried here as implausible
+    and is NOT - the operator's reading is that this handle exists to pull the
+    chassis out, and two inches of grip is what that takes. The doubt is
+    recorded because it was wrong: a check that says "this cannot be right"
+    is only ever a reason to go and ask.
+    WHAT IS NOT MODELLED is the section behind that front face. The side
+    elevation shows a hooked profile rather than a solid block, so extruding the
+    outline is a first approximation and says so here.
+relief:
+  wall: '#15181b'
+  features:
+  - node: body
+    out: 49.59
+    color: '#2a2d31'
+    confidence: measured
+    source: >-
+      dell/rear-handle-14g@1's own depth key - Dell's service model, measured
+      from the panel plane at z 713.5 to the handle's own front at 763.1. Every
+      visible region of the part ends flat at 762.7-763.1, which is why one
+      number covers the whole outline rather than a feature per region. The
+      hooked section behind that front face is not modelled.
 elements:
-  frame: {at: [0.0, 0.0], size: [113.55, 43.25], class: bezel}
-  rail: {at: [0.4, 20.85], size: [112.75, 3.95], class: handle}
+  body: {at: [0.0, 0.0], size: [111.69, 41.85], class: handle}
 skins: [default]
