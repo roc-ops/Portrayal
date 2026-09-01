@@ -219,11 +219,16 @@ relief:
     confidence: estimated
     source: operator - rounded head, about a sixteenth proud
 parts:
-  # THE INLET IS THE LIBRARY'S, TURNED. `rotate: 90` puts the chamfered pair of
-  # corners on the RIGHT and the earth pin centre-right with line and neutral
-  # stacked to its left, which is how Dell mounts it and what figure 9 shows at
-  # 4x. common/psu-ac-650 composes the same part at 270 for the mirror case.
-  - {ref: std/c14-inlet@1, id: inlet, at: [6.70, 11.0], rotate: 90, behind: true}
+  # THE C20, NOT A C14, AND THIS LINE WAS WRONG UNTIL THE OPERATOR SPOTTED IT.
+  # The part was created by copying the 1100 W contract and swapping the inlet
+  # ref by string replacement; the replacement silently matched nothing, so the
+  # knockout was resized to a C20 while a C14 stayed composed inside it. The
+  # drawing showed a small chamfered connector floating in an oversized hole.
+  # Composed `behind` for the same reason the C14 is: the body carries the
+  # knockout, so without it the inlet is drawn and then painted over.
+  # `at` puts the rotated 32.4 x 24.4 part's centre on (20.10, 19.55), which is
+  # where the C14's opening was centred - see the placement note in provenance.
+  - {ref: std/c20-inlet@1, id: inlet, at: [3.90, 7.35], rotate: 90, behind: true}
 elements:
   grip:
     at: [33.04, 3.65]
