@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 0.12.2
+version: 0.13.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -745,13 +745,40 @@ views:
            at: [144.66, 5.35], group: furniture, rel-pos: 21}
         - {ref: dell/thumbscrew-blue-14g@1, id: cage-screw-right,
            at: [282.59, 26.00], group: furniture, rel-pos: 22}
-        # THE REAR DRIVE CAGE'S OWN FACEPLATE, which the two thumbscrews above
-        # are turned into. A frame: top rail, bottom rail and two tabs, with the
-        # drive openings between them, standing 14.13 proud of the panel.
-        # NOT `behaviour: mounts` - the drives are inserted INTO this, so it
-        # must draw behind them, which a plain placement does.
-        - {ref: dell/drive-cage-rear-14g@1, id: drive-cage-rear,
-           at: [144.26, 1.71], frames: [drive-24, drive-25, drive-26, drive-27],
+        # THE CHASSIS ACROSS REAR BAYS 2 AND 3, and it is ALWAYS PRESENT.
+        # It was `only-in: [rear-4-sff]` when it was called a drive cage, so a
+        # machine with PCIe in those bays lost its rails, screw tabs and vent
+        # panels along with the drives. The four rear views show the divider,
+        # its thumbscrew and the T land unchanged whether the bays hold drives,
+        # a blank or PCIe slots - structure that does not vary with what a bay
+        # holds belongs to the chassis.
+        # IT KEEPS `frames:`, AND DROPPING IT WAS A MISTAKE L13 CAUGHT. The
+        # reasoning was that the per-bay plates surround the drives and this
+        # does not - but `frames:` is about the BOX, not the ink: "ids this part
+        # SURROUNDS rather than covers - a frame whose bounding box takes in
+        # openings its ink does not". This part's box is 287.18 wide and spans
+        # all four drive positions, which is the definition.
+        # The plates do NOT frame anything: at 254.75 and 311.80 they sit beside
+        # the drives, not around them, and overlap none of them.
+        - {ref: dell/rear-bay-frame-14g@2, id: rear-bay-frame,
+           at: [144.26, 1.71],
+           # AND THE RISERS TOO, now that this is always present. In the
+           # no-rear-storage configuration riser 2 and riser 3 fill the same
+           # bays the drives would, and this part's box spans them exactly as
+           # it spans the drives - its ink is the T land above and the rails and
+           # panels around, never the openings themselves.
+           frames: [drive-24, drive-25, drive-26, drive-27, riser-2, riser-3,
+                    bay2-drive-plate, bay3-drive-plate],
+           group: furniture, rel-pos: 19}
+        # THE NUMBERED PLATE, ONE PER BAY. Mirror images about face 289.75; the
+        # skin is named for the numbers it carries, because which numbers a bay
+        # wears is decided by the front - 24-27 behind a 24-bay front, 12-15
+        # behind a 12-bay one.
+        - {ref: dell/rear-drive-plate-14g@1, id: bay2-drive-plate,
+           at: [254.75, 7.75], skin: n24-25,
+           only-in: [rear-4-sff], group: furniture, rel-pos: 19}
+        - {ref: dell/rear-drive-plate-14g@1, id: bay3-drive-plate,
+           at: [311.80, 7.75], skin: n26-27,
            only-in: [rear-4-sff], group: furniture, rel-pos: 19}
   # THE FOUR FACES THAT WERE MISSING. 83 of the library's 84 devices carry all
   # six views and this one carried two, which is what stops it being opened in
@@ -919,6 +946,14 @@ gaps:
       models no mid bay at all, which is a whole third drive location missing
       rather than a detail.
     wanted: >-
+      RE-READ AFTER THE REAR BAYS WERE SEPARATED, and still open. The rear half
+      of this is now expressible: the chassis structure across bays 2 and 3 is
+      its own always-present part, and what each bay holds - drives, PCIe, a
+      blank - varies independently of the other. That was the piece `only-in`
+      could not reach while one 287 mm component owned both bays.
+      WHAT REMAINS IS THE FRONT. The 24 x 2.5 inch and 12 x 3.5 inch fronts are
+      different panels, not different occupancy, and until the second is drawn
+      nothing exercises the face-binding that would couple it to a rear.
       A way for a configuration to constrain more than one view at once. Today
       `only-in` scopes a bay to a configuration and every view chooses
       independently, so nothing stops a consumer selecting a 24-bay front and a

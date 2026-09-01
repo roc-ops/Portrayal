@@ -1,0 +1,81 @@
+format: 1
+kind: module
+name: drive-carrier-35
+version: 1.0.0
+class: drive
+behaviour: fills
+profile: server
+description: >-
+  A 3.5 inch hot-swap drive in its carrier, drawn wide - the orientation both
+  the rear bays and a 12 x 3.5 inch front mount it in
+size: {w: 107.8, h: 26.5, d: 155.0}
+attrs:
+  form-factor: 3.5in
+provenance:
+  size: >-
+    photo-measured - ISM figure 9, "Back view of 2 x 3.5 inch drive system",
+    which passes Gate 1 at 0.27% against a 434 x 86.8 rear face. That is a
+    BETTER figure than the 8 this whole device was built from, at 1.05%, and it
+    had never been opened.
+    The two carriers in it measure 154.80..262.80 and 314.20..421.80 - 108.0 and
+    107.6 wide - and 7.5..34.0 tall. Drawn at 107.8 x 26.5.
+    THE CHECK IS THE DRIVE INSIDE IT. A bare 3.5 inch drive is 101.6 x 26.1, so
+    a carrier at 107.8 x 26.5 is the drive plus a few millimetres of frame. A
+    reading of the BAY OPENING rather than the carrier would have come out
+    several millimetres larger and looked just as plausible; that it lands on
+    the drive is what says which of the two was measured.
+  it-declares-no-standard-and-that-is-deliberate: >-
+    A first draft carried `conforms: drive-35` and lint rejected it - there is
+    no such registry key. The right answer was not to add one: common/
+    drive-carrier-25 declares no `conforms` either, and only std/drive-25, the
+    BARE DRIVE, does.
+    The registry's own drive-25 entry says why, and says it about this exact
+    confusion: "three different things get called a 2.5 inch drive bay and only
+    this one is standard - the chassis OPENING is the chassis's, the CARRIER is
+    the vendor's, and the DRIVE is everybody's." A carrier is Dell's part with
+    Dell's latch and Dell's lamps; SFF-8301 has nothing to say about it.
+  depth: >-
+    estimated - 155.0. Nothing held here dimensions a 3.5 inch carrier's depth;
+    this is the drive's own 147 mm plus a carrier's frame, and it is a placement
+    for the 3D extrusion rather than a measurement.
+  one-carrier-per-bay: >-
+    THE TWO CARRIERS ARE IN DIFFERENT BAYS, which is the whole reason this part
+    exists rather than a 2 x 3.5 inch cage. Bay 2 runs to about face 288 and bay
+    3 from there; the left carrier sits at 154.80 and the right at 314.20, one
+    each side. A rear with two 3.5 inch drives is not one assembly - it is two
+    bays each fitted with one carrier, and either bay could instead hold PCIe
+    slots or a blank.
+  the-vent-pattern-is-not-drawn: >-
+    The real carrier's vent is honeycomb. At 4 px/mm the figure resolves three
+    dark panels separated by bright ribs and no cell structure at all, so three
+    panels is what is drawn. Drawing a hex grid would be inventing a pattern
+    from knowing what these usually look like, which is the failure this note
+    exists to prevent.
+  the-latch-is-amber-and-that-is-a-touchpoint: >-
+    photo-measured - a ring at local 22.0, 13.25, about 10 across, in Dell's
+    hot-swap terracotta rather than the grey ring the 2.5 inch carrier carries.
+    The service label's own legend gives that colour its meaning: terracotta is
+    serviceable while the system is running.
+  capacity-is-an-illustration: >-
+    The label reads 10 TB SATA 7.2K, transcribed from the figure. Which drive a
+    buyer fits is a purchase, not a property of the carrier - the default skin
+    illustrates one and other capacities are skins, exactly as
+    common/drive-carrier-25 handles it.
+elements:
+  lamp-activity:
+    at: [4.6, 4.4]
+    size: [2.6, 4.4]
+    class: led
+    states:
+      - 'off'
+      - {name: active, color: '#22c55e', behavior: blinking}
+  lamp-status:
+    at: [4.6, 15.8]
+    size: [2.6, 4.4]
+    class: led
+    states:
+      - 'off'
+      - {name: ready, color: '#22c55e'}
+      - {name: fault, color: '#f59e0b', behavior: blinking}
+      - {name: rebuild, color: '#22c55e', behavior: blinking}
+skins: [default]

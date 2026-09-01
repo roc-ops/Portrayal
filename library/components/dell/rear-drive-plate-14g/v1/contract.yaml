@@ -1,0 +1,56 @@
+format: 1
+kind: component
+name: rear-drive-plate-14g
+version: 1.0.0
+class: mechanical
+profile: server
+description: >-
+  The numbered plate at the inboard end of one rear drive bay on a 14G
+  PowerEdge - two slot numbers, each with an arrow pointing at the drive it names
+size: {w: 12.95, h: 31.75, d: 2.0}
+provenance:
+  it-comes-and-goes-with-the-drives: >-
+    WHY THIS IS ITS OWN PART. It used to live in a 287.18 mm component that
+    spanned both rear bays and was `only-in: [rear-4-sff]`, so a machine with
+    PCIe in those bays lost the chassis rails and vent panels along with the
+    drive numbers.
+    Comparing the four rear views - drives fitted, vented blank, PCIe slots -
+    the divider, its thumbscrew and the T land are identical in all three, and
+    only the numbered plate changes: in the blanked view it is gone with the
+    drives it names. So the structure stayed in dell/rear-bay-frame-14g and this
+    left, one instance per bay.
+  the-two-plates-are-one-part-mirrored: >-
+    Mirrored about face 289.75, an axis fixed by the two arrow apexes at 256.50
+    and 323.00 - the sharpest features either plate carries - and confirmed by
+    what it predicts: the far edge lands at 254.75 against 254.50 measured, a
+    quarter of a millimetre from a number that took no part in choosing it.
+    The arrow points AT the bay it names either way, which is what puts the
+    digits on opposite sides of it in the two skins.
+  the-numbers-depend-on-the-front: >-
+    THE SKINS ARE NAMED FOR THE NUMBERS THEY CARRY, not for left and right,
+    because which numbers a bay wears is decided by the FRONT.
+    ISM figure 19's "Rear View Configurations" panel draws two rear-4-SFF
+    layouts and numbers them differently - 12,13/14,15 and 24,25/26,27 - and
+    figures 17 and 18 give the fronts: 24 x 2.5 inch is bays 0-23, 12 x 3.5 inch
+    is 0-11. A rear starting at 24 sits behind a 24-bay front, one starting at
+    12 behind a 12-bay one.
+    `n24-25` and `n26-27` are the pair for the 24-bay front this device models.
+    `n12-13` and `n14-15` are the pair for the 12 x 3.5 inch front and are NOT
+    written, because that front is not drawn - the same gap the 3.5 inch carrier
+    and rear-2-lff stand on.
+  the-fitting-is-inferred-on-one-side: >-
+    A round fitting sits at the plate's inboard edge on both skins. On n26-27 it
+    is read from a BROKEN HIGHLIGHT ARC - two bright patches at face
+    312.0..313.5 and 314.5..315.5 - rather than from an outline. On n24-25 it is
+    not measured at all, only mirrored. The figure never showed a circle.
+  the-white-pad-is-not-drawn: >-
+    A pressed pad with a hole measured cleanly at face 257.00..262.50 on the
+    n24-25 side, and it is left off. It is the flange lying over the plate - the
+    thing that made that plate measure 2.75 short on the covered edge - so
+    drawing it means drawing an obstruction across the label it obscures. The
+    plate behind it is shown whole instead.
+  depth: >-
+    estimated - 2.0, a plate's thickness. Nothing held here dimensions it.
+elements:
+  plate: {at: [0.0, 0.0], size: [12.95, 31.75], class: bezel}
+skins: [n24-25, n26-27]

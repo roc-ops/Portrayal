@@ -1,15 +1,29 @@
 format: 1
 kind: component
-name: drive-cage-rear-14g
-version: 1.0.0
+name: rear-bay-frame-14g
+version: 2.0.0
 class: mechanical
 profile: compute
 description: >-
-  The rear drive cage's own faceplate on a 14G PowerEdge - a top rail, a bottom
-  rail and two thumbscrew tabs, standing proud of the rear panel with the drive
-  openings between them
+  The chassis structure across rear bays 2 and 3 on a 14G PowerEdge - rails,
+  screw tabs, vent panels and the T-shaped land, present whatever the bays hold
 size: {w: 287.18, h: 42.98, d: 14.13}
 provenance:
+  it-is-chassis-and-not-a-cage: >-
+    RENAMED FROM drive-cage-rear-14g, WHICH IS WHAT IT WAS NOT. That part was
+    287.18 wide, spanned rear bays 2 and 3, framed all four drives, and carried
+    `only-in: [rear-4-sff]` - so a machine with PCIe in those bays drew none of
+    it and the face lost its rails, screw tabs and vent panels along with the
+    drives.
+    THE FOUR REAR VIEWS SETTLE IT. With drives fitted, with a vented blank, and
+    with PCIe slots, the divider between the bays, its blue thumbscrew and the
+    T-shaped land above are IDENTICAL in all three. Structure that does not
+    change with what a bay holds is not part of what the bay holds.
+    Only `frame` and `cage-land` ever crossed the bay boundary and both are
+    chassis, so the seam was already where the split needed to fall.
+    What left is the numbered plate: it is gone in the blanked view along with
+    the drives it names, so it is now dell/rear-drive-plate-14g, placed once per
+    bay.
   size: >-
     measured - Dell's service model, r740xd.glb, `DELL_R740XD_2.5 Drive Rear
     Cage-1`, clipped to the panel plane at z 713.5. A vendor solid measured in
@@ -238,71 +252,6 @@ provenance:
     A ZERO-CONTRAST FILL WITH A STROKE IS A TRAP, because the fill looks
     deliberate in the source and only the border is visible in the render. The
     other two panels on this cage are still drawn that way.
-  which-numbers-this-cage-carries-depends-on-the-front: >-
-    DELL DOCUMENTS BOTH, and the numbers on this cage were changed because of
-    it. ISM figure 19, the service information label, has a panel titled "Rear
-    View Configurations" that draws four rear layouts and NUMBERS them. Two of
-    them carry four 2.5 inch drives, and they are numbered differently:
-      12, 13 / 14, 15   the variant ISM figure 8 photographs
-      24, 25 / 26, 27   the variant fitted to a 24-bay front
-    Figures 17 and 18 give the fronts on the same label: 24 x 2.5 inch is bays
-    0-23, 12 x 3.5 inch is 0-11. So a rear numbered 12-15 sits behind a 12-bay
-    front and a rear numbered 24-27 behind a 24-bay one, and this device models
-    24 front bays.
-    THE 12-15 WAS MEASURED AND IT WAS NOT WRONG. It is printed ink, read off
-    figure 8 at 7x - on the other chassis. What was wrong was pairing that rear
-    with this front, and no amount of re-reading figure 8 would have caught it,
-    because figure 8 cannot see the front of the machine it belongs to.
-    A MEASUREMENT CAN BE ACCURATE AND STILL BE ABOUT SOMETHING ELSE. The check
-    that found this was not a sharper look at the figure; it was arithmetic -
-    bays 12-15 imply eleven bays somewhere the model does not have - followed by
-    going and finding the label that settles it.
-  the-ids-follow-the-ink: >-
-    The bays were `drive-r0` to `drive-r3`, positional names invented before the
-    numbering was known. Dell prints a number on each bay, so the id is that
-    number: drive-24 to drive-27. An operator reading the tree now sees what the
-    metal says, which is the whole point of an id naming the FUNCTION.
-  the-slot-numbers-are-printed-on-this-cage: >-
-    photo-measured - four labels, 12 and 13 on the left pair and 14 and 15 on
-    the right, each a digit group and a filled triangle pointing AT the bay it
-    names.
-    THE INK IS BLACK ON DARK GREY and that is why it was missed three times.
-    Values run 0-50 against a 60-85 plate, so a dark-on-light threshold sees one
-    dark block and a light-on-dark threshold sees nothing inside it; both report
-    an empty region and neither reports an error. Found by dumping raw grey
-    values and printing them as characters - the same tool that found the two
-    squares a blob scan lost beyond riser 3, for the same reason.
-    THE TWO PAIRS ARE MIRRORED. 12 and 13 sit on a plate to their RIGHT with the
-    arrow pointing left; 14 and 15 on a plate to their LEFT with the arrow
-    pointing right. Digits face 259.80..263.00 and 315.50..319.00, triangles
-    256.50..259.00 and 320.50..323.00, rows at y 12.75 and 30.50 - a 17.75
-    pitch, which is the bay pitch, and the check that the labels belong to the
-    bays rather than to the metal.
-    THE PLATES ARE TWO DIFFERENT GREYS AND BOTH WERE SAMPLED. #4d5055 on the
-    left and #696d72 on the right, from medians over the same figure. They look
-    like they should match and they do not; copying one to the other is the
-    mistake that made this cage's rings invisible once already.
-    Left plate face 254.50..263.00, right 313.75..324.75 - the right edges from
-    a grey profile that holds 105-111 inside against 136 and 139 outside.
-  they-belong-to-the-cage-and-not-to-the-chassis: >-
-    Drawn as chassis decor and silkscreen first, and L21 caught it: riser-3
-    occupies face 318..413 in the no-rear-storage configuration and painted
-    straight over 14 and 15. The rule was right about a model that was wrong -
-    with riser 3 fitted there are no rear drives to name, so the labels have to
-    appear and disappear with the cage, which is already only-in: [rear-4-sff].
-    A LINT RULE FIRING IS NOT ALWAYS A DRAWING PROBLEM. This one named the
-    wrong owner, and the fix was to move the ink to the part it is printed on
-    rather than to teach the schema a new way to hide it.
-  the-second-fitting-is-inferred-from-a-highlight: >-
-    estimated - a pressed pad with a hole sits between 12 and 13 at face
-    257.00..262.50, y 21.50..27.75, straddling the bay boundary at 22.8 so it
-    belongs to neither label; that one is measured, and the hole is centred both
-    ways on the pad, which is the check that it is a fitting and not noise.
-    ITS OPPOSITE NUMBER BESIDE THE SECOND PLATE IS NOT. What the figure carries
-    there is a BROKEN ARC - bright patches at face 312.0..313.5 and
-    314.5..315.5, at 25.0..25.5 and 26.0..27.5 - which is a glare highlight on
-    something round, not an outline. A 3.0 circle at 313.30, 26.60 is drawn from
-    it, and the figure never showed a circle.
   outline: >-
     measured - extracted by spec/tools/intake/cad-outline.py, rasterised at
     16 px/mm and simplified at 0.40 mm. THAT 0.40 IS A SIMPLIFICATION TOLERANCE
