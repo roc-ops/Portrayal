@@ -1,19 +1,45 @@
 format: 1
 kind: module
-name: psu-1100w-ac-14g
+name: psu-2400w-ac-14g
 version: 1.0.0
 class: psu
 behaviour: fills
 profile: server
 description: >-
-  1100 W AC hot-plug power supply for a 14th-generation PowerEdge - C14 inlet,
+  2400 W AC hot-plug power supply for a 14th-generation PowerEdge - C14 inlet,
   a fan, and a translucent handle that is itself the status indicator
 attrs:
-  power-output-w: 1100
+  power-output-w: 2400
   form-factor: crps
-  inlet: c14
+  inlet: c20
   efficiency: platinum
 provenance:
+  why-this-is-a-separate-part-and-not-a-wattage-skin: >-
+    THE INLET IS A C20, NOT A C14, so the casting differs and this cannot be a
+    label change. dell/psu-1100w-ac-14g's own rule says as much: a supply
+    differing in more than the printed number is a different part.
+    NO R740xd DOCUMENT STATES THE CONNECTOR - not the ISM, not the spec sheet,
+    not Dell's online technical-specifications page, and not the 60-page R740
+    and R740xd Technical Guide, none of which contains a C13/C14/C19/C20 or IEC
+    token anywhere. The per-wattage power-cord tables only begin at 15G, and
+    even there the column names the CORD, so a C13 row means a C14 inlet.
+    IT COMES FROM THE SUPPLIES' OWN RATINGS. Dell's J1CC3 2400 W is rated
+    100-240 V at 16 A and is listed with a C19 cord, which mates a C20 inlet;
+    the Z2000E-S1 2000 W is rated 11.5 A, and a C14 is a 10 A connector. So the
+    C14-to-C20 boundary falls between 1600 and 2000 W, and 2000 W belongs with
+    this part rather than with the 1100 W's skins.
+    2400 W IS ALSO 200-240 V FOR FULL OUTPUT - the same unit delivers 1400 W on
+    100-120 V. That is an electrical fact and changes nothing in the drawing.
+  the-inlet-placement-is-provisional: >-
+    THE ONE THING HERE NOT MEASURED. No front-on figure or photograph of this
+    supply is held at a measurable scale - the operator's photographs show the
+    face and settle the LAYOUT, which is identical to the 1100 W, but not where
+    the larger inlet sits within it. The C20's opening is centred where the
+    C14's was, at (20.10, 19.55), and its bezel is thinner on the right to
+    clear the latch bar at 33.04.
+    Everything else on this face is the 1100 W's geometry, measured off ISM
+    figure 8. Re-place the inlet when a face-on shot turns up; nothing else
+    depends on it.
   the-inlet-is-composed-behind-so-the-lever-can-cross-it: >-
     THE LEVER SWEEPS OVER THE CONNECTOR, and a skin paints BEFORE its composed
     parts - so a 12.87 tab was being clipped to the 2.63 of it that cleared the
@@ -245,4 +271,4 @@ elements:
     size: [33.0, 33.8]
     class: vent
     description: the exhaust aperture
-skins: [default, w495, w750, w1600]
+skins: [default]

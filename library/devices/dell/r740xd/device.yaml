@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 9.0.1
+version: 9.1.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -701,10 +701,10 @@ views:
            accepts: [dell/ndc-4x-rj45-14g@1], default: dell/ndc-4x-rj45-14g@1,
            group: ndc, rel-pos: 1}
         - {id: psu-1, at: [251.30, 46.20], size: {w: 86.3, h: 39.1},
-           accepts: [dell/psu-1100w-ac-14g@1], default: dell/psu-1100w-ac-14g@1,
+           accepts: [dell/psu-1100w-ac-14g@1, dell/psu-2400w-ac-14g@1], default: dell/psu-1100w-ac-14g@1,
            group: psus, rel-pos: 1}
         - {id: psu-2, at: [341.10, 46.20], size: {w: 86.3, h: 39.1},
-           accepts: [dell/psu-1100w-ac-14g@1], default: dell/psu-1100w-ac-14g@1,
+           accepts: [dell/psu-1100w-ac-14g@1, dell/psu-2400w-ac-14g@1], default: dell/psu-1100w-ac-14g@1,
            group: psus, rel-pos: 2}
         - {id: drive-24, at: [173.0, 4.9], size: {w: 79.4, h: 17.868},
            accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
@@ -1090,6 +1090,8 @@ gaps:
       cage mounts to and they show when drives are fitted instead. That one is
       a rear configuration telling two rear drawings apart, which is the
       mechanism this gap says is MISSING between faces - and still is.
+      A tenth time when the C20 supply became its own part. A second occupant
+      for an existing bay, on the same face, coupled to nothing at the front.
       TWO SOURCES DISAGREE AND ARE LEFT DISAGREEING. The system information
       label draws FIVE fronts - 24, 16 and 8 x 2.5 inch, 12 and 8 x 3.5 inch -
       where table 28 lists TWO front backplanes. Whether the 16- and 8-bay
