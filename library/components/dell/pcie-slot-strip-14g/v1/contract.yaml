@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: pcie-slot-strip-14g
-version: 1.0.0
+version: 1.1.0
 class: mechanical
 # IN FRONT OF THE CARD. The bracket runs behind this strip and shows again to
 # its left; drawn behind, the strip and its numerals disappear under the card.
@@ -29,6 +29,15 @@ provenance:
     that is in front of the card. The printing moves into this part's own skin,
     inside `<g id="silkscreen">`, which is the mechanism for ink that travels
     with a part rather than with the panel.
+  the-1a-strip-has-no-numeral-2: >-
+    A SECOND SKIN, `no-2`, and the one claim in this file with no figure behind
+    it. Riser 1A wires slots 1 and 3 and blanks the middle opening; the operator
+    states that position carries no printed number, and said so twice. No figure
+    in either document draws a 1A machine - it is the one riser-1 arrangement
+    the reference composite omits - so nothing here can confirm or refute it.
+    Recorded as the operator's word rather than dressed up as a reading. If the
+    numeral turns out to be printed on every chassis regardless of riser, the
+    fix is to drop this skin, not to move anything.
   depth: >-
     estimated - 2.0 is a sheet-metal thickness and is not measured. A
     straight-on figure cannot show it, and the service model has no riser cage
@@ -45,4 +54,4 @@ parts:
   - {ref: dell/pcie-retention-clip-14g@1, id: clip-3, at: [-1.00, 43.75]}
 elements:
   strip: {at: [0.0, 0.0], size: [10.75, 62.0], class: bezel}
-skins: [default]
+skins: [default, no-2]

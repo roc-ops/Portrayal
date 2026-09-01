@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 1.0.0
+version: 2.0.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -788,7 +788,7 @@ views:
         # full-height bracket is 21.59 tall on a 20.32 pitch, so each overlaps
         # its neighbour by the 1.27 key - and the bottom one has no neighbour,
         # so 2.05 of its key ran past the plate and showed beside the rivet.
-        - {ref: dell/riser-lower-trim-14g@1, id: riser-1-trim, at: [-0.5, 66.0],
+        - {ref: dell/riser-lower-trim-14g@1, id: riser-1-trim, at: [-0.5, 66.24],
            group: furniture, rel-pos: 21}
         # THE SLOT-NUMBER STRIP, between the clips and the riser plate and
         # IN FRONT of the cards. Its numerals were chassis silkscreen and never
@@ -1009,7 +1009,9 @@ gaps:
       rear storage bay 3 turned out to be the SAME HOLE, closed by two
       different blanks depending on which configuration you picked.
       RE-READ AND STILL OPEN: that change touched which bay closes an opening,
-      not the front-to-rear coupling this gap is about.
+      not the front-to-rear coupling this gap is about. Re-read again when
+      riser 1's brackets moved 1 mm and slot 2 lost its numeral on 1A - both
+      are ink and geometry inside one bay, and neither reaches across faces.
       TWO SOURCES DISAGREE AND ARE LEFT DISAGREEING. The system information
       label draws FIVE fronts - 24, 16 and 8 x 2.5 inch, 12 and 8 x 3.5 inch -
       where table 28 lists TWO front backplanes. Whether the 16- and 8-bay
@@ -1131,6 +1133,12 @@ configurations:
   no-riser-3:
     skins:
       db9: teal
+      # RISER 1A LEAVES SLOT 2 UNLABELLED. Its middle opening has no connector
+      # behind it and takes a filler only, and the operator states that position
+      # carries no printed number. Nothing in the intake draws a 1A machine, so
+      # this is the operator's word rather than a reading - see the strip's own
+      # provenance.
+      pcie-slot-strip-14g: no-2
     kind: orderable
     description: >-
       TABLE 25's ROW 3, 1A+2A - the three-slot riser 2 fitted and no riser 3 at
