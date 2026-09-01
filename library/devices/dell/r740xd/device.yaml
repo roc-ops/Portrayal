@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 2.1.0
+version: 3.0.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -629,7 +629,7 @@ views:
            # `no-riser-3` is table 25's row 3 (1A+2A), which fits riser 2 and no
            # riser 3, and had no configuration of its own until now.
            only-in: [rear-storage-blank, no-riser-3]}
-        - {id: riser-1, at: [17.0, 4.0], size: {w: 102.50, h: 62.0},
+        - {id: riser-1, at: [13.95, 4.0], size: {w: 107.59, h: 62.0},
            accepts: [dell/riser-1-3fh-14g@1, dell/riser-1-2fh-14g@1],
            default: dell/riser-1-3fh-14g@1,
            group: risers, rel-pos: 1}
@@ -1012,6 +1012,8 @@ gaps:
       not the front-to-rear coupling this gap is about. Re-read again when
       riser 1's brackets moved 1 mm and slot 2 lost its numeral on 1A - both
       are ink and geometry inside one bay, and neither reaches across faces.
+      Re-read a third time when riser 1's plate grew to meet the slot strip and
+      the shroud: the bay's own box moved, and still nothing crossed a face.
       TWO SOURCES DISAGREE AND ARE LEFT DISAGREEING. The system information
       label draws FIVE fronts - 24, 16 and 8 x 2.5 inch, 12 and 8 x 3.5 inch -
       where table 28 lists TWO front backplanes. Whether the 16- and 8-bay
