@@ -24,13 +24,25 @@
        flange begins at 118.5, so the plate is 102.50 and its right edge lands
        at 119.50. The LEFT edge stays at face 17; the slot numerals at
        11.75..14.00 are on the chassis, left of this plate. -->
-  <path id="plate" fill-rule="evenodd" d="M1.50 0.30 H101.00 A1.20 1.20 0 0 1 102.20 1.50 V60.50 A1.20 1.20 0 0 1 101.00 61.70 H1.50 A1.20 1.20 0 0 1 0.30 60.50 V1.50 A1.20 1.20 0 0 1 1.50 0.30 Z M1.50 0.50 H97.50 A2.00 2.00 0 0 1 99.50 2.50 V16.50 A2.00 2.00 0 0 1 97.50 18.50 H1.50 A2.00 2.00 0 0 1 -0.50 16.50 V2.50 A2.00 2.00 0 0 1 1.50 0.50 Z M1.50 41.14 H97.50 A2.00 2.00 0 0 1 99.50 43.14 V57.14 A2.00 2.00 0 0 1 97.50 59.14 H1.50 A2.00 2.00 0 0 1 -0.50 57.14 V43.14 A2.00 2.00 0 0 1 1.50 41.14 Z" fill="#969da4" stroke="#4f565d" stroke-width="0.5"/>
+  <path id="plate" fill-rule="evenodd" d="M1.50 0.30 H101.00 A1.20 1.20 0 0 1 102.20 1.50 V60.50 A1.20 1.20 0 0 1 101.00 61.70 H1.50 A1.20 1.20 0 0 1 0.30 60.50 V1.50 A1.20 1.20 0 0 1 1.50 0.30 Z M1.50 0.50 H97.50 A2.00 2.00 0 0 1 99.50 2.50 V16.50 A2.00 2.00 0 0 1 97.50 18.50 H1.50 A2.00 2.00 0 0 1 -0.50 16.50 V2.50 A2.00 2.00 0 0 1 1.50 0.50 Z M1.50 20.82 H97.50 A2.00 2.00 0 0 1 99.50 22.82 V36.82 A2.00 2.00 0 0 1 97.50 38.82 H1.50 A2.00 2.00 0 0 1 -0.50 36.82 V22.82 A2.00 2.00 0 0 1 1.50 20.82 Z M1.50 41.14 H97.50 A2.00 2.00 0 0 1 99.50 43.14 V57.14 A2.00 2.00 0 0 1 97.50 59.14 H1.50 A2.00 2.00 0 0 1 -0.50 57.14 V43.14 A2.00 2.00 0 0 1 1.50 41.14 Z" fill="#969da4" stroke="#4f565d" stroke-width="0.5"/>
   <!-- THE OPENINGS KEEP THEIR IDS AND STOP DRAWING. render.py hangs each
        bay's data-path on the node with this id, so they must exist; they kept a
        stroke as well, which drew a second outline just inside every window.
        That doubled rectangle was one shape drawn twice, not a shape read
        wrong. -->
   <rect id="slot-1" x="2.50" y="5.00" width="89.9" height="12.2" rx="1.4" fill="none" stroke="none"/>
+  <!-- THREE OPENINGS, TWO CONNECTORS. This plate was drawn with the middle
+       window filled in, because the riser has no slot 2 - but the WINDOW is
+       chassis-side sheet metal on a 20.32 pitch and is punched whichever riser
+       is fitted. A machine with this riser shows three rectangles like every
+       other one; what it does not have is a card in the middle. The window
+       geometry is lifted verbatim from riser-1-3fh-14g rather than re-measured,
+       because the two plates are the same pressing.
+       SLOT 2 ACCEPTS ONLY A FILLER, which is where the difference lives now.
+       There is no connector behind it, so the bay's `accepts` names one part
+       and no card can be seated - the model says "blanked" by what it will
+       take, not by drawing metal over a hole the machine has. -->
+  <rect id="slot-2" x="2.50" y="25.32" width="89.9" height="12.2" rx="1.4" fill="none" stroke="none"/>
   <rect id="slot-3" x="2.50" y="45.64" width="89.9" height="12.2" rx="1.4" fill="none" stroke="none"/>
   <!-- THE LOUVRE ROW, AND IT IS ON THIS PLATE. It was moved to the card on
        the argument that the figure puts it inside a window and a hole cannot
