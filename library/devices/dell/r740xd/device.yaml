@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 6.0.0
+version: 7.0.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -693,7 +693,7 @@ views:
         # two different parts closing one opening, one plain and one perforated,
         # picked by configuration. When riser 3 is not fitted the opening is
         # closed by rear-storage-3, which scopes to `no-riser-3` below.
-        - {id: riser-3, at: [299.56, 4.0], size: {w: 107.59, h: 41.68},
+        - {id: riser-3, at: [309.085, 4.0], size: {w: 107.59, h: 41.68},
            accepts: [dell/riser-3-2fh-14g@1],
            default: dell/riser-3-2fh-14g@1,
            group: risers, rel-pos: 3, only-in: [no-rear-storage]}
@@ -819,7 +819,7 @@ views:
         # 406.85 - the reflection of the riser 1 strip's right edge meeting its
         # plate's left - and carries slots 7 and 8.
         - {ref: dell/pcie-slot-strip-r3-14g@1, id: slot-strip-r3,
-           at: [406.85, 4.0], group: furniture, rel-pos: 23,
+           at: [416.375, 4.0], group: furniture, rel-pos: 23,
            only-in: [no-rear-storage]}
         # THE TAB THE LEFT THUMBSCREW IS BOLTED TO, drawn after the bays
         # because things go behind it: riser 2's bracket tails run across it,
@@ -1052,6 +1052,9 @@ gaps:
       A sixth time when riser 3 became bay 1 reflected - mirrored brackets, a
       two-slot plate and its own slot strip. Handedness is a fact about one
       bay's own metal and reaches no further than that.
+      A seventh time when riser 3 slid 9.525 right to sit over the power
+      supply's edge. Moving one bay along its own face changes nothing about
+      which front it can be sold with.
       TWO SOURCES DISAGREE AND ARE LEFT DISAGREEING. The system information
       label draws FIVE fronts - 24, 16 and 8 x 2.5 inch, 12 and 8 x 3.5 inch -
       where table 28 lists TWO front backplanes. Whether the 16- and 8-bay
