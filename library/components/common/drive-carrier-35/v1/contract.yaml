@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: drive-carrier-35
-version: 1.0.0
+version: 1.1.0
 class: drive
 behaviour: fills
 profile: server
@@ -12,6 +12,40 @@ size: {w: 107.8, h: 26.5, d: 155.0}
 attrs:
   form-factor: 3.5in
 provenance:
+  it-is-the-2-5-inch-carrier-scaled-and-laid-flat: >-
+    IT WAS DRAWN AS A DIFFERENT KIND OF OBJECT and it is not one. Two plain LED
+    rectangles where common/drive-carrier-25 has stroked lamp GLYPHS, three flat
+    dark panels where that one has honeycomb seen through windows, and no rails
+    at all - so two carriers out of the same family read as unrelated parts.
+    ISM figure 9 shows the same vocabulary at both sizes: two green lamp glyphs
+    on a recessed panel at the outboard end, an amber ring on a dark boss,
+    bright rails along both long edges, and three windows onto a honeycomb tray.
+    The ring, its plate and the label are unchanged - they were measured when
+    this part was built and were not what was wrong with it.
+  the-rails-and-the-carrier-face: >-
+    photo-measured off ISM figure 9, Gate 1 at 0.27% - the best rear in either
+    document. A tone profile down a column clear of the vents puts the carrier's
+    visible face at y 9.75..35.25 with the bay's dark gap above and below, and
+    lighter bands at 9.75..11.25 and 34.00..35.25 running x 187.3..260.3. Those
+    are the rails: they start just outboard of the release plate and run to the
+    inboard end, the same 23-to-98 per cent span the 2.5 inch carrier's have.
+  the-honeycomb-is-carried-not-measured: >-
+    "Bigger holes for the honeycomb to show through" is about the WINDOWS, which
+    are 15.4 x 17.3 here against 12.2 x 10.9 on the 2.5 inch carrier. The mesh
+    behind them belongs to the drive tray and is the same mesh in both.
+    THE FIGURE CANNOT SETTLE THE CELL SIZE. At 4 px/mm a cut across the window
+    band resolves the three PANELS, 15.62 apart, and not the cells inside them.
+    So the flat-top cell and its 3.22 x 3.73 pitch are carried from
+    common/drive-carrier-25 rather than read here - and a first pass that scaled
+    them 1.6x drew a mesh visibly coarser than the figure's, which is the check
+    that carrying them is right.
+  the-lamp-glyphs-are-not-scaled-with-the-carrier: >-
+    Figure 9's green shows at x 161.25..163.75, y 16.75..19.50 and 26.25..29.25 -
+    about 2.5 across - but that is the LIT AREA, not the moulded glyph, and a
+    lit mark is smaller than the mark. The glyph is the same silkscreen on both
+    carriers so it is drawn the same size on both; the measurement fixes where
+    it sits, which is what it can honestly say. Green in the figure, so activity
+    is the upper one here.
   size: >-
     photo-measured - ISM figure 9, "Back view of 2 x 3.5 inch drive system",
     which passes Gate 1 at 0.27% against a 434 x 86.8 rear face. That is a
@@ -62,6 +96,10 @@ provenance:
     illustrates one and other capacities are skins, exactly as
     common/drive-carrier-25 handles it.
 elements:
+  window-1: {at: [40.0, 4.6], size: [15.4, 17.3], class: vent}
+  window-2: {at: [56.8, 4.6], size: [15.4, 17.3], class: vent}
+  window-3: {at: [73.6, 4.6], size: [15.4, 17.3], class: vent}
+  release: {at: [16.1, 4.2], size: [15.2, 18.1], class: control}
   lamp-activity:
     at: [4.6, 4.4]
     size: [2.6, 4.4]
