@@ -1,0 +1,126 @@
+# The gates, on every pull request - because the failure that prompted this
+# could only appear AFTER a merge.
+#
+# #100 gave the Dell R740xd its rear face and, with it, two PSU bays. #101 added
+# a library-wide test asserting every multi-bay power group states its
+# redundancy. Both were correct in isolation, neither branch could see the
+# other, and main went red the moment the two landed within minutes of each
+# other. Nothing was wrong with either change; the pair had simply never been
+# run together, because nothing ran them together until somebody did it by hand.
+name: gates
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# A second push to a PR makes the first run pointless - it is testing a tree
+# nobody will merge.
+concurrency:
+  group: gates-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # WHAT THE SUITE ACTUALLY NEEDS, which is not what the TOOLS need. The
+      # library tools import only yaml and jsonschema, and reasoning from that
+      # is how the second run of this workflow died: test_figmap imports figmap,
+      # which imports numpy at module scope, and a module-scope import in a
+      # collected test file is a COLLECTION ERROR - it takes the whole suite
+      # down rather than skipping one file.
+      #
+      # Derived by walking every test module's top-level imports one hop through
+      # the local modules, rather than by guessing: PIL and numpy are needed at
+      # collection, and cairosvg, docling, mlx_vlm and rapidocr are imported
+      # lazily and stay optional. mlx_vlm could not be installed here anyway -
+      # it is Apple-silicon only.
+      - name: install
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest pyyaml jsonschema pillow numpy
+
+      # pdftoppm gates the OCR tests. Without it they SKIP, which is the one
+      # thing this workflow exists to stop happening quietly.
+      - name: poppler
+        run: sudo apt-get update && sudo apt-get install -y poppler-utils
+
+      # Lint on its own first. build.sh lints too, but a failure here names the
+      # rule and the file without a render log on top of it.
+      - name: lint
+        run: python3 spec/tools/portrayal/lint.py --schemas spec/schemas --library library
+
+      # BUILD BEFORE PYTEST, AND THIS ORDER IS THE POINT. Four test modules -
+      # behaviour, config-scope, viewbox, state-css - skip themselves when
+      # library/dist is missing, and dist is gitignored so a fresh checkout has
+      # none. A run that tests before building reports 532 passed / 509 skipped
+      # and looks green. That happened once, on a branch that changed 14
+      # devices, and none of the rendering was exercised.
+      #
+      # publish.sh IS build.sh plus the exports, so this is one build and not
+      # two, and it leaves library/exports regenerated for the check below.
+      # --no-images: every rendered PNG under library/exports is gitignored, so
+      # CI was building 1104 pictures and throwing them away inside the step
+      # that costs a quarter of the run.
+      - name: build and publish
+        run: ./publish.sh --no-images
+
+      - name: devicelock
+        run: python3 spec/tools/portrayal/devicelock.py --library library
+
+      - name: tests
+        run: |
+          set -o pipefail
+          python3 -m pytest spec/tests -q -rs | tee /tmp/pytest.txt
+
+      # The guard for the failure above. A skip is legitimate - a lamp part not
+      # in this library, an optional tool - but a JUMP in skips means the suite
+      # quietly stopped testing something. The threshold sits close to the real
+      # number so it bites early; raise it in the same commit that explains why.
+      #
+      # IT CHECKS THAT THE SUITE RAN AT ALL FIRST, and that is not theoretical:
+      # the first run of this workflow had no pytest installed, so the file held
+      # one line of error text, the skip count parsed as zero, and this step
+      # reported SUCCESS. A suite that never started looked exactly like a suite
+      # with nothing skipped - the same shape of blindness the step exists to
+      # prevent, one level up.
+      - name: no silent skipping
+        if: always()
+        run: |
+          if ! grep -qE '[0-9]+ (passed|failed|error)' /tmp/pytest.txt; then
+            echo "::error::pytest produced no summary line - the suite did not run."
+            echo "::error::A missing interpreter or package looks like a clean result here."
+            tail -20 /tmp/pytest.txt || true
+            exit 1
+          fi
+          n=$(sed -n 's/.*[^0-9]\([0-9][0-9]*\) skipped.*/\1/p' /tmp/pytest.txt | tail -1)
+          n=${n:-0}
+          echo "skipped: $n"
+          if [ "$n" -gt 5 ]; then
+            echo "::error::$n tests skipped (expected at most 5). A jump in skips"
+            echo "::error::usually means dist was not built, or a tool the suite"
+            echo "::error::needs is missing from the runner - see the build step."
+            sed -n '/short test summary/,$p' /tmp/pytest.txt || true
+            exit 1
+          fi
+
+      # The exports are committed and a DCIM reads them, so a stale one is a
+      # real defect rather than untidiness. publish.sh above has already
+      # regenerated them from this tree; anything left in the diff is a change
+      # somebody made without republishing. #100 merged that way and it went
+      # unnoticed for two PRs.
+      - name: exports are current
+        run: |
+          if ! git diff --quiet -- library/exports; then
+            echo "::error::library/exports is stale - run ./publish.sh and commit the result"
+            git --no-pager diff --stat -- library/exports
+            exit 1
+          fi

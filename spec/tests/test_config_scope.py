@@ -11,6 +11,8 @@ from pathlib import Path
 import pytest
 import yaml
 
+import libdata
+
 SPEC = Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library"
 C40G = yaml.safe_load((LIB / "devices/casa/c40g/device.yaml").read_text())
@@ -69,8 +71,7 @@ def test_ac_and_dc_rears_render_different_metal():
 def test_scoping_never_silently_empties_a_view():
     """`only-in` is the one field that can delete geometry, and it is a list of
     free-text names. Every name in the library must be a real configuration."""
-    for p in sorted(LIB.glob("devices/*/*/device.yaml")):
-        d = yaml.safe_load(p.read_text()) or {}
+    for _slug, p, d in libdata.library():
         cfgs = set(d.get("configurations") or {})
         for vname, view in (d.get("views") or {}).items():
             comps = (view or {}).get("components") or {}
