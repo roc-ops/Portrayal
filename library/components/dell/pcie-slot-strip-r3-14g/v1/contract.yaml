@@ -1,0 +1,43 @@
+format: 1
+kind: component
+name: pcie-slot-strip-r3-14g
+version: 1.0.0
+class: mechanical
+# IN FRONT OF THE CARD, exactly as the riser 1 strip is: the bracket runs behind
+# this metal and shows again beyond it, which is the retention edge an operator
+# sees first.
+behaviour: mounts
+profile: compute
+description: >-
+  The strip of chassis metal between the PCIe card retention clips and riser 3's
+  plate on a 14G PowerEdge, carrying slot numbers 7 and 8 - the mirror of the
+  riser 1 strip
+size: {w: 10.75, h: 41.68, d: 2.0}
+provenance:
+  it-is-dell-pcie-slot-strip-14g-reflected: >-
+    NOTHING HERE IS INDEPENDENTLY MEASURED, and that is deliberate. Riser 3 sits
+    at the far end of the chassis and presents its cards facing out the other
+    way, so this strip is the riser 1 strip reflected: the numerals move to the
+    edge that faces the plate - now the left one, at 1.37 rather than 9.38 -
+    and the clips reach away from the plate, which is now to the right.
+    Deriving it beats re-measuring it, because a reflection cannot disagree with
+    the thing it copies, and every number in the riser 1 strip is argued in that
+    file rather than restated here.
+  two-slots-not-three: >-
+    Height 41.68 rather than 62.0: riser 3 presents two slots, and 62.0 minus one
+    20.32 slot pitch is exactly 41.68. The numerals keep the riser 1 strip's y
+    positions, 9.00 and 29.00.
+  depth: >-
+    estimated - 2.0, a sheet-metal thickness, carried over from
+    dell/pcie-slot-strip-14g@1 along with everything else here.
+parts:
+  # THE CLIPS ARE BOLTED TO THIS STRIP, so they are composed rather than placed
+  # beside it - two mounted parts in one place is what L13 exists to catch.
+  # MIRRORED INDIVIDUALLY as well as repositioned: a retention clip is handed,
+  # and reflecting the strip without reflecting them would leave two right-hand
+  # clips on a left-hand strip.
+  - {ref: dell/pcie-retention-clip-14g@1, id: clip-1, at: [4.25, 3.75], mirror: true}
+  - {ref: dell/pcie-retention-clip-14g@1, id: clip-2, at: [4.25, 23.75], mirror: true}
+elements:
+  strip: {at: [0.0, 0.0], size: [10.75, 41.68], class: bezel}
+skins: [default]

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 5.1.0
+version: 6.0.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -693,7 +693,7 @@ views:
         # two different parts closing one opening, one plain and one perforated,
         # picked by configuration. When riser 3 is not fitted the opening is
         # closed by rear-storage-3, which scopes to `no-riser-3` below.
-        - {id: riser-3, at: [318.0, 4.0], size: {w: 95.0, h: 41.0},
+        - {id: riser-3, at: [299.56, 4.0], size: {w: 107.59, h: 41.68},
            accepts: [dell/riser-3-2fh-14g@1],
            default: dell/riser-3-2fh-14g@1,
            group: risers, rel-pos: 3, only-in: [no-rear-storage]}
@@ -814,6 +814,13 @@ views:
         # order the hardware is assembled in.
         - {ref: dell/pcie-slot-strip-14g@1, id: slot-strip, at: [3.5, 4.0],
            group: furniture, rel-pos: 22}
+        # RISER 3'S STRIP, THE MIRROR OF THE ONE ABOVE. Its brackets face
+        # out to the right, so the strip sits on the plate's RIGHT edge at
+        # 406.85 - the reflection of the riser 1 strip's right edge meeting its
+        # plate's left - and carries slots 7 and 8.
+        - {ref: dell/pcie-slot-strip-r3-14g@1, id: slot-strip-r3,
+           at: [406.85, 4.0], group: furniture, rel-pos: 23,
+           only-in: [no-rear-storage]}
         # THE TAB THE LEFT THUMBSCREW IS BOLTED TO, drawn after the bays
         # because things go behind it: riser 2's bracket tails run across it,
         # and a fitted blank's perforations start to its right. It was part of
@@ -1042,6 +1049,9 @@ gaps:
       A fifth time when the screw tab was split out of the frame so it could
       draw in front of riser 2's bracket tails. That is a draw-order fact about
       one bay, not a coupling between faces.
+      A sixth time when riser 3 became bay 1 reflected - mirrored brackets, a
+      two-slot plate and its own slot strip. Handedness is a fact about one
+      bay's own metal and reaches no further than that.
       TWO SOURCES DISAGREE AND ARE LEFT DISAGREEING. The system information
       label draws FIVE fronts - 24, 16 and 8 x 2.5 inch, 12 and 8 x 3.5 inch -
       where table 28 lists TWO front backplanes. Whether the 16- and 8-bay
