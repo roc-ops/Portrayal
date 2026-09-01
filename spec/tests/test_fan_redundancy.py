@@ -16,6 +16,8 @@ import sys
 
 import yaml
 
+import libdata
+
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "spec" / "tools" / "portrayal"))
 import lint  # noqa: E402
@@ -83,10 +85,8 @@ def test_the_rule_does_not_police_the_arithmetic():
 # ---- what the library says --------------------------------------------------
 
 def devices():
-    for f in sorted(LIB.glob("devices/**/device.yaml")):
-        d = yaml.safe_load(f.read_text())
-        if d.get("kind") == "device":
-            yield f"{f.parent.parent.name}/{f.parent.name}", d
+    """Over the once-parsed library - see libdata."""
+    return libdata.devices()
 
 
 def test_every_stated_fan_figure_fills_its_bays():

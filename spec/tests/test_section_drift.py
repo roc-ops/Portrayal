@@ -19,6 +19,7 @@ is the durable part.
 import pathlib
 import sys
 
+import pytest
 import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
@@ -29,43 +30,41 @@ import attrsections  # noqa: E402
 LIB = ROOT / "library"
 
 
-def devices():
-    for f in sorted(LIB.glob("devices/**/device.yaml")):
-        d = yaml.safe_load(f.read_text())
-        if d.get("kind") == "device":
-            yield f, d
-
-
-def homes():
+# ONE PARSE, NOT ONE PER QUESTION. `homes()` walked all 84 manifests, and
+# `where()` called it once per key - so asking where seven optics keys live
+# parsed the library seven times and took 33 seconds. The `library` fixture is
+# session-scoped, and this maps it once per session too.
+@pytest.fixture(scope="session")
+def homes(library):
     out = {}
-    for f, d in devices():
+    for slug, path, d in library:
         for section, body in (d.get("attrs") or {}).items():
             if isinstance(body, dict):
                 for k in body:
-                    out.setdefault(k, {}).setdefault(section, []).append(f.parent.name)
+                    out.setdefault(k, {}).setdefault(section, []).append(path.parent.name)
     return out
 
 
 # ---- the state of the library ----------------------------------------------
 
-def test_no_attrs_key_has_two_homes():
-    drift = {k: sorted(v) for k, v in homes().items() if len(v) > 1}
+def test_no_attrs_key_has_two_homes(homes):
+    drift = {k: sorted(v) for k, v in homes.items() if len(v) > 1}
     assert not drift, drift
 
 
-def test_every_section_used_is_a_declared_one():
+def test_every_section_used_is_a_declared_one(library):
     bad = set()
-    for _, d in devices():
+    for _, _, d in library:
         bad |= set(d.get("attrs") or {}) - set(attrsections.SECTIONS)
     assert not bad, bad
 
 
-def test_no_section_is_left_empty():
+def test_no_section_is_left_empty(library):
     """Moving a section's only key out leaves `physical:` with nothing under
     it, which the schema rejects as `None is not of type object` - and it did,
     on the s9720-56ed, until the move learned to clean up after itself."""
     empty = []
-    for f, d in devices():
+    for slug, f, d in library:
         for s, b in (d.get("attrs") or {}).items():
             if b is None or (isinstance(b, dict) and not b):
                 empty.append(f"{f.parent.name}:{s}")
@@ -103,31 +102,31 @@ def test_one_home_does_not_fire():
 
 # ---- where the two ties landed, and why -------------------------------------
 
-def where(key):
-    return sorted(homes().get(key, {}))
+def where(homes, key):
+    return sorted(homes.get(key, {}))
 
 
-def test_boot_time_follows_its_own_numeric_siblings():
+def test_boot_time_follows_its_own_numeric_siblings(homes):
     """A 1-vs-1 tie the counts could not settle. `boot-time-s` and
     `oob-link-time-s` already sat in `management`, and prose describing the same
     measurement belongs with the numbers describing it."""
-    assert where("boot-time") == ["management"]
+    assert where(homes, "boot-time") == ["management"]
     for sibling in ("boot-time-s", "oob-link-time-s"):
-        if sibling in homes():
-            assert where(sibling) == ["management"], sibling
+        if sibling in homes:
+            assert where(homes, sibling) == ["management"], sibling
 
 
-def test_every_optics_key_sits_in_one_section_as_a_family():
+def test_every_optics_key_sits_in_one_section_as_a_family(homes):
     """Six `optics-*` keys were split across two sections, one of them 13-to-12
     and another 1-to-1. Settling them individually by count would have scattered
     a family that L40 already treats as one thing."""
-    fams = {k: where(k) for k in homes() if k.startswith("optics-")}
+    fams = {k: where(homes, k) for k in homes if k.startswith("optics-")}
     assert fams, "no optics keys found"
     assert {tuple(v) for v in fams.values()} == {("features",)}, fams
 
 
-def test_the_redundancy_prose_key_is_filed_with_capabilities():
+def test_the_redundancy_prose_key_is_filed_with_capabilities(homes):
     """Also 1-vs-1, and superseded: both devices carrying it now state the same
     thing structurally on their groups, which is where the comparison layer
     reads it from. Its home matters only for consistency."""
-    assert where("redundancy") in ([], ["features"])
+    assert where(homes, "redundancy") in ([], ["features"])

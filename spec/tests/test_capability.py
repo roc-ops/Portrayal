@@ -4,6 +4,8 @@ from pathlib import Path
 
 import yaml
 
+import libdata
+
 SPEC = Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library"
 sys.path.insert(0, str(SPEC / "tools/portrayal"))
@@ -29,8 +31,7 @@ def assess(dev):
 def test_no_device_declares_its_own_level():
     """Derive, never declare. An author who can write `level: 3` will, and then
     it lies the first time the model changes underneath it."""
-    for man in sorted(LIB.glob("devices/*/*/device.yaml")):
-        d = yaml.safe_load(man.read_text())
+    for _slug, man, d in libdata.library():
         assert "capability" not in d, man
         assert "level" not in d, man
 

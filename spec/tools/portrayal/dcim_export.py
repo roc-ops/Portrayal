@@ -632,6 +632,16 @@ def rasterize(src, png, scale):
     return png
 
 
+# TWO JOBS, ONE FLAG, UNTIL NOW. `--images` both wrote `front_image: true` into
+# the YAML and rasterised the PNG behind it. The boolean means "a rendered face
+# exists in dist", which is true whenever the build ran; the rasterisation is
+# 1104 pictures and about two minutes. CI needs the first and throws the second
+# away - every PNG under library/exports is gitignored - but dropping `--images`
+# to save the time also deleted 692 lines of tracked YAML across 346 files,
+# because one switch drove both. `--no-raster` separates them.
+RASTER = True
+
+
 def render_image(dist, root, target, doc, dev_name, cfg_name, face):
     """Rasterise a compiled face into the library's elevation-images tree."""
     # 2 px/mm. A 440 mm faceplate lands near 880 px, which is the range the
@@ -703,14 +713,14 @@ def export_modules(dist, root, images=None):
             out = d / (doc["model"].replace("/", "-") + ".yaml")
             out.write_text("---\n" + yaml.dump(doc, Dumper=Indented, sort_keys=False,
                                                width=100, default_flow_style=False))
-            if images:
+            if images and RASTER:
                 if render_module_image(images, root, target, doc, ns, name, ver):
                     imaged.add(doc["model"])
         wrote += 1
         print(f"{doc['model']}  ({len(doc.get('interfaces', []))} interfaces, "
               f"{len(doc.get('power-ports', []))} power ports)")
     print(f"module types: {wrote} written, {skipped} skipped for having no manufacturer")
-    if images:
+    if images and RASTER:
         print(f"module images: {len(imaged)} of {wrote} rendered")
 
 
@@ -726,11 +736,17 @@ def main():
     ap.add_argument("--modules", action="store_true", help="export module types instead")
     ap.add_argument("--nos", action="append", default=[],
                     help="NOS profile to name interfaces for; repeatable")
+    ap.add_argument("--no-raster", action="store_true",
+                    help="write the image booleans but skip rendering the PNGs "
+                         "behind them. What CI wants: the YAML is tracked, the "
+                         "pictures are gitignored")
     ap.add_argument("--images", action="store_true",
                     help="rasterise elevations and module faces from the same build")
     args = ap.parse_args()
 
     dist = Dist(args.dist)
+    global RASTER
+    RASTER = not args.no_raster
     images = args.dist if args.images else None
 
     if args.modules:
@@ -859,7 +875,7 @@ def export_device(dist, device_name, out_root, nos, images):
             for target in TARGETS:
                 f = write(doc, out_root, target, None if ident else profile)
                 for face in ("front", "rear"):
-                    if doc.get(f"{face}_image"):
+                    if doc.get(f"{face}_image") and RASTER:
                         render_image(images, out_root, target, doc,
                                      dev["name"], cfg_name, face)
                 wrote += 1

@@ -67,8 +67,11 @@ jobs:
       #
       # publish.sh IS build.sh plus the exports, so this is one build and not
       # two, and it leaves library/exports regenerated for the check below.
+      # --no-images: every rendered PNG under library/exports is gitignored, so
+      # CI was building 1104 pictures and throwing them away inside the step
+      # that costs a quarter of the run.
       - name: build and publish
-        run: ./publish.sh
+        run: ./publish.sh --no-images
 
       - name: devicelock
         run: python3 spec/tools/portrayal/devicelock.py --library library
