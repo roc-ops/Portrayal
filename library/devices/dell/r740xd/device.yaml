@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 3.0.0
+version: 4.0.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -518,6 +518,16 @@ views:
         - {id: usb-1, at: [120.20, 71.47], size: [12.0, 4.5], shape: rect}
         - {id: usb-2, at: [120.20, 79.59], size: [12.0, 4.5], shape: rect}
         - {id: sys-id, at: [8.36, 72.04], size: [7.0, 7.0], shape: circle}
+        # SLOT 6'S OPENING, WHICH THE RISER 2 PLATE USED TO CARRY. That
+        # plate now stops at face 46.20 - the power supply's top edge - so the
+        # low-profile slot is framed by the chassis instead, at exactly the
+        # position the plate's own window had.
+        # THAT POSITION IS CONFIRMED THREE WAYS. Slot 6's bracket sat 3.65 too
+        # low; moving its top onto riser 1's slot 3 also put the three riser 2
+        # slots on a 20.32 pitch, AND left the bracket 1.32 below this window,
+        # which is the offset slots 4 and 5 already have from theirs.
+        - {id: riser-2-slot-6, at: [161.10, 45.14], size: [54.28, 18.0],
+           shape: rect}
     silkscreen:
       # WHAT THE PAINT IS FOR. The band tells a person at arm's length which
       # of three similar-looking sockets is which, and the legends are how it
@@ -649,9 +659,14 @@ views:
         # photo-measured at 95 and the supply's left edge at 250.70, and both
         # cannot be right - recorded here as the bay the chassis has room for,
         # with the disagreement left visible rather than split between them.
-        - {id: riser-2, at: [161.0, 4.0], size: {w: 89.70, h: 62.0},
-           accepts: [dell/riser-2-2fh-1lp-14g@1, dell/riser-2-3-blank-14g@1],
-           default: dell/riser-2-2fh-1lp-14g@1,
+        # THE BAY MATCHES THE COMPONENT, WHICH IT DID NOT BEFORE. A 95.0
+        # occupant in an 89.70 bay was being CENTRED, so the riser drew from
+        # 158.35 rather than 161.0 - every face number in this assembly was
+        # 2.65 left of what its local coordinates implied, and the undersized
+        # bay also hid the plate's overlap with the power supply from L13.
+        - {id: riser-2, at: [155.335, 4.0], size: {w: 111.715, h: 42.20},
+           accepts: [dell/riser-2-2fh-1lp-14g@2, dell/riser-2-3-blank-14g@1],
+           default: dell/riser-2-2fh-1lp-14g@2,
            group: risers, rel-pos: 2, only-in: [no-rear-storage, no-riser-3]}
         # A 12 mm DISAGREEMENT WAS REPORTED AGAINST THE CAD HERE AND IT WAS
         # NOT REAL. It came from the rear handle's upper 'window', read off a
@@ -1014,6 +1029,12 @@ gaps:
       are ink and geometry inside one bay, and neither reaches across faces.
       Re-read a third time when riser 1's plate grew to meet the slot strip and
       the shroud: the bay's own box moved, and still nothing crossed a face.
+      A fourth time when riser 2's three slots were aligned and its plate cut
+      back to the full-height pair. That one surfaced a NEW question but not a
+      new gap of this kind: a bay's occupant is drawn after the panel, so a
+      card cannot be shown "only through its cutout" without a part drawn after
+      the bays to mask it. Recorded where it belongs, on the riser 2 slot 6
+      cutout, rather than widened into this one.
       TWO SOURCES DISAGREE AND ARE LEFT DISAGREEING. The system information
       label draws FIVE fronts - 24, 16 and 8 x 2.5 inch, 12 and 8 x 3.5 inch -
       where table 28 lists TWO front backplanes. Whether the 16- and 8-bay
@@ -1070,7 +1091,7 @@ configurations:
       "somebody forgot to write the bays down".
     bays:
       riser-1: dell/riser-1-3fh-14g@1
-      riser-2: dell/riser-2-2fh-1lp-14g@1
+      riser-2: dell/riser-2-2fh-1lp-14g@2
       riser-3: dell/riser-3-2fh-14g@1
   no-rear-storage:
     # the serial port's insulator is teal on this machine, not the
@@ -1152,7 +1173,7 @@ configurations:
       overriding a bay from outside.
     bays:
       riser-1: dell/riser-1-2fh-14g@1
-      riser-2: dell/riser-2-2fh-1lp-14g@1
+      riser-2: dell/riser-2-2fh-1lp-14g@2
   rear-storage-blank:
     # the serial port's insulator is teal on this machine, not the
     # near-black a DE-9 usually carries - std/db9@1's `teal` skin. Named in
