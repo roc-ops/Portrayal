@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 0.13.0
+version: 0.14.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -581,6 +581,30 @@ views:
         # down over the iDRAC port. None are collisions between PARTS - they are
         # boxes of things that sit at different heights, and the fix is to say
         # which number is which rather than to move anything.
+        # THE 2 x 3.5 INCH REAR: one carrier per rear bay, not a pair per bay.
+        # ISM figure 9 puts them at face 154.80 and 314.20, one each side of the
+        # divider at 288 - which is the same bay boundary the 2.5 inch cages sit
+        # either side of. Positions and the 107.80 x 26.50 carrier are measured
+        # off that figure, which passes Gate 1 at 0.27%.
+        # `rear-drive-12`, NOT `drive-12`, AND THE REASON IS A BUG THAT FIRED.
+        # Ids follow the ink on this device - the rear SFF bays are drive-24 to
+        # drive-27 because that is what is printed. The same rule here gives
+        # drive-12 and drive-13, which are ALREADY THE NAMES OF TWO FRONT BAYS:
+        # this chassis draws a 24-bay front numbered 0-23.
+        # Named that way, lint reported `config full-24: bay drive-12 ref
+        # common/drive-carrier-25@1 not in accepts` - the full-24 configuration
+        # fits a 2.5 inch carrier into every drive-N it can name, and it had
+        # just been handed two more that take a 3.5 inch one. A silent version
+        # of that would have put the wrong drive in the wrong bay.
+        # The collision is not a naming slip. A rear numbered from 12 belongs to
+        # a 12-bay front and this device draws a 24-bay one, which is the
+        # front-rear coupling gap showing up as an id clash.
+        - {id: rear-drive-12, at: [154.80, 7.50], size: {w: 107.8, h: 26.5},
+           accepts: [common/drive-carrier-35@1], default: common/drive-carrier-35@1,
+           group: drives-rear, rel-pos: 1, only-in: [rear-2-lff]}
+        - {id: rear-drive-13, at: [314.20, 7.50], size: {w: 107.8, h: 26.5},
+           accepts: [common/drive-carrier-35@1], default: common/drive-carrier-35@1,
+           group: drives-rear, rel-pos: 2, only-in: [rear-2-lff]}
         - {id: riser-1, at: [17.0, 4.0], size: {w: 102.50, h: 62.0},
            accepts: [dell/riser-1-3fh-14g@1, dell/riser-1-2fh-14g@1],
            default: dell/riser-1-3fh-14g@1,
@@ -768,12 +792,18 @@ views:
            # it spans the drives - its ink is the T land above and the rails and
            # panels around, never the openings themselves.
            frames: [drive-24, drive-25, drive-26, drive-27, riser-2, riser-3,
-                    bay2-drive-plate, bay3-drive-plate],
+                    bay2-drive-plate, bay3-drive-plate,
+                    rear-drive-12, rear-drive-13, lff-drive-label],
            group: furniture, rel-pos: 19}
         # THE NUMBERED PLATE, ONE PER BAY. Mirror images about face 289.75; the
         # skin is named for the numbers it carries, because which numbers a bay
         # wears is decided by the front - 24-27 behind a 24-bay front, 12-15
         # behind a 12-bay one.
+        # THE 2 x 3.5 INCH NUMBERS, on the divider rather than on plates. A
+        # different arrangement from the SFF labels, not a moved version of them.
+        - {ref: dell/rear-drive-label-lff-14g@1, id: lff-drive-label,
+           at: [282.50, 14.50], only-in: [rear-2-lff],
+           group: furniture, rel-pos: 19}
         - {ref: dell/rear-drive-plate-14g@1, id: bay2-drive-plate,
            at: [254.75, 7.75], skin: n24-25,
            only-in: [rear-4-sff], group: furniture, rel-pos: 19}
@@ -898,9 +928,12 @@ gaps:
       draws ONE of them, the 24 x 2.5 inch. The others are not modelled and the
       12 x 3.5 inch is the one that matters, because it is the front the rears
       numbered 12-15 and 12-13 belong to.
-      IT IS BLOCKED ON A CARRIER, not on the format: a 3.5 inch drive carrier
-      does not exist in this library, which is the same thing `rear-2-lff` has
-      been waiting on since it was named.
+      IT WAS BLOCKED ON A CARRIER AND IS NOT ANY MORE.
+      common/drive-carrier-35 now exists, measured off ISM figure 9, and
+      `rear-2-lff` draws with it. What remains is the FRONT PANEL itself - 12
+      apertures in a 3 x 4 grid where this device draws 24 in a row, which is
+      different metal rather than different occupancy, so it needs a second
+      front view rather than a carrier.
     wanted: >-
       common/drive-carrier-35 and a 12 x 3.5 inch front view declaring
       `face: front`, after which `lff-12-rear-2` and `lff-12-rear-4` can bind it
@@ -946,6 +979,12 @@ gaps:
       models no mid bay at all, which is a whole third drive location missing
       rather than a detail.
     wanted: >-
+      NOW DEMONSTRABLE RATHER THAN HYPOTHETICAL. `rear-2-lff` draws a correct
+      2 x 3.5 inch rear on a 24 x 2.5 inch front, and ISM table 28 lists no such
+      machine - every row carrying that rear has a 12-bay front. The mismatch
+      even forced an id: the figure prints 12 and 13, which are already two of
+      this chassis's front bays, so the rear ones had to be rear-drive-12 and
+      rear-drive-13. An id clash is what this gap looks like from the inside.
       RE-READ AFTER THE REAR BAYS WERE SEPARATED, and still open. The rear half
       of this is now expressible: the chassis structure across bays 2 and 3 is
       its own always-present part, and what each bay holds - drives, PCIe, a
@@ -1030,13 +1069,25 @@ configurations:
     # and all five of these show this rear.
     skins:
       db9: teal
-    kind: orderable
+    # `example`, NOT `orderable`, AND IT WAS MARKED ORDERABLE BEFORE. ISM
+    # table 28 lists no configuration pairing a 24 x 2.5 inch front with a
+    # 2 x 3.5 inch rear - every row carrying this rear has a 12 x 3.5 inch
+    # front, and this device draws the 24-bay one.
+    kind: example
     description: >-
-      NAMED AND NOT YET DRAWN. The R740xd ISM figure 9 shows two 3.5 inch drives
-      in the rear, and this library has no 3.5 inch carrier - so the
-      configuration is recorded and left unfinished rather than quietly drawn
-      with a 2.5 inch drive standing in for one, which would be a picture of a
-      machine nobody can order.
+      DRAWN NOW, AND IT IS A PICTURE OF A REAR RATHER THAN OF A MACHINE.
+      common/drive-carrier-35 exists, measured off ISM figure 9, so the two
+      3.5 inch bays and the numbering on the divider between them are real and
+      sourced. What is not real is the pairing: table 28 has no row with a
+      24 x 2.5 inch front and a 2 x 3.5 inch rear, so selecting this shows a
+      correct rear on a front it never ships with.
+      THE ID CLASH IS THAT MISMATCH MADE VISIBLE. The figure prints 12 and 13,
+      which are already two of this chassis's front bays, so the rear ones are
+      rear-drive-12 and rear-drive-13 rather than following the ink the way
+      drive-24 to drive-27 do. Named the obvious way, lint caught full-24
+      fitting a 2.5 inch carrier into a 3.5 inch bay.
+      It stops being an illustration the day the 12 x 3.5 inch front is drawn
+      and a configuration binds the two faces together.
   full-24:
     # the serial port's insulator is teal on this machine, not the
     # near-black a DE-9 usually carries - std/db9@1's `teal` skin. Named in
