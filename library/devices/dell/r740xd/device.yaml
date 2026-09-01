@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 8.0.0
+version: 9.0.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -833,6 +833,16 @@ views:
         # the same 8.25 span riser 1's clip has.
         # PLAIN PLACEMENTS, NOT MOUNTED: a fitted rear blank covers this metal,
         # and drawing after the bays would put a clip on top of the blank.
+        # WHAT THE CAGE MOUNTS TO, drawn when there is no cage. The clips
+        # below and these are the same spot in different machines: a riser
+        # fitted shows the clip, drives fitted show what it bolted to. Both
+        # figures are right and `only-in` is what tells them apart.
+        - {ref: dell/riser-cage-mount-14g@1, id: riser-2-cage-mount,
+           at: [269.93, 24.93], group: furniture, rel-pos: 26,
+           only-in: [rear-4-sff, rear-2-lff]}
+        - {ref: dell/riser-cage-mount-14g@1, id: riser-3-cage-mount,
+           at: [298.43, 24.93], group: furniture, rel-pos: 27,
+           only-in: [rear-4-sff, rear-2-lff]}
         - {ref: dell/riser-card-clip-14g@1, id: riser-2-card-clip,
            at: [268.93, 26.50], group: furniture, rel-pos: 24,
            only-in: [no-rear-storage, no-riser-3]}
@@ -871,7 +881,8 @@ views:
                     bay2-drive-plate, bay3-drive-plate,
                     rear-drive-12, rear-drive-13, lff-drive-label,
                     rear-storage-2, rear-storage-3,
-                 riser-2-card-clip, riser-3-card-clip],
+                 riser-2-card-clip, riser-3-card-clip,
+                 riser-2-cage-mount, riser-3-cage-mount],
            group: furniture, rel-pos: 19}
         # THE NUMBERED PLATE, ONE PER BAY. Mirror images about face 289.75; the
         # skin is named for the numbers it carries, because which numbers a bay
@@ -1075,6 +1086,10 @@ gaps:
       An eighth time when two "rivet" pairs beside the divider turned out to be
       card retention clips. A misread of what is on the rear, corrected on the
       rear, and silent about any front.
+      A ninth time when those rivets came back, scoped: they are what the riser
+      cage mounts to and they show when drives are fitted instead. That one is
+      a rear configuration telling two rear drawings apart, which is the
+      mechanism this gap says is MISSING between faces - and still is.
       TWO SOURCES DISAGREE AND ARE LEFT DISAGREEING. The system information
       label draws FIVE fronts - 24, 16 and 8 x 2.5 inch, 12 and 8 x 3.5 inch -
       where table 28 lists TWO front backplanes. Whether the 16- and 8-bay
@@ -1221,6 +1236,9 @@ configurations:
     # and all of these show this rear.
     skins:
       db9: teal
+      # THE TAB'S OUTLINE AND TONGUE ARE BEHIND THE BLANK. What stands proud of
+      # a fitted perforated panel is the pad and its captive thumbscrew.
+      rear-bay-screw-tab-14g: pad-only
     kind: orderable
     description: >-
       THE "WITHOUT" HALF OF "WITH OR WITHOUT REAR STORAGE". ISM table 25 names
