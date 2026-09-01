@@ -17,10 +17,24 @@
        to 22.75, 17.75 tall, and a row at y 15 puts the right edge at local
        90.75 with no plate band left of the vents at all. 90.00 x 18.00,
        centred on the opening. -->
-  <path id="plate" fill-rule="evenodd" d="M1.50 0.30 H93.50 A1.20 1.20 0 0 1 94.70 1.50 V60.50 A1.20 1.20 0 0 1 93.50 61.70 H1.50 A1.20 1.20 0 0 1 0.30 60.50 V1.50 A1.20 1.20 0 0 1 1.50 0.30 Z M2.75 0.50 H88.75 A2.00 2.00 0 0 1 90.75 2.50 V16.50 A2.00 2.00 0 0 1 88.75 18.50 H2.75 A2.00 2.00 0 0 1 0.75 16.50 V2.50 A2.00 2.00 0 0 1 2.75 0.50 Z M2.75 20.82 H88.75 A2.00 2.00 0 0 1 90.75 22.82 V36.82 A2.00 2.00 0 0 1 88.75 38.82 H2.75 A2.00 2.00 0 0 1 0.75 36.82 V22.82 A2.00 2.00 0 0 1 2.75 20.82 Z M2.75 41.14 H88.75 A2.00 2.00 0 0 1 90.75 43.14 V57.14 A2.00 2.00 0 0 1 88.75 59.14 H2.75 A2.00 2.00 0 0 1 0.75 57.14 V43.14 A2.00 2.00 0 0 1 2.75 41.14 Z" fill="#969da4" stroke="#4f565d" stroke-width="0.5"/>
-  <rect id="slot-4" x="2.50" y="5.00" width="89.9" height="12.2" rx="1.4" fill="none" stroke="#454b51" stroke-width="0.35"/>
-  <rect id="slot-5" x="2.50" y="25.32" width="89.9" height="12.2" rx="1.4" fill="none" stroke="#454b51" stroke-width="0.35"/>
-  <rect id="slot-6" x="2.50" y="45.64" width="54.53" height="12.2" rx="1.4" fill="none" stroke="#454b51" stroke-width="0.35"/>
+  <path id="plate" fill-rule="evenodd" d="M1.50 0.30 H93.50 A1.20 1.20 0 0 1 94.70 1.50 V60.50 A1.20 1.20 0 0 1 93.50 61.70 H1.50 A1.20 1.20 0 0 1 0.30 60.50 V1.50 A1.20 1.20 0 0 1 1.50 0.30 Z M2.75 0.50 H88.75 A2.00 2.00 0 0 1 90.75 2.50 V16.50 A2.00 2.00 0 0 1 88.75 18.50 H2.75 A2.00 2.00 0 0 1 0.75 16.50 V2.50 A2.00 2.00 0 0 1 2.75 0.50 Z M2.75 20.82 H88.75 A2.00 2.00 0 0 1 90.75 22.82 V36.82 A2.00 2.00 0 0 1 88.75 38.82 H2.75 A2.00 2.00 0 0 1 0.75 36.82 V22.82 A2.00 2.00 0 0 1 2.75 20.82 Z M2.75 41.14 H55.03 A2.00 2.00 0 0 1 57.03 43.14 V57.14 A2.00 2.00 0 0 1 55.03 59.14 H2.75 A2.00 2.00 0 0 1 0.75 57.14 V43.14 A2.00 2.00 0 0 1 2.75 41.14 Z" fill="#969da4" stroke="#4f565d" stroke-width="0.5"/>
+  <!-- THE OPENINGS KEEP THEIR IDS AND STOP DRAWING, which is the same fix
+       riser-1 had and this file never got. render.py hangs each bay's data-path
+       on the node with this id, so they have to exist - but they kept a stroke
+       as well, and a stroked rect over a punched window draws a second outline
+       just inside every one of them. One shape drawn twice, not a shape read
+       wrong.
+       AND THE THIRD WINDOW IS LOW-PROFILE SIZED. It was cut full width,
+       2.75..90.75, the same as the full-height pair - but slot 6 is LOW PROFILE
+       and its bracket is only 54.53 wide, so the 33 mm of window past the end
+       of the card was an opening onto nothing and rendered as a dark void
+       beside it. Now 2.75..57.03, framing the bracket that is actually there.
+       CUTTING IT ALTOGETHER WAS THE FIRST ATTEMPT AND IT WAS WRONG: the card
+       is drawn `behind` this plate, so with no window it disappeared entirely.
+       The window is what makes the slot visible; only its width was wrong. -->
+  <rect id="slot-4" x="2.50" y="5.00" width="89.9" height="12.2" rx="1.4" fill="none" stroke="none"/>
+  <rect id="slot-5" x="2.50" y="25.32" width="89.9" height="12.2" rx="1.4" fill="none" stroke="none"/>
+  <rect id="slot-6" x="2.50" y="45.64" width="54.53" height="12.2" rx="1.4" fill="none" stroke="none"/>
   <!-- THE LOUVRE ROW, AND IT IS ON THIS PLATE. It was moved to the card on
        the argument that the figure puts it inside a window and a hole cannot
        carry ink - but the card is BEHIND this plate, so anything on the card in
