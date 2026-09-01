@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 7.0.0
+version: 8.0.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -825,6 +825,22 @@ views:
         # because things go behind it: riser 2's bracket tails run across it,
         # and a fitted blank's perforations start to its right. It was part of
         # dell/rear-bay-frame-14g until that made both impossible at once.
+        # THE OTHER TWO CARD CLIPS, one per riser, where each riser's
+        # brackets end and the L of the bracket is held. They were two pairs of
+        # stroked circles inside rear-bay-frame, called rivets; the R740
+        # three-riser rear shows blue prongs at both. Positioned from that
+        # figure by colour - prong pairs at 269.00..277.25 and 299.00..307.25,
+        # the same 8.25 span riser 1's clip has.
+        # PLAIN PLACEMENTS, NOT MOUNTED: a fitted rear blank covers this metal,
+        # and drawing after the bays would put a clip on top of the blank.
+        - {ref: dell/riser-card-clip-14g@1, id: riser-2-card-clip,
+           at: [268.93, 26.50], group: furniture, rel-pos: 24,
+           only-in: [no-rear-storage, no-riser-3]}
+        # RISER 3'S CLIP IS ONLY IN `no-rear-storage`, not in `no-riser-3`:
+        # that configuration blanks this opening, and the blank covers the clip.
+        - {ref: dell/riser-card-clip-14g@1, id: riser-3-card-clip,
+           at: [298.86, 26.50], group: furniture, rel-pos: 25,
+           only-in: [no-rear-storage]}
         - {ref: dell/rear-bay-screw-tab-14g@1, id: rear-bay-screw-tab,
            at: [144.26, 3.09], group: furniture, rel-pos: 20}
         - {ref: dell/thumbscrew-blue-14g@1, id: cage-screw-right,
@@ -844,7 +860,7 @@ views:
         # all four drive positions, which is the definition.
         # The plates do NOT frame anything: at 254.75 and 311.80 they sit beside
         # the drives, not around them, and overlap none of them.
-        - {ref: dell/rear-bay-frame-14g@3, id: rear-bay-frame,
+        - {ref: dell/rear-bay-frame-14g@4, id: rear-bay-frame,
            at: [144.26, 1.71],
            # AND THE RISERS TOO, now that this is always present. In the
            # no-rear-storage configuration riser 2 and riser 3 fill the same
@@ -854,7 +870,8 @@ views:
            frames: [drive-24, drive-25, drive-26, drive-27, riser-2, riser-3,
                     bay2-drive-plate, bay3-drive-plate,
                     rear-drive-12, rear-drive-13, lff-drive-label,
-                    rear-storage-2, rear-storage-3],
+                    rear-storage-2, rear-storage-3,
+                 riser-2-card-clip, riser-3-card-clip],
            group: furniture, rel-pos: 19}
         # THE NUMBERED PLATE, ONE PER BAY. Mirror images about face 289.75; the
         # skin is named for the numbers it carries, because which numbers a bay
@@ -1055,6 +1072,9 @@ gaps:
       A seventh time when riser 3 slid 9.525 right to sit over the power
       supply's edge. Moving one bay along its own face changes nothing about
       which front it can be sold with.
+      An eighth time when two "rivet" pairs beside the divider turned out to be
+      card retention clips. A misread of what is on the rear, corrected on the
+      rear, and silent about any front.
       TWO SOURCES DISAGREE AND ARE LEFT DISAGREEING. The system information
       label draws FIVE fronts - 24, 16 and 8 x 2.5 inch, 12 and 8 x 3.5 inch -
       where table 28 lists TWO front backplanes. Whether the 16- and 8-bay
