@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: rear-bay-frame-14g
-version: 2.0.0
+version: 3.0.0
 class: mechanical
 profile: compute
 description: >-
@@ -9,6 +9,16 @@ description: >-
   screw tabs, vent panels and the T-shaped land, present whatever the bays hold
 size: {w: 287.18, h: 42.98, d: 14.13}
 provenance:
+  the-screw-tab-is-no-longer-here: >-
+    IT LEFT OVER DRAW ORDER, not geometry. This component is a plain placement
+    and draws before the bays, which is exactly what its cage panels, vents and
+    rivets need - a fitted blank is supposed to cover them. The tab at the left
+    end needed the opposite: riser 2's bracket tails run straight across it and
+    go behind it, so drawn from here it ended up underneath the cards it should
+    hide. Making this component `mounts` would have fixed the tab and un-fixed
+    the blanks.
+    It is dell/rear-bay-screw-tab-14g@1 now, with the geometry unchanged and
+    this file still the place its numbers are argued.
   it-is-chassis-and-not-a-cage: >-
     RENAMED FROM drive-cage-rear-14g, WHICH IS WHAT IT WAS NOT. That part was
     287.18 wide, spanned rear bays 2 and 3, framed all four drives, and carried
@@ -273,16 +283,6 @@ provenance:
 relief:
   wall: '#4a5057'
   features:
-  - node: screw-tab-tongue
-    sink: 0.99
-    color: '#626971'
-    confidence: estimated
-    source: >-
-      dell/drive-cage-rear-14g@1's own tongue key - a 12 degree bend on the
-      operator's reading, over a 9.50 face, dropping 1.98 at its far edge.
-      0.99 is the MEAN of that ramp, because `sink` is a uniform
-      recess and this vocabulary has no bend. The outline is measured; the angle
-      is not.
   - node: frame
     out: 14.13
     color: '#8c939b'

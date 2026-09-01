@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 4.0.0
+version: 5.0.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -814,8 +814,12 @@ views:
         # order the hardware is assembled in.
         - {ref: dell/pcie-slot-strip-14g@1, id: slot-strip, at: [3.5, 4.0],
            group: furniture, rel-pos: 22}
-        - {ref: dell/thumbscrew-blue-14g@1, id: cage-screw-left,
-           at: [144.66, 5.35], group: furniture, rel-pos: 21}
+        # THE TAB THE LEFT THUMBSCREW IS BOLTED TO, drawn after the bays
+        # because things go behind it: riser 2's bracket tails run across it,
+        # and a fitted blank's perforations start to its right. It was part of
+        # dell/rear-bay-frame-14g until that made both impossible at once.
+        - {ref: dell/rear-bay-screw-tab-14g@1, id: rear-bay-screw-tab,
+           at: [144.26, 3.09], group: furniture, rel-pos: 20}
         - {ref: dell/thumbscrew-blue-14g@1, id: cage-screw-right,
            at: [282.59, 26.00], group: furniture, rel-pos: 22}
         # THE CHASSIS ACROSS REAR BAYS 2 AND 3, and it is ALWAYS PRESENT.
@@ -833,7 +837,7 @@ views:
         # all four drive positions, which is the definition.
         # The plates do NOT frame anything: at 254.75 and 311.80 they sit beside
         # the drives, not around them, and overlap none of them.
-        - {ref: dell/rear-bay-frame-14g@2, id: rear-bay-frame,
+        - {ref: dell/rear-bay-frame-14g@3, id: rear-bay-frame,
            at: [144.26, 1.71],
            # AND THE RISERS TOO, now that this is always present. In the
            # no-rear-storage configuration riser 2 and riser 3 fill the same
@@ -1035,6 +1039,9 @@ gaps:
       card cannot be shown "only through its cutout" without a part drawn after
       the bays to mask it. Recorded where it belongs, on the riser 2 slot 6
       cutout, rather than widened into this one.
+      A fifth time when the screw tab was split out of the frame so it could
+      draw in front of riser 2's bracket tails. That is a draw-order fact about
+      one bay, not a coupling between faces.
       TWO SOURCES DISAGREE AND ARE LEFT DISAGREEING. The system information
       label draws FIVE fronts - 24, 16 and 8 x 2.5 inch, 12 and 8 x 3.5 inch -
       where table 28 lists TWO front backplanes. Whether the 16- and 8-bay
