@@ -31,9 +31,16 @@ provenance:
     On the AC supply the ISM calls the release lever "an illuminated translucent
     handle that serves as an indicator" - one part doing both jobs, which is why
     that lever carries `var(--led-color)`. This supply separates them: the latch
-    is plain amber plastic and the lamp is its own mark in the corner, carrying a
-    waveform. So the colour variable moved with the function, and a device
-    lighting this supply lights the thing that actually lights.
+    is plain amber plastic and the lamp is a round indicator in the corner. So
+    the colour variable moved with the function, and a device lighting this
+    supply lights the thing that actually lights.
+    THE LAMP AND ITS LABEL ARE TWO THINGS. A first pass drew one rounded
+    rectangle with the waveform on it, which makes the mark read as part of the
+    lit surface; the supply has a round lamp with the waveform printed on the
+    metal beside it. Only the lamp carries `var(--led-color)`.
+    PLACED FROM DESCRIPTION, NOT FROM THE PHOTOGRAPHS - at about 1.6 px/mm they
+    cannot separate a 3 mm lamp from the screw next to it, so the corner is
+    right and the millimetres are not.
   the-region-and-the-class: >-
     UNRESTRICTED, UNLIKE THE OTHER DC OPTIONS. The R740 and R740xd Technical
     Guide marks the 750 W Mixed Mode HVDC and the 750 W Mixed Mode 240 V DC as
@@ -206,8 +213,8 @@ parts:
   - {ref: dell/dc-terminal-6ryj9@1, id: terminal, at: [10.0, 5.5], behind: true}
 elements:
   lamp-status:
-    at: [1.60, 1.60]
-    size: [6.20, 3.10]
+    at: [6.05, 1.85]
+    size: [2.70, 2.70]
     class: led
     states: ['off',
              {name: 'ok', color: '#22c55e'},

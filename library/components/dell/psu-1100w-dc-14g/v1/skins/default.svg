@@ -43,16 +43,22 @@
     <path d="M48.19 6.96 L53.56 11.76 M75.37 6.96 L70.55 11.52 M75.79 32.06 L70.63 27.29 M48.19 31.64 L53.46 27.04"/>
   </g>
   <g><circle id="screw-1" cx="45.73" cy="3.50" r="3.1" fill="#c3c8cd" stroke="#8b9299" stroke-width="0.3"/><path d="M43.93 3.50 h3.6 M45.73 1.70 v3.6" stroke="#7b8288" stroke-width="0.55"/></g><g><circle id="screw-2" cx="78.33" cy="3.50" r="3.1" fill="#c3c8cd" stroke="#8b9299" stroke-width="0.3"/><path d="M76.53 3.50 h3.6 M78.33 1.70 v3.6" stroke="#7b8288" stroke-width="0.55"/></g><g><circle id="screw-3" cx="78.33" cy="35.10" r="3.1" fill="#c3c8cd" stroke="#8b9299" stroke-width="0.3"/><path d="M76.53 35.10 h3.6 M78.33 33.30 v3.6" stroke="#7b8288" stroke-width="0.55"/></g><g><circle id="screw-4" cx="45.73" cy="35.10" r="3.1" fill="#c3c8cd" stroke="#8b9299" stroke-width="0.3"/><path d="M43.93 35.10 h3.6 M45.73 33.30 v3.6" stroke="#7b8288" stroke-width="0.55"/></g>
-  <!-- THE INDICATOR, at the upper left, carrying a waveform mark. Separate
-       from the latch on this supply, where the AC unit's illuminated lever is
-       both. Placed from the operator's photographs, which show the face at
-       about 1.6 px/mm - enough to say it is there and roughly where, not
-       enough to dimension it. -->
-  <rect id="lamp-status" x="1.60" y="1.60" width="6.20" height="3.10" rx="0.5"
-        fill="var(--led-color, #2c3a30)" stroke="#454b51" stroke-width="0.3"/>
-  <g id="lamp-glyph" fill="none" stroke="#c9ced3" stroke-width="0.32">
-    <path d="M2.30 3.15 l0.9 0 0.55 -1.15 0.7 2.25 0.55 -1.10 0.85 0"/>
+  <!-- THE LAMP AND ITS LABEL ARE TWO THINGS, and drawing them as one was
+       wrong. The first pass made the indicator a rounded rectangle with the
+       waveform drawn ON it, so the mark appeared to be part of the lit surface.
+       The supply has a ROUND lamp and, beside it, a waveform printed on the
+       sheet metal - the same relationship the drive carriers have, where the
+       glyph names the lamp rather than sitting inside it.
+       Only the round one carries the LED colour variable; the waveform is
+       silkscreen and never lights.
+       PLACED FROM THE OPERATOR'S DESCRIPTION, not from the photographs. At
+       about 1.6 px/mm the face-on views cannot resolve a 3 mm lamp from the
+       screw beside it, so the corner is right and the millimetres are not. -->
+  <g id="silkscreen-lamp" fill="none" stroke="#c9ced3" stroke-width="0.30">
+    <path d="M1.50 3.20 l0.85 0 0.50 -1.35 0.65 2.65 0.50 -1.30 0.75 0"/>
   </g>
+  <circle id="lamp-status" cx="7.40" cy="3.20" r="1.35"
+          fill="var(--led-color, #2c3a30)" stroke="#454b51" stroke-width="0.3"/>
   <!-- THE FAN LABEL IS BLACK WITH THE WATTAGE IN WHITE, not the AC supply's
        green EPP disc. EPP is an AC-supply mark; this unit does not carry it. -->
   <circle id="fan-label" cx="62.16" cy="19.45" r="9.10" fill="#141719"
