@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 0.15.0
+version: 1.0.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -610,12 +610,25 @@ views:
         # still there and gets a perforated panel, one per bay - a scan of the
         # face finds two perforated regions with the divider between them, not
         # one panel spanning both.
-        - {id: rear-storage-2, at: [153.20, 1.20], size: {w: 114.8, h: 39.1},
-           accepts: [dell/rear-bay-blank-14g@1], default: dell/rear-bay-blank-14g@1,
+        # SIZED FROM THE FRAME'S PATH, NOT FROM THE PERFORATION SCAN. These
+        # were 114.8 x 39.1 at y 1.20, which is the extent of the HOLES; the
+        # panel that closes the bay is bigger, and chassis vents, rivets and a
+        # locating hole showed to the right of both of them.
+        # The divider sits at local 135.19..152.00 in the 287.18-wide frame at
+        # 144.26, so the openings either side are 135.19 and 135.18 - equal to a
+        # hundredth of a millimetre, which is the check that the reading is
+        # right. Vertically the frame's top rail ends at face 2.90 and its
+        # bottom rail begins at 42.40.
+        - {id: rear-storage-2, at: [144.26, 2.90], size: {w: 135.19, h: 39.50},
+           accepts: [dell/rear-bay-blank-14g@2], default: dell/rear-bay-blank-14g@2,
            group: drives-rear, rel-pos: 3, only-in: [rear-storage-blank]}
-        - {id: rear-storage-3, at: [307.20, 1.20], size: {w: 114.8, h: 39.1},
-           accepts: [dell/rear-bay-blank-14g@1], default: dell/rear-bay-blank-14g@1,
-           group: drives-rear, rel-pos: 4, only-in: [rear-storage-blank]}
+        - {id: rear-storage-3, at: [296.26, 2.90], size: {w: 135.19, h: 39.50},
+           accepts: [dell/rear-bay-blank-14g@2], default: dell/rear-bay-blank-14g@2,
+           group: drives-rear, rel-pos: 4,
+           # ALSO WHEN RISER 3 IS SIMPLY NOT FITTED. Same opening, same blank -
+           # `no-riser-3` is table 25's row 3 (1A+2A), which fits riser 2 and no
+           # riser 3, and had no configuration of its own until now.
+           only-in: [rear-storage-blank, no-riser-3]}
         - {id: riser-1, at: [17.0, 4.0], size: {w: 102.50, h: 62.0},
            accepts: [dell/riser-1-3fh-14g@1, dell/riser-1-2fh-14g@1],
            default: dell/riser-1-3fh-14g@1,
@@ -639,7 +652,7 @@ views:
         - {id: riser-2, at: [161.0, 4.0], size: {w: 89.70, h: 62.0},
            accepts: [dell/riser-2-2fh-1lp-14g@1, dell/riser-2-3-blank-14g@1],
            default: dell/riser-2-2fh-1lp-14g@1,
-           group: risers, rel-pos: 2, only-in: [no-rear-storage]}
+           group: risers, rel-pos: 2, only-in: [no-rear-storage, no-riser-3]}
         # A 12 mm DISAGREEMENT WAS REPORTED AGAINST THE CAD HERE AND IT WAS
         # NOT REAL. It came from the rear handle's upper 'window', read off a
         # silhouette of the WHOLE handle shell at 159.7-242.0 and compared with
@@ -659,8 +672,14 @@ views:
            # riser, two storage outcomes - so this bay belongs to all three.
            group: risers, rel-pos: 2,
            only-in: [rear-4-sff, rear-2-lff, rear-storage-blank]}
+        # NO BLANK IN THIS BAY'S `accepts`, AND THAT IS THE POINT. This
+        # opening and rear-storage-3 are the SAME HOLE - this bay at 318.0 and
+        # that one at 296.26 - so offering a blank here as well gave the chassis
+        # two different parts closing one opening, one plain and one perforated,
+        # picked by configuration. When riser 3 is not fitted the opening is
+        # closed by rear-storage-3, which scopes to `no-riser-3` below.
         - {id: riser-3, at: [318.0, 4.0], size: {w: 95.0, h: 41.0},
-           accepts: [dell/riser-3-2fh-14g@1, dell/riser-3-blank-14g@1],
+           accepts: [dell/riser-3-2fh-14g@1],
            default: dell/riser-3-2fh-14g@1,
            group: risers, rel-pos: 3, only-in: [no-rear-storage]}
         - {id: ndc, at: [139.6, 66.4], size: {w: 90.3, h: 14.5},
@@ -985,7 +1004,12 @@ gaps:
       only), while configuration 3 fits a three-slot 2A (slots 4, 5, 6) and has
       NO rear storage despite fitting no riser 3 at all. It is riser 2's
       full-height section that occupies the bay the rear cage needs. This
-      device's `no-rear-storage` and `rear-4-sff` already encode exactly that.
+      device's `no-rear-storage` and `rear-4-sff` already encode exactly that,
+      and row 3 itself is now `no-riser-3` - added when the riser 3 opening and
+      rear storage bay 3 turned out to be the SAME HOLE, closed by two
+      different blanks depending on which configuration you picked.
+      RE-READ AND STILL OPEN: that change touched which bay closes an opening,
+      not the front-to-rear coupling this gap is about.
       TWO SOURCES DISAGREE AND ARE LEFT DISAGREEING. The system information
       label draws FIVE fronts - 24, 16 and 8 x 2.5 inch, 12 and 8 x 3.5 inch -
       where table 28 lists TWO front backplanes. Whether the 16- and 8-bay
@@ -1104,6 +1128,21 @@ configurations:
       fitting a 2.5 inch carrier into a 3.5 inch bay.
       It stops being an illustration the day the 12 x 3.5 inch front is drawn
       and a configuration binds the two faces together.
+  no-riser-3:
+    skins:
+      db9: teal
+    kind: orderable
+    description: >-
+      TABLE 25's ROW 3, 1A+2A - the three-slot riser 2 fitted and no riser 3 at
+      all. Six PCIe slots, and the riser 3 opening carries the same perforated
+      blank that closes a rear storage bay, because it is the same opening.
+      IT HAD NO CONFIGURATION UNTIL NOW and the variant sheet reported that as a
+      gap: it is the only row in table 25 that fits riser 2 without riser 3, so
+      nothing in the device named it and the drawing could only be produced by
+      overriding a bay from outside.
+    bays:
+      riser-1: dell/riser-1-2fh-14g@1
+      riser-2: dell/riser-2-2fh-1lp-14g@1
   rear-storage-blank:
     # the serial port's insulator is teal on this machine, not the
     # near-black a DE-9 usually carries - std/db9@1's `teal` skin. Named in
