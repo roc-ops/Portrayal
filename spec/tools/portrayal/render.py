@@ -407,7 +407,7 @@ def rewrite_ids(el, prefix, contract, path_prefix, skip=None):
                     lambda m: f"url(#{renamed.get(m.group(1), m.group(1))})", val))
 
 
-def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None):
+def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None):
     contract, skins = lib.resolve(ref)
     comp_name = ref.split("/")[-1].split("@")[0]
     if skin_overrides and comp_name in skin_overrides:
@@ -518,6 +518,17 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         tf = f"translate({at[0]},{at[1]})"
         if rotate:
             tf += f" rotate({rotate} {cw / 2} {chh / 2})"
+    # MIRRORED LAST, so it flips the component about its OWN vertical centre
+    # line and leaves the box exactly where `at` and `rotate` put it. Written
+    # as a translate-then-negate rather than scale(-1,1) about a computed
+    # centre, because the second form has to know where the centre ended up
+    # and this one does not.
+    # HANDEDNESS IS NOT ROTATION. rotate: 180 is the flip this vocabulary could
+    # already express and it is the wrong one for a PCIe bracket: it turns the
+    # louvre row to the top and the retention tab to the bottom. A riser whose
+    # cards face the other way needs the reflection, not the half-turn.
+    if mirror:
+        tf += f" translate({cw:g},0) scale(-1,1)"
     g.set("transform", tf)
     title = ET.SubElement(g, f"{{{SVG_NS}}}title")
     title.text = label or inst_id
@@ -556,7 +567,8 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         pg, _ = instance_group(lib, part["ref"], f"{inst_id}--{part['id']}",
                                part["at"], None, part.get("attrs"), None, None,
                                skin_name=part.get("skin", "default"),
-                               rotate=part.get("rotate"), palette=palette,
+                               rotate=part.get("rotate"), mirror=bool(part.get("mirror")),
+                               palette=palette,
                                inst_palette=inst_palette,
                                skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                                path=f"{path}/{part['id']}", resolved=resolved)
@@ -662,7 +674,8 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
             b_at = [b_at[0] + d, b_at[1] - d]
         sub, _ = instance_group(
             lib, occupant, f"{inst_id}--{bay_id}--module", b_at,
-            None, None, None, None, rotate=bay.get("rotate"), palette=palette,
+            None, None, None, None, rotate=bay.get("rotate"),
+            mirror=bool(bay.get("mirror")), palette=palette,
             inst_palette=inst_palette,
             skin_overrides=skin_overrides, attr_overrides=attr_overrides,
             path=f"{path}/{bay_id}/module", resolved=resolved, depth=depth + 1)
