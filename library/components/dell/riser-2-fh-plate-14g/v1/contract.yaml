@@ -1,0 +1,60 @@
+format: 1
+kind: component
+name: riser-2-fh-plate-14g
+version: 1.0.0
+class: riser
+profile: server
+description: >-
+  the riser 2 plate on a 14th-generation PowerEdge - two full-height windows
+  and one low-profile, shared by risers 2A, 2D, 2E and 2F
+provenance:
+  why-this-is-its-own-part: >-
+    NOTHING ON THE REAR FACE SEPARATES THE VARIANTS THAT SHARE THIS PLATE.
+    The riser that plugs into the system board is inside the chassis; what a
+    photograph of the rear shows is this plate, and it is the same pressing
+    whichever card is fitted. So the metal is drawn once here and composed,
+    and the parts that compose it carry the only things that actually vary:
+    which slots have a connector behind them, how wide each is, and which
+    processor it is wired to. THE BAY ANCHORS ARE DELIBERATELY ABSENT.
+    render.py hangs a bay data-path on the skin node whose id matches the bay
+    id, so the rect anchors have to sit with the `bays` that name them - on
+    the riser part, not on the shared metal. This part draws ink and no
+    openings. IT IS CHASSIS METAL AND IT IS STILL DRAWN BY A MODULE. Decor is
+    emitted before bay occupants, so a plate modelled as panel decor would
+    render UNDER the cards it is supposed to cover. Composed by the module it
+    draws after them instead, which is what the hardware looks like.
+  the-plate-is-not-punched-and-that-was-a-misreading: >-
+    A ROW OF VENTS WAS DRAWN ON THIS PLATE AND IT BELONGS TO THE CARD.
+    Measured at face 24.75 and 44.75, each row falls inside a BRACKET - local
+    y 18.93 and 18.61, the same place on each card - and each overlaps one of
+    this plate's own windows, which is a hole and cannot carry ink. Two
+    independent reasons, agreeing. The rows now live in
+    dell/pcie-filler-fh-14g@1 where they are louvres rather than punched
+    rectangles. Nothing here is punched between the openings on the evidence
+    held: this plate is metal with windows in it and no vent field of its
+    own.
+  size: >-
+    size is 95.0 x 62.0, the plate the skin DRAWS; insert is 120.02 x 62.0,
+    what a slot has to reserve. THOSE ARE DIFFERENT THINGS and the difference
+    is the whole point here: the plate is what a photograph shows, the insert
+    is what the brackets need. Growing `size` to the envelope instead was
+    tried and put five false overlaps on the rear face - riser 3's box across
+    the power supply, riser 1's down over the iDRAC port - none of them
+    collisions between parts, all of them collisions between boxes of things
+    at different heights. The plate and the slot pitch come from the R740 ISM
+    figure 9, which passes Gate 1 at 0.26% against a 434 x 86.8 rear face;
+    the pitch is the PCI standard 20.32 and the figure confirms it at 20.535
+    (1.06%). THE OUTLINE IS AREA ON THE FACE, not the assembly behind it.
+    Nothing held here dimensions the riser's depth or its board, so no depth
+    is recorded.
+  the-low-profile-slot-was-the-one-that-was-wrong: >-
+    IT WAS 78.0 WIDE, which is neither of the two numbers it could have been.
+    An LP connector opening is 54.53; an LP bracket is 79.20. 78.0 is within
+    a millimetre of the bracket and 23 mm from the opening - so this slot
+    appears to have been measured as a BRACKET while the full-height slots
+    beside it were measured as OPENINGS, at the same x, which cannot both be
+    true of one drawing. It is placed here by its opening, aligned with the
+    others, and the 78.0 reading is recorded as unresolved rather than
+    quietly kept.
+size: {w: 111.715, h: 42.2}
+skins: [default]

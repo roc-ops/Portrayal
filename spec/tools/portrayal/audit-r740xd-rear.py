@@ -52,7 +52,7 @@ for label, key in TABLE9:
 
 # ---- B.3, the measured geometry ------------------------------------------
 checks = []
-riser = comp('dell/riser-2-2fh-1lp-14g@1')
+riser = comp('dell/riser-2a-14g@1')
 rows = sorted(v['at'][1] for v in riser['bays'].values())
 pitch = (rows[-1] - rows[0]) / (len(rows) - 1)
 checks.append(('PCIe bracket pitch 20.32', f'{pitch:.2f}', abs(pitch - 20.32) < 0.01))

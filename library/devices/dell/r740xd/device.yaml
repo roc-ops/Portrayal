@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 10.0.3
+version: 11.0.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -752,10 +752,12 @@ views:
         # front-rear coupling gap showing up as an id clash.
         - {id: rear-drive-12, at: [154.80, 7.50], size: {w: 107.8, h: 26.9},
            accepts: [common/drive-carrier-35@1], default: common/drive-carrier-35@1,
-           group: drives-rear, rel-pos: 1, only-in: [rear-2-lff, lff-12-rear-2-lff]}
+           group: drives-rear, rel-pos: 1, only-in: [lff12-rlff2-rc0-noriser, lff12-rlff2-rc1-1b2b, lff12-rlff2-rc2-1b2c,
+                     lff12-mlff4-rlff2-rc0-noriser, lff12-mlff4-rlff2-rc1-1b2b, lff12-mlff4-rlff2-rc2-1b2c]}
         - {id: rear-drive-13, at: [314.20, 7.50], size: {w: 107.8, h: 26.9},
            accepts: [common/drive-carrier-35@1], default: common/drive-carrier-35@1,
-           group: drives-rear, rel-pos: 2, only-in: [rear-2-lff, lff-12-rear-2-lff]}
+           group: drives-rear, rel-pos: 2, only-in: [lff12-rlff2-rc0-noriser, lff12-rlff2-rc1-1b2b, lff12-rlff2-rc2-1b2c,
+                     lff12-mlff4-rlff2-rc0-noriser, lff12-mlff4-rlff2-rc1-1b2b, lff12-mlff4-rlff2-rc2-1b2c]}
         # THE BAYS BLANKED. Table 25's riser configurations 0, 1 and 2 are
         # "with or without rear storage"; this is the without. The opening is
         # still there and gets a perforated panel, one per bay - a scan of the
@@ -772,17 +774,20 @@ views:
         # bottom rail begins at 42.40.
         - {id: rear-storage-2, at: [144.26, 2.90], size: {w: 135.19, h: 39.50},
            accepts: [dell/rear-bay-blank-14g@2], default: dell/rear-bay-blank-14g@2,
-           group: drives-rear, rel-pos: 3, only-in: [rear-storage-blank]}
+           group: drives-rear, rel-pos: 3, only-in: [lff12-rc0-noriser, lff12-rc1-1b2b, lff12-rc2-1b2c, sff24-rc0-noriser, sff24-rc1-1b2b,
+                     sff24-rc2-1b2c]}
         - {id: rear-storage-3, at: [296.26, 2.90], size: {w: 135.19, h: 39.50},
            accepts: [dell/rear-bay-blank-14g@2], default: dell/rear-bay-blank-14g@2,
            group: drives-rear, rel-pos: 4,
            # ALSO WHEN RISER 3 IS SIMPLY NOT FITTED. Same opening, same blank -
            # `no-riser-3` is table 25's row 3 (1A+2A), which fits riser 2 and no
            # riser 3, and had no configuration of its own until now.
-           only-in: [rear-storage-blank, no-riser-3]}
+           only-in: [lff12-rc0-noriser, lff12-rc1-1b2b, lff12-rc2-1b2c, lff12-rc3-1a2a, sff24-rc0-noriser,
+                     sff24-rc1-1b2b, sff24-rc2-1b2c, sff24-rc3-1a2a]}
         - {id: riser-1, at: [13.95, 4.0], size: {w: 107.59, h: 62.0},
-           accepts: [dell/riser-1-3fh-14g@1, dell/riser-1-2fh-14g@1],
-           default: dell/riser-1-3fh-14g@1,
+           accepts: [dell/riser-1b-14g@1, dell/riser-1a-14g@1, dell/riser-1d-14g@1,
+                     dell/riser-1-none-14g@1],
+           default: dell/riser-1b-14g@1,
            group: risers, rel-pos: 1}
         # RISER 2 IS TWO DIFFERENT HOLES, not one hole with two occupants. The
         # standards-only render against ISM figure 8 caught this: the figure
@@ -806,9 +811,13 @@ views:
         # 2.65 left of what its local coordinates implied, and the undersized
         # bay also hid the plate's overlap with the power supply from L13.
         - {id: riser-2, at: [155.335, 4.0], size: {w: 111.715, h: 42.20},
-           accepts: [dell/riser-2-2fh-1lp-14g@2, dell/riser-2-3-blank-14g@1],
-           default: dell/riser-2-2fh-1lp-14g@2,
-           group: risers, rel-pos: 2, only-in: [no-rear-storage, no-riser-3, lff-12]}
+           accepts: [dell/riser-2a-14g@1, dell/riser-2d-14g@1, dell/riser-2e-14g@1,
+                     dell/riser-2f-14g@1, dell/riser-2-3-blank-14g@1],
+           default: dell/riser-2a-14g@1,
+           group: risers, rel-pos: 2, only-in: [lff12-rc3-1a2a, lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a, lff12-rc9-1a2d3a,
+                     lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b, sff24-rc3-1a2a,
+                     sff24-rc4-1a2a3a, sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a,
+                     sff24-rc15-1a2e3b, sff24-rc16-1d2e3b, sff24-rc17-1a2f3b]}
         # A 12 mm DISAGREEMENT WAS REPORTED AGAINST THE CAD HERE AND IT WAS
         # NOT REAL. It came from the rear handle's upper 'window', read off a
         # silhouette of the WHOLE handle shell at 159.7-242.0 and compared with
@@ -821,13 +830,21 @@ views:
         # this bay goes, in either direction.
         # The 78.0 reading against 79.2 stands as the open question it was.
         - {id: riser-2-lp, at: [147.87, 46.93], size: {w: 79.2, h: 18.42},
-           accepts: [dell/riser-2-1lp-14g@1],
-           default: dell/riser-2-1lp-14g@1,
+           accepts: [dell/riser-2b-14g@1, dell/riser-2c-14g@1,
+                     dell/riser-2-none-14g@1],
+           default: dell/riser-2b-14g@1,
            # THE SAME RISER 2 WHETHER OR NOT DRIVES WERE ORDERED. Table 25
            # calls configurations 1 and 2 "with or without rear storage" - one
            # riser, two storage outcomes - so this bay belongs to all three.
            group: risers, rel-pos: 2,
-           only-in: [rear-4-sff, rear-2-lff, rear-storage-blank, lff-12-rear-2-lff]}
+           only-in: [lff12-rc0-noriser, lff12-rc1-1b2b, lff12-rc2-1b2c, lff12-rlff2-rc0-noriser,
+                     lff12-rlff2-rc1-1b2b, lff12-rlff2-rc2-1b2c, lff12-rsff4-rc0-noriser,
+                     lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c, lff12-mlff4-rlff2-rc0-noriser,
+                     lff12-mlff4-rlff2-rc1-1b2b, lff12-mlff4-rlff2-rc2-1b2c, lff12-mlff4-rsff4-rc0-noriser,
+                     lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c, sff24-rc0-noriser,
+                     sff24-rc1-1b2b, sff24-rc2-1b2c, sff24-rsff4-rc0-noriser, sff24-rsff4-rc1-1b2b,
+                     sff24-rsff4-rc2-1b2c, sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b,
+                     sff24-msff4-rsff4-rc2-1b2c]}
         # NO BLANK IN THIS BAY'S `accepts`, AND THAT IS THE POINT. This
         # opening and rear-storage-3 are the SAME HOLE - this bay at 318.0 and
         # that one at 296.26 - so offering a blank here as well gave the chassis
@@ -835,9 +852,12 @@ views:
         # picked by configuration. When riser 3 is not fitted the opening is
         # closed by rear-storage-3, which scopes to `no-riser-3` below.
         - {id: riser-3, at: [309.085, 4.0], size: {w: 107.59, h: 41.68},
-           accepts: [dell/riser-3-2fh-14g@1],
-           default: dell/riser-3-2fh-14g@1,
-           group: risers, rel-pos: 3, only-in: [no-rear-storage, lff-12]}
+           accepts: [dell/riser-3a-14g@1, dell/riser-3b-14g@1],
+           default: dell/riser-3a-14g@1,
+           group: risers, rel-pos: 3, only-in: [lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a, lff12-rc9-1a2d3a,
+                     lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b, sff24-rc4-1a2a3a,
+                     sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a, sff24-rc15-1a2e3b,
+                     sff24-rc16-1d2e3b, sff24-rc17-1a2f3b]}
         - {id: ndc, at: [139.6, 66.4], size: {w: 90.3, h: 14.5},
            accepts: [dell/ndc-4x-rj45-14g@1], default: dell/ndc-4x-rj45-14g@1,
            group: ndc, rel-pos: 1}
@@ -850,19 +870,31 @@ views:
         - {id: drive-24, at: [173.0, 4.9], size: {w: 79.4, h: 17.868},
            accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
            default: common/drive-blank-25@1, rotate: 270,
-           only-in: [rear-4-sff], group: drives-rear, rel-pos: 12}
+           only-in: [lff12-rsff4-rc0-noriser, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
+                     lff12-mlff4-rsff4-rc0-noriser, lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c,
+                     sff24-rsff4-rc0-noriser, sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c,
+                     sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b, sff24-msff4-rsff4-rc2-1b2c], group: drives-rear, rel-pos: 12}
         - {id: drive-25, at: [173.0, 22.8], size: {w: 79.4, h: 17.868},
            accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
            default: common/drive-blank-25@1, rotate: 270,
-           only-in: [rear-4-sff], group: drives-rear, rel-pos: 13}
+           only-in: [lff12-rsff4-rc0-noriser, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
+                     lff12-mlff4-rsff4-rc0-noriser, lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c,
+                     sff24-rsff4-rc0-noriser, sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c,
+                     sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b, sff24-msff4-rsff4-rc2-1b2c], group: drives-rear, rel-pos: 13}
         - {id: drive-26, at: [331.0, 4.9], size: {w: 79.4, h: 17.868},
            accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
            default: common/drive-blank-25@1, rotate: 270,
-           only-in: [rear-4-sff], group: drives-rear, rel-pos: 14}
+           only-in: [lff12-rsff4-rc0-noriser, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
+                     lff12-mlff4-rsff4-rc0-noriser, lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c,
+                     sff24-rsff4-rc0-noriser, sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c,
+                     sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b, sff24-msff4-rsff4-rc2-1b2c], group: drives-rear, rel-pos: 14}
         - {id: drive-27, at: [331.0, 22.8], size: {w: 79.4, h: 17.868},
            accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
            default: common/drive-blank-25@1, rotate: 270,
-           only-in: [rear-4-sff], group: drives-rear, rel-pos: 15}
+           only-in: [lff12-rsff4-rc0-noriser, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
+                     lff12-mlff4-rsff4-rc0-noriser, lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c,
+                     sff24-rsff4-rc0-noriser, sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c,
+                     sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b, sff24-msff4-rsff4-rc2-1b2c], group: drives-rear, rel-pos: 15}
       placements:
         # THE LIBRARY'S RJ45, not a second opinion about what one looks like.
         # This was common/rj45-jack, which draws its own face at 15.8 x 13.2
@@ -968,7 +1000,10 @@ views:
         # plate's left - and carries slots 7 and 8.
         - {ref: dell/pcie-slot-strip-r3-14g@1, id: slot-strip-r3,
            at: [416.375, 4.0], group: furniture, rel-pos: 23,
-           only-in: [no-rear-storage, lff-12]}
+           only-in: [lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a, lff12-rc9-1a2d3a,
+                     lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b, sff24-rc4-1a2a3a,
+                     sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a, sff24-rc15-1a2e3b,
+                     sff24-rc16-1d2e3b, sff24-rc17-1a2f3b]}
         # THE TAB THE LEFT THUMBSCREW IS BOLTED TO, drawn after the bays
         # because things go behind it: riser 2's bracket tails run across it,
         # and a fitted blank's perforations start to its right. It was part of
@@ -987,18 +1022,34 @@ views:
         # figures are right and `only-in` is what tells them apart.
         - {ref: dell/riser-cage-mount-14g@1, id: riser-2-cage-mount,
            at: [269.93, 24.93], group: furniture, rel-pos: 26,
-           only-in: [rear-4-sff, rear-2-lff, lff-12-rear-2-lff]}
+           only-in: [lff12-rlff2-rc0-noriser, lff12-rlff2-rc1-1b2b, lff12-rlff2-rc2-1b2c,
+                     lff12-mlff4-rlff2-rc0-noriser, lff12-mlff4-rlff2-rc1-1b2b, lff12-mlff4-rlff2-rc2-1b2c,
+                     lff12-rsff4-rc0-noriser, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
+                     lff12-mlff4-rsff4-rc0-noriser, lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c,
+                     sff24-rsff4-rc0-noriser, sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c,
+                     sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b, sff24-msff4-rsff4-rc2-1b2c]}
         - {ref: dell/riser-cage-mount-14g@1, id: riser-3-cage-mount,
            at: [298.43, 24.93], group: furniture, rel-pos: 27,
-           only-in: [rear-4-sff, rear-2-lff, lff-12-rear-2-lff]}
+           only-in: [lff12-rlff2-rc0-noriser, lff12-rlff2-rc1-1b2b, lff12-rlff2-rc2-1b2c,
+                     lff12-mlff4-rlff2-rc0-noriser, lff12-mlff4-rlff2-rc1-1b2b, lff12-mlff4-rlff2-rc2-1b2c,
+                     lff12-rsff4-rc0-noriser, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
+                     lff12-mlff4-rsff4-rc0-noriser, lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c,
+                     sff24-rsff4-rc0-noriser, sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c,
+                     sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b, sff24-msff4-rsff4-rc2-1b2c]}
         - {ref: dell/riser-card-clip-14g@1, id: riser-2-card-clip,
            at: [268.93, 26.50], group: furniture, rel-pos: 24,
-           only-in: [no-rear-storage, no-riser-3, lff-12]}
+           only-in: [lff12-rc3-1a2a, lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a, lff12-rc9-1a2d3a,
+                     lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b, sff24-rc3-1a2a,
+                     sff24-rc4-1a2a3a, sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a,
+                     sff24-rc15-1a2e3b, sff24-rc16-1d2e3b, sff24-rc17-1a2f3b]}
         # RISER 3'S CLIP IS ONLY IN `no-rear-storage`, not in `no-riser-3`:
         # that configuration blanks this opening, and the blank covers the clip.
         - {ref: dell/riser-card-clip-14g@1, id: riser-3-card-clip,
            at: [298.86, 26.50], group: furniture, rel-pos: 25,
-           only-in: [no-rear-storage, lff-12]}
+           only-in: [lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a, lff12-rc9-1a2d3a,
+                     lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b, sff24-rc4-1a2a3a,
+                     sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a, sff24-rc15-1a2e3b,
+                     sff24-rc16-1d2e3b, sff24-rc17-1a2f3b]}
         - {ref: dell/rear-bay-screw-tab-14g@1, id: rear-bay-screw-tab,
            at: [144.26, 3.09], group: furniture, rel-pos: 20}
         - {ref: dell/thumbscrew-blue-14g@1, id: cage-screw-right,
@@ -1039,14 +1090,21 @@ views:
         # THE 2 x 3.5 INCH NUMBERS, on the divider rather than on plates. A
         # different arrangement from the SFF labels, not a moved version of them.
         - {ref: dell/rear-drive-label-lff-14g@1, id: lff-drive-label,
-           at: [282.50, 14.50], only-in: [rear-2-lff, lff-12-rear-2-lff],
+           at: [282.50, 14.50], only-in: [lff12-rlff2-rc0-noriser, lff12-rlff2-rc1-1b2b, lff12-rlff2-rc2-1b2c,
+                     lff12-mlff4-rlff2-rc0-noriser, lff12-mlff4-rlff2-rc1-1b2b, lff12-mlff4-rlff2-rc2-1b2c],
            group: furniture, rel-pos: 19}
         - {ref: dell/rear-drive-plate-14g@1, id: bay2-drive-plate,
            at: [254.75, 7.75], skin: n24-25,
-           only-in: [rear-4-sff], group: furniture, rel-pos: 19}
+           only-in: [lff12-rsff4-rc0-noriser, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
+                     lff12-mlff4-rsff4-rc0-noriser, lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c,
+                     sff24-rsff4-rc0-noriser, sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c,
+                     sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b, sff24-msff4-rsff4-rc2-1b2c], group: furniture, rel-pos: 19}
         - {ref: dell/rear-drive-plate-14g@1, id: bay3-drive-plate,
            at: [311.80, 7.75], skin: n26-27,
-           only-in: [rear-4-sff], group: furniture, rel-pos: 19}
+           only-in: [lff12-rsff4-rc0-noriser, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
+                     lff12-mlff4-rsff4-rc0-noriser, lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c,
+                     sff24-rsff4-rc0-noriser, sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c,
+                     sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b, sff24-msff4-rsff4-rc2-1b2c], group: furniture, rel-pos: 19}
   # THE FOUR FACES THAT WERE MISSING. 83 of the library's 84 devices carry all
   # six views and this one carried two, which is what stops it being opened in
   # the 3D explorer at all.
@@ -1139,6 +1197,34 @@ views:
 # so yet. Recorded as a gap rather than left for the next person to rediscover
 # from a bay number that does not add up.
 gaps:
+  - what: riser-configurations-not-all-declared
+    scope: [rear, riser-1, riser-2, riser-2-lp, riser-3]
+    reason: needs-drawing
+    note: >-
+      THE PARTS EXIST FOR ALL ELEVEN AND THE DEVICE DECLARES THREE. Technical
+      guide Table 12 names eleven riser configurations - 0, 1, 2, 3, 4, 5, 6, 9,
+      15, 16 and 17 - and the eleven Dell part numbers behind them are now
+      modelled one apiece: 1A, 1B, 1D, 2A, 2B, 2C, 2D, 2E, 2F, 3A and 3B, plus a
+      no-riser arrangement for configuration 0. What this device still seats is
+      riser configuration 5 (1B+2A+3A), 3 (1A+2A) and 1 (1B+2B), because those
+      are the three its configurations were written around before the parts
+      existed to say anything else.
+      SO THIS IS A GAP IN THE DEVICE AND NOT IN THE LIBRARY, which is the reason
+      it is worth recording separately from the four below: nothing needs
+      measuring, drawing or sourcing. Eight configurations are a seating list
+      away, and the reason token is the nearest available rather than an honest
+      fit - `needs-drawing` is what the vocabulary offers for "the model cannot
+      say it yet" and no token means "the parts are ready and nobody has wired
+      them up".
+      WHAT DOES NEED A DECISION FIRST is what the eight are called. The naming
+      agreed for this device is a drive configuration plus a riser
+      configuration - `lff12-rsff4-rc1` for the 16-drive machine on riser
+      configuration 1 - and applying it renames every existing configuration,
+      which is a change of addressing that belongs in its own version rather
+      than riding along with a component split.
+    wanted: >-
+      eleven configurations seating the eleven riser parts, under the drive-plus-riser
+      naming, replacing the three that exist
   - what: mid-drive-tray
     scope: [front, rear]
     reason: needs-drawing
@@ -1309,240 +1395,396 @@ gaps:
       configuration, which is new schema.
 
 configurations:
-  base:
-    # the serial port's insulator is teal on this machine, not the
-    # near-black a DE-9 usually carries - std/db9@1's `teal` skin. Named in
-    # every configuration because a skin override has no device-wide default
-    # and all five of these show this rear.
-    skins:
-      db9: teal
-    kind: base
-    source: derived
-    default: true
-    description: >-
-      the chassis as an enclosure you can power on: every drive bay filled with a
-      blank. DERIVED and not sourced - Dell publishes no default drive count for
-      this chassis, so this is the library populating bays by role rather than
-      following an orderable bundle, and the two are not equally good.
-      THE PCIe SLOTS ARE NAMED HERE RATHER THAN LEFT TO THE BAY DEFAULT. A base
-      is a chassis you can log into with nothing decided about expansion, so its
-      traffic slots have to be EMPTY - and empty on real hardware means a filler
-      bracket, not a hole, because the airflow depends on it. Saying so
-      explicitly is what distinguishes "nobody has chosen a card yet" from
-      "somebody forgot to write the bays down".
-    bays:
-      riser-1: dell/riser-1-3fh-14g@1
-      riser-2: dell/riser-2-2fh-1lp-14g@2
-      riser-3: dell/riser-3-2fh-14g@1
-  no-rear-storage:
-    # the serial port's insulator is teal on this machine, not the
-    # near-black a DE-9 usually carries - std/db9@1's `teal` skin. Named in
-    # every configuration because a skin override has no device-wide default
-    # and all five of these show this rear.
-    skins:
-      db9: teal
+  # GENERATED ALONGSIDE THE only-in LISTS ABOVE, from one table, because
+  # they are two statements of the same fact and keeping them by hand is
+  # what emptied three configurations of their rear cards. A configuration
+  # names its risers; which bays and placements are in scope FOLLOWS.
+  #
+  # Forty is every machine Dell builds: eight drive configurations against
+  # the eleven riser configurations of technical guide Table 12, less the
+  # pairings that table forbids - rear storage needs riser configuration 0,
+  # 1 or 2, because riser 3 occupies the space the rear drive bay wants.
+  lff12-rc0-noriser:
     kind: orderable
     description: >-
-      the three-riser rear: seven full-height PCIe slots across risers 1, 2 and
-      3, one half-height, and no rear drives. Drawn from the R740 ISM figure 9,
-      "Back view of three riser system", which passes Gate 1 at 0.26%.
-  rear-4-sff:
-    kind: orderable
-    # THE BAYS ARE SEATED HERE, and `bays:` was there all along. An earlier note
-    # in this file claimed a configuration could not say which accepted module
-    # fills a bay, and put an override on a command line instead. It can, and
-    # render.py has honoured it the whole time: bay id to component ref, with an
-    # empty string for a deliberately empty bay. riser-2 is not listed because
-    # it is not in THIS build - riser-2-lp is, and it already defaults right.
-    bays:
-      drive-24: common/drive-carrier-25@1
-      drive-25: common/drive-carrier-25@1
-      drive-26: common/drive-carrier-25@1
-      drive-27: common/drive-carrier-25@1
-    skins:
-      drive-carrier-25: default
-      db9: teal
-    description: >-
-      four 2.5 inch drives in the rear, which costs riser 2's two full-height
-      slots and all of riser 3 - the R740xd ISM figure 8. THE BAYS ARE METAL AND
-      NOT OCCUPANCY: this configuration has holes the other does not, which is
-      why the competing sets carry `only-in` rather than differing by what is
-      plugged into them.
-  rear-2-lff:
-    # the serial port's insulator is teal on this machine, not the
-    # near-black a DE-9 usually carries - std/db9@1's `teal` skin. Named in
-    # every configuration because a skin override has no device-wide default
-    # and all five of these show this rear.
-    skins:
-      db9: teal
-    # `example`, NOT `orderable`, AND IT WAS MARKED ORDERABLE BEFORE. ISM
-    # table 28 lists no configuration pairing a 24 x 2.5 inch front with a
-    # 2 x 3.5 inch rear - every row carrying this rear has a 12 x 3.5 inch
-    # front, and this device draws the 24-bay one.
-    kind: example
-    description: >-
-      DRAWN NOW, AND IT IS A PICTURE OF A REAR RATHER THAN OF A MACHINE.
-      common/drive-carrier-35 exists, measured off ISM figure 9, so the two
-      3.5 inch bays and the numbering on the divider between them are real and
-      sourced. What is not real is the pairing: table 28 has no row with a
-      24 x 2.5 inch front and a 2 x 3.5 inch rear, so selecting this shows a
-      correct rear on a front it never ships with.
-      THE ID CLASH IS THAT MISMATCH MADE VISIBLE. The figure prints 12 and 13,
-      which are already two of this chassis's front bays, so the rear ones are
-      rear-drive-12 and rear-drive-13 rather than following the ink the way
-      drive-24 to drive-27 do. Named the obvious way, lint caught full-24
-      fitting a 2.5 inch carrier into a 3.5 inch bay.
-      It stops being an illustration the day the 12 x 3.5 inch front is drawn
-      and a configuration binds the two faces together.
-  no-riser-3:
-    skins:
-      db9: teal
-      # RISER 1A LEAVES SLOT 2 UNLABELLED. Its middle opening has no connector
-      # behind it and takes a filler only, and the operator states that position
-      # carries no printed number. Nothing in the intake draws a 1A machine, so
-      # this is the operator's word rather than a reading - see the strip's own
-      # provenance.
-      pcie-slot-strip-14g: no-2
-    kind: orderable
-    description: >-
-      TABLE 25's ROW 3, 1A+2A - the three-slot riser 2 fitted and no riser 3 at
-      all. Six PCIe slots, and the riser 3 opening carries the same perforated
-      blank that closes a rear storage bay, because it is the same opening.
-      IT HAD NO CONFIGURATION UNTIL NOW and the variant sheet reported that as a
-      gap: it is the only row in table 25 that fits riser 2 without riser 3, so
-      nothing in the device named it and the drawing could only be produced by
-      overriding a bay from outside.
-    bays:
-      riser-1: dell/riser-1-2fh-14g@1
-      riser-2: dell/riser-2-2fh-1lp-14g@2
-  rear-storage-blank:
-    # the serial port's insulator is teal on this machine, not the
-    # near-black a DE-9 usually carries - std/db9@1's `teal` skin. Named in
-    # every configuration because a skin override has no device-wide default
-    # and all of these show this rear.
-    skins:
-      db9: teal
-      # THE TAB'S OUTLINE AND TONGUE ARE BEHIND THE BLANK. What stands proud of
-      # a fitted perforated panel is the pad and its captive thumbscrew.
-      rear-bay-screw-tab-14g: pad-only
-    kind: orderable
-    description: >-
-      THE "WITHOUT" HALF OF "WITH OR WITHOUT REAR STORAGE". ISM table 25 names
-      riser configurations 0, 1 and 2 that way - one riser layout, two storage
-      outcomes - and every other configuration on this device draws the "with".
-      Here the one-slot low-profile riser 2 is fitted, no drives were ordered,
-      and both rear bays carry a perforated blank.
-      IT IS ORDERABLE WHERE rear-2-lff IS NOT. Table 28's rows 1, 3 and 9 all
-      pair a 24 x 2.5 inch front with no rear backplane at all, which is exactly
-      this machine, so unlike the 2 x 3.5 inch illustration this is a build you
-      can buy.
-      WHAT IT DOES NOT SHOW is riser 3: configurations 1 and 2 fit none, and the
-      bay it would occupy is the one blanked here. `no-rear-storage` is the
-      other shape - a three-slot riser 2 and a riser 3 - and the two are not the
-      same machine despite both having no rear drives.
-  full-24:
-    # the serial port's insulator is teal on this machine, not the
-    # near-black a DE-9 usually carries - std/db9@1's `teal` skin. Named in
-    # every configuration because a skin override has no device-wide default
-    # and all five of these show this rear.
-    skins:
-      db9: teal
-    kind: example
-    description: >-
-      all 24 bays carrying a drive. An ILLUSTRATION and not a SKU: the number of
-      drives is what a buyer chooses, so this names no orderable thing and
-      creates no device type.
-    bays:
-      drive-0: common/drive-carrier-25@1
-      drive-1: common/drive-carrier-25@1
-      drive-2: common/drive-carrier-25@1
-      drive-3: common/drive-carrier-25@1
-      drive-4: common/drive-carrier-25@1
-      drive-5: common/drive-carrier-25@1
-      drive-6: common/drive-carrier-25@1
-      drive-7: common/drive-carrier-25@1
-      drive-8: common/drive-carrier-25@1
-      drive-9: common/drive-carrier-25@1
-      drive-10: common/drive-carrier-25@1
-      drive-11: common/drive-carrier-25@1
-      drive-12: common/drive-carrier-25@1
-      drive-13: common/drive-carrier-25@1
-      drive-14: common/drive-carrier-25@1
-      drive-15: common/drive-carrier-25@1
-      drive-16: common/drive-carrier-25@1
-      drive-17: common/drive-carrier-25@1
-      drive-18: common/drive-carrier-25@1
-      drive-19: common/drive-carrier-25@1
-      drive-20: common/drive-carrier-25@1
-      drive-21: common/drive-carrier-25@1
-      drive-22: common/drive-carrier-25@1
-      drive-23: common/drive-carrier-25@1
-  lff-12:
+      12-drive, riser configuration 0 (no riser). Front 12 x 3.5in at slots
+      0-11; no rear storage.
     views: {front: front-lff-12}
-    # the serial port's insulator is teal on this machine, not the
-    # near-black a DE-9 usually carries - std/db9@1's `teal` skin. Named in
-    # every configuration because a skin override has no device-wide default
-    # and all five of these show this rear.
-    skins:
-      db9: teal
+    bays:
+      riser-1: dell/riser-1-none-14g@1
+      riser-2-lp: dell/riser-2-none-14g@1
+  lff12-rc1-1b2b:
     kind: orderable
     description: >-
-      THE 12 x 3.5 INCH FRONT, which this device has had a REAR for since it was
-      first modelled and never had a front. Table 28 lists "3.5 inch (x12)
-      SAS/SATA backplane" on its own as a supported option, and this is it:
-      twelve 3.5 inch carriers in 3 rows of 4, over the three-riser rear.
-      ONLY THE BAYS DIFFER FROM THE 24-BAY FRONT. ISM table 2 lists the same
-      four features on both fronts - left control panel, drive slots, right
-      control panel, information tag - so the panels, the latches, the bezel
-      and every port on the right are shared, and the drive field is the same
-      backplane opening divided four ways instead of twenty-four.
-    bays:
-      riser-1: dell/riser-1-3fh-14g@1
-      riser-2: dell/riser-2-2fh-1lp-14g@2
-      riser-3: dell/riser-3-2fh-14g@1
-  lff-12-rear-2-lff:
+      12-drive, riser configuration 1 (1B+2B). Front 12 x 3.5in at slots
+      0-11; no rear storage.
     views: {front: front-lff-12}
-    # the serial port's insulator is teal on this machine, not the
-    # near-black a DE-9 usually carries - std/db9@1's `teal` skin. Named in
-    # every configuration because a skin override has no device-wide default
-    # and all five of these show this rear.
-    skins:
-      db9: teal
+    bays:
+      riser-1: dell/riser-1b-14g@1
+      riser-2-lp: dell/riser-2b-14g@1
+  lff12-rc2-1b2c:
     kind: orderable
     description: >-
-      THE PAIRING TABLE 28 ACTUALLY LISTS: "3.5 inch (x12) SAS/SATA backplane
-      and 3.5 inch (x2) SAS/SATA backplane (back)". Twelve 3.5 inch drives in
-      front, two in the rear numbered 12 and 13 - which is where the rear
-      numbering this device has carried all along comes from.
-      IT IS THE MACHINE `rear-2-lff` SAID IT WAS NOT. That configuration records,
-      in its own description, that no row of table 28 pairs a 24 x 2.5 inch
-      front with a 2 x 3.5 inch rear, and that it was therefore a picture of a
-      rear rather than of a machine. The front it was missing is this one.
-  full-12:
+      12-drive, riser configuration 2 (1B+2C). Front 12 x 3.5in at slots
+      0-11; no rear storage. Requires two processors.
     views: {front: front-lff-12}
-    # the serial port's insulator is teal on this machine, not the
-    # near-black a DE-9 usually carries - std/db9@1's `teal` skin. Named in
-    # every configuration because a skin override has no device-wide default
-    # and all five of these show this rear.
-    skins:
-      db9: teal
-    kind: example
-    description: >-
-      all twelve 3.5 inch bays carrying a drive. An ILLUSTRATION and not a
-      SKU, exactly as `full-24` is at the other size: the number of drives is
-      what a buyer chooses, so this names no orderable thing and creates no
-      device type. It exists so the 12-bay front can be seen populated as
-      well as blanked, which is the only difference between it and `lff-12`.
     bays:
-      lff-drive-0: common/drive-carrier-35@1
-      lff-drive-1: common/drive-carrier-35@1
-      lff-drive-2: common/drive-carrier-35@1
-      lff-drive-3: common/drive-carrier-35@1
-      lff-drive-4: common/drive-carrier-35@1
-      lff-drive-5: common/drive-carrier-35@1
-      lff-drive-6: common/drive-carrier-35@1
-      lff-drive-7: common/drive-carrier-35@1
-      lff-drive-8: common/drive-carrier-35@1
-      lff-drive-9: common/drive-carrier-35@1
-      lff-drive-10: common/drive-carrier-35@1
-      lff-drive-11: common/drive-carrier-35@1
+      riser-1: dell/riser-1b-14g@1
+      riser-2-lp: dell/riser-2c-14g@1
+  lff12-rc3-1a2a:
+    kind: orderable
+    description: >-
+      12-drive, riser configuration 3 (1A+2A). Front 12 x 3.5in at slots
+      0-11; no rear storage. Requires two processors.
+    views: {front: front-lff-12}
+    bays:
+      riser-1: dell/riser-1a-14g@1
+      riser-2: dell/riser-2a-14g@1
+  lff12-rc4-1a2a3a:
+    kind: orderable
+    description: >-
+      12-drive, riser configuration 4 (1A+2A+3A). Front 12 x 3.5in at slots
+      0-11; no rear storage. Requires two processors.
+    views: {front: front-lff-12}
+    bays:
+      riser-1: dell/riser-1a-14g@1
+      riser-2: dell/riser-2a-14g@1
+      riser-3: dell/riser-3a-14g@1
+  lff12-rc5-1b2a3a:
+    kind: orderable
+    description: >-
+      12-drive, riser configuration 5 (1B+2A+3A). Front 12 x 3.5in at slots
+      0-11; no rear storage. Requires two processors.
+    views: {front: front-lff-12}
+    bays:
+      riser-1: dell/riser-1b-14g@1
+      riser-2: dell/riser-2a-14g@1
+      riser-3: dell/riser-3a-14g@1
+  lff12-rc6-1d2a3a:
+    kind: orderable
+    description: >-
+      12-drive, riser configuration 6 (1D+2A+3A). Front 12 x 3.5in at slots
+      0-11; no rear storage. Requires two processors.
+    views: {front: front-lff-12}
+    bays:
+      riser-1: dell/riser-1d-14g@1
+      riser-2: dell/riser-2a-14g@1
+      riser-3: dell/riser-3a-14g@1
+  lff12-rc9-1a2d3a:
+    kind: orderable
+    description: >-
+      12-drive, riser configuration 9 (1A+2D+3A). Front 12 x 3.5in at slots
+      0-11; no rear storage. Requires two processors.
+    views: {front: front-lff-12}
+    bays:
+      riser-1: dell/riser-1a-14g@1
+      riser-2: dell/riser-2d-14g@1
+      riser-3: dell/riser-3a-14g@1
+  lff12-rc15-1a2e3b:
+    kind: orderable
+    description: >-
+      12-drive, riser configuration 15 (1A+2E+3B). Front 12 x 3.5in at slots
+      0-11; no rear storage. Requires two processors.
+    views: {front: front-lff-12}
+    bays:
+      riser-1: dell/riser-1a-14g@1
+      riser-2: dell/riser-2e-14g@1
+      riser-3: dell/riser-3b-14g@1
+  lff12-rc16-1d2e3b:
+    kind: orderable
+    description: >-
+      12-drive, riser configuration 16 (1D+2E+3B). Front 12 x 3.5in at slots
+      0-11; no rear storage. Requires two processors.
+    views: {front: front-lff-12}
+    bays:
+      riser-1: dell/riser-1d-14g@1
+      riser-2: dell/riser-2e-14g@1
+      riser-3: dell/riser-3b-14g@1
+  lff12-rc17-1a2f3b:
+    kind: orderable
+    description: >-
+      12-drive, riser configuration 17 (1A+2F+3B). Front 12 x 3.5in at slots
+      0-11; no rear storage. Requires two processors.
+    views: {front: front-lff-12}
+    bays:
+      riser-1: dell/riser-1a-14g@1
+      riser-2: dell/riser-2f-14g@1
+      riser-3: dell/riser-3b-14g@1
+  lff12-rlff2-rc0-noriser:
+    kind: orderable
+    description: >-
+      14-drive, riser configuration 0 (no riser). Front 12 x 3.5in at slots
+      0-11; rear 2 x 3.5in at slots 12-13.
+    views: {front: front-lff-12}
+    bays:
+      riser-1: dell/riser-1-none-14g@1
+      riser-2-lp: dell/riser-2-none-14g@1
+  lff12-rlff2-rc1-1b2b:
+    kind: orderable
+    description: >-
+      14-drive, riser configuration 1 (1B+2B). Front 12 x 3.5in at slots
+      0-11; rear 2 x 3.5in at slots 12-13.
+    views: {front: front-lff-12}
+    bays:
+      riser-1: dell/riser-1b-14g@1
+      riser-2-lp: dell/riser-2b-14g@1
+  lff12-rlff2-rc2-1b2c:
+    kind: orderable
+    description: >-
+      14-drive, riser configuration 2 (1B+2C). Front 12 x 3.5in at slots
+      0-11; rear 2 x 3.5in at slots 12-13. Requires two processors.
+    views: {front: front-lff-12}
+    bays:
+      riser-1: dell/riser-1b-14g@1
+      riser-2-lp: dell/riser-2c-14g@1
+  lff12-rsff4-rc0-noriser:
+    kind: orderable
+    description: >-
+      16-drive, riser configuration 0 (no riser). Front 12 x 3.5in at slots
+      0-11; rear 4 x 2.5in at slots 12-15.
+    views: {front: front-lff-12}
+    bays:
+      riser-1: dell/riser-1-none-14g@1
+      riser-2-lp: dell/riser-2-none-14g@1
+  lff12-rsff4-rc1-1b2b:
+    kind: orderable
+    description: >-
+      16-drive, riser configuration 1 (1B+2B). Front 12 x 3.5in at slots
+      0-11; rear 4 x 2.5in at slots 12-15.
+    views: {front: front-lff-12}
+    bays:
+      riser-1: dell/riser-1b-14g@1
+      riser-2-lp: dell/riser-2b-14g@1
+  lff12-rsff4-rc2-1b2c:
+    kind: orderable
+    description: >-
+      16-drive, riser configuration 2 (1B+2C). Front 12 x 3.5in at slots
+      0-11; rear 4 x 2.5in at slots 12-15. Requires two processors.
+    views: {front: front-lff-12}
+    bays:
+      riser-1: dell/riser-1b-14g@1
+      riser-2-lp: dell/riser-2c-14g@1
+  lff12-mlff4-rlff2-rc0-noriser:
+    kind: orderable
+    description: >-
+      18-drive, riser configuration 0 (no riser). Front 12 x 3.5in at slots
+      0-11; mid 4 x 3.5in at slots 14-17; rear 2 x 3.5in at slots 12-13. THE
+      MID GROUP HAS NOWHERE TO GO YET - the tray sits under the lid and this
+      device has no cover-off view, so this renders exactly like the machine
+      without it. See the mid-drive-tray gap.
+    views: {front: front-lff-12}
+    bays:
+      riser-1: dell/riser-1-none-14g@1
+      riser-2-lp: dell/riser-2-none-14g@1
+  lff12-mlff4-rlff2-rc1-1b2b:
+    kind: orderable
+    description: >-
+      18-drive, riser configuration 1 (1B+2B). Front 12 x 3.5in at slots
+      0-11; mid 4 x 3.5in at slots 14-17; rear 2 x 3.5in at slots 12-13. THE
+      MID GROUP HAS NOWHERE TO GO YET - the tray sits under the lid and this
+      device has no cover-off view, so this renders exactly like the machine
+      without it. See the mid-drive-tray gap.
+    views: {front: front-lff-12}
+    bays:
+      riser-1: dell/riser-1b-14g@1
+      riser-2-lp: dell/riser-2b-14g@1
+  lff12-mlff4-rlff2-rc2-1b2c:
+    kind: orderable
+    description: >-
+      18-drive, riser configuration 2 (1B+2C). Front 12 x 3.5in at slots
+      0-11; mid 4 x 3.5in at slots 14-17; rear 2 x 3.5in at slots 12-13. THE
+      MID GROUP HAS NOWHERE TO GO YET - the tray sits under the lid and this
+      device has no cover-off view, so this renders exactly like the machine
+      without it. See the mid-drive-tray gap. Requires two processors.
+    views: {front: front-lff-12}
+    bays:
+      riser-1: dell/riser-1b-14g@1
+      riser-2-lp: dell/riser-2c-14g@1
+  lff12-mlff4-rsff4-rc0-noriser:
+    kind: orderable
+    description: >-
+      20-drive, riser configuration 0 (no riser). Front 12 x 3.5in at slots
+      0-11; mid 4 x 3.5in at slots 16-19; rear 4 x 2.5in at slots 12-15. THE
+      MID GROUP HAS NOWHERE TO GO YET - the tray sits under the lid and this
+      device has no cover-off view, so this renders exactly like the machine
+      without it. See the mid-drive-tray gap.
+    views: {front: front-lff-12}
+    bays:
+      riser-1: dell/riser-1-none-14g@1
+      riser-2-lp: dell/riser-2-none-14g@1
+  lff12-mlff4-rsff4-rc1-1b2b:
+    kind: orderable
+    description: >-
+      20-drive, riser configuration 1 (1B+2B). Front 12 x 3.5in at slots
+      0-11; mid 4 x 3.5in at slots 16-19; rear 4 x 2.5in at slots 12-15. THE
+      MID GROUP HAS NOWHERE TO GO YET - the tray sits under the lid and this
+      device has no cover-off view, so this renders exactly like the machine
+      without it. See the mid-drive-tray gap.
+    views: {front: front-lff-12}
+    bays:
+      riser-1: dell/riser-1b-14g@1
+      riser-2-lp: dell/riser-2b-14g@1
+  lff12-mlff4-rsff4-rc2-1b2c:
+    kind: orderable
+    description: >-
+      20-drive, riser configuration 2 (1B+2C). Front 12 x 3.5in at slots
+      0-11; mid 4 x 3.5in at slots 16-19; rear 4 x 2.5in at slots 12-15. THE
+      MID GROUP HAS NOWHERE TO GO YET - the tray sits under the lid and this
+      device has no cover-off view, so this renders exactly like the machine
+      without it. See the mid-drive-tray gap. Requires two processors.
+    views: {front: front-lff-12}
+    bays:
+      riser-1: dell/riser-1b-14g@1
+      riser-2-lp: dell/riser-2c-14g@1
+  sff24-rc0-noriser:
+    kind: orderable
+    description: >-
+      24-drive, riser configuration 0 (no riser). Front 24 x 2.5in at slots
+      0-23; no rear storage.
+    bays:
+      riser-1: dell/riser-1-none-14g@1
+      riser-2-lp: dell/riser-2-none-14g@1
+  sff24-rc1-1b2b:
+    kind: orderable
+    description: >-
+      24-drive, riser configuration 1 (1B+2B). Front 24 x 2.5in at slots
+      0-23; no rear storage.
+    bays:
+      riser-1: dell/riser-1b-14g@1
+      riser-2-lp: dell/riser-2b-14g@1
+  sff24-rc2-1b2c:
+    kind: orderable
+    description: >-
+      24-drive, riser configuration 2 (1B+2C). Front 24 x 2.5in at slots
+      0-23; no rear storage. Requires two processors.
+    bays:
+      riser-1: dell/riser-1b-14g@1
+      riser-2-lp: dell/riser-2c-14g@1
+  sff24-rc3-1a2a:
+    kind: orderable
+    description: >-
+      24-drive, riser configuration 3 (1A+2A). Front 24 x 2.5in at slots
+      0-23; no rear storage. Requires two processors.
+    bays:
+      riser-1: dell/riser-1a-14g@1
+      riser-2: dell/riser-2a-14g@1
+  sff24-rc4-1a2a3a:
+    kind: orderable
+    description: >-
+      24-drive, riser configuration 4 (1A+2A+3A). Front 24 x 2.5in at slots
+      0-23; no rear storage. Requires two processors.
+    bays:
+      riser-1: dell/riser-1a-14g@1
+      riser-2: dell/riser-2a-14g@1
+      riser-3: dell/riser-3a-14g@1
+  sff24-rc5-1b2a3a:
+    kind: orderable
+    description: >-
+      24-drive, riser configuration 5 (1B+2A+3A). Front 24 x 2.5in at slots
+      0-23; no rear storage. Requires two processors.
+    bays:
+      riser-1: dell/riser-1b-14g@1
+      riser-2: dell/riser-2a-14g@1
+      riser-3: dell/riser-3a-14g@1
+  sff24-rc6-1d2a3a:
+    kind: orderable
+    description: >-
+      24-drive, riser configuration 6 (1D+2A+3A). Front 24 x 2.5in at slots
+      0-23; no rear storage. Requires two processors.
+    bays:
+      riser-1: dell/riser-1d-14g@1
+      riser-2: dell/riser-2a-14g@1
+      riser-3: dell/riser-3a-14g@1
+  sff24-rc9-1a2d3a:
+    kind: orderable
+    description: >-
+      24-drive, riser configuration 9 (1A+2D+3A). Front 24 x 2.5in at slots
+      0-23; no rear storage. Requires two processors.
+    bays:
+      riser-1: dell/riser-1a-14g@1
+      riser-2: dell/riser-2d-14g@1
+      riser-3: dell/riser-3a-14g@1
+  sff24-rc15-1a2e3b:
+    kind: orderable
+    description: >-
+      24-drive, riser configuration 15 (1A+2E+3B). Front 24 x 2.5in at slots
+      0-23; no rear storage. Requires two processors.
+    bays:
+      riser-1: dell/riser-1a-14g@1
+      riser-2: dell/riser-2e-14g@1
+      riser-3: dell/riser-3b-14g@1
+  sff24-rc16-1d2e3b:
+    kind: orderable
+    description: >-
+      24-drive, riser configuration 16 (1D+2E+3B). Front 24 x 2.5in at slots
+      0-23; no rear storage. Requires two processors.
+    bays:
+      riser-1: dell/riser-1d-14g@1
+      riser-2: dell/riser-2e-14g@1
+      riser-3: dell/riser-3b-14g@1
+  sff24-rc17-1a2f3b:
+    kind: orderable
+    description: >-
+      24-drive, riser configuration 17 (1A+2F+3B). Front 24 x 2.5in at slots
+      0-23; no rear storage. Requires two processors.
+    bays:
+      riser-1: dell/riser-1a-14g@1
+      riser-2: dell/riser-2f-14g@1
+      riser-3: dell/riser-3b-14g@1
+  sff24-rsff4-rc0-noriser:
+    kind: orderable
+    description: >-
+      28-drive, riser configuration 0 (no riser). Front 24 x 2.5in at slots
+      0-23; rear 4 x 2.5in at slots 24-27.
+    bays:
+      riser-1: dell/riser-1-none-14g@1
+      riser-2-lp: dell/riser-2-none-14g@1
+  sff24-rsff4-rc1-1b2b:
+    kind: orderable
+    description: >-
+      28-drive, riser configuration 1 (1B+2B). Front 24 x 2.5in at slots
+      0-23; rear 4 x 2.5in at slots 24-27.
+    bays:
+      riser-1: dell/riser-1b-14g@1
+      riser-2-lp: dell/riser-2b-14g@1
+  sff24-rsff4-rc2-1b2c:
+    kind: orderable
+    description: >-
+      28-drive, riser configuration 2 (1B+2C). Front 24 x 2.5in at slots
+      0-23; rear 4 x 2.5in at slots 24-27. Requires two processors.
+    bays:
+      riser-1: dell/riser-1b-14g@1
+      riser-2-lp: dell/riser-2c-14g@1
+  sff24-msff4-rsff4-rc0-noriser:
+    kind: orderable
+    description: >-
+      32-drive, riser configuration 0 (no riser). Front 24 x 2.5in at slots
+      0-23; mid 4 x 2.5in at slots 28-31; rear 4 x 2.5in at slots 24-27. THE
+      MID GROUP HAS NOWHERE TO GO YET - the tray sits under the lid and this
+      device has no cover-off view, so this renders exactly like the machine
+      without it. See the mid-drive-tray gap.
+    bays:
+      riser-1: dell/riser-1-none-14g@1
+      riser-2-lp: dell/riser-2-none-14g@1
+  sff24-msff4-rsff4-rc1-1b2b:
+    kind: orderable
+    description: >-
+      32-drive, riser configuration 1 (1B+2B). Front 24 x 2.5in at slots
+      0-23; mid 4 x 2.5in at slots 28-31; rear 4 x 2.5in at slots 24-27. THE
+      MID GROUP HAS NOWHERE TO GO YET - the tray sits under the lid and this
+      device has no cover-off view, so this renders exactly like the machine
+      without it. See the mid-drive-tray gap.
+    bays:
+      riser-1: dell/riser-1b-14g@1
+      riser-2-lp: dell/riser-2b-14g@1
+  sff24-msff4-rsff4-rc2-1b2c:
+    kind: orderable
+    description: >-
+      32-drive, riser configuration 2 (1B+2C). Front 24 x 2.5in at slots
+      0-23; mid 4 x 2.5in at slots 28-31; rear 4 x 2.5in at slots 24-27. THE
+      MID GROUP HAS NOWHERE TO GO YET - the tray sits under the lid and this
+      device has no cover-off view, so this renders exactly like the machine
+      without it. See the mid-drive-tray gap. Requires two processors.
+    bays:
+      riser-1: dell/riser-1b-14g@1
+      riser-2-lp: dell/riser-2c-14g@1

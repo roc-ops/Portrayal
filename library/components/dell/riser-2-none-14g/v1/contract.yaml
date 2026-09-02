@@ -1,0 +1,52 @@
+format: 1
+kind: module
+name: riser-2-none-14g
+version: 1.0.0
+class: riser
+behaviour: fills
+profile: server
+description: >-
+  the riser 2 position with no riser in it - the low-profile window is still
+  there and takes a filler only
+attrs:
+  riser: 'none'
+  appears-in: 'riser configuration 0, the no-riser option'
+  slot-4: 'no connector - opening takes a filler only'
+provenance:
+  identity: >-
+    THE COMPANION TO riser-1-none-14g, and it exists for the same reason. Dell's
+    technical guide lists a "No riser" option - configuration 0, "No PCIe slots
+    (only rear storage)" - and the operator's photo survey found no R740xd rear
+    without its riser windows, so the openings are there on a machine with no
+    riser cards at all. Something has to draw the low-profile window and fill it,
+    and it cannot be riser 2B or 2C because a machine ordered with no riser has
+    neither.
+  the-opening-is-there-and-is-blanked: >-
+    `slot-4` names one part in `accepts` - the low-profile filler - and no card
+    can be seated. That is the model saying "blanked" the way the riser 1 parts
+    do: not by hiding the opening, but by there being nothing a card can seat
+    into. On this part every slot is blanked, which is what "no riser" means.
+  it-carries-the-plate-rather-than-composing-one: >-
+    The low-profile plate is an unnamed fill rect and a STROKED window anchor
+    drawn over it - the opposite arrangement to the tall riser plates, where the
+    metal is a path with real holes and the anchors draw nothing. An opaque rect
+    split out as a composed part lands above the outline that has to sit on it,
+    and there is no artwork of consequence to share: it is two rectangles. So
+    this skin is riser-2b-14g's, verbatim, and the sharing that the riser 1 and
+    riser 3 plates buy stops here on purpose.
+  numbering: >-
+    THE NUMBER 4 IS KEPT EVEN THOUGH NOTHING IS WIRED TO IT. The low-profile hole
+    is slot 4 when riser 2 presents only that one and slot 6 when it presents
+    three, so the bay keeping the name it would have under riser 2B is what makes
+    the position legible. Renumbering an opening because it happens to be empty
+    would say the hole moved.
+size: {w: 79.2, h: 18.42}
+insert: {w: 95.0, h: 18.42}
+bays:
+  slot-4:
+    behind: true
+    at: [0, 0]
+    size: [79.2, 18.42]
+    accepts: [dell/pcie-filler-lp-14g@1]
+    default: dell/pcie-filler-lp-14g@1
+skins: [default]

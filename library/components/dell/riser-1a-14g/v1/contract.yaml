@@ -1,0 +1,106 @@
+format: 1
+kind: module
+name: riser-1a-14g
+version: 1.0.0
+class: riser
+behaviour: fills
+profile: server
+description: >-
+  Dell riser 1A - two x16 full-height slots on the three-window riser 1 plate;
+  the middle opening has no connector behind it
+attrs:
+  riser: '1A'
+  bracket-envelope: '120.02 x 64.05'
+  slot-1: 'x16, full height, full length, processor 1'
+  slot-2: 'no connector - opening takes a filler only'
+  slot-3: 'x16, full height, half length, processor 1'
+provenance:
+  identity: >-
+    A REMOVABLE ASSEMBLY THAT BRINGS ITS OWN SLOTS, which is why it is a module
+    with `bays` rather than openings drawn on the chassis. The ISM carries
+    removal and installation procedures for risers 1, 2, 2A, 2B and 3, and the
+    component schema names exactly this case: `bays` is for "MODULES THAT
+    THEMSELVES HOST BAYS - a PCIe riser, a SIP carrying SPAs".
+    WHAT THIS PART IS, PRECISELY, is the card that plugs into the system board.
+    The sheet metal a photograph of the rear shows is dell/riser-1-plate-14g@1
+    and is common to 1A, 1B and 1D; it is composed here rather than redrawn.
+    That split is the whole point: nothing on the rear face separates the three,
+    and the two copies of the artwork that used to exist differed only in their
+    comments.
+  the-middle-opening-is-there-and-is-blanked: >-
+    THE PLATE HAS THREE WINDOWS AND THIS CARD HAS TWO CONNECTORS. The windows
+    are chassis-side sheet metal on the PCI 20.32 pitch and are punched whichever
+    riser is fitted, so a machine with 1A shows three rectangles like every other
+    one; what it does not have is a card in the middle.
+    So `slot-2` names one part in `accepts` - the full-height filler - and no
+    card can be seated there. That is the model saying "blanked": not by hiding
+    the opening, but by there being nothing a card can seat into. It is a
+    structural claim a consumer can act on, which an attribute would not be.
+  slot-numbering: >-
+    THE NUMBERS BELONG TO THE RISER, NOT THE CHASSIS, and that is what resolves
+    the puzzle in ISM table 25: the low-profile slot is numbered 4 when riser 2
+    presents only that one, and 6 when riser 2 presents three. An opening cannot
+    change size in place - a full-height card will not fit where the half-height
+    one goes, with the power supply directly beneath it - so the metal is fixed
+    and the numbering travels with the part.
+    THIS PART SKIPS 2 AND THAT IS DELIBERATE. 1A wires slots 1 and 3; the bay
+    keeping the name `slot-2` is what makes the gap legible rather than
+    renumbering three openings into two.
+  the-slots-hold-the-standard-bracket: >-
+    Each slot is positioned by its OPENING - 89.90 x 12.06, the PCIe opening -
+    while std/pcie-bracket-fh is 120.02 long: 19.96 of it runs past the opening
+    at the tip end and 10.16 at the flange end, behind the riser's own sheet,
+    which is why a face-on reading never sees it. `insert` carries that envelope
+    so a bay reserves what the brackets need rather than what the plate shows.
+  where-the-electrical-facts-come-from: >-
+    datasheet - PowerEdge R740 and R740xd Technical Guide, Table 11, which gives
+    height, length and link width for every slot on every riser, and the ISM's
+    Table 3, which gives the processor each slot is wired to. Table 11 lists
+    riser 1A as slot 1 x16 full-height full-length and slot 3 x16 full-height
+    half-length, and names no slot 2.
+    THESE ARE ATTRS AND NOT `accepts` ENTRIES. Lane width does not decide what
+    fits an opening - height and length do, and those are already enforced
+    structurally by which brackets each bay names. A consumer that cares about
+    x8 against x16 reads the attribute; a consumer asking what can physically be
+    installed reads `accepts`, and the two questions stay apart.
+  adjacent-brackets-overlap-by-1.27-on-purpose: >-
+    THE SLOT BAYS OVERLAP IN Y AND THE PARTS STILL FIT. A PCIe bracket is 21.59
+    across overall on a 20.32 slot pitch, because its flange end is KEYED - the
+    top of the plate is offset sideways so the mounting tab reaches over the
+    neighbouring slot and keys against it. Consecutive brackets interleave by
+    exactly 1.27 and that is why a row of them nests. Any overlap check working
+    on bounding boxes will report these; it is the check unable to express a real
+    interlock, not a fault in the placement.
+size: {w: 107.59, h: 62.0}
+insert: {w: 120.02, h: 64.05}
+parts:
+  # THE METAL, DRAWN OVER THE CARDS. The bays below are `behind: true`, so a
+  # seated card renders beneath this component's own skin; this plate is
+  # composed with the default (over), which puts it above the cards. What shows
+  # of a card is its working area through a punched window and its retention tab
+  # clear of the metal - the flange end is covered, which is what the hardware
+  # does.
+  - {ref: dell/riser-1-plate-14g@1, id: plate, at: [0, 0]}
+bays:
+  slot-1:
+    behind: true
+    at: [-13.41, 1.82]
+    size: [120.02, 21.59]
+    accepts: [dell/pcie-filler-fh-14g@1, std/pcie-bracket-fh@1]
+    default: dell/pcie-filler-fh-14g@1
+  slot-2:
+    # THE OPENING WITH NO CONNECTOR BEHIND IT. Same geometry as its neighbours -
+    # the chassis punches all three - but `accepts` names the filler and nothing
+    # else, so no card can be seated here.
+    behind: true
+    at: [-13.41, 22.14]
+    size: [120.02, 21.59]
+    accepts: [dell/pcie-filler-fh-14g@1]
+    default: dell/pcie-filler-fh-14g@1
+  slot-3:
+    behind: true
+    at: [-13.41, 42.46]
+    size: [120.02, 21.59]
+    accepts: [dell/pcie-filler-fh-14g@1, std/pcie-bracket-fh@1]
+    default: dell/pcie-filler-fh-14g@1
+skins: [default]
