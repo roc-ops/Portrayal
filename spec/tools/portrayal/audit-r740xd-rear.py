@@ -16,13 +16,30 @@ ROOT = pathlib.Path('library')
 
 
 def comp(ref):
+    """Resolve `ns/name@major` to its contract.
+
+    THE MAJOR IN THE REF IS THE ANSWER, and this used to ignore it: it walked
+    v1, v2, v3 and returned the first directory that existed, so a part with two
+    majors in the library was read at whichever came first rather than at the one
+    the caller asked for. It also stopped at v3, which is why the audit died on
+    common/rj45-port@4 the moment that part reached its fourth major.
+    The library keeps one directory per major, so `@4` is `v4` and there is
+    nothing to search. The highest present is a fallback for a ref written
+    without a major, not the normal path.
+    """
     ns, rest = ref.split('/')
-    name = rest.split('@')[0]
-    for v in ('v1', 'v2', 'v3'):
-        p = ROOT / 'components' / ns / name / v / 'contract.yaml'
-        if p.exists():
-            return yaml.safe_load(p.read_text())
-    raise SystemExit(f'no contract for {ref}')
+    name, _, major = rest.partition('@')
+    base = ROOT / 'components' / ns / name
+    want = base / f'v{major}' / 'contract.yaml' if major else None
+    if want and want.exists():
+        return yaml.safe_load(want.read_text())
+    got = sorted(base.glob('v*/contract.yaml'),
+                 key=lambda q: int(q.parent.name[1:]))
+    if not got:
+        raise SystemExit(f'no contract for {ref}')
+    if major:
+        print(f'     NOTE {ref} has no v{major}; reading {got[-1].parent.name}')
+    return yaml.safe_load(got[-1].read_text())
 
 
 d = yaml.safe_load((ROOT / 'devices/dell/r740xd/device.yaml').read_text())
@@ -53,15 +70,40 @@ for label, key in TABLE9:
 # ---- B.3, the measured geometry ------------------------------------------
 checks = []
 riser = comp('dell/riser-2a-14g@1')
-rows = sorted(v['at'][1] for v in riser['bays'].values())
-pitch = (rows[-1] - rows[0]) / (len(rows) - 1)
-checks.append(('PCIe bracket pitch 20.32', f'{pitch:.2f}', abs(pitch - 20.32) < 0.01))
+rows = sorted(v['at'][1] for v in (riser.get('bays') or {}).values())
+if len(rows) >= 2:
+    pitch = (rows[-1] - rows[0]) / (len(rows) - 1)
+    checks.append(('PCIe bracket pitch 20.32', f'{pitch:.2f}',
+                   abs(pitch - 20.32) < 0.01))
+else:
+    checks.append(('PCIe bracket pitch 20.32', 'no slot bays found', False))
 
+# THE JACKS ARE COMPOSED PARTS NOW, AND THIS ASKED FOR LAMPS. The NDC used to
+# draw its own indicators as `elements` and the four `lamp-link` positions stood
+# in for the four jacks; it now composes dell/rj45-port-14g four times and has no
+# `elements` at all, so this line raised KeyError and took the whole audit with
+# it - including the eleven inventory rows above, which were fine.
+#
+# THE PORT PLACEMENTS ARE THE BETTER READING ANYWAY. A lamp is near its jack; a
+# port placement IS the jack, so the pitch now comes from the thing being
+# measured rather than from a proxy for it. The old shape is still accepted,
+# because this tool is meant to survive the part being rearranged again.
+#
+# AND A MISSING MEASUREMENT IS A FAILED CHECK, NOT A TRACEBACK. That is the
+# actual lesson: an audit that dies on the first part it cannot read tells you
+# less than one that prints a red line and carries on to the other six.
 ndc = comp('dell/ndc-4x-rj45-14g@1')
-lx = sorted(v['at'][0] for k, v in ndc['elements'].items()
-            if k.startswith('lamp-link'))
-jp = (lx[-1] - lx[0]) / 3
-checks.append(('NDC jack pitch 22.2', f'{jp:.2f}', abs(jp - 22.2) < 0.05))
+jx = sorted(q['at'][0] for q in (ndc.get('parts') or [])
+            if str(q.get('id', '')).startswith('port-'))
+if not jx:
+    jx = sorted(v['at'][0] for k, v in (ndc.get('elements') or {}).items()
+                if k.startswith('lamp-link'))
+if len(jx) >= 2:
+    jp = (jx[-1] - jx[0]) / (len(jx) - 1)
+    checks.append((f'NDC jack pitch 22.2 (from {len(jx)})', f'{jp:.2f}',
+                   abs(jp - 22.2) < 0.05))
+else:
+    checks.append(('NDC jack pitch 22.2', 'no jack positions found', False))
 
 rj = comp('common/rj45-jack@2')
 checks.append(('iDRAC9 RJ45 ~15.5 wide', f"{rj['size']['w']}",
