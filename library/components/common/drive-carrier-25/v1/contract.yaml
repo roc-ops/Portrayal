@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: drive-carrier-25
-version: 1.2.0
+version: 1.3.0
 class: drive
 behaviour: fills
 profile: server
@@ -9,7 +9,8 @@ description: >-
   Hot-plug carrier for a 2.5 inch SFF drive, stood on edge as a rack server's
   front bays present them - two illuminated glyphs at the head, a release with
   its orange ring, and three windows onto the tray's honeycomb
-size: {w: 17.868, h: 79.4, d: 105.0}
+size: {w: 17.868, h: 79.4, d: 123.7}
+body: {depth: 123.7, color: '#3c4247'}
 attrs:
   media: sff-2.5
   form-factor: '2.5-inch SFF'
@@ -19,6 +20,26 @@ attrs:
   link: 12Gb
   rpm: 10K
 provenance:
+  depth-from-dell-cad: >-
+    measured - Dell's R740XD 3D guide CAD, node `DD9900_ Drives_-1.001`, which
+    spans z 19.77..143.47. The bare drive inside it (`DD9900_ HDD 2.5_`, 15.00
+    x 69.85 x 100.20 - matching std/drive-25's recorded 15.0 x 69.85 x 100.45)
+    sits at z 42.28..142.48, so the carrier is the drive plus 22.5 mm of bezel
+    and latch in front and 1.0 mm of shell behind. THE HANDLE IS CLOSED IN
+    THIS SCENE, checked because the R740xd PSU's CAD depth is a pose: the
+    release handle spans 19.77..31.77 against a carrier face at 20.27, so it
+    stands 0.5 mm proud rather than swung out. THE FACE IS NOT TAKEN FROM THIS
+    CAD and 17.868 x 79.4 stands. The same node reads 18.50 wide while its own
+    front row pitches at 17.8174 - a carrier wider than its pitch is
+    impossible - and neighbour gaps in that row run 16.9 to 18.8, so the scene
+    is approximately assembled in x. The library's 17.868 comes from two
+    Gate-1 figures with 24 repeats each.
+  body: >-
+    the 3D body. `body.depth` is what viewer3d.js uses for a component
+    (`body.depth ?? size.d`), and it matches `size.d` here because the whole
+    part is one box behind one face. `travel` is DELIBERATELY OMITTED: the
+    schema reserves it for captive modules that pull out and stay in the
+    chassis, and a drive carrier comes all the way out.
   the-label-is-attrs-now-not-a-skin-per-capacity: >-
     THE FOUR CAPACITY SKINS ARE GONE AND NOTHING REFERENCED THEM. d2tb-sas,
     d1200gb-sas, d960gb-ssd and d1920gb-ssd differed from `default` in one <g

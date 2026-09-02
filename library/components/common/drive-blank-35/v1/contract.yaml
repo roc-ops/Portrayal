@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: drive-blank-35
-version: 1.0.0
+version: 1.2.0
 class: blank
 behaviour: fills
 profile: server
@@ -10,11 +10,29 @@ description: >-
   same release with its orange ring, same rails, same three windows onto the
   tray honeycomb, and nothing at the head, because the glyphs on a populated
   carrier are its lamps and a blank has nothing to report
-size: {w: 107.208, h: 26.5, d: 155.0}
+size: {w: 105.5, h: 26.9, d: 25.0}
+body: {depth: 25.0, color: '#3c4247'}
 attrs:
   media: lff-3.5
   form-factor: '3.5-inch LFF'
 provenance:
+  face-size-from-the-carrier: >-
+    borrowed - common/drive-carrier-35 entire, now 105.50 x 26.90 from Dell's
+    own R740XD 3D guide CAD. A blank fills the same bay on the same pitch, so
+    its face is the carrier's face; that reasons from the BAY rather than from
+    a drawing of the blank, which is the same borrowing drive-blank-25
+    documents.
+  depth-is-borrowed-and-unmeasured: >-
+    borrowed - common/drive-blank-25's 25.0. A filler is a shell, not a 165 mm
+    tray. THERE IS NO BLANK IN DELL'S CAD: searching the R740XD 3D guide for
+    blank, filler or dummy returns only rear-cage hardware, so the carrier's
+    measured 165.60 depth does NOT transfer here and an earlier pass of this
+    work wrongly recorded that it did. Nothing has measured this part's depth.
+  body: >-
+    the 3D body, and `body.depth` matches `size.d` because the whole part is
+    one shallow box behind one face. `travel` is omitted: a blank is
+    removable, not captive. THE DEPTH IS BORROWED, so the 3D extent of this
+    part is the least-sourced thing about it.
   size: >-
     borrowed - common/drive-carrier-35 entire, because a blank fills the same
     bay on the same pitch and its face is therefore the same 107.208 x 26.5.

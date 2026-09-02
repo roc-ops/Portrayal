@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 9.5.1
+version: 9.6.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -487,6 +487,13 @@ views:
         - {id: panel-left, at: [13.41, 5.3], size: {w: 11.59, h: 30.0},
            accepts: [dell/control-panel-left-14g@1], default: dell/control-panel-left-14g@1,
            group: panels, rel-pos: 1}
+        # THE BAY IS THE PART, THE PITCH IS THE SPACING, and they are no
+        # longer the same number. 107.208 and 26.990 are PITCHES measured
+        # off the photograph; a pitch bounds a carrier from above and never
+        # gives it. Dell's own R740XD 3D guide CAD measures the carrier at
+        # 105.50 x 26.90 - inside both bounds - so the columns leave a real
+        # 1.708 gap and the rows 0.09. The earlier width came from setting
+        # the carrier equal to its pitch by analogy with the 2.5 inch one.
         # THE 12 x 3.5 INCH FRONT - 3 rows of 4, replacing the 24 vertical
         # SFF bays above. Same opening, divided four ways instead of
         # twenty-four: the SFF field runs 26.884..455.716 and 428.832/4 is
@@ -506,40 +513,40 @@ views:
         # image and do not survive the markdown conversion in okf, so no
         # readable source in hand states the order. Row-major 0-3 / 4-7 /
         # 8-11 is Dell LFF convention and is what is used here.
-        - {id: lff-drive-0, at: [26.884, 3.890], size: {w: 107.208, h: 26.500},
+        - {id: lff-drive-0, at: [26.884, 3.890], size: {w: 105.500, h: 26.900},
            accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
            group: drives, rel-pos: 0}
-        - {id: lff-drive-1, at: [134.092, 3.890], size: {w: 107.208, h: 26.500},
+        - {id: lff-drive-1, at: [134.092, 3.890], size: {w: 105.500, h: 26.900},
            accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
            group: drives, rel-pos: 1}
-        - {id: lff-drive-2, at: [241.300, 3.890], size: {w: 107.208, h: 26.500},
+        - {id: lff-drive-2, at: [241.300, 3.890], size: {w: 105.500, h: 26.900},
            accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
            group: drives, rel-pos: 2}
-        - {id: lff-drive-3, at: [348.508, 3.890], size: {w: 107.208, h: 26.500},
+        - {id: lff-drive-3, at: [348.508, 3.890], size: {w: 105.500, h: 26.900},
            accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
            group: drives, rel-pos: 3}
-        - {id: lff-drive-4, at: [26.884, 30.880], size: {w: 107.208, h: 26.500},
+        - {id: lff-drive-4, at: [26.884, 30.880], size: {w: 105.500, h: 26.900},
            accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
            group: drives, rel-pos: 4}
-        - {id: lff-drive-5, at: [134.092, 30.880], size: {w: 107.208, h: 26.500},
+        - {id: lff-drive-5, at: [134.092, 30.880], size: {w: 105.500, h: 26.900},
            accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
            group: drives, rel-pos: 5}
-        - {id: lff-drive-6, at: [241.300, 30.880], size: {w: 107.208, h: 26.500},
+        - {id: lff-drive-6, at: [241.300, 30.880], size: {w: 105.500, h: 26.900},
            accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
            group: drives, rel-pos: 6}
-        - {id: lff-drive-7, at: [348.508, 30.880], size: {w: 107.208, h: 26.500},
+        - {id: lff-drive-7, at: [348.508, 30.880], size: {w: 105.500, h: 26.900},
            accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
            group: drives, rel-pos: 7}
-        - {id: lff-drive-8, at: [26.884, 57.870], size: {w: 107.208, h: 26.500},
+        - {id: lff-drive-8, at: [26.884, 57.870], size: {w: 105.500, h: 26.900},
            accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
            group: drives, rel-pos: 8}
-        - {id: lff-drive-9, at: [134.092, 57.870], size: {w: 107.208, h: 26.500},
+        - {id: lff-drive-9, at: [134.092, 57.870], size: {w: 105.500, h: 26.900},
            accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
            group: drives, rel-pos: 9}
-        - {id: lff-drive-10, at: [241.300, 57.870], size: {w: 107.208, h: 26.500},
+        - {id: lff-drive-10, at: [241.300, 57.870], size: {w: 105.500, h: 26.900},
            accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
            group: drives, rel-pos: 10}
-        - {id: lff-drive-11, at: [348.508, 57.870], size: {w: 107.208, h: 26.500},
+        - {id: lff-drive-11, at: [348.508, 57.870], size: {w: 105.500, h: 26.900},
            accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
            group: drives, rel-pos: 11}
       placements:
@@ -740,10 +747,10 @@ views:
         # The collision is not a naming slip. A rear numbered from 12 belongs to
         # a 12-bay front and this device draws a 24-bay one, which is the
         # front-rear coupling gap showing up as an id clash.
-        - {id: rear-drive-12, at: [154.80, 7.50], size: {w: 107.8, h: 26.5},
+        - {id: rear-drive-12, at: [154.80, 7.50], size: {w: 107.8, h: 26.9},
            accepts: [common/drive-carrier-35@1], default: common/drive-carrier-35@1,
            group: drives-rear, rel-pos: 1, only-in: [rear-2-lff, lff-12-rear-2-lff]}
-        - {id: rear-drive-13, at: [314.20, 7.50], size: {w: 107.8, h: 26.5},
+        - {id: rear-drive-13, at: [314.20, 7.50], size: {w: 107.8, h: 26.9},
            accepts: [common/drive-carrier-35@1], default: common/drive-carrier-35@1,
            group: drives-rear, rel-pos: 2, only-in: [rear-2-lff, lff-12-rear-2-lff]}
         # THE BAYS BLANKED. Table 25's riser configurations 0, 1 and 2 are
