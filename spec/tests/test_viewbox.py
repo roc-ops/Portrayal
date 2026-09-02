@@ -28,6 +28,58 @@ DEVICES = ROOT / "library" / "devices"
 VB = re.compile(r'viewBox="([-\d.]+) ([-\d.]+) ([\d.]+) ([\d.]+)"')
 
 
+def rendered_as(d, vname, view):
+    """The files the renderer actually writes for one view.
+
+    A VIEW IS NOT ALWAYS ITS OWN FILENAME. A view may declare `face: front`,
+    which makes it a VARIANT of the front - a different drawing of the same
+    face, chosen by configuration:
+
+        views:            front-lff-12: {face: front, ...}
+        configurations:   lff-12: {views: {front: front-lff-12}}
+
+    and the renderer names the output by the FACE, not by the view - so that
+    variant comes out as `r740xd.lff-12.front.svg`. Globbing `*{view}.svg`
+    finds nothing for it.
+
+    That cost the r740xd's twelve-bay front its only check: the drawing was
+    built, the test skipped with "not built", and the skip sat one under the CI
+    guard's threshold so nothing said so. It also worked the other way - the
+    plain `front` glob swept up all three variant files and measured them
+    against the BASE view's size. Both views happen to declare 482.6 x 86.8
+    today, so it passed by coincidence; a variant with its own size would have
+    been compared against the wrong number.
+
+    A VARIANT IS RESOLVED PRECISELY and a base face by SUBTRACTION, which is
+    deliberate. A variant's configurations are named in the manifest, so they
+    can be listed. The base face's are not exhaustively knowable from the
+    manifest: a device that declares no configurations at all still renders a
+    synthetic `mx150.default.front.svg`, and modelling that here would mean
+    tracking every naming rule the renderer has. Taking everything on disk for
+    the face and removing what the variants claim needs to know only what IS a
+    variant, which the manifest does say.
+    """
+    face = (view or {}).get("face") or vname
+    cfgs = d.get("configurations") or {}
+
+    def selected_by(target):
+        return [cn for cn, c in cfgs.items()
+                if ((c or {}).get("views") or {}).get(face) == target]
+
+    if (view or {}).get("face"):
+        return [DIST / f"{d['name']}.{cn}.{face}.svg" for cn in selected_by(vname)]
+
+    # the base drawing of this face: everything rendered for it, less every
+    # file a variant of the same face claims
+    variants = [n for n, v in (d.get("views") or {}).items()
+                if (v or {}).get("face") == face]
+    taken = {DIST / f"{d['name']}.{cn}.{face}.svg"
+             for var in variants for cn in selected_by(var)}
+    on_disk = {p for p in DIST.glob(f"{d['name']}.*{face}.svg")
+               if p.name.endswith(f".{face}.svg")}
+    return sorted(on_disk - taken)
+
+
 def cases():
     out = []
     for dev in sorted(DEVICES.glob("*/*/device.yaml")):
@@ -35,13 +87,14 @@ def cases():
         for vname, view in (d.get("views") or {}).items():
             size = (view or {}).get("size")
             if size:
-                out.append((d["name"], vname, size["w"], size["h"]))
+                out.append((d["name"], vname, size["w"], size["h"],
+                            [str(f) for f in rendered_as(d, vname, view)]))
     return out
 
 
-@pytest.mark.parametrize("name,view,w,h", cases())
-def test_viewbox_covers_the_declared_panel(name, view, w, h):
-    files = sorted(DIST.glob(f"{name}.*{view}.svg")) + [DIST / f"{name}.{view}.svg"]
+@pytest.mark.parametrize("name,view,w,h,expected", cases())
+def test_viewbox_covers_the_declared_panel(name, view, w, h, expected):
+    files = [pathlib.Path(f) for f in expected]
     files = [f for f in files if f.exists()]
     if not files:
         pytest.skip(f"{name}.{view} not built")
@@ -59,3 +112,70 @@ def test_viewbox_covers_the_declared_panel(name, view, w, h):
         assert vh + y >= h - 0.01, (
             f"{f.name}: viewBox is {vh:g} tall from {y:g} but the panel is {h:g} - "
             f"{h - (vh + y):.2f} mm of it is outside the drawing")
+
+
+# ---- the mapping itself ------------------------------------------------------
+#
+# `rendered_as` is the part that was wrong, so it gets its own tests rather than
+# being covered only through the parametrised sweep above. A resolution bug is
+# invisible there: a view that resolves to NO files skips, and a skip reads as
+# "not built" rather than as a fault.
+
+def _r740xd():
+    return yaml.safe_load((DEVICES / "dell" / "r740xd" / "device.yaml").read_text())
+
+
+def test_a_variant_view_resolves_to_the_configurations_that_select_it():
+    """`front-lff-12` is drawn only when a configuration redirects the front to
+    it. Before this, nothing matched `*front-lff-12.svg` and the twelve-bay
+    front - the whole point of the change that added it - went unchecked."""
+    d = _r740xd()
+    got = {f.name for f in rendered_as(d, "front-lff-12", d["views"]["front-lff-12"])}
+    assert got == {"r740xd.lff-12.front.svg",
+                   "r740xd.lff-12-rear-2-lff.front.svg",
+                   "r740xd.full-12.front.svg"}, got
+
+
+def test_a_base_face_does_not_sweep_up_its_own_variants():
+    """The other half of the bug, and the quieter one. The old glob measured
+    all three variant drawings against the BASE front's declared size. Both
+    happen to be 482.6 x 86.8 today, so it passed for the wrong reason."""
+    d = _r740xd()
+    got = {f.name for f in rendered_as(d, "front", d["views"]["front"])}
+    assert "r740xd.lff-12.front.svg" not in got
+    assert "r740xd.front.svg" in got and "r740xd.base.front.svg" in got
+
+
+def test_every_rendered_file_is_claimed_by_exactly_one_view():
+    """The completeness property, which is what makes the two above more than
+    spot checks: for a face whose view declares a size, the views' resolved
+    files must partition what is on disk - none checked twice against two
+    different declared sizes, and none left unchecked.
+
+    Scoped to faces that DECLARE a size, because `cases()` is. A view with no
+    `size:` has no declared panel to cover, so it yields no case and claims no
+    file - the as5912-54x draws a front and a rear it never dimensions. That is
+    a real hole in this test's reach, but it is a different one, and pretending
+    those files should be claimed here would only hide it behind a failure
+    about variants.
+    """
+    for dev in sorted(DEVICES.glob("*/*/device.yaml")):
+        d = yaml.safe_load(dev.read_text()) or {}
+        if d.get("kind") != "device":
+            continue
+        claimed, sized_faces = [], set()
+        for vname, view in (d.get("views") or {}).items():
+            if not (view or {}).get("size"):
+                continue
+            sized_faces.add((view or {}).get("face") or vname)
+            claimed += [f for f in rendered_as(d, vname, view) if f.exists()]
+
+        dupes = sorted({p.name for p in claimed if claimed.count(p) > 1})
+        assert not dupes, f"{d['name']}: claimed by two views: {dupes}"
+
+        for face in sized_faces:
+            on_disk = {p for p in DIST.glob(f"{d['name']}.*{face}.svg")
+                       if p.name.endswith(f".{face}.svg")}
+            missed = sorted(p.name for p in on_disk - set(claimed))
+            assert not missed, \
+                f"{d['name']}: rendered but checked by no view: {missed}"
