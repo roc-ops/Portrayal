@@ -505,7 +505,14 @@ export async function extractRelief(url, scope) {
     if (!el.dataset.ref) continue;
     const path = (el.dataset.path || '').split('/')[0];
     if (!path || frus.some(f => f.path === path)) continue;
-    frus.push({path, ref: el.dataset.ref.split(':')[0], cls: el.dataset.class, ...mmRect(el)});
+    // `data-body-depth` IS THE MODULE'S OWN DEPTH and was being thrown
+    // away here, so every module without a `body:` block fell back to a
+    // hardcoded 60 mm bay below - 60 for a 40 mm control panel, 60 for a
+    // 25 mm drive blank. On a part seated in a rack ear that hole runs
+    // straight out the back of the flange.
+    frus.push({path, ref: el.dataset.ref.split(':')[0],
+               cls: el.dataset.class,
+               bodyDepth: +el.dataset.bodyDepth || null, ...mmRect(el)});
   }
   for (const el of svg.querySelectorAll('[data-z-out],[data-z-cyl],[data-z-bar],[data-z-uhandle]'))
     el.style.display = 'none';
@@ -618,10 +625,13 @@ export async function buildFaceRelief(F, ctx) {
       fruGroups[f.path] = fg;
       FRU_GROUPS[f.path] = fg;
       const bd = BODY_META[f.ref];
-      const depth = bd ? bd.depth : 60;
+      // a `body:` block is the best answer, the part's own size.d the next, and
+      // 60 only when a drawing predates `data-body-depth` entirely
+      const depth = bd ? bd.depth : (f.bodyDepth || 60);
       // captive modules declare how far they pull out; removable FRUs clear the chassis
       const captive = bd && bd.travel;
       FRU_META[f.path] = {cls: f.cls, view: F.view, body: bd, captive: !!captive,
+                          bodyDepth: f.bodyDepth,
                           pull: Math.min(captive || depth * 1.5 + 25, INTO - 10)};
     }
     let curOwner = null;
@@ -887,7 +897,8 @@ export async function buildFaceRelief(F, ctx) {
       }
       // empty bay: interior surfaces only, so it never occludes the module's
       // own cavities (the C14 inlet pins live inside this volume)
-      const bd = meta.body ? meta.body.depth : 60;
+      // the bay is as deep as the thing that goes in it, not 60 mm
+      const bd = meta.body ? meta.body.depth : (meta.bodyDepth || 60);
       const bay = new THREE.Mesh(new THREE.BoxGeometry(f.w + 0.6, f.h + 0.6, bd),
         new THREE.MeshLambertMaterial({color: 0x0a0c0e, side: THREE.BackSide}));
       bay.position.set(LX(f.x, f.w), LY(f.y, f.h), -bd / 2 - 0.2);
