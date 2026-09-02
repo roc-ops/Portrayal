@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: rear-handle-14g
-version: 1.1.0
+version: 1.2.0
 class: mechanical
 profile: compute
 # SURFACE-MOUNTED, AND THAT IS A DRAWING FACT AS WELL AS A MECHANICAL ONE.
@@ -155,16 +155,40 @@ provenance:
 relief:
   wall: '#15181b'
   features:
-  - node: body
+  - node: handle-foot-left
     out: 49.59
     color: '#2a2d31'
     confidence: measured
-    source: >-
-      dell/rear-handle-14g@1's own depth key - Dell's service model, measured
-      from the panel plane at z 713.5 to the handle's own front at 763.1. Every
-      visible region of the part ends flat at 762.7-763.1, which is why one
-      number covers the whole outline rather than a feature per region. The
-      hooked section behind that front face is not modelled.
+    source: 'measured - Dell service CAD, guide ic140r740xd000202a, node `DELL_R740XD_
+      Rear Handle-1.002`. Material was found band by band across the width, asking
+      which triangles CROSS each band rather than which vertices fall in it - a
+      straight bar has vertices only at its ends, and the vertex form reported a
+      35 mm hole through the grip. This band reaches the panel plane and runs out
+      to 49.59: it is a foot, bolted flat, and it is what holds the bar off the
+      metal.'
+  - node: handle-grip
+    out: 49.27
+    color: '#2a2d31'
+    confidence: measured
+    source: 'measured - Dell service CAD, guide ic140r740xd000202a, node `DELL_R740XD_
+      Rear Handle-1.002`. Material was found band by band across the width, asking
+      which triangles CROSS each band rather than which vertices fall in it - a
+      straight bar has vertices only at its ends, and the vertex form reported a
+      35 mm hole through the grip. This band carries nothing nearer the panel than
+      37.21: it is the BAR, and the 37.21 mm behind it is the finger gap the photographs
+      show daylight through. It reaches 49.27, so it is 12.06 thick.'
+    lift: 37.21
+  - node: handle-foot-right
+    out: 49.24
+    color: '#2a2d31'
+    confidence: measured
+    source: 'measured - Dell service CAD, guide ic140r740xd000202a, node `DELL_R740XD_
+      Rear Handle-1.002`. Material was found band by band across the width, asking
+      which triangles CROSS each band rather than which vertices fall in it - a
+      straight bar has vertices only at its ends, and the vertex form reported a
+      35 mm hole through the grip. This band reaches the panel plane and runs out
+      to 49.24: it is a foot, bolted flat, and it is what holds the bar off the
+      metal.'
 elements:
   body: {at: [0.0, 0.0], size: [111.69, 41.85], class: handle}
   screws: {at: [4.50, 10.25], size: [101.72, 29.15], class: fastener}

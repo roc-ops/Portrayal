@@ -78,4 +78,15 @@
        is why that hole is drawn and then covered: the CAD says where the screw
        goes and the screw is what a person sees there. -->
   <g id="screws"><circle cx="6.85" cy="12.60" r="2.35" fill="#5a6067" stroke="#24282c" stroke-width="0.3"/><path d="M5.50 12.60 h2.70 M6.85 11.25 v2.70" stroke="#24282c" stroke-width="0.45" stroke-linecap="round"/><circle cx="103.87" cy="37.05" r="2.35" fill="#5a6067" stroke="#24282c" stroke-width="0.3"/><path d="M102.52 37.05 h2.70 M103.87 35.70 v2.70" stroke="#24282c" stroke-width="0.45" stroke-linecap="round"/></g>
+
+  <!-- THREE BOXES, NOT ONE SLAB. These draw nothing - no fill, no
+       stroke - and exist only to give `relief` three bounding boxes to
+       extrude. relief builds a box from a node's bbox, so a single
+       feature on the outline could only ever be a brick; and getBBox
+       ignores clipping, so a clipped copy of the outline would still
+       report the full width. The depths behind them are measured off
+       Dell's service CAD - see the contract. -->
+  <rect id="handle-foot-left" x="0.0" y="0.0" width="29.57" height="25.19" fill="none"/>   <!-- a mounting foot, bolted flat to the panel -->
+  <rect id="handle-grip" x="29.57" y="18.69" width="50.0" height="6.77" fill="none"/>   <!-- the grip: 50 mm of bar standing 37.21 proud, 12.06 thick -->
+  <rect id="handle-foot-right" x="79.57" y="18.69" width="32.12" height="23.12" fill="none"/>   <!-- a mounting foot, bolted flat to the panel -->
 </svg>
