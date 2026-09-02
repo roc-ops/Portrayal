@@ -96,6 +96,13 @@ roles:
     # draws, and `transceiver` is a draw class for exactly that reason.
     - port
     - inlet
+    # A terminal block is the same argument as `inlet` at the other polarity:
+    # dell/dc-terminal-6ryj9 is two bladed openings and a ground stud, and the
+    # SUPPLY behind it is what draws. It arrived with the -48 V DC supply and
+    # was the only class in the library sorted into no role at all, which is
+    # exactly the silence this file exists to prevent - a class nobody asks for
+    # a figure is indistinguishable from a part that draws nothing.
+    - connector
     # A button is a switch contact. An indicator's draw sits inside the figure
     # of the card that lights it, and at hundredths of a watt it is below the
     # resolution of every published figure in the corpus - counting them

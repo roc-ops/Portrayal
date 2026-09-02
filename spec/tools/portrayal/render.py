@@ -465,6 +465,19 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                 style = state_style(st, vocabulary)
                 if style:
                     palette[(comp, st["name"])] = style
+        # AND THE STATES A COMPOSER PUTS ON A COMPOSED PART. A component that
+        # draws nothing itself still names meanings: dell/rj45-port-14g has no
+        # skin and no elements, and exists only to attach ISM table 11 to
+        # common/rj45-port@4 through a `states` override on `parts:`. Harvesting
+        # `elements` alone let those names reach `data-states` and never reach
+        # the stylesheet, so setting one selected a class no rule matched and
+        # the lamp did not light.
+        for part in contract.get("parts") or []:
+            for sts in (part.get("states") or {}).values():
+                for st in sts or []:
+                    style = state_style(st, vocabulary)
+                    if style:
+                        palette[(comp, st["name"])] = style
     skin_file = skins / f"{skin_name}.svg"
     if not skin_file.exists():
         # A COMPONENT NEED NOT HAVE A SKIN CALLED `default`, and one deliberately

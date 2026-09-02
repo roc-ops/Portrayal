@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 9.6.1
+version: 10.0.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -653,7 +653,7 @@ views:
         - {id: paint-serial, at: [52.50, 80.5], size: [28.20, 3.175], rx: 0, fill: '#0f6a76', kind: port-paint}
         - {id: paint-vga, at: [80.70, 80.5], size: [28.55, 3.175], rx: 0, fill: '#145d8f', kind: port-paint}
       cutouts:
-        - {id: idrac9, at: [28.60, 66.50], size: [16.0, 14.0], shape: rect}
+        - {id: idrac9, at: [28.60, 66.55], size: [16.0, 14.0], shape: rect}
         - {id: serial, at: [53.63, 69.10], size: [20.47, 11.4], shape: d-sub}
         - {id: vga, at: [87.30, 69.10], size: [20.47, 11.4], shape: d-sub}
         - {id: usb-1, at: [120.20, 71.47], size: [12.0, 4.5], shape: rect}
@@ -886,8 +886,15 @@ views:
         # the two lamps at the bottom.
         # RE-CENTRED, NOT MOVED. The bezel is 17.0 x 14.9 over a 16.0 x 14.0
         # opening, so it overlaps the cutout by half a millimetre a side - which
-        # is what a bezel does. Placed at 28.10, 66.05 so its centre still lands
-        # on the cutout's at 36.60, 73.50.
+        # is what a bezel does. Placed at 28.10, 66.05.
+        # THE HOLE FOLLOWS THE COMPOSED APERTURE, NOT THE BEZEL'S CENTRE, and the
+        # two are 0.05 apart. common/rj45-port@4 composes std/rj45 at [0.5, 0.5]
+        # inside a 14.9-tall bezel, so the jack sits 0.5 above and 0.4 below -
+        # centred would be 0.45. This device had the cutout at the centred
+        # position and every other user of that component has it at the composed
+        # one, so 0.45 meant one device disagreeing with six and with the part
+        # itself. 0.05 mm is a third of a pixel on the figures behind either
+        # number. The asymmetry is the component's and is left there.
         - {ref: common/rj45-port@4, id: idrac9, at: [28.10, 66.05],
            attrs: {role: management}, group: mgmt-ports, rel-pos: 1}
         - {ref: common/db9-receptacle@1, id: serial, at: [48.47, 68.55],
@@ -1145,10 +1152,21 @@ gaps:
       device does not have either. Recorded here because a reader counting drive
       bays against a spec sheet will find this device short and no view will
       explain why.
+      IT IS NO LONGER SHORT OF NUMBERS. Dell's own R740XD 3D guide CAD carries
+      `740XD_ MidDriveTray_-1.001` at 431.5 x 94.5 x 181.2 mm, with its bracket
+      (`740XD_ MidDriveTray_ Bracket-1.001`, 73.40 x 18.10 x 117.00) and its
+      drives (`740XD_ MidDriveTray_ 2.5 HDD-5.002`, 69.90 x 15.00 x 100.20 on a
+      108.4 pitch) as named sub-parts. The R740 and R740xd Technical Guide adds
+      what the tray is FOR - "The 4 x 3.5-inch mid-bay storage option, which also
+      supports 2.5-inch drives in the Hybrid carrier" - which also names the
+      hybrid carrier this library does not have. An interior photograph is staged
+      beside the front one in working/intake/dell/r740xd/photos.
+      So what remains is drawing, not measuring.
     wanted: >-
       A top-with-cover-off view and a mid-tray bay group, or an explicit
       statement that this library models only externally visible bays. Either
-      answers the question; leaving it unsaid does not.
+      answers the question; leaving it unsaid does not. The geometry is now
+      available from the CAD rather than needing to be estimated.
   - what: front-panel-variants
     scope: [front, front-lff-12]
     reason: needs-drawing
