@@ -407,6 +407,44 @@ def rewrite_ids(el, prefix, contract, path_prefix, skip=None):
                     lambda m: f"url(#{renamed.get(m.group(1), m.group(1))})", val))
 
 
+def fill_from_attrs(root, attrs):
+    """Fill skin nodes marked `data-from` from this instance's merged attrs.
+
+    A node carries the value it should show when nothing says otherwise, so the
+    skin remains a valid standalone drawing; an attr replaces it. This is the
+    same bargain `var(--led-color, #2c3a30)` makes for colour, moved to text.
+
+    ABSENT LEAVES THE DEFAULT; EMPTY DELETES. An attr nobody mentioned must not
+    blank a label - a part dropped into a bay with no attrs at all still has to
+    draw - so only an explicit empty string removes anything. When it does, the
+    node goes, and so does the nearest run of ancestors marked
+    `data-hide-when-empty`: an SSD has no rotational speed AND no spindle glyph
+    beside it, and deleting the text alone would leave the glyph pointing at
+    nothing.
+    """
+    parents = {c: p for p in root.iter() for c in p}
+    for node in list(root.iter()):
+        key = node.get("data-from")
+        if key is None:
+            continue
+        if key not in attrs:
+            continue
+        val = "" if attrs[key] is None else str(attrs[key]).strip()
+        if val:
+            node.text = val
+            continue
+        target = node
+        while True:
+            p = parents.get(target)
+            if p is not None and p.get("data-hide-when-empty") is not None:
+                target = p
+                continue
+            break
+        p = parents.get(target)
+        if p is not None:
+            p.remove(target)
+
+
 def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None):
     contract, skins = lib.resolve(ref)
     comp_name = ref.split("/")[-1].split("@")[0]
@@ -538,6 +576,10 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     for child in list(skin):
         holder.append(copy.deepcopy(child))
     rewrite_ids(holder, inst_id, contract, path, skip=holder)
+    # TEXT FROM ATTRS, so one carrier covers a catalogue instead of a file per
+    # row. `merged` is the contract's attrs under the placement's, which is
+    # already the precedence every other attr consumer uses.
+    fill_from_attrs(holder, merged)
     for child in list(holder):
         g.append(child)
     for feat in (contract.get("relief") or {}).get("features") or []:

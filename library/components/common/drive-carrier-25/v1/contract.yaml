@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: drive-carrier-25
-version: 1.1.0
+version: 1.2.0
 class: drive
 behaviour: fills
 profile: server
@@ -13,7 +13,35 @@ size: {w: 17.868, h: 79.4, d: 105.0}
 attrs:
   media: sff-2.5
   form-factor: '2.5-inch SFF'
+  capacity: '1.2'
+  capacity-unit: TB
+  interface: SAS
+  link: 12Gb
+  rpm: 10K
 provenance:
+  the-label-is-attrs-now-not-a-skin-per-capacity: >-
+    THE FOUR CAPACITY SKINS ARE GONE AND NOTHING REFERENCED THEM. d2tb-sas,
+    d1200gb-sas, d960gb-ssd and d1920gb-ssd differed from `default` in one <g
+    id="drive-label"> block and in nothing else, and no device named any of
+    them. Table 9 of the R740/R740xd Technical Guide lists eight rows of
+    supported drives for one chassis and a reseller lists 84 distinct specs,
+    so a file per capacity is a file per catalogue row forever. The label now
+    reads from attrs via `data-from`, which is the bargain skins already make
+    for colour: the value in the file is a DEFAULT and the render overrides
+    it. An attr that is ABSENT leaves the default standing; an attr that is
+    EMPTY removes the node and any ancestor marked `data-hide-when-empty`,
+    which is how one drawing serves an SSD with no rotational speed and no
+    spindle glyph beside it.
+  the-defaults-are-real-rows-of-table-9: >-
+    datasheet - Dell R740/R740xd Technical Guide, table 9 "Supported drives",
+    row 2.5-inch / SAS / 12Gb / 10K - "300GB, 600GB, 768 GB, 1.2TB, 1.8TB,
+    2.4TB". The values in the skin are DEFAULTS rather than a fixed drawing,
+    so a bay that names no attrs still renders a drive Dell actually sells.
+    THE DEFAULT USED TO READ 10 TB SATA 7.2K, WHICH IS NOT A DRIVE THAT
+    EXISTS. Table 9's 2.5-inch SATA 7.2K row is "1TB, 2TB", and 10TB appears
+    only in the 3.5-inch rows - it was copied from the 3.5-inch family. A
+    capacity baked into a file nobody re-reads is how that survived unnoticed,
+    which is most of the argument for attrs.
   the-label-is-text-and-a-skin: >-
     IT LOOKED LIKE A QR CODE AND IT IS FOUR LINES OF TYPE. At the resolution the
     first reading was done, a dense block of small white glyphs on a dark square
@@ -196,4 +224,4 @@ elements:
   window-1: {at: [2.83, 27.3], size: [12.2, 10.9], class: vent}
   window-2: {at: [2.83, 39.6], size: [12.2, 11.0], class: vent}
   window-3: {at: [2.83, 52.1], size: [12.2, 9.1], class: vent}
-skins: [default, d2tb-sas, d1200gb-sas, d960gb-ssd, d1920gb-ssd]
+skins: [default]

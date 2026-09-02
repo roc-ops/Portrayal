@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: drive-carrier-35
-version: 1.2.0
+version: 1.3.0
 class: drive
 behaviour: fills
 profile: server
@@ -11,7 +11,33 @@ description: >-
 size: {w: 107.208, h: 26.5, d: 155.0}
 attrs:
   form-factor: 3.5in
+  capacity: '10'
+  capacity-unit: TB
+  interface: SATA
+  link: 6Gb
+  rpm: 7.2K
 provenance:
+  the-label-is-attrs-now-not-a-skin-per-capacity: >-
+    THE FOUR CAPACITY SKINS ARE GONE AND NOTHING REFERENCED THEM. d2tb-sas,
+    d1200gb-sas, d960gb-ssd and d1920gb-ssd differed from `default` in one <g
+    id="drive-label"> block and in nothing else, and no device named any of
+    them. Table 9 of the R740/R740xd Technical Guide lists eight rows of
+    supported drives for one chassis and a reseller lists 84 distinct specs,
+    so a file per capacity is a file per catalogue row forever. The label now
+    reads from attrs via `data-from`, which is the bargain skins already make
+    for colour: the value in the file is a DEFAULT and the render overrides
+    it. An attr that is ABSENT leaves the default standing; an attr that is
+    EMPTY removes the node and any ancestor marked `data-hide-when-empty`,
+    which is how one drawing serves an SSD with no rotational speed and no
+    spindle glyph beside it.
+  the-defaults-are-real-rows-of-table-9: >-
+    datasheet - Dell R740/R740xd Technical Guide, table 9 "Supported drives",
+    row 3.5-inch / SATA / 6Gb / 7.2K - "1TB, 2TB, 4TB, 8TB, 10TB, 12TB, 14TB,
+    16TB". The values in the skin are DEFAULTS rather than a fixed drawing, so
+    a bay that names no attrs still renders a drive Dell actually sells. THE
+    LINK-RATE ROW IS NEW HERE. This label carried three rows where the 2.5
+    inch carrier has four plus the spindle glyph, because this part was scaled
+    from that one before the row existed. Same fields at both sizes now.
   it-is-the-2-5-inch-carrier-scaled-and-laid-flat: >-
     IT WAS DRAWN AS A DIFFERENT KIND OF OBJECT and it is not one. Two plain LED
     rectangles where common/drive-carrier-25 has stroked lamp GLYPHS, three flat
