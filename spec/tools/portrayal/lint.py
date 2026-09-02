@@ -83,6 +83,8 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
       fact worth comparing has a name the comparison layer knows (census)
   L69 device: a cooling group with more than one bay says how many of those
       fans the box can lose
+  L70 device: a declared vendor silence names a fact that exists, and is not
+      contradicted by the device stating that fact anyway
 """
 import argparse
 import json
@@ -95,6 +97,7 @@ from pathlib import Path
 import yaml
 
 import attrsections as attrs_mod
+import capability
 import devicelock
 from manifest import (view_parts, targets, split_target, presented_interface,
                       VIEW_KEY_ORDER,
@@ -2266,27 +2269,15 @@ def lint_device_bay_pitch(path, data):
                          "second image before recording it as a finding")
 
 
-EAR_ZONE_MM = 25.0
-
-
-def _seated_in_an_ear(view, w):
-    """Anything installed within EAR_ZONE_MM of either end of the face.
-
-    25 mm because that is what an ear is: a 19-inch face is 482.6 mm and the
-    bodies behind one run 434 to 448 mm, so the flange each side is between 17
-    and 24 mm. Anchors are compared rather than full extents - a part's width
-    lives in its contract and this rule does not need to resolve one to know
-    that something was seated out there.
-    """
-    parts = view_parts(view)
-    for item in parts["placements"] + parts["bays"] + parts["cutouts"]:
-        at = item.get("at")
-        if not at:
-            continue
-        x = float(at[0])
-        if x <= EAR_ZONE_MM or x >= w - EAR_ZONE_MM:
-            return item.get("id") or item.get("ref") or "a component"
-    return None
+# THE DEFINITION LIVES IN capability.py AND IS IMPORTED, not copied. It used to
+# live here, and the grader had its own idea of the same face: the linter
+# accepted the Dell R740xd's 482.6 mm front because its ears carry a VGA and a
+# power button, while the capability grader called that a chassis-width
+# disagreement and stopped the device at level 2 with six good views. One face,
+# two rules, opposite answers. See issue #105.
+EAR_ZONE_MM = capability.EAR_ZONE_MM
+RACK_FACE_MM = capability.RACK_FACE_MM
+_seated_in_an_ear = capability.seated_in_an_ear
 
 
 def lint_device_rack_ears(path, data):
@@ -2318,7 +2309,7 @@ def lint_device_rack_ears(path, data):
         if vname not in ("front", "rear"):
             continue
         w = ((view or {}).get("size") or {}).get("w")
-        if not (w and 480.0 <= float(w) <= 487.0):
+        if not (w and RACK_FACE_MM[0] <= float(w) <= RACK_FACE_MM[1]):
             continue
         if _seated_in_an_ear(view or {}, float(w)):
             continue
@@ -2802,6 +2793,47 @@ def lint_device_fan_redundancy(path, data):
              f"say how many fans the box can lose. Set attrs.redundancy to the "
              f"vendor's form ('3+1', '5+1', 'n+1') with a redundancy-note quoting "
              f"the sentence and naming where it came from")
+
+
+def lint_device_declared_silence(path, data):
+    """L70: a `fact:` gap names a real fact, and does not contradict the device.
+
+    THE THIRD STATE, and the reason it needs guarding. A blank in a comparison
+    meant two things that looked identical - the vendor publishes nothing, or
+    nobody has looked. Six ASR 9000 chassis had the first case written down in
+    provenance ("this is the vendor being silent, not this model being thin")
+    where no consumer could reach it. Scoping a `vendor-silent` gap
+    `fact:<name>` makes that reachable.
+
+    Which buys two ways to be wrong, and both are silent without this rule.
+
+    A MISSPELLED FACT NAME claims nothing. `fact:peak-power` resolves to no
+    fact, the gap looks discharged in the file and the comparison still shows a
+    bare blank - the worst outcome, because somebody did the work and it did
+    not land.
+
+    A CONTRADICTION is worse than either state alone: the device states a
+    figure AND says the vendor publishes none. One of the two is wrong and
+    nothing here can tell which, so the resolver refuses to prefer one and this
+    asks a person. It is an error rather than a warning because a reader shown
+    a number has no way to know a retraction was filed against it.
+    """
+    import comparable as facts_mod
+
+    stated = facts_mod.resolve(data)
+    for name, why in facts_mod.declared_silence(data).items():
+        if name not in facts_mod.BY_NAME:
+            err(path, "L70", f"a vendor-silent gap is scoped 'fact:{name}', which is "
+                f"not a comparable fact. The gap reads as discharged and the comparison "
+                f"still shows a blank, so the work does not land. Known names are in "
+                f"comparable.py")
+            continue
+        if stated.get(name, {}).get("readings"):
+            got = stated[name]["readings"][0]
+            err(path, "L70", f"the device states {name} as {got['value']!r} from "
+                f"{got['from']} AND declares the vendor silent on it "
+                f"({why.get('what')}). One of the two is wrong; a reader shown the "
+                f"number cannot know a retraction was filed against it")
 
 
 def lint_device_gap_scope(path, data):
@@ -4826,7 +4858,6 @@ def print_matrix(matrix, schemas):
     Nothing here is declared. Every column is computed from the manifest, so it
     cannot be optimistic and cannot go stale.
     """
-    import capability
     profiles = capability.load_profiles(schemas)
     rows = []
     for path, d in matrix:
@@ -5175,6 +5206,7 @@ def main():
                 lint_device_empty_declaration(f, d)
                 lint_device_power_redundancy(f, d)
                 lint_device_fan_redundancy(f, d)
+                lint_device_declared_silence(f, d)
                 lint_device_control_plane_redundancy(f, d)
                 try:
                     dev_maturity[str(f.parent.relative_to(root / "devices"))] = \

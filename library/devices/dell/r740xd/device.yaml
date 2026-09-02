@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 9.6.0
+version: 9.6.1
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -267,6 +267,9 @@ groups:
     term: PSU
     role: service
     index-origin: 1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 - Dell R740xd Installation and Service Manual: "When two identical PSUs are installed, power supply redundancy (1+1 - with redundancy or 2+0 - without redundancy) is configured in system BIOS." The pair is 1+1 by default and the same two supplies can be set to 2+0, which is the vendor offering the choice rather than a second product. Hot spare puts the redundant PSU to sleep while the active one carries 100 percent of the load'
   mgmt-rear:
     term: Control
     role: management

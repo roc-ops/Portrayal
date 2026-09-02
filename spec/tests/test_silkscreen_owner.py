@@ -14,6 +14,8 @@ from pathlib import Path
 
 import yaml
 
+import libdata
+
 SPEC = Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library"
 sys.path.insert(0, str(SPEC / "tools/portrayal"))
@@ -79,8 +81,7 @@ def test_chassis_is_an_answer_and_not_an_escape_hatch():
     src = (SPEC / "tools/portrayal/lint.py").read_text()
     assert "Printed ink annotates a part" not in src
     marks = 0
-    for p in sorted(LIB.glob("devices/*/*/device.yaml")):
-        d = yaml.safe_load(p.read_text()) or {}
+    for _slug, p, d in libdata.library():
         for v in (d.get("views") or {}).values():
             marks += sum(1 for m in view_parts(v)["silkscreen"]
                          if m.get("for") == "chassis")
@@ -106,8 +107,7 @@ def test_l14_does_not_spin_a_rotated_bay():
 
 def _ownership(modelled_only):
     tot = own = 0
-    for p in sorted(LIB.glob("devices/*/*/device.yaml")):
-        d = yaml.safe_load(p.read_text()) or {}
+    for _slug, p, d in libdata.library():
         if modelled_only and (d.get("maturity") or "draft") == "draft":
             continue
         for v in (d.get("views") or {}).values():
@@ -142,8 +142,7 @@ def test_a_wordmark_names_the_whole_unit_and_not_whatever_is_beside_it():
     `smartoptics` to an ethernet jack and `DCP-R-34D-CS` to a port, because
     those happened to be nearest. A wordmark names the chassis or nothing.
     """
-    for p in sorted(LIB.glob("devices/*/*/device.yaml")):
-        d = yaml.safe_load(p.read_text()) or {}
+    for _slug, p, d in libdata.library():
         flat = lambda s: str(s).lower().replace(" ", "").replace("-", "")
         names = {flat(d.get("model")), flat(d.get("manufacturer"))}
         for v in (d.get("views") or {}).values():
