@@ -565,7 +565,15 @@ export function createViewer(container, opts = {}) {
       // draws ONE plate the width of the drawing and lets the drawing paint its
       // own ears onto it. True whatever the split.
       const [fwmm, fhmm] = faceMM.front;
-      const PLATE = 2;
+      // THE EAR IS ABOUT AN INCH THICK, and 2 mm was a placeholder. At 2 mm the
+      // backs of the ear-mounted ports came out the other side: measured off an
+      // export, a USB on the flange is 13.70 mm deep and the VGA 6.73, with
+      // nothing behind either but the plate, because the body box stops at the
+      // fold. 25.4 is the operator's figure for the real flange - they have the
+      // machine - and it contains the deepest of those with room over.
+      // It is NOT derived from the ports: a number chosen to just clear 13.70
+      // would look right today and fail the next thing bolted into a flange.
+      const PLATE = 25.4;
       // the same default the component branch uses; configs.json carries the
       // chassis box but not its colour
       const plain = new THREE.MeshLambertMaterial({color: '#3a3f44'});
