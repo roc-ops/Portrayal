@@ -46,6 +46,7 @@ d = yaml.safe_load((ROOT / 'devices/dell/r740xd/device.yaml').read_text())
 rear = d['views']['rear']
 bays = {b['id']: b for b in rear['components']['bays']}
 pl = {p['id']: p for p in rear['components']['placements']}
+cut = {c['id']: c for c in rear['panel']['cutouts']}
 
 # ---- B.2, the inventory --------------------------------------------------
 TABLE9 = [('full-height PCIe slot (7)', 'riser-1'),
@@ -109,28 +110,63 @@ rj = comp('common/rj45-jack@2')
 checks.append(('iDRAC9 RJ45 ~15.5 wide', f"{rj['size']['w']}",
                abs(rj['size']['w'] - 15.54) < 0.4))
 
+# THE SIZE CAME FROM A FIGURE AND NOW COMES FROM THE CAD. 88.7 x 41.8 was
+# photo-measured off ISM figure 8 at 7.2 px/mm; Dell's own service model,
+# descended past the named assembly to the mesh child that is 195.5 deep, gives
+# 86.3 x 39.1 and puts the body's left edge at face x 251.34 against the 251.30
+# this device seats it at. A measurement in software beats a reading off a
+# figure, so the expectation moves with it.
 psu = comp('dell/psu-1100w-ac-14g@1')
-checks.append(('PSU 88.7 x 41.8', f"{psu['size']['w']} x {psu['size']['h']}",
-               psu['size'] == {'w': 88.7, 'h': 41.8}))
-checks.append(('PSU top at y 45.0', f"{bays['psu-1']['at'][1]}",
-               bays['psu-1']['at'][1] == 45.0))
+checks.append(('PSU 86.3 x 39.1 (vendor CAD)',
+               f"{psu['size']['w']} x {psu['size']['h']}",
+               psu['size'] == {'w': 86.3, 'h': 39.1}))
+# THE POSITION IS NOT SETTLED AND THIS NO LONGER PRETENDS IT IS. y 45.0 was
+# argued off ISM figure 9 in the same breath as a height of 41.8, and that
+# height is now disproven; y 46.20 is what the device carries and its only
+# corroboration is a comment that cites the seating back. So the check that can
+# be made is the one that does not need the answer: the bay reserves exactly
+# what the module measures. See the device's psu-top-edge-unsettled gap.
+checks.append(('PSU bay fits the module',
+               f"bay {bays['psu-1']['size']['w']} x {bays['psu-1']['size']['h']}"
+               f" at y {bays['psu-1']['at'][1]}",
+               bays['psu-1']['size'] == psu['size']))
 
 
 def bottom(pid):
-    """Where a port's own aperture ends on the face - through the wrapper."""
+    """Where a port's APERTURE ends on the face - the hole, not the bezel.
+
+    THIS USED TO COMPARE A BEZEL WITH TWO APERTURES. serial and vga each compose
+    a `shell` and it reached that; idrac9 composes none at that id, so it fell
+    back to the whole part - which for an RJ45 is the bezel, and a bezel is
+    deliberately bigger than its hole. It read 80.95 against 80.50 and called
+    the row misaligned when nothing was.
+    The cutout is the hole in the sheet metal and every one of the three has
+    one, so it is the measurement they can all be held to. The device says as
+    much where it places this port: "THE HOLE FOLLOWS THE COMPOSED APERTURE,
+    NOT THE BEZEL'S CENTRE".
+    """
+    k = cut.get(pid)
+    if k:
+        return k['at'][1] + k['size'][1]
     p = pl[pid]
     c = comp(p['ref'])
     inner = [q for q in (c.get('parts') or []) if q.get('id') == 'shell']
     if not inner:
         return p['at'][1] + c['size']['h']
-    std = comp(inner[0]['ref'])
-    return p['at'][1] + inner[0]['at'][1] + std['size']['h']
+    return p['at'][1] + inner[0]['at'][1] + comp(inner[0]['ref'])['size']['h']
 
 
+# AND THE 80.0 WAS NEVER SOURCED. No fact sheet for this device is held; the
+# number was written into this tool. What the row is FOR is that the three
+# openings finish flush with one another, which is a relative claim the drawing
+# can be held to and which survives the panel being re-measured. The absolute is
+# printed so a reader can still challenge it.
 bs = {k: bottom(k) for k in ('idrac9', 'serial', 'vga')}
-checks.append(('I/O bottoms share y = 80',
-               ', '.join(f'{k} {v:.2f}' for k, v in bs.items()),
-               all(abs(v - 80.0) < 0.1 for v in bs.values())))
+spread = max(bs.values()) - min(bs.values())
+checks.append(('I/O apertures finish flush (<0.1)',
+               ', '.join(f'{k} {v:.2f}' for k, v in bs.items()) +
+               f'  spread {spread:.2f}',
+               spread < 0.1))
 
 print('\nB.3  measured-geometry claim             model                      ok')
 bad = 0

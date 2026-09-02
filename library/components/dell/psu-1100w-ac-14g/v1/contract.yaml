@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: psu-1100w-ac-14g
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: server
@@ -24,26 +24,27 @@ provenance:
     the hardware has: recess, connector, lever across it.
   what-the-vendor-cad-settles-and-what-it-cannot: >-
     THE SHAPES ARE CONFIRMED AND THE PROTRUSIONS ARE NOT, and the reason is the
-    pose. Dell's interactive service model for this machine
-    (r740xd, 740XD_Powersupply_Unit-1.001) draws the supply with its handle
-    SWUNG OPEN, because the guide is a removal procedure - which is why the unit
-    boxes 132.6 wide against a body that is 86.3. Anything measured from the
-    face in that pose is measuring an open handle.
+    pose. Dell's interactive service model for this machine (r740xd,
+    740XD_Powersupply_Unit-1.001) draws the supply with its handle SWUNG OPEN,
+    because the guide is a removal procedure - which is why the unit boxes
+    132.6 wide against a body that is 86.3. Anything measured from the face in
+    that pose is measuring an open handle.
     CONFIRMED: the withdrawal handle really is a U standing off the faceplate,
-    which is what the side view shows and what `uhandle` was chosen for; and the
-    release lever really is a Z - a rounded head at the rear, a dogleg, and a
-    long shaft running back into the supply. Both were described from the
-    hardware before the model was read, and both are there.
+    which is what the side view shows and what `uhandle` was chosen for; and
+    the release lever really is a Z - a rounded head at the rear, a dogleg, and
+    a long shaft running back into the supply. Both were described from the
+    hardware before the model was read, and both are there. The BODY's
+    cross-section is confirmed too, and is now what `size` carries.
     NOT SETTLED: how far either stands proud when the supply is SEATED and the
     handle closed. 19.05 and 25.4 stay as they are - operator estimates, marked
     `estimated` - until a guide poses this supply home. A number taken from an
-    open handle would be `vendor-cad` and wrong, which is worse than an estimate
-    that says it is one.
-    ALSO READ, and not applied: the supply's own body measures 86.3 x 39.1 x
-    195.5 against the 87.5 x 41.8 this part carries from ISM figure 8. Those are
-    close enough to be the same supply and far enough apart to be worth
-    re-reading; the figure is this device's own source and stays until something
-    settles it.
+    open handle would be `vendor-cad` and wrong, which is worse than an
+    estimate that says it is one.
+    ALSO NOT SETTLED: where the supply sits. The same warning applies with more
+    force to position than to size, and this entry used to say the body reading
+    was "not applied" while `size` carried it. That sentence outlived its
+    subject by some months and is the reason the rear audit could report a part
+    disagreeing with its own provenance.
   the-latch-is-a-z-and-we-see-its-end: >-
     THE ORANGE RECTANGLE IS THE TOP OF A LEVER, NOT A TAB. Behind the face it
     runs about three-quarters of an inch out, turns to run PARALLEL to the
@@ -79,18 +80,29 @@ provenance:
     EPP is Dell's "Extended Power Performance" mark. It is branding rather than
     a measurement; the wordmark's own artwork is Dell's and is not reproduced.
   size: >-
-    photo-measured from ISM figure 8, which passes Gate 1 at 0.38% against a
-    434 x 86.8 rear face - the best-scaled source held for this machine. THE
-    WIDTH IS A PITCH RATHER THAN AN OUTLINE, which is the more reliable of the
-    two: the handles sit about 90 mm apart on both rear figures. WIDTH IS THEN
-    CONSTRAINED BY WHAT ELSE IS ON THE FACE: riser 2's vent field stops at
-    x 251.4, so the first supply cannot begin before it, and the second must end
-    at the 434 edge. 88.7 each from 256.6 is what fits, and it sits inside the
-    handle pitch's own spread (89.9 on one figure, 90.5 on the other).
-    HEIGHT IS 41.8 AND THE MODULE TOP IS y 45.0, read off the R740 ISM figure 9
-    - "Back view of three riser system" - which passes Gate 1 at 0.26% and is
-    the best-scaled rear source held. An earlier draft made it 43.4 by halving
-    the face, which is a derivation and not a measurement.
+    measured - Dell's own service model, r740xd.glb, node
+    `740XD_Powersupply_Unit-1.001`, descended past the named node to the mesh
+    child `Body_1_6.002`: 86.3 x 39.1 x 195.5.
+    DESCENDING IS THE WHOLE POINT. Every named PSU node in that scene is an
+    assembly and boxes 132.6 wide, because the guide draws the supply with its
+    withdrawal handle SWUNG OPEN - it is a removal procedure. The body is the
+    child that is DEEP: a supply runs the better part of 200 mm into the
+    chassis where a handle and a latch are shallow things near the face, so
+    depth is the property to sort on rather than a name to trust.
+    IT CONFIRMS THE NUMBER THIS FILE ALREADY HAD, independently: the same
+    measurement puts the body's left edge at face x 251.34 and this device
+    seats it at 251.30.
+    WHAT THIS REPLACED WAS A READING OFF ISM FIGURE 8 - 88.7 x 41.8, argued
+    from the handle pitch (about 90 mm on both rear figures) and from what
+    else fits on the face, with riser 2's vent field stopping at x 251.4 and
+    the second supply ending at the 434 edge. That reasoning was sound and its
+    answer is 2.4 mm wide and 2.7 mm tall of a CAD body, which is a
+    photo-measurement at 7.2 px/mm losing to a model measured in software. The
+    old text is kept in outline here because it is what a reader will find if
+    they go back to figure 8 and wonder why the numbers differ.
+    THE POSITION IS A DIFFERENT QUESTION AND IS NOT SETTLED. glb-parts.py says
+    why in as many words: sizes survive a pose, positions do not. See the
+    device's `psu-top-edge-unsettled` gap.
   output: >-
     the figure prints "EPP 1100W 94.5% efficiency" on the fan label of both
     supplies, which is where 1100 comes from. THE R740xd TAKES THIRTEEN DIFFERENT

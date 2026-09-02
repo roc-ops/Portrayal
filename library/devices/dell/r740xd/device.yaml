@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 11.0.3
+version: 11.0.4
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -1197,6 +1197,37 @@ views:
 # so yet. Recorded as a gap rather than left for the next person to rediscover
 # from a bay number that does not add up.
 gaps:
+  - what: psu-top-edge-unsettled
+    scope: [rear]
+    reason: sources-disagree
+    note: >-
+      TWO NUMBERS, ONE APPEARANCE EACH, AND NEITHER CORROBORATED. This device
+      seats both supplies at y 46.20, and the only other place that number
+      appears is a comment on riser 2's plate saying the plate was cut back to
+      "face 46.20 - the power supply's top edge", which cites this seating
+      rather than a source. psu-1100w-ac-14g's provenance used to argue the
+      module top was y 45.0, read off R740 ISM figure 9 - but it argued that in
+      the same breath as a height of 41.8, and the height has since been
+      measured off Dell's own service model at 39.1. A position argued from a
+      reading whose companion number is disproven is not evidence for the
+      position.
+      THE CAD CANNOT ANSWER IT. glb-parts.py states the rule it enforces:
+      sizes survive a pose and positions do not, and this scene draws the
+      supply with its withdrawal handle swung open for a removal procedure. The
+      body measures cleanly at 86.3 x 39.1 x 195.5 and its face y lands
+      nowhere near either candidate.
+      AN ATTEMPT TO RE-READ FIGURE 9 FAILED GATE 1 AT 13.18%, against a
+      provenance that claims 0.26% for the same figure - so the failure is in
+      the panel detection, not in the figure, and nothing may be taken off it
+      until somebody finds the body's true top and bottom edges in that raster.
+      The seating is left where it is rather than moved on a measurement that
+      did not pass its own gate.
+      WHAT WOULD SETTLE IT: the body edges in ISM figure 9 identified by hand
+      rather than by ink-density, which turns the 13.18% back into the 0.26%
+      the figure is capable of and makes the fraction readable. 1.2 mm is worth
+      one careful pass, because riser 2's plate is cut to this number.
+    wanted: >-
+      the supply's top edge on the rear face, from a figure that has passed Gate 1
   - what: riser-configurations-not-all-declared
     scope: [rear, riser-1, riser-2, riser-2-lp, riser-3]
     reason: needs-drawing
