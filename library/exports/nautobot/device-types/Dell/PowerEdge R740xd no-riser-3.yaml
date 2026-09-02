@@ -1,7 +1,7 @@
 ---
 manufacturer: Dell
-model: PowerEdge R740xd base
-slug: dell-poweredge-r740xd-base
+model: PowerEdge R740xd no-riser-3
+slug: dell-poweredge-r740xd-no-riser-3
 u_height: 1.0
 is_full_depth: true
 description: 2U two-socket rack server - 24 x 2
@@ -14,6 +14,9 @@ module-bays:
   - name: PSU 2
     position: '2'
     description: 'Accepts: psu-1100w-ac-14g, psu-2400w-ac-14g, psu-1100w-dc-14g'
+  - name: Rear storage-3
+    position: '3'
+    description: 'Accepts: rear-bay-blank-14g'
   - name: drive-0
     position: '0'
     description: 'Accepts: drive-carrier-25, drive-blank-25, drive-25'
@@ -95,16 +98,17 @@ module-bays:
   - name: riser-1
     position: '1'
     description: 'Accepts: riser-1-3fh-14g, riser-1-2fh-14g'
+  - name: riser-2
+    position: '2'
+    description: 'Accepts: riser-2-2fh-1lp-14g, riser-2-3-blank-14g'
 comments: '2U two-socket rack server - 24 x 2.5 inch front drive bays
 
 
-  Configuration `base`: the chassis as an enclosure you can power on: every drive bay filled with a blank.
-  DERIVED and not sourced - Dell publishes no default drive count for this chassis, so this is the library
-  populating bays by role rather than following an orderable bundle, and the two are not equally good.
-  THE PCIe SLOTS ARE NAMED HERE RATHER THAN LEFT TO THE BAY DEFAULT. A base is a chassis you can log into
-  with nothing decided about expansion, so its traffic slots have to be EMPTY - and empty on real hardware
-  means a filler bracket, not a hole, because the airflow depends on it. Saying so explicitly is what
-  distinguishes "nobody has chosen a card yet" from "somebody forgot to write the bays down".
+  Configuration `no-riser-3`: TABLE 25''s ROW 3, 1A+2A - the three-slot riser 2 fitted and no riser 3
+  at all. Six PCIe slots, and the riser 3 opening carries the same perforated blank that closes a rear
+  storage bay, because it is the same opening. IT HAD NO CONFIGURATION UNTIL NOW and the variant sheet
+  reported that as a gap: it is the only row in table 25 that fits riser 2 without riser 3, so nothing
+  in the device named it and the drawing could only be produced by overriding a bay from outside.
 
 
   Drawing version 10.0.0. A major bump means a slot moved or an id was renamed, so anything cached from

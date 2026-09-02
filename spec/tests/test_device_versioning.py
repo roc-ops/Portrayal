@@ -262,7 +262,19 @@ def test_examples_never_become_device_types():
         for n, c in (d.get("configurations") or {}).items():
             if (c or {}).get("kind") == "example":
                 examples.add(n)
-    leaked = [n for n in names if any(e in n for e in examples)]
+    # A CONFIGURATION IS A TRAILING TOKEN, NOT A SUBSTRING. `e in n` reported
+    # "PowerEdge R740xd lff-12-rear-2-lff" as an illustration because the
+    # r740xd's `rear-2-lff` example is a substring of it - and that
+    # configuration is ORDERABLE, a row of ISM table 28. The exporter separates
+    # the model from the configuration with a SPACE ("C40G bdm-3plus1" above),
+    # so an example leaks only when it is the whole stem or the whole tail after
+    # a space. Matching mid-word condemns by accident.
+    # NOT an exact "<model> <config>": sixteen stems in the tree are part-number
+    # style (`5912-54X-O-48V-B-arcos`) with no model prefix, and building the
+    # expected name from the model would stop checking those at all.
+    leaked = sorted({n for n in names
+                     for e in examples
+                     if n == e or n.endswith(" " + e)})
     assert not leaked, f"illustrations exported as device types: {leaked}"
 
 
