@@ -1,14 +1,14 @@
 format: 1
 kind: module
 name: drive-carrier-35
-version: 1.1.0
+version: 1.2.0
 class: drive
 behaviour: fills
 profile: server
 description: >-
   A 3.5 inch hot-swap drive in its carrier, drawn wide - the orientation both
   the rear bays and a 12 x 3.5 inch front mount it in
-size: {w: 107.8, h: 26.5, d: 155.0}
+size: {w: 107.208, h: 26.5, d: 155.0}
 attrs:
   form-factor: 3.5in
 provenance:
@@ -52,12 +52,35 @@ provenance:
     BETTER figure than the 8 this whole device was built from, at 1.05%, and it
     had never been opened.
     The two carriers in it measure 154.80..262.80 and 314.20..421.80 - 108.0 and
-    107.6 wide - and 7.5..34.0 tall. Drawn at 107.8 x 26.5.
+    107.6 wide - and 7.5..34.0 tall.
     THE CHECK IS THE DRIVE INSIDE IT. A bare 3.5 inch drive is 101.6 x 26.1, so
-    a carrier at 107.8 x 26.5 is the drive plus a few millimetres of frame. A
+    a carrier at ~107.5 x 26.5 is the drive plus a few millimetres of frame. A
     reading of the BAY OPENING rather than the carrier would have come out
     several millimetres larger and looked just as plausible; that it lands on
     the drive is what says which of the two was measured.
+  width-was-107-8-and-is-now-107-208: >-
+    photo-measured - and the earlier figure was not wrong, it was UNBOUNDED.
+    Figure 9 shows two rear bays 160 mm apart, and two isolated openings put no
+    upper limit on the part inside either of them; an opening is legitimately
+    wider than what it holds. Four of 107.8 across the 12 x 3.5 inch front
+    overrun that front's opening by 2.4 mm, which is how the slack showed up.
+    dellr740xd-12x35.webp settles it. It passes Gate 1 at 0.07% against the
+    482.6 x 86.8 RACK FACE - the tightest figure in this project - and its ear
+    fold lines land at body-relative -0.67 and +434.79, independently confirming
+    the 434.5 body. Its four columns divide the same backplane opening the 24
+    SFF bays divide: autocorrelated period 107.216 against 428.832/4 = 107.208,
+    agreeing to 0.008 mm. FOUR REPEATS BOUND A PART WHERE TWO DISTANT ONES
+    CANNOT, so the front is the better witness to the width and the rear stays
+    the better witness to the opening. Both readings still hold at 107.208.
+  the-height-is-26-5-and-was-deliberately-not-changed: >-
+    The same photograph measures the front's ROW pitch at 26.99 by three
+    independent methods, and the flush-fit convention the 2.5 inch carrier
+    follows would make that the height. It is not taken, because the rear
+    opening is 26.5 and a carrier cannot be taller than the hole it goes in.
+    Both numbers are upper bounds and 26.5 is the tighter one; the photograph
+    also shows why the rows need not be flush, since bright cage shelves run
+    between them where the columns have only a thin divider. Taking 26.99 would
+    have contradicted a measured opening to satisfy a convention.
   it-declares-no-standard-and-that-is-deliberate: >-
     A first draft carried `conforms: drive-35` and lint rejected it - there is
     no such registry key. The right answer was not to add one: common/
