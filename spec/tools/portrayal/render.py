@@ -617,6 +617,11 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                         node.set(f"data-z-{zk}", str(feat[zk]))
                 if feat.get("color"):
                     node.set("data-z-color", feat["color"])
+                if feat.get("shape"):
+                    # EXTRUDE THE OUTLINE, NOT THE BOX. Only meaningful next to
+                    # `out`; the kit falls back to the box if the node's art
+                    # yields no usable contour.
+                    node.set("data-z-shape", "1")
                 if feat.get("knurl"):
                     node.set("data-z-knurl", "1")
                 if feat.get("thread"):
@@ -674,6 +679,11 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                         node.set(f"data-z-{zk}", str(feat[zk]))
                 if feat.get("color"):
                     node.set("data-z-color", feat["color"])
+                if feat.get("shape"):
+                    # EXTRUDE THE OUTLINE, NOT THE BOX. Only meaningful next to
+                    # `out`; the kit falls back to the box if the node's art
+                    # yields no usable contour.
+                    node.set("data-z-shape", "1")
                 if feat.get("knurl"):
                     node.set("data-z-knurl", "1")
                 if feat.get("thread"):

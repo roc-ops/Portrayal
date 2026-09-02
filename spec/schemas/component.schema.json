@@ -212,6 +212,10 @@
        "color": {
         "type": "string",
         "description": "side/body color (CSS)"
+       },
+       "shape": {
+        "type": "boolean",
+        "description": "extrude the node's own OUTLINE rather than its bounding box. `out` builds a box, which is right for a lamp or a boss and wrong for anything with a contour: the rear handle's face was its real art and its sides were the bbox, so a curved moulding read as three cardboard boxes stood on end. Opt-in rather than inferred, because the box is cheaper and is the right answer for most protrusions, and guessing would silently reshape every one in the library. Companion to `round` on a cavity, which shape-punches from the node's art the same way."
        }
       }
      }

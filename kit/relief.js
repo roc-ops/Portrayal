@@ -414,6 +414,72 @@ export async function extractRelief(url, scope) {
         `<g transform="matrix(${m.a} ${m.b} ${m.c} ${m.d} ${m.e - rect.x} ${m.f - rect.y})">` +
         clone.outerHTML + `</g>`) + `</svg>`;
   };
+  // THE OUTLINE OF A NODE, in face millimetres, as closed rings.
+  //
+  // SAMPLED RATHER THAN PARSED. getPointAtLength walks a path at constant arc
+  // length and consumes NO length crossing from one subpath to the next, so two
+  // consecutive samples that jump much further than the step are a subpath
+  // boundary. That finds the rings without writing a path parser, and it works
+  // for curves exactly as well as for lines - which matters, because these
+  // outlines are CAD contours and the next one may not be polygonal.
+  //
+  // A ring whose centroid falls inside another is a HOLE; one that does not is a
+  // separate island. That is what makes the screw hole in the rear handle's left
+  // foot a hole rather than a second lump of metal.
+  //
+  // A `fill="none"` path is a stroked centreline - a line, not an area - and
+  // extruding it would build a ribbon where the drawing shows a bracket.
+  const RING_STEP = 0.25;
+  const inRing = (pt, ring) => {
+    let hit = false;
+    for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+      const a = ring[i], b = ring[j];
+      if ((a[1] > pt[1]) !== (b[1] > pt[1]) &&
+          pt[0] < (b[0] - a[0]) * (pt[1] - a[1]) / (b[1] - a[1]) + a[0]) hit = !hit;
+    }
+    return hit;
+  };
+  const ringsOf = el => {
+    const m = inv.multiply(el.getScreenCTM());
+    const paths = el.tagName === 'path' ? [el] : [...el.querySelectorAll('path')];
+    const rings = [];
+    for (const q of paths) {
+      if (q.getAttribute('fill') === 'none') continue;
+      let total = 0;
+      try { total = q.getTotalLength(); } catch (e) { continue; }
+      if (!(total > 0)) continue;
+      const n = Math.max(8, Math.min(4000, Math.ceil(total / RING_STEP)));
+      const step = total / n;
+      let cur = [], prev = null;
+      for (let i = 0; i <= n; i++) {
+        const s = q.getPointAtLength(step * i);
+        const pt = [m.a * s.x + m.c * s.y + m.e, m.b * s.x + m.d * s.y + m.f];
+        if (prev && Math.hypot(pt[0] - prev[0], pt[1] - prev[1]) > 4 * step) {
+          if (cur.length > 2) rings.push(cur);
+          cur = [];
+        }
+        cur.push(pt); prev = pt;
+      }
+      if (cur.length > 2) rings.push(cur);
+    }
+    if (!rings.length) return null;
+    const area = r => {
+      let a = 0;
+      for (let i = 0, j = r.length - 1; i < r.length; j = i++)
+        a += (r[j][0] + r[i][0]) * (r[j][1] - r[i][1]);
+      return Math.abs(a / 2);
+    };
+    const cent = r => [r.reduce((s, c) => s + c[0], 0) / r.length,
+                       r.reduce((s, c) => s + c[1], 0) / r.length];
+    rings.sort((a, b) => area(b) - area(a));
+    const out = [];
+    for (const r of rings) {
+      const host = out.find(o => inRing(cent(r), o.shell));
+      if (host) host.holes.push(r); else out.push({shell: r, holes: []});
+    }
+    return out;
+  };
+
   const cavities = [...svg.querySelectorAll('[data-depth]')]
     .filter(el => !el.querySelector('[data-depth]'))
     .map(el => {
@@ -456,6 +522,7 @@ export async function extractRelief(url, scope) {
             knurl: !!el.dataset.zKnurl,
             thread: el.dataset.zThread && +el.dataset.zThread,
             color: el.dataset.zColor || null,
+            rings: el.dataset.zShape ? ringsOf(el) : null,
             svgText: nodeSvg(el, rect)};
   });
   const domes = [...svg.querySelectorAll('[data-z-dome]')].map(el => {
@@ -864,6 +931,38 @@ export async function buildFaceRelief(F, ctx) {
           [side, faceTex, side]);
         m.rotation.x = Math.PI / 2;
         m.position.set(LX(o.x, o.w), LY(o.y, o.h), o.lift + o.cyl / 2);
+        addTo(m);
+      } else if (o.rings && o.rings.length) {
+        // THE SHAPE, NOT THE BOX. `shape: true` on the feature. The face art was
+        // always the node's own; it was the SIDES that followed the bounding box,
+        // so a contoured moulding read as a cardboard box with the right picture
+        // on the front. Extruding the outline gives it the sides it has.
+        const depth = o.out - o.lift;
+        const shapes = o.rings.map(r => {
+          const s = new THREE.Shape(
+            r.shell.map(([x, y]) => new THREE.Vector2(LX(x, 0), LY(y, 0))));
+          for (const h of r.holes)
+            s.holes.push(new THREE.Path(
+              h.map(([x, y]) => new THREE.Vector2(LX(x, 0), LY(y, 0)))));
+          return s;
+        });
+        const geo = new THREE.ExtrudeGeometry(shapes, {depth, bevelEnabled: false});
+        // ExtrudeGeometry's UVs are world-space; the face texture is rasterised
+        // over the node's rect, so put world coordinates back into face mm and
+        // then into that rect. Inverting LX/LY rather than assuming they are the
+        // identity is what keeps a flipped face right - `left` and `bottom` are
+        // drawn mirrored, and a texture that ignored that would read backwards.
+        const unX = wx => (F.flipLX ? -wx : wx) + fw / 2;
+        const unY = wy => fh / 2 - (F.flipLY ? -wy : wy);
+        const pos = geo.attributes.position, uv = geo.attributes.uv;
+        for (let i = 0; i < pos.count; i++) {
+          uv.setXY(i, (unX(pos.getX(i)) - o.x) / o.w,
+                   1 - (unY(pos.getY(i)) - o.y) / o.h);
+        }
+        uv.needsUpdate = true;
+        const m = new THREE.Mesh(
+          geo, [faceTex, new THREE.MeshLambertMaterial({color: o.color})]);
+        m.position.set(0, 0, o.lift);
         addTo(m);
       } else {
         // box: lift..out (lift defaults to 0 = sits on the face)

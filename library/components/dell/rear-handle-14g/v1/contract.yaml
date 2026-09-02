@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: rear-handle-14g
-version: 1.3.0
+version: 1.4.0
 class: mechanical
 profile: compute
 # SURFACE-MOUNTED, AND THAT IS A DRAWING FACT AS WELL AS A MECHANICAL ONE.
@@ -183,6 +183,10 @@ relief:
   wall: '#15181b'
   features:
   - node: handle-foot-left
+    # EXTRUDE THE OUTLINE, NOT THE BOX. This piece is a contour, so a
+    # bbox extrusion gave it the right face on the wrong sides - three
+    # cardboard boxes with the handle printed on their ends.
+    shape: true
     out: 49.59
     color: '#2a2d31'
     confidence: measured
@@ -194,6 +198,10 @@ relief:
       to 49.59: it is a foot, bolted flat, and it is what holds the bar off the
       metal.'
   - node: handle-grip
+    # EXTRUDE THE OUTLINE, NOT THE BOX. This piece is a contour, so a
+    # bbox extrusion gave it the right face on the wrong sides - three
+    # cardboard boxes with the handle printed on their ends.
+    shape: true
     out: 49.27
     color: '#2a2d31'
     confidence: measured
@@ -206,6 +214,10 @@ relief:
       show daylight through. It reaches 49.27, so it is 12.06 thick.'
     lift: 37.21
   - node: handle-foot-right
+    # EXTRUDE THE OUTLINE, NOT THE BOX. This piece is a contour, so a
+    # bbox extrusion gave it the right face on the wrong sides - three
+    # cardboard boxes with the handle printed on their ends.
+    shape: true
     out: 49.24
     color: '#2a2d31'
     confidence: measured
