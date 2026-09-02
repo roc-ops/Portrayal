@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 9.3.0
+version: 9.5.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -456,7 +456,7 @@ views:
            for: chassis, group: latches, rel-pos: 2}
         - {ref: dell/bezel-2u-14g@1, id: bezel, at: [24.30, 2.23],
            for: [drive-0, drive-1, drive-2, drive-3, drive-4, drive-5, drive-6, drive-7, drive-8, drive-9, drive-10, drive-11, drive-12, drive-13, drive-14, drive-15, drive-16, drive-17, drive-18, drive-19, drive-20, drive-21, drive-22, drive-23, panel-left],
-           group: covers, rel-pos: 0}
+           optional: bezel, group: covers, rel-pos: 0}
   front-lff-12:
     # THE 12 x 3.5 INCH FRONT. A VARIANT VIEW and not a scoped bay: this is
     # a different backplane, a different cage and a different chassis to
@@ -507,53 +507,41 @@ views:
         # readable source in hand states the order. Row-major 0-3 / 4-7 /
         # 8-11 is Dell LFF convention and is what is used here.
         - {id: lff-drive-0, at: [26.884, 3.890], size: {w: 107.208, h: 26.500},
-           accepts: [common/drive-carrier-35@1], default: common/drive-carrier-35@1,
-           group: drives, rel-pos: 0,
-           only-in: [lff-12, lff-12-rear-2-lff]}
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           group: drives, rel-pos: 0}
         - {id: lff-drive-1, at: [134.092, 3.890], size: {w: 107.208, h: 26.500},
-           accepts: [common/drive-carrier-35@1], default: common/drive-carrier-35@1,
-           group: drives, rel-pos: 1,
-           only-in: [lff-12, lff-12-rear-2-lff]}
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           group: drives, rel-pos: 1}
         - {id: lff-drive-2, at: [241.300, 3.890], size: {w: 107.208, h: 26.500},
-           accepts: [common/drive-carrier-35@1], default: common/drive-carrier-35@1,
-           group: drives, rel-pos: 2,
-           only-in: [lff-12, lff-12-rear-2-lff]}
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           group: drives, rel-pos: 2}
         - {id: lff-drive-3, at: [348.508, 3.890], size: {w: 107.208, h: 26.500},
-           accepts: [common/drive-carrier-35@1], default: common/drive-carrier-35@1,
-           group: drives, rel-pos: 3,
-           only-in: [lff-12, lff-12-rear-2-lff]}
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           group: drives, rel-pos: 3}
         - {id: lff-drive-4, at: [26.884, 30.880], size: {w: 107.208, h: 26.500},
-           accepts: [common/drive-carrier-35@1], default: common/drive-carrier-35@1,
-           group: drives, rel-pos: 4,
-           only-in: [lff-12, lff-12-rear-2-lff]}
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           group: drives, rel-pos: 4}
         - {id: lff-drive-5, at: [134.092, 30.880], size: {w: 107.208, h: 26.500},
-           accepts: [common/drive-carrier-35@1], default: common/drive-carrier-35@1,
-           group: drives, rel-pos: 5,
-           only-in: [lff-12, lff-12-rear-2-lff]}
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           group: drives, rel-pos: 5}
         - {id: lff-drive-6, at: [241.300, 30.880], size: {w: 107.208, h: 26.500},
-           accepts: [common/drive-carrier-35@1], default: common/drive-carrier-35@1,
-           group: drives, rel-pos: 6,
-           only-in: [lff-12, lff-12-rear-2-lff]}
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           group: drives, rel-pos: 6}
         - {id: lff-drive-7, at: [348.508, 30.880], size: {w: 107.208, h: 26.500},
-           accepts: [common/drive-carrier-35@1], default: common/drive-carrier-35@1,
-           group: drives, rel-pos: 7,
-           only-in: [lff-12, lff-12-rear-2-lff]}
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           group: drives, rel-pos: 7}
         - {id: lff-drive-8, at: [26.884, 57.870], size: {w: 107.208, h: 26.500},
-           accepts: [common/drive-carrier-35@1], default: common/drive-carrier-35@1,
-           group: drives, rel-pos: 8,
-           only-in: [lff-12, lff-12-rear-2-lff]}
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           group: drives, rel-pos: 8}
         - {id: lff-drive-9, at: [134.092, 57.870], size: {w: 107.208, h: 26.500},
-           accepts: [common/drive-carrier-35@1], default: common/drive-carrier-35@1,
-           group: drives, rel-pos: 9,
-           only-in: [lff-12, lff-12-rear-2-lff]}
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           group: drives, rel-pos: 9}
         - {id: lff-drive-10, at: [241.300, 57.870], size: {w: 107.208, h: 26.500},
-           accepts: [common/drive-carrier-35@1], default: common/drive-carrier-35@1,
-           group: drives, rel-pos: 10,
-           only-in: [lff-12, lff-12-rear-2-lff]}
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           group: drives, rel-pos: 10}
         - {id: lff-drive-11, at: [348.508, 57.870], size: {w: 107.208, h: 26.500},
-           accepts: [common/drive-carrier-35@1], default: common/drive-carrier-35@1,
-           group: drives, rel-pos: 11,
-           only-in: [lff-12, lff-12-rear-2-lff]}
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           group: drives, rel-pos: 11}
       placements:
         - {ref: dell/power-button-14g@1, id: power-btn, at: [458.80, 3.17], for: chassis,
            group: mgmt, rel-pos: 1}
@@ -599,7 +587,7 @@ views:
            for: chassis, group: latches, rel-pos: 2}
         - {ref: dell/bezel-2u-14g@1, id: bezel, at: [24.30, 2.23],
            for: [lff-drive-0, lff-drive-1, lff-drive-2, lff-drive-3, lff-drive-4, lff-drive-5, lff-drive-6, lff-drive-7, lff-drive-8, lff-drive-9, lff-drive-10, lff-drive-11, panel-left],
-           group: covers, rel-pos: 0}
+           optional: bezel, group: covers, rel-pos: 0}
   rear:
     size:
       w: 434.0
@@ -1502,6 +1490,21 @@ configurations:
       in its own description, that no row of table 28 pairs a 24 x 2.5 inch
       front with a 2 x 3.5 inch rear, and that it was therefore a picture of a
       rear rather than of a machine. The front it was missing is this one.
+  full-12:
+    views: {front: front-lff-12}
+    # the serial port's insulator is teal on this machine, not the
+    # near-black a DE-9 usually carries - std/db9@1's `teal` skin. Named in
+    # every configuration because a skin override has no device-wide default
+    # and all five of these show this rear.
+    skins:
+      db9: teal
+    kind: example
+    description: >-
+      all twelve 3.5 inch bays carrying a drive. An ILLUSTRATION and not a
+      SKU, exactly as `full-24` is at the other size: the number of drives is
+      what a buyer chooses, so this names no orderable thing and creates no
+      device type. It exists so the 12-bay front can be seen populated as
+      well as blanked, which is the only difference between it and `lff-12`.
     bays:
       lff-drive-0: common/drive-carrier-35@1
       lff-drive-1: common/drive-carrier-35@1
