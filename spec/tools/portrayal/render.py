@@ -519,8 +519,21 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     # the chassis, not that the face has an N-mm hole in it. Emitting data-depth
     # for one rendered every PSU and fan as an empty recess in 3D. The depth is
     # still carried, as data-body-depth, so it stays addressable.
+    #
+    # AND SO IS ANYTHING THAT `mounts`, which this stopped one class short of.
+    # `mounts` means it attaches to a surface - a rack ear, a label, a ground
+    # lug, a bolted handle - so it stands ON the metal and there is no hole
+    # behind it. The rear handle read as a 49.59 mm recess the shape of its own
+    # outline: from straight on you saw its face at the bottom of the pit, and
+    # from any angle you saw the pit's walls and no face at all. Its three
+    # protruding boxes were correct the whole time and were being built inside
+    # a hole that should never have existed.
+    # An explicit `relief.cavity` still wins, because that is a part saying it
+    # really does have a recess in it - a screw head's driver slot, for one.
     if contract["size"].get("d"):
-        aperture = contract.get("kind") != "module" or (contract.get("relief") or {}).get("cavity")
+        solid = (contract.get("kind") == "module"
+                 or contract.get("behaviour") == "mounts")
+        aperture = not solid or (contract.get("relief") or {}).get("cavity")
         g.set("data-depth" if aperture else "data-body-depth", str(contract["size"]["d"]))
     relief = contract.get("relief")
     if relief:
