@@ -75,14 +75,46 @@ parts:
   - {ref: dell/riser-3-plate-14g@1, id: plate, at: [0, 0]}
 bays:
   slot-7:
+    # TURNED ROUND, AND IT IS THE CARD THAT TURNS. Riser 3 sits at the far
+    # end of the chassis and presents its brackets the other way about: the L
+    # of the bracket to the left, the narrow neck to the right. This rotates
+    # the OCCUPANT only - the plate, its window and the slot numerals stay
+    # exactly where they are.
+    # A HALF-TURN AND NOT A MIRROR. The reflection puts the bracket on the
+    # right side of the drawing and the wrong side of the metal: the L has a
+    # tab that stands proud, and mirroring aims it into the chassis. Rotating
+    # keeps it facing out at whoever is looking at the machine.
+    rotate: 180
     behind: true
-    at: [0.98, 1.82]
+    # BACK UP INTO THE WINDOW. The half-turn above reflects the
+    # bracket's uneven clearances - 2.88 mm above its ink and 6.05
+    # below - so the card lands 3.17 low and the top of the opening
+    # uncovers as a black band. This is that 3.17 taken off y. It is
+    # a property of the BRACKET, not of this riser: any part turned
+    # over in a bay it does not fill symmetrically needs the same.
+    at: [0.98, -1.35]
     size: [120.02, 21.59]
     accepts: [dell/pcie-filler-fh-14g@1, std/pcie-bracket-fh@1]
     default: dell/pcie-filler-fh-14g@1
   slot-8:
+    # TURNED ROUND, AND IT IS THE CARD THAT TURNS. Riser 3 sits at the far
+    # end of the chassis and presents its brackets the other way about: the L
+    # of the bracket to the left, the narrow neck to the right. This rotates
+    # the OCCUPANT only - the plate, its window and the slot numerals stay
+    # exactly where they are.
+    # A HALF-TURN AND NOT A MIRROR. The reflection puts the bracket on the
+    # right side of the drawing and the wrong side of the metal: the L has a
+    # tab that stands proud, and mirroring aims it into the chassis. Rotating
+    # keeps it facing out at whoever is looking at the machine.
+    rotate: 180
     behind: true
-    at: [0.98, 22.14]
+    # BACK UP INTO THE WINDOW. The half-turn above reflects the
+    # bracket's uneven clearances - 2.88 mm above its ink and 6.05
+    # below - so the card lands 3.17 low and the top of the opening
+    # uncovers as a black band. This is that 3.17 taken off y. It is
+    # a property of the BRACKET, not of this riser: any part turned
+    # over in a bay it does not fill symmetrically needs the same.
+    at: [0.98, 18.97]
     size: [120.02, 21.59]
     accepts: [dell/pcie-filler-fh-14g@1, std/pcie-bracket-fh@1]
     default: dell/pcie-filler-fh-14g@1
