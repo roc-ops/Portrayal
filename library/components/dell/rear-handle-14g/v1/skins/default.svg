@@ -71,22 +71,46 @@
     <rect x="92.02" y="7.4" width="2.00" height="11.25" rx="0.5"
           fill="#17191d"/>
   </g>
-  <path id="body" fill-rule="evenodd" fill="#2a2d31" stroke="#15181b"
-        stroke-width="0.35"
-        d="M0.00 0.00 L0.31 19.94 L9.81 19.94 L12.06 19.25 L13.12 18.44 L14.31 16.38 L14.56 10.31 L15.00 10.25 L15.31 21.38 L16.50 23.56 L18.44 24.88 L20.00 25.19 L76.81 25.19 L82.00 25.69 L87.19 27.00 L90.50 28.38 L98.06 33.00 L98.50 41.69 L110.94 41.81 L111.38 41.31 L111.69 25.75 L108.00 21.88 L104.56 19.88 L98.69 18.69 L22.19 18.69 L21.88 4.00 L29.31 3.94 L29.31 2.69 L21.94 2.69 L21.81 0.00 L13.44 0.00 L13.12 0.75 L2.81 0.75 L2.75 0.00 Z M6.50 10.38 L8.19 10.88 L8.94 12.25 L8.44 13.81 L7.19 14.56 L5.81 14.31 L4.75 12.94 L5.00 11.38 Z"/>
-  <!-- The captive screws. The LEFT one lands in the outline's own hole, which
-       is why that hole is drawn and then covered: the CAD says where the screw
-       goes and the screw is what a person sees there. -->
-  <g id="screws"><circle cx="6.85" cy="12.60" r="2.35" fill="#5a6067" stroke="#24282c" stroke-width="0.3"/><path d="M5.50 12.60 h2.70 M6.85 11.25 v2.70" stroke="#24282c" stroke-width="0.45" stroke-linecap="round"/><circle cx="103.87" cy="37.05" r="2.35" fill="#5a6067" stroke="#24282c" stroke-width="0.3"/><path d="M102.52 37.05 h2.70 M103.87 35.70 v2.70" stroke="#24282c" stroke-width="0.45" stroke-linecap="round"/></g>
 
-  <!-- THREE BOXES, NOT ONE SLAB. These draw nothing - no fill, no
-       stroke - and exist only to give `relief` three bounding boxes to
-       extrude. relief builds a box from a node's bbox, so a single
-       feature on the outline could only ever be a brick; and getBBox
-       ignores clipping, so a clipped copy of the outline would still
-       report the full width. The depths behind them are measured off
-       Dell's service CAD - see the contract. -->
-  <rect id="handle-foot-left" x="0.0" y="0.0" width="29.57" height="25.19" fill="none"/>   <!-- a mounting foot, bolted flat to the panel -->
-  <rect id="handle-grip" x="29.57" y="18.69" width="50.0" height="6.77" fill="none"/>   <!-- the grip: 50 mm of bar standing 37.21 proud, 12.06 thick -->
-  <rect id="handle-foot-right" x="79.57" y="18.69" width="32.12" height="23.12" fill="none"/>   <!-- a mounting foot, bolted flat to the panel -->
+  <!-- THE PIECES THAT STAND OUT CARRY THE SHAPE, and that is the whole
+       point of splitting the outline. These were three invisible rects, and
+       the kit textures a protruding box from THE NODE'S OWN ART - so blank
+       nodes gave blank faces and the real silhouette stayed painted on the
+       panel at z 0, which read as a handle stuck flat to the metal with three
+       plain slabs standing out of it.
+       relief.js hides every [data-z-out] node before it captures the faceplate
+       texture, so the outline being here takes it off the panel in the same
+       motion: it is drawn once, on the parts that hold it.
+       SPLIT BY CLIPPING THE POLYGON, NOT BY clip-path. getBBox ignores
+       clipping, so a clipped copy of the outline would report the full width
+       and every box would come out the size of the whole handle. The body was
+       two closed subpaths of straight segments, so the split is exact.
+       FILL AND OUTLINE ARE SEPARATE PATHS because the cuts are not edges of
+       the handle. Stroking each piece whole ran the outline's ink down both
+       seams and drew hairlines across a moulding that has none; the outline
+       path is built only from edges that were in the CAD contour.
+       The screws travel with the metal they are bolted through. -->
+  <g id="handle-foot-left">
+    <path fill-rule="evenodd" fill="#2a2d31" stroke="none"
+          d="M0.00 0.00 L0.31 19.94 L9.81 19.94 L12.06 19.25 L13.12 18.44 L14.31 16.38 L14.56 10.31 L15.00 10.25 L15.31 21.38 L16.50 23.56 L18.44 24.88 L20.00 25.19 L29.57 25.19 L29.57 18.69 L22.19 18.69 L21.88 4.00 L29.31 3.94 L29.31 2.69 L21.94 2.69 L21.81 0.00 L13.44 0.00 L13.12 0.75 L2.81 0.75 L2.75 0.00 Z M6.50 10.38 L8.19 10.88 L8.94 12.25 L8.44 13.81 L7.19 14.56 L5.81 14.31 L4.75 12.94 L5.00 11.38 Z"/>
+    <path fill="none" stroke="#15181b" stroke-width="0.35"
+          stroke-linecap="square" stroke-linejoin="miter"
+          d="M0.00 0.00 L0.31 19.94 L9.81 19.94 L12.06 19.25 L13.12 18.44 L14.31 16.38 L14.56 10.31 L15.00 10.25 L15.31 21.38 L16.50 23.56 L18.44 24.88 L20.00 25.19 L29.57 25.19 M29.57 18.69 L22.19 18.69 L21.88 4.00 L29.31 3.94 L29.31 2.69 L21.94 2.69 L21.81 0.00 L13.44 0.00 L13.12 0.75 L2.81 0.75 L2.75 0.00 L0.00 0.00 M6.50 10.38 L8.19 10.88 L8.94 12.25 L8.44 13.81 L7.19 14.56 L5.81 14.31 L4.75 12.94 L5.00 11.38 Z"/>
+    <circle cx="6.85" cy="12.60" r="2.35" fill="#5a6067" stroke="#24282c" stroke-width="0.3"/><path d="M5.50 12.60 h2.70 M6.85 11.25 v2.70" stroke="#24282c" stroke-width="0.45" stroke-linecap="round"/>
+  </g>
+  <g id="handle-grip">
+    <path fill-rule="evenodd" fill="#2a2d31" stroke="none"
+          d="M29.57 25.19 L76.81 25.19 L79.57 25.46 L79.57 18.69 L29.57 18.69 Z"/>
+    <path fill="none" stroke="#15181b" stroke-width="0.35"
+          stroke-linecap="square" stroke-linejoin="miter"
+          d="M29.57 25.19 L76.81 25.19 L79.57 25.46 M79.57 18.69 L29.57 18.69"/>
+  </g>
+  <g id="handle-foot-right">
+    <path fill-rule="evenodd" fill="#2a2d31" stroke="none"
+          d="M79.57 25.46 L82.00 25.69 L87.19 27.00 L90.50 28.38 L98.06 33.00 L98.50 41.69 L110.94 41.81 L111.38 41.31 L111.69 25.75 L108.00 21.88 L104.56 19.88 L98.69 18.69 L79.57 18.69 Z"/>
+    <path fill="none" stroke="#15181b" stroke-width="0.35"
+          stroke-linecap="square" stroke-linejoin="miter"
+          d="M79.57 25.46 L82.00 25.69 L87.19 27.00 L90.50 28.38 L98.06 33.00 L98.50 41.69 L110.94 41.81 L111.38 41.31 L111.69 25.75 L108.00 21.88 L104.56 19.88 L98.69 18.69 L79.57 18.69"/>
+    <circle cx="103.87" cy="37.05" r="2.35" fill="#5a6067" stroke="#24282c" stroke-width="0.3"/><path d="M102.52 37.05 h2.70 M103.87 35.70 v2.70" stroke="#24282c" stroke-width="0.45" stroke-linecap="round"/>
+  </g>
 </svg>

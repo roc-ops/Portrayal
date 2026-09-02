@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: rear-handle-14g
-version: 1.2.0
+version: 1.3.0
 class: mechanical
 profile: compute
 # SURFACE-MOUNTED, AND THAT IS A DRAWING FACT AS WELL AS A MECHANICAL ONE.
@@ -18,6 +18,33 @@ description: >-
   card and the low-profile riser slot, and pulled to draw the chassis out
 size: {w: 111.69, h: 41.85, d: 49.59}
 provenance:
+  the-outline-is-three-pieces-now-and-they-are-the-ones-that-stand-out: >-
+    IT WAS ONE PATH CALLED `body` AND THREE INVISIBLE RECTS, and in 3D that put
+    the shape in the wrong place. The kit textures a protruding box from THE
+    NODE'S OWN ART, so nodes drawing nothing gave faces drawing nothing: three
+    blank solids stood off the panel while the CAD silhouette stayed painted
+    flat on the metal at z 0. Looking at it, the handle appeared stuck to the
+    rear face with plain slabs coming out of it.
+    So the outline now lives on the three pieces that protrude, which is also
+    what removes it from the panel: relief.js hides every raised node before it
+    captures the faceplate texture, so the shape is drawn once, on the metal
+    that holds it.
+    THE SPLIT IS EXACT AND IS NOT A clip-path. getBBox ignores clipping, so a
+    clipped copy would still report the full width and every box would come out
+    the size of the whole handle. The body was two closed subpaths of straight
+    segments - the outline and the left screw hole - so clipping the polygon
+    against each band is exact arithmetic, and the pieces still measure
+    0.00..29.57, 29.57..79.57 and 79.57..111.69, which are the bands the depths
+    were measured for.
+    FILL AND OUTLINE ARE SEPARATE PATHS. Stroking each piece whole ran the
+    outline's ink down both cuts and drew two hairlines across a moulding that
+    has none. The outline path is built only from edges that were in the CAD
+    contour; an edge lying along a cut plane is a cut, not metal. What is left
+    is 201 antialiased pixels in a 2400 px render - where two fills abut - and
+    the picture is otherwise identical.
+    `elements` follows the same three ids, so the list the contract publishes
+    and the list relief extrudes are one list rather than two that can drift.
+    The old `body` and `screws` ids are gone; nothing referenced them.
   a-subpath-was-deleted-on-the-operators-reading: >-
     THE ONE THING IN THIS FILE THAT IS NOT CAD. The extraction produced a
     stair-stepped bar at face 217.54..247.85 by 45.04..46.85 - the "small bar at
@@ -190,6 +217,21 @@ relief:
       to 49.24: it is a foot, bolted flat, and it is what holds the bar off the
       metal.'
 elements:
-  body: {at: [0.0, 0.0], size: [111.69, 41.85], class: handle}
-  screws: {at: [4.50, 10.25], size: [101.72, 29.15], class: fastener}
+  # THE THREE PIECES THE OUTLINE SPLITS INTO, which are also the three the
+  # relief extrudes - one list, not two that can disagree. Each foot bolts flat
+  # to the panel and carries its captive screw; the grip is the bar between
+  # them, held 37.21 mm off the metal, and the gap behind it is the one the
+  # photographs show daylight through.
+  handle-foot-left:
+    at: [0.0, 0.0]
+    size: [29.57, 25.19]
+    class: handle
+  handle-grip:
+    at: [29.57, 18.69]
+    size: [50.0, 6.77]
+    class: handle
+  handle-foot-right:
+    at: [79.57, 18.69]
+    size: [32.12, 23.12]
+    class: handle
 skins: [default]
