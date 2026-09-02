@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: drive-carrier-35
-version: 1.4.0
+version: 1.5.0
 class: drive
 behaviour: fills
 profile: server
@@ -18,6 +18,31 @@ attrs:
   link: 6Gb
   rpm: 7.2K
 provenance:
+  body-faces: >-
+    measured, photo, and one ESTIMATE per face, kept separate. From Dell's
+    CAD, by clipping the decoded LOD triangles to the carrier's box and
+    profiling where metal is: the front bezel band runs z 0..22.08 (13.3% of
+    the depth) and two screw bosses sit at z 38.64..44.16 and 139.84..145.36,
+    centres 41.40 and 142.60. From the operator's photographs, which is colour
+    and construction and not geometry: a pale label over bare metal with the
+    spindle hub showing on top, green PCB and the SAS/SATA connector
+    underneath, bright rails down both long edges. ESTIMATED and marked as
+    such: rail width, screw head diameter and the connector rectangle - the
+    bezel spans full width in front of the rails so a rail's own width is not
+    cleanly separable at this resolution, and this scene buries the carrier's
+    rear inside the cage.
+  body-face-orientation: >-
+    UNVERIFIED, AND THE ONE THING HERE NOBODY HAS CHECKED. The art puts the
+    carrier's FACE at y=0 on the top and bottom faces. The schema states the
+    convention for the sides - "right: face at image left; left: face at image
+    right; rear as seen from behind" - and says nothing about which end of a
+    TOP face the front sits at. common/psu-ac-650's body-top wraps its entire
+    content in rotate(180), which says somebody worked this out the hard way
+    and that guessing it is a real risk. It could not be checked here: `kit`
+    is a library and the viewer page that stitches the six faces lives outside
+    this repository. WHOEVER OPENS THIS PART IN THE 3D VIEWER FIRST should
+    look at whether the bezel band lands at the front, and flip the top and
+    bottom art if it does not.
   size-from-dell-cad: >-
     measured - Dell's own R740XD 3D guide CAD (guide ic140r740xd000202a, asset
     IC140R740XD00), node `Poweredge_R740_3.5_Drive-10`. The carrier reads
