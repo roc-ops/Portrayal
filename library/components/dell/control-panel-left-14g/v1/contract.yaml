@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: control-panel-left-14g
-version: 1.1.0
+version: 1.2.0
 class: control-panel
 behaviour: fills
 profile: server
@@ -10,7 +10,22 @@ description: >-
   are themselves lamps, the system health and system ID bar, and the optional
   iDRAC Quick Sync 2 bar below it. Both bars are buttons as well as indicators
 size: {w: 11.59, h: 30.0, d: 22.8}
+body: {depth: 22.8, color: '#15181b'}
 provenance:
+  the-body-box: >-
+    THE FRU IS A BOX NOW, NOT A FACE. It is field-replaceable and already
+    `behaviour: fills`, so the viewer treated it as a FRU with nothing to
+    eject but a plane. `body.depth` is the measured 22.80 - the same number as
+    `size.d`, because the whole module is one box behind one face - and it
+    also gives relief.js an authoritative depth rather than the hardcoded 60
+    mm bay it falls back to for a module with no body block. `travel` is
+    deliberately omitted: this comes all the way out. THE SIDE ART IS
+    CONSTRUCTION apart from the 4.70 mm front lip, which is the bezel sub-mesh
+    (12.20 x 36.40 x 4.70 at 0.36..5.11). Every projection of this assembly is
+    unreadable at the module's scale - the full-height sheet bracket, the
+    panel body and the info-tag tray overlap in all three planes - so the
+    sides carry the moulding's colours and nothing is claimed that was not
+    measured.
   depth: >-
     measured - Dell service CAD, node `DELL_R740XD_Controlpanel_Left_Part-1`.
     The panel body is 12.20 x 40.50 x 20.20 sitting 2.60..22.80 behind the
