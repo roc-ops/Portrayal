@@ -379,6 +379,15 @@
           "behind": {
             "type": "boolean",
             "description": "draw this composed part BENEATH this component's own skin instead of over it. The default is over, which is right for a bezel framing an aperture - the aperture belongs on top of the plate. A blanking plate is the other way round: it composes a bracket for its outline and then covers the connector opening with vented metal, and drawn over, the bracket's own dark opening lands back on the vents and the plate renders as an empty slot."
+          },
+                    "mirror": {"type": "boolean", "description": "flip the occupant horizontally about its own centre line; handedness, not rotation - a riser whose cards face the other way"},
+          "states": {
+            "type": "object",
+            "description": "what this part's lamps MEAN here, as {element-id: states}. A component declares what a lamp IS - a 2 mm round lamp, a jack with two indicators - and can only guess what it signifies; the thing composing it knows. The same override device placements already take, one level down, so a card can compose a generic jack and attach its own indicator table rather than redrawing the lamps over the ones it composed. Addresses one element at a time, because a jack's two lamps routinely do NOT share a vocabulary.",
+            "additionalProperties": {
+              "type": "array",
+              "minItems": 1
+            }
           }
         }
       }
@@ -469,6 +478,10 @@
           "behind": {
             "type": "boolean",
             "description": "seat this bay's occupant BEHIND the module's own skin instead of on top of it. For a faceplate the occupant shows through: a PCIe card sits behind its riser's sheet metal and only its working area, through a punched window, and its retention tab, clear of the plate, are visible - the flange end is covered. Requires the skin to have real holes; a stroked outline is a drawing of a window, not a window, and with `behind` the occupant simply disappears behind it. Same word and same mechanism as `behind` on `parts:`."
+          },
+          "mirror": {
+            "type": "boolean",
+            "description": "flip this bay's occupant horizontally about its own centre line. HANDEDNESS, NOT ROTATION: a riser at the far end of a chassis presents its cards facing out the other way - tapered end toward the chassis edge, flange toward the middle - and `rotate: 180` gets that wrong by also turning the card upside down, putting a bracket's louvre row at the top and its retention tab at the bottom. Mirroring the BAY rather than authoring a mirrored component is what lets the same bay still accept either a vendor filler or a std/ bracket."
           }
         }
       }

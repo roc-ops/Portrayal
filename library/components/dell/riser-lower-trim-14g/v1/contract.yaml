@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: riser-lower-trim-14g
-version: 1.0.0
+version: 1.1.0
 class: mechanical
 # IN FRONT OF THE CARD, so it must draw after the bays. A plain placement draws
 # before them and the bracket would cover this instead.
@@ -10,7 +10,7 @@ profile: compute
 description: >-
   The strip of chassis metal below riser 1 on a 14G PowerEdge, covering the
   bottom card's keyed end
-size: {w: 112.2, h: 2.05, d: 2.0}
+size: {w: 121.06, h: 1.81, d: 2.0}
 provenance:
   size: >-
     derived - its height is exactly the overhang it has to cover, and that comes
@@ -29,9 +29,19 @@ provenance:
     That is the same ordering fact that has been the answer repeatedly on this
     face - what a part is drawn AFTER decides what it can cover - showing up
     once more as a part covering something it should be pierced by.
-    IT ALSO STOPS AT 111.70 rather than 120.50. dell/riser-1-shroud-14g@1 starts
-    there and stands 17.76 proud, covering the key from that point on, so the
-    two were overlapping for no reason and the rivet at 113.58 needs no gap.
+    IT SPANS THE BRACKET, AND STOPPING AT 111.70 WAS THE MISTAKE. The reasoning
+    was that dell/riser-1-shroud-14g@1 starts there and stands 17.76 proud, so
+    it covers the key from that point on. The shroud does start at 111.70 - but
+    it ends at y 66.24 and the key runs to 68.05, so it covers the key ACROSS
+    and not DOWN, and a 1.81 mm strip of the bottom card's corner showed below
+    the plate. Two parts were checked for overlap in x and neither in y.
+    Back to 121.06, face -0.50..120.56, which is the moved bracket's own right
+    edge; and the fourth rivet at 113.58 has its gap back.
+    IT NOW STARTS AT 66.24 RATHER THAN 66.00, height 1.81. Running from 66.00
+    put it 0.24 into the shroud's box and L13 reported it - correctly, because
+    both are mounted parts and the exemption is only for one-of-each. Abutting
+    the shroud's CAD-measured lower edge instead costs nothing: the 0.24 above
+    is under the riser plate's own 0.5-wide stroke, centred on its 66.00 edge.
   the-gap-is-the-idrac: >-
     The strip is one piece of metal with the iDRAC jack's aperture cut through
     it, at face 28.60..44.60 - the same span the panel already declares as that

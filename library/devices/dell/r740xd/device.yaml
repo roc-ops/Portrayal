@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 0.11.1
+version: 10.0.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -459,7 +459,145 @@ views:
            for: chassis, group: latches, rel-pos: 2}
         - {ref: dell/bezel-2u-14g@1, id: bezel, at: [24.30, 2.23],
            for: [drive-0, drive-1, drive-2, drive-3, drive-4, drive-5, drive-6, drive-7, drive-8, drive-9, drive-10, drive-11, drive-12, drive-13, drive-14, drive-15, drive-16, drive-17, drive-18, drive-19, drive-20, drive-21, drive-22, drive-23, panel-left],
-           group: covers, rel-pos: 0}
+           optional: bezel, group: covers, rel-pos: 0}
+  front-lff-12:
+    # THE 12 x 3.5 INCH FRONT. A VARIANT VIEW and not a scoped bay: this is
+    # a different backplane, a different cage and a different chassis to
+    # order, so it is a different PANEL wearing the same face. Bound by
+    # `configurations.<name>.views`, which is what stops a 12-bay front
+    # being drawn with the 24-bay rear numbering.
+    face: front
+    size:
+      w: 482.6
+      h: 86.8
+    panel:
+      decor:
+        # the two ear flanges. Bare metal outboard of the control panels,
+        # and the only reason they are drawn at all is what sits in them.
+        - {at: [0, 0], size: [13.41, 86.8], fill: '#3a4045'}
+        - {at: [468.54, 0], size: [14.06, 86.8], fill: '#3a4045'}
+        # the recessed strips the panels sit in
+        - {at: [13.41, 2.7], size: [11.59, 81.4], fill: '#23272b'}
+        - {at: [457.8, 2.7], size: [10.6, 81.4], fill: '#23272b'}
+      cutouts:
+        - {id: power-btn, at: [458.80, 3.17], size: [8.34, 8.31], shape: rect}
+        - {id: usb-1, at: [460.40, 19.54], size: [4.5, 12.0], shape: rect}
+        - {id: usb-2, at: [460.40, 45.56], size: [4.5, 12.0], shape: rect}
+        - {id: idrac-direct, at: [462.13, 63.43], size: [2.75, 7.5], shape: rect}
+        - {id: vga, at: [469.435, 16.665], size: [11.40, 20.47], shape: rect}
+    components:
+      bays:
+        - {id: panel-left, at: [13.41, 5.3], size: {w: 11.59, h: 30.0},
+           accepts: [dell/control-panel-left-14g@1], default: dell/control-panel-left-14g@1,
+           group: panels, rel-pos: 1}
+        # THE BAY IS THE PART, THE PITCH IS THE SPACING, and they are no
+        # longer the same number. 107.208 and 26.990 are PITCHES measured
+        # off the photograph; a pitch bounds a carrier from above and never
+        # gives it. Dell's own R740XD 3D guide CAD measures the carrier at
+        # 105.50 x 26.90 - inside both bounds - so the columns leave a real
+        # 1.708 gap and the rows 0.09. The earlier width came from setting
+        # the carrier equal to its pitch by analogy with the 2.5 inch one.
+        # THE 12 x 3.5 INCH FRONT - 3 rows of 4, replacing the 24 vertical
+        # SFF bays above. Same opening, divided four ways instead of
+        # twenty-four: the SFF field runs 26.884..455.716 and 428.832/4 is
+        # 107.208, against a period of 107.216 measured off
+        # dellr740xd-12x35.webp - which passes Gate 1 at 0.07% against the
+        # 482.6 rack face, the tightest figure in this project, and whose
+        # ear folds land at body-relative -0.67 and +434.79.
+        # THE COLUMNS ARE FLUSH AND THE ROWS ARE NOT, by 0.49. That is not
+        # sloppiness: the photograph shows bright cage shelves running the
+        # full width between rows, carrying the drives, where the columns
+        # have only a thin divider. It is also what lets the carrier keep
+        # the 26.5 height the rear opening measured - a pitch and an
+        # opening are both UPPER bounds on the part, and 26.5 is tighter
+        # than the 26.99 row pitch.
+        # THE NUMBERING IS CONVENTION, NOT A READING. Dell numbers these
+        # slots in its figure, but the callouts are baked into the figure
+        # image and do not survive the markdown conversion in okf, so no
+        # readable source in hand states the order. Row-major 0-3 / 4-7 /
+        # 8-11 is Dell LFF convention and is what is used here.
+        - {id: lff-drive-0, at: [26.884, 3.890], size: {w: 105.500, h: 26.900},
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           group: drives, rel-pos: 0}
+        - {id: lff-drive-1, at: [134.092, 3.890], size: {w: 105.500, h: 26.900},
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           group: drives, rel-pos: 1}
+        - {id: lff-drive-2, at: [241.300, 3.890], size: {w: 105.500, h: 26.900},
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           group: drives, rel-pos: 2}
+        - {id: lff-drive-3, at: [348.508, 3.890], size: {w: 105.500, h: 26.900},
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           group: drives, rel-pos: 3}
+        - {id: lff-drive-4, at: [26.884, 30.880], size: {w: 105.500, h: 26.900},
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           group: drives, rel-pos: 4}
+        - {id: lff-drive-5, at: [134.092, 30.880], size: {w: 105.500, h: 26.900},
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           group: drives, rel-pos: 5}
+        - {id: lff-drive-6, at: [241.300, 30.880], size: {w: 105.500, h: 26.900},
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           group: drives, rel-pos: 6}
+        - {id: lff-drive-7, at: [348.508, 30.880], size: {w: 105.500, h: 26.900},
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           group: drives, rel-pos: 7}
+        - {id: lff-drive-8, at: [26.884, 57.870], size: {w: 105.500, h: 26.900},
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           group: drives, rel-pos: 8}
+        - {id: lff-drive-9, at: [134.092, 57.870], size: {w: 105.500, h: 26.900},
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           group: drives, rel-pos: 9}
+        - {id: lff-drive-10, at: [241.300, 57.870], size: {w: 105.500, h: 26.900},
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           group: drives, rel-pos: 10}
+        - {id: lff-drive-11, at: [348.508, 57.870], size: {w: 105.500, h: 26.900},
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           group: drives, rel-pos: 11}
+      placements:
+        - {ref: dell/power-button-14g@1, id: power-btn, at: [458.80, 3.17], for: chassis,
+           group: mgmt, rel-pos: 1}
+        - {ref: std/usb-a@1, id: usb-1, at: [456.65, 23.29], rotate: 90,
+           attrs: {speed: usb-2.0}, group: ports, rel-pos: 1}
+        - {ref: std/usb-a@1, id: usb-2, at: [456.65, 49.31], rotate: 90,
+           attrs: {speed: usb-2.0}, group: ports, rel-pos: 2}
+        - {ref: std/micro-usb@1, id: idrac-direct, at: [459.75, 65.81], rotate: 90,
+           group: ports, rel-pos: 3}
+        - {ref: std/vga@1, id: vga, at: [464.90, 21.20], rotate: 270,
+           group: ports, rel-pos: 4}
+        - {ref: common/usb-symbol@1, id: mark-usb-1, at: [459.45, 14.40],
+           for: usb-1, group: marks, rel-pos: 1}
+        - {ref: common/usb-symbol@1, id: mark-usb-2, at: [459.45, 40.90],
+           for: usb-2, group: marks, rel-pos: 2}
+        - {ref: dell/idrac-direct-symbol@1, id: mark-idrac, at: [461.60, 59.10],
+           for: idrac-direct, group: marks, rel-pos: 3}
+        - {ref: common/vga-symbol@1, id: mark-vga, at: [472.13, 12.00],
+           for: vga, group: marks, rel-pos: 4}
+        - {ref: dell/control-panel-grid-14g@1, id: panel-grid, at: [458.65, 35.80],
+           for: chassis, group: marks, rel-pos: 5}
+        - ref: common/led-dot@1
+          id: idrac-direct-led
+          at: [462.50, 72.30]
+          for: idrac-direct
+          group: leds
+          rel-pos: 1
+          states: ['off',
+                   {name: connected, color: '#22c55e'},
+                   {name: recognised, color: '#22c55e',
+                    behavior: {mode: blinking, rate: 0.25}}]
+          description: >-
+            ISM table 8 entire. `connected` is "solid green for two seconds" - a
+            laptop or tablet has been plugged in, and the two seconds is how long
+            that indication lasts before the next one rather than a blink, so it
+            is modelled solid and the duration recorded here instead of being
+            invented as a rate. `recognised` is "flashing green (on for two
+            seconds and off for two seconds)", which is 0.25 Hz exactly. `off`
+            is the device unplugged.
+        - {ref: dell/rack-latch-14g@1, id: latch-left, at: [0.63, 46.91],
+           for: chassis, group: latches, rel-pos: 1}
+        - {ref: dell/rack-latch-14g@1, id: latch-right, at: [469.04, 46.91],
+           for: chassis, group: latches, rel-pos: 2}
+        - {ref: dell/bezel-2u-14g@1, id: bezel, at: [24.30, 2.23],
+           for: [lff-drive-0, lff-drive-1, lff-drive-2, lff-drive-3, lff-drive-4, lff-drive-5, lff-drive-6, lff-drive-7, lff-drive-8, lff-drive-9, lff-drive-10, lff-drive-11, panel-left],
+           optional: bezel, group: covers, rel-pos: 0}
   rear:
     size:
       w: 434.0
@@ -515,12 +653,22 @@ views:
         - {id: paint-serial, at: [52.50, 80.5], size: [28.20, 3.175], rx: 0, fill: '#0f6a76', kind: port-paint}
         - {id: paint-vga, at: [80.70, 80.5], size: [28.55, 3.175], rx: 0, fill: '#145d8f', kind: port-paint}
       cutouts:
-        - {id: idrac9, at: [28.60, 66.50], size: [16.0, 14.0], shape: rect}
+        - {id: idrac9, at: [28.60, 66.55], size: [16.0, 14.0], shape: rect}
         - {id: serial, at: [53.63, 69.10], size: [20.47, 11.4], shape: d-sub}
         - {id: vga, at: [87.30, 69.10], size: [20.47, 11.4], shape: d-sub}
         - {id: usb-1, at: [120.20, 71.47], size: [12.0, 4.5], shape: rect}
         - {id: usb-2, at: [120.20, 79.59], size: [12.0, 4.5], shape: rect}
         - {id: sys-id, at: [8.36, 72.04], size: [7.0, 7.0], shape: circle}
+        # SLOT 6'S OPENING, WHICH THE RISER 2 PLATE USED TO CARRY. That
+        # plate now stops at face 46.20 - the power supply's top edge - so the
+        # low-profile slot is framed by the chassis instead, at exactly the
+        # position the plate's own window had.
+        # THAT POSITION IS CONFIRMED THREE WAYS. Slot 6's bracket sat 3.65 too
+        # low; moving its top onto riser 1's slot 3 also put the three riser 2
+        # slots on a 20.32 pitch, AND left the bracket 1.32 below this window,
+        # which is the offset slots 4 and 5 already have from theirs.
+        - {id: riser-2-slot-6, at: [161.10, 45.14], size: [54.28, 18.0],
+           shape: rect}
     silkscreen:
       # WHAT THE PAINT IS FOR. The band tells a person at arm's length which
       # of three similar-looking sockets is which, and the legends are how it
@@ -584,7 +732,55 @@ views:
         # down over the iDRAC port. None are collisions between PARTS - they are
         # boxes of things that sit at different heights, and the fix is to say
         # which number is which rather than to move anything.
-        - {id: riser-1, at: [17.0, 4.0], size: {w: 102.50, h: 62.0},
+        # THE 2 x 3.5 INCH REAR: one carrier per rear bay, not a pair per bay.
+        # ISM figure 9 puts them at face 154.80 and 314.20, one each side of the
+        # divider at 288 - which is the same bay boundary the 2.5 inch cages sit
+        # either side of. Positions and the 107.80 x 26.50 carrier are measured
+        # off that figure, which passes Gate 1 at 0.27%.
+        # `rear-drive-12`, NOT `drive-12`, AND THE REASON IS A BUG THAT FIRED.
+        # Ids follow the ink on this device - the rear SFF bays are drive-24 to
+        # drive-27 because that is what is printed. The same rule here gives
+        # drive-12 and drive-13, which are ALREADY THE NAMES OF TWO FRONT BAYS:
+        # this chassis draws a 24-bay front numbered 0-23.
+        # Named that way, lint reported `config full-24: bay drive-12 ref
+        # common/drive-carrier-25@1 not in accepts` - the full-24 configuration
+        # fits a 2.5 inch carrier into every drive-N it can name, and it had
+        # just been handed two more that take a 3.5 inch one. A silent version
+        # of that would have put the wrong drive in the wrong bay.
+        # The collision is not a naming slip. A rear numbered from 12 belongs to
+        # a 12-bay front and this device draws a 24-bay one, which is the
+        # front-rear coupling gap showing up as an id clash.
+        - {id: rear-drive-12, at: [154.80, 7.50], size: {w: 107.8, h: 26.9},
+           accepts: [common/drive-carrier-35@1], default: common/drive-carrier-35@1,
+           group: drives-rear, rel-pos: 1, only-in: [rear-2-lff, lff-12-rear-2-lff]}
+        - {id: rear-drive-13, at: [314.20, 7.50], size: {w: 107.8, h: 26.9},
+           accepts: [common/drive-carrier-35@1], default: common/drive-carrier-35@1,
+           group: drives-rear, rel-pos: 2, only-in: [rear-2-lff, lff-12-rear-2-lff]}
+        # THE BAYS BLANKED. Table 25's riser configurations 0, 1 and 2 are
+        # "with or without rear storage"; this is the without. The opening is
+        # still there and gets a perforated panel, one per bay - a scan of the
+        # face finds two perforated regions with the divider between them, not
+        # one panel spanning both.
+        # SIZED FROM THE FRAME'S PATH, NOT FROM THE PERFORATION SCAN. These
+        # were 114.8 x 39.1 at y 1.20, which is the extent of the HOLES; the
+        # panel that closes the bay is bigger, and chassis vents, rivets and a
+        # locating hole showed to the right of both of them.
+        # The divider sits at local 135.19..152.00 in the 287.18-wide frame at
+        # 144.26, so the openings either side are 135.19 and 135.18 - equal to a
+        # hundredth of a millimetre, which is the check that the reading is
+        # right. Vertically the frame's top rail ends at face 2.90 and its
+        # bottom rail begins at 42.40.
+        - {id: rear-storage-2, at: [144.26, 2.90], size: {w: 135.19, h: 39.50},
+           accepts: [dell/rear-bay-blank-14g@2], default: dell/rear-bay-blank-14g@2,
+           group: drives-rear, rel-pos: 3, only-in: [rear-storage-blank]}
+        - {id: rear-storage-3, at: [296.26, 2.90], size: {w: 135.19, h: 39.50},
+           accepts: [dell/rear-bay-blank-14g@2], default: dell/rear-bay-blank-14g@2,
+           group: drives-rear, rel-pos: 4,
+           # ALSO WHEN RISER 3 IS SIMPLY NOT FITTED. Same opening, same blank -
+           # `no-riser-3` is table 25's row 3 (1A+2A), which fits riser 2 and no
+           # riser 3, and had no configuration of its own until now.
+           only-in: [rear-storage-blank, no-riser-3]}
+        - {id: riser-1, at: [13.95, 4.0], size: {w: 107.59, h: 62.0},
            accepts: [dell/riser-1-3fh-14g@1, dell/riser-1-2fh-14g@1],
            default: dell/riser-1-3fh-14g@1,
            group: risers, rel-pos: 1}
@@ -604,10 +800,15 @@ views:
         # photo-measured at 95 and the supply's left edge at 250.70, and both
         # cannot be right - recorded here as the bay the chassis has room for,
         # with the disagreement left visible rather than split between them.
-        - {id: riser-2, at: [161.0, 4.0], size: {w: 89.70, h: 62.0},
-           accepts: [dell/riser-2-2fh-1lp-14g@1, dell/riser-2-3-blank-14g@1],
-           default: dell/riser-2-2fh-1lp-14g@1,
-           group: risers, rel-pos: 2, only-in: [no-rear-storage]}
+        # THE BAY MATCHES THE COMPONENT, WHICH IT DID NOT BEFORE. A 95.0
+        # occupant in an 89.70 bay was being CENTRED, so the riser drew from
+        # 158.35 rather than 161.0 - every face number in this assembly was
+        # 2.65 left of what its local coordinates implied, and the undersized
+        # bay also hid the plate's overlap with the power supply from L13.
+        - {id: riser-2, at: [155.335, 4.0], size: {w: 111.715, h: 42.20},
+           accepts: [dell/riser-2-2fh-1lp-14g@2, dell/riser-2-3-blank-14g@1],
+           default: dell/riser-2-2fh-1lp-14g@2,
+           group: risers, rel-pos: 2, only-in: [no-rear-storage, no-riser-3, lff-12]}
         # A 12 mm DISAGREEMENT WAS REPORTED AGAINST THE CAD HERE AND IT WAS
         # NOT REAL. It came from the rear handle's upper 'window', read off a
         # silhouette of the WHOLE handle shell at 159.7-242.0 and compared with
@@ -622,33 +823,43 @@ views:
         - {id: riser-2-lp, at: [147.87, 46.93], size: {w: 79.2, h: 18.42},
            accepts: [dell/riser-2-1lp-14g@1],
            default: dell/riser-2-1lp-14g@1,
-           group: risers, rel-pos: 2, only-in: [rear-4-sff]}
-        - {id: riser-3, at: [318.0, 4.0], size: {w: 95.0, h: 41.0},
-           accepts: [dell/riser-3-2fh-14g@1, dell/riser-3-blank-14g@1],
+           # THE SAME RISER 2 WHETHER OR NOT DRIVES WERE ORDERED. Table 25
+           # calls configurations 1 and 2 "with or without rear storage" - one
+           # riser, two storage outcomes - so this bay belongs to all three.
+           group: risers, rel-pos: 2,
+           only-in: [rear-4-sff, rear-2-lff, rear-storage-blank, lff-12-rear-2-lff]}
+        # NO BLANK IN THIS BAY'S `accepts`, AND THAT IS THE POINT. This
+        # opening and rear-storage-3 are the SAME HOLE - this bay at 318.0 and
+        # that one at 296.26 - so offering a blank here as well gave the chassis
+        # two different parts closing one opening, one plain and one perforated,
+        # picked by configuration. When riser 3 is not fitted the opening is
+        # closed by rear-storage-3, which scopes to `no-riser-3` below.
+        - {id: riser-3, at: [309.085, 4.0], size: {w: 107.59, h: 41.68},
+           accepts: [dell/riser-3-2fh-14g@1],
            default: dell/riser-3-2fh-14g@1,
-           group: risers, rel-pos: 3, only-in: [no-rear-storage]}
+           group: risers, rel-pos: 3, only-in: [no-rear-storage, lff-12]}
         - {id: ndc, at: [139.6, 66.4], size: {w: 90.3, h: 14.5},
            accepts: [dell/ndc-4x-rj45-14g@1], default: dell/ndc-4x-rj45-14g@1,
            group: ndc, rel-pos: 1}
         - {id: psu-1, at: [251.30, 46.20], size: {w: 86.3, h: 39.1},
-           accepts: [dell/psu-1100w-ac-14g@1], default: dell/psu-1100w-ac-14g@1,
+           accepts: [dell/psu-1100w-ac-14g@1, dell/psu-2400w-ac-14g@1, dell/psu-1100w-dc-14g@1], default: dell/psu-1100w-ac-14g@1,
            group: psus, rel-pos: 1}
         - {id: psu-2, at: [341.10, 46.20], size: {w: 86.3, h: 39.1},
-           accepts: [dell/psu-1100w-ac-14g@1], default: dell/psu-1100w-ac-14g@1,
+           accepts: [dell/psu-1100w-ac-14g@1, dell/psu-2400w-ac-14g@1, dell/psu-1100w-dc-14g@1], default: dell/psu-1100w-ac-14g@1,
            group: psus, rel-pos: 2}
-        - {id: drive-r0, at: [173.0, 4.9], size: {w: 79.4, h: 17.868},
+        - {id: drive-24, at: [173.0, 4.9], size: {w: 79.4, h: 17.868},
            accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
            default: common/drive-blank-25@1, rotate: 270,
            only-in: [rear-4-sff], group: drives-rear, rel-pos: 12}
-        - {id: drive-r1, at: [173.0, 22.8], size: {w: 79.4, h: 17.868},
+        - {id: drive-25, at: [173.0, 22.8], size: {w: 79.4, h: 17.868},
            accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
            default: common/drive-blank-25@1, rotate: 270,
            only-in: [rear-4-sff], group: drives-rear, rel-pos: 13}
-        - {id: drive-r2, at: [331.0, 4.9], size: {w: 79.4, h: 17.868},
+        - {id: drive-26, at: [331.0, 4.9], size: {w: 79.4, h: 17.868},
            accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
            default: common/drive-blank-25@1, rotate: 270,
            only-in: [rear-4-sff], group: drives-rear, rel-pos: 14}
-        - {id: drive-r3, at: [331.0, 22.8], size: {w: 79.4, h: 17.868},
+        - {id: drive-27, at: [331.0, 22.8], size: {w: 79.4, h: 17.868},
            accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
            default: common/drive-blank-25@1, rotate: 270,
            only-in: [rear-4-sff], group: drives-rear, rel-pos: 15}
@@ -663,7 +874,28 @@ views:
         # figure 8 overlay - the same 0.5, on all three, which is what says it
         # is the shared baseline that was out and not three separate readings.
         # The legend bar under them moved with them, because it labels them.
-        - {ref: std/rj45@1, id: idrac9, at: [28.60, 66.50], rotate: 180,
+        # THE iDRAC PORT IS A HOUSING, NOT A BARE JACK. std/rj45 is the modular
+        # jack on its own - black, no bezel, no lamps - and drawn on a black
+        # panel it read as a hole with nothing in it. The real port has a silver
+        # bezel and two indicators in its top corners.
+        # common/rj45-port@4 already carried exactly that and had done for four
+        # versions. THE LAMPS BELONG TO THE PORT and arrive with it rather than
+        # being placed beside it, which is what the hardware does.
+        # NO ROTATION NOW. std/rj45 draws its keyway DOWN and needed 180 to sit
+        # right; rj45-port@4 draws it UP already, so the rotation would have put
+        # the two lamps at the bottom.
+        # RE-CENTRED, NOT MOVED. The bezel is 17.0 x 14.9 over a 16.0 x 14.0
+        # opening, so it overlaps the cutout by half a millimetre a side - which
+        # is what a bezel does. Placed at 28.10, 66.05.
+        # THE HOLE FOLLOWS THE COMPOSED APERTURE, NOT THE BEZEL'S CENTRE, and the
+        # two are 0.05 apart. common/rj45-port@4 composes std/rj45 at [0.5, 0.5]
+        # inside a 14.9-tall bezel, so the jack sits 0.5 above and 0.4 below -
+        # centred would be 0.45. This device had the cutout at the centred
+        # position and every other user of that component has it at the composed
+        # one, so 0.45 meant one device disagreeing with six and with the part
+        # itself. 0.05 mm is a third of a pixel on the figures behind either
+        # number. The asymmetry is the component's and is left there.
+        - {ref: common/rj45-port@4, id: idrac9, at: [28.10, 66.05],
            attrs: {role: management}, group: mgmt-ports, rel-pos: 1}
         - {ref: common/db9-receptacle@1, id: serial, at: [48.47, 68.55],
            group: mgmt-ports, rel-pos: 2}
@@ -719,7 +951,7 @@ views:
         # full-height bracket is 21.59 tall on a 20.32 pitch, so each overlaps
         # its neighbour by the 1.27 key - and the bottom one has no neighbour,
         # so 2.05 of its key ran past the plate and showed beside the rivet.
-        - {ref: dell/riser-lower-trim-14g@1, id: riser-1-trim, at: [-0.5, 66.0],
+        - {ref: dell/riser-lower-trim-14g@1, id: riser-1-trim, at: [-0.5, 66.24],
            group: furniture, rel-pos: 21}
         # THE SLOT-NUMBER STRIP, between the clips and the riser plate and
         # IN FRONT of the cards. Its numerals were chassis silkscreen and never
@@ -730,17 +962,90 @@ views:
         # order the hardware is assembled in.
         - {ref: dell/pcie-slot-strip-14g@1, id: slot-strip, at: [3.5, 4.0],
            group: furniture, rel-pos: 22}
-        - {ref: dell/thumbscrew-blue-14g@1, id: cage-screw-left,
-           at: [144.66, 5.35], group: furniture, rel-pos: 21}
+        # RISER 3'S STRIP, THE MIRROR OF THE ONE ABOVE. Its brackets face
+        # out to the right, so the strip sits on the plate's RIGHT edge at
+        # 406.85 - the reflection of the riser 1 strip's right edge meeting its
+        # plate's left - and carries slots 7 and 8.
+        - {ref: dell/pcie-slot-strip-r3-14g@1, id: slot-strip-r3,
+           at: [416.375, 4.0], group: furniture, rel-pos: 23,
+           only-in: [no-rear-storage, lff-12]}
+        # THE TAB THE LEFT THUMBSCREW IS BOLTED TO, drawn after the bays
+        # because things go behind it: riser 2's bracket tails run across it,
+        # and a fitted blank's perforations start to its right. It was part of
+        # dell/rear-bay-frame-14g until that made both impossible at once.
+        # THE OTHER TWO CARD CLIPS, one per riser, where each riser's
+        # brackets end and the L of the bracket is held. They were two pairs of
+        # stroked circles inside rear-bay-frame, called rivets; the R740
+        # three-riser rear shows blue prongs at both. Positioned from that
+        # figure by colour - prong pairs at 269.00..277.25 and 299.00..307.25,
+        # the same 8.25 span riser 1's clip has.
+        # PLAIN PLACEMENTS, NOT MOUNTED: a fitted rear blank covers this metal,
+        # and drawing after the bays would put a clip on top of the blank.
+        # WHAT THE CAGE MOUNTS TO, drawn when there is no cage. The clips
+        # below and these are the same spot in different machines: a riser
+        # fitted shows the clip, drives fitted show what it bolted to. Both
+        # figures are right and `only-in` is what tells them apart.
+        - {ref: dell/riser-cage-mount-14g@1, id: riser-2-cage-mount,
+           at: [269.93, 24.93], group: furniture, rel-pos: 26,
+           only-in: [rear-4-sff, rear-2-lff, lff-12-rear-2-lff]}
+        - {ref: dell/riser-cage-mount-14g@1, id: riser-3-cage-mount,
+           at: [298.43, 24.93], group: furniture, rel-pos: 27,
+           only-in: [rear-4-sff, rear-2-lff, lff-12-rear-2-lff]}
+        - {ref: dell/riser-card-clip-14g@1, id: riser-2-card-clip,
+           at: [268.93, 26.50], group: furniture, rel-pos: 24,
+           only-in: [no-rear-storage, no-riser-3, lff-12]}
+        # RISER 3'S CLIP IS ONLY IN `no-rear-storage`, not in `no-riser-3`:
+        # that configuration blanks this opening, and the blank covers the clip.
+        - {ref: dell/riser-card-clip-14g@1, id: riser-3-card-clip,
+           at: [298.86, 26.50], group: furniture, rel-pos: 25,
+           only-in: [no-rear-storage, lff-12]}
+        - {ref: dell/rear-bay-screw-tab-14g@1, id: rear-bay-screw-tab,
+           at: [144.26, 3.09], group: furniture, rel-pos: 20}
         - {ref: dell/thumbscrew-blue-14g@1, id: cage-screw-right,
            at: [282.59, 26.00], group: furniture, rel-pos: 22}
-        # THE REAR DRIVE CAGE'S OWN FACEPLATE, which the two thumbscrews above
-        # are turned into. A frame: top rail, bottom rail and two tabs, with the
-        # drive openings between them, standing 14.13 proud of the panel.
-        # NOT `behaviour: mounts` - the drives are inserted INTO this, so it
-        # must draw behind them, which a plain placement does.
-        - {ref: dell/drive-cage-rear-14g@1, id: drive-cage-rear,
-           at: [144.26, 1.71], frames: [drive-r0, drive-r1, drive-r2, drive-r3],
+        # THE CHASSIS ACROSS REAR BAYS 2 AND 3, and it is ALWAYS PRESENT.
+        # It was `only-in: [rear-4-sff]` when it was called a drive cage, so a
+        # machine with PCIe in those bays lost its rails, screw tabs and vent
+        # panels along with the drives. The four rear views show the divider,
+        # its thumbscrew and the T land unchanged whether the bays hold drives,
+        # a blank or PCIe slots - structure that does not vary with what a bay
+        # holds belongs to the chassis.
+        # IT KEEPS `frames:`, AND DROPPING IT WAS A MISTAKE L13 CAUGHT. The
+        # reasoning was that the per-bay plates surround the drives and this
+        # does not - but `frames:` is about the BOX, not the ink: "ids this part
+        # SURROUNDS rather than covers - a frame whose bounding box takes in
+        # openings its ink does not". This part's box is 287.18 wide and spans
+        # all four drive positions, which is the definition.
+        # The plates do NOT frame anything: at 254.75 and 311.80 they sit beside
+        # the drives, not around them, and overlap none of them.
+        - {ref: dell/rear-bay-frame-14g@4, id: rear-bay-frame,
+           at: [144.26, 1.71],
+           # AND THE RISERS TOO, now that this is always present. In the
+           # no-rear-storage configuration riser 2 and riser 3 fill the same
+           # bays the drives would, and this part's box spans them exactly as
+           # it spans the drives - its ink is the T land above and the rails and
+           # panels around, never the openings themselves.
+           frames: [drive-24, drive-25, drive-26, drive-27, riser-2, riser-3,
+                    bay2-drive-plate, bay3-drive-plate,
+                    rear-drive-12, rear-drive-13, lff-drive-label,
+                    rear-storage-2, rear-storage-3,
+                 riser-2-card-clip, riser-3-card-clip,
+                 riser-2-cage-mount, riser-3-cage-mount],
+           group: furniture, rel-pos: 19}
+        # THE NUMBERED PLATE, ONE PER BAY. Mirror images about face 289.75; the
+        # skin is named for the numbers it carries, because which numbers a bay
+        # wears is decided by the front - 24-27 behind a 24-bay front, 12-15
+        # behind a 12-bay one.
+        # THE 2 x 3.5 INCH NUMBERS, on the divider rather than on plates. A
+        # different arrangement from the SFF labels, not a moved version of them.
+        - {ref: dell/rear-drive-label-lff-14g@1, id: lff-drive-label,
+           at: [282.50, 14.50], only-in: [rear-2-lff, lff-12-rear-2-lff],
+           group: furniture, rel-pos: 19}
+        - {ref: dell/rear-drive-plate-14g@1, id: bay2-drive-plate,
+           at: [254.75, 7.75], skin: n24-25,
+           only-in: [rear-4-sff], group: furniture, rel-pos: 19}
+        - {ref: dell/rear-drive-plate-14g@1, id: bay3-drive-plate,
+           at: [311.80, 7.75], skin: n26-27,
            only-in: [rear-4-sff], group: furniture, rel-pos: 19}
   # THE FOUR FACES THAT WERE MISSING. 83 of the library's 84 devices carry all
   # six views and this one carried two, which is what stops it being opened in
@@ -830,6 +1135,179 @@ views:
            fill: '#1a1d21', confidence: estimated,
            source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the 6.0 is not measured"}
 
+# THE FRONT AND THE REAR ARE NOT INDEPENDENT, and nothing in this file can say
+# so yet. Recorded as a gap rather than left for the next person to rediscover
+# from a bay number that does not add up.
+gaps:
+  - what: mid-drive-tray
+    scope: [front, rear]
+    reason: needs-drawing
+    note: >-
+      ISM table 28 puts a MID DRIVE TRAY in three of its ten backplane rows -
+      2.5 inch x4 behind the 24-bay front, 3.5 inch x4 behind the 12-bay one.
+      This device models no mid bay at all, so a third of the orderable
+      combinations cannot be expressed and a whole drive location is absent.
+      IT IS NOT A FACE. The tray sits under the lid between the fans and the
+      backplane, so it belongs to a top view with the cover off, which this
+      device does not have either. Recorded here because a reader counting drive
+      bays against a spec sheet will find this device short and no view will
+      explain why.
+      IT IS NO LONGER SHORT OF NUMBERS. Dell's own R740XD 3D guide CAD carries
+      `740XD_ MidDriveTray_-1.001` at 431.5 x 94.5 x 181.2 mm, with its bracket
+      (`740XD_ MidDriveTray_ Bracket-1.001`, 73.40 x 18.10 x 117.00) and its
+      drives (`740XD_ MidDriveTray_ 2.5 HDD-5.002`, 69.90 x 15.00 x 100.20 on a
+      108.4 pitch) as named sub-parts. The R740 and R740xd Technical Guide adds
+      what the tray is FOR - "The 4 x 3.5-inch mid-bay storage option, which also
+      supports 2.5-inch drives in the Hybrid carrier" - which also names the
+      hybrid carrier this library does not have. An interior photograph is staged
+      beside the front one in working/intake/dell/r740xd/photos.
+      So what remains is drawing, not measuring.
+    wanted: >-
+      A top-with-cover-off view and a mid-tray bay group, or an explicit
+      statement that this library models only externally visible bays. Either
+      answers the question; leaving it unsaid does not. The geometry is now
+      available from the CAD rather than needing to be estimated.
+  - what: front-panel-variants
+    scope: [front, front-lff-12]
+    reason: needs-drawing
+    note: >-
+      ISM figures 17 and 18 number five fronts - 24, 16 and 8 x 2.5 inch at bays
+      0-23, 0-15 and 0-7, and 12 and 8 x 3.5 inch at 0-11 and 0-7.
+      TWO OF THE FIVE ARE NOW DRAWN. `front` is the 24 x 2.5 inch; `front-lff-12`
+      is the 12 x 3.5 inch, the one that mattered, because it is the front the
+      rears numbered 12-15 and 12-13 belong to. It is a variant view with
+      `face: front`, bound by `lff-12` and `lff-12-rear-2-lff`, and its grid was
+      measured off dellr740xd-12x35.webp at Gate 1 0.07% - the same backplane
+      opening the 24 SFF bays divide, 428.832 / 4 = 107.208 against a measured
+      period of 107.216.
+      THE 16 AND 8 x 2.5 INCH AND THE 8 x 3.5 INCH ARE STILL NOT MODELLED, and
+      no figure for them has been measured.
+    wanted: >-
+      the remaining three fronts as further `face: front` variants, each with a
+      configuration to bind it.
+  - what: front-rear-configuration-coupling
+    scope: [front, front-lff-12, rear, rear-4-sff, rear-2-lff, lff-12, lff-12-rear-2-lff]
+    reason: vendor-silent
+    note: >-
+      DELL ENUMERATES THEM. ISM table 28, "Supported backplane options for
+      PowerEdge R740XD systems", lists front, mid and rear together - ten rows,
+      and the coupling falls straight out:
+        2.5in x24                                      no rear
+        2.5in x24  + 2.5in x4 mid  + 2.5in x4 rear
+        2.5in x24 (20 SAS/SATA + 4 NVMe)               no rear
+        3.5in x12                                      no rear
+        3.5in x12  + 3.5in x4 mid  + 3.5in x2 rear
+        3.5in x12  + 3.5in x4 mid  + 2.5in x4 rear
+        3.5in x12                  + 3.5in x2 rear
+        3.5in x12                  + 2.5in x4 rear
+        2.5in x24 NVMe                                 no rear
+        3.5in x12 Hybrid with NVMe U.2                 no rear
+      The 24-bay front takes ONE rear, the 4 x 2.5 inch, which figure 19 numbers
+      24-27. The 12-bay front takes either, and figure 19 numbers both from 12.
+      This device carries the 24-bay front, which is why its rear reads 24-27.
+      THE ARITHMETIC GOT THERE FIRST AND IS NOW REDUNDANT. Bays numbered 12-15
+      imply eleven bays this model does not have; that is how the error was
+      found. Table 28 is how it is now SOURCED, and a guess agreeing with a
+      document afterwards is worth more than either alone.
+      THE RISER SIDE IS TABLE 25, and its discriminator is riser 2 rather than
+      riser 3. Rear storage is offered in riser configurations 0, 1 and 2 and no
+      others: 1 and 2 fit a one-slot low-profile riser 2 (2B or 2C, slot 4
+      only), while configuration 3 fits a three-slot 2A (slots 4, 5, 6) and has
+      NO rear storage despite fitting no riser 3 at all. It is riser 2's
+      full-height section that occupies the bay the rear cage needs. This
+      device's `no-rear-storage` and `rear-4-sff` already encode exactly that,
+      and row 3 itself is now `no-riser-3` - added when the riser 3 opening and
+      rear storage bay 3 turned out to be the SAME HOLE, closed by two
+      different blanks depending on which configuration you picked.
+      RE-READ AND STILL OPEN: that change touched which bay closes an opening,
+      not the front-to-rear coupling this gap is about. Re-read again when
+      riser 1's brackets moved 1 mm and slot 2 lost its numeral on 1A - both
+      are ink and geometry inside one bay, and neither reaches across faces.
+      Re-read a third time when riser 1's plate grew to meet the slot strip and
+      the shroud: the bay's own box moved, and still nothing crossed a face.
+      A fourth time when riser 2's three slots were aligned and its plate cut
+      back to the full-height pair. That one surfaced a NEW question but not a
+      new gap of this kind: a bay's occupant is drawn after the panel, so a
+      card cannot be shown "only through its cutout" without a part drawn after
+      the bays to mask it. Recorded where it belongs, on the riser 2 slot 6
+      cutout, rather than widened into this one.
+      A fifth time when the screw tab was split out of the frame so it could
+      draw in front of riser 2's bracket tails. That is a draw-order fact about
+      one bay, not a coupling between faces.
+      A sixth time when riser 3 became bay 1 reflected - mirrored brackets, a
+      two-slot plate and its own slot strip. Handedness is a fact about one
+      bay's own metal and reaches no further than that.
+      A seventh time when riser 3 slid 9.525 right to sit over the power
+      supply's edge. Moving one bay along its own face changes nothing about
+      which front it can be sold with.
+      An eighth time when two "rivet" pairs beside the divider turned out to be
+      card retention clips. A misread of what is on the rear, corrected on the
+      rear, and silent about any front.
+      A ninth time when those rivets came back, scoped: they are what the riser
+      cage mounts to and they show when drives are fitted instead. That one is
+      a rear configuration telling two rear drawings apart, which is the
+      mechanism this gap says is MISSING between faces - and still is.
+      A tenth time when the C20 supply became its own part. A second occupant
+      for an existing bay, on the same face, coupled to nothing at the front.
+      TWO SOURCES DISAGREE AND ARE LEFT DISAGREEING. The system information
+      label draws FIVE fronts - 24, 16 and 8 x 2.5 inch, 12 and 8 x 3.5 inch -
+      where table 28 lists TWO front backplanes. Whether the 16- and 8-bay
+      fronts are different chassis or one backplane drawn part-populated,
+      nothing held here says.
+      AND TABLE 28 HAS A MID DRIVE TRAY in three of its ten rows. This device
+      models no mid bay at all, which is a whole third drive location missing
+      rather than a detail.
+    wanted: >-
+      NOW DEMONSTRABLE RATHER THAN HYPOTHETICAL. `rear-2-lff` draws a correct
+      2 x 3.5 inch rear on a 24 x 2.5 inch front, and ISM table 28 lists no such
+      machine - every row carrying that rear has a 12-bay front. The mismatch
+      even forced an id: the figure prints 12 and 13, which are already two of
+      this chassis's front bays, so the rear ones had to be rear-drive-12 and
+      rear-drive-13. An id clash is what this gap looks like from the inside.
+      RE-READ AFTER THE REAR BAYS WERE SEPARATED, and still open. The rear half
+      of this is now expressible: the chassis structure across bays 2 and 3 is
+      its own always-present part, and what each bay holds - drives, PCIe, a
+      blank - varies independently of the other. That was the piece `only-in`
+      could not reach while one 287 mm component owned both bays.
+      WHAT REMAINS IS THE FRONT. The 24 x 2.5 inch and 12 x 3.5 inch fronts are
+      different panels, not different occupancy, and until the second is drawn
+      nothing exercises the face-binding that would couple it to a rear.
+      A way for a configuration to constrain more than one view at once. Today
+      `only-in` scopes a bay to a configuration and every view chooses
+      independently, so nothing stops a consumer selecting a 24-bay front and a
+      rear numbered 12-15 - a machine that cannot be bought. The library needs
+      either configurations that span views, or a declared incompatibility
+      between them; and this device needs its 12 x 3.5 inch front modelled
+      before either can be exercised, which is the same gap `rear-2-lff` already
+      stands on.
+
+  - what: lff-front-rear-4-sff-numbering
+    scope: [front-lff-12, rear-4-sff]
+    reason: needs-drawing
+    note: >-
+      THE MISSING THING IS A DECISION, NOT EVIDENCE, and `reason` has no token
+      for that - `needs-drawing` is the nearest, because one of the two ways out
+      is a second rear panel. The vendor is not silent and the sources do not
+      disagree; the model cannot say it.
+      TABLE 28 LISTS "3.5 inch (x12) ... and 2.5 inch (x4) SAS/SATA backplane
+      (back)" AND IT CANNOT BE SPELLED HERE. The four rear 2.5 inch bays are
+      `drive-24..27`, and those ids ARE the 24-bay front's numbering; under the
+      12 x 3.5 inch front the same four bays are drives 12-15. A bay id does not
+      vary by configuration, so one set of bays cannot carry both numberings,
+      and `configurations.<name>.views` does not reach it - that couples which
+      PANEL a face wears, not what the bays on another face are called.
+      `rear-2-lff` escaped this only by accident of naming: its bays were
+      already `rear-drive-12` and `rear-drive-13`, so `lff-12-rear-2-lff` binds
+      them without contradiction.
+      THIS IS THE RESIDUE OF "the two rear numberings stop being mutually
+      exclusive readings of one drawing", and drawing the front did not settle
+      it - it made it precise.
+    wanted: >-
+      a decision on how a bay carries a per-configuration label: either a second
+      rear variant view whose bays are named for the LFF numbering, which
+      duplicates a panel to rename four bays, or a `labels:` override in the
+      configuration, which is new schema.
+
 configurations:
   base:
     # the serial port's insulator is teal on this machine, not the
@@ -854,7 +1332,7 @@ configurations:
       "somebody forgot to write the bays down".
     bays:
       riser-1: dell/riser-1-3fh-14g@1
-      riser-2: dell/riser-2-2fh-1lp-14g@1
+      riser-2: dell/riser-2-2fh-1lp-14g@2
       riser-3: dell/riser-3-2fh-14g@1
   no-rear-storage:
     # the serial port's insulator is teal on this machine, not the
@@ -877,10 +1355,10 @@ configurations:
     # empty string for a deliberately empty bay. riser-2 is not listed because
     # it is not in THIS build - riser-2-lp is, and it already defaults right.
     bays:
-      drive-r0: common/drive-carrier-25@1
-      drive-r1: common/drive-carrier-25@1
-      drive-r2: common/drive-carrier-25@1
-      drive-r3: common/drive-carrier-25@1
+      drive-24: common/drive-carrier-25@1
+      drive-25: common/drive-carrier-25@1
+      drive-26: common/drive-carrier-25@1
+      drive-27: common/drive-carrier-25@1
     skins:
       drive-carrier-25: default
       db9: teal
@@ -897,13 +1375,71 @@ configurations:
     # and all five of these show this rear.
     skins:
       db9: teal
+    # `example`, NOT `orderable`, AND IT WAS MARKED ORDERABLE BEFORE. ISM
+    # table 28 lists no configuration pairing a 24 x 2.5 inch front with a
+    # 2 x 3.5 inch rear - every row carrying this rear has a 12 x 3.5 inch
+    # front, and this device draws the 24-bay one.
+    kind: example
+    description: >-
+      DRAWN NOW, AND IT IS A PICTURE OF A REAR RATHER THAN OF A MACHINE.
+      common/drive-carrier-35 exists, measured off ISM figure 9, so the two
+      3.5 inch bays and the numbering on the divider between them are real and
+      sourced. What is not real is the pairing: table 28 has no row with a
+      24 x 2.5 inch front and a 2 x 3.5 inch rear, so selecting this shows a
+      correct rear on a front it never ships with.
+      THE ID CLASH IS THAT MISMATCH MADE VISIBLE. The figure prints 12 and 13,
+      which are already two of this chassis's front bays, so the rear ones are
+      rear-drive-12 and rear-drive-13 rather than following the ink the way
+      drive-24 to drive-27 do. Named the obvious way, lint caught full-24
+      fitting a 2.5 inch carrier into a 3.5 inch bay.
+      It stops being an illustration the day the 12 x 3.5 inch front is drawn
+      and a configuration binds the two faces together.
+  no-riser-3:
+    skins:
+      db9: teal
+      # RISER 1A LEAVES SLOT 2 UNLABELLED. Its middle opening has no connector
+      # behind it and takes a filler only, and the operator states that position
+      # carries no printed number. Nothing in the intake draws a 1A machine, so
+      # this is the operator's word rather than a reading - see the strip's own
+      # provenance.
+      pcie-slot-strip-14g: no-2
     kind: orderable
     description: >-
-      NAMED AND NOT YET DRAWN. The R740xd ISM figure 9 shows two 3.5 inch drives
-      in the rear, and this library has no 3.5 inch carrier - so the
-      configuration is recorded and left unfinished rather than quietly drawn
-      with a 2.5 inch drive standing in for one, which would be a picture of a
-      machine nobody can order.
+      TABLE 25's ROW 3, 1A+2A - the three-slot riser 2 fitted and no riser 3 at
+      all. Six PCIe slots, and the riser 3 opening carries the same perforated
+      blank that closes a rear storage bay, because it is the same opening.
+      IT HAD NO CONFIGURATION UNTIL NOW and the variant sheet reported that as a
+      gap: it is the only row in table 25 that fits riser 2 without riser 3, so
+      nothing in the device named it and the drawing could only be produced by
+      overriding a bay from outside.
+    bays:
+      riser-1: dell/riser-1-2fh-14g@1
+      riser-2: dell/riser-2-2fh-1lp-14g@2
+  rear-storage-blank:
+    # the serial port's insulator is teal on this machine, not the
+    # near-black a DE-9 usually carries - std/db9@1's `teal` skin. Named in
+    # every configuration because a skin override has no device-wide default
+    # and all of these show this rear.
+    skins:
+      db9: teal
+      # THE TAB'S OUTLINE AND TONGUE ARE BEHIND THE BLANK. What stands proud of
+      # a fitted perforated panel is the pad and its captive thumbscrew.
+      rear-bay-screw-tab-14g: pad-only
+    kind: orderable
+    description: >-
+      THE "WITHOUT" HALF OF "WITH OR WITHOUT REAR STORAGE". ISM table 25 names
+      riser configurations 0, 1 and 2 that way - one riser layout, two storage
+      outcomes - and every other configuration on this device draws the "with".
+      Here the one-slot low-profile riser 2 is fitted, no drives were ordered,
+      and both rear bays carry a perforated blank.
+      IT IS ORDERABLE WHERE rear-2-lff IS NOT. Table 28's rows 1, 3 and 9 all
+      pair a 24 x 2.5 inch front with no rear backplane at all, which is exactly
+      this machine, so unlike the 2 x 3.5 inch illustration this is a build you
+      can buy.
+      WHAT IT DOES NOT SHOW is riser 3: configurations 1 and 2 fit none, and the
+      bay it would occupy is the one blanked here. `no-rear-storage` is the
+      other shape - a three-slot riser 2 and a riser 3 - and the two are not the
+      same machine despite both having no rear drives.
   full-24:
     # the serial port's insulator is teal on this machine, not the
     # near-black a DE-9 usually carries - std/db9@1's `teal` skin. Named in
@@ -941,3 +1477,72 @@ configurations:
       drive-21: common/drive-carrier-25@1
       drive-22: common/drive-carrier-25@1
       drive-23: common/drive-carrier-25@1
+  lff-12:
+    views: {front: front-lff-12}
+    # the serial port's insulator is teal on this machine, not the
+    # near-black a DE-9 usually carries - std/db9@1's `teal` skin. Named in
+    # every configuration because a skin override has no device-wide default
+    # and all five of these show this rear.
+    skins:
+      db9: teal
+    kind: orderable
+    description: >-
+      THE 12 x 3.5 INCH FRONT, which this device has had a REAR for since it was
+      first modelled and never had a front. Table 28 lists "3.5 inch (x12)
+      SAS/SATA backplane" on its own as a supported option, and this is it:
+      twelve 3.5 inch carriers in 3 rows of 4, over the three-riser rear.
+      ONLY THE BAYS DIFFER FROM THE 24-BAY FRONT. ISM table 2 lists the same
+      four features on both fronts - left control panel, drive slots, right
+      control panel, information tag - so the panels, the latches, the bezel
+      and every port on the right are shared, and the drive field is the same
+      backplane opening divided four ways instead of twenty-four.
+    bays:
+      riser-1: dell/riser-1-3fh-14g@1
+      riser-2: dell/riser-2-2fh-1lp-14g@2
+      riser-3: dell/riser-3-2fh-14g@1
+  lff-12-rear-2-lff:
+    views: {front: front-lff-12}
+    # the serial port's insulator is teal on this machine, not the
+    # near-black a DE-9 usually carries - std/db9@1's `teal` skin. Named in
+    # every configuration because a skin override has no device-wide default
+    # and all five of these show this rear.
+    skins:
+      db9: teal
+    kind: orderable
+    description: >-
+      THE PAIRING TABLE 28 ACTUALLY LISTS: "3.5 inch (x12) SAS/SATA backplane
+      and 3.5 inch (x2) SAS/SATA backplane (back)". Twelve 3.5 inch drives in
+      front, two in the rear numbered 12 and 13 - which is where the rear
+      numbering this device has carried all along comes from.
+      IT IS THE MACHINE `rear-2-lff` SAID IT WAS NOT. That configuration records,
+      in its own description, that no row of table 28 pairs a 24 x 2.5 inch
+      front with a 2 x 3.5 inch rear, and that it was therefore a picture of a
+      rear rather than of a machine. The front it was missing is this one.
+  full-12:
+    views: {front: front-lff-12}
+    # the serial port's insulator is teal on this machine, not the
+    # near-black a DE-9 usually carries - std/db9@1's `teal` skin. Named in
+    # every configuration because a skin override has no device-wide default
+    # and all five of these show this rear.
+    skins:
+      db9: teal
+    kind: example
+    description: >-
+      all twelve 3.5 inch bays carrying a drive. An ILLUSTRATION and not a
+      SKU, exactly as `full-24` is at the other size: the number of drives is
+      what a buyer chooses, so this names no orderable thing and creates no
+      device type. It exists so the 12-bay front can be seen populated as
+      well as blanked, which is the only difference between it and `lff-12`.
+    bays:
+      lff-drive-0: common/drive-carrier-35@1
+      lff-drive-1: common/drive-carrier-35@1
+      lff-drive-2: common/drive-carrier-35@1
+      lff-drive-3: common/drive-carrier-35@1
+      lff-drive-4: common/drive-carrier-35@1
+      lff-drive-5: common/drive-carrier-35@1
+      lff-drive-6: common/drive-carrier-35@1
+      lff-drive-7: common/drive-carrier-35@1
+      lff-drive-8: common/drive-carrier-35@1
+      lff-drive-9: common/drive-carrier-35@1
+      lff-drive-10: common/drive-carrier-35@1
+      lff-drive-11: common/drive-carrier-35@1

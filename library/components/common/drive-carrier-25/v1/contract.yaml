@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: drive-carrier-25
-version: 1.1.0
+version: 1.3.0
 class: drive
 behaviour: fills
 profile: server
@@ -9,11 +9,60 @@ description: >-
   Hot-plug carrier for a 2.5 inch SFF drive, stood on edge as a rack server's
   front bays present them - two illuminated glyphs at the head, a release with
   its orange ring, and three windows onto the tray's honeycomb
-size: {w: 17.868, h: 79.4, d: 105.0}
+size: {w: 17.868, h: 79.4, d: 123.7}
+body: {depth: 123.7, color: '#3c4247'}
 attrs:
   media: sff-2.5
   form-factor: '2.5-inch SFF'
+  capacity: '1.2'
+  capacity-unit: TB
+  interface: SAS
+  link: 12Gb
+  rpm: 10K
 provenance:
+  depth-from-dell-cad: >-
+    measured - Dell's R740XD 3D guide CAD, node `DD9900_ Drives_-1.001`, which
+    spans z 19.77..143.47. The bare drive inside it (`DD9900_ HDD 2.5_`, 15.00
+    x 69.85 x 100.20 - matching std/drive-25's recorded 15.0 x 69.85 x 100.45)
+    sits at z 42.28..142.48, so the carrier is the drive plus 22.5 mm of bezel
+    and latch in front and 1.0 mm of shell behind. THE HANDLE IS CLOSED IN
+    THIS SCENE, checked because the R740xd PSU's CAD depth is a pose: the
+    release handle spans 19.77..31.77 against a carrier face at 20.27, so it
+    stands 0.5 mm proud rather than swung out. THE FACE IS NOT TAKEN FROM THIS
+    CAD and 17.868 x 79.4 stands. The same node reads 18.50 wide while its own
+    front row pitches at 17.8174 - a carrier wider than its pitch is
+    impossible - and neighbour gaps in that row run 16.9 to 18.8, so the scene
+    is approximately assembled in x. The library's 17.868 comes from two
+    Gate-1 figures with 24 repeats each.
+  body: >-
+    the 3D body. `body.depth` is what viewer3d.js uses for a component
+    (`body.depth ?? size.d`), and it matches `size.d` here because the whole
+    part is one box behind one face. `travel` is DELIBERATELY OMITTED: the
+    schema reserves it for captive modules that pull out and stay in the
+    chassis, and a drive carrier comes all the way out.
+  the-label-is-attrs-now-not-a-skin-per-capacity: >-
+    THE FOUR CAPACITY SKINS ARE GONE AND NOTHING REFERENCED THEM. d2tb-sas,
+    d1200gb-sas, d960gb-ssd and d1920gb-ssd differed from `default` in one <g
+    id="drive-label"> block and in nothing else, and no device named any of
+    them. Table 9 of the R740/R740xd Technical Guide lists eight rows of
+    supported drives for one chassis and a reseller lists 84 distinct specs,
+    so a file per capacity is a file per catalogue row forever. The label now
+    reads from attrs via `data-from`, which is the bargain skins already make
+    for colour: the value in the file is a DEFAULT and the render overrides
+    it. An attr that is ABSENT leaves the default standing; an attr that is
+    EMPTY removes the node and any ancestor marked `data-hide-when-empty`,
+    which is how one drawing serves an SSD with no rotational speed and no
+    spindle glyph beside it.
+  the-defaults-are-real-rows-of-table-9: >-
+    datasheet - Dell R740/R740xd Technical Guide, table 9 "Supported drives",
+    row 2.5-inch / SAS / 12Gb / 10K - "300GB, 600GB, 768 GB, 1.2TB, 1.8TB,
+    2.4TB". The values in the skin are DEFAULTS rather than a fixed drawing,
+    so a bay that names no attrs still renders a drive Dell actually sells.
+    THE DEFAULT USED TO READ 10 TB SATA 7.2K, WHICH IS NOT A DRIVE THAT
+    EXISTS. Table 9's 2.5-inch SATA 7.2K row is "1TB, 2TB", and 10TB appears
+    only in the 3.5-inch rows - it was copied from the 3.5-inch family. A
+    capacity baked into a file nobody re-reads is how that survived unnoticed,
+    which is most of the argument for attrs.
   the-label-is-text-and-a-skin: >-
     IT LOOKED LIKE A QR CODE AND IT IS FOUR LINES OF TYPE. At the resolution the
     first reading was done, a dense block of small white glyphs on a dark square
@@ -196,4 +245,4 @@ elements:
   window-1: {at: [2.83, 27.3], size: [12.2, 10.9], class: vent}
   window-2: {at: [2.83, 39.6], size: [12.2, 11.0], class: vent}
   window-3: {at: [2.83, 52.1], size: [12.2, 9.1], class: vent}
-skins: [default, d2tb-sas, d1200gb-sas, d960gb-ssd, d1920gb-ssd]
+skins: [default]

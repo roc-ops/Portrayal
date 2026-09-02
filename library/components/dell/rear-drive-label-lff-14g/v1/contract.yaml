@@ -1,0 +1,36 @@
+format: 1
+kind: component
+name: rear-drive-label-lff-14g
+version: 1.0.0
+class: mechanical
+profile: server
+description: >-
+  The two slot numbers for a 2 x 3.5 inch rear on a 14G PowerEdge, printed on
+  the divider between the bays rather than on a plate
+size: {w: 11.0, h: 12.0, d: 0.1}
+provenance:
+  it-is-not-the-same-arrangement-as-the-sff-labels: >-
+    photo-measured off ISM figure 9. THE 4 x 2.5 INCH LAYOUT HAS A NUMBERED
+    PLATE PER BAY - a darker rectangle outboard of the central dividers at face
+    254.75 and 313.75, carrying two numbers each. This one has no plate at all.
+    The numbers are printed straight on the chassis divider between the bays,
+    stacked one above the other, directly over the blue thumbscrew at 288.34.
+    Assuming the SFF arrangement and moving the digits would have produced two
+    plates where the machine has none, in the wrong half of the face.
+    What IS the same is the convention: the arrow points AT the bay it names, so
+    12 takes a left arrow and 13 a right one.
+  measured-positions-and-a-borrowed-size: >-
+    Arrow and digit positions are read at 4 px/mm, which is the limit for glyphs
+    this size - good to a few tenths, no better. THE FONT SIZE IS NOT MEASURED:
+    4.6 is taken from the 4 x 2.5 inch labels on the same face because the two
+    look alike at this resolution, and that is an assumption rather than a
+    reading.
+  why-it-is-a-part-and-not-device-silkscreen: >-
+    It belongs to the 3.5 inch drives and must come and go with them, and
+    `only-in` reaches placements and bays but not a view's silkscreen. A device
+    cannot scope printed text to a configuration, so text that is only sometimes
+    there has to be a part. The same reasoning put the 4 x 2.5 inch numbers on
+    dell/rear-drive-plate-14g.
+elements:
+  silkscreen: {at: [0.0, 0.0], size: [11.0, 12.0], class: label}
+skins: [default]

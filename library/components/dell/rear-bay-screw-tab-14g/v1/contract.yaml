@@ -1,0 +1,62 @@
+format: 1
+kind: component
+name: rear-bay-screw-tab-14g
+version: 1.1.0
+class: mechanical
+# IN FRONT OF WHAT SITS IN THE BAY. Riser 2's bracket tails run across this
+# metal and go behind it, and a fitted blank's perforations start to its right.
+# Both need this drawn after the bays, which is what `mounts` means.
+behaviour: mounts
+profile: server
+description: >-
+  The chassis tab at the left end of the rear bay frame on a 14th-generation
+  PowerEdge, carrying the blue captive thumbscrew
+size: {w: 11.0, h: 37.5, d: 4.0}
+provenance:
+  why-it-is-not-part-of-the-frame: >-
+    IT WAS, AND THE DRAW ORDER MADE THAT UNTENABLE. rear-bay-frame-14g is a
+    plain placement, so it draws before the bays - which is what the cage
+    panels, vents and rivets need, because a fitted blank is supposed to cover
+    them. This tab needs the opposite: riser 2's bracket tails run straight
+    across it and go behind it, so drawn from the frame it ended up underneath
+    the very cards it should hide.
+    Changing the frame's behaviour would have fixed the tab and un-fixed the
+    blanks. One piece of metal cannot be on both sides of a bay, so the tab is
+    its own part.
+  the-reference-shows-it-proud: >-
+    photo-measured, and the ordering is read rather than assumed. The operator's
+    composite of the blanked rear shows this tab standing above the panel with
+    the thumbscrew on it, and the blank's perforations beginning to its right -
+    so `mounts` is right for the blanked rear too, not only where a riser is
+    fitted.
+  geometry: >-
+    Carried over unchanged from dell/rear-bay-frame-14g@2, shifted so the part's
+    own origin is its top-left: face 144.26, 3.09. Nothing was re-measured, and
+    nothing should be taken from this file as an independent reading - the
+    numbers are that component's, and its provenance is where they are argued.
+  a-second-skin-for-a-blanked-rear: >-
+    `pad-only` drops the tab outline and the lower tongue. With a perforated
+    blank in the bay those two are behind it and do not show - what stands
+    proud is the pad and the screw captive in it. The part is the same metal
+    either way; the skin says how much of it is visible.
+  depth: >-
+    estimated - 4.0. The tab stands proud of the panel and the thumbscrew stands
+    proud of the tab; neither is dimensioned by anything held here.
+relief:
+  # THE TONGUE'S BEND IS NOT DESCRIBED HERE ANY MORE. `sink` on a node requires
+  # that node in every skin, and `pad-only` does not draw the tongue at all -
+  # with a blank fitted it is behind the panel. A relief feature naming a node
+  # half the skins lack is a claim about geometry that is sometimes not there.
+  wall: '#4a5057'
+parts:
+  # THE THUMBSCREW IS CAPTIVE IN THIS TAB, so it is composed rather than placed
+  # beside it. As two separate `mounts` placements their boxes overlapped and
+  # L13 reported it - correctly, because two mounted parts in one place is
+  # usually two things claiming the same metal. This is the same reasoning that
+  # put the retention clips inside dell/pcie-slot-strip-14g.
+  - {ref: dell/thumbscrew-blue-14g@1, id: screw, at: [0.40, 2.26]}
+elements:
+  # NAMED FOR THE NODE BOTH SKINS HAVE. `pad-only` drops the tab
+  # outline, so an element pointing at it would be absent half the time.
+  screw-pad: {at: [0.0, 1.16], size: [11.0, 13.25], class: bezel}
+skins: [default, pad-only]

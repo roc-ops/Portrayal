@@ -1,0 +1,31 @@
+format: 1
+kind: component
+name: dc-terminal-6ryj9
+version: 1.0.0
+class: connector
+profile: server
+description: >-
+  The -48 V DC input receptacle on a 14th-generation PowerEdge power supply -
+  two bladed openings taking Dell part 6RYJ9's terminal block
+size: {w: 31.0, h: 27.5, d: 12.0}
+attrs:
+  mating-part: '6RYJ9'
+provenance:
+  why-it-is-a-dell-part-and-not-a-std-one: >-
+    IT HAS NO CONNECTOR STANDARD BEHIND IT. std/c14-inlet and std/c20-inlet each
+    cite IEC 60320-1 and a manufacturer's panel cutout; this one's mating half is
+    a Dell part number, 6RYJ9, and its wiring is specified in the R740 ISM's DC
+    wiring instructions rather than in any standard: black -(48-60) V DC, red
+    V DC return, green with yellow stripe safety ground, 10 AWG minimum 90 C.
+    So it lives under dell/ and says why.
+  size: >-
+    photo-measured, and from a POOR SOURCE that is named rather than hidden. The
+    operator's photographs of the unit show the face clearly enough to place the
+    housing and its two openings, but the largest is 140 px across the whole
+    supply - about 1.6 px/mm - so every number here is a proportion of the
+    supply's own 86.3 x 39.1, not a reading.
+    Re-measure the moment a figure or a high-resolution photograph turns up.
+    Nothing else in the DC supply depends on these numbers.
+elements:
+  openings: {at: [3.4, 5.6], size: [24.2, 16.3], class: cutout}
+skins: [default]

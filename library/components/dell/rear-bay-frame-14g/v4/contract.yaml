@@ -1,0 +1,309 @@
+format: 1
+kind: component
+name: rear-bay-frame-14g
+version: 4.0.0
+class: mechanical
+profile: compute
+description: >-
+  The chassis structure across rear bays 2 and 3 on a 14G PowerEdge - rails,
+  screw tabs, vent panels and the T-shaped land, present whatever the bays hold
+size: {w: 287.18, h: 42.98, d: 14.13}
+provenance:
+  the-two-rivet-pairs-beside-the-divider-were-clips: >-
+    A MISREAD, FOUND BY COLOUR. Each of the two spaces flanking the divider
+    thumbscrew carried two stroked circles and a small hole here, called rivets
+    and centred on face 273.00 and 301.50. The R740 ISM's three-riser rear shows
+    the blue angel-wing prongs of a card retention clip at both, and the prong
+    pairs measure an 8.25 outer span in all three places they appear - beside
+    riser 1 and in these two - which is what says they are one part rather than
+    three similar things.
+    At 4 px/mm a clip is a pale bar above a dark recess with blue either side,
+    and the bar and recess read as two stacked circles. Nothing in the outline
+    settles it; the colour does, because rivets are not blue.
+    They are dell/riser-card-clip-14g@1 now.
+  the-screw-tab-is-no-longer-here: >-
+    IT LEFT OVER DRAW ORDER, not geometry. This component is a plain placement
+    and draws before the bays, which is exactly what its cage panels, vents and
+    rivets need - a fitted blank is supposed to cover them. The tab at the left
+    end needed the opposite: riser 2's bracket tails run straight across it and
+    go behind it, so drawn from here it ended up underneath the cards it should
+    hide. Making this component `mounts` would have fixed the tab and un-fixed
+    the blanks.
+    It is dell/rear-bay-screw-tab-14g@1 now, with the geometry unchanged and
+    this file still the place its numbers are argued.
+  it-is-chassis-and-not-a-cage: >-
+    RENAMED FROM drive-cage-rear-14g, WHICH IS WHAT IT WAS NOT. That part was
+    287.18 wide, spanned rear bays 2 and 3, framed all four drives, and carried
+    `only-in: [rear-4-sff]` - so a machine with PCIe in those bays drew none of
+    it and the face lost its rails, screw tabs and vent panels along with the
+    drives.
+    THE FOUR REAR VIEWS SETTLE IT. With drives fitted, with a vented blank, and
+    with PCIe slots, the divider between the bays, its blue thumbscrew and the
+    T-shaped land above are IDENTICAL in all three. Structure that does not
+    change with what a bay holds is not part of what the bay holds.
+    Only `frame` and `cage-land` ever crossed the bay boundary and both are
+    chassis, so the seam was already where the split needed to fall.
+    What left is the numbered plate: it is gone in the blanked view along with
+    the drives it names, so it is now dell/rear-drive-plate-14g, placed once per
+    bay.
+  size: >-
+    measured - Dell's service model, r740xd.glb, `DELL_R740XD_2.5 Drive Rear
+    Cage-1`, clipped to the panel plane at z 713.5. A vendor solid measured in
+    software rather than a caliper on hardware, in the sense std/sma@1's barrel
+    key sets out. THE SIZE IS OF WHAT IS VISIBLE: 1,304 of the part's 8,644
+    triangles stand in front of the panel and the rest are inside the chassis.
+  it-is-a-frame-and-that-is-why-it-was-missing: >-
+    Its face is a top rail, a bottom rail and two mounting tabs; the drives fill
+    everything between, so on a populated rear almost none of it shows. Modelled
+    as nothing, the carriers floated on bare chassis and the two thumbscrews sat
+    on air - which `lift: 8.1` in their own relief was already describing before
+    the thing it lifts off was drawn.
+  the-screw-sits-on-a-pad: >-
+    photo-measured - the left tab was drawn as one flat block and the figure
+    shows it articulated: a BRIGHTER pad from face y 4.25 to 17.50 carrying the
+    thumbscrew, then a duller bar below it from 17.75 to 29.50. Same metal,
+    different faces of it - one tilted toward the light and one not - so it is
+    drawn as a highlight rather than as a second part.
+    The pad reads 143.75..156.00 wide in the figure and is drawn at the tab's
+    own 144.26..155.26. The extra quarter-millimetre each side is halo: a bright
+    feature against bright metal at 4 px/mm, which is the one thing this figure
+    is worst at.
+  the-tongue-is-bent-not-just-shaded: >-
+    photo-measured for its OUTLINE, estimated for its ANGLE. Below the screw pad
+    and the bar, the same tab carries a third face at face 146.00..156.80,
+    y 29.50..39.00. It is not duller than the bar, it is DARK - tone falls from
+    about 178 to about 110 - and no flat surface beside another flat surface in
+    the same plane does that. It is also slightly narrower and shifted right,
+    10.80 against 11.75, which is what a pressed tongue coming off a wider strip
+    looks like.
+    ITS RIGHT EDGE IS BROUGHT IN TO 155.26. The figure puts it at 156.80, which
+    is past the 155.26 that the pad and the bar both end at - and a tongue
+    cannot overhang the tab it is pressed out of. Width goes to 9.26 and the
+    correction is taken entirely off the RIGHT, where the overhang is; the left
+    edge at 146.00 is not disturbed. This is the same halo the screw pad shows,
+    in the same direction, on the same figure.
+    THE ANGLE IS THE OPERATOR'S READING, about 12 degrees down into the chassis,
+    and it is a guess made deliberately rather than a measurement: the figure
+    cannot show an angle at all and the service model has no cage face in front
+    of the panel to read one from. At 12 degrees over 9.50 the far edge drops
+    1.98, so the relief carries 0.99 - the MEAN of a ramp, since
+    `sink` is a uniform recess and there is no bend in the vocabulary. Say
+    plainly: one number standing in for a slope, on an angle nobody measured.
+  the-panel-between-the-tab-and-the-first-bay: >-
+    photo-measured - the extracted outline carries only a top and bottom rail
+    across face 155.26..170.00; the metal between them is a face the projection
+    at the panel plane does not catch, the same way the shroud's slot column is
+    not caught. Drawn as a plate with its features read off ISM figure 8.
+    FOUR SQUARES AND TWO RINGS, and FILL FRACTION IS WHAT TELLS THEM APART. At
+    this size a ring and a square are the same blob to a threshold; the squares
+    come back 90-95% of their bounding box filled and the two rings 43% and 31%,
+    which is a wall of about 0.8 on a 7 mm circle. Reading area alone would have
+    drawn six squares.
+    squares at face 157.70 and 163.25 by 18.10 and 23.50, 4.80 x 4.70, on a
+    5.55 x 5.40 pitch; rings at 162.40, 12.50 and 162.40, 33.50, about 7.1
+    across. The rings sit on the squares' own centre line - 162.40 against the
+    block's 162.85 - which is the check that they are one pressed group.
+    THE RING INK IS #6d747c AND WAS FIRST #8b9299, which is the dull grey the
+    chassis rivets carry against a #9aa1a8 panel. Here the background is this
+    cage's #8c939b and the two were within one part in 255: the rings were in
+    the file and in the render and could not be seen. A colour is only dull
+    RELATIVE TO WHAT IT SITS ON, and reusing one across two backgrounds is not
+    reusing a decision, it is losing one.
+  the-panel-beyond-riser-3: >-
+    photo-measured - the far right of the face, past the last drive bay. Same
+    kind of metal as the panel beside the screw tab and missing for the same
+    reason: the projection at the panel plane carries only this cage's rails
+    across it.
+    TEN SQUARES AND THE ARRANGEMENT IS NOT A GRID. The RIGHT column at face
+    423.00 runs the full height - six on a 5.50 pitch from y 7.00 - while the
+    two columns to its left carry only the middle pair at 18.00 and 23.50. The
+    rings sit where those columns would otherwise continue.
+    A BLOB SCAN FOUND EIGHT OF THE TEN. The top two of the right column touch
+    the dark edge beside them, merge into one region, and that region comes back
+    a 9 x 16 blob at 57% fill - neither square nor ring, so it was dropped.
+    Nothing reported an error; two features were simply not in the list. They
+    were found by printing the window as characters at 0.5 mm and reading it.
+    Connected-component labelling is the right tool until two things touch, and
+    then it is silently the wrong one.
+    Fill fraction separates them as before: squares 87-96% of their box, rings
+    38% and 31%. Rings at face 416.88, 12.50 and 416.63, 32.75, about 7.2
+    across; squares 4.75 x 5.00 on a 5.50 pitch both ways.
+  the-panel-between-risers-2-and-3: >-
+    photo-measured - the third of three panels this cage carries that the
+    projection at the panel plane does not reach, past the second drive bay.
+    A 2 x 3 BLOCK AND TWO RINGS: columns at face 297.50 and 303.00, rows at
+    7.50, 13.00 and 18.50, all on a 5.50 pitch, with rings below at 301.50,
+    28.00 and 301.50, 36.50 - about 6.9 across, on the block's own centre line.
+    THE LOWER ONE HAS A HOLE IN IT AND THE UPPER ONE DOES NOT. The character map
+    shows dark pixels inside the lower circle at rows 36.0..37.5 and clear
+    ground inside the upper one. Two different fittings at the same size, and a
+    blob scan reports both as one ring-shaped region either way - the difference
+    is only visible by looking at what is INSIDE the outline.
+    MAPPED BEFORE IT WAS SCANNED, on purpose. A blob scan of this window returns
+    the middle and bottom rows and NOT the top one, which is the same failure
+    that lost two squares on the panel beyond riser 3 - features touching
+    something else merge and then fail the shape test. Printing the window as
+    characters at 0.5 mm and reading it took a minute and found six squares
+    where the scan found four.
+  the-two-vent-groups-are-one-part-mirrored: >-
+    THE AXIS IS NOT CHOSEN, THE RINGS FIX IT. Mirroring about face 287.25 sends
+    the right group's ring centre at 301.50 to 273.00, which is where the left
+    group's rings measured - exactly, not approximately. It also lands 0.60 off
+    this cage's own centre at 287.85. Two independent things agreeing on an axis
+    is what makes the mirror a finding rather than an assumption.
+    Each group is six openings 4.50 square on a 5.50 pitch, columns at face
+    267.00 and 272.50 on the left and 297.50 and 303.00 on the right, rows at
+    7.50, 13.00 and 18.50; then a plain ring at y 28.00, r 3.07, and a ring with
+    a hole at 36.50, r 2.97, hole 0.85 - all on the ring axis at 273.00 and
+    301.50.
+  the-openings-are-mirrored-and-the-figure-says-otherwise: >-
+    RECORDED BECAUSE A MEASUREMENT WAS DISPLACED, NOT BECAUSE ONE WAS TAKEN.
+    ISM figure 8 shows the LEFT group as six NARROW SLOTS - 2.25 wide on a 3.50
+    pitch, at face 269.75 and 273.25, openings 4.30 tall - against the right
+    group's 4.50 squares on 5.50. That reading was taken twice and by two
+    methods, a character map at 0.5 mm and the raster at 8x, and both came back
+    slots. It is not a marginal call in the figure.
+    The operator, who has the hardware, says the two sides are the same part,
+    and said so knowing the figure shows otherwise. That is a source this
+    library does not otherwise have and it outranks a 4 px/mm drawing.
+    SO THE NUMBERS ABOVE ARE MIRRORED, NOT MEASURED, and the ones they displace
+    are kept here rather than deleted. If this face ever renders wrong, 2.25 on
+    a 3.50 pitch at 269.75 and 273.25 is what the figure says and where to
+    start. A displaced measurement that is written down can be argued with; one
+    that is overwritten cannot.
+  the-rings-were-separated-and-are-now-a-pair: >-
+    Same call, same direction. A radial grey profile had shown the LEFT pair to
+    be two different fittings - the upper flat to r 1.7 and bottoming at 104 at
+    r 2.90, the lower bottoming at 65 at r 2.30 with a second minimum at its own
+    centre - against the right pair's 3.07 and 2.97. Under the mirror they are
+    one pair at 3.07 and 2.97 on both sides, and the profile's 2.90 and 2.30
+    are recorded here as what it read.
+    WHAT THE PROFILE GOT RIGHT AND KEPT is that the lower fitting has something
+    solid at its centre and the upper does not - dark at r 0.2 rising to ground
+    by r 1.2. Both sides carry it.
+  the-rings-are-drawn-dull-and-the-figure-says-dark: >-
+    The figure gives #4d5055 and #38393f for the left pair, two of the darkest
+    marks on that strip. Drawn at that weight they read as named hardware - a
+    port, a lamp, something a viewer should be able to look up - and they are
+    neither; they are pressed into the metal. Both pairs are drawn #868d95 on
+    the land, one step off it, so the drawing says "formed metal, nothing to
+    identify" instead of matching a photograph's contrast.
+    THE SIZES ARE NOT TOUCHED BY THIS. Tone is a rendering decision and radius
+    is a measurement, and this key exists so the two are not later confused for
+    each other by somebody re-reading the figure and "correcting" the colour.
+  the-piece-at-the-top-is-an-asymmetric-t: >-
+    photo-measured, and the reading is the OPERATOR'S. Three passes drew this as
+    a raised strip with shoulders - low outside, high in the middle - and each
+    pass fixed a different thing that was not the problem: the draw order, then
+    the fold ink, then the shoulder profile. The shape itself was wrong the
+    whole time and every fix rendered as something the operator still could not
+    see.
+    It is a T. A horizontal BAR across the top, face 258.75..308.10, and a
+    vertical STEM hanging from it, face 280.00..296.75, running down to the
+    bottom rail. The stem's centre at 288.38 sits 60% across the bar - the
+    operator's "60 to 70 percent" - which is why nothing symmetric ever fitted.
+    THE TWO FLANKS ARE DIFFERENT JOINTS. On the right the outline runs from the
+    bar's TOP corner at 308.10, 1.71 straight down to the stem at 296.75, 10.25
+    - no underside at all, which is "on the right it goes all the way to the
+    edge". On the left the bar keeps an underside at y 5.25 from 258.75 to
+    265.00 and only then falls away to 280.00, 15.50.
+    NEITHER CHAMFER IS EXACTLY 45 DEGREES - 37 on the right, 34 on the left. The
+    endpoints are traced and the angle falls out of them.
+    IT LIES OVER THE VENTS AND THAT IS WHAT PLACES IT. Each chamfer takes a bite
+    out of the corner of the square nearest it, and the bite is a far sharper
+    measurement than an edge running through bright metal, because a square of
+    known size and position is doing the measuring. The right flank cuts 2.90 by
+    2.19 off its square's top-left corner; the left flank is set to cut 3.20 by
+    2.19 off its square's top-right corner, which fixes its underside end at
+    270.51 and its meeting with the stem at y 11.74.
+    THE FIRST VERSION HAD 265.00 AND 15.50, traced off the raster, and swallowed
+    the whole square. The operator's estimate - "about 25% in from the edge" -
+    lands at 270.5, which is 24%. The eyeballed number beat the measured one
+    because it measured the right thing: WHERE AN EDGE CROSSES A FEATURE OF
+    KNOWN SIZE, not where a faint gradient sits in a field of bright metal.
+    A FEATURE ALREADY IN THE MODEL IS A RULER. Six squares on a measured pitch
+    sat under this edge the whole time and were not used until the operator
+    pointed at the overlap.
+  why-three-traces-missed-it: >-
+    RECORDED BECAUSE THE METHOD FAILED, NOT THE DATA, and it failed the same way
+    three times. Every pass searched for the piece's TOP edge - and the top edge
+    is the full-width bar, which runs into chassis metal of nearly the same tone
+    and reads as no edge at all. This shape is carried by its UNDERSIDE and its
+    two chamfers, and no column scan was ever pointed at those.
+    Each pass then produced a clean, gapless trace and a confident number:
+      pass 1  a 2.85 mm step at 278.00..297.50, from a window that let the
+              vents' own top row win every column in the shoulder
+      pass 2  a fold line added, on the correct observation that the boundary
+              is a line and not a brightness step
+      pass 3  a 5.2 mm sweep at 275.50..299.50, after narrowing that window
+    All three were measurements of the wrong feature, and all three looked like
+    progress. A MEASUREMENT REPEATED THREE TIMES STAYS WRONG IF IT IS THE WRONG
+    MEASUREMENT, and the thing that broke the loop was not a better scan - it
+    was the operator describing the shape in words and the figure being read
+    against that description instead of against an expectation.
+  the-dimple-above-the-thumbscrew: >-
+    photo-measured - face 288.50, 10.00, about 2.75 across, on the raised
+    section and on the same centre line as the thumbscrew at 288.34. It samples
+    a uniform #898a8e with no bright interior, so it is a filled dimple and not
+    a ring like the six on the vent grounds - a distinction only visible by
+    looking INSIDE the outline, which is the third feature on this cage that
+    turned on exactly that check.
+    Drawn dull at #8a9199 for the same reason the rings are: formed metal is not
+    something a reader should be trying to identify.
+  the-land-has-to-draw-before-the-vents-and-once-did-not: >-
+    RECORDED BECAUSE IT FAILED SILENTLY. The united land was inserted where the
+    left-hand land had been, which is LATER in the skin than the right-hand vent
+    group - so it painted over six openings and their two rings. The render came
+    back with a blank panel where a vent block had been, lint passed, and
+    nothing anywhere reported an error.
+    The land is the ground every other feature on this cage sits on, so it is
+    drawn immediately after the frame. In a flat SVG skin, draw order IS the
+    model, and moving a shape without checking what now sits behind it is the
+    same class of mistake as moving a part without checking what it lands on.
+  neither-group-sits-in-a-box: >-
+    The three panel rects on this cage were drawn fill #8c939b with a #5a6069
+    stroke - which is the FRAME'S OWN FILL plus a border. So the dark background
+    an operator reported behind the right group was never a background: it was
+    an outline drawn around nothing, on metal already the right colour, and it
+    read as a panel edge that does not exist.
+    Both groups now sit on the light land the vents are actually punched in,
+    face 263.50..277.75 and 296.75..311.00, y 4.50..42.50, #9ba2aa. That tone
+    comes from a RATIO and not an absolute: the figure sits about 15 percent
+    bright - its ground samples 169 where this cage is painted 147 - and the
+    land runs 1.13x that ground.
+    A ZERO-CONTRAST FILL WITH A STROKE IS A TRAP, because the fill looks
+    deliberate in the source and only the border is visible in the render. The
+    other two panels on this cage are still drawn that way.
+  outline: >-
+    measured - extracted by spec/tools/intake/cad-outline.py, rasterised at
+    16 px/mm and simplified at 0.40 mm. THAT 0.40 IS A SIMPLIFICATION TOLERANCE
+    and must not be measured back off this outline as though it were a radius.
+  the-tabs-are-the-check: >-
+    THE CAGE WAS EXTRACTED WITHOUT REFERENCE TO THE SCREWS AND PUTS ITS HOLES
+    UNDER THEM. The left tab carries a hole centred at local 6.25, 9.35, which
+    is face 150.51, 11.06; dell/thumbscrew-blue-14g@1 sits at face 150.41,
+    11.10, placed from the CAD's screw node and confirmed by a hue sweep of ISM
+    figure 8. A tenth of a millimetre apart, from readings that never met. The
+    middle tab at local 135..152 sits between the two drive bays and under the
+    other screw at 288.34.
+  depth: >-
+    measured - 14.13 proud of the panel at its highest. THE FACE IS NOT FLAT and
+    `out` cannot say so: the thumbscrews seat at 8.1 proud, which is a lower
+    shelf of this same part, so extruding the whole outline to 14.13 is a first
+    approximation. Recorded here rather than left for somebody to discover from
+    a 3D view that looks a little too solid.
+relief:
+  wall: '#4a5057'
+  features:
+  - node: frame
+    out: 14.13
+    color: '#8c939b'
+    confidence: measured
+    source: >-
+      dell/drive-cage-rear-14g@1's own depth key - Dell's service model, from
+      the panel plane at z 713.5 to the cage's own front at 727.6. One number
+      for the whole outline, which the depth key records as an approximation
+      because the screw shelf sits 6 mm below it.
+elements:
+  frame: {at: [0.0, 0.0], size: [287.18, 42.98], class: bezel}
+skins: [default]

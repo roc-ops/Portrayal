@@ -1,0 +1,65 @@
+format: 1
+kind: component
+name: rj45-port-14g
+version: 1.0.0
+class: port
+profile: server
+description: >-
+  A 14G PowerEdge network port - common/rj45-port carrying the link and activity
+  states ISM table 11 gives it
+size: {w: 17.0, h: 14.9, d: 16.0}
+provenance:
+  it-carries-meaning-and-not-drawing: >-
+    NOTHING HERE IS DRAWN. There is no skin: the bezel, the jack, its eight
+    conductors and the two lamp windows are all common/rj45-port@4, composed
+    whole. What this part adds is ISM table 11 - what those two lamps signify on
+    a 14G PowerEdge - attached with the `states` override on `parts:`.
+    A component declares what a lamp IS and can only guess what it MEANS. The
+    same jack is a management port here and a data port on the next card, and
+    the indicator table belongs to whoever fitted it.
+  why-it-is-a-component-at-all: >-
+    Because the table is worth writing once. `states` on a placement or a part
+    could put it inline on every card that wants it, and then four NDCs would
+    carry four copies of the same four state names and nothing would keep them
+    in step. Naming it once means a card composes `dell/rj45-port-14g@1` and
+    gets Dell's meanings with the connector.
+  it-used-to-redraw-the-lamps: >-
+    RECORDED BECAUSE THE FIRST VERSION WAS A WORKAROUND. `parts:` accepted at,
+    attrs, behind, id, lift, ref, rotate and skin - and not states - so this
+    component originally composed the common port `behind: true` and drew two
+    lamp rects of its own on top, at the composed part's own lamp coordinates.
+    Identical rects in identical places: two nodes for one indicator, and the
+    only way to attach a meaning was to redraw the thing it was about.
+    `states` on `parts:` removed the need, and the redrawn rects with it. The
+    machinery was already there - apply_states handles a per-element mapping and
+    already reached lamps inside composed parts - it had simply never been wired
+    to anything but device placements.
+  lamps: >-
+    ISM table 11, per port: the LINK indicator is green at the port's maximum
+    speed, amber below it, blinking green when NIC identify is enabled through
+    the configuration utility, and off when the NIC is not connected; the
+    ACTIVITY indicator blinks green when data is moving and is off when it is
+    not. NO RATE IS PUBLISHED for either blink and none is stated.
+    Transcribed from dell/ndc-4x-rj45-14g@1, which read them off the ISM and is
+    where they lived before this part existed.
+  which-lamp-is-which: >-
+    LINK IS THE LEFT ONE AND THAT IS MEASURED, not assumed from the order of the
+    table. On the NDC the link indicator sits at face x 3.60 and the activity
+    indicator at 15.64, on a jack spanning 2.47..18.47 - so link is the lamp on
+    the keyway's left and activity the one on its right.
+    The lamps keep the common part's own ids, `led-left` and `led-right`,
+    because that is what they are addressed by; this file is where the mapping
+    from side to meaning is written down.
+parts:
+  - ref: common/rj45-port@4
+    id: port
+    at: [0.0, 0.0]
+    states:
+      led-left:
+        - 'off'
+        - {name: up, color: '#22c55e'}
+        - {name: degraded, color: '#eab308'}
+        - {name: identify, color: '#22c55e', behavior: blinking}
+      led-right:
+        - 'off'
+        - {name: active, color: '#22c55e', behavior: blinking}

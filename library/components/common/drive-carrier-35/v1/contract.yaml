@@ -1,0 +1,217 @@
+format: 1
+kind: module
+name: drive-carrier-35
+version: 1.5.0
+class: drive
+behaviour: fills
+profile: server
+description: >-
+  A 3.5 inch hot-swap drive in its carrier, drawn wide - the orientation both
+  the rear bays and a 12 x 3.5 inch front mount it in
+size: {w: 105.5, h: 26.9, d: 165.6}
+body: {depth: 165.6, color: '#3c4247'}
+attrs:
+  form-factor: 3.5in
+  capacity: '10'
+  capacity-unit: TB
+  interface: SATA
+  link: 6Gb
+  rpm: 7.2K
+provenance:
+  body-faces: >-
+    measured, photo, and one ESTIMATE per face, kept separate. From Dell's
+    CAD, by clipping the decoded LOD triangles to the carrier's box and
+    profiling where metal is: the front bezel band runs z 0..22.08 (13.3% of
+    the depth) and two screw bosses sit at z 38.64..44.16 and 139.84..145.36,
+    centres 41.40 and 142.60. From the operator's photographs, which is colour
+    and construction and not geometry: a pale label over bare metal with the
+    spindle hub showing on top, green PCB and the SAS/SATA connector
+    underneath, bright rails down both long edges. ESTIMATED and marked as
+    such: rail width, screw head diameter and the connector rectangle - the
+    bezel spans full width in front of the rails so a rail's own width is not
+    cleanly separable at this resolution, and this scene buries the carrier's
+    rear inside the cage.
+  body-face-orientation: >-
+    UNVERIFIED, AND THE ONE THING HERE NOBODY HAS CHECKED. The art puts the
+    carrier's FACE at y=0 on the top and bottom faces. The schema states the
+    convention for the sides - "right: face at image left; left: face at image
+    right; rear as seen from behind" - and says nothing about which end of a
+    TOP face the front sits at. common/psu-ac-650's body-top wraps its entire
+    content in rotate(180), which says somebody worked this out the hard way
+    and that guessing it is a real risk. It could not be checked here: `kit`
+    is a library and the viewer page that stitches the six faces lives outside
+    this repository. WHOEVER OPENS THIS PART IN THE 3D VIEWER FIRST should
+    look at whether the bezel band lands at the front, and flip the top and
+    bottom art if it does not.
+  size-from-dell-cad: >-
+    measured - Dell's own R740XD 3D guide CAD (guide ic140r740xd000202a, asset
+    IC140R740XD00), node `Poweredge_R740_3.5_Drive-10`. The carrier reads
+    105.50 x 26.90 x 165.60 and the bare drive inside it 101.60 x 26.10 x
+    147.00 - which is SFF-8301 exactly, and is what says the extraction is
+    sound rather than merely plausible. IT REPLACES TWO PITCHES AND A FIGURE.
+    107.208 was the 12-bay front's COLUMN PITCH and 26.99 its ROW PITCH; a
+    pitch bounds a carrier from above and never gives it, and the CAD sits
+    inside both (105.50 < 107.216, 26.90 < 26.99), contradicting neither. The
+    old width had been set EQUAL to the pitch by analogy with the 2.5 inch
+    carrier - the real part leaves a 1.7 mm gap between columns. The old 26.5
+    height came from ISM figure 9's rear bay at 8.2 px/mm, where 0.4 mm is
+    three pixels. THE DEPTH IS NOT A POSE. The R740xd PSU's CAD box is 234.8
+    deep against a 195.5 body because that scene poses its handle open, so the
+    sub-parts here were laid out along z first: the drive spans 28.44..175.44
+    inside a carrier spanning 11.43..177.03, so the 18.6 mm excess is bezel in
+    front and 1.6 mm of shell behind - not a swung lever.
+  body: >-
+    the 3D body. `body.depth` is what viewer3d.js uses for a component
+    (`body.depth ?? size.d`), and it matches `size.d` here because the whole
+    part is one box behind one face. `travel` is DELIBERATELY OMITTED: the
+    schema reserves it for captive modules that pull out and stay in the
+    chassis, and a drive carrier comes all the way out.
+  the-label-is-attrs-now-not-a-skin-per-capacity: >-
+    THE FOUR CAPACITY SKINS ARE GONE AND NOTHING REFERENCED THEM. d2tb-sas,
+    d1200gb-sas, d960gb-ssd and d1920gb-ssd differed from `default` in one <g
+    id="drive-label"> block and in nothing else, and no device named any of
+    them. Table 9 of the R740/R740xd Technical Guide lists eight rows of
+    supported drives for one chassis and a reseller lists 84 distinct specs,
+    so a file per capacity is a file per catalogue row forever. The label now
+    reads from attrs via `data-from`, which is the bargain skins already make
+    for colour: the value in the file is a DEFAULT and the render overrides
+    it. An attr that is ABSENT leaves the default standing; an attr that is
+    EMPTY removes the node and any ancestor marked `data-hide-when-empty`,
+    which is how one drawing serves an SSD with no rotational speed and no
+    spindle glyph beside it.
+  the-defaults-are-real-rows-of-table-9: >-
+    datasheet - Dell R740/R740xd Technical Guide, table 9 "Supported drives",
+    row 3.5-inch / SATA / 6Gb / 7.2K - "1TB, 2TB, 4TB, 8TB, 10TB, 12TB, 14TB,
+    16TB". The values in the skin are DEFAULTS rather than a fixed drawing, so
+    a bay that names no attrs still renders a drive Dell actually sells. THE
+    LINK-RATE ROW IS NEW HERE. This label carried three rows where the 2.5
+    inch carrier has four plus the spindle glyph, because this part was scaled
+    from that one before the row existed. Same fields at both sizes now.
+  it-is-the-2-5-inch-carrier-scaled-and-laid-flat: >-
+    IT WAS DRAWN AS A DIFFERENT KIND OF OBJECT and it is not one. Two plain LED
+    rectangles where common/drive-carrier-25 has stroked lamp GLYPHS, three flat
+    dark panels where that one has honeycomb seen through windows, and no rails
+    at all - so two carriers out of the same family read as unrelated parts.
+    ISM figure 9 shows the same vocabulary at both sizes: two green lamp glyphs
+    on a recessed panel at the outboard end, an amber ring on a dark boss,
+    bright rails along both long edges, and three windows onto a honeycomb tray.
+    The ring, its plate and the label are unchanged - they were measured when
+    this part was built and were not what was wrong with it.
+  the-rails-and-the-carrier-face: >-
+    photo-measured off ISM figure 9, Gate 1 at 0.27% - the best rear in either
+    document. A tone profile down a column clear of the vents puts the carrier's
+    visible face at y 9.75..35.25 with the bay's dark gap above and below, and
+    lighter bands at 9.75..11.25 and 34.00..35.25 running x 187.3..260.3. Those
+    are the rails: they start just outboard of the release plate and run to the
+    inboard end, the same 23-to-98 per cent span the 2.5 inch carrier's have.
+  the-honeycomb-is-carried-not-measured: >-
+    "Bigger holes for the honeycomb to show through" is about the WINDOWS, which
+    are 15.4 x 17.3 here against 12.2 x 10.9 on the 2.5 inch carrier. The mesh
+    behind them belongs to the drive tray and is the same mesh in both.
+    THE FIGURE CANNOT SETTLE THE CELL SIZE. At 4 px/mm a cut across the window
+    band resolves the three PANELS, 15.62 apart, and not the cells inside them.
+    So the flat-top cell and its 3.22 x 3.73 pitch are carried from
+    common/drive-carrier-25 rather than read here - and a first pass that scaled
+    them 1.6x drew a mesh visibly coarser than the figure's, which is the check
+    that carrying them is right.
+  the-lamp-glyphs-are-not-scaled-with-the-carrier: >-
+    Figure 9's green shows at x 161.25..163.75, y 16.75..19.50 and 26.25..29.25 -
+    about 2.5 across - but that is the LIT AREA, not the moulded glyph, and a
+    lit mark is smaller than the mark. The glyph is the same silkscreen on both
+    carriers so it is drawn the same size on both; the measurement fixes where
+    it sits, which is what it can honestly say. Green in the figure, so activity
+    is the upper one here.
+  size: >-
+    photo-measured - ISM figure 9, "Back view of 2 x 3.5 inch drive system",
+    which passes Gate 1 at 0.27% against a 434 x 86.8 rear face. That is a
+    BETTER figure than the 8 this whole device was built from, at 1.05%, and it
+    had never been opened.
+    The two carriers in it measure 154.80..262.80 and 314.20..421.80 - 108.0 and
+    107.6 wide - and 7.5..34.0 tall.
+    THE CHECK IS THE DRIVE INSIDE IT. A bare 3.5 inch drive is 101.6 x 26.1, so
+    a carrier at ~107.5 x 26.5 is the drive plus a few millimetres of frame. A
+    reading of the BAY OPENING rather than the carrier would have come out
+    several millimetres larger and looked just as plausible; that it lands on
+    the drive is what says which of the two was measured.
+  width-was-107-8-and-is-now-107-208: >-
+    photo-measured - and the earlier figure was not wrong, it was UNBOUNDED.
+    Figure 9 shows two rear bays 160 mm apart, and two isolated openings put no
+    upper limit on the part inside either of them; an opening is legitimately
+    wider than what it holds. Four of 107.8 across the 12 x 3.5 inch front
+    overrun that front's opening by 2.4 mm, which is how the slack showed up.
+    dellr740xd-12x35.webp settles it. It passes Gate 1 at 0.07% against the
+    482.6 x 86.8 RACK FACE - the tightest figure in this project - and its ear
+    fold lines land at body-relative -0.67 and +434.79, independently confirming
+    the 434.5 body. Its four columns divide the same backplane opening the 24
+    SFF bays divide: autocorrelated period 107.216 against 428.832/4 = 107.208,
+    agreeing to 0.008 mm. FOUR REPEATS BOUND A PART WHERE TWO DISTANT ONES
+    CANNOT, so the front is the better witness to the width and the rear stays
+    the better witness to the opening. Both readings still hold at 107.208.
+  the-height-is-26-5-and-was-deliberately-not-changed: >-
+    The same photograph measures the front's ROW pitch at 26.99 by three
+    independent methods, and the flush-fit convention the 2.5 inch carrier
+    follows would make that the height. It is not taken, because the rear
+    opening is 26.5 and a carrier cannot be taller than the hole it goes in.
+    Both numbers are upper bounds and 26.5 is the tighter one; the photograph
+    also shows why the rows need not be flush, since bright cage shelves run
+    between them where the columns have only a thin divider. Taking 26.99 would
+    have contradicted a measured opening to satisfy a convention.
+  it-declares-no-standard-and-that-is-deliberate: >-
+    A first draft carried `conforms: drive-35` and lint rejected it - there is
+    no such registry key. The right answer was not to add one: common/
+    drive-carrier-25 declares no `conforms` either, and only std/drive-25, the
+    BARE DRIVE, does.
+    The registry's own drive-25 entry says why, and says it about this exact
+    confusion: "three different things get called a 2.5 inch drive bay and only
+    this one is standard - the chassis OPENING is the chassis's, the CARRIER is
+    the vendor's, and the DRIVE is everybody's." A carrier is Dell's part with
+    Dell's latch and Dell's lamps; SFF-8301 has nothing to say about it.
+  depth: >-
+    estimated - 155.0. Nothing held here dimensions a 3.5 inch carrier's depth;
+    this is the drive's own 147 mm plus a carrier's frame, and it is a placement
+    for the 3D extrusion rather than a measurement.
+  one-carrier-per-bay: >-
+    THE TWO CARRIERS ARE IN DIFFERENT BAYS, which is the whole reason this part
+    exists rather than a 2 x 3.5 inch cage. Bay 2 runs to about face 288 and bay
+    3 from there; the left carrier sits at 154.80 and the right at 314.20, one
+    each side. A rear with two 3.5 inch drives is not one assembly - it is two
+    bays each fitted with one carrier, and either bay could instead hold PCIe
+    slots or a blank.
+  the-vent-pattern-is-not-drawn: >-
+    The real carrier's vent is honeycomb. At 4 px/mm the figure resolves three
+    dark panels separated by bright ribs and no cell structure at all, so three
+    panels is what is drawn. Drawing a hex grid would be inventing a pattern
+    from knowing what these usually look like, which is the failure this note
+    exists to prevent.
+  the-latch-is-amber-and-that-is-a-touchpoint: >-
+    photo-measured - a ring at local 22.0, 13.25, about 10 across, in Dell's
+    hot-swap terracotta rather than the grey ring the 2.5 inch carrier carries.
+    The service label's own legend gives that colour its meaning: terracotta is
+    serviceable while the system is running.
+  capacity-is-an-illustration: >-
+    The label reads 10 TB SATA 7.2K, transcribed from the figure. Which drive a
+    buyer fits is a purchase, not a property of the carrier - the default skin
+    illustrates one and other capacities are skins, exactly as
+    common/drive-carrier-25 handles it.
+elements:
+  window-1: {at: [40.0, 4.6], size: [15.4, 17.3], class: vent}
+  window-2: {at: [56.8, 4.6], size: [15.4, 17.3], class: vent}
+  window-3: {at: [73.6, 4.6], size: [15.4, 17.3], class: vent}
+  release: {at: [16.1, 4.2], size: [15.2, 18.1], class: control}
+  lamp-activity:
+    at: [4.6, 4.4]
+    size: [2.6, 4.4]
+    class: led
+    states:
+      - 'off'
+      - {name: active, color: '#22c55e', behavior: blinking}
+  lamp-status:
+    at: [4.6, 15.8]
+    size: [2.6, 4.4]
+    class: led
+    states:
+      - 'off'
+      - {name: ready, color: '#22c55e'}
+      - {name: fault, color: '#f59e0b', behavior: blinking}
+      - {name: rebuild, color: '#22c55e', behavior: blinking}
+skins: [default]

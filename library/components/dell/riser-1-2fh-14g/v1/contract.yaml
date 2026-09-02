@@ -1,13 +1,13 @@
 format: 1
 kind: module
 name: riser-1-2fh-14g
-version: 1.1.0
+version: 1.4.0
 class: riser
 behaviour: fills
 profile: server
 description: >-
-  PCIe expansion card riser for a 14th-generation PowerEdge - presents
-  2 slots and carries a bay for each
+  PCIe expansion card riser for a 14th-generation PowerEdge - three chassis
+  openings, of which it wires 2; the middle one takes a filler only
 attrs:
   supported-risers: '1A'
   bracket-envelope: '120.02 x 64.05'
@@ -66,6 +66,23 @@ provenance:
     change size in place - a full-height card will not fit where the half-height
     one goes, with the power supply directly beneath it - so the metal is fixed
     and the numbering travels with the part.
+  the-middle-opening-is-there-and-is-blanked: >-
+    THE PLATE WAS DRAWN WITH TWO WINDOWS AND THE MACHINE HAS THREE. This is 1A,
+    the one riser-1 arrangement the reference composite does not show, so it was
+    modelled from the slots it wires - and that put sheet metal where the
+    chassis has a hole. The windows are on the PCI 20.32 pitch and are the same
+    pressing as riser-1-3fh-14g; a riser with fewer connectors does not get a
+    differently punched plate.
+    So the middle window is cut, its geometry lifted verbatim from
+    riser-1-3fh-14g rather than re-measured, and `slot-2` names one part in
+    `accepts` - the full-height filler. That is the model saying "blanked": not
+    by hiding the opening, but by there being nothing a card can seat into.
+    WHETHER THE NUMERAL 2 STILL PRINTS IS NOT SETTLED HERE. It is on
+    dell/pcie-slot-strip-14g, chassis metal at face 11.75..14.00, left of this
+    plate and outside this part - so on the evidence held it is printed on every
+    14G chassis whatever riser is fitted, and it is left alone. If it turns out
+    the strip comes out with the riser cage, the fix is a second skin on the
+    strip, not a change here.
   which-part-numbers: >-
     THIS FACE IS SHARED BY 1A. ISM table 25 names eleven riser part numbers
     across the three positions and they present only FIVE distinct arrangements
@@ -80,18 +97,29 @@ provenance:
     exactly 1.27 and that is why a row of them nests. Any overlap check working
     on bounding boxes will report these; it is the check unable to express a real
     interlock, not a fault in the placement.
-size: {w: 102.5, h: 62.0}
+size: {w: 107.59, h: 62.0}
 insert: {w: 120.02, h: 64.05}
 bays:
+  # THE BRACKETS SIT 1 MM RIGHT OF WHERE THEY WERE. Only the bays move;
+  # the plate, its windows and the slot strip are chassis and stay put.
   slot-1:
     # BEHIND THE PLATE. What shows of a card is its working area
     # through the punched window and its retention tab clear of the
     # metal; the flange end is covered. Without this the occupant is
     # appended after the skin and the whole outline shows on top.
     behind: true
-    at: [-17.46, 1.82]
+    at: [-13.41, 1.82]
     size: [120.02, 21.59]
     accepts: [dell/pcie-filler-fh-14g@1, std/pcie-bracket-fh@1]
+    default: dell/pcie-filler-fh-14g@1
+  slot-2:
+    # THE OPENING WITH NO CONNECTOR BEHIND IT. Same geometry as its
+    # neighbours - the chassis punches all three - but `accepts` names
+    # the filler and nothing else, so no card can be seated here.
+    behind: true
+    at: [-13.41, 22.14]
+    size: [120.02, 21.59]
+    accepts: [dell/pcie-filler-fh-14g@1]
     default: dell/pcie-filler-fh-14g@1
   slot-3:
     # BEHIND THE PLATE. What shows of a card is its working area
@@ -99,7 +127,7 @@ bays:
     # metal; the flange end is covered. Without this the occupant is
     # appended after the skin and the whole outline shows on top.
     behind: true
-    at: [-17.46, 42.46]
+    at: [-13.41, 42.46]
     size: [120.02, 21.59]
     accepts: [dell/pcie-filler-fh-14g@1, std/pcie-bracket-fh@1]
     default: dell/pcie-filler-fh-14g@1

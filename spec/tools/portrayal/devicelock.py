@@ -127,7 +127,63 @@ def _bay_accepts(doc):
     return out
 
 
-def buckets(doc):
+def component_versions(library: pathlib.Path):
+    """Every component's declared version, keyed the way a ref names it.
+
+    `common/rj45-port@4` addresses a MAJOR, and the file under v4 says which
+    minor is actually there. That indirection is the whole point of the ref -
+    and the whole reason a device could change appearance without its lock
+    moving.
+    """
+    out = {}
+    root = library / "components"
+    if not root.is_dir():
+        return out
+    for ct in root.glob("*/*/v*/contract.yaml"):
+        try:
+            doc = yaml.safe_load(ct.read_text()) or {}
+        except Exception:
+            continue
+        vendor, name, major = ct.parts[-4], ct.parts[-3], ct.parts[-2]
+        out[f"{vendor}/{name}@{major[1:]}"] = str(doc.get("version") or "")
+        out.setdefault(f"{vendor}/{name}", {})[major] = doc.get("parts") or []
+    return out
+
+
+def _composed(doc, versions):
+    """What this device draws that it does not itself contain, and at which
+    version.
+
+    THE LOCK FINGERPRINTS THE DEVICE FILE, so a device could be redrawn by an
+    edit somewhere else entirely and report no change at all. That is not
+    hypothetical: common/rj45-port went 4.2.0 -> 4.6.0, which altered how nine
+    devices draw their management ports, and devicelock re-locked none of them.
+    The guard against a device changing without saying so did not extend to a
+    device changing because something it composes did.
+    Resolved TRANSITIVELY - a card composes a jack which composes a cage - so a
+    change three levels down still reaches the device that shows it.
+    """
+    seen, todo = {}, []
+    for view in (doc.get("views") or {}).values():
+        for kind in ("bays", "placements"):
+            for item in (((view or {}).get("components") or {}).get(kind) or []):
+                for ref in ([item.get("ref"), item.get("default")]
+                            + list(item.get("accepts") or [])):
+                    if ref:
+                        todo.append(ref)
+    while todo:
+        ref = todo.pop()
+        if ref in seen:
+            continue
+        seen[ref] = versions.get(ref, "?")
+        base, _, major = ref.partition("@")
+        for part in (versions.get(base) or {}).get(f"v{major}", []):
+            if part.get("ref"):
+                todo.append(part["ref"])
+    return dict(sorted(seen.items()))
+
+
+def buckets(doc, versions=None):
     """The four things a device change can be, hashed apart.
 
     `shape` is the breaking surface: chassis dimensions, view sizes, and the
@@ -189,10 +245,14 @@ def buckets(doc):
             "configurations": doc.get("configurations"),
         }),
         "gaps": _digest(doc.get("gaps") or []),
+        # WHAT THIS DEVICE DRAWS THAT LIVES SOMEWHERE ELSE. Hashed apart from
+        # `surface` because it is not this file's content at all - nothing in
+        # the device changed, the thing it composes did.
+        "composed": _digest(_composed(doc, versions or {})),
     }
 
 
-def entry(doc):
+def entry(doc, versions=None):
     # The three NAME SETS are recorded separately, not only hashed, because
     # `required_bump` has to tell an addition from a removal and a hash cannot.
     # Adding a `base` configuration moves the `names` hash while every id stays
@@ -203,8 +263,11 @@ def entry(doc):
          "groups": sorted((doc.get("groups") or {}).keys()),
          "configs": sorted((doc.get("configurations") or {}).keys()),
          "placement-groups": _placement_groups(doc),
-         "bay-accepts": _bay_accepts(doc)}
-    e.update(buckets(doc))
+         "bay-accepts": _bay_accepts(doc),
+         # RECORDED AND NOT ONLY HASHED, so a finding can name the part that
+         # moved. A digest can say something changed; it cannot say what.
+         "composed-refs": _composed(doc, versions or {})}
+    e.update(buckets(doc, versions))
     return e
 
 
@@ -219,8 +282,16 @@ def required_bump(old, new):
     if old is None:
         return None
     if old.get("shape") == new["shape"] and old.get("names") == new["names"]:
+        # A COMPOSED CHANGE IS A PATCH. The device's own geometry and ids are
+        # untouched; a part it draws was redrawn, so anything holding a
+        # coordinate is still right and anything holding a picture is not.
+        # `"composed" in old` guards the migration: a lock written before this
+        # field existed must not report every device in the library at once.
+        composed_moved = ("composed" in old
+                          and old["composed"] != new["composed"])
         return "patch" if old.get("surface") != new["surface"] or \
-                          old.get("gaps") != new["gaps"] else None
+                          old.get("gaps") != new["gaps"] or composed_moved \
+            else None
     # ANYTHING REMOVED IS BREAKING, whichever set it left: an id, a group or a
     # configuration name can each be held by something outside this repository.
     for key in ("ids", "groups", "configs"):
@@ -364,10 +435,11 @@ def check(library: pathlib.Path):
     lock = load_lock(library)
     known = lock.get("devices") or {}
     findings = []
+    versions = component_versions(library)
     for path in device_files(library):
         name = slug(path, library)
         doc = yaml.safe_load(path.read_text()) or {}
-        now = entry(doc)
+        now = entry(doc, versions)
         was = known.get(name)
         if was is None:
             findings.append((name, "unlocked",
@@ -390,6 +462,18 @@ def check(library: pathlib.Path):
                 what.append("surface (silkscreen, decor, provenance, attrs, portfolio)")
             if was.get("gaps") != now["gaps"]:
                 what.append("gaps")
+            # NAME THE COMPOSED CHANGE. The one bucket whose cause is not in
+            # this file is the one that most needs saying out loud - without
+            # this the report is "changed ()" and the reader has nowhere to go.
+            if "composed" in was and was["composed"] != now["composed"]:
+                before = was.get("composed-refs") or {}
+                after = now.get("composed-refs") or {}
+                moved = [f"{r} {before[r]} -> {after[r]}" for r in sorted(after)
+                         if r in before and before[r] != after[r]]
+                moved += [f"{r} added" for r in sorted(set(after) - set(before))]
+                moved += [f"{r} gone" for r in sorted(set(before) - set(after))]
+                what.append("a composed component"
+                            + (f" ({'; '.join(moved[:3])})" if moved else ""))
             gone = sorted(set(was.get("ids") or []) - set(now["ids"]))
             added = sorted(set(now["ids"]) - set(was.get("ids") or []))
             detail = ""
@@ -423,6 +507,7 @@ def check(library: pathlib.Path):
 
 
 def update(library: pathlib.Path):
+    versions = component_versions(library)
     lock = load_lock(library)
     lock["format"] = FORMAT
     devices = lock.setdefault("devices", {})
@@ -430,7 +515,7 @@ def update(library: pathlib.Path):
     for path in device_files(library):
         name = slug(path, library)
         doc = yaml.safe_load(path.read_text()) or {}
-        now = entry(doc)
+        now = entry(doc, versions)
         if devices.get(name) != now:
             changed.append(name)
         devices[name] = now

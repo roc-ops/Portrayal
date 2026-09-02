@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="86.3mm" height="39.1mm" viewBox="0 0 86.3 39.1">
+  <!-- 2400 W AC supply, 14G PowerEdge. THE SAME CASTING AS THE 1100 W EXCEPT
+       FOR THE INLET, which is a C20 rather than a C14 because this supply
+       draws 16 A and a C14 is a 10 A connector. The operator's photographs of
+       the unit show the layout is otherwise identical - orange release lever
+       at the left, inlet, latch bar, octagonal fan with the green EPP label -
+       which is why this is the 1100 W drawing with one part swapped.
+       THE INLET'S PLACEMENT IS PROVISIONAL. No front-on figure or photograph
+       of this supply is held at a measurable scale; the C20's opening is
+       centred where the C14's was, at (20.10, 19.55), and the bezel is thinner
+       on its right to clear the latch bar at 33.04. Every other feature is the
+       1100 W's, measured off ISM figure 8. Re-place the inlet the moment a
+       face-on shot turns up - and nothing else here depends on it.
+       The rest, from the 1100 W: re-read off ISM figure 8 at 2.5991
+       px/mm. The FAN OPENING IS AN OCTAGON with a screw at each cut corner
+       and an X of spokes running in to the hub; it was a rounded rectangle
+       with a circle in it, which reads as a fan at a glance and as a
+       different part up close. The label was 9.14 left of where it sits -
+       three-eighths of an inch, called by eye before it was measured. -->
+  <!-- the body carries the same knockout as the bezel. `behind` puts a
+       composed part under the WHOLE skin, base plate included, so
+       without this hole the inlet is drawn and then painted over. -->
+  <path id="body" fill-rule="evenodd" d="M0.2 1.2 a1 1 0 0 1 1 -1 h83.90 a1 1 0 0 1 1 1 v36.70 a1 1 0 0 1 -1 1 h-83.90 a1 1 0 0 1 -1 -1 Z M7.9 3.35 h24.4 v32.4 h-24.4 Z" fill="#8d949c" stroke="#5f666d" stroke-width="0.4"/>
+  <!-- The inlet is std/c14-inlet@1, COMPOSED and not drawn - see the
+       contract. This is the BEZEL around it: a recess the coupler sits back
+       inside. Three earlier drafts drew the connector by hand and got it
+       wrong three different ways while the library already held the part. -->
+  <path id="inlet-bezel" fill-rule="evenodd" d="M6.7 3.35 a1.2 1.2 0 0 1 1.2 -1.2 h23.80 a1.2 1.2 0 0 1 1.2 1.2 v32.40 a1.2 1.2 0 0 1 -1.2 1.2 h-23.80 a1.2 1.2 0 0 1 -1.2 -1.2 Z M7.9 3.35 h24.4 v32.4 h-24.4 Z" fill="#1b1f22" stroke="#41474d" stroke-width="0.4"/>
+  <!-- THE RELEASE TAB IS A LEVER AND IT OVERLAPS THE INLET. It slides across
+       to lock the cord in, so only its rounded right-hand half shows and it
+       sits ON the bezel rather than beside it. It is also the indicator: the
+       ISM calls this "an illuminated translucent handle that serves as an
+       indicator", which is why it carries the LED colour variable. -->
+  <path id="lever" d="M7.47 12.99 h3.20 a2.6 2.6 0 0 1 2.6 2.6 v10.47 a2.6 2.6 0 0 1 -2.6 2.6 h-3.20 Z"
+        fill="var(--led-color, #e8a33d)" stroke="#9a6a1e" stroke-width="0.35"/>
+  <!-- THE SLOTS THE LEVER TRAVELS IN, straddling the tab above and below.
+       They are openings rather than paint: without them the orange reads as
+       a coloured tab instead of the top of a mechanism. -->
+  <rect id="latch-slot-top" x="0.4" y="12.5" width="4.3" height="2.8" rx="0.4" fill="#141719"/>
+  <rect id="latch-slot-bottom" x="0.4" y="26.3" width="4.3" height="2.8" rx="0.4" fill="#141719"/>
+  <!-- THE LEVER'S LEG, between the two slots. It is the same metal as the
+       face and so the same colour, which left the holes reading and the part
+       moving through them invisible. A faint outline is the whole of the fix. -->
+  <rect id="latch-leg" x="0.4" y="15.30" width="4.3" height="11.00" rx="0.4" fill="#9aa1a8" stroke="#7a8189" stroke-width="0.3"/>
+  <!-- the latch bar between the inlet and the fan -->
+  <rect id="grip" x="33.04" y="3.65" width="8.24" height="34.64" rx="1.2" fill="#c9ced3" stroke="#8b9299" stroke-width="0.35"/>
+  <!-- the fan opening: an octagon, four cut corners, four screws -->
+  <path id="fan" d="M51.63 1.80 H71.93 L80.53 10.40 V28.90 L72.63 36.80 H51.63 L43.03 28.20 V10.40 Z" fill="#141719" stroke="#41474d" stroke-width="0.4"/>
+  <g stroke="#2c3237" stroke-width="1.1" fill="none" stroke-linecap="round">
+    <path d="M48.19 6.96 L53.56 11.76 M75.37 6.96 L70.55 11.52 M75.79 32.06 L70.63 27.29 M48.19 31.64 L53.46 27.04"/>
+  </g>
+  <g><circle id="screw-1" cx="45.73" cy="3.50" r="3.1" fill="#c3c8cd" stroke="#8b9299" stroke-width="0.3"/><path d="M43.93 3.50 h3.6 M45.73 1.70 v3.6" stroke="#7b8288" stroke-width="0.55"/></g><g><circle id="screw-2" cx="78.33" cy="3.50" r="3.1" fill="#c3c8cd" stroke="#8b9299" stroke-width="0.3"/><path d="M76.53 3.50 h3.6 M78.33 1.70 v3.6" stroke="#7b8288" stroke-width="0.55"/></g><g><circle id="screw-3" cx="78.33" cy="35.10" r="3.1" fill="#c3c8cd" stroke="#8b9299" stroke-width="0.3"/><path d="M76.53 35.10 h3.6 M78.33 33.30 v3.6" stroke="#7b8288" stroke-width="0.55"/></g><g><circle id="screw-4" cx="45.73" cy="35.10" r="3.1" fill="#c3c8cd" stroke="#8b9299" stroke-width="0.3"/><path d="M43.93 35.10 h3.6 M45.73 33.30 v3.6" stroke="#7b8288" stroke-width="0.55"/></g>
+  <!-- the printed EPP label. The wordmark is Dell artwork and is not
+       reproduced; what is drawn is the green ground and the text bands. -->
+  <circle cx="62.16" cy="19.45" r="11.54" fill="#e8ebee" stroke="#9aa0a6" stroke-width="0.35"/>
+  <path d="M50.62 17.55 A11.54 11.54 0 0 1 73.70 17.55 Z" fill="#1f8b57"/>
+  <g id="silkscreen">
+  <text x="62.16" y="15.85" font-family="sans-serif" font-size="5.0" font-weight="bold" font-style="italic" fill="#eaf5ef" text-anchor="middle">EPP</text>
+  <text id="watts" x="62.16" y="23.45" font-family="sans-serif" font-size="6.2" font-weight="bold" fill="#22262a" text-anchor="middle">2400W</text>
+  <text x="62.16" y="26.65" font-family="sans-serif" font-size="2.0" fill="#6d747a" text-anchor="middle">94.3% efficiency</text>
+  </g>
+</svg>

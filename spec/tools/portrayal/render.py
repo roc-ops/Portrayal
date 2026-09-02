@@ -407,7 +407,45 @@ def rewrite_ids(el, prefix, contract, path_prefix, skip=None):
                     lambda m: f"url(#{renamed.get(m.group(1), m.group(1))})", val))
 
 
-def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None):
+def fill_from_attrs(root, attrs):
+    """Fill skin nodes marked `data-from` from this instance's merged attrs.
+
+    A node carries the value it should show when nothing says otherwise, so the
+    skin remains a valid standalone drawing; an attr replaces it. This is the
+    same bargain `var(--led-color, #2c3a30)` makes for colour, moved to text.
+
+    ABSENT LEAVES THE DEFAULT; EMPTY DELETES. An attr nobody mentioned must not
+    blank a label - a part dropped into a bay with no attrs at all still has to
+    draw - so only an explicit empty string removes anything. When it does, the
+    node goes, and so does the nearest run of ancestors marked
+    `data-hide-when-empty`: an SSD has no rotational speed AND no spindle glyph
+    beside it, and deleting the text alone would leave the glyph pointing at
+    nothing.
+    """
+    parents = {c: p for p in root.iter() for c in p}
+    for node in list(root.iter()):
+        key = node.get("data-from")
+        if key is None:
+            continue
+        if key not in attrs:
+            continue
+        val = "" if attrs[key] is None else str(attrs[key]).strip()
+        if val:
+            node.text = val
+            continue
+        target = node
+        while True:
+            p = parents.get(target)
+            if p is not None and p.get("data-hide-when-empty") is not None:
+                target = p
+                continue
+            break
+        p = parents.get(target)
+        if p is not None:
+            p.remove(target)
+
+
+def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None):
     contract, skins = lib.resolve(ref)
     comp_name = ref.split("/")[-1].split("@")[0]
     if skin_overrides and comp_name in skin_overrides:
@@ -427,6 +465,19 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                 style = state_style(st, vocabulary)
                 if style:
                     palette[(comp, st["name"])] = style
+        # AND THE STATES A COMPOSER PUTS ON A COMPOSED PART. A component that
+        # draws nothing itself still names meanings: dell/rj45-port-14g has no
+        # skin and no elements, and exists only to attach ISM table 11 to
+        # common/rj45-port@4 through a `states` override on `parts:`. Harvesting
+        # `elements` alone let those names reach `data-states` and never reach
+        # the stylesheet, so setting one selected a class no rule matched and
+        # the lamp did not light.
+        for part in contract.get("parts") or []:
+            for sts in (part.get("states") or {}).values():
+                for st in sts or []:
+                    style = state_style(st, vocabulary)
+                    if style:
+                        palette[(comp, st["name"])] = style
     skin_file = skins / f"{skin_name}.svg"
     if not skin_file.exists():
         # A COMPONENT NEED NOT HAVE A SKIN CALLED `default`, and one deliberately
@@ -518,6 +569,17 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         tf = f"translate({at[0]},{at[1]})"
         if rotate:
             tf += f" rotate({rotate} {cw / 2} {chh / 2})"
+    # MIRRORED LAST, so it flips the component about its OWN vertical centre
+    # line and leaves the box exactly where `at` and `rotate` put it. Written
+    # as a translate-then-negate rather than scale(-1,1) about a computed
+    # centre, because the second form has to know where the centre ended up
+    # and this one does not.
+    # HANDEDNESS IS NOT ROTATION. rotate: 180 is the flip this vocabulary could
+    # already express and it is the wrong one for a PCIe bracket: it turns the
+    # louvre row to the top and the retention tab to the bottom. A riser whose
+    # cards face the other way needs the reflection, not the half-turn.
+    if mirror:
+        tf += f" translate({cw:g},0) scale(-1,1)"
     g.set("transform", tf)
     title = ET.SubElement(g, f"{{{SVG_NS}}}title")
     title.text = label or inst_id
@@ -527,6 +589,10 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     for child in list(skin):
         holder.append(copy.deepcopy(child))
     rewrite_ids(holder, inst_id, contract, path, skip=holder)
+    # TEXT FROM ATTRS, so one carrier covers a catalogue instead of a file per
+    # row. `merged` is the contract's attrs under the placement's, which is
+    # already the precedence every other attr consumer uses.
+    fill_from_attrs(holder, merged)
     for child in list(holder):
         g.append(child)
     for feat in (contract.get("relief") or {}).get("features") or []:
@@ -556,9 +622,20 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         pg, _ = instance_group(lib, part["ref"], f"{inst_id}--{part['id']}",
                                part["at"], None, part.get("attrs"), None, None,
                                skin_name=part.get("skin", "default"),
-                               rotate=part.get("rotate"), palette=palette,
+                               rotate=part.get("rotate"), mirror=bool(part.get("mirror")),
+                               palette=palette,
+                               inst_palette=inst_palette,
                                skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                                path=f"{path}/{part['id']}", resolved=resolved)
+        # WHAT A COMPOSED LAMP MEANS IS THE COMPOSER'S TO SAY. A component
+        # declares what a lamp IS and can only guess what it MEANS - the same
+        # reasoning apply_states already carries for device placements, and the
+        # same need one level down: a card composing a generic jack has an
+        # indicator table for it and had no way to attach one. Without this the
+        # only route was a wrapper that redraws the lamps over the ones it
+        # composes, which is two nodes for one indicator.
+        if part.get("states"):
+            apply_states(pg, part["states"], inst_palette)
         # a part on a protruding parent recesses from THAT surface, not the panel
         if part.get("lift"):
             pg.set("data-z-lift", str(part["lift"]))
@@ -652,7 +729,9 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
             b_at = [b_at[0] + d, b_at[1] - d]
         sub, _ = instance_group(
             lib, occupant, f"{inst_id}--{bay_id}--module", b_at,
-            None, None, None, None, rotate=bay.get("rotate"), palette=palette,
+            None, None, None, None, rotate=bay.get("rotate"),
+            mirror=bool(bay.get("mirror")), palette=palette,
+            inst_palette=inst_palette,
             skin_overrides=skin_overrides, attr_overrides=attr_overrides,
             path=f"{path}/{bay_id}/module", resolved=resolved, depth=depth + 1)
         # BEHIND THE FACEPLATE, NOT ON IT. Appending is right for a drive in a
@@ -1235,6 +1314,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                                      p.get("group"), p.get("rel-pos"),
                                      skin_name=p.get("skin", "default"),
                                      rotate=p.get("rotate"), palette=palette,
+                                     inst_palette=inst_palette,
                                      skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                                      resolved=resolved)
         # WHAT THE BLOCK IS FOR travels with every member, because the consumer
@@ -1360,6 +1440,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             g, contract = instance_group(lib, default, f"{b['id']}--module", b["at"],
                                          None, None, None, None,
                                          rotate=b.get("rotate"), palette=palette,
+                                         inst_palette=inst_palette,
                                          centre=bay_centre,
                                          skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                                          path=f"{b['id']}/module", resolved=resolved)
@@ -1505,6 +1586,28 @@ def is_stale(device, device_yaml, lib, configs, default_cfg, outdir):
     return newest_in >= oldest_out
 
 
+
+def resolve_views(device, cfg):
+    """{face: (view-name, view)} for one configuration.
+
+    A view carrying `face:` is a VARIANT and appears only when bound, because
+    rendering it unbound would emit `<device>.<config>.front-12-lff.svg` - a
+    file named after a panel rather than a face, which no consumer asks for.
+    Everything else keeps its own name, so a device with no bindings behaves
+    exactly as it did before this existed.
+    """
+    views = device.get("views") or {}
+    out = {}
+    for face, vname in ((cfg or {}).get("views") or {}).items():
+        if vname in views:
+            out[face] = (vname, views[vname] or {})
+    for vname, v in views.items():
+        if (v or {}).get("face"):
+            continue
+        out.setdefault(vname, (vname, v or {}))
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("device_yaml")
@@ -1537,7 +1640,9 @@ def main():
         return
 
     for cfg_name, cfg in configs.items():
-        for view_name, view in device["views"].items():
+        # THE FACE IS THE NAME, whichever panel this configuration binds to it.
+        # A consumer asks for `front` and gets this configuration's front.
+        for view_name, (_src, view) in resolve_views(device, cfg).items():
             svg = render_view(device, view_name, view or {}, lib, include=tuple(args.include),
                               silkscreen=("silkscreen" not in args.without),
                               config_name=cfg_name, config=cfg)

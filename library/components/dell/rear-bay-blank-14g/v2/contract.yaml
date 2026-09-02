@@ -1,0 +1,58 @@
+format: 1
+kind: module
+name: rear-bay-blank-14g
+version: 2.0.0
+class: mechanical
+behaviour: fills
+profile: server
+description: >-
+  The perforated blank over one empty rear storage bay on a 14th-generation
+  PowerEdge - fitted where a riser configuration allows rear drives and none
+  are ordered, and over a blanked riser 3
+size: {w: 135.19, h: 39.5, d: 12.0}
+provenance:
+  what-it-closes: >-
+    ISM table 25 names three riser configurations "with or without rear storage"
+    - 0, 1 and 2. This is the WITHOUT: the bay is there, the riser 2 that would
+    have blocked it is the one-slot low-profile kind, and no drives were
+    ordered. The opening gets a vented panel rather than being left as a hole.
+  v1-SIZED-THE-PANEL-TO-THE-HOLES: >-
+    THE ERROR THIS VERSION FIXES, and it was one reading doing two jobs. The
+    perforation scan returned face 153.2..268.0 for bay 2; that is the extent of
+    the HOLES. v1 used it as the PANEL size and then inset the holes 4.2 inside
+    it, so the drawn field came out 8.7 mm narrower than the measurement it came
+    from, and the panel came out 20 mm narrower than the bay. Chassis vents,
+    rivets and a locating hole showed to the right of it in every render.
+    Panel and field are separate things here and are sourced separately.
+  size: >-
+    measured, from dell/rear-bay-frame-14g@2's own path rather than from the
+    photograph. The divider is local 135.19..152.00 in a 287.18-wide frame, so
+    the bay either side of it is 135.19 and 135.18 - THE SAME SIZE TO A
+    HUNDREDTH OF A MILLIMETRE, which is what makes the reading trustworthy.
+    Height 39.50 from the same path: the top rail's lower edge at local 1.19 and
+    the bottom rail's upper edge at 40.69, face 2.90 to 42.40.
+    CONFIRMED INDEPENDENTLY BY THE OPERATOR'S HAND EDIT, which dragged both
+    panels out to the divider and the frame edges in Inkscape. That drag put the
+    bottom at 42.41 against the 42.40 derived here - a hundredth of a millimetre
+    from a number it took no part in choosing - and the gap it left between the
+    two panels centres on 288.32 against the divider thumbscrew's 288.34.
+  the-hole-field-is-centred-and-that-is-checkable: >-
+    photo-measured. Four margins between panel edge and first hole - two per
+    panel - read 8.94, 11.45, 10.94 and 8.44, mean 9.94 with a 3.01 spread. The
+    field is centred, 115.31 wide, and the spread is the honest error bar on a
+    220% upscale.
+  the-row-pitch-is-measured-the-column-pitch-is-fitted: >-
+    Rows: MEASURED. Six bands start at face y 5.50, 11.00, 16.50, 22.00, 27.50
+    and 33.00 - a 5.5 pitch with no scatter - and 5 x 5.5 + 4.0 = 31.5
+    reproduces the measured field height exactly.
+    Columns: A FAILED MEASUREMENT, recorded as failed. Counting dark runs along
+    a hole band returns 24 in bay 2 and 22 in bay 3, pitch sd 1.37 on a mean of
+    5.7, with runs found outside the field. The count stays at 24 from the
+    original read; the pitch is FITTED as (field - hole) / 23 = 4.8657. Nobody
+    should take that figure off this file as though a caliper produced it.
+  depth: >-
+    estimated - 12.0. Nothing dimensions it; a blanking panel sits roughly where
+    the drive faces would, and that is the reasoning rather than a reading.
+elements:
+  perforations: {at: [9.94, 2.6], size: [115.31, 31.5], class: vent}
+skins: [default]

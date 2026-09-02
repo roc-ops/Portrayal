@@ -292,6 +292,34 @@ def scoped(items, cfg_name):
     return out
 
 
+def views_for(dev, cfg_name):
+    """The views one configuration actually wears.
+
+    A view carrying `face:` is a VARIANT and belongs only to configurations that
+    bind it through `configurations.<name>.views`. Walking every view instead
+    put `front-lff-12`'s twelve LFF bays into the 24-bay `base` device type -
+    the bays carry no `only-in`, because the binding is what scopes them, so
+    `scoped()` had nothing to filter on.
+
+    Same rule as render.resolve_views. A device with no bindings is unaffected.
+    """
+    views = dev.get("views") or {}
+    cfg = ((dev.get("configurations") or {}).get(cfg_name) or {})
+    # A BOUND VARIANT REPLACES THE DEFAULT VIEW FOR ITS FACE - it does not join
+    # it. Merely adding gave `lff-12` twelve LFF bays AND the twenty-four SFF
+    # ones, which is a front this chassis cannot be built with. render.py keys
+    # `resolve_views` by FACE for exactly this reason, so the view named after
+    # the face drops out when something is bound to it.
+    bound = {face: n for face, n in (cfg.get("views") or {}).items()
+             if n in views}
+    out = [views[n] for n in bound.values()]
+    for n, v in views.items():
+        if (v or {}).get("face") or n in bound:
+            continue
+        out.append(v)
+    return out
+
+
 def bay_signature(dev, cfg_name):
     """Which bays this configuration renders, as a comparable key.
 
@@ -302,7 +330,7 @@ def bay_signature(dev, cfg_name):
     module bays that are not on it.
     """
     ids = []
-    for view in (dev.get("views") or {}).values():
+    for view in views_for(dev, cfg_name):
         for b in scoped(view_parts(view)["bays"], cfg_name):
             ids.append(str(b.get("id") or ""))
     return tuple(sorted(ids))
@@ -389,7 +417,7 @@ def build(dev, cfg_name, cfg, profile, dist=None, frus=None, label=None):
         return {**(g.get("attrs") or {}), **(p.get("attrs") or {})}
 
     console, mgmt_rj, mgmt_sfp, bays = [], [], [], []
-    for view in (dev.get("views") or {}).values():
+    for view in views_for(dev, cfg_name):
         parts = view_parts(view)
         for p in scoped(parts["placements"], cfg_name):
             a = attrs_of(p)
@@ -421,7 +449,7 @@ def build(dev, cfg_name, cfg, profile, dist=None, frus=None, label=None):
 
     ifaces = mgmt_rj + sorted(mgmt_sfp, key=lambda i: i["name"])
     ports = []
-    for view in (dev.get("views") or {}).values():
+    for view in views_for(dev, cfg_name):
         for p in scoped(view_parts(view)["placements"], cfg_name):
             if not p["id"].startswith("port-"):
                 continue
