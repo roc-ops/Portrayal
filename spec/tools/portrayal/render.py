@@ -1662,7 +1662,18 @@ def main():
     cap = capability.report(Path(args.device_yaml), device, args.library, SCHEMAS)
     cfg_index = {"device": device["name"], "model": device.get("model", ""),
                  "capability": cap["capability"], "gaps": cap["gaps"],
-                 "views": list(device["views"].keys()),
+                 # FACES ONLY. A view carrying `face:` is a VARIANT - the
+                 # 12 x 3.5in front is drawn when a configuration redirects the
+                 # front to it, never on its own - and listing it here offered
+                 # `front-lff-12` in the viewer as a seventh face beside front,
+                 # rear, top, bottom, left and right. There is no such face and
+                 # no file named for one: a bound variant renders as
+                 # `<device>.<config>.front.svg`, under the face it replaces.
+                 # `bays` below still keys every view including the variants,
+                 # because a viewer holding a configuration that binds one has
+                 # to know what that view holds.
+                 "views": [v for v, w in device["views"].items()
+                           if not (w or {}).get("face")],
                  "chassis": {"w": ch.get("width"), "h": ch.get("height"), "d": ch.get("depth"),
                              "ru": ch.get("ru")},
                  # facts about the device that belong to no view. They reach the

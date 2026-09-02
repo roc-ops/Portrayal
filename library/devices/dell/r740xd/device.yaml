@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 11.0.0
+version: 11.0.1
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -1679,6 +1679,12 @@ configurations:
       riser-3: dell/riser-3a-14g@1
   sff24-rc5-1b2a3a:
     kind: orderable
+    # WHAT THE VIEWER OPENS WITH, and it needs saying now that `base` is gone.
+    # Without it the default fell to whichever name sorted first, which was
+    # lff12-rc0-noriser - a machine with no risers at all, and the least
+    # representative of the forty. This is the one `base` used to draw: the
+    # 24-bay chassis with all three risers and no rear storage.
+    default: true
     description: >-
       24-drive, riser configuration 5 (1B+2A+3A). Front 24 x 2.5in at slots
       0-23; no rear storage. Requires two processors.

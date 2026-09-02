@@ -131,9 +131,15 @@ def test_a_variant_view_resolves_to_the_configurations_that_select_it():
     front - the whole point of the change that added it - went unchecked."""
     d = _r740xd()
     got = {f.name for f in rendered_as(d, "front-lff-12", d["views"]["front-lff-12"])}
-    assert got == {"r740xd.lff-12.front.svg",
-                   "r740xd.lff-12-rear-2-lff.front.svg",
-                   "r740xd.full-12.front.svg"}, got
+    # THE PROPERTY, NOT THE ROLL-CALL. This asserted three configuration names
+    # and broke the moment the device was renamed onto Dell's own scheme - a
+    # test measuring the spelling of its fixture rather than the resolver. What
+    # has to hold is that the variant resolves to EXACTLY the configurations
+    # that bind it, whatever those are called and however many there are.
+    bound = {n for n, c in d["configurations"].items()
+             if (c.get("views") or {}).get("front") == "front-lff-12"}
+    assert bound, "no configuration binds the variant - the fixture changed"
+    assert got == {f"r740xd.{n}.front.svg" for n in bound}, got
 
 
 def test_a_base_face_does_not_sweep_up_its_own_variants():
@@ -142,8 +148,12 @@ def test_a_base_face_does_not_sweep_up_its_own_variants():
     happen to be 482.6 x 86.8 today, so it passed for the wrong reason."""
     d = _r740xd()
     got = {f.name for f in rendered_as(d, "front", d["views"]["front"])}
-    assert "r740xd.lff-12.front.svg" not in got
-    assert "r740xd.front.svg" in got and "r740xd.base.front.svg" in got
+    bound = {n for n, c in d["configurations"].items()
+             if (c.get("views") or {}).get("front") == "front-lff-12"}
+    assert not (got & {f"r740xd.{n}.front.svg" for n in bound}), got
+    # the unconfigured drawing belongs to the base face and is always present
+    assert "r740xd.front.svg" in got
+    assert got, "the base front resolved to nothing at all"
 
 
 def test_every_rendered_file_is_claimed_by_exactly_one_view():
