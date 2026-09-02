@@ -441,6 +441,9 @@ export function createViewer(container, opts = {}) {
     const faceCv = {};
     const faceSvg = {};   // source text per face, for adaptive re-rasterisation
     const facePunch = {}; // apertures cleared from each face, replayed on refinement
+    // The size each face's DRAWING declares, which is not always the plane's.
+    // A rack face with integral ears is wider than the body behind it.
+    const faceMM = {};
     lodPaused = performance.now() + 500;   // no refinement while the build is in flight
     _punchCache.clear();
     // Relief is built in LOCAL face coordinates (x right, y up, z out of the face,
@@ -468,6 +471,7 @@ export function createViewer(container, opts = {}) {
     for (const F of FACES) {
       const before = meshes.length;
       await buildFaceRelief(F, {src: F.url || f(F.view), faceCv, faceSvg, facePunch,
+                                faceMM,
                                 meshes, FRU_GROUPS, FRU_META, BODY_META, D, deep: F.deep(),
                                 bodyBoxMesh,
                                 restyle: RESTYLE, scope: SCOPE});
@@ -542,6 +546,36 @@ export function createViewer(container, opts = {}) {
         new THREE.BoxGeometry(fp.size[0], fp.size[1], D - 1.2), bodyMats);
       bodyBox.position.set(fp.at[0] + fp.size[0] / 2 - W / 2,
                            H / 2 - (fp.at[1] + fp.size[1] / 2), -0.6);
+      scene.add(box);
+      box.userData.bodyBox = bodyBox;
+      scene.add(bodyBox);
+    } else if (faceMM.front && faceMM.front[0] > W + 0.5) {
+      // A RACK FACE IS WIDER THAN THE BODY IT BOLTS TO. Dell builds the mounting
+      // flanges into the R740xd's faceplate and puts the VGA, the power button
+      // and the health lamp in them, so the front drawing is 482.6 mm over a
+      // 434 mm chassis - both numbers right, and lint and the grader accept the
+      // pair. Textured onto a 434-wide box face the artwork squashed and the
+      // ear's ports hung in mid-air off the end.
+      // So the face gets a plate of its own width and the body box sits behind
+      // it - the same construction the component branch above uses for
+      // `body.plate` over `body.footprint`, which is the same shape at another
+      // scale.
+      // THE FOLD LINES ARE NOT GUESSED. The ear span is measured nowhere, and
+      // splitting the 48.6 mm difference would be assuming the answer, so this
+      // draws ONE plate the width of the drawing and lets the drawing paint its
+      // own ears onto it. True whatever the split.
+      const [fwmm, fhmm] = faceMM.front;
+      const PLATE = 2;
+      // the same default the component branch uses; configs.json carries the
+      // chassis box but not its colour
+      const plain = new THREE.MeshLambertMaterial({color: '#3a3f44'});
+      const plateMats = mats.map((m, i) => i === 4 ? m : plain);
+      box = new THREE.Mesh(new THREE.BoxGeometry(fwmm, fhmm, PLATE), plateMats);
+      box.position.set(0, 0, D / 2 - PLATE / 2);
+      const bodyMats = mats.map((m, i) => i === 4 ? plain : m);
+      const bodyBox = new THREE.Mesh(
+        new THREE.BoxGeometry(W, H, D - PLATE), bodyMats);
+      bodyBox.position.set(0, 0, -PLATE / 2);
       scene.add(box);
       box.userData.bodyBox = bodyBox;
       scene.add(bodyBox);

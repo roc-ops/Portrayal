@@ -564,7 +564,9 @@ export async function buildFaceRelief(F, ctx) {
     // question that cannot miss one of the three.
     const restyle = ctx.restyle || [];
     const reg = (svgText, run) => { if (svgText) restyle.push({svgText, run}); };
-    const fw = F.fw(), fh = F.fh();
+    // `let`, because the drawing may state a different size below and a face
+    // is drawn at its own size rather than at its plane's.
+    let fw = F.fw(), fh = F.fh();
     // A device need not declare every view; fall back to a plain face. Asked
     // through svgSource so the answer is cached: when the view DOES exist this
     // is the same fetch extractRelief is about to want, and when it does not the
@@ -579,6 +581,20 @@ export async function buildFaceRelief(F, ctx) {
     }
     const {cavities, outs, domes, vents, frus, cleanText} = await extractRelief(src, ctx.scope);
     const faceText = squareFaceplate(cleanText);
+    // THE DRAWING'S OWN SIZE WINS, because the face is not obliged to match the
+    // plane it sits on. The R740xd's front is the 482.6 mm rack face - Dell
+    // builds the flanges into the faceplate and puts the VGA, the power button
+    // and the health lamp in them - over a 434 mm body. Taking fw from the
+    // chassis squashed the artwork by 10% AND placed every feature against the
+    // wrong centre, which threw the ear's ports 36 mm off the end of the box.
+    // For every other face in the library the two numbers are already equal, so
+    // this changes nothing that was right.
+    const vb = /viewBox\s*=\s*"\s*[-\d.eE+]+\s+[-\d.eE+]+\s+([\d.eE+-]+)\s+([\d.eE+-]+)/.exec(faceText);
+    if (vb) {
+      const dw = parseFloat(vb[1]), dh = parseFloat(vb[2]);
+      if (dw > 0 && dh > 0) { fw = dw; fh = dh; }
+    }
+    if (ctx.faceMM) ctx.faceMM[F.view] = [fw, fh];
     const cv = await rasterize(faceText, fw, fh, PX, !!F.flipLX, !!F.flipLY);
     faceCv[F.view] = cv;
     faceSvg[F.view] = faceText;   // LOD re-rasterises from this; keep it squared
