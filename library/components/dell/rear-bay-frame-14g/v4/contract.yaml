@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: rear-bay-frame-14g
-version: 4.2.0
+version: 4.2.1
 class: mechanical
 profile: compute
 description: >-
@@ -9,6 +9,16 @@ description: >-
   screw tabs, vent panels and the T-shaped land, present whatever the bays hold
 size: {w: 294.12, h: 42.98}
 provenance:
+  the-element-box-is-the-thing-that-extrudes: >-
+    RECORDED BECAUSE THE BRIDGE FIX LOOKED LIKE IT HAD NOT LANDED. When the
+    outline grew from 287.18 to 294.12 to carry the left-hand bridge, the
+    contract `size`, the skin `viewBox` and every path coordinate moved, and the
+    `elements.frame` box did not. That box is what `relief.features[].node:
+    frame` extrudes, so the part drew 294.12 of art over a 287.18 solid: the
+    right-hand 6.94 - the far tab - kept its ink but lost its depth, and read as
+    a fresh step in the metal at the other end from the one just closed.
+    A relief feature names an ELEMENT, not the outline. Widening a part means
+    widening both, and nothing warns when only one moves.
   the-left-edge-carries-an-estimated-bridge: >-
     6.94 mm was added to the LEFT of this outline, filled in the frame's own
     metal, to close a gap that read as a hole through to the panel between this
@@ -318,5 +328,5 @@ relief:
       for the whole outline, which the depth key records as an approximation
       because the screw shelf sits 6 mm below it.
 elements:
-  frame: {at: [0.0, 0.0], size: [287.18, 42.98], class: bezel}
+  frame: {at: [0.0, 0.0], size: [294.12, 42.98], class: bezel}
 skins: [default]
