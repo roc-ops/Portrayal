@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: mid-drive-tray-14g
-version: 1.0.0
+version: 1.1.0
 class: mechanical
 profile: server
 description: >-
@@ -35,14 +35,20 @@ provenance:
     the 2.5 inch drives are drawn CENTRED IN THE 106.30 SLOTS the 3.5 inch
     drives establish - within 2 mm of where the model puts them, and evenly.
     The CAD figures are recorded here so the regularisation can be argued with.
-  the-drives-are-drawn-and-not-seated: >-
-    A LIMITATION, STATED RATHER THAN HIDDEN. std/drive-35@1 and std/drive-25@1
-    are FACE parts: their w x h is what a front panel shows, 101.6 x 26.1 and
-    15.0 x 69.85. A tray seen from above needs the drive's FOOTPRINT instead -
-    101.60 x 146.99 and 69.85 x 100.50 - which is a different projection of the
-    same hardware and not something a placement can ask for. So the drives are
-    artwork on this tray rather than occupants of four bays, and no
-    configuration can swap one for a blank. See the device's gap.
+  the-drives-are-seated-and-were-not: >-
+    THEY WERE ARTWORK ON THIS PART AND ARE NOW BAYS ON THE DEVICE. The reason
+    they could not be seated is worth keeping, because the fix is not the one
+    the first attempt reached for: a component's `size` is what a FACE shows,
+    so std/drive-35@1 is 101.6 x 26.1 and a tray seen from above needs the
+    101.60 x 146.99 footprint instead - a different projection of one piece of
+    hardware.
+    A SKIN CANNOT EXPRESS THAT, because `elements` is one block shared by every
+    skin and `relief.features` name nodes in it. The library's grain is one
+    contract per presented face, so the drives are std/drive-35-plan@1 and
+    std/drive-25-plan@1 - separate contracts that `conforms:` to the SAME
+    registry entries as the face-on ones, with `presents:` saying which two of
+    each standard's three dimensions they draw. No number is restated and none
+    can drift.
   the-backplane: >-
     measured - `740XD_ MidDriveTray_ Backplane-1.001`, face x 4.80..429.20 and
     top_y 484.51..509.28, so 424.40 x 24.77 across the rear of the tray. Drawn

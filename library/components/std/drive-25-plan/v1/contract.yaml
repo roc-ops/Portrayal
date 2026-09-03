@@ -1,0 +1,43 @@
+format: 1
+kind: component
+name: drive-25-plan
+version: 1.0.0
+class: drive
+conforms: drive-25
+presents: hd
+profile: server
+description: >-
+  A 2.5 inch drive lying flat, seen from above - the same body std/drive-25@1
+  draws standing on edge, in the projection a mid-bay presents
+size: {w: 69.85, h: 100.45, d: 15.0}
+provenance:
+  size: >-
+    registry - spec/schemas/standards.yaml `drive-25`, the same entry
+    std/drive-25@1 conforms to. `presents: hd` says these are the standard's
+    h and depth, leaving its w - the 15.0 thickness - as this contract's own
+    depth. Nothing is restated: change SFF-8201 in the registry and both files
+    move, or both fail.
+  the-registry-draws-it-on-edge-and-this-bay-does-not: >-
+    THE STANDARD FIXES AN ORIENTATION AND A BAY IS FREE TO DISAGREE. The
+    registry's own description says drive-35 is drawn lying flat "where drive-25
+    is drawn standing on edge", which is right for the front of this machine -
+    24 of them on edge across a 2U face. The mid tray lays the same drive flat,
+    so what a view from above shows is the standard's h x depth rather than its
+    w x depth.
+    That is exactly why L9 checks the pair as a SET and not in order: which way
+    round a part is turned belongs to the placement. What must not drift are the
+    values, and they cannot.
+  the-length-the-tray-measures-is-100-50: >-
+    Dell's service model gives the drives in `740XD_ MidDriveTray_ 2.5 HDD-5.002`
+    as 69.85 x 100.50 x 15.00. The registry's SFF-8201 depth is 100.45. The 0.05
+    is inside L9's tolerance and inside what the model resolves; the registry
+    figure is used because it is the anchored one.
+  the-face-is-plain-and-that-is-honest: >-
+    estimated - a lid, a label panel and the connector end, drawn so the part
+    reads as a drive rather than a plain rectangle. NO VENDOR DRAWING WAS
+    CONSULTED for the top of a 2.5 inch drive. The OUTLINE is the standard; the
+    furniture on it is not, and nothing should be measured off this artwork.
+skins: [default]
+elements:
+  body: {at: [0.0, 0.0], size: [69.85, 100.45], class: bezel}
+  label: {at: [6.0, 9.0], size: [57.85, 42.0], class: label}

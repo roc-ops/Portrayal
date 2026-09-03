@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 17.0.0
+version: 18.0.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -1302,6 +1302,59 @@ views:
         # lid turns its depth position into a reading. See
         # dell/system-cover-14g@1.
     components:
+      bays:
+        # FOUR SLOTS ON A 106.30 PITCH, measured off the 3.5 inch drives in
+        # Dell's model. The bay is the SLOT, so it is the size of the larger
+        # drive; a 2.5 inch drive sits centred in the same slot, which is the
+        # bay set below.
+        - {id: mid-lff-0, at: [7.52, 342.92], size: {w: 101.6, h: 147.0},
+           accepts: [std/drive-35-plan@1], default: std/drive-35-plan@1,
+           group: drives-mid, rel-pos: 1,
+           only-in: [lff12-mlff4-rlff2-rc0-noriser, lff12-mlff4-rlff2-rc1-1b2b,
+                     lff12-mlff4-rlff2-rc2-1b2c, lff12-mlff4-rsff4-rc0-noriser,
+                     lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c]}
+        - {id: mid-lff-1, at: [113.82, 342.92], size: {w: 101.6, h: 147.0},
+           accepts: [std/drive-35-plan@1], default: std/drive-35-plan@1,
+           group: drives-mid, rel-pos: 2,
+           only-in: [lff12-mlff4-rlff2-rc0-noriser, lff12-mlff4-rlff2-rc1-1b2b,
+                     lff12-mlff4-rlff2-rc2-1b2c, lff12-mlff4-rsff4-rc0-noriser,
+                     lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c]}
+        - {id: mid-lff-2, at: [220.12, 342.92], size: {w: 101.6, h: 147.0},
+           accepts: [std/drive-35-plan@1], default: std/drive-35-plan@1,
+           group: drives-mid, rel-pos: 3,
+           only-in: [lff12-mlff4-rlff2-rc0-noriser, lff12-mlff4-rlff2-rc1-1b2b,
+                     lff12-mlff4-rlff2-rc2-1b2c, lff12-mlff4-rsff4-rc0-noriser,
+                     lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c]}
+        - {id: mid-lff-3, at: [326.42, 342.92], size: {w: 101.6, h: 147.0},
+           accepts: [std/drive-35-plan@1], default: std/drive-35-plan@1,
+           group: drives-mid, rel-pos: 4,
+           only-in: [lff12-mlff4-rlff2-rc0-noriser, lff12-mlff4-rlff2-rc1-1b2b,
+                     lff12-mlff4-rlff2-rc2-1b2c, lff12-mlff4-rsff4-rc0-noriser,
+                     lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c]}
+        # THE SAME FOUR SLOTS WITH THE SMALLER DRIVE. A separate bay set
+        # rather than a second `accepts` on the one above, because the drive
+        # is a different size and sits at a different place in the slot - the
+        # same split the front and rear bays of this device already use.
+        - {id: mid-sff-0, at: [23.39, 390.41], size: {w: 69.85, h: 100.45},
+           accepts: [std/drive-25-plan@1], default: std/drive-25-plan@1,
+           group: drives-mid, rel-pos: 1,
+           only-in: [sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b,
+                     sff24-msff4-rsff4-rc2-1b2c]}
+        - {id: mid-sff-1, at: [129.69, 390.41], size: {w: 69.85, h: 100.45},
+           accepts: [std/drive-25-plan@1], default: std/drive-25-plan@1,
+           group: drives-mid, rel-pos: 2,
+           only-in: [sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b,
+                     sff24-msff4-rsff4-rc2-1b2c]}
+        - {id: mid-sff-2, at: [236.0, 390.41], size: {w: 69.85, h: 100.45},
+           accepts: [std/drive-25-plan@1], default: std/drive-25-plan@1,
+           group: drives-mid, rel-pos: 3,
+           only-in: [sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b,
+                     sff24-msff4-rsff4-rc2-1b2c]}
+        - {id: mid-sff-3, at: [342.29, 390.41], size: {w: 69.85, h: 100.45},
+           accepts: [std/drive-25-plan@1], default: std/drive-25-plan@1,
+           group: drives-mid, rel-pos: 4,
+           only-in: [sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b,
+                     sff24-msff4-rsff4-rc2-1b2c]}
       placements:
         # THE LID, AND THE ONLY REASON THIS VIEW HAS PARTS AT ALL. The top was
         # five decor rectangles, so there was nothing to take off and nothing
@@ -1317,12 +1370,16 @@ views:
         # size is a skin rather than a second component. `mlff4` is four 3.5
         # inch, `msff4` is four 2.5 inch.
         - {ref: dell/mid-drive-tray-14g@1, id: mid-drive-tray-lff, at: [1.30, 322.34],
-           inset: 1.17, group: drives-mid, rel-pos: 1,
+           inset: 1.17, group: drives-mid, rel-pos: 5,
+           frames: [mid-lff-0, mid-lff-1, mid-lff-2, mid-lff-3,
+                   mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3],
            only-in: [lff12-mlff4-rlff2-rc0-noriser, lff12-mlff4-rlff2-rc1-1b2b,
                      lff12-mlff4-rlff2-rc2-1b2c, lff12-mlff4-rsff4-rc0-noriser,
                      lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c]}
         - {ref: dell/mid-drive-tray-14g@1, id: mid-drive-tray-sff, at: [1.30, 322.34],
-           inset: 1.17, skin: sff, group: drives-mid, rel-pos: 1,
+           inset: 1.17, skin: sff, group: drives-mid, rel-pos: 5,
+           frames: [mid-lff-0, mid-lff-1, mid-lff-2, mid-lff-3,
+                   mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3],
            only-in: [sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b,
                      sff24-msff4-rsff4-rc2-1b2c]}
   bottom:
@@ -1410,27 +1467,24 @@ gaps:
       a mechanical drawing or a caliper on the hardware giving the riser-1
       shroud plate's front and the chassis top shelf's front at the same face x,
       which is the one measurement that settles the ordering outright
-  - what: mid-tray-drives-are-drawn-not-seated
+  - what: mid-bay-drive-numbering-unknown
     scope: [top]
-    reason: needs-drawing
+    reason: vendor-silent
     note: >-
-      THE MID TRAY'S FOUR DRIVES ARE ARTWORK, NOT OCCUPANTS, and no
-      configuration can swap one for a blank the way every other drive bay on
-      this device can.
-      The reason is a real limit rather than an oversight. A component's
-      `size` is what a FACE shows: std/drive-35@1 is 101.6 x 26.1 and
-      std/drive-25@1 is 15.0 x 69.85, both correct for a front panel. A tray
-      seen from above needs the same drives' FOOTPRINT - 101.60 x 146.99 and
-      69.85 x 100.50 - which is a different projection of one piece of
-      hardware, and a placement cannot ask for it. Rotating does not help: the
-      third dimension is the one being asked for.
-      So the slots are drawn on dell/mid-drive-tray-14g@1's two skins at the
-      measured 106.30 pitch, and the tray reads correctly with the cover off,
-      but the bays are not modelled and the drives cannot be configured.
+      THE MID BAYS ARE NOT NUMBERED HERE, AND THAT IS DELIBERATE. This device
+      numbers its front drives 0 to 23 and its rear drives 12 to 15 or 24 to 27,
+      in both cases because Dell's own label says so and the numbering was
+      checked against it. NOTHING FOUND SO FAR SAYS WHAT DELL CALLS THE FOUR
+      MID-BAY DRIVES.
+      They are `mid-lff-0..3` and `mid-sff-0..3`, which are positions and not
+      claims: they say "the four slots, left to right" and assert nothing about
+      what the machine prints or what iDRAC reports. Inventing a range that
+      looked like the others - 24 to 27 say - would have been the easy thing and
+      would have been a fabrication of exactly the kind the front and rear
+      numbering was careful to avoid.
     wanted: >-
-      a way to place a part by the face it is seen from - or top-view drive
-      components, which duplicates parts the library already has and is the
-      reason it was not simply done
+      the mid-drive-tray page of the R740xd installation and service manual, or
+      a photograph of the tray with its silkscreen legible
   - what: riser-1-shroud-rib-width-unresolved
     scope: [rear]
     reason: needs-drawing

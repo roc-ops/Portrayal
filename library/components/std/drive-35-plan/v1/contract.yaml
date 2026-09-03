@@ -1,0 +1,38 @@
+format: 1
+kind: component
+name: drive-35-plan
+version: 1.0.0
+class: drive
+conforms: drive-35
+presents: wd
+profile: server
+description: >-
+  A 3.5 inch drive seen from above - the same body std/drive-35@1 draws from the
+  front, in the projection a mid-bay or a top view presents
+size: {w: 101.6, h: 147.0, d: 26.1}
+provenance:
+  size: >-
+    registry - spec/schemas/standards.yaml `drive-35`, the same entry
+    std/drive-35@1 conforms to, read in the plan projection: the standard's
+    w x depth is what a view from above shows, and its h becomes the thickness.
+    NOTHING IS RESTATED HERE. `presents: plan` is what lets L9 check these
+    numbers against that entry rather than against the elevation, which is the
+    whole reason this can be a second contract without being a second source of
+    truth. Change SFF-8301 in the registry and both files move, or both fail.
+  why-this-is-a-contract-and-not-a-skin: >-
+    A component's `elements` is ONE block shared by every skin, and
+    `relief.features` name nodes in it. Two projections of a part do not share
+    an element layout - a drive's label sits in a different place, at a
+    different size, seen from above - so a skin cannot express one. The
+    library's grain is one contract per presented face; this follows that grain
+    rather than bending the data model, and `conforms` plus `presents` is what
+    stops it costing a second set of numbers.
+  the-face-is-plain-and-that-is-honest: >-
+    estimated - a lid, a label panel and four screw positions, drawn because a
+    bare rectangle reads as a hole rather than as a drive. NO VENDOR DRAWING WAS
+    CONSULTED for the top of a 3.5 inch drive. The OUTLINE is the standard; the
+    furniture on it is not, and nothing should be measured off this artwork.
+skins: [default]
+elements:
+  body: {at: [0.0, 0.0], size: [101.6, 147.0], class: bezel}
+  label: {at: [8.0, 12.0], size: [85.6, 60.0], class: label}

@@ -501,6 +501,15 @@
      }
     }
    }
+  },
+  "presents": {
+   "enum": [
+    "wh",
+    "wd",
+    "hd"
+   ],
+   "default": "wh",
+   "description": "WHICH TWO of the conformed standard's three dimensions this contract's own `size.w` and `size.h` are; the remaining one is its `size.d`. `wh` (the default) is the elevation a front or rear panel shows; `wd` and `hd` are the other two projections of the same box. A component's `elements` and `relief.features` describe ONE presented face - they are a single block shared by every skin - so a part seen from another direction is a different contract, not a different skin. This key exists so that second contract can still be anchored to the standard instead of restating its numbers and drifting. ORDER WITHIN THE PAIR IS NOT CHECKED: which way round a part is turned is a property of how it is placed, not of the standard it conforms to, and the registry already fixes an orientation of its own (drive-35 is described lying flat, drive-25 standing on edge) that a bay is free to disagree with."
   }
  },
  "$defs": {

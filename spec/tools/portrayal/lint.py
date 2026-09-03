@@ -517,11 +517,35 @@ def lint_component(path, validator):
             # needed was the one moment it could not be printed. Second time a
             # missing key in a message has crashed lint; name it and carry on.
             origin = std.get("registry") or std.get("source") or "no source recorded"
-            if abs(sz["w"] - std["w"]) > 0.05 or abs(sz["h"] - std["h"]) > 0.05:
-                err(path, "L9", f"conforms {conf}: size {sz['w']}x{sz['h']} != registry {std['w']}x{std['h']} ({origin})")
-            if sz.get("d") is not None and std.get("depth") is not None \
-                    and abs(sz["d"] - std["depth"]) > 0.05:
-                err(path, "L9", f"conforms {conf}: depth {sz['d']} != registry {std['depth']} ({origin})")
+            # WHICH TWO OF THE THREE THIS CONTRACT DRAWS. A registry entry is a
+            # box - w, h and depth - and a contract draws one projection of it.
+            # The check used to assume every contract was the elevation, which
+            # is why a plan view of a standard part could not `conforms:` to the
+            # standard it plainly is: 101.6 x 147.0 is not 101.6 x 26.1, and the
+            # only way past it was to restate the numbers in a second file and
+            # let them drift.
+            pres = data.get("presents", "wh")
+            trio = {"w": std["w"], "h": std["h"], "d": std.get("depth")}
+            pair = [trio[k] for k in pres]
+            rest = trio[({"w", "h", "d"} - set(pres)).pop()]
+            if any(v is None for v in pair):
+                err(path, "L9", f"conforms {conf}: presents {pres} needs a depth "
+                    f"from the registry and {conf} does not give one ({origin})")
+            else:
+                # ORDER WITHIN THE PAIR IS NOT CHECKED, because which way round a
+                # part is turned belongs to the placement, not to the standard.
+                # The registry fixes an orientation of its own - drive-35 is
+                # described lying flat, drive-25 standing on edge - and a bay is
+                # free to disagree. What must not drift are the VALUES.
+                got, want = sorted([sz["w"], sz["h"]]), sorted(pair)
+                if any(abs(a - b) > 0.05 for a, b in zip(got, want)):
+                    err(path, "L9", f"conforms {conf}: size {sz['w']}x{sz['h']} is not "
+                        f"the registry's {pair[0]}x{pair[1]} in any order "
+                        f"for presents {pres} ({origin})")
+                if sz.get("d") is not None and rest is not None \
+                        and abs(sz["d"] - rest) > 0.05:
+                    err(path, "L9", f"conforms {conf}: depth {sz['d']} != {rest} "
+                        f"for presents {pres} ({origin})")
             # aperture vs cavity: registry cavity means the opening steps in, so the
             # component must declare the recess cross-section and a node drawing it
             cav = std.get("cavity")
