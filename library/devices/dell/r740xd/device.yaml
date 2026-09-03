@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 11.0.5
+version: 12.0.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -336,7 +336,13 @@ views:
         - {id: usb-1, at: [460.40, 19.54], size: [4.5, 12.0], shape: rect}
         - {id: usb-2, at: [460.40, 45.56], size: [4.5, 12.0], shape: rect}
         - {id: idrac-direct, at: [462.13, 63.43], size: [2.75, 7.5], shape: rect}
-        - {id: vga, at: [469.435, 16.665], size: [11.40, 20.47], shape: rect}
+        # THE HOLE HAS THE SHAPE OF WHAT GOES IN IT. This was `rect`, so a
+        # trapezoid sat in a rectangle and the corners the aperture does not
+        # have showed as ink round the connector. `rotate` matches the
+        # placement's own 270 below - the D faces the way the part does, and
+        # saying it in the same word is what keeps the two together.
+        - {id: vga, at: [469.435, 16.665], size: [11.40, 20.47], shape: d-sub,
+           rotate: 270}
     components:
       bays:
         - {id: panel-left, at: [13.41, 5.3], size: {w: 11.59, h: 30.0},
@@ -423,7 +429,14 @@ views:
            attrs: {speed: usb-2.0}, group: ports, rel-pos: 2}
         - {ref: std/micro-usb@1, id: idrac-direct, at: [459.75, 65.81], rotate: 90,
            group: ports, rel-pos: 3}
-        - {ref: std/vga@1, id: vga, at: [464.90, 21.20], rotate: 270,
+        # MOUNTED BEHIND THE FACEPLATE, WHICH IS THE EXCEPTION HERE. A D-sub
+        # bolted through sheet metal stands its full 6.73 proud and std/vga@1
+        # says so; this one is on the control-panel board, which sits back from
+        # the front bezel, so about a millimetre and a half of it emerges and
+        # the rest is inside the machine. Same connector, mounted differently -
+        # so the difference is on the placement rather than in a second copy of
+        # the part, and the two rear D-subs are untouched.
+        - {ref: std/vga@1, id: vga, at: [464.90, 21.20], rotate: 270, inset: 5.23,
            group: ports, rel-pos: 4}
         - {ref: common/usb-symbol@1, id: mark-usb-1, at: [459.45, 14.40],
            for: usb-1, group: marks, rel-pos: 1}
@@ -484,7 +497,13 @@ views:
         - {id: usb-1, at: [460.40, 19.54], size: [4.5, 12.0], shape: rect}
         - {id: usb-2, at: [460.40, 45.56], size: [4.5, 12.0], shape: rect}
         - {id: idrac-direct, at: [462.13, 63.43], size: [2.75, 7.5], shape: rect}
-        - {id: vga, at: [469.435, 16.665], size: [11.40, 20.47], shape: rect}
+        # THE HOLE HAS THE SHAPE OF WHAT GOES IN IT. This was `rect`, so a
+        # trapezoid sat in a rectangle and the corners the aperture does not
+        # have showed as ink round the connector. `rotate` matches the
+        # placement's own 270 below - the D faces the way the part does, and
+        # saying it in the same word is what keeps the two together.
+        - {id: vga, at: [469.435, 16.665], size: [11.40, 20.47], shape: d-sub,
+           rotate: 270}
     components:
       bays:
         - {id: panel-left, at: [13.41, 5.3], size: {w: 11.59, h: 30.0},
@@ -561,7 +580,14 @@ views:
            attrs: {speed: usb-2.0}, group: ports, rel-pos: 2}
         - {ref: std/micro-usb@1, id: idrac-direct, at: [459.75, 65.81], rotate: 90,
            group: ports, rel-pos: 3}
-        - {ref: std/vga@1, id: vga, at: [464.90, 21.20], rotate: 270,
+        # MOUNTED BEHIND THE FACEPLATE, WHICH IS THE EXCEPTION HERE. A D-sub
+        # bolted through sheet metal stands its full 6.73 proud and std/vga@1
+        # says so; this one is on the control-panel board, which sits back from
+        # the front bezel, so about a millimetre and a half of it emerges and
+        # the rest is inside the machine. Same connector, mounted differently -
+        # so the difference is on the placement rather than in a second copy of
+        # the part, and the two rear D-subs are untouched.
+        - {ref: std/vga@1, id: vga, at: [464.90, 21.20], rotate: 270, inset: 5.23,
            group: ports, rel-pos: 4}
         - {ref: common/usb-symbol@1, id: mark-usb-1, at: [459.45, 14.40],
            for: usb-1, group: marks, rel-pos: 1}
@@ -1197,6 +1223,26 @@ views:
 # so yet. Recorded as a gap rather than left for the next person to rediscover
 # from a bay number that does not add up.
 gaps:
+  - what: front-vga-setback-estimated
+    scope: [front, front-lff-12]
+    reason: needs-hardware
+    note: >-
+      THE NUMBER CAME FROM A DESCRIPTION, NOT A MEASUREMENT. std/vga@1 stands
+      6.73 proud because that is what a D-sub does when its flange bolts through
+      sheet metal, and on this machine's front the connector is on the control
+      panel board, which sits back from the bezel - so only a little of it
+      emerges. The operator, looking at the hardware, put that at "a millimetre
+      and a half"; `inset: 5.23` is 6.73 less 1.50 and is therefore an estimate
+      dressed as two decimal places.
+      IT IS THE SETBACK THAT IS UNKNOWN, not the connector. The 6.73 is TE
+      114-40010's mating dimension and stays; what nobody here has measured is
+      how far behind the faceplate the board sits. A caliper on the hardware, or
+      any drawing that dimensions the control panel board against the front
+      bezel, replaces one number and nothing else.
+      THE REAR D-SUBS ARE NOT AFFECTED. They bolt through the rear panel in the
+      ordinary way and carry no inset.
+    wanted: >-
+      the control panel board's setback from the front bezel, measured
   - what: psu-top-edge-unsettled
     scope: [rear]
     reason: sources-disagree

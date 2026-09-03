@@ -445,7 +445,46 @@ def fill_from_attrs(root, attrs):
             p.remove(target)
 
 
-def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None):
+def _inset_feature(feat, back):
+    """A feature on an instance mounted `back` mm behind the panel face.
+
+    A part's relief is written for the usual mounting - the flange bolts to the
+    sheet metal and the body stands proud by its own depth. Mount the same part
+    on a board set back from the face and every one of those numbers is measured
+    from the wrong plane.
+
+    `out` and `lift` are distances FROM THE FACE and simply move; `cyl`, `bar`
+    and `uhandle` are LENGTHS whose base is `lift`, so what moves is where they
+    start and what shortens is however much of them ends up behind the panel.
+    A feature left wholly behind is dropped: it is inside the machine, and the
+    drawing of a face does not show what is behind it.
+    """
+    if not back:
+        return feat
+    f = dict(feat)
+    top = None
+    for k in ("cyl", "bar", "uhandle"):
+        if f.get(k) is not None:
+            top = (f.get("lift") or 0.0) + f[k]
+    if f.get("out") is not None:
+        f["out"] = round(f["out"] - back, 4)
+        if f["out"] <= 0:
+            return None
+    if f.get("lift") is not None:
+        f["lift"] = round(max(0.0, f["lift"] - back), 4)
+        if not f["lift"]:
+            f.pop("lift")
+    if top is not None:
+        top -= back
+        if top <= 0:
+            return None
+        for k in ("cyl", "bar", "uhandle"):
+            if f.get(k) is not None:
+                f[k] = round(top - (f.get("lift") or 0.0), 4)
+    return f
+
+
+def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None, z_inset=0.0):
     contract, skins = lib.resolve(ref)
     comp_name = ref.split("/")[-1].split("@")[0]
     if skin_overrides and comp_name in skin_overrides:
@@ -609,6 +648,9 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     for child in list(holder):
         g.append(child)
     for feat in (contract.get("relief") or {}).get("features") or []:
+        feat = _inset_feature(feat, z_inset)
+        if feat is None:
+            continue
         want = f"{inst_id}--{feat['node']}"
         for node in g.iter():
             if node.get("id") == want:
@@ -641,6 +683,7 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                                part["at"], None, part.get("attrs"), None, None,
                                skin_name=part.get("skin", "default"),
                                rotate=part.get("rotate"), mirror=bool(part.get("mirror")),
+                               z_inset=z_inset,
                                palette=palette,
                                inst_palette=inst_palette,
                                skin_overrides=skin_overrides, attr_overrides=attr_overrides,
@@ -671,6 +714,9 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         if not part.get("behind"):
             part_groups.append(pg)
     for feat in (contract.get("relief") or {}).get("features") or []:
+        feat = _inset_feature(feat, z_inset)
+        if feat is None:
+            continue
         want = f"{inst_id}--{feat['node']}"
         for node in g.iter():
             if node.get("id") == want:
@@ -1163,8 +1209,24 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                 # does not. Nothing in the library used either value, so this
                 # changes no existing render.
                 e = ET.SubElement(cut_g, f"{{{SVG_NS}}}path")
-                e.set("d", _dsub_path(x, y, cw_, ch_) if shape == "d-sub"
-                      else _slot_path(x, y, cw_, ch_))
+                # A D HAS A DIRECTION AND SO DOES THE PART IN IT. The connector
+                # beside this hole says which way it faces with `rotate`; the
+                # hole says it in the same word and about its own centre, so the
+                # two cannot drift.
+                # `size` IS THE FOOTPRINT, NOT THE UNROTATED SHAPE, which is the
+                # trap here: a quarter turn swaps the box, so building the path
+                # at the declared size and then turning it counts the rotation
+                # twice and the aperture bulges past the connector on both
+                # flanks. The path is built in the unturned frame, on the same
+                # centre, and the transform does the rest.
+                rot = c.get("rotate") or 0
+                cx_, cy_ = x + cw_ / 2, y + ch_ / 2
+                pw, ph = (ch_, cw_) if rot % 180 == 90 else (cw_, ch_)
+                px_, py_ = cx_ - pw / 2, cy_ - ph / 2
+                e.set("d", _dsub_path(px_, py_, pw, ph) if shape == "d-sub"
+                      else _slot_path(px_, py_, pw, ph))
+                if rot:
+                    e.set("transform", f"rotate({rot:g} {cx_:g} {cy_:g})")
             else:
                 e = ET.SubElement(cut_g, f"{{{SVG_NS}}}rect")
                 e.set("x", f"{x:g}"); e.set("y", f"{y:g}")
@@ -1337,6 +1399,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                                      p.get("group"), p.get("rel-pos"),
                                      skin_name=p.get("skin", "default"),
                                      rotate=p.get("rotate"), palette=palette,
+                                     z_inset=p.get("inset") or 0.0,
                                      inst_palette=inst_palette,
                                      skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                                      resolved=resolved)
