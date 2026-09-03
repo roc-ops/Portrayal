@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 15.0.0
+version: 16.0.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -1286,18 +1286,21 @@ views:
         - {id: edge-rear, at: [0.0, 731.5], size: [434.0, 6.0],
            fill: '#1a1d21', confidence: estimated,
            source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the 6.0 is not measured"}
-        # THE COVER LATCH. Its WIDTH is measured - Dell's service model,
-        # `DELL_R740XD_Systemcover_Latch-1.001`, x -12.4..12.6, which is 25.0
-        # and symmetric about the centreline to a tenth. Symmetry is what says
-        # that axis has not been posed.
-        # ITS DEPTH IS NOT. The same model slides the system cover back: 444.0
-        # wide against the shell's 434.0, running to z 732.3 where the rear
-        # panel plane is 713.5. A latch riding on a posed cover cannot say where
-        # along the depth it sits, so 150.0 is a placement and not a reading.
-        - {id: cover-latch, at: [204.5, 150.0], size: [25.0, 64.0],
-           rx: 2.0, fill: '#3a4045', confidence: estimated,
-           source: "width measured from Dell's service model; DEPTH POSITION
-             ESTIMATED because the cover carrying it is posed in that axis"}
+        # THE COVER LATCH IS NO LONGER PAINT ON THIS PANEL. It was decor
+        # here, with its width measured and its depth position openly recorded
+        # as "a placement and not a reading" because the cover carrying it is
+        # posed in that axis. Both problems go away at once now the cover is a
+        # part: the latch is on the lid, where it belongs, and de-posing the
+        # lid turns its depth position into a reading. See
+        # dell/system-cover-14g@1.
+    components:
+      placements:
+        # THE LID, AND THE ONLY REASON THIS VIEW HAS PARTS AT ALL. The top was
+        # five decor rectangles, so there was nothing to take off and nothing
+        # underneath to take it off FOR. `behaviour: mounts` gives it the kit's
+        # pull handle - the same one the bezel uses - in 2D and 3D alike.
+        - {ref: dell/system-cover-14g@1, id: system-cover, at: [0.0, 196.9],
+           group: covers, rel-pos: 1}
   bottom:
     size: {w: 434.0, h: 737.5}
     panel:
