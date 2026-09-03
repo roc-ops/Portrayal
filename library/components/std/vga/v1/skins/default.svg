@@ -5,38 +5,43 @@
        the clearance a photograph of the port shows. Painting the cutout solid
        is what made this connector render as big as its own hole.
        Shape per Figure 3: 10 degrees +/-2 of taper a side, 3.35 radius in four
-       places where the flats meet the slopes. The insert is a separate path
-       because it is a separate part - a metal shell with an insulator in it -
-       and that is what lets 3D say one sits behind the other. -->
-  <path id="opening" d="M0.818 4.382 A3.350 3.350 0 0 1 4.117 0.450 L16.353 0.450 A3.350 3.350 0 0 1 19.652 4.382 L18.982 8.182 A3.350 3.350 0 0 1 15.683 10.950 L4.787 10.950 A3.350 3.350 0 0 1 1.488 8.182 Z" fill="#5c6268" stroke="#9aa0a6" stroke-width="0.35"/>
-  <!-- THE FACE IS BLUE. Every VGA receptacle made carries a blue
-       insulator; it is how the connector is told apart from the other
-       D-subs on the same panel. Same shell as std/db9 - high density
-       means more contacts in the same shell, not a bigger one. -->
-  <path id="insert" d="M1.546 4.225 A2.450 2.450 0 0 1 3.959 1.350 L16.511 1.350 A2.450 2.450 0 0 1 18.924 4.225 L18.254 8.025 A2.450 2.450 0 0 1 15.841 10.050 L4.629 10.050 A2.450 2.450 0 0 1 2.216 8.025 Z" fill="#1f4f9e" stroke="#16376e" stroke-width="0.2"/>
-  <!-- Fifteen contacts in three rows of five, and HD-15 IS FEMALE:
-       these are SOCKETS, so they are drawn as holes rather than as
-       pins. THE MIDDLE ROW IS OFFSET BY HALF ITS PITCH, which is what
-       makes the rows interleave - each middle contact falls in a gap
-       of the row above. Drawn flat before, the three rows read as a
-       grid. Pitch and row separation are NOT SOURCED. -->
-  <g id="sockets-outer" fill="#0b1526">
-    <circle cx="5.66" cy="3.49" r="0.42"/>
-    <circle cx="7.93" cy="3.49" r="0.42"/>
-    <circle cx="10.20" cy="3.49" r="0.42"/>
-    <circle cx="12.47" cy="3.49" r="0.42"/>
-    <circle cx="14.74" cy="3.49" r="0.42"/>
-    <circle cx="6.25" cy="7.91" r="0.42"/>
-    <circle cx="8.32" cy="7.91" r="0.42"/>
-    <circle cx="10.40" cy="7.91" r="0.42"/>
-    <circle cx="12.47" cy="7.91" r="0.42"/>
-    <circle cx="14.55" cy="7.91" r="0.42"/>
+       places where the flats meet the slopes. -->
+  <!-- THE SHELL IS DRAWN AS A RING so 3D builds it as a TUBE. Its path carries
+       the insert's own profile as a second subpath, which `shape: true` reads as
+       a hole - and that hole is the difference between a wall standing round the
+       insert and a slab burying it. -->
+  <path id="opening" fill-rule="evenodd"
+        d="M0.818 4.382 A3.350 3.350 0 0 1 4.117 0.450 L16.353 0.450 A3.350 3.350 0 0 1 19.652 4.382 L18.982 8.182 A3.350 3.350 0 0 1 15.683 10.950 L4.787 10.950 A3.350 3.350 0 0 1 1.488 8.182 Z M1.546 4.225 A2.450 2.450 0 0 1 3.959 1.350 L16.511 1.350 A2.450 2.450 0 0 1 18.924 4.225 L18.254 8.025 A2.450 2.450 0 0 1 15.841 10.050 L4.629 10.050 A2.450 2.450 0 0 1 2.216 8.025 Z" fill="#5c6268" stroke="#9aa0a6" stroke-width="0.35"/>
+  <!-- THE BORES, DRAWN BEHIND THE INSERT so they have something to be. The
+       insert above is pierced by these same fifteen circles, so in 3D each is a
+       hole through a solid face and in 2D these dark discs are what shows
+       through it - one set of positions, stated twice because the drawing and
+       the solid both need it. -->
+  <g id="socket-floor">
+    <circle cx="5.66" cy="3.49" r="0.42" fill="#0b1526"/>
+    <circle cx="7.93" cy="3.49" r="0.42" fill="#0b1526"/>
+    <circle cx="10.2" cy="3.49" r="0.42" fill="#0b1526"/>
+    <circle cx="12.47" cy="3.49" r="0.42" fill="#0b1526"/>
+    <circle cx="14.74" cy="3.49" r="0.42" fill="#0b1526"/>
+    <circle cx="6.25" cy="7.91" r="0.42" fill="#0b1526"/>
+    <circle cx="8.32" cy="7.91" r="0.42" fill="#0b1526"/>
+    <circle cx="10.4" cy="7.91" r="0.42" fill="#0b1526"/>
+    <circle cx="12.47" cy="7.91" r="0.42" fill="#0b1526"/>
+    <circle cx="14.55" cy="7.91" r="0.42" fill="#0b1526"/>
+    <circle cx="7.04" cy="5.7" r="0.42" fill="#0b1526"/>
+    <circle cx="9.21" cy="5.7" r="0.42" fill="#0b1526"/>
+    <circle cx="11.39" cy="5.7" r="0.42" fill="#0b1526"/>
+    <circle cx="13.56" cy="5.7" r="0.42" fill="#0b1526"/>
+    <circle cx="15.73" cy="5.7" r="0.42" fill="#0b1526"/>
   </g>
-  <g id="sockets-mid" fill="#0b1526">
-    <circle cx="7.04" cy="5.70" r="0.42"/>
-    <circle cx="9.21" cy="5.70" r="0.42"/>
-    <circle cx="11.39" cy="5.70" r="0.42"/>
-    <circle cx="13.56" cy="5.70" r="0.42"/>
-    <circle cx="15.73" cy="5.70" r="0.42"/>
-  </g>
+  <!-- THE FACE IS BLUE. Every VGA receptacle made carries a blue insulator;
+       PC99 colour-codes it, the same convention that makes std/db9@1's teal
+       skin teal.
+       FLUSH WITH THE SHELL LIP AND PIERCED, which is the female half of the
+       pair: a receptacle presents its insulator at the front of the shell and
+       the plug's pins enter it, where std/db9@1 sets its insert back and stands
+       pins off it. THE MIDDLE ROW IS OFFSET BY HALF ITS PITCH, which is what
+       makes the rows interleave. Pitch and row separation are NOT SOURCED. -->
+  <path id="insert" fill-rule="evenodd"
+        d="M1.546 4.225 A2.450 2.450 0 0 1 3.959 1.350 L16.511 1.350 A2.450 2.450 0 0 1 18.924 4.225 L18.254 8.025 A2.450 2.450 0 0 1 15.841 10.050 L4.629 10.050 A2.450 2.450 0 0 1 2.216 8.025 Z M5.240 3.490 A0.420 0.420 0 1 0 6.080 3.490 A0.420 0.420 0 1 0 5.240 3.490 Z M7.510 3.490 A0.420 0.420 0 1 0 8.350 3.490 A0.420 0.420 0 1 0 7.510 3.490 Z M9.780 3.490 A0.420 0.420 0 1 0 10.620 3.490 A0.420 0.420 0 1 0 9.780 3.490 Z M12.050 3.490 A0.420 0.420 0 1 0 12.890 3.490 A0.420 0.420 0 1 0 12.050 3.490 Z M14.320 3.490 A0.420 0.420 0 1 0 15.160 3.490 A0.420 0.420 0 1 0 14.320 3.490 Z M5.830 7.910 A0.420 0.420 0 1 0 6.670 7.910 A0.420 0.420 0 1 0 5.830 7.910 Z M7.900 7.910 A0.420 0.420 0 1 0 8.740 7.910 A0.420 0.420 0 1 0 7.900 7.910 Z M9.980 7.910 A0.420 0.420 0 1 0 10.820 7.910 A0.420 0.420 0 1 0 9.980 7.910 Z M12.050 7.910 A0.420 0.420 0 1 0 12.890 7.910 A0.420 0.420 0 1 0 12.050 7.910 Z M14.130 7.910 A0.420 0.420 0 1 0 14.970 7.910 A0.420 0.420 0 1 0 14.130 7.910 Z M6.620 5.700 A0.420 0.420 0 1 0 7.460 5.700 A0.420 0.420 0 1 0 6.620 5.700 Z M8.790 5.700 A0.420 0.420 0 1 0 9.630 5.700 A0.420 0.420 0 1 0 8.790 5.700 Z M10.970 5.700 A0.420 0.420 0 1 0 11.810 5.700 A0.420 0.420 0 1 0 10.970 5.700 Z M13.140 5.700 A0.420 0.420 0 1 0 13.980 5.700 A0.420 0.420 0 1 0 13.140 5.700 Z M15.310 5.700 A0.420 0.420 0 1 0 16.150 5.700 A0.420 0.420 0 1 0 15.310 5.700 Z" fill="#1f4f9e" stroke="#16376e" stroke-width="0.2"/>
 </svg>

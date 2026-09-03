@@ -4,20 +4,23 @@
        ASR 9000 Visio master. That was wrong to put in a shared part: the plate
        is Cisco's own bezel, cut to a shape nothing else uses, and a generic
        DE-9 has no business carrying one vendor's trim. Where a device does have
-       a bezel around its D-sub, that device draws it - the same way a faceplate
-       draws any other decoration behind the parts seated on it.
+       a bezel around its D-sub, that device draws it.
        Standoff positions are TE C-747905 Rev AB1's 24.99 mounting centres, and
        hexagonal is what Cisco's master draws and what 114-40010's 4-40
        screwlocks are. -->
-  <g id="standoffs" fill="#9aa1a8" stroke="#6d7379" stroke-width="0.25">
-    <polygon points="4.90,7.40 2.91,8.55 0.91,7.40 0.91,5.10 2.91,3.95 4.90,5.10"/>
-    <polygon points="29.89,7.40 27.89,8.55 25.90,7.40 25.90,5.10 27.89,3.95 29.89,5.10"/>
+  <!-- THE BORES, DRAWN BEHIND THE POSTS. The posts above are pierced by the
+       same two circles, so in 3D each is a hex TUBE and in 2D these dark discs
+       are what shows down it. 4-40 UNC takes a 2.26 tap drill, so 2.3 across is
+       the hole a screwlock actually presents - an earlier 1.5 read far too
+       small against the master. -->
+  <g id="bore-floor">
+    <circle cx="2.905" cy="6.25" r="1.15" fill="#4a4f55"/>
+    <circle cx="27.895" cy="6.25" r="1.15" fill="#4a4f55"/>
   </g>
-  <!-- The threaded bore. 4-40 UNC takes a 2.26 tap drill, so 2.3 across is the
-       hole a screwlock actually presents - an earlier 1.5 read far too small
-       against the master. -->
-  <g fill="#4a4f55">
-    <circle cx="2.905" cy="6.25" r="1.15"/>
-    <circle cx="27.895" cy="6.25" r="1.15"/>
-  </g>
+  <!-- POSTS, NOT PAINT. A screwlock stands off the panel about as far as the
+       shell it flanks, and these were flat - which left a connector standing
+       proud between two decals. Drawn as paths rather than polygons because
+       `shape: true` extrudes an outline and needs one. -->
+  <path id="standoffs" fill-rule="evenodd" d="M4.9 7.4 L2.91 8.55 L0.91 7.4 L0.91 5.1 L2.91 3.95 L4.9 5.1 Z M29.89 7.4 L27.89 8.55 L25.9 7.4 L25.9 5.1 L27.89 3.95 L29.89 5.1 Z M1.755 6.250 A1.150 1.150 0 1 0 4.055 6.250 A1.150 1.150 0 1 0 1.755 6.250 Z M26.745 6.250 A1.150 1.150 0 1 0 29.045 6.250 A1.150 1.150 0 1 0 26.745 6.250 Z"
+        fill="#9aa1a8" stroke="#6d7379" stroke-width="0.25"/>
 </svg>
