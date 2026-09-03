@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 13.1.0
+version: 13.2.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -1281,6 +1281,26 @@ views:
 # so yet. Recorded as a gap rather than left for the next person to rediscover
 # from a bay number that does not add up.
 gaps:
+  - what: riser-1-shelf-over-plate-ordering-estimated
+    scope: [rear]
+    reason: needs-hardware
+    note: >-
+      WHICH OF THE TWO IS IN FRONT IS ASSERTED, NOT MEASURED. dell/riser-1-top-
+      shelf-14g@1 is 14.68 proud (measured, the chassis shell's front) and
+      dell/riser-1-shroud-14g@1's plate is extruded at 17.76 (an approximation
+      across a whole outline, as that file's depth key says), so the plate drew
+      in front and the shelf read as tucked under the piece it closes the top
+      of. The operator, looking at the render against the hardware, says the
+      shelf is the outermost thing there.
+      It is expressed as a 3.10 `lift` on the composition - the smallest value
+      that clears 17.76 - so both measured depths survive untouched and only the
+      ordering changes. If the plate's width and depth are ever settled properly
+      (see riser-1-shroud-rib-width-unresolved, which is the same piece of
+      missing evidence) this lift should be re-derived rather than kept.
+    wanted: >-
+      a mechanical drawing or a caliper on the hardware giving the riser-1
+      shroud plate's front and the chassis top shelf's front at the same face x,
+      which is the one measurement that settles the ordering outright
   - what: riser-1-shroud-rib-width-unresolved
     scope: [rear]
     reason: needs-drawing

@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: riser-1-shroud-14g
-version: 1.4.0
+version: 1.5.0
 class: mechanical
 # The outer skin of this assembly: it draws after the bays, and the cards'
 # flange ends go behind it.
@@ -12,6 +12,26 @@ description: >-
   PCIe retention bracket, and the only part of that assembly seen from outside
 size: {w: 25.62, h: 64.43, d: 17.76}
 provenance:
+  the-shelf-is-lifted-over-the-plate: >-
+    THE OPERATOR'S READING, AND IT OVERRIDES AN APPROXIMATION RATHER THAN A
+    MEASUREMENT. dell/riser-1-top-shelf-14g@1 stands 14.68 proud - measured, the
+    chassis shell's own front - and this plate is extruded at 17.76, so wherever
+    they crossed the plate won and the shelf read as tucked underneath the thing
+    it sits on top of.
+    17.76 IS THE SOFTER OF THE TWO NUMBERS. This file's own depth key calls it
+    "one number for the whole outline, which the depth key records as an
+    approximation", and the plate's width is itself an open question - see
+    the-plate-outline-is-wider-than-the-cad-rib. The shelf's 14.68 is a specific
+    front at two named points. An approximation spanning a whole outline should
+    yield to a measurement at a point, not the other way round.
+    SO NEITHER MEASURED FIGURE IS EDITED. The shelf component keeps its 14.68
+    and the plate keeps its 17.76; the ordering is expressed where it belongs,
+    on the composition, with `lift` - the schema's word for "mm this composed
+    part sits proud of the parent's face". 3.10 is the SMALLEST lift that clears
+    17.76, landing the shelf's front at 17.78. It asserts an ordering, not a
+    depth, and is deliberately the minimum that does so: a bigger number would
+    look the same here and would be a claim about the hardware that nothing
+    supports.
   the-part-has-two-levels-and-only-one-was-drawn: >-
     THE BOX STARTED 8.94 LEFT OF ANY INK, AND THAT WAS THE BUG. Descending
     `R740XD_GPU_Brackets_01-1` to its mesh children gives TWO bodies, not one:
@@ -161,7 +181,10 @@ parts:
   # 116.75..142.00 - so the shelf goes on top.
   # Composed rather than placed beside: as two `mounts` placements their boxes
   # overlapped by 20.57 x 12.94 and L13 said so, correctly.
-  - {ref: dell/riser-1-top-shelf-14g@1, id: shelf, at: [-0.20, -1.81]}
+  # THE SHELF IS THE OUTERMOST THING HERE, and lifted 3.10 to say so - see
+  # the-shelf-is-lifted-over-the-plate below.
+  - {ref: dell/riser-1-top-shelf-14g@1, id: shelf, at: [-0.20, -1.81],
+     lift: 3.10}
   # THE CLIP SITS IN THE RECESS THIS SKIN CUTS FOR IT. Composed rather than
   # drawn so the chassis's three clips are one part placed three times; the
   # two beside the divider had been modelled as rivets for want of it.
