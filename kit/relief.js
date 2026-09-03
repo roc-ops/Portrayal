@@ -360,11 +360,17 @@ export async function extractRelief(url, scope) {
     return z;
   };
   // owning FRU (bay module / pull tab) of a node, for animated removal
+  // WHICH PART DID THIS COME FROM - which is not the same question as "is this
+  // part a FRU", and conflating the two is what made covers unpullable.
+  // The answer is used for two different jobs. Grouping into an ejectable
+  // subgroup is still FRU-only: a module leaves a BAY behind it, and building
+  // one behind a bolted-on cover would punch a hole in the chassis. But TAGGING
+  // every mesh with the part that produced it costs nothing and is what lets a
+  // cover be hidden without being ejected.
   const ownerOf = el => {
     const a = el.closest('[data-path]');
     if (!a) return null;
-    const root = a.dataset.path.split('/')[0];
-    return _fru(scope).has(root) ? root : null;
+    return a.dataset.path.split('/')[0] || null;
   };
   // A NODE RENDERED ALONE LOSES THE SCOPE ITS RULES WERE WRITTEN IN, and that is
   // the third bug of the shape the `lift` note above names. `shared` carries the
@@ -702,7 +708,13 @@ export async function buildFaceRelief(F, ctx) {
                           pull: Math.min(captive || depth * 1.5 + 25, INTO - 10)};
     }
     let curOwner = null;
-    const addTo = obj => (curOwner && fruGroups[curOwner] ? fruGroups[curOwner] : grp).add(obj);
+    // Tagged on the way in, so `setPulled` can hide a part's relief without the
+    // part having to be a FRU. A cover's meshes stay in the shared group - they
+    // are not going anywhere - and simply stop being drawn.
+    const addTo = obj => {
+      if (curOwner) obj.userData.portrayalPath = curOwner;
+      return (curOwner && fruGroups[curOwner] ? fruGroups[curOwner] : grp).add(obj);
+    };
     for (const c of cavities) {
       curOwner = c.owner;
       const d = Math.min(c.d, INTO - 2);

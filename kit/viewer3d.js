@@ -957,6 +957,18 @@ export function createViewer(container, opts = {}) {
     // geometry first: a body that was extruded before the part came off is still
     // in the scene, and no amount of repainting a texture removes it
     for (const [path, g] of Object.entries(FRU_GROUPS)) g.visible = !isOff(path);
+    // AND THE RELIEF OF EVERYTHING THAT IS NOT A FRU, which is where this used
+    // to stop. Only modules get a subgroup of their own, because only a module
+    // leaves a bay behind it; a bolted-on cover is merged into the shared relief
+    // group with everything else on its face. So taking a cover off repainted
+    // the face texture underneath it - correctly - and left its extruded body
+    // standing there, which reads as a control that does nothing.
+    // Every mesh now carries the path it came from, so it can be hidden where it
+    // stands without being ejected.
+    if (box) box.traverse(o => {
+      const p = o.userData && o.userData.portrayalPath;
+      if (p) o.visible = !isOff(p);
+    });
     // a texture is only touched if the change is actually in it
     const touches = text => [...changed].some(p => text.includes(`data-path="${p}"`));
     let n = 0;
