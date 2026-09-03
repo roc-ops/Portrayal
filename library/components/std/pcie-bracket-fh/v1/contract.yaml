@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: pcie-bracket-fh
-version: 1.2.0
+version: 1.2.1
 class: bracket
 conforms: pcie-bracket-fh
 description: >-
@@ -180,6 +180,11 @@ relief:
   # inert for as long as the part has existed.
   - node: flange-fold
     out: 9.4
+    # THE FOLD IS THE PLATE'S OWN METAL. Without this the kit
+    # samples the node's art for a side colour, and the node is a
+    # 0.3 mm stroked line - so the sample lands on nothing and the
+    # flange built black against a grey bracket.
+    color: '#9aa1a8'
     confidence: drawing
     source: >-
       the fold at the flange end, PCIe CEM 5.0 figure 11-5 side view - the metal

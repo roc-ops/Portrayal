@@ -692,7 +692,18 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                                part["at"], None, part.get("attrs"), None, None,
                                skin_name=part.get("skin", "default"),
                                rotate=part.get("rotate"), mirror=bool(part.get("mirror")),
-                               z_inset=z_inset,
+                               # A LIFTED PART'S FEATURES ARE STILL MEASURED
+                               # FROM THE PANEL. `lift` raises where a composed
+                               # part sits, and the kit builds a box as
+                               # `out - lift` - so a clip whose own `out` is 3.0,
+                               # composed onto a shroud lifted 17.76, asked for a
+                               # box 14.76 mm DEEP IN THE WRONG DIRECTION and
+                               # rendered as nothing. Raising the child's
+                               # absolute figures by the lift is what makes the
+                               # two agree: 3.0 becomes 20.76, the kit subtracts
+                               # 17.76 again, and 3.0 of clip lands on the
+                               # shroud's outer face.
+                               z_inset=z_inset - (part.get("lift") or 0),
                                palette=palette,
                                inst_palette=inst_palette,
                                skin_overrides=skin_overrides, attr_overrides=attr_overrides,
