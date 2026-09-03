@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 13.2.0
+version: 14.0.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -1099,20 +1099,44 @@ views:
                      lff12-mlff4-rsff4-rc0-noriser, lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c,
                      sff24-rsff4-rc0-noriser, sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c,
                      sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b, sff24-msff4-rsff4-rc2-1b2c]}
-        - {ref: dell/riser-card-clip-14g@1, id: riser-2-card-clip,
-           at: [268.93, 26.50], group: furniture, rel-pos: 24,
-           only-in: [lff12-rc3-1a2a, lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a, lff12-rc9-1a2d3a,
-                     lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b, sff24-rc3-1a2a,
-                     sff24-rc4-1a2a3a, sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a,
-                     sff24-rc15-1a2e3b, sff24-rc16-1d2e3b, sff24-rc17-1a2f3b]}
+        # THE PLATES EITHER SIDE OF THE DIVIDER, and they were missing on both
+        # sides. Dell's model has one pressing at face 267.32 and again at
+        # 297.10, y 1.81, 17.61 proud - riser 1's raised rib at the other two
+        # risers. Without them the two card clips below sat at 3.0 proud inside
+        # a frame standing 14.13, eleven millimetres down a hole, with nothing
+        # to be a clip ON.
+        # ALWAYS PRESENT, unlike the clips they carry: this is chassis metal
+        # beside the divider, not part of a riser. Riser 3's clip disappears in
+        # the configurations that blank that opening; the plate does not, and
+        # the blank does not reach it - it starts at 309.09.
         # RISER 3'S CLIP IS ONLY IN `no-rear-storage`, not in `no-riser-3`:
         # that configuration blanks this opening, and the blank covers the clip.
-        - {ref: dell/riser-card-clip-14g@1, id: riser-3-card-clip,
-           at: [298.86, 26.50], group: furniture, rel-pos: 25,
+        # THE PLATES EITHER SIDE OF THE DIVIDER, and they were missing on
+        # both sides. Dell's model has one pressing at face 267.32 and again at
+        # 297.10, y 1.81, standing 17.61 proud - riser 1's raised rib at the
+        # other two risers. Each carries its riser's card clip, which is why
+        # the clip is composed into the plate rather than placed beside it.
+        # WITHOUT THEM THE CLIPS HAD NOTHING TO BE A CLIP ON: both were placed
+        # straight on the panel at 3.0 proud inside a frame standing 14.13, so
+        # each sat eleven millimetres down a hole.
+        # THIS IS RISER-CAGE METAL, NOT CHASSIS METAL, and the scoping is what
+        # says so: it falls inside rear-storage-2 and rear-storage-3, which in
+        # the drive configurations hold drives and the riser-N-cage-mount ring.
+        # Those configurations and these are disjoint. Each plate therefore
+        # carries exactly the list its own clip carried.
+        - {ref: dell/riser-divider-plate-14g@1, id: riser-2-divider-plate,
+           at: [267.32, 1.81], group: furniture, rel-pos: 24,
+           only-in: [lff12-rc3-1a2a, lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a,
+                     lff12-rc9-1a2d3a, lff12-rc15-1a2e3b, lff12-rc16-1d2e3b,
+                     lff12-rc17-1a2f3b, sff24-rc3-1a2a, sff24-rc4-1a2a3a, sff24-rc5-1b2a3a,
+                     sff24-rc6-1d2a3a, sff24-rc9-1a2d3a, sff24-rc15-1a2e3b, sff24-rc16-1d2e3b,
+                     sff24-rc17-1a2f3b]}
+        - {ref: dell/riser-divider-plate-14g@1, id: riser-3-divider-plate,
+           at: [297.10, 1.81], group: furniture, rel-pos: 25,
            only-in: [lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a, lff12-rc9-1a2d3a,
-                     lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b, sff24-rc4-1a2a3a,
-                     sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a, sff24-rc15-1a2e3b,
-                     sff24-rc16-1d2e3b, sff24-rc17-1a2f3b]}
+                     lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b,
+                     sff24-rc4-1a2a3a, sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a,
+                     sff24-rc15-1a2e3b, sff24-rc16-1d2e3b, sff24-rc17-1a2f3b]}
         - {ref: dell/rear-bay-screw-tab-14g@1, id: rear-bay-screw-tab,
            at: [144.26, 3.09], group: furniture, rel-pos: 20}
         - {ref: dell/thumbscrew-blue-14g@1, id: cage-screw-right,
@@ -1281,6 +1305,24 @@ views:
 # so yet. Recorded as a gap rather than left for the next person to rediscover
 # from a bay number that does not add up.
 gaps:
+  - what: riser-divider-plate-face-detail-unknown
+    scope: [rear]
+    reason: needs-photo
+    note: >-
+      dell/riser-divider-plate-14g@1's OUTLINE AND DEPTH ARE MEASURED and its
+      FACE IS NOT. Both bodies come off Dell's service model to the hundredth -
+      face 267.32..278.64 and 297.10..308.42, y 1.81..42.42, 17.61 proud - but
+      what is printed or punched on them has not been established from any
+      figure. Riser 1's equivalent plate carries a five-slot column that appears
+      in no cut of the model at any plane and had to be read off ISM figure 8;
+      whether these two carry the same column, or anything else, was NOT
+      SEARCHED FOR rather than looked for and found absent.
+      The recess drawn for the card clip is drawn because a clip sits in a
+      recess on riser 1, not because this plate was seen to have one.
+    wanted: >-
+      a rear photograph or ISM figure at usable resolution across face
+      267..309, which would settle both plates at once - they are the same
+      pressing
   - what: riser-1-shelf-over-plate-ordering-estimated
     scope: [rear]
     reason: needs-hardware

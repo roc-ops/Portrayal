@@ -1042,6 +1042,11 @@
            "type": "number",
            "exclusiveMinimum": 0,
            "description": "mm this INSTANCE is mounted behind the panel face. A part's relief says how far it stands proud when its flange bolts to the sheet metal; a connector on a board set back from the faceplate is the same part mounted differently, and this is where that difference belongs - on the placement, not in a second copy of the part. Every protrusion the instance declares is reduced by this much and anything left wholly behind the panel is not drawn."
+          },
+          "lift": {
+           "type": "number",
+           "exclusiveMinimum": 0,
+           "description": "mm this INSTANCE sits proud of the panel face - the mirror of `inset`, and used when the part is bolted not to the sheet metal but to something already standing off it. Every protrusion the instance declares is raised by this much. `relief.features` has carried `lift` all along, composed `parts:` gained it, and `panel.decor` gained it; a placement not having it was the same asymmetry in the vocabulary rather than a decision, and it forced the alternative of a second copy of the part with fattened numbers - which is exactly what `inset` exists to avoid in the other direction."
           }
          },
          "oneOf": [

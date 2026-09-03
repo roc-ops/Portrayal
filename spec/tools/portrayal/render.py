@@ -1428,7 +1428,8 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                                      p.get("group"), p.get("rel-pos"),
                                      skin_name=p.get("skin", "default"),
                                      rotate=p.get("rotate"), palette=palette,
-                                     z_inset=p.get("inset") or 0.0,
+                                     z_inset=(p.get("inset") or 0.0)
+                                     - (p.get("lift") or 0.0),
                                      inst_palette=inst_palette,
                                      skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                                      resolved=resolved)
