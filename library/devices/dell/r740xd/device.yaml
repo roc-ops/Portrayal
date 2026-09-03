@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 14.2.0
+version: 15.0.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -291,9 +291,21 @@ groups:
     role: service
     index-origin: 1
     description: >-
-      removable covers over the face. The bezel is the only one, and it is drawn
-      only when asked for: it hides the drives it protects, which is the whole
-      point of it and exactly why the default drawing leaves it off.
+      removable covers over the face. The bezel is the only one, and it is DRAWN
+      BY DEFAULT AND TAKEN OFF IN THE VIEWER - which is a reversal, and the
+      reason is worth keeping.
+      It was `optional: bezel` before, meaning the build dropped it unless asked
+      for it by name. The argument was that it hides the drives it protects, so
+      the default drawing should leave it off. That is a fair thing to want and
+      it was the wrong mechanism for it: `optional` excludes a part from the
+      ARTIFACT, so nothing downstream could put it back. A machine that ships
+      with a bezel rendered as one that has none, in every consumer, with no
+      way to ask.
+      The kit already had the right control. `behaviour: mounts` puts a pull
+      handle on any cover - "take off this cover to see behind it" - and it
+      drives 2D and 3D alike. So the bezel is placed like any other part and
+      the drives are one click away, which is the same gesture the top panel
+      uses and one fewer concept than it had.
   furniture:
     term: Item
     role: furniture
@@ -472,7 +484,7 @@ views:
            for: chassis, group: latches, rel-pos: 2}
         - {ref: dell/bezel-2u-14g@1, id: bezel, at: [24.30, 2.23],
            for: [drive-0, drive-1, drive-2, drive-3, drive-4, drive-5, drive-6, drive-7, drive-8, drive-9, drive-10, drive-11, drive-12, drive-13, drive-14, drive-15, drive-16, drive-17, drive-18, drive-19, drive-20, drive-21, drive-22, drive-23, panel-left],
-           optional: bezel, group: covers, rel-pos: 0}
+           group: covers, rel-pos: 0}
   front-lff-12:
     # THE 12 x 3.5 INCH FRONT. A VARIANT VIEW and not a scoped bay: this is
     # a different backplane, a different cage and a different chassis to
@@ -635,7 +647,7 @@ views:
            for: chassis, group: latches, rel-pos: 2}
         - {ref: dell/bezel-2u-14g@1, id: bezel, at: [24.30, 2.23],
            for: [lff-drive-0, lff-drive-1, lff-drive-2, lff-drive-3, lff-drive-4, lff-drive-5, lff-drive-6, lff-drive-7, lff-drive-8, lff-drive-9, lff-drive-10, lff-drive-11, panel-left],
-           optional: bezel, group: covers, rel-pos: 0}
+           group: covers, rel-pos: 0}
   rear:
     size:
       w: 434.0
