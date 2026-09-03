@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: riser-1-shroud-14g
-version: 1.3.0
+version: 1.4.0
 class: mechanical
 # The outer skin of this assembly: it draws after the bays, and the cards'
 # flange ends go behind it.
@@ -12,6 +12,38 @@ description: >-
   PCIe retention bracket, and the only part of that assembly seen from outside
 size: {w: 25.62, h: 64.43, d: 17.76}
 provenance:
+  the-part-has-two-levels-and-only-one-was-drawn: >-
+    THE BOX STARTED 8.94 LEFT OF ANY INK, AND THAT WAS THE BUG. Descending
+    `R740XD_GPU_Brackets_01-1` to its mesh children gives TWO bodies, not one:
+    `Body_2_3.002`, face 111.70..148.60, y 3.36..67.04, 11.06 proud - a wide
+    lower shelf - and `Body_1_3.005`, face 125.00..135.10, y 1.81..62.89, 17.71
+    proud - a narrow raised rib on top of it.
+    This part was modelled as ONE plate: the rib's depth (17.76) on a
+    mid-width outline (120.64..137.26) that matches neither body. The shelf
+    supplied the 111.70 the placement and the box were both taken from, and was
+    then never drawn - so from the box's left edge to the plate's there was
+    nothing at all. In 2D that reads as transparent and the eye forgives it; in
+    3D it is an open canyon, with the plate's own 17.76 side wall standing in
+    the middle of it as a face belonging to no component anybody can name. That
+    is exactly how it was reported.
+    The shelf is drawn now. THE RIB IS NOT RE-CUT - see the gap below.
+  the-plate-outline-is-wider-than-the-cad-rib: >-
+    UNRESOLVED, AND LEFT ALONE DELIBERATELY. The raised plate here spans
+    120.64..137.26; the only body in the model at that depth spans
+    125.00..135.10. The outline came from cad-outline.py cutting at the panel
+    plane, which returns a SILHOUETTE - the union of everything the plane
+    crosses - so it is not evidence for one body's width, and the two disagree
+    by about 4 mm on each side.
+    Re-cutting the plate would move the slot column and the clip recess, which
+    are photo-measured against ISM figure 8 and currently agree with the render.
+    Recorded as a gap on the device rather than guessed at: the empty strip is
+    what was reported and what is fixed here.
+  the-shelf-runs-past-this-component: >-
+    `Body_2_3.002` ends at face 148.60 and this component ends at 137.32, so the
+    shelf is clipped here at its own right edge and continues under
+    dell/rear-bay-frame-14g@4, which begins at 137.32 and stands 14.13 proud -
+    above the shelf's 11.06, so nothing of the shelf should show through it. The
+    clip is at 64.43 in y for the same reason, against the shelf's 65.23.
   size: >-
     measured - Dell's service model, `R740XD_GPU_Brackets_01-1`, clipped to the
     panel plane at z 713.5. A vendor solid measured in software, in the sense
@@ -80,6 +112,20 @@ provenance:
 relief:
   wall: '#4a5057'
   features:
+  # THE SHELF THE PLATE STANDS ON. Drawn first and lower, so the plate reads as
+  # a rib rising 6.70 out of it rather than a slab floating over a hole.
+  - node: base
+    out: 11.06
+    color: '#8c939b'
+    confidence: measured
+    source: >-
+      Dell's service model, `R740XD_GPU_Brackets_01-1` descended to its mesh
+      children: `Body_2_3.002`, face 111.70..148.60, y 3.36..67.04, front at
+      z 724.56 against the panel plane's 713.5. Read in the y convention
+      face_y = 86.8 - raw_y, which is CONFIRMED rather than assumed - it
+      reproduces the rear handle's trusted low edge at 42.35 to the hundredth
+      and this assembly's sibling `R740XD_Expansioncard_Clip-1.001` at
+      y 1.81..44.81, the figure this file already carries.
   - node: shroud
     out: 17.76
     color: '#9aa1a8'
@@ -130,6 +176,7 @@ parts:
   # what a clip sitting in the window cut for it does.
   - {ref: dell/riser-card-clip-14g@1, id: clip, at: [13.6, 45.79], lift: 14.76}
 elements:
+  base: {at: [0.0, 1.55], size: [25.62, 62.88], class: bezel}
   shroud: {at: [0.0, 0.0], size: [25.62, 64.43], class: bezel}
   slots: {at: [16.30, 15.94], size: [3.4, 26.03], class: vent}
 skins: [default]

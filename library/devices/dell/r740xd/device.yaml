@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 13.0.1
+version: 13.1.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -1281,31 +1281,37 @@ views:
 # so yet. Recorded as a gap rather than left for the next person to rediscover
 # from a bay number that does not add up.
 gaps:
-  - what: riser-1-shroud-frame-gap-estimated
+  - what: riser-1-shroud-rib-width-unresolved
     scope: [rear]
-    reason: needs-hardware
+    reason: needs-drawing
     note: >-
-      A GAP THAT SHOWED AS A HOLE THROUGH THE PANEL is now bridged, and the
-      bridge is estimated rather than measured. dell/riser-1-shroud-14g@1 ends at
-      device x 137.32 and dell/rear-bay-frame-14g@4 used to start at 144.26,
-      leaving 6.94 mm neither part drew - straight on, that read as an opening
-      into the machine, and the shroud's composed shelf overhangs it, which made
-      it look like a lid over open air.
-      A CAD READ WAS ATTEMPTED. R740XD_GPU_Brackets_01-1 - the assembly
-      riser-1-shroud-14g is measured from - gives a footprint 36.9 mm wide
-      against the shroud's declared 25.62, from two independent mesh children
-      agreeing to the hundredth. It was not applied: the same instance's y
-      extent runs -40 to +24 against an 86.8 mm panel, which is not a seated
-      pose, and moving 6.94 mm of real geometry on a reading that fails its own
-      plausibility check would be worse than not reading it.
-      So rear-bay-frame-14g now carries an estimated bridging plate on its own
-      left edge, in its own metal, closing the gap without asserting a shape for
-      it. Everything the frame already drew - rails, rivets, the far tab, the
-      drive-bay openings - stays at the device coordinates it always occupied;
-      only the new strip and the component's placement moved, by the same 6.94.
+      THE PREVIOUS FORM OF THIS GAP SAID THE CAD POSE WAS EXPLODED. IT IS NOT,
+      AND THE SENTENCE IS KEPT HERE BECAUSE IT IS THE INSTRUCTIVE PART.
+      A reading of R740XD_GPU_Brackets_01-1 was rejected on the grounds that its
+      y extent ran -40 to +24 against an 86.8 mm panel - "not a seated pose".
+      That was a Y-CONVENTION ARTEFACT IN THE READER, not a fact about the
+      model. Calibrated against the rear handle, whose device y is trusted, the
+      convention is face_y = 86.8 - raw_y; it reproduces the handle's low edge
+      at 42.35 to the hundredth and this assembly's own sibling
+      R740XD_Expansioncard_Clip-1.001 at y 1.81..44.81, the figure
+      riser-1-shroud-14g already carried from an independent read. The pose is
+      seated and the 36.9 mm was real all along - a plausibility check that
+      fires on the reader instead of the data rejects good evidence, and it
+      cost a wrong fix at the other end of the part.
+      WHAT THE MODEL ACTUALLY SHOWS, descended to mesh children, is two levels:
+      Body_2_3.002 at 111.70..148.60, 11.06 proud - a wide lower shelf, now
+      drawn - and Body_1_3.005 at 125.00..135.10, 17.71 proud - a narrow rib.
+      WHAT IS STILL OPEN is the rib. riser-1-shroud-14g draws it 120.64..137.26,
+      about 4 mm wider on each side than the body at that depth. The outline
+      came from cad-outline.py cutting at the panel plane, which returns the
+      SILHOUETTE of everything the plane crosses rather than one body, so it
+      cannot settle a single body's width. Re-cutting it would move the slot
+      column and the clip recess, both photo-measured off ISM figure 8 and both
+      currently agreeing with the render, so it is recorded rather than guessed.
     wanted: >-
-      a seated (not exploded) reading of R740XD_GPU_Brackets_01-1, or a
-      mechanical drawing of the panel between riser 1 and the rear bay frame
+      a mechanical drawing of the riser-1 shroud, or a clean section of
+      R740XD_GPU_Brackets_01-1 above the shelf, to settle the raised rib's width
+      independently of the panel-plane silhouette
   - what: front-vga-setback-estimated
     scope: [front, front-lff-12]
     reason: needs-hardware
