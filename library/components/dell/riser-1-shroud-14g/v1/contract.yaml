@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: riser-1-shroud-14g
-version: 1.2.0
+version: 1.3.0
 class: mechanical
 # The outer skin of this assembly: it draws after the bays, and the cards'
 # flange ends go behind it.
@@ -88,14 +88,25 @@ relief:
       dell/riser-1-shroud-14g@1's own depth key - Dell's service model, from the
       panel plane at z 713.5 to this part's own front. One number for the whole
       outline, which the depth key records as an approximation.
+  # THE SLOT FLOORS ARE 2.0 UNDER THE PLATE, NOT 17.76 UNDER IT. This was
+  # `sink: 2.0`, and `sink` measures from a CAVITY FLOOR - this part has no
+  # cavity, so it built nothing and the dark slot art stayed painted on the
+  # faceplate. Looking through the five windows in a plate standing 17.76 proud,
+  # what showed was the panel the whole way back.
+  # A FLOOR IS A SOLID WHOSE TOP IS JUST UNDER THE PLATE. 15.76 out against the
+  # plate's 17.76 leaves exactly the 2.0 recess the slots are - the same number,
+  # written the only way the vocabulary can build it.
   - node: slots
-    sink: 2.0
+    out: 15.76
     color: '#1b1f23'
     confidence: estimated
     source: >-
-      Unsourced. The slot column is not in the model at any plane - see the
-      slots key - so how deep the recesses go is not known. 2.0 reads as a
-      pocket against a 17.76 face and is not a measurement.
+      Unsourced, and unchanged in substance from this key's earlier form: the
+      slot column is not in the service model at any plane - see the slots note
+      in the skin - so how deep the recesses go is not known. 2.0 reads as a
+      pocket against a 17.76 face and is not a measurement. What changed is that
+      it is now a floor at 15.76 rather than a `sink` with no cavity to sink
+      from, which built nothing at all.
 parts:
   # THE SHELF SITS ON THIS, and they interleave in depth rather than stacking
   # cleanly: at face (130, 2) this shroud is 17.76 proud and in front, at
@@ -112,9 +123,12 @@ parts:
   # and the clip was composed at the parent's own face, so it sat back at the
   # sheet metal with the shroud rising in front of it. `lift` is the schema's
   # word for exactly this - "mm this composed part sits proud of the parent's
-  # face. Use when the parent itself protrudes" - and 17.76 is the shroud's own
-  # measured depth, so the clip lands flush with its outer face.
-  - {ref: dell/riser-card-clip-14g@1, id: clip, at: [13.6, 45.79], lift: 17.76}
+  # face. Use when the parent itself protrudes".
+  # 14.76 AND NOT 17.76, BECAUSE THE CLIP IS 3.0 THICK. Lifted to the shroud's
+  # own 17.76 it stood 3 mm PROUD of the plate, floating off the front of it;
+  # lifted 14.76 its outer face lands level with the plate at 17.76, which is
+  # what a clip sitting in the window cut for it does.
+  - {ref: dell/riser-card-clip-14g@1, id: clip, at: [13.6, 45.79], lift: 14.76}
 elements:
   shroud: {at: [0.0, 0.0], size: [25.62, 64.43], class: bezel}
   slots: {at: [16.30, 15.94], size: [3.4, 26.03], class: vent}
