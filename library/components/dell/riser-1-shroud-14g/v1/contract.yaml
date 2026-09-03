@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: riser-1-shroud-14g
-version: 1.1.0
+version: 1.2.0
 class: mechanical
 # The outer skin of this assembly: it draws after the bays, and the cards'
 # flange ends go behind it.
@@ -108,7 +108,13 @@ parts:
   # THE CLIP SITS IN THE RECESS THIS SKIN CUTS FOR IT. Composed rather than
   # drawn so the chassis's three clips are one part placed three times; the
   # two beside the divider had been modelled as rivets for want of it.
-  - {ref: dell/riser-card-clip-14g@1, id: clip, at: [13.6, 45.79]}
+  # THE CLIP IS ON THE SHROUD, NOT ON THE PANEL. This shroud stands 17.76 proud
+  # and the clip was composed at the parent's own face, so it sat back at the
+  # sheet metal with the shroud rising in front of it. `lift` is the schema's
+  # word for exactly this - "mm this composed part sits proud of the parent's
+  # face. Use when the parent itself protrudes" - and 17.76 is the shroud's own
+  # measured depth, so the clip lands flush with its outer face.
+  - {ref: dell/riser-card-clip-14g@1, id: clip, at: [13.6, 45.79], lift: 17.76}
 elements:
   shroud: {at: [0.0, 0.0], size: [25.62, 64.43], class: bezel}
   slots: {at: [16.30, 15.94], size: [3.4, 26.03], class: vent}
