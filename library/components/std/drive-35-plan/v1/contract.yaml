@@ -1,8 +1,9 @@
 format: 1
-kind: component
+kind: module
 name: drive-35-plan
-version: 1.0.0
+version: 1.1.0
 class: drive
+behaviour: fills
 conforms: drive-35
 presents: wd
 profile: server
@@ -11,6 +12,23 @@ description: >-
   front, in the projection a mid-bay or a top view presents
 size: {w: 101.6, h: 147.0, d: 26.1}
 provenance:
+  it-is-a-module-because-it-SEATS: >-
+    `kind: module` with `behaviour: fills`, and the reason is render.py's
+    aperture rule: anything that is not a module is drawn as a HOLE as deep as
+    its `size.d`. Seated straight into a bay as a plain component, this drive
+    became a 26.1 mm void in the top of the chassis - four rectangular pits
+    where four drives should be.
+    std/drive-35@1 is a plain component and is right to be: on a front face the
+    bare drive body is COMPOSED INTO a carrier, and the carrier is the module
+    that fills the bay. This projection has no carrier to be composed into - see
+    below - so it is the thing that seats, and it has to say so.
+  the-mid-tray-carrier-is-not-modelled: >-
+    A limitation, stated. Dell's mid tray holds its drives in carriers -
+    `740XD_ MidDriveTray_ Bracket-1.001` is in the service model at
+    392.29 x 160.53 - and this library has no plan-view carrier to compose this
+    drive into. The bare drive stands in for the carrier it should sit in, so
+    the bay reads correctly and the drive is the right size, but the carrier's
+    own ears, latch and handle are simply absent rather than wrong.
   size: >-
     registry - spec/schemas/standards.yaml `drive-35`, the same entry
     std/drive-35@1 conforms to, read in the plan projection: the standard's
