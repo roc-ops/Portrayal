@@ -1,13 +1,13 @@
 format: 1
 kind: component
 name: riser-card-clip-14g
-version: 1.0.0
+version: 1.1.0
 class: mechanical
 profile: compute
 description: >-
   The blue card-retention clip at the end of a riser's slots on a 14G PowerEdge,
   where the L of a PCIe bracket is held
-size: {w: 8.4, h: 16.4, d: 3.0}
+size: {w: 8.4, h: 16.4}
 provenance:
   it-was-inside-the-riser-1-shroud: >-
     Lifted verbatim out of dell/riser-1-shroud-14g@1 so it can be placed three
@@ -31,4 +31,18 @@ provenance:
     sheet metal and nothing held here dimensions by how much.
 elements:
   body: {at: [0.0, 0.0], size: [8.4, 16.4], class: bezel}
+relief:
+  features:
+  # THICKNESS, NOT A HOLE. This carried 3.0 as `size.d`, and
+  # render.py reads a non-module, non-mounts part's `d` as the
+  # depth of an APERTURE - so it was a pit in the panel. The
+  # number is the same; what it means is a protrusion.
+  - node: body
+    out: 3.0
+    confidence: estimated
+    source: >-
+      carried over verbatim from this part's own `size.d`, where it
+      had been since the part was drawn - the clip is a pressing bolted to the chassis and 3.0 is how thick it is - not how deep a hole behind it would be. It sits proud of the panel and a fitted rear blank covers it, which is why it still draws before the bays. No new reading was
+      taken; the correction is to what the number means, not to the
+      number.
 skins: [default]
