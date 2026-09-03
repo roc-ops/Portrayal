@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 18.0.0
+version: 19.0.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -286,6 +286,14 @@ groups:
       the rear I/O: iDRAC9 dedicated, serial, VGA and two USB 3.0. Four families
       in one block deliberately, the same reason as the front - Dell's table
       calls them one panel and they do one job.
+  interior:
+    term: Item
+    role: furniture
+    index-origin: 1
+    description: >-
+      what the system cover hides: the board it all sits on, the fan wall across
+      the front of it, and the shroud or the mid-drive tray over the processors.
+      None of it is visible until the cover is taken off.
   drives-mid:
     term: Drive
     role: service
@@ -1362,6 +1370,34 @@ views:
         # pull handle - the same one the bezel uses - in 2D and 3D alike.
         - {ref: dell/system-cover-14g@1, id: system-cover, at: [0.0, 196.9],
            group: covers, rel-pos: 1}
+        # THE SYSTEM BOARD IS MEASURED AND NOT PLACED YET - see
+        # dell/system-board-14g@1 and the gap `interior-is-a-stack-not-a-face`.
+        # It is the floor everything else sits on, so its box contains every
+        # other box in here, and L13 reads that as the sizing error it usually
+        # is. That rule is right about faceplates, and this view stops being a
+        # faceplate the moment the cover comes off.
+        # THE FAN WALL, across the full width in front of everything else. On
+        # every configuration: this machine has no variant without fans.
+        - {ref: dell/fan-cage-14g@1, id: fan-cage, at: [12.55, 245.38],
+           group: interior, rel-pos: 2}
+        # THE AIR SHROUD, AND IT IS THE MID TRAY'S ALTERNATIVE. Both are seated
+        # in Dell's model and they occupy the SAME volume - the shroud
+        # top_y 318.98..529.40 at height 36.12..84.88, the tray 322.34..503.58
+        # at 48.89..85.63 - so a machine has one or the other over the
+        # processors and never both. Thirty-one configurations here, nine on the
+        # tray below. That is an inference from two measurements, not a line
+        # found in a manual; it is argued in the component.
+        - {ref: dell/air-shroud-14g@1, id: air-shroud, at: [1.36, 318.98],
+           group: interior, rel-pos: 3,
+           only-in: [lff12-rc0-noriser, lff12-rc1-1b2b, lff12-rc15-1a2e3b,
+                     lff12-rc16-1d2e3b, lff12-rc17-1a2f3b, lff12-rc2-1b2c, lff12-rc3-1a2a,
+                     lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a, lff12-rc9-1a2d3a,
+                     lff12-rlff2-rc0-noriser, lff12-rlff2-rc1-1b2b, lff12-rlff2-rc2-1b2c,
+                     lff12-rsff4-rc0-noriser, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
+                     sff24-rc0-noriser, sff24-rc1-1b2b, sff24-rc15-1a2e3b,
+                     sff24-rc16-1d2e3b, sff24-rc17-1a2f3b, sff24-rc2-1b2c, sff24-rc3-1a2a,
+                     sff24-rc4-1a2a3a, sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a,
+                     sff24-rsff4-rc0-noriser, sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c]}
         # THE MID-DRIVE TRAY, on the nine configurations that have one. It is
         # UNDER THE LID, so it is placed before the cover and the cover draws
         # over it; taking the cover off in the viewer is what reveals it.
@@ -1467,6 +1503,32 @@ gaps:
       a mechanical drawing or a caliper on the hardware giving the riser-1
       shroud plate's front and the chassis top shelf's front at the same face x,
       which is the one measurement that settles the ordering outright
+  - what: interior-is-a-stack-not-a-face
+    scope: [top]
+    reason: needs-drawing
+    note: >-
+      TWO PARTS OF THIS INTERIOR ARE MEASURED AND NOT DRAWN, AND THE REASON IS
+      THE SAME FOR BOTH.
+      dell/system-board-14g@1 is the floor: its box contains every other box
+      under the lid, because everything sits on it. dell/air-shroud-14g@1 wants
+      `behaviour: mounts` - it lifts out to reach the processors, and that
+      declaration is what would give it a pull handle - but the system cover is
+      `mounts` and lies over IT.
+      L13 reports both, and L13 is right about what it was written for: on a
+      FACEPLATE, two parts in one place is a sizing error, and mounted-over-
+      mounted is two covers that cannot both be there. THIS VIEW STOPS BEING A
+      FACEPLATE THE MOMENT THE COVER COMES OFF. With the lid open the top is a
+      section through four heights - board at 40.63, shroud at 84.88, tray at
+      85.63, fan cage at 86.34, against an 86.8 panel - and every one of those
+      overlaps in plan precisely because they are stacked, not adjacent.
+      The depths are all there; nothing about the geometry is unknown. What is
+      missing is a way to SAY "this lies under that" so the rule can tell a
+      stack from a mistake. Until then the shroud is drawn as a plain component
+      that cannot be lifted, and the board is not drawn at all.
+    wanted: >-
+      a decision on how a view expresses depth-layered parts - whether L13
+      learns that two parts at declared different heights may share a plan, or
+      whether an interior is a different kind of view from a faceplate
   - what: mid-bay-drive-numbering-unknown
     scope: [top]
     reason: vendor-silent

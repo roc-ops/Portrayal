@@ -1,0 +1,56 @@
+format: 1
+kind: component
+name: fan-cage-14g
+version: 1.0.0
+class: mechanical
+profile: server
+description: >-
+  The cooling fan cage of a 14G PowerEdge seen from above - the frame across the
+  full width of the chassis, between the front drive backplane and the shroud
+size: {w: 408.9, h: 71.5, d: 3.48}
+provenance:
+  size: >-
+    measured - Dell's service model, `DELL_R740XD_CoolingfanFrame-1`, the seated
+    one of its two poses: face x 12.55..421.45 and top_y 245.38..316.88 in the
+    top view's frame (top_y = raw_z + 24).
+  depth: >-
+    measured - the frame's own top is at chassis height 86.34, effectively the
+    lid line, and the FANS in it top out at 83.32. 3.48 is the drop from the
+    86.8 panel to the top of a fan, so this part is a shallow well with the fans
+    at its floor - which is what looking down into an open chassis shows.
+  the-six-fans-are-measured-and-unevenly-spaced: >-
+    measured, and the unevenness is REPORTED RATHER THAN REGULARISED, which is
+    the opposite of the call made for the mid tray's drives - so the difference
+    is worth stating.
+    `DELL_R740XD_Coolingfan-1` has six seated poses, each 64.14 x 46.20, at face
+    x 16.56, 80.22, 144.24, 225.62, 289.46 and 353.21. The gaps run 63.66,
+    64.02, 81.38, 63.84, 63.75: five fans on a ~63.8 pitch and one gap of 81.38
+    in the middle.
+    THE MID TRAY'S DRIVES WERE REGULARISED BECAUSE FOUR SLOTS IN ONE TRAY HAVE
+    ONE PITCH AND A SECOND MEASUREMENT OF THE SAME TRAY AGREED. Here there is no
+    second measurement and no pitch to regularise TO: two banks of three either
+    side of a wider centre is a perfectly ordinary way to build a 2U fan wall,
+    and forcing six fans onto an even pitch would invent a layout to replace one
+    the model actually shows. If it is wrong, it is wrong in a way a photograph
+    settles in a second.
+  it-is-mechanical-and-not-cooling: >-
+    `class: mechanical`, and a test is what settled it. `cooling` is one of the
+    five classes this library treats as a body that comes out - psu, fan, tab,
+    power, cooling - so anything wearing it must declare `behaviour: fills`, and
+    test_the_old_class_list_is_a_subset_of_fills says so.
+    THE CAGE DOES NOT COME OUT AND THE FANS DO. This part is the fixed frame the
+    fans sit in, so it is mechanical like every other frame in here; `cooling`
+    belongs to the fan itself, and will be right on it the day the fans are
+    modules in bays rather than artwork on this cage.
+  the-fans-are-drawn-and-not-seated: >-
+    A LIMITATION AND A GOOD CANDIDATE FOR THE NEXT PASS. These are hot-swap
+    parts on this machine - each one lifts straight out - so they ought to be
+    bays with a fan module in them, the way the front drives are, and they would
+    then pull individually in the viewer. They are artwork on this cage for now;
+    the cage's own frame is what is measured and the fans sit at their measured
+    positions inside it.
+relief:
+  wall: '#2b3035'
+elements:
+  cage: {at: [0.0, 0.0], size: [408.9, 71.5], class: bezel}
+skins: [default]

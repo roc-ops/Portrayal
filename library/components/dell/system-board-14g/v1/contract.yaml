@@ -1,0 +1,42 @@
+format: 1
+kind: component
+name: system-board-14g
+version: 1.0.0
+class: mechanical
+profile: server
+description: >-
+  The system board of a 14G PowerEdge seen from above - the floor of the
+  chassis, visible between the fan cage, the shroud and the risers
+size: {w: 427.0, h: 469.69, d: 46.17}
+provenance:
+  size: >-
+    measured - Dell's service model, `R740XD_ SystemBoard`, the one seated pose:
+    face x 3.58..430.58 and top_y 267.74..737.43 in the top view's frame
+    (top_y = raw_z + 24). It is the full width of the chassis interior and runs
+    from just behind the fan cage to the rear wall.
+  depth: >-
+    measured - the board's own top is at chassis height 40.63 against an 86.8
+    panel, so it sits 46.17 below the plane the lid closes on. That is the
+    number `size.d` carries, which makes this part a WELL 46.17 deep with its
+    own art as the floor: what you are looking down into when the lid, the
+    shroud and the tray are all out of the way.
+  what-is-on-it-is-not-drawn: >-
+    NOT SEARCHED FOR, RATHER THAN LOOKED FOR AND ABSENT. The service model
+    carries the processors, heatsinks, memory and the NVDIMM battery as seated
+    parts - `R740XD_ HeatSink 1U` at face 75.63..157.85 and 274.93..357.15,
+    `R740XD_ Memory Module` 25 seated at 3.77 wide, `DELL_R740XD_NVDIMM-N
+    battery-1.001` at 178.58..247.58 - and none of them is drawn here.
+    They are all UNDER THE AIR SHROUD, so nothing is missing from the view as it
+    stands; they become worth drawing the moment the shroud can be taken off,
+    which is the obvious next layer and is why they are named here rather than
+    left to be rediscovered.
+  the-board-is-a-plain-green-rectangle: >-
+    estimated - the outline is measured and the SURFACE IS NOT. No trace, no
+    socket, no connector and no silkscreen is drawn; the colour is a plain board
+    green and is not sampled from anything. Nothing should be read off it except
+    where the board begins and ends.
+relief:
+  wall: '#123a28'
+elements:
+  board: {at: [0.0, 0.0], size: [427.0, 469.69], class: bezel}
+skins: [default]
