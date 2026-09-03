@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 12.1.4
+version: 13.0.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -1132,8 +1132,13 @@ views:
         # all four drive positions, which is the definition.
         # The plates do NOT frame anything: at 254.75 and 311.80 they sit beside
         # the drives, not around them, and overlap none of them.
+        # SHIFTED LEFT 6.94 TO MATCH THE PART'S OWN EXTENDED CANVAS. The
+        # component grew a bridging strip on its left edge to close a gap
+        # against dell/riser-1-shroud-14g@1; moving the placement the same
+        # amount keeps every pre-existing feature - rails, rivets, the drive-bay
+        # openings, the far tab - at the device coordinates they were always at.
         - {ref: dell/rear-bay-frame-14g@4, id: rear-bay-frame,
-           at: [144.26, 1.71],
+           at: [137.32, 1.71],
            # AND THE RISERS TOO, now that this is always present. In the
            # no-rear-storage configuration riser 2 and riser 3 fill the same
            # bays the drives would, and this part's box spans them exactly as
@@ -1276,6 +1281,31 @@ views:
 # so yet. Recorded as a gap rather than left for the next person to rediscover
 # from a bay number that does not add up.
 gaps:
+  - what: riser-1-shroud-frame-gap-estimated
+    scope: [rear]
+    reason: needs-hardware
+    note: >-
+      A GAP THAT SHOWED AS A HOLE THROUGH THE PANEL is now bridged, and the
+      bridge is estimated rather than measured. dell/riser-1-shroud-14g@1 ends at
+      device x 137.32 and dell/rear-bay-frame-14g@4 used to start at 144.26,
+      leaving 6.94 mm neither part drew - straight on, that read as an opening
+      into the machine, and the shroud's composed shelf overhangs it, which made
+      it look like a lid over open air.
+      A CAD READ WAS ATTEMPTED. R740XD_GPU_Brackets_01-1 - the assembly
+      riser-1-shroud-14g is measured from - gives a footprint 36.9 mm wide
+      against the shroud's declared 25.62, from two independent mesh children
+      agreeing to the hundredth. It was not applied: the same instance's y
+      extent runs -40 to +24 against an 86.8 mm panel, which is not a seated
+      pose, and moving 6.94 mm of real geometry on a reading that fails its own
+      plausibility check would be worse than not reading it.
+      So rear-bay-frame-14g now carries an estimated bridging plate on its own
+      left edge, in its own metal, closing the gap without asserting a shape for
+      it. Everything the frame already drew - rails, rivets, the far tab, the
+      drive-bay openings - stays at the device coordinates it always occupied;
+      only the new strip and the component's placement moved, by the same 6.94.
+    wanted: >-
+      a seated (not exploded) reading of R740XD_GPU_Brackets_01-1, or a
+      mechanical drawing of the panel between riser 1 and the rear bay frame
   - what: front-vga-setback-estimated
     scope: [front, front-lff-12]
     reason: needs-hardware
