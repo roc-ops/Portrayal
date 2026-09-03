@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 16.0.0
+version: 17.0.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -286,6 +286,14 @@ groups:
       the rear I/O: iDRAC9 dedicated, serial, VGA and two USB 3.0. Four families
       in one block deliberately, the same reason as the front - Dell's table
       calls them one panel and they do one job.
+  drives-mid:
+    term: Drive
+    role: service
+    index-origin: 1
+    description: >-
+      the mid-bay drives, between the front cage and the risers and reachable
+      only with the system cover off. Nine of the forty configurations have
+      them: four 3.5 inch or four 2.5 inch, in one tray either way.
   covers:
     term: Cover
     role: service
@@ -1301,6 +1309,22 @@ views:
         # pull handle - the same one the bezel uses - in 2D and 3D alike.
         - {ref: dell/system-cover-14g@1, id: system-cover, at: [0.0, 196.9],
            group: covers, rel-pos: 1}
+        # THE MID-DRIVE TRAY, on the nine configurations that have one. It is
+        # UNDER THE LID, so it is placed before the cover and the cover draws
+        # over it; taking the cover off in the viewer is what reveals it.
+        # ONE TRAY, TWO SKINS. The sheet metal is the same part either way -
+        # Dell fits the same tray and changes what goes in it - so the drive
+        # size is a skin rather than a second component. `mlff4` is four 3.5
+        # inch, `msff4` is four 2.5 inch.
+        - {ref: dell/mid-drive-tray-14g@1, id: mid-drive-tray-lff, at: [1.30, 322.34],
+           inset: 1.17, group: drives-mid, rel-pos: 1,
+           only-in: [lff12-mlff4-rlff2-rc0-noriser, lff12-mlff4-rlff2-rc1-1b2b,
+                     lff12-mlff4-rlff2-rc2-1b2c, lff12-mlff4-rsff4-rc0-noriser,
+                     lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c]}
+        - {ref: dell/mid-drive-tray-14g@1, id: mid-drive-tray-sff, at: [1.30, 322.34],
+           inset: 1.17, skin: sff, group: drives-mid, rel-pos: 1,
+           only-in: [sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b,
+                     sff24-msff4-rsff4-rc2-1b2c]}
   bottom:
     size: {w: 434.0, h: 737.5}
     panel:
@@ -1386,6 +1410,27 @@ gaps:
       a mechanical drawing or a caliper on the hardware giving the riser-1
       shroud plate's front and the chassis top shelf's front at the same face x,
       which is the one measurement that settles the ordering outright
+  - what: mid-tray-drives-are-drawn-not-seated
+    scope: [top]
+    reason: needs-drawing
+    note: >-
+      THE MID TRAY'S FOUR DRIVES ARE ARTWORK, NOT OCCUPANTS, and no
+      configuration can swap one for a blank the way every other drive bay on
+      this device can.
+      The reason is a real limit rather than an oversight. A component's
+      `size` is what a FACE shows: std/drive-35@1 is 101.6 x 26.1 and
+      std/drive-25@1 is 15.0 x 69.85, both correct for a front panel. A tray
+      seen from above needs the same drives' FOOTPRINT - 101.60 x 146.99 and
+      69.85 x 100.50 - which is a different projection of one piece of
+      hardware, and a placement cannot ask for it. Rotating does not help: the
+      third dimension is the one being asked for.
+      So the slots are drawn on dell/mid-drive-tray-14g@1's two skins at the
+      measured 106.30 pitch, and the tray reads correctly with the cover off,
+      but the bays are not modelled and the drives cannot be configured.
+    wanted: >-
+      a way to place a part by the face it is seen from - or top-view drive
+      components, which duplicates parts the library already has and is the
+      reason it was not simply done
   - what: riser-1-shroud-rib-width-unresolved
     scope: [rear]
     reason: needs-drawing
