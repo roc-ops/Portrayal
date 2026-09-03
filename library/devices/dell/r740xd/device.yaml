@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 14.0.0
+version: 14.2.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -690,6 +690,34 @@ views:
         # 1 mm INSIDE the outer standoff centres.
         - {id: paint-serial, at: [52.50, 80.5], size: [28.20, 3.175], rx: 0, fill: '#0f6a76', kind: port-paint}
         - {id: paint-vga, at: [80.70, 80.5], size: [28.55, 3.175], rx: 0, fill: '#145d8f', kind: port-paint}
+        # THE SHELL BETWEEN THE FRAME AND THE LOW-PROFILE SLOT. The chassis's
+        # own sheet metal stands 14.68 proud across this whole side of the
+        # rear - `Body_8_6.001` in Dell's service model, face 1.45..249.85,
+        # covering every probe point from y 44 to y 48 - and this model had
+        # bare panel at zero there. dell/rear-bay-frame-14g@4 ends at y 44.69
+        # standing 14.13, so its bottom edge was a lit edge with a fourteen-
+        # millimetre drop behind it: a bright thread apparently floating in
+        # mid-air, which is exactly how it was reported.
+        # THE DEPTH IS MEASURED AND THE BOUNDS ARE NOT. 14.68 is the shell's
+        # own front, the same figure dell/riser-1-top-shelf-14g@1 carries for
+        # this same body. The strip's top and bottom are set by what this model
+        # puts either side of it - the frame's bottom at 44.69, riser-2-lp's
+        # top at 46.93 - not by any edge in the hardware, because the shell has
+        # none here; it runs on behind the openings.
+        # DECOR RATHER THAN A COMPONENT because it is what the metal IS, not
+        # something installed on it. Nobody can put a part number to it.
+        - id: shell-band-riser-2
+          at: [137.32, 44.69]
+          size: [112.53, 2.24]
+          out: 14.68
+          fill: '#9aa1a8'
+          confidence: measured
+          source: >-
+            Dell's service model, `Body_8_6.001` - the chassis shell - fronting
+            14.68 proud of the panel plane at z 713.5 and covering face x 170,
+            200 and 240 at y 44.0, 45.5, 46.5 and 48.0 alike. Read in the y
+            convention face_y = 86.8 - raw_y, confirmed against the rear
+            handle's trusted low edge and this same shell's riser-1 shelf.
       cutouts:
         - {id: idrac9, at: [28.60, 66.55], size: [16.0, 14.0], shape: rect}
         - {id: serial, at: [53.63, 69.10], size: [20.47, 11.4], shape: d-sub}
