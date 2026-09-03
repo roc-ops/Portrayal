@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 12.0.1
+version: 12.1.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -536,40 +536,52 @@ views:
         # readable source in hand states the order. Row-major 0-3 / 4-7 /
         # 8-11 is Dell LFF convention and is what is used here.
         - {id: lff-drive-0, at: [26.884, 3.890], size: {w: 105.500, h: 26.900},
-           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1,
+                     std/drive-35@1], default: common/drive-blank-35@1,
            group: drives, rel-pos: 0}
         - {id: lff-drive-1, at: [134.092, 3.890], size: {w: 105.500, h: 26.900},
-           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1,
+                     std/drive-35@1], default: common/drive-blank-35@1,
            group: drives, rel-pos: 1}
         - {id: lff-drive-2, at: [241.300, 3.890], size: {w: 105.500, h: 26.900},
-           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1,
+                     std/drive-35@1], default: common/drive-blank-35@1,
            group: drives, rel-pos: 2}
         - {id: lff-drive-3, at: [348.508, 3.890], size: {w: 105.500, h: 26.900},
-           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1,
+                     std/drive-35@1], default: common/drive-blank-35@1,
            group: drives, rel-pos: 3}
         - {id: lff-drive-4, at: [26.884, 30.880], size: {w: 105.500, h: 26.900},
-           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1,
+                     std/drive-35@1], default: common/drive-blank-35@1,
            group: drives, rel-pos: 4}
         - {id: lff-drive-5, at: [134.092, 30.880], size: {w: 105.500, h: 26.900},
-           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1,
+                     std/drive-35@1], default: common/drive-blank-35@1,
            group: drives, rel-pos: 5}
         - {id: lff-drive-6, at: [241.300, 30.880], size: {w: 105.500, h: 26.900},
-           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1,
+                     std/drive-35@1], default: common/drive-blank-35@1,
            group: drives, rel-pos: 6}
         - {id: lff-drive-7, at: [348.508, 30.880], size: {w: 105.500, h: 26.900},
-           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1,
+                     std/drive-35@1], default: common/drive-blank-35@1,
            group: drives, rel-pos: 7}
         - {id: lff-drive-8, at: [26.884, 57.870], size: {w: 105.500, h: 26.900},
-           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1,
+                     std/drive-35@1], default: common/drive-blank-35@1,
            group: drives, rel-pos: 8}
         - {id: lff-drive-9, at: [134.092, 57.870], size: {w: 105.500, h: 26.900},
-           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1,
+                     std/drive-35@1], default: common/drive-blank-35@1,
            group: drives, rel-pos: 9}
         - {id: lff-drive-10, at: [241.300, 57.870], size: {w: 105.500, h: 26.900},
-           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1,
+                     std/drive-35@1], default: common/drive-blank-35@1,
            group: drives, rel-pos: 10}
         - {id: lff-drive-11, at: [348.508, 57.870], size: {w: 105.500, h: 26.900},
-           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1,
+                     std/drive-35@1], default: common/drive-blank-35@1,
            group: drives, rel-pos: 11}
       placements:
         - {ref: dell/power-button-14g@1, id: power-btn, at: [458.80, 3.17], for: chassis,
@@ -893,33 +905,58 @@ views:
         - {id: psu-2, at: [341.10, 46.20], size: {w: 86.3, h: 39.1},
            accepts: [dell/psu-1100w-ac-14g@1, dell/psu-2400w-ac-14g@1, dell/psu-1100w-dc-14g@1], default: dell/psu-1100w-ac-14g@1,
            group: psus, rel-pos: 2}
-        - {id: drive-24, at: [173.0, 4.9], size: {w: 79.4, h: 17.868},
+        # THE SAME FOUR HOLES, NUMBERED FOR A 12-BAY FRONT. Dell numbers the
+        # rear immediately after the front, so these are drives 12-15 where the
+        # `drive-24..27` set above is the same metal behind a 24-bay front. Two
+        # declarations of one opening, scoped apart by configuration, exactly as
+        # `riser-2` and `riser-2-lp` are.
+        # NAMED `rear-sff-*` AND NOT `drive-*`: `drive-12` is already a front bay
+        # on the 24-bay front, and `rear-drive-12` is already the 2 x 3.5 inch
+        # rear, which Dell also numbers 12. The form factor is what tells the two
+        # rears apart.
+        - {id: rear-sff-12, at: [173.0, 4.9], size: {w: 79.4, h: 17.868},
            accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
            default: common/drive-blank-25@1, rotate: 270,
            only-in: [lff12-rsff4-rc0-noriser, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
-                     lff12-mlff4-rsff4-rc0-noriser, lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c,
-                     sff24-rsff4-rc0-noriser, sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c,
+                     lff12-mlff4-rsff4-rc0-noriser, lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c],
+           group: drives-rear, rel-pos: 1}
+        - {id: rear-sff-13, at: [173.0, 22.8], size: {w: 79.4, h: 17.868},
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
+           default: common/drive-blank-25@1, rotate: 270,
+           only-in: [lff12-rsff4-rc0-noriser, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
+                     lff12-mlff4-rsff4-rc0-noriser, lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c],
+           group: drives-rear, rel-pos: 2}
+        - {id: rear-sff-14, at: [331.0, 4.9], size: {w: 79.4, h: 17.868},
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
+           default: common/drive-blank-25@1, rotate: 270,
+           only-in: [lff12-rsff4-rc0-noriser, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
+                     lff12-mlff4-rsff4-rc0-noriser, lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c],
+           group: drives-rear, rel-pos: 3}
+        - {id: rear-sff-15, at: [331.0, 22.8], size: {w: 79.4, h: 17.868},
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
+           default: common/drive-blank-25@1, rotate: 270,
+           only-in: [lff12-rsff4-rc0-noriser, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
+                     lff12-mlff4-rsff4-rc0-noriser, lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c],
+           group: drives-rear, rel-pos: 4}
+        - {id: drive-24, at: [173.0, 4.9], size: {w: 79.4, h: 17.868},
+           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
+           default: common/drive-blank-25@1, rotate: 270,
+           only-in: [sff24-rsff4-rc0-noriser, sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c,
                      sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b, sff24-msff4-rsff4-rc2-1b2c], group: drives-rear, rel-pos: 12}
         - {id: drive-25, at: [173.0, 22.8], size: {w: 79.4, h: 17.868},
            accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
            default: common/drive-blank-25@1, rotate: 270,
-           only-in: [lff12-rsff4-rc0-noriser, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
-                     lff12-mlff4-rsff4-rc0-noriser, lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c,
-                     sff24-rsff4-rc0-noriser, sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c,
+           only-in: [sff24-rsff4-rc0-noriser, sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c,
                      sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b, sff24-msff4-rsff4-rc2-1b2c], group: drives-rear, rel-pos: 13}
         - {id: drive-26, at: [331.0, 4.9], size: {w: 79.4, h: 17.868},
            accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
            default: common/drive-blank-25@1, rotate: 270,
-           only-in: [lff12-rsff4-rc0-noriser, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
-                     lff12-mlff4-rsff4-rc0-noriser, lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c,
-                     sff24-rsff4-rc0-noriser, sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c,
+           only-in: [sff24-rsff4-rc0-noriser, sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c,
                      sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b, sff24-msff4-rsff4-rc2-1b2c], group: drives-rear, rel-pos: 14}
         - {id: drive-27, at: [331.0, 22.8], size: {w: 79.4, h: 17.868},
            accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
            default: common/drive-blank-25@1, rotate: 270,
-           only-in: [lff12-rsff4-rc0-noriser, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
-                     lff12-mlff4-rsff4-rc0-noriser, lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c,
-                     sff24-rsff4-rc0-noriser, sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c,
+           only-in: [sff24-rsff4-rc0-noriser, sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c,
                      sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b, sff24-msff4-rsff4-rc2-1b2c], group: drives-rear, rel-pos: 15}
       placements:
         # THE LIBRARY'S RJ45, not a second opinion about what one looks like.
@@ -1103,6 +1140,12 @@ views:
            # it spans the drives - its ink is the T land above and the rails and
            # panels around, never the openings themselves.
            frames: [drive-24, drive-25, drive-26, drive-27, riser-2, riser-3,
+                    # the same four holes under their 12-bay-front numbers, and
+                    # the plates that label them - one set is in scope per
+                    # configuration, but `frames` is a statement about the METAL
+                    # and has to name every bay this piece surrounds
+                    rear-sff-12, rear-sff-13, rear-sff-14, rear-sff-15,
+                    bay2-drive-plate-lff, bay3-drive-plate-lff,
                     bay2-drive-plate, bay3-drive-plate,
                     rear-drive-12, rear-drive-13, lff-drive-label,
                     rear-storage-2, rear-storage-3,
@@ -1121,16 +1164,26 @@ views:
            group: furniture, rel-pos: 19}
         - {ref: dell/rear-drive-plate-14g@1, id: bay2-drive-plate,
            at: [254.75, 7.75], skin: n24-25,
-           only-in: [lff12-rsff4-rc0-noriser, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
-                     lff12-mlff4-rsff4-rc0-noriser, lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c,
-                     sff24-rsff4-rc0-noriser, sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c,
+           only-in: [sff24-rsff4-rc0-noriser, sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c,
                      sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b, sff24-msff4-rsff4-rc2-1b2c], group: furniture, rel-pos: 19}
+        # THE SAME PLATE, THE OTHER NUMBERS. Behind a 12-bay front these
+        # four bays are drives 12-15, so the plate that labels them has to
+        # say so; one placement per front, scoped apart.
+        - {ref: dell/rear-drive-plate-14g@1, id: bay2-drive-plate-lff,
+           at: [254.75, 7.75], skin: n12-13,
+           only-in: [lff12-rsff4-rc0-noriser, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
+                     lff12-mlff4-rsff4-rc0-noriser, lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c], group: furniture, rel-pos: 19}
         - {ref: dell/rear-drive-plate-14g@1, id: bay3-drive-plate,
            at: [311.80, 7.75], skin: n26-27,
-           only-in: [lff12-rsff4-rc0-noriser, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
-                     lff12-mlff4-rsff4-rc0-noriser, lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c,
-                     sff24-rsff4-rc0-noriser, sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c,
+           only-in: [sff24-rsff4-rc0-noriser, sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c,
                      sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b, sff24-msff4-rsff4-rc2-1b2c], group: furniture, rel-pos: 19}
+        # THE SAME PLATE, THE OTHER NUMBERS. Behind a 12-bay front these
+        # four bays are drives 12-15, so the plate that labels them has to
+        # say so; one placement per front, scoped apart.
+        - {ref: dell/rear-drive-plate-14g@1, id: bay3-drive-plate-lff,
+           at: [311.80, 7.75], skin: n14-15,
+           only-in: [lff12-rsff4-rc0-noriser, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
+                     lff12-mlff4-rsff4-rc0-noriser, lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c], group: furniture, rel-pos: 19}
   # THE FOUR FACES THAT WERE MISSING. 83 of the library's 84 devices carry all
   # six views and this one carried two, which is what stops it being opened in
   # the 3D explorer at all.
@@ -1443,33 +1496,6 @@ gaps:
       between them; and this device needs its 12 x 3.5 inch front modelled
       before either can be exercised, which is the same gap `rear-2-lff` already
       stands on.
-
-  - what: lff-front-rear-4-sff-numbering
-    scope: [front-lff-12, rear-4-sff]
-    reason: needs-drawing
-    note: >-
-      THE MISSING THING IS A DECISION, NOT EVIDENCE, and `reason` has no token
-      for that - `needs-drawing` is the nearest, because one of the two ways out
-      is a second rear panel. The vendor is not silent and the sources do not
-      disagree; the model cannot say it.
-      TABLE 28 LISTS "3.5 inch (x12) ... and 2.5 inch (x4) SAS/SATA backplane
-      (back)" AND IT CANNOT BE SPELLED HERE. The four rear 2.5 inch bays are
-      `drive-24..27`, and those ids ARE the 24-bay front's numbering; under the
-      12 x 3.5 inch front the same four bays are drives 12-15. A bay id does not
-      vary by configuration, so one set of bays cannot carry both numberings,
-      and `configurations.<name>.views` does not reach it - that couples which
-      PANEL a face wears, not what the bays on another face are called.
-      `rear-2-lff` escaped this only by accident of naming: its bays were
-      already `rear-drive-12` and `rear-drive-13`, so `lff-12-rear-2-lff` binds
-      them without contradiction.
-      THIS IS THE RESIDUE OF "the two rear numberings stop being mutually
-      exclusive readings of one drawing", and drawing the front did not settle
-      it - it made it precise.
-    wanted: >-
-      a decision on how a bay carries a per-configuration label: either a second
-      rear variant view whose bays are named for the LFF numbering, which
-      duplicates a panel to rename four bays, or a `labels:` override in the
-      configuration, which is new schema.
 
 configurations:
   # GENERATED ALONGSIDE THE only-in LISTS ABOVE, from one table, because
