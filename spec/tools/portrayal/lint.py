@@ -1155,7 +1155,13 @@ def _feature_magnitude(feat):
     number it is about, and asking a feature which magnitude it carries has to
     ignore them or every stacked cyl looks like two numbers.
     """
-    keys = [k for k in ("top", "sink", "out", "dome", "cyl", "bar", "uhandle", "vent")
+    # `pocket` JOINS THE LIST BECAUSE IT IS ONE OF THESE. It was added as a
+    # relief primitive and this helper was not told, so every pocketed feature
+    # reported its magnitude as `?` and L36 could not check a single borrowed
+    # one - a rule silently unable to see the newest thing it governs, which is
+    # the same shape of blindness the rule itself exists to catch.
+    keys = [k for k in ("top", "sink", "out", "dome", "cyl", "bar", "uhandle",
+                        "vent", "pocket")
             if feat.get(k) is not None]
     return (keys[0], float(feat[keys[0]])) if len(keys) == 1 else None
 

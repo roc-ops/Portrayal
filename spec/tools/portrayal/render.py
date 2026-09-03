@@ -659,6 +659,15 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                         node.set(f"data-z-{zk}", str(feat[zk]))
                 if feat.get("color"):
                     node.set("data-z-color", feat["color"])
+                if feat.get("pocket"):
+                    # A POCKET IS A CAVITY THE KIT ALREADY KNOWS HOW TO BUILD.
+                    # relief.js collects every `[data-depth]` as a recess with
+                    # walls and a floor taken from that node's own art, so this
+                    # needs no new geometry - only a way for a feature to say it
+                    # is a hole in a face rather than a lump on one.
+                    node.set("data-depth", str(feat["pocket"]))
+                    if (contract.get("relief") or {}).get("wall"):
+                        node.set("data-wall", contract["relief"]["wall"])
                 if feat.get("shape"):
                     # EXTRUDE THE OUTLINE, NOT THE BOX. Only meaningful next to
                     # `out`; the kit falls back to the box if the node's art
@@ -725,6 +734,15 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                         node.set(f"data-z-{zk}", str(feat[zk]))
                 if feat.get("color"):
                     node.set("data-z-color", feat["color"])
+                if feat.get("pocket"):
+                    # A POCKET IS A CAVITY THE KIT ALREADY KNOWS HOW TO BUILD.
+                    # relief.js collects every `[data-depth]` as a recess with
+                    # walls and a floor taken from that node's own art, so this
+                    # needs no new geometry - only a way for a feature to say it
+                    # is a hole in a face rather than a lump on one.
+                    node.set("data-depth", str(feat["pocket"]))
+                    if (contract.get("relief") or {}).get("wall"):
+                        node.set("data-wall", contract["relief"]["wall"])
                 if feat.get("shape"):
                     # EXTRUDE THE OUTLINE, NOT THE BOX. Only meaningful next to
                     # `out`; the kit falls back to the box if the node's art

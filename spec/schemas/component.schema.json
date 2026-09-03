@@ -216,6 +216,11 @@
        "shape": {
         "type": "boolean",
         "description": "extrude the node's own OUTLINE rather than its bounding box. `out` builds a box, which is right for a lamp or a boss and wrong for anything with a contour: the rear handle's face was its real art and its sides were the bbox, so a curved moulding read as three cardboard boxes stood on end. Opt-in rather than inferred, because the box is cheaper and is the right answer for most protrusions, and guessing would silently reshape every one in the library. Companion to `round` on a cavity, which shape-punches from the node's art the same way."
+       },
+       "pocket": {
+        "type": "number",
+        "exclusiveMinimum": 0,
+        "description": "mm this node is sunk INTO an otherwise solid face - a window cut through a drive carrier, a button pressed into it. Distinct from `sink`, which measures from a cavity floor and so needs the part to be a hole already: a carrier is solid except where it is pocketed, and had no way to say so. The floor is the node's own art, so what is drawn behind a window is what shows down it."
        }
       }
      }
