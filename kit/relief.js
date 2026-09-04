@@ -1024,6 +1024,12 @@ export async function buildFaceRelief(F, ctx) {
       const bay = new THREE.Mesh(new THREE.BoxGeometry(f.w + 0.6, f.h + 0.6, bd),
         new THREE.MeshLambertMaterial({color: 0x0a0c0e, side: THREE.BackSide}));
       bay.position.set(LX(f.x, f.w), LY(f.y, f.h), zf - bd / 2 - 0.2);
+      // THE HOLE BELONGS TO THE BAY, NOT THE MODULE. Tagged with the bay's
+      // path so it stays when the module is unseated - that is the point of
+      // it - and goes when the bay itself does: the mid tray's four bays are
+      // pulled with the tray, and four dark boxes were left hanging where it
+      // had been, hiding the board.
+      bay.userData.portrayalPath = f.path;
       grp.add(bay);
     }
   meshes.push(grp);

@@ -1928,8 +1928,12 @@ def lint_device_overlap(path, view_name, view, lib_roots):
         if pid in bay_ids:
             return True
         c = _contract(pid)
-        return bool((c.get("size") or {}).get("d")) and c.get("kind") != "module" \
-            and not _mounted(pid)
+        if not (c.get("size") or {}).get("d") or c.get("kind") == "module":
+            return False
+        # a mounted part is solid - unless it says `relief.cavity`, which is
+        # the same override render.py honours: the mid tray lifts out AND is
+        # the recess its drives sit in
+        return not _mounted(pid) or bool((c.get("relief") or {}).get("cavity"))
 
     for pid, w in stands.items():
         if w in every_id and not _well(w):

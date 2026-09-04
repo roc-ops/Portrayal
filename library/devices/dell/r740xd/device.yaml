@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 20.3.0
+version: 20.4.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -1629,14 +1629,14 @@ views:
         # size is a skin rather than a second component. `mlff4` is four 3.5
         # inch, `msff4` is four 2.5 inch.
         - {ref: dell/mid-drive-tray-14g@1, id: mid-drive-tray-lff, at: [1.30, 233.92],
-           inset: 1.17, group: drives-mid, rel-pos: 5,
+           inset: 1.17, group: drives-mid, rel-pos: 5, under: system-cover,
            frames: [mid-lff-0, mid-lff-1, mid-lff-2, mid-lff-3,
                    mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3],
            only-in: [lff12-mlff4-rlff2-rc0-noriser, lff12-mlff4-rlff2-rc1-1b2b,
                      lff12-mlff4-rlff2-rc2-1b2c, lff12-mlff4-rsff4-rc0-noriser,
                      lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c]}
         - {ref: dell/mid-drive-tray-14g@1, id: mid-drive-tray-sff, at: [1.30, 233.92],
-           inset: 1.17, skin: sff, group: drives-mid, rel-pos: 5,
+           inset: 1.17, skin: sff, group: drives-mid, rel-pos: 5, under: system-cover,
            frames: [mid-lff-0, mid-lff-1, mid-lff-2, mid-lff-3,
                    mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3],
            only-in: [sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b,

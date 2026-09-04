@@ -1402,10 +1402,15 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     # something that is NOT itself deferred - a well, or a bay - is drawn in
     # the first pass, in `under:` order, with the wells it stands among.
     every_bay = {b["id"] for b in parts["bays"]}
+    # AND A WELL THAT THINGS STAND IN IS NOT A LID EITHER, whatever its
+    # behaviour says. The mid tray is `mounts` because it lifts out, and it is
+    # a recess with four drive bays `in:` it; the bays have to paint after it.
+    wells_in_use = {q["in"] for q in (*parts["placements"], *parts["bays"]) if q.get("in")}
     for q in parts["placements"]:
         overs = q.get("under") or []
         overs = overs if isinstance(overs, list) else [overs]
-        if q["id"] in deferred_ids and any(o in every_bay or o not in deferred_ids for o in overs):
+        if q["id"] in deferred_ids and (q["id"] in wells_in_use or
+                                        any(o in every_bay or o not in deferred_ids for o in overs)):
             deferred_ids.discard(q["id"])
 
     # HOW DEEP A WELL'S FLOOR IS, for whatever says it is `in:` one. The
@@ -1424,7 +1429,12 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         except Exception:
             return 0.0
         c = c or {}
-        if c.get("kind") == "module" or c.get("behaviour") == "mounts":
+        # the aperture rule exactly as the emitter applies it: a module is
+        # solid, a mounted part is solid UNLESS it declares `relief.cavity` -
+        # the mid tray lifts out and is the recess its drives sit in
+        if c.get("kind") == "module":
+            return 0.0
+        if c.get("behaviour") == "mounts" and not (c.get("relief") or {}).get("cavity"):
             return 0.0
         return float((c.get("size") or {}).get("d") or 0.0)
 
@@ -1484,6 +1494,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             g.set("data-group-role", grp["role"])
         if p.get("in"):
             sink(g, floor_of(p["in"]))
+            g.set("data-in", p["in"])
         # What the lamps on this instance mean. A placement wins over its group,
         # the way attrs already do: a block of eighteen QSFP28 speed lamps says
         # its vocabulary once, and one lamp inside it may still differ.
@@ -1551,6 +1562,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         bay_g.set("data-class", "bay")
         if b.get("in"):
             bay_g.set("data-z-lift", f"{-floor_of(b['in']):g}")
+            bay_g.set("data-in", b["in"])
         if b.get("group"):
             bay_g.set("data-group", b["group"])
             brole = (dev_groups.get(b["group"]) or {}).get("role")

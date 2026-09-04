@@ -771,16 +771,19 @@ def test_under_must_name_something_in_the_view():
     assert hits and "not in this view" in hits[0]
 
 
-def test_a_bay_can_be_under_a_tray():
-    """A DIMM socket is an opening, and the mid tray lies over it. Without the
-    declaration the tray's box on the bay is the overlap L13 reports; with it
-    the bay is a well by nature and the pair is not compared."""
-    tray = {"id": "tray", "ref": "dell/mid-drive-tray-14g@1", "at": [1.30, 233.92]}
-    sock = {"id": "sock", "at": [20.0, 281.0], "size": {"w": 3.8, "h": 133.4}}
+def test_a_bay_can_be_under_a_well():
+    """An opening under a recess. Without the declaration the well's box on
+    the bay is the overlap L13 reports; with it the bay is a well by nature
+    and the pair is not compared. The fan cage is the well here because it is
+    a plain one - the mid tray this first used became `mounts` the day it got
+    a pull handle, and mounted-over-unmounted is exempt before `under:` is
+    even consulted."""
+    cage = {"id": "cage", "ref": "dell/fan-cage-14g@1", "at": [12.55, 420.62]}
+    sock = {"id": "sock", "at": [20.0, 430.0], "size": {"w": 3.8, "h": 40.0}}
     v = {"size": {"w": 434.0, "h": 737.5},
-         "components": {"placements": [tray], "bays": [sock]}}
+         "components": {"placements": [cage], "bays": [sock]}}
     assert caught("L13", lint.lint_device_overlap, P, "top", v, [str(LIB)])
-    v["components"]["bays"] = [dict(sock, under="tray")]
+    v["components"]["bays"] = [dict(sock, under="cage")]
     assert not caught("L13", lint.lint_device_overlap, P, "top", v, [str(LIB)])
 
 

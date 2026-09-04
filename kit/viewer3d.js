@@ -956,7 +956,11 @@ export function createViewer(container, opts = {}) {
     };
     // geometry first: a body that was extruded before the part came off is still
     // in the scene, and no amount of repainting a texture removes it
-    for (const [path, g] of Object.entries(FRU_GROUPS)) g.visible = !isOff(path);
+    // A FRU group is keyed by its BAY - 'mid-sff-0' - and the tree pulls the
+    // MODULE in it - 'mid-sff-0/module'. The prefix test runs the other way, so
+    // an unseated drive kept its body in the scene and the control did nothing.
+    for (const [path, g] of Object.entries(FRU_GROUPS))
+      g.visible = !isOff(path) && !isOff(path + '/module');
     // AND THE RELIEF OF EVERYTHING THAT IS NOT A FRU, which is where this used
     // to stop. Only modules get a subgroup of their own, because only a module
     // leaves a bay behind it; a bolted-on cover is merged into the shared relief
@@ -965,7 +969,12 @@ export function createViewer(container, opts = {}) {
     // standing there, which reads as a control that does nothing.
     // Every mesh now carries the path it came from, so it can be hidden where it
     // stands without being ejected.
-    if (box) box.traverse(o => {
+    // THE RELIEF IS NOT UNDER THE CHASSIS BOX. It is its own group on the
+    // scene, so a traversal of `box` reached none of it and this hid nothing:
+    // a pulled cover only LOOKED gone because its top texture repainted
+    // transparent, and its 1 mm of sides stayed. A pulled tray kept its dark
+    // back plane and walls, which read as a slab over the board. Walk both.
+    for (const root of [box, reliefGroup]) if (root) root.traverse(o => {
       const p = o.userData && o.userData.portrayalPath;
       if (p) o.visible = !isOff(p);
     });

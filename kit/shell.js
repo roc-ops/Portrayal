@@ -559,6 +559,16 @@ export function createShell(opts = {}) {
             if (off) n.el.setAttribute('data-portrayal-pulled', '');
             else n.el.removeAttribute('data-portrayal-pulled');
             row.classList.toggle('pulled', off);
+            // WHAT STANDS IN A WELL COMES OUT WITH IT. A bay or a part that says
+            // `in:` this one (render.py emits it as data-in) is carried by it -
+            // the mid tray's four drives lift out with the tray - so they go
+            // off and come back with it, in the drawing and in the tree.
+            for (const w of state.svg.querySelectorAll(`[data-in="${CSS.escape(n.path)}"]`)) {
+              if (off) w.setAttribute('data-portrayal-pulled', '');
+              else w.removeAttribute('data-portrayal-pulled');
+              const wr = el.tree.querySelector(`.node[data-path="${CSS.escape(w.dataset.path)}"]`);
+              if (wr) wr.classList.toggle('pulled', off);
+            }
             refreshPulled();
             // a host driving a 3D scene needs the whole set, not this one part:
             // viewer3d's setPulled takes what should be off, so a reset is []
