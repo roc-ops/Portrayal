@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: heatsink-1u-14g
-version: 1.0.0
+version: 1.1.0
 class: mechanical
 # It is lifted off the processor to reach it, and `mounts` is what gives it
 # the viewer's pull handle. The shroud over it is `mounts` too; the placement
@@ -34,13 +34,14 @@ relief:
   wall: '#6d737a'
   features:
   - node: block
-    out: 1.0
+    out: 33.1
     color: '#8a9096'
-    confidence: estimated
+    confidence: measured
     source: >-
-      unsourced. It is 33.1 tall in the model, but it stands on a board that
-      is itself drawn as a well whose floor is this part's top, so 1.0 is what
-      makes it read as a block on that floor rather than as paint.
+      Dell's service model, `R740XD_ HeatSink 1U`: cad y 7.7 to 40.8. It
+      stands `in:` dell/system-board-14g@1, whose floor is the PCB at 79.9,
+      so it rises from there to 46.8 below the lid. It was 1.0 for one
+      version, when the board's floor was drawn at this part's own top.
 elements:
   block: {at: [0.0, 0.0], size: [82.2, 128.1], class: bezel}
 skins: [default]

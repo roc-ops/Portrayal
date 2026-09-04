@@ -1,23 +1,26 @@
 format: 1
 kind: component
 name: fan-cage-14g
-version: 2.0.0
+version: 2.1.0
 class: mechanical
 profile: server
 description: >-
   The cooling fan cage of a 14G PowerEdge seen from above - the frame across the
   full width of the chassis, between the front drive backplane and the shroud
-size: {w: 408.9, h: 71.5, d: 3.48}
+size: {w: 408.9, h: 71.5, d: 78.08}
 provenance:
   size: >-
     measured - Dell's service model, `DELL_R740XD_CoolingfanFrame-1`, the seated
     one of its two poses: face x 12.55..421.45 and top_y 420.62..492.12 in the
     top view's frame (top_y = 713.5 - raw_z; rear at 0).
   depth: >-
-    measured - the frame's own top is at chassis height 86.34, effectively the
-    lid line, and the FANS in it top out at 83.32. 3.48 is the drop from the
-    86.8 panel to the top of a fan, so this part is a shallow well with the fans
-    at its floor - which is what looking down into an open chassis shows.
+    measured - the fans stand on it. A fan is 74.6 tall from cad y 8.72 to
+    83.32, so its base is 78.08 below the 86.8 panel, and that is the floor
+    this well is drawn to; a fan `in:` it rises its own 74.6 and tops out
+    3.48 below the lid, where the model has it. The frame's own top is at
+    86.34, effectively the lid line. The first figure here was 3.48 - the top
+    of a fan - which is a fine description of what looking down shows and a
+    wrong one of where a fan is.
   the-six-fans-are-measured-and-unevenly-spaced: >-
     measured, and the unevenness is REPORTED RATHER THAN REGULARISED, which is
     the opposite of the call made for the mid tray's drives - so the difference
@@ -53,10 +56,10 @@ provenance:
     What this art keeps is the FLOOR - six dark slots where a lifted fan came
     from. The rings went with the fans, and they were wrong anyway: a fan seen
     from above shows the top of its housing, not its rotor (ISM Figure 35).
-  depth-is-still-the-drop-to-a-seated-fan: >-
-    3.48 is unchanged by the fans becoming modules. The well is the cage frame
-    seen from the lid line, and a seated fan's top at 83.32 is its floor; the
-    fan module carries its own 74.6 height for the pull.
+  the-fans-carry-their-own-height: >-
+    dell/fan-14g@1 is 74.6 tall and says so in its `size.d`; the well is
+    78.08 to the floor; the difference is the 3.48 a seated fan sits below the
+    lid. Three numbers, each measured, and none restated.
 relief:
   wall: '#2b3035'
 elements:

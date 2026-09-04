@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: mid-drive-tray-14g
-version: 2.0.0
+version: 2.1.0
 class: mechanical
 # It lifts out of the chassis - the ISM removes it in one step - and `mounts`
 # is what gives it the viewer's pull handle. It is ALSO the recess its four
@@ -13,7 +13,7 @@ profile: server
 description: >-
   The mid-drive tray of a 14G PowerEdge - four drives lying flat between the
   front cage and the risers, reached by taking the system cover off
-size: {w: 431.4, h: 181.24, d: 5.21}
+size: {w: 431.4, h: 181.24, d: 31.31}
 provenance:
   size: >-
     measured - Dell's service model, `740XD_ MidDriveTray_-1.001`: face
@@ -58,18 +58,22 @@ provenance:
     registry entries as the face-on ones, with `presents:` saying which two of
     each standard's three dimensions they draw. No number is restated and none
     can drift.
-  the-well-is-5-21-deep: >-
+  the-well-is-31-31-deep: >-
     measured, and it is what makes the lid worth taking off. With no `size.d`
     this tray was flat paint on the top plane: the cover came away and what was
     behind it was a picture of a tray rather than a recess anything could sit
     in.
-    render.py draws a plain component as an APERTURE as deep as its `size.d`, so
-    this number is the depth of the well and this part's own art is its floor.
-    5.21 is the drop from the top plane to the top of a seated drive: the panel
-    is 86.8 and Dell's model puts the 3.5 inch drives in this tray at
-    y 55.49..81.60, so 86.8 - 81.60. The tray's sheet metal is 1.17 below the
-    plane and its floor is lower again at 37.91; neither is the number wanted
-    here, because what the well has to clear is the DRIVE.
+    render.py draws this part as an APERTURE as deep as its `size.d`, and A
+    WELL'S DEPTH IS THE FLOOR ITS OCCUPANTS STAND ON: the bays `in:` it put
+    their drives' bottoms there and let them rise to their own height. 31.31
+    is where a seated drive's bottom is: the panel is 86.8 and Dell's model
+    puts the 3.5 inch drives in this tray at y 55.49..81.60, so 86.8 - 55.49,
+    and a 26.1 drive standing on it tops out 5.21 below the lid, which is
+    where the model has it. The tray's own sheet metal is lower again, at
+    37.91 (48.89 below the lid); the drives sit above it on the carrier rails
+    this library does not model, so the floor drawn is the one they rest on
+    and not the one the tin is at. The first figure here was 5.21 - the top
+    of the drive - and it drew the drives hanging under the tray.
   it-lifts-out-and-is-a-well: >-
     `behaviour: mounts` with `relief.cavity: tray`, and the two together are
     the point. The tray comes out of the chassis as one piece with its drives

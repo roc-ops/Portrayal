@@ -1438,6 +1438,21 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             return 0.0
         return float((c.get("size") or {}).get("d") or 0.0)
 
+    # HOW TALL THE THING IN A BAY IS, so it can stand on the floor rather than
+    # hang from the plane: the deepest acceptable occupant, exactly as the
+    # bay's own data-depth is taken.
+    def occupant_depth(b):
+        ds = []
+        for ref in (b.get("accepts") or []):
+            try:
+                c, _ = lib.resolve(ref)
+            except Exception:
+                continue
+            d = ((c or {}).get("size") or {}).get("d")
+            if d:
+                ds.append(float(d))
+        return max(ds) if ds else 0.0
+
     def sink(g, floor):
         if not floor:
             return
@@ -1561,7 +1576,16 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         bay_g.set("data-path", b["id"])
         bay_g.set("data-class", "bay")
         if b.get("in"):
-            bay_g.set("data-z-lift", f"{-floor_of(b['in']):g}")
+            # A MODULE STANDS ON THE FLOOR AND RISES TO ITS OWN HEIGHT. A bay's
+            # plane is where the module's face is and the body reaches back
+            # from it - on a faceplate, into the chassis. In a well the body
+            # reaches DOWN, so the plane has to sit the module's height above
+            # the floor or a DIMM sinks 31 mm into the board and a drive hangs
+            # under its tray. The well's `d` is the floor its occupants stand
+            # on; this is what puts their tops where the model measured them.
+            floor = floor_of(b["in"])
+            if floor:
+                bay_g.set("data-z-lift", f"{-(floor - occupant_depth(b)):g}")
             bay_g.set("data-in", b["in"])
         if b.get("group"):
             bay_g.set("data-group", b["group"])

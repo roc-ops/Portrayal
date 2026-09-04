@@ -1,13 +1,13 @@
 format: 1
 kind: component
 name: system-board-14g
-version: 1.2.0
+version: 1.3.0
 class: mechanical
 profile: server
 description: >-
   The system board of a 14G PowerEdge seen from above - the floor of the
   chassis, visible between the fan cage, the shroud and the risers
-size: {w: 427.0, h: 469.69, d: 46.17}
+size: {w: 427.0, h: 469.69, d: 79.9}
 provenance:
   size: >-
     measured - Dell's service model, `R740XD_ SystemBoard`, the one seated pose:
@@ -15,11 +15,15 @@ provenance:
     (top_y = 713.5 - raw_z; rear at 0). It is the full width of the chassis interior and runs
     from just behind the fan cage to the rear wall.
   depth: >-
-    measured - the board's own top is at chassis height 40.63 against an 86.8
-    panel, so it sits 46.17 below the plane the lid closes on. That is the
-    number `size.d` carries, which makes this part a WELL 46.17 deep with its
-    own art as the floor: what you are looking down into when the lid, the
-    shroud and the tray are all out of the way.
+    measured - 79.9 is the PCB, the floor everything on this board stands on:
+    the DIMM sockets base at cad y 6.9 and the panel is at 86.8. That is the
+    number `size.d` carries, which makes this part a WELL 79.9 deep with its
+    own art as the floor, and it is what the heatsinks stand on with their
+    measured 33.1 and the DIMMs with their 31.3. A WELL'S DEPTH IS ITS FLOOR,
+    NOT THE TOP OF WHAT IS IN IT. The first figure here was 46.17, the top of
+    the heatsinks, because the model's bounding box for the assembly stops
+    there - and with that as the floor a DIMM's body sank 31 mm into the
+    board and a heatsink was 1 mm tall.
   what-is-on-it: >-
     The processors' heatsinks are dell/heatsink-1u-14g@1, placed on the
     device over this board; the memory is twenty-four bays of
@@ -32,13 +36,6 @@ provenance:
     sockets themselves (under the heatsinks), the NVDIMM-N battery
     (`DELL_R740XD_NVDIMM-N battery-1.001`, face x 178.58..247.58, and it
     mounts on the shroud rather than here), and every connector.
-  the-top-is-the-heatsink-top: >-
-    A NOTE ON `size.d`. The 40.63 the model gives as this assembly's top is
-    the top of the heatsinks (cad y 40.8), not of the PCB - the DIMM sockets
-    base at cad y 6.9, so the board itself is nearer 80 below the lid line.
-    46.17 is kept because it is the depth of the well as the eye sees it,
-    with the heatsinks drawn flat on its floor; the DIMMs stand 31.3 above
-    that floor and carry that as their own `d`.
   the-board-is-a-plain-green-rectangle: >-
     estimated - the outline is measured and the SURFACE IS NOT. No trace, no
     socket, no connector and no silkscreen is drawn; the colour is a plain board
