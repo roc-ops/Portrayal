@@ -530,6 +530,8 @@ export async function extractRelief(url, scope) {
             thread: el.dataset.zThread && +el.dataset.zThread,
             color: el.dataset.zColor || null,
             rings: el.dataset.zShape ? ringsOf(el) : null,
+            profile: el.dataset.zProfile
+              ? el.dataset.zProfile.split(',').map(p => p.split(':').map(Number)) : null,
             svgText: nodeSvg(el, rect)};
   });
   const domes = [...svg.querySelectorAll('[data-z-dome]')].map(el => {
@@ -964,6 +966,39 @@ export async function buildFaceRelief(F, ctx) {
           [side, faceTex, side]);
         m.rotation.x = Math.PI / 2;
         m.position.set(LX(o.x, o.w), LY(o.y, o.h), o.lift + o.cyl / 2);
+        addTo(m);
+      } else if (o.profile && o.profile.length >= 2) {
+        // A DEPTH THAT VARIES ACROSS THE NODE. `profile` on the feature: [x, out]
+        // pairs from the node's left edge, swept straight down its height. The
+        // R740xd's bezel is a honeycomb 20 proud whose end caps fall away to 9
+        // at the tips - a section like a football sliced a third through - and
+        // a box drew it as a slab with the right picture on the front. The
+        // polyline is closed back to the face and extruded down the node, so
+        // the front is the curve and the ends are the caps' own slopes.
+        const shape = new THREE.Shape();
+        const px = x => LX(o.x + x, 0);
+        shape.moveTo(px(o.profile[0][0]), o.lift);
+        for (const [x, out] of o.profile) shape.lineTo(px(x), out);
+        shape.lineTo(px(o.profile[o.profile.length - 1][0]), o.lift);
+        shape.closePath();
+        const geo = new THREE.ExtrudeGeometry(shape, {depth: o.h, bevelEnabled: false});
+        // the shape's plane is (x, depth) and the extrusion runs along its z;
+        // turn that so depth is the face normal and the extrusion runs DOWN
+        // the node from its top edge
+        geo.rotateX(Math.PI / 2);
+        geo.translate(0, LY(o.y, 0), 0);
+        const unX = wx => (F.flipLX ? -wx : wx) + fw / 2;
+        const unY = wy => fh / 2 - (F.flipLY ? -wy : wy);
+        const pos = geo.attributes.position, uv = geo.attributes.uv;
+        for (let i = 0; i < pos.count; i++) {
+          uv.setXY(i, (unX(pos.getX(i)) - o.x) / o.w,
+                   1 - (unY(pos.getY(i)) - o.y) / o.h);
+        }
+        uv.needsUpdate = true;
+        // ExtrudeGeometry's group 0 is the two caps - here the node's top and
+        // bottom edges - and group 1 the walls, of which the front is the curve
+        const m = new THREE.Mesh(
+          geo, [new THREE.MeshLambertMaterial({color: o.color}), faceTex]);
         addTo(m);
       } else if (o.rings && o.rings.length) {
         // THE SHAPE, NOT THE BOX. `shape: true` on the feature. The face art was

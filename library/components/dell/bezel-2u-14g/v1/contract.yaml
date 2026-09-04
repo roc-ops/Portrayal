@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: bezel-2u-14g
-version: 2.0.0
+version: 2.1.0
 class: bezel
 behaviour: mounts
 profile: server
@@ -67,19 +67,20 @@ provenance:
     placeholder for five versions.
   the-profile: >-
     measured from the same mesh, read as the front-most z in 10 mm bands
-    across x and 4 mm bands up y, and drawn as FOUR relief features because
-    a bezel has four depths, not one. The honeycomb FIELD's front is at z
-    -0.7, 20.3 proud, and its cells are 20 mm deep tubes to z 19.5 - the
-    block is drawn to the front figure and the tubes are not drawn, which a
-    hole in a 20 mm block reads as anyway. The END CAPS are wedges: 9.3 proud
-    at the extreme ends (z 10.3 left, 11.3 right) rising to the field's 20.3
-    where they meet it; a box cannot taper, so each is drawn at 15.9, the
-    figure at the cap's middle, and the tip reads 6.6 too far out. The BADGE
-    BAR at x 175..265, y 28.7..48.7 stands at z -3.7, 3.0 proud of the field;
-    the round badge near the left cap is 0.5 proud and is drawn flush. The
-    top and bottom rails sit 3 to 5 behind the field's front and are drawn at
-    the field's figure. The x rule is the top view's, 217 - raw_x - w, because
-    a front view and a plan agree about left and right.
+    across x and 4 mm bands up y. Across x the bezel is NOT one depth: the
+    honeycomb field's front is at z -0.7, 20.3 proud, and the end caps fall
+    away from it to 11.3 and 10.3 at the tips - 8.3 and 9.3 proud - over
+    about 40 mm each side, a section like a football sliced a third through.
+    That is what `profile` on the plate's feature carries, as [x, out] pairs
+    from the bands, and the kit sweeps it down the height so the side view
+    is the curve and not a box. Up y it is nearly flat: -0.7 to -1.7 across
+    the field, the top and bottom rails 3 to 5 behind it, all drawn at the
+    field's figure. The BADGE BAR at x 175..265, y 28.7..48.7 stands at
+    z -3.7, 3.0 proud of the field, and is its own box; the round badge near
+    the left cap is 0.5 proud and is drawn flush. The cells are 20 mm tubes
+    to z 19.5 and are not drawn as tubes, which a hole in a 20 mm prism reads
+    as anyway. The x rule is the top view's, 217 - raw_x - w, because a front
+    view and a plan agree about left and right.
   the-model-puts-the-release-on-the-other-end: >-
     A DISAGREEMENT, RECORDED AND NOT RESOLVED. The ISM says the release
     button is at the LEFT end as seen from the front, and this skin draws it
@@ -92,29 +93,27 @@ provenance:
     because it is the document a person removing the bezel reads.
 relief:
   features:
-  - node: field
+  - node: plate
     out: 20.3
-    color: '#2b2f34'
-    confidence: measured
-    source: the mesh's front-most z in the honeycomb, -0.7, against the carriers' 19.6
-  - node: flange-l
-    out: 15.9
+    profile: [[0, 8.3], [20, 14.9], [30, 16.7], [40, 20.3], [400, 20.3], [410, 15.9], [430, 9.3], [434, 9.3]]
     color: '#2b2f34'
     confidence: measured
     source: >-
-      the cap's front at its middle, cad z 3.7; the cap tapers from 9.3 proud
-      at the tip to the field's 20.3, and a box is drawn at the middle
-  - node: flange-r
-    out: 15.9
-    color: '#2b2f34'
-    confidence: measured
-    source: as flange-l; the right cap tapers from z 11.3 at its tip
+      the mesh's front-most z in 10 mm bands across x, against the carriers'
+      19.6: the field at -0.7 (20.3 proud), the left cap's tip at 11.3 (8.3),
+      the right cap's at 10.3 (9.3), and the bands between them. `out` is the
+      greatest figure; the profile is the section.
   - node: badge
     out: 23.3
     color: '#2b2f34'
     confidence: measured
     source: the bar's front at cad z -3.7, 3.0 proud of the field
 elements:
+  plate:
+    at: [0.0, 0.0]
+    size: [434.0, 82.35]
+    class: bezel
+    description: the bezel's plate - field and both caps - with the model's section
   field:
     at: [24.8, 0.0]
     size: [384.4, 82.35]

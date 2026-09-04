@@ -225,6 +225,19 @@
         "type": "boolean",
         "description": "extrude the node's own OUTLINE rather than its bounding box. `out` builds a box, which is right for a lamp or a boss and wrong for anything with a contour: the rear handle's face was its real art and its sides were the bbox, so a curved moulding read as three cardboard boxes stood on end. Opt-in rather than inferred, because the box is cheaper and is the right answer for most protrusions, and guessing would silently reshape every one in the library. Companion to `round` on a cavity, which shape-punches from the node's art the same way."
        },
+       "profile": {
+        "type": "array",
+        "minItems": 2,
+        "items": {
+         "type": "array",
+         "minItems": 2,
+         "maxItems": 2,
+         "items": {
+          "type": "number"
+         }
+        },
+        "description": "how far the node stands off the face AS IT VARIES ACROSS ITS WIDTH: [x, out] pairs, x in mm from the node's left edge, out in mm proud of the face, swept straight down the node's height. A box has one depth and an outline extrusion has one depth; the R740xd's front bezel has none of those - Dell's model is a honeycomb field 20 proud with end caps that fall away to 9 at the tips, a section like a football sliced a third through. The kit extrudes this polyline into a prism whose curved front carries the node's own art. `out` still names the greatest figure, so everything that reads a single depth keeps working. Not shifted by `in:` and not flipped on a mirrored face."
+       },
        "pocket": {
         "type": "number",
         "exclusiveMinimum": 0,

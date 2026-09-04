@@ -659,6 +659,10 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                 for zk in ("top", "sink", "out", "dome", "vent", "cyl", "lift", "bar", "uhandle"):
                     if feat.get(zk) is not None:
                         node.set(f"data-z-{zk}", str(feat[zk]))
+                if feat.get("profile"):
+                    # depth that varies across the node, as x:out pairs; `out`
+                    # goes out beside it as the single figure everything else reads
+                    node.set("data-z-profile", ",".join(f"{x:g}:{o:g}" for x, o in feat["profile"]))
                 if feat.get("color"):
                     node.set("data-z-color", feat["color"])
                 if feat.get("pocket"):
@@ -745,6 +749,10 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                 for zk in ("top", "sink", "out", "dome", "vent", "cyl", "lift", "bar", "uhandle"):
                     if feat.get(zk) is not None:
                         node.set(f"data-z-{zk}", str(feat[zk]))
+                if feat.get("profile"):
+                    # depth that varies across the node, as x:out pairs; `out`
+                    # goes out beside it as the single figure everything else reads
+                    node.set("data-z-profile", ",".join(f"{x:g}:{o:g}" for x, o in feat["profile"]))
                 if feat.get("color"):
                     node.set("data-z-color", feat["color"])
                 if feat.get("pocket"):
