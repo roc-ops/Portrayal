@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 19.0.0
+version: 20.0.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -1287,6 +1287,12 @@ views:
   # to report it, because three separate features on this device have already
   # been drawn in a tone that could not be seen against what they sit on.
   top:
+    # REAR AT y=0, FRONT AT y=737.5. That is this library's plan convention -
+    # every UfiSpace top puts screw-r* at the top of the drawing and screw-f*
+    # at the bottom - and it is the viewer's: the top face is mounted so that
+    # SVG y=0 lands at the rear. This view was first authored the other way
+    # round, and looked right in 2D and mirrored in 3D, with the fan wall two
+    # thirds of the way back. CAD: top_y = 713.5 - raw_z.
     size: {w: 434.0, h: 737.5}
     panel:
       decor:
@@ -1296,10 +1302,10 @@ views:
         - {id: edge-right, at: [428.0, 0.0], size: [6.0, 737.5],
            fill: '#1a1d21', confidence: estimated,
            source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the 6.0 is not measured"}
-        - {id: edge-front, at: [0.0, 0.0], size: [434.0, 6.0],
+        - {id: edge-rear, at: [0.0, 0.0], size: [434.0, 6.0],
            fill: '#1a1d21', confidence: estimated,
            source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the 6.0 is not measured"}
-        - {id: edge-rear, at: [0.0, 731.5], size: [434.0, 6.0],
+        - {id: edge-front, at: [0.0, 731.5], size: [434.0, 6.0],
            fill: '#1a1d21', confidence: estimated,
            source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the 6.0 is not measured"}
         # THE COVER LATCH IS NO LONGER PAINT ON THIS PANEL. It was decor
@@ -1315,25 +1321,25 @@ views:
         # Dell's model. The bay is the SLOT, so it is the size of the larger
         # drive; a 2.5 inch drive sits centred in the same slot, which is the
         # bay set below.
-        - {id: mid-lff-0, at: [7.52, 342.92], size: {w: 101.6, h: 147.0},
+        - {id: mid-lff-0, at: [7.52, 247.58], size: {w: 101.6, h: 147.0},
            accepts: [std/drive-35-plan@1], default: std/drive-35-plan@1,
            group: drives-mid, rel-pos: 1,
            only-in: [lff12-mlff4-rlff2-rc0-noriser, lff12-mlff4-rlff2-rc1-1b2b,
                      lff12-mlff4-rlff2-rc2-1b2c, lff12-mlff4-rsff4-rc0-noriser,
                      lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c]}
-        - {id: mid-lff-1, at: [113.82, 342.92], size: {w: 101.6, h: 147.0},
+        - {id: mid-lff-1, at: [113.82, 247.58], size: {w: 101.6, h: 147.0},
            accepts: [std/drive-35-plan@1], default: std/drive-35-plan@1,
            group: drives-mid, rel-pos: 2,
            only-in: [lff12-mlff4-rlff2-rc0-noriser, lff12-mlff4-rlff2-rc1-1b2b,
                      lff12-mlff4-rlff2-rc2-1b2c, lff12-mlff4-rsff4-rc0-noriser,
                      lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c]}
-        - {id: mid-lff-2, at: [220.12, 342.92], size: {w: 101.6, h: 147.0},
+        - {id: mid-lff-2, at: [220.12, 247.58], size: {w: 101.6, h: 147.0},
            accepts: [std/drive-35-plan@1], default: std/drive-35-plan@1,
            group: drives-mid, rel-pos: 3,
            only-in: [lff12-mlff4-rlff2-rc0-noriser, lff12-mlff4-rlff2-rc1-1b2b,
                      lff12-mlff4-rlff2-rc2-1b2c, lff12-mlff4-rsff4-rc0-noriser,
                      lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c]}
-        - {id: mid-lff-3, at: [326.42, 342.92], size: {w: 101.6, h: 147.0},
+        - {id: mid-lff-3, at: [326.42, 247.58], size: {w: 101.6, h: 147.0},
            accepts: [std/drive-35-plan@1], default: std/drive-35-plan@1,
            group: drives-mid, rel-pos: 4,
            only-in: [lff12-mlff4-rlff2-rc0-noriser, lff12-mlff4-rlff2-rc1-1b2b,
@@ -1343,22 +1349,22 @@ views:
         # rather than a second `accepts` on the one above, because the drive
         # is a different size and sits at a different place in the slot - the
         # same split the front and rear bays of this device already use.
-        - {id: mid-sff-0, at: [23.39, 390.41], size: {w: 69.85, h: 100.45},
+        - {id: mid-sff-0, at: [23.39, 246.64], size: {w: 69.85, h: 100.45},
            accepts: [std/drive-25-plan@1], default: std/drive-25-plan@1,
            group: drives-mid, rel-pos: 1,
            only-in: [sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b,
                      sff24-msff4-rsff4-rc2-1b2c]}
-        - {id: mid-sff-1, at: [129.69, 390.41], size: {w: 69.85, h: 100.45},
+        - {id: mid-sff-1, at: [129.69, 246.64], size: {w: 69.85, h: 100.45},
            accepts: [std/drive-25-plan@1], default: std/drive-25-plan@1,
            group: drives-mid, rel-pos: 2,
            only-in: [sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b,
                      sff24-msff4-rsff4-rc2-1b2c]}
-        - {id: mid-sff-2, at: [236.0, 390.41], size: {w: 69.85, h: 100.45},
+        - {id: mid-sff-2, at: [236.0, 246.64], size: {w: 69.85, h: 100.45},
            accepts: [std/drive-25-plan@1], default: std/drive-25-plan@1,
            group: drives-mid, rel-pos: 3,
            only-in: [sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b,
                      sff24-msff4-rsff4-rc2-1b2c]}
-        - {id: mid-sff-3, at: [342.29, 390.41], size: {w: 69.85, h: 100.45},
+        - {id: mid-sff-3, at: [342.29, 246.64], size: {w: 69.85, h: 100.45},
            accepts: [std/drive-25-plan@1], default: std/drive-25-plan@1,
            group: drives-mid, rel-pos: 4,
            only-in: [sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b,
@@ -1368,27 +1374,32 @@ views:
         # five decor rectangles, so there was nothing to take off and nothing
         # underneath to take it off FOR. `behaviour: mounts` gives it the kit's
         # pull handle - the same one the bezel uses - in 2D and 3D alike.
-        - {ref: dell/system-cover-14g@1, id: system-cover, at: [0.0, 196.9],
+        - {ref: dell/system-cover-14g@1, id: system-cover, at: [0.0, 0.0],
            group: covers, rel-pos: 1}
-        # THE SYSTEM BOARD IS MEASURED AND NOT PLACED YET - see
-        # dell/system-board-14g@1 and the gap `interior-is-a-stack-not-a-face`.
-        # It is the floor everything else sits on, so its box contains every
-        # other box in here, and L13 reads that as the sizing error it usually
-        # is. That rule is right about faceplates, and this view stops being a
-        # faceplate the moment the cover comes off.
+        # THE BOARD IS THE FLOOR, and it is drawn first because everything
+        # else in here stands on it. 46.17 below the lid line, so what shows of
+        # it is the gaps between the fan cage, the shroud or tray, and the
+        # rear. `under:` names all of them: a board is a well and they are
+        # over it, which is what L13 checks before it lets the boxes share a
+        # plan. The lid is not listed - `mounts` already puts it over anything.
+        - {ref: dell/system-board-14g@1, id: system-board, at: [3.58, 0.07],
+           group: interior, rel-pos: 1,
+           under: [fan-cage, air-shroud, mid-drive-tray-lff, mid-drive-tray-sff,
+                   mid-lff-0, mid-lff-1, mid-lff-2, mid-lff-3,
+                   mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3]}
         # THE FAN WALL, across the full width in front of everything else. On
         # every configuration: this machine has no variant without fans.
-        - {ref: dell/fan-cage-14g@1, id: fan-cage, at: [12.55, 245.38],
+        - {ref: dell/fan-cage-14g@1, id: fan-cage, at: [12.55, 420.62],
            group: interior, rel-pos: 2}
         # THE AIR SHROUD, AND IT IS THE MID TRAY'S ALTERNATIVE. Both are seated
         # in Dell's model and they occupy the SAME volume - the shroud
-        # top_y 318.98..529.40 at height 36.12..84.88, the tray 322.34..503.58
+        # top_y 208.10..418.52 at height 36.12..84.88, the tray 233.92..415.16
         # at 48.89..85.63 - so a machine has one or the other over the
         # processors and never both. Thirty-one configurations here, nine on the
         # tray below. That is an inference from two measurements, not a line
         # found in a manual; it is argued in the component.
-        - {ref: dell/air-shroud-14g@1, id: air-shroud, at: [1.36, 318.98],
-           group: interior, rel-pos: 3,
+        - {ref: dell/air-shroud-14g@1, id: air-shroud, at: [1.36, 208.10],
+           group: interior, rel-pos: 3, under: system-cover,
            only-in: [lff12-rc0-noriser, lff12-rc1-1b2b, lff12-rc15-1a2e3b,
                      lff12-rc16-1d2e3b, lff12-rc17-1a2f3b, lff12-rc2-1b2c, lff12-rc3-1a2a,
                      lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a, lff12-rc9-1a2d3a,
@@ -1405,14 +1416,14 @@ views:
         # Dell fits the same tray and changes what goes in it - so the drive
         # size is a skin rather than a second component. `mlff4` is four 3.5
         # inch, `msff4` is four 2.5 inch.
-        - {ref: dell/mid-drive-tray-14g@1, id: mid-drive-tray-lff, at: [1.30, 322.34],
+        - {ref: dell/mid-drive-tray-14g@1, id: mid-drive-tray-lff, at: [1.30, 233.92],
            inset: 1.17, group: drives-mid, rel-pos: 5,
            frames: [mid-lff-0, mid-lff-1, mid-lff-2, mid-lff-3,
                    mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3],
            only-in: [lff12-mlff4-rlff2-rc0-noriser, lff12-mlff4-rlff2-rc1-1b2b,
                      lff12-mlff4-rlff2-rc2-1b2c, lff12-mlff4-rsff4-rc0-noriser,
                      lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c]}
-        - {ref: dell/mid-drive-tray-14g@1, id: mid-drive-tray-sff, at: [1.30, 322.34],
+        - {ref: dell/mid-drive-tray-14g@1, id: mid-drive-tray-sff, at: [1.30, 233.92],
            inset: 1.17, skin: sff, group: drives-mid, rel-pos: 5,
            frames: [mid-lff-0, mid-lff-1, mid-lff-2, mid-lff-3,
                    mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3],
@@ -1503,32 +1514,6 @@ gaps:
       a mechanical drawing or a caliper on the hardware giving the riser-1
       shroud plate's front and the chassis top shelf's front at the same face x,
       which is the one measurement that settles the ordering outright
-  - what: interior-is-a-stack-not-a-face
-    scope: [top]
-    reason: needs-drawing
-    note: >-
-      TWO PARTS OF THIS INTERIOR ARE MEASURED AND NOT DRAWN, AND THE REASON IS
-      THE SAME FOR BOTH.
-      dell/system-board-14g@1 is the floor: its box contains every other box
-      under the lid, because everything sits on it. dell/air-shroud-14g@1 wants
-      `behaviour: mounts` - it lifts out to reach the processors, and that
-      declaration is what would give it a pull handle - but the system cover is
-      `mounts` and lies over IT.
-      L13 reports both, and L13 is right about what it was written for: on a
-      FACEPLATE, two parts in one place is a sizing error, and mounted-over-
-      mounted is two covers that cannot both be there. THIS VIEW STOPS BEING A
-      FACEPLATE THE MOMENT THE COVER COMES OFF. With the lid open the top is a
-      section through four heights - board at 40.63, shroud at 84.88, tray at
-      85.63, fan cage at 86.34, against an 86.8 panel - and every one of those
-      overlaps in plan precisely because they are stacked, not adjacent.
-      The depths are all there; nothing about the geometry is unknown. What is
-      missing is a way to SAY "this lies under that" so the rule can tell a
-      stack from a mistake. Until then the shroud is drawn as a plain component
-      that cannot be lifted, and the board is not drawn at all.
-    wanted: >-
-      a decision on how a view expresses depth-layered parts - whether L13
-      learns that two parts at declared different heights may share a plan, or
-      whether an interior is a different kind of view from a faceplate
   - what: mid-bay-drive-numbering-unknown
     scope: [top]
     reason: vendor-silent

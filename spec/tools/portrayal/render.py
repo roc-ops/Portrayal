@@ -1466,7 +1466,31 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         extents[0] = min(extents[0], x0); extents[1] = min(extents[1], y0)
         extents[2] = max(extents[2], x1); extents[3] = max(extents[3], y1)
 
-    for p in parts["placements"]:
+    # WHAT IS UNDER SOMETHING PAINTS BEFORE IT. `under:` is the placement's
+    # declaration that another part lies over it - the air shroud under the
+    # system cover, the board under the fan wall - and it is the same key L13
+    # reads to let the two share a plan. Both are `mounts`, so both are in the
+    # second pass, and document order put the cover first: the shroud painted
+    # over the lid that hides it. A part that says it is lower goes earlier.
+    # Document order is kept for everything the declarations do not touch.
+    def _stacked(seq):
+        seq = list(seq)
+        for _ in range(len(seq)):
+            moved = False
+            for i, q in enumerate(seq):
+                overs = q.get("under") or []
+                overs = overs if isinstance(overs, list) else [overs]
+                j = min((k for k, r in enumerate(seq) if r["id"] in overs), default=None)
+                if j is not None and j < i:
+                    seq.insert(j, seq.pop(i))
+                    moved = True
+                    break
+            if not moved:
+                break
+        return seq
+
+    ordered = _stacked(parts["placements"])
+    for p in ordered:
         if p["id"] not in deferred_ids:
             draw_placement(p)
 
@@ -1566,7 +1590,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             bay_g.set("data-for", df)
 
     # second pass: the surface-mounted parts, now safely in front of the openings
-    for p in parts["placements"]:
+    for p in ordered:
         if p["id"] in deferred_ids:
             draw_placement(p)
 

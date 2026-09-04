@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: mid-drive-tray-14g
-version: 1.2.0
+version: 1.3.0
 class: mechanical
 profile: server
 description: >-
@@ -11,15 +11,18 @@ size: {w: 431.4, h: 181.24, d: 5.21}
 provenance:
   size: >-
     measured - Dell's service model, `740XD_ MidDriveTray_-1.001`: face
-    x 1.30..432.70 and top_y 322.34..503.58 in the top view's own frame.
+    x 1.30..432.70 and top_y 233.92..415.16 in the top view's own frame.
   the-top-view-frame-is-derived-and-checked: >-
-    top_y = raw_z + 24.0, which is not measured but follows from two figures
+    top_y = 713.5 - raw_z, which is not measured but follows from two figures
     that are: the rear panel plane at raw_z 713.5, used by every part on the
-    rear face, and the datasheet depth 737.5 front metal to rear metal.
-    CHECKED WHERE IT MATTERS: the rear 3.5 inch drives land at top_y 738.06
-    against a 737.5 rear metal face, 0.56 out. The front end of the same axis
-    does NOT check out - the front drives sit at top_y 28 to 44 where a face
-    flush with the front metal would be near 0 - and that is unexplained. It
+    rear face, and the datasheet depth 737.5 front metal to rear metal. THE
+    REAR IS AT y=0, which is this library's plan convention and the viewer's;
+    a first pass had the axis running the other way, and the 3D showed the fan
+    wall two thirds of the way back before anyone noticed.
+    CHECKED WHERE IT MATTERS: the rear 3.5 inch drives land at top_y -0.56
+    against the rear metal face at 0. The front end of the same axis does NOT
+    check out - the front drives sit at top_y 693.5 to 709.5 where a face
+    flush with the front metal would be near 737.5 - and that is unexplained. It
     does not touch this part, which is mid-chassis and measured against the
     rear, but the axis should not be treated as solved.
   the-slot-pitch-is-106-30-and-the-2-5-inch-drives-were-regularised: >-
@@ -63,7 +66,7 @@ provenance:
     here, because what the well has to clear is the DRIVE.
   the-backplane: >-
     measured - `740XD_ MidDriveTray_ Backplane-1.001`, face x 4.80..429.20 and
-    top_y 484.51..509.28, so 424.40 x 24.77 across the rear of the tray. Drawn
+    top_y 228.22..252.99, so 424.40 x 24.77 across the rear of the tray. Drawn
     in board green because that is what it is; the colour is not sampled from
     anything.
   what-is-not-drawn: >-

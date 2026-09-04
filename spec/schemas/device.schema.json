@@ -1038,6 +1038,21 @@
            ],
            "description": "ids this part SURROUNDS rather than covers - a frame whose bounding box takes in openings its ink does not. L13 compares boxes, which is right for almost every part and wrong for a frame; this is the declaration that makes the difference checkable instead of assumed. Name only what the openings actually clear. NOT a way to silence a real overlap: a part that genuinely paints over another is an error. Distinct from `behaviour: mounts`, which says a part lies OVER what is behind it and draws after the bays - a drive cage surrounds its drives and must draw BEFORE them, so the two are not interchangeable."
           },
+          "under": {
+           "oneOf": [
+            {
+             "$ref": "#/$defs/segment"
+            },
+            {
+             "type": "array",
+             "minItems": 1,
+             "items": {
+              "$ref": "#/$defs/segment"
+             }
+            }
+           ],
+           "description": "ids in this view that lie OVER this part - the system board names the shroud and the fan wall that stand on it, the shroud names the lid that closes over it. A faceplate has one height and two parts in one place is a sizing error; a view with its cover off is a section through several, and everything in it overlaps in plan because it is stacked. This is how a placement says which. L13 does not compare a pair one of which is declared under the other, and it CHECKS the claim rather than trusting it: the lower part must be a well (an aperture with `size.d`) or the upper must be `behaviour: mounts`, because otherwise there is no height for the two to be at. NOT a way to silence a real overlap between two flat parts."
+          },
           "inset": {
            "type": "number",
            "exclusiveMinimum": 0,

@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: system-cover-14g
-version: 1.0.0
+version: 1.1.0
 class: mechanical
 # It is the lid. It lies over everything inside and comes off to reveal it,
 # which is exactly what `mounts` declares - and what gives it the kit's pull
@@ -32,11 +32,13 @@ provenance:
     third of a millimetre in y. A subtraction that lands an independently known
     part on its own dimensions is a subtraction that was right.
     So the latch's depth position, which the device file recorded as "a
-    placement and not a reading", is now a reading: face y 27.89 on this cover.
+    placement and not a reading", is now a reading: 27.89 from the rear edge
+    of this cover, which is face y 449.09 with the rear at y=0 - the plan
+    convention this library draws every top in.
   the-front-edge-is-where-the-model-puts-it: >-
-    The cover starts at face y 196.90 and the chassis is 737.5 deep, so 196.90
-    of the top is not this part - it is the front drive cage under its own
-    shell. That follows from the depth and the de-posing rather than being
+    The cover ends at face y 540.60 and the chassis is 737.5 deep, so the last
+    196.90 of the top is not this part - it is the front drive cage under its
+    own shell. That follows from the depth and the de-posing rather than being
     measured as an edge.
   the-ribs-are-drawn-and-not-measured: >-
     estimated. The lid is a large flat pressing and every one of them has
@@ -68,5 +70,5 @@ relief:
       instead. Recorded as the approximation it is.
 elements:
   cover: {at: [0.0, 0.0], size: [434.0, 540.6], class: bezel}
-  latch: {at: [204.58, 27.89], size: [25.02, 63.62], class: latch}
+  latch: {at: [204.58, 449.09], size: [25.02, 63.62], class: latch}
 skins: [default]

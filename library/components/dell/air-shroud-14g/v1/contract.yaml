@@ -1,15 +1,14 @@
 format: 1
 kind: component
 name: air-shroud-14g
-version: 1.0.0
+version: 1.2.0
 class: mechanical
-# `behaviour: mounts` IS WHAT THIS PART WANTS AND IT CANNOT HAVE IT YET. It
-# lies over the processors and lifts out to reach them, which is exactly what
-# `mounts` declares, and declaring it is what would give it the viewer's pull
-# handle - the whole point of drawing it. But the system cover is `mounts` too
-# and lies over THIS, and L13 reports two mounted parts in one place, correctly,
-# because on a faceplate that is a sizing error. See the device's gap
-# `interior-is-a-stack-not-a-face`.
+# It lies over the processors and lifts out to reach them, which is what
+# `mounts` declares, and declaring it is what gives it the viewer's pull
+# handle - the whole point of drawing it. The system cover is `mounts` too and
+# lies over THIS; the placement says so with `under: system-cover`, which is
+# how L13 tells a stack from two lids in one place.
+behaviour: mounts
 profile: server
 description: >-
   The air shroud of a 14G PowerEdge - the moulding over the processors and
@@ -18,12 +17,12 @@ size: {w: 431.49, h: 210.42}
 provenance:
   size: >-
     measured - Dell's service model, `DELL_R740XD_Air shroud-1.001`, the one
-    seated pose: face x 1.36..432.84 and top_y 318.98..529.40 in the top view's
-    frame (top_y = raw_z + 24). It is very nearly the full interior width.
+    seated pose: face x 1.36..432.84 and top_y 208.10..418.52 in the top view's
+    frame (top_y = 713.5 - raw_z; rear at 0). It is very nearly the full interior width.
   it-and-the-mid-tray-are-alternatives: >-
     THEY OCCUPY THE SAME VOLUME AND CANNOT BOTH BE FITTED. This shroud is
-    top_y 318.98..529.40 at chassis height 36.12..84.88;
-    dell/mid-drive-tray-14g@1 is 322.34..503.58 at 48.89..85.63. Both are seated
+    top_y 208.10..418.52 at chassis height 36.12..84.88;
+    dell/mid-drive-tray-14g@1 is 233.92..415.16 at 48.89..85.63. Both are seated
     poses in the same model - overlapping in depth AND in height - so a machine
     has one or the other over the processors, never both.
     That is why this part carries the thirty-one configurations WITHOUT a mid
@@ -32,7 +31,7 @@ provenance:
     the scoping is what it is.
   a-second-name-gives-a-longer-part: >-
     `R740XD_ AirShroud` - the same assembly under its other name - measures
-    top_y 318.98..564.39, which is 34.99 longer at the rear. The shorter
+    top_y 173.11..418.52, which is 34.99 longer at the rear. The shorter
     `DELL_R740XD_Air shroud-1.001` is used because the longer one runs past the
     mid tray's own rear edge and into the riser area, which reads as the
     assembly's envelope taking in something mounted behind it. RECORDED BECAUSE
@@ -43,6 +42,15 @@ provenance:
     panel, so it sits 1.92 below the lid. Drawn as a solid at that height rather
     than as a well, because it is a moulding you look AT and then lift out, not
     a recess you look into.
+  it-mounts-and-what-that-cost: >-
+    `behaviour: mounts`, and for one version it could not be. The cover over it
+    is `mounts` too, and L13 read two mounted parts in one place as two lids
+    that cannot both be there - right for a faceplate, wrong for a section
+    through an open chassis. The placement's `under:` is what changed: it says
+    which of the two is lower, and the rule checks that the upper one is a lid.
+    So this part is pullable in the viewer, and what is beneath it - the
+    processors, heatsinks and DIMMs on dell/system-board-14g@1 - is the next
+    thing worth drawing.
   the-face-is-plain: >-
     estimated - the outline is measured and the surface is not. A real shroud
     has ducts, finger holes, part-number moulding and cutouts over the DIMM

@@ -1843,6 +1843,22 @@ def lint_device_overlap(path, view_name, view, lib_roots):
     by their whole area and never coexist in any rendered view. Without this the
     rule rejects the correct model, which is the more dangerous direction - an
     author reading a hard error concludes the arrangement is wrong.
+
+    And so are two parts at DIFFERENT HEIGHTS, when one says so. Every exemption
+    above is a faceplate exemption: it lets two things share a plan because one
+    of them is not really in the plan. A view with its lid off is not a
+    faceplate. The R740xd's top, cover pulled, is a SECTION through four
+    heights - the system board at 40.63, the air shroud at 84.88, the mid tray
+    at 85.63, the fan cage at 86.34, against an 86.8 panel - and everything in
+    it overlaps in plan precisely because it is stacked. `under:` on a
+    placement names the parts that lie over it, and a pair one of which has
+    declared itself under the other is not compared.
+    THE DECLARATION IS CHECKED, NOT TRUSTED. A part can only be under something
+    if there is somewhere for it to be: it must be a well (`size.d` on a part
+    that is neither a module nor mounted - the aperture rule), or the part over
+    it must be `behaviour: mounts`, a lid. A flat part claiming to be under
+    another flat part is the sizing error this rule exists for, wearing a new
+    key, and is reported as one.
     """
     boxes = []
     parts_ = view_parts(view)["placements"]
@@ -1868,13 +1884,42 @@ def lint_device_overlap(path, view_name, view, lib_roots):
     # it and draws after the bays, where a cage surrounds its drives and must
     # draw before them.
     framed = {p["id"]: set(targets(p.get("frames"))) for p in parts_}
+    # A PART THAT LIES UNDER ANOTHER IS NOT IN THE SAME PLACE AS IT. `under:`
+    # names what is over this placement - the board names the shroud and the
+    # fan wall, the shroud names the lid. Checked below, per pair: the lower
+    # part is a well or the upper is a lid, or the claim is the error.
+    under = {p["id"]: set(targets(p.get("under"))) for p in parts_}
+    every_id = {p["id"] for p in parts_} | {b["id"] for b in view_parts(view)["bays"]}
+    for pid, ups in under.items():
+        for u in ups - every_id:
+            err(path, "L13", f"{view_name}: {pid} is under '{u}', which is not in this view")
 
-    def _mounted(pid):
+    def _contract(pid):
         q = next((z for z in parts_ if z.get("id") == pid), None)
         if not q:
-            return False
+            return {}
         cp = resolve_component(q["ref"], lib_roots)
-        return bool(cp) and (load_yaml(cp) or {}).get("behaviour") == "mounts"
+        return (load_yaml(cp) or {}) if cp else {}
+
+    def _mounted(pid):
+        return _contract(pid).get("behaviour") == "mounts"
+
+    def _well(pid):
+        # the aperture rule, as render.py applies it: a non-module, non-mounted
+        # part's `size.d` is a hole depth, so such a part has a floor below the
+        # panel for something else to stand over
+        c = _contract(pid)
+        return bool((c.get("size") or {}).get("d")) and c.get("kind") != "module" \
+            and not _mounted(pid)
+
+    def _stacked(lo, hi):
+        if hi not in under.get(lo, ()):
+            return False
+        if _well(lo) or _mounted(hi):
+            return True
+        err(path, "L13", f"{view_name}: {lo} says it is under {hi}, but it is not a "
+                         f"well and {hi} is not mounted - there is no height between them")
+        return True
     for p in parts_:
         if not p.get("at") or p.get("mate-to"):
             continue
@@ -1916,6 +1961,8 @@ def lint_device_overlap(path, view_name, view, lib_roots):
                 if b[0] in framed.get(a[0], ()) or a[0] in framed.get(b[0], ()):
                     continue
                 if _mounted(a[0]) != _mounted(b[0]):
+                    continue
+                if _stacked(a[0], b[0]) or _stacked(b[0], a[0]):
                     continue
                 # never both present, so never actually overlapping. Absent
                 # `only-in` means every configuration, which intersects everything
