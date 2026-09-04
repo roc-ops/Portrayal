@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: rear-bay-frame-14g
-version: 4.2.1
+version: 4.3.0
 class: mechanical
 profile: compute
 description: >-
@@ -320,6 +320,7 @@ relief:
   features:
   - node: frame
     out: 14.13
+    shape: true
     color: '#8c939b'
     confidence: measured
     source: >-
@@ -327,6 +328,12 @@ relief:
       the panel plane at z 713.5 to the cage's own front at 727.6. One number
       for the whole outline, which the depth key records as an approximation
       because the screw shelf sits 6 mm below it.
+      `shape: true` BECAUSE THE OUTLINE HAS HOLES IN IT. The node is a
+      rectangle with the four drive openings and the two riser openings cut
+      out, and without `shape` the kit extruded the rectangle: a 14 mm slab
+      stood across every opening, and riser 3 sat behind a panel that was
+      never there. Extruding the ink gives the land, the rails and the panels
+      their 14 mm and leaves the openings open.
 elements:
   frame: {at: [0.0, 0.0], size: [294.12, 42.98], class: bezel}
 skins: [default]

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: riser-1d-14g
-version: 1.0.0
+version: 1.1.0
 class: riser
 behaviour: fills
 profile: server
@@ -15,6 +15,13 @@ attrs:
   slot-2: 'x8, full height, full length, processor 1'
   slot-3: 'x8, full height, half length, processor 1'
 provenance:
+  depth: >-
+    estimated from a measurement of a sibling. Dell's service model carries
+    riser 1 once, as the three-slot card that is dell/riser-1b-14g@1, and it
+    reaches 170.9 into the chassis. This riser shares the cage and the slot
+    position and differs in what is on the card, so it is given the same
+    reach and the same body; the number is the sibling's and not this
+    part's, and a model of this variant would settle it.
   identity: >-
     A REMOVABLE ASSEMBLY THAT BRINGS ITS OWN SLOTS, which is why it is a
     module with `bays` rather than openings drawn on the chassis. The ISM
@@ -65,7 +72,10 @@ provenance:
     brackets interleave by exactly 1.27 and that is why a row of them nests.
     Any overlap check working on bounding boxes will report these; it is the
     check unable to express a real interlock, not a fault in the placement.
-size: {w: 107.59, h: 62.0}
+size: {w: 107.59, h: 62.0, d: 170.9}
+body:
+  depth: 170.9
+  color: '#4a5057'
 insert: {w: 120.02, h: 64.05}
 parts:
   # THE METAL, DRAWN OVER THE CARDS. The bays are `behind: true`, so a seated

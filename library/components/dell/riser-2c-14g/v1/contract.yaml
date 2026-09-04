@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: riser-2c-14g
-version: 1.0.0
+version: 1.1.0
 class: riser
 behaviour: fills
 profile: server
@@ -12,6 +12,12 @@ attrs:
   appears-in: 'riser configuration 2'
   slot-4: 'x16, low profile, half length, processor 2'
 provenance:
+  depth: >-
+    measured - Dell's service model, `R740XD_Riser_2C-1`: the low-profile
+    riser's own body, `Body_4.006`, is 27.4 x 37.7 x 211.4, cad z 492.5..
+    703.9 against the rear metal at 713.5. 211.4 is the card's reach into the
+    chassis and `body` is that reach behind this plate. The BOSS carrier the
+    model seats on it runs on to 464.4 and is not this part.
   identity: >-
     A REMOVABLE ASSEMBLY THAT BRINGS ITS OWN SLOTS, which is why it is a
     module with `bays` rather than openings drawn on the chassis. The ISM
@@ -71,7 +77,10 @@ provenance:
     a BRACKET while the full-height slots beside it were measured as
     OPENINGS, at the same x, which cannot both be true of one drawing. Placed
     by its opening here, and the 78.0 recorded rather than quietly kept.
-size: {w: 79.2, h: 18.42}
+size: {w: 79.2, h: 18.42, d: 211.4}
+body:
+  depth: 211.4
+  color: '#4a5057'
 insert: {w: 95.0, h: 18.42}
 bays:
   slot-4:

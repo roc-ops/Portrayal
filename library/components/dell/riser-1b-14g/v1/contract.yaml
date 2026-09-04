@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: riser-1b-14g
-version: 1.0.0
+version: 1.1.0
 class: riser
 behaviour: fills
 profile: server
@@ -15,6 +15,14 @@ attrs:
   slot-2: 'x8, full height, full length, processor 1'
   slot-3: 'x8, full height, half length, processor 1'
 provenance:
+  depth: >-
+    measured - Dell's service model, `R740XD_Riser_1-1.001`: the riser card
+    is a vertical PCB 1.6 x 77.0 x 170.9 standing at the left as seen from
+    behind, cad z 528.7..699.6 against the rear metal at 713.5, with three
+    x16 slot connectors 91 long on a 20.3 pitch and a card in each. 170.9 is
+    the cage's reach into the chassis, and `body` is that reach behind this
+    plate, so the riser ejects as the cage it is and stands inside the box
+    when the lid is off.
   identity: >-
     A REMOVABLE ASSEMBLY THAT BRINGS ITS OWN SLOTS, which is why it is a
     module with `bays` rather than openings drawn on the chassis. The ISM
@@ -65,7 +73,10 @@ provenance:
     brackets interleave by exactly 1.27 and that is why a row of them nests.
     Any overlap check working on bounding boxes will report these; it is the
     check unable to express a real interlock, not a fault in the placement.
-size: {w: 107.59, h: 62.0}
+size: {w: 107.59, h: 62.0, d: 170.9}
+body:
+  depth: 170.9
+  color: '#4a5057'
 insert: {w: 120.02, h: 64.05}
 parts:
   # THE METAL, DRAWN OVER THE CARDS. The bays are `behind: true`, so a seated
