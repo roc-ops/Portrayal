@@ -1393,6 +1393,21 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             break
         deferred_ids |= grew
 
+    # A MOUNTED PART THAT IS UNDER AN OPENING IS NOT IN FRONT OF IT. The second
+    # pass exists so a surface-mounted part paints over the bays behind it - a
+    # rear handle across two riser slots. The R740xd's heatsinks are `mounts`
+    # too, because they lift off, but they say `under:` the mid-drive tray and
+    # its four bays: with the tray fitted, the drives lie over them, and the
+    # second pass painted heatsinks on top of drives. A part declared under
+    # something that is NOT itself deferred - a well, or a bay - is drawn in
+    # the first pass, in `under:` order, with the wells it stands among.
+    every_bay = {b["id"] for b in parts["bays"]}
+    for q in parts["placements"]:
+        overs = q.get("under") or []
+        overs = overs if isinstance(overs, list) else [overs]
+        if q["id"] in deferred_ids and any(o in every_bay or o not in deferred_ids for o in overs):
+            deferred_ids.discard(q["id"])
+
     def draw_placement(p):
         if p.get("mate-to") and not p.get("at"):
             host = hosts.get(p["mate-to"])

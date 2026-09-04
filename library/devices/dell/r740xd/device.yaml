@@ -1581,10 +1581,19 @@ views:
         # THE HEATSINKS, one per processor, on the board and under the shroud
         # or the tray. Measured poses of `R740XD_ HeatSink 1U`; CPU1 right,
         # CPU2 left as seen from the front (ISM Figure 90).
+        # They are `mounts` and they are ALSO under the tray and its drives on
+        # the nine mid-tray configurations - so render.py draws them in the
+        # first pass, with the wells, rather than over the drives.
         - {ref: dell/heatsink-1u-14g@1, id: heatsink-1, at: [274.90, 265.80],
-           group: processors, rel-pos: 1, under: [air-shroud, system-cover]}
+           group: processors, rel-pos: 1,
+           under: [air-shroud, system-cover, mid-drive-tray-lff, mid-drive-tray-sff,
+                   mid-lff-0, mid-lff-1, mid-lff-2, mid-lff-3,
+                   mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3]}
         - {ref: dell/heatsink-1u-14g@1, id: heatsink-2, at: [75.60, 265.80],
-           group: processors, rel-pos: 2, under: [air-shroud, system-cover]}
+           group: processors, rel-pos: 2,
+           under: [air-shroud, system-cover, mid-drive-tray-lff, mid-drive-tray-sff,
+                   mid-lff-0, mid-lff-1, mid-lff-2, mid-lff-3,
+                   mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3]}
         # THE FAN WALL, across the full width in front of everything else. On
         # every configuration: this machine has no variant without fans.
         - {ref: dell/fan-cage-14g@1, id: fan-cage, at: [12.55, 420.62],

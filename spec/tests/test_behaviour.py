@@ -128,3 +128,20 @@ def test_mounted_parts_paint_after_bays():
         at = svg.find(f'id="{bay}"')
         assert at != -1, f"{bay} is not in the C40G front view"
         assert at < cover, f"{bay} paints after the cover that covers it"
+
+
+def test_a_mounted_part_under_an_opening_paints_before_it():
+    """The second pass is for parts IN FRONT of openings. The R740xd's
+    heatsinks are `mounts` because they lift off, and on a mid-tray
+    configuration they are under the tray and its four drive bays - the
+    drives sit at 55.49 and the heatsink tops at 40.8. Deferring them with
+    the lids painted heatsinks over drives. A mounted part that says
+    `under:` a bay or a well is drawn with the wells, in `under:` order."""
+    svg = needs_dist("r740xd.lff12-mlff4-rlff2-rc0-noriser.top.svg").read_text()
+    for hs in ("heatsink-1", "heatsink-2"):
+        at = svg.find(f'id="{hs}"')
+        assert at != -1, f"{hs} is not in the R740xd top view"
+        for over in ("mid-lff-0", "mid-lff-3", "mid-drive-tray-lff", "system-cover"):
+            o = svg.find(f'id="{over}"')
+            assert o != -1, f"{over} is not in the R740xd top view"
+            assert at < o, f"{hs} paints after {over}, which lies over it"
