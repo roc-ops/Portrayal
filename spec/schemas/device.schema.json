@@ -879,6 +879,11 @@
            "type": "boolean",
            "description": "flip the occupant horizontally about its own centre line; handedness, not rotation - a riser whose cards face the other way"
           },
+          "floor": {
+           "type": "number",
+           "exclusiveMinimum": 0,
+           "description": "mm below the face at which this bay's occupant STANDS, when that is not the well's own floor. With `in:` alone a module stands on the well's floor and rises its own height; a card in a riser stands on its slot, and the three slots of a riser are three shelves at three heights inside one well. So a bay may say where its shelf is: the R740xd's riser 1 slots are 26.6, 44.8 and 64.6 down, from the model's seated cards. Only meaningful with `in:`, and never deeper than the well (L13)."
+          },
           "in": {
            "$ref": "#/$defs/segment",
            "description": "the WELL this bay opens in - a placement in this view drawn as a recess. The module that fills it STANDS ON THE WELL'S FLOOR and rises to its own `size.d`: the bay's plane sits that far above the floor and the body reaches down to it. A 26.1 mm drive in the mid tray, whose floor is 31.31 down, tops out 5.21 below the lid; a 31.3 mm DIMM on the board's PCB, 79.9 down, tops out at 48.6. A well's depth is its floor, never the top of what is in it. Implies the well is `under:` this bay. Checked: the target must be a well in this view."
@@ -1060,6 +1065,10 @@
           "in": {
            "$ref": "#/$defs/segment",
            "description": "the WELL this part stands in - a placement in this view that render.py draws as a recess (an unmounted, non-module part with `size.d`). A top view with its lid off is a section, and a part on the floor of a well is not at the face: the R740xd's heatsinks stand on the system board's PCB 79.9 mm down. The renderer sinks the part by the well's depth (a negative z-lift that relief.js sums like any other) and its `out` features rise from the floor. Implies the well is `under:` this part for L13 and for paint order, so it need not be repeated. Checked: the target must be a well in this view."
+          },
+          "mirror": {
+           "type": "boolean",
+           "description": "flip this instance horizontally about its own centre line; handedness, not rotation. The same key a bay offers its occupant: the R740xd's riser 3 is riser 1's cage at the other wall, so its card stands with the PCB outboard and the connectors inboard the other way about."
           },
           "under": {
            "oneOf": [

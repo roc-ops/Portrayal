@@ -592,8 +592,13 @@ export async function extractRelief(url, scope) {
     // carries the well's floor as a negative z-lift (render.py's `in:`), and
     // the module's plane, body and bay box all sit that far down.
     const frect = mmRect(el);
+    // A SHELF LEAVES NO HOLE. A bay with a `floor:` is a shelf in a well - a
+    // card on its riser slot - and the dark box the kit leaves behind a pulled
+    // module would stand on the card below it. Read off the bay, which is the
+    // module's parent.
+    const shelf = !!(el.parentElement && el.parentElement.dataset && el.parentElement.dataset.shelf);
     frus.push({path, ref: el.dataset.ref.split(':')[0],
-               cls: el.dataset.class, lift: liftOf(el),
+               cls: el.dataset.class, lift: liftOf(el), shelf,
                bodyDepth: +el.dataset.bodyDepth || null, ...frect,
                // its own art, so the plane can be cut to the module's SHAPE
                svgText: nodeSvg(el, frect)});
@@ -1120,6 +1125,7 @@ export async function buildFaceRelief(F, ctx) {
       // own cavities (the C14 inlet pins live inside this volume)
       // the bay is as deep as the thing that goes in it, not 60 mm
       const bd = meta.body ? meta.body.depth : (meta.bodyDepth || 60);
+      if (f.shelf) continue;   // a shelf, not a hole: nothing is left behind
       const bay = new THREE.Mesh(new THREE.BoxGeometry(f.w + 0.6, f.h + 0.6, bd),
         new THREE.MeshLambertMaterial({color: 0x0a0c0e, side: THREE.BackSide}));
       bay.position.set(LX(f.x, f.w), LY(f.y, f.h), zf - bd / 2 - 0.2);

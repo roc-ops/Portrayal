@@ -1509,7 +1509,8 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                                      None, merged_attrs,
                                      p.get("group"), p.get("rel-pos"),
                                      skin_name=p.get("skin", "default"),
-                                     rotate=p.get("rotate"), palette=palette,
+                                     rotate=p.get("rotate"), mirror=bool(p.get("mirror")),
+                                     palette=palette,
                                      z_inset=(p.get("inset") or 0.0)
                                      - (p.get("lift") or 0.0),
                                      inst_palette=inst_palette,
@@ -1609,6 +1610,15 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             # under its tray. The well's `d` is the floor its occupants stand
             # on; this is what puts their tops where the model measured them.
             floor = floor_of(b["in"])
+            # A SHELF IN THE WELL. `floor:` says the occupant stands this far
+            # down rather than on the well's own floor - a card on its slot -
+            # and the well is still what it is in.
+            if b.get("floor"):
+                floor = float(b["floor"])
+                # a shelf is not a hole: the kit leaves a dark bay box behind
+                # a pulled module, and for a card on a shelf that box stood on
+                # the card below it
+                bay_g.set("data-shelf", "1")
             if floor:
                 bay_lift = -(floor - occupant_depth(b))
                 bay_g.set("data-z-lift", f"{bay_lift:g}")

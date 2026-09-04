@@ -1939,6 +1939,14 @@ def lint_device_overlap(path, view_name, view, lib_roots):
         if w in every_id and not _well(w):
             err(path, "L13", f"{view_name}: {pid} says it is in {w}, which is not a well - "
                              "only a recess has a floor to stand on")
+    # A SHELF CANNOT BE BELOW THE FLOOR. `floor:` on a bay puts its occupant on
+    # a shelf inside the well; a shelf deeper than the well is a hole in it.
+    for b in bays_:
+        if b.get("floor") and b.get("in") in every_id and b["in"] not in bay_ids:
+            d = float((_contract(b["in"]).get("size") or {}).get("d") or 0)
+            if d and float(b["floor"]) > d + 0.05:
+                err(path, "L13", f"{view_name}: {b['id']} puts its shelf {b['floor']} down "
+                                 f"in {b['in']}, which is only {d:g} deep")
 
     def _stacked(lo, hi):
         if hi not in under.get(lo, ()):

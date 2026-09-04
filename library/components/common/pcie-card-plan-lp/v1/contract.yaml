@@ -1,0 +1,44 @@
+format: 1
+kind: module
+name: pcie-card-plan-lp
+version: 1.0.0
+class: expansion-card
+behaviour: fills
+profile: server
+description: >-
+  A low-profile PCIe expansion card seen from above, lying in a riser slot - its
+  bracket at the rear, its length running forward into the chassis
+size: {w: 79.2, h: 173.8, d: 21.6}
+body:
+  depth: 21.6
+  color: '#1f5138'
+attrs:
+  role: expansion-card
+  power-absent: not-published
+provenance:
+  size: >-
+    measured, in part. Dell's R740XD service model seats a generic card,
+    `R740XD_Expansioncard-1.002`, in every riser slot: 120.9 across its
+    bracket, 21.6 thick with the bracket, and 181.0 long, of which 7.2 stand
+    behind the rear metal as the bracket's tab - so 173.8 is what lies inside
+    and is the plan footprint here. The 79.2 is the low-profile bracket the library already carries in std/pcie-bracket-lp@1; the model seats no low-profile card, so the length and thickness are the full-height card's.
+    A REAL CARD IS ITS OWN LENGTH: half-length here, and a full-length card
+    runs to 312. This is the placeholder the model uses and is drawn as one.
+  it-is-a-module-because-it-lifts-out: >-
+    `kind: module` with `behaviour: fills` - it fills a slot and comes out of
+    it, and `d` is its thickness, which is how far it rises from the shelf
+    the slot puts it on.
+  the-face-is-plain: >-
+    estimated - a green board with a dark edge connector at the rear and a
+    bracket line. Nothing should be measured off the art.
+  power: >-
+    NOT PUBLISHED per card, and could not be: this is the model's generic
+    card, not a product. A real card's draw belongs to the contract that
+    models that card.
+  lifecycle: >-
+    not applicable - a placeholder for whatever card is fitted.
+relief:
+  wall: '#1a1d21'
+elements:
+  body: {at: [0.0, 0.0], size: [79.2, 173.8], class: bezel}
+skins: [default]

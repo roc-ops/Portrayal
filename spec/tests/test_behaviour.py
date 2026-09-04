@@ -167,3 +167,23 @@ def test_a_part_in_a_well_is_sunk_to_its_floor():
     assert lift("fan-0") == -3.48
     m = re.search(r'id="heatsink-1--block"[^>]*data-z-out="([^"]+)"', svg)
     assert m and float(m.group(1)) == -46.8, "the heatsink's out was not pulled down to the floor"
+
+
+def test_a_card_stands_on_its_shelf_and_leaves_no_hole():
+    """A riser's three slots are three shelves at three heights inside one
+    well. `floor:` on the bay is the shelf, the card rises its own 21.6 from
+    it, and a shelf is marked so the kit leaves no dark bay box behind a
+    pulled card - that box stood on the card below it."""
+    import re
+    svg = needs_dist("r740xd.sff24-rc5-1b2a3a.top.svg").read_text()
+    def bay(id_):
+        m = re.search(rf'<g id="{id_}"[^>]*>', svg)
+        assert m, f"{id_} is not in the top view"
+        return m.group(0)
+    for id_, floor in (("r1-slot-1", 26.6), ("r1-slot-2", 44.8), ("r1-slot-3", 64.6)):
+        g = bay(id_)
+        lift = float(re.search(r'data-z-lift="([^"]+)"', g).group(1))
+        assert abs(lift + (floor - 21.6)) < 0.01, (id_, lift)
+        assert 'data-shelf="1"' in g, f"{id_} is a shelf and does not say so"
+    # the DIMM sockets are on the well's own floor and are not shelves
+    assert 'data-shelf' not in bay("dimm-a1")

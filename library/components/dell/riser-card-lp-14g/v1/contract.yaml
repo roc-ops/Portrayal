@@ -1,0 +1,46 @@
+format: 1
+kind: component
+name: riser-card-lp-14g
+version: 1.0.0
+class: riser
+behaviour: mounts
+profile: server
+description: >-
+  The low-profile riser card of a 2U 14G PowerEdge seen from above - the
+  short card that carries riser 2's single low-profile slot
+size: {w: 27.4, h: 211.4}
+attrs:
+  role: riser-card
+  power-absent: not-published
+provenance:
+  size: >-
+    measured - Dell's service model, `R740XD_Riser_2C-1`, its own body
+    `Body_4.006`: 27.4 x 37.7 x 211.4 at cad x -76.0, z 492.5..703.9 (top_y
+    9.6..221.0). The model seats a BOSS carrier on it that runs on to z
+    464.4; that is the carrier and not the riser, and is not drawn.
+  it-stands-for-2b-too: >-
+    2B is the same low-profile riser without the BOSS connector, in the same
+    bay; the model carries only 2C, so 2B is drawn with this part and the
+    device says so.
+  depth: >-
+    measured - 37.7 tall from cad y 10.7 to 48.4, standing on the PCB at 6.9;
+    drawn as 41.5 from the floor so the top lands where the model has it.
+  the-connector-is-not-placed: >-
+    estimated - the model's 2C body is one mesh and the slot connector's
+    position along it was not read out; it is drawn at the rear third,
+    where the low-profile slot sits behind riser 2's plate.
+  power: >-
+    NOT PUBLISHED - see dell/riser-card-14g@1; the same searches.
+  lifecycle: >-
+    searched - no end-of-life notice for the riser cards is in the intake.
+relief:
+  wall: '#1a1d21'
+  features:
+  - node: card
+    out: 41.5
+    color: '#1f5138'
+    confidence: measured
+    source: cad y 10.7..48.4 on a floor at 6.9, Dell's service model
+elements:
+  card: {at: [0.0, 0.0], size: [27.4, 211.4], class: bezel}
+skins: [default]
