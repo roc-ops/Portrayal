@@ -1947,6 +1947,18 @@ def lint_device_overlap(path, view_name, view, lib_roots):
             if d and float(b["floor"]) > d + 0.05:
                 err(path, "L13", f"{view_name}: {b['id']} puts its shelf {b['floor']} down "
                                  f"in {b['in']}, which is only {d:g} deep")
+            # AND NOT SO SHALLOW THAT THE OCCUPANT STANDS OUT OF THE FACE: a
+            # card rises its own `d` from the shelf, and a shelf nearer the face
+            # than that puts the card through the lid - riser 3's did, by 0.8
+            occ = 0.0
+            for ref in (b.get("accepts") or []):
+                cp = resolve_component(ref, lib_roots)
+                c = (load_yaml(cp) or {}) if cp else {}
+                occ = max(occ, float((c.get("size") or {}).get("d") or 0))
+            if occ and float(b["floor"]) + 0.05 < occ:
+                err(path, "L13", f"{view_name}: {b['id']} puts its shelf {b['floor']} down and "
+                                 f"its occupant is {occ:g} tall - it would stand "
+                                 f"{occ - float(b['floor']):.1f} out of the face")
 
     def _stacked(lo, hi):
         if hi not in under.get(lo, ()):

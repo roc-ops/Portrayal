@@ -802,3 +802,20 @@ def test_in_names_a_well_or_is_an_error():
          "components": {"placements": [clip], "bays": [dict(sock, **{"in": "clip"})]}}
     hits = caught("L13", lint.lint_device_overlap, P, "top", v, [str(LIB)])
     assert hits and "not a well" in hits[0]
+
+
+def test_a_shelf_cannot_put_its_card_through_the_lid():
+    """`floor:` is where a bay's occupant stands, and the occupant rises its
+    own `d` from there. A shelf 20.8 down under a 21.6 card puts 0.8 of the
+    card above the face - riser 3's did - and a shelf deeper than its well
+    is a hole in it. Both are the sizing error L13 exists for."""
+    board = {"id": "board", "ref": "dell/system-board-14g@1", "at": [5.5, 6.2]}
+    card = {"id": "c", "at": [3.9, 0.0], "size": {"w": 120.9, "h": 173.8},
+            "accepts": ["common/pcie-card-plan@1"], "in": "board"}
+    v = lambda floor: {"size": {"w": 434.0, "h": 737.5},
+                       "components": {"placements": [board], "bays": [dict(card, floor=floor)]}}
+    hits = caught("L13", lint.lint_device_overlap, P, "top", v(20.8), [str(LIB)])
+    assert hits and "out of the face" in hits[0]
+    hits = caught("L13", lint.lint_device_overlap, P, "top", v(90.0), [str(LIB)])
+    assert hits and "only 79.9 deep" in hits[0]
+    assert not caught("L13", lint.lint_device_overlap, P, "top", v(26.6), [str(LIB)])

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 20.10.1
+version: 20.10.2
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -1515,9 +1515,11 @@ views:
         # span face x 310.1..431.0, top_y -7.2..173.8 with the 7.2 being the
         # bracket's tab behind the rear metal, clipped here. The rear view's
         # slot-1 is the TOP slot, so slot-1 is the highest card. Riser 2's
-        # and riser 3's shelves are the rear view's slot bottoms less the
-        # 3.4 riser 1 shows between a bracket's bottom and its card's base,
-        # and their x runs are the rear view's slot brackets - estimated.
+        # and riser 3's bays share riser 1's 4.0 top edge and its bracket
+        # pitch, so their shelves are riser 1's measured ones by slot rank -
+        # 26.6, 44.8, 64.6 - and their x runs are the rear view's slot
+        # brackets. Estimated. A first pass took each shelf from the rear
+        # slot's bottom edge and put riser 3's top card 0.8 through the lid.
         # `in:` the board, `floor:` the shelf, `under:` the cards above.
         - {id: r1-slot-1, at: [310.10, 0.0], size: {w: 120.9, h: 173.8},
            accepts: [common/pcie-card-plan@1], default: common/pcie-card-plan@1,
@@ -1566,7 +1568,7 @@ views:
                      sff24-rsff4-rc2-1b2c]}
         - {id: r2-slot-4, at: [168.76, 0.0], size: {w: 120.9, h: 173.8},
            accepts: [common/pcie-card-plan@1], default: common/pcie-card-plan@1,
-           group: cards, rel-pos: 4, in: system-board, floor: 24.0,
+           group: cards, rel-pos: 4, in: system-board, floor: 26.6,
            under: [riser-2-card],
            only-in: [lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b,
                      lff12-rc3-1a2a, lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a,
@@ -1575,7 +1577,7 @@ views:
                      sff24-rc6-1d2a3a, sff24-rc9-1a2d3a]}
         - {id: r2-slot-5, at: [168.76, 0.0], size: {w: 120.9, h: 173.8},
            accepts: [common/pcie-card-plan@1], default: common/pcie-card-plan@1,
-           group: cards, rel-pos: 5, in: system-board, floor: 44.3,
+           group: cards, rel-pos: 5, in: system-board, floor: 44.8,
            under: [r2-slot-4, riser-2-card],
            only-in: [lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b,
                      lff12-rc3-1a2a, lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a,
@@ -1584,7 +1586,7 @@ views:
                      sff24-rc6-1d2a3a, sff24-rc9-1a2d3a]}
         - {id: r2-slot-6, at: [209.60, 0.0], size: {w: 79.2, h: 173.8},
            accepts: [common/pcie-card-plan-lp@1], default: common/pcie-card-plan-lp@1,
-           group: cards, rel-pos: 6, in: system-board, floor: 61.5,
+           group: cards, rel-pos: 6, in: system-board, floor: 64.6,
            under: [r2-slot-4, r2-slot-5, riser-2-card],
            only-in: [lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b,
                      lff12-rc3-1a2a, lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a,
@@ -1603,7 +1605,7 @@ views:
                      sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c]}
         - {id: r3-slot-7, at: [3.90, 0.0], size: {w: 120.9, h: 173.8},
            accepts: [common/pcie-card-plan@1], default: common/pcie-card-plan@1,
-           group: cards, rel-pos: 8, in: system-board, floor: 20.8,
+           group: cards, rel-pos: 8, in: system-board, floor: 26.6,
            under: [riser-3-card],
            only-in: [lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b,
                      lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a, lff12-rc9-1a2d3a,
@@ -1611,7 +1613,7 @@ views:
                      sff24-rc4-1a2a3a, sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a]}
         - {id: r3-slot-8, at: [3.90, 0.0], size: {w: 120.9, h: 173.8},
            accepts: [common/pcie-card-plan@1], default: common/pcie-card-plan@1,
-           group: cards, rel-pos: 9, in: system-board, floor: 41.2,
+           group: cards, rel-pos: 9, in: system-board, floor: 44.8,
            under: [r3-slot-7, riser-3-card],
            only-in: [lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b,
                      lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a, lff12-rc9-1a2d3a,
