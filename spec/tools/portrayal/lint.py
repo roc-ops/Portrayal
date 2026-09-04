@@ -1899,6 +1899,17 @@ def lint_device_overlap(path, view_name, view, lib_roots):
     for pid, ups in under.items():
         for u in ups - every_id:
             err(path, "L13", f"{view_name}: {pid} is under '{u}', which is not in this view")
+    # `in:` IS THE SAME STACK SEEN FROM THE OTHER END. A part or a bay that
+    # stands on a well's floor is over that well, so the well is under it -
+    # recorded here so the pair is exempt without the well having to list
+    # everything that stands on it. Checked below, once the contracts are in
+    # hand: the target must be a well in this view.
+    stands = {q["id"]: q.get("in") for q in (*parts_, *bays_) if q.get("in")}
+    for pid, w in stands.items():
+        if w not in every_id:
+            err(path, "L13", f"{view_name}: {pid} is in '{w}', which is not in this view")
+        else:
+            under.setdefault(w, set()).add(pid)
 
     def _contract(pid):
         q = next((z for z in parts_ if z.get("id") == pid), None)
@@ -1919,6 +1930,11 @@ def lint_device_overlap(path, view_name, view, lib_roots):
         c = _contract(pid)
         return bool((c.get("size") or {}).get("d")) and c.get("kind") != "module" \
             and not _mounted(pid)
+
+    for pid, w in stands.items():
+        if w in every_id and not _well(w):
+            err(path, "L13", f"{view_name}: {pid} says it is in {w}, which is not a well - "
+                             "only a recess has a floor to stand on")
 
     def _stacked(lo, hi):
         if hi not in under.get(lo, ()):

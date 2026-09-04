@@ -583,8 +583,11 @@ export async function extractRelief(url, scope) {
     // hardcoded 60 mm bay below - 60 for a 40 mm control panel, 60 for a
     // 25 mm drive blank. On a part seated in a rack ear that hole runs
     // straight out the back of the flange.
+    // A MODULE IN A BAY THAT OPENS IN A WELL IS NOT AT THE FACE. The bay
+    // carries the well's floor as a negative z-lift (render.py's `in:`), and
+    // the module's plane, body and bay box all sit that far down.
     frus.push({path, ref: el.dataset.ref.split(':')[0],
-               cls: el.dataset.class,
+               cls: el.dataset.class, lift: liftOf(el),
                bodyDepth: +el.dataset.bodyDepth || null, ...mmRect(el)});
   }
   for (const el of svg.querySelectorAll('[data-z-out],[data-z-cyl],[data-z-bar],[data-z-uhandle]'))
@@ -676,6 +679,13 @@ export async function buildFaceRelief(F, ctx) {
     }
     if (ctx.faceMM) ctx.faceMM[F.view] = [fw, fh];
     const cv = await rasterize(faceText, fw, fh, PX, !!F.flipLX, !!F.flipLY);
+    // THE ART BEFORE ANY HOLE IS PUNCHED IN IT. A cavity punches `cv` with its
+    // own outline, and a module whose bay opens inside that cavity - a drive in
+    // the mid tray, a DIMM on the board - had its face art punched away before
+    // the FRU pass came to crop it, so every such module was a dark rectangle.
+    const artCv = document.createElement('canvas');
+    artCv.width = cv.width; artCv.height = cv.height;
+    artCv.getContext('2d').drawImage(cv, 0, 0);
     faceCv[F.view] = cv;
     faceSvg[F.view] = faceText;   // LOD re-rasterises from this; keep it squared
     facePunch[F.view] = [];
@@ -989,10 +999,11 @@ export async function buildFaceRelief(F, ctx) {
     curOwner = null;
     for (const f of frus) {   // move the FRU's face art into its group; leave a bay
       const fg = fruGroups[f.path];
-      const faceCrop = crop(cv, f, PX);
+      const faceCrop = crop(f.lift ? artCv : cv, f, PX);
+      const zf = f.lift || 0;
       const plane = new THREE.Mesh(new THREE.PlaneGeometry(f.w, f.h),
         new THREE.MeshBasicMaterial({map: canvasTex(faceCrop), transparent: true, alphaTest: 0.1, alphaToCoverage: true}));
-      plane.position.set(LX(f.x, f.w), LY(f.y, f.h), 0.3);
+      plane.position.set(LX(f.x, f.w), LY(f.y, f.h), zf + 0.3);
       fg.add(plane);
       // CLEAR, never fill: an opaque patch on the chassis face would occlude
       // everything behind it (the module's own cavities, pins, bay interior)
@@ -1003,7 +1014,7 @@ export async function buildFaceRelief(F, ctx) {
       if (meta.body) {   // full module body travels with the FRU
         const {mesh, fp, d} = await bodyBoxMesh(meta.body, f.w, f.h);
         mesh.position.set(LX(f.x + fp.at[0], fp.size[0]),
-                          LY(f.y + fp.at[1], fp.size[1]), -d / 2 - 0.05);
+                          LY(f.y + fp.at[1], fp.size[1]), zf - d / 2 - 0.05);
         fg.add(mesh);
       }
       // empty bay: interior surfaces only, so it never occludes the module's
@@ -1012,7 +1023,7 @@ export async function buildFaceRelief(F, ctx) {
       const bd = meta.body ? meta.body.depth : (meta.bodyDepth || 60);
       const bay = new THREE.Mesh(new THREE.BoxGeometry(f.w + 0.6, f.h + 0.6, bd),
         new THREE.MeshLambertMaterial({color: 0x0a0c0e, side: THREE.BackSide}));
-      bay.position.set(LX(f.x, f.w), LY(f.y, f.h), -bd / 2 - 0.2);
+      bay.position.set(LX(f.x, f.w), LY(f.y, f.h), zf - bd / 2 - 0.2);
       grp.add(bay);
     }
   meshes.push(grp);

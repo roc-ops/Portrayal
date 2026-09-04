@@ -782,3 +782,20 @@ def test_a_bay_can_be_under_a_tray():
     assert caught("L13", lint.lint_device_overlap, P, "top", v, [str(LIB)])
     v["components"]["bays"] = [dict(sock, under="tray")]
     assert not caught("L13", lint.lint_device_overlap, P, "top", v, [str(LIB)])
+
+
+def test_in_names_a_well_or_is_an_error():
+    """`in:` is `under:` read from the other end - what stands in a well is
+    over it - and it is checked the same way: the target has to be a recess.
+    A DIMM socket in the system board is fine; a DIMM socket 'in' a flat
+    riser clip has no floor to stand on and says so."""
+    board = {"id": "board", "ref": "dell/system-board-14g@1", "at": [3.58, 0.07]}
+    sock = {"id": "sock", "at": [20.0, 281.0], "size": {"w": 3.8, "h": 133.4}, "in": "board"}
+    v = {"size": {"w": 434.0, "h": 737.5},
+         "components": {"placements": [board], "bays": [sock]}}
+    assert not caught("L13", lint.lint_device_overlap, P, "top", v, [str(LIB)])
+    clip = {"id": "clip", "ref": "dell/riser-card-clip-14g@1", "at": [10.0, 280.0]}
+    v = {"size": {"w": 434.0, "h": 737.5},
+         "components": {"placements": [clip], "bays": [dict(sock, **{"in": "clip"})]}}
+    hits = caught("L13", lint.lint_device_overlap, P, "top", v, [str(LIB)])
+    assert hits and "not a well" in hits[0]

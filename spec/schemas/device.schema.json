@@ -879,6 +879,10 @@
            "type": "boolean",
            "description": "flip the occupant horizontally about its own centre line; handedness, not rotation - a riser whose cards face the other way"
           },
+          "in": {
+           "$ref": "#/$defs/segment",
+           "description": "the WELL this bay opens in - a placement in this view drawn as a recess. The bay's plane, and the face of the module that fills it, sit at the well's floor rather than at the face, and the module's body reaches down from there: a drive in the mid-drive tray has its top at the tray's 5.21 mm floor, a DIMM on the system board its top at the board's 46.17. Implies the well is `under:` this bay. Checked: the target must be a well in this view."
+          },
           "under": {
            "oneOf": [
             {
@@ -1052,6 +1056,10 @@
             }
            ],
            "description": "ids this part SURROUNDS rather than covers - a frame whose bounding box takes in openings its ink does not. L13 compares boxes, which is right for almost every part and wrong for a frame; this is the declaration that makes the difference checkable instead of assumed. Name only what the openings actually clear. NOT a way to silence a real overlap: a part that genuinely paints over another is an error. Distinct from `behaviour: mounts`, which says a part lies OVER what is behind it and draws after the bays - a drive cage surrounds its drives and must draw BEFORE them, so the two are not interchangeable."
+          },
+          "in": {
+           "$ref": "#/$defs/segment",
+           "description": "the WELL this part stands in - a placement in this view that render.py draws as a recess (an unmounted, non-module part with `size.d`). A top view with its lid off is a section, and a part on the floor of a well is not at the face: the R740xd's heatsinks stand on the system board 46.17 mm down. The renderer sinks the part by the well's depth (a negative z-lift that relief.js sums like any other) and its `out` features rise from the floor. Implies the well is `under:` this part for L13 and for paint order, so it need not be repeated. Checked: the target must be a well in this view."
           },
           "under": {
            "oneOf": [

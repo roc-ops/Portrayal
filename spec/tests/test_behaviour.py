@@ -145,3 +145,23 @@ def test_a_mounted_part_under_an_opening_paints_before_it():
             o = svg.find(f'id="{over}"')
             assert o != -1, f"{over} is not in the R740xd top view"
             assert at < o, f"{hs} paints after {over}, which lies over it"
+
+
+def test_a_part_in_a_well_is_sunk_to_its_floor():
+    """The 3D reads a part's height off the face. A DIMM in the system board
+    is not at the face - it is 46.17 down, on the board - and a drive in the
+    mid tray is 5.21 down. `in:` emits that as a negative data-z-lift, and a
+    mounted part's `out` is pulled down by the same amount so it rises from
+    the floor rather than from the lid line."""
+    import re
+    svg = needs_dist("r740xd.lff12-mlff4-rlff2-rc0-noriser.top.svg").read_text()
+    def lift(id_):
+        m = re.search(rf'id="{id_}"[^>]*data-z-lift="([^"]+)"', svg)
+        assert m, f"{id_} carries no data-z-lift"
+        return float(m.group(1))
+    assert lift("dimm-a1") == -46.17
+    assert lift("heatsink-1") == -46.17
+    assert lift("mid-lff-0") == -5.21
+    assert lift("fan-0") == -3.48
+    m = re.search(r'id="heatsink-1--block"[^>]*data-z-out="([^"]+)"', svg)
+    assert m and float(m.group(1)) == -45.17, "the heatsink's out was not pulled down to the floor"

@@ -1408,6 +1408,34 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         if q["id"] in deferred_ids and any(o in every_bay or o not in deferred_ids for o in overs):
             deferred_ids.discard(q["id"])
 
+    # HOW DEEP A WELL'S FLOOR IS, for whatever says it is `in:` one. The
+    # aperture rule again: an unmounted, non-module part's `size.d` is the
+    # depth of the recess it draws as, and the floor of that recess is where a
+    # part on it sits. Emitted as a NEGATIVE data-z-lift - relief.js sums lifts
+    # up the ancestor chain, so a sunk group sinks everything in it - and the
+    # part's own `out` figures, which are measured from the face, are pulled
+    # down by the same amount so they rise from the floor instead.
+    def floor_of(wid):
+        q = next((z for z in parts["placements"] if z.get("id") == wid), None)
+        if not q:
+            return 0.0
+        try:
+            c, _ = lib.resolve(q["ref"])
+        except Exception:
+            return 0.0
+        c = c or {}
+        if c.get("kind") == "module" or c.get("behaviour") == "mounts":
+            return 0.0
+        return float((c.get("size") or {}).get("d") or 0.0)
+
+    def sink(g, floor):
+        if not floor:
+            return
+        g.set("data-z-lift", f"{-floor:g}")
+        for node in g.iter():
+            if node.get("data-z-out") is not None:
+                node.set("data-z-out", f"{float(node.get('data-z-out')) - floor:g}")
+
     def draw_placement(p):
         if p.get("mate-to") and not p.get("at"):
             host = hosts.get(p["mate-to"])
@@ -1454,6 +1482,8 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         # only thing that separates them. See L37.
         if grp.get("role"):
             g.set("data-group-role", grp["role"])
+        if p.get("in"):
+            sink(g, floor_of(p["in"]))
         # What the lamps on this instance mean. A placement wins over its group,
         # the way attrs already do: a block of eighteen QSFP28 speed lamps says
         # its vocabulary once, and one lamp inside it may still differ.
@@ -1488,13 +1518,21 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     # second pass, and document order put the cover first: the shroud painted
     # over the lid that hides it. A part that says it is lower goes earlier.
     # Document order is kept for everything the declarations do not touch.
+    # `in:` is the same stack read from the other end: what stands on a well
+    # is over it, so the well is under it and paints first.
+    stands_on = {}
+    for q in (*parts["placements"], *parts["bays"]):
+        if q.get("in"):
+            stands_on.setdefault(q["in"], set()).add(q["id"])
+
     def _stacked(seq):
         seq = list(seq)
         for _ in range(len(seq)):
             moved = False
             for i, q in enumerate(seq):
                 overs = q.get("under") or []
-                overs = overs if isinstance(overs, list) else [overs]
+                overs = list(overs if isinstance(overs, list) else [overs])
+                overs += stands_on.get(q["id"], ())
                 j = min((k for k, r in enumerate(seq) if r["id"] in overs), default=None)
                 if j is not None and j < i:
                     seq.insert(j, seq.pop(i))
@@ -1511,6 +1549,8 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         bay_g.set("id", b["id"])
         bay_g.set("data-path", b["id"])
         bay_g.set("data-class", "bay")
+        if b.get("in"):
+            bay_g.set("data-z-lift", f"{-floor_of(b['in']):g}")
         if b.get("group"):
             bay_g.set("data-group", b["group"])
             brole = (dev_groups.get(b["group"]) or {}).get("role")
