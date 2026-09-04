@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: air-shroud-14g
-version: 1.3.0
+version: 1.4.0
 class: mechanical
 # It lies over the processors and lifts out to reach them, which is what
 # `mounts` declares, and declaring it is what gives it the viewer's pull
@@ -60,14 +60,19 @@ relief:
   wall: '#3a4045'
   features:
   - node: shroud
-    out: 1.0
+    out: 77.98
     color: '#4a5057'
-    confidence: estimated
+    confidence: measured
     source: >-
-      unsourced. The shroud's top is 1.92 below the lid, so what stands proud of
-      the surrounding metal is not this number - it is drawn 1.0 proud of the
-      floor it sits on so it reads as a moulding rather than as paint. A well
-      would be wrong: this is a part you lift out.
+      Dell's service model: the shroud's top is at chassis height 84.88, and it
+      is placed `in:` dell/system-board-14g@1, whose floor is the PCB at 6.9 -
+      so it rises 77.98 from that floor and tops out 1.92 below the 86.8 lid,
+      which is where the model has it. It was `out: 1.0` at the face for three
+      versions, which put its top at exactly the lid's own top plane and made
+      the two shimmer through each other; the fans' tabs had done the same and
+      were fixed the same way. The block is drawn from the floor up, though
+      the moulding's underside is at 36.12 - it stands over the DIMMs on the
+      board's standoffs, and what is under it is hidden either way.
 elements:
   shroud: {at: [0.0, 0.0], size: [431.49, 210.42], class: bezel}
 skins: [default]
