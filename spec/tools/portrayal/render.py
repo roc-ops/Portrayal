@@ -1573,6 +1573,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     ordered = _stacked(parts["placements"])
 
     def draw_bay(b):
+        bay_lift = 0.0
         bay_g = ET.SubElement(svg, f"{{{SVG_NS}}}g")
         bay_g.set("id", b["id"])
         bay_g.set("data-path", b["id"])
@@ -1587,7 +1588,8 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             # on; this is what puts their tops where the model measured them.
             floor = floor_of(b["in"])
             if floor:
-                bay_g.set("data-z-lift", f"{-(floor - occupant_depth(b)):g}")
+                bay_lift = -(floor - occupant_depth(b))
+                bay_g.set("data-z-lift", f"{bay_lift:g}")
             bay_g.set("data-in", b["in"])
         if b.get("group"):
             bay_g.set("data-group", b["group"])
@@ -1678,6 +1680,17 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         df = data_for(b.get("for"))
         if df:
             bay_g.set("data-for", df)
+        # A MODULE'S `out` IS MEASURED FROM ITS OWN FACE, and its face is now
+        # the bay's sunk plane. The kit builds a raised feature as a box from
+        # its summed lift to its ABSOLUTE `out`, so a fan's release tab at
+        # `out: 1.0` in a bay 3.48 down ran from -3.48 to +1.0 - through the
+        # lid, whose top is at exactly 1.0, which is the shimmer and the orange
+        # showing through it. Pull every `out` in here down by the bay's lift,
+        # as sink() does for a placement.
+        if bay_lift:
+            for node in bay_g.iter():
+                if node.get("data-z-out") is not None:
+                    node.set("data-z-out", f"{float(node.get('data-z-out')) + bay_lift:g}")
 
     # FIRST PASS: the wells and the openings, interleaved by `under:`. Bays
     # paint after placements by default - a cage draws before the drives it

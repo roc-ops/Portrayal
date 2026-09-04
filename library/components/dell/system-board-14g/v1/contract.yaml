@@ -1,19 +1,34 @@
 format: 1
 kind: component
 name: system-board-14g
-version: 1.5.0
+version: 1.6.0
 class: mechanical
 profile: server
 description: >-
   The system board of a 14G PowerEdge seen from above - the floor of the
   chassis, visible between the fan cage, the shroud and the risers
-size: {w: 427.0, h: 469.69, d: 79.9}
+size: {w: 422.8, h: 456.5, d: 79.9}
 provenance:
   size: >-
-    measured - Dell's service model, `R740XD_ SystemBoard`, the one seated pose:
-    face x 3.58..430.58 and top_y 0.07..469.76 in the top view's frame
-    (top_y = 713.5 - raw_z; rear at 0). It is the full width of the chassis interior and runs
-    from just behind the fan cage to the rear wall.
+    measured - THE PCB ITSELF, `Body_25_2.001` inside Dell's service model's
+    motherboard assembly: 422.8 x 456.5 x 1.7, face x 5.5..428.3 and top_y
+    6.2..462.7 in the top view's frame (x = 217 - raw_x - w, top_y = 713.5 -
+    raw_z). The assembly's own box, `R740XD_ SystemBoard`, is 427.0 x 469.69
+    and was this part's size for four versions; it is the envelope of the
+    board WITH its brackets and connectors, and a floor drawn to it ran under
+    the supplies and out to the rear metal.
+  the-outline-is-an-L: >-
+    measured envelope, estimated edge. The rear-left corner of the PCB is
+    missing where the two supplies sit - the ISM's "Memory socket locations"
+    figure shows the notch, and the model puts the supplies at face x
+    6.6..182.7 and top_y 0..195.5 (`740XD_Powersupply_Unit-1.001`, both
+    poses, 86.3 wide on an 89.8 pitch, 195.5 into the chassis). The notch is
+    drawn to that envelope, board-local 177.2 x 189.3. THE PCB'S OWN EDGE WAS
+    NOT READ: the mesh is Draco-compressed and only its bounding box was
+    taken, so the notch is where the supplies must be and not where the
+    copper stops. A photograph of the board out of the chassis would fix it
+    to the millimetre. The renderer punches the well with this part's art, so
+    the L is the hole and the floor, not the rectangle.
   depth: >-
     measured - 79.9 is the PCB, the floor everything on this board stands on:
     the DIMM sockets base at cad y 6.9 and the panel is at 86.8. That is the
@@ -30,12 +45,11 @@ provenance:
     common/dimm-plan@1, also on the device; and the twelve socket pairs the
     DIMMs stand in are drawn HERE, because a socket is the board -
     `00_740XD_Ram Slot_MT-1.002`, twelve seated at 15.9 x 162.0, two DIMMs
-    each, at face x 18.3, 37.1, 56.0, 161.4, 180.2, 199.1, 217.8, 236.6,
-    255.5, 360.9, 379.7, 398.6 and top_y 266.8..428.8. The
-    board says `under:` all of them. What is still not drawn: the processor
-    sockets themselves (under the heatsinks), the NVDIMM-N battery
-    (`DELL_R740XD_NVDIMM-N battery-1.001`, face x 178.58..247.58, and it
-    mounts on the shroud rather than here), and every connector.
+    each, at face x 19.5, 38.4, 57.2, 162.6, 181.5, 200.3, 219.0, 237.9,
+    256.7, 362.1, 381.0, 399.8 and top_y 266.8..428.8. The board says
+    `under:` all of them. What is still not drawn: the processor sockets
+    themselves (under the heatsinks), the NVDIMM-N battery (it mounts on the
+    shroud rather than here), and every connector.
   the-board-is-a-plain-green-rectangle: >-
     estimated - the outline is measured and the SURFACE IS NOT. No trace, no
     socket, no connector and no silkscreen is drawn; the colour is a plain board
@@ -57,5 +71,5 @@ relief:
   wall: '#1e2226'
   walls: inside
 elements:
-  board: {at: [0.0, 0.0], size: [427.0, 469.69], class: bezel}
+  board: {at: [0.0, 0.0], size: [422.8, 456.5], class: bezel}
 skins: [default]

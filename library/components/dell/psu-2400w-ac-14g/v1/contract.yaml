@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: psu-2400w-ac-14g
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: server
@@ -172,9 +172,19 @@ provenance:
     stencil's PSU masters are 15G and later wattages (700, 800, 1100, 1400, 1800,
     2400, 2800 W on C14 through C22) and none of them is this unit.
   depth: >-
-    estimated. A CRPS-form supply is around 185 mm deep and no document held here
-    states it for this one. Not recorded rather than guessed.
-size: {w: 86.3, h: 39.1}
+    measured - Dell's R740XD service model, `740XD_Powersupply_Unit-1.001`,
+    both seated poses: cad z 518.0 to 752.8 against a rear metal plane at
+    713.5, so the body reaches 195.5 into the chassis and the handle stands
+    39.3 proud of the panel. 195.5 is `size.d` and the body; the handle's
+    stand-off is the relief's business, not this number's. The same figure
+    serves the 1100 W AC, the 1100 W DC and the 2400 W AC because the model
+    carries one supply body and all three are the same CRPS-form can - if a
+    variant is longer, that is a claim nobody here can source. This replaced
+    "around 185, not recorded rather than guessed", and 185 was 10 short.
+size: {w: 86.3, h: 39.1, d: 195.5}
+body:
+  depth: 195.5
+  color: '#8a9096'
 relief:
   wall: '#3a4045'
   features:
