@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: bezel-2u-14g
-version: 1.2.0
+version: 2.0.0
 class: bezel
 behaviour: mounts
 profile: server
@@ -9,7 +9,7 @@ description: >-
   The optional metal front bezel for a 2U 14th-generation PowerEdge - a
   honeycomb of large hexagonal openings between two end flanges, with a keylock
   and a release button at the left end. Unbranded
-size: {w: 434.0, h: 82.35, d: 14.0}
+size: {w: 434.0, h: 82.35, d: 23.3}
 provenance:
   size: >-
     THE MASTER'S ASPECT, ANCHORED BY WHERE THE PART FITS. Dell's 2u-14g-bezel
@@ -59,27 +59,82 @@ provenance:
     bezel with an LCD is a different part with a display element and states, and
     modelling it as a skin of this one would give it a screen that cannot light.
   depth: >-
-    estimated. It stands proud of the face and no document held here says by how
-    much. 14 is a placeholder, and it is now also the relief's `out`, so the
-    part is a block that far off the face in 3D rather than paint on it: the
-    honeycomb's holes are holes in the block's top, and the drives show through
-    them. One measured figure - a rule against the bezel's edge - corrects both
-    numbers at once.
+    measured - Dell's service model, `DELL_R740XD_Frontbezel-1.001`, its one
+    body `3DGeom~7136.001`, decoded from Draco: cad z -3.7..19.5 against the
+    front drive carriers' faces at z 19.6 (`Poweredge_R760_Drive_Carrier_
+    Assembly-1.002`, front-most pose). 23.3 is the badge bar's face; the
+    honeycomb's is 20.3 proud, the end caps' 9.3 at their tips. 14 had been a
+    placeholder for five versions.
+  the-profile: >-
+    measured from the same mesh, read as the front-most z in 10 mm bands
+    across x and 4 mm bands up y, and drawn as FOUR relief features because
+    a bezel has four depths, not one. The honeycomb FIELD's front is at z
+    -0.7, 20.3 proud, and its cells are 20 mm deep tubes to z 19.5 - the
+    block is drawn to the front figure and the tubes are not drawn, which a
+    hole in a 20 mm block reads as anyway. The END CAPS are wedges: 9.3 proud
+    at the extreme ends (z 10.3 left, 11.3 right) rising to the field's 20.3
+    where they meet it; a box cannot taper, so each is drawn at 15.9, the
+    figure at the cap's middle, and the tip reads 6.6 too far out. The BADGE
+    BAR at x 175..265, y 28.7..48.7 stands at z -3.7, 3.0 proud of the field;
+    the round badge near the left cap is 0.5 proud and is drawn flush. The
+    top and bottom rails sit 3 to 5 behind the field's front and are drawn at
+    the field's figure. The x rule is the top view's, 217 - raw_x - w, because
+    a front view and a plan agree about left and right.
+  the-model-puts-the-release-on-the-other-end: >-
+    A DISAGREEMENT, RECORDED AND NOT RESOLVED. The ISM says the release
+    button is at the LEFT end as seen from the front, and this skin draws it
+    there. Dell's model has `DELL_R740XD_Frontbezel_ReleaseButton-1.001` at
+    cad x 192.0..215.4, which by the same x rule that put the supplies where
+    the board figure notches the PCB is the RIGHT end. Either the guide means
+    the other left, or the model's bezel is posed mirrored, or the rule that
+    has held for every other part fails for this one; a photograph settles it
+    and none held here shows the bezel's ends clearly. The ISM is followed
+    because it is the document a person removing the bezel reads.
 relief:
   features:
-  - node: body
-    out: 14.0
+  - node: field
+    out: 20.3
     color: '#2b2f34'
-    confidence: estimated
+    confidence: measured
+    source: the mesh's front-most z in the honeycomb, -0.7, against the carriers' 19.6
+  - node: flange-l
+    out: 15.9
+    color: '#2b2f34'
+    confidence: measured
     source: >-
-      the same placeholder as `size.d`; see `depth`. The colour is the
-      bezel's own dark plastic edge and is not sampled.
+      the cap's front at its middle, cad z 3.7; the cap tapers from 9.3 proud
+      at the tip to the field's 20.3, and a box is drawn at the middle
+  - node: flange-r
+    out: 15.9
+    color: '#2b2f34'
+    confidence: measured
+    source: as flange-l; the right cap tapers from z 11.3 at its tip
+  - node: badge
+    out: 23.3
+    color: '#2b2f34'
+    confidence: measured
+    source: the bar's front at cad z -3.7, 3.0 proud of the field
 elements:
-  body:
-    at: [0.0, 0.0]
-    size: [434.0, 82.35]
+  field:
+    at: [24.8, 0.0]
+    size: [384.4, 82.35]
     class: bezel
-    description: the bezel itself - flanges, honeycomb field, lock and release
+    description: the honeycomb field between the end caps
+  flange-l:
+    at: [0.0, 0.0]
+    size: [24.8, 82.35]
+    class: bezel
+    description: the left end cap, with the lock and release on it
+  flange-r:
+    at: [409.2, 0.0]
+    size: [24.8, 82.35]
+    class: bezel
+    description: the right end cap
+  badge:
+    at: [175.0, 28.7]
+    size: [90.0, 20.0]
+    class: bezel
+    description: the badge bar across the middle of the field
   lock:
     at: [8.0, 12.0]
     size: [9.0, 9.0]
