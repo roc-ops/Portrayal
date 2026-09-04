@@ -57,6 +57,10 @@ roles:
     # a PCIe riser is a board with connectors and, on some variants, a switch.
     # Nothing held here states a figure for one, so the warning is the record.
     - riser
+    # a DIMM is silicon on a board: it draws, a few watts each, and nothing held
+    # here states a figure per module - Dell publishes system power through a
+    # planning tool. The warning is the record, as it is for nic and riser.
+    - memory
 
   # SUPPLIES: state `power-output-w` and never a draw key - they are opposite
   # signs of one unit, so a sum over both is a category error that reads as an

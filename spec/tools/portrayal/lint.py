@@ -1888,8 +1888,14 @@ def lint_device_overlap(path, view_name, view, lib_roots):
     # names what is over this placement - the board names the shroud and the
     # fan wall, the shroud names the lid. Checked below, per pair: the lower
     # part is a well or the upper is a lid, or the claim is the error.
+    # A BAY CAN BE UNDER SOMETHING TOO - it is an opening, so it always has
+    # somewhere to be: the R740xd's DIMM sockets are under the mid tray and
+    # its drive bays, on the configurations that carry one.
+    bays_ = view_parts(view)["bays"]
     under = {p["id"]: set(targets(p.get("under"))) for p in parts_}
-    every_id = {p["id"] for p in parts_} | {b["id"] for b in view_parts(view)["bays"]}
+    under.update({b["id"]: set(targets(b.get("under"))) for b in bays_})
+    bay_ids = {b["id"] for b in bays_}
+    every_id = {p["id"] for p in parts_} | bay_ids
     for pid, ups in under.items():
         for u in ups - every_id:
             err(path, "L13", f"{view_name}: {pid} is under '{u}', which is not in this view")
@@ -1908,6 +1914,8 @@ def lint_device_overlap(path, view_name, view, lib_roots):
         # the aperture rule, as render.py applies it: a non-module, non-mounted
         # part's `size.d` is a hole depth, so such a part has a floor below the
         # panel for something else to stand over
+        if pid in bay_ids:
+            return True
         c = _contract(pid)
         return bool((c.get("size") or {}).get("d")) and c.get("kind") != "module" \
             and not _mounted(pid)
@@ -1939,7 +1947,7 @@ def lint_device_overlap(path, view_name, view, lib_roots):
         boxes.append((p["id"], x, y, w, h, p.get("only-in")))
     # Bays occupy faceplate area exactly as placements do. Leaving them out let a
     # rivet row sit on top of five fan bays without a word from the linter.
-    for b in view_parts(view)["bays"]:
+    for b in bays_:
         # NOT transposed for `rotate`. A placement's size comes from the unrotated
         # component, so a quarter turn swaps it; a bay's size is authored as the
         # ON-PANEL footprint already, and `rotate` only spins the occupant inside

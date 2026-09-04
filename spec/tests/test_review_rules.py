@@ -769,3 +769,16 @@ def test_under_must_name_something_in_the_view():
     bad = _top([dict(BOARD, under="lid-that-is-not-here")])
     hits = caught("L13", lint.lint_device_overlap, P, "top", bad, [str(LIB)])
     assert hits and "not in this view" in hits[0]
+
+
+def test_a_bay_can_be_under_a_tray():
+    """A DIMM socket is an opening, and the mid tray lies over it. Without the
+    declaration the tray's box on the bay is the overlap L13 reports; with it
+    the bay is a well by nature and the pair is not compared."""
+    tray = {"id": "tray", "ref": "dell/mid-drive-tray-14g@1", "at": [1.30, 233.92]}
+    sock = {"id": "sock", "at": [20.0, 281.0], "size": {"w": 3.8, "h": 133.4}}
+    v = {"size": {"w": 434.0, "h": 737.5},
+         "components": {"placements": [tray], "bays": [sock]}}
+    assert caught("L13", lint.lint_device_overlap, P, "top", v, [str(LIB)])
+    v["components"]["bays"] = [dict(sock, under="tray")]
+    assert not caught("L13", lint.lint_device_overlap, P, "top", v, [str(LIB)])

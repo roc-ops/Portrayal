@@ -879,6 +879,21 @@
            "type": "boolean",
            "description": "flip the occupant horizontally about its own centre line; handedness, not rotation - a riser whose cards face the other way"
           },
+          "under": {
+           "oneOf": [
+            {
+             "$ref": "#/$defs/segment"
+            },
+            {
+             "type": "array",
+             "minItems": 1,
+             "items": {
+              "$ref": "#/$defs/segment"
+             }
+            }
+           ],
+           "description": "Same as on a placement: the ids in this view that lie OVER this bay. A bay is an opening, so it always has somewhere to be under - the R740xd's DIMM sockets sit under the mid-drive tray and its drive bays on the nine configurations that carry one, and the DIMMs' 42.6 mm top clears the tray's 48.89 mm floor. Checked by L13 exactly as a placement's is: the upper part must exist in the view, and the pair is then not compared."
+          },
           "for": {
            "description": "the placement or bay this one belongs to. A bay is a hole in this face; what it belongs to is on this face too, so a bare id and nothing else. Emitted as data-for.",
            "oneOf": [

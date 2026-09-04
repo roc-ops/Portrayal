@@ -1,0 +1,41 @@
+format: 1
+kind: module
+name: dimm-plan
+version: 1.0.0
+class: memory
+behaviour: fills
+profile: server
+description: >-
+  A DIMM seen from above, standing in its socket - the thin edge of the
+  module with its latches at either end, which is all a plan view shows
+size: {w: 3.8, h: 133.4, d: 31.3}
+provenance:
+  size: >-
+    measured - Dell's R740XD service model, `R740XD_ Memory Module`, the
+    twenty-four seated poses: each 3.8 wide and 133.4 long in the top view's
+    frame, 31.3 tall from cad y 11.3 to 42.6. THE LENGTH IS A CHECK THAT
+    PASSES: JEDEC's DDR4 DIMM is 133.35 mm long, and 133.4 is that to the
+    tenth, so the model is at scale and the axis is the long one. The 3.8 is
+    the module's thickness with its heat spreader and is what a plan view has
+    to draw; it is the width of the BAY, and the socket around it is the
+    board's own art rather than this part's.
+  it-is-a-module-because-it-lifts-out: >-
+    `kind: module` with `behaviour: fills` - a DIMM fills its socket and comes
+    out of it, and render.py would draw a plain component as a hole. `d` is
+    the height it stands, which is how far it rises when pulled.
+  it-is-common-and-not-std: >-
+    There is no `dimm` entry in spec/schemas/standards.yaml for this to
+    `conforms:` to, so it cannot be a `std/` part the way the plan drives are.
+    It is `common/` because nothing about it is Dell's: any DDR4 server board
+    seats the same 133.35 edge. Adding the JEDEC outline to the registry and
+    moving this under it is the right next step, and this file says so rather
+    than inventing a `conforms:`.
+  the-face-is-plain: >-
+    estimated - a dark edge with a lighter strip for the heat spreader, drawn
+    so it reads as a module rather than as a line. Nothing should be measured
+    off the art.
+relief:
+  wall: '#1a1d21'
+elements:
+  body: {at: [0.0, 0.0], size: [3.8, 133.4], class: bezel}
+skins: [default]

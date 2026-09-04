@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: system-board-14g
-version: 1.1.0
+version: 1.2.0
 class: mechanical
 profile: server
 description: >-
@@ -20,16 +20,25 @@ provenance:
     number `size.d` carries, which makes this part a WELL 46.17 deep with its
     own art as the floor: what you are looking down into when the lid, the
     shroud and the tray are all out of the way.
-  what-is-on-it-is-not-drawn: >-
-    NOT SEARCHED FOR, RATHER THAN LOOKED FOR AND ABSENT. The service model
-    carries the processors, heatsinks, memory and the NVDIMM battery as seated
-    parts - `R740XD_ HeatSink 1U` at face 75.63..157.85 and 274.93..357.15,
-    `R740XD_ Memory Module` 25 seated at 3.77 wide, `DELL_R740XD_NVDIMM-N
-    battery-1.001` at 178.58..247.58 - and none of them is drawn here.
-    They are all UNDER THE AIR SHROUD, so nothing is missing from the view as it
-    stands; they become worth drawing the moment the shroud can be taken off,
-    which is the obvious next layer and is why they are named here rather than
-    left to be rediscovered.
+  what-is-on-it: >-
+    The processors' heatsinks are dell/heatsink-1u-14g@1, placed on the
+    device over this board; the memory is twenty-four bays of
+    common/dimm-plan@1, also on the device; and the twelve socket pairs the
+    DIMMs stand in are drawn HERE, because a socket is the board -
+    `00_740XD_Ram Slot_MT-1.002`, twelve seated at 15.9 x 162.0, two DIMMs
+    each, at face x 18.3, 37.1, 56.0, 161.4, 180.2, 199.1, 217.8, 236.6,
+    255.5, 360.9, 379.7, 398.6 and top_y 266.8..428.8. The
+    board says `under:` all of them. What is still not drawn: the processor
+    sockets themselves (under the heatsinks), the NVDIMM-N battery
+    (`DELL_R740XD_NVDIMM-N battery-1.001`, face x 178.58..247.58, and it
+    mounts on the shroud rather than here), and every connector.
+  the-top-is-the-heatsink-top: >-
+    A NOTE ON `size.d`. The 40.63 the model gives as this assembly's top is
+    the top of the heatsinks (cad y 40.8), not of the PCB - the DIMM sockets
+    base at cad y 6.9, so the board itself is nearer 80 below the lid line.
+    46.17 is kept because it is the depth of the well as the eye sees it,
+    with the heatsinks drawn flat on its floor; the DIMMs stand 31.3 above
+    that floor and carry that as their own `d`.
   the-board-is-a-plain-green-rectangle: >-
     estimated - the outline is measured and the SURFACE IS NOT. No trace, no
     socket, no connector and no silkscreen is drawn; the colour is a plain board

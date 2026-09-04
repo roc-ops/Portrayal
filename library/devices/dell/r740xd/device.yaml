@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 20.1.0
+version: 20.2.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -299,6 +299,27 @@ groups:
     attrs:
       redundancy: 'n+1'
       redundancy-note: 'n+1 - "Cooling redundancy: The system allows N+1 fan redundancy, allowing continuous operation with one fan failure in the system" (PowerEdge R740 and R740xd Technical Guide, Thermal design). The spec sheet says the same as "Up to 6 hot plugs fans with full redundancy"'
+  memory:
+    term: DIMM
+    role: service
+    index-origin: 1
+    description: >-
+      the twenty-four DIMM sockets, twelve per processor in two banks of six
+      either side of it. Each bay is named for its socket - A1..A12 for CPU1,
+      B1..B12 for CPU2 - in Dell's own lettering, and the order across the
+      board is the ISM's "Memory socket locations" figure: B6 B12 B5 B11 B4
+      B10, CPU2, B7 B1 B8 B2 B9 B3 A6 A12 A5 A11 A4 A10, CPU1, A7 A1 A8 A2 A9
+      A3, from the left as seen from the front. Every socket is seated here
+      because no configuration says otherwise; a real order fills them by
+      Dell's population rules, which this device does not encode.
+  processors:
+    term: Processor
+    role: service
+    index-origin: 1
+    description: >-
+      the two processor positions, each under a 1U heatsink. CPU1 is on the
+      right as seen from the front and CPU2 on the left, which is the ISM's
+      board figure; the heatsink is what the view shows and what lifts off.
   interior:
     term: Item
     role: furniture
@@ -1330,6 +1351,133 @@ views:
         # dell/system-cover-14g@1.
     components:
       bays:
+        # TWENTY-FOUR DIMM BAYS at the measured seated positions of Dell's
+        # `R740XD_ Memory Module`, 3.8 x 133.4 each on a ~9.45 pitch, named
+        # for their sockets in the order of ISM Figure 90. The bay is the
+        # DIMM's own footprint; the socket around it is drawn on the board.
+        # Under the shroud, or on the nine mid-tray configurations under the
+        # tray and its drives - `under:` says so, and L13 takes a bay's word
+        # for having depth because an opening always has some.
+        - {id: dimm-b6, at: [19.60, 281.00], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 1, physical-context: Memory,
+           under: [mid-drive-tray-lff, mid-drive-tray-sff, mid-lff-0, mid-lff-1,
+                   mid-lff-2, mid-lff-3, mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3]}
+        - {id: dimm-b12, at: [29.10, 281.00], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 2, physical-context: Memory,
+           under: [mid-drive-tray-lff, mid-drive-tray-sff, mid-lff-0, mid-lff-1,
+                   mid-lff-2, mid-lff-3, mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3]}
+        - {id: dimm-b5, at: [38.40, 281.00], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 3, physical-context: Memory,
+           under: [mid-drive-tray-lff, mid-drive-tray-sff, mid-lff-0, mid-lff-1,
+                   mid-lff-2, mid-lff-3, mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3]}
+        - {id: dimm-b11, at: [47.90, 281.00], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 4, physical-context: Memory,
+           under: [mid-drive-tray-lff, mid-drive-tray-sff, mid-lff-0, mid-lff-1,
+                   mid-lff-2, mid-lff-3, mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3]}
+        - {id: dimm-b4, at: [57.30, 281.00], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 5, physical-context: Memory,
+           under: [mid-drive-tray-lff, mid-drive-tray-sff, mid-lff-0, mid-lff-1,
+                   mid-lff-2, mid-lff-3, mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3]}
+        - {id: dimm-b10, at: [66.80, 281.00], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 6, physical-context: Memory,
+           under: [mid-drive-tray-lff, mid-drive-tray-sff, mid-lff-0, mid-lff-1,
+                   mid-lff-2, mid-lff-3, mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3]}
+        - {id: dimm-b7, at: [162.70, 281.00], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 7, physical-context: Memory,
+           under: [mid-drive-tray-lff, mid-drive-tray-sff, mid-lff-0, mid-lff-1,
+                   mid-lff-2, mid-lff-3, mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3]}
+        - {id: dimm-b1, at: [172.20, 281.00], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 8, physical-context: Memory,
+           under: [mid-drive-tray-lff, mid-drive-tray-sff, mid-lff-0, mid-lff-1,
+                   mid-lff-2, mid-lff-3, mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3]}
+        - {id: dimm-b8, at: [181.50, 281.00], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 9, physical-context: Memory,
+           under: [mid-drive-tray-lff, mid-drive-tray-sff, mid-lff-0, mid-lff-1,
+                   mid-lff-2, mid-lff-3, mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3]}
+        - {id: dimm-b2, at: [191.00, 281.00], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 10, physical-context: Memory,
+           under: [mid-drive-tray-lff, mid-drive-tray-sff, mid-lff-0, mid-lff-1,
+                   mid-lff-2, mid-lff-3, mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3]}
+        - {id: dimm-b9, at: [200.40, 281.00], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 11, physical-context: Memory,
+           under: [mid-drive-tray-lff, mid-drive-tray-sff, mid-lff-0, mid-lff-1,
+                   mid-lff-2, mid-lff-3, mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3]}
+        - {id: dimm-b3, at: [209.90, 281.00], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 12, physical-context: Memory,
+           under: [mid-drive-tray-lff, mid-drive-tray-sff, mid-lff-0, mid-lff-1,
+                   mid-lff-2, mid-lff-3, mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3]}
+        - {id: dimm-a6, at: [219.10, 281.00], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 13, physical-context: Memory,
+           under: [mid-drive-tray-lff, mid-drive-tray-sff, mid-lff-0, mid-lff-1,
+                   mid-lff-2, mid-lff-3, mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3]}
+        - {id: dimm-a12, at: [228.60, 281.00], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 14, physical-context: Memory,
+           under: [mid-drive-tray-lff, mid-drive-tray-sff, mid-lff-0, mid-lff-1,
+                   mid-lff-2, mid-lff-3, mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3]}
+        - {id: dimm-a5, at: [237.90, 281.00], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 15, physical-context: Memory,
+           under: [mid-drive-tray-lff, mid-drive-tray-sff, mid-lff-0, mid-lff-1,
+                   mid-lff-2, mid-lff-3, mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3]}
+        - {id: dimm-a11, at: [247.40, 281.00], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 16, physical-context: Memory,
+           under: [mid-drive-tray-lff, mid-drive-tray-sff, mid-lff-0, mid-lff-1,
+                   mid-lff-2, mid-lff-3, mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3]}
+        - {id: dimm-a4, at: [256.80, 281.00], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 17, physical-context: Memory,
+           under: [mid-drive-tray-lff, mid-drive-tray-sff, mid-lff-0, mid-lff-1,
+                   mid-lff-2, mid-lff-3, mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3]}
+        - {id: dimm-a10, at: [266.30, 281.00], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 18, physical-context: Memory,
+           under: [mid-drive-tray-lff, mid-drive-tray-sff, mid-lff-0, mid-lff-1,
+                   mid-lff-2, mid-lff-3, mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3]}
+        - {id: dimm-a7, at: [362.20, 281.00], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 19, physical-context: Memory,
+           under: [mid-drive-tray-lff, mid-drive-tray-sff, mid-lff-0, mid-lff-1,
+                   mid-lff-2, mid-lff-3, mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3]}
+        - {id: dimm-a1, at: [371.70, 281.00], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 20, physical-context: Memory,
+           under: [mid-drive-tray-lff, mid-drive-tray-sff, mid-lff-0, mid-lff-1,
+                   mid-lff-2, mid-lff-3, mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3]}
+        - {id: dimm-a8, at: [381.00, 281.00], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 21, physical-context: Memory,
+           under: [mid-drive-tray-lff, mid-drive-tray-sff, mid-lff-0, mid-lff-1,
+                   mid-lff-2, mid-lff-3, mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3]}
+        - {id: dimm-a2, at: [390.50, 281.00], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 22, physical-context: Memory,
+           under: [mid-drive-tray-lff, mid-drive-tray-sff, mid-lff-0, mid-lff-1,
+                   mid-lff-2, mid-lff-3, mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3]}
+        - {id: dimm-a9, at: [399.90, 281.00], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 23, physical-context: Memory,
+           under: [mid-drive-tray-lff, mid-drive-tray-sff, mid-lff-0, mid-lff-1,
+                   mid-lff-2, mid-lff-3, mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3]}
+        - {id: dimm-a3, at: [409.40, 281.00], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 24, physical-context: Memory,
+           under: [mid-drive-tray-lff, mid-drive-tray-sff, mid-lff-0, mid-lff-1,
+                   mid-lff-2, mid-lff-3, mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3]}
         # SIX FAN BAYS at the fan cage's measured fan positions - see
         # dell/fan-cage-14g@1 for the uneven pitch and why it is kept.
         # Fan 1 is at the left as seen from the front, which is low x.
@@ -1424,7 +1572,19 @@ views:
            under: [fan-cage, air-shroud, mid-drive-tray-lff, mid-drive-tray-sff,
                    mid-lff-0, mid-lff-1, mid-lff-2, mid-lff-3,
                    mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3,
-                   fan-0, fan-1, fan-2, fan-3, fan-4, fan-5]}
+                   fan-0, fan-1, fan-2, fan-3, fan-4, fan-5,
+                   dimm-b6, dimm-b12, dimm-b5, dimm-b11, dimm-b4, dimm-b10,
+                   dimm-b7, dimm-b1, dimm-b8, dimm-b2, dimm-b9, dimm-b3,
+                   dimm-a6, dimm-a12, dimm-a5, dimm-a11, dimm-a4, dimm-a10,
+                   dimm-a7, dimm-a1, dimm-a8, dimm-a2, dimm-a9, dimm-a3,
+                   heatsink-1, heatsink-2]}
+        # THE HEATSINKS, one per processor, on the board and under the shroud
+        # or the tray. Measured poses of `R740XD_ HeatSink 1U`; CPU1 right,
+        # CPU2 left as seen from the front (ISM Figure 90).
+        - {ref: dell/heatsink-1u-14g@1, id: heatsink-1, at: [274.90, 265.80],
+           group: processors, rel-pos: 1, under: [air-shroud, system-cover]}
+        - {ref: dell/heatsink-1u-14g@1, id: heatsink-2, at: [75.60, 265.80],
+           group: processors, rel-pos: 2, under: [air-shroud, system-cover]}
         # THE FAN WALL, across the full width in front of everything else. On
         # every configuration: this machine has no variant without fans.
         - {ref: dell/fan-cage-14g@1, id: fan-cage, at: [12.55, 420.62],
