@@ -1505,11 +1505,8 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         return seq
 
     ordered = _stacked(parts["placements"])
-    for p in ordered:
-        if p["id"] not in deferred_ids:
-            draw_placement(p)
 
-    for b in parts["bays"]:
+    def draw_bay(b):
         bay_g = ET.SubElement(svg, f"{{{SVG_NS}}}g")
         bay_g.set("id", b["id"])
         bay_g.set("data-path", b["id"])
@@ -1603,6 +1600,20 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         df = data_for(b.get("for"))
         if df:
             bay_g.set("data-for", df)
+
+    # FIRST PASS: the wells and the openings, interleaved by `under:`. Bays
+    # paint after placements by default - a cage draws before the drives it
+    # frames - but a bay that says it is under a placement paints before it:
+    # the R740xd's DIMM sockets are under the mid-drive tray, and drawing every
+    # bay after every well put twenty-four DIMMs on top of the tray's sheet
+    # metal, so that on a mid-tray configuration the tray highlighted and
+    # showed nothing. A bay has no `ref`, which is how the two are told apart.
+    first = [q for q in ordered if q["id"] not in deferred_ids]
+    for item in _stacked(first + list(parts["bays"])):
+        if "ref" in item:
+            draw_placement(item)
+        else:
+            draw_bay(item)
 
     # second pass: the surface-mounted parts, now safely in front of the openings
     for p in ordered:
