@@ -587,9 +587,12 @@ export async function extractRelief(url, scope) {
     // A MODULE IN A BAY THAT OPENS IN A WELL IS NOT AT THE FACE. The bay
     // carries the well's floor as a negative z-lift (render.py's `in:`), and
     // the module's plane, body and bay box all sit that far down.
+    const frect = mmRect(el);
     frus.push({path, ref: el.dataset.ref.split(':')[0],
                cls: el.dataset.class, lift: liftOf(el),
-               bodyDepth: +el.dataset.bodyDepth || null, ...mmRect(el)});
+               bodyDepth: +el.dataset.bodyDepth || null, ...frect,
+               // its own art, so the plane can be cut to the module's SHAPE
+               svgText: nodeSvg(el, frect)});
   }
   for (const el of svg.querySelectorAll('[data-z-out],[data-z-cyl],[data-z-bar],[data-z-uhandle]'))
     el.style.display = 'none';
@@ -1008,6 +1011,19 @@ export async function buildFaceRelief(F, ctx) {
     for (const f of frus) {   // move the FRU's face art into its group; leave a bay
       const fg = fruGroups[f.path];
       const faceCrop = crop(f.lift ? artCv : cv, f, PX);
+      // A MODULE IS ITS SHAPE, NOT ITS BOX. The R740xd's riser 2 is two
+      // full-height slots over one low-profile slot - an L - and its box
+      // takes in the top-left corner of a power supply; riser 1's brackets
+      // reach two millimetres past its plate into the iDRAC jack. Cropping
+      // the box moved that corner and that jack-top onto the ejecting riser
+      // and left a hole in the panel where they had been. So the crop is
+      // masked by the module's own art, exactly as a cavity's punch is: what
+      // the module paints comes with it, and what it does not stays.
+      const mask = await rasterize(f.svgText, f.w, f.h, PX);
+      const mctx = faceCrop.getContext('2d');
+      mctx.globalCompositeOperation = 'destination-in';
+      mctx.drawImage(mask, 0, 0, faceCrop.width, faceCrop.height);
+      mctx.globalCompositeOperation = 'source-over';
       const zf = f.lift || 0;
       const plane = new THREE.Mesh(new THREE.PlaneGeometry(f.w, f.h),
         new THREE.MeshBasicMaterial({map: canvasTex(faceCrop), transparent: true, alphaTest: 0.1, alphaToCoverage: true}));
@@ -1015,9 +1031,12 @@ export async function buildFaceRelief(F, ctx) {
       fg.add(plane);
       // CLEAR, never fill: an opaque patch on the chassis face would occlude
       // everything behind it (the module's own cavities, pins, bay interior)
-      cv.getContext('2d').clearRect(Math.round(f.x * PX), Math.round(f.y * PX),
-                                    Math.round(f.w * PX), Math.round(f.h * PX));
-      facePunch[F.view].push({kind: 'rect', x: f.x, y: f.y, w: f.w, h: f.h});
+      // and the same shape comes out of the face, not the rectangle
+      const pctx = cv.getContext('2d');
+      pctx.globalCompositeOperation = 'destination-out';
+      pctx.drawImage(mask, Math.round(f.x * PX), Math.round(f.y * PX));
+      pctx.globalCompositeOperation = 'source-over';
+      facePunch[F.view].push({kind: 'shape', svg: f.svgText, x: f.x, y: f.y, w: f.w, h: f.h});
       const meta = FRU_META[f.path];
       if (meta.body) {   // full module body travels with the FRU
         const {mesh, fp, d} = await bodyBoxMesh(meta.body, f.w, f.h);
