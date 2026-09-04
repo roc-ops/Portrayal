@@ -1529,6 +1529,16 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         df = data_for(p.get("for"))
         if df:
             g.set("data-for", df)
+        # WHAT LIES OVER THIS PART, PUBLISHED. `under:` has ordered the paint
+        # since it was added - the lid draws after the shroud it closes over -
+        # but the relation itself never left this file, so a viewer that wanted
+        # to take the lid off to show a selected DIMM had nothing to read and
+        # would have had to guess it from overlapping boxes. The ids are bare
+        # because `under:` is by definition ids in THIS view; data_for's
+        # cross-view qualification does not arise.
+        du = data_for(p.get("under"))
+        if du:
+            g.set("data-under", du)
         svg.append(g)
         cw, chh_ = contract["size"]["w"], contract["size"]["h"]
         if p.get("rotate") in (90, 270, -90):
@@ -1680,6 +1690,9 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         df = data_for(b.get("for"))
         if df:
             bay_g.set("data-for", df)
+        du = data_for(b.get("under"))
+        if du:
+            bay_g.set("data-under", du)
         # A MODULE'S `out` IS MEASURED FROM ITS OWN FACE, and its face is now
         # the bay's sunk plane. The kit builds a raised feature as a box from
         # its summed lift to its ABSOLUTE `out`, so a fan's release tab at
