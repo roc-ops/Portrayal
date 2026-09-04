@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: bezel-2u-14g
-version: 2.1.0
+version: 2.2.0
 class: bezel
 behaviour: mounts
 profile: server
@@ -67,20 +67,23 @@ provenance:
     placeholder for five versions.
   the-profile: >-
     measured from the same mesh, read as the front-most z in 10 mm bands
-    across x and 4 mm bands up y. Across x the bezel is NOT one depth: the
-    honeycomb field's front is at z -0.7, 20.3 proud, and the end caps fall
-    away from it to 11.3 and 10.3 at the tips - 8.3 and 9.3 proud - over
-    about 40 mm each side, a section like a football sliced a third through.
-    That is what `profile` on the plate's feature carries, as [x, out] pairs
-    from the bands, and the kit sweeps it down the height so the side view
-    is the curve and not a box. Up y it is nearly flat: -0.7 to -1.7 across
-    the field, the top and bottom rails 3 to 5 behind it, all drawn at the
-    field's figure. The BADGE BAR at x 175..265, y 28.7..48.7 stands at
-    z -3.7, 3.0 proud of the field, and is its own box; the round badge near
-    the left cap is 0.5 proud and is drawn flush. The cells are 20 mm tubes
-    to z 19.5 and are not drawn as tubes, which a hole in a 20 mm prism reads
-    as anyway. The x rule is the top view's, 217 - raw_x - w, because a front
-    view and a plan agree about left and right.
+    across x and 4 mm bands up y. The bezel is NOT one depth in either
+    direction. ACROSS: the honeycomb field's front is at z -0.7, 20.3 proud,
+    and the end caps fall away from it to 11.3 and 10.3 at the tips - 8.3 and
+    9.3 proud - over about 40 mm each side. DOWN: the upper rows stand a
+    little further out, 21.3, the middle is the field's 20.3, and the bottom
+    rail drops to 14.9 with a lip at 16.7 on the very edge - which is what
+    looking up at the bezel shows. A section like a football sliced a third
+    through, both ways. `profile` and `profile-y` on the plate's feature carry
+    the two runs, and the kit builds the surface as the lesser of the two at
+    every point with skirts down to the face, so the side view is the curve
+    and the view from below is the rail. The BADGE BAR at x 175..265,
+    y 28.7..48.7 stands at z -3.7, 3.0 proud of the field, and is its own box;
+    the round badge near the left cap is 0.5 proud and is drawn flush. The
+    cells are 20 mm tubes to z 19.5 and are not drawn as tubes, which a hole
+    in a 20 mm surface reads as anyway. The x rule is the top view's,
+    217 - raw_x - w, because a front view and a plan agree about left and
+    right.
   the-model-puts-the-release-on-the-other-end: >-
     A DISAGREEMENT, RECORDED AND NOT RESOLVED. The ISM says the release
     button is at the LEFT end as seen from the front, and this skin draws it
@@ -96,13 +99,17 @@ relief:
   - node: plate
     out: 20.3
     profile: [[0, 8.3], [20, 14.9], [30, 16.7], [40, 20.3], [400, 20.3], [410, 15.9], [430, 9.3], [434, 9.3]]
+    profile-y: [[0, 20.3], [6, 21.3], [16, 21.3], [24, 20.8], [30, 20.3], [64, 20.3], [68, 18.7], [73, 14.9], [77, 14.9], [80, 16.7], [82.35, 16.7]]
     color: '#2b2f34'
     confidence: measured
     source: >-
-      the mesh's front-most z in 10 mm bands across x, against the carriers'
-      19.6: the field at -0.7 (20.3 proud), the left cap's tip at 11.3 (8.3),
-      the right cap's at 10.3 (9.3), and the bands between them. `out` is the
-      greatest figure; the profile is the section.
+      the mesh's front-most z in 10 mm bands across x and 4 mm bands up y,
+      against the carriers' 19.6. Across: the field at -0.7 (20.3 proud), the
+      left cap's tip at 11.3 (8.3), the right cap's at 10.3 (9.3). Down: the
+      top rows at -1.7 (21.3), the middle at -0.7, the bottom rail falling to
+      4.7 (14.9) with a lip at 2.9 (16.7) on the edge; the badge bar's own
+      bands are left out because it is its own box. `out` is the greatest
+      figure across; the two profiles are the section both ways.
   - node: badge
     out: 23.3
     color: '#2b2f34'

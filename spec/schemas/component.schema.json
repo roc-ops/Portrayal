@@ -236,7 +236,20 @@
           "type": "number"
          }
         },
-        "description": "how far the node stands off the face AS IT VARIES ACROSS ITS WIDTH: [x, out] pairs, x in mm from the node's left edge, out in mm proud of the face, swept straight down the node's height. A box has one depth and an outline extrusion has one depth; the R740xd's front bezel has none of those - Dell's model is a honeycomb field 20 proud with end caps that fall away to 9 at the tips, a section like a football sliced a third through. The kit extrudes this polyline into a prism whose curved front carries the node's own art. `out` still names the greatest figure, so everything that reads a single depth keeps working. Not shifted by `in:` and not flipped on a mirrored face."
+        "description": "how far the node stands off the face AS IT VARIES ACROSS ITS WIDTH: [x, out] pairs, x in mm from the node's left edge, out in mm proud of the face. A box has one depth and an outline extrusion has one depth; the R740xd's front bezel has none of those - Dell's model is a honeycomb field 20 proud with end caps that fall away to 9 at the tips, a section like a football sliced a third through. With `profile-y` beside it the surface at any point is the LESSER of the two, so a part can bulge both ways; alone, the section is swept straight down the height. The kit builds the surface as a height field with the node's own art on it and skirts down to the face. `out` still names the greatest figure, so everything that reads a single depth keeps working. Not shifted by `in:` and not flipped on a mirrored face."
+       },
+       "profile-y": {
+        "type": "array",
+        "minItems": 2,
+        "items": {
+         "type": "array",
+         "minItems": 2,
+         "maxItems": 2,
+         "items": {
+          "type": "number"
+         }
+        },
+        "description": "the same as `profile`, DOWN the node: [y, out] pairs, y in mm from the node's top edge. The bezel's front is 20 to 21 proud over most of its height and falls to 15 at the bottom rail with a lip at the edge, which is what looking up at it shows. Combined with `profile` by taking the lesser at every point."
        },
        "pocket": {
         "type": "number",

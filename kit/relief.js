@@ -532,6 +532,8 @@ export async function extractRelief(url, scope) {
             rings: el.dataset.zShape ? ringsOf(el) : null,
             profile: el.dataset.zProfile
               ? el.dataset.zProfile.split(',').map(p => p.split(':').map(Number)) : null,
+            profileY: el.dataset.zProfileY
+              ? el.dataset.zProfileY.split(',').map(p => p.split(':').map(Number)) : null,
             svgText: nodeSvg(el, rect)};
   });
   const domes = [...svg.querySelectorAll('[data-z-dome]')].map(el => {
@@ -967,39 +969,74 @@ export async function buildFaceRelief(F, ctx) {
         m.rotation.x = Math.PI / 2;
         m.position.set(LX(o.x, o.w), LY(o.y, o.h), o.lift + o.cyl / 2);
         addTo(m);
-      } else if (o.profile && o.profile.length >= 2) {
-        // A DEPTH THAT VARIES ACROSS THE NODE. `profile` on the feature: [x, out]
-        // pairs from the node's left edge, swept straight down its height. The
-        // R740xd's bezel is a honeycomb 20 proud whose end caps fall away to 9
-        // at the tips - a section like a football sliced a third through - and
-        // a box drew it as a slab with the right picture on the front. The
-        // polyline is closed back to the face and extruded down the node, so
-        // the front is the curve and the ends are the caps' own slopes.
-        const shape = new THREE.Shape();
-        const px = x => LX(o.x + x, 0);
-        shape.moveTo(px(o.profile[0][0]), o.lift);
-        for (const [x, out] of o.profile) shape.lineTo(px(x), out);
-        shape.lineTo(px(o.profile[o.profile.length - 1][0]), o.lift);
-        shape.closePath();
-        const geo = new THREE.ExtrudeGeometry(shape, {depth: o.h, bevelEnabled: false});
-        // the shape's plane is (x, depth) and the extrusion runs along its z;
-        // turn that so depth is the face normal and the extrusion runs DOWN
-        // the node from its top edge
-        geo.rotateX(Math.PI / 2);
-        geo.translate(0, LY(o.y, 0), 0);
-        const unX = wx => (F.flipLX ? -wx : wx) + fw / 2;
-        const unY = wy => fh / 2 - (F.flipLY ? -wy : wy);
-        const pos = geo.attributes.position, uv = geo.attributes.uv;
-        for (let i = 0; i < pos.count; i++) {
-          uv.setXY(i, (unX(pos.getX(i)) - o.x) / o.w,
-                   1 - (unY(pos.getY(i)) - o.y) / o.h);
+      } else if ((o.profile && o.profile.length >= 2) || (o.profileY && o.profileY.length >= 2)) {
+        // A DEPTH THAT VARIES ACROSS THE NODE, BOTH WAYS. `profile` is [x, out]
+        // from the left edge, `profile-y` is [y, out] from the top edge, and
+        // the surface at any point is the LESSER of the two. The R740xd's
+        // bezel is a honeycomb 20 proud whose end caps fall away to 9 at the
+        // tips and whose bottom rail sits back at 15 - a section like a
+        // football sliced a third through, in both directions - and a box
+        // drew it as a slab with the right picture on the front. Built as a
+        // height field with the node's art on it and skirts down to the face.
+        const px = o.profile && o.profile.length >= 2 ? o.profile : [[0, o.out], [o.w, o.out]];
+        const py = o.profileY && o.profileY.length >= 2 ? o.profileY : [[0, o.out], [o.h, o.out]];
+        const interp = (pts, t) => {
+          if (t <= pts[0][0]) return pts[0][1];
+          for (let i = 0; i + 1 < pts.length; i++) {
+            const [t0, v0] = pts[i], [t1, v1] = pts[i + 1];
+            if (t <= t1) return t1 === t0 ? v1 : v0 + (v1 - v0) * (t - t0) / (t1 - t0);
+          }
+          return pts[pts.length - 1][1];
+        };
+        const depthAt = (x, y) => Math.min(interp(px, x), interp(py, y));
+        // sample at every knot and every 5 mm, so a knee is a knee and a
+        // straight run is straight
+        const knots = (pts, len) => {
+          const set = new Set([0, len]);
+          for (const [t] of pts) if (t > 0 && t < len) set.add(t);
+          for (let v = 5; v < len; v += 5) set.add(v);
+          return [...set].sort((a, b) => a - b);
+        };
+        const xs = knots(px, o.w), ys = knots(py, o.h);
+        const nx = xs.length, ny = ys.length;
+        const pos = [], uvs = [], idx = [];
+        for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
+          pos.push(LX(o.x + xs[i], 0), LY(o.y + ys[j], 0), depthAt(xs[i], ys[j]));
+          uvs.push(xs[i] / o.w, 1 - ys[j] / o.h);
         }
-        uv.needsUpdate = true;
-        // ExtrudeGeometry's group 0 is the two caps - here the node's top and
-        // bottom edges - and group 1 the walls, of which the front is the curve
-        const m = new THREE.Mesh(
-          geo, [new THREE.MeshLambertMaterial({color: o.color}), faceTex]);
-        addTo(m);
+        for (let j = 0; j + 1 < ny; j++) for (let i = 0; i + 1 < nx; i++) {
+          const a = j * nx + i, b = a + 1, c = a + nx, d = c + 1;
+          idx.push(a, c, b, b, c, d);
+        }
+        const front = new THREE.BufferGeometry();
+        front.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+        front.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+        front.setIndex(idx);
+        front.computeVertexNormals();
+        faceTex.side = THREE.DoubleSide;   // a mirrored face reverses the winding
+        addTo(new THREE.Mesh(front, faceTex));
+        // skirts: the perimeter dropped to the face, so the ends and the rails
+        // are the slopes the profiles give them and not open edges
+        const sp = [], si = [];
+        const ring = [];
+        for (let i = 0; i < nx; i++) ring.push([xs[i], ys[0]]);
+        for (let j = 1; j < ny; j++) ring.push([xs[nx - 1], ys[j]]);
+        for (let i = nx - 2; i >= 0; i--) ring.push([xs[i], ys[ny - 1]]);
+        for (let j = ny - 2; j > 0; j--) ring.push([xs[0], ys[j]]);
+        for (let k = 0; k < ring.length; k++) {
+          const [x, y] = ring[k];
+          sp.push(LX(o.x + x, 0), LY(o.y + y, 0), depthAt(x, y),
+                  LX(o.x + x, 0), LY(o.y + y, 0), o.lift);
+        }
+        for (let k = 0; k < ring.length; k++) {
+          const a = 2 * k, b = a + 1, c = 2 * ((k + 1) % ring.length), d = c + 1;
+          si.push(a, b, c, b, d, c);
+        }
+        const skirt = new THREE.BufferGeometry();
+        skirt.setAttribute('position', new THREE.Float32BufferAttribute(sp, 3));
+        skirt.setIndex(si);
+        skirt.computeVertexNormals();
+        addTo(new THREE.Mesh(skirt, new THREE.MeshLambertMaterial({color: o.color, side: THREE.DoubleSide})));
       } else if (o.rings && o.rings.length) {
         // THE SHAPE, NOT THE BOX. `shape: true` on the feature. The face art was
         // always the node's own; it was the SIDES that followed the bounding box,
