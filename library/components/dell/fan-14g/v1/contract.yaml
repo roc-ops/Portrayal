@@ -1,0 +1,87 @@
+format: 1
+kind: module
+name: fan-14g
+version: 1.0.0
+class: cooling
+behaviour: fills
+profile: server
+description: >-
+  A hot-swap cooling fan of a 2U 14G PowerEdge seen from above - the block that
+  lifts straight out of the fan cage by its release tab, six across the chassis
+size: {w: 63.6, h: 46.2, d: 74.6}
+attrs:
+  role: fan-module
+  fans: '1 axial fan'
+  hot-swap: 'yes'
+  power-absent: not-published
+provenance:
+  size: >-
+    measured - Dell's service model, `DELL_R740XD_Coolingfan-1`, the six seated
+    poses: each 64.14 wide and 46.20 deep in the top view's frame, and 74.6 tall
+    from cad y 8.7 to 83.3. The w x h here is the PLAN FOOTPRINT, because a top
+    view is what presents this part; `d` is its height, which is how far it
+    comes up when it is pulled.
+    THE WIDTH IS 63.60 AND NOT 64.14, and the difference is a finding. Six
+    64.14 envelopes at the measured left edges overlap their neighbours by
+    0.12 to 0.48 mm - L13 reported it - and two fans cannot occupy the same
+    half-millimetre. So the envelope is not the slot: something on each
+    housing, a lip or the tab's shoulder, reaches over the next one. 63.60 is
+    just inside the narrowest measured gap (63.66), which is the most a slot on
+    that pitch can be; the measured left edges are kept exactly.
+  it-is-a-module-because-it-lifts-out: >-
+    `kind: module` with `behaviour: fills`, for the same reason as
+    std/drive-35-plan@1: render.py draws anything that is not a module as a
+    hole as deep as its `size.d`, and this is a body that fills a bay rather
+    than a recess in one. It was artwork on dell/fan-cage-14g@1 for one
+    version; the cage's own provenance said it ought to be a bay, and now it
+    is. The ISM is plain about the behaviour being modelled: "Cooling fans are
+    hot swappable" and "Press the release tab and lift the cooling fan out of
+    the cooling fan assembly" (PowerEdge R740xd Installation and Service
+    Manual, Cooling fans).
+  what-a-fan-looks-like-from-above: >-
+    photo - Figure 35 of the ISM, "Removing cooling fan", the one figure in the
+    intake that shows a fan out of its bay. From above a fan is NOT a rotor: the
+    blades face front and rear, the way the air goes, and what the lid comes off
+    to show is the top of the housing - a black block with an AIRFLOW arrow
+    printed toward the rear and an orange release tab along the front edge.
+    The housing, the arrow and the tab are drawn from that photograph; their
+    sizes are estimated off it and nothing should be measured from them. The
+    finger-guard rings the cage used to draw were wrong in kind, not just in
+    place, and are gone.
+  standard-and-high-performance-are-one-part-here: >-
+    The ISM offers "standard or high performance" fans and forbids mixing them.
+    They are the same size in the same bay with the same tab; nothing in the
+    intake distinguishes them by dimension, so one contract stands for both and
+    no `model` is claimed for it.
+  fans: >-
+    install guide - one fan per module, six modules per chassis: "Your system
+    supports up to six standard or high performance hot swappable cooling
+    fans" (ISM, Cooling fan details). NO DIAMETER IS GIVEN anywhere in the
+    intake, so this reads '1 axial fan' and not '1 x NN mm'; the 64.14 housing
+    width is measured and is not the rotor.
+  power: >-
+    NOT PUBLISHED. Searched the converted PowerEdge R740xd ISM (every 'fan'
+    line; the word appears 106 times and never beside a wattage), the R740xd
+    spec sheet ('Up to 6 hot plugs fans with full redundancy' is all it says),
+    and the R740/R740xd technical guide extracted with pdftotext, whose thermal
+    section talks about 'lower fan power consumption' as a benefit and states
+    no figure. Dell gives system-level power through its Enterprise
+    Infrastructure Planning Tool, not per fan.
+  lifecycle: >-
+    searched - no end-of-life notice for the fan module is in the intake.
+relief:
+  wall: '#1a1d21'
+  features:
+  - node: tab
+    out: 1.0
+    color: '#e8762b'
+    confidence: estimated
+    source: >-
+      Figure 35 of the ISM shows the release tab standing above the housing;
+      how far is not measured and 1.0 is drawn so it reads as a tab and not as
+      paint.
+elements:
+  body: {at: [0.0, 0.0], size: [63.6, 46.2], class: bezel}
+  tab: {at: [20.8, 39.7], size: [22.0, 5.0], class: latch}
+  label: {at: [11.8, 8.0], size: [40.0, 26.0], class: label}
+skins: [default]

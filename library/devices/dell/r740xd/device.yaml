@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 20.0.0
+version: 20.1.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -286,6 +286,19 @@ groups:
       the rear I/O: iDRAC9 dedicated, serial, VGA and two USB 3.0. Four families
       in one block deliberately, the same reason as the front - Dell's table
       calls them one panel and they do one job.
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    description: >-
+      the six hot-swap cooling fans in the fan cage, numbered 1 to 6 from the
+      left as seen from the front - the ISM's system board table puts the
+      fan 1 connector beside the left control panel's and fan 6's beside the
+      optical drive's. Reached with the system cover off; each lifts out by
+      its own release tab.
+    attrs:
+      redundancy: 'n+1'
+      redundancy-note: 'n+1 - "Cooling redundancy: The system allows N+1 fan redundancy, allowing continuous operation with one fan failure in the system" (PowerEdge R740 and R740xd Technical Guide, Thermal design). The spec sheet says the same as "Up to 6 hot plugs fans with full redundancy"'
   interior:
     term: Item
     role: furniture
@@ -1317,6 +1330,30 @@ views:
         # dell/system-cover-14g@1.
     components:
       bays:
+        # SIX FAN BAYS at the fan cage's measured fan positions - see
+        # dell/fan-cage-14g@1 for the uneven pitch and why it is kept.
+        # Fan 1 is at the left as seen from the front, which is low x.
+        # Single-processor machines without a mid tray blank bays 1 and 2
+        # (ISM, Cooling fan details); no configuration here encodes the
+        # processor count, so all six are seated.
+        - {id: fan-0, at: [16.56, 432.12], size: {w: 63.6, h: 46.2},
+           accepts: [dell/fan-14g@1], default: dell/fan-14g@1,
+           group: fans, rel-pos: 1}
+        - {id: fan-1, at: [80.22, 432.12], size: {w: 63.6, h: 46.2},
+           accepts: [dell/fan-14g@1], default: dell/fan-14g@1,
+           group: fans, rel-pos: 2}
+        - {id: fan-2, at: [144.24, 432.12], size: {w: 63.6, h: 46.2},
+           accepts: [dell/fan-14g@1], default: dell/fan-14g@1,
+           group: fans, rel-pos: 3}
+        - {id: fan-3, at: [225.62, 432.12], size: {w: 63.6, h: 46.2},
+           accepts: [dell/fan-14g@1], default: dell/fan-14g@1,
+           group: fans, rel-pos: 4}
+        - {id: fan-4, at: [289.46, 432.12], size: {w: 63.6, h: 46.2},
+           accepts: [dell/fan-14g@1], default: dell/fan-14g@1,
+           group: fans, rel-pos: 5}
+        - {id: fan-5, at: [353.21, 432.12], size: {w: 63.6, h: 46.2},
+           accepts: [dell/fan-14g@1], default: dell/fan-14g@1,
+           group: fans, rel-pos: 6}
         # FOUR SLOTS ON A 106.30 PITCH, measured off the 3.5 inch drives in
         # Dell's model. The bay is the SLOT, so it is the size of the larger
         # drive; a 2.5 inch drive sits centred in the same slot, which is the
@@ -1386,11 +1423,13 @@ views:
            group: interior, rel-pos: 1,
            under: [fan-cage, air-shroud, mid-drive-tray-lff, mid-drive-tray-sff,
                    mid-lff-0, mid-lff-1, mid-lff-2, mid-lff-3,
-                   mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3]}
+                   mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3,
+                   fan-0, fan-1, fan-2, fan-3, fan-4, fan-5]}
         # THE FAN WALL, across the full width in front of everything else. On
         # every configuration: this machine has no variant without fans.
         - {ref: dell/fan-cage-14g@1, id: fan-cage, at: [12.55, 420.62],
-           group: interior, rel-pos: 2}
+           group: interior, rel-pos: 2,
+           frames: [fan-0, fan-1, fan-2, fan-3, fan-4, fan-5]}
         # THE AIR SHROUD, AND IT IS THE MID TRAY'S ALTERNATIVE. Both are seated
         # in Dell's model and they occupy the SAME volume - the shroud
         # top_y 208.10..418.52 at height 36.12..84.88, the tray 233.92..415.16
@@ -1642,34 +1681,6 @@ gaps:
     wanted: >-
       eleven configurations seating the eleven riser parts, under the drive-plus-riser
       naming, replacing the three that exist
-  - what: mid-drive-tray
-    scope: [front, rear]
-    reason: needs-drawing
-    note: >-
-      ISM table 28 puts a MID DRIVE TRAY in three of its ten backplane rows -
-      2.5 inch x4 behind the 24-bay front, 3.5 inch x4 behind the 12-bay one.
-      This device models no mid bay at all, so a third of the orderable
-      combinations cannot be expressed and a whole drive location is absent.
-      IT IS NOT A FACE. The tray sits under the lid between the fans and the
-      backplane, so it belongs to a top view with the cover off, which this
-      device does not have either. Recorded here because a reader counting drive
-      bays against a spec sheet will find this device short and no view will
-      explain why.
-      IT IS NO LONGER SHORT OF NUMBERS. Dell's own R740XD 3D guide CAD carries
-      `740XD_ MidDriveTray_-1.001` at 431.5 x 94.5 x 181.2 mm, with its bracket
-      (`740XD_ MidDriveTray_ Bracket-1.001`, 73.40 x 18.10 x 117.00) and its
-      drives (`740XD_ MidDriveTray_ 2.5 HDD-5.002`, 69.90 x 15.00 x 100.20 on a
-      108.4 pitch) as named sub-parts. The R740 and R740xd Technical Guide adds
-      what the tray is FOR - "The 4 x 3.5-inch mid-bay storage option, which also
-      supports 2.5-inch drives in the Hybrid carrier" - which also names the
-      hybrid carrier this library does not have. An interior photograph is staged
-      beside the front one in working/intake/dell/r740xd/photos.
-      So what remains is drawing, not measuring.
-    wanted: >-
-      A top-with-cover-off view and a mid-tray bay group, or an explicit
-      statement that this library models only externally visible bays. Either
-      answers the question; leaving it unsaid does not. The geometry is now
-      available from the CAD rather than needing to be estimated.
   - what: front-panel-variants
     scope: [front, front-lff-12]
     reason: needs-drawing

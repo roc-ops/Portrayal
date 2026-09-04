@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: fan-cage-14g
-version: 1.1.0
+version: 2.0.0
 class: mechanical
 profile: server
 description: >-
@@ -32,7 +32,10 @@ provenance:
     side of a wider centre is a perfectly ordinary way to build a 2U fan wall,
     and forcing six fans onto an even pitch would invent a layout to replace one
     the model actually shows. If it is wrong, it is wrong in a way a photograph
-    settles in a second.
+    settles in a second. Those six positions are now the device's fan bays,
+    which this part `frames:` - 63.60 wide rather than the 64.14 envelope,
+    because the envelopes overlap their neighbours by up to 0.48 mm and slots
+    cannot; dell/fan-14g@1 records the reasoning.
   it-is-mechanical-and-not-cooling: >-
     `class: mechanical`, and a test is what settled it. `cooling` is one of the
     five classes this library treats as a body that comes out - psu, fan, tab,
@@ -42,13 +45,18 @@ provenance:
     fans sit in, so it is mechanical like every other frame in here; `cooling`
     belongs to the fan itself, and will be right on it the day the fans are
     modules in bays rather than artwork on this cage.
-  the-fans-are-drawn-and-not-seated: >-
-    A LIMITATION AND A GOOD CANDIDATE FOR THE NEXT PASS. These are hot-swap
-    parts on this machine - each one lifts straight out - so they ought to be
-    bays with a fan module in them, the way the front drives are, and they would
-    then pull individually in the viewer. They are artwork on this cage for now;
-    the cage's own frame is what is measured and the fans sit at their measured
-    positions inside it.
+  the-fans-are-bays-and-were-artwork: >-
+    Version 1 drew six fans on this cage, hub and finger guard and all, and
+    said in its own provenance that they ought to be bays. They are: the
+    device declares six bays at the measured positions, this part frames them,
+    and dell/fan-14g@1 seats in each and pulls individually in the viewer.
+    What this art keeps is the FLOOR - six dark slots where a lifted fan came
+    from. The rings went with the fans, and they were wrong anyway: a fan seen
+    from above shows the top of its housing, not its rotor (ISM Figure 35).
+  depth-is-still-the-drop-to-a-seated-fan: >-
+    3.48 is unchanged by the fans becoming modules. The well is the cage frame
+    seen from the lid line, and a seated fan's top at 83.32 is its floor; the
+    fan module carries its own 74.6 height for the pull.
 relief:
   wall: '#2b3035'
 elements:
