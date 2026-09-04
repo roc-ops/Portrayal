@@ -578,6 +578,8 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     if relief:
         if relief.get("wall"):
             g.set("data-wall", relief["wall"])
+        if relief.get("walls") == "inside":
+            g.set("data-walls", "inside")
         if relief.get("cavity"):
             g.set("data-cavity", relief["cavity"])
         if relief.get("round"):

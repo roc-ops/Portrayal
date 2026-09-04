@@ -123,6 +123,14 @@
      "type": "string",
      "description": "cavity wall color (CSS)"
     },
+    "walls": {
+     "type": "string",
+     "enum": [
+      "both",
+      "inside"
+     ],
+     "description": "which side of a cavity's walls is drawn. `both` (the default) draws them double-sided: the recess from inside and, from outside, the housing of a port cage seen through a neighbouring vent. `inside` draws the recess only. For a well whose sides ARE the chassis - the R740xd's system board is 80 mm deep and runs to the rear metal - a double-sided wall stands 0.07 mm behind the rear panel and cuts off every cavity that looks in from that face, the C14 inlet's pins included."
+    },
     "cavity": {
      "$ref": "#/$defs/segment",
      "description": "skin node id whose bbox is the recess; default = whole component"

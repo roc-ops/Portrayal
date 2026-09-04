@@ -500,6 +500,7 @@ export async function extractRelief(url, scope) {
         color: f.dataset.zColor || '#0a0c0e',
       }));
       return {...rect, owner: ownerOf(el), d: +el.dataset.depth, wall: el.dataset.wall || '#a7adb4',
+              wallsInside: el.dataset.walls === 'inside',
               lift: liftOf(el),
               round: !!el.dataset.round, cavSvg: nodeSvg(cavNode || el, rect),
               grpRect, grpSvg: nodeSvg(el, grpRect), features};
@@ -760,7 +761,14 @@ export async function buildFaceRelief(F, ctx) {
       // is a separate dark exterior; the textured floor plane sits just inside it
       // (sink pockets punch through the floor's alpha, so the back stays clear
       // of the floor by the sink allowance).
-      const wallMat = new THREE.MeshLambertMaterial({color: c.wall, side: THREE.DoubleSide});
+      // A WELL WHOSE SIDES ARE THE CHASSIS SHOWS THEM FROM INSIDE ONLY. The
+      // double side is for a port cage, whose housing is seen through the vent
+      // next to it. The R740xd's board well is 80 mm deep to the rear metal:
+      // drawn double-sided, its rear wall stood a hair behind the rear panel
+      // and everything looking in from that face - the C14 inlet's pins, the
+      // rear drive bays - ended at a flat plane.
+      const wallMat = new THREE.MeshLambertMaterial({color: c.wall,
+        side: c.wallsInside ? THREE.BackSide : THREE.DoubleSide});
       const backMat = new THREE.MeshLambertMaterial({color: 0x23262b, side: THREE.DoubleSide});
       let walls;
       if (c.round) {

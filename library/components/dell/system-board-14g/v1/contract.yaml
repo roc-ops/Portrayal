@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: system-board-14g
-version: 1.3.0
+version: 1.5.0
 class: mechanical
 profile: server
 description: >-
@@ -41,8 +41,21 @@ provenance:
     socket, no connector and no silkscreen is drawn; the colour is a plain board
     green and is not sampled from anything. Nothing should be read off it except
     where the board begins and ends.
+  the-walls-are-the-chassis-and-not-the-board: >-
+    `relief.wall` is the colour of the recess's sides, and this recess is the
+    whole interior of the box: 79.9 deep, the full width, from the fan wall to
+    the rear metal. Its sides are the chassis's own sheet metal and they are
+    seen from OUTSIDE too - the kit draws a well's walls double-sided, as the
+    housing seen through a neighbouring opening - so a dark green here turned
+    every rear opening green: the riser slots, the rear drive bays, whatever
+    looked into the box saw the back of this well where the bay interior used
+    to be. Dark grey, the interior of any server, and not sampled. And they
+    are drawn from INSIDE ONLY - `walls: inside` - because the colour was
+    half of it: the well's rear wall stood 0.07 behind the rear panel and cut
+    off the C14 inlets' pins and every rear bay's interior at a flat plane.
 relief:
-  wall: '#123a28'
+  wall: '#1e2226'
+  walls: inside
 elements:
   board: {at: [0.0, 0.0], size: [427.0, 469.69], class: bezel}
 skins: [default]
