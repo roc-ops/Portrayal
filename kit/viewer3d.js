@@ -622,7 +622,15 @@ export function createViewer(container, opts = {}) {
          ['top',    2, W, D, [0, H / 2, 0],  [-Math.PI / 2, 0, 0], false, false],
          ['bottom', 3, W, D, [0, -H / 2, 0], [Math.PI / 2, 0, 0],  true,  true],
          ['front',  4, W, H, [0, 0, D / 2],  [0, 0, 0],            false, false],
-         ['rear',   5, W, H, [0, 0, -D / 2], [0, Math.PI, 0],      false, false]];
+         ['rear',   5, W, H, [0, 0, -D / 2], [0, Math.PI, 0],      false, false]]
+        // A REFINED FACE IS RASTERISED AT THE DRAWING'S SIZE, LIKE THE FIRST ONE.
+        // The base texture comes from buildFaceRelief, which takes its width from
+        // the drawing (482.6 on the R740xd's front); these records fed refineFace
+        // the box's width instead (434). Zoom in on a port and the refined raster
+        // painted the 482.6 mm drawing into a 434 mm canvas: everything slid 10%
+        // left and the right ear - the last 48 mm - came back bare. Same mistake
+        // as the pick and the halo, third place it was made.
+        .map(([k, mi, wmm, hmm, ...rest]) => [k, mi, ...(faceMM[k] || [wmm, hmm]), ...rest]);
     for (const [k, matIndex, wmm, hmm, pos, rot, flipX, flipY] of lodFaces) {
       if (!faceSvg[k]) continue;   // face fell back to flat colour - nothing to sharpen
       LOD.push({key: k, matIndex, wmm, hmm, svgText: faceSvg[k], flipX, flipY,
