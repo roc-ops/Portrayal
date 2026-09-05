@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: riser-1a-14g
-version: 1.3.0
+version: 1.4.0
 class: riser
 behaviour: fills
 profile: server
@@ -69,6 +69,17 @@ provenance:
     at the tip end and 10.16 at the flange end, behind the riser's own sheet,
     which is why a face-on reading never sees it. `insert` carries that envelope
     so a bay reserves what the brackets need rather than what the plate shows.
+  the-slot-block: >-
+    `slot:` on each bay is the same facts as the prose attrs, structured for
+    a card feature: `lanes` and `processor` are Technical Guide Table 11 and
+    the Information Update Tech Sheet Table 3, as below; `generation` 3 is
+    the platform's, Technical Guide 'PCIe Gen3'; `connector` x16 is measured
+    on riser 1 - the model's three connectors are 91 long, the x16 length,
+    on the x8-wired 1B as on the x16-wired 1A - and is taken as the family's
+    mechanical connector on every other slot, full-height and low-profile
+    alike, which is an inference from that riser and not a figure the guide
+    prints. A card feature reads `connector` for whether a card fits and
+    `lanes` for the width it will run at.
   where-the-electrical-facts-come-from: >-
     datasheet - PowerEdge R740 and R740xd Technical Guide, Table 11, which gives
     height, length and link width for every slot on every riser, and the ISM's
@@ -116,6 +127,7 @@ parts:
   - {ref: dell/riser-1-plate-14g@1, id: plate, at: [0, 0]}
 bays:
   slot-1:
+    slot: {connector: x16, lanes: 16, height: full, length: full, processor: 1, generation: 3}
     plan: {at: [-97.9, -13.9]}
     behind: true
     at: [-13.41, 1.82]
@@ -133,6 +145,7 @@ bays:
     accepts: [dell/pcie-filler-fh-14g@1]
     default: dell/pcie-filler-fh-14g@1
   slot-3:
+    slot: {connector: x16, lanes: 16, height: full, length: half, processor: 1, generation: 3}
     plan: {at: [-97.9, -13.9]}
     behind: true
     at: [-13.41, 42.46]

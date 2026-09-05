@@ -600,6 +600,20 @@
       "description": "where this bay's occupant lies in the PLAN of this module, relative to the module's own plan origin - a riser's card lies inboard of its PCB. Used when the module is projected into another view.",
       "properties": {"at": {"$ref": "#/$defs/xy"}}
      },
+     "slot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["connector", "lanes", "height", "length"],
+      "description": "WHAT KIND OF EXPANSION SLOT THIS BAY IS, for a card feature that has to say whether a card fits and at what width it will run. `connector` is the MECHANICAL edge connector the riser presents (x16 on every full-height slot of Dell's 14G risers - the model measures 91 mm connectors on riser 1 whatever the wiring); `lanes` is the ELECTRICAL link width the vendor publishes (Technical Guide Table 11's x8 / x16). A card whose edge is wider than the connector does not fit; one narrower runs at its own width; one equal to the connector but wider than the lanes fits and runs at the lanes. `height` and `length` are what the opening takes, and `accepts` already enforces them by bracket; they are restated here so a consumer need not resolve every bracket ref. `processor` is which CPU the slot is wired to, when the vendor says. Prose attrs like `slot-1: 'x8, full height, ...'` stay for readers; L75 checks the two agree.",
+      "properties": {
+       "connector": {"enum": ["x1", "x4", "x8", "x16"], "description": "mechanical edge connector"},
+       "lanes": {"type": "integer", "enum": [1, 2, 4, 8, 16], "description": "electrical link width"},
+       "height": {"enum": ["full", "low"]},
+       "length": {"enum": ["full", "half"]},
+       "processor": {"type": "integer", "minimum": 1, "description": "the CPU this slot is wired to, per the vendor"},
+       "generation": {"type": "number", "description": "PCI Express generation, when the vendor states it"}
+      }
+     },
      "behind": {
       "type": "boolean",
       "description": "seat this bay's occupant BEHIND the module's own skin instead of on top of it. For a faceplate the occupant shows through: a PCIe card sits behind its riser's sheet metal and only its working area, through a punched window, and its retention tab, clear of the plate, are visible - the flange end is covered. Requires the skin to have real holes; a stroked outline is a drawing of a window, not a window, and with `behind` the occupant simply disappears behind it. Same word and same mechanism as `behind` on `parts:`."

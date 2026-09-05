@@ -809,7 +809,7 @@ export function createShell(opts = {}) {
     if (emit('inspect', {path, el: e, box, cls}).some(Boolean)) return;
     if (!e) { box.innerHTML = ''; return; }
     const ref = e.dataset.ref || e.querySelector('[data-ref]')?.dataset.ref;
-    const bay = (state.meta?.bays?.[state.view] || []).find(b => b.id === path);
+    const bay = (state.meta?.bays?.[bayView()] || []).find(b => b.id === path);
 
     let html = `<h2>${cls || 'node'}</h2><div class="row"><span>path</span><code>${path}</code></div>`;
     if (ref) html += `<div class="row"><span>component</span><code>${ref.split(':')[0]}</code></div>`;
@@ -857,7 +857,7 @@ export function createShell(opts = {}) {
   // was invisible in 3D on every device. Two copies of `rename` and `bayTransform`
   // would each have been right the day they were written.
   async function swapBay(bayId, ref) {
-    const bay = (state.meta.bays[state.view] || []).find(b => b.id === bayId);
+    const bay = (state.meta.bays[bayView()] || []).find(b => b.id === bayId);
     const g = state.svg.querySelector(`[data-path="${CSS.escape(bayId)}"]`);
     if (!g || !bay) return;
     g.querySelector(`[id="${CSS.escape(bayId)}--module"]`)?.remove();
@@ -887,6 +887,17 @@ export function createShell(opts = {}) {
   function openModule(ref) { state.module = ref; loadStage(); }
 
   // ---------------------------------------------------------------- loading
+
+  // THE BAYS OF THE FACE ON SCREEN, on this configuration. The index keys
+  // `bays` by view name, variant views included (`front-lff-12`), and a
+  // configuration that binds a variant says so in its `views`; look the face
+  // up through that or a 12-drive front reads the 24-drive bay list. `views`
+  // at the top level is faces only, which is what loadFaces walks - a variant
+  // has no file of its own to fetch.
+  function bayView() {
+    const c = (state.meta?.configs || []).find(c => c.name === state.cfg);
+    return c?.views?.[state.view] || state.view;
+  }
 
   async function loadFaces() {
     if (state.module) return;
@@ -969,7 +980,7 @@ export function createShell(opts = {}) {
     crumbs();
     el.inspect.innerHTML = '';
     el.status.textContent = state.module ? '' :
-      `${(state.meta.bays[state.view] || []).length} bays`;
+      `${(state.meta.bays[bayView()] || []).length} bays`;
     emit('load', svg);
   }
 
