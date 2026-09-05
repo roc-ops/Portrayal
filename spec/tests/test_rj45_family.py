@@ -164,12 +164,25 @@ def test_common_rj45_ganged_eth_composes_the_cell_and_adds_two_lamps():
 
 def test_the_dell_carrier_attaches_ism_meanings_to_the_new_lamps():
     c = contract("dell/rj45-port-14g@1")
-    assert c["version"] == "1.1.0"
+    assert c["version"] == "1.2.0"
     part = c["parts"][0]
     assert part["ref"] == "common/rj45-eth@1"
     assert set(part["states"]) == {"led-a", "led-b"}, "the carrier names the new part's lamps"
-    names = [s if isinstance(s, str) else s["name"] for s in part["states"]["led-a"]]
+    # common/rj45-eth@1's led-a is its LOCAL left window; the carrier's rotate:
+    # 180 (added to restore keyway-up) lands it on screen-right, so the LINK
+    # vocabulary - measured on the keyway's screen-left - lives on led-b now.
+    names = [s if isinstance(s, str) else s["name"] for s in part["states"]["led-b"]]
     assert "off" in names and len(names) >= 3, "ISM table 11's LINK vocabulary survives"
+
+
+def test_the_dell_carrier_turns_the_housing_keyway_up():
+    c = contract("dell/rj45-port-14g@1")
+    part = c["parts"][0]
+    assert part["ref"] == "common/rj45-eth@1"
+    assert part.get("rotate") == 180, (
+        "common/rj45-eth@1 draws keyway-down unrotated; the Dell jacks are "
+        "keyway-up in ISM figure 8, so the composed part must turn 180"
+    )
 
 
 def test_the_base_stylesheet_renders_the_link_state():
