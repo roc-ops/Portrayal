@@ -684,3 +684,64 @@ def test_the_sweep_does_not_report_a_group_that_keeps_a_member(tmp_path):
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
     assert "mgmt-leds has no members" not in r.stdout
+
+
+# --- Controller ruling (ufispace s9* batch): a lamp on the jack's edge -----
+#
+# Five s9* devices drew a management lamp within a millimetre of the jack's
+# footprint edge - not clearly inside, not clearly beside it. Ruling: within
+# LAMP_EDGE_TOL (1.0mm) of the footprint counts as INSIDE (lifted); beyond it
+# is still OUTSIDE (external, jack stays bare). mgmt-eth here is std/rj45@1 at
+# [10.0, 10.0], so its old footprint is x:[10, 26], y:[10, 24] (16 x 14, see
+# `size(std/rj45@1)`); a single `for:` lamp keeps this test clear of the
+# separate "lamps both inside and outside" unresolved case.
+EDGE_TOL_INSIDE_FIXTURE = textwrap.dedent("""\
+format: 1
+kind: device
+name: d9
+version: 1.0.0
+manufacturer: Acme
+model: D9
+chassis: {width: 100, height: 40, depth: 30}
+groups:
+  mgmt: {term: Port}
+  mgmt-leds: {term: LED}
+views:
+  front:
+    size: {w: 100, h: 40}
+    components:
+      placements:
+        - {id: mgmt-eth, ref: std/rj45@1, at: [10.0, 10.0], group: mgmt, rel-pos: 1, attrs: {role: mgmt}}
+        - {id: led-mgmt-l, ref: common/led-dot@1, at: [26.8, 15.0], group: mgmt-leds, rel-pos: 1, for: mgmt-eth, attrs: {function: link}}
+""")
+
+EDGE_TOL_OUTSIDE_FIXTURE = EDGE_TOL_INSIDE_FIXTURE.replace("[26.8, 15.0]", "[27.5, 15.0]")
+assert EDGE_TOL_OUTSIDE_FIXTURE != EDGE_TOL_INSIDE_FIXTURE, "fixture edit must actually take"
+
+
+def test_a_lamp_08mm_outside_the_box_is_lifted(tmp_path):
+    d = tmp_path / "devices/acme/d9"; d.mkdir(parents=True)
+    (d / "device.yaml").write_text(EDGE_TOL_INSIDE_FIXTURE)
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert "external-lamps" not in r.stdout, "0.8mm outside the old footprint is within LAMP_EDGE_TOL - still inside"
+    data = yaml.safe_load((d / "device.yaml").read_text())
+    pl = {p["id"]: p for p in data["views"]["front"]["components"]["placements"]}
+    assert pl["mgmt-eth"]["ref"] == "common/rj45-eth@1"
+    assert "led-mgmt-l" not in pl, "the lamp is lifted into the jack's own states"
+    assert "states" in pl["mgmt-eth"]
+
+
+def test_a_lamp_15mm_outside_the_box_is_external(tmp_path):
+    d = tmp_path / "devices/acme/d9"; d.mkdir(parents=True)
+    (d / "device.yaml").write_text(EDGE_TOL_OUTSIDE_FIXTURE)
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert "external-lamps 1" in r.stdout
+    data = yaml.safe_load((d / "device.yaml").read_text())
+    pl = {p["id"]: p for p in data["views"]["front"]["components"]["placements"]}
+    assert pl["mgmt-eth"]["ref"] == "std/rj45@2"
+    assert "led-mgmt-l" in pl, "beyond LAMP_EDGE_TOL - stays a separate placement, not lifted"
+    assert "states" not in pl["mgmt-eth"]

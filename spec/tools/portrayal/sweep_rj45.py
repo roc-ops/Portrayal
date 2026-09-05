@@ -45,6 +45,13 @@ SINGLE = {"std/rj45@1", "common/rj45-port@4", "common/rj45-bezel@2", "common/rj4
           "common/rj45-shielded@2", "common/rj45-jack@2"}
 GANGED = {"std/rj45-ganged@1", "common/rj45-hd@1", "common/rj45-hd-plain@1"}
 
+# Controller ruling (ufispace s9* batch): a lamp drawn within this many mm of
+# the jack's footprint counts as INSIDE it. The vendor drawings place some
+# lamps right on the jack's drawn edge - that is a statement about where the
+# lamp sits on the faceplate, not a coordinate-rounding artefact, so the
+# inside/outside test tolerates it rather than reporting it unresolved.
+LAMP_EDGE_TOL = 1.0
+
 # A `\b` boundary treats `-` as a word break, so `led-oob-left\b` matches the
 # PREFIX of `led-oob-left-2` too. Require instead that the next character
 # actually ends the id: a list/scalar delimiter, whitespace, or end of line.
@@ -241,7 +248,9 @@ def sweep_device(path):
                     if (by_id[t].get("rotate") or 0) % 180 == 90:
                         jw, jh = jh, jw
                     x, y = q["at"]
-                    (inside if jx <= x <= jx + jw and jy <= y <= jy + jh else outside)[t].append((x, q))
+                    tol = LAMP_EDGE_TOL
+                    in_box = (jx - tol <= x <= jx + jw + tol) and (jy - tol <= y <= jy + jh + tol)
+                    (inside if in_box else outside)[t].append((x, q))
         external_ids = set()
         lifted = {}
         for pid in list(moves):
