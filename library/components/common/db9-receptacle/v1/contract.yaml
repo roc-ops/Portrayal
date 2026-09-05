@@ -1,13 +1,32 @@
 format: 1
 kind: component
 name: db9-receptacle
-version: 1.0.0
+version: 1.1.0
 class: port
 profile: networking
 description: >-
   DE-9 receptacle as a faceplate sees it - the shell with a jackscrew standoff
   either side of it, which is what an RS-232 or alarm-out port on equipment
   looks like. No bezel: that is the device's, not the connector's
+relief:
+  wall: '#3a3e43'
+  features:
+  # A SCREWLOCK IS A POST, NOT A DECAL. These were flat, which left the
+  # connector standing proud between two painted hexagons. They stand off about
+  # as far as the shell they flank, and the bore is a subpath of the same
+  # outline so each builds as a hex TUBE rather than a solid boss.
+  - node: standoffs
+    out: 6.73
+    shape: true
+    color: '#9aa1a8'
+    confidence: estimated
+    source: >-
+      Matched to the shell this part composes - std/db9@1 and std/vga@1 both
+      stand 6.73 proud - because a 4-40 screwlock has to reach the plug's own
+      jackscrew, which sits at the plug's flange. Nothing held here dimensions
+      the post: TE C-747905 Rev AB1 gives the 24.99 mounting centres this
+      drawing uses and not the height, so the figure is the shell's rather than
+      its own.
 size: {w: 30.8, h: 12.5, d: 6.73}
 attrs: {media: db9}
 provenance:

@@ -128,3 +128,86 @@ def test_mounted_parts_paint_after_bays():
         at = svg.find(f'id="{bay}"')
         assert at != -1, f"{bay} is not in the C40G front view"
         assert at < cover, f"{bay} paints after the cover that covers it"
+
+
+def test_a_mounted_part_under_an_opening_paints_before_it():
+    """The second pass is for parts IN FRONT of openings. The R740xd's
+    heatsinks are `mounts` because they lift off, and on a mid-tray
+    configuration they are under the tray and its four drive bays - the
+    drives sit at 55.49 and the heatsink tops at 40.8. Deferring them with
+    the lids painted heatsinks over drives. A mounted part that says
+    `under:` a bay or a well is drawn with the wells, in `under:` order."""
+    svg = needs_dist("r740xd.lff12-mlff4-rlff2-rc0-noriser.top.svg").read_text()
+    for hs in ("heatsink-1", "heatsink-2"):
+        at = svg.find(f'id="{hs}"')
+        assert at != -1, f"{hs} is not in the R740xd top view"
+        for over in ("mid-lff-0", "mid-lff-3", "mid-drive-tray-lff", "system-cover"):
+            o = svg.find(f'id="{over}"')
+            assert o != -1, f"{over} is not in the R740xd top view"
+            assert at < o, f"{hs} paints after {over}, which lies over it"
+
+
+def test_a_part_in_a_well_is_sunk_to_its_floor():
+    """The 3D reads a part's height off the face. A DIMM in the system board
+    is not at the face: it stands on the PCB 79.9 down and rises its own
+    31.3, so its plane is 48.6 down; a drive in the mid tray stands on a
+    floor 31.31 down and rises 26.1, so its top is 5.21 down, where Dell's
+    model has it. `in:` emits that as a negative data-z-lift, and a mounted
+    part's `out` is pulled down by the well's depth so it rises from the
+    floor rather than from the lid line."""
+    import re
+    svg = needs_dist("r740xd.lff12-mlff4-rlff2-rc0-noriser.top.svg").read_text()
+    def lift(id_):
+        m = re.search(rf'id="{id_}"[^>]*data-z-lift="([^"]+)"', svg)
+        assert m, f"{id_} carries no data-z-lift"
+        return float(m.group(1))
+    assert lift("dimm-a1") == -48.6
+    assert lift("heatsink-1") == -79.9
+    assert lift("mid-lff-0") == -5.21
+    assert lift("fan-0") == -3.48
+    m = re.search(r'id="heatsink-1--block"[^>]*data-z-out="([^"]+)"', svg)
+    assert m and float(m.group(1)) == -46.8, "the heatsink's out was not pulled down to the floor"
+
+
+def test_a_card_stands_on_its_shelf_and_leaves_no_hole():
+    """A riser's three slots are three shelves at three heights inside one
+    well. `floor:` on the bay is the shelf, the card rises its own 21.6 from
+    it, and a shelf is marked so the kit leaves no dark bay box behind a
+    pulled card - that box stood on the card below it. The R740xd carried
+    these bays once and does not now (a card's slot is on the rear face), so
+    the fixture is its own."""
+    import re
+    sys.path.insert(0, str(SPEC / "tools/portrayal"))
+    import render
+
+    # the real board well and the generic plan card, resolved from the library
+    lib = render.Library([str(LIB)])
+    WELL, CARD = "dell/system-board-14g@1", "common/pcie-card-plan@1"
+
+    def bay(id_, floor):
+        b = {"id": id_, "at": [10.0, 10.0], "size": {"w": 120.9, "h": 173.8},
+             "accepts": [CARD], "default": CARD, "in": "well"}
+        if floor is not None:
+            b["floor"] = floor
+        return b
+    view = {"size": {"w": 440.0, "h": 480.0}, "components": {
+        "placements": [{"ref": WELL, "id": "well", "at": [5.0, 5.0]}],
+        "bays": [bay("slot-1", 26.6), bay("slot-2", 44.8), bay("slot-3", 64.6),
+                 bay("socket", None)]}}
+    d = {"name": "f", "manufacturer": "F", "model": "F", "version": "0.1.0",
+         "chassis": {"width": 440.0, "height": 480.0, "depth": 86.8},
+         "views": {"top": view}}
+    out = render.render_view(d, "top", view, lib, config={})
+    svg = out if isinstance(out, str) else render.ET.tostring(out, encoding="unicode")
+    def g(id_):
+        m = re.search(rf'<g id="{id_}"[^>]*>', svg)
+        assert m, f"{id_} is not in the view"
+        return m.group(0)
+    for id_, floor in (("slot-1", 26.6), ("slot-2", 44.8), ("slot-3", 64.6)):
+        lift = float(re.search(r'data-z-lift="([^"]+)"', g(id_)).group(1))
+        assert abs(lift + (floor - 21.6)) < 0.01, (id_, lift)
+        assert 'data-shelf="1"' in g(id_), f"{id_} is a shelf and does not say so"
+    # a bay on the well's own floor is not a shelf, and sinks to the floor
+    assert 'data-shelf' not in g("socket")
+    lift = float(re.search(r'data-z-lift="([^"]+)"', g("socket")).group(1))
+    assert abs(lift + (79.9 - 21.6)) < 0.01, lift

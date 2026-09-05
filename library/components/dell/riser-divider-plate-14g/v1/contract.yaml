@@ -1,0 +1,86 @@
+format: 1
+kind: component
+name: riser-divider-plate-14g
+version: 1.0.0
+class: mechanical
+# It is bolted to the outside of the rear-bay frame and stands 3.48 proud
+# of it, so it lies over what is behind it and draws after the bays.
+behaviour: mounts
+profile: compute
+description: >-
+  The sheet metal either side of the rear-bay divider on a 14G PowerEdge - the
+  plate right of riser 2 and the plate left of riser 3, one pressing placed twice
+size: {w: 11.32, h: 40.61}
+provenance:
+  size: >-
+    measured - Dell's service model, descended to mesh children. `Body_1_4.005`
+    at face 267.32..278.64 and `Body_1_5.006` at face 297.10..308.42, both
+    y 1.81..42.42. 11.32 x 40.61 in both cases, agreeing to the hundredth in
+    every dimension, which is what says ONE PART PLACED TWICE rather than two
+    similar ones - the same argument dell/riser-card-clip-14g@1 is built on.
+    Read in the y convention face_y = 86.8 - raw_y, confirmed against the rear
+    handle's trusted low edge and the riser-1 assembly's own sibling bracket.
+  it-is-the-riser-1-shroud-s-opposite-number: >-
+    Riser 1's equivalent - `Body_1_3.005`, face 125.00..135.10, 17.71 proud - is
+    the raised rib inside dell/riser-1-shroud-14g@1. These two are the same
+    feature at the other two risers: same top edge at y 1.81, same depth to
+    within 0.10, and a card clip landing on each. They are shorter, 40.61
+    against riser 1's 61.08, because riser 1 is a full-height cage and these
+    flank a divider that is not.
+    THEY WERE MISSING ENTIRELY, and what made that visible was the clips. Both
+    were placed straight on the panel at 3.0 proud inside a frame standing
+    14.13, so each sat 11 mm down a hole with nothing to be a clip ON. The
+    plates are what they mount to.
+  depth: >-
+    measured - 17.61 proud of the panel plane, both bodies, from the panel plane
+    at z 713.5 to their own fronts. This makes them the frontmost thing in that
+    band, ahead of dell/rear-bay-frame-14g@4's 14.13, which is what the hardware
+    reads like and what the operator reports.
+  it-mounts-on-the-frame-and-says-so: >-
+    `behaviour: mounts`, because this plate's box sits wholly inside
+    dell/rear-bay-frame-14g@4's and the two are not alternatives - the frame is
+    always present and the plate is bolted to the front of it, 17.61 against
+    14.13. That is the definition L13 gives for a surface-mounted part: one
+    that is supposed to lie over what is behind it, and the same key render.py
+    reads to draw it in front. The frame declares no behaviour, so this is a
+    mounted part over an unmounted one rather than two mounted parts arguing.
+  the-clip-is-composed-not-placed-beside: >-
+    dell/riser-card-clip-14g@1 sits ON this plate, so it is composed into it -
+    the same call riser 1's shroud makes, and made for the reason that file
+    records: as two placements their boxes overlap and L13 says so, correctly.
+    It also settles the depth. Both clips were placed straight on the panel at
+    3.0 proud while the frame around them stands 14.13, eleven millimetres down
+    a hole. Composed here with `lift: 14.61` its 3.0 lands its face flush at
+    17.61, level with this plate, which is what a clip seated in the window cut
+    for it does.
+    THE TWO CLIPS ARE NOT QUITE A PAIR AND THIS AVERAGES THEM. Photo-measured,
+    they sit at face 269.00 and 299.00; these plates at 267.32 and 297.10. That
+    is 1.68 and 1.90 from their own plate's left edge - 0.22 apart, which is
+    inside what a 4 px/mm read can resolve and outside what one composed offset
+    can express. 1.68 is used for both. The plates are the measured pair, to the
+    hundredth in the model; the clips are the softer figure, so the clips move.
+  the-face-carries-no-detail-and-that-is-not-a-finding: >-
+    NOT SEARCHED FOR, RATHER THAN LOOKED FOR AND ABSENT. Riser 1's plate carries
+    a five-slot column that is in no cut of the service model at any plane and
+    had to come off ISM figure 8. Whether these two carry the same column, or
+    anything else, has not been established from a figure - only their outline
+    and depth are measured. The recess drawn for the clip is a recess because a
+    clip sits in one on riser 1, not because this plate was seen to have one.
+relief:
+  wall: '#4a5057'
+  features:
+  - node: plate
+    out: 17.61
+    color: '#9aa1a8'
+    confidence: measured
+    source: >-
+      this part's own depth key - `Body_1_4.005` and `Body_1_5.006` in Dell's
+      service model, both fronting 17.61 proud of the panel plane at z 713.5.
+parts:
+  # 14.61 AND NOT 17.61: the clip is 3.0 thick, so lifting it to this plate's
+  # own front would stand it 3 mm off the face. 14.61 lands its outer face at
+  # 17.61, flush in the window.
+  - {ref: dell/riser-card-clip-14g@1, id: clip, at: [1.68, 24.21], lift: 14.61}
+elements:
+  plate: {at: [0.0, 0.0], size: [11.32, 40.61], class: bezel}
+skins: [default]

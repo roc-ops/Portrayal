@@ -2,10 +2,6 @@
   <!-- 2U 14G front bezel, unbranded. Two end flanges from the master
        (24.8 mm each), a honeycomb field between them, keylock and release
        at the LEFT end because that is the end the ISM says to pull. -->
-  <defs>
-    <clipPath id="field"><rect x="24.80" y="0" width="384.40" height="82.35" rx="1.2"/></clipPath>
-  </defs>
-
   <!-- THE OPENINGS ARE HOLES, not dark paint. The bezel is ONE path with
        the hexagons as subpaths and fill-rule evenodd, so each cell is cut
        out of the metal and whatever is behind - the drives - shows through
@@ -13,54 +9,85 @@
        have hidden the drives the moment anything was rendered behind them,
        which is exactly what a bezel must NOT do to a drawing of a machine
        whose drives are the thing worth seeing. -->
-  <clipPath id="plate"><rect x="0" y="0" width="434.0" height="82.35" rx="2.0"/></clipPath>
-  <g clip-path="url(#plate)">
-    <path fill-rule="evenodd" fill="#3f4449" stroke="none" d="M0 0 H434.0 V82.35 H0 Z M75.51 -6.38 L63.89 13.76 L40.63 13.76 L29.00 -6.38 L40.63 -26.52 L63.89 -26.52 Z M75.51 41.17 L63.89 61.32 L40.63 61.32 L29.00 41.17 L40.63 21.03 L63.89 21.03 Z M75.51 88.73 L63.89 108.87 L40.63 108.87 L29.00 88.73 L40.63 68.59 L63.89 68.59 Z M116.70 17.40 L105.07 37.54 L81.81 37.54 L70.19 17.40 L81.81 -2.74 L105.07 -2.74 Z M116.70 64.95 L105.07 85.09 L81.81 85.09 L70.19 64.95 L81.81 44.81 L105.07 44.81 Z M116.70 112.51 L105.07 132.65 L81.81 132.65 L70.19 112.51 L81.81 92.37 L105.07 92.37 Z M157.89 -6.38 L146.26 13.76 L123.00 13.76 L111.37 -6.38 L123.00 -26.52 L146.26 -26.52 Z M157.89 41.17 L146.26 61.32 L123.00 61.32 L111.37 41.17 L123.00 21.03 L146.26 21.03 Z M157.89 88.73 L146.26 108.87 L123.00 108.87 L111.37 88.73 L123.00 68.59 L146.26 68.59 Z M199.07 17.40 L187.44 37.54 L164.19 37.54 L152.56 17.40 L164.19 -2.74 L187.44 -2.74 Z M199.07 64.95 L187.44 85.09 L164.19 85.09 L152.56 64.95 L164.19 44.81 L187.44 44.81 Z M199.07 112.51 L187.44 132.65 L164.19 132.65 L152.56 112.51 L164.19 92.37 L187.44 92.37 Z M240.26 -6.38 L228.63 13.76 L205.37 13.76 L193.74 -6.38 L205.37 -26.52 L228.63 -26.52 Z M240.26 41.17 L228.63 61.32 L205.37 61.32 L193.74 41.17 L205.37 21.03 L228.63 21.03 Z M240.26 88.73 L228.63 108.87 L205.37 108.87 L193.74 88.73 L205.37 68.59 L228.63 68.59 Z M281.44 17.40 L269.81 37.54 L246.56 37.54 L234.93 17.40 L246.56 -2.74 L269.81 -2.74 Z M281.44 64.95 L269.81 85.09 L246.56 85.09 L234.93 64.95 L246.56 44.81 L269.81 44.81 Z M281.44 112.51 L269.81 132.65 L246.56 132.65 L234.93 112.51 L246.56 92.37 L269.81 92.37 Z M322.63 -6.38 L311.00 13.76 L287.74 13.76 L276.11 -6.38 L287.74 -26.52 L311.00 -26.52 Z M322.63 41.17 L311.00 61.32 L287.74 61.32 L276.11 41.17 L287.74 21.03 L311.00 21.03 Z M322.63 88.73 L311.00 108.87 L287.74 108.87 L276.11 88.73 L287.74 68.59 L311.00 68.59 Z M363.81 17.40 L352.19 37.54 L328.93 37.54 L317.30 17.40 L328.93 -2.74 L352.19 -2.74 Z M363.81 64.95 L352.19 85.09 L328.93 85.09 L317.30 64.95 L328.93 44.81 L352.19 44.81 Z M363.81 112.51 L352.19 132.65 L328.93 132.65 L317.30 112.51 L328.93 92.37 L352.19 92.37 Z M405.00 -6.38 L393.37 13.76 L370.11 13.76 L358.49 -6.38 L370.11 -26.52 L393.37 -26.52 Z M405.00 41.17 L393.37 61.32 L370.11 61.32 L358.49 41.17 L370.11 21.03 L393.37 21.03 Z M405.00 88.73 L393.37 108.87 L370.11 108.87 L358.49 88.73 L370.11 68.59 L393.37 68.59 Z M446.19 17.40 L434.56 37.54 L411.30 37.54 L399.67 17.40 L411.30 -2.74 L434.56 -2.74 Z M446.19 64.95 L434.56 85.09 L411.30 85.09 L399.67 64.95 L411.30 44.81 L434.56 44.81 Z M446.19 112.51 L434.56 132.65 L411.30 132.65 L399.67 112.51 L411.30 92.37 L434.56 92.37 Z"/>
+  <!-- THE WHOLE BEZEL IS ONE NODE, `body`, so the contract can stand it off
+       the face as a block. Its top carries this art, holes and all, which is
+       what lets the drives be seen through it in 3D as well as in 2D.
+       THE CELLS ARE CUT TO THE FIELD IN THE GEOMETRY, not by a clipPath: the
+       kit renders `body` on its own to texture the block and sizes the block
+       from the node's bounding box, and neither honours a clip - the first
+       block was taller than the face by a row of half-hexagons top and
+       bottom, hanging off the bezel like a fringe. -->
+  <!-- ONE PLATE, WITH THE MODEL'S SECTION. The field and both caps are inside
+       `plate`, which the contract stands off the face by a PROFILE: 20.3 at
+       the honeycomb, falling to 9.3 at the tips of the caps, swept down the
+       height - so from the side the bezel is the sliced football Dell's mesh
+       is, not a box. The badge bar stays its own node, 3 further out. -->
+  <g id="plate">
+  <g id="field">
+  <g>
+    <path fill-rule="evenodd" fill="#3f4449" stroke="none" d="M0 0 H434.0 V82.35 H0 Z M75.51 41.17 L63.89 61.32 L40.63 61.32 L29.00 41.17 L40.63 21.03 L63.89 21.03 Z M71.83 82.35 L32.68 82.35 L40.63 68.59 L63.89 68.59 Z M106.65 0.00 L116.70 17.40 L105.07 37.54 L81.81 37.54 L70.19 17.40 L80.23 0.00 Z M116.70 64.95 L106.65 82.35 L80.23 82.35 L70.19 64.95 L81.81 44.81 L105.07 44.81 Z M154.21 0.00 L146.26 13.76 L123.00 13.76 L115.05 0.00 Z M157.89 41.17 L146.26 61.32 L123.00 61.32 L111.37 41.17 L123.00 21.03 L146.26 21.03 Z M154.21 82.35 L115.05 82.35 L123.00 68.59 L146.26 68.59 Z M189.02 0.00 L199.07 17.40 L187.44 37.54 L164.19 37.54 L152.56 17.40 L162.61 0.00 Z M199.07 64.95 L189.02 82.35 L162.61 82.35 L152.56 64.95 L164.19 44.81 L187.44 44.81 Z M236.58 0.00 L228.63 13.76 L205.37 13.76 L197.42 0.00 Z M240.26 41.17 L228.63 61.32 L205.37 61.32 L193.74 41.17 L205.37 21.03 L228.63 21.03 Z M236.58 82.35 L197.42 82.35 L205.37 68.59 L228.63 68.59 Z M271.39 0.00 L281.44 17.40 L269.81 37.54 L246.56 37.54 L234.93 17.40 L244.98 0.00 Z M281.44 64.95 L271.39 82.35 L244.98 82.35 L234.93 64.95 L246.56 44.81 L269.81 44.81 Z M318.95 0.00 L311.00 13.76 L287.74 13.76 L279.79 0.00 Z M322.63 41.17 L311.00 61.32 L287.74 61.32 L276.11 41.17 L287.74 21.03 L311.00 21.03 Z M318.95 82.35 L279.79 82.35 L287.74 68.59 L311.00 68.59 Z M353.77 0.00 L363.81 17.40 L352.19 37.54 L328.93 37.54 L317.30 17.40 L327.35 0.00 Z M363.81 64.95 L353.77 82.35 L327.35 82.35 L317.30 64.95 L328.93 44.81 L352.19 44.81 Z M401.32 0.00 L393.37 13.76 L370.11 13.76 L362.17 0.00 Z M405.00 41.17 L393.37 61.32 L370.11 61.32 L358.49 41.17 L370.11 21.03 L393.37 21.03 Z M401.32 82.35 L362.17 82.35 L370.11 68.59 L393.37 68.59 Z M409.20 33.90 L399.67 17.40 L409.20 0.90 Z M409.20 81.45 L399.67 64.95 L409.20 48.45 Z"/>
     <g fill="none" stroke="#23272b" stroke-width="0.5">
-      <path d="M75.51 -6.38 L63.89 13.76 L40.63 13.76 L29.00 -6.38 L40.63 -26.52 L63.89 -26.52 Z"/>
+      <path d="M71.83 0.00 L63.89 13.76 L40.63 13.76 L32.68 0.00 Z"/>
       <path d="M75.51 41.17 L63.89 61.32 L40.63 61.32 L29.00 41.17 L40.63 21.03 L63.89 21.03 Z"/>
-      <path d="M75.51 88.73 L63.89 108.87 L40.63 108.87 L29.00 88.73 L40.63 68.59 L63.89 68.59 Z"/>
-      <path d="M116.70 17.40 L105.07 37.54 L81.81 37.54 L70.19 17.40 L81.81 -2.74 L105.07 -2.74 Z"/>
-      <path d="M116.70 64.95 L105.07 85.09 L81.81 85.09 L70.19 64.95 L81.81 44.81 L105.07 44.81 Z"/>
-      <path d="M116.70 112.51 L105.07 132.65 L81.81 132.65 L70.19 112.51 L81.81 92.37 L105.07 92.37 Z"/>
-      <path d="M157.89 -6.38 L146.26 13.76 L123.00 13.76 L111.37 -6.38 L123.00 -26.52 L146.26 -26.52 Z"/>
+      <path d="M71.83 82.35 L32.68 82.35 L40.63 68.59 L63.89 68.59 Z"/>
+      <path d="M106.65 0.00 L116.70 17.40 L105.07 37.54 L81.81 37.54 L70.19 17.40 L80.23 0.00 Z"/>
+      <path d="M116.70 64.95 L106.65 82.35 L80.23 82.35 L70.19 64.95 L81.81 44.81 L105.07 44.81 Z"/>
+      <path d="M154.21 0.00 L146.26 13.76 L123.00 13.76 L115.05 0.00 Z"/>
       <path d="M157.89 41.17 L146.26 61.32 L123.00 61.32 L111.37 41.17 L123.00 21.03 L146.26 21.03 Z"/>
-      <path d="M157.89 88.73 L146.26 108.87 L123.00 108.87 L111.37 88.73 L123.00 68.59 L146.26 68.59 Z"/>
-      <path d="M199.07 17.40 L187.44 37.54 L164.19 37.54 L152.56 17.40 L164.19 -2.74 L187.44 -2.74 Z"/>
-      <path d="M199.07 64.95 L187.44 85.09 L164.19 85.09 L152.56 64.95 L164.19 44.81 L187.44 44.81 Z"/>
-      <path d="M199.07 112.51 L187.44 132.65 L164.19 132.65 L152.56 112.51 L164.19 92.37 L187.44 92.37 Z"/>
-      <path d="M240.26 -6.38 L228.63 13.76 L205.37 13.76 L193.74 -6.38 L205.37 -26.52 L228.63 -26.52 Z"/>
+      <path d="M154.21 82.35 L115.05 82.35 L123.00 68.59 L146.26 68.59 Z"/>
+      <path d="M189.02 0.00 L199.07 17.40 L187.44 37.54 L164.19 37.54 L152.56 17.40 L162.61 0.00 Z"/>
+      <path d="M199.07 64.95 L189.02 82.35 L162.61 82.35 L152.56 64.95 L164.19 44.81 L187.44 44.81 Z"/>
+      <path d="M236.58 0.00 L228.63 13.76 L205.37 13.76 L197.42 0.00 Z"/>
       <path d="M240.26 41.17 L228.63 61.32 L205.37 61.32 L193.74 41.17 L205.37 21.03 L228.63 21.03 Z"/>
-      <path d="M240.26 88.73 L228.63 108.87 L205.37 108.87 L193.74 88.73 L205.37 68.59 L228.63 68.59 Z"/>
-      <path d="M281.44 17.40 L269.81 37.54 L246.56 37.54 L234.93 17.40 L246.56 -2.74 L269.81 -2.74 Z"/>
-      <path d="M281.44 64.95 L269.81 85.09 L246.56 85.09 L234.93 64.95 L246.56 44.81 L269.81 44.81 Z"/>
-      <path d="M281.44 112.51 L269.81 132.65 L246.56 132.65 L234.93 112.51 L246.56 92.37 L269.81 92.37 Z"/>
-      <path d="M322.63 -6.38 L311.00 13.76 L287.74 13.76 L276.11 -6.38 L287.74 -26.52 L311.00 -26.52 Z"/>
+      <path d="M236.58 82.35 L197.42 82.35 L205.37 68.59 L228.63 68.59 Z"/>
+      <path d="M271.39 0.00 L281.44 17.40 L269.81 37.54 L246.56 37.54 L234.93 17.40 L244.98 0.00 Z"/>
+      <path d="M281.44 64.95 L271.39 82.35 L244.98 82.35 L234.93 64.95 L246.56 44.81 L269.81 44.81 Z"/>
+      <path d="M318.95 0.00 L311.00 13.76 L287.74 13.76 L279.79 0.00 Z"/>
       <path d="M322.63 41.17 L311.00 61.32 L287.74 61.32 L276.11 41.17 L287.74 21.03 L311.00 21.03 Z"/>
-      <path d="M322.63 88.73 L311.00 108.87 L287.74 108.87 L276.11 88.73 L287.74 68.59 L311.00 68.59 Z"/>
-      <path d="M363.81 17.40 L352.19 37.54 L328.93 37.54 L317.30 17.40 L328.93 -2.74 L352.19 -2.74 Z"/>
-      <path d="M363.81 64.95 L352.19 85.09 L328.93 85.09 L317.30 64.95 L328.93 44.81 L352.19 44.81 Z"/>
-      <path d="M363.81 112.51 L352.19 132.65 L328.93 132.65 L317.30 112.51 L328.93 92.37 L352.19 92.37 Z"/>
-      <path d="M405.00 -6.38 L393.37 13.76 L370.11 13.76 L358.49 -6.38 L370.11 -26.52 L393.37 -26.52 Z"/>
+      <path d="M318.95 82.35 L279.79 82.35 L287.74 68.59 L311.00 68.59 Z"/>
+      <path d="M353.77 0.00 L363.81 17.40 L352.19 37.54 L328.93 37.54 L317.30 17.40 L327.35 0.00 Z"/>
+      <path d="M363.81 64.95 L353.77 82.35 L327.35 82.35 L317.30 64.95 L328.93 44.81 L352.19 44.81 Z"/>
+      <path d="M401.32 0.00 L393.37 13.76 L370.11 13.76 L362.17 0.00 Z"/>
       <path d="M405.00 41.17 L393.37 61.32 L370.11 61.32 L358.49 41.17 L370.11 21.03 L393.37 21.03 Z"/>
-      <path d="M405.00 88.73 L393.37 108.87 L370.11 108.87 L358.49 88.73 L370.11 68.59 L393.37 68.59 Z"/>
-      <path d="M446.19 17.40 L434.56 37.54 L411.30 37.54 L399.67 17.40 L411.30 -2.74 L434.56 -2.74 Z"/>
-      <path d="M446.19 64.95 L434.56 85.09 L411.30 85.09 L399.67 64.95 L411.30 44.81 L434.56 44.81 Z"/>
-      <path d="M446.19 112.51 L434.56 132.65 L411.30 132.65 L399.67 112.51 L411.30 92.37 L434.56 92.37 Z"/>
+      <path d="M401.32 82.35 L362.17 82.35 L370.11 68.59 L393.37 68.59 Z"/>
+      <path d="M409.20 33.90 L399.67 17.40 L409.20 0.90 Z"/>
+      <path d="M409.20 81.45 L399.67 64.95 L409.20 48.45 Z"/>
     </g>
     <rect x="0" y="0" width="434.0" height="82.35" rx="2.0" fill="none" stroke="#23272b" stroke-width="0.8"/>
   </g>
+  </g>
 
-  <!-- end flanges: solid metal, and the drives behind them are covered
-       even though the honeycomb field is narrower than the drive row -->
+  <!-- end caps: solid, and the drives behind them are covered even though
+       the honeycomb field is narrower than the drive row. The lock and
+       release are ON the left cap, so they are in its node and ride on it. -->
+  <g id="flange-l">
   <rect x="0" y="0" width="24.80" height="82.35" rx="2.0" fill="#3f4449" stroke="#23272b" stroke-width="0.8"/>
-  <rect x="409.20" y="0" width="24.80" height="82.35" rx="2.0" fill="#3f4449" stroke="#23272b" stroke-width="0.8"/>
-
   <!-- lock and release, LEFT end - the end the ISM says to pull -->
   <rect id="release" x="3.2" y="30.0" width="4.6" height="22.0" rx="1.6" fill="#2b2f34" stroke="#4a5157" stroke-width="0.4"/>
   <g id="lock">
     <circle cx="12.5" cy="16.5" r="4.5" fill="#22262a" stroke="#5a6167" stroke-width="0.55"/>
     <circle cx="12.5" cy="16.5" r="1.9" fill="none" stroke="#7d848a" stroke-width="0.45"/>
     <path d="M12.5 14.9 v3.2" stroke="#7d848a" stroke-width="0.5" stroke-linecap="round"/>
+  </g>
+  </g>
+  <g id="flange-r">
+  <rect x="409.20" y="0" width="24.80" height="82.35" rx="2.0" fill="#3f4449" stroke="#23272b" stroke-width="0.8"/>
+  </g>
+    <!-- THE ROUNDEL IS ON THE PLATE. Flush with the cells, so it is plate art and
+       travels with the plate's box: drawn at the root of this file it was
+       painted onto the chassis face behind the bezel, and stayed there on the
+       drives when the bezel came off. -->
+  <g id="roundel">
+    <circle cx="57.0" cy="22.0" r="8.0" fill="#3f4449" stroke="#23272b" stroke-width="0.8"/>
+    <circle cx="57.0" cy="22.0" r="5.2" fill="none" stroke="#7d848a" stroke-width="0.6"/>
+  </g>
+  </g>
+
+  <!-- THE BADGE BAR, across the middle of the field: Dell's model has a bar
+       90 wide standing 3 further out than the cells, and a round badge near
+       the left cap flush with them. Positions from the model; the art is not. -->
+  <g id="badge">
+    <rect x="175.0" y="28.7" width="90.0" height="20.0" rx="3.0" fill="#3f4449" stroke="#23272b" stroke-width="0.8"/>
+    <rect x="182.0" y="35.0" width="76.0" height="7.4" rx="1.2" fill="#2b2f34"/>
   </g>
 </svg>

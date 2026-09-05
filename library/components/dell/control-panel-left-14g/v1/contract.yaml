@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: control-panel-left-14g
-version: 1.0.0
+version: 1.2.1
 class: control-panel
 behaviour: fills
 profile: server
@@ -9,8 +9,35 @@ description: >-
   Left control panel of a 14th-generation PowerEdge - five status glyphs that
   are themselves lamps, the system health and system ID bar, and the optional
   iDRAC Quick Sync 2 bar below it. Both bars are buttons as well as indicators
-size: {w: 11.59, h: 30.0, d: 40.0}
+size: {w: 11.59, h: 30.0, d: 22.8}
+body: {depth: 22.8, color: '#15181b'}
 provenance:
+  the-body-box: >-
+    THE FRU IS A BOX NOW, NOT A FACE. It is field-replaceable and already
+    `behaviour: fills`, so the viewer treated it as a FRU with nothing to
+    eject but a plane. `body.depth` is the measured 22.80 - the same number as
+    `size.d`, because the whole module is one box behind one face - and it
+    also gives relief.js an authoritative depth rather than the hardcoded 60
+    mm bay it falls back to for a module with no body block. `travel` is
+    deliberately omitted: this comes all the way out. THE SIDE ART IS
+    CONSTRUCTION apart from the 4.70 mm front lip, which is the bezel sub-mesh
+    (12.20 x 36.40 x 4.70 at 0.36..5.11). Every projection of this assembly is
+    unreadable at the module's scale - the full-height sheet bracket, the
+    panel body and the info-tag tray overlap in all three planes - so the
+    sides carry the moulding's colours and nothing is claimed that was not
+    measured.
+  depth: >-
+    measured - Dell service CAD, node `DELL_R740XD_Controlpanel_Left_Part-1`.
+    The panel body is 12.20 x 40.50 x 20.20 sitting 2.60..22.80 behind the
+    front face, so the module reaches 22.80 and no further. IT WAS 40.0 WITH
+    NO SOURCE. The `size` provenance beside this one covers WIDTH and HEIGHT
+    and stops; the depth was a bare number. What makes 40 easy to arrive at is
+    that the same CAD node also carries the panel's CABLE HARNESS - sub-meshes
+    running 258 to 349 mm back to the board - and the assembly's whole extent
+    is not the module's depth. THE OPERATOR'S TEST IS WHAT CAUGHT IT: the
+    panel 'does not extend past the back of the rack ears', and the ear is
+    about 25.4, so anything over that was wrong on the hardware regardless of
+    where the number came from. 22.80 stops inside it.
   identity: >-
     A FIELD-REPLACEABLE UNIT, which is why it is a component and not a handful
     of placements on the chassis. The R740xd Installation and Service Manual

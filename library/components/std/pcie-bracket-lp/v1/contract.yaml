@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: pcie-bracket-lp
-version: 1.1.0
+version: 1.2.1
 class: bracket
 conforms: pcie-bracket-lp
 description: >-
@@ -111,14 +111,26 @@ provenance:
     the bracket across the card: 1.27 on the solder side and 17.15 toward the
     component side, which is what figure 11-5's otherwise puzzling "2X (17.15)"
     is measuring - NOT a neck width, which is how a first pass read it.
-  the-return-flange-is-not-on-this-face: >-
-    At the flange end the metal turns 90 degrees out of the plate and runs 9.40
-    into the chassis; the hold-down screw goes through THAT tab, not through
-    anything visible here. It is perpendicular to this elevation and points AWAY
-    from the viewer, into the chassis, so it is neither something the face can
-    show nor something `relief` can raise - relief features stand proud toward
-    the viewer. It is carried as attrs.return-flange-depth and drawn on the face
-    only as the fold line. Drawing it flat would make the part 9.40 too long.
+  the-return-flange-points-out-and-that-is-the-operators-reading: >-
+    THIS KEY USED TO ARGUE THE OPPOSITE AND THE ARGUMENT IS WORTH KEEPING. It
+    read: the metal turns 90 degrees out of the plate and runs 9.40 into the
+    chassis, the hold-down screw goes through THAT tab, it is perpendicular to
+    this elevation and points AWAY from the viewer - "so it is neither something
+    the face can show nor something `relief` can raise". That is a correct
+    reading of PCIe CEM 5.0's side view, which describes the fold relative to the
+    CARD, and it is why the fold was carried as an attribute and a fold line for
+    as long as this part has existed.
+    THE OPERATOR HAS THE HARDWARE AND THIS DRAWING ON SCREEN, and says the fold
+    comes toward the viewer. A face-on elevation of a rear panel is looking at
+    the card from outside the machine, which reverses the sense of "back", and a
+    plate built behind the panel is a plate nothing can see - which is what a
+    first attempt at this produced.
+    So `flange-fold` is now `out: 9.40`, and the number never changed: 9.40 is
+    figure 11-5's, measured, and only its direction was ever in question.
+    WHAT WOULD SETTLE IT PROPERLY is a side elevation of a SEATED bracket, or a
+    CAD node for one - neither is held here. Until then this is the operator's
+    reading over a specification's wording, recorded as such rather than
+    presented as measured.
   the-tapped-ears-are-in-neither-the-face-nor-relief: >-
     THE TWO #4-40 EARS ARE NOT ON THIS FACE EITHER. They sit 53.9 apart,
     are 12.57 long, and bend the opposite way - toward the card board they screw
@@ -162,11 +174,27 @@ elements:
 relief:
   wall: '#8a9199'
   features:
+  # THE L, AND IT BUILT NOTHING UNTIL NOW. This was `sink: 9.4`, which is
+  # measured from a CAVITY FLOOR - and this part has no cavity, so the feature
+  # had nothing to sink from and rendered as air. The number was right and
+  # inert for as long as the part has existed.
   - node: flange-fold
-    sink: 9.40
+    out: 9.4
+    # THE FOLD IS THE PLATE'S OWN METAL. Without this the kit
+    # samples the node's art for a side colour, and the node is a
+    # 0.3 mm stroked line - so the sample lands on nothing and the
+    # flange built black against a grey bracket.
+    color: '#9aa1a8'
     confidence: drawing
     source: >-
-      the fold at the flange end, PCIe CEM 5.0 figure 11-9 side view - the
-      metal turns 90 degrees here and runs 9.40 back into the chassis, carrying
-      the hold-down screw slot. On the face it is a line; 9.40 is what it is.
+      the fold at the flange end, PCIe CEM 5.0 figure 11-9 side view - the metal
+      turns 90 degrees here and runs 9.40 carrying the hold-down screw slot. On
+      the face it is a line, 0.3 by 15.08, so extruding it gives the plate the
+      fold is.
+      THE DIRECTION IS THE OPERATOR'S AND READS AGAINST THE SPEC'S WORDING. CEM
+      says the metal runs "back into the chassis", which is true of the fold
+      relative to the CARD; this drawing is face-on from outside, where the same
+      fold comes toward the viewer. Taken literally into the scene it would put a
+      plate behind the panel where nothing can see it, which is what a first
+      attempt at this did.
 skins: [default]

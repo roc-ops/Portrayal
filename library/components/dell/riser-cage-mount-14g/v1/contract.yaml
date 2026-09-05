@@ -1,13 +1,13 @@
 format: 1
 kind: component
 name: riser-cage-mount-14g
-version: 1.0.0
+version: 1.1.0
 class: mechanical
 profile: server
 description: >-
   The pair of rings a riser cage mounts to on a 14G PowerEdge rear bay, seen
   when the bay carries drives instead of a riser
-size: {w: 6.14, h: 14.54, d: 0.5}
+size: {w: 6.14, h: 14.54}
 provenance:
   it-is-the-other-half-of-a-pair-of-readings: >-
     THE SAME SPOT DRAWS TWO DIFFERENT THINGS AND BOTH ARE RIGHT. Beside the
@@ -28,4 +28,18 @@ provenance:
     stand proud, and nothing held here dimensions them.
 elements:
   ring-upper: {at: [0.0, 0.0], size: [6.14, 6.14], class: bezel}
+relief:
+  features:
+  # THICKNESS, NOT A HOLE. This carried 0.5 as `size.d`, and
+  # render.py reads a non-module, non-mounts part's `d` as the
+  # depth of an APERTURE - so it was a pit in the panel. The
+  # number is the same; what it means is a protrusion.
+  - node: ring-upper
+    out: 0.5
+    confidence: estimated
+    source: >-
+      carried over verbatim from this part's own `size.d`, where it
+      had been since the part was drawn - a mount ring on the chassis face; 0.5 is its own thickness. Same reading as the clip beside it. No new reading was
+      taken; the correction is to what the number means, not to the
+      number.
 skins: [default]

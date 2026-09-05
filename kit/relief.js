@@ -12,6 +12,37 @@
 
 let THREE, renderer, PXMM, FRU_PATHS;
 
+// A BODY THAT IS NOT ONE BOX. A module's `body` is a box the size of its face
+// (or its `footprint`) and `depth` deep; a riser is a plate with a 1.6 mm PCB
+// standing behind it and three connectors on the PCB, and a box that size hid
+// the chassis interior while a box cut to the plate left the PCB behind when
+// the riser was ejected. `body.boxes` lists the pieces instead, each in the
+// face's own frame, starting `from` mm behind the plane. This resolves either
+// form to a list the two builders (the FRU in a chassis, the part alone) draw
+// the same way; it is pure, so it is checked under node.
+// A rect in a module's own frame, mapped through the module's placement (its
+// translate, and its reflection when `mirror: true`) into face mm. Corners
+// through the matrix, then the min/max, so a mirrored module's box comes out
+// on the mirrored side with a positive width.
+export function localToFace(m, r) {
+  if (!m) return {x: r.x, y: r.y, w: r.w, h: r.h};
+  const pt = (x, y) => ({x: m.a * x + m.c * y + m.e, y: m.b * x + m.d * y + m.f});
+  const p = pt(r.x, r.y), q = pt(r.x + r.w, r.y + r.h);
+  return {x: Math.min(p.x, q.x), y: Math.min(p.y, q.y), w: Math.abs(q.x - p.x), h: Math.abs(q.y - p.y)};
+}
+
+export function bodyBoxes(body, faceW, faceH) {
+  const color = body.color || '#3a3f44';
+  if (body.boxes && body.boxes.length) {
+    return body.boxes.map((b, i) => ({
+      id: b.id || `box-${i}`, x: b.at[0], y: b.at[1], w: b.size[0], h: b.size[1],
+      z0: b.from || 0, z1: (b.from || 0) + b.depth, color: b.color || color}));
+  }
+  const fp = body.footprint || {at: [0, 0], size: [faceW, faceH]};
+  return [{id: 'body', x: fp.at[0], y: fp.at[1], w: fp.size[0], h: fp.size[1],
+           z0: 0, z1: body.depth, color}];
+}
+
 export function configureRelief(deps, scope) {
   // THREE and the renderer are genuinely per-page and stay module-level. The
   // raster density and the FRU path set are per-VIEWER, and a second viewer
@@ -141,6 +172,39 @@ export function setNodeStates(map, scope) {
     if (cls) st.set(path, String(cls));
 }
 export function clearNodeStates(scope) { _sc(scope).states.clear(); }
+
+// WHAT A VIEWER HAS WRITTEN ON A PART. A field is a `data-from` text node the
+// part declares (`fields` in its contract, carried in components.json): a
+// supply's wattage, a drive's capacity. The value replaces the node's text and
+// lands on the part's group as `data-<key>`, in the parsed document and in
+// every texture redrawn from it - the same route a lamp state takes. Keyed by
+// the part's data-path; a map of key -> value per part; an empty value hides
+// the node, as render.py's fill does.
+export function setNodeFields(map, scope) {
+  const st = _sc(scope).fields || (_sc(scope).fields = new Map());
+  st.clear();
+  for (const [path, vals] of map instanceof Map ? map : Object.entries(map || {}))
+    if (vals && Object.keys(vals).length) st.set(path, {...vals});
+}
+export function nodeFields(scope) { return new Map(_sc(scope).fields || []); }
+export function applyNodeFields(root, scope) {
+  if (!root) return root;
+  const st = _sc(scope).fields;
+  if (!st || !st.size) return root;
+  for (const [path, vals] of st)
+    // the part on the face that holds it, and its projections on the others
+    for (const el of root.querySelectorAll(
+        `[data-path="${CSS.escape(path)}"],[data-projection][data-of="${CSS.escape(path)}"]`))
+      for (const [k, v] of Object.entries(vals)) {
+        const val = v == null ? '' : String(v);
+        el.setAttribute(`data-${k}`, val);
+        for (const t of el.querySelectorAll(`[data-from="${CSS.escape(k)}"]`)) {
+          t.textContent = val;
+          if (val) t.removeAttribute('display'); else t.setAttribute('display', 'none');
+        }
+      }
+  return root;
+}
 export function nodeStates(scope) { return new Map(_sc(scope).states); }
 
 // WHAT A VIEWER HAS TAKEN OFF. A cover hides what is behind it, which is the
@@ -190,6 +254,12 @@ export function applyPulled(root, scope) {
       el.setAttribute("data-portrayal-pulled", "");
       el.setAttribute("display", "none");
     }
+  // a part's projections on other faces go with it
+  for (const el of root.querySelectorAll("[data-projection][data-of]"))
+    if (_isPulled(el.getAttribute("data-of"), pulled)) {
+      el.setAttribute("data-portrayal-pulled", "");
+      el.setAttribute("display", "none");
+    }
   return root;
 }
 
@@ -217,6 +287,7 @@ export function restyleText(text, scope) {
   const div = document.createElement('div');
   div.innerHTML = text;
   applyNodeStates(div, scope);
+  applyNodeFields(div, scope);
   applyPulled(div, scope);
   return div.innerHTML;
 }
@@ -302,26 +373,14 @@ export function crop(cv, r, pxmm = PXMM) {
   return c;
 }
 
-// standards-relief extraction: cavities (with interior features) + outward protrusions.
-// Interior/plate art is re-rendered STANDALONE from its own nodes so bezel plates
-// can carry arbitrary shapes (plug-outline apertures, LED holes) via alpha.
-export async function extractRelief(url, scope) {
-  const div = document.createElement('div');
-  div.style.cssText = 'position:absolute;left:-10000px;top:0;width:1000px;visibility:hidden';
-  div.innerHTML = await svgSource(url, scope);
-  document.body.appendChild(div);
-  const svg = div.querySelector('svg');
-  // before anything is measured or serialised: cleanText and every nodeSvg below
-  // are taken from this document, so applying the runtime states once here is
-  // what puts them on the face texture and on every piece of relief at once.
-  applyNodeStates(svg, scope);
-  // A part the viewer has taken off is REMOVED here rather than hidden, and only
-  // here: this document is built to be measured and then discarded, so nothing
-  // has to put it back. Left as display:none it would measure 0x0 and extrude a
-  // degenerate feature instead of none at all - a cover that is off should leave
-  // no geometry behind, not a flat one.
-  applyPulled(svg, scope);
-  for (const el of [...svg.querySelectorAll("[data-portrayal-pulled]")]) el.remove();
+// THE MEASURING TOOLS FOR ONE PARSED FACE, shared between the build and the
+// lamp animator. Both need the same answers - where a node sits in face mm,
+// how far off the face it starts, which part owns it, and how to render it
+// standalone with the scope its rules were written in - and having two
+// copies is how the second one drifts. `svg` must be attached to a document
+// (getScreenCTM and getBBox read nothing from a detached tree).
+export function nodeTools(svg) {
+  const q = sel => [...svg.querySelectorAll(sel)].filter(el => !el.closest('[data-projection]'));
   const inv = svg.getScreenCTM().inverse();
   const mmRect = el => {
     const b = el.getBBox();
@@ -331,7 +390,7 @@ export async function extractRelief(url, scope) {
     const x0 = Math.min(pts[0].x, pts[1].x), y0 = Math.min(pts[0].y, pts[1].y);
     return {x: x0, y: y0, w: Math.abs(pts[1].x - pts[0].x), h: Math.abs(pts[1].y - pts[0].y)};
   };
-  const shared = [...svg.querySelectorAll('style, defs')].map(n => n.outerHTML).join('');
+  const shared = [...q('style, defs')].map(n => n.outerHTML).join('');
   // HOW FAR OFF THE FACE A FEATURE STARTS, summed up the ANCESTOR CHAIN.
   //
   // `lift` is not always written on the node that carries the feature. A composed
@@ -360,11 +419,17 @@ export async function extractRelief(url, scope) {
     return z;
   };
   // owning FRU (bay module / pull tab) of a node, for animated removal
+  // WHICH PART DID THIS COME FROM - which is not the same question as "is this
+  // part a FRU", and conflating the two is what made covers unpullable.
+  // The answer is used for two different jobs. Grouping into an ejectable
+  // subgroup is still FRU-only: a module leaves a BAY behind it, and building
+  // one behind a bolted-on cover would punch a hole in the chassis. But TAGGING
+  // every mesh with the part that produced it costs nothing and is what lets a
+  // cover be hidden without being ejected.
   const ownerOf = el => {
     const a = el.closest('[data-path]');
     if (!a) return null;
-    const root = a.dataset.path.split('/')[0];
-    return _fru(scope).has(root) ? root : null;
+    return a.dataset.path.split('/')[0] || null;
   };
   // A NODE RENDERED ALONE LOSES THE SCOPE ITS RULES WERE WRITTEN IN, and that is
   // the third bug of the shape the `lift` note above names. `shared` carries the
@@ -391,14 +456,23 @@ export async function extractRelief(url, scope) {
   // gap rather than a plumbing one.
   const scopeWrap = (el, inner) => {
     for (let p = el.parentElement; p && p !== svg; p = p.parentElement) {
+      // `data-ref` and `data-class` ride too: render.py's other scope for a
+      // declared colour is `g[data-ref^='dell/control-panel-left-14g@']
+      // .state-fault`, and a lamp wrapped in id and class alone painted its
+      // generic default in its own texture while the face showed the vendor's
+      // colour - same defect as the id case, one attribute over.
       const id = p.getAttribute('id'), cls = p.getAttribute('class'),
-            path = p.getAttribute('data-path');
-      if (!id && !cls) continue;      // a pure layout group changes no selector
+            path = p.getAttribute('data-path'), ref = p.getAttribute('data-ref'),
+            dc = p.getAttribute('data-class');
+      if (!id && !cls && !ref && !dc) continue;      // a pure layout group changes no selector
       inner = `<g${id ? ` id="${id}"` : ''}${cls ? ` class="${cls}"` : ''}` +
+              `${ref ? ` data-ref="${ref}"` : ''}${dc ? ` data-class="${dc}"` : ''}` +
               `${path ? ` data-path="${path}"` : ''}>${inner}</g>`;
     }
     return inner;
   };
+  // The `<!--art-->` marker separates the shared stylesheet from the node's
+  // own art, so lamps.js can lay an unlit copy of the art under the live one.
   const nodeSvg = (el, rect) => {
     const m = inv.multiply(el.getScreenCTM());
     const clone = el.cloneNode(true);
@@ -408,13 +482,113 @@ export async function extractRelief(url, scope) {
     for (const r of clone.querySelectorAll(
         '[data-z-out],[data-z-cyl],[data-z-bar],[data-z-uhandle],[data-z-dome][data-z-lift]'))
       r.style.display = 'none';
-    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${rect.w} ${rect.h}"` +
-      ` width="${rect.w}mm" height="${rect.h}mm">${shared}` +
-      scopeWrap(el,
+    const live = scopeWrap(el,
         `<g transform="matrix(${m.a} ${m.b} ${m.c} ${m.d} ${m.e - rect.x} ${m.f - rect.y})">` +
-        clone.outerHTML + `</g>`) + `</svg>`;
+        clone.outerHTML + `</g>`);
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${rect.w} ${rect.h}"` +
+      ` width="${rect.w}mm" height="${rect.h}mm">${shared}<!--art-->` + live + `</svg>`;
   };
-  const cavities = [...svg.querySelectorAll('[data-depth]')]
+  return {inv, mmRect, shared, liftOf, ownerOf, scopeWrap, nodeSvg};
+}
+
+// standards-relief extraction: cavities (with interior features) + outward protrusions.
+// Interior/plate art is re-rendered STANDALONE from its own nodes so bezel plates
+// can carry arbitrary shapes (plug-outline apertures, LED holes) via alpha.
+export async function extractRelief(url, scope) {
+  const div = document.createElement('div');
+  div.style.cssText = 'position:absolute;left:-10000px;top:0;width:1000px;visibility:hidden';
+  div.innerHTML = await svgSource(url, scope);
+  document.body.appendChild(div);
+  const svg = div.querySelector('svg');
+  // A PROJECTION IS FLAT. A part seated on one face may be drawn again on
+  // another as `data-projection` (render.py's `plan:`), for the 2D view with
+  // the lid off. Its body already stands in the scene from the face that
+  // holds it, so nothing inside one is extracted here - it is texture only.
+  const q = sel => [...svg.querySelectorAll(sel)].filter(el => !el.closest('[data-projection]'));
+  // before anything is measured or serialised: cleanText and every nodeSvg below
+  // are taken from this document, so applying the runtime states once here is
+  // what puts them on the face texture and on every piece of relief at once.
+  applyNodeStates(svg, scope);
+  // and the fields written on parts, for the same reason: a rebuild - a config
+  // switch, a swap - would otherwise draw every badge from the default text
+  // while the registry still said the value was set, and a repeated setFields
+  // would see nothing changed and never put it back
+  applyNodeFields(svg, scope);
+  // A part the viewer has taken off is REMOVED here rather than hidden, and only
+  // here: this document is built to be measured and then discarded, so nothing
+  // has to put it back. Left as display:none it would measure 0x0 and extrude a
+  // degenerate feature instead of none at all - a cover that is off should leave
+  // no geometry behind, not a flat one.
+  applyPulled(svg, scope);
+  for (const el of [...q("[data-portrayal-pulled]")]) el.remove();
+  const {inv, mmRect, shared, liftOf, ownerOf, nodeSvg} = nodeTools(svg);
+  // THE OUTLINE OF A NODE, in face millimetres, as closed rings.
+  //
+  // SAMPLED RATHER THAN PARSED. getPointAtLength walks a path at constant arc
+  // length and consumes NO length crossing from one subpath to the next, so two
+  // consecutive samples that jump much further than the step are a subpath
+  // boundary. That finds the rings without writing a path parser, and it works
+  // for curves exactly as well as for lines - which matters, because these
+  // outlines are CAD contours and the next one may not be polygonal.
+  //
+  // A ring whose centroid falls inside another is a HOLE; one that does not is a
+  // separate island. That is what makes the screw hole in the rear handle's left
+  // foot a hole rather than a second lump of metal.
+  //
+  // A `fill="none"` path is a stroked centreline - a line, not an area - and
+  // extruding it would build a ribbon where the drawing shows a bracket.
+  const RING_STEP = 0.25;
+  const inRing = (pt, ring) => {
+    let hit = false;
+    for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+      const a = ring[i], b = ring[j];
+      if ((a[1] > pt[1]) !== (b[1] > pt[1]) &&
+          pt[0] < (b[0] - a[0]) * (pt[1] - a[1]) / (b[1] - a[1]) + a[0]) hit = !hit;
+    }
+    return hit;
+  };
+  const ringsOf = el => {
+    const m = inv.multiply(el.getScreenCTM());
+    const paths = el.tagName === 'path' ? [el] : [...el.querySelectorAll('path')];
+    const rings = [];
+    for (const q of paths) {
+      if (q.getAttribute('fill') === 'none') continue;
+      let total = 0;
+      try { total = q.getTotalLength(); } catch (e) { continue; }
+      if (!(total > 0)) continue;
+      const n = Math.max(8, Math.min(4000, Math.ceil(total / RING_STEP)));
+      const step = total / n;
+      let cur = [], prev = null;
+      for (let i = 0; i <= n; i++) {
+        const s = q.getPointAtLength(step * i);
+        const pt = [m.a * s.x + m.c * s.y + m.e, m.b * s.x + m.d * s.y + m.f];
+        if (prev && Math.hypot(pt[0] - prev[0], pt[1] - prev[1]) > 4 * step) {
+          if (cur.length > 2) rings.push(cur);
+          cur = [];
+        }
+        cur.push(pt); prev = pt;
+      }
+      if (cur.length > 2) rings.push(cur);
+    }
+    if (!rings.length) return null;
+    const area = r => {
+      let a = 0;
+      for (let i = 0, j = r.length - 1; i < r.length; j = i++)
+        a += (r[j][0] + r[i][0]) * (r[j][1] - r[i][1]);
+      return Math.abs(a / 2);
+    };
+    const cent = r => [r.reduce((s, c) => s + c[0], 0) / r.length,
+                       r.reduce((s, c) => s + c[1], 0) / r.length];
+    rings.sort((a, b) => area(b) - area(a));
+    const out = [];
+    for (const r of rings) {
+      const host = out.find(o => inRing(cent(r), o.shell));
+      if (host) host.holes.push(r); else out.push({shell: r, holes: []});
+    }
+    return out;
+  };
+
+  const cavities = [...q('[data-depth]')]
     .filter(el => !el.querySelector('[data-depth]'))
     .map(el => {
       const cavNode = el.dataset.cavity &&
@@ -428,6 +602,7 @@ export async function extractRelief(url, scope) {
         color: f.dataset.zColor || '#0a0c0e',
       }));
       return {...rect, owner: ownerOf(el), d: +el.dataset.depth, wall: el.dataset.wall || '#a7adb4',
+              wallsInside: el.dataset.walls === 'inside',
               lift: liftOf(el),
               round: !!el.dataset.round, cavSvg: nodeSvg(cavNode || el, rect),
               grpRect, grpSvg: nodeSvg(el, grpRect), features};
@@ -439,14 +614,14 @@ export async function extractRelief(url, scope) {
   // mesh. Omitting it punched the faceplate and then silently deleted the walls
   // and floor that were supposed to close the hole, so the chassis had seven
   // full-length slits you could see the background through.
-  for (const el of svg.querySelectorAll('[data-groove]')) {
+  for (const el of q('[data-groove]')) {
     const rect = mmRect(el);
     cavities.push({...rect, owner: ownerOf(el), d: +el.dataset.groove, wall: '#25282c', round: false,
                    lift: liftOf(el),
                    cavSvg: nodeSvg(el, rect), grpRect: rect,
                    grpSvg: nodeSvg(el, rect), features: []});
   }
-  const outs = [...svg.querySelectorAll('[data-z-out],[data-z-cyl],[data-z-bar],[data-z-uhandle]')].map(el => {
+  const outs = [...q('[data-z-out],[data-z-cyl],[data-z-bar],[data-z-uhandle]')].map(el => {
     const rect = mmRect(el);
     return {...rect, owner: ownerOf(el), out: el.dataset.zOut && +el.dataset.zOut,
             cyl: el.dataset.zCyl && +el.dataset.zCyl,
@@ -456,15 +631,20 @@ export async function extractRelief(url, scope) {
             knurl: !!el.dataset.zKnurl,
             thread: el.dataset.zThread && +el.dataset.zThread,
             color: el.dataset.zColor || null,
+            rings: el.dataset.zShape ? ringsOf(el) : null,
+            profile: el.dataset.zProfile
+              ? el.dataset.zProfile.split(',').map(p => p.split(':').map(Number)) : null,
+            profileY: el.dataset.zProfileY
+              ? el.dataset.zProfileY.split(',').map(p => p.split(':').map(Number)) : null,
             svgText: nodeSvg(el, rect)};
   });
-  const domes = [...svg.querySelectorAll('[data-z-dome]')].map(el => {
+  const domes = [...q('[data-z-dome]')].map(el => {
     const rect = mmRect(el);
     // a lamp on a raised indicator bezel domes from THAT surface, not the panel
     return {...rect, owner: ownerOf(el), dome: +el.dataset.zDome, lift: liftOf(el),
             svgText: nodeSvg(el, rect)};
   });
-  const vents = [...svg.querySelectorAll('[data-vent],[data-z-vent]')].map(el => {
+  const vents = [...q('[data-vent],[data-z-vent]')].map(el => {
     const rect = mmRect(el);
     return {...rect, owner: ownerOf(el), depth: +(el.dataset.vent || el.dataset.zVent),
             svgText: nodeSvg(el, rect)};
@@ -501,17 +681,60 @@ export async function extractRelief(url, scope) {
   const BODY_CLASSES = ['psu', 'fan', 'tab', 'power', 'cooling'];
   const BODY_SELECTOR = ['[data-behaviour="fills"]', '[data-behaviour="occupies"]']
     .concat(BODY_CLASSES.map(c => `[data-class="${c}"]:not([data-behaviour])`)).join(',');
-  for (const el of svg.querySelectorAll(BODY_SELECTOR)) {
+  // A MODULE INSIDE A MODULE HAS A BODY OF ITS OWN. A card in a riser slot is
+  // not a FRU here - it comes out with its riser - but its PCB is real, and
+  // it hides on its own path. Collected beside the FRUs and built into the
+  // owner's ejection group.
+  const subBodies = [];
+  for (const el of q(BODY_SELECTOR)) {
     if (!el.dataset.ref) continue;
-    const path = (el.dataset.path || '').split('/')[0];
-    if (!path || frus.some(f => f.path === path)) continue;
-    frus.push({path, ref: el.dataset.ref.split(':')[0], cls: el.dataset.class, ...mmRect(el)});
+    const full = el.dataset.path || '';
+    const path = full.split('/')[0];
+    if (!path) continue;
+    // a module in a chassis bay is `bay/module`; one in a module's bay is
+    // `bay/module/slot/module` - the third segment is what makes it nested
+    if (full.split('/').length > 2) {
+      // the body index lives with the builder; every nested module is
+      // recorded here and the builder keeps the ones that declare boxes
+      const m = inv.multiply(el.getScreenCTM());
+      subBodies.push({path: full, owner: path, ref: el.dataset.ref.split(':')[0], lift: liftOf(el),
+                      toFace: {a: m.a, b: m.b, c: m.c, d: m.d, e: m.e, f: m.f}});
+      continue;
+    }
+    if (frus.some(f => f.path === path)) continue;
+    // `data-body-depth` IS THE MODULE'S OWN DEPTH and was being thrown
+    // away here, so every module without a `body:` block fell back to a
+    // hardcoded 60 mm bay below - 60 for a 40 mm control panel, 60 for a
+    // 25 mm drive blank. On a part seated in a rack ear that hole runs
+    // straight out the back of the flange.
+    // A MODULE IN A BAY THAT OPENS IN A WELL IS NOT AT THE FACE. The bay
+    // carries the well's floor as a negative z-lift (render.py's `in:`), and
+    // the module's plane, body and bay box all sit that far down.
+    const frect = mmRect(el);
+    // A SHELF LEAVES NO HOLE. A bay with a `floor:` is a shelf in a well - a
+    // card on its riser slot - and the dark box the kit leaves behind a pulled
+    // module would stand on the card below it. Read off the bay, which is the
+    // module's parent.
+    const shelf = !!(el.parentElement && el.parentElement.dataset && el.parentElement.dataset.shelf);
+    frus.push({path, ref: el.dataset.ref.split(':')[0],
+               cls: el.dataset.class, lift: liftOf(el), shelf,
+               bodyDepth: +el.dataset.bodyDepth || null, ...frect,
+               // its own art, so the plane can be cut to the module's SHAPE
+               svgText: nodeSvg(el, frect),
+               // THE MODULE'S OWN FRAME, not its drawn box. A riser's slot
+               // brackets hang 13.4 mm outboard of its plate, so the bbox
+               // starts 13.4 left of the contract's origin - and a body box
+               // placed from the bbox stood that far out through the chassis
+               // wall. This is local mm -> face mm, mirror included, so a box
+               // in the contract's frame lands where the contract says.
+               toFace: (() => { const m = inv.multiply(el.getScreenCTM());
+                                return {a: m.a, b: m.b, c: m.c, d: m.d, e: m.e, f: m.f}; })()});
   }
-  for (const el of svg.querySelectorAll('[data-z-out],[data-z-cyl],[data-z-bar],[data-z-uhandle]'))
+  for (const el of q('[data-z-out],[data-z-cyl],[data-z-bar],[data-z-uhandle]'))
     el.style.display = 'none';
   const cleanText = svg.outerHTML;
   div.remove();
-  return {cavities, outs, domes, vents, frus, cleanText};
+  return {cavities, outs, domes, vents, frus, subBodies, cleanText};
 }
 
 export async function rasterize(svgText, wmm, hmm, pxmm = PXMM, flipX = false, flipY = false) {
@@ -563,8 +786,12 @@ export async function buildFaceRelief(F, ctx) {
     // state class lands on - and asking the text is the only version of the
     // question that cannot miss one of the three.
     const restyle = ctx.restyle || [];
-    const reg = (svgText, run) => { if (svgText) restyle.push({svgText, run}); };
-    const fw = F.fw(), fh = F.fh();
+    // `anim` - the material and its mm size - is what lets the viewer redraw
+    // the same texture at several instants of a CSS animation (see lamps.js)
+    const reg = (svgText, run, anim = null) => { if (svgText) restyle.push({svgText, run, anim}); };
+    // `let`, because the drawing may state a different size below and a face
+    // is drawn at its own size rather than at its plane's.
+    let fw = F.fw(), fh = F.fh();
     // A device need not declare every view; fall back to a plain face. Asked
     // through svgSource so the answer is cached: when the view DOES exist this
     // is the same fetch extractRelief is about to want, and when it does not the
@@ -577,9 +804,30 @@ export async function buildFaceRelief(F, ctx) {
       faceCv[F.view] = cv0;
       return;
     }
-    const {cavities, outs, domes, vents, frus, cleanText} = await extractRelief(src, ctx.scope);
+    const {cavities, outs, domes, vents, frus, subBodies = [], cleanText} = await extractRelief(src, ctx.scope);
     const faceText = squareFaceplate(cleanText);
+    // THE DRAWING'S OWN SIZE WINS, because the face is not obliged to match the
+    // plane it sits on. The R740xd's front is the 482.6 mm rack face - Dell
+    // builds the flanges into the faceplate and puts the VGA, the power button
+    // and the health lamp in them - over a 434 mm body. Taking fw from the
+    // chassis squashed the artwork by 10% AND placed every feature against the
+    // wrong centre, which threw the ear's ports 36 mm off the end of the box.
+    // For every other face in the library the two numbers are already equal, so
+    // this changes nothing that was right.
+    const vb = /viewBox\s*=\s*"\s*[-\d.eE+]+\s+[-\d.eE+]+\s+([\d.eE+-]+)\s+([\d.eE+-]+)/.exec(faceText);
+    if (vb) {
+      const dw = parseFloat(vb[1]), dh = parseFloat(vb[2]);
+      if (dw > 0 && dh > 0) { fw = dw; fh = dh; }
+    }
+    if (ctx.faceMM) ctx.faceMM[F.view] = [fw, fh];
     const cv = await rasterize(faceText, fw, fh, PX, !!F.flipLX, !!F.flipLY);
+    // THE ART BEFORE ANY HOLE IS PUNCHED IN IT. A cavity punches `cv` with its
+    // own outline, and a module whose bay opens inside that cavity - a drive in
+    // the mid tray, a DIMM on the board - had its face art punched away before
+    // the FRU pass came to crop it, so every such module was a dark rectangle.
+    const artCv = document.createElement('canvas');
+    artCv.width = cv.width; artCv.height = cv.height;
+    artCv.getContext('2d').drawImage(cv, 0, 0);
     faceCv[F.view] = cv;
     faceSvg[F.view] = faceText;   // LOD re-rasterises from this; keep it squared
     facePunch[F.view] = [];
@@ -602,14 +850,23 @@ export async function buildFaceRelief(F, ctx) {
       fruGroups[f.path] = fg;
       FRU_GROUPS[f.path] = fg;
       const bd = BODY_META[f.ref];
-      const depth = bd ? bd.depth : 60;
+      // a `body:` block is the best answer, the part's own size.d the next, and
+      // 60 only when a drawing predates `data-body-depth` entirely
+      const depth = bd ? bd.depth : (f.bodyDepth || 60);
       // captive modules declare how far they pull out; removable FRUs clear the chassis
       const captive = bd && bd.travel;
       FRU_META[f.path] = {cls: f.cls, view: F.view, body: bd, captive: !!captive,
+                          bodyDepth: f.bodyDepth,
                           pull: Math.min(captive || depth * 1.5 + 25, INTO - 10)};
     }
     let curOwner = null;
-    const addTo = obj => (curOwner && fruGroups[curOwner] ? fruGroups[curOwner] : grp).add(obj);
+    // Tagged on the way in, so `setPulled` can hide a part's relief without the
+    // part having to be a FRU. A cover's meshes stay in the shared group - they
+    // are not going anywhere - and simply stop being drawn.
+    const addTo = obj => {
+      if (curOwner) obj.userData.portrayalPath = curOwner;
+      return (curOwner && fruGroups[curOwner] ? fruGroups[curOwner] : grp).add(obj);
+    };
     for (const c of cavities) {
       curOwner = c.owner;
       const d = Math.min(c.d, INTO - 2);
@@ -645,7 +902,14 @@ export async function buildFaceRelief(F, ctx) {
       // is a separate dark exterior; the textured floor plane sits just inside it
       // (sink pockets punch through the floor's alpha, so the back stays clear
       // of the floor by the sink allowance).
-      const wallMat = new THREE.MeshLambertMaterial({color: c.wall, side: THREE.DoubleSide});
+      // A WELL WHOSE SIDES ARE THE CHASSIS SHOWS THEM FROM INSIDE ONLY. The
+      // double side is for a port cage, whose housing is seen through the vent
+      // next to it. The R740xd's board well is 80 mm deep to the rear metal:
+      // drawn double-sided, its rear wall stood a hair behind the rear panel
+      // and everything looking in from that face - the C14 inlet's pins, the
+      // rear drive bays - ended at a flat plane.
+      const wallMat = new THREE.MeshLambertMaterial({color: c.wall,
+        side: c.wallsInside ? THREE.BackSide : THREE.DoubleSide});
       const backMat = new THREE.MeshLambertMaterial({color: 0x23262b, side: THREE.DoubleSide});
       let walls;
       if (c.round) {
@@ -736,7 +1000,8 @@ export async function buildFaceRelief(F, ctx) {
       m.scale.set(dm.w, dm.h, dm.dome + 0.15);
       m.position.set(LX(dm.x, dm.w), LY(dm.y, dm.h), (dm.lift || 0) - 0.15);
       addTo(m);
-      reg(dm.svgText, async text => remap(m.material, await rasterize(text, dm.w, dm.h, PX)));
+      reg(dm.svgText, async text => remap(m.material, await rasterize(text, dm.w, dm.h, PX)),
+          {mat: m.material, w: dm.w, h: dm.h, path: dm.owner});
     }
     for (const o of outs) {   // protrusions: bezel plates, handles, studs, tubes
       curOwner = o.owner;
@@ -748,7 +1013,8 @@ export async function buildFaceRelief(F, ctx) {
       }
       const faceTex = new THREE.MeshBasicMaterial(
         {map: canvasTex(ocv), transparent: true, alphaTest: 0.1, alphaToCoverage: true});
-      reg(o.svgText, async text => remap(faceTex, await rasterize(text, o.w, o.h, PX)));
+      reg(o.svgText, async text => remap(faceTex, await rasterize(text, o.w, o.h, PX)),
+          {mat: faceTex, w: o.w, h: o.h, path: o.owner});
       if (o.uhandle !== undefined && o.uhandle !== '') {
         const far = +o.uhandle;
         const horizontal = o.w >= o.h;
@@ -839,6 +1105,106 @@ export async function buildFaceRelief(F, ctx) {
         m.rotation.x = Math.PI / 2;
         m.position.set(LX(o.x, o.w), LY(o.y, o.h), o.lift + o.cyl / 2);
         addTo(m);
+      } else if ((o.profile && o.profile.length >= 2) || (o.profileY && o.profileY.length >= 2)) {
+        // A DEPTH THAT VARIES ACROSS THE NODE, BOTH WAYS. `profile` is [x, out]
+        // from the left edge, `profile-y` is [y, out] from the top edge, and
+        // the surface at any point is the LESSER of the two. The R740xd's
+        // bezel is a honeycomb 20 proud whose end caps fall away to 9 at the
+        // tips and whose bottom rail sits back at 15 - a section like a
+        // football sliced a third through, in both directions - and a box
+        // drew it as a slab with the right picture on the front. Built as a
+        // height field with the node's art on it and skirts down to the face.
+        const px = o.profile && o.profile.length >= 2 ? o.profile : [[0, o.out], [o.w, o.out]];
+        const py = o.profileY && o.profileY.length >= 2 ? o.profileY : [[0, o.out], [o.h, o.out]];
+        const interp = (pts, t) => {
+          if (t <= pts[0][0]) return pts[0][1];
+          for (let i = 0; i + 1 < pts.length; i++) {
+            const [t0, v0] = pts[i], [t1, v1] = pts[i + 1];
+            if (t <= t1) return t1 === t0 ? v1 : v0 + (v1 - v0) * (t - t0) / (t1 - t0);
+          }
+          return pts[pts.length - 1][1];
+        };
+        const depthAt = (x, y) => Math.min(interp(px, x), interp(py, y));
+        // sample at every knot and every 5 mm, so a knee is a knee and a
+        // straight run is straight
+        const knots = (pts, len) => {
+          const set = new Set([0, len]);
+          for (const [t] of pts) if (t > 0 && t < len) set.add(t);
+          for (let v = 5; v < len; v += 5) set.add(v);
+          return [...set].sort((a, b) => a - b);
+        };
+        const xs = knots(px, o.w), ys = knots(py, o.h);
+        const nx = xs.length, ny = ys.length;
+        const pos = [], uvs = [], idx = [];
+        for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
+          pos.push(LX(o.x + xs[i], 0), LY(o.y + ys[j], 0), depthAt(xs[i], ys[j]));
+          uvs.push(xs[i] / o.w, 1 - ys[j] / o.h);
+        }
+        for (let j = 0; j + 1 < ny; j++) for (let i = 0; i + 1 < nx; i++) {
+          const a = j * nx + i, b = a + 1, c = a + nx, d = c + 1;
+          idx.push(a, c, b, b, c, d);
+        }
+        const front = new THREE.BufferGeometry();
+        front.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+        front.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+        front.setIndex(idx);
+        front.computeVertexNormals();
+        faceTex.side = THREE.DoubleSide;   // a mirrored face reverses the winding
+        addTo(new THREE.Mesh(front, faceTex));
+        // skirts: the perimeter dropped to the face, so the ends and the rails
+        // are the slopes the profiles give them and not open edges
+        const sp = [], si = [];
+        const ring = [];
+        for (let i = 0; i < nx; i++) ring.push([xs[i], ys[0]]);
+        for (let j = 1; j < ny; j++) ring.push([xs[nx - 1], ys[j]]);
+        for (let i = nx - 2; i >= 0; i--) ring.push([xs[i], ys[ny - 1]]);
+        for (let j = ny - 2; j > 0; j--) ring.push([xs[0], ys[j]]);
+        for (let k = 0; k < ring.length; k++) {
+          const [x, y] = ring[k];
+          sp.push(LX(o.x + x, 0), LY(o.y + y, 0), depthAt(x, y),
+                  LX(o.x + x, 0), LY(o.y + y, 0), o.lift);
+        }
+        for (let k = 0; k < ring.length; k++) {
+          const a = 2 * k, b = a + 1, c = 2 * ((k + 1) % ring.length), d = c + 1;
+          si.push(a, b, c, b, d, c);
+        }
+        const skirt = new THREE.BufferGeometry();
+        skirt.setAttribute('position', new THREE.Float32BufferAttribute(sp, 3));
+        skirt.setIndex(si);
+        skirt.computeVertexNormals();
+        addTo(new THREE.Mesh(skirt, new THREE.MeshLambertMaterial({color: o.color, side: THREE.DoubleSide})));
+      } else if (o.rings && o.rings.length) {
+        // THE SHAPE, NOT THE BOX. `shape: true` on the feature. The face art was
+        // always the node's own; it was the SIDES that followed the bounding box,
+        // so a contoured moulding read as a cardboard box with the right picture
+        // on the front. Extruding the outline gives it the sides it has.
+        const depth = o.out - o.lift;
+        const shapes = o.rings.map(r => {
+          const s = new THREE.Shape(
+            r.shell.map(([x, y]) => new THREE.Vector2(LX(x, 0), LY(y, 0))));
+          for (const h of r.holes)
+            s.holes.push(new THREE.Path(
+              h.map(([x, y]) => new THREE.Vector2(LX(x, 0), LY(y, 0)))));
+          return s;
+        });
+        const geo = new THREE.ExtrudeGeometry(shapes, {depth, bevelEnabled: false});
+        // ExtrudeGeometry's UVs are world-space; the face texture is rasterised
+        // over the node's rect, so put world coordinates back into face mm and
+        // then into that rect. Inverting LX/LY rather than assuming they are the
+        // identity is what keeps a flipped face right - `left` and `bottom` are
+        // drawn mirrored, and a texture that ignored that would read backwards.
+        const unX = wx => (F.flipLX ? -wx : wx) + fw / 2;
+        const unY = wy => fh / 2 - (F.flipLY ? -wy : wy);
+        const pos = geo.attributes.position, uv = geo.attributes.uv;
+        for (let i = 0; i < pos.count; i++) {
+          uv.setXY(i, (unX(pos.getX(i)) - o.x) / o.w,
+                   1 - (unY(pos.getY(i)) - o.y) / o.h);
+        }
+        uv.needsUpdate = true;
+        const m = new THREE.Mesh(
+          geo, [faceTex, new THREE.MeshLambertMaterial({color: o.color})]);
+        m.position.set(0, 0, o.lift);
+        addTo(m);
       } else {
         // box: lift..out (lift defaults to 0 = sits on the face)
         const depth = o.out - o.lift;
@@ -852,30 +1218,109 @@ export async function buildFaceRelief(F, ctx) {
     curOwner = null;
     for (const f of frus) {   // move the FRU's face art into its group; leave a bay
       const fg = fruGroups[f.path];
-      const faceCrop = crop(cv, f, PX);
+      const faceCrop = crop(f.lift ? artCv : cv, f, PX);
+      // A MODULE IS ITS SHAPE, NOT ITS BOX. The R740xd's riser 2 is two
+      // full-height slots over one low-profile slot - an L - and its box
+      // takes in the top-left corner of a power supply; riser 1's brackets
+      // reach two millimetres past its plate into the iDRAC jack. Cropping
+      // the box moved that corner and that jack-top onto the ejecting riser
+      // and left a hole in the panel where they had been. So the crop is
+      // masked by the module's own art, exactly as a cavity's punch is: what
+      // the module paints comes with it, and what it does not stays.
+      const mask = await rasterize(f.svgText, f.w, f.h, PX);
+      const mctx = faceCrop.getContext('2d');
+      mctx.globalCompositeOperation = 'destination-in';
+      mctx.drawImage(mask, 0, 0, faceCrop.width, faceCrop.height);
+      mctx.globalCompositeOperation = 'source-over';
+      const zf = f.lift || 0;
       const plane = new THREE.Mesh(new THREE.PlaneGeometry(f.w, f.h),
         new THREE.MeshBasicMaterial({map: canvasTex(faceCrop), transparent: true, alphaTest: 0.1, alphaToCoverage: true}));
-      plane.position.set(LX(f.x, f.w), LY(f.y, f.h), 0.3);
+      plane.position.set(LX(f.x, f.w), LY(f.y, f.h), zf + 0.3);
       fg.add(plane);
+      // A FIELD OR A STATE WRITTEN ON A MODULE REPAINTS ITS PLANE. The crop above
+      // is a one-time cut of the face canvas, so a wattage written on a supply
+      // after the build changed the face texture and left the supply's own
+      // plane reading the old badge. Re-cut from the module's own art, restyled,
+      // with the cavities that fall in its rect punched from it again - the
+      // C14 inlet's pins live behind one. Taken before the module's own shape
+      // punch is recorded below, which is the face's hole and not this plane's.
+      // A LIFTED MODULE'S PLANE SITS BELOW THE FACE'S PUNCHES. Its first crop
+      // came from the pristine art canvas for that reason: a DIMM on the board
+      // or a drive in the tray lies inside its well's own punch, and replaying
+      // that punch would cut the whole plane away. Only a module at the face
+      // has cavities of its own to re-open.
+      const punchesHere = f.lift ? [] : facePunch[F.view].filter(p =>
+        p.x < f.x + f.w && p.x + p.w > f.x && p.y < f.y + f.h && p.y + p.h > f.y);
+      reg(f.svgText, async text => {
+        const c2 = await rasterize(text, f.w, f.h, PX);
+        const x2 = c2.getContext('2d');
+        for (const p of punchesHere) {
+          x2.globalCompositeOperation = 'destination-out';
+          x2.drawImage(await rasterize(p.svg, p.w, p.h, PX),
+                       Math.round((p.x - f.x) * PX), Math.round((p.y - f.y) * PX));
+          x2.globalCompositeOperation = 'source-over';
+        }
+        remap(plane.material, c2);
+      });
       // CLEAR, never fill: an opaque patch on the chassis face would occlude
       // everything behind it (the module's own cavities, pins, bay interior)
-      cv.getContext('2d').clearRect(Math.round(f.x * PX), Math.round(f.y * PX),
-                                    Math.round(f.w * PX), Math.round(f.h * PX));
-      facePunch[F.view].push({kind: 'rect', x: f.x, y: f.y, w: f.w, h: f.h});
+      // and the same shape comes out of the face, not the rectangle
+      const pctx = cv.getContext('2d');
+      pctx.globalCompositeOperation = 'destination-out';
+      pctx.drawImage(mask, Math.round(f.x * PX), Math.round(f.y * PX));
+      pctx.globalCompositeOperation = 'source-over';
+      facePunch[F.view].push({kind: 'shape', svg: f.svgText, x: f.x, y: f.y, w: f.w, h: f.h});
       const meta = FRU_META[f.path];
-      if (meta.body) {   // full module body travels with the FRU
+      if (meta.body && meta.body.boxes) {
+        // THE BODY IN PIECES, each a plain box in the FRU's group so the
+        // riser's PCB and connectors come out with its plate. Side art is
+        // for the one-box form; a PCB is a colour.
+        for (const b of bodyBoxes(meta.body, f.w, f.h)) {
+          const r = localToFace(f.toFace, b);
+          const m = new THREE.Mesh(new THREE.BoxGeometry(r.w, r.h, b.z1 - b.z0),
+            new THREE.MeshLambertMaterial({color: b.color}));
+          m.position.set(LX(r.x, r.w), LY(r.y, r.h),
+                         zf - b.z0 - (b.z1 - b.z0) / 2 - 0.05);
+          fg.add(m);
+        }
+      } else if (meta.body) {   // full module body travels with the FRU
         const {mesh, fp, d} = await bodyBoxMesh(meta.body, f.w, f.h);
         mesh.position.set(LX(f.x + fp.at[0], fp.size[0]),
-                          LY(f.y + fp.at[1], fp.size[1]), -d / 2 - 0.05);
+                          LY(f.y + fp.at[1], fp.size[1]), zf - d / 2 - 0.05);
         fg.add(mesh);
       }
       // empty bay: interior surfaces only, so it never occludes the module's
       // own cavities (the C14 inlet pins live inside this volume)
-      const bd = meta.body ? meta.body.depth : 60;
+      // the bay is as deep as the thing that goes in it, not 60 mm
+      const bd = meta.body ? meta.body.depth : (meta.bodyDepth || 60);
+      if (f.shelf) continue;   // a shelf, not a hole: nothing is left behind
+      // a body in pieces is a riser, and behind an unseated riser is the
+      // chassis interior, not a hole: nothing is left behind here either
+      if (meta.body && meta.body.boxes) continue;
       const bay = new THREE.Mesh(new THREE.BoxGeometry(f.w + 0.6, f.h + 0.6, bd),
         new THREE.MeshLambertMaterial({color: 0x0a0c0e, side: THREE.BackSide}));
-      bay.position.set(LX(f.x, f.w), LY(f.y, f.h), -bd / 2 - 0.2);
+      bay.position.set(LX(f.x, f.w), LY(f.y, f.h), zf - bd / 2 - 0.2);
+      // THE HOLE BELONGS TO THE BAY, NOT THE MODULE. Tagged with the bay's
+      // path so it stays when the module is unseated - that is the point of
+      // it - and goes when the bay itself does: the mid tray's four bays are
+      // pulled with the tray, and four dark boxes were left hanging where it
+      // had been, hiding the board.
+      bay.userData.portrayalPath = f.path;
       grp.add(bay);
+    }
+    for (const s of subBodies) {
+      const body = BODY_META[s.ref];
+      if (!body || !body.boxes) continue;
+      const into = fruGroups[s.owner] || grp;
+      for (const b of bodyBoxes(body, 0, 0)) {
+        const r = localToFace(s.toFace, b);
+        const m = new THREE.Mesh(new THREE.BoxGeometry(r.w, r.h, b.z1 - b.z0),
+          new THREE.MeshLambertMaterial({color: b.color}));
+        m.position.set(LX(r.x, r.w), LY(r.y, r.h),
+                       (s.lift || 0) - b.z0 - (b.z1 - b.z0) / 2 - 0.05);
+        m.userData.portrayalPath = s.path;
+        into.add(m);
+      }
     }
   meshes.push(grp);
 }

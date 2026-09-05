@@ -25,11 +25,12 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { toGLB, toUSDZ } from './share.js';
 import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, svgSource, setSvgOverride, clearSvgOverrides,
-         setNodeStates, nodeStates, restyleText,
+         setNodeStates, nodeStates, setNodeFields, restyleText,
          setPulled as setReliefPulled, pulledPaths,
-         buildFaceRelief } from './relief.js';
+         buildFaceRelief, bodyBoxes } from './relief.js';
 import { applyOverrides } from './swap.js';
 import { jdist } from './dist.js';
+import { createLamps } from './lamps.js';
 
 const CLS_LABEL = {fan: 'Fan module', psu: 'Power supply', tab: 'Info tab'};
 // box-face shading, in +x -x +y -y +z -z order: sides darker, lid lifted,
@@ -100,6 +101,7 @@ export function createViewer(container, opts = {}) {
   // How to redraw each texture that came from a node's own art, collected during
   // the build. Emptied on every rebuild: the materials it points at are disposed.
   let RESTYLE = [];
+  let FIELDS = {};   // path -> {key: value}, what the host has written on parts
   let COMP = null, COMP_ENTRY = null;     // lone-component mode, as ?component= gave
   let W = 438.4, H = 43.5, D = 515;
   // animated FRUs: paths discovered per build, groups tweened along their face normal
@@ -242,6 +244,8 @@ export function createViewer(container, opts = {}) {
                                     // for the compliance and serial labels down there
   const MAX_TOTAL_TEXELS = 40e6;    // a 3/4 view lights up three faces at once
   const LOD = [];
+  // blinking and alternating lamps: frames per keyframe block, swapped per tick
+  const LAMPS = createLamps();
   let lodPaused = 0, lodSummary = '';
 
   const texelsAt = (rec, px) => rec.wmm * rec.hmm * px * px;
@@ -281,10 +285,17 @@ export function createViewer(container, opts = {}) {
     return _punchCache.get(key);
   }
 
+  // `rev` counts changes to rec.svgText and `painted` says which one the texture
+  // shows. A state change used to zero rec.level and call this, and if the face
+  // was mid-refine for the camera it returned at once - the refine in flight had
+  // captured the OLD text, painted it, and left the lamp dark until the next
+  // zoom. Now a refine re-runs while the text moved under it.
   async function refineFace(rec, pxmm) {
-    if (rec.busy || rec.level === pxmm || !box) return;
+    if (rec.busy || !box) return;
+    if (rec.level === pxmm && rec.painted === rec.rev) return;
     rec.busy = true;
-    try {
+    try { do {
+      const rev = rec.rev;
       const cv = await rasterize(rec.svgText, rec.wmm, rec.hmm, pxmm, rec.flipX, rec.flipY);
       // The build punches apertures out of the face after rasterising it; a fresh
       // raster is opaque again, which would seal every cavity behind a flat wall.
@@ -307,7 +318,8 @@ export function createViewer(container, opts = {}) {
       mat.needsUpdate = true;
       if (old) old.dispose();
       rec.level = pxmm;
-    } catch (e) {
+      rec.painted = rev;
+    } while (rec.painted !== rec.rev); } catch (e) {
       console.warn('[portrayal] face refine failed', rec.key, e);
     } finally { rec.busy = false; }
   }
@@ -348,6 +360,21 @@ export function createViewer(container, opts = {}) {
   const SCOPE = createReliefScope();
   let box = null, reliefGroup = null, gen = 0;
   const faceGroups = {};        // view -> the group buildFaceRelief filled
+  // view -> [w, h] of the face's DRAWING, which is not always the plane's. The
+  // R740xd's front is the 482.6 mm rack face over a 434 mm body; relief is laid
+  // out against the drawing (relief.js: "the drawing's own size wins"), so
+  // anything that maps between the drawing and the face - a pick, a halo -
+  // has to use the same number or it lands one ear off. Kept here rather
+  // than inside load() because pick() and select() run long after it.
+  const FACE_MM = {};
+  // view -> [flipX, flipY]: whether the face's texture is the drawing mirrored.
+  // Only the bottom is (its art is authored as seen from below), and relief
+  // negates its local x/y to match - see LX/LY in relief.js. A pick has to
+  // un-mirror and a halo has to mirror, or both land on the wrong side.
+  const FACE_FLIP = {};
+  const ALL_VIEWS = ['front', 'rear', 'right', 'left', 'top', 'bottom'];
+  // BoxGeometry material index -> face; the order three.js builds them in
+  const FACE_OF_INDEX = ['right', 'left', 'top', 'bottom', 'front', 'rear'];
 
   async function bodyBoxMesh(body, faceW, faceH) {
     const plain = () => new THREE.MeshLambertMaterial({color: body.color || '#3a3f44'});
@@ -441,6 +468,10 @@ export function createViewer(container, opts = {}) {
     const faceCv = {};
     const faceSvg = {};   // source text per face, for adaptive re-rasterisation
     const facePunch = {}; // apertures cleared from each face, replayed on refinement
+    // The size each face's DRAWING declares, which is not always the plane's.
+    // A rack face with integral ears is wider than the body behind it.
+    for (const k of Object.keys(FACE_MM)) delete FACE_MM[k];
+    const faceMM = FACE_MM;
     lodPaused = performance.now() + 500;   // no refinement while the build is in flight
     _punchCache.clear();
     // Relief is built in LOCAL face coordinates (x right, y up, z out of the face,
@@ -468,11 +499,13 @@ export function createViewer(container, opts = {}) {
     for (const F of FACES) {
       const before = meshes.length;
       await buildFaceRelief(F, {src: F.url || f(F.view), faceCv, faceSvg, facePunch,
+                                faceMM,
                                 meshes, FRU_GROUPS, FRU_META, BODY_META, D, deep: F.deep(),
                                 bodyBoxMesh,
                                 restyle: RESTYLE, scope: SCOPE});
       // a face with no drawing falls back to flat colour and contributes no group
       if (meshes.length > before) built[F.view] = meshes[meshes.length - 1];
+      FACE_FLIP[F.view] = [!!F.flipLX, !!F.flipLY];
     }
     let mats;
     if (COMP) {
@@ -519,11 +552,32 @@ export function createViewer(container, opts = {}) {
         scene.remove(box.userData.bodyBox); disposeTree(box.userData.bodyBox);
       }
     }
+    LAMPS.clear();
     if (reliefGroup) { scene.remove(reliefGroup); disposeTree(reliefGroup); }
     for (const k of Object.keys(faceGroups)) delete faceGroups[k];
     Object.assign(faceGroups, built);
     const fp = COMP && COMP_ENTRY.body && COMP_ENTRY.body.footprint;
-    if (fp) {
+    const bx = COMP && COMP_ENTRY.body && COMP_ENTRY.body.boxes;
+    if (bx && bx.length) {
+      // A BODY IN PIECES: the face on a thin plate and each box behind it
+      // where the part says it is - the riser alone shows its PCB and its
+      // connectors standing off the plate, as it does in the chassis.
+      const plain = () => new THREE.MeshLambertMaterial({color: COMP_ENTRY.body.color || '#3a3f44'});
+      const plateMats = mats.map((m, i) => i === 4 ? m : plain());
+      box = new THREE.Mesh(new THREE.BoxGeometry(W, H, 1.2), plateMats);
+      box.position.set(0, 0, D / 2 - 0.6);
+      const bodyBox = new THREE.Group();
+      for (const b of bodyBoxes(COMP_ENTRY.body, W, H)) {
+        const m = new THREE.Mesh(new THREE.BoxGeometry(b.w, b.h, b.z1 - b.z0),
+          new THREE.MeshLambertMaterial({color: b.color}));
+        m.position.set(b.x + b.w / 2 - W / 2, H / 2 - (b.y + b.h / 2),
+                       D / 2 - b.z0 - (b.z1 - b.z0) / 2);
+        bodyBox.add(m);
+      }
+      scene.add(box);
+      box.userData.bodyBox = bodyBox;
+      scene.add(bodyBox);
+    } else if (fp) {
       // thin faceplate carries the face (and its mounting tabs); the body box
       // sits behind it within the footprint
       const plateMats = mats.map((m, i) => i === 4 ? m :
@@ -545,6 +599,44 @@ export function createViewer(container, opts = {}) {
       scene.add(box);
       box.userData.bodyBox = bodyBox;
       scene.add(bodyBox);
+    } else if (faceMM.front && faceMM.front[0] > W + 0.5) {
+      // A RACK FACE IS WIDER THAN THE BODY IT BOLTS TO. Dell builds the mounting
+      // flanges into the R740xd's faceplate and puts the VGA, the power button
+      // and the health lamp in them, so the front drawing is 482.6 mm over a
+      // 434 mm chassis - both numbers right, and lint and the grader accept the
+      // pair. Textured onto a 434-wide box face the artwork squashed and the
+      // ear's ports hung in mid-air off the end.
+      // So the face gets a plate of its own width and the body box sits behind
+      // it - the same construction the component branch above uses for
+      // `body.plate` over `body.footprint`, which is the same shape at another
+      // scale.
+      // THE FOLD LINES ARE NOT GUESSED. The ear span is measured nowhere, and
+      // splitting the 48.6 mm difference would be assuming the answer, so this
+      // draws ONE plate the width of the drawing and lets the drawing paint its
+      // own ears onto it. True whatever the split.
+      const [fwmm, fhmm] = faceMM.front;
+      // THE EAR IS ABOUT AN INCH THICK, and 2 mm was a placeholder. At 2 mm the
+      // backs of the ear-mounted ports came out the other side: measured off an
+      // export, a USB on the flange is 13.70 mm deep and the VGA 6.73, with
+      // nothing behind either but the plate, because the body box stops at the
+      // fold. 25.4 is the operator's figure for the real flange - they have the
+      // machine - and it contains the deepest of those with room over.
+      // It is NOT derived from the ports: a number chosen to just clear 13.70
+      // would look right today and fail the next thing bolted into a flange.
+      const PLATE = 25.4;
+      // the same default the component branch uses; configs.json carries the
+      // chassis box but not its colour
+      const plain = new THREE.MeshLambertMaterial({color: '#3a3f44'});
+      const plateMats = mats.map((m, i) => i === 4 ? m : plain);
+      box = new THREE.Mesh(new THREE.BoxGeometry(fwmm, fhmm, PLATE), plateMats);
+      box.position.set(0, 0, D / 2 - PLATE / 2);
+      const bodyMats = mats.map((m, i) => i === 4 ? plain : m);
+      const bodyBox = new THREE.Mesh(
+        new THREE.BoxGeometry(W, H, D - PLATE), bodyMats);
+      bodyBox.position.set(0, 0, -PLATE / 2);
+      scene.add(box);
+      box.userData.bodyBox = bodyBox;
+      scene.add(bodyBox);
     } else {
       box = new THREE.Mesh(new THREE.BoxGeometry(W, H, D), mats);
       scene.add(box);
@@ -563,28 +655,45 @@ export function createViewer(container, opts = {}) {
          ['top',    2, W, D, [0, H / 2, 0],  [-Math.PI / 2, 0, 0], false, false],
          ['bottom', 3, W, D, [0, -H / 2, 0], [Math.PI / 2, 0, 0],  true,  true],
          ['front',  4, W, H, [0, 0, D / 2],  [0, 0, 0],            false, false],
-         ['rear',   5, W, H, [0, 0, -D / 2], [0, Math.PI, 0],      false, false]];
+         ['rear',   5, W, H, [0, 0, -D / 2], [0, Math.PI, 0],      false, false]]
+        // A REFINED FACE IS RASTERISED AT THE DRAWING'S SIZE, LIKE THE FIRST ONE.
+        // The base texture comes from buildFaceRelief, which takes its width from
+        // the drawing (482.6 on the R740xd's front); these records fed refineFace
+        // the box's width instead (434). Zoom in on a port and the refined raster
+        // painted the 482.6 mm drawing into a 434 mm canvas: everything slid 10%
+        // left and the right ear - the last 48 mm - came back bare. Same mistake
+        // as the pick and the halo, third place it was made.
+        .map(([k, mi, wmm, hmm, ...rest]) => [k, mi, ...(faceMM[k] || [wmm, hmm]), ...rest]);
     for (const [k, matIndex, wmm, hmm, pos, rot, flipX, flipY] of lodFaces) {
       if (!faceSvg[k]) continue;   // face fell back to flat colour - nothing to sharpen
       LOD.push({key: k, matIndex, wmm, hmm, svgText: faceSvg[k], flipX, flipY,
                 punches: facePunch[k] || [],
-                frame: FRAME(pos, rot), level: PXMM, busy: false, gen});
+                frame: FRAME(pos, rot), level: PXMM, busy: false, gen, rev: 0, painted: 0});
     }
     reliefGroup = new THREE.Group();
     meshes.forEach(m => reliefGroup.add(m));
     scene.add(reliefGroup);
+    await syncLamps(null);
   }
 
   // hit-testing: hidden inline SVGs give us component boxes in mm via getBBox/CTM
-  const hitIndex = {front: [], rear: []};
-  const pathIndex = {front: [], rear: []};
+  // SIX FACES, NOT TWO. Indexing only the front and rear meant a part on the
+  // top, bottom or either side could not be picked, located, highlighted or
+  // framed in 3D at all - which made a merged tree pointless, since four of
+  // its six sections would have done nothing when clicked.
+  const hitIndex = Object.fromEntries(ALL_VIEWS.map(v => [v, []]));
+  const pathIndex = Object.fromEntries(ALL_VIEWS.map(v => [v, []]));
   async function buildHitIndex(cfg) {
-    for (const view of ['front', 'rear']) {
+    for (const view of ALL_VIEWS) {
+      hitIndex[view] = []; pathIndex[view] = [];
+      const text = await svgSource(`${DIST}${DEV}.${cfg}.${view}.svg`, SCOPE);
+      if (!text) continue;                 // a face the device does not draw
       const div = document.createElement('div');
       div.style.cssText = 'position:absolute;left:-10000px;top:0;width:1000px;visibility:hidden';
-      div.innerHTML = await svgSource(`${DIST}${DEV}.${cfg}.${view}.svg`, SCOPE);
+      div.innerHTML = text;
       document.body.appendChild(div);
       const svg = div.querySelector('svg');
+      if (!svg) { div.remove(); continue; }
       const inv = svg.getScreenCTM().inverse();
       const rec = el => {
         const b = el.getBBox();
@@ -615,12 +724,25 @@ export function createViewer(container, opts = {}) {
     mouse.set((ev.clientX - r.left) / r.width * 2 - 1,
               -((ev.clientY - r.top) / r.height) * 2 + 1);
     ray.setFromCamera(mouse, camera);
-    const hit = ray.intersectObject(box)[0];
+    // A rack face is two meshes - the plate carries the front, the body box
+    // the other five - so both are asked and the nearer hit wins.
+    const targets = [box, box.userData && box.userData.bodyBox].filter(Boolean);
+    const hit = ray.intersectObjects(targets)[0];
     if (!hit) return null;
-    const view = hit.face.materialIndex === 4 ? (COMP ? 'comp' : 'front')
-               : hit.face.materialIndex === 5 ? 'rear' : null;
-    if (!view || COMP) return {view: view || SIDE_NAMES[hit.face.materialIndex], path: null};
-    const x = hit.uv.x * W, y = (1 - hit.uv.y) * H;
+    if (COMP) return {view: hit.face.materialIndex === 4 ? 'comp' : SIDE_NAMES[hit.face.materialIndex], path: null};
+    const view = FACE_OF_INDEX[hit.face.materialIndex];
+    if (!view || !hitIndex[view] || !hitIndex[view].length) return {view, path: null};
+    // uv runs 0..1 across the mesh that was hit, and for a rack face that
+    // mesh is the plate at the drawing's width, not the body's. Scaling by W
+    // put every hit 10% short of where the pointer was - nothing at the left
+    // edge, a whole ear at the right.
+    const [fw, fh] = FACE_MM[view] || [W, H];
+    const [flipX, flipY] = FACE_FLIP[view] || [false, false];
+    // uv is read off the TEXTURE, and a mirrored face's texture is the drawing
+    // reversed - so undo the mirror to get back to drawing coordinates.
+    let x = hit.uv.x * fw, y = (1 - hit.uv.y) * fh;
+    if (flipX) x = fw - x;
+    if (flipY) y = fh - y;
     // smallest containing box wins — the chassis faceplate contains every point
     const c = hitIndex[view]
       .filter(c => x >= c.x0 && x <= c.x1 && y >= c.y0 && y <= c.y1)
@@ -675,7 +797,7 @@ export function createViewer(container, opts = {}) {
     const parts = path.split('/');
     for (let n = parts.length; n > 0; n--) {
       const p = parts.slice(0, n).join('/');
-      for (const view of ['front', 'rear']) {
+      for (const view of ALL_VIEWS) {
         const c = pathIndex[view].find(e => e.path === p);
         if (c) return {view, c, exact: n === parts.length};
       }
@@ -693,7 +815,14 @@ export function createViewer(container, opts = {}) {
     const grp = faceGroups[view];
     if (!grp) return false;
     const w = Math.max(c.x1 - c.x0, 0.4), h = Math.max(c.y1 - c.y0, 0.4);
-    const lx = c.x0 + w / 2 - W / 2, ly = H / 2 - (c.y0 + h / 2);
+    // Local x=0 is the centre of the face the relief was built on, which for a
+    // rack face is the 482.6 mm plate. Centring on the 434 mm body put the
+    // halo 24.3 mm to the right of everything on the front - one ear.
+    const [fw, fh] = FACE_MM[view] || [W, H];
+    const [flipX, flipY] = FACE_FLIP[view] || [false, false];
+    // the same LX/LY relief.js places a part with, mirror and all
+    const lx = (flipX ? -1 : 1) * (c.x0 + w / 2 - fw / 2);
+    const ly = (flipY ? -1 : 1) * (fh / 2 - (c.y0 + h / 2));
     hl = new THREE.Group();
     const geo = new THREE.PlaneGeometry(w, h);
     // depthTest off, drawn last: the same argument hl.js makes in 2D - a halo that
@@ -831,6 +960,7 @@ export function createViewer(container, opts = {}) {
   (function loop(now) {
     raf = requestAnimationFrame(loop);
     stepTweens(now || 0);
+    LAMPS.step(now || 0);
     controls.update();
     renderer.render(scene, camera);
     lodTick();
@@ -863,6 +993,7 @@ export function createViewer(container, opts = {}) {
     el.removeEventListener('pointerup', onPointerUp);
     controls.dispose();
     clearHighlight();
+    LAMPS.clear();
     disposeTree(scene);
     scene.clear();
     LOD.length = 0;
@@ -899,7 +1030,7 @@ export function createViewer(container, opts = {}) {
   // 1.0-1.4 s rebuild. What it cannot do is un-extrude relief that was already
   // built, so anything with a body gets hidden in the scene as well - and on the
   // NEXT rebuild it is dropped at extraction and the geometry never exists.
-  async function setPulled(paths) {
+  async function applyPulledNow(paths) {
     const next = new Set();
     for (const p of paths || []) if (p) next.add(String(p));
     const changed = new Set();
@@ -914,7 +1045,28 @@ export function createViewer(container, opts = {}) {
     };
     // geometry first: a body that was extruded before the part came off is still
     // in the scene, and no amount of repainting a texture removes it
-    for (const [path, g] of Object.entries(FRU_GROUPS)) g.visible = !isOff(path);
+    // A FRU group is keyed by its BAY - 'mid-sff-0' - and the tree pulls the
+    // MODULE in it - 'mid-sff-0/module'. The prefix test runs the other way, so
+    // an unseated drive kept its body in the scene and the control did nothing.
+    for (const [path, g] of Object.entries(FRU_GROUPS))
+      g.visible = !isOff(path) && !isOff(path + '/module');
+    // AND THE RELIEF OF EVERYTHING THAT IS NOT A FRU, which is where this used
+    // to stop. Only modules get a subgroup of their own, because only a module
+    // leaves a bay behind it; a bolted-on cover is merged into the shared relief
+    // group with everything else on its face. So taking a cover off repainted
+    // the face texture underneath it - correctly - and left its extruded body
+    // standing there, which reads as a control that does nothing.
+    // Every mesh now carries the path it came from, so it can be hidden where it
+    // stands without being ejected.
+    // THE RELIEF IS NOT UNDER THE CHASSIS BOX. It is its own group on the
+    // scene, so a traversal of `box` reached none of it and this hid nothing:
+    // a pulled cover only LOOKED gone because its top texture repainted
+    // transparent, and its 1 mm of sides stayed. A pulled tray kept its dark
+    // back plane and walls, which read as a slab over the board. Walk both.
+    for (const root of [box, reliefGroup]) if (root) root.traverse(o => {
+      const p = o.userData && o.userData.portrayalPath;
+      if (p) o.visible = !isOff(p);
+    });
     // a texture is only touched if the change is actually in it
     const touches = text => [...changed].some(p => text.includes(`data-path="${p}"`));
     let n = 0;
@@ -926,15 +1078,50 @@ export function createViewer(container, opts = {}) {
     for (const rec of LOD) {
       if (!touches(rec.svgText)) continue;
       rec.svgText = restyleText(rec.svgText, SCOPE);
-      const at = rec.level;
-      rec.level = 0;                    // refineFace no-ops at the level it holds
-      await refineFace(rec, at);
+      rec.rev++;
+      await refineFace(rec, rec.level);
       n++;
     }
+    await syncLamps(changed);
     return n;
   }
 
-  async function setStates(map) {
+  // ONE REPAINT AT A TIME, LATEST WINS. Both setters are fire-and-forget from
+  // the host and each awaits a chain of rasterisations, so two chip clicks in
+  // quick succession ran interleaved: whichever raster finished last won each
+  // texture, and it was not always the newer one. A state and a pull change are
+  // queued behind builds and behind each other; a setter called while its own
+  // job is queued replaces that job's argument rather than adding a second.
+  const pending = {};
+  function coalesce(kind, arg, run) {
+    pending[kind] = {arg};
+    if (pending[kind + 'Job']) return pending[kind + 'Job'];
+    return (pending[kind + 'Job'] = serialise(async () => {
+      pending[kind + 'Job'] = null;
+      const {arg} = pending[kind]; pending[kind] = null;
+      try { return await run(arg); }
+      catch (err) { console.warn(`[portrayal] 3D ${kind} sync failed`, err); return 0; }
+    }));
+  }
+  const setPulled = paths => coalesce('pulled', paths, applyPulledNow);
+  const setStates = map => coalesce('states', map, applyStatesNow);
+  const setFields = map => coalesce('fields', map, applyFieldsNow);   // same queue: latest wins
+
+  async function syncLamps(changed) {
+    if (!box) return;
+    const isOff = path => {
+      for (const p of PULLED) if (path === p || path.startsWith(p + '/')) return true;
+      return false;
+    };
+    try {
+      await LAMPS.sync({faces: LOD, entries: RESTYLE, faceGroups, fruGroups: FRU_GROUPS,
+                        faceFlip: FACE_FLIP, pxmm: Math.max(PXMM, 16),
+                        restyle: t => restyleText(t, SCOPE), changed, isOff,
+                        tint: rec => FACE_TINT[rec.matIndex] ?? 1});
+    } catch (err) { console.warn('[portrayal] lamp animation sync failed', err); }
+  }
+
+  async function applyStatesNow(map) {
     const next = {};
     for (const [k, v] of map instanceof Map ? map : Object.entries(map || {}))
       if (v) next[k] = String(v);
@@ -954,23 +1141,58 @@ export function createViewer(container, opts = {}) {
     for (const rec of LOD) {
       if (!touches(rec.svgText)) continue;
       rec.svgText = restyleText(rec.svgText, SCOPE);
-      const at = rec.level;
-      rec.level = 0;                    // refineFace no-ops at the level it holds
-      await refineFace(rec, at);
+      rec.rev++;
+      await refineFace(rec, rec.level);
       n++;
     }
+    await syncLamps(changed);
+    return n;
+  }
+
+  // WRITE ON A PART: `{ 'psu-1/module': {watts: '750W'} }`. A field is a
+  // `data-from` text node the part declares; the value replaces it in every
+  // texture the part is drawn in. Same route as setStates, and like it the
+  // whole map is the new truth - a part left out goes back to its drawing.
+  async function applyFieldsNow(map) {
+    const next = {};
+    for (const [k, vals] of map instanceof Map ? map : Object.entries(map || {}))
+      if (vals && Object.keys(vals).length) next[k] = {...vals};
+    const changed = new Set();
+    for (const k of new Set([...Object.keys(FIELDS), ...Object.keys(next)]))
+      if (JSON.stringify(FIELDS[k]) !== JSON.stringify(next[k])) changed.add(k);
+    FIELDS = next;
+    if (!changed.size || !box) return 0;
+    setNodeFields(FIELDS, SCOPE);
+    const touches = text => [...changed].some(p => text.includes(`data-path="${p}"`));
+    let n = 0;
+    for (const e of RESTYLE) {
+      if (!touches(e.svgText)) continue;
+      try { await e.run(restyleText(e.svgText, SCOPE)); n++; }
+      catch (err) { console.warn('[portrayal] field repaint failed', err); }
+    }
+    for (const rec of LOD) {
+      if (!touches(rec.svgText)) continue;
+      rec.svgText = restyleText(rec.svgText, SCOPE);
+      // the same revision bump the state and pull setters use: a refine already
+      // in flight captured the old text, and must not land over this one
+      rec.rev++;
+      await refineFace(rec, rec.level);
+      n++;
+    }
+    // an animated lamp on that face keys its frames on the entry text
+    await syncLamps(changed);
     return n;
   }
 
   return {
-    load, select, on, resize, dispose, setStates,
+    load, select, on, resize, dispose, setStates, setFields, fields: () => JSON.parse(JSON.stringify(FIELDS)),
     states: () => ({...STATES}),
     setPulled,
     pulled: () => new Set(PULLED),
     // what a host needs to rebuild the chrome this module gave up
     frus, toggleFru, download, exportData, exportName,
     // every path select() can find, for a host without its own tree
-    paths: () => ['front', 'rear'].flatMap(view =>
+    paths: () => ALL_VIEWS.flatMap(view =>
       pathIndex[view].map(c => ({view, path: c.path, cls: c.cls, model: c.model}))),
     capabilities: () => caps,
     lod: () => lodSummary,
@@ -988,6 +1210,12 @@ export function createViewer(container, opts = {}) {
     },
     get selection() { return selected; },
     // debug handle: lets devtools and the pose-diff harness drive the built scene
-    three: {THREE, scene, camera, renderer, controls, LOD},
+    // LIVE, NOT A SNAPSHOT. The scene is rebuilt on every load and the camera
+    // and controls are recreated with it; a handle that captured them once
+    // measured a dead scene - every halo projected to the same pixel and a
+    // framing select "moved nothing". Getters read whatever is current.
+    three: {THREE, LOD, LAMPS, refine: (rec, px) => refineFace(rec, px),
+            get scene() { return scene; }, get camera() { return camera; },
+            get renderer() { return renderer; }, get controls() { return controls; }},
   };
 }

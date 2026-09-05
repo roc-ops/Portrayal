@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: db9
-version: 1.0.0
+version: 1.1.0
 class: port
 profile: networking
 conforms: db9
@@ -73,29 +73,105 @@ elements:
   opening: {at: [0.0, 0.0], size: [20.47, 11.40], class: cutout}
 relief:
   wall: '#3a3e43'
-  cavity: opening
   features:
-  - node: insert
-    top: 4.2
-    color: '#17191c'
+  # THE SHELL STANDS PROUD, AND THAT IS THE WHOLE CORRECTION. This was
+  # `cavity: opening` with everything rising off its floor, so a connector that
+  # passes THROUGH a panel cutout was drawn sunk into one. `shape: true` extrudes
+  # the outline rather than its bounding box, and the outline is a ring - the
+  # insert's own profile is a second subpath - so it builds as a D-shaped TUBE
+  # with the insert inside it rather than a slab that would bury it.
+  - node: opening
+    out: 6.73
+    shape: true
+    color: '#5c6268'
     confidence: estimated
     source: >-
-      std/db9@1's own insert key. The insert sits 2.53 behind the panel face in
-      a 6.73 cavity, because a male DE-9's shell stands in front of its
-      insulator to guard the pins - the opposite of std/vga@1, whose female
-      insert is flush. The distinction is sourced; the millimetres are a
-      fraction of a mating dimension standing in for a setback nobody here has
-      measured.
-  - node: pins
-    top: 6.4
+      6.73 is this contract's own `d`, which TE 114-40010 Figure 3 dimensions
+      against the panel face. THE DIRECTION IS THE SOURCED PART: a D-sub passes
+      through its cutout and stands in front of it, where this used to recess
+      behind it. The millimetres are the part's declared depth rather than a
+      second reading.
+  # SET BACK INSIDE THE SHELL, which is what makes this the male half: it sits
+  # 2.53 below the lip so the shell guards the pins. std/vga@1's insert is flush
+  # with its lip instead, and the two are the same fact told from either end.
+  # NO `color` HERE ON PURPOSE - the kit samples the node's own art when a
+  # feature names none, so the body follows whichever skin is drawn. This part
+  # ships `default` black and `teal` for PC99 serial, and a fixed colour would
+  # have made one of them a lie.
+  - node: insert
+    out: 4.2
+    shape: true
+    confidence: estimated
+    source: >-
+      The insert stands 4.2 proud against the shell's 6.73, leaving it 2.53
+      inside the lip - a male DE-9's shell stands in front of its insulator to
+      guard the pins, the opposite of std/vga@1, whose female insert is flush.
+      The distinction is sourced from what the two connectors ARE; the
+      millimetres are a fraction of a mating dimension standing in for a setback
+      nobody here has measured.
+  - node: pin-1
+    cyl: 2.2
+    lift: 4.2
     color: '#cfd6dd'
     confidence: estimated
     source: >-
-      DE-9 ON EQUIPMENT IS MALE - the contacts are pins, so they stand off the
-      insert where std/vga@1's sockets sink into it. 6.40 leaves them 0.33 short
-      of the panel face, which keeps them inside the shell as the shell exists
-      to do. Not dimensioned anywhere held here; 114-40010 fixes the mating
-      depth and not the pin length.
+      ONE NODE PER CONTACT, because relief builds one body per node and the nine as a single group gave one lump the size of all of them. DE-9 ON EQUIPMENT IS MALE - the contacts are pins, so they stand off the insert where std/vga@1's sockets sink into it. 2.2 from an insert 4.2 proud reaches 6.4, which leaves them 0.33 short of the shell lip and so inside the shell, as the shell exists to do. Not dimensioned anywhere held here; 114-40010 fixes the mating depth and not the pin length.
+  - node: pin-2
+    cyl: 2.2
+    lift: 4.2
+    color: '#cfd6dd'
+    confidence: estimated
+    source: >-
+      DE-9 ON EQUIPMENT IS MALE - the contacts are pins, so they stand off the insert where std/vga@1's sockets sink into it. 2.2 from an insert 4.2 proud reaches 6.4, which leaves them 0.33 short of the shell lip and so inside the shell, as the shell exists to do. Not dimensioned anywhere held here; 114-40010 fixes the mating depth and not the pin length.
+  - node: pin-3
+    cyl: 2.2
+    lift: 4.2
+    color: '#cfd6dd'
+    confidence: estimated
+    source: >-
+      DE-9 ON EQUIPMENT IS MALE - the contacts are pins, so they stand off the insert where std/vga@1's sockets sink into it. 2.2 from an insert 4.2 proud reaches 6.4, which leaves them 0.33 short of the shell lip and so inside the shell, as the shell exists to do. Not dimensioned anywhere held here; 114-40010 fixes the mating depth and not the pin length.
+  - node: pin-4
+    cyl: 2.2
+    lift: 4.2
+    color: '#cfd6dd'
+    confidence: estimated
+    source: >-
+      DE-9 ON EQUIPMENT IS MALE - the contacts are pins, so they stand off the insert where std/vga@1's sockets sink into it. 2.2 from an insert 4.2 proud reaches 6.4, which leaves them 0.33 short of the shell lip and so inside the shell, as the shell exists to do. Not dimensioned anywhere held here; 114-40010 fixes the mating depth and not the pin length.
+  - node: pin-5
+    cyl: 2.2
+    lift: 4.2
+    color: '#cfd6dd'
+    confidence: estimated
+    source: >-
+      DE-9 ON EQUIPMENT IS MALE - the contacts are pins, so they stand off the insert where std/vga@1's sockets sink into it. 2.2 from an insert 4.2 proud reaches 6.4, which leaves them 0.33 short of the shell lip and so inside the shell, as the shell exists to do. Not dimensioned anywhere held here; 114-40010 fixes the mating depth and not the pin length.
+  - node: pin-6
+    cyl: 2.2
+    lift: 4.2
+    color: '#cfd6dd'
+    confidence: estimated
+    source: >-
+      DE-9 ON EQUIPMENT IS MALE - the contacts are pins, so they stand off the insert where std/vga@1's sockets sink into it. 2.2 from an insert 4.2 proud reaches 6.4, which leaves them 0.33 short of the shell lip and so inside the shell, as the shell exists to do. Not dimensioned anywhere held here; 114-40010 fixes the mating depth and not the pin length.
+  - node: pin-7
+    cyl: 2.2
+    lift: 4.2
+    color: '#cfd6dd'
+    confidence: estimated
+    source: >-
+      DE-9 ON EQUIPMENT IS MALE - the contacts are pins, so they stand off the insert where std/vga@1's sockets sink into it. 2.2 from an insert 4.2 proud reaches 6.4, which leaves them 0.33 short of the shell lip and so inside the shell, as the shell exists to do. Not dimensioned anywhere held here; 114-40010 fixes the mating depth and not the pin length.
+  - node: pin-8
+    cyl: 2.2
+    lift: 4.2
+    color: '#cfd6dd'
+    confidence: estimated
+    source: >-
+      DE-9 ON EQUIPMENT IS MALE - the contacts are pins, so they stand off the insert where std/vga@1's sockets sink into it. 2.2 from an insert 4.2 proud reaches 6.4, which leaves them 0.33 short of the shell lip and so inside the shell, as the shell exists to do. Not dimensioned anywhere held here; 114-40010 fixes the mating depth and not the pin length.
+  - node: pin-9
+    cyl: 2.2
+    lift: 4.2
+    color: '#cfd6dd'
+    confidence: estimated
+    source: >-
+      DE-9 ON EQUIPMENT IS MALE - the contacts are pins, so they stand off the insert where std/vga@1's sockets sink into it. 2.2 from an insert 4.2 proud reaches 6.4, which leaves them 0.33 short of the shell lip and so inside the shell, as the shell exists to do. Not dimensioned anywhere held here; 114-40010 fixes the mating depth and not the pin length.
 connection-points:
   mate: {at: [10.235, 5.7], direction: front}
 skins: [default, teal]

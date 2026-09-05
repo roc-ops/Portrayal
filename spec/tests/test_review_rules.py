@@ -714,3 +714,108 @@ def test_an_unrelated_provenance_key_does_not_count():
     d = _pw({"power-draw-max-w": 400})
     d["provenance"] = {"size": "measured off the rear panel figure"}
     assert caught("L52", lint.lint_component_power, P, d)
+
+
+# --- L13: a stack is not a sizing error ---------------------------------------
+#
+# Every L13 exemption before `under:` was a faceplate exemption: mate-to, for:,
+# frames:, mounts, disjoint only-in - each lets two boxes share a plan because
+# one of them is not really in it. The R740xd's top with the lid off is a
+# section through four heights, and the board's box contains every other box
+# because everything stands on it. The rule was right, and the model was right,
+# and they could not both be said.
+
+def _top(placements):
+    return {"size": {"w": 434.0, "h": 737.5},
+            "components": {"placements": list(placements)}}
+
+
+BOARD = {"id": "board", "ref": "dell/system-board-14g@1", "at": [3.58, 267.74]}
+FANS = {"id": "fans", "ref": "dell/fan-cage-14g@1", "at": [12.55, 245.38]}
+SHROUD = {"id": "shroud", "ref": "dell/air-shroud-14g@1", "at": [1.36, 318.98]}
+LID = {"id": "lid", "ref": "dell/system-cover-14g@1", "at": [0.0, 196.9]}
+
+
+def test_a_board_under_a_fan_cage_is_not_an_overlap():
+    """The fan cage's box runs 49mm into the board's, and neither is mounted -
+    two wells, in the faceplate reading, cut through each other. Without the
+    declaration that is the sizing error L13 exists for; with it, the board is
+    a well and the cage stands over it."""
+    assert caught("L13", lint.lint_device_overlap, P, "top", _top([BOARD, FANS]), [str(LIB)])
+    ok = _top([dict(BOARD, under="fans"), FANS])
+    assert not caught("L13", lint.lint_device_overlap, P, "top", ok, [str(LIB)])
+
+
+def test_two_lids_in_one_place_are_still_reported_unless_one_is_under():
+    """Mounted-over-mounted is two covers that cannot both be there - until the
+    lower one says it is lower. The shroud and the system cover are both
+    `mounts`, and only `under:` tells them apart."""
+    assert caught("L13", lint.lint_device_overlap, P, "top", _top([SHROUD, LID]), [str(LIB)])
+    ok = _top([dict(SHROUD, under="lid"), LID])
+    assert not caught("L13", lint.lint_device_overlap, P, "top", ok, [str(LIB)])
+
+
+def test_a_flat_part_cannot_claim_to_be_under_another_flat_part():
+    """The declaration is checked, not trusted. Two riser clips - flat, neither
+    mounted - one on top of the other is a sizing error wearing a new key, and
+    it is reported as one."""
+    lo = {"id": "a", "ref": "dell/riser-card-clip-14g@1", "at": [0.0, 0.0], "under": "b"}
+    hi = {"id": "b", "ref": "dell/riser-card-clip-14g@1", "at": [1.0, 1.0]}
+    hits = caught("L13", lint.lint_device_overlap, P, "top", _top([lo, hi]), [str(LIB)])
+    assert hits and "no height between them" in hits[0]
+
+
+def test_under_must_name_something_in_the_view():
+    bad = _top([dict(BOARD, under="lid-that-is-not-here")])
+    hits = caught("L13", lint.lint_device_overlap, P, "top", bad, [str(LIB)])
+    assert hits and "not in this view" in hits[0]
+
+
+def test_a_bay_can_be_under_a_well():
+    """An opening under a recess. Without the declaration the well's box on
+    the bay is the overlap L13 reports; with it the bay is a well by nature
+    and the pair is not compared. The fan cage is the well here because it is
+    a plain one - the mid tray this first used became `mounts` the day it got
+    a pull handle, and mounted-over-unmounted is exempt before `under:` is
+    even consulted."""
+    cage = {"id": "cage", "ref": "dell/fan-cage-14g@1", "at": [12.55, 420.62]}
+    sock = {"id": "sock", "at": [20.0, 430.0], "size": {"w": 3.8, "h": 40.0}}
+    v = {"size": {"w": 434.0, "h": 737.5},
+         "components": {"placements": [cage], "bays": [sock]}}
+    assert caught("L13", lint.lint_device_overlap, P, "top", v, [str(LIB)])
+    v["components"]["bays"] = [dict(sock, under="cage")]
+    assert not caught("L13", lint.lint_device_overlap, P, "top", v, [str(LIB)])
+
+
+def test_in_names_a_well_or_is_an_error():
+    """`in:` is `under:` read from the other end - what stands in a well is
+    over it - and it is checked the same way: the target has to be a recess.
+    A DIMM socket in the system board is fine; a DIMM socket 'in' a flat
+    riser clip has no floor to stand on and says so."""
+    board = {"id": "board", "ref": "dell/system-board-14g@1", "at": [3.58, 0.07]}
+    sock = {"id": "sock", "at": [20.0, 281.0], "size": {"w": 3.8, "h": 133.4}, "in": "board"}
+    v = {"size": {"w": 434.0, "h": 737.5},
+         "components": {"placements": [board], "bays": [sock]}}
+    assert not caught("L13", lint.lint_device_overlap, P, "top", v, [str(LIB)])
+    clip = {"id": "clip", "ref": "dell/riser-card-clip-14g@1", "at": [10.0, 280.0]}
+    v = {"size": {"w": 434.0, "h": 737.5},
+         "components": {"placements": [clip], "bays": [dict(sock, **{"in": "clip"})]}}
+    hits = caught("L13", lint.lint_device_overlap, P, "top", v, [str(LIB)])
+    assert hits and "not a well" in hits[0]
+
+
+def test_a_shelf_cannot_put_its_card_through_the_lid():
+    """`floor:` is where a bay's occupant stands, and the occupant rises its
+    own `d` from there. A shelf 20.8 down under a 21.6 card puts 0.8 of the
+    card above the face - riser 3's did - and a shelf deeper than its well
+    is a hole in it. Both are the sizing error L13 exists for."""
+    board = {"id": "board", "ref": "dell/system-board-14g@1", "at": [5.5, 6.2]}
+    card = {"id": "c", "at": [3.9, 0.0], "size": {"w": 120.9, "h": 173.8},
+            "accepts": ["common/pcie-card-plan@1"], "in": "board"}
+    v = lambda floor: {"size": {"w": 434.0, "h": 737.5},
+                       "components": {"placements": [board], "bays": [dict(card, floor=floor)]}}
+    hits = caught("L13", lint.lint_device_overlap, P, "top", v(20.8), [str(LIB)])
+    assert hits and "out of the face" in hits[0]
+    hits = caught("L13", lint.lint_device_overlap, P, "top", v(90.0), [str(LIB)])
+    assert hits and "only 79.9 deep" in hits[0]
+    assert not caught("L13", lint.lint_device_overlap, P, "top", v(26.6), [str(LIB)])

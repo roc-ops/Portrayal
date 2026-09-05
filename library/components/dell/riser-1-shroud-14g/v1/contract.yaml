@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: riser-1-shroud-14g
-version: 1.1.0
+version: 1.5.0
 class: mechanical
 # The outer skin of this assembly: it draws after the bays, and the cards'
 # flange ends go behind it.
@@ -12,6 +12,58 @@ description: >-
   PCIe retention bracket, and the only part of that assembly seen from outside
 size: {w: 25.62, h: 64.43, d: 17.76}
 provenance:
+  the-shelf-is-lifted-over-the-plate: >-
+    THE OPERATOR'S READING, AND IT OVERRIDES AN APPROXIMATION RATHER THAN A
+    MEASUREMENT. dell/riser-1-top-shelf-14g@1 stands 14.68 proud - measured, the
+    chassis shell's own front - and this plate is extruded at 17.76, so wherever
+    they crossed the plate won and the shelf read as tucked underneath the thing
+    it sits on top of.
+    17.76 IS THE SOFTER OF THE TWO NUMBERS. This file's own depth key calls it
+    "one number for the whole outline, which the depth key records as an
+    approximation", and the plate's width is itself an open question - see
+    the-plate-outline-is-wider-than-the-cad-rib. The shelf's 14.68 is a specific
+    front at two named points. An approximation spanning a whole outline should
+    yield to a measurement at a point, not the other way round.
+    SO NEITHER MEASURED FIGURE IS EDITED. The shelf component keeps its 14.68
+    and the plate keeps its 17.76; the ordering is expressed where it belongs,
+    on the composition, with `lift` - the schema's word for "mm this composed
+    part sits proud of the parent's face". 3.10 is the SMALLEST lift that clears
+    17.76, landing the shelf's front at 17.78. It asserts an ordering, not a
+    depth, and is deliberately the minimum that does so: a bigger number would
+    look the same here and would be a claim about the hardware that nothing
+    supports.
+  the-part-has-two-levels-and-only-one-was-drawn: >-
+    THE BOX STARTED 8.94 LEFT OF ANY INK, AND THAT WAS THE BUG. Descending
+    `R740XD_GPU_Brackets_01-1` to its mesh children gives TWO bodies, not one:
+    `Body_2_3.002`, face 111.70..148.60, y 3.36..67.04, 11.06 proud - a wide
+    lower shelf - and `Body_1_3.005`, face 125.00..135.10, y 1.81..62.89, 17.71
+    proud - a narrow raised rib on top of it.
+    This part was modelled as ONE plate: the rib's depth (17.76) on a
+    mid-width outline (120.64..137.26) that matches neither body. The shelf
+    supplied the 111.70 the placement and the box were both taken from, and was
+    then never drawn - so from the box's left edge to the plate's there was
+    nothing at all. In 2D that reads as transparent and the eye forgives it; in
+    3D it is an open canyon, with the plate's own 17.76 side wall standing in
+    the middle of it as a face belonging to no component anybody can name. That
+    is exactly how it was reported.
+    The shelf is drawn now. THE RIB IS NOT RE-CUT - see the gap below.
+  the-plate-outline-is-wider-than-the-cad-rib: >-
+    UNRESOLVED, AND LEFT ALONE DELIBERATELY. The raised plate here spans
+    120.64..137.26; the only body in the model at that depth spans
+    125.00..135.10. The outline came from cad-outline.py cutting at the panel
+    plane, which returns a SILHOUETTE - the union of everything the plane
+    crosses - so it is not evidence for one body's width, and the two disagree
+    by about 4 mm on each side.
+    Re-cutting the plate would move the slot column and the clip recess, which
+    are photo-measured against ISM figure 8 and currently agree with the render.
+    Recorded as a gap on the device rather than guessed at: the empty strip is
+    what was reported and what is fixed here.
+  the-shelf-runs-past-this-component: >-
+    `Body_2_3.002` ends at face 148.60 and this component ends at 137.32, so the
+    shelf is clipped here at its own right edge and continues under
+    dell/rear-bay-frame-14g@4, which begins at 137.32 and stands 14.13 proud -
+    above the shelf's 11.06, so nothing of the shelf should show through it. The
+    clip is at 64.43 in y for the same reason, against the shelf's 65.23.
   size: >-
     measured - Dell's service model, `R740XD_GPU_Brackets_01-1`, clipped to the
     panel plane at z 713.5. A vendor solid measured in software, in the sense
@@ -80,6 +132,20 @@ provenance:
 relief:
   wall: '#4a5057'
   features:
+  # THE SHELF THE PLATE STANDS ON. Drawn first and lower, so the plate reads as
+  # a rib rising 6.70 out of it rather than a slab floating over a hole.
+  - node: base
+    out: 11.06
+    color: '#8c939b'
+    confidence: measured
+    source: >-
+      Dell's service model, `R740XD_GPU_Brackets_01-1` descended to its mesh
+      children: `Body_2_3.002`, face 111.70..148.60, y 3.36..67.04, front at
+      z 724.56 against the panel plane's 713.5. Read in the y convention
+      face_y = 86.8 - raw_y, which is CONFIRMED rather than assumed - it
+      reproduces the rear handle's trusted low edge at 42.35 to the hundredth
+      and this assembly's sibling `R740XD_Expansioncard_Clip-1.001` at
+      y 1.81..44.81, the figure this file already carries.
   - node: shroud
     out: 17.76
     color: '#9aa1a8'
@@ -88,14 +154,25 @@ relief:
       dell/riser-1-shroud-14g@1's own depth key - Dell's service model, from the
       panel plane at z 713.5 to this part's own front. One number for the whole
       outline, which the depth key records as an approximation.
+  # THE SLOT FLOORS ARE 2.0 UNDER THE PLATE, NOT 17.76 UNDER IT. This was
+  # `sink: 2.0`, and `sink` measures from a CAVITY FLOOR - this part has no
+  # cavity, so it built nothing and the dark slot art stayed painted on the
+  # faceplate. Looking through the five windows in a plate standing 17.76 proud,
+  # what showed was the panel the whole way back.
+  # A FLOOR IS A SOLID WHOSE TOP IS JUST UNDER THE PLATE. 15.76 out against the
+  # plate's 17.76 leaves exactly the 2.0 recess the slots are - the same number,
+  # written the only way the vocabulary can build it.
   - node: slots
-    sink: 2.0
+    out: 15.76
     color: '#1b1f23'
     confidence: estimated
     source: >-
-      Unsourced. The slot column is not in the model at any plane - see the
-      slots key - so how deep the recesses go is not known. 2.0 reads as a
-      pocket against a 17.76 face and is not a measurement.
+      Unsourced, and unchanged in substance from this key's earlier form: the
+      slot column is not in the service model at any plane - see the slots note
+      in the skin - so how deep the recesses go is not known. 2.0 reads as a
+      pocket against a 17.76 face and is not a measurement. What changed is that
+      it is now a floor at 15.76 rather than a `sink` with no cavity to sink
+      from, which built nothing at all.
 parts:
   # THE SHELF SITS ON THIS, and they interleave in depth rather than stacking
   # cleanly: at face (130, 2) this shroud is 17.76 proud and in front, at
@@ -104,12 +181,25 @@ parts:
   # 116.75..142.00 - so the shelf goes on top.
   # Composed rather than placed beside: as two `mounts` placements their boxes
   # overlapped by 20.57 x 12.94 and L13 said so, correctly.
-  - {ref: dell/riser-1-top-shelf-14g@1, id: shelf, at: [-0.20, -1.81]}
+  # THE SHELF IS THE OUTERMOST THING HERE, and lifted 3.10 to say so - see
+  # the-shelf-is-lifted-over-the-plate below.
+  - {ref: dell/riser-1-top-shelf-14g@1, id: shelf, at: [-0.20, -1.81],
+     lift: 3.10}
   # THE CLIP SITS IN THE RECESS THIS SKIN CUTS FOR IT. Composed rather than
   # drawn so the chassis's three clips are one part placed three times; the
   # two beside the divider had been modelled as rivets for want of it.
-  - {ref: dell/riser-card-clip-14g@1, id: clip, at: [13.6, 45.79]}
+  # THE CLIP IS ON THE SHROUD, NOT ON THE PANEL. This shroud stands 17.76 proud
+  # and the clip was composed at the parent's own face, so it sat back at the
+  # sheet metal with the shroud rising in front of it. `lift` is the schema's
+  # word for exactly this - "mm this composed part sits proud of the parent's
+  # face. Use when the parent itself protrudes".
+  # 14.76 AND NOT 17.76, BECAUSE THE CLIP IS 3.0 THICK. Lifted to the shroud's
+  # own 17.76 it stood 3 mm PROUD of the plate, floating off the front of it;
+  # lifted 14.76 its outer face lands level with the plate at 17.76, which is
+  # what a clip sitting in the window cut for it does.
+  - {ref: dell/riser-card-clip-14g@1, id: clip, at: [13.6, 45.79], lift: 14.76}
 elements:
+  base: {at: [0.0, 1.55], size: [25.62, 62.88], class: bezel}
   shroud: {at: [0.0, 0.0], size: [25.62, 64.43], class: bezel}
   slots: {at: [16.30, 15.94], size: [3.4, 26.03], class: vent}
 skins: [default]

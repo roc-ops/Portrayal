@@ -1,0 +1,47 @@
+format: 1
+kind: component
+name: drive-35
+version: 1.0.0
+class: drive
+profile: server
+conforms: drive-35
+description: >-
+  3.5 inch form factor drive per SFF-8301 - the drive itself, not a carrier:
+  101.60 wide by 26.10 high, presenting its plain front edge at the bay
+size: {w: 101.6, h: 26.1, d: 147.0}
+attrs:
+  form-factor: 3.5-inch
+provenance:
+  size: >-
+    standard - SFF-8301 "3.5\" Form Factor Drive Dimensions", the A1/A2/A3
+    envelope every 3.5 inch drive is built to: 101.60 wide, 26.10 high, 147.00
+    long. DRAWN LYING FLAT - 101.60 across by 26.10 tall - because that is how a
+    front-loading server bay presents it and how common/drive-carrier-35 is
+    drawn; a bay that stands it on edge says so with `rotate`.
+  the-cad-agrees-to-the-hundredth: >-
+    measured - Dell's service model r740xd.glb, node
+    `Poweredge_R740_3.5_Drive-10`, mesh child `Body_12_12`: 101.60 x 26.11 x
+    146.99. That is SFF-8301's envelope to a hundredth of a millimetre on every
+    axis, which is what a standard part should look like when a vendor's CAD is
+    measured against it, and is the reason this contract carries `standard`
+    rather than a reading of its own.
+  why-this-part-exists: >-
+    THE 2.5 INCH BAYS OFFERED A BARE DRIVE AND THE 3.5 INCH ONES COULD NOT. Every
+    2.5 inch bay in this library accepts std/drive-25@1 beside the carrier and
+    the blank; the 3.5 inch bays accepted only a carrier or a blank, because no
+    3.5 inch equivalent had been drawn. That is not a statement about the
+    hardware - it was a hole in the library, and it left an operator unable to
+    put a drive in a 12-bay front.
+  the-face-is-blank-on-purpose: >-
+    A HOT-SWAP DRIVE GOES IN CONNECTOR FIRST, so what a chassis wall shows is the
+    drive's plain front edge - no connector, no label, no lamp, no latch. Every
+    one of those belongs to the CARRIER, which is the vendor's part and not this
+    one. Same reasoning as std/drive-25@1, and the same trap: almost everything
+    in a photograph of a populated bay is the vendor's plastic.
+  what-this-is-not: >-
+    NOT A BAY AND NOT A CARRIER. The opening a chassis punches for a 3.5 inch
+    drive is larger than the drive and is the chassis's own dimension; the
+    carrier that holds it is the vendor's. This part is the governed object
+    between them, and it is the only one of the three that is the same for
+    everybody.
+skins: [default]

@@ -120,7 +120,9 @@ def test_the_unstated_ones_are_the_ones_we_could_not_source():
 
 
 def test_the_comparison_layer_can_now_reach_them():
-    """The point of the exercise. It resolved on nothing before this."""
+    """The point of the exercise. It resolved on nothing before this. Forty
+    when the rule landed; the R740xd made it forty-one the day its fans became
+    bays with a group that quotes the technical guide's N+1."""
     import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 40, n
+    assert n == 41, n

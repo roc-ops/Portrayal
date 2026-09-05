@@ -445,7 +445,46 @@ def fill_from_attrs(root, attrs):
             p.remove(target)
 
 
-def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None):
+def _inset_feature(feat, back):
+    """A feature on an instance mounted `back` mm behind the panel face.
+
+    A part's relief is written for the usual mounting - the flange bolts to the
+    sheet metal and the body stands proud by its own depth. Mount the same part
+    on a board set back from the face and every one of those numbers is measured
+    from the wrong plane.
+
+    `out` and `lift` are distances FROM THE FACE and simply move; `cyl`, `bar`
+    and `uhandle` are LENGTHS whose base is `lift`, so what moves is where they
+    start and what shortens is however much of them ends up behind the panel.
+    A feature left wholly behind is dropped: it is inside the machine, and the
+    drawing of a face does not show what is behind it.
+    """
+    if not back:
+        return feat
+    f = dict(feat)
+    top = None
+    for k in ("cyl", "bar", "uhandle"):
+        if f.get(k) is not None:
+            top = (f.get("lift") or 0.0) + f[k]
+    if f.get("out") is not None:
+        f["out"] = round(f["out"] - back, 4)
+        if f["out"] <= 0:
+            return None
+    if f.get("lift") is not None:
+        f["lift"] = round(max(0.0, f["lift"] - back), 4)
+        if not f["lift"]:
+            f.pop("lift")
+    if top is not None:
+        top -= back
+        if top <= 0:
+            return None
+        for k in ("cyl", "bar", "uhandle"):
+            if f.get(k) is not None:
+                f[k] = round(top - (f.get("lift") or 0.0), 4)
+    return f
+
+
+def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None, z_inset=0.0, seated=None, bay_attrs=None):
     contract, skins = lib.resolve(ref)
     comp_name = ref.split("/")[-1].split("@")[0]
     if skin_overrides and comp_name in skin_overrides:
@@ -519,13 +558,28 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     # the chassis, not that the face has an N-mm hole in it. Emitting data-depth
     # for one rendered every PSU and fan as an empty recess in 3D. The depth is
     # still carried, as data-body-depth, so it stays addressable.
+    #
+    # AND SO IS ANYTHING THAT `mounts`, which this stopped one class short of.
+    # `mounts` means it attaches to a surface - a rack ear, a label, a ground
+    # lug, a bolted handle - so it stands ON the metal and there is no hole
+    # behind it. The rear handle read as a 49.59 mm recess the shape of its own
+    # outline: from straight on you saw its face at the bottom of the pit, and
+    # from any angle you saw the pit's walls and no face at all. Its three
+    # protruding boxes were correct the whole time and were being built inside
+    # a hole that should never have existed.
+    # An explicit `relief.cavity` still wins, because that is a part saying it
+    # really does have a recess in it - a screw head's driver slot, for one.
     if contract["size"].get("d"):
-        aperture = contract.get("kind") != "module" or (contract.get("relief") or {}).get("cavity")
+        solid = (contract.get("kind") == "module"
+                 or contract.get("behaviour") == "mounts")
+        aperture = not solid or (contract.get("relief") or {}).get("cavity")
         g.set("data-depth" if aperture else "data-body-depth", str(contract["size"]["d"]))
     relief = contract.get("relief")
     if relief:
         if relief.get("wall"):
             g.set("data-wall", relief["wall"])
+        if relief.get("walls") == "inside":
+            g.set("data-walls", "inside")
         if relief.get("cavity"):
             g.set("data-cavity", relief["cavity"])
         if relief.get("round"):
@@ -596,14 +650,37 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     for child in list(holder):
         g.append(child)
     for feat in (contract.get("relief") or {}).get("features") or []:
+        feat = _inset_feature(feat, z_inset)
+        if feat is None:
+            continue
         want = f"{inst_id}--{feat['node']}"
         for node in g.iter():
             if node.get("id") == want:
                 for zk in ("top", "sink", "out", "dome", "vent", "cyl", "lift", "bar", "uhandle"):
                     if feat.get(zk) is not None:
                         node.set(f"data-z-{zk}", str(feat[zk]))
+                if feat.get("profile"):
+                    # depth that varies across the node, as x:out pairs; `out`
+                    # goes out beside it as the single figure everything else reads
+                    node.set("data-z-profile", ",".join(f"{x:g}:{o:g}" for x, o in feat["profile"]))
+                if feat.get("profile-y"):
+                    node.set("data-z-profile-y", ",".join(f"{y:g}:{o:g}" for y, o in feat["profile-y"]))
                 if feat.get("color"):
                     node.set("data-z-color", feat["color"])
+                if feat.get("pocket"):
+                    # A POCKET IS A CAVITY THE KIT ALREADY KNOWS HOW TO BUILD.
+                    # relief.js collects every `[data-depth]` as a recess with
+                    # walls and a floor taken from that node's own art, so this
+                    # needs no new geometry - only a way for a feature to say it
+                    # is a hole in a face rather than a lump on one.
+                    node.set("data-depth", str(feat["pocket"]))
+                    if (contract.get("relief") or {}).get("wall"):
+                        node.set("data-wall", contract["relief"]["wall"])
+                if feat.get("shape"):
+                    # EXTRUDE THE OUTLINE, NOT THE BOX. Only meaningful next to
+                    # `out`; the kit falls back to the box if the node's art
+                    # yields no usable contour.
+                    node.set("data-z-shape", "1")
                 if feat.get("knurl"):
                     node.set("data-z-knurl", "1")
                 if feat.get("thread"):
@@ -623,6 +700,18 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                                part["at"], None, part.get("attrs"), None, None,
                                skin_name=part.get("skin", "default"),
                                rotate=part.get("rotate"), mirror=bool(part.get("mirror")),
+                               # A LIFTED PART'S FEATURES ARE STILL MEASURED
+                               # FROM THE PANEL. `lift` raises where a composed
+                               # part sits, and the kit builds a box as
+                               # `out - lift` - so a clip whose own `out` is 3.0,
+                               # composed onto a shroud lifted 17.76, asked for a
+                               # box 14.76 mm DEEP IN THE WRONG DIRECTION and
+                               # rendered as nothing. Raising the child's
+                               # absolute figures by the lift is what makes the
+                               # two agree: 3.0 becomes 20.76, the kit subtracts
+                               # 17.76 again, and 3.0 of clip lands on the
+                               # shroud's outer face.
+                               z_inset=z_inset - (part.get("lift") or 0),
                                palette=palette,
                                inst_palette=inst_palette,
                                skin_overrides=skin_overrides, attr_overrides=attr_overrides,
@@ -653,14 +742,37 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         if not part.get("behind"):
             part_groups.append(pg)
     for feat in (contract.get("relief") or {}).get("features") or []:
+        feat = _inset_feature(feat, z_inset)
+        if feat is None:
+            continue
         want = f"{inst_id}--{feat['node']}"
         for node in g.iter():
             if node.get("id") == want:
                 for zk in ("top", "sink", "out", "dome", "vent", "cyl", "lift", "bar", "uhandle"):
                     if feat.get(zk) is not None:
                         node.set(f"data-z-{zk}", str(feat[zk]))
+                if feat.get("profile"):
+                    # depth that varies across the node, as x:out pairs; `out`
+                    # goes out beside it as the single figure everything else reads
+                    node.set("data-z-profile", ",".join(f"{x:g}:{o:g}" for x, o in feat["profile"]))
+                if feat.get("profile-y"):
+                    node.set("data-z-profile-y", ",".join(f"{y:g}:{o:g}" for y, o in feat["profile-y"]))
                 if feat.get("color"):
                     node.set("data-z-color", feat["color"])
+                if feat.get("pocket"):
+                    # A POCKET IS A CAVITY THE KIT ALREADY KNOWS HOW TO BUILD.
+                    # relief.js collects every `[data-depth]` as a recess with
+                    # walls and a floor taken from that node's own art, so this
+                    # needs no new geometry - only a way for a feature to say it
+                    # is a hole in a face rather than a lump on one.
+                    node.set("data-depth", str(feat["pocket"]))
+                    if (contract.get("relief") or {}).get("wall"):
+                        node.set("data-wall", contract["relief"]["wall"])
+                if feat.get("shape"):
+                    # EXTRUDE THE OUTLINE, NOT THE BOX. Only meaningful next to
+                    # `out`; the kit falls back to the box if the node's art
+                    # yields no usable contour.
+                    node.set("data-z-shape", "1")
                 if feat.get("knurl"):
                     node.set("data-z-knurl", "1")
                 if feat.get("thread"):
@@ -719,7 +831,13 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                 node.set("data-path", f"{path}/{bay_id}")
                 node.set("data-class", "bay")
                 break
-        occupant = bay.get("default")
+        # A CONFIGURATION CAN SEAT A NESTED BAY. `seated` is the configuration's
+        # bay map, keyed by bay path without the `/module` steps - `riser-1/
+        # slot-1` - and it wins over the module's own default, an empty string
+        # meaning empty. Before this a riser's slots only ever held their
+        # default, so no configuration could put a card in one.
+        bay_path = f"{path}/{bay_id}".replace("/module/", "/") if path else bay_id
+        occupant = (seated or {}).get(bay_path, bay.get("default"))
         if not occupant or depth >= MAX_BAY_DEPTH:
             continue
         bw, bh = bay_size(bay)
@@ -729,11 +847,12 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
             b_at = [b_at[0] + d, b_at[1] - d]
         sub, _ = instance_group(
             lib, occupant, f"{inst_id}--{bay_id}--module", b_at,
-            None, None, None, None, rotate=bay.get("rotate"),
+            None, (bay_attrs or {}).get(bay_path), None, None, rotate=bay.get("rotate"),
             mirror=bool(bay.get("mirror")), palette=palette,
             inst_palette=inst_palette,
             skin_overrides=skin_overrides, attr_overrides=attr_overrides,
-            path=f"{path}/{bay_id}/module", resolved=resolved, depth=depth + 1)
+            path=f"{path}/{bay_id}/module", resolved=resolved, depth=depth + 1,
+            seated=seated, bay_attrs=bay_attrs)
         # BEHIND THE FACEPLATE, NOT ON IT. Appending is right for a drive in a
         # cage and wrong for a card in a riser: what shows of a PCIe bracket is
         # its working area through a punched window and its retention tab clear
@@ -905,6 +1024,61 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             **({"attrs": spec["attrs"]} if spec.get("attrs") else {}),
             **({"skin": spec["skin"]} if spec.get("skin") else {}),
         })
+
+    # A SEATED PART SEEN FROM THIS FACE TOO. A bay on another view may say its
+    # occupant's plan lands here (`plan:`), and the occupant's contract names
+    # what draws it from above (`plan.ref`). Each becomes a placement in this
+    # view - so `in:`, `under:` and the paint order all apply - marked as a
+    # PROJECTION of the seated part: draw_placement swaps its data-path for
+    # `data-of`, so the tree lists the part once and the kit builds nothing
+    # from it. The occupants of the occupant's own bays come along at the
+    # offsets those bays declare, lowest slot first so the top card paints
+    # last. A mirrored plan mirrors the offsets about the plan's own width.
+    cfg_bays = config.get("bays") or {}
+    for other_name, other in (device.get("views") or {}).items():
+        if other_name == view_name:
+            continue
+        for b in view_parts(other)["bays"]:
+            pl = b.get("plan")
+            if not pl or pl.get("view") != view_name:
+                continue
+            if b.get("only-in") and config_name not in b["only-in"]:
+                continue
+            occ = cfg_bays.get(b["id"], b.get("default"))
+            if not occ:
+                continue
+            oc, _ = lib.resolve(occ)
+            pref = ((oc or {}).get("plan") or {}).get("ref")
+            if not pref:
+                continue
+            pc, _ = lib.resolve(pref)
+            pw = float((pc.get("size") or {}).get("w") or 0)
+            mirror = bool(pl.get("mirror"))
+            X, Y = pl["at"]
+            common = {k: pl[k] for k in ("in", "under") if pl.get(k)}
+            parts["placements"].append({
+                "ref": pref, "id": f"{b['id']}-plan", "at": [X, Y], "mirror": mirror,
+                "projection-of": f"{b['id']}/module", **common})
+            for slot, sb in sorted(((oc or {}).get("bays") or {}).items(), reverse=True):
+                sp = (sb or {}).get("plan")
+                if not sp:
+                    continue
+                socc = cfg_bays.get(f"{b['id']}/{slot}", sb.get("default"))
+                if not socc:
+                    continue
+                sc, _ = lib.resolve(socc)
+                sref = ((sc or {}).get("plan") or {}).get("ref")
+                if not sref:
+                    continue
+                scc, _ = lib.resolve(sref)
+                sw = float((scc.get("size") or {}).get("w") or 0)
+                dx, dy = sp["at"]
+                x = X + (pw - dx - sw) if mirror else X + dx
+                parts["placements"].append({
+                    "ref": sref, "id": f"{b['id']}-{slot}-plan", "at": [round(x, 4), round(Y + dy, 4)],
+                    "mirror": mirror, "projection-of": f"{b['id']}/module/{slot}/module",
+                    "under": [f"{b['id']}-plan"] + list(common.get("under") or []),
+                    **({"in": common["in"]} if common.get("in") else {})})
 
     used_patterns = {d.get("pattern") for d in parts["decor"] if d.get("pattern")}
     if used_patterns:
@@ -1140,8 +1314,24 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                 # does not. Nothing in the library used either value, so this
                 # changes no existing render.
                 e = ET.SubElement(cut_g, f"{{{SVG_NS}}}path")
-                e.set("d", _dsub_path(x, y, cw_, ch_) if shape == "d-sub"
-                      else _slot_path(x, y, cw_, ch_))
+                # A D HAS A DIRECTION AND SO DOES THE PART IN IT. The connector
+                # beside this hole says which way it faces with `rotate`; the
+                # hole says it in the same word and about its own centre, so the
+                # two cannot drift.
+                # `size` IS THE FOOTPRINT, NOT THE UNROTATED SHAPE, which is the
+                # trap here: a quarter turn swaps the box, so building the path
+                # at the declared size and then turning it counts the rotation
+                # twice and the aperture bulges past the connector on both
+                # flanks. The path is built in the unturned frame, on the same
+                # centre, and the transform does the rest.
+                rot = c.get("rotate") or 0
+                cx_, cy_ = x + cw_ / 2, y + ch_ / 2
+                pw, ph = (ch_, cw_) if rot % 180 == 90 else (cw_, ch_)
+                px_, py_ = cx_ - pw / 2, cy_ - ph / 2
+                e.set("d", _dsub_path(px_, py_, pw, ph) if shape == "d-sub"
+                      else _slot_path(px_, py_, pw, ph))
+                if rot:
+                    e.set("transform", f"rotate({rot:g} {cx_:g} {cy_:g})")
             else:
                 e = ET.SubElement(cut_g, f"{{{SVG_NS}}}rect")
                 e.set("x", f"{x:g}"); e.set("y", f"{y:g}")
@@ -1279,6 +1469,74 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             break
         deferred_ids |= grew
 
+    # A MOUNTED PART THAT IS UNDER AN OPENING IS NOT IN FRONT OF IT. The second
+    # pass exists so a surface-mounted part paints over the bays behind it - a
+    # rear handle across two riser slots. The R740xd's heatsinks are `mounts`
+    # too, because they lift off, but they say `under:` the mid-drive tray and
+    # its four bays: with the tray fitted, the drives lie over them, and the
+    # second pass painted heatsinks on top of drives. A part declared under
+    # something that is NOT itself deferred - a well, or a bay - is drawn in
+    # the first pass, in `under:` order, with the wells it stands among.
+    every_bay = {b["id"] for b in parts["bays"]}
+    # AND A WELL THAT THINGS STAND IN IS NOT A LID EITHER, whatever its
+    # behaviour says. The mid tray is `mounts` because it lifts out, and it is
+    # a recess with four drive bays `in:` it; the bays have to paint after it.
+    wells_in_use = {q["in"] for q in (*parts["placements"], *parts["bays"]) if q.get("in")}
+    for q in parts["placements"]:
+        overs = q.get("under") or []
+        overs = overs if isinstance(overs, list) else [overs]
+        if q["id"] in deferred_ids and (q["id"] in wells_in_use or
+                                        any(o in every_bay or o not in deferred_ids for o in overs)):
+            deferred_ids.discard(q["id"])
+
+    # HOW DEEP A WELL'S FLOOR IS, for whatever says it is `in:` one. The
+    # aperture rule again: an unmounted, non-module part's `size.d` is the
+    # depth of the recess it draws as, and the floor of that recess is where a
+    # part on it sits. Emitted as a NEGATIVE data-z-lift - relief.js sums lifts
+    # up the ancestor chain, so a sunk group sinks everything in it - and the
+    # part's own `out` figures, which are measured from the face, are pulled
+    # down by the same amount so they rise from the floor instead.
+    def floor_of(wid):
+        q = next((z for z in parts["placements"] if z.get("id") == wid), None)
+        if not q:
+            return 0.0
+        try:
+            c, _ = lib.resolve(q["ref"])
+        except Exception:
+            return 0.0
+        c = c or {}
+        # the aperture rule exactly as the emitter applies it: a module is
+        # solid, a mounted part is solid UNLESS it declares `relief.cavity` -
+        # the mid tray lifts out and is the recess its drives sit in
+        if c.get("kind") == "module":
+            return 0.0
+        if c.get("behaviour") == "mounts" and not (c.get("relief") or {}).get("cavity"):
+            return 0.0
+        return float((c.get("size") or {}).get("d") or 0.0)
+
+    # HOW TALL THE THING IN A BAY IS, so it can stand on the floor rather than
+    # hang from the plane: the deepest acceptable occupant, exactly as the
+    # bay's own data-depth is taken.
+    def occupant_depth(b):
+        ds = []
+        for ref in (b.get("accepts") or []):
+            try:
+                c, _ = lib.resolve(ref)
+            except Exception:
+                continue
+            d = ((c or {}).get("size") or {}).get("d")
+            if d:
+                ds.append(float(d))
+        return max(ds) if ds else 0.0
+
+    def sink(g, floor):
+        if not floor:
+            return
+        g.set("data-z-lift", f"{-floor:g}")
+        for node in g.iter():
+            if node.get("data-z-out") is not None:
+                node.set("data-z-out", f"{float(node.get('data-z-out')) - floor:g}")
+
     def draw_placement(p):
         if p.get("mate-to") and not p.get("at"):
             host = hosts.get(p["mate-to"])
@@ -1313,16 +1571,42 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                                      None, merged_attrs,
                                      p.get("group"), p.get("rel-pos"),
                                      skin_name=p.get("skin", "default"),
-                                     rotate=p.get("rotate"), palette=palette,
+                                     rotate=p.get("rotate"), mirror=bool(p.get("mirror")),
+                                     palette=palette,
+                                     z_inset=(p.get("inset") or 0.0)
+                                     - (p.get("lift") or 0.0),
                                      inst_palette=inst_palette,
                                      skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                                      resolved=resolved)
+        # A PROJECTION IS THE PART SEEN FROM HERE, NOT A SECOND PART. Its
+        # data-path becomes data-of, naming the seated part on the face that
+        # holds it; no relief, no ref, no behaviour, so the kit builds nothing
+        # and ejects nothing from it - the body already stands where this is.
+        if p.get("projection-of"):
+            g.set("data-projection", "1")
+            for node in g.iter():
+                dp = node.get("data-path")
+                if dp is not None:
+                    node.set("data-of", p["projection-of"] + dp[len(p["id"]):]
+                             if dp.startswith(p["id"]) else p["projection-of"])
+                    del node.attrib["data-path"]
+                for k in list(node.attrib):
+                    if k.startswith("data-z-") or k in ("data-depth", "data-body-depth",
+                                                        "data-ref", "data-behaviour",
+                                                        "data-vent", "data-groove"):
+                        del node.attrib[k]
         # WHAT THE BLOCK IS FOR travels with every member, because the consumer
         # that needs it is looking at a member and has no way back to `groups:`.
         # A PSU bay and a line-card bay are both data-class `bay`; this is the
         # only thing that separates them. See L37.
         if grp.get("role"):
             g.set("data-group-role", grp["role"])
+        if p.get("in"):
+            # a projection is flat: nothing is built from it, so it carries no
+            # lift - but it keeps data-in, which the pull machinery reads
+            if not p.get("projection-of"):
+                sink(g, floor_of(p["in"]))
+            g.set("data-in", p["in"])
         # What the lamps on this instance mean. A placement wins over its group,
         # the way attrs already do: a block of eighteen QSFP28 speed lamps says
         # its vocabulary once, and one lamp inside it may still differ.
@@ -1340,6 +1624,16 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         df = data_for(p.get("for"))
         if df:
             g.set("data-for", df)
+        # WHAT LIES OVER THIS PART, PUBLISHED. `under:` has ordered the paint
+        # since it was added - the lid draws after the shroud it closes over -
+        # but the relation itself never left this file, so a viewer that wanted
+        # to take the lid off to show a selected DIMM had nothing to read and
+        # would have had to guess it from overlapping boxes. The ids are bare
+        # because `under:` is by definition ids in THIS view; data_for's
+        # cross-view qualification does not arise.
+        du = data_for(p.get("under"))
+        if du:
+            g.set("data-under", du)
         svg.append(g)
         cw, chh_ = contract["size"]["w"], contract["size"]["h"]
         if p.get("rotate") in (90, 270, -90):
@@ -1350,15 +1644,67 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         extents[0] = min(extents[0], x0); extents[1] = min(extents[1], y0)
         extents[2] = max(extents[2], x1); extents[3] = max(extents[3], y1)
 
-    for p in parts["placements"]:
-        if p["id"] not in deferred_ids:
-            draw_placement(p)
+    # WHAT IS UNDER SOMETHING PAINTS BEFORE IT. `under:` is the placement's
+    # declaration that another part lies over it - the air shroud under the
+    # system cover, the board under the fan wall - and it is the same key L13
+    # reads to let the two share a plan. Both are `mounts`, so both are in the
+    # second pass, and document order put the cover first: the shroud painted
+    # over the lid that hides it. A part that says it is lower goes earlier.
+    # Document order is kept for everything the declarations do not touch.
+    # `in:` is the same stack read from the other end: what stands on a well
+    # is over it, so the well is under it and paints first.
+    stands_on = {}
+    for q in (*parts["placements"], *parts["bays"]):
+        if q.get("in"):
+            stands_on.setdefault(q["in"], set()).add(q["id"])
 
-    for b in parts["bays"]:
+    def _stacked(seq):
+        seq = list(seq)
+        for _ in range(len(seq)):
+            moved = False
+            for i, q in enumerate(seq):
+                overs = q.get("under") or []
+                overs = list(overs if isinstance(overs, list) else [overs])
+                overs += stands_on.get(q["id"], ())
+                j = min((k for k, r in enumerate(seq) if r["id"] in overs), default=None)
+                if j is not None and j < i:
+                    seq.insert(j, seq.pop(i))
+                    moved = True
+                    break
+            if not moved:
+                break
+        return seq
+
+    ordered = _stacked(parts["placements"])
+
+    def draw_bay(b):
+        bay_lift = 0.0
         bay_g = ET.SubElement(svg, f"{{{SVG_NS}}}g")
         bay_g.set("id", b["id"])
         bay_g.set("data-path", b["id"])
         bay_g.set("data-class", "bay")
+        if b.get("in"):
+            # A MODULE STANDS ON THE FLOOR AND RISES TO ITS OWN HEIGHT. A bay's
+            # plane is where the module's face is and the body reaches back
+            # from it - on a faceplate, into the chassis. In a well the body
+            # reaches DOWN, so the plane has to sit the module's height above
+            # the floor or a DIMM sinks 31 mm into the board and a drive hangs
+            # under its tray. The well's `d` is the floor its occupants stand
+            # on; this is what puts their tops where the model measured them.
+            floor = floor_of(b["in"])
+            # A SHELF IN THE WELL. `floor:` says the occupant stands this far
+            # down rather than on the well's own floor - a card on its slot -
+            # and the well is still what it is in.
+            if b.get("floor"):
+                floor = float(b["floor"])
+                # a shelf is not a hole: the kit leaves a dark bay box behind
+                # a pulled module, and for a card on a shelf that box stood on
+                # the card below it
+                bay_g.set("data-shelf", "1")
+            if floor:
+                bay_lift = -(floor - occupant_depth(b))
+                bay_g.set("data-z-lift", f"{bay_lift:g}")
+            bay_g.set("data-in", b["in"])
         if b.get("group"):
             bay_g.set("data-group", b["group"])
             brole = (dev_groups.get(b["group"]) or {}).get("role")
@@ -1437,20 +1783,53 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             # a faceplate overlapping its aperture does.
             bay_centre = [b["at"][0] + b["size"]["w"] / 2.0,
                           b["at"][1] + b["size"]["h"] / 2.0]
+            # THE OCCUPANT'S OWN VALUES: a configuration's `bay-attrs` reach the
+            # part seated in THIS bay, the way a placement's `attrs` reach a
+            # placed part - a supply's wattage, a drive's capacity
             g, contract = instance_group(lib, default, f"{b['id']}--module", b["at"],
-                                         None, None, None, None,
+                                         None, (config.get("bay-attrs") or {}).get(b["id"]), None, None,
                                          rotate=b.get("rotate"), palette=palette,
                                          inst_palette=inst_palette,
                                          centre=bay_centre,
                                          skin_overrides=skin_overrides, attr_overrides=attr_overrides,
-                                         path=f"{b['id']}/module", resolved=resolved)
+                                         path=f"{b['id']}/module", resolved=resolved,
+                                         seated=config.get("bays"),
+                                         bay_attrs=config.get("bay-attrs"))
             bay_g.append(g)
         df = data_for(b.get("for"))
         if df:
             bay_g.set("data-for", df)
+        du = data_for(b.get("under"))
+        if du:
+            bay_g.set("data-under", du)
+        # A MODULE'S `out` IS MEASURED FROM ITS OWN FACE, and its face is now
+        # the bay's sunk plane. The kit builds a raised feature as a box from
+        # its summed lift to its ABSOLUTE `out`, so a fan's release tab at
+        # `out: 1.0` in a bay 3.48 down ran from -3.48 to +1.0 - through the
+        # lid, whose top is at exactly 1.0, which is the shimmer and the orange
+        # showing through it. Pull every `out` in here down by the bay's lift,
+        # as sink() does for a placement.
+        if bay_lift:
+            for node in bay_g.iter():
+                if node.get("data-z-out") is not None:
+                    node.set("data-z-out", f"{float(node.get('data-z-out')) + bay_lift:g}")
+
+    # FIRST PASS: the wells and the openings, interleaved by `under:`. Bays
+    # paint after placements by default - a cage draws before the drives it
+    # frames - but a bay that says it is under a placement paints before it:
+    # the R740xd's DIMM sockets are under the mid-drive tray, and drawing every
+    # bay after every well put twenty-four DIMMs on top of the tray's sheet
+    # metal, so that on a mid-tray configuration the tray highlighted and
+    # showed nothing. A bay has no `ref`, which is how the two are told apart.
+    first = [q for q in ordered if q["id"] not in deferred_ids]
+    for item in _stacked(first + list(parts["bays"])):
+        if "ref" in item:
+            draw_placement(item)
+        else:
+            draw_bay(item)
 
     # second pass: the surface-mounted parts, now safely in front of the openings
-    for p in parts["placements"]:
+    for p in ordered:
         if p["id"] in deferred_ids:
             draw_placement(p)
 
@@ -1662,7 +2041,18 @@ def main():
     cap = capability.report(Path(args.device_yaml), device, args.library, SCHEMAS)
     cfg_index = {"device": device["name"], "model": device.get("model", ""),
                  "capability": cap["capability"], "gaps": cap["gaps"],
-                 "views": list(device["views"].keys()),
+                 # FACES ONLY. A view carrying `face:` is a VARIANT - the
+                 # 12 x 3.5in front is drawn when a configuration redirects the
+                 # front to it, never on its own - and listing it here offered
+                 # `front-lff-12` in the viewer as a seventh face beside front,
+                 # rear, top, bottom, left and right. There is no such face and
+                 # no file named for one: a bound variant renders as
+                 # `<device>.<config>.front.svg`, under the face it replaces.
+                 # `bays` below still keys every view including the variants,
+                 # because a viewer holding a configuration that binds one has
+                 # to know what that view holds.
+                 "views": [v for v, w in device["views"].items()
+                           if not (w or {}).get("face")],
                  "chassis": {"w": ch.get("width"), "h": ch.get("height"), "d": ch.get("depth"),
                              "ru": ch.get("ru")},
                  # facts about the device that belong to no view. They reach the

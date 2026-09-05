@@ -1,0 +1,55 @@
+format: 1
+kind: component
+name: riser-card-14g
+version: 1.0.0
+class: riser
+# It lifts out with its cage - the ISM removes riser 1 by its two release
+# tabs - and `mounts` is what gives it the viewer's pull handle. It stands
+# `in:` the system board and rises its measured 77 from the PCB.
+behaviour: mounts
+profile: server
+description: >-
+  The full-height riser card of a 2U 14G PowerEdge seen from above - the
+  vertical PCB standing at the chassis wall with its slot connectors on the
+  inboard face, the cards plugging in beside it
+size: {w: 12.8, h: 170.9}
+attrs:
+  role: riser-card
+  power-absent: not-published
+provenance:
+  size: >-
+    measured - Dell's service model, `R740XD_Riser_1-1.001`: a vertical PCB
+    `Body_12_7.001` 1.6 x 77.0 x 170.9 at cad x -203.8, z 528.7..699.6 (top_y
+    13.9..184.8), and three x16 slot connectors `Body_1_42/5_17/11_9` each
+    11.3 x 10.8 x 91.0 on its inboard face at cad y 31.9, 52.2 and 72.6 - a
+    20.3 pitch - and z 574.6..665.6. The footprint here is PCB plus connector,
+    12.8 across, and the card's own length; from above that is all a riser is.
+  one-part-for-the-family: >-
+    The model carries riser 1 once, as the three-slot 1B. 1A and 1D share its
+    cage and its position and differ in which lanes the connectors carry, and
+    from above a connector is a connector, so one card stands in for all
+    three; the riser 2 and riser 3 full-height cages are the same design in
+    their own bays and are drawn with this part too, with the device saying
+    which of those positions is measured and which is placed by analogy.
+  depth: >-
+    measured - 77.0 tall from cad y 7.2 to 84.2, standing on the PCB at 6.9,
+    so its top is 2.6 below the 86.8 lid. That is the relief's `out` from the
+    board well's floor.
+  power: >-
+    NOT PUBLISHED - the riser is a passive board with connectors, and the ISM
+    and the technical guide state no figure for one; searched both for 'riser'
+    beside a wattage and found the 225 W the riser 3 slot can DELIVER, which
+    is the slot's budget and not the card's draw.
+  lifecycle: >-
+    searched - no end-of-life notice for the riser cards is in the intake.
+relief:
+  wall: '#1a1d21'
+  features:
+  - node: card
+    out: 77.0
+    color: '#1f5138'
+    confidence: measured
+    source: cad y 7.2..84.2 on a floor at 6.9, Dell's service model
+elements:
+  card: {at: [0.0, 0.0], size: [12.8, 170.9], class: bezel}
+skins: [default]

@@ -1,0 +1,48 @@
+format: 1
+kind: component
+name: heatsink-1u-14g
+version: 1.2.0
+class: mechanical
+# It is lifted off the processor to reach it, and `mounts` is what gives it
+# the viewer's pull handle. The shroud over it is `mounts` too; the placement
+# says `under: air-shroud`, which is how L13 tells a stack from two lids.
+behaviour: mounts
+profile: server
+description: >-
+  The 1U processor heatsink of a 14G PowerEdge seen from above - a finned
+  block the width of the socket, one per processor, under the air shroud
+size: {w: 82.2, h: 128.1}
+provenance:
+  size: >-
+    measured - Dell's R740XD service model, `R740XD_ HeatSink 1U`, the two
+    seated poses: 82.2 wide and 128.1 deep in the top view's frame, at face
+    x 76.9..159.1 (CPU2, left as seen from the front) and 276.2..358.4
+    (CPU1; x = 217 - raw_x - w, and the first version had them in the rear's
+    frame, which put CPU1 on the left), top_y 265.8..393.90 for both. 33.1 tall, from cad y 7.7 to
+    40.8 - which is the 40.63 dell/system-board-14g@1 records as the board's
+    own top, because the heatsink IS the tallest thing in that assembly.
+  it-is-one-part-for-two-sockets: >-
+    Both poses measure the same and the ISM's processor chapter removes them
+    with one procedure, so one contract serves both processors. Dell's model
+    also carries a `HeatSink 1U_New`, boxed identically; the older name is
+    cited because its poses are the seated ones.
+  the-fins-are-drawn-and-not-measured: >-
+    estimated - fins run front to back, the way the fans push air, and are
+    drawn as lines on that axis so the part reads as a heatsink. Their count
+    and pitch are not from any source. The four corner screws are where a
+    Torx T30 heatsink screw would be and are not measured either.
+relief:
+  wall: '#6d737a'
+  features:
+  - node: block
+    out: 33.1
+    color: '#8a9096'
+    confidence: measured
+    source: >-
+      Dell's service model, `R740XD_ HeatSink 1U`: cad y 7.7 to 40.8. It
+      stands `in:` dell/system-board-14g@1, whose floor is the PCB at 79.9,
+      so it rises from there to 46.8 below the lid. It was 1.0 for one
+      version, when the board's floor was drawn at this part's own top.
+elements:
+  block: {at: [0.0, 0.0], size: [82.2, 128.1], class: bezel}
+skins: [default]

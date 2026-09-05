@@ -1,0 +1,80 @@
+format: 1
+kind: component
+name: riser-1-plate-14g
+version: 1.0.0
+class: riser
+profile: server
+description: >-
+  the riser 1 plate on a 14th-generation PowerEdge - one pressing with three
+  windows, shared by every riser 1 arrangement; the card behind it is what
+  differs
+attrs:
+  presents: 'three full-height windows on the PCI 20.32 pitch'
+provenance:
+  why-this-is-its-own-part: >-
+    NOTHING ON THE REAR FACE SEPARATES 1A FROM 1B FROM 1D. The riser that plugs
+    into the system board is inside the chassis; what a photograph of the rear
+    shows is this plate, and it is the same pressing whichever card is fitted.
+    That was previously modelled by giving each arrangement its own copy of the
+    artwork, and the two copies that existed - riser-1-3fh-14g and
+    riser-1-2fh-14g - differed only in their comments. Their skins were
+    byte-identical apart from the header line and a note about slot 2.
+    So the metal is drawn once here and composed, and the parts that compose it
+    carry the only thing that actually varies: which slots have a connector
+    behind them, what each is wired to, and how wide.
+    THE BAY ANCHORS ARE DELIBERATELY ABSENT. render.py hangs a bay's data-path
+    on the skin node whose id matches the bay id, so the `<rect id="slot-N">`
+    anchors have to sit with the `bays` that name them - on the riser part, not
+    on the shared metal. This part draws ink and no openings.
+  the-plate-is-not-punched-and-that-was-a-misreading: >-
+    A ROW OF VENTS WAS DRAWN ON THIS PLATE AND IT BELONGS TO THE CARD. Measured
+    at face 24.75 and 44.75, each row falls inside a BRACKET - local y 18.93 and
+    18.61, the same place on each card - and each overlaps one of this plate's
+    own windows, which is a hole and cannot carry ink. Two independent reasons,
+    agreeing. The rows now live in dell/pcie-filler-fh-14g@1 where they are
+    louvres rather than punched rectangles.
+    Nothing here is punched between the openings on the evidence held: this
+    plate is metal with windows in it and no vent field of its own.
+  the-louvre-row-is-on-this-plate-and-not-on-the-card: >-
+    It was moved to the card on the argument that the figure puts it inside a
+    window and a hole cannot carry ink - but the card is BEHIND this plate, so
+    anything on the card in the metal between windows is covered by definition,
+    and the row vanished. That settles ownership the other way: only the plate
+    can show ink here. Placed by the geometry it must fit rather than by its own
+    reading - the figure puts the row at face 24.75 and the metal between
+    windows is 22.50..24.82, about 2 mm apart, and the window is measured off
+    tone at 4 px/mm while the card pitch is standard and exact, so the gap is
+    the harder number.
+  the-plate-reaches-past-the-outboard-vents: >-
+    photo-measured - it was 95.0, which put its right edge at face 112 while the
+    card runs to 119.56, so the flange end showed. Reading tone along face y 15
+    across the right of slot 1: the card's OUTBOARD vent pair - the column
+    outside the rounded frame - is dark to 114.75, the bracket's own metal runs
+    to 118.50, and bright sheet metal begins there. So the metal that covers the
+    flange starts at 118.5 and the plate is 102.50, right edge at 119.50.
+    THE LEFT EDGE DOES NOT MOVE. The same row finds no plate band between face
+    17 and the vents, and the slot numerals sit at 11.75..14.00 - left of this
+    plate, on the chassis. That is a different piece of metal and it is what
+    carries the labels.
+  size: >-
+    107.59 x 62.0 is the plate this skin DRAWS. It is not what a slot has to
+    reserve: the brackets behind it are 120.02 long and start 17.46 to the left,
+    behind the neighbouring metal, and that envelope is declared as `insert` on
+    the riser parts that own the bays rather than here. Growing the box to the
+    envelope was tried and put five false overlaps on the rear face, none of
+    them collisions between parts and all of them collisions between boxes of
+    things at different heights.
+    The plate and the slot pitch come from the R740 ISM figure 9, which passes
+    Gate 1 at 0.26% against a 434 x 86.8 rear face; the pitch is the PCI
+    standard 20.32 and the figure confirms it at 20.535 (1.06%).
+    THE OUTLINE IS AREA ON THE FACE, not the assembly behind it. Nothing held
+    here dimensions the riser's depth or its board, so no depth is recorded.
+  colour: >-
+    THE PLATE IS THE SAME METAL AS THE CHASSIS. It was #7d848c against a #9aa1a8
+    panel, which read as a dark box laid on the face; ISM figure 8 measures the
+    plate at #acaeb3 and the chassis beside it at #afb0b5 - three parts in 255,
+    a hair darker and no more. The value in the skin keeps that relationship
+    against this library's own panel colour rather than copying the figure's
+    absolute level.
+size: {w: 107.59, h: 62.0}
+skins: [default]

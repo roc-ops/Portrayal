@@ -1,0 +1,74 @@
+format: 1
+kind: component
+name: system-cover-14g
+version: 1.2.0
+class: mechanical
+# It is the lid. It lies over everything inside and comes off to reveal it,
+# which is exactly what `mounts` declares - and what gives it the kit's pull
+# handle without a line of device-specific wiring.
+behaviour: mounts
+profile: compute
+description: >-
+  The system cover of a 14G PowerEdge - the lid over the mid-drive tray, the
+  risers and the processor tray, released by the latch it carries
+size: {w: 434.0, h: 540.6}
+provenance:
+  size: >-
+    measured for depth, BORROWED for width. Dell's service model,
+    `DELL_R740XD_Systemcover-1.001`, is 540.60 deep and that number is used as
+    it stands. Its 444.00 width is NOT: the chassis is 434.00 between the ear
+    folds and a lid cannot be 10 mm wider than the box, so the width is the
+    chassis's own and the model's is treated as posing.
+  the-pose-is-removed-and-the-latch-proves-it: >-
+    THE COVER IN THE MODEL IS SLID BACK, which the device file already knew -
+    it recorded the cover as 444.00 wide running to z 732.28 against a rear
+    panel plane of 713.5, and refused to take the latch's depth position from
+    it for that reason.
+    De-posing it is one subtraction: a lid's rear edge is the chassis's rear
+    metal face, so the 18.78 it overhangs by comes off everything on it. What
+    makes that a finding rather than an assumption is the LATCH. Its size was
+    measured independently and is already in this library at 25.0 x 64.0; the
+    de-posed model gives 25.02 x 63.62, agreeing to a hundredth in x and a
+    third of a millimetre in y. A subtraction that lands an independently known
+    part on its own dimensions is a subtraction that was right.
+    So the latch's depth position, which the device file recorded as "a
+    placement and not a reading", is now a reading: 27.89 from the rear edge
+    of this cover, which is face y 449.09 with the rear at y=0 - the plan
+    convention this library draws every top in.
+  the-front-edge-is-where-the-model-puts-it: >-
+    The cover ends at face y 540.60 and the chassis is 737.5 deep, so the last
+    196.90 of the top is not this part - it is the front drive cage under its
+    own shell. That follows from the depth and the de-posing rather than being
+    measured as an edge.
+  the-ribs-are-drawn-and-not-measured: >-
+    estimated. The lid is a large flat pressing and every one of them has
+    stiffening ribs; three are drawn because a plain rectangle reads as a hole
+    in the drawing rather than a surface. Their number, pitch and width are not
+    from any source and nothing should be inferred from them.
+relief:
+  wall: '#1a1d21'
+  features:
+  - node: cover
+    out: 1.0
+    color: '#2b3035'
+    confidence: estimated
+    source: >-
+      unsourced - sheet steel of about a millimetre, so the lid reads as a
+      surface with an edge rather than paint on the panel. The service model
+      gives this part a 16.00 y-extent, but that is the formed cover INCLUDING
+      the side flanges that fold down inside the chassis, not the thickness of
+      the metal seen from above.
+  - node: latch
+    out: 4.0
+    color: '#3a4045'
+    confidence: estimated
+    source: >-
+      unsourced. The model puts the latch's top at y 86.61 against the cover's
+      86.79, which says it sits BELOW the lid's outer face, not proud of it -
+      it is recessed into a well. `out` cannot express a well in a part that is
+      itself only 1.0 thick, so the latch is drawn standing slightly proud
+      instead. Recorded as the approximation it is.
+elements:
+  cover: {at: [0.0, 0.0], size: [434.0, 540.6], class: bezel}
+  latch: {at: [204.40, 449.09], size: [25.02, 63.62], class: latch}
+skins: [default]

@@ -1,0 +1,86 @@
+format: 1
+kind: component
+name: system-board-14g
+version: 1.7.0
+class: mechanical
+profile: server
+description: >-
+  The system board of a 14G PowerEdge seen from above - the floor of the
+  chassis, visible between the fan cage, the shroud and the risers
+size: {w: 422.8, h: 456.5, d: 79.9}
+provenance:
+  the-notch-is-painted: >-
+    The L is the PCB; the notch is the supplies' cage, drawn as sheet metal
+    at face x 6.6..182.7 by 195.5 deep (the model's supply poses). Left
+    unpainted, the well's shape-accurate punch left the chassis face
+    standing over the supplies at lid level - a plate floating above them
+    that picked as the board. The cage is estimated as a plain top with a
+    division per supply.
+  size: >-
+    measured - THE PCB ITSELF, `Body_25_2.001` inside Dell's service model's
+    motherboard assembly: 422.8 x 456.5 x 1.7, face x 5.5..428.3 and top_y
+    6.2..462.7 in the top view's frame (x = 217 - raw_x - w, top_y = 713.5 -
+    raw_z). The assembly's own box, `R740XD_ SystemBoard`, is 427.0 x 469.69
+    and was this part's size for four versions; it is the envelope of the
+    board WITH its brackets and connectors, and a floor drawn to it ran under
+    the supplies and out to the rear metal.
+  the-outline-is-an-L: >-
+    measured envelope, estimated edge. The rear-left corner of the PCB is
+    missing where the two supplies sit - the ISM's "Memory socket locations"
+    figure shows the notch, and the model puts the supplies at face x
+    6.6..182.7 and top_y 0..195.5 (`740XD_Powersupply_Unit-1.001`, both
+    poses, 86.3 wide on an 89.8 pitch, 195.5 into the chassis). The notch is
+    drawn to that envelope, board-local 177.2 x 189.3. THE PCB'S OWN EDGE WAS
+    NOT READ: the mesh is Draco-compressed and only its bounding box was
+    taken, so the notch is where the supplies must be and not where the
+    copper stops. A photograph of the board out of the chassis would fix it
+    to the millimetre. The renderer punches the well with this part's art, so
+    the L is the hole and the floor, not the rectangle.
+  depth: >-
+    measured - 79.9 is the PCB, the floor everything on this board stands on:
+    the DIMM sockets base at cad y 6.9 and the panel is at 86.8. That is the
+    number `size.d` carries, which makes this part a WELL 79.9 deep with its
+    own art as the floor, and it is what the heatsinks stand on with their
+    measured 33.1 and the DIMMs with their 31.3. A WELL'S DEPTH IS ITS FLOOR,
+    NOT THE TOP OF WHAT IS IN IT. The first figure here was 46.17, the top of
+    the heatsinks, because the model's bounding box for the assembly stops
+    there - and with that as the floor a DIMM's body sank 31 mm into the
+    board and a heatsink was 1 mm tall.
+  what-is-on-it: >-
+    The processors' heatsinks are dell/heatsink-1u-14g@1, placed on the
+    device over this board; the memory is twenty-four bays of
+    common/dimm-plan@1, also on the device; and the twelve socket pairs the
+    DIMMs stand in are drawn HERE, because a socket is the board -
+    `00_740XD_Ram Slot_MT-1.002`, twelve seated at 15.9 x 162.0, two DIMMs
+    each, at face x 19.5, 38.4, 57.2, 162.6, 181.5, 200.3, 219.0, 237.9,
+    256.7, 362.1, 381.0, 399.8 and top_y 266.8..428.8. The board says
+    `under:` all of them. What is still not drawn: the processor sockets
+    themselves (under the heatsinks), the NVDIMM-N battery (it mounts on the
+    shroud rather than here), and every connector.
+  the-board-is-a-plain-green-rectangle: >-
+    estimated - the outline is measured and the SURFACE IS NOT. No trace, no
+    socket, no connector and no silkscreen is drawn; the colour is a plain board
+    green and is not sampled from anything. Nothing should be read off it except
+    where the board begins and ends.
+  the-walls-are-the-chassis-and-not-the-board: >-
+    `relief.wall` is the colour of the recess's sides, and this recess is the
+    whole interior of the box: 79.9 deep, the full width, from the fan wall to
+    the rear metal. Its sides are the chassis's own sheet metal and they are
+    seen from OUTSIDE too - the kit draws a well's walls double-sided, as the
+    housing seen through a neighbouring opening - so a dark green here turned
+    every rear opening green: the riser slots, the rear drive bays, whatever
+    looked into the box saw the back of this well where the bay interior used
+    to be. Dark grey, the interior of any server, and not sampled. And they
+    are drawn from INSIDE ONLY - `walls: inside` - because the colour was
+    half of it: the well's rear wall stood 0.07 behind the rear panel and cut
+    off the C14 inlets' pins and every rear bay's interior at a flat plane.
+relief:
+  wall: '#1e2226'
+  walls: inside
+elements:
+  board: {at: [0.0, 0.0], size: [422.8, 456.5], class: bezel}
+  # the supplies' cage in the notch, sheet metal seen from above; it makes the
+  # well's punch the whole rect, so the supplies stand in the well in 3D
+  # rather than under a floating piece of the chassis face
+  psu-cage: {at: [0.0, 0.0], size: [177.2, 189.3], class: bezel}
+skins: [default]

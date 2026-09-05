@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: drive-carrier-35
-version: 1.5.0
+version: 1.7.1
 class: drive
 behaviour: fills
 profile: server
@@ -17,6 +17,15 @@ attrs:
   interface: SATA
   link: 6Gb
   rpm: 7.2K
+# THE LABEL IS FIELDS. The carrier is one part for every capacity; what the
+# label prints is set per drive - a placement's attrs, a configuration's
+# bay-attrs, or a form. Defaults are the attrs above.
+fields:
+  capacity: {label: Capacity, type: text, default: '10'}
+  capacity-unit: {label: Unit, type: choice, default: TB, options: [GB, TB]}
+  interface: {label: Interface, type: choice, default: SATA, options: [SAS, SATA, NVMe]}
+  link: {label: Link rate, type: text, default: 6Gb}
+  rpm: {label: Spindle, type: text, default: 7.2K, description: empty for an SSD - the glyph beside it goes too}
 provenance:
   body-faces: >-
     measured, photo, and one ESTIMATE per face, kept separate. From Dell's
@@ -214,4 +223,32 @@ elements:
       - {name: ready, color: '#22c55e'}
       - {name: fault, color: '#f59e0b', behavior: blinking}
       - {name: rebuild, color: '#22c55e', behavior: blinking}
+relief:
+  wall: '#1b1e21'
+  features:
+  # THE WINDOWS ARE HOLES. `2.5 HDD.008` is a flat surface 69.63 x 19.39 sitting
+  # 12.76 behind the carrier face - deeper than the 2.5-inch carrier's 7.63,
+  # which is what a taller caddy over a taller drive gives you.
+  - node: window-1
+    pocket: 12.7
+    confidence: measured
+    source: >-
+      measured - Dell's service model r740xd.glb, node `Poweredge_R740_3.5_Drive-10`. The carrier body `Body_14_11` is 105.50 x 26.90 x 165.63, which is this contract's `size` to two decimal places. ITS FACE IS THE HIGH-z END, at 714.06: these eighteen instances are the REAR 3.5-inch option and so present themselves out the back of the machine, where the 2.5-inch carriers present out the front. Same carrier, opposite direction, and the arithmetic has to follow the instance rather than the part.
+  - node: window-2
+    pocket: 12.7
+    confidence: measured
+    source: >-
+      measured - Dell's service model r740xd.glb, node `Poweredge_R740_3.5_Drive-10`. The carrier body `Body_14_11` is 105.50 x 26.90 x 165.63, which is this contract's `size` to two decimal places. ITS FACE IS THE HIGH-z END, at 714.06: these eighteen instances are the REAR 3.5-inch option and so present themselves out the back of the machine, where the 2.5-inch carriers present out the front. Same carrier, opposite direction, and the arithmetic has to follow the instance rather than the part.
+  - node: window-3
+    pocket: 12.7
+    confidence: measured
+    source: >-
+      measured - Dell's service model r740xd.glb, node `Poweredge_R740_3.5_Drive-10`. The carrier body `Body_14_11` is 105.50 x 26.90 x 165.63, which is this contract's `size` to two decimal places. ITS FACE IS THE HIGH-z END, at 714.06: these eighteen instances are the REAR 3.5-inch option and so present themselves out the back of the machine, where the 2.5-inch carriers present out the front. Same carrier, opposite direction, and the arithmetic has to follow the instance rather than the part.
+  # THE RELEASE IS PRESSED IN. `Body_10_12` is 22.70 x 15.20 x 9.00 starting
+  # 5.70 behind the face; 5.7 is the depth of the pocket its front presents.
+  - node: release
+    pocket: 5.7
+    confidence: measured
+    source: >-
+      measured - Dell's service model r740xd.glb, node `Poweredge_R740_3.5_Drive-10`. The carrier body `Body_14_11` is 105.50 x 26.90 x 165.63, which is this contract's `size` to two decimal places. ITS FACE IS THE HIGH-z END, at 714.06: these eighteen instances are the REAR 3.5-inch option and so present themselves out the back of the machine, where the 2.5-inch carriers present out the front. Same carrier, opposite direction, and the arithmetic has to follow the instance rather than the part.
 skins: [default]

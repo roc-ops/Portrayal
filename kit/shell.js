@@ -164,7 +164,7 @@ export function createShell(opts = {}) {
   $('header h1').textContent = opts.title || 'Portrayal';
 
   const state = {device: null, cfg: null, view: null, module: null, sel: null,
-                 svg: null, meta: null, cfgBays: {}};
+                 svg: null, meta: null, cfgBays: {}, cfgFields: {}};
 
   const handlers = {};
   const on = (name, fn) => { (handlers[name] ||= []).push(fn); };
@@ -478,7 +478,7 @@ export function createShell(opts = {}) {
   // The chip is absent when nothing is pulled rather than reading "0 removed",
   // and it restores on click, so the indication and the way back are one control.
   function refreshPulled() {
-    const off = state.svg ? state.svg.querySelectorAll('[data-portrayal-pulled]') : [];
+    const off = pulledPaths();
     const n = off.length;
     el.pulled.hidden = !n;
     el.pulled.textContent = `\u27f2 ${n} removed`;
@@ -488,15 +488,25 @@ export function createShell(opts = {}) {
 
   function restoreAllPulled() {
     if (!state.svg) return;
-    for (const e of [...state.svg.querySelectorAll('[data-portrayal-pulled]')])
-      e.removeAttribute('data-portrayal-pulled');
+    for (const e of pulledEls()) e.removeAttribute('data-portrayal-pulled');
+    if (state.autoPulled) state.autoPulled.clear();
     for (const r of el.tree.querySelectorAll('.node.pulled')) r.classList.remove('pulled');
     refreshPulled();
     emit('pulled', {paths: []});
   }
 
-  function renderTree(roots) {
-    const box = el.tree; box.innerHTML = '';
+  function renderTree(roots, {clear = true, heading = null} = {}) {
+    const box = el.tree;
+    if (clear) box.innerHTML = '';
+    // a face's section in a merged tree: a fold row like a group's, so the six
+    // sections read the way the groups inside them already do
+    if (heading) {
+      const row = document.createElement('div');
+      row.className = 'node grp face';
+      row.innerHTML = `<span class="tw">▾</span><span class="nm">${heading}</span>`
+        + `<span class="cls">${roots.length}</span>`;
+      box.appendChild(row);
+    }
     // `fold` is true for a fresh list and false for a group's own children: those
     // all carry the same data-group, so folding them again would build the same
     // head again, and again. That is the crash the first version of this had.
@@ -559,11 +569,20 @@ export function createShell(opts = {}) {
             if (off) n.el.setAttribute('data-portrayal-pulled', '');
             else n.el.removeAttribute('data-portrayal-pulled');
             row.classList.toggle('pulled', off);
+            // WHAT STANDS IN A WELL COMES OUT WITH IT. A bay or a part that says
+            // `in:` this one (render.py emits it as data-in) is carried by it -
+            // the mid tray's four drives lift out with the tray - so they go
+            // off and come back with it, in the drawing and in the tree.
+            for (const w of state.svg.querySelectorAll(`[data-in="${CSS.escape(n.path)}"]`)) {
+              if (off) w.setAttribute('data-portrayal-pulled', '');
+              else w.removeAttribute('data-portrayal-pulled');
+              const wr = el.tree.querySelector(`.node[data-path="${CSS.escape(w.dataset.path)}"]`);
+              if (wr) wr.classList.toggle('pulled', off);
+            }
             refreshPulled();
             // a host driving a 3D scene needs the whole set, not this one part:
             // viewer3d's setPulled takes what should be off, so a reset is []
-            emit('pulled', {paths: [...state.svg.querySelectorAll('[data-portrayal-pulled]')]
-                                   .map(e => e.dataset.path).filter(Boolean)});
+            emit('pulled', {paths: pulledPaths()});
           };
           row.querySelector('.cls').before(pull);
         }
@@ -626,11 +645,118 @@ export function createShell(opts = {}) {
   })();
 
   let halo = null;
+  // ── what is over a part, and taking it off to see the part ───────────────
+  // Every face the shell holds, mounted or not - a pull on the lid is a fact
+  // about the device, not about which drawing happens to be on screen.
+  function faceDocs() {
+    return [state.svg, ...Object.values(state.faces || {})]
+      .filter((d, i, a) => d && a.indexOf(d) === i);
+  }
+  function elOf(path) {
+    const q = `[data-path="${CSS.escape(path)}"]`;
+    for (const d of faceDocs()) { const e = d.querySelector(q); if (e) return e; }
+    return null;
+  }
+  function pulledEls() { return faceDocs().flatMap(d => [...d.querySelectorAll('[data-portrayal-pulled]')]); }
+  function pulledPaths() { return pulledEls().map(e => e.dataset.path).filter(Boolean); }
+  function isPulled(path) { return !!elOf(path)?.hasAttribute('data-portrayal-pulled'); }
+
+  // WHAT LIES OVER A PART, from two things the drawing DECLARES and nothing it
+  // does not. `data-under` on a part is the schema's `under:` - the ids that
+  // lie over it, the shroud naming the lid that closes over it. `data-for` on
+  // a cover is what it hides - the bezel naming its twenty-four drives. Walked
+  // transitively, so a heatsink under a shroud under a lid names both. Boxes
+  // are not consulted: two parts whose boxes overlap are not thereby stacked,
+  // and guessing that once turned every click on the front into "bezel".
+  function over(path) {
+    const out = new Set(), seen = new Set();
+    // ONLY WHAT THE TREE WOULD LET YOU PULL is taken off. The system board is
+    // walked THROUGH - what is over it is over the DIMMs seated in it - but a
+    // board is not a cover and hiding it would be a hole, not a reveal.
+    const found = o => { if (elOf(o)?.dataset.behaviour) out.add(o); visit(o); };
+    const visit = p => {
+      if (!p || seen.has(p)) return;
+      seen.add(p);
+      const e = elOf(p);
+      if (!e) return;
+      // declared on the part: the ids that lie over it (schema `under:`)
+      for (const o of (e.dataset.under || '').split(/\s+/).filter(Boolean)) found(o);
+      // NOT the well it sits in. A well's `under:` names everything standing
+      // in it - the board lists the heatsinks beside the DIMMs as well as the
+      // shroud over them - and the schema cannot tell a neighbour from a lid.
+      // Reading it as "over the contents" pulled heatsink-2 to reveal
+      // heatsink-1. What lies over a part is what the PART declares.
+      // declared on a cover: what it hides (the bezel and its drives)
+      const doc = e.ownerSVGElement || e.closest('svg');
+      for (const c of doc.querySelectorAll('[data-behaviour][data-for]')) {
+        const cp = c.dataset.path;
+        if (cp && cp !== p && c.dataset.for.split(/\s+/).includes(p)) found(cp);
+      }
+    };
+    visit(path);
+    if (path.includes('/')) visit(path.split('/')[0]);   // a port is under what its module is under
+    out.delete(path);
+    return [...out];
+  }
+
+  // Take parts off or put them back by path, the way the tree's control does,
+  // so a host driving a scene hears about it the same way.
+  function setPulled(paths, on) {
+    let changed = false;
+    for (const p of paths) {
+      const e = elOf(p);
+      if (!e || e.hasAttribute('data-portrayal-pulled') === on) continue;
+      if (on) e.setAttribute('data-portrayal-pulled', ''); else e.removeAttribute('data-portrayal-pulled');
+      el.tree.querySelector(`.node[data-path="${CSS.escape(p)}"]`)?.classList.toggle('pulled', on);
+      changed = true;
+    }
+    if (!changed) return;
+    refreshPulled();
+    emit('pulled', {paths: pulledPaths()});
+  }
+
+  // REVEAL WHAT YOU SELECTED. Selecting a DIMM under the lid and being shown
+  // the lid is a selection you cannot see, so whatever is declared to lie over
+  // the selection comes off, and goes back when the selection moves on. Only
+  // covers this took off are put back: one the reader pulled by hand stays
+  // off, because that was their decision and not this function's.
+  function reveal(path) {
+    state.autoPulled = state.autoPulled || new Set();
+    // AND THE PART ITSELF IS SHOWN. Selecting something you took off - the lid,
+    // a module, a port on a pulled module - is a selection of a thing that is
+    // not drawn, which is nothing to look at. So a pulled selection, or a
+    // pulled ancestor of it, goes back on. That includes one pulled by hand:
+    // the reader's later decision was to select it.
+    if (path) {
+      const back = pulledEls().map(e => e.dataset.path)
+        .filter(p => p && (path === p || path.startsWith(p + '/')));
+      if (back.length) { for (const p of back) state.autoPulled.delete(p); setPulled(back, false); }
+    }
+    const need = new Set(path ? over(path) : []);
+    const back = [...state.autoPulled].filter(p => !need.has(p));
+    const off = [...need].filter(p => !state.autoPulled.has(p) && !isPulled(p));
+    for (const p of back) state.autoPulled.delete(p);
+    for (const p of off) state.autoPulled.add(p);
+    if (back.length) setPulled(back, false);
+    if (off.length) setPulled(off, true);
+  }
+
   function select(path, fromTree) {
     state.sel = path;
+    reveal(path);
     for (const r of el.tree.querySelectorAll('.node')) r.classList.toggle('sel', r.dataset.path === path);
+    const q = `[data-path="${CSS.escape(path)}"]`;
     const target = path == null ? null
-      : state.svg?.querySelector(`[data-path="${CSS.escape(path)}"]`);
+      : (state.svg?.querySelector(q)
+         || Object.values(state.faces || {}).map(f => f.querySelector(q)).find(Boolean)
+         || null);
+    // THE SAME PART ON ANOTHER FACE: a projection carries `data-of` naming
+    // the seated part, so selecting the part marks its projections too, and
+    // clicking a projection selects the part it is of (see the hit test).
+    for (const d of faceDocs()) {
+      for (const e of d.querySelectorAll('[data-portrayal-selected]')) e.removeAttribute('data-portrayal-selected');
+      if (path != null) for (const e of d.querySelectorAll(`[data-projection][data-of="${CSS.escape(path)}"]`)) e.setAttribute('data-portrayal-selected', '');
+    }
     if (halo) { halo.remove(); halo = null; }
     // getScreenCTM is null while the SVG is hidden, which is exactly what a page
     // showing a 3D stage instead has done to it. Selection still stands; only
@@ -641,7 +767,8 @@ export function createShell(opts = {}) {
     // happens: the row highlights, the tree scrolls, the inspector explains why
     // there is nothing to point at.
     const noExtent = target?.dataset.extent === 'none';
-    if (target && !noExtent && state.svg.getScreenCTM()) {
+    // the halo is drawn in the mounted SVG, so only for a target that is in it
+    if (target && !noExtent && state.svg.contains(target) && state.svg.getScreenCTM()) {
       // getBBox is in the element's OWN coordinate system. The halo is appended to
       // the root, so the box has to be carried through every transform between them
       // or it lands wherever that offset happens to point - which for a bay-mounted
@@ -761,7 +888,35 @@ export function createShell(opts = {}) {
 
   // ---------------------------------------------------------------- loading
 
-  function refreshTree() { renderTree(buildTree(state.svg)); refreshPulled(); }
+  async function loadFaces() {
+    if (state.module) return;
+    const key = `${state.device}.${state.cfg}`;
+    if (state.facesFor !== key) { state.faces = {}; state.facesFor = key; }
+    for (const view of state.meta?.views || []) {
+      if (state.faces[view]) continue;
+      const file = `${DIST}/${state.device}.${state.cfg}.${view}.svg`;
+      const r = await fetch(file);
+      if (!r.ok) continue;
+      const doc = new DOMParser().parseFromString(await r.text(), 'image/svg+xml');
+      state.faces[view] = document.importNode(doc.documentElement, true);
+    }
+  }
+  function refreshTree() {
+    // `merge` is the host saying "every face is visible": one section per
+    // view, the on-screen one first, each folded the way a single tree is
+    if (state.merge && !state.module) {
+      const views = [state.view, ...(state.meta?.views || []).filter(v => v !== state.view)];
+      el.tree.innerHTML = '';
+      for (const view of views) {
+        const svg = state.faces?.[view];
+        if (!svg) continue;
+        renderTree(buildTree(svg), {clear: false, heading: view});
+      }
+    } else {
+      renderTree(buildTree(state.svg));
+    }
+    refreshPulled();
+  }
 
   async function loadStage() {
     el.svgHost.innerHTML = '';
@@ -779,6 +934,15 @@ export function createShell(opts = {}) {
     el.svgHost.appendChild(svg);
     state.svg = svg;
     state.sel = null;
+    // THE OTHER FACES ARE STILL THE SAME DEVICE. In 2D one view is on screen
+    // and the tree lists it; in 3D every face is on screen at once, so a
+    // tree pinned to `state.view` lists a sixth of what the reader is looking
+    // at. The remaining faces are fetched on request (loadFaces) and kept
+    // parsed but unmounted - buildTree reads structure only, so a detached
+    // document is enough - and dropped whenever the device or config changes.
+    const key = `${state.device}.${state.cfg}`;
+    if (state.facesFor !== key) { state.faces = {}; state.facesFor = key; }
+    state.faces[state.view] = svg;
     // Clicking the selected thing again clears it, and clicking away from any
     // part clears it too. A selection you cannot revoke is a halo painted over
     // the hardware for the rest of the session - and on the annotate tab, one
@@ -786,12 +950,22 @@ export function createShell(opts = {}) {
     // anywhere; see below.
     svg.addEventListener('click', ev => {
       if (dragged) return;              // this click is the end of a pan
+      // a click on a projection is a click on the part it projects
+      const proj = ev.target.closest('[data-projection][data-of]');
+      if (proj && !ev.target.closest('[data-path]')?.contains(proj)) { select(proj.dataset.of); return; }
       const hit = ev.target.closest('[data-path]');
       const path = hit ? hit.dataset.path : null;
       select(path && path !== state.sel ? path : null, false);
     });
     fit();
     refreshTree();
+    // A CONFIG CHANGE MUST NOT UN-MERGE THE TREE. loadStage drops the cached
+    // faces when the key changes and re-adds only the mounted one, so a host
+    // that merged in 3D would see the tree fall back to a single section
+    // until it asked again. Ask on its behalf: the refresh above drew what was
+    // available, and this fills in the rest as it arrives.
+    if (state.merge && !state.module)
+      loadFaces().then(refreshTree).catch(() => {});
     crumbs();
     el.inspect.innerHTML = '';
     el.status.textContent = state.module ? '' :
@@ -827,6 +1001,7 @@ export function createShell(opts = {}) {
   function syncCfgBays() {
     const c = state.meta.configs.find(c => c.name === state.cfg);
     state.cfgBays = {...(c?.bays || {})};
+    state.cfgFields = {};
   }
 
   el.cfg.onchange = e => { state.cfg = e.target.value; state.module = null; syncCfgBays(); loadStage(); };
@@ -866,9 +1041,34 @@ export function createShell(opts = {}) {
     if (state.sel != null) select(null, false);
   });
 
+  // WRITE ON A PART in the 2D drawings: a field is a `data-from` text node the
+  // part declares (components.json `fields`), the value replaces its text and
+  // lands on the group as `data-<key>`. `setFields('psu-1/module', {watts:
+  // '750W'})`; an empty value hides the node; null clears the part's fields.
+  // The host mirrors the same map into the 3D viewer's setFields.
+  function setFields(path, vals) {
+    if (!vals) delete state.cfgFields[path];
+    else state.cfgFields[path] = {...(state.cfgFields[path] || {}), ...vals};
+    for (const d of faceDocs())
+      for (const el of d.querySelectorAll(
+          `[data-path="${CSS.escape(path)}"],[data-projection][data-of="${CSS.escape(path)}"]`))
+        for (const [k, v] of Object.entries(vals || {})) {
+          const val = v == null ? '' : String(v);
+          el.setAttribute(`data-${k}`, val);
+          for (const t of el.querySelectorAll(`[data-from="${CSS.escape(k)}"]`)) {
+            t.textContent = val;
+            if (val) t.removeAttribute('display'); else t.setAttribute('display', 'none');
+          }
+        }
+    emit('fields', {path, fields: state.cfgFields[path] || null, all: state.cfgFields});
+    emit('change');
+  }
+  function fieldsOf(ref) { return compByRef(ref)?.fields || {}; }
+
   return {
-    state, el, ready, on, emit,
-    select, fit, refreshTree, loadDevice, loadStage, openModule, swapBay,
+    state, el, ready, on, emit, setFields, fieldsOf,
+    select, fit, refreshTree, loadFaces, loadDevice, loadStage, openModule, swapBay,
+    over, setPulled, pulledPaths,
     compByRef, devices: () => DEVICES, components: () => COMPONENTS,
     device: () => DEVICES.find(d => d.name === state.device),
     hl: () => hlColor,

@@ -1,1308 +1,1393 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://roc-ops.github.io/Portrayal/schemas/v0/device.schema.json",
-  "title": "Portrayal device manifest (v0)",
-  "type": "object",
-  "required": [
-    "format",
-    "kind",
-    "name",
-    "version",
-    "manufacturer",
-    "model",
-    "chassis",
-    "views"
-  ],
-  "additionalProperties": false,
-  "properties": {
-    "format": {
-      "const": 1
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://roc-ops.github.io/Portrayal/schemas/v0/device.schema.json",
+ "title": "Portrayal device manifest (v0)",
+ "type": "object",
+ "required": [
+  "format",
+  "kind",
+  "name",
+  "version",
+  "manufacturer",
+  "model",
+  "chassis",
+  "views"
+ ],
+ "additionalProperties": false,
+ "properties": {
+  "format": {
+   "const": 1
+  },
+  "kind": {
+   "const": "device"
+  },
+  "name": {
+   "$ref": "#/$defs/segment"
+  },
+  "version": {
+   "type": "string",
+   "pattern": "^\\d+\\.\\d+\\.\\d+$"
+  },
+  "maturity": {
+   "enum": [
+    "draft",
+    "modelled",
+    "verified"
+   ],
+   "description": "how far this device has been taken, and the standard lint holds it to. draft: no requirement. modelled: must carry a provenance block citing a datasheet or hardware guide. verified: additionally no dimension may be estimated. Defaults to draft when absent."
+  },
+  "manufacturer": {
+   "type": "string"
+  },
+  "model": {
+   "type": "string"
+  },
+  "part-numbers": {
+   "type": "object",
+   "additionalProperties": {
+    "type": "string"
+   }
+  },
+  "description": {
+   "type": "string"
+  },
+  "profile": {
+   "$ref": "#/$defs/segment"
+  },
+  "datasheet": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "title": {
+     "type": "string"
     },
-    "kind": {
-      "const": "device"
+    "url": {
+     "type": "string"
     },
-    "name": {
-      "$ref": "#/$defs/segment"
+    "sha256": {
+     "type": "string"
     },
-    "version": {
-      "type": "string",
-      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    "archive": {
+     "type": "string"
+    }
+   }
+  },
+  "references": {
+   "type": "array",
+   "description": "additional source documents (guides, HIGs) registered like the datasheet",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "title": {
+      "type": "string"
+     },
+     "url": {
+      "type": "string"
+     },
+     "sha256": {
+      "type": "string"
+     },
+     "archive": {
+      "type": "string"
+     }
+    }
+   }
+  },
+  "provenance": {
+   "type": "object",
+   "additionalProperties": {
+    "type": "string"
+   }
+  },
+  "attrs": {
+   "type": "object",
+   "description": "facts about the device that belong to no view, filed by section. Keys are globally unique across sections and keep their own prefix (`power.power-max-w`, not `power.max-w`): each one is flattened onto the SVG root as `data-<key>`, where it is read without its container, and the section is a classification of a fact rather than a namespace for it - so re-filing a key changes no drawing and no export. Lint L25 is an error if two sections claim one key. `spec/schemas/profiles.yaml` states what each device class owes in terms of these sections.",
+   "additionalProperties": false,
+   "properties": {
+    "physical": {
+     "type": "object",
+     "description": "the box as an object: weight, and anything dimensional the chassis block does not already hold. `rack: '13 RU'` beside `chassis.ru: 13` is NOT physical data, it is the same fact written twice - the structured one is the one a tool can use",
+     "additionalProperties": {
+      "type": [
+       "string",
+       "number",
+       "boolean"
+      ]
+     }
     },
-    "maturity": {
+    "performance": {
+     "type": "object",
+     "description": "what the box forwards and on what: capacity, forwarding rate, buffers, table sizes, the modes its cages run and the optics they take",
+     "additionalProperties": {
+      "type": [
+       "string",
+       "number",
+       "boolean"
+      ]
+     }
+    },
+    "power": {
+     "type": "object",
+     "description": "what it draws and what it is fed. `power-max-w`, `power-typical-w`, `power-min-w`, suffixed `-ac-w`/`-dc-w` only where the vendor states both and they differ. These are the WHOLE BOX's spellings and are refused on a component contract (lint L28); a module says `power-draw-max-w` or `power-output-w`, which is what stops a sum over a chassis's occupants resolving to a plausible wrong number",
+     "properties": {
+      "power-envelope": {
+       "description": "what the vendor's own figure COVERS, where a document says - and it is what decides whether a module total may be reconciled against that figure at all. Casa states '3.6 kW per fully loaded chassis'; Cisco publishes no chassis draw for the ASR9000 at all, only a per-card table and an instruction to compute your own budget. The same key on two chassis can therefore mean opposite things, and without this word a consumer cannot tell which it is holding. An enum rather than a free string because a value that licenses a reconciliation drifts into `fully-loaded`, `full` and `yes`. ABSENT means nobody has looked; `unstated` means somebody read the datasheet and it is silent, which is a finding - the same distinction `lifecycle.eol: none-announced` draws",
+       "enum": [
+        "bare",
+        "as-tested",
+        "fully-configured",
+        "unstated"
+       ]
+      }
+     },
+     "additionalProperties": {
+      "type": [
+       "string",
+       "number",
+       "boolean"
+      ]
+     }
+    },
+    "thermal": {
+     "type": "object",
+     "description": "operating temperature and the machinery that holds it - fans, airflow. `operating-temp-f2b` and `operating-temp-b2f` are two facts, not two spellings: the airflow SKUs have different ranges",
+     "additionalProperties": {
+      "type": [
+       "string",
+       "number",
+       "boolean"
+      ]
+     }
+    },
+    "environmental": {
+     "type": "object",
+     "description": "conditions the box is rated for but does not control - storage temperature, humidity, altitude",
+     "additionalProperties": {
+      "type": [
+       "string",
+       "number",
+       "boolean"
+      ]
+     }
+    },
+    "platform": {
+     "type": "object",
+     "description": "what it is built from: ASIC, CPU, memory, storage, flash, BMC, external TCAM, the software it ships with",
+     "additionalProperties": {
+      "type": [
+       "string",
+       "number",
+       "boolean"
+      ]
+     }
+    },
+    "features": {
+     "type": "object",
+     "description": "capabilities that are switched on rather than dimensioned - MACsec, PoE, FlexE, timing, TPM, GNSS. Where a datasheet says 'optional' the fact may belong in `configurations` as a SKU variant instead; state it here only while the SKUs are unmodelled",
+     "additionalProperties": {
+      "type": [
+       "string",
+       "number",
+       "boolean"
+      ]
+     }
+    },
+    "management": {
+     "type": "object",
+     "description": "how it is operated and observed: management ports, firmware bundles, telemetry the box exposes about itself",
+     "additionalProperties": {
+      "type": [
+       "string",
+       "number",
+       "boolean"
+      ]
+     }
+    },
+    "compliance": {
+     "type": "object",
+     "description": "what it is certified or tested to. Wording is load-bearing and must survive verbatim: 'NEBS Level 3 (pre-test; certificate by request)' is a materially different claim from 'NEBS Level 3', and flattening it would be a false statement about a product",
+     "additionalProperties": {
+      "type": [
+       "string",
+       "number",
+       "boolean"
+      ]
+     }
+    },
+    "lifecycle": {
+     "type": "object",
+     "description": "GA is assumed. Record only what the vendor has ANNOUNCED, with the link",
+     "additionalProperties": false,
+     "properties": {
+      "eol": {
+       "enum": [
+        "none-announced",
+        "announced"
+       ],
+       "description": "ABSENT means nobody has looked. `none-announced` means somebody searched and the vendor has announced nothing - a real finding, and it must not be indistinguishable from nobody looking. `announced` owes `eol-announcement`"
+      },
+      "eol-announcement": {
+       "type": "string",
+       "description": "URL of the notice. A date with no link is a claim about a product that no reader can check"
+      },
+      "end-of-sale": {
+       "type": "string"
+      },
+      "end-of-support": {
+       "type": "string"
+      },
+      "end-of-life": {
+       "type": "string"
+      }
+     }
+    },
+    "other": {
+     "type": "object",
+     "description": "the long tail: a real device fact that fits no section yet. Not an escape hatch - lint L24 counts it and the gaps register carries it as `attrs-unclassified`, so it shrinks as patterns emerge or stays visibly unshrunk",
+     "additionalProperties": {
+      "type": [
+       "string",
+       "number",
+       "boolean"
+      ]
+     }
+    }
+   }
+  },
+  "chassis": {
+   "type": "object",
+   "required": [
+    "width",
+    "height",
+    "depth"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "width": {
+     "type": "number"
+    },
+    "height": {
+     "type": "number"
+    },
+    "depth": {
+     "type": "number"
+    },
+    "ru": {
+     "type": "number"
+    },
+    "weight-kg": {
+     "type": "number"
+    },
+    "airflow": {
+     "enum": [
+      "front-to-back",
+      "back-to-front",
+      "side",
+      "passive"
+     ]
+    },
+    "color": {
+     "type": "string",
+     "description": "housing color (faceplate fill); default dark"
+    },
+    "edge": {
+     "type": "string"
+    },
+    "silk": {
+     "type": "string",
+     "description": "silkscreen/label text color; default light"
+    }
+   }
+  },
+  "configurations": {
+   "type": "object",
+   "description": "renderable variants: bay population, skin choices, airflow/region context. EACH ONE SAYS WHAT KIND OF THING IT IS, because the field was carrying four different meanings at once and a consumer could not tell an orderable SKU from somebody's illustration - the C40G exported a DCIM device type called 'C40G bdm-3plus1', named after whichever redundancy drawing happened to be listed second.",
+   "propertyNames": {
+    "$ref": "#/$defs/segment"
+   },
+   "additionalProperties": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "description": {
+      "type": "string"
+     },
+     "default": {
+      "type": "boolean",
+      "description": "the configuration a viewer opens with. Where a `base` exists it is the default and nothing else may claim it: opening on an illustration is how `default` came to mean 'whatever the drawing happens to be populated with', which is what four of the library's devices did."
+     },
+     "airflow": {
       "enum": [
-        "draft",
-        "modelled",
-        "verified"
-      ],
-      "description": "how far this device has been taken, and the standard lint holds it to. draft: no requirement. modelled: must carry a provenance block citing a datasheet or hardware guide. verified: additionally no dimension may be estimated. Defaults to draft when absent."
-    },
-    "manufacturer": {
-      "type": "string"
-    },
-    "model": {
-      "type": "string"
-    },
-    "part-numbers": {
+       "front-to-back",
+       "back-to-front"
+      ]
+     },
+     "occupants": {
       "type": "object",
+      "description": "what is PLUGGED IN, keyed by the id of the receptacle it plugs into. A populated port is not a different port - it is the same cage with an optic in it - so this is a configuration the way `bays` is, and a device can be drawn bare or fitted without either being a separate model. Sugar for a `mate-to` placement: the occupant is positioned by its `mate` connection point landing on the host's, and L12 holds the two to the same `interface`, so nothing here is a second positioning path. The value is a component ref, or a mapping carrying `ref` and an explicit `id` where the derived `<host>-occupant` is not the name you want on the row",
       "additionalProperties": {
-        "type": "string"
-      }
-    },
-    "description": {
-      "type": "string"
-    },
-    "profile": {
-      "$ref": "#/$defs/segment"
-    },
-    "datasheet": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "title": {
-          "type": "string"
+       "oneOf": [
+        {
+         "type": "string"
         },
-        "url": {
-          "type": "string"
-        },
-        "sha256": {
-          "type": "string"
-        },
-        "archive": {
-          "type": "string"
-        }
-      }
-    },
-    "references": {
-      "type": "array",
-      "description": "additional source documents (guides, HIGs) registered like the datasheet",
-      "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "title": {
-            "type": "string"
+        {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "ref"
+         ],
+         "properties": {
+          "ref": {
+           "type": "string"
           },
-          "url": {
-            "type": "string"
-          },
-          "sha256": {
-            "type": "string"
-          },
-          "archive": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "provenance": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "string"
-      }
-    },
-    "attrs": {
-      "type": "object",
-      "description": "facts about the device that belong to no view, filed by section. Keys are globally unique across sections and keep their own prefix (`power.power-max-w`, not `power.max-w`): each one is flattened onto the SVG root as `data-<key>`, where it is read without its container, and the section is a classification of a fact rather than a namespace for it - so re-filing a key changes no drawing and no export. Lint L25 is an error if two sections claim one key. `spec/schemas/profiles.yaml` states what each device class owes in terms of these sections.",
-      "additionalProperties": false,
-      "properties": {
-        "physical": {
-          "type": "object",
-          "description": "the box as an object: weight, and anything dimensional the chassis block does not already hold. `rack: '13 RU'` beside `chassis.ru: 13` is NOT physical data, it is the same fact written twice - the structured one is the one a tool can use",
-          "additionalProperties": {
-            "type": [
-              "string",
-              "number",
-              "boolean"
-            ]
-          }
-        },
-        "performance": {
-          "type": "object",
-          "description": "what the box forwards and on what: capacity, forwarding rate, buffers, table sizes, the modes its cages run and the optics they take",
-          "additionalProperties": {
-            "type": [
-              "string",
-              "number",
-              "boolean"
-            ]
-          }
-        },
-        "power": {
-          "type": "object",
-          "description": "what it draws and what it is fed. `power-max-w`, `power-typical-w`, `power-min-w`, suffixed `-ac-w`/`-dc-w` only where the vendor states both and they differ. These are the WHOLE BOX's spellings and are refused on a component contract (lint L28); a module says `power-draw-max-w` or `power-output-w`, which is what stops a sum over a chassis's occupants resolving to a plausible wrong number",
-          "properties": {
-            "power-envelope": {
-              "description": "what the vendor's own figure COVERS, where a document says - and it is what decides whether a module total may be reconciled against that figure at all. Casa states '3.6 kW per fully loaded chassis'; Cisco publishes no chassis draw for the ASR9000 at all, only a per-card table and an instruction to compute your own budget. The same key on two chassis can therefore mean opposite things, and without this word a consumer cannot tell which it is holding. An enum rather than a free string because a value that licenses a reconciliation drifts into `fully-loaded`, `full` and `yes`. ABSENT means nobody has looked; `unstated` means somebody read the datasheet and it is silent, which is a finding - the same distinction `lifecycle.eol: none-announced` draws",
-              "enum": [
-                "bare",
-                "as-tested",
-                "fully-configured",
-                "unstated"
-              ]
-            }
-          },
-          "additionalProperties": {
-            "type": [
-              "string",
-              "number",
-              "boolean"
-            ]
-          }
-        },
-        "thermal": {
-          "type": "object",
-          "description": "operating temperature and the machinery that holds it - fans, airflow. `operating-temp-f2b` and `operating-temp-b2f` are two facts, not two spellings: the airflow SKUs have different ranges",
-          "additionalProperties": {
-            "type": [
-              "string",
-              "number",
-              "boolean"
-            ]
-          }
-        },
-        "environmental": {
-          "type": "object",
-          "description": "conditions the box is rated for but does not control - storage temperature, humidity, altitude",
-          "additionalProperties": {
-            "type": [
-              "string",
-              "number",
-              "boolean"
-            ]
-          }
-        },
-        "platform": {
-          "type": "object",
-          "description": "what it is built from: ASIC, CPU, memory, storage, flash, BMC, external TCAM, the software it ships with",
-          "additionalProperties": {
-            "type": [
-              "string",
-              "number",
-              "boolean"
-            ]
-          }
-        },
-        "features": {
-          "type": "object",
-          "description": "capabilities that are switched on rather than dimensioned - MACsec, PoE, FlexE, timing, TPM, GNSS. Where a datasheet says 'optional' the fact may belong in `configurations` as a SKU variant instead; state it here only while the SKUs are unmodelled",
-          "additionalProperties": {
-            "type": [
-              "string",
-              "number",
-              "boolean"
-            ]
-          }
-        },
-        "management": {
-          "type": "object",
-          "description": "how it is operated and observed: management ports, firmware bundles, telemetry the box exposes about itself",
-          "additionalProperties": {
-            "type": [
-              "string",
-              "number",
-              "boolean"
-            ]
-          }
-        },
-        "compliance": {
-          "type": "object",
-          "description": "what it is certified or tested to. Wording is load-bearing and must survive verbatim: 'NEBS Level 3 (pre-test; certificate by request)' is a materially different claim from 'NEBS Level 3', and flattening it would be a false statement about a product",
-          "additionalProperties": {
-            "type": [
-              "string",
-              "number",
-              "boolean"
-            ]
-          }
-        },
-        "lifecycle": {
-          "type": "object",
-          "description": "GA is assumed. Record only what the vendor has ANNOUNCED, with the link",
-          "additionalProperties": false,
-          "properties": {
-            "eol": {
-              "enum": [
-                "none-announced",
-                "announced"
-              ],
-              "description": "ABSENT means nobody has looked. `none-announced` means somebody searched and the vendor has announced nothing - a real finding, and it must not be indistinguishable from nobody looking. `announced` owes `eol-announcement`"
-            },
-            "eol-announcement": {
-              "type": "string",
-              "description": "URL of the notice. A date with no link is a claim about a product that no reader can check"
-            },
-            "end-of-sale": {
-              "type": "string"
-            },
-            "end-of-support": {
-              "type": "string"
-            },
-            "end-of-life": {
-              "type": "string"
-            }
-          }
-        },
-        "other": {
-          "type": "object",
-          "description": "the long tail: a real device fact that fits no section yet. Not an escape hatch - lint L24 counts it and the gaps register carries it as `attrs-unclassified`, so it shrinks as patterns emerge or stays visibly unshrunk",
-          "additionalProperties": {
-            "type": [
-              "string",
-              "number",
-              "boolean"
-            ]
-          }
-        }
-      }
-    },
-    "chassis": {
-      "type": "object",
-      "required": [
-        "width",
-        "height",
-        "depth"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "width": {
-          "type": "number"
-        },
-        "height": {
-          "type": "number"
-        },
-        "depth": {
-          "type": "number"
-        },
-        "ru": {
-          "type": "number"
-        },
-        "weight-kg": {
-          "type": "number"
-        },
-        "airflow": {
-          "enum": [
-            "front-to-back",
-            "back-to-front",
-            "side",
-            "passive"
-          ]
-        },
-        "color": {
-          "type": "string",
-          "description": "housing color (faceplate fill); default dark"
-        },
-        "edge": {
-          "type": "string"
-        },
-        "silk": {
-          "type": "string",
-          "description": "silkscreen/label text color; default light"
-        }
-      }
-    },
-    "configurations": {
-      "type": "object",
-      "description": "renderable variants: bay population, skin choices, airflow/region context. EACH ONE SAYS WHAT KIND OF THING IT IS, because the field was carrying four different meanings at once and a consumer could not tell an orderable SKU from somebody's illustration - the C40G exported a DCIM device type called 'C40G bdm-3plus1', named after whichever redundancy drawing happened to be listed second.",
-      "propertyNames": {
-        "$ref": "#/$defs/segment"
-      },
-      "additionalProperties": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "description": {
-            "type": "string"
-          },
-          "default": {
-            "type": "boolean",
-            "description": "the configuration a viewer opens with. Where a `base` exists it is the default and nothing else may claim it: opening on an illustration is how `default` came to mean 'whatever the drawing happens to be populated with', which is what four of the library's devices did."
-          },
-          "airflow": {
-            "enum": [
-              "front-to-back",
-              "back-to-front"
-            ]
-          },
-          "occupants": {
-            "type": "object",
-            "description": "what is PLUGGED IN, keyed by the id of the receptacle it plugs into. A populated port is not a different port - it is the same cage with an optic in it - so this is a configuration the way `bays` is, and a device can be drawn bare or fitted without either being a separate model. Sugar for a `mate-to` placement: the occupant is positioned by its `mate` connection point landing on the host's, and L12 holds the two to the same `interface`, so nothing here is a second positioning path. The value is a component ref, or a mapping carrying `ref` and an explicit `id` where the derived `<host>-occupant` is not the name you want on the row",
-            "additionalProperties": {
-              "oneOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "object",
-                  "additionalProperties": false,
-                  "required": [
-                    "ref"
-                  ],
-                  "properties": {
-                    "ref": {
-                      "type": "string"
-                    },
-                    "id": {
-                      "type": "string"
-                    },
-                    "attrs": {
-                      "type": "object"
-                    },
-                    "skin": {
-                      "type": "string"
-                    }
-                  }
-                }
-              ]
-            }
-          },
-          "bays": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            },
-            "description": "what is seated, keyed by bay id, overriding that bay's own `default`. AN EMPTY STRING MEANS THE BAY IS EMPTY - it is how a `kind: base` empties the traffic slots while leaving supplies, fans and engines seated, and the renderer already draws it as a real hole with the depth of what the bay accepts rather than a black rectangle painted on the panel. The convention worked before it was written down here, which is its own argument for writing it down."
-          },
-          "skins": {
-            "type": "object",
-            "description": "component name -> skin name",
-            "additionalProperties": {
-              "$ref": "#/$defs/segment"
-            }
-          },
-          "region-context": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
-          },
-          "part-numbers": {
-            "type": "object",
-            "description": "orderable SKUs for this configuration: model -> {part, power-cord}",
-            "additionalProperties": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "part": {
-                  "type": "string"
-                },
-                "power-cord": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "component-attrs": {
-            "type": "object",
-            "description": "component name -> extra data-* attrs (FRU model/part-number per config)",
-            "additionalProperties": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "string"
-              }
-            }
-          },
-          "kind": {
-            "enum": [
-              "base",
-              "orderable",
-              "example",
-              "model"
-            ],
-            "description": "`base`: the chassis with enough in it to power on and log in - supplies, fans and the routing or supervisory engines populated, TRAFFIC SLOTS EMPTY. On a fixed one-RU switch that is the fans plus one power flavour. At most one per device, and it is the default: what you spec first is a chassis you can reach, before deciding what goes in it. `orderable`: a SKU of this same device - power feed, airflow, region. Named EXPLICITLY even when the base already embodies one of them, so that asking for the DC variant does not mean knowing which flavour the base happens to be. Exports as a device type. `example`: an illustrative population - a redundancy scheme, a worked configuration. Renders as a picture, and NEVER names or creates a device type, because it is not a thing anyone can order. `model`: this configuration is really a different product - the MX80's mx5/mx10/mx40, the ASR-9001-S. Flagged rather than solved: these most likely want to become devices of their own, and until they do this at least stops them reading as variants of one chassis."
-          },
-          "source": {
-            "type": "string",
-            "description": "where this configuration comes from. A `base` is either DERIVED - built from the group roles, populating everything `service` and `management` and blanking everything `traffic` - or SOURCED, when the vendor publishes the configuration as an orderable bundle and the library should follow it rather than invent one. Juniper publishes MX10016-BASE and MX10016-PREMIUM with their exact component counts; Cisco and Casa do not, for the chassis here. The two are not equally good and a consumer should be able to tell them apart, which is what this says."
-          },
-          "views": {
-            "type": "object",
-            "propertyNames": {
-              "enum": [
-                "front",
-                "rear",
-                "top",
-                "bottom",
-                "left",
-                "right"
-              ]
-            },
-            "additionalProperties": {
-              "$ref": "#/$defs/segment"
-            },
-            "description": "which panel each face wears in this configuration, as {face: view name}. Faces not named fall back to the view named after them, so a configuration that overrides only the front keeps the standard rear and sides. THIS IS WHAT COUPLES THE FACES: a front and a rear that do not go together on real hardware cannot both be named here, so the impossible machine has nowhere to live. Scoping a bay with `only-in` cannot do that - it varies occupants within one panel and says nothing about any other face."
-          }
-        }
-      }
-    },
-    "groups": {
-      "type": "object",
-      "description": "every `group:` used in any view, declared once: the vendor's word for one of them (term), where numbering starts, and shared attrs. Lint L17 rejects an undeclared group",
-      "propertyNames": {
-        "$ref": "#/$defs/segment"
-      },
-      "additionalProperties": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "index-origin": {
-            "enum": [
-              0,
-              1
-            ]
-          },
-          "term": {
-            "type": "string",
-            "description": "vendor display word, e.g. 'Port', 'Slot', 'Bay'"
-          },
-          "role": {
-            "enum": [
-              "traffic",
-              "management",
-              "service",
-              "indicator",
-              "furniture"
-            ],
-            "description": "what this block is FOR - the one thing the drawing cannot work out for itself. A PSU bay, a fan bay and a line-card bay are all data-class `bay`, the same hole with a module in it, so anything ranking the tree by class cannot tell which of them is why the box exists and which two keep it alive. Only the group knows. `traffic` is the work the device is bought to do - line-card slots and the ports that carry user traffic. `management` is how you reach and discipline it - the OOB jack, the console, the craft port, the timing and sync interfaces; a separate bucket rather than part of traffic because on five devices the management block is written FIRST in the manifest, so leaving it in with the traffic ports still opened the tree with a console socket. `service` is what keeps it running - PSUs, fans, filters, power shelves, AND THE CONTROL-PLANE CARDS: routing engines, route processors, supervisors, fabric and switch-control boards. They are named here because leaving them unnamed let the convention drift both ways - nine devices had routing engines in `service` and two in `management`, and the ASR 9912 and 9922 had their ROUTE PROCESSORS in `traffic`, which made the first base configuration built for a 9922 empty both of them. An RE is not `management`: that bucket is jacks and ports, the things you plug into, not the cards behind them. `indicator` is what you read - LEDs, displays. `furniture` is what you neither connect to nor read - ears, rivets, labels, grounding points, doors. Ordering WITHIN a role stays document order, which already reads correctly; this only says which bucket the block falls in. Lint L37"
-          },
-          "physical-context": {
-            "type": "string",
-            "description": "Redfish PhysicalContext value shared by everything in this block, e.g. 'PowerSupply' for the PSU bays. A whole group is the natural place to say it once"
-          },
-          "mixed": {
-            "type": "string",
-            "description": "the job these ports do together, when they do NOT share a media or a speed and that is deliberate: a management cluster of SFP+, USB and RJ45, a timing block of RJ45 and coax. The default shape of a port group is one family - one media, one speed - because that is what lets the block declare its facts once in `attrs`; a group spanning families is normally a bucket nobody has sorted yet, and lint L23 says so. This field is the author's answer: the vendor's faceplate calls these one thing, and splitting them by media would be a worse drawing. State the function, e.g. 'management cluster' or 'timing inputs and outputs' - it is a reason, not a switch, and L23 also objects if it is set on a group that is in fact one family"
+          "id": {
+           "type": "string"
           },
           "attrs": {
-            "type": "object"
+           "type": "object"
           },
-          "states": {
-            "description": "what this indicator's states MEAN on this device. Overrides the component's own vocabulary, which can only be generic - the same led-dot is a speed lamp on one port and a link lamp on the next. A block of eighteen speed lamps shares one vocabulary and says it once; a placement inside it may still override",
-            "oneOf": [
-              {
-                "type": "array",
-                "minItems": 1,
-                "items": {
-                  "$ref": "#/$defs/state"
-                }
-              },
-              {
-                "type": "object",
-                "minProperties": 1,
-                "description": "per contracted element, when one component carries two lamps that do NOT share a vocabulary - a management jack whose left lamp is green for 1G and whose right is amber for 10M/100M. Keys are element ids of the referenced component; lint L20 rejects one that names no element",
-                "propertyNames": {
-                  "$ref": "#/$defs/segment"
-                },
-                "additionalProperties": {
-                  "type": "array",
-                  "minItems": 1,
-                  "items": {
-                    "$ref": "#/$defs/state"
-                  }
-                }
-              }
-            ]
-          },
-          "description": {
-            "type": "string",
-            "description": "the vendor's own sentence about this block of indicators, kept beside the tokens"
+          "skin": {
+           "type": "string"
           }
+         }
         }
+       ]
       }
-    },
-    "views": {
+     },
+     "bays": {
       "type": "object",
-      "minProperties": 1,
-      "required": [
-        "front"
+      "additionalProperties": {
+       "type": "string"
+      },
+      "description": "what is seated, keyed by bay id, overriding that bay's own `default`. AN EMPTY STRING MEANS THE BAY IS EMPTY - it is how a `kind: base` empties the traffic slots while leaving supplies, fans and engines seated, and the renderer already draws it as a real hole with the depth of what the bay accepts rather than a black rectangle painted on the panel. The convention worked before it was written down here, which is its own argument for writing it down."
+     },
+     "skins": {
+      "type": "object",
+      "description": "component name -> skin name",
+      "additionalProperties": {
+       "$ref": "#/$defs/segment"
+      }
+     },
+     "region-context": {
+      "type": "object",
+      "additionalProperties": {
+       "type": "string"
+      }
+     },
+     "part-numbers": {
+      "type": "object",
+      "description": "orderable SKUs for this configuration: model -> {part, power-cord}",
+      "additionalProperties": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "part": {
+         "type": "string"
+        },
+        "power-cord": {
+         "type": "string"
+        }
+       }
+      }
+     },
+     "bay-attrs": {
+      "type": "object",
+      "description": "bay path -> attrs for the occupant seated THERE: `psu-1: {watts: 750W}` prints on that supply alone, where `component-attrs` reaches every instance of a component. A nested path - `riser-1/slot-1` - reaches a module's own bay. The keys are the occupant's `fields`, and the values print on its `data-from` nodes.",
+      "additionalProperties": {
+       "type": "object",
+       "additionalProperties": {"type": ["string", "number"]}
+      }
+     },
+     "component-attrs": {
+      "type": "object",
+      "description": "component name -> extra data-* attrs (FRU model/part-number per config)",
+      "additionalProperties": {
+       "type": "object",
+       "additionalProperties": {
+        "type": "string"
+       }
+      }
+     },
+     "kind": {
+      "enum": [
+       "base",
+       "orderable",
+       "example",
+       "model"
       ],
+      "description": "`base`: the chassis with enough in it to power on and log in - supplies, fans and the routing or supervisory engines populated, TRAFFIC SLOTS EMPTY. On a fixed one-RU switch that is the fans plus one power flavour. At most one per device, and it is the default: what you spec first is a chassis you can reach, before deciding what goes in it. `orderable`: a SKU of this same device - power feed, airflow, region. Named EXPLICITLY even when the base already embodies one of them, so that asking for the DC variant does not mean knowing which flavour the base happens to be. Exports as a device type. `example`: an illustrative population - a redundancy scheme, a worked configuration. Renders as a picture, and NEVER names or creates a device type, because it is not a thing anyone can order. `model`: this configuration is really a different product - the MX80's mx5/mx10/mx40, the ASR-9001-S. Flagged rather than solved: these most likely want to become devices of their own, and until they do this at least stops them reading as variants of one chassis."
+     },
+     "source": {
+      "type": "string",
+      "description": "where this configuration comes from. A `base` is either DERIVED - built from the group roles, populating everything `service` and `management` and blanking everything `traffic` - or SOURCED, when the vendor publishes the configuration as an orderable bundle and the library should follow it rather than invent one. Juniper publishes MX10016-BASE and MX10016-PREMIUM with their exact component counts; Cisco and Casa do not, for the chassis here. The two are not equally good and a consumer should be able to tell them apart, which is what this says."
+     },
+     "views": {
+      "type": "object",
       "propertyNames": {
-        "$ref": "#/$defs/segment"
+       "enum": [
+        "front",
+        "rear",
+        "top",
+        "bottom",
+        "left",
+        "right"
+       ]
       },
       "additionalProperties": {
-        "type": "object",
-        "additionalProperties": false,
-        "description": "one face of the device, written in the order the part is made: size the panel, punch it, print it, populate it. Key order is linted (L16).",
-        "properties": {
-          "empty": {
-            "type": "string",
-            "minLength": 40,
-            "description": "this face was LOOKED FOR AND IS NOT DOCUMENTED, and this says where you looked. A face with nothing on it is otherwise indistinguishable from a face nobody got to, so the capability check counted both as unfinished and the only way to pass was to draw something - which on an undocumented face means inventing it. Prose rather than a boolean, and long enough that a bare `empty: yes` will not validate, because the claim being made is about a search rather than about the drawing. A view declaring this must actually be bare (L60); if a source turns up, the sentence goes and the feature is drawn."
-          },
-          "size": {
-            "type": "object",
-            "description": "view dimensions in mm when not the chassis front elevation (e.g. top = width x depth)",
-            "required": [
-              "w",
-              "h"
-            ],
-            "additionalProperties": false,
-            "properties": {
-              "w": {
-                "type": "number"
-              },
-              "h": {
-                "type": "number"
-              }
-            }
-          },
-          "panel": {
-            "type": "object",
-            "additionalProperties": false,
-            "description": "the sheet metal - what it is (decor) and where it is punched (cutouts)",
-            "properties": {
-              "decor": {
-                "type": "array",
-                "description": "non-addressable chassis decoration (vent fields etc.)",
-                "items": {
-                  "type": "object",
-                  "required": [
-                    "at"
-                  ],
-                  "additionalProperties": false,
-                  "properties": {
-                    "at": {
-                      "$ref": "#/$defs/xy"
-                    },
-                    "size": {
-                      "$ref": "#/$defs/xy"
-                    },
-                    "pattern": {
-                      "enum": [
-                        "vent",
-                        "holes",
-                        "grille",
-                        "slots",
-                        "slots-h",
-                        "ribs"
-                      ]
-                    },
-                    "vent": {
-                      "type": "number",
-                      "exclusiveMinimum": 0,
-                      "description": "air vent: dark cells (or the whole rect when plain-fill) become holes into a cavity this deep in 3D"
-                    },
-                    "pattern-offset": {
-                      "$ref": "#/$defs/xy",
-                      "description": "shift the pattern phase under this rect (align lattice rows across corners)"
-                    },
-                    "id": {
-                      "type": "string",
-                      "description": "name this rect in the drawing. Without one it is numbered by kind, and somebody opening the SVG in an editor finds an anonymous rectangle they can only identify by clicking it and watching what highlights"
-                    },
-                    "kind": {
-                      "type": "string",
-                      "description": "what this rect IS - port-shell, recess, label-plate, bezel. A vent field and a stroked outline name themselves from `pattern` and `stroke`; everything else is an unlabelled grey box unless the author says otherwise. It reaches the drawing as data-kind, so the file can be READ rather than clicked through"
-                    },
-                    "out": {
-                      "type": "number",
-                      "exclusiveMinimum": 0,
-                      "description": "decor protrudes this many mm from the face in 3D (raised stampings)"
-                    },
-                    "lift": {
-                      "type": "number",
-                      "exclusiveMinimum": 0,
-                      "description": "standoff: the raised decor STARTS this many mm off the face, so it spans lift..out instead of 0..out. Without it `out` can only build a solid block from the panel outward, which is wrong for anything with a section - a cable-management hook is a thin plate at the FRONT of a horizontal foot, and extruding its outline from the panel gave a cube where the hardware has an L. `relief.features` has carried `lift` all along; decor not having it was an asymmetry in the vocabulary rather than a decision."
-                    },
-                    "confidence": {
-                      "$ref": "#/$defs/confidence"
-                    },
-                    "source": {
-                      "type": "string",
-                      "description": "where precisely, in one phrase. Start with '<ns>/<name>@<major>' when the number came from another part, so the claim can be resolved rather than only read."
-                    },
-                    "sink": {
-                      "type": "number",
-                      "exclusiveMinimum": 0,
-                      "description": "decor is recessed this many mm into the face in 3D (pressed grooves)"
-                    },
-                    "fill": {
-                      "type": "string",
-                      "description": "plain fill (e.g. groove color) when no pattern"
-                    },
-                    "rx": {
-                      "type": "number"
-                    },
-                    "stroke": {
-                      "type": "string",
-                      "description": "outline-only decor (fiber channels etc.); fill defaults to none"
-                    },
-                    "stroke-width": {
-                      "type": "number"
-                    },
-                    "rotate": {
-                      "type": "number",
-                      "description": "text decor rotation in degrees about its anchor"
-                    },
-                    "shape": {
-                      "enum": [
-                        "rect",
-                        "circle",
-                        "d-sub",
-                        "slot"
-                      ],
-                      "default": "rect",
-                      "description": "outline of the painted patch. `rect` (with optional `rx`) is the default; `d-sub` is the D-subminiature outline of TE 114-40010 Figure 3 and `slot` a stadium. THE SAME VOCABULARY A CUTOUT'S `shape` TAKES, because paint printed around a connector takes the connector's shape and until now had no way to say so - a patch behind a D-sub could only be a rectangle or a rounded one. `circle` is accepted for symmetry and still draws as a rect; decor has `rx`."
-                    }
-                  }
-                }
-              },
-              "cutouts": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "additionalProperties": false,
-                  "required": [
-                    "id",
-                    "at",
-                    "size"
-                  ],
-                  "properties": {
-                    "id": {
-                      "$ref": "#/$defs/segment"
-                    },
-                    "at": {
-                      "$ref": "#/$defs/xy"
-                    },
-                    "size": {
-                      "$ref": "#/$defs/xy",
-                      "description": "[w, h] in mm"
-                    },
-                    "shape": {
-                      "enum": [
-                        "rect",
-                        "circle",
-                        "d-sub",
-                        "slot"
-                      ],
-                      "default": "rect"
-                    },
-                    "rx": {
-                      "type": "number",
-                      "description": "corner radius for rect"
-                    },
-                    "empty": {
-                      "type": "boolean",
-                      "description": "a hole with deliberately nothing in it (a blanked-off option). Without this, a cutout no placement sits in is a lint finding"
-                    },
-                    "provenance": {
-                      "$ref": "#/$defs/provenance"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "silkscreen": {
-            "type": "array",
-            "description": "Printed matter on the CHASSIS panel. Painted after the panel and its decor and BEFORE components, because on the real device the silkscreen goes down on the punched panel and the modules are installed on top of it. A legend that a module would cover is therefore invisible here, which is the correct behaviour: on the hardware it would be invisible too. Silkscreen printed on a MODULE's own faceplate belongs in that component's skin, inside <g id=\"silkscreen\">, and travels with it.",
-            "items": {
-              "type": "object",
-              "additionalProperties": false,
-              "required": [
-                "at"
-              ],
-              "properties": {
-                "id": {
-                  "$ref": "#/$defs/segment",
-                  "description": "optional stable id; needed only when something else refers to this mark"
-                },
-                "at": {
-                  "$ref": "#/$defs/xy"
-                },
-                "text": {
-                  "type": "string",
-                  "description": "printed legend. Multi-line uses \\n. Exactly one of text or path"
-                },
-                "font-size": {
-                  "type": "number"
-                },
-                "anchor": {
-                  "enum": [
-                    "start",
-                    "middle",
-                    "end"
-                  ]
-                },
-                "rotate": {
-                  "type": "number",
-                  "description": "degrees about the anchor"
-                },
-                "fill": {
-                  "type": "string",
-                  "description": "ink colour; defaults to chassis silk"
-                },
-                "for": {
-                  "description": "what this mark annotates. One placement or bay, or a list when the mark joins things - a leader line from a breaker to its terminal names both. Emitted as data-for. Printed ink annotates something on the face it is printed on: a bare id in this view, never another view and never the chassis.",
-                  "oneOf": [
-                    {
-                      "$ref": "#/$defs/segment"
-                    },
-                    {
-                      "type": "array",
-                      "minItems": 1,
-                      "items": {
-                        "$ref": "#/$defs/segment"
-                      }
-                    }
-                  ]
-                },
-                "path": {
-                  "type": "string",
-                  "description": "printed line or symbol as an SVG path in view mm - a leader line, a polarity arrow, an earth mark. Exactly one of text or path"
-                },
-                "filled": {
-                  "type": "boolean",
-                  "description": "this path ENCLOSES ink rather than tracing a route. A leader line is stroked; a solid arrowhead is filled. Without it every symbol is an outline held shut by its own stroke width, which leaves a pinhole in anything small and cannot be scaled - at twice the size the hole is four times as obvious"
-                },
-                "fill-rule": {
-                  "enum": [
-                    "nonzero",
-                    "evenodd"
-                  ],
-                  "description": "evenodd where a filled mark has a hole in it - a bored nut, a ring"
-                },
-                "stroke-width": {
-                  "type": "number"
-                }
-              },
-              "oneOf": [
-                {
-                  "required": [
-                    "text"
-                  ]
-                },
-                {
-                  "required": [
-                    "path"
-                  ]
-                }
-              ]
-            }
-          },
-          "components": {
-            "type": "object",
-            "additionalProperties": false,
-            "description": "what is installed into the panel. bays are things that come out; placements are things that do not",
-            "properties": {
-              "bays": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "required": [
-                    "id",
-                    "at",
-                    "size"
-                  ],
-                  "additionalProperties": false,
-                  "properties": {
-                    "only-in": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/$defs/segment"
-                      },
-                      "minItems": 1,
-                      "uniqueItems": true,
-                      "description": "THE CONFIGURATIONS IN WHICH THIS PART OF THE METAL EXISTS AT ALL, which is a different question from what goes in it. Absent means every configuration, which is almost always the answer. A C40G ordered for AC has ONE bolted panel across the bottom rear where a DC chassis has two power-entry openings - not two empty openings, different sheet metal - and without this a configuration could vary only its OCCUPANTS: the AC rear drew two empty PEM bays as black rectangles, and the bay picker offered a DC power entry module on a chassis that cannot take one. Scoping lives HERE, on the bay or placement, rather than in the configuration block, because it is a statement about GEOMETRY and geometry is what a view holds - a configuration says what is fitted, not where the holes are. Distinct from `optional`, which is a build-time flag that hides a part from every configuration at once. Lint L41"
-                    },
-                    "id": {
-                      "$ref": "#/$defs/segment"
-                    },
-                    "at": {
-                      "$ref": "#/$defs/xy"
-                    },
-                    "size": {
-                      "type": "object",
-                      "required": [
-                        "w",
-                        "h"
-                      ],
-                      "additionalProperties": false,
-                      "properties": {
-                        "w": {
-                          "type": "number"
-                        },
-                        "h": {
-                          "type": "number"
-                        }
-                      }
-                    },
-                    "opening": {
-                      "type": "object",
-                      "required": [
-                        "w",
-                        "h"
-                      ],
-                      "additionalProperties": false,
-                      "properties": {
-                        "w": {
-                          "type": "number"
-                        },
-                        "h": {
-                          "type": "number"
-                        }
-                      },
-                      "description": "the HOLE IN THE SHEET METAL, when it differs from `size`. `size` is the space the slot RESERVES - what the occupant is placed into and checked against - and on a card cage that is the card including its ejector brackets. The hole the card's plate covers is smaller, and it is the hole you see when the bay is empty. On an ASR 9006 they are 395.70 and 352.59: painting the reserved space dark put 21.5 mm of opening over metal at each end. Absent means the two are the same, which is the common case. Measured only - never inferred from the occupant, which is the mistake this exists to undo."
-                    },
-                    "accepts": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      },
-                      "minItems": 1
-                    },
-                    "group": {
-                      "$ref": "#/$defs/segment"
-                    },
-                    "rel-pos": {
-                      "type": "integer"
-                    },
-                    "physical-context": {
-                      "type": "string",
-                      "description": "Redfish PhysicalContext value, e.g. 'PowerSupply', 'Fan', 'NetworkingDevice'. This is the join between the drawing and a running box: it is what lets an ENTITY-MIB entPhysicalTable row or a Redfish Thermal sensor be laid over the bay it actually describes. The `wired` capability flag is exactly 'every bay and every port group says this'"
-                    },
-                    "default": {
-                      "type": [
-                        "string",
-                        "null"
-                      ],
-                      "description": "ref populated by default config; null = open"
-                    },
-                    "rotate": {
-                      "type": "number",
-                      "description": "degrees to rotate the occupant, e.g. a line card mounted horizontally in one chassis and vertically in another"
-                    },
-                    "mirror": {"type": "boolean", "description": "flip the occupant horizontally about its own centre line; handedness, not rotation - a riser whose cards face the other way"},
-                    "for": {
-                      "description": "the placement or bay this one belongs to. A bay is a hole in this face; what it belongs to is on this face too, so a bare id and nothing else. Emitted as data-for.",
-                      "oneOf": [
-                        {
-                          "$ref": "#/$defs/segment"
-                        },
-                        {
-                          "type": "array",
-                          "minItems": 1,
-                          "items": {
-                            "$ref": "#/$defs/segment"
-                          }
-                        }
-                      ]
-                    },
-                    "interface": {
-                      "$ref": "#/$defs/segment",
-                      "description": "THE INTERFACE THIS SLOT PRESENTS, for an opening whose occupants are not a list anyone published. `accepts` is the vendor's compatibility matrix transcribed - it works because a switch's card catalogue is closed and printed, and the module reference's support tables ARE those lists. An open form factor has no table to transcribe: anyone may build a PCIe card, so a list is unbounded, and one written anyway asserts something the vendor never said. Such a bay names the interface instead and carries no list. Occupants declare the same key via `mates`, exactly as they do for a cage. Deliberately not an enum - a new interface is a new key, not a schema change. Electrical detail (a generation, a lane width) belongs in `attrs`, NOT here: a gen3 card seats in a gen4 slot and an x8 card in an x16, so matching on an exact key would refuse hardware that fits. See ndv#43."
-                    }
-                  },
-                  "anyOf": [
-                    {
-                      "required": [
-                        "accepts"
-                      ]
-                    },
-                    {
-                      "required": [
-                        "interface"
-                      ]
-                    }
-                  ],
-                  "description": "A bay says what goes in it in ONE OF TWO WAYS, and must say it somehow: `accepts` for a closed vendor matrix, `interface` for an open form factor. Both together is fine - a slot can be standard AND have a published list. Neither is a hole that promises nothing."
-                }
-              },
-              "placements": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "required": [
-                    "ref",
-                    "id"
-                  ],
-                  "additionalProperties": false,
-                  "properties": {
-                    "only-in": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/$defs/segment"
-                      },
-                      "minItems": 1,
-                      "uniqueItems": true,
-                      "description": "THE CONFIGURATIONS IN WHICH THIS PART OF THE METAL EXISTS AT ALL, which is a different question from what goes in it. Absent means every configuration, which is almost always the answer. A C40G ordered for AC has ONE bolted panel across the bottom rear where a DC chassis has two power-entry openings - not two empty openings, different sheet metal - and without this a configuration could vary only its OCCUPANTS: the AC rear drew two empty PEM bays as black rectangles, and the bay picker offered a DC power entry module on a chassis that cannot take one. Scoping lives HERE, on the bay or placement, rather than in the configuration block, because it is a statement about GEOMETRY and geometry is what a view holds - a configuration says what is fitted, not where the holes are. Distinct from `optional`, which is a build-time flag that hides a part from every configuration at once. Lint L41"
-                    },
-                    "ref": {
-                      "type": "string",
-                      "pattern": "^[a-z0-9-]+/[a-z0-9-]+@\\d+$",
-                      "description": "namespace/component@major"
-                    },
-                    "id": {
-                      "$ref": "#/$defs/segment"
-                    },
-                    "at": {
-                      "$ref": "#/$defs/xy"
-                    },
-                    "rotate": {
-                      "type": "number"
-                    },
-                    "skin": {
-                      "$ref": "#/$defs/segment"
-                    },
-                    "group": {
-                      "$ref": "#/$defs/segment"
-                    },
-                    "rel-pos": {
-                      "type": "integer"
-                    },
-                    "physical-context": {
-                      "type": "string",
-                      "description": "Redfish PhysicalContext value. See the same key on a bay; declaring it once on the group is usually right, and a placement overrides"
-                    },
-                    "optional": {
-                      "$ref": "#/$defs/segment",
-                      "description": "render only when --with <tag> is given (e.g. ears)"
-                    },
-                    "attrs": {
-                      "type": "object"
-                    },
-                    "states": {
-                      "description": "what this indicator's states MEAN on this device. Overrides the component's own vocabulary, which can only be generic - the same led-dot is a speed lamp on one port and a link lamp on the next",
-                      "oneOf": [
-                        {
-                          "type": "array",
-                          "minItems": 1,
-                          "items": {
-                            "$ref": "#/$defs/state"
-                          }
-                        },
-                        {
-                          "type": "object",
-                          "minProperties": 1,
-                          "description": "per contracted element, when one component carries two lamps that do NOT share a vocabulary - a management jack whose left lamp is green for 1G and whose right is amber for 10M/100M. Keys are element ids of the referenced component; lint L20 rejects one that names no element",
-                          "propertyNames": {
-                            "$ref": "#/$defs/segment"
-                          },
-                          "additionalProperties": {
-                            "type": "array",
-                            "minItems": 1,
-                            "items": {
-                              "$ref": "#/$defs/state"
-                            }
-                          }
-                        }
-                      ]
-                    },
-                    "description": {
-                      "type": "string",
-                      "description": "the vendor's own sentence about this indicator, kept beside the tokens - 'Blue = 100G, Green = 40G'. Prose, never a state list"
-                    },
-                    "provenance": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "string"
-                      }
-                    },
-                    "mate-to": {
-                      "$ref": "#/$defs/segment",
-                      "description": "id of a placement in this view to mate into. The renderer positions this component so its `mate` connection-point coincides with the host's, so an occupant never carries hand-computed centring offsets. Mutually exclusive with `at`."
-                    },
-                    "for": {
-                      "description": "what this part is bound to - an LED to its port, a button to its module. One target or a list, and a list means collectively: a FAN lamp over five trays names all five. A target in another view of the same device is written 'view/id', because a front-panel PSU lamp indicates a PSU that lives in the rear. The literal 'chassis' names the whole unit, for an indicator with no modelled subject. Emitted as data-for; never inferred from names.",
-                      "oneOf": [
-                        {
-                          "$ref": "#/$defs/for-target"
-                        },
-                        {
-                          "type": "array",
-                          "minItems": 1,
-                          "items": {
-                            "$ref": "#/$defs/for-target"
-                          }
-                        }
-                      ]
-                    },
-                    "frames": {
-                      "oneOf": [
-                        {
-                          "$ref": "#/$defs/segment"
-                        },
-                        {
-                          "type": "array",
-                          "minItems": 1,
-                          "items": {
-                            "$ref": "#/$defs/segment"
-                          }
-                        }
-                      ],
-                      "description": "ids this part SURROUNDS rather than covers - a frame whose bounding box takes in openings its ink does not. L13 compares boxes, which is right for almost every part and wrong for a frame; this is the declaration that makes the difference checkable instead of assumed. Name only what the openings actually clear. NOT a way to silence a real overlap: a part that genuinely paints over another is an error. Distinct from `behaviour: mounts`, which says a part lies OVER what is behind it and draws after the bays - a drive cage surrounds its drives and must draw BEFORE them, so the two are not interchangeable."
-                    }
-                  },
-                  "oneOf": [
-                    {
-                      "required": [
-                        "at"
-                      ]
-                    },
-                    {
-                      "required": [
-                        "mate-to"
-                      ]
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "regions": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "required": [
-                "id"
-              ],
-              "additionalProperties": false,
-              "properties": {
-                "id": {
-                  "$ref": "#/$defs/segment"
-                },
-                "at": {
-                  "$ref": "#/$defs/xy"
-                },
-                "size": {
-                  "type": "object",
-                  "required": [
-                    "w",
-                    "h"
-                  ],
-                  "additionalProperties": false,
-                  "properties": {
-                    "w": {
-                      "type": "number"
-                    },
-                    "h": {
-                      "type": "number"
-                    }
-                  }
-                },
-                "physical-context": {
-                  "type": "string",
-                  "description": "Redfish PhysicalContext value where applicable"
-                },
-                "members": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/$defs/segment"
-                  }
-                },
-                "label": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "face": {
-            "enum": [
-              "front",
-              "rear",
-              "top",
-              "bottom",
-              "left",
-              "right"
-            ],
-            "description": "which face this view draws, when the view is not NAMED after one. A view called `front` needs no `face`; a second front - a different panel for the same face, say a 12 x 3.5 inch front beside a 24 x 2.5 inch one - declares `face: front` and is a VARIANT. A variant draws only when a configuration binds it, and draws under the face's name, so a consumer still asks for `front` and gets whichever front that configuration wears."
-          }
+       "$ref": "#/$defs/segment"
+      },
+      "description": "which panel each face wears in this configuration, as {face: view name}. Faces not named fall back to the view named after them, so a configuration that overrides only the front keeps the standard rear and sides. THIS IS WHAT COUPLES THE FACES: a front and a rear that do not go together on real hardware cannot both be named here, so the impossible machine has nowhere to live. Scoping a bay with `only-in` cannot do that - it varies occupants within one panel and says nothing about any other face."
+     }
+    }
+   }
+  },
+  "groups": {
+   "type": "object",
+   "description": "every `group:` used in any view, declared once: the vendor's word for one of them (term), where numbering starts, and shared attrs. Lint L17 rejects an undeclared group",
+   "propertyNames": {
+    "$ref": "#/$defs/segment"
+   },
+   "additionalProperties": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "index-origin": {
+      "enum": [
+       0,
+       1
+      ]
+     },
+     "term": {
+      "type": "string",
+      "description": "vendor display word, e.g. 'Port', 'Slot', 'Bay'"
+     },
+     "role": {
+      "enum": [
+       "traffic",
+       "management",
+       "service",
+       "indicator",
+       "furniture"
+      ],
+      "description": "what this block is FOR - the one thing the drawing cannot work out for itself. A PSU bay, a fan bay and a line-card bay are all data-class `bay`, the same hole with a module in it, so anything ranking the tree by class cannot tell which of them is why the box exists and which two keep it alive. Only the group knows. `traffic` is the work the device is bought to do - line-card slots and the ports that carry user traffic. `management` is how you reach and discipline it - the OOB jack, the console, the craft port, the timing and sync interfaces; a separate bucket rather than part of traffic because on five devices the management block is written FIRST in the manifest, so leaving it in with the traffic ports still opened the tree with a console socket. `service` is what keeps it running - PSUs, fans, filters, power shelves, AND THE CONTROL-PLANE CARDS: routing engines, route processors, supervisors, fabric and switch-control boards. They are named here because leaving them unnamed let the convention drift both ways - nine devices had routing engines in `service` and two in `management`, and the ASR 9912 and 9922 had their ROUTE PROCESSORS in `traffic`, which made the first base configuration built for a 9922 empty both of them. An RE is not `management`: that bucket is jacks and ports, the things you plug into, not the cards behind them. `indicator` is what you read - LEDs, displays. `furniture` is what you neither connect to nor read - ears, rivets, labels, grounding points, doors. Ordering WITHIN a role stays document order, which already reads correctly; this only says which bucket the block falls in. Lint L37"
+     },
+     "physical-context": {
+      "type": "string",
+      "description": "Redfish PhysicalContext value shared by everything in this block, e.g. 'PowerSupply' for the PSU bays. A whole group is the natural place to say it once"
+     },
+     "mixed": {
+      "type": "string",
+      "description": "the job these ports do together, when they do NOT share a media or a speed and that is deliberate: a management cluster of SFP+, USB and RJ45, a timing block of RJ45 and coax. The default shape of a port group is one family - one media, one speed - because that is what lets the block declare its facts once in `attrs`; a group spanning families is normally a bucket nobody has sorted yet, and lint L23 says so. This field is the author's answer: the vendor's faceplate calls these one thing, and splitting them by media would be a worse drawing. State the function, e.g. 'management cluster' or 'timing inputs and outputs' - it is a reason, not a switch, and L23 also objects if it is set on a group that is in fact one family"
+     },
+     "attrs": {
+      "type": "object"
+     },
+     "states": {
+      "description": "what this indicator's states MEAN on this device. Overrides the component's own vocabulary, which can only be generic - the same led-dot is a speed lamp on one port and a link lamp on the next. A block of eighteen speed lamps shares one vocabulary and says it once; a placement inside it may still override",
+      "oneOf": [
+       {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+         "$ref": "#/$defs/state"
         }
-      }
-    },
-    "portfolio": {
+       },
+       {
+        "type": "object",
+        "minProperties": 1,
+        "description": "per contracted element, when one component carries two lamps that do NOT share a vocabulary - a management jack whose left lamp is green for 1G and whose right is amber for 10M/100M. Keys are element ids of the referenced component; lint L20 rejects one that names no element",
+        "propertyNames": {
+         "$ref": "#/$defs/segment"
+        },
+        "additionalProperties": {
+         "type": "array",
+         "minItems": 1,
+         "items": {
+          "$ref": "#/$defs/state"
+         }
+        }
+       }
+      ]
+     },
+     "description": {
+      "type": "string",
+      "description": "the vendor's own sentence about this block of indicators, kept beside the tokens"
+     }
+    }
+   }
+  },
+  "views": {
+   "type": "object",
+   "minProperties": 1,
+   "required": [
+    "front"
+   ],
+   "propertyNames": {
+    "$ref": "#/$defs/segment"
+   },
+   "additionalProperties": {
+    "type": "object",
+    "additionalProperties": false,
+    "description": "one face of the device, written in the order the part is made: size the panel, punch it, print it, populate it. Key order is linted (L16).",
+    "properties": {
+     "empty": {
+      "type": "string",
+      "minLength": 40,
+      "description": "this face was LOOKED FOR AND IS NOT DOCUMENTED, and this says where you looked. A face with nothing on it is otherwise indistinguishable from a face nobody got to, so the capability check counted both as unfinished and the only way to pass was to draw something - which on an undocumented face means inventing it. Prose rather than a boolean, and long enough that a bare `empty: yes` will not validate, because the claim being made is about a search rather than about the drawing. A view declaring this must actually be bare (L60); if a source turns up, the sentence goes and the feature is drawn."
+     },
+     "size": {
       "type": "object",
-      "description": "where this device sits in the vendor's own catalogue, in the vendor's own words. Free text on purpose: the controlled vocabulary is to be harvested from what accumulates, not designed up front from a dozen devices. All fields optional; a device without a portfolio block sorts under its manufacturer.",
+      "description": "view dimensions in mm when not the chassis front elevation (e.g. top = width x depth)",
+      "required": [
+       "w",
+       "h"
+      ],
       "additionalProperties": false,
       "properties": {
-        "line": {
-          "type": "string",
-          "description": "the vendor's business line, e.g. 'Service Provider'"
-        },
-        "family": {
-          "type": "string",
-          "description": "the vendor's word for the category, e.g. 'Aggregation Router'"
-        },
-        "series": {
-          "type": "string",
-          "description": "marketing series, e.g. 'AGR400'; the model is the SKU root"
-        },
-        "also-listed-in": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "minItems": 1,
-          "uniqueItems": true,
-          "description": "other catalogue categories the vendor ALSO files this device under, in the vendor's own words. `line` is the category of the vendor's own canonical product URL; this is everywhere else it appears. A consumer filtering by category should union the two, so a box the vendor lists twice shows up in both lists."
-        }
-      }
-    },
-    "gaps": {
-      "type": "array",
-      "description": "unknowns no rule can ever find, because the manifest looks complete. 'The HIG has no port-lamp table' is a fact about a DOCUMENT, not about this file, and only someone who read the source knows it. Detectable gaps - a port with no media, an indicator with no `for:` - are derived from the lint rules at build time and must NOT be listed here: a hand-kept list of machine-findable problems goes stale the first time someone fixes one. Declare the unknowns, derive the rest.",
-      "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "what",
-          "reason",
-          "wanted"
-        ],
-        "properties": {
-          "what": {
-            "$ref": "#/$defs/segment",
-            "description": "the missing knowledge, as a token: port-led-semantics, fan-direction"
-          },
-          "scope": {
-            "type": "array",
-            "description": "what it applies to: group names, instance ids, or view names",
-            "items": {
-              "type": "string"
-            }
-          },
-          "reason": {
-            "description": "why it is missing, because that decides who can close it. `sources-disagree` is the one that is NOT an absence: two documents we hold state different values for one fact, and picking the bigger number and saying nothing loses a real finding. It is the normal case rather than the exceptional one - the AGR400's datasheet says 527 W max where its own QSG says 638 W at 25 C, and the C100G guide gives the fan assemblies 100 W each in prose and 330 W for the three of them in Table A-2. The `note` carries both figures with their sources",
-            "enum": [
-              "vendor-silent",
-              "sources-disagree",
-              "nos-dependent",
-              "needs-hardware",
-              "needs-photo",
-              "needs-drawing"
-            ]
-          },
-          "note": {
-            "type": "string",
-            "description": "what was looked at and what it did not say. Cite the section, so the next reader does not repeat the search"
-          },
-          "wanted": {
-            "type": "string",
-            "description": "required, and the most valuable field: the difference between 'we don't know' and a request someone can act on"
-          },
-          "blocks": {
-            "type": "array",
-            "description": "capability flags or levels this gap stands in the way of, so a consumer can join a flag to its explanation structurally rather than by reading the prose in `wanted`. Optional, and an empty list is a fine answer - do not invent a blocker to fill the field. Absent or empty means 'blocks nothing we can name', not 'unknown'.",
-            "items": {
-              "$ref": "#/$defs/segment"
-            }
-          }
-        }
-      }
-    }
-  },
-  "$defs": {
-    "state": {
-      "description": "one state a lamp can be in. The name is a token because `state-<name>` is a CSS class; the sentence explaining it belongs in `description` alongside THE BEHAVIOR BLOCK IS THE SAME SHAPE AS component.schema.json's and is kept that way deliberately: a state means one thing whether it is declared on a part or overridden on a placement. When `rate` and `sequence` were added they went into the component schema only, and a device that stated a blink frequency on a placement was rejected by a rule nobody had thought about - two definitions of one concept, drifting.",
-      "oneOf": [
-        {
-          "$ref": "#/$defs/segment"
-        },
-        {
-          "type": "object",
-          "required": [
-            "name"
-          ],
-          "additionalProperties": false,
-          "properties": {
-            "name": {
-              "$ref": "#/$defs/segment"
-            },
-            "behavior": {
-              "description": "how the lamp is lit, as opposed to what colour it is lit. Omitted means solid. A state is colour AND behaviour: solid green and blinking green are different facts on real hardware. `rate` is the blink frequency in hertz, because a lamp blinking twice a second and one blinking four times a second are two different documented conditions on the same drive and flattening both to `blinking` throws the distinction away. `sequence` is for a pattern no single colour and rate can express - Dell's drive status lamp blinks green three seconds, amber three seconds, then off for six, which is three phases with durations rather than a blink of anything.",
-              "oneOf": [
-                {
-                  "enum": [
-                    "solid",
-                    "blinking",
-                    "alternating",
-                    "sequence"
-                  ]
-                },
-                {
-                  "type": "object",
-                  "required": [
-                    "mode"
-                  ],
-                  "additionalProperties": false,
-                  "properties": {
-                    "mode": {
-                      "enum": [
-                        "solid",
-                        "blinking",
-                        "alternating",
-                        "sequence"
-                      ]
-                    },
-                    "color": {
-                      "type": "string",
-                      "description": "the second colour, for `alternating` - the lamp flashes between `color` and this one"
-                    },
-                    "rate": {
-                      "type": "number",
-                      "exclusiveMinimum": 0,
-                      "description": "blink frequency in hertz, for `blinking` and `alternating`. Omitted means once a second, which is what every state written before this property existed meant by `blinking`."
-                    },
-                    "phases": {
-                      "type": "array",
-                      "minItems": 2,
-                      "description": "for `sequence`: the cycle in order. Each phase names a colour and how long it holds; a phase with NO colour is the lamp off, which is a phase like any other and is how 'blinks green, amber, and turns off' gets said. Durations are seconds and may be omitted, in which case the phases divide the cycle evenly - some vendors give the order without the timing, and recording that as an even division is more honest than inventing durations.",
-                      "items": {
-                        "type": "object",
-                        "additionalProperties": false,
-                        "properties": {
-                          "color": {
-                            "type": "string",
-                            "description": "the colour this phase holds; absent means the lamp is off for it"
-                          },
-                          "seconds": {
-                            "type": "number",
-                            "exclusiveMinimum": 0,
-                            "description": "how long this phase holds"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            },
-            "color": {
-              "type": "string",
-              "description": "LED color for this state, emitted as scoped CSS"
-            }
-          }
-        }
-      ]
-    },
-    "segment": {
-      "type": "string",
-      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
-    },
-    "for-target": {
-      "description": "what a placement's `for:` names: a bare id, meaning a placement or bay in the same view; 'view/id', meaning one in another view of the same device, because a front-panel PSU lamp indicates a PSU that lives in the rear and only the qualified form can spell that; or the literal 'chassis', the whole unit, for an indicator whose subject is not a modelled part. A list means collectively - a FAN lamp over five trays names all five and belongs to none of them.",
-      "type": "string",
-      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*(/[a-z0-9]+(-[a-z0-9]+)*)?$"
-    },
-    "xy": {
-      "type": "array",
-      "items": {
+       "w": {
         "type": "number"
-      },
-      "minItems": 2,
-      "maxItems": 2
-    },
-    "confidence": {
+       },
+       "h": {
+        "type": "number"
+       }
+      }
+     },
+     "panel": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "the sheet metal - what it is (decor) and where it is punched (cutouts)",
+      "properties": {
+       "decor": {
+        "type": "array",
+        "description": "non-addressable chassis decoration (vent fields etc.)",
+        "items": {
+         "type": "object",
+         "required": [
+          "at"
+         ],
+         "additionalProperties": false,
+         "properties": {
+          "at": {
+           "$ref": "#/$defs/xy"
+          },
+          "size": {
+           "$ref": "#/$defs/xy"
+          },
+          "pattern": {
+           "enum": [
+            "vent",
+            "holes",
+            "grille",
+            "slots",
+            "slots-h",
+            "ribs"
+           ]
+          },
+          "vent": {
+           "type": "number",
+           "exclusiveMinimum": 0,
+           "description": "air vent: dark cells (or the whole rect when plain-fill) become holes into a cavity this deep in 3D"
+          },
+          "pattern-offset": {
+           "$ref": "#/$defs/xy",
+           "description": "shift the pattern phase under this rect (align lattice rows across corners)"
+          },
+          "id": {
+           "type": "string",
+           "description": "name this rect in the drawing. Without one it is numbered by kind, and somebody opening the SVG in an editor finds an anonymous rectangle they can only identify by clicking it and watching what highlights"
+          },
+          "kind": {
+           "type": "string",
+           "description": "what this rect IS - port-shell, recess, label-plate, bezel. A vent field and a stroked outline name themselves from `pattern` and `stroke`; everything else is an unlabelled grey box unless the author says otherwise. It reaches the drawing as data-kind, so the file can be READ rather than clicked through"
+          },
+          "out": {
+           "type": "number",
+           "exclusiveMinimum": 0,
+           "description": "decor protrudes this many mm from the face in 3D (raised stampings)"
+          },
+          "lift": {
+           "type": "number",
+           "exclusiveMinimum": 0,
+           "description": "standoff: the raised decor STARTS this many mm off the face, so it spans lift..out instead of 0..out. Without it `out` can only build a solid block from the panel outward, which is wrong for anything with a section - a cable-management hook is a thin plate at the FRONT of a horizontal foot, and extruding its outline from the panel gave a cube where the hardware has an L. `relief.features` has carried `lift` all along; decor not having it was an asymmetry in the vocabulary rather than a decision."
+          },
+          "confidence": {
+           "$ref": "#/$defs/confidence"
+          },
+          "source": {
+           "type": "string",
+           "description": "where precisely, in one phrase. Start with '<ns>/<name>@<major>' when the number came from another part, so the claim can be resolved rather than only read."
+          },
+          "sink": {
+           "type": "number",
+           "exclusiveMinimum": 0,
+           "description": "decor is recessed this many mm into the face in 3D (pressed grooves)"
+          },
+          "fill": {
+           "type": "string",
+           "description": "plain fill (e.g. groove color) when no pattern"
+          },
+          "rx": {
+           "type": "number"
+          },
+          "stroke": {
+           "type": "string",
+           "description": "outline-only decor (fiber channels etc.); fill defaults to none"
+          },
+          "stroke-width": {
+           "type": "number"
+          },
+          "rotate": {
+           "type": "number",
+           "description": "text decor rotation in degrees about its anchor"
+          },
+          "shape": {
+           "enum": [
+            "rect",
+            "circle",
+            "d-sub",
+            "slot"
+           ],
+           "default": "rect",
+           "description": "outline of the painted patch. `rect` (with optional `rx`) is the default; `d-sub` is the D-subminiature outline of TE 114-40010 Figure 3 and `slot` a stadium. THE SAME VOCABULARY A CUTOUT'S `shape` TAKES, because paint printed around a connector takes the connector's shape and until now had no way to say so - a patch behind a D-sub could only be a rectangle or a rounded one. `circle` is accepted for symmetry and still draws as a rect; decor has `rx`."
+          }
+         }
+        }
+       },
+       "cutouts": {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "id",
+          "at",
+          "size"
+         ],
+         "properties": {
+          "id": {
+           "$ref": "#/$defs/segment"
+          },
+          "at": {
+           "$ref": "#/$defs/xy"
+          },
+          "size": {
+           "$ref": "#/$defs/xy",
+           "description": "[w, h] in mm"
+          },
+          "shape": {
+           "enum": [
+            "rect",
+            "circle",
+            "d-sub",
+            "slot"
+           ],
+           "default": "rect"
+          },
+          "rx": {
+           "type": "number",
+           "description": "corner radius for rect"
+          },
+          "empty": {
+           "type": "boolean",
+           "description": "a hole with deliberately nothing in it (a blanked-off option). Without this, a cutout no placement sits in is a lint finding"
+          },
+          "provenance": {
+           "$ref": "#/$defs/provenance"
+          },
+          "rotate": {
+           "type": "number",
+           "description": "degrees to turn the aperture about its own centre. A `d-sub` or `slot` hole has a direction and the part that fills it already says which - the placement's own `rotate` - so without this a turned connector sat in an untuned hole and the corners its aperture does not have showed as ink."
+          }
+         }
+        }
+       }
+      }
+     },
+     "silkscreen": {
+      "type": "array",
+      "description": "Printed matter on the CHASSIS panel. Painted after the panel and its decor and BEFORE components, because on the real device the silkscreen goes down on the punched panel and the modules are installed on top of it. A legend that a module would cover is therefore invisible here, which is the correct behaviour: on the hardware it would be invisible too. Silkscreen printed on a MODULE's own faceplate belongs in that component's skin, inside <g id=\"silkscreen\">, and travels with it.",
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "at"
+       ],
+       "properties": {
+        "id": {
+         "$ref": "#/$defs/segment",
+         "description": "optional stable id; needed only when something else refers to this mark"
+        },
+        "at": {
+         "$ref": "#/$defs/xy"
+        },
+        "text": {
+         "type": "string",
+         "description": "printed legend. Multi-line uses \\n. Exactly one of text or path"
+        },
+        "font-size": {
+         "type": "number"
+        },
+        "anchor": {
+         "enum": [
+          "start",
+          "middle",
+          "end"
+         ]
+        },
+        "rotate": {
+         "type": "number",
+         "description": "degrees about the anchor"
+        },
+        "fill": {
+         "type": "string",
+         "description": "ink colour; defaults to chassis silk"
+        },
+        "for": {
+         "description": "what this mark annotates. One placement or bay, or a list when the mark joins things - a leader line from a breaker to its terminal names both. Emitted as data-for. Printed ink annotates something on the face it is printed on: a bare id in this view, never another view and never the chassis.",
+         "oneOf": [
+          {
+           "$ref": "#/$defs/segment"
+          },
+          {
+           "type": "array",
+           "minItems": 1,
+           "items": {
+            "$ref": "#/$defs/segment"
+           }
+          }
+         ]
+        },
+        "path": {
+         "type": "string",
+         "description": "printed line or symbol as an SVG path in view mm - a leader line, a polarity arrow, an earth mark. Exactly one of text or path"
+        },
+        "filled": {
+         "type": "boolean",
+         "description": "this path ENCLOSES ink rather than tracing a route. A leader line is stroked; a solid arrowhead is filled. Without it every symbol is an outline held shut by its own stroke width, which leaves a pinhole in anything small and cannot be scaled - at twice the size the hole is four times as obvious"
+        },
+        "fill-rule": {
+         "enum": [
+          "nonzero",
+          "evenodd"
+         ],
+         "description": "evenodd where a filled mark has a hole in it - a bored nut, a ring"
+        },
+        "stroke-width": {
+         "type": "number"
+        }
+       },
+       "oneOf": [
+        {
+         "required": [
+          "text"
+         ]
+        },
+        {
+         "required": [
+          "path"
+         ]
+        }
+       ]
+      }
+     },
+     "components": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "what is installed into the panel. bays are things that come out; placements are things that do not",
+      "properties": {
+       "bays": {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "required": [
+          "id",
+          "at",
+          "size"
+         ],
+         "additionalProperties": false,
+         "properties": {
+          "only-in": {
+           "type": "array",
+           "items": {
+            "$ref": "#/$defs/segment"
+           },
+           "minItems": 1,
+           "uniqueItems": true,
+           "description": "THE CONFIGURATIONS IN WHICH THIS PART OF THE METAL EXISTS AT ALL, which is a different question from what goes in it. Absent means every configuration, which is almost always the answer. A C40G ordered for AC has ONE bolted panel across the bottom rear where a DC chassis has two power-entry openings - not two empty openings, different sheet metal - and without this a configuration could vary only its OCCUPANTS: the AC rear drew two empty PEM bays as black rectangles, and the bay picker offered a DC power entry module on a chassis that cannot take one. Scoping lives HERE, on the bay or placement, rather than in the configuration block, because it is a statement about GEOMETRY and geometry is what a view holds - a configuration says what is fitted, not where the holes are. Distinct from `optional`, which is a build-time flag that hides a part from every configuration at once. Lint L41"
+          },
+          "id": {
+           "$ref": "#/$defs/segment"
+          },
+          "at": {
+           "$ref": "#/$defs/xy"
+          },
+          "size": {
+           "type": "object",
+           "required": [
+            "w",
+            "h"
+           ],
+           "additionalProperties": false,
+           "properties": {
+            "w": {
+             "type": "number"
+            },
+            "h": {
+             "type": "number"
+            }
+           }
+          },
+          "opening": {
+           "type": "object",
+           "required": [
+            "w",
+            "h"
+           ],
+           "additionalProperties": false,
+           "properties": {
+            "w": {
+             "type": "number"
+            },
+            "h": {
+             "type": "number"
+            }
+           },
+           "description": "the HOLE IN THE SHEET METAL, when it differs from `size`. `size` is the space the slot RESERVES - what the occupant is placed into and checked against - and on a card cage that is the card including its ejector brackets. The hole the card's plate covers is smaller, and it is the hole you see when the bay is empty. On an ASR 9006 they are 395.70 and 352.59: painting the reserved space dark put 21.5 mm of opening over metal at each end. Absent means the two are the same, which is the common case. Measured only - never inferred from the occupant, which is the mistake this exists to undo."
+          },
+          "accepts": {
+           "type": "array",
+           "items": {
+            "type": "string"
+           },
+           "minItems": 1
+          },
+          "group": {
+           "$ref": "#/$defs/segment"
+          },
+          "rel-pos": {
+           "type": "integer"
+          },
+          "physical-context": {
+           "type": "string",
+           "description": "Redfish PhysicalContext value, e.g. 'PowerSupply', 'Fan', 'NetworkingDevice'. This is the join between the drawing and a running box: it is what lets an ENTITY-MIB entPhysicalTable row or a Redfish Thermal sensor be laid over the bay it actually describes. The `wired` capability flag is exactly 'every bay and every port group says this'"
+          },
+          "default": {
+           "type": [
+            "string",
+            "null"
+           ],
+           "description": "ref populated by default config; null = open"
+          },
+          "rotate": {
+           "type": "number",
+           "description": "degrees to rotate the occupant, e.g. a line card mounted horizontally in one chassis and vertically in another"
+          },
+          "mirror": {
+           "type": "boolean",
+           "description": "flip the occupant horizontally about its own centre line; handedness, not rotation - a riser whose cards face the other way"
+          },
+          "plan": {
+           "type": "object",
+           "additionalProperties": false,
+           "required": ["view", "at"],
+           "description": "WHERE THIS BAY'S OCCUPANT IS SEEN FROM ANOTHER FACE. A riser is seated in its rear bay and stands inside the chassis; with the lid off, the top view should show it there. The occupant's contract names the component that draws it from above (`plan.ref`), and this says which view that lands in and where - the plan's top-left in that view's mm. `in:` and `under:` are the target view's, so the plan sits in its well and paints under the lid. `mirror` flips it, for a riser whose cards face the other way. The occupants of the occupant's own bays come along at the offsets those bays declare. The result is a PROJECTION: it carries `data-of` naming the seated part and no data-path of its own, so the tree lists the part once, selecting either face marks both, and the 3D kit builds nothing from it - the body already stands there.",
+           "properties": {
+            "view": {"type": "string"},
+            "at": {"$ref": "#/$defs/xy"},
+            "in": {"$ref": "#/$defs/segment"},
+            "under": {"type": "array", "items": {"$ref": "#/$defs/segment"}},
+            "mirror": {"type": "boolean"}
+           }
+          },
+          "floor": {
+           "type": "number",
+           "exclusiveMinimum": 0,
+           "description": "mm below the face at which this bay's occupant STANDS, when that is not the well's own floor. With `in:` alone a module stands on the well's floor and rises its own height; a card in a riser stands on its slot, and the three slots of a riser are three shelves at three heights inside one well. So a bay may say where its shelf is: the R740xd's riser 1 slots are 26.6, 44.8 and 64.6 down, from the model's seated cards. Only meaningful with `in:`, and never deeper than the well (L13)."
+          },
+          "in": {
+           "$ref": "#/$defs/segment",
+           "description": "the WELL this bay opens in - a placement in this view drawn as a recess. The module that fills it STANDS ON THE WELL'S FLOOR and rises to its own `size.d`: the bay's plane sits that far above the floor and the body reaches down to it. A 26.1 mm drive in the mid tray, whose floor is 31.31 down, tops out 5.21 below the lid; a 31.3 mm DIMM on the board's PCB, 79.9 down, tops out at 48.6. A well's depth is its floor, never the top of what is in it. Implies the well is `under:` this bay. Checked: the target must be a well in this view."
+          },
+          "under": {
+           "oneOf": [
+            {
+             "$ref": "#/$defs/segment"
+            },
+            {
+             "type": "array",
+             "minItems": 1,
+             "items": {
+              "$ref": "#/$defs/segment"
+             }
+            }
+           ],
+           "description": "Same as on a placement: the ids in this view that lie OVER this bay. A bay is an opening, so it always has somewhere to be under - the R740xd's DIMM sockets sit under the mid-drive tray and its drive bays on the nine configurations that carry one, and the DIMMs' 42.6 mm top clears the tray's 48.89 mm floor. Checked by L13 exactly as a placement's is: the upper part must exist in the view, and the pair is then not compared."
+          },
+          "for": {
+           "description": "the placement or bay this one belongs to. A bay is a hole in this face; what it belongs to is on this face too, so a bare id and nothing else. Emitted as data-for.",
+           "oneOf": [
+            {
+             "$ref": "#/$defs/segment"
+            },
+            {
+             "type": "array",
+             "minItems": 1,
+             "items": {
+              "$ref": "#/$defs/segment"
+             }
+            }
+           ]
+          },
+          "interface": {
+           "$ref": "#/$defs/segment",
+           "description": "THE INTERFACE THIS SLOT PRESENTS, for an opening whose occupants are not a list anyone published. `accepts` is the vendor's compatibility matrix transcribed - it works because a switch's card catalogue is closed and printed, and the module reference's support tables ARE those lists. An open form factor has no table to transcribe: anyone may build a PCIe card, so a list is unbounded, and one written anyway asserts something the vendor never said. Such a bay names the interface instead and carries no list. Occupants declare the same key via `mates`, exactly as they do for a cage. Deliberately not an enum - a new interface is a new key, not a schema change. Electrical detail (a generation, a lane width) belongs in `attrs`, NOT here: a gen3 card seats in a gen4 slot and an x8 card in an x16, so matching on an exact key would refuse hardware that fits. See ndv#43."
+          }
+         },
+         "anyOf": [
+          {
+           "required": [
+            "accepts"
+           ]
+          },
+          {
+           "required": [
+            "interface"
+           ]
+          }
+         ],
+         "description": "A bay says what goes in it in ONE OF TWO WAYS, and must say it somehow: `accepts` for a closed vendor matrix, `interface` for an open form factor. Both together is fine - a slot can be standard AND have a published list. Neither is a hole that promises nothing."
+        }
+       },
+       "placements": {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "required": [
+          "ref",
+          "id"
+         ],
+         "additionalProperties": false,
+         "properties": {
+          "only-in": {
+           "type": "array",
+           "items": {
+            "$ref": "#/$defs/segment"
+           },
+           "minItems": 1,
+           "uniqueItems": true,
+           "description": "THE CONFIGURATIONS IN WHICH THIS PART OF THE METAL EXISTS AT ALL, which is a different question from what goes in it. Absent means every configuration, which is almost always the answer. A C40G ordered for AC has ONE bolted panel across the bottom rear where a DC chassis has two power-entry openings - not two empty openings, different sheet metal - and without this a configuration could vary only its OCCUPANTS: the AC rear drew two empty PEM bays as black rectangles, and the bay picker offered a DC power entry module on a chassis that cannot take one. Scoping lives HERE, on the bay or placement, rather than in the configuration block, because it is a statement about GEOMETRY and geometry is what a view holds - a configuration says what is fitted, not where the holes are. Distinct from `optional`, which is a build-time flag that hides a part from every configuration at once. Lint L41"
+          },
+          "ref": {
+           "type": "string",
+           "pattern": "^[a-z0-9-]+/[a-z0-9-]+@\\d+$",
+           "description": "namespace/component@major"
+          },
+          "id": {
+           "$ref": "#/$defs/segment"
+          },
+          "at": {
+           "$ref": "#/$defs/xy"
+          },
+          "rotate": {
+           "type": "number"
+          },
+          "skin": {
+           "$ref": "#/$defs/segment"
+          },
+          "group": {
+           "$ref": "#/$defs/segment"
+          },
+          "rel-pos": {
+           "type": "integer"
+          },
+          "physical-context": {
+           "type": "string",
+           "description": "Redfish PhysicalContext value. See the same key on a bay; declaring it once on the group is usually right, and a placement overrides"
+          },
+          "optional": {
+           "$ref": "#/$defs/segment",
+           "description": "render only when --with <tag> is given (e.g. ears)"
+          },
+          "attrs": {
+           "type": "object"
+          },
+          "states": {
+           "description": "what this indicator's states MEAN on this device. Overrides the component's own vocabulary, which can only be generic - the same led-dot is a speed lamp on one port and a link lamp on the next",
+           "oneOf": [
+            {
+             "type": "array",
+             "minItems": 1,
+             "items": {
+              "$ref": "#/$defs/state"
+             }
+            },
+            {
+             "type": "object",
+             "minProperties": 1,
+             "description": "per contracted element, when one component carries two lamps that do NOT share a vocabulary - a management jack whose left lamp is green for 1G and whose right is amber for 10M/100M. Keys are element ids of the referenced component; lint L20 rejects one that names no element",
+             "propertyNames": {
+              "$ref": "#/$defs/segment"
+             },
+             "additionalProperties": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+               "$ref": "#/$defs/state"
+              }
+             }
+            }
+           ]
+          },
+          "description": {
+           "type": "string",
+           "description": "the vendor's own sentence about this indicator, kept beside the tokens - 'Blue = 100G, Green = 40G'. Prose, never a state list"
+          },
+          "provenance": {
+           "type": "object",
+           "additionalProperties": {
+            "type": "string"
+           }
+          },
+          "mate-to": {
+           "$ref": "#/$defs/segment",
+           "description": "id of a placement in this view to mate into. The renderer positions this component so its `mate` connection-point coincides with the host's, so an occupant never carries hand-computed centring offsets. Mutually exclusive with `at`."
+          },
+          "for": {
+           "description": "what this part is bound to - an LED to its port, a button to its module. One target or a list, and a list means collectively: a FAN lamp over five trays names all five. A target in another view of the same device is written 'view/id', because a front-panel PSU lamp indicates a PSU that lives in the rear. The literal 'chassis' names the whole unit, for an indicator with no modelled subject. Emitted as data-for; never inferred from names.",
+           "oneOf": [
+            {
+             "$ref": "#/$defs/for-target"
+            },
+            {
+             "type": "array",
+             "minItems": 1,
+             "items": {
+              "$ref": "#/$defs/for-target"
+             }
+            }
+           ]
+          },
+          "frames": {
+           "oneOf": [
+            {
+             "$ref": "#/$defs/segment"
+            },
+            {
+             "type": "array",
+             "minItems": 1,
+             "items": {
+              "$ref": "#/$defs/segment"
+             }
+            }
+           ],
+           "description": "ids this part SURROUNDS rather than covers - a frame whose bounding box takes in openings its ink does not. L13 compares boxes, which is right for almost every part and wrong for a frame; this is the declaration that makes the difference checkable instead of assumed. Name only what the openings actually clear. NOT a way to silence a real overlap: a part that genuinely paints over another is an error. Distinct from `behaviour: mounts`, which says a part lies OVER what is behind it and draws after the bays - a drive cage surrounds its drives and must draw BEFORE them, so the two are not interchangeable."
+          },
+          "in": {
+           "$ref": "#/$defs/segment",
+           "description": "the WELL this part stands in - a placement in this view that render.py draws as a recess (an unmounted, non-module part with `size.d`). A top view with its lid off is a section, and a part on the floor of a well is not at the face: the R740xd's heatsinks stand on the system board's PCB 79.9 mm down. The renderer sinks the part by the well's depth (a negative z-lift that relief.js sums like any other) and its `out` features rise from the floor. Implies the well is `under:` this part for L13 and for paint order, so it need not be repeated. Checked: the target must be a well in this view."
+          },
+          "mirror": {
+           "type": "boolean",
+           "description": "flip this instance horizontally about its own centre line; handedness, not rotation. The same key a bay offers its occupant: the R740xd's riser 3 is riser 1's cage at the other wall, so its card stands with the PCB outboard and the connectors inboard the other way about."
+          },
+          "under": {
+           "oneOf": [
+            {
+             "$ref": "#/$defs/segment"
+            },
+            {
+             "type": "array",
+             "minItems": 1,
+             "items": {
+              "$ref": "#/$defs/segment"
+             }
+            }
+           ],
+           "description": "ids in this view that lie OVER this part - the system board names the shroud and the fan wall that stand on it, the shroud names the lid that closes over it. A faceplate has one height and two parts in one place is a sizing error; a view with its cover off is a section through several, and everything in it overlaps in plan because it is stacked. This is how a placement says which. L13 does not compare a pair one of which is declared under the other, and it CHECKS the claim rather than trusting it: the lower part must be a well (an aperture with `size.d`) or the upper must be `behaviour: mounts`, because otherwise there is no height for the two to be at. NOT a way to silence a real overlap between two flat parts."
+          },
+          "inset": {
+           "type": "number",
+           "exclusiveMinimum": 0,
+           "description": "mm this INSTANCE is mounted behind the panel face. A part's relief says how far it stands proud when its flange bolts to the sheet metal; a connector on a board set back from the faceplate is the same part mounted differently, and this is where that difference belongs - on the placement, not in a second copy of the part. Every protrusion the instance declares is reduced by this much and anything left wholly behind the panel is not drawn."
+          },
+          "lift": {
+           "type": "number",
+           "exclusiveMinimum": 0,
+           "description": "mm this INSTANCE sits proud of the panel face - the mirror of `inset`, and used when the part is bolted not to the sheet metal but to something already standing off it. Every protrusion the instance declares is raised by this much. `relief.features` has carried `lift` all along, composed `parts:` gained it, and `panel.decor` gained it; a placement not having it was the same asymmetry in the vocabulary rather than a decision, and it forced the alternative of a second copy of the part with fattened numbers - which is exactly what `inset` exists to avoid in the other direction."
+          }
+         },
+         "oneOf": [
+          {
+           "required": [
+            "at"
+           ]
+          },
+          {
+           "required": [
+            "mate-to"
+           ]
+          }
+         ]
+        }
+       }
+      }
+     },
+     "regions": {
+      "type": "array",
+      "items": {
+       "type": "object",
+       "required": [
+        "id"
+       ],
+       "additionalProperties": false,
+       "properties": {
+        "id": {
+         "$ref": "#/$defs/segment"
+        },
+        "at": {
+         "$ref": "#/$defs/xy"
+        },
+        "size": {
+         "type": "object",
+         "required": [
+          "w",
+          "h"
+         ],
+         "additionalProperties": false,
+         "properties": {
+          "w": {
+           "type": "number"
+          },
+          "h": {
+           "type": "number"
+          }
+         }
+        },
+        "physical-context": {
+         "type": "string",
+         "description": "Redfish PhysicalContext value where applicable"
+        },
+        "members": {
+         "type": "array",
+         "items": {
+          "$ref": "#/$defs/segment"
+         }
+        },
+        "label": {
+         "type": "string"
+        }
+       }
+      }
+     },
+     "face": {
       "enum": [
-        "measured",
-        "photo-measured",
-        "drawing",
-        "datasheet",
-        "registry",
-        "borrowed",
-        "estimated",
-        "known-wrong"
+       "front",
+       "rear",
+       "top",
+       "bottom",
+       "left",
+       "right"
       ],
-      "description": "where a NUMBER came from. THE SAME VOCABULARY THE COMPONENT SCHEMA USES, deliberately - a device's 3D projections were the one place in the library that could never say where they came from, and giving them a second set of words would have been the defect this vocabulary exists to prevent. See spec/schemas/component.schema.json $defs/confidence for what each token means; `borrowed` in particular asserts that the named origin MEASURED the magnitude, and lint L36 checks it."
+      "description": "which face this view draws, when the view is not NAMED after one. A view called `front` needs no `face`; a second front - a different panel for the same face, say a 12 x 3.5 inch front beside a 24 x 2.5 inch one - declares `face: front` and is a VARIANT. A variant draws only when a configuration binds it, and draws under the face's name, so a consumer still asks for `front` and gets whichever front that configuration wears."
+     }
     }
+   }
+  },
+  "portfolio": {
+   "type": "object",
+   "description": "where this device sits in the vendor's own catalogue, in the vendor's own words. Free text on purpose: the controlled vocabulary is to be harvested from what accumulates, not designed up front from a dozen devices. All fields optional; a device without a portfolio block sorts under its manufacturer.",
+   "additionalProperties": false,
+   "properties": {
+    "line": {
+     "type": "string",
+     "description": "the vendor's business line, e.g. 'Service Provider'"
+    },
+    "family": {
+     "type": "string",
+     "description": "the vendor's word for the category, e.g. 'Aggregation Router'"
+    },
+    "series": {
+     "type": "string",
+     "description": "marketing series, e.g. 'AGR400'; the model is the SKU root"
+    },
+    "also-listed-in": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     },
+     "minItems": 1,
+     "uniqueItems": true,
+     "description": "other catalogue categories the vendor ALSO files this device under, in the vendor's own words. `line` is the category of the vendor's own canonical product URL; this is everywhere else it appears. A consumer filtering by category should union the two, so a box the vendor lists twice shows up in both lists."
+    }
+   }
+  },
+  "gaps": {
+   "type": "array",
+   "description": "unknowns no rule can ever find, because the manifest looks complete. 'The HIG has no port-lamp table' is a fact about a DOCUMENT, not about this file, and only someone who read the source knows it. Detectable gaps - a port with no media, an indicator with no `for:` - are derived from the lint rules at build time and must NOT be listed here: a hand-kept list of machine-findable problems goes stale the first time someone fixes one. Declare the unknowns, derive the rest.",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "what",
+     "reason",
+     "wanted"
+    ],
+    "properties": {
+     "what": {
+      "$ref": "#/$defs/segment",
+      "description": "the missing knowledge, as a token: port-led-semantics, fan-direction"
+     },
+     "scope": {
+      "type": "array",
+      "description": "what it applies to: group names, instance ids, or view names",
+      "items": {
+       "type": "string"
+      }
+     },
+     "reason": {
+      "description": "why it is missing, because that decides who can close it. `sources-disagree` is the one that is NOT an absence: two documents we hold state different values for one fact, and picking the bigger number and saying nothing loses a real finding. It is the normal case rather than the exceptional one - the AGR400's datasheet says 527 W max where its own QSG says 638 W at 25 C, and the C100G guide gives the fan assemblies 100 W each in prose and 330 W for the three of them in Table A-2. The `note` carries both figures with their sources",
+      "enum": [
+       "vendor-silent",
+       "sources-disagree",
+       "nos-dependent",
+       "needs-hardware",
+       "needs-photo",
+       "needs-drawing"
+      ]
+     },
+     "note": {
+      "type": "string",
+      "description": "what was looked at and what it did not say. Cite the section, so the next reader does not repeat the search"
+     },
+     "wanted": {
+      "type": "string",
+      "description": "required, and the most valuable field: the difference between 'we don't know' and a request someone can act on"
+     },
+     "blocks": {
+      "type": "array",
+      "description": "capability flags or levels this gap stands in the way of, so a consumer can join a flag to its explanation structurally rather than by reading the prose in `wanted`. Optional, and an empty list is a fine answer - do not invent a blocker to fill the field. Absent or empty means 'blocks nothing we can name', not 'unknown'.",
+      "items": {
+       "$ref": "#/$defs/segment"
+      }
+     }
+    }
+   }
   }
+ },
+ "$defs": {
+  "state": {
+   "description": "one state a lamp can be in. The name is a token because `state-<name>` is a CSS class; the sentence explaining it belongs in `description` alongside THE BEHAVIOR BLOCK IS THE SAME SHAPE AS component.schema.json's and is kept that way deliberately: a state means one thing whether it is declared on a part or overridden on a placement. When `rate` and `sequence` were added they went into the component schema only, and a device that stated a blink frequency on a placement was rejected by a rule nobody had thought about - two definitions of one concept, drifting.",
+   "oneOf": [
+    {
+     "$ref": "#/$defs/segment"
+    },
+    {
+     "type": "object",
+     "required": [
+      "name"
+     ],
+     "additionalProperties": false,
+     "properties": {
+      "name": {
+       "$ref": "#/$defs/segment"
+      },
+      "behavior": {
+       "description": "how the lamp is lit, as opposed to what colour it is lit. Omitted means solid. A state is colour AND behaviour: solid green and blinking green are different facts on real hardware. `rate` is the blink frequency in hertz, because a lamp blinking twice a second and one blinking four times a second are two different documented conditions on the same drive and flattening both to `blinking` throws the distinction away. `sequence` is for a pattern no single colour and rate can express - Dell's drive status lamp blinks green three seconds, amber three seconds, then off for six, which is three phases with durations rather than a blink of anything.",
+       "oneOf": [
+        {
+         "enum": [
+          "solid",
+          "blinking",
+          "alternating",
+          "sequence"
+         ]
+        },
+        {
+         "type": "object",
+         "required": [
+          "mode"
+         ],
+         "additionalProperties": false,
+         "properties": {
+          "mode": {
+           "enum": [
+            "solid",
+            "blinking",
+            "alternating",
+            "sequence"
+           ]
+          },
+          "color": {
+           "type": "string",
+           "description": "the second colour, for `alternating` - the lamp flashes between `color` and this one"
+          },
+          "rate": {
+           "type": "number",
+           "exclusiveMinimum": 0,
+           "description": "blink frequency in hertz, for `blinking` and `alternating`. Omitted means once a second, which is what every state written before this property existed meant by `blinking`."
+          },
+          "phases": {
+           "type": "array",
+           "minItems": 2,
+           "description": "for `sequence`: the cycle in order. Each phase names a colour and how long it holds; a phase with NO colour is the lamp off, which is a phase like any other and is how 'blinks green, amber, and turns off' gets said. Durations are seconds and may be omitted, in which case the phases divide the cycle evenly - some vendors give the order without the timing, and recording that as an even division is more honest than inventing durations.",
+           "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+             "color": {
+              "type": "string",
+              "description": "the colour this phase holds; absent means the lamp is off for it"
+             },
+             "seconds": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "how long this phase holds"
+             }
+            }
+           }
+          }
+         }
+        }
+       ]
+      },
+      "color": {
+       "type": "string",
+       "description": "LED color for this state, emitted as scoped CSS"
+      }
+     }
+    }
+   ]
+  },
+  "segment": {
+   "type": "string",
+   "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+  },
+  "for-target": {
+   "description": "what a placement's `for:` names: a bare id, meaning a placement or bay in the same view; 'view/id', meaning one in another view of the same device, because a front-panel PSU lamp indicates a PSU that lives in the rear and only the qualified form can spell that; or the literal 'chassis', the whole unit, for an indicator whose subject is not a modelled part. A list means collectively - a FAN lamp over five trays names all five and belongs to none of them.",
+   "type": "string",
+   "pattern": "^[a-z0-9]+(-[a-z0-9]+)*(/[a-z0-9]+(-[a-z0-9]+)*)?$"
+  },
+  "xy": {
+   "type": "array",
+   "items": {
+    "type": "number"
+   },
+   "minItems": 2,
+   "maxItems": 2
+  },
+  "confidence": {
+   "enum": [
+    "measured",
+    "photo-measured",
+    "drawing",
+    "datasheet",
+    "registry",
+    "borrowed",
+    "estimated",
+    "known-wrong"
+   ],
+   "description": "where a NUMBER came from. THE SAME VOCABULARY THE COMPONENT SCHEMA USES, deliberately - a device's 3D projections were the one place in the library that could never say where they came from, and giving them a second set of words would have been the defect this vocabulary exists to prevent. See spec/schemas/component.schema.json $defs/confidence for what each token means; `borrowed` in particular asserts that the named origin MEASURED the magnitude, and lint L36 checks it."
+  }
+ }
 }

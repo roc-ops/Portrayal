@@ -1,13 +1,13 @@
 format: 1
 kind: component
 name: rear-drive-plate-14g
-version: 1.0.0
+version: 1.1.0
 class: mechanical
 profile: server
 description: >-
   The numbered plate at the inboard end of one rear drive bay on a 14G
   PowerEdge - two slot numbers, each with an arrow pointing at the drive it names
-size: {w: 12.95, h: 31.75, d: 2.0}
+size: {w: 12.95, h: 31.75}
 provenance:
   it-comes-and-goes-with-the-drives: >-
     WHY THIS IS ITS OWN PART. It used to live in a 287.18 mm component that
@@ -53,4 +53,18 @@ provenance:
     estimated - 2.0, a plate's thickness. Nothing held here dimensions it.
 elements:
   plate: {at: [0.0, 0.0], size: [12.95, 31.75], class: bezel}
+relief:
+  features:
+  # THICKNESS, NOT A HOLE. This carried 2.0 as `size.d`, and
+  # render.py reads a non-module, non-mounts part's `d` as the
+  # depth of an APERTURE - so it was a pit in the panel. The
+  # number is the same; what it means is a protrusion.
+  - node: plate
+    out: 2.0
+    confidence: estimated
+    source: >-
+      carried over verbatim from this part's own `size.d`, where it
+      had been since the part was drawn - the numbered plate around a rear drive bay is a pressing ON the metal, so 2.0 is its thickness. As an aperture it made a 2 mm pit round every rear drive. No new reading was
+      taken; the correction is to what the number means, not to the
+      number.
 skins: [n24-25, n26-27]

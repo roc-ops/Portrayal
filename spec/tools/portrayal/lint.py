@@ -517,11 +517,35 @@ def lint_component(path, validator):
             # needed was the one moment it could not be printed. Second time a
             # missing key in a message has crashed lint; name it and carry on.
             origin = std.get("registry") or std.get("source") or "no source recorded"
-            if abs(sz["w"] - std["w"]) > 0.05 or abs(sz["h"] - std["h"]) > 0.05:
-                err(path, "L9", f"conforms {conf}: size {sz['w']}x{sz['h']} != registry {std['w']}x{std['h']} ({origin})")
-            if sz.get("d") is not None and std.get("depth") is not None \
-                    and abs(sz["d"] - std["depth"]) > 0.05:
-                err(path, "L9", f"conforms {conf}: depth {sz['d']} != registry {std['depth']} ({origin})")
+            # WHICH TWO OF THE THREE THIS CONTRACT DRAWS. A registry entry is a
+            # box - w, h and depth - and a contract draws one projection of it.
+            # The check used to assume every contract was the elevation, which
+            # is why a plan view of a standard part could not `conforms:` to the
+            # standard it plainly is: 101.6 x 147.0 is not 101.6 x 26.1, and the
+            # only way past it was to restate the numbers in a second file and
+            # let them drift.
+            pres = data.get("presents", "wh")
+            trio = {"w": std["w"], "h": std["h"], "d": std.get("depth")}
+            pair = [trio[k] for k in pres]
+            rest = trio[({"w", "h", "d"} - set(pres)).pop()]
+            if any(v is None for v in pair):
+                err(path, "L9", f"conforms {conf}: presents {pres} needs a depth "
+                    f"from the registry and {conf} does not give one ({origin})")
+            else:
+                # ORDER WITHIN THE PAIR IS NOT CHECKED, because which way round a
+                # part is turned belongs to the placement, not to the standard.
+                # The registry fixes an orientation of its own - drive-35 is
+                # described lying flat, drive-25 standing on edge - and a bay is
+                # free to disagree. What must not drift are the VALUES.
+                got, want = sorted([sz["w"], sz["h"]]), sorted(pair)
+                if any(abs(a - b) > 0.05 for a, b in zip(got, want)):
+                    err(path, "L9", f"conforms {conf}: size {sz['w']}x{sz['h']} is not "
+                        f"the registry's {pair[0]}x{pair[1]} in any order "
+                        f"for presents {pres} ({origin})")
+                if sz.get("d") is not None and rest is not None \
+                        and abs(sz["d"] - rest) > 0.05:
+                    err(path, "L9", f"conforms {conf}: depth {sz['d']} != {rest} "
+                        f"for presents {pres} ({origin})")
             # aperture vs cavity: registry cavity means the opening steps in, so the
             # component must declare the recess cross-section and a node drawing it
             cav = std.get("cavity")
@@ -1155,7 +1179,13 @@ def _feature_magnitude(feat):
     number it is about, and asking a feature which magnitude it carries has to
     ignore them or every stacked cyl looks like two numbers.
     """
-    keys = [k for k in ("top", "sink", "out", "dome", "cyl", "bar", "uhandle", "vent")
+    # `pocket` JOINS THE LIST BECAUSE IT IS ONE OF THESE. It was added as a
+    # relief primitive and this helper was not told, so every pocketed feature
+    # reported its magnitude as `?` and L36 could not check a single borrowed
+    # one - a rule silently unable to see the newest thing it governs, which is
+    # the same shape of blindness the rule itself exists to catch.
+    keys = [k for k in ("top", "sink", "out", "dome", "cyl", "bar", "uhandle",
+                        "vent", "pocket")
             if feat.get(k) is not None]
     return (keys[0], float(feat[keys[0]])) if len(keys) == 1 else None
 
@@ -1262,6 +1292,105 @@ def _lights_up(path, data, lib_roots, seen):
         if sub and _lights_up(cp, sub, lib_roots, seen):
             return True
     return False
+
+
+def lint_component_body_boxes(path, data, _lib_roots=None):
+    """L71: a body box reaches no further than the part says it is deep.
+
+    `size.d` is the part's reach into the chassis, and it is what the bay
+    hole, the pull distance and every fit check read. A box that runs on past
+    it is a PCB the part does not admit to - the riser's first pass declared
+    a 170.9 reach and a PCB starting 13.9 behind the plate and running 170.9,
+    which is 184.8. The number the part states has to contain its own body.
+    A box with no `confidence` is counted, once per file, as L35 counts.
+    """
+    body = data.get("body") or {}
+    boxes = body.get("boxes") or []
+    if not boxes:
+        return
+    d = float((data.get("size") or {}).get("d") or 0)
+    unmarked = 0
+    for i, b in enumerate(boxes):
+        reach = float(b.get("from") or 0) + float(b["depth"])
+        if reach > d + 0.05:
+            err(path, "L71", f"body box {b.get('id') or i} reaches {reach:g} behind the "
+                             f"face and size.d says the part is {d:g} deep")
+        if reach > float(body.get("depth") or 0) + 0.05:
+            err(path, "L71", f"body box {b.get('id') or i} reaches {reach:g} and "
+                             f"body.depth says {body.get('depth')} - the pull distance "
+                             f"is read from body.depth, so it must be the reach")
+        if not b.get("confidence"):
+            unmarked += 1
+    if unmarked:
+        warn(path, "L71", f"{unmarked} of {len(boxes)} body boxes carry no confidence")
+
+
+def lint_component_fields(path, data, _lib_roots=None):
+    """L73: a field prints somewhere, and what prints is a field.
+
+    A field is a promise to a form: set this and the drawing changes. It is
+    kept by a `data-from` node of that name in EVERY skin, or the value goes
+    nowhere on the skin that lacks it. And a `data-from` node the contract
+    does not declare is a field a form cannot find - the drive carriers
+    carried five of those for a year. A choice with no options is a text
+    box pretending.
+    """
+    fields = data.get("fields") or {}
+    skins_dir = path.parent / "skins"
+    seen = {}
+    for skin in (data.get("skins") or ["default"]):
+        sp = skins_dir / f"{skin}.svg"
+        if not sp.exists():
+            continue
+        keys = set(re.findall(r'data-from="([^"]+)"', sp.read_text(errors="replace")))
+        seen[skin] = keys
+        for k in fields:
+            if k not in keys:
+                err(path, "L73", f"field {k} has no data-from node in skin {skin}")
+    undeclared = set().union(*seen.values()) - set(fields) if seen else set()
+    if undeclared:
+        warn(path, "L73", f"skin fills {', '.join(sorted(undeclared))} from attrs but the "
+                          f"contract declares no such field - a form cannot offer them")
+    for k, f in fields.items():
+        if (f or {}).get("type") == "choice" and not (f or {}).get("options"):
+            err(path, "L73", f"field {k} is a choice with no options")
+        if (f or {}).get("options") and f.get("default") is not None and f["default"] not in f["options"]:
+            err(path, "L73", f"field {k}: default {f['default']!r} is not one of its options")
+
+
+def lint_component_lamp_colour(path, data, _lib_roots=None):
+    """L74: a lamp that declares states has to be painted from the variable.
+
+    A state is a CSS class that sets `--led-color`; a node is lit by reading it
+    - `fill="var(--led-color, <off>)"`, or the stroke for a glyph. A skin node
+    with a literal colour ignores every state its contract declares, in 2D
+    and in 3D alike: the R740xd's control panel declared amber faults on five
+    glyphs and two bars and none of them could ever turn amber.
+    """
+    skins_dir = path.parent / "skins"
+    # a button with an `on` state is lit the same way; a display is lit per
+    # segment by opacity and is not
+    lit = {k for k, e in (data.get("elements") or {}).items()
+           if isinstance(e, dict) and e.get("states") and e.get("class") in ("led", "button")}
+    if not lit:
+        return
+    for skin in (data.get("skins") or ["default"]):
+        sp = skins_dir / f"{skin}.svg"
+        if not sp.exists():
+            continue
+        try:
+            root = ET.parse(sp).getroot()
+        except ET.ParseError:
+            continue
+        for node in root.iter():
+            k = node.get("id")
+            if k not in lit:
+                continue
+            sub = ET.tostring(node, encoding="unicode")
+            if "var(--led-color" not in sub:
+                err(path, "L74", f"{skin}: lamp {k} declares states but its node paints a "
+                                 f"literal colour - no state can light it; use "
+                                 f"var(--led-color, <off colour>) on its fill or stroke")
 
 
 def lint_component_states_render(path, data, lib_roots):
@@ -1813,6 +1942,22 @@ def lint_device_overlap(path, view_name, view, lib_roots):
     by their whole area and never coexist in any rendered view. Without this the
     rule rejects the correct model, which is the more dangerous direction - an
     author reading a hard error concludes the arrangement is wrong.
+
+    And so are two parts at DIFFERENT HEIGHTS, when one says so. Every exemption
+    above is a faceplate exemption: it lets two things share a plan because one
+    of them is not really in the plan. A view with its lid off is not a
+    faceplate. The R740xd's top, cover pulled, is a SECTION through four
+    heights - the system board at 40.63, the air shroud at 84.88, the mid tray
+    at 85.63, the fan cage at 86.34, against an 86.8 panel - and everything in
+    it overlaps in plan precisely because it is stacked. `under:` on a
+    placement names the parts that lie over it, and a pair one of which has
+    declared itself under the other is not compared.
+    THE DECLARATION IS CHECKED, NOT TRUSTED. A part can only be under something
+    if there is somewhere for it to be: it must be a well (`size.d` on a part
+    that is neither a module nor mounted - the aperture rule), or the part over
+    it must be `behaviour: mounts`, a lid. A flat part claiming to be under
+    another flat part is the sizing error this rule exists for, wearing a new
+    key, and is reported as one.
     """
     boxes = []
     parts_ = view_parts(view)["placements"]
@@ -1838,13 +1983,90 @@ def lint_device_overlap(path, view_name, view, lib_roots):
     # it and draws after the bays, where a cage surrounds its drives and must
     # draw before them.
     framed = {p["id"]: set(targets(p.get("frames"))) for p in parts_}
+    # A PART THAT LIES UNDER ANOTHER IS NOT IN THE SAME PLACE AS IT. `under:`
+    # names what is over this placement - the board names the shroud and the
+    # fan wall, the shroud names the lid. Checked below, per pair: the lower
+    # part is a well or the upper is a lid, or the claim is the error.
+    # A BAY CAN BE UNDER SOMETHING TOO - it is an opening, so it always has
+    # somewhere to be: the R740xd's DIMM sockets are under the mid tray and
+    # its drive bays, on the configurations that carry one.
+    bays_ = view_parts(view)["bays"]
+    under = {p["id"]: set(targets(p.get("under"))) for p in parts_}
+    under.update({b["id"]: set(targets(b.get("under"))) for b in bays_})
+    bay_ids = {b["id"] for b in bays_}
+    every_id = {p["id"] for p in parts_} | bay_ids
+    for pid, ups in under.items():
+        for u in ups - every_id:
+            err(path, "L13", f"{view_name}: {pid} is under '{u}', which is not in this view")
+    # `in:` IS THE SAME STACK SEEN FROM THE OTHER END. A part or a bay that
+    # stands on a well's floor is over that well, so the well is under it -
+    # recorded here so the pair is exempt without the well having to list
+    # everything that stands on it. Checked below, once the contracts are in
+    # hand: the target must be a well in this view.
+    stands = {q["id"]: q.get("in") for q in (*parts_, *bays_) if q.get("in")}
+    for pid, w in stands.items():
+        if w not in every_id:
+            err(path, "L13", f"{view_name}: {pid} is in '{w}', which is not in this view")
+        else:
+            under.setdefault(w, set()).add(pid)
 
-    def _mounted(pid):
+    def _contract(pid):
         q = next((z for z in parts_ if z.get("id") == pid), None)
         if not q:
-            return False
+            return {}
         cp = resolve_component(q["ref"], lib_roots)
-        return bool(cp) and (load_yaml(cp) or {}).get("behaviour") == "mounts"
+        return (load_yaml(cp) or {}) if cp else {}
+
+    def _mounted(pid):
+        return _contract(pid).get("behaviour") == "mounts"
+
+    def _well(pid):
+        # the aperture rule, as render.py applies it: a non-module, non-mounted
+        # part's `size.d` is a hole depth, so such a part has a floor below the
+        # panel for something else to stand over
+        if pid in bay_ids:
+            return True
+        c = _contract(pid)
+        if not (c.get("size") or {}).get("d") or c.get("kind") == "module":
+            return False
+        # a mounted part is solid - unless it says `relief.cavity`, which is
+        # the same override render.py honours: the mid tray lifts out AND is
+        # the recess its drives sit in
+        return not _mounted(pid) or bool((c.get("relief") or {}).get("cavity"))
+
+    for pid, w in stands.items():
+        if w in every_id and not _well(w):
+            err(path, "L13", f"{view_name}: {pid} says it is in {w}, which is not a well - "
+                             "only a recess has a floor to stand on")
+    # A SHELF CANNOT BE BELOW THE FLOOR. `floor:` on a bay puts its occupant on
+    # a shelf inside the well; a shelf deeper than the well is a hole in it.
+    for b in bays_:
+        if b.get("floor") and b.get("in") in every_id and b["in"] not in bay_ids:
+            d = float((_contract(b["in"]).get("size") or {}).get("d") or 0)
+            if d and float(b["floor"]) > d + 0.05:
+                err(path, "L13", f"{view_name}: {b['id']} puts its shelf {b['floor']} down "
+                                 f"in {b['in']}, which is only {d:g} deep")
+            # AND NOT SO SHALLOW THAT THE OCCUPANT STANDS OUT OF THE FACE: a
+            # card rises its own `d` from the shelf, and a shelf nearer the face
+            # than that puts the card through the lid - riser 3's did, by 0.8
+            occ = 0.0
+            for ref in (b.get("accepts") or []):
+                cp = resolve_component(ref, lib_roots)
+                c = (load_yaml(cp) or {}) if cp else {}
+                occ = max(occ, float((c.get("size") or {}).get("d") or 0))
+            if occ and float(b["floor"]) + 0.05 < occ:
+                err(path, "L13", f"{view_name}: {b['id']} puts its shelf {b['floor']} down and "
+                                 f"its occupant is {occ:g} tall - it would stand "
+                                 f"{occ - float(b['floor']):.1f} out of the face")
+
+    def _stacked(lo, hi):
+        if hi not in under.get(lo, ()):
+            return False
+        if _well(lo) or _mounted(hi):
+            return True
+        err(path, "L13", f"{view_name}: {lo} says it is under {hi}, but it is not a "
+                         f"well and {hi} is not mounted - there is no height between them")
+        return True
     for p in parts_:
         if not p.get("at") or p.get("mate-to"):
             continue
@@ -1864,7 +2086,7 @@ def lint_device_overlap(path, view_name, view, lib_roots):
         boxes.append((p["id"], x, y, w, h, p.get("only-in")))
     # Bays occupy faceplate area exactly as placements do. Leaving them out let a
     # rivet row sit on top of five fan bays without a word from the linter.
-    for b in view_parts(view)["bays"]:
+    for b in bays_:
         # NOT transposed for `rotate`. A placement's size comes from the unrotated
         # component, so a quarter turn swaps it; a bay's size is authored as the
         # ON-PANEL footprint already, and `rotate` only spins the occupant inside
@@ -1886,6 +2108,8 @@ def lint_device_overlap(path, view_name, view, lib_roots):
                 if b[0] in framed.get(a[0], ()) or a[0] in framed.get(b[0], ()):
                     continue
                 if _mounted(a[0]) != _mounted(b[0]):
+                    continue
+                if _stacked(a[0], b[0]) or _stacked(b[0], a[0]):
                     continue
                 # never both present, so never actually overlapping. Absent
                 # `only-in` means every configuration, which intersects everything
@@ -4391,6 +4615,7 @@ def lint_device(path, validator, lib_roots):
     lint_device_double_count(path, data, lib_roots)
     lint_device_bay_fit(path, data, lib_roots)
     lint_device_midplane_depth(path, data, lib_roots)
+    lint_device_plan(path, data, lib_roots)
     lint_device_label_geometry(path, data)
     lint_device_alignment(path, data, lib_roots)
     lint_device_cutout_derivation(path, data, lib_roots)
@@ -4824,12 +5049,49 @@ def lint_device(path, validator, lib_roots):
                                  f"{', '.join(ce)} - a verified device cannot be built "
                                  "from guessed parts")
 
+    lint_device_configuration_bays(path, data, lib_roots)
+    return data
+
+
+def lint_device_configuration_bays(path, data, lib_roots):
+    """L8: a configuration seats what its bays accept.
+
+    A NESTED KEY IS WALKED: `riser-1/slot-1` is the device's riser-1 bay, then
+    a bay called slot-1 on one of the modules riser-1 accepts, and the ref must
+    be in THAT bay's accepts. Which module is seated is not known here - the
+    configuration may say - so any accepted module's slot counts.
+    """
     bay_accepts = {}
     for view in (data.get("views") or {}).values():
         for b in view_parts(view)["bays"]:
             bay_accepts[b["id"]] = b.get("accepts") or []
+
+    def nested_accepts(key):
+        head, *rest = key.split("/")
+        accepts = bay_accepts.get(head)
+        if accepts is None:
+            return None
+        for seg in rest:
+            found = None
+            for mref in accepts:
+                cp = resolve_component(mref, lib_roots)
+                c = (load_yaml(cp) or {}) if cp else {}
+                b = (c.get("bays") or {}).get(seg)
+                if isinstance(b, dict):
+                    found = (found or []) + list(b.get("accepts") or [])
+            if found is None:
+                return None
+            accepts = found
+        return accepts
     for cname, cfg in (data.get("configurations") or {}).items():
         for bid, ref in (cfg.get("bays") or {}).items():
+            if "/" in bid:
+                acc = nested_accepts(bid)
+                if acc is None:
+                    err(path, "L8", f"config {cname}: unknown nested bay {bid}")
+                elif ref and ref not in acc:
+                    err(path, "L8", f"config {cname}: {bid} does not accept {ref}")
+                continue
             if bid not in bay_accepts:
                 err(path, "L8", f"config {cname}: unknown bay {bid}")
             elif ref == "":
@@ -4844,7 +5106,6 @@ def lint_device(path, validator, lib_roots):
                 continue
             elif ref not in bay_accepts[bid]:
                 err(path, "L8", f"config {cname}: bay {bid} ref {ref!r} not in accepts")
-    return data
 
 
 def print_matrix(matrix, schemas):
@@ -4902,6 +5163,48 @@ def print_matrix(matrix, schemas):
 
 # ---------------------------------------------------------------- L33
 FIT_TOL = 0.05          # a rounding difference is not a misfit
+
+
+def lint_device_plan(path, data, lib_roots):
+    """L72: a bay's `plan:` lands in a view that exists, in a well that is
+    there, and its occupants have a plan to land.
+
+    The projection is drawn from what the bay's occupants declare, so a bay
+    that says `plan:` while none of what it accepts carries `plan.ref` draws
+    nothing and says nothing - which is the silent failure this reports.
+    """
+    views = data.get("views") or {}
+    for vname, view in views.items():
+        for b in view_parts(view)["bays"]:
+            pl = b.get("plan")
+            if not pl:
+                continue
+            tv = views.get(pl.get("view"))
+            if tv is None:
+                err(path, "L72", f"{vname}: {b['id']} projects into view {pl.get('view')!r}, "
+                                 "which this device does not have")
+                continue
+            tp = view_parts(tv)
+            there = {q.get("id") for q in (*tp["placements"], *tp["bays"])}
+            if pl.get("in") and pl["in"] not in there:
+                err(path, "L72", f"{vname}: {b['id']} projects `in:` {pl['in']}, which is "
+                                 f"not in {pl['view']}")
+            for u in (pl.get("under") or []):
+                if u not in there:
+                    err(path, "L72", f"{vname}: {b['id']} projects `under:` {u}, which is "
+                                     f"not in {pl['view']} - it would paint in the wrong order")
+            have = []
+            for ref in (b.get("accepts") or []):
+                cp = resolve_component(ref, lib_roots)
+                c = (load_yaml(cp) or {}) if cp else {}
+                pref = (c.get("plan") or {}).get("ref")
+                if pref:
+                    if not resolve_component(pref, lib_roots):
+                        err(path, "L72", f"{vname}: {ref} names plan {pref}, which is not in the library")
+                    have.append(ref)
+            if not have:
+                warn(path, "L72", f"{vname}: {b['id']} projects into {pl['view']} but none of "
+                                  f"what it accepts carries `plan.ref` - nothing will be drawn")
 
 
 def lint_device_bay_fit(path, data, lib_roots):
@@ -5193,6 +5496,9 @@ def main():
                 lint_component_role(f, d)
                 lint_component_forwarded_mate(f, d, args.library)
                 lint_component_relief_confidence(f, d, args.library)
+                lint_component_body_boxes(f, d)
+                lint_component_fields(f, d)
+                lint_component_lamp_colour(f, d)
             n += 1
         for f in sorted(root.glob("devices/**/device.yaml")):
             if args.device and not any(sel in str(f) for sel in args.device):

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: drive-carrier-25
-version: 1.3.0
+version: 1.5.1
 class: drive
 behaviour: fills
 profile: server
@@ -19,6 +19,15 @@ attrs:
   interface: SAS
   link: 12Gb
   rpm: 10K
+# THE LABEL IS FIELDS. The carrier is one part for every capacity; what the
+# label prints is set per drive - a placement's attrs, a configuration's
+# bay-attrs, or a form. Defaults are the attrs above.
+fields:
+  capacity: {label: Capacity, type: text, default: '1.2'}
+  capacity-unit: {label: Unit, type: choice, default: TB, options: [GB, TB]}
+  interface: {label: Interface, type: choice, default: SAS, options: [SAS, SATA, NVMe]}
+  link: {label: Link rate, type: text, default: 12Gb}
+  rpm: {label: Spindle, type: text, default: 10K, description: empty for an SSD - the glyph beside it goes too}
 provenance:
   depth-from-dell-cad: >-
     measured - Dell's R740XD 3D guide CAD, node `DD9900_ Drives_-1.001`, which
@@ -245,4 +254,37 @@ elements:
   window-1: {at: [2.83, 27.3], size: [12.2, 10.9], class: vent}
   window-2: {at: [2.83, 39.6], size: [12.2, 11.0], class: vent}
   window-3: {at: [2.83, 52.1], size: [12.2, 9.1], class: vent}
+relief:
+  wall: '#1b1e21'
+  features:
+  # THE THREE WINDOWS ARE HOLES, NOT PAINT. `2.5 HDD.003` is a flat surface
+  # 10.07 x 39.71 sitting 7.63 behind the carrier face, and the windows are the
+  # only openings in that face - so it is what you see down them. The honeycomb
+  # already drawn behind each window becomes the floor of the pocket rather than
+  # a pattern printed on the lid.
+  - node: window-1
+    pocket: 7.6
+    confidence: measured
+    source: >-
+      measured - Dell's service model r740xd.glb, node `Poweredge_R740XD_Drives_Assembly-1.001`, descended past the named assembly to its mesh children. The carrier body `Body_3_4.004` is 18.48 x 78.30 x 123.89 and its FACE is the small-z end at 19.58, because on this face the chassis runs from the drive bays forward - a feature standing proud has a smaller z0 and one that is recessed a larger one, and reading that backwards would have built every window as a lump. NOTHING ON THIS CARRIER STANDS PROUD. Every child begins at or behind the face plane, which is why the depth here is all pockets and no protrusions.
+  - node: window-2
+    pocket: 7.6
+    confidence: measured
+    source: >-
+      measured - Dell's service model r740xd.glb, node `Poweredge_R740XD_Drives_Assembly-1.001`, descended past the named assembly to its mesh children. The carrier body `Body_3_4.004` is 18.48 x 78.30 x 123.89 and its FACE is the small-z end at 19.58, because on this face the chassis runs from the drive bays forward - a feature standing proud has a smaller z0 and one that is recessed a larger one, and reading that backwards would have built every window as a lump. NOTHING ON THIS CARRIER STANDS PROUD. Every child begins at or behind the face plane, which is why the depth here is all pockets and no protrusions.
+  - node: window-3
+    pocket: 7.6
+    confidence: measured
+    source: >-
+      measured - Dell's service model r740xd.glb, node `Poweredge_R740XD_Drives_Assembly-1.001`, descended past the named assembly to its mesh children. The carrier body `Body_3_4.004` is 18.48 x 78.30 x 123.89 and its FACE is the small-z end at 19.58, because on this face the chassis runs from the drive bays forward - a feature standing proud has a smaller z0 and one that is recessed a larger one, and reading that backwards would have built every window as a lump. NOTHING ON THIS CARRIER STANDS PROUD. Every child begins at or behind the face plane, which is why the depth here is all pockets and no protrusions.
+  # THE RELEASE IS PRESSED IN. `Body_4_4.004` is 11.46 x 10.56 x 4.20 and starts
+  # 0.19 behind the face - the only face-adjacent child of that size, and the
+  # release is the only feature of that size on the drawing. The mapping is by
+  # size and position rather than by name, because the model's mesh names are
+  # `Body_N` and carry none.
+  - node: release
+    pocket: 4.2
+    confidence: measured
+    source: >-
+      measured - Dell's service model r740xd.glb, node `Poweredge_R740XD_Drives_Assembly-1.001`, descended past the named assembly to its mesh children. The carrier body `Body_3_4.004` is 18.48 x 78.30 x 123.89 and its FACE is the small-z end at 19.58, because on this face the chassis runs from the drive bays forward - a feature standing proud has a smaller z0 and one that is recessed a larger one, and reading that backwards would have built every window as a lump. NOTHING ON THIS CARRIER STANDS PROUD. Every child begins at or behind the face plane, which is why the depth here is all pockets and no protrusions.
 skins: [default]
