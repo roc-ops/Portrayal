@@ -1294,6 +1294,37 @@ def _lights_up(path, data, lib_roots, seen):
     return False
 
 
+def lint_component_body_boxes(path, data, _lib_roots=None):
+    """L71: a body box reaches no further than the part says it is deep.
+
+    `size.d` is the part's reach into the chassis, and it is what the bay
+    hole, the pull distance and every fit check read. A box that runs on past
+    it is a PCB the part does not admit to - the riser's first pass declared
+    a 170.9 reach and a PCB starting 13.9 behind the plate and running 170.9,
+    which is 184.8. The number the part states has to contain its own body.
+    A box with no `confidence` is counted, once per file, as L35 counts.
+    """
+    body = data.get("body") or {}
+    boxes = body.get("boxes") or []
+    if not boxes:
+        return
+    d = float((data.get("size") or {}).get("d") or 0)
+    unmarked = 0
+    for i, b in enumerate(boxes):
+        reach = float(b.get("from") or 0) + float(b["depth"])
+        if reach > d + 0.05:
+            err(path, "L71", f"body box {b.get('id') or i} reaches {reach:g} behind the "
+                             f"face and size.d says the part is {d:g} deep")
+        if reach > float(body.get("depth") or 0) + 0.05:
+            err(path, "L71", f"body box {b.get('id') or i} reaches {reach:g} and "
+                             f"body.depth says {body.get('depth')} - the pull distance "
+                             f"is read from body.depth, so it must be the reach")
+        if not b.get("confidence"):
+            unmarked += 1
+    if unmarked:
+        warn(path, "L71", f"{unmarked} of {len(boxes)} body boxes carry no confidence")
+
+
 def lint_component_states_render(path, data, lib_roots):
     """L47: a state nothing draws is a state the viewer offers and cannot show.
 
@@ -5318,6 +5349,7 @@ def main():
                 lint_component_role(f, d)
                 lint_component_forwarded_mate(f, d, args.library)
                 lint_component_relief_confidence(f, d, args.library)
+                lint_component_body_boxes(f, d)
             n += 1
         for f in sorted(root.glob("devices/**/device.yaml")):
             if args.device and not any(sel in str(f) for sel in args.device):

@@ -12,6 +12,26 @@
 
 let THREE, renderer, PXMM, FRU_PATHS;
 
+// A BODY THAT IS NOT ONE BOX. A module's `body` is a box the size of its face
+// (or its `footprint`) and `depth` deep; a riser is a plate with a 1.6 mm PCB
+// standing behind it and three connectors on the PCB, and a box that size hid
+// the chassis interior while a box cut to the plate left the PCB behind when
+// the riser was ejected. `body.boxes` lists the pieces instead, each in the
+// face's own frame, starting `from` mm behind the plane. This resolves either
+// form to a list the two builders (the FRU in a chassis, the part alone) draw
+// the same way; it is pure, so it is checked under node.
+export function bodyBoxes(body, faceW, faceH) {
+  const color = body.color || '#3a3f44';
+  if (body.boxes && body.boxes.length) {
+    return body.boxes.map((b, i) => ({
+      id: b.id || `box-${i}`, x: b.at[0], y: b.at[1], w: b.size[0], h: b.size[1],
+      z0: b.from || 0, z1: (b.from || 0) + b.depth, color: b.color || color}));
+  }
+  const fp = body.footprint || {at: [0, 0], size: [faceW, faceH]};
+  return [{id: 'body', x: fp.at[0], y: fp.at[1], w: fp.size[0], h: fp.size[1],
+           z0: 0, z1: body.depth, color}];
+}
+
 export function configureRelief(deps, scope) {
   // THREE and the renderer are genuinely per-page and stay module-level. The
   // raster density and the FRU path set are per-VIEWER, and a second viewer
@@ -1115,7 +1135,18 @@ export async function buildFaceRelief(F, ctx) {
       pctx.globalCompositeOperation = 'source-over';
       facePunch[F.view].push({kind: 'shape', svg: f.svgText, x: f.x, y: f.y, w: f.w, h: f.h});
       const meta = FRU_META[f.path];
-      if (meta.body) {   // full module body travels with the FRU
+      if (meta.body && meta.body.boxes) {
+        // THE BODY IN PIECES, each a plain box in the FRU's group so the
+        // riser's PCB and connectors come out with its plate. Side art is
+        // for the one-box form; a PCB is a colour.
+        for (const b of bodyBoxes(meta.body, f.w, f.h)) {
+          const m = new THREE.Mesh(new THREE.BoxGeometry(b.w, b.h, b.z1 - b.z0),
+            new THREE.MeshLambertMaterial({color: b.color}));
+          m.position.set(LX(f.x + b.x, b.w), LY(f.y + b.y, b.h),
+                         zf - b.z0 - (b.z1 - b.z0) / 2 - 0.05);
+          fg.add(m);
+        }
+      } else if (meta.body) {   // full module body travels with the FRU
         const {mesh, fp, d} = await bodyBoxMesh(meta.body, f.w, f.h);
         mesh.position.set(LX(f.x + fp.at[0], fp.size[0]),
                           LY(f.y + fp.at[1], fp.size[1]), zf - d / 2 - 0.05);
@@ -1126,6 +1157,9 @@ export async function buildFaceRelief(F, ctx) {
       // the bay is as deep as the thing that goes in it, not 60 mm
       const bd = meta.body ? meta.body.depth : (meta.bodyDepth || 60);
       if (f.shelf) continue;   // a shelf, not a hole: nothing is left behind
+      // a body in pieces is a riser, and behind an unseated riser is the
+      // chassis interior, not a hole: nothing is left behind here either
+      if (meta.body && meta.body.boxes) continue;
       const bay = new THREE.Mesh(new THREE.BoxGeometry(f.w + 0.6, f.h + 0.6, bd),
         new THREE.MeshLambertMaterial({color: 0x0a0c0e, side: THREE.BackSide}));
       bay.position.set(LX(f.x, f.w), LY(f.y, f.h), zf - bd / 2 - 0.2);

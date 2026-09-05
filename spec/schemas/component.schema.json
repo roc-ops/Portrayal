@@ -78,6 +78,49 @@
      "exclusiveMinimum": 0,
      "description": "captive module: pulls out this far and stays in the chassis (omit for removable FRUs)"
     },
+    "boxes": {
+     "type": "array",
+     "minItems": 1,
+     "description": "A BODY THAT IS NOT ONE BOX. A riser is a bracket plate with a thin PCB standing behind it and connectors on the PCB's inboard face; a card is a bracket and a PCB slab beside it. One box the size of the face hid the interior, and a box cut to the plate left the PCB behind when the riser was ejected. Each entry is a box in the face's own frame: `at`/`size` in mm from the face's top-left, `from` mm behind the face plane where the box starts (0: at the plane), `depth` how far it runs on from there. A box may stand outside the face rect - the riser's PCB is at the bay's outer edge and reaches below the bracket to the board. When `boxes` is given the single box is not drawn, `footprint` is ignored, and an EMPTY bay leaves no dark hole: what is behind an unseated riser is the chassis interior. `depth` on the body remains the reach, for the pull distance.",
+     "items": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+       "at",
+       "size",
+       "depth"
+      ],
+      "properties": {
+       "id": {
+        "type": "string"
+       },
+       "at": {
+        "$ref": "#/$defs/xy"
+       },
+       "size": {
+        "$ref": "#/$defs/xy"
+       },
+       "from": {
+        "type": "number",
+        "minimum": 0,
+        "description": "mm behind the face plane where the box starts"
+       },
+       "depth": {
+        "type": "number",
+        "exclusiveMinimum": 0
+       },
+       "color": {
+        "type": "string"
+       },
+       "confidence": {
+        "$ref": "#/$defs/confidence"
+       },
+       "source": {
+        "type": "string"
+       }
+      }
+     }
+    },
     "footprint": {
      "type": "object",
      "additionalProperties": false,

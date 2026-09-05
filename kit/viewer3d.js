@@ -27,7 +27,7 @@ import { toGLB, toUSDZ } from './share.js';
 import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, svgSource, setSvgOverride, clearSvgOverrides,
          setNodeStates, nodeStates, restyleText,
          setPulled as setReliefPulled, pulledPaths,
-         buildFaceRelief } from './relief.js';
+         buildFaceRelief, bodyBoxes } from './relief.js';
 import { applyOverrides } from './swap.js';
 import { jdist } from './dist.js';
 
@@ -544,7 +544,27 @@ export function createViewer(container, opts = {}) {
     for (const k of Object.keys(faceGroups)) delete faceGroups[k];
     Object.assign(faceGroups, built);
     const fp = COMP && COMP_ENTRY.body && COMP_ENTRY.body.footprint;
-    if (fp) {
+    const bx = COMP && COMP_ENTRY.body && COMP_ENTRY.body.boxes;
+    if (bx && bx.length) {
+      // A BODY IN PIECES: the face on a thin plate and each box behind it
+      // where the part says it is - the riser alone shows its PCB and its
+      // connectors standing off the plate, as it does in the chassis.
+      const plain = () => new THREE.MeshLambertMaterial({color: COMP_ENTRY.body.color || '#3a3f44'});
+      const plateMats = mats.map((m, i) => i === 4 ? m : plain());
+      box = new THREE.Mesh(new THREE.BoxGeometry(W, H, 1.2), plateMats);
+      box.position.set(0, 0, D / 2 - 0.6);
+      const bodyBox = new THREE.Group();
+      for (const b of bodyBoxes(COMP_ENTRY.body, W, H)) {
+        const m = new THREE.Mesh(new THREE.BoxGeometry(b.w, b.h, b.z1 - b.z0),
+          new THREE.MeshLambertMaterial({color: b.color}));
+        m.position.set(b.x + b.w / 2 - W / 2, H / 2 - (b.y + b.h / 2),
+                       D / 2 - b.z0 - (b.z1 - b.z0) / 2);
+        bodyBox.add(m);
+      }
+      scene.add(box);
+      box.userData.bodyBox = bodyBox;
+      scene.add(bodyBox);
+    } else if (fp) {
       // thin faceplate carries the face (and its mounting tabs); the body box
       // sits behind it within the footprint
       const plateMats = mats.map((m, i) => i === 4 ? m :

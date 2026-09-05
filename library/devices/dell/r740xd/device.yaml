@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 20.11.0
+version: 20.12.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -320,16 +320,6 @@ groups:
       the two processor positions, each under a 1U heatsink. CPU1 is on the
       right as seen from the front and CPU2 on the left, which is the ISM's
       board figure; the heatsink is what the view shows and what lifts off.
-  riser-cards:
-    term: Riser card
-    role: furniture
-    index-origin: 1
-    description: >-
-      the riser cards themselves, standing in the chassis behind the rear
-      plates: the vertical PCB with its slot connectors that the expansion
-      cards plug into. Riser 1's is measured from Dell's model; riser 2's
-      full-height card and riser 3's are the same cage placed by analogy at
-      their bays' outer edge, and the low-profile riser 2 is measured as 2C.
   interior:
     term: Item
     role: furniture
@@ -1619,63 +1609,13 @@ views:
            under: [air-shroud, system-cover, mid-drive-tray-lff, mid-drive-tray-sff,
                    mid-lff-0, mid-lff-1, mid-lff-2, mid-lff-3,
                    mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3]}
-        # THE RISER CARDS, standing in the board well behind the rear plates.
-        # They are the furniture the expansion cards plug into; the cards
-        # themselves are NOT here. A card's slot is the rear view's bay -
-        # that is the face it is changed from - and this view had once
-        # carried a second bay per slot with a generic card in it that nothing
-        # tied to the rear one. See the gap. Riser 1's is MEASURED: Dell's model has its PCB at cad x -203.8,
-        # which is face x 419.2..420.8, with the connectors inboard of it, so
-        # the footprint runs 408.0..420.8 - the PCB at the bay's outer edge,
-        # against the chassis wall. Riser 2's full-height card and riser 3's
-        # are that cage placed BY ANALOGY at their own bays' outer edges (the
-        # rear view's riser-2 bay ends at face x 278.7, riser-3's at 16.7 with
-        # its brackets turned, so its card is mirrored); the model carries
-        # neither. The low-profile riser 2 is measured as 2C.
-        - {ref: dell/riser-card-14g@1, id: riser-1-card, at: [408.00, 13.90],
-           group: riser-cards, rel-pos: 1, in: system-board,
-           under: [air-shroud, system-cover],
-           only-in: [lff12-mlff4-rlff2-rc1-1b2b, lff12-mlff4-rlff2-rc2-1b2c,
-                     lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c, lff12-rc1-1b2b,
-                     lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b,
-                     lff12-rc2-1b2c, lff12-rc3-1a2a, lff12-rc4-1a2a3a, lff12-rc5-1b2a3a,
-                     lff12-rc6-1d2a3a, lff12-rc9-1a2d3a, lff12-rlff2-rc1-1b2b,
-                     lff12-rlff2-rc2-1b2c, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
-                     sff24-msff4-rsff4-rc1-1b2b, sff24-msff4-rsff4-rc2-1b2c, sff24-rc1-1b2b,
-                     sff24-rc15-1a2e3b, sff24-rc16-1d2e3b, sff24-rc17-1a2f3b,
-                     sff24-rc2-1b2c, sff24-rc3-1a2a, sff24-rc4-1a2a3a, sff24-rc5-1b2a3a,
-                     sff24-rc6-1d2a3a, sff24-rc9-1a2d3a, sff24-rsff4-rc1-1b2b,
-                     sff24-rsff4-rc2-1b2c]}
-        - {ref: dell/riser-card-14g@1, id: riser-2-card, at: [265.80, 13.90],
-           group: riser-cards, rel-pos: 2, in: system-board,
-           under: [air-shroud, system-cover],
-           only-in: [lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b,
-                     lff12-rc3-1a2a, lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a,
-                     lff12-rc9-1a2d3a, sff24-rc15-1a2e3b, sff24-rc16-1d2e3b,
-                     sff24-rc17-1a2f3b, sff24-rc3-1a2a, sff24-rc4-1a2a3a, sff24-rc5-1b2a3a,
-                     sff24-rc6-1d2a3a, sff24-rc9-1a2d3a]}
-        - {ref: dell/riser-card-lp-14g@1, id: riser-2-lp-card, at: [265.60, 9.60],
-           group: riser-cards, rel-pos: 2, in: system-board,
-           under: [air-shroud, system-cover],
-           only-in: [lff12-mlff4-rlff2-rc1-1b2b, lff12-mlff4-rlff2-rc2-1b2c,
-                     lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c, lff12-rc1-1b2b,
-                     lff12-rc2-1b2c, lff12-rlff2-rc1-1b2b, lff12-rlff2-rc2-1b2c,
-                     lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c, sff24-msff4-rsff4-rc1-1b2b,
-                     sff24-msff4-rsff4-rc2-1b2c, sff24-rc1-1b2b, sff24-rc2-1b2c,
-                     sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c]}
-        # RISER 3 STANDS ON THE SUPPLY CAGE, NOT THE BOARD: its bay is above the
-        # two supplies, in the notch the PCB leaves for them. There is no well
-        # there to be `in:`, so it is `in:` the board and rises the card's 77
-        # from the board's floor, which puts its top 2.9 below the lid where
-        # the bay's top is 4 - a 1.1 fudge, and it is said here. Its PCB is
-        # 10.2 in from the cards' outer end, as riser 1's measures.
-        - {ref: dell/riser-card-14g@1, id: riser-3-card, at: [14.10, 13.90], mirror: true,
-           group: riser-cards, rel-pos: 3, in: system-board,
-           under: [air-shroud, system-cover],
-           only-in: [lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b,
-                     lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a, lff12-rc9-1a2d3a,
-                     sff24-rc15-1a2e3b, sff24-rc16-1d2e3b, sff24-rc17-1a2f3b,
-                     sff24-rc4-1a2a3a, sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a]}
+        # THE RISERS ARE NOT HERE. Each is seated in its rear bay, and its body -
+        # plate, PCB and slot connectors, at the full reach - is the rear
+        # module's own `body.boxes`, so it stands in the chassis interior in
+        # 3D and comes out as one piece when ejected. This view once stood a
+        # riser-card part of its own in the board well for each of them; it
+        # was the same PCB twice, and the copy that stayed behind. A 2D plan
+        # of the seated riser is what the gap below asks for.
         # THE FAN WALL, across the full width in front of everything else. On
         # every configuration: this machine has no variant without fans.
         - {ref: dell/fan-cage-14g@1, id: fan-cage, at: [12.55, 420.62],
@@ -1916,8 +1856,11 @@ gaps:
       carried a second bay per slot with a generic card in it so a stack of
       shelves would show something; nothing linked it to the rear bay, so a
       card fitted on one face was absent on the other, and every slot
-      showed a card the chassis does not ship with. Those bays are gone.
-      The riser cards stay, empty, until a card can be seen from two faces.
+      showed a card the chassis does not ship with. Those bays are gone,
+      and so are the top view's riser-card placements: the riser's PCB and
+      connectors are now the rear module's own body, standing at the full
+      reach, so the whole riser ejects as one piece and the top view draws
+      no riser at all until a seated part can be seen from two faces.
     wanted: >-
       A card component that carries its plan projection - a second view of
       itself, as a module carries a front and a rear - and a way for a rear
@@ -1926,15 +1869,16 @@ gaps:
       declare it), so that seating a card on the rear draws its bracket
       there and its body inside. In 3D the body is the same card extruded
       inward through the rear face.
-  - what: riser-2-and-3-cards-placed-by-analogy
-    scope: [top]
+  - what: riser-2-and-3-bodies-placed-by-analogy
+    scope: [rear, riser-2, riser-3]
     reason: needs-drawing
     note: >-
       Dell's model carries riser 1 (three-slot, measured here to the tenth)
       and the low-profile riser 2C. It carries no full-height riser 2 and no
-      riser 3. Their riser cards stand at their bays' outer edges because
-      riser 1's does, and riser 3 is drawn from the board's floor when it
-      really stands on the supply cage.
+      riser 3. Their bodies - the PCB and the slot connectors in
+      `body.boxes` on dell/riser-2a/2d/2e/2f-14g and dell/riser-3a/3b-14g -
+      are riser 1's, stood at their own bays' outer edges, and riser 3's
+      PCB is cut to end at the supply cage it stands on.
     wanted: >-
       A model or a photograph of riser 2A and riser 3 seated, which would put
       both PCBs where they are.

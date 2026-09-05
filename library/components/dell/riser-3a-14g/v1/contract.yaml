@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: riser-3a-14g
-version: 1.1.1
+version: 1.2.0
 class: riser
 behaviour: fills
 profile: server
@@ -15,13 +15,16 @@ attrs:
   slot-8: 'x16, full height, full length, processor 2'
 provenance:
   depth: >-
-    THE BODY IS THE PLATE AND ITS LATCH, 20 deep, NOT THE CAGE'S REACH, and
-    the reach is what `size.d` still records. The cage behind this plate is
-    drawn where it can be seen: the riser card and the expansion cards stand
-    in the top view, `in:` the system board, each card on its own shelf. A
-    body the full reach was tried first and it was a grey box that hid all
-    of them; 20 is estimated as the plate, the ejector tabs and the bracket
-    lands behind them.
+    THE BODY IS IN PIECES AND IT IS THE WHOLE RISER: the plate the face
+    paints, the PCB standing behind it at the bay's outer edge, and a slot
+    connector on the PCB's inboard face per slot that takes a card - each a
+    box in `body.boxes`, so that ejecting the riser takes the riser, and
+    the chassis interior stays visible around it. `size.d` and `body.depth`
+    are the reach from the face to the PCB's far end. A first pass drew one
+    box the full reach and it hid the interior; a second cut it to 20, the
+    plate and its latch, and stood the PCB in the top view as a part of its
+    own, which stayed behind when the riser came out. Each box says where
+    its numbers are from.
     estimated from a measurement of a different riser. Dell's service model
     carries no riser 3 at all; riser 1, the full-height three-slot card,
     reaches 170.9 into the chassis, and riser 3 is a full-height cage of the
@@ -77,10 +80,20 @@ provenance:
     brackets interleave by exactly 1.27 and that is why a row of them nests.
     Any overlap check working on bounding boxes will report these; it is the
     check unable to express a real interlock, not a fault in the placement.
-size: {w: 107.59, h: 41.68, d: 170.9}
+size: {w: 107.59, h: 41.68, d: 184.8}
 body:
-  depth: 20.0
+  depth: 184.8
   color: '#4a5057'
+  boxes:
+  - {id: pcb, at: [106.00, -1.40], size: [1.6, 43.6],
+     from: 13.9, depth: 170.9, color: '#1f5138',
+     confidence: estimated, source: 'estimated by analogy with dell/riser-1b-14g@1: the same cage in its own bay, the PCB at the bay''s outer edge'}
+  - {id: slot-7-connector, at: [94.70, -3.75], size: [11.3, 10.8],
+     from: 47.9, depth: 91.0, color: '#15171b',
+     confidence: estimated, source: 'estimated by analogy with dell/riser-1b-14g@1: the same cage in its own bay, the PCB at the bay''s outer edge'}
+  - {id: slot-8-connector, at: [94.70, 16.57], size: [11.3, 10.8],
+     from: 47.9, depth: 91.0, color: '#15171b',
+     confidence: estimated, source: 'estimated by analogy with dell/riser-1b-14g@1: the same cage in its own bay, the PCB at the bay''s outer edge'}
 insert: {w: 120.02, h: 43.73}
 parts:
   # THE METAL, DRAWN OVER THE CARDS. The bays are `behind: true`, so a seated

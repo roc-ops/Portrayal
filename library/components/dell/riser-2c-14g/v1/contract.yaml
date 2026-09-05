@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: riser-2c-14g
-version: 1.1.1
+version: 1.2.0
 class: riser
 behaviour: fills
 profile: server
@@ -13,13 +13,16 @@ attrs:
   slot-4: 'x16, low profile, half length, processor 2'
 provenance:
   depth: >-
-    THE BODY IS THE PLATE AND ITS LATCH, 20 deep, NOT THE CAGE'S REACH, and
-    the reach is what `size.d` still records. The cage behind this plate is
-    drawn where it can be seen: the riser card and the expansion cards stand
-    in the top view, `in:` the system board, each card on its own shelf. A
-    body the full reach was tried first and it was a grey box that hid all
-    of them; 20 is estimated as the plate, the ejector tabs and the bracket
-    lands behind them.
+    THE BODY IS IN PIECES AND IT IS THE WHOLE RISER: the plate the face
+    paints, the PCB standing behind it at the bay's outer edge, and a slot
+    connector on the PCB's inboard face per slot that takes a card - each a
+    box in `body.boxes`, so that ejecting the riser takes the riser, and
+    the chassis interior stays visible around it. `size.d` and `body.depth`
+    are the reach from the face to the PCB's far end. A first pass drew one
+    box the full reach and it hid the interior; a second cut it to 20, the
+    plate and its latch, and stood the PCB in the top view as a part of its
+    own, which stayed behind when the riser came out. Each box says where
+    its numbers are from.
     measured - Dell's service model, `R740XD_Riser_2C-1`: the low-profile
     riser's own body, `Body_4.006`, is 27.4 x 37.7 x 211.4, cad z 492.5..
     703.9 against the rear metal at 713.5. 211.4 is the card's reach into the
@@ -84,10 +87,17 @@ provenance:
     a BRACKET while the full-height slots beside it were measured as
     OPENINGS, at the same x, which cannot both be true of one drawing. Placed
     by its opening here, and the 78.0 recorded rather than quietly kept.
-size: {w: 79.2, h: 18.42, d: 211.4}
+size: {w: 79.2, h: 18.42, d: 221.0}
 body:
-  depth: 20.0
+  depth: 221.0
   color: '#4a5057'
+  boxes:
+  - {id: pcb, at: [-6.87, -8.53], size: [1.6, 37.7],
+     from: 9.6, depth: 211.4, color: '#1f5138',
+     confidence: measured, source: 'Dell service model R740XD_Riser_2C-1, Body_4.006 - one mesh 27.4 x 37.7 x 211.4; the PCB is taken as its outer 1.6'}
+  - {id: slot-4-connector, at: [-5.27, -2.40], size: [11.3, 10.8],
+     from: 43.6, depth: 91.0, color: '#15171b',
+     confidence: estimated, source: 'estimated - the 2C body is one mesh and the connector was not read out; placed 34 behind the PCB''s start, as riser 1''s connectors are'}
 insert: {w: 95.0, h: 18.42}
 bays:
   slot-4:
