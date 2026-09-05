@@ -141,25 +141,23 @@ def test_the_compiled_svg_embeds_the_device_manifest():
 
 # ---- the gap this did NOT close ---------------------------------------------
 
-def test_the_overlays_declared_interface_names_agree_with_the_exporter():
-    """A DUPLICATION, pinned so it cannot drift silently.
+def test_the_overlays_declared_interface_names_are_what_the_exporter_reads():
+    """THE JOIN, NOW A READ RATHER THAN A PIN.
 
-    `nos_name()` hardcodes arcos as swp{n}/ma1 in Python. The arcos overlay
-    already declares exactly that, as `name: 'swp{n}'` - so the overlay is the
-    source of truth and the exporter reimplements it. Nothing joins them, which
-    means renaming the interface in the overlay would leave the exporter happily
-    emitting the old name.
-
-    Until the exporter reads the overlay, this test is the join. It also marks
-    the remaining distance to a pure-artifact exporter: a JS consumer can read
-    these names from overlays.json, but only for a NOS that HAS an overlay -
-    `sonic` is named in nos_name and has no overlay anywhere.
+    `nos_name()` used to hardcode arcos as swp{n}/ma1 in Python while the arcos
+    overlay declared exactly that as data, and this test held the two together
+    by asserting they agreed. The exporter now reads the published overlay -
+    `overlay_names()` over overlays.json - so there is one statement of the
+    fact and this checks it is the published one being read: a JS consumer and
+    the exporter answer "what does ArcOS call port 7" from the same bytes.
+    `spec/tests/test_dcim_nos_overlay.py` runs the export itself.
     """
-    from dcim_export import nos_name
+    from dcim_export import overlay_names
     doc = load("overlays.json")["overlays"]["edgecore/as7726-32x"]["arcos"]
-    declared = {i["physical"]: i["name"] for i in doc["interfaces"]}
-    assert declared["port-{n}"].replace("{n}", "7") == nos_name("arcos", "switch", 7)
-    assert declared["mgmt-eth"] == nos_name("arcos", "mgmt", 0)
+    names = overlay_names(doc)
+    assert names["port-7"][0] == "swp7"
+    assert names["mgmt-eth"][0] == "ma1"
+    assert names["port-7"][1]["modes"], "the breakout modes the Python never read"
 
 
 # ---- the export runs against a build, with no library in sight --------------
