@@ -4980,12 +4980,49 @@ def lint_device(path, validator, lib_roots):
                                  f"{', '.join(ce)} - a verified device cannot be built "
                                  "from guessed parts")
 
+    lint_device_configuration_bays(path, data, lib_roots)
+    return data
+
+
+def lint_device_configuration_bays(path, data, lib_roots):
+    """L8: a configuration seats what its bays accept.
+
+    A NESTED KEY IS WALKED: `riser-1/slot-1` is the device's riser-1 bay, then
+    a bay called slot-1 on one of the modules riser-1 accepts, and the ref must
+    be in THAT bay's accepts. Which module is seated is not known here - the
+    configuration may say - so any accepted module's slot counts.
+    """
     bay_accepts = {}
     for view in (data.get("views") or {}).values():
         for b in view_parts(view)["bays"]:
             bay_accepts[b["id"]] = b.get("accepts") or []
+
+    def nested_accepts(key):
+        head, *rest = key.split("/")
+        accepts = bay_accepts.get(head)
+        if accepts is None:
+            return None
+        for seg in rest:
+            found = None
+            for mref in accepts:
+                cp = resolve_component(mref, lib_roots)
+                c = (load_yaml(cp) or {}) if cp else {}
+                b = (c.get("bays") or {}).get(seg)
+                if isinstance(b, dict):
+                    found = (found or []) + list(b.get("accepts") or [])
+            if found is None:
+                return None
+            accepts = found
+        return accepts
     for cname, cfg in (data.get("configurations") or {}).items():
         for bid, ref in (cfg.get("bays") or {}).items():
+            if "/" in bid:
+                acc = nested_accepts(bid)
+                if acc is None:
+                    err(path, "L8", f"config {cname}: unknown nested bay {bid}")
+                elif ref and ref not in acc:
+                    err(path, "L8", f"config {cname}: {bid} does not accept {ref}")
+                continue
             if bid not in bay_accepts:
                 err(path, "L8", f"config {cname}: unknown bay {bid}")
             elif ref == "":
@@ -5000,7 +5037,6 @@ def lint_device(path, validator, lib_roots):
                 continue
             elif ref not in bay_accepts[bid]:
                 err(path, "L8", f"config {cname}: bay {bid} ref {ref!r} not in accepts")
-    return data
 
 
 def print_matrix(matrix, schemas):

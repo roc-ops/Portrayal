@@ -82,3 +82,44 @@ def test_every_riser_carries_its_pcb_and_a_connector_per_card_slot():
         for slot, b in (c.get("bays") or {}).items():
             takes_card = any("bracket" in a for a in b["accepts"])
             assert (f"{slot}-connector" in boxes) == takes_card, (p, slot)
+
+
+def test_a_configuration_can_seat_a_riser_slot():
+    """A card goes into a riser's slot from the device file: the
+    configuration's bay map takes a nested key, `riser-1/slot-1`, and it
+    wins over the module bay's default. Rendered on a fixture that seats
+    riser 1B in a bay and the generic card in its top slot."""
+    import re
+    sys.path.insert(0, str(SPEC / "tools/portrayal"))
+    import render
+    lib = render.Library([str(LIB)])
+    view = {"size": {"w": 434.0, "h": 86.8}, "components": {"bays": [
+        {"id": "riser-1", "at": [13.95, 4.0], "size": {"w": 107.59, "h": 62.0},
+         "accepts": ["dell/riser-1b-14g@1"], "default": "dell/riser-1b-14g@1"}]}}
+    d = {"name": "f", "manufacturer": "F", "model": "F", "version": "0.1.0",
+         "chassis": {"width": 434.0, "height": 86.8, "depth": 700.0},
+         "views": {"rear": view}}
+    def render_with(bays):
+        out = render.render_view(d, "rear", view, lib, config={"bays": bays})
+        return out if isinstance(out, str) else render.ET.tostring(out, encoding="unicode")
+    plain = render_with({})
+    assert re.search(r'data-path="riser-1/module/slot-1/module"[^>]*data-ref="dell/pcie-filler-fh-14g@1', plain)
+    seated = render_with({"riser-1/slot-1": "common/pcie-card-fh@1", "riser-1/slot-3": ""})
+    assert re.search(r'data-path="riser-1/module/slot-1/module"[^>]*data-ref="common/pcie-card-fh@1', seated)
+    assert re.search(r'data-path="riser-1/module/slot-2/module"[^>]*data-ref="dell/pcie-filler-fh-14g@1', seated)
+    assert not re.search(r'data-path="riser-1/module/slot-3/module"', seated), "an empty string empties the slot"
+
+
+def test_lint_walks_a_nested_configuration_key():
+    dev = lambda bays: {"views": {"rear": {"size": {"w": 434.0, "h": 86.8}, "components": {"bays": [
+                            {"id": "riser-1", "at": [13.95, 4.0], "size": {"w": 107.59, "h": 62.0},
+                             "accepts": ["dell/riser-1b-14g@1"], "default": "dell/riser-1b-14g@1"}]}}},
+                        "configurations": {"c": {"bays": bays}}}
+    run = lambda bays: _caught("L8", lint.lint_device_configuration_bays, pathlib.Path("x.yaml"), dev(bays), [str(LIB)])
+    assert not run({"riser-1/slot-1": "common/pcie-card-fh@1", "riser-1/slot-2": ""})
+    hits = run({"riser-1/slot-9": "common/pcie-card-fh@1"})
+    assert hits and "unknown nested bay" in hits[0], hits
+    hits = run({"riser-1/slot-1": "common/pcie-card-lp@1"})
+    assert hits and "does not accept" in hits[0], hits
+    hits = run({"riser-9": "dell/riser-1b-14g@1"})
+    assert hits and "unknown bay" in hits[0], hits

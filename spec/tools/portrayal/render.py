@@ -484,7 +484,7 @@ def _inset_feature(feat, back):
     return f
 
 
-def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None, z_inset=0.0):
+def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None, z_inset=0.0, seated=None):
     contract, skins = lib.resolve(ref)
     comp_name = ref.split("/")[-1].split("@")[0]
     if skin_overrides and comp_name in skin_overrides:
@@ -831,7 +831,13 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                 node.set("data-path", f"{path}/{bay_id}")
                 node.set("data-class", "bay")
                 break
-        occupant = bay.get("default")
+        # A CONFIGURATION CAN SEAT A NESTED BAY. `seated` is the configuration's
+        # bay map, keyed by bay path without the `/module` steps - `riser-1/
+        # slot-1` - and it wins over the module's own default, an empty string
+        # meaning empty. Before this a riser's slots only ever held their
+        # default, so no configuration could put a card in one.
+        bay_path = f"{path}/{bay_id}".replace("/module/", "/") if path else bay_id
+        occupant = (seated or {}).get(bay_path, bay.get("default"))
         if not occupant or depth >= MAX_BAY_DEPTH:
             continue
         bw, bh = bay_size(bay)
@@ -845,7 +851,8 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
             mirror=bool(bay.get("mirror")), palette=palette,
             inst_palette=inst_palette,
             skin_overrides=skin_overrides, attr_overrides=attr_overrides,
-            path=f"{path}/{bay_id}/module", resolved=resolved, depth=depth + 1)
+            path=f"{path}/{bay_id}/module", resolved=resolved, depth=depth + 1,
+            seated=seated)
         # BEHIND THE FACEPLATE, NOT ON IT. Appending is right for a drive in a
         # cage and wrong for a card in a riser: what shows of a PCIe bracket is
         # its working area through a punched window and its retention tab clear
@@ -1707,7 +1714,8 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                                          inst_palette=inst_palette,
                                          centre=bay_centre,
                                          skin_overrides=skin_overrides, attr_overrides=attr_overrides,
-                                         path=f"{b['id']}/module", resolved=resolved)
+                                         path=f"{b['id']}/module", resolved=resolved,
+                                         seated=config.get("bays"))
             bay_g.append(g)
         df = data_for(b.get("for"))
         if df:

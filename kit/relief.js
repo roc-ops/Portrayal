@@ -610,10 +610,27 @@ export async function extractRelief(url, scope) {
   const BODY_CLASSES = ['psu', 'fan', 'tab', 'power', 'cooling'];
   const BODY_SELECTOR = ['[data-behaviour="fills"]', '[data-behaviour="occupies"]']
     .concat(BODY_CLASSES.map(c => `[data-class="${c}"]:not([data-behaviour])`)).join(',');
+  // A MODULE INSIDE A MODULE HAS A BODY OF ITS OWN. A card in a riser slot is
+  // not a FRU here - it comes out with its riser - but its PCB is real, and
+  // it hides on its own path. Collected beside the FRUs and built into the
+  // owner's ejection group.
+  const subBodies = [];
   for (const el of svg.querySelectorAll(BODY_SELECTOR)) {
     if (!el.dataset.ref) continue;
-    const path = (el.dataset.path || '').split('/')[0];
-    if (!path || frus.some(f => f.path === path)) continue;
+    const full = el.dataset.path || '';
+    const path = full.split('/')[0];
+    if (!path) continue;
+    // a module in a chassis bay is `bay/module`; one in a module's bay is
+    // `bay/module/slot/module` - the third segment is what makes it nested
+    if (full.split('/').length > 2) {
+      // the body index lives with the builder; every nested module is
+      // recorded here and the builder keeps the ones that declare boxes
+      const m = inv.multiply(el.getScreenCTM());
+      subBodies.push({path: full, owner: path, ref: el.dataset.ref.split(':')[0], lift: liftOf(el),
+                      toFace: {a: m.a, b: m.b, c: m.c, d: m.d, e: m.e, f: m.f}});
+      continue;
+    }
+    if (frus.some(f => f.path === path)) continue;
     // `data-body-depth` IS THE MODULE'S OWN DEPTH and was being thrown
     // away here, so every module without a `body:` block fell back to a
     // hardcoded 60 mm bay below - 60 for a 40 mm control panel, 60 for a
@@ -646,7 +663,7 @@ export async function extractRelief(url, scope) {
     el.style.display = 'none';
   const cleanText = svg.outerHTML;
   div.remove();
-  return {cavities, outs, domes, vents, frus, cleanText};
+  return {cavities, outs, domes, vents, frus, subBodies, cleanText};
 }
 
 export async function rasterize(svgText, wmm, hmm, pxmm = PXMM, flipX = false, flipY = false) {
@@ -714,7 +731,7 @@ export async function buildFaceRelief(F, ctx) {
       faceCv[F.view] = cv0;
       return;
     }
-    const {cavities, outs, domes, vents, frus, cleanText} = await extractRelief(src, ctx.scope);
+    const {cavities, outs, domes, vents, frus, subBodies = [], cleanText} = await extractRelief(src, ctx.scope);
     const faceText = squareFaceplate(cleanText);
     // THE DRAWING'S OWN SIZE WINS, because the face is not obliged to match the
     // plane it sits on. The R740xd's front is the 482.6 mm rack face - Dell
@@ -1190,6 +1207,20 @@ export async function buildFaceRelief(F, ctx) {
       // had been, hiding the board.
       bay.userData.portrayalPath = f.path;
       grp.add(bay);
+    }
+    for (const s of subBodies) {
+      const body = BODY_META[s.ref];
+      if (!body || !body.boxes) continue;
+      const into = fruGroups[s.owner] || grp;
+      for (const b of bodyBoxes(body, 0, 0)) {
+        const r = localToFace(s.toFace, b);
+        const m = new THREE.Mesh(new THREE.BoxGeometry(r.w, r.h, b.z1 - b.z0),
+          new THREE.MeshLambertMaterial({color: b.color}));
+        m.position.set(LX(r.x, r.w), LY(r.y, r.h),
+                       (s.lift || 0) - b.z0 - (b.z1 - b.z0) / 2 - 0.05);
+        m.userData.portrayalPath = s.path;
+        into.add(m);
+      }
     }
   meshes.push(grp);
 }
