@@ -45,6 +45,11 @@ SINGLE = {"std/rj45@1", "common/rj45-port@4", "common/rj45-bezel@2", "common/rj4
           "common/rj45-shielded@2", "common/rj45-jack@2"}
 GANGED = {"std/rj45-ganged@1", "common/rj45-hd@1", "common/rj45-hd-plain@1"}
 
+# A `\b` boundary treats `-` as a word break, so `led-oob-left\b` matches the
+# PREFIX of `led-oob-left-2` too. Require instead that the next character
+# actually ends the id: a list/scalar delimiter, whitespace, or end of line.
+BOUND = r"(?=[,\]}\s]|$)"
+
 # These contracts are retired wrappers, deleted whole in a later task; their
 # internal `jack:` part must not be swept out from under them first. Matched
 # by path segment (any version), not by ref, so `--components` skips the
@@ -154,6 +159,43 @@ def edit_at(text, dx, dy):
     return text[:m.start()] + f"at: [{fmt(round(x, 2))}, {fmt(round(y, 2))}]" + text[m.end():]
 
 
+def read_at(text):
+    """The (x, y) an `at: [x, y]` in text currently reads, after any edit_at."""
+    m = re.search(r"at: \[\s*(-?[\d.]+)\s*,\s*(-?[\d.]+)\s*\]", text)
+    return float(m.group(1)), float(m.group(2))
+
+
+def derived_aperture(ref, jack_at, rot):
+    """The (at, size) the aperture ref presents when placed at jack_at, via
+    lint's own `_aperture_of` - the same recipe L63 uses to say what a cutout
+    should be. None if the ref declares no aperture, or if rot is a rotation
+    this tool has not verified: L63 folds w/h for 90/270 because the standard
+    aperture is centred in its part; this tool does not attempt that fold for
+    an arbitrary composed offset, so it reports rather than guesses."""
+    if rot not in (0, 180):
+        return None
+    ap = L._aperture_of(ref, ROOTS)
+    if not ap:
+        return None
+    (aw, ah), (ax, ay) = ap
+    return (round(jack_at[0] + ax, 2), round(jack_at[1] + ay, 2)), (round(aw, 2), round(ah, 2))
+
+
+def skins_of(ref):
+    cp = L.resolve_component(ref, ROOTS)
+    return (L.load_yaml(cp) or {}).get("skins") or []
+
+
+def _drop_skin(text, value):
+    """Remove a ` skin: <value>` entry from a flow mapping, keeping the
+    remaining commas valid whether it sat mid-list (comma before it, the
+    common case) or was the mapping's first field (comma after it instead)."""
+    new = re.sub(rf",\s*skin: {re.escape(value)}\b", "", text, count=1)
+    if new == text:
+        new = re.sub(rf"skin: {re.escape(value)},\s*", "", text, count=1)
+    return new
+
+
 def bump(version, level):
     a, b, c = (int(x) for x in version.split("."))
     return f"{a + 1}.0.0" if level == "major" else f"{a}.{b + 1}.0"
@@ -165,6 +207,7 @@ def sweep_device(path):
     groups = data.get("groups") or {}
     report = collections.Counter()
     removed_ids, unresolved, moved_ids = [], [], []
+    lifted_lamp_groups = set()          # groups a lifted lamp belonged to - ruling C
     for vname, view in (data.get("views") or {}).items():
         pl = (((view or {}).get("components") or {}).get("placements")) or []
         by_id = {str(q["id"]): q for q in pl}
@@ -224,6 +267,14 @@ def sweep_device(path):
             block = "\n".join(rows[s[0]:s[1] + 1])
             block = block.replace(f"ref: {old}", f"ref: {new}", 1)
             block = edit_at(block, (ow - nw) / 2, (oh - nh) / 2)
+            # B. a skin the new part does not declare cannot be asked for -
+            # all four new parts declare skins: [default], so any other skin
+            # a swept placement named (e.g. common/rj45-bezel@2's `dark`) is
+            # gone with the part it belonged to.
+            skin = by_id[pid].get("skin")
+            if skin and str(skin) not in skins_of(new):
+                block = _drop_skin(block, str(skin))
+                report["skin dropped"] += 1
             if lifted.get(pid):
                 lamps = sorted(lifted[pid], key=lambda t: t[0])
                 # led-a is the component's LOCAL left window. Unrotated, the
@@ -277,14 +328,23 @@ def sweep_device(path):
                 if s:
                     del rows[s[0]:s[1] + 1]
                     removed_ids.append(str(lamp["id"])); report["lamps lifted"] += 1
-        # 5. cutouts. The anchor holds the CUTOUT's own centre, not the jack
-        # part's: read the cutout's own old size off its `size:` field before
-        # rewriting it, and shift by (old cutout size - new part size) / 2. A
-        # cutout can be a different size than the part it houses (bezel
-        # clearance, etc) - using the part's old/new sizes here would move a
-        # hole whose size never changes at all (celestica/es1010 port-1:
-        # cutout [12.7, 11] already matches the new part even though the old
-        # part is [14, 12] - the hole must not move).
+                    g = lamp.get("group")
+                    if g is not None:
+                        lifted_lamp_groups.add(str(g))
+        # 5. cutouts. Most RJ45 cutouts were DERIVED from the old part - `at`
+        # is the jack's own `at` plus the old part's aperture offset, `size`
+        # is the old aperture's size, both via lint's `_aperture_of` - within
+        # 0.15mm of slop. Held to its own centre regardless, such a cutout
+        # rides its offset to wherever the OLD part happened to put it; move
+        # the jack onto a new part whose aperture offset is (0, 0) and the
+        # held centre lands 0.05-0.1mm off the new derived aperture, which
+        # trips L63. So a DERIVED cutout is RE-DERIVED from the new part
+        # instead: recompute the aperture the new part presents at the jack's
+        # new position. A cutout that does not match the old derived aperture
+        # is INFORMATIVE (celestica/es1010 port-1: cutout [12.7, 11] already
+        # matches the new part even though the old part is [14, 12] - nothing
+        # here was ever derived from the old part, so its own centre holds,
+        # same as before this ruling).
         for pid, (old, new) in moves.items():
             lo, hi = view_bounds(rows, vname)
             s = cutout_span(rows, pid, lo, hi)
@@ -298,10 +358,32 @@ def sweep_device(path):
             else:
                 m = re.search(r"size: \{w: ([\d.]+), h: ([\d.]+)\}", line)
                 cow, coh = float(m.group(1)), float(m.group(2))
-            line = re.sub(r"size: \[\s*[\d.]+\s*,\s*[\d.]+\s*\]", f"size: [{fmt(nw)}, {fmt(nh)}]", line)
-            line = re.sub(r"size: \{w: [\d.]+, h: [\d.]+\}", f"size: [{fmt(nw)}, {fmt(nh)}]", line)
-            rows[s[0]] = edit_at(line, (cow - nw) / 2, (coh - nh) / 2)
-            report["cutouts resized"] += 1
+            cat = read_at(line)
+            rot = (by_id[pid].get("rotate") or 0) % 360
+            if rot not in (0, 180):
+                unresolved.append(f"{vname}/{pid}: rotate {rot} - cutout derivation not verified "
+                                   f"for this rotation")
+            old_da = derived_aperture(old, tuple(by_id[pid]["at"]), rot)
+            derived = (old_da is not None
+                       and abs(old_da[0][0] - cat[0]) <= 0.15 and abs(old_da[0][1] - cat[1]) <= 0.15
+                       and abs(old_da[1][0] - cow) <= 0.15 and abs(old_da[1][1] - coh) <= 0.15)
+            if derived:
+                # the jack's own move already landed in rows - read its NEW
+                # `at` back off the file rather than re-deriving the arithmetic
+                js = span(rows, pid, lo, hi)
+                new_jack_at = read_at("\n".join(rows[js[0]:js[1] + 1])) if js else tuple(by_id[pid]["at"])
+                new_da = derived_aperture(new, new_jack_at, rot)
+                nat, nsz = new_da
+                line = re.sub(r"size: \[\s*[\d.]+\s*,\s*[\d.]+\s*\]", f"size: [{fmt(nsz[0])}, {fmt(nsz[1])}]", line)
+                line = re.sub(r"size: \{w: [\d.]+, h: [\d.]+\}", f"size: [{fmt(nsz[0])}, {fmt(nsz[1])}]", line)
+                line = re.sub(r"at: \[\s*-?[\d.]+\s*,\s*-?[\d.]+\s*\]", f"at: [{fmt(nat[0])}, {fmt(nat[1])}]", line)
+                rows[s[0]] = line
+                report["cutouts re-derived"] += 1
+            else:
+                line = re.sub(r"size: \[\s*[\d.]+\s*,\s*[\d.]+\s*\]", f"size: [{fmt(nw)}, {fmt(nh)}]", line)
+                line = re.sub(r"size: \{w: [\d.]+, h: [\d.]+\}", f"size: [{fmt(nw)}, {fmt(nh)}]", line)
+                rows[s[0]] = edit_at(line, (cow - nw) / 2, (coh - nh) / 2)
+                report["cutouts held"] += 1
     text = "\n".join(rows)
     # 4. legends: a `for:` naming a removed lamp names the jack instead. The
     # lamp's `for:` said which jack it belonged to; read it off the ORIGINAL
@@ -316,7 +398,6 @@ def sweep_device(path):
         # matches the PREFIX of `led-oob-left-2` too. Require instead that the
         # next character actually end the id: a list/scalar delimiter,
         # whitespace, or end of line.
-        BOUND = r"(?=[,\]}\s]|$)"
         for lid, jack in owner.items():
             n = len(re.findall(rf"for: {re.escape(lid)}{BOUND}", text, flags=re.M))
             text = re.sub(rf"for: {re.escape(lid)}{BOUND}", f"for: {jack}", text, flags=re.M)
@@ -336,6 +417,14 @@ def sweep_device(path):
                     seen.append(item)
             return "for: [" + ", ".join(seen) + "]"
         text = re.sub(r"for: \[([^\]]*)\]", _dedup_for_list, text)
+    # C. a group emptied by lifting is reported, not removed - dropping a
+    # group id is its own major bump (devicelock's "ids or groups" rule) and
+    # a human should choose whether the group goes or gains a new member,
+    # not this tool.
+    for name in sorted(lifted_lamp_groups):
+        if name in groups and not re.search(rf"group: {re.escape(name)}{BOUND}", text):
+            unresolved.append(f"group {name} has no members after lifting - remove it by "
+                               f"hand (a group removal is a major bump)")
     # 6. version
     if removed_ids or report["lamped"] or report["bare"]:
         level = "major" if removed_ids else "minor"

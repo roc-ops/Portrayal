@@ -366,7 +366,10 @@ views:
 def test_the_sweep_holds_the_cutouts_own_centre_not_the_parts(tmp_path):
     d = tmp_path / "devices/acme/d2"; d.mkdir(parents=True)
     (d / "device.yaml").write_text(CUTOUT_FIXTURE)
-    subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"], check=True)
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert "cutouts held 1" in r.stdout, "this cutout was never derived from the old part - it is informative"
     data = yaml.safe_load((d / "device.yaml").read_text())
     cut = data["views"]["front"]["panel"]["cutouts"][0]
     assert cut["at"] == [2.11, 16.1], "cutout size already matches the new part: its centre must not move"
@@ -561,3 +564,123 @@ def test_the_sweep_leaves_a_jack_bare_when_its_lamps_are_external(tmp_path):
     assert pl["mgmt-eth"]["ref"] == "std/rj45@2", "role wanted lamps, but the lamps sit outside the footprint"
     assert "led-mgmt-lnk" in pl and "led-mgmt-act" in pl, "lamps beside the jack must not be lifted"
     assert "states" not in pl["mgmt-eth"]
+
+
+# --- Fix round 3: pilot lessons (derived cutouts, dropped skins, orphan groups) ---
+
+# Ruling A: most RJ45 cutouts were DERIVED from the old part (`at` = jack `at`
+# + the old part's own aperture offset, `size` = the old aperture's size).
+# common/rj45-bezel@2 composes std/rj45@1 (16 x 14, offset (0, 0)) at [0.5, 0.5],
+# so its derived aperture is 16 x 14 at the jack's own `at` + (0.5, 0.5). The new
+# lamped target, common/rj45-eth@1, composes std/rj45@2 (15.8 x 13.2, offset
+# (0, 0)) at (0, 0) - an aperture offset of zero, unlike the old bezel. A
+# held-centre cutout would land 0.05-0.1mm off that new derived aperture and
+# trip L63; the ruling instead RE-DERIVES a matching cutout from the new part.
+DERIVED_CUTOUT_FIXTURE = textwrap.dedent("""\
+format: 1
+kind: device
+name: d7
+version: 1.0.0
+manufacturer: Acme
+model: D7
+chassis: {width: 100, height: 40, depth: 30}
+groups:
+  mgmt: {term: Port}
+views:
+  front:
+    size: {w: 100, h: 40}
+    panel:
+      cutouts:
+        - {id: mgmt-eth, at: [10.5, 10.5], size: [16, 14]}
+    components:
+      placements:
+        - {id: mgmt-eth, ref: common/rj45-bezel@2, at: [10.0, 10.0], group: mgmt, rel-pos: 1, attrs: {role: mgmt}}
+""")
+
+
+def test_the_sweep_rederives_a_derived_cutout(tmp_path):
+    d = tmp_path / "devices/acme/d7"; d.mkdir(parents=True)
+    (d / "device.yaml").write_text(DERIVED_CUTOUT_FIXTURE)
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert "cutouts re-derived 1" in r.stdout
+    data = yaml.safe_load((d / "device.yaml").read_text())
+    pl = {p["id"]: p for p in data["views"]["front"]["components"]["placements"]}
+    assert pl["mgmt-eth"]["ref"] == "common/rj45-eth@1"
+    assert pl["mgmt-eth"]["at"] == [10.6, 10.85]
+    cut = data["views"]["front"]["panel"]["cutouts"][0]
+    assert cut["at"] == [10.6, 10.85], "re-derived from the new part's own (0, 0) offset"
+    assert cut["size"] == [15.8, 13.2]
+
+
+# test_the_sweep_holds_the_cutouts_own_centre_not_the_parts (above, the es1010
+# case) is the INFORMATIVE half of ruling A: its cutout never matched the old
+# derived aperture (the old part's aperture offset is (0.65, 0.5), the cutout
+# sits at the jack's own `at` with no offset applied), so it still holds its
+# own centre and the report says "cutouts held 1" - already asserted there.
+
+
+# Ruling B: a placement's `skin:` the new part does not declare is dropped.
+# All four new parts declare skins: [default]; common/rj45-bezel@2 (console
+# here, a bare target either way) declares skins: [default, dark] - `dark`
+# has nowhere to go.
+SKIN_FIXTURE = textwrap.dedent("""\
+format: 1
+kind: device
+name: d8
+version: 1.0.0
+manufacturer: Acme
+model: D8
+chassis: {width: 100, height: 40, depth: 30}
+groups:
+  console: {term: Port}
+views:
+  front:
+    size: {w: 100, h: 40}
+    components:
+      placements:
+        - {id: console, ref: common/rj45-bezel@2, at: [10.0, 10.0], group: console, rel-pos: 1, skin: dark}
+""")
+
+
+def test_the_sweep_drops_a_skin_the_new_part_lacks(tmp_path):
+    d = tmp_path / "devices/acme/d8"; d.mkdir(parents=True)
+    (d / "device.yaml").write_text(SKIN_FIXTURE)
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert "skin dropped 1" in r.stdout
+    data = yaml.safe_load((d / "device.yaml").read_text())
+    pl = {p["id"]: p for p in data["views"]["front"]["components"]["placements"]}
+    assert pl["console"]["ref"] == "std/rj45@2"
+    assert "skin" not in pl["console"], "std/rj45@2 declares skins: [default] only - dark has nowhere to go"
+
+
+# Ruling C: after lifting, a group with no remaining member anywhere is
+# reported (not removed - a group removal is its own major bump under
+# devicelock's rules, a human's call). The brief's own FIXTURE is the case:
+# mgmt-leds holds only led-mgmt-l/led-mgmt-r, both lifted into mgmt-eth.
+def test_the_sweep_reports_an_emptied_group(tmp_path):
+    out, _ = sweep(tmp_path, "--apply")
+    assert ("! group mgmt-leds has no members after lifting - remove it by hand "
+            "(a group removal is a major bump)") in out
+
+
+# A fixture where mgmt-leds keeps another member (not lifted, since it is not
+# `for:` the jack) must not be reported.
+KEPT_GROUP_FIXTURE = FIXTURE.replace(
+    "        - {id: console, ref: std/rj45@1, at: [40.0, 10.0], group: console, rel-pos: 2}\n",
+    "        - {id: console, ref: std/rj45@1, at: [40.0, 10.0], group: console, rel-pos: 2}\n"
+    "        - {id: led-other, ref: common/led-dot@1, at: [90.0, 30.0], group: mgmt-leds, rel-pos: 3, attrs: {function: fan}}\n",
+)
+assert KEPT_GROUP_FIXTURE != FIXTURE, "fixture edit must actually take"
+
+
+def test_the_sweep_does_not_report_a_group_that_keeps_a_member(tmp_path):
+    d = tmp_path / "devices/acme/d"; d.mkdir(parents=True)
+    (d / "device.yaml").write_text(KEPT_GROUP_FIXTURE)
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert "mgmt-leds has no members" not in r.stdout
