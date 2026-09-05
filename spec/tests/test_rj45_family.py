@@ -144,3 +144,16 @@ def test_common_rj45_eth_skin_punches_the_opening_through_its_own_face():
     # the face is drawn evenodd with the opening as a hole, so the composed jack
     # behind it shows through (see common/rj45-port@4's skin comment)
     assert 'fill-rule="evenodd"' in s
+
+
+def test_common_rj45_ganged_eth_composes_the_cell_and_adds_two_lamps():
+    c = contract("common/rj45-ganged-eth@1")
+    assert c["size"] == {"w": 12.7, "h": 11.0, "d": 18.6}
+    assert c["parts"] == [{"ref": "std/rj45-ganged@2", "id": "jack", "at": [0.0, 0.0], "behind": True}]
+    assert c["elements"]["led-a"]["at"] == [1.2, 9.63]
+    assert c["elements"]["led-b"]["at"] == [9.5, 9.63]
+    for el in ("led-a", "led-b"):
+        assert c["elements"][el]["states"] == ["off", "link", "activity"]
+    assert c["connection-points"]["net"] == {"at": [6.35, 5.1], "direction": "front"}
+    s = skin("common/rj45-ganged-eth@1")
+    assert 'fill-rule="evenodd"' in s and 'id="led-b"' in s
