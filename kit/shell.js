@@ -740,6 +740,13 @@ export function createShell(opts = {}) {
       : (state.svg?.querySelector(q)
          || Object.values(state.faces || {}).map(f => f.querySelector(q)).find(Boolean)
          || null);
+    // THE SAME PART ON ANOTHER FACE: a projection carries `data-of` naming
+    // the seated part, so selecting the part marks its projections too, and
+    // clicking a projection selects the part it is of (see the hit test).
+    for (const d of faceDocs()) {
+      for (const e of d.querySelectorAll('[data-portrayal-selected]')) e.removeAttribute('data-portrayal-selected');
+      if (path != null) for (const e of d.querySelectorAll(`[data-projection][data-of="${CSS.escape(path)}"]`)) e.setAttribute('data-portrayal-selected', '');
+    }
     if (halo) { halo.remove(); halo = null; }
     // getScreenCTM is null while the SVG is hidden, which is exactly what a page
     // showing a 3D stage instead has done to it. Selection still stands; only
@@ -933,6 +940,9 @@ export function createShell(opts = {}) {
     // anywhere; see below.
     svg.addEventListener('click', ev => {
       if (dragged) return;              // this click is the end of a pan
+      // a click on a projection is a click on the part it projects
+      const proj = ev.target.closest('[data-projection][data-of]');
+      if (proj && !ev.target.closest('[data-path]')?.contains(proj)) { select(proj.dataset.of); return; }
       const hit = ev.target.closest('[data-path]');
       const path = hit ? hit.dataset.path : null;
       select(path && path !== state.sel ? path : null, false);

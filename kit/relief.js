@@ -221,6 +221,12 @@ export function applyPulled(root, scope) {
       el.setAttribute("data-portrayal-pulled", "");
       el.setAttribute("display", "none");
     }
+  // a part's projections on other faces go with it
+  for (const el of root.querySelectorAll("[data-projection][data-of]"))
+    if (_isPulled(el.getAttribute("data-of"), pulled)) {
+      el.setAttribute("data-portrayal-pulled", "");
+      el.setAttribute("display", "none");
+    }
   return root;
 }
 
@@ -342,6 +348,11 @@ export async function extractRelief(url, scope) {
   div.innerHTML = await svgSource(url, scope);
   document.body.appendChild(div);
   const svg = div.querySelector('svg');
+  // A PROJECTION IS FLAT. A part seated on one face may be drawn again on
+  // another as `data-projection` (render.py's `plan:`), for the 2D view with
+  // the lid off. Its body already stands in the scene from the face that
+  // holds it, so nothing inside one is extracted here - it is texture only.
+  const q = sel => [...svg.querySelectorAll(sel)].filter(el => !el.closest('[data-projection]'));
   // before anything is measured or serialised: cleanText and every nodeSvg below
   // are taken from this document, so applying the runtime states once here is
   // what puts them on the face texture and on every piece of relief at once.
@@ -352,7 +363,7 @@ export async function extractRelief(url, scope) {
   // degenerate feature instead of none at all - a cover that is off should leave
   // no geometry behind, not a flat one.
   applyPulled(svg, scope);
-  for (const el of [...svg.querySelectorAll("[data-portrayal-pulled]")]) el.remove();
+  for (const el of [...q("[data-portrayal-pulled]")]) el.remove();
   const inv = svg.getScreenCTM().inverse();
   const mmRect = el => {
     const b = el.getBBox();
@@ -362,7 +373,7 @@ export async function extractRelief(url, scope) {
     const x0 = Math.min(pts[0].x, pts[1].x), y0 = Math.min(pts[0].y, pts[1].y);
     return {x: x0, y: y0, w: Math.abs(pts[1].x - pts[0].x), h: Math.abs(pts[1].y - pts[0].y)};
   };
-  const shared = [...svg.querySelectorAll('style, defs')].map(n => n.outerHTML).join('');
+  const shared = [...q('style, defs')].map(n => n.outerHTML).join('');
   // HOW FAR OFF THE FACE A FEATURE STARTS, summed up the ANCESTOR CHAIN.
   //
   // `lift` is not always written on the node that carries the feature. A composed
@@ -517,7 +528,7 @@ export async function extractRelief(url, scope) {
     return out;
   };
 
-  const cavities = [...svg.querySelectorAll('[data-depth]')]
+  const cavities = [...q('[data-depth]')]
     .filter(el => !el.querySelector('[data-depth]'))
     .map(el => {
       const cavNode = el.dataset.cavity &&
@@ -543,14 +554,14 @@ export async function extractRelief(url, scope) {
   // mesh. Omitting it punched the faceplate and then silently deleted the walls
   // and floor that were supposed to close the hole, so the chassis had seven
   // full-length slits you could see the background through.
-  for (const el of svg.querySelectorAll('[data-groove]')) {
+  for (const el of q('[data-groove]')) {
     const rect = mmRect(el);
     cavities.push({...rect, owner: ownerOf(el), d: +el.dataset.groove, wall: '#25282c', round: false,
                    lift: liftOf(el),
                    cavSvg: nodeSvg(el, rect), grpRect: rect,
                    grpSvg: nodeSvg(el, rect), features: []});
   }
-  const outs = [...svg.querySelectorAll('[data-z-out],[data-z-cyl],[data-z-bar],[data-z-uhandle]')].map(el => {
+  const outs = [...q('[data-z-out],[data-z-cyl],[data-z-bar],[data-z-uhandle]')].map(el => {
     const rect = mmRect(el);
     return {...rect, owner: ownerOf(el), out: el.dataset.zOut && +el.dataset.zOut,
             cyl: el.dataset.zCyl && +el.dataset.zCyl,
@@ -567,13 +578,13 @@ export async function extractRelief(url, scope) {
               ? el.dataset.zProfileY.split(',').map(p => p.split(':').map(Number)) : null,
             svgText: nodeSvg(el, rect)};
   });
-  const domes = [...svg.querySelectorAll('[data-z-dome]')].map(el => {
+  const domes = [...q('[data-z-dome]')].map(el => {
     const rect = mmRect(el);
     // a lamp on a raised indicator bezel domes from THAT surface, not the panel
     return {...rect, owner: ownerOf(el), dome: +el.dataset.zDome, lift: liftOf(el),
             svgText: nodeSvg(el, rect)};
   });
-  const vents = [...svg.querySelectorAll('[data-vent],[data-z-vent]')].map(el => {
+  const vents = [...q('[data-vent],[data-z-vent]')].map(el => {
     const rect = mmRect(el);
     return {...rect, owner: ownerOf(el), depth: +(el.dataset.vent || el.dataset.zVent),
             svgText: nodeSvg(el, rect)};
@@ -615,7 +626,7 @@ export async function extractRelief(url, scope) {
   // it hides on its own path. Collected beside the FRUs and built into the
   // owner's ejection group.
   const subBodies = [];
-  for (const el of svg.querySelectorAll(BODY_SELECTOR)) {
+  for (const el of q(BODY_SELECTOR)) {
     if (!el.dataset.ref) continue;
     const full = el.dataset.path || '';
     const path = full.split('/')[0];
@@ -659,7 +670,7 @@ export async function extractRelief(url, scope) {
                toFace: (() => { const m = inv.multiply(el.getScreenCTM());
                                 return {a: m.a, b: m.b, c: m.c, d: m.d, e: m.e, f: m.f}; })()});
   }
-  for (const el of svg.querySelectorAll('[data-z-out],[data-z-cyl],[data-z-bar],[data-z-uhandle]'))
+  for (const el of q('[data-z-out],[data-z-cyl],[data-z-bar],[data-z-uhandle]'))
     el.style.display = 'none';
   const cleanText = svg.outerHTML;
   div.remove();

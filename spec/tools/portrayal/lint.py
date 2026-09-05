@@ -4547,6 +4547,7 @@ def lint_device(path, validator, lib_roots):
     lint_device_double_count(path, data, lib_roots)
     lint_device_bay_fit(path, data, lib_roots)
     lint_device_midplane_depth(path, data, lib_roots)
+    lint_device_plan(path, data, lib_roots)
     lint_device_label_geometry(path, data)
     lint_device_alignment(path, data, lib_roots)
     lint_device_cutout_derivation(path, data, lib_roots)
@@ -5094,6 +5095,44 @@ def print_matrix(matrix, schemas):
 
 # ---------------------------------------------------------------- L33
 FIT_TOL = 0.05          # a rounding difference is not a misfit
+
+
+def lint_device_plan(path, data, lib_roots):
+    """L72: a bay's `plan:` lands in a view that exists, in a well that is
+    there, and its occupants have a plan to land.
+
+    The projection is drawn from what the bay's occupants declare, so a bay
+    that says `plan:` while none of what it accepts carries `plan.ref` draws
+    nothing and says nothing - which is the silent failure this reports.
+    """
+    views = data.get("views") or {}
+    for vname, view in views.items():
+        for b in view_parts(view)["bays"]:
+            pl = b.get("plan")
+            if not pl:
+                continue
+            tv = views.get(pl.get("view"))
+            if tv is None:
+                err(path, "L72", f"{vname}: {b['id']} projects into view {pl.get('view')!r}, "
+                                 "which this device does not have")
+                continue
+            if pl.get("in"):
+                there = {q.get("id") for q in view_parts(tv)["placements"]}
+                if pl["in"] not in there:
+                    err(path, "L72", f"{vname}: {b['id']} projects `in:` {pl['in']}, which is "
+                                     f"not a placement in {pl['view']}")
+            have = []
+            for ref in (b.get("accepts") or []):
+                cp = resolve_component(ref, lib_roots)
+                c = (load_yaml(cp) or {}) if cp else {}
+                pref = (c.get("plan") or {}).get("ref")
+                if pref:
+                    if not resolve_component(pref, lib_roots):
+                        err(path, "L72", f"{vname}: {ref} names plan {pref}, which is not in the library")
+                    have.append(ref)
+            if not have:
+                warn(path, "L72", f"{vname}: {b['id']} projects into {pl['view']} but none of "
+                                  f"what it accepts carries `plan.ref` - nothing will be drawn")
 
 
 def lint_device_bay_fit(path, data, lib_roots):

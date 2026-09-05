@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: pcie-card-lp
-version: 1.0.0
+version: 1.1.0
 class: expansion-card
 behaviour: fills
 profile: server
@@ -47,6 +47,7 @@ body:
   - {id: pcb, at: [15.50, 3.00], size: [67, 1.6], from: 0.0, depth: 167.65,
      color: '#2f7a4e', confidence: estimated,
      source: 'PCIe CEM 5.0 half-length and 68.09 card height; the plane from the riser connector''s middle'}
+plan: {ref: common/pcie-card-plan-lp@1}
 parts:
   - {ref: std/pcie-bracket-lp@1, id: bracket, at: [0, 0], behind: true}
 elements:

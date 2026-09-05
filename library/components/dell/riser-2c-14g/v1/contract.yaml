@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: riser-2c-14g
-version: 1.2.1
+version: 1.3.0
 class: riser
 behaviour: fills
 profile: server
@@ -98,9 +98,13 @@ body:
   - {id: slot-4-connector, at: [-5.27, -2.40], size: [11.3, 10.8],
      from: 43.6, depth: 91.0, color: '#15171b',
      confidence: estimated, source: 'estimated - the 2C body is one mesh and the connector was not read out; placed 34 behind the PCB''s start, as riser 1''s connectors are'}
+# SEEN FROM ABOVE IT IS ITS PCB: the part that stood in the top view as a
+# placement of its own, now this part's plan, drawn where the rear bay says.
+plan: {ref: dell/riser-card-lp-14g@1}
 insert: {w: 95.0, h: 18.42}
 bays:
   slot-4:
+    plan: {at: [-69.0, -9.6]}
     behind: true
     at: [0, 0]
     size: [79.2, 18.42]

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 20.12.0
+version: 20.13.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -913,6 +913,7 @@ views:
            only-in: [lff12-rc0-noriser, lff12-rc1-1b2b, lff12-rc2-1b2c, lff12-rc3-1a2a, sff24-rc0-noriser,
                      sff24-rc1-1b2b, sff24-rc2-1b2c, sff24-rc3-1a2a]}
         - {id: riser-1, at: [13.95, 4.0], size: {w: 107.59, h: 62.0},
+           plan: {view: top, at: [408.00, 13.90], in: system-board, under: [air-shroud, system-cover]},
            accepts: [dell/riser-1b-14g@1, dell/riser-1a-14g@1, dell/riser-1d-14g@1,
                      dell/riser-1-none-14g@1],
            default: dell/riser-1b-14g@1,
@@ -939,6 +940,7 @@ views:
         # 2.65 left of what its local coordinates implied, and the undersized
         # bay also hid the plate's overlap with the power supply from L13.
         - {id: riser-2, at: [155.335, 4.0], size: {w: 111.715, h: 42.20},
+           plan: {view: top, at: [265.80, 13.90], in: system-board, under: [air-shroud, system-cover]},
            accepts: [dell/riser-2a-14g@1, dell/riser-2d-14g@1, dell/riser-2e-14g@1,
                      dell/riser-2f-14g@1, dell/riser-2-3-blank-14g@1],
            default: dell/riser-2a-14g@1,
@@ -958,6 +960,7 @@ views:
         # this bay goes, in either direction.
         # The 78.0 reading against 79.2 stands as the open question it was.
         - {id: riser-2-lp, at: [147.87, 46.93], size: {w: 79.2, h: 18.42},
+           plan: {view: top, at: [265.60, 9.60], in: system-board, under: [air-shroud, system-cover]},
            accepts: [dell/riser-2b-14g@1, dell/riser-2c-14g@1,
                      dell/riser-2-none-14g@1],
            default: dell/riser-2b-14g@1,
@@ -980,6 +983,7 @@ views:
         # picked by configuration. When riser 3 is not fitted the opening is
         # closed by rear-storage-3, which scopes to `no-riser-3` below.
         - {id: riser-3, at: [309.085, 4.0], size: {w: 107.59, h: 41.68},
+           plan: {view: top, at: [14.10, 13.90], in: system-board, under: [air-shroud, system-cover], mirror: true},
            accepts: [dell/riser-3a-14g@1, dell/riser-3b-14g@1],
            default: dell/riser-3a-14g@1,
            group: risers, rel-pos: 3, only-in: [lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a, lff12-rc9-1a2d3a,
@@ -1609,13 +1613,18 @@ views:
            under: [air-shroud, system-cover, mid-drive-tray-lff, mid-drive-tray-sff,
                    mid-lff-0, mid-lff-1, mid-lff-2, mid-lff-3,
                    mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3]}
-        # THE RISERS ARE NOT HERE. Each is seated in its rear bay, and its body -
-        # plate, PCB and slot connectors, at the full reach - is the rear
-        # module's own `body.boxes`, so it stands in the chassis interior in
-        # 3D and comes out as one piece when ejected. This view once stood a
-        # riser-card part of its own in the board well for each of them; it
-        # was the same PCB twice, and the copy that stayed behind. A 2D plan
-        # of the seated riser is what the gap below asks for.
+        # THE RISERS ARE NOT PLACED HERE. Each is seated in its rear bay, and
+        # its body - plate, PCB and slot connectors, at the full reach - is the
+        # rear module's own `body.boxes`, so it stands in the chassis interior
+        # in 3D and comes out as one piece when ejected. What this view shows
+        # of a riser, and of the cards in its slots, is a PROJECTION: the rear
+        # bay's `plan:` says where the seated part's plan lands, the part's
+        # contract says what draws it from above, and the render puts it here
+        # tagged `data-of` the rear path. Riser 1's plan position is measured
+        # from Dell's model (the PCB at cad x -203.8, top_y 13.9), riser 2's
+        # full-height cage and riser 3's are placed by analogy at their bays'
+        # outer edges, riser 3 mirrored, and the low-profile riser 2 is
+        # measured as 2C at cad x -76.0.
         # THE FAN WALL, across the full width in front of everything else. On
         # every configuration: this machine has no variant without fans.
         - {ref: dell/fan-cage-14g@1, id: fan-cage, at: [12.55, 420.62],
@@ -1844,31 +1853,6 @@ gaps:
       one careful pass, because riser 2's plate is cut to this number.
     wanted: >-
       the supply's top edge on the rear face, from a figure that has passed Gate 1
-  - what: expansion-cards-do-not-reach-the-interior
-    scope: [top, rear]
-    reason: vendor-silent
-    note: >-
-      An expansion card is changed from the REAR: its bracket is the face
-      you see, its slot is a bay on the rear view, and that is where it is
-      seated. The rest of the card lies inside the chassis, on a riser
-      shelf, and a top view with the lid off should show it there - but a
-      rear bay's occupant is drawn on the rear face only. The top view once
-      carried a second bay per slot with a generic card in it so a stack of
-      shelves would show something; nothing linked it to the rear bay, so a
-      card fitted on one face was absent on the other, and every slot
-      showed a card the chassis does not ship with. Those bays are gone,
-      and so are the top view's riser-card placements: the riser's PCB and
-      connectors are now the rear module's own body, standing at the full
-      reach, so the whole riser ejects as one piece and the top view draws
-      no riser at all until a seated part can be seen from two faces.
-    wanted: >-
-      A card component that carries its plan projection - a second view of
-      itself, as a module carries a front and a rear - and a way for a rear
-      bay to say where its occupant's interior lies in the top view (a
-      shelf position and height, `floor:` as the riser's shelves already
-      declare it), so that seating a card on the rear draws its bracket
-      there and its body inside. In 3D the body is the same card extruded
-      inward through the rear face.
   - what: riser-2-and-3-bodies-placed-by-analogy
     scope: [rear, riser-2, riser-3]
     reason: needs-drawing

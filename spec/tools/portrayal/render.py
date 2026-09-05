@@ -1025,6 +1025,61 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             **({"skin": spec["skin"]} if spec.get("skin") else {}),
         })
 
+    # A SEATED PART SEEN FROM THIS FACE TOO. A bay on another view may say its
+    # occupant's plan lands here (`plan:`), and the occupant's contract names
+    # what draws it from above (`plan.ref`). Each becomes a placement in this
+    # view - so `in:`, `under:` and the paint order all apply - marked as a
+    # PROJECTION of the seated part: draw_placement swaps its data-path for
+    # `data-of`, so the tree lists the part once and the kit builds nothing
+    # from it. The occupants of the occupant's own bays come along at the
+    # offsets those bays declare, lowest slot first so the top card paints
+    # last. A mirrored plan mirrors the offsets about the plan's own width.
+    cfg_bays = config.get("bays") or {}
+    for other_name, other in (device.get("views") or {}).items():
+        if other_name == view_name:
+            continue
+        for b in view_parts(other)["bays"]:
+            pl = b.get("plan")
+            if not pl or pl.get("view") != view_name:
+                continue
+            if b.get("only-in") and config_name not in b["only-in"]:
+                continue
+            occ = cfg_bays.get(b["id"], b.get("default"))
+            if not occ:
+                continue
+            oc, _ = lib.resolve(occ)
+            pref = ((oc or {}).get("plan") or {}).get("ref")
+            if not pref:
+                continue
+            pc, _ = lib.resolve(pref)
+            pw = float((pc.get("size") or {}).get("w") or 0)
+            mirror = bool(pl.get("mirror"))
+            X, Y = pl["at"]
+            common = {k: pl[k] for k in ("in", "under") if pl.get(k)}
+            parts["placements"].append({
+                "ref": pref, "id": f"{b['id']}-plan", "at": [X, Y], "mirror": mirror,
+                "projection-of": f"{b['id']}/module", **common})
+            for slot, sb in sorted(((oc or {}).get("bays") or {}).items(), reverse=True):
+                sp = (sb or {}).get("plan")
+                if not sp:
+                    continue
+                socc = cfg_bays.get(f"{b['id']}/{slot}", sb.get("default"))
+                if not socc:
+                    continue
+                sc, _ = lib.resolve(socc)
+                sref = ((sc or {}).get("plan") or {}).get("ref")
+                if not sref:
+                    continue
+                scc, _ = lib.resolve(sref)
+                sw = float((scc.get("size") or {}).get("w") or 0)
+                dx, dy = sp["at"]
+                x = X + (pw - dx - sw) if mirror else X + dx
+                parts["placements"].append({
+                    "ref": sref, "id": f"{b['id']}-{slot}-plan", "at": [round(x, 4), round(Y + dy, 4)],
+                    "mirror": mirror, "projection-of": f"{b['id']}/module/{slot}/module",
+                    "under": [f"{b['id']}-plan"] + list(common.get("under") or []),
+                    **({"in": common["in"]} if common.get("in") else {})})
+
     used_patterns = {d.get("pattern") for d in parts["decor"] if d.get("pattern")}
     if used_patterns:
         defs = ET.SubElement(svg, f"{{{SVG_NS}}}defs")
@@ -1523,6 +1578,23 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                                      inst_palette=inst_palette,
                                      skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                                      resolved=resolved)
+        # A PROJECTION IS THE PART SEEN FROM HERE, NOT A SECOND PART. Its
+        # data-path becomes data-of, naming the seated part on the face that
+        # holds it; no relief, no ref, no behaviour, so the kit builds nothing
+        # and ejects nothing from it - the body already stands where this is.
+        if p.get("projection-of"):
+            g.set("data-projection", "1")
+            for node in g.iter():
+                dp = node.get("data-path")
+                if dp is not None:
+                    node.set("data-of", p["projection-of"] + dp[len(p["id"]):]
+                             if dp.startswith(p["id"]) else p["projection-of"])
+                    del node.attrib["data-path"]
+                for k in list(node.attrib):
+                    if k.startswith("data-z-") or k in ("data-depth", "data-body-depth",
+                                                        "data-ref", "data-behaviour",
+                                                        "data-vent", "data-groove"):
+                        del node.attrib[k]
         # WHAT THE BLOCK IS FOR travels with every member, because the consumer
         # that needs it is looking at a member and has no way back to `groups:`.
         # A PSU bay and a line-card bay are both data-class `bay`; this is the

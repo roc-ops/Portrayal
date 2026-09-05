@@ -123,3 +123,47 @@ def test_lint_walks_a_nested_configuration_key():
     assert hits and "does not accept" in hits[0], hits
     hits = run({"riser-9": "dell/riser-1b-14g@1"})
     assert hits and "unknown bay" in hits[0], hits
+
+
+def test_a_seated_part_is_projected_into_another_view_once():
+    """The rear bay says where its occupant's plan lands in the top view;
+    the occupant's contract says what draws it from above. The top view gets
+    a PROJECTION - `data-of` the rear path, `data-projection`, no data-path
+    of its own and no relief - and the cards in the riser's slots come along
+    at their declared offsets, mirrored with the riser."""
+    import re
+    sys.path.insert(0, str(SPEC / "tools/portrayal"))
+    import render
+    lib = render.Library([str(LIB)])
+    rear = {"size": {"w": 434.0, "h": 86.8}, "components": {"bays": [
+        {"id": "riser-1", "at": [13.95, 4.0], "size": {"w": 107.59, "h": 62.0},
+         "accepts": ["dell/riser-1b-14g@1"], "default": "dell/riser-1b-14g@1",
+         "plan": {"view": "top", "at": [408.0, 13.9], "in": "board", "under": ["lid"]}},
+        {"id": "riser-3", "at": [309.085, 4.0], "size": {"w": 107.59, "h": 41.68},
+         "accepts": ["dell/riser-3a-14g@1"], "default": "dell/riser-3a-14g@1",
+         "plan": {"view": "top", "at": [14.1, 13.9], "in": "board", "mirror": True}}]}}
+    top = {"size": {"w": 434.0, "h": 737.5}, "components": {"placements": [
+        {"ref": "dell/system-board-14g@1", "id": "board", "at": [5.5, 6.2]},
+        {"ref": "dell/system-cover-14g@1", "id": "lid", "at": [0.0, 0.0]}]}}
+    d = {"name": "f", "manufacturer": "F", "model": "F", "version": "0.1.0",
+         "chassis": {"width": 434.0, "height": 86.8, "depth": 737.5},
+         "views": {"rear": rear, "top": top}}
+    out = render.render_view(d, "top", top, lib, config={"bays": {"riser-1/slot-1": "common/pcie-card-fh@1"}})
+    svg = out if isinstance(out, str) else render.ET.tostring(out, encoding="unicode")
+    g = re.search(r'<g id="riser-1-plan"[^>]*>', svg)
+    assert g, "the riser's plan is not in the top view"
+    assert 'data-projection="1"' in g.group(0) and 'data-of="riser-1/module"' in g.group(0)
+    assert 'data-path=' not in g.group(0), "a projection is not a second part in the tree"
+    assert 'data-in="board"' in g.group(0)
+    # the projection carries no relief for the kit to build
+    body = svg[g.end():svg.index("</g>", g.end())]
+    assert "data-z-" not in body and "data-ref" not in body
+    # the seated card came along, inboard of the PCB, under the riser's plan
+    c = re.search(r'<g id="riser-1-slot-1-plan"[^>]*>', svg)
+    assert c and 'data-of="riser-1/module/slot-1/module"' in c.group(0), "the card's plan is missing"
+    assert re.search(r'translate\(310\.1,0(\.0)?\)', c.group(0)), c.group(0)
+    # the fillers in slots 2 and 3 have no plan and draw nothing
+    assert 'id="riser-1-slot-2-plan"' not in svg
+    # riser 3 is mirrored: its slot-7 filler draws nothing, and its own plan flips
+    r3 = re.search(r'<g id="riser-3-plan"[^>]*>', svg)
+    assert r3 and "scale(-1,1)" in r3.group(0)

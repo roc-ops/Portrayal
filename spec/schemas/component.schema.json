@@ -526,6 +526,18 @@
     "default"
    ]
   },
+  "plan": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": ["ref"],
+   "description": "THIS PART SEEN FROM ABOVE, as another component. A riser's face is its bracket plate; from above it is a thin PCB with connectors, which is a different drawing at a different size, so it is its own part - dell/riser-card-14g@1 for the full-height risers. A device bay that seats this part says where the plan lands in its top view (`plan:` on the bay).",
+   "properties": {
+    "ref": {
+     "type": "string",
+     "pattern": "^[a-z0-9-]+/[a-z0-9-]+@\\d+$"
+    }
+   }
+  },
   "bays": {
    "type": "object",
    "description": "MODULES THAT THEMSELVES HOST BAYS - a PCIe riser, a SIP carrying SPAs. Was `additionalProperties: true` and described as unused while 51 bays across 25 components already relied on it, so a malformed one validated and was found, if at all, by a tree that read wrong. Same shape as a device's bay minus the fields that only mean something on a face: no `group` or `rel-pos`, because a nested bay numbers within its carrier, and no `only-in`, because a configuration varies a chassis and not a card. Lint L48 checks that a skin actually draws each one.",
@@ -563,6 +575,13 @@
        "null"
       ],
       "description": "ref populated by default; null = open"
+     },
+     "plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["at"],
+      "description": "where this bay's occupant lies in the PLAN of this module, relative to the module's own plan origin - a riser's card lies inboard of its PCB. Used when the module is projected into another view.",
+      "properties": {"at": {"$ref": "#/$defs/xy"}}
      },
      "behind": {
       "type": "boolean",
