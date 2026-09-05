@@ -371,31 +371,14 @@ export function crop(cv, r, pxmm = PXMM) {
   return c;
 }
 
-// standards-relief extraction: cavities (with interior features) + outward protrusions.
-// Interior/plate art is re-rendered STANDALONE from its own nodes so bezel plates
-// can carry arbitrary shapes (plug-outline apertures, LED holes) via alpha.
-export async function extractRelief(url, scope) {
-  const div = document.createElement('div');
-  div.style.cssText = 'position:absolute;left:-10000px;top:0;width:1000px;visibility:hidden';
-  div.innerHTML = await svgSource(url, scope);
-  document.body.appendChild(div);
-  const svg = div.querySelector('svg');
-  // A PROJECTION IS FLAT. A part seated on one face may be drawn again on
-  // another as `data-projection` (render.py's `plan:`), for the 2D view with
-  // the lid off. Its body already stands in the scene from the face that
-  // holds it, so nothing inside one is extracted here - it is texture only.
+// THE MEASURING TOOLS FOR ONE PARSED FACE, shared between the build and the
+// lamp animator. Both need the same answers - where a node sits in face mm,
+// how far off the face it starts, which part owns it, and how to render it
+// standalone with the scope its rules were written in - and having two
+// copies is how the second one drifts. `svg` must be attached to a document
+// (getScreenCTM and getBBox read nothing from a detached tree).
+export function nodeTools(svg) {
   const q = sel => [...svg.querySelectorAll(sel)].filter(el => !el.closest('[data-projection]'));
-  // before anything is measured or serialised: cleanText and every nodeSvg below
-  // are taken from this document, so applying the runtime states once here is
-  // what puts them on the face texture and on every piece of relief at once.
-  applyNodeStates(svg, scope);
-  // A part the viewer has taken off is REMOVED here rather than hidden, and only
-  // here: this document is built to be measured and then discarded, so nothing
-  // has to put it back. Left as display:none it would measure 0x0 and extrude a
-  // degenerate feature instead of none at all - a cover that is off should leave
-  // no geometry behind, not a flat one.
-  applyPulled(svg, scope);
-  for (const el of [...q("[data-portrayal-pulled]")]) el.remove();
   const inv = svg.getScreenCTM().inverse();
   const mmRect = el => {
     const b = el.getBBox();
@@ -471,14 +454,23 @@ export async function extractRelief(url, scope) {
   // gap rather than a plumbing one.
   const scopeWrap = (el, inner) => {
     for (let p = el.parentElement; p && p !== svg; p = p.parentElement) {
+      // `data-ref` and `data-class` ride too: render.py's other scope for a
+      // declared colour is `g[data-ref^='dell/control-panel-left-14g@']
+      // .state-fault`, and a lamp wrapped in id and class alone painted its
+      // generic default in its own texture while the face showed the vendor's
+      // colour - same defect as the id case, one attribute over.
       const id = p.getAttribute('id'), cls = p.getAttribute('class'),
-            path = p.getAttribute('data-path');
-      if (!id && !cls) continue;      // a pure layout group changes no selector
+            path = p.getAttribute('data-path'), ref = p.getAttribute('data-ref'),
+            dc = p.getAttribute('data-class');
+      if (!id && !cls && !ref && !dc) continue;      // a pure layout group changes no selector
       inner = `<g${id ? ` id="${id}"` : ''}${cls ? ` class="${cls}"` : ''}` +
+              `${ref ? ` data-ref="${ref}"` : ''}${dc ? ` data-class="${dc}"` : ''}` +
               `${path ? ` data-path="${path}"` : ''}>${inner}</g>`;
     }
     return inner;
   };
+  // The `<!--art-->` marker separates the shared stylesheet from the node's
+  // own art, so lamps.js can lay an unlit copy of the art under the live one.
   const nodeSvg = (el, rect) => {
     const m = inv.multiply(el.getScreenCTM());
     const clone = el.cloneNode(true);
@@ -488,12 +480,41 @@ export async function extractRelief(url, scope) {
     for (const r of clone.querySelectorAll(
         '[data-z-out],[data-z-cyl],[data-z-bar],[data-z-uhandle],[data-z-dome][data-z-lift]'))
       r.style.display = 'none';
-    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${rect.w} ${rect.h}"` +
-      ` width="${rect.w}mm" height="${rect.h}mm">${shared}` +
-      scopeWrap(el,
+    const live = scopeWrap(el,
         `<g transform="matrix(${m.a} ${m.b} ${m.c} ${m.d} ${m.e - rect.x} ${m.f - rect.y})">` +
-        clone.outerHTML + `</g>`) + `</svg>`;
+        clone.outerHTML + `</g>`);
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${rect.w} ${rect.h}"` +
+      ` width="${rect.w}mm" height="${rect.h}mm">${shared}<!--art-->` + live + `</svg>`;
   };
+  return {inv, mmRect, shared, liftOf, ownerOf, scopeWrap, nodeSvg};
+}
+
+// standards-relief extraction: cavities (with interior features) + outward protrusions.
+// Interior/plate art is re-rendered STANDALONE from its own nodes so bezel plates
+// can carry arbitrary shapes (plug-outline apertures, LED holes) via alpha.
+export async function extractRelief(url, scope) {
+  const div = document.createElement('div');
+  div.style.cssText = 'position:absolute;left:-10000px;top:0;width:1000px;visibility:hidden';
+  div.innerHTML = await svgSource(url, scope);
+  document.body.appendChild(div);
+  const svg = div.querySelector('svg');
+  // A PROJECTION IS FLAT. A part seated on one face may be drawn again on
+  // another as `data-projection` (render.py's `plan:`), for the 2D view with
+  // the lid off. Its body already stands in the scene from the face that
+  // holds it, so nothing inside one is extracted here - it is texture only.
+  const q = sel => [...svg.querySelectorAll(sel)].filter(el => !el.closest('[data-projection]'));
+  // before anything is measured or serialised: cleanText and every nodeSvg below
+  // are taken from this document, so applying the runtime states once here is
+  // what puts them on the face texture and on every piece of relief at once.
+  applyNodeStates(svg, scope);
+  // A part the viewer has taken off is REMOVED here rather than hidden, and only
+  // here: this document is built to be measured and then discarded, so nothing
+  // has to put it back. Left as display:none it would measure 0x0 and extrude a
+  // degenerate feature instead of none at all - a cover that is off should leave
+  // no geometry behind, not a flat one.
+  applyPulled(svg, scope);
+  for (const el of [...q("[data-portrayal-pulled]")]) el.remove();
+  const {inv, mmRect, shared, liftOf, ownerOf, nodeSvg} = nodeTools(svg);
   // THE OUTLINE OF A NODE, in face millimetres, as closed rings.
   //
   // SAMPLED RATHER THAN PARSED. getPointAtLength walks a path at constant arc
@@ -758,7 +779,9 @@ export async function buildFaceRelief(F, ctx) {
     // state class lands on - and asking the text is the only version of the
     // question that cannot miss one of the three.
     const restyle = ctx.restyle || [];
-    const reg = (svgText, run) => { if (svgText) restyle.push({svgText, run}); };
+    // `anim` - the material and its mm size - is what lets the viewer redraw
+    // the same texture at several instants of a CSS animation (see lamps.js)
+    const reg = (svgText, run, anim = null) => { if (svgText) restyle.push({svgText, run, anim}); };
     // `let`, because the drawing may state a different size below and a face
     // is drawn at its own size rather than at its plane's.
     let fw = F.fw(), fh = F.fh();
@@ -970,7 +993,8 @@ export async function buildFaceRelief(F, ctx) {
       m.scale.set(dm.w, dm.h, dm.dome + 0.15);
       m.position.set(LX(dm.x, dm.w), LY(dm.y, dm.h), (dm.lift || 0) - 0.15);
       addTo(m);
-      reg(dm.svgText, async text => remap(m.material, await rasterize(text, dm.w, dm.h, PX)));
+      reg(dm.svgText, async text => remap(m.material, await rasterize(text, dm.w, dm.h, PX)),
+          {mat: m.material, w: dm.w, h: dm.h, path: dm.owner});
     }
     for (const o of outs) {   // protrusions: bezel plates, handles, studs, tubes
       curOwner = o.owner;
@@ -982,7 +1006,8 @@ export async function buildFaceRelief(F, ctx) {
       }
       const faceTex = new THREE.MeshBasicMaterial(
         {map: canvasTex(ocv), transparent: true, alphaTest: 0.1, alphaToCoverage: true});
-      reg(o.svgText, async text => remap(faceTex, await rasterize(text, o.w, o.h, PX)));
+      reg(o.svgText, async text => remap(faceTex, await rasterize(text, o.w, o.h, PX)),
+          {mat: faceTex, w: o.w, h: o.h, path: o.owner});
       if (o.uhandle !== undefined && o.uhandle !== '') {
         const far = +o.uhandle;
         const horizontal = o.w >= o.h;

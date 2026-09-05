@@ -722,6 +722,16 @@ export function createShell(opts = {}) {
   // off, because that was their decision and not this function's.
   function reveal(path) {
     state.autoPulled = state.autoPulled || new Set();
+    // AND THE PART ITSELF IS SHOWN. Selecting something you took off - the lid,
+    // a module, a port on a pulled module - is a selection of a thing that is
+    // not drawn, which is nothing to look at. So a pulled selection, or a
+    // pulled ancestor of it, goes back on. That includes one pulled by hand:
+    // the reader's later decision was to select it.
+    if (path) {
+      const back = pulledEls().map(e => e.dataset.path)
+        .filter(p => p && (path === p || path.startsWith(p + '/')));
+      if (back.length) { for (const p of back) state.autoPulled.delete(p); setPulled(back, false); }
+    }
     const need = new Set(path ? over(path) : []);
     const back = [...state.autoPulled].filter(p => !need.has(p));
     const off = [...need].filter(p => !state.autoPulled.has(p) && !isPulled(p));
