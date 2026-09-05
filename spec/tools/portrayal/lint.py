@@ -4012,7 +4012,26 @@ def lint_device_rj45_lamps(path, data, lib_roots):
     groups = data.get("groups") or {}
     unlamped_eth = lamped_bare = retired = 0
     for view in (data.get("views") or {}).values():
-        for q in (((view or {}).get("components") or {}).get("placements") or []):
+        placements = (((view or {}).get("components") or {}).get("placements") or [])
+        # A jack on a bare ref is not "on a part with no lamps" if this view
+        # draws a `class: led` placement `for:` it beside the jack instead of
+        # inside it - sweep_rj45.py leaves such a jack bare on purpose
+        # (edgecore/as5912-54x mgmt-eth: two lamps drawn beside the bezel, not
+        # composed into it), and the census must not re-flag what the sweep
+        # deliberately left alone.
+        lamped_for = set()
+        for q in placements:
+            ref = str(q.get("ref") or "")
+            if not ref:
+                continue
+            try:
+                cp = resolve_component(ref, lib_roots)
+            except ValueError:          # malformed ref with no @major - L5 reports that itself
+                continue
+            if cp and (load_yaml(cp) or {}).get("class") == "led":
+                f = q.get("for")
+                lamped_for.update(str(t) for t in (f if isinstance(f, list) else [f]) if t is not None)
+        for q in placements:
             ref = str(q.get("ref") or "")
             if "rj45" not in ref:
                 continue
@@ -4020,7 +4039,7 @@ def lint_device_rj45_lamps(path, data, lib_roots):
                 retired += 1
                 continue
             if rj45_wants_lamps(q, groups):
-                if ref not in RJ45_LAMPED_REFS:
+                if ref not in RJ45_LAMPED_REFS and str(q.get("id")) not in lamped_for:
                     unlamped_eth += 1
             elif ref not in RJ45_BARE_REFS:
                 lamped_bare += 1

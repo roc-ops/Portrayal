@@ -221,6 +221,24 @@ def test_l76_counts_a_console_with_lamps_and_a_retired_part():
     assert "1 on a retired RJ45 part" in ws[0]
 
 
+# Defect found piloting the sweep on real devices: edgecore/as5912-54x draws
+# mgmt-eth's two lamps as separate placements BESIDE the bare jack, not
+# composed inside it. L76 must not count that as "on a part with no lamps" -
+# the jack has lamps, they just aren't the ones the ref itself would draw.
+def test_l76_does_not_count_an_ethernet_jack_whose_lamp_is_drawn_beside_it():
+    ws = l76(_dev([
+        {"id": "mgmt-eth", "ref": "std/rj45@2", "at": [0, 0], "group": "mgmt", "attrs": {"role": "mgmt"}},
+        {"id": "led-mgmt-lnk", "ref": "common/led-dot@1", "at": [50, 50], "group": "mgmt",
+         "for": "mgmt-eth", "attrs": {"function": "link"}},
+    ]))
+    assert ws == []
+
+
+def test_l76_still_counts_an_ethernet_jack_with_truly_no_lamps():
+    ws = l76(_dev([{"id": "mgmt-eth", "ref": "std/rj45@2", "at": [0, 0], "group": "mgmt", "attrs": {"role": "mgmt"}}]))
+    assert len(ws) == 1 and "1 Ethernet jack(s) on a part with no lamps" in ws[0]
+
+
 SWEEP = ROOT / "spec/tools/portrayal/sweep_rj45.py"
 
 FIXTURE = textwrap.dedent("""\
@@ -497,3 +515,49 @@ def test_the_sweep_flips_handedness_for_a_rotated_jack(tmp_path):
     # screen-right, so its states land on led-b, not led-a.
     assert pl["mgmt-eth"]["states"]["led-b"] == ["off", {"name": "link-1g", "color": "#22c55e"}]
     assert pl["mgmt-eth"]["states"]["led-a"] == ["off", {"name": "activity"}]
+
+
+# --- Fix round 2: a jack whose lamps sit beside it, not inside it ---------
+
+# Defect found piloting the sweep on real devices: edgecore/as5912-54x
+# mgmt-eth is common/rj45-bezel@2 (no lamps) and its two management lamps are
+# drawn as separate placements BESIDE the jack, outside its footprint.
+# Deciding by role alone (mgmt -> Ethernet -> wants lamps) moved the jack onto
+# the LAMPED common/rj45-eth@1, which would draw four lamps where the
+# hardware has two. Controller ruling: a jack with a `for:` lamp OUTSIDE its
+# old footprint takes the BARE target regardless of role, and nothing is
+# lifted from it.
+EXTERNAL_LAMPS_FIXTURE = textwrap.dedent("""\
+format: 1
+kind: device
+name: d6
+version: 1.0.0
+manufacturer: Acme
+model: D6
+chassis: {width: 100, height: 40, depth: 30}
+groups:
+  mgmt: {term: Port}
+  mgmt-leds: {term: LED}
+views:
+  front:
+    size: {w: 100, h: 40}
+    components:
+      placements:
+        - {id: mgmt-eth, ref: common/rj45-bezel@2, at: [10.0, 10.0], group: mgmt, rel-pos: 1, attrs: {role: mgmt}}
+        - {id: led-mgmt-lnk, ref: common/led-dot@1, at: [11.0, 30.0], group: mgmt-leds, rel-pos: 1, for: mgmt-eth, attrs: {function: link}}
+        - {id: led-mgmt-act, ref: common/led-dot@1, at: [15.0, 30.0], group: mgmt-leds, rel-pos: 2, for: mgmt-eth, attrs: {function: activity}}
+""")
+
+
+def test_the_sweep_leaves_a_jack_bare_when_its_lamps_are_external(tmp_path):
+    d = tmp_path / "devices/acme/d6"; d.mkdir(parents=True)
+    (d / "device.yaml").write_text(EXTERNAL_LAMPS_FIXTURE)
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert "external-lamps 1" in r.stdout
+    data = yaml.safe_load((d / "device.yaml").read_text())
+    pl = {p["id"]: p for p in data["views"]["front"]["components"]["placements"]}
+    assert pl["mgmt-eth"]["ref"] == "std/rj45@2", "role wanted lamps, but the lamps sit outside the footprint"
+    assert "led-mgmt-lnk" in pl and "led-mgmt-act" in pl, "lamps beside the jack must not be lifted"
+    assert "states" not in pl["mgmt-eth"]

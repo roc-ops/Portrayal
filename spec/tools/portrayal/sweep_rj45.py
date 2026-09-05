@@ -174,7 +174,18 @@ def sweep_device(path):
             new = target(ref, L.rj45_wants_lamps(q, groups))
             if new:
                 moves[str(q["id"])] = (ref, new)
-        lifted = collections.defaultdict(list)          # jack id -> [(x, lamp placement)]
+        # A jack's lamps may be drawn INSIDE its footprint (composed into the
+        # part - lift them) or BESIDE it (separate placements drawn next to a
+        # bare jack, e.g. edgecore/as5912-54x mgmt-eth on rj45-bezel@2 with
+        # led-mgmt-lnk/led-mgmt-act at fixed points beside it). Deciding by
+        # role alone moved such a jack onto the LAMPED part, doubling its
+        # lamps on screen. Controller ruling: any lamp OUTSIDE the jack's old
+        # footprint forces that jack to the BARE target regardless of role,
+        # and nothing is lifted from it; lamps only inside are unchanged
+        # (lifted, lamped); lamps both inside and outside are reported by
+        # hand rather than guessed at.
+        inside = collections.defaultdict(list)          # jack id -> [(x, lamp placement)]
+        outside = collections.defaultdict(list)
         for q in pl:
             f = q.get("for")
             targets = f if isinstance(f, list) else [f]
@@ -182,13 +193,24 @@ def sweep_device(path):
                 continue
             for t in targets:
                 t = str(t)
-                if t in moves and moves[t][1].startswith("common/") and t in by_id:
+                if t in moves and t in by_id:
                     jx, jy = by_id[t]["at"]; jw, jh = size(moves[t][0])
                     if (by_id[t].get("rotate") or 0) % 180 == 90:
                         jw, jh = jh, jw
                     x, y = q["at"]
-                    if jx <= x <= jx + jw and jy <= y <= jy + jh:
-                        lifted[t].append((x, q))
+                    (inside if jx <= x <= jx + jw and jy <= y <= jy + jh else outside)[t].append((x, q))
+        external_ids = set()
+        lifted = {}
+        for pid in list(moves):
+            has_in, has_out = bool(inside.get(pid)), bool(outside.get(pid))
+            if has_out:
+                old = moves[pid][0]
+                moves[pid] = (old, target(old, False))          # bare, regardless of role
+                external_ids.add(pid)
+                if has_in:
+                    unresolved.append(f"{pid}: lamps both inside and outside the jack - decide by hand")
+            elif has_in and moves[pid][1].startswith("common/"):
+                lifted[pid] = inside[pid]
         # 1-2. move jacks, holding centres; 3. write lifted states onto them
         failed = set()
         for pid, (old, new) in moves.items():
@@ -241,6 +263,8 @@ def sweep_device(path):
                         block = "\n".join(lines)
             rows[s[0]:s[1] + 1] = block.split("\n")
             report["lamped" if new.startswith("common/") else "bare"] += 1
+            if pid in external_ids:
+                report["external-lamps"] += 1
             moved_ids.append(pid)
         # 3b. remove the lifted lamps - only for jacks whose own move succeeded;
         # a jack we could not rewrite must not lose the lamps it still draws
