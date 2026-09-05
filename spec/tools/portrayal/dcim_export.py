@@ -23,6 +23,14 @@ produced nothing at all, despite having console ports, module bays, a weight
 and a part number. Not every device takes a NOS; that is a fact about the
 device, not a reason to refuse to export it.
 
+A NOS is data. What ArcOS calls a port is stated once, in the device's overlay
+(`overlays/arcos.yaml`, `interfaces:`), and the exporter reads it from there -
+it does not know any NOS by name. Every device exports under its manufacturer
+with ports named by their faceplate id; a device whose overlay declares a NOS
+asked for with `--nos` exports a second type with that NOS's names, filed
+under the software vendor when the overlay carries an `identity:`. A `--nos`
+that no overlay in the build declares is refused.
+
 Nothing is dropped on the floor. What the target schema has no field for goes
 into `comments` rather than being lost: the datasheet, the maturity this model
 claims, and the attrs that have no home - power envelope, ASIC, CPU. A bay's
@@ -193,19 +201,90 @@ def slugify(s):
     return re.sub(r"-+", "-", re.sub(r"[^a-z0-9]+", "-", str(s).lower())).strip("-")
 
 
-def nos_name(profile, kind, n, origin=1):
-    """Interface name for a port, per NOS convention.
+def _index_expr(expr, n):
+    """`{n}`, `{(n-1)*4}`: arithmetic over the port index, and nothing else.
 
-    `origin` is the group's index-origin - where the vendor's own numbering
-    starts. SONiC counts lanes from zero whatever the faceplate says, so the
-    first port is Ethernet0 on a box silkscreened 1 and on a box silkscreened 0
-    alike; assuming 1 gave the AS7946-30XB an interface called `Ethernet-4`.
+    The overlay schema's own example for a name pattern is SONiC's
+    `Ethernet{(n-1)*4}`, so the braces have to admit an expression - and an
+    expression read from a data file is not something to hand to eval() whole.
+    Only literals, `n` and the arithmetic operators pass; anything else is the
+    overlay's mistake and is refused by name.
     """
-    if profile == "arcos":
-        return {"switch": f"swp{n}", "mgmt": "ma1"}[kind]
-    if profile == "sonic":                    # SONiC numbers by lane, not by port
-        return {"switch": f"Ethernet{(n - origin) * 4}", "mgmt": "eth0"}[kind]
-    raise SystemExit(f"unknown NOS profile: {profile}")
+    import ast
+    tree = ast.parse(expr.strip(), mode="eval")
+    ok = (ast.Expression, ast.BinOp, ast.UnaryOp, ast.Constant, ast.Name, ast.Load,
+          ast.Add, ast.Sub, ast.Mult, ast.Div, ast.FloorDiv, ast.Mod, ast.USub, ast.UAdd)
+    for node in ast.walk(tree):
+        if not isinstance(node, ok) or (isinstance(node, ast.Name) and node.id != "n"):
+            raise SystemExit(f"overlay interface name {{{expr}}}: only arithmetic over n "
+                             f"is allowed in a name pattern")
+    return int(eval(compile(tree, "<overlay>", "eval"), {"__builtins__": {}}, {"n": n}))
+
+
+def _expand(pattern, n):
+    """Fill every `{...}` in a name pattern for port n. `{i}` - the breakout
+    child index - is not known at the port and is left standing."""
+    return re.sub(r"\{([^{}]*)\}",
+                  lambda m: m.group(0) if m.group(1).strip() == "i"
+                  else str(_index_expr(m.group(1), n)),
+                  pattern)
+
+
+def overlay_names(overlay):
+    """physical id -> (NOS interface name, breakout rule or None).
+
+    THE OVERLAY IS THE ONLY SOURCE OF A NOS NAME. This used to be a Python
+    function with `if profile == "arcos"` and `if profile == "sonic"` in it,
+    while the ArcOS overlay stated the same rule as data with breakout modes the
+    Python never read (#63, #56). Two statements of one fact drift, and the code
+    won silently. Now the exporter reads `interfaces:` - `physical` with `{n}`
+    over `range`, `name` with `{n}` or arithmetic on it - and a NOS with no
+    overlay has no names, rather than invented ones.
+    """
+    out = {}
+    for rule in (overlay or {}).get("interfaces") or []:
+        phys, name = rule["physical"], rule["name"]
+        if "{n}" in phys:
+            if not rule.get("range"):
+                raise SystemExit(f"overlay interface {phys!r} has {{n}} and no range")
+            lo, hi = (int(x) for x in str(rule["range"]).split("-", 1))
+            for n in range(lo, hi + 1):
+                out[phys.replace("{n}", str(n))] = (_expand(name, n), rule.get("breakout"))
+        else:
+            out[phys] = (name, rule.get("breakout"))
+    return out
+
+
+def breakout_note(breakout, n):
+    """What the overlay says a port can be split into, as prose on the interface.
+
+    A device type lists the ports the metal has. The 4x25G children a breakout
+    makes are how a DEVICE is configured, not a fact about the type - so they go
+    in the description, modes and the child naming pattern for port n, rather
+    than as 96 interfaces the faceplate has not got.
+    """
+    modes = ", ".join(breakout.get("modes") or [])
+    child = breakout.get("child-name")
+    parts = [f"Breakout: {modes}" if modes else "Breakout capable"]
+    if child:
+        parts.append(f"children {_expand(child, n)}")
+    return "; ".join(parts)[:200]
+
+
+def iface_type(p, attrs):
+    """DCIM interface type for a port placement, or None when it cannot be
+    known. Family from the cage ref, speed from the attrs; an unknown
+    combination is skipped rather than guessed."""
+    ref = p["ref"]
+    fam = ("qsfp" if "qsfp" in ref else
+           "rj45" if "rj45" in ref else
+           "sfp" if "sfp" in ref else None)
+    if fam is None:
+        return None
+    if fam == "rj45" and attrs.get("role") == "mgmt":
+        return "1000base-t"                    # a copper management port is 1G
+    speed = attrs.get("speed") or {"qsfp": "100g", "sfp": "25g", "rj45": "1g"}[fam]
+    return IFACE_TYPE.get((fam, speed))
 
 
 def flatten(section, prefix=""):
@@ -336,7 +415,7 @@ def bay_signature(dev, cfg_name):
     return tuple(sorted(ids))
 
 
-def build(dev, cfg_name, cfg, profile, dist=None, frus=None, label=None):
+def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
     ch = dev.get("chassis", {})
     cfg = cfg or {}
 
@@ -416,7 +495,12 @@ def build(dev, cfg_name, cfg, profile, dist=None, frus=None, label=None):
         g = dev_groups.get(p.get("group")) or {}
         return {**(g.get("attrs") or {}), **(p.get("attrs") or {})}
 
-    console, mgmt_rj, mgmt_sfp, bays = [], [], [], []
+    # WHAT THE NOS CALLS EACH PORT comes from the overlay's `interfaces:` rules
+    # and from nowhere else. None means no NOS: the document is the hardware's
+    # own, and names its ports by the id on the faceplate.
+    names = overlay_names(overlay) if overlay is not None else None
+
+    console, mgmt_sfp, bays = [], [], []
     for view in views_for(dev, cfg_name):
         parts = view_parts(view)
         for p in scoped(parts["placements"], cfg_name):
@@ -426,10 +510,8 @@ def build(dev, cfg_name, cfg, profile, dist=None, frus=None, label=None):
                 console.append({"name": "Console", "type": "rj-45"})
             elif role == "console" and p["ref"].startswith("std/usb-c"):
                 console.append({"name": "Console (USB-C)", "type": "usb-c"})
-            elif role == "mgmt" and media == "rj45" and profile:
-                mgmt_rj.append({"name": nos_name(profile, "mgmt", 0),
-                                "type": "1000base-t", "mgmt_only": True})
-            elif role == "mgmt" and a.get("speed") == "10g":
+            elif (role == "mgmt" and a.get("speed") == "10g"
+                  and not (names and p["id"] in names)):
                 mgmt_sfp.append({"name": p["id"].replace("port-", ""),
                                  "type": "10gbase-x-sfpp", "mgmt_only": True,
                                  "description": "10G management port (faceplate label; "
@@ -447,35 +529,41 @@ def build(dev, cfg_name, cfg, profile, dist=None, frus=None, label=None):
                 bay["description"] = f"Accepts: {short}"[:200]
             bays.append(bay)
 
-    ifaces = mgmt_rj + sorted(mgmt_sfp, key=lambda i: i["name"])
-    ports = []
+    # Switch and management interfaces. With an overlay, a placement is an
+    # interface exactly when a rule names it - `mgmt-eth` becomes `ma1` because
+    # the overlay says so, not because a media attr happened to match. Without
+    # one, every `port-N` that is not console or management is an interface
+    # under its faceplate id: unspecific, but a fact about the metal rather than
+    # a convention borrowed from a NOS the box may not run.
+    ports = {}
     for view in views_for(dev, cfg_name):
         for p in scoped(view_parts(view)["placements"], cfg_name):
-            if not p["id"].startswith("port-"):
-                continue
+            pid = p["id"]
             a = attrs_of(p)
-            if a.get("role") in ("mgmt", "console"):
-                continue
-            ref = p["ref"]
-            fam = ("qsfp" if "qsfp" in ref else
-                   "rj45" if "rj45" in ref else
-                   "sfp" if "sfp" in ref else None)
-            if fam is None:
-                continue
-            speed = a.get("speed") or {"qsfp": "100g", "sfp": "25g", "rj45": "1g"}[fam]
-            t = IFACE_TYPE.get((fam, speed))
+            if names is not None:
+                if pid not in names:
+                    continue
+                name, breakout = names[pid]
+            else:
+                if not pid.startswith("port-") or a.get("role") in ("mgmt", "console"):
+                    continue
+                name, breakout = pid, None
+            t = iface_type(p, a)
             if t is None:                      # unknown combination: skip, do not guess
                 continue
-            try:
-                n = int(p["id"].split("-")[1])
-            except ValueError:
-                continue
-            origin = (dev_groups.get(p.get("group")) or {}).get("index-origin", 1)
-            ports.append((n, t, origin))
+            iface = {"name": name, "type": t}
+            if a.get("role") == "mgmt":
+                iface["mgmt_only"] = True
+            if breakout:
+                iface["description"] = breakout_note(breakout, _num(pid.rsplit("-", 1)[-1]))
+            # management first, then by faceplate number - the order a person
+            # reads the front panel in
+            ports.setdefault(name, ((0 if a.get("role") == "mgmt" else 1),
+                                    _num(pid.rsplit("-", 1)[-1]), iface))
 
-    if profile:
-        for n, t, origin in sorted(set(ports)):
-            ifaces.append({"name": nos_name(profile, "switch", n, origin), "type": t})
+    ifaces = ([i for _, _, i in sorted(ports.values(), key=lambda k: k[:2]) if i.get("mgmt_only")]
+              + sorted(mgmt_sfp, key=lambda i: i["name"])
+              + [i for _, _, i in sorted(ports.values(), key=lambda k: k[:2]) if not i.get("mgmt_only")])
 
     if console:
         out["console-ports"] = console
@@ -488,7 +576,7 @@ def build(dev, cfg_name, cfg, profile, dist=None, frus=None, label=None):
     body = comments_for(dev, cfg_name, cfg)
     if body:
         out["comments"] = body
-    return out, bool(ports)
+    return out
 
 
 def build_module(contract, manufacturer):
@@ -773,6 +861,18 @@ def main():
     args = ap.parse_args()
 
     dist = Dist(args.dist)
+    # A NOS NOBODY DESCRIBES IS AN ERROR, NOT A DEFAULT. `--nos sonic` used to
+    # answer from a Python branch and wrote 144 device types for a NOS with no
+    # overlay anywhere; now the only source of a NOS name is an overlay, so a
+    # profile no overlay declares has nothing to say and the run stops here,
+    # before a file is written, naming where the overlay would go.
+    known = dist.profiles()
+    for p in args.nos:
+        if p not in known:
+            raise SystemExit(f"--nos {p}: no overlay in {args.dist} declares it. A NOS is "
+                             f"described by devices/<vendor>/<model>/overlays/{p}.yaml, "
+                             f"with `interfaces:` rules for its names"
+                             + (f"; known: {', '.join(sorted(known))}" if known else ""))
     global RASTER
     RASTER = not args.no_raster
     images = args.dist if args.images else None
@@ -883,14 +983,19 @@ def export_device(dist, device_name, out_root, nos, images):
     vendors = load_vendors(dist)
     for key, (cfg_name, cfg) in by_sku.items():
         label = labels[key]
-        # A NOS names switch interfaces. Emit one document per profile that
-        # actually resolves any, and a NOS-neutral one when none does - a device
-        # whose ports are all line-card bays still has a device type.
-        _, has_ports = build(dev, cfg_name, cfg, None, images, frus, label)
-        profiles = list(nos) if (nos and has_ports) else [None]
+        # THE HARDWARE'S OWN DOCUMENT, ALWAYS; A NOS DOCUMENT ONLY WHERE AN
+        # OVERLAY DECLARES THAT NOS FOR THIS DEVICE. Asking for `--nos arcos`
+        # used to write an ArcOS type for every switch in the library with names
+        # made up in Python, UfiSpace and Juniper included, and `--nos sonic` did
+        # the same for a NOS no overlay describes (#63, #56). A device with no
+        # overlay for a profile now gets nothing for it - the neutral type names
+        # its ports by the faceplate and says no more than it knows.
+        ns = dev.get("ns")
+        profiles = [None] + [p for p in nos if dist.overlay(ns, device_name, p)]
 
         for profile in profiles:
-            doc, _ = build(dev, cfg_name, cfg, profile, images, frus, label)
+            overlay = dist.overlay(ns, device_name, profile) if profile else None
+            doc = build(dev, cfg_name, cfg, overlay, images, frus, label)
             # DEVICE name, not the configuration's. `name` is rebound by the
             # by-SKU loop above and means a configuration from there on, which
             # silently looked up an overlay that does not exist and filed every

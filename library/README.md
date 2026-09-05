@@ -7,7 +7,6 @@ overlays, and sanitized device dumps. Compiled SVGs are build artifacts
 ```
 components/common/<name>/v<major>/{contract.yaml, skins/*.svg}
 devices/<vendor>/<model>/{device.yaml, overlays/<nos>.yaml, dumps/}
-profiles/
 ```
 
 First device: **Edgecore AS7726-32X** (32× QSFP28 Trident 3 white-box switch),

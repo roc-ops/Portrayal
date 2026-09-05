@@ -126,3 +126,8 @@ class Dist:
         if not profile:
             return None
         return (self._overlays.get(f"{ns}/{model}") or {}).get(profile)
+
+    def profiles(self):
+        """Every NOS some overlay in this build declares - the only NOSes an
+        export can name interfaces for."""
+        return {p for profs in self._overlays.values() for p in (profs or {})}
