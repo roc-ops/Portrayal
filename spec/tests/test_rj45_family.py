@@ -46,3 +46,5 @@ def test_the_ganged_cell_keeps_its_measured_face_and_gains_the_tiers():
     assert (g["w"], g["h"]) == (12.7, 11.0)
     assert g["confidence"] == "measured"
     assert g["cavity"] == {"w": 11.91, "h": 10.5}
+    assert g["depth"] == 18.6
+    assert g["depth-confidence"] == "drawing"
