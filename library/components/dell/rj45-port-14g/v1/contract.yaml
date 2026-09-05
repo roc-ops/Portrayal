@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: rj45-port-14g
-version: 1.1.0
+version: 1.2.0
 class: port
 profile: server
 description: >-
@@ -47,9 +47,14 @@ provenance:
     table. On the NDC the link indicator sits at face x 3.60 and the activity
     indicator at 15.64, on a jack spanning 2.47..18.47 - so link is the lamp on
     the keyway's left and activity the one on its right.
-    The lamps keep the common part's own ids, `led-a` and `led-b`,
-    because that is what they are addressed by; this file is where the mapping
-    from side to meaning is written down.
+    THE PART ROTATES NOW, AND THAT SWAPS THE IDS. common/rj45-eth@1's own
+    provenance says led-a is its left window and led-b its right when unrotated,
+    swapped by a 180 turn - and this composition turns it, because the Dell
+    jacks are keyway-up in ISM figure 8 while the housing draws keyway-down
+    unrotated. So after the turn, left - where link sits - is `led-b`, and right
+    - where activity sits - is `led-a`; the ids in `parts[0].states` below carry
+    the meanings on that footing, not on the common part's own unrotated
+    left/right.
   composes-rj45-eth: >-
     Since 1.1.0 this composes common/rj45-eth@1 - the housing with two lamps - where
     1.0.0 composed common/rj45-port@4, a bezel plate over an aperture. Same two lamps,
@@ -61,12 +66,13 @@ parts:
   - ref: common/rj45-eth@1
     id: port
     at: [0.0, 0.0]
+    rotate: 180
     states:
       led-a:
+        - 'off'
+        - {name: active, color: '#22c55e', behavior: blinking}
+      led-b:
         - 'off'
         - {name: up, color: '#22c55e'}
         - {name: degraded, color: '#eab308'}
         - {name: identify, color: '#22c55e', behavior: blinking}
-      led-b:
-        - 'off'
-        - {name: active, color: '#22c55e', behavior: blinking}

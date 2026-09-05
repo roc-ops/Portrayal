@@ -164,12 +164,25 @@ def test_common_rj45_ganged_eth_composes_the_cell_and_adds_two_lamps():
 
 def test_the_dell_carrier_attaches_ism_meanings_to_the_new_lamps():
     c = contract("dell/rj45-port-14g@1")
-    assert c["version"] == "1.1.0"
+    assert c["version"] == "1.2.0"
     part = c["parts"][0]
     assert part["ref"] == "common/rj45-eth@1"
     assert set(part["states"]) == {"led-a", "led-b"}, "the carrier names the new part's lamps"
-    names = [s if isinstance(s, str) else s["name"] for s in part["states"]["led-a"]]
+    # common/rj45-eth@1's led-a is its LOCAL left window; the carrier's rotate:
+    # 180 (added to restore keyway-up) lands it on screen-right, so the LINK
+    # vocabulary - measured on the keyway's screen-left - lives on led-b now.
+    names = [s if isinstance(s, str) else s["name"] for s in part["states"]["led-b"]]
     assert "off" in names and len(names) >= 3, "ISM table 11's LINK vocabulary survives"
+
+
+def test_the_dell_carrier_turns_the_housing_keyway_up():
+    c = contract("dell/rj45-port-14g@1")
+    part = c["parts"][0]
+    assert part["ref"] == "common/rj45-eth@1"
+    assert part.get("rotate") == 180, (
+        "common/rj45-eth@1 draws keyway-down unrotated; the Dell jacks are "
+        "keyway-up in ISM figure 8, so the composed part must turn 180"
+    )
 
 
 def test_the_base_stylesheet_renders_the_link_state():
@@ -366,7 +379,10 @@ views:
 def test_the_sweep_holds_the_cutouts_own_centre_not_the_parts(tmp_path):
     d = tmp_path / "devices/acme/d2"; d.mkdir(parents=True)
     (d / "device.yaml").write_text(CUTOUT_FIXTURE)
-    subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"], check=True)
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert "cutouts held 1" in r.stdout, "this cutout was never derived from the old part - it is informative"
     data = yaml.safe_load((d / "device.yaml").read_text())
     cut = data["views"]["front"]["panel"]["cutouts"][0]
     assert cut["at"] == [2.11, 16.1], "cutout size already matches the new part: its centre must not move"
@@ -574,3 +590,313 @@ def test_a_swept_device_renders_lamps_inside_its_management_jack(tmp_path):
     assert 'data-path="mgmt-eth/led-a"' in svg and 'data-path="mgmt-eth/led-b"' in svg
     assert 'data-path="led-mgmt-eth-l"' not in svg
     assert 'data-path="mgmt-eth/jack/opening"' in svg, "the housing's three-tier cavity is in the drawing"
+# --- Fix round 3: pilot lessons (derived cutouts, dropped skins, orphan groups) ---
+
+# Ruling A: most RJ45 cutouts were DERIVED from the old part (`at` = jack `at`
+# + the old part's own aperture offset, `size` = the old aperture's size).
+# common/rj45-bezel@2 composes std/rj45@1 (16 x 14, offset (0, 0)) at [0.5, 0.5],
+# so its derived aperture is 16 x 14 at the jack's own `at` + (0.5, 0.5). The new
+# lamped target, common/rj45-eth@1, composes std/rj45@2 (15.8 x 13.2, offset
+# (0, 0)) at (0, 0) - an aperture offset of zero, unlike the old bezel. A
+# held-centre cutout would land 0.05-0.1mm off that new derived aperture and
+# trip L63; the ruling instead RE-DERIVES a matching cutout from the new part.
+DERIVED_CUTOUT_FIXTURE = textwrap.dedent("""\
+format: 1
+kind: device
+name: d7
+version: 1.0.0
+manufacturer: Acme
+model: D7
+chassis: {width: 100, height: 40, depth: 30}
+groups:
+  mgmt: {term: Port}
+views:
+  front:
+    size: {w: 100, h: 40}
+    panel:
+      cutouts:
+        - {id: mgmt-eth, at: [10.5, 10.5], size: [16, 14]}
+    components:
+      placements:
+        - {id: mgmt-eth, ref: common/rj45-bezel@2, at: [10.0, 10.0], group: mgmt, rel-pos: 1, attrs: {role: mgmt}}
+""")
+
+
+def test_the_sweep_rederives_a_derived_cutout(tmp_path):
+    d = tmp_path / "devices/acme/d7"; d.mkdir(parents=True)
+    (d / "device.yaml").write_text(DERIVED_CUTOUT_FIXTURE)
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert "cutouts re-derived 1" in r.stdout
+    data = yaml.safe_load((d / "device.yaml").read_text())
+    pl = {p["id"]: p for p in data["views"]["front"]["components"]["placements"]}
+    assert pl["mgmt-eth"]["ref"] == "common/rj45-eth@1"
+    assert pl["mgmt-eth"]["at"] == [10.6, 10.85]
+    cut = data["views"]["front"]["panel"]["cutouts"][0]
+    assert cut["at"] == [10.6, 10.85], "re-derived from the new part's own (0, 0) offset"
+    assert cut["size"] == [15.8, 13.2]
+
+
+# test_the_sweep_holds_the_cutouts_own_centre_not_the_parts (above, the es1010
+# case) is the INFORMATIVE half of ruling A: its cutout never matched the old
+# derived aperture (the old part's aperture offset is (0.65, 0.5), the cutout
+# sits at the jack's own `at` with no offset applied), so it still holds its
+# own centre and the report says "cutouts held 1" - already asserted there.
+
+
+# Ruling B: a placement's `skin:` the new part does not declare is dropped.
+# All four new parts declare skins: [default]; common/rj45-bezel@2 (console
+# here, a bare target either way) declares skins: [default, dark] - `dark`
+# has nowhere to go.
+SKIN_FIXTURE = textwrap.dedent("""\
+format: 1
+kind: device
+name: d8
+version: 1.0.0
+manufacturer: Acme
+model: D8
+chassis: {width: 100, height: 40, depth: 30}
+groups:
+  console: {term: Port}
+views:
+  front:
+    size: {w: 100, h: 40}
+    components:
+      placements:
+        - {id: console, ref: common/rj45-bezel@2, at: [10.0, 10.0], group: console, rel-pos: 1, skin: dark}
+""")
+
+
+def test_the_sweep_drops_a_skin_the_new_part_lacks(tmp_path):
+    d = tmp_path / "devices/acme/d8"; d.mkdir(parents=True)
+    (d / "device.yaml").write_text(SKIN_FIXTURE)
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert "skin dropped 1" in r.stdout
+    data = yaml.safe_load((d / "device.yaml").read_text())
+    pl = {p["id"]: p for p in data["views"]["front"]["components"]["placements"]}
+    assert pl["console"]["ref"] == "std/rj45@2"
+    assert "skin" not in pl["console"], "std/rj45@2 declares skins: [default] only - dark has nowhere to go"
+
+
+# Ruling C: after lifting, a group with no remaining member anywhere is
+# reported (not removed - a group removal is its own major bump under
+# devicelock's rules, a human's call). The brief's own FIXTURE is the case:
+# mgmt-leds holds only led-mgmt-l/led-mgmt-r, both lifted into mgmt-eth.
+def test_the_sweep_reports_an_emptied_group(tmp_path):
+    out, _ = sweep(tmp_path, "--apply")
+    assert ("! group mgmt-leds has no members after lifting - remove it by hand "
+            "(a group removal is a major bump)") in out
+
+
+# A fixture where mgmt-leds keeps another member (not lifted, since it is not
+# `for:` the jack) must not be reported.
+KEPT_GROUP_FIXTURE = FIXTURE.replace(
+    "        - {id: console, ref: std/rj45@1, at: [40.0, 10.0], group: console, rel-pos: 2}\n",
+    "        - {id: console, ref: std/rj45@1, at: [40.0, 10.0], group: console, rel-pos: 2}\n"
+    "        - {id: led-other, ref: common/led-dot@1, at: [90.0, 30.0], group: mgmt-leds, rel-pos: 3, attrs: {function: fan}}\n",
+)
+assert KEPT_GROUP_FIXTURE != FIXTURE, "fixture edit must actually take"
+
+
+def test_the_sweep_does_not_report_a_group_that_keeps_a_member(tmp_path):
+    d = tmp_path / "devices/acme/d"; d.mkdir(parents=True)
+    (d / "device.yaml").write_text(KEPT_GROUP_FIXTURE)
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert "mgmt-leds has no members" not in r.stdout
+
+
+# --- Controller ruling (ufispace s9* batch): a lamp on the jack's edge -----
+#
+# Five s9* devices drew a management lamp within a millimetre of the jack's
+# footprint edge - not clearly inside, not clearly beside it. Ruling: within
+# LAMP_EDGE_TOL (1.0mm) of the footprint counts as INSIDE (lifted); beyond it
+# is still OUTSIDE (external, jack stays bare). mgmt-eth here is std/rj45@1 at
+# [10.0, 10.0], so its old footprint is x:[10, 26], y:[10, 24] (16 x 14, see
+# `size(std/rj45@1)`); a single `for:` lamp keeps this test clear of the
+# separate "lamps both inside and outside" unresolved case.
+EDGE_TOL_INSIDE_FIXTURE = textwrap.dedent("""\
+format: 1
+kind: device
+name: d9
+version: 1.0.0
+manufacturer: Acme
+model: D9
+chassis: {width: 100, height: 40, depth: 30}
+groups:
+  mgmt: {term: Port}
+  mgmt-leds: {term: LED}
+views:
+  front:
+    size: {w: 100, h: 40}
+    components:
+      placements:
+        - {id: mgmt-eth, ref: std/rj45@1, at: [10.0, 10.0], group: mgmt, rel-pos: 1, attrs: {role: mgmt}}
+        - {id: led-mgmt-l, ref: common/led-dot@1, at: [26.8, 15.0], group: mgmt-leds, rel-pos: 1, for: mgmt-eth, attrs: {function: link}}
+""")
+
+EDGE_TOL_OUTSIDE_FIXTURE = EDGE_TOL_INSIDE_FIXTURE.replace("[26.8, 15.0]", "[27.5, 15.0]")
+assert EDGE_TOL_OUTSIDE_FIXTURE != EDGE_TOL_INSIDE_FIXTURE, "fixture edit must actually take"
+
+
+def test_a_lamp_08mm_outside_the_box_is_lifted(tmp_path):
+    d = tmp_path / "devices/acme/d9"; d.mkdir(parents=True)
+    (d / "device.yaml").write_text(EDGE_TOL_INSIDE_FIXTURE)
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert "external-lamps" not in r.stdout, "0.8mm outside the old footprint is within LAMP_EDGE_TOL - still inside"
+    data = yaml.safe_load((d / "device.yaml").read_text())
+    pl = {p["id"]: p for p in data["views"]["front"]["components"]["placements"]}
+    assert pl["mgmt-eth"]["ref"] == "common/rj45-eth@1"
+    assert "led-mgmt-l" not in pl, "the lamp is lifted into the jack's own states"
+    assert "states" in pl["mgmt-eth"]
+
+
+def test_a_lamp_15mm_outside_the_box_is_external(tmp_path):
+    d = tmp_path / "devices/acme/d9"; d.mkdir(parents=True)
+    (d / "device.yaml").write_text(EDGE_TOL_OUTSIDE_FIXTURE)
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert "external-lamps 1" in r.stdout
+    data = yaml.safe_load((d / "device.yaml").read_text())
+    pl = {p["id"]: p for p in data["views"]["front"]["components"]["placements"]}
+    assert pl["mgmt-eth"]["ref"] == "std/rj45@2"
+    assert "led-mgmt-l" in pl, "beyond LAMP_EDGE_TOL - stays a separate placement, not lifted"
+    assert "states" not in pl["mgmt-eth"]
+
+
+# --- Fix round 4: orientation (a jack off a keyway-up part turns over) ----
+#
+# Controller ruling: all four NEW parts are pins-up, keyway-down when
+# unrotated. common/rj45-port@4 and common/rj45-jack@2 (FLIP_ORIGIN) are the
+# other way up, so a placement moved off either one needs its `rotate`
+# flipped 180 to keep drawing the same, already-verified face.
+FLIP_FIXTURE = textwrap.dedent("""\
+format: 1
+kind: device
+name: d10
+version: 1.0.0
+manufacturer: Acme
+model: D10
+chassis: {width: 100, height: 40, depth: 30}
+groups:
+  mgmt: {term: Port}
+views:
+  front:
+    size: {w: 100, h: 40}
+    components:
+      placements:
+        - {id: mgmt, ref: common/rj45-port@4, at: [10.0, 10.0], group: mgmt, rel-pos: 1, attrs: {role: mgmt}}
+""")
+
+FLIP_FIXTURE_ROTATED = FLIP_FIXTURE.replace(
+    "{id: mgmt, ref: common/rj45-port@4, at: [10.0, 10.0], group: mgmt, rel-pos: 1, attrs: {role: mgmt}}",
+    "{id: mgmt, ref: common/rj45-port@4, at: [10.0, 10.0], rotate: 180, group: mgmt, rel-pos: 1, attrs: {role: mgmt}}",
+)
+assert FLIP_FIXTURE_ROTATED != FLIP_FIXTURE, "fixture edit must actually take"
+
+# A jack already keyway-down (common/rj45-bezel@2 is not in FLIP_ORIGIN) must
+# not have its rotate touched, and no flip reported - same size (17.0x14.9)
+# as common/rj45-port@4, so the `at` does not move either, isolating the
+# rotate behaviour under test.
+NO_FLIP_FIXTURE = textwrap.dedent("""\
+format: 1
+kind: device
+name: d11
+version: 1.0.0
+manufacturer: Acme
+model: D11
+chassis: {width: 100, height: 40, depth: 30}
+groups:
+  mgmt: {term: Port}
+views:
+  front:
+    size: {w: 100, h: 40}
+    components:
+      placements:
+        - {id: console, ref: common/rj45-bezel@2, at: [10.0, 10.0], group: mgmt, rel-pos: 1, attrs: {role: console}}
+""")
+
+# Handedness must key off the FINAL rotate: this jack has no rotate of its
+# own, so before the flip it would present led-a/led-b unswapped, but the
+# flip to 180 means the lower-x lamp (link) actually lands on screen-right.
+HANDEDNESS_FLIP_FIXTURE = textwrap.dedent("""\
+format: 1
+kind: device
+name: d12
+version: 1.0.0
+manufacturer: Acme
+model: D12
+chassis: {width: 100, height: 40, depth: 30}
+groups:
+  mgmt: {term: Port}
+  mgmt-leds: {term: LED}
+views:
+  front:
+    size: {w: 100, h: 40}
+    components:
+      placements:
+        - {id: mgmt, ref: common/rj45-port@4, at: [10.0, 10.0], group: mgmt, rel-pos: 1, attrs: {role: mgmt}}
+        - {id: led-l, ref: common/led-dot@1, at: [11.2, 21.73], group: mgmt-leds, rel-pos: 1, for: mgmt, attrs: {function: link}}
+        - {id: led-r, ref: common/led-dot@1, at: [22.8, 21.73], group: mgmt-leds, rel-pos: 2, for: mgmt, attrs: {function: activity}}
+""")
+
+
+def test_a_jack_off_rj45_port_4_gains_rotate_180(tmp_path):
+    d = tmp_path / "devices/acme/d10"; d.mkdir(parents=True)
+    (d / "device.yaml").write_text(FLIP_FIXTURE)
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert "rotation flipped 1" in r.stdout
+    data = yaml.safe_load((d / "device.yaml").read_text())
+    pl = {p["id"]: p for p in data["views"]["front"]["components"]["placements"]}
+    assert pl["mgmt"]["ref"] == "common/rj45-eth@1"
+    assert pl["mgmt"]["rotate"] == 180
+
+
+def test_a_jack_off_rj45_port_4_already_rotated_180_loses_the_rotate_key(tmp_path):
+    d = tmp_path / "devices/acme/d10"; d.mkdir(parents=True)
+    (d / "device.yaml").write_text(FLIP_FIXTURE_ROTATED)
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert "rotation flipped 1" in r.stdout
+    data = yaml.safe_load((d / "device.yaml").read_text())
+    pl = {p["id"]: p for p in data["views"]["front"]["components"]["placements"]}
+    assert pl["mgmt"]["ref"] == "common/rj45-eth@1"
+    assert "rotate" not in pl["mgmt"]
+
+
+def test_a_jack_already_keyway_down_is_not_flipped(tmp_path):
+    d = tmp_path / "devices/acme/d11"; d.mkdir(parents=True)
+    (d / "device.yaml").write_text(NO_FLIP_FIXTURE)
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert "rotation flipped" not in r.stdout
+    data = yaml.safe_load((d / "device.yaml").read_text())
+    pl = {p["id"]: p for p in data["views"]["front"]["components"]["placements"]}
+    assert pl["console"]["ref"] == "std/rj45@2"
+    assert "rotate" not in pl["console"]
+
+
+def test_handedness_uses_the_final_rotate_after_the_flip(tmp_path):
+    d = tmp_path / "devices/acme/d12"; d.mkdir(parents=True)
+    (d / "device.yaml").write_text(HANDEDNESS_FLIP_FIXTURE)
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    data = yaml.safe_load((d / "device.yaml").read_text())
+    pl = {p["id"]: p for p in data["views"]["front"]["components"]["placements"]}
+    assert pl["mgmt"]["rotate"] == 180
+    # led-l (lower x, 11.2, function: link) is the LEFT lamp. Final rotate is
+    # 180 (flipped from absent/0), so it presents on screen-right: led-b.
+    assert pl["mgmt"]["states"]["led-b"] == ["off", {"name": "link"}]
+    assert pl["mgmt"]["states"]["led-a"] == ["off", {"name": "activity"}]

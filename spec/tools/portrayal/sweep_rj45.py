@@ -45,6 +45,30 @@ SINGLE = {"std/rj45@1", "common/rj45-port@4", "common/rj45-bezel@2", "common/rj4
           "common/rj45-shielded@2", "common/rj45-jack@2"}
 GANGED = {"std/rj45-ganged@1", "common/rj45-hd@1", "common/rj45-hd-plain@1"}
 
+# Controller ruling (fix round 4): all four NEW parts are pins-up, keyway-down
+# when unrotated. Two OLD parts drew the OTHER way up: common/rj45-port@4
+# composes its inner std/rj45@1 with an internal `rotate: 180` (its own
+# description says "stepped keyway up"), and common/rj45-jack@2 is "pins
+# down, clip notch up". The sweep only ever edits ref/at/skin/states - it
+# never touches a placement's own `rotate:` - so a placement moved off either
+# of these two now presents the flipped face at the SAME rotate value it
+# always had. Flip it: new_rotate = (old_rotate + 180) % 360, so the part
+# underneath turns over and the jack keeps its original, verified orientation
+# on the faceplate.
+FLIP_ORIGIN = {"common/rj45-port@4", "common/rj45-jack@2"}
+
+# Controller ruling (ufispace s9* batch): a lamp drawn within this many mm of
+# the jack's footprint counts as INSIDE it. The vendor drawings place some
+# lamps right on the jack's drawn edge - that is a statement about where the
+# lamp sits on the faceplate, not a coordinate-rounding artefact, so the
+# inside/outside test tolerates it rather than reporting it unresolved.
+LAMP_EDGE_TOL = 1.0
+
+# A `\b` boundary treats `-` as a word break, so `led-oob-left\b` matches the
+# PREFIX of `led-oob-left-2` too. Require instead that the next character
+# actually ends the id: a list/scalar delimiter, whitespace, or end of line.
+BOUND = r"(?=[,\]}\s]|$)"
+
 # These contracts are retired wrappers, deleted whole in a later task; their
 # internal `jack:` part must not be swept out from under them first. Matched
 # by path segment (any version), not by ref, so `--components` skips the
@@ -154,6 +178,73 @@ def edit_at(text, dx, dy):
     return text[:m.start()] + f"at: [{fmt(round(x, 2))}, {fmt(round(y, 2))}]" + text[m.end():]
 
 
+def read_at(text):
+    """The (x, y) an `at: [x, y]` in text currently reads, after any edit_at."""
+    m = re.search(r"at: \[\s*(-?[\d.]+)\s*,\s*(-?[\d.]+)\s*\]", text)
+    return float(m.group(1)), float(m.group(2))
+
+
+def flip_rotate(block, old_rotate, new_rotate):
+    """Rewrite a placement/part block's `rotate:` from old_rotate to the
+    FLIPPED new_rotate the caller already computed (only 0 -> 180 or
+    180 -> 0 ever arise here, from FLIP_ORIGIN). Flow style (`- {...}`, one
+    row or wrapped over several) gets `rotate: 180` spliced in right after
+    `at: [...]`, or the existing entry - and its comma - removed. Block
+    style (one `key: value` per line, no braces) gets a new `rotate: 180`
+    line inserted right after the `at:` line, or that line deleted."""
+    if new_rotate == old_rotate:
+        return block
+    lines = block.split("\n")
+    flow = bool(re.match(r"^\s*-\s*\{", lines[0]))
+    if new_rotate == 180:
+        if flow:
+            return re.sub(r"(at: \[[^\]\n]*\])", r"\1, rotate: 180", block, count=1)
+        indent = (len(lines[1]) - len(lines[1].lstrip(" ")) if len(lines) > 1
+                  else len(lines[0]) - len(lines[0].lstrip(" ")) + 2)
+        for i, l in enumerate(lines):
+            if re.search(r"\bat:\s*\[", l):
+                lines.insert(i + 1, " " * indent + "rotate: 180")
+                break
+        return "\n".join(lines)
+    if flow:
+        new = re.sub(r",\s*rotate: 180\b", "", block, count=1)
+        if new == block:
+            new = re.sub(r"rotate: 180,\s*", "", block, count=1)
+        return new
+    return "\n".join(l for l in lines if not re.match(r"^\s*rotate:\s*180\s*$", l))
+
+
+def derived_aperture(ref, jack_at, rot):
+    """The (at, size) the aperture ref presents when placed at jack_at, via
+    lint's own `_aperture_of` - the same recipe L63 uses to say what a cutout
+    should be. None if the ref declares no aperture, or if rot is a rotation
+    this tool has not verified: L63 folds w/h for 90/270 because the standard
+    aperture is centred in its part; this tool does not attempt that fold for
+    an arbitrary composed offset, so it reports rather than guesses."""
+    if rot not in (0, 180):
+        return None
+    ap = L._aperture_of(ref, ROOTS)
+    if not ap:
+        return None
+    (aw, ah), (ax, ay) = ap
+    return (round(jack_at[0] + ax, 2), round(jack_at[1] + ay, 2)), (round(aw, 2), round(ah, 2))
+
+
+def skins_of(ref):
+    cp = L.resolve_component(ref, ROOTS)
+    return (L.load_yaml(cp) or {}).get("skins") or []
+
+
+def _drop_skin(text, value):
+    """Remove a ` skin: <value>` entry from a flow mapping, keeping the
+    remaining commas valid whether it sat mid-list (comma before it, the
+    common case) or was the mapping's first field (comma after it instead)."""
+    new = re.sub(rf",\s*skin: {re.escape(value)}\b", "", text, count=1)
+    if new == text:
+        new = re.sub(rf"skin: {re.escape(value)},\s*", "", text, count=1)
+    return new
+
+
 def bump(version, level):
     a, b, c = (int(x) for x in version.split("."))
     return f"{a + 1}.0.0" if level == "major" else f"{a}.{b + 1}.0"
@@ -165,6 +256,7 @@ def sweep_device(path):
     groups = data.get("groups") or {}
     report = collections.Counter()
     removed_ids, unresolved, moved_ids = [], [], []
+    lifted_lamp_groups = set()          # groups a lifted lamp belonged to - ruling C
     for vname, view in (data.get("views") or {}).items():
         pl = (((view or {}).get("components") or {}).get("placements")) or []
         by_id = {str(q["id"]): q for q in pl}
@@ -198,7 +290,9 @@ def sweep_device(path):
                     if (by_id[t].get("rotate") or 0) % 180 == 90:
                         jw, jh = jh, jw
                     x, y = q["at"]
-                    (inside if jx <= x <= jx + jw and jy <= y <= jy + jh else outside)[t].append((x, q))
+                    tol = LAMP_EDGE_TOL
+                    in_box = (jx - tol <= x <= jx + jw + tol) and (jy - tol <= y <= jy + jh + tol)
+                    (inside if in_box else outside)[t].append((x, q))
         external_ids = set()
         lifted = {}
         for pid in list(moves):
@@ -213,6 +307,7 @@ def sweep_device(path):
                 lifted[pid] = inside[pid]
         # 1-2. move jacks, holding centres; 3. write lifted states onto them
         failed = set()
+        final_rotates = {}          # pid -> rotate AFTER any FLIP_ORIGIN flip
         for pid, (old, new) in moves.items():
             lo, hi = view_bounds(rows, vname)   # recomputed each time: earlier
             s = span(rows, pid, lo, hi)         # edits in this view shift lines
@@ -224,14 +319,34 @@ def sweep_device(path):
             block = "\n".join(rows[s[0]:s[1] + 1])
             block = block.replace(f"ref: {old}", f"ref: {new}", 1)
             block = edit_at(block, (ow - nw) / 2, (oh - nh) / 2)
+            # A jack moved off a FLIP_ORIGIN part turns over: the new part's
+            # keyway-down default is the OLD part's keyway-up default rotated
+            # 180, so the placement's own rotate must gain (or lose) that 180
+            # to keep drawing the same, already-verified face.
+            old_rotate = (by_id[pid].get("rotate") or 0) % 360
+            new_rotate = (old_rotate + 180) % 360 if old in FLIP_ORIGIN else old_rotate
+            if new_rotate != old_rotate:
+                block = flip_rotate(block, old_rotate, new_rotate)
+                report["rotation flipped"] += 1
+            final_rotates[pid] = new_rotate
+            # B. a skin the new part does not declare cannot be asked for -
+            # all four new parts declare skins: [default], so any other skin
+            # a swept placement named (e.g. common/rj45-bezel@2's `dark`) is
+            # gone with the part it belonged to.
+            skin = by_id[pid].get("skin")
+            if skin and str(skin) not in skins_of(new):
+                block = _drop_skin(block, str(skin))
+                report["skin dropped"] += 1
             if lifted.get(pid):
                 lamps = sorted(lifted[pid], key=lambda t: t[0])
                 # led-a is the component's LOCAL left window. Unrotated, the
                 # lower-x lamp maps to led-a. A jack rotated 180 presents that
                 # local-left window on screen-right, so the mapping flips:
                 # lower-x -> led-b. Any other rotation is outside what the
-                # corpus has verified - report it rather than guess.
-                rot = (by_id[pid].get("rotate") or 0) % 360
+                # corpus has verified - report it rather than guess. Uses the
+                # FINAL rotate (after any FLIP_ORIGIN flip above), since that
+                # is the orientation the NEW part actually draws.
+                rot = final_rotates.get(pid, (by_id[pid].get("rotate") or 0) % 360)
                 if rot == 180:
                     order = ("led-b", "led-a")
                 elif rot == 0:
@@ -277,14 +392,23 @@ def sweep_device(path):
                 if s:
                     del rows[s[0]:s[1] + 1]
                     removed_ids.append(str(lamp["id"])); report["lamps lifted"] += 1
-        # 5. cutouts. The anchor holds the CUTOUT's own centre, not the jack
-        # part's: read the cutout's own old size off its `size:` field before
-        # rewriting it, and shift by (old cutout size - new part size) / 2. A
-        # cutout can be a different size than the part it houses (bezel
-        # clearance, etc) - using the part's old/new sizes here would move a
-        # hole whose size never changes at all (celestica/es1010 port-1:
-        # cutout [12.7, 11] already matches the new part even though the old
-        # part is [14, 12] - the hole must not move).
+                    g = lamp.get("group")
+                    if g is not None:
+                        lifted_lamp_groups.add(str(g))
+        # 5. cutouts. Most RJ45 cutouts were DERIVED from the old part - `at`
+        # is the jack's own `at` plus the old part's aperture offset, `size`
+        # is the old aperture's size, both via lint's `_aperture_of` - within
+        # 0.15mm of slop. Held to its own centre regardless, such a cutout
+        # rides its offset to wherever the OLD part happened to put it; move
+        # the jack onto a new part whose aperture offset is (0, 0) and the
+        # held centre lands 0.05-0.1mm off the new derived aperture, which
+        # trips L63. So a DERIVED cutout is RE-DERIVED from the new part
+        # instead: recompute the aperture the new part presents at the jack's
+        # new position. A cutout that does not match the old derived aperture
+        # is INFORMATIVE (celestica/es1010 port-1: cutout [12.7, 11] already
+        # matches the new part even though the old part is [14, 12] - nothing
+        # here was ever derived from the old part, so its own centre holds,
+        # same as before this ruling).
         for pid, (old, new) in moves.items():
             lo, hi = view_bounds(rows, vname)
             s = cutout_span(rows, pid, lo, hi)
@@ -298,10 +422,32 @@ def sweep_device(path):
             else:
                 m = re.search(r"size: \{w: ([\d.]+), h: ([\d.]+)\}", line)
                 cow, coh = float(m.group(1)), float(m.group(2))
-            line = re.sub(r"size: \[\s*[\d.]+\s*,\s*[\d.]+\s*\]", f"size: [{fmt(nw)}, {fmt(nh)}]", line)
-            line = re.sub(r"size: \{w: [\d.]+, h: [\d.]+\}", f"size: [{fmt(nw)}, {fmt(nh)}]", line)
-            rows[s[0]] = edit_at(line, (cow - nw) / 2, (coh - nh) / 2)
-            report["cutouts resized"] += 1
+            cat = read_at(line)
+            rot = (by_id[pid].get("rotate") or 0) % 360
+            if rot not in (0, 180):
+                unresolved.append(f"{vname}/{pid}: rotate {rot} - cutout derivation not verified "
+                                   f"for this rotation")
+            old_da = derived_aperture(old, tuple(by_id[pid]["at"]), rot)
+            derived = (old_da is not None
+                       and abs(old_da[0][0] - cat[0]) <= 0.15 and abs(old_da[0][1] - cat[1]) <= 0.15
+                       and abs(old_da[1][0] - cow) <= 0.15 and abs(old_da[1][1] - coh) <= 0.15)
+            if derived:
+                # the jack's own move already landed in rows - read its NEW
+                # `at` back off the file rather than re-deriving the arithmetic
+                js = span(rows, pid, lo, hi)
+                new_jack_at = read_at("\n".join(rows[js[0]:js[1] + 1])) if js else tuple(by_id[pid]["at"])
+                new_da = derived_aperture(new, new_jack_at, rot)
+                nat, nsz = new_da
+                line = re.sub(r"size: \[\s*[\d.]+\s*,\s*[\d.]+\s*\]", f"size: [{fmt(nsz[0])}, {fmt(nsz[1])}]", line)
+                line = re.sub(r"size: \{w: [\d.]+, h: [\d.]+\}", f"size: [{fmt(nsz[0])}, {fmt(nsz[1])}]", line)
+                line = re.sub(r"at: \[\s*-?[\d.]+\s*,\s*-?[\d.]+\s*\]", f"at: [{fmt(nat[0])}, {fmt(nat[1])}]", line)
+                rows[s[0]] = line
+                report["cutouts re-derived"] += 1
+            else:
+                line = re.sub(r"size: \[\s*[\d.]+\s*,\s*[\d.]+\s*\]", f"size: [{fmt(nw)}, {fmt(nh)}]", line)
+                line = re.sub(r"size: \{w: [\d.]+, h: [\d.]+\}", f"size: [{fmt(nw)}, {fmt(nh)}]", line)
+                rows[s[0]] = edit_at(line, (cow - nw) / 2, (coh - nh) / 2)
+                report["cutouts held"] += 1
     text = "\n".join(rows)
     # 4. legends: a `for:` naming a removed lamp names the jack instead. The
     # lamp's `for:` said which jack it belonged to; read it off the ORIGINAL
@@ -316,7 +462,6 @@ def sweep_device(path):
         # matches the PREFIX of `led-oob-left-2` too. Require instead that the
         # next character actually end the id: a list/scalar delimiter,
         # whitespace, or end of line.
-        BOUND = r"(?=[,\]}\s]|$)"
         for lid, jack in owner.items():
             n = len(re.findall(rf"for: {re.escape(lid)}{BOUND}", text, flags=re.M))
             text = re.sub(rf"for: {re.escape(lid)}{BOUND}", f"for: {jack}", text, flags=re.M)
@@ -336,6 +481,14 @@ def sweep_device(path):
                     seen.append(item)
             return "for: [" + ", ".join(seen) + "]"
         text = re.sub(r"for: \[([^\]]*)\]", _dedup_for_list, text)
+    # C. a group emptied by lifting is reported, not removed - dropping a
+    # group id is its own major bump (devicelock's "ids or groups" rule) and
+    # a human should choose whether the group goes or gains a new member,
+    # not this tool.
+    for name in sorted(lifted_lamp_groups):
+        if name in groups and not re.search(rf"group: {re.escape(name)}{BOUND}", text):
+            unresolved.append(f"group {name} has no members after lifting - remove it by "
+                               f"hand (a group removal is a major bump)")
     # 6. version
     if removed_ids or report["lamped"] or report["bare"]:
         level = "major" if removed_ids else "minor"
@@ -363,7 +516,14 @@ def sweep_component(path):
             continue
         (ow, oh), (nw, nh) = size(ref), size(new)
         block = "\n".join(rows[s[0]:s[1] + 1]).replace(f"ref: {ref}", f"ref: {new}", 1)
-        rows[s[0]:s[1] + 1] = edit_at(block, (ow - nw) / 2, (oh - nh) / 2).split("\n")
+        block = edit_at(block, (ow - nw) / 2, (oh - nh) / 2)
+        # Same FLIP_ORIGIN turnover as sweep_device, for a `parts:` entry.
+        old_rotate = (p.get("rotate") or 0) % 360
+        new_rotate = (old_rotate + 180) % 360 if ref in FLIP_ORIGIN else old_rotate
+        if new_rotate != old_rotate:
+            block = flip_rotate(block, old_rotate, new_rotate)
+            report["rotation flipped"] += 1
+        rows[s[0]:s[1] + 1] = block.split("\n")
         report["parts moved"] += 1
         moved_ids.append(str(p["id"]))
     text = "\n".join(rows)
