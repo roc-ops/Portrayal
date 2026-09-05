@@ -55,12 +55,14 @@ def aperture(ref, depth=0):
         if sub:
             o = part.get("at") or [0, 0]
             found.append((sub[0], [o[0] + sub[1][0], o[1] + sub[1][1]]))
+    # Mirrors `_aperture_of` in spec/tools/portrayal/lint.py: only a single
+    # resolved sub-aperture is trusted; zero or multiple fall back to the
+    # composing contract's own size.
     if len(found) == 1:
         return found[0]
-    if not found:
-        sz = ct.get("size") or {}
-        if sz.get("w") and sz.get("h"):
-            return (sz["w"], sz["h"]), [0.0, 0.0]
+    sz = ct.get("size") or {}
+    if sz.get("w") and sz.get("h"):
+        return (sz["w"], sz["h"]), [0.0, 0.0]
     return None
 
 
