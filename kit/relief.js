@@ -192,7 +192,9 @@ export function applyNodeFields(root, scope) {
   const st = _sc(scope).fields;
   if (!st || !st.size) return root;
   for (const [path, vals] of st)
-    for (const el of root.querySelectorAll(`[data-path="${CSS.escape(path)}"]`))
+    // the part on the face that holds it, and its projections on the others
+    for (const el of root.querySelectorAll(
+        `[data-path="${CSS.escape(path)}"],[data-projection][data-of="${CSS.escape(path)}"]`))
       for (const [k, v] of Object.entries(vals)) {
         const val = v == null ? '' : String(v);
         el.setAttribute(`data-${k}`, val);
@@ -507,6 +509,11 @@ export async function extractRelief(url, scope) {
   // are taken from this document, so applying the runtime states once here is
   // what puts them on the face texture and on every piece of relief at once.
   applyNodeStates(svg, scope);
+  // and the fields written on parts, for the same reason: a rebuild - a config
+  // switch, a swap - would otherwise draw every badge from the default text
+  // while the registry still said the value was set, and a repeated setFields
+  // would see nothing changed and never put it back
+  applyNodeFields(svg, scope);
   // A part the viewer has taken off is REMOVED here rather than hidden, and only
   // here: this document is built to be measured and then discarded, so nothing
   // has to put it back. Left as display:none it would measure 0x0 and extrude a
@@ -1237,7 +1244,12 @@ export async function buildFaceRelief(F, ctx) {
       // with the cavities that fall in its rect punched from it again - the
       // C14 inlet's pins live behind one. Taken before the module's own shape
       // punch is recorded below, which is the face's hole and not this plane's.
-      const punchesHere = facePunch[F.view].filter(p =>
+      // A LIFTED MODULE'S PLANE SITS BELOW THE FACE'S PUNCHES. Its first crop
+      // came from the pristine art canvas for that reason: a DIMM on the board
+      // or a drive in the tray lies inside its well's own punch, and replaying
+      // that punch would cut the whole plane away. Only a module at the face
+      // has cavities of its own to re-open.
+      const punchesHere = f.lift ? [] : facePunch[F.view].filter(p =>
         p.x < f.x + f.w && p.x + p.w > f.x && p.y < f.y + f.h && p.y + p.h > f.y);
       reg(f.svgText, async text => {
         const c2 = await rasterize(text, f.w, f.h, PX);

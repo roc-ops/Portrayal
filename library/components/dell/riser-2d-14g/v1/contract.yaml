@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: riser-2d-14g
-version: 1.3.0
+version: 1.3.1
 class: riser
 behaviour: fills
 profile: server
@@ -126,7 +126,9 @@ bays:
     accepts: [dell/pcie-filler-fh-14g@1, std/pcie-bracket-fh@1, common/pcie-card-fh@1]
     default: dell/pcie-filler-fh-14g@1
   slot-6:
-    plan: {at: [-97.9, -13.9]}
+    # the low-profile card's plan is 79.2 wide, so its offset is the
+    # low-profile riser's: the card still ends 10.2 past the PCB
+    plan: {at: [-69.0, -13.9]}
     behind: true
     at: [-10.115, 42.46]
     size: [79.2, 18.42]

@@ -1050,7 +1050,8 @@ export function createShell(opts = {}) {
     if (!vals) delete state.cfgFields[path];
     else state.cfgFields[path] = {...(state.cfgFields[path] || {}), ...vals};
     for (const d of faceDocs())
-      for (const el of d.querySelectorAll(`[data-path="${CSS.escape(path)}"]`))
+      for (const el of d.querySelectorAll(
+          `[data-path="${CSS.escape(path)}"],[data-projection][data-of="${CSS.escape(path)}"]`))
         for (const [k, v] of Object.entries(vals || {})) {
           const val = v == null ? '' : String(v);
           el.setAttribute(`data-${k}`, val);

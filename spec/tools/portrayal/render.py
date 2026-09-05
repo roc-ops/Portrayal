@@ -1602,7 +1602,10 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         if grp.get("role"):
             g.set("data-group-role", grp["role"])
         if p.get("in"):
-            sink(g, floor_of(p["in"]))
+            # a projection is flat: nothing is built from it, so it carries no
+            # lift - but it keeps data-in, which the pull machinery reads
+            if not p.get("projection-of"):
+                sink(g, floor_of(p["in"]))
             g.set("data-in", p["in"])
         # What the lamps on this instance mean. A placement wins over its group,
         # the way attrs already do: a block of eighteen QSFP28 speed lamps says

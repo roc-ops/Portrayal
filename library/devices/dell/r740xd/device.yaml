@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 20.13.0
+version: 20.13.1
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -908,8 +908,8 @@ views:
            accepts: [dell/rear-bay-blank-14g@2], default: dell/rear-bay-blank-14g@2,
            group: drives-rear, rel-pos: 4,
            # ALSO WHEN RISER 3 IS SIMPLY NOT FITTED. Same opening, same blank -
-           # `no-riser-3` is table 25's row 3 (1A+2A), which fits riser 2 and no
-           # riser 3, and had no configuration of its own until now.
+           # the `rc3-1a2a` configurations are table 25's row 3 (1A+2A), which
+           # fits riser 2 and no riser 3.
            only-in: [lff12-rc0-noriser, lff12-rc1-1b2b, lff12-rc2-1b2c, lff12-rc3-1a2a, sff24-rc0-noriser,
                      sff24-rc1-1b2b, sff24-rc2-1b2c, sff24-rc3-1a2a]}
         - {id: riser-1, at: [13.95, 4.0], size: {w: 107.59, h: 62.0},
@@ -922,7 +922,7 @@ views:
         # standards-only render against ISM figure 8 caught this: the figure
         # shows a low-profile slot at x 170..230, y 49.5..62.5 in the 4 x 2.5
         # machine, where the model showed bare panel - riser 2 carried
-        # only-in: [no-rear-storage] and vanished, contradicting the rear-4-sff
+        # only-in for the no-rear-storage configurations and vanished, contradicting the rear 4 x 2.5
         # description below, which costs riser 2 its "two full-height slots"
         # and not riser 2 itself. Dropping the only-in put a 62 mm plate
         # straight through both rear drive bays, and L13 was right to say so.
@@ -981,7 +981,7 @@ views:
         # that one at 296.26 - so offering a blank here as well gave the chassis
         # two different parts closing one opening, one plain and one perforated,
         # picked by configuration. When riser 3 is not fitted the opening is
-        # closed by rear-storage-3, which scopes to `no-riser-3` below.
+        # closed by rear-storage-3, which scopes to the `rc3-1a2a` configurations below.
         - {id: riser-3, at: [309.085, 4.0], size: {w: 107.59, h: 41.68},
            plan: {view: top, at: [14.10, 13.90], in: system-board, under: [air-shroud, system-cover], mirror: true},
            accepts: [dell/riser-3a-14g@1, dell/riser-3b-14g@1],
@@ -1203,8 +1203,8 @@ views:
         # beside the divider, not part of a riser. Riser 3's clip disappears in
         # the configurations that blank that opening; the plate does not, and
         # the blank does not reach it - it starts at 309.09.
-        # RISER 3'S CLIP IS ONLY IN `no-rear-storage`, not in `no-riser-3`:
-        # that configuration blanks this opening, and the blank covers the clip.
+        # RISER 3'S CLIP IS ONLY WHERE RISER 3 IS FITTED, not in the `rc3-1a2a`
+        # configurations: those blank this opening, and the blank covers the clip.
         # THE PLATES EITHER SIDE OF THE DIVIDER, and they were missing on
         # both sides. Dell's model has one pressing at face 267.32 and again at
         # 297.10, y 1.81, standing 17.61 proud - riser 1's raised rib at the
@@ -1236,7 +1236,7 @@ views:
         - {ref: dell/thumbscrew-blue-14g@1, id: cage-screw-right,
            at: [282.59, 26.00], group: furniture, rel-pos: 22}
         # THE CHASSIS ACROSS REAR BAYS 2 AND 3, and it is ALWAYS PRESENT.
-        # It was `only-in: [rear-4-sff]` when it was called a drive cage, so a
+        # It was scoped to the rear 4 x 2.5 configurations when it was called a drive cage, so a
         # machine with PCIe in those bays lost its rails, screw tabs and vent
         # panels along with the drives. The four rear views show the divider,
         # its thumbscrew and the T land unchanged whether the bays hold drives,
@@ -1257,8 +1257,8 @@ views:
         # openings, the far tab - at the device coordinates they were always at.
         - {ref: dell/rear-bay-frame-14g@4, id: rear-bay-frame,
            at: [137.32, 1.71],
-           # AND THE RISERS TOO, now that this is always present. In the
-           # no-rear-storage configuration riser 2 and riser 3 fill the same
+           # AND THE RISERS TOO, now that this is always present. Without
+           # rear storage riser 2 and riser 3 fill the same
            # bays the drives would, and this part's box spans them exactly as
            # it spans the drives - its ink is the T land above and the rails and
            # panels around, never the openings themselves.
@@ -1866,34 +1866,6 @@ gaps:
     wanted: >-
       A model or a photograph of riser 2A and riser 3 seated, which would put
       both PCBs where they are.
-  - what: riser-configurations-not-all-declared
-    scope: [rear, riser-1, riser-2, riser-2-lp, riser-3]
-    reason: needs-drawing
-    note: >-
-      THE PARTS EXIST FOR ALL ELEVEN AND THE DEVICE DECLARES THREE. Technical
-      guide Table 12 names eleven riser configurations - 0, 1, 2, 3, 4, 5, 6, 9,
-      15, 16 and 17 - and the eleven Dell part numbers behind them are now
-      modelled one apiece: 1A, 1B, 1D, 2A, 2B, 2C, 2D, 2E, 2F, 3A and 3B, plus a
-      no-riser arrangement for configuration 0. What this device still seats is
-      riser configuration 5 (1B+2A+3A), 3 (1A+2A) and 1 (1B+2B), because those
-      are the three its configurations were written around before the parts
-      existed to say anything else.
-      SO THIS IS A GAP IN THE DEVICE AND NOT IN THE LIBRARY, which is the reason
-      it is worth recording separately from the four below: nothing needs
-      measuring, drawing or sourcing. Eight configurations are a seating list
-      away, and the reason token is the nearest available rather than an honest
-      fit - `needs-drawing` is what the vocabulary offers for "the model cannot
-      say it yet" and no token means "the parts are ready and nobody has wired
-      them up".
-      WHAT DOES NEED A DECISION FIRST is what the eight are called. The naming
-      agreed for this device is a drive configuration plus a riser
-      configuration - `lff12-rsff4-rc1` for the 16-drive machine on riser
-      configuration 1 - and applying it renames every existing configuration,
-      which is a change of addressing that belongs in its own version rather
-      than riding along with a component split.
-    wanted: >-
-      eleven configurations seating the eleven riser parts, under the drive-plus-riser
-      naming, replacing the three that exist
   - what: front-panel-variants
     scope: [front, front-lff-12]
     reason: needs-drawing
@@ -1903,7 +1875,7 @@ gaps:
       TWO OF THE FIVE ARE NOW DRAWN. `front` is the 24 x 2.5 inch; `front-lff-12`
       is the 12 x 3.5 inch, the one that mattered, because it is the front the
       rears numbered 12-15 and 12-13 belong to. It is a variant view with
-      `face: front`, bound by `lff-12` and `lff-12-rear-2-lff`, and its grid was
+      `face: front`, bound by the `lff12-` configurations, and its grid was
       measured off dellr740xd-12x35.webp at Gate 1 0.07% - the same backplane
       opening the 24 SFF bays divide, 428.832 / 4 = 107.208 against a measured
       period of 107.216.
@@ -1942,8 +1914,8 @@ gaps:
       only), while configuration 3 fits a three-slot 2A (slots 4, 5, 6) and has
       NO rear storage despite fitting no riser 3 at all. It is riser 2's
       full-height section that occupies the bay the rear cage needs. This
-      device's `no-rear-storage` and `rear-4-sff` already encode exactly that,
-      and row 3 itself is now `no-riser-3` - added when the riser 3 opening and
+      device's configurations already encode exactly that - rear storage only
+      with rc0, rc1 and rc2 - and row 3 is `rc3-1a2a`, added when the riser 3 opening and
       rear storage bay 3 turned out to be the SAME HOLE, closed by two
       different blanks depending on which configuration you picked.
       RE-READ AND STILL OPEN: that change touched which bay closes an opening,

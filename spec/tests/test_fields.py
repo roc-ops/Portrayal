@@ -49,7 +49,7 @@ def test_a_configuration_writes_on_the_part_in_one_bay():
 
 def test_every_field_prints_and_every_print_is_a_field():
     """Across the library: the promise L73 keeps, on the real files."""
-    for p in sorted(LIB.glob("components/*/*/v1/contract.yaml")):
+    for p in sorted(LIB.glob("components/*/*/v*/contract.yaml")):
         c = yaml.safe_load(p.read_text())
         if not c.get("fields"):
             continue
@@ -93,6 +93,6 @@ def test_a_lamp_with_states_reads_the_variable(tmp_path):
 
 
 def test_every_lit_lamp_in_the_library_reads_the_variable():
-    for p in sorted(LIB.glob("components/*/*/v1/contract.yaml")):
+    for p in sorted(LIB.glob("components/*/*/v*/contract.yaml")):
         c = yaml.safe_load(p.read_text())
         assert not _caught("L74", lint.lint_component_lamp_colour, p, c), p

@@ -1368,8 +1368,10 @@ def lint_component_lamp_colour(path, data, _lib_roots=None):
     glyphs and two bars and none of them could ever turn amber.
     """
     skins_dir = path.parent / "skins"
+    # a button with an `on` state is lit the same way; a display is lit per
+    # segment by opacity and is not
     lit = {k for k, e in (data.get("elements") or {}).items()
-           if isinstance(e, dict) and e.get("states") and e.get("class") == "led"}
+           if isinstance(e, dict) and e.get("states") and e.get("class") in ("led", "button")}
     if not lit:
         return
     for skin in (data.get("skins") or ["default"]):
@@ -5182,11 +5184,15 @@ def lint_device_plan(path, data, lib_roots):
                 err(path, "L72", f"{vname}: {b['id']} projects into view {pl.get('view')!r}, "
                                  "which this device does not have")
                 continue
-            if pl.get("in"):
-                there = {q.get("id") for q in view_parts(tv)["placements"]}
-                if pl["in"] not in there:
-                    err(path, "L72", f"{vname}: {b['id']} projects `in:` {pl['in']}, which is "
-                                     f"not a placement in {pl['view']}")
+            tp = view_parts(tv)
+            there = {q.get("id") for q in (*tp["placements"], *tp["bays"])}
+            if pl.get("in") and pl["in"] not in there:
+                err(path, "L72", f"{vname}: {b['id']} projects `in:` {pl['in']}, which is "
+                                 f"not in {pl['view']}")
+            for u in (pl.get("under") or []):
+                if u not in there:
+                    err(path, "L72", f"{vname}: {b['id']} projects `under:` {u}, which is "
+                                     f"not in {pl['view']} - it would paint in the wrong order")
             have = []
             for ref in (b.get("accepts") or []):
                 cp = resolve_component(ref, lib_roots)

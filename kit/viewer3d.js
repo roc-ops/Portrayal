@@ -1173,11 +1173,14 @@ export function createViewer(container, opts = {}) {
     for (const rec of LOD) {
       if (!touches(rec.svgText)) continue;
       rec.svgText = restyleText(rec.svgText, SCOPE);
-      const at = rec.level;
-      rec.level = 0;
-      await refineFace(rec, at);
+      // the same revision bump the state and pull setters use: a refine already
+      // in flight captured the old text, and must not land over this one
+      rec.rev++;
+      await refineFace(rec, rec.level);
       n++;
     }
+    // an animated lamp on that face keys its frames on the entry text
+    await syncLamps(changed);
     return n;
   }
 
