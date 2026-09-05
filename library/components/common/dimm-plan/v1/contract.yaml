@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dimm-plan
-version: 1.1.0
+version: 1.2.0
 class: memory
 behaviour: fills
 profile: server
@@ -12,6 +12,15 @@ size: {w: 3.8, h: 133.4, d: 31.3}
 body:
   depth: 31.3
   color: '#14171a'
+# ONE SHAPE, MANY PARTS. A DIMM of one capacity or speed looks like every
+# other at this resolution; what differs is the sticker, so capacity and
+# speed are fields on the one part, printed along its edge.
+fields:
+  capacity: {label: Capacity, type: text, default: 32GB}
+  speed: {label: Speed, type: text, default: '2933', unit: MT/s}
+attrs:
+  capacity: 32GB
+  speed: '2933'
 provenance:
   size: >-
     measured - Dell's R740XD service model, `R740XD_ Memory Module`, the

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: psu-2400w-ac-14g
-version: 1.1.0
+version: 1.2.0
 class: psu
 behaviour: fills
 profile: server
@@ -13,6 +13,17 @@ attrs:
   form-factor: crps
   inlet: c20
   efficiency: platinum
+# WHAT A FORM CAN CHANGE WITHOUT THIS BECOMING ANOTHER PART. Three supplies
+# look different - the AC and DC faces, the C20 inlet - and are three parts;
+# the wattage printed on the badge is a field on each. `power-output-w` in
+# attrs stays the electrical figure the power model sums.
+fields:
+  watts:
+    label: Wattage
+    type: text
+    default: '2400W'
+    pattern: '^\\d+W$'
+    description: what the badge prints; the sum reads power-output-w, not this
 provenance:
   why-this-is-a-separate-part-and-not-a-wattage-skin: >-
     THE INLET IS A C20, NOT A C14, so the casting differs and this cannot be a

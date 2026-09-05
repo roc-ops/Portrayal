@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: drive-35-plan
-version: 1.3.0
+version: 1.4.0
 class: drive
 behaviour: fills
 conforms: drive-35
@@ -14,6 +14,14 @@ size: {w: 101.6, h: 147.0, d: 26.1}
 body:
   depth: 26.1
   color: '#2a2e33'
+# WHAT THE LABEL PRINTS, from above: capacity and its unit, the same fields
+# the carrier's label carries, so one drive reads the same on both faces.
+attrs:
+  capacity: '10'
+  capacity-unit: TB
+fields:
+  capacity: {label: Capacity, type: text, default: '10'}
+  capacity-unit: {label: Unit, type: choice, default: TB, options: [GB, TB]}
 provenance:
   it-is-a-module-because-it-SEATS: >-
     `kind: module` with `behaviour: fills`, and the reason is render.py's

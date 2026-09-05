@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: drive-carrier-35
-version: 1.6.0
+version: 1.7.0
 class: drive
 behaviour: fills
 profile: server
@@ -17,6 +17,15 @@ attrs:
   interface: SATA
   link: 6Gb
   rpm: 7.2K
+# THE LABEL IS FIELDS. The carrier is one part for every capacity; what the
+# label prints is set per drive - a placement's attrs, a configuration's
+# bay-attrs, or a form. Defaults are the attrs above.
+fields:
+  capacity: {label: Capacity, type: text, default: '10'}
+  capacity-unit: {label: Unit, type: choice, default: TB, options: [GB, TB]}
+  interface: {label: Interface, type: choice, default: SATA, options: [SAS, SATA, NVMe]}
+  link: {label: Link rate, type: text, default: 6Gb}
+  rpm: {label: Spindle, type: text, default: 7.2K, description: empty for an SSD - the glyph beside it goes too}
 provenance:
   body-faces: >-
     measured, photo, and one ESTIMATE per face, kept separate. From Dell's

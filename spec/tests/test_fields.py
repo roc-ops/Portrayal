@@ -1,0 +1,78 @@
+"""Configurable fields: a part declares what a form can change on it.
+
+A different shape is a different part; a different property is a field on
+the same one. The skin fills text from attrs (`data-from`); `fields` says
+which keys exist, so the index can offer a form, a configuration can set a
+bay's occupant, and the kit can rewrite the text live.
+"""
+import json
+import pathlib
+import re
+import sys
+
+import pytest
+import yaml
+
+SPEC = pathlib.Path(__file__).resolve().parents[1]
+LIB = SPEC.parent / "library"
+sys.path.insert(0, str(SPEC / "tools/portrayal"))
+import lint  # noqa: E402
+import render  # noqa: E402
+
+
+def _caught(code, fn, *a):
+    saved_w, saved_e = lint.WARNINGS[:], lint.ERRORS[:]
+    lint.WARNINGS.clear(); lint.ERRORS.clear()
+    try:
+        fn(*a)
+        return [m for m in lint.WARNINGS + lint.ERRORS if f"[{code}]" in m]
+    finally:
+        lint.WARNINGS[:] = saved_w; lint.ERRORS[:] = saved_e
+
+
+def test_a_configuration_writes_on_the_part_in_one_bay():
+    lib = render.Library([str(LIB)])
+    view = {"size": {"w": 434.0, "h": 86.8}, "components": {"bays": [
+        {"id": "psu-1", "at": [251.3, 46.2], "size": {"w": 86.3, "h": 39.1},
+         "accepts": ["dell/psu-1100w-ac-14g@1"], "default": "dell/psu-1100w-ac-14g@1"},
+        {"id": "psu-2", "at": [341.1, 46.2], "size": {"w": 86.3, "h": 39.1},
+         "accepts": ["dell/psu-1100w-ac-14g@1"], "default": "dell/psu-1100w-ac-14g@1"}]}}
+    d = {"name": "f", "manufacturer": "F", "model": "F", "version": "0.1.0",
+         "chassis": {"width": 434.0, "height": 86.8, "depth": 700.0}, "views": {"rear": view}}
+    out = render.render_view(d, "rear", view, lib, config={"bay-attrs": {"psu-1": {"watts": "750W"}}})
+    svg = out if isinstance(out, str) else render.ET.tostring(out, encoding="unicode")
+    one = svg[svg.index('id="psu-1--module"'):svg.index('id="psu-2--module"')]
+    two = svg[svg.index('id="psu-2--module"'):]
+    assert 'data-watts="750W"' in one and ">750W<" in one, "the value did not reach the badge"
+    assert 'data-watts="750W"' not in two and ">1100W<" in two, "the other supply must keep its drawing"
+
+
+def test_every_field_prints_and_every_print_is_a_field():
+    """Across the library: the promise L73 keeps, on the real files."""
+    for p in sorted(LIB.glob("components/*/*/v1/contract.yaml")):
+        c = yaml.safe_load(p.read_text())
+        if not c.get("fields"):
+            continue
+        assert not _caught("L73", lint.lint_component_fields, p, c), p
+
+
+def test_lint_refuses_a_field_that_prints_nowhere(tmp_path):
+    d = tmp_path / "x"; (d / "skins").mkdir(parents=True)
+    (d / "skins" / "default.svg").write_text('<svg><text data-from="watts">1W</text><text data-from="ghost">?</text></svg>')
+    p = d / "contract.yaml"
+    hits = _caught("L73", lint.lint_component_fields, p, {"skins": ["default"], "fields": {"watts": {}, "speed": {}}})
+    assert any("speed has no data-from node" in h for h in hits), hits
+    assert any("ghost" in h for h in hits), hits
+    hits = _caught("L73", lint.lint_component_fields, p, {"skins": ["default"], "fields": {"watts": {"type": "choice"}}})
+    assert any("no options" in h for h in hits), hits
+
+
+def test_the_index_offers_the_form():
+    idx = LIB / "dist" / "components.json"
+    if not idx.exists():
+        pytest.skip("dist not built")
+    comps = json.loads(idx.read_text())["components"]
+    psu = next(c for c in comps if c["name"] == "psu-1100w-ac-14g")
+    assert psu["fields"]["watts"]["default"] == "1100W"
+    dimm = next(c for c in comps if c["name"] == "dimm-plan")
+    assert set(dimm["fields"]) == {"capacity", "speed"}

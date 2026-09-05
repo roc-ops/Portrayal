@@ -391,6 +391,14 @@
        }
       }
      },
+     "bay-attrs": {
+      "type": "object",
+      "description": "bay path -> attrs for the occupant seated THERE: `psu-1: {watts: 750W}` prints on that supply alone, where `component-attrs` reaches every instance of a component. A nested path - `riser-1/slot-1` - reaches a module's own bay. The keys are the occupant's `fields`, and the values print on its `data-from` nodes.",
+      "additionalProperties": {
+       "type": "object",
+       "additionalProperties": {"type": ["string", "number"]}
+      }
+     },
      "component-attrs": {
       "type": "object",
       "description": "component name -> extra data-* attrs (FRU model/part-number per config)",

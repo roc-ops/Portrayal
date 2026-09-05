@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: drive-carrier-25
-version: 1.4.0
+version: 1.5.0
 class: drive
 behaviour: fills
 profile: server
@@ -19,6 +19,15 @@ attrs:
   interface: SAS
   link: 12Gb
   rpm: 10K
+# THE LABEL IS FIELDS. The carrier is one part for every capacity; what the
+# label prints is set per drive - a placement's attrs, a configuration's
+# bay-attrs, or a form. Defaults are the attrs above.
+fields:
+  capacity: {label: Capacity, type: text, default: '1.2'}
+  capacity-unit: {label: Unit, type: choice, default: TB, options: [GB, TB]}
+  interface: {label: Interface, type: choice, default: SAS, options: [SAS, SATA, NVMe]}
+  link: {label: Link rate, type: text, default: 12Gb}
+  rpm: {label: Spindle, type: text, default: 10K, description: empty for an SSD - the glyph beside it goes too}
 provenance:
   depth-from-dell-cad: >-
     measured - Dell's R740XD 3D guide CAD, node `DD9900_ Drives_-1.001`, which

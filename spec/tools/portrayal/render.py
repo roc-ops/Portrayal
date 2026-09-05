@@ -484,7 +484,7 @@ def _inset_feature(feat, back):
     return f
 
 
-def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None, z_inset=0.0, seated=None):
+def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None, z_inset=0.0, seated=None, bay_attrs=None):
     contract, skins = lib.resolve(ref)
     comp_name = ref.split("/")[-1].split("@")[0]
     if skin_overrides and comp_name in skin_overrides:
@@ -847,12 +847,12 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
             b_at = [b_at[0] + d, b_at[1] - d]
         sub, _ = instance_group(
             lib, occupant, f"{inst_id}--{bay_id}--module", b_at,
-            None, None, None, None, rotate=bay.get("rotate"),
+            None, (bay_attrs or {}).get(bay_path), None, None, rotate=bay.get("rotate"),
             mirror=bool(bay.get("mirror")), palette=palette,
             inst_palette=inst_palette,
             skin_overrides=skin_overrides, attr_overrides=attr_overrides,
             path=f"{path}/{bay_id}/module", resolved=resolved, depth=depth + 1,
-            seated=seated)
+            seated=seated, bay_attrs=bay_attrs)
         # BEHIND THE FACEPLATE, NOT ON IT. Appending is right for a drive in a
         # cage and wrong for a card in a riser: what shows of a PCIe bracket is
         # its working area through a punched window and its retention tab clear
@@ -1780,14 +1780,18 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             # a faceplate overlapping its aperture does.
             bay_centre = [b["at"][0] + b["size"]["w"] / 2.0,
                           b["at"][1] + b["size"]["h"] / 2.0]
+            # THE OCCUPANT'S OWN VALUES: a configuration's `bay-attrs` reach the
+            # part seated in THIS bay, the way a placement's `attrs` reach a
+            # placed part - a supply's wattage, a drive's capacity
             g, contract = instance_group(lib, default, f"{b['id']}--module", b["at"],
-                                         None, None, None, None,
+                                         None, (config.get("bay-attrs") or {}).get(b["id"]), None, None,
                                          rotate=b.get("rotate"), palette=palette,
                                          inst_palette=inst_palette,
                                          centre=bay_centre,
                                          skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                                          path=f"{b['id']}/module", resolved=resolved,
-                                         seated=config.get("bays"))
+                                         seated=config.get("bays"),
+                                         bay_attrs=config.get("bay-attrs"))
             bay_g.append(g)
         df = data_for(b.get("for"))
         if df:

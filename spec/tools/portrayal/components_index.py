@@ -74,6 +74,8 @@ def main():
                 "size-confidence": data.get("size-confidence") or {},
                 "size-notes": data.get("size-notes", ""),
                 "attrs": data.get("attrs") or {},
+                # what a form can change on it - see the schema's `fields`
+                "fields": data.get("fields") or {},
                 "skins": data.get("skins", ["default"]),
                 "elements": sorted((data.get("elements") or {}).keys()),
                 # additive: the geometry behind those names, and the relief that

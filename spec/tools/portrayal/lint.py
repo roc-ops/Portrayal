@@ -1325,6 +1325,39 @@ def lint_component_body_boxes(path, data, _lib_roots=None):
         warn(path, "L71", f"{unmarked} of {len(boxes)} body boxes carry no confidence")
 
 
+def lint_component_fields(path, data, _lib_roots=None):
+    """L73: a field prints somewhere, and what prints is a field.
+
+    A field is a promise to a form: set this and the drawing changes. It is
+    kept by a `data-from` node of that name in EVERY skin, or the value goes
+    nowhere on the skin that lacks it. And a `data-from` node the contract
+    does not declare is a field a form cannot find - the drive carriers
+    carried five of those for a year. A choice with no options is a text
+    box pretending.
+    """
+    fields = data.get("fields") or {}
+    skins_dir = path.parent / "skins"
+    seen = {}
+    for skin in (data.get("skins") or ["default"]):
+        sp = skins_dir / f"{skin}.svg"
+        if not sp.exists():
+            continue
+        keys = set(re.findall(r'data-from="([^"]+)"', sp.read_text(errors="replace")))
+        seen[skin] = keys
+        for k in fields:
+            if k not in keys:
+                err(path, "L73", f"field {k} has no data-from node in skin {skin}")
+    undeclared = set().union(*seen.values()) - set(fields) if seen else set()
+    if undeclared:
+        warn(path, "L73", f"skin fills {', '.join(sorted(undeclared))} from attrs but the "
+                          f"contract declares no such field - a form cannot offer them")
+    for k, f in fields.items():
+        if (f or {}).get("type") == "choice" and not (f or {}).get("options"):
+            err(path, "L73", f"field {k} is a choice with no options")
+        if (f or {}).get("options") and f.get("default") is not None and f["default"] not in f["options"]:
+            err(path, "L73", f"field {k}: default {f['default']!r} is not one of its options")
+
+
 def lint_component_states_render(path, data, lib_roots):
     """L47: a state nothing draws is a state the viewer offers and cannot show.
 
@@ -5425,6 +5458,7 @@ def main():
                 lint_component_forwarded_mate(f, d, args.library)
                 lint_component_relief_confidence(f, d, args.library)
                 lint_component_body_boxes(f, d)
+                lint_component_fields(f, d)
             n += 1
         for f in sorted(root.glob("devices/**/device.yaml")):
             if args.device and not any(sel in str(f) for sel in args.device):

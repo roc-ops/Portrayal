@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: psu-1100w-dc-14g
-version: 1.1.0
+version: 1.2.0
 class: psu
 behaviour: fills
 profile: server
@@ -13,6 +13,17 @@ attrs:
   form-factor: crps
   inlet: dc-terminal
   efficiency: gold
+# WHAT A FORM CAN CHANGE WITHOUT THIS BECOMING ANOTHER PART. Three supplies
+# look different - the AC and DC faces, the C20 inlet - and are three parts;
+# the wattage printed on the badge is a field on each. `power-output-w` in
+# attrs stays the electrical figure the power model sums.
+fields:
+  watts:
+    label: Wattage
+    type: text
+    default: '1100W'
+    pattern: '^\\d+W$'
+    description: what the badge prints; the sum reads power-output-w, not this
 provenance:
   it-is-a-different-faceplate-not-a-wattage-skin: >-
     THE INPUT IS A TERMINAL BLOCK, so the casting differs and no skin can express

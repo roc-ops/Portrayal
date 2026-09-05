@@ -25,7 +25,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { toGLB, toUSDZ } from './share.js';
 import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, svgSource, setSvgOverride, clearSvgOverrides,
-         setNodeStates, nodeStates, restyleText,
+         setNodeStates, nodeStates, setNodeFields, restyleText,
          setPulled as setReliefPulled, pulledPaths,
          buildFaceRelief, bodyBoxes } from './relief.js';
 import { applyOverrides } from './swap.js';
@@ -100,6 +100,7 @@ export function createViewer(container, opts = {}) {
   // How to redraw each texture that came from a node's own art, collected during
   // the build. Emptied on every rebuild: the materials it points at are disposed.
   let RESTYLE = [];
+  let FIELDS = {};   // path -> {key: value}, what the host has written on parts
   let COMP = null, COMP_ENTRY = null;     // lone-component mode, as ?component= gave
   let W = 438.4, H = 43.5, D = 515;
   // animated FRUs: paths discovered per build, groups tweened along their face normal
@@ -1098,8 +1099,40 @@ export function createViewer(container, opts = {}) {
     return n;
   }
 
+  // WRITE ON A PART: `{ 'psu-1/module': {watts: '750W'} }`. A field is a
+  // `data-from` text node the part declares; the value replaces it in every
+  // texture the part is drawn in. Same route as setStates, and like it the
+  // whole map is the new truth - a part left out goes back to its drawing.
+  async function setFields(map) {
+    const next = {};
+    for (const [k, vals] of map instanceof Map ? map : Object.entries(map || {}))
+      if (vals && Object.keys(vals).length) next[k] = {...vals};
+    const changed = new Set();
+    for (const k of new Set([...Object.keys(FIELDS), ...Object.keys(next)]))
+      if (JSON.stringify(FIELDS[k]) !== JSON.stringify(next[k])) changed.add(k);
+    FIELDS = next;
+    if (!changed.size || !box) return 0;
+    setNodeFields(FIELDS, SCOPE);
+    const touches = text => [...changed].some(p => text.includes(`data-path="${p}"`));
+    let n = 0;
+    for (const e of RESTYLE) {
+      if (!touches(e.svgText)) continue;
+      try { await e.run(restyleText(e.svgText, SCOPE)); n++; }
+      catch (err) { console.warn('[portrayal] field repaint failed', err); }
+    }
+    for (const rec of LOD) {
+      if (!touches(rec.svgText)) continue;
+      rec.svgText = restyleText(rec.svgText, SCOPE);
+      const at = rec.level;
+      rec.level = 0;
+      await refineFace(rec, at);
+      n++;
+    }
+    return n;
+  }
+
   return {
-    load, select, on, resize, dispose, setStates,
+    load, select, on, resize, dispose, setStates, setFields, fields: () => JSON.parse(JSON.stringify(FIELDS)),
     states: () => ({...STATES}),
     setPulled,
     pulled: () => new Set(PULLED),

@@ -172,6 +172,37 @@ export function setNodeStates(map, scope) {
     if (cls) st.set(path, String(cls));
 }
 export function clearNodeStates(scope) { _sc(scope).states.clear(); }
+
+// WHAT A VIEWER HAS WRITTEN ON A PART. A field is a `data-from` text node the
+// part declares (`fields` in its contract, carried in components.json): a
+// supply's wattage, a drive's capacity. The value replaces the node's text and
+// lands on the part's group as `data-<key>`, in the parsed document and in
+// every texture redrawn from it - the same route a lamp state takes. Keyed by
+// the part's data-path; a map of key -> value per part; an empty value hides
+// the node, as render.py's fill does.
+export function setNodeFields(map, scope) {
+  const st = _sc(scope).fields || (_sc(scope).fields = new Map());
+  st.clear();
+  for (const [path, vals] of map instanceof Map ? map : Object.entries(map || {}))
+    if (vals && Object.keys(vals).length) st.set(path, {...vals});
+}
+export function nodeFields(scope) { return new Map(_sc(scope).fields || []); }
+export function applyNodeFields(root, scope) {
+  if (!root) return root;
+  const st = _sc(scope).fields;
+  if (!st || !st.size) return root;
+  for (const [path, vals] of st)
+    for (const el of root.querySelectorAll(`[data-path="${CSS.escape(path)}"]`))
+      for (const [k, v] of Object.entries(vals)) {
+        const val = v == null ? '' : String(v);
+        el.setAttribute(`data-${k}`, val);
+        for (const t of el.querySelectorAll(`[data-from="${CSS.escape(k)}"]`)) {
+          t.textContent = val;
+          if (val) t.removeAttribute('display'); else t.setAttribute('display', 'none');
+        }
+      }
+  return root;
+}
 export function nodeStates(scope) { return new Map(_sc(scope).states); }
 
 // WHAT A VIEWER HAS TAKEN OFF. A cover hides what is behind it, which is the
@@ -254,6 +285,7 @@ export function restyleText(text, scope) {
   const div = document.createElement('div');
   div.innerHTML = text;
   applyNodeStates(div, scope);
+  applyNodeFields(div, scope);
   applyPulled(div, scope);
   return div.innerHTML;
 }
@@ -1173,6 +1205,26 @@ export async function buildFaceRelief(F, ctx) {
         new THREE.MeshBasicMaterial({map: canvasTex(faceCrop), transparent: true, alphaTest: 0.1, alphaToCoverage: true}));
       plane.position.set(LX(f.x, f.w), LY(f.y, f.h), zf + 0.3);
       fg.add(plane);
+      // A FIELD OR A STATE WRITTEN ON A MODULE REPAINTS ITS PLANE. The crop above
+      // is a one-time cut of the face canvas, so a wattage written on a supply
+      // after the build changed the face texture and left the supply's own
+      // plane reading the old badge. Re-cut from the module's own art, restyled,
+      // with the cavities that fall in its rect punched from it again - the
+      // C14 inlet's pins live behind one. Taken before the module's own shape
+      // punch is recorded below, which is the face's hole and not this plane's.
+      const punchesHere = facePunch[F.view].filter(p =>
+        p.x < f.x + f.w && p.x + p.w > f.x && p.y < f.y + f.h && p.y + p.h > f.y);
+      reg(f.svgText, async text => {
+        const c2 = await rasterize(text, f.w, f.h, PX);
+        const x2 = c2.getContext('2d');
+        for (const p of punchesHere) {
+          x2.globalCompositeOperation = 'destination-out';
+          x2.drawImage(await rasterize(p.svg, p.w, p.h, PX),
+                       Math.round((p.x - f.x) * PX), Math.round((p.y - f.y) * PX));
+          x2.globalCompositeOperation = 'source-over';
+        }
+        remap(plane.material, c2);
+      });
       // CLEAR, never fill: an opaque patch on the chassis face would occlude
       // everything behind it (the module's own cavities, pins, bay interior)
       // and the same shape comes out of the face, not the rectangle

@@ -164,7 +164,7 @@ export function createShell(opts = {}) {
   $('header h1').textContent = opts.title || 'Portrayal';
 
   const state = {device: null, cfg: null, view: null, module: null, sel: null,
-                 svg: null, meta: null, cfgBays: {}};
+                 svg: null, meta: null, cfgBays: {}, cfgFields: {}};
 
   const handlers = {};
   const on = (name, fn) => { (handlers[name] ||= []).push(fn); };
@@ -991,6 +991,7 @@ export function createShell(opts = {}) {
   function syncCfgBays() {
     const c = state.meta.configs.find(c => c.name === state.cfg);
     state.cfgBays = {...(c?.bays || {})};
+    state.cfgFields = {};
   }
 
   el.cfg.onchange = e => { state.cfg = e.target.value; state.module = null; syncCfgBays(); loadStage(); };
@@ -1030,8 +1031,31 @@ export function createShell(opts = {}) {
     if (state.sel != null) select(null, false);
   });
 
+  // WRITE ON A PART in the 2D drawings: a field is a `data-from` text node the
+  // part declares (components.json `fields`), the value replaces its text and
+  // lands on the group as `data-<key>`. `setFields('psu-1/module', {watts:
+  // '750W'})`; an empty value hides the node; null clears the part's fields.
+  // The host mirrors the same map into the 3D viewer's setFields.
+  function setFields(path, vals) {
+    if (!vals) delete state.cfgFields[path];
+    else state.cfgFields[path] = {...(state.cfgFields[path] || {}), ...vals};
+    for (const d of faceDocs())
+      for (const el of d.querySelectorAll(`[data-path="${CSS.escape(path)}"]`))
+        for (const [k, v] of Object.entries(vals || {})) {
+          const val = v == null ? '' : String(v);
+          el.setAttribute(`data-${k}`, val);
+          for (const t of el.querySelectorAll(`[data-from="${CSS.escape(k)}"]`)) {
+            t.textContent = val;
+            if (val) t.removeAttribute('display'); else t.setAttribute('display', 'none');
+          }
+        }
+    emit('fields', {path, fields: state.cfgFields[path] || null, all: state.cfgFields});
+    emit('change');
+  }
+  function fieldsOf(ref) { return compByRef(ref)?.fields || {}; }
+
   return {
-    state, el, ready, on, emit,
+    state, el, ready, on, emit, setFields, fieldsOf,
     select, fit, refreshTree, loadFaces, loadDevice, loadStage, openModule, swapBay,
     over, setPulled, pulledPaths,
     compByRef, devices: () => DEVICES, components: () => COMPONENTS,

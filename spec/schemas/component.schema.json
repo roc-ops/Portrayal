@@ -526,6 +526,23 @@
     "default"
    ]
   },
+  "fields": {
+   "type": "object",
+   "description": "WHAT A FORM CAN CHANGE ON THIS PART WITHOUT IT BECOMING ANOTHER PART. A different shape is a different component; a different property - a supply's wattage, a DIMM's capacity and speed, a drive's capacity and interface - is a field on the same one. Each key names a `data-from` text node in every skin, which carries the default the drawing shows when nothing says otherwise; a placement's `attrs`, a configuration's `bay-attrs`, or the kit's setFields put a value there. The consumer building the form reads this from components.json.",
+   "additionalProperties": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "label": {"type": "string", "description": "what the form calls it"},
+     "type": {"enum": ["text", "number", "choice"], "description": "text unless said otherwise; a choice needs options"},
+     "default": {"type": ["string", "number"], "description": "what the skin shows; stated here so a form can reset to it without reading the drawing"},
+     "options": {"type": "array", "items": {"type": ["string", "number"]}, "description": "the values a choice offers"},
+     "pattern": {"type": "string", "description": "a regex a text value must match"},
+     "unit": {"type": "string", "description": "printed after a number, or the unit a text value is understood in"},
+     "description": {"type": "string"}
+    }
+   }
+  },
   "plan": {
    "type": "object",
    "additionalProperties": false,
