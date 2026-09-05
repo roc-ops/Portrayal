@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: system-board-14g
-version: 1.6.0
+version: 1.7.0
 class: mechanical
 profile: server
 description: >-
@@ -9,6 +9,13 @@ description: >-
   chassis, visible between the fan cage, the shroud and the risers
 size: {w: 422.8, h: 456.5, d: 79.9}
 provenance:
+  the-notch-is-painted: >-
+    The L is the PCB; the notch is the supplies' cage, drawn as sheet metal
+    at face x 6.6..182.7 by 195.5 deep (the model's supply poses). Left
+    unpainted, the well's shape-accurate punch left the chassis face
+    standing over the supplies at lid level - a plate floating above them
+    that picked as the board. The cage is estimated as a plain top with a
+    division per supply.
   size: >-
     measured - THE PCB ITSELF, `Body_25_2.001` inside Dell's service model's
     motherboard assembly: 422.8 x 456.5 x 1.7, face x 5.5..428.3 and top_y
@@ -72,4 +79,8 @@ relief:
   walls: inside
 elements:
   board: {at: [0.0, 0.0], size: [422.8, 456.5], class: bezel}
+  # the supplies' cage in the notch, sheet metal seen from above; it makes the
+  # well's punch the whole rect, so the supplies stand in the well in 3D
+  # rather than under a floating piece of the chassis face
+  psu-cage: {at: [0.0, 0.0], size: [177.2, 189.3], class: bezel}
 skins: [default]
