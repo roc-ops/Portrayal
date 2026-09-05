@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: cor580
-version: 1.0.0
+version: 1.0.1
 maturity: modelled
 manufacturer: Edgecore
 model: COR580
@@ -133,8 +133,9 @@ provenance:
     centred on x 396.34 - the mgmt jack's two bezel LED windows read at 391.34 and 401.34 and its bezel
     rails at 389.46 and 403.22, which fix that centre twice over - and a USB-A. Both RJ-45s carry WHITE
     bezels here where the sibling's are dark - on common/rj45-port@4 that meant the default skin and not
-    its `dark` one; after the RJ45 sweep MGMT is common/rj45-eth@1 and CONSOLE 1 is std/rj45@2, and both
-    draw only the white bezel, so the skin choice no longer applies. The sibling's cluster shares a single shell between its mgmt RJ-45 and its USB, puts the
+    its `dark` one; that part is gone with the RJ45 sweep, and its white/dark skins went with it. MGMT
+    is now common/rj45-eth@1 and CONSOLE 1 is std/rj45@2, and both draw the same dark housing, so the
+    white-versus-dark distinction the photo shows is no longer drawn. The sibling's cluster shares a single shell between its mgmt RJ-45 and its USB, puts the
     SFP+ pair on the RIGHT and has no micro-USB at all. Nothing here was carried over.
   usb-orientation: >-
     MEASURED - the USB-A is mounted VERTICALLY. Its blue insert reads 4.7 mm wide and 13.8 mm tall (x
@@ -939,3 +940,11 @@ gaps:
     Sized from the datasheet triple and carried over from the sibling DCS510, which shares this shell
     - a lid seam, a rear vent strip and the side rail lines, all estimated there and no better sourced
     here. No mechanical drawing in this intake dimensions a single feature on these four faces.
+- what: rj45-bezel-colour
+  scope:
+  - mgmt-eth
+  - console-1
+  reason: needs-drawing
+  wanted: >-
+    A bezel plate part or a skin variant for the white-bezelled RJ-45 the photo shows; the four-part
+    RJ45 family draws one dark housing.

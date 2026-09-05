@@ -520,7 +520,8 @@ views:
         - {id: mhz-10-in, ref: std/smb@1, at: [393.81, 18.01], group: timing, rel-pos: 4}
         - {id: pps-1-out, ref: std/smb@1, at: [393.81, 30.53], group: timing, rel-pos: 5}
         - {id: usb, ref: std/usb-a@1, at: [403.79, 28.77], rotate: 90, group: mgmt, rel-pos: 0}
-        - {id: mgmt-eth, ref: common/rj45-eth@1, at: [415.8, 28.7], rotate: 180, group: mgmt, rel-pos: 1, states: {led-a: ['off', {behavior: blinking, name: activity}], led-b: ['off', {name: link}]}}
+        - {id: mgmt-eth, ref: common/rj45-eth@1, at: [415.8, 28.7], rotate: 180, group: mgmt, rel-pos: 1, states: {led-a: ['off', {behavior: blinking, name: activity}], led-b: ['off', {name: link}]},
+           description: 'QSG Front LEDs callout 5 - the OOB jack carries link (left) and activity (right) lamps as led-b and led-a under rotate 180; the guide names no colours'}
         - {id: console-1, ref: std/rj45@2, at: [415.8, 45.7], rotate: 180, group: mgmt, rel-pos: 3}
         - {id: console-0, ref: std/micro-usb@1, at: [404.0, 46.4], group: mgmt, rel-pos: 2}
         - {id: reset, ref: common/reset-button@1, at: [394.5, 45.4], group: mgmt, rel-pos: 4, for: chassis}
