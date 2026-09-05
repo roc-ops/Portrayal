@@ -30,6 +30,7 @@ import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, sv
          buildFaceRelief, bodyBoxes } from './relief.js';
 import { applyOverrides } from './swap.js';
 import { jdist } from './dist.js';
+import { createLamps } from './lamps.js';
 
 const CLS_LABEL = {fan: 'Fan module', psu: 'Power supply', tab: 'Info tab'};
 // box-face shading, in +x -x +y -y +z -z order: sides darker, lid lifted,
@@ -242,6 +243,8 @@ export function createViewer(container, opts = {}) {
                                     // for the compliance and serial labels down there
   const MAX_TOTAL_TEXELS = 40e6;    // a 3/4 view lights up three faces at once
   const LOD = [];
+  // blinking and alternating lamps: frames per keyframe block, swapped per tick
+  const LAMPS = createLamps();
   let lodPaused = 0, lodSummary = '';
 
   const texelsAt = (rec, px) => rec.wmm * rec.hmm * px * px;
@@ -281,10 +284,17 @@ export function createViewer(container, opts = {}) {
     return _punchCache.get(key);
   }
 
+  // `rev` counts changes to rec.svgText and `painted` says which one the texture
+  // shows. A state change used to zero rec.level and call this, and if the face
+  // was mid-refine for the camera it returned at once - the refine in flight had
+  // captured the OLD text, painted it, and left the lamp dark until the next
+  // zoom. Now a refine re-runs while the text moved under it.
   async function refineFace(rec, pxmm) {
-    if (rec.busy || rec.level === pxmm || !box) return;
+    if (rec.busy || !box) return;
+    if (rec.level === pxmm && rec.painted === rec.rev) return;
     rec.busy = true;
-    try {
+    try { do {
+      const rev = rec.rev;
       const cv = await rasterize(rec.svgText, rec.wmm, rec.hmm, pxmm, rec.flipX, rec.flipY);
       // The build punches apertures out of the face after rasterising it; a fresh
       // raster is opaque again, which would seal every cavity behind a flat wall.
@@ -307,7 +317,8 @@ export function createViewer(container, opts = {}) {
       mat.needsUpdate = true;
       if (old) old.dispose();
       rec.level = pxmm;
-    } catch (e) {
+      rec.painted = rev;
+    } while (rec.painted !== rec.rev); } catch (e) {
       console.warn('[portrayal] face refine failed', rec.key, e);
     } finally { rec.busy = false; }
   }
@@ -540,6 +551,7 @@ export function createViewer(container, opts = {}) {
         scene.remove(box.userData.bodyBox); disposeTree(box.userData.bodyBox);
       }
     }
+    LAMPS.clear();
     if (reliefGroup) { scene.remove(reliefGroup); disposeTree(reliefGroup); }
     for (const k of Object.keys(faceGroups)) delete faceGroups[k];
     Object.assign(faceGroups, built);
@@ -655,11 +667,12 @@ export function createViewer(container, opts = {}) {
       if (!faceSvg[k]) continue;   // face fell back to flat colour - nothing to sharpen
       LOD.push({key: k, matIndex, wmm, hmm, svgText: faceSvg[k], flipX, flipY,
                 punches: facePunch[k] || [],
-                frame: FRAME(pos, rot), level: PXMM, busy: false, gen});
+                frame: FRAME(pos, rot), level: PXMM, busy: false, gen, rev: 0, painted: 0});
     }
     reliefGroup = new THREE.Group();
     meshes.forEach(m => reliefGroup.add(m));
     scene.add(reliefGroup);
+    await syncLamps(null);
   }
 
   // hit-testing: hidden inline SVGs give us component boxes in mm via getBBox/CTM
@@ -946,6 +959,7 @@ export function createViewer(container, opts = {}) {
   (function loop(now) {
     raf = requestAnimationFrame(loop);
     stepTweens(now || 0);
+    LAMPS.step(now || 0);
     controls.update();
     renderer.render(scene, camera);
     lodTick();
@@ -978,6 +992,7 @@ export function createViewer(container, opts = {}) {
     el.removeEventListener('pointerup', onPointerUp);
     controls.dispose();
     clearHighlight();
+    LAMPS.clear();
     disposeTree(scene);
     scene.clear();
     LOD.length = 0;
@@ -1014,7 +1029,7 @@ export function createViewer(container, opts = {}) {
   // 1.0-1.4 s rebuild. What it cannot do is un-extrude relief that was already
   // built, so anything with a body gets hidden in the scene as well - and on the
   // NEXT rebuild it is dropped at extraction and the geometry never exists.
-  async function setPulled(paths) {
+  async function applyPulledNow(paths) {
     const next = new Set();
     for (const p of paths || []) if (p) next.add(String(p));
     const changed = new Set();
@@ -1062,15 +1077,49 @@ export function createViewer(container, opts = {}) {
     for (const rec of LOD) {
       if (!touches(rec.svgText)) continue;
       rec.svgText = restyleText(rec.svgText, SCOPE);
-      const at = rec.level;
-      rec.level = 0;                    // refineFace no-ops at the level it holds
-      await refineFace(rec, at);
+      rec.rev++;
+      await refineFace(rec, rec.level);
       n++;
     }
+    await syncLamps(changed);
     return n;
   }
 
-  async function setStates(map) {
+  // ONE REPAINT AT A TIME, LATEST WINS. Both setters are fire-and-forget from
+  // the host and each awaits a chain of rasterisations, so two chip clicks in
+  // quick succession ran interleaved: whichever raster finished last won each
+  // texture, and it was not always the newer one. A state and a pull change are
+  // queued behind builds and behind each other; a setter called while its own
+  // job is queued replaces that job's argument rather than adding a second.
+  const pending = {};
+  function coalesce(kind, arg, run) {
+    pending[kind] = {arg};
+    if (pending[kind + 'Job']) return pending[kind + 'Job'];
+    return (pending[kind + 'Job'] = serialise(async () => {
+      pending[kind + 'Job'] = null;
+      const {arg} = pending[kind]; pending[kind] = null;
+      try { return await run(arg); }
+      catch (err) { console.warn(`[portrayal] 3D ${kind} sync failed`, err); return 0; }
+    }));
+  }
+  const setPulled = paths => coalesce('pulled', paths, applyPulledNow);
+  const setStates = map => coalesce('states', map, applyStatesNow);
+
+  async function syncLamps(changed) {
+    if (!box) return;
+    const isOff = path => {
+      for (const p of PULLED) if (path === p || path.startsWith(p + '/')) return true;
+      return false;
+    };
+    try {
+      await LAMPS.sync({faces: LOD, entries: RESTYLE, faceGroups, fruGroups: FRU_GROUPS,
+                        faceFlip: FACE_FLIP, pxmm: Math.max(PXMM, 16),
+                        restyle: t => restyleText(t, SCOPE), changed, isOff,
+                        tint: rec => FACE_TINT[rec.matIndex] ?? 1});
+    } catch (err) { console.warn('[portrayal] lamp animation sync failed', err); }
+  }
+
+  async function applyStatesNow(map) {
     const next = {};
     for (const [k, v] of map instanceof Map ? map : Object.entries(map || {}))
       if (v) next[k] = String(v);
@@ -1090,11 +1139,11 @@ export function createViewer(container, opts = {}) {
     for (const rec of LOD) {
       if (!touches(rec.svgText)) continue;
       rec.svgText = restyleText(rec.svgText, SCOPE);
-      const at = rec.level;
-      rec.level = 0;                    // refineFace no-ops at the level it holds
-      await refineFace(rec, at);
+      rec.rev++;
+      await refineFace(rec, rec.level);
       n++;
     }
+    await syncLamps(changed);
     return n;
   }
 
@@ -1128,7 +1177,7 @@ export function createViewer(container, opts = {}) {
     // and controls are recreated with it; a handle that captured them once
     // measured a dead scene - every halo projected to the same pixel and a
     // framing select "moved nothing". Getters read whatever is current.
-    three: {THREE, LOD,
+    three: {THREE, LOD, LAMPS, refine: (rec, px) => refineFace(rec, px),
             get scene() { return scene; }, get camera() { return camera; },
             get renderer() { return renderer; }, get controls() { return controls; }},
   };
