@@ -157,3 +157,13 @@ def test_common_rj45_ganged_eth_composes_the_cell_and_adds_two_lamps():
     assert c["connection-points"]["net"] == {"at": [6.35, 5.1], "direction": "front"}
     s = skin("common/rj45-ganged-eth@1")
     assert 'fill-rule="evenodd"' in s and 'id="led-b"' in s
+
+
+def test_the_dell_carrier_attaches_ism_meanings_to_the_new_lamps():
+    c = contract("dell/rj45-port-14g@1")
+    assert c["version"] == "1.1.0"
+    part = c["parts"][0]
+    assert part["ref"] == "common/rj45-eth@1"
+    assert set(part["states"]) == {"led-a", "led-b"}, "the carrier names the new part's lamps"
+    names = [s if isinstance(s, str) else s["name"] for s in part["states"]["led-a"]]
+    assert "off" in names and len(names) >= 3, "ISM table 11's LINK vocabulary survives"
