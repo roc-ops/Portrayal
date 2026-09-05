@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: sfp-lc-duplex
-version: 1.3.0
+version: 1.4.0
 class: transceiver
 behaviour: occupies
 mates: sfp
@@ -33,11 +33,15 @@ provenance:
     on the TE 2007562-6 cage, so ~13.9 stands proud of the faceplate)
   bail-colour: convention (blue commonly marks single-mode); the drawing is
     monochrome and states only "SFP MODULE 100MB 30km SINGLE-MODE"
+  bores: std/lc-bore@2 - the 4.7 square opening sourced from the ProLabs CWDM4
+    section A-A. Composed @1 (4.6 x 4.4, proportional) until the two versions were
+    collapsed (#126); each bore re-anchored so its centre stayed at (3.575, 4.25)
+    and (9.925, 4.25), keeping the 6.35 spacing the SFP-30K-FSF drawing gives
 parts:
   # lifted to the module front: these recess from the transceiver face, which is
   # 13.9 proud of the panel, not from the panel itself
-  - {ref: std/lc-bore@1, id: lc-a, at: [1.275, 2.05], lift: 13.9}
-  - {ref: std/lc-bore@1, id: lc-b, at: [7.625, 2.05], lift: 13.9}
+  - {ref: std/lc-bore@2, id: lc-a, at: [1.225, 1.9], lift: 13.9}
+  - {ref: std/lc-bore@2, id: lc-b, at: [7.575, 1.9], lift: 13.9}
 relief:
   features:
     - node: body
