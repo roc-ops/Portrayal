@@ -173,17 +173,41 @@ def test_a_card_stands_on_its_shelf_and_leaves_no_hole():
     """A riser's three slots are three shelves at three heights inside one
     well. `floor:` on the bay is the shelf, the card rises its own 21.6 from
     it, and a shelf is marked so the kit leaves no dark bay box behind a
-    pulled card - that box stood on the card below it."""
+    pulled card - that box stood on the card below it. The R740xd carried
+    these bays once and does not now (a card's slot is on the rear face), so
+    the fixture is its own."""
     import re
-    svg = needs_dist("r740xd.sff24-rc5-1b2a3a.top.svg").read_text()
-    def bay(id_):
+    sys.path.insert(0, str(SPEC / "tools/portrayal"))
+    import render
+
+    # the real board well and the generic plan card, resolved from the library
+    lib = render.Library([str(LIB)])
+    WELL, CARD = "dell/system-board-14g@1", "common/pcie-card-plan@1"
+
+    def bay(id_, floor):
+        b = {"id": id_, "at": [10.0, 10.0], "size": {"w": 120.9, "h": 173.8},
+             "accepts": [CARD], "default": CARD, "in": "well"}
+        if floor is not None:
+            b["floor"] = floor
+        return b
+    view = {"size": {"w": 440.0, "h": 480.0}, "components": {
+        "placements": [{"ref": WELL, "id": "well", "at": [5.0, 5.0]}],
+        "bays": [bay("slot-1", 26.6), bay("slot-2", 44.8), bay("slot-3", 64.6),
+                 bay("socket", None)]}}
+    d = {"name": "f", "manufacturer": "F", "model": "F", "version": "0.1.0",
+         "chassis": {"width": 440.0, "height": 480.0, "depth": 86.8},
+         "views": {"top": view}}
+    out = render.render_view(d, "top", view, lib, config={})
+    svg = out if isinstance(out, str) else render.ET.tostring(out, encoding="unicode")
+    def g(id_):
         m = re.search(rf'<g id="{id_}"[^>]*>', svg)
-        assert m, f"{id_} is not in the top view"
+        assert m, f"{id_} is not in the view"
         return m.group(0)
-    for id_, floor in (("r1-slot-1", 26.6), ("r1-slot-2", 44.8), ("r1-slot-3", 64.6)):
-        g = bay(id_)
-        lift = float(re.search(r'data-z-lift="([^"]+)"', g).group(1))
+    for id_, floor in (("slot-1", 26.6), ("slot-2", 44.8), ("slot-3", 64.6)):
+        lift = float(re.search(r'data-z-lift="([^"]+)"', g(id_)).group(1))
         assert abs(lift + (floor - 21.6)) < 0.01, (id_, lift)
-        assert 'data-shelf="1"' in g, f"{id_} is a shelf and does not say so"
-    # the DIMM sockets are on the well's own floor and are not shelves
-    assert 'data-shelf' not in bay("dimm-a1")
+        assert 'data-shelf="1"' in g(id_), f"{id_} is a shelf and does not say so"
+    # a bay on the well's own floor is not a shelf, and sinks to the floor
+    assert 'data-shelf' not in g("socket")
+    lift = float(re.search(r'data-z-lift="([^"]+)"', g("socket")).group(1))
+    assert abs(lift + (79.9 - 21.6)) < 0.01, lift

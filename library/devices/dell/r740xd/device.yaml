@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 20.10.2
+version: 20.11.0
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -330,17 +330,6 @@ groups:
       cards plug into. Riser 1's is measured from Dell's model; riser 2's
       full-height card and riser 3's are the same cage placed by analogy at
       their bays' outer edge, and the low-profile riser 2 is measured as 2C.
-  cards:
-    term: Card
-    role: service
-    index-origin: 1
-    description: >-
-      the expansion cards lying in the riser slots, seen from above, one bay
-      per slot and named for the rear view's slot. They stack: each slot's
-      card is `under:` the cards above it, so picking the lowest reveals it.
-      Every slot is seated with the model's generic card HERE while the rear
-      view seats fillers, because nothing links what a bay holds across two
-      views - see the gap.
   interior:
     term: Item
     role: furniture
@@ -1508,117 +1497,6 @@ views:
            group: memory, rel-pos: 24, physical-context: Memory, in: system-board,
            under: [air-shroud, system-cover, mid-drive-tray-lff, mid-drive-tray-sff, mid-lff-0, mid-lff-1,
                    mid-lff-2, mid-lff-3, mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3]}
-        # THE EXPANSION CARDS, one bay per riser slot, lying in the top view
-        # at the heights their slots put them. Riser 1's three are measured:
-        # Dell's model seats a card in each at cad y 22.2, 42.0 and 60.2, so
-        # their shelves are 64.6, 44.8 and 26.6 below the lid, and the cards
-        # span face x 310.1..431.0, top_y -7.2..173.8 with the 7.2 being the
-        # bracket's tab behind the rear metal, clipped here. The rear view's
-        # slot-1 is the TOP slot, so slot-1 is the highest card. Riser 2's
-        # and riser 3's bays share riser 1's 4.0 top edge and its bracket
-        # pitch, so their shelves are riser 1's measured ones by slot rank -
-        # 26.6, 44.8, 64.6 - and their x runs are the rear view's slot
-        # brackets. Estimated. A first pass took each shelf from the rear
-        # slot's bottom edge and put riser 3's top card 0.8 through the lid.
-        # `in:` the board, `floor:` the shelf, `under:` the cards above.
-        - {id: r1-slot-1, at: [310.10, 0.0], size: {w: 120.9, h: 173.8},
-           accepts: [common/pcie-card-plan@1], default: common/pcie-card-plan@1,
-           group: cards, rel-pos: 1, in: system-board, floor: 26.6,
-           under: [riser-1-card],
-           only-in: [lff12-mlff4-rlff2-rc1-1b2b, lff12-mlff4-rlff2-rc2-1b2c,
-                     lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c, lff12-rc1-1b2b,
-                     lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b,
-                     lff12-rc2-1b2c, lff12-rc3-1a2a, lff12-rc4-1a2a3a, lff12-rc5-1b2a3a,
-                     lff12-rc6-1d2a3a, lff12-rc9-1a2d3a, lff12-rlff2-rc1-1b2b,
-                     lff12-rlff2-rc2-1b2c, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
-                     sff24-msff4-rsff4-rc1-1b2b, sff24-msff4-rsff4-rc2-1b2c, sff24-rc1-1b2b,
-                     sff24-rc15-1a2e3b, sff24-rc16-1d2e3b, sff24-rc17-1a2f3b,
-                     sff24-rc2-1b2c, sff24-rc3-1a2a, sff24-rc4-1a2a3a, sff24-rc5-1b2a3a,
-                     sff24-rc6-1d2a3a, sff24-rc9-1a2d3a, sff24-rsff4-rc1-1b2b,
-                     sff24-rsff4-rc2-1b2c]}
-        - {id: r1-slot-2, at: [310.10, 0.0], size: {w: 120.9, h: 173.8},
-           accepts: [common/pcie-card-plan@1], default: common/pcie-card-plan@1,
-           group: cards, rel-pos: 2, in: system-board, floor: 44.8,
-           under: [r1-slot-1, riser-1-card],
-           only-in: [lff12-mlff4-rlff2-rc1-1b2b, lff12-mlff4-rlff2-rc2-1b2c,
-                     lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c, lff12-rc1-1b2b,
-                     lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b,
-                     lff12-rc2-1b2c, lff12-rc3-1a2a, lff12-rc4-1a2a3a, lff12-rc5-1b2a3a,
-                     lff12-rc6-1d2a3a, lff12-rc9-1a2d3a, lff12-rlff2-rc1-1b2b,
-                     lff12-rlff2-rc2-1b2c, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
-                     sff24-msff4-rsff4-rc1-1b2b, sff24-msff4-rsff4-rc2-1b2c, sff24-rc1-1b2b,
-                     sff24-rc15-1a2e3b, sff24-rc16-1d2e3b, sff24-rc17-1a2f3b,
-                     sff24-rc2-1b2c, sff24-rc3-1a2a, sff24-rc4-1a2a3a, sff24-rc5-1b2a3a,
-                     sff24-rc6-1d2a3a, sff24-rc9-1a2d3a, sff24-rsff4-rc1-1b2b,
-                     sff24-rsff4-rc2-1b2c]}
-        - {id: r1-slot-3, at: [310.10, 0.0], size: {w: 120.9, h: 173.8},
-           accepts: [common/pcie-card-plan@1], default: common/pcie-card-plan@1,
-           group: cards, rel-pos: 3, in: system-board, floor: 64.6,
-           under: [r1-slot-1, r1-slot-2, riser-1-card],
-           only-in: [lff12-mlff4-rlff2-rc1-1b2b, lff12-mlff4-rlff2-rc2-1b2c,
-                     lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c, lff12-rc1-1b2b,
-                     lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b,
-                     lff12-rc2-1b2c, lff12-rc3-1a2a, lff12-rc4-1a2a3a, lff12-rc5-1b2a3a,
-                     lff12-rc6-1d2a3a, lff12-rc9-1a2d3a, lff12-rlff2-rc1-1b2b,
-                     lff12-rlff2-rc2-1b2c, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
-                     sff24-msff4-rsff4-rc1-1b2b, sff24-msff4-rsff4-rc2-1b2c, sff24-rc1-1b2b,
-                     sff24-rc15-1a2e3b, sff24-rc16-1d2e3b, sff24-rc17-1a2f3b,
-                     sff24-rc2-1b2c, sff24-rc3-1a2a, sff24-rc4-1a2a3a, sff24-rc5-1b2a3a,
-                     sff24-rc6-1d2a3a, sff24-rc9-1a2d3a, sff24-rsff4-rc1-1b2b,
-                     sff24-rsff4-rc2-1b2c]}
-        - {id: r2-slot-4, at: [168.76, 0.0], size: {w: 120.9, h: 173.8},
-           accepts: [common/pcie-card-plan@1], default: common/pcie-card-plan@1,
-           group: cards, rel-pos: 4, in: system-board, floor: 26.6,
-           under: [riser-2-card],
-           only-in: [lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b,
-                     lff12-rc3-1a2a, lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a,
-                     lff12-rc9-1a2d3a, sff24-rc15-1a2e3b, sff24-rc16-1d2e3b,
-                     sff24-rc17-1a2f3b, sff24-rc3-1a2a, sff24-rc4-1a2a3a, sff24-rc5-1b2a3a,
-                     sff24-rc6-1d2a3a, sff24-rc9-1a2d3a]}
-        - {id: r2-slot-5, at: [168.76, 0.0], size: {w: 120.9, h: 173.8},
-           accepts: [common/pcie-card-plan@1], default: common/pcie-card-plan@1,
-           group: cards, rel-pos: 5, in: system-board, floor: 44.8,
-           under: [r2-slot-4, riser-2-card],
-           only-in: [lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b,
-                     lff12-rc3-1a2a, lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a,
-                     lff12-rc9-1a2d3a, sff24-rc15-1a2e3b, sff24-rc16-1d2e3b,
-                     sff24-rc17-1a2f3b, sff24-rc3-1a2a, sff24-rc4-1a2a3a, sff24-rc5-1b2a3a,
-                     sff24-rc6-1d2a3a, sff24-rc9-1a2d3a]}
-        - {id: r2-slot-6, at: [209.60, 0.0], size: {w: 79.2, h: 173.8},
-           accepts: [common/pcie-card-plan-lp@1], default: common/pcie-card-plan-lp@1,
-           group: cards, rel-pos: 6, in: system-board, floor: 64.6,
-           under: [r2-slot-4, r2-slot-5, riser-2-card],
-           only-in: [lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b,
-                     lff12-rc3-1a2a, lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a,
-                     lff12-rc9-1a2d3a, sff24-rc15-1a2e3b, sff24-rc16-1d2e3b,
-                     sff24-rc17-1a2f3b, sff24-rc3-1a2a, sff24-rc4-1a2a3a, sff24-rc5-1b2a3a,
-                     sff24-rc6-1d2a3a, sff24-rc9-1a2d3a]}
-        - {id: r2lp-slot-4, at: [206.93, 0.0], size: {w: 79.2, h: 173.8},
-           accepts: [common/pcie-card-plan-lp@1], default: common/pcie-card-plan-lp@1,
-           group: cards, rel-pos: 7, in: system-board, floor: 62.0,
-           under: [riser-2-lp-card],
-           only-in: [lff12-mlff4-rlff2-rc1-1b2b, lff12-mlff4-rlff2-rc2-1b2c,
-                     lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c, lff12-rc1-1b2b,
-                     lff12-rc2-1b2c, lff12-rlff2-rc1-1b2b, lff12-rlff2-rc2-1b2c,
-                     lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c, sff24-msff4-rsff4-rc1-1b2b,
-                     sff24-msff4-rsff4-rc2-1b2c, sff24-rc1-1b2b, sff24-rc2-1b2c,
-                     sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c]}
-        - {id: r3-slot-7, at: [3.90, 0.0], size: {w: 120.9, h: 173.8},
-           accepts: [common/pcie-card-plan@1], default: common/pcie-card-plan@1,
-           group: cards, rel-pos: 8, in: system-board, floor: 26.6,
-           under: [riser-3-card],
-           only-in: [lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b,
-                     lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a, lff12-rc9-1a2d3a,
-                     sff24-rc15-1a2e3b, sff24-rc16-1d2e3b, sff24-rc17-1a2f3b,
-                     sff24-rc4-1a2a3a, sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a]}
-        - {id: r3-slot-8, at: [3.90, 0.0], size: {w: 120.9, h: 173.8},
-           accepts: [common/pcie-card-plan@1], default: common/pcie-card-plan@1,
-           group: cards, rel-pos: 9, in: system-board, floor: 44.8,
-           under: [r3-slot-7, riser-3-card],
-           only-in: [lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b,
-                     lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a, lff12-rc9-1a2d3a,
-                     sff24-rc15-1a2e3b, sff24-rc16-1d2e3b, sff24-rc17-1a2f3b,
-                     sff24-rc4-1a2a3a, sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a]}
         # SIX FAN BAYS at the fan cage's measured fan positions - see
         # dell/fan-cage-14g@1 for the uneven pitch and why it is kept.
         # Fan 1 is at the left as seen from the front, which is low x.
@@ -1742,7 +1620,11 @@ views:
                    mid-lff-0, mid-lff-1, mid-lff-2, mid-lff-3,
                    mid-sff-0, mid-sff-1, mid-sff-2, mid-sff-3]}
         # THE RISER CARDS, standing in the board well behind the rear plates.
-        # Riser 1's is MEASURED: Dell's model has its PCB at cad x -203.8,
+        # They are the furniture the expansion cards plug into; the cards
+        # themselves are NOT here. A card's slot is the rear view's bay -
+        # that is the face it is changed from - and this view had once
+        # carried a second bay per slot with a generic card in it that nothing
+        # tied to the rear one. See the gap. Riser 1's is MEASURED: Dell's model has its PCB at cad x -203.8,
         # which is face x 419.2..420.8, with the connectors inboard of it, so
         # the footprint runs 408.0..420.8 - the PCB at the bay's outer edge,
         # against the chassis wall. Riser 2's full-height card and riser 3's
@@ -2022,34 +1904,40 @@ gaps:
       one careful pass, because riser 2's plate is cut to this number.
     wanted: >-
       the supply's top edge on the rear face, from a figure that has passed Gate 1
-  - what: riser-cards-not-linked-across-views
+  - what: expansion-cards-do-not-reach-the-interior
     scope: [top, rear]
     reason: vendor-silent
     note: >-
-      The rear view seats a FILLER in every riser slot, because that is how
-      the chassis ships; the top view seats the model's generic CARD in the
-      same slot, because a stack of empty shelves reveals nothing when one is
-      picked. Both are declared bays with their own defaults, and nothing in
-      the data model says that `riser-1/slot-1` on the rear and `r1-slot-1`
-      on the top are one slot seen twice. Fit a card in one and the other
-      does not know.
+      An expansion card is changed from the REAR: its bracket is the face
+      you see, its slot is a bay on the rear view, and that is where it is
+      seated. The rest of the card lies inside the chassis, on a riser
+      shelf, and a top view with the lid off should show it there - but a
+      rear bay's occupant is drawn on the rear face only. The top view once
+      carried a second bay per slot with a generic card in it so a stack of
+      shelves would show something; nothing linked it to the rear bay, so a
+      card fitted on one face was absent on the other, and every slot
+      showed a card the chassis does not ship with. Those bays are gone.
+      The riser cards stay, empty, until a card can be seen from two faces.
     wanted: >-
-      A way for a bay to say it is another bay seen from another face, so
-      one occupant shows in both. `for:` is the nearest key and means
-      belonging, not identity.
+      A card component that carries its plan projection - a second view of
+      itself, as a module carries a front and a rear - and a way for a rear
+      bay to say where its occupant's interior lies in the top view (a
+      shelf position and height, `floor:` as the riser's shelves already
+      declare it), so that seating a card on the rear draws its bracket
+      there and its body inside. In 3D the body is the same card extruded
+      inward through the rear face.
   - what: riser-2-and-3-cards-placed-by-analogy
     scope: [top]
     reason: needs-drawing
     note: >-
       Dell's model carries riser 1 (three-slot, measured here to the tenth)
       and the low-profile riser 2C. It carries no full-height riser 2 and no
-      riser 3. Their cards stand at their bays' outer edges because riser 1's
-      does, their shelves are the rear view's slot bottoms less the 3.4 riser
-      1 shows, and riser 3 is drawn from the board's floor when it really
-      stands on the supply cage.
+      riser 3. Their riser cards stand at their bays' outer edges because
+      riser 1's does, and riser 3 is drawn from the board's floor when it
+      really stands on the supply cage.
     wanted: >-
       A model or a photograph of riser 2A and riser 3 seated, which would put
-      both PCBs and their shelves where they are.
+      both PCBs where they are.
   - what: riser-configurations-not-all-declared
     scope: [rear, riser-1, riser-2, riser-2-lp, riser-3]
     reason: needs-drawing
