@@ -167,3 +167,14 @@ def test_the_dell_carrier_attaches_ism_meanings_to_the_new_lamps():
     assert set(part["states"]) == {"led-a", "led-b"}, "the carrier names the new part's lamps"
     names = [s if isinstance(s, str) else s["name"] for s in part["states"]["led-a"]]
     assert "off" in names and len(names) >= 3, "ISM table 11's LINK vocabulary survives"
+
+
+def test_the_base_stylesheet_renders_the_link_state():
+    """`link` is a bare token in common/rj45-eth@1 and common/rj45-ganged-eth@1,
+    so it takes its presentation from the renderer's base stylesheet, as `up`
+    and `activity` already do. Without a rule the lamp declares a state nothing
+    paints, which test_state_css catches on a build - this catches it on the
+    source."""
+    import render
+    assert ".state-link" in render.STATE_CSS
+    assert ".state-up" in render.STATE_CSS
