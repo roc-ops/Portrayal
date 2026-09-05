@@ -1393,6 +1393,35 @@ def lint_component_lamp_colour(path, data, _lib_roots=None):
                                  f"var(--led-color, <off colour>) on its fill or stroke")
 
 
+def lint_component_slots(path, data, _lib_roots=None):
+    """L75: a slot's structured facts agree with its prose, and a slot cannot
+    carry more lanes than its connector.
+
+    The prose attr is what a reader sees and the `slot:` block is what a card
+    feature reads; two statements of one fact drift unless something holds
+    them together. And a connector is the widest link it can carry: x16 lanes
+    on an x8 connector is a typo, not a slot.
+    """
+    width = {"x1": 1, "x4": 4, "x8": 8, "x16": 16}
+    prose_re = re.compile(r"^x(\d+), (full height|low profile), (full length|half length), processor (\d)")
+    attrs = data.get("attrs") or {}
+    for bid, b in (data.get("bays") or {}).items():
+        sl = (b or {}).get("slot") if isinstance(b, dict) else None
+        if not sl:
+            continue
+        if sl["lanes"] > width[sl["connector"]]:
+            err(path, "L75", f"bay {bid}: {sl['lanes']} lanes on an {sl['connector']} connector")
+        prose = attrs.get(bid)
+        if isinstance(prose, str):
+            m = prose_re.match(prose)
+            if m:
+                want = (int(m.group(1)), m.group(2).split()[0], m.group(3).split()[0], int(m.group(4)))
+                have = (sl["lanes"], sl["height"], sl["length"], sl.get("processor"))
+                if want != have:
+                    err(path, "L75", f"bay {bid}: slot says lanes {have[0]}, {have[1]} height, "
+                                     f"{have[2]} length, processor {have[3]} but the attr reads {prose!r}")
+
+
 def lint_component_states_render(path, data, lib_roots):
     """L47: a state nothing draws is a state the viewer offers and cannot show.
 
@@ -5499,6 +5528,7 @@ def main():
                 lint_component_body_boxes(f, d)
                 lint_component_fields(f, d)
                 lint_component_lamp_colour(f, d)
+                lint_component_slots(f, d)
             n += 1
         for f in sorted(root.glob("devices/**/device.yaml")):
             if args.device and not any(sel in str(f) for sel in args.device):

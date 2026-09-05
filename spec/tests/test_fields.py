@@ -96,3 +96,31 @@ def test_every_lit_lamp_in_the_library_reads_the_variable():
     for p in sorted(LIB.glob("components/*/*/v*/contract.yaml")):
         c = yaml.safe_load(p.read_text())
         assert not _caught("L74", lint.lint_component_lamp_colour, p, c), p
+
+
+def test_every_riser_slot_says_what_it_is():
+    """A card feature reads `slot:`: connector, lanes, height, length. Every
+    wired slot on every R740xd riser carries it, agreeing with its prose."""
+    wired = 0
+    for p in sorted(LIB.glob("components/dell/riser-[123][a-f]-14g/v1/contract.yaml")):
+        c = yaml.safe_load(p.read_text())
+        for bid, b in c["bays"].items():
+            prose = c["attrs"].get(bid, "")
+            if prose.startswith("no connector"):
+                assert "slot" not in b, (p, bid, "a blanked opening is not a slot")
+                continue
+            assert "slot" in b, (p, bid)
+            wired += 1
+        assert not _caught("L75", lint.lint_component_slots, p, c), p
+    assert wired == 26, wired
+
+
+def test_lint_holds_a_slot_to_its_prose_and_its_connector():
+    c = {"attrs": {"slot-1": "x8, full height, full length, processor 1"},
+         "bays": {"slot-1": {"at": [0, 0], "size": [1, 1], "accepts": ["x/y@1"],
+                             "slot": {"connector": "x16", "lanes": 16, "height": "full", "length": "full", "processor": 1}}}}
+    hits = _caught("L75", lint.lint_component_slots, pathlib.Path("x.yaml"), c)
+    assert hits and "attr reads" in hits[0], hits
+    c["bays"]["slot-1"]["slot"] = {"connector": "x8", "lanes": 16, "height": "full", "length": "full", "processor": 1}
+    hits = _caught("L75", lint.lint_component_slots, pathlib.Path("x.yaml"), c)
+    assert any("16 lanes on an x8" in h for h in hits), hits

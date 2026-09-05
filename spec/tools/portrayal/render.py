@@ -2070,7 +2070,17 @@ def main():
                  "default": default_cfg,
                  "configs": [{"name": n, "description": c.get("description", ""),
                               "part-numbers": c.get("part-numbers") or {},
-                              "bays": c.get("bays") or {}}
+                              "bays": c.get("bays") or {},
+                              # WHICH VARIANT VIEW STANDS IN FOR A FACE on this
+                              # configuration - `{front: front-lff-12}`. The
+                              # `bays` map below is keyed by view name, variants
+                              # included, and a consumer looking up a face's bays
+                              # on a configuration that binds a variant has to
+                              # go through this or it reads the wrong front.
+                              # `views` at the top level stays the six faces, so
+                              # a loader that fetches a face per name never asks
+                              # for a variant's file, which does not exist.
+                              "views": c.get("views") or {}}
                              for n, c in sorted(configs.items())],
                  # what each bay will take, so a viewer can offer the swap rather
                  # than guessing from component class
