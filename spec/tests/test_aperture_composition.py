@@ -88,10 +88,11 @@ def test_a_wrapper_of_a_wrapper_still_resolves(tmp_path):
 
 
 def test_a_leaf_that_names_its_plug_has_said_what_it_is(tmp_path):
-    """`std/lc-bore@1` carries `interface: lc` and no `conforms:`, and all 82
-    `lc-duplex-adapter` placements resolve through it. An aperture that names
-    the plug it accepts satisfies the leaf even where the registry has not
-    caught up."""
+    """`std/lc-bore@1` carried `interface: lc` and no `conforms:` while all 82
+    `lc-duplex-adapter` placements resolved through it. That version is gone
+    (#126) and @2 conforms, but the allowance it needed stands: an aperture that
+    names the plug it accepts satisfies the leaf even where the registry has
+    not caught up. The fixture below is that shape, not the library's part."""
     plant(tmp_path, "std/lc-bore@1", interface="lc", elements=cutout())
     p = plant(tmp_path, "common/lc-adapter@1", elements=cutout(),
               parts=[{"ref": "std/lc-bore@1", "id": "left", "at": [0, 0]}])

@@ -644,10 +644,11 @@ def _composes_a_standard(data, lib_roots, depth=0, seen=None):
 
     A leaf satisfies this by declaring `conforms:` OR `interface:`. `conforms:`
     is the strong form - L9 checks it against the registry to the millimetre -
-    but `std/lc-bore@1` carries `interface: lc` and no `conforms:`, and 82
-    `lc-duplex-adapter` placements resolve through it. An aperture that names
-    the plug it accepts has said what it is, even where the registry has not
-    caught up with it yet.
+    but an aperture can name the plug it accepts before the registry has an
+    entry for the opening: `std/lc-bore@1` carried `interface: lc` and no
+    `conforms:` while 82 `lc-duplex-adapter` placements resolved through it.
+    That version is gone (#126) and @2 conforms, but the allowance stands for
+    the next aperture that arrives ahead of its standard.
     """
     seen = seen or set()
     if depth > 4:

@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: lc-duplex-adapter
-version: 3.0.0
+version: 3.1.0
 class: port
 profile: networking
 description: >-
@@ -17,6 +17,11 @@ provenance:
     adapters on the DCP-R-34D-CS faceplate (13.24mm) and the row pitch (11.5mm)
   bore-spacing: measured - 6.6mm between the paired connection points, held
     across 35 adapters on that faceplate
+  bores: std/lc-bore@2 - the 4.7 square opening sourced from the ProLabs CWDM4
+    section A-A. This composed @1 (4.6 x 4.4, proportional, unsourced) until the
+    two versions were collapsed (#126); each bore was re-anchored so its CENTRE
+    stayed where it was - (3.3, 5.5) and (9.9, 5.5) - and the caps grew to fill
+    the bore they plug. Nothing else moved
   stand-off: photo - the adapter body sits about an eighth of an inch proud of
     the faceplate, not the quarter inch first modelled
   dust-caps: photo - unused ports carry a white cap standing about a quarter
@@ -24,8 +29,8 @@ provenance:
     front. The spigot that seats it into the bore is not modelled separately -
     it sits inside the recess and is never visible
 elements:
-  cap-tx: {at: [1.0, 3.3], size: [4.6, 4.4], class: cap}
-  cap-rx: {at: [7.6, 3.3], size: [4.6, 4.4], class: cap}
+  cap-tx: {at: [0.95, 3.15], size: [4.7, 4.7], class: cap}
+  cap-rx: {at: [7.55, 3.15], size: [4.7, 4.7], class: cap}
 relief:
   features:
     - node: bezel
@@ -74,8 +79,8 @@ relief:
         its depth is not.
 parts:
   # lifted onto the raised bezel, so each bore recesses from the proud face
-  - {ref: std/lc-bore@1, id: tx, at: [1.0, 3.3], lift: 3.175}
-  - {ref: std/lc-bore@1, id: rx, at: [7.6, 3.3], lift: 3.175}
+  - {ref: std/lc-bore@2, id: tx, at: [0.95, 3.15], lift: 3.175}
+  - {ref: std/lc-bore@2, id: rx, at: [7.55, 3.15], lift: 3.175}
 connection-points:
   optical: {at: [6.6, 5.5], direction: front}
 skins: [default]
