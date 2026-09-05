@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: as7726-32x
-version: 0.33.2
+version: 1.0.0
 manufacturer: Edgecore
 model: AS7726-32X
 portfolio:
@@ -178,8 +178,8 @@ views:
         - {id: port-30, at: [324.25, 26.22], size: [18.5, 9.58], shape: rect}
         - {id: port-31, at: [343.25, 14.2], size: [18.5, 9.58], shape: rect}
         - {id: port-32, at: [343.25, 26.22], size: [18.5, 9.58], shape: rect}
-        - {id: mgmt-eth, at: [362.5, 9.6], size: [16, 14], shape: rect}
-        - {id: console, at: [362.5, 25.7], size: [16, 14], shape: rect}
+        - {id: mgmt-eth, at: [362.6, 9.95], size: [15.8, 13.2], shape: rect}
+        - {id: console, at: [362.6, 26.05], size: [15.8, 13.2], shape: rect}
         - {id: mgmt-sfp-1, at: [381.75, 14.5], size: [14.5, 10], shape: rect}
         - {id: mgmt-sfp-2, at: [381.75, 25.5], size: [14.5, 10], shape: rect}
         - {id: usb, at: [400.25, 12.5], size: [4.5, 12], shape: rect}
@@ -273,15 +273,13 @@ views:
         - {ref: common/led-indicator@1, id: led-psu2, at: [33, 23], group: leds, rel-pos: 5, for: rear/psu-2}
         - {ref: common/led-indicator@1, id: led-fan, at: [40, 23], group: leds, rel-pos: 3, for: [rear/fan-1, rear/fan-2, rear/fan-3, rear/fan-4, rear/fan-5, rear/fan-6]}
         - {ref: common/reset-button@1, id: reset, at: [36.5, 32], for: chassis, group: mgmt, rel-pos: 6}
-        - {ref: common/rj45-port@4, id: mgmt-eth, at: [362, 9.1], group: mgmt, rel-pos: 1, attrs: {role: mgmt, speed: 1000base-t}}
-        - {ref: common/rj45-bezel@2, id: console, at: [362, 25.2], group: mgmt, rel-pos: 2, attrs: {media: rj45-serial, role: console}}
+        - {ref: common/rj45-eth@1, id: mgmt-eth, at: [362.6, 9.95], group: mgmt, rel-pos: 1, attrs: {role: mgmt, speed: 1000base-t}}
+        - {ref: std/rj45@2, id: console, at: [362.6, 26.05], group: mgmt, rel-pos: 2, attrs: {media: rj45-serial, role: console}}
         - {ref: common/sfp-led-pair@1, id: sfp-leds, at: [383, 9], group: leds, rel-pos: 6, for: [mgmt-sfp-1, mgmt-sfp-2]}
         - {ref: common/sfp-plus-cage@2, id: mgmt-sfp-1, at: [381, 14.5], group: mgmt, rel-pos: 3, attrs: {media: sfp-plus, speed: 10g, role: mgmt-uplink}}
         - {ref: common/sfp-plus-cage@2, id: mgmt-sfp-2, at: [381, 25.5], group: mgmt, rel-pos: 4, attrs: {media: sfp-plus, speed: 10g, role: mgmt-uplink}}
         - {ref: common/usb-a@2, id: usb, at: [394, 16.5], group: mgmt, rel-pos: 5, rotate: 270}
         - {ref: common/pull-tab@1, id: info-tab, at: [381, 38.6], group: furniture, rel-pos: 3}
-        - {ref: common/led-dot@1, id: led-mgmt-eth-l, at: [363.2, 21.73], for: mgmt-eth, group: leds, rel-pos: 901}
-        - {ref: common/led-dot@1, id: led-mgmt-eth-r, at: [375.8, 21.73], for: mgmt-eth, group: leds, rel-pos: 902}
     regions:
       - {id: mgmt-block, at: [360, 1], size: {w: 52, h: 42}, label: Management, members: [mgmt-eth, console, mgmt-sfp-1, mgmt-sfp-2, sfp-leds, usb, info-tab]}
       - {id: status-leds, at: [32, 2], size: {w: 15, h: 38}, label: Status LEDs, members: [led-loc, led-psu1, led-diag, led-psu2, led-fan, reset]}

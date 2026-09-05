@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: cor580
-version: 0.2.1
+version: 1.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: COR580
@@ -132,8 +132,9 @@ provenance:
     15.5; the 1000BASE-T management RJ-45 above the RS-232 console RJ-45 ('MGMT' / 'CONSOLE 1'), both
     centred on x 396.34 - the mgmt jack's two bezel LED windows read at 391.34 and 401.34 and its bezel
     rails at 389.46 and 403.22, which fix that centre twice over - and a USB-A. Both RJ-45s carry WHITE
-    bezels here where the sibling's are dark, so they take common/rj45-port@4's default skin and not its
-    `dark` one. The sibling's cluster shares a single shell between its mgmt RJ-45 and its USB, puts the
+    bezels here where the sibling's are dark - on common/rj45-port@4 that meant the default skin and not
+    its `dark` one; after the RJ45 sweep MGMT is common/rj45-eth@1 and CONSOLE 1 is std/rj45@2, and both
+    draw only the white bezel, so the skin choice no longer applies. The sibling's cluster shares a single shell between its mgmt RJ-45 and its USB, puts the
     SFP+ pair on the RIGHT and has no micro-USB at all. Nothing here was carried over.
   usb-orientation: >-
     MEASURED - the USB-A is mounted VERTICALLY. Its blue insert reads 4.7 mm wide and 13.8 mm tall (x
@@ -393,8 +394,8 @@ views:
       - {id: oob-1, at: [369.75, 27.5], size: [14.5, 10.0], shape: rect}
       - {id: led-oob-0, at: [372.72, 8.5], size: [2.0, 2.0], shape: circle}
       - {id: led-oob-1, at: [379.28, 8.5], size: [2.0, 2.0], shape: circle}
-      - {id: mgmt-eth, at: [388.34, 8.75], size: [16.0, 14.0], shape: rect}
-      - {id: console-1, at: [388.34, 26.75], size: [16.0, 14.0], shape: rect}
+      - {id: mgmt-eth, at: [388.44, 9.1], size: [15.8, 13.2], shape: rect}
+      - {id: console-1, at: [388.44, 27.1], size: [15.8, 13.2], shape: rect}
       - {id: usb, at: [407.95, 9.35], size: [4.5, 12.0], shape: rect}
     silkscreen:
     - {at: [89.3, 25.7], text: '0', font-size: 1.7, anchor: middle, fill: '#d8dcdf', for: port-0}
@@ -560,8 +561,7 @@ views:
         rel-pos: 2}
       - {ref: common/led-dot@1, id: led-sys-loc, at: [32.6, 4.57], group: leds, rel-pos: 1, for: chassis}
       - {ref: common/led-dot@1, id: led-diag, at: [32.6, 7.68], group: leds, rel-pos: 2, for: chassis}
-      - {ref: common/led-dot@1, id: led-fan, at: [32.6, 10.64], group: leds, rel-pos: 3, for: [rear/fan-1,
-          rear/fan-2, rear/fan-3, rear/fan-4, rear/fan-5, rear/fan-6]}
+      - {ref: common/led-dot@1, id: led-fan, at: [32.6, 10.64], group: leds, rel-pos: 3, for: [rear/fan-1, rear/fan-2, rear/fan-3, rear/fan-4, rear/fan-5, rear/fan-6]}
       - {ref: common/led-dot@1, id: led-psu1, at: [32.6, 13.61], group: leds, rel-pos: 4, for: rear/psu-1}
       - {ref: common/led-dot@1, id: led-psu2, at: [32.6, 16.73], group: leds, rel-pos: 5, for: rear/psu-2}
       - {ref: common/reset-button@1, id: reset, at: [31.6, 19.78], group: mgmt, rel-pos: 6, for: chassis}
@@ -659,15 +659,15 @@ views:
         attrs: {media: sfp-plus, speed: 10g, role: out-of-band}
       - {ref: common/led-dot@1, id: led-oob-0, at: [372.72, 8.5], group: leds, rel-pos: 6, for: oob-0}
       - {ref: common/led-dot@1, id: led-oob-1, at: [379.28, 8.5], group: leds, rel-pos: 7, for: oob-1}
-      - ref: common/rj45-port@4
+      - ref: common/rj45-eth@1
         id: mgmt-eth
-        at: [387.84, 8.25]
+        at: [388.44, 9.1]
         group: mgmt
         rel-pos: 4
         attrs: {media: rj45, speed: 1000base-t, role: mgmt}
-      - ref: common/rj45-port@4
+      - ref: std/rj45@2
         id: console-1
-        at: [387.84, 26.25]
+        at: [388.44, 27.1]
         group: mgmt
         rel-pos: 5
         attrs: {media: rj45-serial, role: console}
@@ -680,8 +680,6 @@ views:
         attrs: {media: usb-a, role: storage}
       - {ref: common/usb-symbol@1, id: usb-mark, at: [407.0, 22.2], group: furniture, rel-pos: 3, for: usb}
       - {ref: common/pull-tab@1, id: info-tab, at: [416.6, 38.6], group: furniture, rel-pos: 4}
-      - {ref: common/led-dot@1, id: led-mgmt-eth-l, at: [389.04, 20.88], for: mgmt-eth, group: qsfpdd-leds, rel-pos: 901}
-      - {ref: common/led-dot@1, id: led-mgmt-eth-r, at: [401.64, 20.88], for: mgmt-eth, group: qsfpdd-leds, rel-pos: 902}
     regions:
     - id: status-cluster
       at: [30.0, 3.0]

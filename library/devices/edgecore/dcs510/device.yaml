@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcs510
-version: 0.2.2
+version: 1.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: DCS510
@@ -150,7 +150,7 @@ provenance:
     time: position is the placement's own `at` plus the component's aperture offset, size is the registry
     entry the component `conforms:` to (or the component's own size where it conforms to nothing). The
     32 port holes come out of expand.py that way. Three were hand-written around the visible opening with
-    clearance instead - mgmt-eth at 14.4 x 10.4 where common/rj45-shielded@2 is 15.8 x 12.5, and the two
+    clearance instead - mgmt-eth at 14.4 x 10.4 where common/rj45-eth@1 is 15.8 x 13.2, and the two
     SFP+ cages at 15.0 x 9.2 where common/sfp-plus-cage@2 forwards to std/sfp's 14.5 x 10.0 at an offset
     of [0.75, 0] - and spec/tests/test_cutout_derivation.py failed on all three. They are now derived.
     The measured openings that produced those three numbers are still recorded in `management-cluster`
@@ -314,16 +314,16 @@ views:
       - {id: timing-1pps-out, at: [21.06, 5.14], size: [6.35, 6.35], shape: circle}
       - {id: timing-10mhz-in, at: [11.56, 14.64], size: [6.35, 6.35], shape: circle}
       - {id: timing-1pps-in, at: [21.06, 14.64], size: [6.35, 6.35], shape: circle}
-      - {id: tod, at: [13.1, 26.9], size: [16.0, 14.0], shape: rect}
+      - {id: tod, at: [13.2, 27.25], size: [15.8, 13.2], shape: rect}
       - {id: led-loc, at: [32.6, 6.7], size: [2.0, 2.0], shape: circle}
       - {id: led-diag, at: [32.6, 9.93], size: [2.0, 2.0], shape: circle}
       - {id: led-fan, at: [32.6, 13.16], size: [2.0, 2.0], shape: circle}
       - {id: led-ps1, at: [32.6, 16.39], size: [2.0, 2.0], shape: circle}
       - {id: led-ps2, at: [32.6, 19.63], size: [2.0, 2.0], shape: circle}
       - {id: reset, at: [31.6, 21.86], size: [4.0, 4.0], shape: circle}
-      - {id: mgmt-eth, at: [391.4, 2.9], size: [15.8, 12.5], shape: rect}
+      - {id: mgmt-eth, at: [391.4, 2.55], size: [15.8, 13.2], shape: rect}
       - {id: usb, at: [393.3, 15.95], size: [12.0, 4.5], shape: rect}
-      - {id: console, at: [389.4, 26.6], size: [16.0, 14.0], shape: rect}
+      - {id: console, at: [389.5, 26.95], size: [15.8, 13.2], shape: rect}
       - {id: mgmt-sfp-1, at: [410.05, 11.9], size: [14.5, 10.0], shape: rect}
       - {id: mgmt-sfp-2, at: [410.05, 26.6], size: [14.5, 10.0], shape: rect}
       - {id: led-mgmt-sfp-1, at: [412.95, 8.3], size: [2.0, 2.0], shape: circle}
@@ -505,14 +505,10 @@ views:
         M -1.6 0.57785 L -0.3 0.57785 L -0.95 -0.57785 Z M 0.3 -0.57785 L 1.6 -0.57785 L 0.95 0.57785
         Z
       filled: true
-    - {at: [9.7, 11.0], text: OUT, font-size: 1.2, anchor: end, fill: '#d8dcdf', for: [timing-10mhz-out,
-        timing-1pps-out]}
-    - {at: [9.7, 20.5], text: IN, font-size: 1.2, anchor: end, fill: '#d8dcdf', for: [timing-10mhz-in,
-        timing-1pps-in]}
-    - {at: [14.73, 25.0], text: 10MHz, font-size: 1.7, anchor: middle, fill: '#d8dcdf', for: [timing-10mhz-out,
-        timing-10mhz-in]}
-    - {at: [24.23, 25.0], text: 1PPS, font-size: 1.7, anchor: middle, fill: '#d8dcdf', for: [timing-1pps-out,
-        timing-1pps-in]}
+    - {at: [9.7, 11.0], text: OUT, font-size: 1.2, anchor: end, fill: '#d8dcdf', for: [timing-10mhz-out, timing-1pps-out]}
+    - {at: [9.7, 20.5], text: IN, font-size: 1.2, anchor: end, fill: '#d8dcdf', for: [timing-10mhz-in, timing-1pps-in]}
+    - {at: [14.73, 25.0], text: 10MHz, font-size: 1.7, anchor: middle, fill: '#d8dcdf', for: [timing-10mhz-out, timing-10mhz-in]}
+    - {at: [24.23, 25.0], text: 1PPS, font-size: 1.7, anchor: middle, fill: '#d8dcdf', for: [timing-1pps-out, timing-1pps-in]}
     - {at: [32.4, 8.15], text: Loc, font-size: 1.3, anchor: end, fill: '#d8dcdf', for: led-loc}
     - {at: [32.4, 11.38], text: Diag, font-size: 1.3, anchor: end, fill: '#d8dcdf', for: led-diag}
     - {at: [32.4, 14.61], text: Fan, font-size: 1.3, anchor: end, fill: '#d8dcdf', for: led-fan}
@@ -530,8 +526,7 @@ views:
         Z
       filled: true
     - {at: [399.1, 25.2], text: Console, font-size: 1.7, anchor: start, fill: '#d8dcdf', for: console}
-    - {at: [417.3, 24.78], text: 10G Mgmt, font-size: 1.7, anchor: middle, fill: '#d8dcdf', for: [mgmt-sfp-1,
-        mgmt-sfp-2]}
+    - {at: [417.3, 24.78], text: 10G Mgmt, font-size: 1.7, anchor: middle, fill: '#d8dcdf', for: [mgmt-sfp-1, mgmt-sfp-2]}
     - at: [417.3, 9.3]
       fill: '#d8dcdf'
       for:
@@ -571,17 +566,15 @@ views:
         group: timing
         rel-pos: 4
         attrs: {media: coax-sma, role: 1pps-in}
-      - ref: common/rj45-port@4
+      - ref: std/rj45@2
         id: tod
-        at: [12.6, 26.4]
-        skin: dark
+        at: [13.2, 27.25]
         group: timing
         rel-pos: 5
         attrs: {media: rj45, role: tod}
       - {ref: common/led-dot@1, id: led-loc, at: [32.6, 6.7], group: leds, rel-pos: 1, for: chassis}
       - {ref: common/led-dot@1, id: led-diag, at: [32.6, 9.93], group: leds, rel-pos: 2, for: chassis}
-      - {ref: common/led-dot@1, id: led-fan, at: [32.6, 13.16], group: leds, rel-pos: 3, for: [rear/fan-1,
-          rear/fan-2, rear/fan-3, rear/fan-4, rear/fan-5, rear/fan-6]}
+      - {ref: common/led-dot@1, id: led-fan, at: [32.6, 13.16], group: leds, rel-pos: 3, for: [rear/fan-1, rear/fan-2, rear/fan-3, rear/fan-4, rear/fan-5, rear/fan-6]}
       - {ref: common/led-dot@1, id: led-ps1, at: [32.6, 16.39], group: leds, rel-pos: 4, for: rear/psu-1}
       - {ref: common/led-dot@1, id: led-ps2, at: [32.6, 19.63], group: leds, rel-pos: 5, for: rear/psu-2}
       - {ref: common/reset-button@1, id: reset, at: [31.6, 21.86], group: mgmt, rel-pos: 6, for: chassis}
@@ -681,9 +674,9 @@ views:
         rel-pos: 31}
       - {ref: common/qsfp-lane-leds-column@1, id: led-port-32, at: [385.5, 25.8], for: port-32, group: qsfpdd-leds,
         rel-pos: 32}
-      - ref: common/rj45-shielded@2
+      - ref: common/rj45-eth@1
         id: mgmt-eth
-        at: [391.4, 2.9]
+        at: [391.4, 2.55]
         group: mgmt
         rel-pos: 1
         attrs: {media: rj45, speed: 1000base-t, role: mgmt}
@@ -693,10 +686,9 @@ views:
         group: mgmt
         rel-pos: 5
         attrs: {media: usb-a, role: storage}
-      - ref: common/rj45-port@4
+      - ref: std/rj45@2
         id: console
-        at: [388.9, 26.1]
-        skin: dark
+        at: [389.5, 26.95]
         group: mgmt
         rel-pos: 2
         attrs: {media: rj45-serial, role: console}
@@ -715,8 +707,6 @@ views:
       - {ref: common/led-dot@1, id: led-mgmt-sfp-1, at: [412.95, 8.3], group: leds, rel-pos: 6, for: mgmt-sfp-1}
       - {ref: common/led-dot@1, id: led-mgmt-sfp-2, at: [419.65, 8.3], group: leds, rel-pos: 7, for: mgmt-sfp-2}
       - {ref: common/pull-tab@1, id: info-tab, at: [414.5, 38.4], group: furniture, rel-pos: 3}
-      - {ref: common/led-dot@1, id: led-mgmt-eth-l, at: [392.6, 13.13], for: mgmt-eth, group: qsfpdd-leds, rel-pos: 901}
-      - {ref: common/led-dot@1, id: led-mgmt-eth-r, at: [404.0, 13.13], for: mgmt-eth, group: qsfpdd-leds, rel-pos: 902}
     regions:
     - id: timing-block
       at: [1.0, 1.0]
