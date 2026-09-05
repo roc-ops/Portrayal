@@ -79,23 +79,33 @@ same test `sweep_jack_lamps.py` already applies to decide where a lamp belongs.
 Every dimension in the family carries a confidence, and the note says which are
 settled and which this work has to acquire.
 
-| figure | value | confidence today | source |
-|---|---|---|---|
-| housing face | 15.76 x 12.48 | datasheet-drawing | already cited by `rj45-shielded` and `rj45-jack` |
-| panel cutout | 16.0 x 14.0 | registry, unverified (#61 §3) | IEC 60603-7 is paywalled; a TE or Amphenol modular-jack datasheet carries the same panel-cutout drawing and is public |
-| cavity body (tier 1) | 11.89 x 6.85 | measured | TE 2497310-1 CAD, kept |
-| latch shoulder (tier 2) | to transcribe | none, does not exist today | the same manufacturer drawing; the plug's IEC profile has this step between body and latch |
-| latch tab (tier 3) | 4.0 x 2.6 | conventional, unmeasured | verify from the same drawing |
-| cavity depth | 16.0 | estimated | keep, flagged, until a drawing gives it |
-| ganged cell | 12.7 x 11.0, 13.97 pitch | measured (ES1010 photo, TE CAD autocorrelation) | keep |
-| lamp window | 2.0 wide, 1.2 in from each side, 0.27 from the keyway edge | derived from the S9600-72XC's own management jack | keep as the family default |
+The acquisition happened on 2026-09-05. Four public manufacturer documents are
+staged under `working/intake/standards/rj45/` (gitignored, with a README naming
+each and its sha256): TE customer drawing **1734264 rev A2**, an RJ45 8P8C side
+entry jack whose front view dimensions the plug opening in three tiers; TE
+customer drawing **6368011 rev L**, a stacked 2x1 shielded RJ45 with integral
+LEDs; the **Amphenol Canada modular jack catalogue** (RJHS, RJESE, RJSAE, RJE88
+series, each with a dimensioned front view); and TE 1775675, a 6-position jack
+kept for comparison only. The IEC text was never needed.
 
-**The one acquisition.** A public modular-jack datasheet with a panel-cutout and
-plug-interface drawing, from TE (the family the 2497310-1 CAD belongs to) or
-Amphenol. It settles tiers 2 and 3 and the cutout in one document. It is staged
-under `working/intake/standards/`, gitignored like every other source, and its
-identity and the figures read from it go into `standards.yaml` and the
-component provenance. Nothing in this design is blocked on the IEC text itself.
+| figure | value | confidence | source |
+|---|---|---|---|
+| housing face, single jack | 15.8 wide (body 15.6 ±0.3) x 13.2 high | drawing | TE 1734264 front view; Amphenol RJHSE-508X and RJESE-808X read 15.75 x 13.21, agreeing to 0.05 |
+| housing depth | 18.6 | drawing | TE 1734264 side view (low profile; taller families run to 21) |
+| cavity body (tier 1) | 11.91 wide x 6.83 high | drawing | TE 1734264 front view; the library's 11.89 x 6.85 from the 2497310-1 CAD agrees to 0.02 |
+| latch shoulder (tier 2) | 6.30 wide x 1.69 high | drawing | TE 1734264: the opening is 8.52 high through the shoulder, so 8.52 less 6.83 |
+| latch slot (tier 3) | 4.06 wide | drawing | TE 1734264; the library's 4.0 was conventional and is right |
+| latch slot height | 2.6 | conventional | not dimensioned on 1734264 or the Amphenol views; the slot runs to the housing's lower edge in every drawing, so the skin draws it to the face and the figure stays flagged |
+| contact pitch | 1.02, eight contacts over 7.14 | drawing | TE 1734264 detail C |
+| panel cutout, single jack | 16.0 x 14.0 | registry, unverified | neither drawing gives a single-jack cutout; 6368011 gives 18.04 x 27.81 for a 2x1 stack. The 16 x 14 stays as the aperture the panel punches and stays flagged, which is the #61 §3 finding restated |
+| ganged cell | 12.7 x 11.0, 13.97 pitch | measured | ES1010 photo, TE 2497310-1 CAD autocorrelation; unchanged |
+| stacked pair with LEDs | 19.6 wide, two ports in a 27.19 face, LEDs in the four corners | drawing | TE 6368011 front view; a different family from the magjack block, recorded so a stacked-with-LED device has a source |
+| lamp window | 2.0 wide, 1.2 in from each side, 0.27 from the keyway edge | derived | the S9600-72XC's own management jack; the Amphenol and TE LED windows sit in the same corners |
+
+So the three-tier profile is: 11.91 x 6.83 body, a 6.30 wide shoulder 1.69 high
+beneath it, and a 4.06 wide latch slot running from the shoulder to the housing's
+lower edge. Two of the three figures the library already carried were right to
+within 0.02 mm; the shoulder is the tier it never had.
 
 ### What the skins draw
 
@@ -177,8 +187,8 @@ a version probe wrongly.
 
 Four PRs, each green on its own.
 
-1. **Source and the two bare parts.** Stage the manufacturer drawing; transcribe
-   the tiers and the cutout into `standards.yaml`; build `std/rj45@2` and
+1. **Source and the two bare parts.** The drawings are staged; transcribe the
+   tiers into `standards.yaml` with their sources; build `std/rj45@2` and
    `std/rj45-ganged@2` with skins and relief. Old parts untouched, nothing placed
    yet. Tests: the cavity path has three tiers and matches the registry to the
    millimetre; L9 conformance passes.
