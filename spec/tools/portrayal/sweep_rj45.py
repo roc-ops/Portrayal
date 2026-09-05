@@ -45,6 +45,20 @@ SINGLE = {"std/rj45@1", "common/rj45-port@4", "common/rj45-bezel@2", "common/rj4
           "common/rj45-shielded@2", "common/rj45-jack@2"}
 GANGED = {"std/rj45-ganged@1", "common/rj45-hd@1", "common/rj45-hd-plain@1"}
 
+# These contracts are retired wrappers, deleted whole in a later task; their
+# internal `jack:` part must not be swept out from under them first. Matched
+# by path segment (any version), not by ref, so `--components` skips the
+# contract entirely and reports nothing for it.
+RETIRED_COMPONENT_DIRS = {
+    "common/rj45-port", "common/rj45-bezel", "common/rj45-hd", "common/rj45-hd-plain",
+    "common/rj45-shielded", "common/rj45-jack",
+    "std/rj45", "std/rj45-ganged",
+}
+
+
+def is_retired_wrapper(path):
+    return any(f"/components/{d}/v" in path for d in RETIRED_COMPONENT_DIRS)
+
 
 def target(ref, lamps):
     if ref in SINGLE:
@@ -86,9 +100,33 @@ def _item_bounds(rows, i):
     return start, end
 
 
-def span(rows, pid):
-    """(start, end) line indexes of the placement carrying id: pid, flow or block."""
+def view_bounds(rows, vname):
+    """(start, end) line indexes of the `  <vname>:` view block under `views:`,
+    running from its own header to just before the next sibling view (or end
+    of file). An id repeated across views (variant views do this today for 68
+    non-RJ45 ids) must only ever be found inside its OWN view - otherwise the
+    whole-file search finds view 1's placement twice and view 2's never."""
+    start = None
     for i, l in enumerate(rows):
+        if re.match(rf"^  {re.escape(vname)}:\s*$", l):
+            start = i
+            break
+    if start is None:
+        return 0, len(rows)
+    end = len(rows)
+    for j in range(start + 1, len(rows)):
+        if re.match(r"^  \S", rows[j]):  # next sibling view, same 2-space indent
+            end = j
+            break
+    return start, end
+
+
+def span(rows, pid, lo=0, hi=None):
+    """(start, end) line indexes of the placement carrying id: pid, flow or
+    block, searched only within rows[lo:hi] (default: the whole file)."""
+    hi = len(rows) if hi is None else hi
+    for i in range(lo, hi):
+        l = rows[i]
         if not re.search(rf"\bid: {re.escape(pid)}(?:[,}}\s]|$)", l):
             continue
         start, end = _item_bounds(rows, i)
@@ -97,8 +135,10 @@ def span(rows, pid):
     return None
 
 
-def cutout_span(rows, pid):
-    for i, l in enumerate(rows):
+def cutout_span(rows, pid, lo=0, hi=None):
+    hi = len(rows) if hi is None else hi
+    for i in range(lo, hi):
+        l = rows[i]
         if re.search(rf"\bid: {re.escape(pid)}(?:[,}}\s]|$)", l) and "ref:" not in l and "size:" in l:
             return i, i
     return None
@@ -152,7 +192,8 @@ def sweep_device(path):
         # 1-2. move jacks, holding centres; 3. write lifted states onto them
         failed = set()
         for pid, (old, new) in moves.items():
-            s = span(rows, pid)
+            lo, hi = view_bounds(rows, vname)   # recomputed each time: earlier
+            s = span(rows, pid, lo, hi)         # edits in this view shift lines
             if not s:
                 unresolved.append(f"{vname}/{pid}: no placement line")
                 failed.add(pid)
@@ -163,8 +204,22 @@ def sweep_device(path):
             block = edit_at(block, (ow - nw) / 2, (oh - nh) / 2)
             if lifted.get(pid):
                 lamps = sorted(lifted[pid], key=lambda t: t[0])
+                # led-a is the component's LOCAL left window. Unrotated, the
+                # lower-x lamp maps to led-a. A jack rotated 180 presents that
+                # local-left window on screen-right, so the mapping flips:
+                # lower-x -> led-b. Any other rotation is outside what the
+                # corpus has verified - report it rather than guess.
+                rot = (by_id[pid].get("rotate") or 0) % 360
+                if rot == 180:
+                    order = ("led-b", "led-a")
+                elif rot == 0:
+                    order = ("led-a", "led-b")
+                else:
+                    order = ("led-a", "led-b")
+                    unresolved.append(
+                        f"{vname}/{pid}: rotate {rot} - lamp handedness not verified for this rotation")
                 mapping = {}
-                for name, (_, lamp) in zip(("led-a", "led-b"), lamps):
+                for name, (_, lamp) in zip(order, lamps):
                     if lamp.get("states"):
                         mapping[name] = lamp["states"]
                     elif (lamp.get("attrs") or {}).get("function"):
@@ -193,20 +248,35 @@ def sweep_device(path):
             if pid in failed:
                 continue
             for _, lamp in lamps:
-                s = span(rows, str(lamp["id"]))
+                lo, hi = view_bounds(rows, vname)
+                s = span(rows, str(lamp["id"]), lo, hi)
                 if s:
                     del rows[s[0]:s[1] + 1]
                     removed_ids.append(str(lamp["id"])); report["lamps lifted"] += 1
-        # 5. cutouts
+        # 5. cutouts. The anchor holds the CUTOUT's own centre, not the jack
+        # part's: read the cutout's own old size off its `size:` field before
+        # rewriting it, and shift by (old cutout size - new part size) / 2. A
+        # cutout can be a different size than the part it houses (bezel
+        # clearance, etc) - using the part's old/new sizes here would move a
+        # hole whose size never changes at all (celestica/es1010 port-1:
+        # cutout [12.7, 11] already matches the new part even though the old
+        # part is [14, 12] - the hole must not move).
         for pid, (old, new) in moves.items():
-            s = cutout_span(rows, pid)
+            lo, hi = view_bounds(rows, vname)
+            s = cutout_span(rows, pid, lo, hi)
             if not s:
                 continue
-            (ow, oh), (nw, nh) = size(old), size(new)
+            nw, nh = size(new)
             line = rows[s[0]]
+            m = re.search(r"size: \[\s*([\d.]+)\s*,\s*([\d.]+)\s*\]", line)
+            if m:
+                cow, coh = float(m.group(1)), float(m.group(2))
+            else:
+                m = re.search(r"size: \{w: ([\d.]+), h: ([\d.]+)\}", line)
+                cow, coh = float(m.group(1)), float(m.group(2))
             line = re.sub(r"size: \[\s*[\d.]+\s*,\s*[\d.]+\s*\]", f"size: [{fmt(nw)}, {fmt(nh)}]", line)
             line = re.sub(r"size: \{w: [\d.]+, h: [\d.]+\}", f"size: [{fmt(nw)}, {fmt(nh)}]", line)
-            rows[s[0]] = edit_at(line, (ow - nw) / 2, (oh - nh) / 2)
+            rows[s[0]] = edit_at(line, (cow - nw) / 2, (coh - nh) / 2)
             report["cutouts resized"] += 1
     text = "\n".join(rows)
     # 4. legends: a `for:` naming a removed lamp names the jack instead. The
@@ -218,14 +288,30 @@ def sweep_device(path):
             for q in (((view or {}).get("components") or {}).get("placements") or []):
                 if str(q.get("id")) in removed_ids:
                     f = q.get("for"); owner[str(q["id"])] = str(f[0] if isinstance(f, list) else f)
+        # A `\b` boundary treats `-` as a word break, so `led-oob-left\b`
+        # matches the PREFIX of `led-oob-left-2` too. Require instead that the
+        # next character actually end the id: a list/scalar delimiter,
+        # whitespace, or end of line.
+        BOUND = r"(?=[,\]}\s]|$)"
         for lid, jack in owner.items():
-            n = len(re.findall(rf"for: {re.escape(lid)}\b", text))
-            text = re.sub(rf"for: {re.escape(lid)}\b", f"for: {jack}", text)
-            text = re.sub(rf"(for: \[[^\]]*?)\b{re.escape(lid)}\b", rf"\1{jack}", text)
+            n = len(re.findall(rf"for: {re.escape(lid)}{BOUND}", text, flags=re.M))
+            text = re.sub(rf"for: {re.escape(lid)}{BOUND}", f"for: {jack}", text, flags=re.M)
+            text = re.sub(rf"(for: \[[^\]]*?){re.escape(lid)}{BOUND}", rf"\1{jack}", text)
             report["legends re-pointed"] += n
             for key in ("members", "scope", "combo-with"):
                 if re.search(rf"{key}:[^\n]*\b{re.escape(lid)}\b", text):
                     unresolved.append(f"{key} still names removed lamp {lid}")
+        # Two lifted lamps that both belonged to the same jack now name that
+        # jack twice in a `for: [...]` list (e.g. `for: [mgmt-eth, mgmt-eth]`);
+        # collapse to one entry.
+        def _dedup_for_list(m):
+            seen = []
+            for item in m.group(1).split(","):
+                item = item.strip()
+                if item not in seen:
+                    seen.append(item)
+            return "for: [" + ", ".join(seen) + "]"
+        text = re.sub(r"for: \[([^\]]*)\]", _dedup_for_list, text)
     # 6. version
     if removed_ids or report["lamped"] or report["bare"]:
         level = "major" if removed_ids else "minor"
@@ -238,7 +324,7 @@ def sweep_component(path):
     data = yaml.safe_load(open(path))
     rows = pathlib.Path(path).read_text().split("\n")
     report = collections.Counter()
-    moved_ids = []
+    moved_ids, unresolved = [], []
     for p in data.get("parts") or []:
         ref = str(p.get("ref") or "")
         new = target(ref, L.rj45_wants_lamps({"id": p.get("id"), "attrs": p.get("attrs")}, {}))
@@ -246,6 +332,10 @@ def sweep_component(path):
             continue
         s = span(rows, str(p["id"]))
         if not s:
+            # matches sweep_device's own behaviour: a part that should move but
+            # whose placement line couldn't be found is reported, not silently
+            # dropped - otherwise the report would understate what's left to do.
+            unresolved.append(f"{p['id']}: no parts line")
             continue
         (ow, oh), (nw, nh) = size(ref), size(new)
         block = "\n".join(rows[s[0]:s[1] + 1]).replace(f"ref: {ref}", f"ref: {new}", 1)
@@ -255,7 +345,7 @@ def sweep_component(path):
     text = "\n".join(rows)
     if report["parts moved"]:
         text = re.sub(r"^version: (\S+)$", lambda m: f"version: {bump(m.group(1), 'minor')}", text, count=1, flags=re.M)
-    return text, report, [], moved_ids
+    return text, report, unresolved, moved_ids
 
 
 files = (sorted(glob.glob(f"{LIB}/components/*/*/v*/contract.yaml")) if ARGS.components
@@ -263,8 +353,13 @@ files = (sorted(glob.glob(f"{LIB}/components/*/*/v*/contract.yaml")) if ARGS.com
 for path in files:
     if ARGS.only and not any(o in path for o in ARGS.only):
         continue
+    if ARGS.components and is_retired_wrapper(path):
+        # These wrapper contracts are deleted whole in a later task; sweeping
+        # their internal jack now would move it out from under the file
+        # that's about to disappear. Skip entirely - report nothing.
+        continue
     text, report, unresolved, moved_ids = (sweep_component if ARGS.components else sweep_device)(path)
-    if not report:
+    if not report and not unresolved:
         continue
     ids = f" [{', '.join(moved_ids)}]" if moved_ids else ""
     print(f"{path}:{ids} " + ", ".join(f"{k} {v}" for k, v in sorted(report.items())))

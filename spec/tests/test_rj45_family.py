@@ -6,6 +6,7 @@ committed; the numbers are.
 """
 import pathlib
 import re
+import shutil
 import subprocess
 import sys
 import textwrap
@@ -312,3 +313,187 @@ def test_the_sweep_is_minor_when_no_id_is_removed(tmp_path):
     d = tmp_path / "devices/acme/d"; d.mkdir(parents=True); (d / "device.yaml").write_text(lone)
     subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"], check=True)
     assert yaml.safe_load((d / "device.yaml").read_text())["version"] == "1.3.0"
+
+
+# --- Fix round 1: six review findings ------------------------------------
+
+# Finding 1 (critical): the cutout's `at` must shift by half the difference
+# between the CUTOUT's own old size and the new part's size, not by half the
+# difference between the old and new PART sizes. celestica/es1010 port-1 is
+# the real case: cutout size [12.7, 11] already matches the new part
+# (common/rj45-ganged-eth@1, 12.7 x 11) even though the old part
+# (common/rj45-hd@1, 14 x 12) does not - so the cutout must not move at all.
+CUTOUT_FIXTURE = textwrap.dedent("""\
+format: 1
+kind: device
+name: d2
+version: 1.0.0
+manufacturer: Acme
+model: D2
+chassis: {width: 100, height: 40, depth: 30}
+groups:
+  mgmt: {term: Port}
+views:
+  front:
+    size: {w: 100, h: 40}
+    panel:
+      cutouts:
+        - {id: port-1, at: [2.11, 16.1], size: [12.7, 11]}
+    components:
+      placements:
+        - {id: port-1, ref: common/rj45-hd@1, at: [2.11, 16.1], group: mgmt, rel-pos: 1, attrs: {role: mgmt}}
+""")
+
+
+def test_the_sweep_holds_the_cutouts_own_centre_not_the_parts(tmp_path):
+    d = tmp_path / "devices/acme/d2"; d.mkdir(parents=True)
+    (d / "device.yaml").write_text(CUTOUT_FIXTURE)
+    subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"], check=True)
+    data = yaml.safe_load((d / "device.yaml").read_text())
+    cut = data["views"]["front"]["panel"]["cutouts"][0]
+    assert cut["at"] == [2.11, 16.1], "cutout size already matches the new part: its centre must not move"
+    assert cut["size"] == [12.7, 11.0]
+
+
+# Finding 2 (critical): these contracts are retired wrappers deleted in a
+# later task; sweeping their internal `jack:` part now would move it out from
+# under the very file that's about to disappear. Skip by path, report nothing.
+def test_the_sweep_skips_retired_rj45_wrapper_contracts(tmp_path):
+    lib = tmp_path / "lib"
+    for rel in ("components/common/rj45-hd-plain", "components/std/rj45-ganged"):
+        shutil.copytree(LIB / rel, lib / rel)
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(lib), "--components"],
+                        capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert "rj45-hd-plain" not in r.stdout
+
+
+# Finding 3 (important): span() and cutout_span() must be scoped to the
+# current view's line range. Two views carrying the same placement id (as 68
+# non-RJ45 ids do today in variant views) must each be found and moved once.
+SCOPING_FIXTURE = textwrap.dedent("""\
+format: 1
+kind: device
+name: d3
+version: 1.0.0
+manufacturer: Acme
+model: D3
+chassis: {width: 100, height: 40, depth: 30}
+groups:
+  mgmt: {term: Port}
+views:
+  front:
+    size: {w: 100, h: 40}
+    components:
+      placements:
+        - {id: mgmt-eth, ref: std/rj45@1, at: [10.0, 10.0], group: mgmt, rel-pos: 1, attrs: {role: mgmt}}
+  front-lff-12:
+    face: front
+    size: {w: 100, h: 40}
+    components:
+      placements:
+        - {id: mgmt-eth, ref: std/rj45@1, at: [50.0, 10.0], group: mgmt, rel-pos: 1, attrs: {role: mgmt}}
+""")
+
+
+def test_the_sweep_scopes_ids_to_their_own_view(tmp_path):
+    d = tmp_path / "devices/acme/d3"; d.mkdir(parents=True)
+    (d / "device.yaml").write_text(SCOPING_FIXTURE)
+    subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"], check=True)
+    data = yaml.safe_load((d / "device.yaml").read_text())
+    front = {p["id"]: p for p in data["views"]["front"]["components"]["placements"]}
+    variant = {p["id"]: p for p in data["views"]["front-lff-12"]["components"]["placements"]}
+    assert front["mgmt-eth"]["ref"] == "common/rj45-eth@1"
+    assert front["mgmt-eth"]["at"] == [10.1, 10.4]
+    assert variant["mgmt-eth"]["ref"] == "common/rj45-eth@1"
+    assert variant["mgmt-eth"]["at"] == [50.1, 10.4]
+
+
+# Finding 4 (important): sweep_component must report an unresolved part
+# instead of silently skipping it, matching sweep_device's own behaviour.
+# The part's id line is written with two spaces after the colon so span()'s
+# regex (which requires exactly one) cannot find it - a real-shaped miss,
+# not a contrived one.
+UNRESOLVED_CONTRACT = textwrap.dedent("""\
+format: 1
+kind: component
+name: test-card
+version: 1.0.0
+class: card
+profile: networking
+size: {w: 50.0, h: 30.0, d: 10.0}
+parts:
+  - {id:  bad-jack, ref: std/rj45@1, at: [1.0, 1.0]}
+""")
+
+
+def test_the_sweep_reports_unresolved_parts_instead_of_silently_skipping(tmp_path):
+    lib = tmp_path / "lib"
+    contract_dir = lib / "components/acme/test-card/v1"
+    contract_dir.mkdir(parents=True)
+    (contract_dir / "contract.yaml").write_text(UNRESOLVED_CONTRACT)
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(lib), "--components"],
+                        capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert "no parts line" in r.stdout
+
+
+# Finding 5 (important): legend re-pointing must (a) dedup a `for: [...]`
+# list after two lifted ids collapse onto the same jack, and (b) not treat
+# `-` as a word boundary, or `led-mgmt-l` matches inside `led-mgmt-l-2`.
+LEGEND_FIXTURE = textwrap.dedent("""\
+format: 1
+kind: device
+name: d4
+version: 1.0.0
+manufacturer: Acme
+model: D4
+chassis: {width: 100, height: 40, depth: 30}
+groups:
+  mgmt: {term: Port}
+  mgmt-leds: {term: LED}
+views:
+  front:
+    size: {w: 100, h: 40}
+    silkscreen:
+      - {at: [12, 30], text: MGMT, for: [led-mgmt-l, led-mgmt-r]}
+      - {at: [12, 34], text: L2, for: led-mgmt-l-2}
+    components:
+      placements:
+        - {id: mgmt-eth, ref: std/rj45@1, at: [10.0, 10.0], group: mgmt, rel-pos: 1, attrs: {role: mgmt}}
+        - {id: led-mgmt-l, ref: common/led-dot@1, at: [11.2, 21.73], group: mgmt-leds, rel-pos: 1, for: mgmt-eth, attrs: {function: link-1g}}
+        - {id: led-mgmt-r, ref: common/led-dot@1, at: [22.8, 21.73], group: mgmt-leds, rel-pos: 2, for: mgmt-eth, attrs: {function: activity}}
+        - {id: led-mgmt-l-2, ref: common/led-dot@1, at: [70.0, 21.73], group: mgmt-leds, rel-pos: 3, attrs: {function: link-1g}}
+""")
+
+
+def test_the_sweep_dedupes_and_respects_legend_boundaries(tmp_path):
+    d = tmp_path / "devices/acme/d4"; d.mkdir(parents=True)
+    (d / "device.yaml").write_text(LEGEND_FIXTURE)
+    subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"], check=True)
+    data = yaml.safe_load((d / "device.yaml").read_text())
+    legends = data["views"]["front"]["silkscreen"]
+    assert legends[0]["for"] == ["mgmt-eth"], "two lifted ids collapsed onto the same jack must dedup"
+    assert legends[1]["for"] == "led-mgmt-l-2", "a lamp that is NOT lifted must be untouched"
+
+
+# Finding 6 (important, controller ruling): led-a is the component's LOCAL
+# left window. A jack with rotate: 180 presents it on screen-right, so the
+# lifted lamp with the LOWER x maps to led-b (not led-a) when rotated 180.
+ROTATED_FIXTURE = FIXTURE.replace(
+    "{id: mgmt-eth, ref: std/rj45@1, at: [10.0, 10.0], group: mgmt, rel-pos: 1, attrs: {role: mgmt}}",
+    "{id: mgmt-eth, ref: std/rj45@1, at: [10.0, 10.0], group: mgmt, rel-pos: 1, rotate: 180, attrs: {role: mgmt}}",
+)
+assert ROTATED_FIXTURE != FIXTURE, "fixture edit must actually take"
+
+
+def test_the_sweep_flips_handedness_for_a_rotated_jack(tmp_path):
+    d = tmp_path / "devices/acme/d"; d.mkdir(parents=True)
+    (d / "device.yaml").write_text(ROTATED_FIXTURE)
+    subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"], check=True)
+    data = yaml.safe_load((d / "device.yaml").read_text())
+    pl = {p["id"]: p for p in data["views"]["front"]["components"]["placements"]}
+    # led-mgmt-l (lower x, 11.2) is the LEFT lamp; rotated 180 it presents on
+    # screen-right, so its states land on led-b, not led-a.
+    assert pl["mgmt-eth"]["states"]["led-b"] == ["off", {"name": "link-1g", "color": "#22c55e"}]
+    assert pl["mgmt-eth"]["states"]["led-a"] == ["off", {"name": "activity"}]
