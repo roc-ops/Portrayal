@@ -76,3 +76,23 @@ def test_the_index_offers_the_form():
     assert psu["fields"]["watts"]["default"] == "1100W"
     dimm = next(c for c in comps if c["name"] == "dimm-plan")
     assert set(dimm["fields"]) == {"capacity", "speed"}
+
+
+def test_a_lamp_with_states_reads_the_variable(tmp_path):
+    """L74: the R740xd control panel declared amber faults on lamps painted
+    with literal colours, so nothing could ever light them."""
+    d = tmp_path / "x"; (d / "skins").mkdir(parents=True)
+    (d / "skins" / "default.svg").write_text(
+        '<svg xmlns="http://www.w3.org/2000/svg"><rect id="lamp-a" fill="#123456"/>'
+        '<g id="lamp-b" stroke="var(--led-color, #8b9299)"><path d="M0 0"/></g></svg>')
+    c = {"skins": ["default"], "elements": {
+        "lamp-a": {"class": "led", "states": ["off", {"name": "fault", "color": "#eab308"}]},
+        "lamp-b": {"class": "led", "states": ["off", {"name": "fault", "color": "#eab308"}]}}}
+    hits = _caught("L74", lint.lint_component_lamp_colour, d / "contract.yaml", c)
+    assert len(hits) == 1 and "lamp-a" in hits[0], hits
+
+
+def test_every_lit_lamp_in_the_library_reads_the_variable():
+    for p in sorted(LIB.glob("components/*/*/v1/contract.yaml")):
+        c = yaml.safe_load(p.read_text())
+        assert not _caught("L74", lint.lint_component_lamp_colour, p, c), p

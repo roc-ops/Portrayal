@@ -1105,6 +1105,7 @@ export function createViewer(container, opts = {}) {
   }
   const setPulled = paths => coalesce('pulled', paths, applyPulledNow);
   const setStates = map => coalesce('states', map, applyStatesNow);
+  const setFields = map => coalesce('fields', map, applyFieldsNow);   // same queue: latest wins
 
   async function syncLamps(changed) {
     if (!box) return;
@@ -1152,7 +1153,7 @@ export function createViewer(container, opts = {}) {
   // `data-from` text node the part declares; the value replaces it in every
   // texture the part is drawn in. Same route as setStates, and like it the
   // whole map is the new truth - a part left out goes back to its drawing.
-  async function setFields(map) {
+  async function applyFieldsNow(map) {
     const next = {};
     for (const [k, vals] of map instanceof Map ? map : Object.entries(map || {}))
       if (vals && Object.keys(vals).length) next[k] = {...vals};

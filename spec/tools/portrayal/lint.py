@@ -1358,6 +1358,39 @@ def lint_component_fields(path, data, _lib_roots=None):
             err(path, "L73", f"field {k}: default {f['default']!r} is not one of its options")
 
 
+def lint_component_lamp_colour(path, data, _lib_roots=None):
+    """L74: a lamp that declares states has to be painted from the variable.
+
+    A state is a CSS class that sets `--led-color`; a node is lit by reading it
+    - `fill="var(--led-color, <off>)"`, or the stroke for a glyph. A skin node
+    with a literal colour ignores every state its contract declares, in 2D
+    and in 3D alike: the R740xd's control panel declared amber faults on five
+    glyphs and two bars and none of them could ever turn amber.
+    """
+    skins_dir = path.parent / "skins"
+    lit = {k for k, e in (data.get("elements") or {}).items()
+           if isinstance(e, dict) and e.get("states") and e.get("class") == "led"}
+    if not lit:
+        return
+    for skin in (data.get("skins") or ["default"]):
+        sp = skins_dir / f"{skin}.svg"
+        if not sp.exists():
+            continue
+        try:
+            root = ET.parse(sp).getroot()
+        except ET.ParseError:
+            continue
+        for node in root.iter():
+            k = node.get("id")
+            if k not in lit:
+                continue
+            sub = ET.tostring(node, encoding="unicode")
+            if "var(--led-color" not in sub:
+                err(path, "L74", f"{skin}: lamp {k} declares states but its node paints a "
+                                 f"literal colour - no state can light it; use "
+                                 f"var(--led-color, <off colour>) on its fill or stroke")
+
+
 def lint_component_states_render(path, data, lib_roots):
     """L47: a state nothing draws is a state the viewer offers and cannot show.
 
@@ -5459,6 +5492,7 @@ def main():
                 lint_component_relief_confidence(f, d, args.library)
                 lint_component_body_boxes(f, d)
                 lint_component_fields(f, d)
+                lint_component_lamp_colour(f, d)
             n += 1
         for f in sorted(root.glob("devices/**/device.yaml")):
             if args.device and not any(sel in str(f) for sel in args.device):
