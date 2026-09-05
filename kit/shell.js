@@ -1001,7 +1001,9 @@ export function createShell(opts = {}) {
     state.cfg = state.meta.default;
     state.view = state.meta.views[0];
     el.cfg.innerHTML = state.meta.configs
-      .map(c => `<option value="${c.name}"${c.name === state.cfg ? ' selected' : ''}>${c.name}</option>`).join('');
+      // the kind beside the name, so a reader can tell the bare chassis from a
+      // SKU from an illustration without opening device.yaml (#66)
+      .map(c => `<option value="${c.name}"${c.name === state.cfg ? ' selected' : ''}>${c.name}${c.kind ? ` · ${c.kind}` : ''}</option>`).join('');
     el.view.innerHTML = state.meta.views
       .map(v => `<option value="${v}">${v}</option>`).join('');
     if (picker && picker.value !== name) picker.value = name;

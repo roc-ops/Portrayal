@@ -2069,6 +2069,16 @@ def main():
                  "provenance": device.get("provenance") or {},
                  "default": default_cfg,
                  "configs": [{"name": n, "description": c.get("description", ""),
+                              # WHAT KIND OF CONFIGURATION THIS IS - `base`,
+                              # `orderable`, `example` or `model` (#51). Without
+                              # it a page reading the index saw the bare chassis,
+                              # a SKU and somebody's illustration as three equal
+                              # entries and guessed from the name (#66). A parts
+                              # list refuses to price a base; a configurator
+                              # starts from one. `null` only for the `default`
+                              # this renderer makes up when a device declares no
+                              # configurations - nothing is invented for it.
+                              "kind": c.get("kind"),
                               "part-numbers": c.get("part-numbers") or {},
                               "bays": c.get("bays") or {},
                               # WHICH VARIANT VIEW STANDS IN FOR A FACE on this
