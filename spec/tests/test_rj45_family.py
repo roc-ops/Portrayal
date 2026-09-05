@@ -122,3 +122,25 @@ def test_the_v1_jacks_no_longer_claim_the_standard():
     aperture and must not assert conformance to a housing they are not."""
     assert "conforms" not in contract("std/rj45@1")
     assert "conforms" not in contract("std/rj45-ganged@1")
+
+
+def test_common_rj45_eth_composes_the_housing_and_adds_two_lamps():
+    c = contract("common/rj45-eth@1")
+    assert c["size"] == {"w": 15.8, "h": 13.2, "d": 18.6}
+    assert c["parts"] == [{"ref": "std/rj45@2", "id": "jack", "at": [0.0, 0.0], "behind": True}]
+    assert c["elements"]["led-a"]["at"] == [1.2, 11.83] and c["elements"]["led-a"]["size"] == [2.0, 1.1]
+    assert c["elements"]["led-b"]["at"] == [12.6, 11.83]
+    for el in ("led-a", "led-b"):
+        assert c["elements"][el]["class"] == "led"
+        assert c["elements"][el]["states"] == ["off", "link", "activity"], "names only, no colours asserted"
+    assert c["connection-points"]["net"] == {"at": [7.9, 6.6], "direction": "front"}
+    assert "conforms" not in c, "the wrapper composes the standard; it does not restate it"
+
+
+def test_common_rj45_eth_skin_punches_the_opening_through_its_own_face():
+    s = skin("common/rj45-eth@1")
+    assert 'id="led-a"' in s and 'id="led-b"' in s
+    assert "var(--led-color" in s
+    # the face is drawn evenodd with the opening as a hole, so the composed jack
+    # behind it shows through (see common/rj45-port@4's skin comment)
+    assert 'fill-rule="evenodd"' in s
