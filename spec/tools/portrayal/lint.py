@@ -5473,6 +5473,14 @@ def main():
     ap.add_argument("--device", action="append", default=[], metavar="NAME",
                     help="lint only these devices by name or path fragment; "
                          "components are still checked in full")
+    # WARNINGS ARE A PASS BY DEFAULT, AND A CALLER CAN SAY OTHERWISE. The census
+    # rules (L24, L40, L68 and the rest) fire on the day they land and are meant
+    # to shrink, so a run with warnings exits 0 and the gate stays usable. But
+    # exit 0 also meant a script could not tell a clean run from a warning run
+    # without parsing the output (#109). `--strict` makes that a status: exit 2
+    # on any warning, for a caller who wants "no warnings" to be checkable.
+    ap.add_argument("--strict", action="store_true",
+                    help="exit 2 if any warning was raised (default: warnings pass)")
     args = ap.parse_args()
     schemas = Path(args.schemas)
     std_file = schemas / "standards.yaml"
@@ -5617,7 +5625,32 @@ def main():
         for e in ERRORS:
             print(f"  {e}")
         sys.exit(1)
-    print(f"LINT: ok ({n} files)")
+    if args.strict and WARNINGS:
+        print(f"LINT: failed --strict ({n} files, {_count(len(WARNINGS), 'warning')} "
+              f"in {_count(len(_rules(WARNINGS)), 'rule')})")
+        sys.exit(2)
+    print(summary_line(n, WARNINGS))
+
+
+def _rules(warnings):
+    return {w.split("[")[1].split("]")[0] for w in warnings if "[" in w}
+
+
+def _count(n, noun):
+    return f"{n} {noun}" if n == 1 else f"{n} {noun}s"
+
+
+def summary_line(n_files, warnings):
+    """The last line, and it is a verdict. `LINT: ok (600 files)` printed under
+    24 warning blocks read as clean to anyone who looked at the tail - and a PR
+    body did, writing "lint clean at 600 files" over a run carrying 95 warnings
+    (#109). A warning run still passes: the census rules exist to be counted
+    and to shrink. But the count is on the last line now, so the tail cannot
+    say something the rest of the output does not."""
+    if not warnings:
+        return f"LINT: ok ({_count(n_files, 'file')})"
+    return (f"LINT: ok ({_count(n_files, 'file')}, {_count(len(warnings), 'warning')} "
+            f"in {_count(len(_rules(warnings)), 'rule')})")
 
 
 if __name__ == "__main__":

@@ -19,6 +19,8 @@ Quick start (paths are relative to this directory):
 
 ```sh
 python3 tools/portrayal/lint.py --schemas schemas --library ../library
+#   last line: `LINT: ok (641 files, 1695 warnings in 23 rules)` - warnings are
+#   census rules and pass; add --strict to exit 2 on any, --device NAME for one device
 python3 tools/portrayal/render.py ../library/devices/edgecore/as7726-32x/device.yaml \
     --library ../library --out ../library/dist
 (cd ../library && python3 -m http.server 8931)  # browse http://localhost:8931/dist/
