@@ -20,6 +20,17 @@ let THREE, renderer, PXMM, FRU_PATHS;
 // face's own frame, starting `from` mm behind the plane. This resolves either
 // form to a list the two builders (the FRU in a chassis, the part alone) draw
 // the same way; it is pure, so it is checked under node.
+// A rect in a module's own frame, mapped through the module's placement (its
+// translate, and its reflection when `mirror: true`) into face mm. Corners
+// through the matrix, then the min/max, so a mirrored module's box comes out
+// on the mirrored side with a positive width.
+export function localToFace(m, r) {
+  if (!m) return {x: r.x, y: r.y, w: r.w, h: r.h};
+  const pt = (x, y) => ({x: m.a * x + m.c * y + m.e, y: m.b * x + m.d * y + m.f});
+  const p = pt(r.x, r.y), q = pt(r.x + r.w, r.y + r.h);
+  return {x: Math.min(p.x, q.x), y: Math.min(p.y, q.y), w: Math.abs(q.x - p.x), h: Math.abs(q.y - p.y)};
+}
+
 export function bodyBoxes(body, faceW, faceH) {
   const color = body.color || '#3a3f44';
   if (body.boxes && body.boxes.length) {
@@ -621,7 +632,15 @@ export async function extractRelief(url, scope) {
                cls: el.dataset.class, lift: liftOf(el), shelf,
                bodyDepth: +el.dataset.bodyDepth || null, ...frect,
                // its own art, so the plane can be cut to the module's SHAPE
-               svgText: nodeSvg(el, frect)});
+               svgText: nodeSvg(el, frect),
+               // THE MODULE'S OWN FRAME, not its drawn box. A riser's slot
+               // brackets hang 13.4 mm outboard of its plate, so the bbox
+               // starts 13.4 left of the contract's origin - and a body box
+               // placed from the bbox stood that far out through the chassis
+               // wall. This is local mm -> face mm, mirror included, so a box
+               // in the contract's frame lands where the contract says.
+               toFace: (() => { const m = inv.multiply(el.getScreenCTM());
+                                return {a: m.a, b: m.b, c: m.c, d: m.d, e: m.e, f: m.f}; })()});
   }
   for (const el of svg.querySelectorAll('[data-z-out],[data-z-cyl],[data-z-bar],[data-z-uhandle]'))
     el.style.display = 'none';
@@ -1140,9 +1159,10 @@ export async function buildFaceRelief(F, ctx) {
         // riser's PCB and connectors come out with its plate. Side art is
         // for the one-box form; a PCB is a colour.
         for (const b of bodyBoxes(meta.body, f.w, f.h)) {
-          const m = new THREE.Mesh(new THREE.BoxGeometry(b.w, b.h, b.z1 - b.z0),
+          const r = localToFace(f.toFace, b);
+          const m = new THREE.Mesh(new THREE.BoxGeometry(r.w, r.h, b.z1 - b.z0),
             new THREE.MeshLambertMaterial({color: b.color}));
-          m.position.set(LX(f.x + b.x, b.w), LY(f.y + b.y, b.h),
+          m.position.set(LX(r.x, r.w), LY(r.y, r.h),
                          zf - b.z0 - (b.z1 - b.z0) / 2 - 0.05);
           fg.add(m);
         }

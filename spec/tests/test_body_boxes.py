@@ -36,6 +36,13 @@ def test_the_kit_resolves_both_body_forms_to_one_list():
     pcb, c = out["riser"]
     assert (pcb["x"], pcb["z0"], pcb["z1"], pcb["color"]) == (-0.75, 13.9, 184.8, "#1f5138")
     assert (c["z0"], c["z1"], c["color"]) == (47.9, 138.9, "#4a5057")
+    # placed through the module's own transform: riser 1's PCB lands at face
+    # x 13.2, inside the chassis wall, not 13.4 further out where the bbox
+    # of its brackets starts; mirrored, it lands on the other side, positive
+    pl = out["plain"]
+    assert (round(pl["x"], 2), round(pl["y"], 2), round(pl["w"], 2)) == (13.2, 2.6, 1.6)
+    mr = out["mirrored"]
+    assert round(mr["x"], 2) == round(13.95 + 107.59 + 0.75 - 1.6, 2) and round(mr["w"], 2) == 1.6
 
 
 def _caught(code, fn, *a):
