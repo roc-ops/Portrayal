@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: n3100-4c
-version: 1.0.1
+version: 2.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: N3100-4C
@@ -40,6 +40,39 @@ provenance:
     126.35 includes any bracket metal is unstated; the plate drawn in the
     HIG faceplate figure measures consistently with 126.35 excluding the
     bracket tab.
+  the-x-scale-was-anchored-on-the-wrong-edge: >-
+    CORRECTED. The x fractions above were taken at 9.276 px/mm by reading the
+    datasheet's 126.35 as the width of the PLATE. It is not. 126.35 is the whole
+    card; the plate is the standard full-height PCIe bracket at 120.02, and the
+    remaining 6.33 is the PCB and its components standing proud of the metal at
+    the left end - which the render shows directly, their ink breaking below the
+    plate's own lower edge. A bracket cannot be 6.33 over the specification and
+    still enter a slot.
+    Re-anchored on the card's full ink extent, px 7 to 1465, the scale is 11.547
+    px/mm and three governed figures land that had not before: the bracket
+    measures 120.98 against PCIe CEM 5.0 figure 11-5's 120.02 (0.8 percent), the
+    SFP28 pitch 14.30 against the registry's sfp-ganged share of 14.25 (0.4
+    percent), and the four-cage block 58.02 against 4 x 14.25 (1.8 percent).
+    At the old scale the pitch read 18.06, which cannot be right for cages that
+    share walls - the figure shows one unbroken dark run across all four - and
+    the SMA and SMB nuts read 12.90 and 10.06 against threads the datasheet
+    itself names as 1/4-36UNS and 10-32UNF.
+    THE PIXEL READINGS WERE NEVER WRONG, only the anchor. Every feature listed
+    above reproduces to within one pixel under the stated mapping, so each x was
+    converted rather than re-measured.
+    THE Y SCALE STANDS: the plate spans 199 px over the card's 21.95 height,
+    which is 9.066 px/mm against the 9.112 recorded - 0.5 percent, inside the
+    reading error - because the height was anchored on a dimension that IS the
+    face. Only x was wrong.
+  silkscreen-recentred-after-the-rescale: >-
+    A LEGEND'S POSITION IS NOT A POINT THAT SCALES WITH ITS PART. Cutout and
+    component sizes are governed - 4.83 for an SMB hole, 14.5 for an SFP
+    aperture - so they did not move, but a centre is `at` plus half a size and
+    only `at` changed. Converting the labels by the same transform as the parts
+    left seven of them up to 1.54 mm off centre, which L61 reported. They are
+    recentred on their PLACEMENTS, which is what L61 measures: the cutout centre
+    differs wherever the component is wider than its hole, as the SMA jack's 9.5
+    is wider than its 6.35 opening.
   front-layout: >-
     drawing - HIG fig-0005 (straight-on faceplate render, 1471x259 px).
     Gate 1: the plate face measures 1172 x 200 px against the datasheet
@@ -207,54 +240,54 @@ views:
     size: {w: 126.35, h: 21.95}
     panel:
       decor:
-      - {at: [12.72, 3.29], size: [2.6, 2.5], fill: '#17191c'}
-      - {at: [16.87, 3.29], size: [2.6, 2.5], fill: '#17191c'}
-      - {at: [21.02, 3.29], size: [2.6, 2.5], fill: '#17191c'}
-      - {at: [25.17, 3.29], size: [2.6, 2.5], fill: '#17191c'}
-      - {at: [29.32, 3.29], size: [2.6, 2.5], fill: '#17191c'}
-      - {at: [33.47, 3.29], size: [2.6, 2.5], fill: '#17191c'}
-      - {at: [11.10, 7.46], size: [2.4, 2.5], fill: '#17191c'}
-      - {at: [11.10, 11.74], size: [2.4, 2.5], fill: '#17191c'}
-      - {at: [11.10, 15.91], size: [2.4, 2.5], fill: '#17191c'}
-      - {at: [23.72, 7.57], size: [2.5, 2.5], fill: '#17191c'}
-      - {at: [23.72, 11.85], size: [2.5, 2.5], fill: '#17191c'}
-      - {at: [48.36, 2.09], size: [5.9, 2.85], fill: '#e0cd3c', rx: 0.3}
-      - {at: [66.15, 2.09], size: [5.9, 2.85], fill: '#e0cd3c', rx: 0.3}
-      - {at: [83.95, 2.09], size: [5.9, 2.85], fill: '#e0cd3c', rx: 0.3}
-      - {at: [101.95, 2.09], size: [5.9, 2.85], fill: '#e0cd3c', rx: 0.3}
+      - {at: [15.5, 3.29], size: [2.6, 2.5], fill: '#17191c'}
+      - {at: [18.83, 3.29], size: [2.6, 2.5], fill: '#17191c'}
+      - {at: [22.17, 3.29], size: [2.6, 2.5], fill: '#17191c'}
+      - {at: [25.5, 3.29], size: [2.6, 2.5], fill: '#17191c'}
+      - {at: [28.84, 3.29], size: [2.6, 2.5], fill: '#17191c'}
+      - {at: [32.17, 3.29], size: [2.6, 2.5], fill: '#17191c'}
+      - {at: [14.2, 7.46], size: [2.4, 2.5], fill: '#17191c'}
+      - {at: [14.2, 11.74], size: [2.4, 2.5], fill: '#17191c'}
+      - {at: [14.2, 15.91], size: [2.4, 2.5], fill: '#17191c'}
+      - {at: [24.34, 7.57], size: [2.5, 2.5], fill: '#17191c'}
+      - {at: [24.34, 11.85], size: [2.5, 2.5], fill: '#17191c'}
+      - {at: [44.13, 2.09], size: [5.9, 2.85], fill: '#e0cd3c', rx: 0.3}
+      - {at: [58.42, 2.09], size: [5.9, 2.85], fill: '#e0cd3c', rx: 0.3}
+      - {at: [72.72, 2.09], size: [5.9, 2.85], fill: '#e0cd3c', rx: 0.3}
+      - {at: [87.18, 2.09], size: [5.9, 2.85], fill: '#e0cd3c', rx: 0.3}
       cutouts:
-      - {id: clk-1pps, at: [16.24, 8.59], size: [4.83, 4.83], shape: circle}
-      - {id: clk-10mhz, at: [28.96, 8.59], size: [4.83, 4.83], shape: circle}
-      - {id: gnss-ant, at: [116.25, 6.60], size: [6.35, 6.35], shape: circle}
-      - {id: port-0, at: [40.37, 6.85], size: [14.5, 10.0], shape: rect}
-      - {id: port-1, at: [58.43, 6.85], size: [14.5, 10.0], shape: rect}
-      - {id: port-2, at: [76.49, 6.85], size: [14.5, 10.0], shape: rect}
-      - {id: port-3, at: [94.55, 6.85], size: [14.5, 10.0], shape: rect}
-      - {id: led-port-0, at: [42.99, 3.17], size: [2.0, 2.0], shape: circle}
-      - {id: led-port-1, at: [60.88, 3.17], size: [2.0, 2.0], shape: circle}
-      - {id: led-port-2, at: [78.67, 3.17], size: [2.0, 2.0], shape: circle}
-      - {id: led-port-3, at: [96.46, 3.17], size: [2.0, 2.0], shape: circle}
-      - {id: led-sync, at: [23.96, 17.22], size: [2.0, 2.0], shape: circle}
+      - {id: clk-1pps, at: [18.54, 8.59], size: [4.83, 4.83], shape: circle}
+      - {id: clk-10mhz, at: [28.76, 8.59], size: [4.83, 4.83], shape: circle}
+      - {id: gnss-ant, at: [98.98, 6.60], size: [6.35, 6.35], shape: circle}
+      - {id: port-0, at: [37.71, 6.85], size: [14.5, 10.0], shape: rect}
+      - {id: port-1, at: [52.22, 6.85], size: [14.5, 10.0], shape: rect}
+      - {id: port-2, at: [66.73, 6.85], size: [14.5, 10.0], shape: rect}
+      - {id: port-3, at: [81.24, 6.85], size: [14.5, 10.0], shape: rect}
+      - {id: led-port-0, at: [39.82, 3.17], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-1, at: [54.19, 3.17], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-2, at: [68.48, 3.17], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-3, at: [82.77, 3.17], size: [2.0, 2.0], shape: circle}
+      - {id: led-sync, at: [24.53, 17.22], size: [2.0, 2.0], shape: circle}
     silkscreen:
-    - {at: [18.65, 18.3], text: 1PPS, font-size: 2.4, anchor: middle, for: clk-1pps}
-    - {at: [31.37, 18.3], text: 10MHZ, font-size: 2.4, anchor: middle, for: clk-10mhz}
-    - {at: [119.42, 18.3], text: GNSS ANT, font-size: 2.4, anchor: middle, for: gnss-ant}
-    - {at: [51.31, 4.4], text: '0', font-size: 2.2, anchor: middle, fill: '#141414', for: port-0}
-    - {at: [69.10, 4.4], text: '1', font-size: 2.2, anchor: middle, fill: '#141414', for: port-1}
-    - {at: [86.90, 4.4], text: '2', font-size: 2.2, anchor: middle, fill: '#141414', for: port-2}
-    - {at: [104.90, 4.4], text: '3', font-size: 2.2, anchor: middle, fill: '#141414', for: port-3}
+    - {at: [20.95, 18.3], text: 1PPS, font-size: 2.4, anchor: middle, for: clk-1pps}
+    - {at: [31.17, 18.3], text: 10MHZ, font-size: 2.4, anchor: middle, for: clk-10mhz}
+    - {at: [102.15, 18.3], text: GNSS ANT, font-size: 2.4, anchor: middle, for: gnss-ant}
+    - {at: [44.96, 4.4], text: '0', font-size: 2.2, anchor: middle, fill: '#141414', for: port-0}
+    - {at: [59.47, 4.4], text: '1', font-size: 2.2, anchor: middle, fill: '#141414', for: port-1}
+    - {at: [73.98, 4.4], text: '2', font-size: 2.2, anchor: middle, fill: '#141414', for: port-2}
+    - {at: [88.49, 4.4], text: '3', font-size: 2.2, anchor: middle, fill: '#141414', for: port-3}
     components:
       placements:
-      - {ref: std/sfp@1, id: port-0, at: [40.37, 6.85], group: sfp28, rel-pos: 0}
-      - {ref: std/sfp@1, id: port-1, at: [58.43, 6.85], group: sfp28, rel-pos: 1}
-      - {ref: std/sfp@1, id: port-2, at: [76.49, 6.85], group: sfp28, rel-pos: 2}
-      - {ref: std/sfp@1, id: port-3, at: [94.55, 6.85], group: sfp28, rel-pos: 3}
-      - {ref: common/smb-jack@1, id: clk-1pps, at: [15.15, 7.5], group: timing, rel-pos: 2, attrs: {role: 1pps-io}}
-      - {ref: common/smb-jack@1, id: clk-10mhz, at: [27.87, 7.5], group: timing, rel-pos: 3, attrs: {role: 10mhz-io}}
-      - {ref: common/sma-jack@1, id: gnss-ant, at: [114.67, 5.02], group: timing, rel-pos: 1, attrs: {role: gnss-in}}
+      - {ref: std/sfp@1, id: port-0, at: [37.71, 6.85], group: sfp28, rel-pos: 0}
+      - {ref: std/sfp@1, id: port-1, at: [52.22, 6.85], group: sfp28, rel-pos: 1}
+      - {ref: std/sfp@1, id: port-2, at: [66.73, 6.85], group: sfp28, rel-pos: 2}
+      - {ref: std/sfp@1, id: port-3, at: [81.24, 6.85], group: sfp28, rel-pos: 3}
+      - {ref: common/smb-jack@1, id: clk-1pps, at: [17.45, 7.5], group: timing, rel-pos: 2, attrs: {role: 1pps-io}}
+      - {ref: common/smb-jack@1, id: clk-10mhz, at: [27.67, 7.5], group: timing, rel-pos: 3, attrs: {role: 10mhz-io}}
+      - {ref: common/sma-jack@1, id: gnss-ant, at: [97.4, 5.02], group: timing, rel-pos: 1, attrs: {role: gnss-in}}
       - ref: common/led-dot@1
         id: led-port-0
-        at: [42.99, 3.17]
+        at: [39.82, 3.17]
         for: port-0
         group: sfp28-leds
         rel-pos: 0
@@ -266,7 +299,7 @@ views:
           less TX/RX activity)'
       - ref: common/led-dot@1
         id: led-port-1
-        at: [60.88, 3.17]
+        at: [54.19, 3.17]
         for: port-1
         group: sfp28-leds
         rel-pos: 1
@@ -278,7 +311,7 @@ views:
           less TX/RX activity)'
       - ref: common/led-dot@1
         id: led-port-2
-        at: [78.67, 3.17]
+        at: [68.48, 3.17]
         for: port-2
         group: sfp28-leds
         rel-pos: 2
@@ -290,7 +323,7 @@ views:
           less TX/RX activity)'
       - ref: common/led-dot@1
         id: led-port-3
-        at: [96.46, 3.17]
+        at: [82.77, 3.17]
         for: port-3
         group: sfp28-leds
         rel-pos: 3
@@ -302,7 +335,7 @@ views:
           less TX/RX activity)'
       - ref: common/led-dot@1
         id: led-sync
-        at: [23.96, 17.22]
+        at: [24.53, 17.22]
         for: chassis
         group: status-leds
         rel-pos: 1
@@ -318,7 +351,7 @@ views:
           disabled or in free-run/holdover), Blinking Amber 1/sec (thermal
           alert), Blinking Amber 4/sec (thermal NMI, all Ethernet ports
           disabled)'
-      - {ref: common/screw-head@1, id: plate-screw, at: [4.61, 5.66], for: chassis, group: plate-screws, rel-pos: 1}
+      - {ref: common/screw-head@1, id: plate-screw, at: [8.99, 5.66], for: chassis, group: plate-screws, rel-pos: 1}
   rear:
     size: {w: 126.35, h: 21.95}
     panel:
@@ -352,6 +385,24 @@ views:
       decor:
       - {at: [0, 0], size: [126.35, 181.07], fill: '#1e5c2b'}
 gaps:
+- what: no-dimensioned-drawing
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    EVERY POSITION ON THIS FACE IS SCALED OFF A RENDER, not read off a drawing.
+    UfiSpace publishes no mechanical drawing for this card: the HIG carries five
+    renders and the datasheet is two pages whose only dimension line is the
+    overall 126.35 x 181.07 x 21.95. The scale is now anchored on the PCIe
+    bracket's governed 120.02 and corroborated by the registry's sfp-ganged
+    pitch, which is far better than the datasheet width it replaced - but three
+    figures agreeing to under 2 percent is corroboration, not measurement.
+    What a drawing would settle and this cannot - whether the connector opening
+    is the specification's 12.06 or something larger. The render cannot show it
+    because the cages fill the opening and their bezels cover the metal around
+    it, which is also why the bracket is not composed here yet.
+  wanted: >-
+    a dimensioned mechanical drawing of the N3100-4C faceplate from UfiSpace, or
+    a square-on photograph with a scale in frame
 - what: rear-edge-connector
   scope: [rear]
   reason: vendor-silent
