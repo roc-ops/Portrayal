@@ -6,7 +6,9 @@ committed; the numbers are.
 """
 import pathlib
 import re
+import subprocess
 import sys
+import textwrap
 
 import pytest
 import yaml
@@ -216,3 +218,97 @@ def test_l76_counts_a_console_with_lamps_and_a_retired_part():
     assert len(ws) == 1
     assert "1 console/timing jack(s) on a lamped part" in ws[0]
     assert "1 on a retired RJ45 part" in ws[0]
+
+
+SWEEP = ROOT / "spec/tools/portrayal/sweep_rj45.py"
+
+FIXTURE = textwrap.dedent("""\
+format: 1
+kind: device
+name: d
+version: 1.2.3
+manufacturer: Acme
+model: D
+chassis: {width: 100, height: 40, depth: 30}
+groups:
+  mgmt: {term: Port}
+  mgmt-leds: {term: LED}
+  console: {term: Port}
+views:
+  front:
+    size: {w: 100, h: 40}
+    panel:
+      cutouts:
+        - {id: mgmt-eth, at: [10.0, 10.0], size: [16, 14]}
+        - {id: console, at: [40.0, 10.0], size: [16, 14]}
+    silkscreen:
+      - {at: [12, 30], text: MGMT, for: mgmt-eth}
+      - {at: [12, 32], text: L, for: led-mgmt-l}
+    components:
+      placements:
+        - {id: mgmt-eth, ref: std/rj45@1, at: [10.0, 10.0], group: mgmt, rel-pos: 1, attrs: {role: mgmt}}
+        - {id: led-mgmt-l, ref: common/led-dot@1, at: [11.2, 21.73], group: mgmt-leds, rel-pos: 1, for: mgmt-eth,
+           states: ['off', {name: link-1g, color: '#22c55e'}]}
+        - {id: led-mgmt-r, ref: common/led-dot@1, at: [22.8, 21.73], group: mgmt-leds, rel-pos: 2, for: mgmt-eth, attrs: {function: activity}}
+        - {id: console, ref: std/rj45@1, at: [40.0, 10.0], group: console, rel-pos: 2}
+""")
+
+
+def sweep(tmp_path, *args):
+    d = tmp_path / "devices/acme/d"; d.mkdir(parents=True)
+    (d / "device.yaml").write_text(FIXTURE)
+    # the tool resolves component classes through --library; give it the real library
+    # for components and the tmp tree for devices
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), *args],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    return r.stdout, (d / "device.yaml").read_text()
+
+
+def test_the_sweep_reports_and_changes_nothing_without_apply(tmp_path):
+    out, text = sweep(tmp_path)
+    assert "mgmt-eth" in out and "console" in out
+    assert text == FIXTURE
+
+
+def test_the_sweep_moves_by_role_and_holds_the_centre(tmp_path):
+    _, text = sweep(tmp_path, "--apply")
+    d = yaml.safe_load(text)
+    pl = {p["id"]: p for p in d["views"]["front"]["components"]["placements"]}
+    assert pl["mgmt-eth"]["ref"] == "common/rj45-eth@1"
+    assert pl["mgmt-eth"]["at"] == [10.1, 10.4]          # (16-15.8)/2, (14-13.2)/2
+    assert pl["console"]["ref"] == "std/rj45@2"
+    assert pl["console"]["at"] == [40.1, 10.4]
+
+
+def test_the_sweep_lifts_the_lamps_into_the_jack(tmp_path):
+    _, text = sweep(tmp_path, "--apply")
+    d = yaml.safe_load(text)
+    pl = {p["id"]: p for p in d["views"]["front"]["components"]["placements"]}
+    assert "led-mgmt-l" not in pl and "led-mgmt-r" not in pl
+    assert pl["mgmt-eth"]["states"]["led-a"] == ["off", {"name": "link-1g", "color": "#22c55e"}]
+    assert pl["mgmt-eth"]["states"]["led-b"] == ["off", {"name": "activity"}]
+    legends = [s["for"] for s in d["views"]["front"]["silkscreen"]]
+    assert legends == ["mgmt-eth", "mgmt-eth"]
+
+
+def test_the_sweep_resizes_the_cutouts_and_bumps_major(tmp_path):
+    _, text = sweep(tmp_path, "--apply")
+    d = yaml.safe_load(text)
+    cuts = {c["id"]: c for c in d["views"]["front"]["panel"]["cutouts"]}
+    assert cuts["mgmt-eth"]["size"] == [15.8, 13.2] and cuts["mgmt-eth"]["at"] == [10.1, 10.4]
+    assert d["version"] == "2.0.0", "two ids were removed"
+    # and the prose survived: textual edit, not a dump
+    assert "text: MGMT" in text
+
+
+def test_the_sweep_is_minor_when_no_id_is_removed(tmp_path):
+    # strip both lamp placements (led-mgmt-l's spans two lines) and the
+    # silkscreen entry that names one of them, leaving valid YAML with no
+    # lamp id anywhere for the sweep to remove
+    lone = re.sub(r"      - \{at: \[12, 32\].*?for: led-mgmt-l\}\n", "", FIXTURE)
+    lone = re.sub(r"        - \{id: led-mgmt-l.*?\n.*?\n", "", lone)
+    lone = re.sub(r"        - \{id: led-mgmt-r.*?\n", "", lone)
+    d = tmp_path / "devices/acme/d"; d.mkdir(parents=True); (d / "device.yaml").write_text(lone)
+    subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"], check=True)
+    assert yaml.safe_load((d / "device.yaml").read_text())["version"] == "1.3.0"
