@@ -1,0 +1,35 @@
+format: 1
+kind: component
+name: rj45-ganged
+version: 2.0.0
+class: port
+profile: networking
+conforms: rj45-ganged
+interface: rj45
+description: One cell of a shared-wall 2xN RJ45 block - the 12.7 x 11.0 face between
+  neighbouring ports on a 13.97 pitch, with the same three-tier 8P8C interface as
+  the single housing recessed into it. Rows mirror; the upper row is this part
+  rotated 180 at placement.
+size: {w: 12.7, h: 11.0, d: 18.6}
+attrs: {media: rj45}
+provenance:
+  size: measured - ES1010 square-on photo (13.99 pitch) and TE 2497310-1 2x6 magjack CAD
+    (13.9695 autocorrelation) agree on a 13.97 pitch; 12.7 is the face between shared
+    walls. Unchanged from v1.
+  depth: drawing - TE 1734264 side view, 18.6; a ganged block shares the single jack's
+    interface depth.
+  cavity: drawing - TE 1734264 front view, the same three tiers as std/rj45@2 - body
+    11.91 x 6.83, shoulder 6.30 x 1.69, slot 4.06 wide to the lower edge. In an 11.0 cell
+    the body's top edge sits 0.5 below the cell's top edge (estimated; the shared wall
+    is thin) and the slot runs 1.98. v1's 11.89 x 6.85 body and 4.0 slot were right to
+    0.02; the shoulder is new.
+  pins: drawing - TE 1734264 detail C, eight contacts 0.46 wide on a 1.02 pitch.
+elements:
+  opening: {at: [0.395, 0.5], size: [11.91, 10.5], class: cutout}
+relief:
+  wall: '#3a3f45'
+  cavity: cavity
+  size: {w: 11.91, h: 10.5}
+connection-points:
+  mate: {at: [6.35, 5.1], direction: front}
+skins: [default]

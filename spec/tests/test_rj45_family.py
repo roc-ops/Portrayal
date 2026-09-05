@@ -105,3 +105,20 @@ def test_std_rj45_v2_lints_clean(tmp_path):
     data = lint.lint_component(p, jsonschema.Draft202012Validator(schema))
     lint._skin_checks(p, data)        # L3 (every element id in the skin) and L4 (viewBox = size)
     assert not [e for e in lint.ERRORS if "[L9]" in e or "[L1]" in e or "[L3]" in e or "[L4]" in e], lint.ERRORS
+
+
+def test_std_rj45_ganged_v2_is_the_cell():
+    c = contract("std/rj45-ganged@2")
+    assert c["size"] == {"w": 12.7, "h": 11.0, "d": 18.6}
+    assert c["conforms"] == "rj45-ganged" and c["interface"] == "rj45"
+    assert c["relief"]["size"] == {"w": 11.91, "h": 10.5}
+    assert c["connection-points"]["mate"] == {"at": [6.35, 5.1], "direction": "front"}
+    widths = tier_widths(cavity_path("std/rj45-ganged@2"))
+    assert 11.91 in widths and 4.06 in widths and 2.805 in widths and 1.12 in widths, widths
+
+
+def test_the_v1_jacks_no_longer_claim_the_standard():
+    """They keep drawing until the sweeps retire them, but they were the 16 x 14
+    aperture and must not assert conformance to a housing they are not."""
+    assert "conforms" not in contract("std/rj45@1")
+    assert "conforms" not in contract("std/rj45-ganged@1")
