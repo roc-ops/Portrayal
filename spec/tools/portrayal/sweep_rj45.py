@@ -45,6 +45,18 @@ SINGLE = {"std/rj45@1", "common/rj45-port@4", "common/rj45-bezel@2", "common/rj4
           "common/rj45-shielded@2", "common/rj45-jack@2"}
 GANGED = {"std/rj45-ganged@1", "common/rj45-hd@1", "common/rj45-hd-plain@1"}
 
+# Controller ruling (fix round 4): all four NEW parts are pins-up, keyway-down
+# when unrotated. Two OLD parts drew the OTHER way up: common/rj45-port@4
+# composes its inner std/rj45@1 with an internal `rotate: 180` (its own
+# description says "stepped keyway up"), and common/rj45-jack@2 is "pins
+# down, clip notch up". The sweep only ever edits ref/at/skin/states - it
+# never touches a placement's own `rotate:` - so a placement moved off either
+# of these two now presents the flipped face at the SAME rotate value it
+# always had. Flip it: new_rotate = (old_rotate + 180) % 360, so the part
+# underneath turns over and the jack keeps its original, verified orientation
+# on the faceplate.
+FLIP_ORIGIN = {"common/rj45-port@4", "common/rj45-jack@2"}
+
 # Controller ruling (ufispace s9* batch): a lamp drawn within this many mm of
 # the jack's footprint counts as INSIDE it. The vendor drawings place some
 # lamps right on the jack's drawn edge - that is a statement about where the
@@ -172,6 +184,36 @@ def read_at(text):
     return float(m.group(1)), float(m.group(2))
 
 
+def flip_rotate(block, old_rotate, new_rotate):
+    """Rewrite a placement/part block's `rotate:` from old_rotate to the
+    FLIPPED new_rotate the caller already computed (only 0 -> 180 or
+    180 -> 0 ever arise here, from FLIP_ORIGIN). Flow style (`- {...}`, one
+    row or wrapped over several) gets `rotate: 180` spliced in right after
+    `at: [...]`, or the existing entry - and its comma - removed. Block
+    style (one `key: value` per line, no braces) gets a new `rotate: 180`
+    line inserted right after the `at:` line, or that line deleted."""
+    if new_rotate == old_rotate:
+        return block
+    lines = block.split("\n")
+    flow = bool(re.match(r"^\s*-\s*\{", lines[0]))
+    if new_rotate == 180:
+        if flow:
+            return re.sub(r"(at: \[[^\]\n]*\])", r"\1, rotate: 180", block, count=1)
+        indent = (len(lines[1]) - len(lines[1].lstrip(" ")) if len(lines) > 1
+                  else len(lines[0]) - len(lines[0].lstrip(" ")) + 2)
+        for i, l in enumerate(lines):
+            if re.search(r"\bat:\s*\[", l):
+                lines.insert(i + 1, " " * indent + "rotate: 180")
+                break
+        return "\n".join(lines)
+    if flow:
+        new = re.sub(r",\s*rotate: 180\b", "", block, count=1)
+        if new == block:
+            new = re.sub(r"rotate: 180,\s*", "", block, count=1)
+        return new
+    return "\n".join(l for l in lines if not re.match(r"^\s*rotate:\s*180\s*$", l))
+
+
 def derived_aperture(ref, jack_at, rot):
     """The (at, size) the aperture ref presents when placed at jack_at, via
     lint's own `_aperture_of` - the same recipe L63 uses to say what a cutout
@@ -265,6 +307,7 @@ def sweep_device(path):
                 lifted[pid] = inside[pid]
         # 1-2. move jacks, holding centres; 3. write lifted states onto them
         failed = set()
+        final_rotates = {}          # pid -> rotate AFTER any FLIP_ORIGIN flip
         for pid, (old, new) in moves.items():
             lo, hi = view_bounds(rows, vname)   # recomputed each time: earlier
             s = span(rows, pid, lo, hi)         # edits in this view shift lines
@@ -276,6 +319,16 @@ def sweep_device(path):
             block = "\n".join(rows[s[0]:s[1] + 1])
             block = block.replace(f"ref: {old}", f"ref: {new}", 1)
             block = edit_at(block, (ow - nw) / 2, (oh - nh) / 2)
+            # A jack moved off a FLIP_ORIGIN part turns over: the new part's
+            # keyway-down default is the OLD part's keyway-up default rotated
+            # 180, so the placement's own rotate must gain (or lose) that 180
+            # to keep drawing the same, already-verified face.
+            old_rotate = (by_id[pid].get("rotate") or 0) % 360
+            new_rotate = (old_rotate + 180) % 360 if old in FLIP_ORIGIN else old_rotate
+            if new_rotate != old_rotate:
+                block = flip_rotate(block, old_rotate, new_rotate)
+                report["rotation flipped"] += 1
+            final_rotates[pid] = new_rotate
             # B. a skin the new part does not declare cannot be asked for -
             # all four new parts declare skins: [default], so any other skin
             # a swept placement named (e.g. common/rj45-bezel@2's `dark`) is
@@ -290,8 +343,10 @@ def sweep_device(path):
                 # lower-x lamp maps to led-a. A jack rotated 180 presents that
                 # local-left window on screen-right, so the mapping flips:
                 # lower-x -> led-b. Any other rotation is outside what the
-                # corpus has verified - report it rather than guess.
-                rot = (by_id[pid].get("rotate") or 0) % 360
+                # corpus has verified - report it rather than guess. Uses the
+                # FINAL rotate (after any FLIP_ORIGIN flip above), since that
+                # is the orientation the NEW part actually draws.
+                rot = final_rotates.get(pid, (by_id[pid].get("rotate") or 0) % 360)
                 if rot == 180:
                     order = ("led-b", "led-a")
                 elif rot == 0:
@@ -461,7 +516,14 @@ def sweep_component(path):
             continue
         (ow, oh), (nw, nh) = size(ref), size(new)
         block = "\n".join(rows[s[0]:s[1] + 1]).replace(f"ref: {ref}", f"ref: {new}", 1)
-        rows[s[0]:s[1] + 1] = edit_at(block, (ow - nw) / 2, (oh - nh) / 2).split("\n")
+        block = edit_at(block, (ow - nw) / 2, (oh - nh) / 2)
+        # Same FLIP_ORIGIN turnover as sweep_device, for a `parts:` entry.
+        old_rotate = (p.get("rotate") or 0) % 360
+        new_rotate = (old_rotate + 180) % 360 if ref in FLIP_ORIGIN else old_rotate
+        if new_rotate != old_rotate:
+            block = flip_rotate(block, old_rotate, new_rotate)
+            report["rotation flipped"] += 1
+        rows[s[0]:s[1] + 1] = block.split("\n")
         report["parts moved"] += 1
         moved_ids.append(str(p["id"]))
     text = "\n".join(rows)

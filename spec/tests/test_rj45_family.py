@@ -745,3 +745,134 @@ def test_a_lamp_15mm_outside_the_box_is_external(tmp_path):
     assert pl["mgmt-eth"]["ref"] == "std/rj45@2"
     assert "led-mgmt-l" in pl, "beyond LAMP_EDGE_TOL - stays a separate placement, not lifted"
     assert "states" not in pl["mgmt-eth"]
+
+
+# --- Fix round 4: orientation (a jack off a keyway-up part turns over) ----
+#
+# Controller ruling: all four NEW parts are pins-up, keyway-down when
+# unrotated. common/rj45-port@4 and common/rj45-jack@2 (FLIP_ORIGIN) are the
+# other way up, so a placement moved off either one needs its `rotate`
+# flipped 180 to keep drawing the same, already-verified face.
+FLIP_FIXTURE = textwrap.dedent("""\
+format: 1
+kind: device
+name: d10
+version: 1.0.0
+manufacturer: Acme
+model: D10
+chassis: {width: 100, height: 40, depth: 30}
+groups:
+  mgmt: {term: Port}
+views:
+  front:
+    size: {w: 100, h: 40}
+    components:
+      placements:
+        - {id: mgmt, ref: common/rj45-port@4, at: [10.0, 10.0], group: mgmt, rel-pos: 1, attrs: {role: mgmt}}
+""")
+
+FLIP_FIXTURE_ROTATED = FLIP_FIXTURE.replace(
+    "{id: mgmt, ref: common/rj45-port@4, at: [10.0, 10.0], group: mgmt, rel-pos: 1, attrs: {role: mgmt}}",
+    "{id: mgmt, ref: common/rj45-port@4, at: [10.0, 10.0], rotate: 180, group: mgmt, rel-pos: 1, attrs: {role: mgmt}}",
+)
+assert FLIP_FIXTURE_ROTATED != FLIP_FIXTURE, "fixture edit must actually take"
+
+# A jack already keyway-down (common/rj45-bezel@2 is not in FLIP_ORIGIN) must
+# not have its rotate touched, and no flip reported - same size (17.0x14.9)
+# as common/rj45-port@4, so the `at` does not move either, isolating the
+# rotate behaviour under test.
+NO_FLIP_FIXTURE = textwrap.dedent("""\
+format: 1
+kind: device
+name: d11
+version: 1.0.0
+manufacturer: Acme
+model: D11
+chassis: {width: 100, height: 40, depth: 30}
+groups:
+  mgmt: {term: Port}
+views:
+  front:
+    size: {w: 100, h: 40}
+    components:
+      placements:
+        - {id: console, ref: common/rj45-bezel@2, at: [10.0, 10.0], group: mgmt, rel-pos: 1, attrs: {role: console}}
+""")
+
+# Handedness must key off the FINAL rotate: this jack has no rotate of its
+# own, so before the flip it would present led-a/led-b unswapped, but the
+# flip to 180 means the lower-x lamp (link) actually lands on screen-right.
+HANDEDNESS_FLIP_FIXTURE = textwrap.dedent("""\
+format: 1
+kind: device
+name: d12
+version: 1.0.0
+manufacturer: Acme
+model: D12
+chassis: {width: 100, height: 40, depth: 30}
+groups:
+  mgmt: {term: Port}
+  mgmt-leds: {term: LED}
+views:
+  front:
+    size: {w: 100, h: 40}
+    components:
+      placements:
+        - {id: mgmt, ref: common/rj45-port@4, at: [10.0, 10.0], group: mgmt, rel-pos: 1, attrs: {role: mgmt}}
+        - {id: led-l, ref: common/led-dot@1, at: [11.2, 21.73], group: mgmt-leds, rel-pos: 1, for: mgmt, attrs: {function: link}}
+        - {id: led-r, ref: common/led-dot@1, at: [22.8, 21.73], group: mgmt-leds, rel-pos: 2, for: mgmt, attrs: {function: activity}}
+""")
+
+
+def test_a_jack_off_rj45_port_4_gains_rotate_180(tmp_path):
+    d = tmp_path / "devices/acme/d10"; d.mkdir(parents=True)
+    (d / "device.yaml").write_text(FLIP_FIXTURE)
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert "rotation flipped 1" in r.stdout
+    data = yaml.safe_load((d / "device.yaml").read_text())
+    pl = {p["id"]: p for p in data["views"]["front"]["components"]["placements"]}
+    assert pl["mgmt"]["ref"] == "common/rj45-eth@1"
+    assert pl["mgmt"]["rotate"] == 180
+
+
+def test_a_jack_off_rj45_port_4_already_rotated_180_loses_the_rotate_key(tmp_path):
+    d = tmp_path / "devices/acme/d10"; d.mkdir(parents=True)
+    (d / "device.yaml").write_text(FLIP_FIXTURE_ROTATED)
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert "rotation flipped 1" in r.stdout
+    data = yaml.safe_load((d / "device.yaml").read_text())
+    pl = {p["id"]: p for p in data["views"]["front"]["components"]["placements"]}
+    assert pl["mgmt"]["ref"] == "common/rj45-eth@1"
+    assert "rotate" not in pl["mgmt"]
+
+
+def test_a_jack_already_keyway_down_is_not_flipped(tmp_path):
+    d = tmp_path / "devices/acme/d11"; d.mkdir(parents=True)
+    (d / "device.yaml").write_text(NO_FLIP_FIXTURE)
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert "rotation flipped" not in r.stdout
+    data = yaml.safe_load((d / "device.yaml").read_text())
+    pl = {p["id"]: p for p in data["views"]["front"]["components"]["placements"]}
+    assert pl["console"]["ref"] == "std/rj45@2"
+    assert "rotate" not in pl["console"]
+
+
+def test_handedness_uses_the_final_rotate_after_the_flip(tmp_path):
+    d = tmp_path / "devices/acme/d12"; d.mkdir(parents=True)
+    (d / "device.yaml").write_text(HANDEDNESS_FLIP_FIXTURE)
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    data = yaml.safe_load((d / "device.yaml").read_text())
+    pl = {p["id"]: p for p in data["views"]["front"]["components"]["placements"]}
+    assert pl["mgmt"]["rotate"] == 180
+    # led-l (lower x, 11.2, function: link) is the LEFT lamp. Final rotate is
+    # 180 (flipped from absent/0), so it presents on screen-right: led-b.
+    assert pl["mgmt"]["states"]["led-b"] == ["off", {"name": "link"}]
+    assert pl["mgmt"]["states"]["led-a"] == ["off", {"name": "activity"}]
