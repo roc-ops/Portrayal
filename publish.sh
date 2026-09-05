@@ -32,13 +32,25 @@ OUT="${1:-library/dist}"
 # From an empty directory, so a file the exporter no longer produces cannot
 # survive as a leftover - which is how a renamed device type used to linger.
 rm -rf library/exports
-python3 spec/tools/portrayal/dcim_export.py --dist "$OUT" \
-  --out library/exports --nos arcos --nos sonic ${IMAGES+"${IMAGES[@]}"} >/dev/null
-# Module types are per component, not per device: one pass over the index.
-# --images for the same reason the device pass takes it - it also renders each
-# card's faceplate into module-images/. *.png is gitignored, so this costs the
-# repository nothing and gives a local run the pictures.
+# ONE PROCESS PER DEVICE, IN PARALLEL, THE WAY build.sh RENDERS. The YAML is
+# under two seconds for the whole library; the pictures behind it were 136
+# seconds in one process on 84 devices (#37), because cairosvg rasterises one
+# elevation at a time and the loop was serial only because it was written as
+# one. Each device reads the build and writes its own files under its own
+# manufacturer, so nothing here shares state. Capped at the core count, as in
+# build.sh. `xargs` exits non-zero if any device does, and `set -e` stops here.
+#
+# The module pass is per component rather than per device and writes to
+# module-types/ and module-images/, which the device pass never touches - so it
+# runs alongside rather than after, and is waited on by pid so its failure is
+# not lost behind the device pass succeeding.
+JOBS="${JOBS:-$(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 4)}"
 python3 spec/tools/portrayal/dcim_export.py --dist "$OUT" --modules \
-  --out library/exports ${IMAGES+"${IMAGES[@]}"} >/dev/null
+  --out library/exports ${IMAGES+"${IMAGES[@]}"} >/dev/null &
+modules_pid=$!
+python3 -c "import json,sys; print('\n'.join(d['name'] for d in json.load(open(sys.argv[1]))['devices']))" "$OUT/devices.json" \
+  | xargs -P "$JOBS" -I{} python3 spec/tools/portrayal/dcim_export.py --dist "$OUT" \
+      --out library/exports --device {} --nos arcos --nos sonic ${IMAGES+"${IMAGES[@]}"} >/dev/null
+wait "$modules_pid"
 
 echo "exported $(find library/exports -name '*.yaml' | wc -l | tr -d ' ') documents -> library/exports"
