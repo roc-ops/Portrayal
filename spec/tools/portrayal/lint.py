@@ -85,6 +85,9 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
       fans the box can lose
   L70 device: a declared vendor silence names a fact that exists, and is not
       contradicted by the device stating that fact anyway
+  L76 device: an Ethernet RJ45 is a lamped part and a console or timing RJ45 is
+      a bare one - counted, so the two-component convention cannot grow back
+      (census; see docs/rj45-family-design.md)
 """
 import argparse
 import json
@@ -3984,6 +3987,52 @@ def lint_device_face_bindings(path, data, lib_roots):
                               "binds it, so it is never drawn")
 
 
+# THE RJ45 FAMILY IS TWO BARE PARTS AND TWO LAMPED ONES (docs/rj45-family-design.md).
+# Which a placement takes is decided by what the jack is FOR, and the test is the
+# one sweep_jack_lamps.py already applied: a console, aux, serial, timing or
+# telemetry jack carries no link lamp; everything else that is Ethernet does.
+RJ45_BARE = re.compile(r"console|aux|serial|ioioi|(^|-)tod($|-)|bits|pps|sync|telemetry|timing", re.I)
+RJ45_LAMPED_REFS = {"common/rj45-eth@1", "common/rj45-ganged-eth@1"}
+RJ45_BARE_REFS = {"std/rj45@2", "std/rj45-ganged@2"}
+
+
+def rj45_wants_lamps(q, groups):
+    """True when this RJ45 placement is an Ethernet jack, by id, role and group."""
+    ga = (groups.get(q.get("group")) or {}).get("attrs") or {}
+    role = str({**ga, **(q.get("attrs") or {})}.get("role") or "")
+    text = f"{q.get('id')} {role} {q.get('group') or ''}"
+    return not RJ45_BARE.search(text)
+
+
+def lint_device_rj45_lamps(path, data, lib_roots):
+    """L76: the RJ45 census. Nine components once answered 'does this jack have
+    lamps' five different ways (#125, #80). A census rule fires on the day it
+    lands and shrinks to zero as the sweeps go through; what it stops is the
+    sixth way arriving quietly."""
+    groups = data.get("groups") or {}
+    unlamped_eth = lamped_bare = retired = 0
+    for view in (data.get("views") or {}).values():
+        for q in (((view or {}).get("components") or {}).get("placements") or []):
+            ref = str(q.get("ref") or "")
+            if "rj45" not in ref:
+                continue
+            if ref not in RJ45_LAMPED_REFS and ref not in RJ45_BARE_REFS:
+                retired += 1
+                continue
+            if rj45_wants_lamps(q, groups):
+                if ref not in RJ45_LAMPED_REFS:
+                    unlamped_eth += 1
+            elif ref not in RJ45_BARE_REFS:
+                lamped_bare += 1
+    if unlamped_eth or lamped_bare or retired:
+        warn(path, "L76", f"RJ45 family: {unlamped_eth} Ethernet jack(s) on a part with no "
+                          f"lamps, {lamped_bare} console/timing jack(s) on a lamped part, "
+                          f"{retired} on a retired RJ45 part. An Ethernet jack is "
+                          "common/rj45-eth@1 or common/rj45-ganged-eth@1; a console or "
+                          "timing jack is std/rj45@2 or std/rj45-ganged@2 "
+                          "(docs/rj45-family-design.md; spec/tools/portrayal/sweep_rj45.py)")
+
+
 def lint_device_id_convention(path, data, lib_roots):
     """L62: an id that names its connector, and a port lamp spelled a fourth way.
 
@@ -4651,6 +4700,7 @@ def lint_device(path, validator, lib_roots):
     lint_device_cutout_derivation(path, data, lib_roots)
     lint_device_air_aperture(path, data, lib_roots)
     lint_device_id_convention(path, data, lib_roots)
+    lint_device_rj45_lamps(path, data, lib_roots)
     lint_device_face_bindings(path, data, lib_roots)
     declared_groups = set((data.get("groups") or {}).keys())
     for gname, gdef in (data.get("groups") or {}).items():

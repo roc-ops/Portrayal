@@ -178,3 +178,41 @@ def test_the_base_stylesheet_renders_the_link_state():
     import render
     assert ".state-link" in render.STATE_CSS
     assert ".state-up" in render.STATE_CSS
+
+
+def _dev(placements, groups=None):
+    return {"kind": "device", "name": "d", "version": "1.0.0",
+            "chassis": {"width": 100, "height": 40, "depth": 30},
+            "groups": groups or {"mgmt": {"term": "Port"}, "console": {"term": "Port"}},
+            "views": {"front": {"size": {"w": 100, "h": 40},
+                                "components": {"placements": placements}}}}
+
+
+def l76(data):
+    lint.WARNINGS.clear()
+    lint.lint_device_rj45_lamps(pathlib.Path("d/device.yaml"), data, [str(LIB)])
+    return [w for w in lint.WARNINGS if "[L76]" in w]
+
+
+def test_l76_is_quiet_when_roles_and_parts_agree():
+    ws = l76(_dev([
+        {"id": "mgmt-eth", "ref": "common/rj45-eth@1", "at": [0, 0], "group": "mgmt", "attrs": {"role": "mgmt"}},
+        {"id": "console", "ref": "std/rj45@2", "at": [20, 0], "group": "console", "attrs": {"role": "console"}},
+        {"id": "tod-in", "ref": "std/rj45-ganged@2", "at": [40, 0], "group": "mgmt"},
+    ]))
+    assert ws == []
+
+
+def test_l76_counts_an_ethernet_jack_with_no_lamps():
+    ws = l76(_dev([{"id": "port-1", "ref": "std/rj45-ganged@2", "at": [0, 0], "group": "mgmt", "attrs": {"role": "port"}}]))
+    assert len(ws) == 1 and "1 Ethernet jack(s) on a part with no lamps" in ws[0]
+
+
+def test_l76_counts_a_console_with_lamps_and_a_retired_part():
+    ws = l76(_dev([
+        {"id": "console", "ref": "common/rj45-eth@1", "at": [0, 0], "group": "console"},
+        {"id": "port-2", "ref": "std/rj45-ganged@1", "at": [20, 0], "group": "mgmt", "attrs": {"role": "port"}},
+    ]))
+    assert len(ws) == 1
+    assert "1 console/timing jack(s) on a lamped part" in ws[0]
+    assert "1 on a retired RJ45 part" in ws[0]
