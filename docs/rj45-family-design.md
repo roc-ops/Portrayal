@@ -114,8 +114,8 @@ The bare housing is a solid face the colour of jack plastic with the cavity
 punched through it as one evenodd path, three tiers, pins drawn inside the body
 tier. `relief.cavity` names that path and `relief.wall` gives the walls their
 colour, so the 3D view extrudes a socket with sides rather than a flat patch. The
-housing does not draw a panel hole; the panel's own `cutouts:` punches the 16 x 14
-opening it sits in, as today.
+housing does not draw a panel hole; the panel's own `cutouts:` punches the
+15.8 x 13.2 opening it sits in, derived from the placement as today.
 
 The ganged cell is the same face clipped to the cell size, with the shared walls
 implied by abutting cells at the block pitch. Rows mirror, not translate: the
