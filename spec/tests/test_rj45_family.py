@@ -888,4 +888,61 @@ def test_handedness_uses_the_final_rotate_after_the_flip(tmp_path):
     # led-l (lower x, 11.2, function: link) is the LEFT lamp. Final rotate is
     # 180 (flipped from absent/0), so it presents on screen-right: led-b.
     assert pl["mgmt"]["states"]["led-b"] == ["off", {"name": "link"}]
-    assert pl["mgmt"]["states"]["led-a"] == ["off", {"name": "activity"}]
+
+
+# --- Fix round 5: a lifted lamp's description rides with it -------------
+
+# Both lamps carry a description; led-mgmt-l's has an embedded apostrophe to
+# exercise '' doubling.
+DESC_FIXTURE = FIXTURE.replace(
+    "           states: ['off', {name: link-1g, color: '#22c55e'}]}",
+    "           states: ['off', {name: link-1g, color: '#22c55e'}],\n"
+    "           description: 'per the QSG''s table 3'}",
+).replace(
+    "        - {id: led-mgmt-r, ref: common/led-dot@1, at: [22.8, 21.73], group: mgmt-leds, rel-pos: 2, for: mgmt-eth, attrs: {function: activity}}",
+    "        - {id: led-mgmt-r, ref: common/led-dot@1, at: [22.8, 21.73], group: mgmt-leds, rel-pos: 2, for: mgmt-eth, attrs: {function: activity},\n"
+    "           description: 'right lamp, HIG table 4'}",
+)
+assert DESC_FIXTURE != FIXTURE
+
+# Same, but the jack already carries its own description to append after.
+DESC_FIXTURE_EXISTING = DESC_FIXTURE.replace(
+    "        - {id: mgmt-eth, ref: std/rj45@1, at: [10.0, 10.0], group: mgmt, rel-pos: 1, attrs: {role: mgmt}}",
+    "        - {id: mgmt-eth, ref: std/rj45@1, at: [10.0, 10.0], group: mgmt, rel-pos: 1, attrs: {role: mgmt}, description: 'OOB jack'}",
+)
+assert DESC_FIXTURE_EXISTING != DESC_FIXTURE
+
+
+def test_the_sweep_carries_lifted_descriptions_onto_the_jack(tmp_path):
+    d = tmp_path / "devices/acme/d13"; d.mkdir(parents=True)
+    (d / "device.yaml").write_text(DESC_FIXTURE)
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert "descriptions carried 2" in r.stdout
+    data = yaml.safe_load((d / "device.yaml").read_text())
+    pl = {p["id"]: p for p in data["views"]["front"]["components"]["placements"]}
+    assert pl["mgmt-eth"]["description"] == (
+        "led-mgmt-l: per the QSG's table 3; led-mgmt-r: right lamp, HIG table 4"
+    )
+
+
+def test_the_sweep_appends_a_carried_description_after_an_existing_one(tmp_path):
+    d = tmp_path / "devices/acme/d14"; d.mkdir(parents=True)
+    (d / "device.yaml").write_text(DESC_FIXTURE_EXISTING)
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    data = yaml.safe_load((d / "device.yaml").read_text())
+    pl = {p["id"]: p for p in data["views"]["front"]["components"]["placements"]}
+    assert pl["mgmt-eth"]["description"].startswith(
+        "OOB jack; led-mgmt-l: per the QSG's table 3; led-mgmt-r: "
+    )
+
+
+def test_the_sweep_adds_no_description_when_lamps_have_none(tmp_path):
+    out, text = sweep(tmp_path, "--apply")
+    assert "descriptions carried" not in out
+    d = yaml.safe_load(text)
+    pl = {p["id"]: p for p in d["views"]["front"]["components"]["placements"]}
+    assert "description" not in pl["mgmt-eth"]

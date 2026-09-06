@@ -245,6 +245,31 @@ def _drop_skin(text, value):
     return new
 
 
+def _squote(text):
+    """Single-quoted YAML scalar, doubling any embedded single quote."""
+    return "'" + text.replace("'", "''") + "'"
+
+
+def _set_description(block, quoted):
+    """Write `quoted` as the item's `description:` field: extend the
+    existing single-quoted scalar in place if there is one (it may wrap
+    several lines, per house style), else add a new field next to where
+    `states:` is spliced in - before the item's own closing `}` for a flow
+    mapping, or as a new line at the item's field indent for a block one."""
+    m = re.search(r"description:\s*'(?:[^']|'')*'", block, flags=re.DOTALL)
+    if m:
+        return block[:m.start()] + f"description: {quoted}" + block[m.end():]
+    lines = block.split("\n")
+    if re.match(r"^\s*-\s*\{", lines[0]):
+        idx = block.rstrip().rfind("}")
+        return block[:idx] + f", description: {quoted}" + block[idx:]
+    field_indent = (len(lines[1]) - len(lines[1].lstrip(" "))
+                    if len(lines) > 1 else
+                    len(lines[0]) - len(lines[0].lstrip(" ")) + 2)
+    lines.append(" " * field_indent + f"description: {quoted}")
+    return "\n".join(lines)
+
+
 def bump(version, level):
     a, b, c = (int(x) for x in version.split("."))
     return f"{a + 1}.0.0" if level == "major" else f"{a}.{b + 1}.0"
@@ -376,6 +401,18 @@ def sweep_device(path):
                                         len(lines[0]) - len(lines[0].lstrip(" ")) + 2)
                         lines.append(" " * field_indent + f"states: {inline}")
                         block = "\n".join(lines)
+                # A lifted lamp's description names the HIG table (or its
+                # absence) its states came from - dropping it loses that
+                # provenance with no way to recover it from the file. Carry
+                # it onto the jack, in ascending-x (not led-a/led-b) order,
+                # appended after any description the jack already has.
+                descs = [(lamp["id"], lamp["description"]) for _, lamp in lamps if lamp.get("description")]
+                if descs:
+                    carried = "; ".join(f"{lid}: {text}" for lid, text in descs)
+                    existing = by_id[pid].get("description")
+                    merged = f"{existing}; {carried}" if existing else carried
+                    block = _set_description(block, _squote(merged))
+                    report["descriptions carried"] += len(descs)
             rows[s[0]:s[1] + 1] = block.split("\n")
             report["lamped" if new.startswith("common/") else "bare"] += 1
             if pid in external_ids:
