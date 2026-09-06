@@ -173,7 +173,9 @@ def test_common_rj45_eth_composes_the_housing_and_adds_two_lamps():
     assert c["elements"]["led-b"]["at"] == [12.6, 11.83]
     for el in ("led-a", "led-b"):
         assert c["elements"][el]["class"] == "led"
-        assert c["elements"][el]["states"] == ["off", "link", "activity"], "names only, no colours asserted"
+    # link on one window, activity on the other: names only, no colours asserted
+    assert c["elements"]["led-a"]["states"] == ["off", "link"]
+    assert c["elements"]["led-b"]["states"] == ["off", "activity"]
     assert c["connection-points"]["net"] == {"at": [7.9, 6.6], "direction": "front"}
     assert "conforms" not in c, "the wrapper composes the standard; it does not restate it"
 
@@ -193,8 +195,8 @@ def test_common_rj45_ganged_eth_composes_the_cell_and_adds_two_lamps():
     assert c["parts"] == [{"ref": "std/rj45-ganged@2", "id": "jack", "at": [0.0, 0.0], "behind": True}]
     assert c["elements"]["led-a"]["at"] == [1.2, 9.63]
     assert c["elements"]["led-b"]["at"] == [9.5, 9.63]
-    for el in ("led-a", "led-b"):
-        assert c["elements"][el]["states"] == ["off", "link", "activity"]
+    assert c["elements"]["led-a"]["states"] == ["off", "link"]
+    assert c["elements"]["led-b"]["states"] == ["off", "activity"]
     assert c["connection-points"]["net"] == {"at": [6.35, 5.1], "direction": "front"}
     s = skin("common/rj45-ganged-eth@1")
     assert 'fill-rule="evenodd"' in s and 'id="led-b"' in s

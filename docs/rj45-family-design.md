@@ -53,8 +53,10 @@ Three questions were put to Jason on 2026-09-05 and answered:
    in 2xN blocks on a 13.97 mm pitch where a 15.8 mm housing cannot fit. One
    per-port cell with shared walls keeps every anchor where it is.
 3. **The lamped jack's default vocabulary is `off / link / activity` with no
-   colours asserted.** A device that documents green, amber or a blink overrides
-   with `states:` on the placement, as `dell/rj45-port-14g` already does.
+   colours asserted, split across the pair: led-a is the link lamp and led-b the
+   activity lamp.** A device that documents green, amber, a blink, or a split by
+   speed rather than by function overrides with `states:` on the placement, as
+   `dell/rj45-port-14g` already does.
 
 ## The family
 
@@ -128,9 +130,9 @@ change.
 
 The lamped variants compose the bare part `behind: true` and add two lamp
 rectangles in the two corners on the keyway side, so `rotate: 180` moves the
-lamps with the keyway the way it does on the metal. Each lamp declares
-`states: ['off', link, activity]` with no colour. The component says what the two
-lamps are; the device says what they mean.
+lamps with the keyway the way it does on the metal. led-a declares
+`states: ['off', link]` and led-b `states: ['off', activity]`, with no colour. The
+component says what the two lamps are; the device says what they mean.
 
 ### Lamps move into the component
 
@@ -224,7 +226,7 @@ where 368 of the library's 762 RJ45 placements actually live. What stayed
 flagged: the latch slot height (2.6, conventional) and the housing top wall
 (2.0, read at scale).
 
-**Three departures from the note as approved.**
+**Four departures from the note as approved.**
 
 1. The panel cutout follows the housing (15.8 x 13.2) rather than staying at
    16 x 14, decided in the plan's first task and verified in every review after.
@@ -241,6 +243,12 @@ flagged: the latch slot height (2.6, conventional) and the housing top wall
    jack with `for:`, the shape as5912-54x already uses, and the device carries a
    `bits-lamps` provenance entry saying so. One jack does not earn a fifth
    member; if a second arrives, the family gains one.
+4. **The two lamps split link and activity.** The lamped parts shipped at 1.0.0
+   with `off / link / activity` on BOTH lamps, as the retired `common/rj45-port@4`
+   had. Review of the merged result found that unreadable - a jack whose two lamps
+   each claim link and activity - so 1.1.0 splits the pair: led-a link, led-b
+   activity. The 27 UfiSpace jacks whose guides split the lamps by speed keep their
+   own mapping; three that had copied the both-on-each default were split.
 
 **The version rule the sweep answered two ways:** a composed-part swap that
 removes no id is a minor bump.

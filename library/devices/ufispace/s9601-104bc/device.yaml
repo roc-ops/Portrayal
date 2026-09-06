@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9601-104bc
-version: 2.0.0
+version: 2.0.1
 maturity: modelled
 manufacturer: UfiSpace
 model: S9601-104BC
@@ -800,7 +800,7 @@ views:
         - {ref: std/rj45@2, id: tod, at: [8.93, 28.4], group: timing, rel-pos: 4, attrs: {media: rj45, role: tod-io}}
         - {ref: common/reset-button@1, id: reset, at: [14.76, 44.74], for: chassis, group: mgmt, rel-pos: 4}
         - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [25.84, 49.77], rotate: 180, group: mgmt, rel-pos: 1,
-           attrs: {role: oob, speed: 100m-1g}, states: {led-a: ['off', {color: '#22c55e', name: link}, {behavior: blinking, color: '#22c55e', name: activity}], led-b: ['off', {color: '#22c55e', name: link}, {behavior: blinking, color: '#22c55e', name: activity}]}, description: 'led-mgmt-l: the management jack''s left corner lamp, drawn lit green in HIG Figure 8 - which is also how the jack is known to be keyway-up, since a ganged RJ45 puts its lamps on the latch side. THE HIG TABLES NO MANAGEMENT-PORT LED for this platform, so the states here are the component default and not a transcription; led-mgmt-r: the management jack''s right corner lamp; same absence of a vendor table as its left-hand twin, and the same component default'}
+           attrs: {role: oob, speed: 100m-1g}, states: {led-a: ['off', {color: '#22c55e', name: link}], led-b: ['off', {behavior: blinking, color: '#22c55e', name: activity}]}, description: 'led-mgmt-l: the management jack''s left corner lamp, drawn lit green in HIG Figure 8 - which is also how the jack is known to be keyway-up, since a ganged RJ45 puts its lamps on the latch side. THE HIG TABLES NO MANAGEMENT-PORT LED for this platform, so the states here are the component default (led-a link, led-b activity, the green of Figure 8) and not a transcription; led-mgmt-r: the management jack''s right corner lamp; same absence of a vendor table as its left-hand twin, and the same component default'}
         - {ref: std/usb-a@1, id: usb, at: [26.2, 61.35], group: mgmt, rel-pos: 2, attrs: {role: maintenance, speed: usb3}}
         - {ref: std/rj45-ganged@2, id: console, at: [25.84, 68.83], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
         - {ref: common/led-dot@1, id: led-sync, at: [15.34, 62.32], for: chassis,

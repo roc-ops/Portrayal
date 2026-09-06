@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: rj45-ganged-eth
-version: 1.0.0
+version: 1.1.0
 class: port
 profile: networking
 description: An Ethernet RJ45 in a ganged 2xN block - the std/rj45-ganged@2 cell with
@@ -18,11 +18,14 @@ provenance:
     management jack, read for #80; neither drawing dimensions the window itself.
     common/rj45-hd@1 placed them at the same corners on the same cell.
   states: >-
-    convention - what the two lamps ARE, link and activity, with no colour: the
-    datasheets that name them do not agree on colours and most do not name them. A
-    device whose guide tables the lamps overrides with `states:` on the placement
-    (dell/rj45-port-14g@1 is the pattern; three UfiSpace devices write the per-element
-    mapping directly).
+    convention - what the two lamps ARE: led-a is the link lamp (`off`, `link`) and
+    led-b the activity lamp (`off`, `activity`), with no colour. Ethernet jacks put link
+    on one window and activity on the other; the datasheets that name them do not agree
+    on colours and most do not name them. A device whose guide tables the lamps
+    overrides with `states:` on the placement (dell/rj45-port-14g@1 is the pattern; the
+    UfiSpace guides that split the two lamps by speed rather than by link/activity write
+    their own per-element mapping). 1.0.0 gave both lamps the whole vocabulary, as the
+    retired common/rj45-port@4 had; 1.1.0 splits it.
   which-is-which: convention - led-a is the left window and led-b the right when the
     part is unrotated (pins up, keyway down). rotate 180 swaps them on the face with the
     keyway, as on the metal.
@@ -31,12 +34,12 @@ elements:
     at: [1.2, 9.63]
     size: [2.0, 1.1]
     class: led
-    states: ['off', link, activity]
+    states: ['off', link]
   led-b:
     at: [9.5, 9.63]
     size: [2.0, 1.1]
     class: led
-    states: ['off', link, activity]
+    states: ['off', activity]
 parts:
   - {ref: std/rj45-ganged@2, id: jack, at: [0.0, 0.0], behind: true}
 relief:
