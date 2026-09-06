@@ -121,6 +121,27 @@ def cage_type(ref, attrs):
 PART_CONSOLE = {"std/rj45-ganged": "rj-45", "common/rj45-shielded": "rj-45",
                 "std/usb-a": "usb-a"}
 
+# The four-part RJ45 family (sweep_rj45.py / docs/rj45-family-design.md), keyed
+# by the FULL ref including @major because a version bump inside this family
+# changes what the jack IS, not just its shape: std/rj45@2 and
+# std/rj45-ganged@2 are the swept bare jack (console/aux/timing, no lamps);
+# common/rj45-eth@1 and common/rj45-ganged-eth@1 are the swept lamped jack
+# (Ethernet). Checked in build_module BEFORE the version-less PART_CONSOLE/
+# PART_IFACE maps below, on the un-stripped ref, so an unswept std/rj45@1 -
+# RE-S-2000, JNP10K-RE1, the MX2000 RCBs, and every other Juniper RE card
+# still on the old bare ref - keeps falling through exactly as it always did,
+# rather than an id-blind version-less "std/rj45" key exporting its Ethernet
+# management jack as a console port (ndv rj45-common fix round). std/rj45@1
+# and std/rj45-ganged@1 old refs are unaffected: the ganged one was already
+# in PART_CONSOLE version-less (both its versions read the same either way);
+# the plain one still drops out of export, as before this family existed.
+FAMILY_PART = {
+    "std/rj45@2": ("console", "rj-45"),
+    "std/rj45-ganged@2": ("console", "rj-45"),
+    "common/rj45-eth@1": ("iface", "1000base-t"),
+    "common/rj45-ganged-eth@1": ("iface", "1000base-t"),
+}
+
 # RF and timing connectors. These are INTERFACES, not front ports: a front port
 # in both libraries is a patch-panel pass-through and requires a rear_port to
 # terminate on, which a connector on a line card does not have. Emitting them as
@@ -598,7 +619,8 @@ def build_module(contract, manufacturer):
     for part in contract.get("parts") or []:
         if not isinstance(part, dict):
             continue
-        ref = part["ref"].split("@")[0]
+        full_ref = part["ref"]
+        ref = full_ref.split("@")[0]
         pid = str(part.get("id") or "")
         if ref in PART_SKIP:
             continue
@@ -611,6 +633,15 @@ def build_module(contract, manufacturer):
             if placed == "other":
                 iface["label"] = "RJ45"
             ifaces.append(iface)
+        elif full_ref in FAMILY_PART:
+            # Checked on the un-stripped ref, before PART_CONSOLE/PART_IFACE
+            # below drop the @major and would otherwise catch every version of
+            # std/rj45 alike - see FAMILY_PART's comment for why that is wrong.
+            kind, t = FAMILY_PART[full_ref]
+            if kind == "console":
+                consoles.append({"name": pid or "Console", "type": t})
+            else:
+                ifaces.append({"name": pid, "type": t})
         elif ref in PART_POWER:
             powers.append({"name": pid or "Inlet", "type": PART_POWER[ref]})
         elif ref in PART_CONSOLE:
