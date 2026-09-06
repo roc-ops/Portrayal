@@ -353,7 +353,7 @@ views:
         - {id: fan-0, at: [387.1, 0.0], size: {w: 54.86, h: 88.2}, accepts: [cisco/asr-9001-fan@1], group: cooling, rel-pos: 0, default: cisco/asr-9001-fan@1}
       placements:
         - {ref: std/rj45-ganged@2, id: tod, at: [159.75, 45.45], group: timing, rel-pos: 0}
-        - {ref: std/rj45-ganged@2, id: svc-lan, at: [159.75, 61.5], group: timing, rel-pos: 1, rotate: 180}
+        - {ref: common/rj45-ganged-eth@1, id: svc-lan, at: [159.75, 61.5], group: timing, rel-pos: 1, rotate: 180, provenance: {media: 'Ethernet, not timing, despite the group: the legend reads SVC LAN and the install guide lists this as a service LAN port, not one of the tod/sync timing signals it shares the panel row with, so it is drawn lamped (common/rj45-ganged-eth@1) rather than the bare std/rj45-ganged@2 its timing-group neighbours use.'}}
         - {ref: std/rj45-ganged@2, id: sync-0, at: [207.35, 45.45], group: timing, rel-pos: 2}
         - {ref: std/rj45-ganged@2, id: sync-1, at: [207.35, 61.5], group: timing, rel-pos: 3, rotate: 180}
         - {ref: std/rj45-ganged@2, id: console, at: [228.5, 45.45], group: mgmt, rel-pos: 4}

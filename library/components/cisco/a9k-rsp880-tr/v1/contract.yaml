@@ -145,7 +145,12 @@ provenance:
     outputs. External USB2, class-A port. Two dual-speed 100/1000 Mbit Ethernet
     Management ports. One Connectivity Management Processor (CMP) port. Two EIA/TIA-232
     RJ232 serial RJ-45 ports - one each for Console and Auxiliary modem ports.' That is
-    ten RJ-45s, and the master draws ten.
+    ten RJ-45s, and the master draws ten. CMP: treated as Ethernet management; Cisco's
+    port list names it only as the CMP port, unlike the two "100/1000 Mbit Ethernet
+    Management" ports named two sentences earlier - this quote never calls the CMP
+    Ethernet by name. Drawn lamped (common/rj45-ganged-eth@1) on that assumption,
+    distinct from mgt-lan-0/mgt-lan-1, because a lights-out management processor with
+    its own IP is the closest reading of what a CMP is; no stronger citation is claimed.
   jack-orientation: >-
     the ICS and MGT LAN jacks are STACKED PAIRS in one bezel, not two singles side by
     side, and the pair MIRRORS: read at high zoom the upper jack's keyway points up and
@@ -156,8 +161,9 @@ provenance:
     '1' beside the lower, and ICS0 sits above ICS1/TOD under the GPS bracket.
   cages: >-
     composed from std/, never drawn. The RJ-45s go in as std/rj45-ganged (12.7 x 11.0)
-    rather than std/rj45 (16.0 x 14.0): the IEC 60603-7 single-port cutout is the wrong
-    part for a stacked pair whose ports share walls, and 16.0 will not fit twice across
+    rather than std/rj45's single-jack IEC 60603-7 panel cutout (16.0 x 14.0 - the
+    aperture the housing sits in, not the 15.8 x 13.2 std/rj45 housing itself): that
+    cutout is the wrong part for a stacked pair whose ports share walls, and 16.0 will not fit twice across
     a 41 mm card. The drawn jack measures 10.83 x 12.81, which rotated is 12.81 x 10.83
     against the ganged registry's 12.7 x 11.0 - agreement to one percent, which is the
     check. Timing coax is std/smb, sourced from the same 10-32 UNF figure the registry
