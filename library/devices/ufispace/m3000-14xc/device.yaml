@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: m3000-14xc
-version: 1.0.3
+version: 2.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: M3000-14XC
@@ -465,32 +465,12 @@ views:
            description: 'HIG ID row - Off (no power), Blinking Blue (beacon feature is
              enabled on the switch)', group: status-leds, rel-pos: 6}
         - {ref: common/reset-button@1, id: reset, at: [136.5, 31.8], for: chassis, group: mgmt, rel-pos: 5}
-        - {ref: std/rj45-ganged@1, id: bits, at: [159.2, 10.6], rotate: 180, group: timing, rel-pos: 4, attrs: {media: rj48, role: bits-io}}
-        - {ref: std/rj45-ganged@1, id: tod, at: [159.2, 24.4], group: timing, rel-pos: 5, attrs: {media: rj45, role: tod-io}}
-        - {ref: std/rj45-ganged@1, id: console, at: [184.9, 13.2], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
+        - {ref: std/rj45-ganged@2, id: bits, at: [159.2, 10.6], rotate: 180, group: timing, rel-pos: 4, attrs: {media: rj48, role: bits-io}}
+        - {ref: std/rj45-ganged@2, id: tod, at: [159.2, 24.4], group: timing, rel-pos: 5, attrs: {media: rj45, role: tod-io}}
+        - {ref: std/rj45-ganged@2, id: console, at: [184.9, 13.2], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
         - {ref: std/usb-a@1, id: usb, at: [184.4, 29.0], group: mgmt, rel-pos: 2, attrs: {role: maintenance, speed: usb2}}
-        - {ref: std/rj45-ganged@1, id: mgmt-1, at: [209.75, 10.0], rotate: 180, group: mgmt, rel-pos: 3, attrs: {role: oob, speed: 100m-1g}}
-        - {ref: std/rj45-ganged@1, id: mgmt-2, at: [209.75, 23.2], group: mgmt, rel-pos: 4, attrs: {role: stack-oob, speed: 100m-1g}}
-        - {ref: common/led-dot@1, id: led-mgmt1-l, at: [209.6, 9.4], for: mgmt-1, group: port-leds, rel-pos: 13,
-           states: ['off', {name: link-1g, color: '#22c55e'},
-                    {name: activity-1g, color: '#22c55e', behavior: blinking}],
-           description: 'HIG Management port LED table, left lamp - Off (1G no link),
-             Solid Green (1G link-up), Blinking Green (1G TX/RX activity)'}
-        - {ref: common/led-dot@1, id: led-mgmt1-r, at: [220.6, 9.4], for: mgmt-1, group: port-leds, rel-pos: 14,
-           states: ['off', {name: link-100m, color: '#f59e0b'},
-                    {name: activity-100m, color: '#f59e0b', behavior: blinking}],
-           description: 'HIG Management port LED table, right lamp - Off (no activity),
-             Solid Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity)'}
-        - {ref: common/led-dot@1, id: led-mgmt2-l, at: [209.1, 32.7], for: mgmt-2, group: port-leds, rel-pos: 15,
-           states: ['off', {name: link-1g, color: '#22c55e'},
-                    {name: activity-1g, color: '#22c55e', behavior: blinking}],
-           description: 'HIG Management port LED table, left lamp - Off (1G no link),
-             Solid Green (1G link-up), Blinking Green (1G TX/RX activity)'}
-        - {ref: common/led-dot@1, id: led-mgmt2-r, at: [220.9, 32.7], for: mgmt-2, group: port-leds, rel-pos: 16,
-           states: ['off', {name: link-100m, color: '#f59e0b'},
-                    {name: activity-100m, color: '#f59e0b', behavior: blinking}],
-           description: 'HIG Management port LED table, right lamp - Off (no activity),
-             Solid Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity)'}
+        - {ref: common/rj45-ganged-eth@1, id: mgmt-1, at: [209.75, 10], rotate: 180, group: mgmt, rel-pos: 3, attrs: {role: oob, speed: 100m-1g}, states: {led-a: ['off', {color: '#f59e0b', name: link-100m}, {behavior: blinking, color: '#f59e0b', name: activity-100m}], led-b: ['off', {color: '#22c55e', name: link-1g}, {behavior: blinking, color: '#22c55e', name: activity-1g}]}, description: 'led-mgmt1-l: HIG Management port LED table, left lamp - Off (1G no link), Solid Green (1G link-up), Blinking Green (1G TX/RX activity); led-mgmt1-r: HIG Management port LED table, right lamp - Off (no activity), Solid Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity)'}
+        - {ref: common/rj45-ganged-eth@1, id: mgmt-2, at: [209.75, 23.2], group: mgmt, rel-pos: 4, attrs: {role: stack-oob, speed: 100m-1g}, states: {led-a: ['off', {color: '#22c55e', name: link-1g}, {behavior: blinking, color: '#22c55e', name: activity-1g}], led-b: ['off', {color: '#f59e0b', name: link-100m}, {behavior: blinking, color: '#f59e0b', name: activity-100m}]}, description: 'led-mgmt2-l: HIG Management port LED table, left lamp - Off (1G no link), Solid Green (1G link-up), Blinking Green (1G TX/RX activity); led-mgmt2-r: HIG Management port LED table, right lamp - Off (no activity), Solid Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity)'}
         - {ref: std/sfp-ganged@1, id: port-0, at: [233.0, 24.6], group: sfp-plus-ru, rel-pos: 0}
         - {ref: std/sfp-ganged@1, id: port-1, at: [247.25, 24.6], group: sfp-plus-ru, rel-pos: 1}
         - {ref: std/sfp-ganged@1, id: port-2, at: [261.5, 24.6], group: sfp-plus-ru, rel-pos: 2}
