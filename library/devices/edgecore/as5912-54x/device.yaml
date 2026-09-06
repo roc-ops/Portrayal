@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: as5912-54x
-version: 1.0.2
+version: 2.0.0
 manufacturer: Edgecore
 model: AS5912-54X
 portfolio:
@@ -186,8 +186,8 @@ views:
         - {id: port-53, at: [391.25, 18.42], size: [18.5, 9.58], shape: rect}
         - {id: port-54, at: [391.25, 32.92], size: [18.5, 9.58], shape: rect}
         - {id: usb-a, at: [320, 35.5], size: [12, 4.5], shape: rect}
-        - {id: mgmt-eth, at: [416.5, 2.9], size: [16, 14], shape: rect}
-        - {id: console, at: [416.5, 19.5], size: [16, 14], shape: rect}
+        - {id: mgmt-eth, at: [416.6, 3.35], size: [15.8, 13.2], shape: rect}
+        - {id: console, at: [416.6, 19.85], size: [15.8, 13.2], shape: rect}
         - {id: led-port-1, at: [16.6, 13.9], size: [3.6, 3.2], shape: rect}
         - {id: led-port-2, at: [21.9, 13.9], size: [3.6, 3.2], shape: rect}
         - {id: led-port-3, at: [30.85, 13.9], size: [3.6, 3.2], shape: rect}
@@ -423,8 +423,8 @@ views:
         - {ref: common/usb-symbol@1, id: usb-mark, at: [334.5, 35.75], group: furniture, rel-pos: 3}
         - {ref: common/led-dot@1, id: led-mgmt-lnk, at: [420.5, 37.3], group: mgmt, for: mgmt-eth, attrs: {function: link}, rel-pos: 2}
         - {ref: common/led-dot@1, id: led-mgmt-act, at: [427.5, 37.3], group: mgmt, for: mgmt-eth, attrs: {function: activity}, rel-pos: 3}
-        - {ref: common/rj45-bezel@2, id: mgmt-eth, at: [416, 2.5], rotate: 180, group: mgmt, attrs: {media: rj45, role: mgmt}, rel-pos: 4}
-        - {ref: common/rj45-bezel@2, id: console, at: [416, 19.0], group: mgmt, attrs: {media: rj45-serial, role: console}, rel-pos: 5}
+        - {ref: std/rj45@2, id: mgmt-eth, at: [416.6, 3.35], rotate: 180, group: mgmt, attrs: {media: rj45, role: mgmt}, rel-pos: 4}
+        - {ref: std/rj45@2, id: console, at: [416.6, 19.85], group: mgmt, attrs: {media: rj45-serial, role: console}, rel-pos: 5}
     regions:
       - {id: sfp-block, at: [12, 0], size: {w: 352, h: 44}, label: 48x 10G SFP+}
       - {id: qsfp-block, at: [370, 0], size: {w: 42, h: 44}, label: 6x 100G QSFP28}

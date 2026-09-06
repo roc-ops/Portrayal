@@ -644,6 +644,17 @@ def test_the_sweep_leaves_a_jack_bare_when_its_lamps_are_external(tmp_path):
     assert "states" not in pl["mgmt-eth"]
 
 
+def test_a_swept_device_renders_lamps_inside_its_management_jack(tmp_path):
+    """After the Edgecore sweep the AS7726-32X's mgmt-eth is common/rj45-eth@1 and
+    its two lamps are elements of that placement, not neighbours of it."""
+    dev = LIB / "devices/edgecore/as7726-32x/device.yaml"
+    r = subprocess.run([sys.executable, str(ROOT / "spec/tools/portrayal/render.py"), str(dev),
+                        "--library", str(LIB), "--out", str(tmp_path)], capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr[-800:]
+    svg = next(tmp_path.glob("as7726-32x.*.front.svg")).read_text()
+    assert 'data-path="mgmt-eth/led-a"' in svg and 'data-path="mgmt-eth/led-b"' in svg
+    assert 'data-path="led-mgmt-eth-l"' not in svg
+    assert 'data-path="mgmt-eth/jack/opening"' in svg, "the housing's three-tier cavity is in the drawing"
 # --- Fix round 3: pilot lessons (derived cutouts, dropped skins, orphan groups) ---
 
 # Ruling A: most RJ45 cutouts were DERIVED from the old part (`at` = jack `at`
