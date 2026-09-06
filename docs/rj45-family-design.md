@@ -46,8 +46,9 @@ absent because nobody decided. #80 is waiting on which of these is right.
 Three questions were put to Jason on 2026-09-05 and answered:
 
 1. **`std/rj45` is the jack housing**, with its cavity recessed into solid walls,
-   not the panel aperture. The 16 x 14 IEC cutout stays as the standard the housing
-   conforms to and the hole the panel punches for it.
+   not the panel aperture. The registry's `rj45` entry became the housing itself,
+   and a single jack's panel cutout is the housing's 15.8 x 13.2; the 16 x 14
+   figure was the registry's unsourced aperture and is retired (#61 §3).
 2. **The ganged form is a second bare cell, `std/rj45-ganged`.** 540 placements sit
    in 2xN blocks on a 13.97 mm pitch where a 15.8 mm housing cannot fit. One
    per-port cell with shared walls keeps every anchor where it is.
@@ -97,7 +98,7 @@ kept for comparison only. The IEC text was never needed.
 | latch slot (tier 3) | 4.06 wide | drawing | TE 1734264; the library's 4.0 was conventional and is right |
 | latch slot height | 2.6 | conventional | not dimensioned on 1734264 or the Amphenol views; the slot runs to the housing's lower edge in every drawing, so the skin draws it to the face and the figure stays flagged |
 | contact pitch | 1.02, eight contacts over 7.14 | drawing | TE 1734264 detail C |
-| panel cutout, single jack | 16.0 x 14.0 | registry, unverified | neither drawing gives a single-jack cutout; 6368011 gives 18.04 x 27.81 for a 2x1 stack. The 16 x 14 stays as the aperture the panel punches and stays flagged, which is the #61 §3 finding restated |
+| panel cutout, single jack | 15.8 x 13.2 | drawing | the housing is the standard the panel is cut for (TE 1734264); the 16 x 14 the registry carried was unsourced and is retired; L39 checks a cutout against its occupant's standard at 0.3 mm, which is why the two are one figure |
 | ganged cell | 12.7 x 11.0, 13.97 pitch | measured | ES1010 photo, TE 2497310-1 CAD autocorrelation; unchanged |
 | stacked pair with LEDs | 19.6 wide, two ports in a 27.19 face, LEDs in the four corners | drawing | TE 6368011 front view; a different family from the magjack block, recorded so a stacked-with-LED device has a source |
 | lamp window | 2.0 wide, 1.2 in from each side, 0.27 from the keyway edge | derived | the S9600-72XC's own management jack; the Amphenol and TE LED windows sit in the same corners |
@@ -216,3 +217,7 @@ Landed 2026-09-05 across PRs 131, 132, 133, 134, 135, 136, 137, 138, 139 and
 this PR. Four components replace nine; every RJ45 in the library is one of
 them; L76 counts zero. What stayed flagged: the latch slot height (2.6,
 conventional) and the housing top wall (2.0, read at scale).
+
+One departure from the note as approved: the panel cutout follows the housing
+(15.8 x 13.2) rather than staying at 16 x 14, decided in the plan's first task
+and verified in every review after.
