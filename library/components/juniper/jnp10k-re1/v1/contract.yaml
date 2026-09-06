@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: jnp10k-re1
-version: 1.0.0
+version: 1.1.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -32,12 +32,12 @@ states:
 - fail
 - absent
 parts:
-- {ref: std/rj45@1, id: con, at: [23.0, 12.0], attrs: {function: serial console}}
+- {ref: std/rj45@2, id: con, at: [23.1, 12.4], attrs: {function: serial console}}
 - {ref: std/smb@1, id: pps-in, at: [44.6, 8.0], attrs: {function: PPS in}}
 - {ref: std/smb@1, id: pps-out, at: [57.1, 8.0], attrs: {function: PPS out}}
 - {ref: std/smb@1, id: mhz-in, at: [67.6, 8.0], attrs: {function: 10MHz in}}
 - {ref: std/smb@1, id: mhz-out, at: [80.1, 8.0], attrs: {function: 10MHz out}}
-- {ref: std/rj45@1, id: mgmt, at: [84.0, 12.0], attrs: {function: out-of-band management}}
+- {ref: common/rj45-eth@1, id: mgmt, at: [84.1, 12.4], attrs: {function: out-of-band management}}
 - {ref: std/sfp@1, id: sfp-mgmt, at: [114.25, 15.0], attrs: {function: management SFP}}
 - {ref: std/usb-a@1, id: usb, at: [138.75, 15.75], rotate: 90, attrs: {function: USB service port}}
 - {ref: std/sfp@1, id: port-0, at: [297.75, 9.0], attrs: {media: sfp-plus}}
