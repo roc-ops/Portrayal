@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9720-56ed
-version: 0.2.4
+version: 1.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9720-56ED
@@ -659,9 +659,9 @@ views:
       cutouts:
       - {id: pps, at: [6.68, 40.62], size: [4.83, 4.83], shape: circle}
       - {id: mhz, at: [6.52, 54.46], size: [4.83, 4.83], shape: circle}
-      - {id: mgmt, at: [20.40, 47.00], size: [12.70, 11.00], shape: rect}
+      - {id: mgmt, at: [20.4, 47], size: [12.7, 11], shape: rect}
       - {id: usb, at: [20.75, 59.95], size: [12.00, 4.50], shape: rect}
-      - {id: console, at: [20.40, 67.05], size: [12.70, 11.00], shape: rect}
+      - {id: console, at: [20.4, 67.05], size: [12.7, 11], shape: rect}
       - {id: console-usb, at: [6.80, 77.00], size: [7.50, 2.75], shape: rect}
       - {id: mgmt-sfp-0, at: [41.70, 50.85], size: [14.25, 10.40], shape: rect}
       - {id: mgmt-sfp-1, at: [41.70, 66.05], size: [14.25, 10.40], shape: rect}
@@ -842,7 +842,7 @@ views:
    states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b', behavior: blinking}],
    description: 'HIG section 10 Front Panel LED table, PS1 row - Off (no power), Solid Green (PSU 1 working normally), Blinking Amber (PSU 1 fail, needs service)',
    group: status-leds, rel-pos: 5}
-        - {ref: std/rj45-ganged@1, id: mgmt, at: [20.40, 47.00], group: mgmt, rel-pos: 4,
+        - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [20.4, 47], group: mgmt, rel-pos: 4,
    attrs: {role: mgmt, speed: 100m-1g},
    description: 'the 100/1000M RJ45 OOB management port, top of the three-high
      ganged stack, under an Ethernet icon. Its two integrated lamps sit inside
@@ -856,7 +856,7 @@ views:
    description: 'USB 3.0 Type-A maintenance port under the SS trident, mounted
      landscape in the middle of the ganged stack; HIG section 12 calls it a
      maintenance port and gives the i2c reset sequence for it'}
-        - {ref: std/rj45-ganged@1, id: console, at: [20.40, 67.05], group: mgmt, rel-pos: 6,
+        - {ref: std/rj45-ganged@2, id: console, at: [20.4, 67.05], group: mgmt, rel-pos: 6,
    attrs: {media: rj45-serial, role: console}}
         - {ref: std/micro-usb@1, id: console-usb, at: [6.80, 77.00], group: mgmt, rel-pos: 7,
    attrs: {role: console},
@@ -983,8 +983,6 @@ views:
         - {ref: common/led-dot@1, id: led-fabric-18, at: [402.40, 56.00], for: fabric-18, group: port-leds, rel-pos: 59}
         - {ref: std/qsfp-dd@1, id: fabric-19, at: [405.35, 66.22], group: qsfpdd-fabric, rel-pos: 19}
         - {ref: common/led-dot@1, id: led-fabric-19, at: [402.40, 70.80], for: fabric-19, group: port-leds, rel-pos: 60}
-        - {ref: common/led-dot@1, id: led-mgmt-l, at: [21.6, 55.73], for: mgmt, group: port-leds, rel-pos: 901}
-        - {ref: common/led-dot@1, id: led-mgmt-r, at: [29.9, 55.73], for: mgmt, group: port-leds, rel-pos: 902}
     regions:
       - {id: timing-block, at: [2.0, 33.0], size: {w: 15, h: 30}, label: Timing bulkheads,
          members: [pps, mhz]}

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9311-64d
-version: 2.0.4
+version: 3.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9311-64D
@@ -570,27 +570,10 @@ views:
         - {ref: std/usb-a@1, id: usb, at: [7.63, 66.91], rotate: 90, group: mgmt, rel-pos: 3,
            attrs: {role: storage, speed: usb3}}
         - {ref: common/usb-symbol@1, id: usb-mark, at: [10.4, 77.4], for: usb, group: furniture, rel-pos: 1}
-        - {ref: std/rj45-ganged@1, id: console, at: [21.39, 51.09], rotate: 180, group: mgmt, rel-pos: 1,
+        - {ref: std/rj45-ganged@2, id: console, at: [21.39, 51.09], rotate: 180, group: mgmt, rel-pos: 1,
            attrs: {media: rj45-serial, role: console}}
-        - {ref: std/rj45-ganged@1, id: oob, at: [21.39, 65.43], group: mgmt, rel-pos: 4,
-           attrs: {role: mgmt, speed: 100m-1g}}
-        - {ref: common/led-dot@1, id: led-oob-left, for: oob, at: [21.0, 72.9],
-           states: ['off',
-                   {name: link-1g, color: '#22c55e'},
-                   {name: activity-1g, color: '#22c55e', behavior: blinking}],
-           description: 'HIG Management Port LED table, Left LED - Off (no power), Solid Green
-             (1G link-up), Blinking Green (1G TX/RX activity). std/rj45-ganged contracts no
-             lamps of its own, so the two the figure draws in the jack aperture''s bottom
-             corners are placed on top of it',
-           group: port-leds, rel-pos: 33}
-        - {ref: common/led-dot@1, id: led-oob-right, for: oob, at: [32.3, 72.9],
-           states: ['off',
-                   {name: link-10-100m, color: '#f59e0b'},
-                   {name: activity-10-100m, color: '#f59e0b', behavior: blinking}],
-           description: 'HIG Management Port LED table, Right LED - Off (no power), Solid Amber
-             (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity). The two jack lamps do
-             not share a vocabulary, which is why they are two placements and not one',
-           group: port-leds, rel-pos: 34}
+        - {ref: common/rj45-ganged-eth@1, id: oob, at: [21.39, 65.43], group: mgmt, rel-pos: 4,
+           attrs: {role: mgmt, speed: 100m-1g}, states: {led-a: ['off', {color: '#22c55e', name: link-1g}, {behavior: blinking, color: '#22c55e', name: activity-1g}], led-b: ['off', {color: '#f59e0b', name: link-10-100m}, {behavior: blinking, color: '#f59e0b', name: activity-10-100m}]}, description: 'led-oob-left: HIG Management Port LED table, Left LED - Off (no power), Solid Green (1G link-up), Blinking Green (1G TX/RX activity). std/rj45-ganged contracts no lamps of its own, so the two the figure draws in the jack aperture''s bottom corners are placed on top of it; led-oob-right: HIG Management Port LED table, Right LED - Off (no power), Solid Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity). The two jack lamps do not share a vocabulary, which is why they are two placements and not one'}
         - {ref: std/sfp-ganged@1, id: port-64, at: [20.61, 16.56], rotate: 180, group: sfp-plus, rel-pos: 64}
         - {ref: std/sfp-ganged@1, id: port-65, at: [20.61, 30.27], group: sfp-plus, rel-pos: 65}
         - {ref: ufispace/qsfpdd-led-cluster@1, id: leds-a0, at: [39.73, 9.1], for: [port-0, port-1], group: port-leds, rel-pos: 1}

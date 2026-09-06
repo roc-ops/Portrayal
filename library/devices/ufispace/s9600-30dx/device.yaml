@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-30dx
-version: 2.1.4
+version: 3.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-30DX
@@ -550,13 +550,13 @@ views:
            attrs: {media: micro-usb-b, role: console}}
         - {ref: std/usb-a@1, id: usb, at: [7.36, 65.25], rotate: 90, group: mgmt, rel-pos: 3,
            attrs: {role: storage, speed: usb2}}
-        - {ref: std/rj45-ganged@1, id: console, at: [23.03, 47.51], rotate: 180, group: mgmt, rel-pos: 2,
+        - {ref: std/rj45-ganged@2, id: console, at: [23.03, 47.51], rotate: 180, group: mgmt, rel-pos: 2,
            attrs: {media: rj45-serial, role: console}}
-        - {ref: std/rj45-ganged@1, id: oob, at: [23.03, 61.8], group: mgmt, rel-pos: 1,
+        - {ref: common/rj45-ganged-eth@1, id: oob, at: [23.03, 61.8], group: mgmt, rel-pos: 1,
            attrs: {role: mgmt, speed: 100m-1g}}
-        - {ref: std/rj45-ganged@1, id: bits, at: [327.47, 29.47], group: timing, rel-pos: 4,
+        - {ref: std/rj45-ganged@2, id: bits, at: [327.47, 29.47], group: timing, rel-pos: 4,
            attrs: {media: rj48, role: bits-io}}
-        - {ref: std/rj45-ganged@1, id: tod, at: [347.52, 29.47], group: timing, rel-pos: 5,
+        - {ref: std/rj45-ganged@2, id: tod, at: [347.52, 29.47], group: timing, rel-pos: 5,
            attrs: {media: rj45, role: tod-io}}
         - {ref: std/smb@1, id: pps, at: [369.35, 34.34], group: timing, rel-pos: 2, attrs: {role: 1pps-io}}
         - {ref: std/smb@1, id: mhz, at: [384.32, 34.34], group: timing, rel-pos: 3, attrs: {role: 10mhz-io}}
@@ -621,8 +621,6 @@ views:
         - {ref: std/qsfp-dd@1, id: port-27, at: [262.1, 45.23], group: qsfpdd-400g, rel-pos: 27}
         - {ref: std/qsfp-dd@1, id: port-28, at: [292.45, 30.52], group: qsfpdd-400g, rel-pos: 28}
         - {ref: std/qsfp-dd@1, id: port-29, at: [292.45, 45.23], group: qsfpdd-400g, rel-pos: 29}
-        - {ref: common/led-dot@1, id: led-oob-l, at: [24.23, 70.53], for: oob, group: port-leds, rel-pos: 901}
-        - {ref: common/led-dot@1, id: led-oob-r, at: [32.53, 70.53], for: oob, group: port-leds, rel-pos: 902}
     regions:
       - {id: mgmt-block, at: [1.0, 1.0], size: {w: 40.0, h: 85.5}, label: Management and SFP+,
          members: [reset, console-usb, usb, console, oob, mgmt-sfp-0, mgmt-sfp-1]}

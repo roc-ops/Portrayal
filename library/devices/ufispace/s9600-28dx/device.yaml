@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-28dx
-version: 1.0.4
+version: 2.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-28DX
@@ -301,7 +301,7 @@ gaps:
     a per-NOS LED table from UfiSpace or a NOS vendor, or photographs of a live unit
     with ports in known states
 - what: management-jack-led-semantics
-  scope: [led-mgmt-l, led-mgmt-r]
+  scope: [mgmt]
   reason: vendor-silent
   note: >-
     The management RJ45 carries two green lamps at its bottom corners, plainly drawn in
@@ -470,7 +470,7 @@ views:
         - {ref: common/smb-jack@1, id: clk-1pps, at: [9.48, 4.49], group: timing, rel-pos: 1, attrs: {role: 1pps-io}}
         - {ref: common/smb-jack@1, id: clk-10mhz, at: [9.48, 18.90], group: timing, rel-pos: 2, attrs: {role: 10mhz-io}}
         - {ref: common/sma-jack@1, id: gnss-ant, at: [8.39, 31.90], group: timing, rel-pos: 3, attrs: {role: gnss-in}}
-        - {ref: std/rj45@1, id: tod, at: [23.12, 26.52], group: timing, rel-pos: 4, attrs: {media: rj45, role: tod-io}}
+        - {ref: std/rj45@2, id: tod, at: [23.22, 26.92], group: timing, rel-pos: 4, attrs: {media: rj45, role: tod-io}}
         - {ref: std/usb-a@1, id: usb, at: [41.05, 30.80], rotate: 90, group: mgmt, rel-pos: 3, attrs: {role: maintenance, speed: usb3}}
         - {ref: common/reset-button@1, id: reset, at: [29.28, 44.51], for: chassis, group: mgmt, rel-pos: 5}
         - {ref: common/led-rect@1, id: led-sync, for: chassis, at: [11.3, 56.40],
@@ -516,10 +516,8 @@ views:
              Drawn blue in the figure where the five lamps above it are green',
            group: status-leds, rel-pos: 6}
         - {ref: std/micro-usb@1, id: console-usb, at: [18.9, 70.2], group: mgmt, rel-pos: 2, attrs: {media: micro-usb, role: console}}
-        - {ref: std/rj45@1, id: console, at: [29.69, 59.40], group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
-        - {ref: std/rj45@1, id: mgmt, at: [49.71, 59.56], group: mgmt, rel-pos: 4, attrs: {role: oob, speed: 100m-1g}}
-        - {ref: common/led-dot@1, id: led-mgmt-l, at: [50.6, 70.5], for: mgmt, group: port-leds, rel-pos: 1}
-        - {ref: common/led-dot@1, id: led-mgmt-r, at: [62.9, 70.5], for: mgmt, group: port-leds, rel-pos: 2}
+        - {ref: std/rj45@2, id: console, at: [29.79, 59.8], group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
+        - {ref: common/rj45-eth@1, id: mgmt, at: [49.81, 59.96], group: mgmt, rel-pos: 4, attrs: {role: oob, speed: 100m-1g}}
         - {ref: std/sfp-ganged@1, id: port-0-1, at: [52.98, 15.29], group: sfp28-breakout, rel-pos: 1}
         - {ref: std/sfp-ganged@1, id: port-0-2, at: [52.98, 28.19], rotate: 180, group: sfp28-breakout, rel-pos: 2}
         - {ref: std/sfp-ganged@1, id: port-0-3, at: [70.08, 15.29], group: sfp28-breakout, rel-pos: 3}

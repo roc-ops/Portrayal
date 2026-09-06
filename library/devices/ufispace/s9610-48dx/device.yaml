@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9610-48dx
-version: 2.0.4
+version: 3.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9610-48DX
@@ -719,12 +719,12 @@ views:
         - {ref: std/sma@1, id: gnss-ant, at: [9.43, 33.97], attrs: {media: coax-sma, role: gnss-in}, group: timing, rel-pos: 1}
         - {ref: std/smb@1, id: clk-10mhz, at: [10.18, 20.16], attrs: {media: coax-smb, role: 10mhz-io}, group: timing, rel-pos: 2}
         - {ref: std/smb@1, id: clk-1pps, at: [10.18, 5.87], attrs: {media: coax-smb, role: 1pps-io}, group: timing, rel-pos: 3}
-        - {ref: std/rj45-ganged@1, id: tod, at: [24.43, 29.50], attrs: {media: rj45, role: tod-io}, group: timing, rel-pos: 4}
-        - {ref: std/rj45-ganged@1, id: bits, at: [24.43, 15.50], rotate: 180, attrs: {media: rj48, role: bits-io}, group: timing, rel-pos: 5}
-        - {ref: std/rj45@1, id: console, at: [27.21, 58.99], attrs: {media: rj45-serial, role: console}, group: mgmt, rel-pos: 1}
+        - {ref: std/rj45-ganged@2, id: tod, at: [24.43, 29.5], attrs: {media: rj45, role: tod-io}, group: timing, rel-pos: 4}
+        - {ref: std/rj45-ganged@2, id: bits, at: [24.43, 15.5], rotate: 180, attrs: {media: rj48, role: bits-io}, group: timing, rel-pos: 5}
+        - {ref: std/rj45@2, id: console, at: [27.31, 59.39], attrs: {media: rj45-serial, role: console}, group: mgmt, rel-pos: 1}
         - {ref: std/micro-usb@1, id: console-usb, at: [16.40, 70.17], attrs: {media: micro-usb-b, role: console}, group: mgmt, rel-pos: 2}
         - {ref: std/usb-a@1, id: usb, at: [40.40, 30.80], rotate: 90, attrs: {role: maintenance, speed: usb3}, group: mgmt, rel-pos: 3}
-        - {ref: std/rj45@1, id: oob, at: [47.25, 59.13], attrs: {media: rj45, role: mgmt, speed: 100m-1g}, group: mgmt, rel-pos: 4}
+        - {ref: common/rj45-eth@1, id: oob, at: [47.35, 59.53], attrs: {media: rj45, role: mgmt, speed: 100m-1g}, group: mgmt, rel-pos: 4, states: {led-a: ['off', {color: '#22c55e', name: link-1g}, {behavior: blinking, color: '#22c55e', name: activity}], led-b: ['off', {color: '#f59e0b', name: link-10-100m}, {behavior: blinking, color: '#f59e0b', name: activity}]}, description: 'led-oob-left: the left lamp inside the out-of-band jack''s own aperture, drawn dark in the datasheet render. THIS VOCABULARY IS NOT SOURCED FOR THIS DEVICE: HIG section 10 tables the six front-panel lamps and the two FRU lamps and gives this jack no table at all, so the wording is borrowed from the S9510-28DC and S9311-64D guides, whose Management Port LED tables give 1G green on the left and 10M/100M amber on the right for the same class of jack on the same vendor''s boxes. It is an inference from a sibling document and is recorded as one; led-oob-right: the right lamp inside the out-of-band jack''s own aperture, drawn dark in the datasheet render. THIS VOCABULARY IS NOT SOURCED FOR THIS DEVICE: HIG section 10 tables the six front-panel lamps and the two FRU lamps and gives this jack no table at all, so the wording is borrowed from the S9510-28DC and S9311-64D guides, whose Management Port LED tables give 1G green on the left and 10M/100M amber on the right for the same class of jack on the same vendor''s boxes. It is an inference from a sibling document and is recorded as one'}
         - {ref: common/reset-button@1, id: reset, at: [28.80, 44.10], for: chassis, group: mgmt, rel-pos: 5}
         - {ref: common/led-dot@1, id: led-sync, for: chassis, at: [9.45, 57.11],
            states: ['off',
@@ -764,18 +764,6 @@ views:
                    {name: beacon, color: '#3b82f6', behavior: blinking}],
            description: 'HIG Front Panel LED table, ID row - Off (no power), Solid Blue (Reserved), Blinking Blue (beacon feature enabled). The only blue lamp on the panel',
            group: status-leds, rel-pos: 6}
-        - {ref: common/led-dot@1, id: led-oob-left, for: oob, at: [49.10, 69.80],
-           states: ['off',
-                   {name: link-1g, color: '#22c55e'},
-                   {name: activity, color: '#22c55e', behavior: blinking}],
-           description: 'the left lamp inside the out-of-band jack''s own aperture, drawn dark in the datasheet render. THIS VOCABULARY IS NOT SOURCED FOR THIS DEVICE: HIG section 10 tables the six front-panel lamps and the two FRU lamps and gives this jack no table at all, so the wording is borrowed from the S9510-28DC and S9311-64D guides, whose Management Port LED tables give 1G green on the left and 10M/100M amber on the right for the same class of jack on the same vendor''s boxes. It is an inference from a sibling document and is recorded as one',
-           group: port-leds, rel-pos: 101}
-        - {ref: common/led-dot@1, id: led-oob-right, for: oob, at: [59.55, 69.80],
-           states: ['off',
-                   {name: link-10-100m, color: '#f59e0b'},
-                   {name: activity, color: '#f59e0b', behavior: blinking}],
-           description: 'the right lamp inside the out-of-band jack''s own aperture, drawn dark in the datasheet render. THIS VOCABULARY IS NOT SOURCED FOR THIS DEVICE: HIG section 10 tables the six front-panel lamps and the two FRU lamps and gives this jack no table at all, so the wording is borrowed from the S9510-28DC and S9311-64D guides, whose Management Port LED tables give 1G green on the left and 10M/100M amber on the right for the same class of jack on the same vendor''s boxes. It is an inference from a sibling document and is recorded as one',
-           group: port-leds, rel-pos: 102}
         - {ref: std/sfp-ganged@1, id: sfpp-0, at: [67.59, 45.51], rotate: 180, group: sfp-plus-mgmt, rel-pos: 0}
         - {ref: std/sfp-ganged@1, id: sfpp-1, at: [67.59, 60.79], group: sfp-plus-mgmt, rel-pos: 1}
         - {ref: std/sfp-ganged@1, id: sfpp-2, at: [81.92, 45.51], rotate: 180, group: sfp-plus-mgmt, rel-pos: 2}

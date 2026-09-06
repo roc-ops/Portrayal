@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9610-36d
-version: 2.0.4
+version: 3.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9610-36D
@@ -695,18 +695,10 @@ views:
            description: 'HIG Front Panel LED table, PS1 row - Off (no power), Solid Green (PSU1 working normal), Solid Amber (PSU1 fail, PSU1 needs service)',
            group: status-leds, rel-pos: 5}
         - {ref: std/micro-usb@1, id: console-usb, at: [7.2, 76.4], group: mgmt, rel-pos: 4, attrs: {media: micro-usb-b, role: console}}
-        - {ref: std/rj45-ganged@1, id: oob, at: [20.8, 47.1], rotate: 180, group: mgmt, rel-pos: 1, attrs: {role: mgmt, speed: 100m-1g}}
+        - {ref: common/rj45-ganged-eth@1, id: oob, at: [20.8, 47.1], rotate: 180, group: mgmt, rel-pos: 1, attrs: {role: mgmt, speed: 100m-1g}, states: {led-a: ['off', {color: '#f59e0b', name: link}, {behavior: blinking, color: '#f59e0b', name: activity}], led-b: ['off', {color: '#22c55e', name: link}, {behavior: blinking, color: '#22c55e', name: activity}]}, description: 'led-oob-left: std/rj45-ganged contracts no lamps of its own, so the two the faceplate draws in the jack aperture''s top corners are placed on top of it. The HIG tables no states for them - see the port-led-semantics gap - so a plain link/activity default is used and nothing is claimed about which speed each lamp reports; led-oob-right: the second of the out-of-band jack''s two aperture lamps; the HIG tables no states for it, so it carries the same undeclared default as its partner'}
         - {ref: std/usb-a@1, id: usb, at: [21.1, 60.2], group: mgmt, rel-pos: 2, attrs: {role: maintenance, speed: usb3}}
-        - {ref: std/rj45-ganged@1, id: console, at: [20.8, 66.5], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
+        - {ref: std/rj45-ganged@2, id: console, at: [20.8, 66.5], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
         - {ref: common/usb-symbol@1, id: usb-mark, at: [30.3, 42.3], for: usb, group: furniture, rel-pos: 1}
-        - {ref: common/led-dot@1, id: led-oob-left, for: oob, at: [20.7, 47.8],
-           states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}],
-           description: 'std/rj45-ganged contracts no lamps of its own, so the two the faceplate draws in the jack aperture''s top corners are placed on top of it. The HIG tables no states for them - see the port-led-semantics gap - so a plain link/activity default is used and nothing is claimed about which speed each lamp reports',
-           group: port-leds, rel-pos: 37}
-        - {ref: common/led-dot@1, id: led-oob-right, for: oob, at: [31.42, 47.8],
-           states: ['off', {name: link, color: '#f59e0b'}, {name: activity, color: '#f59e0b', behavior: blinking}],
-           description: 'the second of the out-of-band jack''s two aperture lamps; the HIG tables no states for it, so it carries the same undeclared default as its partner',
-           group: port-leds, rel-pos: 38}
         - {ref: std/sfp-ganged@1, id: sfp-0, at: [41.78, 51.0], rotate: 180, group: sfp-plus, rel-pos: 0}
         - {ref: std/sfp-ganged@1, id: sfp-1, at: [41.78, 65.9], group: sfp-plus, rel-pos: 1}
         - {ref: common/led-dot@1, id: led-sfp-left, for: [sfp-0, sfp-1], at: [45.14, 49.49], group: port-leds, rel-pos: 39}

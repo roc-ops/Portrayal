@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9511-20ct
-version: 0.2.1
+version: 1.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9511-20CT
@@ -495,29 +495,15 @@ views:
              power fail)',
            group: status-leds, rel-pos: 5}
         - {ref: common/reset-button@1, id: reset, at: [130.50, 36.00], for: chassis, group: mgmt, rel-pos: 4}
-        - {ref: std/rj45-ganged@1, id: bits, at: [146.48, 10.80], rotate: 180, group: timing, rel-pos: 4, attrs: {media: rj48, role: bits-in}}
-        - {ref: std/rj45-ganged@1, id: tod, at: [146.48, 22.80], group: timing, rel-pos: 5, attrs: {media: rj45, role: tod-io}}
-        - {ref: std/rj45-ganged@1, id: mgmt, at: [167.51, 9.30], rotate: 180, group: mgmt, rel-pos: 1, attrs: {role: mgmt, speed: 100m-1g}}
-        - {ref: common/led-dot@1, id: led-mgmt-left, for: mgmt, at: [168.30, 9.60],
-           states: ['off', {name: link-1g, color: '#22c55e'},
-                   {name: activity-1g, color: '#22c55e', behavior: blinking}],
-           description: 'HIG section 8 Management port LED table, Left LED - Off (1G no
-             link), Solid Green (1G link-up), Blinking Green (1G TX/RX activity)',
-           group: port-leds, rel-pos: 41}
-        - {ref: common/led-dot@1, id: led-mgmt-right, for: mgmt, at: [178.20, 9.60],
-           states: ['off', {name: link-10-100m, color: '#f59e0b'},
-                   {name: activity-10-100m, color: '#f59e0b', behavior: blinking}],
-           description: 'HIG section 8 Management port LED table, Right LED - Off (no
-             link), Solid Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX
-             activity). The two lamps do not share a vocabulary, so they are declared
-             separately',
-           group: port-leds, rel-pos: 42}
+        - {ref: std/rj45-ganged@2, id: bits, at: [146.48, 10.8], rotate: 180, group: timing, rel-pos: 4, attrs: {media: rj48, role: bits-in}}
+        - {ref: std/rj45-ganged@2, id: tod, at: [146.48, 22.8], group: timing, rel-pos: 5, attrs: {media: rj45, role: tod-io}}
+        - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [167.51, 9.3], rotate: 180, group: mgmt, rel-pos: 1, attrs: {role: mgmt, speed: 100m-1g}, states: {led-a: ['off', {color: '#f59e0b', name: link-10-100m}, {behavior: blinking, color: '#f59e0b', name: activity-10-100m}], led-b: ['off', {color: '#22c55e', name: link-1g}, {behavior: blinking, color: '#22c55e', name: activity-1g}]}, description: 'led-mgmt-left: HIG section 8 Management port LED table, Left LED - Off (1G no link), Solid Green (1G link-up), Blinking Green (1G TX/RX activity); led-mgmt-right: HIG section 8 Management port LED table, Right LED - Off (no link), Solid Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity). The two lamps do not share a vocabulary, so they are declared separately'}
         - {ref: std/usb-a@1, id: usb, at: [167.86, 20.80], group: mgmt, rel-pos: 2, attrs: {role: storage, speed: usb3}}
-        - {ref: std/rj45-ganged@1, id: console, at: [167.51, 25.60], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
-        - {ref: std/rj45-ganged@1, id: port-0-rj45, at: [245.85, 8.65], group: combo-1g-rj45, rel-pos: 0}
-        - {ref: std/rj45-ganged@1, id: port-1-rj45, at: [245.85, 24.39], rotate: 180, group: combo-1g-rj45, rel-pos: 1}
-        - {ref: std/rj45-ganged@1, id: port-2-rj45, at: [259.82, 8.65], group: combo-1g-rj45, rel-pos: 2}
-        - {ref: std/rj45-ganged@1, id: port-3-rj45, at: [259.82, 24.39], rotate: 180, group: combo-1g-rj45, rel-pos: 3}
+        - {ref: std/rj45-ganged@2, id: console, at: [167.51, 25.6], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
+        - {ref: common/rj45-ganged-eth@1, id: port-0-rj45, at: [245.85, 8.65], group: combo-1g-rj45, rel-pos: 0}
+        - {ref: common/rj45-ganged-eth@1, id: port-1-rj45, at: [245.85, 24.39], rotate: 180, group: combo-1g-rj45, rel-pos: 1}
+        - {ref: common/rj45-ganged-eth@1, id: port-2-rj45, at: [259.82, 8.65], group: combo-1g-rj45, rel-pos: 2}
+        - {ref: common/rj45-ganged-eth@1, id: port-3-rj45, at: [259.82, 24.39], rotate: 180, group: combo-1g-rj45, rel-pos: 3}
         - {ref: std/sfp-ganged@1, id: port-0-sfp, at: [279.01, 8.95], group: combo-1g-sfp, rel-pos: 0}
         - {ref: std/sfp-ganged@1, id: port-1-sfp, at: [279.01, 24.69], group: combo-1g-sfp, rel-pos: 1}
         - {ref: std/sfp-ganged@1, id: port-2-sfp, at: [293.26, 8.95], group: combo-1g-sfp, rel-pos: 2}
@@ -559,14 +545,6 @@ views:
         - {ref: common/led-dot@1, id: led-port-18, at: [420.75, 21.0], for: port-18, group: port-leds, rel-pos: 19}
         - {ref: common/led-dot@1, id: led-port-19, at: [423.75, 21.0], for: port-19, group: port-leds, rel-pos: 20}
         - {ref: common/ground-symbol@1, id: ground-mark, at: [434.00, 18.00], group: grounding, rel-pos: 1}
-        - {ref: common/led-dot@1, id: led-port-0-rj45-l, at: [247.05, 17.38], for: port-0-rj45, group: port-leds, rel-pos: 901}
-        - {ref: common/led-dot@1, id: led-port-0-rj45-r, at: [255.35, 17.38], for: port-0-rj45, group: port-leds, rel-pos: 902}
-        - {ref: common/led-dot@1, id: led-port-1-rj45-l, at: [247.05, 24.66], for: port-1-rj45, group: port-leds, rel-pos: 903}
-        - {ref: common/led-dot@1, id: led-port-1-rj45-r, at: [255.35, 24.66], for: port-1-rj45, group: port-leds, rel-pos: 904}
-        - {ref: common/led-dot@1, id: led-port-2-rj45-l, at: [261.02, 17.38], for: port-2-rj45, group: port-leds, rel-pos: 905}
-        - {ref: common/led-dot@1, id: led-port-2-rj45-r, at: [269.32, 17.38], for: port-2-rj45, group: port-leds, rel-pos: 906}
-        - {ref: common/led-dot@1, id: led-port-3-rj45-l, at: [261.02, 24.66], for: port-3-rj45, group: port-leds, rel-pos: 907}
-        - {ref: common/led-dot@1, id: led-port-3-rj45-r, at: [269.32, 24.66], for: port-3-rj45, group: port-leds, rel-pos: 908}
     regions:
       - {id: timing, at: [118, 3], size: {w: 44, h: 39}, label: Timing block, members: [gnss-ant, clk-1pps, clk-10mhz, bits, tod]}
       - {id: mgmt-block, at: [165, 7], size: {w: 18, h: 32}, label: Management, members: [mgmt, usb, console]}

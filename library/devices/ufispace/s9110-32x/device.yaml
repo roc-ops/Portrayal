@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9110-32x
-version: 1.0.4
+version: 2.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9110-32X
@@ -389,7 +389,7 @@ views:
       - {at: [430.75, 40.35], path: 'M -1.05 -1.05 L 1.05 -1.05 L 0 1.05 Z', fill: '#f5f7fa', stroke-width: 0.2, for: port-31}
     components:
       placements:
-        - {ref: std/rj45-ganged@1, id: oob, at: [25.3, 8.9], rotate: 180, group: mgmt, rel-pos: 1, attrs: {role: mgmt-oob, speed: 100m-1g}}
+        - {ref: std/rj45-ganged@2, id: oob, at: [25.3, 8.9], rotate: 180, group: mgmt, rel-pos: 1, attrs: {role: mgmt-oob, speed: 100m-1g}}
         - {ref: common/led-dot@1, id: oob-led-left, at: [23.8, 6.8], for: oob, group: port-leds, rel-pos: 32,
            states: ['off', {name: link-1g, color: '#22c55e'}, {name: activity-1g, color: '#22c55e', behavior: blinking}],
            description: 'HIG Management Port LED table, left lamp - Off (no power), Solid Green (1G link-up), Blinking Green (1G TX/RX activity)'}
@@ -397,7 +397,7 @@ views:
            states: ['off', {name: link-10-100, color: '#f59e0b'}, {name: activity-10-100, color: '#f59e0b', behavior: blinking}],
            description: 'HIG Management Port LED table, right lamp - Off (no power), Solid Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity)'}
         - {ref: std/usb-a@1, id: usb, at: [25.65, 20.2], group: mgmt, rel-pos: 4, attrs: {role: storage, speed: usb3}}
-        - {ref: std/rj45-ganged@1, id: console, at: [25.3, 27.5], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
+        - {ref: std/rj45-ganged@2, id: console, at: [25.3, 27.5], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
         - {ref: std/sfp@1, id: mgmt-sfp, at: [57.2, 26.4], group: mgmt, rel-pos: 2, attrs: {media: sfp-plus, speed: 10g, role: mgmt}}
         - {ref: common/led-dot@1, id: led-mgmt, at: [58.7, 22.85], for: mgmt-sfp, group: port-leds, rel-pos: 34,
            description: 'the lamp on the orange MGMT label. No HIG table covers it - the Management Port LED table is the RJ45 OOB jack (10M/100M/1G rows) - so it keeps the off/on default; see the port-led-semantics gap'}

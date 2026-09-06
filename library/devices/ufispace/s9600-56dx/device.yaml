@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-56dx
-version: 2.0.4
+version: 3.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-56DX
@@ -320,7 +320,7 @@ gaps:
     a per-NOS LED table from UfiSpace or a NOS vendor, or photographs of a live unit with
     known ports up, down and passing traffic
 - what: mgmt-jack-led-semantics
-  scope: [oob, led-oob-left, led-oob-right]
+  scope: [oob]
   reason: vendor-silent
   note: >-
     The two lamps in the out-of-band jack's aperture are drawn green in HIG Figure 8 and are
@@ -563,11 +563,11 @@ views:
         - {ref: std/sma@1, id: gnss-ant, at: [9.53, 33.77], group: timing, rel-pos: 1, attrs: {media: coax-sma, role: gnss-in}}
         - {ref: std/smb@1, id: clk-10mhz, at: [10.13, 19.92], group: timing, rel-pos: 2, attrs: {media: coax-smb, role: 10mhz-io}}
         - {ref: std/smb@1, id: clk-1pps, at: [10.13, 5.14], group: timing, rel-pos: 3, attrs: {media: coax-smb, role: 1pps-io}}
-        - {ref: std/rj45@1, id: tod, at: [22.80, 26.57], group: timing, rel-pos: 4, attrs: {media: rj45, role: tod-io}}
-        - {ref: std/rj45@1, id: console, at: [29.15, 58.88], group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
+        - {ref: std/rj45@2, id: tod, at: [22.9, 26.97], group: timing, rel-pos: 4, attrs: {media: rj45, role: tod-io}}
+        - {ref: std/rj45@2, id: console, at: [29.25, 59.28], group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
         - {ref: std/micro-usb@1, id: console-usb, at: [18.64, 70.26], group: mgmt, rel-pos: 2, attrs: {media: micro-usb-b, role: console}}
         - {ref: std/usb-a@1, id: usb, at: [40.20, 30.35], rotate: 90, group: mgmt, rel-pos: 3, attrs: {role: storage, speed: usb3}}
-        - {ref: std/rj45@1, id: oob, at: [49.32, 57.89], group: mgmt, rel-pos: 4, attrs: {media: rj45, role: mgmt, speed: 100m-1g}}
+        - {ref: common/rj45-eth@1, id: oob, at: [49.42, 58.29], group: mgmt, rel-pos: 4, attrs: {media: rj45, role: mgmt, speed: 100m-1g}, states: {led-a: ['off', {color: '#22c55e', name: link-1g}, {behavior: blinking, color: '#22c55e', name: activity-1g}], led-b: ['off', {color: '#f59e0b', name: link-10-100m}, {behavior: blinking, color: '#f59e0b', name: activity-10-100m}]}, description: 'led-oob-left: the left lamp in the out-of-band jack''s aperture, drawn green in HIG Figure 8''s lower corners. THIS VOCABULARY IS NOT SOURCED FOR THIS DEVICE: HIG section 10 tables the six front-panel lamps and the two FRU lamps and gives this jack no table at all, unlike the S9510-28DC and S9311-64D guides from which the wording is borrowed. See the mgmt-jack-led-semantics gap; led-oob-right: the right lamp in the out-of-band jack''s aperture. Same borrowed, unsourced vocabulary and the same gap as led-oob-left'}
         - {ref: common/reset-button@1, id: reset, at: [28.64, 43.94], for: chassis, group: mgmt, rel-pos: 5}
         - {ref: common/led-dot@1, id: led-sync, for: chassis, at: [11.70, 56.98],
            states: ['off',
@@ -604,18 +604,6 @@ views:
                    {name: beacon, color: '#3b82f6', behavior: blinking}],
            description: 'HIG Front Panel LED table, ID row - Off (no power), Blinking Blue (beacon feature enabled). The only blue lamp on the panel and the only row in the table that states a behaviour',
            group: status-leds, rel-pos: 6}
-        - {ref: common/led-dot@1, id: led-oob-left, for: oob, at: [50.13, 68.70],
-           states: ['off',
-                   {name: link-1g, color: '#22c55e'},
-                   {name: activity-1g, color: '#22c55e', behavior: blinking}],
-           description: 'the left lamp in the out-of-band jack''s aperture, drawn green in HIG Figure 8''s lower corners. THIS VOCABULARY IS NOT SOURCED FOR THIS DEVICE: HIG section 10 tables the six front-panel lamps and the two FRU lamps and gives this jack no table at all, unlike the S9510-28DC and S9311-64D guides from which the wording is borrowed. See the mgmt-jack-led-semantics gap',
-           group: port-leds, rel-pos: 101}
-        - {ref: common/led-dot@1, id: led-oob-right, for: oob, at: [60.60, 68.70],
-           states: ['off',
-                   {name: link-10-100m, color: '#f59e0b'},
-                   {name: activity-10-100m, color: '#f59e0b', behavior: blinking}],
-           description: 'the right lamp in the out-of-band jack''s aperture. Same borrowed, unsourced vocabulary and the same gap as led-oob-left',
-           group: port-leds, rel-pos: 102}
         - {ref: std/sfp-ganged@1, id: port-sfp-1, at: [52.09, 14.40], rotate: 180, group: sfp28, rel-pos: 1}
         - {ref: std/sfp-ganged@1, id: port-sfp-2, at: [52.09, 27.89], group: sfp28, rel-pos: 2}
         - {ref: std/sfp-ganged@1, id: port-sfp-3, at: [70.52, 14.40], rotate: 180, group: sfp28, rel-pos: 3}

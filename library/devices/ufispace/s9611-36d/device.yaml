@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9611-36d
-version: 2.0.5
+version: 3.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9611-36D
@@ -806,26 +806,13 @@ views:
            description: 'HIG Front Panel LED table, PS1 row - Off (no power), Solid Green
              (PSU1 is working normal), Solid Amber (PSU1 fail, PSU1 need service)',
            group: status-leds, rel-pos: 5}
-        - {ref: std/rj45-ganged@1, id: oob, at: [20.57, 46.90], rotate: 180, group: mgmt, rel-pos: 1,
-           attrs: {role: mgmt, speed: 100m-1g}}
-        - {ref: common/led-dot@1, id: led-oob-left, for: oob, at: [20.70, 47.74],
-           states: ['off', 'on'],
-           description: 'the left of the two lamps moulded into the out-of-band jack''s own
-             aperture. std/rj45-ganged contracts no lamps of its own, so both are placed on
-             top of it. This HIG tables no management-port LED at all - unlike the
-             S9311-64D''s, which does - so neither lamp is given a vocabulary',
-           group: port-leds, rel-pos: 39}
-        - {ref: common/led-dot@1, id: led-oob-right, for: oob, at: [31.15, 47.74],
-           states: ['off', 'on'],
-           description: 'the right of the two lamps in the out-of-band jack''s aperture; see
-             led-oob-left. The two are drawn as separate placements because they are two
-             lamps, not because they are known to differ',
-           group: port-leds, rel-pos: 40}
+        - {ref: common/rj45-ganged-eth@1, id: oob, at: [20.57, 46.9], rotate: 180, group: mgmt, rel-pos: 1,
+           attrs: {role: mgmt, speed: 100m-1g}, states: {led-a: ['off', 'on'], led-b: ['off', 'on']}, description: 'led-oob-left: the left of the two lamps moulded into the out-of-band jack''s own aperture. std/rj45-ganged contracts no lamps of its own, so both are placed on top of it. This HIG tables no management-port LED at all - unlike the S9311-64D''s, which does - so neither lamp is given a vocabulary; led-oob-right: the right of the two lamps in the out-of-band jack''s aperture; see led-oob-left. The two are drawn as separate placements because they are two lamps, not because they are known to differ'}
         - {ref: std/usb-a@1, id: usb, at: [20.92, 60.08], group: mgmt, rel-pos: 3,
            attrs: {role: storage, speed: usb3}}
         - {ref: common/usb-symbol@1, id: usb-mark, at: [30.30, 41.80], for: usb,
            group: furniture, rel-pos: 1}
-        - {ref: std/rj45-ganged@1, id: console, at: [20.57, 67.00], group: mgmt,
+        - {ref: std/rj45-ganged@2, id: console, at: [20.57, 67], group: mgmt,
            rel-pos: 2, attrs: {media: rj45-serial, role: console}}
         - {ref: std/micro-usb@1, id: console-usb, at: [7.14, 77.29], group: mgmt, rel-pos: 4,
            attrs: {media: micro-usb-b, role: console}}
