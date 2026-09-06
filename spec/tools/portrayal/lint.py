@@ -3991,7 +3991,15 @@ def lint_device_face_bindings(path, data, lib_roots):
 # Which a placement takes is decided by what the jack is FOR, and the test is the
 # one sweep_jack_lamps.py already applied: a console, aux, serial, timing or
 # telemetry jack carries no link lamp; everything else that is Ethernet does.
-RJ45_BARE = re.compile(r"console|aux|serial|ioioi|(^|-)tod($|-)|bits|pps|sync|telemetry|timing", re.I)
+# The long words stand unanchored (a substring match is enough - nothing else
+# in an id/role/group legitimately contains "console"). The short tokens -
+# Juniper's "con" console abbreviation, "clk" for an external clock, "ptp" for
+# a grandmaster, and a bare "tod" not already caught by the old (^|-)tod($|-) -
+# are anchored on whitespace or a hyphen so they cannot fire inside an
+# unrelated word (e.g. "contact", "oob", "eth-lan").
+RJ45_BARE = re.compile(
+    r"console|aux|serial|ioioi|telemetry|timing"
+    r"|(^|[\s-])(con|tod|clk|bits|pps|sync|ptp)([\s-]|$)", re.I)
 RJ45_LAMPED_REFS = {"common/rj45-eth@1", "common/rj45-ganged-eth@1"}
 RJ45_BARE_REFS = {"std/rj45@2", "std/rj45-ganged@2"}
 

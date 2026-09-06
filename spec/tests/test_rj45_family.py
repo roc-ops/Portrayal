@@ -18,6 +18,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
 sys.path.insert(0, str(ROOT / "spec" / "tools" / "portrayal"))
 import lint  # noqa: E402
+import dcim_export as dx  # noqa: E402
 
 STANDARDS = yaml.safe_load((ROOT / "spec/schemas/standards.yaml").read_text())["standards"]
 
@@ -252,6 +253,38 @@ def test_l76_still_counts_an_ethernet_jack_with_truly_no_lamps():
     assert len(ws) == 1 and "1 Ethernet jack(s) on a part with no lamps" in ws[0]
 
 
+def _wants(id_, role=None, group="mgmt"):
+    q = {"id": id_, "group": group, "attrs": ({"role": role} if role else {})}
+    return lint.rj45_wants_lamps(q, {"mgmt": {"attrs": {}}})
+
+
+@pytest.mark.parametrize("id_", ["con", "tod", "clk-a", "gm-ptp", "bits-0", "console-1"])
+def test_rj45_wants_lamps_is_false_for_bare_ids(id_):
+    assert _wants(id_) is False
+
+
+def test_rj45_wants_lamps_is_false_for_console_role():
+    assert _wants("port-9", role="console") is False
+
+
+@pytest.mark.parametrize("id_", ["mgmt-eth", "port-1", "ethernet", "mgmt0"])
+def test_rj45_wants_lamps_is_true_for_ethernet_ids(id_):
+    assert _wants(id_) is True
+
+
+# second-tod-x contains the bare token "tod" flanked by hyphens (-tod-), so it
+# IS bare by the rule - it is not exempted just because "tod" isn't the whole id.
+def test_rj45_wants_lamps_is_false_for_an_id_containing_the_bare_token():
+    assert _wants("second-tod-x") is False
+
+
+# contact-1 and oob contain no bare token (contact is not "con" bounded by a
+# separator; oob is not "aux"/"con"/etc at all), and eth-lan is plainly Ethernet.
+@pytest.mark.parametrize("id_", ["contact-1", "oob", "eth-lan"])
+def test_rj45_wants_lamps_is_true_when_no_token_matches(id_):
+    assert _wants(id_) is True
+
+
 SWEEP = ROOT / "spec/tools/portrayal/sweep_rj45.py"
 
 FIXTURE = textwrap.dedent("""\
@@ -295,6 +328,38 @@ def sweep(tmp_path, *args):
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
     return r.stdout, (d / "device.yaml").read_text()
+
+
+CON_FIXTURE = textwrap.dedent("""\
+format: 1
+kind: device
+name: d
+version: 1.2.3
+manufacturer: Acme
+model: D
+chassis: {width: 100, height: 40, depth: 30}
+groups:
+  sio: {term: Port}
+views:
+  front:
+    size: {w: 100, h: 40}
+    panel:
+      cutouts:
+        - {id: con, at: [10.0, 10.0], size: [16, 14]}
+    components:
+      placements:
+        - {id: con, ref: std/rj45@1, at: [10.0, 10.0], group: sio, rel-pos: 1}
+""")
+
+
+def test_the_sweep_maps_a_con_id_to_the_bare_ref(tmp_path):
+    d = tmp_path / "devices/acme/d"; d.mkdir(parents=True)
+    (d / "device.yaml").write_text(CON_FIXTURE)
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices")],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert "con" in r.stdout
+    assert "bare" in r.stdout, "an id like `con` must map bare (std/rj45@2), not lamped"
 
 
 def test_the_sweep_reports_and_changes_nothing_without_apply(tmp_path):
@@ -946,3 +1011,51 @@ def test_the_sweep_adds_no_description_when_lamps_have_none(tmp_path):
     d = yaml.safe_load(text)
     pl = {p["id"]: p for p in d["views"]["front"]["components"]["placements"]}
     assert "description" not in pl["mgmt-eth"]
+
+
+# The exporter dropped all four swept RJ45 refs (#Fix B): a Juniper 40GE
+# MIC/DPC module with a lamped Ethernet jack and a bare console jack lost
+# every one of those ports on export.
+def test_build_module_exports_the_swept_rj45_family_refs():
+    contract = {
+        "kind": "module", "name": "m", "attrs": {"model": "m"},
+        "parts": [
+            {"id": "port-0-0", "ref": "common/rj45-ganged-eth@1", "attrs": {"media": "rj45"}},
+            {"id": "console", "ref": "std/rj45@2"},
+        ],
+    }
+    out = dx.build_module(contract, "Juniper")
+    assert out["interfaces"] == [{"name": "port-0-0", "type": "1000base-t"}]
+    assert out["console-ports"] == [{"name": "console", "type": "rj-45"}]
+
+
+# Fix round: PART_CONSOLE briefly gained a version-less "std/rj45": "rj-45"
+# entry, which caught every unswept std/rj45@1 too - turning nine real
+# Juniper RE module types' Ethernet management jacks into exported console
+# ports (RE-MX-104, RE-S-2000-4096, JNP10K-RE1, the MX2000 RCBs, and more).
+# The family must be recognised by the FULL ref (with @major), so an
+# unswept @1 keeps exactly its pre-family behaviour: dropped from export.
+def test_build_module_leaves_unswept_rj45_at_1_exactly_as_before():
+    contract = {
+        "kind": "module", "name": "m", "attrs": {"model": "m"},
+        "parts": [
+            {"id": "ethernet", "ref": "std/rj45@1",
+             "attrs": {"function": "out-of-band management"}},
+        ],
+    }
+    out = dx.build_module(contract, "Juniper")
+    assert "interfaces" not in out
+    assert "console-ports" not in out
+
+
+# The ganged sibling's console behaviour was never version-gated (it was
+# already in PART_CONSOLE version-less before this family existed), so its
+# @1 - not yet swept to @2 - keeps exporting as a console port, unchanged.
+def test_build_module_keeps_unswept_rj45_ganged_at_1_as_console():
+    contract = {
+        "kind": "module", "name": "m", "attrs": {"model": "m"},
+        "parts": [{"id": "console", "ref": "std/rj45-ganged@1"}],
+    }
+    out = dx.build_module(contract, "Juniper")
+    assert out["console-ports"] == [{"name": "console", "type": "rj-45"}]
+    assert "interfaces" not in out
