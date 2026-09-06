@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s6301-56stp
-version: 2.0.0
+version: 2.0.1
 maturity: modelled
 manufacturer: UfiSpace
 model: S6301-56STP
@@ -252,8 +252,10 @@ groups:
     index-origin: 0
     attrs: {media: rj45, speed: 1g}
     description: the 48 10M/100M/1G RJ45 access ports, PoE 802.3af/at up to
-      30 W each; every jack carries one integrated mode-switched lamp, drawn
-      as led-a/led-b of common/rj45-ganged-eth@1
+      30 W each; the hardware carries one mode-switched lamp per jack, the
+      part draws both corner windows (led-a/led-b of
+      common/rj45-ganged-eth@1) at the component default, and the
+      port-leds provenance records the mismatch
   sfp-plus:
     term: Port
     role: traffic

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s7801-54xs
-version: 2.0.0
+version: 2.0.1
 maturity: modelled
 manufacturer: UfiSpace
 model: S7801-54XS
@@ -70,9 +70,12 @@ provenance:
     the gate: the photographed OOB jack is keyway-down, so its contacts face
     UP, while an unrotated lamped jack in this family draws lamps-top/
     contacts-DOWN and cannot show both; the pre-sweep modelling judged that
-    putting the lamps at the bottom (which an unrotated common/rj45-port@4,
-    and now an unrotated common/rj45-eth@1, would not do) would be a larger
-    error than the contact side, and its lamp pair matches the photographed
+    putting the lamps at the bottom (the pre-sweep evidence puts the lamps at
+    the top: common/rj45-port@4 drew lamps-top unrotated, while
+    common/rj45-eth@1's own unrotated default is keyway-down with lamps at
+    the bottom - the opposite - so the sweep's rotate: 180 is what keeps the
+    lamps at the top) would be a larger error than the contact side, and its
+    lamp pair matches the photographed
     green corner lamps - so lamps-top is kept and the rotate stays. The
     S9510-28DC uses the same component the same way.
   system-leds: >-
