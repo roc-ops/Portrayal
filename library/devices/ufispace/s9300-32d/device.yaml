@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9300-32d
-version: 0.2.3
+version: 1.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9300-32D
@@ -389,14 +389,14 @@ views:
            description: 'HIG Front Panel LED table, ID row - Off (no power), Blinking Blue
              (beacon feature is enabled on the switch)',
            group: status-leds, rel-pos: 5}
-        - {ref: common/rj45-bezel@2, id: console, at: [13.6, 2.0], group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
+        - {ref: std/rj45@2, id: console, at: [14.2, 2.85], group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
         - {ref: common/usb-a@3, id: usb, at: [13.6, 17.4], group: mgmt, rel-pos: 2, attrs: {role: storage, speed: usb3}}
-        - {ref: common/rj45-port@4, id: oob, at: [13.6, 27.2], group: mgmt, rel-pos: 3,
+        - {ref: common/rj45-eth@1, id: oob, at: [14.2, 28.05], rotate: 180, group: mgmt, rel-pos: 3,
            attrs: {role: mgmt, speed: 100m-1g},
-           states: {led-left: ['off', {name: link-1g, color: '#22c55e'},
-                               {name: activity-1g, color: '#22c55e', behavior: blinking}],
-                    led-right: ['off', {name: link-10-100m, color: '#f59e0b'},
-                                {name: activity-10-100m, color: '#f59e0b', behavior: blinking}]},
+           states: {led-a: ['off', {name: link-10-100m, color: '#f59e0b'},
+                            {name: activity-10-100m, color: '#f59e0b', behavior: blinking}],
+                    led-b: ['off', {name: link-1g, color: '#22c55e'},
+                            {name: activity-1g, color: '#22c55e', behavior: blinking}]},
            description: 'HIG Management Port LED table - left lamp Off (no power), Solid Green
              (1G link-up), Blinking Green (1G TX/RX activity); right lamp Off (no power), Solid
              Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity). The two lamps
@@ -459,8 +459,6 @@ views:
         - {ref: std/qsfp-dd@1, id: port-29, at: [388.0, 26.05], rotate: 180, group: qsfpdd-400g, rel-pos: 29}
         - {ref: std/qsfp-dd@1, id: port-30, at: [407.5, 8.75], group: qsfpdd-400g, rel-pos: 30}
         - {ref: std/qsfp-dd@1, id: port-31, at: [407.5, 26.05], rotate: 180, group: qsfpdd-400g, rel-pos: 31}
-        - {ref: common/led-dot@1, id: led-oob-l, at: [14.8, 39.83], for: oob, group: port-leds, rel-pos: 901}
-        - {ref: common/led-dot@1, id: led-oob-r, at: [27.4, 39.83], for: oob, group: port-leds, rel-pos: 902}
     regions:
       - {id: mgmt-block, at: [1, 1], size: {w: 31, h: 42}, label: Management, members: [reset, console, usb, oob]}
       - {id: sfp-block, at: [35, 1], size: {w: 31, h: 42}, label: SFP+ OOB and MGMT, members: [oob-sfp-0, oob-sfp-1, port-sfp-0, port-sfp-1]}

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9725-64e
-version: 0.2.4
+version: 1.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9725-64E
@@ -970,17 +970,17 @@ views:
            description: 'HIG PS1 row - Off (no power), Solid Green (PSU1 is working
              normal), Solid Amber (PSU1 fail, PSU1 need service)',
            group: status-leds, rel-pos: 5}
-        - {ref: std/rj45-ganged@1, id: mgmt, at: [20.95, 48.0], rotate: 180, group: mgmt, rel-pos: 4,
+        - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [20.95, 48], rotate: 180, group: mgmt, rel-pos: 4,
            attrs: {role: mgmt, speed: 100m-1g},
            description: 'the OOB management jack (HIG Figure 4 callout RJ45 OOB); its two
              integrated lamps - left green for 1G link and activity, right amber for
-             10M/100M, per the HIG Management port LED table - sit inside this aperture
-             and are not drawn'}
+             10M/100M, per the HIG Management port LED table - are drawn as led-a/led-b
+             of this jack'}
         - {ref: std/usb-a@1, id: usb, at: [21.39, 61.93], group: mgmt, rel-pos: 5,
            attrs: {role: maintenance},
            description: 'USB 3.0 Type-A; the HIG prints the usbreset and 5V-restart
              commands for it under Connecting the USB Extender Cable'}
-        - {ref: std/rj45-ganged@1, id: console, at: [21.0, 68.35], group: mgmt, rel-pos: 6,
+        - {ref: std/rj45-ganged@2, id: console, at: [21, 68.35], group: mgmt, rel-pos: 6,
            attrs: {media: rj45-serial, role: console}}
         - {ref: std/micro-usb@1, id: console-usb, at: [7.2, 79.8], group: mgmt, rel-pos: 7,
            attrs: {role: console},
@@ -1117,8 +1117,6 @@ views:
         - {ref: common/led-dot@1, id: led-port-61, at: [397.38, 83.61], for: port-61, group: port-leds, rel-pos: 62}
         - {ref: common/led-dot@1, id: led-port-62, at: [406.76, 83.61], for: port-62, group: port-leds, rel-pos: 63}
         - {ref: common/led-dot@1, id: led-port-63, at: [420.36, 83.61], for: port-63, group: port-leds, rel-pos: 64}
-        - {ref: common/led-dot@1, id: led-mgmt-l, at: [22.15, 48.27], for: mgmt, group: port-leds, rel-pos: 901}
-        - {ref: common/led-dot@1, id: led-mgmt-r, at: [30.45, 48.27], for: mgmt, group: port-leds, rel-pos: 902}
     regions:
       - {id: mgmt-block, at: [3.0, 26.0], size: {w: 34, h: 60}, label: Management and timing,
          members: [pps, mhz, mgmt, usb, console, console-usb]}

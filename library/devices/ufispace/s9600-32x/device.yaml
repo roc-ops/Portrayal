@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-32x
-version: 1.1.4
+version: 2.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-32X
@@ -573,15 +573,18 @@ views:
         - {ref: common/sma-jack@1, id: gnss-ant, at: [7.43, 33.73], group: timing, rel-pos: 1, attrs: {role: gnss-in}}
         - {ref: common/smb-jack@1, id: clk-1pps, at: [8.17, 6.41], group: timing, rel-pos: 2, attrs: {role: 1pps-io}}
         - {ref: common/smb-jack@1, id: clk-10mhz, at: [8.34, 20.86], group: timing, rel-pos: 3, attrs: {role: 10mhz-io}}
-        - {ref: common/rj45-bezel@2, id: tod, at: [21.60, 26.75], group: timing, rel-pos: 4, attrs: {media: rj45, role: tod-io}}
-        - {ref: common/rj45-port@4, id: mgmt, at: [48.83, 58.75], group: mgmt, rel-pos: 1,
+        - {ref: std/rj45@2, id: tod, at: [22.2, 27.6], group: timing, rel-pos: 4, attrs: {media: rj45, role: tod-io}}
+        - {ref: common/rj45-eth@1, id: mgmt, at: [49.43, 59.6], group: mgmt, rel-pos: 1,
            attrs: {role: mgmt, speed: 100m-1g},
            description: 'the datasheet''s 1 x 100/1000M RJ45 management port. Its two
              lamps are drawn because Figure 8 draws them green in the jack''s lower
              corners; HIG section 10 tables the six front-panel lamps and the two FRU
              lamps and gives this jack no table, unlike the S9510-28DC guide, so they
-             keep the component default rather than that platform''s vocabulary'}
-        - {ref: common/rj45-bezel@2, id: console, at: [28.54, 58.24], group: mgmt, rel-pos: 2, attrs: {media: rj45-serial, role: console}}
+             keep the component default rather than that platform''s vocabulary.
+             common/rj45-port@4 drew this jack keyway-up (lamps at the top) by
+             default, the opposite of Figure 8; common/rj45-eth@1 is keyway-down by
+             default already, matching the photo directly, so no rotate is added'}
+        - {ref: std/rj45@2, id: console, at: [29.14, 59.09], group: mgmt, rel-pos: 2, attrs: {media: rj45-serial, role: console}}
         - {ref: std/micro-usb@1, id: console-usb, at: [18.35, 70.40], group: mgmt, rel-pos: 3, attrs: {role: console, media: micro-usb}}
         - {ref: std/usb-a@1, id: usb, at: [39.90, 32.25], rotate: 270, group: mgmt, rel-pos: 4, attrs: {role: storage, speed: usb3}}
         - {ref: common/reset-button@1, id: reset, at: [28.44, 44.62], for: chassis, group: mgmt, rel-pos: 5}
@@ -671,8 +674,6 @@ views:
         - {ref: ufispace/lane-led-quad@1, id: led-port-15, at: [242.40, 13.00], for: port-15, attrs: {port: '15'}, group: port-leds, rel-pos: 30}
         - {ref: ufispace/lane-led-quad@1, id: led-port-30, at: [242.40, 72.50], for: port-30, attrs: {port: '30'}, group: port-leds, rel-pos: 31}
         - {ref: ufispace/lane-led-quad@1, id: led-port-31, at: [242.40, 75.80], for: port-31, attrs: {port: '31'}, group: port-leds, rel-pos: 32}
-        - {ref: common/led-dot@1, id: led-mgmt-l, at: [50.03, 71.38], for: mgmt, group: port-leds, rel-pos: 901}
-        - {ref: common/led-dot@1, id: led-mgmt-r, at: [62.63, 71.38], for: mgmt, group: port-leds, rel-pos: 902}
     regions:
       - {id: timing-block, at: [6.0, 3.0], size: {w: 34.0, h: 42.0}, label: Timing block,
          members: [gnss-ant, clk-1pps, clk-10mhz, tod]}

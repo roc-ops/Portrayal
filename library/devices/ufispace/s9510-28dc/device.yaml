@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9510-28dc
-version: 1.1.4
+version: 2.0.0
 manufacturer: UfiSpace
 model: S9510-28DC
 portfolio:
@@ -299,11 +299,11 @@ views:
         - {id: clk-10mhz, at: [134.585, 3.485], size: [4.83, 4.83], shape: circle}
         - {id: clk-1pps, at: [144.585, 3.485], size: [4.83, 4.83], shape: circle}
         - {id: ground-mark, at: [431.6, 18.75], size: [6, 6], shape: rect}
-        - {id: bits, at: [132.3, 13.9], size: [16, 14], shape: rect}
-        - {id: tod, at: [132.3, 28.8], size: [16, 14], shape: rect}
-        - {id: mgmt, at: [152.8, 1.7], size: [16, 14], shape: rect}
+        - {id: bits, at: [132.4, 14.25], size: [15.8, 13.2], shape: rect}
+        - {id: tod, at: [132.4, 29.15], size: [15.8, 13.2], shape: rect}
+        - {id: mgmt, at: [152.9, 2.05], size: [15.8, 13.2], shape: rect}
         - {id: usb, at: [154.8, 18.5], size: [12, 4.5], shape: rect}
-        - {id: console, at: [152.8, 25.9], size: [16, 14], shape: rect}
+        - {id: console, at: [152.9, 26.25], size: [15.8, 13.2], shape: rect}
         - {id: port-0, at: [177.975, 26.8], size: [18.5, 9.58], shape: rect}
         - {id: port-1, at: [205.075, 26.8], size: [18.5, 9.58], shape: rect}
         - {id: port-2, at: [230.225, 8.8], size: [18.5, 9.58], shape: rect}
@@ -467,21 +467,21 @@ views:
              colours and two behaviours - the lamp that put behaviour into the model', group: status-leds, rel-pos: 5}
         - {ref: common/ground-symbol@1, id: ground-mark, at: [431.6, 18.75], group: grounding, rel-pos: 1}
         - {ref: common/reset-button@1, id: reset, at: [118.8, 34.6], for: chassis, group: mgmt, rel-pos: 4}
-        - {ref: common/rj45-bezel@2, id: bits, at: [131.8, 13.4], group: timing, rel-pos: 4, attrs: {media: rj48, role: bits-io}}
-        - {ref: common/rj45-bezel@2, id: tod, at: [131.8, 28.3], group: timing, rel-pos: 5, attrs: {media: rj45, role: tod-in}}
-        - {ref: common/rj45-port@4, id: mgmt, at: [152.3, 1.2], group: mgmt, rel-pos: 1,
+        - {ref: std/rj45@2, id: bits, at: [132.4, 14.25], group: timing, rel-pos: 4, attrs: {media: rj48, role: bits-io}}
+        - {ref: std/rj45@2, id: tod, at: [132.4, 29.15], group: timing, rel-pos: 5, attrs: {media: rj45, role: tod-in}}
+        - {ref: common/rj45-eth@1, id: mgmt, at: [152.9, 2.05], rotate: 180, group: mgmt, rel-pos: 1,
            attrs: {role: mgmt, speed: 100m-1g},
-           states: {led-left: ['off', {name: link-1g, color: '#22c55e'},
-                               {name: activity-1g, color: '#22c55e', behavior: blinking}],
-                    led-right: ['off', {name: link-100m, color: '#f59e0b'},
-                                {name: activity-100m, color: '#f59e0b', behavior: blinking}]},
+           states: {led-a: ['off', {name: link-100m, color: '#f59e0b'},
+                            {name: activity-100m, color: '#f59e0b', behavior: blinking}],
+                    led-b: ['off', {name: link-1g, color: '#22c55e'},
+                            {name: activity-1g, color: '#22c55e', behavior: blinking}]},
            description: 'HIG Management port LED table - left lamp Off (1G no link), Solid Green (1G link-
              up), Blinking Green (1G TX/RX activity); right lamp Off (no activity), Solid Amber
              (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity). The two lamps do not
              share a vocabulary, which is why this is declared per element rather than as one
              list'}
         - {ref: common/usb-a@3, id: usb, at: [152.3, 16.1], group: mgmt, rel-pos: 2, attrs: {role: storage, speed: usb3}}
-        - {ref: common/rj45-bezel@2, id: console, at: [152.3, 25.4], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
+        - {ref: std/rj45@2, id: console, at: [152.9, 26.25], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
         - {ref: common/qsfp-cage@2, id: port-0, at: [177.4, 26.2], group: qsfpdd-400g, rel-pos: 0}
         - {ref: common/qsfp-cage@2, id: port-1, at: [204.5, 26.2], group: qsfpdd-400g, rel-pos: 1}
         - {ref: common/led-arrow@1, id: led-port-4, at: [255.975, 18.7], skin: up, for: port-4, attrs: {port: '4'}, group: port-leds, rel-pos: 7}
@@ -540,8 +540,6 @@ views:
         - {ref: std/sfp-ganged@1, id: port-25, at: [399.4, 22.6], group: sfp28, rel-pos: 25}
         - {ref: std/sfp-ganged@1, id: port-26, at: [413.65, 7], group: sfp28, rel-pos: 26}
         - {ref: std/sfp-ganged@1, id: port-27, at: [413.65, 22.6], group: sfp28, rel-pos: 27}
-        - {ref: common/led-dot@1, id: led-mgmt-l, at: [153.5, 13.83], for: mgmt, group: port-leds, rel-pos: 901}
-        - {ref: common/led-dot@1, id: led-mgmt-r, at: [166.1, 13.83], for: mgmt, group: port-leds, rel-pos: 902}
     regions:
       - {id: timing, at: [116, 1], size: {w: 36, h: 42}, label: Timing block, members: [gnss-ant, clk-10mhz, clk-1pps, bits, tod]}
       - {id: mgmt-block, at: [151, 1], size: {w: 19, h: 42}, label: Management, members: [mgmt, usb, console]}
