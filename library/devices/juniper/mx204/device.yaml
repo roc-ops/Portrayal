@@ -420,13 +420,17 @@ views:
         - {id: led-port-9, ref: common/led-dot@1, at: [164.75, 21.1], for: port-9, group: sfp-plus-leds, rel-pos: 9}
         - {id: led-port-10, ref: common/led-dot@1, at: [175.35, 21.1], for: port-10, group: sfp-plus-leds, rel-pos: 10}
         - {id: led-port-11, ref: common/led-dot@1, at: [178.95, 21.1], for: port-11, group: sfp-plus-leds, rel-pos: 11}
-        - {id: mgmt, ref: common/rj45-eth@1, at: [237.05, 20.65], rotate: 180, group: mgmt, rel-pos: 0, states: {led-a: ['off', {name: link}], led-b: ['off', {name: activity}]}}
+        - {id: mgmt, ref: common/rj45-eth@1, at: [237.05, 20.65], rotate: 180, group: mgmt, rel-pos: 0,
+           states: {led-a: ['off', {name: 1000m, color: '#f59e0b'}, {name: 100m, color: '#22c55e'}],
+                    led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}]},
+           description: 'Routing Engine interface text - link LED amber steady at 1000 Mbps, green
+             steady at 100 Mbps, off at 10 Mbps; activity LED green, blinking with traffic'}
         - {id: bits, ref: std/rj45@2, at: [259.15, 20.65], rotate: 180, group: timing, rel-pos: 0}
         - {id: led-bits-act, ref: common/led-dot@1, at: [261.95, 20.7], for: bits, group: bits-leds, rel-pos: 0,
            attrs: {function: activity}}
         - {id: led-bits-link, ref: common/led-dot@1, at: [270.15, 20.7], for: bits, group: bits-leds, rel-pos: 1,
            attrs: {function: link}}
-        - {id: con, ref: common/rj45-eth@1, at: [282.25, 20.8], group: mgmt, rel-pos: 1}
+        - {id: con, ref: std/rj45@2, at: [282.25, 20.8], group: mgmt, rel-pos: 1}
         - {id: tod, ref: std/rj45@2, at: [306.25, 20.8], group: timing, rel-pos: 1}
         - {id: usb, ref: std/usb-a@1, at: [323.85, 25.55], rotate: 90, group: mgmt, rel-pos: 2}
         - {id: clk-10mhz-in, ref: std/smb@1, at: [341.64, 21.39], group: timing, rel-pos: 2,
