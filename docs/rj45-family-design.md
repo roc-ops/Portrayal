@@ -62,7 +62,7 @@ Four components replace nine.
 
 | component | is | lamps | used for |
 |---|---|---|---|
-| `std/rj45@2` | a single modular jack housing, 15.76 x 12.48, three-tier cavity | none | console, aux, serial; ToD, BITS, 1PPS, sync; telemetry; any RJ45 with no link lamp |
+| `std/rj45@2` | a single modular jack housing, 15.8 x 13.2, three-tier cavity | none | console, aux, serial; ToD, BITS, 1PPS, sync; telemetry; any RJ45 with no link lamp |
 | `std/rj45-ganged@2` | one cell of a shared-wall 2xN block, ~12.7 x 11, same cavity | none | the same roles inside a ganged block |
 | `common/rj45-eth@1` | `std/rj45@2` plus two lamps in the housing corners | `led-a`, `led-b` | every single Ethernet jack: data, mgmt, OOB, service |
 | `common/rj45-ganged-eth@1` | `std/rj45-ganged@2` plus two lamps in the outer corners | `led-a`, `led-b` | every Ethernet jack in a ganged block |
@@ -71,9 +71,12 @@ Four components replace nine.
 meanings once; it composes `common/rj45-eth@1` instead of `rj45-port@4`.
 
 The rule for choosing is the placement's role, and it is mechanical. A jack whose
-role or id says console, aux, serial, ToD, BITS, PPS, sync or telemetry takes the
-bare part. Everything else that carries Ethernet takes the lamped one. This is the
-same test `sweep_jack_lamps.py` already applies to decide where a lamp belongs.
+role, id or **media** says console, aux, serial, ToD, BITS, PPS, sync, PTP, 1588,
+ICS or telemetry takes the bare part, and so does one on a card whose **name** says
+T1, E1, DS1 or RJ48 - a channelized card numbers its RJ48c jacks `port-*` like any
+other card, and they carry DS1, not Ethernet. Everything else that carries Ethernet
+takes the lamped one. This is the same test `sweep_jack_lamps.py` already applies to
+decide where a lamp belongs.
 
 ### Geometry and sources
 
@@ -171,7 +174,7 @@ become dead once the lamps are components, and are removed with a note.
 | `std/rj45-ganged@1` | `std/rj45-ganged@2` or `common/rj45-ganged-eth@1` by role | 540 | 132 `port` and 21 `mgmt` become lamped; 29 console and the timing set stay bare; 10 unroled are read |
 | `common/rj45-hd@1` | `common/rj45-ganged-eth@1` | 83 | bezel plate art is dropped; anchors re-centred on the cell |
 | `common/rj45-hd-plain@1` | `std/rj45-ganged@2` | 3 | |
-| `common/rj45-port@4` | `common/rj45-eth@1` | 17 | anchors move from the 17 x 14.9 plate to the 15.76 x 12.48 housing, centre held |
+| `common/rj45-port@4` | `common/rj45-eth@1` | 17 | anchors move from the 17 x 14.9 plate to the 15.8 x 13.2 housing, centre held (+0.6, +0.85) |
 | `common/rj45-bezel@2` | `std/rj45@2` | 14 | |
 | `common/rj45-shielded@2` | `common/rj45-eth@1` | 19 | Casa SMM cards and Smartoptics; the shell IS the housing |
 | `common/rj45-shielded@1`, `rj45-jack@2` | `std/rj45@2` | 2 | |
@@ -215,9 +218,29 @@ for.
 
 Landed 2026-09-05 across PRs 131, 132, 133, 134, 135, 136, 137, 138, 139 and
 this PR. Four components replace nine; every RJ45 in the library is one of
-them; L76 counts zero. What stayed flagged: the latch slot height (2.6,
-conventional) and the housing top wall (2.0, read at scale).
+them; L76 counts zero over **devices and components alike** - the census reads a
+component contract's `parts:` as well as a device view's placements, which is
+where 368 of the library's 762 RJ45 placements actually live. What stayed
+flagged: the latch slot height (2.6, conventional) and the housing top wall
+(2.0, read at scale).
 
-One departure from the note as approved: the panel cutout follows the housing
-(15.8 x 13.2) rather than staying at 16 x 14, decided in the plan's first task
-and verified in every review after.
+**Three departures from the note as approved.**
+
+1. The panel cutout follows the housing (15.8 x 13.2) rather than staying at
+   16 x 14, decided in the plan's first task and verified in every review after.
+2. **The L13 and L39 clauses stay.** The note said both become dead once the
+   lamps are components and are removed with a note; they are not dead.
+   `edgecore/as5912-54x` draws mgmt-eth's two lamps BESIDE the jack under `for:`
+   and needs L13's exemption; the MX204's BITS jack keeps two lamps inside it
+   and needs L39's. What was removed is the RJ45 justification from the two
+   comments, not the code.
+3. **Two of the 556 in-jack lamps were not lifted.** 554 were. The MX204's
+   `led-bits-act` and `led-bits-link` sit inside its BITS jack, which is a timing
+   role - bare part, by decision 3 - that nonetheless has lamps, and the family
+   has no bare-with-lamps member. They stay as separate placements naming the
+   jack with `for:`, the shape as5912-54x already uses, and the device carries a
+   `bits-lamps` provenance entry saying so. One jack does not earn a fifth
+   member; if a second arrives, the family gains one.
+
+**The version rule the sweep answered two ways:** a composed-part swap that
+removes no id is a minor bump.

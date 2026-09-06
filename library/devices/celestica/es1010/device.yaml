@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: es1010
-version: 2.0.0
+version: 2.0.1
 manufacturer: Celestica
 model: ES1010
 description: Celestica ES1010 - 1U 48-port 1GbE (PoE++) access switch with 4x 25G SFP28 uplinks;
@@ -19,7 +19,15 @@ provenance:
     panel lower lip and below the port-pair legend row (working/celestica/pics/chassis-front.jpeg,
     shot upside down). It was at baseline 35.6, inside the jack. The x is unchanged - the
     photograph is not orthographic enough to re-derive it'
-  port-apertures: ganged block openings via std/rj45-ganged (estimated)
+  port-apertures: 'measured - the ganged cell is 12.7 x 11.0 on a 13.97 pitch, read off this
+    device''s own square-on photo and confirmed against the TE 2497310-1 2x6 magjack CAD; the
+    twenty-four data jacks are common/rj45-ganged-eth@1 and the console is the bare
+    std/rj45-ganged@2 (docs/rj45-family-design.md). The figure was carried as estimated until
+    #125 sourced it'
+  port-leds: 'photo - the two link and activity lamps moulded into each RJ45''s own housing, one
+    pair per port. They were twenty-four pairs of separate common/led-dot placements in a
+    port-leds group until #125; they are now led-a and led-b of common/rj45-ganged-eth@1, which
+    is what the housing actually carries. No vendor table gives their colours, so none is claimed'
   psu: photo (Gospower G1482-1600WRA FRU, six faces)
   fans: datasheet (2+1 FIXED fans - not FRUs; three grilles seen on the rear photo)
 attrs:

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: as7946-30xb
-version: 3.0.0
+version: 3.0.1
 maturity: modelled
 manufacturer: Edgecore
 model: AS7946-30XB
@@ -82,10 +82,13 @@ provenance:
     row of the ganged block, are keyway-down. A 2-high ganged jack mirrors its rows so both release
     tabs stay reachable. common/rj45-shielded draws keyway-down, so the other four carry rotate
     180
-  rj45-choice: Jason - use std/ before common/. std/rj45 is the IEC 60603-7 aperture; common/rj45-shielded
-    is one we drew, and it puts its integrated LEDs on the CONTACTS side, which no real jack does
-    - they always flank the keyway. Five jacks are std/rj45@2; MGMT is common/rj45-eth@1, with its
-    two LEDs as mgmt-eth/led-a and led-b
+  rj45-choice: Jason - use std/ before common/. The ruling was made against the v1 library, where
+    std/rj45 WAS the IEC 60603-7 16.0 x 14.0 aperture and common/rj45-shielded was one we drew,
+    putting its integrated LEDs on the CONTACTS side, which no real jack does - they always flank
+    the keyway. Both of those are retired by ndv#125, which made std/rj45@2 the jack housing itself (15.8 x
+    13.2, TE 1734264) and the unsourced 16 x 14 aperture went with it. The ruling still decides
+    this face. Five jacks are std/rj45@2; MGMT is common/rj45-eth@1, with its two LEDs as
+    mgmt-eth/led-a and led-b
   grounding: drawing - QSG rear callout 13. An IEC earth symbol at 73.2, 26.0 with TWO studs beneath
     it at y 39.5 and 54.2, immediately right of the PSU bay. Only the upper stud is modelled, because
     common/ground-lug carries one stud under its symbol; the second is recorded here rather than

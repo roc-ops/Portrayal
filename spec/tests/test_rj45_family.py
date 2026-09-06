@@ -78,7 +78,15 @@ def test_the_registry_carries_the_three_tiers():
         assert [t["name"] for t in tiers] == ["body", "shoulder", "slot"]
         assert (tiers[0]["w"], tiers[0]["h"]) == BODY
         assert (tiers[1]["w"], tiers[1]["h"]) == SHOULDER
-        assert tiers[2]["w"] == SLOT_W and "h" not in tiers[2], "the slot runs to the edge; no height is sourced"
+        # M2: the slot DOES carry a height, and the point of it carrying one is
+        # that it also carries its own confidence - the 2.6 is conventional, not
+        # dimensioned on TE 1734264 or the Amphenol views, and a consumer reading
+        # the registry could not tell which tier figure was soft while the flag
+        # lived only in the design note's prose.
+        assert tiers[2]["w"] == SLOT_W
+        assert tiers[2]["h"] == 2.6
+        assert tiers[2]["confidence"] == "conventional"
+        assert "confidence" not in tiers[0] and "confidence" not in tiers[1]
 
 
 def test_the_ganged_cell_keeps_its_measured_face_and_gains_the_tiers():
@@ -312,6 +320,103 @@ def test_rj45_wants_lamps_is_false_for_an_id_containing_the_bare_token():
 @pytest.mark.parametrize("id_", ["contact-1", "oob", "eth-lan"])
 def test_rj45_wants_lamps_is_true_when_no_token_matches(id_):
     assert _wants(id_) is True
+
+
+# The tokens added after #125's final review found 48 RJ48c T1/E1 ports swept
+# onto the lamped part (review C1) and 24 Cisco timing jacks the census would
+# have mis-flagged (review I5). Each is boundary-anchored like the rest.
+@pytest.mark.parametrize("id_", ["ieee-1588", "ics-0", "port-t1", "e1-3",
+                                 "ds1-0", "rj48-a", "che1-2"])
+def test_rj45_wants_lamps_is_false_for_the_non_ethernet_tokens(id_):
+    assert _wants(id_) is False
+
+
+# ...and they are anchored, so they do not fire inside an unrelated word.
+@pytest.mark.parametrize("id_", ["ice-0", "note1", "atm1"])
+def test_the_new_tokens_do_not_fire_unanchored(id_):
+    assert _wants(id_) is True
+
+
+# media: is where half the corpus says what a jack is. casa/smm-sw-bdm-a's
+# psu-monitor carries `media: rj45-telemetry` and no bare token anywhere else.
+@pytest.mark.parametrize("media,want", [("rj45-telemetry", False),
+                                        ("rj45-serial", False),
+                                        ("rj45", True)])
+def test_rj45_wants_lamps_reads_media(media, want):
+    q = {"id": "psu-monitor", "group": "mgmt", "attrs": {"media": media}}
+    assert lint.rj45_wants_lamps(q, {"mgmt": {"attrs": {}}}) is want
+
+
+# On a component's parts:, the contract's own name is part of the text: a
+# channelized T1/E1 card numbers its RJ48c jacks port-* like any other card.
+def test_rj45_wants_lamps_reads_the_contract_name_for_a_component_part():
+    q = {"id": "port-0-0", "attrs": {"media": "rj45"}}
+    assert lint.rj45_wants_lamps(q, {}) is True
+    assert lint.rj45_wants_lamps(q, {}, "mic-3d-16che1-t1-ce") is False
+    assert lint.rj45_wants_lamps(q, {}, "spa-8xcht1-e1") is False
+    assert lint.rj45_wants_lamps(q, {}, "mpc7e-10g") is True
+
+
+def l76c(name, parts):
+    lint.WARNINGS.clear()
+    lint.lint_component_rj45_lamps(
+        pathlib.Path("library/components/x/y/v1/contract.yaml"),
+        {"name": name, "parts": parts}, [str(LIB)])
+    return [w for w in lint.WARNINGS if "[L76]" in w]
+
+
+# I5: 368 of the library's 762 RJ45 placements sit in component contracts, and
+# the census that could not see them is how C1 got in.
+def test_l76_counts_a_component_parts_entry():
+    ws = l76c("mpc7e-10g", [{"id": "port-1", "ref": "std/rj45-ganged@2", "at": [0, 0],
+                             "attrs": {"role": "port"}}])
+    assert len(ws) == 1 and "1 Ethernet jack(s) on a part with no lamps" in ws[0]
+    assert "mpc7e-10g" in ws[0]
+
+
+def test_l76_is_quiet_on_a_t1_cards_bare_ports():
+    assert l76c("mic-3d-16che1-t1-ce",
+                [{"id": "port-0-0", "ref": "std/rj45-ganged@2", "at": [0, 0],
+                  "attrs": {"media": "rj45"}}]) == []
+
+
+def test_l76_counts_a_t1_cards_lamped_ports():
+    ws = l76c("mic-3d-16che1-t1-ce",
+              [{"id": "port-0-0", "ref": "common/rj45-ganged-eth@1", "at": [0, 0],
+                "attrs": {"media": "rj45"}}])
+    assert len(ws) == 1 and "1 console/timing jack(s) on a lamped part" in ws[0]
+
+
+# The Dell carrier draws nothing and composes common/rj45-eth@1; a card placing
+# it is placing a lamped jack, not a retired part.
+def test_l76_follows_a_carrier_to_the_family_member_it_composes():
+    assert l76c("ndc-4x-rj45-14g",
+                [{"id": "port-1", "ref": "dell/rj45-port-14g@1", "at": [0, 0]}]) == []
+
+
+# The family's own members compose each other by definition.
+def test_l76_does_not_census_the_family_itself():
+    lint.WARNINGS.clear()
+    lint.lint_component_rj45_lamps(
+        LIB / "components/common/rj45-eth/v1/contract.yaml",
+        yaml.safe_load((LIB / "components/common/rj45-eth/v1/contract.yaml").read_text()),
+        [str(LIB)])
+    assert [w for w in lint.WARNINGS if "[L76]" in w] == []
+
+
+# C1: these four cards are RJ48c carrying DS1, not Ethernet. They must stay bare.
+@pytest.mark.parametrize("rel", [
+    "components/cisco/spa-8xcht1-e1/v1/contract.yaml",
+    "components/cisco/spa-8xcht1-e1-v2/v1/contract.yaml",
+    "components/juniper/mic-3d-16che1-t1-ce/v1/contract.yaml",
+    "components/juniper/mic-3d-16che1-t1-ce-v/v1/contract.yaml",
+])
+def test_the_t1_e1_cards_ports_are_bare_jacks(rel):
+    d = yaml.safe_load((LIB / rel).read_text())
+    jacks = [p for p in d["parts"] if "rj45" in str(p.get("ref"))]
+    assert jacks
+    assert {str(p["ref"]) for p in jacks} == {"std/rj45-ganged@2"}
+    assert "port-jacks-are-bare" in d["provenance"]
 
 
 SWEEP = ROOT / "spec/tools/portrayal/sweep_rj45.py"
@@ -1136,3 +1241,47 @@ def test_no_lamp_placement_still_declares_for_a_lamped_rj45():
             for p in pl:
                 fr = p.get("for"); fr = fr if isinstance(fr, list) else [fr]
                 assert not ("led" in p.get("ref", "") and any(x in lamped for x in fr)), f"{f}: {p['id']}"
+
+
+# I1: #125 gave std/rj45@2 seven jobs, so the ref stopped being able to carry
+# the DCIM type and seven Juniper timing jacks exported as CONSOLE PORTS. The
+# placement's own words decide first now.
+def test_a_timing_jack_exports_as_an_other_interface_not_a_console():
+    contract = {
+        "kind": "module", "name": "m", "attrs": {"model": "m"},
+        "parts": [
+            {"id": "tod", "ref": "std/rj45@2", "attrs": {"role": "timing"}},
+            {"id": "bits", "ref": "std/rj45@2", "attrs": {"role": "timing"}},
+            {"id": "con", "ref": "std/rj45@2"},
+        ],
+    }
+    out = dx.build_module(contract, "Juniper")
+    assert out["console-ports"] == [{"name": "con", "type": "rj-45"}]
+    assert out["interfaces"] == [{"name": "tod", "type": "other", "label": "TOD"},
+                                 {"name": "bits", "type": "other", "label": "BITS"}]
+
+
+def test_jnp10003_rcb_exports_no_console_named_bits_or_tod():
+    c = yaml.safe_load((LIB / "components/juniper/jnp10003-rcb/v1/contract.yaml").read_text())
+    out = dx.build_module(c, "Juniper")
+    names = {p["name"] for p in out.get("console-ports") or []}
+    assert "bits" not in names and "tod" not in names
+    ifaces = {i["name"]: i for i in out["interfaces"]}
+    assert ifaces["tod"] == {"name": "tod", "type": "other", "label": "TOD"}
+    assert ifaces["bits"] == {"name": "bits", "type": "other", "label": "BITS"}
+    assert names == {"usb", "con"}
+
+
+# An id like "contact-1" or a group like "topology" must not be read as a
+# timing function: the tokens are anchored on whitespace or a hyphen.
+@pytest.mark.parametrize("pid", ["contact-1", "syncope", "topology"])
+def test_an_unrelated_word_is_not_read_as_a_timing_function(pid):
+    assert dx.rj45_timing_label({"id": pid}) is None
+
+
+@pytest.mark.parametrize("pid,label", [("tod", "TOD"), ("bits-in", "BITS"),
+                                       ("gm-ptp", "GM-PTP"), ("ieee-1588", "1588"),
+                                       ("ics-0", "ICS"), ("clk-a", "CLK"),
+                                       ("pps-in", "PPS"), ("sync-0", "SYNC")])
+def test_the_timing_tokens_each_label_themselves(pid, label):
+    assert dx.rj45_timing_label({"id": pid}) == label
