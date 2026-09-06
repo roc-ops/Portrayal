@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9321-64e
-version: 1.0.1
+version: 1.1.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9321-64E
@@ -119,6 +119,18 @@ provenance:
     that column and the datasheet lists only two timing interfaces, both '(Premium)'.
     It is drawn as a dark decor circle and named in gaps; guessing it into a port
     would be inventing a connector.
+  round-panel-features: >-
+    drawing - the front carries five plain round features that no HIG callout names, and
+    they are listed here so none of them reads as a stray mark. Measured on the vendor
+    front render (chassis x 9-510, y 25-125 px for 436 x 87.7 mm, aspect 4.970 against a
+    true 4.971): a 3.7 mm dark disc left of the RESET pinhole centred (12.75, 9.35); a
+    3.0 mm dark disc right of the ID legend box centred (18.6, 31.0); the 6.8 mm blanked
+    opening above the two SMB timing bezels centred (6.79, 32.9), which has its own
+    entry; and two 6.6 mm dark openings with a lighter rim at the right-hand edge,
+    centred (430.8, 21.4) and (430.6, 66.4), one above and one below the 2.4 x 27.1 mm
+    rounded slot between them. All five are on the vendor artwork and all five are drawn.
+    Only the timing-column one is identified even negatively - see the
+    unidentified-front-panel-opening gap, which now covers the other four as well.
   buttons: >-
     drawing - HIG Figure 4's 'Reset' callout points at a single recessed circular
     button whose ring centres (20.6, 9.3) and measures 1.7 mm across; drawn with
@@ -272,12 +284,18 @@ gaps:
   scope: [furniture]
   reason: vendor-silent
   note: >-
-    a third round opening the size of the two SMB timing bezels sits directly above
-    them at (6.79, 32.9) on the front panel, 6.8 mm across, drawn black where they are
-    yellow. No callout in HIG Figure 4 names it, the datasheet lists only two timing
-    interfaces, and no held image resolves what is behind it. It is drawn as a dark
-    decor circle so the panel is not silently missing a hole, and it is named here so
-    the circle is a recorded unknown rather than an unexplained mark.
+    Five plain round features sit on the front panel and no HIG callout names any of them.
+    The one this entry was opened for is a third round opening the size of the two SMB
+    timing bezels, directly above them at (6.79, 32.9), 6.8 mm across, drawn black where
+    they are yellow; the datasheet lists only two timing interfaces and no held image
+    resolves what is behind it. The other four are a 3.7 mm disc left of the RESET
+    pinhole at (12.75, 9.35), a 3.0 mm disc right of the ID legend box at (18.6, 31.0),
+    and two 6.6 mm openings with a lighter rim at the right edge, (430.8, 21.4) and
+    (430.6, 66.4), flanking the rounded slot between them - plausibly rail or handle
+    furniture on a chassis that hangs on inner rails, but the HIG's rail section draws
+    the SIDE pins and never this face. All five are measured from the vendor front
+    render and drawn as dark decor circles, so the panel is not silently missing a hole,
+    and all five are named here so they are recorded unknowns rather than stray marks.
   wanted: a photograph of the front panel's timing column, or a mechanical drawing
     of the front bezel.
 - what: qsfp-dd-port-led-semantics
@@ -457,70 +475,134 @@ views:
       - {at: [27.1, 83.6], text: IOIOI, font-size: 1.8, anchor: middle, for: console}
       - {at: [41.6, 26.6], text: '64▲', font-size: 1.8, anchor: start, fill: '#22262a', for: port-64}
       - {at: [55.5, 26.6], text: '▼65', font-size: 1.8, anchor: end, fill: '#22262a', for: port-65}
-      - {at: [61.40, 10.60], text: '0▲', font-size: 1.9, anchor: end, fill: '#f5f7fa', for: port-0}
-      - {at: [78.80, 10.60], text: '1▼', font-size: 1.9, anchor: start, fill: '#f5f7fa', for: port-1}
-      - {at: [84.36, 10.60], text: '2▲', font-size: 1.9, anchor: end, fill: '#f5f7fa', for: port-2}
-      - {at: [101.76, 10.60], text: '3▼', font-size: 1.9, anchor: start, fill: '#f5f7fa', for: port-3}
-      - {at: [107.31, 10.60], text: '4▲', font-size: 1.9, anchor: end, fill: '#f5f7fa', for: port-4}
-      - {at: [124.71, 10.60], text: '5▼', font-size: 1.9, anchor: start, fill: '#f5f7fa', for: port-5}
-      - {at: [130.27, 10.60], text: '6▲', font-size: 1.9, anchor: end, fill: '#f5f7fa', for: port-6}
-      - {at: [147.67, 10.60], text: '7▼', font-size: 1.9, anchor: start, fill: '#f5f7fa', for: port-7}
-      - {at: [153.23, 10.60], text: '8▲', font-size: 1.9, anchor: end, fill: '#f5f7fa', for: port-8}
-      - {at: [170.63, 10.60], text: '9▼', font-size: 1.9, anchor: start, fill: '#f5f7fa', for: port-9}
-      - {at: [176.18, 10.60], text: '10▲', font-size: 1.9, anchor: end, fill: '#f5f7fa', for: port-10}
-      - {at: [193.59, 10.60], text: '11▼', font-size: 1.9, anchor: start, fill: '#f5f7fa', for: port-11}
-      - {at: [199.14, 10.60], text: '12▲', font-size: 1.9, anchor: end, fill: '#f5f7fa', for: port-12}
-      - {at: [216.54, 10.60], text: '13▼', font-size: 1.9, anchor: start, fill: '#f5f7fa', for: port-13}
-      - {at: [222.10, 10.60], text: '14▲', font-size: 1.9, anchor: end, fill: '#f5f7fa', for: port-14}
-      - {at: [239.50, 10.60], text: '15▼', font-size: 1.9, anchor: start, fill: '#f5f7fa', for: port-15}
-      - {at: [245.06, 10.60], text: '16▲', font-size: 1.9, anchor: end, fill: '#f5f7fa', for: port-16}
-      - {at: [262.46, 10.60], text: '17▼', font-size: 1.9, anchor: start, fill: '#f5f7fa', for: port-17}
-      - {at: [268.01, 10.60], text: '18▲', font-size: 1.9, anchor: end, fill: '#f5f7fa', for: port-18}
-      - {at: [285.41, 10.60], text: '19▼', font-size: 1.9, anchor: start, fill: '#f5f7fa', for: port-19}
-      - {at: [290.97, 10.60], text: '20▲', font-size: 1.9, anchor: end, fill: '#f5f7fa', for: port-20}
-      - {at: [308.37, 10.60], text: '21▼', font-size: 1.9, anchor: start, fill: '#f5f7fa', for: port-21}
-      - {at: [313.93, 10.60], text: '22▲', font-size: 1.9, anchor: end, fill: '#f5f7fa', for: port-22}
-      - {at: [331.33, 10.60], text: '23▼', font-size: 1.9, anchor: start, fill: '#f5f7fa', for: port-23}
-      - {at: [336.88, 10.60], text: '24▲', font-size: 1.9, anchor: end, fill: '#f5f7fa', for: port-24}
-      - {at: [354.28, 10.60], text: '25▼', font-size: 1.9, anchor: start, fill: '#f5f7fa', for: port-25}
-      - {at: [359.84, 10.60], text: '26▲', font-size: 1.9, anchor: end, fill: '#f5f7fa', for: port-26}
-      - {at: [377.24, 10.60], text: '27▼', font-size: 1.9, anchor: start, fill: '#f5f7fa', for: port-27}
-      - {at: [382.80, 10.60], text: '28▲', font-size: 1.9, anchor: end, fill: '#f5f7fa', for: port-28}
-      - {at: [400.20, 10.60], text: '29▼', font-size: 1.9, anchor: start, fill: '#f5f7fa', for: port-29}
-      - {at: [405.76, 10.60], text: '30▲', font-size: 1.9, anchor: end, fill: '#f5f7fa', for: port-30}
-      - {at: [423.15, 10.60], text: '31▼', font-size: 1.9, anchor: start, fill: '#f5f7fa', for: port-31}
-      - {at: [61.40, 82.60], text: '32▲', font-size: 1.9, anchor: end, fill: '#f5f7fa', for: port-32}
-      - {at: [78.80, 82.60], text: '33▼', font-size: 1.9, anchor: start, fill: '#f5f7fa', for: port-33}
-      - {at: [84.36, 82.60], text: '34▲', font-size: 1.9, anchor: end, fill: '#f5f7fa', for: port-34}
-      - {at: [101.76, 82.60], text: '35▼', font-size: 1.9, anchor: start, fill: '#f5f7fa', for: port-35}
-      - {at: [107.31, 82.60], text: '36▲', font-size: 1.9, anchor: end, fill: '#f5f7fa', for: port-36}
-      - {at: [124.71, 82.60], text: '37▼', font-size: 1.9, anchor: start, fill: '#f5f7fa', for: port-37}
-      - {at: [130.27, 82.60], text: '38▲', font-size: 1.9, anchor: end, fill: '#f5f7fa', for: port-38}
-      - {at: [147.67, 82.60], text: '39▼', font-size: 1.9, anchor: start, fill: '#f5f7fa', for: port-39}
-      - {at: [153.23, 82.60], text: '40▲', font-size: 1.9, anchor: end, fill: '#f5f7fa', for: port-40}
-      - {at: [170.63, 82.60], text: '41▼', font-size: 1.9, anchor: start, fill: '#f5f7fa', for: port-41}
-      - {at: [176.18, 82.60], text: '42▲', font-size: 1.9, anchor: end, fill: '#f5f7fa', for: port-42}
-      - {at: [193.59, 82.60], text: '43▼', font-size: 1.9, anchor: start, fill: '#f5f7fa', for: port-43}
-      - {at: [199.14, 82.60], text: '44▲', font-size: 1.9, anchor: end, fill: '#f5f7fa', for: port-44}
-      - {at: [216.54, 82.60], text: '45▼', font-size: 1.9, anchor: start, fill: '#f5f7fa', for: port-45}
-      - {at: [222.10, 82.60], text: '46▲', font-size: 1.9, anchor: end, fill: '#f5f7fa', for: port-46}
-      - {at: [239.50, 82.60], text: '47▼', font-size: 1.9, anchor: start, fill: '#f5f7fa', for: port-47}
-      - {at: [245.06, 82.60], text: '48▲', font-size: 1.9, anchor: end, fill: '#f5f7fa', for: port-48}
-      - {at: [262.46, 82.60], text: '49▼', font-size: 1.9, anchor: start, fill: '#f5f7fa', for: port-49}
-      - {at: [268.01, 82.60], text: '50▲', font-size: 1.9, anchor: end, fill: '#f5f7fa', for: port-50}
-      - {at: [285.41, 82.60], text: '51▼', font-size: 1.9, anchor: start, fill: '#f5f7fa', for: port-51}
-      - {at: [290.97, 82.60], text: '52▲', font-size: 1.9, anchor: end, fill: '#f5f7fa', for: port-52}
-      - {at: [308.37, 82.60], text: '53▼', font-size: 1.9, anchor: start, fill: '#f5f7fa', for: port-53}
-      - {at: [313.93, 82.60], text: '54▲', font-size: 1.9, anchor: end, fill: '#f5f7fa', for: port-54}
-      - {at: [331.33, 82.60], text: '55▼', font-size: 1.9, anchor: start, fill: '#f5f7fa', for: port-55}
-      - {at: [336.88, 82.60], text: '56▲', font-size: 1.9, anchor: end, fill: '#f5f7fa', for: port-56}
-      - {at: [354.28, 82.60], text: '57▼', font-size: 1.9, anchor: start, fill: '#f5f7fa', for: port-57}
-      - {at: [359.84, 82.60], text: '58▲', font-size: 1.9, anchor: end, fill: '#f5f7fa', for: port-58}
-      - {at: [377.24, 82.60], text: '59▼', font-size: 1.9, anchor: start, fill: '#f5f7fa', for: port-59}
-      - {at: [382.80, 82.60], text: '60▲', font-size: 1.9, anchor: end, fill: '#f5f7fa', for: port-60}
-      - {at: [400.20, 82.60], text: '61▼', font-size: 1.9, anchor: start, fill: '#f5f7fa', for: port-61}
-      - {at: [405.76, 82.60], text: '62▲', font-size: 1.9, anchor: end, fill: '#f5f7fa', for: port-62}
-      - {at: [423.15, 82.60], text: '63▼', font-size: 1.9, anchor: start, fill: '#f5f7fa', for: port-63}
+      - {at: [60.09, 10.60], text: '0', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-0}
+      - {at: [60.09, 13.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-0}
+      - {at: [80.11, 10.60], text: '1', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-1}
+      - {at: [80.11, 13.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-1}
+      - {at: [83.05, 10.60], text: '2', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-2}
+      - {at: [83.05, 13.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-2}
+      - {at: [103.07, 10.60], text: '3', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-3}
+      - {at: [103.07, 13.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-3}
+      - {at: [106.00, 10.60], text: '4', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-4}
+      - {at: [106.00, 13.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-4}
+      - {at: [126.02, 10.60], text: '5', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-5}
+      - {at: [126.02, 13.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-5}
+      - {at: [128.97, 10.60], text: '6', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-6}
+      - {at: [128.97, 13.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-6}
+      - {at: [148.97, 10.60], text: '7', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-7}
+      - {at: [148.97, 13.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-7}
+      - {at: [151.92, 10.60], text: '8', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-8}
+      - {at: [151.92, 13.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-8}
+      - {at: [171.94, 10.60], text: '9', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-9}
+      - {at: [171.94, 13.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-9}
+      - {at: [174.88, 10.60], text: '10', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-10}
+      - {at: [174.88, 13.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-10}
+      - {at: [194.90, 10.60], text: '11', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-11}
+      - {at: [194.90, 13.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-11}
+      - {at: [197.83, 10.60], text: '12', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-12}
+      - {at: [197.83, 13.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-12}
+      - {at: [217.84, 10.60], text: '13', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-13}
+      - {at: [217.84, 13.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-13}
+      - {at: [220.79, 10.60], text: '14', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-14}
+      - {at: [220.79, 13.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-14}
+      - {at: [240.81, 10.60], text: '15', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-15}
+      - {at: [240.81, 13.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-15}
+      - {at: [243.75, 10.60], text: '16', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-16}
+      - {at: [243.75, 13.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-16}
+      - {at: [263.76, 10.60], text: '17', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-17}
+      - {at: [263.76, 13.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-17}
+      - {at: [266.70, 10.60], text: '18', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-18}
+      - {at: [266.70, 13.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-18}
+      - {at: [286.72, 10.60], text: '19', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-19}
+      - {at: [286.72, 13.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-19}
+      - {at: [289.67, 10.60], text: '20', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-20}
+      - {at: [289.67, 13.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-20}
+      - {at: [309.68, 10.60], text: '21', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-21}
+      - {at: [309.68, 13.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-21}
+      - {at: [312.62, 10.60], text: '22', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-22}
+      - {at: [312.62, 13.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-22}
+      - {at: [332.63, 10.60], text: '23', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-23}
+      - {at: [332.63, 13.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-23}
+      - {at: [335.57, 10.60], text: '24', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-24}
+      - {at: [335.57, 13.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-24}
+      - {at: [355.58, 10.60], text: '25', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-25}
+      - {at: [355.58, 13.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-25}
+      - {at: [358.53, 10.60], text: '26', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-26}
+      - {at: [358.53, 13.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-26}
+      - {at: [378.55, 10.60], text: '27', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-27}
+      - {at: [378.55, 13.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-27}
+      - {at: [381.50, 10.60], text: '28', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-28}
+      - {at: [381.50, 13.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-28}
+      - {at: [401.50, 10.60], text: '29', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-29}
+      - {at: [401.50, 13.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-29}
+      - {at: [404.45, 10.60], text: '30', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-30}
+      - {at: [404.45, 13.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-30}
+      - {at: [424.45, 10.60], text: '31', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-31}
+      - {at: [424.45, 13.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-31}
+      - {at: [60.09, 82.60], text: '32', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-32}
+      - {at: [60.09, 85.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-32}
+      - {at: [80.11, 82.60], text: '33', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-33}
+      - {at: [80.11, 85.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-33}
+      - {at: [83.05, 82.60], text: '34', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-34}
+      - {at: [83.05, 85.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-34}
+      - {at: [103.07, 82.60], text: '35', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-35}
+      - {at: [103.07, 85.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-35}
+      - {at: [106.00, 82.60], text: '36', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-36}
+      - {at: [106.00, 85.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-36}
+      - {at: [126.02, 82.60], text: '37', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-37}
+      - {at: [126.02, 85.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-37}
+      - {at: [128.97, 82.60], text: '38', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-38}
+      - {at: [128.97, 85.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-38}
+      - {at: [148.97, 82.60], text: '39', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-39}
+      - {at: [148.97, 85.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-39}
+      - {at: [151.92, 82.60], text: '40', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-40}
+      - {at: [151.92, 85.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-40}
+      - {at: [171.94, 82.60], text: '41', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-41}
+      - {at: [171.94, 85.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-41}
+      - {at: [174.88, 82.60], text: '42', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-42}
+      - {at: [174.88, 85.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-42}
+      - {at: [194.90, 82.60], text: '43', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-43}
+      - {at: [194.90, 85.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-43}
+      - {at: [197.83, 82.60], text: '44', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-44}
+      - {at: [197.83, 85.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-44}
+      - {at: [217.84, 82.60], text: '45', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-45}
+      - {at: [217.84, 85.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-45}
+      - {at: [220.79, 82.60], text: '46', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-46}
+      - {at: [220.79, 85.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-46}
+      - {at: [240.81, 82.60], text: '47', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-47}
+      - {at: [240.81, 85.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-47}
+      - {at: [243.75, 82.60], text: '48', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-48}
+      - {at: [243.75, 85.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-48}
+      - {at: [263.76, 82.60], text: '49', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-49}
+      - {at: [263.76, 85.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-49}
+      - {at: [266.70, 82.60], text: '50', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-50}
+      - {at: [266.70, 85.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-50}
+      - {at: [286.72, 82.60], text: '51', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-51}
+      - {at: [286.72, 85.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-51}
+      - {at: [289.67, 82.60], text: '52', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-52}
+      - {at: [289.67, 85.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-52}
+      - {at: [309.68, 82.60], text: '53', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-53}
+      - {at: [309.68, 85.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-53}
+      - {at: [312.62, 82.60], text: '54', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-54}
+      - {at: [312.62, 85.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-54}
+      - {at: [332.63, 82.60], text: '55', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-55}
+      - {at: [332.63, 85.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-55}
+      - {at: [335.57, 82.60], text: '56', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-56}
+      - {at: [335.57, 85.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-56}
+      - {at: [355.58, 82.60], text: '57', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-57}
+      - {at: [355.58, 85.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-57}
+      - {at: [358.53, 82.60], text: '58', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-58}
+      - {at: [358.53, 85.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-58}
+      - {at: [378.55, 82.60], text: '59', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-59}
+      - {at: [378.55, 85.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-59}
+      - {at: [381.50, 82.60], text: '60', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-60}
+      - {at: [381.50, 85.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-60}
+      - {at: [401.50, 82.60], text: '61', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-61}
+      - {at: [401.50, 85.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-61}
+      - {at: [404.45, 82.60], text: '62', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-62}
+      - {at: [404.45, 85.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-62}
+      - {at: [424.45, 82.60], text: '63', font-size: 1.9, anchor: middle, fill: '#f5f7fa', for: port-63}
+      - {at: [424.45, 85.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: port-63}
     components:
       placements:
         - {ref: common/reset-button@1, id: reset, at: [18.6, 7.3], for: chassis, group: mgmt, rel-pos: 1}
