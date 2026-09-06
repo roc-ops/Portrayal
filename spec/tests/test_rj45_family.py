@@ -9,6 +9,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 import textwrap
 
 import pytest
@@ -21,6 +22,39 @@ import lint  # noqa: E402
 import dcim_export as dx  # noqa: E402
 
 STANDARDS = yaml.safe_load((ROOT / "spec/schemas/standards.yaml").read_text())["standards"]
+
+# sweep_rj45.py's own job is done - task 15 deletes the seven parts it converts
+# FROM, once every device that had one is swept. Its regression tests still
+# prove the conversion was right, so they run it against this private library
+# instead of the real one: a symlink of everything the real library still
+# holds, plus the seven retired contracts as they were the day they were
+# retired, frozen under spec/tests/fixtures/rj45_retired/ rather than restored
+# from git history (which will not hold HEAD's copy forever).
+RETIRED_FIXTURES = ROOT / "spec/tests/fixtures/rj45_retired"
+
+
+def _build_sweep_library():
+    tmp = pathlib.Path(tempfile.mkdtemp(prefix="rj45-sweep-lib-"))
+    comp = tmp / "components"
+    # Symlink each VERSION directory, not each name directory: std/rj45-ganged
+    # and std/rj45 both still exist (their v2 is current), so their own name
+    # directory must be real here too, or restoring v1 below would create it
+    # inside the symlink's target - the real library - instead of this copy.
+    for version_dir in (LIB / "components").glob("*/*/v*"):
+        if not version_dir.is_dir():
+            continue
+        ns, name = version_dir.parent.parent.name, version_dir.parent.name
+        (comp / ns / name).mkdir(parents=True, exist_ok=True)
+        (comp / ns / name / version_dir.name).symlink_to(version_dir)
+    for contract in RETIRED_FIXTURES.glob("*/*/*/contract.yaml"):
+        ns, name, version = contract.parts[-4:-1]
+        dest = comp / ns / name / version
+        dest.mkdir(parents=True, exist_ok=True)
+        shutil.copy(contract, dest / "contract.yaml")
+    return tmp
+
+
+SWEEP_LIB = _build_sweep_library()
 
 BODY = (11.91, 6.83)
 SHOULDER = (6.30, 1.69)
@@ -121,11 +155,20 @@ def test_std_rj45_ganged_v2_is_the_cell():
     assert 11.91 in widths and 4.06 in widths and 2.805 in widths and 1.12 in widths, widths
 
 
+def _retired_contract(ref):
+    """std/rj45@1 and std/rj45-ganged@1 are gone from the real library (task
+    15); read the frozen copy instead, the same one sweep_rj45.py's own tests
+    run the tool against."""
+    nsname, major = ref.rsplit("@", 1)
+    return yaml.safe_load((SWEEP_LIB / "components" / nsname / f"v{major}" / "contract.yaml").read_text())
+
+
 def test_the_v1_jacks_no_longer_claim_the_standard():
-    """They keep drawing until the sweeps retire them, but they were the 16 x 14
-    aperture and must not assert conformance to a housing they are not."""
-    assert "conforms" not in contract("std/rj45@1")
-    assert "conforms" not in contract("std/rj45-ganged@1")
+    """They drew until the sweeps retired them, but they were the 16 x 14
+    aperture and must not assert conformance to a housing they were not -
+    checked against the frozen pre-retirement copy (task 15 deletes them)."""
+    assert "conforms" not in _retired_contract("std/rj45@1")
+    assert "conforms" not in _retired_contract("std/rj45-ganged@1")
 
 
 def test_common_rj45_eth_composes_the_housing_and_adds_two_lamps():
@@ -324,7 +367,7 @@ def sweep(tmp_path, *args):
     (d / "device.yaml").write_text(FIXTURE)
     # the tool resolves component classes through --library; give it the real library
     # for components and the tmp tree for devices
-    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), *args],
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(SWEEP_LIB), "--devices", str(tmp_path / "devices"), *args],
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
     return r.stdout, (d / "device.yaml").read_text()
@@ -355,7 +398,7 @@ views:
 def test_the_sweep_maps_a_con_id_to_the_bare_ref(tmp_path):
     d = tmp_path / "devices/acme/d"; d.mkdir(parents=True)
     (d / "device.yaml").write_text(CON_FIXTURE)
-    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices")],
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(SWEEP_LIB), "--devices", str(tmp_path / "devices")],
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
     assert "con" in r.stdout
@@ -407,7 +450,7 @@ def test_the_sweep_is_minor_when_no_id_is_removed(tmp_path):
     lone = re.sub(r"        - \{id: led-mgmt-l.*?\n.*?\n", "", lone)
     lone = re.sub(r"        - \{id: led-mgmt-r.*?\n", "", lone)
     d = tmp_path / "devices/acme/d"; d.mkdir(parents=True); (d / "device.yaml").write_text(lone)
-    subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"], check=True)
+    subprocess.run([sys.executable, str(SWEEP), "--library", str(SWEEP_LIB), "--devices", str(tmp_path / "devices"), "--apply"], check=True)
     assert yaml.safe_load((d / "device.yaml").read_text())["version"] == "1.3.0"
 
 
@@ -444,7 +487,7 @@ views:
 def test_the_sweep_holds_the_cutouts_own_centre_not_the_parts(tmp_path):
     d = tmp_path / "devices/acme/d2"; d.mkdir(parents=True)
     (d / "device.yaml").write_text(CUTOUT_FIXTURE)
-    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(SWEEP_LIB), "--devices", str(tmp_path / "devices"), "--apply"],
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
     assert "cutouts held 1" in r.stdout, "this cutout was never derived from the old part - it is informative"
@@ -460,7 +503,7 @@ def test_the_sweep_holds_the_cutouts_own_centre_not_the_parts(tmp_path):
 def test_the_sweep_skips_retired_rj45_wrapper_contracts(tmp_path):
     lib = tmp_path / "lib"
     for rel in ("components/common/rj45-hd-plain", "components/std/rj45-ganged"):
-        shutil.copytree(LIB / rel, lib / rel)
+        shutil.copytree(SWEEP_LIB / rel, lib / rel)
     r = subprocess.run([sys.executable, str(SWEEP), "--library", str(lib), "--components"],
                         capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
@@ -498,7 +541,7 @@ views:
 def test_the_sweep_scopes_ids_to_their_own_view(tmp_path):
     d = tmp_path / "devices/acme/d3"; d.mkdir(parents=True)
     (d / "device.yaml").write_text(SCOPING_FIXTURE)
-    subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"], check=True)
+    subprocess.run([sys.executable, str(SWEEP), "--library", str(SWEEP_LIB), "--devices", str(tmp_path / "devices"), "--apply"], check=True)
     data = yaml.safe_load((d / "device.yaml").read_text())
     front = {p["id"]: p for p in data["views"]["front"]["components"]["placements"]}
     variant = {p["id"]: p for p in data["views"]["front-lff-12"]["components"]["placements"]}
@@ -569,7 +612,7 @@ views:
 def test_the_sweep_dedupes_and_respects_legend_boundaries(tmp_path):
     d = tmp_path / "devices/acme/d4"; d.mkdir(parents=True)
     (d / "device.yaml").write_text(LEGEND_FIXTURE)
-    subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"], check=True)
+    subprocess.run([sys.executable, str(SWEEP), "--library", str(SWEEP_LIB), "--devices", str(tmp_path / "devices"), "--apply"], check=True)
     data = yaml.safe_load((d / "device.yaml").read_text())
     legends = data["views"]["front"]["silkscreen"]
     assert legends[0]["for"] == ["mgmt-eth"], "two lifted ids collapsed onto the same jack must dedup"
@@ -589,7 +632,7 @@ assert ROTATED_FIXTURE != FIXTURE, "fixture edit must actually take"
 def test_the_sweep_flips_handedness_for_a_rotated_jack(tmp_path):
     d = tmp_path / "devices/acme/d"; d.mkdir(parents=True)
     (d / "device.yaml").write_text(ROTATED_FIXTURE)
-    subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"], check=True)
+    subprocess.run([sys.executable, str(SWEEP), "--library", str(SWEEP_LIB), "--devices", str(tmp_path / "devices"), "--apply"], check=True)
     data = yaml.safe_load((d / "device.yaml").read_text())
     pl = {p["id"]: p for p in data["views"]["front"]["components"]["placements"]}
     # led-mgmt-l (lower x, 11.2) is the LEFT lamp; rotated 180 it presents on
@@ -633,7 +676,7 @@ views:
 def test_the_sweep_leaves_a_jack_bare_when_its_lamps_are_external(tmp_path):
     d = tmp_path / "devices/acme/d6"; d.mkdir(parents=True)
     (d / "device.yaml").write_text(EXTERNAL_LAMPS_FIXTURE)
-    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(SWEEP_LIB), "--devices", str(tmp_path / "devices"), "--apply"],
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
     assert "external-lamps 1" in r.stdout
@@ -690,7 +733,7 @@ views:
 def test_the_sweep_rederives_a_derived_cutout(tmp_path):
     d = tmp_path / "devices/acme/d7"; d.mkdir(parents=True)
     (d / "device.yaml").write_text(DERIVED_CUTOUT_FIXTURE)
-    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(SWEEP_LIB), "--devices", str(tmp_path / "devices"), "--apply"],
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
     assert "cutouts re-derived 1" in r.stdout
@@ -736,7 +779,7 @@ views:
 def test_the_sweep_drops_a_skin_the_new_part_lacks(tmp_path):
     d = tmp_path / "devices/acme/d8"; d.mkdir(parents=True)
     (d / "device.yaml").write_text(SKIN_FIXTURE)
-    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(SWEEP_LIB), "--devices", str(tmp_path / "devices"), "--apply"],
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
     assert "skin dropped 1" in r.stdout
@@ -769,7 +812,7 @@ assert KEPT_GROUP_FIXTURE != FIXTURE, "fixture edit must actually take"
 def test_the_sweep_does_not_report_a_group_that_keeps_a_member(tmp_path):
     d = tmp_path / "devices/acme/d"; d.mkdir(parents=True)
     (d / "device.yaml").write_text(KEPT_GROUP_FIXTURE)
-    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(SWEEP_LIB), "--devices", str(tmp_path / "devices"), "--apply"],
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
     assert "mgmt-leds has no members" not in r.stdout
@@ -811,7 +854,7 @@ assert EDGE_TOL_OUTSIDE_FIXTURE != EDGE_TOL_INSIDE_FIXTURE, "fixture edit must a
 def test_a_lamp_08mm_outside_the_box_is_lifted(tmp_path):
     d = tmp_path / "devices/acme/d9"; d.mkdir(parents=True)
     (d / "device.yaml").write_text(EDGE_TOL_INSIDE_FIXTURE)
-    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(SWEEP_LIB), "--devices", str(tmp_path / "devices"), "--apply"],
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
     assert "external-lamps" not in r.stdout, "0.8mm outside the old footprint is within LAMP_EDGE_TOL - still inside"
@@ -825,7 +868,7 @@ def test_a_lamp_08mm_outside_the_box_is_lifted(tmp_path):
 def test_a_lamp_15mm_outside_the_box_is_external(tmp_path):
     d = tmp_path / "devices/acme/d9"; d.mkdir(parents=True)
     (d / "device.yaml").write_text(EDGE_TOL_OUTSIDE_FIXTURE)
-    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(SWEEP_LIB), "--devices", str(tmp_path / "devices"), "--apply"],
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
     assert "external-lamps 1" in r.stdout
@@ -916,7 +959,7 @@ views:
 def test_a_jack_off_rj45_port_4_gains_rotate_180(tmp_path):
     d = tmp_path / "devices/acme/d10"; d.mkdir(parents=True)
     (d / "device.yaml").write_text(FLIP_FIXTURE)
-    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(SWEEP_LIB), "--devices", str(tmp_path / "devices"), "--apply"],
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
     assert "rotation flipped 1" in r.stdout
@@ -929,7 +972,7 @@ def test_a_jack_off_rj45_port_4_gains_rotate_180(tmp_path):
 def test_a_jack_off_rj45_port_4_already_rotated_180_loses_the_rotate_key(tmp_path):
     d = tmp_path / "devices/acme/d10"; d.mkdir(parents=True)
     (d / "device.yaml").write_text(FLIP_FIXTURE_ROTATED)
-    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(SWEEP_LIB), "--devices", str(tmp_path / "devices"), "--apply"],
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
     assert "rotation flipped 1" in r.stdout
@@ -942,7 +985,7 @@ def test_a_jack_off_rj45_port_4_already_rotated_180_loses_the_rotate_key(tmp_pat
 def test_a_jack_already_keyway_down_is_not_flipped(tmp_path):
     d = tmp_path / "devices/acme/d11"; d.mkdir(parents=True)
     (d / "device.yaml").write_text(NO_FLIP_FIXTURE)
-    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(SWEEP_LIB), "--devices", str(tmp_path / "devices"), "--apply"],
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
     assert "rotation flipped" not in r.stdout
@@ -955,7 +998,7 @@ def test_a_jack_already_keyway_down_is_not_flipped(tmp_path):
 def test_handedness_uses_the_final_rotate_after_the_flip(tmp_path):
     d = tmp_path / "devices/acme/d12"; d.mkdir(parents=True)
     (d / "device.yaml").write_text(HANDEDNESS_FLIP_FIXTURE)
-    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(SWEEP_LIB), "--devices", str(tmp_path / "devices"), "--apply"],
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
     data = yaml.safe_load((d / "device.yaml").read_text())
@@ -992,7 +1035,7 @@ assert DESC_FIXTURE_EXISTING != DESC_FIXTURE
 def test_the_sweep_carries_lifted_descriptions_onto_the_jack(tmp_path):
     d = tmp_path / "devices/acme/d13"; d.mkdir(parents=True)
     (d / "device.yaml").write_text(DESC_FIXTURE)
-    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(SWEEP_LIB), "--devices", str(tmp_path / "devices"), "--apply"],
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
     assert "descriptions carried 2" in r.stdout
@@ -1006,7 +1049,7 @@ def test_the_sweep_carries_lifted_descriptions_onto_the_jack(tmp_path):
 def test_the_sweep_appends_a_carried_description_after_an_existing_one(tmp_path):
     d = tmp_path / "devices/acme/d14"; d.mkdir(parents=True)
     (d / "device.yaml").write_text(DESC_FIXTURE_EXISTING)
-    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(LIB), "--devices", str(tmp_path / "devices"), "--apply"],
+    r = subprocess.run([sys.executable, str(SWEEP), "--library", str(SWEEP_LIB), "--devices", str(tmp_path / "devices"), "--apply"],
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
     data = yaml.safe_load((d / "device.yaml").read_text())
@@ -1070,3 +1113,39 @@ def test_build_module_keeps_unswept_rj45_ganged_at_1_as_console():
     out = dx.build_module(contract, "Juniper")
     assert out["console-ports"] == [{"name": "console", "type": "rj-45"}]
     assert "interfaces" not in out
+
+
+RETIRED = ["common/rj45-hd@1", "common/rj45-hd-plain@1", "common/rj45-port@4", "common/rj45-bezel@2",
+           "common/rj45-shielded@1", "common/rj45-shielded@2", "common/rj45-jack@2", "std/rj45@1", "std/rj45-ganged@1"]
+
+
+def test_the_retired_rj45_parts_are_gone_and_unreferenced():
+    """Gone from the library, and gone from every `ref:` - a device or component
+    that still composed one would fail to build. Provenance prose is free to go
+    on naming a retired part for history (the design doc and several surviving
+    contracts do), so the search is for `ref:` lines, not any mention."""
+    for ref in RETIRED:
+        nsname, major = ref.rsplit("@", 1)
+        assert not (LIB / "components" / nsname / f"v{major}").exists(), ref
+    pattern = r"ref:\s*(" + "|".join(re.escape(r) for r in RETIRED) + r")\b"
+    hits = subprocess.run(["grep", "-rlnE", pattern, str(LIB / "devices"), str(LIB / "components")],
+                          capture_output=True, text=True).stdout.split()
+    assert hits == [], hits
+
+
+def test_no_lamp_is_placed_inside_an_rj45_any_more():
+    """The L39 exemption for a lamp 'moulded into the jack housing' has nothing
+    left to exempt; it is removed, and this is what would bring it back - an
+    LED `for:` a jack that already carries its own composed lamps, which is a
+    real duplicate. A lamp `for:` a BARE jack (std/rj45@2, std/rj45-ganged@2)
+    is the different, settled pattern nine devices use across four vendors -
+    two discrete LEDs beside a jack that itself has none - and is not this."""
+    LAMPED = {"common/rj45-eth@1", "common/rj45-ganged-eth@1"}
+    for f in sorted(LIB.glob("devices/*/*/device.yaml")):
+        d = yaml.safe_load(f.read_text())
+        for v in (d.get("views") or {}).values():
+            pl = ((v or {}).get("components") or {}).get("placements") or []
+            lamped = {p["id"] for p in pl if p.get("ref") in LAMPED}
+            for p in pl:
+                fr = p.get("for"); fr = fr if isinstance(fr, list) else [fr]
+                assert not ("led" in p.get("ref", "") and any(x in lamped for x in fr)), f"{f}: {p['id']}"

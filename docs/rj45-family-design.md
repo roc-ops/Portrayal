@@ -209,3 +209,10 @@ The optical apertures in #61 (OSFP, SFP-DD, XENPAK, CPAK); `std/qsfp-dd`'s
 unverified size; PoE lamps beyond what a device's guide tables; a keystone or
 field-terminated jack, which is a different housing this library has no device
 for.
+
+## Done
+
+Landed 2026-09-05 across PRs 131, 132, 133, 134, 135, 136, 137, 138, 139 and
+this PR. Four components replace nine; every RJ45 in the library is one of
+them; L76 counts zero. What stayed flagged: the latch slot height (2.6,
+conventional) and the housing top wall (2.0, read at scale).

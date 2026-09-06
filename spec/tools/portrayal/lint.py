@@ -1994,9 +1994,9 @@ def lint_device_overlap(path, view_name, view, lib_roots):
     """
     boxes = []
     parts_ = view_parts(view)["placements"]
-    # An indicator that DECLARES it belongs to a part may sit on it: an LED in a
-    # jack's bezel overlaps the jack by construction. `for:` is the declaration,
-    # so honour it here the same way mate-to is honoured.
+    # An indicator that DECLARES it belongs to a part may sit on it: a status
+    # LED `for:` its host port overlaps the port by construction. `for:` is
+    # the declaration, so honour it here the same way mate-to is honoured.
     owned = {p["id"]: set(targets(p.get("for"))) for p in parts_}
     # A SURFACE-MOUNTED PART IS SUPPOSED TO LIE OVER WHAT IS BEHIND IT. The
     # R740xd's rear handle is bolted to the outside of the panel and its rail
@@ -2416,14 +2416,13 @@ def lint_device_cutouts(path, view_name, view, lib_roots):
         if q.get("id") in boxes:
             continue
         if cls in ("led", "button"):
-            # TWO WAYS A LAMP IS ALREADY PUNCHED, and both are real hardware
-            # rather than bookkeeping. The AS7946-30XB's mgmt link and activity
-            # LEDs sit wholly inside the RJ45 - moulded into the jack housing,
-            # which is where they are on the metal. And four Juniper files break
-            # the shared-id convention, declaring the hole as `esd-rear` while
-            # the part is `esd-rear-jack`; going by id alone punched the same
-            # hole twice, which L39 itself then reported as two holes sharing
-            # metal. Both are found by asking where the thing sits.
+            # A LAMP CAN ALREADY BE PUNCHED under a different id than its hole,
+            # and that is real hardware rather than bookkeeping: four Juniper
+            # files break the shared-id convention, declaring the hole as
+            # `esd-rear` while the part is `esd-rear-jack`; going by id alone
+            # punched the same hole twice, which L39 itself then reported as
+            # two holes sharing metal. It is found by asking where the thing
+            # sits, not what it is called.
             fb = _footprint(q, lib_roots)
             if fb and _covered(fb):
                 continue
