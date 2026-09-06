@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 20.13.3
+version: 21.0.1
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
@@ -719,7 +719,13 @@ views:
         # edge to an eighth past the VGA's outer standoff. A port that moves
         # takes the end of the bar with it. Colour is a plain dark for now -
         # the shape is what is being established.
-        - {id: legend-bar, at: [25.43, 80.5], size: [90.67, 3.175], fill: '#33383d'}
+        # THE LEFT END MOVED WITH THE PORT. The RJ45 family sweep (2026-09)
+        # re-centred the iDRAC jack, moving its left edge from 28.60 to
+        # 28.70; an eighth past that is 28.70 - 3.175 = 25.525 (was
+        # 28.60 - 3.175 = 25.43). The right end is unmoved (the VGA did not
+        # move), so the bar's width shrank by the same 0.095mm to hold it:
+        # 90.67 - 0.095 = 90.575.
+        - {id: legend-bar, at: [25.525, 80.5], size: [90.575, 3.175], fill: '#33383d'}
         # FIVE RIVETS, four of them in one row. A sweep of face y 66.5..70.5
         # across the whole width returns four identical regions, 5.00 x 4.75
         # each, at x 7.03, 50.72, 86.47 and 113.58, all at y 68.85 - above the
@@ -781,7 +787,7 @@ views:
             convention face_y = 86.8 - raw_y, confirmed against the rear
             handle's trusted low edge and this same shell's riser-1 shelf.
       cutouts:
-        - {id: idrac9, at: [28.60, 66.55], size: [16.0, 14.0], shape: rect}
+        - {id: idrac9, at: [28.7, 66.9], size: [15.8, 13.2], shape: rect}
         - {id: serial, at: [53.63, 69.10], size: [20.47, 11.4], shape: d-sub}
         - {id: vga, at: [87.30, 69.10], size: [20.47, 11.4], shape: d-sub}
         - {id: usb-1, at: [120.20, 71.47], size: [12.0, 4.5], shape: rect}
@@ -1054,37 +1060,48 @@ views:
                      sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b, sff24-msff4-rsff4-rc2-1b2c], group: drives-rear, rel-pos: 15}
       placements:
         # THE LIBRARY'S RJ45, not a second opinion about what one looks like.
-        # This was common/rj45-jack, which draws its own face at 15.8 x 13.2
-        # where the governed aperture is 16.0 x 14.0. HELD BY ITS BOTTOM EDGE,
-        # not its corner: the iDRAC, serial and VGA share a baseline (fact
-        # sheet B.3) and that is the fact worth preserving, so y is set from
-        # the line rather than from each part's own top edge.
-        # THE LINE ITSELF IS NOW 80.5. All three sat 0.5 high against the ISM
-        # figure 8 overlay - the same 0.5, on all three, which is what says it
-        # is the shared baseline that was out and not three separate readings.
-        # The legend bar under them moved with them, because it labels them.
+        # This was common/rj45-jack: the registry carried a governed panel
+        # aperture of 16.0 x 14.0 for it, unsourced. That figure is retired
+        # along with the part - the RJ45 family sweep (2026-09) moved this
+        # jack onto common/rj45-eth@1, which draws its own housing rather
+        # than composing a separate bezel over a registry aperture. Today
+        # the jack IS 15.8 x 13.2, and the cutout equals it exactly (see
+        # "THE HOLE NOW MATCHES THE JACK EXACTLY" below).
+        # THE FAMILY HOLDS A JACK'S CENTRE, not its bottom edge, when the
+        # part changes size (see "RE-CENTRED, NOT MOVED" below). The iDRAC,
+        # serial and VGA share a baseline (fact sheet B.3, 80.5 by this
+        # file's own rounding) that the serial and VGA still start at
+        # unchanged. Swapping in the smaller rj45-eth@1 housing at the same
+        # centre leaves the iDRAC's bottom edge at 66.9 + 13.2 = 80.1, 0.45mm
+        # above that baseline - a known, recorded deviation from B.3, not a
+        # fresh measurement of it.
+        # The legend bar under them moved with the iDRAC jack, because it
+        # labels it (see the legend-bar comment above, in `decor`).
         # THE iDRAC PORT IS A HOUSING, NOT A BARE JACK. std/rj45 is the modular
         # jack on its own - black, no bezel, no lamps - and drawn on a black
         # panel it read as a hole with nothing in it. The real port has a silver
         # bezel and two indicators in its top corners.
-        # common/rj45-port@4 already carried exactly that and had done for four
-        # versions. THE LAMPS BELONG TO THE PORT and arrive with it rather than
-        # being placed beside it, which is what the hardware does.
-        # NO ROTATION NOW. std/rj45 draws its keyway DOWN and needed 180 to sit
-        # right; rj45-port@4 draws it UP already, so the rotation would have put
-        # the two lamps at the bottom.
-        # RE-CENTRED, NOT MOVED. The bezel is 17.0 x 14.9 over a 16.0 x 14.0
-        # opening, so it overlaps the cutout by half a millimetre a side - which
-        # is what a bezel does. Placed at 28.10, 66.05.
-        # THE HOLE FOLLOWS THE COMPOSED APERTURE, NOT THE BEZEL'S CENTRE, and the
-        # two are 0.05 apart. common/rj45-port@4 composes std/rj45 at [0.5, 0.5]
-        # inside a 14.9-tall bezel, so the jack sits 0.5 above and 0.4 below -
-        # centred would be 0.45. This device had the cutout at the centred
-        # position and every other user of that component has it at the composed
-        # one, so 0.45 meant one device disagreeing with six and with the part
-        # itself. 0.05 mm is a third of a pixel on the figures behind either
-        # number. The asymmetry is the component's and is left there.
-        - {ref: common/rj45-port@4, id: idrac9, at: [28.10, 66.05],
+        # common/rj45-port@4 carried exactly that for four versions; the RJ45
+        # family sweep (2026-09) moved this jack onto common/rj45-eth@1, the
+        # four-part family's own lamped housing, which is smaller (15.8 x 13.2,
+        # no separate bezel) but still THE LAMPS BELONG TO THE PORT and arrive
+        # with it rather than being placed beside it, which is what the
+        # hardware does.
+        # ROTATED 180 TO MATCH. common/rj45-eth@1 draws its keyway - and its
+        # two lamps - DOWN when unrotated, same as std/rj45; the real port's
+        # lamps sit in its top corners, so this placement carries rotate: 180
+        # to put them there, the same face rj45-port@4 drew UP without any
+        # rotate of its own.
+        # RE-CENTRED, NOT MOVED. rj45-port@4's own aperture was its 17.0 x 14.9
+        # bezel; swapping in rj45-eth@1's 15.8 x 13.2 housing at the same
+        # centre shifted `at` by half the size difference each way -
+        # (17.0-15.8)/2, (14.9-13.2)/2 = 0.60, 0.85mm - from 28.10, 66.05 to
+        # 28.70, 66.90.
+        # THE HOLE NOW MATCHES THE JACK EXACTLY. rj45-eth@1 has no separate
+        # bezel to compose - the housing IS the aperture, offset [0, 0] - so
+        # the cutout sits at the jack's own `at` and size, 28.70, 66.90 at
+        # 15.8 x 13.2, with none of the old 0.05mm bezel-offset asymmetry.
+        - {ref: common/rj45-eth@1, id: idrac9, at: [28.7, 66.9], rotate: 180,
            attrs: {role: management}, group: mgmt-ports, rel-pos: 1}
         - {ref: common/db9-receptacle@1, id: serial, at: [48.47, 68.55],
            group: mgmt-ports, rel-pos: 2}
