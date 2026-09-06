@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: as7946-74xksb
-version: 1.0.2
+version: 3.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS7946-74XKSB
@@ -102,7 +102,8 @@ provenance:
     rotate 180
   rj45-choice: Jason - use std/ before common/. std/rj45 is the IEC 60603-7 aperture; the
     hand-drawn common/rj45-shielded puts its integrated LEDs on the contacts side, which no real
-    jack does. All six jacks are std/rj45@1, and MGMT's two LEDs are placed on top of it
+    jack does. Five jacks are std/rj45@2; MGMT is common/rj45-eth@1, with its two LEDs as
+    mgmt-eth/led-a and led-b
   status-leds: drawing - DIAG, LOC, FAN, PS0 and PS1 on a 4.75 mm pitch beneath the timing block
     at y 45.0, legends beneath them at 48.9
   filters: 'drawing plus photo - the AGR420 front carries a top and a bottom air filter, and
@@ -168,7 +169,7 @@ provenance:
     DC terminals and the spec and serial labels at the end with the front thumb screws'
   audit-by-name: 'gate 5 - all thirteen datasheet page-2 callouts walked and satisfied. 1 ->
     port-0/1; 2 -> port-2..9; 3 -> port-10..73; 4 -> bits-0/1/2; 5 -> mhz-10-in; 6 -> usb;
-    7 -> mgmt-eth with led-mgmt-link and led-mgmt-act; 8 -> console-1; 9 -> pps-tod;
+    7 -> mgmt-eth with mgmt-eth/led-a and mgmt-eth/led-b; 8 -> console-1; 9 -> pps-tod;
     10 -> pps-1-out; 11 -> console-0; 12 -> psu-0/psu-1 bays with dc-psu and ac-psu
     configurations; 13 -> fan-0..fan-4. From the QSG on top of those: the grounding point ->
     ground-plate, the reset button -> reset, the five system LEDs -> led-diag/loc/fan/ps0/ps1,
@@ -226,7 +227,7 @@ chassis:
 # are derived from the lint rules at build time and must not be listed here.
 gaps:
 - what: mgmt-led-colours
-  scope: [mgmt-leds]
+  scope: [mgmt-eth]
   reason: vendor-silent
   note: >-
     The QSG's Front LEDs section tables every port family and every system lamp
@@ -358,13 +359,6 @@ groups:
     index-origin: 0
     mixed: the management corner - out-of-band RJ45, RS-232 console on micro-USB-B, a USB-A service
       port and the recessed reset. One cluster on the faceplate, four media
-  mgmt-leds:
-    term: LED
-    role: indicator
-    index-origin: 0
-    description: 'QSG Front LEDs callout 5 - "RJ-45 OOB Port - Left (link), Right (activity)".
-      That is the whole of what the guide says. It gives these two lamps NO colour, so none is
-      declared for them and the block has no shared vocabulary to declare either'
   fasteners:
     term: Rivet
     role: furniture
@@ -480,16 +474,16 @@ views:
       - {id: port-71, at: [331.01, 31.30], size: [14.25, 10.40], shape: rect}
       - {id: port-72, at: [331.01, 44.30], size: [14.25, 10.40], shape: rect}
       - {id: port-73, at: [331.01, 61.00], size: [14.25, 10.40], shape: rect}
-      - {id: bits-0, at: [356.00, 14.40], size: [16.00, 14.00], shape: rect}
-      - {id: bits-2, at: [372.30, 14.40], size: [16.00, 14.00], shape: rect}
-      - {id: bits-1, at: [356.00, 28.50], size: [16.00, 14.00], shape: rect}
-      - {id: pps-tod, at: [372.30, 28.50], size: [16.00, 14.00], shape: rect}
+      - {id: bits-0, at: [356.1, 14.8], size: [15.8, 13.2], shape: rect}
+      - {id: bits-2, at: [372.4, 14.8], size: [15.8, 13.2], shape: rect}
+      - {id: bits-1, at: [356.1, 28.9], size: [15.8, 13.2], shape: rect}
+      - {id: pps-tod, at: [372.4, 28.9], size: [15.8, 13.2], shape: rect}
       - {id: mhz-10-in, at: [393.60, 17.80], size: [4.83, 4.83], shape: circle}
       - {id: pps-1-out, at: [394.10, 31.20], size: [4.83, 4.83], shape: circle}
       - {id: usb, at: [404.95, 27.60], size: [4.50, 12.00], shape: rect}
-      - {id: mgmt-eth, at: [413.50, 27.00], size: [16.00, 14.00], shape: rect}
+      - {id: mgmt-eth, at: [413.6, 27.4], size: [15.8, 13.2], shape: rect}
       - {id: console-0, at: [402.90, 44.40], size: [7.50, 2.75], shape: rect}
-      - {id: console-1, at: [413.50, 44.40], size: [16.00, 14.00], shape: rect}
+      - {id: console-1, at: [413.6, 44.8], size: [15.8, 13.2], shape: rect}
       - {id: reset, at: [394.80, 44.60], size: [4.00, 4.00], shape: rect}
       - {id: led-port-0-a, at: [12.6, 34.6], size: [2, 2], shape: rect}
       - {id: led-port-0-b, at: [12.6, 37.7], size: [2, 2], shape: rect}
@@ -1037,25 +1031,17 @@ views:
         - {id: led-port-72-a, ref: common/led-arrow-sm@1, at: [334.74, 56.80], skin: up, group: sfp28-speed-leds, rel-pos: 63, for: port-72, attrs: {function: speed}}
         - {id: led-port-73-b, ref: common/led-arrow-sm@1, at: [338.74, 56.80], skin: down, group: sfp28-link-leds, rel-pos: 62, for: port-73, attrs: {function: link}}
         - {id: led-port-72-b, ref: common/led-arrow-sm@1, at: [341.63, 56.80], skin: up, group: sfp28-link-leds, rel-pos: 63, for: port-72, attrs: {function: link}}
-        - {id: bits-0, ref: std/rj45@1, at: [356.00, 14.40], rotate: 180, group: timing, rel-pos: 0}
-        - {id: bits-2, ref: std/rj45@1, at: [372.30, 14.40], rotate: 180, group: timing, rel-pos: 1}
-        - {id: bits-1, ref: std/rj45@1, at: [356.00, 28.50], group: timing, rel-pos: 2}
-        - {id: pps-tod, ref: std/rj45@1, at: [372.30, 28.50], group: timing, rel-pos: 3}
+        - {id: bits-0, ref: std/rj45@2, at: [356.1, 14.8], rotate: 180, group: timing, rel-pos: 0}
+        - {id: bits-2, ref: std/rj45@2, at: [372.4, 14.8], rotate: 180, group: timing, rel-pos: 1}
+        - {id: bits-1, ref: std/rj45@2, at: [356.1, 28.9], group: timing, rel-pos: 2}
+        - {id: pps-tod, ref: std/rj45@2, at: [372.4, 28.9], group: timing, rel-pos: 3}
         - {id: mhz-10-in, ref: std/smb@1, at: [393.60, 17.80], group: timing, rel-pos: 4}
         - {id: pps-1-out, ref: std/smb@1, at: [394.10, 31.20], group: timing, rel-pos: 5}
         - {id: usb, ref: std/usb-a@1, at: [401.20, 31.35], rotate: 90, group: mgmt, rel-pos: 0}
-        - {id: mgmt-eth, ref: std/rj45@1, at: [413.50, 27.00], rotate: 180, group: mgmt, rel-pos: 1, attrs: {leds: 'Left = link, Right = activity'}}
+        - {id: mgmt-eth, ref: common/rj45-eth@1, at: [413.6, 27.4], rotate: 180, group: mgmt, rel-pos: 1, attrs: {leds: 'Left = link, Right = activity'}, states: {led-a: ['off', {behavior: blinking, name: activity}], led-b: ['off', {name: link}]}}
         - {id: console-0, ref: std/micro-usb@1, at: [402.90, 44.40], group: mgmt, rel-pos: 2}
-        - {id: console-1, ref: std/rj45@1, at: [413.50, 44.40], rotate: 180, group: mgmt, rel-pos: 3}
+        - {id: console-1, ref: std/rj45@2, at: [413.6, 44.8], rotate: 180, group: mgmt, rel-pos: 3}
         - {id: reset, ref: common/reset-button@1, at: [394.80, 44.60], group: mgmt, rel-pos: 4, for: chassis}
-        - {id: led-mgmt-link, ref: common/led-rect@1, at: [414.6, 28.0], group: mgmt-leds, rel-pos: 0, for: mgmt-eth, attrs: {function: link},
-           description: 'left lamp: link. The QSG gives it no colour, so it keeps led-rect''s
-             generic off/on and no state vocabulary is invented for it'}
-        - {id: led-mgmt-act, ref: common/led-rect@1, at: [423.8, 28.0], group: mgmt-leds, rel-pos: 1, for: mgmt-eth, attrs: {function: activity},
-           states: ['off', {name: activity, behavior: blinking}],
-           description: 'right lamp: activity. The QSG gives it no colour; the blink is the
-             behaviour the same guide gives every other activity lamp on this device, and is
-             declared without a colour of its own'}
         - {id: led-diag, ref: common/led-rect@1, at: [359.30, 45.00], group: status-leds, rel-pos: 0, for: chassis, attrs: {function: DIAG},
            description: 'DIAG - Green (OK), Amber (fault detected)'}
         - {id: led-loc, ref: common/led-rect@1, at: [364.20, 45.00], group: status-leds, rel-pos: 1, for: chassis, attrs: {function: LOC},
