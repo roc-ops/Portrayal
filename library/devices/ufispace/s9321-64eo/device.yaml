@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9321-64eo
-version: 0.2.4
+version: 1.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9321-64EO
@@ -122,9 +122,10 @@ provenance:
     LED table (left green 1G, right amber 10M/100M), so the lower jack is the OOB port and
     the upper is the console. The panel legend agrees once read that way - 'IOIOI' with an
     up triangle for the console and a down triangle beside the network symbol for the OOB.
-    common/rj45-hd@1 draws its two integrated lamps on the CONTACT side and this device
-    shows them on the keyway side; the jack is left unrotated because the contacts and
-    keyway are geometry and the lamp side is that component's own art.
+    common/rj45-ganged-eth@1 draws its two integrated lamps on the keyway side already,
+    matching this device's photo; the mismatch common/rj45-hd@1 used to force (lamps drawn
+    on the CONTACT side) is gone, and the jack stays unrotated because the contacts and
+    keyway are geometry, unaffected by the lamp side.
   sfp-block: >-
     drawing - one stacked SFP28 pair in a silver ganged frame at x 24.15-39.80,
     y 12.50-44.62, the vendor's ports 64 and 65 printed in orange inside it. The two drawn
@@ -609,12 +610,12 @@ views:
            attrs: {role: maintenance, speed: usb3},
            description: 'HIG Connecting the USB Extender Cable - a maintenance port; the guide
              gives usbreset and i2cset lines to run after inserting a device'}
-        - {ref: common/rj45-hd-plain@1, id: console, at: [23.45, 51.50], rotate: 180, group: mgmt, rel-pos: 1,
+        - {ref: std/rj45-ganged@2, id: console, at: [24.1, 52], rotate: 180, group: mgmt, rel-pos: 1,
            attrs: {media: rj45-serial, role: console},
            description: 'HIG Initial System Setup - RJ45 console labelled IOIO, 115200 8N1, no flow
              control. Drawn rotate 180 because this jack shows its latch keyway up and its contacts
              down, the mirror of the OOB jack below it'}
-        - {ref: common/rj45-hd@1, id: oob, at: [23.45, 63.60], group: mgmt, rel-pos: 4,
+        - {ref: common/rj45-ganged-eth@1, id: oob, at: [24.1, 64.1], group: mgmt, rel-pos: 4,
            attrs: {role: mgmt, speed: 100m-1g},
            states: {led-a: ['off', {name: link-1g, color: '#22c55e'},
                             {name: activity-1g, color: '#22c55e', behavior: blinking}],
@@ -754,8 +755,6 @@ views:
         - {ref: common/led-dot@1, id: led-port-61, at: [390.40, 80.60], for: port-61, group: port-leds, rel-pos: 62}
         - {ref: common/led-dot@1, id: led-port-62, at: [409.70, 80.60], for: port-62, group: port-leds, rel-pos: 63}
         - {ref: common/led-dot@1, id: led-port-63, at: [413.50, 80.60], for: port-63, group: port-leds, rel-pos: 64}
-        - {ref: common/led-dot@1, id: led-oob-l, at: [24.65, 73.33], for: oob, group: port-leds, rel-pos: 901}
-        - {ref: common/led-dot@1, id: led-oob-r, at: [34.25, 73.33], for: oob, group: port-leds, rel-pos: 902}
     regions:
       - {id: mgmt-block, at: [0.5, 46], size: {w: 40, h: 41}, label: Management and console, members: [reset, console-usb, usb, console, oob]}
       - {id: timing-block, at: [0.5, 1], size: {w: 22, h: 34}, label: Timing interfaces, members: [tim-1pps, tim-10mhz]}

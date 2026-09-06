@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9700-53dx
-version: 2.0.3
+version: 3.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9700-53DX
@@ -760,14 +760,14 @@ views:
       placements:
         - {ref: std/sfp-ganged@1, id: mgmt-sfp-0, at: [23.23, 14.22], rotate: 180, group: sfp-plus, rel-pos: 0}
         - {ref: std/sfp-ganged@1, id: mgmt-sfp-1, at: [23.23, 27.36], group: sfp-plus, rel-pos: 1}
-        - {ref: std/rj45-ganged@1, id: console, at: [23.20, 47.72], rotate: 180, group: mgmt, rel-pos: 1,
+        - {ref: std/rj45-ganged@2, id: console, at: [23.2, 47.72], rotate: 180, group: mgmt, rel-pos: 1,
            attrs: {media: rj45-serial, role: console}}
         - {ref: std/micro-usb@1, id: console-usb, at: [9.33, 51.52], group: mgmt, rel-pos: 2,
            attrs: {media: micro-usb-b, role: console}}
         - {ref: std/usb-a@1, id: usb, at: [7.40, 61.65], rotate: 90, group: mgmt, rel-pos: 3,
            attrs: {role: storage, speed: usb2}}
-        - {ref: std/rj45-ganged@1, id: oob, at: [23.20, 60.18], group: mgmt, rel-pos: 4,
-           attrs: {media: rj45, role: mgmt, speed: 100m-1g}}
+        - {ref: common/rj45-ganged-eth@1, id: oob, at: [23.2, 60.18], group: mgmt, rel-pos: 4,
+           attrs: {media: rj45, role: mgmt, speed: 100m-1g}, states: {led-a: ['off', {color: '#22c55e', name: link-1g}, {behavior: blinking, color: '#22c55e', name: activity-1g}], led-b: ['off', {color: '#f59e0b', name: link-10-100m}, {behavior: blinking, color: '#f59e0b', name: activity-10-100m}]}, description: 'led-oob-left: the left lamp in the out-of-band jack''s aperture. HIG section 10''s Management port LED table is explicit for this device - Left LED: Off (1G no link), Solid Green (1G link-up), Blinking Green (1G TX/RX activity) - so unlike the S9600-56DX''s this vocabulary is sourced and not borrowed; led-oob-right: the right lamp in the out-of-band jack''s aperture. HIG section 10, Management port LED table, Right LED - Off (no activity), Solid Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity)'}
         - {ref: common/reset-button@1, id: reset, at: [7.11, 37.19], for: chassis, group: mgmt, rel-pos: 5}
         - {ref: ufispace/seg7-status-2@1, id: status-display, at: [411.50, 5.25], for: chassis,
            description: 'the two-digit seven-segment beacon HIG Figure 4 calls out as ''Beacon LED''. What the digits show is not stated anywhere in the guide - see the beacon-semantics gap - so the part carries no state vocabulary',
@@ -796,18 +796,6 @@ views:
                    {name: fail, color: '#f59e0b'}],
            description: 'HIG section 10, Front Panel LED table, PS1 row - OFF (no power), Solid Green (PSU 1 is working well), Blinking Green (reserved), Solid Amber (PSU 1 fail, needs service), Blinking Amber (reserved)',
            group: status-leds, rel-pos: 4}
-        - {ref: common/led-dot@1, id: led-oob-left, for: oob, at: [23.60, 68.80],
-           states: ['off',
-                   {name: link-1g, color: '#22c55e'},
-                   {name: activity-1g, color: '#22c55e', behavior: blinking}],
-           description: 'the left lamp in the out-of-band jack''s aperture. HIG section 10''s Management port LED table is explicit for this device - Left LED: Off (1G no link), Solid Green (1G link-up), Blinking Green (1G TX/RX activity) - so unlike the S9600-56DX''s this vocabulary is sourced and not borrowed',
-           group: port-leds, rel-pos: 101}
-        - {ref: common/led-dot@1, id: led-oob-right, for: oob, at: [33.50, 68.80],
-           states: ['off',
-                   {name: link-10-100m, color: '#f59e0b'},
-                   {name: activity-10-100m, color: '#f59e0b', behavior: blinking}],
-           description: 'the right lamp in the out-of-band jack''s aperture. HIG section 10, Management port LED table, Right LED - Off (no activity), Solid Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity)',
-           group: port-leds, rel-pos: 102}
         - {ref: std/qsfp-ganged@1, id: port-0, at: [43.29, 13.41], rotate: 180, group: qsfp28, rel-pos: 0}
         - {ref: std/qsfp-ganged@1, id: port-1, at: [43.29, 28.98], group: qsfp28, rel-pos: 1}
         - {ref: common/led-dot@1, id: led-port-0, at: [49.61, 9.60], for: port-0, attrs: {port: '0'}, group: port-leds, rel-pos: 1}

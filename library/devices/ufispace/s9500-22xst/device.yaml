@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9500-22xst
-version: 0.2.3
+version: 1.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9500-22XST
@@ -543,30 +543,16 @@ views:
         - {ref: common/sma-jack@1, id: clk-1pps-out, at: [150.45, 12.23], group: timing, rel-pos: 3, attrs: {role: 1pps-out}}
         - {ref: common/sma-jack@1, id: clk-10mhz-in, at: [135.45, 25.18], group: timing, rel-pos: 4, attrs: {role: 10mhz-in}}
         - {ref: common/sma-jack@1, id: clk-10mhz-out, at: [150.45, 25.18], group: timing, rel-pos: 5, attrs: {role: 10mhz-out}}
-        - {ref: std/rj45-ganged@1, id: bits, at: [165.97, 15.4], rotate: 180, group: timing, rel-pos: 6, attrs: {media: rj48, role: bits-in}}
-        - {ref: std/rj45-ganged@1, id: tod, at: [165.97, 26.4], group: timing, rel-pos: 7, attrs: {media: rj45, role: tod-in}}
+        - {ref: std/rj45-ganged@2, id: bits, at: [165.97, 15.4], rotate: 180, group: timing, rel-pos: 6, attrs: {media: rj48, role: bits-in}}
+        - {ref: std/rj45-ganged@2, id: tod, at: [165.97, 26.4], group: timing, rel-pos: 7, attrs: {media: rj45, role: tod-in}}
         - {ref: std/micro-usb@1, id: console-usb, at: [166.10, 8.25], group: mgmt, rel-pos: 4, attrs: {media: micro-usb, role: console}}
-        - {ref: std/rj45-ganged@1, id: mgmt, at: [185.67, 6.35], rotate: 180, group: mgmt, rel-pos: 1, attrs: {role: mgmt, speed: 100m-1g}}
-        - {ref: common/led-dot@1, id: led-mgmt-left, for: mgmt, at: [186.7, 6.9],
-           states: ['off', {name: link-1g, color: '#22c55e'},
-                   {name: activity-1g, color: '#22c55e', behavior: blinking}],
-           description: 'HIG section 10 Management port LED table, Left LED - Off (1G no
-             link), Solid Green (1G link-up), Blinking Green (1G TX/RX activity)',
-           group: port-leds, rel-pos: 33}
-        - {ref: common/led-dot@1, id: led-mgmt-right, for: mgmt, at: [196.3, 6.9],
-           states: ['off', {name: link-10-100m, color: '#f59e0b'},
-                   {name: activity-10-100m, color: '#f59e0b', behavior: blinking}],
-           description: 'HIG section 10 Management port LED table, Right LED - Off (no
-             activity), Solid Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX
-             activity). The two lamps do not share a vocabulary, so they are declared
-             separately',
-           group: port-leds, rel-pos: 34}
+        - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [185.67, 6.35], rotate: 180, group: mgmt, rel-pos: 1, attrs: {role: mgmt, speed: 100m-1g}, states: {led-a: ['off', {color: '#f59e0b', name: link-10-100m}, {behavior: blinking, color: '#f59e0b', name: activity-10-100m}], led-b: ['off', {color: '#22c55e', name: link-1g}, {behavior: blinking, color: '#22c55e', name: activity-1g}]}, description: 'led-mgmt-left: HIG section 10 Management port LED table, Left LED - Off (1G no link), Solid Green (1G link-up), Blinking Green (1G TX/RX activity); led-mgmt-right: HIG section 10 Management port LED table, Right LED - Off (no activity), Solid Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity). The two lamps do not share a vocabulary, so they are declared separately'}
         - {ref: std/usb-a@1, id: usb, at: [186.06, 19.44], group: mgmt, rel-pos: 2, attrs: {role: storage, speed: usb2}}
-        - {ref: std/rj45-ganged@1, id: console, at: [185.67, 25.87], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
-        - {ref: std/rj45-ganged@1, id: port-0, at: [217.30, 10.05], group: rj45-1g, rel-pos: 0}
-        - {ref: std/rj45-ganged@1, id: port-1, at: [217.30, 24.95], rotate: 180, group: rj45-1g, rel-pos: 1}
-        - {ref: std/rj45-ganged@1, id: port-2, at: [231.84, 10.05], group: rj45-1g, rel-pos: 2}
-        - {ref: std/rj45-ganged@1, id: port-3, at: [231.84, 24.95], rotate: 180, group: rj45-1g, rel-pos: 3}
+        - {ref: std/rj45-ganged@2, id: console, at: [185.67, 25.87], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
+        - {ref: common/rj45-ganged-eth@1, id: port-0, at: [217.3, 10.05], group: rj45-1g, rel-pos: 0}
+        - {ref: common/rj45-ganged-eth@1, id: port-1, at: [217.3, 24.95], rotate: 180, group: rj45-1g, rel-pos: 1}
+        - {ref: common/rj45-ganged-eth@1, id: port-2, at: [231.84, 10.05], group: rj45-1g, rel-pos: 2}
+        - {ref: common/rj45-ganged-eth@1, id: port-3, at: [231.84, 24.95], rotate: 180, group: rj45-1g, rel-pos: 3}
         - {ref: std/sfp-ganged@1, id: port-4, at: [260.48, 10.35], group: sfp-plus, rel-pos: 4}
         - {ref: std/sfp-ganged@1, id: port-5, at: [260.48, 25.25], group: sfp-plus, rel-pos: 5}
         - {ref: std/sfp-ganged@1, id: port-6, at: [274.73, 10.35], group: sfp-plus, rel-pos: 6}
@@ -604,14 +590,6 @@ views:
         - {ref: common/led-dot@1, id: led-port-20, at: [416.87, 21.2], for: port-20, group: port-leds, rel-pos: 17}
         - {ref: common/led-dot@1, id: led-port-21, at: [420.87, 21.2], for: port-21, group: port-leds, rel-pos: 18}
         - {ref: common/ground-symbol@1, id: ground-mark, at: [433.5, 19.4], group: grounding, rel-pos: 3}
-        - {ref: common/led-dot@1, id: led-port-0-l, at: [218.5, 18.78], for: port-0, group: port-leds, rel-pos: 901}
-        - {ref: common/led-dot@1, id: led-port-0-r, at: [226.8, 18.78], for: port-0, group: port-leds, rel-pos: 902}
-        - {ref: common/led-dot@1, id: led-port-1-l, at: [218.5, 25.22], for: port-1, group: port-leds, rel-pos: 903}
-        - {ref: common/led-dot@1, id: led-port-1-r, at: [226.8, 25.22], for: port-1, group: port-leds, rel-pos: 904}
-        - {ref: common/led-dot@1, id: led-port-2-l, at: [233.04, 18.78], for: port-2, group: port-leds, rel-pos: 905}
-        - {ref: common/led-dot@1, id: led-port-2-r, at: [241.34, 18.78], for: port-2, group: port-leds, rel-pos: 906}
-        - {ref: common/led-dot@1, id: led-port-3-l, at: [233.04, 25.22], for: port-3, group: port-leds, rel-pos: 907}
-        - {ref: common/led-dot@1, id: led-port-3-r, at: [241.34, 25.22], for: port-3, group: port-leds, rel-pos: 908}
     regions:
       - {id: timing, at: [118, 1], size: {w: 63, h: 41.5}, label: Timing block, members: [gnss-ant, clk-1pps-in, clk-1pps-out, clk-10mhz-in, clk-10mhz-out, bits, tod]}
       - {id: mgmt-block, at: [183, 4], size: {w: 18, h: 37}, label: Management, members: [mgmt, usb, console]}

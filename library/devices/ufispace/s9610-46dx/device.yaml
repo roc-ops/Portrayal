@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9610-46dx
-version: 2.0.4
+version: 3.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9610-46DX
@@ -406,7 +406,7 @@ gaps:
     a per-NOS LED table from UfiSpace or a NOS vendor, or photographs of a live unit with
     known ports up, down and passing traffic
 - what: mgmt-jack-led-semantics
-  scope: [oob, led-oob-left, led-oob-right]
+  scope: [oob]
   reason: vendor-silent
   note: >-
     The two lamps in the out-of-band jack's aperture are drawn BLUE in HIG Figure 8 - not
@@ -751,12 +751,12 @@ views:
         - {ref: std/sma@1, id: gnss-ant, at: [9.93, 34.30], group: timing, rel-pos: 1, attrs: {media: coax-sma, role: gnss-in}}
         - {ref: std/smb@1, id: clk-10mhz, at: [10.69, 20.66], group: timing, rel-pos: 2, attrs: {media: coax-smb, role: 10mhz-io}}
         - {ref: std/smb@1, id: clk-1pps, at: [10.85, 6.43], group: timing, rel-pos: 3, attrs: {media: coax-smb, role: 1pps-io}}
-        - {ref: std/rj45-ganged@1, id: bits, at: [24.99, 15.03], rotate: 180, group: timing, rel-pos: 4, attrs: {media: rj48, role: bits-io}}
-        - {ref: std/rj45-ganged@1, id: tod, at: [24.99, 27.95], group: timing, rel-pos: 5, attrs: {media: rj45, role: tod-io}}
-        - {ref: std/rj45@1, id: console, at: [27.81, 59.10], group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
+        - {ref: std/rj45-ganged@2, id: bits, at: [24.99, 15.03], rotate: 180, group: timing, rel-pos: 4, attrs: {media: rj48, role: bits-io}}
+        - {ref: std/rj45-ganged@2, id: tod, at: [24.99, 27.95], group: timing, rel-pos: 5, attrs: {media: rj45, role: tod-io}}
+        - {ref: std/rj45@2, id: console, at: [27.91, 59.5], group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
         - {ref: std/micro-usb@1, id: console-usb, at: [17.14, 69.64], group: mgmt, rel-pos: 2, attrs: {media: micro-usb-b, role: console}}
         - {ref: std/usb-a@1, id: usb, at: [40.75, 30.80], rotate: 90, group: mgmt, rel-pos: 3, attrs: {role: storage, speed: usb3}}
-        - {ref: std/rj45@1, id: oob, at: [47.53, 59.10], group: mgmt, rel-pos: 4, attrs: {media: rj45, role: mgmt, speed: 100m-1g}}
+        - {ref: common/rj45-eth@1, id: oob, at: [47.63, 59.5], group: mgmt, rel-pos: 4, attrs: {media: rj45, role: mgmt, speed: 100m-1g}, states: {led-a: ['off', {color: '#3b82f6', name: 'on'}], led-b: ['off', {color: '#3b82f6', name: 'on'}]}, description: 'led-oob-left: the left lamp in the out-of-band jack''s aperture, drawn BLUE in HIG Figure 8. THIS GUIDE TABLES IT NOWHERE and the colour differs from the S9600-56DX''s green/amber pair, so no link/activity vocabulary is borrowed from that sibling - the lamp carries a plain on state in the colour the figure draws it. See the mgmt-jack-led-semantics gap; led-oob-right: the right lamp in the out-of-band jack''s aperture. Same unsourced state and the same gap as led-oob-left'}
         - {ref: common/reset-button@1, id: reset, at: [29.17, 44.63], for: chassis, group: mgmt, rel-pos: 5}
         - {ref: common/led-dot@1, id: led-sync, for: chassis, at: [9.94, 57.21],
            states: ['off',
@@ -796,14 +796,6 @@ views:
                    {name: beacon, color: '#3b82f6', behavior: blinking}],
            description: 'HIG Front Panel LED table, ID row - Off (no power), Solid Blue (Reserved), Blinking Blue (beacon feature enabled). Solid Blue is carried because the table prints it, even though the vendor names no meaning for it',
            group: status-leds, rel-pos: 6}
-        - {ref: common/led-dot@1, id: led-oob-left, for: oob, at: [50.72, 70.01],
-           states: ['off', {name: 'on', color: '#3b82f6'}],
-           description: 'the left lamp in the out-of-band jack''s aperture, drawn BLUE in HIG Figure 8. THIS GUIDE TABLES IT NOWHERE and the colour differs from the S9600-56DX''s green/amber pair, so no link/activity vocabulary is borrowed from that sibling - the lamp carries a plain on state in the colour the figure draws it. See the mgmt-jack-led-semantics gap',
-           group: port-leds, rel-pos: 101}
-        - {ref: common/led-dot@1, id: led-oob-right, for: oob, at: [59.67, 70.01],
-           states: ['off', {name: 'on', color: '#3b82f6'}],
-           description: 'the right lamp in the out-of-band jack''s aperture. Same unsourced state and the same gap as led-oob-left',
-           group: port-leds, rel-pos: 102}
         # --- 40x QSFP28, five columns per block, four rows on two 2x2-per-column
         #     assemblies; upper port of each belly-to-belly pair is rotate: 180
         - {ref: std/qsfp-ganged@1, id: port-0, at: [101.16, 16.32], rotate: 180, group: qsfp28, rel-pos: 0}
