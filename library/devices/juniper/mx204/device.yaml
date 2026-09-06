@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx204
-version: 1.1.1
+version: 2.0.0
 maturity: modelled
 manufacturer: Juniper
 model: MX204
@@ -262,15 +262,6 @@ groups:
     index-origin: 0
     mixed: the management corner - out-of-band RJ45, RJ45 serial console, the
       USB service port, and the recessed OFFLINE and RESET buttons
-  mgmt-leds:
-    term: LED
-    role: indicator
-    index-origin: 0
-    states: ['off', {name: 1000m, color: '#f59e0b'}, {name: 100m, color: '#22c55e'},
-             {name: activity, behavior: blinking}]
-    description: Routing Engine interface text - link LED amber steady at
-      1000 Mbps, green steady at 100 Mbps, off at 10 Mbps; activity LED green,
-      blinking with traffic
   status-leds:
     term: LED
     role: indicator
@@ -339,10 +330,10 @@ views:
         - {id: led-port-9, at: [164.75, 21.1], size: [2.0, 2.0], shape: circle}
         - {id: led-port-10, at: [175.35, 21.1], size: [2.0, 2.0], shape: circle}
         - {id: led-port-11, at: [178.95, 21.1], size: [2.0, 2.0], shape: circle}
-        - {id: mgmt, at: [236.95, 20.25], size: [16.0, 14.0]}
-        - {id: bits, at: [259.05, 20.25], size: [16.0, 14.0]}
-        - {id: con, at: [282.15, 20.4], size: [16.0, 14.0]}
-        - {id: tod, at: [306.15, 20.4], size: [16.0, 14.0]}
+        - {id: mgmt, at: [237.05, 20.65], size: [15.8, 13.2]}
+        - {id: bits, at: [259.15, 20.65], size: [15.8, 13.2]}
+        - {id: con, at: [282.25, 20.8], size: [15.8, 13.2]}
+        - {id: tod, at: [306.25, 20.8], size: [15.8, 13.2]}
         - {id: usb, at: [327.6, 21.8], size: [4.5, 12.0]}
         - {id: clk-10mhz-in, at: [341.64, 21.39], size: [4.83, 4.83], shape: circle}
         - {id: clk-10mhz-out, at: [341.64, 28.99], size: [4.83, 4.83], shape: circle}
@@ -429,18 +420,18 @@ views:
         - {id: led-port-9, ref: common/led-dot@1, at: [164.75, 21.1], for: port-9, group: sfp-plus-leds, rel-pos: 9}
         - {id: led-port-10, ref: common/led-dot@1, at: [175.35, 21.1], for: port-10, group: sfp-plus-leds, rel-pos: 10}
         - {id: led-port-11, ref: common/led-dot@1, at: [178.95, 21.1], for: port-11, group: sfp-plus-leds, rel-pos: 11}
-        - {id: mgmt, ref: std/rj45@1, at: [236.95, 20.25], rotate: 180, group: mgmt, rel-pos: 0}
-        - {id: led-mgmt-act, ref: common/led-dot@1, at: [239.85, 20.7], for: mgmt, group: mgmt-leds, rel-pos: 0,
-           attrs: {function: activity}}
-        - {id: led-mgmt-link, ref: common/led-dot@1, at: [248.05, 20.7], for: mgmt, group: mgmt-leds, rel-pos: 1,
-           attrs: {function: link}}
-        - {id: bits, ref: std/rj45@1, at: [259.05, 20.25], rotate: 180, group: timing, rel-pos: 0}
+        - {id: mgmt, ref: common/rj45-eth@1, at: [237.05, 20.65], rotate: 180, group: mgmt, rel-pos: 0,
+           states: {led-a: ['off', {name: 1000m, color: '#f59e0b'}, {name: 100m, color: '#22c55e'}],
+                    led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}]},
+           description: 'Routing Engine interface text - link LED amber steady at 1000 Mbps, green
+             steady at 100 Mbps, off at 10 Mbps; activity LED green, blinking with traffic'}
+        - {id: bits, ref: std/rj45@2, at: [259.15, 20.65], rotate: 180, group: timing, rel-pos: 0}
         - {id: led-bits-act, ref: common/led-dot@1, at: [261.95, 20.7], for: bits, group: bits-leds, rel-pos: 0,
            attrs: {function: activity}}
         - {id: led-bits-link, ref: common/led-dot@1, at: [270.15, 20.7], for: bits, group: bits-leds, rel-pos: 1,
            attrs: {function: link}}
-        - {id: con, ref: std/rj45@1, at: [282.15, 20.4], group: mgmt, rel-pos: 1}
-        - {id: tod, ref: std/rj45@1, at: [306.15, 20.4], group: timing, rel-pos: 1}
+        - {id: con, ref: std/rj45@2, at: [282.25, 20.8], group: mgmt, rel-pos: 1}
+        - {id: tod, ref: std/rj45@2, at: [306.25, 20.8], group: timing, rel-pos: 1}
         - {id: usb, ref: std/usb-a@1, at: [323.85, 25.55], rotate: 90, group: mgmt, rel-pos: 2}
         - {id: clk-10mhz-in, ref: std/smb@1, at: [341.64, 21.39], group: timing, rel-pos: 2,
            attrs: {function: 10 MHz clock input}}
@@ -473,8 +464,6 @@ views:
            for: chassis, attrs: {function: take the router offline}}
         - {id: reset-btn, ref: common/reset-button@1, at: [422.35, 32.2], group: mgmt, rel-pos: 4,
            for: chassis, attrs: {function: reset}}
-        - {ref: common/led-dot@1, id: led-con-l, at: [283.35, 32.13], for: con, group: mgmt-leds, rel-pos: 901}
-        - {ref: common/led-dot@1, id: led-con-r, at: [294.95, 32.13], for: con, group: mgmt-leds, rel-pos: 902}
   rear:
     size:
       w: 437.0

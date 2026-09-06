@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: re-s-2000
-version: 1.0.0
+version: 1.1.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -32,9 +32,9 @@ states:
 - absent
 parts:
 - {ref: std/usb-a@1, id: usb, at: [164.0, 11.5], rotate: 90, attrs: {function: USB service port}}
-- {ref: std/rj45@1, id: aux, at: [179.9, 6.75], attrs: {function: auxiliary console}}
-- {ref: std/rj45@1, id: console, at: [197.3, 6.75], attrs: {function: serial console}}
-- {ref: std/rj45@1, id: ethernet, at: [214.8, 6.75], attrs: {function: fxp0 out-of-band management}}
+- {ref: std/rj45@2, id: aux, at: [180, 7.15], attrs: {function: auxiliary console}}
+- {ref: std/rj45@2, id: console, at: [197.4, 7.15], attrs: {function: serial console}}
+- {ref: common/rj45-eth@1, id: ethernet, at: [214.9, 7.15], attrs: {function: fxp0 out-of-band management}}
 elements:
   latch:
     at: [1.0, 6.0]

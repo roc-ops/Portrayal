@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9001
-version: 0.4.1
+version: 1.0.0
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9001
@@ -285,14 +285,14 @@ views:
       cutouts:
         - {id: clk-10mhz, at: [180.3, 66.0], size: [4.0, 4.0], shape: circle}
         - {id: clk-1pps, at: [193.05, 66.0], size: [4.0, 4.0], shape: circle}
-        - {id: tod, at: [159.75, 45.45], size: [12.7, 11.0]}
-        - {id: svc-lan, at: [159.75, 61.5], size: [12.7, 11.0]}
-        - {id: sync-0, at: [207.35, 45.45], size: [12.7, 11.0]}
-        - {id: sync-1, at: [207.35, 61.5], size: [12.7, 11.0]}
-        - {id: console, at: [228.5, 45.45], size: [12.7, 11.0]}
-        - {id: aux, at: [228.5, 61.5], size: [12.7, 11.0]}
-        - {id: mgt-lan-0, at: [250.85, 61.5], size: [12.7, 11.0]}
-        - {id: mgt-lan-1, at: [250.85, 45.45], size: [12.7, 11.0]}
+        - {id: tod, at: [159.75, 45.45], size: [12.7, 11]}
+        - {id: svc-lan, at: [159.75, 61.5], size: [12.7, 11]}
+        - {id: sync-0, at: [207.35, 45.45], size: [12.7, 11]}
+        - {id: sync-1, at: [207.35, 61.5], size: [12.7, 11]}
+        - {id: console, at: [228.5, 45.45], size: [12.7, 11]}
+        - {id: aux, at: [228.5, 61.5], size: [12.7, 11]}
+        - {id: mgt-lan-0, at: [250.85, 61.5], size: [12.7, 11]}
+        - {id: mgt-lan-1, at: [250.85, 45.45], size: [12.7, 11]}
         - {id: cluster-0, at: [318.675, 61.8], size: [14.25, 10.4]}
         - {id: cluster-1, at: [318.675, 45.75], size: [14.25, 10.4]}
         - {id: sfp-plus-0, at: [362.175, 61.8], size: [14.25, 10.4]}
@@ -352,14 +352,14 @@ views:
         - {id: psu-1, at: [72.0, 45.0], size: {w: 56.8, h: 41.0}, accepts: [cisco/a9k-750w-ac@1, cisco/a9k-750w-dc@1], group: power-modules, rel-pos: 1, default: cisco/a9k-750w-ac@1}
         - {id: fan-0, at: [387.1, 0.0], size: {w: 54.86, h: 88.2}, accepts: [cisco/asr-9001-fan@1], group: cooling, rel-pos: 0, default: cisco/asr-9001-fan@1}
       placements:
-        - {ref: std/rj45-ganged@1, id: tod, at: [159.75, 45.45], group: timing, rel-pos: 0}
-        - {ref: std/rj45-ganged@1, id: svc-lan, at: [159.75, 61.5], group: timing, rel-pos: 1, rotate: 180}
-        - {ref: std/rj45-ganged@1, id: sync-0, at: [207.35, 45.45], group: timing, rel-pos: 2}
-        - {ref: std/rj45-ganged@1, id: sync-1, at: [207.35, 61.5], group: timing, rel-pos: 3, rotate: 180}
-        - {ref: std/rj45-ganged@1, id: console, at: [228.5, 45.45], group: mgmt, rel-pos: 4}
-        - {ref: std/rj45-ganged@1, id: aux, at: [228.5, 61.5], group: mgmt, rel-pos: 5, rotate: 180}
-        - {ref: std/rj45-ganged@1, id: mgt-lan-1, at: [250.85, 45.45], group: mgmt, rel-pos: 6}
-        - {ref: std/rj45-ganged@1, id: mgt-lan-0, at: [250.85, 61.5], group: mgmt, rel-pos: 7, rotate: 180}
+        - {ref: std/rj45-ganged@2, id: tod, at: [159.75, 45.45], group: timing, rel-pos: 0}
+        - {ref: common/rj45-ganged-eth@1, id: svc-lan, at: [159.75, 61.5], group: mgmt, rel-pos: 9, rotate: 180, provenance: {media: 'Ethernet, not timing: the legend reads SVC LAN and the install guide lists this as a service LAN port, not one of the tod/sync timing signals it shares the panel row with, so it is drawn lamped (common/rj45-ganged-eth@1) rather than the bare std/rj45-ganged@2 its physical row-mates use, and grouped with mgmt (console, auxiliary, Ethernet and USB management access) rather than timing.'}}
+        - {ref: std/rj45-ganged@2, id: sync-0, at: [207.35, 45.45], group: timing, rel-pos: 1}
+        - {ref: std/rj45-ganged@2, id: sync-1, at: [207.35, 61.5], group: timing, rel-pos: 2, rotate: 180}
+        - {ref: std/rj45-ganged@2, id: console, at: [228.5, 45.45], group: mgmt, rel-pos: 4}
+        - {ref: std/rj45-ganged@2, id: aux, at: [228.5, 61.5], group: mgmt, rel-pos: 5, rotate: 180}
+        - {ref: common/rj45-ganged-eth@1, id: mgt-lan-1, at: [250.85, 45.45], group: mgmt, rel-pos: 6}
+        - {ref: common/rj45-ganged-eth@1, id: mgt-lan-0, at: [250.85, 61.5], group: mgmt, rel-pos: 7, rotate: 180}
         - {ref: std/sfp-ganged@1, id: cluster-1, at: [318.675, 45.75], group: cluster, rel-pos: 1}
         - {ref: std/sfp-ganged@1, id: cluster-0, at: [318.675, 61.8], group: cluster, rel-pos: 0}
         - {ref: std/sfp-ganged@1, id: sfp-plus-3, at: [341.675, 45.75], group: sfp-plus, rel-pos: 3}
@@ -375,10 +375,6 @@ views:
         - {ref: common/led-dot@1, id: led-eusb, at: [306.5, 49.5], group: system-leds, rel-pos: 6, for: usb, states: ['off', {name: usb-active, color: '#39b54a'}]}
         - {ref: common/led-dot@1, id: led-aco, at: [306.5, 57.8], group: system-leds, rel-pos: 7, for: chassis, states: ['off']}
         - {ref: common/led-dot@1, id: led-sync, at: [306.5, 66.0], group: system-leds, rel-pos: 8, for: chassis, states: ['off', {name: sync-ok, color: '#39b54a'}]}
-        - {ref: common/led-dot@1, id: led-mgt-lan-1-l, at: [252.05, 54.18], for: mgt-lan-1, group: system-leds, rel-pos: 901}
-        - {ref: common/led-dot@1, id: led-mgt-lan-1-r, at: [260.35, 54.18], for: mgt-lan-1, group: system-leds, rel-pos: 902}
-        - {ref: common/led-dot@1, id: led-mgt-lan-0-l, at: [252.05, 61.77], for: mgt-lan-0, group: system-leds, rel-pos: 903}
-        - {ref: common/led-dot@1, id: led-mgt-lan-0-r, at: [260.35, 61.77], for: mgt-lan-0, group: system-leds, rel-pos: 904}
   rear:
     size: {w: 442.0, h: 88.2}
     panel:

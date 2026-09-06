@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9620-32e
-version: 0.2.3
+version: 1.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9620-32E
@@ -117,7 +117,7 @@ provenance:
     y 20.51-22.57 under IOIOI; an RJ45 console bezel x 142.68-158.17 y 9.01-22.25 under
     IOIOI; and an RJ45 OOB management bezel x 162.64-178.02 y 9.23-22.15 under an
     Ethernet icon, with two green lamps inside its own aperture at (164.93, 20.57) and
-    (175.62, 20.57) which are the jack's integrated pair and are not drawn separately.
+    (175.62, 20.57) which are the jack's integrated pair, drawn as led-a/led-b of the jack.
     Both RJ45 bezels measure 15.5 x 13.2 and take std/rj45 (16.0 x 14.0) seated on the
     measured bezel centre - the 20 mm spacing leaves room for the full IEC bezel, so
     the rj45-ganged part that a tighter block would need is not used here. Both jacks
@@ -593,8 +593,8 @@ views:
       - {id: mhz, at: [6.87, 33.19], size: [4.83, 4.83], shape: circle}
       - {id: usb, at: [120.04, 10.01], size: [4.50, 12.00], shape: rect}
       - {id: console-usb, at: [130.60, 20.20], size: [7.50, 2.75], shape: rect}
-      - {id: console, at: [142.43, 8.63], size: [16.00, 14.00], shape: rect}
-      - {id: mgmt, at: [162.33, 8.69], size: [16.00, 14.00], shape: rect}
+      - {id: console, at: [142.53, 9.03], size: [15.8, 13.2], shape: rect}
+      - {id: mgmt, at: [162.43, 9.09], size: [15.8, 13.2], shape: rect}
       - {id: mgmt-sfp-0, at: [182.35, 12.40], size: [14.25, 10.40], shape: rect}
       - {id: mgmt-sfp-1, at: [196.60, 12.40], size: [14.25, 10.40], shape: rect}
       - {id: port-32, at: [210.85, 12.40], size: [14.25, 10.40], shape: rect}
@@ -732,13 +732,13 @@ views:
         - {ref: std/micro-usb@1, id: console-usb, at: [130.60, 20.20], group: mgmt, rel-pos: 5,
            attrs: {role: console},
            description: 'the micro-USB console port, labelled IOIOI like the RJ45 one'}
-        - {ref: std/rj45@1, id: console, at: [142.43, 8.63], group: mgmt, rel-pos: 6,
+        - {ref: std/rj45@2, id: console, at: [142.53, 9.03], group: mgmt, rel-pos: 6,
            attrs: {media: rj45-serial, role: console}}
-        - {ref: std/rj45@1, id: mgmt, at: [162.33, 8.69], group: mgmt, rel-pos: 7,
+        - {ref: common/rj45-eth@1, id: mgmt, at: [162.43, 9.09], group: mgmt, rel-pos: 7,
            attrs: {role: mgmt, speed: 100m-1g},
            description: 'the 100/1000M RJ45 OOB management port; its two integrated
-             green lamps sit inside this aperture at (164.93, 20.57) and (175.62,
-             20.57) on the render and are not drawn separately'}
+             green lamps, drawn at (164.93, 20.57) and (175.62, 20.57) on the render,
+             are drawn as led-a/led-b of this jack'}
         - {ref: std/sfp-ganged@1, id: mgmt-sfp-0, at: [182.35, 12.40], group: sfp-plus-mgmt, rel-pos: 0}
         - {ref: std/sfp-ganged@1, id: mgmt-sfp-1, at: [196.60, 12.40], group: sfp-plus-mgmt, rel-pos: 1}
         - {ref: std/sfp-ganged@1, id: port-32, at: [210.85, 12.40], group: sfp28, rel-pos: 32}
@@ -815,8 +815,6 @@ views:
         - {ref: common/led-dot@1, id: led-port-30, at: [402.01, 51.17], for: port-30, group: port-leds, rel-pos: 31}
         - {ref: std/qsfp-dd@1, id: port-31, at: [404.43, 61.81], group: qsfpdd-800g, rel-pos: 31}
         - {ref: common/led-dot@1, id: led-port-31, at: [402.01, 65.15], for: port-31, group: port-leds, rel-pos: 32}
-        - {ref: common/led-dot@1, id: led-mgmt-l, at: [163.53, 20.42], for: mgmt, group: port-leds, rel-pos: 901}
-        - {ref: common/led-dot@1, id: led-mgmt-r, at: [175.13, 20.42], for: mgmt, group: port-leds, rel-pos: 902}
     regions:
       - {id: timing-block, at: [3.0, 14.0], size: {w: 12, h: 26}, label: Timing bulkheads,
          members: [pps, mhz]}

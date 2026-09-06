@@ -36,6 +36,8 @@ STATE_CSS = """
     [data-path] { cursor: pointer; }
     .state-on    { --led-color: #22c55e; }
     .state-up    { --led-color: #22c55e; }
+    /* link and up are the same fact on an Ethernet lamp; see docs/rj45-family-design.md */
+    .state-link  { --led-color: #22c55e; }
     .state-activity { --led-color: #86efac; }
     .state-ok    { --led-color: #22c55e; }
     .state-fault { --led-color: #ef4444; }

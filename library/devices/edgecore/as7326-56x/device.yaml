@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: as7326-56x
-version: 1.1.2
+version: 2.0.0
 manufacturer: Edgecore
 model: AS7326-56X
 portfolio:
@@ -211,8 +211,8 @@ views:
         - {id: port-57, at: [388, 6], size: [14.25, 10.4], shape: rect}
         - {id: port-58, at: [388, 21], size: [14.25, 10.4], shape: rect}
         - {id: usb-a, at: [389.1, 36], size: [12, 4.5], shape: rect}
-        - {id: mgmt-eth, at: [410.5, 2.4], size: [16, 14], shape: rect}
-        - {id: console, at: [410.5, 18], size: [16, 14], shape: rect}
+        - {id: mgmt-eth, at: [410.6, 2.85], size: [15.8, 13.2], shape: rect}
+        - {id: console, at: [410.6, 18.35], size: [15.8, 13.2], shape: rect}
         - {id: usb-c, at: [414.3, 33.8], size: [8.34, 2.56], shape: circle}
         - {id: led-port-1, at: [17.1, 11.7], size: [3.6, 3.2], shape: rect}
         - {id: led-port-2, at: [20.9, 11.7], size: [3.6, 3.2], shape: rect}
@@ -523,12 +523,10 @@ views:
         - {ref: common/led-arrow@1, id: led-port-58, at: [395.9, 17.1], skin: down, group: mgmt, for: port-58, attrs: {port: '58'}, rel-pos: 3}
         - {ref: std/sfp-ganged@1, id: port-58, at: [388, 21.0], rotate: 180, group: mgmt, attrs: {media: sfp-plus, speed: 10g, role: mgmt}, rel-pos: 4}
         - {ref: std/usb-a@1, id: usb-a, at: [389.1, 36.0], group: mgmt, attrs: {role: storage}, rel-pos: 5}
-        - {ref: common/rj45-bezel@2, id: mgmt-eth, at: [410, 2.0], rotate: 180, group: mgmt, attrs: {media: rj45, role: mgmt}, rel-pos: 6}
-        - {ref: common/rj45-bezel@2, id: console, at: [410, 17.5], group: mgmt, attrs: {media: rj45-serial, role: console}, rel-pos: 7}
+        - {ref: common/rj45-eth@1, id: mgmt-eth, at: [410.6, 2.85], rotate: 180, group: mgmt, attrs: {media: rj45, role: mgmt}, rel-pos: 6}
+        - {ref: std/rj45@2, id: console, at: [410.6, 18.35], group: mgmt, attrs: {media: rj45-serial, role: console}, rel-pos: 7}
         - {ref: std/usb-c@1, id: usb-c, at: [414.3, 33.8], group: mgmt, attrs: {role: console}, rel-pos: 8}
         - {ref: common/pull-tab@1, id: info-tab, at: [410, 38.0], group: furniture, rel-pos: 3}
-        - {ref: common/led-dot@1, id: led-mgmt-eth-l, at: [411.2, 2.27], for: mgmt-eth, group: sfp28-leds, rel-pos: 901}
-        - {ref: common/led-dot@1, id: led-mgmt-eth-r, at: [423.8, 2.27], for: mgmt-eth, group: sfp28-leds, rel-pos: 902}
     regions:
       - {id: sfp-block, at: [14, 0], size: {w: 266, h: 43.5}, label: 48x 25G SFP28}
       - {id: qsfp-block, at: [296, 1], size: {w: 80, h: 42.5}, label: 8x 100G QSFP28}

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: smm-sw-bdm-b
-version: 1.5.0
+version: 1.6.0
 class: switch
 behaviour: fills
 profile: networking
@@ -106,5 +106,5 @@ parts:
   # has no link speed, and must never be patched into a switch. Left unsaid, a
   # consumer holding only the part ref has to guess, and the DCIM export was
   # guessing `console`.
-  - {ref: common/rj45-shielded@2, id: psu-monitor, at: [7.33, 119.65], rotate: 90, attrs: {media: rj45-telemetry, role: psu-monitor}}
+  - {ref: std/rj45@2, id: psu-monitor, at: [7.33, 119.3], rotate: 90, attrs: {media: rj45-telemetry, role: psu-monitor}}
 skins: [default]

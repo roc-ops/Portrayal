@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9502-16smt
-version: 0.2.1
+version: 1.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9502-16SMT
@@ -479,28 +479,14 @@ views:
              good, CPU board power fail), Blinking Yellow (both fail)',
            group: status-leds, rel-pos: 4}
         - {ref: common/reset-button@1, id: reset, at: [133.30, 35.90], for: chassis, group: mgmt, rel-pos: 4}
-        - {ref: std/rj45-ganged@1, id: mgmt, at: [166.66, 14.10], rotate: 180, group: mgmt, rel-pos: 1, attrs: {role: mgmt, speed: 100m-1g}}
-        - {ref: common/led-dot@1, id: led-mgmt-left, for: mgmt, at: [167.40, 14.40],
-           states: ['off', {name: link-1g, color: '#22c55e'},
-                   {name: activity-1g, color: '#22c55e', behavior: blinking}],
-           description: 'HIG section 8 Management port LED table, Left LED - Off (1G no
-             link), Solid Green (1G link-up), Blinking Green (1G TX/RX activity)',
-           group: port-leds, rel-pos: 25}
-        - {ref: common/led-dot@1, id: led-mgmt-right, for: mgmt, at: [177.60, 14.40],
-           states: ['off', {name: link-10-100m, color: '#f59e0b'},
-                   {name: activity-10-100m, color: '#f59e0b', behavior: blinking}],
-           description: 'HIG section 8 Management port LED table, Right LED - Off (no
-             link), Solid Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX
-             activity). The two lamps do not share a vocabulary, so they are declared
-             separately',
-           group: port-leds, rel-pos: 26}
+        - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [166.66, 14.1], rotate: 180, group: mgmt, rel-pos: 1, attrs: {role: mgmt, speed: 100m-1g}, states: {led-a: ['off', {color: '#f59e0b', name: link-10-100m}, {behavior: blinking, color: '#f59e0b', name: activity-10-100m}], led-b: ['off', {color: '#22c55e', name: link-1g}, {behavior: blinking, color: '#22c55e', name: activity-1g}]}, description: 'led-mgmt-left: HIG section 8 Management port LED table, Left LED - Off (1G no link), Solid Green (1G link-up), Blinking Green (1G TX/RX activity); led-mgmt-right: HIG section 8 Management port LED table, Right LED - Off (no link), Solid Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity). The two lamps do not share a vocabulary, so they are declared separately'}
         - {ref: std/usb-a@1, id: usb, at: [167.01, 28.55], group: mgmt, rel-pos: 2, attrs: {role: storage, speed: usb2}}
-        - {ref: std/rj45-ganged@1, id: tod, at: [188.09, 10.60], rotate: 180, group: timing, rel-pos: 3, attrs: {media: rj45, role: tod-io}}
-        - {ref: std/rj45-ganged@1, id: console, at: [188.09, 22.60], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
-        - {ref: std/rj45-ganged@1, id: port-0, at: [209.86, 8.55], group: rj45-1g, rel-pos: 0}
-        - {ref: std/rj45-ganged@1, id: port-1, at: [209.86, 24.35], rotate: 180, group: rj45-1g, rel-pos: 1}
-        - {ref: std/rj45-ganged@1, id: port-2, at: [224.80, 8.55], group: rj45-1g, rel-pos: 2}
-        - {ref: std/rj45-ganged@1, id: port-3, at: [224.80, 24.35], rotate: 180, group: rj45-1g, rel-pos: 3}
+        - {ref: std/rj45-ganged@2, id: tod, at: [188.09, 10.6], rotate: 180, group: timing, rel-pos: 3, attrs: {media: rj45, role: tod-io}}
+        - {ref: std/rj45-ganged@2, id: console, at: [188.09, 22.6], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
+        - {ref: common/rj45-ganged-eth@1, id: port-0, at: [209.86, 8.55], group: rj45-1g, rel-pos: 0}
+        - {ref: common/rj45-ganged-eth@1, id: port-1, at: [209.86, 24.35], rotate: 180, group: rj45-1g, rel-pos: 1}
+        - {ref: common/rj45-ganged-eth@1, id: port-2, at: [224.8, 8.55], group: rj45-1g, rel-pos: 2}
+        - {ref: common/rj45-ganged-eth@1, id: port-3, at: [224.8, 24.35], rotate: 180, group: rj45-1g, rel-pos: 3}
         - {ref: std/sfp-ganged@1, id: port-4, at: [304.70, 8.85], group: sfp-1g, rel-pos: 4}
         - {ref: std/sfp-ganged@1, id: port-5, at: [304.70, 24.65], group: sfp-1g, rel-pos: 5}
         - {ref: std/sfp-ganged@1, id: port-6, at: [318.95, 8.85], group: sfp-1g, rel-pos: 6}
@@ -526,14 +512,6 @@ views:
         - {ref: common/led-dot@1, id: led-port-14, at: [385.27, 20.95], for: port-14, group: port-leds, rel-pos: 15}
         - {ref: common/led-dot@1, id: led-port-15, at: [389.27, 20.95], for: port-15, group: port-leds, rel-pos: 16}
         - {ref: common/ground-symbol@1, id: ground-mark, at: [430.90, 18.00], group: grounding, rel-pos: 1}
-        - {ref: common/led-dot@1, id: led-port-0-l, at: [211.06, 17.28], for: port-0, group: port-leds, rel-pos: 901}
-        - {ref: common/led-dot@1, id: led-port-0-r, at: [219.36, 17.28], for: port-0, group: port-leds, rel-pos: 902}
-        - {ref: common/led-dot@1, id: led-port-1-l, at: [211.06, 24.62], for: port-1, group: port-leds, rel-pos: 903}
-        - {ref: common/led-dot@1, id: led-port-1-r, at: [219.36, 24.62], for: port-1, group: port-leds, rel-pos: 904}
-        - {ref: common/led-dot@1, id: led-port-2-l, at: [226.0, 17.28], for: port-2, group: port-leds, rel-pos: 905}
-        - {ref: common/led-dot@1, id: led-port-2-r, at: [234.3, 17.28], for: port-2, group: port-leds, rel-pos: 906}
-        - {ref: common/led-dot@1, id: led-port-3-l, at: [226.0, 24.62], for: port-3, group: port-leds, rel-pos: 907}
-        - {ref: common/led-dot@1, id: led-port-3-r, at: [234.3, 24.62], for: port-3, group: port-leds, rel-pos: 908}
     regions:
       - {id: power-feeds, at: [18, 5], size: {w: 88, h: 37}, label: Fixed dual power feed, members: []}
       - {id: timing, at: [118, 3], size: {w: 86, h: 39}, label: Timing block, members: [clk-1pps, clk-10mhz, tod]}

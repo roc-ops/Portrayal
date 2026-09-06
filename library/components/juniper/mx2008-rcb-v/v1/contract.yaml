@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mx2008-rcb-v
-version: 1.0.0
+version: 1.1.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -35,11 +35,11 @@ states:
 - fail
 - absent
 parts:
-- {ref: std/rj45@1, id: mgmt0, at: [8.0, 40.0], rotate: 90, attrs: {function: management 0}}
-- {ref: std/rj45@1, id: mgmt1, at: [28.0, 40.0], rotate: 90, attrs: {function: management 1}}
-- {ref: std/rj45@1, id: console, at: [8.0, 62.0], rotate: 90, attrs: {function: serial console}}
-- {ref: std/rj45@1, id: aux, at: [28.0, 62.0], rotate: 90, attrs: {function: auxiliary console}}
-- {ref: std/rj45@1, id: bits, at: [8.0, 100.0], rotate: 90, attrs: {function: BITS timing}}
+- {ref: common/rj45-eth@1, id: mgmt0, at: [8.1, 40.4], rotate: 90, attrs: {function: management 0}}
+- {ref: common/rj45-eth@1, id: mgmt1, at: [28.1, 40.4], rotate: 90, attrs: {function: management 1}}
+- {ref: std/rj45@2, id: console, at: [8.1, 62.4], rotate: 90, attrs: {function: serial console}}
+- {ref: std/rj45@2, id: aux, at: [28.1, 62.4], rotate: 90, attrs: {function: auxiliary console}}
+- {ref: std/rj45@2, id: bits, at: [8.1, 100.4], rotate: 90, attrs: {function: BITS timing}}
 - {ref: std/usb-a@1, id: usb, at: [30.25, 102.75], attrs: {function: USB service port}}
 size:
   w: 57.0

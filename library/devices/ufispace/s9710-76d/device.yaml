@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9710-76d
-version: 0.2.4
+version: 1.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9710-76D
@@ -642,17 +642,17 @@ views:
            description: 'HIG PS1 row - Off (no power), Solid Green (PSU 1 is working
              normal), Blinking Amber (PSU 1 fail, PSU1 need service)',
            group: status-leds, rel-pos: 5}
-        - {ref: std/rj45-ganged@1, id: mgmt, at: [21.01, 46.92], rotate: 180, group: mgmt, rel-pos: 4,
+        - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [21.01, 46.92], rotate: 180, group: mgmt, rel-pos: 4,
            attrs: {role: mgmt, speed: 100m-1g},
            description: 'the 100/1000M RJ45 out-of-band management jack; its two
              integrated lamps - left green for 1G link and activity, right amber for
-             10M/100M, per the HIG Management port LED table - sit inside this aperture
-             and are not drawn'}
+             10M/100M, per the HIG Management port LED table - are drawn as led-a/led-b
+             of this jack'}
         - {ref: std/usb-a@1, id: usb, at: [21.36, 60.23], group: mgmt, rel-pos: 5,
            attrs: {role: maintenance},
            description: 'USB 3.0 Type-A; HIG Connecting the USB Extender Cable calls it
              a maintenance port and ships a 200 mm extender for it'}
-        - {ref: std/rj45-ganged@1, id: console, at: [21.01, 67.23], group: mgmt, rel-pos: 6,
+        - {ref: std/rj45-ganged@2, id: console, at: [21.01, 67.23], group: mgmt, rel-pos: 6,
            attrs: {media: rj45-serial, role: console}}
         - {ref: std/micro-usb@1, id: console-usb, at: [6.78, 77.51], group: mgmt, rel-pos: 7,
            attrs: {role: console},
@@ -781,8 +781,6 @@ views:
         - {ref: ufispace/qsfpdd-led-pair@1, id: leds-svc-b-7, at: [364.66, 77.56], for: [svc-29, svc-31], skin: service, group: port-leds, rel-pos: 36}
         - {ref: ufispace/qsfpdd-led-pair@1, id: leds-svc-t-8, at: [402.66, 45.50], for: [svc-32, svc-34], skin: service, group: port-leds, rel-pos: 37}
         - {ref: ufispace/qsfpdd-led-pair@1, id: leds-svc-b-8, at: [402.66, 77.56], for: [svc-33, svc-35], skin: service, group: port-leds, rel-pos: 38}
-        - {ref: common/led-dot@1, id: led-mgmt-l, at: [22.21, 47.19], for: mgmt, group: port-leds, rel-pos: 901}
-        - {ref: common/led-dot@1, id: led-mgmt-r, at: [30.51, 47.19], for: mgmt, group: port-leds, rel-pos: 902}
     regions:
       - {id: mgmt-block, at: [3.0, 26.0], size: {w: 33, h: 59}, label: Management and timing,
          members: [pps, mhz, mgmt, usb, console, console-usb]}

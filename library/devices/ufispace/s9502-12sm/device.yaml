@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9502-12sm
-version: 1.1.2
+version: 2.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9502-12SM
@@ -90,8 +90,8 @@ provenance:
     RJ45 apertures (y 11.28-20.50 and 24.09-33.31). Both RJ45 pairs are drawn with
     std/rj45-ganged because each plate is one piece of metal about 16 mm wide and a
     16 mm single-port IEC bezel does not fit two of them in it. The OOB jack's two
-    integrated lamps are visible in the render (green left, amber right) inside its own
-    aperture and are not drawn - see gaps.
+    integrated lamps are visible in the render (green left, amber right) and now draw
+    as led-a/led-b of the jack.
   system-leds: >-
     measured - four lamps in a vertical column at x 136.18, y 22.29 / 24.73 / 27.28 /
     29.61, beside a printed white legend box at x 138.12-143.76, y 21.01-31.01. That is
@@ -255,16 +255,6 @@ gaps:
     device places ufispace/psu-120-dc directly, as the fixed connector it is.
   wanted: the AC build modelled as its own front face, or a per-configuration override
     for `placements` plus a way to vary silkscreen with it.
-- what: mgmt-port-lamps-not-drawn
-  scope: [mgmt]
-  reason: needs-drawing
-  note: >-
-    the OOB management jack carries two integrated lamps in the corners of its own
-    aperture - visible as a green and an amber square in the front render, and tabled in
-    full by the HIG's Management port LED section (left green for 1G link and activity,
-    right amber for 10M/100M). std/rj45-ganged draws the bare opening and any lamp sits
-    inside that aperture, so they exist on the hardware and not in the drawing.
-  wanted: an rj45-ganged variant that can draw corner lamps inside the aperture.
 - what: sfp-port-led-semantics
   scope: [port-leds]
   reason: vendor-silent
@@ -449,21 +439,21 @@ views:
              (system power good, CPU board power fail), Blinking Yellow (both fail)',
            group: status-leds, rel-pos: 4}
         - {ref: common/reset-button@1, id: reset, at: [134.3, 36.6], for: chassis, group: mgmt, rel-pos: 3}
-        - {ref: std/rj45-ganged@1, id: mgmt, at: [167.27, 14.1], rotate: 180, group: mgmt, rel-pos: 4,
+        - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [167.27, 14.1], rotate: 180, group: mgmt, rel-pos: 4,
            attrs: {role: mgmt, speed: 100m-1g},
            description: 'the OOB management jack; its two integrated lamps (left green
              for 1G link and activity, right amber for 10M/100M, per the HIG Management
-             port LED table) sit inside this aperture and are not drawn - see gaps'}
+             port LED table) are drawn as led-a/led-b of this jack'}
         - {ref: std/usb-a@1, id: usb, at: [167.62, 28.5], group: mgmt, rel-pos: 5,
            attrs: {role: maintenance},
            description: 'USB 2.0 Type-A; the HIG calls it a maintenance port'}
         - {ref: common/usb-symbol@1, id: usb-mark, at: [170.8, 37.9], for: usb, group: furniture, rel-pos: 1}
-        - {ref: std/rj45-ganged@1, id: tod, at: [188.67, 10.39], rotate: 180, group: mgmt, rel-pos: 6,
+        - {ref: std/rj45-ganged@2, id: tod, at: [188.67, 10.39], rotate: 180, group: mgmt, rel-pos: 6,
            attrs: {media: rj45-tod, role: timing},
            description: 'ToD input/output, port marked TOD; HIG Connecting a Cable to
              the ToD Interface - a straight-through shielded Ethernet cable to a GNSS
              unit, no longer than 3 m'}
-        - {ref: std/rj45-ganged@1, id: console, at: [188.67, 23.2], group: mgmt, rel-pos: 7,
+        - {ref: std/rj45-ganged@2, id: console, at: [188.67, 23.2], group: mgmt, rel-pos: 7,
            attrs: {media: rj45-serial, role: console}}
         - {ref: std/sfp-ganged@1, id: port-0, at: [304.67, 8.6], rotate: 180, group: sfp, rel-pos: 0}
         - {ref: std/sfp-ganged@1, id: port-1, at: [304.67, 25.1], group: sfp, rel-pos: 1}
@@ -487,8 +477,6 @@ views:
            description: 'the earth symbol printed at the right-hand end of the front
              panel, marking the side-mounted grounding lug position that HIG Figure 15
              details on the right side wall'}
-        - {ref: common/led-dot@1, id: led-mgmt-l, at: [168.47, 14.37], for: mgmt, group: port-leds, rel-pos: 901}
-        - {ref: common/led-dot@1, id: led-mgmt-r, at: [176.77, 14.37], for: mgmt, group: port-leds, rel-pos: 902}
     regions:
       - {id: power-inputs, at: [18.0, 12.0], size: {w: 92, h: 30}, label: Fixed 1+1 power inputs, members: [psu-0, psu-1]}
       - {id: mgmt-block, at: [120.0, 4.0], size: {w: 85, h: 38}, label: Management and timing, members: [pps, mhz, mgmt, usb, tod, console]}

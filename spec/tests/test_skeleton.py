@@ -111,6 +111,12 @@ def test_behaviour_is_part_of_the_state(tmp_path):
     assert "--led-color: #22c55e; --led-color-alt: #ef4444;" in front
     assert "state-warning { animation: portrayal-alternate" in front
     # one component, two lamps, two vocabularies: a single list could not say this
-    assert 'data-path="mgmt/led-left" data-class="led" data-states="off link-1g activity-1g"' in front
-    assert 'data-states="off link-100m activity-100m"' in front
-    assert "#mgmt--led-right.state-activity-100m { animation: portrayal-blink" in front
+    # (led-left/led-right until the RJ45 sweep lifted this jack onto
+    # common/rj45-eth@1, whose two elements are led-a/led-b - #125; the
+    # controller ruling kept the sweep's rotate: 180 flip for this jack, which
+    # swaps which element carries which vocabulary, since led-a moves to
+    # screen-right under that rotate and the screen-left lamp must keep the
+    # link-1g vocabulary)
+    assert 'data-path="mgmt/led-a" data-class="led" data-states="off link-100m activity-100m"' in front
+    assert 'data-states="off link-1g activity-1g"' in front
+    assert "#mgmt--led-a.state-activity-100m { animation: portrayal-blink" in front

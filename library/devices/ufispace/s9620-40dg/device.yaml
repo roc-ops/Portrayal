@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9620-40dg
-version: 0.2.3
+version: 1.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9620-40DG
@@ -627,16 +627,16 @@ views:
         - {ref: common/led-dot@1, id: led-sys-5, at: [78.3, 28.98], for: chassis, group: status-leds, rel-pos: 5}
         - {ref: common/led-dot@1, id: led-sys-6, at: [78.3, 31.52], for: chassis, group: status-leds, rel-pos: 6,
            description: 'sixth and last of the system column; it renders yellow where the five above it render green, which is the only thing the images say about any of them'}
-        - {ref: std/rj45@1, id: mgmt, at: [89.5, 20.6], group: mgmt, rel-pos: 1,
+        - {ref: common/rj45-eth@1, id: mgmt, at: [89.6, 21], group: mgmt, rel-pos: 1,
            attrs: {role: mgmt, speed: 100m-1g},
-           description: 'the 100/1000M out-of-band management jack; its two integrated link lamps sit in the lower corners of the aperture and are not drawn separately'}
-        - {ref: std/rj45-ganged@1, id: tod, at: [111.6, 10.25], group: mgmt, rel-pos: 2,
+           description: 'the 100/1000M out-of-band management jack; its two integrated link lamps, in the lower corners of the aperture, are drawn as led-a/led-b of this jack'}
+        - {ref: std/rj45-ganged@2, id: tod, at: [111.6, 10.25], group: mgmt, rel-pos: 2,
            attrs: {role: timing},
            description: 'ToD input/output on RJ45, upper jack of the stacked timing pair; the datasheet specifies a shielded RJ45 cable for it'}
-        - {ref: std/rj45-ganged@1, id: bits, at: [111.6, 22.23], group: mgmt, rel-pos: 3,
+        - {ref: std/rj45-ganged@2, id: bits, at: [111.6, 22.23], group: mgmt, rel-pos: 3,
            attrs: {role: timing, media: rj48},
            description: 'BITS input on RJ48, lower jack of the stacked timing pair; the datasheet specifies a shielded RJ48 cable for it. Drawn with std/rj45-ganged because RJ48 shares the 8-position modular opening and the library has no RJ48 part'}
-        - {ref: std/rj45-ganged@1, id: console, at: [133.35, 14.0], group: mgmt, rel-pos: 4,
+        - {ref: std/rj45-ganged@2, id: console, at: [133.35, 14], group: mgmt, rel-pos: 4,
            attrs: {media: rj45-serial, role: console}}
         - {ref: std/usb-a@1, id: usb, at: [133.7, 27.85], group: mgmt, rel-pos: 5,
            attrs: {role: maintenance},
@@ -736,8 +736,6 @@ views:
         - {ref: common/led-dot@1, id: led-dd-2b, at: [327.06, 38.7], for: port-dd-2, group: port-leds, rel-pos: 42}
         - {ref: common/led-dot@1, id: led-dd-3a, at: [344.64, 38.7], for: port-dd-3, group: port-leds, rel-pos: 43}
         - {ref: common/led-dot@1, id: led-dd-3b, at: [356.44, 38.7], for: port-dd-3, group: port-leds, rel-pos: 44}
-        - {ref: common/led-dot@1, id: led-mgmt-l, at: [90.7, 32.33], for: mgmt, group: port-leds, rel-pos: 901}
-        - {ref: common/led-dot@1, id: led-mgmt-r, at: [102.3, 32.33], for: mgmt, group: port-leds, rel-pos: 902}
   rear:
     size:
       w: 440

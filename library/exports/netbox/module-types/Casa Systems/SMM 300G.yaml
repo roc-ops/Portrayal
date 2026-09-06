@@ -4,8 +4,6 @@ model: SMM 300G
 description: Casa/CommScope SMM300G Switch and Management Module - the 300G supervisor for the C100G and
   C40G CCAP chassis
 console-ports:
-  - name: mgmt
-    type: rj-45
   - name: console
     type: rj-45
 interfaces:
@@ -33,6 +31,8 @@ interfaces:
     type: 100gbase-x-qsfp28
   - name: cg1
     type: 100gbase-x-qsfp28
+  - name: mgmt
+    type: 1000base-t
 comments: 'Casa/CommScope SMM300G Switch and Management Module - the 300G supervisor for the C100G and
   C40G CCAP chassis. Ten 10GigE SFP+ (XG0-XG9) in ganged blocks of six and four, two 100GigE QSFP28 (CG0,
   CG1), a 10/100BASE-T management RJ45 and an RS-232 console RJ45, plus STATUS, ACTIVE and ALARM lamps.
@@ -60,4 +60,4 @@ comments: 'Casa/CommScope SMM300G Switch and Management Module - the 300G superv
   - timing: IEEE 1588v2
 
 
-  Contract version 1.5.0.'
+  Contract version 1.6.0.'
