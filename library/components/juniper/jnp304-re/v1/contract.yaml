@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: jnp304-re
-version: 1.0.0
+version: 1.2.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -50,8 +50,12 @@ provenance:
     blinking on activity'
   mgmt-lamps: 'guide Figure 25 callouts 1 and 2 - the MGMT port link
     activity and status lamps sit on the jack itself (photo shows the two
-    windows at its top corners); drawn as two lenses above the composed
-    std/rj45. Their states are Table 16''s MGMT rows'
+    windows at its top corners); the jack is common/rj45-eth@1 and now
+    carries the two lamps as its own led-a/led-b, not a pair of lenses
+    drawn a second time above it. Table 16''s MGMT rows are on the part''s
+    `states`: led-a (left, unrotated) is the activity lamp at Figure 25''s
+    left window, led-b (right) the 10/100/1000 status lamp at its right
+    window'
   levers: 'photo - pale blue ejector levers with captive screws at both ends
     of the face; positions photo-read, projection estimated'
 states:
@@ -59,8 +63,10 @@ states:
 - fail
 - absent
 parts:
-- {ref: std/rj45@1, id: console, at: [82.8, 17.3], attrs: {function: serial console}}
-- {ref: std/rj45@1, id: mgmt, at: [118.3, 17.3], attrs: {function: out-of-band management, speed: 10/100/1000}}
+- {ref: std/rj45@2, id: console, at: [82.9, 17.7], attrs: {function: serial console}}
+- {ref: common/rj45-eth@1, id: mgmt, at: [118.4, 17.7], attrs: {function: out-of-band management, speed: 10/100/1000},
+   states: {led-a: ['off', {name: activity, color: '#22c55e', behavior: blinking}],
+            led-b: ['off', {name: 10-100, color: '#eab308'}, {name: '1000', color: '#22c55e'}]}}
 - {ref: std/usb-a@1, id: usb, at: [137.4, 21.75], rotate: 90, attrs: {function: USB 3.0 service port}}
 elements:
   lever-left:

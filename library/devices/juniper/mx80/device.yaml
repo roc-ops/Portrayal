@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx80
-version: 0.5.1
+version: 1.0.0
 maturity: modelled
 manufacturer: Juniper
 model: MX80
@@ -132,12 +132,12 @@ views:
         - {id: xe-1, at: [281.25, 62.15], size: [19.5, 9.7]}
         - {id: xe-2, at: [310.55, 62.15], size: [19.5, 9.7]}
         - {id: xe-3, at: [339.95, 62.15], size: [19.5, 9.7]}
-        - {id: console, at: [182.0, 47.5], size: [16.0, 14.0]}
-        - {id: aux, at: [182.0, 66.5], size: [16.0, 14.0]}
-        - {id: ethernet, at: [205.0, 47.5], size: [16.0, 14.0]}
+        - {id: console, at: [182.1, 47.9], size: [15.8, 13.2]}
+        - {id: aux, at: [182.1, 66.9], size: [15.8, 13.2]}
+        - {id: ethernet, at: [205.1, 47.9], size: [15.8, 13.2]}
         - {id: usb, at: [210.75, 64.5], size: [4.5, 12.0]}
-        - {id: clk-a, at: [224.0, 47.5], size: [16.0, 14.0]}
-        - {id: clk-b, at: [224.0, 66.5], size: [16.0, 14.0]}
+        - {id: clk-a, at: [224.1, 47.9], size: [15.8, 13.2]}
+        - {id: clk-b, at: [224.1, 66.9], size: [15.8, 13.2]}
         - {id: led-sys-ok, at: [167.0, 63.0], size: [2.2, 2.2], shape: circle}
         - {id: led-re, at: [173.5, 63.0], size: [2.2, 2.2], shape: circle}
         - {id: btn-online, at: [166.5, 75.5], size: [3.4, 3.4], shape: circle}
@@ -198,17 +198,17 @@ views:
         - {id: led-link-1, ref: common/led-dot@1, at: [303.4, 66.0], for: xe-1, group: xe-leds, rel-pos: 1}
         - {id: led-link-2, ref: common/led-dot@1, at: [332.7, 66.0], for: xe-2, group: xe-leds, rel-pos: 2}
         - {id: led-link-3, ref: common/led-dot@1, at: [362.1, 66.0], for: xe-3, group: xe-leds, rel-pos: 3}
-        - {id: console, ref: std/rj45@1, at: [182.0, 47.5], rotate: 180, group: mgmt, rel-pos: 0,
+        - {id: console, ref: std/rj45@2, at: [182.1, 47.9], rotate: 180, group: mgmt, rel-pos: 0,
            attrs: {function: serial console}}
-        - {id: aux, ref: std/rj45@1, at: [182.0, 66.5], group: mgmt, rel-pos: 1,
+        - {id: aux, ref: std/rj45@2, at: [182.1, 66.9], group: mgmt, rel-pos: 1,
            attrs: {function: auxiliary console}}
-        - {id: ethernet, ref: std/rj45@1, at: [205.0, 47.5], rotate: 180, group: mgmt, rel-pos: 2,
+        - {id: ethernet, ref: common/rj45-eth@1, at: [205.1, 47.9], rotate: 180, group: mgmt, rel-pos: 2,
            attrs: {function: out-of-band management}}
         - {id: usb, ref: std/usb-a@1, at: [207.0, 68.25], rotate: 90, group: mgmt, rel-pos: 3,
            attrs: {function: USB service port}}
-        - {id: clk-a, ref: std/rj45@1, at: [224.0, 47.5], rotate: 180, group: mgmt, rel-pos: 4,
+        - {id: clk-a, ref: std/rj45@2, at: [224.1, 47.9], rotate: 180, group: mgmt, rel-pos: 4,
            attrs: {function: external clock A}}
-        - {id: clk-b, ref: std/rj45@1, at: [224.0, 66.5], group: mgmt, rel-pos: 5,
+        - {id: clk-b, ref: std/rj45@2, at: [224.1, 66.9], group: mgmt, rel-pos: 5,
            attrs: {function: external clock B}}
         - {id: led-sys-ok, ref: common/led-dot@1, at: [167.0, 63.0], for: chassis,
            group: status-leds, rel-pos: 0,
@@ -220,12 +220,6 @@ views:
            description: RE status lamp}
         - {id: btn-online, ref: common/reset-button@1, at: [166.5, 75.5], for: chassis,
            group: mgmt, rel-pos: 6, attrs: {function: online/offline}}
-        - {ref: common/led-dot@1, id: led-ethernet-l, at: [206.2, 47.77], for: ethernet, group: status-leds, rel-pos: 901}
-        - {ref: common/led-dot@1, id: led-ethernet-r, at: [217.8, 47.77], for: ethernet, group: status-leds, rel-pos: 902}
-        - {ref: common/led-dot@1, id: led-clk-a-l, at: [225.2, 47.77], for: clk-a, group: status-leds, rel-pos: 903}
-        - {ref: common/led-dot@1, id: led-clk-a-r, at: [236.8, 47.77], for: clk-a, group: status-leds, rel-pos: 904}
-        - {ref: common/led-dot@1, id: led-clk-b-l, at: [225.2, 78.23], for: clk-b, group: status-leds, rel-pos: 905}
-        - {ref: common/led-dot@1, id: led-clk-b-r, at: [236.8, 78.23], for: clk-b, group: status-leds, rel-pos: 906}
   rear:
     size:
       w: 445.0

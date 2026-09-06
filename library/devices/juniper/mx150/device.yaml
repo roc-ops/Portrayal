@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx150
-version: 0.5.0
+version: 1.0.0
 maturity: modelled
 manufacturer: Juniper
 model: MX150
@@ -125,23 +125,23 @@ views:
         - {at: [223.0, 2.5], size: [80.0, 12.0], pattern: vent, vent: 40}
         - {at: [308.0, 2.5], size: [100.0, 10.0], pattern: vent, vent: 40}
       cutouts:
-        - {id: port-0, at: [161.35, 9.0], size: [12.7, 11.0]}
-        - {id: port-2, at: [177.05, 9.0], size: [12.7, 11.0]}
-        - {id: port-4, at: [192.75, 9.0], size: [12.7, 11.0]}
-        - {id: port-6, at: [208.45, 9.0], size: [12.7, 11.0]}
-        - {id: port-1, at: [161.35, 22.5], size: [12.7, 11.0]}
-        - {id: port-3, at: [177.05, 22.5], size: [12.7, 11.0]}
-        - {id: port-5, at: [192.75, 22.5], size: [12.7, 11.0]}
-        - {id: port-7, at: [208.45, 22.5], size: [12.7, 11.0]}
-        - {id: port-8, at: [224.6, 21.5], size: [16.0, 14.0]}
-        - {id: port-9, at: [242.3, 21.5], size: [16.0, 14.0]}
+        - {id: port-0, at: [161.35, 9], size: [12.7, 11]}
+        - {id: port-2, at: [177.05, 9], size: [12.7, 11]}
+        - {id: port-4, at: [192.75, 9], size: [12.7, 11]}
+        - {id: port-6, at: [208.45, 9], size: [12.7, 11]}
+        - {id: port-1, at: [161.35, 22.5], size: [12.7, 11]}
+        - {id: port-3, at: [177.05, 22.5], size: [12.7, 11]}
+        - {id: port-5, at: [192.75, 22.5], size: [12.7, 11]}
+        - {id: port-7, at: [208.45, 22.5], size: [12.7, 11]}
+        - {id: port-8, at: [224.7, 21.9], size: [15.8, 13.2]}
+        - {id: port-9, at: [242.4, 21.9], size: [15.8, 13.2]}
         - {id: port-10, at: [273.05, 23.1], size: [14.25, 10.4]}
         - {id: port-11, at: [287.3, 23.1], size: [14.25, 10.4]}
         - {id: xe-0, at: [316.05, 23.1], size: [14.25, 10.4]}
         - {id: xe-1, at: [330.3, 23.1], size: [14.25, 10.4]}
         - {id: con, at: [349.05, 26.6], size: [7.5, 2.75]}
         - {id: usb, at: [362.75, 21.5], size: [4.5, 12.0]}
-        - {id: mgmt, at: [373.4, 21.5], size: [16.0, 14.0]}
+        - {id: mgmt, at: [373.5, 21.9], size: [15.8, 13.2]}
         - {id: led-beacon, at: [434.0, 26.8], size: [3.2, 3.2], shape: circle}
         - {id: led-link-10, at: [277.3, 17.6], size: [2, 2], shape: rect}
         - {id: led-st-10, at: [281.9, 17.6], size: [2, 2], shape: rect}
@@ -190,16 +190,16 @@ views:
       - {at: [436.5, 18.6], text: EN, font-size: 1.5, anchor: end, for: led-en}
     components:
       placements:
-        - {id: port-0, ref: std/rj45-ganged@1, at: [161.35, 9.0], rotate: 180, group: ge, rel-pos: 0}
-        - {id: port-2, ref: std/rj45-ganged@1, at: [177.05, 9.0], rotate: 180, group: ge, rel-pos: 2}
-        - {id: port-4, ref: std/rj45-ganged@1, at: [192.75, 9.0], rotate: 180, group: ge, rel-pos: 4}
-        - {id: port-6, ref: std/rj45-ganged@1, at: [208.45, 9.0], rotate: 180, group: ge, rel-pos: 6}
-        - {id: port-1, ref: std/rj45-ganged@1, at: [161.35, 22.5], group: ge, rel-pos: 1}
-        - {id: port-3, ref: std/rj45-ganged@1, at: [177.05, 22.5], group: ge, rel-pos: 3}
-        - {id: port-5, ref: std/rj45-ganged@1, at: [192.75, 22.5], group: ge, rel-pos: 5}
-        - {id: port-7, ref: std/rj45-ganged@1, at: [208.45, 22.5], group: ge, rel-pos: 7}
-        - {id: port-8, ref: std/rj45@1, at: [224.6, 21.5], group: ge, rel-pos: 8}
-        - {id: port-9, ref: std/rj45@1, at: [242.3, 21.5], group: ge, rel-pos: 9}
+        - {id: port-0, ref: common/rj45-ganged-eth@1, at: [161.35, 9], rotate: 180, group: ge, rel-pos: 0}
+        - {id: port-2, ref: common/rj45-ganged-eth@1, at: [177.05, 9], rotate: 180, group: ge, rel-pos: 2}
+        - {id: port-4, ref: common/rj45-ganged-eth@1, at: [192.75, 9], rotate: 180, group: ge, rel-pos: 4}
+        - {id: port-6, ref: common/rj45-ganged-eth@1, at: [208.45, 9], rotate: 180, group: ge, rel-pos: 6}
+        - {id: port-1, ref: common/rj45-ganged-eth@1, at: [161.35, 22.5], group: ge, rel-pos: 1}
+        - {id: port-3, ref: common/rj45-ganged-eth@1, at: [177.05, 22.5], group: ge, rel-pos: 3}
+        - {id: port-5, ref: common/rj45-ganged-eth@1, at: [192.75, 22.5], group: ge, rel-pos: 5}
+        - {id: port-7, ref: common/rj45-ganged-eth@1, at: [208.45, 22.5], group: ge, rel-pos: 7}
+        - {id: port-8, ref: common/rj45-eth@1, at: [224.7, 21.9], group: ge, rel-pos: 8}
+        - {id: port-9, ref: common/rj45-eth@1, at: [242.4, 21.9], group: ge, rel-pos: 9}
         - {id: port-10, ref: std/sfp-ganged@1, at: [273.05, 23.3], group: ge, rel-pos: 10,
            attrs: {media: sfp, speed: 1g}}
         - {id: port-11, ref: std/sfp-ganged@1, at: [287.3, 23.3], group: ge, rel-pos: 11,
@@ -210,7 +210,7 @@ views:
            attrs: {function: console}}
         - {id: usb, ref: std/usb-a@1, at: [359.0, 25.25], rotate: 90, group: mgmt, rel-pos: 1,
            attrs: {function: USB service port}}
-        - {id: mgmt, ref: std/rj45@1, at: [373.4, 21.5], group: mgmt, rel-pos: 2,
+        - {id: mgmt, ref: common/rj45-eth@1, at: [373.5, 21.9], group: mgmt, rel-pos: 2,
            attrs: {function: out-of-band management}}
         - {id: led-link-10, ref: common/led-dot@1, at: [277.3, 17.6], for: port-10, group: port-leds, rel-pos: 4}
         - {id: led-st-10, ref: common/led-dot@1, at: [281.9, 17.6], for: port-10, group: port-leds, rel-pos: 5}
@@ -253,28 +253,6 @@ views:
              are the photograph and the behaviour is the name. common/led-indicator is used rather
              than the led-dot the other seven carry because a beacon is the larger lamp - 4.0 mm
              against 2.0 - which is also why it has an opening of its own and they do not'}
-        - {ref: common/led-dot@1, id: led-port-0-l, at: [162.55, 9.27], for: port-0, group: port-leds, rel-pos: 901}
-        - {ref: common/led-dot@1, id: led-port-0-r, at: [170.85, 9.27], for: port-0, group: port-leds, rel-pos: 902}
-        - {ref: common/led-dot@1, id: led-port-2-l, at: [178.25, 9.27], for: port-2, group: port-leds, rel-pos: 903}
-        - {ref: common/led-dot@1, id: led-port-2-r, at: [186.55, 9.27], for: port-2, group: port-leds, rel-pos: 904}
-        - {ref: common/led-dot@1, id: led-port-4-l, at: [193.95, 9.27], for: port-4, group: port-leds, rel-pos: 905}
-        - {ref: common/led-dot@1, id: led-port-4-r, at: [202.25, 9.27], for: port-4, group: port-leds, rel-pos: 906}
-        - {ref: common/led-dot@1, id: led-port-6-l, at: [209.65, 9.27], for: port-6, group: port-leds, rel-pos: 907}
-        - {ref: common/led-dot@1, id: led-port-6-r, at: [217.95, 9.27], for: port-6, group: port-leds, rel-pos: 908}
-        - {ref: common/led-dot@1, id: led-port-1-l, at: [162.55, 31.23], for: port-1, group: port-leds, rel-pos: 909}
-        - {ref: common/led-dot@1, id: led-port-1-r, at: [170.85, 31.23], for: port-1, group: port-leds, rel-pos: 910}
-        - {ref: common/led-dot@1, id: led-port-3-l, at: [178.25, 31.23], for: port-3, group: port-leds, rel-pos: 911}
-        - {ref: common/led-dot@1, id: led-port-3-r, at: [186.55, 31.23], for: port-3, group: port-leds, rel-pos: 912}
-        - {ref: common/led-dot@1, id: led-port-5-l, at: [193.95, 31.23], for: port-5, group: port-leds, rel-pos: 913}
-        - {ref: common/led-dot@1, id: led-port-5-r, at: [202.25, 31.23], for: port-5, group: port-leds, rel-pos: 914}
-        - {ref: common/led-dot@1, id: led-port-7-l, at: [209.65, 31.23], for: port-7, group: port-leds, rel-pos: 915}
-        - {ref: common/led-dot@1, id: led-port-7-r, at: [217.95, 31.23], for: port-7, group: port-leds, rel-pos: 916}
-        - {ref: common/led-dot@1, id: led-port-8-l, at: [225.8, 33.23], for: port-8, group: port-leds, rel-pos: 917}
-        - {ref: common/led-dot@1, id: led-port-8-r, at: [237.4, 33.23], for: port-8, group: port-leds, rel-pos: 918}
-        - {ref: common/led-dot@1, id: led-port-9-l, at: [243.5, 33.23], for: port-9, group: port-leds, rel-pos: 919}
-        - {ref: common/led-dot@1, id: led-port-9-r, at: [255.1, 33.23], for: port-9, group: port-leds, rel-pos: 920}
-        - {ref: common/led-dot@1, id: led-mgmt-l, at: [374.6, 33.23], for: mgmt, group: port-leds, rel-pos: 921}
-        - {ref: common/led-dot@1, id: led-mgmt-r, at: [386.2, 33.23], for: mgmt, group: port-leds, rel-pos: 922}
   rear:
     size:
       w: 441.0
