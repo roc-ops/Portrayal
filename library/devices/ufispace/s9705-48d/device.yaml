@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9705-48d
-version: 2.0.1
+version: 2.0.2
 maturity: modelled
 manufacturer: UfiSpace
 model: S9705-48D
@@ -245,6 +245,16 @@ provenance:
     carry the same content in mirrored order, which is stated here because a symmetric
     face cannot expose a wrong axis. BOTTOM is shown in no held image and carries only a
     compliance sticker at an estimated position.
+  vent-islands: >-
+    derived - a vent field is a perforation and the drawing said so, but the marks
+    printed inside one were floating on air (L64). The vendor interrupts the
+    perforation where it prints, so each of those marks now has a solid patch under it
+    in the chassis colour, drawn over the vent the way ufispace/s9600-72xc paints its
+    port bands over one. The patch is the printing's own footprint plus 0.4 mm, which is
+    what the S9610-36D's front render measures: its slots stop 0.4 mm outside each lamp
+    cluster and resume 0.4 mm past it. Where a vent is simply measured wider than the
+    metal it reaches, this states the metal that the printing proves is there without
+    re-measuring the field.
   lifecycle: >-
     searched 2026-08-28, 'UfiSpace S9705-48D end of life end of sale announcement' - no
     announcement of any kind found. The product page
@@ -814,6 +824,9 @@ views:
     panel:
       decor:
         - {at: [345.90, 0.00], size: [24.80, 87.70], pattern: vent, vent: 28}
+        - {at: [347.1, 5.6], size: [20.3, 33.7], fill: '#404040'}
+        - {at: [347.64, 60.79], size: [20.12, 4.57], fill: '#404040'}
+        - {at: [353.54, 54.43], size: [8.72, 4.41], fill: '#404040'}
         - {at: [347.50, 6.00], size: [12.20, 32.90], fill: '#c9ced4', rx: 0.5}
         - {at: [349.60, 7.20], size: [8.00, 7.50], fill: '#aab0b7', rx: 3.9}
         - {at: [349.40, 23.60], size: [8.20, 7.70], fill: '#aab0b7', rx: 4.0}

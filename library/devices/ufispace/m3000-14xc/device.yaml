@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: m3000-14xc
-version: 2.0.1
+version: 2.0.2
 maturity: modelled
 manufacturer: UfiSpace
 model: M3000-14XC
@@ -160,6 +160,16 @@ provenance:
     none stated - neither the datasheet nor the HIG prints an orderable chassis SKU
     (the accessory list names only the PSUs, PSU-201-DISB/PSU-201-AISB). No SKU is
     invented; the configurations carry none.
+  vent-islands: >-
+    derived - a vent field is a perforation and the drawing said so, but the marks
+    printed inside one were floating on air (L64). The vendor interrupts the
+    perforation where it prints, so each of those marks now has a solid patch under it
+    in the chassis colour, drawn over the vent the way ufispace/s9600-72xc paints its
+    port bands over one. The patch is the printing's own footprint plus 0.4 mm, which is
+    what the S9610-36D's front render measures: its slots stop 0.4 mm outside each lamp
+    cluster and resume 0.4 mm past it. Where a vent is simply measured wider than the
+    metal it reaches, this states the metal that the printing proves is there without
+    re-measuring the field.
   lifecycle: >-
     searched 2026-08-28, 'UfiSpace M3000-14XC end of life' - no announcement found; the
     product page is live and the unit is actively marketed. none-announced is a real
@@ -521,6 +531,7 @@ views:
         - {at: [126.5, 3.5], size: [36, 36], rx: 18, pattern: vent, vent: 40}
         - {at: [176.5, 3.5], size: [36, 36], rx: 18, pattern: vent, vent: 40}
         - {at: [320, 3.5], size: [103, 21.5], pattern: vent, vent: 30}
+        - {at: [100.8, 33.3], size: [4.4, 4.4], fill: '#3a3f45'}
     components:
       placements:
         - {ref: common/screw-head@1, id: screw-r1, at: [15.7, 33.7], group: furniture, rel-pos: 1}

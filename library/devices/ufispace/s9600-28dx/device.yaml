@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-28dx
-version: 2.0.1
+version: 2.0.2
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-28DX
@@ -200,6 +200,16 @@ provenance:
     accessory lists name only the FRUs (PSU-132-DESR, PSU-132-AESR, FAN-803816-HI),
     which are the modules' own part numbers and live on their contracts. No SKU is
     invented here.
+  vent-islands: >-
+    derived - a vent field is a perforation and the drawing said so, but the marks
+    printed inside one were floating on air (L64). The vendor interrupts the
+    perforation where it prints, so each of those marks now has a solid patch under it
+    in the chassis colour, drawn over the vent the way ufispace/s9600-72xc paints its
+    port bands over one. The patch is the printing's own footprint plus 0.4 mm, which is
+    what the S9610-36D's front render measures: its slots stop 0.4 mm outside each lamp
+    cluster and resume 0.4 mm past it. Where a vent is simply measured wider than the
+    metal it reaches, this states the metal that the printing proves is there without
+    re-measuring the field.
   lifecycle: >-
     searched 2026-08-28, 'UfiSpace S9600-28DX end of life' - no announcement of any kind;
     the product page and datasheet are live and the unit is actively marketed.
@@ -421,6 +431,9 @@ views:
         - {at: [17.5, 6.6], size: [32.5, 13.4], pattern: vent, vent: 30}
         - {at: [4.0, 41.5], size: [46.0, 12.5], pattern: vent, vent: 30}
         - {at: [66.5, 41.5], size: [23.5, 37.5], pattern: vent, vent: 30}
+        - {at: [27.6, 49.22], size: [7.4, 2.6], fill: '#3a3f45'}
+        - {at: [28.88, 44.11], size: [4.8, 4.8], fill: '#3a3f45'}
+        - {at: [414, 82.15], size: [21.2, 3.59], fill: '#3a3f45'}
         # white label strip carrying the six system-lamp legends
         - {at: [5.94, 56.0], size: [5.4, 16.4], fill: '#e8eaed', rx: 0.3}
         # the port-lamp PCB strips: yellow and orange over the SFP28 block and the

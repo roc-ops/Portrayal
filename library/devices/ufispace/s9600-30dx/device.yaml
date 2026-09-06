@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-30dx
-version: 3.0.2
+version: 3.0.3
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-30DX
@@ -152,6 +152,16 @@ provenance:
     110 VAC feed the HIG derates both supplies to 1000 W each. These are the vendor's
     figures as the vendor states them and are NOT reconciled against the module set; the
     fans publish no draw, so any total built from the modelled modules is a floor.
+  vent-islands: >-
+    derived - a vent field is a perforation and the drawing said so, but the marks
+    printed inside one were floating on air (L64). The vendor interrupts the
+    perforation where it prints, so each of those marks now has a solid patch under it
+    in the chassis colour, drawn over the vent the way ufispace/s9600-72xc paints its
+    port bands over one. The patch is the printing's own footprint plus 0.4 mm, which is
+    what the S9610-36D's front render measures: its slots stop 0.4 mm outside each lamp
+    cluster and resume 0.4 mm past it. Where a vent is simply measured wider than the
+    metal it reaches, this states the metal that the printing proves is there without
+    re-measuring the field.
   lifecycle: >-
     searched 2026-08-28: the vendor's own product page was fetched and read for a
     notice, and none appears - the page is live and carries active downloads.
@@ -633,6 +643,9 @@ views:
     panel:
       decor:
         - {at: [337.5, 2.0], size: [33.0, 83.0], pattern: vent, vent: 25}
+        - {at: [343.2, 58.22], size: [17.6, 4.08], fill: '#3c3f42'}
+        - {at: [348, 51.72], size: [8, 4.08], fill: '#3c3f42'}
+        - {at: [351.6, 25.6], size: [6.8, 6.8], fill: '#3c3f42'}
         - {at: [340.0, 4.0], size: [9.0, 20.0], fill: '#c9ced4', rx: 1.0}
     silkscreen:
       - {at: [352.0, 55.0], text: FAN, font-size: 4.0, anchor: middle, for: [fan-0, fan-1, fan-2, fan-3]}

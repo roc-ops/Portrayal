@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: es1010
-version: 2.0.2
+version: 2.0.3
 manufacturer: Celestica
 model: ES1010
 description: Celestica ES1010 - 1U 48-port 1GbE (PoE++) access switch with 4x 25G SFP28 uplinks;
@@ -30,6 +30,16 @@ provenance:
     is what the housing actually carries. No vendor table gives their colours, so none is claimed'
   psu: photo (Gospower G1482-1600WRA FRU, six faces)
   fans: datasheet (2+1 FIXED fans - not FRUs; three grilles seen on the rear photo)
+  vent-islands: >-
+    derived - a vent field is a perforation and the drawing said so, but the marks
+    printed inside one were floating on air (L64). The vendor interrupts the
+    perforation where it prints, so each of those marks now has a solid patch under it
+    in the chassis colour, drawn over the vent the way ufispace/s9600-72xc paints its
+    port bands over one. The patch is the printing's own footprint plus 0.4 mm, which is
+    what the S9610-36D's front render measures: its slots stop 0.4 mm outside each lamp
+    cluster and resume 0.4 mm past it. Where a vent is simply measured wider than the
+    metal it reaches, this states the metal that the printing proves is there without
+    re-measuring the field.
 attrs:
   performance:
     switching-capacity: 148 Gbps
@@ -269,6 +279,9 @@ views:
       decor:
         - {at: [163, 4], size: [96, 36], pattern: vent, vent: 30}
         - {at: [263, 4], size: [170, 36], pattern: vent, vent: 30}
+        - {at: [290.88, 23.87], size: [2.24, 2.77], fill: '#3a3f45'}
+        - {at: [347.88, 23.87], size: [2.24, 2.77], fill: '#3a3f45'}
+        - {at: [404.88, 23.87], size: [2.24, 2.77], fill: '#3a3f45'}
     silkscreen:
       - {text: '3', at: [292, 26], font-size: 2.4}
       - {text: '2', at: [349, 26], font-size: 2.4}

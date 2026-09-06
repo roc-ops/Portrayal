@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9700-53dx
-version: 3.0.1
+version: 3.0.2
 maturity: modelled
 manufacturer: UfiSpace
 model: S9700-53DX
@@ -293,6 +293,16 @@ provenance:
     floor. Provisioning reserve 2000 W per circuit (HIG). PSU rating 2000 W per supply from
     the ordering lines; on a single 110 VAC feed the HIG derates each supply to 1000 W and
     warns that hot-swap is then no longer supported.
+  vent-islands: >-
+    derived - a vent field is a perforation and the drawing said so, but the marks
+    printed inside one were floating on air (L64). The vendor interrupts the
+    perforation where it prints, so each of those marks now has a solid patch under it
+    in the chassis colour, drawn over the vent the way ufispace/s9600-72xc paints its
+    port bands over one. The patch is the printing's own footprint plus 0.4 mm, which is
+    what the S9610-36D's front render measures: its slots stop 0.4 mm outside each lamp
+    cluster and resume 0.4 mm past it. Where a vent is simply measured wider than the
+    metal it reaches, this states the metal that the printing proves is there without
+    re-measuring the field.
   lifecycle: >-
     searched 2026-08-28: 'UfiSpace S9700-53DX end of life end of sale announcement' - no
     announcement found; the vendor's telco core-edge product page, the Open Compute
@@ -601,6 +611,12 @@ views:
         - {at: [276.0, 7.6], size: [158.0, 15.6], pattern: vent, vent: 25}
         - {at: [276.0, 55.2], size: [158.0, 21.8], pattern: vent, vent: 25}
         - {at: [276.0, 23.2], size: [6.0, 32.0], pattern: vent, vent: 25}
+        - {at: [6.71, 27.52], size: [10.57, 14.07], fill: '#33332e'}
+        - {at: [7, 57.3], size: [9.2, 16.75], fill: '#33332e'}
+        - {at: [8.93, 51.12], size: [8.3, 3.55], fill: '#33332e'}
+        - {at: [10.58, 48.34], size: [5, 1.95], fill: '#33332e'}
+        - {at: [408.3, 77.72], size: [24.8, 4.08], fill: '#33332e'}
+        - {at: [411.1, 4.85], size: [18, 10.3], fill: '#33332e'}
         - {at: [44.70, 8.20], size: [229.30, 4.60], fill: '#4a692e', rx: 0.4}
         - {at: [282.40, 23.60], size: [147.30, 5.90], fill: '#d68998', rx: 0.4}
         - {at: [22.40, 12.68], size: [15.90, 26.60], fill: '#c8cacc', rx: 0.8}
@@ -916,6 +932,9 @@ views:
     panel:
       decor:
         - {at: [335.5, 1.5], size: [36.5, 84.7], pattern: vent, vent: 25}
+        - {at: [347.6, 60.6], size: [21.8, 4.9], fill: '#33332e'}
+        - {at: [352.6, 53.88], size: [11.6, 5.72], fill: '#33332e'}
+        - {at: [362.1, 17.8], size: [6.8, 6.8], fill: '#33332e'}
         - {at: [348.10, 6.40], size: [11.60, 32.90], fill: '#c9ced4', rx: 0.6}
         - {at: [351.50, 10.40], size: [4.80, 4.80], fill: '#8d9297', rx: 2.4}
         - {at: [351.50, 26.70], size: [4.80, 4.80], fill: '#8d9297', rx: 2.4}
