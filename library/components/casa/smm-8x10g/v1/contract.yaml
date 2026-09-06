@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: smm-8x10g
-version: 1.7.0
+version: 1.9.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -84,9 +84,15 @@ provenance:
     six of them were invisible, because the cage pitch alternates 17.3 and 20.2
     while a rotated cage is 16 tall - so on every tight pair the legend fell
     inside the NEXT opening and the cage installed there painted over it. They
-    now sit BESIDE each opening at x 21.8, clear of both the 20.23 right edge of
-    a rotated cage and the 21.49 edge of the wider RJ45, which is also what the
-    SMM300G photograph shows the real hardware doing'
+    now sit BESIDE each opening at x 21.9, clear of both the 20.23 right edge of
+    a rotated cage and the 21.83 edge of the wider RJ45 (mgmt/console at x 7.33,
+    common/rj45-eth@1 and std/rj45@2 both 15.8 x 13.2, rotate: 90, so the landed
+    edge is 7.33 + 15.8/2 + 13.2/2). REVISED AGAIN when the RJ45 sweep grew both
+    jacks from the retired 15.8 x 12.5 common/rj45-shielded@2 (edge 21.49, 0.31mm
+    clear of the legend then at 21.8) to the current 15.8 x 13.2 - the wider jack
+    put the old x 0.03mm inside its own housing, so the legend moved to 21.9,
+    0.07mm clear of the new edge. This is also what the SMM300G photograph shows
+    the real hardware doing'
   legend-band: 'CORRECTED. The model legend sits between TWO orange bands, not
     below one. Three product photographs - DS8x96, CSC8x10G and SMM300G - agree
     on that, and casa/bdm carries the same pair from Figure 1-14. Position and
@@ -183,7 +189,7 @@ relief:
     - {node: active, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
     - {node: alarm, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
 parts:
-  - {ref: common/rj45-shielded@2, id: mgmt, at: [7.33, 41.46], rotate: 90}
+  - {ref: common/rj45-eth@1, id: mgmt, at: [7.33, 41.11], rotate: 90}
   - {ref: common/sfp-plus-cage@2, id: xg0, at: [7.23, 64.33], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
   - {ref: common/sfp-plus-cage@2, id: xg1, at: [7.23, 81.68], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
   - {ref: common/sfp-plus-cage@2, id: xg2, at: [7.23, 101.86], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
@@ -194,7 +200,7 @@ parts:
   - {ref: common/sfp-plus-cage@2, id: xg7, at: [7.23, 193.57], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
   - {ref: common/sfp-plus-cage@2, id: g0, at: [7.23, 213.68], rotate: 90, attrs: {media: sfp, speed: 1g}}
   - {ref: common/sfp-plus-cage@2, id: g1, at: [7.23, 228.52], rotate: 90, attrs: {media: sfp, speed: 1g}}
-  - {ref: common/rj45-shielded@2, id: console, at: [7.33, 242.24], rotate: 90}
+  - {ref: std/rj45@2, id: console, at: [7.33, 241.89], rotate: 90}
 connection-points:
   mate: {at: [15.23, 172.75], direction: front}
 skins: [default]

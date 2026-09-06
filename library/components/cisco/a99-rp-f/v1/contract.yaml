@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a99-rp-f
-version: 1.0.1
+version: 1.1.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -279,13 +279,13 @@ relief:
         common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
         estimated' and the dome carries none
 parts:
-  - {ref: std/rj45-ganged@1, id: sync-0, at: [55.93, 6.45]}
-  - {ref: std/rj45-ganged@1, id: sync-1, at: [75.83, 6.45]}
-  - {ref: std/rj45-ganged@1, id: tod, at: [96.35, 6.45]}
-  - {ref: std/rj45-ganged@1, id: mgt-lan-0, at: [123.07, 6.85]}
-  - {ref: std/rj45-ganged@1, id: aux, at: [144.48, 6.85]}
-  - {ref: std/rj45-ganged@1, id: mgt-lan-1, at: [123.07, 22.3]}
-  - {ref: std/rj45-ganged@1, id: console, at: [144.48, 22.3]}
+  - {ref: std/rj45-ganged@2, id: sync-0, at: [55.93, 6.45]}
+  - {ref: std/rj45-ganged@2, id: sync-1, at: [75.83, 6.45]}
+  - {ref: std/rj45-ganged@2, id: tod, at: [96.35, 6.45]}
+  - {ref: common/rj45-ganged-eth@1, id: mgt-lan-0, at: [123.07, 6.85]}
+  - {ref: std/rj45-ganged@2, id: aux, at: [144.48, 6.85]}
+  - {ref: common/rj45-ganged-eth@1, id: mgt-lan-1, at: [123.07, 22.3]}
+  - {ref: std/rj45-ganged@2, id: console, at: [144.48, 22.3]}
   - {ref: std/smb@1, id: gps-10mhz, at: [43.3, 5.17]}
   - {ref: std/smb@1, id: gps-1pps, at: [43.3, 14.1]}
   - {ref: std/usb-a@1, id: usb, at: [163.69, 11.7], rotate: 90}
