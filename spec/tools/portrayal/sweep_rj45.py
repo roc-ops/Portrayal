@@ -541,7 +541,8 @@ def sweep_component(path):
     moved_ids, unresolved = [], []
     for p in data.get("parts") or []:
         ref = str(p.get("ref") or "")
-        new = target(ref, L.rj45_wants_lamps({"id": p.get("id"), "attrs": p.get("attrs")}, {}))
+        new = target(ref, L.rj45_wants_lamps({"id": p.get("id"), "attrs": p.get("attrs")}, {},
+                                      data.get("name")))
         if not new:
             continue
         s = span(rows, str(p["id"]))

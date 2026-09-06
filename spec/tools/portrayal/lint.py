@@ -3998,17 +3998,108 @@ def lint_device_face_bindings(path, data, lib_roots):
 # unrelated word (e.g. "contact", "oob", "eth-lan").
 RJ45_BARE = re.compile(
     r"console|aux|serial|ioioi|telemetry|timing"
-    r"|(^|[\s-])(con|tod|clk|bits|pps|sync|ptp)([\s-]|$)", re.I)
+    r"|(^|[\s-])(con|tod|clk|bits|pps|sync|ptp|1588|ics"
+    r"|t1|e1|ds1|rj48|che1)([\s-]|$)", re.I)
 RJ45_LAMPED_REFS = {"common/rj45-eth@1", "common/rj45-ganged-eth@1"}
 RJ45_BARE_REFS = {"std/rj45@2", "std/rj45-ganged@2"}
+# A carrier that draws nothing and exists to attach one vendor's meanings
+# (dell/rj45-port-14g) is the family member it composes, for census purposes;
+# and the family's own members compose each other by definition, so a contract
+# that IS one of them is not making a jack choice and is not censused.
+RJ45_FAMILY_DIRS = {("std", "rj45"), ("std", "rj45-ganged"),
+                    ("common", "rj45-eth"), ("common", "rj45-ganged-eth"),
+                    ("dell", "rj45-port-14g")}
 
 
-def rj45_wants_lamps(q, groups):
-    """True when this RJ45 placement is an Ethernet jack, by id, role and group."""
+def rj45_class(ref, lib_roots, depth=0):
+    """'lamped', 'bare' or 'retired' for an RJ45-ish ref, following one carrier."""
+    if ref in RJ45_LAMPED_REFS:
+        return "lamped"
+    if ref in RJ45_BARE_REFS:
+        return "bare"
+    if depth > 2:
+        return "retired"
+    try:
+        cp = resolve_component(ref, lib_roots)
+    except ValueError:
+        return "retired"
+    if not cp:
+        return "retired"
+    for sub in ((load_yaml(cp) or {}).get("parts") or []):
+        sref = str((sub or {}).get("ref") or "")
+        if "rj45" in sref:
+            return rj45_class(sref, lib_roots, depth + 1)
+    return "retired"
+
+
+def rj45_wants_lamps(q, groups, name=None):
+    """True when this RJ45 placement is an Ethernet jack, by id, role, group,
+    media - and, inside a component's `parts:`, the contract's own name.
+
+    MEDIA IS PART OF THE TEXT because it is where half the corpus says what the
+    jack is: `media: rj45-serial` and `media: rj45-telemetry` classify themselves,
+    and reading only id/role/group made eleven Casa and Cisco jacks look Ethernet.
+    THE CONTRACT NAME IS PART OF IT for a card whose ports are named `port-*` by
+    the vendor's numbering and are not Ethernet at all - `spa-8xcht1-e1` and
+    `mic-3d-16che1-t1-ce` are channelized T1/E1 cards whose RJ48c jacks carry DS1.
+    The mechanical `port-*` rule swept 48 of those onto the lamped part and
+    invented two lamps each (#125 review C1); the card's own name is the only
+    place on a `parts:` entry that says otherwise."""
     ga = (groups.get(q.get("group")) or {}).get("attrs") or {}
-    role = str({**ga, **(q.get("attrs") or {})}.get("role") or "")
-    text = f"{q.get('id')} {role} {q.get('group') or ''}"
+    attrs = {**ga, **(q.get("attrs") or {})}
+    role = str(attrs.get("role") or "")
+    media = str(attrs.get("media") or "")
+    text = f"{q.get('id')} {role} {q.get('group') or ''} {media} {name or ''}"
     return not RJ45_BARE.search(text)
+
+
+def _rj45_census(placements, groups, lib_roots, name=None):
+    """Count the RJ45 placements in one list that disagree with the family's rule.
+
+    Shared by the device path (a view's `components.placements`) and the component
+    path (a contract's `parts:`), because 368 of the library's 762 RJ45 placements
+    sit inside component contracts and the census that could not see them is how
+    C1 got in (#125 review I5)."""
+    unlamped_eth = lamped_bare = retired = 0
+    # A jack on a bare ref is not "on a part with no lamps" if this view
+    # draws a `class: led` placement `for:` it beside the jack instead of
+    # inside it - sweep_rj45.py leaves such a jack bare on purpose
+    # (edgecore/as5912-54x mgmt-eth: two lamps drawn beside the bezel, not
+    # composed into it), and the census must not re-flag what the sweep
+    # deliberately left alone. The same exemption covers a BARE timing jack
+    # whose vendor draws lamps for it (juniper/mx204's bits): the family has
+    # no bare-with-lamps member, so the lamps stay separate placements.
+    lamped_for = set()
+    for q in placements:
+        ref = str(q.get("ref") or "")
+        if not ref:
+            continue
+        try:
+            cp = resolve_component(ref, lib_roots)
+        except ValueError:          # malformed ref with no @major - L5 reports that itself
+            continue
+        if cp and (load_yaml(cp) or {}).get("class") == "led":
+            f = q.get("for")
+            lamped_for.update(str(x) for x in (f if isinstance(f, list) else [f]) if x is not None)
+    for q in placements:
+        ref = str(q.get("ref") or "")
+        if "rj45" not in ref:
+            continue
+        cls = rj45_class(ref, lib_roots)
+        if cls == "retired":
+            retired += 1
+            continue
+        if rj45_wants_lamps(q, groups, name):
+            if cls != "lamped" and str(q.get("id")) not in lamped_for:
+                unlamped_eth += 1
+        elif cls != "bare":
+            lamped_bare += 1
+    return unlamped_eth, lamped_bare, retired
+
+
+RJ45_CENSUS_MSG = ("An Ethernet jack is common/rj45-eth@1 or common/rj45-ganged-eth@1; "
+                   "a console or timing jack is std/rj45@2 or std/rj45-ganged@2 "
+                   "(docs/rj45-family-design.md; spec/tools/portrayal/sweep_rj45.py)")
 
 
 def lint_device_rj45_lamps(path, data, lib_roots):
@@ -4020,43 +4111,32 @@ def lint_device_rj45_lamps(path, data, lib_roots):
     unlamped_eth = lamped_bare = retired = 0
     for view in (data.get("views") or {}).values():
         placements = (((view or {}).get("components") or {}).get("placements") or [])
-        # A jack on a bare ref is not "on a part with no lamps" if this view
-        # draws a `class: led` placement `for:` it beside the jack instead of
-        # inside it - sweep_rj45.py leaves such a jack bare on purpose
-        # (edgecore/as5912-54x mgmt-eth: two lamps drawn beside the bezel, not
-        # composed into it), and the census must not re-flag what the sweep
-        # deliberately left alone.
-        lamped_for = set()
-        for q in placements:
-            ref = str(q.get("ref") or "")
-            if not ref:
-                continue
-            try:
-                cp = resolve_component(ref, lib_roots)
-            except ValueError:          # malformed ref with no @major - L5 reports that itself
-                continue
-            if cp and (load_yaml(cp) or {}).get("class") == "led":
-                f = q.get("for")
-                lamped_for.update(str(t) for t in (f if isinstance(f, list) else [f]) if t is not None)
-        for q in placements:
-            ref = str(q.get("ref") or "")
-            if "rj45" not in ref:
-                continue
-            if ref not in RJ45_LAMPED_REFS and ref not in RJ45_BARE_REFS:
-                retired += 1
-                continue
-            if rj45_wants_lamps(q, groups):
-                if ref not in RJ45_LAMPED_REFS and str(q.get("id")) not in lamped_for:
-                    unlamped_eth += 1
-            elif ref not in RJ45_BARE_REFS:
-                lamped_bare += 1
+        a, b, c = _rj45_census(placements, groups, lib_roots)
+        unlamped_eth += a; lamped_bare += b; retired += c
     if unlamped_eth or lamped_bare or retired:
         warn(path, "L76", f"RJ45 family: {unlamped_eth} Ethernet jack(s) on a part with no "
                           f"lamps, {lamped_bare} console/timing jack(s) on a lamped part, "
-                          f"{retired} on a retired RJ45 part. An Ethernet jack is "
-                          "common/rj45-eth@1 or common/rj45-ganged-eth@1; a console or "
-                          "timing jack is std/rj45@2 or std/rj45-ganged@2 "
-                          "(docs/rj45-family-design.md; spec/tools/portrayal/sweep_rj45.py)")
+                          f"{retired} on a retired RJ45 part. " + RJ45_CENSUS_MSG)
+
+
+def lint_component_rj45_lamps(path, data, lib_roots):
+    """L76 over a component contract's `parts:` - the other half of the census.
+
+    A line card's RJ45s are `parts:` entries, not view placements, and until
+    #125's final review nothing counted them. Half the library's jacks live here."""
+    try:
+        d = Path(path).parent.parent
+        if (d.parent.name, d.name) in RJ45_FAMILY_DIRS:
+            return
+    except (ValueError, IndexError):
+        pass
+    unlamped_eth, lamped_bare, retired = _rj45_census(
+        data.get("parts") or [], {}, lib_roots, data.get("name"))
+    if unlamped_eth or lamped_bare or retired:
+        warn(path, "L76", f"RJ45 family: {data.get('name')} parts: carry {unlamped_eth} "
+                          f"Ethernet jack(s) on a part with no lamps, {lamped_bare} "
+                          f"console/timing jack(s) on a lamped part, {retired} on a "
+                          f"retired RJ45 part. " + RJ45_CENSUS_MSG)
 
 
 def lint_device_id_convention(path, data, lib_roots):
@@ -5614,6 +5694,7 @@ def main():
                 lint_component_fields(f, d)
                 lint_component_lamp_colour(f, d)
                 lint_component_slots(f, d)
+                lint_component_rj45_lamps(f, d, args.library)
             n += 1
         for f in sorted(root.glob("devices/**/device.yaml")):
             if args.device and not any(sel in str(f) for sel in args.device):
