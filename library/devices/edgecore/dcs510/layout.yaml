@@ -196,7 +196,9 @@ provenance:
     `conforms:` to (or the component's own size where it conforms to nothing).
     The 32 port holes come out of expand.py that way. Three were hand-written
     around the visible opening with clearance instead - mgmt-eth at 14.4 x 10.4
-    where common/rj45-shielded@2 is 15.8 x 12.5, and the two SFP+ cages at
+    where the jack it named, common/rj45-shielded@2, was 15.8 x 12.5 (ndv#125
+    retired that part; mgmt-eth is common/rj45-eth@1 at 15.8 x 13.2 now, and the
+    cutout derives from it), and the two SFP+ cages at
     15.0 x 9.2 where common/sfp-plus-cage@2 forwards to std/sfp's 14.5 x 10.0 at
     an offset of [0.75, 0] - and spec/tests/test_cutout_derivation.py failed on
     all three. They are now derived. The measured openings that produced those
@@ -451,7 +453,7 @@ views:
         - {ref: common/sma-jack@1, id: timing-1pps-out, at: [19.49, 3.57], group: timing, rel-pos: 2, attrs: {media: coax-sma, role: 1pps-out}}
         - {ref: common/sma-jack@1, id: timing-10mhz-in, at: [9.99, 13.07], group: timing, rel-pos: 3, attrs: {media: coax-sma, role: 10mhz-in}}
         - {ref: common/sma-jack@1, id: timing-1pps-in, at: [19.49, 13.07], group: timing, rel-pos: 4, attrs: {media: coax-sma, role: 1pps-in}}
-        - {ref: common/rj45-port@4, id: tod, at: [12.6, 26.4], skin: dark, group: timing, rel-pos: 5, attrs: {media: rj45, role: tod}}
+        - {ref: std/rj45@2, id: tod, at: [12.6, 26.4], group: timing, rel-pos: 5, attrs: {media: rj45, role: tod}}
         - {ref: common/led-dot@1, id: led-loc, at: [32.6, 6.70], group: leds, rel-pos: 1, for: chassis}
         - {ref: common/led-dot@1, id: led-diag, at: [32.6, 9.93], group: leds, rel-pos: 2, for: chassis}
         - {ref: common/led-dot@1, id: led-fan, at: [32.6, 13.16], group: leds, rel-pos: 3, for: [rear/fan-1, rear/fan-2, rear/fan-3, rear/fan-4, rear/fan-5, rear/fan-6]}
@@ -459,9 +461,9 @@ views:
         - {ref: common/led-dot@1, id: led-ps2, at: [32.6, 19.63], group: leds, rel-pos: 5, for: rear/psu-2}
         - {ref: common/reset-button@1, id: reset, at: [31.6, 21.86], group: mgmt, rel-pos: 6, for: chassis}
         - {block: qsfpdd-400g}
-        - {ref: common/rj45-shielded@2, id: mgmt-eth, at: [391.4, 2.9], group: mgmt, rel-pos: 1, attrs: {media: rj45, speed: 1000base-t, role: mgmt}}
+        - {ref: common/rj45-eth@1, id: mgmt-eth, at: [391.4, 2.9], group: mgmt, rel-pos: 1, attrs: {media: rj45, speed: 1000base-t, role: mgmt}}
         - {ref: std/usb-a@1, id: usb, at: [393.3, 15.95], group: mgmt, rel-pos: 5, attrs: {media: usb-a, role: storage}}
-        - {ref: common/rj45-port@4, id: console, at: [388.9, 26.1], skin: dark, group: mgmt, rel-pos: 2, attrs: {media: rj45-serial, role: console}}
+        - {ref: std/rj45@2, id: console, at: [388.9, 26.1], group: mgmt, rel-pos: 2, attrs: {media: rj45-serial, role: console}}
         - {ref: common/sfp-plus-cage@2, id: mgmt-sfp-1, at: [409.3, 11.9], group: mgmt, rel-pos: 3, attrs: {media: sfp-plus, speed: 10g, role: mgmt-uplink}}
         - {ref: common/sfp-plus-cage@2, id: mgmt-sfp-2, at: [409.3, 26.6], group: mgmt, rel-pos: 4, attrs: {media: sfp-plus, speed: 10g, role: mgmt-uplink}}
         - {ref: common/led-dot@1, id: led-mgmt-sfp-1, at: [412.95, 8.3], group: leds, rel-pos: 6, for: mgmt-sfp-1}

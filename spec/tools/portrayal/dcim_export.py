@@ -142,6 +142,33 @@ FAMILY_PART = {
     "common/rj45-ganged-eth@1": ("iface", "1000base-t"),
 }
 
+# ...AND FAMILY_PART IS A FALLBACK, NOT A DECISION. #125 gave std/rj45@2 seven
+# jobs - console, aux, serial; ToD, BITS, 1PPS, sync; telemetry - so the ref can
+# no longer carry the DCIM type, which is the lesson recorded a few lines below
+# and learned twice already (ndv#27, #29). Reading the ref alone exported seven
+# Juniper timing jacks as CONSOLE PORTS. So the placement's own words are read
+# first: an id, role or media naming a timing function makes an `other` interface
+# labelled with that function - the treatment PART_RF already gives an SMB timing
+# input, which says "a thing this schema has no name for" instead of naming a
+# neighbour - and one naming a console keeps the console path. Anchored on
+# whitespace or a hyphen so a token cannot fire inside an unrelated word
+# ("contact", "topology"), the same anchoring lint.RJ45_BARE uses.
+RJ45_TIMING = re.compile(
+    r"(^|[\s-])(gm-ptp|1588|bits|tod|pps|sync|ptp|ics|clk)([\s-]|$)", re.I)
+RJ45_CONSOLE = re.compile(r"console|aux|serial|(^|[\s-])con([\s-]|$)", re.I)
+
+
+def rj45_words(part):
+    a = part.get("attrs") or {}
+    return f"{part.get('id') or ''} {a.get('role') or ''} {a.get('function') or ''} " \
+           f"{a.get('media') or ''} {part.get('group') or ''}"
+
+
+def rj45_timing_label(part):
+    """The timing function this RJ45 placement names, upper-cased, or None."""
+    m = RJ45_TIMING.search(rj45_words(part))
+    return m.group(2).upper() if m else None
+
 # RF and timing connectors. These are INTERFACES, not front ports: a front port
 # in both libraries is a patch-panel pass-through and requires a rear_port to
 # terminate on, which a connector on a line card does not have. Emitting them as
@@ -637,11 +664,18 @@ def build_module(contract, manufacturer):
             # Checked on the un-stripped ref, before PART_CONSOLE/PART_IFACE
             # below drop the @major and would otherwise catch every version of
             # std/rj45 alike - see FAMILY_PART's comment for why that is wrong.
-            kind, t = FAMILY_PART[full_ref]
-            if kind == "console":
-                consoles.append({"name": pid or "Console", "type": t})
+            # What the PLACEMENT says beats what the ref says, both ways round.
+            timing = rj45_timing_label(part)
+            if timing:
+                ifaces.append({"name": pid, "type": "other", "label": timing})
+            elif RJ45_CONSOLE.search(rj45_words(part)):
+                consoles.append({"name": pid or "Console", "type": "rj-45"})
             else:
-                ifaces.append({"name": pid, "type": t})
+                kind, t = FAMILY_PART[full_ref]
+                if kind == "console":
+                    consoles.append({"name": pid or "Console", "type": t})
+                else:
+                    ifaces.append({"name": pid, "type": t})
         elif ref in PART_POWER:
             powers.append({"name": pid or "Inlet", "type": PART_POWER[ref]})
         elif ref in PART_CONSOLE:

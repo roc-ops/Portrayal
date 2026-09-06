@@ -12,6 +12,13 @@ attrs:
   power-draw-max-w: 29.08
   model-variants: MIC-3D-16CHE1-T1-CE-H
 provenance:
+  port-jacks-are-bare: >-
+    THE PORT JACKS ARE BARE. port-0-0..15 are RJ48 receptacles carrying channelized E1/T1,
+    not Ethernet, so they take the RJ45 family's bare cell rather than its lamped one
+    (docs/rj45-family-design.md decision 3: the lamped member is for what carries Ethernet).
+    The module reference tables no per-port link or activity lamp for this MIC, and this
+    contract draws none: a lamped jack here would assert two indicators the hardware is not
+    documented to have.
   size: 'registry + layout - the face is the slot geometry of its chassis
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
@@ -33,22 +40,22 @@ states:
 - fail
 - absent
 parts:
-- {ref: common/rj45-ganged-eth@1, id: port-0-0, at: [16, 3.6], rotate: 180, attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-0-1, at: [16, 15.8], attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-0-2, at: [28.7, 3.6], rotate: 180, attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-0-3, at: [28.7, 15.8], attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-0-4, at: [41.4, 3.6], rotate: 180, attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-0-5, at: [41.4, 15.8], attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-0-6, at: [54.1, 3.6], rotate: 180, attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-0-7, at: [54.1, 15.8], attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-0-8, at: [66.8, 3.6], rotate: 180, attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-0-9, at: [66.8, 15.8], attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-0-10, at: [79.5, 3.6], rotate: 180, attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-0-11, at: [79.5, 15.8], attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-0-12, at: [92.2, 3.6], rotate: 180, attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-0-13, at: [92.2, 15.8], attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-0-14, at: [104.9, 3.6], rotate: 180, attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-0-15, at: [104.9, 15.8], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-0, at: [16, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-1, at: [16, 15.8], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-2, at: [28.7, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-3, at: [28.7, 15.8], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-4, at: [41.4, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-5, at: [41.4, 15.8], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-6, at: [54.1, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-7, at: [54.1, 15.8], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-8, at: [66.8, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-9, at: [66.8, 15.8], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-10, at: [79.5, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-11, at: [79.5, 15.8], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-12, at: [92.2, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-13, at: [92.2, 15.8], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-14, at: [104.9, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-15, at: [104.9, 15.8], attrs: {media: rj45}}
 size:
   w: 168.0
   h: 27.0

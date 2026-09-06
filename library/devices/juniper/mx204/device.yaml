@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx204
-version: 2.0.0
+version: 2.0.1
 maturity: modelled
 manufacturer: Juniper
 model: MX204
@@ -16,6 +16,16 @@ description: >-
   and 10 MHz in/out). Two 650 W PSUs (AC or DC, 1+1) and three fan modules at
   the rear.
 provenance:
+  bits-lamps: >-
+    THE BITS JACK KEEPS ITS TWO LAMPS AS SEPARATE PLACEMENTS, and it is the only jack in the
+    library that does. The RJ45 family (docs/rj45-family-design.md, #125) has four members -
+    two bare, two lamped - and no bare-with-lamps one. BITS is a timing role, so decision 3
+    puts it on std/rj45@2, the bare housing; but the hardware guide draws a link and an
+    activity lamp beside it, so led-bits-link and led-bits-act stay where they are, naming
+    the jack with for:, the same shape edgecore/as5912-54x uses for its mgmt-eth pair. One
+    jack does not earn a fifth family member. L76 does not count this as an unlamped
+    Ethernet jack (BITS is not Ethernet) and L39 lets the lamps sit inside the jack's own
+    cutout; if a second bare-with-lamps jack ever arrives, the family gains a member.
   sources: MX204 Universal Routing Platform Hardware Guide (published 2025-11-12,
     figures g009860/g009862/g009881/g009897/g100549 among others, extracted with
     captions into working/images/mx204/), HPE datasheet a00150825enw (MX

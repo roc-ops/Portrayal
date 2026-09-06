@@ -171,7 +171,11 @@ provenance:
     x 396.34 - the mgmt jack's two bezel LED windows read at 391.34 and 401.34
     and its bezel rails at 389.46 and 403.22, which fix that centre twice over -
     and a USB-A. Both RJ-45s carry WHITE bezels here where the sibling's are
-    dark, so they take common/rj45-port@4's default skin and not its `dark` one.
+    dark. That was a skin choice on common/rj45-port@4, which ndv#125 retired
+    along with every other bezel plate; the jacks are now common/rj45-eth@1 (mgmt)
+    and std/rj45@2 (console), which draw the housing itself and have no bezel to
+    colour. The white-versus-dark reading is kept because it is what the photograph
+    shows, and it is what would drive a skin if the family ever grows one.
     The sibling's cluster shares a single shell between its mgmt RJ-45 and its
     USB, puts the SFP+ pair on the RIGHT and has no micro-USB at all. Nothing
     here was carried over.
@@ -552,8 +556,8 @@ views:
         - {ref: common/sfp-plus-cage@2, id: oob-1, at: [369.0, 27.5], group: mgmt, rel-pos: 3, attrs: {media: sfp-plus, speed: 10g, role: out-of-band}}
         - {ref: common/led-dot@1, id: led-oob-0, at: [372.72, 8.5], group: leds, rel-pos: 6, for: oob-0}
         - {ref: common/led-dot@1, id: led-oob-1, at: [379.28, 8.5], group: leds, rel-pos: 7, for: oob-1}
-        - {ref: common/rj45-port@4, id: mgmt-eth, at: [387.84, 8.25], group: mgmt, rel-pos: 4, attrs: {media: rj45, speed: 1000base-t, role: mgmt}}
-        - {ref: common/rj45-port@4, id: console-1, at: [387.84, 26.25], group: mgmt, rel-pos: 5, attrs: {media: rj45-serial, role: console}}
+        - {ref: common/rj45-eth@1, id: mgmt-eth, at: [387.84, 8.25], group: mgmt, rel-pos: 4, attrs: {media: rj45, speed: 1000base-t, role: mgmt}}
+        - {ref: std/rj45@2, id: console-1, at: [387.84, 26.25], group: mgmt, rel-pos: 5, attrs: {media: rj45-serial, role: console}}
         - {ref: std/usb-a@1, id: usb, at: [404.2, 13.1], rotate: 90, group: mgmt, rel-pos: 7, attrs: {media: usb-a, role: storage}}
         - {ref: common/usb-symbol@1, id: usb-mark, at: [407.00, 22.2], group: furniture, rel-pos: 3, for: usb}
         - {ref: common/pull-tab@1, id: info-tab, at: [416.6, 38.6], group: furniture, rel-pos: 4}

@@ -86,8 +86,54 @@ sources:
     secondary:
       - https://www.te.com/en/products/connectors/modular-connectors.html
     governs: [rj45]
-    notes: Panel cutout 16 x 14 currently registry-confidence; verify via IEC or
-      a manufacturer panel-cutout drawing (TE/Amphenol keystone datasheets).
+    notes: Governs the plug/jack INTERFACE - the 8P8C contact geometry and mating
+      dimensions. It does not govern the panel cutout the library draws. Since
+      ndv#125 that follows the jack HOUSING (15.8 x 13.2, TE 1734264), because the
+      housing is what a panel is cut for. The 16 x 14 this entry used to call for
+      verification was the registry's own unsourced aperture and is retired.
+
+  - id: te-1734264
+    title: "TE 1734264 rev A2 - RJ45 8P8C side entry jack, low profile, panel ground (customer drawing)"
+    org: TE Connectivity
+    status: acquired
+    url: https://www.te.com/commerce/DocumentDelivery/DDEController?Action=srchrtrv&DocNm=1734264
+    sha256: 7df6dd525841184ee0a82bfd271ebb6b39c6b5831f0165dbd17eb7e7440a3ae6
+    local: intake/standards/rj45/te-1734264-A2-rj45-side-entry-panel-ground.pdf
+    governs: [rj45, rj45-ganged]
+    notes: The drawing behind the family's confidence-drawing figures. Front view
+      gives the housing face 15.8 x 13.2 and the plug opening in three tiers -
+      body 11.91 x 6.83, a 6.30 wide shoulder to 8.52 total, a 4.06 latch slot -
+      plus contact pitch 1.02 over 7.14. The side view gives depth 18.6. The latch
+      slot HEIGHT is not dimensioned here and stays conventional (2.6).
+
+  - id: te-6368011
+    title: "TE 6368011 rev L - stacked 2x1 shielded RJ45 with integral LEDs (customer drawing)"
+    org: TE Connectivity
+    status: acquired
+    url: https://www.te.com/commerce/DocumentDelivery/DDEController?Action=srchrtrv&DocNm=6368011
+    sha256: 8040141678bd09111a5162ac69ed85a33b51f11b0067b7729a2aacbb3ba764e0
+    local: intake/standards/rj45/te-6368011-L-stacked-2x1-shielded-led.pdf
+    governs: [rj45, rj45-ganged]
+    notes: Where the lamped members' LED windows come from - LEDs in the housing
+      corners flanking the keyway, not on the contacts side. Also a 2x1 stack's
+      suggested panel cutout 18.04 x 27.81 and its two-row geometry, recorded so
+      a stacked-with-LED device has a source; it is a different family from the
+      magjack block the ganged cell is measured from.
+
+  - id: amphenol-modular-jack-catalogue
+    title: "Amphenol Canada modular jacks catalogue (RJHS, RJE73, RJSAE, RJE88 series)"
+    org: Amphenol Canada
+    status: acquired
+    url: https://www.amphenolcanada.com/ProductSearch/drawings/AC/RJHSE5080.pdf
+    mirrors:
+      - https://octopart.com/datasheet/rjhse-5080-amphenol-41233491
+    sha256: 983f3e4691b704ef2c9aaf099a63fb0703c7ba23537ec4d9b33a9cf63a99cfb8
+    local: intake/standards/rj45/amphenol-canada-modular-jacks-catalogue.pdf
+    governs: [rj45]
+    notes: The independent second reading of the housing face. RJHSE-508X and
+      RJESE-808X are dimensioned 15.75 x 13.21, agreeing with TE 1734264 to
+      0.05; RJE88 vertical entry is 16.10 x 14.70, a different family. LED
+      window positions agree with TE 6368011.
 
   - id: schurter-6100-3
     title: "SCHURTER 6100-3 - IEC Appliance Inlet C14, screw-on mounting (datasheet)"

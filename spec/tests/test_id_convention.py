@@ -65,9 +65,9 @@ def test_a_traffic_port_is_silent():
 def test_a_singleton_function_name_is_silent():
     """`console` over an RJ45, and `reset` over a button. The connector words
     are right there in the refs and neither id borrows one."""
-    assert run([p("console", "std/rj45-ganged@1", attrs={"media": "rj45-serial"})]) == []
+    assert run([p("console", "std/rj45-ganged@2", attrs={"media": "rj45-serial"})]) == []
     assert run([p("reset", "common/reset-button@1")]) == []
-    assert run([p("tod", "common/rj45-jack@2")]) == []
+    assert run([p("tod", "std/rj45@2")]) == []
 
 
 def test_a_function_word_that_looks_like_a_connector_is_silent():

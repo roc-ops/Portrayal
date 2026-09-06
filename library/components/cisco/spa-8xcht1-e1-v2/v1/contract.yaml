@@ -22,6 +22,16 @@ attrs:
   min-hardware-revision: '1.0'
   eol: 'none-announced'
 provenance:
+  port-jacks-are-bare: >-
+    THE PORT JACKS ARE BARE, AND THAT IS THE POINT. p0-p7 are RJ48c receptacles carrying
+    DS1/E1 over G.703, not Ethernet, so the RJ45 family's lamped member does not apply
+    (docs/rj45-family-design.md decision 3: everything else that CARRIES ETHERNET takes the
+    lamped one). The lamps this card really has are the card's own elements, two per port -
+    led-ca-p{n} (Carrier/Alarm) and led-al-p{n} (Active/Loopback), drawn beside the jack and
+    sourced from Table 23 of the ASR 9000 Series SIP and SPA Hardware Installation Guide.
+    Putting the jacks on common/rj45-ganged-eth@1 would draw two more lamps inside each
+    jack, giving four where the vendor documents two. std/rj45-ganged@2 is the housing and
+    nothing else, which is what an RJ48c is.
   relief: >-
     RELIEF IS DECLARED, AND WHAT MATTERS ABOUT IT IS THAT IT IS A HANDFUL OF NUMBERS AND NOT
     A HANDFUL PER PART. This face carries: 17 panel lamps at dome 0.3 (one number, carried
@@ -483,12 +493,12 @@ relief:
         common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
         estimated' and the dome carries none
 parts:
-  - {ref: common/rj45-ganged-eth@1, id: p0, at: [2.29, 12.64], rotate: 90}
-  - {ref: common/rj45-ganged-eth@1, id: p1, at: [2.29, 30.54], rotate: 90}
-  - {ref: common/rj45-ganged-eth@1, id: p2, at: [2.29, 48.45], rotate: 90}
-  - {ref: common/rj45-ganged-eth@1, id: p3, at: [2.29, 66.36], rotate: 90}
-  - {ref: common/rj45-ganged-eth@1, id: p4, at: [2.29, 90.83], rotate: 90}
-  - {ref: common/rj45-ganged-eth@1, id: p5, at: [2.29, 108.65], rotate: 90}
-  - {ref: common/rj45-ganged-eth@1, id: p6, at: [2.29, 126.46], rotate: 90}
-  - {ref: common/rj45-ganged-eth@1, id: p7, at: [2.29, 144.28], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: p0, at: [2.29, 12.64], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: p1, at: [2.29, 30.54], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: p2, at: [2.29, 48.45], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: p3, at: [2.29, 66.36], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: p4, at: [2.29, 90.83], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: p5, at: [2.29, 108.65], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: p6, at: [2.29, 126.46], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: p7, at: [2.29, 144.28], rotate: 90}
 skins: [default]

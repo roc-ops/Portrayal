@@ -46,7 +46,7 @@ def test_a_group_may_not_relabel_a_port_of_another_family():
     member, so without this an RJ45 draws as SFP28 and the drawing says so."""
     errs, _ = check(device({"sfp28": SFP28}, [
         {"id": "port-1", "ref": "std/sfp-ganged@1", "group": "sfp28"},
-        {"id": "port-2", "ref": "common/rj45-hd@1", "group": "sfp28"},
+        {"id": "port-2", "ref": "common/rj45-eth@1", "group": "sfp28"},
     ]))
     assert len(errs) == 1 and "[L22]" in errs[0] and "port-2" in errs[0]
 
@@ -91,7 +91,7 @@ def test_a_declared_mixture_is_an_answer_not_an_exemption():
         {"id": "port-57", "ref": "std/sfp-ganged@1", "group": "mgmt",
          "attrs": {"media": "sfp-plus", "speed": "10g"}},
         {"id": "usb-a", "ref": "std/usb-a@1", "group": "mgmt"},
-        {"id": "console", "ref": "common/rj45-hd@1", "group": "mgmt",
+        {"id": "console", "ref": "std/rj45@2", "group": "mgmt",
          "attrs": {"media": "rj45-serial"}},
     ]))
     assert warns == []
