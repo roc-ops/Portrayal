@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9701-82dc
-version: 2.0.1
+version: 2.1.1
 maturity: modelled
 manufacturer: UfiSpace
 model: S9701-82DC
@@ -274,6 +274,13 @@ provenance:
     S9600-28DX guide the component was built from says 80 x 113 x 81.5. One millimetre,
     two guides, same part number; the component's 80 is kept and the disagreement is in
     the fan-face-width gap.
+  lamp-apertures: >-
+    derived - every lamp now declares the hole it sits in, which is the convention #68
+    settled and which this file had for its ports and not for its lamps. The opening is the
+    part's own footprint at the part's own anchor, the way edgecore/as5912-54x cuts
+    common/led-arrow@1: common/led-dot@1 takes a 2.0 circle because that is what its skin
+    draws, common/led-arrow-sm@1 a 2.25 x 2.0 box round its triangle. ufispace/lane-led-quad@1
+    is the one that overstates - see the lane-lamp-aperture gap.
   lifecycle: >-
     searched 2026-08-28: 'UfiSpace S9701-82DC end of life', 'UfiSpace S9701-82DC end of
     sale' and the vendor's telco core-edge product page - no announcement found. The
@@ -371,6 +378,18 @@ chassis:
   color: '#464646'
   weight-kg: 15.54
 gaps:
+- what: lane-lamp-aperture
+  scope: [port-leds]
+  reason: needs-drawing
+  note: >-
+    Each QSFP28 port's lane strip is drawn as ONE 14.4 x 2.6 opening, because the library
+    cuts a lamp at its part's footprint and ufispace/lane-led-quad@1 is one part. The front
+    render shows four discrete round lenses on the green band at a 3.94 mm pitch, each with
+    its own dark ring, so the metal is four holes of about 2.4 mm and not a slot. Declaring
+    the four would need four ids, and a cutout with no placement behind it is itself a
+    finding, so the coarse opening stands until a drawing dimensions the holes. It is the
+    same overstatement the arrow lamps carry, one order larger.
+  wanted: a panel-cutout drawing, or a photograph square-on to the green band at 2000 px or better
 - what: qsfp28-numeral-glyphs
   scope: [qsfp28]
   reason: needs-photo
@@ -738,6 +757,95 @@ views:
       - {id: fabric-3, at: [385.38, 45.41], size: [19, 10], shape: rect}
       - {id: fabric-4, at: [408.87, 31.83], size: [19, 10], shape: rect}
       - {id: fabric-5, at: [408.87, 45.41], size: [19, 10], shape: rect}
+      - {id: led-sync, at: [12.53, 67.19], size: [2.0, 2.0], shape: circle}
+      - {id: led-sys, at: [12.53, 69.59], size: [2.0, 2.0], shape: circle}
+      - {id: led-fan, at: [12.53, 71.99], size: [2.0, 2.0], shape: circle}
+      - {id: led-ps0, at: [12.53, 74.38], size: [2.0, 2.0], shape: circle}
+      - {id: led-ps1, at: [12.53, 76.78], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-0, at: [49.51, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-1, at: [53.25, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-2, at: [63.76, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-3, at: [67.5, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-4, at: [78.01, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-5, at: [81.75, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-6, at: [92.26, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-7, at: [96.0, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-8, at: [111.14, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-9, at: [114.88, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-10, at: [125.39, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-11, at: [129.13, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-12, at: [139.64, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-13, at: [143.38, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-14, at: [153.89, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-15, at: [157.63, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-16, at: [172.77, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-17, at: [176.51, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-18, at: [187.02, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-19, at: [190.76, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-20, at: [201.27, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-21, at: [205.01, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-22, at: [215.52, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-23, at: [219.26, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-24, at: [234.29, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-25, at: [238.03, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-26, at: [248.54, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-27, at: [252.28, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-28, at: [262.79, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-29, at: [266.53, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-30, at: [277.04, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-31, at: [280.78, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-32, at: [49.51, 57.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-33, at: [53.25, 57.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-34, at: [63.76, 57.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-35, at: [67.5, 57.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-36, at: [78.01, 57.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-37, at: [81.75, 57.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-38, at: [92.26, 57.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-39, at: [96.0, 57.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-40, at: [111.14, 57.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-41, at: [114.88, 57.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-42, at: [125.39, 57.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-43, at: [129.13, 57.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-44, at: [139.64, 57.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-45, at: [143.38, 57.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-46, at: [153.89, 57.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-47, at: [157.63, 57.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-48, at: [172.77, 57.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-49, at: [176.51, 57.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-50, at: [187.02, 57.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-51, at: [190.76, 57.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-52, at: [201.27, 57.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-53, at: [205.01, 57.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-54, at: [215.52, 57.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-55, at: [219.26, 57.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-56, at: [234.29, 57.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-57, at: [238.03, 57.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-58, at: [248.54, 57.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-59, at: [252.28, 57.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-60, at: [262.79, 57.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-61, at: [266.53, 57.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-62, at: [277.04, 57.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-63, at: [280.78, 57.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-64, at: [293.44, 8.97], size: [14.4, 2.6], shape: rect}
+      - {id: led-port-65, at: [293.44, 12.21], size: [14.4, 2.6], shape: rect}
+      - {id: led-port-66, at: [317.15, 8.97], size: [14.4, 2.6], shape: rect}
+      - {id: led-port-67, at: [317.15, 12.21], size: [14.4, 2.6], shape: rect}
+      - {id: led-port-68, at: [340.75, 8.97], size: [14.4, 2.6], shape: rect}
+      - {id: led-port-69, at: [340.75, 12.21], size: [14.4, 2.6], shape: rect}
+      - {id: led-port-70, at: [293.44, 73.0], size: [14.4, 2.6], shape: rect}
+      - {id: led-port-71, at: [293.44, 76.53], size: [14.4, 2.6], shape: rect}
+      - {id: led-port-72, at: [317.15, 73.0], size: [14.4, 2.6], shape: rect}
+      - {id: led-port-73, at: [317.15, 76.53], size: [14.4, 2.6], shape: rect}
+      - {id: led-port-74, at: [340.75, 73.0], size: [14.4, 2.6], shape: rect}
+      - {id: led-port-75, at: [340.75, 76.53], size: [14.4, 2.6], shape: rect}
+      - {id: led-f0, at: [367.96, 27.72], size: [2.0, 2.0], shape: circle}
+      - {id: led-f1, at: [372.16, 27.72], size: [2.0, 2.0], shape: circle}
+      - {id: led-f2, at: [391.78, 27.72], size: [2.0, 2.0], shape: circle}
+      - {id: led-f3, at: [395.98, 27.72], size: [2.0, 2.0], shape: circle}
+      - {id: led-f4, at: [415.27, 27.72], size: [2.0, 2.0], shape: circle}
+      - {id: led-f5, at: [419.47, 27.72], size: [2.0, 2.0], shape: circle}
+      - {id: led-mgmt-sfp-0, at: [31.23, 27.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-mgmt-sfp-1, at: [34.97, 27.7], size: [2.25, 2.0], shape: rect}
     silkscreen:
       - {at: [12.19, 6.55], text: 'GNSS', anchor: middle, font-size: 2, fill: '#f0f0f0', for: gnss-ant}
       - {at: [12.19, 9.55], text: 'ANT', anchor: middle, font-size: 2, fill: '#f0f0f0', for: gnss-ant}
