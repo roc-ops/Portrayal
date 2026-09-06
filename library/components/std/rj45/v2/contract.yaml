@@ -1,0 +1,41 @@
+format: 1
+kind: component
+name: rj45
+version: 2.0.0
+class: port
+profile: networking
+conforms: rj45
+interface: rj45
+description: RJ45 modular jack HOUSING - the 15.8 x 13.2 plastic face a plug enters,
+  with the 8P8C interface recessed into solid walls in three tiers (body, latch
+  shoulder, latch slot). Pins up, keyway down when unrotated; rotate 180 at
+  placement for a jack fitted the other way up.
+size: {w: 15.8, h: 13.2, d: 18.6}
+attrs: {media: rj45}
+provenance:
+  size: drawing - TE customer drawing 1734264 rev A2, front view - housing 15.8 wide
+    (body 15.6 +/-0.3), 13.2 high. Amphenol RJHSE-508X and RJESE-808X front views read
+    15.75 x 13.21. v1 was the 16 x 14 IEC panel aperture at registry confidence; no
+    source ever gave that figure, and a jack is a housing with walls, not a hole (#125).
+  depth: drawing - TE 1734264 side view, 18.6 overall for the low-profile family.
+    Taller families run to 21; a device that knows its jack can override.
+  cavity: drawing - TE 1734264 front view. Three tiers - body 11.91 x 6.83, a 6.30 wide
+    shoulder 1.69 high beneath it (8.52 total through the shoulder), a 4.06 wide latch
+    slot running to the housing's lower edge. The body's top edge sits 2.0 below the
+    housing's top edge, estimated from the drawing at scale (+/-0.3); nothing dimensions
+    the top wall. The library's v1 body of 11.89 x 6.85 (TE 2497310-1 CAD) and slot of
+    4.0 were right to 0.02; the shoulder is the tier v1 never had.
+  pins: drawing - TE 1734264 detail C, eight contacts 0.46 wide on a 1.02 pitch, 7.14
+    across the outer pair, centred on the opening.
+  walls: the sides of the opening are the housing, drawn solid, which is what grips a
+    plug. v1 and every bezel over it drew an aperture with the interface floating in a
+    dark hole.
+elements:
+  opening: {at: [1.945, 2.0], size: [11.91, 11.2], class: cutout}
+relief:
+  wall: '#3a3f45'
+  cavity: cavity
+  size: {w: 11.91, h: 11.2}
+connection-points:
+  mate: {at: [7.9, 6.6], direction: front}
+skins: [default]

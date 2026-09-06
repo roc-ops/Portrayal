@@ -35,19 +35,35 @@ def aperture(ref, depth=0):
     `common/qsfp28-cage@3` declares no `conforms` and wraps `std/qsfp-ganged@1`
     at [0.25, 4.2]. Reading only the wrapper reported the AS7726-32X - a 32-port
     switch - as having no derivable aperture at all.
+
+    Returns `(size, offset)` where `size` is a `(w, h)` pair - the registry entry
+    a part `conforms:` to, or that part's own `size` when it conforms to nothing
+    (the same fallback `expected()` applies at the top level, applied at every
+    depth: `std/rj45@1` and `std/rj45-ganged@1` stopped conforming in #125 and are
+    still composed inside bezels like `common/rj45-hd@1`, so the rule has to hold
+    wherever a leaf part sits, not only where a device places one directly).
     """
     ct = contract(ref)
     if not ct or depth > 3:
         return None
     if ct.get("conforms") in STD:
-        return ct["conforms"], [0.0, 0.0]
+        st = STD[ct["conforms"]]
+        return (st["w"], st["h"]), [0.0, 0.0]
     found = []
     for part in (ct.get("parts") or []):
         sub = aperture(part.get("ref", ""), depth + 1)
         if sub:
             o = part.get("at") or [0, 0]
             found.append((sub[0], [o[0] + sub[1][0], o[1] + sub[1][1]]))
-    return found[0] if len(found) == 1 else None
+    # Mirrors `_aperture_of` in spec/tools/portrayal/lint.py: only a single
+    # resolved sub-aperture is trusted; zero or multiple fall back to the
+    # composing contract's own size.
+    if len(found) == 1:
+        return found[0]
+    sz = ct.get("size") or {}
+    if sz.get("w") and sz.get("h"):
+        return (sz["w"], sz["h"]), [0.0, 0.0]
+    return None
 
 
 def pairs():
@@ -81,7 +97,7 @@ def expected(it):
         return None
     a = aperture(str(it["ref"]))
     if a:
-        st = STD[a[0]]; aw, ah = st["w"], st["h"]; ax, ay = a[1]
+        (aw, ah), (ax, ay) = a
     else:
         sz = ct.get("size") or {}
         aw, ah, ax, ay = sz.get("w"), sz.get("h"), 0.0, 0.0
