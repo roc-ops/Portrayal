@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcp-r-9d-cs
-version: 0.5.1
+version: 1.0.0
 manufacturer: Smartoptics
 model: DCP-R-9D-CS
 description: 40-channel colourless/directionless ROADM line unit, 1RU. Two rows of LC duplex adapters
@@ -215,8 +215,8 @@ views:
         - {at: [268, 13.5], size: [6, 18], pattern: vent, vent: 4}
         - {at: [430, 12.5], size: [7, 19], pattern: vent, vent: 5}
       cutouts:
-        - {id: eth0, at: [9.6, 10.2], size: [15.8, 12.5], shape: rect}
-        - {id: rs232, at: [10.8, 24.7], size: [15.8, 12.5], shape: rect}
+        - {id: eth0, at: [9.6, 9.85], size: [15.8, 13.2], shape: rect}
+        - {id: rs232, at: [10.8, 24.35], size: [15.8, 13.2], shape: rect}
         - {id: port-osc, at: [31, 26.7], size: [14.5, 10], shape: rect}
         - {id: port-xc1, at: [68.93, 10.84], size: [13.2, 11], shape: rect}
         - {id: port-xc2, at: [82.37, 10.84], size: [13.2, 11], shape: rect}
@@ -420,8 +420,8 @@ views:
       placements:
         - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.75], skin: left, optional: ears, group: furniture, rel-pos: 1}
         - {ref: common/rack-ear@1, id: ear-right, at: [440, 0.75], skin: right, optional: ears, group: furniture, rel-pos: 2}
-        - {ref: common/rj45-shielded@2, id: eth0, at: [9.6, 10.2], rotate: 180, group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 1}
-        - {ref: common/rj45-shielded@2, id: rs232, at: [10.8, 24.7], group: mgmt, attrs: {role: console, media: rj45-serial}, rel-pos: 2}
+        - {ref: common/rj45-eth@1, id: eth0, at: [9.6, 9.85], rotate: 180, group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 1}
+        - {ref: std/rj45@2, id: rs232, at: [10.8, 24.35], group: mgmt, attrs: {role: console, media: rj45-serial}, rel-pos: 2}
         - {ref: std/sfp@1, id: port-osc, at: [31, 26.7], attrs: {media: sfp, role: osc}, group: line, rel-pos: 1}
         - {ref: common/led-dot@1, id: led-osc-tx, at: [33.9, 21.4], for: port-osc, attrs: {function: osc-tx}, group: port-leds, rel-pos: 1}
         - {ref: common/led-dot@1, id: led-osc-rx, at: [39.7, 21.4], for: port-osc, attrs: {function: osc-rx}, group: port-leds, rel-pos: 2}
@@ -475,8 +475,6 @@ views:
         - {ref: common/lc-duplex-adapter@3, id: port-960, at: [414.48, 21.89], group: channels, rel-pos: 40}
         - {ref: common/laser-warning@1, id: laser-warn-top, at: [269.5, 4.6], group: furniture, rel-pos: 3}
         - {ref: common/laser-warning@1, id: laser-warn-bottom, at: [269.5, 35.4], group: furniture, rel-pos: 4}
-        - {ref: common/led-dot@1, id: led-eth0-l, at: [10.8, 10.47], for: eth0, group: port-leds, rel-pos: 901}
-        - {ref: common/led-dot@1, id: led-eth0-r, at: [22.2, 10.47], for: eth0, group: port-leds, rel-pos: 902}
   rear:
     size:
       w: 440
@@ -508,22 +506,14 @@ views:
         - {ref: common/rack-ear@1, id: ear-right-r, at: [440, 0.75], skin: right, optional: ears, group: furniture, rel-pos: 6}
         - {ref: common/psu-550w@2, id: psu-1, at: [0, 2.5], attrs: {slot: '1'}, group: psus, rel-pos: 1}
         - {ref: common/psu-550w@2, id: psu-2, at: [366.5, 2.5], attrs: {slot: '2'}, group: psus, rel-pos: 2}
-        - {ref: common/rj45-hd@1, id: eth2, at: [276, 8.5], group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 3}
-        - {ref: common/rj45-hd@1, id: eth4, at: [291, 8.5], group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 4}
-        - {ref: common/rj45-hd@1, id: eth1, at: [276, 22], group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 5}
-        - {ref: common/rj45-hd@1, id: eth3, at: [291, 22], group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 6}
+        - {ref: common/rj45-ganged-eth@1, id: eth2, at: [276.65, 9], group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 3}
+        - {ref: common/rj45-ganged-eth@1, id: eth4, at: [291.65, 9], group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 4}
+        - {ref: common/rj45-ganged-eth@1, id: eth1, at: [276.65, 22.5], group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 5}
+        - {ref: common/rj45-ganged-eth@1, id: eth3, at: [291.65, 22.5], group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 6}
         - {ref: common/led-dot@1, id: led-eth5-tx, at: [320, 14], for: eth5, attrs: {function: tx}, group: port-leds, rel-pos: 3}
         - {ref: common/led-dot@1, id: led-eth5-rx, at: [332, 14], for: eth5, attrs: {function: rx}, group: port-leds, rel-pos: 4}
         - {ref: std/sfp@1, id: eth5, at: [318.75, 22], group: mgmt, attrs: {role: mgmt, media: sfp, speed: 100m-1g}, rel-pos: 7}
         - {ref: common/reset-button@1, id: reset, at: [345, 26], group: mgmt, for: chassis, rel-pos: 8}
-        - {ref: common/led-dot@1, id: led-eth2-l, at: [277.2, 18.23], for: eth2, group: port-leds, rel-pos: 901}
-        - {ref: common/led-dot@1, id: led-eth2-r, at: [286.8, 18.23], for: eth2, group: port-leds, rel-pos: 902}
-        - {ref: common/led-dot@1, id: led-eth4-l, at: [292.2, 18.23], for: eth4, group: port-leds, rel-pos: 903}
-        - {ref: common/led-dot@1, id: led-eth4-r, at: [301.8, 18.23], for: eth4, group: port-leds, rel-pos: 904}
-        - {ref: common/led-dot@1, id: led-eth1-l, at: [277.2, 31.73], for: eth1, group: port-leds, rel-pos: 905}
-        - {ref: common/led-dot@1, id: led-eth1-r, at: [286.8, 31.73], for: eth1, group: port-leds, rel-pos: 906}
-        - {ref: common/led-dot@1, id: led-eth3-l, at: [292.2, 31.73], for: eth3, group: port-leds, rel-pos: 907}
-        - {ref: common/led-dot@1, id: led-eth3-r, at: [301.8, 31.73], for: eth3, group: port-leds, rel-pos: 908}
   left:
     size:
       w: 505
