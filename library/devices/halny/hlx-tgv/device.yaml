@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: hlx-tgv
-version: 1.0.0
+version: 2.0.0
 manufacturer: Halny
 model: HLX-TGV
 description: XGS-PON ONT (SFU/HGU) - 1x 10G RJ45, 1x GbE RJ45, 2x FXS, SC/APC PON, VoIP
@@ -65,12 +65,6 @@ groups:
     term: Item
     role: furniture
     index-origin: 1
-  port-leds:
-    term: LED
-    role: indicator
-    index-origin: 1
-    description: >-
-      the two link and activity lamps moulded into each RJ45's own housing, one pair per port
   leds:
     index-origin: 1
     term: LED
@@ -88,7 +82,7 @@ views:
         - {at: [28, 33], size: [10, 6.5], fill: '#17191c'}
       cutouts:
         - {id: dc-in, at: [32, 12.5], size: [12, 13], shape: rect}
-        - {id: eth-10g, at: [68.1, 12], size: [15.8, 12.5], shape: rect}
+        - {id: eth-10g, at: [68.1, 11.65], size: [15.8, 13.2], shape: rect}
         - {id: eth-lan, at: [91.1, 11.5], size: [15.8, 13.2], shape: rect}
         - {id: tel-2, at: [123, 12.5], size: [14, 13.5], shape: rect}
         - {id: tel-1, at: [142, 12.5], size: [14, 13.5], shape: rect}
@@ -106,15 +100,11 @@ views:
       placements:
         - {ref: common/power-button@1, id: power-btn, at: [12, 13], for: chassis, group: mgmt, rel-pos: 1}
         - {ref: common/dc-barrel@1, id: dc-in, at: [32, 12.5], group: inlets, rel-pos: 1}
-        - {ref: common/rj45-shielded@1, id: eth-10g, at: [68.1, 12], attrs: {speed: 10g}, group: rj45-10g, rel-pos: 1}
-        - {ref: common/rj45-jack@2, id: eth-lan, at: [91.1, 11.5], skin: yellow, attrs: {speed: 1g}, group: rj45-1g, rel-pos: 1}
+        - {ref: common/rj45-eth@1, id: eth-10g, at: [68.1, 11.65], attrs: {speed: 10g}, group: rj45-10g, rel-pos: 1}
+        - {ref: common/rj45-eth@1, id: eth-lan, at: [91.1, 11.5], rotate: 180, attrs: {speed: 1g}, group: rj45-1g, rel-pos: 1}
         - {ref: common/reset-button@1, id: reset, at: [113, 16], for: chassis, group: mgmt, rel-pos: 2}
         - {ref: common/rj11-jack@1, id: tel-2, at: [123, 12.5], rotate: 180, attrs: {role: fxs}, rel-pos: 2, group: fxs}
         - {ref: common/rj11-jack@1, id: tel-1, at: [142, 12.5], rotate: 180, attrs: {role: fxs}, rel-pos: 1, group: fxs}
-        - {ref: common/led-dot@1, id: led-eth-10g-l, at: [69.3, 22.23], for: eth-10g, group: port-leds, rel-pos: 901}
-        - {ref: common/led-dot@1, id: led-eth-10g-r, at: [80.7, 22.23], for: eth-10g, group: port-leds, rel-pos: 902}
-        - {ref: common/led-dot@1, id: led-eth-lan-l, at: [92.3, 22.43], for: eth-lan, group: leds, rel-pos: 903}
-        - {ref: common/led-dot@1, id: led-eth-lan-r, at: [103.7, 22.43], for: eth-lan, group: leds, rel-pos: 904}
   top:
     size:
       w: 172

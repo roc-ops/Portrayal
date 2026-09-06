@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: gl-8xep
-version: 1.0.0
+version: 2.0.0
 maturity: modelled
 manufacturer: ReadyLinks
 model: GL-8xEP
@@ -184,10 +184,6 @@ groups:
     term: LED
     role: indicator
     index-origin: 1
-  rj45-2g5-leds:
-    term: LED
-    role: indicator
-    index-origin: 1
   sfp-leds:
     term: LED
     role: indicator
@@ -207,16 +203,16 @@ views:
       - {at: [20.0, 19.6], size: [10.6, 4.4], fill: '#b0b5bb', rx: 2.2}
       - {at: [20.0, 30.5], size: [10.6, 4.4], fill: '#b0b5bb', rx: 2.2}
       cutouts:
-      - {id: port-2, at: [86.25, 9.8], size: [12.7, 11.0], shape: rect}
-      - {id: port-4, at: [100.15, 9.8], size: [12.7, 11.0], shape: rect}
-      - {id: port-6, at: [114.15, 9.8], size: [12.7, 11.0], shape: rect}
-      - {id: port-8, at: [128.15, 9.8], size: [12.7, 11.0], shape: rect}
-      - {id: port-1, at: [86.25, 23.3], size: [12.7, 11.0], shape: rect}
-      - {id: port-3, at: [100.15, 23.3], size: [12.7, 11.0], shape: rect}
-      - {id: port-5, at: [114.15, 23.3], size: [12.7, 11.0], shape: rect}
-      - {id: port-7, at: [128.15, 23.3], size: [12.7, 11.0], shape: rect}
-      - {id: eth-2g5-2, at: [62.35, 8.0], size: [12.7, 11.0], shape: rect}
-      - {id: eth-2g5-1, at: [62.35, 22.9], size: [12.7, 11.0], shape: rect}
+      - {id: port-2, at: [86.25, 9.8], size: [12.7, 11], shape: rect}
+      - {id: port-4, at: [100.15, 9.8], size: [12.7, 11], shape: rect}
+      - {id: port-6, at: [114.15, 9.8], size: [12.7, 11], shape: rect}
+      - {id: port-8, at: [128.15, 9.8], size: [12.7, 11], shape: rect}
+      - {id: port-1, at: [86.25, 23.3], size: [12.7, 11], shape: rect}
+      - {id: port-3, at: [100.15, 23.3], size: [12.7, 11], shape: rect}
+      - {id: port-5, at: [114.15, 23.3], size: [12.7, 11], shape: rect}
+      - {id: port-7, at: [128.15, 23.3], size: [12.7, 11], shape: rect}
+      - {id: eth-2g5-2, at: [62.35, 8], size: [12.7, 11], shape: rect}
+      - {id: eth-2g5-1, at: [62.35, 22.9], size: [12.7, 11], shape: rect}
       - {id: xg2, at: [38.9, 9.7], size: [14.5, 10.0], shape: rect}
       - {id: xg1, at: [38.9, 23.7], size: [14.5, 10.0], shape: rect}
       - {id: usb2, at: [21.1, 20.5], size: [8.34, 2.56], shape: rect}
@@ -262,16 +258,16 @@ views:
     - {at: [134.5, 42.8], text: '7', font-size: 2.6, for: port-7}
     components:
       placements:
-      - {ref: std/rj45-ganged@1, id: port-2, at: [86.25, 9.8], rotate: 180, group: gbe-poe, rel-pos: 2}
-      - {ref: std/rj45-ganged@1, id: port-4, at: [100.15, 9.8], rotate: 180, group: gbe-poe, rel-pos: 4}
-      - {ref: std/rj45-ganged@1, id: port-6, at: [114.15, 9.8], rotate: 180, group: gbe-poe, rel-pos: 6}
-      - {ref: std/rj45-ganged@1, id: port-8, at: [128.15, 9.8], rotate: 180, group: gbe-poe, rel-pos: 8}
-      - {ref: std/rj45-ganged@1, id: port-1, at: [86.25, 23.3], group: gbe-poe, rel-pos: 1}
-      - {ref: std/rj45-ganged@1, id: port-3, at: [100.15, 23.3], group: gbe-poe, rel-pos: 3}
-      - {ref: std/rj45-ganged@1, id: port-5, at: [114.15, 23.3], group: gbe-poe, rel-pos: 5}
-      - {ref: std/rj45-ganged@1, id: port-7, at: [128.15, 23.3], group: gbe-poe, rel-pos: 7}
-      - {ref: std/rj45-ganged@1, id: eth-2g5-2, at: [62.35, 8.0], rotate: 180, group: rj45-2g5, rel-pos: 2}
-      - {ref: std/rj45-ganged@1, id: eth-2g5-1, at: [62.35, 22.9], group: rj45-2g5, rel-pos: 1}
+      - {ref: std/rj45-ganged@2, id: port-2, at: [86.25, 9.8], rotate: 180, group: gbe-poe, rel-pos: 2}
+      - {ref: std/rj45-ganged@2, id: port-4, at: [100.15, 9.8], rotate: 180, group: gbe-poe, rel-pos: 4}
+      - {ref: std/rj45-ganged@2, id: port-6, at: [114.15, 9.8], rotate: 180, group: gbe-poe, rel-pos: 6}
+      - {ref: std/rj45-ganged@2, id: port-8, at: [128.15, 9.8], rotate: 180, group: gbe-poe, rel-pos: 8}
+      - {ref: std/rj45-ganged@2, id: port-1, at: [86.25, 23.3], group: gbe-poe, rel-pos: 1}
+      - {ref: std/rj45-ganged@2, id: port-3, at: [100.15, 23.3], group: gbe-poe, rel-pos: 3}
+      - {ref: std/rj45-ganged@2, id: port-5, at: [114.15, 23.3], group: gbe-poe, rel-pos: 5}
+      - {ref: std/rj45-ganged@2, id: port-7, at: [128.15, 23.3], group: gbe-poe, rel-pos: 7}
+      - {ref: common/rj45-ganged-eth@1, id: eth-2g5-2, at: [62.35, 8], rotate: 180, group: rj45-2g5, rel-pos: 2}
+      - {ref: common/rj45-ganged-eth@1, id: eth-2g5-1, at: [62.35, 22.9], group: rj45-2g5, rel-pos: 1}
       - {ref: std/sfp@1, id: xg2, at: [38.9, 9.7], rotate: 180, group: sfp-plus, rel-pos: 2}
       - {ref: std/sfp@1, id: xg1, at: [38.9, 23.7], group: sfp-plus, rel-pos: 1}
       - {ref: std/usb-c@1, id: usb2, at: [21.1, 20.5], group: usbc-power, rel-pos: 2}
@@ -292,10 +288,6 @@ views:
       - {ref: common/led-dot@1, id: led-xg2-b, at: [43.3, 20.7], for: xg2, group: sfp-leds, rel-pos: 2}
       - {ref: common/led-dot@1, id: led-xg1-a, at: [46.9, 20.7], for: xg1, group: sfp-leds, rel-pos: 3}
       - {ref: common/led-dot@1, id: led-xg1-b, at: [49.8, 20.7], for: xg1, group: sfp-leds, rel-pos: 4}
-      - {ref: common/led-dot@1, id: led-2g5-2a, at: [62.3, 9.3], for: eth-2g5-2, group: rj45-2g5-leds, rel-pos: 3}
-      - {ref: common/led-dot@1, id: led-2g5-2b, at: [73.2, 9.3], for: eth-2g5-2, group: rj45-2g5-leds, rel-pos: 4}
-      - {ref: common/led-dot@1, id: led-2g5-1a, at: [62.3, 30.6], for: eth-2g5-1, group: rj45-2g5-leds, rel-pos: 1}
-      - {ref: common/led-dot@1, id: led-2g5-1b, at: [73.2, 30.6], for: eth-2g5-1, group: rj45-2g5-leds, rel-pos: 2}
   rear:
     size: {w: 160.0, h: 45.32}
     panel:
