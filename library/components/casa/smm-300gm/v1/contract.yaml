@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: smm-300gm
-version: 1.5.0
+version: 1.6.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -91,7 +91,8 @@ provenance:
   ports: composed from std/ aperture components rather than drawn as rectangles.
     The ganged blocks use std/sfp-ganged (SFF-8433, the port's share of a continuous
     1xN slot, so adjacent instances abut with no gap) and std/qsfp-ganged; the two
-    jacks reuse common/rj45-shielded@2 exactly as casa/smm-8x10g does
+    RJ45s are the shielded housing split by role - mgmt is common/rj45-eth@1
+    (lamped), console is std/rj45@2 (bare) - exactly as casa/smm-8x10g does
   rotation: every cage is ROTATED 90. A ganged SFP opening is 14.25 x 10.4 and the
     faceplate is only 30.47 wide, so the long axis has to run down the card. The
     SMM300G photograph measures the openings at 10.1mm across (7.5 to 17.6mm from
@@ -249,6 +250,6 @@ parts:
   - {ref: std/sfp-ganged@1, id: xg9, at: [5.475, 201.95], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
   - {ref: std/qsfp-ganged@1, id: cg0, at: [3.35, 223.01], rotate: 90, attrs: {media: qsfp28, speed: 100g}}
   - {ref: std/qsfp-ganged@1, id: cg1, at: [3.35, 242.01], rotate: 90, attrs: {media: qsfp28, speed: 100g}}
-  - {ref: common/rj45-shielded@2, id: mgmt, at: [7.335, 261.05], rotate: 90}
-  - {ref: common/rj45-shielded@2, id: console, at: [7.335, 279.95], rotate: 90}
+  - {ref: common/rj45-eth@1, id: mgmt, at: [7.33, 260.7], rotate: 90}
+  - {ref: std/rj45@2, id: console, at: [7.33, 279.6], rotate: 90}
 skins: [default]

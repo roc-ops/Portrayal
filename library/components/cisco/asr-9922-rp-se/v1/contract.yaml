@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: asr-9922-rp-se
-version: 1.1.1
+version: 1.2.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -342,15 +342,15 @@ relief:
         casa/pem@1 hs-button - 'NO PRECEDENT - a panel pushbutton. Invented here'. Reused
         rather than re-invented so the library carries ONE pushbutton number
 parts:
-  - {ref: std/rj45-ganged@1, id: sync-0, at: [8.96, 47.63], rotate: 90}
-  - {ref: std/rj45-ganged@1, id: sync-1, at: [8.96, 67.09], rotate: 90}
-  - {ref: std/rj45-ganged@1, id: ieee-1588, at: [8.96, 112.55], rotate: 90}
-  - {ref: std/rj45-ganged@1, id: nv-sync-0, at: [8.96, 132.47], rotate: 90}
-  - {ref: std/rj45-ganged@1, id: nv-sync-1-tod, at: [8.96, 152.37], rotate: 90}
-  - {ref: std/rj45-ganged@1, id: mgt-lan-0, at: [8.96, 246.39], rotate: 90}
-  - {ref: std/rj45-ganged@1, id: mgt-lan-1, at: [8.96, 267.17], rotate: 90}
-  - {ref: std/rj45-ganged@1, id: console, at: [8.96, 288.28], rotate: 90}
-  - {ref: std/rj45-ganged@1, id: aux, at: [8.96, 309.05], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: sync-0, at: [8.96, 47.63], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: sync-1, at: [8.96, 67.09], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: ieee-1588, at: [8.96, 112.55], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: nv-sync-0, at: [8.96, 132.47], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: nv-sync-1-tod, at: [8.96, 152.37], rotate: 90}
+  - {ref: common/rj45-ganged-eth@1, id: mgt-lan-0, at: [8.96, 246.39], rotate: 90}
+  - {ref: common/rj45-ganged-eth@1, id: mgt-lan-1, at: [8.96, 267.17], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: console, at: [8.96, 288.28], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: aux, at: [8.96, 309.05], rotate: 90}
   - {ref: std/smb@1, id: gps-10mhz, at: [10.98, 175.36]}
   - {ref: std/smb@1, id: gps-1pps, at: [10.98, 185.66]}
   - {ref: std/sfp-ganged@1, id: sfp-plus-0, at: [22.05, 90.0], rotate: 90}

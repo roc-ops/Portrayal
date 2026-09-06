@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-rsp
-version: 1.1.1
+version: 1.2.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -367,12 +367,12 @@ relief:
         casa/pem@1 hs-button - 'NO PRECEDENT - a panel pushbutton. Invented here'. Reused
         rather than re-invented so the library carries ONE pushbutton number
 parts:
-  - {ref: std/rj45-ganged@1, id: mgt-lan-0, at: [5.98, 42.17], rotate: 90}
-  - {ref: std/rj45-ganged@1, id: mgt-lan-1, at: [5.98, 63.35], rotate: 90}
-  - {ref: std/rj45-ganged@1, id: console, at: [5.98, 84.54], rotate: 90}
-  - {ref: std/rj45-ganged@1, id: aux, at: [5.98, 105.71], rotate: 90}
-  - {ref: std/rj45-ganged@1, id: sync-0, at: [5.98, 126.89], rotate: 90}
-  - {ref: std/rj45-ganged@1, id: sync-1, at: [5.98, 148.08], rotate: 90}
+  - {ref: common/rj45-ganged-eth@1, id: mgt-lan-0, at: [5.98, 42.17], rotate: 90}
+  - {ref: common/rj45-ganged-eth@1, id: mgt-lan-1, at: [5.98, 63.35], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: console, at: [5.98, 84.54], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: aux, at: [5.98, 105.71], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: sync-0, at: [5.98, 126.89], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: sync-1, at: [5.98, 148.08], rotate: 90}
   - {ref: common/db9-receptacle@1, id: alarm-out, at: [-2.485, 179.53], rotate: 90}
 body:
   depth: 673.8
