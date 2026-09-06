@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-102xc
-version: 2.0.1
+version: 2.0.2
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-102XC
@@ -243,6 +243,16 @@ provenance:
     which is a suffix naming the airflow and the chassis family, not a different face.
     The per-device part numbers are carried in the configurations' component-attrs, which
     is where a FRU model belongs.
+  vent-islands: >-
+    derived - a vent field is a perforation and the drawing said so, but the marks
+    printed inside one were floating on air (L64). The vendor interrupts the
+    perforation where it prints, so each of those marks now has a solid patch under it
+    in the chassis colour, drawn over the vent the way ufispace/s9600-72xc paints its
+    port bands over one. The patch is the printing's own footprint plus 0.4 mm, which is
+    what the S9610-36D's front render measures: its slots stop 0.4 mm outside each lamp
+    cluster and resume 0.4 mm past it. Where a vent is simply measured wider than the
+    metal it reaches, this states the metal that the printing proves is there without
+    re-measuring the field.
   lifecycle: >-
     searched 2026-08-28, 'UfiSpace S9600-102XC end of life end of sale' - no announcement
     found; the product page is live and the unit is actively distributed. none-announced
@@ -496,6 +506,10 @@ views:
         - {at: [391.4, 72.8], size: [23.2, 7.0], fill: '#5d7a3a', rx: 0.4}
         - {at: [392.6, 8.6], size: [39.3, 4.8], pattern: vent, vent: 22}
         - {at: [392.6, 73.9], size: [20.8, 4.8], pattern: vent, vent: 22}
+        - {at: [7.08, 6.02], size: [9.92, 2.36], fill: '#3a3f45'}
+        - {at: [16.75, 2.05], size: [10.3, 10.3], fill: '#3a3f45'}
+        - {at: [28.6, 5.92], size: [6.5, 2.36], fill: '#3a3f45'}
+        - {at: [35.4, 3.2], size: [179.7, 11.7], fill: '#3a3f45'}
         - {at: [409.7, 7.5], size: [3.1, 7.0], fill: '#e8ece8', rx: 0.6}
         - {at: [428.8, 7.5], size: [3.1, 7.0], fill: '#e8ece8', rx: 0.6}
         - {at: [409.7, 72.8], size: [3.1, 7.0], fill: '#e8ece8', rx: 0.6}
@@ -907,6 +921,8 @@ views:
         # with two tapped M4 holes, shipped covered with a protective label.
         - {at: [345.9, 4.1], size: [15.9, 41.6], fill: '#b0b5bb', rx: 0.6}
         - {at: [336.0, 48.0], size: [34.0, 36.0], pattern: vent, vent: 25}
+        - {at: [346.6, 60.23], size: [11.72, 2.93], fill: '#3a3f45'}
+        - {at: [347.6, 55.23], size: [5.48, 2.93], fill: '#3a3f45'}
     silkscreen:
       - {text: FAN, at: [348.0, 57.5], font-size: 2.6, anchor: start, for: [fan-0, fan-1, fan-2, fan-3]}
       - {text: 0 1 2 3, at: [347.0, 62.5], font-size: 2.6, anchor: start, for: [fan-0, fan-1, fan-2, fan-3]}

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9611-36d
-version: 3.0.1
+version: 3.0.2
 maturity: modelled
 manufacturer: UfiSpace
 model: S9611-36D
@@ -270,6 +270,16 @@ provenance:
     UL/IEC 62368-1 and no NEBS claim, and none is invented; the HIG's section 13 does
     carry NEBS compliance statements, which is recorded as such and not upgraded to a
     certification.
+  vent-islands: >-
+    derived - a vent field is a perforation and the drawing said so, but the marks
+    printed inside one were floating on air (L64). The vendor interrupts the
+    perforation where it prints, so each of those marks now has a solid patch under it
+    in the chassis colour, drawn over the vent the way ufispace/s9600-72xc paints its
+    port bands over one. The patch is the printing's own footprint plus 0.4 mm, which is
+    what the S9610-36D's front render measures: its slots stop 0.4 mm outside each lamp
+    cluster and resume 0.4 mm past it. Where a vent is simply measured wider than the
+    metal it reaches, this states the metal that the printing proves is there without
+    re-measuring the field.
   lifecycle: >-
     searched 2026-08-28: 'UfiSpace S9611-36D end of life' - no announcement found; the
     results are dominated by the sibling S9610-36D's live product pages and the vendor's
@@ -563,6 +573,15 @@ views:
         - {at: [60.12, 24.80], size: [369.38, 2.60], pattern: vent, vent: 25}
         - {at: [60.12, 29.30], size: [369.38, 2.10], pattern: vent, vent: 25}
         - {at: [37.90, 77.03], size: [390.90, 7.50], pattern: vent, vent: 25}
+        - {at: [74.89, 77.27], size: [9.25, 7.74], fill: '#454545'}
+        - {at: [118.8, 77.27], size: [9.25, 7.74], fill: '#454545'}
+        - {at: [156.82, 77.27], size: [9.25, 7.74], fill: '#454545'}
+        - {at: [200.88, 77.27], size: [9.25, 7.74], fill: '#454545'}
+        - {at: [238.9, 77.27], size: [9.25, 7.74], fill: '#454545'}
+        - {at: [282.7, 77.27], size: [9.25, 7.74], fill: '#454545'}
+        - {at: [320.72, 77.27], size: [9.25, 7.74], fill: '#454545'}
+        - {at: [364.78, 77.27], size: [9.25, 7.74], fill: '#454545'}
+        - {at: [402.8, 77.27], size: [9.25, 7.74], fill: '#454545'}
         - {at: [5.78, 7.16], size: [3.81, 3.69], fill: '#3d3d3d', rx: 1.85}
         - {at: [6.79, 24.72], size: [3.66, 1.56], fill: '#2a2a2a', rx: 0.78}
         - {at: [12.02, 24.72], size: [3.66, 1.56], fill: '#2a2a2a', rx: 0.78}

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9321-64eo
-version: 1.0.1
+version: 1.0.2
 maturity: modelled
 manufacturer: UfiSpace
 model: S9321-64EO
@@ -207,6 +207,16 @@ provenance:
     ordering line - so unlike the 1RU boxes in this library there is no blue/red airflow
     pair to model. NO ORDERABLE CHASSIS SKU appears in any held document; the datasheet
     says only 'Contact our sales team for current configuration options'.
+  vent-islands: >-
+    derived - a vent field is a perforation and the drawing said so, but the marks
+    printed inside one were floating on air (L64). The vendor interrupts the
+    perforation where it prints, so each of those marks now has a solid patch under it
+    in the chassis colour, drawn over the vent the way ufispace/s9600-72xc paints its
+    port bands over one. The patch is the printing's own footprint plus 0.4 mm, which is
+    what the S9610-36D's front render measures: its slots stop 0.4 mm outside each lamp
+    cluster and resume 0.4 mm past it. Where a vent is simply measured wider than the
+    metal it reaches, this states the metal that the printing proves is there without
+    re-measuring the field.
   lifecycle: >-
     searched 2026-08-28: 'UfiSpace S9321-64EO end of life' - no announcement found; the
     UfiSpace product page and distributor listings are live. none-announced is a real
@@ -450,6 +460,15 @@ views:
         - {at: [0.80, 11.80], size: [23.50, 24.00], pattern: vent, vent: 25}
         - {at: [0.80, 48.50], size: [23.50, 9.50], pattern: vent, vent: 25}
         - {at: [0.80, 78.00], size: [44.00, 8.00], pattern: vent, vent: 25}
+        - {at: [9.35, 49.53], size: [8.3, 3.55], fill: '#404244'}
+        - {at: [10.7, 54.05], size: [5.6, 2.11], fill: '#404244'}
+        - {at: [10.97, 20.14], size: [7.8, 7.8], fill: '#404244'}
+        - {at: [11.77, 17.7], size: [6.2, 2.28], fill: '#404244'}
+        - {at: [12.29, 3.5], size: [5.12, 2.28], fill: '#404244'}
+        - {at: [14.92, 77.9], size: [2.96, 2.28], fill: '#404244'}
+        - {at: [21.9, 77.9], size: [6.2, 2.28], fill: '#404244'}
+        - {at: [29.46, 77.9], size: [1.88, 2.28], fill: '#404244'}
+        - {at: [32.46, 77.9], size: [1.88, 2.28], fill: '#404244'}
         - {at: [3.65, 29.75], size: [5.90, 5.90], fill: '#0b0d0f', rx: 2.95}
         - {at: [24.15, 12.50], size: [15.65, 32.12], fill: '#b0b5bb', rx: 0.8}
         - {at: [22.45, 51.45], size: [16.00, 24.10], fill: '#c8ccd0', rx: 0.6}

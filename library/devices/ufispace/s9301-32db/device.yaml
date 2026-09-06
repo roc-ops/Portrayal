@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9301-32db
-version: 2.0.2
+version: 2.0.3
 maturity: modelled
 manufacturer: UfiSpace
 model: S9301-32DB
@@ -190,6 +190,16 @@ provenance:
     airflow build (blue handles and latches: FAN-405637-CD with PSU-132-AESR/DESR) is
     orderable and photographed in -3-view but is not modelled as a configuration, because
     the shared PSU and fan components carry only red-latch skins.
+  vent-islands: >-
+    derived - a vent field is a perforation and the drawing said so, but the marks
+    printed inside one were floating on air (L64). The vendor interrupts the
+    perforation where it prints, so each of those marks now has a solid patch under it
+    in the chassis colour, drawn over the vent the way ufispace/s9600-72xc paints its
+    port bands over one. The patch is the printing's own footprint plus 0.4 mm, which is
+    what the S9610-36D's front render measures: its slots stop 0.4 mm outside each lamp
+    cluster and resume 0.4 mm past it. Where a vent is simply measured wider than the
+    metal it reaches, this states the metal that the printing proves is there without
+    re-measuring the field.
   lifecycle: >-
     searched 2026-08-28: 'UfiSpace S9301-32DB end of life' - no announcement found; the
     UfiSpace product page, the S9301-32DB FAQ page and several distributor listings are
@@ -433,6 +443,12 @@ views:
         - {at: [339.48, 7.10], size: [89.85, 2.40], pattern: vent, vent: 25}
         - {at: [339.48, 36.40], size: [89.85, 2.40], pattern: vent, vent: 25}
         - {at: [69.33, 40.30], size: [269.75, 1.40], pattern: vent, vent: 25}
+        - {at: [335.68, 7.3], size: [7.5, 14.2], fill: '#404244'}
+        - {at: [335.68, 24.3], size: [7.5, 14.36], fill: '#404244'}
+        - {at: [380.58, 7.3], size: [7.65, 14.2], fill: '#404244'}
+        - {at: [380.58, 24.3], size: [7.65, 14.36], fill: '#404244'}
+        - {at: [425.63, 7.3], size: [4.1, 14.2], fill: '#404244'}
+        - {at: [425.63, 24.3], size: [4.1, 14.36], fill: '#404244'}
     silkscreen:
       - {at: [9.40, 10.60], text: RESET, font-size: 2.4, anchor: middle, for: reset}
       - {at: [5.25, 14.18], text: SYS, font-size: 1.7, anchor: middle, fill: '#17191c', for: led-sys}

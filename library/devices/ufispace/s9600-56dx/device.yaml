@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-56dx
-version: 3.0.1
+version: 3.0.2
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-56DX
@@ -236,6 +236,16 @@ provenance:
     modules is a floor. Provisioning reserve 2000 W per circuit (HIG). PSU rating 2000 W
     per supply from the ordering lines; on a single 110 VAC feed the HIG derates each
     supply to 1000 W.
+  vent-islands: >-
+    derived - a vent field is a perforation and the drawing said so, but the marks
+    printed inside one were floating on air (L64). The vendor interrupts the
+    perforation where it prints, so each of those marks now has a solid patch under it
+    in the chassis colour, drawn over the vent the way ufispace/s9600-72xc paints its
+    port bands over one. The patch is the printing's own footprint plus 0.4 mm, which is
+    what the S9610-36D's front render measures: its slots stop 0.4 mm outside each lamp
+    cluster and resume 0.4 mm past it. Where a vent is simply measured wider than the
+    metal it reaches, this states the metal that the printing proves is there without
+    re-measuring the field.
   lifecycle: >-
     searched 2026-08-28: 'UfiSpace S9600-56DX end of life' - no announcement found; the
     vendor's telco aggregation product page and the hardware installation guide are both
@@ -471,6 +481,8 @@ views:
         - {at: [213.5, 54.7], size: [93.4, 16.9], pattern: vent, vent: 25}
         - {at: [257.6, 28.6], size: [4.8, 26.0], pattern: vent, vent: 25}
         - {at: [20.0, 80.6], size: [365.0, 3.3], pattern: vent, vent: 25}
+        - {at: [27.84, 49.05], size: [5.6, 2.11], fill: '#3c3c3c'}
+        - {at: [28.24, 43.54], size: [4.8, 4.8], fill: '#3c3c3c'}
         - {at: [336.6, 85.2], size: [42.9, 1.2], fill: '#0b0d0f', rx: 0.6}
         - {at: [53.35, 6.1], size: [56.84, 7.07], fill: '#e6d84e', rx: 0.4}
         - {at: [86.69, 9.96], size: [23.81, 3.21], fill: '#d9722a', rx: 0.3}
@@ -732,6 +744,9 @@ views:
     panel:
       decor:
         - {at: [344.0, 2.0], size: [28.0, 83.7], pattern: vent, vent: 25}
+        - {at: [346.2, 62.24], size: [24.2, 3.26], fill: '#3c3c3c'}
+        - {at: [355.2, 55.94], size: [6.2, 3.26], fill: '#3c3c3c'}
+        - {at: [360.7, 16.5], size: [6.8, 6.8], fill: '#3c3c3c'}
         - {at: [348.6, 4.98], size: [9.2, 33.89], fill: '#c9ced4', rx: 0.6}
         - {at: [350.7, 6.7], size: [4.6, 4.6], fill: '#8d9297', rx: 2.3}
         - {at: [350.7, 22.9], size: [4.6, 4.6], fill: '#8d9297', rx: 2.3}

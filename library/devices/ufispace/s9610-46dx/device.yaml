@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9610-46dx
-version: 3.0.1
+version: 3.0.2
 maturity: modelled
 manufacturer: UfiSpace
 model: S9610-46DX
@@ -303,6 +303,16 @@ provenance:
     fans publish no draw at all, so any total built from the modelled modules is a floor.
     PSU rating 2000 W per supply from the datasheet's ordering lines; on a single 110 VAC
     feed the HIG derates each supply to 1000 W.
+  vent-islands: >-
+    derived - a vent field is a perforation and the drawing said so, but the marks
+    printed inside one were floating on air (L64). The vendor interrupts the
+    perforation where it prints, so each of those marks now has a solid patch under it
+    in the chassis colour, drawn over the vent the way ufispace/s9600-72xc paints its
+    port bands over one. The patch is the printing's own footprint plus 0.4 mm, which is
+    what the S9610-36D's front render measures: its slots stop 0.4 mm outside each lamp
+    cluster and resume 0.4 mm past it. Where a vent is simply measured wider than the
+    metal it reaches, this states the metal that the printing proves is there without
+    re-measuring the field.
   lifecycle: >-
     searched 2026-08-28: 'UfiSpace S9610-46DX end of life' - no announcement found; the
     vendor's telco aggregation product page for this model and the hardware installation
@@ -569,6 +579,7 @@ views:
         - {at: [8.60, 44.60], size: [51.40, 7.70], pattern: vent, vent: 25}
         - {at: [8.90, 76.00], size: [95.00, 8.20], pattern: vent, vent: 25}
         - {at: [104.00, 76.60], size: [323.00, 4.20], pattern: vent, vent: 25}
+        - {at: [28.52, 44.23], size: [5.3, 6.02], fill: '#3c3c3c'}
         - {at: [335.20, 84.40], size: [43.10, 2.00], fill: '#0b0d0f', rx: 0.6}
         # --- assembly shells (panel metal) + white EMI strip in each
         - {at: [100.46, 14.07], size: [44.43, 28.14], fill: '#b0b5bb', rx: 0.8}
@@ -924,6 +935,9 @@ views:
     panel:
       decor:
         - {at: [338.50, 2.00], size: [30.00, 83.50], pattern: vent, vent: 25}
+        - {at: [345.2, 4.96], size: [20.9, 32.75], fill: '#3c3c3c'}
+        - {at: [345.3, 59.84], size: [24.2, 3.26], fill: '#3c3c3c'}
+        - {at: [353.9, 52.94], size: [6.2, 3.26], fill: '#3c3c3c'}
         - {at: [345.60, 5.36], size: [12.70, 31.95], fill: '#f5f7fa', rx: 0.6}
         - {at: [348.45, 38.25], size: [7.70, 7.70], fill: '#8d9297', rx: 3.85}
     silkscreen:

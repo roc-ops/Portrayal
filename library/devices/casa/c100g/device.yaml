@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: c100g
-version: 0.5.4
+version: 0.5.5
 maturity: modelled
 manufacturer: Casa Systems
 model: C100G
@@ -169,6 +169,16 @@ provenance:
     in rear slots 5 and 8, remaining 10 slots available for RF I/O cards" - so front
     cards stay out of rear bays, which the existing rear accepts lists already respect.
     Bay defaults are unchanged; this widens only what each bay is DECLARED to take'
+  vent-islands: >-
+    derived - a vent field is a perforation and the drawing said so, but the marks
+    printed inside one were floating on air (L64). The vendor interrupts the
+    perforation where it prints, so each of those marks now has a solid patch under it
+    in the chassis colour, drawn over the vent the way ufispace/s9600-72xc paints its
+    port bands over one. The patch is the printing's own footprint plus 0.4 mm, which is
+    what the S9610-36D's front render measures: its slots stop 0.4 mm outside each lamp
+    cluster and resume 0.4 mm past it. Where a vent is simply measured wider than the
+    metal it reaches, this states the metal that the printing proves is there without
+    re-measuring the field.
 attrs:
   physical:
     weight: 132 lb / 61.23 kg fully loaded
@@ -264,6 +274,8 @@ views:
         - {at: [142.0, 455.5], size: [24.5, 10.3], fill: '#d7dbdf', rx: 1.2}
         - {at: [266.5, 455.5], size: [24.5, 10.3], fill: '#d7dbdf', rx: 1.2}
         - {at: [6, 470], size: [420.95, 96.0], fill: '#8d949c', pattern: grille, vent: 60, confidence: estimated, source: 'no Casa document gives a depth for a chassis air grille; searched both guides for grille, vent and air filter. This value predates the confidence key and its origin is unrecorded - marked estimated because that is the honest floor, not because anyone estimated it deliberately'}
+        - {at: [12.8, 539.3], size: [72.2, 11.6], fill: '#a7a9ac'}
+        - {at: [348, 539.3], size: [72.2, 11.6], fill: '#a7a9ac'}
       cutouts:
         - {id: ground-strap-front, at: [348.4, 530.4], size: [15, 7.9], shape: rect}
     silkscreen:

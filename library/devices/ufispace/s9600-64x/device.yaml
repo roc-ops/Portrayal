@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-64x
-version: 2.0.1
+version: 2.0.3
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-64X
@@ -202,6 +202,16 @@ provenance:
     summed with the others.
   attrs: datasheet SPECIFICATIONS/PERFORMANCE/ENVIRONMENTAL/REGULATORY tables, plus the HIG's
     Component Physical Information and Initial System Setup sections
+  vent-islands: >-
+    derived - a vent field is a perforation and the drawing said so, but the marks
+    printed inside one were floating on air (L64). The vendor interrupts the
+    perforation where it prints, so each of those marks now has a solid patch under it
+    in the chassis colour, drawn over the vent the way ufispace/s9600-72xc paints its
+    port bands over one. The patch is the printing's own footprint plus 0.4 mm, which is
+    what the S9610-36D's front render measures: its slots stop 0.4 mm outside each lamp
+    cluster and resume 0.4 mm past it. Where a vent is simply measured wider than the
+    metal it reaches, this states the metal that the printing proves is there without
+    re-measuring the field.
 attrs:
   physical:
     weight-shipping-kg: 34.04
@@ -434,6 +444,7 @@ views:
         - {at: [35.50, 43.03], size: [58.33, 12.24], pattern: vent, vent: 25}
         - {at: [74.83, 55.27], size: [19.00, 26.52], pattern: vent, vent: 25}
         - {at: [13.17, 81.11], size: [421.83, 6.12], pattern: vent, vent: 25}
+        - {at: [90.77, 75.1], size: [341.8, 9.56], fill: '#363636'}
         # the paint bands the port lamps and the row arrows are printed on
         - {at: [53.33, 6.46], size: [60.17, 7.82], fill: '#e0dd4a', rx: 0.4}
         - {at: [91.17, 12.24], size: [22.33, 2.04], fill: '#b85c2c', rx: 0.3}
@@ -802,6 +813,9 @@ views:
       decor:
         # the perforated strip between the fan bank and the supplies
         - {at: [342.50, 1.00], size: [29.00, 85.50], pattern: vent, vent: 25}
+        - {at: [342.5, 61.18], size: [26, 5.72], fill: '#363636'}
+        - {at: [349.35, 53.7], size: [14.3, 6.95], fill: '#363636'}
+        - {at: [359.8, 15.65], size: [6.8, 6.8], fill: '#363636'}
         # the grounding location: a plate with two bolt circles under a protective label,
         # with the label's own tab circle below it. Chassis metal, so decor - the lug that
         # bolts to it ships loose in the carton and is not fitted.

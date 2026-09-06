@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9610-48dx
-version: 3.0.1
+version: 3.0.2
 maturity: modelled
 manufacturer: UfiSpace
 model: S9610-48DX
@@ -264,6 +264,16 @@ provenance:
     module set: the fans publish no draw at all, so any total built from the modelled
     modules is a floor. PSU rating 2000 W per supply from the ordering lines; on a single
     110 VAC feed the HIG derates each supply to 1000 W.
+  vent-islands: >-
+    derived - a vent field is a perforation and the drawing said so, but the marks
+    printed inside one were floating on air (L64). The vendor interrupts the
+    perforation where it prints, so each of those marks now has a solid patch under it
+    in the chassis colour, drawn over the vent the way ufispace/s9600-72xc paints its
+    port bands over one. The patch is the printing's own footprint plus 0.4 mm, which is
+    what the S9610-36D's front render measures: its slots stop 0.4 mm outside each lamp
+    cluster and resume 0.4 mm past it. Where a vent is simply measured wider than the
+    metal it reaches, this states the metal that the printing proves is there without
+    re-measuring the field.
   lifecycle: >-
     searched 2026-08-28: 'UfiSpace S9610-48DX end of life' - no announcement found. The
     vendor's telco aggregation product page, the R1.9 hardware installation guide and the
@@ -544,6 +554,8 @@ views:
         - {at: [39.50, 9.60], size: [20.50, 5.50], pattern: vent, vent: 25}
         - {at: [50.80, 16.00], size: [9.50, 24.00], pattern: vent, vent: 25}
         - {at: [94.00, 14.50], size: [4.50, 25.50], pattern: vent, vent: 25}
+        - {at: [17.95, 75.14], size: [4.4, 1.78], fill: '#3c3c3c'}
+        - {at: [33.01, 75.14], size: [4.4, 1.78], fill: '#3c3c3c'}
         - {at: [61.55, 9.60], size: [48.90, 5.35], fill: '#d9d34f', rx: 0.4}
         - {at: [110.45, 9.60], size: [103.97, 5.35], fill: '#4f6b3d', rx: 0.4}
         - {at: [314.62, 9.60], size: [114.23, 5.35], fill: '#4f6b3d', rx: 0.4}
@@ -884,6 +896,10 @@ views:
     panel:
       decor:
         - {at: [344.50, 2.00], size: [27.00, 83.70], pattern: vent, vent: 25}
+        - {at: [345, 61.64], size: [24.2, 3.26], fill: '#3c3c3c'}
+        - {at: [346.48, 5.6], size: [12.2, 38.5], fill: '#3c3c3c'}
+        - {at: [354, 55.64], size: [6.2, 3.26], fill: '#3c3c3c'}
+        - {at: [360.7, 16.1], size: [6.8, 6.8], fill: '#3c3c3c'}
         - {at: [346.88, 6.00], size: [11.40, 33.60], fill: '#c9ced4', rx: 0.6}
         - {at: [349.30, 7.65], size: [7.50, 7.50], fill: '#8d9297', rx: 3.75}
         - {at: [349.30, 23.55], size: [7.50, 7.50], fill: '#8d9297', rx: 3.75}

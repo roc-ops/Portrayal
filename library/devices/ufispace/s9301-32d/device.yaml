@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9301-32d
-version: 1.0.2
+version: 1.0.3
 maturity: modelled
 manufacturer: UfiSpace
 model: S9301-32D
@@ -212,6 +212,16 @@ provenance:
     model override and the components keep their own. NO ORDERABLE CHASSIS SKU appears
     in any held document - the datasheet and the HIG name the product only as S9301-32D -
     which is recorded as a gap rather than as 'no SKU exists'.
+  vent-islands: >-
+    derived - a vent field is a perforation and the drawing said so, but the marks
+    printed inside one were floating on air (L64). The vendor interrupts the
+    perforation where it prints, so each of those marks now has a solid patch under it
+    in the chassis colour, drawn over the vent the way ufispace/s9600-72xc paints its
+    port bands over one. The patch is the printing's own footprint plus 0.4 mm, which is
+    what the S9610-36D's front render measures: its slots stop 0.4 mm outside each lamp
+    cluster and resume 0.4 mm past it. Where a vent is simply measured wider than the
+    metal it reaches, this states the metal that the printing proves is there without
+    re-measuring the field.
   lifecycle: >-
     searched 2026-08-28: 'UfiSpace S9301-32D end of life end of sale announcement' - no
     announcement found; the vendor product page, the datasheet PDF and distributor
@@ -426,6 +436,20 @@ views:
         - {at: [50.47, 4.28], size: [14.45, 4.66], fill: '#f59e0b', rx: 0.4}
         - {at: [72.0, 3.0], size: [354.0, 6.0], pattern: vent, vent: 25}
         - {at: [72.0, 36.4], size: [354.0, 2.8], pattern: vent, vent: 25}
+        - {at: [111.81, 5.5], size: [1.88, 2.28], fill: '#3a3f45'}
+        - {at: [114.62, 5.5], size: [1.88, 2.28], fill: '#3a3f45'}
+        - {at: [156.82, 5.5], size: [1.88, 2.28], fill: '#3a3f45'}
+        - {at: [159.62, 5.5], size: [1.88, 2.28], fill: '#3a3f45'}
+        - {at: [201.29, 5.5], size: [2.96, 2.28], fill: '#3a3f45'}
+        - {at: [204.09, 5.5], size: [2.96, 2.28], fill: '#3a3f45'}
+        - {at: [246.29, 5.5], size: [2.96, 2.28], fill: '#3a3f45'}
+        - {at: [249.09, 5.5], size: [2.96, 2.28], fill: '#3a3f45'}
+        - {at: [291.3, 5.5], size: [2.96, 2.28], fill: '#3a3f45'}
+        - {at: [294.09, 5.5], size: [2.96, 2.28], fill: '#3a3f45'}
+        - {at: [336.3, 5.5], size: [2.96, 2.28], fill: '#3a3f45'}
+        - {at: [339.1, 5.5], size: [2.96, 2.28], fill: '#3a3f45'}
+        - {at: [381.31, 5.5], size: [2.96, 2.28], fill: '#3a3f45'}
+        - {at: [384.11, 5.5], size: [2.96, 2.28], fill: '#3a3f45'}
     silkscreen:
       - {at: [9.36, 9.6], text: RESET, font-size: 2.0, anchor: middle, for: reset}
       - {at: [5.08, 14.42], text: SYS, font-size: 1.4, anchor: middle, fill: '#17191c', for: led-sys}

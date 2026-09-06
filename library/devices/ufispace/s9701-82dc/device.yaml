@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9701-82dc
-version: 2.1.1
+version: 2.1.2
 maturity: modelled
 manufacturer: UfiSpace
 model: S9701-82DC
@@ -281,6 +281,16 @@ provenance:
     common/led-arrow@1: common/led-dot@1 takes a 2.0 circle because that is what its skin
     draws, common/led-arrow-sm@1 a 2.25 x 2.0 box round its triangle. ufispace/lane-led-quad@1
     is the one that overstates - see the lane-lamp-aperture gap.
+  vent-islands: >-
+    derived - a vent field is a perforation and the drawing said so, but the marks
+    printed inside one were floating on air (L64). The vendor interrupts the
+    perforation where it prints, so each of those marks now has a solid patch under it
+    in the chassis colour, drawn over the vent the way ufispace/s9600-72xc paints its
+    port bands over one. The patch is the printing's own footprint plus 0.4 mm, which is
+    what the S9610-36D's front render measures: its slots stop 0.4 mm outside each lamp
+    cluster and resume 0.4 mm past it. Where a vent is simply measured wider than the
+    metal it reaches, this states the metal that the printing proves is there without
+    re-measuring the field.
   lifecycle: >-
     searched 2026-08-28: 'UfiSpace S9701-82DC end of life', 'UfiSpace S9701-82DC end of
     sale' and the vendor's telco core-edge product page - no announcement found. The
@@ -1226,6 +1236,9 @@ views:
     panel:
       decor:
       - {at: [337.8, 1.5], size: [33.5, 84.7], pattern: vent, vent: 20}
+      - {at: [345.9, 4.6], size: [22.35, 43.2], fill: '#464646'}
+      - {at: [347.55, 58.46], size: [19.7, 4.49], fill: '#464646'}
+      - {at: [352.95, 52.76], size: [8.9, 4.49], fill: '#464646'}
       - {at: [346.3, 5], size: [15.5, 42.4], fill: '#c9ced4', rx: 0.8}
       - {at: [348.6, 5.6], size: [9.5, 9.8], fill: '#e2e5e9', rx: 4.9}
       - {at: [348.6, 22.5], size: [9.5, 9.3], fill: '#e2e5e9', rx: 4.7}
