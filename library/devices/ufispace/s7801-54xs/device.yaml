@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s7801-54xs
-version: 1.1.4
+version: 2.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S7801-54XS
@@ -57,16 +57,23 @@ provenance:
     RJ45 serial console (legend 'SS/arrows/IOIOI' printed below), all on a
     light bezel plate measured x 6.3-23.0 in the faceplate figure. Vertical
     positions estimated to fit the photographed stack into the 43.8 face using
-    the components' own contract heights (14.9 + 9.3 + 12.5); the photo shows
-    the jacks nearly touching, as modelled. Both RJ45s are keyway-down in the
-    zoomed angle photograph (s7801-54xs-1-view.png), so neither is rotated.
-    The console is common/rj45-shielded (no lamps), which draws its contacts
-    at the top and matches the photo; the OOB is common/rj45-port whose lamp
-    pair matches the photographed green corner lamps. CAVEAT, checked in a
-    zoomed crop per the gate: the photographed OOB jack is keyway-down, so its
-    contacts face UP, while common/rj45-port draws lamps-top/contacts-DOWN
-    and cannot show both; rotating it would put the lamps at the bottom, a
-    larger error than the contact side, so it is placed unrotated. The
+    the components' own contract heights, 35.7 mm total
+    (common/rj45-eth@1 13.2 + common/usb-a@3 9.3 + std/rj45@2 13.2; before the
+    RJ45 sweep the same trio - common/rj45-port@4, common/usb-a@3,
+    common/rj45-shielded@2 - stacked to 36.7); the photo shows the jacks
+    nearly touching, as modelled. Both RJ45s are keyway-down in the zoomed
+    angle photograph (s7801-54xs-1-view.png). The console (std/rj45@2) draws
+    its contacts at the top, unrotated, matching the photo. The OOB
+    (common/rj45-eth@1) carries a device-level rotate: 180, the RJ45 sweep's
+    FLIP_ORIGIN rule preserving the appearance the pre-sweep unrotated
+    common/rj45-port@4 placement drew - CAVEAT, checked in a zoomed crop per
+    the gate: the photographed OOB jack is keyway-down, so its contacts face
+    UP, while an unrotated lamped jack in this family draws lamps-top/
+    contacts-DOWN and cannot show both; the pre-sweep modelling judged that
+    putting the lamps at the bottom (which an unrotated common/rj45-port@4,
+    and now an unrotated common/rj45-eth@1, would not do) would be a larger
+    error than the contact side, and its lamp pair matches the photographed
+    green corner lamps - so lamps-top is kept and the rotate stays. The
     S9510-28DC uses the same component the same way.
   system-leds: >-
     drawing - lamp x positions read off the faceplate figure at 3.35 px/mm
@@ -407,18 +414,23 @@ views:
       - {text: '53▼', at: [427.3, 37.7], font-size: 1.7, fill: '#e8eae4', anchor: middle, for: port-53}
     components:
       placements:
-        - {ref: common/rj45-port@4, id: mgmt-oob, at: [6.2, 4.4], group: mgmt, rel-pos: 1,
+        - {ref: common/rj45-eth@1, id: mgmt-oob, at: [6.8, 5.25], rotate: 180, group: mgmt, rel-pos: 1,
            attrs: {role: mgmt, speed: 100m-1g},
-           states: {led-left: ['off', {name: link-1g, color: '#22c55e'},
-                               {name: activity-1g, color: '#22c55e', behavior: blinking}],
-                    led-right: ['off', {name: link-100m, color: '#f59e0b'},
-                                {name: activity-100m, color: '#f59e0b', behavior: blinking}]},
+           states: {led-a: ['off', {name: link-100m, color: '#f59e0b'},
+                            {name: activity-100m, color: '#f59e0b', behavior: blinking}],
+                    led-b: ['off', {name: link-1g, color: '#22c55e'},
+                            {name: activity-1g, color: '#22c55e', behavior: blinking}]},
            description: 'HIG Management Port LED table - left lamp Off (no power), Solid
              Green (1G link-up), Blinking Green (1G TX/RX activity); right lamp Off,
              Solid Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity).
-             The two lamps do not share a vocabulary, so states are per element'}
+             The two lamps do not share a vocabulary, so states are per element. At this
+             placement''s rotate: 180 (preserving the pre-sweep common/rj45-port@4
+             render, which the mgmt-stack provenance ties to the photographed
+             green corner lamps) the component-local left window (led-a) renders on
+             screen-right, so led-a carries the physical-right/amber pair and led-b
+             the physical-left/green pair, keeping the same physical lamp assignment'}
         - {ref: common/usb-a@3, id: usb, at: [6.2, 19.9], group: mgmt, rel-pos: 2, attrs: {role: storage, speed: usb3}}
-        - {ref: common/rj45-shielded@2, id: console, at: [6.8, 29.6], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
+        - {ref: std/rj45@2, id: console, at: [6.8, 29.25], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
         - {ref: common/reset-button@1, id: reset, at: [46.6, 2.6], for: chassis, group: mgmt, rel-pos: 4}
         - {ref: common/led-dot@1, id: led-sys, at: [52.4, 4.0], for: chassis, group: status-leds, rel-pos: 1,
            states: ['off', {name: boot-complete, color: '#22c55e'},
@@ -570,8 +582,6 @@ views:
         - {ref: common/led-dot@1, id: led-port-53-l2, at: [419.7, 38.9], for: port-53, attrs: {port: '53', lane: '2'}, group: port-leds, rel-pos: 70}
         - {ref: common/led-dot@1, id: led-port-53-l3, at: [424.1, 38.9], for: port-53, attrs: {port: '53', lane: '3'}, group: port-leds, rel-pos: 71}
         - {ref: common/led-dot@1, id: led-port-53-l4, at: [428.5, 38.9], for: port-53, attrs: {port: '53', lane: '4'}, group: port-leds, rel-pos: 72}
-        - {ref: common/led-dot@1, id: led-mgmt-oob-l, at: [7.4, 17.03], for: mgmt-oob, group: port-leds, rel-pos: 901}
-        - {ref: common/led-dot@1, id: led-mgmt-oob-r, at: [20.0, 17.03], for: mgmt-oob, group: port-leds, rel-pos: 902}
     regions:
       - {id: mgmt-block, at: [5.6, 0.5], size: {w: 18.2, h: 43}, label: Management, members: [mgmt-oob, usb, console]}
   rear:

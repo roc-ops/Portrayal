@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s6301-56stp
-version: 1.1.3
+version: 2.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S6301-56STP
@@ -53,9 +53,12 @@ provenance:
     photo+HIG - each RJ45 jack carries ONE integrated lamp in its outer corner
     (top-left on the top row, bottom-left on the bottom row), mode-switched
     between LNK/SPD and PoE status by the front-panel Mode button (HIG front
-    panel LED table). std/rj45-ganged draws the opening only and the lamps sit
-    INSIDE the jack apertures, so they are not drawn - same treatment as the
-    MX150's in-jack lamps, recorded on the ge-poe group. The SFP+ ports' lamps
+    panel LED table). Before the RJ45 sweep std/rj45-ganged drew the opening
+    only and the lamps, sitting INSIDE the jack apertures, were not drawn -
+    same treatment as the MX150's in-jack lamps. They now draw as led-a/led-b
+    of common/rj45-ganged-eth@1 on the ge-poe group (both corners modelled at
+    component default vocabulary; the mode-switched single-lamp behaviour the
+    hardware actually has is not separately captured here). The SFP+ ports' lamps
     sit in the centre band between the cage rows (one ▲▼ pair per column,
     upper/lower port) and are drawn with common/sfp-led-pair, states overridden
     to the mode-switched vocabulary because the component default cites another
@@ -195,17 +198,6 @@ chassis:
   ru: 1
   weight-kg: 5.74
 gaps:
-- what: rj45-port-lamps-not-drawn
-  scope: [ge-poe]
-  reason: needs-drawing
-  note: >-
-    every RJ45 jack carries one integrated corner lamp (mode-switched LNK/SPD
-    or PoE per the HIG table); std/rj45-ganged draws the bare opening and the
-    lamp sits inside the aperture, so 48 lamps exist on the hardware and none
-    in the drawing - the MX150 treatment, recorded so the absence is a decision
-    rather than an oversight.
-  wanted: an rj45-ganged variant (or overlay mechanism) that can draw a corner
-    lamp inside the aperture without colliding with the placement.
 - what: fan-position-legends
   scope: [fans]
   reason: needs-hardware
@@ -260,8 +252,8 @@ groups:
     index-origin: 0
     attrs: {media: rj45, speed: 1g}
     description: the 48 10M/100M/1G RJ45 access ports, PoE 802.3af/at up to
-      30 W each; every jack carries one integrated mode-switched lamp inside
-      its aperture, not drawn (see gaps)
+      30 W each; every jack carries one integrated mode-switched lamp, drawn
+      as led-a/led-b of common/rj45-ganged-eth@1
   sfp-plus:
     term: Port
     role: traffic
@@ -415,10 +407,10 @@ views:
            description: 'HIG Management Port LED table, right lamp - Off (no
              power), Solid Amber (10M/100M link-up), Blinking Amber (10M/100M
              TX/RX activity)', group: port-leds, rel-pos: 6}
-        - {ref: std/rj45-ganged@1, id: mgmt, at: [7.6, 7.0], rotate: 180, group: mgmt, rel-pos: 1,
+        - {ref: std/rj45-ganged@2, id: mgmt, at: [7.6, 7], rotate: 180, group: mgmt, rel-pos: 1,
            attrs: {role: mgmt, speed: 100m-1g}}
         - {ref: std/usb-a@1, id: usb, at: [7.95, 20.6], group: mgmt, rel-pos: 2, attrs: {role: storage}}
-        - {ref: std/rj45-ganged@1, id: console, at: [7.6, 27.2], group: mgmt, rel-pos: 3,
+        - {ref: std/rj45-ganged@2, id: console, at: [7.6, 27.2], group: mgmt, rel-pos: 3,
            attrs: {media: rj45-serial, role: console}}
         - {ref: common/usb-symbol@1, id: usb-mark, at: [5.4, 39.2], for: usb, group: furniture, rel-pos: 1}
         - {ref: common/reset-button@1, id: mode, at: [35.4, 2.4], for: chassis, group: mgmt, rel-pos: 4,
@@ -466,54 +458,54 @@ views:
            states: ['off', {name: beacon, color: '#3b82f6', behavior: blinking}],
            description: 'HIG ID row - Off (no power), Blinking Blue (beacon
              feature is enabled on the switch)', group: status-leds, rel-pos: 7}
-        - {ref: std/rj45-ganged@1, id: port-0, at: [25.8, 12.6], rotate: 180, group: ge-poe, rel-pos: 0}
-        - {ref: std/rj45-ganged@1, id: port-1, at: [25.8, 26.6], group: ge-poe, rel-pos: 1}
-        - {ref: std/rj45-ganged@1, id: port-2, at: [39.7, 12.6], rotate: 180, group: ge-poe, rel-pos: 2}
-        - {ref: std/rj45-ganged@1, id: port-3, at: [39.7, 26.6], group: ge-poe, rel-pos: 3}
-        - {ref: std/rj45-ganged@1, id: port-4, at: [53.6, 12.6], rotate: 180, group: ge-poe, rel-pos: 4}
-        - {ref: std/rj45-ganged@1, id: port-5, at: [53.6, 26.6], group: ge-poe, rel-pos: 5}
-        - {ref: std/rj45-ganged@1, id: port-6, at: [67.5, 12.6], rotate: 180, group: ge-poe, rel-pos: 6}
-        - {ref: std/rj45-ganged@1, id: port-7, at: [67.5, 26.6], group: ge-poe, rel-pos: 7}
-        - {ref: std/rj45-ganged@1, id: port-8, at: [81.4, 12.6], rotate: 180, group: ge-poe, rel-pos: 8}
-        - {ref: std/rj45-ganged@1, id: port-9, at: [81.4, 26.6], group: ge-poe, rel-pos: 9}
-        - {ref: std/rj45-ganged@1, id: port-10, at: [95.3, 12.6], rotate: 180, group: ge-poe, rel-pos: 10}
-        - {ref: std/rj45-ganged@1, id: port-11, at: [95.3, 26.6], group: ge-poe, rel-pos: 11}
-        - {ref: std/rj45-ganged@1, id: port-12, at: [113.3, 12.6], rotate: 180, group: ge-poe, rel-pos: 12}
-        - {ref: std/rj45-ganged@1, id: port-13, at: [113.3, 26.6], group: ge-poe, rel-pos: 13}
-        - {ref: std/rj45-ganged@1, id: port-14, at: [127.2, 12.6], rotate: 180, group: ge-poe, rel-pos: 14}
-        - {ref: std/rj45-ganged@1, id: port-15, at: [127.2, 26.6], group: ge-poe, rel-pos: 15}
-        - {ref: std/rj45-ganged@1, id: port-16, at: [141.1, 12.6], rotate: 180, group: ge-poe, rel-pos: 16}
-        - {ref: std/rj45-ganged@1, id: port-17, at: [141.1, 26.6], group: ge-poe, rel-pos: 17}
-        - {ref: std/rj45-ganged@1, id: port-18, at: [155, 12.6], rotate: 180, group: ge-poe, rel-pos: 18}
-        - {ref: std/rj45-ganged@1, id: port-19, at: [155, 26.6], group: ge-poe, rel-pos: 19}
-        - {ref: std/rj45-ganged@1, id: port-20, at: [168.9, 12.6], rotate: 180, group: ge-poe, rel-pos: 20}
-        - {ref: std/rj45-ganged@1, id: port-21, at: [168.9, 26.6], group: ge-poe, rel-pos: 21}
-        - {ref: std/rj45-ganged@1, id: port-22, at: [182.8, 12.6], rotate: 180, group: ge-poe, rel-pos: 22}
-        - {ref: std/rj45-ganged@1, id: port-23, at: [182.8, 26.6], group: ge-poe, rel-pos: 23}
-        - {ref: std/rj45-ganged@1, id: port-24, at: [200.8, 12.6], rotate: 180, group: ge-poe, rel-pos: 24}
-        - {ref: std/rj45-ganged@1, id: port-25, at: [200.8, 26.6], group: ge-poe, rel-pos: 25}
-        - {ref: std/rj45-ganged@1, id: port-26, at: [214.7, 12.6], rotate: 180, group: ge-poe, rel-pos: 26}
-        - {ref: std/rj45-ganged@1, id: port-27, at: [214.7, 26.6], group: ge-poe, rel-pos: 27}
-        - {ref: std/rj45-ganged@1, id: port-28, at: [228.6, 12.6], rotate: 180, group: ge-poe, rel-pos: 28}
-        - {ref: std/rj45-ganged@1, id: port-29, at: [228.6, 26.6], group: ge-poe, rel-pos: 29}
-        - {ref: std/rj45-ganged@1, id: port-30, at: [242.5, 12.6], rotate: 180, group: ge-poe, rel-pos: 30}
-        - {ref: std/rj45-ganged@1, id: port-31, at: [242.5, 26.6], group: ge-poe, rel-pos: 31}
-        - {ref: std/rj45-ganged@1, id: port-32, at: [256.4, 12.6], rotate: 180, group: ge-poe, rel-pos: 32}
-        - {ref: std/rj45-ganged@1, id: port-33, at: [256.4, 26.6], group: ge-poe, rel-pos: 33}
-        - {ref: std/rj45-ganged@1, id: port-34, at: [270.3, 12.6], rotate: 180, group: ge-poe, rel-pos: 34}
-        - {ref: std/rj45-ganged@1, id: port-35, at: [270.3, 26.6], group: ge-poe, rel-pos: 35}
-        - {ref: std/rj45-ganged@1, id: port-36, at: [288.3, 12.6], rotate: 180, group: ge-poe, rel-pos: 36}
-        - {ref: std/rj45-ganged@1, id: port-37, at: [288.3, 26.6], group: ge-poe, rel-pos: 37}
-        - {ref: std/rj45-ganged@1, id: port-38, at: [302.2, 12.6], rotate: 180, group: ge-poe, rel-pos: 38}
-        - {ref: std/rj45-ganged@1, id: port-39, at: [302.2, 26.6], group: ge-poe, rel-pos: 39}
-        - {ref: std/rj45-ganged@1, id: port-40, at: [316.1, 12.6], rotate: 180, group: ge-poe, rel-pos: 40}
-        - {ref: std/rj45-ganged@1, id: port-41, at: [316.1, 26.6], group: ge-poe, rel-pos: 41}
-        - {ref: std/rj45-ganged@1, id: port-42, at: [330, 12.6], rotate: 180, group: ge-poe, rel-pos: 42}
-        - {ref: std/rj45-ganged@1, id: port-43, at: [330, 26.6], group: ge-poe, rel-pos: 43}
-        - {ref: std/rj45-ganged@1, id: port-44, at: [343.9, 12.6], rotate: 180, group: ge-poe, rel-pos: 44}
-        - {ref: std/rj45-ganged@1, id: port-45, at: [343.9, 26.6], group: ge-poe, rel-pos: 45}
-        - {ref: std/rj45-ganged@1, id: port-46, at: [357.8, 12.6], rotate: 180, group: ge-poe, rel-pos: 46}
-        - {ref: std/rj45-ganged@1, id: port-47, at: [357.8, 26.6], group: ge-poe, rel-pos: 47}
+        - {ref: common/rj45-ganged-eth@1, id: port-0, at: [25.8, 12.6], rotate: 180, group: ge-poe, rel-pos: 0}
+        - {ref: common/rj45-ganged-eth@1, id: port-1, at: [25.8, 26.6], group: ge-poe, rel-pos: 1}
+        - {ref: common/rj45-ganged-eth@1, id: port-2, at: [39.7, 12.6], rotate: 180, group: ge-poe, rel-pos: 2}
+        - {ref: common/rj45-ganged-eth@1, id: port-3, at: [39.7, 26.6], group: ge-poe, rel-pos: 3}
+        - {ref: common/rj45-ganged-eth@1, id: port-4, at: [53.6, 12.6], rotate: 180, group: ge-poe, rel-pos: 4}
+        - {ref: common/rj45-ganged-eth@1, id: port-5, at: [53.6, 26.6], group: ge-poe, rel-pos: 5}
+        - {ref: common/rj45-ganged-eth@1, id: port-6, at: [67.5, 12.6], rotate: 180, group: ge-poe, rel-pos: 6}
+        - {ref: common/rj45-ganged-eth@1, id: port-7, at: [67.5, 26.6], group: ge-poe, rel-pos: 7}
+        - {ref: common/rj45-ganged-eth@1, id: port-8, at: [81.4, 12.6], rotate: 180, group: ge-poe, rel-pos: 8}
+        - {ref: common/rj45-ganged-eth@1, id: port-9, at: [81.4, 26.6], group: ge-poe, rel-pos: 9}
+        - {ref: common/rj45-ganged-eth@1, id: port-10, at: [95.3, 12.6], rotate: 180, group: ge-poe, rel-pos: 10}
+        - {ref: common/rj45-ganged-eth@1, id: port-11, at: [95.3, 26.6], group: ge-poe, rel-pos: 11}
+        - {ref: common/rj45-ganged-eth@1, id: port-12, at: [113.3, 12.6], rotate: 180, group: ge-poe, rel-pos: 12}
+        - {ref: common/rj45-ganged-eth@1, id: port-13, at: [113.3, 26.6], group: ge-poe, rel-pos: 13}
+        - {ref: common/rj45-ganged-eth@1, id: port-14, at: [127.2, 12.6], rotate: 180, group: ge-poe, rel-pos: 14}
+        - {ref: common/rj45-ganged-eth@1, id: port-15, at: [127.2, 26.6], group: ge-poe, rel-pos: 15}
+        - {ref: common/rj45-ganged-eth@1, id: port-16, at: [141.1, 12.6], rotate: 180, group: ge-poe, rel-pos: 16}
+        - {ref: common/rj45-ganged-eth@1, id: port-17, at: [141.1, 26.6], group: ge-poe, rel-pos: 17}
+        - {ref: common/rj45-ganged-eth@1, id: port-18, at: [155, 12.6], rotate: 180, group: ge-poe, rel-pos: 18}
+        - {ref: common/rj45-ganged-eth@1, id: port-19, at: [155, 26.6], group: ge-poe, rel-pos: 19}
+        - {ref: common/rj45-ganged-eth@1, id: port-20, at: [168.9, 12.6], rotate: 180, group: ge-poe, rel-pos: 20}
+        - {ref: common/rj45-ganged-eth@1, id: port-21, at: [168.9, 26.6], group: ge-poe, rel-pos: 21}
+        - {ref: common/rj45-ganged-eth@1, id: port-22, at: [182.8, 12.6], rotate: 180, group: ge-poe, rel-pos: 22}
+        - {ref: common/rj45-ganged-eth@1, id: port-23, at: [182.8, 26.6], group: ge-poe, rel-pos: 23}
+        - {ref: common/rj45-ganged-eth@1, id: port-24, at: [200.8, 12.6], rotate: 180, group: ge-poe, rel-pos: 24}
+        - {ref: common/rj45-ganged-eth@1, id: port-25, at: [200.8, 26.6], group: ge-poe, rel-pos: 25}
+        - {ref: common/rj45-ganged-eth@1, id: port-26, at: [214.7, 12.6], rotate: 180, group: ge-poe, rel-pos: 26}
+        - {ref: common/rj45-ganged-eth@1, id: port-27, at: [214.7, 26.6], group: ge-poe, rel-pos: 27}
+        - {ref: common/rj45-ganged-eth@1, id: port-28, at: [228.6, 12.6], rotate: 180, group: ge-poe, rel-pos: 28}
+        - {ref: common/rj45-ganged-eth@1, id: port-29, at: [228.6, 26.6], group: ge-poe, rel-pos: 29}
+        - {ref: common/rj45-ganged-eth@1, id: port-30, at: [242.5, 12.6], rotate: 180, group: ge-poe, rel-pos: 30}
+        - {ref: common/rj45-ganged-eth@1, id: port-31, at: [242.5, 26.6], group: ge-poe, rel-pos: 31}
+        - {ref: common/rj45-ganged-eth@1, id: port-32, at: [256.4, 12.6], rotate: 180, group: ge-poe, rel-pos: 32}
+        - {ref: common/rj45-ganged-eth@1, id: port-33, at: [256.4, 26.6], group: ge-poe, rel-pos: 33}
+        - {ref: common/rj45-ganged-eth@1, id: port-34, at: [270.3, 12.6], rotate: 180, group: ge-poe, rel-pos: 34}
+        - {ref: common/rj45-ganged-eth@1, id: port-35, at: [270.3, 26.6], group: ge-poe, rel-pos: 35}
+        - {ref: common/rj45-ganged-eth@1, id: port-36, at: [288.3, 12.6], rotate: 180, group: ge-poe, rel-pos: 36}
+        - {ref: common/rj45-ganged-eth@1, id: port-37, at: [288.3, 26.6], group: ge-poe, rel-pos: 37}
+        - {ref: common/rj45-ganged-eth@1, id: port-38, at: [302.2, 12.6], rotate: 180, group: ge-poe, rel-pos: 38}
+        - {ref: common/rj45-ganged-eth@1, id: port-39, at: [302.2, 26.6], group: ge-poe, rel-pos: 39}
+        - {ref: common/rj45-ganged-eth@1, id: port-40, at: [316.1, 12.6], rotate: 180, group: ge-poe, rel-pos: 40}
+        - {ref: common/rj45-ganged-eth@1, id: port-41, at: [316.1, 26.6], group: ge-poe, rel-pos: 41}
+        - {ref: common/rj45-ganged-eth@1, id: port-42, at: [330, 12.6], rotate: 180, group: ge-poe, rel-pos: 42}
+        - {ref: common/rj45-ganged-eth@1, id: port-43, at: [330, 26.6], group: ge-poe, rel-pos: 43}
+        - {ref: common/rj45-ganged-eth@1, id: port-44, at: [343.9, 12.6], rotate: 180, group: ge-poe, rel-pos: 44}
+        - {ref: common/rj45-ganged-eth@1, id: port-45, at: [343.9, 26.6], group: ge-poe, rel-pos: 45}
+        - {ref: common/rj45-ganged-eth@1, id: port-46, at: [357.8, 12.6], rotate: 180, group: ge-poe, rel-pos: 46}
+        - {ref: common/rj45-ganged-eth@1, id: port-47, at: [357.8, 26.6], group: ge-poe, rel-pos: 47}
         - {ref: std/sfp-ganged@1, id: port-48, at: [376.4, 12.4], rotate: 180, group: sfp-plus, rel-pos: 48}
         - {ref: std/sfp-ganged@1, id: port-49, at: [376.4, 27.4], group: sfp-plus, rel-pos: 49}
         - {ref: std/sfp-ganged@1, id: port-50, at: [390.65, 12.4], rotate: 180, group: sfp-plus, rel-pos: 50}
@@ -526,102 +518,6 @@ views:
         - {ref: common/sfp-led-pair@1, id: led-port-50-port-51, at: [391.75, 23.1], for: [port-50, port-51], group: port-leds, rel-pos: 2}
         - {ref: common/sfp-led-pair@1, id: led-port-52-port-53, at: [406, 23.1], for: [port-52, port-53], group: port-leds, rel-pos: 3}
         - {ref: common/sfp-led-pair@1, id: led-port-54-port-55, at: [420.25, 23.1], for: [port-54, port-55], group: port-leds, rel-pos: 4}
-        - {ref: common/led-dot@1, id: led-port-0-l, at: [27.0, 12.87], for: port-0, group: port-leds, rel-pos: 901}
-        - {ref: common/led-dot@1, id: led-port-0-r, at: [35.3, 12.87], for: port-0, group: port-leds, rel-pos: 902}
-        - {ref: common/led-dot@1, id: led-port-1-l, at: [27.0, 35.33], for: port-1, group: port-leds, rel-pos: 903}
-        - {ref: common/led-dot@1, id: led-port-1-r, at: [35.3, 35.33], for: port-1, group: port-leds, rel-pos: 904}
-        - {ref: common/led-dot@1, id: led-port-2-l, at: [40.9, 12.87], for: port-2, group: port-leds, rel-pos: 905}
-        - {ref: common/led-dot@1, id: led-port-2-r, at: [49.2, 12.87], for: port-2, group: port-leds, rel-pos: 906}
-        - {ref: common/led-dot@1, id: led-port-3-l, at: [40.9, 35.33], for: port-3, group: port-leds, rel-pos: 907}
-        - {ref: common/led-dot@1, id: led-port-3-r, at: [49.2, 35.33], for: port-3, group: port-leds, rel-pos: 908}
-        - {ref: common/led-dot@1, id: led-port-4-l, at: [54.8, 12.87], for: port-4, group: port-leds, rel-pos: 909}
-        - {ref: common/led-dot@1, id: led-port-4-r, at: [63.1, 12.87], for: port-4, group: port-leds, rel-pos: 910}
-        - {ref: common/led-dot@1, id: led-port-5-l, at: [54.8, 35.33], for: port-5, group: port-leds, rel-pos: 911}
-        - {ref: common/led-dot@1, id: led-port-5-r, at: [63.1, 35.33], for: port-5, group: port-leds, rel-pos: 912}
-        - {ref: common/led-dot@1, id: led-port-6-l, at: [68.7, 12.87], for: port-6, group: port-leds, rel-pos: 913}
-        - {ref: common/led-dot@1, id: led-port-6-r, at: [77.0, 12.87], for: port-6, group: port-leds, rel-pos: 914}
-        - {ref: common/led-dot@1, id: led-port-7-l, at: [68.7, 35.33], for: port-7, group: port-leds, rel-pos: 915}
-        - {ref: common/led-dot@1, id: led-port-7-r, at: [77.0, 35.33], for: port-7, group: port-leds, rel-pos: 916}
-        - {ref: common/led-dot@1, id: led-port-8-l, at: [82.6, 12.87], for: port-8, group: port-leds, rel-pos: 917}
-        - {ref: common/led-dot@1, id: led-port-8-r, at: [90.9, 12.87], for: port-8, group: port-leds, rel-pos: 918}
-        - {ref: common/led-dot@1, id: led-port-9-l, at: [82.6, 35.33], for: port-9, group: port-leds, rel-pos: 919}
-        - {ref: common/led-dot@1, id: led-port-9-r, at: [90.9, 35.33], for: port-9, group: port-leds, rel-pos: 920}
-        - {ref: common/led-dot@1, id: led-port-10-l, at: [96.5, 12.87], for: port-10, group: port-leds, rel-pos: 921}
-        - {ref: common/led-dot@1, id: led-port-10-r, at: [104.8, 12.87], for: port-10, group: port-leds, rel-pos: 922}
-        - {ref: common/led-dot@1, id: led-port-11-l, at: [96.5, 35.33], for: port-11, group: port-leds, rel-pos: 923}
-        - {ref: common/led-dot@1, id: led-port-11-r, at: [104.8, 35.33], for: port-11, group: port-leds, rel-pos: 924}
-        - {ref: common/led-dot@1, id: led-port-12-l, at: [114.5, 12.87], for: port-12, group: port-leds, rel-pos: 925}
-        - {ref: common/led-dot@1, id: led-port-12-r, at: [122.8, 12.87], for: port-12, group: port-leds, rel-pos: 926}
-        - {ref: common/led-dot@1, id: led-port-13-l, at: [114.5, 35.33], for: port-13, group: port-leds, rel-pos: 927}
-        - {ref: common/led-dot@1, id: led-port-13-r, at: [122.8, 35.33], for: port-13, group: port-leds, rel-pos: 928}
-        - {ref: common/led-dot@1, id: led-port-14-l, at: [128.4, 12.87], for: port-14, group: port-leds, rel-pos: 929}
-        - {ref: common/led-dot@1, id: led-port-14-r, at: [136.7, 12.87], for: port-14, group: port-leds, rel-pos: 930}
-        - {ref: common/led-dot@1, id: led-port-15-l, at: [128.4, 35.33], for: port-15, group: port-leds, rel-pos: 931}
-        - {ref: common/led-dot@1, id: led-port-15-r, at: [136.7, 35.33], for: port-15, group: port-leds, rel-pos: 932}
-        - {ref: common/led-dot@1, id: led-port-16-l, at: [142.3, 12.87], for: port-16, group: port-leds, rel-pos: 933}
-        - {ref: common/led-dot@1, id: led-port-16-r, at: [150.6, 12.87], for: port-16, group: port-leds, rel-pos: 934}
-        - {ref: common/led-dot@1, id: led-port-17-l, at: [142.3, 35.33], for: port-17, group: port-leds, rel-pos: 935}
-        - {ref: common/led-dot@1, id: led-port-17-r, at: [150.6, 35.33], for: port-17, group: port-leds, rel-pos: 936}
-        - {ref: common/led-dot@1, id: led-port-18-l, at: [156.2, 12.87], for: port-18, group: port-leds, rel-pos: 937}
-        - {ref: common/led-dot@1, id: led-port-18-r, at: [164.5, 12.87], for: port-18, group: port-leds, rel-pos: 938}
-        - {ref: common/led-dot@1, id: led-port-19-l, at: [156.2, 35.33], for: port-19, group: port-leds, rel-pos: 939}
-        - {ref: common/led-dot@1, id: led-port-19-r, at: [164.5, 35.33], for: port-19, group: port-leds, rel-pos: 940}
-        - {ref: common/led-dot@1, id: led-port-20-l, at: [170.1, 12.87], for: port-20, group: port-leds, rel-pos: 941}
-        - {ref: common/led-dot@1, id: led-port-20-r, at: [178.4, 12.87], for: port-20, group: port-leds, rel-pos: 942}
-        - {ref: common/led-dot@1, id: led-port-21-l, at: [170.1, 35.33], for: port-21, group: port-leds, rel-pos: 943}
-        - {ref: common/led-dot@1, id: led-port-21-r, at: [178.4, 35.33], for: port-21, group: port-leds, rel-pos: 944}
-        - {ref: common/led-dot@1, id: led-port-22-l, at: [184.0, 12.87], for: port-22, group: port-leds, rel-pos: 945}
-        - {ref: common/led-dot@1, id: led-port-22-r, at: [192.3, 12.87], for: port-22, group: port-leds, rel-pos: 946}
-        - {ref: common/led-dot@1, id: led-port-23-l, at: [184.0, 35.33], for: port-23, group: port-leds, rel-pos: 947}
-        - {ref: common/led-dot@1, id: led-port-23-r, at: [192.3, 35.33], for: port-23, group: port-leds, rel-pos: 948}
-        - {ref: common/led-dot@1, id: led-port-24-l, at: [202.0, 12.87], for: port-24, group: port-leds, rel-pos: 949}
-        - {ref: common/led-dot@1, id: led-port-24-r, at: [210.3, 12.87], for: port-24, group: port-leds, rel-pos: 950}
-        - {ref: common/led-dot@1, id: led-port-25-l, at: [202.0, 35.33], for: port-25, group: port-leds, rel-pos: 951}
-        - {ref: common/led-dot@1, id: led-port-25-r, at: [210.3, 35.33], for: port-25, group: port-leds, rel-pos: 952}
-        - {ref: common/led-dot@1, id: led-port-26-l, at: [215.9, 12.87], for: port-26, group: port-leds, rel-pos: 953}
-        - {ref: common/led-dot@1, id: led-port-26-r, at: [224.2, 12.87], for: port-26, group: port-leds, rel-pos: 954}
-        - {ref: common/led-dot@1, id: led-port-27-l, at: [215.9, 35.33], for: port-27, group: port-leds, rel-pos: 955}
-        - {ref: common/led-dot@1, id: led-port-27-r, at: [224.2, 35.33], for: port-27, group: port-leds, rel-pos: 956}
-        - {ref: common/led-dot@1, id: led-port-28-l, at: [229.8, 12.87], for: port-28, group: port-leds, rel-pos: 957}
-        - {ref: common/led-dot@1, id: led-port-28-r, at: [238.1, 12.87], for: port-28, group: port-leds, rel-pos: 958}
-        - {ref: common/led-dot@1, id: led-port-29-l, at: [229.8, 35.33], for: port-29, group: port-leds, rel-pos: 959}
-        - {ref: common/led-dot@1, id: led-port-29-r, at: [238.1, 35.33], for: port-29, group: port-leds, rel-pos: 960}
-        - {ref: common/led-dot@1, id: led-port-30-l, at: [243.7, 12.87], for: port-30, group: port-leds, rel-pos: 961}
-        - {ref: common/led-dot@1, id: led-port-30-r, at: [252.0, 12.87], for: port-30, group: port-leds, rel-pos: 962}
-        - {ref: common/led-dot@1, id: led-port-31-l, at: [243.7, 35.33], for: port-31, group: port-leds, rel-pos: 963}
-        - {ref: common/led-dot@1, id: led-port-31-r, at: [252.0, 35.33], for: port-31, group: port-leds, rel-pos: 964}
-        - {ref: common/led-dot@1, id: led-port-32-l, at: [257.6, 12.87], for: port-32, group: port-leds, rel-pos: 965}
-        - {ref: common/led-dot@1, id: led-port-32-r, at: [265.9, 12.87], for: port-32, group: port-leds, rel-pos: 966}
-        - {ref: common/led-dot@1, id: led-port-33-l, at: [257.6, 35.33], for: port-33, group: port-leds, rel-pos: 967}
-        - {ref: common/led-dot@1, id: led-port-33-r, at: [265.9, 35.33], for: port-33, group: port-leds, rel-pos: 968}
-        - {ref: common/led-dot@1, id: led-port-34-l, at: [271.5, 12.87], for: port-34, group: port-leds, rel-pos: 969}
-        - {ref: common/led-dot@1, id: led-port-34-r, at: [279.8, 12.87], for: port-34, group: port-leds, rel-pos: 970}
-        - {ref: common/led-dot@1, id: led-port-35-l, at: [271.5, 35.33], for: port-35, group: port-leds, rel-pos: 971}
-        - {ref: common/led-dot@1, id: led-port-35-r, at: [279.8, 35.33], for: port-35, group: port-leds, rel-pos: 972}
-        - {ref: common/led-dot@1, id: led-port-36-l, at: [289.5, 12.87], for: port-36, group: port-leds, rel-pos: 973}
-        - {ref: common/led-dot@1, id: led-port-36-r, at: [297.8, 12.87], for: port-36, group: port-leds, rel-pos: 974}
-        - {ref: common/led-dot@1, id: led-port-37-l, at: [289.5, 35.33], for: port-37, group: port-leds, rel-pos: 975}
-        - {ref: common/led-dot@1, id: led-port-37-r, at: [297.8, 35.33], for: port-37, group: port-leds, rel-pos: 976}
-        - {ref: common/led-dot@1, id: led-port-38-l, at: [303.4, 12.87], for: port-38, group: port-leds, rel-pos: 977}
-        - {ref: common/led-dot@1, id: led-port-38-r, at: [311.7, 12.87], for: port-38, group: port-leds, rel-pos: 978}
-        - {ref: common/led-dot@1, id: led-port-39-l, at: [303.4, 35.33], for: port-39, group: port-leds, rel-pos: 979}
-        - {ref: common/led-dot@1, id: led-port-39-r, at: [311.7, 35.33], for: port-39, group: port-leds, rel-pos: 980}
-        - {ref: common/led-dot@1, id: led-port-40-l, at: [317.3, 12.87], for: port-40, group: port-leds, rel-pos: 981}
-        - {ref: common/led-dot@1, id: led-port-40-r, at: [325.6, 12.87], for: port-40, group: port-leds, rel-pos: 982}
-        - {ref: common/led-dot@1, id: led-port-41-l, at: [317.3, 35.33], for: port-41, group: port-leds, rel-pos: 983}
-        - {ref: common/led-dot@1, id: led-port-41-r, at: [325.6, 35.33], for: port-41, group: port-leds, rel-pos: 984}
-        - {ref: common/led-dot@1, id: led-port-42-l, at: [331.2, 12.87], for: port-42, group: port-leds, rel-pos: 985}
-        - {ref: common/led-dot@1, id: led-port-42-r, at: [339.5, 12.87], for: port-42, group: port-leds, rel-pos: 986}
-        - {ref: common/led-dot@1, id: led-port-43-l, at: [331.2, 35.33], for: port-43, group: port-leds, rel-pos: 987}
-        - {ref: common/led-dot@1, id: led-port-43-r, at: [339.5, 35.33], for: port-43, group: port-leds, rel-pos: 988}
-        - {ref: common/led-dot@1, id: led-port-44-l, at: [345.1, 12.87], for: port-44, group: port-leds, rel-pos: 989}
-        - {ref: common/led-dot@1, id: led-port-44-r, at: [353.4, 12.87], for: port-44, group: port-leds, rel-pos: 990}
-        - {ref: common/led-dot@1, id: led-port-45-l, at: [345.1, 35.33], for: port-45, group: port-leds, rel-pos: 991}
-        - {ref: common/led-dot@1, id: led-port-45-r, at: [353.4, 35.33], for: port-45, group: port-leds, rel-pos: 992}
-        - {ref: common/led-dot@1, id: led-port-46-l, at: [359.0, 12.87], for: port-46, group: port-leds, rel-pos: 993}
-        - {ref: common/led-dot@1, id: led-port-46-r, at: [367.3, 12.87], for: port-46, group: port-leds, rel-pos: 994}
-        - {ref: common/led-dot@1, id: led-port-47-l, at: [359.0, 35.33], for: port-47, group: port-leds, rel-pos: 995}
-        - {ref: common/led-dot@1, id: led-port-47-r, at: [367.3, 35.33], for: port-47, group: port-leds, rel-pos: 996}
     regions:
       - {id: mgmt-block, at: [5.5, 3.5], size: {w: 17, h: 39.5}, label: Management, members: [mgmt, usb, console]}
       - {id: uplinks, at: [375.5, 11.5], size: {w: 59, h: 31}, label: SFP+ uplinks, members: [port-48, port-49, port-50, port-51, port-52, port-53, port-54, port-55]}
