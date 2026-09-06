@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9720-56ed
-version: 1.0.1
+version: 1.1.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9720-56ED
@@ -307,6 +307,14 @@ provenance:
     240V, 16A' and 'DC input: -40 to -72V, 80A' are the INPUT to provision per supply and
     are recorded as input, not as draw. Nothing here adds the two 3000 W supply
     nameplates or the fan modules to any of these numbers.
+  lamp-apertures: >-
+    derived - every lamp and the reset button now declare the hole they sit in, which is
+    the convention #68 settled and which this file had for its ports and not for its
+    lamps. The opening is the part's own footprint at the part's own anchor, the way
+    edgecore/as5912-54x cuts common/led-arrow@1 and dcp-r-34d-cs cuts common/reset-button@1:
+    common/led-dot@1 takes a 2.0 circle because that is what its skin draws, the button a
+    4.0 square. No source dimensions the metal itself - the front figures are 3 px/mm and
+    carry baked-in annotation - so these are the part footprints and not a measurement.
   lifecycle: >-
     searched 2026-08-28, 'UfiSpace S9720-56ED end of life' - no announcement. UfiSpace
     lists the platform as current on both its Telecom Core/Edge and its AI Networking
@@ -723,6 +731,72 @@ views:
       - {id: fabric-17, at: [377.37, 66.22], size: [19.00, 10.00], shape: rect}
       - {id: fabric-18, at: [405.35, 51.38], size: [19.00, 10.00], shape: rect}
       - {id: fabric-19, at: [405.35, 66.22], size: [19.00, 10.00], shape: rect}
+      - {id: reset, at: [13.2, 7.4], size: [4.0, 4.0], shape: rect}
+      - {id: led-sync, at: [9.91, 62.96], size: [2.0, 2.0], shape: circle}
+      - {id: led-sys, at: [9.91, 65.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-fan, at: [9.91, 68.24], size: [2.0, 2.0], shape: circle}
+      - {id: led-ps0, at: [9.91, 70.71], size: [2.0, 2.0], shape: circle}
+      - {id: led-ps1, at: [9.91, 73.18], size: [2.0, 2.0], shape: circle}
+      - {id: led-mgmt-sfp-0, at: [46.1, 47.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-mgmt-sfp-1, at: [51.8, 47.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-36, at: [60.3, 47.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-37, at: [66.0, 47.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-0, at: [21.58, 14.1], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-1, at: [21.58, 27.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-2, at: [48.4, 14.1], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-3, at: [48.4, 27.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-4, at: [75.22, 14.1], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-5, at: [75.22, 27.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-6, at: [102.04, 14.1], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-7, at: [102.04, 27.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-8, at: [128.86, 14.1], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-9, at: [128.86, 27.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-10, at: [155.68, 14.1], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-11, at: [155.68, 27.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-12, at: [182.49, 14.1], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-13, at: [182.49, 27.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-14, at: [209.31, 14.1], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-15, at: [209.31, 27.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-16, at: [236.13, 14.1], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-17, at: [236.13, 27.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-18, at: [262.95, 14.1], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-19, at: [262.95, 27.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-fabric-0, at: [290.48, 14.1], size: [2.0, 2.0], shape: circle}
+      - {id: led-fabric-1, at: [290.48, 27.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-fabric-2, at: [318.46, 14.1], size: [2.0, 2.0], shape: circle}
+      - {id: led-fabric-3, at: [318.46, 27.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-fabric-4, at: [346.44, 14.1], size: [2.0, 2.0], shape: circle}
+      - {id: led-fabric-5, at: [346.44, 27.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-fabric-6, at: [374.42, 14.1], size: [2.0, 2.0], shape: circle}
+      - {id: led-fabric-7, at: [374.42, 27.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-fabric-8, at: [402.4, 14.1], size: [2.0, 2.0], shape: circle}
+      - {id: led-fabric-9, at: [402.4, 27.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-20, at: [75.22, 56.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-21, at: [75.22, 70.8], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-22, at: [102.04, 56.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-23, at: [102.04, 70.8], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-24, at: [128.86, 56.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-25, at: [128.86, 70.8], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-26, at: [155.68, 56.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-27, at: [155.68, 70.8], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-28, at: [182.49, 56.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-29, at: [182.49, 70.8], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-30, at: [209.31, 56.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-31, at: [209.31, 70.8], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-32, at: [236.13, 56.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-33, at: [236.13, 70.8], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-34, at: [262.95, 56.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-35, at: [262.95, 70.8], size: [2.0, 2.0], shape: circle}
+      - {id: led-fabric-10, at: [290.48, 56.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-fabric-11, at: [290.48, 70.8], size: [2.0, 2.0], shape: circle}
+      - {id: led-fabric-12, at: [318.46, 56.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-fabric-13, at: [318.46, 70.8], size: [2.0, 2.0], shape: circle}
+      - {id: led-fabric-14, at: [346.44, 56.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-fabric-15, at: [346.44, 70.8], size: [2.0, 2.0], shape: circle}
+      - {id: led-fabric-16, at: [374.42, 56.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-fabric-17, at: [374.42, 70.8], size: [2.0, 2.0], shape: circle}
+      - {id: led-fabric-18, at: [402.4, 56.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-fabric-19, at: [402.4, 70.8], size: [2.0, 2.0], shape: circle}
     silkscreen:
       - {at: [1.30, 15.00], text: S9720-56ED, font-size: 3.3, anchor: start, fill: '#f5f7fa', for: chassis}
       - {at: [15.20, 7.25], text: RESET, font-size: 2.4, anchor: middle, for: reset}

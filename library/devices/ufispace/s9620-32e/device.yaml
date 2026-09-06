@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9620-32e
-version: 1.0.1
+version: 1.1.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9620-32E
@@ -247,6 +247,14 @@ provenance:
     -48 to -60V, 80A' are the INPUT to provision per supply and are recorded as input,
     not as draw - the C100G lesson. Nothing here adds the two PSU nameplates or the fan
     modules to 696 and calls the result anything.
+  lamp-apertures: >-
+    derived - every lamp and the reset button now declare the hole they sit in, which is
+    the convention #68 settled and which this file had for its ports and not for its
+    lamps. The opening is the part's own footprint at the part's own anchor, the way
+    edgecore/as5912-54x cuts common/led-arrow@1 and dcp-r-34d-cs cuts common/reset-button@1:
+    common/led-dot@1 takes a 2.0 circle because that is what its skin draws, the button a
+    4.0 square. No source dimensions the metal itself, so these are the part footprints and
+    not a measurement; the platform has no hardware installation guide at all.
   lifecycle: >-
     searched 2026-08-28, 'UfiSpace S9620-32E end of life' - no announcement. UfiSpace
     unveiled the platform at the OCP APAC Summit in August 2025 as the first Broadcom
@@ -633,6 +641,51 @@ views:
       - {id: port-29, at: [379.12, 61.81], size: [19.0, 10.0], shape: rect}
       - {id: port-30, at: [404.43, 46.40], size: [19.0, 10.0], shape: rect}
       - {id: port-31, at: [404.43, 61.81], size: [19.0, 10.0], shape: rect}
+      - {id: led-sync, at: [12.86, 40.46], size: [2.0, 2.0], shape: circle}
+      - {id: led-sys, at: [12.86, 42.85], size: [2.0, 2.0], shape: circle}
+      - {id: led-fan, at: [12.86, 45.35], size: [2.0, 2.0], shape: circle}
+      - {id: led-ps0, at: [12.86, 47.79], size: [2.0, 2.0], shape: circle}
+      - {id: led-ps1, at: [12.86, 50.34], size: [2.0, 2.0], shape: circle}
+      - {id: led-id, at: [12.86, 52.78], size: [2.0, 2.0], shape: circle}
+      - {id: reset, at: [111.83, 19.6], size: [4.0, 4.0], shape: rect}
+      - {id: led-mgmt-sfp-0, at: [188.47, 9.31], size: [2.0, 2.0], shape: circle}
+      - {id: led-mgmt-sfp-1, at: [202.72, 9.31], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-32, at: [216.97, 9.31], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-33, at: [231.22, 9.31], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-34, at: [245.47, 9.31], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-35, at: [259.72, 9.31], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-0, at: [22.38, 51.17], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-1, at: [22.38, 65.15], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-2, at: [47.69, 51.17], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-3, at: [47.69, 65.15], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-4, at: [73.0, 51.17], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-5, at: [73.0, 65.15], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-6, at: [98.31, 51.17], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-7, at: [98.31, 65.15], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-8, at: [123.61, 51.17], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-9, at: [123.61, 65.15], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-10, at: [148.92, 51.17], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-11, at: [148.92, 65.15], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-12, at: [174.23, 51.17], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-13, at: [174.23, 65.15], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-14, at: [199.54, 51.17], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-15, at: [199.54, 65.15], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-16, at: [224.85, 51.17], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-17, at: [224.85, 65.15], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-18, at: [250.16, 51.17], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-19, at: [250.16, 65.15], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-20, at: [275.47, 51.17], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-21, at: [275.47, 65.15], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-22, at: [300.78, 51.17], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-23, at: [300.78, 65.15], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-24, at: [326.08, 51.17], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-25, at: [326.08, 65.15], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-26, at: [351.39, 51.17], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-27, at: [351.39, 65.15], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-28, at: [376.7, 51.17], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-29, at: [376.7, 65.15], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-30, at: [402.01, 51.17], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-31, at: [402.01, 65.15], size: [2.0, 2.0], shape: circle}
     silkscreen:
       - {at: [404.69, 7.28], text: S9620-32E, font-size: 2.5, anchor: start, fill: '#f5f7fa', for: chassis}
       - {at: [9.22, 16.83], text: 1PPS, font-size: 2.0, anchor: middle, for: pps}
