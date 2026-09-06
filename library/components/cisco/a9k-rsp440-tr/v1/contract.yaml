@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-rsp440-tr
-version: 1.1.1
+version: 1.2.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -91,8 +91,8 @@ provenance:
     that is how ICS0/ICS1/TOD on the RSP-440 and nV Sync0/nV Sync1/TOD on the
     ASR-9922-RP came out different without anyone deciding they should.
   cages: >-
-    composed from std/. RJ-45s are std/rj45-ganged (12.7 x 11.0) rather than std/rj45
-    (16.0 x 14.0): the IEC single-port cutout will not fit twice across a 41 mm card and
+    composed from std/. RJ-45s are std/rj45-ganged (12.7 x 11.0) rather than std/rj45's single-jack IEC panel cutout
+    (16.0 x 14.0 - the aperture, not the 15.8 x 13.2 housing): that cutout will not fit twice across a 41 mm card and
     the drawn jack measures 12.81 x 10.83. Timing coax is std/smb; the USB is std/usb-a;
     SFP+ is std/sfp-ganged.
   lamps: >-
@@ -318,15 +318,15 @@ relief:
         casa/pem@1 hs-button - 'NO PRECEDENT - a panel pushbutton. Invented here'. Reused
         rather than re-invented so the library carries ONE pushbutton number
 parts:
-  - {ref: std/rj45-ganged@1, id: sync-0, at: [7.56, 44.82], rotate: 90}
-  - {ref: std/rj45-ganged@1, id: sync-1, at: [7.56, 63.34], rotate: 90}
-  - {ref: std/rj45-ganged@1, id: ieee-1588, at: [7.56, 106.34], rotate: 90}
-  - {ref: std/rj45-ganged@1, id: ics-0, at: [7.56, 125.2], rotate: 90}
-  - {ref: std/rj45-ganged@1, id: ics-1-tod, at: [7.56, 144.06], rotate: 90}
-  - {ref: std/rj45-ganged@1, id: mgt-lan-0, at: [7.56, 233.17], rotate: 90}
-  - {ref: std/rj45-ganged@1, id: mgt-lan-1, at: [7.56, 252.86], rotate: 90}
-  - {ref: std/rj45-ganged@1, id: console, at: [7.56, 272.84], rotate: 90}
-  - {ref: std/rj45-ganged@1, id: aux, at: [7.56, 292.52], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: sync-0, at: [7.56, 44.82], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: sync-1, at: [7.56, 63.34], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: ieee-1588, at: [7.56, 106.34], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: ics-0, at: [7.56, 125.2], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: ics-1-tod, at: [7.56, 144.06], rotate: 90}
+  - {ref: common/rj45-ganged-eth@1, id: mgt-lan-0, at: [7.56, 233.17], rotate: 90}
+  - {ref: common/rj45-ganged-eth@1, id: mgt-lan-1, at: [7.56, 252.86], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: console, at: [7.56, 272.84], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: aux, at: [7.56, 292.52], rotate: 90}
   - {ref: std/smb@1, id: gps-10mhz, at: [9.82, 166.02]}
   - {ref: std/smb@1, id: gps-1pps, at: [9.82, 175.78]}
   - {ref: std/sfp-ganged@1, id: sfp-plus-0, at: [19.52, 85.02], rotate: 90}

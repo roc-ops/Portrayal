@@ -9,17 +9,17 @@ console-ports:
     type: rj-45
   - name: tod
     type: rj-45
-  - name: mgt-lan-0
-    type: rj-45
   - name: aux
-    type: rj-45
-  - name: mgt-lan-1
     type: rj-45
   - name: console
     type: rj-45
   - name: usb
     type: usb-a
 interfaces:
+  - name: mgt-lan-0
+    type: 1000base-t
+  - name: mgt-lan-1
+    type: 1000base-t
   - name: gps-10mhz
     type: other
     label: SMB
@@ -53,4 +53,4 @@ comments: 'Cisco ASR 9900 Fixed Chassis Route Processor. The RP for the ASR 9902
   - usb: 1 x USB class A
 
 
-  Contract version 1.0.1.'
+  Contract version 1.1.0.'
