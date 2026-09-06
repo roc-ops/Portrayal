@@ -101,7 +101,24 @@ views:
         - {ref: common/power-button@1, id: power-btn, at: [12, 13], for: chassis, group: mgmt, rel-pos: 1}
         - {ref: common/dc-barrel@1, id: dc-in, at: [32, 12.5], group: inlets, rel-pos: 1}
         - {ref: common/rj45-eth@1, id: eth-10g, at: [68.1, 11.65], attrs: {speed: 10g}, group: rj45-10g, rel-pos: 1}
-        - {ref: common/rj45-eth@1, id: eth-lan, at: [91.1, 11.5], rotate: 180, attrs: {speed: 1g}, group: rj45-1g, rel-pos: 1}
+        # UNDO THE FLIP. common/rj45-jack@2 (the retired part) declared
+        # "pins down, clip notch up" as its own default, which is what the
+        # sweep tool's turnover-preserving rotate: 180 was protecting - but
+        # this device's own photo-measured lamps outrank a retired part's
+        # stated default. The four deleted lamp placements (led-eth-lan-l at
+        # [92.3, 22.43], led-eth-lan-r at [103.7, 22.43], against the jack at
+        # [91.1, 11.5]) sit at x offsets 1.2 and 12.6 from the jack's own
+        # `at`, 0.27mm above the jack's bottom edge (91.1+15.8 jack width
+        # aside, bottom edge = 11.5 + 13.2 = 24.7; lamp bottom = 22.43 + 2.0
+        # = 24.43; 24.7 - 24.43 = 0.27) - exactly where common/rj45-eth@1
+        # draws led-a/led-b (at [1.2, 11.83]/[12.6, 11.83], each 0.27mm above
+        # its own local bottom edge) UNROTATED. The housing is keyway-down,
+        # same as its neighbour eth-10g, not keyway-up. led-a is screen-left
+        # at rotate 0, matching the old led-eth-lan-l at x 92.3, so no
+        # states: swap is needed (none was ever declared on this placement).
+        # The old part's photo-derived `skin: yellow` has no equivalent on
+        # rj45-eth@1 (skins: [default] only) and is no longer drawn.
+        - {ref: common/rj45-eth@1, id: eth-lan, at: [91.1, 11.5], attrs: {speed: 1g}, group: rj45-1g, rel-pos: 1}
         - {ref: common/reset-button@1, id: reset, at: [113, 16], for: chassis, group: mgmt, rel-pos: 2}
         - {ref: common/rj11-jack@1, id: tel-2, at: [123, 12.5], rotate: 180, attrs: {role: fxs}, rel-pos: 2, group: fxs}
         - {ref: common/rj11-jack@1, id: tel-1, at: [142, 12.5], rotate: 180, attrs: {role: fxs}, rel-pos: 1, group: fxs}

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: gl-8xep
-version: 2.0.0
+version: 2.0.1
 maturity: modelled
 manufacturer: ReadyLinks
 model: GL-8xEP
@@ -54,12 +54,14 @@ provenance:
     them as the render shows; the GLB 14.9 mm figure is the cage body
     behind the panel); USB-C pair at x 25.3; status lamps at
     x 12.7, y 22.2/26.9/32.0; reset button at (150.1, 30.2). The render
-    confirms every feature and the port legends. The jacks are drawn
-    with std/rj45-ganged (12.7 x 11.0, the bezel-less opening) because
-    the GLB jack bodies are 13.4 mm on a 13.95 mm pitch inside one
-    ganged shell strip per row (58.4 x 14.9 in the GLB) - std/rj45's
-    16 mm bezel physically cannot sit on that pitch, which L39 proved
-    by overlap before the swap.
+    confirms every feature and the port legends. Eight of the ten jacks
+    (the GbE/PoE row pair) are drawn with std/rj45-ganged@2 (12.7 x 11.0,
+    the bezel-less opening); the other two, the 2.5G pair, are the same
+    12.7 x 11.0 cell lamped - common/rj45-ganged-eth@1 - because the GLB
+    jack bodies are 13.4 mm on a 13.95 mm pitch inside one ganged shell
+    strip per row (58.4 x 14.9 in the GLB) - std/rj45's 16 mm bezel
+    physically cannot sit on that pitch, which L39 proved by overlap
+    before the swap.
   port-leds: >-
     drawing - 3.0 mm lenses above the top jack row (y 6.4) and below the
     bottom row (y 37.2), one per column; datasheet 'ReadyLighting: 64
