@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s8901-54xc
-version: 1.1.4
+version: 2.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S8901-54XC
@@ -42,15 +42,22 @@ provenance:
   mgmt-stack: >-
     photo-measured centres, COMPRESSED TO FIT THE REUSED PARTS: the render's
     bezels are mgmt RJ45 6.5-18.5, USB 18.6-26.0, console 26.3-37.8 (31.3 mm
-    total), while common/rj45-port@4 + common/usb-a@3 + common/rj45-bezel@2
-    stack to 39.1 mm. They are placed at y 1.6 / 16.9 / 26.4 - the USB lands on
-    its measured centre, the two jacks are pulled up to 2.7 mm off theirs. The
-    same trade the S9510-28DC made with the same three parts. THE TWO JACKS
-    MIRROR - in a 10x crop the mgmt jack's pins are at the bottom and the
-    console's at the top - and the mirroring is exactly the two components'
-    defaults: rj45-port@4 composes std/rj45 rotated (pins down, LEDs top) while
-    rj45-bezel@2 draws pins up, so NEITHER placement carries a rotate. A first
-    draft rotated the console 180 and the render pass caught it.
+    total), while the three parts placed here stack to 35.7 mm
+    (common/rj45-eth@1 13.2 + common/usb-a@3 9.3 + std/rj45@2 13.2; before the
+    RJ45 sweep the same trio - common/rj45-port@4, common/usb-a@3,
+    common/rj45-bezel@2 - stacked to 39.1). They are placed at y 1.6 / 16.9 /
+    26.4 - the USB lands on its measured centre, the two jacks are pulled up
+    to 2.7 mm off theirs. The same trade the S9510-28DC made with the same
+    three roles. THE TWO JACKS MIRROR - in a 10x crop the mgmt jack's pins are
+    at the bottom and the console's at the top. Before the sweep this fell out
+    of the two components' own defaults (rj45-port@4 composed std/rj45 rotated
+    internally, pins down/LEDs top; rj45-bezel@2 drew pins up) with neither
+    placement carrying a device-level rotate. The RJ45 sweep's FLIP_ORIGIN
+    rule now carries a rotate: 180 on the mgmt placement (common/rj45-eth@1's
+    own unrotated default is keyway-down, the opposite of rj45-port@4's) to
+    preserve this same pins-down/LEDs-top appearance; the console
+    (std/rj45@2) stays unrotated, still pins-up. A first draft rotated the
+    console 180 and the render pass caught it.
   led-positions: photo-measured (SYS/FAN/PS0/PS1 rect lamps at x centres 53.4/
     60.1/67.0/73.7, y centre 3.84, ID below PS1 at y 6.31 - RE-PITCHED in the
     model from the measured 6.8 mm to 7.7 mm, centres 52.5/60.2/67.9/75.6,
@@ -422,18 +429,23 @@ views:
       - {text: ▼, at: [428, 37.9], font-size: 2.2, anchor: middle, fill: '#e8eaec', for: port-53}
     components:
       placements:
-        - {ref: common/rj45-port@4, id: mgmt, at: [5.9, 1.6], group: mgmt, rel-pos: 1,
+        - {ref: common/rj45-eth@1, id: mgmt, at: [6.5, 2.45], rotate: 180, group: mgmt, rel-pos: 1,
            attrs: {role: mgmt, speed: 100m-1g},
-           states: {led-left: ['off', {name: link-1g, color: '#22c55e'},
-                               {name: activity-1g, color: '#22c55e', behavior: blinking}],
-                    led-right: ['off', {name: link-100m, color: '#f59e0b'},
-                                {name: activity-100m, color: '#f59e0b', behavior: blinking}]},
+           states: {led-a: ['off', {name: link-100m, color: '#f59e0b'},
+                            {name: activity-100m, color: '#f59e0b', behavior: blinking}],
+                    led-b: ['off', {name: link-1g, color: '#22c55e'},
+                            {name: activity-1g, color: '#22c55e', behavior: blinking}]},
            description: 'HIG Management Port LED table - left lamp Off (no power), Solid Green
              (1G link-up), Blinking Green (1G TX/RX activity); right lamp Off, Solid Amber
              (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity). Declared per
-             element because the two lamps do not share a vocabulary'}
+             element because the two lamps do not share a vocabulary. No per-device
+             corner evidence overrides the tool''s rotate: 180 (preserving the pre-sweep
+             common/rj45-port@4 render), so at this rotate the component-local left
+             window (led-a) renders on screen-right: led-a carries the physical-right/
+             amber pair and led-b the physical-left/green pair, the same physical
+             assignment as before the sweep'}
         - {ref: common/usb-a@3, id: usb, at: [5.9, 16.9], group: mgmt, rel-pos: 2, attrs: {role: storage, speed: usb3}}
-        - {ref: common/rj45-bezel@2, id: console, at: [5.9, 26.4], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
+        - {ref: std/rj45@2, id: console, at: [6.5, 27.25], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
         - {ref: common/reset-button@1, id: reset, at: [44.7, 3.6], for: chassis, group: mgmt, rel-pos: 4}
         - {ref: common/led-rect@1, id: led-sys, at: [50.2, 2.5], for: chassis,
            states: ['off',
@@ -590,8 +602,6 @@ views:
         - {ref: common/led-dot@1, id: led-port-53-3, at: [423.52, 38.47], for: port-53, attrs: {port: '53', lane: '3'}, group: port-leds, rel-pos: 53}
         - {ref: common/led-dot@1, id: led-port-52-4, at: [427.98, 6.55], for: port-52, attrs: {port: '52', lane: '4'}, group: port-leds, rel-pos: 52}
         - {ref: common/led-dot@1, id: led-port-53-4, at: [427.6, 38.47], for: port-53, attrs: {port: '53', lane: '4'}, group: port-leds, rel-pos: 53}
-        - {ref: common/led-dot@1, id: led-mgmt-l, at: [7.1, 14.23], for: mgmt, group: port-leds, rel-pos: 901}
-        - {ref: common/led-dot@1, id: led-mgmt-r, at: [19.7, 14.23], for: mgmt, group: port-leds, rel-pos: 902}
     regions:
       - {id: mgmt-block, at: [5.4, 1], size: {w: 18.4, h: 42}, label: Management, members: [mgmt, usb, console]}
       - {id: sfp-block-a, at: [26, 9.5], size: {w: 171.6, h: 29.4}, label: SFP28 0-23, members: [port-0, port-23]}
