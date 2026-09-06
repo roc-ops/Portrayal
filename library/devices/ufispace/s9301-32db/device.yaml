@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9301-32db
-version: 2.0.0
+version: 2.0.1
 maturity: modelled
 manufacturer: UfiSpace
 model: S9301-32DB
@@ -103,9 +103,11 @@ provenance:
     console RJ45 at the top (6.5-18.5), USB 3.0 (19.3-25.6), OOB RJ45 at the bottom
     (26.4-38.4). THE TWO JACKS MIRROR - at 36x zoom the console shows its latch keyway UP
     with the eight contacts below, and the OOB shows the contacts UP with the keyway below,
-    so the console is rotate: 180 and the OOB is not. The 14.0 x 12.0 mm ganged-RJ45 parts
-    are used because the 17.0 x 14.9 mm ones do not fit: three of those stack to 39.1 mm in
-    a 32.7 mm bezel. common/rj45-ganged-eth@1 draws its two integrated lamps on the keyway
+    so the console is rotate: 180 and the OOB is not. The 12.7 x 11.0 mm ganged-RJ45 cells
+    (std/rj45-ganged@2, via common/rj45-ganged-eth@1) are used because the 15.8 x 13.2 mm
+    single-housing jack (std/rj45@2) does not fit: two of those plus the 7.0 mm-tall
+    common/usb-a@2 between them stack to 33.4 mm in a 32.7 mm bezel. common/rj45-ganged-eth@1
+    draws its two integrated lamps on the keyway
     side already, matching the photo; the mismatch common/rj45-hd@1 used to force (its
     lamps drawn on the CONTACT side, against this device's keyway-side photo) is gone, and
     the jack stays unrotated because the contacts and keyway are geometry, unaffected by
