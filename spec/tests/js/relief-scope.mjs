@@ -45,7 +45,7 @@ out.defaultIsItsOwnScope = [await m.svgSource(url), await m.svgSource(url, b)];
 out.defaultStatesUntouched = [...m.nodeStates()];
 
 // THE RASTER DENSITY AND THE FRU SET were still module-level after the first
-// pass at this, and the closing note on ndv#31 said so: two viewers at different
+// pass at this, and the closing note on roc-ops/Portrayal#31 said so: two viewers at different
 // pxmm would fight over PXMM. configureRelief now writes them onto the scope it
 // is given, so a second viewer configuring cannot reclaim the first's.
 const hi = m.createReliefScope();

@@ -551,7 +551,7 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     # HOW IT MOVES, beside WHAT IT IS. The 3D viewer decided what could be
     # ejected from a hardcoded class list, so every new removable type meant
     # editing that list - and a transceiver, which is removable, was not on it.
-    # See roc-ops/ndv#3.
+    # See roc-ops/Portrayal#3.
     if contract.get("behaviour"):
         g.set("data-behaviour", contract["behaviour"])
     g.set("data-ref", f"{ref}:{contract['version']}")

@@ -89,7 +89,7 @@ PART_IFACE = {
 # Two earlier versions of this were wrong in opposite directions. Keeping the
 # cage default unless the attr looked "faster" - compared as strings, which is
 # not an ordering - meant A9K-40GE-B still exported forty 10G interfaces after
-# its contract was corrected to `sfp: 40` (roc-ops/ndv#23). Letting the attr win
+# its contract was corrected to `sfp: 40` (roc-ops/Portrayal#23). Letting the attr win
 # outright then retyped every QSFP cage on the mixed cards.
 CAGE_FAMILY = {
     "std/sfp-ganged": "sfp",
@@ -131,7 +131,7 @@ PART_CONSOLE = {"std/rj45-ganged": "rj-45", "common/rj45-shielded": "rj-45",
 # RE-S-2000, JNP10K-RE1, the MX2000 RCBs, and every other Juniper RE card
 # still on the old bare ref - keeps falling through exactly as it always did,
 # rather than an id-blind version-less "std/rj45" key exporting its Ethernet
-# management jack as a console port (ndv rj45-common fix round). std/rj45@1
+# management jack as a console port (the rj45-common fix round). std/rj45@1
 # and std/rj45-ganged@1 old refs are unaffected: the ganged one was already
 # in PART_CONSOLE version-less (both its versions read the same either way);
 # the plain one still drops out of export, as before this family existed.
@@ -145,7 +145,7 @@ FAMILY_PART = {
 # ...AND FAMILY_PART IS A FALLBACK, NOT A DECISION. #125 gave std/rj45@2 seven
 # jobs - console, aux, serial; ToD, BITS, 1PPS, sync; telemetry - so the ref can
 # no longer carry the DCIM type, which is the lesson recorded a few lines below
-# and learned twice already (ndv#27, #29). Reading the ref alone exported seven
+# and learned twice already (roc-ops/Portrayal#27, #29). Reading the ref alone exported seven
 # Juniper timing jacks as CONSOLE PORTS. So the placement's own words are read
 # first: an id, role or media naming a timing function makes an `other` interface
 # labelled with that function - the treatment PART_RF already gives an SMB timing
@@ -195,7 +195,7 @@ PART_POWER = {
 #
 # A housing cannot carry this. Ten identical `common/sfp-plus-cage` can be eight
 # 1G and two 10G, and an 8P8C shell is equally an Ethernet port, a console and a
-# telemetry link - roc-ops/ndv#27 and #29 are the same defect seen twice. The
+# telemetry link - roc-ops/Portrayal#27 and #29 are the same defect seen twice. The
 # library answers both the same way: `attrs` on the placement, which thirty-odd
 # parts already carried before either issue was filed.
 #
