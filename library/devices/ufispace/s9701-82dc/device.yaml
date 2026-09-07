@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9701-82dc
-version: 2.1.3
+version: 2.1.4
 maturity: modelled
 manufacturer: UfiSpace
 model: S9701-82DC
@@ -109,23 +109,33 @@ provenance:
     at 36.83 and 50.41. They sit in the middle of the panel height with vent field above
     and below, which is why the fabric block is visibly shorter than the service blocks.
   port-numbers: >-
-    TRANSCRIBED, NOT RECONSTRUCTED. The HIG's Port Overview table gives the three ranges -
-    '0 ~ 63 SFP28 1/10/25G', '64 ~ 75 QSFP28 40/100G', '0 ~ 5 QSFP-DD 400G' - and Figure 8
-    prints the individual numerals large enough to read at 600 dpi: the yellow band above
-    each SFP28 shell carries 'N (up-triangle)(down-triangle) N+1' per column, even on the
-    top row and odd on the bottom, 0-31 across the upper shell row and 32-63 across the
-    lower; the crimson fabric band prints '0 (up) o o (down) 1', '2 ... 3', '4 ... 5'. The
-    fabric ports therefore have their OWN numbering space starting at 0, which is the
-    vendor's, not an editorial choice.
-    THE QSFP28 NUMERALS ARE THE ONE SET THAT IS NOT LEGIBLE. Each green band carries a
-    white lozenge - an up-triangle over a down-triangle - with two dark glyph clusters
-    inside it, and at 3.4 px/mm (both images are the same raster resolution here) the
-    digits will not separate. That printing EXISTS is a positive reading, not a guess: the
-    same crop resolves the neighbouring crimson band's numerals and the yellow band's,
-    which are the same glyph size on the same darkness of ground. The values 64/65 ... 74/75
-    come from the HIG's port table and from Figure 8's own callout numbering of those very
-    shells, so they are drawn; that the GLYPHS were not read is recorded in the
-    qsfp28-numeral-glyphs gap.
+    TRANSCRIBED, NOT RECONSTRUCTED. The HIG's Port Overview table gives the three ranges
+    - '0 ~ 63 SFP28 1/10/25G', '64 ~ 75 QSFP28 40/100G', '0 ~ 5 QSFP-DD 400G' - and
+    Figure 8 prints the individual numerals large enough to read at 600 dpi: the yellow
+    band above each SFP28 shell carries 'N (up-triangle)(down-triangle) N+1' per column,
+    even on the top row and odd on the bottom, 0-31 across the upper shell row and 32-63
+    across the lower; the crimson fabric band prints '0 (up) o o (down) 1', '2 ... 3',
+    '4 ... 5'. The fabric ports therefore have their OWN numbering space starting at 0,
+    which is the vendor's, not an editorial choice. THE QSFP28 NUMERALS ARE THE ONE SET
+    THAT IS NOT LEGIBLE. Each green band carries a white lozenge - an up-triangle over a
+    down-triangle - with two dark glyph clusters inside it, and at 3.4 px/mm (both
+    images are the same raster resolution here) the digits will not separate. That
+    printing EXISTS is a positive reading, not a guess: the same crop resolves the
+    neighbouring crimson band's numerals and the yellow band's, which are the same glyph
+    size on the same darkness of ground. The values 64/65 ... 74/75 come from the HIG's
+    port table and from Figure 8's own callout numbering of those very shells, so they
+    are drawn; that the GLYPHS were not read is recorded in the qsfp28-numeral-glyphs
+    gap. THE LOZENGE IS 3.2 mm ACROSS, measured rather than eyeballed: a white-pixel run
+    over the upper green band in the front product render (chassis 1397 x 281 px for 436
+    x 87.7 mm, aspect 4.972 against a true 4.971) puts the three badges at
+    309.68-312.80, 333.08-336.20 and 355.87-359.30, so 3.12, 3.12 and 3.43 mm wide on
+    centres 311.24, 334.64 and 357.58 against the drawn 310.79, 334.50 and 358.10. The
+    first draft drew them 3.74 wide, which is 17% over. The badge is BIGGER than the
+    SFP28 direction arrows beside it and that is the vendor's doing, not a slip: this is
+    a number badge carrying two glyph clusters, while those are bare arrows - and
+    common/led-arrow-sm is deliberately undersized there (2.25 against the vendor's 3.6)
+    to clear the 3.74 mm lamp pitch, so the two sit at opposite ends of their own errors
+    and the contrast reads larger than it is.
   port-leds: >-
     photo-measured from the front product render, because HIG Figure 8 draws the shells
     with transceivers seated and every per-port lamp is hidden behind a module face.
@@ -1007,28 +1017,28 @@ views:
       - {at: [278.68, 73.03], path: 'M -1.15 0.78 L 1.15 0.78 L 0 -0.78 L -1.15 0.78', filled: true, stroke-width: 0.45, fill: '#20242a', for: port-62}
       - {at: [281.38, 73.03], path: 'M -1.15 -0.78 L 1.15 -0.78 L 0 0.78 L -1.15 -0.78', filled: true, stroke-width: 0.45, fill: '#20242a', for: port-63}
       - {at: [285.23, 73.78], text: '63', anchor: middle, font-size: 2, fill: '#20242a', for: port-63}
-      - {at: [310.79, 9.9], path: 'M -1.87 1.80 L 1.87 1.80 L 0 -1.80 L -1.87 1.80', filled: true, stroke-width: 0.4, fill: '#f0f0f0', for: port-64}
-      - {at: [310.79, 13.5], path: 'M -1.87 -1.80 L 1.87 -1.80 L 0 1.80 L -1.87 -1.80', filled: true, stroke-width: 0.4, fill: '#f0f0f0', for: port-65}
+      - {at: [310.79, 9.9], path: 'M -1.60 1.80 L 1.60 1.80 L 0 -1.80 L -1.60 1.80', filled: true, stroke-width: 0.4, fill: '#f0f0f0', for: port-64}
+      - {at: [310.79, 13.5], path: 'M -1.60 -1.80 L 1.60 -1.80 L 0 1.80 L -1.60 -1.80', filled: true, stroke-width: 0.4, fill: '#f0f0f0', for: port-65}
       - {at: [310.79, 10.45], text: '64', anchor: middle, font-size: 1.4, fill: '#20242a', for: port-64}
       - {at: [310.79, 14.05], text: '65', anchor: middle, font-size: 1.4, fill: '#20242a', for: port-65}
-      - {at: [334.5, 9.9], path: 'M -1.87 1.80 L 1.87 1.80 L 0 -1.80 L -1.87 1.80', filled: true, stroke-width: 0.4, fill: '#f0f0f0', for: port-66}
-      - {at: [334.5, 13.5], path: 'M -1.87 -1.80 L 1.87 -1.80 L 0 1.80 L -1.87 -1.80', filled: true, stroke-width: 0.4, fill: '#f0f0f0', for: port-67}
+      - {at: [334.5, 9.9], path: 'M -1.60 1.80 L 1.60 1.80 L 0 -1.80 L -1.60 1.80', filled: true, stroke-width: 0.4, fill: '#f0f0f0', for: port-66}
+      - {at: [334.5, 13.5], path: 'M -1.60 -1.80 L 1.60 -1.80 L 0 1.80 L -1.60 -1.80', filled: true, stroke-width: 0.4, fill: '#f0f0f0', for: port-67}
       - {at: [334.5, 10.45], text: '66', anchor: middle, font-size: 1.4, fill: '#20242a', for: port-66}
       - {at: [334.5, 14.05], text: '67', anchor: middle, font-size: 1.4, fill: '#20242a', for: port-67}
-      - {at: [358.1, 9.9], path: 'M -1.87 1.80 L 1.87 1.80 L 0 -1.80 L -1.87 1.80', filled: true, stroke-width: 0.4, fill: '#f0f0f0', for: port-68}
-      - {at: [358.1, 13.5], path: 'M -1.87 -1.80 L 1.87 -1.80 L 0 1.80 L -1.87 -1.80', filled: true, stroke-width: 0.4, fill: '#f0f0f0', for: port-69}
+      - {at: [358.1, 9.9], path: 'M -1.60 1.80 L 1.60 1.80 L 0 -1.80 L -1.60 1.80', filled: true, stroke-width: 0.4, fill: '#f0f0f0', for: port-68}
+      - {at: [358.1, 13.5], path: 'M -1.60 -1.80 L 1.60 -1.80 L 0 1.80 L -1.60 -1.80', filled: true, stroke-width: 0.4, fill: '#f0f0f0', for: port-69}
       - {at: [358.1, 10.45], text: '68', anchor: middle, font-size: 1.4, fill: '#20242a', for: port-68}
       - {at: [358.1, 14.05], text: '69', anchor: middle, font-size: 1.4, fill: '#20242a', for: port-69}
-      - {at: [310.79, 73.6], path: 'M -1.87 1.80 L 1.87 1.80 L 0 -1.80 L -1.87 1.80', filled: true, stroke-width: 0.4, fill: '#f0f0f0', for: port-70}
-      - {at: [310.79, 77.4], path: 'M -1.87 -1.80 L 1.87 -1.80 L 0 1.80 L -1.87 -1.80', filled: true, stroke-width: 0.4, fill: '#f0f0f0', for: port-71}
+      - {at: [310.79, 73.6], path: 'M -1.60 1.80 L 1.60 1.80 L 0 -1.80 L -1.60 1.80', filled: true, stroke-width: 0.4, fill: '#f0f0f0', for: port-70}
+      - {at: [310.79, 77.4], path: 'M -1.60 -1.80 L 1.60 -1.80 L 0 1.80 L -1.60 -1.80', filled: true, stroke-width: 0.4, fill: '#f0f0f0', for: port-71}
       - {at: [310.79, 74.15], text: '70', anchor: middle, font-size: 1.4, fill: '#20242a', for: port-70}
       - {at: [310.79, 77.95], text: '71', anchor: middle, font-size: 1.4, fill: '#20242a', for: port-71}
-      - {at: [334.5, 73.6], path: 'M -1.87 1.80 L 1.87 1.80 L 0 -1.80 L -1.87 1.80', filled: true, stroke-width: 0.4, fill: '#f0f0f0', for: port-72}
-      - {at: [334.5, 77.4], path: 'M -1.87 -1.80 L 1.87 -1.80 L 0 1.80 L -1.87 -1.80', filled: true, stroke-width: 0.4, fill: '#f0f0f0', for: port-73}
+      - {at: [334.5, 73.6], path: 'M -1.60 1.80 L 1.60 1.80 L 0 -1.80 L -1.60 1.80', filled: true, stroke-width: 0.4, fill: '#f0f0f0', for: port-72}
+      - {at: [334.5, 77.4], path: 'M -1.60 -1.80 L 1.60 -1.80 L 0 1.80 L -1.60 -1.80', filled: true, stroke-width: 0.4, fill: '#f0f0f0', for: port-73}
       - {at: [334.5, 74.15], text: '72', anchor: middle, font-size: 1.4, fill: '#20242a', for: port-72}
       - {at: [334.5, 77.95], text: '73', anchor: middle, font-size: 1.4, fill: '#20242a', for: port-73}
-      - {at: [358.1, 73.6], path: 'M -1.87 1.80 L 1.87 1.80 L 0 -1.80 L -1.87 1.80', filled: true, stroke-width: 0.4, fill: '#f0f0f0', for: port-74}
-      - {at: [358.1, 77.4], path: 'M -1.87 -1.80 L 1.87 -1.80 L 0 1.80 L -1.87 -1.80', filled: true, stroke-width: 0.4, fill: '#f0f0f0', for: port-75}
+      - {at: [358.1, 73.6], path: 'M -1.60 1.80 L 1.60 1.80 L 0 -1.80 L -1.60 1.80', filled: true, stroke-width: 0.4, fill: '#f0f0f0', for: port-74}
+      - {at: [358.1, 77.4], path: 'M -1.60 -1.80 L 1.60 -1.80 L 0 1.80 L -1.60 -1.80', filled: true, stroke-width: 0.4, fill: '#f0f0f0', for: port-75}
       - {at: [358.1, 74.15], text: '74', anchor: middle, font-size: 1.4, fill: '#20242a', for: port-74}
       - {at: [358.1, 77.95], text: '75', anchor: middle, font-size: 1.4, fill: '#20242a', for: port-75}
       - {at: [363.06, 29.47], text: '0', anchor: middle, font-size: 2, fill: '#f0f0f0', for: fabric-0}

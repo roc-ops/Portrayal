@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-28dx
-version: 2.0.3
+version: 2.0.4
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-28DX
@@ -124,6 +124,19 @@ provenance:
     column - which is port 0, the 100G port those four SFP28 breakout ports share. The
     vendor is marking the shared group on the metal. Sampled RGB: yellow 233/216/60,
     orange 218/108/48, green PCB about 70/95/58.
+  port-numbers: >-
+    NOT DRAWN, and this is the same finding the S9600-56DX records rather than an
+    omission - it is written down here because the file previously said nothing and the
+    silence read as one. HIG Figure 8 prints a large green numeral on each schematic
+    module face (0 4 8 12 over 1 5 9 13 across the first four columns), which is where a
+    seated transceiver would cover it. The datasheet's product render of the same panel
+    with every cage EMPTY shows no numeral anywhere on the metal: the bright bezel
+    frames, the EMI strips and the green lamp strips are unmarked at 8x. So the
+    NUMBERING is certain - it runs down each column and every id and rel-pos here uses
+    it - while where the vendor prints it is not. The one thing that could carry it is
+    the white pointed badge the lamp strip draws between clusters, which is the shape
+    the S9610-46DX resolved as a number badge on its own artwork; at this raster the
+    28DX's cannot be read either way, so nothing is printed and the question is a gap.
   vents: >-
     figure-measured extent, SIMPLIFIED SHAPE. The faceplate is a square-perforation
     field over most of its area, and the perforated region was measured by dark-run
@@ -278,6 +291,18 @@ chassis:
   ru: 2
   weight-kg: 17.66
 gaps:
+- what: port-number-printing
+  scope: [qsfp28, qsfpdd-400g, sfp28]
+  reason: needs-photo
+  note: >-
+    Where the faceplate prints its port numerals is not established. HIG Figure 8 puts each one
+    on the schematic module face, where a seated transceiver would cover it, and the datasheet's
+    empty-cage product render shows none on the metal at 8x. The white pointed badges the lamp
+    strip draws between clusters are the one feature that could carry them - the S9610-46DX
+    resolved the same shape on the same vendor's artwork as a number badge with a small numeral
+    in it - but at this figure's raster the badge is a shape and nothing more. The numbering
+    itself is certain and is used for every id and rel-pos; only the printing is open.
+  wanted: a straight-on high-resolution photograph of the faceplate with the cages empty
 - what: psu-variant-attrs
   scope: [psu-0, psu-1]
   reason: needs-hardware
