@@ -1,0 +1,75 @@
+format: 1
+kind: lab
+name: roadm-ring-demo
+title: Three-site ROADM ring demo
+description: >-
+  Three-site optical ring built in the lab as a demonstration. Each site is a
+  DCP-SC-28P service-channel controller with two DCP-R ROADM units below it,
+  one per direction. Transcribed from a hand-drawn Visio connectivity diagram.
+provenance:
+  layout: stated - controllers at U36, U28 and U20, each with its two ROADMs
+    below on alternate Us
+  topology: ring read off the connectivity diagram - D1-to-D1 between the first
+    pair, D2-to-D1 onward, closing D2-to-D2 back to the first site. Management
+    and the site cross-connect were corrected from the diagram afterwards
+  management: stated - each ROADM's REAR ETH 4 runs round to the FRONT of its
+    controller, D1 to port 1 and D2 to port 2. The SC-28P has no rear ethernet,
+    so these are rear-to-front runs and the viewer routes them accordingly
+  cross-connect: stated - D1 XC34 to D2 XC34 at every site
+  osc-loop: stated - OSC TX into 1510 RX, 1510 TX back into OSC RX, per ROADM
+  strands: every fiber is modelled individually rather than as a duplex link, so
+    a run appears as two tubes - TX at one end into RX at the other, and back
+  spans: the three ring spans are named so the viewer can colour them apart.
+    Intra-site fiber - the XC cross-connect and the OSC loops - carries no span
+    and renders in the neutral fiber colour
+  roadm-model: assumed dcp-r-34d-cs. The diagram labels the units only as
+    roadm01-D1/D2; the 34D-CS is the colourless-directionless cross-connect,
+    which is the better fit for a ROADM role than the 9D
+rack:
+  height-ru: 42
+  rails-only: true
+devices:
+  - {id: site-a-sc01,        ref: dcp-sc-28p,    ru: 36, label: site-a-sc01}
+  - {id: site-a-roadm01-D1,  ref: dcp-r-34d-cs,  ru: 34, label: site-a-roadm01-D1}
+  - {id: site-a-roadm01-D2,  ref: dcp-r-34d-cs,  ru: 32, label: site-a-roadm01-D2}
+  - {id: site-b-sc01,        ref: dcp-sc-28p,    ru: 28, label: site-b-sc01}
+  - {id: site-b-roadm01-D1,  ref: dcp-r-34d-cs,  ru: 26, label: site-b-roadm01-D1}
+  - {id: site-b-roadm01-D2,  ref: dcp-r-34d-cs,  ru: 24, label: site-b-roadm01-D2}
+  - {id: site-c-sc01,        ref: dcp-sc-28p,    ru: 20, label: site-c-sc01}
+  - {id: site-c-roadm01-D1,  ref: dcp-r-34d-cs,  ru: 18, label: site-c-roadm01-D1}
+  - {id: site-c-roadm01-D2,  ref: dcp-r-34d-cs,  ru: 16, label: site-c-roadm01-D2}
+links:
+  # management - each ROADM's rear ETH 4 round to the controller's front
+  - {media: ethernet, from: [site-a-roadm01-D1, eth4], to: [site-a-sc01, port-1]}
+  - {media: ethernet, from: [site-a-roadm01-D2, eth4], to: [site-a-sc01, port-2]}
+  - {media: ethernet, from: [site-b-roadm01-D1, eth4], to: [site-b-sc01, port-1]}
+  - {media: ethernet, from: [site-b-roadm01-D2, eth4], to: [site-b-sc01, port-2]}
+  - {media: ethernet, from: [site-c-roadm01-D1, eth4], to: [site-c-sc01, port-1]}
+  - {media: ethernet, from: [site-c-roadm01-D2, eth4], to: [site-c-sc01, port-2]}
+  # site cross-connect - D1 XC34 to D2 XC34, both strands
+  - {media: smf, from: [site-a-roadm01-D1, xc34, tx], to: [site-a-roadm01-D2, xc34, rx]}
+  - {media: smf, from: [site-a-roadm01-D2, xc34, tx], to: [site-a-roadm01-D1, xc34, rx]}
+  - {media: smf, from: [site-b-roadm01-D1, xc34, tx], to: [site-b-roadm01-D2, xc34, rx]}
+  - {media: smf, from: [site-b-roadm01-D2, xc34, tx], to: [site-b-roadm01-D1, xc34, rx]}
+  - {media: smf, from: [site-c-roadm01-D1, xc34, tx], to: [site-c-roadm01-D2, xc34, rx]}
+  - {media: smf, from: [site-c-roadm01-D2, xc34, tx], to: [site-c-roadm01-D1, xc34, rx]}
+  # OSC loop on every ROADM - OSC TX into 1510 RX and 1510 TX back into OSC RX
+  - {media: smf, from: [site-a-roadm01-D1, port-osc, tx], to: [site-a-roadm01-D1, port-1510, rx]}
+  - {media: smf, from: [site-a-roadm01-D1, port-1510, tx], to: [site-a-roadm01-D1, port-osc, rx]}
+  - {media: smf, from: [site-a-roadm01-D2, port-osc, tx], to: [site-a-roadm01-D2, port-1510, rx]}
+  - {media: smf, from: [site-a-roadm01-D2, port-1510, tx], to: [site-a-roadm01-D2, port-osc, rx]}
+  - {media: smf, from: [site-b-roadm01-D1, port-osc, tx], to: [site-b-roadm01-D1, port-1510, rx]}
+  - {media: smf, from: [site-b-roadm01-D1, port-1510, tx], to: [site-b-roadm01-D1, port-osc, rx]}
+  - {media: smf, from: [site-b-roadm01-D2, port-osc, tx], to: [site-b-roadm01-D2, port-1510, rx]}
+  - {media: smf, from: [site-b-roadm01-D2, port-1510, tx], to: [site-b-roadm01-D2, port-osc, rx]}
+  - {media: smf, from: [site-c-roadm01-D1, port-osc, tx], to: [site-c-roadm01-D1, port-1510, rx]}
+  - {media: smf, from: [site-c-roadm01-D1, port-1510, tx], to: [site-c-roadm01-D1, port-osc, rx]}
+  - {media: smf, from: [site-c-roadm01-D2, port-osc, tx], to: [site-c-roadm01-D2, port-1510, rx]}
+  - {media: smf, from: [site-c-roadm01-D2, port-1510, tx], to: [site-c-roadm01-D2, port-osc, rx]}
+  # the optical ring - Line ports, one fiber pair per span
+  - {media: smf, from: [site-a-roadm01-D1, port-line, tx], to: [site-b-roadm01-D1, port-line, rx], span: site-a-site-b}
+  - {media: smf, from: [site-b-roadm01-D1, port-line, tx], to: [site-a-roadm01-D1, port-line, rx], span: site-a-site-b}
+  - {media: smf, from: [site-b-roadm01-D2, port-line, tx], to: [site-c-roadm01-D1, port-line, rx], span: site-b-site-c}
+  - {media: smf, from: [site-c-roadm01-D1, port-line, tx], to: [site-b-roadm01-D2, port-line, rx], span: site-b-site-c}
+  - {media: smf, from: [site-c-roadm01-D2, port-line, tx], to: [site-a-roadm01-D2, port-line, rx], span: site-c-site-a}
+  - {media: smf, from: [site-a-roadm01-D2, port-line, tx], to: [site-c-roadm01-D2, port-line, rx], span: site-c-site-a}
