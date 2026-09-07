@@ -34,8 +34,12 @@ per-FRU captures, and key verified dimensions.
 
 These are typical figures for a careful capture under the conditions above,
 not guarantees. A capture is fit for geometry only once its caliper spot checks
-have been taken and the error they show has been written down; the calipers
-are the measurement, the photo is the map between them.
+have been taken, the error they show has been written down, and that error is
+within tolerance: a port-scale feature (a connector face, a pitch) must read
+within 0.5 mm of the calipers or be recaptured; a shell-scale figure (chassis
+width, height, depth, a bay position) within 2 mm. The recorded error travels
+with the measurement as its confidence. The calipers are the measurement; the
+photo is the map between them.
 
 ## Per-device intake checklist
 
@@ -77,7 +81,10 @@ are the measurement, the photo is the map between them.
 
 File everything under `working/intake/<vendor>/<line>/` — the gitignored
 staging tree the intake process uses — and record each file in that
-directory's `SOURCES.md`. `working/images/<stem>/` is reserved for what
+directory's `SOURCES.md`. Name capture files by model and view
+(`<model>-<n>-<view>.png`, as the staged gallery images are), so two devices in
+one line never collide, and date a second session of the same model in
+`SOURCES.md` rather than overwriting its files. `working/images/<stem>/` is reserved for what
 `spec/tools/intake/extract.py` writes. Photos and scans never enter the
 repository, identity photos included: what crosses into `library/` is the
 transcribed fact, carried in the device's provenance block as `measured` with
