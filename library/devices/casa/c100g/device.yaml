@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: c100g
-version: 0.5.6
+version: 0.5.7
 maturity: modelled
 manufacturer: Casa Systems
 model: C100G
@@ -80,20 +80,20 @@ provenance:
     card. Their faceplate aspect is 13.26; the chassis front view gives 345.5 by 30.46 = 11.34,
     about 17 percent wider. Port positions taken from those figures are therefore used as FRACTIONS
     of the faceplate and stretched to this width, not as absolute geometry
-  width: 'Table A-1 quotes 19in / 482, which is the rack face INCLUDING the mounting ears. Jason
+  width: 'Table A-1 quotes 19in / 482, which is the rack face INCLUDING the mounting ears. The maintainer
     confirmed from a real chassis that the ears sit outside the body and that there is only a 1/8in
     (3.175mm) flange either side of the cards. Working back: the card region measures 426.6 in Fig
     1-1, so the BODY is 426.6 + 2x3.175 = 432.95, and the ears must protrude 24.5 each side to reach
     482. Drawn as the body only - the ears are deliberately omitted for now and can be added as
     their own part'
-  airflow: Jason - air is drawn in at the rear, passes behind and through the cards, and exhausts
+  airflow: the maintainer - air is drawn in at the rear, passes behind and through the cards, and exhausts
     at the FRONT bottom. So the grille below the filter is the fan EXHAUST, not an intake, and it
     is a coarse wire grille rather than perforation
   rear-slots: 'datasheet - C100G rear side (11+1) in Chapter 4, verbatim: slots 0-4 6+12 IO or IO2;
     slot 5 LC-BDM-SWITCH for BDM line module redundancy; slots 6 and 7 SMM-SW-BDM-A and -B respectively,
     with the guide noting that correct slot positions are indicated on the module faceplates; slot
     8 6+12 SW-IO or SW-IO2, non-redundant under 11+1; slots 9-13 6+12 IO or IO2'
-  rear-order: 'Jason - the rear slot order is MIRRORED. Rear N connects to front N, so viewed from
+  rear-order: 'the maintainer - the rear slot order is MIRRORED. Rear N connects to front N, so viewed from
     the back the numbering runs right to left: rear 0 sits directly behind front 0, which is on
     the far side when you walk round. Rear bay x is therefore FL + (13 - N) * pitch, not FL + N
     * pitch'
@@ -129,7 +129,7 @@ provenance:
     ELSE IS DRAWN ON THESE FACES, deliberately. The bottom is bare beyond the flange
     because the guide says nothing about it except "grab the bottom of the chassis"
     when lifting - no feet, no vents, no label. No top or bottom vents are drawn
-    either: the guide and Jason disagree about which way the air goes (see the airflow
+    either: the guide and the maintainer disagree about which way the air goes (see the airflow
     entry), but both readings are front-to-rear or rear-to-front, and neither puts
     an opening on these two faces. An invented top plate would be the wrong-box
     outcome these four views exist to prevent'
