@@ -51,9 +51,12 @@ Three layers:
 6. **Regions**: addressable areas (sensor context via Redfish PhysicalContext
    vocabulary, grouping, doc callouts); may declare member components; NOS
    entity-map rules may target regions (e.g. a per-NOS "port bank" container).
-7. **Licensing**: Apache-2.0 tooling; CC-BY-SA 4.0 + KiCad-style outputs
-   exception for content; CC-BY 4.0 photos; DCO. No vendor logos in community
-   skins — contracts reserve a `logo-zone` region. No datasheet copies/conversions
+7. **Licensing**: Apache-2.0 for everything — tooling, schemas, manifests,
+   contracts and skins — so a rendered SVG never raises the question of whether
+   it is a derivative of the library data. (It was CC-BY-SA 4.0 with an outputs
+   exception for content until unified before publication.) Contributions under
+   the Developer Certificate of Origin; see `README.md`, Licence. No vendor
+   logos in community skins — contracts reserve a `logo-zone` region. No datasheet copies/conversions
    in-repo: transcribed facts with per-field provenance (`datasheet §x` |
    `measured` | `photo-inferred` | `vendor-cad` | `estimated`) + datasheet
    registered by title/URL/SHA-256/archive link. Device dumps stored sanitized
