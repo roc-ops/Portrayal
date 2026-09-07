@@ -53,4 +53,7 @@ python3 -c "import json,sys; print('\n'.join(d['name'] for d in json.load(open(s
       --out library/exports --device {} --nos arcos ${IMAGES+"${IMAGES[@]}"} >/dev/null
 wait "$modules_pid"
 
+# The exports leave with a DCIM the same way dist leaves with a page; the
+# licence and NOTICE go with them for the same reason build.sh copies them.
+cp LICENSE NOTICE library/exports/
 echo "exported $(find library/exports -name '*.yaml' | wc -l | tr -d ' ') documents -> library/exports"
