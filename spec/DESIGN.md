@@ -5,7 +5,7 @@
 Mission: declarative, Git-versioned definitions of hardware devices paired with SVG
 renderings in which every component is individually addressable — for monitoring
 callouts, technical documentation, DCIM, and diagram-tool exports. Domain-neutral
-core; networking is profile #1. See PRIOR-ART.md for the research this rests on.
+core; networking is profile #1. See ../PRIOR-ART.md for the research this rests on.
 
 ## Architecture
 
