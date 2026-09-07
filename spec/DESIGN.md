@@ -1,6 +1,6 @@
 # Portrayal Design Decisions (v0)
 
-"Portrayal" (network-device-visualization) is a working name, not final.
+"Portrayal" is the name; the repository is `roc-ops/Portrayal`.
 
 Mission: declarative, Git-versioned definitions of hardware devices paired with SVG
 renderings in which every component is individually addressable — for monitoring

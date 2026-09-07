@@ -2,7 +2,7 @@
 
 Each one is a CLASS, not a one-off, and each is invisible to the gates for a
 structural reason - so the fix is a rule or a line of skill guidance, not a
-correction to one device. See roc-ops/ndv#32.
+correction to one device. See roc-ops/Portrayal#32.
 
 Every rule here is exercised against a fixture that FAILS it, because a rule
 that has only ever been observed staying quiet has not been shown to work. All
@@ -555,7 +555,7 @@ def test_a_closed_vendor_matrix_still_validates():
 
 def test_an_open_form_factor_may_name_an_interface_instead():
     """Anyone may build a PCIe card, so a list is unbounded and one written
-    anyway asserts something the vendor never said. See ndv#43."""
+    anyway asserts something the vendor never said. See roc-ops/Portrayal#43."""
     assert not _bay_errs({**BASE, "interface": "pcie-x8"})
 
 
