@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx304
-version: 3.0.2
+version: 3.0.3
 maturity: modelled
 manufacturer: Juniper
 model: MX304
@@ -154,7 +154,7 @@ groups:
       default
     attrs:
       redundancy: '1+1'
-      redundancy-note: '1+1 - mx304 hardware guide, "MX304 Component Redundancy": "Routing Engines-A redundant system consists of two Routing Engines which are available as field-replaceable units (FRUs). One Routing Engine functions as the primary and the other functions as the backup. If the primary host subsystem (or either of its components) fails, the backup takes over as the primary. The Routing Engine installed in slot 0 functions as the default primary Routing Engine." The form assumes the second bay holds a Routing Engine; on this chassis that bay can instead take a third LMIC, in which case the router runs on one RE and there is no redundancy to state'
+      redundancy-note: '1+1 - mx304 hardware guide, "MX304 Component Redundancy": a redundant system has two field-replaceable Routing Engines, one primary and one backup, the backup taking over if the primary or any part of it fails, with the RE in slot 0 primary by default. The form assumes the second bay holds a Routing Engine; on this chassis that bay can instead take a third LMIC, in which case the router runs on one RE and there is no redundancy to state'
   lmics:
     term: Slot
     role: traffic
