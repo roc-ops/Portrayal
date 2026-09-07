@@ -61,7 +61,7 @@ def test_lint_refuses_a_field_that_prints_nowhere(tmp_path):
     (d / "skins" / "default.svg").write_text('<svg><text data-from="watts">1W</text><text data-from="ghost">?</text></svg>')
     p = d / "contract.yaml"
     hits = _caught("L73", lint.lint_component_fields, p, {"skins": ["default"], "fields": {"watts": {}, "speed": {}}})
-    assert any("speed has no data-from node" in h for h in hits), hits
+    assert any("speed has no data-from or data-fill-from node" in h for h in hits), hits
     assert any("ghost" in h for h in hits), hits
     hits = _caught("L73", lint.lint_component_fields, p, {"skins": ["default"], "fields": {"watts": {"type": "choice"}}})
     assert any("no options" in h for h in hits), hits
@@ -124,3 +124,78 @@ def test_lint_holds_a_slot_to_its_prose_and_its_connector():
     c["bays"]["slot-1"]["slot"] = {"connector": "x8", "lanes": 16, "height": "full", "length": "full", "processor": 1}
     hits = _caught("L75", lint.lint_component_slots, pathlib.Path("x.yaml"), c)
     assert any("16 lanes on an x8" in h for h in hits), hits
+
+
+# A SHELL IS A PROPERTY, NOT A SHAPE. The RJ45 family is one drawing whose
+# shield is bright metal on some boxes and black plastic on others, so the
+# finish is a field like a DIMM's capacity - `data-fill-from` sets a fill the
+# way `data-from` sets text. These pin the mechanism, the default and the one
+# device measured dark, because a silent regression here repaints 758 jacks.
+
+RJ45_FAMILY = ["std/rj45@2", "std/rj45-ganged@2",
+               "common/rj45-eth@1", "common/rj45-ganged-eth@1"]
+
+
+def _skin_of(ref):
+    ns, major = ref.rsplit("@", 1)
+    return (LIB / "components" / ns / f"v{major}" / "skins" / "default.svg").read_text()
+
+
+def _contract_of(ref):
+    ns, major = ref.rsplit("@", 1)
+    return yaml.safe_load(
+        (LIB / "components" / ns / f"v{major}" / "contract.yaml").read_text())
+
+
+@pytest.mark.parametrize("ref", RJ45_FAMILY)
+def test_every_rj45_shell_is_painted_from_its_finish_field(ref):
+    """The shell reads the attr, declares the field, and still draws alone."""
+    skin, contract = _skin_of(ref), _contract_of(ref)
+    assert 'data-fill-from="finish"' in skin
+    assert contract["fields"]["finish"]["default"] == "#b0b5bb"
+    # the node keeps a literal fill, so the skin is a valid standalone drawing
+    assert re.search(r'fill="#b0b5bb" data-fill-from="finish"', skin)
+
+
+def test_the_finish_attr_repaints_the_shell_and_absence_leaves_the_default():
+    root = render.ET.fromstring(
+        '<g xmlns="http://www.w3.org/2000/svg">'
+        '<path id="housing" fill="#b0b5bb" data-fill-from="finish"/></g>')
+    render.fill_from_attrs(root, {})
+    assert root[0].get("fill") == "#b0b5bb", "no attr leaves the drawn default"
+    render.fill_from_attrs(root, {"finish": "#2b2f33"})
+    assert root[0].get("fill") == "#2b2f33"
+
+
+def test_an_empty_finish_does_not_delete_the_housing():
+    """For text an empty attr deletes the node; a shape with no fill is not a
+    quieter drawing, it is an invisible one."""
+    root = render.ET.fromstring(
+        '<g xmlns="http://www.w3.org/2000/svg">'
+        '<path id="housing" fill="#b0b5bb" data-fill-from="finish"/></g>')
+    render.fill_from_attrs(root, {"finish": ""})
+    assert len(root) == 1 and root[0].get("fill") == "#b0b5bb"
+
+
+def test_the_s8901_jacks_carry_the_black_finish_they_were_measured_at():
+    """Its shells read 46 and 39 against the S9701-82DC's 183-185, and the
+    zoomed render shows black plastic in a white bezel plate."""
+    d = yaml.safe_load((LIB / "devices/ufispace/s8901-54xc/device.yaml").read_text())
+    got = {p["id"]: (p.get("attrs") or {}).get("finish")
+           for p in d["views"]["front"]["components"]["placements"]
+           if p["id"] in ("mgmt", "console")}
+    assert got == {"mgmt": "#2b2f33", "console": "#2b2f33"}
+
+
+def test_a_field_wired_by_fill_satisfies_l73(tmp_path):
+    """L73 asks whether the drawing is wired to the field, not which attribute
+    carries it - so a fill-painted node keeps the promise a text node does."""
+    (tmp_path / "skins").mkdir()
+    (tmp_path / "skins" / "default.svg").write_text(
+        '<svg xmlns="http://www.w3.org/2000/svg"><path data-fill-from="finish"/></svg>')
+    data = {"format": 1, "kind": "component", "name": "x", "version": "1.0.0",
+            "class": "port", "size": {"w": 1.0, "h": 1.0},
+            "fields": {"finish": {"label": "Shell finish", "type": "text",
+                                  "default": "#b0b5bb"}}}
+    assert _caught("L73", lint.lint_component_fields,
+                   tmp_path / "contract.yaml", data) == []

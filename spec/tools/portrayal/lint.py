@@ -1338,6 +1338,13 @@ def lint_component_fields(path, data, _lib_roots=None):
     does not declare is a field a form cannot find - the drive carriers
     carried five of those for a year. A choice with no options is a text
     box pretending.
+
+    A NODE PAINTED FROM AN ATTR KEEPS THE PROMISE THE SAME WAY. `data-fill-from`
+    sets a `fill` where `data-from` sets text, and the rule is about whether the
+    drawing is wired to the field at all, not about which attribute carries it -
+    so both count, in both directions. Reading only one of them would have
+    called the RJ45 family's `finish` an unkept promise and, worse, let a skin
+    paint itself from an attr no form is ever offered.
     """
     fields = data.get("fields") or {}
     skins_dir = path.parent / "skins"
@@ -1346,11 +1353,13 @@ def lint_component_fields(path, data, _lib_roots=None):
         sp = skins_dir / f"{skin}.svg"
         if not sp.exists():
             continue
-        keys = set(re.findall(r'data-from="([^"]+)"', sp.read_text(errors="replace")))
+        text = sp.read_text(errors="replace")
+        keys = set(re.findall(r'data-(?:fill-)?from="([^"]+)"', text))
         seen[skin] = keys
         for k in fields:
             if k not in keys:
-                err(path, "L73", f"field {k} has no data-from node in skin {skin}")
+                err(path, "L73", f"field {k} has no data-from or data-fill-from "
+                                 f"node in skin {skin}")
     undeclared = set().union(*seen.values()) - set(fields) if seen else set()
     if undeclared:
         warn(path, "L73", f"skin fills {', '.join(sorted(undeclared))} from attrs but the "
