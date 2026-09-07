@@ -90,4 +90,17 @@ seven vendors, at varying maturity.
 
 ## Licence
 
-Apache-2.0. See `LICENSE`.
+Apache-2.0, for everything in the repository: the compiler and tools, the
+schemas, the device manifests, the component contracts and the skins. See
+`LICENSE` and `NOTICE`.
+
+One licence rather than a code/data split is deliberate. The library data
+was CC-BY-SA 4.0 with an outputs exception until publication; it was unified
+so that a rendered SVG never raises the question of whether it is a derivative
+of the data it was compiled from. Under a single permissive licence it cannot
+matter.
+
+Contributions are accepted under the
+[Developer Certificate of Origin](https://developercertificate.org/): by signing
+off a commit (`git commit -s`) you certify that you wrote the change or have
+the right to submit it under this licence. There is no CLA.
