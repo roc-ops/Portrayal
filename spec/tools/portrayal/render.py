@@ -410,11 +410,26 @@ def rewrite_ids(el, prefix, contract, path_prefix, skip=None):
 
 
 def fill_from_attrs(root, attrs):
-    """Fill skin nodes marked `data-from` from this instance's merged attrs.
+    """Fill skin nodes marked `data-from` or `data-fill-from` from this
+    instance's merged attrs.
 
     A node carries the value it should show when nothing says otherwise, so the
     skin remains a valid standalone drawing; an attr replaces it. This is the
     same bargain `var(--led-color, #2c3a30)` makes for colour, moved to text.
+
+    AND THEN MOVED BACK. `data-fill-from` names an attr that sets a node's
+    `fill`, which is what a part whose SHELL COMES IN COLOURS needs and what a
+    skin per colour does badly: the four RJ45 parts are one drawing whose shield
+    is bright metal on the S9701-82DC (measured 183-185 against a cavity of 16)
+    and black plastic on the S8901-54XC (39-46), and every other line of those
+    files is identical. A skin apiece would be four near-copies per finish and a
+    name to choose on each of 758 placements; an attr is one word on the ones
+    that differ. `fields` is where a part advertises it, the same as for text.
+
+    EMPTY LEAVES THE DEFAULT HERE, where for text it deletes. A label nobody
+    filled in should not print, but a shape with no fill is not a quieter
+    drawing - it is an invisible one, and no unspecified attr should be able to
+    delete a housing.
 
     ABSENT LEAVES THE DEFAULT; EMPTY DELETES. An attr nobody mentioned must not
     blank a label - a part dropped into a bay with no attrs at all still has to
@@ -426,6 +441,9 @@ def fill_from_attrs(root, attrs):
     """
     parents = {c: p for p in root.iter() for c in p}
     for node in list(root.iter()):
+        paint = node.get("data-fill-from")
+        if paint is not None and attrs.get(paint) not in (None, ""):
+            node.set("fill", str(attrs[paint]).strip())
         key = node.get("data-from")
         if key is None:
             continue

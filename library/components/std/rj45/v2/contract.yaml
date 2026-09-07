@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: rj45
-version: 2.0.0
+version: 2.1.0
 class: port
 profile: networking
 conforms: rj45
@@ -13,6 +13,23 @@ description: RJ45 modular jack HOUSING - the 15.8 x 13.2 plastic face a plug ent
 size: {w: 15.8, h: 13.2, d: 18.6}
 attrs: {media: rj45}
 provenance:
+  finish: >-
+    measured, and settable because the corpus disagrees with itself. The shield around
+    the 8P8C opening is bright metal on some boxes and black plastic on others, and it
+    is the one thing that differs between otherwise identical jacks. Sampling the shell
+    strip above the cavity - so the black opening does not skew it - on the two devices
+    whose front renders carry single jacks at 2 px/mm or better: the S9701-82DC's ToD,
+    console and management jacks read 185, 183 and 121 against a cavity of 16, and the
+    S8901-54XC's management and console jacks read 46 and 39. Both readings are
+    confirmed by eye at 14x: the S9701's jacks are a silver shield around a black bore,
+    the S8901's are black plastic in a white bezel plate. So #b0b5bb is the default,
+    which is the library's own bright-shell grey and reads 181 against the 183-185
+    measured; a device whose jacks are black says so with `attrs: {finish: '#2b2f33'}`
+    on the placement, which is the value this part carried for everything until now. THE
+    DEFAULT IS A CONVENTION, NOT A CENSUS: five jacks on two devices is what the renders
+    support, three of them bright, and the previous single value was chosen with no
+    provenance at all. It is recorded as a gap on neither part because the remedy is a
+    per-device measurement rather than a document nobody holds.
   size: drawing - TE customer drawing 1734264 rev A2, front view - housing 15.8 wide
     (body 15.6 +/-0.3), 13.2 high. Amphenol RJHSE-508X and RJESE-808X front views read
     15.75 x 13.21. v1 was the 16 x 14 IEC panel aperture at registry confidence; no
@@ -30,6 +47,11 @@ provenance:
   walls: the sides of the opening are the housing, drawn solid, which is what grips a
     plug. v1 and every bezel over it drew an aperture with the interface floating in a
     dark hole.
+fields:
+  finish:
+    label: Shell finish
+    type: text
+    default: '#b0b5bb'
 elements:
   opening: {at: [1.945, 2.0], size: [11.91, 11.2], class: cutout}
 relief:
