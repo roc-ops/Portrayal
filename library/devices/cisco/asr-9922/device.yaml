@@ -292,7 +292,7 @@ groups:
     physical-context: NetworkingDevice
     attrs:
       redundancy: '1+1'
-      redundancy-note: '1+1 - b-asr9k-overview-reference-guide, "Stateful Switchover": "The RSP/RP cards are deployed in ''active/standby'' configurations. Stateful switchover (SSO) preserves state and configuration information if a switchover to the standby RSP/RP card occurs." Unlike the RSP chassis in the series, no fabric rides on this card: "Functional Description" puts the route processor functions on the RP and the switch fabric on the FC cards'
+      redundancy-note: '1+1 - b-asr9k-overview-reference-guide, "Stateful Switchover": the RSP/RP pair runs active/standby, and SSO carries state and configuration across to the standby on a switchover. Unlike the RSP chassis in the series, no fabric rides on this card: "Functional Description" puts the route processor functions on the RP and the switch fabric on the FC cards'
   fabric:
     term: FC
     role: service
@@ -300,7 +300,7 @@ groups:
     physical-context: NetworkingDevice
     attrs:
       redundancy: '6+1'
-      redundancy-note: '6+1 - b-asr9k-overview-reference-guide, "Fabric Switchover": "In the Cisco ASR 9922 Router and Cisco ASR 9912 Router, fabric switching across the RP and line cards is provided by a separate set of seven OIR FC cards operating in 6+1 redundancy mode. Any FC card can be removed from the chassis, power-cycled, or provisioned to remain unpowered without impacting system traffic. All FC cards remain active unless disabled or faulty." So the spare is a working plane and not a standby card. "Fabric Controller Card" in the same guide gives the partly-populated case: five FCs are 4+1, all seven are 6+1'
+      redundancy-note: '6+1 - b-asr9k-overview-reference-guide, "Fabric Switchover": on the 9922 and 9912 the fabric is a separate set of seven OIR FC cards run 6+1, any one of which can be pulled, power-cycled or left unpowered without affecting traffic, and all of which stay active unless disabled or faulty. So the spare is a working plane and not a standby card. "Fabric Controller Card" in the same guide gives the partly-populated case: five FCs are 4+1, all seven are 6+1'
   power-modules:
     term: Power Module
     role: service

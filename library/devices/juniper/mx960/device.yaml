@@ -69,7 +69,7 @@ groups:
     description: Switch Control Board slots SCB0 and SCB1
     attrs:
       redundancy: '2+1'
-      redundancy-note: '2+1 - mx960 hardware guide, "The MX-Series SCB": "The MX240 and MX480 require two SCBs for 1+1 redundancy, whereas the MX960 requires three SCBs for 2+1 redundancy." THE FORM COUNTS THREE CARDS AND THIS GROUP HOLDS TWO BAYS: SCB0 and SCB1 are the dedicated ones, and the third SCB seats in line-card slot 6 (see `fpcs`), which is why the count here does not match the form. One form covers control and fabric together because the SCB does both - "The switch fabric is Integrated into the SCB ... The routing engine installs directly into the SCB" - and "MX960 Component Redundancy" gives the control half as a primary/backup host-subsystem pair'
+      redundancy-note: '2+1 - mx960 hardware guide, "The MX-Series SCB": the MX240 and MX480 take two SCBs for 1+1, where the MX960 takes three for 2+1. THE FORM COUNTS THREE CARDS AND THIS GROUP HOLDS TWO BAYS: SCB0 and SCB1 are the dedicated ones, and the third SCB seats in line-card slot 6 (see `fpcs`), which is why the count here does not match the form. One form covers control and fabric together because the SCB does both - the fabric is integrated into the SCB and the Routing Engine installs directly into it - and "MX960 Component Redundancy" gives the control half as a primary/backup host-subsystem pair'
   psus:
     term: PEM
     role: service

@@ -60,7 +60,7 @@ groups:
     description: CB-RE slots 0 and 1 at the ends of the fabric cage
     attrs:
       redundancy: '1+1'
-      redundancy-note: '1+1 - mx2020 hardware guide, "MX2020 Component Redundancy": "To operate, each host subsystem requires one or two Routing Engines installed into the front of the chassis in vertical slots labeled 0 and 1. If two CB-REs are installed, one functions as the primary and the other functions as the backup. If the primary host subsystem (or either of its components) fails, the backup can take over as the primary." The same bullet adds what the form drops: configured for nonstop active routing, the backup keeps its state in step with the primary and forwarding continues through a switchover'
+      redundancy-note: '1+1 - mx2020 hardware guide, "MX2020 Component Redundancy": each host subsystem takes one or two Routing Engines in the front vertical slots 0 and 1; with two CB-REs fitted one is primary and the other backup, and the backup takes over if the primary or any part of it fails. The same bullet adds what the form drops: configured for nonstop active routing, the backup keeps its state in step with the primary and forwarding continues through a switchover'
   sfbs:
     term: Slot
     role: service
@@ -68,7 +68,7 @@ groups:
     description: Switch Fabric Board slots SFB 0-7
     attrs:
       redundancy: 'n+1'
-      redundancy-note: 'n+1 - mx2020 hardware guide, "MX2000-SFB-S Switch Fabric Board Description": "Throughput of 6Tbps, with a minimum of 7 SFBs installed. An additional SFB is recommended for N+1 redundancy." The same entry gives the slot count these eight bays come from - "You can install up to eight SFB2s in an MX2000 series router. Only seven SFB2s are required for line rate operation" - and the fabric is all-active, so the spare is a working plane rather than a standby. RECORDED AS THE GUIDE WRITES IT: seven-plus-one would be an arithmetic reading of two sentences and the guide itself says N+1'
+      redundancy-note: 'n+1 - mx2020 hardware guide, "MX2000-SFB-S Switch Fabric Board Description": 6 Tbps with a minimum of seven SFBs fitted, and an eighth recommended for N+1. The same entry gives the slot count these eight bays come from - up to eight SFB2s, seven needed for line rate - and the fabric is all-active, so the spare is a working plane rather than a standby. RECORDED AS THE GUIDE WRITES IT: seven-plus-one would be an arithmetic reading of two sentences and the guide itself says N+1'
   fpcs:
     term: Slot
     role: traffic
