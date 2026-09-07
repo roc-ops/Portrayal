@@ -103,7 +103,7 @@ Three layers:
 
 ## Walking-skeleton scope (current)
 
-Guinea pig: Edgecore AS7726-32X (live as roc-spine1, ArcOS S8.5.1A).
+Guinea pig: Edgecore AS7726-32X (a live lab unit, ArcOS S8.5.1A).
 Components: qsfp28-cage, sfp-plus-cage, rj45-port, psu-ac-650 (+ bay), fan-module
 (+ bay). Views: front + rear. Overlay: ArcOS. Deliverable: compiled SVG with a
 consumer page proving query-highlight ("all 100G ports"), state toggling, and a
