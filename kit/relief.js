@@ -660,7 +660,7 @@ export async function extractRelief(url, scope) {
   //              would lose a distinction the power model depends on. 5 parts.
   //   cooling  - casa/ and cisco/ call a fan `cooling` where edgecore/, ufispace/
   //              and common/ call the same object `fan`. 7 parts against 3. That
-  //              duplication is a DATA defect and is recorded in working/notes/;
+  //              duplication is a DATA defect, tracked as roc-ops/Portrayal#173;
   //              admitting both here is the renderer refusing to be the place it
   //              gets fixed, not an endorsement of it.
   // The visible symptom was that every Casa and Cisco fan and PEM drew as art
