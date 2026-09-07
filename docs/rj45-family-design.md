@@ -43,7 +43,7 @@ absent because nobody decided. #80 is waiting on which of these is right.
 
 ## Decisions
 
-Three questions were put to Jason on 2026-09-05 and answered:
+Three questions were put to the maintainer on 2026-09-05 and answered:
 
 1. **`std/rj45` is the jack housing**, with its cavity recessed into solid walls,
    not the panel aperture. The registry's `rj45` entry became the housing itself,

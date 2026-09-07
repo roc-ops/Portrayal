@@ -172,7 +172,7 @@ provenance, the same way the QSFP views were.
 
 ## How the cards decompose
 
-Per Jason, and this is what makes the set cheap to build:
+Per the maintainer, and this is what makes the set cheap to build:
 
 - **The PCB and the rear/backplane connectors are common to every card.** One shared
   body component - board, backplane connector set, ejectors, side rails - serves all
@@ -188,12 +188,12 @@ connector at the opposite end.
 ## From a C40G rear photograph
 
 Things the line drawings do not show, and which the figures alone would never have
-given us. Measurements are Jason's, from the hardware.
+given us. Measurements are the maintainer's, from the hardware.
 
 ### Cable combs and standoffs
 
 Every I/O card is fronted by a **cable comb** - a notched strip carrying the
-`U0-U11` / `D0-D5` silkscreen. Per Jason the labels are on **both** the card face and
+`U0-U11` / `D0-D5` silkscreen. Per the maintainer the labels are on **both** the card face and
 the comb, so the comb repeats them at the point where a cable actually lands rather
 than replacing them.
 
@@ -225,7 +225,7 @@ I/O combined, so it has more inside it. It should be its own component, not a sk
 - The PEM area is at the bottom rear with **PEM 1 / PEM 2** silkscreen, twin IEC
   inlets with their own switches, and ground studs.
 
-## Jason's hand-built SVGs — what they add
+## The maintainer's hand-built SVGs — what they add
 
 Two hand-drawn chassis SVGs (front and back) in `working/intake/casa/handbuilt/`.
 Independently built from the hardware, so where they agree with what I read off the
@@ -438,7 +438,7 @@ transforms by hand, which is the only reliable way to lift a curve out of that f
 tip reaches x 367.5, which is why `C100G` moved from 406.95 to 417.9; his `modelLabel`
 starts at 374.5, so the original text was too far left and the swoop ran into it.
 
-### Airflow — the guide and Jason disagree
+### Airflow — the guide and the maintainer disagree
 
 Recorded, not decided.
 
@@ -448,7 +448,7 @@ the cards, turn red, and leave at the **top**. The body text agrees: *"the air f
 system fans draw air from the front of the chassis to the rear."* That makes the rear fan
 face an **outlet**.
 
-**Jason** stated the opposite from the hardware — in at the rear, out at the front bottom,
+**The maintainer** stated the opposite from the hardware — in at the rear, out at the front bottom,
 and that the grille below the front filter is the fan exhaust. `c100g/device.yaml` still
 records his version under `provenance.airflow`.
 
@@ -489,7 +489,7 @@ connector is at the far end of the cable, at the headend equipment - never on th
 
 ## Line cards are shared, the rest is not
 
-Per Jason: the front and rear **line cards are common to both chassis**; PEM, fans and
+Per the maintainer: the front and rear **line cards are common to both chassis**; PEM, fans and
 the other cards are not. So line cards belong in `components/`, shared, while the
 chassis-specific parts stay with their device.
 

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: as7946-74xksb
-version: 3.0.4
+version: 3.0.5
 maturity: modelled
 manufacturer: Edgecore
 model: AS7946-74XKSB
@@ -100,7 +100,7 @@ provenance:
     PPS/TOD, the lower row of the ganged block, are keyway-down. A 2-high ganged jack mirrors its
     rows so both release tabs stay reachable. std/rj45 draws keyway-down, so the other four carry
     rotate 180
-  rj45-choice: Jason - use std/ before common/. std/rj45 is the IEC 60603-7 aperture; the
+  rj45-choice: the maintainer - use std/ before common/. std/rj45 is the IEC 60603-7 aperture; the
     hand-drawn common/rj45-shielded puts its integrated LEDs on the contacts side, which no real
     jack does. Five jacks are std/rj45@2; MGMT is common/rj45-eth@1, with its two LEDs as
     mgmt-eth/led-a and led-b
@@ -116,7 +116,7 @@ provenance:
     placement is a bounding rectangle to both the renderer and lint rule L13, so a single 26 mm
     stepped box would read as sitting on top of the sixteen ports it steps around. Both halves
     carry group `filters` and their descriptions say which whole they belong to'
-  rear: 'drawing plus Jason - two stacked PSU bays at the left, a grounding landing, then five
+  rear: 'drawing plus the maintainer - two stacked PSU bays at the left, a grounding landing, then five
     fan bays. The PSU pair is placed from THIS device''s figure, not the AGR400''s: both Edgecore
     datasheet rear figures put the PSU block''s left edge at panel x 13-14 (12.82 on the AGR400
     page, 14.06 here), while the AGR400 model has it at 6.26 measured off that router''s QSG, and
@@ -126,9 +126,9 @@ provenance:
   psu-width: 'CARRIED FORWARD, not resolved - edgecore/agr-psu-dc@1 and agr-psu-ac@1 are 60.1 mm
     wide, and the callout box drawn round the PSU pair measures 57.9 mm on the AGR400 datasheet
     page and 53.6 mm here. The component may be a little over. It is reused unchanged because
-    Jason confirmed both platforms take the same PSU and narrowing it would silently move the
+    the maintainer confirmed both platforms take the same PSU and narrowing it would silently move the
     AGR400; the disagreement is recorded rather than acted on'
-  fans: 'drawing plus Jason - the fan bays keep the AGR400 geometry, 69.4 mm square on a 70.4 mm
+  fans: 'drawing plus the maintainer - the fan bays keep the AGR400 geometry, 69.4 mm square on a 70.4 mm
     pitch. This figure reads 68.5 mm pitch, 2.7 percent smaller, which is inside figure error, and
     the AGR400 number has the stronger derivation - it is the only size that is both square, as
     the photographs show, and fits its measured pitch. Overlaid at matched scale the five bays
