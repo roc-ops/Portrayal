@@ -5,7 +5,9 @@ exactly one face short on each. Not a Cisco quirk - see the evidence section.
 
 ## The situation
 
-Seven modular chassis. Front, rear, top, left and right all carry sourced content. The bottom
+Seven modular chassis. (The family is eight with the fixed-configuration ASR 9001,
+which the count near the end of this note includes; the argument there is about the
+whole family.) Front, rear, top, left and right all carry sourced content. The bottom
 carries none, on every one of them, and cannot be made to without inventing a face.
 
 ## The evidence that this is not one vendor being unhelpful
