@@ -72,4 +72,7 @@ for pid in "${pids[@]}"; do wait "$pid"; done
 # seconds against 41 for everything else, on a stage whose output exactly one
 # test reads and nothing on the page does. `./publish.sh` is this plus the
 # exports, and is what runs when the artifacts are published.
+# The dist is the artifact set a consumer takes without a checkout, and
+# Apache-2.0 asks a redistribution to carry the NOTICE. So it travels with it.
+cp LICENSE NOTICE "$OUT"/
 echo "built $(ls "$OUT" | wc -l | tr -d ' ') files -> $OUT"
