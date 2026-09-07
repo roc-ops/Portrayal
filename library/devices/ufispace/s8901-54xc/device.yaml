@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s8901-54xc
-version: 2.0.1
+version: 2.0.2
 maturity: modelled
 manufacturer: UfiSpace
 model: S8901-54XC
@@ -430,7 +430,7 @@ views:
     components:
       placements:
         - {ref: common/rj45-eth@1, id: mgmt, at: [6.5, 2.45], rotate: 180, group: mgmt, rel-pos: 1,
-           attrs: {role: mgmt, speed: 100m-1g},
+           attrs: {role: mgmt, speed: 100m-1g, finish: '#2b2f33'},
            states: {led-a: ['off', {name: link-100m, color: '#f59e0b'},
                             {name: activity-100m, color: '#f59e0b', behavior: blinking}],
                     led-b: ['off', {name: link-1g, color: '#22c55e'},
@@ -445,7 +445,7 @@ views:
              amber pair and led-b the physical-left/green pair, the same physical
              assignment as before the sweep'}
         - {ref: common/usb-a@3, id: usb, at: [5.9, 16.9], group: mgmt, rel-pos: 2, attrs: {role: storage, speed: usb3}}
-        - {ref: std/rj45@2, id: console, at: [6.5, 27.25], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
+        - {ref: std/rj45@2, id: console, at: [6.5, 27.25], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console, finish: '#2b2f33'}}
         - {ref: common/reset-button@1, id: reset, at: [44.7, 3.6], for: chassis, group: mgmt, rel-pos: 4}
         - {ref: common/led-rect@1, id: led-sys, at: [50.2, 2.5], for: chassis,
            states: ['off',
