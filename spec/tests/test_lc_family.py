@@ -182,6 +182,55 @@ def test_the_transceiver_apertures_clear_the_art_around_them():
     assert ap_top >= 0.65 and ap_top + APERTURE[1] <= 7.55
 
 
+def ferrule_centres(ref):
+    """Where each composed bore's ferrule actually lands on the parent face.
+
+    The ferrule sits at (2.35, 2.35) in the bore's own frame; rotate: 180 turns
+    the part about its own centre, which puts it at (2.35, 6.3 - 2.35).
+    """
+    out = []
+    for p in contract(ref)["parts"]:
+        if not p["ref"].startswith("std/lc-bore@"):
+            continue
+        x, y = p["at"]
+        assert p.get("rotate") == 180, ref
+        out.append((round(x + 2.35, 6), round(y + APERTURE[1] - 2.35, 6)))
+    return sorted(out)
+
+
+def test_the_declared_optical_point_is_where_the_ferrules_actually_are():
+    """The invariant that catches an axis moving without its record moving.
+
+    #126 moved the transceiver apertures and their optical points together, but
+    a prose passage describing the OLD centres survived the move in
+    sfp-lc-duplex and had to be caught in review. Coordinates can be checked
+    even when prose cannot, so check them: whatever the placements resolve to
+    is what `optical` has to say, on all three faces.
+    """
+    for ref, keys in (("common/lc-duplex-adapter@3", ["optical"]),
+                      ("common/sfp-lc-duplex@1", ["optical"]),
+                      ("common/qsfp-transceiver@1", ["optical-tx", "optical-rx"])):
+        centres = ferrule_centres(ref)
+        assert len(centres) == 2, ref
+        # both bores share one axis - they are a duplex pair, not a stack
+        assert centres[0][1] == centres[1][1], ref
+        cps = contract(ref)["connection-points"]
+        if len(keys) == 2:
+            assert [tuple(cps[k]["at"]) for k in keys] == centres, ref
+        else:
+            # one point for the pair: the midpoint of the two ferrules
+            mid = (round(sum(c[0] for c in centres) / 2, 6), centres[0][1])
+            assert tuple(cps[keys[0]]["at"]) == mid, ref
+
+
+def test_mate_stays_on_the_centreline_even_though_optical_does_not():
+    # mate aligns the module in its cage and is not the optical axis. #126
+    # separated the two on both transceivers; nothing may quietly re-merge them.
+    for ref in ("common/sfp-lc-duplex@1", "common/qsfp-transceiver@1"):
+        c = contract(ref)
+        assert c["connection-points"]["mate"]["at"][1] == c["size"]["h"] / 2, ref
+
+
 def test_the_qsfp_silkscreen_is_not_the_colour_of_the_face_it_sits_on():
     # T and R were #8d949c on a #8d949c face and had never rendered at all.
     lc = skin("common/qsfp-transceiver@1", "lc")
