@@ -1,0 +1,102 @@
+format: 1
+kind: component
+name: lc-bore
+version: 3.0.0
+class: port
+interface: lc
+profile: networking
+description: One LC receptacle bore - the KEYED opening an LC plug enters, not a
+  square hole. Four tiers on one axis - the square bore with the fiber ferrule
+  standing in it, then a neck, a shoulder and a latch tongue that together clear
+  the plug's latch arm. Tongue down when unrotated; rotate 180 at placement for a
+  receptacle fitted latch-up, which is how every receptacle in the corpus is drawn.
+size: {w: 4.7, h: 6.3, d: 4.5}
+conforms: lc-duplex-receptacle
+attrs: {media: fiber, connector: lc}
+provenance:
+  size: >-
+    drawing for the width and the square, fitted for the rest. 4.7 +/-0.05 is the bore
+    square, dimensioned twice over on two independent documents - section A-A of the
+    ProLabs PAN-QSFP28-100GBASE-CWDM4-C datasheet, which is what the registry has always
+    rested on, and the LINK-PP LS-SM311G-10C product drawing, which calls it out four
+    times (once per bore, each axis) on an 8.5 +/-0.1 module face. The 6.3 HEIGHT is not
+    dimensioned anywhere: it is that square plus a 1.6 latch stack, and see `keyway`.
+    v2 was 4.7 square and drew a plain rounded rect, which is the defect #126 opened -
+    a real LC opening is keyed, and the square is only its first tier.
+  keyway: >-
+    drawing for the widths, CONVENTIONAL for the heights, and the two must not be read as
+    one number. The three tier WIDTHS come from the SENKO LC Standard 2PC Connector
+    datasheet DS-LC-000004 Rev A, whose front view dimensions the plug this opening has
+    to accept - body 5.58, then 3.3 +0.05/-0.10, 4.3 +/-0.1 and 2.3 +/-0.1 going out
+    along the latch, the whole silhouette 10.43 tall. The aperture runs 0.16 to 0.40
+    larger than the plug at every tier, which is the clearance traced off SENKO's own LC
+    Premium Adapter DS-LC-000010 Rev A front view at a scale checked two ways (its 18.0
+    +/-0.2 body gives 41.61 px/mm and its 9.3 height 42.10). The HEIGHTS are what fits:
+    THIS PART IS THE TRANSCEIVER RECEPTACLE, not the bulkhead adapter, and an 8.5 module
+    face with its ferrule on the centreline leaves 1.90 above the bore square. Taking
+    0.30 of that as face material gives a 1.60 stack, split 0.42 / 0.49 / 0.69 in the
+    proportions traced off the SENKO adapter. ONE number was chosen - the 0.30 wall -
+    and the rest follows.
+  short-keyway: >-
+    A KNOWN UNDERSTATEMENT, recorded rather than hidden. SENKO's bulkhead adapter carries
+    a 3.51 stack in a 9.3 face; this part's 1.60 is less than half that, because a
+    transceiver face is 8.5 and its optical axis sits on the centreline. Two readings
+    disagree about whether that centreline is right: the library has always had it there
+    and sfp-lc-duplex sources only the X of its bore centres, while LINK-PP's front view
+    scales to a bore square sitting 2.70 +/-0.3 below the face top - a ferrule nearer 5.05
+    than 4.25, which would leave room for the full stack. Moving it would shift the
+    optical connection point of every SFP and QSFP in the library on the strength of one
+    +/-0.3 trace off a JPEG, so it has not been moved. common/lc-duplex-adapter composes
+    this part and so draws a shorter keyway than its own hardware has.
+  gap: >-
+    NOT STATED BY ANYONE, and this is a fact about the corpus rather than about one book.
+    Five documents draw this receptacle and none dimensions its latch slot - QSFP-DD
+    Hardware Rev 6.3 section 6.2.2, SFF-8436 Rev 4.9 section 5.10, NTT TR142002 ed.1
+    section 6, SENKO's datasheets and LINK-PP's product drawing. The first three each
+    say the geometry shall conform to IEC 61754-20 and stop there; the last two dimension
+    the square and leave the slot uncalled. QSFP-DD Figure 27 fixes lane assignment and
+    key orientation, not the optical axis height. IEC 61754-20 is paywalled and nobody
+    here holds it. Until someone does, the three tier heights are the library's
+    convention and not a measurement.
+  ferrule: standard (LC uses a 1.25mm ferrule; SC and FC use 2.5mm)
+  depth: estimated (recess deep enough that the ferrule face sits below the
+    surrounding surface, which is what you see looking into a real LC port)
+elements:
+  bore: {at: [0.0, 0.0], size: [4.7, 6.3], class: cutout}
+relief:
+  wall: '#4a4f55'
+  cavity: bore
+  features:
+    - node: ferrule
+      top: 3.6
+      color: '#e8ecef'
+      confidence: estimated
+      source: >-
+        std/lc-bore@1 (v1) - the same 3.6 carried through v2 and v3 unchanged. Only the
+        aperture has ever gained a source; the ferrule protrusion has not, and it remains
+        v1's estimate.
+    # The latch slot is not a flat-bottomed channel. It scoops back as it runs
+    # away from the bore so a fingertip can reach in and press the latch - which
+    # is a curve, and this vocabulary has no curves (spec/DEPTH-AND-3D.md s7:
+    # extrusions and tori, no fillets or chamfers). Three steps approximate it.
+    - node: key-neck
+      top: 3.6
+      confidence: estimated
+      source: >-
+        NOT MEASURED. The scoop's existence is reported from handling the hardware - the
+        slot rounds away toward its outer end so the latch can be reached - and no source
+        dimensions it. The three tops step 3.6, 2.9, 2.2 to approximate that curve as
+        stairs; only their ORDER is claimed, not their values.
+    - node: key-shoulder
+      top: 2.9
+      confidence: estimated
+      source: std/lc-bore@3's own key-neck reading - one approximation in three steps, not
+        three readings.
+    - node: key-tongue
+      top: 2.2
+      confidence: estimated
+      source: std/lc-bore@3's own key-neck reading - the outermost and so the deepest
+        step, which is the end a finger goes into.
+connection-points:
+  mate: {at: [2.35, 2.35], direction: front}
+skins: [default]

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="4.7mm" height="6.3mm" viewBox="0 0 4.7 6.3">
+  <!-- THE OPENING IS KEYED, NOT SQUARE. One path, four tiers on the vertical
+       axis, all concentric on x=2.35: the 4.7 bore square (dimensioned - ProLabs
+       section A-A and LINK-PP LS-SM311G-10C), then the neck 3.46, the shoulder
+       4.70 and the latch tongue 2.64 - widths from the plug the opening accepts
+       (SENKO DS-LC-000004) plus the clearance traced off SENKO DS-LC-000010.
+       The heights of those three are the library's convention; nothing publishes
+       them. Tongue DOWN here; placements that want it up say rotate: 180. -->
+  <path id="bore" fill="#15181b" d="
+    M 0 0 h 4.7 v 4.70
+    h -0.62 v 0.42 h 0.62 v 0.49
+    h -1.03 v 0.69 h -2.64 v -0.69
+    h -1.03 v -0.49 h 0.62 v -0.42 h -0.62 z"/>
+  <!-- Floors for the latch slot, one per tier, stepping deeper as they run out
+       from the bore. Same fill as the aperture, so they change nothing in 2D and
+       give the 3D view the scoop a finger reaches into. -->
+  <rect id="key-neck" x="0.62" y="4.70" width="3.46" height="0.42" fill="#15181b"/>
+  <rect id="key-shoulder" x="0" y="5.12" width="4.7" height="0.49" fill="#15181b"/>
+  <rect id="key-tongue" x="1.03" y="5.61" width="2.64" height="0.69" fill="#15181b"/>
+  <circle id="sleeve" cx="2.35" cy="2.35" r="1.2" fill="#22262a" stroke="#3a4046" stroke-width="0.12"/>
+  <!-- LC ferrule: 1.25mm diameter (the standard that distinguishes LC from SC) -->
+  <circle id="ferrule" cx="2.35" cy="2.35" r="0.625" fill="#e8ecef"/>
+</svg>

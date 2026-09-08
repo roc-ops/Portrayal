@@ -17,11 +17,18 @@ provenance:
     adapters on the DCP-R-34D-CS faceplate (13.24mm) and the row pitch (11.5mm)
   bore-spacing: measured - 6.6mm between the paired connection points, held
     across 35 adapters on that faceplate
-  bores: std/lc-bore@2 - the 4.7 square opening sourced from the ProLabs CWDM4
-    section A-A. This composed @1 (4.6 x 4.4, proportional, unsourced) until the
-    two versions were collapsed (#126); each bore was re-anchored so its CENTRE
-    stayed where it was - (3.3, 5.5) and (9.9, 5.5) - and the caps grew to fill
-    the bore they plug. Nothing else moved
+  bores: >-
+    std/lc-bore@3 - the KEYED opening, 4.7 wide by 6.3, whose first tier is the 4.7
+    square from the ProLabs CWDM4 section A-A. This composed @1 (4.6 x 4.4,
+    proportional, unsourced), then @2 (4.7 square) when the two versions were
+    collapsed, and now @3 when that square turned out to be one tier of four (#126).
+    THE CENTRE HAS NOT MOVED ACROSS ANY OF IT - (3.3, 5.5) and (9.9, 5.5) - and the
+    dust caps still plug the bore square, which still starts at y 3.15; the 1.60 of
+    keyway is new material above it. Each placement carries rotate: 180 so the latch
+    tongue points up, as a panel-mount adapter is fitted. THE KEYWAY THIS DRAWS IS
+    SHORTER THAN THIS PART'S OWN HARDWARE: @3 is sized for a transceiver face and
+    SENKO's bulkhead adapter DS-LC-000010 carries a 3.51 stack rather than 1.60. That
+    is recorded on @3 under `short-keyway` and is the price of one shared bore part
   stand-off: photo - the adapter body sits about an eighth of an inch proud of
     the faceplate, not the quarter inch first modelled
   dust-caps: photo - unused ports carry a white cap standing about a quarter
@@ -78,9 +85,11 @@ relief:
         common/lc-duplex-adapter@3 - as cap-tx-inset. The inset's existence is photographed,
         its depth is not.
 parts:
-  # lifted onto the raised bezel, so each bore recesses from the proud face
-  - {ref: std/lc-bore@2, id: tx, at: [0.95, 3.15], lift: 3.175}
-  - {ref: std/lc-bore@2, id: rx, at: [7.55, 3.15], lift: 3.175}
+  # lifted onto the raised bezel, so each bore recesses from the proud face.
+  # rotate 180 puts the latch tongue UP, which is how a panel-mount adapter is
+  # fitted and how the issue's own photograph shows it; @3 draws it down.
+  - {ref: std/lc-bore@3, id: tx, at: [0.95, 1.55], lift: 3.175, rotate: 180}
+  - {ref: std/lc-bore@3, id: rx, at: [7.55, 1.55], lift: 3.175, rotate: 180}
 connection-points:
   optical: {at: [6.6, 5.5], direction: front}
 skins: [default]
