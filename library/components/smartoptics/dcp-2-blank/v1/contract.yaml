@@ -1,0 +1,54 @@
+format: 1
+kind: module
+name: dcp-2-blank
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: Smartoptics DCP-2 blind plate - the moulded blank that fills an unused
+  traffic slot so the airflow still passes through the populated one. Two perforated
+  vent patches, each with a central boss.
+size: {w: 205.0, h: 44.0}
+attrs:
+  role: slot-blank
+provenance:
+  size: >-
+    borrowed - smartoptics/dcp-404@1, because a blank fills the same slot a traffic unit
+    does and the library should not hold two different answers for one aperture. The
+    aperture itself was measured independently: DCP-Series_User_Manual fig 2-4 puts the
+    front slots at ~7-213 and ~226-433 in the 440 face, i.e. ~206.5 each, which leaves
+    1.5 of clearance on a 205 module. UM s2.5 gives the part no dimensions of its own.
+  elements: >-
+    photo-inferred from an OBLIQUE view - UM fig 2-15 is the only artwork, and it is a
+    three-quarter shot of the plate off the chassis. What it fixes: the plate is BLACK
+    moulded plastic, not the chassis' light grey metal, and it carries two perforated
+    patches, one toward each end, each with a raised central boss. The perforations are
+    ROUND holes in a hexagonal packing - not the hexagonal holes used on the fan tray
+    and the DCP-404. Patch positions, hole pitch and hole size are estimated from that
+    photograph and are the weakest numbers on this part.
+  part-number: >-
+    NONE EXISTS, and that is why this part exports under its slug rather than a part
+    number as the PSUs and fan tray do. so-ds-dcp-2-r4.3's ordering table lists the
+    chassis, the licence, both PSUs and a spare fan unit, and no blind plate; UM s4.1
+    lists it only inside the box contents - "DCP-2 chassis, incl. PSU, fan units and
+    blind plate". It ships with the chassis and is not separately orderable.
+  purpose: >-
+    UM s2.5 - "If only 1 traffic module is being used in the DCP2 chassis this blind
+    plate should be mounted to the empty slot to help guide the airflow through the
+    traffic unit." The DCP-404 technical description backs this with an alarm: its high
+    temperature warning tells the operator to "Check if the second slot in DCP-2 has a
+    card or a dummy front panel."
+
+  face-geometry-gap: >-
+    no orthographic artwork exists. Patch centres, hole pitch and hole diameter are read
+    off a three-quarter photograph and are estimated, not measured.
+  latching-gap: >-
+    UM s2.5 does not say how the plate is retained. The two central bosses look like
+    captive fasteners in fig 2-15 but nothing states it, so they are drawn as bosses
+    rather than as screws.
+elements:
+  vent-left: {at: [25.0, 9.0], size: [42.0, 26.0], class: vent}
+  vent-right: {at: [138.0, 9.0], size: [42.0, 26.0], class: vent}
+  boss-left: {at: [43.4, 19.4], size: [5.2, 5.2], class: fastener}
+  boss-right: {at: [156.4, 19.4], size: [5.2, 5.2], class: fastener}
+skins: [default]

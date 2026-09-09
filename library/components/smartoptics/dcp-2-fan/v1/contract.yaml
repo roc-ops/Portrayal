@@ -1,0 +1,57 @@
+format: 1
+kind: module
+name: dcp-2-fan
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: Smartoptics DCP-2-FAN-FB - the DCP-2 fan tray, a hot-pluggable unit
+  carrying four fans behind a hexagonal perforated faceplate, with a captive screw
+  at each end.
+size: {w: 192.0, h: 40.0}
+attrs:
+  model: DCP-2-FAN-FB
+  fans: '4'
+  airflow: front-to-back
+provenance:
+  size: >-
+    photo-measured - DCP-Series_User_Manual figs 2-5 and 2-6, scaled across from the
+    440mm body width. The tray faceplate runs from ~85 to ~277 in the face, so 192 wide;
+    height is taken as the PSU modules' 40 because the tray sits in the same band and
+    both are bounded by the same 45mm face. The height is the softer of the two: the y
+    axis in both figures is ~3% compressed by camera angle.
+  fans: >-
+    UM s2.4 - "a fan unit which consists of 4 fans ... designed to operate with 3 working
+    fans". The four fans are not individually visible through the perforation and are not
+    drawn as separate features.
+  screws: >-
+    UM s2.4.1 - "Tighten captive screws on each side of the fan tray faceplate", confirmed
+    in figs 2-5 and 2-6 at roughly 88 and 272 in the face, i.e. just inboard of each end
+    of the tray.
+  vents: >-
+    photo-measured - fig 2-5. The perforation is a honeycomb whose column pitch
+    autocorrelates at 5.50mm across the whole field; the field runs ~92-263 in the face
+    and ~7.6-36.7 down it. THE HEXAGONS ARE FLAT-TOP - flat edges top and bottom, vertices
+    left and right - which is the OPPOSITE ORIENTATION to the pointy-top cells on
+    smartoptics/dcp-404@1, a part that sits in the same chassis. Both were read at 14x
+    from photographs of the respective faces; they genuinely differ, and one was not
+    copied from the other. Row pitch and hole size follow from the column pitch for a
+    regular honeycomb, with the web between holes set from the photograph at about 15%
+    of pitch.
+
+  indicators: >-
+    photo-observed, and it is why this part declares ok/fail while drawing no lamp.
+    Several cells of the perforation glow green in figs 2-5 and 2-6 - light from behind
+    the faceplate, not an aperture of its own - so the tray does report state, but no
+    discrete lamp is resolvable at 2.7 px/mm and none is drawn. UM s2.4 gives the
+    behaviour: a failed fan raises an alarm and the other three speed up.
+  depth-gap: NOT STATED in any DCP document.
+  fan-count-gap: >-
+    the tray holds four fans (UM s2.4) but the perforation does not resolve them, so the
+    faceplate carries no per-fan feature and none is drawn.
+states: [ok, fail, absent]
+elements:
+  vent-field: {at: [7.0, 5.1], size: [171.0, 29.1], class: vent}
+  screw-left: {at: [1.5, 17.5], size: [5.0, 5.0], class: fastener}
+  screw-right: {at: [185.5, 17.5], size: [5.0, 5.0], class: fastener}
+skins: [default]

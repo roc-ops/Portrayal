@@ -1,0 +1,71 @@
+format: 1
+kind: module
+name: dcp-2-psu-dc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: Smartoptics DCP-2-PSU-DC-FB - the -48V DC power supply for the DCP-2
+  chassis. Same 1U CRPS envelope as the AC unit, with a three-post DC terminal in
+  place of the C14 inlet and a green release lever in place of the orange one.
+size: {w: 73.5, h: 40.0}
+attrs:
+  model: DCP-2-PSU-DC-FB
+  input: dc
+  voltage: '-48v'
+  power-output-w: 460
+  airflow: front-to-back
+provenance:
+  size: >-
+    borrowed - smartoptics/dcp-2-psu-ac@1, which is the same 1U CRPS envelope. UM s2.3
+    shows the two modules in one bay pair and says "Both types can be used
+    simultaneously", so they share a footprint by construction. See that part for how
+    73.5 x 40 was settled.
+  power: >-
+    UM spec table and so-ds-dcp-2-r4.3 - input "-40 to -72 VDC", drawn at "Max 7A @ -48V"
+    per UM s3.1.5. The 460 output is BORROWED from the AC module's sticker, because no
+    photograph in the corpus shows the DC module's own label legibly. NO AMBIENT is
+    quoted with any DCP power figure.
+  elements: >-
+    photo-inferred from an OBLIQUE view, and that is a real limitation. UM fig 2-13 is
+    the only artwork of this module anywhere in the corpus and it is a three-quarter
+    shot of both PSUs removed from the chassis - good enough to say WHAT is on the face
+    and in what order, not where. What it shows: the same fan aperture and bail handle
+    as the AC unit, a three-post DC terminal block where the AC unit has its C14 inlet,
+    and a GREEN release lever where the AC unit has an orange one. Every installed
+    photograph in the corpus (figs 2-5, 2-6) has AC supplies in both bays, so the DC
+    face has never been measured face-on. Positions here are the AC part's, with the
+    inlet swapped; treat x/y as estimated rather than measured.
+  terminal: >-
+    NOT a std/ part, and deliberately so. The AC module composes std/c14-inlet@1 because
+    IEC 60320-1 fixes that cutout; the DC input here is a three-post block whose standard,
+    if it has one, is not identified in any DCP document and for which the library holds
+    no part. It occupies the same aperture the C14 does - 20 x 28 at the same centre -
+    which is what the chassis metalwork allows, and is drawn rather than composed. If a
+    DC terminal part is ever added to std/, this should compose it.
+  colour: >-
+    photo-inferred - fig 2-13. The lever colour is the one unambiguous difference
+    between the two modules in that photograph. NOT ASSERTED: why it differs. Latch
+    colour encodes airflow direction on many vendors' supplies, but both DCP-2 supplies
+    are -FB parts, so that cannot be what it means here, and no DCP document explains it.
+  ground: >-
+    UM s3.1.5 - "the DC power connector contains the chassis (frame) ground terminal".
+    So the DC variant needs no separate ground stud on its face, and none is drawn.
+
+  face-geometry-gap: >-
+    no orthographic artwork of this module exists in the corpus. Every element position
+    is inherited from the AC part rather than measured. A face-on photograph of a
+    DC-populated DCP-2, or a DC PSU datasheet, would settle it.
+  depth-gap: NOT STATED, as for the AC module.
+states: [ok, fail, absent]
+elements:
+  handle: {at: [4.5, 3.5], size: [35.5, 5.0], class: handle}
+  fan-aperture: {at: [8.45, 8.0], size: [34.1, 30.0], class: vent}
+  dc-terminal: {at: [45.5, 6.0], size: [20.0, 28.0], class: inlet}
+  latch: {at: [66.0, 14.5], size: [7.0, 22.5], class: latch}
+  screw-left: {at: [6.2, 35.2], size: [3.6, 3.6], class: fastener}
+  screw-mid: {at: [37.7, 35.2], size: [3.6, 3.6], class: fastener}
+  lamp-status: {at: [55.6, 35.4], size: [3.6, 3.6], class: indicator}
+connection-points:
+  power: {at: [50.5, 20.0], direction: rear}
+skins: [default]

@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="73.5mm" height="40mm" viewBox="0 0 73.5 40">
+  <!-- DCP-2-PSU-AC-FB face, 73.5 x 40 (1U CRPS, named by the module's own
+       "CRPS 460W AC Gold" sticker in DCP-Series_User_Manual fig 2-5).
+
+       THE INLET IS NOT DRAWN HERE. It is std/c14-inlet@1, composed by the
+       contract at rotate 270 (earth pin left), and this bezel art wraps it - the
+       same arrangement common/psu-ac-650@3 uses. An earlier version of this skin
+       hand-drew a 19 x 20 socket, which is neither the IEC 60320-1 cutout
+       (28 x 20) nor the orientation the hardware uses, and read as squashed.
+
+       Everything else is measured off fig 2-5, averaged over both installed
+       supplies: fan opening 34.1 wide on centre x 25.5, release lever 64.5-73,
+       two captive screws along the bottom, and ONE status lamp - the single
+       bi-colour LED a CRPS supply carries, not the pair drawn at first. The bail
+       handle is stowed, lying across the top of the fan opening. -->
+  <defs>
+    <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c3c8cd"/>
+      <stop offset="0.55" stop-color="#a8aeb4"/>
+      <stop offset="1" stop-color="#8d9399"/>
+    </linearGradient>
+    <radialGradient id="fanwell" cx="0.5" cy="0.45" r="0.62">
+      <stop offset="0" stop-color="#2a2e32"/>
+      <stop offset="1" stop-color="#111417"/>
+    </radialGradient>
+  </defs>
+
+  <rect id="body" x="0" y="0" width="73.5" height="40" rx="0.8"
+        fill="url(#metal)" stroke="#6d7278" stroke-width="0.3"/>
+
+  <g id="fan-aperture">
+    <rect x="8.45" y="8" width="34.1" height="30" rx="1.4" fill="url(#fanwell)"
+          stroke="#70767c" stroke-width="0.35"/>
+    <circle cx="25.5" cy="23" r="13.4" fill="none" stroke="#3d4247" stroke-width="0.5"/>
+    <circle cx="25.5" cy="23" r="10.0" fill="none" stroke="#33373b" stroke-width="0.45"/>
+    <circle cx="25.5" cy="23" r="6.2" fill="none" stroke="#33373b" stroke-width="0.45"/>
+    <circle cx="25.5" cy="23" r="3.7" fill="#4a5055"/>
+    <g stroke="#3d4247" stroke-width="0.4">
+      <path d="M 25.5 9.6 V 36.4"/>
+      <path d="M 12.1 23 H 38.9"/>
+      <path d="M 16.0 13.5 L 35.0 32.5"/>
+      <path d="M 35.0 13.5 L 16.0 32.5"/>
+    </g>
+  </g>
+
+  <g id="handle">
+    <rect x="4.5" y="3.5" width="35.5" height="5" rx="2.4" fill="#26292c" stroke="#141618" stroke-width="0.25"/>
+    <rect x="6.6" y="4.9" width="31.3" height="2.2" rx="1.1" fill="#3a3e42"/>
+  </g>
+
+  <g id="latch">
+    <rect x="66" y="14.5" width="7" height="22.5" rx="1.6" fill="#e2621d" stroke="#a8430f" stroke-width="0.3"/>
+    <rect x="67.4" y="17.0" width="4.2" height="17.5" rx="1.1" fill="#f07a33"/>
+  </g>
+
+  <g id="screws" fill="#9aa0a6" stroke="#5f646a" stroke-width="0.28">
+    <circle id="screw-left" cx="8.0" cy="37.0" r="1.8"/>
+    <circle id="screw-mid" cx="39.5" cy="37.0" r="1.8"/>
+  </g>
+  <g stroke="#5f646a" stroke-width="0.3" fill="none">
+    <path d="M 6.8 35.8 L 9.2 38.2 M 9.2 35.8 L 6.8 38.2"/>
+    <path d="M 38.3 35.8 L 40.7 38.2 M 40.7 35.8 L 38.3 38.2"/>
+  </g>
+
+  <circle id="lamp-status" cx="57.4" cy="37.2" r="1.8" fill="#1d2124" stroke="#5f646a" stroke-width="0.3"/>
+</svg>
