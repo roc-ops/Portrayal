@@ -60,9 +60,12 @@ an individual is officially representing the community in public spaces.
 ## Enforcement
 
 Instances of abusive, harassing, or otherwise unacceptable behaviour may be
-reported to the maintainer at the email address on the
-[roc-ops GitHub profile](https://github.com/roc-ops). All complaints will be
-reviewed and investigated promptly and fairly. All community leaders are
+reported to the maintainer privately through this repository's
+[security advisory form](https://github.com/roc-ops/Portrayal/security/advisories/new)
+("Report a vulnerability" under the Security tab), which reaches the
+maintainer and nobody else; a dedicated conduct address will replace this
+channel once one exists. All complaints will be reviewed and investigated
+promptly and fairly. All community leaders are
 obligated to respect the privacy and security of the reporter of any incident.
 
 ## Enforcement guidelines
