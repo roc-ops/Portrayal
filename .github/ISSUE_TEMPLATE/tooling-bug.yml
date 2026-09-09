@@ -1,0 +1,28 @@
+name: Tooling bug
+description: build.sh, lint, render, devicelock, the exporter, the kit, or CI misbehaved
+labels: [tooling]
+body:
+  - type: input
+    id: command
+    attributes:
+      label: Command you ran
+      placeholder: python3 spec/tools/portrayal/lint.py --schemas spec/schemas --library library --device mx204
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: What happened
+      description: Paste the relevant output. A traceback where a message was expected is a bug in itself.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+  - type: input
+    id: env
+    attributes:
+      label: Python version and platform
+      placeholder: Python 3.12.3, macOS 15
