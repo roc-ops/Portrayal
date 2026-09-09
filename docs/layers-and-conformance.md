@@ -9,7 +9,7 @@ question a reviewer has to hold in their head.
 A view is written in the order the part is made, and lint holds it to that order
 (L16). This is not a style preference: an agent building a device follows the file
 top to bottom, stage by stage, and a file that reads in a different order teaches
-the wrong procedure. The procedure itself is `.claude/skills/portrayal-model-device/`.
+the wrong procedure. The procedure itself is `docs/modelling-a-device.md`.
 
 ```yaml
 views:
@@ -240,10 +240,10 @@ the migration of all 443 device text marks out of `decor` into `silkscreen`.
 
 Not done, deliberately:
 
-- **The component-skin grouping convention is not enforced.** 26 of 149 skins contain text
-  (107 nodes) and none use `<g id="silkscreen">` yet. The backstop makes the export correct
-  regardless; the grouping is what would make it *checkable*. A rule requiring it should
-  land with the migration, not before it.
+- **The component-skin grouping convention is enforced.** L38 is an error on printed text
+  outside `<g id="silkscreen">` in a skin, unless the part is applied over the panel, and the
+  library passes it. The backstop stays for the export's sake; the grouping is what makes
+  the convention *checkable*.
 - **Cutouts are not modelled.** The panel's holes are still implicit in the skin artwork.
   Declaring them as data is what would let lint assert that every component sits in a
   cutout and every cutout is filled — the rule that would have caught the overlapping LEDs,

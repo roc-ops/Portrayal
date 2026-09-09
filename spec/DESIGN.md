@@ -57,8 +57,8 @@ Three layers:
    exception for content until unified before publication.) Contributions under
    the Developer Certificate of Origin; see `README.md`, Licence. No vendor
    logos in community skins — contracts reserve a `logo-zone` region. No datasheet copies/conversions
-   in-repo: transcribed facts with per-field provenance (`datasheet §x` |
-   `measured` | `photo-inferred` | `vendor-cad` | `estimated`) + datasheet
+   in-repo: transcribed facts with per-field provenance (`datasheet` | `drawing` |
+   `measured` | `photo-measured` | `registry` | `borrowed` | `estimated` | `known-wrong`) + datasheet
    registered by title/URL/SHA-256/archive link. Device dumps stored sanitized
    (serials, MACs, IPs, hostnames, communities stripped/hashed).
 8. **Builds**: byte-deterministic (no timestamps; toolchain version in
@@ -94,14 +94,20 @@ Three layers:
    that on purpose rather than by omission. L54 catches the mechanical half — a
    gap whose `scope` names no group, view, configuration, id or attribute the
    device has.
-10. **Repos**: `spec` (schema+tooling, Apache-2.0) and `library`
-    (content). Photos/dumps via Git LFS. Layout:
-    `components/{common,<vendor>}/`, `devices/<vendor>/<model>/`, `profiles/`.
-    Vendor slugs reused from netbox devicetype-library. Refs =
+10. **Layout**: one repository. `spec/` holds schemas, tooling and tests;
+    `library/` holds `components/{std,common,<vendor>}/<name>/v<major>/` and
+    `devices/<vendor>/<model>/`; `kit/` is the JS consumer of what `build.sh`
+    publishes. Profiles live in `spec/schemas/profiles.yaml`. Photographs and
+    vendor documents are never committed (no LFS; they stay in the gitignored
+    `working/` staging tree and are cited, not copied); dumps are committed
+    sanitised. Vendor slugs reused from netbox devicetype-library. Refs =
     `namespace/name@major`. Toolchain takes a library search path; reserved
     `local/` namespace for private overlays.
 
-## Walking-skeleton scope (current)
+## First device (historical)
+
+The scope the project started with, kept as the record of where it began; the
+library has grown well past it.
 
 Guinea pig: Edgecore AS7726-32X (a live lab unit, ArcOS S8.5.1A).
 Components: qsfp28-cage, sfp-plus-cage, rj45-port, psu-ac-650 (+ bay), fan-module

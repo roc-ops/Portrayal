@@ -3,7 +3,8 @@
 # tested against what it will land on.
 #
 # WHY THIS EXISTS INSTEAD OF BRANCH PROTECTION. Required status checks and
-# rulesets are both gated behind GitHub Pro for a private repository, so the
+# rulesets are both gated behind GitHub Pro for a private repository (this one, until
+# roc-ops/Portrayal#155 makes it public), so the
 # server will not enforce anything here. This is the client-side stand-in: it
 # checks the two things branch protection would have checked, at the one place
 # every merge in this repo actually goes through.
