@@ -9,7 +9,7 @@ question a reviewer has to hold in their head.
 A view is written in the order the part is made, and lint holds it to that order
 (L16). This is not a style preference: an agent building a device follows the file
 top to bottom, stage by stage, and a file that reads in a different order teaches
-the wrong procedure. The procedure itself is `.claude/skills/portrayal-model-device/`.
+the wrong procedure. The procedure itself is `docs/modelling-a-device.md`.
 
 ```yaml
 views:

@@ -52,7 +52,7 @@ python3 spec/tools/intake/extract.py <guide.pdf> --out working/images
 The full intake process — what to hunt, where vendors keep it, staging rules,
 and the conversion discipline that keeps docling from eating a machine — is
 `.claude/skills/portrayal-vendor-intake/SKILL.md`. The modelling process that
-follows it is `.claude/skills/portrayal-model-device/SKILL.md`.
+follows it is `docs/modelling-a-device.md`.
 
 ## What makes it different
 
@@ -82,7 +82,7 @@ source documents stay out of the repository. See `PRIOR-ART.md`.
 - `spec/DESIGN.md` — the architecture and the design decisions behind it
 - `spec/DEPTH-AND-3D.md` — how depth and relief turn the 2D drawing into 3D
 - `docs/layers-and-conformance.md` — the canonical manifest, the layer model and the maturity gate
-- `.claude/skills/portrayal-model-device/SKILL.md` — how to model a device from reference material, stage by stage with a check at each. Written for an agent; works for a person
+- `docs/modelling-a-device.md` — how to model a device from reference material, stage by stage with a check at each; `docs/modelling-pitfalls.md` for when a figure or a rule misbehaves
 - `PRIOR-ART.md` — the research this rests on, and the gap it fills
 
 ## Status
