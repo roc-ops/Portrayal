@@ -4,15 +4,16 @@
 
        THE INLET IS NOT DRAWN HERE. It is std/c14-inlet@1, composed by the
        contract at rotate 270 (earth pin left), and this bezel art wraps it - the
-       same arrangement common/psu-ac-650@3 uses. An earlier version of this skin
-       hand-drew a 19 x 20 socket, which is neither the IEC 60320-1 cutout
-       (28 x 20) nor the orientation the hardware uses, and read as squashed.
+       same arrangement common/psu-ac-650@3 uses.
 
-       Everything else is measured off fig 2-5, averaged over both installed
-       supplies: fan opening 34.1 wide on centre x 25.5, release lever 64.5-73,
-       two captive screws along the bottom, and ONE status lamp - the single
-       bi-colour LED a CRPS supply carries, not the pair drawn at first. The bail
-       handle is stowed, lying across the top of the fan opening. -->
+       THE LEVER IS CENTRED ON THE INLET, and the lamp sits below it in the
+       corner. It was drawn low and long, which put it across the bottom-right
+       corner where the status lamp goes. The C14 aperture spans y 6-34 about a
+       centre of 20; the lever now shares that centre.
+
+       THE FOUR SCREWS SIT ON THE CORNERS OF THE FAN APERTURE. There were two,
+       placed along the bottom and clear of the opening, which read as unrelated
+       to it. -->
   <defs>
     <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#c3c8cd"/>
@@ -48,19 +49,23 @@
     <rect x="6.6" y="4.9" width="31.3" height="2.2" rx="1.1" fill="#3a3e42"/>
   </g>
 
-  <g id="latch">
-    <rect x="66" y="14.5" width="7" height="22.5" rx="1.6" fill="#e2621d" stroke="#a8430f" stroke-width="0.3"/>
-    <rect x="67.4" y="17.0" width="4.2" height="17.5" rx="1.1" fill="#f07a33"/>
-  </g>
-
-  <g id="screws" fill="#9aa0a6" stroke="#5f646a" stroke-width="0.28">
-    <circle id="screw-left" cx="8.0" cy="37.0" r="1.8"/>
-    <circle id="screw-mid" cx="39.5" cy="37.0" r="1.8"/>
+  <g fill="#9aa0a6" stroke="#5f646a" stroke-width="0.28">
+    <circle id="screw-tl" cx="10.15" cy="9.70" r="1.70"/>
+    <circle id="screw-tr" cx="40.85" cy="9.70" r="1.70"/>
+    <circle id="screw-bl" cx="10.15" cy="36.30" r="1.70"/>
+    <circle id="screw-br" cx="40.85" cy="36.30" r="1.70"/>
   </g>
   <g stroke="#5f646a" stroke-width="0.3" fill="none">
-    <path d="M 6.8 35.8 L 9.2 38.2 M 9.2 35.8 L 6.8 38.2"/>
-    <path d="M 38.3 35.8 L 40.7 38.2 M 40.7 35.8 L 38.3 38.2"/>
+    <path d="M 9.05 8.60 L 11.25 10.80 M 11.25 8.60 L 9.05 10.80"/>
+    <path d="M 39.75 8.60 L 41.95 10.80 M 41.95 8.60 L 39.75 10.80"/>
+    <path d="M 9.05 35.20 L 11.25 37.40 M 11.25 35.20 L 9.05 37.40"/>
+    <path d="M 39.75 35.20 L 41.95 37.40 M 41.95 35.20 L 39.75 37.40"/>
   </g>
 
-  <circle id="lamp-status" cx="57.4" cy="37.2" r="1.8" fill="#1d2124" stroke="#5f646a" stroke-width="0.3"/>
+  <g id="latch">
+    <rect x="66" y="8.75" width="7" height="22.5" rx="1.6" fill="#e2621d" stroke="#a8430f" stroke-width="0.3"/>
+    <rect x="67.4" y="11.25" width="4.2" height="17.5" rx="1.1" fill="#f07a33"/>
+  </g>
+
+  <circle id="lamp-status" cx="67.8" cy="36.2" r="1.8" fill="#1d2124" stroke="#5f646a" stroke-width="0.3"/>
 </svg>

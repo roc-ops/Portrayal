@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dcp-2-fan
-version: 1.0.0
+version: 1.1.0
 class: fan
 behaviour: fills
 profile: networking
@@ -49,9 +49,34 @@ provenance:
   fan-count-gap: >-
     the tray holds four fans (UM s2.4) but the perforation does not resolve them, so the
     faceplate carries no per-fan feature and none is drawn.
+  depth: >-
+    ESTIMATED at 80, stated only so the tray is a solid in 3D. No DCP document gives a
+    fan-tray length. It carries four fans in a row behind the faceplate and sits inside
+    a 500-deep chassis, which is the only bound available.
 states: [ok, fail, absent]
 elements:
   vent-field: {at: [7.0, 5.1], size: [171.0, 29.1], class: vent}
   screw-left: {at: [1.5, 17.5], size: [5.0, 5.0], class: fastener}
   screw-right: {at: [185.5, 17.5], size: [5.0, 5.0], class: fastener}
+relief:
+  wall: '#8d9399'
+  features:
+    - node: vent-field
+      sink: 4.0
+      confidence: estimated
+      source: >-
+        the perforation is a hole field with fans behind it, so it reads as depth rather
+        than as printing. 4 is where the fans sit far enough back to be shadow. Nothing
+        dimensions it.
+    - node: screw-left
+      out: 0.9
+      confidence: estimated
+      source: a captive screw head standing proud of the faceplate; UM s2.4.1 has them tightened to 17 cm-kg
+    - node: screw-right
+      out: 0.9
+      confidence: estimated
+      source: as screw-left
+body:
+  depth: 80.0        # estimated - see provenance/depth
+  color: '#a8aeb4'
 skins: [default]

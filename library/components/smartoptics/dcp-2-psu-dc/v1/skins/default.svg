@@ -1,17 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="73.5mm" height="40mm" viewBox="0 0 73.5 40">
-  <!-- DCP-2-PSU-DC-FB face, 73.5 x 40 - the AC module's envelope with a
-       three-post DC terminal in the same aperture the C14 occupies, and a green
-       release lever in place of the orange one.
+  <!-- DCP-2-PSU-DC-FB face, 73.5 x 40 - the AC module's envelope with a narrower
+       three-post DC terminal where the C14 sits, and a green release lever.
 
        THE TERMINAL IS DRAWN, NOT COMPOSED, and that is the one place this part
        differs in kind from its AC twin. IEC 60320-1 fixes the C14 cutout, so the
        AC module composes std/c14-inlet@1; this DC block's standard is not named
-       in any DCP document and the library holds no part for it.
+       in any DCP document and the library holds no part for it. It is NARROWER
+       than the C14's aperture and its three contacts are in ONE VERTICAL COLUMN.
 
        DRAWN FROM AN OBLIQUE PHOTOGRAPH. UM fig 2-13 is the only artwork of this
-       module in the corpus - a three-quarter shot out of the chassis. It fixes
-       WHAT is on the face and in what order, not where. Everything but the
-       terminal is inherited from the AC part, whose positions are measured. -->
+       module in the corpus. Everything but the terminal is inherited from the AC
+       part, whose positions are measured.
+
+       THE LEVER IS CENTRED ON THE INLET, and the lamp sits below it in the
+       corner. It was drawn low and long, which put it across the bottom-right
+       corner where the status lamp goes. The terminal spans y 7-33 about a
+       centre of 20; the lever now shares that centre.
+
+       THE FOUR SCREWS SIT ON THE CORNERS OF THE FAN APERTURE. There were two,
+       placed along the bottom and clear of the opening, which read as unrelated
+       to it. -->
   <defs>
     <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#c3c8cd"/>
@@ -47,29 +55,33 @@
     <rect x="6.6" y="4.9" width="31.3" height="2.2" rx="1.1" fill="#3a3e42"/>
   </g>
 
+  <g fill="#9aa0a6" stroke="#5f646a" stroke-width="0.28">
+    <circle id="screw-tl" cx="10.15" cy="9.70" r="1.70"/>
+    <circle id="screw-tr" cx="40.85" cy="9.70" r="1.70"/>
+    <circle id="screw-bl" cx="10.15" cy="36.30" r="1.70"/>
+    <circle id="screw-br" cx="40.85" cy="36.30" r="1.70"/>
+  </g>
+  <g stroke="#5f646a" stroke-width="0.3" fill="none">
+    <path d="M 9.05 8.60 L 11.25 10.80 M 11.25 8.60 L 9.05 10.80"/>
+    <path d="M 39.75 8.60 L 41.95 10.80 M 41.95 8.60 L 39.75 10.80"/>
+    <path d="M 9.05 35.20 L 11.25 37.40 M 11.25 35.20 L 9.05 37.40"/>
+    <path d="M 39.75 35.20 L 41.95 37.40 M 41.95 35.20 L 39.75 37.40"/>
+  </g>
+
   <g id="dc-terminal">
-    <rect x="45.5" y="6" width="20" height="28" rx="1.0" fill="#3d4247" stroke="#262a2e" stroke-width="0.35"/>
-    <rect x="47.2" y="8.2" width="16.6" height="23.6" rx="0.7" fill="#15181a" stroke="#585d63" stroke-width="0.3"/>
+    <rect x="45.5" y="7" width="11" height="26" rx="0.9" fill="#3d4247" stroke="#262a2e" stroke-width="0.35"/>
+    <rect x="46.9" y="8.6" width="8.2" height="22.8" rx="0.6" fill="#15181a" stroke="#585d63" stroke-width="0.28"/>
     <g fill="#c9a227" stroke="#8a6f14" stroke-width="0.22">
-      <circle cx="55.5" cy="13.4" r="2.1"/>
-      <circle cx="51.4" cy="24.0" r="2.1"/>
-      <circle cx="59.6" cy="24.0" r="2.1"/>
+      <circle cx="51.0" cy="12.5" r="2.0"/>
+      <circle cx="51.0" cy="20.0" r="2.0"/>
+      <circle cx="51.0" cy="27.5" r="2.0"/>
     </g>
   </g>
 
   <g id="latch">
-    <rect x="66" y="14.5" width="7" height="22.5" rx="1.6" fill="#1f8f6a" stroke="#116048" stroke-width="0.3"/>
-    <rect x="67.4" y="17.0" width="4.2" height="17.5" rx="1.1" fill="#2eab80"/>
+    <rect x="66" y="8.75" width="7" height="22.5" rx="1.6" fill="#1f8f6a" stroke="#116048" stroke-width="0.3"/>
+    <rect x="67.4" y="11.25" width="4.2" height="17.5" rx="1.1" fill="#2eab80"/>
   </g>
 
-  <g id="screws" fill="#9aa0a6" stroke="#5f646a" stroke-width="0.28">
-    <circle id="screw-left" cx="8.0" cy="37.0" r="1.8"/>
-    <circle id="screw-mid" cx="39.5" cy="37.0" r="1.8"/>
-  </g>
-  <g stroke="#5f646a" stroke-width="0.3" fill="none">
-    <path d="M 6.8 35.8 L 9.2 38.2 M 9.2 35.8 L 6.8 38.2"/>
-    <path d="M 38.3 35.8 L 40.7 38.2 M 40.7 35.8 L 38.3 38.2"/>
-  </g>
-
-  <circle id="lamp-status" cx="57.4" cy="37.2" r="1.8" fill="#1d2124" stroke="#5f646a" stroke-width="0.3"/>
+  <circle id="lamp-status" cx="67.8" cy="36.2" r="1.8" fill="#1d2124" stroke="#5f646a" stroke-width="0.3"/>
 </svg>
