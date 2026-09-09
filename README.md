@@ -77,6 +77,7 @@ source documents stay out of the repository. See `PRIOR-ART.md`.
 
 ## Documentation
 
+- `CONTRIBUTING.md` — how to add a device in an afternoon, and what a reviewer asks for
 - `spec/DESIGN.md` — the architecture and the design decisions behind it
 - `spec/DEPTH-AND-3D.md` — how depth and relief turn the 2D drawing into 3D
 - `docs/layers-and-conformance.md` — the canonical manifest, the layer model and the maturity gate
