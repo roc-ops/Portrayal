@@ -52,9 +52,9 @@ it so the figures are usable.
 
 ### 3. Model it
 
-The modelling guide is
-[`.claude/skills/portrayal-model-device/SKILL.md`](.claude/skills/portrayal-model-device/SKILL.md)
-(it is moving to `docs/modelling-a-device.md`). It walks the order the panel is
+The modelling guide is [`docs/modelling-a-device.md`](docs/modelling-a-device.md),
+with [`docs/modelling-pitfalls.md`](docs/modelling-pitfalls.md) for when a figure
+or a rule misbehaves. It walks the order the panel is
 manufactured in: chassis and faces, then the holes punched in them, then the
 printing, then the components seated in the holes; with a check at each stage.
 The short version of what you will write:
