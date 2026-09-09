@@ -6,16 +6,16 @@
 #
 # This file is not a real product. It is linted and rendered by the test suite
 # so it can never drift from what the tools accept.
-format: 1
-kind: device
+format: 1                       # the manifest format; always 1 today
+kind: device                    # a device manifest; contracts say component or module
 name: ex-1u                     # the directory name: lower-case, digits, hyphens
 version: 0.1.0                  # semver; the lock check tells you when to bump it
 maturity: draft                 # draft | modelled | verified - lint holds you to it
 manufacturer: Example           # the key in spec/schemas/vendors.yaml
 model: EX-1U                    # as printed on the faceplate
-portfolio:
-  line: Example Series          # the vendor's own grouping, optional
-description: >-
+portfolio:                      # optional: how the vendor groups it, for the picker
+  line: Example Series
+description: >-                 # the paragraph a person reads first; also the DCIM description
   One paragraph a person reads first: what the box is, what is on its faces,
   what is unusual. A 1RU four-port 10G switch with an out-of-band management
   jack, a console jack, a system lamp, two redundant supplies and one fan.
@@ -43,18 +43,18 @@ attrs:                          # facts a DCIM wants, in sections; keys are uniq
     optics-sfp-plus: 10G SFP+ SR, LR; 1G SFP SX, LX   # what runs in the cages, per the datasheet
   lifecycle:
     eol: none-announced         # searched and found nothing; absent means nobody looked
-chassis:
+chassis:                        # the body, not the rack face; every view is sized from it
   width: 440.0                  # millimetres, body between the ear folds
   height: 43.6
   depth: 300.0
-  ru: 1
-  color: '#3a3d42'
+  ru: 1                         # rack units; the elevation and the 3D box use it
+  color: '#3a3d42'              # panel colour as a hex fill; from a photograph, not a guess
 groups:                         # what the parts are FOR; every placement and bay names one
   sfp-plus:
     term: Port                  # the vendor's word for one of these
     role: traffic               # traffic | management | service | indicator | furniture
     index-origin: 1             # what the silkscreen counts from
-    description: four 10G SFP+ ports
+    description: four 10G SFP+ ports   # one line; shows in the tree beside the group
     attrs: {media: sfp-plus, speed: 10g}   # stated once; lint checks the members agree
   port-leds:
     term: LED
@@ -145,16 +145,16 @@ views:                          # all six; a face with nothing documented says s
       side elevation; nothing asymmetric is drawn
 configurations:                 # the ways the box is sold or built; `base` powers on
   base:
-    kind: base
+    kind: base                  # base | orderable | example | model - see the schema
     description: two supplies, one fan, no transceivers fitted
 gaps:                           # what you could not find, so silence is never mistaken for a finding
-  - what: rear-grounding-stud
-    scope: [rear]
-    reason: vendor-silent
+  - what: rear-grounding-stud   # a slug for the missing thing
+    scope: [rear]               # the view, group, id or configuration it belongs to
+    reason: vendor-silent       # why it is missing; sources-disagree is the one that is not an absence
     note: the guide's grounding section names a stud but no figure shows where it is
-    wanted: a rear photograph or drawing that places the stud
-datasheet:
-  title: Example EX-1U Datasheet
+    wanted: a rear photograph or drawing that places the stud   # what would close it
+datasheet:                      # the document the dimensions came from: title, url, and
+  title: Example EX-1U Datasheet   # sha256 once you hold the file; the file itself stays out
   url: https://example.com/ex-1u-datasheet
-references:
+references:                     # every other document you read, the same way
   - {title: Example EX-1U Installation Guide}
