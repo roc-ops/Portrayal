@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcp-2
-version: 1.5.0
+version: 1.6.0
 manufacturer: Smartoptics
 model: DCP-2
 description: 1RU 19-inch chassis for the DCP transponder and muxponder family. Two
@@ -399,6 +399,25 @@ configurations:
     bays:
       slot-1: smartoptics/dcp-404@1
       slot-2: smartoptics/dcp-404@1
+  ila-node:
+    kind: example
+    description: >-
+      THE ILA NODE, which is what a DCP-F-A22 is for: a 22 dB EDFA in slot 1 carrying a
+      PPM-AD1-1510 in its upper bay and the dummy cover in its lower one, with the blind
+      plate in slot 2. The 1510 adds and drops the supervisory channel at the amplifier
+      site; the second PPM position is unused at a plain ILA, and UM s2.5 wants the empty
+      one covered rather than open. Illustrative, like the other examples: the units are
+      ordered separately from the chassis.
+      It is also the ONLY configuration in the library that seats a relief-bearing module
+      in a bay on a raised carrier, which is why it is worth having as a drawing and not
+      just as a note - smartoptics/ppm-dummy@1 declares no relief, so with the bays at
+      their defaults nothing exercises the depth arithmetic that puts an occupant on the
+      A22's raised block.
+    bays:
+      slot-1: smartoptics/dcp-f-a22@1
+      slot-1/ppm-1: smartoptics/ppm-ad1-1510@1
+      slot-1/ppm-2: smartoptics/ppm-dummy@1
+      slot-2: smartoptics/dcp-2-blank@1
   dcp-404-x1:
     kind: example
     description: >-
