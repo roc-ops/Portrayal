@@ -465,7 +465,7 @@ def fill_from_attrs(root, attrs):
             p.remove(target)
 
 
-def _inset_feature(feat, back):
+def _inset_feature(feat, back, group_lift=0.0):
     """A feature on an instance mounted `back` mm behind the panel face.
 
     A part's relief is written for the usual mounting - the flange bolts to the
@@ -478,10 +478,27 @@ def _inset_feature(feat, back):
     start and what shortens is however much of them ends up behind the panel.
     A feature left wholly behind is dropped: it is inside the machine, and the
     drawing of a face does not show what is behind it.
+
+    `group_lift` IS THE PART OF `back` THE INSTANCE GROUP ALREADY CARRIES, and
+    keeping it separate is the whole reason this takes two numbers. relief.js
+    reads `data-z-out` as an ABSOLUTE distance from the panel but SUMS
+    `data-z-lift` up the ancestor chain, so a lift written onto the part's own
+    group must be folded into that part's `out` values and must NOT be folded
+    into their `lift` values. Doing both counts it twice, and it did: composing
+    common/lc-duplex-adapter@3 onto smartoptics/dcp-f-a22's plate at `lift: 44`
+    put 44 on the adapter's group AND rewrote each dust cap's own 3.175 lift to
+    47.175, so relief.js summed 91.175 against an `out` of 50.35 and built the
+    caps as boxes 40mm deep starting in front of where they end. They rendered as
+    white spikes standing off the face.
+    Only one caller has a group lift to pass - a component's `parts:`, which sets
+    `data-z-lift` on the part group. A device placement's `lift:` sets no such
+    attribute and is carried entirely by `back`, which is why it must not.
     """
-    if not back:
+    if not back and not group_lift:
         return feat
     f = dict(feat)
+    # what a `lift`, and anything measured from one, has to move by
+    lb = back + group_lift
     top = None
     for k in ("cyl", "bar", "uhandle"):
         if f.get(k) is not None:
@@ -491,11 +508,11 @@ def _inset_feature(feat, back):
         if f["out"] <= 0:
             return None
     if f.get("lift") is not None:
-        f["lift"] = round(max(0.0, f["lift"] - back), 4)
+        f["lift"] = round(max(0.0, f["lift"] - lb), 4)
         if not f["lift"]:
             f.pop("lift")
     if top is not None:
-        top -= back
+        top -= lb
         if top <= 0:
             return None
         for k in ("cyl", "bar", "uhandle"):
@@ -504,7 +521,7 @@ def _inset_feature(feat, back):
     return f
 
 
-def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None, z_inset=0.0, seated=None, bay_attrs=None):
+def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None, z_inset=0.0, z_group_lift=0.0, seated=None, bay_attrs=None):
     contract, skins = lib.resolve(ref)
     comp_name = ref.split("/")[-1].split("@")[0]
     if skin_overrides and comp_name in skin_overrides:
@@ -670,7 +687,7 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     for child in list(holder):
         g.append(child)
     for feat in (contract.get("relief") or {}).get("features") or []:
-        feat = _inset_feature(feat, z_inset)
+        feat = _inset_feature(feat, z_inset, z_group_lift)
         if feat is None:
             continue
         want = f"{inst_id}--{feat['node']}"
@@ -732,6 +749,7 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                                # 17.76 again, and 3.0 of clip lands on the
                                # shroud's outer face.
                                z_inset=z_inset - (part.get("lift") or 0),
+                               z_group_lift=z_group_lift + (part.get("lift") or 0),
                                palette=palette,
                                inst_palette=inst_palette,
                                skin_overrides=skin_overrides, attr_overrides=attr_overrides,
@@ -762,7 +780,7 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         if not part.get("behind"):
             part_groups.append(pg)
     for feat in (contract.get("relief") or {}).get("features") or []:
-        feat = _inset_feature(feat, z_inset)
+        feat = _inset_feature(feat, z_inset, z_group_lift)
         if feat is None:
             continue
         want = f"{inst_id}--{feat['node']}"

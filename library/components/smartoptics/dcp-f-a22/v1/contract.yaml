@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dcp-f-a22
-version: 1.1.0
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: optical
@@ -83,8 +83,19 @@ provenance:
     under their lamps. The same pair of triangles the DCP-404 carries, which is what
     common/warning-triangle@1 was added for.
   vents: >-
-    stencil master - a single row of elongated hexagonal slots along the top edge,
-    drawn staggered. The row is the only ventilation the master shows on this face.
+    stencil master - two offset rows of hexagonal cells on the sloped band, the only
+    ventilation the master shows on this face.
+    THE CELLS ARE REGULAR HEXAGONS SEEN FORESHORTENED, not the elongated slots the
+    master draws, and this is the same correction smartoptics/dcp-404@1 needed. They sit
+    on a band tilted back to the chassis, so a front elevation sees them squashed by the
+    ratio of the band's PROJECTION to its true length: 8.9 / hypot(8.9, 44) = 0.19825,
+    against the DCP-404's 10.4 / 45.21 = 0.23003. A cell 5.2 wide is 4.503 tall as a
+    regular hexagon and is therefore drawn 0.893 tall. It was drawn 2.7 - squashed to
+    0.60 where it should be 0.198, so three times too tall - which reads as an elongated
+    slot in 2D and, once the band actually slopes, as a stretched cell in 3D.
+    ONE RATIO FIXES BOTH VIEWS, which is what says it is the right ratio rather than a
+    tuned one. Block bounds, row positions and pitches are the master's and are kept;
+    only the cell outlines are regularised.
     IT IS DRAWN ONLY AS FAR AS THE PPM FIELD, and the master draws it further. Two
     19.5 bays stacked take 39 of the 44 height, which leaves 5 for margins and none
     for a vent band above them - so a row running the full width, as the master shows
@@ -103,6 +114,13 @@ provenance:
     the PPM field, stacked, because that is the only place they fit. Their exact x, the
     gap between them and which is SFP 1 are ESTIMATED. The photograph is 1.1 px/mm
     across the chassis and cannot separate them.
+    THE CAPTION MOVED OFF THE RAMP. It sat at baseline 8.2, which was inside the top band
+    before that band sloped and on the bevel afterwards - in 3D it lay facing the ceiling.
+    A caption cannot sit on a slope, and there is no room between the ramp's foot at 8.9
+    and SFP 1's top at 10.0, so it moves to baseline 23.0, in the 4mm the two cages leave
+    between them. That is off the ramp and keeps this face's habit of captioning a port
+    from just above it, as ETH1, ETH2, EDFA and OCM all do. Its position is as estimated
+    as the cages it labels.
   no-orthographic-elevation-gap: >-
     none exists. The only elevation of this unit is the stencil master, which is
     anisotropic and self-contradictory at the right-hand end; the only photograph is a
