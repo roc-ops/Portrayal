@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dcp-2-psu-dc
-version: 1.0.0
+version: 1.2.0
 class: psu
 behaviour: fills
 profile: networking
@@ -36,13 +36,21 @@ provenance:
     photograph in the corpus (figs 2-5, 2-6) has AC supplies in both bays, so the DC
     face has never been measured face-on. Positions here are the AC part's, with the
     inlet swapped; treat x/y as estimated rather than measured.
+  terminal-geometry: >-
+    CORRECTED after looking at fig 2-13 at 7x. The first cut drew the DC input as a
+    20 x 28 block - the C14 aperture's envelope - with three posts arranged in a
+    triangle, by analogy with a mains connector. NEITHER IS RIGHT. The photograph shows
+    a NARROW, TALL block roughly a third the width of the AC inlet's aperture, with its
+    three contacts in a SINGLE VERTICAL COLUMN, evenly spaced. It is drawn 11 x 26 with
+    the contacts inline at 12.5, 20.0 and 27.5. The AC and DC modules do NOT share an
+    aperture size, which was the assumption underneath the error.
   terminal: >-
     NOT a std/ part, and deliberately so. The AC module composes std/c14-inlet@1 because
     IEC 60320-1 fixes that cutout; the DC input here is a three-post block whose standard,
     if it has one, is not identified in any DCP document and for which the library holds
-    no part. It occupies the same aperture the C14 does - 20 x 28 at the same centre -
-    which is what the chassis metalwork allows, and is drawn rather than composed. If a
-    DC terminal part is ever added to std/, this should compose it.
+    no part. It is drawn rather than composed. It does NOT share the C14's aperture -
+    see provenance/terminal-geometry, which corrects exactly that assumption. If a DC
+    terminal part is ever added to std/, this should compose it.
   colour: >-
     photo-inferred - fig 2-13. The lever colour is the one unambiguous difference
     between the two modules in that photograph. NOT ASSERTED: why it differs. Latch
@@ -56,16 +64,103 @@ provenance:
     no orthographic artwork of this module exists in the corpus. Every element position
     is inherited from the AC part rather than measured. A face-on photograph of a
     DC-populated DCP-2, or a DC PSU datasheet, would settle it.
+  latch-and-handle: >-
+    borrowed - smartoptics/dcp-2-psu-ac@1, which borrows in turn from
+    dell/psu-1100w-ac-14g@1: a lever "about three-quarters of an inch proud" and a grip
+    "about an inch proud and a U rather than the flat rectangle this was drawn as", both
+    from the operator with the machine in front of them. The owner reads the DCP-2's
+    supplies as the same cantilever mechanism as the R740xd's, and the AC and DC modules
+    of this family differ only at the inlet.
+  latch-position: >-
+    CENTRED ON THE TERMINAL, and it was not. The lever was drawn at y 14.5-37.0, which
+    put it across the bottom-right corner where the status lamp sits. The terminal spans
+    y 7-33 about a centre of 20; the lever now shares that centre at 8.75-31.25 and the
+    lamp has its corner back.
+  screws: >-
+    FOUR, ON THE CORNERS OF THE FAN APERTURE, as on the AC module. Two were drawn along
+    the bottom of the face, clear of the opening, which read as unrelated to it.
+  lamp: >-
+    ONE status lamp, in the bottom-right corner. Inherited from the AC module - the CRPS
+    form factor specifies a single bi-colour status LED - and no photograph in the corpus
+    shows this module's face straight on to confirm it independently.
   depth-gap: NOT STATED, as for the AC module.
+  no-body-relief: >-
+    THE BODY DECLARES NO `out`, DELIBERATELY. A face that stands proud of its own panel
+    buries everything on it - the kit extrudes the plate as a slab and every feature
+    without relief of its own ends up inside it. That is what left smartoptics/dcp-404@1
+    blank in 3D. The module's own proudness relative to the chassis is the bay's
+    business, not the part's.
+  depth: >-
+    ESTIMATED at 265, and stated as a figure only so the part is a solid in 3D rather
+    than a plane. NO DCP DOCUMENT GIVES A PSU LENGTH. 1U CRPS is a family of lengths
+    rather than one, so the form factor named on the module's own sticker does not
+    settle it either; what bounds it is the chassis, which is 500 deep. Replace it the
+    moment anything states one.
 states: [ok, fail, absent]
 elements:
   handle: {at: [4.5, 3.5], size: [35.5, 5.0], class: handle}
   fan-aperture: {at: [8.45, 8.0], size: [34.1, 30.0], class: vent}
-  dc-terminal: {at: [45.5, 6.0], size: [20.0, 28.0], class: inlet}
-  latch: {at: [66.0, 14.5], size: [7.0, 22.5], class: latch}
-  screw-left: {at: [6.2, 35.2], size: [3.6, 3.6], class: fastener}
-  screw-mid: {at: [37.7, 35.2], size: [3.6, 3.6], class: fastener}
-  lamp-status: {at: [55.6, 35.4], size: [3.6, 3.6], class: indicator}
+  dc-terminal: {at: [45.5, 7.0], size: [11.0, 26.0], class: inlet}
+  screw-tl: {at: [8.45, 8.00], size: [3.4, 3.4], class: fastener}
+  screw-tr: {at: [39.15, 8.00], size: [3.4, 3.4], class: fastener}
+  screw-bl: {at: [8.45, 34.60], size: [3.4, 3.4], class: fastener}
+  screw-br: {at: [39.15, 34.60], size: [3.4, 3.4], class: fastener}
+  latch: {at: [66.0, 8.75], size: [7.0, 22.5], class: latch}
+  lamp-status: {at: [66.0, 34.4], size: [3.6, 3.6], class: indicator}
 connection-points:
   power: {at: [50.5, 20.0], direction: rear}
+relief:
+  wall: '#5a6065'
+  features:
+    - node: fan-aperture
+      sink: 6.0
+      confidence: estimated
+      source: >-
+        a fan sits behind a grille recessed into the face; 6 is the depth at which the
+        blades read as behind the plate rather than flush with it. No document dimensions
+        it and no view in the corpus is a side elevation of this module.
+    # THE SAME HARDWARE AS THE R740xd's SUPPLY, on the owner's reading, so it takes
+    # dell/psu-1100w-ac-14g@1's figures rather than a second guess at the same thing.
+    # Both were given by the operator with the machine in front of them.
+    - node: latch
+      out: 19.05
+      confidence: estimated
+      source: >-
+        borrowed - dell/psu-1100w-ac-14g@1's release lever, "about three-quarters of an
+        inch proud ... pushed sideways to lock the cord in, so it has to stand off the
+        face far enough to get a thumb on, and a flat tab would not work". The owner
+        reads this as the same cantilever: it retains the cord AND is what the supply is
+        pulled out by. Drawn 2.2 proud at first, which is a tab and not a lever.
+    - node: handle
+      uhandle: 25.4
+      color: '#c9ced3'
+      confidence: estimated
+      source: >-
+        borrowed - dell/psu-1100w-ac-14g@1's grip, "about an inch proud and a U rather
+        than the flat rectangle this was drawn as, the same shape as the handles already
+        in this library". Drawn here as a flat bar before, which is what a stowed bail
+        looks like in a photograph and not what the part does.
+    - node: screw-tl
+      dome: 1.6
+      confidence: estimated
+      source: borrowed - dell/psu-1100w-ac-14g@1's captive screws, "rounded head, about a sixteenth proud"
+    - node: screw-tr
+      dome: 1.6
+      confidence: estimated
+      source: as screw-tl
+    - node: screw-bl
+      dome: 1.6
+      confidence: estimated
+      source: as screw-tl
+    - node: screw-br
+      dome: 1.6
+      confidence: estimated
+      source: as screw-tl
+    - node: lamp-status
+      out: 0.2
+      confidence: estimated
+      source: a light pipe finishing flush to slightly proud of the face
+body:
+  depth: 265.0       # estimated - see provenance/depth
+  color: '#a8aeb4'
 skins: [default]

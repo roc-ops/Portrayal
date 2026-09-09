@@ -31,6 +31,26 @@ export function localToFace(m, r) {
   return {x: Math.min(p.x, q.x), y: Math.min(p.y, q.y), w: Math.abs(q.x - p.x), h: Math.abs(q.y - p.y)};
 }
 
+// WHICH RAISED SURFACE DOES A LIFTED CAVITY BELONG TO. Exported because it is
+// the whole of a rule that is easy to state and easy to get subtly wrong, and a
+// pure function of two rectangles and two depths is worth testing without a
+// browser.
+//
+// A cavity punches a raised surface when it is lifted onto that surface's top:
+// its footprint lies within the surface, and its lift matches the surface's own
+// protrusion. Requiring the MATCH rather than merely `lift <= out` is what stops
+// a shallow cavity on the faceplate from punching a tall bezel that happens to
+// pass over it - two features at different depths in the same footprint are a
+// real arrangement, not an error to be papered over.
+// the selector for "this node carries relief of its own"
+export const RAISED = '[data-z-out],[data-z-cyl],[data-z-bar],[data-z-uhandle],[data-z-dome]';
+
+export function cavitySeatsOn(c, o, eps = 0.01) {
+  return !!c.lift && Math.abs(c.lift - o.out) < eps
+    && c.x >= o.x - eps && c.y >= o.y - eps
+    && c.x + c.w <= o.x + o.w + eps && c.y + c.h <= o.y + o.h + eps;
+}
+
 export function bodyBoxes(body, faceW, faceH) {
   const color = body.color || '#3a3f44';
   if (body.boxes && body.boxes.length) {
@@ -588,6 +608,24 @@ export async function extractRelief(url, scope) {
     return out;
   };
 
+  // FLAT ART THAT WAS LIFTED. A composed part with no relief of its own - a
+  // warning triangle, a printed marking - has nothing for a lift to raise. It
+  // stays in the face texture at the panel plane, and a raised plate in front of
+  // it hides it completely. smartoptics/dcp-404's two hazard triangles vanished
+  // this way while its lamps did not, which is what made it look like a marking
+  // problem rather than a lift one: lamps are drawn by the lamp path, which owns
+  // them on every face, so they were never in the face texture to be buried.
+  //
+  // Anything carrying `data-states` is such a lamp and is left alone here.
+  const flatLifted = [...q('[data-z-lift]')]
+    .filter(el => !el.matches(RAISED) && !el.hasAttribute('data-depth')
+                  && !el.querySelector(`${RAISED},[data-depth],[data-states]`)
+                  && !el.hasAttribute('data-states'))
+    .map(el => {
+      const rect = mmRect(el);
+      return {...rect, lift: liftOf(el), owner: ownerOf(el), svgText: nodeSvg(el, rect)};
+    });
+
   const cavities = [...q('[data-depth]')]
     .filter(el => !el.querySelector('[data-depth]'))
     .map(el => {
@@ -734,7 +772,7 @@ export async function extractRelief(url, scope) {
     el.style.display = 'none';
   const cleanText = svg.outerHTML;
   div.remove();
-  return {cavities, outs, domes, vents, frus, subBodies, cleanText};
+  return {cavities, outs, domes, vents, frus, subBodies, flatLifted, cleanText};
 }
 
 export async function rasterize(svgText, wmm, hmm, pxmm = PXMM, flipX = false, flipY = false) {
@@ -804,7 +842,8 @@ export async function buildFaceRelief(F, ctx) {
       faceCv[F.view] = cv0;
       return;
     }
-    const {cavities, outs, domes, vents, frus, subBodies = [], cleanText} = await extractRelief(src, ctx.scope);
+    const {cavities, outs, domes, vents, frus, subBodies = [], flatLifted = [],
+           cleanText} = await extractRelief(src, ctx.scope);
     const faceText = squareFaceplate(cleanText);
     // THE DRAWING'S OWN SIZE WINS, because the face is not obliged to match the
     // plane it sits on. The R740xd's front is the 482.6 mm rack face - Dell
@@ -1006,14 +1045,63 @@ export async function buildFaceRelief(F, ctx) {
     for (const o of outs) {   // protrusions: bezel plates, handles, studs, tubes
       curOwner = o.owner;
       const ocv = await rasterize(o.svgText, o.w, o.h, PX);
-      if (!o.color) {   // side color: sample the node's own art
+      // A LIFTED CAVITY PUNCHES THE SURFACE IT WAS LIFTED ONTO. The cavity loop
+      // above skips the FACE punch for a lifted cavity, on the reasoning that it
+      // recesses from a raised part whose own geometry already covers the face -
+      // which is right, and only half the job. Nothing then punched that raised
+      // part, so the well sat at the correct depth behind an unbroken surface.
+      //
+      // smartoptics/dcp-404 is the case that found it: a faceplate standing 44
+      // proud of its chassis with four QSFP cages lifted onto it. The cages are
+      // pure cavities - no `out` of their own - so they had no raised feature to
+      // be seen by and simply vanished. Its QSFP-DD neighbour appeared to work
+      // and did not: what showed was its collar, an `out` that the lift raised to
+      // 45, while its bay was buried exactly like the others.
+      //
+      // The punch is the same one the face gets - destination-out with the
+      // cavity node's own art, so the hole has the cage's shape and not its
+      // bounding box - and the material is already `transparent` with an
+      // `alphaTest`, so erased pixels discard the fragment and the cavity behind
+      // shows through.
+      //
+      // IT MUST BE REAPPLIED ON EVERY RESTYLE, which is why it is a function and
+      // not a block. `reg` re-rasterises this node from `o.svgText` whenever a
+      // descendant changes, and a lifted flat part IS such a descendant: the
+      // DCP-404 composes fourteen lamps that all live inside `body`, so setting
+      // any lamp state rebuilds the plate texture. Composed once inline, that
+      // rebuild dropped the punch and the marks and re-buried all four cages and
+      // both hazard triangles - the very symptom this fixes, undone by the first
+      // state change. Found in review rather than by any test.
+      const seated = cavities.filter(c => cavitySeatsOn(c, o));
+      const marks = flatLifted.filter(f => cavitySeatsOn(f, o));
+      const compose = async cvs => {
+        if (!seated.length && !marks.length) return cvs;
+        const octx = cvs.getContext('2d');
+        octx.globalCompositeOperation = 'destination-out';
+        for (const c of seated)
+          octx.drawImage(await rasterize(c.cavSvg, c.w, c.h, PX),
+                         Math.round((c.x - o.x) * PX), Math.round((c.y - o.y) * PX));
+        octx.globalCompositeOperation = 'source-over';
+        // and the flat art goes ON, after the punch, so a marking beside a cage
+        // is not erased by it
+        for (const f of marks)
+          octx.drawImage(await rasterize(f.svgText, f.w, f.h, PX),
+                         Math.round((f.x - o.x) * PX), Math.round((f.y - o.y) * PX));
+        return cvs;
+      };
+      // the side colour samples the node's centre and must read the UNPUNCHED
+      // raster, so it goes first. It is guarded by `if (!o.color)` and so never
+      // re-runs on a restyle, which is what lets one helper serve both paths.
+      if (!o.color) {
         const px = ocv.getContext('2d').getImageData(
           Math.floor(ocv.width / 2), Math.floor(ocv.height / 2), 1, 1).data;
         o.color = `rgb(${px[0]},${px[1]},${px[2]})`;
       }
+      await compose(ocv);
       const faceTex = new THREE.MeshBasicMaterial(
         {map: canvasTex(ocv), transparent: true, alphaTest: 0.1, alphaToCoverage: true});
-      reg(o.svgText, async text => remap(faceTex, await rasterize(text, o.w, o.h, PX)),
+      reg(o.svgText,
+          async text => remap(faceTex, await compose(await rasterize(text, o.w, o.h, PX))),
           {mat: faceTex, w: o.w, h: o.h, path: o.owner});
       if (o.uhandle !== undefined && o.uhandle !== '') {
         const far = +o.uhandle;

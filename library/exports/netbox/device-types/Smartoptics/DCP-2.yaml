@@ -32,10 +32,13 @@ comments: '1RU 19-inch chassis for the DCP transponder and muxponder family. Two
 
 
   Configuration `ac-f2b`: The chassis as it is specified before deciding what goes in it: two AC supplies,
-  the fan tray, the management board, and both traffic slots empty. so-ds-dcp-2-r4.3 orders this as DCP-2-FB/HW.
-  The box actually ships with a blind plate as well (UM s4.1), which the dcp-404-x1 configuration shows
-  in place.
+  the fan tray, the management board, and BOTH TRAFFIC SLOTS BLANKED. so-ds-dcp-2-r4.3 orders this as
+  DCP-2-FB/HW. The slots carry the blind plate rather than being drawn as bare holes, which is a deliberate
+  departure from the schema''s "TRAFFIC SLOTS EMPTY" wording for a `base`. Two reasons: UM s4.1 lists
+  the blind plate in the box, so a chassis as delivered HAS one, and UM s2.5 asks for it in any slot that
+  is not carrying a unit - an empty hole is a configuration the vendor tells you not to run. It also reads
+  far better.
 
 
-  Drawing version 1.1.0. A major bump means a slot moved or an id was renamed, so anything cached from
+  Drawing version 1.3.0. A major bump means a slot moved or an id was renamed, so anything cached from
   an earlier export may no longer line up.'
