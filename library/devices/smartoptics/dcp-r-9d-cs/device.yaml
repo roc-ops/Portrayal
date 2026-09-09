@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcp-r-9d-cs
-version: 1.0.3
+version: 2.0.0
 manufacturer: Smartoptics
 model: DCP-R-9D-CS
 description: 40-channel colourless/directionless ROADM line unit, 1RU. Two rows of LC duplex adapters
@@ -17,6 +17,26 @@ provenance:
     fiber; adapters recovered by pairing those
   column-grid: top and bottom rows agreed across all 23 columns, so one averaged grid is used and
     the drawing jitter discarded
+  xc-orientation: >-
+    stencil master r-9d-csx - THE BOTTOM ROW IS MIRRORED, latch tongues down against the top
+    row's up, exactly as on the 34D. The drawing already encoded it: every bottom-row port
+    prints its Tx/Rx box reversed. It could not be DRAWN until std/lc-bore@3 made the bore
+    keyed (#126), because a 4.7 square has no orientation. All 23 bottom-row adapters now
+    carry rotate: 180
+  mgmt-jack-alignment: >-
+    stencil, correcting a transcription slip. The ShapeSheet puts ETH0 and RS232 within 0.14mm
+    of the same x (fractions 0.0828 and 0.0831) and the art draws the shells flush, but the
+    model had them 1.2mm apart at 9.6 and 10.8. ETH0 moved onto RS232's x, and its rotated
+    caption with it. RS232 is the half that already matched, so it did not move
+  osc-captions: >-
+    stencil art. As on the 34D, the Tx and Rx captions sat 4.3mm and 1.9mm from their own LEDs
+    on opposite sides and threw the pair 1.65mm left of the cage. The LEDs were already right -
+    measured at 34.98 and 40.81 against the model's 34.9 and 40.7, which is what validates this
+    master's coordinate mapping to 0.1mm. Captions moved to 31.9 and 43.85
+  status-leds: >-
+    stencil art - Power and Status centres measured at 54.79 and 60.88, a 6.09mm pitch, against
+    the 5.6 the model carried. Same defect and the same correction as the 34D, and the two
+    masters agree on the pitch to 0.02mm
   y-scale: this master is drawn 46.0mm tall against a 45mm chassis, so y was scaled by 45/46.0.
     The 34D master needed no such correction - a reminder that masters in one stencil are not all
     drawn to the same scale
@@ -215,7 +235,7 @@ views:
         - {at: [268, 13.5], size: [6, 18], pattern: vent, vent: 4}
         - {at: [430, 12.5], size: [7, 19], pattern: vent, vent: 5}
       cutouts:
-        - {id: eth0, at: [9.6, 9.85], size: [15.8, 13.2], shape: rect}
+        - {id: eth0, at: [10.8, 9.85], size: [15.8, 13.2], shape: rect}
         - {id: rs232, at: [10.8, 24.35], size: [15.8, 13.2], shape: rect}
         - {id: port-osc, at: [31, 26.7], size: [14.5, 10], shape: rect}
         - {id: port-xc1, at: [68.93, 10.84], size: [13.2, 11], shape: rect}
@@ -266,8 +286,8 @@ views:
         - {id: port-960, at: [414.48, 21.89], size: [13.2, 11], shape: rect}
         - {id: led-osc-tx, at: [33.9, 21.4], size: [2, 2], shape: rect}
         - {id: led-osc-rx, at: [39.7, 21.4], size: [2, 2], shape: rect}
-        - {id: led-power, at: [53.2, 34.5], size: [2, 2], shape: rect}
-        - {id: led-status, at: [58.8, 34.5], size: [2, 2], shape: rect}
+        - {id: led-power, at: [53.79, 34.5], size: [2, 2], shape: rect}
+        - {id: led-status, at: [59.88, 34.5], size: [2, 2], shape: rect}
     silkscreen:
       - {text: Tx, at: [72.23, 9.77], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: port-xc1}
       - {text: Rx, at: [78.83, 9.77], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: port-xc1}
@@ -363,12 +383,12 @@ views:
       - {text: Tx, at: [424.38, 35.02], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: port-960}
       - {text: smartoptics, at: [16.7, 6.2], font-size: 3.2, fill: '#e8ecef', for: chassis}
       - {text: DCP-R-9D-CS, at: [39.8, 6.0], font-size: 2.8, fill: '#e8ecef', for: chassis}
-      - {text: ETH0, at: [6.2, 16.4], font-size: 2.1, fill: '#c9cdd1', anchor: middle, rotate: -90, for: eth0}
+      - {text: ETH0, at: [7.4, 16.4], font-size: 2.1, fill: '#c9cdd1', anchor: middle, rotate: -90, for: eth0}
       - {text: RS232, at: [7.4, 31.0], font-size: 2.1, fill: '#c9cdd1', anchor: middle, rotate: -90, for: rs232}
-      - {text: Tx, at: [30.6, 23.2], font-size: 1.9, fill: '#c9cdd1', for: port-osc}
-      - {text: Rx, at: [42.6, 23.2], font-size: 1.9, fill: '#c9cdd1', for: port-osc}
-      - {text: Power, at: [54.2, 33.7], font-size: 1.9, fill: '#c9cdd1', anchor: middle, for: led-power}
-      - {text: Status, at: [59.8, 33.7], font-size: 1.9, fill: '#c9cdd1', anchor: middle, for: led-status}
+      - {text: Tx, at: [31.9, 23.2], font-size: 1.9, fill: '#c9cdd1', for: port-osc}
+      - {text: Rx, at: [43.85, 23.2], font-size: 1.9, fill: '#c9cdd1', for: port-osc}
+      - {text: Power, at: [54.79, 33.7], font-size: 1.9, fill: '#c9cdd1', anchor: middle, for: led-power}
+      - {text: Status, at: [60.88, 33.7], font-size: 1.9, fill: '#c9cdd1', anchor: middle, for: led-status}
       - {at: [38.25, 39.6], text: OSC, font-size: 1.4, for: port-osc}
       - {at: [75.53, 7.09], text: XC1, font-size: 1.4, for: port-xc1}
       - {at: [88.97, 7.09], text: XC2, font-size: 1.4, for: port-xc2}
@@ -420,13 +440,13 @@ views:
       placements:
         - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.75], skin: left, optional: ears, group: furniture, rel-pos: 1}
         - {ref: common/rack-ear@1, id: ear-right, at: [440, 0.75], skin: right, optional: ears, group: furniture, rel-pos: 2}
-        - {ref: common/rj45-eth@1, id: eth0, at: [9.6, 9.85], rotate: 180, group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 1}
+        - {ref: common/rj45-eth@1, id: eth0, at: [10.8, 9.85], rotate: 180, group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 1}
         - {ref: std/rj45@2, id: rs232, at: [10.8, 24.35], group: mgmt, attrs: {role: console, media: rj45-serial}, rel-pos: 2}
         - {ref: std/sfp@1, id: port-osc, at: [31, 26.7], attrs: {media: sfp, role: osc}, group: line, rel-pos: 1}
         - {ref: common/led-dot@1, id: led-osc-tx, at: [33.9, 21.4], for: port-osc, attrs: {function: osc-tx}, group: port-leds, rel-pos: 1}
         - {ref: common/led-dot@1, id: led-osc-rx, at: [39.7, 21.4], for: port-osc, attrs: {function: osc-rx}, group: port-leds, rel-pos: 2}
-        - {ref: common/led-dot@1, id: led-power, at: [53.2, 34.5], for: chassis, attrs: {function: power}, group: status-leds, rel-pos: 1}
-        - {ref: common/led-dot@1, id: led-status, at: [58.8, 34.5], for: chassis, attrs: {function: status}, group: status-leds, rel-pos: 2}
+        - {ref: common/led-dot@1, id: led-power, at: [53.79, 34.5], for: chassis, attrs: {function: power}, group: status-leds, rel-pos: 1}
+        - {ref: common/led-dot@1, id: led-status, at: [59.88, 34.5], for: chassis, attrs: {function: status}, group: status-leds, rel-pos: 2}
         - {ref: common/lc-duplex-adapter@3, id: port-xc1, at: [68.93, 10.84], group: xc, rel-pos: 1}
         - {ref: common/lc-duplex-adapter@3, id: port-xc2, at: [82.37, 10.84], group: xc, rel-pos: 2}
         - {ref: common/lc-duplex-adapter@3, id: port-line, at: [99.27, 10.84], attrs: {media: fiber, role: line}, group: line, rel-pos: 2}
@@ -450,29 +470,29 @@ views:
         - {ref: common/lc-duplex-adapter@3, id: port-954, at: [383.91, 10.84], group: channels, rel-pos: 18}
         - {ref: common/lc-duplex-adapter@3, id: port-957, at: [401.25, 10.84], group: channels, rel-pos: 19}
         - {ref: common/lc-duplex-adapter@3, id: port-958, at: [414.48, 10.84], group: channels, rel-pos: 20}
-        - {ref: common/lc-duplex-adapter@3, id: port-1510, at: [68.93, 21.89], attrs: {media: fiber, role: osc-filter}, group: line, rel-pos: 3}
-        - {ref: common/lc-duplex-adapter@3, id: port-xc3, at: [82.37, 21.89], group: xc, rel-pos: 3}
-        - {ref: common/lc-duplex-adapter@3, id: port-xc4, at: [99.27, 21.89], group: xc, rel-pos: 4}
-        - {ref: common/lc-duplex-adapter@3, id: port-923, at: [116.35, 21.89], group: channels, rel-pos: 21}
-        - {ref: common/lc-duplex-adapter@3, id: port-924, at: [129.61, 21.89], group: channels, rel-pos: 22}
-        - {ref: common/lc-duplex-adapter@3, id: port-927, at: [146.59, 21.89], group: channels, rel-pos: 23}
-        - {ref: common/lc-duplex-adapter@3, id: port-928, at: [160.14, 21.89], group: channels, rel-pos: 24}
-        - {ref: common/lc-duplex-adapter@3, id: port-931, at: [177.22, 21.89], group: channels, rel-pos: 25}
-        - {ref: common/lc-duplex-adapter@3, id: port-932, at: [190.63, 21.89], group: channels, rel-pos: 26}
-        - {ref: common/lc-duplex-adapter@3, id: port-935, at: [207.5, 21.89], group: channels, rel-pos: 27}
-        - {ref: common/lc-duplex-adapter@3, id: port-936, at: [220.98, 21.89], group: channels, rel-pos: 28}
-        - {ref: common/lc-duplex-adapter@3, id: port-939, at: [238.14, 21.89], group: channels, rel-pos: 29}
-        - {ref: common/lc-duplex-adapter@3, id: port-940, at: [251.4, 21.89], group: channels, rel-pos: 30}
-        - {ref: common/lc-duplex-adapter@3, id: port-943, at: [279.46, 21.89], group: channels, rel-pos: 31}
-        - {ref: common/lc-duplex-adapter@3, id: port-944, at: [292.72, 21.89], group: channels, rel-pos: 32}
-        - {ref: common/lc-duplex-adapter@3, id: port-947, at: [309.7, 21.89], group: channels, rel-pos: 33}
-        - {ref: common/lc-duplex-adapter@3, id: port-948, at: [323.11, 21.89], group: channels, rel-pos: 34}
-        - {ref: common/lc-duplex-adapter@3, id: port-951, at: [340.16, 21.89], group: channels, rel-pos: 35}
-        - {ref: common/lc-duplex-adapter@3, id: port-952, at: [353.61, 21.89], group: channels, rel-pos: 36}
-        - {ref: common/lc-duplex-adapter@3, id: port-955, at: [370.54, 21.89], group: channels, rel-pos: 37}
-        - {ref: common/lc-duplex-adapter@3, id: port-956, at: [383.91, 21.89], group: channels, rel-pos: 38}
-        - {ref: common/lc-duplex-adapter@3, id: port-959, at: [401.25, 21.89], group: channels, rel-pos: 39}
-        - {ref: common/lc-duplex-adapter@3, id: port-960, at: [414.48, 21.89], group: channels, rel-pos: 40}
+        - {ref: common/lc-duplex-adapter@3, id: port-1510, at: [68.93, 21.89], rotate: 180, attrs: {media: fiber, role: osc-filter}, group: line, rel-pos: 3}
+        - {ref: common/lc-duplex-adapter@3, id: port-xc3, at: [82.37, 21.89], rotate: 180, group: xc, rel-pos: 3}
+        - {ref: common/lc-duplex-adapter@3, id: port-xc4, at: [99.27, 21.89], rotate: 180, group: xc, rel-pos: 4}
+        - {ref: common/lc-duplex-adapter@3, id: port-923, at: [116.35, 21.89], rotate: 180, group: channels, rel-pos: 21}
+        - {ref: common/lc-duplex-adapter@3, id: port-924, at: [129.61, 21.89], rotate: 180, group: channels, rel-pos: 22}
+        - {ref: common/lc-duplex-adapter@3, id: port-927, at: [146.59, 21.89], rotate: 180, group: channels, rel-pos: 23}
+        - {ref: common/lc-duplex-adapter@3, id: port-928, at: [160.14, 21.89], rotate: 180, group: channels, rel-pos: 24}
+        - {ref: common/lc-duplex-adapter@3, id: port-931, at: [177.22, 21.89], rotate: 180, group: channels, rel-pos: 25}
+        - {ref: common/lc-duplex-adapter@3, id: port-932, at: [190.63, 21.89], rotate: 180, group: channels, rel-pos: 26}
+        - {ref: common/lc-duplex-adapter@3, id: port-935, at: [207.5, 21.89], rotate: 180, group: channels, rel-pos: 27}
+        - {ref: common/lc-duplex-adapter@3, id: port-936, at: [220.98, 21.89], rotate: 180, group: channels, rel-pos: 28}
+        - {ref: common/lc-duplex-adapter@3, id: port-939, at: [238.14, 21.89], rotate: 180, group: channels, rel-pos: 29}
+        - {ref: common/lc-duplex-adapter@3, id: port-940, at: [251.4, 21.89], rotate: 180, group: channels, rel-pos: 30}
+        - {ref: common/lc-duplex-adapter@3, id: port-943, at: [279.46, 21.89], rotate: 180, group: channels, rel-pos: 31}
+        - {ref: common/lc-duplex-adapter@3, id: port-944, at: [292.72, 21.89], rotate: 180, group: channels, rel-pos: 32}
+        - {ref: common/lc-duplex-adapter@3, id: port-947, at: [309.7, 21.89], rotate: 180, group: channels, rel-pos: 33}
+        - {ref: common/lc-duplex-adapter@3, id: port-948, at: [323.11, 21.89], rotate: 180, group: channels, rel-pos: 34}
+        - {ref: common/lc-duplex-adapter@3, id: port-951, at: [340.16, 21.89], rotate: 180, group: channels, rel-pos: 35}
+        - {ref: common/lc-duplex-adapter@3, id: port-952, at: [353.61, 21.89], rotate: 180, group: channels, rel-pos: 36}
+        - {ref: common/lc-duplex-adapter@3, id: port-955, at: [370.54, 21.89], rotate: 180, group: channels, rel-pos: 37}
+        - {ref: common/lc-duplex-adapter@3, id: port-956, at: [383.91, 21.89], rotate: 180, group: channels, rel-pos: 38}
+        - {ref: common/lc-duplex-adapter@3, id: port-959, at: [401.25, 21.89], rotate: 180, group: channels, rel-pos: 39}
+        - {ref: common/lc-duplex-adapter@3, id: port-960, at: [414.48, 21.89], rotate: 180, group: channels, rel-pos: 40}
         - {ref: common/laser-warning@1, id: laser-warn-top, at: [269.5, 4.6], group: furniture, rel-pos: 3}
         - {ref: common/laser-warning@1, id: laser-warn-bottom, at: [269.5, 35.4], group: furniture, rel-pos: 4}
   rear:
