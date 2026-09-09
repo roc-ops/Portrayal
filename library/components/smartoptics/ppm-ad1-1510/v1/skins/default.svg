@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="55.4mm" height="19.5mm" viewBox="0 0 55.4 19.5">
+  <!-- PPM-AD1-1510-2F, 55.4 x 19.5.
+
+       THE ADAPTERS ARE NOT DRAWN HERE. Three common/lc-duplex-adapter@3 are
+       composed by the contract at 5.57, 22.50 and 35.70; this plate is what they
+       sit on. That part is itself measured off the Smartoptics DCP-R stencil, so
+       it is the same vendor's drawing of the same connector.
+
+       LC, NOT SC. The stencil master's adapters read as SC at a glance and the
+       datasheet says "Connector type LC/UPC" outright. Six adapters at ~6.5mm
+       pitch inside a 55.4 face can only be LC anyway.
+
+       THE PART NUMBER RUNS VERTICALLY UP THE RIGHT EDGE, which is what the
+       master and four sibling PPM figures show. DCP-F UM fig-0038 puts it on the
+       left; fig-0037's exploded view of the same part puts it on the right. The
+       majority and the master agree, so fig-0038 is treated as an odd revision. -->
+  <defs>
+    <linearGradient id="plate" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4a4f55"/>
+      <stop offset="0.35" stop-color="#33383d"/>
+      <stop offset="1" stop-color="#22262a"/>
+    </linearGradient>
+  </defs>
+
+  <rect id="body" x="0" y="0" width="55.4" height="19.5" rx="1.0"
+        fill="url(#plate)" stroke="#15181a" stroke-width="0.25"/>
+
+  <g id="captions">
+    <rect id="caption-osc" x="5.57" y="15.4" width="13.2" height="2.7" rx="0.3" fill="#eef0f2"/>
+    <rect id="caption-edfa" x="22.50" y="15.4" width="13.2" height="2.7" rx="0.3" fill="#eef0f2"/>
+    <rect id="caption-line" x="35.70" y="15.4" width="13.2" height="2.7" rx="0.3" fill="#eef0f2"/>
+  </g>
+
+  <g id="port-silkscreen" font-family="sans-serif" text-anchor="middle">
+    <text x="12.17" y="3.3" font-size="2.5" fill="#f2f4f6">OSC</text>
+    <text x="29.10" y="3.3" font-size="2.5" fill="#f2f4f6">EDFA</text>
+    <text x="42.30" y="3.3" font-size="2.5" fill="#f2f4f6">Line</text>
+
+    <text x="8.9" y="17.4" font-size="1.9" fill="#1c1f22">Tx</text>
+    <text x="15.4" y="17.4" font-size="1.9" fill="#1c1f22">Rx</text>
+    <text x="25.9" y="17.4" font-size="1.9" fill="#1c1f22">Tx</text>
+    <text x="32.4" y="17.4" font-size="1.9" fill="#1c1f22">Rx</text>
+    <text x="39.0" y="17.4" font-size="1.9" fill="#1c1f22">Tx</text>
+    <text x="45.5" y="17.4" font-size="1.9" fill="#1c1f22">Rx</text>
+  </g>
+
+  <g id="part-silkscreen" font-family="sans-serif">
+    <text x="53.4" y="9.75" font-size="1.9" fill="#dfe3e7" text-anchor="middle"
+          transform="rotate(90 53.4 9.75)">PPM-AD1-1510-2F</text>
+  </g>
+</svg>

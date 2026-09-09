@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcp-2
-version: 1.0.0
+version: 1.1.0
 manufacturer: Smartoptics
 model: DCP-2
 description: 1RU 19-inch chassis for the DCP transponder and muxponder family. Two
@@ -95,6 +95,11 @@ provenance:
     (AC) Min: 14W Max: 17W". The manual's other rows bundle a traffic unit, which answers
     for itself. NO AMBIENT TEMPERATURE is quoted against any DCP power figure, so none is
     asserted.
+  slot-occupants: >-
+    the traffic slots accept smartoptics/dcp-f-a22@1 as well as the DCP-404. Both are
+    205 x 44 x 270 - the DCP traffic-unit envelope is one shared footprint, stated
+    independently by each part's own datasheet - so a slot that fits one fits the
+    other. The A22 is what makes an ILA node out of this chassis.
   vents: >-
     photo-measured - the rear vent area is the fan tray's own faceplate and belongs to
     smartoptics/dcp-2-fan@1, not to the chassis. The chassis draws none of its own.
@@ -234,6 +239,7 @@ views:
           size: {w: 205.0, h: 44.0}
           accepts:
             - smartoptics/dcp-404@1
+            - smartoptics/dcp-f-a22@1
             - smartoptics/dcp-2-blank@1
           default: smartoptics/dcp-2-blank@1
           group: slots
@@ -243,6 +249,7 @@ views:
           size: {w: 205.0, h: 44.0}
           accepts:
             - smartoptics/dcp-404@1
+            - smartoptics/dcp-f-a22@1
             - smartoptics/dcp-2-blank@1
           default: smartoptics/dcp-2-blank@1
           group: slots
