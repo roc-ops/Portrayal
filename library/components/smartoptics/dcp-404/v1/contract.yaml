@@ -131,8 +131,13 @@ provenance:
     on the `body` node. It rendered plausibly in a front elevation and was wrong in
     both other places it mattered: blank in 3D, and painting over its own silkscreen in
     2D. Both follow from the same thing - putting relief on the base plate. It is now a
-    `sink` on the vent band, which is the feature the slope belongs to. The figure is
-    unchanged in magnitude and still estimated.
+    `out` with a `profile-y` on `body`, where `body` is now a GROUP wrapping the whole
+    face - relief textures a height field from the node's own art, so a `body` naming
+    only the plate rect gave a raised surface with a bare gradient on it.
+    AND THE FIGURE CHANGED BY TWENTY TIMES, which an earlier version of this key denied.
+    It was briefly a 2.15 sink on the vent band; that was the 10-15 degree observation
+    read as a setback FROM the plate rather than the angle of a long ramp. The slope runs
+    the whole protrusion: 0 to 44 over the top 10.4.
   slope: >-
     ESTIMATED, and the estimate is the whole of it. The front face is not one plane: a
     vertical plate carries the ports, and above it an angled band sloping back to the lid
@@ -142,9 +147,10 @@ provenance:
     claimed it was and was wrong. WHAT IS MISSING IS A MEASUREMENT. The band projects
     10.4 tall in a front elevation, and a band of true length L at angle t projects
     L*cos(t) and sets back L*sin(t); at 10 to 15 degrees that is 1.8 to 2.8 of setback.
-    2.5 is the middle of that and is what `profile-y` carries. THE ANGLE ITSELF IS EYED
+    44 is what `profile-y` carries at the foot of the ramp, and 0 at its top. THE ANGLE
+    ITSELF IS EYED
     OFF A PERSPECTIVE RENDER - no source states it and no view here is a side elevation,
-    which is the one thing that would settle it. Treat the 2.5 as a shape, not a figure.
+    which is the one thing that would settle it. Treat the ramp as a shape, not a figure.
   stand-off: >-
     NOT MODELLED. The unit's faceplate stands proud of the DCP-2 it plugs into by an inch
     or two. That is a property of the BAY, not of this part - it wants `insert` or
@@ -169,7 +175,7 @@ relief:
   features:
     # THE PLATE STANDS PROUD AND ITS TOP SLOPES BACK, which is what the hardware
     # does and what the ingestion established. `profile-y` reads down the height:
-    # 0.35 at the top edge, rising to the full 2.5 by 10.4 and flat from there.
+    # 0 at the top edge, rising to the full 44 by 10.4 and flat from there.
     #
     # THIS BURIED THE WHOLE FACE ONCE. Declared alone, it extruded the plate as a
     # slab while every cage, lamp and vent - none of which had relief - stayed at
@@ -200,7 +206,7 @@ relief:
         why the two figures agree. Reading the same angle as a setback FROM the plate gave
         2.15, a slope invisible at any scale and wrong by a factor of twenty.
         NO `color` is set, so the sides sample the node's own art.
-    # the perforation is holes through a 2.5 plate, not printing on it
+    # the perforation is holes through a 44 plate, not printing on it
     - {node: vent-angled, vent: 44.0, confidence: estimated, source: holes through the sloped band}
     - {node: vent-top-edge, vent: 44.0, confidence: estimated, source: holes through the plate}
     - {node: vent-bottom-edge, vent: 44.0, confidence: estimated, source: holes through the plate}

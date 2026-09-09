@@ -1062,31 +1062,46 @@ export async function buildFaceRelief(F, ctx) {
       // cavity node's own art, so the hole has the cage's shape and not its
       // bounding box - and the material is already `transparent` with an
       // `alphaTest`, so erased pixels discard the fragment and the cavity behind
-      // shows through. Sits before the side-colour sample below, which reads the
-      // node's centre: punching first would let it sample a hole.
+      // shows through.
+      //
+      // IT MUST BE REAPPLIED ON EVERY RESTYLE, which is why it is a function and
+      // not a block. `reg` re-rasterises this node from `o.svgText` whenever a
+      // descendant changes, and a lifted flat part IS such a descendant: the
+      // DCP-404 composes fourteen lamps that all live inside `body`, so setting
+      // any lamp state rebuilds the plate texture. Composed once inline, that
+      // rebuild dropped the punch and the marks and re-buried all four cages and
+      // both hazard triangles - the very symptom this fixes, undone by the first
+      // state change. Found in review rather than by any test.
       const seated = cavities.filter(c => cavitySeatsOn(c, o));
-      if (!o.color) {   // side color: sample the node's own art
-        const px = ocv.getContext('2d').getImageData(
-          Math.floor(ocv.width / 2), Math.floor(ocv.height / 2), 1, 1).data;
-        o.color = `rgb(${px[0]},${px[1]},${px[2]})`;
-      }
       const marks = flatLifted.filter(f => cavitySeatsOn(f, o));
-      if (seated.length || marks.length) {
-        const octx = ocv.getContext('2d');
+      const compose = async cvs => {
+        if (!seated.length && !marks.length) return cvs;
+        const octx = cvs.getContext('2d');
         octx.globalCompositeOperation = 'destination-out';
         for (const c of seated)
           octx.drawImage(await rasterize(c.cavSvg, c.w, c.h, PX),
                          Math.round((c.x - o.x) * PX), Math.round((c.y - o.y) * PX));
         octx.globalCompositeOperation = 'source-over';
-        // and the flat art goes ON, in the same pass and after the punch, so a
-        // marking beside a cage is not erased by it
+        // and the flat art goes ON, after the punch, so a marking beside a cage
+        // is not erased by it
         for (const f of marks)
           octx.drawImage(await rasterize(f.svgText, f.w, f.h, PX),
                          Math.round((f.x - o.x) * PX), Math.round((f.y - o.y) * PX));
+        return cvs;
+      };
+      // the side colour samples the node's centre and must read the UNPUNCHED
+      // raster, so it goes first. It is guarded by `if (!o.color)` and so never
+      // re-runs on a restyle, which is what lets one helper serve both paths.
+      if (!o.color) {
+        const px = ocv.getContext('2d').getImageData(
+          Math.floor(ocv.width / 2), Math.floor(ocv.height / 2), 1, 1).data;
+        o.color = `rgb(${px[0]},${px[1]},${px[2]})`;
       }
+      await compose(ocv);
       const faceTex = new THREE.MeshBasicMaterial(
         {map: canvasTex(ocv), transparent: true, alphaTest: 0.1, alphaToCoverage: true});
-      reg(o.svgText, async text => remap(faceTex, await rasterize(text, o.w, o.h, PX)),
+      reg(o.svgText,
+          async text => remap(faceTex, await compose(await rasterize(text, o.w, o.h, PX))),
           {mat: faceTex, w: o.w, h: o.h, path: o.owner});
       if (o.uhandle !== undefined && o.uhandle !== '') {
         const far = +o.uhandle;

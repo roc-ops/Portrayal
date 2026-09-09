@@ -88,3 +88,38 @@ def test_every_collection_extract_returns_is_actually_consumed():
         "extractRelief returns %s and buildFaceRelief never destructures them - "
         "either the consumer was dropped or the producer is dead work" % unused
     )
+
+
+@pytest.mark.skipif(not RELIEF.exists(), reason="kit/relief.js not present")
+def test_the_restyle_path_composes_the_same_thing_the_initial_build_does():
+    """A texture rebuilt on restyle must carry the punch and the marks.
+
+    `reg` re-rasterises a node from its own `svgText` whenever a descendant
+    changes, and a lifted flat part IS such a descendant - the DCP-404 composes
+    fourteen lamps that all live inside `body`. So setting any lamp state rebuilds
+    the plate texture.
+
+    Composed once inline, that rebuild dropped the cavity punch and the lifted
+    markings and re-buried all four QSFP cages and both hazard triangles: the
+    exact symptom the punch exists to fix, undone by the first state change. It
+    was found in review, not by a test, because nothing here builds a face or sets
+    a lamp - so this checks the one thing that can be checked from the source,
+    that both paths go through the same helper.
+    """
+    src = RELIEF.read_text()
+
+    outs = src[src.index("for (const o of outs) {"):]
+    outs = outs[:outs.index("\n    }\n")]
+
+    assert "const compose = async" in outs, (
+        "the cavity punch and the lifted markings are inlined in the outs loop "
+        "rather than being a function; a restyle cannot reapply a block"
+    )
+
+    reg = re.search(r"reg\(o\.svgText,\s*(?:\n\s*)?async text =>(.*?)\{mat: faceTex", outs, re.S)
+    assert reg, "could not find the outs loop's restyle registration"
+    assert "compose(" in reg.group(1), (
+        "the restyle callback rebuilds this node's texture without calling "
+        "compose(), so every lamp change will re-bury the cavities and markings "
+        "that the initial build punched and composited"
+    )
