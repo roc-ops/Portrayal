@@ -18,10 +18,13 @@ repository publishes.
 
 ## Reporting
 
-Use GitHub's private vulnerability reporting on this repository ("Report a
-vulnerability" under the Security tab) so the report is not public until a fix
-is. If that is unavailable to you, open an issue that says only that you have a
-security report and how to reach you; do not put the details in the issue.
+While this repository is private, open an issue: only its collaborators can
+read it, so the report is private by construction, and the maintainer is
+notified. Once the repository is public, use GitHub's private vulnerability
+reporting ("Report a vulnerability" under the Security tab) so the report is
+not public until a fix is; if that form is unavailable to you, open an issue
+that says only that you have a security report and how to reach you, and keep
+the details out of it.
 
 You will get an acknowledgement within a week. Leaked data is removed from the
 tree and, where it matters, from history; tooling fixes ship as an ordinary

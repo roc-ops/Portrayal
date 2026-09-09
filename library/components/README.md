@@ -119,7 +119,9 @@ rest earns its place:
 - `provenance` with one entry per figure you state. The confidence words are
   `datasheet`, `drawing`, `measured`, `photo-measured`, `registry`,
   `borrowed`, `estimated`, `known-wrong`; `borrowed` must name the part the
-  figure came from.
+  figure came from. (Older `std/` contracts, the real `qsfp28` among them, say
+  `standard` where this example says `registry`; it is the same claim in the
+  older spelling, and #173 is where the vocabulary gets settled.)
 
 The schema, `spec/schemas/component.schema.json`, is the full reference; every
 key carries a description.
