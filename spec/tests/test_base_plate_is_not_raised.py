@@ -63,26 +63,70 @@ def test_the_base_plate_is_drawn_first(fname, plate):
     )
 
 
-def test_the_dcp_404_still_shows_its_silkscreen_and_vents():
-    """The symptom, stated as the user saw it: the printing went missing."""
+def test_the_dcp_404_face_is_inside_the_node_that_carries_its_relief():
+    """The symptom, stated as the user saw it: the printing went missing.
+
+    It went missing TWICE, by two different mechanisms, and this test now guards
+    the second because the first can no longer happen.
+
+    In 2D the plate was raised over its own art by the renderer, which is fixed
+    above and in render.py. In 3D the same contract mistake surfaced differently:
+    relief's profile path builds "a height field with the node's art on it", so a
+    `body` naming only the gradient rect gives a raised surface textured with a
+    bare gradient and every vent and silkscreen line disappears.
+
+    The fix is structural - `body` is a GROUP wrapping the whole face - so the
+    invariant worth asserting is nesting, not draw order: the face art has to be
+    INSIDE the node that carries the relief. A sibling renders in 2D and vanishes
+    in 3D, which is the failure that is easy to ship and hard to see.
+    """
     f = DIST / "smartoptics--dcp-404--v1--default.svg"
     if not f.exists():
         pytest.skip("dcp-404 not built")
-    ids = top_level_ids(f.read_text())
-    body = ids.index("dcp-404--body")
-    face = [i for i in ids
-            if "silkscreen" in i or i.startswith("dcp-404--vent")]
-    # ESTABLISH THE SUBJECT BEFORE ASSERTING ABOUT ITS ORDER. Without this the
-    # test passes for the wrong reason: if the vents and the silkscreen were
-    # renamed or dropped from the skin, nothing would match, `painted_over`
-    # would be empty, and a face with no printing at all would read as a pass -
-    # the very symptom this test exists to catch.
+    text = f.read_text()
+
+    m = re.search(r'<g id="dcp-404--body"[^>]*>', text)
+    assert m, "dcp-404--body is not a group; the relief node cannot carry the face art"
+
+    # the group's own extent, by tag depth from where it opens
+    depth, i, end = 0, m.start(), None
+    for tok in re.finditer(r"<(/?)g\b[^>]*?(/?)>", text[m.start():]):
+        if tok.group(2) == "/":
+            continue
+        depth += -1 if tok.group(1) else 1
+        if depth == 0:
+            end = m.start() + tok.end()
+            break
+    assert end, "dcp-404--body group never closes"
+    inside = text[m.start():end]
+
+    face = set(re.findall(r'id="(dcp-404--(?:vent|[a-z-]*silkscreen)[a-z0-9-]*)"', text))
     assert face, (
         "no vent or silkscreen element found on the DCP-404 at all; this test "
-        f"cannot say anything about draw order. Draw order: {ids}"
+        "cannot say anything about where the face lives"
     )
-    painted_over = [i for i in ids[:body] if i in face]
-    assert not painted_over, (
-        "the DCP-404's plate is in front of its own face: "
-        f"{painted_over} are drawn before dcp-404--body and so are invisible"
+    outside = sorted(i for i in face if ('id="%s"' % i) not in inside)
+    assert not outside, (
+        "these face elements are OUTSIDE dcp-404--body, the node that carries "
+        "`out`/`profile-y`. They will draw in 2D and vanish from the 3D height "
+        "field: %s" % outside
+    )
+
+
+def test_the_relief_node_and_the_lifted_parts_agree():
+    """A part lifted less than the plate it sits on is inside the plate."""
+    f = DIST / "smartoptics--dcp-404--v1--default.svg"
+    if not f.exists():
+        pytest.skip("dcp-404 not built")
+    text = f.read_text()
+    out = re.search(r'<g id="dcp-404--body"[^>]*data-z-out="([\d.]+)"', text)
+    if not out:
+        pytest.skip("dcp-404 body declares no out")
+    plate = float(out.group(1))
+    lifts = {float(v) for v in re.findall(r'data-z-lift="([\d.]+)"', text)}
+    assert lifts, "the plate stands proud and no composed part is lifted onto it"
+    low = sorted(v for v in lifts if v < plate)
+    assert not low, (
+        "parts lifted %s sit below a plate standing %s proud, so the plate "
+        "swallows them" % (low, plate)
     )
