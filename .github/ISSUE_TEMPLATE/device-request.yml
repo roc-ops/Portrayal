@@ -1,0 +1,38 @@
+name: Device request
+description: Ask for a device to be modelled, or say you are modelling one
+title: "<vendor> <model>: "
+labels: [device-request]
+body:
+  - type: input
+    id: device
+    attributes:
+      label: Vendor and model
+      placeholder: UfiSpace S9600-28DX
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Public sources you know of
+      description: Datasheet, hardware installation guide, product page, gallery images. Links only; nothing is uploaded here.
+    validations:
+      required: true
+  - type: dropdown
+    id: hardware
+    attributes:
+      label: Do you have the hardware in hand?
+      options: ["No", "Yes, and I can photograph and measure it", "Yes, but I cannot open or photograph it"]
+    validations:
+      required: true
+  - type: dropdown
+    id: intent
+    attributes:
+      label: Are you modelling it yourself?
+      options: ["I am modelling it, this issue claims it", "Requesting only"]
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything unusual about the device
+      description: Modular chassis, AC/DC variants, odd faceplate, components that do not exist in the library yet.
