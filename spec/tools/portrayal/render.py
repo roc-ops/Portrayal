@@ -801,9 +801,36 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                 # children to the end of the instance group. Only when there ARE
                 # composed parts - otherwise this reorders the skin's own draw
                 # order and a raised base plate paints over its own detail.
+                #
+                # AND NEVER THE BASE PLATE, parts or no parts. The "otherwise"
+                # above named the failure exactly and then guarded only half of
+                # it: a raised base plate paints over its own detail whether or
+                # not the component composes anything. smartoptics/dcp-404
+                # declares `out` on `body`, composes cages, lamps and warning
+                # triangles, and so took this branch - its plate was moved to the
+                # end and covered every vent and every silkscreen line on the
+                # faceplate. The cages and lamps still showed, because the
+                # re-raise below puts composed parts back on top, which is what
+                # made it read as "the printing is missing" rather than "the
+                # plate is in front".
+                #
+                # The base plate is the first thing the skin DRAWS; everything
+                # else in the skin is drawn ON it. Composed parts are appended
+                # after the skin and carry `data-ref`, so the skin's own children
+                # are the ones without it - and `defs`, `style` and the rest
+                # define without drawing, so they are not the base plate however
+                # early they appear. Missing that was worth one wrong answer: the
+                # first cut of this guard took `defs` for the plate and changed
+                # nothing.
+                nondrawing = ("title", "defs", "style", "desc", "metadata")
+                skin_children = [c for c in g
+                                 if not c.tag.split("}")[-1] in nondrawing
+                                 and not c.get("data-ref")]
+                is_base_plate = bool(skin_children) and node is skin_children[0]
                 if contract.get("parts") \
                         and any(feat.get(k) is not None for k in ("out", "cyl", "bar", "uhandle", "dome")) \
-                        and node in list(g):
+                        and node in list(g) \
+                        and not is_base_plate:
                     g.remove(node)
                     g.append(node)
                 break
