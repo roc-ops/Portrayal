@@ -12,8 +12,13 @@ rewrote each dust cap's own 3.175 lift to 47.175, so relief.js summed 91.175
 against an `out` of 50.35 and built each cap as a box whose front face was 40mm
 BEHIND its back. They rendered as white spikes standing off the faceplate.
 
-Nothing else in the library composes a lifted part that has a lift of its own,
-so the bug had one victim and no test. The invariant is general, so this is:
+It has a second shape, found by CodeRabbit on the fix's own PR and confirmed by
+seating the other occupant the A22 accepts: a module in a bay that carries a lift
+got the lift on its group and its own relief left panel-relative, so every
+feature on smartoptics/ppm-ad1-1510@1 went 40mm negative in the A22's raised
+block. That went unseen because the bay's DEFAULT is ppm-dummy, which declares no
+relief at all - so `dcp-2`'s `ila-node` configuration exists partly to give this
+a live subject. The invariant is general, so this is:
 
     a feature's own extent is `out` minus the summed lift under it, and a solid
     cannot have negative extent.
@@ -44,20 +49,14 @@ def negative_boxes(path):
         raw = el.get("data-z-out")
         if raw is None:
             continue
-        lift, node, ancestor = 0.0, el, 0.0
-        while node is not None:
-            v = float(node.get("data-z-lift") or 0)
-            lift += v
-            node = parent.get(node)
-            if node is not None:
-                ancestor += v if node is not el else 0.0
-        # only the composed case: something ABOVE this node contributes lift
+        # only the composed case: something ABOVE this node has to contribute lift
         anc, node = 0.0, parent.get(el)
         while node is not None:
             anc += float(node.get("data-z-lift") or 0)
             node = parent.get(node)
         if not anc:
             continue
+        lift = anc + float(el.get("data-z-lift") or 0)
         try:
             box = float(raw) - lift
         except ValueError:

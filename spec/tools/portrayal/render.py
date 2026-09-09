@@ -924,6 +924,16 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         if bay.get("rotate") in (90, 270):
             d = (bw - bh) / 2.0
             b_at = [b_at[0] + d, b_at[1] - d]
+        # AND ITS RELIEF IS MEASURED FROM THE SAME PLANE THE OPENING IS ON. Giving
+        # the occupant the opening's lift moves the module; its own `out` values
+        # are absolute distances from the PANEL, so they have to move with it or
+        # every feature on it builds inside out. Seating smartoptics/
+        # ppm-ad1-1510@1 in the A22's raised block put 24 of them at negative
+        # extent - a caption `out: 0.15` against a summed lift of 44 - and it went
+        # unseen only because the bay's default is ppm-dummy, which declares no
+        # relief at all. The other accepted occupant is the one the ILA set exists
+        # for.
+        occ_lift = float(bay_lift or 0)
         sub, _ = instance_group(
             lib, occupant, f"{inst_id}--{bay_id}--module", b_at,
             None, (bay_attrs or {}).get(bay_path), None, None, rotate=bay.get("rotate"),
@@ -931,6 +941,7 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
             inst_palette=inst_palette,
             skin_overrides=skin_overrides, attr_overrides=attr_overrides,
             path=f"{path}/{bay_id}/module", resolved=resolved, depth=depth + 1,
+            z_inset=z_inset - occ_lift, z_group_lift=z_group_lift + occ_lift,
             seated=seated, bay_attrs=bay_attrs)
         # BEHIND THE FACEPLATE, NOT ON IT. Appending is right for a drive in a
         # cage and wrong for a card in a riser: what shows of a PCIe bracket is
