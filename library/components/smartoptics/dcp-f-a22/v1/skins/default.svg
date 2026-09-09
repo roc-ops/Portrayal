@@ -32,62 +32,100 @@
     </linearGradient>
   </defs>
 
-  <rect id="body" x="0" y="0" width="205" height="44" rx="1.2"
-        fill="url(#plate)" stroke="#111417" stroke-width="0.3"/>
+  <!-- TWO BOXES WELDED AT 147.3, NOT ONE PLATE WITH A PROFILE. The left block's
+       top slopes back to the chassis, the right block is square to its top edge,
+       and no single `profile-y` can say that - it reads down the height and knows
+       nothing about x. So the face is two sibling groups that abut on the PPM
+       field's left edge, each carrying its own relief.
 
-  <rect x="0" y="0" width="146.0" height="8.9" rx="1.2" fill="url(#topband)"/>
-  <g id="vent-top" fill="#0a0c0e">
-    <polygon points="14.00,5.00 15.43,3.65 17.77,3.65 19.20,5.00 17.77,6.35 15.43,6.35"/>
-    <polygon points="20.50,6.90 21.93,5.55 24.27,5.55 25.70,6.90 24.27,8.25 21.93,8.25"/>
-    <polygon points="27.00,5.00 28.43,3.65 30.77,3.65 32.20,5.00 30.77,6.35 28.43,6.35"/>
-    <polygon points="33.50,6.90 34.93,5.55 37.27,5.55 38.70,6.90 37.27,8.25 34.93,8.25"/>
-    <polygon points="40.00,5.00 41.43,3.65 43.77,3.65 45.20,5.00 43.77,6.35 41.43,6.35"/>
-    <polygon points="46.50,6.90 47.93,5.55 50.27,5.55 51.70,6.90 50.27,8.25 47.93,8.25"/>
-    <polygon points="53.00,5.00 54.43,3.65 56.77,3.65 58.20,5.00 56.77,6.35 54.43,6.35"/>
-    <polygon points="59.50,6.90 60.93,5.55 63.27,5.55 64.70,6.90 63.27,8.25 60.93,8.25"/>
-    <polygon points="66.00,5.00 67.43,3.65 69.77,3.65 71.20,5.00 69.77,6.35 67.43,6.35"/>
-    <polygon points="72.50,6.90 73.93,5.55 76.27,5.55 77.70,6.90 76.27,8.25 73.93,8.25"/>
-    <polygon points="79.00,5.00 80.43,3.65 82.77,3.65 84.20,5.00 82.77,6.35 80.43,6.35"/>
-    <polygon points="85.50,6.90 86.93,5.55 89.27,5.55 90.70,6.90 89.27,8.25 86.93,8.25"/>
-    <polygon points="92.00,5.00 93.43,3.65 95.77,3.65 97.20,5.00 95.77,6.35 93.43,6.35"/>
-    <polygon points="98.50,6.90 99.93,5.55 102.27,5.55 103.70,6.90 102.27,8.25 99.93,8.25"/>
-    <polygon points="105.00,5.00 106.43,3.65 108.77,3.65 110.20,5.00 108.77,6.35 106.43,6.35"/>
-    <polygon points="111.50,6.90 112.93,5.55 115.27,5.55 116.70,6.90 115.27,8.25 112.93,8.25"/>
-    <polygon points="118.00,5.00 119.43,3.65 121.77,3.65 123.20,5.00 121.77,6.35 119.43,6.35"/>
-    <polygon points="124.50,6.90 125.93,5.55 128.27,5.55 129.70,6.90 128.27,8.25 125.93,8.25"/>
-    <polygon points="131.00,5.00 132.43,3.65 134.77,3.65 136.20,5.00 134.77,6.35 132.43,6.35"/>
-    <polygon points="137.50,6.90 138.93,5.55 141.27,5.55 142.70,6.90 141.27,8.25 138.93,8.25"/>
-  </g>
+       Square on the right is not a preference. ppm-1 opens at y 2.5 and the ramp
+       runs to 8.9, so a ramp over this end would cut through the top 6.4 of bay 1;
+       the metal has to stand full height for a module to slide into it.
 
-  <!-- the two PPM bays. A seated module nests under the element whose id matches
+       EACH GROUP WRAPS EVERYTHING THAT RIDES ON IT, because `out` extrudes the
+       node's OWN ART as a height field. On a bare plate rect it extrudes a slab
+       and leaves every mark inside it at the panel plane, which is what left
+       smartoptics/dcp-404@1 blank in 3D.
+
+       `body` stays as the wrapper the two sit in. It carries no relief of its own -
+       each block declares its own - but keeping the id means this restructure adds
+       nodes and removes none, so nothing addressing the face by name breaks. -->
+  <g id="body">
+    <g id="body-ramp">
+      <path id="plate-ramp" fill="url(#plate)"
+            d="M 1.2 0 H 147.3 V 44 H 1.2 A 1.2 1.2 0 0 1 0 42.8 V 1.2 A 1.2 1.2 0 0 1 1.2 0 Z"/>
+      <!-- OUTER EDGES ONLY. Stroking each block's whole outline draws the weld: two
+           0.3 strokes meeting at 147.3 make a dark line down the middle of a plate
+           that has no seam in it. So each block strokes an OPEN path along the edges
+           it actually has, and the two together outline the 205 x 44 shell. -->
+      <path id="edge-ramp" fill="none" stroke="#111417" stroke-width="0.3"
+            d="M 147.3 0 H 1.2 A 1.2 1.2 0 0 0 0 1.2 V 42.8 A 1.2 1.2 0 0 0 1.2 44 H 147.3"/>
+
+      <rect id="ramp-band" x="0" y="0" width="147.3" height="8.9" rx="1.2" fill="url(#topband)"/>
+      <g id="vent-top" fill="#0a0c0e">
+        <polygon points="14.00,5.00 15.43,3.65 17.77,3.65 19.20,5.00 17.77,6.35 15.43,6.35"/>
+        <polygon points="20.50,6.90 21.93,5.55 24.27,5.55 25.70,6.90 24.27,8.25 21.93,8.25"/>
+        <polygon points="27.00,5.00 28.43,3.65 30.77,3.65 32.20,5.00 30.77,6.35 28.43,6.35"/>
+        <polygon points="33.50,6.90 34.93,5.55 37.27,5.55 38.70,6.90 37.27,8.25 34.93,8.25"/>
+        <polygon points="40.00,5.00 41.43,3.65 43.77,3.65 45.20,5.00 43.77,6.35 41.43,6.35"/>
+        <polygon points="46.50,6.90 47.93,5.55 50.27,5.55 51.70,6.90 50.27,8.25 47.93,8.25"/>
+        <polygon points="53.00,5.00 54.43,3.65 56.77,3.65 58.20,5.00 56.77,6.35 54.43,6.35"/>
+        <polygon points="59.50,6.90 60.93,5.55 63.27,5.55 64.70,6.90 63.27,8.25 60.93,8.25"/>
+        <polygon points="66.00,5.00 67.43,3.65 69.77,3.65 71.20,5.00 69.77,6.35 67.43,6.35"/>
+        <polygon points="72.50,6.90 73.93,5.55 76.27,5.55 77.70,6.90 76.27,8.25 73.93,8.25"/>
+        <polygon points="79.00,5.00 80.43,3.65 82.77,3.65 84.20,5.00 82.77,6.35 80.43,6.35"/>
+        <polygon points="85.50,6.90 86.93,5.55 89.27,5.55 90.70,6.90 89.27,8.25 86.93,8.25"/>
+        <polygon points="92.00,5.00 93.43,3.65 95.77,3.65 97.20,5.00 95.77,6.35 93.43,6.35"/>
+        <polygon points="98.50,6.90 99.93,5.55 102.27,5.55 103.70,6.90 102.27,8.25 99.93,8.25"/>
+        <polygon points="105.00,5.00 106.43,3.65 108.77,3.65 110.20,5.00 108.77,6.35 106.43,6.35"/>
+        <polygon points="111.50,6.90 112.93,5.55 115.27,5.55 116.70,6.90 115.27,8.25 112.93,8.25"/>
+        <polygon points="118.00,5.00 119.43,3.65 121.77,3.65 123.20,5.00 121.77,6.35 119.43,6.35"/>
+        <polygon points="124.50,6.90 125.93,5.55 128.27,5.55 129.70,6.90 128.27,8.25 125.93,8.25"/>
+        <polygon points="131.00,5.00 132.43,3.65 134.77,3.65 136.20,5.00 134.77,6.35 132.43,6.35"/>
+        <polygon points="137.50,6.90 138.93,5.55 141.27,5.55 142.70,6.90 141.27,8.25 138.93,8.25"/>
+      </g>
+
+      <g id="brand-silkscreen" font-family="sans-serif">
+        <text id="brand" x="4.7" y="14.1" font-size="3.4" fill="#eef1f4">smartoptics</text>
+        <text id="model" x="4.7" y="18.4" font-size="2.4" fill="#b9bfc5">DCP-F-A22</text>
+      </g>
+
+      <g id="caption-silkscreen" font-family="sans-serif" text-anchor="middle">
+        <text id="caption-power" x="8.68" y="40.6" font-size="1.9" fill="#dfe4e8">Power</text>
+        <text id="caption-status" x="17.79" y="40.6" font-size="1.9" fill="#dfe4e8">Status</text>
+        <text x="37.8" y="21.9" font-size="2.1" fill="#e8ecef">ETH1</text>
+        <text x="60.2" y="21.9" font-size="2.1" fill="#e8ecef">ETH2</text>
+        <text x="94.68" y="21.9" font-size="2.1" fill="#e8ecef">EDFA</text>
+        <text x="120.58" y="21.9" font-size="2.1" fill="#e8ecef">OCM</text>
+        <text x="138.0" y="8.2" font-size="2.1" fill="#e8ecef">SFP</text>
+      </g>
+
+      <g id="port-caption-boxes">
+        <rect x="88.08" y="36.0" width="13.2" height="2.7" rx="0.3" fill="#eef0f2"/>
+        <rect x="113.98" y="36.0" width="6.6" height="2.7" rx="0.3" fill="#eef0f2"/>
+      </g>
+      <g id="txrx-silkscreen" font-family="sans-serif" text-anchor="middle">
+        <text x="91.4" y="38.0" font-size="1.9" fill="#1c1f22">Tx</text>
+        <text x="97.9" y="38.0" font-size="1.9" fill="#1c1f22">Rx</text>
+        <text x="117.3" y="38.0" font-size="1.9" fill="#1c1f22">Tx</text>
+      </g>
+    </g>
+
+  <!-- the square end. Its plate meets the ramp's at 147.3 with both edges cut
+       straight, so the two abut without a seam and without either rounding into
+       the other; only the outer corners carry the shell's radius.
+
+       The two PPM bays. A seated module nests under the element whose id matches
        its bay, so these openings must exist for the bay to hold anything. -->
-  <rect id="ppm-1" x="147.3" y="2.5" width="55.4" height="19.5" rx="0.8"
-        fill="#101315" stroke="#0a0c0e" stroke-width="0.25"/>
-  <rect id="ppm-2" x="147.3" y="22.0" width="55.4" height="19.5" rx="0.8"
-        fill="#101315" stroke="#0a0c0e" stroke-width="0.25"/>
-
-  <g id="brand-silkscreen" font-family="sans-serif">
-    <text id="brand" x="4.7" y="14.1" font-size="3.4" fill="#eef1f4">smartoptics</text>
-    <text id="model" x="4.7" y="18.4" font-size="2.4" fill="#b9bfc5">DCP-F-A22</text>
-  </g>
-
-  <g id="caption-silkscreen" font-family="sans-serif" text-anchor="middle">
-    <text id="caption-power" x="8.68" y="40.6" font-size="1.9" fill="#dfe4e8">Power</text>
-    <text id="caption-status" x="17.79" y="40.6" font-size="1.9" fill="#dfe4e8">Status</text>
-    <text x="37.8" y="21.9" font-size="2.1" fill="#e8ecef">ETH1</text>
-    <text x="60.2" y="21.9" font-size="2.1" fill="#e8ecef">ETH2</text>
-    <text x="94.68" y="21.9" font-size="2.1" fill="#e8ecef">EDFA</text>
-    <text x="120.58" y="21.9" font-size="2.1" fill="#e8ecef">OCM</text>
-    <text x="138.0" y="8.2" font-size="2.1" fill="#e8ecef">SFP</text>
-  </g>
-
-  <g id="port-caption-boxes">
-    <rect x="88.08" y="36.0" width="13.2" height="2.7" rx="0.3" fill="#eef0f2"/>
-    <rect x="113.98" y="36.0" width="6.6" height="2.7" rx="0.3" fill="#eef0f2"/>
-  </g>
-  <g id="txrx-silkscreen" font-family="sans-serif" text-anchor="middle">
-    <text x="91.4" y="38.0" font-size="1.9" fill="#1c1f22">Tx</text>
-    <text x="97.9" y="38.0" font-size="1.9" fill="#1c1f22">Rx</text>
-    <text x="117.3" y="38.0" font-size="1.9" fill="#1c1f22">Tx</text>
+    <g id="body-square">
+      <path id="plate-square" fill="url(#plate)"
+            d="M 147.3 0 H 203.8 A 1.2 1.2 0 0 1 205 1.2 V 42.8 A 1.2 1.2 0 0 1 203.8 44 H 147.3 Z"/>
+      <path id="edge-square" fill="none" stroke="#111417" stroke-width="0.3"
+            d="M 147.3 0 H 203.8 A 1.2 1.2 0 0 1 205 1.2 V 42.8 A 1.2 1.2 0 0 1 203.8 44 H 147.3"/>
+      <rect id="ppm-1" x="147.3" y="2.5" width="55.4" height="19.5" rx="0.8"
+            fill="#101315" stroke="#0a0c0e" stroke-width="0.25"/>
+      <rect id="ppm-2" x="147.3" y="22.0" width="55.4" height="19.5" rx="0.8"
+            fill="#101315" stroke="#0a0c0e" stroke-width="0.25"/>
+    </g>
   </g>
 </svg>
