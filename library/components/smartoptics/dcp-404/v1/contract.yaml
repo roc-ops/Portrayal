@@ -145,12 +145,21 @@ provenance:
     term for exactly this - it is what dell/bezel-2u-14g uses to give its front a section
     both ways - so the vocabulary was never the obstacle; an earlier draft of this key
     claimed it was and was wrong. WHAT IS MISSING IS A MEASUREMENT. The band projects
-    10.4 tall in a front elevation, and a band of true length L at angle t projects
-    L*cos(t) and sets back L*sin(t); at 10 to 15 degrees that is 1.8 to 2.8 of setback.
-    44 is what `profile-y` carries at the foot of the ramp, and 0 at its top. THE ANGLE
-    ITSELF IS EYED
-    OFF A PERSPECTIVE RENDER - no source states it and no view here is a side elevation,
-    which is the one thing that would settle it. Treat the ramp as a shape, not a figure.
+    10.4 tall in a front elevation. That 10.4 is the PROJECTION, not the band's own
+    length: a strip of true length L tilted t off the lid projects L*sin(t) and sets back
+    L*cos(t). THE EYED 10-15 DEGREES IS A BAND, NOT A VALUE: across it L runs 40.2 to
+    59.9 and the setback 38.8 to 59.0. 44 is not read off that range - it comes from the
+    observed protrusion, and 13.3 degrees is the angle inside the band that fits it, at
+    which L is 45.2. `profile-y` carries 0 at the top edge and 44 at the foot of the ramp.
+    AN EARLIER VERSION OF THIS PARAGRAPH GOT 1.8 TO 2.8 and it is worth saying why,
+    because the reasoning looked sound. It took 10.4 for L rather than for the
+    projection, AND measured the angle from the face plane rather than from the lid.
+    Either mistake alone is small; together they turn a 44 ramp into a 2.3 lip. The two
+    angles are complements - 13.3 degrees off the lid is 76.7 off the face - so a figure
+    that does not say which it is from cannot be checked.
+    THE ANGLE ITSELF IS EYED OFF A PERSPECTIVE RENDER - no source states it and no view
+    here is a side elevation, which is the one thing that would settle it. Treat the ramp
+    as a shape, not a figure.
   stand-off: >-
     NOT MODELLED. The unit's faceplate stands proud of the DCP-2 it plugs into by an inch
     or two. That is a property of the BAY, not of this part - it wants `insert` or
@@ -201,10 +210,21 @@ relief:
         profile is 0 at the top edge rising to the full 44 by y = 10.4 - one straight
         ramp, no flat at the top.
         AN EARLIER VERSION HAD 2.15 AND IT WAS ARITHMETIC BACKWARDS. The 10-15 degrees
-        eyed off the render is the ramp's angle from the FACE PLANE, and a band 10.4 tall
-        at 13 degrees from the face runs about 45 deep - which is the protrusion, and is
-        why the two figures agree. Reading the same angle as a setback FROM the plate gave
-        2.15, a slope invisible at any scale and wrong by a factor of twenty.
+        eyed off the render is the ramp's angle OFF THE LID, not off the face plane, and
+        a band projecting 10.4 at 13 degrees off the lid runs 10.4/tan(13) = 45 deep -
+        which is the protrusion, and is why the two figures agree. Read as an angle off
+        the FACE, the same 13 degrees gives a band 10.7 long setting back 2.4. That is the
+        SINGLE-error figure - right L, wrong reference surface. What shipped was 2.15,
+        which needed BOTH mistakes: the reference surface and taking 10.4 for L. Either
+        way it is a lip rather than a ramp, and 44/2.15 is a factor of twenty.
+        SAY WHICH SURFACE AN ANGLE IS MEASURED FROM. The two conventions are complements
+        and 13 is a plausible number in both, so a bare "13 degrees" cannot be checked;
+        this key reached the right answer under the wrong label for a while, which is how
+        it survived being corrected next door.
+        AND 44 IS A FITTED VALUE, NOT A DERIVED ONE. It comes from the observed
+        protrusion; 13.3 degrees off the lid is the angle that then fits, and the eyed
+        10-15 band spans a setback of roughly 39 to 59, which 44 sits inside rather than
+        being pinned by.
         NO `color` is set, so the sides sample the node's own art.
     # the perforation is holes through a 44 plate, not printing on it
     - {node: vent-angled, vent: 44.0, confidence: estimated, source: holes through the sloped band}
