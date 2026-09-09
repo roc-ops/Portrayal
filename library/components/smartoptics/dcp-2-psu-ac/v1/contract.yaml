@@ -1,0 +1,90 @@
+format: 1
+kind: module
+name: dcp-2-psu-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: Smartoptics DCP-2-PSU-AC-FB - the AC power supply for the DCP-2 chassis,
+  a 1U CRPS module wrapping a std/c14-inlet core, with a fan aperture and an orange
+  release lever.
+size: {w: 73.5, h: 40.0}
+attrs:
+  model: DCP-2-PSU-AC-FB
+  input: ac
+  power-output-w: 460
+  airflow: front-to-back
+provenance:
+  size: >-
+    photo-measured, then snapped to the CRPS form factor - and the snap is the point.
+    The module's own sticker reads "CRPS 460W AC Gold" in DCP-Series_User_Manual fig 2-5,
+    which names the form factor, and 1U CRPS is 73.5 wide x 40 high. Measuring the two
+    installed bays in that figure gives 81 and 75 for what are demonstrably the same
+    part, so neither edge read is worth more than the standard it brackets. What IS sharp
+    in the photograph is the pitch between the two fan stickers - 352.3, and figs 2-5 and
+    2-6 are separate photographs that agree on it to 0.15%. 73.5 at a 352.3 pitch puts
+    the pair at 4.0-77.5 and 356.3-429.8 in a 440 face, which matches the measured right
+    bay to under a millimetre.
+  power: >-
+    the sticker, and it disagrees with the datasheet ON PURPOSE. so-ds-dcp-2-r4.3 says
+    "PSU Rating 400W"; the module sticker says 460W. Both are recorded because they are
+    different claims - 400 is what the chassis is rated to draw from a supply, 460 is what
+    this supply can deliver. NO AMBIENT is quoted with either figure in any DCP document,
+    so none is asserted here.
+  inlet: >-
+    standard (IEC 60320-1) via std/c14-inlet@1, composed rather than drawn - and it is
+    ROTATED 270, earth pin to the left. The first cut of this part hand-drew a 19 x 20
+    inlet, which is neither the standard cutout (28 x 20) nor the orientation the
+    hardware uses, and it read as a squashed socket.
+    THE ROTATION IS MEASURED, not assumed: the aperture in UM figs 2-5 and 2-6 is about
+    20 across by 27 down - the standard cutout on its side - and the C14 shroud's two
+    chamfered corners, which sit on the earth side, are on the LEFT in both that figure
+    and the removed-module shot (fig 2-13). Chamfer position survives foreshortening,
+    which is what lets the oblique photograph corroborate the face-on one.
+    common/psu-ac-650@3 already composes the same part at the same rotation for the same
+    reason, so this follows an existing convention rather than inventing one.
+  face-features: >-
+    photo-measured from UM fig 2-5, averaged over BOTH installed supplies, which are the
+    same part photographed twice and agree to about a millimetre. Fan opening 34.1 wide
+    centred on local x 25.5; the C14 aperture centred on 55.5; the release lever spanning
+    roughly 64.5-73. The bail handle is drawn stowed, lying across the top of the fan
+    opening, which is where it sits in both installed photographs; fig 2-13 shows it
+    folded out on a module in the hand.
+  lamp: >-
+    ONE status lamp, at local x 57.4 - not two. The first cut drew a pair by analogy with
+    other supplies. The bottom band of the face resolves exactly one round aperture in
+    both installed supplies, and one bi-colour status LED is what the CRPS form factor
+    named on the module's own sticker specifies. What it signals is not stated in any DCP
+    document, so it is drawn unlit and carries no function attr.
+  screws: >-
+    photo-measured - two captive screws along the bottom of the face at local x 8 and
+    39.5, visible in fig 2-5 at 12x.
+  elements: >-
+    photo-measured - fig 2-5 and fig 2-6 (installed, face-on) for the arrangement, and
+    fig 2-13 (the AC and DC modules side by side, out of the chassis) for what each
+    feature is. The fan sits left, the C14 inlet right of centre, the orange release
+    lever at the right edge, with two round lamp apertures low on the face. Positions
+    are good to about +/-1mm across; the y axis in both installed figures is ~3%
+    compressed by the camera angle and is scaled from the 45mm chassis height rather
+    than from the same factor as x.
+  handle: >-
+    fig 2-13 - a black wire bail handle folds out of the face. It is drawn stowed, which
+    is how it appears in both installed photographs; UM s2.3.1-2.3.2 describes lifting it
+    to extract the module.
+
+  depth-gap: >-
+    NOT STATED in any DCP document, and not derivable from a front elevation. 1U CRPS is
+    a family of lengths, so the form factor does not settle it either.
+states: [ok, fail, absent]
+elements:
+  handle: {at: [4.5, 3.5], size: [35.5, 5.0], class: handle}
+  fan-aperture: {at: [8.45, 8.0], size: [34.1, 30.0], class: vent}
+  latch: {at: [66.0, 14.5], size: [7.0, 22.5], class: latch}
+  screw-left: {at: [6.2, 35.2], size: [3.6, 3.6], class: fastener}
+  screw-mid: {at: [37.7, 35.2], size: [3.6, 3.6], class: fastener}
+  lamp-status: {at: [55.6, 35.4], size: [3.6, 3.6], class: indicator}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [41.5, 10.0], rotate: 270}
+connection-points:
+  power: {at: [50.5, 20.0], direction: rear}
+skins: [default]

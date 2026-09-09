@@ -1,0 +1,103 @@
+format: 1
+kind: module
+name: ppm-ad1-1510
+version: 1.0.0
+class: filter
+behaviour: fills
+profile: optical
+description: Smartoptics PPM-AD1-1510-2F - a passive plug-in module that splits the
+  1511nm optical supervisory channel off the line fibre between the EDFA and the
+  line. Three LC duplex adapters - OSC, EDFA and Line - on a half-height plate that
+  seats in a DCP-F carrier's PPM bay.
+size: {w: 55.4, h: 19.5}
+attrs:
+  model: PPM-AD1-1510-2F
+  media: fiber
+  role: osc-filter
+  channel-nm: '1511'
+provenance:
+  size: >-
+    ESTIMATED, and corroborated four ways rather than measured once. NO DOCUMENT IN
+    THE CORPUS DIMENSIONS ANY PPM - ds-ppm-r4.0 has no mechanical section for any of
+    the nine parts, and DCP-F-User_Manual chapter 7 has no PPM subsection at all.
+    What agrees: the stencil master resolved on the 19-inch rack width gives
+    55.24 x 19.46; the LC adapters drawn inside that master, read as a scale bar,
+    give ~55.6 x 19.6; the space left beside the PPM field on the A22's now
+    datasheet-known 205 face allows at most 57.7; and the vendor photograph
+    dcp-f-a22.jpg, scaled on that same 205, measures the fitted module at 55.4.
+    Four routes sharing no assumption, spread 55.24-55.6. See
+    working/intake/factsheets/ppm-ad1-1510-2f.md for the two methods that FAILED
+    first and why - connection points are not ferrules, and the A22 and the PPM do
+    not draw the same connector.
+  connector: >-
+    datasheet - ds-ppm-r4.0, the spec table for this exact part: "Connector type
+    LC/UPC". Worth stating plainly because THE ARTWORK DISAGREES: the adapters drawn
+    on the stencil master read as SC at a glance. The pitch settles it independently -
+    six adapters at ~6.5mm inside a 55.4 face can only be LC, and SC at its 9.2mm
+    minimum would need a module too wide for the bay. The A22's own datasheet says
+    "All optical ports are of LC connector type", which is a second, independent
+    statement.
+  ports: >-
+    stencil master ppm-1510 - three duplex pairs, captioned OSC, EDFA and Line, each
+    with a white Tx/Rx box beneath it. Six bores, not four. The OSC pair is set apart
+    from the other two by a wider gap, which is drawn.
+  port-positions: >-
+    stencil master, scaled on the 55.4 width. Duplex centres at 12.17, 29.10 and
+    42.30. The measured spacing between the EDFA and Line pairs is 12.74 and they
+    abut in the drawing, so they are placed at common/lc-duplex-adapter@3's own
+    13.2 abutting pitch rather than at the 3.5%-short figure the render gives.
+  marking: >-
+    stencil master - the part number is silkscreened VERTICALLY UP THE RIGHT-HAND
+    EDGE. This settles a contradiction in the manual: fig-0038 puts it on the left
+    with a grip slot, fig-0037's exploded view of the same part puts it on the right
+    without one. The master and four sibling PPM figures all say right, so fig-0038
+    is an odd-revision render. Port order is identical in both, so it is not a mirror.
+  channel: >-
+    ds-ppm-r4.0 and DCP-F UM s4.7.1 agree the part is named 1510 and operates at
+    1511nm. Both numbers are the vendor's; the attr carries the operating wavelength.
+  bores: >-
+    via common/lc-duplex-adapter@3, itself measured off the Smartoptics DCP-R stencil -
+    the same vendor's drawing of the same connector, which is why it is preferred here
+    over a generic.
+  depth: >-
+    ESTIMATED at 60, and stated as a figure only so the part has a solid in 3D rather
+    than being a plane. NO DOCUMENT GIVES IT - the four methods that settle the face
+    all measure a face and none sees behind it. What bounds it: the module seats in a
+    bay inside a carrier that is 270 deep, so it cannot exceed that, and a passive
+    three-filter module needs a fraction of it. Treat 60 as a placeholder with a
+    ceiling, not as a measurement, and replace it the moment anything states one.
+  face-detail-gap: >-
+    no orthographic photograph of a PPM exists. Lamp inventory, exact caption
+    positions and any marking other than the part number are unknown, and the module
+    may well carry none - a passive filter has nothing to report.
+elements:
+  caption-osc: {at: [5.57, 15.4], size: [13.2, 2.7], class: marking}
+  caption-edfa: {at: [22.50, 15.4], size: [13.2, 2.7], class: marking}
+  caption-line: {at: [35.70, 15.4], size: [13.2, 2.7], class: marking}
+parts:
+  - {ref: common/lc-duplex-adapter@3, id: osc, at: [5.57, 4.0], attrs: {role: osc}}
+  - {ref: common/lc-duplex-adapter@3, id: edfa, at: [22.50, 4.0], attrs: {role: edfa}}
+  - {ref: common/lc-duplex-adapter@3, id: line, at: [35.70, 4.0], attrs: {role: line}}
+relief:
+  wall: '#22262a'
+  features:
+    # NOT `out` ON THE BODY. A plate that stands proud of its own panel buries
+    # everything drawn on it - which is what left smartoptics/dcp-404@1 a blank
+    # faceplate in 3D and, by the same root cause, painted over its own silkscreen
+    # in 2D. The plate IS the panel; the adapters recess into it.
+    - node: caption-osc
+      out: 0.15
+      confidence: estimated
+      source: a printed caption panel, drawn barely proud so it reads as label rather than hole
+    - node: caption-edfa
+      out: 0.15
+      confidence: estimated
+      source: as caption-osc
+    - node: caption-line
+      out: 0.15
+      confidence: estimated
+      source: as caption-osc
+body:
+  depth: 60.0        # estimated - see provenance/depth
+  color: '#33383d'
+skins: [default]
