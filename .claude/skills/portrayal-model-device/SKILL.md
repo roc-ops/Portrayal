@@ -172,7 +172,7 @@ render and check the stencil against it BEFORE you place anything.**
 The Smartoptics DCP-404 was built from the `DCP_v260105` stencil and came out
 confidently wrong:
 
-    vent features        stencil drew 1 of 5
+    vent features        stencil drew 1 of 7
     Power / Status       stencil: one lamp, far right
                          real:    two lamps, lower left
     traffic lamps        stencil: below the cages

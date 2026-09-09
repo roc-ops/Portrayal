@@ -18,6 +18,8 @@ attrs:
   role: muxponder
   client-ports: '4'
   line-ports: '1'
+  qsfp28: '4'
+  qsfp-dd: '1'
   client-rate: 100GBASE
   line-rate: 400G OpenZR+ coherent DWDM
   power-draw-typical-w: 56
@@ -142,7 +144,7 @@ elements:
   # the three full-width rows; the per-port groups are small enough to stay art
   vent-angled: {at: [0.0, 4.6], size: [205.0, 3.8], class: vent}
   vent-top-edge: {at: [0.0, 10.35], size: [205.0, 1.85], class: vent}
-  vent-bottom-edge: {at: [0.0, 40.30], size: [205.0, 1.45], class: vent}
+  vent-bottom-edge: {at: [0.0, 41.95], size: [205.0, 1.55], class: vent}
 relief:
   features:
     # the plate stands proud and the band above it falls back to the lid; see
@@ -184,7 +186,8 @@ parts:
   # Power and Status at the lower left, which the stencil placed at the far right
   - {ref: common/led-rect@1, id: led-power, at: [5.30, 36.70], attrs: {function: power}}
   - {ref: common/led-rect@1, id: led-status, at: [11.90, 36.70], attrs: {function: status}}
-  # upper is IEC 60825 laser hazard; lower is a general warning triangle the
-  # library has no part for, so laser-warning stands in - see provenance/markings
+  # two different symbols: the IEC 60825 laser burst over the ISO 7010 general
+  # warning. common/warning-triangle@1 was added for the lower one - the library
+  # had only the laser part - see provenance/markings
   - {ref: common/laser-warning@1, id: warn-laser, at: [7.80, 24.10], attrs: {marking: laser}}
   - {ref: common/warning-triangle@1, id: warn-general, at: [7.80, 29.62], attrs: {marking: general}}
