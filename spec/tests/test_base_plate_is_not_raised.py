@@ -70,8 +70,18 @@ def test_the_dcp_404_still_shows_its_silkscreen_and_vents():
         pytest.skip("dcp-404 not built")
     ids = top_level_ids(f.read_text())
     body = ids.index("dcp-404--body")
-    painted_over = [i for i in ids[:body]
-                    if "silkscreen" in i or i.startswith("dcp-404--vent")]
+    face = [i for i in ids
+            if "silkscreen" in i or i.startswith("dcp-404--vent")]
+    # ESTABLISH THE SUBJECT BEFORE ASSERTING ABOUT ITS ORDER. Without this the
+    # test passes for the wrong reason: if the vents and the silkscreen were
+    # renamed or dropped from the skin, nothing would match, `painted_over`
+    # would be empty, and a face with no printing at all would read as a pass -
+    # the very symptom this test exists to catch.
+    assert face, (
+        "no vent or silkscreen element found on the DCP-404 at all; this test "
+        f"cannot say anything about draw order. Draw order: {ids}"
+    )
+    painted_over = [i for i in ids[:body] if i in face]
     assert not painted_over, (
         "the DCP-404's plate is in front of its own face: "
         f"{painted_over} are drawn before dcp-404--body and so are invisible"
