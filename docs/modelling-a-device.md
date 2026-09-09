@@ -529,6 +529,8 @@ right. Put your drawing next to the reference at the same scale:
 
 ```sh
 # reference px/mm = reference panel width in px / real width in mm
+# cairosvg is optional (pip install cairosvg); CI does not need it. Any SVG
+# rasteriser that takes an output width does the same job.
 cairosvg out.svg -o mine.png --output-width <panel_px>    # same px/mm
 # crop the identical millimetre range from both and view them side by side
 ```

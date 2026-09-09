@@ -88,8 +88,8 @@ description: QSFP28 cage cutout (100G, 4 lanes)
 size: {w: 20.0, h: 10.15, d: 37.0}      # millimetres; d is depth into the panel
 attrs: {media: qsfp28}
 provenance:                  # every figure says where it came from and how sure you are
-  depth: standard (SFF-8663 Rev 1.7 Fig 4-1, bezel to connector 37 REF)
-  size: standard (SFF-8663 Rev 1.7 Fig 5-4, spring-finger bezel opening)
+  depth: registry - SFF-8663 Rev 1.7 Fig 4-1, bezel to connector 37 REF
+  size: registry - SFF-8663 Rev 1.7 Fig 5-4, spring-finger bezel opening
 elements:                    # addressable sub-elements; each id must exist in every skin
   opening: {at: [0.0, 0.0], size: [20.0, 10.15], class: cutout}
 relief:                      # 3D: how far things stand out or sink, with confidence

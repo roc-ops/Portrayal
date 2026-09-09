@@ -27,7 +27,7 @@
 ## Gates run locally
 
 - [ ] `./build.sh --device <name>` lints clean for this device (or `./build.sh` for a component change)
-- [ ] `devicelock.py --library library` run **against main's lock first**; every device it named took the bump it asked for; then `--update`
+- [ ] `python3 spec/tools/portrayal/devicelock.py --library library` run **against main's lock first**; every device it named took the bump it asked for; then `--update`
 - [ ] `./publish.sh --no-images` and the regenerated `library/exports` committed
 - [ ] `python3 -m pytest spec/tests -q` passes (build first; it skips without `dist/`)
 - [ ] No vendor material committed: no PDF, CAD, stencil, or photograph; dumps sanitised
