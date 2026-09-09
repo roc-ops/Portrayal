@@ -13,17 +13,18 @@ DCIM, and diagram-tool exports. Domain-neutral core; networking is profile #1.
 - `tools/portrayal/lint.py` — schema validation + contract↔skin consistency + ID grammar
 - `tools/portrayal/visio_extract.py` — pull shape artwork out of Visio stencils for intake
   reference (see `VISIO-INTAKE.md`)
-- `tests/` — walking-skeleton tests (lint green, deterministic render, addressability)
+- `tests/` — the suite: library-wide invariants every device must satisfy, plus unit
+  tests of the tools. Build `dist/` first; several modules skip without it
 
 Quick start (paths are relative to this directory):
 
 ```sh
 python3 tools/portrayal/lint.py --schemas schemas --library ../library
-#   last line: `LINT: ok (641 files, 1695 warnings in 23 rules)` - warnings are
-#   census rules and pass; add --strict to exit 2 on any, --device NAME for one device
+#   last line: `LINT: ok (<files> files, <warnings> warnings in <rules> rules)` -
+#   warnings are census rules and pass; add --strict to exit 2 on any, --device NAME for one device
 python3 tools/portrayal/render.py ../library/devices/edgecore/as7726-32x/device.yaml \
     --library ../library --out ../library/dist
-(cd ../library && python3 -m http.server 8931)  # browse http://localhost:8931/dist/
+(cd .. && python3 tools/serve.py 8931)  # browse http://localhost:8931/library/dist/
 ```
 
 Licensed Apache-2.0. See `../LICENSE`.

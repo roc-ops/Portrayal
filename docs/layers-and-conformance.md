@@ -240,10 +240,10 @@ the migration of all 443 device text marks out of `decor` into `silkscreen`.
 
 Not done, deliberately:
 
-- **The component-skin grouping convention is not enforced.** 26 of 149 skins contain text
-  (107 nodes) and none use `<g id="silkscreen">` yet. The backstop makes the export correct
-  regardless; the grouping is what would make it *checkable*. A rule requiring it should
-  land with the migration, not before it.
+- **The component-skin grouping convention is not enforced.** Most skins that print text
+  now carry it in `<g id="silkscreen">`, and the backstop makes the export correct for the
+  ones that do not; the grouping is what makes it *checkable*. A rule requiring it should
+  land when the last of them are migrated.
 - **Cutouts are not modelled.** The panel's holes are still implicit in the skin artwork.
   Declaring them as data is what would let lint assert that every component sits in a
   cutout and every cutout is filled — the rule that would have caught the overlapping LEDs,

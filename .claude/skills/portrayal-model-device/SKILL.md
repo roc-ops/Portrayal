@@ -78,8 +78,8 @@ overstates the haul by more than double. **Say which of the two any figure count
 is** - the rejects are deliberately kept on disk, so `find -name '*.png' | wc -l`
 will always flatter you.
 
-    working/images/extract.py     docling: figure + caption + page + section
-    working/images/INDEX.md       roll-up, grouped by part number
+    spec/tools/intake/extract.py  docling: figure + caption + page + section,
+                                  into working/images/<stem>/
 
 Use docling rather than `pdfimages`. A figure without its caption is an image; a
 figure WITH "Figure 27: 1-Port 100-Gigabit Ethernet Modular Port Adapter with
@@ -190,7 +190,8 @@ is not paperwork - it is what makes `maturity` honest and what lets the next
 person know which figure to re-measure when something is wrong.
 
 Confidence words, used verbatim in provenance: `datasheet`, `drawing`,
-`measured`, `photo-measured`, `registry`, `estimated`. Anything `estimated` keeps
+`measured`, `photo-measured`, `registry`, `borrowed`, `estimated`, `known-wrong`.
+Anything `estimated` keeps
 the device out of `verified`.
 
 **Use every image you have, not the first one that answers.** Guide art is often
