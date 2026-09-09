@@ -28,7 +28,7 @@ import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, sv
          setNodeStates, nodeStates, setNodeFields, restyleText,
          setPulled as setReliefPulled, pulledPaths,
          buildFaceRelief, bodyBoxes } from './relief.js';
-import { applyOverrides } from './swap.js';
+import { applyOverrides, nestedBays } from './swap.js';
 import { jdist } from './dist.js';
 import { createLamps } from './lamps.js';
 
@@ -417,14 +417,35 @@ export function createViewer(container, opts = {}) {
       return {comp: c, text: await svgSource(url, SCOPE)};
     };
     let total = 0;
+    // A NESTED OVERRIDE IS NOT IN ANY DEVICE'S BAY LIST, so the cheap guard
+    // below cannot see one and every view it names would be skipped - the swap
+    // would apply in 2D and the 3D scene, which is built from this text and not
+    // from that DOM, would keep the old occupant. Nested paths are the ones
+    // carrying `/module/`, which no device bay id ever does, so recognising them
+    // costs a string test rather than a parse of every view.
+    const nestedOverride = Object.keys(OVERRIDES).some(k => k.includes('/module/'));
     for (const [view, bays] of Object.entries(devIndex.bays)) {
-      if (!bays.some(b => Object.prototype.hasOwnProperty.call(OVERRIDES, b.id))) continue;
+      if (!nestedOverride
+          && !bays.some(b => Object.prototype.hasOwnProperty.call(OVERRIDES, b.id))) continue;
       const url = `${DIST}${DEV}.${cfg}.${view}.svg`;
       let text;
       try { text = await svgSource(url, SCOPE); } catch { continue; }
       const doc = new DOMParser().parseFromString(text, 'image/svg+xml');
       if (doc.querySelector('parsererror')) continue;
-      const n = await applyOverrides(doc.documentElement, bays, OVERRIDES, loadSkin);
+      // TWO PASSES, AND THE SECOND HAS TO LOOK AGAIN. Which nested bays exist,
+      // and where they are, is a property of the carrier CURRENTLY seated - so
+      // deriving them before the device pass reads them off the carrier that
+      // pass is about to replace. 73 device bays in the library accept more than
+      // one bay-bearing carrier: the r740xd's four riser bays, every mx2008 FPC
+      // taking either an mpc*-3d-v2k or an mx2k-mpc6e-v2k, whose `mic0`/`mic1`
+      // differ in geometry. An override map that swaps a carrier AND something
+      // under it would have seated the nested module at the OLD carrier's `at`,
+      // or missed a bay the new carrier introduces.
+      // shell.js never had this: `bayFor` re-reads the live drawing each time.
+      let n = await applyOverrides(doc.documentElement, bays, OVERRIDES, loadSkin);
+      const nested = nestedBays(doc.documentElement, byRef);
+      if (nested.length)
+        n += await applyOverrides(doc.documentElement, nested, OVERRIDES, loadSkin);
       if (!n) continue;
       setSvgOverride(url, new XMLSerializer().serializeToString(doc), SCOPE);
       total += n;

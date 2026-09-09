@@ -16,7 +16,7 @@
 // it, and the comment says which.
 
 import { createDevicePicker } from './devsel.js';
-import { seatModule } from './swap.js';
+import { seatModule, nestedBays } from './swap.js';
 import { jdist } from './dist.js';
 
 const NS = 'http://www.w3.org/2000/svg';
@@ -175,6 +175,15 @@ export function createShell(opts = {}) {
     const [name, major] = rest.split('@');
     return COMPONENTS.find(c => c.ns === ns && c.name === name && c.major === 'v' + major);
   };
+
+  // A BAY ON THE DEVICE, OR A BAY INSIDE WHATEVER IS SEATED IN ONE. The first
+  // is in the manifest; the second cannot be, because which nested bays exist
+  // depends on what is currently populated. swap.js reads those off the drawing
+  // - see `nestedBays` there for why they are resolved rather than merged into
+  // `meta.bays`, which the status line counts.
+  const bayFor = path => (state.meta?.bays?.[bayView()] || []).find(b => b.id === path)
+    || (state.svg ? nestedBays(state.svg, compByRef).find(b => b.id === path) : null)
+    || null;
 
   // ---------------------------------------------------------------- stage
 
@@ -809,7 +818,7 @@ export function createShell(opts = {}) {
     if (emit('inspect', {path, el: e, box, cls}).some(Boolean)) return;
     if (!e) { box.innerHTML = ''; return; }
     const ref = e.dataset.ref || e.querySelector('[data-ref]')?.dataset.ref;
-    const bay = (state.meta?.bays?.[bayView()] || []).find(b => b.id === path);
+    const bay = bayFor(path);
 
     let html = `<h2>${cls || 'node'}</h2><div class="row"><span>path</span><code>${path}</code></div>`;
     if (ref) html += `<div class="row"><span>component</span><code>${ref.split(':')[0]}</code></div>`;
@@ -857,10 +866,12 @@ export function createShell(opts = {}) {
   // was invisible in 3D on every device. Two copies of `rename` and `bayTransform`
   // would each have been right the day they were written.
   async function swapBay(bayId, ref) {
-    const bay = (state.meta.bays[bayView()] || []).find(b => b.id === bayId);
+    const bay = bayFor(bayId);
     const g = state.svg.querySelector(`[data-path="${CSS.escape(bayId)}"]`);
     if (!g || !bay) return;
-    g.querySelector(`[id="${CSS.escape(bayId)}--module"]`)?.remove();
+    // the element id, not the path - see seatModule's `idBase`
+    const idBase = g.getAttribute('id') || bayId;
+    g.querySelector(`[id="${CSS.escape(idBase)}--module"]`)?.remove();
     state.cfgBays[bayId] = ref || null;
     if (!ref) { refreshTree(); select(bayId, true); emit('change'); return; }
     const c = compByRef(ref);
@@ -878,7 +889,7 @@ export function createShell(opts = {}) {
     // rather than a caching one, so it is left alone here.
     const file = `${DIST}/components/${c.ns}--${c.name}--${c.major}--${skin}.svg`;
     const txt = await (await fetch(file)).text();
-    g.appendChild(seatModule(document, bayId, bay, ref, c, txt));
+    g.appendChild(seatModule(document, bayId, bay, ref, c, txt, idBase));
     refreshTree();
     select(bayId, true);
     emit('change');

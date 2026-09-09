@@ -93,6 +93,24 @@ def main():
                 # that is how a vendor modelled entirely from estimates comes to
                 # look more complete than one that honestly declared nothing.
                 "relief-confidence": _confidence_counts(data),
+                # WHAT A NESTED BAY ACCEPTS, which lived only in the contract on
+                # disk. 39 components declare bays and 84 bays in total - the
+                # A9K modular line cards and SIPs, the Dell 14G risers, the
+                # Smartoptics shelf cards - and a consumer holding this index
+                # could see that a carrier had been drawn with openings and had
+                # no way to learn what goes in one, so no picker could be
+                # offered for any of them.
+                # NORMALISED TO THE SHAPE A DEVICE BAY ALREADY HAS: a contract
+                # writes `size: [55.4, 19.5]` and a device bay carries
+                # `size: {w, h}`, and one shape means one code path in the
+                # consumer rather than two that have to agree.
+                "bays": {bid: {"at": b.get("at"),
+                               "size": dict(zip(("w", "h"), b.get("size") or []))
+                               if isinstance(b.get("size"), list) else b.get("size"),
+                               "accepts": b.get("accepts") or [],
+                               **({"default": b["default"]} if "default" in b else {})}
+                         for bid, b in sorted((data.get("bays") or {}).items())
+                         if isinstance(b, dict)},
                 # REF AND ID, not the ref alone. A consumer that has to say
                 # what a card's ports ARE needs the id - `d0` is a downstream
                 # port and `u0` an upstream one, and the ref they share says
