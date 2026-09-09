@@ -1,0 +1,160 @@
+# A starting point for a new device. Copy it to
+# library/devices/<vendor>/<model>/device.yaml, replace every value, delete
+# these comments as you go. Every key a small fixed-port switch needs is
+# here once; the schema (spec/schemas/device.schema.json) describes the rest,
+# and docs/modelling-a-device.md says how to find each number.
+#
+# This file is not a real product. It is linted and rendered by the test suite
+# so it can never drift from what the tools accept.
+format: 1
+kind: device
+name: ex-1u                     # the directory name: lower-case, digits, hyphens
+version: 0.1.0                  # semver; the lock check tells you when to bump it
+maturity: draft                 # draft | modelled | verified - lint holds you to it
+manufacturer: Example           # the key in spec/schemas/vendors.yaml
+model: EX-1U                    # as printed on the faceplate
+portfolio:
+  line: Example Series          # the vendor's own grouping, optional
+description: >-
+  One paragraph a person reads first: what the box is, what is on its faces,
+  what is unusual. A 1RU four-port 10G switch with an out-of-band management
+  jack, a console jack, a system lamp, two redundant supplies and one fan.
+provenance:                     # every figure below names its source here,
+  chassis: >-                   # using one confidence word from the vocabulary:
+    datasheet - 440 x 43.6 x 300 mm from the datasheet's dimensions row; the   # datasheet, drawing, measured,
+    rack face is 482.6 with ears, which are not modelled                       # photo-measured, registry, borrowed,
+  front: >-                                                                    # estimated, known-wrong
+    drawing - the installation guide's front elevation (Figure 2), orthographic
+    at 3.1 px/mm against the datasheet width; port pitch 16.5 read across four
+    cutouts; lamp row 5 mm above the cages
+  rear: >-
+    photo-measured - the product page's rear gallery image at 1.09 px/mm; the
+    two supply bays and the fan bay are positioned from it, so +-1 mm
+  power: >-
+    datasheet - 'Max power 150 W' with no qualifier, filed as max and said so
+attrs:                          # facts a DCIM wants, in sections; keys are unique
+  physical:                     # across sections and leave as data-<key> on the SVG
+    weight-kg: 4.2
+  power:
+    power-max-w: 150
+  platform:
+    switch-silicon: Example ASIC 1
+  features:
+    optics-sfp-plus: 10G SFP+ SR, LR; 1G SFP SX, LX   # what runs in the cages, per the datasheet
+  lifecycle:
+    eol: none-announced         # searched and found nothing; absent means nobody looked
+chassis:
+  width: 440.0                  # millimetres, body between the ear folds
+  height: 43.6
+  depth: 300.0
+  ru: 1
+  color: '#3a3d42'
+groups:                         # what the parts are FOR; every placement and bay names one
+  sfp-plus:
+    term: Port                  # the vendor's word for one of these
+    role: traffic               # traffic | management | service | indicator | furniture
+    index-origin: 1             # what the silkscreen counts from
+    description: four 10G SFP+ ports
+    attrs: {media: sfp-plus, speed: 10g}   # stated once; lint checks the members agree
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: one link/activity lamp above each SFP+ port
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    description: out-of-band Ethernet and console   # both RJ45, so no `mixed:`; add it only when media differ
+  status:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the system lamp
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    description: two hot-swap supplies
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 - installation guide, "Power supplies": either supply carries the switch alone'
+  cooling:
+    term: Fan
+    role: service
+    index-origin: 1
+    description: one fan module
+views:                          # all six; a face with nothing documented says so
+  front:
+    size: {w: 440.0, h: 43.6}
+    silkscreen:                 # what is printed on the metal, and what it belongs to
+      - {at: [425.0, 8.0], text: EX-1U, font-size: 2.0, anchor: middle, fill: '#e8eaec', for: chassis}
+      - {at: [27.25, 34.0], text: '1', font-size: 1.8, anchor: middle, fill: '#e8eaec', for: port-1}
+      - {at: [43.75, 34.0], text: '2', font-size: 1.8, anchor: middle, fill: '#e8eaec', for: port-2}
+      - {at: [60.25, 34.0], text: '3', font-size: 1.8, anchor: middle, fill: '#e8eaec', for: port-3}
+      - {at: [76.75, 34.0], text: '4', font-size: 1.8, anchor: middle, fill: '#e8eaec', for: port-4}
+      - {at: [387.9, 34.0], text: MGMT, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: mgmt}
+      - {at: [407.9, 34.0], text: CON, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: console}
+      - {at: [425.0, 28.0], text: SYS, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: sys}
+    components:
+      placements:               # parts fixed to the panel; a bay is for what slides out
+        - {id: port-1, ref: std/sfp@1, at: [20.0, 16.0], group: sfp-plus, rel-pos: 1}
+        - {id: port-2, ref: std/sfp@1, at: [36.5, 16.0], group: sfp-plus, rel-pos: 2}
+        - {id: port-3, ref: std/sfp@1, at: [53.0, 16.0], group: sfp-plus, rel-pos: 3}
+        - {id: port-4, ref: std/sfp@1, at: [69.5, 16.0], group: sfp-plus, rel-pos: 4}
+        - {id: led-port-1, ref: common/led-dot@1, at: [26.25, 11.0], for: port-1, group: port-leds, rel-pos: 1}
+        - {id: led-port-2, ref: common/led-dot@1, at: [42.75, 11.0], for: port-2, group: port-leds, rel-pos: 2}
+        - {id: led-port-3, ref: common/led-dot@1, at: [59.25, 11.0], for: port-3, group: port-leds, rel-pos: 3}
+        - {id: led-port-4, ref: common/led-dot@1, at: [75.75, 11.0], for: port-4, group: port-leds, rel-pos: 4}
+        - {id: mgmt, ref: common/rj45-eth@1, at: [380.0, 14.0], group: mgmt, rel-pos: 1}      # an Ethernet jack has lamps
+        - {id: console, ref: std/rj45@2, at: [400.0, 14.0], group: mgmt, rel-pos: 2}          # a console jack is the bare housing
+        - {id: sys, ref: common/led-dot@1, at: [424.0, 20.0], for: chassis, attrs: {role: system}, group: status, rel-pos: 1}   # a lamp says what it indicates
+  rear:
+    size: {w: 440.0, h: 43.6}
+    silkscreen:
+      - {at: [46.75, 2.4], text: PSU 1, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: psu-1}
+      - {at: [126.75, 2.4], text: PSU 2, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: psu-2}
+      - {at: [324.3, 2.4], text: FAN, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: fan-1}
+    components:
+      bays:                     # openings a module slides into; `default` is what is seated
+        - {id: psu-1, at: [10.0, 3.0], size: {w: 73.5, h: 40.0},
+           accepts: [common/psu-550w@2], default: common/psu-550w@2, group: psus, rel-pos: 1}
+        - {id: psu-2, at: [90.0, 3.0], size: {w: 73.5, h: 40.0},
+           accepts: [common/psu-550w@2], default: common/psu-550w@2, group: psus, rel-pos: 2}
+        - {id: fan-1, at: [300.0, 3.0], size: {w: 48.6, h: 40.0},
+           accepts: [common/fan-module@1], default: common/fan-module@1, group: cooling, rel-pos: 1}
+  top:
+    size: {w: 440.0, h: 300.0}
+    empty: >-
+      looked for and not documented: no top view in the datasheet or the
+      installation guide; the product gallery shows a plain lid
+  bottom:
+    size: {w: 440.0, h: 300.0}
+    empty: >-
+      looked for and not documented: no underside view in any document held;
+      the face sits on rails and is never serviced
+  left:
+    size: {w: 300.0, h: 43.6}
+    empty: >-
+      looked for and not documented: the side elevation in the guide shows only
+      the rail-mount holes, which are not modelled at draft
+  right:
+    size: {w: 300.0, h: 43.6}
+    empty: >-
+      looked for and not documented: mirror of the left face per the guide's
+      side elevation; nothing asymmetric is drawn
+configurations:                 # the ways the box is sold or built; `base` powers on
+  base:
+    kind: base
+    description: two supplies, one fan, no transceivers fitted
+gaps:                           # what you could not find, so silence is never mistaken for a finding
+  - what: rear-grounding-stud
+    scope: [rear]
+    reason: vendor-silent
+    note: the guide's grounding section names a stud but no figure shows where it is
+    wanted: a rear photograph or drawing that places the stud
+datasheet:
+  title: Example EX-1U Datasheet
+  url: https://example.com/ex-1u-datasheet
+references:
+  - {title: Example EX-1U Installation Guide}
