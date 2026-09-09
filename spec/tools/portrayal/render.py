@@ -873,10 +873,24 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         if not isinstance(bay, dict) or not bay.get("at"):
             continue
         want = f"{inst_id}--{bay_id}"
+        # WHAT THE OPENING IS OFF THE PANEL, THE OCCUPANT IS TOO. `relief.js`'s
+        # liftOf sums data-z-lift up the ANCESTOR chain, and the occupant is
+        # appended to `g` rather than beside its opening (see the comment on the
+        # append below - the flat coordinate space is deliberate), so it inherits
+        # nothing from the group the opening sits in. On a carrier whose plate
+        # stands proud that buried both: smartoptics/dcp-f-a22 holds its two PPM
+        # bays in a block 44 off the chassis, and the modules seated in them sat
+        # at the panel plane behind unbroken metal - the dcp-404's blank-face
+        # failure, in the one place restructuring the skin cannot reach.
+        # A component bay declares no lift of its own; it takes one from a relief
+        # feature naming the opening, which the two loops above have already
+        # applied by the time this runs.
+        bay_lift = None
         for node in g.iter():
             if node.get("id") == want:
                 node.set("data-path", f"{path}/{bay_id}")
                 node.set("data-class", "bay")
+                bay_lift = node.get("data-z-lift")
                 break
         # A CONFIGURATION CAN SEAT A NESTED BAY. `seated` is the configuration's
         # bay map, keyed by bay path without the `/module` steps - `riser-1/
@@ -907,6 +921,8 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         # inserts the occupant before the skin - the same word and the same
         # mechanism `parts:` has carried all along. It only means anything if
         # the skin has real holes; over a stroked outline the occupant vanishes.
+        if bay_lift:
+            sub.set("data-z-lift", bay_lift)
         if bay.get("behind"):
             g.insert(behind_at, sub)
             behind_at += 1
