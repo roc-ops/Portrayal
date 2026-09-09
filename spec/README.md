@@ -10,7 +10,8 @@ DCIM, and diagram-tool exports. Domain-neutral core; networking is profile #1.
 - `DEPTH-AND-3D.md` — how depth, relief and module bodies turn the 2D drawing into 3D
 - `schemas/` — JSON Schemas for component contracts, device manifests, NOS overlays
 - `tools/portrayal/render.py` — compiles manifest + component skins → flat, addressable SVG
-- `tools/portrayal/lint.py` — schema validation + contract↔skin consistency + ID grammar
+- `tools/portrayal/lint.py` — schema validation + contract↔skin consistency + ID grammar;
+  `--list-rules` prints every rule code, and [docs/lint-rules.md](../docs/lint-rules.md) is that table as a page
 - `tools/portrayal/visio_extract.py` — pull shape artwork out of Visio stencils for intake
   reference (see `VISIO-INTAKE.md`)
 - `tests/` — the suite: library-wide invariants every device must satisfy, plus unit
