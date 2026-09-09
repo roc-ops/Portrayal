@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dcp-2-blank
-version: 1.1.0
+version: 1.2.0
 class: blank
 behaviour: fills
 profile: networking
@@ -59,20 +59,36 @@ elements:
 relief:
   wall: '#17191b'
   features:
+    # REAL HOLES, not a sink. The perforation goes through a moulded plate whose
+    # whole job is to pass air (UM s2.5), so `vent` - which turns the node's dark
+    # cells into actual openings - is what it is. Drawn first as a 2.0 sink, which
+    # rendered as a shallow dimple and read as printing.
     - node: vent-left
-      sink: 2.0
+      vent: 12.0
       confidence: estimated
-      source: round perforations through a moulded plate; the depth is the plate's own thickness, eyed off fig 2-15
+      source: >-
+        through-holes in a moulded plate. The 12 is how far back the opening runs
+        before anything closes it, bounded by the plate's own depth; nothing dimensions
+        either.
     - node: vent-right
-      sink: 2.0
+      vent: 12.0
       confidence: estimated
       source: as vent-left
+    # THE PULL STANDS WELL PROUD - it is what a hand grabs to get the plate out.
     - node: boss-left
-      out: 1.2
+      cyl: 15.0
       confidence: estimated
-      source: the raised central boss visible in fig 2-15; UM s2.5 does not say whether it is a fastener
+      source: >-
+        Jason, from the hardware: "I am really certain that that sits proud of the box,
+        at least enough to grab onto to pull the blank out - so at least a half inch if
+        not three-quarters." 15 is the middle of 12.7 and 19.05. It was first drawn at
+        `out: 1.2`, a flat pad, which is what a boss looks like in a three-quarter
+        photograph and not what it does. A cylinder rather than a box because the node is
+        round and `cyl` takes its radius from the node's own bounds.
+        WHAT IS NOT SETTLED: whether it is a pull, a thumbscrew or a captive fastener.
+        UM s2.5 does not say, and fig 2-15 does not resolve it.
     - node: boss-right
-      out: 1.2
+      cyl: 15.0
       confidence: estimated
       source: as boss-left
 body:

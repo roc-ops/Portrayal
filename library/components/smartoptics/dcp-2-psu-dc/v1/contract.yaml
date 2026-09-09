@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dcp-2-psu-dc
-version: 1.1.0
+version: 1.2.0
 class: psu
 behaviour: fills
 profile: networking
@@ -64,6 +64,25 @@ provenance:
     no orthographic artwork of this module exists in the corpus. Every element position
     is inherited from the AC part rather than measured. A face-on photograph of a
     DC-populated DCP-2, or a DC PSU datasheet, would settle it.
+  latch-and-handle: >-
+    borrowed - smartoptics/dcp-2-psu-ac@1, which borrows in turn from
+    dell/psu-1100w-ac-14g@1: a lever "about three-quarters of an inch proud" and a grip
+    "about an inch proud and a U rather than the flat rectangle this was drawn as", both
+    from the operator with the machine in front of them. The owner reads the DCP-2's
+    supplies as the same cantilever mechanism as the R740xd's, and the AC and DC modules
+    of this family differ only at the inlet.
+  latch-position: >-
+    CENTRED ON THE TERMINAL, and it was not. The lever was drawn at y 14.5-37.0, which
+    put it across the bottom-right corner where the status lamp sits. The terminal spans
+    y 7-33 about a centre of 20; the lever now shares that centre at 8.75-31.25 and the
+    lamp has its corner back.
+  screws: >-
+    FOUR, ON THE CORNERS OF THE FAN APERTURE, as on the AC module. Two were drawn along
+    the bottom of the face, clear of the opening, which read as unrelated to it.
+  lamp: >-
+    ONE status lamp, in the bottom-right corner. Inherited from the AC module - the CRPS
+    form factor specifies a single bi-colour status LED - and no photograph in the corpus
+    shows this module's face straight on to confirm it independently.
   depth-gap: NOT STATED, as for the AC module.
   no-body-relief: >-
     THE BODY DECLARES NO `out`, DELIBERATELY. A face that stands proud of its own panel
@@ -82,16 +101,17 @@ elements:
   handle: {at: [4.5, 3.5], size: [35.5, 5.0], class: handle}
   fan-aperture: {at: [8.45, 8.0], size: [34.1, 30.0], class: vent}
   dc-terminal: {at: [45.5, 7.0], size: [11.0, 26.0], class: inlet}
-  latch: {at: [66.0, 14.5], size: [7.0, 22.5], class: latch}
-  screw-left: {at: [6.2, 35.2], size: [3.6, 3.6], class: fastener}
-  screw-mid: {at: [37.7, 35.2], size: [3.6, 3.6], class: fastener}
-  lamp-status: {at: [55.6, 35.4], size: [3.6, 3.6], class: indicator}
+  screw-tl: {at: [8.45, 8.00], size: [3.4, 3.4], class: fastener}
+  screw-tr: {at: [39.15, 8.00], size: [3.4, 3.4], class: fastener}
+  screw-bl: {at: [8.45, 34.60], size: [3.4, 3.4], class: fastener}
+  screw-br: {at: [39.15, 34.60], size: [3.4, 3.4], class: fastener}
+  latch: {at: [66.0, 8.75], size: [7.0, 22.5], class: latch}
+  lamp-status: {at: [66.0, 34.4], size: [3.6, 3.6], class: indicator}
 connection-points:
   power: {at: [50.5, 20.0], direction: rear}
 relief:
   wall: '#5a6065'
   features:
-    # the fan well is a hole, not a picture of one
     - node: fan-aperture
       sink: 6.0
       confidence: estimated
@@ -99,25 +119,43 @@ relief:
         a fan sits behind a grille recessed into the face; 6 is the depth at which the
         blades read as behind the plate rather than flush with it. No document dimensions
         it and no view in the corpus is a side elevation of this module.
+    # THE SAME HARDWARE AS THE R740xd's SUPPLY, on the owner's reading, so it takes
+    # dell/psu-1100w-ac-14g@1's figures rather than a second guess at the same thing.
+    # Both were given by the operator with the machine in front of them.
     - node: latch
-      out: 2.2
+      out: 19.05
       confidence: estimated
       source: >-
-        the release lever stands proud enough to get a thumb behind it, which is what
-        UM s2.3.2 describes - "Push the locking lever in towards the power connector".
-        The figure is eyed off fig 2-13, where the lever clears the face plainly.
+        borrowed - dell/psu-1100w-ac-14g@1's release lever, "about three-quarters of an
+        inch proud ... pushed sideways to lock the cord in, so it has to stand off the
+        face far enough to get a thumb on, and a flat tab would not work". The owner
+        reads this as the same cantilever: it retains the cord AND is what the supply is
+        pulled out by. Drawn 2.2 proud at first, which is a tab and not a lever.
     - node: handle
-      out: 1.4
+      uhandle: 25.4
+      color: '#c9ced3'
       confidence: estimated
       source: >-
-        the bail handle is drawn STOWED, lying against the face, so it stands only its
-        own bar thickness proud. fig 2-13 shows it folded out on a module in the hand.
-    - node: dc-terminal
-      sink: 3.0
+        borrowed - dell/psu-1100w-ac-14g@1's grip, "about an inch proud and a U rather
+        than the flat rectangle this was drawn as, the same shape as the handles already
+        in this library". Drawn here as a flat bar before, which is what a stowed bail
+        looks like in a photograph and not what the part does.
+    - node: screw-tl
+      dome: 1.6
       confidence: estimated
-      source: >-
-        the three contacts sit in wells behind the block face, visible as recesses in
-        fig 2-13. Depth eyed off that photograph.
+      source: borrowed - dell/psu-1100w-ac-14g@1's captive screws, "rounded head, about a sixteenth proud"
+    - node: screw-tr
+      dome: 1.6
+      confidence: estimated
+      source: as screw-tl
+    - node: screw-bl
+      dome: 1.6
+      confidence: estimated
+      source: as screw-tl
+    - node: screw-br
+      dome: 1.6
+      confidence: estimated
+      source: as screw-tl
     - node: lamp-status
       out: 0.2
       confidence: estimated

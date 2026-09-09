@@ -73,6 +73,14 @@ provenance:
     which puts the ratio back at 1.9. Lamp and caption centre on 26.75 and 26.54, so they
     sit on one line to within 0.2 - the render's slight downward angle makes them look
     staggered and they are not.
+  edge-row-centring: >-
+    the two edge rows ran 5.20 to 205.30 on a 205 face - inset 5.20 on the left and
+    0.30 PAST the edge on the right, so the last cell of each hung off the module. The
+    angled rows above them were already centred to within 0.6, which is what says the
+    5.20 was a generator stepping until it ran out rather than a margin anyone chose.
+    All 22 cells are kept and both rows shifted 2.75 left, giving 2.45 each side. The
+    `elements` extents follow, so the contract no longer claims a row spans the full
+    width when it does not.
   edge-vents: >-
     photograph - the bottom slot row runs to 43.5 on a 44 face, close enough to the edge
     that it rolls over it. It was first drawn at 41.75, which left it floating in the
@@ -113,6 +121,11 @@ provenance:
     exclamation mark - two different symbols. The first cut composed common/laser-warning
     for both because the library held no general warning part; common/warning-triangle@1
     was added for this and is what the lower one now uses.
+  lift: >-
+    every composed part carries `lift: 44.0` because the plate it sits on stands that
+    far out of the chassis. Without it the parts sit at the panel plane and the plate swallows them,
+    which is precisely how this component came to render as a blank faceplate. The
+    figure tracks the body's `out` and must move with it.
   slope-3d: >-
     WHAT CHANGED AND WHY. The slope was first carried as `out: 2.5` with a `profile-y`
     on the `body` node. It rendered plausibly in a front elevation and was wrong in
@@ -150,28 +163,51 @@ provenance:
 elements:
   # the three full-width rows; the per-port groups are small enough to stay art
   vent-angled: {at: [0.0, 4.6], size: [205.0, 3.8], class: vent}
-  vent-top-edge: {at: [0.0, 10.35], size: [205.0, 1.85], class: vent}
-  vent-bottom-edge: {at: [0.0, 41.95], size: [205.0, 1.55], class: vent}
+  vent-top-edge: {at: [2.45, 10.35], size: [200.1, 1.85], class: vent}
+  vent-bottom-edge: {at: [2.45, 41.95], size: [200.1, 1.55], class: vent}
 relief:
   features:
-    # THE SLOPE IS A RECESS AT THE TOP OF THE PLATE, NOT THE PLATE STANDING PROUD.
-    # It used to be `out: 2.5` on `body`, and that produced a BLANK FACEPLATE in 3D:
-    # the kit extruded the plate as a 2.5 slab, and every cage, lamp, vent and
-    # silkscreen line - none of which declares relief of its own - sat at the panel
-    # plane inside it. The same root cause painted the plate over its own art in 2D
-    # (fixed in #201). A plug-in unit's plate IS its panel; how far it stands out of
-    # the chassis is the bay's business. So the band is expressed as a SINK measured
-    # down from the plate, which is the same shape read the other way up.
-    - node: vent-angled
-      sink: 2.15
-      color: '#23272b'
+    # THE PLATE STANDS PROUD AND ITS TOP SLOPES BACK, which is what the hardware
+    # does and what the ingestion established. `profile-y` reads down the height:
+    # 0.35 at the top edge, rising to the full 2.5 by 10.4 and flat from there.
+    #
+    # THIS BURIED THE WHOLE FACE ONCE. Declared alone, it extruded the plate as a
+    # slab while every cage, lamp and vent - none of which had relief - stayed at
+    # the panel plane inside it, so 3D showed a blank faceplate. The fix is not to
+    # drop the proudness (that lost the shape the part actually has) but to put
+    # everything else ON the raised surface: `lift: 44.0` on every composed part,
+    # and real `vent` holes for the perforation. `lift` is exactly this - "feature
+    # starts this far off the face" - and the kit builds a lifted part's box as
+    # out - lift, so its own relief still measures from the panel.
+    - node: body
+      out: 44.0
+      profile-y: [[0, 0.0], [10.4, 44.0], [44, 44.0]]
       confidence: estimated
       source: >-
-        the band projects 10.4 in the front elevation and slopes back to the lid at an
-        angle EYED off a perspective render, 10 to 15 degrees, which sets it back 1.8 to
-        2.8; 2.15 is the middle of that. No source gives the angle and no view here is a
-        side elevation. Carried on the vent band because that is the node the slope
-        actually covers - the rest of the face is flat.
+        TWO FIGURES IN ONE PROFILE. The 44 is HOW FAR THE MODULE STANDS OUT OF THE
+        CHASSIS - Jason's reading of an unboxing video and two stills of a DCP-404 seated
+        in a DCP-2, "somewhere between an inch and a half to two inches", i.e. 38 to 51;
+        44 is the middle. It is consistent with the parts: the module is 270 deep in a
+        500-deep chassis, so a slot floor around 226 leaves exactly this much outside.
+        Nothing states the slot depth, so this is an observation, not a measurement.
+        THE BAND SLOPES BACK THE WHOLE PROTRUSION, not a few millimetres of it. It runs
+        from the plate's front face all the way to where it meets the chassis, so the
+        profile is 0 at the top edge rising to the full 44 by y = 10.4 - one straight
+        ramp, no flat at the top.
+        AN EARLIER VERSION HAD 2.15 AND IT WAS ARITHMETIC BACKWARDS. The 10-15 degrees
+        eyed off the render is the ramp's angle from the FACE PLANE, and a band 10.4 tall
+        at 13 degrees from the face runs about 45 deep - which is the protrusion, and is
+        why the two figures agree. Reading the same angle as a setback FROM the plate gave
+        2.15, a slope invisible at any scale and wrong by a factor of twenty.
+        NO `color` is set, so the sides sample the node's own art.
+    # the perforation is holes through a 2.5 plate, not printing on it
+    - {node: vent-angled, vent: 44.0, confidence: estimated, source: holes through the sloped band}
+    - {node: vent-top-edge, vent: 44.0, confidence: estimated, source: holes through the plate}
+    - {node: vent-bottom-edge, vent: 44.0, confidence: estimated, source: holes through the plate}
+    - {node: vent-columns, vent: 44.0, confidence: estimated, source: holes through the plate}
+    - {node: vent-client, vent: 44.0, confidence: estimated, source: holes through the plate}
+    - {node: vent-honeycomb, vent: 44.0, confidence: estimated, source: holes through the plate}
+    - {node: vent-line, vent: 44.0, confidence: estimated, source: holes through the plate}
 body:
   depth: 270.0
   color: '#8f959c'
@@ -179,29 +215,29 @@ skins: [default]
 parts:
   # four client cages ABUTTING as one block - 18.98 pitch, so the per-port
   # ganged opening (18.5) and not a standalone qsfp28 cage (20.0, would overlap)
-  - {ref: std/qsfp-ganged@1, id: c1, at: [38.42, 29.30], attrs: {media: qsfp28, role: client}}
-  - {ref: std/qsfp-ganged@1, id: c2, at: [57.40, 29.30], attrs: {media: qsfp28, role: client}}
-  - {ref: std/qsfp-ganged@1, id: c3, at: [76.38, 29.30], attrs: {media: qsfp28, role: client}}
-  - {ref: std/qsfp-ganged@1, id: c4, at: [95.37, 29.30], attrs: {media: qsfp28, role: client}}
+  - {ref: std/qsfp-ganged@1, id: c1, at: [38.42, 29.30], lift: 44.0, attrs: {media: qsfp28, role: client}}
+  - {ref: std/qsfp-ganged@1, id: c2, at: [57.40, 29.30], lift: 44.0, attrs: {media: qsfp28, role: client}}
+  - {ref: std/qsfp-ganged@1, id: c3, at: [76.38, 29.30], lift: 44.0, attrs: {media: qsfp28, role: client}}
+  - {ref: std/qsfp-ganged@1, id: c4, at: [95.37, 29.30], lift: 44.0, attrs: {media: qsfp28, role: client}}
   # the line port stands alone past the honeycomb block
-  - {ref: std/qsfp-dd@1, id: line, at: [147.88, 29.09], attrs: {media: qsfp-dd, role: line}}
+  - {ref: std/qsfp-dd@1, id: line, at: [147.88, 29.09], lift: 44.0, attrs: {media: qsfp-dd, role: line}}
   # a green lamp beside each word of every port's Tx/Rx caption, ABOVE the cage
-  - {ref: common/led-dot@1, id: led-c1-tx, at: [45.07, 25.75], attrs: {function: tx}}
-  - {ref: common/led-dot@1, id: led-c1-rx, at: [48.27, 25.75], attrs: {function: rx}}
-  - {ref: common/led-dot@1, id: led-c2-tx, at: [64.05, 25.75], attrs: {function: tx}}
-  - {ref: common/led-dot@1, id: led-c2-rx, at: [67.25, 25.75], attrs: {function: rx}}
-  - {ref: common/led-dot@1, id: led-c3-tx, at: [83.03, 25.75], attrs: {function: tx}}
-  - {ref: common/led-dot@1, id: led-c3-rx, at: [86.23, 25.75], attrs: {function: rx}}
-  - {ref: common/led-dot@1, id: led-c4-tx, at: [102.02, 25.75], attrs: {function: tx}}
-  - {ref: common/led-dot@1, id: led-c4-rx, at: [105.22, 25.75], attrs: {function: rx}}
+  - {ref: common/led-dot@1, id: led-c1-tx, at: [45.07, 25.75], lift: 44.0, attrs: {function: tx}}
+  - {ref: common/led-dot@1, id: led-c1-rx, at: [48.27, 25.75], lift: 44.0, attrs: {function: rx}}
+  - {ref: common/led-dot@1, id: led-c2-tx, at: [64.05, 25.75], lift: 44.0, attrs: {function: tx}}
+  - {ref: common/led-dot@1, id: led-c2-rx, at: [67.25, 25.75], lift: 44.0, attrs: {function: rx}}
+  - {ref: common/led-dot@1, id: led-c3-tx, at: [83.03, 25.75], lift: 44.0, attrs: {function: tx}}
+  - {ref: common/led-dot@1, id: led-c3-rx, at: [86.23, 25.75], lift: 44.0, attrs: {function: rx}}
+  - {ref: common/led-dot@1, id: led-c4-tx, at: [102.02, 25.75], lift: 44.0, attrs: {function: tx}}
+  - {ref: common/led-dot@1, id: led-c4-rx, at: [105.22, 25.75], lift: 44.0, attrs: {function: rx}}
   # the line port's lamps sit low, flanking its cage rather than above it
-  - {ref: common/led-rect@1, id: led-line-tx, at: [140.90, 36.49], attrs: {function: tx}}
-  - {ref: common/led-rect@1, id: led-line-rx, at: [169.30, 36.49], attrs: {function: rx}}
+  - {ref: common/led-rect@1, id: led-line-tx, at: [140.90, 36.49], lift: 44.0, attrs: {function: tx}}
+  - {ref: common/led-rect@1, id: led-line-rx, at: [169.30, 36.49], lift: 44.0, attrs: {function: rx}}
   # Power and Status at the lower left, which the stencil placed at the far right
-  - {ref: common/led-rect@1, id: led-power, at: [5.30, 36.70], attrs: {function: power}}
-  - {ref: common/led-rect@1, id: led-status, at: [11.90, 36.70], attrs: {function: status}}
+  - {ref: common/led-rect@1, id: led-power, at: [5.30, 36.70], lift: 44.0, attrs: {function: power}}
+  - {ref: common/led-rect@1, id: led-status, at: [11.90, 36.70], lift: 44.0, attrs: {function: status}}
   # two different symbols: the IEC 60825 laser burst over the ISO 7010 general
   # warning. common/warning-triangle@1 was added for the lower one - the library
   # had only the laser part - see provenance/markings
-  - {ref: common/laser-warning@1, id: warn-laser, at: [7.80, 24.10], attrs: {marking: laser}}
-  - {ref: common/warning-triangle@1, id: warn-general, at: [7.80, 29.62], attrs: {marking: general}}
+  - {ref: common/laser-warning@1, id: warn-laser, at: [7.80, 24.10], lift: 44.0, attrs: {marking: laser}}
+  - {ref: common/warning-triangle@1, id: warn-general, at: [7.80, 29.62], lift: 44.0, attrs: {marking: general}}
