@@ -28,7 +28,7 @@ import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, sv
          setNodeStates, nodeStates, setNodeFields, restyleText,
          setPulled as setReliefPulled, pulledPaths,
          buildFaceRelief, bodyBoxes } from './relief.js';
-import { applyOverrides } from './swap.js';
+import { applyOverrides, nestedBays } from './swap.js';
 import { jdist } from './dist.js';
 import { createLamps } from './lamps.js';
 
@@ -417,14 +417,25 @@ export function createViewer(container, opts = {}) {
       return {comp: c, text: await svgSource(url, SCOPE)};
     };
     let total = 0;
+    // A NESTED OVERRIDE IS NOT IN ANY DEVICE'S BAY LIST, so the cheap guard
+    // below cannot see one and every view it names would be skipped - the swap
+    // would apply in 2D and the 3D scene, which is built from this text and not
+    // from that DOM, would keep the old occupant. Nested paths are the ones
+    // carrying `/module/`, which no device bay id ever does, so recognising them
+    // costs a string test rather than a parse of every view.
+    const nestedOverride = Object.keys(OVERRIDES).some(k => k.includes('/module/'));
     for (const [view, bays] of Object.entries(devIndex.bays)) {
-      if (!bays.some(b => Object.prototype.hasOwnProperty.call(OVERRIDES, b.id))) continue;
+      if (!nestedOverride
+          && !bays.some(b => Object.prototype.hasOwnProperty.call(OVERRIDES, b.id))) continue;
       const url = `${DIST}${DEV}.${cfg}.${view}.svg`;
       let text;
       try { text = await svgSource(url, SCOPE); } catch { continue; }
       const doc = new DOMParser().parseFromString(text, 'image/svg+xml');
       if (doc.querySelector('parsererror')) continue;
-      const n = await applyOverrides(doc.documentElement, bays, OVERRIDES, loadSkin);
+      // resolved from the drawing, because which nested bays exist depends on
+      // what this configuration seated
+      const all = bays.concat(nestedBays(doc.documentElement, byRef));
+      const n = await applyOverrides(doc.documentElement, all, OVERRIDES, loadSkin);
       if (!n) continue;
       setSvgOverride(url, new XMLSerializer().serializeToString(doc), SCOPE);
       total += n;

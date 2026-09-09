@@ -60,20 +60,28 @@ export function bayTransform(bay, c) {
 //   data-path="bdm/status" -> data-path="front-0/module/status"
 // The component's own root id/path is the wrapper's already, so it is dropped
 // rather than renamed - two nodes claiming one path is the bug this fixes.
-export function rename(wrap, name, bayId) {
+// AN ID BASE AND A PATH BASE ARE TWO ARGUMENTS, not one used twice. render.py
+// joins an id with `--` and a path with `/`, so the same bay is the element
+// `slot-1--module--ppm-2` at the path `slot-1/module/ppm-2`. On a bay of the
+// DEVICE those are both `slot-1` and one parameter served both by luck; a bay
+// nested inside a seated module is the case where they differ, and rewriting the
+// paths with the id base put every descendant of a swapped module at a path
+// nothing could address. `pathBase` defaults to `idBase`, so a device bay - and
+// the existing caller in the tests - reads exactly as before.
+export function rename(wrap, name, idBase, pathBase = idBase) {
   const renamed = new Map();
   for (const el of wrap.querySelectorAll('[id],[data-path]')) {
     const id = el.getAttribute('id');
     if (id === name) el.removeAttribute('id');
     else if (id && id.startsWith(name + '--')) {
-      const to = `${bayId}--module--${id.slice(name.length + 2)}`;
+      const to = `${idBase}--module--${id.slice(name.length + 2)}`;
       renamed.set(id, to);
       el.setAttribute('id', to);
     }
     const dp = el.getAttribute('data-path');
-    if (dp === name) el.setAttribute('data-path', `${bayId}/module`);
+    if (dp === name) el.setAttribute('data-path', `${pathBase}/module`);
     else if (dp && dp.startsWith(name + '/'))
-      el.setAttribute('data-path', `${bayId}/module/${dp.slice(name.length + 1)}`);
+      el.setAttribute('data-path', `${pathBase}/module/${dp.slice(name.length + 1)}`);
   }
   // RENAMING A DEFINITION IS HALF THE JOB. A skin that clips, masks or fills by
   // reference carries `clip-path="url(#drive-carrier-25--w0)"` beside the
@@ -99,10 +107,19 @@ export function rename(wrap, name, bayId) {
 // The <g> that represents `ref` seated in `bay`, built from the component's
 // compiled standalone skin. `ownerDoc` is whichever document will hold it - the
 // live page for shell.js, a parsed face for viewer3d.js.
-export function seatModule(ownerDoc, bayId, bay, ref, comp, skinText) {
+// `idBase` IS NOT `bayId`, AND ON A NESTED BAY THEY DIVERGE. A path uses `/` and
+// a compiled id uses `--`, so the bay at path `slot-1/module/ppm-2` is the
+// element `slot-1--module--ppm-2`. On a bay of the DEVICE the two happen to be
+// the same string - `slot-1` - which is why one argument served both until a
+// nested bay could be swapped at all: the removal below looked for an id built
+// out of the path, found nothing, and the seat appended a SECOND occupant beside
+// the first. The bay then held two modules and the drawing showed the old one.
+// Callers pass the id off the bay element itself; it defaults to `bayId` so a
+// device bay reads exactly as before.
+export function seatModule(ownerDoc, bayId, bay, ref, comp, skinText, idBase = bayId) {
   const doc = new DOMParser().parseFromString(skinText, 'image/svg+xml');
   const wrap = ownerDoc.createElementNS(NS, 'g');
-  wrap.setAttribute('id', `${bayId}--module`);
+  wrap.setAttribute('id', `${idBase}--module`);
   wrap.setAttribute('data-path', `${bayId}/module`);
   wrap.setAttribute('data-ref', ref);
   wrap.setAttribute('transform', bayTransform(bay, comp));
@@ -119,7 +136,7 @@ export function seatModule(ownerDoc, bayId, bay, ref, comp, skinText) {
       wrap.setAttribute(a.name, a.value);
   for (const n of [...doc.documentElement.childNodes])
     (n === root ? [...n.childNodes] : [n]).forEach(k => wrap.appendChild(ownerDoc.importNode(k, true)));
-  rename(wrap, comp.name, bayId);
+  rename(wrap, comp.name, idBase, bayId);
   return wrap;
 }
 
@@ -128,6 +145,35 @@ export function seatModule(ownerDoc, bayId, bay, ref, comp, skinText) {
 // selector work on the live DOM and on a fetched face alike.
 function bayGroup(rootEl, bayId) {
   return rootEl.querySelector(`[data-path="${CSS.escape(bayId)}"]`);
+}
+
+// WHICH NESTED BAYS EXIST DEPENDS ON WHAT IS SEATED, so they cannot be in the
+// device manifest and never could be: a `dcp-2` has two traffic slots, and
+// whether it also has two PPM bays depends on whether the thing in slot 1 is an
+// A22 or a DCP-404. They are read off the DRAWING instead, which is the only
+// place that knows.
+//
+// The carrier is the path up to the last `/module` - `slot-1/module/ppm-1` is a
+// bay in whatever is seated in `slot-1` - and its `data-ref` names the component
+// whose `bays` components.json now publishes.
+//
+// RESOLVED ON DEMAND, NOT MERGED INTO THE DEVICE'S OWN LIST. `meta.bays` means
+// "the bays this device declares" and the status line counts it; a nested bay is
+// a property of the current population, not of the device, and folding the two
+// together would make that count answer a different question depending on what
+// happened to be seated.
+export function nestedBays(rootEl, compByRef) {
+  const out = [];
+  for (const el of rootEl.querySelectorAll('[data-class="bay"]')) {
+    const path = el.getAttribute('data-path') || '';
+    const cut = path.lastIndexOf('/module/');
+    if (cut < 0) continue;                    // a bay on the device itself
+    const carrier = bayGroup(rootEl, path.slice(0, cut + '/module'.length));
+    const ref = (carrier?.getAttribute('data-ref') || '').split(':')[0];
+    const bay = ref ? compByRef(ref)?.bays?.[path.slice(cut + '/module/'.length)] : null;
+    if (bay) out.push({...bay, id: path});
+  }
+  return out;
 }
 
 // Apply a whole override map to one compiled face. `overrides` is bay id -> ref,
@@ -146,14 +192,15 @@ export async function applyOverrides(rootEl, bays, overrides, loadSkin) {
     if (!Object.prototype.hasOwnProperty.call(overrides, bay.id)) continue;
     const g = bayGroup(rootEl, bay.id);
     if (!g) continue;
-    g.querySelector(`[id="${CSS.escape(bay.id)}--module"]`)?.remove();
+    const idBase = g.getAttribute('id') || bay.id;
+    g.querySelector(`[id="${CSS.escape(idBase)}--module"]`)?.remove();
     applied++;
     const ref = overrides[bay.id];
     if (!ref) continue;                       // deliberately empty
     const loaded = await loadSkin(ref);
     if (!loaded) continue;                    // unknown ref: leave the bay open
     g.appendChild(seatModule(rootEl.ownerDocument, bay.id, bay, ref,
-                             loaded.comp, loaded.text));
+                             loaded.comp, loaded.text, idBase));
   }
   return applied;
 }

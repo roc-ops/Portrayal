@@ -903,13 +903,56 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         # A component bay declares no lift of its own; it takes one from a relief
         # feature naming the opening, which the two loops above have already
         # applied by the time this runs.
+        # A BAY IS A GROUP HOLDING ITS OPENING AND ITS OCCUPANT, on a component
+        # exactly as on a device face. It was a bare rect with the occupant
+        # appended somewhere else entirely, and everything downstream assumes the
+        # group shape, so both of the symptoms that made nested bays look broken
+        # fell out of the difference:
+        #   shell.js reads occupancy as `el.querySelector('[data-ref]')` - a
+        #   DESCENDANT query - so an occupied nested bay always read "open"; and
+        #   swap.js does `g.querySelector('#<id>--module')?.remove()` then
+        #   `g.appendChild(...)`, which against a rect removed nothing and
+        #   appended the new occupant INSIDE a <rect>, where SVG will not draw
+        #   it. The drawing did not change and the DOM claimed two occupants.
+        # The skin's rect becomes `--opening`, as a device bay's does, and the
+        # group takes its place in the SKIN'S OWN DRAW ORDER rather than at the
+        # end - the opening is a hole in the plate and has to stay where the
+        # plate put it.
         bay_lift = None
+        opening = parent_of = None
         for node in g.iter():
             if node.get("id") == want:
-                node.set("data-path", f"{path}/{bay_id}")
-                node.set("data-class", "bay")
-                bay_lift = node.get("data-z-lift")
+                opening = node
                 break
+        if opening is not None:
+            for cand in g.iter():
+                if opening in list(cand):
+                    parent_of = cand
+                    break
+        bay_g = None
+        if opening is not None and parent_of is not None:
+            bay_lift = opening.get("data-z-lift")
+            bay_g = ET.Element(f"{{{SVG_NS}}}g")
+            bay_g.set("id", want)
+            bay_g.set("data-path", f"{path}/{bay_id}")
+            bay_g.set("data-class", "bay")
+            # THE LIFT BELONGS TO THE BAY, NOT TO THE HOLE IN IT. relief.js sums
+            # data-z-lift up the ancestor chain, so with the occupant inside this
+            # group the group is where one reading serves both. Leaving it on the
+            # opening AND copying it onto the occupant - which is what this did
+            # while they were siblings - would now count it twice.
+            if bay_lift:
+                bay_g.set("data-z-lift", bay_lift)
+                del opening.attrib["data-z-lift"]
+            parent_of.insert(list(parent_of).index(opening), bay_g)
+            parent_of.remove(opening)
+            opening.set("id", f"{want}--opening")
+            bay_g.append(opening)
+        else:
+            # L48 reports a bay whose id names nothing in the skin; without an
+            # anchor there is no place in the drawing to put the group, so the
+            # occupant is appended as it always was rather than dropped.
+            pass
         # A CONFIGURATION CAN SEAT A NESTED BAY. `seated` is the configuration's
         # bay map, keyed by bay path without the `/module` steps - `riser-1/
         # slot-1` - and it wins over the module's own default, an empty string
@@ -950,9 +993,22 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         # inserts the occupant before the skin - the same word and the same
         # mechanism `parts:` has carried all along. It only means anything if
         # the skin has real holes; over a stroked outline the occupant vanishes.
-        if bay_lift:
-            sub.set("data-z-lift", bay_lift)
-        if bay.get("behind"):
+        # `behind` moves the WHOLE BAY to the front, not just its occupant. The
+        # group has to stay one node for the tree and the swap to find it, and
+        # moving it wholesale is what keeps the skin painting over the card: on
+        # the Dell risers the skin is three invisible anchor rects and the plate
+        # is a composed part appended after them, so a bay group at behind_at
+        # still ends up under the metal, exactly as the loose occupant did.
+        if bay_g is not None:
+            bay_g.append(sub)
+            if bay.get("behind"):
+                for holder in g.iter():
+                    if bay_g in list(holder):
+                        holder.remove(bay_g)
+                        break
+                g.insert(behind_at, bay_g)
+                behind_at += 1
+        elif bay.get("behind"):
             g.insert(behind_at, sub)
             behind_at += 1
         else:
