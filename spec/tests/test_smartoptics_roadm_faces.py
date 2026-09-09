@@ -82,9 +82,10 @@ def test_the_osc_captions_sit_either_side_of_their_own_leds():
         pl = {p["id"]: p for p in front(name)["components"]["placements"]}
         tx_led = pl["led-osc-tx"]["at"][0] + 1.0     # led-dot is 2.0 square
         rx_led = pl["led-osc-rx"]["at"][0] + 1.0
-        cap = [l for l in labels(name) if l.get("for") == "port-osc" and l["text"] in ("Tx", "Rx")]
-        tx = next(l for l in cap if l["text"] == "Tx")["at"][0]
-        rx = next(l for l in cap if l["text"] == "Rx")["at"][0]
+        cap = [lb for lb in labels(name)
+               if lb.get("for") == "port-osc" and lb["text"] in ("Tx", "Rx")]
+        tx = next(lb for lb in cap if lb["text"] == "Tx")["at"][0]
+        rx = next(lb for lb in cap if lb["text"] == "Rx")["at"][0]
         # Tx caption left of its LED, Rx right of its own, and by the same margin
         assert tx < tx_led and rx > rx_led, name
         assert abs((tx_led - tx) - (rx - rx_led)) < 0.25, f"{name}: captions not symmetric"
@@ -102,7 +103,8 @@ def test_power_and_status_do_not_run_together():
         pl = {p["id"]: p for p in front(name)["components"]["placements"]}
         pitch = pl["led-status"]["at"][0] - pl["led-power"]["at"][0]
         assert pitch > 6.0, f"{name}: status LED pitch {pitch} too tight for the captions"
-        cap = {l["text"]: l["at"][0] for l in labels(name) if l["text"] in ("Power", "Status")}
+        cap = {lb["text"]: lb["at"][0]
+               for lb in labels(name) if lb["text"] in ("Power", "Status")}
         # each caption over its own LED, within a quarter of a millimetre
         for text, led in (("Power", "led-power"), ("Status", "led-status")):
             assert abs(cap[text] - (pl[led]["at"][0] + 1.0)) < 0.25, f"{name}: {text} off its LED"
