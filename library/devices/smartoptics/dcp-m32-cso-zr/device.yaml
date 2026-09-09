@@ -1,0 +1,423 @@
+format: 1
+kind: device
+name: dcp-m32-cso-zr
+version: 1.0.0
+manufacturer: Smartoptics
+model: DCP-M32-CSO-ZR+
+description: 32-channel 150 GHz coherent open line system, 1RU. Mux/demux with EDFA,
+  OCM and OSC, 32 client channels on LC duplex adapters in two rows, plus Line, a
+  1510nm OSC filter port and a 1625nm OTDR port.
+profile: optical
+provenance:
+  method: >-
+    FACT SHEET FIRST, THEN THE ARTWORK - working/intake/factsheets/dcp-m32-cso-zr.md.
+    The inventory and every count came from so-ds-dcp-m32-cso-zr-r1.2 and the DCP-M
+    User Manual before any drawing was opened.
+  size: >-
+    datasheet - so-ds-dcp-m32-cso-zr-r1.2, "Size (WxDxH) 440mm x 510mm x 1RU", 13 kg.
+    NOT TRANSPOSED, unlike the DCP-404's and the DCP-F-A22's, whose labels are: here the
+    labels and values are in the printed order, confirmed three ways - the ordering line
+    spells out "1RU, 19in, D=510mm", UM s13 gives labelled WIDTH/DEPTH/HEIGHT rows, and
+    the DCP-M-DE manual gives a sibling in the same shell 45mm (H) as a number.
+    THE DEPTH IS 510, NOT THE DCP-2's 500 and not the DCP-R's 505. The Vyve gap list
+    says "same 440x45x505 family shell - chassis dims can be reused"; that is wrong and
+    the datasheet is right.
+  photo-calibration: >-
+    THE MEASUREMENT FRAME FOR EVERYTHING BELOW, and it is derived rather than assumed.
+    The vendor photograph is 2.1082 px/mm with the face's x=0 at pixel 60.40 and y=0 at
+    pixel 321.5. That comes from a least-squares fit of the sixteen upper Tx/Rx strip
+    centres against the stencil's connection points, run separately on the ten strips
+    left of the mid-face gap and the six right of it: BOTH halves return 2.1082 px/mm to
+    four figures, which is what makes the scale trustworthy, and the half that also
+    agrees with the ETH0/RS232 and OSC-cage connection points to 0.2mm fixes the origin.
+    The unit in the photograph HAS NO RACK EARS - it is a bare chassis on white - so the
+    440 body is the whole of the dark plate, and thresholding that plate's edge is what
+    the earlier 2.1318 px/mm came from: it overshoots by six pixels on the left and three
+    on the right where the edge is soft. An independent check falls out of the fit rather
+    than into it: the Line port's lone strip measures 13.28 against a part that is 13.2
+    wide.
+  port-positions: >-
+    FROM THE PHOTOGRAPH, and it disagrees with the stencil in one specific place.
+    Under the calibration above the eight upper channel-pair midpoints sit on a 30.83
+    pitch to better than 0.1mm, seven times running, with one wider gap in the middle of
+    the face. The stencil's connection points agree with the photograph to 0.1mm for the
+    three pairs RIGHT of that gap and are 5.1mm to the right of it for the five pairs
+    left of it - because the stencil draws the mid-face gap 36.5 wide where the unit has
+    41.7. Everything else in the frame - the ETH0/RS232 jack centre at 15.0, the OSC cage
+    centre at 35.0 - lands on the stencil's cps to 0.2mm. So the photograph is not
+    mis-scaled; the drawing has one block in the wrong place, and the photograph is taken
+    for all 35 adapters so that the face is internally consistent.
+  stencil-defects: >-
+    SIX now, in one master, which is why nothing here is taken from it unchecked. The
+    channel numbers print 0.5 high and run past the datasheet's plan; one caption reads
+    "Rx Rx" where every other reads "Rx Tx"; the hex vent field is drawn as six cells; the
+    1510, OTDR and Line adapters are drawn in the LOWER row where the unit has them in
+    the upper; those first two are drawn 13-16mm from where they sit and NOT abutting,
+    where the unit abuts them as one pair; and the mid-face gap is 5.2mm narrow.
+  rows: >-
+    FROM THE PHOTOGRAPH. Each channel block carries a white Tx/Rx strip above the upper
+    adapters and below the lower ones; the 1510/OTDR/Line group has ONE strip, at the
+    upper position, and bare plate beneath. Rows measured: upper labels baseline 5.5,
+    upper strips 6.5, upper adapters 10.4, lower adapters 23.4, lower strips 36.0, lower
+    labels baseline 40.8.
+  channel-plan: >-
+    silkscreen, read off the photograph - D914 to D960.5 on a 150 GHz grid, sixteen per
+    row. NEITHER THE STENCIL NOR THE VYVE GAP LIST CAN BE TRUSTED HERE: the master prints
+    every number 0.5 high and ends at 961, outside the datasheet's stated plan, and the
+    gap list transcribes p.24 as "9540/9175/9200/9130", which are misreadings of the same
+    labels. Two sources wrong in different ways is why this comes off the photograph.
+  client-lamps: >-
+    smartoptics/m32-client-lamp@1, one per channel, coincident with the Tx/Rx strip -
+    THE CAPTION IS THE LAMP. See that part for the count, the manual's behaviour, the
+    elimination argument that places them, and the objection that does not defeat it.
+  line-and-osc-lamps: >-
+    THE PHOTOGRAPH SETTLES THE COUNTS THE DATASHEET LEFT OPEN, differently for each.
+    The OSC port has TWO round lamps, between a printed "Tx" on their left and "Rx" on
+    their right - visible as two unlit lenses, so common/led-dot@1 twice. The Line port
+    has ONE white strip, identical to a client channel's, so it takes the same part the
+    channels do. Both were unmodelled while the count was open; neither is now.
+    The 1510 and 1625 OTDR ports carry the same strip and get NO lamp: the datasheet's
+    VISUAL INDICATORS block names an LED for the clients, the Line and the OSC and names
+    none for those two, so their strips are drawn as printed decor.
+  connectors: >-
+    all optical ports are LC. "All optical ports are of LC connector type" (DS FRONT SIDE
+    CONNECTIONS), and UM s13 adds the polish - "Line port(s) LC/UPC connector type". That
+    is a harder statement than the DCP-F family got and it covers all 35 adapters.
+  front-management: >-
+    UM s3.7 - on this variant the console and ETH0 are on the FRONT, with ETH1 to ETH5 at
+    the rear. The DCP-M40's are all at the rear. So the DCP-2's rear ETH0-over-CONSOLE
+    pair must not be copied onto this device, and fig 2-7 and the quick-turn-up guide's
+    fig 3, which show a DCP-M40 rear, are live traps.
+  vent-fields: >-
+    three hex fields on the front, all photo-measured: an L-shaped one over the left block
+    notched around the OSC lamps and cage, a two-column one in the mid-face gap, and a
+    one-column one hard against the right edge. Each is a lighter backing rect with the
+    library's vent pattern painted over it, because the pattern draws only its holes and a
+    vent field on a plate this dark is otherwise invisible. The 62mm between the last
+    channel and the right-hand field is bare plate on the real unit, not an omission.
+  power: >-
+    datasheet POWER CONSUMPTION. Recorded on the contract rather than inferred from the
+    chassis, which is a different product.
+gaps:
+- what: client-lamp-positions
+  scope: [client-leds]
+  reason: needs-photo
+  note: >-
+    The 32 client lamps are placed coincident with each channel's Tx/Rx strip. The COUNT
+    and the FUNCTION are datasheet and manual; the POSITION is arrived at by elimination
+    on a photograph - only three features repeat per channel, and the number and the
+    adapter are ruled out - rather than by seeing a lit lamp. The part carries the
+    objection in full, including the two ports on this same face that wear the identical
+    strip with no datasheet LED behind it.
+  wanted: >-
+    a photograph of a unit CARRYING TRAFFIC. Every image held shows Power and Status
+    green while every client strip is white, which says the channels are dark, not that
+    the lamps are elsewhere. With light on a few channels, whatever turns green settles
+    it outright.
+- what: rear-face
+  scope: [rear]
+  reason: needs-photo
+  note: >-
+    The rear carries two PSU bays, a fan tray and ETH1-ETH5, and the DCP-M manual's rear
+    figures are of the DCP-M40, a different product with all its management at the back.
+    No photograph or figure of THIS unit's rear exists in the corpus, so the rear view is
+    the chassis envelope and its bays only.
+  wanted: >-
+    a photograph of a DCP-M32 rear, or a manual figure that names it as such.
+- what: side-top-bottom-views
+  scope: [left, right, top, bottom]
+  reason: needs-photo
+  note: >-
+    Only front and rear are modelled. 510 deep is stated but nothing in the corpus shows
+    a side, top or bottom of this unit.
+  wanted: a square-on photograph of the lid or a flank.
+chassis:
+  width: 440
+  height: 45
+  depth: 510
+  ru: 1
+  color: '#1b1e21'
+groups:
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 1
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the front-panel management interfaces - ETH0 as an RJ45 craft port and the RS-232
+      console. UM s3.7 puts both on the front of this variant, unlike the DCP-M40.
+  line:
+    term: Port
+    role: traffic
+    index-origin: 1
+    mixed: >-
+      the line side, as against the channels added and dropped from it: the Line port,
+      the 1510nm OSC filter and the 1625nm OTDR filter, plus the SFP cage that terminates
+      the supervisory channel. Three LC duplex adapters and one SFP, so the block declares
+      no media of its own and each port carries its own.
+  channels:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber, role: channel}
+    description: >-
+      the 32 add/drop channel ports, silkscreened D914 to D960.5 on a 150 GHz grid. They
+      run left to right along the upper row and then along the lower, so the rows are a
+      layout rather than a split.
+  client-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: >-
+      one indicator per client channel, coincident with that channel's Tx/Rx strip. Green
+      when the monitor sees light on the port, off when it does not.
+  line-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: >-
+      the line side's own indicators - one strip on the Line port and two round lamps on
+      the OSC, which is how the unit itself distinguishes them.
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the chassis indicators, which report the unit rather than any one port
+  markings:
+    term: Marking
+    role: furniture
+    index-origin: 1
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: >-
+        datasheet REAR - two hot-swappable supplies, single or dual feeding, AC and DC
+        mixable in one chassis.
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+views:
+  front:
+    size:
+      w: 440
+      h: 45
+    panel:
+      decor:
+        - {at: [0.0, 1.7], size: [440.0, 1.0], rx: 0.4, fill: '#23262a', kind: vent-backing}
+        - {at: [0.0, 1.7], size: [440.0, 1.0], rx: 0.4, pattern: vent, vent: 12}
+        - {at: [0.0, 42.3], size: [440.0, 2.5], rx: 0.4, fill: '#23262a', kind: vent-backing}
+        - {at: [0.0, 42.3], size: [440.0, 2.5], rx: 0.4, pattern: vent, vent: 12}
+        - {at: [27.9, 10.3], size: [34.6, 12.2], rx: 1.2, fill: '#2b2f33', kind: vent-backing}
+        - {at: [27.9, 10.3], size: [34.6, 12.2], rx: 1.2, pattern: vent, vent: 14}
+        - {at: [43.4, 22.2], size: [19.1, 7.0], rx: 1.2, fill: '#2b2f33', kind: vent-backing}
+        - {at: [43.4, 22.2], size: [19.1, 7.0], rx: 1.2, pattern: vent, vent: 14}
+        - {at: [267.1, 9.3], size: [10.2, 26.3], rx: 1.2, fill: '#2b2f33', kind: vent-backing}
+        - {at: [267.1, 9.3], size: [10.2, 26.3], rx: 1.2, pattern: vent, vent: 14}
+        - {at: [432.5, 9.0], size: [5.7, 26.4], rx: 1.2, fill: '#2b2f33', kind: vent-backing}
+        - {at: [432.5, 9.0], size: [5.7, 26.4], rx: 1.2, pattern: vent, vent: 14}
+        - {at: [66.06, 6.5], size: [13.2, 2.0], rx: 0.25, fill: '#eef0f2', kind: caption-strip}
+        - {at: [79.26, 6.5], size: [13.2, 2.0], rx: 0.25, fill: '#eef0f2', kind: caption-strip}
+    silkscreen:
+      - {at: [2.7, 8.3], text: smartoptics, font-size: 3.8, fill: '#eef1f4', anchor: start}
+      - {at: [39.7, 8.5], text: DCP-M32-CSO-ZR+, font-size: 2.4, fill: '#b9bfc5', anchor: start}
+      - {at: [69.36, 8.05], text: Tx, font-size: 1.5, fill: '#1c1f22', for: port-1510}
+      - {at: [75.96, 8.05], text: Rx, font-size: 1.5, fill: '#1c1f22', for: port-1510}
+      - {at: [82.56, 8.05], text: Tx, font-size: 1.5, fill: '#1c1f22', for: port-otdr}
+      - {at: [89.16, 8.05], text: Rx, font-size: 1.5, fill: '#1c1f22', for: port-otdr}
+      - {at: [3.80, 22.00], text: ETH0, font-size: 1.8, fill: '#dfe4e8', rotate: -90, for: eth0}
+      - {at: [3.80, 35.10], text: RS232, font-size: 1.8, fill: '#dfe4e8', rotate: -90, for: rs232}
+      - {at: [30.00, 24.13], text: Tx, font-size: 1.7, fill: '#e8ecef', anchor: end, for: led-osc-tx}
+      - {at: [40.50, 24.13], text: Rx, font-size: 1.7, fill: '#e8ecef', anchor: start, for: led-osc-rx}
+      - {at: [35.30, 41.00], text: OSC, font-size: 2.0, fill: '#e8ecef', for: osc-sfp}
+      - {at: [51.90, 35.50], text: Power, font-size: 1.5, fill: '#dfe4e8', for: led-power}
+      - {at: [58.00, 35.50], text: Status, font-size: 1.5, fill: '#dfe4e8', for: led-status}
+      - {at: [72.66, 5.5], text: '1510', font-size: 1.7, fill: '#e8ecef', for: port-1510}
+      - {at: [85.86, 5.5], text: '1625 OTDR', font-size: 1.7, fill: '#e8ecef', for: port-otdr}
+      - {at: [103.69, 5.5], text: 'Line', font-size: 1.7, fill: '#e8ecef', for: port-line}
+      - {at: [121.52, 5.5], text: '914', font-size: 1.5, fill: '#e8ecef', for: ch-914}
+      - {at: [134.72, 5.5], text: '915.5', font-size: 1.5, fill: '#e8ecef', for: ch-915p5}
+      - {at: [152.35, 5.5], text: '920', font-size: 1.5, fill: '#e8ecef', for: ch-920}
+      - {at: [165.55, 5.5], text: '921.5', font-size: 1.5, fill: '#e8ecef', for: ch-921p5}
+      - {at: [183.18, 5.5], text: '926', font-size: 1.5, fill: '#e8ecef', for: ch-926}
+      - {at: [196.38, 5.5], text: '927.5', font-size: 1.5, fill: '#e8ecef', for: ch-927p5}
+      - {at: [214.01, 5.5], text: '932', font-size: 1.5, fill: '#e8ecef', for: ch-932}
+      - {at: [227.21, 5.5], text: '933.5', font-size: 1.5, fill: '#e8ecef', for: ch-933p5}
+      - {at: [244.85, 5.5], text: '938', font-size: 1.5, fill: '#e8ecef', for: ch-938}
+      - {at: [258.05, 5.5], text: '939.5', font-size: 1.5, fill: '#e8ecef', for: ch-939p5}
+      - {at: [286.59, 5.5], text: '944', font-size: 1.5, fill: '#e8ecef', for: ch-944}
+      - {at: [299.79, 5.5], text: '945.5', font-size: 1.5, fill: '#e8ecef', for: ch-945p5}
+      - {at: [317.42, 5.5], text: '950', font-size: 1.5, fill: '#e8ecef', for: ch-950}
+      - {at: [330.62, 5.5], text: '951.5', font-size: 1.5, fill: '#e8ecef', for: ch-951p5}
+      - {at: [348.25, 5.5], text: '956', font-size: 1.5, fill: '#e8ecef', for: ch-956}
+      - {at: [361.45, 5.5], text: '957.5', font-size: 1.5, fill: '#e8ecef', for: ch-957p5}
+      - {at: [121.52, 40.8], text: '917', font-size: 1.5, fill: '#e8ecef', for: ch-917}
+      - {at: [134.72, 40.8], text: '918.5', font-size: 1.5, fill: '#e8ecef', for: ch-918p5}
+      - {at: [152.35, 40.8], text: '923', font-size: 1.5, fill: '#e8ecef', for: ch-923}
+      - {at: [165.55, 40.8], text: '924.5', font-size: 1.5, fill: '#e8ecef', for: ch-924p5}
+      - {at: [183.18, 40.8], text: '929', font-size: 1.5, fill: '#e8ecef', for: ch-929}
+      - {at: [196.38, 40.8], text: '930.5', font-size: 1.5, fill: '#e8ecef', for: ch-930p5}
+      - {at: [214.01, 40.8], text: '935', font-size: 1.5, fill: '#e8ecef', for: ch-935}
+      - {at: [227.21, 40.8], text: '936.5', font-size: 1.5, fill: '#e8ecef', for: ch-936p5}
+      - {at: [244.85, 40.8], text: '941', font-size: 1.5, fill: '#e8ecef', for: ch-941}
+      - {at: [258.05, 40.8], text: '942.5', font-size: 1.5, fill: '#e8ecef', for: ch-942p5}
+      - {at: [286.59, 40.8], text: '947', font-size: 1.5, fill: '#e8ecef', for: ch-947}
+      - {at: [299.79, 40.8], text: '948.5', font-size: 1.5, fill: '#e8ecef', for: ch-948p5}
+      - {at: [317.42, 40.8], text: '953', font-size: 1.5, fill: '#e8ecef', for: ch-953}
+      - {at: [330.62, 40.8], text: '954.5', font-size: 1.5, fill: '#e8ecef', for: ch-954p5}
+      - {at: [348.25, 40.8], text: '959', font-size: 1.5, fill: '#e8ecef', for: ch-959}
+      - {at: [361.45, 40.8], text: '960.5', font-size: 1.5, fill: '#e8ecef', for: ch-960p5}
+    components:
+      placements:
+        - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.75], skin: left, optional: ears, group: furniture, rel-pos: 1}
+        - {ref: common/rack-ear@1, id: ear-right, at: [440, 0.75], skin: right, optional: ears, group: furniture, rel-pos: 2}
+        - {ref: common/rj45-ganged-eth@1, id: eth0, at: [8.65, 12.30], rotate: 180, group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 1}
+        - {ref: std/rj45-ganged@2, id: rs232, at: [8.65, 25.50], group: mgmt, attrs: {role: console, media: rj45-serial}, rel-pos: 2}
+        - {ref: std/sfp@1, id: osc-sfp, at: [28.05, 28.30], group: line, attrs: {role: osc, media: sfp}, rel-pos: 1}
+        - {ref: common/led-dot@1, id: led-osc-tx, at: [31.40, 22.60], for: osc-sfp, attrs: {function: tx}, group: line-leds, rel-pos: 1}
+        - {ref: common/led-dot@1, id: led-osc-rx, at: [37.10, 22.60], for: osc-sfp, attrs: {function: rx}, group: line-leds, rel-pos: 2}
+        - {ref: common/led-rect@1, id: led-power, at: [49.60, 36.00], for: chassis, attrs: {function: power}, group: status-leds, rel-pos: 1}
+        - {ref: common/led-rect@1, id: led-status, at: [55.70, 36.00], for: chassis, attrs: {function: status}, group: status-leds, rel-pos: 2}
+        - {ref: common/laser-warning@1, id: warn-laser, at: [266.30, 36.60], attrs: {marking: laser}, group: markings, rel-pos: 1}
+        - {ref: common/warning-triangle@1, id: warn-general, at: [272.30, 36.60], attrs: {marking: general}, group: markings, rel-pos: 2}
+        - {ref: common/lc-duplex-adapter@3, id: port-1510, at: [66.06, 10.4], group: line, attrs: {role: 1510}, rel-pos: 2}
+        - {ref: common/lc-duplex-adapter@3, id: port-otdr, at: [79.26, 10.4], group: line, attrs: {role: otdr}, rel-pos: 3}
+        - {ref: common/lc-duplex-adapter@3, id: port-line, at: [97.09, 10.4], group: line, attrs: {role: line}, rel-pos: 4}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-port-line, at: [97.09, 6.5], for: port-line, attrs: {function: line}, group: line-leds, rel-pos: 3}
+        - {ref: common/lc-duplex-adapter@3, id: ch-914, at: [114.92, 10.4], group: channels, attrs: {channel: '914'}, rel-pos: 1}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-914, at: [114.92, 6.5], for: ch-914, group: client-leds, rel-pos: 1}
+        - {ref: common/lc-duplex-adapter@3, id: ch-915p5, at: [128.12, 10.4], group: channels, attrs: {channel: '915.5'}, rel-pos: 2}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-915p5, at: [128.12, 6.5], for: ch-915p5, group: client-leds, rel-pos: 2}
+        - {ref: common/lc-duplex-adapter@3, id: ch-920, at: [145.75, 10.4], group: channels, attrs: {channel: '920'}, rel-pos: 3}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-920, at: [145.75, 6.5], for: ch-920, group: client-leds, rel-pos: 3}
+        - {ref: common/lc-duplex-adapter@3, id: ch-921p5, at: [158.95, 10.4], group: channels, attrs: {channel: '921.5'}, rel-pos: 4}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-921p5, at: [158.95, 6.5], for: ch-921p5, group: client-leds, rel-pos: 4}
+        - {ref: common/lc-duplex-adapter@3, id: ch-926, at: [176.58, 10.4], group: channels, attrs: {channel: '926'}, rel-pos: 5}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-926, at: [176.58, 6.5], for: ch-926, group: client-leds, rel-pos: 5}
+        - {ref: common/lc-duplex-adapter@3, id: ch-927p5, at: [189.78, 10.4], group: channels, attrs: {channel: '927.5'}, rel-pos: 6}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-927p5, at: [189.78, 6.5], for: ch-927p5, group: client-leds, rel-pos: 6}
+        - {ref: common/lc-duplex-adapter@3, id: ch-932, at: [207.41, 10.4], group: channels, attrs: {channel: '932'}, rel-pos: 7}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-932, at: [207.41, 6.5], for: ch-932, group: client-leds, rel-pos: 7}
+        - {ref: common/lc-duplex-adapter@3, id: ch-933p5, at: [220.61, 10.4], group: channels, attrs: {channel: '933.5'}, rel-pos: 8}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-933p5, at: [220.61, 6.5], for: ch-933p5, group: client-leds, rel-pos: 8}
+        - {ref: common/lc-duplex-adapter@3, id: ch-938, at: [238.25, 10.4], group: channels, attrs: {channel: '938'}, rel-pos: 9}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-938, at: [238.25, 6.5], for: ch-938, group: client-leds, rel-pos: 9}
+        - {ref: common/lc-duplex-adapter@3, id: ch-939p5, at: [251.45, 10.4], group: channels, attrs: {channel: '939.5'}, rel-pos: 10}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-939p5, at: [251.45, 6.5], for: ch-939p5, group: client-leds, rel-pos: 10}
+        - {ref: common/lc-duplex-adapter@3, id: ch-944, at: [279.99, 10.4], group: channels, attrs: {channel: '944'}, rel-pos: 11}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-944, at: [279.99, 6.5], for: ch-944, group: client-leds, rel-pos: 11}
+        - {ref: common/lc-duplex-adapter@3, id: ch-945p5, at: [293.19, 10.4], group: channels, attrs: {channel: '945.5'}, rel-pos: 12}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-945p5, at: [293.19, 6.5], for: ch-945p5, group: client-leds, rel-pos: 12}
+        - {ref: common/lc-duplex-adapter@3, id: ch-950, at: [310.82, 10.4], group: channels, attrs: {channel: '950'}, rel-pos: 13}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-950, at: [310.82, 6.5], for: ch-950, group: client-leds, rel-pos: 13}
+        - {ref: common/lc-duplex-adapter@3, id: ch-951p5, at: [324.02, 10.4], group: channels, attrs: {channel: '951.5'}, rel-pos: 14}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-951p5, at: [324.02, 6.5], for: ch-951p5, group: client-leds, rel-pos: 14}
+        - {ref: common/lc-duplex-adapter@3, id: ch-956, at: [341.65, 10.4], group: channels, attrs: {channel: '956'}, rel-pos: 15}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-956, at: [341.65, 6.5], for: ch-956, group: client-leds, rel-pos: 15}
+        - {ref: common/lc-duplex-adapter@3, id: ch-957p5, at: [354.85, 10.4], group: channels, attrs: {channel: '957.5'}, rel-pos: 16}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-957p5, at: [354.85, 6.5], for: ch-957p5, group: client-leds, rel-pos: 16}
+        - {ref: common/lc-duplex-adapter@3, id: ch-917, at: [114.92, 23.4], group: channels, attrs: {channel: '917'}, rel-pos: 17}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-917, at: [114.92, 36.0], for: ch-917, group: client-leds, rel-pos: 17}
+        - {ref: common/lc-duplex-adapter@3, id: ch-918p5, at: [128.12, 23.4], group: channels, attrs: {channel: '918.5'}, rel-pos: 18}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-918p5, at: [128.12, 36.0], for: ch-918p5, group: client-leds, rel-pos: 18}
+        - {ref: common/lc-duplex-adapter@3, id: ch-923, at: [145.75, 23.4], group: channels, attrs: {channel: '923'}, rel-pos: 19}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-923, at: [145.75, 36.0], for: ch-923, group: client-leds, rel-pos: 19}
+        - {ref: common/lc-duplex-adapter@3, id: ch-924p5, at: [158.95, 23.4], group: channels, attrs: {channel: '924.5'}, rel-pos: 20}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-924p5, at: [158.95, 36.0], for: ch-924p5, group: client-leds, rel-pos: 20}
+        - {ref: common/lc-duplex-adapter@3, id: ch-929, at: [176.58, 23.4], group: channels, attrs: {channel: '929'}, rel-pos: 21}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-929, at: [176.58, 36.0], for: ch-929, group: client-leds, rel-pos: 21}
+        - {ref: common/lc-duplex-adapter@3, id: ch-930p5, at: [189.78, 23.4], group: channels, attrs: {channel: '930.5'}, rel-pos: 22}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-930p5, at: [189.78, 36.0], for: ch-930p5, group: client-leds, rel-pos: 22}
+        - {ref: common/lc-duplex-adapter@3, id: ch-935, at: [207.41, 23.4], group: channels, attrs: {channel: '935'}, rel-pos: 23}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-935, at: [207.41, 36.0], for: ch-935, group: client-leds, rel-pos: 23}
+        - {ref: common/lc-duplex-adapter@3, id: ch-936p5, at: [220.61, 23.4], group: channels, attrs: {channel: '936.5'}, rel-pos: 24}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-936p5, at: [220.61, 36.0], for: ch-936p5, group: client-leds, rel-pos: 24}
+        - {ref: common/lc-duplex-adapter@3, id: ch-941, at: [238.25, 23.4], group: channels, attrs: {channel: '941'}, rel-pos: 25}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-941, at: [238.25, 36.0], for: ch-941, group: client-leds, rel-pos: 25}
+        - {ref: common/lc-duplex-adapter@3, id: ch-942p5, at: [251.45, 23.4], group: channels, attrs: {channel: '942.5'}, rel-pos: 26}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-942p5, at: [251.45, 36.0], for: ch-942p5, group: client-leds, rel-pos: 26}
+        - {ref: common/lc-duplex-adapter@3, id: ch-947, at: [279.99, 23.4], group: channels, attrs: {channel: '947'}, rel-pos: 27}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-947, at: [279.99, 36.0], for: ch-947, group: client-leds, rel-pos: 27}
+        - {ref: common/lc-duplex-adapter@3, id: ch-948p5, at: [293.19, 23.4], group: channels, attrs: {channel: '948.5'}, rel-pos: 28}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-948p5, at: [293.19, 36.0], for: ch-948p5, group: client-leds, rel-pos: 28}
+        - {ref: common/lc-duplex-adapter@3, id: ch-953, at: [310.82, 23.4], group: channels, attrs: {channel: '953'}, rel-pos: 29}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-953, at: [310.82, 36.0], for: ch-953, group: client-leds, rel-pos: 29}
+        - {ref: common/lc-duplex-adapter@3, id: ch-954p5, at: [324.02, 23.4], group: channels, attrs: {channel: '954.5'}, rel-pos: 30}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-954p5, at: [324.02, 36.0], for: ch-954p5, group: client-leds, rel-pos: 30}
+        - {ref: common/lc-duplex-adapter@3, id: ch-959, at: [341.65, 23.4], group: channels, attrs: {channel: '959'}, rel-pos: 31}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-959, at: [341.65, 36.0], for: ch-959, group: client-leds, rel-pos: 31}
+        - {ref: common/lc-duplex-adapter@3, id: ch-960p5, at: [354.85, 23.4], group: channels, attrs: {channel: '960.5'}, rel-pos: 32}
+        - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-960p5, at: [354.85, 36.0], for: ch-960p5, group: client-leds, rel-pos: 32}
+  rear:
+    size:
+      w: 440
+      h: 45
+    components:
+      bays:
+        - id: psu-1
+          at: [4.0, 2.5]
+          size: {w: 73.5, h: 40.0}
+          accepts:
+            - smartoptics/dcp-2-psu-ac@1
+            - smartoptics/dcp-2-psu-dc@1
+          default: smartoptics/dcp-2-psu-ac@1
+          group: psus
+          rel-pos: 1
+        - id: fan-1
+          at: [85.0, 2.5]
+          size: {w: 192.0, h: 40.0}
+          accepts:
+            - smartoptics/dcp-2-fan@1
+          default: smartoptics/dcp-2-fan@1
+          group: fans
+          rel-pos: 1
+        - id: psu-2
+          at: [356.3, 2.5]
+          size: {w: 73.5, h: 40.0}
+          accepts:
+            - smartoptics/dcp-2-psu-ac@1
+            - smartoptics/dcp-2-psu-dc@1
+          default: smartoptics/dcp-2-psu-ac@1
+          group: psus
+          rel-pos: 2
+      placements:
+        - {ref: common/rack-ear@1, id: ear-left-r, at: [-14, 0.75], skin: left, optional: ears, group: furniture, rel-pos: 3}
+        - {ref: common/rack-ear@1, id: ear-right-r, at: [440, 0.75], skin: right, optional: ears, group: furniture, rel-pos: 4}
+  left:
+    size:
+      w: 510
+      h: 45
+    panel:
+      decor:
+        - {at: [0, 0], size: [510, 45], fill: '#b9bec4'}
+        - {at: [497.3, 0], size: [12.7, 45], fill: '#17191c'}
+  right:
+    size:
+      w: 510
+      h: 45
+    panel:
+      decor:
+        - {at: [0, 0], size: [510, 45], fill: '#b9bec4'}
+        - {at: [0, 0], size: [12.7, 45], fill: '#17191c'}
+  top:
+    size:
+      w: 440
+      h: 510
+    panel:
+      decor:
+        - {at: [0, 0], size: [440, 510], fill: '#b9bec4'}
+        - {at: [0, 497.3], size: [440, 12.7], fill: '#17191c'}
+  bottom:
+    size:
+      w: 440
+      h: 510
+    panel:
+      decor:
+        - {at: [0, 0], size: [440, 510], fill: '#b9bec4'}
+        - {at: [0, 0], size: [440, 12.7], fill: '#17191c'}

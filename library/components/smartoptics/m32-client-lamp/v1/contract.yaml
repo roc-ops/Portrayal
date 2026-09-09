@@ -1,0 +1,69 @@
+format: 1
+kind: component
+name: m32-client-lamp
+version: 1.0.0
+class: led
+profile: optical
+description: The DCP-M32's per-channel client indicator - a white strip carrying the
+  Tx and Rx lettering, lit from behind. The caption IS the lamp.
+size: {w: 13.2, h: 2.0}
+attrs: {function: client, media: fiber}
+provenance:
+  what-it-is: >-
+    THE CAPTION IS THE LAMP, which is the whole reason this part exists rather than a
+    generic led placed beside a printed strip. so-ds-dcp-m32-cso-zr-r1.2's VISUAL
+    INDICATORS block says "Client LED: 32 x individual client Tx/Rx", and DCP-M User
+    Manual s3.6.4 gives the behaviour: "The Client LEDs represent light status on the
+    ports" - green when the port is receiving or transmitting light, off when it is not.
+    These are OPTICAL-PRESENCE indicators driven by the channel monitor, NOT link LEDs:
+    there is no PHY and no active transceiver behind a channel port. That is why an
+    otherwise passive mux has them at all, and the datasheet says as much - "unlike a
+    passive multiplexer it monitors the traffic".
+  position: >-
+    ESTIMATED, BY ELIMINATION ON A PHOTOGRAPH, and the reasoning matters more than the
+    figure. The lamps exist and are somewhere on the face. A high-resolution photograph
+    of a real unit shows only THREE features that repeat per channel: the channel
+    number, the white Tx/Rx strip, and the LC adapter. The number is dark text on dark
+    plate and the adapter is an opening, which leaves the strip. The count then
+    corroborates it - sixteen channels on the upper row and sixteen on the lower, one
+    strip each, exactly the datasheet's 32. A caption-only reading has no reason for
+    that to line up.
+    THE OBJECTION, KEPT BECAUSE SOMEONE WILL RAISE IT AGAIN: the same white-strip-with-
+    dark-lettering style appears on parts that certainly have no lamp -
+    smartoptics/ppm-ad1-1510@1 uses it for all three port pairs and is entirely passive,
+    with no power feed at all. So the STYLE does not prove a lamp. That is a different
+    question from where these 32 must be, and only the second one is live here.
+    THE OBJECTION IS NOW STRONGER THAN IT WAS, and it is recorded at full strength: on
+    this very face, the 1510 and 1625 OTDR ports carry a strip identical to the client
+    ones, and the datasheet's VISUAL INDICATORS block names no LED for either. Worse, the
+    OSC port - which the datasheet DOES give an LED - is drawn with two round lamps
+    between a printed "Tx" and "Rx", not with a strip. So where Smartoptics indisputably
+    put a lamp on this face, they did not use this part.
+    WHAT SURVIVES THAT: the datasheet still asserts 32 client indicators, and no round
+    lamp of the OSC kind appears anywhere near a channel in any image held. Something has
+    to be behind the strip. The two styles looking different is then a packaging
+    constraint rather than a contradiction - there is 2mm of plate above a channel
+    adapter and no room for a 2.5mm round lens beside 32 of them - and an unlit strip
+    that reads as a caption is better industrial design than a dead grey dot.
+  size: >-
+    photo-measured - the strip runs the width of one duplex adapter, so it takes
+    common/lc-duplex-adapter@3's 13.2, and stands 2.0 tall. The height was 2.7 until the
+    photograph was re-calibrated by least squares against the stencil's connection points
+    rather than by thresholding the plate's edge; the strip measures 1.94 in that frame,
+    and the Line adapter's lone strip comes out 13.28 against a part 13.2 wide, which is
+    what says the scale is right to half a percent.
+  colour: >-
+    green when lit, from UM s3.6.4. Unlit it is the white diffuser with its own dark
+    lettering, which is what every photograph held shows - Power and Status are green in
+    those frames while every client strip is white, meaning the channels are dark rather
+    than the lamps absent.
+  upgrade-path: >-
+    a photograph of a unit CARRYING TRAFFIC settles this outright: whatever turns green
+    is the lamp. Every image held is of an unlit or unconnected unit.
+elements:
+  lamp:
+    at: [0.0, 0.0]
+    size: [13.2, 2.0]
+    class: led
+    states: ['off', 'on']
+skins: [default]
