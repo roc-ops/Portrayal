@@ -1,0 +1,193 @@
+format: 1
+kind: module
+name: dcp-404
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: optical
+description: >-
+  Smartoptics DCP-404 muxponder, a half-width 1RU plug-in unit for one DCP-2
+  traffic slot. Four QSFP28 client ports carrying 4x100GBE as one ganged block,
+  and one QSFP-DD line port taking a coherent 400G OpenZR+ DWDM pluggable. Each
+  port carries its number, a Tx/Rx caption with a green lamp beside each word,
+  and a hex vent group above the cage. Power and Status lamps sit at the lower
+  left under the laser hazard marking, and vent columns stand at both ends.
+size: {w: 205.0, h: 44.0}
+attrs:
+  model: DCP-404
+  role: muxponder
+  client-ports: '4'
+  line-ports: '1'
+  qsfp28: '4'
+  qsfp-dd: '1'
+  client-rate: 100GBASE
+  line-rate: 400G OpenZR+ coherent DWDM
+  power-draw-typical-w: 56
+  power-draw-max-w: 64
+  weight-kg: 1.8
+provenance:
+  method: >-
+    FACT SHEET FIRST, THEN THE PHOTOGRAPH - and the second step is the one that matters.
+    The inventory came from the manuals before any artwork was opened
+    (working/intake/factsheets/dcp-404.md). It was first drawn against the DCP_v260105
+    Visio stencil, and the stencil turned out to be A SIMPLIFICATION OF THE PRODUCT
+    rather than a drawing of it: it omits every vent feature except one, puts a single
+    Status lamp at the right end where the real unit has Power and Status at the lower
+    left, hangs the traffic lamps under the cages instead of beside their captions, and
+    consequently places the whole port block about 16mm left of where it sits. This
+    contract is measured from the vendor's own product render instead. THE STENCIL IS
+    NOT USELESS - it agreed with the photograph on the brand, model and hazard triangles
+    to about a millimetre, and it is what first showed the four client cages abut.
+  size: >-
+    datasheet - so-ds-dcp-404-r1.8, DIMENSIONS: 205 wide, 44 high, 270 deep, 1.8 kg.
+    THE DATASHEET LABELS THOSE AXES "(WxDxH)" AND THE LABELS ARE TRANSPOSED - 44 cannot
+    be the width of a half-width 1RU unit. Which number is the width was settled
+    independently: the Visio master scales to 204.22, within 0.4% of 205, and that is
+    what identifies the 44 as the height. The stencil master is drawn 41.19 tall against
+    the real 44, so every y taken from it was 6% short - a reminder, as on the 9D master,
+    that masters in one stencil are not all drawn to one scale.
+  power: >-
+    datasheet - so-ds-dcp-404-r1.8, POWER CONSUMPTION: "Typical consumption at 220VAC:
+    Normal operation: 56W, Max during power up: 64W". NO AMBIENT IS GIVEN and none is
+    invented - the datasheet states a supply voltage and not a temperature, so there is
+    no ladder to pick a rung from. The 64 is an inrush figure rather than a steady-state
+    maximum, which is worth knowing before it is summed into a chassis budget.
+  face-scale: >-
+    measured off the datasheet render at 995 x 349. x from the 205 width, 4.610 px/mm;
+    y from the 44 height between the face's own edges, 4.841 px/mm. THE TWO AGREE TO 5%,
+    which is what says the faceplate is very nearly orthographic in that render even
+    though the lid above it is plainly in perspective. Positions are good to about
+    +/-0.3mm across, a little softer down.
+  ports: >-
+    manual counts, photograph positions. DCP-404 Technical Description 14.0_A s1.1 gives
+    "4 x QSFP28" and "1 x OpenZR+" without positions. The render puts the four client
+    cages as ONE CONTINUOUS RUN, 38.18 to 114.11, which at four equal cages is an 18.98
+    pitch - so they abut and each is a std/qsfp-ganged (18.5) with about half a
+    millimetre of shared wall, not a std/qsfp28 (20.0), which would overlap. The line
+    cage stands alone at 147.95 to 166.82, 18.87 wide against std/qsfp-dd's 19.0.
+  caption-scale: >-
+    photograph, and it corrects a ratio rather than a size. The client lamps measure 1.86
+    across and their Tx/Rx captions 1.03 of cap height - the lamp is about 1.8x the
+    letter. The first cut set the captions at font-size 1.8, a 1.3 cap, which made
+    correctly-sized lamps read as too small beside oversized type. The type is now 1.45,
+    which puts the ratio back at 1.9. Lamp and caption centre on 26.75 and 26.54, so they
+    sit on one line to within 0.2 - the render's slight downward angle makes them look
+    staggered and they are not.
+  edge-vents: >-
+    photograph - the bottom slot row runs to 43.5 on a 44 face, close enough to the edge
+    that it rolls over it. It was first drawn at 41.75, which left it floating in the
+    plate. The line port's lamps sit with their BOTTOM level with the bottom of its cage
+    at 39.09, not below it.
+  cage-band: >-
+    photograph - every cage mouth runs y 29.13 to 39.04, so all five centre on 34.09.
+    The drawn mouth is 9.91 tall, between std/qsfp-ganged's 9.58 and std/qsfp-dd's 10.0,
+    and the standards govern the parts.
+  lamps: >-
+    photograph, and the count is one the manual never fixes. s3.1.1 describes Tx and Rx
+    lamp states without counting or placing them. THE FACE CARRIES TWO SHAPES OF LAMP AND
+    THE DIFFERENCE IS NOT DECORATIVE. The client ports take small round lamps, one beside
+    each word of their "Tx  Rx" caption above the cage. Power, Status and the line port's
+    two are LARGE LIGHT RECTANGLES - common/led-rect, not common/led-dot - and the line
+    port names its pair ABOVE them rather than below, which is the opposite way round
+    from every other caption on this face. Power and Status sit at the lower left with
+    their captions beneath; the manual mentions the board status lamp under s3.1 and says
+    nothing at all about a power lamp.
+  vents: >-
+    photograph, and this is where the stencil is furthest out - it drew one of the seven
+    vent features and drew that one wrong. EVERY CELL IS A HEXAGON, point up and point
+    down with flat edges either side, and EVERY GROUP SITS IN A LIGHTER ROUNDED RECESS.
+    The features are: a row of foreshortened hexagons on the angled band in two offset
+    rows at a 9.2 pitch; a slot row where the face rounds over at the top, 4.8 wide on a
+    9.3 pitch; a matching but shorter slot row along the bottom edge; a three-cell column
+    at 27.33 to 29.94 between the hazard triangles and port 1; three cells above each
+    client cage; a 3/2/3 meshed honeycomb between the client block and the line port; and
+    seven cells above the line port, three over four. A three-cell column past the line
+    port at 179.40 to 182.01 completes it, and THERE IS NOTHING OUTBOARD OF EITHER
+    COLUMN - the first cut of this part invented one at each end. The left-hand column is
+    what pushes the ports right and is why the stencil's port block sits 16mm off. Block
+    bounds and pitches are measured; individual cell outlines are regularised.
+  markings: >-
+    photograph - two hazard triangles at x 8.46 to 12.80, on y 25.00 to 28.30 and 30.37
+    to 33.67. The stencil agreed on these to about a millimetre. Nothing in the manual
+    mentions them. The upper is the IEC 60825 laser burst and the lower is a plain
+    exclamation mark - two different symbols. The first cut composed common/laser-warning
+    for both because the library held no general warning part; common/warning-triangle@1
+    was added for this and is what the lower one now uses.
+  slope: >-
+    ESTIMATED, and the estimate is the whole of it. The front face is not one plane: a
+    vertical plate carries the ports, and above it an angled band sloping back to the lid
+    carries the round-over slot row and the foreshortened hexagons. `profile-y` is the
+    term for exactly this - it is what dell/bezel-2u-14g uses to give its front a section
+    both ways - so the vocabulary was never the obstacle; an earlier draft of this key
+    claimed it was and was wrong. WHAT IS MISSING IS A MEASUREMENT. The band projects
+    10.4 tall in a front elevation, and a band of true length L at angle t projects
+    L*cos(t) and sets back L*sin(t); at 10 to 15 degrees that is 1.8 to 2.8 of setback.
+    2.5 is the middle of that and is what `profile-y` carries. THE ANGLE ITSELF IS EYED
+    OFF A PERSPECTIVE RENDER - no source states it and no view here is a side elevation,
+    which is the one thing that would settle it. Treat the 2.5 as a shape, not a figure.
+  stand-off: >-
+    NOT MODELLED. The unit's faceplate stands proud of the DCP-2 it plugs into by an inch
+    or two. That is a property of the BAY, not of this part - it wants `insert` or
+    `travel` on the chassis side - and the DCP-2 is not modelled yet, so there is nothing
+    to hang it on.
+  body-sides: >-
+    ONE OBSERVED, FOUR INFERRED, and the difference is recorded on each skin. The LID is
+    from the vendor product render and is the only side any source shows: a light,
+    heavily mottled surface, drawn as a texture because at that angle a fine perforation
+    and a textured paint are indistinguishable and a perforated lid would carry an
+    airflow claim this has no basis for. The BOTTOM, both FLANKS and the REAR are drawn
+    as plain sheet. The rear is the weakest: a traffic unit mates with the DCP-2
+    backplane at that end and nothing photographs or draws it - the Series manual's
+    figure 2-6 is the chassis rear, which is a different object - so its connector block
+    says only "this end mates", not where or what shape.
+elements:
+  # the three full-width rows; the per-port groups are small enough to stay art
+  vent-angled: {at: [0.0, 4.6], size: [205.0, 3.8], class: vent}
+  vent-top-edge: {at: [0.0, 10.35], size: [205.0, 1.85], class: vent}
+  vent-bottom-edge: {at: [0.0, 41.95], size: [205.0, 1.55], class: vent}
+relief:
+  features:
+    # the plate stands proud and the band above it falls back to the lid; see
+    # provenance/slope for why the 2.5 is a shape rather than a figure
+    - node: body
+      out: 2.5
+      profile-y: [[0, 0.35], [4.0, 1.30], [10.4, 2.50], [12.2, 2.50], [44, 2.50]]
+      color: '#23272b'
+      confidence: estimated
+      source: >-
+        the band projects 10.4 in the front elevation and slopes back to the lid at an
+        angle EYED off a perspective render, 10 to 15 degrees, which sets it back 1.8 to
+        2.8. No source gives the angle and no view here is a side elevation.
+body:
+  depth: 270.0
+  color: '#8f959c'
+skins: [default]
+parts:
+  # four client cages ABUTTING as one block - 18.98 pitch, so the per-port
+  # ganged opening (18.5) and not a standalone qsfp28 cage (20.0, would overlap)
+  - {ref: std/qsfp-ganged@1, id: c1, at: [38.42, 29.30], attrs: {media: qsfp28, role: client}}
+  - {ref: std/qsfp-ganged@1, id: c2, at: [57.40, 29.30], attrs: {media: qsfp28, role: client}}
+  - {ref: std/qsfp-ganged@1, id: c3, at: [76.38, 29.30], attrs: {media: qsfp28, role: client}}
+  - {ref: std/qsfp-ganged@1, id: c4, at: [95.37, 29.30], attrs: {media: qsfp28, role: client}}
+  # the line port stands alone past the honeycomb block
+  - {ref: std/qsfp-dd@1, id: line, at: [147.88, 29.09], attrs: {media: qsfp-dd, role: line}}
+  # a green lamp beside each word of every port's Tx/Rx caption, ABOVE the cage
+  - {ref: common/led-dot@1, id: led-c1-tx, at: [45.07, 25.75], attrs: {function: tx}}
+  - {ref: common/led-dot@1, id: led-c1-rx, at: [48.27, 25.75], attrs: {function: rx}}
+  - {ref: common/led-dot@1, id: led-c2-tx, at: [64.05, 25.75], attrs: {function: tx}}
+  - {ref: common/led-dot@1, id: led-c2-rx, at: [67.25, 25.75], attrs: {function: rx}}
+  - {ref: common/led-dot@1, id: led-c3-tx, at: [83.03, 25.75], attrs: {function: tx}}
+  - {ref: common/led-dot@1, id: led-c3-rx, at: [86.23, 25.75], attrs: {function: rx}}
+  - {ref: common/led-dot@1, id: led-c4-tx, at: [102.02, 25.75], attrs: {function: tx}}
+  - {ref: common/led-dot@1, id: led-c4-rx, at: [105.22, 25.75], attrs: {function: rx}}
+  # the line port's lamps sit low, flanking its cage rather than above it
+  - {ref: common/led-rect@1, id: led-line-tx, at: [140.90, 36.49], attrs: {function: tx}}
+  - {ref: common/led-rect@1, id: led-line-rx, at: [169.30, 36.49], attrs: {function: rx}}
+  # Power and Status at the lower left, which the stencil placed at the far right
+  - {ref: common/led-rect@1, id: led-power, at: [5.30, 36.70], attrs: {function: power}}
+  - {ref: common/led-rect@1, id: led-status, at: [11.90, 36.70], attrs: {function: status}}
+  # two different symbols: the IEC 60825 laser burst over the ISO 7010 general
+  # warning. common/warning-triangle@1 was added for the lower one - the library
+  # had only the laser part - see provenance/markings
+  - {ref: common/laser-warning@1, id: warn-laser, at: [7.80, 24.10], attrs: {marking: laser}}
+  - {ref: common/warning-triangle@1, id: warn-general, at: [7.80, 29.62], attrs: {marking: general}}
