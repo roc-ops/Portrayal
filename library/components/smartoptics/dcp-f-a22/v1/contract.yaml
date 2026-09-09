@@ -108,9 +108,17 @@ provenance:
     anisotropic and self-contradictory at the right-hand end; the only photograph is a
     1.1 px/mm vendor render of an installed chassis. Everything here is `drawing` or
     `estimated` confidence and none of it is measured.
-  depth-gap: >-
-    270 is stated by the datasheet but no figure in the corpus shows a side, top or
-    bottom of this unit, so only the front face is modelled.
+  depth: >-
+    datasheet - so-ds-dcp-f-a22-r1.3, 270 deep. Only the front face is modelled; no
+    figure in the corpus shows a side, top or bottom of this unit.
+  no-body-relief: >-
+    THE BODY DECLARES NO `out`, DELIBERATELY. A faceplate that stands proud of its own
+    panel buries everything drawn on it: the 3D kit extrudes the plate as a slab and
+    every port, lamp and marking, having no relief of its own, sits at the panel plane
+    inside it. That is what left smartoptics/dcp-404@1 a blank face in 3D, and the same
+    root cause painted over its silkscreen in 2D. A plug-in unit's plate IS its panel;
+    how far it stands out of the CHASSIS is the bay's business, not the part's.
+    Depth here comes from the ports, which carry their own relief.
 elements:
   vent-top: {at: [14.0, 3.6], size: [128.0, 4.4], class: vent}
   caption-power: {at: [4.6, 38.4], size: [8.2, 2.6], class: marking}
@@ -141,4 +149,7 @@ parts:
   - {ref: common/lc-duplex-adapter@3, id: ocm, at: [113.98, 23.8], attrs: {role: monitor}}
   - {ref: std/sfp@1, id: sfp-1, at: [130.75, 10.0], attrs: {role: mgmt, media: sfp, speed: 100m-1g}}
   - {ref: std/sfp@1, id: sfp-2, at: [130.75, 24.0], attrs: {role: mgmt, media: sfp, speed: 100m-1g}}
+body:
+  depth: 270.0
+  color: '#33383d'
 skins: [default]

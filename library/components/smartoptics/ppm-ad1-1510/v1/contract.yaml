@@ -59,9 +59,13 @@ provenance:
     via common/lc-duplex-adapter@3, itself measured off the Smartoptics DCP-R stencil -
     the same vendor's drawing of the same connector, which is why it is preferred here
     over a generic.
-  depth-gap: >-
-    NOT STATED anywhere, and not derivable from a faceplate. The four size methods
-    above all measure a face; none of them sees behind it.
+  depth: >-
+    ESTIMATED at 60, and stated as a figure only so the part has a solid in 3D rather
+    than being a plane. NO DOCUMENT GIVES IT - the four methods that settle the face
+    all measure a face and none sees behind it. What bounds it: the module seats in a
+    bay inside a carrier that is 270 deep, so it cannot exceed that, and a passive
+    three-filter module needs a fraction of it. Treat 60 as a placeholder with a
+    ceiling, not as a measurement, and replace it the moment anything states one.
   face-detail-gap: >-
     no orthographic photograph of a PPM exists. Lamp inventory, exact caption
     positions and any marking other than the part number are unknown, and the module
@@ -74,4 +78,26 @@ parts:
   - {ref: common/lc-duplex-adapter@3, id: osc, at: [5.57, 4.0], attrs: {role: osc}}
   - {ref: common/lc-duplex-adapter@3, id: edfa, at: [22.50, 4.0], attrs: {role: edfa}}
   - {ref: common/lc-duplex-adapter@3, id: line, at: [35.70, 4.0], attrs: {role: line}}
+relief:
+  wall: '#22262a'
+  features:
+    # NOT `out` ON THE BODY. A plate that stands proud of its own panel buries
+    # everything drawn on it - which is what left smartoptics/dcp-404@1 a blank
+    # faceplate in 3D and, by the same root cause, painted over its own silkscreen
+    # in 2D. The plate IS the panel; the adapters recess into it.
+    - node: caption-osc
+      out: 0.15
+      confidence: estimated
+      source: a printed caption panel, drawn barely proud so it reads as label rather than hole
+    - node: caption-edfa
+      out: 0.15
+      confidence: estimated
+      source: as caption-osc
+    - node: caption-line
+      out: 0.15
+      confidence: estimated
+      source: as caption-osc
+body:
+  depth: 60.0        # estimated - see provenance/depth
+  color: '#33383d'
 skins: [default]
