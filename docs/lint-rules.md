@@ -26,7 +26,7 @@ a test fails when this page and the linter disagree. A finding prints as
 | L17 | device | a placement's group is declared under `groups:` | declare the group with term, role and index-origin |
 | L18 | device | a port inherits media from its group rather than restating it | drop the per-port media, or fix the group's `attrs.media` |
 | L19 | device | an indicator declares `for:` the thing it indicates | add `for:` to the lamp placement |
-| L20 | component | state names are tokens and behaviours are well-formed | a state name is a token like `link`; prose goes in `description`; check `behaviour` values |
+| L20 | component, device | state names are tokens and each `behavior` is well-formed, on a contract's states, an element's, or a placement's | a state name is a token like `link`; prose goes in `description`; `behavior` is solid, blinking, alternating or sequence, with `behavior.color` for the second colour |
 | L21 | device | chassis silkscreen does not sit under a bay where the module covers it | move the mark, or put it in the module's own skin if the module carries it |
 | L22 | device | a group's declared media/speed matches the ports it holds | fix the group's `attrs`, or move the odd port to its own group |
 | L23 | device | a port group is one family, or says in `mixed:` why it is not | split the group by family, or add `mixed:` naming the job they share |
@@ -57,7 +57,7 @@ a test fails when this page and the linter disagree. A finding prints as
 | L48 | component | a bay the contract declares is drawn by a skin | draw the bay opening in every skin, or remove the bay |
 | L49 | device | members of one group, cut to one size, sit on one pitch | re-measure; an uneven pitch is usually a mis-read, not a finding |
 | L50 | component | printing inside a skin is legible at the size it is set | raise the font size or drop the text |
-| L51 | component | a class has a power role in spec/schemas/power-roles.yaml | add the class to power-roles.yaml with provides/consumes/none |
+| L51 | component | a class has a power role in spec/schemas/power-roles.yaml | add the class under `draw`, `supply` or `passive` in power-roles.yaml |
 | L52 | component | a stated power figure says where it was read from | add the provenance key the message names |
 | L53 | device | content changed without the version bump the change requires (see devicelock) | bump `version`: patch for wording, minor for additions, major for geometry or ids |
 | L54 | device | a gap's scope names a group, view, configuration, id or attribute the device has | fix the `scope`, or drop it |
@@ -80,6 +80,6 @@ a test fails when this page and the linter disagree. A finding prints as
 | L71 | component | a body box reaches no further than the part says it is deep | shrink the body box or raise `body.depth` |
 | L72 | device | a bay's `plan:` lands in a view that exists, inside the chassis | fix the plan view name or the coordinates |
 | L73 | component | a field prints somewhere, and what prints is a field | add a `data-from` text node for each field, or remove the field |
-| L74 | component | a lamp that declares states is painted from the state variable | fill the lamp node from `var(--state-...)`, not a literal |
+| L74 | component | a lamp that declares states is painted from the lamp-colour variable | fill or stroke the lamp node with `var(--led-color, <off colour>)`, not a literal colour |
 | L75 | component | a slot's structured facts agree with its prose, and lanes fit the connector | fix `lanes`/`connector` or the description |
 | L76 | device | the RJ45 census: every Ethernet jack says whether it has lamps | use std/rj45@2 with the lamp parts, or say in provenance the jack is bare |

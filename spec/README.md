@@ -11,7 +11,7 @@ DCIM, and diagram-tool exports. Domain-neutral core; networking is profile #1.
 - `schemas/` — JSON Schemas for component contracts, device manifests, NOS overlays
 - `tools/portrayal/render.py` — compiles manifest + component skins → flat, addressable SVG
 - `tools/portrayal/lint.py` — schema validation + contract↔skin consistency + ID grammar;
-  `--list-rules` prints every rule code, and `../docs/lint-rules.md` is that table as a page
+  `--list-rules` prints every rule code, and [docs/lint-rules.md](../docs/lint-rules.md) is that table as a page
 - `tools/portrayal/visio_extract.py` — pull shape artwork out of Visio stencils for intake
   reference (see `VISIO-INTAKE.md`)
 - `tests/` — walking-skeleton tests (lint green, deterministic render, addressability)

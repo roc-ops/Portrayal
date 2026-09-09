@@ -18,9 +18,15 @@ sys.path.insert(0, str(TOOLS))
 import lint  # noqa: E402
 
 SOURCE = (TOOLS / "lint.py").read_text()
+# The RULES literal is the thing under test, so it is cut out of the source
+# before the source is searched; otherwise an entry would vouch for itself.
+_head, _rest = SOURCE.split("RULES = {", 1)
+RULES_LITERAL, _tail = _rest.split("\n}\n", 1)
+CODE = _head + _tail
 # codes passed to err()/warn() as literals, and codes handed to helpers the same way
-RAISED = set(re.findall(r'"(L\d+)"', SOURCE.split("RULES = {", 1)[1].split("def rules_text", 1)[1]))
-MENTIONED = set(re.findall(r"\bL\d+\b", SOURCE))
+RAISED = set(re.findall(r'"(L\d+)"', CODE))
+# every other way the code can name a rule: the header list, a docstring, a comment
+MENTIONED = set(re.findall(r"\bL\d+\b", CODE))
 
 
 def test_every_code_the_linter_raises_is_in_the_catalogue():
@@ -31,6 +37,13 @@ def test_every_code_the_linter_raises_is_in_the_catalogue():
 def test_every_catalogue_entry_is_still_a_rule_the_source_knows():
     stale = sorted(set(lint.RULES) - MENTIONED, key=lambda c: int(c[1:]))
     assert not stale, f"in RULES but nowhere in lint.py: {stale}"
+
+
+def test_catalogue_literal_has_no_duplicate_keys():
+    keys = re.findall(r'^\s+"(L\d+)":', RULES_LITERAL, re.M)
+    dupes = sorted({k for k in keys if keys.count(k) > 1})
+    assert not dupes, f"RULES declares these codes twice; Python keeps the last silently: {dupes}"
+    assert len(keys) == len(lint.RULES)
 
 
 def test_catalogue_codes_are_contiguous_from_L0():
@@ -55,3 +68,4 @@ def test_list_rules_needs_no_library():
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stderr
     assert r.stdout.startswith("L0 ") and "L76 " in r.stdout
+    assert "fix:" in r.stdout, "the terminal listing must carry the remediation, not only the rule"
