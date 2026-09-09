@@ -45,6 +45,19 @@ def test_a_bay_inside_a_seated_module_resolves_from_the_drawing():
         "the contract writes `size: [w, h]` and a device bay carries "
         f"`{{w, h}}`; the index has to normalise it: {out['size']}")
 
+    # RE-DERIVED AFTER THE CARRIER CHANGES, which is what makes viewer3d's two
+    # passes correct. It overrides the device's bays first and the nested ones
+    # second, and 73 device bays in the library accept more than one bay-bearing
+    # carrier - the r740xd's four risers, every mx2008 FPC - whose nested bays
+    # differ in geometry. A descriptor taken before the swap would seat the
+    # module at the OLD carrier's `at`, or miss a bay the new one introduces.
+    assert out["afterIds"] == ["slot-1/module/ppm-1"], (
+        "the replaced carrier declares one bay where the old one declared two, "
+        f"and the resolver still reports the old pair: {out['afterIds']}")
+    assert out["afterAt"] == [10, 20], (
+        f"resolved against the carrier that is no longer seated: {out['afterAt']}")
+    assert out["afterAccepts"] == ["x/y@1"]
+
 
 def test_components_json_publishes_what_a_nested_bay_accepts():
     """Without this the resolver above has nothing to resolve against.

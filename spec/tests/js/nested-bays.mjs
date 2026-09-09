@@ -57,6 +57,18 @@ const INDEX = {
 const m = await import('../../../kit/swap.js');
 const got = m.nestedBays(root, ref => INDEX[ref] || null);
 
+// AFTER THE CARRIER IS REPLACED, the answer has to change. viewer3d overrides
+// the device's bays first and the nested ones second, so the second pass must
+// re-derive rather than reuse: 73 device bays in the library accept more than
+// one bay-bearing carrier, and their nested bays differ in geometry. Reusing a
+// descriptor taken before the swap seats the module at the old carrier's `at`.
+const carrier = nodes.find(n => n.getAttribute('data-path') === 'slot-1/module');
+carrier._attrs['data-ref'] = 'other/carrier@1:1.0.0';
+INDEX['other/carrier@1'] = {
+  bays: {'ppm-1': {at: [10, 20], size: {w: 5, h: 6}, accepts: ['x/y@1'], default: null}},
+};
+const after = m.nestedBays(root, ref => INDEX[ref] || null);
+
 console.log(JSON.stringify({
   ids: got.map(b => b.id),
   accepts: got.map(b => b.accepts.length),
@@ -66,4 +78,8 @@ console.log(JSON.stringify({
   keys: got.length ? Object.keys(got[0]).sort() : [],
   at: got.length ? got[0].at : null,
   size: got.length ? got[0].size : null,
+  // the same path, re-derived after the carrier changed underneath it
+  afterIds: after.map(b => b.id),
+  afterAt: after.length ? after[0].at : null,
+  afterAccepts: after.length ? after[0].accepts : null,
 }));
