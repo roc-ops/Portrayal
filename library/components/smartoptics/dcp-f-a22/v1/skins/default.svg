@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="205mm" height="44mm" viewBox="0 0 205 44">
+  <!-- DCP-F-A22 front face, 205 x 44 (datasheet so-ds-dcp-f-a22-r1.3, whose
+       "44 x 205 x 270mm (WxDxH)" labels are transposed exactly as the DCP-404's
+       are). Same footprint as smartoptics/dcp-404@1 in all three axes.
+
+       THE PORTS ARE NOT DRAWN HERE - they are composed by the contract: two
+       common/rj45-eth, two common/lc-duplex-adapter (EDFA and OCM), two std/sfp,
+       and two PPM bays. Sizes come from those parts and NOT from the stencil,
+       which draws its optical adapters SC-sized at ~10mm pitch against a
+       datasheet that says LC.
+
+       LAYOUT ORDER CAME FROM A PHOTOGRAPH. a22.gif draws one stacked pair of
+       openings and brackets it twice, SFP on the left and PPM on the right;
+       dcp-f-a22.jpg shows they are two separate groups, the SFP cages between the
+       OCM and the PPM field and the bays at the right-hand end.
+
+       THE VENT ROW STOPS AT THE PPM FIELD, and the master draws it further. Two
+       19.5 bays stacked take 39 of the 44 height, leaving 5 for margins and none
+       for a band above them - so a row running the full width cannot be what the
+       metal does. The master's y is not trustworthy here in any case: its
+       faceplate box has an aspect of 3.52 against the real 4.659, so x was scaled
+       on 205 and y on 44, never on one factor. -->
+  <defs>
+    <linearGradient id="plate" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4a4f55"/>
+      <stop offset="0.22" stop-color="#33383d"/>
+      <stop offset="1" stop-color="#1c1f22"/>
+    </linearGradient>
+    <linearGradient id="topband" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2b3035"/>
+      <stop offset="1" stop-color="#1a1d20"/>
+    </linearGradient>
+  </defs>
+
+  <rect id="body" x="0" y="0" width="205" height="44" rx="1.2"
+        fill="url(#plate)" stroke="#111417" stroke-width="0.3"/>
+
+  <rect x="0" y="0" width="146.0" height="8.9" rx="1.2" fill="url(#topband)"/>
+  <g id="vent-top" fill="#0a0c0e">
+    <polygon points="14.00,5.00 15.43,3.65 17.77,3.65 19.20,5.00 17.77,6.35 15.43,6.35"/>
+    <polygon points="20.50,6.90 21.93,5.55 24.27,5.55 25.70,6.90 24.27,8.25 21.93,8.25"/>
+    <polygon points="27.00,5.00 28.43,3.65 30.77,3.65 32.20,5.00 30.77,6.35 28.43,6.35"/>
+    <polygon points="33.50,6.90 34.93,5.55 37.27,5.55 38.70,6.90 37.27,8.25 34.93,8.25"/>
+    <polygon points="40.00,5.00 41.43,3.65 43.77,3.65 45.20,5.00 43.77,6.35 41.43,6.35"/>
+    <polygon points="46.50,6.90 47.93,5.55 50.27,5.55 51.70,6.90 50.27,8.25 47.93,8.25"/>
+    <polygon points="53.00,5.00 54.43,3.65 56.77,3.65 58.20,5.00 56.77,6.35 54.43,6.35"/>
+    <polygon points="59.50,6.90 60.93,5.55 63.27,5.55 64.70,6.90 63.27,8.25 60.93,8.25"/>
+    <polygon points="66.00,5.00 67.43,3.65 69.77,3.65 71.20,5.00 69.77,6.35 67.43,6.35"/>
+    <polygon points="72.50,6.90 73.93,5.55 76.27,5.55 77.70,6.90 76.27,8.25 73.93,8.25"/>
+    <polygon points="79.00,5.00 80.43,3.65 82.77,3.65 84.20,5.00 82.77,6.35 80.43,6.35"/>
+    <polygon points="85.50,6.90 86.93,5.55 89.27,5.55 90.70,6.90 89.27,8.25 86.93,8.25"/>
+    <polygon points="92.00,5.00 93.43,3.65 95.77,3.65 97.20,5.00 95.77,6.35 93.43,6.35"/>
+    <polygon points="98.50,6.90 99.93,5.55 102.27,5.55 103.70,6.90 102.27,8.25 99.93,8.25"/>
+    <polygon points="105.00,5.00 106.43,3.65 108.77,3.65 110.20,5.00 108.77,6.35 106.43,6.35"/>
+    <polygon points="111.50,6.90 112.93,5.55 115.27,5.55 116.70,6.90 115.27,8.25 112.93,8.25"/>
+    <polygon points="118.00,5.00 119.43,3.65 121.77,3.65 123.20,5.00 121.77,6.35 119.43,6.35"/>
+    <polygon points="124.50,6.90 125.93,5.55 128.27,5.55 129.70,6.90 128.27,8.25 125.93,8.25"/>
+    <polygon points="131.00,5.00 132.43,3.65 134.77,3.65 136.20,5.00 134.77,6.35 132.43,6.35"/>
+    <polygon points="137.50,6.90 138.93,5.55 141.27,5.55 142.70,6.90 141.27,8.25 138.93,8.25"/>
+  </g>
+
+  <!-- the two PPM bays. A seated module nests under the element whose id matches
+       its bay, so these openings must exist for the bay to hold anything. -->
+  <rect id="ppm-1" x="147.3" y="2.5" width="55.4" height="19.5" rx="0.8"
+        fill="#101315" stroke="#0a0c0e" stroke-width="0.25"/>
+  <rect id="ppm-2" x="147.3" y="22.0" width="55.4" height="19.5" rx="0.8"
+        fill="#101315" stroke="#0a0c0e" stroke-width="0.25"/>
+
+  <g id="brand-silkscreen" font-family="sans-serif">
+    <text id="brand" x="4.7" y="14.1" font-size="3.4" fill="#eef1f4">smartoptics</text>
+    <text id="model" x="4.7" y="18.4" font-size="2.4" fill="#b9bfc5">DCP-F-A22</text>
+  </g>
+
+  <g id="caption-silkscreen" font-family="sans-serif" text-anchor="middle">
+    <text id="caption-power" x="8.68" y="40.6" font-size="1.9" fill="#dfe4e8">Power</text>
+    <text id="caption-status" x="17.79" y="40.6" font-size="1.9" fill="#dfe4e8">Status</text>
+    <text x="37.8" y="21.9" font-size="2.1" fill="#e8ecef">ETH1</text>
+    <text x="60.2" y="21.9" font-size="2.1" fill="#e8ecef">ETH2</text>
+    <text x="94.68" y="21.9" font-size="2.1" fill="#e8ecef">EDFA</text>
+    <text x="120.58" y="21.9" font-size="2.1" fill="#e8ecef">OCM</text>
+    <text x="138.0" y="8.2" font-size="2.1" fill="#e8ecef">SFP</text>
+  </g>
+
+  <g id="port-caption-boxes">
+    <rect x="88.08" y="36.0" width="13.2" height="2.7" rx="0.3" fill="#eef0f2"/>
+    <rect x="113.98" y="36.0" width="6.6" height="2.7" rx="0.3" fill="#eef0f2"/>
+  </g>
+  <g id="txrx-silkscreen" font-family="sans-serif" text-anchor="middle">
+    <text x="91.4" y="38.0" font-size="1.9" fill="#1c1f22">Tx</text>
+    <text x="97.9" y="38.0" font-size="1.9" fill="#1c1f22">Rx</text>
+    <text x="117.3" y="38.0" font-size="1.9" fill="#1c1f22">Tx</text>
+  </g>
+</svg>

@@ -1,0 +1,42 @@
+format: 1
+kind: module
+name: ppm-dummy
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: optical
+description: Smartoptics PPM-DUMMY - the cover plate for a DCP-F PPM bay that has no
+  module in it. No ports and no markings beyond the part name.
+size: {w: 55.4, h: 19.5}
+attrs:
+  model: PPM-DUMMY
+  role: slot-blank
+provenance:
+  size: >-
+    borrowed - smartoptics/ppm-ad1-1510@1, because a cover plate fills the same bay a
+    module does and the library should not hold two answers for one aperture. See that
+    part for how 55.4 x 19.5 was arrived at and how weak it still is: no document in
+    the corpus dimensions any PPM, and the figure rests on four agreeing inferences
+    rather than one measurement.
+  what-it-is: >-
+    datasheet - ds-ppm-r4.0 lists PPM-DUMMY in the ordering table and gives it one
+    sentence: "The 'PPM-DUMMY' is a cover plate for slots that are not equipped with
+    a PPM module." That is more than the manual manages. It is a cover plate, not a
+    filter with an unpopulated face - and the ABSENCE of a spec block for it, in a
+    datasheet that gives one to all eight other PPMs, is evidence rather than a hole.
+  face: >-
+    ESTIMATED throughout, and this is the weakest part in the DCP-F set. There is no
+    stencil master for it - the only one of the nine PPMs with none - and DCP-F UM's
+    figure of it is featureless at the size it is printed. Drawn as a plain plate
+    carrying only the part name, on the reasoning that a cover plate for a passive
+    bay has nothing to put on it.
+  no-ports: >-
+    ds-ppm-r4.0 - a cover plate. Every other PPM in the family has a Connector type
+    row; this one has no spec table at all.
+  validation-gap: >-
+    UNLIKE A POPULATED FACE, THIS PART HAS NOTHING TO BETRAY AN ERROR. A wrong scale
+    on the 1510 would show up as a wrong LC pitch; here there is no port pitch and no
+    silkscreen to check against. Its correctness is entirely a function of the bay it
+    fills, so the bay is what should be measured first if this ever looks wrong.
+  depth-gap: NOT STATED, as for every PPM.
+skins: [default]

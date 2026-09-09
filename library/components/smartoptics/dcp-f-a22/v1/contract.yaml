@@ -1,0 +1,144 @@
+format: 1
+kind: module
+name: dcp-f-a22
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: optical
+description: Smartoptics DCP-F-A22 - a 22 dB gain EDFA amplifier that takes one slot
+  in a DCP-2 chassis and carries two bays for passive plug-in modules. Half-width
+  1RU, the same 205 x 44 footprint as the DCP-404.
+size: {w: 205.0, h: 44.0}
+attrs:
+  model: DCP-F-A22
+  role: amplifier
+  gain-db: '22'
+  power-draw-typical-w: 30
+  power-draw-max-w: 35
+  laser-class: '1'
+provenance:
+  method: >-
+    FACT SHEET FIRST, THEN THE ARTWORK - working/intake/factsheets/dcp-f-a22.md. The
+    sheet was written from the manuals alone and concluded that no document in the
+    corpus dimensions any DCP-F plug-in unit. That was true of the corpus and false of
+    the world: the part's own datasheet was then found by probing the URL pattern the
+    R22 product page uses, and it dimensions it outright. The sheet records the
+    overturning rather than being quietly rewritten.
+  size: >-
+    datasheet - so-ds-dcp-f-a22-r1.3, "Size (WxDxH) 44 x 205 x 270mm", 1.8 kg.
+    THE AXIS LABELS ARE TRANSPOSED, exactly as on the DCP-404's datasheet, and they
+    resolve the same way: 44 cannot be the width of a half-width 1RU unit. That lands
+    the A22 on PRECISELY the DCP-404's footprint - 205 x 44 x 270, identical in all
+    three axes - which says the DCP traffic-unit form factor is one shared envelope.
+    Two parts agreeing is a stronger check than either alone.
+  power: >-
+    datasheet - "Typical consumption at 220VAC: Normal operation: 30W, Max during power
+    up: 35W". The ambient is not stated with either figure; 220VAC is the input, not a
+    temperature.
+  ports: >-
+    datasheet, FRONT SIDE CONNECTIONS - 1 x EDFA input/output port, 1 x Monitor output
+    port, 2 x RJ45 management 10/100/1000 Base-T, 2 x SFP management 1000 Base-X, and
+    "All optical ports are of LC connector type". The datasheet ALSO lists REAR SIDE
+    CONNECTIONS and says outright they are "located on the DCP-2 chassis" - those are
+    the chassis management block, already on smartoptics/dcp-2, and they are
+    deliberately not drawn here.
+  ppm-bay-height: >-
+    from smartoptics/ppm-ad1-1510@1's 19.5, NOT from this master. The A22 master draws
+    its two stacked openings 28mm tall in total, i.e. 14 each, which disagrees with the
+    PPM master's 19.46 by a third. The PPM master is isotropic - 10.81 px/mm on both
+    axes - and this one is not, so the PPM master wins. Two 19.5 bays then fill 39 of
+    the 44 face, which fixes the bay positions at 2.5 and 22.0 with 2.5 of margin top
+    and bottom and nothing between them.
+  ppm-bays: >-
+    count and numbering from prose, arrangement from artwork, and the two are kept
+    apart. DCP-F UM s4.7 "DCP-F has two internal expansion slots"; s1.1 "support for
+    2 x Passive Plugin Modules"; s3.5 "should be placed in PPM position 1". The CLI
+    manual corroborates independently with real interface names - ppm-1/1/2/osc-tx,
+    i.e. ppm-<chassis>/<slot>/<position>/<port>. That the bays are STACKED, bay 1
+    upper, at the right-hand end is not in any prose; it comes from the stencil's
+    connection points sharing an x and differing only in y, and from the PPM 1 / 2
+    bracket in the manual figures.
+  layout: >-
+    ORDERING FROM THE PHOTOGRAPH, FINE POSITIONS FROM THE STENCIL, and the photograph
+    had to come first because the stencil is self-contradictory here. a22.gif draws ONE
+    stacked pair of openings and brackets it twice - SFP 1/2 on the left and PPM 1/2
+    on the right - and nothing in the drawing says which it is. The vendor photograph
+    dcp-f-a22.jpg shows they are two separate feature groups: the SFP cages sit
+    between the OCM and the PPM field, and the PPM bays are at the right-hand end.
+    That also reconciles arithmetically - the OCM ends at 129.5 and the PPM field
+    starts at 147.3, leaving an 18mm gap that two stacked SFP cages fit and nothing
+    else explains.
+    x positions are read off the master and scaled on the datasheet's 205; y on the 44.
+    THE MASTER IS ANISOTROPIC - its faceplate box has an aspect of 3.52 against the
+    real 4.659 - so the axes are scaled separately and nothing is taken from a single
+    factor.
+  connector-sizes: >-
+    from the library's real parts, NOT from the master. The master draws its optical
+    adapters at ~10mm pitch and 7.4mm wide, which is SC-like and contradicts the
+    datasheet's LC. Positions come from the drawing; sizes come from
+    common/lc-duplex-adapter@3, itself measured off the Smartoptics DCP-R stencil.
+  markings: >-
+    stencil master - smartoptics wordmark and DCP-F-A22 top left, a laser hazard
+    triangle over a general warning triangle beneath them, and Power / Status captions
+    under their lamps. The same pair of triangles the DCP-404 carries, which is what
+    common/warning-triangle@1 was added for.
+  vents: >-
+    stencil master - a single row of elongated hexagonal slots along the top edge,
+    drawn staggered. The row is the only ventilation the master shows on this face.
+    IT IS DRAWN ONLY AS FAR AS THE PPM FIELD, and the master draws it further. Two
+    19.5 bays stacked take 39 of the 44 height, which leaves 5 for margins and none
+    for a vent band above them - so a row running the full width, as the master shows
+    it, cannot be what the metal does. The master's y is not trustworthy here anyway:
+    its faceplate box has an aspect of 3.52 against the real 4.659.
+  ocm-aperture-gap: >-
+    THE OCM IS DRAWN AS TWO APERTURES UNDER ONE CAPTION. a22.gif shows two adapter
+    openings with a single white Tx box beneath them, while the datasheet says
+    "1 x Monitor output port". It is modelled as one duplex adapter with one captioned
+    bore, on the reading that the second position is present in the shell and unused -
+    but that is a reading, not a source. The M32 master has the same shape at its OTDR
+    position, which suggests a vendor drawing convention rather than two independent
+    oddities. A square-on bench photograph settles it.
+  sfp-positions-gap: >-
+    the two SFP cages are placed in the 18mm the arithmetic leaves between the OCM and
+    the PPM field, stacked, because that is the only place they fit. Their exact x, the
+    gap between them and which is SFP 1 are ESTIMATED. The photograph is 1.1 px/mm
+    across the chassis and cannot separate them.
+  no-orthographic-elevation-gap: >-
+    none exists. The only elevation of this unit is the stencil master, which is
+    anisotropic and self-contradictory at the right-hand end; the only photograph is a
+    1.1 px/mm vendor render of an installed chassis. Everything here is `drawing` or
+    `estimated` confidence and none of it is measured.
+  depth-gap: >-
+    270 is stated by the datasheet but no figure in the corpus shows a side, top or
+    bottom of this unit, so only the front face is modelled.
+elements:
+  vent-top: {at: [14.0, 3.6], size: [128.0, 4.4], class: vent}
+  caption-power: {at: [4.6, 38.4], size: [8.2, 2.6], class: marking}
+  caption-status: {at: [13.7, 38.4], size: [8.2, 2.6], class: marking}
+bays:
+  ppm-1:
+    at: [147.3, 2.5]
+    size: [55.4, 19.5]
+    accepts:
+      - smartoptics/ppm-ad1-1510@1
+      - smartoptics/ppm-dummy@1
+    default: smartoptics/ppm-dummy@1
+  ppm-2:
+    at: [147.3, 22.0]
+    size: [55.4, 19.5]
+    accepts:
+      - smartoptics/ppm-ad1-1510@1
+      - smartoptics/ppm-dummy@1
+    default: smartoptics/ppm-dummy@1
+parts:
+  - {ref: common/laser-warning@1, id: warn-laser, at: [10.7, 21.4]}
+  - {ref: common/warning-triangle@1, id: warn-general, at: [10.7, 27.7]}
+  - {ref: common/led-rect@1, id: led-power, at: [6.38, 35.1], attrs: {function: power}}
+  - {ref: common/led-rect@1, id: led-status, at: [15.49, 35.1], attrs: {function: status}}
+  - {ref: common/rj45-eth@1, id: eth1, at: [29.9, 23.8], attrs: {role: mgmt, speed: 1000base-t}}
+  - {ref: common/rj45-eth@1, id: eth2, at: [52.3, 23.8], attrs: {role: mgmt, speed: 1000base-t}}
+  - {ref: common/lc-duplex-adapter@3, id: edfa, at: [88.08, 23.8], attrs: {role: edfa}}
+  - {ref: common/lc-duplex-adapter@3, id: ocm, at: [113.98, 23.8], attrs: {role: monitor}}
+  - {ref: std/sfp@1, id: sfp-1, at: [130.75, 10.0], attrs: {role: mgmt, media: sfp, speed: 100m-1g}}
+  - {ref: std/sfp@1, id: sfp-2, at: [130.75, 24.0], attrs: {role: mgmt, media: sfp, speed: 100m-1g}}
+skins: [default]
