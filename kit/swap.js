@@ -204,3 +204,36 @@ export async function applyOverrides(rootEl, bays, overrides, loadSkin) {
   }
   return applied;
 }
+
+// EVERY LEVEL, BY FOLLOWING THE FRONTIER. A device's own bays are known before
+// anything is applied; nested ones are not, because which nested bays exist -
+// and where they are - is a property of the carrier CURRENTLY seated. So the
+// only way to apply an override map to a face is to seat what you know, look
+// again, and repeat while looking still finds something new.
+//
+// It ran ONCE and buried every nested swap in 3D; then TWICE, which covered the
+// two levels the library actually has. Two is not the number - it is the depth
+// of today's deepest carrier. The moment a component that declares bays appears
+// in another's `accepts` list, a third level exists and the pass that stops at
+// two skips it silently: the 2D drawing swaps, the scene built from this text
+// does not, and nothing reports anything. That is the same 2D/3D divergence
+// twice already fixed one level at a time, and this is the shape that stops
+// fixing it one level at a time.
+//
+// `seen` is what makes the walk terminate on its own: a bay is applied at the
+// level it first appears at and never revisited, so the loop ends when a pass
+// reveals nothing new rather than when a counter runs out. `maxDepth` is the
+// belt - render.py bounds its own recursion at MAX_BAY_DEPTH = 3 for the same
+// reason - so a drawing with a cycle in it cannot spin here.
+export async function applyAllOverrides(rootEl, deviceBays, overrides, loadSkin,
+                                        compByRef, maxDepth = 4) {
+  let n = await applyOverrides(rootEl, deviceBays, overrides, loadSkin);
+  const seen = new Set(deviceBays.map(b => b.id));
+  for (let depth = 0; depth < maxDepth; depth++) {
+    const frontier = nestedBays(rootEl, compByRef).filter(b => !seen.has(b.id));
+    if (!frontier.length) break;
+    for (const b of frontier) seen.add(b.id);
+    n += await applyOverrides(rootEl, frontier, overrides, loadSkin);
+  }
+  return n;
+}
