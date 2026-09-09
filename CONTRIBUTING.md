@@ -135,10 +135,14 @@ came from.
 
 ## The gates
 
-Every pull request, device or not, passes the same workflow:
-`lint` → `publish` (build + exports) → `devicelock` → `pytest` → exports
-current. Run them locally in that order before pushing; the sequence above is
-exactly what CI does.
+Every pull request, device or not, passes the same checks: `lint`, `publish`
+(build + exports), the `devicelock` check, `pytest`, and "exports are current".
+CI runs them in that order because its lock check only has to confirm that the
+lock you committed matches the tree. Locally the lock step comes earlier, as
+step 5 shows: the check must see the lock *before* you regenerate it, or the
+bump it would have asked for is lost, and publish comes *after* the bumps
+because a version change alters the exports. Both orders end in the same
+state, and CI verifies that they did.
 
 ## Commits
 

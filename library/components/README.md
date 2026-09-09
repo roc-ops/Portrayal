@@ -128,8 +128,9 @@ key carries a description.
 
 A skin is a hand-written SVG at `skins/<name>.svg`, drawn in millimetres:
 
-- `width`/`height` carry `mm` units and `viewBox` equals the contract's `size`
-  (lint L4). `<svg width="20mm" height="10.15mm" viewBox="0 0 20 10.15">`.
+- `width`/`height` carry `mm` units and `viewBox` is `0 0 <w> <h>` from the
+  contract's `size` (lint L4); `d` is depth into the panel and has no place in a
+  face drawing. `<svg width="20mm" height="10.15mm" viewBox="0 0 20 10.15">`.
 - Every id in `elements:` is an element id in every skin (lint L3). Other
   shapes may carry ids too; those are what `relief.features` and `fields`
   address.
@@ -154,6 +155,10 @@ The rules most often met while adding a component: L2 (id grammar), L3 and L4
 `cutout` element is backed by a conforming contract), L27/L28/L52 (a
 power-bearing module states its figure and its source), L35/L36 (relief
 confidence), L38 (text in the silkscreen group), L46 (composed parts do not
-collide). Run `python3 spec/tools/portrayal/lint.py --schemas spec/schemas
---library library` from the repository root; components are always checked in
-full.
+collide). From the repository root:
+
+```sh
+python3 spec/tools/portrayal/lint.py --schemas spec/schemas --library library
+```
+
+Components are always checked in full, even with `--device`.
