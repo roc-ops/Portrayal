@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dcp-2-psu-ac
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -75,6 +75,18 @@ provenance:
   depth-gap: >-
     NOT STATED in any DCP document, and not derivable from a front elevation. 1U CRPS is
     a family of lengths, so the form factor does not settle it either.
+  no-body-relief: >-
+    THE BODY DECLARES NO `out`, DELIBERATELY. A face that stands proud of its own panel
+    buries everything on it - the kit extrudes the plate as a slab and every feature
+    without relief of its own ends up inside it. That is what left smartoptics/dcp-404@1
+    blank in 3D. The module's own proudness relative to the chassis is the bay's
+    business, not the part's.
+  depth: >-
+    ESTIMATED at 265, and stated as a figure only so the part is a solid in 3D rather
+    than a plane. NO DCP DOCUMENT GIVES A PSU LENGTH. 1U CRPS is a family of lengths
+    rather than one, so the form factor named on the module's own sticker does not
+    settle it either; what bounds it is the chassis, which is 500 deep. Replace it the
+    moment anything states one.
 states: [ok, fail, absent]
 elements:
   handle: {at: [4.5, 3.5], size: [35.5, 5.0], class: handle}
@@ -87,4 +99,35 @@ parts:
   - {ref: std/c14-inlet@1, id: inlet, at: [41.5, 10.0], rotate: 270}
 connection-points:
   power: {at: [50.5, 20.0], direction: rear}
+relief:
+  wall: '#5a6065'
+  features:
+    # the fan well is a hole, not a picture of one
+    - node: fan-aperture
+      sink: 6.0
+      confidence: estimated
+      source: >-
+        a fan sits behind a grille recessed into the face; 6 is the depth at which the
+        blades read as behind the plate rather than flush with it. No document dimensions
+        it and no view in the corpus is a side elevation of this module.
+    - node: latch
+      out: 2.2
+      confidence: estimated
+      source: >-
+        the release lever stands proud enough to get a thumb behind it, which is what
+        UM s2.3.2 describes - "Push the locking lever in towards the power connector".
+        The figure is eyed off fig 2-13, where the lever clears the face plainly.
+    - node: handle
+      out: 1.4
+      confidence: estimated
+      source: >-
+        the bail handle is drawn STOWED, lying against the face, so it stands only its
+        own bar thickness proud. fig 2-13 shows it folded out on a module in the hand.
+    - node: lamp-status
+      out: 0.2
+      confidence: estimated
+      source: a light pipe finishing flush to slightly proud of the face
+body:
+  depth: 265.0       # estimated - see provenance/depth
+  color: '#a8aeb4'
 skins: [default]

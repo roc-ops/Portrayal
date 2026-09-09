@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dcp-404
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: optical
@@ -113,6 +113,13 @@ provenance:
     exclamation mark - two different symbols. The first cut composed common/laser-warning
     for both because the library held no general warning part; common/warning-triangle@1
     was added for this and is what the lower one now uses.
+  slope-3d: >-
+    WHAT CHANGED AND WHY. The slope was first carried as `out: 2.5` with a `profile-y`
+    on the `body` node. It rendered plausibly in a front elevation and was wrong in
+    both other places it mattered: blank in 3D, and painting over its own silkscreen in
+    2D. Both follow from the same thing - putting relief on the base plate. It is now a
+    `sink` on the vent band, which is the feature the slope belongs to. The figure is
+    unchanged in magnitude and still estimated.
   slope: >-
     ESTIMATED, and the estimate is the whole of it. The front face is not one plane: a
     vertical plate carries the ports, and above it an angled band sloping back to the lid
@@ -147,17 +154,24 @@ elements:
   vent-bottom-edge: {at: [0.0, 41.95], size: [205.0, 1.55], class: vent}
 relief:
   features:
-    # the plate stands proud and the band above it falls back to the lid; see
-    # provenance/slope for why the 2.5 is a shape rather than a figure
-    - node: body
-      out: 2.5
-      profile-y: [[0, 0.35], [4.0, 1.30], [10.4, 2.50], [12.2, 2.50], [44, 2.50]]
+    # THE SLOPE IS A RECESS AT THE TOP OF THE PLATE, NOT THE PLATE STANDING PROUD.
+    # It used to be `out: 2.5` on `body`, and that produced a BLANK FACEPLATE in 3D:
+    # the kit extruded the plate as a 2.5 slab, and every cage, lamp, vent and
+    # silkscreen line - none of which declares relief of its own - sat at the panel
+    # plane inside it. The same root cause painted the plate over its own art in 2D
+    # (fixed in #201). A plug-in unit's plate IS its panel; how far it stands out of
+    # the chassis is the bay's business. So the band is expressed as a SINK measured
+    # down from the plate, which is the same shape read the other way up.
+    - node: vent-angled
+      sink: 2.15
       color: '#23272b'
       confidence: estimated
       source: >-
         the band projects 10.4 in the front elevation and slopes back to the lid at an
         angle EYED off a perspective render, 10 to 15 degrees, which sets it back 1.8 to
-        2.8. No source gives the angle and no view here is a side elevation.
+        2.8; 2.15 is the middle of that. No source gives the angle and no view here is a
+        side elevation. Carried on the vent band because that is the node the slope
+        actually covers - the rest of the face is flat.
 body:
   depth: 270.0
   color: '#8f959c'

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dcp-2-psu-dc
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -36,13 +36,21 @@ provenance:
     photograph in the corpus (figs 2-5, 2-6) has AC supplies in both bays, so the DC
     face has never been measured face-on. Positions here are the AC part's, with the
     inlet swapped; treat x/y as estimated rather than measured.
+  terminal-geometry: >-
+    CORRECTED after looking at fig 2-13 at 7x. The first cut drew the DC input as a
+    20 x 28 block - the C14 aperture's envelope - with three posts arranged in a
+    triangle, by analogy with a mains connector. NEITHER IS RIGHT. The photograph shows
+    a NARROW, TALL block roughly a third the width of the AC inlet's aperture, with its
+    three contacts in a SINGLE VERTICAL COLUMN, evenly spaced. It is drawn 11 x 26 with
+    the contacts inline at 12.5, 20.0 and 27.5. The AC and DC modules do NOT share an
+    aperture size, which was the assumption underneath the error.
   terminal: >-
     NOT a std/ part, and deliberately so. The AC module composes std/c14-inlet@1 because
     IEC 60320-1 fixes that cutout; the DC input here is a three-post block whose standard,
     if it has one, is not identified in any DCP document and for which the library holds
-    no part. It occupies the same aperture the C14 does - 20 x 28 at the same centre -
-    which is what the chassis metalwork allows, and is drawn rather than composed. If a
-    DC terminal part is ever added to std/, this should compose it.
+    no part. It is drawn rather than composed. It does NOT share the C14's aperture -
+    see provenance/terminal-geometry, which corrects exactly that assumption. If a DC
+    terminal part is ever added to std/, this should compose it.
   colour: >-
     photo-inferred - fig 2-13. The lever colour is the one unambiguous difference
     between the two modules in that photograph. NOT ASSERTED: why it differs. Latch
@@ -57,15 +65,64 @@ provenance:
     is inherited from the AC part rather than measured. A face-on photograph of a
     DC-populated DCP-2, or a DC PSU datasheet, would settle it.
   depth-gap: NOT STATED, as for the AC module.
+  no-body-relief: >-
+    THE BODY DECLARES NO `out`, DELIBERATELY. A face that stands proud of its own panel
+    buries everything on it - the kit extrudes the plate as a slab and every feature
+    without relief of its own ends up inside it. That is what left smartoptics/dcp-404@1
+    blank in 3D. The module's own proudness relative to the chassis is the bay's
+    business, not the part's.
+  depth: >-
+    ESTIMATED at 265, and stated as a figure only so the part is a solid in 3D rather
+    than a plane. NO DCP DOCUMENT GIVES A PSU LENGTH. 1U CRPS is a family of lengths
+    rather than one, so the form factor named on the module's own sticker does not
+    settle it either; what bounds it is the chassis, which is 500 deep. Replace it the
+    moment anything states one.
 states: [ok, fail, absent]
 elements:
   handle: {at: [4.5, 3.5], size: [35.5, 5.0], class: handle}
   fan-aperture: {at: [8.45, 8.0], size: [34.1, 30.0], class: vent}
-  dc-terminal: {at: [45.5, 6.0], size: [20.0, 28.0], class: inlet}
+  dc-terminal: {at: [45.5, 7.0], size: [11.0, 26.0], class: inlet}
   latch: {at: [66.0, 14.5], size: [7.0, 22.5], class: latch}
   screw-left: {at: [6.2, 35.2], size: [3.6, 3.6], class: fastener}
   screw-mid: {at: [37.7, 35.2], size: [3.6, 3.6], class: fastener}
   lamp-status: {at: [55.6, 35.4], size: [3.6, 3.6], class: indicator}
 connection-points:
   power: {at: [50.5, 20.0], direction: rear}
+relief:
+  wall: '#5a6065'
+  features:
+    # the fan well is a hole, not a picture of one
+    - node: fan-aperture
+      sink: 6.0
+      confidence: estimated
+      source: >-
+        a fan sits behind a grille recessed into the face; 6 is the depth at which the
+        blades read as behind the plate rather than flush with it. No document dimensions
+        it and no view in the corpus is a side elevation of this module.
+    - node: latch
+      out: 2.2
+      confidence: estimated
+      source: >-
+        the release lever stands proud enough to get a thumb behind it, which is what
+        UM s2.3.2 describes - "Push the locking lever in towards the power connector".
+        The figure is eyed off fig 2-13, where the lever clears the face plainly.
+    - node: handle
+      out: 1.4
+      confidence: estimated
+      source: >-
+        the bail handle is drawn STOWED, lying against the face, so it stands only its
+        own bar thickness proud. fig 2-13 shows it folded out on a module in the hand.
+    - node: dc-terminal
+      sink: 3.0
+      confidence: estimated
+      source: >-
+        the three contacts sit in wells behind the block face, visible as recesses in
+        fig 2-13. Depth eyed off that photograph.
+    - node: lamp-status
+      out: 0.2
+      confidence: estimated
+      source: a light pipe finishing flush to slightly proud of the face
+body:
+  depth: 265.0       # estimated - see provenance/depth
+  color: '#a8aeb4'
 skins: [default]

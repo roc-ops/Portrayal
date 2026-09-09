@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dcp-2-blank
-version: 1.0.0
+version: 1.1.0
 class: blank
 behaviour: fills
 profile: networking
@@ -42,6 +42,11 @@ provenance:
   face-geometry-gap: >-
     no orthographic artwork exists. Patch centres, hole pitch and hole diameter are read
     off a three-quarter photograph and are estimated, not measured.
+  depth: >-
+    ESTIMATED at 15, stated only so the plate is a solid in 3D. UM s2.5 gives the part
+    no dimensions at all. A moulded blanking plate is a plate with a lip, and it guides
+    airflow rather than filling the slot, so it is given far less than the 270 of the
+    traffic unit whose aperture it shares.
   latching-gap: >-
     UM s2.5 does not say how the plate is retained. The two central bosses look like
     captive fasteners in fig 2-15 but nothing states it, so they are drawn as bosses
@@ -51,4 +56,26 @@ elements:
   vent-right: {at: [138.0, 9.0], size: [42.0, 26.0], class: vent}
   boss-left: {at: [43.4, 19.4], size: [5.2, 5.2], class: fastener}
   boss-right: {at: [156.4, 19.4], size: [5.2, 5.2], class: fastener}
+relief:
+  wall: '#17191b'
+  features:
+    - node: vent-left
+      sink: 2.0
+      confidence: estimated
+      source: round perforations through a moulded plate; the depth is the plate's own thickness, eyed off fig 2-15
+    - node: vent-right
+      sink: 2.0
+      confidence: estimated
+      source: as vent-left
+    - node: boss-left
+      out: 1.2
+      confidence: estimated
+      source: the raised central boss visible in fig 2-15; UM s2.5 does not say whether it is a fastener
+    - node: boss-right
+      out: 1.2
+      confidence: estimated
+      source: as boss-left
+body:
+  depth: 15.0        # estimated - see provenance/depth
+  color: '#26292b'
 skins: [default]
