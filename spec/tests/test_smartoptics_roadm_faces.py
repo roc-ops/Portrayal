@@ -11,7 +11,6 @@ the LC bore keyed (#126): a 4.7 square has no orientation, so a mirrored row
 drew identically to an unmirrored one.
 """
 import pathlib
-import re
 
 import yaml
 
