@@ -66,7 +66,7 @@ picture people have never been the same people, not because nobody tried.
 **Where it independently arrived where we did.** Per-field provenance with
 confidence tiers - theirs High (vendor datasheet) down to Unverified (community)
 and heuristic derivation; ours `datasheet / drawing / measured / photo-measured /
-registry / estimated`. Automated extraction with human review for high-priority
+registry / borrowed / estimated / known-wrong`. Automated extraction with human review for high-priority
 vendors. Convergent design is reassuring.
 
 **Where we are ahead, and it is not cosmetic.** Their interfaces are named once

@@ -1,0 +1,29 @@
+name: Modelling defect
+description: A device or component is drawn wrong, or a rule fires where it should not
+title: "<vendor>/<model>: "
+labels: [modelling-defect]
+body:
+  - type: input
+    id: target
+    attributes:
+      label: Device or component
+      placeholder: library/devices/juniper/mx204/device.yaml or common/psu-550w@2
+    validations:
+      required: true
+  - type: textarea
+    id: wrong
+    attributes:
+      label: What is wrong
+      description: What the drawing shows, what the hardware or document shows, and how you know. A matched-scale overlay or a photograph description helps; do not attach vendor material.
+    validations:
+      required: true
+  - type: input
+    id: rule
+    attributes:
+      label: Lint rule, if one fired
+      placeholder: L61
+  - type: textarea
+    id: source
+    attributes:
+      label: Source for the correct figure
+      description: Document and section, or measurement on hardware, with the confidence you would give it.

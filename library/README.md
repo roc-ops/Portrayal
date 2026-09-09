@@ -5,11 +5,11 @@ overlays, and sanitized device dumps. Compiled SVGs are build artifacts
 (`dist/`, gitignored) — render with `spec`.
 
 ```
-components/common/<name>/v<major>/{contract.yaml, skins/*.svg}
+components/{std,common,<vendor>}/<name>/v<major>/{contract.yaml, skins/*.svg}
 devices/<vendor>/<model>/{device.yaml, overlays/<nos>.yaml, dumps/}
 ```
 
-First device: **Edgecore AS7726-32X** (32× QSFP28 Trident 3 white-box switch),
+Reference device: **Edgecore AS7726-32X** (32× QSFP28 Trident 3 white-box switch),
 built from its datasheet facts (per-field provenance; no datasheet copies in-repo)
 and a live ArcOS `show components` dump from a lab unit (serials/MACs redacted).
 
