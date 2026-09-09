@@ -1,0 +1,23 @@
+format: 1
+kind: component
+name: warning-triangle
+version: 1.0.0
+class: marking
+profile: networking
+description: General warning triangle - a black exclamation mark in a yellow
+  triangle, ISO 7010 W001. The generic hazard marking, as distinct from
+  common/laser-warning, which carries the IEC 60825 laser burst.
+size: {w: 5.4, h: 4.8}
+provenance:
+  size: >-
+    borrowed - common/laser-warning@1, which is the same triangle at the same printed
+    size. These two are a matched pair on every faceplate that carries them, stacked one
+    above the other, and drawing them at different sizes would be wrong on the hardware
+    before it was wrong in the library.
+  glyph: >-
+    ISO 7010 W001 - a bare exclamation mark, which is what "general warning" means when
+    it is not qualified by a second symbol. WHY THIS PART EXISTS: the DCP-404 stacks a
+    laser triangle over a general one, the library held only the laser part, and the
+    first modelling composed laser-warning twice. That is right in position and size and
+    wrong in meaning, and a reader cannot tell a doubled symbol from a real one.
+skins: [default]

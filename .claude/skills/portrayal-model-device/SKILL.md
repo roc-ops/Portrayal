@@ -161,6 +161,47 @@ Do that before writing "renders flat" anywhere, and before adding a feature to
 fix a flatness that is not there. A part that already has cavities does not need
 them invented, and the invented ones will be wrong.
 
+### A VENDOR STENCIL IS A DIAGRAM SYMBOL, NOT A DRAWING OF THE PRODUCT
+
+Visio stencils are vector, they carry ShapeSheet connection points, and they are
+the fastest thing in the box to measure. They are also drawn to be legible at
+rack-elevation size in someone's network diagram, and they are routinely
+simplified in ways that look complete. **Get a product photograph or a vendor
+render and check the stencil against it BEFORE you place anything.**
+
+The Smartoptics DCP-404 was built from the `DCP_v260105` stencil and came out
+confidently wrong:
+
+    vent features        stencil drew 1 of 5
+    Power / Status       stencil: one lamp, far right
+                         real:    two lamps, lower left
+    traffic lamps        stencil: below the cages
+                         real:    beside each word of the Tx/Rx caption
+    port block x         16 mm off, because the stencil dropped the vent
+                         column that pushes the ports right
+    face height          41.19 drawn against a real 44, so every y was 6% short
+
+Nothing there is visible without the photograph. The model rendered plausibly
+and passed lint, devicelock and the whole suite.
+
+What the stencil was still good for, and it is not nothing: it agreed with the
+photograph on the brand, model and hazard triangles to about a millimetre, and
+its connection points are what showed the four client cages ABUT - which is the
+difference between composing `qsfp-ganged` and composing `qsfp28` cages that
+overlap. Use it as a second opinion and as the source of connection points; do
+not let it be the only thing you looked at.
+
+Two habits that follow:
+
+- **Find the datasheet's dimensions first**; they settle the stencil's scale.
+  Check the axis labels rather than trusting them - the DCP-404 datasheet reads
+  "Size (WxDxH) 44 x 205 x 270mm", which is transposed, and the stencil is what
+  identifies which number is the width.
+- **Derive px/mm on a photo twice**, once across from the known width and once
+  down from the known height. If they agree the face is near-orthographic and
+  you can measure it; if they diverge you are looking at perspective and the
+  vertical needs correcting before any number comes off it.
+
 ### A FIGURE'S OWN ASPECT TELLS YOU WHETHER TO TRUST IT
 
 Before taking any fraction off a drawing, measure the drawing against something
