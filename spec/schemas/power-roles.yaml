@@ -78,6 +78,14 @@ roles:
     # sheet metal, plastic and hardware
     - blank
     - filter
+    # AN OPTICAL COUPLER IS GLASS. Smartoptics' OCU modules split or combine
+    # C-band power in a fixed ratio with a fused fibre coupler and no electronics
+    # at all - ds-ppm-r4.0 gives them a passband, a coupling ratio and an
+    # insertion loss, and no power row, in a datasheet that gives every module
+    # one where there is one to give. It is deliberately NOT `filter`, which the
+    # add/drop and DCM members of the same family carry: a coupler splits power
+    # across the whole band and a filter selects a wavelength out of it.
+    - coupler
     - ground
     - mechanical
     - mount

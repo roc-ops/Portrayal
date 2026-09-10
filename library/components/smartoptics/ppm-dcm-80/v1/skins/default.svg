@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="55.4mm" height="19.5mm" viewBox="0 0 55.4 19.5">
+  <!-- PPM-DCM80-100GHz, 55.4 x 19.5.
+
+       ONE ADAPTER, AND THE REST OF THE PLATE IS BLANK. The DCP-F stencil draws a
+       large "DCM 80km" legend in the empty half; ds-ppm-r4.0's render of the same
+       part does not, and the datasheet is the product document. Its four DCM
+       renders differ from each other in the vertical part number and in nothing
+       else, which is what says the plates really are identical. See the contract.
+
+       THE ADAPTERS ARE NOT DRAWN HERE. One common/lc-duplex-adapter@3 is
+       composed by the contract at 4.5; this plate is what it sits on.
+
+       LC, NOT SC. ds-ppm-r4.0's spec table for this part says "Connector type
+       LC/UPC"; the stencil master's adapters read as SC at a glance and are
+       wrong about it, as they are on every PPM in the family.
+
+       THE PART NUMBER RUNS VERTICALLY UP THE RIGHT EDGE, which is what the
+       datasheet render and the stencil master both show. -->
+  <defs>
+    <linearGradient id="plate" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4a4f55"/>
+      <stop offset="0.35" stop-color="#33383d"/>
+      <stop offset="1" stop-color="#22262a"/>
+    </linearGradient>
+  </defs>
+
+  <rect id="body" x="0" y="0" width="55.4" height="19.5" rx="1.0"
+        fill="url(#plate)" stroke="#15181a" stroke-width="0.25"/>
+
+  <g id="captions">
+    <rect id="caption-dcm" x="4.5" y="16.2" width="13.2" height="2.05" rx="0.3" fill="#eef0f2"/>
+  </g>
+
+  <g id="port-silkscreen" font-family="sans-serif" text-anchor="middle">
+    <text x="11.1" y="3.3" font-size="2.5" fill="#f2f4f6">DCM</text>
+
+    <text x="7.8" y="17.75" font-size="1.5" fill="#1c1f22">Tx</text>
+    <text x="14.4" y="17.75" font-size="1.5" fill="#1c1f22">Rx</text>
+  </g>
+
+  <g id="part-silkscreen" font-family="sans-serif">
+    <text x="53.4" y="9.75" font-size="1.72" fill="#dfe3e7" text-anchor="middle"
+          transform="rotate(90 53.4 9.75)">PPM-DCM80-100GHz</text>
+  </g>
+</svg>
