@@ -236,6 +236,13 @@ export async function applyAllOverrides(rootEl, deviceBays, overrides, loadSkin,
                                         compByRef, maxDepth = 4) {
   let n = await applyOverrides(rootEl, deviceBays, overrides, loadSkin);
   const seen = new Set(deviceBays.map(b => b.id));
+  // ONLY THE BOUNDED EXIT CAN DROP ANYTHING, and saying so is cheaper than
+  // proving it again below. Leaving the loop because the frontier came back
+  // empty IS the proof that nothing is left; re-deriving it afterwards walks
+  // every bay in the drawing a second time to be told what the loop just
+  // established. `applyBayOverrides` runs per view per config, so that is one
+  // wasted walk per face on the path that always succeeds.
+  let truncated = true;
   for (let depth = 0; depth < maxDepth; depth++) {
     const found = nestedBays(rootEl, compByRef).filter(b => !seen.has(b.id));
     // ONE LEVEL PER PASS, and this is not an optimisation. A COMPILED FACE
@@ -254,7 +261,7 @@ export async function applyAllOverrides(rootEl, deviceBays, overrides, loadSkin,
     // `slot-1/module/ppm-10` reads as a descendant of `slot-1/module/ppm-1`.
     const frontier = found.filter(
       b => !found.some(o => o !== b && b.id.startsWith(o.id + '/')));
-    if (!frontier.length) break;
+    if (!frontier.length) { truncated = false; break; }
     for (const b of frontier) seen.add(b.id);
     n += await applyOverrides(rootEl, frontier, overrides, loadSkin);
   }
@@ -281,9 +288,11 @@ export async function applyAllOverrides(rootEl, deviceBays, overrides, loadSkin,
   // the document to be counted, so a truncated walk can hide further work behind
   // the work it already skipped. `dropped` is therefore a floor: non-empty means
   // something was definitely lost, empty means nothing visible was.
-  const dropped = nestedBays(rootEl, compByRef)
-    .filter(b => !seen.has(b.id)
-                 && Object.prototype.hasOwnProperty.call(overrides, b.id))
-    .map(b => b.id);
+  const dropped = truncated
+    ? nestedBays(rootEl, compByRef)
+        .filter(b => !seen.has(b.id)
+                     && Object.prototype.hasOwnProperty.call(overrides, b.id))
+        .map(b => b.id)
+    : [];
   return {applied: n, dropped};
 }
