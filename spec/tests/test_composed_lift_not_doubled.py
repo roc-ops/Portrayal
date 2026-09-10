@@ -23,10 +23,12 @@ a live subject. The invariant is general, so this is:
     a feature's own extent is `out` minus the summed lift under it, and a solid
     cannot have negative extent.
 
-Scoped to elements that HAVE an ancestor contributing lift, which is exactly the
-composed case this guards. A part that declares `lift` above its own `out` on
-one node is a different defect, in a contract rather than in the renderer, and
-common/qsfp-pull-tab@1's crossbar is an open example of it.
+IT NOW SWEEPS EVERY SOLID, not only the composed ones. It was scoped to nodes
+with an ancestor contributing lift, because a second and unrelated defect held
+three nodes below zero - common/qsfp-pull-tab@1's crossbar wrote `out` as a
+THICKNESS rather than a distance from the panel, so the same arithmetic caught it
+for a reason this test was not about. That contract is fixed, so the scope comes
+off: a solid cannot have negative extent, whatever put it there.
 """
 import pathlib
 import xml.etree.ElementTree as ET
@@ -49,14 +51,16 @@ def negative_boxes(path):
         raw = el.get("data-z-out")
         if raw is None:
             continue
-        # only the composed case: something ABOVE this node has to contribute lift
-        anc, node = 0.0, parent.get(el)
+        # EVERY SOLID, not only the composed ones. This was scoped to nodes with
+        # an ancestor contributing lift, because the library still held three
+        # that failed for a different reason - common/qsfp-pull-tab@1's crossbar
+        # wrote `out` as a thickness. That is fixed, the sweep now finds nothing
+        # anywhere, and a scoped invariant is only as good as the reason it was
+        # scoped.
+        lift, node = 0.0, el
         while node is not None:
-            anc += float(node.get("data-z-lift") or 0)
+            lift += float(node.get("data-z-lift") or 0)
             node = parent.get(node)
-        if not anc:
-            continue
-        lift = anc + float(el.get("data-z-lift") or 0)
         try:
             box = float(raw) - lift
         except ValueError:
@@ -66,7 +70,7 @@ def negative_boxes(path):
     return out
 
 
-def test_no_composed_feature_has_negative_extent():
+def test_no_solid_has_negative_extent():
     if not DIST.exists():
         pytest.skip("library/dist not built")
     files = sorted(DIST.rglob("*.svg"))
@@ -77,8 +81,10 @@ def test_no_composed_feature_has_negative_extent():
             bad.append(
                 f"{f.name}: {i} has out={out} under a summed lift of {lift:g} "
                 f"(its own data-z-lift is {own}), so its extent is {box:+.3f}. "
-                "A lift carried by an ancestor group has been folded into this "
-                "node's own lift as well - see _inset_feature's group_lift."
+                "Either a lift carried by an ancestor group was folded into "
+                "this node's own lift as well (see _inset_feature's group_lift), "
+                "or the contract wrote `out` as a thickness rather than as a "
+                "distance from the panel."
             )
     assert not bad, "features built inside out:\n  " + "\n  ".join(bad)
 
