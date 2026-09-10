@@ -55,6 +55,11 @@ function reset() {
           'data-ref': 'so/carrier-b@1:1.0.0'}),
     node({id: 'slot-1--module--ppm-1--module--optic-1',
           'data-path': 'slot-1/module/ppm-1/module/optic-1', 'data-class': 'bay'}),
+    // NOT NAMED BY THE OVERRIDE MAP. Nothing was asked of this bay, so a walk
+    // that stops before reaching it has lost nothing and must not say it did.
+    // It is what distinguishes `!seen` from `!seen && named`.
+    node({id: 'slot-1--module--ppm-1--module--optic-2',
+          'data-path': 'slot-1/module/ppm-1/module/optic-2', 'data-class': 'bay'}),
   );
 }
 
@@ -65,8 +70,12 @@ const INDEX = {
   'so/carrier-a@1': {name: 'carrier-a',
     bays: {'ppm-1': {at: [10, 10], accepts: ['so/carrier-b@1']},
            'ppm-10': {at: [40, 10], accepts: ['so/carrier-b@1']}}},
-  'so/carrier-b@1': {name: 'carrier-b', bays: {'optic-1': {at: [1, 1], accepts: ['so/leaf@1']}}},
-  'so/carrier-b2@1': {name: 'carrier-b2', bays: {'optic-1': {at: [7, 3], accepts: ['so/leaf@1']}}},
+  'so/carrier-b@1': {name: 'carrier-b',
+    bays: {'optic-1': {at: [1, 1], accepts: ['so/leaf@1']},
+           'optic-2': {at: [1, 9], accepts: ['so/leaf@1']}}},
+  'so/carrier-b2@1': {name: 'carrier-b2',
+    bays: {'optic-1': {at: [7, 3], accepts: ['so/leaf@1']},
+           'optic-2': {at: [7, 9], accepts: ['so/leaf@1']}}},
   'so/leaf@1': {name: 'leaf', bays: {}},
 };
 
@@ -128,7 +137,7 @@ const run = (maxDepth) => m.applyAllOverrides(
 const wrapper = p => created.find(e => e.getAttribute('data-path') === p);
 
 reset();
-const applied = await run(undefined);
+const {applied, dropped} = await run(undefined);
 // read before the next reset clears them
 const ppm1 = wrapper('slot-1/module/ppm-1/module')?.getAttribute('data-ref') ?? null;
 const opticTransform =
@@ -141,7 +150,13 @@ const opticTransform =
 // two applied means the levels were read right, one means ppm-10 was mistaken
 // for something nested inside its sibling.
 reset();
-const boundedApplied = await run(1);
+const bounded = await run(1);
+const boundedApplied = bounded.applied;
+
+// TRUNCATION IS NOT COMPLETION, and the report is what tells them apart. Bounded
+// to one pass, optic-1 is never reached - and the map named it, so it was
+// genuinely lost. An unbounded run reaches everything and must report nothing.
+const boundedDropped = bounded.dropped;
 
 console.log(JSON.stringify({
   applied,
@@ -152,4 +167,8 @@ console.log(JSON.stringify({
   opticTransform,
   // ppm-1 and ppm-10 are siblings, so one bounded pass must catch both
   boundedApplied,
+  // nothing was lost when the walk ran to completion...
+  dropped,
+  // ...and exactly the unreached, override-named bay when it was cut short
+  boundedDropped,
 }));

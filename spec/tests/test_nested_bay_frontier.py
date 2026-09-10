@@ -57,3 +57,23 @@ def test_a_deeper_bay_waits_for_the_carrier_above_it_to_settle():
         f"one bounded pass applied {out['boundedApplied']} of 2 same-level bays. "
         "1 means a sibling was mistaken for a descendant (the `+ '/'` guard); "
         "3 means the levels were not separated at all.")
+
+    # TRUNCATION IS NOT COMPLETION. The walk leaves that loop two ways and they
+    # mean opposite things: an empty frontier is done, a spent `maxDepth` is an
+    # override the caller asked for and never got. Reaching everything must
+    # report nothing, and being cut short must name what was lost - otherwise
+    # 2D shows the swap, 3D does not, and nothing says so.
+    assert out["dropped"] == [], (
+        f"a walk that reached every level reported {out['dropped']} as dropped. "
+        "That is the over-reporting failure: `maxDepth` reached with a non-empty "
+        "frontier is not the same as an override going unapplied.")
+    # optic-2 is unreached too and NO override names it, so nothing was asked of
+    # it and nothing was lost. It is what separates `!seen` from
+    # `!seen && named` - without it every unreached bay is also a named one and
+    # this assertion cannot tell the two predicates apart.
+    assert out["boundedDropped"] == ["slot-1/module/ppm-1/module/optic-1"], (
+        f"a truncated walk reported {out['boundedDropped']}. Empty means the "
+        "loss is silent, which is the defect. Including optic-2 means it is "
+        "reporting every bay it did not reach rather than the ones an override "
+        "actually named - a deep drawing nobody swapped anything in would then "
+        "announce dropped overrides that never existed.")

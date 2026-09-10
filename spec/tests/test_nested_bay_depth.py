@@ -64,6 +64,13 @@ def test_the_walk_reaches_every_level_and_stops_on_its_own():
         "looping at all"
     )
 
+    # completion reports nothing; truncation names what the map asked for and
+    # the walk never reached
+    assert out["dropped"] == [], out["dropped"]
+    assert out["boundedDropped"], (
+        "bounded to one pass this fixture leaves override-named bays unreached, "
+        "and reported none of them")
+
 
 def test_the_library_still_has_no_three_level_carrier():
     """The premise the fixture rests on, checked rather than assumed.
