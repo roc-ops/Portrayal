@@ -220,17 +220,36 @@ export async function applyOverrides(rootEl, bays, overrides, loadSkin) {
 // twice already fixed one level at a time, and this is the shape that stops
 // fixing it one level at a time.
 //
-// `seen` is what makes the walk terminate on its own: a bay is applied at the
-// level it first appears at and never revisited, so the loop ends when a pass
-// reveals nothing new rather than when a counter runs out. `maxDepth` is the
-// belt - render.py bounds its own recursion at MAX_BAY_DEPTH = 3 for the same
-// reason - so a drawing with a cycle in it cannot spin here.
+// `seen` is what makes the walk terminate on its own: a bay is applied at its
+// OWN level and never revisited, so each pass retires at least one level and the
+// loop ends when a pass finds nothing left rather than when a counter runs out.
+// (It used to say "at the level it first appears at", which was the bug the
+// levelling below fixes - a bay can appear in a frontier several levels before
+// it is its turn.) `maxDepth` is the belt - render.py bounds its own recursion
+// at MAX_BAY_DEPTH = 3 for the same reason - so a drawing with a cycle in it
+// cannot spin here.
 export async function applyAllOverrides(rootEl, deviceBays, overrides, loadSkin,
                                         compByRef, maxDepth = 4) {
   let n = await applyOverrides(rootEl, deviceBays, overrides, loadSkin);
   const seen = new Set(deviceBays.map(b => b.id));
   for (let depth = 0; depth < maxDepth; depth++) {
-    const frontier = nestedBays(rootEl, compByRef).filter(b => !seen.has(b.id));
+    const found = nestedBays(rootEl, compByRef).filter(b => !seen.has(b.id));
+    // ONE LEVEL PER PASS, and this is not an optimisation. A COMPILED FACE
+    // ALREADY CARRIES ITS NESTING - render.py seats every configured `default:`
+    // at build time, and the dist holds 248 level-2 bay groups across 52 files
+    // before any override is applied - so `nestedBays` does not hand back one
+    // level at a time. It walks `[data-class="bay"]` and level-limits nothing,
+    // which means a single frontier can hold a carrier AND something seated
+    // inside it.
+    // Applied together, the deeper one's `at`/`rotate` were read off the carrier
+    // the shallower one is about to replace, and `seen` then guarantees they are
+    // never re-derived: the occupant lands where the OLD carrier's bay was.
+    // So a bay with an ancestor in the same frontier waits for the next pass,
+    // by which time the carrier above it has settled and it resolves against
+    // what is actually seated. The `+ '/'` is load-bearing - without it
+    // `slot-1/module/ppm-10` reads as a descendant of `slot-1/module/ppm-1`.
+    const frontier = found.filter(
+      b => !found.some(o => o !== b && b.id.startsWith(o.id + '/')));
     if (!frontier.length) break;
     for (const b of frontier) seen.add(b.id);
     n += await applyOverrides(rootEl, frontier, overrides, loadSkin);
