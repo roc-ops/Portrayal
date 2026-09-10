@@ -70,7 +70,7 @@ def negative_boxes(path):
     return out
 
 
-def test_no_composed_feature_has_negative_extent():
+def test_no_solid_has_negative_extent():
     if not DIST.exists():
         pytest.skip("library/dist not built")
     files = sorted(DIST.rglob("*.svg"))
