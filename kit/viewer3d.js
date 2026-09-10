@@ -436,11 +436,21 @@ export function createViewer(container, opts = {}) {
       // `applyAllOverrides` for why a fixed number of passes is the wrong shape
       // for this. shell.js never needed it: `bayFor` re-reads the live drawing
       // on every lookup, so the gap here was always a 2D/3D divergence.
-      const n = await applyAllOverrides(doc.documentElement, bays, OVERRIDES,
-                                        loadSkin, byRef);
-      if (!n) continue;
+      const {applied, dropped} = await applyAllOverrides(
+        doc.documentElement, bays, OVERRIDES, loadSkin, byRef);
+      // A DROPPED OVERRIDE IS THE ONE FAILURE THIS FILE MUST NOT SWALLOW. It
+      // means the drawing nests deeper than the walk was allowed to go, so the
+      // 2D face shows the swap and this scene does not - silently, and looking
+      // exactly like a viewer that simply did not update. render.py cannot build
+      // a face deeper than MAX_BAY_DEPTH, so reaching this at all says the
+      // drawing is not one it produced.
+      if (dropped.length)
+        console.warn(`[portrayal] ${DEV}.${cfg}.${view}: ${dropped.length} nested `
+                     + `bay override(s) never applied - the drawing nests deeper `
+                     + `than the walk goes, so 2D and 3D will disagree`, dropped);
+      if (!applied) continue;
       setSvgOverride(url, new XMLSerializer().serializeToString(doc), SCOPE);
-      total += n;
+      total += applied;
     }
     return total;
   }

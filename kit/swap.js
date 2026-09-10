@@ -220,6 +220,10 @@ export async function applyOverrides(rootEl, bays, overrides, loadSkin) {
 // twice already fixed one level at a time, and this is the shape that stops
 // fixing it one level at a time.
 //
+// Returns `{applied, dropped}`: how many bays were seated, and the ids of any
+// the override map named that the walk never reached. `dropped` is non-empty
+// only when `maxDepth` cut the walk short.
+//
 // `seen` is what makes the walk terminate on its own: a bay is applied at its
 // OWN level and never revisited, so each pass retires at least one level and the
 // loop ends when a pass finds nothing left rather than when a counter runs out.
@@ -254,5 +258,32 @@ export async function applyAllOverrides(rootEl, deviceBays, overrides, loadSkin,
     for (const b of frontier) seen.add(b.id);
     n += await applyOverrides(rootEl, frontier, overrides, loadSkin);
   }
-  return n;
+  // WHAT WAS LOST, IF ANYTHING - because the two ways out of that loop mean
+  // opposite things and used to be indistinguishable. Running out of frontier is
+  // completion; running out of `maxDepth` is truncation, and an override the
+  // caller asked for was never applied. 2D would show the swap and 3D would not,
+  // which is the divergence this whole family of fixes has been about, and it
+  // would have gone unreported.
+  //
+  // NAMED BY THE MAP, not merely unreached. The walk continues while a frontier
+  // holds anything NEW, so `depth === maxDepth && frontier.length` is true of a
+  // deep drawing nobody swapped anything in - it would announce that overrides
+  // were dropped when none were. What was actually lost is the bays still
+  // unprocessed THAT THE OVERRIDE MAP NAMES.
+  //
+  // Reported rather than logged. swap.js has no console calls and runs in two
+  // places - the live page and a headless parse of a fetched face - so it says
+  // what happened and lets the caller decide how to say it. viewer3d has the
+  // `[portrayal] …` voice for that.
+  //
+  // IT NAMES WHAT IS VISIBLE, WHICH IS NOT NECESSARILY ALL THAT WAS LOST. A bay
+  // that would only have appeared once a deeper carrier was seated cannot be in
+  // the document to be counted, so a truncated walk can hide further work behind
+  // the work it already skipped. `dropped` is therefore a floor: non-empty means
+  // something was definitely lost, empty means nothing visible was.
+  const dropped = nestedBays(rootEl, compByRef)
+    .filter(b => !seen.has(b.id)
+                 && Object.prototype.hasOwnProperty.call(overrides, b.id))
+    .map(b => b.id);
+  return {applied: n, dropped};
 }

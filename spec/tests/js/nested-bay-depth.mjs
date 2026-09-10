@@ -90,12 +90,14 @@ const OVERRIDES = {
 };
 
 revealed = 1;                      // the device bay's own occupant is already in
-const applied = await m.applyAllOverrides(root, deviceBays, OVERRIDES,
-                                          async () => null, ref => INDEX[ref] || null);
+const {applied, dropped} = await m.applyAllOverrides(
+  root, deviceBays, OVERRIDES, async () => null, ref => INDEX[ref] || null);
 
 // and again with the walk bounded to one nested pass, to show the bound bites
 revealed = 1;
-const bounded = await m.applyAllOverrides(root, deviceBays, OVERRIDES,
-                                          async () => null, ref => INDEX[ref] || null, 1);
+const boundedRun = await m.applyAllOverrides(
+  root, deviceBays, OVERRIDES, async () => null, ref => INDEX[ref] || null, 1);
+const bounded = boundedRun.applied;
 
-console.log(JSON.stringify({applied, bounded, levels: LEVELS.length}));
+console.log(JSON.stringify({applied, bounded, levels: LEVELS.length,
+                           dropped, boundedDropped: boundedRun.dropped}));
