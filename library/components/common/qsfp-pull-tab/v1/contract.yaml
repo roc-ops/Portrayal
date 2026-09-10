@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: qsfp-pull-tab
-version: 1.0.0
+version: 1.1.0
 class: latch
 profile: networking
 description: >-
@@ -46,13 +46,19 @@ relief:
         common/qsfp-pull-tab@1's own reach key - the same 34.80 MAX dimension as rail-l. One
         drawing dimension covering both rails of one part.
     - node: crossbar
-      out: 3.4
+      out: 34.8
       lift: 31.4
       confidence: drawing
       source: >-
         common/qsfp-pull-tab@1's own size key - 'drawing - 19.00 MAX across the bail, 3.40
         MAX thick'. The 31.4 lift is 34.8 - 3.4, the subtraction that puts the crossbar at
         the end of the rails, not a separate reading.
+        `out` IS NOT A THICKNESS. It read 3.4 - the bail's thickness - and relief.js builds
+        a solid as `out` minus the summed lift, so the crossbar came out 3.4 - 31.4 = -28:
+        a box whose front face sat 28mm behind its back. It is an ABSOLUTE distance from
+        the panel, so the far end of the rails is the number, and the thickness falls out
+        of the pair: 34.8 - 31.4 = 3.4, which is the dimension the drawing gives. The two
+        rails beside it always said 34.8 for the same reach.
     # the speed is cut through the crossbar as lettering, not printed on it
     - node: speed-cut
       sink: 1.2
