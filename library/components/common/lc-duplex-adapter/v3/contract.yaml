@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: lc-duplex-adapter
-version: 3.1.0
+version: 3.2.0
 class: port
 profile: networking
 description: >-
@@ -51,34 +51,55 @@ relief:
         rather than estimated.
     # caps seat into the bore and stand a quarter inch proud of the jack face
     - node: cap-tx
-      out: 6.35
+      out: 9.525
       lift: 3.175
       color: '#e9ecef'
       confidence: photo-measured
       source: >-
         common/lc-duplex-adapter@3's own dust-caps key - 'photo - unused ports carry a white
-        cap standing about a quarter inch proud of the jack face'. 6.35 is that quarter
-        inch; the 3.175 lift is the bezel's own eighth-inch stand-off, so the cap is
-        measured from the faceplate and not from the jack.
+        cap standing about a quarter inch proud of the jack face'. THE JACK FACE IS THE
+        BEZEL'S FRONT, at 3.175, so a quarter inch proud of it is 3.175 + 6.35 = 9.525, and
+        the cap is 6.35 thick.
+        IT READ 6.35 AND THAT WAS THE QUARTER INCH USED AS AN ABSOLUTE. `out` is a distance
+        from the PANEL, not a height above whatever the part sits on, so writing the
+        measured proudness straight into it put the cap's front at 6.35 - an eighth of an
+        inch proud of the jack, half what the photograph says. The note that shipped with
+        it reinterpreted the reading as 'measured from the faceplate and not from the jack'
+        rather than recording it; the provenance key says jack face, and the provenance key
+        is the reading.
+        WHAT CONFIRMS IT: cap-tx-inset has always sat at 9.525, because the inset is
+        moulded into the cap's FRONT and 9.525 is where that front is. The two agree now
+        and disagreed before, and NOBODY SAW IT BECAUSE THE INSET WAS NEVER DRAWN - it was
+        written as a `sink`, which means nothing outside a cavity, so the one feature whose
+        position contradicted the cap's was built by nothing. #230, fixed alongside this.
     - node: cap-rx
-      out: 6.35
+      out: 9.525
       lift: 3.175
       color: '#e9ecef'
       confidence: photo-measured
       source: >-
         common/lc-duplex-adapter@3's own dust-caps key - the same 'about a quarter inch
-        proud' reading as cap-tx. ONE reading covering both caps, not two.
-    # the moulded square recessed into each cap front
+        proud' reading as cap-tx, resolved the same way. ONE reading covering both caps,
+        not two.
+    # the moulded square recessed into each cap front. POCKET AND NOT SINK: a
+    # `sink` measures down from a CAVITY FLOOR and means nothing outside one, and
+    # the cap is a solid lump standing on the faceplate. Written as a sink it was
+    # collected by nothing and the inset was never built (#230); `pocket` is the
+    # key for a recess in an otherwise solid face. Same depth, same lift, right
+    # word.
     - node: cap-tx-inset
-      sink: 0.9
+      pocket: 0.9
       lift: 9.525
       confidence: estimated
       source: >-
         common/lc-duplex-adapter@3 - the dust-caps key fixes that there IS 'a rounded-square
         inset moulded into its front' and nothing about how deep. The 9.525 lift is 3.175 +
-        6.35, both photo-measured; only the 0.9 sink is invented.
+        6.35, both photo-measured; only the 0.9 depth is invented.
+        THIS LIFT WAS RIGHT WHILE cap-tx's `out` WAS NOT, and it is what caught it: an inset
+        moulded into the cap's front must sit AT that front, and 9.525 is where the
+        photograph puts it. The cap said 6.35. They agree now.
     - node: cap-rx-inset
-      sink: 0.9
+      pocket: 0.9
       lift: 9.525
       confidence: estimated
       source: >-

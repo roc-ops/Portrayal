@@ -208,6 +208,7 @@ RULES = {
     "L74": ("component",  "a lamp that declares states is painted from the lamp-colour variable", "fill or stroke the lamp node with `var(--led-color, <off colour>)`, not a literal colour"),
     "L75": ("component",  "a slot's structured facts agree with its prose, and lanes fit the connector", "fix `lanes`/`connector` or the description"),
     "L76": ("device",     "the RJ45 census: every Ethernet jack says whether it has lamps", "use std/rj45@2 with the lamp parts, or say in provenance the jack is bare"),
+    "L77": ("component",  "a `sink` sits in a cavity, because that is what it measures from", "use `pocket` for a recess in an otherwise solid face"),
 }
 
 
@@ -1438,6 +1439,87 @@ def lint_component_body_boxes(path, data, _lib_roots=None):
             unmarked += 1
     if unmarked:
         warn(path, "L71", f"{unmarked} of {len(boxes)} body boxes carry no confidence")
+
+
+def lint_component_sink_context(path, data, _lib_roots=None):
+    """L77: a `sink` sits in a cavity, because that is what it measures from.
+
+    A SINK IS A STEP IN A FLOOR. It measures DOWN FROM A CAVITY FLOOR, and
+    relief.js collects it in exactly one place - as a feature of the recess it
+    sits in. On a node with no cavity above it there is no floor to measure from,
+    nothing collects it and nothing draws it, silently, for as long as the
+    contract lives. `common/qsfp-pull-tab@1` declared a speed cut through its
+    crossbar that was never built once; `common/lc-duplex-adapter@3` declared the
+    inset moulded into its dust caps and it was never built across 490 nodes in
+    ten drawings - and because it was never built, nobody noticed that it and the
+    cap it belonged to disagreed about where the cap's front was (#230).
+
+    `pocket` is the key for a recess in an otherwise solid face. It compiles to
+    `data-depth`, which is the cavity relief.js already knows how to build, floor
+    taken from the node's own art. Same number, same lift, and it draws.
+
+    WHAT COUNTS AS A CAVITY ABOVE IT. A part whose own group carries `data-depth`
+    is one - that is any part with a depth that is not a solid module and does not
+    `mounts`, or one that says `relief.cavity` outright (a screw head's driver
+    slot is the library's example, and its slots are correct sinks). Failing that,
+    the node has to sit inside something in its own skin that declares a `pocket`.
+    A cavity in a COMPOSED part is not an ancestor of this skin's nodes - it is a
+    sibling subtree - so it cannot host one of these.
+    """
+    relief = data.get("relief") or {}
+    feats = relief.get("features") or []
+    sinks = [f for f in feats if isinstance(f, dict) and f.get("sink") is not None]
+    if not sinks:
+        return
+    solid = (data.get("kind") == "module" or data.get("behaviour") == "mounts")
+    is_cavity = bool((data.get("size") or {}).get("d")
+                     and (not solid or relief.get("cavity")))
+    if is_cavity:
+        return
+    pockets = {f["node"] for f in feats
+               if isinstance(f, dict) and f.get("pocket") is not None and f.get("node")}
+    for f in sinks:
+        node = f.get("node")
+        if node and pockets and _node_under(path, node, pockets):
+            continue
+        err(path, "L77", f"{node} declares sink {f['sink']:g} and nothing above it is a "
+                         "cavity, so no floor exists for it to measure from and relief.js "
+                         "collects it nowhere - the recess is declared and never built. "
+                         "Use `pocket` for a recess in an otherwise solid face")
+
+
+def _node_under(path, node, hosts):
+    """Is `node` inside one of `hosts` in EVERY skin that draws it?
+
+    Read from the skin because nesting is a fact about the drawing, not about the
+    contract - the relief block is a flat list and says nothing about what
+    contains what.
+
+    EVERY SKIN, not any. The relief block is shared across all of them, so a node
+    that sits inside the pocket in one skin and beside it in another has a floor
+    under it on one drawing and nothing on the other - and the drawing without it
+    is the defect this rule exists to name. `any` would let one good skin excuse
+    the rest. A part whose skins do not draw the node at all is a different
+    defect and _skin_checks owns that one, so it is not answered here.
+    """
+    drawn = 0
+    for skin in sorted(Path(path).parent.glob("skins/*.svg")):
+        try:
+            root = ET.parse(skin).getroot()
+        except (ET.ParseError, OSError):
+            continue
+        parent = {c: p for p in root.iter() for c in p}
+        target = next((e for e in root.iter() if e.get("id") == node), None)
+        if target is None:
+            continue
+        drawn += 1
+        while target is not None:
+            target = parent.get(target)
+            if target is not None and target.get("id") in hosts:
+                break
+        else:
+            return False
+    return drawn > 0
 
 
 def lint_component_fields(path, data, _lib_roots=None):
@@ -5823,6 +5905,7 @@ def main():
                 lint_component_forwarded_mate(f, d, args.library)
                 lint_component_relief_confidence(f, d, args.library)
                 lint_component_body_boxes(f, d)
+                lint_component_sink_context(f, d)
                 lint_component_fields(f, d)
                 lint_component_lamp_colour(f, d)
                 lint_component_slots(f, d)

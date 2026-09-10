@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: qsfp-pull-tab
-version: 1.1.0
+version: 1.2.0
 class: latch
 profile: networking
 description: >-
@@ -59,15 +59,20 @@ relief:
         the panel, so the far end of the rails is the number, and the thickness falls out
         of the pair: 34.8 - 31.4 = 3.4, which is the dimension the drawing gives. The two
         rails beside it always said 34.8 for the same reach.
-    # the speed is cut through the crossbar as lettering, not printed on it
+    # the speed is cut through the crossbar as lettering, not printed on it.
+    # POCKET AND NOT SINK: this said `sink: 1.2`, and a sink measures down from a
+    # CAVITY FLOOR - it is a step in the bottom of a recess, and means nothing on
+    # a node that is not inside one. The crossbar is solid, so the cut was
+    # collected by nothing and drawn by nothing, silently, from the day it was
+    # written (#230). `pocket` is the key for a recess in an otherwise solid face.
     - node: speed-cut
-      sink: 1.2
+      pocket: 1.2
       lift: 34.8
       confidence: estimated
       source: >-
-        common/qsfp-pull-tab@1 - the 34.8 lift is the drawing's reach and the 1.2 sink is
-        not dimensioned anywhere. The speed-cut key establishes that the cut goes THROUGH
-        the crossbar ('carries the reach cut through it as the word 100G rather than
-        printed, so it reads from either side'), which makes 1.2 a shallow stand-in for a
-        through-cut.
+        common/qsfp-pull-tab@1 - the 34.8 lift is the crossbar's own front face, where a cut
+        through it has to start, and the 1.2 depth is not dimensioned anywhere. The
+        speed-cut key establishes that the cut goes THROUGH the crossbar ('carries the reach
+        cut through it as the word 100G rather than printed, so it reads from either side'),
+        which makes 1.2 a shallow stand-in for a through-cut.
 skins: [white, blue]

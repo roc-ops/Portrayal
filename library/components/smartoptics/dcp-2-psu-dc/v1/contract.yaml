@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dcp-2-psu-dc
-version: 1.2.0
+version: 1.3.0
 class: psu
 behaviour: fills
 profile: networking
@@ -112,8 +112,11 @@ connection-points:
 relief:
   wall: '#5a6065'
   features:
+    # POCKET AND NOT SINK: this was `sink`, which measures down from a cavity
+    # FLOOR and means nothing on a node that is not inside one - so the recess
+    # was collected by nothing and never built (#230). Same depth, right key.
     - node: fan-aperture
-      sink: 6.0
+      pocket: 6.0
       confidence: estimated
       source: >-
         a fan sits behind a grille recessed into the face; 6 is the depth at which the
