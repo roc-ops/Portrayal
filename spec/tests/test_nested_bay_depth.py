@@ -2,8 +2,15 @@
 
 `applyAllOverrides` seats what it knows, looks again, and repeats while looking
 still finds something new. It cannot know the nested bays up front: which ones
-exist is a property of the carrier CURRENTLY seated, so each level only becomes
-visible once the level above it has been populated.
+exist is a property of the carrier CURRENTLY seated.
+
+SCOPE, NARROWED AFTER THE FACT. This covers nesting an override CREATES - seat a
+carrier that declares bays and those bays did not exist a moment ago. It does NOT
+cover nesting the face already has, which is most of it: render.py seats every
+configured `default:` at build time, so one `nestedBays` call usually returns
+several levels at once. An earlier version of this docstring claimed the two
+behave alike; they do not, and `test_nested_bay_frontier.py` covers the other
+case.
 
 It ran ONCE and buried every nested swap in 3D; then TWICE, which covers the two
 levels the library actually has. Two was never the number - it was the depth of

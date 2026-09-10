@@ -2,8 +2,17 @@
 //
 // `applyAllOverrides` seats what it knows, looks again, and repeats while
 // looking still finds something new. It cannot know the nested bays up front:
-// which ones exist is a property of the carrier CURRENTLY seated, so each level
-// only becomes visible once the level above it has been populated.
+// which ones exist is a property of the carrier CURRENTLY seated.
+//
+// WHAT THIS FIXTURE MODELS, NARROWLY: nesting that an override CREATES. Seat a
+// carrier that declares bays of its own and those bays did not exist in the
+// document a moment ago, so they appear a level at a time - which is what the
+// `revealed` counter below stands in for.
+// It does NOT model nesting the face ALREADY HAS, and an earlier version of this
+// comment wrongly claimed the two behave alike. render.py seats every configured
+// `default:` at build time, so most nesting is present from the first call and a
+// single frontier holds several levels at once. That case, and the stale
+// geometry it used to cause, is nested-bay-frontier.mjs.
 //
 // NOTHING IN THE LIBRARY IS THREE LEVELS DEEP TODAY - all 670 `accepts` entries
 // across the 84 nested bays resolve, and not one names a component that itself
