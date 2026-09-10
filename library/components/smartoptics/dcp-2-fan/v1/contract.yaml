@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dcp-2-fan
-version: 1.1.0
+version: 1.2.0
 class: fan
 behaviour: fills
 profile: networking
@@ -61,8 +61,11 @@ elements:
 relief:
   wall: '#8d9399'
   features:
+    # POCKET AND NOT SINK: this was `sink`, which measures down from a cavity
+    # FLOOR and means nothing on a node that is not inside one - so the recess
+    # was collected by nothing and never built (#230). Same depth, right key.
     - node: vent-field
-      sink: 4.0
+      pocket: 4.0
       confidence: estimated
       source: >-
         the perforation is a hole field with fans behind it, so it reads as depth rather
