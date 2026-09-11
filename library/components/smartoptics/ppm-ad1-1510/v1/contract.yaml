@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ppm-ad1-1510
-version: 1.0.0
+version: 1.1.0
 class: filter
 behaviour: fills
 profile: optical
@@ -59,6 +59,15 @@ provenance:
     via common/lc-duplex-adapter@3, itself measured off the Smartoptics DCP-R stencil -
     the same vendor's drawing of the same connector, which is why it is preferred here
     over a generic.
+  face-layout: >-
+    CORRECTED. The caption boxes were drawn at y 15.4, 2.7 tall, and BOTH sources put
+    them lower and shorter: 16.37-18.22 on the stencil master this part was built
+    from, 16.18-18.23 on ds-ppm-r4.0's own render. Taken as 16.2 x 2.05. The two
+    documents agreeing against the contract is what makes it a misreading rather than
+    a source conflict, and it was found by measuring the seven unbuilt PPMs off the
+    same two drawings - the family is what checked the one member of it that shipped
+    first. The adapter block at y 4.0 is unchanged and both sources support it: it
+    runs 3.86-4.02 to 14.99-15.10 across five renders.
   depth: >-
     ESTIMATED at 60, and stated as a figure only so the part has a solid in 3D rather
     than being a plane. NO DOCUMENT GIVES IT - the four methods that settle the face
@@ -71,9 +80,9 @@ provenance:
     positions and any marking other than the part number are unknown, and the module
     may well carry none - a passive filter has nothing to report.
 elements:
-  caption-osc: {at: [5.57, 15.4], size: [13.2, 2.7], class: marking}
-  caption-edfa: {at: [22.50, 15.4], size: [13.2, 2.7], class: marking}
-  caption-line: {at: [35.70, 15.4], size: [13.2, 2.7], class: marking}
+  caption-osc: {at: [5.57, 16.2], size: [13.2, 2.05], class: marking}
+  caption-edfa: {at: [22.50, 16.2], size: [13.2, 2.05], class: marking}
+  caption-line: {at: [35.70, 16.2], size: [13.2, 2.05], class: marking}
 parts:
   - {ref: common/lc-duplex-adapter@3, id: osc, at: [5.57, 4.0], attrs: {role: osc}}
   - {ref: common/lc-duplex-adapter@3, id: edfa, at: [22.50, 4.0], attrs: {role: edfa}}
