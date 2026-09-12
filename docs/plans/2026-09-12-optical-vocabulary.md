@@ -30,6 +30,11 @@ dependencies.
 - **Lint baseline is `LINT: ok (654 files, 1291 warnings in 22 rules)`.** A task
   may add rules; it must not add warnings to existing files.
 - **pytest baseline is 1357 passed, 1 skipped.** Tasks only add.
+- **Expected totals in each task are a GUIDE, not a gate.** The binding check is
+  that nothing FAILED and the total only went up. If a total differs from what a
+  task predicts but no test failed, say so in the report and carry on - unrelated
+  work can land tests between tasks, and a plan that forces an exact number
+  invites someone to make the number right rather than the suite.
 - **Version bumps happen BEFORE `devicelock.py --update`, never after.**
 - **`working/` is never committed.** Reference material stays there.
 - **Run every command from the worktree root.** Do not `cd` to the main checkout.
@@ -456,16 +461,15 @@ LIB = [str(ROOT / "library")]
 def run(rule, doc, code=None, path="t/contract.yaml"):
     """Call ONE rule and return ONLY its errors.
 
-    Filtering on a substring like "L8" would also catch L80 when testing L8x and
-    would quietly pass if a rule started raising under the wrong code. `code`
-    defaults to None meaning "everything this call raised", which is what the
-    single-rule tests below want.
+    Every optical rule takes `(path, data, lib_roots)` - the ones that do not
+    need the roots accept and ignore them - so one call shape serves all three.
+
+    Filtering on a substring like "L8" would also catch L80 while testing L81,
+    and would quietly pass if a rule started raising under the wrong code, so
+    `code` narrows to one rule when a test cares which fired.
     """
     L.ERRORS.clear()
-    try:
-        rule(path, doc, LIB)
-    except TypeError:
-        rule(path, doc)          # rules that take no lib_roots
+    rule(path, doc, LIB)
     return [e for e in L.ERRORS
             if code is None or f"[{code}]" in e]
 
@@ -608,7 +612,7 @@ Expected: `LINT: ok (654 files, 1291 warnings in 22 rules)` — no contract decl
 ```bash
 python3 -m pytest spec/tests -q | tail -1
 ```
-Expected: `1362 passed, 1 skipped`
+Expected: `1367 passed, 1 skipped`
 
 - [ ] **Step 7: Commit**
 
@@ -747,7 +751,7 @@ Expected: PASS (7 passed)
 python3 spec/tools/portrayal/lint.py --schemas spec/schemas --library library | tail -1
 python3 -m pytest spec/tests -q | tail -1
 ```
-Expected: lint unchanged at the baseline; `1366 passed, 1 skipped`
+Expected: lint unchanged at the baseline; `1371 passed, 1 skipped`
 
 - [ ] **Step 7: Commit**
 
@@ -889,7 +893,7 @@ Expected: PASS (7 passed)
 python3 spec/tools/portrayal/lint.py --schemas spec/schemas --library library | tail -1
 python3 -m pytest spec/tests -q | tail -1
 ```
-Expected: lint at the baseline; `1369 passed, 1 skipped`
+Expected: lint at the baseline; `1374 passed, 1 skipped`
 
 - [ ] **Step 7: Commit**
 
@@ -1021,7 +1025,7 @@ device composing these parts is stale, bump that device's `version:` first.
 python3 spec/tools/portrayal/devicelock.py --library library --update | tail -1
 python3 -m pytest spec/tests -q | tail -1
 ```
-Expected: `1372 passed, 1 skipped`
+Expected: `1377 passed, 1 skipped`
 
 - [ ] **Step 7: Commit**
 
@@ -1119,7 +1123,7 @@ python3 spec/tools/portrayal/lint.py --schemas spec/schemas --library library | 
 python3 spec/tools/portrayal/devicelock.py --library library --update | tail -1
 python3 -m pytest spec/tests -q | tail -1
 ```
-Expected: lint at the baseline; `1380 passed, 1 skipped`
+Expected: lint at the baseline; `1385 passed, 1 skipped`
 
 - [ ] **Step 6: Commit**
 
@@ -1242,7 +1246,7 @@ Expected: PASS (3 passed)
 ```bash
 python3 -m pytest spec/tests -q | tail -1
 ```
-Expected: `1383 passed, 1 skipped`
+Expected: `1388 passed, 1 skipped`
 
 - [ ] **Step 5: Commit**
 
@@ -1294,8 +1298,8 @@ contiguous.
 **Type consistency:** `split_endpoint`, `capacities`, `endpoints`, `reached` are
 defined in Task 2 and used under those names in Tasks 3, 4, 5 and 8.
 `_optical_load_ref` is defined in Task 3 and reused in Task 5. Test counts are
-cumulative and consistent: 1357 baseline -> 1358, 1362, 1366, 1369, 1372, 1380,
-1383.
+cumulative: 1357 baseline -> 1358 (T1), 1363 (T2, file only), 1367, 1371,
+1374, 1377, 1385, 1388 - and each is a guide, not a gate.
 
 **One thing an executor must not assume:** Task 1 step 6 says devicelock *may*
 report stale devices when the adapter's version bumps. Whether it does depends on
