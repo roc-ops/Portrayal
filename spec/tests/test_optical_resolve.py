@@ -7,6 +7,7 @@ is 77 chances to type 12 as 21 on the FS line alone.
 import pathlib
 import sys
 
+import pytest
 import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
@@ -86,3 +87,23 @@ def test_the_50_50_coupler_splits_evenly():
     c = contract("smartoptics/ppm-ocu-50-50@1")
     dests = {d["at"]: d["ratio"] for d in c["optical"]["paths"][0]["to"]}
     assert dests == {"split.1": 50, "split.2": 50}
+
+
+@pytest.mark.parametrize("km", [10, 20, 40, 80])
+def test_each_dcm_passes_rx_through_to_tx(km):
+    """ds-ppm-r4.0's own flow figure: Rx in, dispersion applied, Tx out.
+
+    Bore 1 is Tx and bore 2 is Rx, which is the order the faceplate captions
+    them and the order lc-duplex-adapter composes its bores.
+    """
+    c = contract(f"smartoptics/ppm-dcm-{km}@1")
+    paths = c["optical"]["paths"]
+    assert len(paths) == 1
+    assert paths[0]["from"] == "dcm.2" and paths[0]["to"] == "dcm.1"
+
+
+@pytest.mark.parametrize("km", [10, 20, 40, 80])
+def test_a_dcm_declares_no_unused_positions(km):
+    """Both bores carry light, so `unused` would be a false claim."""
+    c = contract(f"smartoptics/ppm-dcm-{km}@1")
+    assert not (c["optical"].get("unused") or {})
