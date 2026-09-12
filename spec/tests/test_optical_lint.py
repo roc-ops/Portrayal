@@ -96,11 +96,28 @@ def test_two_paths_landing_on_one_position_are_caught():
 
 
 def test_one_source_feeding_two_destinations_is_NOT_a_conflict():
-    """That is a split, which is the whole point of the graph form."""
+    """That is a split, which is the whole point of the graph form - as long as
+    it is written as ONE path with a ratio list, which is the form the ratio
+    check can actually see."""
     assert run(L.lint_component_optical_conflicts,
                module([{"from": "common.1",
                         "to": [{"at": "split.1", "ratio": 50},
                                {"at": "split.2", "ratio": 50}]}])) == []
+
+
+def test_the_same_source_in_two_plain_paths_is_caught():
+    """A split written the long way hides its ratios from the check above.
+
+    `{from: common.1, to: split.1}` and `{from: common.1, to: split.2}` each
+    yield zero ratios via `endpoints()`, so the sum-to-100 check never runs -
+    a 70/30 tap written this way carries no ratios anywhere the linter can see.
+    A source is allowed to be a `from` in at most one path; a genuine split
+    must use the ratio list, which is the one form L79 can verify.
+    """
+    hits = run(L.lint_component_optical_conflicts,
+               module([{"from": "common.1", "to": "split.1"},
+                       {"from": "common.1", "to": "split.2"}]))
+    assert len(hits) == 1 and "common.1" in hits[0], hits
 
 
 def test_ratios_that_do_not_sum_to_100_are_caught():
@@ -143,6 +160,20 @@ def test_declaring_a_position_unused_that_a_path_DOES_reach_is_caught():
                        {"from": "common.2", "to": "split.2"}],
                       unused={"common.2": "this claim contradicts path 1 above"}))
     assert len(hits) == 1 and "common.2" in hits[0], hits
+
+
+def test_an_unused_key_naming_no_real_position_is_caught():
+    """`unused: {ghost.7: "..."}` or `common.9` on a two-bore adapter validates
+    against the schema - `propertyNames` only checks the string shape - and
+    the per-position loop above only ever walks real positions, so a bogus key
+    was previously checked by nothing at all. An uncheckable claim is a defect
+    here the same as a missing one.
+    """
+    hits = run(L.lint_component_optical_coverage,
+               module([{"from": "common.1", "to": "split.1"},
+                       {"from": "common.2", "to": "split.2"}],
+                      unused={"ghost.7": "does not exist"}))
+    assert len(hits) == 1 and "ghost.7" in hits[0], hits
 
 
 def test_a_component_with_no_paths_at_all_is_not_checked_by_L80():

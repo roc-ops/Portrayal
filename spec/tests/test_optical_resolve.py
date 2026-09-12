@@ -37,6 +37,25 @@ def test_an_endpoint_splits_into_a_part_id_and_a_position():
     assert optical.split_endpoint("common.12") == ("common", 12)
 
 
+def test_the_adapters_parts_are_tx_then_rx_in_that_order():
+    """The order is a comment today, and four DCM contracts depend on it.
+
+    `common/lc-duplex-adapter@3`'s own `optical` block says position order is
+    the order its bores are composed below - 1 is `tx`, 2 is `rx` - stated in
+    a comment nothing enforces. Every ppm-dcm-* contract declares its pass-
+    through as `dcm.2 -> dcm.1`, which is only Rx-into-Tx if bore 1 really is
+    `tx` and bore 2 really is `rx`. Swap the two entries under `parts:` and
+    every one of those four DCMs silently inverts - `optical.positions: 2`
+    still holds, L78/L79/L80 still pass, and the suite stays green while the
+    signal direction on every DCM in the library is now backwards.
+    """
+    c = contract("common/lc-duplex-adapter@3")
+    ids = [p["id"] for p in c["parts"]]
+    assert ids == ["tx", "rx"], (
+        "lc-duplex-adapter's parts order encodes bore 1 = tx, bore 2 = rx; "
+        "the DCM contracts' dcm.2 -> dcm.1 pass-through depends on it")
+
+
 def test_capacities_come_from_the_composed_parts_contracts():
     """The module names parts; the PARTS know how many fibres they hold."""
     c = {"parts": [{"ref": "common/lc-duplex-adapter@3", "id": "common"},

@@ -1574,12 +1574,26 @@ def lint_component_optical_conflicts(path, data, _lib_roots=None):
     counting sources as conflicts would reject the parts this vocabulary exists
     for. The check is therefore on destinations only.
 
+    A COMBINE - two sources landing on one destination - is not expressible
+    today. The vocabulary has no syntax for it, so two paths whose destinations
+    collide are always an error here, with no declared-combine escape hatch the
+    way a declared split has one. `ppm-ad1-1510`'s combine direction (plan 6)
+    will need one and none exists yet; see this rule's TODO and the design
+    doc's open questions.
+
     Ratios are checked here rather than in the schema because the schema can say
     a ratio is a number and cannot say two of them add up. 70/40 validates and
-    is wrong.
+    is wrong. THE RATIO LIST IS ALSO THE ONLY FORM THIS CHECK CAN SEE: a split
+    written as two plain paths - `{from: common.1, to: split.1}` and
+    `{from: common.1, to: split.2}` - carries no ratios at all, so writing a
+    genuine split that way hides it from the ratio check entirely. A source
+    is therefore allowed to be a `from` in at most one path; a part that
+    splits must say so with the ratio list, which is the one form this rule
+    can actually verify.
     """
     paths = (data.get("optical") or {}).get("paths") or []
     seen = {}
+    sources = {}
     for i, p in enumerate(paths):
         eps = optical.endpoints(p)
         for ep, _r in eps[1:]:
@@ -1588,6 +1602,14 @@ def lint_component_optical_conflicts(path, data, _lib_roots=None):
                                  f"({seen[ep]} and {i}) - a fibre position "
                                  "takes one ferrule")
             seen[ep] = i
+        src = p.get("from")
+        if src in sources:
+            err(path, "L79", f"{src} is the source of two paths "
+                             f"({sources[src]} and {i}) - splitting a source "
+                             "across two paths hides its ratios from this "
+                             "check, so a split is written as ONE path with "
+                             "a ratio list, not two plain paths")
+        sources[src] = i
         ratios = [r for _e, r in eps[1:] if r is not None]
         if ratios:
             total = round(sum(ratios), 6)
@@ -1623,6 +1645,14 @@ def lint_component_optical_coverage(path, data, lib_roots):
     fires everywhere gets ignored everywhere. The cost is real: a part that
     declares connectors and no paths is not checked by L80, and nothing yet
     catches that gap.
+
+    AN `unused` KEY IS ALSO CHECKED AGAINST SOMETHING. The schema's
+    `propertyNames` can only shape-check the string - `<part-id>.<n>` - and the
+    loop above walks real positions only, so `unused: {ghost.7: "..."}` or
+    `common.9` on a two-bore adapter validated and was silently ignored: a
+    claim about hardware that does not exist, checked by nothing. Every key is
+    now required to name a position on a connector this component actually
+    composes.
     """
     opt = data.get("optical") or {}
     if not (opt.get("paths") or []):
@@ -1641,6 +1671,19 @@ def lint_component_optical_coverage(path, data, lib_roots):
                                  "nothing declares. Route it, or add an "
                                  "`optical.unused` entry saying what terminates "
                                  "there")
+    for ep in sorted(unused):
+        try:
+            part, pos = optical.split_endpoint(ep)
+        except ValueError:
+            err(path, "L80", f"{ep!r} is not an optical endpoint - `unused` "
+                             "keys are `<part-id>.<n>` with n from 1")
+            continue
+        if part not in caps or pos > caps[part]:
+            err(path, "L80", f"{ep} is declared unused but names no position "
+                             "this component composes - `unused` claims a "
+                             "position exists and terminates nothing, so it "
+                             "is checked against real hardware like any other "
+                             "endpoint")
 
 
 def lint_component_fields(path, data, _lib_roots=None):

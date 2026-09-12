@@ -238,7 +238,7 @@ reason to prefer it:
 | rule | what it catches |
 |---|---|
 | endpoints are real | `mtp-1.13` on an MPO-12, instead of a silently ignored row |
-| no position claimed twice | two strands landing on one bore, unless a declared split or combine |
+| no position claimed twice | two strands landing on one bore, unless a declared split. A COMBINE HAS NO SYNTAX YET - two sources into one destination is an error today, full stop; see Open questions |
 | every position reached or declared `unused` | the OCU dead bore, in both directions |
 | fibre counts balance | what arrives at the rear equals what leaves at the front, allowing declared taps and terminations |
 | declared polarity agrees with the paths | a transposition inside a 24-fibre cassette |
@@ -298,6 +298,18 @@ is). It must be a width - presumably the top cover, inset from the body - but
 four cassettes need 435.86 mm side by side, which is wider. It does not threaten
 the 1UFCE, whose 448.0 comes from a dimensioned orthographic drawing in its own
 datasheet, but it is unexplained.
+
+**Combines are undesigned.** The vocabulary can express a split - one path,
+one `from`, a ratio list of destinations - and L79 can verify its ratios. It
+cannot express the opposite: two sources landing on one destination, which is
+what `ppm-ad1-1510`'s add/drop direction and the add/drop filters of plan 6
+will need. Today's parts dodge this by writing add/drop as a split off the
+line port instead, and L79 treats any real collision on a destination as a
+flat error with no declared-combine escape hatch the way a declared split has
+one. What the syntax should look like - a ratio list on the destination side,
+a distinct `combine` keyword, something else - needs plan 6's own evidence
+before it is worth deciding; recorded here so it is not mistaken for settled
+by section D's table, which used to claim it.
 
 ## Sources
 
