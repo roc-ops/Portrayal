@@ -45,8 +45,17 @@ from PIL import Image
 
 # What a figure is NOT.
 #
-# An icon, a logo, a numbered callout bullet: small in both directions. 200px
-# at scale 3.0 is about 0.9in on the page.
+# An icon, a logo, a numbered callout bullet: small in BOTH directions and
+# uncaptioned. 200px at scale 3.0 is about 0.9in on the page.
+#
+# THAT DEFAULT IS A JUNIPER/CISCO NUMBER AND IT IS WRONG FOR SOME PUBLISHERS.
+# FS draws its product renders at about 190x140, so the rule dropped 64 of the 82
+# pictures in their modular cabling portfolio as icons - and the largest of those
+# were the cassette faces, which are the only images of that part anywhere in the
+# corpus. "The vendor published no pictures of it" and "the filter ate them" look
+# identical from the kept pile, which is the whole reason the rejects stay on
+# disk. `--icon-px` is the knob; `--reclassify` re-sorts in a second without
+# touching the PDF, which is what the two-stage design is FOR.
 ICON_PX = 200
 # The Cisco chapter-header cityscape: a wide photograph pasted at the top of
 # every chapter. Dimensions cannot find it. A line-card faceplate is wide and
@@ -93,7 +102,7 @@ def hamming(a, b):
     return bin(int(a, 16) ^ int(b, 16)).count("1")
 
 
-def classify(pics, banner_rule=True, pool=None):
+def classify(pics, banner_rule=True, pool=None, icon_px=ICON_PX):
     """Split raw picture records into keepers and rejects.
 
     Takes and returns plain dicts, so it can be re-run over an existing
@@ -120,7 +129,7 @@ def classify(pics, banner_rule=True, pool=None):
         w, h, cap = p["w"], p["h"], p["caption"]
         aspect = w / max(h, 1)
         why = ""
-        if w < ICON_PX and h < ICON_PX and not cap:
+        if w < icon_px and h < icon_px and not cap:
             why = "icon"
         elif bannerish(p) and sum(
                 1 for q in pool if hamming(p["ahash"], q) <= BANNER_HAMMING
@@ -184,8 +193,9 @@ def convert(pdf: Path, out: Path, scale: float):
     return pics, md
 
 
-def write_index(pdf, out, pics, md, banner_rule=True, pool=None):
-    kept, rejected = classify(pics, banner_rule, pool)
+def write_index(pdf, out, pics, md, banner_rule=True, pool=None,
+                icon_px=ICON_PX):
+    kept, rejected = classify(pics, banner_rule, pool, icon_px)
     sections(md, kept)
     sections(md, rejected)
     (out / "index.json").write_text(json.dumps({
@@ -209,7 +219,7 @@ def hashes(out: Path):
 
 
 def run(pdf: Path, out_root: Path, scale: float, reclassify: bool,
-        banner_rule: bool = True, pool=None):
+        banner_rule: bool = True, pool=None, icon_px=ICON_PX):
     out = out_root / pdf.stem
     raw = out / "raw.json"
     if raw.exists():
@@ -227,9 +237,9 @@ def run(pdf: Path, out_root: Path, scale: float, reclassify: bool,
             raw.write_text(json.dumps(d, indent=1))
         return "recls", write_index(pdf, out, pics,
                                     (out / "doc.md").read_text(), banner_rule,
-                                    pool)
+                                    pool, icon_px)
     pics, md = convert(pdf, out, scale)
-    return "ok", write_index(pdf, out, pics, md, banner_rule, pool)
+    return "ok", write_index(pdf, out, pics, md, banner_rule, pool, icon_px)
 
 
 def main():
@@ -239,6 +249,11 @@ def main():
     ap.add_argument("--scale", type=float, default=3.0)
     ap.add_argument("--reclassify", action="store_true",
                     help="re-run the filter over an existing raw.json; no PDF work")
+    ap.add_argument("--icon-px", type=int, default=ICON_PX,
+                    help="below this on BOTH axes an uncaptioned picture is an "
+                         f"icon (default {ICON_PX}). Lower it for a publisher "
+                         "who draws small - FS product renders are ~190x140 and "
+                         "vanish at the default. Pair with --reclassify")
     ap.add_argument("--no-banner", dest="banner", action="store_false",
                     help="disable the repeated-width banner rule; for a publisher "
                          "whose every figure is drawn at the page width")
@@ -254,7 +269,7 @@ def main():
         t0 = time.time()
         try:
             status, n = run(p, root, a.scale, a.reclassify, a.banner,
-                            pool or None)
+                            pool or None, a.icon_px)
         except Exception as e:
             print(f"FAIL {p.name}: {type(e).__name__}: {e}", flush=True)
             continue
