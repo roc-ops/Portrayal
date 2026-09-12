@@ -102,6 +102,7 @@ import yaml
 import attrsections as attrs_mod
 import capability
 import devicelock
+import optical
 from manifest import (view_parts, targets, split_target, presented_interface,
                       VIEW_KEY_ORDER,
                       component_refs, load_yaml,
@@ -209,6 +210,7 @@ RULES = {
     "L75": ("component",  "a slot's structured facts agree with its prose, and lanes fit the connector", "fix `lanes`/`connector` or the description"),
     "L76": ("device",     "the RJ45 census: every Ethernet jack says whether it has lamps", "use std/rj45@2 with the lamp parts, or say in provenance the jack is bare"),
     "L77": ("component",  "a `sink` sits in a cavity, because that is what it measures from", "use `pocket` for a recess in an otherwise solid face"),
+    "L78": ("component",  "an optical endpoint names a composed connector and a position it has", "fix the part id or the position number"),
 }
 
 
@@ -1520,6 +1522,45 @@ def _node_under(path, node, hosts):
         else:
             return False
     return drawn > 0
+
+
+def _optical_load_ref(lib_roots):
+    """A `load_ref` for optical.capacities that reads from the library roots."""
+    def load(ref):
+        return _contract(ref, lib_roots) or {}
+    return load
+
+
+def lint_component_optical_endpoints(path, data, lib_roots):
+    """L78: an optical endpoint names a composed connector and a position it has.
+
+    `mtp-1.13` on an MPO-12 is not a near miss, it is a fibre that does not
+    exist - and without this rule it is also silent, because nothing downstream
+    looks up a position it was never told about. The capacity comes from the
+    CONNECTOR's own contract, so this also catches an endpoint naming a part
+    that is not a connector at all: a path into a status lamp.
+    """
+    opt = data.get("optical") or {}
+    paths = opt.get("paths") or []
+    if not paths:
+        return
+    caps = optical.capacities(data, _optical_load_ref(lib_roots))
+    for p in paths:
+        for ep, _ratio in optical.endpoints(p):
+            try:
+                part, pos = optical.split_endpoint(ep)
+            except ValueError:
+                err(path, "L78", f"{ep!r} is not an optical endpoint - they are "
+                                 "`<part-id>.<n>` with n from 1")
+                continue
+            if part not in caps:
+                err(path, "L78", f"{ep} names {part!r}, which this part either "
+                                 "does not compose or which declares no "
+                                 "`optical.positions` - only a connector can "
+                                 "carry a fibre")
+            elif pos > caps[part]:
+                err(path, "L78", f"{ep} asks for position {pos} and {part} "
+                                 f"presents {caps[part]}")
 
 
 def lint_component_fields(path, data, _lib_roots=None):
@@ -5905,6 +5946,7 @@ def main():
                 lint_component_forwarded_mate(f, d, args.library)
                 lint_component_relief_confidence(f, d, args.library)
                 lint_component_body_boxes(f, d)
+                lint_component_optical_endpoints(f, d, args.library)
                 lint_component_sink_context(f, d)
                 lint_component_fields(f, d)
                 lint_component_lamp_colour(f, d)

@@ -84,3 +84,4 @@ a test fails when this page and the linter disagree. A finding prints as
 | L75 | component | a slot's structured facts agree with its prose, and lanes fit the connector | fix `lanes`/`connector` or the description |
 | L76 | device | the RJ45 census: every Ethernet jack says whether it has lamps | use std/rj45@2 with the lamp parts, or say in provenance the jack is bare |
 | L77 | component | a `sink` sits in a cavity, because that is what it measures from | use `pocket` for a recess in an otherwise solid face |
+| L78 | component | an optical endpoint names a composed connector and a position it has | fix the part id or the position number |
