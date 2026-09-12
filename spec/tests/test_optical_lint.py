@@ -68,3 +68,21 @@ def test_a_split_destination_is_checked_like_any_other_endpoint():
                         "to": [{"at": "split.1", "ratio": 50},
                                {"at": "split.9", "ratio": 50}]}]))
     assert len(hits) == 1 and "split.9" in hits[0], hits
+
+
+def test_a_malformed_endpoint_gets_its_own_message_not_the_unknown_part_one():
+    """Pins the `except ValueError` branch, which the other tests never reach.
+
+    `lint_component()` reports only the FIRST schema error and still returns
+    the data, so a contract that fails schema validation somewhere else still
+    flows into this rule carrying an endpoint string `optical.ENDPOINT` would
+    have rejected. Without a test that exercises `split_endpoint` raising,
+    that branch and its distinct "is not an optical endpoint" message could be
+    deleted and this suite would stay green - the other tests only ever reach
+    the "names {part!r}" and "asks for position" messages, both of which
+    require `split_endpoint` to have already succeeded.
+    """
+    hits = run(L.lint_component_optical_endpoints,
+               module([{"from": "bad", "to": "split.1"}]))
+    assert len(hits) == 1, hits
+    assert "is not an optical endpoint" in hits[0], hits
