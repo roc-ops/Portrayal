@@ -64,3 +64,25 @@ def test_reached_is_every_endpoint_any_path_touches():
         {"from": "common.1", "to": [{"at": "split.1", "ratio": 50},
                                     {"at": "split.2", "ratio": 50}]}]}}
     assert optical.reached(c) == {"common.1", "split.1", "split.2"}
+
+
+def test_the_97_3_coupler_splits_its_common_port_in_that_ratio():
+    """The part's function, which was the string `coupling-ratio: '97/3'`."""
+    c = contract("smartoptics/ppm-ocu-97-3@1")
+    paths = (c.get("optical") or {}).get("paths") or []
+    assert len(paths) == 1, paths
+    dests = {d["at"]: d["ratio"] for d in paths[0]["to"]}
+    assert paths[0]["from"] == "common.1"
+    assert dests == {"split.1": 97, "split.2": 3}
+
+
+def test_the_couplers_dead_bore_is_a_declared_claim_not_a_sentence():
+    c = contract("smartoptics/ppm-ocu-97-3@1")
+    unused = (c.get("optical") or {}).get("unused") or {}
+    assert "common.2" in unused and len(unused["common.2"]) >= 20
+
+
+def test_the_50_50_coupler_splits_evenly():
+    c = contract("smartoptics/ppm-ocu-50-50@1")
+    dests = {d["at"]: d["ratio"] for d in c["optical"]["paths"][0]["to"]}
+    assert dests == {"split.1": 50, "split.2": 50}

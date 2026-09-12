@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ppm-ocu-50-50
-version: 1.0.0
+version: 1.1.0
 class: coupler
 behaviour: fills
 profile: optical
@@ -105,6 +105,22 @@ parts:
   # carries both legs. That is the datasheet's arrangement, not a convenience.
   - {ref: common/lc-duplex-adapter@3, id: common, at: [22.50, 4.0], attrs: {role: common}}
   - {ref: common/lc-duplex-adapter@3, id: split, at: [35.70, 4.0], attrs: {role: split}}
+optical:
+  # THE PART'S FUNCTION, WHICH USED TO BE A STRING. See ppm-ocu-97-3@1 - the same
+  # coupler at the symmetric ratio, which is why neither leg is the main path and
+  # ds-ppm-r4.0 prints both with the same number.
+  media: os2
+  paths:
+    - from: common.1
+      to:
+        - {at: split.1, ratio: 50}
+        - {at: split.2, ratio: 50}
+  unused:
+    common.2: >-
+      a three-port coupler in a four-bore faceplate - the plate takes duplex
+      adapters and the optics need one common port and two legs, so this bore
+      exists because of the connector and terminates nothing. ds-ppm-r4.0
+      captions it NA.
 relief:
   wall: '#22262a'
   features:
