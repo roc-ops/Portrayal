@@ -1612,6 +1612,17 @@ def lint_component_optical_coverage(path, data, lib_roots):
     error - otherwise `unused` becomes a way to silence the rule rather than a
     statement about the hardware, and the first person under time pressure finds
     that out.
+
+    IT ONLY ASKS THE QUESTION OF A PART THAT OPTED IN. A component composing
+    fibre connectors but declaring no `optical.paths` at all returns here
+    unchecked - deliberately. This rule can only fire once a component has
+    started describing its optical model; running it against every component
+    that merely composes a connector would error on every part in the library
+    that carries an LC adapter and no optical model, which today is all of
+    them. That would force the rule to land as a warning, and a warning that
+    fires everywhere gets ignored everywhere. The cost is real: a part that
+    declares connectors and no paths is not checked by L80, and nothing yet
+    catches that gap.
     """
     opt = data.get("optical") or {}
     if not (opt.get("paths") or []):

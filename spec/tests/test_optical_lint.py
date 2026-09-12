@@ -143,3 +143,19 @@ def test_declaring_a_position_unused_that_a_path_DOES_reach_is_caught():
                        {"from": "common.2", "to": "split.2"}],
                       unused={"common.2": "this claim contradicts path 1 above"}))
     assert len(hits) == 1 and "common.2" in hits[0], hits
+
+
+def test_a_component_with_no_paths_at_all_is_not_checked_by_L80():
+    """This is the rule's deliberate blind spot, not a bug.
+
+    L80 only asks its question of a part that has opted in by declaring
+    `optical.paths`. A component that composes connectors (here, two LC
+    duplex adapters worth four positions) but declares zero paths returns
+    before the coverage walk ever runs - every position of every composed
+    connector escapes "reached or declared unused" unchecked. Running the
+    rule on every component that merely composes a connector would error on
+    every part in the library with an LC adapter and no optical model, which
+    today is all of them, so it stays a guard rather than a check. Nothing
+    else in this file catches this gap either.
+    """
+    assert run(L.lint_component_optical_coverage, module([])) == []
