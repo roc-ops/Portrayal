@@ -116,3 +116,30 @@ def test_a_97_3_split_sums_and_is_silent():
                module([{"from": "common.1",
                         "to": [{"at": "split.1", "ratio": 97},
                                {"at": "split.2", "ratio": 3}]}])) == []
+
+
+def test_a_position_no_path_reaches_and_no_entry_declares_is_caught():
+    """ppm-ocu-97-3's dead bore, which is currently a sentence in provenance."""
+    hits = run(L.lint_component_optical_coverage,
+               module([{"from": "common.1",
+                        "to": [{"at": "split.1", "ratio": 97},
+                               {"at": "split.2", "ratio": 3}]}]))
+    assert len(hits) == 1 and "common.2" in hits[0], hits
+
+
+def test_declaring_it_unused_silences_it():
+    assert run(L.lint_component_optical_coverage,
+               module([{"from": "common.1",
+                        "to": [{"at": "split.1", "ratio": 97},
+                               {"at": "split.2", "ratio": 3}]}],
+                      unused={"common.2": "three-port coupler in a four-bore "
+                                          "faceplate"})) == []
+
+
+def test_declaring_a_position_unused_that_a_path_DOES_reach_is_caught():
+    """The rule has to bite both ways or `unused` becomes a way to silence it."""
+    hits = run(L.lint_component_optical_coverage,
+               module([{"from": "common.1", "to": "split.1"},
+                       {"from": "common.2", "to": "split.2"}],
+                      unused={"common.2": "this claim contradicts path 1 above"}))
+    assert len(hits) == 1 and "common.2" in hits[0], hits

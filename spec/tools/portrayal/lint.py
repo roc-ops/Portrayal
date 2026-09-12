@@ -212,6 +212,7 @@ RULES = {
     "L77": ("component",  "a `sink` sits in a cavity, because that is what it measures from", "use `pocket` for a recess in an otherwise solid face"),
     "L78": ("component",  "an optical endpoint names a composed connector and a position it has", "fix the part id or the position number"),
     "L79": ("component",  "no fibre position is claimed twice, and a split's ratios sum to 100", "remove the duplicate path, or fix the ratios"),
+    "L80": ("component",  "every fibre position is reached by a path or declared unused with a reason", "route it, or add an `optical.unused` entry saying why it terminates nothing"),
 }
 
 
@@ -1593,6 +1594,42 @@ def lint_component_optical_conflicts(path, data, _lib_roots=None):
             if total != 100:
                 err(path, "L79", f"path {i} from {p['from']} splits into ratios "
                                  f"summing to {total:g}, not 100")
+
+
+def lint_component_optical_coverage(path, data, lib_roots):
+    """L80: every position is reached by a path or declared unused, with a reason.
+
+    smartoptics/ppm-ocu-97-3@1 carries this in provenance today:
+
+        THE SECOND BORE IS DEAD. It is captioned NA and terminates nothing.
+
+    True, and unverifiable. A four-bore faceplate on a three-port coupler leaves
+    one position with nothing behind it, and the difference between "nothing
+    behind it" and "somebody forgot a path" is the whole question. Declaring it
+    turns a sentence into a claim.
+
+    IT BITES BOTH WAYS. An entry for a position a path DOES reach is also an
+    error - otherwise `unused` becomes a way to silence the rule rather than a
+    statement about the hardware, and the first person under time pressure finds
+    that out.
+    """
+    opt = data.get("optical") or {}
+    if not (opt.get("paths") or []):
+        return
+    caps = optical.capacities(data, _optical_load_ref(lib_roots))
+    hit = optical.reached(data)
+    unused = opt.get("unused") or {}
+    for part, n in sorted(caps.items()):
+        for pos in range(1, n + 1):
+            ep = f"{part}.{pos}"
+            if ep in hit and ep in unused:
+                err(path, "L80", f"{ep} is declared unused and a path reaches "
+                                 "it - one of the two is wrong")
+            elif ep not in hit and ep not in unused:
+                err(path, "L80", f"{ep} is a fibre position no path reaches and "
+                                 "nothing declares. Route it, or add an "
+                                 "`optical.unused` entry saying what terminates "
+                                 "there")
 
 
 def lint_component_fields(path, data, _lib_roots=None):
@@ -5980,6 +6017,7 @@ def main():
                 lint_component_body_boxes(f, d)
                 lint_component_optical_endpoints(f, d, args.library)
                 lint_component_optical_conflicts(f, d)
+                lint_component_optical_coverage(f, d, args.library)
                 lint_component_sink_context(f, d)
                 lint_component_fields(f, d)
                 lint_component_lamp_colour(f, d)
