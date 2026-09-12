@@ -85,3 +85,4 @@ a test fails when this page and the linter disagree. A finding prints as
 | L76 | device | the RJ45 census: every Ethernet jack says whether it has lamps | use std/rj45@2 with the lamp parts, or say in provenance the jack is bare |
 | L77 | component | a `sink` sits in a cavity, because that is what it measures from | use `pocket` for a recess in an otherwise solid face |
 | L78 | component | an optical endpoint names a composed connector and a position it has | fix the part id or the position number |
+| L79 | component | no fibre position is claimed twice, and a split's ratios sum to 100 | remove the duplicate path, or fix the ratios |

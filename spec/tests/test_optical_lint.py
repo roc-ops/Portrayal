@@ -86,3 +86,33 @@ def test_a_malformed_endpoint_gets_its_own_message_not_the_unknown_part_one():
                module([{"from": "bad", "to": "split.1"}]))
     assert len(hits) == 1, hits
     assert "is not an optical endpoint" in hits[0], hits
+
+
+def test_two_paths_landing_on_one_position_are_caught():
+    hits = run(L.lint_component_optical_conflicts,
+               module([{"from": "common.1", "to": "split.1"},
+                       {"from": "common.2", "to": "split.1"}]))
+    assert len(hits) == 1 and "split.1" in hits[0], hits
+
+
+def test_one_source_feeding_two_destinations_is_NOT_a_conflict():
+    """That is a split, which is the whole point of the graph form."""
+    assert run(L.lint_component_optical_conflicts,
+               module([{"from": "common.1",
+                        "to": [{"at": "split.1", "ratio": 50},
+                               {"at": "split.2", "ratio": 50}]}])) == []
+
+
+def test_ratios_that_do_not_sum_to_100_are_caught():
+    hits = run(L.lint_component_optical_conflicts,
+               module([{"from": "common.1",
+                        "to": [{"at": "split.1", "ratio": 70},
+                               {"at": "split.2", "ratio": 40}]}]))
+    assert len(hits) == 1 and "110" in hits[0], hits
+
+
+def test_a_97_3_split_sums_and_is_silent():
+    assert run(L.lint_component_optical_conflicts,
+               module([{"from": "common.1",
+                        "to": [{"at": "split.1", "ratio": 97},
+                               {"at": "split.2", "ratio": 3}]}])) == []

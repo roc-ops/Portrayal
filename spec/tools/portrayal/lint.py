@@ -211,6 +211,7 @@ RULES = {
     "L76": ("device",     "the RJ45 census: every Ethernet jack says whether it has lamps", "use std/rj45@2 with the lamp parts, or say in provenance the jack is bare"),
     "L77": ("component",  "a `sink` sits in a cavity, because that is what it measures from", "use `pocket` for a recess in an otherwise solid face"),
     "L78": ("component",  "an optical endpoint names a composed connector and a position it has", "fix the part id or the position number"),
+    "L79": ("component",  "no fibre position is claimed twice, and a split's ratios sum to 100", "remove the duplicate path, or fix the ratios"),
 }
 
 
@@ -1561,6 +1562,37 @@ def lint_component_optical_endpoints(path, data, lib_roots):
             elif pos > caps[part]:
                 err(path, "L78", f"{ep} asks for position {pos} and {part} "
                                  f"presents {caps[part]}")
+
+
+def lint_component_optical_conflicts(path, data, _lib_roots=None):
+    """L79: no position is claimed twice, and a split's ratios sum to 100.
+
+    A DESTINATION IS EXCLUSIVE, A SOURCE IS NOT. Two strands landing in one bore
+    is a contradiction - a bore takes one ferrule. One source reaching several
+    destinations is a SPLIT, which is exactly what a tap and a coupler are, so
+    counting sources as conflicts would reject the parts this vocabulary exists
+    for. The check is therefore on destinations only.
+
+    Ratios are checked here rather than in the schema because the schema can say
+    a ratio is a number and cannot say two of them add up. 70/40 validates and
+    is wrong.
+    """
+    paths = (data.get("optical") or {}).get("paths") or []
+    seen = {}
+    for i, p in enumerate(paths):
+        eps = optical.endpoints(p)
+        for ep, _r in eps[1:]:
+            if ep in seen:
+                err(path, "L79", f"{ep} is the destination of two paths "
+                                 f"({seen[ep]} and {i}) - a fibre position "
+                                 "takes one ferrule")
+            seen[ep] = i
+        ratios = [r for _e, r in eps[1:] if r is not None]
+        if ratios:
+            total = round(sum(ratios), 6)
+            if total != 100:
+                err(path, "L79", f"path {i} from {p['from']} splits into ratios "
+                                 f"summing to {total:g}, not 100")
 
 
 def lint_component_fields(path, data, _lib_roots=None):
@@ -5947,6 +5979,7 @@ def main():
                 lint_component_relief_confidence(f, d, args.library)
                 lint_component_body_boxes(f, d)
                 lint_component_optical_endpoints(f, d, args.library)
+                lint_component_optical_conflicts(f, d)
                 lint_component_sink_context(f, d)
                 lint_component_fields(f, d)
                 lint_component_lamp_colour(f, d)
