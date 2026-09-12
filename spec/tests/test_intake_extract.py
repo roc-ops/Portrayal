@@ -95,6 +95,30 @@ def test_a_small_picture_with_a_caption_is_kept():
     assert len(kept) == 1
 
 
+def test_the_icon_threshold_is_tunable_per_publisher():
+    """200px is a Juniper/Cisco number and some publishers draw smaller.
+
+    FS.com renders its FHD cassettes at about 190x140, which is under 200 on both
+    axes and uncaptioned, so the default rule took 64 of the 82 pictures in their
+    modular cabling portfolio - and the largest of them were the cassette faces,
+    the only images of that part anywhere in that corpus. From the kept pile
+    "the vendor published no pictures of it" and "the filter ate them" look
+    identical, which is why the rejects stay on disk and why this knob exists.
+    """
+    fs_cassette = pic(189, 140)
+    kept, rejected = extract.classify([fs_cassette])
+    assert not kept and rejected[0]["drop_reason"] == "icon", (
+        "the default no longer drops it, so this test is no longer about "
+        "anything - check whether ICON_PX moved")
+
+    kept, rejected = extract.classify([fs_cassette], icon_px=120)
+    assert len(kept) == 1 and not rejected
+
+    # and the knob does not simply disable the rule: a real icon still goes
+    kept, rejected = extract.classify([pic(60, 60)], icon_px=120)
+    assert not kept and rejected[0]["drop_reason"] == "icon"
+
+
 def test_a_repeated_wide_uncaptioned_picture_is_dropped_as_a_banner():
     pics = [pic(900, 200, ahash="ffffffffffffffff") for _ in range(extract.BANNER_CLUSTER)]
     kept, rejected = extract.classify(pics)
