@@ -41,18 +41,32 @@ def test_every_fibre_connector_declares_its_capacity():
 def test_the_sweep_covers_what_the_library_actually_has():
     """Guard against this list going stale while the library grows.
 
-    Any component whose attrs name a fibre connector belongs in the list above.
-    A new one that is not listed is not swept, and the sweep passes anyway.
+    Keyed on `attrs.media == "fiber"` and `class == "port"` - a component
+    carrying fibres, not just naming fibre in some unrelated attrs field -
+    rather than on whether it declares `optical.positions`: a new connector
+    shipped with no capacity at all would otherwise satisfy this loop by
+    omission and slip past silently, which is exactly the gap
+    `test_every_fibre_connector_declares_its_capacity` cannot see either,
+    since it only walks the hard-coded list above. `std/lc-bore/v3` and
+    `std/mpo/v1` are excluded because they set `relief.cavity`: that is what
+    makes a component a hole cut in a face rather than a part that carries
+    fibres, so they are apertures, not connectors, and the exclusion is keyed
+    on that structural fact rather than an allowlist - a future `std/sc`
+    aperture is then exempt automatically, and a future
+    `common/e2000-adapter` connector is not.
     """
     found = []
     for f in sorted(LIB.rglob("contract.yaml")):
         d = yaml.safe_load(f.read_text()) or {}
         if (d.get("attrs") or {}).get("media") != "fiber":
             continue
-        if not (d.get("optical") or {}).get("positions"):
+        if d.get("class") != "port":
+            continue
+        if (d.get("relief") or {}).get("cavity"):
             continue
         found.append("/".join(f.parts[-4:-1]))
     unlisted = sorted(set(found) - set(FIBRE_CONNECTORS))
     assert not unlisted, (
-        "these declare a fibre capacity and are not in FIBRE_CONNECTORS, so "
-        f"nothing above sweeps them: {unlisted}")
+        "these are fibre connectors (class: port, attrs.media: fiber, no "
+        "relief.cavity) and are not in FIBRE_CONNECTORS, so nothing above "
+        f"sweeps them: {unlisted}")
