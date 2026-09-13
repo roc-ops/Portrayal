@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: lc-duplex-adapter
-version: 3.4.0
+version: 3.4.1
 class: port
 profile: networking
 description: >-
@@ -30,6 +30,16 @@ provenance:
     ABUTTING ADAPTERS on a faceplate, not of bores within one. FS's own artwork
     measures that at 12.90 on the FHD cassette face, which is a third reading of
     a third thing and is recorded on the FS parts rather than here.
+    THE PAIR MUST STAY CENTRED IN THE 13.2-WIDE BODY: centres at
+    13.2/2 +/- 6.25/2 = 3.475 and 9.725, review of the task that landed the
+    pitch fix caught that the first pass had done 13.2/2 - 6.25/2 wrong as
+    3.175 rather than 3.475, putting the pair 0.300 left of centre (0.825/1.425
+    margins instead of a symmetric 1.125 each side) even though the 6.25 PITCH
+    between them was already correct. That was an arithmetic error in the plan
+    handed to the task, not in how the bore part itself was placed relative to
+    its partner - the fix moves both bores +0.300 to 1.125 and 7.375, and
+    standards.yaml's own note corroborates the result: 'a duplex pair spans
+    pitch plus the body width (10.95)', which leaves 1.125 each side of 13.2.
   bores: >-
     std/lc-bore@3 - the KEYED opening, 4.7 wide by 6.3, whose first tier is the 4.7
     square from the ProLabs CWDM4 section A-A. This composed @1 (4.6 x 4.4,
@@ -37,9 +47,11 @@ provenance:
     collapsed, and now @3 when that square turned out to be one tier of four (#126).
     THE CENTRE HAS NOT MOVED VERTICALLY ACROSS ANY OF IT, and the dust caps still
     plug the bore square, which still starts at y 3.15; the 1.60 of keyway is new
-    material above it. The HORIZONTAL centres DID move, once - from (3.3, 5.5) and
-    (9.9, 5.5) to (3.175, 5.5) and (9.425, 5.5) - when the pitch was corrected to the
-    verified standard; see `bore-spacing` above. Each placement carries rotate: 180
+    material above it. The HORIZONTAL centres DID move, twice - from (3.3, 5.5) and
+    (9.9, 5.5) to (3.175, 5.5) and (9.425, 5.5) when the pitch was corrected to the
+    verified standard, and then to (3.475, 5.5) and (9.725, 5.5) when review caught
+    that the first correction had mis-centred the pair in the 13.2-wide body by
+    0.300; see `bore-spacing` above for both moves. Each placement carries rotate: 180
     so the latch tongue points up, as a panel-mount adapter is fitted. THE KEYWAY
     THIS DRAWS IS SHORTER THAN THIS PART'S OWN HARDWARE: @3 is sized for a
     transceiver face and SENKO's bulkhead adapter DS-LC-000010 carries a 3.51 stack
@@ -52,10 +64,11 @@ provenance:
     front. The spigot that seats it into the bore is not modelled separately -
     it sits inside the recess and is never visible
 elements:
-  # x matches the bores' corrected pitch (parts:, below) so the caps still plug
-  # the sockets they sit over rather than a socket 0.125mm to one side of them.
-  cap-tx: {at: [0.825, 3.15], size: [4.7, 4.7], class: cap}
-  cap-rx: {at: [7.075, 3.15], size: [4.7, 4.7], class: cap}
+  # x matches the bores' corrected, correctly-centred position (parts:, below)
+  # so the caps still plug the sockets they sit over rather than a socket
+  # 0.300mm to one side of them.
+  cap-tx: {at: [1.125, 3.15], size: [4.7, 4.7], class: cap}
+  cap-rx: {at: [7.375, 3.15], size: [4.7, 4.7], class: cap}
 relief:
   features:
     - node: bezel
@@ -133,10 +146,14 @@ parts:
   # lifted onto the raised bezel, so each bore recesses from the proud face.
   # rotate 180 puts the latch tongue UP, which is how a panel-mount adapter is
   # fitted and how the issue's own photograph shows it; @3 draws it down.
-  - {ref: std/lc-bore@3, id: tx, at: [0.825, 1.55], lift: 3.175, rotate: 180}
-  - {ref: std/lc-bore@3, id: rx, at: [7.075, 1.55], lift: 3.175, rotate: 180}
+  - {ref: std/lc-bore@3, id: tx, at: [1.125, 1.55], lift: 3.175, rotate: 180}
+  - {ref: std/lc-bore@3, id: rx, at: [7.375, 1.55], lift: 3.175, rotate: 180}
 connection-points:
-  # the midpoint of the two ferrule centres (3.175 and 9.425), not of the
-  # 13.2-wide body - it moved from 6.6 to 6.3 with the bore-pitch correction.
-  optical: {at: [6.3, 5.5], direction: front}
+  # the midpoint of the two ferrule centres (3.475 and 9.725) - which is,
+  # correctly, the 13.2-wide body's own centre (6.6). It was 6.6 originally
+  # (from the uncorrected 6.6 stencil pitch, itself centred), moved to 6.3 when
+  # the pitch was corrected to the verified standard but the pair was
+  # mis-centred by a plan arithmetic error, and is now back to 6.6 - genuinely
+  # the body centre this time, because the bores are.
+  optical: {at: [6.6, 5.5], direction: front}
 skins: [default]
