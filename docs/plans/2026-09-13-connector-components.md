@@ -70,10 +70,10 @@ bounds the connector; it does not measure it, and the contracts must say so.
 
 | file | responsibility |
 |---|---|
-| `spec/schemas/standards.yaml` | new registry entries: `mpo-adapter`, `sc-simplex-adapter`, `st-adapter`, `fc-adapter`, `lsh-adapter`, `mdc-adapter`. The estimated ones carry `confidence: estimated` |
+| `spec/schemas/standards.yaml` | new registry entries: `mpo-adapter`, `sc-duplex-adapter`, `st-adapter`, `fc-adapter`, `lsh-adapter`, `mdc-adapter`. The estimated ones carry `confidence: estimated` |
 | `spec/tools/portrayal/lint.py` | rule **L81** — a component composing several instances of a part that `conforms:` to a standard with a `pitch` is checked against it |
 | `spec/tests/test_pitch_lint.py` | **new.** L81 fires on a wrong pitch, stays quiet on a right one |
-| `spec/tools/intake/panel-measure.py` | **new.** Face-on panel measurement, reused by every connector task |
+| `spec/tools/intake/panel_measure.py` | **new.** Face-on panel measurement, reused by every connector task. UNDERSCORE, not a hyphen like its siblings there: this one is imported by tests, not only run as a script |
 | `library/components/common/lc-duplex-adapter/v3/contract.yaml` | bore pitch reconciled with the standard |
 | `library/components/std/mpo/v1/` | the MPO adapter aperture |
 | `library/components/common/mpo-adapter/v1/` | the panel-mount MPO adapter that composes it |
@@ -815,15 +815,16 @@ provenance:
 elements:
   opening: {at: [0, 0], size: [7.8, 5.6], class: cutout}
 relief:
+  # CAVITY ALONE, NO POCKET. `relief.cavity` names the skin node whose art is the
+  # recess, and render.py then puts `data-depth` on this component's own instance
+  # group using `size.d`. Adding a `pocket` on that SAME node would put a second
+  # `data-depth` inside the first, and relief.js builds only the innermost cavity
+  # of a nest - so the aperture would delete itself. Plan 1 landed
+  # `test_a_pocket_does_not_swallow_the_cavity_it_sits_in` for exactly that, and
+  # no component in the library sets both on one node. std/lc-bore@3 is the
+  # precedent: `cavity: bore`, depth from `size.d`, pockets only on other nodes.
   wall: '#2a2f35'
   cavity: opening
-  features:
-    - node: opening
-      pocket: 9.0
-      confidence: estimated
-      source: >-
-        the aperture is a recess in an otherwise solid face, so `pocket` and not
-        `sink` - see docs/optical-paths-design.md and roc-ops/Portrayal#230.
 skins: [default]
 ```
 
