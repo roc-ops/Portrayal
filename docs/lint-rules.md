@@ -87,3 +87,4 @@ a test fails when this page and the linter disagree. A finding prints as
 | L78 | component | an optical endpoint names a composed connector and a position it has | fix the part id or the position number |
 | L79 | component | no fibre position is claimed twice, and a split's ratios sum to 100 | remove the duplicate path, or fix the ratios |
 | L80 | component | every fibre position is reached by a path or declared unused with a reason | route it, or add an `optical.unused` entry saying why it terminates nothing |
+| L81 | component | a composed pitch matches the standard the part conforms to | move the parts onto the standard's pitch, or say in provenance why this part differs |
