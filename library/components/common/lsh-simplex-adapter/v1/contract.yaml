@@ -1,0 +1,41 @@
+format: 1
+kind: component
+name: lsh-simplex-adapter
+version: 1.0.0
+class: port
+profile: networking
+description: >-
+  Panel-mount LSH/E2000 simplex adapter, one spring-shutter opening, as fitted
+  to an FS FHD LSH panel. One fibre per adapter. LSH is the same physical
+  interface E2000 names; FS's own catalogue calls it LSH.
+size: {w: 7.0, h: 8.0}
+size-confidence: {w: estimated, h: estimated}
+attrs: {media: fiber, connector: lsh, fibres: '1'}
+optical:
+  # ONE FIBRE. LSH/E2000 ships simplex on FS's panels.
+  positions: 1
+provenance:
+  size: >-
+    ESTIMATED - NOT A MEASUREMENT, AND THE WEAKEST APERTURE OF THE FIVE. No
+    face-on render of an FS LSH panel exists in this corpus, only a
+    THREE-QUARTER product shot of SKU 336339, and a three-quarter view cannot
+    be scaled the way a face-on render can.
+    7.0 x 8.0 IS A ROUGH FRACTION OF A DIFFERENT PART'S MEASURED AXIS, not a
+    reading of this one: common/sc-duplex-adapter@1's own body width, 9.4 mm,
+    is photo-measured off a face-on render, and SC and LSH/E2000 sit in a
+    broadly similar bulkhead size class in vendor cut sheets. That 9.4 mm
+    figure is scaled down here because a body that wide could not sit at this
+    panel's own 8.07 mm pitch without overlapping its neighbour - the scaling
+    is a fit constraint, not a measurement of LSH hardware itself.
+    THE PITCH IS THE ONE DERIVED FIGURE: FS sells this panel with 12 adapters,
+    and the 12x MTP panel (35510, face-on) puts its outermost adapter centres
+    88.8 mm apart, so twelve across that envelope, on a 12-across 11-gap
+    layout, gives 88.8 / 11 = 8.07. See standards.yaml's `lsh-adapter` entry
+    for the full arithmetic and its `pitch-kind: floor` reasoning.
+    What would settle either figure: a face-on photograph of SKU 336339, a
+    caliper on one real adapter, or IEC 61754-15.
+  face-detail-gap: >-
+    no face-on imagery exists for this part at all - only a three-quarter
+    product render (SKU 336339). The spring-loaded shutter, the bayonet key and
+    any panel-print numbering are not modelled.
+skins: [default]

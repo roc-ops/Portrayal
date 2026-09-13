@@ -575,6 +575,167 @@ standards:
       bright blue flange, unlike 35510's pale MTP interiors, so `openings()`
       needed its own blueness predicate here (`p[2] > p[0] + 40 and p[2] >
       90`) in a narrow band (0.11-0.18) over that flange.
+  st-adapter:
+    registry: >-
+      NOT MEASURED AND NOT READ FROM A STANDARD. IEC 61754-2 governs the ST/BFOC
+      interface and is not held here, and no face-on render of an FS ST panel
+      exists - only a three-quarter product shot (SKU 183380). The pitch is
+      DERIVED: FS sells this panel with 6 adapters, and the 12x MTP panel
+      (35510, face-on) puts its outermost adapter centres 88.8 mm apart, so six
+      across that envelope on a 6-across, 5-gap layout gives 88.8 / 5.
+    w: 10.0
+    h: 10.0
+    confidence: estimated
+    pitch: 17.76
+    pitch-confidence: estimated
+    pitch-kind: floor
+    pitch-kind-note: >-
+      No interface standard fixes an ST panel's adapter spacing - IEC 61754-2
+      governs the bayonet mating geometry, not how many bulkheads sit side by
+      side - and this pitch is itself derived arithmetic, not even a
+      vendor-measured layout the way mpo-adapter's floor is. A floor is the
+      only honest reading of a number this soft: it says "FS's own panel does
+      not sit tighter than this," nothing stronger, and a composed layout
+      wider than 17.76 raises nothing.
+    notes: >-
+      EVERY FIGURE HERE IS AN ESTIMATE AND THE APERTURE IS THE WEAKEST. The pitch
+      at least follows from a count FS publishes and an envelope measured off a
+      sibling panel; the 10.0 x 10.0 opening is a plausible round number for a
+      bayonet adapter's bulkhead and rests on nothing. What settles it: a face-on
+      photograph of SKU 183380, a caliper on one adapter, or IEC 61754-2.
+      FS also sells 183381, an 8-adapter version of the same panel family; the
+      88.8 / (n-1) arithmetic would give it 88.8 / 7 = 12.69, but that SKU is not
+      built here - one derived pitch per part, not two variants of a guess.
+  fc-adapter:
+    registry: >-
+      NOT MEASURED AND NOT READ FROM A STANDARD. IEC 61754-13 governs the FC
+      interface and is not held here, and no face-on render of an FS FC panel
+      exists - only a three-quarter product shot (SKU 382881). The pitch is
+      DERIVED the same way as st-adapter's: FS sells this panel with 8
+      adapters, and the 12x MTP panel's (35510, face-on) 88.8 mm
+      outermost-centre envelope gives 88.8 / 7 across an 8-across, 7-gap row.
+    w: 10.0
+    h: 10.0
+    confidence: estimated
+    pitch: 12.69
+    pitch-confidence: estimated
+    pitch-kind: floor
+    pitch-kind-note: >-
+      Same reasoning as st-adapter: IEC 61754-13 governs the FC mating
+      interface, not panel layout, and the pitch itself is derived arithmetic
+      rather than a vendor-measured spacing. Recorded as a floor - "FS's own
+      panel does not sit tighter than this" - not a target.
+    notes: >-
+      EVERY FIGURE HERE IS AN ESTIMATE. The 10.0 x 10.0 aperture is BORROWED
+      from st-adapter's own estimate rather than derived independently: FC and
+      ST are both round bayonet-coupled interfaces of a similar generation and
+      vendor drawings for the two bulkheads read within a millimetre of each
+      other, so the same plausible round number is adopted here rather than
+      inventing a second unsourced guess. It sits comfortably inside the 12.69
+      mm pitch. What settles it: a face-on photograph of SKU 382881, a caliper
+      on one adapter, or IEC 61754-13.
+  lsh-adapter:
+    registry: >-
+      NOT MEASURED AND NOT READ FROM A STANDARD. IEC 61754-15 governs the
+      LSH/E2000 interface and is not held here, and no face-on render of an FS
+      LSH panel exists - only a three-quarter product shot (SKU 336339). The
+      pitch is DERIVED: FS sells this panel with 12 adapters, and the 12x MTP
+      panel's (35510, face-on) 88.8 mm outermost-centre envelope gives
+      88.8 / 11 across a 12-across, 11-gap row.
+    w: 7.0
+    h: 8.0
+    confidence: estimated
+    pitch: 8.07
+    pitch-confidence: estimated
+    pitch-kind: floor
+    pitch-kind-note: >-
+      IEC 61754-15 fixes the E2000 spring-shutter mating geometry, not a panel
+      adapter's side-by-side spacing, and 8.07 is derived arithmetic rather
+      than a measured layout. Recorded as a floor for the same reason as
+      st-adapter and fc-adapter: this is the one FS panel count on record, not
+      a fixed interface requirement.
+    notes: >-
+      EVERY FIGURE HERE IS AN ESTIMATE AND THE APERTURE RESTS ON THE THINNEST
+      REASONING OF THE FIVE. 7.0 x 8.0 is not measured, not borrowed whole from
+      a sibling standard, and not read off any render - it is a rough fraction
+      of common/sc-duplex-adapter@1's photo-measured 9.4 mm body width (the SC
+      and LSH/E2000 families share a broadly similar bulkhead order of
+      magnitude in vendor cut sheets), scaled down because a 9.4 mm body could
+      not sit at this panel's own 8.07 mm pitch without overlapping its
+      neighbour. That scaling-to-fit is itself a constraint check, not a
+      measurement. What settles it: a face-on photograph of SKU 336339, a
+      caliper on one adapter, or IEC 61754-15.
+  mdc-adapter:
+    registry: >-
+      NOT MEASURED AND NOT READ FROM A STANDARD. No IEC part is held here for
+      MDC - US Conec and Senko originated and publish the connector, and no
+      vendor mechanical drawing for either's adapter is in this corpus. No
+      face-on render of an FS MDC panel exists either - only a three-quarter
+      product shot (SKU 147015). The pitch is DERIVED: FS sells this panel
+      with 12 two-port duplex adapters, and the 12x MTP panel's (35510,
+      face-on) 88.8 mm outermost-centre envelope gives 88.8 / 11 across a
+      12-across, 11-gap row.
+    w: 6.6
+    h: 8.0
+    confidence: estimated
+    pitch: 8.07
+    pitch-confidence: estimated
+    pitch-kind: floor
+    pitch-kind-note: >-
+      No interface standard is held to fix an MDC panel's adapter spacing at
+      all, held or otherwise, and 8.07 is derived arithmetic rather than a
+      measured layout - the same reasoning as lsh-adapter, whose panel shares
+      this count. Recorded as a floor: the one FS panel on record, not a
+      requirement.
+    notes: >-
+      EVERY FIGURE HERE IS AN ESTIMATE. w: 6.6 is a PROPORTION OF A KNOWN PART,
+      not an independent guess: MDC is marketed by US Conec and Senko as
+      roughly twice the density of LC duplex in the same panel space, and
+      common/lc-duplex-adapter@3's own measured body is 13.2 mm wide for a
+      two-fibre duplex adapter, so half of that - 6.6 - is adopted as this
+      duplex adapter's estimated width. h: 8.0 is a plain round-number guess
+      with no derivation behind it at all, the weakest figure in this entry.
+      Both sit inside the 8.07 mm pitch. What settles it: a face-on photograph
+      of SKU 147015, a caliper on one adapter, or a held US Conec/Senko
+      mechanical drawing.
+  keystone-opening:
+    registry: >-
+      NOT MEASURED AND NOT READ FROM A STANDARD, AND NOT EVEN A FIBRE
+      INTERFACE. A keystone clip is a generic snap-in mounting opening, not a
+      connector standard - no IEC or TIA fibre document governs it, and no
+      FS render dimensions its panel cutout at all. SKU 143239's three-quarter
+      product shot shows only the moulded clip body, not a panel with a
+      cutout to measure. 14.8 x 19.3 is the de-facto snap-in keystone jack
+      cutout published across keystone-panel vendors' generic cut sheets
+      (RJ45, fibre, and blank keystone inserts all share this one opening),
+      adopted here for lack of anything FS-specific. The pitch is DERIVED the
+      same way as the other four: FS sells this panel with 6 clips, and the
+      12x MTP panel's (35510, face-on) 88.8 mm outermost-centre envelope gives
+      88.8 / 5 across a 6-across, 5-gap row.
+    w: 14.8
+    h: 19.3
+    confidence: estimated
+    pitch: 17.76
+    pitch-confidence: estimated
+    pitch-kind: floor
+    pitch-kind-note: >-
+      There is no fibre or mechanical interface standard to be a target
+      against - a keystone opening's spacing is purely a function of whatever
+      panel it is punched into - and 17.76 is derived arithmetic rather than a
+      measured layout, same as st-adapter. Recorded as a floor: FS's own panel
+      does not sit tighter than this, nothing more is claimed.
+    notes: >-
+      EVERY FIGURE HERE IS AN ESTIMATE. Unlike the other four entries, the
+      14.8 x 19.3 opening is not even derived from FS's own hardware - it is
+      the widely-published generic keystone cutout, carried here because it is
+      the only figure available for a form factor with no single owning
+      standard. It happens to leave a plausible ~3 mm gap under the 17.76 mm
+      pitch, the same kind of real gap 57058's SC adapters showed between
+      bodies narrower than their own pitch - which is reassuring but is not
+      confirmation, since neither the opening nor the pitch is measured here.
+      What settles it: a face-on photograph of SKU 143239's actual panel (not
+      just the clip), a caliper, or a manufacturer cut sheet for this specific
+      panel.
   lc-duplex-receptacle:
     registry: IEC 61754-20 / TIA-604-10 FOCIS 10 for the duplex pitch; the bore square
       from section A-A of the ProLabs PAN-QSFP28-100GBASE-CWDM4-C datasheet and from
