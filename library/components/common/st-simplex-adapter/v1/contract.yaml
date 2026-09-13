@@ -24,11 +24,12 @@ provenance:
     renders were for the MPO and SC duplex adapters. The 10.0 x 10.0 opening is
     a plausible round number for a bayonet adapter's bulkhead and rests on
     nothing measured.
-    THE PITCH IS THE ONE DERIVED FIGURE: FS sells this panel with 6 adapters,
-    and the 12x MTP panel (35510, face-on) puts its outermost adapter centres
-    88.8 mm apart, so six across that envelope, on a 6-across 5-gap layout,
-    gives 88.8 / 5 = 17.76. See standards.yaml's `st-adapter` entry for the
-    full arithmetic and its `pitch-kind: floor` reasoning. This component does
+    THE PITCH IS THE ONE DERIVED FIGURE: FS's catalogue line for 183380 lists
+    6 adapters, but the render shows two rows of 3, not one row of 6 - a
+    3-across row spans 2 gaps. Using a ~67 mm envelope bracketed by two face-on
+    sibling panels (35510 and 57058), 67 / (3 - 1) = 33.5. See standards.yaml's
+    `st-adapter` entry for the full arithmetic and its `pitch-kind: floor`
+    reasoning. This component does
     not itself compose a second instance of anything, so it carries no layout
     for the pitch to check against - the number is recorded for the next
     contract that composes several of these in a row.

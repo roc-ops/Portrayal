@@ -62,7 +62,7 @@ ESTIMATED = [
     ("common/st-simplex-adapter@1", 1),
     ("common/fc-simplex-adapter@1", 1),
     ("common/lsh-simplex-adapter@1", 1),
-    ("common/mdc-adapter@1", 2),
+    ("common/mdc-adapter@1", 4),
     ("common/keystone-clip@1", 0),
 ]
 
