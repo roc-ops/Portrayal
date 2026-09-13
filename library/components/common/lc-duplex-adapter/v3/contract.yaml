@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: lc-duplex-adapter
-version: 3.3.0
+version: 3.4.0
 class: port
 profile: networking
 description: >-
@@ -15,20 +15,36 @@ attrs: {media: fiber, connector: lc-duplex}
 provenance:
   size: measured - Smartoptics DCP-R stencil, from the pitch of abutting
     adapters on the DCP-R-34D-CS faceplate (13.24mm) and the row pitch (11.5mm)
-  bore-spacing: measured - 6.6mm between the paired connection points, held
-    across 35 adapters on that faceplate
+  bore-spacing: >-
+    THE STANDARD, NOT THE STENCIL. 6.25 between bore centres, from
+    standards.yaml's `lc-duplex-receptacle` entry, which carries it at
+    `pitch-confidence: verified` sourced to IEC 61754-20 / TIA-604-10 FOCIS 10.
+    THIS WAS 6.6 AND THE TWO DISAGREED IN SILENCE. 6.6 was measured off the
+    Smartoptics DCP-R stencil - 'the pitch of abutting adapters on the
+    DCP-R-34D-CS faceplate', held across 35 adapters - and it is a good reading
+    of a drawing that is itself a simplification. A figure marked `verified`
+    against a published interface standard outranks one marked `measured` off
+    one vendor's Visio artwork, and nothing in the library compared them until
+    L81 was written.
+    THE 13.2 WIDTH IS UNCHANGED and is a different quantity: the pitch of
+    ABUTTING ADAPTERS on a faceplate, not of bores within one. FS's own artwork
+    measures that at 12.90 on the FHD cassette face, which is a third reading of
+    a third thing and is recorded on the FS parts rather than here.
   bores: >-
     std/lc-bore@3 - the KEYED opening, 4.7 wide by 6.3, whose first tier is the 4.7
     square from the ProLabs CWDM4 section A-A. This composed @1 (4.6 x 4.4,
     proportional, unsourced), then @2 (4.7 square) when the two versions were
     collapsed, and now @3 when that square turned out to be one tier of four (#126).
-    THE CENTRE HAS NOT MOVED ACROSS ANY OF IT - (3.3, 5.5) and (9.9, 5.5) - and the
-    dust caps still plug the bore square, which still starts at y 3.15; the 1.60 of
-    keyway is new material above it. Each placement carries rotate: 180 so the latch
-    tongue points up, as a panel-mount adapter is fitted. THE KEYWAY THIS DRAWS IS
-    SHORTER THAN THIS PART'S OWN HARDWARE: @3 is sized for a transceiver face and
-    SENKO's bulkhead adapter DS-LC-000010 carries a 3.51 stack rather than 1.60. That
-    is recorded on @3 under `short-keyway` and is the price of one shared bore part
+    THE CENTRE HAS NOT MOVED VERTICALLY ACROSS ANY OF IT, and the dust caps still
+    plug the bore square, which still starts at y 3.15; the 1.60 of keyway is new
+    material above it. The HORIZONTAL centres DID move, once - from (3.3, 5.5) and
+    (9.9, 5.5) to (3.175, 5.5) and (9.425, 5.5) - when the pitch was corrected to the
+    verified standard; see `bore-spacing` above. Each placement carries rotate: 180
+    so the latch tongue points up, as a panel-mount adapter is fitted. THE KEYWAY
+    THIS DRAWS IS SHORTER THAN THIS PART'S OWN HARDWARE: @3 is sized for a
+    transceiver face and SENKO's bulkhead adapter DS-LC-000010 carries a 3.51 stack
+    rather than 1.60. That is recorded on @3 under `short-keyway` and is the price
+    of one shared bore part
   stand-off: photo - the adapter body sits about an eighth of an inch proud of
     the faceplate, not the quarter inch first modelled
   dust-caps: photo - unused ports carry a white cap standing about a quarter
@@ -36,8 +52,10 @@ provenance:
     front. The spigot that seats it into the bore is not modelled separately -
     it sits inside the recess and is never visible
 elements:
-  cap-tx: {at: [0.95, 3.15], size: [4.7, 4.7], class: cap}
-  cap-rx: {at: [7.55, 3.15], size: [4.7, 4.7], class: cap}
+  # x matches the bores' corrected pitch (parts:, below) so the caps still plug
+  # the sockets they sit over rather than a socket 0.125mm to one side of them.
+  cap-tx: {at: [0.825, 3.15], size: [4.7, 4.7], class: cap}
+  cap-rx: {at: [7.075, 3.15], size: [4.7, 4.7], class: cap}
 relief:
   features:
     - node: bezel
@@ -115,8 +133,10 @@ parts:
   # lifted onto the raised bezel, so each bore recesses from the proud face.
   # rotate 180 puts the latch tongue UP, which is how a panel-mount adapter is
   # fitted and how the issue's own photograph shows it; @3 draws it down.
-  - {ref: std/lc-bore@3, id: tx, at: [0.95, 1.55], lift: 3.175, rotate: 180}
-  - {ref: std/lc-bore@3, id: rx, at: [7.55, 1.55], lift: 3.175, rotate: 180}
+  - {ref: std/lc-bore@3, id: tx, at: [0.825, 1.55], lift: 3.175, rotate: 180}
+  - {ref: std/lc-bore@3, id: rx, at: [7.075, 1.55], lift: 3.175, rotate: 180}
 connection-points:
-  optical: {at: [6.6, 5.5], direction: front}
+  # the midpoint of the two ferrule centres (3.175 and 9.425), not of the
+  # 13.2-wide body - it moved from 6.6 to 6.3 with the bore-pitch correction.
+  optical: {at: [6.3, 5.5], direction: front}
 skins: [default]

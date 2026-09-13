@@ -126,3 +126,27 @@ def test_a_dcm_declares_no_unused_positions(km):
     """Both bores carry light, so `unused` would be a false claim."""
     c = contract(f"smartoptics/ppm-dcm-{km}@1")
     assert not (c["optical"].get("unused") or {})
+
+
+def test_the_adapters_bore_pitch_matches_the_verified_standard():
+    """The library held two numbers for one physical quantity.
+
+    `standards.yaml`'s `lc-duplex-receptacle` carries `pitch: 6.25` at
+    `pitch-confidence: verified`, from IEC 61754-20 / TIA-604-10 FOCIS 10.
+    The adapter composed its two bores 6.60 apart, from the Smartoptics DCP-R
+    stencil. Nothing compared them, so they disagreed by 5.6% in silence.
+
+    The standard wins: `verified` against a published interface standard
+    outranks `measured` off one vendor's Visio artwork.
+    """
+    import yaml as _yaml
+    std = _yaml.safe_load((ROOT / "spec/schemas/standards.yaml").read_text())
+    want = std["standards"]["lc-duplex-receptacle"]["pitch"]
+
+    c = contract("common/lc-duplex-adapter@3")
+    bore_w = contract("std/lc-bore@3")["size"]["w"]
+    xs = [p["at"][0] for p in c["parts"] if p["ref"] == "std/lc-bore@3"]
+    assert len(xs) == 2, xs
+    centres = sorted(x + bore_w / 2 for x in xs)
+    assert round(centres[1] - centres[0], 4) == want, (
+        f"bores are {centres[1] - centres[0]:.2f} apart; the standard says {want}")
