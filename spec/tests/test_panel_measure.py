@@ -6,13 +6,42 @@ of six at a consistent pitch. If the tool cannot reproduce that, no connector
 measured with it can be trusted.
 """
 import pathlib
+import subprocess
 import sys
 
 import pytest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-IMG = ROOT / "working" / "intake" / "fs" / "fhd" / "photos"
 sys.path.insert(0, str(ROOT / "spec/tools/intake"))
+
+
+def _corpus():
+    """`working/` lives in the MAIN checkout, so a worktree must go find it.
+
+    Reference imagery is gitignored, and gitignored files in a worktree die with
+    the worktree - an intake was lost that way once - so the intake convention
+    stages the corpus in the main checkout only. A worktree therefore holds a
+    stub `working/intake` with nothing under it, and resolving this path against
+    the test file's own root makes these two tests skip wherever the real work
+    happens. They are the only proof that `panel_measure` reproduces the numbers
+    three contracts call MEASURED, so a silent skip here is the expensive kind.
+
+    The shared repository directory's parent is the main checkout; in a plain
+    clone it is that clone, so both cases land correctly. Falling back to ROOT
+    keeps this working with no version control at all.
+    """
+    try:
+        shared = subprocess.run(
+            ["git", "rev-parse", "--git-common-dir"], cwd=ROOT,
+            capture_output=True, text=True, check=True).stdout.strip()
+    except (OSError, subprocess.CalledProcessError):
+        return ROOT / "working"
+    main = (ROOT / shared).resolve().parent
+    staged = main / "working"
+    return staged if staged.is_dir() else ROOT / "working"
+
+
+IMG = _corpus() / "intake" / "fs" / "fhd" / "photos"
 
 
 @pytest.fixture(scope="module")
