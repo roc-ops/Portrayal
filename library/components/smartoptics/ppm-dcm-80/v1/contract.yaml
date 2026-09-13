@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ppm-dcm-80
-version: 1.0.0
+version: 1.1.0
 class: filter
 behaviour: fills
 profile: optical
@@ -85,6 +85,19 @@ elements:
   caption-dcm: {at: [4.50, 16.2], size: [13.2, 2.05], class: marking}
 parts:
   - {ref: common/lc-duplex-adapter@3, id: dcm, at: [4.50, 4.0], attrs: {role: dcm}}
+optical:
+  # RX IN, TX OUT, THROUGH THE GRATING. ds-ppm-r4.0's flow figure for these
+  # modules draws Rx entering and Tx leaving, and says so in prose: "Signals
+  # entering the module are denoted Rx. Signals exiting the module are denoted
+  # Tx." Bore 1 is Tx and bore 2 is Rx - the order the faceplate captions them
+  # and the order common/lc-duplex-adapter@3 composes its bores.
+  #
+  # ONE PATH, NOT TWO. A DCM is not a duplex pass-through; it is a single fibre
+  # path through a Bragg grating that applies 80km of opposite dispersion. Both
+  # bores are ends of that one path.
+  media: os2
+  paths:
+    - {from: dcm.2, to: dcm.1}
 relief:
   wall: '#22262a'
   features:

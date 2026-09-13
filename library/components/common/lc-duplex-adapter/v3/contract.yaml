@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: lc-duplex-adapter
-version: 3.2.0
+version: 3.3.0
 class: port
 profile: networking
 description: >-
@@ -105,6 +105,12 @@ relief:
       source: >-
         common/lc-duplex-adapter@3 - as cap-tx-inset. The inset's existence is photographed,
         its depth is not.
+optical:
+  # TWO BORES, SO TWO FIBRE POSITIONS, and position order is the order the bores
+  # are composed below: 1 is `tx`, 2 is `rx`. Stated here so no module composing
+  # this adapter has to restate it - on the FS FHD line that would be 77 chances
+  # to mistype a number the adapter already knows.
+  positions: 2
 parts:
   # lifted onto the raised bezel, so each bore recesses from the proud face.
   # rotate 180 puts the latch tongue UP, which is how a panel-mount adapter is

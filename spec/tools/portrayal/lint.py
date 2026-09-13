@@ -102,6 +102,7 @@ import yaml
 import attrsections as attrs_mod
 import capability
 import devicelock
+import optical
 from manifest import (view_parts, targets, split_target, presented_interface,
                       VIEW_KEY_ORDER,
                       component_refs, load_yaml,
@@ -209,6 +210,9 @@ RULES = {
     "L75": ("component",  "a slot's structured facts agree with its prose, and lanes fit the connector", "fix `lanes`/`connector` or the description"),
     "L76": ("device",     "the RJ45 census: every Ethernet jack says whether it has lamps", "use std/rj45@2 with the lamp parts, or say in provenance the jack is bare"),
     "L77": ("component",  "a `sink` sits in a cavity, because that is what it measures from", "use `pocket` for a recess in an otherwise solid face"),
+    "L78": ("component",  "an optical endpoint names a composed connector and a position it has", "fix the part id or the position number"),
+    "L79": ("component",  "no fibre position is claimed twice, and a split's ratios sum to 100", "remove the duplicate path, or fix the ratios"),
+    "L80": ("component",  "every fibre position is reached by a path or declared unused with a reason", "route it, or add an `optical.unused` entry saying why it terminates nothing"),
 }
 
 
@@ -1520,6 +1524,166 @@ def _node_under(path, node, hosts):
         else:
             return False
     return drawn > 0
+
+
+def _optical_load_ref(lib_roots):
+    """A `load_ref` for optical.capacities that reads from the library roots."""
+    def load(ref):
+        return _contract(ref, lib_roots) or {}
+    return load
+
+
+def lint_component_optical_endpoints(path, data, lib_roots):
+    """L78: an optical endpoint names a composed connector and a position it has.
+
+    `mtp-1.13` on an MPO-12 is not a near miss, it is a fibre that does not
+    exist - and without this rule it is also silent, because nothing downstream
+    looks up a position it was never told about. The capacity comes from the
+    CONNECTOR's own contract, so this also catches an endpoint naming a part
+    that is not a connector at all: a path into a status lamp.
+    """
+    opt = data.get("optical") or {}
+    paths = opt.get("paths") or []
+    if not paths:
+        return
+    caps = optical.capacities(data, _optical_load_ref(lib_roots))
+    for p in paths:
+        for ep, _ratio in optical.endpoints(p):
+            try:
+                part, pos = optical.split_endpoint(ep)
+            except ValueError:
+                err(path, "L78", f"{ep!r} is not an optical endpoint - they are "
+                                 "`<part-id>.<n>` with n from 1")
+                continue
+            if part not in caps:
+                err(path, "L78", f"{ep} names {part!r}, which this part either "
+                                 "does not compose or which declares no "
+                                 "`optical.positions` - only a connector can "
+                                 "carry a fibre")
+            elif pos > caps[part]:
+                err(path, "L78", f"{ep} asks for position {pos} and {part} "
+                                 f"presents {caps[part]}")
+
+
+def lint_component_optical_conflicts(path, data, _lib_roots=None):
+    """L79: no position is claimed twice, and a split's ratios sum to 100.
+
+    A DESTINATION IS EXCLUSIVE, A SOURCE IS NOT. Two strands landing in one bore
+    is a contradiction - a bore takes one ferrule. One source reaching several
+    destinations is a SPLIT, which is exactly what a tap and a coupler are, so
+    counting sources as conflicts would reject the parts this vocabulary exists
+    for. The check is therefore on destinations only.
+
+    A COMBINE - two sources landing on one destination - is not expressible
+    today. The vocabulary has no syntax for it, so two paths whose destinations
+    collide are always an error here, with no declared-combine escape hatch the
+    way a declared split has one. `ppm-ad1-1510`'s combine direction (plan 6)
+    will need one and none exists yet; see this rule's TODO and the design
+    doc's open questions.
+
+    Ratios are checked here rather than in the schema because the schema can say
+    a ratio is a number and cannot say two of them add up. 70/40 validates and
+    is wrong. THE RATIO LIST IS ALSO THE ONLY FORM THIS CHECK CAN SEE: a split
+    written as two plain paths - `{from: common.1, to: split.1}` and
+    `{from: common.1, to: split.2}` - carries no ratios at all, so writing a
+    genuine split that way hides it from the ratio check entirely. A source
+    is therefore allowed to be a `from` in at most one path; a part that
+    splits must say so with the ratio list, which is the one form this rule
+    can actually verify.
+    """
+    paths = (data.get("optical") or {}).get("paths") or []
+    seen = {}
+    sources = {}
+    for i, p in enumerate(paths):
+        eps = optical.endpoints(p)
+        for ep, _r in eps[1:]:
+            if ep in seen:
+                err(path, "L79", f"{ep} is the destination of two paths "
+                                 f"({seen[ep]} and {i}) - a fibre position "
+                                 "takes one ferrule")
+            seen[ep] = i
+        src = p.get("from")
+        if src in sources:
+            err(path, "L79", f"{src} is the source of two paths "
+                             f"({sources[src]} and {i}) - splitting a source "
+                             "across two paths hides its ratios from this "
+                             "check, so a split is written as ONE path with "
+                             "a ratio list, not two plain paths")
+        sources[src] = i
+        ratios = [r for _e, r in eps[1:] if r is not None]
+        if ratios:
+            total = round(sum(ratios), 6)
+            if total != 100:
+                err(path, "L79", f"path {i} from {p['from']} splits into ratios "
+                                 f"summing to {total:g}, not 100")
+
+
+def lint_component_optical_coverage(path, data, lib_roots):
+    """L80: every position is reached by a path or declared unused, with a reason.
+
+    smartoptics/ppm-ocu-97-3@1 carries this in provenance today:
+
+        THE SECOND BORE IS DEAD. It is captioned NA and terminates nothing.
+
+    True, and unverifiable. A four-bore faceplate on a three-port coupler leaves
+    one position with nothing behind it, and the difference between "nothing
+    behind it" and "somebody forgot a path" is the whole question. Declaring it
+    turns a sentence into a claim.
+
+    IT BITES BOTH WAYS. An entry for a position a path DOES reach is also an
+    error - otherwise `unused` becomes a way to silence the rule rather than a
+    statement about the hardware, and the first person under time pressure finds
+    that out.
+
+    IT ONLY ASKS THE QUESTION OF A PART THAT OPTED IN. A component composing
+    fibre connectors but declaring no `optical.paths` at all returns here
+    unchecked - deliberately. This rule can only fire once a component has
+    started describing its optical model; running it against every component
+    that merely composes a connector would error on every part in the library
+    that carries an LC adapter and no optical model, which today is all of
+    them. That would force the rule to land as a warning, and a warning that
+    fires everywhere gets ignored everywhere. The cost is real: a part that
+    declares connectors and no paths is not checked by L80, and nothing yet
+    catches that gap.
+
+    AN `unused` KEY IS ALSO CHECKED AGAINST SOMETHING. The schema's
+    `propertyNames` can only shape-check the string - `<part-id>.<n>` - and the
+    loop above walks real positions only, so `unused: {ghost.7: "..."}` or
+    `common.9` on a two-bore adapter validated and was silently ignored: a
+    claim about hardware that does not exist, checked by nothing. Every key is
+    now required to name a position on a connector this component actually
+    composes.
+    """
+    opt = data.get("optical") or {}
+    if not (opt.get("paths") or []):
+        return
+    caps = optical.capacities(data, _optical_load_ref(lib_roots))
+    hit = optical.reached(data)
+    unused = opt.get("unused") or {}
+    for part, n in sorted(caps.items()):
+        for pos in range(1, n + 1):
+            ep = f"{part}.{pos}"
+            if ep in hit and ep in unused:
+                err(path, "L80", f"{ep} is declared unused and a path reaches "
+                                 "it - one of the two is wrong")
+            elif ep not in hit and ep not in unused:
+                err(path, "L80", f"{ep} is a fibre position no path reaches and "
+                                 "nothing declares. Route it, or add an "
+                                 "`optical.unused` entry saying what terminates "
+                                 "there")
+    for ep in sorted(unused):
+        try:
+            part, pos = optical.split_endpoint(ep)
+        except ValueError:
+            err(path, "L80", f"{ep!r} is not an optical endpoint - `unused` "
+                             "keys are `<part-id>.<n>` with n from 1")
+            continue
+        if part not in caps or pos > caps[part]:
+            err(path, "L80", f"{ep} is declared unused but names no position "
+                             "this component composes - `unused` claims a "
+                             "position exists and terminates nothing, so it "
+                             "is checked against real hardware like any other "
+                             "endpoint")
 
 
 def lint_component_fields(path, data, _lib_roots=None):
@@ -5905,6 +6069,9 @@ def main():
                 lint_component_forwarded_mate(f, d, args.library)
                 lint_component_relief_confidence(f, d, args.library)
                 lint_component_body_boxes(f, d)
+                lint_component_optical_endpoints(f, d, args.library)
+                lint_component_optical_conflicts(f, d)
+                lint_component_optical_coverage(f, d, args.library)
                 lint_component_sink_context(f, d)
                 lint_component_fields(f, d)
                 lint_component_lamp_colour(f, d)
