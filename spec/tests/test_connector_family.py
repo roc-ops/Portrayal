@@ -6,6 +6,7 @@ compose against - a wrong `positions` silently mis-models every module using it.
 """
 import pathlib
 
+import pytest
 import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
@@ -53,9 +54,6 @@ def test_the_sc_standard_names_where_its_pitch_came_from():
     assert s["pitch-confidence"] in ("measured", "estimated")
     assert "57058" in s["registry"] or "61754-4" in s["registry"], (
         "name the image or the standard the pitch came from")
-
-
-import pytest  # noqa: E402
 
 
 ESTIMATED = [

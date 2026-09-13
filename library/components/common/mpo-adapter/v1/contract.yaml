@@ -11,7 +11,7 @@ description: >-
   `optical.positions` on its placement.
 size: {w: 13.8, h: 9.4}
 size-confidence: {w: photo-measured, h: estimated}
-attrs: {media: fiber, connector: mpo, fibres: '12'}
+attrs: {media: fiber, connector: mpo}
 optical:
   # TWELVE FIBRES IN ONE FERRULE, which is the whole point of the connector and
   # the reason a cassette needs only one of these on its rear. MPO-8, -16 and
@@ -67,8 +67,21 @@ provenance:
     modelled, and the key direction matters - FS sells `Up-Down Type A` and
     `Up-Up Type B` panels as different SKUs, which this part does not yet
     distinguish.
+  connection-point: >-
+    `optical.at` is the plain centre of the 13.8 x 9.4 mating face - (13.8/2,
+    9.4/2) = (6.9, 4.7). That figure is corroborated, not just asserted: the
+    composed std/mpo@1 bore sits at [3.0, 1.9] with its own size 7.8 x 5.6, so
+    its centre is (3.0 + 7.8/2, 1.9 + 5.6/2) = (6.9, 4.7) too - the same point
+    two different pieces of geometry land on. `size-confidence` marks w
+    photo-measured and h estimated; a centre depending on both axes is only
+    as good as the weaker one, so this point is ESTIMATED, not photo-measured,
+    even though half of what it is built from is not.
 parts:
   - {ref: std/mpo@1, id: bore, at: [3.0, 1.9]}
+connection-points:
+  # centre of the 13.8 x 9.4 mating face - (6.9, 4.7) - so the next plan has
+  # somewhere to hang a fibre path off this adapter without a version bump.
+  optical: {at: [6.9, 4.7], direction: front}
 relief:
   wall: '#22262a'
   features:

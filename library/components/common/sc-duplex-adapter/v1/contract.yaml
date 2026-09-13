@@ -11,7 +11,7 @@ description: >-
   which is a device-specific moulded PON bay rather than a panel adapter.
 size: {w: 9.4, h: 12.0}
 size-confidence: {w: photo-measured, h: estimated}
-attrs: {media: fiber, connector: sc, fibres: '2'}
+attrs: {media: fiber, connector: sc}
 optical:
   # TWO PORTS, STACKED. FS's own panel numbering reads 2/4/6/8/10/12 across
   # the top of each block and 1/3/5/7/9/11 across the bottom - the same six
@@ -58,4 +58,12 @@ provenance:
     mechanical drawing. Neither port's own bore geometry is modelled - no
     measurement here reaches that level of detail, only the adapter's outer
     body and the pair's stacking - and no keying or latch detail is drawn.
+  connection-point: >-
+    `optical.at` is the plain centre of the 9.4 x 12.0 mating face -
+    (9.4/2, 12.0/2) = (4.7, 6.0) - the two stacked ports are not modelled
+    individually so there is no finer point to centre on. `size-confidence`
+    marks w photo-measured and h estimated; a centre depending on both axes
+    is only as good as the weaker one, so this point is ESTIMATED.
+connection-points:
+  optical: {at: [4.7, 6.0], direction: front}
 skins: [default]

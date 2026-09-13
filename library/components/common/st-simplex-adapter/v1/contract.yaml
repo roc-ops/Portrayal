@@ -10,7 +10,7 @@ description: >-
   adapters this task's siblings model.
 size: {w: 10.0, h: 10.0}
 size-confidence: {w: estimated, h: estimated}
-attrs: {media: fiber, connector: st, fibres: '1'}
+attrs: {media: fiber, connector: st}
 optical:
   # ONE FIBRE, ONE BAYONET. ST is inherently simplex - unlike SC and LC, which
   # ship duplex adapters as the panel norm, FS's ST panels are one opening per
@@ -40,4 +40,10 @@ provenance:
     product render (SKU 183380). The bayonet key, the coupling nut's knurling
     and any panel-print numbering are not modelled; nothing here reaches that
     level of detail.
+  connection-point: >-
+    `optical.at` is the plain centre of the 10.0 x 10.0 mating face -
+    (10.0/2, 10.0/2) = (5.0, 5.0). Both axes of `size-confidence` are
+    estimated, so this centre is ESTIMATED too.
+connection-points:
+  optical: {at: [5.0, 5.0], direction: front}
 skins: [default]

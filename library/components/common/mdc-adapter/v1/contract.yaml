@@ -12,8 +12,12 @@ description: >-
   MDC is duplex like common/sc-duplex-adapter and common/lc-duplex-adapter, at
   a much smaller footprint, which is the whole point of the connector.
 size: {w: 6.6, h: 8.0}
-size-confidence: {w: estimated, h: estimated}
-attrs: {media: fiber, connector: mdc, fibres: '4'}
+size-confidence: {w: borrowed, h: estimated}
+size-notes: >-
+  w borrowed from common/lc-duplex-adapter@3's measured 13.2 mm duplex body,
+  halved for MDC's roughly-double panel density - see provenance/size. h has
+  no derivation at all and stays estimated.
+attrs: {media: fiber, connector: mdc}
 optical:
   # FOUR FIBRES IN ONE SMALL BODY: FS's catalogue line for SKU 147015 reads
   # "12x MDC UPC 2-Port Duplex (Blue), 48 Fibers" - 48 / 12 = 4 per adapter,
@@ -57,4 +61,12 @@ provenance:
     internal arrangement (side-by-side vs stacked) is not photographed here
     and is drawn as a plain guess in the skin; no keying or latch detail is
     modelled.
+  connection-point: >-
+    `optical.at` is the plain centre of the 6.6 x 8.0 mating face -
+    (6.6/2, 8.0/2) = (3.3, 4.0) - the two duplex ports within this body are
+    not modelled individually so there is no finer point to centre on.
+    `size-confidence` marks w borrowed (from common/lc-duplex-adapter@3) and
+    h estimated; neither axis is measured, so this centre is ESTIMATED.
+connection-points:
+  optical: {at: [3.3, 4.0], direction: front}
 skins: [default]

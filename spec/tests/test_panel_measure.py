@@ -11,8 +11,7 @@ import sys
 import pytest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-IMG = pathlib.Path("/Volumes/External/Network-Device-Visualization/working/"
-                   "intake/fs/fhd/photos")
+IMG = ROOT / "working" / "intake" / "fs" / "fhd" / "photos"
 sys.path.insert(0, str(ROOT / "spec/tools/intake"))
 
 

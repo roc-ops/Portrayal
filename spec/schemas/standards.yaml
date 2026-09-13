@@ -529,9 +529,6 @@ standards:
       face-on render of SKU 57058 (an FHD SC duplex adapter panel face),
       scaled on the 108.97 mm FHD module width and validated against the
       35.05 mm height to 0.57%.
-    w: 9.4
-    h: 12.0
-    confidence: estimated
     pitch: 13.0
     pitch-confidence: measured
     pitch-kind: floor
@@ -552,29 +549,34 @@ standards:
       narrower than the one vendor layout measured here is still worth a
       look, a wider one is unremarkable.
     notes: >-
-      THE PANEL FOOTPRINT for an SC duplex adapter, standing in for the
-      aperture the same way mpo-adapter's w/h once did before that entry was
-      corrected - no cutout-level spec is held here, so w/h are read off the
-      adapter BODY on FS's render rather than a punched-hole dimension. w=9.4
-      is the measured body width (9.32 to 9.49 across six adapters); h=12.0 is
-      an ESTIMATE from the render's proportions (each adapter block reads
-      roughly a third again as tall as it is wide, which two vertically
-      stacked ports would need) and is not a pixel measurement - a caliper on
-      one real adapter settles it.
+      NO APERTURE DIMENSION IS HELD HERE. This entry carried w: 9.4, h: 12.0
+      at confidence: estimated until this fix, standing in for the aperture
+      the same way mpo-adapter's w/h once did before that entry was
+      corrected - but nothing declares `conforms: sc-duplex-adapter`, so L9
+      never checked those figures against anything, and
+      common/sc-duplex-adapter@1's own `size: {w: 9.4, h: 12.0}` is a BODY
+      FOOTPRINT read off FS's render, not a punched-hole dimension this
+      registry could independently confirm. Carrying both was a second,
+      uncompared copy of one number - the exact defect this task's L81 exists
+      to end - so the figures were deleted here rather than kept in sync by
+      hand. What would settle a real aperture: IEC 61754-4, or a caliper on
+      the panel cutout itself rather than the adapter body that sits in it.
       THE TWO SC PORTS STACK VERTICALLY IN ONE ADAPTER, NOT SIDE BY SIDE: the
       panel is numbered 2, 4, 6, 8, 10, 12 along the top of each block and 1,
       3, 5, 7, 9, 11 along the bottom (verified against 57058.main.jpg), the
       opposite arrangement from common/lc-duplex-adapter's side-by-side pair.
       `optical.positions: 2` on common/sc-duplex-adapter means this, and its
       skin draws the pair stacked.
-      THE PITCH IS THE STRONG HALF AND THE FOOTPRINT IS THE WEAK ONE, as with
-      mpo-adapter: 13.0 is a five-gap measurement (spread 0.51), the 9.4 width
-      is a six-body measurement (spread 0.17), and the 12.0 height is a plain
-      guess. Detected by the blue flange each adapter carries across its top,
-      not by paleness - SKU 57058's adapters are dark grey bodies with a
-      bright blue flange, unlike 35510's pale MTP interiors, so `openings()`
+      THE PITCH IS THE ONLY FIGURE THIS ENTRY STILL HOLDS, AND IT IS THE
+      STRONG HALF: 13.0 is a five-gap measurement (spread 0.51) off 57058's
+      six adapters, detected by the blue flange each carries across its top
+      rather than by paleness - unlike 35510's pale MTP interiors, 57058's
+      adapters are dark grey with a bright blue flange, so `openings()`
       needed its own blueness predicate here (`p[2] > p[0] + 40 and p[2] >
-      90`) in a narrow band (0.11-0.18) over that flange.
+      90`) in a narrow band (0.11-0.18) over that flange. The body width and
+      height this entry used to carry are recorded on
+      common/sc-duplex-adapter@1 itself, where `size-confidence` says which
+      axis is measured and which is a guess.
   st-adapter:
     registry: >-
       NOT MEASURED AND NOT READ FROM A STANDARD. IEC 61754-2 governs the ST/BFOC
@@ -591,9 +593,6 @@ standards:
       57058's run 20.51 to 85.50 mm, a 64.99 mm span - two measured
       six-per-row panels disagreeing by 5.6%, so ~67 mm +/- 3% is used rather
       than either alone. 67 / (3 - 1) = 33.5.
-    w: 10.0
-    h: 10.0
-    confidence: estimated
     pitch: 33.5
     pitch-confidence: estimated
     pitch-kind: floor
@@ -606,14 +605,17 @@ standards:
       this soft: it says "FS's own panel does not sit tighter than this,"
       nothing stronger, and a composed layout wider than 33.5 raises nothing.
     notes: >-
-      EVERY FIGURE HERE IS AN ESTIMATE AND THE APERTURE IS THE WEAKEST. The
-      pitch at least follows from a row count counted off the three-quarter
-      render and an envelope bracketed by two sibling panels; the 10.0 x 10.0
-      opening is a plausible round number for a bayonet adapter's bulkhead and
-      rests on nothing. The render's own three adapters sit with visibly wide
-      gaps between them, which is consistent with a 33.5 mm pitch on a 10 mm
-      opening - not a measurement, but not a contradiction either. What
-      settles it: a face-on photograph of SKU 183380, a caliper on one
+      NO APERTURE DIMENSION IS HELD HERE. This entry carried w: 10.0, h: 10.0
+      at confidence: estimated until this fix, a plausible round number for a
+      bayonet adapter's bulkhead that rested on nothing - and nothing
+      declares `conforms: st-adapter`, so L9 never checked it against
+      anything. common/st-simplex-adapter@1's own `size: {w: 10.0, h: 10.0}`
+      is that same guess, held once on the component rather than twice with
+      no comparison between the copies. The pitch is the only figure this
+      entry still holds: it at least follows from a row count counted off
+      the three-quarter render and an envelope bracketed by two sibling
+      panels, which is more than the deleted aperture ever had. What settles
+      an aperture: a face-on photograph of SKU 183380, a caliper on one
       adapter, or IEC 61754-2.
       FS also sells 183381, an 8-adapter version of the same panel family. IF
       it follows the same two-row pattern as 382881's 8-adapter FC panel (two
@@ -636,9 +638,6 @@ standards:
       them in two rows of 4, not one row of 8 - a 4-across row spans 3 gaps.
       Using the same ~67 mm +/- 3% envelope bracketed by 35510 (68.84 mm) and
       57058 (64.99 mm), 67 / (4 - 1) = 22.3.
-    w: 10.0
-    h: 10.0
-    confidence: estimated
     pitch: 22.3
     pitch-confidence: estimated
     pitch-kind: floor
@@ -649,16 +648,19 @@ standards:
       spacing. Recorded as a floor - "FS's own panel does not sit tighter than
       this" - not a target.
     notes: >-
-      EVERY FIGURE HERE IS AN ESTIMATE. The 10.0 x 10.0 aperture is BORROWED
-      from st-adapter's own estimate rather than derived independently: FC and
-      ST are both round bayonet-coupled interfaces of a similar generation and
-      vendor drawings for the two bulkheads read within a millimetre of each
-      other, so the same plausible round number is adopted here rather than
-      inventing a second unsourced guess. It sits comfortably inside the 22.3
-      mm pitch, and the render's own four-per-row adapters sit with visibly
-      wide gaps between them, consistent with that. What settles it: a
-      face-on photograph of SKU 382881, a caliper on one adapter, or
-      IEC 61754-13.
+      NO APERTURE DIMENSION IS HELD HERE. This entry carried w: 10.0, h: 10.0
+      at confidence: estimated until this fix, borrowed from st-adapter's own
+      estimate rather than derived independently - and nothing declares
+      `conforms: fc-adapter`, so L9 never checked it against anything.
+      common/fc-simplex-adapter@1's own `size: {w: 10.0, h: 10.0}` carries
+      that same borrowed figure, held once on the component rather than
+      twice with no comparison between the copies; its `size-confidence`
+      says `estimated`, not `borrowed`, since this registry duplicate is what
+      is being retired, not the component's own honest accounting. The pitch
+      is the only figure this entry still holds: it at least follows from a
+      row count counted off the three-quarter render and an envelope
+      bracketed by two sibling panels. What settles an aperture: a face-on
+      photograph of SKU 382881, a caliper on one adapter, or IEC 61754-13.
       THIS ENTRY PREVIOUSLY RECORDED pitch: 12.69 (88.8 / 7), on the same two
       mistakes as st-adapter's: the 88.8 mm envelope constant and treating
       382881 as one row of 8. Both corrected above.
@@ -673,9 +675,6 @@ standards:
       row of 12 - a 6-across row spans 5 gaps, the same row shape 35510's and
       57058's own six-per-row rows have. Using the same ~67 mm +/- 3% envelope
       bracketed by those two panels, 67 / (6 - 1) = 13.4.
-    w: 7.0
-    h: 8.0
-    confidence: estimated
     pitch: 13.4
     pitch-confidence: estimated
     pitch-kind: floor
@@ -686,21 +685,22 @@ standards:
       floor for the same reason as st-adapter and fc-adapter: this is one FS
       panel's row count, not a fixed interface requirement.
     notes: >-
-      EVERY FIGURE HERE IS AN ESTIMATE AND THE APERTURE RESTS ON THE THINNEST
-      REASONING OF THE FIVE. 7.0 x 8.0 is not measured, not borrowed whole from
-      a sibling standard, and not read off any render - it is a rough fraction
+      NO APERTURE DIMENSION IS HELD HERE. This entry carried w: 7.0, h: 8.0 at
+      confidence: estimated until this fix, and nothing declares
+      `conforms: lsh-adapter`, so L9 never checked it against anything.
+      w=7.0 is not measured, not read off any render - it is a rough fraction
       of common/sc-duplex-adapter@1's photo-measured 9.4 mm body width (the SC
       and LSH/E2000 families share a broadly similar bulkhead order of
-      magnitude in vendor cut sheets). At the corrected 13.4 mm pitch a 7.0 mm
-      body has about 6.4 mm of clearance to its neighbour, so this is no
-      longer a fit constraint the way it was against the earlier, mistaken
-      8.07 mm pitch (where a 9.4 mm body would have overlapped) - the scaling
-      to a fraction of the SC body is the only reasoning left behind this
-      number now, and it is thin. 13.4 itself sits between the 13.0 measured
-      on 57058 and the 13.77 measured on 35510, both six-per-row siblings -
-      the only corroboration these figures have. What settles the pitch or
-      the aperture: a face-on photograph of SKU 336339, a caliper on one
-      adapter, or IEC 61754-15.
+      magnitude in vendor cut sheets), which is why
+      common/lsh-simplex-adapter@1's own `size-confidence` marks that axis
+      `borrowed` from sc-duplex-adapter's measured figure rather than a plain
+      guess; h=8.0 has no derivation behind it at all and stays `estimated`
+      there. Duplicating either figure here, unchecked, was the second copy
+      this task's L81 exists to end. What settles a real aperture: a face-on
+      photograph of SKU 336339, a caliper on one adapter, or IEC 61754-15.
+      13.4 is the only figure this entry still holds. It sits between the
+      13.0 measured on 57058 and the 13.77 measured on 35510, both
+      six-per-row siblings - the only corroboration this pitch has.
       THIS ENTRY PREVIOUSLY RECORDED pitch: 8.07 (88.8 / 11), on the same two
       mistakes as st-adapter's: the 88.8 mm envelope constant and treating
       336339 as one row of 12. Both corrected above; the aperture's fit
@@ -724,9 +724,6 @@ standards:
       adapter carries two MDC duplex connectors of two fibres each - a
       published figure, not a derivation, and the basis for this part's
       `optical.positions: 4`.
-    w: 6.6
-    h: 8.0
-    confidence: estimated
     pitch: 13.4
     pitch-confidence: estimated
     pitch-kind: floor
@@ -739,19 +736,27 @@ standards:
       Recorded as a floor: one FS panel's inferred row count, not a
       requirement.
     notes: >-
-      EVERY FIGURE HERE IS AN ESTIMATE EXCEPT THE FIBRE COUNT. w: 6.6 is a
-      PROPORTION OF A KNOWN PART, not an independent guess: MDC is marketed by
-      US Conec and Senko as roughly twice the density of LC duplex in the same
-      panel space, and common/lc-duplex-adapter@3's own measured body is
-      13.2 mm wide for a two-fibre duplex adapter, so half of that - 6.6 - is
-      adopted as this duplex adapter's estimated width. h: 8.0 is a plain
-      round-number guess with no derivation behind it at all, the weakest
-      figure in this entry. Both sit inside the 13.4 mm pitch. optical.positions
-      IS NOT AN ESTIMATE: 48 fibres / 12 adapters = 4, read straight off FS's
-      own catalogue line for 147015 rather than derived or guessed - the one
-      published figure in this entry. What settles the rest: a face-on
-      photograph of SKU 147015 or its actual panel, a caliper on one adapter,
-      or a held US Conec/Senko mechanical drawing.
+      NO APERTURE DIMENSION IS HELD HERE EXCEPT FOR THE FIBRE COUNT, WHICH IS
+      NOT AN APERTURE DIMENSION AT ALL. This entry carried w: 6.6, h: 8.0 at
+      confidence: estimated until this fix, and nothing declares
+      `conforms: mdc-adapter`, so L9 never checked either against anything.
+      w=6.6 is A PROPORTION OF A KNOWN PART, not an independent guess: MDC is
+      marketed by US Conec and Senko as roughly twice the density of LC
+      duplex in the same panel space, and common/lc-duplex-adapter@3's own
+      measured body is 13.2 mm wide for a two-fibre duplex adapter, so half
+      of that - 6.6 - is why common/mdc-adapter@1's own `size-confidence`
+      marks that axis `borrowed` from lc-duplex-adapter's measured figure
+      rather than a plain guess; h=8.0 has no derivation behind it at all and
+      stays `estimated` there. Keeping either figure here too, with nothing
+      comparing the two copies, was the exact defect this task's L81 exists
+      to end. optical.positions IS NOT AN ESTIMATE and is not affected by any
+      of this: 48 fibres / 12 adapters = 4, read straight off FS's own
+      catalogue line for 147015 rather than derived or guessed - the one
+      published figure in this entry, mentioned here for context though this
+      registry carries no `positions` key of its own - that number lives on
+      common/mdc-adapter@1's `optical.positions`. What settles a real
+      aperture: a face-on photograph of SKU 147015 or its actual panel, a
+      caliper on one adapter, or a held US Conec/Senko mechanical drawing.
       THIS ENTRY PREVIOUSLY RECORDED pitch: 8.07 (88.8 / 11, the same
       arithmetic error as lsh-adapter's, whose panel shares this count) AND
       optical.positions: 2. The positions figure was a plain mistake, not an
@@ -773,9 +778,6 @@ standards:
       clips, but the render shows them in two rows of 3, not one row of 6 - a
       3-across row spans 2 gaps. Using the same ~67 mm +/- 3% envelope
       bracketed by 35510 (68.84 mm) and 57058 (64.99 mm), 67 / (3 - 1) = 33.5.
-    w: 14.8
-    h: 19.3
-    confidence: estimated
     pitch: 33.5
     pitch-confidence: estimated
     pitch-kind: floor
@@ -786,18 +788,19 @@ standards:
       count and an averaged envelope, same as st-adapter. Recorded as a floor:
       FS's own panel does not sit tighter than this, nothing more is claimed.
     notes: >-
-      EVERY FIGURE HERE IS AN ESTIMATE. Unlike the other four entries, the
-      14.8 x 19.3 opening is not even derived from FS's own hardware - it is
-      the widely-published generic keystone cutout, carried here because it is
-      the only figure available for a form factor with no single owning
-      standard. At the corrected 33.5 mm pitch it leaves an 18.7 mm gap to its
-      neighbour - a much larger margin than the ~3 mm gap the earlier,
-      mistaken 17.76 mm pitch implied, and no longer worth comparing to
-      57058's SC adapters' 3.6 mm gap the way the old text did; that
-      resemblance was coincidental to the wrong pitch, not a real check. What
-      settles it: a face-on photograph of SKU 143239's actual panel
-      dimensions, a caliper, or a manufacturer cut sheet for this specific
-      panel.
+      NO APERTURE DIMENSION IS HELD HERE. This entry carried w: 14.8, h: 19.3
+      at confidence: estimated until this fix, and nothing declares
+      `conforms: keystone-opening`, so L9 never checked it against anything.
+      Unlike the other four entries, that opening was not even derived from
+      FS's own hardware - it is the widely-published generic keystone
+      cutout, adopted for lack of anything FS-specific, and
+      common/keystone-clip@1's own `size: {w: 14.8, h: 19.3}` carries that
+      same generic figure, held once on the component rather than twice with
+      no comparison between the copies. At the 33.5 mm pitch this entry
+      still holds, that body leaves an 18.7 mm gap to its neighbour. What
+      settles a real aperture: a face-on photograph of SKU 143239's actual
+      panel dimensions, a caliper, or a manufacturer cut sheet for this
+      specific panel.
       THIS ENTRY PREVIOUSLY RECORDED pitch: 17.76 (88.8 / 5), on the same two
       mistakes as st-adapter's: the 88.8 mm envelope constant and treating
       143239 as one row of 6. Both corrected above.

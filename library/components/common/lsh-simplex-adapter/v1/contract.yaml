@@ -9,8 +9,12 @@ description: >-
   to an FS FHD LSH panel. One fibre per adapter. LSH is the same physical
   interface E2000 names; FS's own catalogue calls it LSH.
 size: {w: 7.0, h: 8.0}
-size-confidence: {w: estimated, h: estimated}
-attrs: {media: fiber, connector: lsh, fibres: '1'}
+size-confidence: {w: borrowed, h: estimated}
+size-notes: >-
+  w borrowed from common/sc-duplex-adapter@1's photo-measured 9.4 mm body
+  width, scaled to a rough fraction for LSH/E2000's smaller bulkhead class -
+  see provenance/size. h has no derivation at all and stays estimated.
+attrs: {media: fiber, connector: lsh}
 optical:
   # ONE FIBRE. LSH/E2000 ships simplex on FS's panels.
   positions: 1
@@ -40,4 +44,11 @@ provenance:
     no face-on imagery exists for this part at all - only a three-quarter
     product render (SKU 336339). The spring-loaded shutter, the bayonet key and
     any panel-print numbering are not modelled.
+  connection-point: >-
+    `optical.at` is the plain centre of the 7.0 x 8.0 mating face -
+    (7.0/2, 8.0/2) = (3.5, 4.0). `size-confidence` marks w borrowed (from
+    common/sc-duplex-adapter@1) and h estimated; neither axis is measured, so
+    this centre is ESTIMATED, the weaker of the two tokens it is built from.
+connection-points:
+  optical: {at: [3.5, 4.0], direction: front}
 skins: [default]

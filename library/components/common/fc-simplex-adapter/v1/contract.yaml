@@ -10,7 +10,7 @@ description: >-
   arrangement as common/st-simplex-adapter.
 size: {w: 10.0, h: 10.0}
 size-confidence: {w: estimated, h: estimated}
-attrs: {media: fiber, connector: fc, fibres: '1'}
+attrs: {media: fiber, connector: fc}
 optical:
   # ONE FIBRE. FC is simplex on FS's panels, the same as ST.
   positions: 1
@@ -37,4 +37,10 @@ provenance:
     no face-on imagery exists for this part at all - only a three-quarter
     product render (SKU 382881). The threaded coupling nut, its knurling and
     any panel-print numbering are not modelled.
+  connection-point: >-
+    `optical.at` is the plain centre of the 10.0 x 10.0 mating face -
+    (10.0/2, 10.0/2) = (5.0, 5.0). Both axes of `size-confidence` are
+    estimated, so this centre is ESTIMATED too.
+connection-points:
+  optical: {at: [5.0, 5.0], direction: front}
 skins: [default]
