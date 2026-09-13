@@ -1,0 +1,68 @@
+format: 1
+kind: component
+name: mpo-adapter
+version: 1.0.0
+class: port
+profile: networking
+description: >-
+  Panel-mount MPO/MTP adapter - one opening in a bezel, as fitted to an FS FHD
+  adapter panel. Twelve fibres by default; an MPO-8, -16 or -24 is the same
+  adapter with a different ferrule, and says so by overriding
+  `optical.positions` on its placement.
+size: {w: 13.8, h: 9.4}
+attrs: {media: fiber, connector: mpo, fibres: '12'}
+optical:
+  # TWELVE FIBRES IN ONE FERRULE, which is the whole point of the connector and
+  # the reason a cassette needs only one of these on its rear. MPO-8, -16 and
+  # -24 share this adapter and this opening - the count is a property of the
+  # ferrule - so a module using another count overrides this on its placement
+  # rather than composing a different part.
+  positions: 12
+provenance:
+  size: >-
+    MEASURED for the width, ESTIMATED for the height. 13.8 is the adapter pitch
+    on FS's face-on render of SKU 35510, where two rows of six give 13.77 and
+    13.80 with spreads of 1.11 and 0.60 - abutting adapters, so the pitch IS the
+    width. The 9.4 height is inferred from the panel's 15.97 row pitch less a
+    plausible divider and is not measured.
+    A SECOND, INDEPENDENT READING EXISTS AND IS CLOSE BUT NOT THE SAME: two
+    vendor drawings for a generic MPO/MTP bulkhead adapter (US Conec C9857 rev
+    AA and Amphenol 955 series, 22 years apart) agree on a 14.9 (or 14.8) x 9.8
+    body with depth 19.8 or 20.6 and a 25.0 x 20.0 / 3.1 dia mounting flange.
+    That reading used to sit in standards.yaml's `mpo-adapter` entry under the
+    same key this contract's `size` compares against nothing, because this
+    contract declares no `conforms:` - it composes std/mpo@1 for the aperture
+    and draws its own bezel around it, as common/lc-duplex-adapter@3 does for
+    std/lc-bore@3. That entry now holds the FS panel's APERTURE and PITCH
+    instead (see its notes for the full history), so the vendor body/depth
+    figures are recorded here rather than lost: 14.9 x 9.8 is 1.1 / 0.4 mm off
+    this part's own 13.8 x 9.4, which is a generic adapter measured two
+    different ways agreeing to within half a millimetre on height and a bit
+    over a millimetre on width - not a contradiction, but not the same
+    number either, and a caliper on one real adapter would settle which vendor
+    drawing (or neither) this FS part actually matches. The 19.8/20.6 body
+    depth is NOT used for anything drawn here or on std/mpo@1 - see std/mpo@1's
+    own `provenance.depth` for why.
+  fibre-count: >-
+    catalogue - FS's FHD panels are sold as `12 x MTP-8/12/24`, one opening
+    taking any of the three ferrules. 12 is the default because it is the count
+    the FHD cassettes' rear connectors use; see the FS catalogue at
+    working/intake/fs/fhd/CATALOGUE.tsv.
+  face-detail-gap: >-
+    no orthographic photograph of an MPO adapter exists here; the reading is off
+    a product RENDER. The latch, the key orientation and any keying mark are not
+    modelled, and the key direction matters - FS sells `Up-Down Type A` and
+    `Up-Up Type B` panels as different SKUs, which this part does not yet
+    distinguish.
+parts:
+  - {ref: std/mpo@1, id: bore, at: [3.0, 1.9]}
+relief:
+  wall: '#22262a'
+  features:
+    - node: bezel
+      out: 1.2
+      confidence: estimated
+      source: >-
+        the adapter's flange stands slightly proud of the panel, as the renders
+        show. 1.2 is not measured; nothing in the corpus dimensions it.
+skins: [default]

@@ -465,25 +465,54 @@ standards:
       plain rounded rectangle, NOT keyed with chamfers - polarity comes from the pin
       layout (earth top centre, line and neutral below). Depth still estimated.
   mpo-adapter:
-    registry: IEC 61754-7 / TIA-604-5 FOCIS 5 for the mating interface; footprint
-      from US Conec C9857 rev AA and Amphenol 955 series
-    w: 14.9
-    h: 9.8
-    confidence: measured
-    depth: 19.8
-    depth-confidence: measured
-    notes: Panel-mount MTP/MPO bulkhead adapter. w and h are the adapter body
-      cross-section, which the cutout has to clear - the governing cutout is in a
-      US Conec Technical Note (C9857 rev Y moved it off the drawing) that has not
-      been obtained, so read these as the body outline rather than the punched
-      hole. Two independent vendor drawings 22 years apart agree on the body (14.9
-      against 14.8 by 9.8) and on the full-flange mounting pattern (25.0 wide, 20.0
-      hole spacing, 3.1 dia), which is what makes this a footprint and not one
-      vendor's shell. They differ on depth (19.8 against 20.6), flange thickness
-      (4.0 against 1.7) and reduced-flange width (18.9 against 17.3), so those are
-      vendor detail. NOT the QSFP optical interface - a QSFP module face is 8.50
-      high and cannot take a 9.8 body, so that interface is a bare MT ferrule
-      window and is still unsourced.
+    registry: >-
+      IEC 61754-7 / TIA-604-5 FOCIS 5 governs the MPO mating interface and is not
+      held here. w/h are MEASURED, NOT READ FROM A STANDARD: the pitch and the
+      aperture come from FS's own face-on render of SKU 35510 (FHD 12x
+      MTP-8/12/24 adapter panel), scaled on the 108.97 mm FHD module width and
+      validated against the 35.05 mm height to 1.7%.
+    w: 7.8
+    h: 5.6
+    confidence: estimated
+    pitch: 13.8
+    pitch-confidence: measured
+    pitch-kind: floor
+    pitch-kind-note: >-
+      13.8 is the adapter BODY WIDTH used as a pitch: FS's six MTP adapters
+      per row on 35510 sit edge to edge, so 13.8 is the closest a layout can
+      pack them, not a mating-interface figure IEC 61754-7 fixes. A device
+      composing several may space them wider; it must not sit narrower - a
+      floor, not a target. Contrast qsfp-ganged, whose pitch is one specific
+      cage part's fixed shared-wall geometry and so IS a target; here there is
+      no shared wall, only abutment, and abutment sets a minimum, not a fix.
+    notes: >-
+      THE PANEL APERTURE for an MPO/MTP adapter, which uses the SC-duplex
+      footprint - that compatibility is why an MPO adapter drops into an SC
+      opening and why the pitch lands near an SC's.
+      THE PITCH IS THE STRONG HALF AND THE APERTURE IS THE WEAK ONE. Two rows of
+      six on 35510 give 13.77 and 13.80 with spreads of 1.11 and 0.60, so 13.8 is
+      a measurement. The 7.8 x 5.6 opening is not: the detection catches a
+      bevelled interior and reads 5.4 to 8.5 across the rows, so the aperture is
+      an estimate sitting inside a measured pitch. A caliper on one adapter, or
+      IEC 61754-7, settles it.
+      Fibre count is a property of the FERRULE, not the adapter: MPO-8, -12, -16
+      and -24 share this opening. The component carries the count in
+      `optical.positions`.
+      THIS ENTRY PREVIOUSLY RECORDED SOMETHING ELSE AND DID NOT SAY SO IN
+      SILENCE. Before std/mpo@1 existed to `conforms:` to this key, it carried
+      w: 14.9, h: 9.8, confidence: measured, depth: 19.8, depth-confidence:
+      measured, from two independent vendor drawings (US Conec C9857 rev AA and
+      Amphenol 955 series, agreeing on a 14.9-or-14.8 x 9.8 body and a 25.0 x
+      20.0 / 3.1 dia flange pattern, differing on depth 19.8 vs 20.6 and flange
+      thickness 4.0 vs 1.7). Its own notes already flagged the compromise -
+      "read these as the body outline rather than the punched hole" - because
+      the file's header defines w/h as the FACEPLATE APERTURE and no cutout
+      spec had been obtained. That body/depth reading is not discarded, only
+      moved: common/mpo-adapter@1's provenance carries it as the vendor's own
+      body-size reading, set against this task's FS-panel figures of 13.8 x
+      9.4. w/h here now hold the actual aperture, correcting the compromise
+      rather than compounding it, and no component has ever `conforms:`-ed to
+      the old numbers (std/mpo@1 is the first) - so nothing regresses.
   lc-duplex-receptacle:
     registry: IEC 61754-20 / TIA-604-10 FOCIS 10 for the duplex pitch; the bore square
       from section A-A of the ProLabs PAN-QSFP28-100GBASE-CWDM4-C datasheet and from
