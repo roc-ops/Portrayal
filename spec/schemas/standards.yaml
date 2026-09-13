@@ -122,13 +122,16 @@ standards:
     cavity-confidence: verified
     pitch: 19.0
     pitch-confidence: measured
-    pitch-kind: floor
-    pitch-kind-note: 19.0 is what TE 2322551-4 measures when its two cages share
-      the thinnest wall the part has - the minimum pitch a ganged block can
-      reach, the same way SFF-8663's 21.0 is a minimum for the standalone
-      cage. Nothing stops a device from spacing ganged ports wider than their
-      shared-wall minimum; going narrower is not physically possible without a
-      different cage.
+    pitch-kind: target
+    pitch-kind-note: 19.0 is measured off TE 2322551-4's two openings (96.750
+      and 115.750, centres 19.000 apart), not derived as a minimum. The actual
+      floor in this space is SFF-8663's 21.0, which governs standalone cages;
+      ganged blocks beat that floor precisely because shared walls cost less
+      width than a cage-to-cage separation. The first pass classified this as a
+      floor by analogy with its four neighbours (sfp-ganged, rj45-ganged, and
+      three MSA pitches), but this entry's own notes argue the opposite - shared
+      walls are the entire point of ganging, and a measured geometry from a
+      specific cage part is not a minimum anyone must clear.
     notes: Per-port opening inside a ganged QSFP block. The aperture is the CAGE
       opening 18.50 x 9.58, measured off TE 2322551-4 (a 1x2 ganged QSFP cage,
       40.2 x 14.0 x 71.8); the cavity behind it is the SFF-8661 module envelope
