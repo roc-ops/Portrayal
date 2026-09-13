@@ -1,0 +1,59 @@
+format: 1
+kind: component
+name: sc-duplex-adapter
+version: 1.0.0
+class: port
+profile: networking
+description: >-
+  Panel-mount SC duplex adapter, as fitted to an FS FHD SC panel - one body
+  carrying two SC ports STACKED vertically, not side by side. Distinct from
+  common/lc-duplex-adapter, whose pair sits abreast, and from common/sc-apc,
+  which is a device-specific moulded PON bay rather than a panel adapter.
+size: {w: 9.4, h: 12.0}
+attrs: {media: fiber, connector: sc, fibres: '2'}
+optical:
+  # TWO PORTS, STACKED. FS's own panel numbering reads 2/4/6/8/10/12 across
+  # the top of each block and 1/3/5/7/9/11 across the bottom - the same six
+  # bodies, each carrying an upper and a lower port - which is the opposite
+  # arrangement from common/lc-duplex-adapter's side-by-side pair.
+  positions: 2
+provenance:
+  size: >-
+    MEASURED for the width, ESTIMATED for the height. FS's face-on render of
+    SKU 57058 gives six adapter bodies 9.32 to 9.49 wide (mean 9.4), found by
+    detecting the blue flange each carries across its top rather than by
+    paleness - unlike 35510's pale MTP interiors, 57058's adapters are dark
+    grey with a bright blue flange, so `openings()` needed its own blueness
+    predicate (`p[2] > p[0] + 40 and p[2] > 90`) over a narrow band (0.11 to
+    0.18) at the flange's height. The 12.0 height is not measured: no source
+    here dimensions it, and it is read off the render's proportions (each
+    block appears roughly a third again as tall as it is wide, which two
+    stacked ports would need) rather than off any pixel span. A caliper on
+    one real adapter would settle it.
+    THIS IS THE BODY, NOT A PITCH: these six adapters do NOT abut, unlike
+    common/mpo-adapter's. Six bodies 9.4 wide sit on a 13.0 pitch (centres
+    20.51, 33.22, 46.35, 59.31, 72.28, 85.50; pitches 12.71-13.22, mean
+    13.00), leaving a real 3.6 mm gap visible in the render - the pitch and
+    the width are two different measured numbers here, where mpo-adapter's
+    contract says its pitch and width ARE the same number because its
+    adapters abut. See standards.yaml's `sc-duplex-adapter` entry for the
+    pitch and its `pitch-kind` reasoning.
+  stacking: >-
+    photo-read off 57058.main.jpg - each adapter carries a blue flange across
+    its top with two dark port openings below it, one over the other, and the
+    panel prints '2' above and '1' below the leftmost block (then 4/3, 6/5,
+    8/7, 10/9, 12/11 across the row). `optical.positions: 2` and the skin's
+    vertical arrangement both follow this reading.
+  fibre-count: >-
+    catalogue - the FS FHD catalogue lists 57058 as a 12-fibre part (MTP-12 to
+    SC, OS2) built from six of these SC duplex adapters, 2 fibres each; see
+    working/intake/fs/fhd/CATALOGUE.tsv. A standalone 6x SC-APC-duplex FHD
+    panel (SKU 41986) exists in the same catalogue and would compose this
+    part six times over, which this task does not build.
+  face-detail-gap: >-
+    no orthographic photograph of an SC duplex adapter exists here; the
+    reading is off a product RENDER (57058.main.jpg), not a photograph or a
+    mechanical drawing. Neither port's own bore geometry is modelled - no
+    measurement here reaches that level of detail, only the adapter's outer
+    body and the pair's stacking - and no keying or latch detail is drawn.
+skins: [default]

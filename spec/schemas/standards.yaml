@@ -513,6 +513,56 @@ standards:
       9.4. w/h here now hold the actual aperture, correcting the compromise
       rather than compounding it, and no component has ever `conforms:`-ed to
       the old numbers (std/mpo@1 is the first) - so nothing regresses.
+  sc-duplex-adapter:
+    registry: >-
+      MEASURED, NOT READ FROM A STANDARD. IEC 61754-4 governs the SC interface
+      and is not held here. The pitch and body width come from FS's own
+      face-on render of SKU 57058 (an FHD SC duplex adapter panel face - the
+      SKU is catalogued as a cassette, but the face measured is the panel
+      face and that word is not repeated here), scaled on the 108.97 mm FHD
+      module width and validated against the 35.05 mm height to 0.57%.
+    w: 9.4
+    h: 12.0
+    confidence: estimated
+    pitch: 13.0
+    pitch-confidence: measured
+    pitch-kind: floor
+    pitch-kind-note: >-
+      13.0 is measured off 57058's six adapters (centres 20.51, 33.22, 46.35,
+      59.31, 72.28, 85.50; pitches 12.71-13.22, mean 13.00), and UNLIKE
+      mpo-adapter's pitch these bodies do NOT abut: each is 9.32-9.49 wide, so
+      a 13.0 pitch leaves a real 3.6 mm gap visible in the render. That gap
+      means 13.0 is not a physical minimum the way an abutting pitch is - a
+      layout could in principle sit tighter, right down toward the 9.4 body
+      width - but nothing in this corpus shows anyone doing that, and IEC
+      61754-4 does not fix a panel pitch at all. Recorded as a floor rather
+      than a target because there is no interface reason to demand this exact
+      spacing; a composed pitch narrower than the one vendor layout measured
+      here is still worth a look, a wider one is unremarkable.
+    notes: >-
+      THE PANEL FOOTPRINT for an SC duplex adapter, standing in for the
+      aperture the same way mpo-adapter's w/h once did before that entry was
+      corrected - no cutout-level spec is held here, so w/h are read off the
+      adapter BODY on FS's render rather than a punched-hole dimension. w=9.4
+      is the measured body width (9.32 to 9.49 across six adapters); h=12.0 is
+      an ESTIMATE from the render's proportions (each adapter block reads
+      roughly a third again as tall as it is wide, which two vertically
+      stacked ports would need) and is not a pixel measurement - a caliper on
+      one real adapter settles it.
+      THE TWO SC PORTS STACK VERTICALLY IN ONE ADAPTER, NOT SIDE BY SIDE: the
+      panel is numbered 2, 4, 6, 8, 10, 12 along the top of each block and 1,
+      3, 5, 7, 9, 11 along the bottom (verified against 57058.main.jpg), the
+      opposite arrangement from common/lc-duplex-adapter's side-by-side pair.
+      `optical.positions: 2` on common/sc-duplex-adapter means this, and its
+      skin draws the pair stacked.
+      THE PITCH IS THE STRONG HALF AND THE FOOTPRINT IS THE WEAK ONE, as with
+      mpo-adapter: 13.0 is a five-gap measurement (spread 0.51), the 9.4 width
+      is a six-body measurement (spread 0.17), and the 12.0 height is a plain
+      guess. Detected by the blue flange each adapter carries across its top,
+      not by paleness - SKU 57058's adapters are dark grey bodies with a
+      bright blue flange, unlike 35510's pale MTP interiors, so `openings()`
+      needed its own blueness predicate here (`p[2] > p[0] + 40 and p[2] >
+      90`) in a narrow band (0.11-0.18) over that flange.
   lc-duplex-receptacle:
     registry: IEC 61754-20 / TIA-604-10 FOCIS 10 for the duplex pitch; the bore square
       from section A-A of the ProLabs PAN-QSFP28-100GBASE-CWDM4-C datasheet and from

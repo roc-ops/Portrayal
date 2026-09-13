@@ -39,3 +39,17 @@ def test_the_mpo_standard_records_the_measured_pitch():
     assert s["pitch-confidence"] == "measured"
     assert "35510" in s["registry"], (
         "the registry entry must name the image the pitch was measured from")
+
+
+def test_the_sc_duplex_adapter_presents_two_fibres():
+    c = contract("common/sc-duplex-adapter@1")
+    assert c is not None, "common/sc-duplex-adapter@1 not built"
+    assert (c.get("optical") or {}).get("positions") == 2
+
+
+def test_the_sc_standard_names_where_its_pitch_came_from():
+    std = yaml.safe_load((ROOT / "spec/schemas/standards.yaml").read_text())
+    s = std["standards"]["sc-duplex-adapter"]
+    assert s["pitch-confidence"] in ("measured", "estimated")
+    assert "57058" in s["registry"] or "61754-4" in s["registry"], (
+        "name the image or the standard the pitch came from")
