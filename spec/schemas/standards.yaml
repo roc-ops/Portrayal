@@ -122,6 +122,13 @@ standards:
     cavity-confidence: verified
     pitch: 19.0
     pitch-confidence: measured
+    pitch-kind: floor
+    pitch-kind-note: 19.0 is what TE 2322551-4 measures when its two cages share
+      the thinnest wall the part has - the minimum pitch a ganged block can
+      reach, the same way SFF-8663's 21.0 is a minimum for the standalone
+      cage. Nothing stops a device from spacing ganged ports wider than their
+      shared-wall minimum; going narrower is not physically possible without a
+      different cage.
     notes: Per-port opening inside a ganged QSFP block. The aperture is the CAGE
       opening 18.50 x 9.58, measured off TE 2322551-4 (a 1x2 ganged QSFP cage,
       40.2 x 14.0 x 71.8); the cavity behind it is the SFF-8661 module envelope
@@ -484,6 +491,13 @@ standards:
     confidence: estimated
     pitch: 6.25
     pitch-confidence: verified
+    pitch-kind: target
+    pitch-kind-note: This is the duplex interface pitch itself, not a layout
+      clearance - fixed by IEC 61754-20 / TIA-604-10 FOCIS 10 and corroborated
+      four ways in the notes below (the standard, two independent vendor
+      drawings, and the Smartoptics stencil master). A part conforming to this
+      standard sits ITS bores at 6.25; there is no "wider is fine" reading of
+      a keyed mating interface the way there is for a cage-to-cage layout.
     tiers:
       - {name: body, w: 4.7, h: 4.7}
       - {name: neck, w: 3.46, h: 0.42, confidence: conventional}
@@ -534,6 +548,10 @@ standards:
       gives the bezel itself as 5.2 MAX thick.
     pitch: 23.5
     pitch-confidence: verified
+    pitch-kind: floor
+    pitch-kind-note: Section 6.8 calls 23.5 "sufficient for most systems" and
+      both bezel figures label it "minimum pitch illustrated" - the MSA's own
+      words for a floor, not a target. A device may sit its ports wider.
     notes: >-
       Recommended bezel opening 19.5 +/-0.1 wide by 9.7 +/-0.2 high with R0.5 MAX
       corners, dimensioned identically in BOTH bezel figures - Figure 37 for
@@ -558,6 +576,10 @@ standards:
     depth-confidence: verified
     pitch: 86.0
     pitch-confidence: estimated
+    pitch-kind: floor
+    pitch-kind-note: The notes below call this "a layout floor read from vendor
+      faceplates, not an MSA figure" - a minimum spacing, not a fixed one. A
+      device may sit its ports wider.
     notes: >-
       CFP MSA Hardware Specification Rev 1.4 - module 82.0 wide x 13.6 high x 144.75 long; the bezel opening is drawn at the module envelope because the MSA dimensions the module and host board, not a recommended bezel. Pitch is a layout floor read from vendor faceplates, not an
       MSA figure.
@@ -572,6 +594,10 @@ standards:
     depth-confidence: verified
     pitch: 45.0
     pitch-confidence: estimated
+    pitch-kind: floor
+    pitch-kind-note: The notes below call this "a layout floor read from vendor
+      faceplates, not an MSA figure" - a minimum spacing, not a fixed one. A
+      device may sit its ports wider.
     notes: >-
       CFP2 MSA Hardware Specification - module 41.5 wide x 12.4 high x 107.5 long; opening drawn at the module envelope as std/cfp. Pitch is a layout floor read from vendor faceplates, not an
       MSA figure.
@@ -586,6 +612,10 @@ standards:
     depth-confidence: estimated
     pitch: 30.0
     pitch-confidence: estimated
+    pitch-kind: floor
+    pitch-kind-note: The notes below call this "a layout floor read from vendor
+      faceplates, not an MSA figure" - a minimum spacing, not a fixed one. A
+      device may sit its ports wider.
     notes: >-
       CXP (InfiniBand Vol 2 Annex A6 / SFF-8642 class) - module ~27 wide x ~10 high; the MSA documents in this intake do not dimension the bezel, so the opening is the approximate module envelope. Pitch is a layout floor read from vendor faceplates, not an
       MSA figure.

@@ -213,7 +213,7 @@ RULES = {
     "L78": ("component",  "an optical endpoint names a composed connector and a position it has", "fix the part id or the position number"),
     "L79": ("component",  "no fibre position is claimed twice, and a split's ratios sum to 100", "remove the duplicate path, or fix the ratios"),
     "L80": ("component",  "every fibre position is reached by a path or declared unused with a reason", "route it, or add an `optical.unused` entry saying why it terminates nothing"),
-    "L81": ("component",  "a composed pitch matches the standard the part conforms to", "move the parts onto the standard's pitch, or say in provenance why this part differs"),
+    "L81": ("component",  "a composed pitch respects the standard the part conforms to - equal for a target, no narrower for a floor", "move a target onto the standard's pitch, widen a floor to at least it, or say in provenance why this part differs"),
 }
 
 
@@ -1688,7 +1688,7 @@ def lint_component_optical_coverage(path, data, lib_roots):
 
 
 def lint_component_composed_pitch(path, data, lib_roots):
-    """L81: a composed pitch matches the standard the composed part conforms to.
+    """L81: a composed pitch respects the standard the composed part conforms to.
 
     THE LIBRARY HELD BOTH NUMBERS AND COMPARED NEITHER. standards.yaml carried
     `lc-duplex-receptacle.pitch: 6.25` at verified confidence, from IEC 61754-20
@@ -1701,9 +1701,28 @@ def lint_component_composed_pitch(path, data, lib_roots):
     means to or not. This checks it. Only the evenly-spaced case is checked -
     parts at irregular spacing are a different drawing, not a pitch.
 
-    The escape hatch is deliberate and narrow: a part that really does space its
-    connectors off-standard says so in `provenance.pitch-note`, and the rule
-    stands down. Silence is not an escape hatch.
+    THE FIRST VERSION OF THIS RULE TREATED EVERY PITCH AS A TARGET, AND THAT WAS
+    WRONG. `standards.yaml` states outright, in the notes of five of its six
+    `pitch` entries (`xfp`, `cfp`, `cfp2`, `cxp`, `qsfp-ganged`), that the figure
+    is a FLOOR - a minimum spacing a device may sit wider than - not a fixed
+    target. Only `lc-duplex-receptacle` is a fixed interface pitch. An equality
+    check against a floor flags every device that legitimately spaces its ports
+    out for thermal or mechanical reasons, and the only fix on offer was to
+    write a `provenance.pitch-note` explaining that the "violation" was fine -
+    which is how 18 contracts ended up carrying a note working around a defect
+    in this rule rather than recording a fact about hardware. `pitch-kind` on
+    the standard (`target` or `floor`; absent means `target`, the stricter
+    reading) tells this rule which check applies:
+
+    - `target`: the composed pitch must equal the standard's, as before.
+    - `floor`: the composed pitch must be AT LEAST the standard's - narrower is
+      an error, wider is explicitly allowed and raises nothing.
+
+    The escape hatch is deliberate and narrow: a part that really does violate
+    its standard's pitch - a target it misses, or a floor it undercuts - says so
+    in `provenance.pitch-note`, and the rule stands down. Silence is not an
+    escape hatch. A note is not owed to a floor a part merely exceeds; that is
+    compliance, not an exception.
     """
     parts = [p for p in (data.get("parts") or []) if isinstance(p, dict)]
     if len(parts) < 2:
@@ -1740,11 +1759,23 @@ def lint_component_composed_pitch(path, data, lib_roots):
         if len(set(gaps)) != 1:
             continue                      # irregular spacing is not a pitch
         got = gaps[0]
-        if abs(got - float(want)) > 0.01:
-            err(path, "L81", f"composes {len(pts)} x {ref} at a pitch of {got:g} "
-                             f"and {key} states {want:g}. Move them onto the "
-                             "standard, or record `provenance.pitch-note` saying "
-                             "why this part differs")
+        want = float(want)
+        kind = std.get("pitch-kind", "target")
+        if kind == "floor":
+            if got < want - 0.01:
+                err(path, "L81",
+                    f"composes {len(pts)} x {ref} at a pitch of {got:g}, "
+                    f"narrower than {key}'s floor of {want:g}. Widen them to at "
+                    f"least the floor, or record `provenance.pitch-note` saying "
+                    f"why this part sits tighter than it")
+            # wider than a floor is compliant, not an exception - raise nothing
+        else:
+            if abs(got - want) > 0.01:
+                err(path, "L81",
+                    f"composes {len(pts)} x {ref} at a pitch of {got:g} and "
+                    f"{key}'s target is {want:g}. Move them onto the standard, "
+                    f"or record `provenance.pitch-note` saying why this part "
+                    f"differs")
 
 
 def lint_component_fields(path, data, _lib_roots=None):
