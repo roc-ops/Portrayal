@@ -11,6 +11,13 @@ plan have only three-quarter renders and are therefore estimated instead.
 
 The faceplate is the widest full-width dark band in the image - the module body
 behind it is narrower and sits above it in these renders.
+
+`plate()` locates that band HEURISTICALLY, and the heuristic is correct only
+for FS's own renders, which put a black module on a white ground - on a render
+shot against a dark backdrop, the backdrop is the widest full-width dark band
+instead. `validate()` is what makes the result trustworthy: it now enforces
+its own tolerance rather than just reporting one, so never call `plate()`
+without it.
 """
 W_MM = 108.97
 H_MM = 35.05
@@ -21,21 +28,55 @@ def _dark(p):
 
 
 def plate(im):
-    """(x0, y0, x1, y1, mm_per_px) for the faceplate in a face-on render."""
+    """(x0, y0, x1, y1, mm_per_px) for the faceplate in a face-on render.
+
+    Raises ValueError if no contiguous band of qualifying rows reaches 20 px
+    tall - see the comment on `runs(mask, gap=0)` below for why contiguity is
+    required rather than just spanning the first and last matching row.
+    """
     px, py = im.size
     rows = []
     for y in range(py):
         xs = [x for x in range(px) if _dark(im.getpixel((x, y)))]
         rows.append((y, (xs[-1] - xs[0] + 1) if xs else 0, xs[0] if xs else 0))
     wmax = max(w for _y, w, _x in rows)
-    band = [(y, x0) for y, w, x0 in rows if w > wmax * 0.97]
-    y0, y1, x0 = band[0][0], band[-1][0], band[0][1]
+    mask = [w > wmax * 0.97 for _y, w, _x in rows]
+    # gap=0: text, a shadow or a reflection elsewhere in the frame can put a
+    # stray qualifying row far from the faceplate. Taking the first and last
+    # matching row (the old approach) would stretch y0/y1 across everything
+    # between - the scale would still be right but the height would be
+    # measured on the wrong rows, so the check that is supposed to catch a
+    # bad scale would pass on a bad one. Requiring the longest CONTIGUOUS run
+    # keeps stray rows from ever entering the band.
+    bands = runs(mask, gap=0)
+    start, end = max(bands, key=lambda se: se[1] - se[0]) if bands else (0, -1)
+    if end - start + 1 < 20:
+        raise ValueError(
+            f"widest contiguous full-width dark band is only "
+            f"{max(end - start + 1, 0)} rows tall - no faceplate found "
+            "(a dark backdrop or a three-quarter render fails this way)")
+    y0, y1, x0 = start, end, rows[start][2]
     return x0, y0, x0 + wmax - 1, y1, W_MM / wmax
 
 
-def validate(mm, y0, y1):
-    """Percent by which the scaled plate height misses the known 35.05 mm."""
-    return abs((y1 - y0 + 1) * mm - H_MM) / H_MM * 100
+def validate(mm, y0, y1, *, limit=3.0):
+    """Percent by which the scaled plate height misses the known 35.05 mm.
+
+    RAISES rather than reporting, because a caller can ignore a number and
+    cannot ignore an exception. Everything downstream of this module writes
+    `confidence: measured` into a shipped contract; a scale that is wrong
+    because `plate` locked onto a dark backdrop instead of a faceplate would
+    turn that claim into a fabrication. Pass `limit=float("inf")` to get the
+    percentage back without the gate - only worth doing when you are
+    deliberately measuring how far off a render is.
+    """
+    h = (y1 - y0 + 1) * mm
+    off = abs(h - H_MM) / H_MM * 100
+    if off > limit:
+        raise ValueError(
+            f"scaled plate height {h:.2f} mm misses the known {H_MM} mm by "
+            f"{off:.1f}% - likely a three-quarter render or a dark background")
+    return off
 
 
 def runs(mask, gap=3):

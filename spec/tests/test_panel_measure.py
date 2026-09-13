@@ -47,3 +47,22 @@ def test_the_mtp_panel_has_six_openings_per_row(pm):
     pitches = [top[i][2] - top[i - 1][2] for i in range(1, 6)]
     spread = max(pitches) - min(pitches)
     assert spread < 2.0, f"pitches {pitches} spread {spread:.2f} - not a pitch"
+
+
+def test_validate_refuses_a_scale_that_misses_the_other_axis(pm):
+    """This is the guard that stops a three-quarter render being recorded as
+    a measurement."""
+    with pytest.raises(ValueError):
+        pm.validate(1.0, 0, 9)  # scales to 10 mm against a known 35.05
+
+
+def test_plate_refuses_an_image_with_no_faceplate(pm):
+    """A mostly-white field with a couple of stray dark rows has no
+    contiguous band, so there is no faceplate to measure."""
+    Image = pytest.importorskip("PIL.Image")
+    im = Image.new("RGB", (200, 100), (255, 255, 255))
+    for y in (10, 60):
+        for x in range(200):
+            im.putpixel((x, y), (0, 0, 0))
+    with pytest.raises(ValueError):
+        pm.plate(im)
