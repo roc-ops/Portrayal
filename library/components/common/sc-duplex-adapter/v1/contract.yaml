@@ -10,6 +10,7 @@ description: >-
   common/lc-duplex-adapter, whose pair sits abreast, and from common/sc-apc,
   which is a device-specific moulded PON bay rather than a panel adapter.
 size: {w: 9.4, h: 12.0}
+size-confidence: {w: photo-measured, h: estimated}
 attrs: {media: fiber, connector: sc, fibres: '2'}
 optical:
   # TWO PORTS, STACKED. FS's own panel numbering reads 2/4/6/8/10/12 across
@@ -30,14 +31,15 @@ provenance:
     block appears roughly a third again as tall as it is wide, which two
     stacked ports would need) rather than off any pixel span. A caliper on
     one real adapter would settle it.
-    THIS IS THE BODY, NOT A PITCH: these six adapters do NOT abut, unlike
-    common/mpo-adapter's. Six bodies 9.4 wide sit on a 13.0 pitch (centres
-    20.51, 33.22, 46.35, 59.31, 72.28, 85.50; pitches 12.71-13.22, mean
-    13.00), leaving a real 3.6 mm gap visible in the render - the pitch and
-    the width are two different measured numbers here, where mpo-adapter's
-    contract says its pitch and width ARE the same number because its
-    adapters abut. See standards.yaml's `sc-duplex-adapter` entry for the
-    pitch and its `pitch-kind` reasoning.
+    THIS IS THE BODY, NOT A PITCH: six bodies 9.4 wide sit on a 13.0 pitch
+    (centres 20.51, 33.22, 46.35, 59.31, 72.28, 85.50; pitches 12.71-13.22,
+    mean 13.00), leaving a real 3.6 mm gap visible in the render - pitch and
+    width are two different measured numbers here. common/mpo-adapter's
+    w: 13.8 cannot be set against this the same way: 35510 shows one
+    continuous faceplate with apertures punched through it, no discrete
+    adapter body visible to measure, so its 13.8 is the aperture pitch itself
+    rather than a body width sitting on a separate pitch. See standards.yaml's
+    `sc-duplex-adapter` entry for the pitch and its `pitch-kind` reasoning.
   stacking: >-
     photo-read off 57058.main.jpg - each adapter carries a blue flange across
     its top with two dark port openings below it, one over the other, and the

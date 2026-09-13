@@ -478,13 +478,17 @@ standards:
     pitch-confidence: measured
     pitch-kind: floor
     pitch-kind-note: >-
-      13.8 is the adapter BODY WIDTH used as a pitch: FS's six MTP adapters
-      per row on 35510 sit edge to edge, so 13.8 is the closest a layout can
-      pack them, not a mating-interface figure IEC 61754-7 fixes. A device
-      composing several may space them wider; it must not sit narrower - a
-      floor, not a target. Contrast qsfp-ganged, whose pitch is one specific
-      cage part's fixed shared-wall geometry and so IS a target; here there is
-      no shared wall, only abutment, and abutment sets a minimum, not a fix.
+      13.8 is FS's own MTP aperture pitch on 35510 (two rows of six, 13.77 and
+      13.80, spreads 1.11 and 0.60) - the only MPO panel pitch this corpus
+      holds. No interface standard fixes it: IEC 61754-7 governs the MPO
+      mating interface, not how many openings sit side by side on a panel.
+      Recorded as a floor, not a target, because there is no interface reason
+      to demand this exact spacing - a composed pitch narrower than 13.8 is
+      worth a second look, since it is the only vendor layout measured here,
+      and a wider one is unremarkable. Contrast qsfp-ganged, whose pitch is
+      one specific cage part's fixed shared-wall geometry and so IS a target;
+      there is no equivalent fixed part here, only one panel's measured
+      spacing.
     notes: >-
       THE PANEL APERTURE for an MPO/MTP adapter, which uses the SC-duplex
       footprint - that compatibility is why an MPO adapter drops into an SC
@@ -508,19 +512,23 @@ standards:
       "read these as the body outline rather than the punched hole" - because
       the file's header defines w/h as the FACEPLATE APERTURE and no cutout
       spec had been obtained. That body/depth reading is not discarded, only
-      moved: common/mpo-adapter@1's provenance carries it as the vendor's own
-      body-size reading, set against this task's FS-panel figures of 13.8 x
-      9.4. w/h here now hold the actual aperture, correcting the compromise
-      rather than compounding it, and no component has ever `conforms:`-ed to
-      the old numbers (std/mpo@1 is the first) - so nothing regresses.
+      moved: common/mpo-adapter@1's provenance now carries it as a DIFFERENT
+      PART's body dimension - a generic flanged bulkhead adapter, not FS's
+      one-piece panel - kept because it is the only adapter-body figure held
+      anywhere in this corpus, and explicitly not in tension with this task's
+      FS-panel figures of 13.8 x 9.4: those are an aperture pitch, not a body
+      measurement, so there is nothing here for 14.9 x 9.8 to agree or
+      disagree with. w/h here now hold the actual aperture, correcting the
+      compromise rather than compounding it, and no component has ever
+      `conforms:`-ed to the old numbers (std/mpo@1 is the first) - so nothing
+      regresses.
   sc-duplex-adapter:
     registry: >-
       MEASURED, NOT READ FROM A STANDARD. IEC 61754-4 governs the SC interface
       and is not held here. The pitch and body width come from FS's own
-      face-on render of SKU 57058 (an FHD SC duplex adapter panel face - the
-      SKU is catalogued as a cassette, but the face measured is the panel
-      face and that word is not repeated here), scaled on the 108.97 mm FHD
-      module width and validated against the 35.05 mm height to 0.57%.
+      face-on render of SKU 57058 (an FHD SC duplex adapter panel face),
+      scaled on the 108.97 mm FHD module width and validated against the
+      35.05 mm height to 0.57%.
     w: 9.4
     h: 12.0
     confidence: estimated
@@ -529,16 +537,20 @@ standards:
     pitch-kind: floor
     pitch-kind-note: >-
       13.0 is measured off 57058's six adapters (centres 20.51, 33.22, 46.35,
-      59.31, 72.28, 85.50; pitches 12.71-13.22, mean 13.00), and UNLIKE
-      mpo-adapter's pitch these bodies do NOT abut: each is 9.32-9.49 wide, so
-      a 13.0 pitch leaves a real 3.6 mm gap visible in the render. That gap
-      means 13.0 is not a physical minimum the way an abutting pitch is - a
-      layout could in principle sit tighter, right down toward the 9.4 body
-      width - but nothing in this corpus shows anyone doing that, and IEC
-      61754-4 does not fix a panel pitch at all. Recorded as a floor rather
-      than a target because there is no interface reason to demand this exact
-      spacing; a composed pitch narrower than the one vendor layout measured
-      here is still worth a look, a wider one is unremarkable.
+      59.31, 72.28, 85.50; pitches 12.71-13.22, mean 13.00). These bodies do
+      NOT abut: each is 9.32-9.49 wide, so a 13.0 pitch leaves a real 3.6 mm
+      gap visible in the render - pitch and body width are two distinct
+      measured numbers here. mpo-adapter's entry cannot be compared this way
+      at all: 35510 shows one continuous faceplate with apertures punched
+      through it, no discrete adapter body visible to measure a width for, so
+      there is no second number there to set a gap against. That gap here
+      means 13.0 is not a physical minimum - a layout could in principle sit
+      tighter, right down toward the 9.4 body width - but nothing in this
+      corpus shows anyone doing that, and IEC 61754-4 does not fix a panel
+      pitch at all. Recorded as a floor rather than a target because there is
+      no interface reason to demand this exact spacing; a composed pitch
+      narrower than the one vendor layout measured here is still worth a
+      look, a wider one is unremarkable.
     notes: >-
       THE PANEL FOOTPRINT for an SC duplex adapter, standing in for the
       aperture the same way mpo-adapter's w/h once did before that entry was
