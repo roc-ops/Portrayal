@@ -217,6 +217,7 @@ RULES = {
     "L81": ("component",  "a composed pitch respects the standard the part conforms to - equal for a target, no narrower for a floor", "move a target onto the standard's pitch, widen a floor to at least it, or say in provenance why this part differs"),
     "L82": ("component",  "a part names its plan drawing one way or the other, never both", "keep `plan:` or `faces.plan`, not both - they mean the same thing"),
     "L83": ("component",  "a declared face names a real component, is not the part itself, and that component has no face of the same direction", "fix the ref, or drop the face it names if the chain has no meaning"),
+    "L84": ("component",  "a face-qualified optical endpoint names a face the part declares", "add the face to `faces:`, or fix the prefix on the endpoint"),
 }
 
 
@@ -1535,6 +1536,35 @@ def _optical_load_ref(lib_roots):
     def load(ref):
         return _contract(ref, lib_roots) or {}
     return load
+
+
+def lint_component_optical_faces(path, data):
+    """L84: a face-qualified endpoint names a face this part declares.
+
+    `rear:mtp.1` on a contract with no `faces.rear` resolves to nothing, and L78
+    would report it as an unknown part - true, but it sends the reader hunting
+    through `parts:` for an id that was never going to be there. The error is one
+    level up, and saying so is the difference between a five-minute fix and an
+    hour.
+
+    WHAT THE PART DECLARES IS ASKED THROUGH `face_ref`, not read off
+    `faces:` directly. A part naming its plan the legacy way has no `plan` key
+    under `faces:` at all, so a literal read would report `plan:pcb.1` on one of
+    the eleven risers as a face it does not have - the same blind spot L83 had
+    until it was routed through the accessor, in the same release.
+    """
+    if not isinstance(data, dict):
+        return
+    have = {d for d in DIRECTIONS if face_ref(data, d)}
+    for p in ((data.get("optical") or {}).get("paths") or []):
+        for ep, _ratio in optical.endpoints(p):
+            try:
+                face, _part, _pos = optical.split_endpoint(ep)
+            except ValueError:
+                continue  # L78's error to report, not this one's
+            if face and face not in have:
+                err(path, "L84", f"path endpoint {ep} names face {face!r}, but "
+                                 "this part declares no such face")
 
 
 def lint_component_optical_endpoints(path, data, lib_roots):
@@ -6252,6 +6282,7 @@ def main():
                     f, d, args.library,
                     f"{f.parents[2].name}/{d.get('name')}@{f.parent.name[1:]}")
                 lint_component_optical_endpoints(f, d, args.library)
+                lint_component_optical_faces(f, d)
                 lint_component_optical_conflicts(f, d)
                 lint_component_optical_coverage(f, d, args.library)
                 lint_component_composed_pitch(f, d, args.library)

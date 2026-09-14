@@ -67,3 +67,62 @@ def test_a_face_that_names_nothing_resolvable_contributes_nothing():
     """
     front = {"parts": [], "faces": {"rear": {"ref": "fs/nope@1"}}}
     assert O.capacities(front, lambda ref: None) == {}
+
+
+import yaml  # noqa: E402
+
+import lint as L  # noqa: E402
+
+LIB = [str(ROOT / "library")]
+
+
+def run84(doc, path="t/contract.yaml"):
+    L.ERRORS.clear()
+    L.lint_component_optical_faces(path, doc)
+    return [e for e in L.ERRORS if "[L84]" in e]
+
+
+def test_a_path_into_a_face_the_part_does_not_have():
+    got = run84({"optical": {"paths": [{"from": "lc1.1", "to": "rear:mtp.1"}]}})
+    assert len(got) == 1, got
+    assert "rear" in got[0] and "declares no" in got[0]
+
+
+def test_a_path_into_a_face_the_part_does_have_is_quiet():
+    assert run84({
+        "faces": {"rear": {"ref": "fs/x-rear@1"}},
+        "optical": {"paths": [{"from": "lc1.1", "to": "rear:mtp.1"}]},
+    }) == []
+
+
+def test_unqualified_endpoints_are_not_this_rules_business():
+    assert run84({"optical": {"paths": [{"from": "a.1", "to": "b.2"}]}}) == []
+
+
+def test_a_split_reports_every_bad_leg():
+    got = run84({"optical": {"paths": [{
+        "from": "c.1",
+        "to": [{"at": "rear:x.1", "ratio": 50},
+               {"at": "top:y.1", "ratio": 50}]}]}})
+    assert len(got) == 2, got
+
+
+def test_the_real_cassette_passes_this_rule():
+    """The one contract in the library that uses a qualified endpoint."""
+    c = yaml.safe_load(
+        (ROOT / "library/components/fs/fhd-1mtp6lcd-os2-a/v1/contract.yaml"
+         ).read_text())
+    assert run84(c) == []
+
+
+def test_a_legacy_plan_spelling_still_counts_as_a_declared_face():
+    """The eleven risers name their plan drawing the old way.
+
+    Reading `faces:` directly would report `plan:pcb.1` on one of them as a face
+    the part does not have. `face_ref` answers for both spellings, which is the
+    whole reason it exists.
+    """
+    assert run84({
+        "plan": {"ref": "dell/riser-card-14g@1"},
+        "optical": {"paths": [{"from": "a.1", "to": "plan:pcb.1"}]},
+    }) == []
