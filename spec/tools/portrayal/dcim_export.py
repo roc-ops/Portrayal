@@ -627,6 +627,22 @@ def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
     return out
 
 
+def contract_view(entry):
+    """An index entry in the shape `optical.py` expects.
+
+    components.json FLATTENS a face to its ref - `faces: {rear: "fs/x@1"}` -
+    because the viewer resolves it against this same index and the nested form
+    would cost bytes on every page load. `optical.capacities` goes through
+    `face_ref`, which reads the contract's nested `{ref: ...}`. Re-nesting here
+    is four lines; teaching the accessor to accept two shapes would put the
+    difference into the one place that exists to hide it.
+    """
+    faces = {k: {"ref": v} for k, v in (entry.get("faces") or {}).items()}
+    return {"parts": entry.get("parts") or [],
+            "faces": faces,
+            "optical": entry.get("optical") or {}}
+
+
 def build_module(contract, manufacturer):
     """A module contract as a DCIM module type."""
     attrs = contract.get("attrs") or {}

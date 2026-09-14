@@ -186,6 +186,16 @@ def main():
                   if (r := face_ref(data, k))}
             if fc:
                 entry["faces"] = fc
+            # THE FIBRE GRAPH, VERBATIM. The exporter reads this file and never
+            # the library - `dcim_export.py --dist` opens nothing under
+            # library/components - so a contract's `optical` is invisible to the
+            # projection until it is published here. Carried whole rather than
+            # summarised: `positions` is what a connector contributes, and
+            # `paths`, `media`, `polarity` and `unused` are what a module's
+            # projection is built from, so a reduced form would only have to be
+            # widened again by the first consumer that wanted the rest.
+            if data.get("optical"):
+                entry["optical"] = data["optical"]
             index.append(entry)
     totals = {}
     for e in index:
