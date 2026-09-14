@@ -182,3 +182,26 @@ def test_the_index_entry_omits_faces_when_there_are_none():
     entries = json.loads(f.read_text())["components"]
     empty = [e["name"] for e in entries if e.get("faces") == {}]
     assert not empty, f"these carry an empty faces object: {empty}"
+
+
+def test_the_self_reference_check_is_reachable_from_a_real_lint_run(tmp_path):
+    """L83's self-reference branch must fire from the CLI, not only from a unit test.
+
+    It first shipped with `name=None` at the registration site, because the
+    per-component loop was read as having nothing to build the component's own
+    ref from. It has `f`: the contract path carries the namespace and the major.
+    A rule branch that only its unit test can reach is dead code with a green
+    test beside it, so this drives the actual binary over a throwaway library.
+    """
+    import subprocess
+    d = tmp_path / "components" / "t" / "selfrear" / "v1"
+    d.mkdir(parents=True)
+    (d / "contract.yaml").write_text(
+        "format: 1\nkind: component\nname: selfrear\nversion: 1.0.0\n"
+        "class: port\nsize: {w: 10, h: 10}\n"
+        "faces:\n  rear: {ref: t/selfrear@1}\n")
+    out = subprocess.run(
+        [sys.executable, str(ROOT / "spec/tools/portrayal/lint.py"),
+         "--schemas", str(ROOT / "spec/schemas"), "--library", str(tmp_path)],
+        capture_output=True, text=True).stdout
+    assert "[L83]" in out and "its own rear" in out, out

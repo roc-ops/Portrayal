@@ -6211,7 +6211,14 @@ def main():
                 # namespace/major split the self-reference check needs, and
                 # building it here would mean re-deriving what `resolve_component`
                 # already does elsewhere rather than reusing it.
-                lint_component_rear_face(f, d, args.library)
+                # ITS OWN REF, so L83 can catch a part naming itself as its own
+                # rear - a copy-paste away, and invisible without it. Same
+                # derivation components_index.py uses (ns from the grandparent
+                # directory, major from the `v<N>` one), so the string L83
+                # compares against is the one the rest of the library writes.
+                lint_component_rear_face(
+                    f, d, args.library,
+                    f"{f.parents[2].name}/{d.get('name')}@{f.parent.name[1:]}")
                 lint_component_optical_endpoints(f, d, args.library)
                 lint_component_optical_conflicts(f, d)
                 lint_component_optical_coverage(f, d, args.library)
