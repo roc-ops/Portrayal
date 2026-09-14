@@ -92,3 +92,51 @@ def test_the_fs_cassette_pitch_is_in_the_registry_as_measured():
     assert s["pitch-confidence"] == "measured"
     assert "57016" in s["registry"], \
         "the registry entry must name the render the pitch came from"
+
+
+CASSETTE = "fs/fhd-1mtp6lcd-os2-a/v1"
+CENTRES = [20.45, 33.34, 46.23, 59.30, 72.19, 85.08]
+
+
+def test_the_cassette_is_an_fhd_module():
+    c = contract(CASSETTE)
+    assert c is not None, "fs/fhd-1mtp6lcd-os2-a@1 not built"
+    assert c["size"]["w"] == 108.97 and c["size"]["h"] == 35.05
+
+
+def test_the_cassette_carries_six_stacked_lc_adapters():
+    c = contract(CASSETTE)
+    lcs = [p for p in c["parts"] if p["ref"] == "common/lc-duplex-v-adapter@1"]
+    assert len(lcs) == 6, [p["ref"] for p in c["parts"]]
+
+
+def test_the_adapters_sit_on_their_measured_centres():
+    """Not a pitch multiplied out - the six centres as measured, each to 0.01.
+
+    lc4 sits 13.07 from lc3 where every other gap is 12.89. That asymmetry is in
+    the render, and rounding it away to a tidy 12.92 everywhere would turn a
+    measurement into a model of one.
+    """
+    c = contract(CASSETTE)
+    lcs = [p for p in c["parts"] if p["ref"] == "common/lc-duplex-v-adapter@1"]
+    got = sorted(round(float(p["at"][0]) + 4.64, 2) for p in lcs)
+    assert got == CENTRES
+
+
+def test_the_adapter_row_is_measured_as_centred_not_drawn_as_centred():
+    """10.66 is the measured top edge of all six, not a number chosen to centre.
+
+    That it ALSO centres - 10.66 + 13.75/2 = 17.53 against 35.05/2 = 17.525 - is
+    the corroboration, not the source. If a later edit rounds `at.y` to make the
+    arithmetic tidier, it has replaced a measurement with a model of one.
+    """
+    c = contract(CASSETTE)
+    lcs = [p for p in c["parts"] if p["ref"] == "common/lc-duplex-v-adapter@1"]
+    assert {round(float(p["at"][1]), 2) for p in lcs} == {10.66}
+
+
+def test_the_cassette_names_the_render_it_was_measured_from():
+    c = contract(CASSETTE)
+    blob = yaml.safe_dump(c.get("provenance") or {})
+    assert "57016" in blob, "provenance must name the SKU it was measured from"
+    assert "1.02" in blob, "and the scale check that makes it a measurement"
