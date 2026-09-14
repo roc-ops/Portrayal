@@ -174,3 +174,24 @@ def test_the_population_is_the_cutout_not_the_class(tmp_path):
         "jack": {"at": [0.5, 0.5], "size": [3.0, 3.0], "class": "jack"}})
     assert len(warnings_for(card, tmp_path)) == 1
     assert warnings_for(jack, tmp_path) == []
+
+
+def test_a_pitch_only_standard_yields_no_aperture_from_the_registry():
+    """Six registry entries hold a pitch and no `w`/`h`, and this indexed them.
+
+    `_aperture_of` returned `(st["w"], st["h"])` for anything naming a standard,
+    so the moment a component declared `conforms:` to one of those six it raised
+    `KeyError: 'w'` - reachable from a real run, because a device panel's cutout
+    check calls this for every placement it punches a hole for. The entry states
+    no aperture, so the walk must fall through to what the part composes, which
+    is the same answer it gave before the component named a standard at all.
+    """
+    lint.STANDARDS.update(
+        lint.load_yaml(SPEC.parent / "spec/schemas/standards.yaml")["standards"])
+    assert lint.STANDARDS["sc-duplex-adapter"].get("w") is None, \
+        "this test is vacuous unless the entry really carries no envelope"
+    lib = [str(SPEC.parent / "library")]
+    got = lint._aperture_of("common/sc-duplex-adapter@1", lib)
+    assert got == ((9.4, 12.0), (0.0, 0.0)), got
+    # and an entry that DOES carry an envelope still answers from the registry
+    assert lint._aperture_of("std/lc-bore@3", lib) == ((4.7, 6.3), (0.0, 0.0))
