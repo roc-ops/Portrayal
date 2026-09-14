@@ -225,3 +225,55 @@ def test_conforming_to_a_pitch_only_standard_does_not_crash_lint(tmp_path):
     assert "Traceback" not in r.stderr, r.stderr
     assert "[L9]" not in r.stdout, \
         f"a standard with no envelope has no size to disagree with: {r.stdout}"
+
+
+def test_the_registry_pitches_are_what_its_own_centres_give():
+    """A transcription slip inside one sentence, which is how 13.06 got in.
+
+    The entry lists the six centres and then the five gaps between them. The
+    second is arithmetic on the first, so it can be checked rather than
+    trusted - and it disagreed by 0.01 for as long as both were written down.
+    """
+    import re
+    std = yaml.safe_load((ROOT / "spec/schemas/standards.yaml").read_text())
+    text = std["standards"]["fhd-lc-cassette"]["registry"]
+    m = re.search(r"centres ([\d.\s]+?), pitches ([\d.\s]+?), mean", text)
+    assert m, f"cannot find the centres/pitches pair in: {text[:200]}"
+    centres = [float(v) for v in m.group(1).split()]
+    stated = [float(v) for v in m.group(2).split()]
+    derived = [round(centres[i] - centres[i - 1], 2) for i in range(1, len(centres))]
+    assert stated == derived, \
+        f"registry states pitches {stated} but its own centres give {derived}"
+
+
+def test_the_registry_centres_are_the_contracts_centres():
+    """The two files must be describing one measurement, not two."""
+    c = contract(CASSETTE)
+    import re
+    std = yaml.safe_load((ROOT / "spec/schemas/standards.yaml").read_text())
+    text = std["standards"]["fhd-lc-cassette"]["registry"]
+    centres = [float(v) for v in
+               re.search(r"centres ([\d.\s]+?), pitches", text).group(1).split()]
+    w = contract("common/lc-duplex-v-adapter/v1")["size"]["w"]
+    placed = [round(float(p["at"][0]) + w / 2, 2) for p in c["parts"]]
+    assert centres == placed, \
+        f"registry centres {centres} are not where the contract places them: {placed}"
+
+
+def test_the_rear_mtp_is_where_its_provenance_says_it_is():
+    """The provenance says centred; centred is what the placement must be.
+
+    It used to say the adapter sits slightly below the vertical centre while
+    placing it exactly on both axes - and since every number on that face is an
+    estimate awaiting a face-on photograph, the provenance is the only record
+    of what was intended.
+    """
+    rear = contract("fs/fhd-1mtp6lcd-rear/v1")
+    mtp = next(p for p in rear["parts"] if p["id"] == "mtp")
+    adapter = contract("common/mpo-adapter/v1")
+    cx = float(mtp["at"][0]) + adapter["size"]["w"] / 2
+    cy = float(mtp["at"][1]) + adapter["size"]["h"] / 2
+    assert (round(cx, 3), round(cy, 3)) == (round(rear["size"]["w"] / 2, 3),
+                                            round(rear["size"]["h"] / 2, 3)), \
+        f"provenance says centred, placement puts it at ({cx}, {cy})"
+    assert "CENTRED" in rear["provenance"]["parts"]
