@@ -159,3 +159,26 @@ def test_no_rear_at_all_is_quiet():
     assert run83({}) == []
     assert run83({"faces": {"plan": {"ref": "common/mpo-adapter@1"}}}) == []
 
+
+def test_the_index_carries_a_parts_other_faces():
+    """The viewer offers a rear drawing only if the index says there is one."""
+    src = (ROOT / "spec/tools/portrayal/components_index.py").read_text()
+    assert "face_ref(" in src, \
+        "components_index.py never asks a contract for its faces, so the " \
+        "viewer cannot know a part has a rear drawing"
+
+
+def test_the_index_entry_omits_faces_when_there_are_none():
+    """An empty dict on 700-odd entries is bytes on every page load.
+
+    Reads the BUILT index, not the source that writes it - a source-text
+    assertion passes against code that was rearranged and still emits `{}`.
+    Skips when dist is absent so a bare checkout does not fail on it.
+    """
+    import json
+    f = ROOT / "library" / "dist" / "components.json"
+    if not f.exists():
+        pytest.skip("library/dist not built - run ./publish.sh --no-images")
+    entries = json.loads(f.read_text())["components"]
+    empty = [e["name"] for e in entries if e.get("faces") == {}]
+    assert not empty, f"these carry an empty faces object: {empty}"
