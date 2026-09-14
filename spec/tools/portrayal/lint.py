@@ -1554,19 +1554,20 @@ def lint_component_optical_endpoints(path, data, lib_roots):
     for p in paths:
         for ep, _ratio in optical.endpoints(p):
             try:
-                part, pos = optical.split_endpoint(ep)
+                face, part, pos = optical.split_endpoint(ep)
             except ValueError:
                 err(path, "L78", f"{ep!r} is not an optical endpoint - they are "
                                  "`<part-id>.<n>` with n from 1")
                 continue
-            if part not in caps:
-                err(path, "L78", f"{ep} names {part!r}, which this part either "
+            key = optical.part_key(face, part)
+            if key not in caps:
+                err(path, "L78", f"{ep} names {key!r}, which this part either "
                                  "does not compose or which declares no "
                                  "`optical.positions` - only a connector can "
                                  "carry a fibre")
-            elif pos > caps[part]:
-                err(path, "L78", f"{ep} asks for position {pos} and {part} "
-                                 f"presents {caps[part]}")
+            elif pos > caps[key]:
+                err(path, "L78", f"{ep} asks for position {pos} and {key} "
+                                 f"presents {caps[key]}")
 
 
 def lint_component_optical_conflicts(path, data, _lib_roots=None):
@@ -1677,12 +1678,13 @@ def lint_component_optical_coverage(path, data, lib_roots):
                                  "there")
     for ep in sorted(unused):
         try:
-            part, pos = optical.split_endpoint(ep)
+            face, part, pos = optical.split_endpoint(ep)
         except ValueError:
             err(path, "L80", f"{ep!r} is not an optical endpoint - `unused` "
                              "keys are `<part-id>.<n>` with n from 1")
             continue
-        if part not in caps or pos > caps[part]:
+        key = optical.part_key(face, part)
+        if key not in caps or pos > caps[key]:
             err(path, "L80", f"{ep} is declared unused but names no position "
                              "this component composes - `unused` claims a "
                              "position exists and terminates nothing, so it "
@@ -1736,7 +1738,7 @@ def lint_component_composed_pitch(path, data, lib_roots):
     for p in parts:
         if p.get("ref") and p.get("at"):
             by_ref.setdefault(p["ref"], []).append(
-                (float(p["at"][0]), float(p["at"][1])))
+                (float(p["at"][0]), float(p["at"][1]), p.get("rotate") == 90))
     for ref, pts in sorted(by_ref.items()):
         if len(pts) < 2:
             continue
@@ -1748,16 +1750,36 @@ def lint_component_composed_pitch(path, data, lib_roots):
         want = std.get("pitch")
         if not want:
             continue
-        # A cage rotated 90 degrees runs its array down `at`'s y, not its x -
-        # a whole rotated column shares one x, and reading x alone would see
-        # every gap as zero and call that a matched pitch. Only fall back to
-        # y when x carries no information at all (every instance shares it):
-        # anything else - including a genuinely irregular x layout - is left
-        # to the x path and its own irregular-spacing exit below.
-        if len({x for x, _y in pts}) == 1:
-            vals = sorted(y for _x, y in pts)
+        rotated = all(r for _x, _y, r in pts)
+        # A cage rotated 90 degrees runs its array down `at`'s y, not its x - a
+        # whole rotated column shares one x, and reading x alone would see
+        # every gap as zero and call that a matched pitch.
+        #
+        # SHARING AN X IS NOT ENOUGH TO MEAN ROTATED, though, and that is what
+        # this used to test. A duplex shell with its two ports STACKED shares one
+        # x too, and it is not the same part turned: a rotated part keeps its
+        # interface pitch, where a stacked pair is genuinely further apart. The
+        # arithmetic settles it - a std/lc-bore@3 is 6.3 tall, so two of them at
+        # lc-duplex-receptacle's 6.25 would overlap, which means 6.25 never
+        # described a stacked pair in the first place. Reading the y of one would
+        # compare a vertical spacing against a horizontal standard and call the
+        # difference a violation.
+        #
+        # So fall back to y only when the placements SAY they are rotated.
+        # Anything else - including a genuinely irregular x layout - is left to
+        # the x path and its own irregular-spacing exit below.
+        if len({x for x, _y, _r in pts}) == 1:
+            if not rotated:
+                # A stacked pair shares an x by construction, not by chance - it
+                # is not a rotated column, so there is no x-based pitch to read
+                # here either. Falling through to the x path would measure the
+                # gap between two identical x values (zero) and report THAT as
+                # missing this standard's pitch, which is a fabricated number,
+                # not a measurement of the hardware.
+                continue
+            vals = sorted(y for _x, y, _r in pts)
         else:
-            vals = sorted(x for x, _y in pts)
+            vals = sorted(x for x, _y, _r in pts)
         gaps = [round(vals[i] - vals[i - 1], 4) for i in range(1, len(vals))]
         if len(set(gaps)) != 1:
             continue                      # irregular spacing is not a pitch
@@ -1767,18 +1789,18 @@ def lint_component_composed_pitch(path, data, lib_roots):
         if kind == "floor":
             if got < want - 0.01:
                 err(path, "L81",
-                    f"composes {len(pts)} x {ref} at a pitch of {got:g}, "
-                    f"narrower than {key}'s floor of {want:g}. Widen them to at "
-                    f"least the floor, or record `provenance.pitch-note` saying "
-                    f"why this part sits tighter than it")
+                    f"composes {len(pts)} x {ref} at a pitch of {got:.2f}, "
+                    f"narrower than {key}'s floor of {want:.2f}. Widen them to "
+                    f"at least the floor, or record `provenance.pitch-note` "
+                    f"saying why this part sits tighter than it")
             # wider than a floor is compliant, not an exception - raise nothing
         else:
             if abs(got - want) > 0.01:
                 err(path, "L81",
-                    f"composes {len(pts)} x {ref} at a pitch of {got:g} and "
-                    f"{key}'s target is {want:g}. Move them onto the standard, "
-                    f"or record `provenance.pitch-note` saying why this part "
-                    f"differs")
+                    f"composes {len(pts)} x {ref} at a pitch of {got:.2f} and "
+                    f"{key}'s target is {want:.2f}. Move them onto the "
+                    f"standard, or record `provenance.pitch-note` saying why "
+                    f"this part differs")
 
 
 def lint_component_faces_once(path, data):

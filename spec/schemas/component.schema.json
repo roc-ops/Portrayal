@@ -831,8 +831,8 @@
   },
   "optical-endpoint": {
    "type": "string",
-   "pattern": "^[a-z0-9-]+\\.[1-9][0-9]*$",
-   "description": "`<part-id>.<n>` - a composed part's id and a 1-based fibre position within it"
+   "pattern": "^(?:[a-z0-9-]+:)?[a-z0-9-]+\\.[1-9][0-9]*$",
+   "description": "`<part-id>.<n>`, or `<face>:<part-id>.<n>` - a composed part's id and a 1-based fibre position within it. The optional face prefix names a key of this component's `faces:`, so a module's paths can reach a part drawn on its rear: a cassette's rear MTP is a part of the rear face component, not of the cassette's own `parts:`. Unprefixed means this face."
   },
   "xy": {
    "type": "array",

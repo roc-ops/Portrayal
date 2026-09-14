@@ -126,3 +126,29 @@ def test_an_entry_with_no_pitch_kind_is_treated_as_a_target():
         L.STANDARDS["xfp"]["pitch-kind"] = saved
     assert len(hits) == 1, hits
     assert "target" in hits[0]
+
+
+def test_a_stacked_pair_is_not_a_rotated_column():
+    """Sharing an x does not make two parts a rotated column.
+
+    A std/lc-bore@3 is 6.3 tall, so a stacked pair cannot sit at
+    lc-duplex-receptacle's 6.25 without overlapping - which means that pitch
+    never described this arrangement. Before this, L81 read the y of any
+    single-x group and reported the difference as a violation.
+    """
+    doc = {"parts": [
+        {"id": "tx", "ref": "std/lc-bore@3", "at": [2.29, 0.35]},
+        {"id": "rx", "ref": "std/lc-bore@3", "at": [2.29, 7.10]},
+    ]}
+    assert run(doc) == []
+
+
+def test_a_rotated_column_is_still_measured_down_its_y():
+    """The case the fallback exists for, and it must keep working."""
+    doc = {"parts": [
+        {"id": "a", "ref": "std/lc-bore@3", "at": [0.0, 0.0], "rotate": 90},
+        {"id": "b", "ref": "std/lc-bore@3", "at": [0.0, 9.0], "rotate": 90},
+    ]}
+    got = run(doc)
+    assert len(got) == 1, got
+    assert "9.0" in got[0] or "9.00" in got[0]

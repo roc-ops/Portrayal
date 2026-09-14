@@ -13,33 +13,60 @@ inheriting lint's opinions.
 """
 import re
 
-ENDPOINT = re.compile(r"^([a-z0-9-]+)\.([1-9][0-9]*)$")
+# The optional `<face>:` prefix is what lets one module's paths reach a part
+# drawn on another of its faces - a cassette's rear MTP lives in the rear face
+# component's `parts:`, not in the cassette's own. Unprefixed means THIS face
+# and is the spelling every contract written before faces existed uses, so the
+# group is optional rather than the pattern being replaced.
+ENDPOINT = re.compile(r"^(?:([a-z0-9-]+):)?([a-z0-9-]+)\.([1-9][0-9]*)$")
 
 
 def split_endpoint(ep):
-    """`mtp-1.3` -> `('mtp-1', 3)`. Raises ValueError on anything else."""
+    """`rear:mtp.3` -> `('rear', 'mtp', 3)`; `lc1.1` -> `(None, 'lc1', 1)`.
+
+    Raises ValueError on anything else. The face comes back separately rather
+    than glued to the part id because the DCIM export's whole job is to say
+    which side a port is on, and deriving that from a string later is how it
+    gets derived differently in two places.
+    """
     m = ENDPOINT.match(ep or "")
     if not m:
         raise ValueError(f"not an optical endpoint: {ep!r}")
-    return m.group(1), int(m.group(2))
+    return m.group(1), m.group(2), int(m.group(3))
+
+
+def part_key(face, part):
+    """How `capacities` spells a part, so a caller need not reassemble it."""
+    return f"{face}:{part}" if face else str(part)
 
 
 def capacities(contract, load_ref):
-    """Composed part id -> fibre positions, for parts that declare them.
+    """Part key -> fibre positions, across this module and all of its faces.
 
     A part with no `optical.positions` is not a connector - a lamp, a latch, a
     silkscreen - and is absent from the result rather than present with zero.
     The difference matters: absent means "not a connector", zero would mean "a
     connector with no fibres", and only one of those is a thing.
+
+    Faces are walked ONE LEVEL. A face is a drawing of this part from another
+    direction, so its parts are this module's parts seen from there; a face of a
+    face is not a thing, and L83 already rejects one.
     """
     out = {}
-    for part in contract.get("parts") or []:
-        if not isinstance(part, dict) or not part.get("id"):
-            continue
-        ref = load_ref(part["ref"]) or {}
-        n = (ref.get("optical") or {}).get("positions")
-        if n:
-            out[str(part["id"])] = int(n)
+
+    def collect(doc, face):
+        for part in doc.get("parts") or []:
+            if not isinstance(part, dict) or not part.get("id"):
+                continue
+            ref = load_ref(part["ref"]) or {}
+            n = (ref.get("optical") or {}).get("positions")
+            if n:
+                out[part_key(face, part["id"])] = int(n)
+
+    collect(contract, None)
+    for face, spec in (contract.get("faces") or {}).items():
+        doc = load_ref((spec or {}).get("ref")) or {}
+        collect(doc, face)
     return out
 
 

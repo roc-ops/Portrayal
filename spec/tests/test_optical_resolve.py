@@ -33,8 +33,8 @@ import optical  # noqa: E402
 
 
 def test_an_endpoint_splits_into_a_part_id_and_a_position():
-    assert optical.split_endpoint("mtp-1.3") == ("mtp-1", 3)
-    assert optical.split_endpoint("common.12") == ("common", 12)
+    assert optical.split_endpoint("mtp-1.3") == (None, "mtp-1", 3)
+    assert optical.split_endpoint("common.12") == (None, "common", 12)
 
 
 def test_the_adapters_parts_are_tx_then_rx_in_that_order():
