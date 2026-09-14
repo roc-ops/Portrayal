@@ -594,6 +594,15 @@
     "default"
    ]
   },
+  "faces": {
+   "type": "object",
+   "additionalProperties": false,
+   "description": "THIS PART SEEN FROM ANOTHER DIRECTION, each as its own component. A face is a drawing, and a drawing from another direction is a different drawing at a different size - so it is a different part, not a variant of this one. `plan` is the top view, which a device bay lands with its own `plan:` key; `rear` is the back of the part, which renders as a component preview rather than in any device view. The legacy top-level `plan:` means exactly `faces.plan` and stays legal; declaring both is an error (L82).",
+   "properties": {
+    "plan": {"$ref": "#/$defs/face"},
+    "rear": {"$ref": "#/$defs/face"}
+   }
+  },
   "fields": {
    "type": "object",
    "description": "WHAT A FORM CAN CHANGE ON THIS PART WITHOUT IT BECOMING ANOTHER PART. A different shape is a different component; a different property - a supply's wattage, a DIMM's capacity and speed, a drive's capacity and interface - is a field on the same one. Each key names a `data-from` text node in every skin, which carries the default the drawing shows when nothing says otherwise; a placement's `attrs`, a configuration's `bay-attrs`, or the kit's setFields put a value there. The consumer building the form reads this from components.json.",
@@ -615,7 +624,7 @@
    "type": "object",
    "additionalProperties": false,
    "required": ["ref"],
-   "description": "THIS PART SEEN FROM ABOVE, as another component. A riser's face is its bracket plate; from above it is a thin PCB with connectors, which is a different drawing at a different size, so it is its own part - dell/riser-card-14g@1 for the full-height risers. A device bay that seats this part says where the plan lands in its top view (`plan:` on the bay).",
+   "description": "SUGAR FOR `faces.plan`, kept because 13 components and one device use it. THIS PART SEEN FROM ABOVE, as another component. A riser's face is its bracket plate; from above it is a thin PCB with connectors, which is a different drawing at a different size, so it is its own part - dell/riser-card-14g@1 for the full-height risers. A device bay that seats this part says where the plan lands in its top view (`plan:` on the bay). Do not declare this and `faces.plan` together - L82 reports it.",
    "properties": {
     "ref": {
      "type": "string",
@@ -708,6 +717,18 @@
   }
  },
  "$defs": {
+  "face": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": ["ref"],
+   "properties": {
+    "ref": {
+     "type": "string",
+     "pattern": "^[a-z0-9-]+/[a-z0-9-]+@\\d+$",
+     "description": "the component that IS this part seen from that direction"
+    }
+   }
+  },
   "watts": {
    "type": "number",
    "exclusiveMinimum": 0,

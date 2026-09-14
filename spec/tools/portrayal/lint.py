@@ -214,6 +214,7 @@ RULES = {
     "L79": ("component",  "no fibre position is claimed twice, and a split's ratios sum to 100", "remove the duplicate path, or fix the ratios"),
     "L80": ("component",  "every fibre position is reached by a path or declared unused with a reason", "route it, or add an `optical.unused` entry saying why it terminates nothing"),
     "L81": ("component",  "a composed pitch respects the standard the part conforms to - equal for a target, no narrower for a floor", "move a target onto the standard's pitch, widen a floor to at least it, or say in provenance why this part differs"),
+    "L82": ("component",  "a part names its plan drawing one way or the other, never both", "keep `plan:` or `faces.plan`, not both - they mean the same thing"),
 }
 
 
@@ -1776,6 +1777,21 @@ def lint_component_composed_pitch(path, data, lib_roots):
                     f"{key}'s target is {want:g}. Move them onto the standard, "
                     f"or record `provenance.pitch-note` saying why this part "
                     f"differs")
+
+
+def lint_component_faces_once(path, data):
+    """L82: a part names its plan drawing one way or the other, never both.
+
+    `plan:` is sugar for `faces.plan`. A contract carrying both leaves every
+    reader to pick one, and the two will agree right up until somebody edits a
+    face and does not notice there is a second copy of it three lines away.
+    """
+    if not isinstance(data, dict):
+        return
+    if (data.get("plan") or {}).get("ref") and \
+            ((data.get("faces") or {}).get("plan") or {}).get("ref"):
+        err(path, "L82", "declares both `plan:` and `faces.plan` - they mean the "
+                         "same thing, so keep one. `plan:` is the legacy spelling")
 
 
 def lint_component_fields(path, data, _lib_roots=None):
@@ -6161,6 +6177,7 @@ def main():
                 lint_component_forwarded_mate(f, d, args.library)
                 lint_component_relief_confidence(f, d, args.library)
                 lint_component_body_boxes(f, d)
+                lint_component_faces_once(f, d)
                 lint_component_optical_endpoints(f, d, args.library)
                 lint_component_optical_conflicts(f, d)
                 lint_component_optical_coverage(f, d, args.library)
