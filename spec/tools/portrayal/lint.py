@@ -6207,14 +6207,11 @@ def main():
                 lint_component_relief_confidence(f, d, args.library)
                 lint_component_body_boxes(f, d)
                 lint_component_faces_once(f, d)
-                # `name` is left None: this loop only has `f` and `d`, not the
-                # namespace/major split the self-reference check needs, and
-                # building it here would mean re-deriving what `resolve_component`
-                # already does elsewhere rather than reusing it.
-                # ITS OWN REF, so L83 can catch a part naming itself as its own
-                # rear - a copy-paste away, and invisible without it. Same
-                # derivation components_index.py uses (ns from the grandparent
-                # directory, major from the `v<N>` one), so the string L83
+                # L83 IS HANDED THE PART'S OWN REF, so it can catch a contract
+                # naming itself as its own rear - a copy-paste away, and
+                # invisible without it. The path carries both halves: namespace
+                # in the grandparent directory, major in the `v<N>` one. Same
+                # derivation components_index.py:55-57 uses, so the string L83
                 # compares against is the one the rest of the library writes.
                 lint_component_rear_face(
                     f, d, args.library,
