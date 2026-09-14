@@ -67,3 +67,37 @@ def test_one_spelling_or_the_other_is_quiet():
     assert run82({"faces": {"plan": {"ref": "a/b@1"}}}) == []
     assert run82({"faces": {"rear": {"ref": "a/b@1"}}}) == []
     assert run82({}) == []
+
+
+def test_render_reads_a_plan_through_the_accessor():
+    """render.py must not spell out `.get("plan")` for a COMPONENT any more.
+
+    The bay-side `plan:` - where a projection LANDS - is a different key and
+    keeps its literal reads; this only checks the two component-side ones.
+    """
+    src = (ROOT / "spec/tools/portrayal/render.py").read_text()
+    assert 'oc or {}).get("plan")' not in src, \
+        "render.py:~1199 still reads a component's plan directly"
+    assert 'sc or {}).get("plan")' not in src, \
+        "render.py:~1218 still reads a component's plan directly"
+    assert "face_ref(" in src, "render.py does not use the accessor at all"
+
+
+def test_lint_reads_a_plan_through_the_accessor():
+    src = (ROOT / "spec/tools/portrayal/lint.py").read_text()
+    assert 'c.get("plan") or {}).get("ref")' not in src, \
+        "lint.py:~5844 still reads a component's plan directly"
+
+
+def test_the_accessor_answers_for_every_part_that_names_a_plan():
+    """Thirteen parts name a plan drawing; the accessor must find all of them.
+
+    Reads the real library rather than a fixture. Spelling-agnostic on purpose -
+    it passes before Task 5's migration and after it, because what it watches is
+    that no part LOSES its plan drawing, not which way the part spells it.
+    """
+    lib = ROOT / "library/components"
+    named = [p for p in lib.glob("*/*/v*/contract.yaml")
+             if F.face_ref(yaml.safe_load(p.read_text()) or {}, "plan")]
+    assert len(named) == 13, \
+        f"expected 13 parts naming a plan drawing, found {len(named)}"

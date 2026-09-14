@@ -20,6 +20,7 @@ import yaml
 APPLIED_CLASSES = {"sticker", "label", "marking"}
 
 import attrsections as attrs_mod
+from faces import face_ref
 from manifest import (view_parts, targets, split_target, component_refs,
                       presented_interface,
                       load_yaml)
@@ -1196,7 +1197,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             if not occ:
                 continue
             oc, _ = lib.resolve(occ)
-            pref = ((oc or {}).get("plan") or {}).get("ref")
+            pref = face_ref(oc or {}, "plan")
             if not pref:
                 continue
             pc, _ = lib.resolve(pref)
@@ -1215,7 +1216,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                 if not socc:
                     continue
                 sc, _ = lib.resolve(socc)
-                sref = ((sc or {}).get("plan") or {}).get("ref")
+                sref = face_ref(sc or {}, "plan")
                 if not sref:
                     continue
                 scc, _ = lib.resolve(sref)

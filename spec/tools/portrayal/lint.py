@@ -103,6 +103,7 @@ import attrsections as attrs_mod
 import capability
 import devicelock
 import optical
+from faces import face_ref
 from manifest import (view_parts, targets, split_target, presented_interface,
                       VIEW_KEY_ORDER,
                       component_refs, load_yaml,
@@ -5857,7 +5858,7 @@ def lint_device_plan(path, data, lib_roots):
             for ref in (b.get("accepts") or []):
                 cp = resolve_component(ref, lib_roots)
                 c = (load_yaml(cp) or {}) if cp else {}
-                pref = (c.get("plan") or {}).get("ref")
+                pref = face_ref(c, "plan")
                 if pref:
                     if not resolve_component(pref, lib_roots):
                         err(path, "L72", f"{vname}: {ref} names plan {pref}, which is not in the library")
