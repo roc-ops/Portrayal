@@ -187,3 +187,41 @@ def test_the_cassette_says_where_its_polarity_map_came_from():
     assert note, "no provenance for the fibre mapping at all"
     assert ("fig-" in note) or ("ASSUMPTION" in note.upper()), \
         "either name the figure it was read from, or say plainly it is assumed"
+
+
+def test_the_cassette_pitch_standard_is_actually_conformed_to():
+    """A registry entry nothing references is a fact nothing checks.
+
+    `fhd-lc-cassette` was added to settle the open question at
+    docs/optical-paths-design.md:287, but L81 reads `conforms` off the COMPOSED
+    part - so until the adapter names it, the entry is inert and the rule that
+    exists to compare the two never runs.
+    """
+    c = contract("common/lc-duplex-v-adapter/v1")
+    assert c.get("conforms") == "fhd-lc-cassette", \
+        "the adapter must name the standard whose pitch describes how it is spaced"
+
+
+def test_conforming_to_a_pitch_only_standard_does_not_crash_lint(tmp_path):
+    """Seven registry entries carry no `w`/`h`, and `std["w"]` indexed them.
+
+    A panel adapter's OPENING is standardised where its bezel is not, so a
+    pitch-only or cavity-only entry is a legitimate shape here - and conforming
+    to one used to end the run in `KeyError: 'w'` rather than a message. That is
+    the third time a missing registry key has taken lint down, so this drives
+    the real binary rather than the function.
+    """
+    import subprocess
+    d = tmp_path / "components" / "t" / "conformer" / "v1"
+    d.mkdir(parents=True)
+    (d / "contract.yaml").write_text(
+        "format: 1\nkind: component\nname: conformer\nversion: 1.0.0\n"
+        "class: port\nsize: {w: 9.28, h: 13.75}\n"
+        "conforms: fhd-lc-cassette\n")
+    r = subprocess.run(
+        [sys.executable, str(ROOT / "spec/tools/portrayal/lint.py"),
+         "--schemas", str(ROOT / "spec/schemas"), "--library", str(tmp_path)],
+        capture_output=True, text=True)
+    assert "Traceback" not in r.stderr, r.stderr
+    assert "[L9]" not in r.stdout, \
+        f"a standard with no envelope has no size to disagree with: {r.stdout}"

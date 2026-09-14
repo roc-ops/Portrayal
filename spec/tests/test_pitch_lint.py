@@ -152,3 +152,32 @@ def test_a_rotated_column_is_still_measured_down_its_y():
     got = run(doc)
     assert len(got) == 1, got
     assert "9.0" in got[0] or "9.00" in got[0]
+
+
+def test_a_shared_x_group_that_disagrees_about_rotation_is_reported():
+    """Neither reading is safe here, so say so rather than pick one.
+
+    A group sharing one x is either a rotated column or a stacked pair, and
+    `rotate` is the only thing that tells them apart. When the placements
+    disagree - one carries a rotate and its neighbour does not, the likeliest
+    slip in exactly this construct - reading y measures a stack against a
+    horizontal standard and reading x measures zero. Both are fabricated
+    numbers. Skipping silently is not free either: it loses a check that was
+    being made before the stacked-pair case existed.
+    """
+    doc = {"parts": [
+        {"id": "a", "ref": "std/lc-bore@3", "at": [0.0, 0.0], "rotate": 90},
+        {"id": "b", "ref": "std/lc-bore@3", "at": [0.0, 9.0]},
+    ]}
+    got = run(doc)
+    assert len(got) == 1, got
+    assert "rotated" in got[0] and "agree" in got[0]
+
+
+def test_a_stacked_pair_that_agrees_is_still_silent():
+    """The fix for the mixed case must not reopen the one it was built for."""
+    doc = {"parts": [
+        {"id": "tx", "ref": "std/lc-bore@3", "at": [2.29, 0.35]},
+        {"id": "rx", "ref": "std/lc-bore@3", "at": [2.29, 7.10]},
+    ]}
+    assert run(doc) == []

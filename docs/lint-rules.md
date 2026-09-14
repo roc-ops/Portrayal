@@ -87,7 +87,7 @@ a test fails when this page and the linter disagree. A finding prints as
 | L78 | component | an optical endpoint names a composed connector and a position it has | fix the part id or the position number |
 | L79 | component | no fibre position is claimed twice, and a split's ratios sum to 100 | remove the duplicate path, or fix the ratios |
 | L80 | component | every fibre position is reached by a path or declared unused with a reason | route it, or add an `optical.unused` entry saying why it terminates nothing |
-| L81 | component | a composed pitch respects the standard the part conforms to - equal for a target, no narrower for a floor | move a target onto the standard's pitch, widen a floor to at least it, or say in provenance why this part differs |
+| L81 | component | a composed pitch respects the standard the part conforms to - equal for a target, no narrower for a floor | move a target onto the standard's pitch, widen a floor to at least it, or say in provenance why this part differs. Where the placements share an x, make their `rotate` agree so a rotated column can be told from a stacked pair |
 | L82 | component | a part names its plan drawing one way or the other, never both | keep `plan:` or `faces.plan`, not both - they mean the same thing |
 | L83 | component | a declared face names a real component, is not the part itself, and that component has no face of the same direction | fix the ref, or drop the face it names if the chain has no meaning |
 | L84 | component | a face-qualified optical endpoint names a face the part declares | add the face to `faces:`, or fix the prefix on the endpoint |
