@@ -13,7 +13,7 @@ inheriting lint's opinions.
 """
 import re
 
-from faces import DIRECTIONS, face_ref
+from faces import OPTICAL_FACES, face_ref
 
 # The optional `<face>:` prefix is what lets one module's paths reach a part
 # drawn on another of its faces - a cassette's rear MTP lives in the rear face
@@ -50,6 +50,12 @@ def capacities(contract, load_ref):
     The difference matters: absent means "not a connector", zero would mean "a
     connector with no fibres", and only one of those is a thing.
 
+    Only the faces that are ANOTHER SIDE of the module contribute - see
+    `faces.OPTICAL_FACES`. A rear face's MTP is hardware the front does not
+    have; a plan face is the same module from above, and counting a connector
+    drawn there as well would make one port two endpoints. L85 reports a
+    non-contributing face that draws one rather than letting it vanish.
+
     Faces are walked ONE LEVEL. A face is a drawing of this part from another
     direction, so its parts are this module's parts seen from there; a face of a
     face is not a thing, and L83 already rejects one.
@@ -70,7 +76,7 @@ def capacities(contract, load_ref):
     # legacy top-level `plan:` - and `face_ref` is the one place that knows
     # both, so going through it here (rather than reading `faces` directly)
     # is what keeps a legacy-spelled contract's rear capacities visible.
-    for face in DIRECTIONS:
+    for face in OPTICAL_FACES:
         ref = face_ref(contract, face)
         if ref:
             collect(load_ref(ref) or {}, face)

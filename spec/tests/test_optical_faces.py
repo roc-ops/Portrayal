@@ -126,3 +126,86 @@ def test_a_legacy_plan_spelling_still_counts_as_a_declared_face():
         "plan": {"ref": "dell/riser-card-14g@1"},
         "optical": {"paths": [{"from": "a.1", "to": "plan:pcb.1"}]},
     }) == []
+
+
+# --- which faces carry fibres of their own -----------------------------------
+
+def test_a_rear_face_contributes_its_own_positions():
+    """The live case: the cassette's MTP is drawn on the back and nowhere else."""
+    front = {"parts": [{"id": "lc1", "ref": "common/lc-duplex-v-adapter@1"}],
+             "faces": {"rear": {"ref": "fs/x-rear@1"}}}
+    known = {
+        "common/lc-duplex-v-adapter@1": {"optical": {"positions": 2}},
+        "common/mpo-adapter@1": {"optical": {"positions": 12}},
+        "fs/x-rear@1": {"parts": [{"id": "mtp", "ref": "common/mpo-adapter@1"}]},
+    }
+    assert O.capacities(front, known.get) == {"lc1": 2, "rear:mtp": 12}
+
+
+def test_a_plan_face_does_not_contribute_positions_again():
+    """A plan face is the SAME module from above, not another side of it.
+
+    Counting an adapter drawn there as well as on the front makes one physical
+    port into two endpoints, and L80 then demands a path for a fibre that is
+    already routed - the author's only escapes being a duplicate path or an
+    `unused` entry, both untrue about the hardware.
+    """
+    front = {"parts": [{"id": "lc1", "ref": "common/lc-duplex-v-adapter@1"}],
+             "faces": {"plan": {"ref": "t/top@1"}}}
+    known = {
+        "common/lc-duplex-v-adapter@1": {"optical": {"positions": 2}},
+        "t/top@1": {"parts": [{"id": "lc1", "ref": "common/lc-duplex-v-adapter@1"}]},
+    }
+    assert O.capacities(front, known.get) == {"lc1": 2}
+
+
+def test_the_legacy_plan_spelling_does_not_contribute_either():
+    """Whichever way a plan is spelled, it is the same drawing."""
+    front = {"parts": [], "plan": {"ref": "t/top@1"}}
+    known = {
+        "common/lc-duplex-v-adapter@1": {"optical": {"positions": 2}},
+        "t/top@1": {"parts": [{"id": "lc1", "ref": "common/lc-duplex-v-adapter@1"}]},
+    }
+    assert O.capacities(front, known.get) == {}
+
+
+def run85(doc, path="t/contract.yaml"):
+    L.ERRORS.clear()
+    L.lint_component_optical_face_capacity(path, doc, LIB)
+    return [e for e in L.ERRORS if "[L85]" in e]
+
+
+def test_a_plan_face_carrying_fibres_is_reported_not_dropped():
+    """Silently dropping is as bad as silently double-counting.
+
+    `capacities` walks only the faces that are another side of the module. A
+    face outside that set which draws a connector is either the same hardware
+    twice or a direction the optical model has not been extended to, and both
+    want a human, not a shrug.
+    """
+    doc = {"faces": {"plan": {"ref": "fs/fhd-1mtp6lcd-rear@1"}}}
+    got = run85(doc)
+    assert len(got) == 1, got
+    assert "plan" in got[0]
+
+
+def test_a_rear_face_carrying_fibres_is_the_point():
+    assert run85({"faces": {"rear": {"ref": "fs/fhd-1mtp6lcd-rear@1"}}}) == []
+
+
+def test_a_plan_face_with_no_optical_parts_is_quiet():
+    """Every plan face in the library today - risers and PCIe cards."""
+    assert run85({"faces": {"plan": {"ref": "common/pcie-card-plan@1"}}}) == []
+    assert run85({"plan": {"ref": "dell/riser-card-14g@1"}}) == []
+
+
+def test_every_optical_face_is_a_real_direction():
+    """The invariant that keeps the two constants from drifting apart.
+
+    A typo here would not fail loudly: `capacities` would walk nothing, the
+    cassette would quietly lose its rear positions, and L85 would start
+    reporting the one face that is supposed to carry fibres.
+    """
+    import faces as FA
+    assert set(FA.OPTICAL_FACES) <= set(FA.DIRECTIONS), \
+        f"{set(FA.OPTICAL_FACES) - set(FA.DIRECTIONS)} is not a declared direction"

@@ -103,7 +103,7 @@ import attrsections as attrs_mod
 import capability
 import devicelock
 import optical
-from faces import DIRECTIONS, face_ref
+from faces import DIRECTIONS, OPTICAL_FACES, face_ref
 from manifest import (view_parts, targets, split_target, presented_interface,
                       VIEW_KEY_ORDER,
                       component_refs, load_yaml,
@@ -218,6 +218,7 @@ RULES = {
     "L82": ("component",  "a part names its plan drawing one way or the other, never both", "keep `plan:` or `faces.plan`, not both - they mean the same thing"),
     "L83": ("component",  "a declared face names a real component, is not the part itself, and that component has no face of the same direction", "fix the ref, or drop the face it names if the chain has no meaning"),
     "L84": ("component",  "a face-qualified optical endpoint names a face the part declares", "add the face to `faces:`, or fix the prefix on the endpoint"),
+    "L85": ("component",  "only a face that is another side of the module draws fibres of its own", "move the connector onto the face that really carries it, or extend `faces.OPTICAL_FACES` if this direction genuinely is another side"),
 }
 
 
@@ -1574,6 +1575,44 @@ def lint_component_optical_faces(path, data):
             if face and face not in have:
                 err(path, "L84", f"path endpoint {ep} names face {face!r}, but "
                                  "this part declares no such face")
+
+
+def lint_component_optical_face_capacity(path, data, lib_roots):
+    """L85: only a face that is another side of the module draws its own fibres.
+
+    `optical.capacities` walks `faces.OPTICAL_FACES` - today just `rear` -
+    because a plan face is the SAME module from above and counting a connector
+    drawn there as well would make one physical port into two endpoints. That
+    narrowing has to be VISIBLE. A plan face that draws a connector is either
+    the front's own port a second time, or a direction the optical model has
+    not been extended to; both want a human rather than a shrug, and a fibre
+    silently dropped from a count is no better than one silently counted twice.
+    """
+    if not isinstance(data, dict):
+        return
+    for direction in DIRECTIONS:
+        if direction in OPTICAL_FACES:
+            continue
+        ref = face_ref(data, direction)
+        if not ref:
+            continue
+        cp = resolve_component(ref, lib_roots)
+        if not cp:
+            continue                      # L83's error to report, not this one's
+        inner = load_yaml(cp) or {}
+        drawn = sorted(
+            str(pt["id"]) for pt in (inner.get("parts") or [])
+            if isinstance(pt, dict) and pt.get("id")
+            and ((_contract(pt.get("ref"), lib_roots) or {}).get("optical") or {}
+                 ).get("positions"))
+        if drawn:
+            err(path, "L85",
+                f"{direction} face {ref} draws fibre-carrying parts "
+                f"({', '.join(drawn)}), but a {direction} face is this module "
+                "seen from another angle rather than another side of it, so "
+                "its positions are not counted. Move the connector onto the "
+                "face that really carries it, or extend `faces.OPTICAL_FACES` "
+                "if this direction genuinely is another side")
 
 
 def lint_component_optical_endpoints(path, data, lib_roots):
@@ -6308,6 +6347,7 @@ def main():
                     f"{f.parents[2].name}/{d.get('name')}@{f.parent.name[1:]}")
                 lint_component_optical_endpoints(f, d, args.library)
                 lint_component_optical_faces(f, d)
+                lint_component_optical_face_capacity(f, d, args.library)
                 lint_component_optical_conflicts(f, d)
                 lint_component_optical_coverage(f, d, args.library)
                 lint_component_composed_pitch(f, d, args.library)
