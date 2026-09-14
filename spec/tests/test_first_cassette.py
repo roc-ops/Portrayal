@@ -47,8 +47,9 @@ def test_the_stacked_adapter_says_which_of_its_dimensions_were_measured():
         "the width IS measured - six bodies, spread 0.00 - and must say so"
     assert sc.get("h") == "photo-measured", \
         "so is the height - same six bodies, same spread"
-    assert sc.get("d") == "estimated", \
-        "the DEPTH is the one nobody can see in a face-on render"
+    assert "d" not in sc and "d" not in c["size"], \
+        "no depth is recorded: a face-on render cannot give one and neither " \
+        "sibling adapter carries one to borrow, so stating it would invent it"
 
 
 def test_two_stacked_bores_actually_fit_in_the_body():
