@@ -20,6 +20,19 @@ import lint as L  # noqa: E402
 LIB = [str(ROOT / "library")]
 
 
+def test_the_directions_constant_matches_the_schema():
+    """The schema is the authority; this constant is how the tools read it.
+
+    They drift the moment somebody adds a face to one and not the other - and
+    the drift is silent, because a direction the schema allows but the tools do
+    not iterate simply never appears in the built index.
+    """
+    import json
+    s = json.loads(
+        (ROOT / "spec/schemas/component.schema.json").read_text())
+    assert tuple(s["properties"]["faces"]["properties"]) == F.DIRECTIONS
+
+
 def run82(doc, path="t/contract.yaml"):
     L.ERRORS.clear()
     L.lint_component_faces_once(path, doc)
@@ -105,25 +118,38 @@ def test_the_accessor_answers_for_every_part_that_names_a_plan():
 
 def run83(doc, path="t/contract.yaml", name="t/thing@1"):
     L.ERRORS.clear()
-    L.lint_component_rear_face(path, doc, LIB, name)
+    L.lint_component_faces_resolve(path, doc, LIB, name)
     return [e for e in L.ERRORS if "[L83]" in e]
 
 
-def test_a_rear_face_must_name_a_component_that_exists():
-    got = run83({"faces": {"rear": {"ref": "fs/not-a-real-part@1"}}})
+@pytest.mark.parametrize("direction", ["plan", "rear"])
+def test_a_face_must_name_a_component_that_exists(direction):
+    got = run83({"faces": {direction: {"ref": "fs/not-a-real-part@1"}}})
     assert len(got) == 1, got
     assert "not in the library" in got[0]
 
 
-def test_a_part_may_not_be_its_own_rear():
-    got = run83({"faces": {"rear": {"ref": "common/mpo-adapter@1"}}},
+def test_a_plan_face_written_the_legacy_way_must_also_name_a_real_component():
+    """L83 reads through `face_ref`, so the legacy `plan:` spelling gets the
+    same check as `faces.plan` - the whole point of routing both through one
+    accessor instead of leaving `plan:` a blind spot."""
+    got = run83({"plan": {"ref": "fs/not-a-real-part@1"}})
+    assert len(got) == 1, got
+    assert "not in the library" in got[0]
+
+
+@pytest.mark.parametrize("direction", ["plan", "rear"])
+def test_a_part_may_not_be_its_own_face(direction):
+    got = run83({"faces": {direction: {"ref": "common/mpo-adapter@1"}}},
                 name="common/mpo-adapter@1")
     assert len(got) == 1, got
-    assert "its own rear" in got[0]
+    assert f"its own {direction}" in got[0]
 
 
-def test_a_rear_face_may_not_itself_have_a_rear(tmp_path):
-    """A part has one back. `a`'s rear being `b` whose rear is `c` means nothing.
+@pytest.mark.parametrize("direction", ["plan", "rear"])
+def test_a_face_may_not_itself_have_a_face_of_the_same_direction(direction, tmp_path):
+    """A part has one back and one top. `a`'s face being `b` whose face of the
+    same direction is `c` means nothing.
 
     Builds its own two-component library rather than leaning on the real one
     staying arranged as it is - and the real library has no chain to point at,
@@ -134,7 +160,7 @@ def test_a_rear_face_may_not_itself_have_a_rear(tmp_path):
     (d / "contract.yaml").write_text(
         "format: 1\nkind: component\nname: middle\nversion: 1.0.0\n"
         "class: port\nsize: {w: 1, h: 1}\n"
-        "faces: {rear: {ref: t/deepest@1}}\n")
+        f"faces: {{{direction}: {{ref: t/deepest@1}}}}\n")
     e = tmp_path / "components" / "t" / "deepest" / "v1"
     e.mkdir(parents=True)
     (e / "contract.yaml").write_text(
@@ -142,30 +168,47 @@ def test_a_rear_face_may_not_itself_have_a_rear(tmp_path):
         "class: port\nsize: {w: 1, h: 1}\n")
 
     L.ERRORS.clear()
-    L.lint_component_rear_face("t/contract.yaml",
-                               {"faces": {"rear": {"ref": "t/middle@1"}}},
-                               [str(tmp_path)], "t/outer@1")
+    L.lint_component_faces_resolve(
+        "t/contract.yaml", {"faces": {direction: {"ref": "t/middle@1"}}},
+        [str(tmp_path)], "t/outer@1")
     got = [e for e in L.ERRORS if "[L83]" in e]
     assert len(got) == 1, got
-    assert "rear of its own" in got[0]
+    assert f"{direction} of its own" in got[0]
 
 
-def test_a_real_rear_reference_is_quiet():
-    got = run83({"faces": {"rear": {"ref": "common/mpo-adapter@1"}}})
+@pytest.mark.parametrize("direction", ["plan", "rear"])
+def test_a_real_face_reference_is_quiet(direction):
+    got = run83({"faces": {direction: {"ref": "common/mpo-adapter@1"}}})
     assert got == [], got
 
 
-def test_no_rear_at_all_is_quiet():
+def test_no_faces_at_all_is_quiet():
     assert run83({}) == []
-    assert run83({"faces": {"plan": {"ref": "common/mpo-adapter@1"}}}) == []
 
 
 def test_the_index_carries_a_parts_other_faces():
-    """The viewer offers a rear drawing only if the index says there is one."""
-    src = (ROOT / "spec/tools/portrayal/components_index.py").read_text()
-    assert "face_ref(" in src, \
-        "components_index.py never asks a contract for its faces, so the " \
-        "viewer cannot know a part has a rear drawing"
+    """The viewer offers a rear or plan drawing only if the built index says
+    there is one - a source-text `"face_ref(" in src` check passes against a
+    refactor that computes the value and drops the assignment, leaving every
+    published entry silently without its faces while the test stays green.
+
+    Skips when dist is absent, the way the emptiness check below already does.
+    """
+    import json
+    f = ROOT / "library" / "dist" / "components.json"
+    if not f.exists():
+        pytest.skip("library/dist not built - run ./publish.sh --no-images")
+    entries = json.loads(f.read_text())["components"]
+    by_name = {e["name"]: e for e in entries if e["ns"] == "common"}
+    for name, want in (("pcie-card-fh", "common/pcie-card-plan@1"),
+                       ("pcie-card-lp", "common/pcie-card-plan-lp@1")):
+        assert name in by_name, f"common/{name} missing from the built index"
+        assert by_name[name].get("faces", {}).get("plan") == want, \
+            f"common/{name}'s built entry does not carry faces.plan == {want!r}"
+    with_faces = [e for e in entries if e.get("faces")]
+    assert len(with_faces) == 13, \
+        f"expected exactly 13 of {len(entries)} entries to carry a faces " \
+        f"key, found {len(with_faces)}"
 
 
 def test_the_index_entry_omits_faces_when_there_are_none():
@@ -259,3 +302,19 @@ def test_every_contract_in_the_library_passes_l82():
                 ((c.get("faces") or {}).get("plan") or {}).get("ref"):
             bad.append(str(p.relative_to(ROOT)))
     assert not bad, bad
+
+
+def test_an_empty_faces_block_fails_schema_validation():
+    """`faces:` with nothing under it passes L82, L83, and the index build -
+    none of them have anything to object to, and the part is silently omitted
+    from every viewer. The schema is the only layer left that can catch it,
+    so `minProperties` on `faces` has to be the backstop.
+    """
+    import json
+    import jsonschema
+    schema = json.loads(
+        (ROOT / "spec/schemas/component.schema.json").read_text())
+    doc = {"format": 1, "kind": "component", "name": "t", "version": "1.0.0",
+          "class": "port", "size": {"w": 1, "h": 1}, "faces": {}}
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(doc, schema)

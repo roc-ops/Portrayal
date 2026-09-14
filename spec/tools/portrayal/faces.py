@@ -11,9 +11,21 @@ key nobody thinks to look for. Readers go through `face_ref` so that adding a
 direction is a change to this file rather than a hunt through render.py and
 lint.py for the places that spell it out.
 
-`plan:` stays legal and means exactly `faces.plan`. 13 components use it and one
-device projects it; there is no value in a migration that only moves words.
+`plan:` stays legal and means exactly `faces.plan`. 11 components still need the
+sugar - the count of things naming a plan drawing is 13, but two have migrated
+to `faces.plan` and no longer touch this fallback. 11 is the number the
+end-of-life question turns on: when it reaches zero, nothing in the library
+still needs `plan:` to mean `faces.plan`, and the fallback can go. Nothing else
+in the codebase tracks that number, so it has to be kept correct here by hand.
 """
+
+# THE LIST THE SCHEMA'S `faces.properties` DECLARES. A reader that spells the
+# directions out instead of iterating this tuple silently drops whichever one
+# it forgot - `components_index.py` did exactly that until this constant
+# existed, checking "plan" and "rear" as a literal instead of importing them,
+# so a third direction would pass lint, render fine, and vanish from the
+# published index with nothing to say why.
+DIRECTIONS = ("plan", "rear")
 
 # `plan` is the only direction with a legacy spelling, because it is the only
 # one that existed before `faces`. A new direction added here gets no fallback

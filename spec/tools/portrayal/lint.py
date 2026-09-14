@@ -103,7 +103,7 @@ import attrsections as attrs_mod
 import capability
 import devicelock
 import optical
-from faces import face_ref
+from faces import DIRECTIONS, face_ref
 from manifest import (view_parts, targets, split_target, presented_interface,
                       VIEW_KEY_ORDER,
                       component_refs, load_yaml,
@@ -216,7 +216,7 @@ RULES = {
     "L80": ("component",  "every fibre position is reached by a path or declared unused with a reason", "route it, or add an `optical.unused` entry saying why it terminates nothing"),
     "L81": ("component",  "a composed pitch respects the standard the part conforms to - equal for a target, no narrower for a floor", "move a target onto the standard's pitch, widen a floor to at least it, or say in provenance why this part differs"),
     "L82": ("component",  "a part names its plan drawing one way or the other, never both", "keep `plan:` or `faces.plan`, not both - they mean the same thing"),
-    "L83": ("component",  "a rear face names a real component, and that component has no rear", "fix the ref, or drop the rear face it names if the chain has no meaning"),
+    "L83": ("component",  "a declared face names a real component, is not the part itself, and that component has no face of the same direction", "fix the ref, or drop the face it names if the chain has no meaning"),
 }
 
 
@@ -1796,31 +1796,38 @@ def lint_component_faces_once(path, data):
                          "same thing, so keep one. `plan:` is the legacy spelling")
 
 
-def lint_component_rear_face(path, data, lib_roots, name=None):
-    """L83: a rear face names a real component, and that component has no rear.
+def lint_component_faces_resolve(path, data, lib_roots, name=None):
+    """L83: every declared face names a real component, not itself, with no
+    face of its own direction.
 
-    The rear face is an ordinary part, so a typo in the ref fails silently -
-    nothing draws, and the contract still lints. And because it is an ordinary
-    part it could declare `faces.rear` itself, which has no meaning: a part has
-    ONE back, and a chain of them says the modeller was drawing something else.
+    A face is an ordinary part, so a typo in its ref fails silently - nothing
+    draws, and the contract still lints. This used to check `rear` alone,
+    because `rear` was the direction the rule was written for; `plan` got none
+    of it, so `faces: {plan: {ref: t/nope@1}}` lints clean today even though
+    the argument for checking it is identical. Iterating `DIRECTIONS` through
+    `face_ref` closes that gap for both spellings of `plan` at once, instead of
+    adding a second rear-shaped code path for it.
     """
     if not isinstance(data, dict):
         return
-    ref = face_ref(data, "rear")
-    if not ref:
-        return
-    if name and ref == name:
-        err(path, "L83", f"names itself as its own rear ({ref})")
-        return
-    cp = resolve_component(ref, lib_roots)
-    if not cp:
-        err(path, "L83", f"names rear face {ref}, which is not in the library")
-        return
-    inner = load_yaml(cp) or {}
-    if face_ref(inner, "rear"):
-        err(path, "L83", f"names rear face {ref}, which declares a rear of its "
-                         "own - a part has one back, so this chain says the "
-                         "wrong part was drawn")
+    for direction in DIRECTIONS:
+        ref = face_ref(data, direction)
+        if not ref:
+            continue
+        if name and ref == name:
+            err(path, "L83", f"names itself as its own {direction} ({ref})")
+            continue
+        cp = resolve_component(ref, lib_roots)
+        if not cp:
+            err(path, "L83",
+                f"names {direction} face {ref}, which is not in the library")
+            continue
+        inner = load_yaml(cp) or {}
+        if face_ref(inner, direction):
+            err(path, "L83",
+                f"names {direction} face {ref}, which declares a {direction} "
+                "of its own - a part has one of each direction, so this "
+                "chain says the wrong part was drawn")
 
 
 def lint_component_fields(path, data, _lib_roots=None):
@@ -6208,12 +6215,12 @@ def main():
                 lint_component_body_boxes(f, d)
                 lint_component_faces_once(f, d)
                 # L83 IS HANDED THE PART'S OWN REF, so it can catch a contract
-                # naming itself as its own rear - a copy-paste away, and
+                # naming itself as its own face - a copy-paste away, and
                 # invisible without it. The path carries both halves: namespace
                 # in the grandparent directory, major in the `v<N>` one. Same
                 # derivation components_index.py:55-57 uses, so the string L83
                 # compares against is the one the rest of the library writes.
-                lint_component_rear_face(
+                lint_component_faces_resolve(
                     f, d, args.library,
                     f"{f.parents[2].name}/{d.get('name')}@{f.parent.name[1:]}")
                 lint_component_optical_endpoints(f, d, args.library)

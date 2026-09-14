@@ -20,7 +20,7 @@ import yaml
 from manifest import load_yaml
 
 sys.path.insert(0, str(Path(__file__).parent))
-from faces import face_ref  # noqa: E402
+from faces import DIRECTIONS, face_ref  # noqa: E402
 from render import (SVG_NS, STATE_CSS, Library, instance_group,  # noqa: E402
                     seq_css_name, state_rule)
 
@@ -182,7 +182,7 @@ def main():
             # them against this same index, so the nested `{ref: ...}` form
             # would cost bytes on every page load and buy nothing. Omitted
             # entirely when a part has none, which is all but thirteen of them.
-            fc = {k: r for k in ("plan", "rear")
+            fc = {k: r for k in DIRECTIONS
                   if (r := face_ref(data, k))}
             if fc:
                 entry["faces"] = fc
