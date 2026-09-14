@@ -219,19 +219,35 @@ def test_the_migrated_cards_use_the_new_spelling(rel):
         f"{rel} lost its plan drawing in the migration"
 
 
-def test_the_risers_still_use_the_legacy_spelling():
+# The eleven card risers that carry a plan drawing, BY NAME. `dell/` holds 25
+# riser directories; the other fourteen are plates, shrouds, cage mounts and
+# clips with no plan face at all, so a count over the glob would also be
+# counting those. Naming them means a NEW riser card does not fail this test,
+# and migrating one of these eleven does - which is the distinction the test is
+# for.
+LEGACY_RISERS = [
+    "riser-1a-14g", "riser-1b-14g", "riser-1d-14g",
+    "riser-2a-14g", "riser-2b-14g", "riser-2c-14g", "riser-2d-14g",
+    "riser-2e-14g", "riser-2f-14g", "riser-3a-14g", "riser-3b-14g",
+]
+
+
+@pytest.mark.parametrize("riser", LEGACY_RISERS)
+def test_the_risers_still_use_the_legacy_spelling(riser):
     """THE SUGAR IS LOAD-BEARING and this is what watches it.
 
     Eleven risers and one device depend on `plan:` continuing to mean
-    `faces.plan`. If a later sweep migrates them all, the fallback in
-    `faces.face_ref` stops being exercised by anything real - so this test
-    fails loudly rather than letting that happen silently.
+    `faces.plan`. If a later sweep migrates them, the fallback in
+    `faces.face_ref` stops being exercised by anything real, and the thirteen
+    components relying on it would be one refactor from breaking with nothing
+    to say so. This fails loudly instead, naming the riser that moved.
     """
-    lib = ROOT / "library/components/dell"
-    legacy = [p.parent.parent.name for p in lib.glob("riser-*/v1/contract.yaml")
-              if "plan" in (yaml.safe_load(p.read_text()) or {})]
-    assert len(legacy) == 11, \
-        f"expected 11 risers on the legacy spelling, found {len(legacy)}: {legacy}"
+    c = yaml.safe_load(
+        (ROOT / "library/components/dell" / riser / "v1" /
+         "contract.yaml").read_text()) or {}
+    assert (c.get("plan") or {}).get("ref"), \
+        f"{riser} no longer carries the legacy `plan:` - if that was deliberate, " \
+        "check something still exercises face_ref's fallback before removing it here"
 
 
 def test_every_contract_in_the_library_passes_l82():
