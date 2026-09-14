@@ -1,0 +1,88 @@
+format: 1
+kind: component
+name: fhd-1mtp6lcd-os2-a
+version: 1.0.0
+class: module
+description: >-
+  FS FHD-1MTP6LCDOS2A - MTP-12 (male) to six LC duplex, 12 fibres, OS2, Type A
+  polarity. FS SKU 57016.
+size: {w: 108.97, h: 35.05, d: 110.24}
+size-confidence: {w: photo-measured, h: photo-measured, d: drawing}
+size-notes: >-
+  The faceplate is MEASURED off FS's face-on render of SKU 57016, scaled on the
+  108.97 mm FHD module width and validated against the 35.05 mm height to 1.02%
+  - and corroborated independently by FS's own dimension line on 57016.B.jpg,
+  which reads 4.29in x 1.38in, exactly 108.97 x 35.05. The 110.24 depth is the
+  4.34in on that same dimension line.
+attrs: {media: fiber, vendor-sku: '57016'}
+body:
+  depth: 110.24
+parts:
+  - {id: lc1, ref: common/lc-duplex-v-adapter@1, at: [15.81, 10.66]}
+  - {id: lc2, ref: common/lc-duplex-v-adapter@1, at: [28.70, 10.66]}
+  - {id: lc3, ref: common/lc-duplex-v-adapter@1, at: [41.59, 10.66]}
+  - {id: lc4, ref: common/lc-duplex-v-adapter@1, at: [54.66, 10.66]}
+  - {id: lc5, ref: common/lc-duplex-v-adapter@1, at: [67.55, 10.66]}
+  - {id: lc6, ref: common/lc-duplex-v-adapter@1, at: [80.44, 10.66]}
+faces:
+  rear: {ref: fs/fhd-1mtp6lcd-rear@1}
+optical:
+  media: os2
+  polarity: a
+  paths:
+    - {from: lc1.1, to: 'rear:mtp.1'}
+    - {from: lc1.2, to: 'rear:mtp.2'}
+    - {from: lc2.1, to: 'rear:mtp.3'}
+    - {from: lc2.2, to: 'rear:mtp.4'}
+    - {from: lc3.1, to: 'rear:mtp.5'}
+    - {from: lc3.2, to: 'rear:mtp.6'}
+    - {from: lc4.1, to: 'rear:mtp.7'}
+    - {from: lc4.2, to: 'rear:mtp.8'}
+    - {from: lc5.1, to: 'rear:mtp.9'}
+    - {from: lc5.2, to: 'rear:mtp.10'}
+    - {from: lc6.1, to: 'rear:mtp.11'}
+    - {from: lc6.2, to: 'rear:mtp.12'}
+provenance:
+  size: >-
+    Faceplate measured off FS's face-on render of SKU 57016, scaled on the
+    108.97 mm FHD module width and validated against the 35.05 mm height to
+    1.02% - see size-notes for the corroborating dimension line.
+  parts: >-
+    THE SIX CENTRES ARE THE MEASUREMENT, not a pitch multiplied out. Measured on
+    57016.main.jpg at 20.45, 33.34, 46.23, 59.30, 72.19 and 85.08, with body
+    widths of 9.28 and a spread of 0.00 across the six. Five gaps of 12.89,
+    12.89, 13.07, 12.89, 12.89 - mean 12.924, spread 0.17. The one wide gap is in
+    the render and is kept rather than averaged away. `at.y` of 10.66 is MEASURED
+    too - the top edge of all six, spread 0.00 - and 10.66 + 13.75/2 = 17.53
+    against a face half-height of 17.525, so the row really is centred rather
+    than drawn to look centred.
+  face-detail-gap: >-
+    The faceplate legends - the FS logo, the port numbers 1 through 12 - are not
+    drawn. The numbering is known from the render (evens along the top, odds
+    along the bottom) and is recorded in the optical paths rather than the art.
+  optical: >-
+    THIS IS AN ASSUMPTION, NOT A SOURCED MAPPING. FS's fhd-fiber-cabling-system-
+    guide names the polarity TYPE - Table 3 (doc.md around line 195) lists
+    FHD-1MTP6LCDOS2A as Type A, and modular-cabling-system-portfolio's cassette
+    table (its doc.md around line 224) confirms SKU 57016 the same way - but
+    neither document holds a per-fibre diagram that says which MTP position
+    lands on which LC port. All 34 figures in the cabling guide were opened,
+    including fig-0023.png, the one immediately after Table 2 where docling
+    dropped a caption-less image (the brief's own lead on where one might be):
+    it is three product photos, none a fibre trace. The Method A/B link
+    diagrams later in the same document (fig-0026, fig-0028 through fig-0032)
+    show cassette-to-cassette wiring at the equipment level, not fibre-to-port.
+    modular-cabling-system-portfolio's own row-thumbnails for 57016 (fig-0044,
+    fig-0046) are the same kind of product photo. No per-fibre diagram exists in
+    either corpus.
+    So the twelve paths below are the STANDARD TYPE A STRAIGHT-THROUGH
+    arrangement instead: MTP position n to fibre n in order, rear:mtp.1 to
+    lc1.1, rear:mtp.2 to lc1.2, rear:mtp.3 to lc2.1, and so on - which is what
+    "Type A" conventionally means (TIA-598/568 straight pinout, no crossing), not
+    a fact read off a drawing of this specific cassette. A Type A cassette's own
+    datasheet with a per-fibre diagram, or a fibre trace on real hardware,
+    settles it; naming the polarity type in FS's tables is not the same as
+    sourcing this map, and this note exists so nobody mistakes one for the
+    other. Confidence: ESTIMATED - there is no schema key for it on `optical`,
+    so this sentence is where that word lives.
+skins: [default]

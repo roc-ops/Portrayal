@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="108.97mm" height="35.05mm" viewBox="0 0 108.97 35.05">
+  <!-- FHD-1MTP6LCDOS2A faceplate, 108.97 x 35.05, FS SKU 57016 - measured off
+       FS's own face-on render, see the contract's size-notes.
+
+       THE SIX LC CUTOUTS ARE NOT DRAWN HERE. Each of the six
+       common/lc-duplex-v-adapter@1 parts the contract composes draws its own
+       bezel and its own two port openings at its `at` position - the same
+       reason common/mpo-adapter@1's plate leaves its aperture undrawn (see
+       that skin's header). Drawing a second rect under each composed adapter
+       would be a duplicate of geometry the composed part already owns, and
+       the two copies would drift the day one of them is edited and the other
+       is not.
+
+       THE TWO THUMB-KNOBS ARE DRAWN, NOT RECORDED AS A GAP. 57016.main.jpg
+       shows one captive knurled knob at each end of the port row, roughly
+       level with its vertical centre. No dimensioned drawing gives their
+       exact centre or radius, so the two circles below are a visual read of
+       the render, not a measurement - placed by eye at half the margin
+       between the plate edge and the nearest adapter, radius by eye against
+       the adapter bezels beside them. A caliper on a real panel settles the
+       precise figures if that is ever needed. -->
+  <defs>
+    <linearGradient id="bez" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3c4248"/>
+      <stop offset="1" stop-color="#23272c"/>
+    </linearGradient>
+    <radialGradient id="knob" cx="0.35" cy="0.35" r="0.75">
+      <stop offset="0" stop-color="#4a5056"/>
+      <stop offset="1" stop-color="#1c1f22"/>
+    </radialGradient>
+  </defs>
+  <rect id="bezel" x="0" y="0" width="108.97" height="35.05" rx="1.5"
+        fill="url(#bez)" stroke="#15181a" stroke-width="0.3"/>
+  <circle id="thumb-knob-left" cx="7.9" cy="17.525" r="3.1"
+          fill="url(#knob)" stroke="#0e1012" stroke-width="0.25"/>
+  <circle id="thumb-knob-right" cx="101.07" cy="17.525" r="3.1"
+          fill="url(#knob)" stroke="#0e1012" stroke-width="0.25"/>
+</svg>

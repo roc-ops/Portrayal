@@ -126,3 +126,58 @@ def test_an_entry_with_no_pitch_kind_is_treated_as_a_target():
         L.STANDARDS["xfp"]["pitch-kind"] = saved
     assert len(hits) == 1, hits
     assert "target" in hits[0]
+
+
+def test_a_stacked_pair_is_not_a_rotated_column():
+    """Sharing an x does not make two parts a rotated column.
+
+    A std/lc-bore@3 is 6.3 tall, so a stacked pair cannot sit at
+    lc-duplex-receptacle's 6.25 without overlapping - which means that pitch
+    never described this arrangement. Before this, L81 read the y of any
+    single-x group and reported the difference as a violation.
+    """
+    doc = {"parts": [
+        {"id": "tx", "ref": "std/lc-bore@3", "at": [2.29, 0.35]},
+        {"id": "rx", "ref": "std/lc-bore@3", "at": [2.29, 7.10]},
+    ]}
+    assert run(doc) == []
+
+
+def test_a_rotated_column_is_still_measured_down_its_y():
+    """The case the fallback exists for, and it must keep working."""
+    doc = {"parts": [
+        {"id": "a", "ref": "std/lc-bore@3", "at": [0.0, 0.0], "rotate": 90},
+        {"id": "b", "ref": "std/lc-bore@3", "at": [0.0, 9.0], "rotate": 90},
+    ]}
+    got = run(doc)
+    assert len(got) == 1, got
+    assert "9.0" in got[0] or "9.00" in got[0]
+
+
+def test_a_shared_x_group_that_disagrees_about_rotation_is_reported():
+    """Neither reading is safe here, so say so rather than pick one.
+
+    A group sharing one x is either a rotated column or a stacked pair, and
+    `rotate` is the only thing that tells them apart. When the placements
+    disagree - one carries a rotate and its neighbour does not, the likeliest
+    slip in exactly this construct - reading y measures a stack against a
+    horizontal standard and reading x measures zero. Both are fabricated
+    numbers. Skipping silently is not free either: it loses a check that was
+    being made before the stacked-pair case existed.
+    """
+    doc = {"parts": [
+        {"id": "a", "ref": "std/lc-bore@3", "at": [0.0, 0.0], "rotate": 90},
+        {"id": "b", "ref": "std/lc-bore@3", "at": [0.0, 9.0]},
+    ]}
+    got = run(doc)
+    assert len(got) == 1, got
+    assert "rotated" in got[0] and "agree" in got[0]
+
+
+def test_a_stacked_pair_that_agrees_is_still_silent():
+    """The fix for the mixed case must not reopen the one it was built for."""
+    doc = {"parts": [
+        {"id": "tx", "ref": "std/lc-bore@3", "at": [2.29, 0.35]},
+        {"id": "rx", "ref": "std/lc-bore@3", "at": [2.29, 7.10]},
+    ]}
+    assert run(doc) == []

@@ -27,6 +27,26 @@ in the codebase tracks that number, so it has to be kept correct here by hand.
 # published index with nothing to say why.
 DIRECTIONS = ("plan", "rear")
 
+# WHICH FACES CARRY OPTICAL HARDWARE OF THEIR OWN.
+#
+# A rear face is the OTHER SIDE of the module: a cassette's MTP is drawn there
+# and nowhere else, so its twelve positions are twelve endpoints the front does
+# not have. A plan face is the SAME module seen from above - a riser's plan
+# redraws the PCIe slots that are already its own - and anything optical drawn
+# there would be the front's ports at a different angle, not new ones. Counting
+# those again turns one physical port into two endpoints and obliges L80 to
+# demand a path for a fibre that is already routed, leaving the author a
+# duplicate path or an `unused` entry as the only ways out, both untrue about
+# the hardware.
+#
+# THIS IS DELIBERATELY NOT `DIRECTIONS`. A direction added there gets a drawing
+# for free; whether it also carries fibres of its own is a judgement about
+# hardware rather than about drawings, and optics in this corpus live on the
+# front and the back. L85 REPORTS a face outside this tuple that draws a
+# connector rather than dropping it, because silently dropping a fibre is no
+# better than silently counting it twice.
+OPTICAL_FACES = ("rear",)
+
 # `plan` is the only direction with a legacy spelling, because it is the only
 # one that existed before `faces`. A new direction added here gets no fallback
 # and needs none.

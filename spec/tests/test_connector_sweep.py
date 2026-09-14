@@ -13,10 +13,10 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library" / "components"
 
 FIBRE_CONNECTORS = [
-    "common/lc-duplex-adapter/v3", "common/mpo-adapter/v1",
-    "common/sc-duplex-adapter/v1", "common/st-simplex-adapter/v1",
-    "common/fc-simplex-adapter/v1", "common/lsh-simplex-adapter/v1",
-    "common/mdc-adapter/v1",
+    "common/lc-duplex-adapter/v3", "common/lc-duplex-v-adapter/v1",
+    "common/mpo-adapter/v1", "common/sc-duplex-adapter/v1",
+    "common/st-simplex-adapter/v1", "common/fc-simplex-adapter/v1",
+    "common/lsh-simplex-adapter/v1", "common/mdc-adapter/v1",
 ]
 
 

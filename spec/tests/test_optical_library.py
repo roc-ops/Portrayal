@@ -43,11 +43,12 @@ def test_every_optical_endpoint_resolves_to_a_real_position():
     for f, d in contracts():
         caps = optical.capacities(d, load_ref)
         for ep in optical.reached(d):
-            part, pos = optical.split_endpoint(ep)
-            if part not in caps:
+            face, part, pos = optical.split_endpoint(ep)
+            key = optical.part_key(face, part)
+            if key not in caps:
                 bad.append(f"{f.parent.parent.name}: {ep} names no connector")
-            elif pos > caps[part]:
-                bad.append(f"{f.parent.parent.name}: {ep} exceeds {caps[part]}")
+            elif pos > caps[key]:
+                bad.append(f"{f.parent.parent.name}: {ep} exceeds {caps[key]}")
     assert not bad, "unresolvable optical endpoints:\n  " + "\n  ".join(bad)
 
 

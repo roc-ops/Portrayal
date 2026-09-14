@@ -103,7 +103,7 @@ import attrsections as attrs_mod
 import capability
 import devicelock
 import optical
-from faces import DIRECTIONS, face_ref
+from faces import DIRECTIONS, OPTICAL_FACES, face_ref
 from manifest import (view_parts, targets, split_target, presented_interface,
                       VIEW_KEY_ORDER,
                       component_refs, load_yaml,
@@ -214,9 +214,11 @@ RULES = {
     "L78": ("component",  "an optical endpoint names a composed connector and a position it has", "fix the part id or the position number"),
     "L79": ("component",  "no fibre position is claimed twice, and a split's ratios sum to 100", "remove the duplicate path, or fix the ratios"),
     "L80": ("component",  "every fibre position is reached by a path or declared unused with a reason", "route it, or add an `optical.unused` entry saying why it terminates nothing"),
-    "L81": ("component",  "a composed pitch respects the standard the part conforms to - equal for a target, no narrower for a floor", "move a target onto the standard's pitch, widen a floor to at least it, or say in provenance why this part differs"),
+    "L81": ("component",  "a composed pitch respects the standard the part conforms to - equal for a target, no narrower for a floor", "move a target onto the standard's pitch, widen a floor to at least it, or say in provenance why this part differs. Where the placements share an x, make their `rotate` agree so a rotated column can be told from a stacked pair"),
     "L82": ("component",  "a part names its plan drawing one way or the other, never both", "keep `plan:` or `faces.plan`, not both - they mean the same thing"),
     "L83": ("component",  "a declared face names a real component, is not the part itself, and that component has no face of the same direction", "fix the ref, or drop the face it names if the chain has no meaning"),
+    "L84": ("component",  "a face-qualified optical endpoint names a face the part declares", "add the face to `faces:`, or fix the prefix on the endpoint"),
+    "L85": ("component",  "only a face that is another side of the module draws fibres of its own", "move the connector onto the face that really carries it, or extend `faces.OPTICAL_FACES` if this direction genuinely is another side"),
 }
 
 
@@ -648,10 +650,19 @@ def lint_component(path, validator):
             # only way past it was to restate the numbers in a second file and
             # let them drift.
             pres = data.get("presents", "wh")
-            trio = {"w": std["w"], "h": std["h"], "d": std.get("depth")}
+            trio = {"w": std.get("w"), "h": std.get("h"), "d": std.get("depth")}
             pair = [trio[k] for k in pres]
             rest = trio[({"w", "h", "d"} - set(pres)).pop()]
-            if any(v is None for v in pair):
+            # A PITCH-ONLY ENTRY MAKES NO ENVELOPE CLAIM, so there is no size
+            # here to agree or disagree with. Seven entries are this shape - a
+            # panel adapter's OPENING is standardised where its bezel is not -
+            # and `std["w"]` indexed them, so naming one in `conforms:` ended
+            # the run in `KeyError: 'w'`. That is the third time a missing
+            # registry key has taken lint down rather than printing a message.
+            # The pitch rules below still apply; only the size check is skipped.
+            if trio["w"] is None and trio["h"] is None:
+                pass
+            elif any(v is None for v in pair):
                 err(path, "L9", f"conforms {conf}: presents {pres} needs a depth "
                     f"from the registry and {conf} does not give one ({origin})")
             else:
@@ -1537,6 +1548,73 @@ def _optical_load_ref(lib_roots):
     return load
 
 
+def lint_component_optical_faces(path, data):
+    """L84: a face-qualified endpoint names a face this part declares.
+
+    `rear:mtp.1` on a contract with no `faces.rear` resolves to nothing, and L78
+    would report it as an unknown part - true, but it sends the reader hunting
+    through `parts:` for an id that was never going to be there. The error is one
+    level up, and saying so is the difference between a five-minute fix and an
+    hour.
+
+    WHAT THE PART DECLARES IS ASKED THROUGH `face_ref`, not read off
+    `faces:` directly. A part naming its plan the legacy way has no `plan` key
+    under `faces:` at all, so a literal read would report `plan:pcb.1` on one of
+    the eleven risers as a face it does not have - the same blind spot L83 had
+    until it was routed through the accessor, in the same release.
+    """
+    if not isinstance(data, dict):
+        return
+    have = {d for d in DIRECTIONS if face_ref(data, d)}
+    for p in ((data.get("optical") or {}).get("paths") or []):
+        for ep, _ratio in optical.endpoints(p):
+            try:
+                face, _part, _pos = optical.split_endpoint(ep)
+            except ValueError:
+                continue  # L78's error to report, not this one's
+            if face and face not in have:
+                err(path, "L84", f"path endpoint {ep} names face {face!r}, but "
+                                 "this part declares no such face")
+
+
+def lint_component_optical_face_capacity(path, data, lib_roots):
+    """L85: only a face that is another side of the module draws its own fibres.
+
+    `optical.capacities` walks `faces.OPTICAL_FACES` - today just `rear` -
+    because a plan face is the SAME module from above and counting a connector
+    drawn there as well would make one physical port into two endpoints. That
+    narrowing has to be VISIBLE. A plan face that draws a connector is either
+    the front's own port a second time, or a direction the optical model has
+    not been extended to; both want a human rather than a shrug, and a fibre
+    silently dropped from a count is no better than one silently counted twice.
+    """
+    if not isinstance(data, dict):
+        return
+    for direction in DIRECTIONS:
+        if direction in OPTICAL_FACES:
+            continue
+        ref = face_ref(data, direction)
+        if not ref:
+            continue
+        cp = resolve_component(ref, lib_roots)
+        if not cp:
+            continue                      # L83's error to report, not this one's
+        inner = load_yaml(cp) or {}
+        drawn = sorted(
+            str(pt["id"]) for pt in (inner.get("parts") or [])
+            if isinstance(pt, dict) and pt.get("id")
+            and ((_contract(pt.get("ref"), lib_roots) or {}).get("optical") or {}
+                 ).get("positions"))
+        if drawn:
+            err(path, "L85",
+                f"{direction} face {ref} draws fibre-carrying parts "
+                f"({', '.join(drawn)}), but a {direction} face is this module "
+                "seen from another angle rather than another side of it, so "
+                "its positions are not counted. Move the connector onto the "
+                "face that really carries it, or extend `faces.OPTICAL_FACES` "
+                "if this direction genuinely is another side")
+
+
 def lint_component_optical_endpoints(path, data, lib_roots):
     """L78: an optical endpoint names a composed connector and a position it has.
 
@@ -1554,19 +1632,20 @@ def lint_component_optical_endpoints(path, data, lib_roots):
     for p in paths:
         for ep, _ratio in optical.endpoints(p):
             try:
-                part, pos = optical.split_endpoint(ep)
+                face, part, pos = optical.split_endpoint(ep)
             except ValueError:
                 err(path, "L78", f"{ep!r} is not an optical endpoint - they are "
                                  "`<part-id>.<n>` with n from 1")
                 continue
-            if part not in caps:
-                err(path, "L78", f"{ep} names {part!r}, which this part either "
+            key = optical.part_key(face, part)
+            if key not in caps:
+                err(path, "L78", f"{ep} names {key!r}, which this part either "
                                  "does not compose or which declares no "
                                  "`optical.positions` - only a connector can "
                                  "carry a fibre")
-            elif pos > caps[part]:
-                err(path, "L78", f"{ep} asks for position {pos} and {part} "
-                                 f"presents {caps[part]}")
+            elif pos > caps[key]:
+                err(path, "L78", f"{ep} asks for position {pos} and {key} "
+                                 f"presents {caps[key]}")
 
 
 def lint_component_optical_conflicts(path, data, _lib_roots=None):
@@ -1677,17 +1756,23 @@ def lint_component_optical_coverage(path, data, lib_roots):
                                  "there")
     for ep in sorted(unused):
         try:
-            part, pos = optical.split_endpoint(ep)
+            face, part, pos = optical.split_endpoint(ep)
         except ValueError:
             err(path, "L80", f"{ep!r} is not an optical endpoint - `unused` "
                              "keys are `<part-id>.<n>` with n from 1")
             continue
-        if part not in caps or pos > caps[part]:
+        key = optical.part_key(face, part)
+        if key not in caps or pos > caps[key]:
             err(path, "L80", f"{ep} is declared unused but names no position "
                              "this component composes - `unused` claims a "
                              "position exists and terminates nothing, so it "
                              "is checked against real hardware like any other "
                              "endpoint")
+
+
+# 90, 270 and their negatives turn a row into a column; 0 and 180 do not, so a
+# 180-rotated pair still runs along x and must not be read down y.
+SWAPS_AXES = {90, -90, 270, -270}
 
 
 def lint_component_composed_pitch(path, data, lib_roots):
@@ -1736,7 +1821,8 @@ def lint_component_composed_pitch(path, data, lib_roots):
     for p in parts:
         if p.get("ref") and p.get("at"):
             by_ref.setdefault(p["ref"], []).append(
-                (float(p["at"][0]), float(p["at"][1])))
+                (float(p["at"][0]), float(p["at"][1]),
+                 p.get("rotate") in SWAPS_AXES))
     for ref, pts in sorted(by_ref.items()):
         if len(pts) < 2:
             continue
@@ -1748,16 +1834,52 @@ def lint_component_composed_pitch(path, data, lib_roots):
         want = std.get("pitch")
         if not want:
             continue
-        # A cage rotated 90 degrees runs its array down `at`'s y, not its x -
-        # a whole rotated column shares one x, and reading x alone would see
-        # every gap as zero and call that a matched pitch. Only fall back to
-        # y when x carries no information at all (every instance shares it):
-        # anything else - including a genuinely irregular x layout - is left
-        # to the x path and its own irregular-spacing exit below.
-        if len({x for x, _y in pts}) == 1:
-            vals = sorted(y for _x, y in pts)
+        rotated = all(r for _x, _y, r in pts)
+        # A cage rotated 90 degrees runs its array down `at`'s y, not its x - a
+        # whole rotated column shares one x, and reading x alone would see
+        # every gap as zero and call that a matched pitch.
+        #
+        # SHARING AN X IS NOT ENOUGH TO MEAN ROTATED, though, and that is what
+        # this used to test. A duplex shell with its two ports STACKED shares one
+        # x too, and it is not the same part turned: a rotated part keeps its
+        # interface pitch, where a stacked pair is genuinely further apart. The
+        # arithmetic settles it - a std/lc-bore@3 is 6.3 tall, so two of them at
+        # lc-duplex-receptacle's 6.25 would overlap, which means 6.25 never
+        # described a stacked pair in the first place. Reading the y of one would
+        # compare a vertical spacing against a horizontal standard and call the
+        # difference a violation.
+        #
+        # So fall back to y only when the placements SAY they are rotated. A
+        # group that shares one x but is not rotated is skipped below instead -
+        # see why at the `continue`.
+        if len({x for x, _y, _r in pts}) == 1:
+            if len({r for _x, _y, r in pts}) > 1:
+                # NEITHER READING IS SAFE. A rotated column and a stacked pair
+                # both share an x, and `rotate` is the only thing separating
+                # them - so when the placements disagree, reading y compares a
+                # stack against a horizontal standard and reading x compares
+                # zero. Skipping in silence is not free either: it drops a
+                # check that was being made before the stacked case existed,
+                # and the likeliest way to land here is forgetting `rotate` on
+                # one member of a rotated column.
+                err(path, "L81",
+                    f"composes {len(pts)} x {ref} sharing one x, but some are "
+                    "rotated onto the other axis and some are not. A rotated "
+                    "column and a stacked pair share an x for different "
+                    "reasons, so until the placements agree there is no pitch "
+                    "here to read")
+                continue
+            if not rotated:
+                # A stacked pair shares an x by construction, not by chance - it
+                # is not a rotated column, so there is no x-based pitch to read
+                # here either. Falling through to the x path would measure the
+                # gap between two identical x values (zero) and report THAT as
+                # missing this standard's pitch, which is a fabricated number,
+                # not a measurement of the hardware.
+                continue
+            vals = sorted(y for _x, y, _r in pts)
         else:
-            vals = sorted(x for x, _y in pts)
+            vals = sorted(x for x, _y, _r in pts)
         gaps = [round(vals[i] - vals[i - 1], 4) for i in range(1, len(vals))]
         if len(set(gaps)) != 1:
             continue                      # irregular spacing is not a pitch
@@ -1767,18 +1889,18 @@ def lint_component_composed_pitch(path, data, lib_roots):
         if kind == "floor":
             if got < want - 0.01:
                 err(path, "L81",
-                    f"composes {len(pts)} x {ref} at a pitch of {got:g}, "
-                    f"narrower than {key}'s floor of {want:g}. Widen them to at "
-                    f"least the floor, or record `provenance.pitch-note` saying "
-                    f"why this part sits tighter than it")
+                    f"composes {len(pts)} x {ref} at a pitch of {got:.2f}, "
+                    f"narrower than {key}'s floor of {want:.2f}. Widen them to "
+                    f"at least the floor, or record `provenance.pitch-note` "
+                    f"saying why this part sits tighter than it")
             # wider than a floor is compliant, not an exception - raise nothing
         else:
             if abs(got - want) > 0.01:
                 err(path, "L81",
-                    f"composes {len(pts)} x {ref} at a pitch of {got:g} and "
-                    f"{key}'s target is {want:g}. Move them onto the standard, "
-                    f"or record `provenance.pitch-note` saying why this part "
-                    f"differs")
+                    f"composes {len(pts)} x {ref} at a pitch of {got:.2f} and "
+                    f"{key}'s target is {want:.2f}. Move them onto the "
+                    f"standard, or record `provenance.pitch-note` saying why "
+                    f"this part differs")
 
 
 def lint_component_faces_once(path, data):
@@ -6224,6 +6346,8 @@ def main():
                     f, d, args.library,
                     f"{f.parents[2].name}/{d.get('name')}@{f.parent.name[1:]}")
                 lint_component_optical_endpoints(f, d, args.library)
+                lint_component_optical_faces(f, d)
+                lint_component_optical_face_capacity(f, d, args.library)
                 lint_component_optical_conflicts(f, d)
                 lint_component_optical_coverage(f, d, args.library)
                 lint_component_composed_pitch(f, d, args.library)
