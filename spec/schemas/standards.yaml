@@ -990,3 +990,30 @@ standards:
       cover the low profile one. Two figures disagreeing is a fact about the
       parts until something settles it, and it is recorded here rather than
       smoothed over.
+  fhd-lc-cassette:
+    registry: >-
+      MEASURED, NOT READ FROM A STANDARD. No published figure governs how FS
+      spaces the adapters on an FHD cassette face. The pitch comes from FS's own
+      face-on render of SKU 57016 (FHD-1MTP6LCDOS2A), scaled on the 108.97 mm
+      FHD module width and validated against the 35.05 mm height to 1.02%: six
+      bodies 9.28 wide, centres 20.45 33.34 46.23 59.30 72.19 85.08, pitches
+      12.89 12.89 13.06 12.89 12.89.
+    pitch: 12.92
+    pitch-confidence: measured
+    pitch-kind: floor
+    pitch-kind-note: >-
+      A FLOOR, not a target. The bodies do NOT abut - each is 9.28 wide on a
+      12.92 pitch, leaving a real 3.61 mm gap visible in the render - so 12.92
+      is not a physical minimum the way an abutting pitch would be. It is
+      recorded as a floor because nothing in any standard fixes an FHD cassette
+      pitch, so a layout WIDER than the one vendor arrangement measured here is
+      unremarkable while a narrower one is worth a question.
+    notes: >-
+      THIS IS NOT THE IEC 61754-20 LC DUPLEX PITCH and must not be confused with
+      it. `lc-duplex-receptacle` records 6.25 mm, which is the spacing of the two
+      BORES INSIDE one duplex adapter; this is the spacing BETWEEN adapters on a
+      cassette face. The parts are different too: FS's cassette adapter is 9.28
+      wide with its ports stacked vertically, where common/lc-duplex-adapter@3 is
+      13.2 wide with its bores side by side. This entry closes the open question
+      at docs/optical-paths-design.md:287, which read 12.90 against our 13.2 as
+      though one part had been measured two ways.
