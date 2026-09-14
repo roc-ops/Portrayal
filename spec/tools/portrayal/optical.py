@@ -13,6 +13,8 @@ inheriting lint's opinions.
 """
 import re
 
+from faces import DIRECTIONS, face_ref
+
 # The optional `<face>:` prefix is what lets one module's paths reach a part
 # drawn on another of its faces - a cassette's rear MTP lives in the rear face
 # component's `parts:`, not in the cassette's own. Unprefixed means THIS face
@@ -64,9 +66,14 @@ def capacities(contract, load_ref):
                 out[part_key(face, part["id"])] = int(n)
 
     collect(contract, None)
-    for face, spec in (contract.get("faces") or {}).items():
-        doc = load_ref((spec or {}).get("ref")) or {}
-        collect(doc, face)
+    # A face has two legal spellings - `faces.rear` and, for `plan` only, the
+    # legacy top-level `plan:` - and `face_ref` is the one place that knows
+    # both, so going through it here (rather than reading `faces` directly)
+    # is what keeps a legacy-spelled contract's rear capacities visible.
+    for face in DIRECTIONS:
+        ref = face_ref(contract, face)
+        if ref:
+            collect(load_ref(ref) or {}, face)
     return out
 
 

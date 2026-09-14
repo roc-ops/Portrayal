@@ -1692,6 +1692,11 @@ def lint_component_optical_coverage(path, data, lib_roots):
                              "endpoint")
 
 
+# 90, 270 and their negatives turn a row into a column; 0 and 180 do not, so a
+# 180-rotated pair still runs along x and must not be read down y.
+SWAPS_AXES = {90, -90, 270, -270}
+
+
 def lint_component_composed_pitch(path, data, lib_roots):
     """L81: a composed pitch respects the standard the composed part conforms to.
 
@@ -1738,7 +1743,8 @@ def lint_component_composed_pitch(path, data, lib_roots):
     for p in parts:
         if p.get("ref") and p.get("at"):
             by_ref.setdefault(p["ref"], []).append(
-                (float(p["at"][0]), float(p["at"][1]), p.get("rotate") == 90))
+                (float(p["at"][0]), float(p["at"][1]),
+                 p.get("rotate") in SWAPS_AXES))
     for ref, pts in sorted(by_ref.items()):
         if len(pts) < 2:
             continue
@@ -1765,9 +1771,9 @@ def lint_component_composed_pitch(path, data, lib_roots):
         # compare a vertical spacing against a horizontal standard and call the
         # difference a violation.
         #
-        # So fall back to y only when the placements SAY they are rotated.
-        # Anything else - including a genuinely irregular x layout - is left to
-        # the x path and its own irregular-spacing exit below.
+        # So fall back to y only when the placements SAY they are rotated. A
+        # group that shares one x but is not rotated is skipped below instead -
+        # see why at the `continue`.
         if len({x for x, _y, _r in pts}) == 1:
             if not rotated:
                 # A stacked pair shares an x by construction, not by chance - it
