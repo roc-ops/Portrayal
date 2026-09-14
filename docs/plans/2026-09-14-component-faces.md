@@ -56,8 +56,14 @@ not name, stop and report it rather than guessing.
 
 **Who uses `plan:` today:** 13 components — `common/pcie-card-fh/v1`, `common/pcie-card-lp/v1`, and eleven Dell risers (`dell/riser-1a-14g`, `1b`, `1d`, `2a`, `2b`, `2c`, `2d`, `2e`, `2f`, `3a`, `3b`, all `/v1`). One device projects them: `library/devices/dell/r740xd/device.yaml`. Nothing else.
 
+**Where the build lands.** `publish.sh` writes **`library/dist/`** — device
+elevations flat as `<device>.<config>.<view>.svg`, component previews under
+`library/dist/components/` as `<ns>--<name>--v<major>--<skin>.svg`, and the
+index as `library/dist/components.json` (an object with a `components` list of
+574 entries). There is no top-level `dist/`.
+
 **Why a rear face needs no renderer.** `faces.rear` names another component, and
-every component already renders standalone into `dist/components/` via
+every component already renders standalone into `library/dist/components/` via
 `components_index.py`. That is where a modeller looks at a part. The spec chose
 this deliberately over a device-level interior view, which would be the library's
 first non-canonical view name and is its own piece of work.
@@ -351,13 +357,25 @@ be — but "it should be" is not the same as having watched it.
 
 - [ ] **Step 1: Capture the before-picture**
 
-```bash
-./publish.sh --no-images
-shasum -a 256 dist/dell/r740xd/*.svg | sort > /tmp/r740xd-before.txt
-wc -l /tmp/r740xd-before.txt
+**Already captured for you.** I built and hashed it before dispatching, so the
+before-picture is a fixed point rather than something re-derived after you have
+already edited the tree:
+
+```
+.superpowers/sdd/2026-09-14-component-faces/r740xd-before.txt
 ```
 
-Keep that file. Do not commit it.
+246 lines, one per rendered SVG. If you want to re-derive it, the command is
+below — but run it only on a tree you have NOT yet modified.
+
+```bash
+./publish.sh --no-images
+shasum -a 256 library/dist/r740xd.*.svg | sort
+```
+
+Note the paths: `publish.sh` writes to **`library/dist/`**, flat, named
+`<device>.<config>.<view>.svg` — not `dist/<vendor>/<model>/`. The r740xd ships
+246 of them across its configurations, and every one must be unchanged.
 
 - [ ] **Step 2: Write the failing test**
 
@@ -459,12 +477,13 @@ Leave `pl = b.get("plan")` at line 5823 alone.
 
 ```bash
 ./publish.sh --no-images
-shasum -a 256 dist/dell/r740xd/*.svg | sort > /tmp/r740xd-after.txt
-diff /tmp/r740xd-before.txt /tmp/r740xd-after.txt && echo "IDENTICAL"
+shasum -a 256 library/dist/r740xd.*.svg | sort > /tmp/r740xd-after.txt
+diff .superpowers/sdd/2026-09-14-component-faces/r740xd-before.txt \
+     /tmp/r740xd-after.txt && echo "IDENTICAL"
 ```
 
-Expected: `IDENTICAL`. If it is not, stop — something read the bay-side key by
-mistake. Paste the diff into your report and do not proceed.
+Expected: `IDENTICAL`, across all 246 files. If it is not, stop — something read
+the bay-side key by mistake. Paste the diff into your report and do not proceed.
 
 - [ ] **Step 7: Run the tests and the gate chain**
 
@@ -661,11 +680,10 @@ def test_the_index_entry_omits_faces_when_there_are_none():
     Skips when dist is absent so a bare checkout does not fail on it.
     """
     import json
-    f = ROOT / "dist" / "components.json"
+    f = ROOT / "library" / "dist" / "components.json"
     if not f.exists():
-        pytest.skip("dist not built - run ./publish.sh --no-images")
-    d = json.loads(f.read_text())
-    entries = d if isinstance(d, list) else d.get("components", d)
+        pytest.skip("library/dist not built - run ./publish.sh --no-images")
+    entries = json.loads(f.read_text())["components"]
     empty = [e["name"] for e in entries if e.get("faces") == {}]
     assert not empty, f"these carry an empty faces object: {empty}"
 ```
@@ -699,15 +717,17 @@ python3 -m pytest spec/tests/test_faces.py -q
 ./publish.sh --no-images
 python3 -c "
 import json
-d = json.load(open('dist/components.json'))
-e = d if isinstance(d, list) else d.get('components', d)
+e = json.load(open('library/dist/components.json'))['components']
 n = [x for x in e if x.get('faces')]
-print(len(n), 'entries carry faces')
+print(len(n), 'of', len(e), 'entries carry faces')
 for x in n[:3]: print(' ', x['name'], x['faces'])
 "
 ```
 
-Expected: **13 entries carry faces** — the eleven risers via the legacy
+The built index lives at **`library/dist/components.json`** and is an object with
+a `components` list under it — 574 entries — not a bare list.
+
+Expected: **13 of 574 entries carry faces** — the eleven risers via the legacy
 spelling and, from Task 5 onward, the two PCIe cards via the new one. If the
 count is not 13, the accessor is not seeing the legacy spelling; stop and report.
 
@@ -820,8 +840,9 @@ is the point of it.
 
 ```bash
 ./publish.sh --no-images
-shasum -a 256 dist/dell/r740xd/*.svg | sort > /tmp/r740xd-after5.txt
-diff /tmp/r740xd-before.txt /tmp/r740xd-after5.txt && echo "IDENTICAL"
+shasum -a 256 library/dist/r740xd.*.svg | sort > /tmp/r740xd-after5.txt
+diff .superpowers/sdd/2026-09-14-component-faces/r740xd-before.txt \
+     /tmp/r740xd-after5.txt && echo "IDENTICAL"
 ```
 
 Expected: `IDENTICAL`. The two cards now declare their plan the new way and the
