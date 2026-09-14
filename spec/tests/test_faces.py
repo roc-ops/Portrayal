@@ -101,3 +101,61 @@ def test_the_accessor_answers_for_every_part_that_names_a_plan():
              if F.face_ref(yaml.safe_load(p.read_text()) or {}, "plan")]
     assert len(named) == 13, \
         f"expected 13 parts naming a plan drawing, found {len(named)}"
+
+
+def run83(doc, path="t/contract.yaml", name="t/thing@1"):
+    L.ERRORS.clear()
+    L.lint_component_rear_face(path, doc, LIB, name)
+    return [e for e in L.ERRORS if "[L83]" in e]
+
+
+def test_a_rear_face_must_name_a_component_that_exists():
+    got = run83({"faces": {"rear": {"ref": "fs/not-a-real-part@1"}}})
+    assert len(got) == 1, got
+    assert "not in the library" in got[0]
+
+
+def test_a_part_may_not_be_its_own_rear():
+    got = run83({"faces": {"rear": {"ref": "common/mpo-adapter@1"}}},
+                name="common/mpo-adapter@1")
+    assert len(got) == 1, got
+    assert "its own rear" in got[0]
+
+
+def test_a_rear_face_may_not_itself_have_a_rear(tmp_path):
+    """A part has one back. `a`'s rear being `b` whose rear is `c` means nothing.
+
+    Builds its own two-component library rather than leaning on the real one
+    staying arranged as it is - and the real library has no chain to point at,
+    which is exactly why this rule exists before one appears.
+    """
+    d = tmp_path / "components" / "t" / "middle" / "v1"
+    d.mkdir(parents=True)
+    (d / "contract.yaml").write_text(
+        "format: 1\nkind: component\nname: middle\nversion: 1.0.0\n"
+        "class: port\nsize: {w: 1, h: 1}\n"
+        "faces: {rear: {ref: t/deepest@1}}\n")
+    e = tmp_path / "components" / "t" / "deepest" / "v1"
+    e.mkdir(parents=True)
+    (e / "contract.yaml").write_text(
+        "format: 1\nkind: component\nname: deepest\nversion: 1.0.0\n"
+        "class: port\nsize: {w: 1, h: 1}\n")
+
+    L.ERRORS.clear()
+    L.lint_component_rear_face("t/contract.yaml",
+                               {"faces": {"rear": {"ref": "t/middle@1"}}},
+                               [str(tmp_path)], "t/outer@1")
+    got = [e for e in L.ERRORS if "[L83]" in e]
+    assert len(got) == 1, got
+    assert "rear of its own" in got[0]
+
+
+def test_a_real_rear_reference_is_quiet():
+    got = run83({"faces": {"rear": {"ref": "common/mpo-adapter@1"}}})
+    assert got == [], got
+
+
+def test_no_rear_at_all_is_quiet():
+    assert run83({}) == []
+    assert run83({"faces": {"plan": {"ref": "common/mpo-adapter@1"}}}) == []
+

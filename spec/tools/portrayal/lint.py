@@ -216,6 +216,7 @@ RULES = {
     "L80": ("component",  "every fibre position is reached by a path or declared unused with a reason", "route it, or add an `optical.unused` entry saying why it terminates nothing"),
     "L81": ("component",  "a composed pitch respects the standard the part conforms to - equal for a target, no narrower for a floor", "move a target onto the standard's pitch, widen a floor to at least it, or say in provenance why this part differs"),
     "L82": ("component",  "a part names its plan drawing one way or the other, never both", "keep `plan:` or `faces.plan`, not both - they mean the same thing"),
+    "L83": ("component",  "a rear face names a real component, and that component has no rear", "fix the ref, or drop the rear face it names if the chain has no meaning"),
 }
 
 
@@ -1793,6 +1794,33 @@ def lint_component_faces_once(path, data):
             ((data.get("faces") or {}).get("plan") or {}).get("ref"):
         err(path, "L82", "declares both `plan:` and `faces.plan` - they mean the "
                          "same thing, so keep one. `plan:` is the legacy spelling")
+
+
+def lint_component_rear_face(path, data, lib_roots, name=None):
+    """L83: a rear face names a real component, and that component has no rear.
+
+    The rear face is an ordinary part, so a typo in the ref fails silently -
+    nothing draws, and the contract still lints. And because it is an ordinary
+    part it could declare `faces.rear` itself, which has no meaning: a part has
+    ONE back, and a chain of them says the modeller was drawing something else.
+    """
+    if not isinstance(data, dict):
+        return
+    ref = face_ref(data, "rear")
+    if not ref:
+        return
+    if name and ref == name:
+        err(path, "L83", f"names itself as its own rear ({ref})")
+        return
+    cp = resolve_component(ref, lib_roots)
+    if not cp:
+        err(path, "L83", f"names rear face {ref}, which is not in the library")
+        return
+    inner = load_yaml(cp) or {}
+    if face_ref(inner, "rear"):
+        err(path, "L83", f"names rear face {ref}, which declares a rear of its "
+                         "own - a part has one back, so this chain says the "
+                         "wrong part was drawn")
 
 
 def lint_component_fields(path, data, _lib_roots=None):
@@ -6179,6 +6207,11 @@ def main():
                 lint_component_relief_confidence(f, d, args.library)
                 lint_component_body_boxes(f, d)
                 lint_component_faces_once(f, d)
+                # `name` is left None: this loop only has `f` and `d`, not the
+                # namespace/major split the self-reference check needs, and
+                # building it here would mean re-deriving what `resolve_component`
+                # already does elsewhere rather than reusing it.
+                lint_component_rear_face(f, d, args.library)
                 lint_component_optical_endpoints(f, d, args.library)
                 lint_component_optical_conflicts(f, d)
                 lint_component_optical_coverage(f, d, args.library)
