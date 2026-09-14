@@ -20,7 +20,13 @@
   2. `./publish.sh --no-images`
   3. `python3 spec/tools/portrayal/devicelock.py --library library`
   4. `python3 -m pytest spec/tests -q 2>&1 | tail -5`
-- Lint baseline at the start of this plan: `LINT: ok (662 files, 1291 warnings in 22 rules)`. Test baseline: `1426 passed, 1 skipped`. Expected totals in tasks are a GUIDE, not a gate — the binding check is that nothing FAILED and the total only went up.
+- Lint baseline at the start of this plan: `LINT: ok (662 files, 1291 warnings in 22 rules)`, and **every task in this plan should leave that line untouched**. The trailing rule count is `len(_rules(warnings))` (lint.py:6303) — the number of distinct rules that PRODUCED A WARNING, not the number of rules that exist — so adding a rule that finds nothing does not move it. If that line changes, something in the library started warning; find out what before continuing.
+- Test baseline: `1426 passed, 1 skipped`. Expected totals in tasks are a GUIDE, not a gate — the binding check is that nothing FAILED and the total only went up.
+- **ADDING A LINT RULE MEANS REGENERATING ITS DOCS PAGE.** `spec/tests/test_lint_rules_catalogue.py::test_docs_page_matches_the_generator` compares `docs/lint-rules.md` byte for byte against what `lint.RULES` generates, so a new entry in `RULES` fails the suite until you run:
+  ```bash
+  python3 spec/tools/portrayal/lint.py --list-rules --markdown > docs/lint-rules.md
+  ```
+  Do that in the same task that adds the rule, and commit the page with it. This bites Tasks 1 and 3.
 - Commit messages end with `Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>`. Avoid backticks in commit message text: write the message to a file and use `git commit -F`.
 - Do not dispatch subagents from inside a task.
 
@@ -292,7 +298,18 @@ already in use at that site.
 Run: `python3 -m pytest spec/tests/test_faces.py -q`
 Expected: PASS, 7 tests.
 
-- [ ] **Step 7: Run the gate chain**
+- [ ] **Step 7: Regenerate the lint rules page**
+
+L82 is a new entry in `lint.RULES`, and `docs/lint-rules.md` is compared against
+that table byte for byte by
+`spec/tests/test_lint_rules_catalogue.py::test_docs_page_matches_the_generator`.
+Without this the suite fails on a stale page:
+
+```bash
+python3 spec/tools/portrayal/lint.py --list-rules --markdown > docs/lint-rules.md
+```
+
+- [ ] **Step 8: Run the gate chain**
 
 ```bash
 python3 spec/tools/portrayal/lint.py --schemas spec/schemas --library library | tail -3
@@ -301,16 +318,18 @@ python3 spec/tools/portrayal/devicelock.py --library library
 python3 -m pytest spec/tests -q 2>&1 | tail -5
 ```
 
-Expected: lint `LINT: ok (662 files, 1291 warnings in **23** rules)` — the rule
-count goes up by one because L82 is new, and the file and warning counts do not
-move because nothing in the library declares `faces` yet. devicelock 0 findings.
-Roughly `1433 passed, 1 skipped`.
+Expected: lint `LINT: ok (662 files, 1291 warnings in 22 rules)` — **unchanged,
+all three numbers**. The trailing rule count is `len(_rules(warnings))`
+(lint.py:6303): the number of DISTINCT RULES THAT PRODUCED A WARNING, not the
+number of rules that exist. A new rule that finds nothing does not appear in it.
+Nothing in the library declares `faces` yet, so L82 is silent and the tail does
+not move. devicelock 0 findings. Roughly `1433 passed, 1 skipped`.
 
-- [ ] **Step 8: Commit**
+- [ ] **Step 9: Commit**
 
 Write the message to a file and commit `spec/tools/portrayal/faces.py`,
-`spec/schemas/component.schema.json`, `spec/tools/portrayal/lint.py` and
-`spec/tests/test_faces.py`.
+`spec/schemas/component.schema.json`, `spec/tools/portrayal/lint.py`,
+`docs/lint-rules.md` and `spec/tests/test_faces.py`.
 
 ---
 
@@ -365,23 +384,26 @@ def test_lint_reads_a_plan_through_the_accessor():
         "lint.py:~5844 still reads a component's plan directly"
 
 
-def test_a_component_using_the_new_spelling_projects():
-    """The accessor is what makes `faces.plan` land in a device's top view.
+def test_the_accessor_answers_for_every_part_that_names_a_plan():
+    """Thirteen parts name a plan drawing; the accessor must find all of them.
 
-    Reads the real library rather than a fixture: if the two migrated PCIe cards
-    ever lose their `faces.plan`, this says so.
+    Reads the real library rather than a fixture. Spelling-agnostic on purpose -
+    it passes before Task 5's migration and after it, because what it watches is
+    that no part LOSES its plan drawing, not which way the part spells it.
     """
-    p = ROOT / "library/components/common/pcie-card-fh/v1/contract.yaml"
-    c = yaml.safe_load(p.read_text())
-    assert F.face_ref(c, "plan"), "pcie-card-fh@1 names no plan drawing"
+    lib = ROOT / "library/components"
+    named = [p for p in lib.glob("*/*/v*/contract.yaml")
+             if F.face_ref(yaml.safe_load(p.read_text()) or {}, "plan")]
+    assert len(named) == 13, \
+        f"expected 13 parts naming a plan drawing, found {len(named)}"
 ```
 
 - [ ] **Step 3: Run it to verify it fails**
 
 Run: `python3 -m pytest spec/tests/test_faces.py -q`
 Expected: FAIL on `test_render_reads_a_plan_through_the_accessor` — the literal
-read is still there. The third test will also fail until Task 5 migrates the
-cards; that is expected and it passes from Task 5 onward.
+read is still there. The other two pass already: the accessor exists from Task 1
+and the thirteen parts already name their plans the legacy way.
 
 - [ ] **Step 4: Change render.py**
 
@@ -448,10 +470,8 @@ mistake. Paste the diff into your report and do not proceed.
 
 Run the full chain from Global Constraints.
 Expected: lint `LINT: ok (662 files, 1291 warnings in 23 rules)`, devicelock 0,
-roughly `1435 passed, 1 skipped` with
-`test_a_component_using_the_new_spelling_projects` still FAILING until Task 5.
-**If that one test is the only failure, that is expected — note it in your
-report and continue.** Anything else failing is not.
+roughly `1435 passed, 1 skipped`, **nothing failing**. If anything is red, stop
+and report it — no task in this plan ends on a known failure.
 
 - [ ] **Step 8: Commit**
 
@@ -496,13 +516,32 @@ def test_a_part_may_not_be_its_own_rear():
     assert "its own rear" in got[0]
 
 
-def test_a_rear_face_may_not_itself_have_a_rear():
-    """A part has one back. `a`'s rear being `b` whose rear is `c` means nothing."""
-    got = run83({"faces": {"rear": {"ref": "common/lc-duplex-adapter@3"}}})
-    # lc-duplex-adapter@3 has no rear today, so this must be QUIET - the test
-    # that matters is the synthetic one below, which does not depend on the
-    # library staying arranged as it is.
-    assert got == [], got
+def test_a_rear_face_may_not_itself_have_a_rear(tmp_path):
+    """A part has one back. `a`'s rear being `b` whose rear is `c` means nothing.
+
+    Builds its own two-component library rather than leaning on the real one
+    staying arranged as it is - and the real library has no chain to point at,
+    which is exactly why this rule exists before one appears.
+    """
+    d = tmp_path / "components" / "t" / "middle" / "v1"
+    d.mkdir(parents=True)
+    (d / "contract.yaml").write_text(
+        "format: 1\nkind: component\nname: middle\nversion: 1.0.0\n"
+        "class: port\nsize: {w: 1, h: 1}\n"
+        "faces: {rear: {ref: t/deepest@1}}\n")
+    e = tmp_path / "components" / "t" / "deepest" / "v1"
+    e.mkdir(parents=True)
+    (e / "contract.yaml").write_text(
+        "format: 1\nkind: component\nname: deepest\nversion: 1.0.0\n"
+        "class: port\nsize: {w: 1, h: 1}\n")
+
+    L.ERRORS.clear()
+    L.lint_component_rear_face("t/contract.yaml",
+                               {"faces": {"rear": {"ref": "t/middle@1"}}},
+                               [str(tmp_path)], "t/outer@1")
+    got = [e for e in L.ERRORS if "[L83]" in e]
+    assert len(got) == 1, got
+    assert "rear of its own" in got[0]
 
 
 def test_a_real_rear_reference_is_quiet():
@@ -564,13 +603,25 @@ than restructuring the caller.
 Run: `python3 -m pytest spec/tests/test_faces.py -q`
 Expected: PASS.
 
-- [ ] **Step 5: Run the gate chain**
+- [ ] **Step 5: Regenerate the lint rules page**
 
-Expected: `LINT: ok (662 files, 1291 warnings in **24** rules)`, devicelock 0,
-roughly `1440 passed, 1 skipped` (still with the Task 2 test failing until
-Task 5).
+L83 is a new entry in `lint.RULES`, so `docs/lint-rules.md` goes stale and
+`test_docs_page_matches_the_generator` fails until you run:
 
-- [ ] **Step 6: Commit**
+```bash
+python3 spec/tools/portrayal/lint.py --list-rules --markdown > docs/lint-rules.md
+```
+
+Commit the regenerated page with the rule.
+
+- [ ] **Step 6: Run the gate chain**
+
+Expected: `LINT: ok (662 files, 1291 warnings in 22 rules)` — unchanged again,
+for the same reason as Task 1: the tail counts rules that WARNED, and L83 finds
+nothing because no component declares a rear face yet. devicelock 0, roughly
+`1440 passed, 1 skipped`, nothing failing.
+
+- [ ] **Step 7: Commit**
 
 ---
 
@@ -602,12 +653,21 @@ def test_the_index_carries_a_parts_other_faces():
         "viewer cannot know a part has a rear drawing"
 
 
-def test_the_index_entry_omits_faces_when_there_are_none(tmp_path):
-    """An empty dict on 700-odd entries is bytes on every page load."""
-    src = (ROOT / "spec/tools/portrayal/components_index.py").read_text()
-    assert 'entry["faces"] = ' not in src or "if faces" in src or \
-        "if fc:" in src, \
-        "components_index.py must not attach an empty faces object"
+def test_the_index_entry_omits_faces_when_there_are_none():
+    """An empty dict on 700-odd entries is bytes on every page load.
+
+    Reads the BUILT index, not the source that writes it - a source-text
+    assertion passes against code that was rearranged and still emits `{}`.
+    Skips when dist is absent so a bare checkout does not fail on it.
+    """
+    import json
+    f = ROOT / "dist" / "components.json"
+    if not f.exists():
+        pytest.skip("dist not built - run ./publish.sh --no-images")
+    d = json.loads(f.read_text())
+    entries = d if isinstance(d, list) else d.get("components", d)
+    empty = [e["name"] for e in entries if e.get("faces") == {}]
+    assert not empty, f"these carry an empty faces object: {empty}"
 ```
 
 - [ ] **Step 2: Run it to verify it fails**
@@ -653,8 +713,8 @@ count is not 13, the accessor is not seeing the legacy spelling; stop and report
 
 - [ ] **Step 5: Run the gate chain, then commit**
 
-Expected: lint unchanged at 24 rules, devicelock 0, roughly `1442 passed, 1
-skipped`.
+Expected: lint unchanged at `LINT: ok (662 files, 1291 warnings in 22 rules)`,
+devicelock 0, roughly `1442 passed, 1 skipped`.
 
 ---
 
@@ -752,9 +812,9 @@ second copy of it.
 - [ ] **Step 4: Run the tests**
 
 Run: `python3 -m pytest spec/tests/test_faces.py -q`
-Expected: PASS, including
-`test_a_component_using_the_new_spelling_projects` from Task 2, which has been
-failing since then and now passes.
+Expected: PASS. `test_the_accessor_answers_for_every_part_that_names_a_plan`
+from Task 2 still finds thirteen — two of them now spelled the new way — which
+is the point of it.
 
 - [ ] **Step 5: Prove the r740xd render STILL did not move**
 
@@ -781,7 +841,7 @@ go in BEFORE `--update`. Say in your report what you decided and why.
 
 - [ ] **Step 7: Run the full gate chain, then commit**
 
-Expected: lint `LINT: ok (662 files, 1291 warnings in 24 rules)`, devicelock 0,
+Expected: lint `LINT: ok (662 files, 1291 warnings in 22 rules)`, devicelock 0,
 roughly `1446 passed, 1 skipped`, nothing failing.
 
 ---
@@ -824,6 +884,6 @@ and L83 are each used once.
   valuable of the three L83 checks if it is lost.
 - **Expected test totals are guesses.** Only "nothing failed and the total rose"
   is binding, per Global Constraints.
-- **Task 2 leaves one test failing on purpose** until Task 5. That is called out
-  in both tasks. An executor who "fixes" it by migrating the cards early has
-  merged Task 5 into Task 2, which is acceptable if they say so.
+- **No task ends on a known failure.** An earlier draft had Task 2 land a test
+  that only passed after Task 5, which trains a reviewer to accept red. Task 2's
+  library-facing test is now spelling-agnostic and green throughout.
