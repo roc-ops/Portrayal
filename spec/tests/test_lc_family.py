@@ -136,18 +136,41 @@ def test_the_three_faces_compose_the_bore_tongue_up():
             assert p["rotate"] == 180, ref
 
 
-def test_the_adapter_bore_centres_did_not_move():
-    # Three majors of lc-bore have passed under this part and the optical centre
-    # has stayed at (3.3, 5.5) and (9.9, 5.5) through all of them. The dust caps
-    # still plug the bore SQUARE, which still starts at y 3.15.
+def test_the_adapter_bore_centres_sit_on_the_verified_pitch():
+    # Three majors of lc-bore passed under this part with its centres unmoved
+    # at (3.3, 5.5) and (9.9, 5.5) - the Smartoptics stencil's 6.6 pitch. That
+    # was corrected to the standard's verified 6.25 (task 1, connector-components
+    # plan): centres now at (3.475, 5.5) and (9.725, 5.5) - a first pass landed
+    # (3.175, 5.5) and (9.425, 5.5), which held the right 6.25 pitch but got
+    # there from a plan arithmetic error (13.2/2 - 6.25/2 computed as 3.175
+    # instead of 3.475) that left the pair 0.300 off the body's own centre;
+    # review caught it. The dust caps moved with them, so they still plug the
+    # bore SQUARE, which still starts at y 3.15.
     c = contract("common/lc-duplex-adapter@3")
     parts = {p["id"]: p for p in c["parts"]}
-    for pid, x in (("tx", 0.95), ("rx", 7.55)):
+    for pid, x in (("tx", 1.125), ("rx", 7.375)):
         assert parts[pid]["at"] == [x, 1.55]
         # at.y + tongue+shoulder+neck = the square's top edge, rotated
         assert round(parts[pid]["at"][1] + 1.60, 6) == 3.15
-    assert c["elements"]["cap-tx"]["at"] == [0.95, 3.15]
-    assert c["elements"]["cap-rx"]["at"] == [7.55, 3.15]
+    assert c["elements"]["cap-tx"]["at"] == [1.125, 3.15]
+    assert c["elements"]["cap-rx"]["at"] == [7.375, 3.15]
+
+
+def test_the_adapter_bore_pair_is_centred_in_the_body():
+    # Finding 1 of task-1 review: the pitch fix above landed the bores 6.25
+    # apart (correct) but 0.300 left of centre (wrong) - a plan arithmetic
+    # slip, not a placement bug. Nothing asserted the pair's POSITION in the
+    # body, only its pitch, so the mis-centring shipped silently. Assert the
+    # relationship, not the literal coordinates, so this survives the next
+    # legitimate move of either the pitch or the body width: the pair's
+    # midpoint must equal the body's own centre.
+    c = contract("common/lc-duplex-adapter@3")
+    bore_w = contract("std/lc-bore@3")["size"]["w"]
+    xs = sorted(p["at"][0] for p in c["parts"] if p["ref"] == "std/lc-bore@3")
+    centres = [x + bore_w / 2 for x in xs]
+    midpoint = sum(centres) / 2
+    assert round(midpoint, 6) == round(c["size"]["w"] / 2, 6), (
+        f"bore pair midpoint {midpoint} is not the body centre {c['size']['w'] / 2}")
 
 
 def test_the_transceiver_optical_axis_is_below_the_face_centreline():

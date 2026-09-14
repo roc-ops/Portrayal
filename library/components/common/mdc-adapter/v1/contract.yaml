@@ -1,0 +1,72 @@
+format: 1
+kind: component
+name: mdc-adapter
+version: 1.0.0
+class: port
+profile: networking
+description: >-
+  Panel-mount MDC adapter, one small-form-factor body carrying FOUR fibre
+  positions across its two ports (a "2-Port Duplex" adapter: each port is
+  itself a duplex MDC connector), as fitted to an FS FHD MDC panel. Distinct
+  from the other four adapters this task models, all of which are simplex -
+  MDC is duplex like common/sc-duplex-adapter and common/lc-duplex-adapter, at
+  a much smaller footprint, which is the whole point of the connector.
+size: {w: 6.6, h: 8.0}
+size-confidence: {w: borrowed, h: estimated}
+size-notes: >-
+  w borrowed from common/lc-duplex-adapter@3's measured 13.2 mm duplex body,
+  halved for MDC's roughly-double panel density - see provenance/size. h has
+  no derivation at all and stays estimated.
+attrs: {media: fiber, connector: mdc}
+optical:
+  # FOUR FIBRES IN ONE SMALL BODY: FS's catalogue line for SKU 147015 reads
+  # "12x MDC UPC 2-Port Duplex (Blue), 48 Fibers" - 48 / 12 = 4 per adapter,
+  # since each of the two ports is itself a duplex connector (2 fibres each).
+  # A published figure, not a derivation - see the size provenance below.
+  positions: 4
+provenance:
+  size: >-
+    ESTIMATED - NOT A MEASUREMENT, EXCEPT THE FIBRE COUNT. NO RENDER OF AN FS
+    MDC PANEL EXISTS AT ALL IN THIS CORPUS, not even a three-quarter shot of
+    SKU 147015 - there is nothing here to scale from, face-on or otherwise.
+    No IEC part is held for MDC either - US Conec and Senko originated and
+    publish the connector, and no vendor mechanical drawing for either's
+    adapter is in this corpus.
+    w: 6.6 IS A PROPORTION OF A KNOWN, MEASURED PART: common/lc-duplex-adapter@3
+    carries a photo-measured 13.2 mm body width for its own two-fibre duplex
+    adapter. MDC is marketed by US Conec and Senko as roughly twice the
+    density of LC duplex in the same panel space, so half of 13.2 - 6.6 - is
+    adopted here as this duplex adapter's estimated width. h: 8.0 is a plain
+    round-number guess with no derivation behind it, the weakest figure in
+    this contract.
+    THE PITCH IS A DERIVED FIGURE: FS's catalogue line for 147015 lists 12 of
+    these two-port duplex adapters; no render of this panel exists to count
+    rows from, so the two-rows-of-6 layout is INFERRED from the family
+    pattern - every other FS FHD panel this task holds a render for turns out
+    to be two rows, not one - rather than examined directly. A 6-across row
+    spans 5 gaps. Using a ~67 mm envelope bracketed by two face-on sibling
+    panels (35510 and 57058), 67 / (6 - 1) = 13.4. See standards.yaml's
+    `mdc-adapter` entry for the full arithmetic and its `pitch-kind: floor`
+    reasoning.
+    optical.positions: 4 IS NOT AN ESTIMATE: FS's own catalogue line for
+    147015 reads "12x MDC UPC 2-Port Duplex (Blue), 48 Fibers, OS2" - 48
+    fibres over 12 adapters is 4 per adapter, a published figure read
+    directly off the catalogue rather than derived or guessed.
+    What would settle the rest: a face-on photograph of SKU 147015 or its
+    actual panel, a caliper on one real adapter, or a held US Conec/Senko
+    mechanical drawing.
+  face-detail-gap: >-
+    no imagery of this part exists at all, face-on or otherwise - no render of
+    SKU 147015 or its panel is held in this corpus. The two ports' own
+    internal arrangement (side-by-side vs stacked) is not photographed here
+    and is drawn as a plain guess in the skin; no keying or latch detail is
+    modelled.
+  connection-point: >-
+    `optical.at` is the plain centre of the 6.6 x 8.0 mating face -
+    (6.6/2, 8.0/2) = (3.3, 4.0) - the two duplex ports within this body are
+    not modelled individually so there is no finer point to centre on.
+    `size-confidence` marks w borrowed (from common/lc-duplex-adapter@3) and
+    h estimated; neither axis is measured, so this centre is ESTIMATED.
+connection-points:
+  optical: {at: [3.3, 4.0], direction: front}
+skins: [default]

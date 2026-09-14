@@ -213,6 +213,7 @@ RULES = {
     "L78": ("component",  "an optical endpoint names a composed connector and a position it has", "fix the part id or the position number"),
     "L79": ("component",  "no fibre position is claimed twice, and a split's ratios sum to 100", "remove the duplicate path, or fix the ratios"),
     "L80": ("component",  "every fibre position is reached by a path or declared unused with a reason", "route it, or add an `optical.unused` entry saying why it terminates nothing"),
+    "L81": ("component",  "a composed pitch respects the standard the part conforms to - equal for a target, no narrower for a floor", "move a target onto the standard's pitch, widen a floor to at least it, or say in provenance why this part differs"),
 }
 
 
@@ -1684,6 +1685,97 @@ def lint_component_optical_coverage(path, data, lib_roots):
                              "position exists and terminates nothing, so it "
                              "is checked against real hardware like any other "
                              "endpoint")
+
+
+def lint_component_composed_pitch(path, data, lib_roots):
+    """L81: a composed pitch respects the standard the composed part conforms to.
+
+    THE LIBRARY HELD BOTH NUMBERS AND COMPARED NEITHER. standards.yaml carried
+    `lc-duplex-receptacle.pitch: 6.25` at verified confidence, from IEC 61754-20
+    / TIA-604-10 FOCIS 10, while common/lc-duplex-adapter@3 composed its two
+    bores 6.60 apart from a vendor stencil. 5.6% apart, both written down, for as
+    long as both existed.
+
+    A component composing SEVERAL copies of one part that `conforms:` to a
+    standard carrying a `pitch` is making a claim about that pitch whether it
+    means to or not. This checks it. Only the evenly-spaced case is checked -
+    parts at irregular spacing are a different drawing, not a pitch.
+
+    THE FIRST VERSION OF THIS RULE TREATED EVERY PITCH AS A TARGET, AND THAT WAS
+    WRONG. `standards.yaml` states outright, in the notes of five of its six
+    `pitch` entries (`xfp`, `cfp`, `cfp2`, `cxp`, `qsfp-ganged`), that the figure
+    is a FLOOR - a minimum spacing a device may sit wider than - not a fixed
+    target. Only `lc-duplex-receptacle` is a fixed interface pitch. An equality
+    check against a floor flags every device that legitimately spaces its ports
+    out for thermal or mechanical reasons, and the only fix on offer was to
+    write a `provenance.pitch-note` explaining that the "violation" was fine -
+    which is how 18 contracts ended up carrying a note working around a defect
+    in this rule rather than recording a fact about hardware. `pitch-kind` on
+    the standard (`target` or `floor`; absent means `target`, the stricter
+    reading) tells this rule which check applies:
+
+    - `target`: the composed pitch must equal the standard's, as before.
+    - `floor`: the composed pitch must be AT LEAST the standard's - narrower is
+      an error, wider is explicitly allowed and raises nothing.
+
+    The escape hatch is deliberate and narrow: a part that really does violate
+    its standard's pitch - a target it misses, or a floor it undercuts - says so
+    in `provenance.pitch-note`, and the rule stands down. Silence is not an
+    escape hatch. A note is not owed to a floor a part merely exceeds; that is
+    compliance, not an exception.
+    """
+    parts = [p for p in (data.get("parts") or []) if isinstance(p, dict)]
+    if len(parts) < 2:
+        return
+    if (data.get("provenance") or {}).get("pitch-note"):
+        return
+    by_ref = {}
+    for p in parts:
+        if p.get("ref") and p.get("at"):
+            by_ref.setdefault(p["ref"], []).append(
+                (float(p["at"][0]), float(p["at"][1])))
+    for ref, pts in sorted(by_ref.items()):
+        if len(pts) < 2:
+            continue
+        sub = _contract(ref, lib_roots) or {}
+        key = sub.get("conforms")
+        if not key:
+            continue
+        std = STANDARDS.get(key) or {}
+        want = std.get("pitch")
+        if not want:
+            continue
+        # A cage rotated 90 degrees runs its array down `at`'s y, not its x -
+        # a whole rotated column shares one x, and reading x alone would see
+        # every gap as zero and call that a matched pitch. Only fall back to
+        # y when x carries no information at all (every instance shares it):
+        # anything else - including a genuinely irregular x layout - is left
+        # to the x path and its own irregular-spacing exit below.
+        if len({x for x, _y in pts}) == 1:
+            vals = sorted(y for _x, y in pts)
+        else:
+            vals = sorted(x for x, _y in pts)
+        gaps = [round(vals[i] - vals[i - 1], 4) for i in range(1, len(vals))]
+        if len(set(gaps)) != 1:
+            continue                      # irregular spacing is not a pitch
+        got = gaps[0]
+        want = float(want)
+        kind = std.get("pitch-kind", "target")
+        if kind == "floor":
+            if got < want - 0.01:
+                err(path, "L81",
+                    f"composes {len(pts)} x {ref} at a pitch of {got:g}, "
+                    f"narrower than {key}'s floor of {want:g}. Widen them to at "
+                    f"least the floor, or record `provenance.pitch-note` saying "
+                    f"why this part sits tighter than it")
+            # wider than a floor is compliant, not an exception - raise nothing
+        else:
+            if abs(got - want) > 0.01:
+                err(path, "L81",
+                    f"composes {len(pts)} x {ref} at a pitch of {got:g} and "
+                    f"{key}'s target is {want:g}. Move them onto the standard, "
+                    f"or record `provenance.pitch-note` saying why this part "
+                    f"differs")
 
 
 def lint_component_fields(path, data, _lib_roots=None):
@@ -6072,6 +6164,7 @@ def main():
                 lint_component_optical_endpoints(f, d, args.library)
                 lint_component_optical_conflicts(f, d)
                 lint_component_optical_coverage(f, d, args.library)
+                lint_component_composed_pitch(f, d, args.library)
                 lint_component_sink_context(f, d)
                 lint_component_fields(f, d)
                 lint_component_lamp_colour(f, d)
