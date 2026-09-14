@@ -98,7 +98,7 @@ quietly — see that task.
 |---|---|
 | `spec/tools/portrayal/optical.py` | **modify.** `split_endpoint` returns a face as well; `capacities` walks the module's faces; `part_key` joins them back. The one place endpoint spelling is decided. |
 | `spec/schemas/component.schema.json` | **modify.** The `optical-endpoint` pattern accepts an optional `<face>:` prefix. |
-| `spec/tools/portrayal/lint.py` | **modify.** L78 and L80 unpack the new tuple; **L84** is new — a face-qualified endpoint names a face this part actually declares. |
+| `spec/tools/portrayal/lint.py` | **modify.** L78 and L80 unpack the new tuple; L81 stops treating a stacked pair as a rotated column; **L84** is new — a face-qualified endpoint names a face this part actually declares. |
 | `library/components/common/lc-duplex-v-adapter/v1/` | **new.** The vertically-stacked LC duplex adapter FS uses. Contract + skin. |
 | `library/components/fs/fhd-1mtp6lcd-os2-a/v1/` | **new.** The cassette: front face, six adapters, twelve paths, `faces.rear`. |
 | `library/components/fs/fhd-1mtp6lcd-rear/v1/` | **new.** The rear face: the body, one MTP-12, the legends. |
@@ -120,6 +120,7 @@ quietly — see that task.
 - Produces: `split_endpoint(ep)` -> `(face, part, pos)`. `face` is `None` for an unqualified endpoint. **This changes the return arity from 2 to 3** — every caller in `lint.py` must be updated in this task.
 - Produces: `part_key(face, part)` -> `str`. `"rear", "mtp"` -> `"rear:mtp"`; `None, "lc1"` -> `"lc1"`. This is the spelling `capacities()` keys its result by, so a caller can look an endpoint up without reassembling it by hand.
 - Produces: `capacities(contract, load_ref)` now also walks every component named in `contract["faces"]`, keying those parts `"<face>:<id>"`.
+- Produces: L81 falls back to measuring a pitch down `at`'s y only when the placements are ROTATED, not merely when they share an x. Task 2 depends on this — see Step 6.
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -303,14 +304,111 @@ change that keeps its existing message text accurate — if a message names the
 part, it should now name the key, so `rear:mtp` appears in the error rather than
 a bare `mtp` that the reader cannot find in `parts:`.
 
-- [ ] **Step 6: Run the tests and the gate chain**
+- [ ] **Step 6: Teach L81 the difference between a rotated column and a stacked pair**
+
+**This is a prerequisite for Task 2 and the plan will not gate without it.**
+`std/lc-bore@3` declares `conforms: lc-duplex-receptacle`, whose pitch is 6.25
+with `pitch-kind: target`. Task 2's adapter composes two of those bores stacked,
+6.75 apart. L81 would compare 6.75 against 6.25 and error.
+
+It errors because of this, in `lint_component_composed_pitch`:
+
+```python
+        if len({x for x, _y in pts}) == 1:
+            vals = sorted(y for _x, y in pts)
+```
+
+The comment above it says the fallback is for "a cage rotated 90 degrees", whose
+whole column shares one x. That is a real case and it must keep working. But a
+STACKED DUPLEX SHELL also shares one x and is not a rotation: a rotated part is
+the same part turned, so its interface pitch is preserved, while a stacked pair
+is genuinely a different distance apart. The proof is arithmetic — a
+`std/lc-bore@3` is 6.3 mm tall, so two of them 6.25 apart would OVERLAP. 6.25
+cannot describe a stacked pair, which means the standard's pitch does not govern
+this arrangement at all.
+
+**The fix is to gate the fallback on the thing that actually distinguishes them.**
+A rotated column's placements carry `rotate: 90` — verified on all three of the
+rotated Juniper columns (`mic-3d-4xge-xfp-v`, `mic6-100g-cfp2`, `mic6-100g-cxp`).
+A stacked pair carries no rotation. So:
+
+```python
+        # A cage rotated 90 degrees runs its array down `at`'s y, not its x - a
+        # whole rotated column shares one x, and reading x alone would see every
+        # gap as zero and call that a matched pitch.
+        #
+        # SHARING AN X IS NOT ENOUGH TO MEAN ROTATED, though, and that is what
+        # this used to test. A duplex shell with its two ports STACKED shares one
+        # x too, and it is not the same part turned: a rotated part keeps its
+        # interface pitch, where a stacked pair is genuinely further apart. The
+        # arithmetic settles it - a std/lc-bore@3 is 6.3 tall, so two of them at
+        # lc-duplex-receptacle's 6.25 would overlap, which means 6.25 never
+        # described a stacked pair in the first place. Reading the y of one would
+        # compare a vertical spacing against a horizontal standard and call the
+        # difference a violation.
+        #
+        # So fall back to y only when the placements SAY they are rotated.
+        # Anything else - including a genuinely irregular x layout - is left to
+        # the x path and its own irregular-spacing exit below.
+        if len({x for x, _y in pts}) == 1 and rotated:
+            vals = sorted(y for _x, y in pts)
+```
+
+`pts` currently collects `(x, y)` pairs. Widen it to carry each placement's
+rotation so `rotated` can be computed — read the `by_ref` loop above and make
+the smallest change that does it, keeping the existing `float()` conversions.
+`rotated` is true when EVERY placement of that ref is rotated; a mixed group is
+not a rotated column and belongs on the x path.
+
+**Verified before this plan was written: the change is a no-op on today's
+library.** Both readings produce zero L81 hits across all 662 contracts, because
+the three rotated columns all carry `rotate: 90` and all three already carry a
+`provenance.pitch-note` besides. So this widens nothing and silences nothing; it
+stops a rule firing on a part that does not exist yet.
+
+Append these to **`spec/tests/test_pitch_lint.py`**, where L81's existing tests
+live:
+
+```python
+def test_a_stacked_pair_is_not_a_rotated_column():
+    """Sharing an x does not make two parts a rotated column.
+
+    A std/lc-bore@3 is 6.3 tall, so a stacked pair cannot sit at
+    lc-duplex-receptacle's 6.25 without overlapping - which means that pitch
+    never described this arrangement. Before this, L81 read the y of any
+    single-x group and reported the difference as a violation.
+    """
+    doc = {"parts": [
+        {"id": "tx", "ref": "std/lc-bore@3", "at": [2.29, 0.35]},
+        {"id": "rx", "ref": "std/lc-bore@3", "at": [2.29, 7.10]},
+    ]}
+    assert run(doc) == []
+
+
+def test_a_rotated_column_is_still_measured_down_its_y():
+    """The case the fallback exists for, and it must keep working."""
+    doc = {"parts": [
+        {"id": "a", "ref": "std/lc-bore@3", "at": [0.0, 0.0], "rotate": 90},
+        {"id": "b", "ref": "std/lc-bore@3", "at": [0.0, 9.0], "rotate": 90},
+    ]}
+    got = run(doc)
+    assert len(got) == 1, got
+    assert "9.0" in got[0] or "9.00" in got[0]
+```
+
+Match the helper name and import style that file already uses — it will have a
+`run`-style wrapper around `lint_component_composed_pitch` and will already
+populate `L.STANDARDS`, which is empty after a plain import.
+
+- [ ] **Step 7: Run the tests and the gate chain**
 
 Run the full chain from Global Constraints.
 Expected: lint `LINT: ok (662 files, 1291 warnings in 22 rules)` unchanged — no
-contract uses a face-qualified endpoint yet, and the widened pattern rejects
-nothing that was previously valid. devicelock 0. Roughly `1473 passed, 1 skipped`.
+contract uses a face-qualified endpoint yet, the widened pattern rejects nothing
+that was previously valid, and the L81 change is a no-op on every contract in the
+library. devicelock 0. Roughly `1475 passed, 1 skipped`.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 8: Commit**
 
 ---
 
