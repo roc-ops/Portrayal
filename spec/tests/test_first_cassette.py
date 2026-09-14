@@ -140,3 +140,50 @@ def test_the_cassette_names_the_render_it_was_measured_from():
     blob = yaml.safe_dump(c.get("provenance") or {})
     assert "57016" in blob, "provenance must name the SKU it was measured from"
     assert "1.02" in blob, "and the scale check that makes it a measurement"
+
+
+def test_the_cassette_has_a_rear_face():
+    c = contract(CASSETTE)
+    assert ((c.get("faces") or {}).get("rear") or {}).get("ref") == \
+        "fs/fhd-1mtp6lcd-rear@1"
+
+
+def test_the_rear_face_carries_one_mtp():
+    c = contract("fs/fhd-1mtp6lcd-rear/v1")
+    assert c is not None, "fs/fhd-1mtp6lcd-rear@1 not built"
+    mtps = [p for p in c["parts"] if p["ref"] == "common/mpo-adapter@1"]
+    assert len(mtps) == 1, [p["ref"] for p in c["parts"]]
+
+
+def test_the_rear_face_admits_it_was_never_measured():
+    """The one render of this face is a three-quarter; the tool refuses it.
+
+    An estimate that does not say it is one is the failure this whole library is
+    built to avoid, and a rear face is where it would be easiest to hide.
+    """
+    c = contract("fs/fhd-1mtp6lcd-rear/v1")
+    sc = c.get("size-confidence") or {}
+    assert sc.get("w") == "estimated" and sc.get("h") == "estimated"
+    assert "3.77" in (c.get("size-notes") or ""), \
+        "say how far off the render actually is, not just that it is off"
+
+
+def test_all_twelve_fibres_are_routed():
+    """Twelve MTP positions, twelve LC ports, and no position left dark."""
+    c = contract(CASSETTE)
+    paths = (c.get("optical") or {}).get("paths") or []
+    assert len(paths) == 12, f"{len(paths)} paths for a 12-fibre cassette"
+    rear = {e for p in paths for e, _ in O.endpoints(p) if e.startswith("rear:")}
+    assert rear == {f"rear:mtp.{n}" for n in range(1, 13)}
+    front = {e for p in paths for e, _ in O.endpoints(p)
+             if not e.startswith("rear:")}
+    assert front == {f"lc{a}.{b}" for a in range(1, 7) for b in (1, 2)}
+
+
+def test_the_cassette_says_where_its_polarity_map_came_from():
+    """Sourced or assumed, it must say which. Naming the type is not sourcing it."""
+    c = contract(CASSETTE)
+    note = ((c.get("provenance") or {}).get("optical") or "")
+    assert note, "no provenance for the fibre mapping at all"
+    assert ("fig-" in note) or ("ASSUMPTION" in note.upper()), \
+        "either name the figure it was read from, or say plainly it is assumed"
