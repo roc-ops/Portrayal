@@ -105,15 +105,27 @@ class Dist:
         return out
 
     def manufacturer_of(self, ns):
-        """Which manufacturer ships a namespace, learned from the devices.
+        """Which manufacturer ships a namespace.
 
-        `common/` and `std/` are deliberately absent: a part with no vendor is
-        not something a DCIM can order.
+        LEARNED FROM THE DEVICES FIRST, and that order is load-bearing rather
+        than incidental: `dell` reports `Dell` from its devices and `Dell
+        Technologies` from vendors.yaml, `juniper` reports `Juniper` against
+        `Juniper Networks`, `edgecore` the same way. Looking in the registry
+        first would rename the manufacturer on several hundred existing export
+        files.
+
+        THE REGISTRY IS THE FALLBACK, for a vendor that ships parts before it
+        ships a chassis - FS sells cassettes that seat in an enclosure nothing
+        has modelled yet, and requiring a device first is an accident of how
+        this join was built rather than a statement about what is orderable.
+        `common/` and `std/` stay absent because they are absent from
+        vendors.yaml, so the rule this docstring used to state as a special case
+        now holds by data.
         """
         for d in self._devices:
             if d.get("ns") == ns:
                 return d.get("manufacturer")
-        return None
+        return (self.vendors.get(ns) or {}).get("display") or None
 
     # ---- registries ---------------------------------------------------------
 

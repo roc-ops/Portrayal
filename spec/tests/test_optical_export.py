@@ -60,3 +60,51 @@ def test_capacities_answers_from_the_built_index():
                         lambda ref: idx.get(ref))
     assert caps == {"lc1": 2, "lc2": 2, "lc3": 2, "lc4": 2, "lc5": 2, "lc6": 2,
                     "rear:mtp": 12}
+
+
+def test_the_cassette_is_an_orderable_module():
+    """`kind` says whether it is orderable; `class` says what it is.
+
+    The cassette declared `kind: component` with `class: module`, which is the
+    two fields the wrong way round - every Smartoptics module declares
+    `kind: module` with a descriptive class. The cost was silent: `Dist.modules()`
+    selects on `kind`, so the part simply never reached the exporter.
+    """
+    idx = index()
+    c = idx["fs/fhd-1mtp6lcd-os2-a@1"]
+    assert c["kind"] == "module"
+    assert c["class"] != "module", "`class: module` says nothing; name the thing"
+
+
+def test_the_rear_face_is_not_separately_orderable():
+    """A face is a drawing of the part, not a second product to order."""
+    idx = index()
+    assert idx["fs/fhd-1mtp6lcd-rear@1"]["kind"] == "component"
+
+
+def test_a_vendor_with_no_device_can_still_ship_modules():
+    import sys as _s
+    _s.path.insert(0, str(ROOT / "spec/tools/portrayal"))
+    from artifacts import Dist
+    d = Dist(str(DIST))
+    assert d.manufacturer_of("fs") == "FS.com"
+
+
+def test_the_device_lookup_still_wins_over_the_registry():
+    """NOT incidental. `dell` reports `Dell` from its devices and `Dell
+    Technologies` from vendors.yaml; `juniper` and `edgecore` differ the same
+    way. A vendors-first lookup would rename the manufacturer on several hundred
+    existing export files."""
+    from artifacts import Dist
+    d = Dist(str(DIST))
+    assert d.manufacturer_of("dell") == "Dell"
+    assert d.manufacturer_of("juniper") == "Juniper"
+
+
+def test_a_namespace_with_no_vendor_is_still_not_orderable():
+    """`common/` and `std/` are absent from vendors.yaml, so the property
+    `manufacturer_of` documents holds by data rather than by a special case."""
+    from artifacts import Dist
+    d = Dist(str(DIST))
+    assert d.manufacturer_of("common") is None
+    assert d.manufacturer_of("std") is None
