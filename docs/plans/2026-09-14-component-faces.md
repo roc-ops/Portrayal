@@ -488,7 +488,7 @@ the bay-side key by mistake. Paste the diff into your report and do not proceed.
 - [ ] **Step 7: Run the tests and the gate chain**
 
 Run the full chain from Global Constraints.
-Expected: lint `LINT: ok (662 files, 1291 warnings in 23 rules)`, devicelock 0,
+Expected: lint `LINT: ok (662 files, 1291 warnings in 22 rules)`, devicelock 0,
 roughly `1435 passed, 1 skipped`, **nothing failing**. If anything is red, stop
 and report it — no task in this plan ends on a known failure.
 
