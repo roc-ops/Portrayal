@@ -181,3 +181,54 @@ def test_a_stacked_pair_that_agrees_is_still_silent():
         {"id": "rx", "ref": "std/lc-bore@3", "at": [2.29, 7.10]},
     ]}
     assert run(doc) == []
+
+
+# --- the standards L81 can actually reach ------------------------------------
+
+def test_every_standard_with_a_pitch_is_conformed_to_by_something():
+    """A pitch nothing names is a fact nothing checks.
+
+    L81 reads `conforms` off the COMPOSED part, so a registry entry no
+    component names can never be compared against anything - the rule exits at
+    `if not key: continue` long before the pitch is read. Seven entries were in
+    that state at once (six connector adapters from the connector-components
+    work, plus the FHD cassette), each carrying a measured or reasoned pitch
+    that nothing could enforce.
+
+    This is the guard that keeps a new entry from joining them.
+    """
+    import pathlib
+    import yaml as Y
+    s = Y.safe_load((ROOT / "spec/schemas/standards.yaml").read_text())["standards"]
+    pitched = {k for k, v in s.items()
+               if isinstance(v, dict) and v.get("pitch") is not None}
+    conformed = set()
+    for p in pathlib.Path(ROOT / "library/components").glob("*/*/v*/contract.yaml"):
+        d = Y.safe_load(p.read_text()) or {}
+        if d.get("conforms"):
+            conformed.add(d["conforms"])
+    inert = sorted(pitched - conformed)
+    assert not inert, \
+        f"these carry a pitch that no component names, so L81 never reads it: {inert}"
+
+
+def test_a_wired_standards_floor_is_actually_enforced():
+    """Proof the wiring does something, not merely that the key is present.
+
+    Three SC adapters at 12.0 sit inside `sc-duplex-adapter`'s measured 13.0
+    floor. Before the adapter named the standard this composed silently.
+    """
+    doc = {"parts": [{"id": f"p{i}", "ref": "common/sc-duplex-adapter@1",
+                      "at": [x, 0.0]}
+                     for i, x in enumerate((0.0, 12.0, 24.0))]}
+    got = run(doc)
+    assert len(got) == 1, got
+    assert "12.00" in got[0] and "13.00" in got[0], got
+
+
+def test_a_wired_standards_floor_allows_a_wider_layout():
+    """It is a FLOOR - a panel may space its adapters further apart."""
+    doc = {"parts": [{"id": f"p{i}", "ref": "common/sc-duplex-adapter@1",
+                      "at": [x, 0.0]}
+                     for i, x in enumerate((0.0, 13.5, 27.0))]}
+    assert run(doc) == []

@@ -4923,7 +4923,15 @@ def _aperture_of(ref, lib_roots, depth=0):
     conf = ct.get("conforms")
     if conf and conf in STANDARDS:
         st = STANDARDS[conf]
-        return (st["w"], st["h"]), (0.0, 0.0)
+        # A PITCH-ONLY ENTRY STATES NO APERTURE. Six registry entries hold a
+        # pitch and no `w`/`h` - a panel adapter's OPENING is standardised
+        # where its bezel is not - so indexing them here raised KeyError the
+        # moment anything declared `conforms:` to one. Falling through to the
+        # parts walk is the right answer as well as the safe one: the aperture
+        # is then read from whatever this part composes, exactly as it is for
+        # a part that names no standard at all.
+        if st.get("w") is not None and st.get("h") is not None:
+            return (st["w"], st["h"]), (0.0, 0.0)
     found = []
     for part in (ct.get("parts") or []):
         sub = _aperture_of(part.get("ref", ""), lib_roots, depth + 1)
