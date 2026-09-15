@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: pbc
-version: 1.0.0
+version: 2.0.0
 maturity: modelled
 manufacturer: MaiaEdge
 model: PBC
@@ -38,7 +38,20 @@ provenance:
     is common/rj45-eth@1 and a console or timing jack is std/rj45@2. CON is the
     console, so it is the std part; MGMT and CTRL are the two 1GB management ports the
     datasheet counts, so they are the Ethernet part. All three were std/rj45@2 in the
-    first draft and the rule caught it.
+    first draft and the rule caught it. THE TWO ETHERNET JACKS ARE FITTED TAB UP and
+    the console jack is not: the photograph reads MGMT's and CTRL's contacts along the
+    bottom of the opening with the latch slot above, and CON's the other way about.
+    Declared as rotate 180, because a jack fitted the other way up is the same jack
+    turned over rather than a reflection of it, and its lamps really do change sides.
+  usb: >-
+    the bare std/usb-a@1 receptacle, not the bezelled common/usb-a@3. That part wraps
+    the opening in a silver plate spanning the component so it can abut its neighbours'
+    bezels, which is the S9510-28DC's face; here the photograph shows a narrow slot
+    straight through the faceplate with no plate around it. KNOWN WRONG, AND NOT THIS
+    DEVICE'S TO FIX: the datasheet says USB 2.0 and std/usb-a@1's only skin paints the
+    tongue USB-3 blue, which on a front panel means 3.0 to anyone reading it. Ten
+    devices place that part, so the answer is a second skin on the standard component
+    rather than anything written here.
   ports: >-
     datasheet page 3 - "Dual 100GbE Ethernet (QSFP28)", "2x 1GB RJ45" management,
     "1x USB 2.0", "RJ45 115.2 kbps" console. Confirmed on the hardware: the front
@@ -163,27 +176,31 @@ views:
       # the cut, not a stripe on a flat plate
       - {id: bead-left, at: [8.0, 6.0], size: [132.0, 29.0], shape: octagon, fill: none, stroke: '#f5b21c', stroke-width: 1.5, kind: bezel}
       - {id: bead-right, at: [232.0, 6.0], size: [132.0, 29.0], shape: octagon, fill: none, stroke: '#f5b21c', stroke-width: 1.5, kind: bezel}
-      - {id: right-panel, at: [380.0, 8.0], size: [36.0, 25.0], fill: '#16181b', stroke: '#2a2d31', stroke-width: 0.6, rx: 2.0, kind: recess}
-      - {id: right-panel-mesh, at: [382.0, 10.0], size: [14.0, 21.0], pattern: holes, vent: 12}
+      # A BLANK GREY BOX, DELIBERATELY. Nobody can put a part number to the
+      # recess at this end (see gaps `right-panel-identity`), so it draws as a
+      # plain plate: the perforated left third the first draft gave it was read
+      # off a photograph in which the surface is mostly reflection, and drawing
+      # a vent field there asserted a vent nobody has seen.
+      - {id: right-panel, at: [380.0, 8.0], size: [36.0, 25.0], fill: '#42464b', rx: 2.0, kind: recess}
       cutouts:
       - {id: port-1, at: [20.575, 20.2], size: [18.5, 9.58], shape: rect}
       - {id: port-2, at: [40.075, 20.2], size: [18.5, 9.58], shape: rect}
       - {id: port-led-1, at: [28.75, 16.0], size: [2.0, 2.0], shape: circle}
       - {id: port-led-2, at: [48.25, 16.0], size: [2.0, 2.0], shape: circle}
-      - {id: usb, at: [253.75, 19.6], size: [4.5, 12.0], shape: rect}
-      - {id: status-1, at: [12.0, 13.6], size: [2.0, 2.0], shape: circle}
-      - {id: status-2, at: [12.0, 17.6], size: [2.0, 2.0], shape: circle}
-      - {id: status-3, at: [12.0, 21.6], size: [2.0, 2.0], shape: circle}
-      - {id: status-4, at: [12.0, 25.6], size: [2.0, 2.0], shape: circle}
-      - {id: con, at: [266.0, 19.0], size: [15.8, 13.2], shape: rect}
-      - {id: mgmt, at: [296.0, 19.0], size: [15.8, 13.2], shape: rect}
-      - {id: ctrl, at: [326.0, 19.0], size: [15.8, 13.2], shape: rect}
+      - {id: usb, at: [242.15, 19.6], size: [4.5, 12.0], shape: rect}
+      - {id: status-1, at: [16.0, 13.6], size: [2.0, 2.0], shape: circle}
+      - {id: status-2, at: [16.0, 17.6], size: [2.0, 2.0], shape: circle}
+      - {id: status-3, at: [16.0, 21.6], size: [2.0, 2.0], shape: circle}
+      - {id: status-4, at: [16.0, 25.6], size: [2.0, 2.0], shape: circle}
+      - {id: con, at: [266.58, 19.0], size: [15.8, 13.2], shape: rect}
+      - {id: mgmt, at: [302.32, 19.0], size: [15.8, 13.2], shape: rect}
+      - {id: ctrl, at: [338.05, 19.0], size: [15.8, 13.2], shape: rect}
       - {id: sys-led, at: [359.2, 30.2], size: [4.0, 4.0], shape: circle}
     silkscreen:
     - {at: [196.0, 24.0], text: MaiaEdge, font-size: 9.0, fill: '#f2a71b', anchor: middle, for: chassis}
-    - {at: [273.9, 15.5], text: CON, for: con}
-    - {at: [303.9, 15.5], text: MGMT, for: mgmt}
-    - {at: [333.9, 15.5], text: CTRL, for: ctrl}
+    - {at: [274.48, 15.5], text: CON, for: con}
+    - {at: [310.22, 15.5], text: MGMT, for: mgmt}
+    - {at: [345.95, 15.5], text: CTRL, for: ctrl}
     components:
       placements:
       - {ref: common/rack-ear@1, id: ear-left, at: [-14.0, -1.1], skin: left, optional: ears, group: furniture, rel-pos: 1}
@@ -199,14 +216,27 @@ views:
       - {ref: common/qsfp-cage@2, id: port-2, at: [39.5, 19.6], group: qsfp28, rel-pos: 2}
       - {ref: common/led-dot@1, id: port-led-1, at: [28.75, 16.0], for: port-1, group: furniture, rel-pos: 8}
       - {ref: common/led-dot@1, id: port-led-2, at: [48.25, 16.0], for: port-2, group: furniture, rel-pos: 9}
-      - {ref: common/usb-a@3, id: usb, at: [247.5, 20.95], rotate: 90, group: mgmt, rel-pos: 1}
-      - {ref: common/led-dot@1, id: status-1, at: [12.0, 13.6], for: chassis, group: furniture, rel-pos: 4}
-      - {ref: common/led-dot@1, id: status-2, at: [12.0, 17.6], for: chassis, group: furniture, rel-pos: 5}
-      - {ref: common/led-dot@1, id: status-3, at: [12.0, 21.6], for: chassis, group: furniture, rel-pos: 6}
-      - {ref: common/led-dot@1, id: status-4, at: [12.0, 25.6], for: chassis, group: furniture, rel-pos: 7}
-      - {ref: std/rj45@2, id: con, at: [266.0, 19.0], group: mgmt, rel-pos: 2}
-      - {ref: common/rj45-eth@1, id: mgmt, at: [296.0, 19.0], group: mgmt, rel-pos: 3}
-      - {ref: common/rj45-eth@1, id: ctrl, at: [326.0, 19.0], group: mgmt, rel-pos: 4}
+      # THE BARE RECEPTACLE, NOT THE BEZELLED ONE. common/usb-a@3 wraps the
+      # opening in a silver plate that spans the part so it can abut its
+      # neighbours' bezels - that is the S9510-28DC's face, where the USB and
+      # the jacks share one strip of metal. Here the photograph shows a narrow
+      # slot straight through the faceplate with no plate around it, so the
+      # standard aperture is the whole part.
+      - {ref: std/usb-a@1, id: usb, at: [238.4, 23.35], rotate: 90, group: mgmt, rel-pos: 1}
+      - {ref: common/led-dot@1, id: status-1, at: [16.0, 13.6], for: chassis, group: furniture, rel-pos: 4}
+      - {ref: common/led-dot@1, id: status-2, at: [16.0, 17.6], for: chassis, group: furniture, rel-pos: 5}
+      - {ref: common/led-dot@1, id: status-3, at: [16.0, 21.6], for: chassis, group: furniture, rel-pos: 6}
+      - {ref: common/led-dot@1, id: status-4, at: [16.0, 25.6], for: chassis, group: furniture, rel-pos: 7}
+      - {ref: std/rj45@2, id: con, at: [266.58, 19.0], group: mgmt, rel-pos: 2}
+      # THE TWO ETHERNET JACKS ARE FITTED TAB UP. The photograph reads their
+      # contacts along the BOTTOM of the opening and the latch slot at the top;
+      # the part is drawn tab down, which is how the console jack beside them
+      # does sit. A jack fitted the other way up is the same jack turned through
+      # 180 degrees, not a reflection of it, so that is what is declared - and
+      # the two lamps travel with it to the other side, because on the hardware
+      # they do.
+      - {ref: common/rj45-eth@1, id: mgmt, at: [302.32, 19.0], rotate: 180, group: mgmt, rel-pos: 3}
+      - {ref: common/rj45-eth@1, id: ctrl, at: [338.05, 19.0], rotate: 180, group: mgmt, rel-pos: 4}
       # THE STATUS LAMP IS ON THE CHAMFER, not centred on the face. The
       # photograph puts it in the notch outside the right window's lower-right
       # 45-degree edge, low and clear of the bead - modelled here as the
@@ -274,10 +304,12 @@ gaps:
   note: >-
     The recessed rectangle at the right end of the front face is drawn as decor because
     nobody can put a part number to it. The product render shows it smooth and uniform,
-    which reads as a display; the photograph shows two zones, a honeycomb-perforated
-    left third and a smooth remainder, which reads as a vent beside something. It is
-    modelled as a recess with a perforated region and NO identity is claimed. If it is
-    an LCD it deserves a real component rather than paint.
+    which reads as a display; the photograph shows what could be a honeycomb-perforated
+    left third, which would read as a vent beside something - but that surface is mostly
+    reflection in every photograph held, and a first draft that drew the perforation was
+    asserting a vent nobody has seen. IT IS NOW A BLANK GREY PLATE: the recess is
+    certain, its surface is not, and a plain box is the only honest way to draw the
+    difference. If it is an LCD it deserves a real component rather than paint.
 - what: front-indicator-meanings
   scope: [front]
   reason: vendor-silent
