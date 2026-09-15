@@ -250,3 +250,78 @@ def test_saying_nothing_about_the_rear_kind_is_quiet():
     """Every cassette built so far has a connector on the back and says nothing."""
     assert run87({"faces": {"rear": {"ref": "t/x@1"}},
                   "optical": {"paths": [{"from": "a.1", "to": "rear:b.1"}]}}) == []
+
+
+def test_front_numbering_follows_at_x_not_id_order(tmp_path):
+    """`_front_parts` orders adapters "across the face by `at.x`", by its own
+    docstring - but until now nothing proved the BUILT index it actually reads
+    at runtime carries `at.x` at all.
+
+    `components_index.py` published only `ref`, `id` and `attrs` per part.
+    Every part's `at` therefore read as the shared default `[0, 0]`, and
+    `_front_parts`' sort fell through to comparing the part-id STRING - quiet
+    for every real cassette so far only because their ids (`lc1`..`lc6` on
+    fhd-1mtp6lcd-os2-a, `lc01`..`lc12` on fhd-2mtp12-lc-os2-a) already sort in
+    face order. `id lc9` at x=10.0 (physically first) and `id lc10` at x=90.0
+    (physically second) disagree with their string order
+    (`"lc10" < "lc9"`), so this is the case that tells the two failure modes
+    apart: the fix must publish `at` on the built index entry, not merely
+    leave `_front_parts` alone.
+
+    This runs the REAL `components_index.py` CLI against a throwaway
+    component (composing the real common/lc-duplex-v-adapter@1, resolved from
+    this library) rather than constructing an index entry by hand, because a
+    hand-built entry that already carries `at` cannot tell a working
+    `_front_parts` apart from a `components_index.py` that silently drops it
+    before the projection ever sees it - which is exactly the bug that
+    shipped. Confirmed to fail against components_index.py before `at` was
+    added to its `parts` projection (labels came out lc10->1,2 / lc9->3,4 -
+    backwards) and to pass after.
+    """
+    import json
+    import subprocess
+
+    comp = tmp_path / "components" / "t" / "lctest" / "v1"
+    (comp / "skins").mkdir(parents=True)
+    (comp / "contract.yaml").write_text("""\
+format: 1
+kind: module
+name: lctest
+version: 1.0.0
+class: cassette
+description: throwaway component proving components_index publishes `at` on parts.
+size: {w: 100.0, h: 20.0}
+attrs: {media: fiber}
+parts:
+  - {id: lc10, ref: common/lc-duplex-v-adapter@1, at: [90.0, 3.0]}
+  - {id: lc9, ref: common/lc-duplex-v-adapter@1, at: [10.0, 3.0]}
+optical:
+  polish: upc
+  paths:
+    - {from: lc9.1, to: lc9.2}
+    - {from: lc10.1, to: lc10.2}
+skins: [default]
+""")
+    (comp / "skins" / "default.svg").write_text(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="100.0mm" height="20.0mm" '
+        'viewBox="0 0 100.0 20.0"><rect x="0" y="0" width="100.0" height="20.0"/></svg>\n')
+
+    out = tmp_path / "dist"
+    subprocess.run(
+        [sys.executable, str(ROOT / "spec/tools/portrayal/components_index.py"),
+         "--library", str(ROOT / "library"), "--library", str(tmp_path),
+         "--out", str(out)],
+        check=True, capture_output=True, text=True)
+
+    idx = {f"{e['ns']}/{e['name']}@{e['major'][1:]}": e
+           for e in json.loads((out / "components.json").read_text())["components"]}
+    e = idx["t/lctest@1"]
+    assert all("at" in p for p in e["parts"]), \
+        f"components_index dropped `at` from the built entry: {e['parts']}"
+
+    import dcim_export as D
+    view = D.contract_view(e)
+    assert P.front_label(view, "lc9.1", idx.get) == "1"
+    assert P.front_label(view, "lc9.2", idx.get) == "2"
+    assert P.front_label(view, "lc10.1", idx.get) == "3"
+    assert P.front_label(view, "lc10.2", idx.get) == "4"

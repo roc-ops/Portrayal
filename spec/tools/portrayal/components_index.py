@@ -121,10 +121,18 @@ def main():
                 # ATTRS TOO, because a placement is more specific than its ref:
                 # the same SFP cage is 1G or 10G depending on `attrs.media` and
                 # `attrs.speed` on the PART, and without them ten Casa SMM ports
-                # exported as 1000base-x when they are 10gbase-x. `at` stays
-                # absent: nothing outside the renderer needs a part's position,
-                # and this file is fetched on every page load.
-                "parts": [{k: p[k] for k in ("ref", "id", "attrs") if k in p}
+                # exported as 1000base-x when they are 10gbase-x. AND `at`,
+                # which used to stay absent on the theory that nothing outside
+                # the renderer needs a part's position - wrong: `optical_ports.
+                # _front_parts` orders a module's front connectors "across the
+                # face by `at.x`", by its own docstring, and reads this index,
+                # not the contract. Without `at` here every part's position
+                # read as the same default and the sort fell through to
+                # comparing the id STRING - silently correct only for ids
+                # already in face order (`lc1`..`lc6`), and silently wrong past
+                # nine of them (`"lc10" < "lc4"`). Carried here now, omitted
+                # when the contract has none, matching `id`/`attrs`.
+                "parts": [{k: p[k] for k in ("ref", "id", "at", "attrs") if k in p}
                           for p in data.get("parts") or []],
                 # SPLIT OFF BELOW, not dropped. Both are carried on the entry so
                 # everything downstream of here (relief-confidence, the defect
