@@ -127,6 +127,15 @@ def test_a_single_faced_module_with_paths_exports_no_ports():
     single-faced module, however many fibre positions it carries, projects to
     neither `front-ports` nor `rear-ports` rather than guessing: exporting one
     side alone is exactly what netbox#21830 rejected.
+
+    THE LOOKUP RESOLVES FOR REAL. A `lambda ref: None` stub makes every part's
+    fibre count zero regardless of the gate this test exists to check - delete
+    the rear-face gate in `build_module` and `ports()` still answers empty
+    fronts, because `optical.capacities` cannot see any positions either way.
+    So this uses the same `known` dict shape `test_a_split_carries_its_ratio`
+    uses below: the adapters genuinely resolve to two fibre positions each,
+    which is what makes the gate the thing standing between this contract and
+    a non-empty `front-ports`.
     """
     import dcim_export as D
     contract = {
@@ -142,7 +151,8 @@ def test_a_single_faced_module_with_paths_exports_no_ports():
                               {"at": "split.2", "ratio": 50}]}],
         },
     }
-    doc = D.build_module(contract, "Vendor", lambda ref: None)
+    known = {"common/lc-duplex-adapter@3": {"optical": {"positions": 2}}}
+    doc = D.build_module(contract, "Vendor", known.get)
     assert "front-ports" not in doc
     assert "rear-ports" not in doc
 

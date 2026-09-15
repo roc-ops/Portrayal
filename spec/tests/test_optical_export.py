@@ -283,3 +283,137 @@ def test_every_vendor_fibre_module_actually_reaches_the_exports():
         if not hits:
             missing.append(model)
     assert not missing, f"modelled, has fibres, exports nothing: {missing}"
+
+
+# ---------------------------------------------------------------------------
+# Section D: "every fibre-map row's endpoints exist in the EXPORTED ports."
+#
+# Every assertion above either re-derives `optical_ports.ports()` in-process or
+# checks that a file merely exists. Neither notices `export_modules` dropping
+# the `load_ref` argument at its `build_module` call site: `optical.capacities`
+# would then answer `{}` for every part - both YAMLs would ship with no
+# `front-ports` and no `rear-ports` - while `export_modules` still writes the
+# twelve-row fibre map naming `MTP-1` and fronts `1..12`, because `fibre_map`
+# is built from the same contract independently of what `build_module` wrote.
+# Every test above stays green through that: the in-process re-derivation still
+# has a real `load_ref` (`idx.get`), and the file-existence checks do not look
+# inside the file. So the tests below read the ACTUAL EXPORTED YAML - never
+# re-deriving it - and cross-check it against the fibre map and against the
+# projection.
+def _exported_module_doc(target, manufacturer, model):
+    """The actual exported module-type YAML, read off disk - not re-derived."""
+    f = (EXPORTS / target / "module-types" / manufacturer
+         / (model.replace("/", "-") + ".yaml"))
+    if not f.exists():
+        return None
+    return yaml.safe_load(f.read_text())
+
+
+def _exported_fibre_map(manufacturer, model):
+    f = EXPORTS / "fibre-maps" / manufacturer / (model.replace("/", "-") + ".yaml")
+    if not f.exists():
+        return None
+    return yaml.safe_load(f.read_text())
+
+
+def test_the_exported_module_files_carry_the_ports_the_graph_implies():
+    """Read the file. Not `optical_ports.ports()` again - the file.
+
+    For every projecting module, in BOTH targets: `front-ports` and
+    `rear-ports` are non-empty, and their name sets exactly equal what
+    `optical_ports.ports()` derives from the same contract. Dropping the
+    `load_ref` argument at the `export_modules` call site makes the exported
+    file's port lists empty while this stays the one place that would notice,
+    because everything else on this branch re-derives instead of reading.
+    """
+    if not EXPORTS.exists():
+        pytest.skip("library/exports not built - run ./publish.sh --no-images")
+    import dcim_export as D
+    import optical_ports as P
+    from artifacts import Dist
+    dist = Dist(str(DIST))
+    idx = index()
+    checked = 0
+    for e in projecting_modules(idx):
+        man = dist.manufacturer_of(e.get("ns"))
+        if not man:
+            continue
+        model = str((e.get("attrs") or {}).get("model") or e["name"])
+        view = D.contract_view(e)
+        expected = P.ports(view, idx.get)
+        exp_front = {p["name"] for p in expected["front"]}
+        exp_rear = {p["name"] for p in expected["rear"]}
+        assert exp_front and exp_rear, \
+            f"{model}: the graph itself carries no ports - this guard is vacuous"
+        for target in D.TARGETS:
+            doc = _exported_module_doc(target, man, model)
+            assert doc is not None, f"{model} ({target}): no exported file"
+            got_front = {p["name"] for p in doc.get("front-ports") or []}
+            got_rear = {p["name"] for p in doc.get("rear-ports") or []}
+            assert got_front, f"{model} ({target}): exported front-ports is empty"
+            assert got_rear, f"{model} ({target}): exported rear-ports is empty"
+            assert got_front == exp_front, \
+                f"{model} ({target}): exported front-ports {got_front} != {exp_front}"
+            assert got_rear == exp_rear, \
+                f"{model} ({target}): exported rear-ports {got_rear} != {exp_rear}"
+            checked += 1
+    assert checked, "no projecting module was checked - this guard is vacuous"
+
+
+def test_every_fibre_map_row_names_ports_in_the_exported_file():
+    """Section D, read literally: a row's endpoints exist in the EXPORTED ports.
+
+    `test_every_fibre_map_row_names_ports_that_exist` above checks the row
+    against `optical_ports.ports()` re-derived in-process, which stays right
+    even when the exported file itself is empty. This reads the file the fibre
+    map is meant to describe.
+    """
+    if not EXPORTS.exists():
+        pytest.skip("library/exports not built - run ./publish.sh --no-images")
+    import dcim_export as D
+    from artifacts import Dist
+    dist = Dist(str(DIST))
+    idx = index()
+    checked = 0
+    for e in projecting_modules(idx):
+        man = dist.manufacturer_of(e.get("ns"))
+        if not man:
+            continue
+        model = str((e.get("attrs") or {}).get("model") or e["name"])
+        doc = _exported_module_doc("netbox", man, model)
+        assert doc is not None, f"{model}: no exported netbox file"
+        fronts = {p["name"] for p in doc.get("front-ports") or []}
+        rears = {p["name"] for p in doc.get("rear-ports") or []}
+        m = _exported_fibre_map(man, model)
+        assert m is not None, f"{model}: no exported fibre map"
+        assert m["rows"], f"{model}: exported fibre map has no rows"
+        for r in m["rows"]:
+            assert r["front"] in fronts, \
+                f"{model}: fibre-map row front {r['front']!r} not among exported front-ports {fronts}"
+            assert r["rear"] in rears, \
+                f"{model}: fibre-map row rear {r['rear']!r} not among exported rear-ports {rears}"
+        checked += 1
+    assert checked, "no projecting module was checked - this guard is vacuous"
+
+
+def test_a_module_that_exports_front_ports_also_exports_a_rear_port():
+    """netbox#21830, pinned against the file: we do not get to omit rear ports.
+
+    `build_module` sets `rear-ports` and `front-ports` under two INDEPENDENT
+    `if` statements, so a front-only export is structurally possible even
+    though nothing in today's library exercises it. Swept across every
+    exported module type in both targets, not just the fibre modules, so a
+    future module that trips this shape is caught wherever it lands.
+    """
+    if not EXPORTS.exists():
+        pytest.skip("library/exports not built - run ./publish.sh --no-images")
+    import dcim_export as D
+    checked = 0
+    for target in D.TARGETS:
+        for f in sorted((EXPORTS / target / "module-types").rglob("*.yaml")):
+            doc = yaml.safe_load(f.read_text())
+            if doc.get("front-ports"):
+                checked += 1
+                assert doc.get("rear-ports"), \
+                    f"{f}: front-ports with no rear-ports (netbox#21830)"
+    assert checked, "no exported module carries front-ports - this guard is vacuous"
