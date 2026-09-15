@@ -943,6 +943,24 @@ def export_modules(dist, root, images=None):
             if images and RASTER:
                 if render_module_image(images, root, target, doc, ns, name, ver):
                     imaged.add(doc["model"])
+
+        # THE FIBRE MAP, gated the same way build_module gates rear-ports: on a
+        # declared rear face, not merely on having paths. A single-faced module
+        # (a PPM coupler) has paths that run front-to-front, so `_row` answers
+        # None for every leg and a map for it would be all rows and no ports -
+        # the same shape netbox#21830 rejected for the port lists themselves.
+        # It sits beside `netbox/` and `nautobot/` rather than inside either,
+        # because it is not a document of either schema - it is the artefact
+        # this project defines, and both targets consume the same rows.
+        view = contract_view(contract)
+        if face_ref(view, "rear") and (contract.get("optical") or {}).get("paths"):
+            m = optical_ports.fibre_map(view, dist.component_by_ref, doc["model"])
+            d = Path(root) / "fibre-maps" / man
+            d.mkdir(parents=True, exist_ok=True)
+            (d / (doc["model"].replace("/", "-") + ".yaml")).write_text(
+                "---\n" + yaml.dump(m, Dumper=Indented, sort_keys=False,
+                                    width=100, default_flow_style=False))
+
         wrote += 1
         print(f"{doc['model']}  ({len(doc.get('interfaces', []))} interfaces, "
               f"{len(doc.get('power-ports', []))} power ports)")

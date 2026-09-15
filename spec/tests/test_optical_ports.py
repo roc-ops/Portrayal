@@ -158,3 +158,40 @@ def test_the_real_ppm_coupler_export_has_no_ports():
     doc = yaml.safe_load(f.read_text())
     assert "front-ports" not in doc
     assert "rear-ports" not in doc
+
+
+def test_the_fibre_map_carries_one_row_per_leg():
+    import dcim_export as D
+    e, idx = cassette_entry()
+    m = P.fibre_map(D.contract_view(e), idx.get, "FHD-1MTP6LCDOS2A")
+    assert m["model"] == "FHD-1MTP6LCDOS2A"
+    assert m["media"] == "os2"
+    assert m["polarity"] == "a"
+    assert len(m["rows"]) == 12
+    assert m["rows"][0] == {"front": "1", "front_position": 1,
+                            "rear": "MTP-1", "rear_position": 1}
+    assert m["rows"][-1] == {"front": "12", "front_position": 1,
+                             "rear": "MTP-1", "rear_position": 12}
+
+
+def test_a_split_carries_its_ratio():
+    """C3: the ratio has no field in the type format, so it rides the map.
+
+    Built here rather than read from the library, because no modelled part
+    splits yet - the taps arrive in plan 6, and a rule with no test until then
+    is a rule nobody has run.
+    """
+    entry = {"parts": [{"id": "lc1", "ref": "common/lc-duplex-v-adapter@1",
+                        "at": [0, 0]}],
+             "faces": {"rear": {"ref": "t/rear@1"}},
+             "optical": {"media": "os2", "polish": "upc",
+                         "paths": [{"from": "rear:mtp.1",
+                                    "to": [{"at": "lc1.1", "ratio": 50},
+                                           {"at": "lc1.2", "ratio": 50}]}]}}
+    known = {"common/lc-duplex-v-adapter@1": {"optical": {"positions": 2}},
+             "common/mpo-adapter@1": {"optical": {"positions": 12}},
+             "t/rear@1": {"parts": [{"id": "mtp", "ref": "common/mpo-adapter@1"}]}}
+    m = P.fibre_map(entry, known.get, "TAP")
+    assert len(m["rows"]) == 2
+    assert all(r["ratio"] == 50 for r in m["rows"])
+    assert {r["front"] for r in m["rows"]} == {"1", "2"}

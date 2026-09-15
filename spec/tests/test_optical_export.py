@@ -108,3 +108,12 @@ def test_a_namespace_with_no_vendor_is_still_not_orderable():
     d = Dist(str(DIST))
     assert d.manufacturer_of("common") is None
     assert d.manufacturer_of("std") is None
+
+
+def test_the_fibre_map_is_published_beside_the_two_targets():
+    f = EXPORTS / "fibre-maps" / "FS.com" / "FHD-1MTP6LCDOS2A.yaml"
+    if not EXPORTS.exists():
+        pytest.skip("library/exports not built - run ./publish.sh --no-images")
+    assert f.exists(), "no fibre map for the one cassette that has fibres"
+    m = yaml.safe_load(f.read_text())
+    assert len(m["rows"]) == 12

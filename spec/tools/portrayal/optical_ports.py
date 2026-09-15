@@ -146,3 +146,57 @@ def _face_part_ref(entry, face, pid, load_ref):
         if isinstance(part, dict) and str(part.get("id")) == pid:
             return part.get("ref")
     return None
+
+
+def fibre_map(entry, load_ref, model):
+    """The per-instance front-to-rear bindings, as a flat row list.
+
+    THE DEVICE-TYPE YAML NO LONGER CARRIES THIS. netbox#20564 replaced the
+    FrontPort->RearPort FK with a bidirectional M2M, and the front-port schema
+    is `{name, type, positions}` with `additionalProperties: false` and no
+    `rear_port` key - so the mapping has nowhere to live in the type format and
+    ships beside it instead.
+
+    THERE IS NO UPSTREAM SCHEMA FOR THIS ARTEFACT, so this defines one. It is
+    generated only and never hand-edited, which keeps the contracts the single
+    source; and it is deliberately boring - a flat row list, no nesting - so
+    feeding it to a script or an API is a five-line job.
+    """
+    opt = entry.get("optical") or {}
+    rear_name = rear_port_names(entry, load_ref)
+
+    rows = []
+    for path in (opt.get("paths") or []):
+        legs = optical.endpoints(path)
+        src, _ = legs[0]
+        for dst, ratio in legs[1:]:
+            rows.append(_row(entry, src, dst, ratio, rear_name, load_ref))
+    rows = [r for r in rows if r]
+    rows.sort(key=lambda r: (r["rear"], r["rear_position"]))
+    out = {"model": model}
+    if opt.get("media"):
+        out["media"] = opt["media"]
+    if opt.get("polarity"):
+        out["polarity"] = opt["polarity"]
+    out["rows"] = rows
+    return out
+
+
+def _row(entry, a, b, ratio, rear_name, load_ref):
+    """One leg as a row, whichever end of it is the rear."""
+    fa, pa, na = optical.split_endpoint(a)
+    fb, pb, nb = optical.split_endpoint(b)
+    if fa and not fb:
+        rear_ep, front_ep = (fa, pa, na), (fb, pb, nb)
+    elif fb and not fa:
+        rear_ep, front_ep = (fb, pb, nb), (fa, pa, na)
+    else:
+        return None                      # front-to-front or rear-to-rear
+    _f, rpid, rpos = rear_ep
+    _g, _fpid, _fpos = front_ep
+    label = front_label(entry, f"{_fpid}.{_fpos}", load_ref)
+    row = {"front": label, "front_position": 1,
+           "rear": rear_name.get(rpid, rpid.upper()), "rear_position": rpos}
+    if ratio is not None:
+        row["ratio"] = ratio
+    return row
