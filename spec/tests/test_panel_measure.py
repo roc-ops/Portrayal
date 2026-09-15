@@ -134,12 +134,27 @@ def test_measure_does_both_steps_against_one_face(pm):
 
 
 def test_measuring_a_face_against_the_wrong_face_refuses(pm):
-    """An FHD panel declared as a MaiaEdge chassis must not validate.
+    """A plate declared as the wrong face must not validate.
 
-    This is the whole safety property: the width scales anything, and only the
+    This is the whole safety property: the width scales ANYTHING, and only the
     height check can tell you the scale was taken off the wrong object.
+
+    ON A DRAWN PLATE RATHER THAN THE STAGED PHOTOGRAPH, deliberately. The
+    reference imagery lives in `working/` and is never committed, so this test
+    skipped on CI - the one test in the file that proves the tool refuses,
+    running only on the machine that already has the corpus. A rectangle with
+    the FHD module's aspect ratio exercises the identical path: the same image
+    passes as the face it is and is refused as the face it is not.
     """
-    im = _im(pm, "35510.G.jpg")
+    Image = pytest.importorskip("PIL.Image")
+    w, h = 311, 100                      # 311/100 is 108.97/35.05 to a tenth of a px
+    im = Image.new("RGB", (w + 40, h + 40), (255, 255, 255))
+    for y in range(20, 20 + h):
+        for x in range(20, 20 + w):
+            im.putpixel((x, y), (10, 10, 10))
+
+    assert pm.measure(im)[1] < 3.0, "the drawn plate is not a good FHD stand-in"
+
     with pytest.raises(ValueError) as e:
         pm.measure(im, face=pm.MAIAEDGE_PBC)
     assert "MaiaEdge" in str(e.value), \
