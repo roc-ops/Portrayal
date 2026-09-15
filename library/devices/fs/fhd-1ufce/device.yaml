@@ -1,0 +1,220 @@
+format: 1
+kind: device
+name: fhd-1ufce
+version: 1.0.0
+manufacturer: FS.com
+model: FHD-1UFCE
+description: >-
+  1U 19in slide-out fiber enclosure. FS SKU #70361 - a sliding drawer with front
+  access to patch cords and rear access to cable entry, holding up to four FHD
+  fiber adapter panels or MTP/MPO cassettes for up to 144 fibers in 1U.
+profile: optical
+provenance:
+  method: >-
+    FIGURES FIRST, FROM THE VENDOR'S OWN DIMENSIONED DRAWING. Every number in
+    `chassis` below is read directly off page 7 of
+    working/intake/fs/fhd/datasheets/fhd-1ufce-fiber-enclosure-datasheet.pdf,
+    which carries a dimensioned front view and a dimensioned top view of this
+    exact part - the only page in the corpus that dimensions anything. Nothing
+    else about this device is measured; what is not on that page is estimated
+    and said so below, or left undrawn.
+  model: >-
+    the datasheet's own "Fiber Enclosure Capacity" table names #70361 as the
+    ordering ID for "FHD 1U slide-out rack mount enclosure", model FHD-1UFCE,
+    "4 ports", "144F". The features list on page 1 adds "Mounts to standard EIA
+    19" rack rails, holds up to 4x FAPs or MTP® Cassettes."
+  chassis: >-
+    page 7, front view: 448.0mm (17.64in) body width, dimensioned on its own
+    line below the 482.6mm (19in) rack-width line - two separate dimensions,
+    not one measured against the other. 44.0mm (1.73in) height, the only
+    figure on that view's right edge. Page 7, top view: 432.8mm (17.04in)
+    depth. All three also appear in the spec table on the same page -
+    "Dimensions (HxWxD): 1.73"x19"x17.04" (44x482.6x432.8mm)" - which is what
+    corroborates the drawing rather than the other way round. `ru: 1` from
+    that same table's "No. of Rack Spaces: 1U".
+  overall-depth: >-
+    the top view carries a second, larger depth line outside the 432.8mm body
+    - 467.2mm (18.39in). That is the envelope INCLUDING whatever projects from
+    the rear (the drawer's cable-management arm, most likely), not the body
+    depth, and the spec table's own HxWxD row confirms 432.8 as the figure it
+    means by "depth". Recorded here because the drawing shows it; not used as
+    `chassis.depth`, which the two agreeing sources both give as 432.8.
+  ears: >-
+    482.6mm (19in) on the same front-view dimension line as the 448.0mm body -
+    the standard EIA-310 rack width. Drawn as common/rack-ear@1 outside the
+    body under the optional tag `ears`, the same generic ear every other 19in
+    device in this library uses; its own 14.0mm width is that component's
+    convention, not a second measurement of this drawing.
+  bays: >-
+    FOUR IS COUNTED, NOT MEASURED. The capacity table's "4 ports" and the
+    features list's "holds up to 4x FAPs or MTP® Cassettes" agree on the
+    number; no page in this datasheet dimensions an empty bay opening. Each
+    bay is sized at 108.97 x 35.05 - the FHD module envelope already measured
+    off FS's own render for fs/fhd-1mtp6lcd-os2-a@1, the only FHD cassette
+    this library carries, since every FHD module this plan will add shares
+    that one width by definition (the format's own name for it). The four sit
+    contiguous across the panel: (448.0 - 4 x 108.97) / 2 = 6.06mm margin each
+    side, centred top-to-bottom in the 44.0mm face: (44.0 - 35.05) / 2 =
+    4.475mm.
+  front-panel-detail: >-
+    ESTIMATED BY OMISSION. Page 1's product photograph shows two extraction
+    handles near the panel ends and an FS logo left of centre, but page 7's
+    dimensioned drawing - the only source this device transcribes figures
+    from - locates none of them, and a three-quarter photograph is not a
+    source panel_measure can rectify. None of that detail is drawn; see
+    `gaps` below.
+  envelope-faces: >-
+    rear, top, bottom, left and right carry the ENVELOPE ONLY, the same
+    treatment dcp-2 gives the four sides no photograph resolved. Top and
+    bottom are 448.0 x 432.8 and left/right are 432.8 x 44.0 - both pairs
+    built from the same `chassis` figures already sourced above, not a
+    second measurement. No surface detail (screws, the slide rail, the
+    cable-management arm the 467.2mm overall depth implies) is drawn on any
+    of the five; see `gaps` below.
+gaps:
+  - what: front-panel-detail
+    scope: [front]
+    reason: needs-photo
+    note: >-
+      the extraction handles and FS logo visible in the page-1 product
+      photograph are real but undimensioned anywhere in the corpus - no page
+      gives their position, and a perspective product shot is not a source
+      panel_measure can rectify the way the FHD cassettes' face-on renders
+      were. The front view here draws the four bays and the rack ears only.
+    wanted: >-
+      a square-on, face-on photograph of the closed FHD-1UFCE front, the same
+      kind of image that let the cassettes' own faceplates be measured.
+  - what: envelope-face-detail
+    scope: [rear, top, bottom, left, right]
+    reason: needs-photo
+    note: >-
+      these five faces carry the bare envelope box from the dimensioned
+      `chassis` figures and nothing else - no slide rail, no cable-management
+      arm, no screws, no rear opening for the cassettes' MTP trunks to pass
+      through. Page 7 dimensions only the front and top outlines, and even
+      the top view resolves no surface detail beyond its own outline.
+    wanted: >-
+      a rear photograph (the cassettes seat from the front but the trunk
+      cables leave from the back of the drawer) and a lid/side photograph,
+      the same kind of source dcp-2's own equivalent gap asks for.
+chassis:
+  width: 448.0
+  height: 44.0
+  depth: 432.8
+  ru: 1
+  color: '#1b1e21'
+  airflow: passive
+groups:
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 1
+  slots:
+    term: Slot
+    role: service
+    index-origin: 1
+    description: >-
+      four slots, each taking one FHD module - a fiber adapter panel or an
+      MTP/MPO cassette. The datasheet's capacity row for #70361 reads "4
+      ports"; the features list adds "holds up to 4x FAPs or MTP® Cassettes".
+views:
+  front:
+    size:
+      w: 448.0
+      h: 44.0
+    components:
+      bays:
+        - id: bay-1
+          at: [6.06, 4.475]
+          size: {w: 108.97, h: 35.05}
+          accepts:
+            - fs/fhd-1mtp6lcd-os2-a@1
+          group: slots
+          rel-pos: 1
+        - id: bay-2
+          at: [115.03, 4.475]
+          size: {w: 108.97, h: 35.05}
+          accepts:
+            - fs/fhd-1mtp6lcd-os2-a@1
+          group: slots
+          rel-pos: 2
+        - id: bay-3
+          at: [224.00, 4.475]
+          size: {w: 108.97, h: 35.05}
+          accepts:
+            - fs/fhd-1mtp6lcd-os2-a@1
+          group: slots
+          rel-pos: 3
+        - id: bay-4
+          at: [332.97, 4.475]
+          size: {w: 108.97, h: 35.05}
+          accepts:
+            - fs/fhd-1mtp6lcd-os2-a@1
+          group: slots
+          rel-pos: 4
+      placements:
+        - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.25], skin: left, optional: ears, group: furniture, rel-pos: 1}
+        - {ref: common/rack-ear@1, id: ear-right, at: [448.0, 0.25], skin: right, optional: ears, group: furniture, rel-pos: 2}
+
+  rear:
+    size:
+      w: 448.0
+      h: 44.0
+    panel:
+      decor:
+        - {at: [0, 0], size: [448.0, 44.0], fill: '#1b1e21'}
+
+  top:
+    size:
+      w: 448.0
+      h: 432.8
+    panel:
+      decor:
+        - {at: [0, 0], size: [448.0, 432.8], fill: '#b9bec4'}
+
+  bottom:
+    size:
+      w: 448.0
+      h: 432.8
+    panel:
+      decor:
+        - {at: [0, 0], size: [448.0, 432.8], fill: '#b9bec4'}
+
+  left:
+    size:
+      w: 432.8
+      h: 44.0
+    panel:
+      decor:
+        - {at: [0, 0], size: [432.8, 44.0], fill: '#b9bec4'}
+
+  right:
+    size:
+      w: 432.8
+      h: 44.0
+    panel:
+      decor:
+        - {at: [0, 0], size: [432.8, 44.0], fill: '#b9bec4'}
+
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The enclosure as FS ships #70361: an empty tray, all four bays open.
+      Fiber adapter panels and MTP/MPO cassettes are separate SKUs from the
+      datasheet's own "Fiber Enclosure Loading List", ordered and fitted
+      afterwards.
+  populated:
+    kind: example
+    description: >-
+      All four bays carrying fs/fhd-1mtp6lcd-os2-a@1, the only FHD cassette
+      this library models today. Illustrative, like every `example` in this
+      library: the cassettes are ordered separately from the enclosure, and
+      later tasks in this plan add the rest of the catalogue this same bay
+      format accepts.
+    bays:
+      bay-1: fs/fhd-1mtp6lcd-os2-a@1
+      bay-2: fs/fhd-1mtp6lcd-os2-a@1
+      bay-3: fs/fhd-1mtp6lcd-os2-a@1
+      bay-4: fs/fhd-1mtp6lcd-os2-a@1

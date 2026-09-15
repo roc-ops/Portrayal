@@ -82,12 +82,33 @@ def test_the_rear_face_is_not_separately_orderable():
     assert idx["fs/fhd-1mtp6lcd-rear@1"]["kind"] == "component"
 
 
-def test_a_vendor_with_no_device_can_still_ship_modules():
-    import sys as _s
-    _s.path.insert(0, str(ROOT / "spec/tools/portrayal"))
+def test_the_registry_fallback_still_answers_for_a_deviceless_namespace():
+    """PLAN 5'S FALLBACK, AND THIS IS WHAT WATCHES IT.
+
+    `manufacturer_of` checks devices first and falls back to vendors.yaml, so a
+    vendor that ships parts before it ships a chassis is still orderable. FS was
+    that vendor until the FHD-1UFCE landed; now it resolves from its device, and
+    the old test passed through the device path while claiming to prove the
+    fallback. This drives the fallback directly instead.
+    """
     from artifacts import Dist
     d = Dist(str(DIST))
-    assert d.manufacturer_of("fs") == "FS.com"
+    assert d.manufacturer_of("fs") == "FS.com"      # now via the device
+    # a namespace that exists in vendors.yaml and has no device at all
+    deviceless = [ns for ns in d.vendors
+                  if not any(x.get("ns") == ns for x in d.devices)]
+    assert deviceless, "every vendor now has a device - the fallback is unwatched"
+    ns = deviceless[0]
+    assert d.manufacturer_of(ns) == d.vendors[ns]["display"]
+
+
+def test_a_namespace_with_no_vendor_is_still_not_orderable():
+    """`common/` and `std/` are absent from vendors.yaml, so the property holds
+    by data rather than by a special case."""
+    from artifacts import Dist
+    d = Dist(str(DIST))
+    assert d.manufacturer_of("common") is None
+    assert d.manufacturer_of("std") is None
 
 
 def test_the_device_lookup_still_wins_over_the_registry():
