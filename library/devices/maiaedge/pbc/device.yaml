@@ -1,0 +1,245 @@
+format: 1
+kind: device
+name: pbc
+version: 0.2.0
+maturity: modelled
+manufacturer: MaiaEdge
+model: PBC
+profile: networking
+description: >-
+  MaiaEdge Path Border Controller - a 1RU appliance that merges L2 switching and L3
+  routing to provision deterministic private Ethernet paths over any underlying
+  transport, with line-rate AES-256-GCM IPsec. Two 100GbE QSFP28 ports on the front
+  beside a console and two management jacks; two 550W supplies and a five-fan wall on
+  the back, front-to-back.
+provenance:
+  size: >-
+    datasheet - MaiaEdge-PBC-PCE-Datasheet-v3.pdf page 3, "Chassis (H x W x D)
+    1.625 x 17.24 x 11.46 in" = 41.27 x 437.90 x 291.08 mm. THE ROW BELOW IT,
+    "Total (With Ears and Tabs) 1.625 x 19.02 x 12.13 in", is NOT the chassis and is
+    not modelled: 19.02 in is 483.11 mm, the rack face including the ears, and L43
+    exists because a device was once modelled wearing its flanges.
+  cutouts: >-
+    registry - each opening is the APERTURE the component declares, not the component's
+    outline: a QSFP28 cage is 19.0 x 14.5 of metal around an 18.5 x 9.58 hole offset
+    (0.25, 4.2) into it, and a USB-A is 17.0 x 9.3 around a 12.0 x 4.5 hole at
+    (2.5, 2.4). The first draft punched the outlines and
+    test_cutout_derivation caught all three.
+  jacks: >-
+    L76 and docs/rj45-family-design.md settle which part each jack is: an Ethernet jack
+    is common/rj45-eth@1 and a console or timing jack is std/rj45@2. CON is the
+    console, so it is the std part; MGMT and CTRL are the two 1GB management ports the
+    datasheet counts, so they are the Ethernet part. All three were std/rj45@2 in the
+    first draft and the rule caught it.
+  ports: >-
+    datasheet page 3 - "Dual 100GbE Ethernet (QSFP28)", "2x 1GB RJ45" management,
+    "1x USB 2.0", "RJ45 115.2 kbps" console. Confirmed on the hardware: the front
+    photograph reads the three jacks' own silkscreen as CON, MGMT and CTRL, which is
+    the console plus the two management ports the table counts.
+  layout: >-
+    ESTIMATED, AND THE WORD IS EXACT. The ORDER and GROUPING of everything on the
+    front face are read off photographs of a unit in service (see gaps
+    `front-positions`); the POSITIONS are a plausible arrangement consistent with
+    them and with each component's own size. No position here is a measurement.
+  rear: >-
+    photo-measured (count and pitch only) - two supply modules and five 40 mm fans,
+    read off the rear photographs. The fan pitch is the one figure on this device that
+    a photograph did settle: five fans span 203.9 mm on a scale anchored to the
+    437.90 mm chassis width, giving 40.8 mm each against common/fan-module-41's known
+    40.9 - 0.2% out, which is what a sound scale looks like. Every other rear figure
+    is a position and is estimated.
+  power: >-
+    datasheet page 3 - "Internal: AC, DC" with "Redundant Power Supply: Yes". The
+    550W per-supply figure is photo-measured: both modules carry a blue 550W label.
+    The datasheet states no chassis draw, so none is recorded and L27 stands.
+  thermal: >-
+    datasheet page 3 - "Internal fan-based forced-air cooling. Front-to-Back (F2B) -
+    intake at front bezel / port side, exhaust at rear (fan/PSU side)."
+attrs:
+  physical:
+    weight-kg: 4.31
+  performance:
+    throughput: dual-100gbe
+    latency-overhead-us: 2
+  power:
+    input: ac-or-dc
+  features:
+    encryption: aes-256-gcm-ipsec
+    redundancy: 1+1
+  thermal:
+    airflow: front-to-back
+  environmental:
+    operating-temp-c: '0 to 50'
+    storage-temp-c: '-40 to 70'
+  lifecycle:
+    eol: none-announced
+chassis: {width: 437.9, height: 41.27, depth: 291.08, ru: 1, color: '#1b1e21'}
+groups:
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp28, speed: 100g}
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: the console and the two out-of-band management jacks, which share a bezel
+  psus: {term: PSU, role: service, index-origin: 1}
+  fans: {term: Fan, role: service, index-origin: 1}
+  furniture: {term: Part, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 437.9, h: 41.27}
+    panel:
+      decor:
+      - {id: vent-left-back, at: [8.0, 6.0], size: [132.0, 29.0], fill: '#111316', rx: 3.0, kind: recess}
+      - {id: vent-left, at: [10.0, 8.0], size: [128.0, 25.0], pattern: slots-h, vent: 20}
+      - {id: bezel-left, at: [8.0, 6.0], size: [132.0, 29.0], fill: none, stroke: '#f2a71b', stroke-width: 1.6, rx: 6.0, kind: bezel}
+      - {id: vent-right-back, at: [232.0, 6.0], size: [132.0, 29.0], fill: '#111316', rx: 3.0, kind: recess}
+      - {id: vent-right, at: [234.0, 8.0], size: [128.0, 25.0], pattern: slots-h, vent: 20}
+      - {id: bezel-right, at: [232.0, 6.0], size: [132.0, 29.0], fill: none, stroke: '#f2a71b', stroke-width: 1.6, rx: 6.0, kind: bezel}
+      - {id: right-panel, at: [380.0, 8.0], size: [36.0, 25.0], fill: '#16181b', stroke: '#2a2d31', stroke-width: 0.6, rx: 2.0, kind: recess}
+      - {id: right-panel-mesh, at: [382.0, 10.0], size: [14.0, 21.0], pattern: holes, vent: 12}
+      cutouts:
+      - {id: qsfp-1, at: [20.25, 20.2], size: [18.5, 9.58], shape: rect}
+      - {id: qsfp-2, at: [39.25, 20.2], size: [18.5, 9.58], shape: rect}
+      - {id: usb, at: [246.5, 24.4], size: [12.0, 4.5], shape: rect}
+      - {id: con, at: [266.0, 19.0], size: [15.8, 13.2], shape: rect}
+      - {id: mgmt, at: [296.0, 19.0], size: [15.8, 13.2], shape: rect}
+      - {id: ctrl, at: [326.0, 19.0], size: [15.8, 13.2], shape: rect}
+      - {id: sys-led, at: [370.0, 18.6], size: [4.0, 4.0], shape: circle}
+    silkscreen:
+    - {at: [196.0, 24.0], text: MaiaEdge, font-size: 9.0, fill: '#f2a71b', anchor: middle, for: chassis}
+    - {at: [273.9, 15.5], text: CON, for: con}
+    - {at: [303.9, 15.5], text: MGMT, for: mgmt}
+    - {at: [333.9, 15.5], text: CTRL, for: ctrl}
+    components:
+      placements:
+      - {ref: common/rack-ear@1, id: ear-left, at: [-14.0, -1.1], skin: left, optional: ears, group: furniture, rel-pos: 1}
+      - {ref: common/rack-ear@1, id: ear-right, at: [437.9, -1.1], skin: right, optional: ears, group: furniture, rel-pos: 2}
+      - {ref: common/qsfp28-cage@3, id: qsfp-1, at: [20.0, 16.0], group: qsfp28, rel-pos: 1}
+      - {ref: common/qsfp28-cage@3, id: qsfp-2, at: [39.0, 16.0], group: qsfp28, rel-pos: 2}
+      - {ref: common/usb-a@3, id: usb, at: [244.0, 22.0], group: mgmt, rel-pos: 1}
+      - {ref: std/rj45@2, id: con, at: [266.0, 19.0], group: mgmt, rel-pos: 2}
+      - {ref: common/rj45-eth@1, id: mgmt, at: [296.0, 19.0], group: mgmt, rel-pos: 3}
+      - {ref: common/rj45-eth@1, id: ctrl, at: [326.0, 19.0], group: mgmt, rel-pos: 4}
+      - {ref: common/led-indicator@1, id: sys-led, at: [370.0, 18.6], for: chassis, group: furniture, rel-pos: 3}
+  rear:
+    size: {w: 437.9, h: 41.27}
+    panel:
+      decor:
+      - {id: blank-bracket, at: [167.0, 0.6], size: [33.0, 40.0], fill: '#8a8d91', kind: label-plate}
+    components:
+      placements:
+      - {ref: common/rack-ear@1, id: ear-left-r, at: [-14.0, -1.1], skin: left, optional: ears, group: furniture, rel-pos: 1}
+      - {ref: common/rack-ear@1, id: ear-right-r, at: [437.9, -1.1], skin: right, optional: ears, group: furniture, rel-pos: 2}
+      - {ref: common/psu-550w@2, id: psu-1, at: [20.0, 0.6], attrs: {slot: '1'}, group: psus, rel-pos: 1}
+      - {ref: common/psu-550w@2, id: psu-2, at: [93.5, 0.6], attrs: {slot: '2'}, group: psus, rel-pos: 2}
+      - {ref: common/fan-module-41@1, id: fan-1, at: [200.0, 0.6], group: fans, rel-pos: 1}
+      - {ref: common/fan-module-41@1, id: fan-2, at: [240.9, 0.6], group: fans, rel-pos: 2}
+      - {ref: common/fan-module-41@1, id: fan-3, at: [281.8, 0.6], group: fans, rel-pos: 3}
+      - {ref: common/fan-module-41@1, id: fan-4, at: [322.7, 0.6], group: fans, rel-pos: 4}
+      - {ref: common/fan-module-41@1, id: fan-5, at: [363.6, 0.6], group: fans, rel-pos: 5}
+  top:
+    size: {w: 437.9, h: 291.08}
+    panel:
+      decor:
+      - {id: top-envelope, at: [0.0, 0.0], size: [437.9, 291.08], fill: '#1b1e21', kind: envelope}
+  bottom:
+    size: {w: 437.9, h: 291.08}
+    panel:
+      decor:
+      - {id: bottom-envelope, at: [0.0, 0.0], size: [437.9, 291.08], fill: '#1b1e21', kind: envelope}
+  left:
+    size: {w: 291.08, h: 41.27}
+    panel:
+      decor:
+      - {id: left-envelope, at: [0.0, 0.0], size: [291.08, 41.27], fill: '#1b1e21', kind: envelope}
+  right:
+    size: {w: 291.08, h: 41.27}
+    panel:
+      decor:
+      - {id: right-envelope, at: [0.0, 0.0], size: [291.08, 41.27], fill: '#1b1e21', kind: envelope}
+gaps:
+- what: front-face-positions
+  scope: [front]
+  reason: needs-drawing
+  wanted: >-
+    a face-on photograph of the front with nothing plugged in, or a mechanical drawing
+    from MaiaEdge. Either settles the whole face in one step.
+  note: >-
+    EVERY POSITION ON THE FRONT FACE IS ESTIMATED. The only sources held are a
+    three-quarter marketing render and photographs of a unit racked in service, and
+    neither is orthographic. panel_measure refuses the photograph outright, and
+    hand-anchoring it gives width- and height-derived scales that disagree far beyond
+    its 3% gate - the RJ45 jacks read 11.5 mm against their known 15.8 because the
+    right of the frame is further from the lens. So the ORDER of the face is evidence
+    and the coordinates are not. Tracked as roc-ops/Portrayal#247.
+- what: right-panel-identity
+  scope: [front]
+  reason: needs-photo
+  wanted: >-
+    a face-on photograph of the right end of the front face, or a word from the vendor
+    saying what the recess is.
+  note: >-
+    The recessed rectangle at the right end of the front face is drawn as decor because
+    nobody can put a part number to it. The product render shows it smooth and uniform,
+    which reads as a display; the photograph shows two zones, a honeycomb-perforated
+    left third and a smooth remainder, which reads as a vent beside something. It is
+    modelled as a recess with a perforated region and NO identity is claimed. If it is
+    an LCD it deserves a real component rather than paint.
+- what: front-indicator-array
+  scope: [front]
+  reason: vendor-silent
+  wanted: an LED table, or a photograph of the unit powered down so the louvres read clean.
+  note: >-
+    The photograph shows red and green points scattered at irregular positions and
+    heights across BOTH vent fields. They are internal board LEDs glowing through the
+    louvres, not a panel indicator array: they do not line up, they sit at several
+    louvre heights, and no document held carries an LED table. Only the one discrete
+    lamp right of the bezel is modelled. Inventing a row of indicators from those
+    points would be drawing the light rather than the hardware.
+- what: psu-module-width
+  scope: [rear]
+  reason: sources-disagree
+  wanted: >-
+    a face-on rear photograph, or the vendor's part number for the supply. The answer
+    decides which of the library's two 550W majors this device should carry.
+  note: >-
+    common/psu-550w@2 is placed, being the maintained major and the 73.5 mm CRPS 1U
+    standard width. The rear photograph disagrees: on the scale the five fans validate
+    to 0.2%, the two-supply block reads about 171 mm, or 85.5 mm each, which is far
+    closer to the RETIRED common/psu-550w@1 at 84.0. An attempt to confirm the module
+    seams programmatically failed, so the reading rests on an eyeball and is not
+    asserted here. Either MaiaEdge fits a wider-than-CRPS module, or the eyeball is
+    wrong.
+- what: envelope-faces-undetailed
+  scope: [top, bottom, left, right]
+  reason: needs-photo
+  wanted: >-
+    photographs of the lid, the underside and either flank out of the rack. The unit
+    was shot in service with a device directly above it.
+  note: >-
+    These four faces draw the chassis envelope and nothing else. The envelope itself is
+    not a guess - 437.90 x 291.08 x 41.27 is dimensioned on page 3 of the datasheet -
+    but no source held shows what is ON any of them: no vent field, no label, no screw
+    pattern, no rail. The flat rect asserts the box and claims nothing about its
+    surface, which is what lets the device carry a rack elevation and a 3D box without
+    inventing detail.
+- what: wordmark-logo-mark
+  scope: [front]
+  reason: needs-drawing
+  wanted: the MaiaEdge mark as vector art, or a face-on photograph square enough to trace it from.
+  note: >-
+    The centre band carries the word MaiaEdge in the vendor's amber, sized and coloured
+    to match the photograph. The LOGO MARK that sits immediately left of it - a
+    stylised angular glyph - is not drawn. Approximating a company's mark from a
+    perspective photograph would be drawing something nobody can check, and a wrong
+    logo is worse than an absent one.
+- what: chassis-power-draw
+  reason: vendor-silent
+  wanted: a chassis draw or input figure from MaiaEdge.
+  note: >-
+    The datasheet states the supply configuration and no chassis draw figure, so none
+    is recorded. L27 stands, and the chassis total is a floor rather than a total.
