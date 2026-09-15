@@ -325,3 +325,68 @@ skins: [default]
     assert P.front_label(view, "lc9.2", idx.get) == "2"
     assert P.front_label(view, "lc10.1", idx.get) == "3"
     assert P.front_label(view, "lc10.2", idx.get) == "4"
+
+
+def test_the_two_row_cassette_follows_its_front_order():
+    """`optical.front-order` states the vendor's own row-then-row numbering
+    explicitly - prove the projection actually follows it rather than
+    falling back to `at.x`, which would produce the column-major order this
+    same module shipped with by accident before `front-order` existed (see
+    its own provenance.parts for the two retractions).
+    """
+    import json
+    import dcim_export as D
+    f = ROOT / "library" / "dist" / "components.json"
+    if not f.exists():
+        pytest.skip("library/dist not built - run ./publish.sh --no-images")
+    idx = {f"{e['ns']}/{e['name']}@{e['major'][1:]}": e
+           for e in json.loads(f.read_text())["components"]}
+    e = idx["fs/fhd-2mtp12-lc-os2-a@1"]
+    view = D.contract_view(e)
+    want = [str(n) for n in range(1, 25)]
+    got = []
+    for pid in ("lc01", "lc02", "lc03", "lc04", "lc05", "lc06",
+                "lc07", "lc08", "lc09", "lc10", "lc11", "lc12"):
+        got += [P.front_label(view, f"{pid}.1", idx.get),
+                P.front_label(view, f"{pid}.2", idx.get)]
+    assert got == want, got
+
+
+def run88(doc, path="t/contract.yaml"):
+    L.ERRORS.clear()
+    L.lint_component_optical_front_order(path, doc)
+    return [e for e in L.ERRORS if "[L88]" in e]
+
+
+TWO_ROW_PARTS = [
+    {"id": "a", "ref": "common/lc-duplex-v-adapter@1", "at": [5.0, 3.0]},
+    {"id": "b", "ref": "common/lc-duplex-v-adapter@1", "at": [20.0, 15.0]},
+]
+TWO_ROW_PATHS = [{"from": "a.1", "to": "a.2"}, {"from": "b.1", "to": "b.2"}]
+
+
+def test_a_two_row_fibre_face_without_front_order_is_l88():
+    """The case geometry cannot answer: two fibre parts at two distinct
+    `at.y` values, and no `optical.front-order` to resolve which row the
+    vendor numbers first."""
+    got = run88({"parts": TWO_ROW_PARTS,
+                 "optical": {"paths": TWO_ROW_PATHS}})
+    assert len(got) == 1, got
+    assert "front-order" in got[0]
+
+
+def test_a_single_row_fibre_face_needs_nothing():
+    """One `at.y` among the fibre parts - `at.x` alone is a safe reading, the
+    same case every cassette built before this rule already models."""
+    one_row = [{"id": "a", "ref": "common/lc-duplex-v-adapter@1", "at": [5.0, 3.0]},
+               {"id": "b", "ref": "common/lc-duplex-v-adapter@1", "at": [20.0, 3.0]}]
+    assert run88({"parts": one_row, "optical": {"paths": TWO_ROW_PATHS}}) == []
+
+
+def test_stating_front_order_silences_l88():
+    assert run88({"parts": TWO_ROW_PARTS,
+                 "optical": {"front-order": ["a", "b"], "paths": TWO_ROW_PATHS}}) == []
+
+
+def test_a_module_with_no_paths_is_not_l88s_business():
+    assert run88({"parts": TWO_ROW_PARTS}) == []

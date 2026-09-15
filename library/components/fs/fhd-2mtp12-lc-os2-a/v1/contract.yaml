@@ -40,6 +40,8 @@ optical:
   media: os2
   polarity: a
   polish: upc
+  front-order:
+    [lc01, lc02, lc03, lc04, lc05, lc06, lc07, lc08, lc09, lc10, lc11, lc12]
   paths:
     - {from: lc01.1, to: 'rear:mtp2.1'}
     - {from: lc01.2, to: 'rear:mtp2.2'}
@@ -109,47 +111,52 @@ provenance:
     the rear geometry stays estimated (see fs/fhd-2mtp12-lc-rear@1's own
     provenance).
 
-    ID ORDER AND THE DCIM FRONT-PORT LABEL - REVISED AFTER
-    `components_index.py` WAS FIXED TO PUBLISH `at`. `lc01`..`lc06` are the
-    1-12 row and `lc07`..`lc12` are the 13-24 row, both left to right, and the
-    ids are zero-padded so they never sort as a string in the wrong order
-    (`"lc10" < "lc4"` unpadded - an early build of this contract hit exactly
-    that and exported a genuinely scrambled numbering). Padding fixed the
-    STRING-SORT failure mode, but it is not what determines the numbering any
-    more, and an earlier draft of this note was wrong to say it was: at the
-    time it was written, the built `library/dist/components.json` entry did
-    not carry `at` on `parts` at all, so `_front_parts`' sort
-    (`optical_ports._front_parts`, ordering "across the face by `at.x`" per
-    its own docstring) fell through to comparing ids, and the ids happened to
-    already be in panel order. That gap in the index was a real bug -
-    reported and fixed in the same round this contract was reviewed
-    (`components_index.py` now carries `at` on every part, proved by
-    `spec/tests/test_optical_ports.py::
-    test_front_numbering_follows_at_x_not_id_order`) - and fixing it changed
-    THIS module's own export, because `_front_parts` genuinely reading
-    `at.x` now exposes something id order was masking: every column here
-    holds one part from EACH row at the SAME `at.x` (the six measured column
-    centres are shared by both rows - see above), and `_front_parts` sorts on
-    `at.x` alone, with no notion of a row. So the DCIM-exported front-port
-    numbering is COLUMN-MAJOR, not row-major: `lc01.1`/`lc01.2` (real fibres
-    1-2) export as front ports "1"/"2", but the NEXT two front ports, "3"/"4",
-    are `lc07.1`/`lc07.2` (real fibres 13-14) - `lc01`'s column-neighbour on
-    the OTHER row, not `lc02` (real fibres 3-4), which does not get front
-    ports "5"/"6" until third. The full column-major order, confirmed against
-    the built index: lc01(1,2) lc07(3,4) lc02(5,6) lc08(7,8) lc03(9,10)
-    lc09(11,12) lc04(13,14) lc10(15,16) lc05(17,18) lc11(19,20) lc06(21,22)
-    lc12(23,24). This does NOT match FS's own row-major silkscreen (1-12 row
-    complete, then 13-24 row). The OPTICAL PATHS above are unaffected by any
-    of this - they bind real part/position pairs, not the derived DCIM index
-    - and every one of the 24 positions is still reached exactly once (see
-    the two tests in spec/tests/test_fs_archetypes.py); the fibre map
-    (`library/exports/fibre-maps/FS.com/FHD-2X12MTPLCOS2A.yaml`) is what
-    carries the column-major `front` labels, and it is the map, not the
-    optical topology, that a consumer must read to find a given real fibre's
-    DCIM name. Giving `_front_parts` an explicit row-aware order is left for
-    a later plan, the same way Plan 5 parked `rear_port_names` and
-    `fibre_map`'s own sort - this is the second finding in the same family,
-    now genuinely live rather than masked by an index bug.
+    ID ORDER, `optical.front-order`, AND TWO RETRACTIONS IN THE SAME
+    PROVENANCE FIELD - both left here rather than deleted, because the
+    mistakes are as much a record as the fact. `lc01`..`lc06` are the 1-12
+    row and `lc07`..`lc12` are the 13-24 row, both left to right, zero-padded
+    so an id never sorts as a string in the wrong order.
+
+    RETRACTION ONE: an earlier draft of this note claimed the DCIM front-port
+    numbering came out matching FS's panel because the ids were already in
+    panel order. That was true only by accident of a bug in
+    `components_index.py`, which was not yet publishing `at` on a part at
+    all - `_front_parts`' sort fell through to comparing ids, and this
+    module's ids happened to already be in panel order.
+
+    RETRACTION TWO: once that bug was fixed and `_front_parts` genuinely
+    read `at.x`, the numbering it produced was COLUMN-MAJOR, not the
+    row-major order FS prints - `lc01`(1,2) `lc07`(3,4) `lc02`(5,6)...,
+    because every column here holds one part from EACH row at the SAME
+    `at.x` (the six measured column centres are shared by both rows - see
+    above) and `_front_parts`' position-based sort has no notion of a row.
+    THAT WAS ALSO WRONG TO SHIP, for a sharper reason than the first bug:
+    GEOMETRY CANNOT DETERMINE A SILKSCREEN. Whether a two-row vendor panel is
+    numbered row then row or column then column, and which row comes first,
+    is a fact about the printing, not a fact `at.x`/`at.y` can be sorted
+    into - inferring "column-major" from this module's OWN placement data
+    was guessing a convention from the one multi-row sample this library
+    happens to hold, the same shape of mistake `standards.yaml`'s
+    `fhd-lc-cassette` note already names for the 12.90-vs-13.2 pitch
+    confusion.
+
+    THE FIX IS TO STATE IT, NOT DERIVE IT. `optical.front-order` above is
+    read directly off the two SOURCED renders: 57341.B.jpg prints `1`
+    through `12` along the bottom row and `13` through `24` along the top
+    row (see the provenance.parts crops), and 57341.E.jpg's own `1-12`/
+    `13-24` rear legend confirms which twelve-fibre half is which (see
+    provenance.optical below) - so "the 1-12 row first, the 13-24 row
+    second, each left to right" is FS's own printed order, not a rule
+    inferred from placement. `[lc01..lc12]` in that exact order is what
+    makes `_front_parts` (spec/tools/portrayal/optical_ports.py) use it
+    instead of sorting on position - L88 requires `front-order` on exactly
+    this shape of module, a fibre-bearing face at more than one `at.y`, and
+    this is the first contract that triggers it. The OPTICAL PATHS above
+    were never affected by any of this at any point - they bind real
+    part/position pairs, not the derived DCIM index - and every one of the
+    24 positions is still reached exactly once (see the two tests in
+    spec/tests/test_fs_archetypes.py, plus the numbering test in
+    spec/tests/test_optical_export.py added when `front-order` landed).
   optical: >-
     THE MTP-TO-FIBRE-RANGE ASSIGNMENT IS SOURCED; THE PER-FIBRE PINOUT WITHIN
     EACH RANGE IS NOT. 57341.E.jpg is FS's own rear render and it PRINTS the
@@ -167,12 +174,13 @@ provenance:
     position lands on which LC bore. So each half uses the same STANDARD
     TYPE A STRAIGHT-THROUGH arrangement fhd-1mtp6lcd-os2-a@1 assumes for its
     own twelve: MTP position n to fibre n in order, independently within
-    each half - rear:mtp2.1 to lc1.1, rear:mtp2.2 to lc1.2, ... rear:mtp2.12
-    to lc6.2 for the 1-12 half, and rear:mtp1.1 to lc7.1 through rear:mtp1.12
-    to lc12.2 for the 13-24 half. This is what "Type A" conventionally means
-    (TIA-598/568 straight pinout, no crossing) applied twice, not a fact read
-    off a per-fibre drawing of this SKU. Confidence: ESTIMATED for the
-    within-half pinout; SOURCED for which half is which MTP.
+    each half - rear:mtp2.1 to lc01.1, rear:mtp2.2 to lc01.2, ...
+    rear:mtp2.12 to lc06.2 for the 1-12 half, and rear:mtp1.1 to lc07.1
+    through rear:mtp1.12 to lc12.2 for the 13-24 half. This is what "Type A"
+    conventionally means (TIA-598/568 straight pinout, no crossing) applied
+    twice, not a fact read off a per-fibre drawing of this SKU. Confidence:
+    ESTIMATED for the within-half pinout; SOURCED for which half is which
+    MTP.
 
     THE POLISH IS THE SAME KIND OF ASSUMPTION fhd-1mtp6lcd-os2-a@1 already
     makes, and for the same reason: FS's catalogue row for this SKU reads
@@ -181,6 +189,20 @@ provenance:
     `polish: upc` is the convention for an OS2 cassette with no APC stated,
     not a fact read off FS's own description of 57341. A catalogue row, a
     datasheet, or a green ferrule in a face-on photograph settles it.
+
+    `optical.front-order` IS READ OFF THE SILKSCREEN, NOT DERIVABLE FROM
+    `parts`. 57341.B.jpg prints the port numbers directly on the faceplate -
+    `1` through `12` along the row nearer the bottom, `13` through `24`
+    along the row nearer the top, both left to right (see the two label
+    crops discussed in provenance.parts) - and that is the entire source for
+    `[lc01, lc02, ..., lc12]` above: the 1-12 row first, the 13-24 row
+    second, each left to right, matching how `lc01`..`lc12` were already
+    assigned to those rows and columns. No placement rule produced this
+    order; `at.x`/`at.y` alone cannot tell a row-major panel from a
+    column-major one, which is exactly what shipped wrong before this field
+    existed (see provenance.parts's two retractions). Confidence: SOURCED,
+    to the faceplate render, the same standing `polarity` and `polish` have
+    for their own sourced halves above.
   face-detail-gap: >-
     the FS logo, the `MALE` warranty seal, the two captive thumb-knobs and
     the port numbers 1 through 24 visible on 57341.B.jpg are not drawn - the

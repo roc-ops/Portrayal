@@ -222,6 +222,7 @@ RULES = {
     "L85": ("component",  "only a face that is another side of the module draws fibres of its own", "move the connector onto the face that really carries it, or extend `faces.OPTICAL_FACES` if this direction genuinely is another side"),
     "L86": ("component",  "a module composing a connector the enum spells two ways states its polish", "add `optical.polish: upc` or `apc`, and say in provenance where it came from"),
     "L87": ("component",  "a module naming what its rear IS has a rear face to name", "add `faces.rear`, or drop `optical.rear-kind`"),
+    "L88": ("component",  "a fibre face with more than one row of connectors states its own front numbering", "add `optical.front-order` listing the fibre part ids in the vendor's printed order"),
 }
 
 
@@ -1669,6 +1670,48 @@ def lint_component_optical_rear_kind(path, data):
         err(path, "L87", f"declares optical.rear-kind {opt['rear-kind']!r} but no "
                          "rear face, so there is nothing for it to describe and "
                          "the projection would ignore it")
+
+
+def lint_component_optical_front_order(path, data):
+    """L88: a fibre face with more than one row states its own numbering.
+
+    `_front_parts` (spec/tools/portrayal/optical_ports.py) derives the DCIM
+    front-port numbering from `at.x` alone, and that derivation is safe only
+    for a single row of connectors - the position on the face IS the vendor's
+    own numbering there, nothing to state. A second row makes it a different
+    question: whether the vendor numbers row then row or column then column,
+    and which row comes first, is a fact about the SILKSCREEN, and `at.x`/
+    `at.y` cannot answer it - the geometry-only derivation would quietly
+    guess one, which is exactly what shipped wrong before this rule existed
+    (fs/fhd-2mtp12-lc-os2-a@1's own provenance.parts records both retracted
+    guesses). So a module whose fibre-bearing parts sit at more than one
+    distinct `at.y` states `optical.front-order` explicitly instead of
+    leaving it to be derived.
+    """
+    if not isinstance(data, dict):
+        return
+    opt = data.get("optical") or {}
+    if not (opt.get("paths") or []):
+        return
+    if opt.get("front-order"):
+        return
+    ys = set()
+    for part in (data.get("parts") or []):
+        if not isinstance(part, dict):
+            continue
+        if optical_ports.family_of(part.get("ref") or "") is None:
+            continue
+        at = part.get("at") or [0, 0]
+        try:
+            ys.add(round(float(at[1]), 4))
+        except (TypeError, ValueError, IndexError):
+            continue
+    if len(ys) > 1:
+        err(path, "L88",
+            f"composes fibre parts at {len(ys)} distinct at.y values but "
+            "states no `optical.front-order` - a multi-row face is exactly "
+            "the case `at.x` cannot number (see optical_ports._front_parts). "
+            "List the fibre part ids in the vendor's own printed order")
 
 
 def lint_component_optical_endpoints(path, data, lib_roots):
@@ -6414,6 +6457,7 @@ def main():
                 lint_component_optical_face_capacity(f, d, args.library)
                 lint_component_optical_polish(f, d)
                 lint_component_optical_rear_kind(f, d)
+                lint_component_optical_front_order(f, d)
                 lint_component_optical_conflicts(f, d)
                 lint_component_optical_coverage(f, d, args.library)
                 lint_component_composed_pitch(f, d, args.library)

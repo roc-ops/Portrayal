@@ -83,6 +83,12 @@
      "enum": ["splice"],
      "description": "WHAT THE BACK OF THIS MODULE IS, when it is not a connector. A splice cassette's trunk fibres are fusion-spliced to its pigtails, so there is nothing on the rear face to draw and no adapter to compose - `splice` is a real rear-port type upstream, shipping in the devicetype-library's ADC PPP-SC-SM. Omitted on every module whose rear carries an adapter, which is all of them so far. L87 checks that a module claiming one has a rear face to claim it about."
     },
+    "front-order": {
+     "type": "array",
+     "minItems": 1,
+     "items": {"$ref": "#/$defs/segment"},
+     "description": "THE VENDOR'S OWN SEQUENCE, because a silkscreen is a fact about the printing and placement cannot supply it. For one row, left to right by `at.x` is a safe reading - the position on the face IS the numbering, and every single-row module in this library is projected that way with nothing stated here. A face with more than one row of fibre parts is a different question: whether the vendor numbers row then row, or column then column, and which row comes first, is a fact about the silkscreen, not a fact `at.x` and `at.y` can be sorted into - guessing a rule from the one multi-row sample this library happens to hold is exactly how the 12.90-vs-13.2 pitch confusion started. Required only where geometry genuinely cannot answer (L88): list every fibre-bearing part id in the order the vendor numbers it, and the projection numbers front ports in that order instead of sorting on position. Say in `provenance.optical` where the order was read, the same way `polarity` and `polish` name their source."
+    },
     "paths": {
      "type": "array",
      "minItems": 1,
