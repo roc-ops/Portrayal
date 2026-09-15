@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: pbc
-version: 0.2.0
+version: 0.3.1
 maturity: modelled
 manufacturer: MaiaEdge
 model: PBC
@@ -25,6 +25,14 @@ provenance:
     (0.25, 4.2) into it, and a USB-A is 17.0 x 9.3 around a 12.0 x 4.5 hole at
     (2.5, 2.4). The first draft punched the outlines and
     test_cutout_derivation caught all three.
+  numbering: >-
+    MaiaEdge's own management UI (working/intake/maiaedge/pbc/renders/ui-port-view.png)
+    numbers the two 100G ports 0 and 1, so the group is index-origin 0, and captions
+    them 100G. It captions MGMT and CTRL 1G and CON not at all, and - independently of
+    L76 - DRAWS CON AS A DIFFERENT JACK from the other two, which is the console-versus-
+    Ethernet split the rule had already forced. A UI view is a schematic: it is taken
+    here for what is on the face, in what order, and what the vendor calls it. No
+    coordinate comes from it.
   jacks: >-
     L76 and docs/rj45-family-design.md settle which part each jack is: an Ethernet jack
     is common/rj45-eth@1 and a console or timing jack is std/rj45@2. CON is the
@@ -78,7 +86,7 @@ groups:
   qsfp28:
     term: Port
     role: traffic
-    index-origin: 1
+    index-origin: 0
     attrs: {media: qsfp28, speed: 100g}
   mgmt:
     term: Port
@@ -104,7 +112,11 @@ views:
       cutouts:
       - {id: qsfp-1, at: [20.25, 20.2], size: [18.5, 9.58], shape: rect}
       - {id: qsfp-2, at: [39.25, 20.2], size: [18.5, 9.58], shape: rect}
-      - {id: usb, at: [246.5, 24.4], size: [12.0, 4.5], shape: rect}
+      - {id: usb, at: [253.75, 19.6], size: [4.5, 12.0], shape: rect}
+      - {id: status-1, at: [15.5, 13.6], size: [2.0, 2.0], shape: circle}
+      - {id: status-2, at: [15.5, 17.6], size: [2.0, 2.0], shape: circle}
+      - {id: status-3, at: [15.5, 21.6], size: [2.0, 2.0], shape: circle}
+      - {id: status-4, at: [15.5, 25.6], size: [2.0, 2.0], shape: circle}
       - {id: con, at: [266.0, 19.0], size: [15.8, 13.2], shape: rect}
       - {id: mgmt, at: [296.0, 19.0], size: [15.8, 13.2], shape: rect}
       - {id: ctrl, at: [326.0, 19.0], size: [15.8, 13.2], shape: rect}
@@ -120,7 +132,11 @@ views:
       - {ref: common/rack-ear@1, id: ear-right, at: [437.9, -1.1], skin: right, optional: ears, group: furniture, rel-pos: 2}
       - {ref: common/qsfp28-cage@3, id: qsfp-1, at: [20.0, 16.0], group: qsfp28, rel-pos: 1}
       - {ref: common/qsfp28-cage@3, id: qsfp-2, at: [39.0, 16.0], group: qsfp28, rel-pos: 2}
-      - {ref: common/usb-a@3, id: usb, at: [244.0, 22.0], group: mgmt, rel-pos: 1}
+      - {ref: common/usb-a@3, id: usb, at: [247.5, 20.95], rotate: 90, group: mgmt, rel-pos: 1}
+      - {ref: common/led-dot@1, id: status-1, at: [15.5, 13.6], for: chassis, group: furniture, rel-pos: 4}
+      - {ref: common/led-dot@1, id: status-2, at: [15.5, 17.6], for: chassis, group: furniture, rel-pos: 5}
+      - {ref: common/led-dot@1, id: status-3, at: [15.5, 21.6], for: chassis, group: furniture, rel-pos: 6}
+      - {ref: common/led-dot@1, id: status-4, at: [15.5, 25.6], for: chassis, group: furniture, rel-pos: 7}
       - {ref: std/rj45@2, id: con, at: [266.0, 19.0], group: mgmt, rel-pos: 2}
       - {ref: common/rj45-eth@1, id: mgmt, at: [296.0, 19.0], group: mgmt, rel-pos: 3}
       - {ref: common/rj45-eth@1, id: ctrl, at: [326.0, 19.0], group: mgmt, rel-pos: 4}
@@ -189,17 +205,21 @@ gaps:
     left third and a smooth remainder, which reads as a vent beside something. It is
     modelled as a recess with a perforated region and NO identity is claimed. If it is
     an LCD it deserves a real component rather than paint.
-- what: front-indicator-array
+- what: front-indicator-meanings
   scope: [front]
   reason: vendor-silent
   wanted: an LED table, or a photograph of the unit powered down so the louvres read clean.
   note: >-
-    The photograph shows red and green points scattered at irregular positions and
-    heights across BOTH vent fields. They are internal board LEDs glowing through the
-    louvres, not a panel indicator array: they do not line up, they sit at several
-    louvre heights, and no document held carries an LED table. Only the one discrete
-    lamp right of the bezel is modelled. Inventing a row of indicators from those
-    points would be drawing the light rather than the hardware.
+    TWO DIFFERENT THINGS GLOW ON THIS FACE and only one of them is modelled. The
+    vendor's UI view draws a deliberate column of four round lamps immediately left of
+    port 0, which the rack photograph could not show because the transceivers' pull
+    tabs and their fibre cover that corner - those four are modelled, and WHAT EACH ONE
+    MEANS is unknown, so they carry `for: chassis` rather than an invented identity.
+    Separately the photograph shows red and green points scattered at irregular
+    positions and heights across BOTH vent fields; those are internal board LEDs
+    glowing through the louvres, not a panel array - they do not line up and they sit
+    at several louvre heights - and they are deliberately not drawn. No document held
+    carries an LED table for either.
 - what: psu-module-width
   scope: [rear]
   reason: sources-disagree
