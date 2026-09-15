@@ -1366,15 +1366,35 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             r.set("fill", "none")
             r.set("stroke", d["stroke"]); r.set("stroke-width", f"{d.get('stroke-width', 1):g}")
         else:
-            if d.get("pattern") and d.get("pattern-offset"):
-                ox, oy = d["pattern-offset"]
-                pid = f"portrayal-{d['pattern']}-o{ox:g}-{oy:g}".replace(".", "_")
+            # A PATTERN IS A TILE, AND EVERY FACE USED TO GET ONE VENDOR'S TILE.
+            # `slots-h` is 14 x 8 because that is the louvre pitch of the first
+            # hardware it was drawn for, so a bezel whose louvres run eight rows
+            # deep in the same height could only be drawn with three, and the
+            # most recognisable texture on the face came out as somebody else's
+            # grille. `pattern-pitch` states this rect's tile size in mm; the
+            # scale is derived from the tile's own width and height rather than
+            # a second copy of them, because two names for one number is this
+            # library's most repeated defect.
+            #
+            # Both modifiers reach the tile the same way - a patternTransform on
+            # a clone - so a rect can shift the lattice's phase, change its
+            # pitch, or do both. TRANSLATE BEFORE SCALE: that lands the scaled
+            # tile's own origin on the offset, which is what "align the lattice
+            # to this rect" has to mean once the tile is no longer 14 x 8.
+            if d.get("pattern") and (d.get("pattern-offset") or d.get("pattern-pitch")):
+                base = svg.find(f".//*[@id='portrayal-{d['pattern']}']")
+                ox, oy = d.get("pattern-offset") or (0.0, 0.0)
+                pw, ph = d.get("pattern-pitch") or (float(base.get("width")),
+                                                    float(base.get("height")))
+                sx, sy = pw / float(base.get("width")), ph / float(base.get("height"))
+                pid = (f"portrayal-{d['pattern']}-o{ox:g}-{oy:g}-s{sx:.6g}-{sy:.6g}"
+                       .replace(".", "_"))
                 if svg.find(f".//*[@id='{pid}']") is None:
-                    base = svg.find(f".//*[@id='portrayal-{d['pattern']}']")
                     clone = ET.fromstring(ET.tostring(base))
                     clone.set("id", pid)
-                    clone.set("patternTransform", f"translate({ox:g} {oy:g})")
-                    base.getparent().append(clone) if hasattr(base, "getparent") else svg.find(".//{http://www.w3.org/2000/svg}defs").append(clone)
+                    clone.set("patternTransform",
+                              f"translate({ox:g} {oy:g}) scale({sx:.6g} {sy:.6g})")
+                    svg.find(f".//{{{SVG_NS}}}defs").append(clone)
                 r.set("fill", f"url(#{pid})")
             else:
                 r.set("fill", f"url(#portrayal-{d['pattern']})" if d.get("pattern") else d.get("fill", "#2e3236"))

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: pbc
-version: 0.4.0
+version: 1.0.0
 maturity: modelled
 manufacturer: MaiaEdge
 model: PBC
@@ -21,8 +21,8 @@ provenance:
     exists because a device was once modelled wearing its flanges.
   cutouts: >-
     registry - each opening is the APERTURE the component declares, not the component's
-    outline: a QSFP28 cage is 19.0 x 14.5 of metal around an 18.5 x 9.58 hole offset
-    (0.25, 4.2) into it, and a USB-A is 17.0 x 9.3 around a 12.0 x 4.5 hole at
+    outline: common/qsfp-cage@2 is 19.5 x 10.18 of metal around an 18.5 x 9.58 hole
+    offset (0.575, 0.6) into it, and a USB-A is 17.0 x 9.3 around a 12.0 x 4.5 hole at
     (2.5, 2.4). The first draft punched the outlines and
     test_cutout_derivation caught all three.
   numbering: >-
@@ -53,11 +53,36 @@ provenance:
     chamfer was read from. `shape: octagon` was added to the format for this - decor
     and cutouts could draw a rectangle, a rounded rectangle, a D-sub shell and a
     stadium slot, and an octagon had no shape to be.
+  louvres: >-
+    photo-measured (COUNT ONLY) - each window carries a grid of short horizontal
+    slots, EIGHT ROWS DEEP AND FIVE COLUMNS ACROSS, counted on the rack photograph
+    and confirmed by the maintainer against the hardware. One column of the left
+    window, isolated and contrast-normalised, reads eight slots between the beads;
+    the unobstructed band above the transceivers reads four ribs, so five columns.
+    The PITCH IS NOT MEASURED: it is those counts divided into the window as
+    modelled, and the window itself is estimated. What the count corrects is a
+    shape, not a dimension - the marketing render draws the field as full-width
+    louvres and the first draft copied it, so this face wore a texture the hardware
+    does not have.
+  port-lamps: >-
+    field knowledge (the maintainer, 2026-09-15), corroborated NEGATIVELY by both
+    sources held - ONE lamp per 100G port. The photograph shows the louvres running
+    straight up to the cage flange with no lamp band above it, and the vendor's UI
+    view draws each port with nothing above it either; neither shows where the one
+    lamp sits, because the transceivers' pull tabs cover that corner. So the COUNT
+    is the maintainer's and the POSITION is estimated. This is why the plain
+    common/qsfp-cage@2 is fitted rather than common/qsfp28-cage@3, whose four lamps
+    belong to the AS7726-32X's panel by its own provenance and are not a property
+    of any cage.
   layout: >-
     ESTIMATED, AND THE WORD IS EXACT. The ORDER and GROUPING of everything on the
     front face are read off photographs of a unit in service (see gaps
     `front-positions`); the POSITIONS are a plausible arrangement consistent with
     them and with each component's own size. No position here is a measurement.
+    The one position that is better than that is the chassis status lamp: the
+    photograph puts it unambiguously in the notch outside the right window's
+    lower-right chamfer, and it is placed against that edge rather than against a
+    coordinate.
   rear: >-
     photo-measured (count and pitch only) - two supply modules and five 40 mm fans,
     read off the rear photographs. The fan pitch is the one figure on this device that
@@ -122,10 +147,18 @@ views:
       # flat top, 45-degree chamfer, short vertical end, chamfer back, flat bottom. A
       # first draft drew them as rounded rectangles and got the silhouette of the most
       # recognisable thing on this device wrong.
+      # THE LOUVRES ARE EIGHT ROWS DEEP AND FIVE COLUMNS ACROSS in each window,
+      # counted off the photograph (see provenance `louvres`), and they run the
+      # whole window with the ports punched through them. `slots-h` is a 14 x 8
+      # tile, so without a pitch this field came out as somebody else's grille -
+      # three coarse rows of stubby dashes. 115/5 and 24/8 give the counts
+      # exactly; the offset puts the lattice's first cell on the rect's own
+      # corner, and the rect is inset far enough that all four of its corners
+      # clear the octagon's chamfers.
       - {id: window-left, at: [8.0, 6.0], size: [132.0, 29.0], shape: octagon, fill: '#111316', kind: recess}
-      - {id: vent-left, at: [14.0, 9.0], size: [120.0, 23.0], pattern: slots-h, vent: 20}
+      - {id: vent-left, at: [16.5, 8.5], size: [115.0, 24.0], pattern: slots-h, pattern-pitch: [23.0, 3.0], pattern-offset: [16.5, 8.5], vent: 20}
       - {id: window-right, at: [232.0, 6.0], size: [132.0, 29.0], shape: octagon, fill: '#111316', kind: recess}
-      - {id: vent-right, at: [238.0, 9.0], size: [120.0, 23.0], pattern: slots-h, vent: 20}
+      - {id: vent-right, at: [240.5, 8.5], size: [115.0, 24.0], pattern: slots-h, pattern-pitch: [23.0, 3.0], pattern-offset: [240.5, 8.5], vent: 20}
       # the raised bead around each window, painted in the vendor's amber - the edge of
       # the cut, not a stripe on a flat plate
       - {id: bead-left, at: [8.0, 6.0], size: [132.0, 29.0], shape: octagon, fill: none, stroke: '#f5b21c', stroke-width: 1.5, kind: bezel}
@@ -133,17 +166,19 @@ views:
       - {id: right-panel, at: [380.0, 8.0], size: [36.0, 25.0], fill: '#16181b', stroke: '#2a2d31', stroke-width: 0.6, rx: 2.0, kind: recess}
       - {id: right-panel-mesh, at: [382.0, 10.0], size: [14.0, 21.0], pattern: holes, vent: 12}
       cutouts:
-      - {id: qsfp-1, at: [20.25, 20.2], size: [18.5, 9.58], shape: rect}
-      - {id: qsfp-2, at: [39.25, 20.2], size: [18.5, 9.58], shape: rect}
+      - {id: port-1, at: [20.575, 20.2], size: [18.5, 9.58], shape: rect}
+      - {id: port-2, at: [40.075, 20.2], size: [18.5, 9.58], shape: rect}
+      - {id: port-led-1, at: [28.75, 16.0], size: [2.0, 2.0], shape: circle}
+      - {id: port-led-2, at: [48.25, 16.0], size: [2.0, 2.0], shape: circle}
       - {id: usb, at: [253.75, 19.6], size: [4.5, 12.0], shape: rect}
-      - {id: status-1, at: [15.5, 13.6], size: [2.0, 2.0], shape: circle}
-      - {id: status-2, at: [15.5, 17.6], size: [2.0, 2.0], shape: circle}
-      - {id: status-3, at: [15.5, 21.6], size: [2.0, 2.0], shape: circle}
-      - {id: status-4, at: [15.5, 25.6], size: [2.0, 2.0], shape: circle}
+      - {id: status-1, at: [12.0, 13.6], size: [2.0, 2.0], shape: circle}
+      - {id: status-2, at: [12.0, 17.6], size: [2.0, 2.0], shape: circle}
+      - {id: status-3, at: [12.0, 21.6], size: [2.0, 2.0], shape: circle}
+      - {id: status-4, at: [12.0, 25.6], size: [2.0, 2.0], shape: circle}
       - {id: con, at: [266.0, 19.0], size: [15.8, 13.2], shape: rect}
       - {id: mgmt, at: [296.0, 19.0], size: [15.8, 13.2], shape: rect}
       - {id: ctrl, at: [326.0, 19.0], size: [15.8, 13.2], shape: rect}
-      - {id: sys-led, at: [370.0, 18.6], size: [4.0, 4.0], shape: circle}
+      - {id: sys-led, at: [359.2, 30.2], size: [4.0, 4.0], shape: circle}
     silkscreen:
     - {at: [196.0, 24.0], text: MaiaEdge, font-size: 9.0, fill: '#f2a71b', anchor: middle, for: chassis}
     - {at: [273.9, 15.5], text: CON, for: con}
@@ -153,17 +188,32 @@ views:
       placements:
       - {ref: common/rack-ear@1, id: ear-left, at: [-14.0, -1.1], skin: left, optional: ears, group: furniture, rel-pos: 1}
       - {ref: common/rack-ear@1, id: ear-right, at: [437.9, -1.1], skin: right, optional: ears, group: furniture, rel-pos: 2}
-      - {ref: common/qsfp28-cage@3, id: qsfp-1, at: [20.0, 16.0], group: qsfp28, rel-pos: 1}
-      - {ref: common/qsfp28-cage@3, id: qsfp-2, at: [39.0, 16.0], group: qsfp28, rel-pos: 2}
+      # ONE LAMP PER PORT, NOT FOUR. common/qsfp28-cage@3 carries a four-lamp
+      # band, and its own provenance says what those are: the AS7726-32X's
+      # per-lane breakout lamps, holes in THAT chassis's panel above the
+      # aperture. This chassis has no such band - the louvres run straight up to
+      # the cage flange in the photograph, and the vendor's own UI view draws
+      # the ports with nothing above them - so the plain cage is the right part
+      # and the single lamp is placed beside it.
+      - {ref: common/qsfp-cage@2, id: port-1, at: [20.0, 19.6], group: qsfp28, rel-pos: 1}
+      - {ref: common/qsfp-cage@2, id: port-2, at: [39.5, 19.6], group: qsfp28, rel-pos: 2}
+      - {ref: common/led-dot@1, id: port-led-1, at: [28.75, 16.0], for: port-1, group: furniture, rel-pos: 8}
+      - {ref: common/led-dot@1, id: port-led-2, at: [48.25, 16.0], for: port-2, group: furniture, rel-pos: 9}
       - {ref: common/usb-a@3, id: usb, at: [247.5, 20.95], rotate: 90, group: mgmt, rel-pos: 1}
-      - {ref: common/led-dot@1, id: status-1, at: [15.5, 13.6], for: chassis, group: furniture, rel-pos: 4}
-      - {ref: common/led-dot@1, id: status-2, at: [15.5, 17.6], for: chassis, group: furniture, rel-pos: 5}
-      - {ref: common/led-dot@1, id: status-3, at: [15.5, 21.6], for: chassis, group: furniture, rel-pos: 6}
-      - {ref: common/led-dot@1, id: status-4, at: [15.5, 25.6], for: chassis, group: furniture, rel-pos: 7}
+      - {ref: common/led-dot@1, id: status-1, at: [12.0, 13.6], for: chassis, group: furniture, rel-pos: 4}
+      - {ref: common/led-dot@1, id: status-2, at: [12.0, 17.6], for: chassis, group: furniture, rel-pos: 5}
+      - {ref: common/led-dot@1, id: status-3, at: [12.0, 21.6], for: chassis, group: furniture, rel-pos: 6}
+      - {ref: common/led-dot@1, id: status-4, at: [12.0, 25.6], for: chassis, group: furniture, rel-pos: 7}
       - {ref: std/rj45@2, id: con, at: [266.0, 19.0], group: mgmt, rel-pos: 2}
       - {ref: common/rj45-eth@1, id: mgmt, at: [296.0, 19.0], group: mgmt, rel-pos: 3}
       - {ref: common/rj45-eth@1, id: ctrl, at: [326.0, 19.0], group: mgmt, rel-pos: 4}
-      - {ref: common/led-indicator@1, id: sys-led, at: [370.0, 18.6], for: chassis, group: furniture, rel-pos: 3}
+      # THE STATUS LAMP IS ON THE CHAMFER, not centred on the face. The
+      # photograph puts it in the notch outside the right window's lower-right
+      # 45-degree edge, low and clear of the bead - modelled here as the
+      # chamfer's own midpoint pushed out along its normal far enough to leave a
+      # visible gap. Centring it vertically, as the first draft did, put the one
+      # lit thing on this face in a place the hardware has nothing.
+      - {ref: common/led-indicator@1, id: sys-led, at: [359.2, 30.2], for: chassis, group: furniture, rel-pos: 3}
   rear:
     size: {w: 437.9, h: 41.27}
     panel:
@@ -233,16 +283,19 @@ gaps:
   reason: vendor-silent
   wanted: an LED table, or a photograph of the unit powered down so the louvres read clean.
   note: >-
-    TWO DIFFERENT THINGS GLOW ON THIS FACE and only one of them is modelled. The
+    THREE DIFFERENT THINGS GLOW ON THIS FACE and two of them are modelled. The
     vendor's UI view draws a deliberate column of four round lamps immediately left of
     port 0, which the rack photograph could not show because the transceivers' pull
     tabs and their fibre cover that corner - those four are modelled, and WHAT EACH ONE
     MEANS is unknown, so they carry `for: chassis` rather than an invented identity.
-    Separately the photograph shows red and green points scattered at irregular
+    Each 100G port also carries ONE lamp (provenance `port-lamps`); its count is the
+    maintainer's and NEITHER SOURCE SHOWS WHERE IT SITS, so it is drawn above the cage
+    - the one place both sources rule out a four-lamp band - and that position is a
+    guess. Separately the photograph shows red and green points scattered at irregular
     positions and heights across BOTH vent fields; those are internal board LEDs
     glowing through the louvres, not a panel array - they do not line up and they sit
     at several louvre heights - and they are deliberately not drawn. No document held
-    carries an LED table for either.
+    carries an LED table for any of the three.
 - what: psu-module-width
   scope: [rear]
   reason: sources-disagree
