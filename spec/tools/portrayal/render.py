@@ -158,6 +158,29 @@ def _dsub_path(x, y, w, h):
     return " ".join(seg)
 
 
+def _octagon_path(x, y, w, h):
+    """A rectangle with its four corners chamfered at 45 degrees.
+
+    The chamfer is derived from the SHORT axis rather than passed in, so this
+    helper's signature matches `_dsub_path` and `_slot_path` and one `shape:`
+    value can mean the same thing in decor and in cutouts. 0.35 of the short
+    axis is what a formed bezel's window reads as on the MaiaEdge PBC - a flat
+    top, a chamfer, a short vertical end, a chamfer back - and it degrades
+    sensibly: a square box becomes a regular-looking octagon, a long one keeps
+    its chamfers proportional to its height instead of swallowing its length.
+    """
+    c = min(w, h) * 0.35
+    # EVERY SEGMENT IS AN ABSOLUTE L, including the ones H and V would shorten.
+    # Eight corners then read as eight coordinate pairs, which is what lets a
+    # test - or anyone reading the SVG - check the shape without parsing SVG's
+    # shorthand.
+    pts = ((x + c, y), (x + w - c, y), (x + w, y + c), (x + w, y + h - c),
+           (x + w - c, y + h), (x + c, y + h), (x, y + h - c), (x, y + c))
+    head = f"M{pts[0][0]:.3f} {pts[0][1]:.3f}"
+    rest = " ".join(f"L{px:.3f} {py:.3f}" for px, py in pts[1:])
+    return f"{head} {rest} Z"
+
+
 def _slot_path(x, y, w, h):
     """A stadium: semicircular ends on the short axis."""
     if w >= h:
@@ -1313,7 +1336,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         # four values the cutouts take, drawn by the same two helpers, so the
         # vocabulary means one thing in both places.
         shape = d.get("shape")
-        as_path = shape in ("d-sub", "slot")
+        as_path = shape in ("d-sub", "slot", "octagon")
         r = ET.SubElement(deco_g, f"{{{SVG_NS}}}{'path' if as_path else 'rect'}")
         if d.get("pattern") == "vent" or d.get("vent"):
             kind = "vent-field"
@@ -1333,6 +1356,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         if as_path:
             dx, dy = d["at"]; dw, dh = d["size"]
             r.set("d", _dsub_path(dx, dy, dw, dh) if shape == "d-sub"
+                  else _octagon_path(dx, dy, dw, dh) if shape == "octagon"
                   else _slot_path(dx, dy, dw, dh))
         else:
             r.set("x", f"{d['at'][0]:g}"); r.set("y", f"{d['at'][1]:g}")
@@ -1452,7 +1476,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                 e = ET.SubElement(cut_g, f"{{{SVG_NS}}}ellipse")
                 e.set("cx", f"{x + cw_ / 2:g}"); e.set("cy", f"{y + ch_ / 2:g}")
                 e.set("rx", f"{cw_ / 2:g}"); e.set("ry", f"{ch_ / 2:g}")
-            elif shape in ("d-sub", "slot"):
+            elif shape in ("d-sub", "slot", "octagon"):
                 # THE SCHEMA OFFERED FOUR SHAPES AND THIS DREW TWO. `d-sub` and
                 # `slot` fell through to the rect branch and were punched as
                 # rectangles - so a D-subminiature aperture rendered as a black
@@ -1478,6 +1502,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                 pw, ph = (ch_, cw_) if rot % 180 == 90 else (cw_, ch_)
                 px_, py_ = cx_ - pw / 2, cy_ - ph / 2
                 e.set("d", _dsub_path(px_, py_, pw, ph) if shape == "d-sub"
+                      else _octagon_path(px_, py_, pw, ph) if shape == "octagon"
                       else _slot_path(px_, py_, pw, ph))
                 if rot:
                     e.set("transform", f"rotate({rot:g} {cx_:g} {cy_:g})")

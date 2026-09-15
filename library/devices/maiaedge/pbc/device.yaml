@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: pbc
-version: 0.3.1
+version: 0.4.0
 maturity: modelled
 manufacturer: MaiaEdge
 model: PBC
@@ -44,6 +44,15 @@ provenance:
     "1x USB 2.0", "RJ45 115.2 kbps" console. Confirmed on the hardware: the front
     photograph reads the three jacks' own silkscreen as CON, MGMT and CTRL, which is
     the console plus the two management ports the table counts.
+  bezel: >-
+    ESTIMATED shape, from photographs. The front face is a formed bezel, not a flat
+    plate: it slopes out to a raised band running the full width and slopes back, and
+    two OCTAGONAL windows are cut through it to the faceplate behind, each edged with a
+    raised bead in the vendor's amber. The right-hand end of the right window is the
+    only window end unobstructed by cabling in any photograph held, and is what the
+    chamfer was read from. `shape: octagon` was added to the format for this - decor
+    and cutouts could draw a rectangle, a rounded rectangle, a D-sub shell and a
+    stadium slot, and an octagon had no shape to be.
   layout: >-
     ESTIMATED, AND THE WORD IS EXACT. The ORDER and GROUPING of everything on the
     front face are read off photographs of a unit in service (see gaps
@@ -101,12 +110,26 @@ views:
     size: {w: 437.9, h: 41.27}
     panel:
       decor:
-      - {id: vent-left-back, at: [8.0, 6.0], size: [132.0, 29.0], fill: '#111316', rx: 3.0, kind: recess}
-      - {id: vent-left, at: [10.0, 8.0], size: [128.0, 25.0], pattern: slots-h, vent: 20}
-      - {id: bezel-left, at: [8.0, 6.0], size: [132.0, 29.0], fill: none, stroke: '#f2a71b', stroke-width: 1.6, rx: 6.0, kind: bezel}
-      - {id: vent-right-back, at: [232.0, 6.0], size: [132.0, 29.0], fill: '#111316', rx: 3.0, kind: recess}
-      - {id: vent-right, at: [234.0, 8.0], size: [128.0, 25.0], pattern: slots-h, vent: 20}
-      - {id: bezel-right, at: [232.0, 6.0], size: [132.0, 29.0], fill: none, stroke: '#f2a71b', stroke-width: 1.6, rx: 6.0, kind: bezel}
+      # THE FACE IS NOT FLAT. It slopes out of the faceplate to a raised band that
+      # runs the full width and slopes back down, the way a PowerEdge R740xd's bezel
+      # does. Three fills read as that relief; nothing dimensions the slope, so this
+      # is shading rather than a claimed depth.
+      - {id: slope-top, at: [0.0, 0.0], size: [437.9, 5.4], fill: '#191c1f', kind: bezel}
+      - {id: raised-band, at: [0.0, 5.4], size: [437.9, 30.2], fill: '#25292e', kind: bezel}
+      - {id: slope-bottom, at: [0.0, 35.6], size: [437.9, 5.67], fill: '#191c1f', kind: bezel}
+      - {id: crease-top, at: [0.0, 5.0], size: [437.9, 0.5], fill: '#31363c', kind: bezel}
+      # THE WINDOWS ARE OCTAGONS, cut through the raised band to the faceplate behind:
+      # flat top, 45-degree chamfer, short vertical end, chamfer back, flat bottom. A
+      # first draft drew them as rounded rectangles and got the silhouette of the most
+      # recognisable thing on this device wrong.
+      - {id: window-left, at: [8.0, 6.0], size: [132.0, 29.0], shape: octagon, fill: '#111316', kind: recess}
+      - {id: vent-left, at: [14.0, 9.0], size: [120.0, 23.0], pattern: slots-h, vent: 20}
+      - {id: window-right, at: [232.0, 6.0], size: [132.0, 29.0], shape: octagon, fill: '#111316', kind: recess}
+      - {id: vent-right, at: [238.0, 9.0], size: [120.0, 23.0], pattern: slots-h, vent: 20}
+      # the raised bead around each window, painted in the vendor's amber - the edge of
+      # the cut, not a stripe on a flat plate
+      - {id: bead-left, at: [8.0, 6.0], size: [132.0, 29.0], shape: octagon, fill: none, stroke: '#f5b21c', stroke-width: 1.5, kind: bezel}
+      - {id: bead-right, at: [232.0, 6.0], size: [132.0, 29.0], shape: octagon, fill: none, stroke: '#f5b21c', stroke-width: 1.5, kind: bezel}
       - {id: right-panel, at: [380.0, 8.0], size: [36.0, 25.0], fill: '#16181b', stroke: '#2a2d31', stroke-width: 0.6, rx: 2.0, kind: recess}
       - {id: right-panel-mesh, at: [382.0, 10.0], size: [14.0, 21.0], pattern: holes, vent: 12}
       cutouts:

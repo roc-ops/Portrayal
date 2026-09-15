@@ -396,7 +396,12 @@
       "description": "bay path -> attrs for the occupant seated THERE: `psu-1: {watts: 750W}` prints on that supply alone, where `component-attrs` reaches every instance of a component. A nested path - `riser-1/slot-1` - reaches a module's own bay. The keys are the occupant's `fields`, and the values print on its `data-from` nodes.",
       "additionalProperties": {
        "type": "object",
-       "additionalProperties": {"type": ["string", "number"]}
+       "additionalProperties": {
+        "type": [
+         "string",
+         "number"
+        ]
+       }
       }
      },
      "component-attrs": {
@@ -646,7 +651,8 @@
             "rect",
             "circle",
             "d-sub",
-            "slot"
+            "slot",
+            "octagon"
            ],
            "default": "rect",
            "description": "outline of the painted patch. `rect` (with optional `rx`) is the default; `d-sub` is the D-subminiature outline of TE 114-40010 Figure 3 and `slot` a stadium. THE SAME VOCABULARY A CUTOUT'S `shape` TAKES, because paint printed around a connector takes the connector's shape and until now had no way to say so - a patch behind a D-sub could only be a rectangle or a rounded one. `circle` is accepted for symmetry and still draws as a rect; decor has `rx`."
@@ -680,7 +686,8 @@
             "rect",
             "circle",
             "d-sub",
-            "slot"
+            "slot",
+            "octagon"
            ],
            "default": "rect"
           },
@@ -890,14 +897,30 @@
           "plan": {
            "type": "object",
            "additionalProperties": false,
-           "required": ["view", "at"],
+           "required": [
+            "view",
+            "at"
+           ],
            "description": "WHERE THIS BAY'S OCCUPANT IS SEEN FROM ANOTHER FACE. A riser is seated in its rear bay and stands inside the chassis; with the lid off, the top view should show it there. The occupant's contract names the component that draws it from above (`plan.ref`), and this says which view that lands in and where - the plan's top-left in that view's mm. `in:` and `under:` are the target view's, so the plan sits in its well and paints under the lid. `mirror` flips it, for a riser whose cards face the other way. The occupants of the occupant's own bays come along at the offsets those bays declare. The result is a PROJECTION: it carries `data-of` naming the seated part and no data-path of its own, so the tree lists the part once, selecting either face marks both, and the 3D kit builds nothing from it - the body already stands there.",
            "properties": {
-            "view": {"type": "string"},
-            "at": {"$ref": "#/$defs/xy"},
-            "in": {"$ref": "#/$defs/segment"},
-            "under": {"type": "array", "items": {"$ref": "#/$defs/segment"}},
-            "mirror": {"type": "boolean"}
+            "view": {
+             "type": "string"
+            },
+            "at": {
+             "$ref": "#/$defs/xy"
+            },
+            "in": {
+             "$ref": "#/$defs/segment"
+            },
+            "under": {
+             "type": "array",
+             "items": {
+              "$ref": "#/$defs/segment"
+             }
+            },
+            "mirror": {
+             "type": "boolean"
+            }
            }
           },
           "floor": {
