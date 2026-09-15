@@ -94,3 +94,64 @@ def test_plate_refuses_an_image_with_no_faceplate(pm):
             im.putpixel((x, y), (0, 0, 0))
     with pytest.raises(ValueError):
         pm.plate(im)
+
+
+# --- a face is two constants that must travel together -----------------------
+
+def test_a_face_carries_its_width_and_height_as_one_thing(pm):
+    """THE TWO CONSTANTS ARE THE POINT and they must not be separable.
+
+    The scale comes from the width and the CHECK comes from the height, so a
+    caller that supplies one without the other gets a scale validated against
+    somebody else's face - which either fails for the wrong reason or, worse,
+    passes. This library's recurring defect is two numbers held in one place and
+    never compared; a face is the fix, not a convenience.
+    """
+    assert pm.FHD_MODULE.w_mm == 108.97
+    assert pm.FHD_MODULE.h_mm == 35.05
+    assert "FHD" in pm.FHD_MODULE.name
+
+
+def test_the_default_face_is_still_the_fhd_module(pm):
+    """Three contracts call figures MEASURED on the strength of this default.
+
+    `plate` and `validate` keep answering for an FHD face when asked for
+    nothing, so every existing caller and every figure already in the library
+    is untouched by the generalisation.
+    """
+    im = _im(pm, "35510.G.jpg")
+    x0, y0, x1, y1, mm = pm.plate(im)
+    assert pm.validate(mm, y0, y1) < 3.0
+    assert abs((x1 - x0 + 1) * mm - 108.97) < 0.01
+
+
+def test_measure_does_both_steps_against_one_face(pm):
+    """The mismatch is impossible when one call owns both constants."""
+    im = _im(pm, "35510.G.jpg")
+    (x0, y0, x1, y1, mm), off = pm.measure(im)
+    assert off < 3.0
+    assert abs((x1 - x0 + 1) * mm - pm.FHD_MODULE.w_mm) < 0.01
+
+
+def test_measuring_a_face_against_the_wrong_face_refuses(pm):
+    """An FHD panel declared as a MaiaEdge chassis must not validate.
+
+    This is the whole safety property: the width scales anything, and only the
+    height check can tell you the scale was taken off the wrong object.
+    """
+    im = _im(pm, "35510.G.jpg")
+    with pytest.raises(ValueError) as e:
+        pm.measure(im, face=pm.MAIAEDGE_PBC)
+    assert "MaiaEdge" in str(e.value), \
+        "the refusal must name the face it was measured against"
+
+
+def test_the_maiaedge_face_carries_the_datasheet_figures(pm):
+    """437.90 x 41.27 mm, the chassis without its ears.
+
+    From page 3 of MaiaEdge-PBC-PCE-Datasheet-v3.pdf: chassis 1.625 x 17.24 x
+    11.46 in. NOT the 19.02 in with-ears width - the ears are a separate part and
+    the bezel face is inset from them.
+    """
+    assert round(pm.MAIAEDGE_PBC.w_mm, 2) == 437.90
+    assert round(pm.MAIAEDGE_PBC.h_mm, 2) == 41.27

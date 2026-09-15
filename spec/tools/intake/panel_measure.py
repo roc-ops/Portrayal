@@ -1,34 +1,56 @@
 #!/usr/bin/env python3
-"""Measure an FHD module face from a face-on product render.
+"""Measure a rack-mount face from a face-on product render.
 
-THE SCALE COMES FROM THE FACEPLATE AND IS CHECKED AGAINST THE OTHER AXIS. Every
-FHD cassette and adapter panel is 108.97 x 35.05 mm, dimensioned on FS's own
-render of SKU 57016. So a face-on image can be scaled on its plate width and then
-VERIFIED by asking whether that scale reproduces the plate height. A
+THE SCALE COMES FROM THE FACE'S WIDTH AND IS CHECKED AGAINST ITS HEIGHT. Give
+the tool a face whose two dimensions are known and it scales an image on the
+width, then VERIFIES by asking whether that scale reproduces the height. A
 three-quarter render fails that check, which is the whole point: it is what
-separates a measurement from a guess, and five of the eight connectors in this
-plan have only three-quarter renders and are therefore estimated instead.
+separates a measurement from a guess, and most of the connectors in this library
+have only three-quarter renders and are therefore estimated instead.
+
+A FACE IS BOTH CONSTANTS AT ONCE, and that is deliberate. The width will scale
+anything you point it at; only the height can tell you the scale was taken off
+the wrong object. Holding them apart is how a caller ends up validating a
+MaiaEdge chassis against an FHD cassette's height - so they travel as one
+`Face`, and `measure()` applies one face to both steps so they cannot be
+mismatched at all.
 
 The faceplate is the widest full-width dark band in the image - the module body
 behind it is narrower and sits above it in these renders.
 
 `plate()` locates that band HEURISTICALLY, and the heuristic is correct only
-for FS's own renders, which put a black module on a white ground - on a render
-shot against a dark backdrop, the backdrop is the widest full-width dark band
-instead. `validate()` is what makes the result trustworthy: it now enforces
-its own tolerance rather than just reporting one, so never call `plate()`
-without it.
+for renders that put a dark chassis on a light ground - on a render shot against
+a dark backdrop, the backdrop is the widest full-width dark band instead.
+`validate()` is what makes the result trustworthy: it enforces its own tolerance
+rather than just reporting one, so never call `plate()` without it. `measure()`
+is the way to be sure you have.
 """
-W_MM = 108.97
-H_MM = 35.05
+import collections
+
+Face = collections.namedtuple("Face", "name w_mm h_mm")
+
+# THE FHD MODULE FACE, and the default because every figure in the library
+# measured with this tool so far was measured against it. Every FHD cassette and
+# adapter panel is this size, dimensioned on FS's own render of SKU 57016 and
+# corroborated by the dimension line on 57016.B.jpg reading 4.29in x 1.38in.
+FHD_MODULE = Face("FHD module", 108.97, 35.05)
+
+# THE MAIAEDGE PBC CHASSIS, from page 3 of MaiaEdge-PBC-PCE-Datasheet-v3.pdf:
+# chassis 1.625 x 17.24 x 11.46 in. NOT the 19.02 in "with ears and tabs" width
+# on the row below it - the ears are a separate part and the bezel face is inset
+# from them, so scaling on 483.11 would make every port on the face too small.
+MAIAEDGE_PBC = Face("MaiaEdge PBC chassis", 437.90, 41.27)
 
 
 def _dark(p):
     return sum(p) < 690
 
 
-def plate(im):
+def plate(im, face=FHD_MODULE):
     """(x0, y0, x1, y1, mm_per_px) for the faceplate in a face-on render.
+
+    `face` supplies the known width the scale is taken from. Pass the same face
+    to `validate`, or use `measure` and avoid the question.
 
     Raises ValueError if no contiguous band of qualifying rows reaches 20 px
     tall - see the comment on `runs(mask, gap=0)` below for why contiguity is
@@ -56,11 +78,11 @@ def plate(im):
             f"{max(end - start + 1, 0)} rows tall - no faceplate found "
             "(a dark backdrop or a three-quarter render fails this way)")
     y0, y1, x0 = start, end, rows[start][2]
-    return x0, y0, x0 + wmax - 1, y1, W_MM / wmax
+    return x0, y0, x0 + wmax - 1, y1, face.w_mm / wmax
 
 
-def validate(mm, y0, y1, *, limit=3.0):
-    """Percent by which the scaled plate height misses the known 35.05 mm.
+def validate(mm, y0, y1, *, face=FHD_MODULE, limit=3.0):
+    """Percent by which the scaled plate height misses the face's known height.
 
     RAISES rather than reporting, because a caller can ignore a number and
     cannot ignore an exception. Everything downstream of this module writes
@@ -71,12 +93,26 @@ def validate(mm, y0, y1, *, limit=3.0):
     deliberately measuring how far off a render is.
     """
     h = (y1 - y0 + 1) * mm
-    off = abs(h - H_MM) / H_MM * 100
+    off = abs(h - face.h_mm) / face.h_mm * 100
     if off > limit:
         raise ValueError(
-            f"scaled plate height {h:.2f} mm misses the known {H_MM} mm by "
-            f"{off:.1f}% - likely a three-quarter render or a dark background")
+            f"scaled plate height {h:.2f} mm misses {face.name}'s known "
+            f"{face.h_mm} mm by {off:.1f}% - likely a three-quarter render, a "
+            "dark background, or the wrong face")
     return off
+
+
+def measure(im, face=FHD_MODULE, limit=3.0):
+    """`((x0, y0, x1, y1, mm_per_px), off_percent)` for one face.
+
+    THE WAY TO CALL THIS MODULE. `plate` and `validate` each take a face because
+    they have to, and a caller who passes one and forgets the other validates a
+    scale against somebody else's height - which fails for the wrong reason, or
+    passes for no reason. Here one face does both, so the mismatch has nowhere
+    to live.
+    """
+    box = plate(im, face)
+    return box, validate(box[4], box[1], box[3], face=face, limit=limit)
 
 
 def runs(mask, gap=3):
