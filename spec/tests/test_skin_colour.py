@@ -155,7 +155,7 @@ def test_the_usb2_tongue_is_not_the_usb3_blue():
 
 def test_the_maiaedge_pbc_asks_for_the_usb2_skin():
     """The device whose datasheet says USB 2.0 is the reason this skin exists."""
-    d = yaml.safe_load((LIB / "devices/maiaedge/pbc/device.yaml").read_text())
+    d = yaml.safe_load((LIB / "devices/maiaedge/pbc-2000/device.yaml").read_text())
     usb = next(p for p in d["views"]["front"]["components"]["placements"]
                if p["id"] == "usb")
     assert usb["ref"] == "std/usb-a@1"

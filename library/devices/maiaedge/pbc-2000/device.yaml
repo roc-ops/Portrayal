@@ -1,10 +1,10 @@
 format: 1
 kind: device
-name: pbc
-version: 2.0.2
+name: pbc-2000
+version: 3.0.0
 maturity: modelled
 manufacturer: MaiaEdge
-model: PBC
+model: PBC-2000
 profile: networking
 description: >-
   MaiaEdge Path Border Controller - a 1RU appliance that merges L2 switching and L3
@@ -13,6 +13,13 @@ description: >-
   beside a console and two management jacks; two 550W supplies and a five-fan wall on
   the back, front-to-back.
 provenance:
+  model-number: >-
+    vendor documentation - www.maiaedge.io/getting-started (getting-started.pdf),
+    Safety Information: "The PBC-2000 is equipped with two redundant AC power
+    inputs." THE DATASHEET AND THE MANAGEMENT UI BOTH SAY ONLY "PBC", which is
+    what this device was first modelled as; the setup guide is the only source
+    held that gives the number. A DCIM reads `model` as the identity, so it is
+    the number and not the family.
   size: >-
     datasheet - MaiaEdge-PBC-PCE-Datasheet-v3.pdf page 3, "Chassis (H x W x D)
     1.625 x 17.24 x 11.46 in" = 41.27 x 437.90 x 291.08 mm. THE ROW BELOW IT,
@@ -58,6 +65,18 @@ provenance:
     "1x USB 2.0", "RJ45 115.2 kbps" console. Confirmed on the hardware: the front
     photograph reads the three jacks' own silkscreen as CON, MGMT and CTRL, which is
     the console plus the two management ports the table counts.
+    AND NOW STATED BY THE VENDOR IN PROSE, which is better than either: the setup
+    guide (www.maiaedge.io/getting-started) describes the face directly - the front
+    has "two windows where the ports are exposed"; the lefthand window has "two 100G
+    interfaces, numbered 0 and 1 from left to right"; and in the righthand window,
+    "from left to right, you'll find a USB port (not currently used), a serial console
+    port, a 10/100/1000 management port, and a 10/100/1000 control port". It calls
+    MGMT "the PBC's center management port" and CTRL "rightmost port in the right
+    window". Every one of those matches what was modelled from the photograph and the
+    UI view; the ORDER of this face is no longer an inference. The vendor's own word
+    for the octagonal cutouts is `window`, which is what the decor already calls them.
+    Note the guide rates the two jacks 10/100/1000 where the table says 1GB, and calls
+    the USB port NOT CURRENTLY USED.
   bezel: >-
     ESTIMATED shape, from photographs. The front face is a formed bezel, not a flat
     plate: it slopes out to a raised band running the full width and slopes back, and
@@ -298,19 +317,24 @@ gaps:
     and the coordinates are not. Tracked as roc-ops/Portrayal#247.
 - what: right-panel-identity
   scope: [front]
-  reason: needs-photo
+  reason: needs-drawing
   wanted: >-
-    a face-on photograph of the right end of the front face, or a word from the vendor
-    saying what the recess is.
+    a dimension for the display and its bezel, so a real component can be built for it.
+    WHAT it is is no longer the question.
   note: >-
-    The recessed rectangle at the right end of the front face is drawn as decor because
-    nobody can put a part number to it. The product render shows it smooth and uniform,
-    which reads as a display; the photograph shows what could be a honeycomb-perforated
-    left third, which would read as a vent beside something - but that surface is mostly
-    reflection in every photograph held, and a first draft that drew the perforation was
-    asserting a vent nobody has seen. IT IS NOW A BLANK GREY PLATE: the recess is
-    certain, its surface is not, and a plain box is the only honest way to draw the
-    difference. If it is an LCD it deserves a real component rather than paint.
+    IT IS A TOUCH SCREEN, and the vendor says so four times. The product documentation
+    has NTP servers configurable "using the on-board web UI or the front panel's touch
+    screen" and DNS "by navigating the menus on the front panel display on the front of
+    your PBC"; the setup guide sets the management IP, gateway and netmask "using the
+    touch screen on the front of the device", and reads the claim code "by navigating
+    the menus on the touchscreen display (from the home screen display, tap on the Claim
+    Info button)". So it is an interactive display with a home screen and menus - not
+    the vent a first draft drew a honeycomb on, which was reading reflection.
+    STILL DRAWN AS A BLANK GREY PLATE, deliberately: this entry used to say "if it is an
+    LCD it deserves a real component rather than paint", and that is now the open work
+    rather than an open question. No source held dimensions the display or its bezel, so
+    a component would have to invent its size - and the recess it sits in is itself
+    estimated like everything else on this face.
 - what: front-indicator-meanings
   scope: [front]
   reason: vendor-silent
