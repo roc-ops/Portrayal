@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: fhd-1ufce
-version: 1.3.0
+version: 1.3.1
 manufacturer: FS.com
 model: FHD-1UFCE
 description: >-
@@ -49,13 +49,21 @@ provenance:
     FOUR IS COUNTED, NOT MEASURED. The capacity table's "4 ports" and the
     features list's "holds up to 4x FAPs or MTP® Cassettes" agree on the
     number; no page in this datasheet dimensions an empty bay opening. Each
-    bay is sized at 108.97 x 35.05 - the FHD module envelope already measured
-    off FS's own render for fs/fhd-1mtp6lcd-os2-a@1, the only FHD cassette
-    this library carries, since every FHD module this plan will add shares
-    that one width by definition (the format's own name for it). The four sit
-    contiguous across the panel: (448.0 - 4 x 108.97) / 2 = 6.06mm margin each
-    side, centred top-to-bottom in the 44.0mm face: (44.0 - 35.05) / 2 =
-    4.475mm.
+    bay is sized at 108.97 x 35.05 - the FHD module envelope, a FAMILY
+    CONSTANT common to every cassette this format admits, not a figure this
+    device measures itself or that belongs to any one cassette. It was first
+    measured off FS's own render for fs/fhd-1mtp6lcd-os2-a@1 (SKU 57016), and
+    `panel_measure` refuses to scale ANY FHD face-on render at all unless
+    that scale reproduces the same 35.05mm height - which is what makes this
+    a constant worth carrying rather than a per-cassette reading. FOUR
+    CASSETTES SIT IN EVERY BAY'S `accepts` TODAY: fs/fhd-1mtp6lcd-os2-a@1,
+    fs/fhd-splice-12-lc@1, fs/fhd-2mtp12-lc-os2-a@1 and
+    fs/fhd-1mtp12-sc-os2-a@1. The bay geometry does not depend on which of
+    them seats in it, because all four - and every other FHD module this
+    plan might still add - share this one envelope by definition of the
+    format (the format's own name for it). The four sit contiguous across
+    the panel: (448.0 - 4 x 108.97) / 2 = 6.06mm margin each side, centred
+    top-to-bottom in the 44.0mm face: (44.0 - 35.05) / 2 = 4.475mm.
   front-panel-detail: >-
     ESTIMATED BY OMISSION. Page 1's product photograph shows two extraction
     handles near the panel ends and an FS logo left of centre, but page 7's
