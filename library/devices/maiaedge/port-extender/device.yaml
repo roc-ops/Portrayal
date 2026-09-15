@@ -1,0 +1,363 @@
+format: 1
+kind: device
+name: port-extender
+version: 0.1.0
+maturity: modelled
+manufacturer: MaiaEdge
+model: Port Extender
+profile: networking
+description: >-
+  MaiaEdge Port Extender - a 1RU switch sold to expand a Path Border Controller's
+  physical port count. 48 SFP28 tenant ports in two rows and 8 QSFP28 fabric uplinks
+  on the front; 1+1 supplies and a 3+1 fan tray behind. Its port roles are configured
+  from the MaiaEdge portal rather than on the box, which is what distinguishes it from
+  the third-party switches that can stand in for it.
+provenance:
+  size: >-
+    datasheet - MaiaEdge-Port-Extender-Datasheet-v1.pdf page 3, "Dimensions (H x W x D)
+    44 mm x 438 mm x 520 mm (1U EIA Rackmount)". NOT the PBC-2000's envelope: that box
+    is 41.27 x 437.90 x 291.08, so this one is taller and 229 mm deeper, and nothing
+    may be borrowed between them.
+  ports: >-
+    datasheet page 3 - "Tenant Ports: 48 x SFP28 10GbE / 25GbE" and "Fabric Uplink
+    Ports: 8 x QSFP28 100GbE". 48 + 8 = 56, WHICH RECONCILES THE TWO PORT COUNTS IN
+    CIRCULATION: the marketing copy says "48 ports" and the product documentation calls
+    it "a 56-port switch", and both are right.
+  arrangement: >-
+    photo-measured (COUNT ONLY) from the product render. The SFP28 field is TWO ROWS of
+    24 columns, ganged in three blocks of eight; the QSFP28 field is two rows of four,
+    in one block at the right-hand end, with visibly wider cages. Counted at 6x on the
+    render, and the counts close against the datasheet exactly - 3 x 8 x 2 = 48 and
+    4 x 2 = 8. Nothing else comes from that image: see `positions`.
+  port-ids: >-
+    EVERY PORT IS `port-N`, INCLUDING THE EIGHT UPLINKS, and that is not cosmetic.
+    dcim_export treats a placement as an interface only when its id starts with
+    `port-`; the first draft called the uplinks `uplink-49`..`uplink-56` and the NetBox
+    and Nautobot exports came out with 48 interfaces instead of 56, silently. The
+    uplink's ROLE is carried by the part it is placed from (common/qsfp28-cage@3,
+    media qsfp28) and by `numbering` below, which is where a role belongs - the id
+    carries the number the vendor addresses it by.
+  numbering: >-
+    derived, AND THE DOCUMENTATION CORROBORATES EVERY NUMBER IT NAMES. Ports run
+    column-major, top then bottom, so column N carries ports 2N-1 and 2N - the
+    arrangement std/sfp-ganged's other two-row users already draw. That puts column 21
+    at 41/42, column 24 at 47/48, and the four uplink columns at 49/50, 51/52, 53/54 and
+    55/56. prod.maiaedge.io/docs names ports 41, 42, 43, 44 and 48 among the tenant
+    ports and 51, 52, 53, 54, 55 and 56 among the uplinks, and cables a PBC's two 100G
+    interfaces to 51 and 52 - one uplink COLUMN. Every number it uses falls where this
+    scheme puts it. The scheme is still derived rather than read off the metal.
+  positions: >-
+    ESTIMATED, AND THE WORD IS EXACT. The only image of this face is a marketing render,
+    and it is not orthographic - the lid is visible, so the face is foreshortened
+    vertically. Its HORIZONTAL proportions are usable and were checked: the cage pitch
+    reads 22.2 px against a faceplate scaled on the datasheet's 438 mm, which is 14.0 mm
+    against std/sfp-ganged's measured 14.25 - 2% out, so the standard pitch is what is
+    placed rather than the reading. NOTHING VERTICAL COMES FROM THE RENDER. The two rows
+    are centred on the face and the row gap is chosen, not measured.
+  pitch: >-
+    registry - 14.25 for the tenant ports (std/sfp-ganged@1, SFF-8433 port pitch) and
+    19.0 for the uplinks (common/qsfp28-cage@3's measured ganged pitch). The blocks then
+    fill the face exactly: 4.0 margin + 3 x 114.0 + two 3.0 gaps + a 6.0 gap + 76.0 +
+    4.0 margin = 438.0. That the arithmetic closes on the datasheet width is a check,
+    not a measurement - the margins and gaps were chosen to make it close.
+  lint-l39: >-
+    EIGHT L39 WARNINGS ON THIS DEVICE ARE roc-ops/Portrayal#248, NOT A DEFECT HERE. The
+    rule checks that a part sits centred in its own opening; common/qsfp28-cage@3's
+    aperture deliberately does not, because the lamp band occupies the top 3.4 mm of the
+    part and the hole sits under it. The cutouts here are the component's own declared
+    aperture, offset (0.25, 4.2) into it, which is what `cutouts` provenance requires.
+    Do not "fix" them by centring - that would punch the hole in the wrong place to
+    quiet a rule that is itself wrong.
+  uplink-lamps: >-
+    photo-measured (count only) - FOUR lamps per uplink port, above the top row and
+    below the bottom, clearly clustered in fours at 9x on the render. That is what
+    common/qsfp28-cage@3 draws, so the part is right here - unlike on the PBC-2000,
+    where the same band had to be dropped because that chassis has none.
+  power: >-
+    datasheet page 3 - "1+1 Redundant, Hot-Swappable PSUs (100-240VAC or 180-300VDC
+    auto-ranging)" and "< 500W Maximum (Typical < 350W at 25C)".
+  thermal: >-
+    datasheet page 3 - "3+1 Redundant Fans; Front-to-Back and Back-to-Front
+    configurations available". BOTH directions are offered, so no airflow is asserted:
+    the same hole is an intake on one SKU and an exhaust on another.
+attrs:
+  # SECTIONS FOLLOW THE LIBRARY'S, NOT THE DATASHEET'S TABLE. L68 is the rule
+  # that knows: `memory` and `storage` are filed under `platform` by 53 and 51
+  # other devices, and a second home makes the key unfindable by section. Same
+  # for `cpu` (54), `bmc` (41) and `packet-buffer` (41), which is why none of
+  # them is spelled the way the datasheet's own rows are.
+  performance:
+    switching-capacity: 2.0 Tbps
+    latency-overhead-ns: 500
+    packet-buffer: 32 MB
+  platform:
+    cpu: Intel x86, up to 8 cores
+    memory: 8-32 GB ECC DDR4
+    storage: configurable M.2 SSD
+    bmc: integrated BMC plane, IPMI 2.0 compliant
+  power:
+    input: ac-or-dc
+    power-max-w: 500
+    power-typical-w: 350
+    psu-redundancy: 1+1 hot-swappable
+  thermal:
+    fan-redundancy: 3+1
+    airflow: front-to-back or back-to-front
+  environmental:
+    operating-temp-c: '0 to 45'
+    operating-humidity: 5% to 90% non-condensing
+    mtbf-hours: 150000
+  lifecycle:
+    eol: none-announced
+chassis: {width: 438.0, height: 44.0, depth: 520.0, ru: 1, color: '#1b1e21'}
+groups:
+  # ONE GROUP, BECAUSE THE VENDOR NUMBERS ALL 56 IN ONE SPACE. The documentation
+  # addresses tenant ports 41-48 and uplinks 51-56 without ever restarting the
+  # count, so the uplinks are 49-56 and not 1-8 of their own group. `index-origin`
+  # takes only 0 or 1, which is the schema saying exactly this: a group's numbering
+  # starts at its first port, and a second group would have to start again.
+  ports:
+    term: Port
+    role: traffic
+    index-origin: 1
+    mixed: >-
+      48 SFP28 tenant ports and 8 QSFP28 fabric uplinks, numbered 1-56 in one space.
+      The media differ and the numbering does not, so each port carries its own media
+      through the part it is placed from rather than from the group.
+    description: >-
+      A tenant port's ROLE is set from the MaiaEdge portal rather than on the box -
+      Customer, Internal Fabric (INNI), External Fabric (ENNI), MaiaConnect or Internet
+      (DIA) - which is what the documentation says distinguishes this switch from the
+      third-party ones that can stand in for it.
+  furniture: {term: Part, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 438.0, h: 44.0}
+    panel:
+      decor:
+      - {id: faceplate, at: [0.0, 0.0], size: [438.0, 44.0], fill: '#25292e', kind: bezel}
+      # A VENT STRIP ABOVE AND BELOW THE PORT FIELD, both running nearly the full
+      # width. Their EXTENT is read off the render; their height is not, because the
+      # face is foreshortened in it.
+      # `slots-h` is a 14 x 8 tile, so a 2.2 mm strip showed less than a third of one
+      # row of it and the vents did not read at all. The pitch is this hardware's, not
+      # the tile's: about 57 slots across the strip, counted on the render.
+      - {id: vent-top, at: [4.0, 0.9], size: [430.0, 2.2], pattern: slots-h, pattern-pitch: [7.54, 2.2], pattern-offset: [4.0, 0.9], vent: 25}
+      - {id: vent-bottom, at: [4.0, 40.9], size: [430.0, 2.2], pattern: slots-h, pattern-pitch: [7.54, 2.2], pattern-offset: [4.0, 40.9], vent: 25}
+      # the ganged blocks are one continuous slot each, not a frame per port - see
+      # std/sfp-ganged's own note on why it carries no collar
+      - {id: block-1, at: [3.4, 8.0], size: [115.2, 29.0], fill: '#16181b', rx: 1.2, kind: port-shell}
+      - {id: block-2, at: [120.4, 8.0], size: [115.2, 29.0], fill: '#16181b', rx: 1.2, kind: port-shell}
+      - {id: block-3, at: [237.4, 8.0], size: [115.2, 29.0], fill: '#16181b', rx: 1.2, kind: port-shell}
+      - {id: block-uplink, at: [357.4, 5.9], size: [77.2, 33.2], fill: '#16181b', rx: 1.2, kind: port-shell}
+      cutouts:
+      - {id: port-1, at: [4.0, 8.6], size: [14.25, 10.4], shape: rect}
+      - {id: port-2, at: [4.0, 25.0], size: [14.25, 10.4], shape: rect}
+      - {id: port-3, at: [18.25, 8.6], size: [14.25, 10.4], shape: rect}
+      - {id: port-4, at: [18.25, 25.0], size: [14.25, 10.4], shape: rect}
+      - {id: port-5, at: [32.5, 8.6], size: [14.25, 10.4], shape: rect}
+      - {id: port-6, at: [32.5, 25.0], size: [14.25, 10.4], shape: rect}
+      - {id: port-7, at: [46.75, 8.6], size: [14.25, 10.4], shape: rect}
+      - {id: port-8, at: [46.75, 25.0], size: [14.25, 10.4], shape: rect}
+      - {id: port-9, at: [61.0, 8.6], size: [14.25, 10.4], shape: rect}
+      - {id: port-10, at: [61.0, 25.0], size: [14.25, 10.4], shape: rect}
+      - {id: port-11, at: [75.25, 8.6], size: [14.25, 10.4], shape: rect}
+      - {id: port-12, at: [75.25, 25.0], size: [14.25, 10.4], shape: rect}
+      - {id: port-13, at: [89.5, 8.6], size: [14.25, 10.4], shape: rect}
+      - {id: port-14, at: [89.5, 25.0], size: [14.25, 10.4], shape: rect}
+      - {id: port-15, at: [103.75, 8.6], size: [14.25, 10.4], shape: rect}
+      - {id: port-16, at: [103.75, 25.0], size: [14.25, 10.4], shape: rect}
+      - {id: port-17, at: [121.0, 8.6], size: [14.25, 10.4], shape: rect}
+      - {id: port-18, at: [121.0, 25.0], size: [14.25, 10.4], shape: rect}
+      - {id: port-19, at: [135.25, 8.6], size: [14.25, 10.4], shape: rect}
+      - {id: port-20, at: [135.25, 25.0], size: [14.25, 10.4], shape: rect}
+      - {id: port-21, at: [149.5, 8.6], size: [14.25, 10.4], shape: rect}
+      - {id: port-22, at: [149.5, 25.0], size: [14.25, 10.4], shape: rect}
+      - {id: port-23, at: [163.75, 8.6], size: [14.25, 10.4], shape: rect}
+      - {id: port-24, at: [163.75, 25.0], size: [14.25, 10.4], shape: rect}
+      - {id: port-25, at: [178.0, 8.6], size: [14.25, 10.4], shape: rect}
+      - {id: port-26, at: [178.0, 25.0], size: [14.25, 10.4], shape: rect}
+      - {id: port-27, at: [192.25, 8.6], size: [14.25, 10.4], shape: rect}
+      - {id: port-28, at: [192.25, 25.0], size: [14.25, 10.4], shape: rect}
+      - {id: port-29, at: [206.5, 8.6], size: [14.25, 10.4], shape: rect}
+      - {id: port-30, at: [206.5, 25.0], size: [14.25, 10.4], shape: rect}
+      - {id: port-31, at: [220.75, 8.6], size: [14.25, 10.4], shape: rect}
+      - {id: port-32, at: [220.75, 25.0], size: [14.25, 10.4], shape: rect}
+      - {id: port-33, at: [238.0, 8.6], size: [14.25, 10.4], shape: rect}
+      - {id: port-34, at: [238.0, 25.0], size: [14.25, 10.4], shape: rect}
+      - {id: port-35, at: [252.25, 8.6], size: [14.25, 10.4], shape: rect}
+      - {id: port-36, at: [252.25, 25.0], size: [14.25, 10.4], shape: rect}
+      - {id: port-37, at: [266.5, 8.6], size: [14.25, 10.4], shape: rect}
+      - {id: port-38, at: [266.5, 25.0], size: [14.25, 10.4], shape: rect}
+      - {id: port-39, at: [280.75, 8.6], size: [14.25, 10.4], shape: rect}
+      - {id: port-40, at: [280.75, 25.0], size: [14.25, 10.4], shape: rect}
+      - {id: port-41, at: [295.0, 8.6], size: [14.25, 10.4], shape: rect}
+      - {id: port-42, at: [295.0, 25.0], size: [14.25, 10.4], shape: rect}
+      - {id: port-43, at: [309.25, 8.6], size: [14.25, 10.4], shape: rect}
+      - {id: port-44, at: [309.25, 25.0], size: [14.25, 10.4], shape: rect}
+      - {id: port-45, at: [323.5, 8.6], size: [14.25, 10.4], shape: rect}
+      - {id: port-46, at: [323.5, 25.0], size: [14.25, 10.4], shape: rect}
+      - {id: port-47, at: [337.75, 8.6], size: [14.25, 10.4], shape: rect}
+      - {id: port-48, at: [337.75, 25.0], size: [14.25, 10.4], shape: rect}
+      - {id: port-49, at: [358.25, 10.75], size: [18.5, 9.58], shape: rect}
+      - {id: port-50, at: [358.25, 23.67], size: [18.5, 9.58], shape: rect}
+      - {id: port-51, at: [377.25, 10.75], size: [18.5, 9.58], shape: rect}
+      - {id: port-52, at: [377.25, 23.67], size: [18.5, 9.58], shape: rect}
+      - {id: port-53, at: [396.25, 10.75], size: [18.5, 9.58], shape: rect}
+      - {id: port-54, at: [396.25, 23.67], size: [18.5, 9.58], shape: rect}
+      - {id: port-55, at: [415.25, 10.75], size: [18.5, 9.58], shape: rect}
+      - {id: port-56, at: [415.25, 23.67], size: [18.5, 9.58], shape: rect}
+    silkscreen:
+    - {at: [16.0, 7.0], text: MaiaEdge, font-size: 3.4, fill: '#f2a71b', anchor: middle, for: chassis}
+    components:
+      placements:
+      - {ref: common/rack-ear@1, id: ear-left, at: [-14.0, -1.4], skin: left, optional: ears, group: furniture, rel-pos: 1}
+      - {ref: common/rack-ear@1, id: ear-right, at: [438.0, -1.4], skin: right, optional: ears, group: furniture, rel-pos: 2}
+      - {ref: std/sfp-ganged@1, id: port-1, at: [4.0, 8.6], rotate: 180, group: ports, rel-pos: 1, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-2, at: [4.0, 25.0], group: ports, rel-pos: 2, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-3, at: [18.25, 8.6], rotate: 180, group: ports, rel-pos: 3, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-4, at: [18.25, 25.0], group: ports, rel-pos: 4, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-5, at: [32.5, 8.6], rotate: 180, group: ports, rel-pos: 5, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-6, at: [32.5, 25.0], group: ports, rel-pos: 6, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-7, at: [46.75, 8.6], rotate: 180, group: ports, rel-pos: 7, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-8, at: [46.75, 25.0], group: ports, rel-pos: 8, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-9, at: [61.0, 8.6], rotate: 180, group: ports, rel-pos: 9, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-10, at: [61.0, 25.0], group: ports, rel-pos: 10, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-11, at: [75.25, 8.6], rotate: 180, group: ports, rel-pos: 11, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-12, at: [75.25, 25.0], group: ports, rel-pos: 12, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-13, at: [89.5, 8.6], rotate: 180, group: ports, rel-pos: 13, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-14, at: [89.5, 25.0], group: ports, rel-pos: 14, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-15, at: [103.75, 8.6], rotate: 180, group: ports, rel-pos: 15, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-16, at: [103.75, 25.0], group: ports, rel-pos: 16, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-17, at: [121.0, 8.6], rotate: 180, group: ports, rel-pos: 17, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-18, at: [121.0, 25.0], group: ports, rel-pos: 18, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-19, at: [135.25, 8.6], rotate: 180, group: ports, rel-pos: 19, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-20, at: [135.25, 25.0], group: ports, rel-pos: 20, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-21, at: [149.5, 8.6], rotate: 180, group: ports, rel-pos: 21, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-22, at: [149.5, 25.0], group: ports, rel-pos: 22, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-23, at: [163.75, 8.6], rotate: 180, group: ports, rel-pos: 23, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-24, at: [163.75, 25.0], group: ports, rel-pos: 24, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-25, at: [178.0, 8.6], rotate: 180, group: ports, rel-pos: 25, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-26, at: [178.0, 25.0], group: ports, rel-pos: 26, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-27, at: [192.25, 8.6], rotate: 180, group: ports, rel-pos: 27, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-28, at: [192.25, 25.0], group: ports, rel-pos: 28, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-29, at: [206.5, 8.6], rotate: 180, group: ports, rel-pos: 29, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-30, at: [206.5, 25.0], group: ports, rel-pos: 30, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-31, at: [220.75, 8.6], rotate: 180, group: ports, rel-pos: 31, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-32, at: [220.75, 25.0], group: ports, rel-pos: 32, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-33, at: [238.0, 8.6], rotate: 180, group: ports, rel-pos: 33, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-34, at: [238.0, 25.0], group: ports, rel-pos: 34, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-35, at: [252.25, 8.6], rotate: 180, group: ports, rel-pos: 35, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-36, at: [252.25, 25.0], group: ports, rel-pos: 36, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-37, at: [266.5, 8.6], rotate: 180, group: ports, rel-pos: 37, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-38, at: [266.5, 25.0], group: ports, rel-pos: 38, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-39, at: [280.75, 8.6], rotate: 180, group: ports, rel-pos: 39, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-40, at: [280.75, 25.0], group: ports, rel-pos: 40, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-41, at: [295.0, 8.6], rotate: 180, group: ports, rel-pos: 41, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-42, at: [295.0, 25.0], group: ports, rel-pos: 42, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-43, at: [309.25, 8.6], rotate: 180, group: ports, rel-pos: 43, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-44, at: [309.25, 25.0], group: ports, rel-pos: 44, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-45, at: [323.5, 8.6], rotate: 180, group: ports, rel-pos: 45, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-46, at: [323.5, 25.0], group: ports, rel-pos: 46, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-47, at: [337.75, 8.6], rotate: 180, group: ports, rel-pos: 47, attrs: {media: sfp28, speed: 25g}}
+      - {ref: std/sfp-ganged@1, id: port-48, at: [337.75, 25.0], group: ports, rel-pos: 48, attrs: {media: sfp28, speed: 25g}}
+      - {ref: common/qsfp28-cage@3, id: port-49, at: [358.0, 6.55], group: ports, rel-pos: 49}
+      - {ref: common/qsfp28-cage@3, id: port-50, at: [358.0, 22.95], rotate: 180, group: ports, rel-pos: 50}
+      - {ref: common/qsfp28-cage@3, id: port-51, at: [377.0, 6.55], group: ports, rel-pos: 51}
+      - {ref: common/qsfp28-cage@3, id: port-52, at: [377.0, 22.95], rotate: 180, group: ports, rel-pos: 52}
+      - {ref: common/qsfp28-cage@3, id: port-53, at: [396.0, 6.55], group: ports, rel-pos: 53}
+      - {ref: common/qsfp28-cage@3, id: port-54, at: [396.0, 22.95], rotate: 180, group: ports, rel-pos: 54}
+      - {ref: common/qsfp28-cage@3, id: port-55, at: [415.0, 6.55], group: ports, rel-pos: 55}
+      - {ref: common/qsfp28-cage@3, id: port-56, at: [415.0, 22.95], rotate: 180, group: ports, rel-pos: 56}
+  rear:
+    size: {w: 438.0, h: 44.0}
+    panel:
+      decor:
+      - {id: rear-envelope, at: [0.0, 0.0], size: [438.0, 44.0], fill: '#1b1e21', kind: envelope}
+  top:
+    size: {w: 438.0, h: 520.0}
+    panel:
+      decor:
+      - {id: top-envelope, at: [0.0, 0.0], size: [438.0, 520.0], fill: '#1b1e21', kind: envelope}
+  bottom:
+    size: {w: 438.0, h: 520.0}
+    panel:
+      decor:
+      - {id: bottom-envelope, at: [0.0, 0.0], size: [438.0, 520.0], fill: '#1b1e21', kind: envelope}
+  left:
+    size: {w: 520.0, h: 44.0}
+    panel:
+      decor:
+      - {id: left-envelope, at: [0.0, 0.0], size: [520.0, 44.0], fill: '#1b1e21', kind: envelope}
+  right:
+    size: {w: 520.0, h: 44.0}
+    panel:
+      decor:
+      - {id: right-envelope, at: [0.0, 0.0], size: [520.0, 44.0], fill: '#1b1e21', kind: envelope}
+gaps:
+- what: rear-face-unmodelled
+  scope: [rear]
+  reason: needs-photo
+  wanted: a photograph of the rear, or a mechanical drawing of it.
+  note: >-
+    THE REAR'S INVENTORY IS KNOWN AND NOTHING PLACES IT, so the face draws the envelope
+    and nothing else. The datasheet counts two hot-swappable supplies and a 3+1 fan
+    tray, and lists the management interfaces as "1 x Rear CPU/BMC Shared Ethernet
+    (RJ45) - 1 x Serial Console (RJ45) - 1 x USB Type-A"; the product documentation
+    puts the management jack "on the rear of the Port Extender (center of the device,
+    at the top)". That is an inventory and one coarse position, and drawing a rear from
+    it would be inventing five or six coordinates to carry one. The front render shows
+    no jacks at all, which is why all three management interfaces are taken to be back
+    there.
+- what: front-face-positions
+  scope: [front]
+  reason: needs-drawing
+  wanted: >-
+    a face-on photograph or a mechanical drawing. Either settles the whole face in one
+    step.
+  note: >-
+    EVERY POSITION ON THE FRONT FACE IS ESTIMATED. The only image held is a marketing
+    render that is not orthographic - the lid is visible in it, so the face is
+    foreshortened vertically and no vertical figure may be taken from it. What the
+    render does settle is the ARRANGEMENT (see provenance `arrangement`), and the
+    horizontal pitch it implies agrees with the standard part to 2%. The row heights,
+    the row gap, the margins and the block gaps are all chosen.
+- what: tenant-port-lamps
+  scope: [front]
+  reason: needs-photo
+  wanted: a face-on photograph, or an LED table.
+  note: >-
+    A ROW OF SMALL ROUND FEATURES RUNS ABOVE AND BELOW THE TENANT PORTS, one per column
+    in each row, and they are NOT DRAWN because nothing held can say whether they are
+    lamps or fasteners. On an 800 px render an unlit indicator and a panel screw are the
+    same dark dot. The uplink ports' lamps ARE drawn, and the difference is the evidence:
+    those are clustered in fours per port and read clearly as the four-lane band the
+    cage part carries. Guessing 48 indicators into existence, or 48 screws, would be
+    drawing something nobody can check.
+- what: port-numerals
+  scope: [front]
+  reason: needs-photo
+  wanted: a face-on photograph square enough to read the legends.
+  note: >-
+    The port numbers are PRINTED between the two rows - the render shows a legend per
+    column - and they are not drawn, because the render cannot resolve their format.
+    Whether a column is labelled with both numbers, or one above the other, or on
+    alternating sides, is not readable at 800 px. The NUMBERING is modelled (see
+    provenance `numbering`); the artwork that carries it is not.
+- what: wordmark-logo-mark
+  scope: [front]
+  reason: needs-drawing
+  wanted: the MaiaEdge mark as vector art.
+  note: >-
+    The faceplate carries the word MaiaEdge at its top left, and that is drawn. The
+    stylised angular glyph beside it is not - the same decision the PBC-2000's face
+    records, for the same reason: approximating a company's mark from a render is
+    drawing something nobody can check, and a wrong logo is worse than an absent one.
+- what: envelope-faces-undetailed
+  scope: [top, bottom, left, right]
+  reason: needs-photo
+  wanted: photographs of the lid, the underside and either flank.
+  note: >-
+    These four faces draw the chassis envelope and nothing else. The envelope is not a
+    guess - 44 x 438 x 520 is dimensioned on page 3 of the datasheet - but no source
+    held shows what is on any of them.
