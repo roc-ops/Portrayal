@@ -117,3 +117,44 @@ def test_the_front_numbering_reproduces_the_faceplate():
     assert P.front_label(view, "lc1.2", idx.get) == "2"
     assert P.front_label(view, "lc6.1", idx.get) == "11"
     assert P.front_label(view, "lc6.2", idx.get) == "12"
+
+
+def test_a_single_faced_module_with_paths_exports_no_ports():
+    """A module with `optical.paths` but no declared rear face states no
+    trunk. `common` and `split` (an OCU coupler's own part ids) are a
+    modeller's names, not roles, and path direction does not settle which
+    part is the trunk either - see the gate's comment in `build_module`. So a
+    single-faced module, however many fibre positions it carries, projects to
+    neither `front-ports` nor `rear-ports` rather than guessing: exporting one
+    side alone is exactly what netbox#21830 rejected.
+    """
+    import dcim_export as D
+    contract = {
+        "name": "t-coupler",
+        "parts": [
+            {"id": "common", "ref": "common/lc-duplex-adapter@3"},
+            {"id": "split", "ref": "common/lc-duplex-adapter@3"},
+        ],
+        "optical": {
+            "polish": "upc",
+            "paths": [{"from": "common.1",
+                       "to": [{"at": "split.1", "ratio": 50},
+                              {"at": "split.2", "ratio": 50}]}],
+        },
+    }
+    doc = D.build_module(contract, "Vendor", lambda ref: None)
+    assert "front-ports" not in doc
+    assert "rear-ports" not in doc
+
+
+def test_the_real_ppm_coupler_export_has_no_ports():
+    """PPM-OCU-50-50 in the built export: the same gate, against the actual
+    corpus rather than a literal dict. It has two adapters and a live optical
+    graph but only one face, so it must carry neither key."""
+    f = (ROOT / "library/exports/netbox/module-types/Smartoptics"
+         / "PPM-OCU-50-50.yaml")
+    if not f.exists():
+        pytest.skip("library/exports not built - run ./publish.sh --no-images")
+    doc = yaml.safe_load(f.read_text())
+    assert "front-ports" not in doc
+    assert "rear-ports" not in doc

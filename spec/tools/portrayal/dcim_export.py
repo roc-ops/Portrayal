@@ -51,6 +51,7 @@ from artifacts import Dist
 
 from manifest import view_parts
 import optical_ports
+from faces import face_ref
 
 # Portrayal media/speed -> DCIM interface type. Every value here is valid in
 # both libraries: NetBox's enum is a strict superset of Nautobot's (227 types
@@ -716,8 +717,25 @@ def build_module(contract, manufacturer, load_ref=None):
     # THE GLASS, IF THIS MODULE CARRIES ANY. A fibre cassette has no interfaces
     # in the DCIM sense - nothing terminates electrically - so these are its
     # entire port list, and a module with no `optical` adds nothing here.
-    if (contract.get("optical") or {}).get("paths"):
-        fibre = optical_ports.ports(contract_view(contract), load_ref)
+    #
+    # GATED ON A DECLARED REAR FACE, not merely on having paths. Section C3
+    # calls the rear connector "the trunk", but a single-faced module such as
+    # a PPM coupler has no rear face at all - its paths run entirely between
+    # parts drawn on its one face (`common.1 -> split.1/2` for an OCU coupler,
+    # never a `rear:`-prefixed endpoint) - and nothing in the contract names
+    # which of its parts is the trunk. `common` and `split` are part ids a
+    # modeller chose, not declared roles, and path direction does not settle
+    # it either: the cassette's own paths run FROM the front
+    # (`lc1.1 -> rear:mtp.1`) while an OCU's run FROM what would be the trunk
+    # (`common.1 -> split.n`) - opposite conventions, so a rule built on
+    # either would invent a role the contract never states. Exporting every
+    # fibre position of a single-faced module as a front port with no rear
+    # counterpart is exactly the shape netbox#21830 rejected ("We do not get
+    # to omit rear ports"), so a single-faced module exports neither list and
+    # waits for the vocabulary a future plan owes.
+    view = contract_view(contract)
+    if face_ref(view, "rear") and (contract.get("optical") or {}).get("paths"):
+        fibre = optical_ports.ports(view, load_ref)
         if fibre["rear"]:
             out["rear-ports"] = fibre["rear"]
         if fibre["front"]:
