@@ -202,3 +202,53 @@ def test_the_sc_adapters_are_the_first_real_check_of_the_registry_floor():
 def test_the_sc_front_ports_type_as_sc():
     c = contract(SC)
     assert c["optical"]["polish"] in ("upc", "apc")
+
+
+MTP24 = "fs/fhd-1mtp24-lc-os2-a/v1"
+
+
+def test_the_library_has_an_mpo_wider_than_twelve():
+    """`common/mpo-adapter@1` is 12 positions and the catalogue needs 8, 12, 16
+    and 24 across 48 modules. This is the first part that needs another."""
+    a = contract("common/mpo24-adapter/v1")
+    assert a is not None, "common/mpo24-adapter@1 not built"
+    assert a["optical"]["positions"] == 24
+    twelve = contract("common/mpo-adapter/v1")
+    assert twelve["optical"]["positions"] == 12, "the 12 must stay a 12"
+
+
+def test_the_mtp24_cassette_carries_24_fibres_on_one_rear_port():
+    """One rear connector, 24 positions - the count is on the port, not the
+    number of ports. This is C1's asymmetry at a width nothing has exercised."""
+    import json
+    import dcim_export as D
+    import optical_ports as P
+    f = ROOT / "library" / "dist" / "components.json"
+    if not f.exists():
+        pytest.skip("library/dist not built - run ./publish.sh --no-images")
+    idx = {f"{e['ns']}/{e['name']}@{e['major'][1:]}": e
+           for e in json.loads(f.read_text())["components"]}
+    e = idx["fs/fhd-1mtp24-lc-os2-a@1"]
+    got = P.ports(D.contract_view(e), idx.get)
+    assert len(got["rear"]) == 1, got["rear"]
+    assert got["rear"][0]["positions"] == 24
+    assert got["rear"][0]["type"] == "mpo"
+    assert len(got["front"]) == 24
+
+
+def test_the_front_numbering_covers_all_24_without_a_gap():
+    """The front-label derivation walks adapters by `at.x`. Twelve adapters do
+    not fit one row on a 108.97 face, so if the real arrangement is two rows the
+    x-order alone may not reproduce the vendor's numbering - which is exactly the
+    soft spot plan 5's self-review named. This is where it gets tested."""
+    import json
+    import dcim_export as D
+    import optical_ports as P
+    f = ROOT / "library" / "dist" / "components.json"
+    if not f.exists():
+        pytest.skip("library/dist not built")
+    idx = {f"{e['ns']}/{e['name']}@{e['major'][1:]}": e
+           for e in json.loads(f.read_text())["components"]}
+    e = idx["fs/fhd-1mtp24-lc-os2-a@1"]
+    m = P.fibre_map(D.contract_view(e), idx.get, "FHD-1X24MTPLCOS2A")
+    assert sorted(int(r["front"]) for r in m["rows"]) == list(range(1, 25))

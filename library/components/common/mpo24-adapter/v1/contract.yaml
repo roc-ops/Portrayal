@@ -1,0 +1,77 @@
+format: 1
+kind: component
+name: mpo24-adapter
+version: 1.0.0
+class: port
+profile: networking
+description: >-
+  Panel-mount MPO/MTP adapter carrying TWENTY-FOUR fibres in one ferrule - the
+  same shell common/mpo-adapter@1 uses for its own default twelve, fitted to
+  FS's MTP-24 (Male) to LC cassette (SKU 57023). common/mpo-adapter@1's own
+  description already says an MPO-8, -16 or -24 is the same adapter with a
+  different ferrule; this is that sibling, built as its own part with
+  `optical.positions: 24` rather than an override, because a cassette
+  composing it should not have to state the ferrule count itself.
+size: {w: 13.8, h: 9.4}
+size-confidence: {w: borrowed, h: borrowed}
+attrs: {media: fiber, connector: mpo}
+optical:
+  # TWENTY-FOUR FIBRES IN ONE FERRULE. common/mpo-adapter@1 carries twelve by
+  # default; this sibling exists because the FHD catalogue's own MTP-24
+  # cassette (SKU 57023) needs a rear connector common/mpo-adapter@1 cannot
+  # be - see its own description for why 12 has to stay 12 rather than being
+  # edited here.
+  positions: 24
+provenance:
+  size: >-
+    BORROWED FROM common/mpo-adapter@1, NOT MEASURED HERE. 57023.E.jpg is the
+    only face-on rear render FS provides for the MTP-24 cassette, and it fails
+    the same check every other FHD rear render fails: `panel_measure.plate()`
+    locks onto the connector's own mounting flange rather than the enclosure's
+    full mounting ears, and that band scales to 4.66% off the known 35.05 mm
+    second-axis check (limit 3.0%) - a three-quarter-style crop dressed as
+    face-on, not a source `validate()` accepts. No other image in the 57023
+    set (B/C/D/F) shows the rear at all. common/mpo-adapter@1's own 13.8 x 9.4
+    is itself not a measured adapter BODY (see that contract's own provenance
+    - 13.8 is an aperture PITCH off SKU 35510's panel, corroborated by
+    std/mpo@1's composed bore centre), but it is the only figure this library
+    holds for an MPO/MTP panel-mount shell of any ferrule count, and the shell
+    itself does not change size between an MPO-12 and an MPO-24 ferrule - only
+    the fibre count inside it does, which is exactly what
+    common/mpo-adapter@1's own description already states. So both axes are
+    `borrowed` from common/mpo-adapter@1 rather than restated as measured or
+    given an independent estimate: naming the same figure a second time with
+    no new source would be a duplicate, not a fact about this SKU. A face-on
+    rear photograph of 57023's mounting flange, square to the panel rather
+    than the connector band, is what would let this stop borrowing and start
+    measuring.
+  face-detail-gap: >-
+    57023.E.jpg shows a single wide MPO/MTP opening flanked by two captive
+    screws, a `1-24` port-range legend to its left and a `Type A` label to its
+    right - the same shell common/mpo-adapter@1 draws, at a ferrule this
+    library has not modelled before. None of that legend is drawn here, the
+    same treatment common/mpo-adapter@1 gives its own face-detail-gap.
+  connection-point: >-
+    `optical.at` reuses common/mpo-adapter@1's own centre of the 13.8 x 9.4
+    mating face - (13.8/2, 9.4/2) = (6.9, 4.7) - because the borrowed size is
+    identical to that part's, so there is no independent geometry here to
+    derive a different point from.
+parts:
+  - {ref: std/mpo@1, id: bore, at: [3.0, 1.9]}
+connection-points:
+  optical: {at: [6.9, 4.7], direction: front}
+relief:
+  wall: '#22262a'
+  features:
+    - node: bezel
+      out: 1.2
+      confidence: estimated
+      source: >-
+        reused from common/mpo-adapter@1's own bezel figure, NOT marked
+        `borrowed` because that part's own 1.2 is itself `confidence:
+        estimated` rather than measured - L36 treats a borrow from an
+        estimate as a fabricated measurement, and carrying an unmeasured
+        figure across to a different ferrule count is still an estimate, not
+        a new fact. Nothing in the 57023 imagery argues for a different
+        figure.
+skins: [default]
