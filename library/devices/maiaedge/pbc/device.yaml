@@ -1,0 +1,374 @@
+format: 1
+kind: device
+name: pbc
+version: 2.0.2
+maturity: modelled
+manufacturer: MaiaEdge
+model: PBC
+profile: networking
+description: >-
+  MaiaEdge Path Border Controller - a 1RU appliance that merges L2 switching and L3
+  routing to provision deterministic private Ethernet paths over any underlying
+  transport, with line-rate AES-256-GCM IPsec. Two 100GbE QSFP28 ports on the front
+  beside a console and two management jacks; two 550W supplies and a five-fan wall on
+  the back, front-to-back.
+provenance:
+  size: >-
+    datasheet - MaiaEdge-PBC-PCE-Datasheet-v3.pdf page 3, "Chassis (H x W x D)
+    1.625 x 17.24 x 11.46 in" = 41.27 x 437.90 x 291.08 mm. THE ROW BELOW IT,
+    "Total (With Ears and Tabs) 1.625 x 19.02 x 12.13 in", is NOT the chassis and is
+    not modelled: 19.02 in is 483.11 mm, the rack face including the ears, and L43
+    exists because a device was once modelled wearing its flanges.
+  cutouts: >-
+    registry - each opening is the APERTURE the component declares, not the component's
+    outline: common/qsfp-cage@2 is 19.5 x 10.18 of metal around an 18.5 x 9.58 hole
+    offset (0.575, 0.6) into it, and a USB-A is 17.0 x 9.3 around a 12.0 x 4.5 hole at
+    (2.5, 2.4). The first draft punched the outlines and
+    test_cutout_derivation caught all three.
+  numbering: >-
+    MaiaEdge's own management UI (working/intake/maiaedge/pbc/renders/ui-port-view.png)
+    numbers the two 100G ports 0 and 1, so the group is index-origin 0, and captions
+    them 100G. It captions MGMT and CTRL 1G and CON not at all, and - independently of
+    L76 - DRAWS CON AS A DIFFERENT JACK from the other two, which is the console-versus-
+    Ethernet split the rule had already forced. A UI view is a schematic: it is taken
+    here for what is on the face, in what order, and what the vendor calls it. No
+    coordinate comes from it.
+  jacks: >-
+    L76 and docs/rj45-family-design.md settle which part each jack is: an Ethernet jack
+    is common/rj45-eth@1 and a console or timing jack is std/rj45@2. CON is the
+    console, so it is the std part; MGMT and CTRL are the two 1GB management ports the
+    datasheet counts, so they are the Ethernet part. All three were std/rj45@2 in the
+    first draft and the rule caught it. THE TWO ETHERNET JACKS ARE FITTED TAB UP and
+    the console jack is not: the photograph reads MGMT's and CTRL's contacts along the
+    bottom of the opening with the latch slot above, and CON's the other way about.
+    Declared as rotate 180, because a jack fitted the other way up is the same jack
+    turned over rather than a reflection of it, and its lamps really do change sides.
+  usb: >-
+    the bare std/usb-a@1 receptacle, not the bezelled common/usb-a@3. That part wraps
+    the opening in a silver plate spanning the component so it can abut its neighbours'
+    bezels, which is the S9510-28DC's face; here the photograph shows a narrow slot
+    straight through the faceplate with no plate around it. THE TONGUE IS WHITE
+    BECAUSE THE PORT IS USB 2.0: page 3 says "1x USB 2.0", and USB-IF colours the
+    Type-A insulator by what the port is - white for 2.0, blue for 3.0. The part
+    could only draw the blue one, so it grew a `usb2` skin and this device asks for
+    it. The photograph agrees as far as it can: the slot shows a pale tongue against
+    a dark opening, and nothing blue.
+  ports: >-
+    datasheet page 3 - "Dual 100GbE Ethernet (QSFP28)", "2x 1GB RJ45" management,
+    "1x USB 2.0", "RJ45 115.2 kbps" console. Confirmed on the hardware: the front
+    photograph reads the three jacks' own silkscreen as CON, MGMT and CTRL, which is
+    the console plus the two management ports the table counts.
+  bezel: >-
+    ESTIMATED shape, from photographs. The front face is a formed bezel, not a flat
+    plate: it slopes out to a raised band running the full width and slopes back, and
+    two OCTAGONAL windows are cut through it to the faceplate behind, each edged with a
+    raised bead in the vendor's amber. The right-hand end of the right window is the
+    only window end unobstructed by cabling in any photograph held, and is what the
+    chamfer was read from. `shape: octagon` was added to the format for this - decor
+    and cutouts could draw a rectangle, a rounded rectangle, a D-sub shell and a
+    stadium slot, and an octagon had no shape to be.
+  louvres: >-
+    photo-measured (COUNT ONLY) - each window carries a grid of short horizontal
+    slots, EIGHT ROWS DEEP AND FIVE COLUMNS ACROSS, counted on the rack photograph
+    and confirmed by the maintainer against the hardware. One column of the left
+    window, isolated and contrast-normalised, reads eight slots between the beads;
+    the unobstructed band above the transceivers reads four ribs, so five columns.
+    The PITCH IS NOT MEASURED: it is those counts divided into the window as
+    modelled, and the window itself is estimated. What the count corrects is a
+    shape, not a dimension - the marketing render draws the field as full-width
+    louvres and the first draft copied it, so this face wore a texture the hardware
+    does not have.
+  port-lamps: >-
+    field knowledge (the maintainer, 2026-09-15), corroborated NEGATIVELY by both
+    sources held - ONE lamp per 100G port. The photograph shows the louvres running
+    straight up to the cage flange with no lamp band above it, and the vendor's UI
+    view draws each port with nothing above it either; neither shows where the one
+    lamp sits, because the transceivers' pull tabs cover that corner. So the COUNT
+    is the maintainer's and the POSITION is estimated. This is why the plain
+    common/qsfp-cage@2 is fitted rather than common/qsfp28-cage@3, whose four lamps
+    belong to the AS7726-32X's panel by its own provenance and are not a property
+    of any cage.
+  layout: >-
+    ESTIMATED, AND THE WORD IS EXACT. The ORDER and GROUPING of everything on the
+    front face are read off photographs of a unit in service (see gaps
+    `front-positions`); the POSITIONS are a plausible arrangement consistent with
+    them and with each component's own size. No position here is a measurement.
+    The one position that is better than that is the chassis status lamp: the
+    photograph puts it unambiguously in the notch outside the right window's
+    lower-right chamfer, and it is placed against that edge rather than against a
+    coordinate.
+  rear: >-
+    photo-measured (count and pitch only) - two supply modules and five 40 mm fans,
+    read off the rear photographs. The fan pitch is the one figure on this device that
+    a photograph did settle: five fans span 203.9 mm on a scale anchored to the
+    437.90 mm chassis width, giving 40.8 mm each against common/fan-module-41's known
+    40.9 - 0.2% out, which is what a sound scale looks like. Every other rear figure
+    is a position and is estimated.
+  power: >-
+    datasheet page 3 - "Internal: AC, DC" with "Redundant Power Supply: Yes". The
+    550W per-supply figure is photo-measured: both modules carry a blue 550W label.
+    The datasheet states no chassis draw, so none is recorded and L27 stands.
+  thermal: >-
+    datasheet page 3 - "Internal fan-based forced-air cooling. Front-to-Back (F2B) -
+    intake at front bezel / port side, exhaust at rear (fan/PSU side)."
+attrs:
+  physical:
+    weight-kg: 4.31
+  performance:
+    throughput: dual-100gbe
+    latency-overhead-us: 2
+  power:
+    input: ac-or-dc
+  features:
+    encryption: aes-256-gcm-ipsec
+    redundancy: 1+1
+  thermal:
+    airflow: front-to-back
+  environmental:
+    operating-temp-c: '0 to 50'
+    storage-temp-c: '-40 to 70'
+  lifecycle:
+    eol: none-announced
+chassis: {width: 437.9, height: 41.27, depth: 291.08, ru: 1, color: '#1b1e21'}
+groups:
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: qsfp28, speed: 100g}
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: the console and the two out-of-band management jacks, which share a bezel
+  psus: {term: PSU, role: service, index-origin: 1}
+  fans: {term: Fan, role: service, index-origin: 1}
+  furniture: {term: Part, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 437.9, h: 41.27}
+    panel:
+      decor:
+      # THE FACE IS NOT FLAT. It slopes out of the faceplate to a raised band that
+      # runs the full width and slopes back down, the way a PowerEdge R740xd's bezel
+      # does. Three fills read as that relief; nothing dimensions the slope, so this
+      # is shading rather than a claimed depth.
+      - {id: slope-top, at: [0.0, 0.0], size: [437.9, 5.4], fill: '#191c1f', kind: bezel}
+      - {id: raised-band, at: [0.0, 5.4], size: [437.9, 30.2], fill: '#25292e', kind: bezel}
+      - {id: slope-bottom, at: [0.0, 35.6], size: [437.9, 5.67], fill: '#191c1f', kind: bezel}
+      - {id: crease-top, at: [0.0, 5.0], size: [437.9, 0.5], fill: '#31363c', kind: bezel}
+      # THE WINDOWS ARE OCTAGONS, cut through the raised band to the faceplate behind:
+      # flat top, 45-degree chamfer, short vertical end, chamfer back, flat bottom. A
+      # first draft drew them as rounded rectangles and got the silhouette of the most
+      # recognisable thing on this device wrong.
+      # THE LOUVRES ARE EIGHT ROWS DEEP AND FIVE COLUMNS ACROSS in each window,
+      # counted off the photograph (see provenance `louvres`), and they run the
+      # whole window with the ports punched through them. `slots-h` is a 14 x 8
+      # tile, so without a pitch this field came out as somebody else's grille -
+      # three coarse rows of stubby dashes. 115/5 and 24/8 give the counts
+      # exactly; the offset puts the lattice's first cell on the rect's own
+      # corner, and the rect is inset far enough that all four of its corners
+      # clear the octagon's chamfers.
+      - {id: window-left, at: [8.0, 6.0], size: [132.0, 29.0], shape: octagon, fill: '#111316', kind: recess}
+      - {id: vent-left, at: [16.5, 8.5], size: [115.0, 24.0], pattern: slots-h, pattern-pitch: [23.0, 3.0], pattern-offset: [16.5, 8.5], vent: 20}
+      - {id: window-right, at: [232.0, 6.0], size: [132.0, 29.0], shape: octagon, fill: '#111316', kind: recess}
+      - {id: vent-right, at: [240.5, 8.5], size: [115.0, 24.0], pattern: slots-h, pattern-pitch: [23.0, 3.0], pattern-offset: [240.5, 8.5], vent: 20}
+      # the raised bead around each window, painted in the vendor's amber - the edge of
+      # the cut, not a stripe on a flat plate
+      - {id: bead-left, at: [8.0, 6.0], size: [132.0, 29.0], shape: octagon, fill: none, stroke: '#f5b21c', stroke-width: 1.5, kind: bezel}
+      - {id: bead-right, at: [232.0, 6.0], size: [132.0, 29.0], shape: octagon, fill: none, stroke: '#f5b21c', stroke-width: 1.5, kind: bezel}
+      # A BLANK GREY BOX, DELIBERATELY. Nobody can put a part number to the
+      # recess at this end (see gaps `right-panel-identity`), so it draws as a
+      # plain plate: the perforated left third the first draft gave it was read
+      # off a photograph in which the surface is mostly reflection, and drawing
+      # a vent field there asserted a vent nobody has seen.
+      - {id: right-panel, at: [380.0, 8.0], size: [36.0, 25.0], fill: '#42464b', rx: 2.0, kind: recess}
+      cutouts:
+      - {id: port-1, at: [20.575, 20.2], size: [18.5, 9.58], shape: rect}
+      - {id: port-2, at: [40.075, 20.2], size: [18.5, 9.58], shape: rect}
+      - {id: port-led-1, at: [28.75, 16.0], size: [2.0, 2.0], shape: circle}
+      - {id: port-led-2, at: [48.25, 16.0], size: [2.0, 2.0], shape: circle}
+      - {id: usb, at: [242.15, 19.6], size: [4.5, 12.0], shape: rect}
+      - {id: status-1, at: [16.0, 13.6], size: [2.0, 2.0], shape: circle}
+      - {id: status-2, at: [16.0, 17.6], size: [2.0, 2.0], shape: circle}
+      - {id: status-3, at: [16.0, 21.6], size: [2.0, 2.0], shape: circle}
+      - {id: status-4, at: [16.0, 25.6], size: [2.0, 2.0], shape: circle}
+      - {id: con, at: [266.58, 19.0], size: [15.8, 13.2], shape: rect}
+      - {id: mgmt, at: [302.32, 19.0], size: [15.8, 13.2], shape: rect}
+      - {id: ctrl, at: [338.05, 19.0], size: [15.8, 13.2], shape: rect}
+      - {id: sys-led, at: [359.2, 30.2], size: [4.0, 4.0], shape: circle}
+    silkscreen:
+    - {at: [196.0, 24.0], text: MaiaEdge, font-size: 9.0, fill: '#f2a71b', anchor: middle, for: chassis}
+    - {at: [274.48, 15.5], text: CON, for: con}
+    - {at: [310.22, 15.5], text: MGMT, for: mgmt}
+    - {at: [345.95, 15.5], text: CTRL, for: ctrl}
+    components:
+      placements:
+      - {ref: common/rack-ear@1, id: ear-left, at: [-14.0, -1.1], skin: left, optional: ears, group: furniture, rel-pos: 1}
+      - {ref: common/rack-ear@1, id: ear-right, at: [437.9, -1.1], skin: right, optional: ears, group: furniture, rel-pos: 2}
+      # ONE LAMP PER PORT, NOT FOUR. common/qsfp28-cage@3 carries a four-lamp
+      # band, and its own provenance says what those are: the AS7726-32X's
+      # per-lane breakout lamps, holes in THAT chassis's panel above the
+      # aperture. This chassis has no such band - the louvres run straight up to
+      # the cage flange in the photograph, and the vendor's own UI view draws
+      # the ports with nothing above them - so the plain cage is the right part
+      # and the single lamp is placed beside it.
+      - {ref: common/qsfp-cage@2, id: port-1, at: [20.0, 19.6], group: qsfp28, rel-pos: 1}
+      - {ref: common/qsfp-cage@2, id: port-2, at: [39.5, 19.6], group: qsfp28, rel-pos: 2}
+      - {ref: common/led-dot@1, id: port-led-1, at: [28.75, 16.0], for: port-1, group: furniture, rel-pos: 8}
+      - {ref: common/led-dot@1, id: port-led-2, at: [48.25, 16.0], for: port-2, group: furniture, rel-pos: 9}
+      # THE BARE RECEPTACLE, NOT THE BEZELLED ONE. common/usb-a@3 wraps the
+      # opening in a silver plate that spans the part so it can abut its
+      # neighbours' bezels - that is the S9510-28DC's face, where the USB and
+      # the jacks share one strip of metal. Here the photograph shows a narrow
+      # slot straight through the faceplate with no plate around it, so the
+      # standard aperture is the whole part.
+      - {ref: std/usb-a@1, id: usb, at: [238.4, 23.35], rotate: 90, skin: usb2, group: mgmt, rel-pos: 1}
+      - {ref: common/led-dot@1, id: status-1, at: [16.0, 13.6], for: chassis, group: furniture, rel-pos: 4}
+      - {ref: common/led-dot@1, id: status-2, at: [16.0, 17.6], for: chassis, group: furniture, rel-pos: 5}
+      - {ref: common/led-dot@1, id: status-3, at: [16.0, 21.6], for: chassis, group: furniture, rel-pos: 6}
+      - {ref: common/led-dot@1, id: status-4, at: [16.0, 25.6], for: chassis, group: furniture, rel-pos: 7}
+      - {ref: std/rj45@2, id: con, at: [266.58, 19.0], group: mgmt, rel-pos: 2}
+      # THE TWO ETHERNET JACKS ARE FITTED TAB UP. The photograph reads their
+      # contacts along the BOTTOM of the opening and the latch slot at the top;
+      # the part is drawn tab down, which is how the console jack beside them
+      # does sit. A jack fitted the other way up is the same jack turned through
+      # 180 degrees, not a reflection of it, so that is what is declared - and
+      # the two lamps travel with it to the other side, because on the hardware
+      # they do.
+      - {ref: common/rj45-eth@1, id: mgmt, at: [302.32, 19.0], rotate: 180, group: mgmt, rel-pos: 3}
+      - {ref: common/rj45-eth@1, id: ctrl, at: [338.05, 19.0], rotate: 180, group: mgmt, rel-pos: 4}
+      # THE STATUS LAMP IS ON THE CHAMFER, not centred on the face. The
+      # photograph puts it in the notch outside the right window's lower-right
+      # 45-degree edge, low and clear of the bead - modelled here as the
+      # chamfer's own midpoint pushed out along its normal far enough to leave a
+      # visible gap. Centring it vertically, as the first draft did, put the one
+      # lit thing on this face in a place the hardware has nothing.
+      - {ref: common/led-indicator@1, id: sys-led, at: [359.2, 30.2], for: chassis, group: furniture, rel-pos: 3}
+  rear:
+    size: {w: 437.9, h: 41.27}
+    panel:
+      decor:
+      - {id: blank-bracket, at: [167.0, 0.6], size: [33.0, 40.0], fill: '#8a8d91', kind: label-plate}
+    components:
+      placements:
+      - {ref: common/rack-ear@1, id: ear-left-r, at: [-14.0, -1.1], skin: left, optional: ears, group: furniture, rel-pos: 1}
+      - {ref: common/rack-ear@1, id: ear-right-r, at: [437.9, -1.1], skin: right, optional: ears, group: furniture, rel-pos: 2}
+      - {ref: common/psu-550w@2, id: psu-1, at: [20.0, 0.6], attrs: {slot: '1'}, group: psus, rel-pos: 1}
+      - {ref: common/psu-550w@2, id: psu-2, at: [93.5, 0.6], attrs: {slot: '2'}, group: psus, rel-pos: 2}
+      - {ref: common/fan-module-41@1, id: fan-1, at: [200.0, 0.6], group: fans, rel-pos: 1}
+      - {ref: common/fan-module-41@1, id: fan-2, at: [240.9, 0.6], group: fans, rel-pos: 2}
+      - {ref: common/fan-module-41@1, id: fan-3, at: [281.8, 0.6], group: fans, rel-pos: 3}
+      - {ref: common/fan-module-41@1, id: fan-4, at: [322.7, 0.6], group: fans, rel-pos: 4}
+      - {ref: common/fan-module-41@1, id: fan-5, at: [363.6, 0.6], group: fans, rel-pos: 5}
+  top:
+    size: {w: 437.9, h: 291.08}
+    panel:
+      decor:
+      - {id: top-envelope, at: [0.0, 0.0], size: [437.9, 291.08], fill: '#1b1e21', kind: envelope}
+  bottom:
+    size: {w: 437.9, h: 291.08}
+    panel:
+      decor:
+      - {id: bottom-envelope, at: [0.0, 0.0], size: [437.9, 291.08], fill: '#1b1e21', kind: envelope}
+  left:
+    size: {w: 291.08, h: 41.27}
+    panel:
+      decor:
+      - {id: left-envelope, at: [0.0, 0.0], size: [291.08, 41.27], fill: '#1b1e21', kind: envelope}
+  right:
+    size: {w: 291.08, h: 41.27}
+    panel:
+      decor:
+      - {id: right-envelope, at: [0.0, 0.0], size: [291.08, 41.27], fill: '#1b1e21', kind: envelope}
+gaps:
+- what: front-face-positions
+  scope: [front]
+  reason: needs-drawing
+  wanted: >-
+    a face-on photograph of the front with nothing plugged in, or a mechanical drawing
+    from MaiaEdge. Either settles the whole face in one step.
+  note: >-
+    EVERY POSITION ON THE FRONT FACE IS ESTIMATED. The only sources held are a
+    three-quarter marketing render and photographs of a unit racked in service, and
+    neither is orthographic. panel_measure refuses the photograph outright, and
+    hand-anchoring it gives width- and height-derived scales that disagree far beyond
+    its 3% gate - the RJ45 jacks read 11.5 mm against their known 15.8 because the
+    right of the frame is further from the lens. So the ORDER of the face is evidence
+    and the coordinates are not. Tracked as roc-ops/Portrayal#247.
+- what: right-panel-identity
+  scope: [front]
+  reason: needs-photo
+  wanted: >-
+    a face-on photograph of the right end of the front face, or a word from the vendor
+    saying what the recess is.
+  note: >-
+    The recessed rectangle at the right end of the front face is drawn as decor because
+    nobody can put a part number to it. The product render shows it smooth and uniform,
+    which reads as a display; the photograph shows what could be a honeycomb-perforated
+    left third, which would read as a vent beside something - but that surface is mostly
+    reflection in every photograph held, and a first draft that drew the perforation was
+    asserting a vent nobody has seen. IT IS NOW A BLANK GREY PLATE: the recess is
+    certain, its surface is not, and a plain box is the only honest way to draw the
+    difference. If it is an LCD it deserves a real component rather than paint.
+- what: front-indicator-meanings
+  scope: [front]
+  reason: vendor-silent
+  wanted: an LED table, or a photograph of the unit powered down so the louvres read clean.
+  note: >-
+    THREE DIFFERENT THINGS GLOW ON THIS FACE and two of them are modelled. The
+    vendor's UI view draws a deliberate column of four round lamps immediately left of
+    port 0, which the rack photograph could not show because the transceivers' pull
+    tabs and their fibre cover that corner - those four are modelled, and WHAT EACH ONE
+    MEANS is unknown, so they carry `for: chassis` rather than an invented identity.
+    Each 100G port also carries ONE lamp (provenance `port-lamps`); its count is the
+    maintainer's and NEITHER SOURCE SHOWS WHERE IT SITS, so it is drawn above the cage
+    - the one place both sources rule out a four-lamp band - and that position is a
+    guess. Separately the photograph shows red and green points scattered at irregular
+    positions and heights across BOTH vent fields; those are internal board LEDs
+    glowing through the louvres, not a panel array - they do not line up and they sit
+    at several louvre heights - and they are deliberately not drawn. No document held
+    carries an LED table for any of the three.
+- what: psu-module-width
+  scope: [rear]
+  reason: sources-disagree
+  wanted: >-
+    a face-on rear photograph, or the vendor's part number for the supply. The answer
+    decides which of the library's two 550W majors this device should carry.
+  note: >-
+    common/psu-550w@2 is placed, being the maintained major and the 73.5 mm CRPS 1U
+    standard width. The rear photograph disagrees: on the scale the five fans validate
+    to 0.2%, the two-supply block reads about 171 mm, or 85.5 mm each, which is far
+    closer to the RETIRED common/psu-550w@1 at 84.0. An attempt to confirm the module
+    seams programmatically failed, so the reading rests on an eyeball and is not
+    asserted here. Either MaiaEdge fits a wider-than-CRPS module, or the eyeball is
+    wrong.
+- what: envelope-faces-undetailed
+  scope: [top, bottom, left, right]
+  reason: needs-photo
+  wanted: >-
+    photographs of the lid, the underside and either flank out of the rack. The unit
+    was shot in service with a device directly above it.
+  note: >-
+    These four faces draw the chassis envelope and nothing else. The envelope itself is
+    not a guess - 437.90 x 291.08 x 41.27 is dimensioned on page 3 of the datasheet -
+    but no source held shows what is ON any of them: no vent field, no label, no screw
+    pattern, no rail. The flat rect asserts the box and claims nothing about its
+    surface, which is what lets the device carry a rack elevation and a 3D box without
+    inventing detail.
+- what: wordmark-logo-mark
+  scope: [front]
+  reason: needs-drawing
+  wanted: the MaiaEdge mark as vector art, or a face-on photograph square enough to trace it from.
+  note: >-
+    The centre band carries the word MaiaEdge in the vendor's amber, sized and coloured
+    to match the photograph. The LOGO MARK that sits immediately left of it - a
+    stylised angular glyph - is not drawn. Approximating a company's mark from a
+    perspective photograph would be drawing something nobody can check, and a wrong
+    logo is worse than an absent one.
+- what: chassis-power-draw
+  reason: vendor-silent
+  wanted: a chassis draw or input figure from MaiaEdge.
+  note: >-
+    The datasheet states the supply configuration and no chassis draw figure, so none
+    is recorded. L27 stands, and the chassis total is a floor rather than a total.

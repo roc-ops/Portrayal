@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9500-22xst
-version: 1.0.3
+version: 1.0.5
 maturity: modelled
 manufacturer: UfiSpace
 model: S9500-22XST
@@ -547,7 +547,7 @@ views:
         - {ref: std/rj45-ganged@2, id: tod, at: [165.97, 26.4], group: timing, rel-pos: 7, attrs: {media: rj45, role: tod-in}}
         - {ref: std/micro-usb@1, id: console-usb, at: [166.10, 8.25], group: mgmt, rel-pos: 4, attrs: {media: micro-usb, role: console}}
         - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [185.67, 6.35], rotate: 180, group: mgmt, rel-pos: 1, attrs: {role: mgmt, speed: 100m-1g}, states: {led-a: ['off', {color: '#f59e0b', name: link-10-100m}, {behavior: blinking, color: '#f59e0b', name: activity-10-100m}], led-b: ['off', {color: '#22c55e', name: link-1g}, {behavior: blinking, color: '#22c55e', name: activity-1g}]}, description: 'led-mgmt-left: HIG section 10 Management port LED table, Left LED - Off (1G no link), Solid Green (1G link-up), Blinking Green (1G TX/RX activity); led-mgmt-right: HIG section 10 Management port LED table, Right LED - Off (no activity), Solid Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity). The two lamps do not share a vocabulary, so they are declared separately'}
-        - {ref: std/usb-a@1, id: usb, at: [186.06, 19.44], group: mgmt, rel-pos: 2, attrs: {role: storage, speed: usb2}}
+        - {ref: std/usb-a@1, id: usb, at: [186.06, 19.44], skin: usb2, group: mgmt, rel-pos: 2, attrs: {role: storage, speed: usb2}}
         - {ref: std/rj45-ganged@2, id: console, at: [185.67, 25.87], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
         - {ref: common/rj45-ganged-eth@1, id: port-0, at: [217.3, 10.05], group: rj45-1g, rel-pos: 0}
         - {ref: common/rj45-ganged-eth@1, id: port-1, at: [217.3, 24.95], rotate: 180, group: rj45-1g, rel-pos: 1}

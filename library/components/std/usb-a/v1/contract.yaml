@@ -1,17 +1,30 @@
 format: 1
 kind: component
 name: usb-a
-version: 1.2.0
+version: 1.3.0
 class: port
 profile: networking
 conforms: usb-a
 interface: usb-a
-description: USB Type-A receptacle opening - sharp corners
+description: >-
+  USB Type-A receptacle opening - sharp corners. Two skins, because the tongue is
+  white for USB 2.0 and blue for 3.0 and that is what the colour means
 size: {w: 12.0, h: 4.5, d: 13.7}
 attrs: {media: usb-a}
 provenance:
   depth: estimated (typical receptacle depth; refine from spec)
   size: standard (USB 2.0/3.0)
+  the-tongue-colour-is-a-skin: >-
+    standard - USB-IF colours the Type-A receptacle insulator by what the port IS:
+    white for USB 1.x and 2.0, Pantone 300C blue for 3.0, teal for 3.1 Gen 2. That
+    makes the colour a CLAIM ABOUT THE PORT rather than a style, and one part
+    cannot hold both. `default` is the blue and `usb2` the white; a device whose
+    datasheet says 2.0 asks for `skin: usb2`, the way a device with a PC99 serial
+    port asks std/db9@1 for `teal`. Ten devices placed this part while it could
+    only draw the blue one, so any of them the vendor calls 2.0 is drawn claiming
+    3.0 and should be checked against its own datasheet. The GEOMETRY is identical
+    in both skins - only the fill differs, because only the fill is what the
+    colour means.
 elements:
   opening: {at: [0.0, 0.0], size: [12.0, 4.5], class: cutout}
 relief:
@@ -19,13 +32,16 @@ relief:
   features:
     - node: tongue
       top: 12.1
-      color: '#2b6cb0'
       confidence: estimated
       source: >-
         std/usb-a@1's own depth key - 'estimated (typical receptacle depth; refine from
         spec)'. The USB 2.0/3.0 specification fixes the receptacle interior including the
         tongue; we do not hold it, so how far the tongue stands off the cavity floor is
-        unsourced.
+        unsourced. NO `color` HERE ON PURPOSE - the kit samples the node's own art when a
+        feature names none, so the body follows whichever skin is drawn. This part ships
+        `default` blue and `usb2` white, and a fixed colour would have made one of them a
+        lie in 3D while the drawing told the truth. Same correction std/db9@1's insert
+        already carries.
 connection-points:
   mate: {at: [6, 2.25], direction: front}
-skins: [default]
+skins: [default, usb2]

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9500-30xs
-version: 2.0.3
+version: 2.0.5
 maturity: modelled
 manufacturer: UfiSpace
 model: S9500-30XS
@@ -562,7 +562,7 @@ views:
         - {ref: std/rj45-ganged@2, id: bits, at: [165.7, 15.9], rotate: 180, group: timing, rel-pos: 6, attrs: {media: rj48, role: bits-in}}
         - {ref: std/rj45-ganged@2, id: tod, at: [165.7, 28.48], group: timing, rel-pos: 7, attrs: {media: rj45, role: tod-in}}
         - {ref: common/rj45-ganged-eth@1, id: oob, at: [185.46, 5.92], rotate: 180, group: mgmt, rel-pos: 1, attrs: {role: mgmt, speed: 100m-1g}, states: {led-a: ['off', {color: '#f59e0b', name: link-100m}, {behavior: blinking, color: '#f59e0b', name: activity-100m}], led-b: ['off', {color: '#22c55e', name: link-1g}, {behavior: blinking, color: '#22c55e', name: activity-1g}]}, description: 'led-oob-left: HIG Management Port LED table, Left LED - Off (1G no link), Solid Green (1G link-up), Blinking Green (1G TX/RX activity); the jack''s two integrated lamps are led-a/led-b of common/rj45-ganged-eth@1, one placement; before the RJ45 sweep they were two separate placements because std/rj45-ganged@1 contracted none; led-oob-right: HIG Management Port LED table, Right LED - Off (no activity), Solid Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity). The two jack lamps do not share a vocabulary, which is why each keeps its own states here rather than a shared default'}
-        - {ref: std/usb-a@1, id: usb, at: [185.82, 19.3], rotate: 180, group: mgmt, rel-pos: 2, attrs: {role: storage, speed: usb2}}
+        - {ref: std/usb-a@1, id: usb, at: [185.82, 19.3], rotate: 180, skin: usb2, group: mgmt, rel-pos: 2, attrs: {role: storage, speed: usb2}}
         - {ref: std/rj45-ganged@2, id: console, at: [185.46, 26.32], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
         - {ref: common/qsfp-cage@2, id: qsfp-0, at: [411.72, 9.58], group: qsfp28, rel-pos: 0}
         - {ref: common/qsfp-cage@2, id: qsfp-1, at: [411.72, 26.71], group: qsfp28, rel-pos: 1}

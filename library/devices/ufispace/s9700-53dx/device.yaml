@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9700-53dx
-version: 3.0.6
+version: 3.0.8
 maturity: modelled
 manufacturer: UfiSpace
 model: S9700-53DX
@@ -778,7 +778,7 @@ views:
            attrs: {media: rj45-serial, role: console}}
         - {ref: std/micro-usb@1, id: console-usb, at: [9.33, 51.52], group: mgmt, rel-pos: 2,
            attrs: {media: micro-usb-b, role: console}}
-        - {ref: std/usb-a@1, id: usb, at: [7.40, 61.65], rotate: 90, group: mgmt, rel-pos: 3,
+        - {ref: std/usb-a@1, id: usb, at: [7.40, 61.65], rotate: 90, skin: usb2, group: mgmt, rel-pos: 3,
            attrs: {role: storage, speed: usb2}}
         - {ref: common/rj45-ganged-eth@1, id: oob, at: [23.2, 60.18], group: mgmt, rel-pos: 4,
            attrs: {media: rj45, role: mgmt, speed: 100m-1g}, states: {led-a: ['off', {color: '#22c55e', name: link-1g}, {behavior: blinking, color: '#22c55e', name: activity-1g}], led-b: ['off', {color: '#f59e0b', name: link-10-100m}, {behavior: blinking, color: '#f59e0b', name: activity-10-100m}]}, description: 'led-oob-left: the left lamp in the out-of-band jack''s aperture. HIG section 10''s Management port LED table is explicit for this device - Left LED: Off (1G no link), Solid Green (1G link-up), Blinking Green (1G TX/RX activity) - so unlike the S9600-56DX''s this vocabulary is sourced and not borrowed; led-oob-right: the right lamp in the out-of-band jack''s aperture. HIG section 10, Management port LED table, Right LED - Off (no activity), Solid Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity)'}

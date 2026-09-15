@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s6301-56stp
-version: 2.0.4
+version: 2.0.6
 maturity: modelled
 manufacturer: UfiSpace
 model: S6301-56STP
@@ -152,7 +152,11 @@ provenance:
     sources-disagree, recorded not resolved: the datasheet says '1 x USB 1.0
     Type-A port', the HIG's cabling section says 'Connect the USB 2.0 A Type
     plug', and the accessory list ships a 'USB 3.0 cable'. The manifest carries
-    the datasheet's line verbatim; see gaps.
+    the datasheet's line verbatim; see gaps. THE DRAWING FOLLOWS THE MANIFEST, not the
+    cable: the `usb2` skin paints USB-IF's white tongue, which is the colour for 1.x AND
+    2.0, so it agrees with two of the three sources at once and leaves the disagreement
+    where it is. The blue it drew before agreed only with the accessory cable, and
+    nothing in the library had chosen that.
   lifecycle: >-
     searched 2026-08-28, 'UfiSpace S6301-56STP end of life' - no announcement;
     the vendor still lists the product (ufispace.com S6301-56STP product page)
@@ -411,7 +415,7 @@ views:
              TX/RX activity)', group: port-leds, rel-pos: 6}
         - {ref: std/rj45-ganged@2, id: mgmt, at: [7.6, 7], rotate: 180, group: mgmt, rel-pos: 1,
            attrs: {role: mgmt, speed: 100m-1g}}
-        - {ref: std/usb-a@1, id: usb, at: [7.95, 20.6], group: mgmt, rel-pos: 2, attrs: {role: storage}}
+        - {ref: std/usb-a@1, id: usb, at: [7.95, 20.6], skin: usb2, group: mgmt, rel-pos: 2, attrs: {role: storage}}
         - {ref: std/rj45-ganged@2, id: console, at: [7.6, 27.2], group: mgmt, rel-pos: 3,
            attrs: {media: rj45-serial, role: console}}
         - {ref: common/usb-symbol@1, id: usb-mark, at: [5.4, 39.2], for: usb, group: furniture, rel-pos: 1}

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9501-28smt
-version: 2.0.3
+version: 2.0.5
 maturity: modelled
 manufacturer: UfiSpace
 model: S9501-28SMT
@@ -584,7 +584,7 @@ views:
         - {ref: common/reset-button@1, id: reset, at: [135.7, 37.15], for: chassis, group: mgmt, rel-pos: 5}
         - {ref: std/rj45-ganged@2, id: bits, at: [147.6, 22.25], group: timing, rel-pos: 4, attrs: {media: rj48, role: bits-in}}
         - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [168.2, 13.7], rotate: 180, group: mgmt, rel-pos: 1, attrs: {role: oob, speed: 100m-1g}, states: {led-a: ['off', {color: '#f59e0b', name: link-100m}, {behavior: blinking, color: '#f59e0b', name: activity-100m}], led-b: ['off', {color: '#22c55e', name: link-1g}, {behavior: blinking, color: '#22c55e', name: activity-1g}]}, description: 'led-mgmt-l: HIG Management port LED table, left lamp - Off (1G no link), Solid Green (1G link-up), Blinking Green (1G TX/RX activity); led-mgmt-r: HIG Management port LED table, right lamp - Off (no activity), Solid Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity)'}
-        - {ref: std/usb-a@1, id: usb, at: [168.55, 28.6], group: mgmt, rel-pos: 2, attrs: {role: maintenance, speed: usb2}}
+        - {ref: std/usb-a@1, id: usb, at: [168.55, 28.6], skin: usb2, group: mgmt, rel-pos: 2, attrs: {role: maintenance, speed: usb2}}
         - {ref: std/rj45-ganged@2, id: tod, at: [189.75, 9.5], rotate: 180, group: timing, rel-pos: 5, attrs: {media: rj45, role: tod-io}}
         - {ref: std/rj45-ganged@2, id: console, at: [189.75, 23.4], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
         - {ref: common/rj45-ganged-eth@1, id: port-0, at: [211.18, 9.5], rotate: 180, group: rj45-1g, rel-pos: 0}
