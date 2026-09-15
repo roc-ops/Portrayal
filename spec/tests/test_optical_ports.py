@@ -69,3 +69,51 @@ def test_the_cassettes_polish_is_marked_as_the_assumption_it_is():
     assert "polish" in note.lower(), "provenance says nothing about the polish"
     assert "ASSUM" in note.upper() or "not name" in note.lower(), \
         "the polish must be marked as an assumption, not stated flatly"
+
+
+def cassette_entry():
+    """The real cassette and its rear, as the index publishes them."""
+    import json
+    f = ROOT / "library" / "dist" / "components.json"
+    if not f.exists():
+        pytest.skip("library/dist not built - run ./publish.sh --no-images")
+    idx = {f"{e['ns']}/{e['name']}@{e['major'][1:]}": e
+           for e in json.loads(f.read_text())["components"]}
+    return idx["fs/fhd-1mtp6lcd-os2-a@1"], idx
+
+
+def test_the_rear_mtp_is_one_port_with_twelve_positions():
+    """C1: a rear MPO-12 exports as ONE rear port, not twelve."""
+    import dcim_export as D
+    e, idx = cassette_entry()
+    got = P.ports(D.contract_view(e), idx.get)
+    assert got["rear"] == [{"name": "MTP-1", "type": "mpo", "positions": 12}]
+
+
+def test_every_front_fibre_is_its_own_port():
+    """C1: per-fibre granularity is what makes the projection lossless for the
+    22 breakouts, 4 conversions and 4 mesh cassettes."""
+    import dcim_export as D
+    e, idx = cassette_entry()
+    got = P.ports(D.contract_view(e), idx.get)
+    assert len(got["front"]) == 12
+    assert got["front"][0] == {"name": "1", "type": "lc-upc", "positions": 1}
+    assert got["front"][-1] == {"name": "12", "type": "lc-upc", "positions": 1}
+
+
+def test_the_front_numbering_reproduces_the_faceplate():
+    """The DERIVATION is placement order; the faceplate is the check on it.
+
+    The contract records the numbering only in prose - "2 above 1 at the left
+    end, 12 above 11 at the right" - so the projection derives it from the
+    adapters' x order and each adapter's fibre positions. This asserts the
+    derivation lands where the vendor's labels do: adapter lc1 carries 1 and 2,
+    lc6 carries 11 and 12.
+    """
+    import dcim_export as D
+    e, idx = cassette_entry()
+    view = D.contract_view(e)
+    assert P.front_label(view, "lc1.1", idx.get) == "1"
+    assert P.front_label(view, "lc1.2", idx.get) == "2"
+    assert P.front_label(view, "lc6.1", idx.get) == "11"
+    assert P.front_label(view, "lc6.2", idx.get) == "12"

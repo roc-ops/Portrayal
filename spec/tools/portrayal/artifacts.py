@@ -104,6 +104,14 @@ class Dist:
                 out.add(m)
         return out
 
+    def component_by_ref(self, ref):
+        """`common/mpo-adapter@1` -> its index entry, or None."""
+        if not hasattr(self, "_by_ref"):
+            self._by_ref = {
+                f"{c.get('ns')}/{c.get('name')}@{str(c.get('major') or '')[1:]}": c
+                for c in self._components}
+        return self._by_ref.get(ref)
+
     def manufacturer_of(self, ns):
         """Which manufacturer ships a namespace.
 

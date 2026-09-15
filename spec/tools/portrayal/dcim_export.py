@@ -50,6 +50,7 @@ import yaml
 from artifacts import Dist
 
 from manifest import view_parts
+import optical_ports
 
 # Portrayal media/speed -> DCIM interface type. Every value here is valid in
 # both libraries: NetBox's enum is a strict superset of Nautobot's (227 types
@@ -643,8 +644,9 @@ def contract_view(entry):
             "optical": entry.get("optical") or {}}
 
 
-def build_module(contract, manufacturer):
+def build_module(contract, manufacturer, load_ref=None):
     """A module contract as a DCIM module type."""
+    load_ref = load_ref or (lambda _r: None)
     attrs = contract.get("attrs") or {}
     model = str(attrs.get("model") or contract["name"])
     out = {"manufacturer": manufacturer, "model": model}
@@ -710,6 +712,16 @@ def build_module(contract, manufacturer):
         out["interfaces"] = ifaces
     if powers:
         out["power-ports"] = powers
+
+    # THE GLASS, IF THIS MODULE CARRIES ANY. A fibre cassette has no interfaces
+    # in the DCIM sense - nothing terminates electrically - so these are its
+    # entire port list, and a module with no `optical` adds nothing here.
+    if (contract.get("optical") or {}).get("paths"):
+        fibre = optical_ports.ports(contract_view(contract), load_ref)
+        if fibre["rear"]:
+            out["rear-ports"] = fibre["rear"]
+        if fibre["front"]:
+            out["front-ports"] = fibre["front"]
 
     body = []
     if contract.get("description"):
@@ -893,7 +905,7 @@ def export_modules(dist, root, images=None):
         if not man:
             skipped += 1
             continue
-        doc = build_module(contract, man)
+        doc = build_module(contract, man, dist.component_by_ref)
         # `major` ARRIVES PREFIXED. It is the version directory's own name, so
         # components.json carries `v1` and not `1` - every other reader strips
         # with `major[1:]` rather than adding. Prefixing again asked for
