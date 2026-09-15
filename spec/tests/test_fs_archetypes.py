@@ -108,3 +108,46 @@ def test_the_splice_cassette_has_a_splice_rear():
     assert c["optical"]["rear-kind"] == "splice"
     assert (c.get("faces") or {}).get("rear"), "a rear-kind needs a rear face (L87)"
     assert len(c["optical"]["paths"]) == 12
+
+
+TWO_MTP = "fs/fhd-2mtp12-lc-os2-a/v1"
+
+
+def test_two_rear_connectors_export_as_two_distinct_ports():
+    """The first module with more than one rear port.
+
+    `rear_port_names` numbers within a part id, so two parts sharing an id would
+    collapse to one name and the fibre map would bind 24 fibres to 12 positions.
+    Distinct ids are what prevent that, and this is what checks it.
+    """
+    import json
+    import dcim_export as D
+    import optical_ports as P
+    f = ROOT / "library" / "dist" / "components.json"
+    if not f.exists():
+        pytest.skip("library/dist not built - run ./publish.sh --no-images")
+    idx = {f"{e['ns']}/{e['name']}@{e['major'][1:]}": e
+           for e in json.loads(f.read_text())["components"]}
+    e = idx["fs/fhd-2mtp12-lc-os2-a@1"]
+    got = P.ports(D.contract_view(e), idx.get)
+    names = [p["name"] for p in got["rear"]]
+    assert len(names) == 2, got["rear"]
+    assert len(set(names)) == 2, f"two rear ports share one name: {names}"
+    assert sum(p["positions"] for p in got["rear"]) == 24
+    assert len(got["front"]) == 24
+
+
+def test_every_one_of_the_24_fibres_is_bound():
+    import json
+    import dcim_export as D
+    import optical_ports as P
+    f = ROOT / "library" / "dist" / "components.json"
+    if not f.exists():
+        pytest.skip("library/dist not built")
+    idx = {f"{e['ns']}/{e['name']}@{e['major'][1:]}": e
+           for e in json.loads(f.read_text())["components"]}
+    e = idx["fs/fhd-2mtp12-lc-os2-a@1"]
+    m = P.fibre_map(D.contract_view(e), idx.get, "FHD-2X12MTPLCOS2A")
+    assert len(m["rows"]) == 24
+    assert len({(r["rear"], r["rear_position"]) for r in m["rows"]}) == 24, \
+        "two fibres land on one rear position"
