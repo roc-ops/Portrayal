@@ -117,3 +117,169 @@ def test_the_fibre_map_is_published_beside_the_two_targets():
     assert f.exists(), "no fibre map for the one cassette that has fibres"
     m = yaml.safe_load(f.read_text())
     assert len(m["rows"]) == 12
+
+
+# ---------------------------------------------------------------------------
+# Section D's library-wide sweeps.
+#
+# `fibre_modules(idx)` selects on `optical.paths` and `kind == "module"`, which
+# is every module carrying a fibre graph - the one FS cassette AND the six
+# Smartoptics PPM modules (ppm-dcm-10/20/40/80, ppm-ocu-50-50, ppm-ocu-97-3)
+# whose connectors are all on one faceplate and whose paths run front-to-front
+# (`common.1 -> split.1/2`, never a `rear:`-prefixed endpoint). Those six
+# declare no `faces.rear`, so `build_module`/`export_modules` in dcim_export.py
+# deliberately export no front-ports, no rear-ports and no fibre map for them:
+# nothing in the vocabulary says which of their endpoints is the trunk, and
+# netbox#21830 refuses front ports without rear ports.
+#
+# So every sweep below is scoped to `projecting_modules(idx)` - modules that
+# declare a rear face, via the SAME accessor the exporter uses
+# (`dcim_export.contract_view` + `faces.face_ref(view, "rear")`) - rather than
+# the raw `fibre_modules` selection, which would fail every one of them.
+def fibre_modules(idx):
+    return [e for e in idx.values()
+            if (e.get("optical") or {}).get("paths") and e.get("kind") == "module"]
+
+
+def projecting_modules(idx):
+    """`fibre_modules`, narrowed to those the exporter actually projects.
+
+    Uses `dcim_export.contract_view` + `faces.face_ref(view, "rear")` - the
+    same accessor `build_module`/`export_modules` gate on - never the raw
+    flattened `faces` shape the index carries.
+    """
+    import dcim_export as D
+    from faces import face_ref
+    out = []
+    for e in fibre_modules(idx):
+        view = D.contract_view(e)
+        if face_ref(view, "rear"):
+            out.append(e)
+    return out
+
+
+def test_the_sweep_finds_fibre_modules_at_all():
+    """Guard the guard: every sweep below passes vacuously on an empty list."""
+    assert fibre_modules(index()), "no fibre modules found - the sweeps are vacuous"
+
+
+def test_the_populations_split_as_the_controller_ruling_expects():
+    """Pin the ruling with a number, not merely an assertion that passes.
+
+    Seven modules carry `optical.paths` today: one FS cassette with a declared
+    rear face, and six Smartoptics PPMs with none. A future cassette that joins
+    the library moves one of these two counts, and this is what a reviewer
+    notices moving.
+    """
+    idx = index()
+    all_fibre = fibre_modules(idx)
+    projecting = projecting_modules(idx)
+    excluded = [e["name"] for e in all_fibre if e not in projecting]
+    assert len(all_fibre) == 7, sorted(e["name"] for e in all_fibre)
+    assert len(projecting) == 1, [e["name"] for e in projecting]
+    assert sorted(excluded) == sorted([
+        "ppm-dcm-10", "ppm-dcm-20", "ppm-dcm-40", "ppm-dcm-80",
+        "ppm-ocu-50-50", "ppm-ocu-97-3",
+    ]), excluded
+
+
+def test_a_fibre_module_with_no_rear_face_exports_nothing_optical():
+    """The controller ruling, pinned by a test rather than merely implemented.
+
+    A fibre module with no declared rear face - the six Smartoptics PPMs, whose
+    connectors are all on one faceplate and whose paths run front-to-front - is
+    NOT a smaller, degenerate case of the exporter's usual output: it must
+    produce no front-ports, no rear-ports and no fibre map at all, because
+    nothing in the vocabulary says which of its endpoints is the trunk.
+    """
+    import dcim_export as D
+    idx = index()
+    all_fibre = fibre_modules(idx)
+    projecting = projecting_modules(idx)
+    unfaced = [e for e in all_fibre if e not in projecting]
+    assert unfaced, "no unfaced fibre module found - this guard is vacuous"
+    for e in unfaced:
+        # build_module takes the RAW entry, not contract_view's shape - it
+        # calls contract_view(contract) internally to do its own rear-face gate.
+        doc = D.build_module(e, "Smartoptics", idx.get)
+        assert "front-ports" not in doc, e["name"]
+        assert "rear-ports" not in doc, e["name"]
+        if EXPORTS.exists():
+            model = str((e.get("attrs") or {}).get("model") or e["name"])
+            hits = list((EXPORTS / "fibre-maps").rglob(
+                model.replace("/", "-") + ".yaml"))
+            assert not hits, f"{model}: fibre map exported with no rear face"
+
+
+def test_every_fibre_module_exports_ports_matching_its_graph():
+    """Section D: the count a module exports equals the count its graph carries."""
+    import dcim_export as D
+    import optical_ports as P
+    idx = index()
+    for e in projecting_modules(idx):
+        view = D.contract_view(e)
+        caps = O.capacities(view, idx.get)
+        got = P.ports(view, idx.get)
+        front_fibres = sum(n for k, n in caps.items() if ":" not in k)
+        rear_fibres = sum(n for k, n in caps.items() if ":" in k)
+        assert len(got["front"]) == front_fibres, e["name"]
+        assert sum(p["positions"] for p in got["rear"]) == rear_fibres, e["name"]
+
+
+def test_every_fibre_map_row_names_ports_that_exist():
+    """Section D: a row pointing at a port nobody exported is a silent drop."""
+    import dcim_export as D
+    import optical_ports as P
+    idx = index()
+    for e in projecting_modules(idx):
+        view = D.contract_view(e)
+        model = str((e.get("attrs") or {}).get("model") or e["name"])
+        got = P.ports(view, idx.get)
+        m = P.fibre_map(view, idx.get, model)
+        fronts = {p["name"] for p in got["front"]}
+        rears = {p["name"] for p in got["rear"]}
+        for r in m["rows"]:
+            assert r["front"] in fronts, f"{model}: front {r['front']!r}"
+            assert r["rear"] in rears, f"{model}: rear {r['rear']!r}"
+
+
+def test_no_exported_front_port_is_left_without_a_rear_port():
+    """Section D, and netbox#21830: we do not get to omit rear ports."""
+    import dcim_export as D
+    import optical_ports as P
+    idx = index()
+    for e in projecting_modules(idx):
+        view = D.contract_view(e)
+        model = str((e.get("attrs") or {}).get("model") or e["name"])
+        got = P.ports(view, idx.get)
+        m = P.fibre_map(view, idx.get, model)
+        bound = {r["front"] for r in m["rows"]}
+        orphans = sorted({p["name"] for p in got["front"]} - bound)
+        assert not orphans, f"{model}: front ports bound to nothing: {orphans}"
+
+
+def test_every_vendor_fibre_module_actually_reaches_the_exports():
+    """The failure that started this plan was SILENT.
+
+    The cassette modelled in plan 4 exported nothing at all, because `kind` and
+    `class` were the wrong way round and FS had no device to learn a
+    manufacturer from. Nothing noticed: the gates were green, the file simply
+    did not exist. This is what notices next time.
+
+    Scoped to `projecting_modules`: the six unfaced PPMs are checked by the
+    guard above instead, which asserts they export nothing rather than
+    something under their own model number.
+    """
+    if not EXPORTS.exists():
+        pytest.skip("library/exports not built - run ./publish.sh --no-images")
+    idx = index()
+    missing = []
+    for e in projecting_modules(idx):
+        if e.get("ns") in ("common", "std"):
+            continue
+        model = str((e.get("attrs") or {}).get("model") or e["name"])
+        hits = list((EXPORTS / "netbox" / "module-types").rglob(
+            model.replace("/", "-") + ".yaml"))
+        if not hits:
+            missing.append(model)
+    assert not missing, f"modelled, has fibres, exports nothing: {missing}"
