@@ -101,6 +101,7 @@ def ports(entry, load_ref):
     """
     caps = optical.capacities(entry, load_ref)
     polish = (entry.get("optical") or {}).get("polish")
+    rear_kind = (entry.get("optical") or {}).get("rear-kind")
 
     front, n = [], 0
     for _x, pid, ref in _front_parts(entry):
@@ -114,8 +115,8 @@ def ports(entry, load_ref):
     for key in sorted(k for k in caps if ":" in k):
         face, pid = key.split(":", 1)
         ref = _face_part_ref(entry, face, pid, load_ref)
-        rear.append({"name": names[pid], "type": port_type(family_of(ref), polish),
-                     "positions": caps[key]})
+        t = rear_kind or port_type(family_of(ref), polish)
+        rear.append({"name": names[pid], "type": t, "positions": caps[key]})
     return {"front": front, "rear": rear}
 
 

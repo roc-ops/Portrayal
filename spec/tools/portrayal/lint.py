@@ -221,6 +221,7 @@ RULES = {
     "L84": ("component",  "a face-qualified optical endpoint names a face the part declares", "add the face to `faces:`, or fix the prefix on the endpoint"),
     "L85": ("component",  "only a face that is another side of the module draws fibres of its own", "move the connector onto the face that really carries it, or extend `faces.OPTICAL_FACES` if this direction genuinely is another side"),
     "L86": ("component",  "a module composing a connector the enum spells two ways states its polish", "add `optical.polish: upc` or `apc`, and say in provenance where it came from"),
+    "L87": ("component",  "a module naming what its rear IS has a rear face to name", "add `faces.rear`, or drop `optical.rear-kind`"),
 }
 
 
@@ -1649,6 +1650,25 @@ def lint_component_optical_polish(path, data):
                 "there is no type to export. Add it, and say in provenance "
                 "whether the vendor named it or it is the convention default")
             return
+
+
+def lint_component_optical_rear_kind(path, data):
+    """L87: `optical.rear-kind` describes a rear face, so there must be one.
+
+    The key says what the back of the module IS when it is not a connector. A
+    contract that claims a splice rear and declares no rear face is describing a
+    drawing that does not exist, and the projection - which is gated on a rear
+    face - would ignore the claim entirely and export nothing, silently.
+    """
+    if not isinstance(data, dict):
+        return
+    opt = data.get("optical") or {}
+    if not opt.get("rear-kind"):
+        return
+    if not face_ref(data, "rear"):
+        err(path, "L87", f"declares optical.rear-kind {opt['rear-kind']!r} but no "
+                         "rear face, so there is nothing for it to describe and "
+                         "the projection would ignore it")
 
 
 def lint_component_optical_endpoints(path, data, lib_roots):
@@ -6393,6 +6413,7 @@ def main():
                 lint_component_optical_faces(f, d)
                 lint_component_optical_face_capacity(f, d, args.library)
                 lint_component_optical_polish(f, d)
+                lint_component_optical_rear_kind(f, d)
                 lint_component_optical_conflicts(f, d)
                 lint_component_optical_coverage(f, d, args.library)
                 lint_component_composed_pitch(f, d, args.library)

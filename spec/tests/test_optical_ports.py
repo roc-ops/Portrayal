@@ -205,3 +205,48 @@ def test_a_split_carries_its_ratio():
     assert len(m["rows"]) == 2
     assert all(r["ratio"] == 50 for r in m["rows"])
     assert {r["front"] for r in m["rows"]} == {"1", "2"}
+
+
+def test_a_splice_rear_exports_as_one_splice_port():
+    """C2, and upstream's own convention: the devicetype-library ships ADC's
+    PPP-SC-SM with `rear-ports: [{name, type: splice, positions: 1}]`."""
+    entry = {"parts": [{"id": "lc1", "ref": "common/lc-duplex-adapter@3",
+                        "at": [0, 0]}],
+             "faces": {"rear": {"ref": "t/splice-rear@1"}},
+             "optical": {"media": "os2", "polish": "upc", "rear-kind": "splice",
+                         "paths": [{"from": "lc1.1", "to": "rear:splice.1"},
+                                   {"from": "lc1.2", "to": "rear:splice.2"}]}}
+    known = {"common/lc-duplex-adapter@3": {"optical": {"positions": 2}},
+             "common/fibre-splice@1": {"optical": {"positions": 2}},
+             "t/splice-rear@1": {"parts": [{"id": "splice",
+                                            "ref": "common/fibre-splice@1"}]}}
+    got = P.ports(entry, known.get)
+    assert got["rear"] == [{"name": "SPLICE-1", "type": "splice", "positions": 2}]
+    assert len(got["front"]) == 2
+
+
+def run87(doc, path="t/contract.yaml"):
+    L.ERRORS.clear()
+    L.lint_component_optical_rear_kind(path, doc)
+    return [e for e in L.ERRORS if "[L87]" in e]
+
+
+def test_declaring_a_splice_rear_without_a_rear_face_is_an_error():
+    """`rear-kind` describes a rear face. Saying it with no rear face to describe
+    is a claim about a drawing that does not exist."""
+    got = run87({"optical": {"rear-kind": "splice",
+                             "paths": [{"from": "a.1", "to": "b.1"}]}})
+    assert len(got) == 1, got
+    assert "rear face" in got[0]
+
+
+def test_a_splice_rear_with_a_rear_face_is_quiet():
+    assert run87({"faces": {"rear": {"ref": "t/x@1"}},
+                  "optical": {"rear-kind": "splice",
+                              "paths": [{"from": "a.1", "to": "rear:b.1"}]}}) == []
+
+
+def test_saying_nothing_about_the_rear_kind_is_quiet():
+    """Every cassette built so far has a connector on the back and says nothing."""
+    assert run87({"faces": {"rear": {"ref": "t/x@1"}},
+                  "optical": {"paths": [{"from": "a.1", "to": "rear:b.1"}]}}) == []
