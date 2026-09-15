@@ -187,18 +187,18 @@ def test_the_sweep_finds_fibre_modules_at_all():
 def test_the_populations_split_as_the_controller_ruling_expects():
     """Pin the ruling with a number, not merely an assertion that passes.
 
-    Nine modules carry `optical.paths` today: three FS cassettes with a
-    declared rear face (fhd-1mtp6lcd-os2-a, fhd-splice-12-lc and
-    fhd-2mtp12-lc-os2-a), and six Smartoptics PPMs with none. A future
-    cassette that joins the library moves one of these two counts, and this
-    is what a reviewer notices moving.
+    Ten modules carry `optical.paths` today: four FS cassettes with a
+    declared rear face (fhd-1mtp6lcd-os2-a, fhd-splice-12-lc,
+    fhd-2mtp12-lc-os2-a and fhd-1mtp12-sc-os2-a), and six Smartoptics PPMs
+    with none. A future cassette that joins the library moves one of these
+    two counts, and this is what a reviewer notices moving.
     """
     idx = index()
     all_fibre = fibre_modules(idx)
     projecting = projecting_modules(idx)
     excluded = [e["name"] for e in all_fibre if e not in projecting]
-    assert len(all_fibre) == 9, sorted(e["name"] for e in all_fibre)
-    assert len(projecting) == 3, [e["name"] for e in projecting]
+    assert len(all_fibre) == 10, sorted(e["name"] for e in all_fibre)
+    assert len(projecting) == 4, [e["name"] for e in projecting]
     assert sorted(excluded) == sorted([
         "ppm-dcm-10", "ppm-dcm-20", "ppm-dcm-40", "ppm-dcm-80",
         "ppm-ocu-50-50", "ppm-ocu-97-3",

@@ -1,0 +1,159 @@
+format: 1
+kind: module
+name: fhd-1mtp12-sc-os2-a
+version: 1.0.0
+class: cassette
+description: >-
+  FS FHD-1MTP6SCDOS2A - MTP-12 (male) to six SC duplex, 12 fibres, OS2, Type A
+  polarity. FS SKU 57058. The first component in this library to compose
+  common/sc-duplex-adapter@1.
+size: {w: 108.97, h: 35.05, d: 117.86}
+size-confidence: {w: photo-measured, h: photo-measured, d: drawing}
+size-notes: >-
+  The faceplate is MEASURED off FS's face-on render of SKU 57058
+  (57058.main.jpg), scaled on the 108.97 mm FHD module width and validated
+  against the 35.05 mm height to 0.57% - independently reproducing the exact
+  scale check already recorded in common/sc-duplex-adapter@1's own
+  provenance, since this is the same image its adapter body width was
+  measured from. Corroborated by FS's own dimension line on 57058.B.jpg,
+  which reads 4.29in x 1.38in - exactly 108.97 x 35.05, the same reading
+  57016.B.jpg gives for the LC cassette, confirming both share one FHD
+  faceplate.
+  THE DEPTH DIFFERS FROM THE LC CASSETTE, THOUGH. 57058.B.jpg's own depth
+  line reads 4.64in, not 57016.B.jpg's 4.34in: 117.86 mm against 110.24 mm,
+  7.62 mm deeper. An SC duplex adapter's ferrule and shutter sit proud of an
+  LC's, so a deeper body is physically plausible, not a misreading - the two
+  SKUs' front faceplates are identical and their depths are not.
+attrs: {media: fiber, model: FHD-1MTP6SCDOS2A, vendor-sku: '57058'}
+body:
+  depth: 117.86
+parts:
+  - {id: sc1, ref: common/sc-duplex-adapter@1, at: [15.81, 11.525]}
+  - {id: sc2, ref: common/sc-duplex-adapter@1, at: [28.52, 11.525]}
+  - {id: sc3, ref: common/sc-duplex-adapter@1, at: [41.65, 11.525]}
+  - {id: sc4, ref: common/sc-duplex-adapter@1, at: [54.61, 11.525]}
+  - {id: sc5, ref: common/sc-duplex-adapter@1, at: [67.58, 11.525]}
+  - {id: sc6, ref: common/sc-duplex-adapter@1, at: [80.80, 11.525]}
+faces:
+  rear: {ref: fs/fhd-1mtp12-sc-rear@1}
+optical:
+  media: os2
+  polarity: a
+  polish: upc
+  paths:
+    - {from: sc1.1, to: 'rear:mtp.1'}
+    - {from: sc1.2, to: 'rear:mtp.2'}
+    - {from: sc2.1, to: 'rear:mtp.3'}
+    - {from: sc2.2, to: 'rear:mtp.4'}
+    - {from: sc3.1, to: 'rear:mtp.5'}
+    - {from: sc3.2, to: 'rear:mtp.6'}
+    - {from: sc4.1, to: 'rear:mtp.7'}
+    - {from: sc4.2, to: 'rear:mtp.8'}
+    - {from: sc5.1, to: 'rear:mtp.9'}
+    - {from: sc5.2, to: 'rear:mtp.10'}
+    - {from: sc6.1, to: 'rear:mtp.11'}
+    - {from: sc6.2, to: 'rear:mtp.12'}
+provenance:
+  size: >-
+    see size-notes.
+  parts: >-
+    THE SIX CENTRES ARE THE MEASUREMENT, not a pitch multiplied out - and they
+    are the SAME SIX CENTRES already on record in common/sc-duplex-adapter@1's
+    own provenance, because 57058.main.jpg is the render that part's body
+    width was measured from originally. Reproduced independently here (scale
+    check 0.57%, matching the earlier run exactly): 20.51, 33.22, 46.35,
+    59.31, 72.28, 85.50. Five gaps of 12.71, 13.13, 12.96, 12.97, 13.22 - mean
+    13.00, spread 0.51, the same noisy spread standards.yaml's
+    sc-duplex-adapter pitch-kind-note already documents. `at.x` is each
+    centre minus half of the adapter's own 9.4 mm width.
+    THE NARROWEST GAP (12.71, between sc1 and sc2) SITS 0.29 MM UNDER THE
+    REGISTRY'S 13.0 MM FLOOR - see provenance.pitch-note below and
+    task-5-report.md for why this is not corrected by widening the placement.
+    `at.y` of 11.525 CENTRES the part vertically ((35.05 - 12.0) / 2) rather
+    than reading an edge, because common/sc-duplex-adapter@1's own 12.0 mm
+    height is itself `estimated`, not measured, so there is no reliable body
+    edge here to anchor a finer reading to. Centring is corroborated, not
+    merely assumed, though: detecting each adapter's own two port openings
+    directly (the flat grey interior against the surrounding bezel, distinct
+    from both the blue flange and the dark plate) and taking the midpoint
+    between the upper and lower port's own measured centre gives 17.79,
+    18.18, 17.92, 18.22, 18.47, 18.39 across the six - mean 18.16, spread
+    0.68 - against a face half-height of 17.525. Close enough, at the same
+    noise scale as the x measurement, that centring is the reading here, the
+    same pattern fs/fhd-1mtp6lcd-os2-a@1's own `at.y` provenance uses.
+  pitch-note: >-
+    common/sc-duplex-adapter@1 composes six-across at an IRREGULAR pitch -
+    the raw measured centres, not a uniform multiple - so L81's own
+    uniform-pitch check does not fire on this component at all (see
+    lint.py's `if len(set(gaps)) != 1: continue`). But the narrowest
+    individual gap, 12.71 mm between sc1 and sc2, is itself 0.29 mm under
+    sc-duplex-adapter's 13.0 mm registry floor. That floor is the MEAN of
+    these same five render-measured gaps (12.71-13.22), rounded to a clean
+    number when standards.yaml's sc-duplex-adapter entry was written; a mean
+    is not a minimum, and this is the first component ever composed at that
+    pitch to say so - L81 was written to check exactly this and, because the
+    real measurement is irregular rather than uniform, does not actually get
+    to. The placement is NOT widened to hide this: it is the honest reading
+    of the same image the floor itself was set from. See task-5-report.md.
+    This is a finding about the registry entry, not a defect in this
+    cassette.
+  face-detail-gap: >-
+    THE SIX SC CUTOUTS ARE NOT DRAWN HERE, for the same reason as the LC
+    cassette's plate: each composed common/sc-duplex-adapter@1 draws its own
+    bezel, blue flange and two port openings at its `at` position, and a
+    second copy here would drift the day one is edited and the other is not.
+    THE TWO THUMB-KNOBS ARE DRAWN, REUSING THE LC CASSETTE'S OWN BY-EYE
+    FIGURE, NOT A NEW MEASUREMENT. fs/fhd-1mtp6lcd-os2-a@1's skin already
+    states its own knob centres (cx 7.9 and 101.07, r 3.1) were placed by eye
+    against the render, not measured - the same FHD ear/knob hardware is
+    visible on 57058.main.jpg at the same rough position, so this skin
+    repeats that by-eye figure rather than eyeballing a second independent
+    guess. A caliper on a real panel settles the precise figures for both
+    SKUs at once. The FS logo, the "1-12" port-range legend and the per-port
+    numbers 1 through 12 visible on the render are likewise not drawn, the
+    same gap fs/fhd-1mtp6lcd-os2-a@1 already records for its own legends.
+  optical: >-
+    THE CONNECTOR FAMILY, MEDIA, FIBRE COUNT AND POLARITY TYPE ARE SOURCED;
+    THE POLISH IS NOT. The catalogue row,
+    working/intake/fs/fhd/CATALOGUE.tsv:
+
+        cassette	57058	FHD® MTP-12 (Male) to SC Cassette, OS2, 12 Fibers, Type A
+
+    names the connector (SC), the media (OS2), the fibre count (12) and the
+    polarity type (Type A) - and stops there, the same silence SKU 57016's
+    own row leaves around polish (see fs/fhd-1mtp6lcd-os2-a@1's own
+    provenance.optical for that case). modular-cabling-system-portfolio's
+    cassette table (its doc.md, line 265) corroborates the polarity a second
+    way, listing #57058 / FHD-1MTP6SCDOS2A as Type A too.
+    UNLIKE THE LC CASSETTE, THIS SKU DOES NOT APPEAR IN
+    fhd-fiber-cabling-system-guide AT ALL. That document's Table 3 is scoped
+    to "FHD MTP-LC A/AF Polarity Cassettes" by its own title and never
+    mentions an SC part, and its Method A/B link diagrams (fig-0026,
+    fig-0028 through fig-0032) are cassette-to-cassette wiring at the
+    equipment level regardless of connector family, not a fibre trace, so
+    they would settle nothing here even if 57058 were named in them. No
+    per-fibre diagram for an SC cassette exists anywhere in this corpus.
+    THE TWELVE PATHS BELOW ARE THEREFORE THE SAME STANDARD TYPE A
+    STRAIGHT-THROUGH ARRANGEMENT fs/fhd-1mtp6lcd-os2-a@1 assumes for its own
+    LC paths: MTP position n to fibre n in order. Confidence: ESTIMATED, for
+    the same reason and to the same degree as that cassette's own paths.
+    `optical.polish: upc` IS A MARKED ASSUMPTION, THE SAME KIND AS 57016'S
+    BUT FOR ITS OWN REASON RATHER THAN A COPY OF THAT NOTE. FS's catalogue
+    names the polish on SC cassettes where it is not the plain default: SKU
+    258599 reads "Fiber Splice Cassette, SC APC, OS2, 12 Fibers", SKUs 258601
+    and 382905 both read "...SC UPC...", and panel SKU 41986 reads "6x SC APC
+    Duplex (Green), 12 Fibers, OS2" - APC gets named every time FS means it,
+    the same pattern 57016's own note established for LC. 57058's row says
+    only "SC Cassette", so `upc` is the convention default an unmarked SC row
+    means, not a fact this row states.
+    It is corroborated, not sourced, by the render itself: common/sc-duplex-
+    adapter@1 was measured off this exact image and its flange reads a clear
+    blue (RGB roughly 47,117,189 at its brightest pixels) - the
+    industry-standard UPC/PC colour, where APC ferrules and their matching
+    adapter keys are conventionally green, and SKU 41986's own catalogue row
+    names its SC APC panel "(Green)" in so many words. A render's colour is
+    not a dimensioned fact and does not settle this on its own, so `upc`
+    stays an assumption; the colour is corroboration, not the source. A
+    green flange in a face-on photograph of a real SC APC FHD panel, or a
+    datasheet that names 57058 "SC UPC" outright, would settle it.
+skins: [default]
