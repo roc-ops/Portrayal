@@ -82,12 +82,33 @@ def test_the_rear_face_is_not_separately_orderable():
     assert idx["fs/fhd-1mtp6lcd-rear@1"]["kind"] == "component"
 
 
-def test_a_vendor_with_no_device_can_still_ship_modules():
-    import sys as _s
-    _s.path.insert(0, str(ROOT / "spec/tools/portrayal"))
+def test_the_registry_fallback_still_answers_for_a_deviceless_namespace():
+    """PLAN 5'S FALLBACK, AND THIS IS WHAT WATCHES IT.
+
+    `manufacturer_of` checks devices first and falls back to vendors.yaml, so a
+    vendor that ships parts before it ships a chassis is still orderable. FS was
+    that vendor until the FHD-1UFCE landed; now it resolves from its device, and
+    the old test passed through the device path while claiming to prove the
+    fallback. This drives the fallback directly instead.
+    """
     from artifacts import Dist
     d = Dist(str(DIST))
-    assert d.manufacturer_of("fs") == "FS.com"
+    assert d.manufacturer_of("fs") == "FS.com"      # now via the device
+    # a namespace that exists in vendors.yaml and has no device at all
+    deviceless = [ns for ns in d.vendors
+                  if not any(x.get("ns") == ns for x in d.devices)]
+    assert deviceless, "every vendor now has a device - the fallback is unwatched"
+    ns = deviceless[0]
+    assert d.manufacturer_of(ns) == d.vendors[ns]["display"]
+
+
+def test_a_namespace_with_no_vendor_is_still_not_orderable():
+    """`common/` and `std/` are absent from vendors.yaml, so the property holds
+    by data rather than by a special case."""
+    from artifacts import Dist
+    d = Dist(str(DIST))
+    assert d.manufacturer_of("common") is None
+    assert d.manufacturer_of("std") is None
 
 
 def test_the_device_lookup_still_wins_over_the_registry():
@@ -166,17 +187,19 @@ def test_the_sweep_finds_fibre_modules_at_all():
 def test_the_populations_split_as_the_controller_ruling_expects():
     """Pin the ruling with a number, not merely an assertion that passes.
 
-    Seven modules carry `optical.paths` today: one FS cassette with a declared
-    rear face, and six Smartoptics PPMs with none. A future cassette that joins
-    the library moves one of these two counts, and this is what a reviewer
-    notices moving.
+    Eleven modules carry `optical.paths` today: five FS cassettes with a
+    declared rear face (fhd-1mtp6lcd-os2-a, fhd-splice-12-lc,
+    fhd-2mtp12-lc-os2-a, fhd-1mtp12-sc-os2-a and fhd-1mtp24-lc-os2-a), and
+    six Smartoptics PPMs with none. A future cassette that joins the library
+    moves one of these two counts, and this is what a reviewer notices
+    moving.
     """
     idx = index()
     all_fibre = fibre_modules(idx)
     projecting = projecting_modules(idx)
     excluded = [e["name"] for e in all_fibre if e not in projecting]
-    assert len(all_fibre) == 7, sorted(e["name"] for e in all_fibre)
-    assert len(projecting) == 1, [e["name"] for e in projecting]
+    assert len(all_fibre) == 11, sorted(e["name"] for e in all_fibre)
+    assert len(projecting) == 5, [e["name"] for e in projecting]
     assert sorted(excluded) == sorted([
         "ppm-dcm-10", "ppm-dcm-20", "ppm-dcm-40", "ppm-dcm-80",
         "ppm-ocu-50-50", "ppm-ocu-97-3",
@@ -417,3 +440,27 @@ def test_a_module_that_exports_front_ports_also_exports_a_rear_port():
                 assert doc.get("rear-ports"), \
                     f"{f}: front-ports with no rear-ports (netbox#21830)"
     assert checked, "no exported module carries front-ports - this guard is vacuous"
+
+
+def test_no_exported_port_has_a_null_type():
+    """`optical_ports.FAMILY` is a table a ref can be absent from - a rear
+    connector like `mpo16-adapter` with no entry yet - and `port_type` answers
+    None for an unknown family, which serializes to `type: null` and passes
+    every sweep that only checks port NAMES. MPO-8 and MPO-16 are the next
+    connectors the bulk build needs, so this checks every exported port in
+    every module-type file, in both targets, carries a real `type`.
+    """
+    if not EXPORTS.exists():
+        pytest.skip("library/exports not built - run ./publish.sh --no-images")
+    import dcim_export as D
+    checked = 0
+    for target in D.TARGETS:
+        for f in sorted((EXPORTS / target / "module-types").rglob("*.yaml")):
+            doc = yaml.safe_load(f.read_text())
+            for kind in ("front-ports", "rear-ports"):
+                for p in doc.get(kind) or []:
+                    checked += 1
+                    assert p.get("type"), \
+                        f"{f} ({kind}): port {p.get('name')!r} exported type " \
+                        f"{p.get('type')!r}"
+    assert checked, "no exported module carries any port - this guard is vacuous"

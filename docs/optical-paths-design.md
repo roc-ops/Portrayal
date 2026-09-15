@@ -280,6 +280,17 @@ because designing 1-4 without 5-6 in view is how a vocabulary ends up not
 fitting. The IMPLEMENTATION PLAN should stage it so 1-4 land and prove themselves
 on a handful of modules before the bulk build.
 
+**The staging turned out to be eight plans, not six.** Steps 1-4 landed as plans
+1-5 (PRs #236, #237, #239, #240, #242) and proved themselves on one cassette, as
+this section asked. Step 5 is then plan 6 (the enclosure and one cassette
+per two-faced shape) and the bulk build that follows it; step 6, the PPM retro-fit,
+owes the two things this document still records as undesigned - a `combine` syntax,
+and a way to name which optical endpoint is a trunk. **The trunk is now the larger
+of the two and is not only the PPMs' problem:** every one of the 19 TAP cassettes
+carries its live and monitor ports on a single face, so 29 parts in all are waiting
+on that vocabulary, and it should be designed before the bulk build rather than
+after it.
+
 ## Open questions
 
 Recorded rather than decided, because both need evidence we do not have:

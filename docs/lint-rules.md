@@ -93,3 +93,5 @@ a test fails when this page and the linter disagree. A finding prints as
 | L84 | component | a face-qualified optical endpoint names a face the part declares | add the face to `faces:`, or fix the prefix on the endpoint |
 | L85 | component | only a face that is another side of the module draws fibres of its own | move the connector onto the face that really carries it, or extend `faces.OPTICAL_FACES` if this direction genuinely is another side |
 | L86 | component | a module composing a connector the enum spells two ways states its polish | add `optical.polish: upc` or `apc`, and say in provenance where it came from |
+| L87 | component | a module naming what its rear IS has a rear face to name | add `faces.rear`, or drop `optical.rear-kind` |
+| L88 | component | a fibre face with more than one row of connectors states its own front numbering | add `optical.front-order` listing the fibre part ids in the vendor's printed order |

@@ -1,0 +1,114 @@
+format: 1
+kind: module
+name: fhd-splice-12-lc
+version: 1.0.0
+class: cassette
+description: >-
+  FS FHD Fiber Splice Cassette, LC UPC, OS2, 12 Fibers. FS SKU 382907. Twelve
+  trunk fibres fusion-spliced inside the cassette to six LC duplex adapters on
+  the front - one of eleven splice cassettes in FS's FHD catalogue, and the
+  only one this library models.
+size: {w: 108.97, h: 35.05, d: 110.24}
+size-confidence: {w: borrowed, h: borrowed, d: borrowed}
+size-notes: >-
+  NO IMAGE OF THIS PART EXISTS. No photograph in working/intake/fs/fhd/photos
+  shows any of the eleven splice cassettes in the catalogue, and no per-SKU
+  datasheet for 382907 was staged - working/intake/fs/fhd/COVERAGE.md records
+  that plainly. 108.97 x 35.05 x 110.24 is BORROWED WHOLE from
+  fs/fhd-1mtp6lcd-os2-a@1 (SKU 57016), whose faceplate and depth are
+  photo-measured and drawing-sourced respectively: every FHD module shares
+  the same 108.97 x 35.05 faceplate by definition of the format (the same
+  reasoning library/devices/fs/fhd-1ufce/device.yaml's own `bays` note gives
+  for sizing an empty bay before any cassette existed to measure), and the
+  110.24 depth is carried across on the same family-envelope assumption, not
+  a second measurement. `spec/tools/intake/panel_measure.py` still refuses
+  any scale that fails to reproduce the 35.05 mm height - that is what makes
+  the faceplate a constant rather than a free guess - but nothing in this
+  contract was itself run through it, because there is no image of 382907 to
+  run.
+attrs: {media: fiber, model: FHD Fiber Splice Cassette, vendor-sku: '382907'}
+body:
+  depth: 110.24
+parts:
+  - {id: lc1, ref: common/lc-duplex-v-adapter@1, at: [17.545, 10.65]}
+  - {id: lc2, ref: common/lc-duplex-v-adapter@1, at: [30.465, 10.65]}
+  - {id: lc3, ref: common/lc-duplex-v-adapter@1, at: [43.385, 10.65]}
+  - {id: lc4, ref: common/lc-duplex-v-adapter@1, at: [56.305, 10.65]}
+  - {id: lc5, ref: common/lc-duplex-v-adapter@1, at: [69.225, 10.65]}
+  - {id: lc6, ref: common/lc-duplex-v-adapter@1, at: [82.145, 10.65]}
+faces:
+  rear: {ref: fs/fhd-splice-12-lc-rear@1}
+optical:
+  media: os2
+  polish: upc
+  rear-kind: splice
+  paths:
+    - {from: lc1.1, to: 'rear:splice.1'}
+    - {from: lc1.2, to: 'rear:splice.2'}
+    - {from: lc2.1, to: 'rear:splice.3'}
+    - {from: lc2.2, to: 'rear:splice.4'}
+    - {from: lc3.1, to: 'rear:splice.5'}
+    - {from: lc3.2, to: 'rear:splice.6'}
+    - {from: lc4.1, to: 'rear:splice.7'}
+    - {from: lc4.2, to: 'rear:splice.8'}
+    - {from: lc5.1, to: 'rear:splice.9'}
+    - {from: lc5.2, to: 'rear:splice.10'}
+    - {from: lc6.1, to: 'rear:splice.11'}
+    - {from: lc6.2, to: 'rear:splice.12'}
+provenance:
+  size: >-
+    see size-notes. NO IMAGE OF THIS PART EXISTS - the figures above are
+    borrowed whole from fs/fhd-1mtp6lcd-os2-a@1's measured envelope, not
+    photographed or measured for SKU 382907 itself.
+  parts: >-
+    THE SIX CENTRES ARE THE FAMILY ARRANGEMENT, NOT A MEASUREMENT OF THIS SKU.
+    `standards.yaml`'s `fhd-lc-cassette` entry records a MEASURED 12.92 mm
+    adapter-pitch FLOOR off SKU 57016's own render; this contract places its
+    six common/lc-duplex-v-adapter@1 at exactly that pitch, centred on the
+    108.97 mm faceplate: five gaps of 9.28-wide bodies on a 12.92 pitch span
+    5 x 12.92 + 9.28 = 73.88, leaving (108.97 - 73.88) / 2 = 17.545 mm of
+    margin each side, so lc1 sits at x=17.545 and each of the rest is
+    +12.92 further. `at.y` of 10.65 is likewise computed, not read off
+    anything: a common/lc-duplex-v-adapter@1 is 13.75 tall, and centring it in
+    the 35.05 mm face gives (35.05 - 13.75) / 2 = 10.65. Nothing here is a
+    measurement of 382907 - it is the pitch floor and the faceplate geometry
+    already established for this family, worked out arithmetically rather
+    than read off a drawing, because no drawing of this SKU exists.
+  face-detail-gap: >-
+    no legend, port numbering, logo or thumb-knob is drawn - there is no
+    render or photograph of 382907 to read any of it off, unlike
+    fhd-1mtp6lcd-os2-a@1's face-on render of 57016.
+  optical: >-
+    THE CONNECTOR FAMILY, POLISH, MEDIA AND FIBRE COUNT ARE SOURCED - EVERYTHING
+    ELSE ABOUT THE PATHS IS NOT. The one fact this contract can cite is the
+    catalogue row itself, working/intake/fs/fhd/CATALOGUE.tsv:
+
+        cassette	382907	FHD® Fiber Splice Cassette, LC UPC, OS2, 12 Fibers
+
+    which names the connector family (LC), states the polish in as many words
+    - "LC UPC" - unlike SKU 57016's row, which names only the polarity type
+    and leaves polish to be inferred by convention (see
+    fs/fhd-1mtp6lcd-os2-a@1's own provenance.optical for that gap); names the
+    media (OS2); and gives the fibre count (12). `optical.polish: upc` is
+    SOURCED to this row, not assumed.
+    THE TWELVE PATHS BELOW ARE A NUMBERING CONVENTION, NOT A TRACED MAP.
+    lc1.1 through lc6.2 are assigned to rear:splice.1 through rear:splice.12
+    in the same left-to-right, top-then-bottom order
+    fs/fhd-1mtp6lcd-os2-a@1 uses for its MTP paths, because a splice cassette
+    still needs twelve positions accounted for and this is the only orderly
+    way to do it - not because any diagram or datasheet says fibre 1 lands on
+    lc1's top bore. A splice tray's actual mapping is whatever the splicer
+    made it: FS builds these by fusion-splicing each of twelve inbound trunk
+    fibres to one of twelve pigtails terminated in the LC adapters, a
+    one-at-a-time manual process with no fixed pinout the way an MTP
+    connector's keyed ferrule has one. THAT IS WHY `optical.polarity` IS
+    OMITTED HERE, where fs/fhd-1mtp6lcd-os2-a@1 states `polarity: a` - a
+    splice cassette has no polarity to declare. Polarity names a connector
+    KEYING convention (Type A/B/AF), and there is no connector on the inside
+    of this cassette to key; there is only whichever fibre the technician
+    fused to whichever pigtail. A per-unit test report or a label on a real
+    382907 unit settles what any given cassette's mapping actually is; this
+    contract's numbering is a placeholder so the paths schema (which requires
+    at least one path and a reason for any unused position) has something
+    coherent to hold, not a sourced fact about this SKU.
+skins: [default]

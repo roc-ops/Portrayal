@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="108.97mm" height="35.05mm" viewBox="0 0 108.97 35.05">
+  <!-- FHD-1MTP6SCDOS2A faceplate, 108.97 x 35.05, FS SKU 57058 - measured off
+       FS's own face-on render, see the contract's size-notes.
+
+       THE SIX SC CUTOUTS ARE NOT DRAWN HERE. Each of the six
+       common/sc-duplex-adapter@1 parts the contract composes draws its own
+       bezel, blue flange and pair of stacked port openings at its `at`
+       position - the same reason common/lc-duplex-v-adapter@1's plate and
+       common/mpo-adapter@1's plate leave their own apertures undrawn (see
+       those skins' headers). Drawing a second rect under each composed
+       adapter would be a duplicate of geometry the composed part already
+       owns, and the two copies would drift the day one of them is edited
+       and the other is not.
+
+       THE TWO THUMB-KNOBS ARE DRAWN, NOT RECORDED AS A GAP - but the
+       figures are REUSED from fs/fhd-1mtp6lcd-os2-a@1's own by-eye reading
+       of 57016.main.jpg, not a fresh measurement of 57058.main.jpg. Both
+       renders show the same FHD captive knurled knob at each end of the
+       port row, and neither drawing is precise enough to be worth a second
+       independent guess. A caliper on a real panel settles the exact
+       figures for both SKUs at once. -->
+  <defs>
+    <linearGradient id="bez" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3c4248"/>
+      <stop offset="1" stop-color="#23272c"/>
+    </linearGradient>
+    <radialGradient id="knob" cx="0.35" cy="0.35" r="0.75">
+      <stop offset="0" stop-color="#4a5056"/>
+      <stop offset="1" stop-color="#1c1f22"/>
+    </radialGradient>
+  </defs>
+  <rect id="bezel" x="0" y="0" width="108.97" height="35.05" rx="1.5"
+        fill="url(#bez)" stroke="#15181a" stroke-width="0.3"/>
+  <circle id="thumb-knob-left" cx="7.9" cy="17.525" r="3.1"
+          fill="url(#knob)" stroke="#0e1012" stroke-width="0.25"/>
+  <circle id="thumb-knob-right" cx="101.07" cy="17.525" r="3.1"
+          fill="url(#knob)" stroke="#0e1012" stroke-width="0.25"/>
+</svg>

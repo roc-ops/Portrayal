@@ -1,0 +1,54 @@
+format: 1
+kind: component
+name: fhd-1mtp12-sc-rear
+version: 1.0.0
+class: cassette
+description: >-
+  The back of FS FHD-1MTP6SCDOS2A (SKU 57058): the cassette body seen from
+  behind, carrying its single MTP-12 trunk adapter.
+size: {w: 99.0, h: 31.0, d: 2.0}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+size-notes: >-
+  NOT MEASURED, AND NOT MEASURABLE FROM WHAT IS HELD - the identical
+  situation fs/fhd-1mtp6lcd-rear@1 already documents for SKU 57016, and the
+  same numbers are reused rather than re-guessed, for a reason stronger than
+  "the family shares a rear": 57058.D.jpg is the only rear view held here
+  too, it is the same top-rear three-quarter composition, and panel_measure
+  refuses it at 3.7694450%, the SAME figure (independently reproduced) that
+  57016.D.jpg gives - to four significant figures, not just "close". Two
+  independent SKUs' rear renders failing panel_measure's own scale-validity
+  check by the identical percentage is strong evidence they were shot from
+  the same rig against the same physical rear tooling, which is exactly what
+  99.0 x 31.0 x 2.0 already assumes. It still cannot be scaled on the
+  faceplate, because the faceplate OVERHANGS the body - the rear face is the
+  body, and the body is narrower by an amount nobody has measured. 99.0 x
+  31.0 is proportion read off that render against the known 108.97 x 35.05
+  front, carried over from fs/fhd-1mtp6lcd-rear@1 rather than re-derived. A
+  face-on photograph of the back settles it for either SKU.
+attrs: {media: fiber}
+parts:
+  - {id: mtp, ref: common/mpo-adapter@1, at: [42.6, 10.8]}
+provenance:
+  size: >-
+    see size-notes.
+  parts: >-
+    ONE MTP-12, CENTRED, and centred is a choice rather than a reading -
+    reused unchanged from fs/fhd-1mtp6lcd-rear@1. `at` places a 13.8 x 9.4
+    mpo-adapter at [42.6, 10.8], so its centre is (49.5, 15.5) against a body
+    centre of (49.5, 15.5) - exact on both axes. On 57058.D.jpg the adapter
+    reads as sitting a little BELOW the middle of the face, beside a 1-12
+    legend, the same offset 57016.D.jpg shows for its own MTP adapter - but
+    that render is the top-rear three-quarter panel_measure refuses, so the
+    offset can be seen and not measured here either. Centring is what the
+    drawing can defend; the apparent drop is recorded here as the thing a
+    face-on photograph of the back should settle, rather than turned into a
+    number nobody measured.
+  face-detail-gap: >-
+    The legends visible on the render are not drawn: a `1-12` port-range
+    label to the left of the adapter, a `Type A` polarity label to the
+    right, a `MALE` warranty seal above it, and two captive thumb-screws at
+    the outer edges - the same four items fs/fhd-1mtp6lcd-rear@1's own gap
+    note lists for 57016.D.jpg, present in the same arrangement on
+    57058.D.jpg. They are recorded here because they identify the part in a
+    photograph and somebody will want them later.
+skins: [default]

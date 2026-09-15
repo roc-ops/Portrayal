@@ -205,3 +205,211 @@ def test_a_split_carries_its_ratio():
     assert len(m["rows"]) == 2
     assert all(r["ratio"] == 50 for r in m["rows"])
     assert {r["front"] for r in m["rows"]} == {"1", "2"}
+
+
+def test_a_splice_rear_exports_as_one_splice_port():
+    """C2, and upstream's own convention: the devicetype-library ships ADC's
+    PPP-SC-SM with `rear-ports: [{name, type: splice, positions: 1}]`."""
+    entry = {"parts": [{"id": "lc1", "ref": "common/lc-duplex-adapter@3",
+                        "at": [0, 0]}],
+             "faces": {"rear": {"ref": "t/splice-rear@1"}},
+             "optical": {"media": "os2", "polish": "upc", "rear-kind": "splice",
+                         "paths": [{"from": "lc1.1", "to": "rear:splice.1"},
+                                   {"from": "lc1.2", "to": "rear:splice.2"}]}}
+    known = {"common/lc-duplex-adapter@3": {"optical": {"positions": 2}},
+             "common/fibre-splice@1": {"optical": {"positions": 2}},
+             "t/splice-rear@1": {"parts": [{"id": "splice",
+                                            "ref": "common/fibre-splice@1"}]}}
+    got = P.ports(entry, known.get)
+    assert got["rear"] == [{"name": "SPLICE-1", "type": "splice", "positions": 2}]
+    assert len(got["front"]) == 2
+
+
+def test_a_declared_rear_kind_does_not_override_a_known_family():
+    """`rear-kind` used to type EVERY rear port (`t = rear_kind or
+    port_type(...)`), so a module with a splice tray AND an MPO adapter on one
+    rear face would export both as `type: splice`. The connector family wins
+    when it is known; `rear-kind` is only the fallback for a part - like a
+    splice tray - that composes nothing `FAMILY` recognises."""
+    entry = {"parts": [{"id": "lc1", "ref": "common/lc-duplex-adapter@3",
+                        "at": [0, 0]}],
+             "faces": {"rear": {"ref": "t/mixed-rear@1"}},
+             "optical": {"media": "os2", "polish": "upc", "rear-kind": "splice",
+                         "paths": [{"from": "lc1.1", "to": "rear:splice.1"},
+                                   {"from": "lc1.2", "to": "rear:mtp.1"}]}}
+    known = {"common/lc-duplex-adapter@3": {"optical": {"positions": 2}},
+             "common/fibre-splice@1": {"optical": {"positions": 2}},
+             "common/mpo-adapter@1": {"optical": {"positions": 12}},
+             "t/mixed-rear@1": {"parts": [
+                 {"id": "splice", "ref": "common/fibre-splice@1"},
+                 {"id": "mtp", "ref": "common/mpo-adapter@1"}]}}
+    got = P.ports(entry, known.get)
+    types = {r["name"]: r["type"] for r in got["rear"]}
+    assert types == {"SPLICE-1": "splice", "MTP-1": "mpo"}, types
+
+
+def run87(doc, path="t/contract.yaml"):
+    L.ERRORS.clear()
+    L.lint_component_optical_rear_kind(path, doc)
+    return [e for e in L.ERRORS if "[L87]" in e]
+
+
+def test_declaring_a_splice_rear_without_a_rear_face_is_an_error():
+    """`rear-kind` describes a rear face. Saying it with no rear face to describe
+    is a claim about a drawing that does not exist."""
+    got = run87({"optical": {"rear-kind": "splice",
+                             "paths": [{"from": "a.1", "to": "b.1"}]}})
+    assert len(got) == 1, got
+    assert "rear face" in got[0]
+
+
+def test_a_splice_rear_with_a_rear_face_is_quiet():
+    assert run87({"faces": {"rear": {"ref": "t/x@1"}},
+                  "optical": {"rear-kind": "splice",
+                              "paths": [{"from": "a.1", "to": "rear:b.1"}]}}) == []
+
+
+def test_saying_nothing_about_the_rear_kind_is_quiet():
+    """Every cassette built so far has a connector on the back and says nothing."""
+    assert run87({"faces": {"rear": {"ref": "t/x@1"}},
+                  "optical": {"paths": [{"from": "a.1", "to": "rear:b.1"}]}}) == []
+
+
+def test_front_numbering_follows_at_x_not_id_order(tmp_path):
+    """`_front_parts` orders adapters "across the face by `at.x`", by its own
+    docstring - but until now nothing proved the BUILT index it actually reads
+    at runtime carries `at.x` at all.
+
+    `components_index.py` published only `ref`, `id` and `attrs` per part.
+    Every part's `at` therefore read as the shared default `[0, 0]`, and
+    `_front_parts`' sort fell through to comparing the part-id STRING - quiet
+    for every real cassette so far only because their ids (`lc1`..`lc6` on
+    fhd-1mtp6lcd-os2-a, `lc01`..`lc12` on fhd-2mtp12-lc-os2-a) already sort in
+    face order. `id lc9` at x=10.0 (physically first) and `id lc10` at x=90.0
+    (physically second) disagree with their string order
+    (`"lc10" < "lc9"`), so this is the case that tells the two failure modes
+    apart: the fix must publish `at` on the built index entry, not merely
+    leave `_front_parts` alone.
+
+    This runs the REAL `components_index.py` CLI against a throwaway
+    component (composing the real common/lc-duplex-v-adapter@1, resolved from
+    this library) rather than constructing an index entry by hand, because a
+    hand-built entry that already carries `at` cannot tell a working
+    `_front_parts` apart from a `components_index.py` that silently drops it
+    before the projection ever sees it - which is exactly the bug that
+    shipped. Confirmed to fail against components_index.py before `at` was
+    added to its `parts` projection (labels came out lc10->1,2 / lc9->3,4 -
+    backwards) and to pass after.
+    """
+    import json
+    import subprocess
+
+    comp = tmp_path / "components" / "t" / "lctest" / "v1"
+    (comp / "skins").mkdir(parents=True)
+    (comp / "contract.yaml").write_text("""\
+format: 1
+kind: module
+name: lctest
+version: 1.0.0
+class: cassette
+description: throwaway component proving components_index publishes `at` on parts.
+size: {w: 100.0, h: 20.0}
+attrs: {media: fiber}
+parts:
+  - {id: lc10, ref: common/lc-duplex-v-adapter@1, at: [90.0, 3.0]}
+  - {id: lc9, ref: common/lc-duplex-v-adapter@1, at: [10.0, 3.0]}
+optical:
+  polish: upc
+  paths:
+    - {from: lc9.1, to: lc9.2}
+    - {from: lc10.1, to: lc10.2}
+skins: [default]
+""")
+    (comp / "skins" / "default.svg").write_text(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="100.0mm" height="20.0mm" '
+        'viewBox="0 0 100.0 20.0"><rect x="0" y="0" width="100.0" height="20.0"/></svg>\n')
+
+    out = tmp_path / "dist"
+    subprocess.run(
+        [sys.executable, str(ROOT / "spec/tools/portrayal/components_index.py"),
+         "--library", str(ROOT / "library"), "--library", str(tmp_path),
+         "--out", str(out)],
+        check=True, capture_output=True, text=True)
+
+    idx = {f"{e['ns']}/{e['name']}@{e['major'][1:]}": e
+           for e in json.loads((out / "components.json").read_text())["components"]}
+    e = idx["t/lctest@1"]
+    assert all("at" in p for p in e["parts"]), \
+        f"components_index dropped `at` from the built entry: {e['parts']}"
+
+    import dcim_export as D
+    view = D.contract_view(e)
+    assert P.front_label(view, "lc9.1", idx.get) == "1"
+    assert P.front_label(view, "lc9.2", idx.get) == "2"
+    assert P.front_label(view, "lc10.1", idx.get) == "3"
+    assert P.front_label(view, "lc10.2", idx.get) == "4"
+
+
+def test_the_two_row_cassette_follows_its_front_order():
+    """`optical.front-order` states the vendor's own row-then-row numbering
+    explicitly - prove the projection actually follows it rather than
+    falling back to `at.x`, which would produce the column-major order this
+    same module shipped with by accident before `front-order` existed (see
+    its own provenance.parts for the two retractions).
+    """
+    import json
+    import dcim_export as D
+    f = ROOT / "library" / "dist" / "components.json"
+    if not f.exists():
+        pytest.skip("library/dist not built - run ./publish.sh --no-images")
+    idx = {f"{e['ns']}/{e['name']}@{e['major'][1:]}": e
+           for e in json.loads(f.read_text())["components"]}
+    e = idx["fs/fhd-2mtp12-lc-os2-a@1"]
+    view = D.contract_view(e)
+    want = [str(n) for n in range(1, 25)]
+    got = []
+    for pid in ("lc01", "lc02", "lc03", "lc04", "lc05", "lc06",
+                "lc07", "lc08", "lc09", "lc10", "lc11", "lc12"):
+        got += [P.front_label(view, f"{pid}.1", idx.get),
+                P.front_label(view, f"{pid}.2", idx.get)]
+    assert got == want, got
+
+
+def run88(doc, path="t/contract.yaml"):
+    L.ERRORS.clear()
+    L.lint_component_optical_front_order(path, doc)
+    return [e for e in L.ERRORS if "[L88]" in e]
+
+
+TWO_ROW_PARTS = [
+    {"id": "a", "ref": "common/lc-duplex-v-adapter@1", "at": [5.0, 3.0]},
+    {"id": "b", "ref": "common/lc-duplex-v-adapter@1", "at": [20.0, 15.0]},
+]
+TWO_ROW_PATHS = [{"from": "a.1", "to": "a.2"}, {"from": "b.1", "to": "b.2"}]
+
+
+def test_a_two_row_fibre_face_without_front_order_is_l88():
+    """The case geometry cannot answer: two fibre parts at two distinct
+    `at.y` values, and no `optical.front-order` to resolve which row the
+    vendor numbers first."""
+    got = run88({"parts": TWO_ROW_PARTS,
+                 "optical": {"paths": TWO_ROW_PATHS}})
+    assert len(got) == 1, got
+    assert "front-order" in got[0]
+
+
+def test_a_single_row_fibre_face_needs_nothing():
+    """One `at.y` among the fibre parts - `at.x` alone is a safe reading, the
+    same case every cassette built before this rule already models."""
+    one_row = [{"id": "a", "ref": "common/lc-duplex-v-adapter@1", "at": [5.0, 3.0]},
+               {"id": "b", "ref": "common/lc-duplex-v-adapter@1", "at": [20.0, 3.0]}]
+    assert run88({"parts": one_row, "optical": {"paths": TWO_ROW_PATHS}}) == []
+
+
+def test_stating_front_order_silences_l88():
+    assert run88({"parts": TWO_ROW_PARTS,
+                 "optical": {"front-order": ["a", "b"], "paths": TWO_ROW_PATHS}}) == []
+
+
+def test_a_module_with_no_paths_is_not_l88s_business():
+    assert run88({"parts": TWO_ROW_PARTS}) == []

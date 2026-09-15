@@ -18,6 +18,7 @@ FAMILY = {
     "common/lc-duplex-v-adapter": "lc",
     "common/sc-duplex-adapter": "sc",
     "common/mpo-adapter": "mpo",
+    "common/mpo24-adapter": "mpo",
     "common/st-simplex-adapter": "st",
     "common/fc-simplex-adapter": "fc",
     "common/lsh-simplex-adapter": "lsh",
@@ -51,22 +52,39 @@ def port_type(family, polish):
 
 
 def _front_parts(entry):
-    """This module's own fibre parts, left to right.
+    """This module's own fibre parts, in front-port numbering order.
 
-    ORDER IS THE NUMBERING. The faceplate's labels are recorded in the
-    cassette's provenance as prose and nowhere in the data, so the projection
-    derives them: adapters across the face by `at.x`, and within an adapter by
-    fibre position. A test checks that derivation against the numbering the
-    contract states, rather than trusting that they agree.
+    ORDER IS THE NUMBERING, but position is only SOMETIMES where that order
+    comes from. For a single row of connectors, `at.x` left to right IS the
+    vendor's own numbering - a safe derivation, not a guess, and every
+    single-row module in this library is projected that way with nothing
+    stated about it. A face with more than one row is a different question:
+    whether the vendor numbers row then row or column then column, and which
+    row comes first, is a fact about the SILKSCREEN, not a fact `at.x` and
+    `at.y` can be sorted into - GEOMETRY CANNOT DETERMINE A SILKSCREEN, and
+    guessing a rule from the one multi-row sample this library happens to
+    hold is exactly how the 12.90-vs-13.2 pitch confusion started. So a
+    module states `optical.front-order` explicitly where geometry cannot
+    answer (L88 requires it), and this reads that order in preference to
+    `at.x` whenever it is present, falling through to the position-based
+    derivation otherwise. A test checks the single-row derivation against the
+    numbering the contract states, rather than trusting that they agree.
     """
-    out = []
+    parts = {}
     for part in (entry.get("parts") or []):
         if not isinstance(part, dict) or not part.get("id"):
             continue
         if family_of(part.get("ref") or "") is None:
             continue
-        at = part.get("at") or [0, 0]
-        out.append((float(at[0]), str(part["id"]), part["ref"]))
+        parts[str(part["id"])] = part
+
+    front_order = (entry.get("optical") or {}).get("front-order")
+    if front_order:
+        return [(float(i), pid, parts[pid]["ref"])
+                for i, pid in enumerate(front_order) if pid in parts]
+
+    out = [(float((p.get("at") or [0, 0])[0]), pid, p["ref"])
+           for pid, p in parts.items()]
     return sorted(out)
 
 
@@ -101,6 +119,7 @@ def ports(entry, load_ref):
     """
     caps = optical.capacities(entry, load_ref)
     polish = (entry.get("optical") or {}).get("polish")
+    rear_kind = (entry.get("optical") or {}).get("rear-kind")
 
     front, n = [], 0
     for _x, pid, ref in _front_parts(entry):
@@ -114,8 +133,8 @@ def ports(entry, load_ref):
     for key in sorted(k for k in caps if ":" in k):
         face, pid = key.split(":", 1)
         ref = _face_part_ref(entry, face, pid, load_ref)
-        rear.append({"name": names[pid], "type": port_type(family_of(ref), polish),
-                     "positions": caps[key]})
+        t = port_type(family_of(ref), polish) or rear_kind
+        rear.append({"name": names[pid], "type": t, "positions": caps[key]})
     return {"front": front, "rear": rear}
 
 
