@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9501-18smt
-version: 2.0.3
+version: 2.0.4
 maturity: modelled
 manufacturer: UfiSpace
 model: S9501-18SMT
@@ -109,10 +109,12 @@ provenance:
     (178.1-180.3, 15.1-16.7). A network icon is printed above the bezel at (171.9-175.4,
     9.3-11.8) and the USB trident below at (171.2-175.4, 36.4-38.6); both are drawn as
     path marks. The silver bezel is PANEL, drawn as decor - without it a dark jack on a
-    dark faceplate is invisible. ONE ART MISMATCH SEEN AT MATCHED SCALE AND LEFT ALONE:
-    std/usb-a draws a blue USB-3 tongue and this port is USB 2.0 (datasheet '1 x USB 2.0
-    Type-A port'; the drawing shows a black tongue). That is the shared standard part's
-    artwork, not this device's geometry, and is not worth a device-local component.
+    dark faceplate is invisible. THE ART MISMATCH THIS ENTRY USED TO RECORD IS FIXED:
+    std/usb-a@1 drew a blue USB-3 tongue where the datasheet says '1 x USB 2.0 Type-A
+    port', and it was left alone because the colour belongs to the shared part rather
+    than to this device. The shared part now carries a `usb2` skin and the placement asks
+    for it. One shade of difference remains and is not worth another skin: USB-IF's
+    colour for 2.0 is white and the vendor's drawing shows a black tongue.
   tod-console-stack: >-
     drawing-measured - a second silver ganged shell x 186.7-203.1, y 9.6-35.2, holding
     two 8P8C jacks: ToD above (labelled TOD) and the serial console below (labelled
@@ -600,7 +602,7 @@ views:
         - {ref: common/reset-button@1, id: reset, at: [134.0, 36.8], for: chassis, group: mgmt, rel-pos: 4}
         - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [167.6, 14], rotate: 180, group: mgmt, rel-pos: 1,
            attrs: {role: oob, speed: 100m-1g}, states: {led-a: ['off', {color: '#f59e0b', name: link-100m}, {behavior: blinking, color: '#f59e0b', name: activity-100m}], led-b: ['off', {color: '#22c55e', name: link-1g}, {behavior: blinking, color: '#22c55e', name: activity-1g}]}, description: 'led-mgmt-l: HIG Management port LED table, Left LED - Off (1G no link), Solid Green (1G link-up), Blinking Green (1G TX/RX activity); led-mgmt-r: HIG Management port LED table, Right LED - Off (no activity), Solid Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity). The two lamps do not share a vocabulary, which is why each is declared on its own'}
-        - {ref: std/usb-a@1, id: usb, at: [167.6, 28.3], group: mgmt, rel-pos: 2, attrs: {role: maintenance, speed: usb2}}
+        - {ref: std/usb-a@1, id: usb, at: [167.6, 28.3], skin: usb2, group: mgmt, rel-pos: 2, attrs: {role: maintenance, speed: usb2}}
         - {ref: std/rj45-ganged@2, id: tod, at: [188.2, 10], rotate: 180, group: timing, rel-pos: 4, attrs: {media: rj45, role: tod-io}}
         - {ref: std/rj45-ganged@2, id: console, at: [188.2, 24.3], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
         - {ref: common/rj45-ganged-eth@1, id: port-0, at: [209.6, 10], rotate: 180, group: rj45-1g, rel-pos: 0}

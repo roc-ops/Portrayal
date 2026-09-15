@@ -160,3 +160,62 @@ def test_the_maiaedge_pbc_asks_for_the_usb2_skin():
                if p["id"] == "usb")
     assert usb["ref"] == "std/usb-a@1"
     assert usb.get("skin") == "usb2", usb
+
+
+# --- the sweep this skin existed to make possible ------------------------------
+#
+# Adding `usb2` to the part is only half the job: every device already saying its
+# port is USB 2.0 was still drawing the 3.0 blue. Three of them had noticed and
+# written it down as a known error that was "not this device's to fix" - which was
+# true right up until the part grew a second skin.
+
+USB_2 = {"usb2", "usb-2.0"}
+USB_3 = {"usb3", "usb-3.0"}
+
+
+def _usb_placements():
+    for p in sorted((LIB / "devices").glob("*/*/device.yaml")):
+        d = yaml.safe_load(p.read_text()) or {}
+        for vname, view in (d.get("views") or {}).items():
+            for pl in (((view or {}).get("components") or {}).get("placements") or []):
+                if "usb-a@" in str(pl.get("ref", "")):
+                    yield f"{p.parent.parent.name}/{p.parent.name}", vname, pl
+
+
+def test_a_port_the_device_calls_usb_2_is_not_drawn_as_usb_3():
+    """THE SWEEP, and it is structural: the placement's own declared speed
+    against the skin it asks for. Reading the provenance prose instead would
+    match sentences about accessory cables and gap discussions - one device's
+    only mention of '2.0' is inside a note about a cable, and another's is inside
+    the note recording this very defect."""
+    bad = []
+    for dev, view, pl in _usb_placements():
+        speed = (pl.get("attrs") or {}).get("speed")
+        if speed in USB_2 and pl.get("skin") != "usb2":
+            bad.append(f"{dev} {view}/{pl['id']}: attrs say {speed!r} but it draws "
+                       f"skin {pl.get('skin')!r} - the default tongue is USB-3 blue")
+    assert not bad, "\n".join(bad)
+
+
+def test_a_port_the_device_calls_usb_3_keeps_the_blue():
+    """The other direction, which is what stops a sweep over-reaching. The
+    R740xd is the case that proves the granularity is right: its FRONT pair is
+    USB 2.0 and its REAR pair is USB 3.0, on the same device, from the same
+    part."""
+    bad = [f"{dev} {view}/{pl['id']}"
+           for dev, view, pl in _usb_placements()
+           if (pl.get("attrs") or {}).get("speed") in USB_3 and pl.get("skin") == "usb2"]
+    assert not bad, bad
+
+
+def test_the_r740xd_draws_its_two_usb_generations_apart():
+    """Dell's own table: the front panel is two USB 2.0 and the rear is two 3.0."""
+    seen = {}
+    for dev, view, pl in _usb_placements():
+        if dev == "dell/r740xd":
+            seen[f"{view}/{pl['id']}"] = pl.get("skin")
+    front = {k: v for k, v in seen.items() if k.startswith("front")}
+    rear = {k: v for k, v in seen.items() if k.startswith("rear")}
+    assert front and rear, seen
+    assert set(front.values()) == {"usb2"}, front
+    assert set(rear.values()) == {None}, rear

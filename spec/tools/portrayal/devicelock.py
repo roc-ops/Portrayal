@@ -66,7 +66,26 @@ def _placements(doc):
                 # `_bay_accepts`.
                 out[key] = {
                     "at": item.get("at"), "size": item.get("size"),
+                    # HANDEDNESS SITS BESIDE ROTATION because it is the same
+                    # kind of fact - which way round the part is placed - and
+                    # `render.py` says so in as many words: "HANDEDNESS IS NOT
+                    # ROTATION ... a riser whose cards face the other way needs
+                    # the reflection, not the half-turn." Mirroring a part puts
+                    # its every feature on the other side while its box stays
+                    # put, so anything that cached a sub-feature coordinate is
+                    # now wrong, which is what major means. No placement in the
+                    # library carries one today; this costs nothing and closes
+                    # the hole before the first one does.
+                    #
+                    # PRESENT ONLY WHEN SET, and that is not tidiness. The
+                    # digest is taken over this whole dict, so a new key holding
+                    # None still changes every device's hash - writing it
+                    # unconditionally asked 88 devices for a MAJOR bump apiece
+                    # for a field none of them uses. Adding it conditionally
+                    # leaves every current hash exactly where it was and starts
+                    # tracking the first placement that does carry one.
                     "rotate": item.get("rotate"),
+                    **({"mirror": item["mirror"]} if item.get("mirror") is not None else {}),
                     "ref": item.get("ref"),
                     "default": item.get("default"), "mate-to": item.get("mate-to"),
                 }
@@ -75,6 +94,34 @@ def _placements(doc):
                 "at": cut.get("at"), "size": cut.get("size"),
                 "shape": cut.get("shape"),
             }
+    return out
+
+
+def _placement_skins(doc):
+    """Which skin each placed thing asks its component for, keyed the same way.
+
+    THIS IS ART AND IT WAS NOT FINGERPRINTED AT ALL. A skin selects which
+    drawing of a component is painted - std/usb-a@1's blue USB-3 tongue or its
+    white USB-2 one, std/db9@1's black insert or its PC99 teal - and 1062
+    placements on 40 devices carry one. Every one of those could have been
+    repointed at different artwork, or had its `skin` deleted so the part fell
+    back to `default`, and the lock would have reported nothing. The module's
+    own first line is "Device fingerprints, so a device cannot change without
+    saying so", and this was the gap in it.
+
+    `surface` rather than `shape`, and the reason is already settled in this
+    file: a CONFIGURATION's `skins:` map has always been fingerprinted, inside
+    the `configurations` blob under `surface`. A placement asking for the same
+    thing one part at a time is the same kind of claim and takes the same bucket
+    - art a reader sees and no consumer computes with, so a patch.
+    """
+    out = {}
+    for vname, view in (doc.get("views") or {}).items():
+        view = view or {}
+        for kind in ("bays", "placements"):
+            for item in ((view.get("components") or {}).get(kind) or []):
+                if item.get("skin") is not None:
+                    out[f"{vname}/{kind}/{item.get('id')}"] = item["skin"]
     return out
 
 
@@ -203,6 +250,11 @@ def buckets(doc, versions=None):
     be re-affirmed when the drawing moves under it. See `stale_gap_scopes`.
     """
     placed = _placements(doc)
+    # PRESENT ONLY WHEN THE DEVICE NAMES ONE, for the same reason `mirror` is
+    # conditional above: an empty map is still a new key, and a new key rehashes
+    # every device in the library. 48 of the 88 name no skin at all and have
+    # nothing new to say; writing it unconditionally billed them for a bump.
+    skins = _placement_skins(doc)
     return {
         "shape": _digest({
             "chassis": doc.get("chassis"),
@@ -243,6 +295,7 @@ def buckets(doc, versions=None):
             "empty": {v: (w or {}).get("empty")
                       for v, w in (doc.get("views") or {}).items()},
             "configurations": doc.get("configurations"),
+            **({"placement-skins": skins} if skins else {}),
         }),
         "gaps": _digest(doc.get("gaps") or []),
         # WHAT THIS DEVICE DRAWS THAT LIVES SOMEWHERE ELSE. Hashed apart from
@@ -459,7 +512,8 @@ def check(library: pathlib.Path):
             if was.get("names") != now["names"]:
                 what.append("ids or groups")
             if was.get("surface") != now["surface"]:
-                what.append("surface (silkscreen, decor, provenance, attrs, portfolio)")
+                what.append("surface (silkscreen, decor, provenance, attrs, "
+                            "portfolio, skins)")
             if was.get("gaps") != now["gaps"]:
                 what.append("gaps")
             # NAME THE COMPOSED CHANGE. The one bucket whose cause is not in

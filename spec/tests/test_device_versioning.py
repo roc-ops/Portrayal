@@ -462,3 +462,83 @@ def test_portfolio_moves_surface_and_not_geometry_or_ids():
     b = dl.entry(dev(portfolio={"line": "Telecoms", "family": "B"}))
     assert a["shape"] == b["shape"] and a["names"] == b["names"]
     assert a["surface"] != b["surface"]
+
+
+# ---- art the lock could not see ---------------------------------------------
+#
+# A placement's `skin` chooses WHICH DRAWING of a component is painted -
+# std/usb-a@1's blue USB-3 tongue or its white USB-2 one, std/db9@1's black
+# insert or its PC99 teal. 1062 placements on 40 devices carry one and none of
+# them was fingerprinted, so any of them could be repointed at different artwork,
+# or have its `skin` deleted so the part fell back to `default`, with the lock
+# reporting nothing. `mirror` was the same hole for handedness.
+
+def _skinned(skin=None, mirror=None, **kw):
+    d = dev(**kw)
+    pl = {"id": "port", "ref": "std/usb-a@1", "at": [1, 1], "group": "slots"}
+    if skin is not None:
+        pl["skin"] = skin
+    if mirror is not None:
+        pl["mirror"] = mirror
+    d["views"]["front"]["components"]["placements"] = [pl]
+    return d
+
+
+def test_repainting_a_placement_is_a_patch():
+    a = dl.entry(_skinned(skin="default"))
+    assert dl.required_bump(a, dl.entry(_skinned(skin="usb2"))) == "patch"
+
+
+def test_asking_for_a_skin_where_there_was_none_is_a_patch():
+    a = dl.entry(_skinned())
+    assert dl.required_bump(a, dl.entry(_skinned(skin="usb2"))) == "patch"
+
+
+def test_dropping_a_skin_back_to_the_default_is_a_change():
+    """The dangerous direction: DELETING the key silently repaints the part."""
+    a = dl.entry(_skinned(skin="usb2"))
+    assert dl.required_bump(a, dl.entry(_skinned())) == "patch"
+
+
+def test_a_skin_is_surface_and_not_shape():
+    """Art, not geometry - nothing moved, so nothing downstream cached a number
+    that is now wrong. The same bucket a CONFIGURATION's `skins:` map has always
+    taken."""
+    a, b = dl.buckets(_skinned(skin="default")), dl.buckets(_skinned(skin="usb2"))
+    assert a["shape"] == b["shape"]
+    assert a["names"] == b["names"]
+    assert a["surface"] != b["surface"]
+
+
+def test_a_device_naming_no_skin_hashes_as_it_always_did():
+    """THE COST OF LEARNING A FIELD, and why it is paid conditionally.
+
+    The digest covers the whole bucket, so a new key holding an empty map still
+    rehashes every device in the library - 48 of the 88 name no skin at all and
+    have nothing new to say. Writing it unconditionally billed them all for a
+    bump nobody could explain.
+    """
+    plain = dev()
+    assert "placement-skins" not in dl._placement_skins(plain)
+    assert dl.buckets(plain)["surface"] == dl._digest({
+        "description": None, "portfolio": None, "maturity": None, "attrs": None,
+        "provenance": {"size": "a"}, "groups": {"slots": {"term": "Slot", "index-origin": 0}},
+        "silkscreen": {"front": None}, "decor": {"front": None},
+        "regions": {"front": None}, "empty": {"front": None},
+        "configurations": None,
+    }), "a device with no skins must hash exactly as it did before the field existed"
+
+
+def test_mirroring_a_placement_is_major():
+    """Handedness puts every feature on the other side while the box stays put,
+    so anything holding a sub-feature coordinate is now wrong."""
+    a = dl.entry(_skinned())
+    assert dl.required_bump(a, dl.entry(_skinned(mirror=True))) == "major"
+
+
+def test_an_unmirrored_placement_hashes_as_it_always_did():
+    """Same conditional-key reasoning as the skins map: no placement in the
+    library carries `mirror`, and none of them may be billed for it."""
+    a = dl._placements(_skinned())
+    assert "mirror" not in a["front/placements/port"]
+    assert "mirror" in dl._placements(_skinned(mirror=True))["front/placements/port"]

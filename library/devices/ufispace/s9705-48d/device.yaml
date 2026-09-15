@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9705-48d
-version: 2.0.7
+version: 2.0.8
 maturity: modelled
 manufacturer: UfiSpace
 model: S9705-48D
@@ -127,14 +127,16 @@ provenance:
     table describes, and the legend row under the block agrees: IOIO with an up-triangle
     for the top jack, a down-triangle and a network glyph for the bottom.
   usb-tongue-colour: >-
-    THE USB TYPE-A IS DRAWN WITH A BLUE TONGUE AND THIS PORT IS USB 2.0. std/usb-a@1 is
-    the right opening - 12.0 x 4.5, rotated 90 because this receptacle is PORTRAIT on
-    this faceplate, inside a measured 6.1 x 12.5 mm bright shell drawn as decor - but its
-    skin paints the USB-3 blue insert, and both the guide figure and the photograph show
-    a black one, as the datasheet's '1 x USB 2.0 Type-A port' implies. The alternative in
-    the library, common/usb-a@3, has a black receptacle and is 17.0 x 9.3 - half again
-    the size of the opening measured here - so the right geometry was kept over the right
-    colour. The colour belongs to the shared part, not to this device.
+    RESOLVED. std/usb-a@1 is the right opening - 12.0 x 4.5, rotated 90 because this
+    receptacle is PORTRAIT on this faceplate, inside a measured 6.1 x 12.5 mm bright
+    shell drawn as decor - but its only skin painted the USB-3 blue insert where the
+    datasheet says '1 x USB 2.0 Type-A port'. The note this entry used to carry said the
+    right geometry was kept over the right colour, because the colour belonged to the
+    shared part and the alternative with a dark receptacle, common/usb-a@3, is 17.0 x 9.3
+    - half again the opening measured here. THE SHARED PART ANSWERED IT: it now has a
+    `usb2` skin and the placement asks for it, so the geometry and the colour are both
+    this device's own. The guide figure and the photograph show a BLACK tongue where
+    USB-IF's 2.0 colour is white; that shade is the only difference left.
   status-lamps: >-
     Four lamps, named by the HIG. Section 10's Front Panel LED table lists SYS, FAN, PS0
     and PS1 in that order with a full state vocabulary for each, and Figure 27 draws them
@@ -786,7 +788,7 @@ views:
         - {ref: common/led-dot@1, id: led-sfp-0, at: [29.90, 48.90], for: mgmt-sfp-0, group: port-leds, rel-pos: 49}
         - {ref: common/led-dot@1, id: led-sfp-1, at: [34.20, 48.90], for: mgmt-sfp-1, group: port-leds, rel-pos: 50}
         - {ref: std/micro-usb@1, id: usb-console, at: [45.50, 43.35], group: mgmt, rel-pos: 3, attrs: {role: console}}
-        - {ref: std/usb-a@1, id: usb, at: [43.30, 54.55], rotate: 90, group: mgmt, rel-pos: 4, attrs: {role: maintenance, speed: usb2}}
+        - {ref: std/usb-a@1, id: usb, at: [43.30, 54.55], rotate: 90, skin: usb2, group: mgmt, rel-pos: 4, attrs: {role: maintenance, speed: usb2}}
         - {ref: std/rj45-ganged@2, id: console, at: [58.4, 44.25], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
         - {ref: common/rj45-ganged-eth@1, id: oob, at: [58.4, 56.15], group: mgmt, rel-pos: 2, attrs: {media: rj45, role: mgmt, speed: 100m-1g}, states: {led-a: ['off', {color: '#22c55e', name: link-1g}, {behavior: blinking, color: '#22c55e', name: activity-1g}], led-b: ['off', {color: '#f59e0b', name: link-10m-100m}, {behavior: blinking, color: '#f59e0b', name: activity-10m-100m}]}, description: 'led-oob-l: HIG section 10, Management port LED, Left LED - Off (1G no link), Solid Green (1G link-up), Blinking Green (1G TX/RX activity); led-oob-r: HIG section 10, Management port LED, Right LED - Off (no activity), Solid Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity)'}
         - {ref: common/reset-button@1, id: reset, at: [10.30, 61.05], for: chassis, group: furniture, rel-pos: 1}
