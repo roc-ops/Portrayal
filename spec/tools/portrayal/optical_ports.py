@@ -133,7 +133,7 @@ def ports(entry, load_ref):
     for key in sorted(k for k in caps if ":" in k):
         face, pid = key.split(":", 1)
         ref = _face_part_ref(entry, face, pid, load_ref)
-        t = rear_kind or port_type(family_of(ref), polish)
+        t = port_type(family_of(ref), polish) or rear_kind
         rear.append({"name": names[pid], "type": t, "positions": caps[key]})
     return {"front": front, "rear": rear}
 

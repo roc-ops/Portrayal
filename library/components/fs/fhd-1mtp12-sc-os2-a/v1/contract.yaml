@@ -83,20 +83,24 @@ provenance:
     same pattern fs/fhd-1mtp6lcd-os2-a@1's own `at.y` provenance uses.
   pitch-note: >-
     common/sc-duplex-adapter@1 composes six-across at an IRREGULAR pitch -
-    the raw measured centres, not a uniform multiple - so L81's own
-    uniform-pitch check does not fire on this component at all (see
-    lint.py's `if len(set(gaps)) != 1: continue`). But the narrowest
+    the raw measured centres, not a uniform multiple. THIS NOTE IS WHY L81
+    STAYS SILENT, though, not the irregular spacing: `lint_component_composed_pitch`
+    returns before it ever looks at a gap once `provenance.pitch-note` is
+    present at all (`if (data.get("provenance") or {}).get("pitch-note"):
+    return`, lint.py) - the documented escape hatch for a part that really
+    does violate its standard's pitch, which this one does. Were this note
+    absent, the check would still fall through the uniform-pitch branch
+    further down (`if len(set(gaps)) != 1: continue`) for the same reason,
+    but that branch is never reached here to begin with. The narrowest
     individual gap, 12.71 mm between sc1 and sc2, is itself 0.29 mm under
     sc-duplex-adapter's 13.0 mm registry floor. That floor is the MEAN of
     these same five render-measured gaps (12.71-13.22), rounded to a clean
     number when standards.yaml's sc-duplex-adapter entry was written; a mean
     is not a minimum, and this is the first component ever composed at that
-    pitch to say so - L81 was written to check exactly this and, because the
-    real measurement is irregular rather than uniform, does not actually get
-    to. The placement is NOT widened to hide this: it is the honest reading
-    of the same image the floor itself was set from. See task-5-report.md.
-    This is a finding about the registry entry, not a defect in this
-    cassette.
+    pitch to say so. The placement is NOT widened to hide this: it is the
+    honest reading of the same image the floor itself was set from. See
+    task-5-report.md. This is a finding about the registry entry, not a
+    defect in this cassette.
   face-detail-gap: >-
     THE SIX SC CUTOUTS ARE NOT DRAWN HERE, for the same reason as the LC
     cassette's plate: each composed common/sc-duplex-adapter@1 draws its own

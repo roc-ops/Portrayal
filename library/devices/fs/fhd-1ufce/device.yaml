@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: fhd-1ufce
-version: 1.4.0
+version: 1.4.1
 manufacturer: FS.com
 model: FHD-1UFCE
 description: >-
@@ -55,14 +55,14 @@ provenance:
     measured off FS's own render for fs/fhd-1mtp6lcd-os2-a@1 (SKU 57016), and
     `panel_measure` refuses to scale ANY FHD face-on render at all unless
     that scale reproduces the same 35.05mm height - which is what makes this
-    a constant worth carrying rather than a per-cassette reading. FIVE
-    CASSETTES SIT IN EVERY BAY'S `accepts` TODAY: fs/fhd-1mtp6lcd-os2-a@1,
-    fs/fhd-splice-12-lc@1, fs/fhd-2mtp12-lc-os2-a@1,
-    fs/fhd-1mtp12-sc-os2-a@1 and fs/fhd-1mtp24-lc-os2-a@1. The bay geometry
-    does not depend on which of them seats in it, because all five - and
-    every other FHD module this plan might still add - share this one
-    envelope by definition of the format (the format's own name for it). The
-    four bays sit contiguous across
+    a constant worth carrying rather than a per-cassette reading. THE RULE,
+    NOT A COUNT: every FHD cassette this library models seats in every bay's
+    `accepts`, because the FHD format defines one shared envelope for the
+    slot rather than a per-cassette one - see each bay's own `accepts` list
+    below for which cassettes that is today. The bay geometry does not
+    depend on which of them seats in it, because every FHD module this plan
+    might still add shares this one envelope by definition of the format
+    (the format's own name for it). The four bays sit contiguous across
     the panel: (448.0 - 4 x 108.97) / 2 = 6.06mm margin each side, centred
     top-to-bottom in the 44.0mm face: (44.0 - 35.05) / 2 = 4.475mm.
   front-panel-detail: >-
@@ -271,11 +271,12 @@ configurations:
   populated:
     kind: example
     description: >-
-      All four bays carrying fs/fhd-1mtp6lcd-os2-a@1, the only FHD cassette
-      this library models today. Illustrative, like every `example` in this
-      library: the cassettes are ordered separately from the enclosure, and
-      later tasks in this plan add the rest of the catalogue this same bay
-      format accepts.
+      All four bays carrying fs/fhd-1mtp6lcd-os2-a@1, chosen as one
+      representative cassette from the FHD catalogue this same bay format
+      accepts - see `provenance.bays` for the rest. Illustrative, like every
+      `example` in this library: the cassettes are ordered separately from
+      the enclosure, and later tasks in this plan add the rest of the
+      catalogue this same bay format accepts.
     bays:
       bay-1: fs/fhd-1mtp6lcd-os2-a@1
       bay-2: fs/fhd-1mtp6lcd-os2-a@1

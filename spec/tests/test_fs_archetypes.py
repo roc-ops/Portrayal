@@ -176,11 +176,16 @@ def test_the_sc_adapters_are_the_first_real_check_of_the_registry_floor():
     common/sc-duplex-adapter@1's pitch floor (13.0, `pitch-kind: floor`) was
     set from. Reproducing them here for the first real cassette shows the
     floor is the MEAN of five noisy gaps (12.71-13.22), not their minimum:
-    the narrowest gap sits 0.29 under it. Because the gaps are not all equal,
-    L81's own uniform-pitch check (`if len(set(gaps)) != 1: continue`) never
-    fires - so lint stays clean - but the raw number is still worth pinning
-    here rather than only in prose. See the contract's `provenance.pitch-note`
-    and task-5-report.md for why the placement is not widened to hide it.
+    the narrowest gap sits 0.29 under it. Lint stays clean not because the
+    gaps are irregular but because the contract carries a
+    `provenance.pitch-note`: L81 returns before it ever looks at a gap once
+    that key is present at all - the documented escape hatch for a part that
+    really does violate its standard's pitch. (The uniform-pitch branch
+    further down, `if len(set(gaps)) != 1: continue`, would also skip these
+    irregular gaps, but it is never reached here to say so.) The raw number
+    is still worth pinning here rather than only in prose. See the
+    contract's `provenance.pitch-note` and task-5-report.md for why the
+    placement is not widened to hide it.
     """
     import lint as L
     L.STANDARDS.update(

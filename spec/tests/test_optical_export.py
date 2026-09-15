@@ -440,3 +440,27 @@ def test_a_module_that_exports_front_ports_also_exports_a_rear_port():
                 assert doc.get("rear-ports"), \
                     f"{f}: front-ports with no rear-ports (netbox#21830)"
     assert checked, "no exported module carries front-ports - this guard is vacuous"
+
+
+def test_no_exported_port_has_a_null_type():
+    """`optical_ports.FAMILY` is a table a ref can be absent from - a rear
+    connector like `mpo16-adapter` with no entry yet - and `port_type` answers
+    None for an unknown family, which serializes to `type: null` and passes
+    every sweep that only checks port NAMES. MPO-8 and MPO-16 are the next
+    connectors the bulk build needs, so this checks every exported port in
+    every module-type file, in both targets, carries a real `type`.
+    """
+    if not EXPORTS.exists():
+        pytest.skip("library/exports not built - run ./publish.sh --no-images")
+    import dcim_export as D
+    checked = 0
+    for target in D.TARGETS:
+        for f in sorted((EXPORTS / target / "module-types").rglob("*.yaml")):
+            doc = yaml.safe_load(f.read_text())
+            for kind in ("front-ports", "rear-ports"):
+                for p in doc.get(kind) or []:
+                    checked += 1
+                    assert p.get("type"), \
+                        f"{f} ({kind}): port {p.get('name')!r} exported type " \
+                        f"{p.get('type')!r}"
+    assert checked, "no exported module carries any port - this guard is vacuous"

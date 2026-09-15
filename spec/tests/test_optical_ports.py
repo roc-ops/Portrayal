@@ -225,6 +225,29 @@ def test_a_splice_rear_exports_as_one_splice_port():
     assert len(got["front"]) == 2
 
 
+def test_a_declared_rear_kind_does_not_override_a_known_family():
+    """`rear-kind` used to type EVERY rear port (`t = rear_kind or
+    port_type(...)`), so a module with a splice tray AND an MPO adapter on one
+    rear face would export both as `type: splice`. The connector family wins
+    when it is known; `rear-kind` is only the fallback for a part - like a
+    splice tray - that composes nothing `FAMILY` recognises."""
+    entry = {"parts": [{"id": "lc1", "ref": "common/lc-duplex-adapter@3",
+                        "at": [0, 0]}],
+             "faces": {"rear": {"ref": "t/mixed-rear@1"}},
+             "optical": {"media": "os2", "polish": "upc", "rear-kind": "splice",
+                         "paths": [{"from": "lc1.1", "to": "rear:splice.1"},
+                                   {"from": "lc1.2", "to": "rear:mtp.1"}]}}
+    known = {"common/lc-duplex-adapter@3": {"optical": {"positions": 2}},
+             "common/fibre-splice@1": {"optical": {"positions": 2}},
+             "common/mpo-adapter@1": {"optical": {"positions": 12}},
+             "t/mixed-rear@1": {"parts": [
+                 {"id": "splice", "ref": "common/fibre-splice@1"},
+                 {"id": "mtp", "ref": "common/mpo-adapter@1"}]}}
+    got = P.ports(entry, known.get)
+    types = {r["name"]: r["type"] for r in got["rear"]}
+    assert types == {"SPLICE-1": "splice", "MTP-1": "mpo"}, types
+
+
 def run87(doc, path="t/contract.yaml"):
     L.ERRORS.clear()
     L.lint_component_optical_rear_kind(path, doc)
