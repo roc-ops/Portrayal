@@ -17,6 +17,7 @@ FIBRE_CONNECTORS = [
     "common/mpo-adapter/v1", "common/sc-duplex-adapter/v1",
     "common/st-simplex-adapter/v1", "common/fc-simplex-adapter/v1",
     "common/lsh-simplex-adapter/v1", "common/mdc-adapter/v1",
+    "common/fibre-splice/v1",
 ]
 
 

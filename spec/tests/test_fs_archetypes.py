@@ -73,3 +73,38 @@ def test_the_enclosure_accepts_every_fs_cassette_in_the_library():
         modelled.add(f"fs/{doc['name']}@{c.parent.name[1:]}")
     missing = sorted(modelled - accepted)
     assert not missing, f"cassettes the enclosure does not accept: {missing}"
+
+
+SPLICE = "fs/fhd-splice-12-lc/v1"
+
+
+def test_the_splice_cassette_states_that_nothing_measured_it():
+    """Eleven splice cassettes in the catalogue and not one photograph.
+
+    The whole contract is derived from family constants. If a later intake
+    fetches imagery and someone measures it, this assertion is what tells them
+    the prose needs rewriting too.
+    """
+    c = contract(SPLICE)
+    assert c is not None, "fs/fhd-splice-12-lc@1 not built"
+    conf = set(c["size-confidence"].values())
+    assert conf <= {"estimated", "borrowed"}, \
+        f"claims a measurement the corpus cannot support: {c['size-confidence']}"
+    note = (c.get("provenance") or {}).get("size", "")
+    assert "no image" in note.lower() or "not photographed" in note.lower(), \
+        "provenance must say plainly that no imagery of this part exists"
+
+
+def test_the_splice_cassettes_polish_is_sourced_not_assumed():
+    """Unlike SKU 57016, this row names it: 'Fiber Splice Cassette, LC UPC'."""
+    c = contract(SPLICE)
+    assert c["optical"]["polish"] == "upc"
+    note = (c.get("provenance") or {}).get("optical", "")
+    assert "382907" in note, "cite the catalogue row that names the polish"
+
+
+def test_the_splice_cassette_has_a_splice_rear():
+    c = contract(SPLICE)
+    assert c["optical"]["rear-kind"] == "splice"
+    assert (c.get("faces") or {}).get("rear"), "a rear-kind needs a rear face (L87)"
+    assert len(c["optical"]["paths"]) == 12

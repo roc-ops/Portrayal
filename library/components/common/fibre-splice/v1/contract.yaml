@@ -1,0 +1,46 @@
+format: 1
+kind: component
+name: fibre-splice
+version: 1.0.0
+class: port
+profile: networking
+description: >-
+  A fusion-splice tray holder, as fitted behind a splice cassette's rear
+  panel - twelve trunk pigtails fusion-spliced to twelve inbound fibres, with
+  nothing to plug into from outside. Not an adapter: there is no bezel, no
+  aperture and no mating face, because a splice has none of those.
+size: {w: 60.0, h: 20.0}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  A PLACEHOLDER FOR A TRAY WHOSE GEOMETRY NOTHING IN THE CORPUS RECORDS. No
+  photograph of a splice cassette's interior is held anywhere in
+  working/intake/fs/fhd, and no per-SKU datasheet for any of the eleven splice
+  SKUs in the catalogue was staged (working/intake/fs/fhd/COVERAGE.md says so
+  plainly). 60.0 x 20.0 is a plausible tray footprint sized to fit within the
+  99.0 x 31.0 rear envelope the FHD cassette family shares - not a reading of
+  any drawing, render or photograph, because none exists to read. A face-on or
+  interior photograph of any splice cassette in this catalogue settles it.
+attrs: {media: fiber}
+optical:
+  # TWELVE FIBRES, NO CONNECTOR. A splice tray terminates the trunk fibres by
+  # fusion, not by mating a bulkhead adapter - the count is a property of the
+  # cassette's fibre capacity, the same way common/mpo-adapter@1's `positions`
+  # is a property of its ferrule, but there is no ferrule here at all.
+  positions: 12
+provenance:
+  size: >-
+    see size-notes. NO IMAGE OF THIS PART, OR OF ANY SPLICE CASSETTE'S
+    INTERIOR, EXISTS IN THE CORPUS - the 60.0 x 20.0 footprint is estimated
+    whole, not measured or scaled off anything.
+  parts: >-
+    no parts are composed. A splice tray has no bulkhead aperture to draw, so
+    unlike common/mpo-adapter@1 - which composes std/mpo@1 for its opening -
+    this component draws itself: a plain lid, nothing more, per the brief's
+    instruction to keep this deliberately plain rather than invent detail no
+    source supports.
+  face-detail-gap: >-
+    real splice trays carry fibre-routing channels, a spool or comb for slack
+    storage, and a hinged or lift-off lid - none of which is drawn, because
+    none of it is sourced. This part is the twelve-position placeholder a
+    rear face needs to satisfy L87, nothing more.
+skins: [default]
