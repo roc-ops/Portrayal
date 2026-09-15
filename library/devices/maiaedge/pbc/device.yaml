@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: pbc
-version: 2.0.0
+version: 2.0.1
 maturity: modelled
 manufacturer: MaiaEdge
 model: PBC
@@ -47,11 +47,12 @@ provenance:
     the bare std/usb-a@1 receptacle, not the bezelled common/usb-a@3. That part wraps
     the opening in a silver plate spanning the component so it can abut its neighbours'
     bezels, which is the S9510-28DC's face; here the photograph shows a narrow slot
-    straight through the faceplate with no plate around it. KNOWN WRONG, AND NOT THIS
-    DEVICE'S TO FIX: the datasheet says USB 2.0 and std/usb-a@1's only skin paints the
-    tongue USB-3 blue, which on a front panel means 3.0 to anyone reading it. Ten
-    devices place that part, so the answer is a second skin on the standard component
-    rather than anything written here.
+    straight through the faceplate with no plate around it. THE TONGUE IS WHITE
+    BECAUSE THE PORT IS USB 2.0: page 3 says "1x USB 2.0", and USB-IF colours the
+    Type-A insulator by what the port is - white for 2.0, blue for 3.0. The part
+    could only draw the blue one, so it grew a `usb2` skin and this device asks for
+    it. The photograph agrees as far as it can: the slot shows a pale tongue against
+    a dark opening, and nothing blue.
   ports: >-
     datasheet page 3 - "Dual 100GbE Ethernet (QSFP28)", "2x 1GB RJ45" management,
     "1x USB 2.0", "RJ45 115.2 kbps" console. Confirmed on the hardware: the front
@@ -222,7 +223,7 @@ views:
       # the jacks share one strip of metal. Here the photograph shows a narrow
       # slot straight through the faceplate with no plate around it, so the
       # standard aperture is the whole part.
-      - {ref: std/usb-a@1, id: usb, at: [238.4, 23.35], rotate: 90, group: mgmt, rel-pos: 1}
+      - {ref: std/usb-a@1, id: usb, at: [238.4, 23.35], rotate: 90, skin: usb2, group: mgmt, rel-pos: 1}
       - {ref: common/led-dot@1, id: status-1, at: [16.0, 13.6], for: chassis, group: furniture, rel-pos: 4}
       - {ref: common/led-dot@1, id: status-2, at: [16.0, 17.6], for: chassis, group: furniture, rel-pos: 5}
       - {ref: common/led-dot@1, id: status-3, at: [16.0, 21.6], for: chassis, group: furniture, rel-pos: 6}
