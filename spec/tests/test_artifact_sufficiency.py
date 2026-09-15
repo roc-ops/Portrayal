@@ -185,7 +185,12 @@ def test_the_dcim_export_needs_no_source_tree():
         # CODE travels with the exporter; DATA is what must come from dist.
         # manifest.py is imported for `view_parts`, which flattens a view dict
         # and opens nothing - a helper, not a route back into the library.
-        for f in ("dcim_export.py", "artifacts.py", "manifest.py"):
+        # optical_ports.py, optical.py and faces.py are the fibre-graph
+        # projection `build_module` now calls for any module with `optical.paths`;
+        # they take an index entry and a lookup function, same as manifest.py,
+        # so they travel the same way.
+        for f in ("dcim_export.py", "artifacts.py", "manifest.py",
+                  "optical_ports.py", "optical.py", "faces.py"):
             shutil.copy(tools / f, sand / "tools" / f)
         # dist/ is the ONLY input. Copied by name so that anything not on the
         # published contract is genuinely absent rather than merely unused.

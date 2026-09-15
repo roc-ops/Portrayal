@@ -1,8 +1,8 @@
 format: 1
-kind: component
+kind: module
 name: fhd-1mtp6lcd-os2-a
 version: 1.0.0
-class: module
+class: cassette
 description: >-
   FS FHD-1MTP6LCDOS2A - MTP-12 (male) to six LC duplex, 12 fibres, OS2, Type A
   polarity. FS SKU 57016.
@@ -14,7 +14,7 @@ size-notes: >-
   - and corroborated independently by FS's own dimension line on 57016.B.jpg,
   which reads 4.29in x 1.38in, exactly 108.97 x 35.05. The 110.24 depth is the
   4.34in on that same dimension line.
-attrs: {media: fiber, vendor-sku: '57016'}
+attrs: {media: fiber, model: FHD-1MTP6LCDOS2A, vendor-sku: '57016'}
 body:
   depth: 110.24
 parts:
@@ -29,6 +29,7 @@ faces:
 optical:
   media: os2
   polarity: a
+  polish: upc
   paths:
     - {from: lc1.1, to: 'rear:mtp.1'}
     - {from: lc1.2, to: 'rear:mtp.2'}
@@ -85,4 +86,15 @@ provenance:
     sourcing this map, and this note exists so nobody mistakes one for the
     other. Confidence: ESTIMATED - there is no schema key for it on `optical`,
     so this sentence is where that word lives.
+
+    THE POLISH IS THE SAME KIND OF ASSUMPTION AND IS MARKED THE SAME WAY. FS's
+    catalogue names the polish where it applies - 19 of its 81 rows read "LC
+    UPC" or "LC APC", including four other FHD cassettes - and SKU 57016's row
+    does not: it reads "FHD MTP-12 (Male) to LC Cassette, OS2, 12 Fibers, Type
+    A" and stops. `polish: upc` is therefore the convention for an OS2 cassette
+    with no APC stated, not a fact read off FS's own description of this part.
+    An APC variant of the same cassette would be a different SKU and FS would
+    say so; that is the evidence for the default rather than a source for it.
+    A catalogue row, a datasheet, or a green ferrule in a face-on photograph
+    settles it.
 skins: [default]

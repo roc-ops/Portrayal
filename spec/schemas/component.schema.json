@@ -75,6 +75,10 @@
      "$ref": "#/$defs/segment",
      "description": "the vendor's polarity name (a, af, b, universal). CHECKED against the paths, never a substitute for them - it is the claim, the paths are the evidence."
     },
+    "polish": {
+     "enum": ["upc", "apc"],
+     "description": "THE FERRULE END FACE, where the port-type enum spells a family two ways. `lc` and `sc` have both a `-upc` and an `-apc` form and cannot name a type without this; `fc` and `lsh` appear only as APC; `mpo`, `st`, `mdc` and `splice` have one form and want nothing here. L86 asks for it exactly where it changes the answer. It is a claim about the connector this module presents, not about the glass - `media` is the glass."
+    },
     "paths": {
      "type": "array",
      "minItems": 1,

@@ -104,16 +104,36 @@ class Dist:
                 out.add(m)
         return out
 
-    def manufacturer_of(self, ns):
-        """Which manufacturer ships a namespace, learned from the devices.
+    def component_by_ref(self, ref):
+        """`common/mpo-adapter@1` -> its index entry, or None."""
+        if not hasattr(self, "_by_ref"):
+            self._by_ref = {
+                f"{c.get('ns')}/{c.get('name')}@{str(c.get('major') or '')[1:]}": c
+                for c in self._components}
+        return self._by_ref.get(ref)
 
-        `common/` and `std/` are deliberately absent: a part with no vendor is
-        not something a DCIM can order.
+    def manufacturer_of(self, ns):
+        """Which manufacturer ships a namespace.
+
+        LEARNED FROM THE DEVICES FIRST, and that order is load-bearing rather
+        than incidental: `dell` reports `Dell` from its devices and `Dell
+        Technologies` from vendors.yaml, `juniper` reports `Juniper` against
+        `Juniper Networks`, `edgecore` the same way. Looking in the registry
+        first would rename the manufacturer on several hundred existing export
+        files.
+
+        THE REGISTRY IS THE FALLBACK, for a vendor that ships parts before it
+        ships a chassis - FS sells cassettes that seat in an enclosure nothing
+        has modelled yet, and requiring a device first is an accident of how
+        this join was built rather than a statement about what is orderable.
+        `common/` and `std/` stay absent because they are absent from
+        vendors.yaml, so the rule this docstring used to state as a special case
+        now holds by data.
         """
         for d in self._devices:
             if d.get("ns") == ns:
                 return d.get("manufacturer")
-        return None
+        return (self.vendors.get(ns) or {}).get("display") or None
 
     # ---- registries ---------------------------------------------------------
 

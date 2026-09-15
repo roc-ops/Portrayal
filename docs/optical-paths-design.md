@@ -284,13 +284,10 @@ on a handful of modules before the bulk build.
 
 Recorded rather than decided, because both need evidence we do not have:
 
-**The LC pitch.** FS's cassette face measures **12.90 mm** between adapter
-centres - measured on a face-on render scaled on its own dimensioned 108.97 mm
-width, with the scale validated against the second axis to 0.8%.
-`common/lc-duplex-adapter@3` is **13.2**, from the Smartoptics DCP-R stencil
-(13.24 across 35 abutting adapters). Composing a 13.2 part at a 12.90 pitch
-overlaps its neighbours. Either FS gets its own adapter or the shared one is
-re-measured; a caliper on one real adapter settles it.
+**The LC pitch** was settled in plan 4: `standards.yaml`'s `fhd-lc-cassette`
+entry records the measured 12.92 floor off FS SKU 57016, and
+`common/lc-duplex-v-adapter@1` is the 9.28-wide stacked adapter FS actually
+ships, so the 13.2-wide shared adapter is no longer composed at a 12.90 pitch.
 
 **The FMT-N's 16.93".** The fixed enclosure's render carries a fourth dimension,
 430.0 mm, that is not in its spec table and cannot be the depth (11.17" = 283.6

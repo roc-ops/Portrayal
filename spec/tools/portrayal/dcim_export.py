@@ -50,6 +50,8 @@ import yaml
 from artifacts import Dist
 
 from manifest import view_parts
+import optical_ports
+from faces import face_ref
 
 # Portrayal media/speed -> DCIM interface type. Every value here is valid in
 # both libraries: NetBox's enum is a strict superset of Nautobot's (227 types
@@ -627,8 +629,25 @@ def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
     return out
 
 
-def build_module(contract, manufacturer):
+def contract_view(entry):
+    """An index entry in the shape `optical.py` expects.
+
+    components.json FLATTENS a face to its ref - `faces: {rear: "fs/x@1"}` -
+    because the viewer resolves it against this same index and the nested form
+    would cost bytes on every page load. `optical.capacities` goes through
+    `face_ref`, which reads the contract's nested `{ref: ...}`. Re-nesting here
+    is four lines; teaching the accessor to accept two shapes would put the
+    difference into the one place that exists to hide it.
+    """
+    faces = {k: {"ref": v} for k, v in (entry.get("faces") or {}).items()}
+    return {"parts": entry.get("parts") or [],
+            "faces": faces,
+            "optical": entry.get("optical") or {}}
+
+
+def build_module(contract, manufacturer, load_ref=None):
     """A module contract as a DCIM module type."""
+    load_ref = load_ref or (lambda _r: None)
     attrs = contract.get("attrs") or {}
     model = str(attrs.get("model") or contract["name"])
     out = {"manufacturer": manufacturer, "model": model}
@@ -694,6 +713,33 @@ def build_module(contract, manufacturer):
         out["interfaces"] = ifaces
     if powers:
         out["power-ports"] = powers
+
+    # THE GLASS, IF THIS MODULE CARRIES ANY. A fibre cassette has no interfaces
+    # in the DCIM sense - nothing terminates electrically - so these are its
+    # entire port list, and a module with no `optical` adds nothing here.
+    #
+    # GATED ON A DECLARED REAR FACE, not merely on having paths. Section C3
+    # calls the rear connector "the trunk", but a single-faced module such as
+    # a PPM coupler has no rear face at all - its paths run entirely between
+    # parts drawn on its one face (`common.1 -> split.1/2` for an OCU coupler,
+    # never a `rear:`-prefixed endpoint) - and nothing in the contract names
+    # which of its parts is the trunk. `common` and `split` are part ids a
+    # modeller chose, not declared roles, and path direction does not settle
+    # it either: the cassette's own paths run FROM the front
+    # (`lc1.1 -> rear:mtp.1`) while an OCU's run FROM what would be the trunk
+    # (`common.1 -> split.n`) - opposite conventions, so a rule built on
+    # either would invent a role the contract never states. Exporting every
+    # fibre position of a single-faced module as a front port with no rear
+    # counterpart is exactly the shape netbox#21830 rejected ("We do not get
+    # to omit rear ports"), so a single-faced module exports neither list and
+    # waits for the vocabulary a future plan owes.
+    view = contract_view(contract)
+    if face_ref(view, "rear") and (contract.get("optical") or {}).get("paths"):
+        fibre = optical_ports.ports(view, load_ref)
+        if fibre["rear"]:
+            out["rear-ports"] = fibre["rear"]
+        if fibre["front"]:
+            out["front-ports"] = fibre["front"]
 
     body = []
     if contract.get("description"):
@@ -877,7 +923,7 @@ def export_modules(dist, root, images=None):
         if not man:
             skipped += 1
             continue
-        doc = build_module(contract, man)
+        doc = build_module(contract, man, dist.component_by_ref)
         # `major` ARRIVES PREFIXED. It is the version directory's own name, so
         # components.json carries `v1` and not `1` - every other reader strips
         # with `major[1:]` rather than adding. Prefixing again asked for
@@ -897,6 +943,24 @@ def export_modules(dist, root, images=None):
             if images and RASTER:
                 if render_module_image(images, root, target, doc, ns, name, ver):
                     imaged.add(doc["model"])
+
+        # THE FIBRE MAP, gated the same way build_module gates rear-ports: on a
+        # declared rear face, not merely on having paths. A single-faced module
+        # (a PPM coupler) has paths that run front-to-front, so `_row` answers
+        # None for every leg and a map for it would be all rows and no ports -
+        # the same shape netbox#21830 rejected for the port lists themselves.
+        # It sits beside `netbox/` and `nautobot/` rather than inside either,
+        # because it is not a document of either schema - it is the artefact
+        # this project defines, and both targets consume the same rows.
+        view = contract_view(contract)
+        if face_ref(view, "rear") and (contract.get("optical") or {}).get("paths"):
+            m = optical_ports.fibre_map(view, dist.component_by_ref, doc["model"])
+            d = Path(root) / "fibre-maps" / man
+            d.mkdir(parents=True, exist_ok=True)
+            (d / (doc["model"].replace("/", "-") + ".yaml")).write_text(
+                "---\n" + yaml.dump(m, Dumper=Indented, sort_keys=False,
+                                    width=100, default_flow_style=False))
+
         wrote += 1
         print(f"{doc['model']}  ({len(doc.get('interfaces', []))} interfaces, "
               f"{len(doc.get('power-ports', []))} power ports)")

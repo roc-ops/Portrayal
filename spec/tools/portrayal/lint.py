@@ -103,6 +103,7 @@ import attrsections as attrs_mod
 import capability
 import devicelock
 import optical
+import optical_ports
 from faces import DIRECTIONS, OPTICAL_FACES, face_ref
 from manifest import (view_parts, targets, split_target, presented_interface,
                       VIEW_KEY_ORDER,
@@ -219,6 +220,7 @@ RULES = {
     "L83": ("component",  "a declared face names a real component, is not the part itself, and that component has no face of the same direction", "fix the ref, or drop the face it names if the chain has no meaning"),
     "L84": ("component",  "a face-qualified optical endpoint names a face the part declares", "add the face to `faces:`, or fix the prefix on the endpoint"),
     "L85": ("component",  "only a face that is another side of the module draws fibres of its own", "move the connector onto the face that really carries it, or extend `faces.OPTICAL_FACES` if this direction genuinely is another side"),
+    "L86": ("component",  "a module composing a connector the enum spells two ways states its polish", "add `optical.polish: upc` or `apc`, and say in provenance where it came from"),
 }
 
 
@@ -1613,6 +1615,40 @@ def lint_component_optical_face_capacity(path, data, lib_roots):
                 "its positions are not counted. Move the connector onto the "
                 "face that really carries it, or extend `faces.OPTICAL_FACES` "
                 "if this direction genuinely is another side")
+
+
+def lint_component_optical_polish(path, data):
+    """L86: a module states the polish where the port type depends on it.
+
+    Section C's enum has `lc-upc` and `lc-apc` and no bare `lc`, so a cassette
+    composing LC adapters cannot be projected at all without this. It is asked
+    for ONLY where it changes the answer: `mpo`, `st`, `mdc` and `splice` have
+    one form each, and `fc` and `lsh` appear only as APC, so demanding a polish
+    on those would be a field with one legal value.
+
+    A polish is a CLAIM and belongs in provenance like any other. FS names it on
+    19 of its 81 catalogue rows and leaves it unstated on the rest, so the note
+    matters: `upc` by convention and `upc` because the vendor said so are
+    different facts, and only one of them survives a correction.
+    """
+    if not isinstance(data, dict):
+        return
+    opt = data.get("optical") or {}
+    if not (opt.get("paths") or []):
+        return
+    if opt.get("polish"):
+        return
+    for part in (data.get("parts") or []):
+        if not isinstance(part, dict):
+            continue
+        fam = optical_ports.family_of(part.get("ref") or "")
+        if fam in optical_ports.POLISHED:
+            err(path, "L86",
+                f"composes {part.get('ref')}, whose port type is spelled "
+                f"{fam}-upc or {fam}-apc, but states no `optical.polish` - so "
+                "there is no type to export. Add it, and say in provenance "
+                "whether the vendor named it or it is the convention default")
+            return
 
 
 def lint_component_optical_endpoints(path, data, lib_roots):
@@ -6356,6 +6392,7 @@ def main():
                 lint_component_optical_endpoints(f, d, args.library)
                 lint_component_optical_faces(f, d)
                 lint_component_optical_face_capacity(f, d, args.library)
+                lint_component_optical_polish(f, d)
                 lint_component_optical_conflicts(f, d)
                 lint_component_optical_coverage(f, d, args.library)
                 lint_component_composed_pitch(f, d, args.library)
