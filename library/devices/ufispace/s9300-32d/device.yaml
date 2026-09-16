@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9300-32d
-version: 1.0.6
+version: 1.0.7
 maturity: modelled
 manufacturer: UfiSpace
 model: S9300-32D
@@ -16,120 +16,132 @@ description: >-
   front-to-back or back-to-front airflow
 profile: networking
 provenance:
-  sources: >-
-    UfiSpace S9300-32D datasheet
-    for dimensions, weight, port inventory, platform, power, environment and compliance;
-    S9300-32D Hardware Installation Guide (s9300-32d-hig) for the faceplate figures, FRU
-    dimensions, LED tables and grounding; three vendor product renders
-    (photos/s9300-32d-1-angle, -2-front, -3-rear) for colour, counts and construction.
-    Figure quality was gated before measuring: the HIG Figure 11 port overview measures
-    1316 x 131 px against the 436 x 43.8 mm face - aspect within 1% - and is the
-    horizontal ruler for the front at 3.02 px/mm; the HIG Figure 10 fan-overview rear
-    elevation (3.39 px/mm, aspect within 1.6%) is the ruler for the rear. The datasheet
-    front/rear views are 6% off in aspect and the photographs are small (520 px) - both
-    used for fractions and confirmation only.
-  chassis: >-
-    datasheet - 'Chassis (WxDxH) 1RU, 436 x 645 x 43.8 mm', weight 11.34 kg without FRU;
-    the HIG component table repeats the same triple. 436 is the body between the ear
-    planes, not a rack face - the HIG Space Clearance section says the S9300-32D 'width
-    is 17.17 inches (43.6cm) and shipped with rack mount brackets suitable for 19 inch
-    racks', so the mounting hardware is additional to 436 and is not drawn. Depth 645
-    is the chassis without FRUs; fan handles add 25 mm and PSU handles 38 mm beyond it
-    (HIG Space Clearance).
-  front-layout: >-
-    drawing - HIG Figure 11 at 3.02 px/mm (the Gate-1-passing figure), cross-checked
-    against the front render: management cluster at the left edge (reset, five system
-    lamps over a vent field, console RJ45 / USB 3.0 / OOB RJ45 in a vertical stack),
-    then two stacked SFP+ columns, then the 32 QSFP-DD in eight 2x2 groups. Positions
-    read off the figure are good to ~0.5 mm and carried as drawing confidence; the
-    RJ45/USB stack is composed from 17 mm library parts, slightly wider than the ~19 mm
-    drawn bezel that frames all three.
-  qsfp-layout: >-
-    drawing - the nine blue lane-LED strips per row sit on a measured 45.1 mm group
-    pitch (strip centres 69.0 + 45.1k, k=0..8, from Figure 11; interior strip centres
-    114.0/159.0/204.1/249.2/294.2/339.5/384.5 measured, end strips extrapolated on the
-    same pitch because port digits contaminate their pixel runs). Between adjacent
-    strips the two 19.0 mm std/qsfp-dd cages sit with 0.5 mm margins (cage lefts
-    72.3 + 45.1k and 91.8 + 45.1k). Rows: cage tops at y 8.75 and 26.05, from the strip
-    blocks' vertical extents (7.4-20.1 and 24.7-37.4) centred on each cage row. The
-    BOTTOM row is drawn rotate: 180 - the vent/heatsink dashes sit above the top row
-    and below the bottom row in both the figure and the datasheet render, the
-    belly-to-belly pattern. Numbering from Figure 11: top row even 0..30, bottom row
-    odd 1..31, left to right.
-  port-numbers: >-
-    drawing-inferred - Figure 11 prints each port's number in blue ON the schematic
-    module face, where a seated module would cover it; the datasheet render shows small
-    printed marks in the inter-row web under each top cage and below each bottom cage,
-    which is where they are drawn here (baselines y 23.6 and 39.5). Exact glyph
-    position unverified against a close-up photograph.
-  sfp-block: >-
-    drawing/photo - two stacked SFP+ columns at x 36.2 and 50.9 (photo fractions agree
-    with Figure 11 within 1 mm), rows aligned with the QSFP rows (cage tops y 8.6 and
-    26.0). The LEFT column is the out-of-band pair (marked with the network symbol; HIG
-    'Connecting the OOB Management Cables' - two 10G SFP+ that reach the x86), the
-    RIGHT column is the pair the vendor prints the orange MGMT band over and numbers
-    0/1 (HIG 'Connecting the Management Cables'; datasheet '2 x 1/10G SFP+ ports', port
-    table rows 0~1). Stacked cages are NOT mirrored here: the keyway direction is not
-    resolvable in any held image, and the sibling S9510-28DC models its stacked SFP
-    rows unmirrored - re-check against hardware. Each column carries an up/down lamp
-    pair above the top cage, per the render.
-  mgmt-block: >-
-    drawing - reset pinhole at (9.1, 4.9 centre) with RESET legend; five system lamps
-    (SYS, FAN, PSU0, PSU1, ID) beside a printed white legend block at x 2.9-6.2,
-    y 12-26.3; vent field below; console RJ45 at the top of the stack (labelled IOIOI),
-    USB 3.0 between, OOB RJ45 at the bottom (network symbol below, integrated green
-    lamps per the render). LED semantics from the HIG Front Panel LED table, page 24,
-    transcribed onto each lamp.
-  rear-layout: >-
-    drawing - HIG Figure 10 rear elevation at 3.39 px/mm: grounding column at the left
-    edge (two M4 lug holes and the earth symbol - HIG Figures 27/28 show the two-hole
-    grounding lug seated here), six fan bays from x 12.5 spanning to 321 (handle
-    centres measured at 23.6 + 51.9k, LED centres 61.1 + 51.3k; bays drawn at the
-    shared component's 50.7 mm face on a 51.56 mm pitch so six faces fill the measured
-    311 mm span - see the fan-face-width gap), then PSU0 at x 321.0 and PSU1 at 381.4
-    (latch centres 322.3 and 382.5, a 60.2 mm pitch; the 9.9 mm chassis strips after
-    each PSU carry the vertical PSU0/PSU1 legends). FAN and PSU legends printed as
-    chassis silkscreen; the fan numbers 0-5 and PSU 0/1 are position facts and cannot
-    live on the interchangeable FRU.
-  views: >-
-    Six views. TOP: y = 0 is the REAR, per the house convention and the HIG Figure 5
-    footprint drawing (which prints the rear at the top); the three shallow stadium
-    recesses are proportioned off that drawing (its depth axis is not to scale - the
-    footprint draws 436 x 645 at aspect 1.03 against a true 0.676 - so their y extents
-    are fractions, estimated). BOTTOM mirrors left-right; it carries the compliance
-    sticker at an estimated position. LEFT (x = 0 is the REAR) and RIGHT (x = 0 is the
-    FRONT): each side carries the five rail attachment pins the HIG rack-mounting
-    section describes ('5 attachment pins on each side'), positions estimated - no
-    drawing dimensions them; the left side near the rear carries the second designated
-    grounding location (HIG Figure 27 shows the yellow REMOVE LABEL FOR SYSTEM
-    GROUNDING tag there), hole positions estimated. Both side faces otherwise carry
-    only symmetric content, so the depth-axis conventions are stated here rather than
-    exposed by any asymmetric feature.
-  attrs: >-
-    datasheet - Specifications, Performance, Environmental, Regulatory Compliance and
-    Supported Accessories sections, transcribed into sections. Compliance strings kept
-    verbatim, semicolon-separated, untidied.
-  power: >-
-    datasheet 'Typical power: 403 Watts (no transceiver)' - the vendor's own scope, so
-    power-envelope is bare; the HIG's connecting-power section states 'The maximum
-    system power consumption is 1246 watts' for both AC and DC versions, unqualified
-    as to optics, carried as power-max-w. The two figures are two documents' claims and
-    are not reconciled against each other or against the module set. PSU rating 1300 W
-    per supply (ordering lines); at a 110 V AC input each supply delivers only 1000 W
-    and hot-swap redundancy is not guaranteed (HIG note).
-  part-numbers: >-
-    The FRU part numbers (PSU-132-AISB1/AESR-3N/DISB1/DESR-3N, FAN-405637-HD/CD) are
-    datasheet ordering lines and live on the FRU contracts and configurations. NO
-    ORDERABLE CHASSIS SKU appears in any held document - the datasheet and HIG name the
-    product only as S9300-32D. The S9510-28DC lesson applies: such SKUs exist at the
-    owner even when no held PDF prints one, so this is recorded as a gap rather than
-    as 'no SKU exists'. The back-to-front airflow variants (blue handles/latches:
-    FAN-405637-CD, PSU-132-AESR-3N/DESR-3N) are orderable and not modelled as
-    configurations - the PSU components carry only red-latch skins.
-  lifecycle: >-
-    searched 2026-08-28: 'UfiSpace S9300-32D end of life' - no announcement found; the
-    product page and distributor listings are live. none-announced is a real finding,
-    not an absence.
+  sources:
+    note: >-
+      UfiSpace S9300-32D datasheet for dimensions, weight, port inventory, platform, power,
+      environment and compliance; S9300-32D Hardware Installation Guide (s9300-32d-hig) for the
+      faceplate figures, FRU dimensions, LED tables and grounding; three vendor product renders
+      (photos/s9300-32d-1-angle, -2-front, -3-rear) for colour, counts and construction. Figure
+      quality was gated before measuring: the HIG Figure 11 port overview measures 1316 x 131 px
+      against the 436 x 43.8 mm face - aspect within 1% - and is the horizontal ruler for the
+      front at 3.02 px/mm; the HIG Figure 10 fan-overview rear elevation (3.39 px/mm, aspect
+      within 1.6%) is the ruler for the rear. The datasheet front/rear views are 6% off in aspect
+      and the photographs are small (520 px) - both used for fractions and confirmation only.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - 'Chassis (WxDxH) 1RU, 436 x 645 x 43.8 mm', weight 11.34 kg without FRU; the HIG
+      component table repeats the same triple. 436 is the body between the ear planes, not a rack
+      face - the HIG Space Clearance section says the S9300-32D 'width is 17.17 inches (43.6cm)
+      and shipped with rack mount brackets suitable for 19 inch racks', so the mounting hardware
+      is additional to 436 and is not drawn. Depth 645 is the chassis without FRUs; fan handles
+      add 25 mm and PSU handles 38 mm beyond it (HIG Space Clearance).
+  front-layout:
+    confidence: drawing
+    note: >-
+      drawing - HIG Figure 11 at 3.02 px/mm (the Gate-1-passing figure), cross-checked against the
+      front render: management cluster at the left edge (reset, five system lamps over a vent
+      field, console RJ45 / USB 3.0 / OOB RJ45 in a vertical stack), then two stacked SFP+
+      columns, then the 32 QSFP-DD in eight 2x2 groups. Positions read off the figure are good to
+      ~0.5 mm and carried as drawing confidence; the RJ45/USB stack is composed from 17 mm library
+      parts, slightly wider than the ~19 mm drawn bezel that frames all three.
+  qsfp-layout:
+    confidence: drawing
+    note: >-
+      drawing - the nine blue lane-LED strips per row sit on a measured 45.1 mm group pitch (strip
+      centres 69.0 + 45.1k, k=0..8, from Figure 11; interior strip centres
+      114.0/159.0/204.1/249.2/294.2/339.5/384.5 measured, end strips extrapolated on the same
+      pitch because port digits contaminate their pixel runs). Between adjacent strips the two
+      19.0 mm std/qsfp-dd cages sit with 0.5 mm margins (cage lefts 72.3 + 45.1k and 91.8 +
+      45.1k). Rows: cage tops at y 8.75 and 26.05, from the strip blocks' vertical extents
+      (7.4-20.1 and 24.7-37.4) centred on each cage row. The BOTTOM row is drawn rotate: 180 - the
+      vent/heatsink dashes sit above the top row and below the bottom row in both the figure and
+      the datasheet render, the belly-to-belly pattern. Numbering from Figure 11: top row even
+      0..30, bottom row odd 1..31, left to right.
+  port-numbers:
+    confidence: drawing
+    note: >-
+      drawing-inferred - Figure 11 prints each port's number in blue ON the schematic module face,
+      where a seated module would cover it; the datasheet render shows small printed marks in the
+      inter-row web under each top cage and below each bottom cage, which is where they are drawn
+      here (baselines y 23.6 and 39.5). Exact glyph position unverified against a close-up
+      photograph.
+  sfp-block:
+    confidence: drawing
+    note: >-
+      drawing/photo - two stacked SFP+ columns at x 36.2 and 50.9 (photo fractions agree with
+      Figure 11 within 1 mm), rows aligned with the QSFP rows (cage tops y 8.6 and 26.0). The LEFT
+      column is the out-of-band pair (marked with the network symbol; HIG 'Connecting the OOB
+      Management Cables' - two 10G SFP+ that reach the x86), the RIGHT column is the pair the
+      vendor prints the orange MGMT band over and numbers 0/1 (HIG 'Connecting the Management
+      Cables'; datasheet '2 x 1/10G SFP+ ports', port table rows 0~1). Stacked cages are NOT
+      mirrored here: the keyway direction is not resolvable in any held image, and the sibling
+      S9510-28DC models its stacked SFP rows unmirrored - re-check against hardware. Each column
+      carries an up/down lamp pair above the top cage, per the render.
+  mgmt-block:
+    confidence: drawing
+    note: >-
+      drawing - reset pinhole at (9.1, 4.9 centre) with RESET legend; five system lamps (SYS, FAN,
+      PSU0, PSU1, ID) beside a printed white legend block at x 2.9-6.2, y 12-26.3; vent field
+      below; console RJ45 at the top of the stack (labelled IOIOI), USB 3.0 between, OOB RJ45 at
+      the bottom (network symbol below, integrated green lamps per the render). LED semantics from
+      the HIG Front Panel LED table, page 24, transcribed onto each lamp.
+  rear-layout:
+    confidence: drawing
+    note: >-
+      drawing - HIG Figure 10 rear elevation at 3.39 px/mm: grounding column at the left edge (two
+      M4 lug holes and the earth symbol - HIG Figures 27/28 show the two-hole grounding lug seated
+      here), six fan bays from x 12.5 spanning to 321 (handle centres measured at 23.6 + 51.9k,
+      LED centres 61.1 + 51.3k; bays drawn at the shared component's 50.7 mm face on a 51.56 mm
+      pitch so six faces fill the measured 311 mm span - see the fan-face-width gap), then PSU0 at
+      x 321.0 and PSU1 at 381.4 (latch centres 322.3 and 382.5, a 60.2 mm pitch; the 9.9 mm
+      chassis strips after each PSU carry the vertical PSU0/PSU1 legends). FAN and PSU legends
+      printed as chassis silkscreen; the fan numbers 0-5 and PSU 0/1 are position facts and cannot
+      live on the interchangeable FRU.
+  views:
+    note: >-
+      Six views. TOP: y = 0 is the REAR, per the house convention and the HIG Figure 5 footprint
+      drawing (which prints the rear at the top); the three shallow stadium recesses are
+      proportioned off that drawing (its depth axis is not to scale - the footprint draws 436 x
+      645 at aspect 1.03 against a true 0.676 - so their y extents are fractions, estimated).
+      BOTTOM mirrors left-right; it carries the compliance sticker at an estimated position. LEFT
+      (x = 0 is the REAR) and RIGHT (x = 0 is the FRONT): each side carries the five rail
+      attachment pins the HIG rack-mounting section describes ('5 attachment pins on each side'),
+      positions estimated - no drawing dimensions them; the left side near the rear carries the
+      second designated grounding location (HIG Figure 27 shows the yellow REMOVE LABEL FOR SYSTEM
+      GROUNDING tag there), hole positions estimated. Both side faces otherwise carry only
+      symmetric content, so the depth-axis conventions are stated here rather than exposed by any
+      asymmetric feature.
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet - Specifications, Performance, Environmental, Regulatory Compliance and Supported
+      Accessories sections, transcribed into sections. Compliance strings kept verbatim,
+      semicolon-separated, untidied.
+  power:
+    confidence: datasheet
+    note: >-
+      datasheet 'Typical power: 403 Watts (no transceiver)' - the vendor's own scope, so
+      power-envelope is bare; the HIG's connecting-power section states 'The maximum system power
+      consumption is 1246 watts' for both AC and DC versions, unqualified as to optics, carried as
+      power-max-w. The two figures are two documents' claims and are not reconciled against each
+      other or against the module set. PSU rating 1300 W per supply (ordering lines); at a 110 V
+      AC input each supply delivers only 1000 W and hot-swap redundancy is not guaranteed (HIG
+      note).
+  part-numbers:
+    note: >-
+      The FRU part numbers (PSU-132-AISB1/AESR-3N/DISB1/DESR-3N, FAN-405637-HD/CD) are datasheet
+      ordering lines and live on the FRU contracts and configurations. NO ORDERABLE CHASSIS SKU
+      appears in any held document - the datasheet and HIG name the product only as S9300-32D. The
+      S9510-28DC lesson applies: such SKUs exist at the owner even when no held PDF prints one, so
+      this is recorded as a gap rather than as 'no SKU exists'. The back-to-front airflow variants
+      (blue handles/latches: FAN-405637-CD, PSU-132-AESR-3N/DESR-3N) are orderable and not
+      modelled as configurations - the PSU components carry only red-latch skins.
+  lifecycle:
+    note: >-
+      searched 2026-08-28: 'UfiSpace S9300-32D end of life' - no announcement found; the product
+      page and distributor listings are live. none-announced is a real finding, not an absence.
+
 attrs:
   performance:
     switching-capacity: 12.8 Tbps

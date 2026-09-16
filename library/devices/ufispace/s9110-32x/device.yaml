@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9110-32x
-version: 2.0.5
+version: 2.0.6
 maturity: modelled
 manufacturer: UfiSpace
 model: S9110-32X
@@ -17,140 +17,150 @@ description: >-
   Intel Denverton, BMC-managed white box (ToR / spine-leaf / DCI).
 profile: networking
 provenance:
-  sources: >-
-    datasheet (S9110-32X 100G Data Center Switch, ufispace.com) and hardware
-    installation guide, both docling-converted
-    (s9110-32x-datasheet, s9110-32x-hig); four vendor product renders
-    (angle, front and two rear gallery images).
-    The two rear renders are the two airflow SKUs - blue handles (back-to-front)
-    and red handles (front-to-back) - and are otherwise identical.
-  chassis: >-
-    datasheet - 'Chassis (WxDxH) 1RU, 440 x 480 x 43.8 mm', weight 7.44 kg
-    without FRU; HIG's component table repeats all four figures. 440 is the
-    body between the bolt-on rack-mount brackets (the HIG ships 88 x 43 x 20 mm
-    brackets separately for a 19-inch rack), so no ear subtraction applies.
-    Depth 480 excludes FRU handles (fan +25 mm, PSU +38 mm per the HIG's space
-    clearance note).
-  front-layout: >-
-    photo-measured off the front product render (1676 px / 440 mm = 3.809
-    px/mm; height renders 44.1 mm against the 43.8 datasheet figure, 0.7
-    percent, so the render is orthographic and was used for positions). Eight
-    silver ganged-cage blocks measured at x 74.6/120.5/165.9/211.3/257.0/
-    302.4/347.9/393.5, regularised to a uniform 45.55 mm pitch from 74.6 (max
-    deviation 0.35 mm); each silver shell 39.7 mm wide holding two 18.5 mm
-    ganged apertures. Top apertures at y 11.5-19.8 and bottom at 26.6-35.2 in
-    the render; modelled at 10.9 and 26.1 with the std 9.58 mm opening
-    (centres within 0.2 mm of measured). The HIG's Figure 11 port overview
-    (fig-0020) confirms the block structure and numbering but is guide art -
-    it prints mock numerals on the cages where the real device silkscreens
-    them below; the render wins.
-  port-numbering: >-
-    photo - the panel prints an up-triangle, the even number, the odd number
-    and a down-triangle under each cage column ('▲0 1▼' under the first).
-    Column-major: even port on top, odd below, left to right 0-31. HIG Figure
-    11 prints the same assignment (block one reads 0/2 over 1/3). Port IDs are
-    0-31 (HIG port table: 'Port ID 0 ~ 31'), so index-origin is 0.
-  qsfp-orientation: >-
-    estimated - the two rows of a 2-high ganged QSFP block are modelled
-    belly-to-belly with the BOTTOM row rotate 180, following the library's
-    as7726-32x precedent for the same construction; the apertures are
-    featureless black in every source at any zoom, so the mirror direction is
-    not observable. The silver shell between and around the apertures is
-    panel-side cage metal and is drawn as decor per the s9510-28dc precedent.
-  lane-leds: >-
-    photo-measured - four round lamps per port above each cage column, top row
-    for the top port and bottom row for the bottom port, 3.94 mm pitch, ~2.4 mm
-    diameter (first quad's centres at 79.1-90.9 mm). Modelled as
-    ufispace/lane-led-quad. The datasheet says only 'Link and Activity LEDs
-    per port'; no table maps the four lamps, so they carry the off/on default
-    - see the port-led-semantics gap.
-  led-semantics: >-
-    HIG section 10 tables, transcribed onto the placements: front panel SYS /
-    FAN / PSU0 / PSU1 / ID (the panel itself prints PS0/PS1/ID beside the
-    lamps and that is what the silkscreen says); Management Port LED table =
-    the two lamps on the OOB RJ45 (left green 1G, right amber 10M/100M); PSU
-    FRU and Fan FRU tables live in the psu-751 and fan-405637 contracts.
-  mgmt-cluster: >-
-    photo-measured; identities from HIG chapter 12 - the RJ45 marked with the
-    network-tree symbol is OOB management ('Connect the OOB management cable by
-    locating the RJ45 OOB port marked a symbol'), the RJ45 labelled IOIO is the
-    console, the SFP+ under the orange MGMT label is the 1x 10G SFP+ management
-    port, USB 3.0 Type-A between them. Orientation read at 8x zoom: the OOB
-    jack sits keyway-up with its two lamps above (rotate 180 of the std part,
-    which draws contacts-top/keyway-down), the console below it mirrors
-    keyway-down (std default), the USB tongue is up (std default). The stacked
-    jacks share one silver ganged shell, drawn as decor. std/rj45-ganged
-    (12.7 x 11) is used because the two jacks sit on a sub-16 mm pitch inside
-    a 32.3 mm shell; std/rj45's 16 mm bezel cannot.
-  rear-layout: >-
-    photo-measured off the rear renders (1675 px / 440 mm = 3.807 px/mm,
-    airflow variants identical in geometry): fan module seams at x 65.7/108.0,
-    116.6/158.9, 167.5/209.9 (50.9 mm bay pitch), PSU faces at 323.1-373.0 and
-    380.1-429.9 (49.9 mm measured against the 50.5 HIG face). 'FAN ◀N' is
-    printed at the top of each fan's right flange column and 'PSU0◀'/'PSU1◀'
-    read top-to-bottom on the chassis strips right of each PSU bay. The FAN
-    marks fall inside the bay extents, so they are hidden when a module is
-    seated - recorded rather than moved, because that is where the print is.
-  fan-bays: >-
-    photo-measured 50.9 mm pitch; bay size follows the module face (50.7 x
-    40.0), which spans the hex grille (the HIG's 43.4 mm body) plus the ~8 mm
-    flange carrying the airflow tag, captive screw and LED - see
-    ufispace/fan-405637 provenance and the fan-faceplate-width gap.
-  grounding: >-
-    HIG chapter 8 and Figures 22-23 - 'there are two locations on the case in
-    which the grounding lug may be fixed'. One is the rear-left pair of M4
-    holes (Figure 23 draws the lug spanning both; the two rings at the rear
-    left of both rear renders, drawn as decor with a ground symbol below);
-    the other is on the left side near the rear under a yellow 'REMOVE LABEL
-    FOR SYSTEM GROUNDING' sticker (Figure 22), drawn on the left view as the
-    label. The lug itself (29 x 37.5 x 12.5 mm, ships loose in the accessory
-    kit) is not seated by default.
-  top-view: >-
-    drawing-fractions - HIG Figure 5's top view (fig-0012) passed no aspect
-    gate as a whole page, so only fractions anchored to the 440 x 480
-    datasheet footprint were taken: four stadium stiffening grooves (two
-    right-side at depth fractions 0.39/0.54, two nearly full-width at
-    0.66/0.81) and three screws near the rear edge. AXIS CONVENTION: y = 0 is
-    the REAR, per the house top-view convention and the figure itself (FRU
-    handles at the top of the drawing).
-  sides: >-
-    left view from the angle render (screw row along the mid-height, a vent
-    field at the front end) and HIG Figure 22 (the yellow grounding label near
-    the rear); positions estimated - the angle render is oblique and passes no
-    measurement gate. Right view is the left mirrored WITHOUT the grounding
-    label, estimated from construction symmetry; no source shows it. AXIS
-    CONVENTION: LEFT view x = 0 is the REAR; RIGHT view x = 0 is the FRONT
-    (renderer-derived house convention). The screw rows are symmetric about
-    mid-depth so the convention is not observable on them; the vent field and
-    the grounding label are the asymmetric features and are placed per the
-    convention.
-  bottom-view: >-
-    size-only, deliberately blank - no figure, photo or text in the intake
-    shows the underside. The datasheet's front/back views, the HIG's five
-    overview figures and all four renders stop at the sides.
-  attrs: >-
-    datasheet (Key Features, Specifications, Performance, Accessories,
-    Environmental, Regulatory Compliance sections); HIG for the console
-    settings and HVDC input row. The datasheet prints 'VCCI CISPR 32, Class A'
-    and 'MTCTE' twice each in its compliance layout; transcribed once.
-  power: >-
-    datasheet 'Typical power: 184 Watts (no transceiver)' - the vendor
-    qualifies the envelope as bare of optics, hence power-envelope: bare.
-    power-max-w 530.7 is the HIG's connecting-power step, 'The maximum system
-    power consumption is 530.7 watts', stated identically for the DC and AC
-    versions; the vendor does not qualify what population it assumes, and that
-    sentence is recorded as the source. Inputs: AC 100-240 V 10 A, DC -36 to
-    -75 V 28 A (datasheet; the HIG checklist adds 190-310 VDC 5 A for the AC
-    unit, and the HIG power-up step narrows DC to -40 to -75 V for 5000 m).
-  part-numbers: >-
-    no orderable chassis SKU appears in either document - the datasheet orders
-    only FRUs (PSU-751-DESR/DISB/AESR/AISB, FAN-405637-HD/CD). A reseller
-    listing (HyperScalers) names S9110-32X-2B7A, which is third-party and not
-    recorded as a part number; see the orderable-part-numbers gap.
-  lifecycle: >-
-    searched 2026-08-28 ('UfiSpace S9110-32X end of life') - no announcement;
-    the product page, EPSGlobal, STORDIS and reseller listings all carry it as
-    current. Recorded as none-announced.
+  sources:
+    confidence: datasheet
+    note: >-
+      datasheet (S9110-32X 100G Data Center Switch, ufispace.com) and hardware installation guide,
+      both docling-converted (s9110-32x-datasheet, s9110-32x-hig); four vendor product renders
+      (angle, front and two rear gallery images). The two rear renders are the two airflow SKUs -
+      blue handles (back-to-front) and red handles (front-to-back) - and are otherwise identical.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - 'Chassis (WxDxH) 1RU, 440 x 480 x 43.8 mm', weight 7.44 kg without FRU; HIG's
+      component table repeats all four figures. 440 is the body between the bolt-on rack-mount
+      brackets (the HIG ships 88 x 43 x 20 mm brackets separately for a 19-inch rack), so no ear
+      subtraction applies. Depth 480 excludes FRU handles (fan +25 mm, PSU +38 mm per the HIG's
+      space clearance note).
+  front-layout:
+    confidence: photo-measured
+    note: >-
+      photo-measured off the front product render (1676 px / 440 mm = 3.809 px/mm; height renders
+      44.1 mm against the 43.8 datasheet figure, 0.7 percent, so the render is orthographic and
+      was used for positions). Eight silver ganged-cage blocks measured at x
+      74.6/120.5/165.9/211.3/257.0/ 302.4/347.9/393.5, regularised to a uniform 45.55 mm pitch
+      from 74.6 (max deviation 0.35 mm); each silver shell 39.7 mm wide holding two 18.5 mm ganged
+      apertures. Top apertures at y 11.5-19.8 and bottom at 26.6-35.2 in the render; modelled at
+      10.9 and 26.1 with the std 9.58 mm opening (centres within 0.2 mm of measured). The HIG's
+      Figure 11 port overview (fig-0020) confirms the block structure and numbering but is guide
+      art - it prints mock numerals on the cages where the real device silkscreens them below; the
+      render wins.
+  port-numbering:
+    note: >-
+      photo - the panel prints an up-triangle, the even number, the odd number and a down-triangle
+      under each cage column ('▲0 1▼' under the first). Column-major: even port on top, odd below,
+      left to right 0-31. HIG Figure 11 prints the same assignment (block one reads 0/2 over 1/3).
+      Port IDs are 0-31 (HIG port table: 'Port ID 0 ~ 31'), so index-origin is 0.
+  qsfp-orientation:
+    confidence: estimated
+    note: >-
+      estimated - the two rows of a 2-high ganged QSFP block are modelled belly-to-belly with the
+      BOTTOM row rotate 180, following the library's as7726-32x precedent for the same
+      construction; the apertures are featureless black in every source at any zoom, so the mirror
+      direction is not observable. The silver shell between and around the apertures is panel-side
+      cage metal and is drawn as decor per the s9510-28dc precedent.
+  lane-leds:
+    confidence: photo-measured
+    note: >-
+      photo-measured - four round lamps per port above each cage column, top row for the top port
+      and bottom row for the bottom port, 3.94 mm pitch, ~2.4 mm diameter (first quad's centres at
+      79.1-90.9 mm). Modelled as ufispace/lane-led-quad. The datasheet says only 'Link and
+      Activity LEDs per port'; no table maps the four lamps, so they carry the off/on default -
+      see the port-led-semantics gap.
+  led-semantics:
+    note: >-
+      HIG section 10 tables, transcribed onto the placements: front panel SYS / FAN / PSU0 / PSU1
+      / ID (the panel itself prints PS0/PS1/ID beside the lamps and that is what the silkscreen
+      says); Management Port LED table = the two lamps on the OOB RJ45 (left green 1G, right amber
+      10M/100M); PSU FRU and Fan FRU tables live in the psu-751 and fan-405637 contracts.
+  mgmt-cluster:
+    confidence: photo-measured
+    note: >-
+      photo-measured; identities from HIG chapter 12 - the RJ45 marked with the network-tree
+      symbol is OOB management ('Connect the OOB management cable by locating the RJ45 OOB port
+      marked a symbol'), the RJ45 labelled IOIO is the console, the SFP+ under the orange MGMT
+      label is the 1x 10G SFP+ management port, USB 3.0 Type-A between them. Orientation read at
+      8x zoom: the OOB jack sits keyway-up with its two lamps above (rotate 180 of the std part,
+      which draws contacts-top/keyway-down), the console below it mirrors keyway-down (std
+      default), the USB tongue is up (std default). The stacked jacks share one silver ganged
+      shell, drawn as decor. std/rj45-ganged (12.7 x 11) is used because the two jacks sit on a
+      sub-16 mm pitch inside a 32.3 mm shell; std/rj45's 16 mm bezel cannot.
+  rear-layout:
+    confidence: photo-measured
+    note: >-
+      photo-measured off the rear renders (1675 px / 440 mm = 3.807 px/mm, airflow variants
+      identical in geometry): fan module seams at x 65.7/108.0, 116.6/158.9, 167.5/209.9 (50.9 mm
+      bay pitch), PSU faces at 323.1-373.0 and 380.1-429.9 (49.9 mm measured against the 50.5 HIG
+      face). 'FAN ◀N' is printed at the top of each fan's right flange column and 'PSU0◀'/'PSU1◀'
+      read top-to-bottom on the chassis strips right of each PSU bay. The FAN marks fall inside
+      the bay extents, so they are hidden when a module is seated - recorded rather than moved,
+      because that is where the print is.
+  fan-bays:
+    confidence: photo-measured
+    note: >-
+      photo-measured 50.9 mm pitch; bay size follows the module face (50.7 x 40.0), which spans
+      the hex grille (the HIG's 43.4 mm body) plus the ~8 mm flange carrying the airflow tag,
+      captive screw and LED - see ufispace/fan-405637 provenance and the fan-faceplate-width gap.
+  grounding:
+    note: >-
+      HIG chapter 8 and Figures 22-23 - 'there are two locations on the case in which the
+      grounding lug may be fixed'. One is the rear-left pair of M4 holes (Figure 23 draws the lug
+      spanning both; the two rings at the rear left of both rear renders, drawn as decor with a
+      ground symbol below); the other is on the left side near the rear under a yellow 'REMOVE
+      LABEL FOR SYSTEM GROUNDING' sticker (Figure 22), drawn on the left view as the label. The
+      lug itself (29 x 37.5 x 12.5 mm, ships loose in the accessory kit) is not seated by default.
+  top-view:
+    confidence: drawing
+    note: >-
+      drawing-fractions - HIG Figure 5's top view (fig-0012) passed no aspect gate as a whole
+      page, so only fractions anchored to the 440 x 480 datasheet footprint were taken: four
+      stadium stiffening grooves (two right-side at depth fractions 0.39/0.54, two nearly
+      full-width at 0.66/0.81) and three screws near the rear edge. AXIS CONVENTION: y = 0 is the
+      REAR, per the house top-view convention and the figure itself (FRU handles at the top of the
+      drawing).
+  sides:
+    note: >-
+      left view from the angle render (screw row along the mid-height, a vent field at the front
+      end) and HIG Figure 22 (the yellow grounding label near the rear); positions estimated - the
+      angle render is oblique and passes no measurement gate. Right view is the left mirrored
+      WITHOUT the grounding label, estimated from construction symmetry; no source shows it. AXIS
+      CONVENTION: LEFT view x = 0 is the REAR; RIGHT view x = 0 is the FRONT (renderer-derived
+      house convention). The screw rows are symmetric about mid-depth so the convention is not
+      observable on them; the vent field and the grounding label are the asymmetric features and
+      are placed per the convention.
+  bottom-view:
+    note: >-
+      size-only, deliberately blank - no figure, photo or text in the intake shows the underside.
+      The datasheet's front/back views, the HIG's five overview figures and all four renders stop
+      at the sides.
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet (Key Features, Specifications, Performance, Accessories, Environmental, Regulatory
+      Compliance sections); HIG for the console settings and HVDC input row. The datasheet prints
+      'VCCI CISPR 32, Class A' and 'MTCTE' twice each in its compliance layout; transcribed once.
+  power:
+    confidence: datasheet
+    note: >-
+      datasheet 'Typical power: 184 Watts (no transceiver)' - the vendor qualifies the envelope as
+      bare of optics, hence power-envelope: bare. power-max-w 530.7 is the HIG's connecting-power
+      step, 'The maximum system power consumption is 530.7 watts', stated identically for the DC
+      and AC versions; the vendor does not qualify what population it assumes, and that sentence
+      is recorded as the source. Inputs: AC 100-240 V 10 A, DC -36 to -75 V 28 A (datasheet; the
+      HIG checklist adds 190-310 VDC 5 A for the AC unit, and the HIG power-up step narrows DC to
+      -40 to -75 V for 5000 m).
+  part-numbers:
+    note: >-
+      no orderable chassis SKU appears in either document - the datasheet orders only FRUs
+      (PSU-751-DESR/DISB/AESR/AISB, FAN-405637-HD/CD). A reseller listing (HyperScalers) names
+      S9110-32X-2B7A, which is third-party and not recorded as a part number; see the
+      orderable-part-numbers gap.
+  lifecycle:
+    note: >-
+      searched 2026-08-28 ('UfiSpace S9110-32X end of life') - no announcement; the product page,
+      EPSGlobal, STORDIS and reseller listings all carry it as current. Recorded as
+      none-announced.
+
 attrs:
   performance:
     switching-capacity: 3.2 Tbps

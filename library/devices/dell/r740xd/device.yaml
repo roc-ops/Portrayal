@@ -1,173 +1,169 @@
 format: 1
 kind: device
 name: r740xd
-version: 21.0.6
+version: 21.0.7
 maturity: draft
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
 profile: server
 provenance:
-  chassis: >-
-    datasheet - the R740xd spec sheet gives Height 86.8 mm, Width 434 mm, Depth
-    737.5 mm and notes the figures exclude the bezel. 434 is the BODY between the
-    ear folds; the drawn front face is 482.6 because this device's ears carry
-    ports (see front-face).
-  front-face: >-
-    THE EARS ARE PART OF THE FACEPLATE AND CARRY PORTS, so they are drawn. Dell
-    builds the mounting flanges into the front moulding and puts the VGA in the
-    right-hand ear, the power button and USB stack in the strip beside it, and
-    the system health lamp in the left. A 434 mm face would leave real,
-    field-visible ports with nowhere to live. L43 tests what is seated in the
-    outer 25 mm rather than the width, and passes this device for that reason.
-  gate-1: >-
-    ISM figure 2 'Front view of 24 x 2.5 inch drive system', rendered from the
-    PDF at 600 dpi, measures 3168 x 564 px on the chassis itself - aspect 5.6170
-    against 482.6/86.8 = 5.5599, which is 1.03%. ORTHOGRAPHIC, and at 6.5644
-    px/mm. An earlier reading of 12.16% measured the docling-EXTRACTED PNG, whose
-    bounding box takes in the callout numerals and leader lines; extracting a
-    figure and measuring a figure are not the same operation.
-  bay-pitch: >-
-    17.868 mm, read three times from three documents that agree to 0.05 mm:
-    Dell's marketing render of this device (Gate 1 2.10%) gives 17.868; the
-    r750-24d-2-5-front Visio master, a line drawing of the 15G successor that
-    passes Gate 1 at 0.67%, gives 17.8454 across 23 gaps of exact vector
-    coordinates; and ISM figure 2 at 600 dpi gives 17.9094 from the 24 orange
-    release rings. The device's OWN source is kept - adopting a measurement of a
-    different machine would trade provenance for false precision - and the other
-    two are corroboration.
-  bay-origin: >-
-    THE ARRAY IS CENTRED, and that is a measurement rather than an assumption.
-    ISM figure 2 puts the first release ring 35.27 mm from the left edge of the
-    face and the last at 447.18, so the array runs 26.3..456.1 and leaves margins
-    of 26.3 and 26.5 - symmetric to 0.15 mm. Implausibility is a failed check;
-    symmetry here is the check passing. x is therefore (482.6 - 24 x 17.868)/2 =
-    26.884.
-  bay-vertical: >-
-    drawing - the r750 master draws 22 of its 24 carriers with an identical
-    outline at y 4.01..83.02, height 79.01 mm (bays 1 and 24 catch chassis paths
-    and are excluded). Correcting the 0.7% by which that master draws the face
-    87.39 mm tall instead of 86.8 gives 78.48. common/drive-carrier-25 carries
-    79.4 from an independent source, and 0.5% agreement between a render and a
-    line drawing is why that figure stands rather than being re-derived here.
-  right-control-panel: >-
-    THE R740xd AND R750 SHARE THIS PANEL, which is what licenses reading exact
-    vector geometry off the 15G master for a 14G machine, and it is established
-    rather than assumed: the master puts the VGA at x 471.18..479.06 where the
-    R740xd's own ISM figure puts it at 471.13..478.90 - 0.16 mm - and their power
-    button centres agree to 0.5 mm. Where the two DISAGREE the ISM wins, because
-    it is this device: the R750 carries one USB-A on this panel and the R740xd
-    carries two, so the USB positions are the ISM's.
-  left-control-panel: >-
-    photo-measured from ISM figure 2 at 6.5644 px/mm. NOT taken from the R750
-    master, which disagrees by 1.9 mm in x on the light bar and so is a different
-    panel - the agreement that licensed the right-hand panel does not hold here,
-    and reading it across anyway would have been the same evidence used twice
-    with the negative result discarded.
-  y-correction: >-
-    the ISM figure draws the face 85.8 mm tall where the datasheet says 86.8, so
-    every y read off it is scaled by 1.0103. x needs no such correction: the
-    figure's width matches 482.6 to the 1.03% that Gate 1 reports.
-  ports: >-
-    POSITIONS from the figures above; SIZES from the registry. A connector's
-    dimensions belong to spec/schemas/standards.yaml and to the std/ parts that
-    conform to it, never to a reading of a picture - the picture is only allowed
-    to say where the part sits.
-  drive-default: >-
-    EVERY BAY DEFAULTS TO A BLANK. A bay with nothing in it renders as an open
-    hole, and a rack server does not ship with 24 open holes - it ships filled,
-    because the airflow depends on it. Dell publishes no default drive count for
-    this chassis, so the honest default is the filler rather than a drive count
-    somebody invented. A populated machine is a configuration.
-  power: >-
-    NOT STATED HERE. The Information Update tech sheet (Rev 2, Nov 2022) lists
-    thirteen orderable PSUs from 495 W to 2600 W across AC, DC, HVDC and Mixed
-    Mode, so there is no single chassis figure to record; the draw belongs to
-    whichever PSU is fitted, and that is a rear-face question this draft does not
-    reach.
-  idrac-direct-led: >-
-    A SEPARATE, UNMARKED LAMP BELOW THE PORT - not the wrench above it. That
-    distinction is the document's own and it is worth spelling out, because two
-    other glyph columns on this chassis work the other way: the drive carrier's
-    head glyphs ARE its lamps and the left panel's five status glyphs ARE its
-    lamps. Here ISM table 7 lists the iDRAC Direct PORT as item 3 with a wrench
-    icon and the iDRAC Direct LED as item 4 with `Icon: N/A`, and figure 7's
-    callout for item 4 points below the socket at plain strip. The wrench marks
-    the hole; the lamp beneath it carries no mark at all.
-    ITS CODES ARE SOURCED AND ITS PLACE IS APPROXIMATE, and those are not the
-    same confidence. Table 8 gives all three codes. For the position the ISM says
-    only "located below the iDRAC Direct port on the right control panel" and
-    figure 7's callout agrees with that much; figure 2 at 6.5644 px/mm resolves
-    the socket and the wrench above it and shows nothing beneath them, and
-    figure 7 is schematic and carries no scale. So the 2.5 mm offset here is a
-    sentence turned into a coordinate, and the size is common/led-dot's 2 mm,
-    which that part itself calls estimated.
-  status-leds-are-dark-when-healthy: >-
-    THE FIVE STATUS LAMPS HAVE EXACTLY TWO STATES AND THAT IS NOT A SHORTCUT.
-    Dell publishes off and solid amber for each of drive, temperature,
-    electrical, memory and PCIe, and nothing else: the ISM's own note above the
-    table reads "The indicators display solid amber if any error occurs", every
-    row says "turns solid amber", and the identical wording appears in the R740,
-    R640, R750 and R760 manuals. Every occurrence of "blink" in this device's
-    manual belongs to some other lamp - the health bar, Quick Sync, the NIC
-    indicators or a PSU handle.
-    SO DARKNESS IS THE HEALTHY STATE HERE, which is worth saying out loud because
-    it is the opposite of most of this library: a dark lamp on this column means
-    nothing is wrong, where a dark lamp on a line card usually means nothing is
-    there.
-  rack-latches: >-
-    BOTH EARS CARRY ONE. The r750 master draws the same 12.16 x 37.99 section at
-    x 2.80 and x 469.04, both starting at y 46.91 - 54% down an 86.8 face - and
-    the operator describes the hardware the same way, "a little bit lower than
-    midway down, and from there to the bottom". A drawing of the successor and a
-    machine in a rack agreeing on where a feature starts is what fixed it.
-    THE LEFT ONE IS CENTRED ON ITS EAR AND NOT ON THE MASTER'S x. The r750 draws
-    it at x 2.80 in an ear of its own width; this chassis's left ear is 13.41
-    wide, so 2.80 put a 12.16 part 2.2 mm off centre and 1.55 mm past the ear's
-    edge. A position read from another machine's drawing has to be re-seated
-    against the metal it lands on - the master gives the part's SIZE, and the
-    ear it sits in gives its PLACE. The right-hand one needed no such move: its
-    ear runs 468.54..482.6 and the master's 469.04 already centres it there.
-    An earlier reading took the right-hand one for the information tag. It is
-    not: the ISM puts the information tag's callout in the middle of the drive
-    row at the bottom, where it slides out from between the bays, and the tag is
-    still not drawn.
-  bezel: >-
-    DRAWN FITTED, AND IT DECLARES WHAT IT HIDES. `for:` names all 24 drive bays
-    and the left control panel, which is how the C40G's snap-on PSU cover says it
-    sits over four supplies - the same construction, and the reason L13 does not
-    read a cover as a sizing mistake. A viewer can then hide it and see what is
-    behind, which is the point.
-    An earlier draft made it an `optional:` placement, the mechanism the
-    SmartOptics rack ears use, and that was the wrong tool: `optional:` is for
-    something absent unless asked for, and this is something PRESENT that a
-    reader chooses to look past.
-    IT CLEARS BOTH EARS AND DOES NOT COVER THE WHOLE FACE. At 434 x 82.35 centred
-    on the 482.6 x 86.8 face it leaves 24.3 mm of ear showing each side and 2.2
-    above and below, which is the operator's description of where it sits and is
-    what fixed its size - see dell/bezel-2u-14g, whose master aspect fails Gate 1
-    against a rack face precisely because a rack face is not what it covers.
-  riser-configurations: >-
-    THREE REARS ARE DRAWN AND THE MACHINE HAS FAR MORE THAN THREE. The
-    Information Update tech sheet's table 3 enumerates TWELVE riser
-    configurations - 0, 1, 2, 3, 4, 5, 6, 9, 15, 16 and 17 - each naming which
-    slots exist on risers 1, 2 and 3 and at what height and length: riser
-    configuration 0 has no PCIe slots at all and only rear storage, 1 and 2 give
-    four slots with or without it, 4 and 5 and 15 give eight.
-    WHAT IS DRAWN HERE IS THE SHAPE OF THE ANSWER, not the whole of it. The three
-    configurations modelled - no rear storage, four 2.5 inch rear, two 3.5 inch
-    rear - establish that competing slot sets and drive bays are METAL scoped by
-    `only-in` rather than different occupants of one hole. Extending that to
-    twelve is transcription against table 3 and not a new mechanism; every slot
-    already carries an id a configuration can name.
-  not-yet-modelled: >-
-    THIS IS A FRONT-FACE DRAFT AND SAYS SO. No rear view, no top view with the
-    lid off, no riser configurations - the tech sheet documents twelve of those
-    and they are the rear's business. The two control panels are drawn as their
-    apertures and contents rather than as the field-replaceable units they are;
-    the ISM has removal procedures for both, so each should become a component
-    with its own bay, and the light bar in particular has no part in the library
-    that fits it.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - the R740xd spec sheet gives Height 86.8 mm, Width 434 mm, Depth 737.5 mm and
+      notes the figures exclude the bezel. 434 is the BODY between the ear folds; the drawn front
+      face is 482.6 because this device's ears carry ports (see front-face).
+  front-face:
+    note: >-
+      THE EARS ARE PART OF THE FACEPLATE AND CARRY PORTS, so they are drawn. Dell builds the
+      mounting flanges into the front moulding and puts the VGA in the right-hand ear, the power
+      button and USB stack in the strip beside it, and the system health lamp in the left. A 434
+      mm face would leave real, field-visible ports with nowhere to live. L43 tests what is seated
+      in the outer 25 mm rather than the width, and passes this device for that reason.
+  gate-1:
+    note: >-
+      ISM figure 2 'Front view of 24 x 2.5 inch drive system', rendered from the PDF at 600 dpi,
+      measures 3168 x 564 px on the chassis itself - aspect 5.6170 against 482.6/86.8 = 5.5599,
+      which is 1.03%. ORTHOGRAPHIC, and at 6.5644 px/mm. An earlier reading of 12.16% measured the
+      docling-EXTRACTED PNG, whose bounding box takes in the callout numerals and leader lines;
+      extracting a figure and measuring a figure are not the same operation.
+  bay-pitch:
+    note: >-
+      17.868 mm, read three times from three documents that agree to 0.05 mm: Dell's marketing
+      render of this device (Gate 1 2.10%) gives 17.868; the r750-24d-2-5-front Visio master, a
+      line drawing of the 15G successor that passes Gate 1 at 0.67%, gives 17.8454 across 23 gaps
+      of exact vector coordinates; and ISM figure 2 at 600 dpi gives 17.9094 from the 24 orange
+      release rings. The device's OWN source is kept - adopting a measurement of a different
+      machine would trade provenance for false precision - and the other two are corroboration.
+  bay-origin:
+    note: >-
+      THE ARRAY IS CENTRED, and that is a measurement rather than an assumption. ISM figure 2 puts
+      the first release ring 35.27 mm from the left edge of the face and the last at 447.18, so
+      the array runs 26.3..456.1 and leaves margins of 26.3 and 26.5 - symmetric to 0.15 mm.
+      Implausibility is a failed check; symmetry here is the check passing. x is therefore (482.6
+      - 24 x 17.868)/2 = 26.884.
+  bay-vertical:
+    confidence: drawing
+    note: >-
+      drawing - the r750 master draws 22 of its 24 carriers with an identical outline at y
+      4.01..83.02, height 79.01 mm (bays 1 and 24 catch chassis paths and are excluded).
+      Correcting the 0.7% by which that master draws the face 87.39 mm tall instead of 86.8 gives
+      78.48. common/drive-carrier-25 carries 79.4 from an independent source, and 0.5% agreement
+      between a render and a line drawing is why that figure stands rather than being re-derived
+      here.
+  right-control-panel:
+    note: >-
+      THE R740xd AND R750 SHARE THIS PANEL, which is what licenses reading exact vector geometry
+      off the 15G master for a 14G machine, and it is established rather than assumed: the master
+      puts the VGA at x 471.18..479.06 where the R740xd's own ISM figure puts it at 471.13..478.90
+      - 0.16 mm - and their power button centres agree to 0.5 mm. Where the two DISAGREE the ISM
+      wins, because it is this device: the R750 carries one USB-A on this panel and the R740xd
+      carries two, so the USB positions are the ISM's.
+  left-control-panel:
+    confidence: photo-measured
+    note: >-
+      photo-measured from ISM figure 2 at 6.5644 px/mm. NOT taken from the R750 master, which
+      disagrees by 1.9 mm in x on the light bar and so is a different panel - the agreement that
+      licensed the right-hand panel does not hold here, and reading it across anyway would have
+      been the same evidence used twice with the negative result discarded.
+  y-correction:
+    note: >-
+      the ISM figure draws the face 85.8 mm tall where the datasheet says 86.8, so every y read
+      off it is scaled by 1.0103. x needs no such correction: the figure's width matches 482.6 to
+      the 1.03% that Gate 1 reports.
+  ports:
+    note: >-
+      POSITIONS from the figures above; SIZES from the registry. A connector's dimensions belong
+      to spec/schemas/standards.yaml and to the std/ parts that conform to it, never to a reading
+      of a picture - the picture is only allowed to say where the part sits.
+  drive-default:
+    note: >-
+      EVERY BAY DEFAULTS TO A BLANK. A bay with nothing in it renders as an open hole, and a rack
+      server does not ship with 24 open holes - it ships filled, because the airflow depends on
+      it. Dell publishes no default drive count for this chassis, so the honest default is the
+      filler rather than a drive count somebody invented. A populated machine is a configuration.
+  power:
+    note: >-
+      NOT STATED HERE. The Information Update tech sheet (Rev 2, Nov 2022) lists thirteen
+      orderable PSUs from 495 W to 2600 W across AC, DC, HVDC and Mixed Mode, so there is no
+      single chassis figure to record; the draw belongs to whichever PSU is fitted, and that is a
+      rear-face question this draft does not reach.
+  idrac-direct-led:
+    note: >-
+      A SEPARATE, UNMARKED LAMP BELOW THE PORT - not the wrench above it. That distinction is the
+      document's own and it is worth spelling out, because two other glyph columns on this chassis
+      work the other way: the drive carrier's head glyphs ARE its lamps and the left panel's five
+      status glyphs ARE its lamps. Here ISM table 7 lists the iDRAC Direct PORT as item 3 with a
+      wrench icon and the iDRAC Direct LED as item 4 with `Icon: N/A`, and figure 7's callout for
+      item 4 points below the socket at plain strip. The wrench marks the hole; the lamp beneath
+      it carries no mark at all. ITS CODES ARE SOURCED AND ITS PLACE IS APPROXIMATE, and those are
+      not the same confidence. Table 8 gives all three codes. For the position the ISM says only
+      "located below the iDRAC Direct port on the right control panel" and figure 7's callout
+      agrees with that much; figure 2 at 6.5644 px/mm resolves the socket and the wrench above it
+      and shows nothing beneath them, and figure 7 is schematic and carries no scale. So the 2.5
+      mm offset here is a sentence turned into a coordinate, and the size is common/led-dot's 2
+      mm, which that part itself calls estimated.
+  status-leds-are-dark-when-healthy:
+    note: >-
+      THE FIVE STATUS LAMPS HAVE EXACTLY TWO STATES AND THAT IS NOT A SHORTCUT. Dell publishes off
+      and solid amber for each of drive, temperature, electrical, memory and PCIe, and nothing
+      else: the ISM's own note above the table reads "The indicators display solid amber if any
+      error occurs", every row says "turns solid amber", and the identical wording appears in the
+      R740, R640, R750 and R760 manuals. Every occurrence of "blink" in this device's manual
+      belongs to some other lamp - the health bar, Quick Sync, the NIC indicators or a PSU handle.
+      SO DARKNESS IS THE HEALTHY STATE HERE, which is worth saying out loud because it is the
+      opposite of most of this library: a dark lamp on this column means nothing is wrong, where a
+      dark lamp on a line card usually means nothing is there.
+  rack-latches:
+    note: >-
+      BOTH EARS CARRY ONE. The r750 master draws the same 12.16 x 37.99 section at x 2.80 and x
+      469.04, both starting at y 46.91 - 54% down an 86.8 face - and the operator describes the
+      hardware the same way, "a little bit lower than midway down, and from there to the bottom".
+      A drawing of the successor and a machine in a rack agreeing on where a feature starts is
+      what fixed it. THE LEFT ONE IS CENTRED ON ITS EAR AND NOT ON THE MASTER'S x. The r750 draws
+      it at x 2.80 in an ear of its own width; this chassis's left ear is 13.41 wide, so 2.80 put
+      a 12.16 part 2.2 mm off centre and 1.55 mm past the ear's edge. A position read from another
+      machine's drawing has to be re-seated against the metal it lands on - the master gives the
+      part's SIZE, and the ear it sits in gives its PLACE. The right-hand one needed no such move:
+      its ear runs 468.54..482.6 and the master's 469.04 already centres it there. An earlier
+      reading took the right-hand one for the information tag. It is not: the ISM puts the
+      information tag's callout in the middle of the drive row at the bottom, where it slides out
+      from between the bays, and the tag is still not drawn.
+  bezel:
+    note: >-
+      DRAWN FITTED, AND IT DECLARES WHAT IT HIDES. `for:` names all 24 drive bays and the left
+      control panel, which is how the C40G's snap-on PSU cover says it sits over four supplies -
+      the same construction, and the reason L13 does not read a cover as a sizing mistake. A
+      viewer can then hide it and see what is behind, which is the point. An earlier draft made it
+      an `optional:` placement, the mechanism the SmartOptics rack ears use, and that was the
+      wrong tool: `optional:` is for something absent unless asked for, and this is something
+      PRESENT that a reader chooses to look past. IT CLEARS BOTH EARS AND DOES NOT COVER THE WHOLE
+      FACE. At 434 x 82.35 centred on the 482.6 x 86.8 face it leaves 24.3 mm of ear showing each
+      side and 2.2 above and below, which is the operator's description of where it sits and is
+      what fixed its size - see dell/bezel-2u-14g, whose master aspect fails Gate 1 against a rack
+      face precisely because a rack face is not what it covers.
+  riser-configurations:
+    note: >-
+      THREE REARS ARE DRAWN AND THE MACHINE HAS FAR MORE THAN THREE. The Information Update tech
+      sheet's table 3 enumerates TWELVE riser configurations - 0, 1, 2, 3, 4, 5, 6, 9, 15, 16 and
+      17 - each naming which slots exist on risers 1, 2 and 3 and at what height and length: riser
+      configuration 0 has no PCIe slots at all and only rear storage, 1 and 2 give four slots with
+      or without it, 4 and 5 and 15 give eight. WHAT IS DRAWN HERE IS THE SHAPE OF THE ANSWER, not
+      the whole of it. The three configurations modelled - no rear storage, four 2.5 inch rear,
+      two 3.5 inch rear - establish that competing slot sets and drive bays are METAL scoped by
+      `only-in` rather than different occupants of one hole. Extending that to twelve is
+      transcription against table 3 and not a new mechanism; every slot already carries an id a
+      configuration can name.
+  not-yet-modelled:
+    note: >-
+      THIS IS A FRONT-FACE DRAFT AND SAYS SO. No rear view, no top view with the lid off, no riser
+      configurations - the tech sheet documents twelve of those and they are the rear's business.
+      The two control panels are drawn as their apertures and contents rather than as the
+      field-replaceable units they are; the ISM has removal procedures for both, so each should
+      become a component with its own bay, and the light bar in particular has no part in the
+      library that fits it.
+
 chassis:
   width: 434.0
   height: 86.8

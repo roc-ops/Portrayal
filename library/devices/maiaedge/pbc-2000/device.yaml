@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: pbc-2000
-version: 3.0.0
+version: 3.0.1
 maturity: modelled
 manufacturer: MaiaEdge
 model: PBC-2000
@@ -13,123 +13,135 @@ description: >-
   the back, front-to-back.
 profile: networking
 provenance:
-  model-number: >-
-    vendor documentation - www.maiaedge.io/getting-started (getting-started.pdf),
-    Safety Information: "The PBC-2000 is equipped with two redundant AC power
-    inputs." THE DATASHEET AND THE MANAGEMENT UI BOTH SAY ONLY "PBC", which is
-    what this device was first modelled as; the setup guide is the only source
-    held that gives the number. A DCIM reads `model` as the identity, so it is
-    the number and not the family.
-  size: >-
-    datasheet - MaiaEdge-PBC-PCE-Datasheet-v3.pdf page 3, "Chassis (H x W x D)
-    1.625 x 17.24 x 11.46 in" = 41.27 x 437.90 x 291.08 mm. THE ROW BELOW IT,
-    "Total (With Ears and Tabs) 1.625 x 19.02 x 12.13 in", is NOT the chassis and is
-    not modelled: 19.02 in is 483.11 mm, the rack face including the ears, and L43
-    exists because a device was once modelled wearing its flanges.
-  cutouts: >-
-    registry - each opening is the APERTURE the component declares, not the component's
-    outline: common/qsfp-cage@2 is 19.5 x 10.18 of metal around an 18.5 x 9.58 hole
-    offset (0.575, 0.6) into it, and a USB-A is 17.0 x 9.3 around a 12.0 x 4.5 hole at
-    (2.5, 2.4). The first draft punched the outlines and
-    test_cutout_derivation caught all three.
-  numbering: >-
-    MaiaEdge's own management UI (working/intake/maiaedge/pbc/renders/ui-port-view.png)
-    numbers the two 100G ports 0 and 1, so the group is index-origin 0, and captions
-    them 100G. It captions MGMT and CTRL 1G and CON not at all, and - independently of
-    L76 - DRAWS CON AS A DIFFERENT JACK from the other two, which is the console-versus-
-    Ethernet split the rule had already forced. A UI view is a schematic: it is taken
-    here for what is on the face, in what order, and what the vendor calls it. No
-    coordinate comes from it.
-  jacks: >-
-    L76 and docs/rj45-family-design.md settle which part each jack is: an Ethernet jack
-    is common/rj45-eth@1 and a console or timing jack is std/rj45@2. CON is the
-    console, so it is the std part; MGMT and CTRL are the two 1GB management ports the
-    datasheet counts, so they are the Ethernet part. All three were std/rj45@2 in the
-    first draft and the rule caught it. THE TWO ETHERNET JACKS ARE FITTED TAB UP and
-    the console jack is not: the photograph reads MGMT's and CTRL's contacts along the
-    bottom of the opening with the latch slot above, and CON's the other way about.
-    Declared as rotate 180, because a jack fitted the other way up is the same jack
-    turned over rather than a reflection of it, and its lamps really do change sides.
-  usb: >-
-    the bare std/usb-a@1 receptacle, not the bezelled common/usb-a@3. That part wraps
-    the opening in a silver plate spanning the component so it can abut its neighbours'
-    bezels, which is the S9510-28DC's face; here the photograph shows a narrow slot
-    straight through the faceplate with no plate around it. THE TONGUE IS WHITE
-    BECAUSE THE PORT IS USB 2.0: page 3 says "1x USB 2.0", and USB-IF colours the
-    Type-A insulator by what the port is - white for 2.0, blue for 3.0. The part
-    could only draw the blue one, so it grew a `usb2` skin and this device asks for
-    it. The photograph agrees as far as it can: the slot shows a pale tongue against
-    a dark opening, and nothing blue.
-  ports: >-
-    datasheet page 3 - "Dual 100GbE Ethernet (QSFP28)", "2x 1GB RJ45" management,
-    "1x USB 2.0", "RJ45 115.2 kbps" console. Confirmed on the hardware: the front
-    photograph reads the three jacks' own silkscreen as CON, MGMT and CTRL, which is
-    the console plus the two management ports the table counts.
-    AND NOW STATED BY THE VENDOR IN PROSE, which is better than either: the setup
-    guide (www.maiaedge.io/getting-started) describes the face directly - the front
-    has "two windows where the ports are exposed"; the lefthand window has "two 100G
-    interfaces, numbered 0 and 1 from left to right"; and in the righthand window,
-    "from left to right, you'll find a USB port (not currently used), a serial console
-    port, a 10/100/1000 management port, and a 10/100/1000 control port". It calls
-    MGMT "the PBC's center management port" and CTRL "rightmost port in the right
-    window". Every one of those matches what was modelled from the photograph and the
-    UI view; the ORDER of this face is no longer an inference. The vendor's own word
-    for the octagonal cutouts is `window`, which is what the decor already calls them.
-    Note the guide rates the two jacks 10/100/1000 where the table says 1GB, and calls
-    the USB port NOT CURRENTLY USED.
-  bezel: >-
-    ESTIMATED shape, from photographs. The front face is a formed bezel, not a flat
-    plate: it slopes out to a raised band running the full width and slopes back, and
-    two OCTAGONAL windows are cut through it to the faceplate behind, each edged with a
-    raised bead in the vendor's amber. The right-hand end of the right window is the
-    only window end unobstructed by cabling in any photograph held, and is what the
-    chamfer was read from. `shape: octagon` was added to the format for this - decor
-    and cutouts could draw a rectangle, a rounded rectangle, a D-sub shell and a
-    stadium slot, and an octagon had no shape to be.
-  louvres: >-
-    photo-measured (COUNT ONLY) - each window carries a grid of short horizontal
-    slots, EIGHT ROWS DEEP AND FIVE COLUMNS ACROSS, counted on the rack photograph
-    and confirmed by the maintainer against the hardware. One column of the left
-    window, isolated and contrast-normalised, reads eight slots between the beads;
-    the unobstructed band above the transceivers reads four ribs, so five columns.
-    The PITCH IS NOT MEASURED: it is those counts divided into the window as
-    modelled, and the window itself is estimated. What the count corrects is a
-    shape, not a dimension - the marketing render draws the field as full-width
-    louvres and the first draft copied it, so this face wore a texture the hardware
-    does not have.
-  port-lamps: >-
-    field knowledge (the maintainer, 2026-09-15), corroborated NEGATIVELY by both
-    sources held - ONE lamp per 100G port. The photograph shows the louvres running
-    straight up to the cage flange with no lamp band above it, and the vendor's UI
-    view draws each port with nothing above it either; neither shows where the one
-    lamp sits, because the transceivers' pull tabs cover that corner. So the COUNT
-    is the maintainer's and the POSITION is estimated. This is why the plain
-    common/qsfp-cage@2 is fitted rather than common/qsfp28-cage@3, whose four lamps
-    belong to the AS7726-32X's panel by its own provenance and are not a property
-    of any cage.
-  layout: >-
-    ESTIMATED, AND THE WORD IS EXACT. The ORDER and GROUPING of everything on the
-    front face are read off photographs of a unit in service (see gaps
-    `front-positions`); the POSITIONS are a plausible arrangement consistent with
-    them and with each component's own size. No position here is a measurement.
-    The one position that is better than that is the chassis status lamp: the
-    photograph puts it unambiguously in the notch outside the right window's
-    lower-right chamfer, and it is placed against that edge rather than against a
-    coordinate.
-  rear: >-
-    photo-measured (count and pitch only) - two supply modules and five 40 mm fans,
-    read off the rear photographs. The fan pitch is the one figure on this device that
-    a photograph did settle: five fans span 203.9 mm on a scale anchored to the
-    437.90 mm chassis width, giving 40.8 mm each against common/fan-module-41's known
-    40.9 - 0.2% out, which is what a sound scale looks like. Every other rear figure
-    is a position and is estimated.
-  power: >-
-    datasheet page 3 - "Internal: AC, DC" with "Redundant Power Supply: Yes". The
-    550W per-supply figure is photo-measured: both modules carry a blue 550W label.
-    The datasheet states no chassis draw, so none is recorded and L27 stands.
-  thermal: >-
-    datasheet page 3 - "Internal fan-based forced-air cooling. Front-to-Back (F2B) -
-    intake at front bezel / port side, exhaust at rear (fan/PSU side)."
+  model-number:
+    note: >-
+      vendor documentation - www.maiaedge.io/getting-started (getting-started.pdf), Safety
+      Information: "The PBC-2000 is equipped with two redundant AC power inputs." THE DATASHEET
+      AND THE MANAGEMENT UI BOTH SAY ONLY "PBC", which is what this device was first modelled as;
+      the setup guide is the only source held that gives the number. A DCIM reads `model` as the
+      identity, so it is the number and not the family.
+  size:
+    confidence: datasheet
+    note: >-
+      datasheet - MaiaEdge-PBC-PCE-Datasheet-v3.pdf page 3, "Chassis (H x W x D) 1.625 x 17.24 x
+      11.46 in" = 41.27 x 437.90 x 291.08 mm. THE ROW BELOW IT, "Total (With Ears and Tabs) 1.625
+      x 19.02 x 12.13 in", is NOT the chassis and is not modelled: 19.02 in is 483.11 mm, the rack
+      face including the ears, and L43 exists because a device was once modelled wearing its
+      flanges.
+  cutouts:
+    confidence: registry
+    note: >-
+      registry - each opening is the APERTURE the component declares, not the component's outline:
+      common/qsfp-cage@2 is 19.5 x 10.18 of metal around an 18.5 x 9.58 hole offset (0.575, 0.6)
+      into it, and a USB-A is 17.0 x 9.3 around a 12.0 x 4.5 hole at (2.5, 2.4). The first draft
+      punched the outlines and test_cutout_derivation caught all three.
+  numbering:
+    note: >-
+      MaiaEdge's own management UI (working/intake/maiaedge/pbc/renders/ui-port-view.png) numbers
+      the two 100G ports 0 and 1, so the group is index-origin 0, and captions them 100G. It
+      captions MGMT and CTRL 1G and CON not at all, and - independently of L76 - DRAWS CON AS A
+      DIFFERENT JACK from the other two, which is the console-versus- Ethernet split the rule had
+      already forced. A UI view is a schematic: it is taken here for what is on the face, in what
+      order, and what the vendor calls it. No coordinate comes from it.
+  jacks:
+    note: >-
+      L76 and docs/rj45-family-design.md settle which part each jack is: an Ethernet jack is
+      common/rj45-eth@1 and a console or timing jack is std/rj45@2. CON is the console, so it is
+      the std part; MGMT and CTRL are the two 1GB management ports the datasheet counts, so they
+      are the Ethernet part. All three were std/rj45@2 in the first draft and the rule caught it.
+      THE TWO ETHERNET JACKS ARE FITTED TAB UP and the console jack is not: the photograph reads
+      MGMT's and CTRL's contacts along the bottom of the opening with the latch slot above, and
+      CON's the other way about. Declared as rotate 180, because a jack fitted the other way up is
+      the same jack turned over rather than a reflection of it, and its lamps really do change
+      sides.
+  usb:
+    note: >-
+      the bare std/usb-a@1 receptacle, not the bezelled common/usb-a@3. That part wraps the
+      opening in a silver plate spanning the component so it can abut its neighbours' bezels,
+      which is the S9510-28DC's face; here the photograph shows a narrow slot straight through the
+      faceplate with no plate around it. THE TONGUE IS WHITE BECAUSE THE PORT IS USB 2.0: page 3
+      says "1x USB 2.0", and USB-IF colours the Type-A insulator by what the port is - white for
+      2.0, blue for 3.0. The part could only draw the blue one, so it grew a `usb2` skin and this
+      device asks for it. The photograph agrees as far as it can: the slot shows a pale tongue
+      against a dark opening, and nothing blue.
+  ports:
+    confidence: datasheet
+    note: >-
+      datasheet page 3 - "Dual 100GbE Ethernet (QSFP28)", "2x 1GB RJ45" management, "1x USB 2.0",
+      "RJ45 115.2 kbps" console. Confirmed on the hardware: the front photograph reads the three
+      jacks' own silkscreen as CON, MGMT and CTRL, which is the console plus the two management
+      ports the table counts. AND NOW STATED BY THE VENDOR IN PROSE, which is better than either:
+      the setup guide (www.maiaedge.io/getting-started) describes the face directly - the front
+      has "two windows where the ports are exposed"; the lefthand window has "two 100G interfaces,
+      numbered 0 and 1 from left to right"; and in the righthand window, "from left to right,
+      you'll find a USB port (not currently used), a serial console port, a 10/100/1000 management
+      port, and a 10/100/1000 control port". It calls MGMT "the PBC's center management port" and
+      CTRL "rightmost port in the right window". Every one of those matches what was modelled from
+      the photograph and the UI view; the ORDER of this face is no longer an inference. The
+      vendor's own word for the octagonal cutouts is `window`, which is what the decor already
+      calls them. Note the guide rates the two jacks 10/100/1000 where the table says 1GB, and
+      calls the USB port NOT CURRENTLY USED.
+  bezel:
+    confidence: estimated
+    note: >-
+      ESTIMATED shape, from photographs. The front face is a formed bezel, not a flat plate: it
+      slopes out to a raised band running the full width and slopes back, and two OCTAGONAL
+      windows are cut through it to the faceplate behind, each edged with a raised bead in the
+      vendor's amber. The right-hand end of the right window is the only window end unobstructed
+      by cabling in any photograph held, and is what the chamfer was read from. `shape: octagon`
+      was added to the format for this - decor and cutouts could draw a rectangle, a rounded
+      rectangle, a D-sub shell and a stadium slot, and an octagon had no shape to be.
+  louvres:
+    confidence: photo-measured
+    note: >-
+      photo-measured (COUNT ONLY) - each window carries a grid of short horizontal slots, EIGHT
+      ROWS DEEP AND FIVE COLUMNS ACROSS, counted on the rack photograph and confirmed by the
+      maintainer against the hardware. One column of the left window, isolated and
+      contrast-normalised, reads eight slots between the beads; the unobstructed band above the
+      transceivers reads four ribs, so five columns. The PITCH IS NOT MEASURED: it is those counts
+      divided into the window as modelled, and the window itself is estimated. What the count
+      corrects is a shape, not a dimension - the marketing render draws the field as full-width
+      louvres and the first draft copied it, so this face wore a texture the hardware does not
+      have.
+  port-lamps:
+    note: >-
+      field knowledge (the maintainer, 2026-09-15), corroborated NEGATIVELY by both sources held -
+      ONE lamp per 100G port. The photograph shows the louvres running straight up to the cage
+      flange with no lamp band above it, and the vendor's UI view draws each port with nothing
+      above it either; neither shows where the one lamp sits, because the transceivers' pull tabs
+      cover that corner. So the COUNT is the maintainer's and the POSITION is estimated. This is
+      why the plain common/qsfp-cage@2 is fitted rather than common/qsfp28-cage@3, whose four
+      lamps belong to the AS7726-32X's panel by its own provenance and are not a property of any
+      cage.
+  layout:
+    confidence: estimated
+    note: >-
+      ESTIMATED, AND THE WORD IS EXACT. The ORDER and GROUPING of everything on the front face are
+      read off photographs of a unit in service (see gaps `front-positions`); the POSITIONS are a
+      plausible arrangement consistent with them and with each component's own size. No position
+      here is a measurement. The one position that is better than that is the chassis status lamp:
+      the photograph puts it unambiguously in the notch outside the right window's lower-right
+      chamfer, and it is placed against that edge rather than against a coordinate.
+  rear:
+    confidence: photo-measured
+    note: >-
+      photo-measured (count and pitch only) - two supply modules and five 40 mm fans, read off the
+      rear photographs. The fan pitch is the one figure on this device that a photograph did
+      settle: five fans span 203.9 mm on a scale anchored to the 437.90 mm chassis width, giving
+      40.8 mm each against common/fan-module-41's known 40.9 - 0.2% out, which is what a sound
+      scale looks like. Every other rear figure is a position and is estimated.
+  power:
+    confidence: datasheet
+    note: >-
+      datasheet page 3 - "Internal: AC, DC" with "Redundant Power Supply: Yes". The 550W
+      per-supply figure is photo-measured: both modules carry a blue 550W label. The datasheet
+      states no chassis draw, so none is recorded and L27 stands.
+  thermal:
+    confidence: datasheet
+    note: >-
+      datasheet page 3 - "Internal fan-based forced-air cooling. Front-to-Back (F2B) - intake at
+      front bezel / port side, exhaust at rear (fan/PSU side)."
+
 attrs:
   physical:
     weight-kg: 4.31

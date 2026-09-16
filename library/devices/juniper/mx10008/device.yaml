@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx10008
-version: 1.0.11
+version: 1.0.12
 maturity: modelled
 manufacturer: Juniper
 model: MX10008
@@ -16,29 +16,44 @@ description: >-
   two tall fan trays covering the Switch Interface Boards.
 profile: networking
 provenance:
-  sources: MX10008 Hardware Guide,
-    the MX10008/MX10016 5G datasheet, the front studio photograph and the
-    rear line drawing g050553
-  chassis: 'datasheet-table - 22.6 x 17.4 x 32 in (574 x 442 x 813 mm
-    chassis only), 13U; flange extends the rack face to 19 in. Ears NOT
-    MODELLED by convention'
-  front: 'photo - the front photograph at ~2.99 px/mm across the 442 mm
-    body: badge strip 0-21, RCB slots at y 22.0 and 60.1 (1.5 in slot
-    height as MX10004), service band to y 117, line-card banks at
-    y 117.0 + i*48.4 and y 317.6 + i*48.4 with the thin divider between
-    them; positions approximate to ~2 mm'
-  slot-numbering: 'guide - FPC 0-7 top-down (the CLI terminology table
-    maps FPC n, n 0-7, to the slots); the photograph''s slot labels are
-    not legible, so top-down follows the family convention'
-  rear: 'drawing - g050553 (isometric, fractions only): one six-high
-    stack of JNP10K-PWR supplies at the left, two tall fan trays right.
-    The MX10008 rear has no usable photograph in the intake - see gaps'
-  power: 'datasheet-table - JNP10K-PWR-AC2 5.5 kW each as the MX10004;
-    the guide also lists the AC3 unit (gap)'
-  color: 'photo - dark grey chassis, silver card faces, light-blue
-    levers and accent line (as MX10004)'
-  other-faces: 'near-blank by evidence - rail bands estimated; axis
-    conventions per viewer3d.js as the siblings'
+  sources:
+    note: >-
+      MX10008 Hardware Guide, the MX10008/MX10016 5G datasheet, the front studio photograph and
+      the rear line drawing g050553
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet-table - 22.6 x 17.4 x 32 in (574 x 442 x 813 mm chassis only), 13U; flange extends
+      the rack face to 19 in. Ears NOT MODELLED by convention
+  front:
+    note: >-
+      photo - the front photograph at ~2.99 px/mm across the 442 mm body: badge strip 0-21, RCB
+      slots at y 22.0 and 60.1 (1.5 in slot height as MX10004), service band to y 117, line-card
+      banks at y 117.0 + i*48.4 and y 317.6 + i*48.4 with the thin divider between them; positions
+      approximate to ~2 mm
+  slot-numbering:
+    note: >-
+      guide - FPC 0-7 top-down (the CLI terminology table maps FPC n, n 0-7, to the slots); the
+      photograph's slot labels are not legible, so top-down follows the family convention
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - g050553 (isometric, fractions only): one six-high stack of JNP10K-PWR supplies at
+      the left, two tall fan trays right. The MX10008 rear has no usable photograph in the intake
+      - see gaps
+  power:
+    confidence: datasheet
+    note: >-
+      datasheet-table - JNP10K-PWR-AC2 5.5 kW each as the MX10004; the guide also lists the AC3
+      unit (gap)
+  color:
+    note: >-
+      photo - dark grey chassis, silver card faces, light-blue levers and accent line (as MX10004)
+  other-faces:
+    note: >-
+      near-blank by evidence - rail bands estimated; axis conventions per viewer3d.js as the
+      siblings
+
 attrs:
   physical:
     weight-empty-kg: 65.86

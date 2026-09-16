@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: as7326-56x
-version: 2.0.5
+version: 2.0.6
 maturity: modelled
 manufacturer: Edgecore
 model: AS7326-56X
@@ -12,50 +12,88 @@ portfolio:
 description: 48x SFP28 + 8x QSFP28 1U ToR switch, Broadcom Trident 3 (BCM56873)
 profile: networking
 provenance:
-  attrs: datasheet (Ports/Key-Components/Performance/Power/Physical sections)
-  chassis: datasheet (Dimensions WxDxH 43.84 x 53.6 x 4.35 cm; Weight 10 kg)
-  port-arrangement: 3 rows x 16 columns confirmed on the physical unit by the owner. The datasheet
-    panel figure is a marketing render whose column widths do not reconcile - 24 columns would need
-    342mm and leave no room for the mgmt block
-  port-pitch: standard - SFP columns on the SFF-8433 basic 14.25, QSFP on the 19.0 measured from
-    TE 2322551-4. The datasheet figure measures 14.45, the same ~1.4 percent scale error the S9510
-    HIG figure carried, so the standards are used rather than the figure
-  port-row-pitch: estimated (~14.5-15.0 to fit three rows in the 43.5mm face; the belly-to-belly
-    reference from TE 2007562-6 is 15.0) - verify with calipers
-  rear-layout: datasheet figure (PSU2 | 6 fans | PSU1, grounding point each end), geometry reused
-    from the AS7726-32X which shares this chassis width
-  faceplate-structure: described by the owner from the unit - top two SFP rows are 2x4 ganged belly-to-belly
-    assemblies, bottom row is 1x2 ganged in the same orientation as row 2. Visible seams measure
-    every 2 columns (~33mm), so the drawn column geometry is unchanged by that grouping; the 2x4
-    spans two visual pairs. Link/activity arrows sit in the belly-to-belly gap of rows 1-2, three
-    per column (up = row 1, down = row 2, right-hand down = row 3), and the port numbers appear
-    ONCE per column between rows 2 and 3 as N-up / N+1-down / N+2-down - no other SFP row carries
-    numbers
-  qsfp-structure: owner + IMG_2141 - belly-to-belly pairs labelled between the two ports of a column.
-    The columns form two groups of two with roughly twice the separation between groups. Above the
-    block each column carries two rows of four lane LEDs (L1-L4), the upper row belonging to the
-    upper port, with the port number at the left of each row - the photo shows this directly
-  mgmt-block: owner - the two 10G ports are a 1x2 belly-to-belly gang with arrow LEDs between them
-    and their label below the lower one, USB-A beneath that; the RJ45 pair is top-to-top (latches
-    facing away from each other, not toward) with a USB-C below and the pull-out tab under that
-    stack. The 10G pair is ports 57/58. The SFP-to-QSFP gap is ~21mm, just over one QSFP port width
-  mgmt-positions: estimated from IMG_2141 (racked front)
-  status-led-labels: 'drawing + photo - DIAG, LOC, PS1, PS2 and FAN are printed to the LEFT
-    of their lamps and level with them, not beneath them: the datasheet page-2 System LEDs
-    callout and IMG_2141 agree, and the same layout is visible on the S9510-28DC lamp stack.
-    Right-anchored 1.3mm clear of the lamp column at x 9.2, with each baseline on its lamp
-    centre. They were left-anchored at 12.5 under the lamps, which put DIAG into port-1'
-  psu-fan-reuse: the AC PSU FRU part numbers (F0TZZ5654019A / F0TZZ5654020A) are identical to the
-    AS7726-32X, so common/psu-ac-650 is the same physical module
-  top-bottom-sides: extrapolated from the AS7726-32X, which shares this chassis line and its width
-    and height, restretched to the 536mm depth. Top grooves and the centre access plate are from
-    IMG_2129; the bottom labels from IMG_2130. Side screw and vent positions are NOT measured -
-    reshoot on a bench to confirm
-  entity-and-interfaces: read from the live unit (ArcOS S8.5.1A, netlab-leaf1) via 'show components
-    | display json' and 'show interface brief'. Chassis serial, MAC and every per-transceiver serial
-    are redacted from the committed dump
-  port-count-note: ArcOS presents swp1-swp56 only. The faceplate labels the 10G management pair
-    57/58, but they are not ASIC switch ports - no swp57/58 exists
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet (Ports/Key-Components/Performance/Power/Physical sections)
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet (Dimensions WxDxH 43.84 x 53.6 x 4.35 cm; Weight 10 kg)
+  port-arrangement:
+    note: >-
+      3 rows x 16 columns confirmed on the physical unit by the owner. The datasheet panel figure
+      is a marketing render whose column widths do not reconcile - 24 columns would need 342mm and
+      leave no room for the mgmt block
+  port-pitch:
+    note: >-
+      standard - SFP columns on the SFF-8433 basic 14.25, QSFP on the 19.0 measured from TE
+      2322551-4. The datasheet figure measures 14.45, the same ~1.4 percent scale error the S9510
+      HIG figure carried, so the standards are used rather than the figure
+  port-row-pitch:
+    confidence: estimated
+    note: >-
+      estimated (~14.5-15.0 to fit three rows in the 43.5mm face; the belly-to-belly reference
+      from TE 2007562-6 is 15.0) - verify with calipers
+  rear-layout:
+    confidence: datasheet
+    note: >-
+      datasheet figure (PSU2 | 6 fans | PSU1, grounding point each end), geometry reused from the
+      AS7726-32X which shares this chassis width
+  faceplate-structure:
+    note: >-
+      described by the owner from the unit - top two SFP rows are 2x4 ganged belly-to-belly
+      assemblies, bottom row is 1x2 ganged in the same orientation as row 2. Visible seams measure
+      every 2 columns (~33mm), so the drawn column geometry is unchanged by that grouping; the 2x4
+      spans two visual pairs. Link/activity arrows sit in the belly-to-belly gap of rows 1-2,
+      three per column (up = row 1, down = row 2, right-hand down = row 3), and the port numbers
+      appear ONCE per column between rows 2 and 3 as N-up / N+1-down / N+2-down - no other SFP row
+      carries numbers
+  qsfp-structure:
+    note: >-
+      owner + IMG_2141 - belly-to-belly pairs labelled between the two ports of a column. The
+      columns form two groups of two with roughly twice the separation between groups. Above the
+      block each column carries two rows of four lane LEDs (L1-L4), the upper row belonging to the
+      upper port, with the port number at the left of each row - the photo shows this directly
+  mgmt-block:
+    note: >-
+      owner - the two 10G ports are a 1x2 belly-to-belly gang with arrow LEDs between them and
+      their label below the lower one, USB-A beneath that; the RJ45 pair is top-to-top (latches
+      facing away from each other, not toward) with a USB-C below and the pull-out tab under that
+      stack. The 10G pair is ports 57/58. The SFP-to-QSFP gap is ~21mm, just over one QSFP port
+      width
+  mgmt-positions:
+    confidence: estimated
+    note: >-
+      estimated from IMG_2141 (racked front)
+  status-led-labels:
+    confidence: drawing
+    note: >-
+      drawing + photo - DIAG, LOC, PS1, PS2 and FAN are printed to the LEFT of their lamps and
+      level with them, not beneath them: the datasheet page-2 System LEDs callout and IMG_2141
+      agree, and the same layout is visible on the S9510-28DC lamp stack. Right-anchored 1.3mm
+      clear of the lamp column at x 9.2, with each baseline on its lamp centre. They were
+      left-anchored at 12.5 under the lamps, which put DIAG into port-1
+  psu-fan-reuse:
+    note: >-
+      the AC PSU FRU part numbers (F0TZZ5654019A / F0TZZ5654020A) are identical to the AS7726-32X,
+      so common/psu-ac-650 is the same physical module
+  top-bottom-sides:
+    note: >-
+      extrapolated from the AS7726-32X, which shares this chassis line and its width and height,
+      restretched to the 536mm depth. Top grooves and the centre access plate are from IMG_2129;
+      the bottom labels from IMG_2130. Side screw and vent positions are NOT measured - reshoot on
+      a bench to confirm
+  entity-and-interfaces:
+    note: >-
+      read from the live unit (ArcOS S8.5.1A, netlab-leaf1) via 'show components | display json'
+      and 'show interface brief'. Chassis serial, MAC and every per-transceiver serial are
+      redacted from the committed dump
+  port-count-note:
+    note: >-
+      ArcOS presents swp1-swp56 only. The faceplate labels the 10G management pair 57/58, but they
+      are not ASIC switch ports - no swp57/58 exists
+
 attrs:
   performance:
     switching-capacity: 2 Tbps (4 Tbps full duplex)

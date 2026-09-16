@@ -99,3 +99,4 @@ a test fails when this page and the linter disagree. A finding prints as
 | L90 | device | a manifest's top-level keys read in the canonical order | reorder them; the message prints the order, and docs/device-template.yaml is written in it |
 | L91 | device | airflow is stated once - on the chassis, and on a configuration only where it differs | move it to `chassis.airflow`, or drop the configuration's copy |
 | L92 | component | a part's size says where it came from | add a `size:` provenance note; the key for a size is `size`, not a sentence about it |
+| L93 | device | a provenance entry says how the figure is known, not only where it was read | add `confidence:` beside the note, from the eight words in the confidence enum |

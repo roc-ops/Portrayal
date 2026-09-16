@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: as7946-74xksb
-version: 3.0.8
+version: 3.0.9
 maturity: modelled
 manufacturer: Edgecore
 model: AS7946-74XKSB
@@ -14,176 +14,262 @@ description: Edgecore AGR420 (AS7946-74XKSB) 25GbE aggregation router. 2RU, 74 f
   PSUs and 4+1 redundant fans.
 profile: networking
 provenance:
-  sources: datasheet AGR420-AS7946-74XKSB-DS-R03 and quick start guide AS7946-74XKSB-QSG-R03,
-    both Edgecore, plus six photographs of a real unit (IMG_6807 front, 6808 top, 6809 rear,
-    6810 left, 6811 right, 6812 bottom) and Edgecore's stock renders. No mechanical drawing
-    was available
-  chassis: 'datasheet - "Dimensions (WxDxH): 440 mm x 480 mm x 87 mm (2RU)". The QSG Chassis
-    section gives the same 440 x 480 x 87 mm (17.3 x 18.9 x 3.4 in), so unlike the AGR400 the
-    two Edgecore documents agree and no disagreement has to be carried'
-  depth: 'measured - 480 mm, and the AGR400 model''s 524 mm is believed WRONG. The AGR400 and
-    the AGR420 are the SAME SHELL, not two shells: the bottom pans in IMG_6792 (AGR400) and
-    IMG_6812 (AGR420) are the same stamping - the same dimple pattern, the same PSU and fan
-    cut-out at one corner, the same rivet lines - and the top, side and rear metalwork matches
-    as well. One shell can only have one depth. Three of the four Edgecore documents say 480
-    (both AGR420 documents and the AGR400 datasheet); only the AGR400 quick start guide says
-    524, and that is the outlier. It is not an over-handles figure either: the rear PSU and fan
-    handles project about 17 mm past the rear panel, photo-measured in IMG_6810, not the 44 mm
-    the difference would need. This model uses 480 for every face. The AGR400 model still
-    carries 524 and should be corrected to match'
-  scale: drawing - the datasheet page-2 Interfaces figures are orthographic. The front panel
-    measures 3947 x 775 px on a 600 dpi render, an aspect of 5.093 against the datasheet 440/87
-    = 5.057, a 0.7 percent match; the rear measures 3943 x 772, an aspect of 5.108. Both carry
-    geometry, and everything below is measured off them at 8.9705 px/mm across and 8.9080 px/mm
-    down
-  ru: datasheet - 87 mm is 2 RU
-  color: photo - the same dark grey painted steel as the AGR400, which is the same shell
-  ports: 'drawing - four cage rows whose tops sit at panel y 14.6, 31.3, 44.3 and 61.0. The
-    QSFP-DD pair occupies the middle two rows in a single column at x 16.1; the eight QSFP28
-    sit in two abutting columns at x 44.6 and 63.1, four rows deep; the 64 SFP28 sit in four
-    blocks of four columns, the blocks starting at x 90.35, 156.32, 222.29 and 288.26 on a
-    65.97 mm pitch and the columns inside each block on a 14.25 mm pitch, which is exactly the
-    std/sfp-ganged footprint - ganged cages abut'
-  port-count: 'datasheet - callouts 1 to 3 on the page-2 figure: 2 x 100G QSFP-DD, 8 x 100G
-    QSFP28, 64 x 25GE SFP28. 2 + 8 + 64 = 74, matching the model number'
-  port-numbering: 'drawing - the pair legends read "N up down M" with the up arrow belonging to
-    the LEFT number and the down arrow to the right, the same convention as the AGR400, read at
-    7x on the 600 dpi render. Numbering runs down each column four at a time: ports 0-1 are the
-    QSFP-DD, 2-5 the left QSFP28 column and 6-9 the right, then the SFP28 run 10-73 block by
-    block and column by column. The last legend, 72 up down 73, is legible on the real device in
-    IMG_6807 at the bottom right, which confirms the scheme end to end'
-  port-0-1-legend: 'drawing + photo - the 0 up down 1 legend is NOT in the top band with
-    the others. The QSFP-DD column stands alone at the left, and the datasheet page-2 front
-    figure and IMG_6807 both show its legend printed on the metal step between the air
-    filter and the top aperture, not above the filter. Placed at baseline 30.20, which is
-    the same 1.10mm above the aperture that every other column on this panel uses; the
-    step edge measures 27.1 in the photograph against the 27.2 this model already had, so
-    the band it sits in is 4.1mm tall and the glyphs clear both edges. It was at 13.50,
-    under filter-top-step, where nothing could read it'
-  port-cutouts: 'drawing - one cutout per aperture, 74 of them, sized from the module footprint
-    rather than the registry aperture because ganged cages abut: 18.5 x 9.58 for QSFP and
-    14.25 x 10.4 for SFP28. The registry apertures (19.0 x 10.0 and 14.5 x 10.0) are single-port
-    figures and would overlap at the measured 14.25 mm pitch'
-  port-leds: 'drawing plus datasheet - the QSG Front LEDs section gives two LEDs per port on all
-    three families, and the ARRANGEMENT DIFFERS BY FAMILY. QSFP-DD: LED1 top, LED2 bottom, a
-    stacked pair OUTSIDE the block at x 12.6, at y 36.6/39.7 for port 0 and 45.6/48.7 for port 1.
-    QSFP28 and SFP28: LED1 left, LED2 right, as arrow-shaped light pipes in the white strip
-    BETWEEN the two rows of a pair - centres at column x + 1.35, 3.75, 13.55, 15.95 for QSFP28
-    and + 1.95, 4.85, 8.85, 11.75 for SFP28, on strips centred at panel y 28.4 and 57.8. Within
-    each pair of marks the DOWN arrow serves the port below the strip and the UP arrow the port
-    above it, so a strip carries four lamps for two ports. The strip is 6.4 mm tall and the marks
-    were read at 7x before being assigned. The QSFP28 offsets are nudged 0.15 mm apart from the
-    1.50/3.45/13.70/15.70 that were read off the render, because common/led-arrow-sm is 2.25 mm
-    wide and two lamps 1.95 mm apart overlap; 0.15 is well inside the +/- 0.3 mm this figure
-    can be read to'
-  led-states: 'QSG Front LEDs section, callouts 1 to 5, re-read off the guide rather than
-    trusted from the transcription. Every lens carries its function in attrs and its state
-    vocabulary in structured states:, declared on the GROUP where a block shares one - two
-    QSFP-DD speed lamps, eight QSFP28 speed lamps, sixty-four SFP28 speed lamps, ten QSFP link
-    lamps and sixty-four SFP28 link lamps - and on the placement where it does not, which here
-    is LOC and the management activity lamp. The sentence the guide prints sits beside them in
-    description:. This was previously prose in attrs: {states: ...} on all 148 lamps, which no
-    tool could read: the Explorer refuses a data-states value that is not a list of tokens, so
-    what reached the chips was led-dot''s generic off/on and the real 25G/10G vocabulary reached
-    nobody. Three corrections from the re-read. LOC "flashes Amber when the command is
-    activated" - the word "locate" was the modeller''s gloss, the same slip the AGR400 had, and
-    "flashes" is a behaviour the prose had dropped. The management lamps are given NO colour by
-    the guide - "Left (link), Right (activity)" is all it says - where the attrs claimed "Lit =
-    link"; nothing is declared for the link lamp rather than inventing one. And the QSFP link
-    lamp''s Off is a MEANING here, "not all lanes linked", where the AGR400 lights that same
-    condition Red - the two sisters genuinely differ'
-  mgmt-block: 'drawing - a ganged 2x2 RJ-45 block at 356.0/372.3 by 14.4/28.2 carrying BITS 0 and
-    BITS 2 above and BITS 1 and PPS/TOD below; two SMB jacks at x 393.6 and 394.1; USB Type A on
-    its side centred at 407.2, 33.6; MGMT and CONSOLE 1 RJ-45s at 413.5; a micro-USB CONSOLE 0 at
-    402.9, 44.4 and a recessed RST button at 394.8, 44.6. The block is within 2 mm of the AGR400''s
-    in every position, which is what a shared shell predicts'
-  rj45-orientation: drawing - BITS 0, BITS 2, MGMT and CONSOLE 1 are keyway-UP; only BITS 1 and
-    PPS/TOD, the lower row of the ganged block, are keyway-down. A 2-high ganged jack mirrors its
-    rows so both release tabs stay reachable. std/rj45 draws keyway-down, so the other four carry
-    rotate 180
-  rj45-choice: the maintainer - use std/ before common/. std/rj45 is the IEC 60603-7 aperture; the
-    hand-drawn common/rj45-shielded puts its integrated LEDs on the contacts side, which no real
-    jack does. Five jacks are std/rj45@2; MGMT is common/rj45-eth@1, with its two LEDs as
-    mgmt-eth/led-a and led-b
-  status-leds: drawing - DIAG, LOC, FAN, PS0 and PS1 on a 4.75 mm pitch beneath the timing block
-    at y 45.0, legends beneath them at 48.9
-  filters: 'drawing plus photo - the AGR420 front carries a top and a bottom air filter, and
-    NEITHER is the AGR400 part. Checked before assuming, as asked: edgecore/agr-filter-top@1 is
-    353.5 mm wide against the 417 needed here, and it is stepped for the AGR400''s TWO QSFP-DD
-    blocks where this front has ONE, at the left. Three new components were drawn -
-    agr420-filter-top (417.0 x 8.6 at panel 12.5, 1.0), agr420-filter-bottom (399.5 x 9.0 at
-    12.5, 77.5) and agr420-filter-step (25.5 x 16.5, placed twice, at 12.5, 10.7 and 12.5, 61.0).
-    Each physical filter is ONE part with a stepped frame and appears as two placements: a
-    placement is a bounding rectangle to both the renderer and lint rule L13, so a single 26 mm
-    stepped box would read as sitting on top of the sixteen ports it steps around. Both halves
-    carry group `filters` and their descriptions say which whole they belong to'
-  rear: 'drawing plus the maintainer - two stacked PSU bays at the left, a grounding landing, then five
-    fan bays. The PSU pair is placed from THIS device''s figure, not the AGR400''s: both Edgecore
-    datasheet rear figures put the PSU block''s left edge at panel x 13-14 (12.82 on the AGR400
-    page, 14.06 here), while the AGR400 model has it at 6.26 measured off that router''s QSG, and
-    at 6.26 the PSU0/PSU1 legend would be printed under the bay. The bays here start at 11.5 and
-    the grounding plate moves right to 71.8, which is where IMG_6809 and the figure both put it.
-    The AGR400 rear should be re-checked'
-  psu-width: 'CARRIED FORWARD, not resolved - edgecore/agr-psu-dc@1 and agr-psu-ac@1 are 60.1 mm
-    wide, and the callout box drawn round the PSU pair measures 57.9 mm on the AGR400 datasheet
-    page and 53.6 mm here. The component may be a little over. It is reused unchanged because
-    the maintainer confirmed both platforms take the same PSU and narrowing it would silently move the
-    AGR400; the disagreement is recorded rather than acted on'
-  fans: 'drawing plus the maintainer - the fan bays keep the AGR400 geometry, 69.4 mm square on a 70.4 mm
-    pitch. This figure reads 68.5 mm pitch, 2.7 percent smaller, which is inside figure error, and
-    the AGR400 number has the stronger derivation - it is the only size that is both square, as
-    the photographs show, and fits its measured pitch. Overlaid at matched scale the five bays
-    land on the reference'
-  panel-screws: 'drawing - four captive slotted thumb screws about 8.4 mm across at the panel
-    corners, Hough-detected at (5.8, 13.5), (5.8, 73.6) and (433.9, 5.8); the fourth, at
-    (433.9, 81.2), is hidden behind a callout arrow in the figure and is taken from IMG_6807 and
-    from the symmetry of the other three. common/screw-head is 3.6 mm and reads as a machine
-    screw at this size, so edgecore/agr-panel-screw was drawn for them'
-  indicators: 'the five system LEDs and the RST button carry no `for:` and lint warns (L19).
-    That is correct here and matches the AGR400: DIAG and LOC are chassis-wide, and PS0/PS1
-    annotate psu-0 and psu-1, which are bays in the REAR view - L14 requires a `for:` target in
-    the SAME view, so naming them would trade a warning for an error'
-  fan-labels: photo - the datasheet figure prints FAN 4 to FAN 0 vertically beside each bay. The
-    real device (IMG_6809) prints them horizontally BELOW each bay with an airflow arrow to their
-    left, the same as the AGR400. The real device wins
-  grounding: photo - an IEC earth symbol with a two-hole plate beneath it, immediately right of
-    the PSU bays, visible in IMG_6809. edgecore/agr-ground-plate@1 draws exactly this
-  airflow: datasheet - both listed SKUs are front-to-back
-  other-faces: 'photo - all four remaining faces were photographed and are modelled from those
-    shots, not left blank. Top (IMG_6808): two rectangular labels near the front right and a
-    caution notice at the rear left. Bottom (IMG_6812): rivets and formed dimples in five columns,
-    no labels. Sides (IMG_6810 left, IMG_6811 right): a cluster of eight rack-bracket holes near
-    the front and rivets along the length. Positions are photo-measured against the 440 mm width
-    and the 480 mm depth and are approximate - none of these shots is orthographic'
-  labels: 'photo - RECTANGULAR. common/device-label is an oval recess belonging to another
-    platform and is deliberately not used. The artwork is placeholder blocks: the real serial,
-    SKU and MAC addresses are legible in IMG_6808 and are NOT transcribed'
-  spec-table: datasheet - silicon, external TCAM, CPU, memory, flash, SSD, BMC, capacity, timing,
-    power and environmentals transcribed into attrs. Where the datasheet and the QSG disagree -
-    weight 16 vs 15.3 kg, max power 692 vs 527/723 W - both numbers are carried rather than one
-    being silently chosen
-  part-numbers: datasheet Ordering Information - AS7946-74XKSB-O-DC-F is FNPEC7946007Z and
-    AS7946-74XKSB-O-AC-F is FNPEC7946008Z
-  top-view-orientation: 'the top and bottom views put y = 0 at the REAR, following the AGR400,
-    whose caution label sits at y 26 and is described there as being at the rear left. The
-    photographs agree with that reading: in IMG_6808 the caution notice is at the end with the
-    DC terminals and the spec and serial labels at the end with the front thumb screws'
-  audit-by-name: 'gate 5 - all thirteen datasheet page-2 callouts walked and satisfied. 1 ->
-    port-0/1; 2 -> port-2..9; 3 -> port-10..73; 4 -> bits-0/1/2; 5 -> mhz-10-in; 6 -> usb;
-    7 -> mgmt-eth with mgmt-eth/led-a and mgmt-eth/led-b; 8 -> console-1; 9 -> pps-tod;
-    10 -> pps-1-out; 11 -> console-0; 12 -> psu-0/psu-1 bays with dc-psu and ac-psu
-    configurations; 13 -> fan-0..fan-4. From the QSG on top of those: the grounding point ->
-    ground-plate, the reset button -> reset, the five system LEDs -> led-diag/loc/fan/ps0/ps1,
-    and the Air Filter Replacement procedure -> filter-top, filter-top-step, filter-bottom-step
-    and filter-bottom. From the photographs: four corner captive screws -> panel-screw-0..3, and
-    the top-cover labels -> label-spec, label-serial, label-caution. 324 placements and bays in
-    all, 74 ports and 148 port lamps among them. Nothing in either document is unaccounted for'
-  audit-by-eye: 'gate 5 - the front and rear were rendered at the reference figure''s own px/mm
-    (3947 and 3943 px wide) and compared strip by strip against it. Every cage row, every block
-    gap, every pair legend and every LED strip lands on the reference; the numbering was
-    confirmed as far out as the 36/37 legend rather than being trusted from block A alone. Two
-    things were moved because of this pass and not before it: the rear PSU pair and grounding
-    plate, and the top filter''s left thumb screw'
+  sources:
+    confidence: datasheet
+    note: >-
+      datasheet AGR420-AS7946-74XKSB-DS-R03 and quick start guide AS7946-74XKSB-QSG-R03, both
+      Edgecore, plus six photographs of a real unit (IMG_6807 front, 6808 top, 6809 rear, 6810
+      left, 6811 right, 6812 bottom) and Edgecore's stock renders. No mechanical drawing was
+      available
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - "Dimensions (WxDxH): 440 mm x 480 mm x 87 mm (2RU)". The QSG Chassis section
+      gives the same 440 x 480 x 87 mm (17.3 x 18.9 x 3.4 in), so unlike the AGR400 the two
+      Edgecore documents agree and no disagreement has to be carried
+  depth:
+    confidence: measured
+    note: >-
+      measured - 480 mm, and the AGR400 model's 524 mm is believed WRONG. The AGR400 and the
+      AGR420 are the SAME SHELL, not two shells: the bottom pans in IMG_6792 (AGR400) and IMG_6812
+      (AGR420) are the same stamping - the same dimple pattern, the same PSU and fan cut-out at
+      one corner, the same rivet lines - and the top, side and rear metalwork matches as well. One
+      shell can only have one depth. Three of the four Edgecore documents say 480 (both AGR420
+      documents and the AGR400 datasheet); only the AGR400 quick start guide says 524, and that is
+      the outlier. It is not an over-handles figure either: the rear PSU and fan handles project
+      about 17 mm past the rear panel, photo-measured in IMG_6810, not the 44 mm the difference
+      would need. This model uses 480 for every face. The AGR400 model still carries 524 and
+      should be corrected to match
+  scale:
+    confidence: drawing
+    note: >-
+      drawing - the datasheet page-2 Interfaces figures are orthographic. The front panel measures
+      3947 x 775 px on a 600 dpi render, an aspect of 5.093 against the datasheet 440/87 = 5.057,
+      a 0.7 percent match; the rear measures 3943 x 772, an aspect of 5.108. Both carry geometry,
+      and everything below is measured off them at 8.9705 px/mm across and 8.9080 px/mm down
+  ru:
+    confidence: datasheet
+    note: >-
+      datasheet - 87 mm is 2 RU
+  color:
+    note: >-
+      photo - the same dark grey painted steel as the AGR400, which is the same shell
+  ports:
+    confidence: drawing
+    note: >-
+      drawing - four cage rows whose tops sit at panel y 14.6, 31.3, 44.3 and 61.0. The QSFP-DD
+      pair occupies the middle two rows in a single column at x 16.1; the eight QSFP28 sit in two
+      abutting columns at x 44.6 and 63.1, four rows deep; the 64 SFP28 sit in four blocks of four
+      columns, the blocks starting at x 90.35, 156.32, 222.29 and 288.26 on a 65.97 mm pitch and
+      the columns inside each block on a 14.25 mm pitch, which is exactly the std/sfp-ganged
+      footprint - ganged cages abut
+  port-count:
+    confidence: datasheet
+    note: >-
+      datasheet - callouts 1 to 3 on the page-2 figure: 2 x 100G QSFP-DD, 8 x 100G QSFP28, 64 x
+      25GE SFP28. 2 + 8 + 64 = 74, matching the model number
+  port-numbering:
+    confidence: drawing
+    note: >-
+      drawing - the pair legends read "N up down M" with the up arrow belonging to the LEFT number
+      and the down arrow to the right, the same convention as the AGR400, read at 7x on the 600
+      dpi render. Numbering runs down each column four at a time: ports 0-1 are the QSFP-DD, 2-5
+      the left QSFP28 column and 6-9 the right, then the SFP28 run 10-73 block by block and column
+      by column. The last legend, 72 up down 73, is legible on the real device in IMG_6807 at the
+      bottom right, which confirms the scheme end to end
+  port-0-1-legend:
+    confidence: drawing
+    note: >-
+      drawing + photo - the 0 up down 1 legend is NOT in the top band with the others. The QSFP-DD
+      column stands alone at the left, and the datasheet page-2 front figure and IMG_6807 both
+      show its legend printed on the metal step between the air filter and the top aperture, not
+      above the filter. Placed at baseline 30.20, which is the same 1.10mm above the aperture that
+      every other column on this panel uses; the step edge measures 27.1 in the photograph against
+      the 27.2 this model already had, so the band it sits in is 4.1mm tall and the glyphs clear
+      both edges. It was at 13.50, under filter-top-step, where nothing could read it
+  port-cutouts:
+    confidence: drawing
+    note: >-
+      drawing - one cutout per aperture, 74 of them, sized from the module footprint rather than
+      the registry aperture because ganged cages abut: 18.5 x 9.58 for QSFP and 14.25 x 10.4 for
+      SFP28. The registry apertures (19.0 x 10.0 and 14.5 x 10.0) are single-port figures and
+      would overlap at the measured 14.25 mm pitch
+  port-leds:
+    confidence: drawing
+    note: >-
+      drawing plus datasheet - the QSG Front LEDs section gives two LEDs per port on all three
+      families, and the ARRANGEMENT DIFFERS BY FAMILY. QSFP-DD: LED1 top, LED2 bottom, a stacked
+      pair OUTSIDE the block at x 12.6, at y 36.6/39.7 for port 0 and 45.6/48.7 for port 1. QSFP28
+      and SFP28: LED1 left, LED2 right, as arrow-shaped light pipes in the white strip BETWEEN the
+      two rows of a pair - centres at column x + 1.35, 3.75, 13.55, 15.95 for QSFP28 and + 1.95,
+      4.85, 8.85, 11.75 for SFP28, on strips centred at panel y 28.4 and 57.8. Within each pair of
+      marks the DOWN arrow serves the port below the strip and the UP arrow the port above it, so
+      a strip carries four lamps for two ports. The strip is 6.4 mm tall and the marks were read
+      at 7x before being assigned. The QSFP28 offsets are nudged 0.15 mm apart from the
+      1.50/3.45/13.70/15.70 that were read off the render, because common/led-arrow-sm is 2.25 mm
+      wide and two lamps 1.95 mm apart overlap; 0.15 is well inside the +/- 0.3 mm this figure can
+      be read to
+  led-states:
+    note: >-
+      QSG Front LEDs section, callouts 1 to 5, re-read off the guide rather than trusted from the
+      transcription. Every lens carries its function in attrs and its state vocabulary in
+      structured states:, declared on the GROUP where a block shares one - two QSFP-DD speed
+      lamps, eight QSFP28 speed lamps, sixty-four SFP28 speed lamps, ten QSFP link lamps and
+      sixty-four SFP28 link lamps - and on the placement where it does not, which here is LOC and
+      the management activity lamp. The sentence the guide prints sits beside them in
+      description:. This was previously prose in attrs: {states: ...} on all 148 lamps, which no
+      tool could read: the Explorer refuses a data-states value that is not a list of tokens, so
+      what reached the chips was led-dot's generic off/on and the real 25G/10G vocabulary reached
+      nobody. Three corrections from the re-read. LOC "flashes Amber when the command is
+      activated" - the word "locate" was the modeller's gloss, the same slip the AGR400 had, and
+      "flashes" is a behaviour the prose had dropped. The management lamps are given NO colour by
+      the guide - "Left (link), Right (activity)" is all it says - where the attrs claimed "Lit =
+      link"; nothing is declared for the link lamp rather than inventing one. And the QSFP link
+      lamp's Off is a MEANING here, "not all lanes linked", where the AGR400 lights that same
+      condition Red - the two sisters genuinely differ
+  mgmt-block:
+    confidence: drawing
+    note: >-
+      drawing - a ganged 2x2 RJ-45 block at 356.0/372.3 by 14.4/28.2 carrying BITS 0 and BITS 2
+      above and BITS 1 and PPS/TOD below; two SMB jacks at x 393.6 and 394.1; USB Type A on its
+      side centred at 407.2, 33.6; MGMT and CONSOLE 1 RJ-45s at 413.5; a micro-USB CONSOLE 0 at
+      402.9, 44.4 and a recessed RST button at 394.8, 44.6. The block is within 2 mm of the
+      AGR400's in every position, which is what a shared shell predicts
+  rj45-orientation:
+    confidence: drawing
+    note: >-
+      drawing - BITS 0, BITS 2, MGMT and CONSOLE 1 are keyway-UP; only BITS 1 and PPS/TOD, the
+      lower row of the ganged block, are keyway-down. A 2-high ganged jack mirrors its rows so
+      both release tabs stay reachable. std/rj45 draws keyway-down, so the other four carry rotate
+      180
+  rj45-choice:
+    note: >-
+      the maintainer - use std/ before common/. std/rj45 is the IEC 60603-7 aperture; the
+      hand-drawn common/rj45-shielded puts its integrated LEDs on the contacts side, which no real
+      jack does. Five jacks are std/rj45@2; MGMT is common/rj45-eth@1, with its two LEDs as
+      mgmt-eth/led-a and led-b
+  status-leds:
+    confidence: drawing
+    note: >-
+      drawing - DIAG, LOC, FAN, PS0 and PS1 on a 4.75 mm pitch beneath the timing block at y 45.0,
+      legends beneath them at 48.9
+  filters:
+    confidence: drawing
+    note: >-
+      drawing plus photo - the AGR420 front carries a top and a bottom air filter, and NEITHER is
+      the AGR400 part. Checked before assuming, as asked: edgecore/agr-filter-top@1 is 353.5 mm
+      wide against the 417 needed here, and it is stepped for the AGR400's TWO QSFP-DD blocks
+      where this front has ONE, at the left. Three new components were drawn - agr420-filter-top
+      (417.0 x 8.6 at panel 12.5, 1.0), agr420-filter-bottom (399.5 x 9.0 at 12.5, 77.5) and
+      agr420-filter-step (25.5 x 16.5, placed twice, at 12.5, 10.7 and 12.5, 61.0). Each physical
+      filter is ONE part with a stepped frame and appears as two placements: a placement is a
+      bounding rectangle to both the renderer and lint rule L13, so a single 26 mm stepped box
+      would read as sitting on top of the sixteen ports it steps around. Both halves carry group
+      `filters` and their descriptions say which whole they belong to
+  rear:
+    confidence: drawing
+    note: >-
+      drawing plus the maintainer - two stacked PSU bays at the left, a grounding landing, then
+      five fan bays. The PSU pair is placed from THIS device's figure, not the AGR400's: both
+      Edgecore datasheet rear figures put the PSU block's left edge at panel x 13-14 (12.82 on the
+      AGR400 page, 14.06 here), while the AGR400 model has it at 6.26 measured off that router's
+      QSG, and at 6.26 the PSU0/PSU1 legend would be printed under the bay. The bays here start at
+      11.5 and the grounding plate moves right to 71.8, which is where IMG_6809 and the figure
+      both put it. The AGR400 rear should be re-checked
+  psu-width:
+    note: >-
+      CARRIED FORWARD, not resolved - edgecore/agr-psu-dc@1 and agr-psu-ac@1 are 60.1 mm wide, and
+      the callout box drawn round the PSU pair measures 57.9 mm on the AGR400 datasheet page and
+      53.6 mm here. The component may be a little over. It is reused unchanged because the
+      maintainer confirmed both platforms take the same PSU and narrowing it would silently move
+      the AGR400; the disagreement is recorded rather than acted on
+  fans:
+    confidence: drawing
+    note: >-
+      drawing plus the maintainer - the fan bays keep the AGR400 geometry, 69.4 mm square on a
+      70.4 mm pitch. This figure reads 68.5 mm pitch, 2.7 percent smaller, which is inside figure
+      error, and the AGR400 number has the stronger derivation - it is the only size that is both
+      square, as the photographs show, and fits its measured pitch. Overlaid at matched scale the
+      five bays land on the reference
+  panel-screws:
+    confidence: drawing
+    note: >-
+      drawing - four captive slotted thumb screws about 8.4 mm across at the panel corners,
+      Hough-detected at (5.8, 13.5), (5.8, 73.6) and (433.9, 5.8); the fourth, at (433.9, 81.2),
+      is hidden behind a callout arrow in the figure and is taken from IMG_6807 and from the
+      symmetry of the other three. common/screw-head is 3.6 mm and reads as a machine screw at
+      this size, so edgecore/agr-panel-screw was drawn for them
+  indicators:
+    note: >-
+      the five system LEDs and the RST button carry no `for:` and lint warns (L19). That is
+      correct here and matches the AGR400: DIAG and LOC are chassis-wide, and PS0/PS1 annotate
+      psu-0 and psu-1, which are bays in the REAR view - L14 requires a `for:` target in the SAME
+      view, so naming them would trade a warning for an error
+  fan-labels:
+    note: >-
+      photo - the datasheet figure prints FAN 4 to FAN 0 vertically beside each bay. The real
+      device (IMG_6809) prints them horizontally BELOW each bay with an airflow arrow to their
+      left, the same as the AGR400. The real device wins
+  grounding:
+    note: >-
+      photo - an IEC earth symbol with a two-hole plate beneath it, immediately right of the PSU
+      bays, visible in IMG_6809. edgecore/agr-ground-plate@1 draws exactly this
+  airflow:
+    confidence: datasheet
+    note: >-
+      datasheet - both listed SKUs are front-to-back
+  other-faces:
+    note: >-
+      photo - all four remaining faces were photographed and are modelled from those shots, not
+      left blank. Top (IMG_6808): two rectangular labels near the front right and a caution notice
+      at the rear left. Bottom (IMG_6812): rivets and formed dimples in five columns, no labels.
+      Sides (IMG_6810 left, IMG_6811 right): a cluster of eight rack-bracket holes near the front
+      and rivets along the length. Positions are photo-measured against the 440 mm width and the
+      480 mm depth and are approximate - none of these shots is orthographic
+  labels:
+    note: >-
+      photo - RECTANGULAR. common/device-label is an oval recess belonging to another platform and
+      is deliberately not used. The artwork is placeholder blocks: the real serial, SKU and MAC
+      addresses are legible in IMG_6808 and are NOT transcribed
+  spec-table:
+    confidence: datasheet
+    note: >-
+      datasheet - silicon, external TCAM, CPU, memory, flash, SSD, BMC, capacity, timing, power
+      and environmentals transcribed into attrs. Where the datasheet and the QSG disagree - weight
+      16 vs 15.3 kg, max power 692 vs 527/723 W - both numbers are carried rather than one being
+      silently chosen
+  part-numbers:
+    confidence: datasheet
+    note: >-
+      datasheet Ordering Information - AS7946-74XKSB-O-DC-F is FNPEC7946007Z and
+      AS7946-74XKSB-O-AC-F is FNPEC7946008Z
+  top-view-orientation:
+    note: >-
+      the top and bottom views put y = 0 at the REAR, following the AGR400, whose caution label
+      sits at y 26 and is described there as being at the rear left. The photographs agree with
+      that reading: in IMG_6808 the caution notice is at the end with the DC terminals and the
+      spec and serial labels at the end with the front thumb screws
+  audit-by-name:
+    note: >-
+      gate 5 - all thirteen datasheet page-2 callouts walked and satisfied. 1 -> port-0/1; 2 ->
+      port-2..9; 3 -> port-10..73; 4 -> bits-0/1/2; 5 -> mhz-10-in; 6 -> usb; 7 -> mgmt-eth with
+      mgmt-eth/led-a and mgmt-eth/led-b; 8 -> console-1; 9 -> pps-tod; 10 -> pps-1-out; 11 ->
+      console-0; 12 -> psu-0/psu-1 bays with dc-psu and ac-psu configurations; 13 -> fan-0..fan-4.
+      From the QSG on top of those: the grounding point -> ground-plate, the reset button ->
+      reset, the five system LEDs -> led-diag/loc/fan/ps0/ps1, and the Air Filter Replacement
+      procedure -> filter-top, filter-top-step, filter-bottom-step and filter-bottom. From the
+      photographs: four corner captive screws -> panel-screw-0..3, and the top-cover labels ->
+      label-spec, label-serial, label-caution. 324 placements and bays in all, 74 ports and 148
+      port lamps among them. Nothing in either document is unaccounted for
+  audit-by-eye:
+    note: >-
+      gate 5 - the front and rear were rendered at the reference figure's own px/mm (3947 and 3943
+      px wide) and compared strip by strip against it. Every cage row, every block gap, every pair
+      legend and every LED strip lands on the reference; the numbering was confirmed as far out as
+      the 36/37 legend rather than being trusted from block A alone. Two things were moved because
+      of this pass and not before it: the rear PSU pair and grounding plate, and the top filter's
+      left thumb screw
+
 attrs:
   physical:
     weight: 16 kg with PSUs and fans (datasheet); QSG says 15.3 kg

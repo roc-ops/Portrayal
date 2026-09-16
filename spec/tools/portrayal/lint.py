@@ -229,6 +229,7 @@ RULES = {
     "L90": ("device",     "a manifest's top-level keys read in the canonical order", "reorder them; the message prints the order, and docs/device-template.yaml is written in it"),
     "L91": ("device",     "airflow is stated once - on the chassis, and on a configuration only where it differs", "move it to `chassis.airflow`, or drop the configuration's copy"),
     "L92": ("component",  "a part's size says where it came from", "add a `size:` provenance note; the key for a size is `size`, not a sentence about it"),
+    "L93": ("device",     "a provenance entry says how the figure is known, not only where it was read", "add `confidence:` beside the note, from the eight words in the confidence enum"),
 }
 
 
@@ -4394,6 +4395,42 @@ def lint_device_airflow_home(path, data):
                          "let a configuration override it only where it differs")
 
 
+def lint_device_provenance_confidence(path, data):
+    """L93: a device's provenance entry says how the figure is known.
+
+    THE CENSUS #167 CREATED, and it is the point of that migration rather than a
+    side effect. Device provenance was `{key: prose}` - 530 distinct keys across
+    89 devices, a median value of 566 characters and a maximum of 6,704 - and the
+    confidence word was a convention at the front of the sentence that 35% of
+    entries did not follow. So the question "which figures on this device are
+    estimated" had no answer a machine could give, which is why L15's `verified`
+    gate was a prefix match that saw 42 of 122.
+
+    Restructuring it to `{confidence, note}` does not by itself fill anything in.
+    944 entries opened with one of the library's eight words and were migrated
+    with it; 744 did not, and NO WORD WAS INVENTED FOR THEM - reading 744
+    paragraphs and deciding measured-or-estimated by eye is precisely how an
+    estimate becomes a measurement, and this library has a rule against that.
+
+    What changed is that the 744 are now countable. This is the count. It is a
+    warning because the entries are honest as they stand - the prose says what
+    was done, it just does not say it in a word - and because a census is meant
+    to shrink rather than to fail a build somebody else has to unblock.
+    """
+    prov = data.get("provenance") or {}
+    if not isinstance(prov, dict):
+        return
+    bare = sorted(k for k, v in prov.items()
+                  if isinstance(v, dict) and not v.get("confidence"))
+    if not bare:
+        return
+    warn(path, "L93", f"{len(bare)} of {len(prov)} provenance entries state no "
+                      f"`confidence` ({', '.join(bare[:4])}"
+                      f"{', ...' if len(bare) > 4 else ''}). Add the word the note "
+                      "already implies - and where the prose does not say, that is "
+                      "a figure whose standing nobody has written down")
+
+
 def lint_device_config_scope(path, data):
     """L41: a bay scoped to configurations that do not exist is a bay in none.
 
@@ -6259,7 +6296,8 @@ def lint_device(path, validator, lib_roots):
             err(path, "L15", f"maturity {maturity}: no provenance block. A device at this "
                              "level must cite where its numbers came from")
         else:
-            joined = " ".join(str(v) for v in prov.values()).lower()
+            joined = " ".join(
+                str(v.get("note") if isinstance(v, dict) else v) for v in prov.values()).lower()
             if not any(k in joined for k in ("datasheet", "installation guide",
                                              "hardware guide", "install guide", "manual")):
                 err(path, "L15", f"maturity {maturity}: provenance cites no datasheet or "
@@ -6273,8 +6311,33 @@ def lint_device(path, validator, lib_roots):
         # A device that places a component whose dimensions are guessed is not verified,
         # however carefully the chassis itself was measured.
         def estimated_keys(doc):
-            return sorted(k for k, v in (doc.get("provenance") or {}).items()
-                          if str(v).lstrip().lower().startswith("estimated"))
+            """Every provenance entry that says the figure was estimated.
+
+            TWO SHAPES, BECAUSE THE LIBRARY HOLDS TWO. A device's provenance is
+            `{key: {confidence, note}}` after #167; a component's is still
+            `{key: string}`, and this function is handed both - the verified
+            check walks a device AND every component it places.
+
+            AND IT READS THE PROSE TOO, not only the field. It used to be
+            `str(v).startswith("estimated")` against strings, which saw 42 of the
+            122 entries that say estimated: the other 80 say it in the middle of
+            a paragraph - "the layout is estimated", "ESTIMATED shape, from
+            photographs". Nothing is at `verified` yet, so tightening this
+            breaks nothing today and means the first device that claims it gets
+            an honest answer rather than a prefix match.
+            """
+            out = []
+            for k, v in (doc.get("provenance") or {}).items():
+                if isinstance(v, dict):
+                    if v.get("confidence") == "estimated":
+                        out.append(k)
+                        continue
+                    text = str(v.get("note") or "")
+                else:
+                    text = str(v)
+                if re.search(r"\bestimat", text, re.I):
+                    out.append(k)
+            return sorted(out)
         est = estimated_keys(data)
         if est:
             err(path, "L15", f"maturity verified: {len(est)} estimated value(s) on the device "
@@ -6810,6 +6873,7 @@ def main():
                 lint_device_control_plane_redundancy(f, d)
                 lint_device_key_order(f, d)
                 lint_device_airflow_home(f, d)
+                lint_device_provenance_confidence(f, d)
                 try:
                     dev_maturity[str(f.parent.relative_to(root / "devices"))] = \
                         d.get("maturity", "draft")

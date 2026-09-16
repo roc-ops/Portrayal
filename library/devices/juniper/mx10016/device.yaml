@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx10016
-version: 1.0.11
+version: 1.0.12
 maturity: modelled
 manufacturer: Juniper
 model: MX10016
@@ -17,29 +17,44 @@ description: >-
   Switch Fabric Boards.
 profile: networking
 provenance:
-  sources: MX10016 Hardware Guide,
-    the MX10008/MX10016 5G datasheet, the front studio photograph and the
-    rear line drawing g050702
-  chassis: 'datasheet-table - 36.6 x 17.4 x 35 in (930 x 442 x 889 mm),
-    21U; flange extends the rack face to 19 in. Ears NOT MODELLED by
-    convention'
-  front: 'photo - the front photograph proportioned per-axis against the
-    442 mm body: badge strip 0-14, RCB slots at y 14.0 and 52.1 (1.5 in
-    slot height as the family), service band to y 110.2, then four
-    four-slot banks on a 48.4 mm pitch with 7 mm dividers; positions
-    approximate to ~3 mm on this tall face'
-  slot-numbering: 'guide - FPC 0-15; drawn top-down to match the family
-    convention (no legible slot print in any source - see gaps)'
-  rear: 'drawing - g050702 (isometric, fractions only): one full-height
-    column of ten JNP10K-PWR supplies at the left, two full-height fan
-    trays right. Base configuration ships five supplies; all ten bays
-    are drawn'
-  power: 'datasheet-table - JNP10K-PWR-AC2 5.5 kW each as the family
-    guides; the AC/AC3/DC variants are gaps'
-  color: 'photo - dark grey chassis, silver card faces, light-blue
-    levers (as the family)'
-  other-faces: 'near-blank by evidence - rail bands estimated; axis
-    conventions per viewer3d.js as the siblings'
+  sources:
+    note: >-
+      MX10016 Hardware Guide, the MX10008/MX10016 5G datasheet, the front studio photograph and
+      the rear line drawing g050702
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet-table - 36.6 x 17.4 x 35 in (930 x 442 x 889 mm), 21U; flange extends the rack
+      face to 19 in. Ears NOT MODELLED by convention
+  front:
+    note: >-
+      photo - the front photograph proportioned per-axis against the 442 mm body: badge strip
+      0-14, RCB slots at y 14.0 and 52.1 (1.5 in slot height as the family), service band to y
+      110.2, then four four-slot banks on a 48.4 mm pitch with 7 mm dividers; positions
+      approximate to ~3 mm on this tall face
+  slot-numbering:
+    note: >-
+      guide - FPC 0-15; drawn top-down to match the family convention (no legible slot print in
+      any source - see gaps)
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - g050702 (isometric, fractions only): one full-height column of ten JNP10K-PWR
+      supplies at the left, two full-height fan trays right. Base configuration ships five
+      supplies; all ten bays are drawn
+  power:
+    confidence: datasheet
+    note: >-
+      datasheet-table - JNP10K-PWR-AC2 5.5 kW each as the family guides; the AC/AC3/DC variants
+      are gaps
+  color:
+    note: >-
+      photo - dark grey chassis, silver card faces, light-blue levers (as the family)
+  other-faces:
+    note: >-
+      near-blank by evidence - rail bands estimated; axis conventions per viewer3d.js as the
+      siblings
+
 attrs:
   physical:
     weight-empty-kg: 99.79

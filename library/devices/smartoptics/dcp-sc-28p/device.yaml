@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcp-sc-28p
-version: 2.0.4
+version: 2.0.5
 maturity: modelled
 manufacturer: Smartoptics
 model: DCP-SC-28P
@@ -10,48 +10,77 @@ description: 28-port service channel unit, 1RU. Twenty-four RJ-45 1G Ethernet po
   and RS232 management.
 profile: optical
 provenance:
-  chassis: DCP-SC-28P User Manual - unit height is 1U (1.77 in); width and depth taken from the
-    DCP-R chassis the family shares (440 x 505mm)
-  port-positions: stencil ShapeSheet connection points, stored by Visio as fractions of shape width/height
-    and resolved against the 19-inch rack width
-  port-count: the recovered layout confirms the model name - 24 RJ45 on a 14.3mm column pitch plus
-    4 LC duplex, i.e. 28 ports, and a separate PROBE
-  port-identification: RJ45 columns carry one connection point per port; the LC columns carry two
-    about 6.4mm apart, one per fiber, which is what distinguishes them
-  port-families: DCP-SC-28P User Manual R14.0 A section 2.2 lists the shelf controller's ports
-    as 1x RS232, 1x ETH0, 24x RJ-45 1G Ethernet, 4x SFP+ 10G Ethernet and 1x QSFP-DD probe. Its
-    NEBS warnings address the RJ-45 block as ETH1-12 plus ETH17-28 and section 8.7 calls the
-    optical pair ETH13-16, so the numbering is one 1-28 series with the SFP+ cages in the middle
-    of it, not two rows. The front-view figure agrees - the cages sit two over two between the
-    RJ45 blocks, under silkscreen boxes reading 13/14 and 15/16
-  sfp-media: SFP+ 10G, from the same list. The stencil could only show LC duplex because the
-    figure's cages are fitted with LC optics; the cage itself is SFP+ and the ports are now
-    modelled as such rather than as the bare `sfp` family token
-  probe-port: QSFP-DD, from the same list. Measured off the front-view figure against the RJ45
-    height it is about 19.7 x 10.6mm, i.e. a QSFP-family cage and not the SFP+ one an earlier
-    revision drew. Placed on the centre the stencil recovered, so only the aperture changed
-  column-pitch: raw connection points jitter between 13.85 and 14.80mm, which put ports 7/9 and
-    8/10 into a 0.15mm overlap that lint L13 caught. Each RJ45 group is therefore fitted to a uniform
-    pitch across its span - 14.32mm left, 14.34mm right - and the drawing jitter discarded
-  connector-choice: the ganged cell (common/rj45-ganged-eth@1, 12.7mm) is used rather than the
-    single housing (common/rj45-eth@1, 15.8mm) because the measured 14.3mm column pitch cannot
-    accommodate the latter
-  rear-layout: photo IMG_2181 of racked DCP-R units - PSU with integrated fan and C14 inlet at each
-    end, mirrored; honeycomb vent panel across the centre; management block right of centre. Block
-    positions are approximate to about 3mm - the photo has uncorrected perspective and partial cable
-    occlusion, so it fixes the structure and order but not exact millimetres
-  side-top-bottom: IMG_2188 shows the lid, so these now carry the real finish - a light silver body
-    with the black front panel wrapping about 12.7mm (half an inch) back along every face. Still
-    no vents, screws or lid labels - the photo shows the finish and the panel depth but not those
-    details, so they are left out rather than invented
-  psu-part: label - Gospower G1251-0550WNA, P/N CRPS0550-AH, and the fan sticker reads 550W Platinum
-    CRPS. So the module is a standard CRPS 1U part at 73.5 x 40 x 185, not the 84mm-wide estimate
-    taken from the racked photo, and both bays sit flush to the chassis edges
-  psu-orientation: photo - both modules are fitted the same way round, fan inboard of the inlet,
-    so the C14 sits at the far right on PSU-2 and inboard on PSU-1. They are not mirrored
-  rear-mgmt-block: none. The SC-28P carries no rear management ports - its manual places only power
-    and fan units in the back panel, and its ETH0 and RS232 are on the front. An earlier revision
-    copied the DCP-R rear here by mistake; the vent now spans what that block wrongly occupied
+  chassis:
+    note: >-
+      DCP-SC-28P User Manual - unit height is 1U (1.77 in); width and depth taken from the DCP-R
+      chassis the family shares (440 x 505mm)
+  port-positions:
+    note: >-
+      stencil ShapeSheet connection points, stored by Visio as fractions of shape width/height and
+      resolved against the 19-inch rack width
+  port-count:
+    note: >-
+      the recovered layout confirms the model name - 24 RJ45 on a 14.3mm column pitch plus 4 LC
+      duplex, i.e. 28 ports, and a separate PROBE
+  port-identification:
+    note: >-
+      RJ45 columns carry one connection point per port; the LC columns carry two about 6.4mm
+      apart, one per fiber, which is what distinguishes them
+  port-families:
+    note: >-
+      DCP-SC-28P User Manual R14.0 A section 2.2 lists the shelf controller's ports as 1x RS232,
+      1x ETH0, 24x RJ-45 1G Ethernet, 4x SFP+ 10G Ethernet and 1x QSFP-DD probe. Its NEBS warnings
+      address the RJ-45 block as ETH1-12 plus ETH17-28 and section 8.7 calls the optical pair
+      ETH13-16, so the numbering is one 1-28 series with the SFP+ cages in the middle of it, not
+      two rows. The front-view figure agrees - the cages sit two over two between the RJ45 blocks,
+      under silkscreen boxes reading 13/14 and 15/16
+  sfp-media:
+    note: >-
+      SFP+ 10G, from the same list. The stencil could only show LC duplex because the figure's
+      cages are fitted with LC optics; the cage itself is SFP+ and the ports are now modelled as
+      such rather than as the bare `sfp` family token
+  probe-port:
+    note: >-
+      QSFP-DD, from the same list. Measured off the front-view figure against the RJ45 height it
+      is about 19.7 x 10.6mm, i.e. a QSFP-family cage and not the SFP+ one an earlier revision
+      drew. Placed on the centre the stencil recovered, so only the aperture changed
+  column-pitch:
+    note: >-
+      raw connection points jitter between 13.85 and 14.80mm, which put ports 7/9 and 8/10 into a
+      0.15mm overlap that lint L13 caught. Each RJ45 group is therefore fitted to a uniform pitch
+      across its span - 14.32mm left, 14.34mm right - and the drawing jitter discarded
+  connector-choice:
+    note: >-
+      the ganged cell (common/rj45-ganged-eth@1, 12.7mm) is used rather than the single housing
+      (common/rj45-eth@1, 15.8mm) because the measured 14.3mm column pitch cannot accommodate the
+      latter
+  rear-layout:
+    note: >-
+      photo IMG_2181 of racked DCP-R units - PSU with integrated fan and C14 inlet at each end,
+      mirrored; honeycomb vent panel across the centre; management block right of centre. Block
+      positions are approximate to about 3mm - the photo has uncorrected perspective and partial
+      cable occlusion, so it fixes the structure and order but not exact millimetres
+  side-top-bottom:
+    note: >-
+      IMG_2188 shows the lid, so these now carry the real finish - a light silver body with the
+      black front panel wrapping about 12.7mm (half an inch) back along every face. Still no
+      vents, screws or lid labels - the photo shows the finish and the panel depth but not those
+      details, so they are left out rather than invented
+  psu-part:
+    note: >-
+      label - Gospower G1251-0550WNA, P/N CRPS0550-AH, and the fan sticker reads 550W Platinum
+      CRPS. So the module is a standard CRPS 1U part at 73.5 x 40 x 185, not the 84mm-wide
+      estimate taken from the racked photo, and both bays sit flush to the chassis edges
+  psu-orientation:
+    note: >-
+      photo - both modules are fitted the same way round, fan inboard of the inlet, so the C14
+      sits at the far right on PSU-2 and inboard on PSU-1. They are not mirrored
+  rear-mgmt-block:
+    note: >-
+      none. The SC-28P carries no rear management ports - its manual places only power and fan
+      units in the back panel, and its ETH0 and RS232 are on the front. An earlier revision copied
+      the DCP-R rear here by mistake; the vent now spans what that block wrongly occupied
+
 chassis:
   width: 440
   height: 45

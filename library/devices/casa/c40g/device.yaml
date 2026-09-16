@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: c40g
-version: 0.5.7
+version: 0.5.8
 maturity: modelled
 manufacturer: Casa Systems
 model: C40G
@@ -11,323 +11,327 @@ description: Casa C40G CMTS/CCAP - 6RU, 6 paired front/rear slots. Takes the sam
   the C100G but HORIZONTALLY, so the card is one model placed at rotate 90.
 profile: networking
 provenance:
-  chassis: 'datasheet - Table A-1 of the C40G Hardware Installation Guide (rev 07/07/2022): 10.47in
-    (265.90mm) H, 19in (482mm) W, 15.25in (388.45mm) D, 6RU'
-  width: body 432.95, the same as the C100G - both are 19in rack devices and the ears sit outside
-    that. See the C100G provenance for the derivation
-  orientation: the maintainer, confirmed against Fig 1-1 - the C40G takes the SAME line cards as the C100G
-    but on their side, so every bay is rotate 90
-  slot-order: drawing + photograph - slots run 5 at the TOP down to 0 at the bottom, printed on
-    the chassis, with 3 and 2 in red as the SMM pair
-  rear-order: NOT mirrored, unlike the C100G. Walking round a chassis flips left to right, not top
-    to bottom - and these cards stack vertically, so rear 5 stays at the top where front 5 is
-  rear-slots: photograph - a C40G rear shows plain 6+12 I/O in slots 0 and 5, the 6+12 SW I/O in
-    slot 4, and SMM-SW-BDM B and A in 3 and 2. Slot 1 takes the LC-BDM-SWITCH that protects, per
-    the 3+1 scheme
-  front-furniture: 'drawing-measured - Figure 1-1, "Casa C40G CMTS front view",
-    PASSES the orthographic gate. Its chassis renders 1364 x 760 px for an aspect
-    of 1.795 against a true rack face of 482 / 265.9 = 1.813, agreeing to 1 percent,
-    so unlike the isolated card figures it carries geometry - at 2.858 px/mm scaled
-    by the exactly known 265.9 height. Measured off it in body coordinates: the
-    two vertical fan strips at x 1.5-37.5 and 386.7-422.7, both running y 17-222;
-    the card band x 37.5-386.4, which independently confirms the existing card bays
-    at x 42.0 width 345.5; the brand band y 196.3-222.9; and the snap-on PSU cover
-    y 226.7-264.9. The right fan bay is trimmed to start at x 388.0 so it does not
-    overlap the card bays, which end at 387.5'
-  psu-row: >-
-    CENTRED IN THE BAND, and that is a symmetry argument rather than a measurement.
-    The four bays sat at 44.0 to 386.6 inside a band of 37.5 to 386.7 - 6.5 of margin
-    on the left and 0.10 on the right. A 0.10 mm margin is not something anyone drew;
-    it is what falls out when a row is placed from one end. Four identical bays on a
-    uniform 87.2 pitch span 342.6 in a 349.2 band, so the row is centred at 3.3 a side
-    and the bays move to 40.8, 128.0, 215.2, 302.4. Width and pitch are untouched.
-    FIGURE 1-10 CANNOT PLACE THEM, checked and recorded so nobody spends the search
-    again. It is the one figure that shows the row with the cover off, and it fails
-    the orthographic gate at 1.918 - its own box pitch drifts 215, 206, 202 px across
-    the four, a 6 percent spread, and anchoring to the card faces puts psu-1 seven
-    millimetres past the band. It confirms the ARRANGEMENT and the numbering, which is
-    what a schematic is good for, and nothing about position.
-    WHAT THIS DID NOT FIX, because it cannot be fixed from what we hold - see the
-    `band-not-centred-in-chassis` gap. The AC panel's four inlets are meant to sit
-    behind their own supplies. Reflected about the PANEL they now miss by 1.2, better
-    than the 2.0 they missed by before; reflected about the CHASSIS, which is the
-    physically meaningful axis, they miss by 9.95, worse than the 6.75 before. Both
-    cannot be right and centring the row cannot make them so: the two axes disagree
-    because the band is not centred in the chassis, and that is the thing in doubt.
-  band-alignment: >-
-    REPORTED FROM THE VIEWER twice - the AC panel sitting left with a dark sliver
-    past its right edge, then the front looking "off kilter" the same way - and it
-    was ONE error in one number, repeated fourteen times.
-    THE BAND IS 37.5 TO 386.7, 349.2 WIDE, and three independent things in this
-    model already said so: the two front fan strips end and start exactly there,
-    the PSU cover measures 349.2 at 37.5, and the AC input panel measures the same.
-    Figure 1-1, the one front figure that PASSES the orthographic gate, puts the
-    card faces at 37.49 and 386.66 when read at this file`s own calibration.
-    THE CARD BAYS WERE THE OUTLIER, at 42.0 - 2.65 right of centre. That put 4.5 of
-    dead space at the left of the band and pushed the cards 0.8 PAST the right side
-    strip, which is why every full-width part looked shifted against them.
-    THE CARD IS NOT RESIZED, and that is the whole reason the fix is a position and
-    not a width. 345.5 is the card`s own length and it is SHARED with the C100G,
-    where the same parts stand vertically - so the 3.7 difference between card and
-    band is margin, 1.85 a side, not a mismeasured card. The bays move to 39.35 and
-    the card sits centred in its opening.
-    THE LEFT STRIPS STOPPED AT 40.0, 2.5 inside the band, on both faces. Now 37.5,
-    where the front fan strip already ended.
-    A WRONG FIX WAS MADE FIRST AND IS RECORDED because the reasoning is the useful
-    part: the AC panel was moved to 42.0 and narrowed to 345.5 to line up with the
-    cards, and the right strip pushed to 387.5 to stop them overlapping it. That did
-    make the rear self-consistent, by moving the one part that was measured correctly
-    to match thirteen that were not. It is reverted. Aligning to the majority is not
-    the same as aligning to the evidence.
-  pem-legend: >-
-    drawing-measured, and THREE separate errors in two lines. The labels read
-    `PEM 1` at [4.0, 216] and `PEM 2` at [4.0, 232] - stacked one above the other,
-    in near-black - and the two openings they name are SIDE BY SIDE at x 44.8 and
-    x 212.8. Figures 1-2 and 1-4 both draw them plainly: two boxed labels sitting
-    next to each other near the top of the power band, in the left strip, in WHITE
-    on the grey. So the stacking was wrong, the colour was wrong, and near-black on
-    `#8d949c` would barely have read even where it sat.
-    MEASURED as fractions of the left strip, not in absolute pixels, because this
-    figure is about 5 percent wide of the true 1.813 aspect and is schematic. The
-    strip is 40.0 wide and the boxes span 0.148-0.500 and 0.549-0.910 of it, giving
-    5.9-20.0 and 22.0-36.4. Vertically the boxes run y 196.1-203.4 at the figure`s
-    own 2.5912 px/mm - the top edge landing on 196.0, which is the power band top
-    the `pem-band-top-edge` gap settled on, and a free corroboration of it.
-    THEY ARE NOT SCOPED TO THE DC CONFIGURATIONS, and that was checked rather than
-    assumed. `for: pem-1` was added first, which made L14 reject `PEM 2` for sitting
-    190 mm from the opening it names - correctly, on its own terms. But Figure 1-2
-    is the AC rear and prints BOTH labels in the same place, so this is a legend
-    COLUMN on common sheet metal, the same column that carries slot numbers 0-5 for
-    six slots spanning the full width. Those carry no `for:` either. A label column
-    names things it does not sit beside; that is what a column is for.
-    THE OUTLINE BOXES ARE NOT DRAWN. Both figures draw each label inside a thin
-    white rounded rectangle, and only the text is modelled. Recorded rather than
-    approximated - it is a drawing job, and nothing here gives a stroke width.
-  wordmarks: >-
-    drawing-measured off Figure 1-1, and a CORRECTION. `C40G` was at [6, 250]
-    in near-black - x 6 puts it inside the left fan strip, which runs x 1.5-37.5,
-    and y 250 puts it inside the snap-on PSU cover, which runs y 226.7-264.9. So
-    the model name was printed across two parts it is not printed on, in a colour
-    that would not read against either. On the figure both marks sit on the brand
-    band, the dark strip at y 196.3-222.9 measured in `front-furniture` above,
-    which is what they are light-coloured FOR. Baselines at y 214.0; `casa systems`
-    begins at x 103.8 and `C40G` at x 272.0, left and right of centre respectively.
-    The word sizes are drawing-measured; the TYPEFACE is not modelled and the
-    vendor's swoosh device beside `casa systems` is not drawn - neither is
-    recoverable from a 2.858 px/mm figure, and both are trademark artwork rather
-    than geometry.
-  fan-left-is-never-empty: >-
-    REVERSED on the owner's observation, and the previous reasoning is kept in
-    `fan-modules` below rather than deleted. `fan-left` carried an explicit
-    `default: null` on the argument that Figure 1-7 calls the left strip a
-    "Secondary fan module slot (optional with redundancy kit)", so a chassis
-    without the kit shows an empty slot. The maintainer - "I don't know if I've ever seen
-    a C40G without something in that left slot". Field observation beats an
-    inference drawn from a schematic that draws both columns identically, and
-    every image we hold agrees with him - Figures 1-1 and 1-7 and both front
-    photographs show a module fitted on BOTH sides.
-    WHAT IS STILL UNKNOWN is what a genuinely non-redundant chassis has there. A
-    blank filler is the obvious candidate, and the guide lists "Blank filler
-    plates" for rear slots 2 and 3 and never for this one. No figure shows the
-    left slot empty, and none shows a fan blank. So the default is the fan module
-    - the only occupant with a drawing - and this line is the record that the
-    non-redundant case is unconfirmed rather than decided.
-    WANTED - a photograph of a non-redundant C40G front, or a parts list naming a
-    fan blank.
-  fan-legend-layer: >-
-    UNRESOLVED, and the note below contradicts itself on it. It says the FAN TRAY
-    2 / FAN TRAY 1 / AIR FILTER legend is "printed on the CHASSIS, which is why an
-    empty left slot still shows it" - but both front photographs show that legend
-    clearly WITH a module fitted, and a chassis legend would be covered by the
-    module sitting on it. So the legend travels with the module, or sits on a
-    narrow fixed bezel inside the same column.
-    The same question decides where the six slot numbers belong, which is why it
-    matters. They are declared as device silkscreen at x 20, and L21 now reports
-    all six as buried under `fan-left`, which spans x 1.5-36.2 and covers them.
-    Measured off Figure 1-1 at 2.467 px/mm the left column divides into a grey
-    strip 0.8-10.5, the pull handle 10.9-17.4, and a further band 17.8-37.3 that
-    holds the numbers - and the RIGHT column measures the same 35-36 mm overall,
-    so the bay extent itself is right and narrowing it would be wrong. What the
-    images cannot resolve at this scale is whether that third band is module face
-    or fixed bezel.
-    ALL SEVEN C40G PHOTOGRAPHS were examined on 2026-08-27 and none of them
-    settles it. What they do establish, and it is the most useful fact found:
-    the two columns are NOT printed alike. At 9x on c40g-front-3x the LEFT column
-    carries the hazard triangle AND the slot number in one continuous grey face
-    with no seam between them, and the only seam is to the RIGHT of the number,
-    against the card cage. The RIGHT column at the same magnification carries the
-    triangle and NOTHING ELSE.
-    That asymmetry is what argues the numbers are CHASSIS ink after all. Both
-    bays accept the same casa/c40g-fan@1, so if the numbers rode on the module
-    face the right-hand module would show them too, and it does not. The strip
-    holding them must then be a fixed bezel at the inner edge of the left column,
-    lying flush enough with the module face that no seam resolves at this
-    resolution - which would make `fan-left` too wide rather than the numbers
-    misplaced.
-    That is a reading, not a measurement, and it is the opposite of what the
-    photographs first suggested, so it is recorded as unresolved rather than
-    acted on. c40g-empty-midplane-5x has every card out and both columns still
-    fitted, at about 220 px across the column - too coarse to resolve the boundary
-    or to see whether the numbers persist. c40g-lab-card-removal shows a seam in
-    roughly the right place but at an angle that makes its position unusable.
-    WANTED - one photograph of the C40G with the LEFT fan module withdrawn. If
-    the numbers are still there, they are chassis ink and `fan-left` shrinks; if
-    they leave with the module, they belong in a component skin and the two
-    modules are different parts. Nothing else in the intake can decide it.
-  fan-modules: 'drawing - Figure 1-7, "C40G fan module location and directional
-    air flow", settles which side is which and it is NOT symmetric. The RIGHT strip
-    is labelled "System fan module" and "Air filter" with "Air flow direction IN";
-    the LEFT strip is labelled "Secondary fan module slot (optional with redundancy
-    kit)" with "Air flow direction OUT". So fan-right defaults to a module and fan-left
-    defaults to empty, which is what a chassis without the redundancy kit actually
-    looks like. Both strips carry the same FAN TRAY 2 / FAN TRAY 1 / AIR FILTER
-    legend printed on the CHASSIS, which is why an empty left slot still shows it
-    in the guide figures'
-  power-entry: 'drawing-measured - Figure 1-4, "C40G CMTS rear view (DC; non-redundant)",
-    scaled by the known 265.9 height at 2.982 px/mm. The two PEM faces read x 44.8-195.7
-    and 212.8-377.7 and the band runs y 194-264.5. They are bays and not placements
-    because the guide carries both "Removing the DC power entry modules" and "Replacing
-    the PEMs" and they slide into openings. THE BAYS WERE RIGHT AND THE COMPONENT
-    WAS WRONG, and I got that backwards once before landing here. casa/c40g-pem
-    read 158.0 x 70.5 against bays of 158.0 x 68.5 - a module 2.00 mm TALLER than
-    the opening it slides into, found by asr9k-cards'' bay-versus-occupant sweep.
-    Nothing else could see it: L13 fires on overlap, so a bay too SMALL for what it
-    accepts is invisible, and 2 mm is invisible drawn.
-    THREE CANDIDATES FOR THE BAND''S TOP EDGE, and the arithmetic decides between
-    them. 194.0 is what this entry and the component''s both read off Figure 1-4,
-    and it is IMPOSSIBLE - the card slot above, rear-0, ends at 164.35 + 30.47 =
-    194.82, and two pieces of sheet metal cannot share 0.82 mm. 194.82 itself is
-    flush against that edge. 196.0 is what the bays already said.
-    196.0 WINS BECAUSE 194.82 IS THE SOFTEST NUMBER OF THE THREE AND FLUSH-MOUNTING
-    ON IT WOULD MAKE THIS BAND DEPEND ON IT EXACTLY. That 30.47 slot pitch is not a
-    measurement of a slot: it is 426.6 mm of card region from the C100G''s Figure
-    1-1 divided by 14, carried across to this chassis, and rear-0''s bottom edge is
-    that derived pitch ACCUMULATED SIX TIMES from y 12.0. The error compounds.
-    Against that, 196.0 leaves a 1.18 mm margin below the card cage - and the front
-    face, measured independently, shows a 1.48 mm margin in exactly that position
-    between the card band and the brand band at y 196.3. A structural margin
-    confirmed on one face is better evidence than a flush fit against an
-    accumulation of derived pitches.
-    SO THE FIGURE READING OF 194 IS THE OVERREAD, by about two millimetres at 2.982
-    px/mm, which is six pixels. casa/c40g-pem is corrected to 68.5 to match the
-    opening it goes into. THE HONEST RANGE IS 2 mm and a tape measure could still
-    move this - see the pem-band-top-edge gap. The team lead flagged rear-0 as the
-    softest of the three before I had finished, and they were right: my first
-    attempt grew the bays onto that edge, which traded a fit defect for a
-    dependency on the least trustworthy number in the file. NOTE THE VARIANT SPLIT: this is the
-    DC chassis, and the AC one is modelled too - see the ac-variant entry. An AC
-    C40G carries four 1100 W PSUs behind the snap-on front cover instead of these
-    two PEMs, which is why these bays default EMPTY and each DC configuration names
-    them.'
-  side-faces: 'drawing plus a stated absence, exactly as on the C100G. NO FIGURE
-    IN THIS GUIDE SHOWS THE TOP, BOTTOM OR SIDE FACES either - Figures 1-1 through
-    1-5 are front and rear elevations and 1-7 is an airflow diagram. So the four
-    are sized from Table A-1 ("Height: 10.47 in. (265.90 mm), Depth: 15.25 in. (388.45
-    mm)"; its 19 in / 482 mm width is the rack face including the flanges, so the
-    432.95 body width is used) and carry only the integral mounting flanges and
-    the chassis label, which the guide locates in the same words the C100G guide
-    uses - "The C40G product label is affixed to the top front side of the chassis".
-    Orientation matches the C100G: top and bottom put the front at y = 0, left puts
-    it at x = 0, right mirrors it. NO SIDE VENTS ARE DRAWN, deliberately, and this
-    is the judgement call worth flagging. Air goes right to left through this chassis,
-    so the side panels are a plausible place for an intake and an exhaust - but
-    the filter the guide describes is on the FAN MODULEs own face ("Figure 1-9 shows
-    the air filter side of the fan module"), the fan modules are inserted from the
-    front, and no figure shows an opening in either side panel. Drawing vents on
-    a guess is the wrong-box outcome these views exist to prevent'
-  redundancy-prose: 'REMOVED, not lost. attrs.other carried `redundancy: "3+1
-    with BDM (slot 1 protects, slot 4 active); classic DOCSIS protects per side
-    at 1 and 4"` - one prose sentence restating what the two redundancy configurations
-    now say structurally, bay by bay. It was worth keeping only while the bays were
-    wrong about it, which they were until the protecting-slots fix: the sentence
-    was the correct statement and the model contradicted it. Now the model IS the
-    statement, and a second copy that no tool can read is the thing rule 8 warns
-    about. The AC axis is a third configuration and was never in this sentence at
-    all'
-  ac-variant: 'drawing - the C40G ships AC or DC and the guide draws the rear
-    both ways: Figures 1-2 and 1-3 for the AC chassis, 1-4 and 1-5 for the DC one.
-    The AC build puts "up to four removable 1100W AC power supply units" in a row
-    across the bottom FRONT, behind the snap-on cover, in place of the two DC power
-    entry modules at the bottom rear. Figure 1-10 shows them with the cover off
-    and Figure 1-11 shows their other end. Numbering runs right to left - "PSUs
-    are labeled on the front of the chassis as PSU1, PSU2, PSU3 and PSU4 from right
-    to left" - so the LEFTMOST bay is psu-4, and rel-pos follows the vendor rather
-    than the drawing order. THIS IS AN ORTHOGONAL AXIS to the other two configurations,
-    which are redundancy schemes: an AC chassis can run either scheme. Configurations
-    are the only mechanism the format has for a variant, so the axes share one list;
-    ac-power changes nothing about redundancy and neither BDM scheme says anything
-    about power. The PEM bays therefore default EMPTY and each DC scheme names them,
-    because a configuration cannot clear a bay - occupants are strings - and because
-    neither AC nor DC is "the" C40G. THE AC REAR FACE IS NOW PLACED, and the
-    band is no longer two empty bays. Figures 1-2 and 1-3 show it: one bolted panel
-    across the bottom of the rear carrying a rocker switch and an IEC C14 inlet per
-    PSU, where the DC chassis carries its two PEMs. It was modelled as
-    casa/c40g-ac-inlet-panel@1 and left unplaced because the format could not say
-    that a bolted panel is present in only one configuration - a configuration carried
-    bays, skins, airflow, region-context and part-numbers, but not placements.
-    `only-in` says it, on the placement and on the two PEM bays alike, because which
-    configurations a piece of METAL exists in is a statement about geometry and
-    geometry lives in the view. An AC chassis has the panel and no PEM openings; a
-    DC chassis has the two openings and no panel. They are never both present, so
-    there is no overlap for L13 to reject and no need for a bay to claim one.
-    WHAT THIS FIXED, reported from the viewer: the AC rear drew two black rectangles
-    where the PEM bays sat empty, and selecting one offered casa/c40g-pem - a DC power
-    entry module - as the only thing that could go in a chassis ordered for AC.'
-  non-redundant-variant: 'drawing plus prose - ADDED, because the guide draws four
-    rear views and the model only had three configurations for them. Figures 1-2
-    and 1-4 are the AC and DC NON-REDUNDANT rears and 1-3 and 1-5 the redundant
-    pair, so the four figures are two axes crossed - AC/DC and redundant/not -
-    not four layouts. The AC/DC axis was already modelled as ac-power; this entry
-    adds the other value of the second axis. The layout is stated in words as
-    well as drawn: "Rear slots (non-redundant system) - Upstream and downstream
-    line card I/O slots: 0, 1, 4 5; Blank filler plates: 2, 3", against the
-    redundant list right below it which reads "I/O slots: 0, 5; LC Switch slots:
-    1, 4; SMM Switch slots: 2, 3". Figure 1-4 is legible at 4x and agrees: slots
-    5 and 4 read QAM IO, 3 and 2 are plain plates with one screw at each end, and
-    1 and 0 read US IO. The chassis overview also says outright that "The Casa
-    C40G chassis is available in both redundant and non-redundant versions".
-    THE FRONT IS NOT MODELLED FROM A NON-REDUNDANT FIGURE - there is no separate
-    front view for it - so front 0/1/4/5 take the DS and US cards Figure 1-1
-    draws (DS 8X96 above, US 16X8 below) on the pairing the rear figure shows,
-    QAM IO behind a DS card and US IO behind a US one, and front 2/3 keep the SMM
-    pair, which the front-slot bullet lists without qualifying it by redundancy.
-    That pairing is an inference from two figures and is the softest part of this
-    entry'
-  switch-slot-print: 'drawing - a free check that PASSES. Figure 1-20 of this
-    guide, "BDM module, SMM Switch BDM A, B, and LC Switch BDM", prints each SMM
-    Switch card''s slot assignment on its own faceplate, for BOTH chassis: A
-    reads "C100G Slot 6 / C40G Slot 2" and B reads "C100G Slot 7 / C40G Slot 3".
-    rear-2 accepts casa/smm-sw-bdm-a@1 and rear-3 accepts casa/smm-sw-bdm-b@1,
-    which is what the card says. The same figure is Figure 1-14 of the C100G
-    guide and that device''s switch-slot-print entry records the other half'
-  protecting-slots: 'SETTLED, and the same half-fault as the C100G. The guide
-    numbers this one twice over. For the classic scheme the chassis overview reads
-    "Rear slots (fully redundant system) - Upstream and downstream line card I/O
-    slots: 0, 5; LC Switch slots: 1, 4; SMM Switch slots: 2, 3", Table A-2 agrees
-    with "Two LC Switch modules for DOCSIS-module redundancy in rear slots 1 and
-    4", and Figure 1-5, the rear view OF THAT EXACT LAYOUT, is legible at 4x: slots
-    5 to 0 read QAM IO, LC SWITCH, SMM SWITCH, SMM SWITCH, LC SWITCH, US IO. So
-    rear-4 is an LC Switch in the classic scheme, and docsis-classic said so in
-    its description while placing a switched I/O. For the BDM scheme the guide is
-    equally explicit - "C40G rear side (3+1): Slot 1 - LC-BDM-SWITCH; Slot 4 - 6+12
-    SW-IO or 6+12 SW-IO2" - so bdm-3plus1 was right and is unchanged. rear-4 accepts
-    both, and each configuration names its own'
-  slot-compatibility: 'drawing - the C40G guide numbers its own slots twice. The
-    chassis overview lists "Front slots - Upstream and downstream line card slots:
-    0, 1, 4 5; Active and standby SMM slots: 2 and 3", and Table A-2, "C40G capacities",
-    agrees: "6 line card slots on front - 1 Switch and Management (SMM) module,
-    1 SMM redundant module, 4 DOCSIS modules (any combination of DS and US modules)".
-    So front-2 and front-3 take the SMM generations and the other four take every
-    DS and US card, "any combination" being a real statement modelled as it reads.
-    Table A-2''s DQM row names DS8x8, DS8x96 and DS8x192 and its DCU row names US16x4
-    and US16x8, so all five are eligible here even though THIS guide''s Tables A-3
-    and A-4 print power for only three of them - the C100G guide carries the other
-    two. The CSC is placed by its data sheet, "The C40G can house 4 CSCs for a maximum
-    of 32 ports", which is the same four slots. The rear is deliberately NOT widened:
-    the same overview puts LC Switch in rear 1 and 4, SMM Switch in rear 2 and 3,
-    and I/O cards in the rest, and it is the only place either guide says where
-    blank filler plates go by number - "Rear slots (non-redundant system) - Blank
-    filler plates: 2, 3". Bay defaults are unchanged'
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - Table A-1 of the C40G Hardware Installation Guide (rev 07/07/2022): 10.47in
+      (265.90mm) H, 19in (482mm) W, 15.25in (388.45mm) D, 6RU
+  width:
+    note: >-
+      body 432.95, the same as the C100G - both are 19in rack devices and the ears sit outside
+      that. See the C100G provenance for the derivation
+  orientation:
+    note: >-
+      the maintainer, confirmed against Fig 1-1 - the C40G takes the SAME line cards as the C100G
+      but on their side, so every bay is rotate 90
+  slot-order:
+    confidence: drawing
+    note: >-
+      drawing + photograph - slots run 5 at the TOP down to 0 at the bottom, printed on the
+      chassis, with 3 and 2 in red as the SMM pair
+  rear-order:
+    note: >-
+      NOT mirrored, unlike the C100G. Walking round a chassis flips left to right, not top to
+      bottom - and these cards stack vertically, so rear 5 stays at the top where front 5 is
+  rear-slots:
+    note: >-
+      photograph - a C40G rear shows plain 6+12 I/O in slots 0 and 5, the 6+12 SW I/O in slot 4,
+      and SMM-SW-BDM B and A in 3 and 2. Slot 1 takes the LC-BDM-SWITCH that protects, per the 3+1
+      scheme
+  front-furniture:
+    confidence: drawing
+    note: >-
+      drawing-measured - Figure 1-1, "Casa C40G CMTS front view", PASSES the orthographic gate.
+      Its chassis renders 1364 x 760 px for an aspect of 1.795 against a true rack face of 482 /
+      265.9 = 1.813, agreeing to 1 percent, so unlike the isolated card figures it carries
+      geometry - at 2.858 px/mm scaled by the exactly known 265.9 height. Measured off it in body
+      coordinates: the two vertical fan strips at x 1.5-37.5 and 386.7-422.7, both running y
+      17-222; the card band x 37.5-386.4, which independently confirms the existing card bays at x
+      42.0 width 345.5; the brand band y 196.3-222.9; and the snap-on PSU cover y 226.7-264.9. The
+      right fan bay is trimmed to start at x 388.0 so it does not overlap the card bays, which end
+      at 387.5
+  psu-row:
+    note: >-
+      CENTRED IN THE BAND, and that is a symmetry argument rather than a measurement. The four
+      bays sat at 44.0 to 386.6 inside a band of 37.5 to 386.7 - 6.5 of margin on the left and
+      0.10 on the right. A 0.10 mm margin is not something anyone drew; it is what falls out when
+      a row is placed from one end. Four identical bays on a uniform 87.2 pitch span 342.6 in a
+      349.2 band, so the row is centred at 3.3 a side and the bays move to 40.8, 128.0, 215.2,
+      302.4. Width and pitch are untouched. FIGURE 1-10 CANNOT PLACE THEM, checked and recorded so
+      nobody spends the search again. It is the one figure that shows the row with the cover off,
+      and it fails the orthographic gate at 1.918 - its own box pitch drifts 215, 206, 202 px
+      across the four, a 6 percent spread, and anchoring to the card faces puts psu-1 seven
+      millimetres past the band. It confirms the ARRANGEMENT and the numbering, which is what a
+      schematic is good for, and nothing about position. WHAT THIS DID NOT FIX, because it cannot
+      be fixed from what we hold - see the `band-not-centred-in-chassis` gap. The AC panel's four
+      inlets are meant to sit behind their own supplies. Reflected about the PANEL they now miss
+      by 1.2, better than the 2.0 they missed by before; reflected about the CHASSIS, which is the
+      physically meaningful axis, they miss by 9.95, worse than the 6.75 before. Both cannot be
+      right and centring the row cannot make them so: the two axes disagree because the band is
+      not centred in the chassis, and that is the thing in doubt.
+  band-alignment:
+    note: >-
+      REPORTED FROM THE VIEWER twice - the AC panel sitting left with a dark sliver past its right
+      edge, then the front looking "off kilter" the same way - and it was ONE error in one number,
+      repeated fourteen times. THE BAND IS 37.5 TO 386.7, 349.2 WIDE, and three independent things
+      in this model already said so: the two front fan strips end and start exactly there, the PSU
+      cover measures 349.2 at 37.5, and the AC input panel measures the same. Figure 1-1, the one
+      front figure that PASSES the orthographic gate, puts the card faces at 37.49 and 386.66 when
+      read at this file`s own calibration. THE CARD BAYS WERE THE OUTLIER, at 42.0 - 2.65 right of
+      centre. That put 4.5 of dead space at the left of the band and pushed the cards 0.8 PAST the
+      right side strip, which is why every full-width part looked shifted against them. THE CARD
+      IS NOT RESIZED, and that is the whole reason the fix is a position and not a width. 345.5 is
+      the card`s own length and it is SHARED with the C100G, where the same parts stand vertically
+      - so the 3.7 difference between card and band is margin, 1.85 a side, not a mismeasured
+      card. The bays move to 39.35 and the card sits centred in its opening. THE LEFT STRIPS
+      STOPPED AT 40.0, 2.5 inside the band, on both faces. Now 37.5, where the front fan strip
+      already ended. A WRONG FIX WAS MADE FIRST AND IS RECORDED because the reasoning is the
+      useful part: the AC panel was moved to 42.0 and narrowed to 345.5 to line up with the cards,
+      and the right strip pushed to 387.5 to stop them overlapping it. That did make the rear
+      self-consistent, by moving the one part that was measured correctly to match thirteen that
+      were not. It is reverted. Aligning to the majority is not the same as aligning to the
+      evidence.
+  pem-legend:
+    confidence: drawing
+    note: >-
+      drawing-measured, and THREE separate errors in two lines. The labels read `PEM 1` at [4.0,
+      216] and `PEM 2` at [4.0, 232] - stacked one above the other, in near-black - and the two
+      openings they name are SIDE BY SIDE at x 44.8 and x 212.8. Figures 1-2 and 1-4 both draw
+      them plainly: two boxed labels sitting next to each other near the top of the power band, in
+      the left strip, in WHITE on the grey. So the stacking was wrong, the colour was wrong, and
+      near-black on `#8d949c` would barely have read even where it sat. MEASURED as fractions of
+      the left strip, not in absolute pixels, because this figure is about 5 percent wide of the
+      true 1.813 aspect and is schematic. The strip is 40.0 wide and the boxes span 0.148-0.500
+      and 0.549-0.910 of it, giving 5.9-20.0 and 22.0-36.4. Vertically the boxes run y 196.1-203.4
+      at the figure`s own 2.5912 px/mm - the top edge landing on 196.0, which is the power band
+      top the `pem-band-top-edge` gap settled on, and a free corroboration of it. THEY ARE NOT
+      SCOPED TO THE DC CONFIGURATIONS, and that was checked rather than assumed. `for: pem-1` was
+      added first, which made L14 reject `PEM 2` for sitting 190 mm from the opening it names -
+      correctly, on its own terms. But Figure 1-2 is the AC rear and prints BOTH labels in the
+      same place, so this is a legend COLUMN on common sheet metal, the same column that carries
+      slot numbers 0-5 for six slots spanning the full width. Those carry no `for:` either. A
+      label column names things it does not sit beside; that is what a column is for. THE OUTLINE
+      BOXES ARE NOT DRAWN. Both figures draw each label inside a thin white rounded rectangle, and
+      only the text is modelled. Recorded rather than approximated - it is a drawing job, and
+      nothing here gives a stroke width.
+  wordmarks:
+    confidence: drawing
+    note: >-
+      drawing-measured off Figure 1-1, and a CORRECTION. `C40G` was at [6, 250] in near-black - x
+      6 puts it inside the left fan strip, which runs x 1.5-37.5, and y 250 puts it inside the
+      snap-on PSU cover, which runs y 226.7-264.9. So the model name was printed across two parts
+      it is not printed on, in a colour that would not read against either. On the figure both
+      marks sit on the brand band, the dark strip at y 196.3-222.9 measured in `front-furniture`
+      above, which is what they are light-coloured FOR. Baselines at y 214.0; `casa systems`
+      begins at x 103.8 and `C40G` at x 272.0, left and right of centre respectively. The word
+      sizes are drawing-measured; the TYPEFACE is not modelled and the vendor's swoosh device
+      beside `casa systems` is not drawn - neither is recoverable from a 2.858 px/mm figure, and
+      both are trademark artwork rather than geometry.
+  fan-left-is-never-empty:
+    note: >-
+      REVERSED on the owner's observation, and the previous reasoning is kept in `fan-modules`
+      below rather than deleted. `fan-left` carried an explicit `default: null` on the argument
+      that Figure 1-7 calls the left strip a "Secondary fan module slot (optional with redundancy
+      kit)", so a chassis without the kit shows an empty slot. The maintainer - "I don't know if
+      I've ever seen a C40G without something in that left slot". Field observation beats an
+      inference drawn from a schematic that draws both columns identically, and every image we
+      hold agrees with him - Figures 1-1 and 1-7 and both front photographs show a module fitted
+      on BOTH sides. WHAT IS STILL UNKNOWN is what a genuinely non-redundant chassis has there. A
+      blank filler is the obvious candidate, and the guide lists "Blank filler plates" for rear
+      slots 2 and 3 and never for this one. No figure shows the left slot empty, and none shows a
+      fan blank. So the default is the fan module - the only occupant with a drawing - and this
+      line is the record that the non-redundant case is unconfirmed rather than decided. WANTED -
+      a photograph of a non-redundant C40G front, or a parts list naming a fan blank.
+  fan-legend-layer:
+    note: >-
+      UNRESOLVED, and the note below contradicts itself on it. It says the FAN TRAY 2 / FAN TRAY 1
+      / AIR FILTER legend is "printed on the CHASSIS, which is why an empty left slot still shows
+      it" - but both front photographs show that legend clearly WITH a module fitted, and a
+      chassis legend would be covered by the module sitting on it. So the legend travels with the
+      module, or sits on a narrow fixed bezel inside the same column. The same question decides
+      where the six slot numbers belong, which is why it matters. They are declared as device
+      silkscreen at x 20, and L21 now reports all six as buried under `fan-left`, which spans x
+      1.5-36.2 and covers them. Measured off Figure 1-1 at 2.467 px/mm the left column divides
+      into a grey strip 0.8-10.5, the pull handle 10.9-17.4, and a further band 17.8-37.3 that
+      holds the numbers - and the RIGHT column measures the same 35-36 mm overall, so the bay
+      extent itself is right and narrowing it would be wrong. What the images cannot resolve at
+      this scale is whether that third band is module face or fixed bezel. ALL SEVEN C40G
+      PHOTOGRAPHS were examined on 2026-08-27 and none of them settles it. What they do establish,
+      and it is the most useful fact found: the two columns are NOT printed alike. At 9x on
+      c40g-front-3x the LEFT column carries the hazard triangle AND the slot number in one
+      continuous grey face with no seam between them, and the only seam is to the RIGHT of the
+      number, against the card cage. The RIGHT column at the same magnification carries the
+      triangle and NOTHING ELSE. That asymmetry is what argues the numbers are CHASSIS ink after
+      all. Both bays accept the same casa/c40g-fan@1, so if the numbers rode on the module face
+      the right-hand module would show them too, and it does not. The strip holding them must then
+      be a fixed bezel at the inner edge of the left column, lying flush enough with the module
+      face that no seam resolves at this resolution - which would make `fan-left` too wide rather
+      than the numbers misplaced. That is a reading, not a measurement, and it is the opposite of
+      what the photographs first suggested, so it is recorded as unresolved rather than acted on.
+      c40g-empty-midplane-5x has every card out and both columns still fitted, at about 220 px
+      across the column - too coarse to resolve the boundary or to see whether the numbers
+      persist. c40g-lab-card-removal shows a seam in roughly the right place but at an angle that
+      makes its position unusable. WANTED - one photograph of the C40G with the LEFT fan module
+      withdrawn. If the numbers are still there, they are chassis ink and `fan-left` shrinks; if
+      they leave with the module, they belong in a component skin and the two modules are
+      different parts. Nothing else in the intake can decide it.
+  fan-modules:
+    confidence: drawing
+    note: >-
+      drawing - Figure 1-7, "C40G fan module location and directional air flow", settles which
+      side is which and it is NOT symmetric. The RIGHT strip is labelled "System fan module" and
+      "Air filter" with "Air flow direction IN"; the LEFT strip is labelled "Secondary fan module
+      slot (optional with redundancy kit)" with "Air flow direction OUT". So fan-right defaults to
+      a module and fan-left defaults to empty, which is what a chassis without the redundancy kit
+      actually looks like. Both strips carry the same FAN TRAY 2 / FAN TRAY 1 / AIR FILTER legend
+      printed on the CHASSIS, which is why an empty left slot still shows it in the guide figures
+  power-entry:
+    confidence: drawing
+    note: >-
+      drawing-measured - Figure 1-4, "C40G CMTS rear view (DC; non-redundant)", scaled by the
+      known 265.9 height at 2.982 px/mm. The two PEM faces read x 44.8-195.7 and 212.8-377.7 and
+      the band runs y 194-264.5. They are bays and not placements because the guide carries both
+      "Removing the DC power entry modules" and "Replacing the PEMs" and they slide into openings.
+      THE BAYS WERE RIGHT AND THE COMPONENT WAS WRONG, and I got that backwards once before
+      landing here. casa/c40g-pem read 158.0 x 70.5 against bays of 158.0 x 68.5 - a module 2.00
+      mm TALLER than the opening it slides into, found by asr9k-cards' bay-versus-occupant sweep.
+      Nothing else could see it: L13 fires on overlap, so a bay too SMALL for what it accepts is
+      invisible, and 2 mm is invisible drawn. THREE CANDIDATES FOR THE BAND'S TOP EDGE, and the
+      arithmetic decides between them. 194.0 is what this entry and the component's both read off
+      Figure 1-4, and it is IMPOSSIBLE - the card slot above, rear-0, ends at 164.35 + 30.47 =
+      194.82, and two pieces of sheet metal cannot share 0.82 mm. 194.82 itself is flush against
+      that edge. 196.0 is what the bays already said. 196.0 WINS BECAUSE 194.82 IS THE SOFTEST
+      NUMBER OF THE THREE AND FLUSH-MOUNTING ON IT WOULD MAKE THIS BAND DEPEND ON IT EXACTLY. That
+      30.47 slot pitch is not a measurement of a slot: it is 426.6 mm of card region from the
+      C100G's Figure 1-1 divided by 14, carried across to this chassis, and rear-0's bottom edge
+      is that derived pitch ACCUMULATED SIX TIMES from y 12.0. The error compounds. Against that,
+      196.0 leaves a 1.18 mm margin below the card cage - and the front face, measured
+      independently, shows a 1.48 mm margin in exactly that position between the card band and the
+      brand band at y 196.3. A structural margin confirmed on one face is better evidence than a
+      flush fit against an accumulation of derived pitches. SO THE FIGURE READING OF 194 IS THE
+      OVERREAD, by about two millimetres at 2.982 px/mm, which is six pixels. casa/c40g-pem is
+      corrected to 68.5 to match the opening it goes into. THE HONEST RANGE IS 2 mm and a tape
+      measure could still move this - see the pem-band-top-edge gap. The team lead flagged rear-0
+      as the softest of the three before I had finished, and they were right: my first attempt
+      grew the bays onto that edge, which traded a fit defect for a dependency on the least
+      trustworthy number in the file. NOTE THE VARIANT SPLIT: this is the DC chassis, and the AC
+      one is modelled too - see the ac-variant entry. An AC C40G carries four 1100 W PSUs behind
+      the snap-on front cover instead of these two PEMs, which is why these bays default EMPTY and
+      each DC configuration names them.
+  side-faces:
+    confidence: drawing
+    note: >-
+      drawing plus a stated absence, exactly as on the C100G. NO FIGURE IN THIS GUIDE SHOWS THE
+      TOP, BOTTOM OR SIDE FACES either - Figures 1-1 through 1-5 are front and rear elevations and
+      1-7 is an airflow diagram. So the four are sized from Table A-1 ("Height: 10.47 in. (265.90
+      mm), Depth: 15.25 in. (388.45 mm)"; its 19 in / 482 mm width is the rack face including the
+      flanges, so the 432.95 body width is used) and carry only the integral mounting flanges and
+      the chassis label, which the guide locates in the same words the C100G guide uses - "The
+      C40G product label is affixed to the top front side of the chassis". Orientation matches the
+      C100G: top and bottom put the front at y = 0, left puts it at x = 0, right mirrors it. NO
+      SIDE VENTS ARE DRAWN, deliberately, and this is the judgement call worth flagging. Air goes
+      right to left through this chassis, so the side panels are a plausible place for an intake
+      and an exhaust - but the filter the guide describes is on the FAN MODULEs own face ("Figure
+      1-9 shows the air filter side of the fan module"), the fan modules are inserted from the
+      front, and no figure shows an opening in either side panel. Drawing vents on a guess is the
+      wrong-box outcome these views exist to prevent
+  redundancy-prose:
+    note: >-
+      REMOVED, not lost. attrs.other carried `redundancy: "3+1 with BDM (slot 1 protects, slot 4
+      active); classic DOCSIS protects per side at 1 and 4"` - one prose sentence restating what
+      the two redundancy configurations now say structurally, bay by bay. It was worth keeping
+      only while the bays were wrong about it, which they were until the protecting-slots fix: the
+      sentence was the correct statement and the model contradicted it. Now the model IS the
+      statement, and a second copy that no tool can read is the thing rule 8 warns about. The AC
+      axis is a third configuration and was never in this sentence at all
+  ac-variant:
+    confidence: drawing
+    note: >-
+      drawing - the C40G ships AC or DC and the guide draws the rear both ways: Figures 1-2 and
+      1-3 for the AC chassis, 1-4 and 1-5 for the DC one. The AC build puts "up to four removable
+      1100W AC power supply units" in a row across the bottom FRONT, behind the snap-on cover, in
+      place of the two DC power entry modules at the bottom rear. Figure 1-10 shows them with the
+      cover off and Figure 1-11 shows their other end. Numbering runs right to left - "PSUs are
+      labeled on the front of the chassis as PSU1, PSU2, PSU3 and PSU4 from right to left" - so
+      the LEFTMOST bay is psu-4, and rel-pos follows the vendor rather than the drawing order.
+      THIS IS AN ORTHOGONAL AXIS to the other two configurations, which are redundancy schemes: an
+      AC chassis can run either scheme. Configurations are the only mechanism the format has for a
+      variant, so the axes share one list; ac-power changes nothing about redundancy and neither
+      BDM scheme says anything about power. The PEM bays therefore default EMPTY and each DC
+      scheme names them, because a configuration cannot clear a bay - occupants are strings - and
+      because neither AC nor DC is "the" C40G. THE AC REAR FACE IS NOW PLACED, and the band is no
+      longer two empty bays. Figures 1-2 and 1-3 show it: one bolted panel across the bottom of
+      the rear carrying a rocker switch and an IEC C14 inlet per PSU, where the DC chassis carries
+      its two PEMs. It was modelled as casa/c40g-ac-inlet-panel@1 and left unplaced because the
+      format could not say that a bolted panel is present in only one configuration - a
+      configuration carried bays, skins, airflow, region-context and part-numbers, but not
+      placements. `only-in` says it, on the placement and on the two PEM bays alike, because which
+      configurations a piece of METAL exists in is a statement about geometry and geometry lives
+      in the view. An AC chassis has the panel and no PEM openings; a DC chassis has the two
+      openings and no panel. They are never both present, so there is no overlap for L13 to reject
+      and no need for a bay to claim one. WHAT THIS FIXED, reported from the viewer: the AC rear
+      drew two black rectangles where the PEM bays sat empty, and selecting one offered
+      casa/c40g-pem - a DC power entry module - as the only thing that could go in a chassis
+      ordered for AC.
+  non-redundant-variant:
+    confidence: drawing
+    note: >-
+      drawing plus prose - ADDED, because the guide draws four rear views and the model only had
+      three configurations for them. Figures 1-2 and 1-4 are the AC and DC NON-REDUNDANT rears and
+      1-3 and 1-5 the redundant pair, so the four figures are two axes crossed - AC/DC and
+      redundant/not - not four layouts. The AC/DC axis was already modelled as ac-power; this
+      entry adds the other value of the second axis. The layout is stated in words as well as
+      drawn: "Rear slots (non-redundant system) - Upstream and downstream line card I/O slots: 0,
+      1, 4 5; Blank filler plates: 2, 3", against the redundant list right below it which reads
+      "I/O slots: 0, 5; LC Switch slots: 1, 4; SMM Switch slots: 2, 3". Figure 1-4 is legible at
+      4x and agrees: slots 5 and 4 read QAM IO, 3 and 2 are plain plates with one screw at each
+      end, and 1 and 0 read US IO. The chassis overview also says outright that "The Casa C40G
+      chassis is available in both redundant and non-redundant versions". THE FRONT IS NOT
+      MODELLED FROM A NON-REDUNDANT FIGURE - there is no separate front view for it - so front
+      0/1/4/5 take the DS and US cards Figure 1-1 draws (DS 8X96 above, US 16X8 below) on the
+      pairing the rear figure shows, QAM IO behind a DS card and US IO behind a US one, and front
+      2/3 keep the SMM pair, which the front-slot bullet lists without qualifying it by
+      redundancy. That pairing is an inference from two figures and is the softest part of this
+      entry
+  switch-slot-print:
+    confidence: drawing
+    note: >-
+      drawing - a free check that PASSES. Figure 1-20 of this guide, "BDM module, SMM Switch BDM
+      A, B, and LC Switch BDM", prints each SMM Switch card's slot assignment on its own
+      faceplate, for BOTH chassis: A reads "C100G Slot 6 / C40G Slot 2" and B reads "C100G Slot 7
+      / C40G Slot 3". rear-2 accepts casa/smm-sw-bdm-a@1 and rear-3 accepts casa/smm-sw-bdm-b@1,
+      which is what the card says. The same figure is Figure 1-14 of the C100G guide and that
+      device's switch-slot-print entry records the other half
+  protecting-slots:
+    note: >-
+      SETTLED, and the same half-fault as the C100G. The guide numbers this one twice over. For
+      the classic scheme the chassis overview reads "Rear slots (fully redundant system) -
+      Upstream and downstream line card I/O slots: 0, 5; LC Switch slots: 1, 4; SMM Switch slots:
+      2, 3", Table A-2 agrees with "Two LC Switch modules for DOCSIS-module redundancy in rear
+      slots 1 and 4", and Figure 1-5, the rear view OF THAT EXACT LAYOUT, is legible at 4x: slots
+      5 to 0 read QAM IO, LC SWITCH, SMM SWITCH, SMM SWITCH, LC SWITCH, US IO. So rear-4 is an LC
+      Switch in the classic scheme, and docsis-classic said so in its description while placing a
+      switched I/O. For the BDM scheme the guide is equally explicit - "C40G rear side (3+1): Slot
+      1 - LC-BDM-SWITCH; Slot 4 - 6+12 SW-IO or 6+12 SW-IO2" - so bdm-3plus1 was right and is
+      unchanged. rear-4 accepts both, and each configuration names its own
+  slot-compatibility:
+    confidence: drawing
+    note: >-
+      drawing - the C40G guide numbers its own slots twice. The chassis overview lists "Front
+      slots - Upstream and downstream line card slots: 0, 1, 4 5; Active and standby SMM slots: 2
+      and 3", and Table A-2, "C40G capacities", agrees: "6 line card slots on front - 1 Switch and
+      Management (SMM) module, 1 SMM redundant module, 4 DOCSIS modules (any combination of DS and
+      US modules)". So front-2 and front-3 take the SMM generations and the other four take every
+      DS and US card, "any combination" being a real statement modelled as it reads. Table A-2's
+      DQM row names DS8x8, DS8x96 and DS8x192 and its DCU row names US16x4 and US16x8, so all five
+      are eligible here even though THIS guide's Tables A-3 and A-4 print power for only three of
+      them - the C100G guide carries the other two. The CSC is placed by its data sheet, "The C40G
+      can house 4 CSCs for a maximum of 32 ports", which is the same four slots. The rear is
+      deliberately NOT widened: the same overview puts LC Switch in rear 1 and 4, SMM Switch in
+      rear 2 and 3, and I/O cards in the rest, and it is the only place either guide says where
+      blank filler plates go by number - "Rear slots (non-redundant system) - Blank filler plates:
+      2, 3". Bay defaults are unchanged
+
 attrs:
   power:
     power-max-w: '1800'

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9620-54dc
-version: 3.0.6
+version: 3.0.7
 maturity: modelled
 manufacturer: UfiSpace
 model: S9620-54DC
@@ -21,217 +21,227 @@ description: >-
   orderable AC or DC, front-to-back
 profile: networking
 provenance:
-  sources: >-
-    UfiSpace S9620-54DC datasheet
-    for dimensions, weight, the port inventory, platform, power,
-    environment, compliance and the FRU ordering lines; two vendor renders
-    (photos/s9620-54dc-2-front, -1-angle) for everything else. THERE IS NO HARDWARE
-    INSTALLATION GUIDE. UfiSpace has published none for the S9620 family, so this
-    model has no faceplate figure, no callout list, no LED table, no FRU dimension
-    table and no rear elevation - every one of which the S9610-36D and S7801-54XS
-    models leaned on. What that costs is recorded feature by feature below and in
-    the gaps register.
-    THE DATASHEET SETS ITS SPEC TEXT AS OUTLINED GLYPHS: pdftotext returns 1471
-    bytes of bullet characters and headings, and the docling doc.md is the same
-    headings with no values, so a reader who trusted either would conclude the
-    vendor published nothing. The figures were recovered by rendering both pages at
-    200 and 1200 dpi with pdftocairo and reading them; every number in attrs comes
-    off that render.
-  gate-1: >-
-    the front render PASSES and it is the only thing here that does. Body measures
-    495 x 50 px (x 14-508, y 50-99) against the datasheet's 440 x 44 mm: aspect
-    9.900 against a true 10.000, 1.0% out, so it is orthographic and reads at 1.1250
-    px/mm across and 1.1364 down. It is also TINY. 520 x 150 px is the largest image
-    UfiSpace serves - /image/5e/ and /image/5g/ were probed against every other size
-    token on the product page and nothing above 650 px exists - so one pixel is
-    0.89 mm and no legend on this faceplate is legible. The datasheet's own 'Front
-    and Back Views' strip is the same raster at 158 px native and shows the FRONT
-    only; there is no back view in it despite the caption. The angle render
-    (650 x 278) is a 45-degree view and fails Gate 1 outright; it is used for
-    construction, counts and colour, never for a dimension.
-  chassis: >-
-    datasheet - '1RU, 440.0 mm(W) x 480.0 mm(D) x 44 mm(H) or 17.32" x 18.89" x
-    1.73"', 'Weight: 10.76 kg (without FRU)'. 440 is the body, not a rack face: it is
-    17.32 inches, and the render draws two small bracket tabs standing outside the
-    full-height body on each side (px 8-13 against a body of 14-508), which are the
-    mounting hardware and are not drawn. No document states the ear extent or the
-    handle projection, because there is no installation guide.
-  front-layout: >-
-    photo-measured at 1.125 / 1.136 px/mm, quoted to 0.1 mm because that is what the
-    arithmetic gives and NOT because the image resolves it - one pixel is 0.89 mm, so
-    every front coordinate here is good to about +/-0.5 mm and no better. Left to
-    right: the timing block (GNSS SMA, two SMB jacks, a reset pinhole, the model
-    legend, an unnamed round icon, the six-lamp status tile, and one RJ45 in a bright
-    bezel with two small unidentified circles under it), then twenty-four ganged SFP
-    columns in two twelve-column shells, then two 100G QSFP-DD columns and one 400G
-    QSFP-DD column.
-  sfp-layout: >-
-    photo-measured, and THE PITCH WAS TAKEN FROM THE SHELL SEPARATORS, which repeat
-    once per column, not from any filled module face. A local-maximum scan of the
-    upper cage band finds 25 separators from x 41 to x 428 px at a uniform 16.125 px,
-    which is 14.33 mm - the SFF-8433 ganged pitch of 14.25 to 0.6%, or 0.09 px per
-    port. The standard pitch is therefore used and anchored at the measured left
-    edge, and the check is what happens at the far end: twelve columns of 14.25 from
-    24.0 mm reach 195.0 against a measured shell break at 234.5 px (195.1 mm), and
-    twelve more from the measured 197.3 reach 368.3 against a measured last separator
-    at 428 px (368.0 mm). Two independent 171 mm runs landing within 0.3 mm is what
-    says the pitch is right. Row pitch is measured at 17 px = 15.0 mm, which is
-    std/sfp-ganged's own 15.00 belly-to-belly figure, so the two rows are placed on
-    it exactly. The drawn dark aperture is only 9 px (7.9 mm) tall against the
-    standard's 10.4 - that is the render's black area inside a grey wall, not a
-    smaller cage - so the standard height is used, centred on the measured aperture
-    centres at y 15.0 and 29.9 mm.
-  port-media: >-
-    THE PRINTED COLOUR BAND UNDER THE PORTS IS WHAT ASSIGNS THE MEDIA, and it is the
-    one thing on this faceplate that a 520 px image reads unambiguously. Sampling the
-    band per column gives twenty yellow columns (RGB 104,104,53), four teal
-    (39,94,92), then olive (64,79,48) under two QSFP-DD columns and steel blue
-    (56,93,118) under the last. That is exactly the datasheet's inventory - 40 x
-    1/10/25G SFP28, 8 x 1/10/25/50G SFP56, 4 x 100G QSFP-DD, 2 x 400G QSFP-DD - in
-    the order the datasheet lists it, and it is what fixes which port is which.
-  port-numbers: >-
-    THE FACEPLATE PRINTS THEM AND THIS RENDER CANNOT READ THEM. The yellow, teal and
-    blue bands each carry two dark glyph clusters per column at 1.8-2.0 mm cap height,
-    which is two pixels; the olive band carries none at all, which is a reading and not a
-    miss - see the qsfp-100g-unnumbered gap for the side-by-side that establishes it. So
-    the NUMERALS
-    DRAWN HERE ARE A RECONSTRUCTION, not a transcription: 0-53 left to right, even
-    along the top row and odd along the bottom, which is the numbering every UfiSpace
-    box in this library uses (S7801-54XS 0-53 on the same 48+6 shape, S9610-36D 0-35,
-    S9510-28DC) and which the up/down lamp pair in each column corroborates. Whether
-    UfiSpace numbers the 400G pair first on this SKU is not knowable from any held
-    document; see the port-numbering gap. The olive band's four ports are left
-    unlabelled because nothing is printed there to label them with.
-  port-leds: >-
-    photo-measured. Each SFP column carries ONE UP-TRIANGLE AND ONE DOWN-TRIANGLE on
-    the silver inter-row strip - 48 green marks counted by colour, exactly two per
-    column, at x offsets 5.8 and 9.3 mm from the column edge and y 22.0-23.8 mm. Up
-    names the top-row port and down the bottom, the arrangement the S9510-28DC HIG
-    figure documents and the S7801-54XS reuses. They sit 3.56 mm apart, so
-    common/led-arrow (3.6 mm wide) COLLIDES and common/led-arrow-sm (2.25) is used
-    instead: the right pitch in a smaller shape. Flanking each pair are two small dark
-    squares, 1.8 mm, at offsets 2.7 and 12.0 mm - 48 of those as well. They are drawn
-    as decor because nothing identifies them and a dark square is not a lamp shape;
-    see the shell-dimples gap.
-    The QSFP-DD lamps are arranged differently, as they are on every UfiSpace box:
-    each 100G column carries four round lamps ABOVE it (green in the render, measured
-    at x 375.1/379.1/383.1/387.1 and 393.8/397.8/401.8/405.8, a 4.0 mm pitch, in a
-    strip that visibly interrupts the vent perforation) for its top-row port, and four
-    BELOW it on the olive band for its bottom-row port. The 400G column has NO lamp
-    row above it - the vent perforation runs unbroken across x 478-500 at the same
-    rows - and two lamps below, at 418.2 and 426.2 mm. That asymmetry is measured, not
-    assumed; what the lamps MEAN is nowhere stated, see the port-led-semantics gap.
-  timing-block: >-
-    photo-measured. Three round gold jacks across the top of the left block, isolated
-    by colour: one 10.2 mm across centred at (12.9, 7.0) and two 8.0 mm at (29.3, 5.3)
-    and (44.4, 5.3). The big one is the GNSS SMA - the datasheet's Timing Interfaces
-    row lists exactly one SMA and two SMB, and an SMA nut is the larger - and the two
-    small ones are the SMB pair. WHICH SMB IS WHICH IS NOT READ: a legend sits beside
-    each jack and is four pixels tall. They are assigned 10MHz then 1PPS in the
-    datasheet's own listing order, which is a convention and not a reading; see the
-    smb-assignment gap. Construction follows the S9311-64D and S9610-36D: a gold decor
-    disc for the knurled nut with the registry bore (std/sma, std/smb) on top, rather
-    than common/smb-jack, which draws a hex nut this hardware does not have.
-  rj45-and-unknowns: >-
-    ONE RJ45 on this face, in a bright bezel measured at x 8.0-20.4, y 17.6-34.3 mm
-    (12.4 wide x 16.7 tall) with a 9.8 x 13.2 mm opening. It is the ToD jack: the
-    datasheet's Timing Interfaces row names a ToD input/output RJ45, it sits inside
-    the timing block, and the three OTHER RJ45/USB connectors the datasheet lists are
-    not on this face at all (see the rear-management-ports gap). No library RJ45 fits
-    a 12.4 mm bezel - std/rj45 is 16.0 wide, common/rj45-shielded 15.8 - so
-    std/rj45-ganged (12.7 x 11.0) is placed on the measured width and centre with the
-    bright bezel drawn as panel decor behind it, per the rule that a std/ port draws
-    the opening and the metal shell around it is panel. The jack's LATCH DIRECTION IS
-    NOT READABLE at 1.1 px/mm; it is drawn in the component's own orientation and the
-    question is recorded.
-    Three small dark circles on the left block are drawn because the render puts them
-    there and are NOT named: one 2.7 mm at (6.2, 14.5) above the jack, which reads as
-    a recessed reset button and is placed as common/reset-button on that reading, and
-    two more at (6.2, 37.4) and (16.9, 37.4) below it, drawn as decor. A 4.4 mm round
-    icon at (72.4, 5.7) between the model legend and the lamp tile is likewise drawn
-    and unnamed. With no guide there is no callout list to resolve any of them.
-  status-lamps: >-
-    photo-measured and DELIBERATELY UNLABELLED. A dark recessed tile at x 78.2-105.5,
-    y 2.6-8.8 mm carries six lamps: four green on the top row at x 79.6, 86.2, 92.9,
-    99.6 (y 4.4) and two on the bottom row (y 7.0), green at 79.6 and BLUE at 100.0.
-    A printed legend sits beside each and is two pixels tall. The 4+2 shape with a
-    blue lamp under the last of the four is the S7801-54XS's HIG-documented cluster
-    exactly (SYS, FAN, PS0, PS1 with ID beneath PS1), and the extra green lamp is
-    where a timing box's SYNC would go - but that is a pattern match, not a reading,
-    so NO LEGEND IS PRINTED HERE and the lamps carry positional ids. The blue lamp
-    keeps a blue beacon state because its colour is measured. See the
-    status-lamp-legends gap.
-  panel-decor: >-
-    photo-measured. The perforated vent field above the ports runs x 108.4-433.8 at
-    y 1.8-8.8 (it starts where the lamp tile ends, not at the chassis edge), and a
-    second perforated row runs x 24.0-367.1 at y 40.5-43.1 - under the SFP block only,
-    stopping where the QSFP shells begin, which is measured rather than tidied. The
-    silver ganged-cage shells are drawn as decor behind the ports, per the S9510-28DC
-    and S7801-54XS precedent: without them a dark cage on a dark faceplate is
-    invisible. Band colours are the peak pixel of each band, not its mean, because the
-    printed glyphs and lamps drag the mean down.
-  rear-layout: >-
-    ESTIMATED IN EVERY COORDINATE, and the inventory is the only sourced part. The
-    datasheet gives 'Hot swappable, 1+1 redundant PSUs' and 'Hot swappable, 4+1
-    redundant Fans' with front-to-back airflow and names the orderable parts
-    (PSU-751-AESR-1C / PSU-751-DESR-1C at 750 W, FAN-405636-HD), so five fan bays and
-    two supply bays at the rear is a fact. WHERE THEY SIT IS NOT: UfiSpace publishes
-    no rear render for this model and no installation guide, so there is no image and
-    no drawing of this face anywhere in the intake. The five fans are laid left to
-    right on an even 52.0 mm pitch from x 12.0 and the two supplies at the right, which
-    is the arrangement every 1RU box in this library has and is a GUESS about this one.
-    Nothing is drawn that a photograph would be needed to place - no grounding pad, no
-    position legends, no vent field - because inventing those would be worse than
-    leaving the face plain. See the rear-geometry gap.
-  views: >-
-    Six views, all with drawn content, and four of them estimated throughout. TOP:
-    y = 0 is the REAR, per the house convention. The angle render shows three long
-    shallow stiffening ribs running ACROSS the width (they are parallel to the front
-    edge in the image, not to the side edge) and a scatter of small fastener dimples;
-    the count is read from the render and the positions are spread evenly, estimated.
-    BOTTOM mirrors left-right and carries a compliance sticker at an estimated
-    position - no image shows the underside. LEFT (x = 0 is the REAR) and RIGHT (x = 0
-    is the FRONT) each carry three countersunk ear-mount screws in a column near the
-    front and four rail features along the length, both visible in the angle render's
-    left side face and neither dimensioned anywhere. Both side faces carry only
-    symmetric content, so the depth-axis conventions are stated here rather than
-    exposed by an asymmetric feature.
-  attrs: >-
-    datasheet - the Physical, Environmental, Performance and Regulatory Compliance
-    tables and the Supported Accessories block, read off a 200 dpi page render because
-    the text is outlined. Compliance strings kept verbatim and semicolon-separated.
-  power: >-
-    datasheet 'Typical power: 125 Watts (no transceiver)' - the vendor's own scope, so
-    power-envelope is bare. NO MAXIMUM IS PUBLISHED. The S9610-36D's HIG states its
-    maximum four times over; this platform has no HIG, so there is no max figure to
-    carry and none is invented. Inputs are the datasheet's: 100-240 V 10 A AC,
-    -40 to -75 V 28 A DC. Each supply is 750 W from its own ordering line
-    ('PSU-751-AESR-1C, 750W AC'). The fans publish no draw at all, so the L27/L29
-    warning stands and any total built from the modules is a floor.
-  part-numbers: >-
-    The datasheet's Available to Order block names PSU-751-AESR-1C and PSU-751-DESR-1C;
-    the library's ufispace/psu-751-ac and -dc were drawn for the S9110-32X, which orders
-    PSU-751-AESR and -DESR at the same 750 W on the same 50.5 x 40.2 face. The base
-    configuration overrides the model attribute to this product's own -1C spelling. The
-    fan is worse: this datasheet says FAN-405636-HD and the library's component is
-    FAN-405637-HD from the S9110-32X, one digit apart in a number that encodes the
-    rotor, so it is probably the same face and possibly not. It is reused with the
-    model overridden and the disagreement filed rather than resolved. Neither part's
-    face was re-measured here, because there is no guide to measure it against.
-  vent-islands: >-
-    derived - a vent field is a perforation and the drawing said so, but the marks
-    printed inside one were floating on air (L64). The vendor interrupts the
-    perforation where it prints, so each of those marks now has a solid patch under it
-    in the chassis colour, drawn over the vent the way ufispace/s9600-72xc paints its
-    port bands over one. The patch is the printing's own footprint plus 0.4 mm, which is
-    what the S9610-36D's front render measures: its slots stop 0.4 mm outside each lamp
-    cluster and resume 0.4 mm past it. Where a vent is simply measured wider than the
-    metal it reaches, this states the metal that the printing proves is there without
-    re-measuring the field.
-  lifecycle: >-
-    searched 2026-08-28: 'UfiSpace S9620-54DC end of life' - no announcement found. The
-    vendor's aggregation-router product page and the datasheet (revision 20260811V01)
-    are both live. none-announced is a real finding, not an absence.
+  sources:
+    note: >-
+      UfiSpace S9620-54DC datasheet for dimensions, weight, the port inventory, platform, power,
+      environment, compliance and the FRU ordering lines; two vendor renders
+      (photos/s9620-54dc-2-front, -1-angle) for everything else. THERE IS NO HARDWARE INSTALLATION
+      GUIDE. UfiSpace has published none for the S9620 family, so this model has no faceplate
+      figure, no callout list, no LED table, no FRU dimension table and no rear elevation - every
+      one of which the S9610-36D and S7801-54XS models leaned on. What that costs is recorded
+      feature by feature below and in the gaps register. THE DATASHEET SETS ITS SPEC TEXT AS
+      OUTLINED GLYPHS: pdftotext returns 1471 bytes of bullet characters and headings, and the
+      docling doc.md is the same headings with no values, so a reader who trusted either would
+      conclude the vendor published nothing. The figures were recovered by rendering both pages at
+      200 and 1200 dpi with pdftocairo and reading them; every number in attrs comes off that
+      render.
+  gate-1:
+    note: >-
+      the front render PASSES and it is the only thing here that does. Body measures 495 x 50 px
+      (x 14-508, y 50-99) against the datasheet's 440 x 44 mm: aspect 9.900 against a true 10.000,
+      1.0% out, so it is orthographic and reads at 1.1250 px/mm across and 1.1364 down. It is also
+      TINY. 520 x 150 px is the largest image UfiSpace serves - /image/5e/ and /image/5g/ were
+      probed against every other size token on the product page and nothing above 650 px exists -
+      so one pixel is 0.89 mm and no legend on this faceplate is legible. The datasheet's own
+      'Front and Back Views' strip is the same raster at 158 px native and shows the FRONT only;
+      there is no back view in it despite the caption. The angle render (650 x 278) is a 45-degree
+      view and fails Gate 1 outright; it is used for construction, counts and colour, never for a
+      dimension.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - '1RU, 440.0 mm(W) x 480.0 mm(D) x 44 mm(H) or 17.32" x 18.89" x 1.73"', 'Weight:
+      10.76 kg (without FRU)'. 440 is the body, not a rack face: it is 17.32 inches, and the
+      render draws two small bracket tabs standing outside the full-height body on each side (px
+      8-13 against a body of 14-508), which are the mounting hardware and are not drawn. No
+      document states the ear extent or the handle projection, because there is no installation
+      guide.
+  front-layout:
+    confidence: photo-measured
+    note: >-
+      photo-measured at 1.125 / 1.136 px/mm, quoted to 0.1 mm because that is what the arithmetic
+      gives and NOT because the image resolves it - one pixel is 0.89 mm, so every front
+      coordinate here is good to about +/-0.5 mm and no better. Left to right: the timing block
+      (GNSS SMA, two SMB jacks, a reset pinhole, the model legend, an unnamed round icon, the
+      six-lamp status tile, and one RJ45 in a bright bezel with two small unidentified circles
+      under it), then twenty-four ganged SFP columns in two twelve-column shells, then two 100G
+      QSFP-DD columns and one 400G QSFP-DD column.
+  sfp-layout:
+    confidence: photo-measured
+    note: >-
+      photo-measured, and THE PITCH WAS TAKEN FROM THE SHELL SEPARATORS, which repeat once per
+      column, not from any filled module face. A local-maximum scan of the upper cage band finds
+      25 separators from x 41 to x 428 px at a uniform 16.125 px, which is 14.33 mm - the SFF-8433
+      ganged pitch of 14.25 to 0.6%, or 0.09 px per port. The standard pitch is therefore used and
+      anchored at the measured left edge, and the check is what happens at the far end: twelve
+      columns of 14.25 from 24.0 mm reach 195.0 against a measured shell break at 234.5 px (195.1
+      mm), and twelve more from the measured 197.3 reach 368.3 against a measured last separator
+      at 428 px (368.0 mm). Two independent 171 mm runs landing within 0.3 mm is what says the
+      pitch is right. Row pitch is measured at 17 px = 15.0 mm, which is std/sfp-ganged's own
+      15.00 belly-to-belly figure, so the two rows are placed on it exactly. The drawn dark
+      aperture is only 9 px (7.9 mm) tall against the standard's 10.4 - that is the render's black
+      area inside a grey wall, not a smaller cage - so the standard height is used, centred on the
+      measured aperture centres at y 15.0 and 29.9 mm.
+  port-media:
+    note: >-
+      THE PRINTED COLOUR BAND UNDER THE PORTS IS WHAT ASSIGNS THE MEDIA, and it is the one thing
+      on this faceplate that a 520 px image reads unambiguously. Sampling the band per column
+      gives twenty yellow columns (RGB 104,104,53), four teal (39,94,92), then olive (64,79,48)
+      under two QSFP-DD columns and steel blue (56,93,118) under the last. That is exactly the
+      datasheet's inventory - 40 x 1/10/25G SFP28, 8 x 1/10/25/50G SFP56, 4 x 100G QSFP-DD, 2 x
+      400G QSFP-DD - in the order the datasheet lists it, and it is what fixes which port is
+      which.
+  port-numbers:
+    note: >-
+      THE FACEPLATE PRINTS THEM AND THIS RENDER CANNOT READ THEM. The yellow, teal and blue bands
+      each carry two dark glyph clusters per column at 1.8-2.0 mm cap height, which is two pixels;
+      the olive band carries none at all, which is a reading and not a miss - see the
+      qsfp-100g-unnumbered gap for the side-by-side that establishes it. So the NUMERALS DRAWN
+      HERE ARE A RECONSTRUCTION, not a transcription: 0-53 left to right, even along the top row
+      and odd along the bottom, which is the numbering every UfiSpace box in this library uses
+      (S7801-54XS 0-53 on the same 48+6 shape, S9610-36D 0-35, S9510-28DC) and which the up/down
+      lamp pair in each column corroborates. Whether UfiSpace numbers the 400G pair first on this
+      SKU is not knowable from any held document; see the port-numbering gap. The olive band's
+      four ports are left unlabelled because nothing is printed there to label them with.
+  port-leds:
+    confidence: photo-measured
+    note: >-
+      photo-measured. Each SFP column carries ONE UP-TRIANGLE AND ONE DOWN-TRIANGLE on the silver
+      inter-row strip - 48 green marks counted by colour, exactly two per column, at x offsets 5.8
+      and 9.3 mm from the column edge and y 22.0-23.8 mm. Up names the top-row port and down the
+      bottom, the arrangement the S9510-28DC HIG figure documents and the S7801-54XS reuses. They
+      sit 3.56 mm apart, so common/led-arrow (3.6 mm wide) COLLIDES and common/led-arrow-sm (2.25)
+      is used instead: the right pitch in a smaller shape. Flanking each pair are two small dark
+      squares, 1.8 mm, at offsets 2.7 and 12.0 mm - 48 of those as well. They are drawn as decor
+      because nothing identifies them and a dark square is not a lamp shape; see the shell-dimples
+      gap. The QSFP-DD lamps are arranged differently, as they are on every UfiSpace box: each
+      100G column carries four round lamps ABOVE it (green in the render, measured at x
+      375.1/379.1/383.1/387.1 and 393.8/397.8/401.8/405.8, a 4.0 mm pitch, in a strip that visibly
+      interrupts the vent perforation) for its top-row port, and four BELOW it on the olive band
+      for its bottom-row port. The 400G column has NO lamp row above it - the vent perforation
+      runs unbroken across x 478-500 at the same rows - and two lamps below, at 418.2 and 426.2
+      mm. That asymmetry is measured, not assumed; what the lamps MEAN is nowhere stated, see the
+      port-led-semantics gap.
+  timing-block:
+    confidence: photo-measured
+    note: >-
+      photo-measured. Three round gold jacks across the top of the left block, isolated by colour:
+      one 10.2 mm across centred at (12.9, 7.0) and two 8.0 mm at (29.3, 5.3) and (44.4, 5.3). The
+      big one is the GNSS SMA - the datasheet's Timing Interfaces row lists exactly one SMA and
+      two SMB, and an SMA nut is the larger - and the two small ones are the SMB pair. WHICH SMB
+      IS WHICH IS NOT READ: a legend sits beside each jack and is four pixels tall. They are
+      assigned 10MHz then 1PPS in the datasheet's own listing order, which is a convention and not
+      a reading; see the smb-assignment gap. Construction follows the S9311-64D and S9610-36D: a
+      gold decor disc for the knurled nut with the registry bore (std/sma, std/smb) on top, rather
+      than common/smb-jack, which draws a hex nut this hardware does not have.
+  rj45-and-unknowns:
+    note: >-
+      ONE RJ45 on this face, in a bright bezel measured at x 8.0-20.4, y 17.6-34.3 mm (12.4 wide x
+      16.7 tall) with a 9.8 x 13.2 mm opening. It is the ToD jack: the datasheet's Timing
+      Interfaces row names a ToD input/output RJ45, it sits inside the timing block, and the three
+      OTHER RJ45/USB connectors the datasheet lists are not on this face at all (see the
+      rear-management-ports gap). No library RJ45 fits a 12.4 mm bezel - std/rj45 is 16.0 wide,
+      common/rj45-shielded 15.8 - so std/rj45-ganged (12.7 x 11.0) is placed on the measured width
+      and centre with the bright bezel drawn as panel decor behind it, per the rule that a std/
+      port draws the opening and the metal shell around it is panel. The jack's LATCH DIRECTION IS
+      NOT READABLE at 1.1 px/mm; it is drawn in the component's own orientation and the question
+      is recorded. Three small dark circles on the left block are drawn because the render puts
+      them there and are NOT named: one 2.7 mm at (6.2, 14.5) above the jack, which reads as a
+      recessed reset button and is placed as common/reset-button on that reading, and two more at
+      (6.2, 37.4) and (16.9, 37.4) below it, drawn as decor. A 4.4 mm round icon at (72.4, 5.7)
+      between the model legend and the lamp tile is likewise drawn and unnamed. With no guide
+      there is no callout list to resolve any of them.
+  status-lamps:
+    confidence: photo-measured
+    note: >-
+      photo-measured and DELIBERATELY UNLABELLED. A dark recessed tile at x 78.2-105.5, y 2.6-8.8
+      mm carries six lamps: four green on the top row at x 79.6, 86.2, 92.9, 99.6 (y 4.4) and two
+      on the bottom row (y 7.0), green at 79.6 and BLUE at 100.0. A printed legend sits beside
+      each and is two pixels tall. The 4+2 shape with a blue lamp under the last of the four is
+      the S7801-54XS's HIG-documented cluster exactly (SYS, FAN, PS0, PS1 with ID beneath PS1),
+      and the extra green lamp is where a timing box's SYNC would go - but that is a pattern
+      match, not a reading, so NO LEGEND IS PRINTED HERE and the lamps carry positional ids. The
+      blue lamp keeps a blue beacon state because its colour is measured. See the
+      status-lamp-legends gap.
+  panel-decor:
+    confidence: photo-measured
+    note: >-
+      photo-measured. The perforated vent field above the ports runs x 108.4-433.8 at y 1.8-8.8
+      (it starts where the lamp tile ends, not at the chassis edge), and a second perforated row
+      runs x 24.0-367.1 at y 40.5-43.1 - under the SFP block only, stopping where the QSFP shells
+      begin, which is measured rather than tidied. The silver ganged-cage shells are drawn as
+      decor behind the ports, per the S9510-28DC and S7801-54XS precedent: without them a dark
+      cage on a dark faceplate is invisible. Band colours are the peak pixel of each band, not its
+      mean, because the printed glyphs and lamps drag the mean down.
+  rear-layout:
+    confidence: estimated
+    note: >-
+      ESTIMATED IN EVERY COORDINATE, and the inventory is the only sourced part. The datasheet
+      gives 'Hot swappable, 1+1 redundant PSUs' and 'Hot swappable, 4+1 redundant Fans' with
+      front-to-back airflow and names the orderable parts (PSU-751-AESR-1C / PSU-751-DESR-1C at
+      750 W, FAN-405636-HD), so five fan bays and two supply bays at the rear is a fact. WHERE
+      THEY SIT IS NOT: UfiSpace publishes no rear render for this model and no installation guide,
+      so there is no image and no drawing of this face anywhere in the intake. The five fans are
+      laid left to right on an even 52.0 mm pitch from x 12.0 and the two supplies at the right,
+      which is the arrangement every 1RU box in this library has and is a GUESS about this one.
+      Nothing is drawn that a photograph would be needed to place - no grounding pad, no position
+      legends, no vent field - because inventing those would be worse than leaving the face plain.
+      See the rear-geometry gap.
+  views:
+    note: >-
+      Six views, all with drawn content, and four of them estimated throughout. TOP: y = 0 is the
+      REAR, per the house convention. The angle render shows three long shallow stiffening ribs
+      running ACROSS the width (they are parallel to the front edge in the image, not to the side
+      edge) and a scatter of small fastener dimples; the count is read from the render and the
+      positions are spread evenly, estimated. BOTTOM mirrors left-right and carries a compliance
+      sticker at an estimated position - no image shows the underside. LEFT (x = 0 is the REAR)
+      and RIGHT (x = 0 is the FRONT) each carry three countersunk ear-mount screws in a column
+      near the front and four rail features along the length, both visible in the angle render's
+      left side face and neither dimensioned anywhere. Both side faces carry only symmetric
+      content, so the depth-axis conventions are stated here rather than exposed by an asymmetric
+      feature.
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet - the Physical, Environmental, Performance and Regulatory Compliance tables and
+      the Supported Accessories block, read off a 200 dpi page render because the text is
+      outlined. Compliance strings kept verbatim and semicolon-separated.
+  power:
+    confidence: datasheet
+    note: >-
+      datasheet 'Typical power: 125 Watts (no transceiver)' - the vendor's own scope, so
+      power-envelope is bare. NO MAXIMUM IS PUBLISHED. The S9610-36D's HIG states its maximum four
+      times over; this platform has no HIG, so there is no max figure to carry and none is
+      invented. Inputs are the datasheet's: 100-240 V 10 A AC, -40 to -75 V 28 A DC. Each supply
+      is 750 W from its own ordering line ('PSU-751-AESR-1C, 750W AC'). The fans publish no draw
+      at all, so the L27/L29 warning stands and any total built from the modules is a floor.
+  part-numbers:
+    note: >-
+      The datasheet's Available to Order block names PSU-751-AESR-1C and PSU-751-DESR-1C; the
+      library's ufispace/psu-751-ac and -dc were drawn for the S9110-32X, which orders
+      PSU-751-AESR and -DESR at the same 750 W on the same 50.5 x 40.2 face. The base
+      configuration overrides the model attribute to this product's own -1C spelling. The fan is
+      worse: this datasheet says FAN-405636-HD and the library's component is FAN-405637-HD from
+      the S9110-32X, one digit apart in a number that encodes the rotor, so it is probably the
+      same face and possibly not. It is reused with the model overridden and the disagreement
+      filed rather than resolved. Neither part's face was re-measured here, because there is no
+      guide to measure it against.
+  vent-islands:
+    note: >-
+      derived - a vent field is a perforation and the drawing said so, but the marks printed
+      inside one were floating on air (L64). The vendor interrupts the perforation where it
+      prints, so each of those marks now has a solid patch under it in the chassis colour, drawn
+      over the vent the way ufispace/s9600-72xc paints its port bands over one. The patch is the
+      printing's own footprint plus 0.4 mm, which is what the S9610-36D's front render measures:
+      its slots stop 0.4 mm outside each lamp cluster and resume 0.4 mm past it. Where a vent is
+      simply measured wider than the metal it reaches, this states the metal that the printing
+      proves is there without re-measuring the field.
+  lifecycle:
+    note: >-
+      searched 2026-08-28: 'UfiSpace S9620-54DC end of life' - no announcement found. The vendor's
+      aggregation-router product page and the datasheet (revision 20260811V01) are both live.
+      none-announced is a real finding, not an absence.
+
 attrs:
   performance:
     switching-capacity: 1.2 Tb/s

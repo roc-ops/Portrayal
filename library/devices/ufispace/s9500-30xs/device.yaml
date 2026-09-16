@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9500-30xs
-version: 2.0.7
+version: 2.0.8
 maturity: modelled
 manufacturer: UfiSpace
 model: S9500-30XS
@@ -19,182 +19,195 @@ description: >-
   the rear
 profile: networking
 provenance:
-  sources: >-
-    UfiSpace S9500-30XS datasheet
-    for dimensions, weight, port inventory, platform, timing, power, environment,
-    compliance and the FRU ordering lines; S9500-30XS Hardware Installation Guide
-    (s9500-30xs-hig) for the faceplate and rear figures, the FRU dimension table, the LED
-    tables and grounding; three vendor product renders (photos/s9500-30xs-1-angle,
-    -2-front, -3-rear) for colour, counts and confirmation. Checked for a vendor 3D
-    model before trusting any figure, per the skill: the intake stages GLBs for
-    ReadyLinks only, and the S9500-30XS product page embeds no model-viewer and offers
-    no .glb/.gltf/.usdz or CAD download - so this model rests on figures and the gates
-    below apply in full.
-  scale-gate: >-
-    THE FRONT FIGURE FAILS A NAIVE ASPECT GATE AND IS STILL USABLE, and the reason is
-    worth writing down because it decides every number on this face. The HIG's port
-    overview (fig-0015) measures 1436 x 150 px body against a stated 440 x 43.5 mm
-    chassis: aspect 9.57 against a true 10.115, 5.7% out. So does the front photograph,
-    independently, at 9.49. Two images agreeing with each other and disagreeing with the
-    spec table is not two bad drawings; it is both of them drawing something the spec
-    table does not measure. What they draw is the chassis's top and bottom lips as well
-    as its front face - the strip is taller than the faceplate.
-    The axes were therefore calibrated separately, each against an object whose real
-    size the vendor states, and each confirmed twice:
-    X - the panel width 1436 px = 440 mm gives 3.2636 px/mm. On that scale the SFP
-    column pitch measures 14.32 mm against the 14.25 mm std/sfp-ganged standard, and
-    PSU1's metal face measures 50.8 mm against the HIG component table's 50.5. Neither
-    of those numbers set the scale, and both land on it.
-    Y - the PSU face is the only object on this face whose height the vendor states
-    (40.2 mm). It measures 131 px, so 3.259 px/mm - within 0.1% of the X scale, which is
-    what an orthographic drawing should be, and which the panel-height reading (3.448)
-    is not. Vertical positions are therefore y = 1.6 + (py - 11) / 3.259, anchoring the
-    PSU face's top edge at 1.6 mm; that puts its bottom edge at 41.8 in a 43.5 chassis,
-    a symmetric 1.6/1.7 mm margin, which is the check that the anchor is right.
-    Both scales are carried as `drawing` confidence and are good to about 0.3 mm.
-  chassis: >-
-    datasheet - 'Chassis (W x D x H) 1 RU, 440 x 302 x 43.5 mm', weight 4.76 kg without
-    FRU; the HIG Component Physical Information table repeats the same triple and the
-    same weight. 440 is the body and not a rack face: the HIG's accessory list ships
-    'Rack Mount Bracket ... 50.4 x 43 x 20mm (19' width rack)' as two separate parts, so
-    the mounting hardware is additional to 440 and is not drawn here.
-  psus: >-
-    drawing - the two supplies are on the FRONT of this chassis, at the left of the
-    faceplate, which is what makes it a front-service telco box. PSU1's metal face
-    measures x 64.96-115.70 (50.74 mm against the stated 50.5) and y 1.6-41.8 (40.2);
-    PSU0 sits one pitch left at 6.22, so the bay pitch is 58.74 mm. That pitch was
-    derived here from this figure alone and lands within 0.1% of the 58.7 the
-    S9510-28DC carries - the same chassis, the same PSU-401, measured by somebody else
-    from a different document - which is corroboration rather than a copied number.
-    The blue release latch is drawn OUTSIDE the face to its left, in the gutter that
-    carries the vertical PSU0/PSU1 legend; ufispace/psu-401-dc draws its latch inside
-    its own 50.5 width, and that difference is the component's business, not the bay's.
-  timing-block: >-
-    drawing - five SMA jacks in two rows, read off HIG fig-0015 at 8x: 1PPS IN and OUT
-    on the upper row at x 140.18 and 155.05, y 16.64; GNSS ANT, 10MHZ IN and 10MHZ OUT
-    on the lower row at x 124.83, 139.60 and 155.05, y 31.98. The IN and OUT columns
-    line up between the two rows, which is the check that the five centres are read
-    right. The datasheet calls all five SMA ('1 x GNSS input SMA, 1 x 1PPS input/output
-    SMA, 1 x 10MHz input/output SMA'). All five are ROUND: common/sma-jack was not used,
-    even though it is the library's panel SMA part and the S9510-28DC uses it for the
-    same job, because it draws a HEX nut and both the figure at 8x and the front
-    photograph show a circular knurled ring here. Each jack is therefore std/sma - the
-    6.35 mm registry bore, round - on a gold decor disc for the nut, the same
-    construction the S9311-64D uses for its round SMB jacks. The disc sizes carry a real
-    difference in the artwork rather than averaging it away: the figure draws the 1PPS
-    pair 9.6 mm across the nut and the other three only 7.1, a 35% difference well above
-    what this figure resolves.
-    Then BITS over ToD in their own silver frame (RJ48 over RJ45, an 12.58 mm stack
-    pitch), then the out-of-band RJ45, the USB-A and the console RJ45 in a third frame.
-  connector-sizes: >-
-    std/rj45-ganged (12.7 x 11.0) is used for all four RJ45/RJ48 jacks rather than
-    std/rj45@2 (15.8 x 13.2), which the S9510-28DC used for the same block and
-    recorded a gap about because it 'slightly exceeds the drawn stack'. The reason is
-    measured, not stylistic: the BITS/ToD apertures are drawn 12.26 mm wide on a
-    12.58 mm vertical pitch, and a 15.8 mm part cannot sit on that pitch at all. The same
-    applies to the USB - the drawn aperture is 13.2 x 5.5, so std/usb-a (12.0 x 4.5)
-    fits where common/usb-a@3 (17.0 x 9.3) does not.
-  sfp-layout: >-
-    drawing - fourteen columns of two, in two runs with ONE chassis web between them:
-    eight columns then the web at x 319.6, then six more. Column centres are
-    210.35 + 14.32k for k=0..7 and 328.47 + 14.32k for k=0..5, taken from the
-    twenty-eight green port arrows in the band between the rows (28 blobs, one pair per
-    column, pair centres regressing on a 14.32 mm pitch with no residual over 0.8 mm)
-    and cross-checked against the bright column separators. Rows: std/sfp-ganged tops at
-    8.83 and 26.48, each centred on the drawn module face (the figure draws SEATED
-    modules, whose faces measure 8.9 and 9.2 mm tall inside a 10.4 mm cage opening -
-    a module is smaller than its cage, which is why the face is not the aperture).
-    Ports 0-19 are the SFP+ run and 20-27 the SFP28 run, per the datasheet's counts and
-    the yellow band, which starts exactly at column 11's left edge.
-  port-numbers: >-
-    drawing - the numbers ARE printed on the panel, on a painted band just outside each
-    aperture, and they are drawn here. HIG fig-0015 prints each port's number twice:
-    large, on the schematic module face, where a seated module would cover it, and
-    small, on the coloured band above the top row and below the bottom row. The band is
-    faceplate paint - the S9510-28DC records that as vendor-confirmed for the same
-    family - so the small number is the one the metal carries. Even numbers on the top
-    row and odd on the bottom, left to right, 0-27 across the SFP columns and a separate
-    0-1 for the two QSFP28.
-  port-arrows: >-
-    drawing, and the figure is not self-consistent about ONE detail of it. Every column
-    carries two small green arrows in the white band between its two apertures - one per
-    port, up for the upper and down for the lower, the same idiom as the S9510-28DC.
-    What the figure disagrees with itself about is their spread and order: the six
-    right-hand columns draw a tight up-then-down pair at +/-2.1 mm about the column
-    centre, legibly in that order at 14x; the eight left-hand columns draw them at
-    +/-4.9 mm and, as far as much fainter marks can be read, down-then-up. Both cannot
-    be the same faceplate. The right-hand block is the legible one and agrees with the
-    sibling, so up-left/down-right at the sibling's +/-2.95 mm is used throughout, and
-    the disagreement is recorded here rather than split.
-  led-semantics: >-
-    HIG section 10 Front Panel LED table, transcribed rather than only cited. Five lamps
-    - GNSS, SYNC, STAT, FAN, PWR - each with its own vocabulary, and three of them draw
-    four distinct meanings out of two colours and two behaviours, which is why a state
-    carries a behavior as well as a colour. The out-of-band jack is declared per element
-    because its left lamp is green for 1G and its right amber for 10M/100M. The PSU FRU
-    and Fan FRU tables belong to the modules and are already transcribed in their
-    contracts. The guide gives NO table for the port lamps; see the port-led-semantics
-    gap.
-  rear-layout: >-
-    drawing/photo - five fan bays across the left and a hex vent field filling the right.
-    HIG fig-0014's rear elevation and the rear photograph are the same artwork at
-    different scales and agree on the one number that anchors everything: fan 0's face
-    starts at x 18.1 mm (18.0 from the figure at 3.182 px/mm, 18.2 from the photograph
-    at 3.782 px/mm). The pitch is 52.6 mm, the mean of three repeated features measured
-    in both images - the airflow tag, the status lamp and the thumbscrew - which
-    individually give 52.25 to 53.43 because both images carry slight perspective (the
-    handles' bounding boxes shrink measurably from left to right). The vent field runs
-    from 285.8 to 435.2. NOTE THIS DISAGREES WITH THE S9510-28DC, which places the same
-    five fans on the same chassis starting at x 8.0: both images here put the first fan
-    ten millimetres further right, and the light chassis border they both draw between
-    2.2 and 17.6 mm is where that model puts fan metal.
-  fan-numbering: >-
-    The rear panel numbers its fans 0-4, printed 'FAN <0' through 'FAN <4' at the top of
-    each fan's right-hand flange in both the figure and the photograph. Those legends
-    are NOT drawn, and the reason is structural rather than an oversight: a fan-position
-    number cannot live on an interchangeable FRU, so it would have to be chassis
-    silkscreen - and there is no chassis metal to carry it, because the 42.2 mm fan face
-    fills all but 1.3 mm of the 43.5 mm rear panel. Drawn as chassis silkscreen it would
-    be painted under the fan modules and invisible. The numbering itself is certain and
-    is what the bay ids and rel-pos carry.
-  top-face: >-
-    drawing, and this is the one figure that passes the aspect gate outright. HIG
-    fig-0011's footprint drawing measures 901 x 618 px against 440 x 302 mm - aspect
-    1.458 against a true 1.457, 0.07% out - so it is orthographic and carries absolute
-    geometry at 2.047 px/mm on both axes. y = 0 is the REAR, per the house convention
-    and the drawing itself, which puts the fan handles at the top edge and the front
-    bezel at the bottom. Two full-width stadium recesses at y 45.9 and 187.2, four short
-    ones in two pairs at y 109.0 and 271.2, and two rows of lid screws at y 6.8 and 85.0
-    on a 52.8 mm pitch that matches the fan pitch below them.
-  side-faces: >-
-    estimated. No held figure dimensions either side wall. The HIG's rack-mounting
-    section fixes the chassis to the posts through the two 50.4 x 43 mm brackets and
-    says nothing about side features, and the grounding section puts the lug on the
-    RIGHT side wall (HIG Figures 19-22 and the fig-0011 inset, which magnifies a
-    two-hole lug on the chassis's right rear corner). Both side faces therefore carry
-    only the bracket screws and, on the right, the grounding lug - positions estimated,
-    and LEFT has x = 0 at the REAR while RIGHT has x = 0 at the FRONT, stated here
-    because both faces carry only symmetric content and nothing else would expose the
-    convention.
-  attrs: >-
-    datasheet - Specifications, Performance, Environmental, Regulatory Compliance and
-    Accessories sections, transcribed into sections. Compliance strings kept verbatim,
-    semicolon-separated, untidied; the NEBS line in particular is kept as the datasheet
-    prints it. The datasheet's own typo in the timing block ('IEEE 1558v2' in the key
-    features list, IEEE 1588v2 in the specification table) is not reproduced.
-  power: >-
-    datasheet 'Typical power: 153.8 Watts (no transceiver)' - the vendor's own scope, so
-    power-envelope is bare. No maximum is published for this platform in either held
-    document: the HIG's Connecting Power section gives provisioning instructions and an
-    input rating and never a system maximum, unlike the S9311-64D's, so power-max-w is
-    absent rather than guessed. The PSU rating is 400 W per supply from the ordering
-    lines. These are the vendor's figures as the vendor states them and are NOT
-    reconciled against the module set; the fans publish no draw at all, so any total
-    built from the modelled modules is a floor.
-  lifecycle: >-
-    searched 2026-08-28: 'UfiSpace S9500-30XS end of life', and the vendor's own product
-    page fetched and read for a notice. No announcement found; the product page is live
-    and carries active downloads. none-announced is a real finding, not an absence.
+  sources:
+    note: >-
+      UfiSpace S9500-30XS datasheet for dimensions, weight, port inventory, platform, timing,
+      power, environment, compliance and the FRU ordering lines; S9500-30XS Hardware Installation
+      Guide (s9500-30xs-hig) for the faceplate and rear figures, the FRU dimension table, the LED
+      tables and grounding; three vendor product renders (photos/s9500-30xs-1-angle, -2-front,
+      -3-rear) for colour, counts and confirmation. Checked for a vendor 3D model before trusting
+      any figure, per the skill: the intake stages GLBs for ReadyLinks only, and the S9500-30XS
+      product page embeds no model-viewer and offers no .glb/.gltf/.usdz or CAD download - so this
+      model rests on figures and the gates below apply in full.
+  scale-gate:
+    note: >-
+      THE FRONT FIGURE FAILS A NAIVE ASPECT GATE AND IS STILL USABLE, and the reason is worth
+      writing down because it decides every number on this face. The HIG's port overview
+      (fig-0015) measures 1436 x 150 px body against a stated 440 x 43.5 mm chassis: aspect 9.57
+      against a true 10.115, 5.7% out. So does the front photograph, independently, at 9.49. Two
+      images agreeing with each other and disagreeing with the spec table is not two bad drawings;
+      it is both of them drawing something the spec table does not measure. What they draw is the
+      chassis's top and bottom lips as well as its front face - the strip is taller than the
+      faceplate. The axes were therefore calibrated separately, each against an object whose real
+      size the vendor states, and each confirmed twice: X - the panel width 1436 px = 440 mm gives
+      3.2636 px/mm. On that scale the SFP column pitch measures 14.32 mm against the 14.25 mm
+      std/sfp-ganged standard, and PSU1's metal face measures 50.8 mm against the HIG component
+      table's 50.5. Neither of those numbers set the scale, and both land on it. Y - the PSU face
+      is the only object on this face whose height the vendor states (40.2 mm). It measures 131
+      px, so 3.259 px/mm - within 0.1% of the X scale, which is what an orthographic drawing
+      should be, and which the panel-height reading (3.448) is not. Vertical positions are
+      therefore y = 1.6 + (py - 11) / 3.259, anchoring the PSU face's top edge at 1.6 mm; that
+      puts its bottom edge at 41.8 in a 43.5 chassis, a symmetric 1.6/1.7 mm margin, which is the
+      check that the anchor is right. Both scales are carried as `drawing` confidence and are good
+      to about 0.3 mm.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - 'Chassis (W x D x H) 1 RU, 440 x 302 x 43.5 mm', weight 4.76 kg without FRU; the
+      HIG Component Physical Information table repeats the same triple and the same weight. 440 is
+      the body and not a rack face: the HIG's accessory list ships 'Rack Mount Bracket ... 50.4 x
+      43 x 20mm (19' width rack)' as two separate parts, so the mounting hardware is additional to
+      440 and is not drawn here.
+  psus:
+    confidence: drawing
+    note: >-
+      drawing - the two supplies are on the FRONT of this chassis, at the left of the faceplate,
+      which is what makes it a front-service telco box. PSU1's metal face measures x 64.96-115.70
+      (50.74 mm against the stated 50.5) and y 1.6-41.8 (40.2); PSU0 sits one pitch left at 6.22,
+      so the bay pitch is 58.74 mm. That pitch was derived here from this figure alone and lands
+      within 0.1% of the 58.7 the S9510-28DC carries - the same chassis, the same PSU-401,
+      measured by somebody else from a different document - which is corroboration rather than a
+      copied number. The blue release latch is drawn OUTSIDE the face to its left, in the gutter
+      that carries the vertical PSU0/PSU1 legend; ufispace/psu-401-dc draws its latch inside its
+      own 50.5 width, and that difference is the component's business, not the bay's.
+  timing-block:
+    confidence: drawing
+    note: >-
+      drawing - five SMA jacks in two rows, read off HIG fig-0015 at 8x: 1PPS IN and OUT on the
+      upper row at x 140.18 and 155.05, y 16.64; GNSS ANT, 10MHZ IN and 10MHZ OUT on the lower row
+      at x 124.83, 139.60 and 155.05, y 31.98. The IN and OUT columns line up between the two
+      rows, which is the check that the five centres are read right. The datasheet calls all five
+      SMA ('1 x GNSS input SMA, 1 x 1PPS input/output SMA, 1 x 10MHz input/output SMA'). All five
+      are ROUND: common/sma-jack was not used, even though it is the library's panel SMA part and
+      the S9510-28DC uses it for the same job, because it draws a HEX nut and both the figure at
+      8x and the front photograph show a circular knurled ring here. Each jack is therefore
+      std/sma - the 6.35 mm registry bore, round - on a gold decor disc for the nut, the same
+      construction the S9311-64D uses for its round SMB jacks. The disc sizes carry a real
+      difference in the artwork rather than averaging it away: the figure draws the 1PPS pair 9.6
+      mm across the nut and the other three only 7.1, a 35% difference well above what this figure
+      resolves. Then BITS over ToD in their own silver frame (RJ48 over RJ45, an 12.58 mm stack
+      pitch), then the out-of-band RJ45, the USB-A and the console RJ45 in a third frame.
+  connector-sizes:
+    note: >-
+      std/rj45-ganged (12.7 x 11.0) is used for all four RJ45/RJ48 jacks rather than std/rj45@2
+      (15.8 x 13.2), which the S9510-28DC used for the same block and recorded a gap about because
+      it 'slightly exceeds the drawn stack'. The reason is measured, not stylistic: the BITS/ToD
+      apertures are drawn 12.26 mm wide on a 12.58 mm vertical pitch, and a 15.8 mm part cannot
+      sit on that pitch at all. The same applies to the USB - the drawn aperture is 13.2 x 5.5, so
+      std/usb-a (12.0 x 4.5) fits where common/usb-a@3 (17.0 x 9.3) does not.
+  sfp-layout:
+    confidence: drawing
+    note: >-
+      drawing - fourteen columns of two, in two runs with ONE chassis web between them: eight
+      columns then the web at x 319.6, then six more. Column centres are 210.35 + 14.32k for
+      k=0..7 and 328.47 + 14.32k for k=0..5, taken from the twenty-eight green port arrows in the
+      band between the rows (28 blobs, one pair per column, pair centres regressing on a 14.32 mm
+      pitch with no residual over 0.8 mm) and cross-checked against the bright column separators.
+      Rows: std/sfp-ganged tops at 8.83 and 26.48, each centred on the drawn module face (the
+      figure draws SEATED modules, whose faces measure 8.9 and 9.2 mm tall inside a 10.4 mm cage
+      opening - a module is smaller than its cage, which is why the face is not the aperture).
+      Ports 0-19 are the SFP+ run and 20-27 the SFP28 run, per the datasheet's counts and the
+      yellow band, which starts exactly at column 11's left edge.
+  port-numbers:
+    confidence: drawing
+    note: >-
+      drawing - the numbers ARE printed on the panel, on a painted band just outside each
+      aperture, and they are drawn here. HIG fig-0015 prints each port's number twice: large, on
+      the schematic module face, where a seated module would cover it, and small, on the coloured
+      band above the top row and below the bottom row. The band is faceplate paint - the
+      S9510-28DC records that as vendor-confirmed for the same family - so the small number is the
+      one the metal carries. Even numbers on the top row and odd on the bottom, left to right,
+      0-27 across the SFP columns and a separate 0-1 for the two QSFP28.
+  port-arrows:
+    confidence: drawing
+    note: >-
+      drawing, and the figure is not self-consistent about ONE detail of it. Every column carries
+      two small green arrows in the white band between its two apertures - one per port, up for
+      the upper and down for the lower, the same idiom as the S9510-28DC. What the figure
+      disagrees with itself about is their spread and order: the six right-hand columns draw a
+      tight up-then-down pair at +/-2.1 mm about the column centre, legibly in that order at 14x;
+      the eight left-hand columns draw them at +/-4.9 mm and, as far as much fainter marks can be
+      read, down-then-up. Both cannot be the same faceplate. The right-hand block is the legible
+      one and agrees with the sibling, so up-left/down-right at the sibling's +/-2.95 mm is used
+      throughout, and the disagreement is recorded here rather than split.
+  led-semantics:
+    note: >-
+      HIG section 10 Front Panel LED table, transcribed rather than only cited. Five lamps - GNSS,
+      SYNC, STAT, FAN, PWR - each with its own vocabulary, and three of them draw four distinct
+      meanings out of two colours and two behaviours, which is why a state carries a behavior as
+      well as a colour. The out-of-band jack is declared per element because its left lamp is
+      green for 1G and its right amber for 10M/100M. The PSU FRU and Fan FRU tables belong to the
+      modules and are already transcribed in their contracts. The guide gives NO table for the
+      port lamps; see the port-led-semantics gap.
+  rear-layout:
+    confidence: drawing
+    note: >-
+      drawing/photo - five fan bays across the left and a hex vent field filling the right. HIG
+      fig-0014's rear elevation and the rear photograph are the same artwork at different scales
+      and agree on the one number that anchors everything: fan 0's face starts at x 18.1 mm (18.0
+      from the figure at 3.182 px/mm, 18.2 from the photograph at 3.782 px/mm). The pitch is 52.6
+      mm, the mean of three repeated features measured in both images - the airflow tag, the
+      status lamp and the thumbscrew - which individually give 52.25 to 53.43 because both images
+      carry slight perspective (the handles' bounding boxes shrink measurably from left to right).
+      The vent field runs from 285.8 to 435.2. NOTE THIS DISAGREES WITH THE S9510-28DC, which
+      places the same five fans on the same chassis starting at x 8.0: both images here put the
+      first fan ten millimetres further right, and the light chassis border they both draw between
+      2.2 and 17.6 mm is where that model puts fan metal.
+  fan-numbering:
+    note: >-
+      The rear panel numbers its fans 0-4, printed 'FAN <0' through 'FAN <4' at the top of each
+      fan's right-hand flange in both the figure and the photograph. Those legends are NOT drawn,
+      and the reason is structural rather than an oversight: a fan-position number cannot live on
+      an interchangeable FRU, so it would have to be chassis silkscreen - and there is no chassis
+      metal to carry it, because the 42.2 mm fan face fills all but 1.3 mm of the 43.5 mm rear
+      panel. Drawn as chassis silkscreen it would be painted under the fan modules and invisible.
+      The numbering itself is certain and is what the bay ids and rel-pos carry.
+  top-face:
+    confidence: drawing
+    note: >-
+      drawing, and this is the one figure that passes the aspect gate outright. HIG fig-0011's
+      footprint drawing measures 901 x 618 px against 440 x 302 mm - aspect 1.458 against a true
+      1.457, 0.07% out - so it is orthographic and carries absolute geometry at 2.047 px/mm on
+      both axes. y = 0 is the REAR, per the house convention and the drawing itself, which puts
+      the fan handles at the top edge and the front bezel at the bottom. Two full-width stadium
+      recesses at y 45.9 and 187.2, four short ones in two pairs at y 109.0 and 271.2, and two
+      rows of lid screws at y 6.8 and 85.0 on a 52.8 mm pitch that matches the fan pitch below
+      them.
+  side-faces:
+    confidence: estimated
+    note: >-
+      estimated. No held figure dimensions either side wall. The HIG's rack-mounting section fixes
+      the chassis to the posts through the two 50.4 x 43 mm brackets and says nothing about side
+      features, and the grounding section puts the lug on the RIGHT side wall (HIG Figures 19-22
+      and the fig-0011 inset, which magnifies a two-hole lug on the chassis's right rear corner).
+      Both side faces therefore carry only the bracket screws and, on the right, the grounding lug
+      - positions estimated, and LEFT has x = 0 at the REAR while RIGHT has x = 0 at the FRONT,
+      stated here because both faces carry only symmetric content and nothing else would expose
+      the convention.
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet - Specifications, Performance, Environmental, Regulatory Compliance and
+      Accessories sections, transcribed into sections. Compliance strings kept verbatim,
+      semicolon-separated, untidied; the NEBS line in particular is kept as the datasheet prints
+      it. The datasheet's own typo in the timing block ('IEEE 1558v2' in the key features list,
+      IEEE 1588v2 in the specification table) is not reproduced.
+  power:
+    confidence: datasheet
+    note: >-
+      datasheet 'Typical power: 153.8 Watts (no transceiver)' - the vendor's own scope, so
+      power-envelope is bare. No maximum is published for this platform in either held document:
+      the HIG's Connecting Power section gives provisioning instructions and an input rating and
+      never a system maximum, unlike the S9311-64D's, so power-max-w is absent rather than
+      guessed. The PSU rating is 400 W per supply from the ordering lines. These are the vendor's
+      figures as the vendor states them and are NOT reconciled against the module set; the fans
+      publish no draw at all, so any total built from the modelled modules is a floor.
+  lifecycle:
+    note: >-
+      searched 2026-08-28: 'UfiSpace S9500-30XS end of life', and the vendor's own product page
+      fetched and read for a notice. No announcement found; the product page is live and carries
+      active downloads. none-announced is a real finding, not an absence.
+
 attrs:
   performance:
     switching-capacity: 300 Gbps

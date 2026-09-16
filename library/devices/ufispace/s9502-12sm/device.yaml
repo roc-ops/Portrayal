@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9502-12sm
-version: 2.0.5
+version: 2.0.6
 maturity: modelled
 manufacturer: UfiSpace
 model: S9502-12SM
@@ -16,180 +16,199 @@ description: UfiSpace S9502-12SM - 1RU fanless disaggregated open access router 
   -40 to 65 C hardened
 profile: networking
 provenance:
-  chassis: >-
-    datasheet - 'Chassis (WxDxH) 1 RU, 440 x 250 x 43.5mm or 17.32' x 9.84' x 1.713"
-    Weight: 4.26kg or 9.39lb'; the HIG Component Physical Information table repeats the
-    dimensions ('S9502-12SM (W x D x H) 17.32' x 9.84' x 1.71' (440 x 250 x 43.5mm)')
-    and the weight ('Chassis without FRU 9.39lbs (4.26kg)'). 440 is the body between the
-    ear folds, not a rack face: the HIG Space Clearance section separates 'The
-    S9502-12SM width is 17.32 inches (44cm)' from the 'rack mount brackets suitable for
-    19 inch (48.3cm) wide racks', and the brackets ship loose (50.4 x 43 x 20 mm
-    accessories, 8 M4 screws) and can go at the front or the centre of the side, so
-    there is no ear extent to subtract. DEPTH IS THE ONE TO READ TWICE: 250 is the body,
-    and HIG Figure 5's top view dimensions BOTH it and D = 10.39" (264 mm) over the
-    front connectors, the 14 mm difference being the projection the Space Clearance
-    section states as 0.55 inches. chassis.depth carries the body; the 14 mm lives on
-    the connector parts' relief.
-  fanless: >-
-    the defining fact about this box and the reason it has no fan bays at all. The
-    datasheet key feature is 'Fanless chassis design', the HIG's Cooling paragraph is
-    'The S9502-12SM has a fanless design so the rack or cabinet must have a minimum of
-    3.28 feet/second (1 meter/second) airflow in any direction without recirculation',
-    and its Preparation Check List gives the airflow direction as 'front-to-back and
-    back-to-front' - i.e. convection either way, which is why no configuration here
-    declares an airflow. Figure 5's fourth strip is captioned 'Fanless' and points at
-    the rear's six vent patches. The heat leaves through those, through the front vent
-    fields and through the side vents; all three are drawn.
-  front-layout: >-
-    photo-measured - the vendor front render s9502-12sm-2-front.png. GATE 1: the render
-    IS the chassis edge to edge, 1717 x 170 px, aspect 10.10 against the datasheet's
-    10.115 (440/43.5) - 0.15% out, the closest any source in this intake has come, at
-    3.902 px/mm. Every front number below is measured on it, and HIG Figures 5, 6 and 8
-    corroborate the arrangement. Left to right: two fixed-PSU input windows, the two
-    SMB timing jacks under the model name, the four system lamps and the RESET button,
-    the OOB/USB bezel plate, the ToD/console bezel plate, a hex vent field, the eight
-    SFP cages, the four SFP+ cages, more vent field, and the earth symbol marking the
-    side-mounted grounding lug.
-  port-grid: >-
-    measured - and the lamps are the ruler again. The eight green ▲▼ lamp pairs give
-    column centres 311.79 / 326.05 / 340.18 / 354.56 for the SFP block and 372.94 /
-    387.28 for the SFP+ block: a pitch of 14.257 and 14.34 against SFF-8433's 14.25
-    Basic, which is as close as a 3.9 px/mm image can come to the standard. Ports are
-    placed at each column centre minus half of std/sfp-ganged's 14.25, so the SFP block
-    runs x 304.67 / 318.92 / 333.18 / 347.44 and the SFP+ block 365.82 / 380.07. The
-    SFP+ block's blue paint independently measures x 365.43-394.90, which brackets those
-    two columns to within 0.4 mm at each end.
-  port-rows: >-
-    measured - the cages are two rows belly-to-belly, and the silver band between them
-    measures y 19.22-25.11 in the SFP block and 18.71-25.11 in the SFP+ block. Setting
-    std/sfp-ganged's 10.4 mm opening against those edges puts the top row at y 8.6 and
-    the bottom at 25.1, a row pitch of 16.5 against the component's own measured
-    belly-to-belly 15.0 - the 1.5 mm is recorded rather than forced, because the band is
-    what the image resolves and the 15.0 is a different device's caliper. The top row is
-    rotate 180 so its latch faces the centre band, as the render draws both rows.
-  port-numbering: >-
-    HIG Port Overview table: 'Port ID 0~7 SFP 100M/1G, 8~11 SFP+ 1/10G'. The panel
-    prints the numerals large above and below each column - 0 2 4 6 over 1 3 5 7 on the
-    SFP block, 8 10 over 9 11 on the SFP+ block - so even ports are the top row and odd
-    the bottom, read directly off the front render. The SFP+ numerals sit on the blue
-    paint strips and are white; the SFP ones sit on bare panel.
-  timing-jacks: >-
-    measured - the two SMB bezels are yellow rings centring (125.42, 8.37) and
-    (125.44, 19.36), 6.4 x 6.7 across, each under its own printed legend (1PPS above the
-    upper, 10MHZ above the lower). std/smb is the registry connector at 4.83 mm and is
-    seated on those centres with the yellow bezel ring drawn as decor behind it, exactly
-    as the S9321-64E does: the registry sizes the connector and the yellow is the washer
-    around it. The third timing interface, ToD, is an RJ45 and is the upper jack of the
-    right-hand bezel plate - the datasheet's 'Timing Interfaces (Standard)' row lists all
-    three together and the HIG has a Connecting a Cable to the ToD Interface section for
-    it.
-  left-cluster: >-
-    measured - the two bezel plates and their contents, all off the front render. The
-    OOB/USB plate is silver x 165.54-181.69, y 13.84-34.60, split by an internal rail
-    into the OOB RJ45 aperture (y 15.38-23.83) and the USB-A aperture (y 28.19-33.31).
-    The ToD/console plate is silver x 187.07-202.96, y 9.48-34.85, split into two equal
-    RJ45 apertures (y 11.28-20.50 and 24.09-33.31). Both RJ45 pairs are drawn with
-    std/rj45-ganged because each plate is one piece of metal about 16 mm wide and a
-    16 mm single-port IEC bezel does not fit two of them in it. The OOB jack's two
-    integrated lamps are visible in the render (green left, amber right) and now draw
-    as led-a/led-b of the jack.
-  system-leds: >-
-    measured - four lamps in a vertical column at x 136.18, y 22.29 / 24.73 / 27.28 /
-    29.61, beside a printed white legend box at x 138.12-143.76, y 21.01-31.01. That is
-    exactly the four the HIG front-panel LED table defines - SYNC, STAT, PSU, PWR - and
-    the table's order matches the column top to bottom. The measured gaps are 2.44 /
-    2.55 / 2.33 and they are drawn on an even 2.44 pitch instead: one centreline for a
-    lamp block, with the drawing's 0.11 mm scatter recorded here rather than copied.
-    Drawn with common/led-dot (2.0 mm, nearest part); states transcribed from the table.
-  buttons: >-
-    measured - one recessed RESET button, ring centring (136.3, 38.6), with its printed
-    legend to the right. Drawn with common/reset-button (4 mm recessed pinhole, nearest
-    library part). HIG Figure 5's callout names it 'Reset' and no other button exists on
-    this panel.
-  psu-inputs: >-
-    THE SUPPLIES ARE FIXED AND THE BAYS DO NOT MEAN OTHERWISE. The datasheet's
-    Redundancy row is 'Fixed, 1+1 redundant PSU' and the HIG's section 4 headings are
-    'DC Version PSU Overview - 1+1, Fixed power supply unit (PSU)' and the same for AC.
-    What the front panel carries is each supply's input connector, not a removable
-    module, so it is drawn as a PLACEMENT and not a bay - nothing here should imply it
-    pulls out. Only the DC build is drawn: see gaps for why the AC build turned out to
-    be a different panel rather than a swapped connector.
-    Geometry: the DC terminal blocks measure x 19.5-52.8 and 75.6-108.9 (a 56.13 step
-    read from the screw centres 22.29 and 78.42), y 18.1-34.0; the AC C14 apertures
-    measure x 21.34-48.12, y 15.35-34.08 on HIG Figure 5's AC elevation. The shared bay
-    is sized 33.3 x 21.0 to hold both. The printed legends 'RTN -36 — -75 ⎓ ⏚' and
-    'RNT -36 — -75 ⎓ ⏚' are transcribed as printed: the second reads RNT in the front
-    render AND in HIG Figure 6, which is a vendor typo for RTN reproduced in two
-    independent places, and tidying it would be inventing artwork the device does not
-    have.
-  vents: >-
-    measured - three hex vent fields on the front: a strip over the PSU windows at
-    x 19-106.5, y 1.0-8.5; a narrower strip along the top right at x 211.5-430.5,
-    y 1.0-6.4; and the main field at x 243-431, y 10.7-32.0, which the two cage blocks
-    are punched out of. Extents from the front render as dark-hole density; the house
-    `pattern: vent` is coarser than the real honeycomb and is used for consistency with
-    the rest of the library.
-  rear: >-
-    photo-measured - the vendor rear render s9502-12sm-4-rear.png (1648 x 165 px, aspect
-    9.988 against a true 10.115, 1.3% out, 3.745 px/mm - usable but the softest source
-    here). Six circular hex vent patches on an even 49.93 mm pitch, x 25.9-64.1,
-    75.8-114.0, 125.8-164.2, 175.7-214.1, 225.9-264.1 and 275.8-314.0, each about 38
-    across and spanning y 5.1-39.0; the right-hand 125 mm of the panel is blank. This is
-    the face HIG Figure 5 captions 'Fanless'. Five screw heads are visible along the
-    bottom edge and are placed by eye at about 18.7 / 118.8 / 217.6 / 317.7 / 416.4,
-    y 37.3 - ESTIMATED, because they are dark on a dark panel and no threshold separates
-    them at 3.7 px/mm.
-  top: >-
-    drawing - HIG Figure 5's top view, which carries its own W = 17.32" (440 mm) and
-    D = 9.84" (250 mm) dimension lines. GATE 1 IS MARGINAL: the drawn cover measures
-    2317 x 1389 px for a 440 x 250 object, aspect 1.668 against a true 1.760, 5.2% out,
-    so no absolute scale is taken - the two groove positions below are fractions of the
-    dimensioned 250. Two long recessed grooves, y 50.8-63.4 and 197.3-209.9 from the
-    rear (centres 57.1 and 203.6, both 12.6 deep in the y axis). Their x extent is the
-    weak number: the rims resolve top and bottom but not at the ends, so x 30-410 is
-    ESTIMATED from the figure's proportions. AXIS: y = 0 is the REAR, the house
-    convention, and this face carries nothing asymmetric front-to-back except the two
-    grooves' own spacing, so the convention is stated rather than demonstrated.
-  sides: >-
-    drawing - HIG Figure 15 is a genuine side elevation of this chassis, and a good one:
-    the body in it measures 866 x 153 px for a 250 x 43.5 object, aspect 5.66 against a
-    true 5.747, 1.5% out, at 3.464 px/mm. It shows the RIGHT side (the front is at its
-    left, and the grounding pad it highlights is the one the front panel's earth symbol
-    marks at x 434.8, the right-hand end). Measured on it: the grounding pad's two M4
-    holes at (8.6, 22.05) and (24.4, 22.05); the front bracket screw holes at (42.5,
-    9.4) and (42.5, 34.6); the centre bracket holes at (128.4, 9.3), (153.6, 9.3),
-    (128.4, 34.6) and (153.6, 34.6) - a 25.1 x 25.3 rectangle, i.e. the 1-inch pattern
-    the HIG's two bracket positions need; and two lower bracket screws at (116.3, 35.4)
-    and (225.5, 35.4). Side vent fields run x 47-120 and x 165-245, y 6-38. AXIS
-    CONVENTION: on the RIGHT view x = 0 is the FRONT, so Figure 15 maps onto it
-    unchanged; on the LEFT view x = 0 is the REAR (renderer convention), so the left
-    view carries the same pattern mirrored as depth - x - width. The pattern is strongly
-    asymmetric front-to-rear, so a wrong mirror would be visible here - which is why the
-    convention is written beside the numbers. The grounding pad is drawn on the RIGHT
-    side only; see gaps for what the HIG says about a second location.
-  attrs: >-
-    datasheet Specifications table and Supported Accessories, with the HIG's two
-    Connecting Power sections for the system maxima and its Preparation Check List for
-    the input currents. The timing rows carry the vendor's own footnote markers'
-    meaning: '*NOS integration is necessary to activate the specific feature' and
-    '**Additional license is required' (which attaches to SMPTE ST 2059-2), because
-    dropping them would turn a conditional capability into an unconditional one.
-  power: >-
-    datasheet gives 'Typical power: 45.1 Watts (no transceiver)'. The HIG's two
-    Connecting Power sections give the maxima: 'The maximum system power consumption is
-    45 watts' (DC Version) and 'The maximum system power consumption is 47.2 watts with
-    an input voltage of 100-240V AC and 2 amperes' (AC Version). NOTE WHAT THAT MEANS
-    AND DO NOT SMOOTH IT: the DC maximum, 45 W, is LOWER than the datasheet's typical,
-    45.1 W. Both are the vendor's, from two documents, and they are not reconciled here
-    - power-max-w carries the AC 47.2, power-max-dc-w the 45, and power-typical-w the
-    45.1, with this sentence as the record that the last two cross. Neither source
-    states a test condition for these figures - no ambient, no optics population, no
-    traffic load, unlike every other UfiSpace box in this library - so power-envelope is
-    `unstated` rather than a guess at `fully-configured`.
-  lifecycle: >-
-    searched 2026-08-28, 'UfiSpace S9502-12SM end of life' - no announcement found. The
-    vendor lists the product on its telecom solutions pages and it remains a current
-    cell-site gateway. none-announced is a checked state, not an absence.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - 'Chassis (WxDxH) 1 RU, 440 x 250 x 43.5mm or 17.32' x 9.84' x 1.713" Weight:
+      4.26kg or 9.39lb'; the HIG Component Physical Information table repeats the dimensions
+      ('S9502-12SM (W x D x H) 17.32' x 9.84' x 1.71' (440 x 250 x 43.5mm)') and the weight
+      ('Chassis without FRU 9.39lbs (4.26kg)'). 440 is the body between the ear folds, not a rack
+      face: the HIG Space Clearance section separates 'The S9502-12SM width is 17.32 inches
+      (44cm)' from the 'rack mount brackets suitable for 19 inch (48.3cm) wide racks', and the
+      brackets ship loose (50.4 x 43 x 20 mm accessories, 8 M4 screws) and can go at the front or
+      the centre of the side, so there is no ear extent to subtract. DEPTH IS THE ONE TO READ
+      TWICE: 250 is the body, and HIG Figure 5's top view dimensions BOTH it and D = 10.39" (264
+      mm) over the front connectors, the 14 mm difference being the projection the Space Clearance
+      section states as 0.55 inches. chassis.depth carries the body; the 14 mm lives on the
+      connector parts' relief.
+  fanless:
+    note: >-
+      the defining fact about this box and the reason it has no fan bays at all. The datasheet key
+      feature is 'Fanless chassis design', the HIG's Cooling paragraph is 'The S9502-12SM has a
+      fanless design so the rack or cabinet must have a minimum of 3.28 feet/second (1
+      meter/second) airflow in any direction without recirculation', and its Preparation Check
+      List gives the airflow direction as 'front-to-back and back-to-front' - i.e. convection
+      either way, which is why no configuration here declares an airflow. Figure 5's fourth strip
+      is captioned 'Fanless' and points at the rear's six vent patches. The heat leaves through
+      those, through the front vent fields and through the side vents; all three are drawn.
+  front-layout:
+    confidence: photo-measured
+    note: >-
+      photo-measured - the vendor front render s9502-12sm-2-front.png. GATE 1: the render IS the
+      chassis edge to edge, 1717 x 170 px, aspect 10.10 against the datasheet's 10.115 (440/43.5)
+      - 0.15% out, the closest any source in this intake has come, at 3.902 px/mm. Every front
+      number below is measured on it, and HIG Figures 5, 6 and 8 corroborate the arrangement. Left
+      to right: two fixed-PSU input windows, the two SMB timing jacks under the model name, the
+      four system lamps and the RESET button, the OOB/USB bezel plate, the ToD/console bezel
+      plate, a hex vent field, the eight SFP cages, the four SFP+ cages, more vent field, and the
+      earth symbol marking the side-mounted grounding lug.
+  port-grid:
+    confidence: measured
+    note: >-
+      measured - and the lamps are the ruler again. The eight green ▲▼ lamp pairs give column
+      centres 311.79 / 326.05 / 340.18 / 354.56 for the SFP block and 372.94 / 387.28 for the SFP+
+      block: a pitch of 14.257 and 14.34 against SFF-8433's 14.25 Basic, which is as close as a
+      3.9 px/mm image can come to the standard. Ports are placed at each column centre minus half
+      of std/sfp-ganged's 14.25, so the SFP block runs x 304.67 / 318.92 / 333.18 / 347.44 and the
+      SFP+ block 365.82 / 380.07. The SFP+ block's blue paint independently measures x
+      365.43-394.90, which brackets those two columns to within 0.4 mm at each end.
+  port-rows:
+    confidence: measured
+    note: >-
+      measured - the cages are two rows belly-to-belly, and the silver band between them measures
+      y 19.22-25.11 in the SFP block and 18.71-25.11 in the SFP+ block. Setting std/sfp-ganged's
+      10.4 mm opening against those edges puts the top row at y 8.6 and the bottom at 25.1, a row
+      pitch of 16.5 against the component's own measured belly-to-belly 15.0 - the 1.5 mm is
+      recorded rather than forced, because the band is what the image resolves and the 15.0 is a
+      different device's caliper. The top row is rotate 180 so its latch faces the centre band, as
+      the render draws both rows.
+  port-numbering:
+    note: >-
+      HIG Port Overview table: 'Port ID 0~7 SFP 100M/1G, 8~11 SFP+ 1/10G'. The panel prints the
+      numerals large above and below each column - 0 2 4 6 over 1 3 5 7 on the SFP block, 8 10
+      over 9 11 on the SFP+ block - so even ports are the top row and odd the bottom, read
+      directly off the front render. The SFP+ numerals sit on the blue paint strips and are white;
+      the SFP ones sit on bare panel.
+  timing-jacks:
+    confidence: measured
+    note: >-
+      measured - the two SMB bezels are yellow rings centring (125.42, 8.37) and (125.44, 19.36),
+      6.4 x 6.7 across, each under its own printed legend (1PPS above the upper, 10MHZ above the
+      lower). std/smb is the registry connector at 4.83 mm and is seated on those centres with the
+      yellow bezel ring drawn as decor behind it, exactly as the S9321-64E does: the registry
+      sizes the connector and the yellow is the washer around it. The third timing interface, ToD,
+      is an RJ45 and is the upper jack of the right-hand bezel plate - the datasheet's 'Timing
+      Interfaces (Standard)' row lists all three together and the HIG has a Connecting a Cable to
+      the ToD Interface section for it.
+  left-cluster:
+    confidence: measured
+    note: >-
+      measured - the two bezel plates and their contents, all off the front render. The OOB/USB
+      plate is silver x 165.54-181.69, y 13.84-34.60, split by an internal rail into the OOB RJ45
+      aperture (y 15.38-23.83) and the USB-A aperture (y 28.19-33.31). The ToD/console plate is
+      silver x 187.07-202.96, y 9.48-34.85, split into two equal RJ45 apertures (y 11.28-20.50 and
+      24.09-33.31). Both RJ45 pairs are drawn with std/rj45-ganged because each plate is one piece
+      of metal about 16 mm wide and a 16 mm single-port IEC bezel does not fit two of them in it.
+      The OOB jack's two integrated lamps are visible in the render (green left, amber right) and
+      now draw as led-a/led-b of the jack.
+  system-leds:
+    confidence: measured
+    note: >-
+      measured - four lamps in a vertical column at x 136.18, y 22.29 / 24.73 / 27.28 / 29.61,
+      beside a printed white legend box at x 138.12-143.76, y 21.01-31.01. That is exactly the
+      four the HIG front-panel LED table defines - SYNC, STAT, PSU, PWR - and the table's order
+      matches the column top to bottom. The measured gaps are 2.44 / 2.55 / 2.33 and they are
+      drawn on an even 2.44 pitch instead: one centreline for a lamp block, with the drawing's
+      0.11 mm scatter recorded here rather than copied. Drawn with common/led-dot (2.0 mm, nearest
+      part); states transcribed from the table.
+  buttons:
+    confidence: measured
+    note: >-
+      measured - one recessed RESET button, ring centring (136.3, 38.6), with its printed legend
+      to the right. Drawn with common/reset-button (4 mm recessed pinhole, nearest library part).
+      HIG Figure 5's callout names it 'Reset' and no other button exists on this panel.
+  psu-inputs:
+    note: >-
+      THE SUPPLIES ARE FIXED AND THE BAYS DO NOT MEAN OTHERWISE. The datasheet's Redundancy row is
+      'Fixed, 1+1 redundant PSU' and the HIG's section 4 headings are 'DC Version PSU Overview -
+      1+1, Fixed power supply unit (PSU)' and the same for AC. What the front panel carries is
+      each supply's input connector, not a removable module, so it is drawn as a PLACEMENT and not
+      a bay - nothing here should imply it pulls out. Only the DC build is drawn: see gaps for why
+      the AC build turned out to be a different panel rather than a swapped connector. Geometry:
+      the DC terminal blocks measure x 19.5-52.8 and 75.6-108.9 (a 56.13 step read from the screw
+      centres 22.29 and 78.42), y 18.1-34.0; the AC C14 apertures measure x 21.34-48.12, y
+      15.35-34.08 on HIG Figure 5's AC elevation. The shared bay is sized 33.3 x 21.0 to hold
+      both. The printed legends 'RTN -36 — -75 ⎓ ⏚' and 'RNT -36 — -75 ⎓ ⏚' are transcribed as
+      printed: the second reads RNT in the front render AND in HIG Figure 6, which is a vendor
+      typo for RTN reproduced in two independent places, and tidying it would be inventing artwork
+      the device does not have.
+  vents:
+    confidence: measured
+    note: >-
+      measured - three hex vent fields on the front: a strip over the PSU windows at x 19-106.5, y
+      1.0-8.5; a narrower strip along the top right at x 211.5-430.5, y 1.0-6.4; and the main
+      field at x 243-431, y 10.7-32.0, which the two cage blocks are punched out of. Extents from
+      the front render as dark-hole density; the house `pattern: vent` is coarser than the real
+      honeycomb and is used for consistency with the rest of the library.
+  rear:
+    confidence: photo-measured
+    note: >-
+      photo-measured - the vendor rear render s9502-12sm-4-rear.png (1648 x 165 px, aspect 9.988
+      against a true 10.115, 1.3% out, 3.745 px/mm - usable but the softest source here). Six
+      circular hex vent patches on an even 49.93 mm pitch, x 25.9-64.1, 75.8-114.0, 125.8-164.2,
+      175.7-214.1, 225.9-264.1 and 275.8-314.0, each about 38 across and spanning y 5.1-39.0; the
+      right-hand 125 mm of the panel is blank. This is the face HIG Figure 5 captions 'Fanless'.
+      Five screw heads are visible along the bottom edge and are placed by eye at about 18.7 /
+      118.8 / 217.6 / 317.7 / 416.4, y 37.3 - ESTIMATED, because they are dark on a dark panel and
+      no threshold separates them at 3.7 px/mm.
+  top:
+    confidence: drawing
+    note: >-
+      drawing - HIG Figure 5's top view, which carries its own W = 17.32" (440 mm) and D = 9.84"
+      (250 mm) dimension lines. GATE 1 IS MARGINAL: the drawn cover measures 2317 x 1389 px for a
+      440 x 250 object, aspect 1.668 against a true 1.760, 5.2% out, so no absolute scale is taken
+      - the two groove positions below are fractions of the dimensioned 250. Two long recessed
+      grooves, y 50.8-63.4 and 197.3-209.9 from the rear (centres 57.1 and 203.6, both 12.6 deep
+      in the y axis). Their x extent is the weak number: the rims resolve top and bottom but not
+      at the ends, so x 30-410 is ESTIMATED from the figure's proportions. AXIS: y = 0 is the
+      REAR, the house convention, and this face carries nothing asymmetric front-to-back except
+      the two grooves' own spacing, so the convention is stated rather than demonstrated.
+  sides:
+    confidence: drawing
+    note: >-
+      drawing - HIG Figure 15 is a genuine side elevation of this chassis, and a good one: the
+      body in it measures 866 x 153 px for a 250 x 43.5 object, aspect 5.66 against a true 5.747,
+      1.5% out, at 3.464 px/mm. It shows the RIGHT side (the front is at its left, and the
+      grounding pad it highlights is the one the front panel's earth symbol marks at x 434.8, the
+      right-hand end). Measured on it: the grounding pad's two M4 holes at (8.6, 22.05) and (24.4,
+      22.05); the front bracket screw holes at (42.5, 9.4) and (42.5, 34.6); the centre bracket
+      holes at (128.4, 9.3), (153.6, 9.3), (128.4, 34.6) and (153.6, 34.6) - a 25.1 x 25.3
+      rectangle, i.e. the 1-inch pattern the HIG's two bracket positions need; and two lower
+      bracket screws at (116.3, 35.4) and (225.5, 35.4). Side vent fields run x 47-120 and x
+      165-245, y 6-38. AXIS CONVENTION: on the RIGHT view x = 0 is the FRONT, so Figure 15 maps
+      onto it unchanged; on the LEFT view x = 0 is the REAR (renderer convention), so the left
+      view carries the same pattern mirrored as depth - x - width. The pattern is strongly
+      asymmetric front-to-rear, so a wrong mirror would be visible here - which is why the
+      convention is written beside the numbers. The grounding pad is drawn on the RIGHT side only;
+      see gaps for what the HIG says about a second location.
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet Specifications table and Supported Accessories, with the HIG's two Connecting
+      Power sections for the system maxima and its Preparation Check List for the input currents.
+      The timing rows carry the vendor's own footnote markers' meaning: '*NOS integration is
+      necessary to activate the specific feature' and '**Additional license is required' (which
+      attaches to SMPTE ST 2059-2), because dropping them would turn a conditional capability into
+      an unconditional one.
+  power:
+    confidence: datasheet
+    note: >-
+      datasheet gives 'Typical power: 45.1 Watts (no transceiver)'. The HIG's two Connecting Power
+      sections give the maxima: 'The maximum system power consumption is 45 watts' (DC Version)
+      and 'The maximum system power consumption is 47.2 watts with an input voltage of 100-240V AC
+      and 2 amperes' (AC Version). NOTE WHAT THAT MEANS AND DO NOT SMOOTH IT: the DC maximum, 45
+      W, is LOWER than the datasheet's typical, 45.1 W. Both are the vendor's, from two documents,
+      and they are not reconciled here - power-max-w carries the AC 47.2, power-max-dc-w the 45,
+      and power-typical-w the 45.1, with this sentence as the record that the last two cross.
+      Neither source states a test condition for these figures - no ambient, no optics population,
+      no traffic load, unlike every other UfiSpace box in this library - so power-envelope is
+      `unstated` rather than a guess at `fully-configured`.
+  lifecycle:
+    note: >-
+      searched 2026-08-28, 'UfiSpace S9502-12SM end of life' - no announcement found. The vendor
+      lists the product on its telecom solutions pages and it remains a current cell-site gateway.
+      none-announced is a checked state, not an absence.
+
 attrs:
   performance:
     switching-capacity: 32 Gbps

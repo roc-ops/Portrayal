@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx10003
-version: 0.2.11
+version: 0.2.12
 maturity: modelled
 manufacturer: Juniper
 model: MX10003
@@ -16,31 +16,49 @@ description: >-
   two three-high PSM stacks flanking four vertical fan modules (FT 0-3).
 profile: networking
 provenance:
-  sources: MX10003 Hardware Guide (223 pages, 66 figures), the MX10003 datasheet, the vendor front and rear
-    line drawings (g009800/g009801) and the 'frontwtop' (front-with-top) studio photograph in
-    the image library
-  chassis: 'datasheet-table - 5.21 x 17.6 x 30 in (132.3 x 447 x 762 mm),
-    3RU; the guide physical table repeats it. Ears NOT MODELLED by
-    convention (the rack face is 19 in / 482.6 mm)'
-  fru-sizes: 'datasheet-table - the guide carries a full FRU dimension
-    table (RCB 202.7 x 42.1, MPC 419.1 x 41.9, MIC 197.3 x 41.9, fan module
-    62.5 x 126.7, PSU 86.7 face); every component size is vendor-stated'
-  front: 'photo - the frontwtop photograph measured at ~2.95 px/mm across
-    the 447 mm body: RCBs at x 17.0 and 227.4 over rows y 2.0; MPCs at
-    x 14.0 (centred 419.1 in 447), rows y 46.0 and 89.5; positions
-    approximate to ~2 mm. The photograph and drawing g009800 agree on
-    arrangement; the photograph wins on finish'
-  rear: 'drawing - g009801: three-high PSM stacks at both rear corners and
-    four vertical fan trays between them (FT 0-3). The drawing is
-    schematic, so the stacks are anchored to the vendor PSU and fan module
-    dimensions, not to drawing pixels. PSM slot numbering is not legible in
-    any source - see gaps'
-  power: 'datasheet-table - the guide power example: fully loaded AC router
-    1676 W (4 fans 80 W + 2 MPCs 1320 W + 2 MICs 160 W + 2 RCBs 116 W)'
-  color: 'photo - medium grey chassis and modules, light-blue ejector
-    levers and SSD carrier (Juniper cloud-era styling)'
-  other-faces: 'near-blank by evidence - rail bands estimated; axis
-    conventions per viewer3d.js as the siblings'
+  sources:
+    note: >-
+      MX10003 Hardware Guide (223 pages, 66 figures), the MX10003 datasheet, the vendor front and
+      rear line drawings (g009800/g009801) and the 'frontwtop' (front-with-top) studio photograph
+      in the image library
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet-table - 5.21 x 17.6 x 30 in (132.3 x 447 x 762 mm), 3RU; the guide physical table
+      repeats it. Ears NOT MODELLED by convention (the rack face is 19 in / 482.6 mm)
+  fru-sizes:
+    confidence: datasheet
+    note: >-
+      datasheet-table - the guide carries a full FRU dimension table (RCB 202.7 x 42.1, MPC 419.1
+      x 41.9, MIC 197.3 x 41.9, fan module 62.5 x 126.7, PSU 86.7 face); every component size is
+      vendor-stated
+  front:
+    note: >-
+      photo - the frontwtop photograph measured at ~2.95 px/mm across the 447 mm body: RCBs at x
+      17.0 and 227.4 over rows y 2.0; MPCs at x 14.0 (centred 419.1 in 447), rows y 46.0 and 89.5;
+      positions approximate to ~2 mm. The photograph and drawing g009800 agree on arrangement; the
+      photograph wins on finish
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - g009801: three-high PSM stacks at both rear corners and four vertical fan trays
+      between them (FT 0-3). The drawing is schematic, so the stacks are anchored to the vendor
+      PSU and fan module dimensions, not to drawing pixels. PSM slot numbering is not legible in
+      any source - see gaps
+  power:
+    confidence: datasheet
+    note: >-
+      datasheet-table - the guide power example: fully loaded AC router 1676 W (4 fans 80 W + 2
+      MPCs 1320 W + 2 MICs 160 W + 2 RCBs 116 W)
+  color:
+    note: >-
+      photo - medium grey chassis and modules, light-blue ejector levers and SSD carrier (Juniper
+      cloud-era styling)
+  other-faces:
+    note: >-
+      near-blank by evidence - rail bands estimated; axis conventions per viewer3d.js as the
+      siblings
+
 attrs:
   physical:
     weight-full-ac-kg: 71.4

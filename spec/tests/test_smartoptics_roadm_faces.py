@@ -121,4 +121,7 @@ def test_the_corrections_are_sourced_in_provenance():
         prov = dev(name)["provenance"]
         for key in ("xc-orientation", "mgmt-jack-alignment", "osc-captions", "status-leds"):
             assert key in prov, f"{name}: {key} not recorded"
-            assert "stencil" in prov[key], f"{name}: {key} does not name its source"
+            # device provenance is {confidence?, note} since #167; the citation
+            # lives in the prose, which is where it always was
+            assert "stencil" in prov[key]["note"], \
+                f"{name}: {key} does not name its source"

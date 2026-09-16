@@ -22,19 +22,28 @@ description: >-                 # the paragraph a person reads first; also the D
 # The device class, from spec/schemas/profiles.yaml - it decides what this
 # device has to state before the `specified` capability flag is true.
 profile: networking
-provenance:                     # every figure below names its source here,
-  chassis: >-                   # using one confidence word from the vocabulary:
-    datasheet - 440 x 43.6 x 300 mm from the datasheet's dimensions row; the   # datasheet, drawing, measured,
-    rack face is 482.6 with ears, which are not modelled                       # photo-measured, registry, borrowed,
-  front: >-                                                                    # estimated, known-wrong
-    drawing - the installation guide's front elevation (Figure 2), orthographic
-    at 3.1 px/mm against the datasheet width; port pitch 16.5 read across four
-    cutouts; lamp row 5 mm above the cages
-  rear: >-
-    photo-measured - the product page's rear gallery image at 1.09 px/mm; the
-    two supply bays and the fan bay are positioned from it, so +-1 mm
-  power: >-
-    datasheet - 'Max power 150 W' with no qualifier, filed as max and said so
+provenance:
+  chassis:
+    confidence: datasheet
+    note: 'datasheet - 440 x 43.6 x 300 mm from the datasheet''s dimensions row; the   # datasheet, drawing,
+      measured, rack face is 482.6 with ears, which are not modelled                       # photo-measured,
+      registry, borrowed,'
+  front:
+    confidence: drawing
+    note: >-
+      drawing - the installation guide's front elevation (Figure 2), orthographic at 3.1 px/mm
+      against the datasheet width; port pitch 16.5 read across four cutouts; lamp row 5 mm above
+      the cages
+  rear:
+    confidence: photo-measured
+    note: >-
+      photo-measured - the product page's rear gallery image at 1.09 px/mm; the two supply bays
+      and the fan bay are positioned from it, so +-1 mm
+  power:
+    confidence: datasheet
+    note: >-
+      datasheet - 'Max power 150 W' with no qualifier, filed as max and said so
+
 attrs:                          # facts a DCIM wants, in sections; keys are unique
   physical:                     # across sections and leave as data-<key> on the SVG
     weight-kg: 4.2

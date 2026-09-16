@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9511-20ct
-version: 1.0.5
+version: 1.0.6
 maturity: modelled
 manufacturer: UfiSpace
 model: S9511-20CT
@@ -18,156 +18,174 @@ description: >-
   FIXED, so the chassis has no bays at all
 profile: networking
 provenance:
-  sources: >-
-    UfiSpace S9511-20CT datasheet
-    for dimensions, weight, port inventory, platform, timing, power, environment and
-    compliance; S9511-20CT Hardware Installation Guide (s9511-20ct-hig) for the Figure 8
-    Port Overview and Figure 7 rear elevations on page 10, the Component Physical
-    Information table, the port table, the LED tables and grounding; three vendor product
-    renders (photos/s9511-20ct-1-view, -2-front, -3-rear) for colour and confirmation.
-    BOTH ELEVATIONS PASS THE ASPECT GATE AND THEY ARE THE BEST THIS VENDOR HAS GIVEN. The
-    front measures 4048 x 402 px across the 440 x 43.5 mm face - aspect 10.07 against a
-    true 10.115, 0.45 percent - and the rear 3930 x 391, aspect 10.051, 0.6 percent. Both
-    are therefore orthographic enough to carry geometry directly, in x AND in y, which is
-    why this device's vertical band is taken from the guide rather than anchored to a
-    photograph as the last three were. The photographs (520 px wide, 1.18 px/mm) are used
-    for colour and counts only.
-  chassis: >-
-    datasheet - 'Chassis (W x D x H) 1RU, 440 x 250 x 43.5 mm', weight 4.2 kg; the HIG
-    Component Physical Information table repeats the same triple (17.32" x 9.84" x 1.71")
-    and the same weight, and heads its weight row simply 'Chassis' rather than 'Chassis
-    without FRU' - which is correct here, because this device has no FRU of any kind. 440
-    is the body: the HIG ships a separate rack mount bracket as an accessory, so the 19
-    inch mounting hardware is additional to 440 and is not drawn.
-  fixed-everything: >-
-    NEITHER THE SUPPLY NOR THE FANS IS FIELD-REPLACEABLE, and that is the structural fact
-    about this device. The datasheet's Redundancy rows read 'Dual-feed one power stage
-    PSU' and 'Fixed, 3+1 redundant Fans'; the HIG's PSU Overview section says 'Dual-feed
-    one power stage fixed PSU' and its Fan Overview heading is '3+1 Redundant, fixed
-    fans.' So there are no components.bays anywhere in this manifest. The two DC feeds are
-    the six screw terminal posts on the front, drawn as panel decor under INPUT0 and
-    INPUT1 silkscreen; the four fans are the four circular grilles on the rear, drawn as
-    panel decor under FAN0-FAN3 silkscreen. Neither is addressable - see the
-    fixed-fru-not-addressable gap - and the front FAN lamp therefore points at the chassis
-    rather than at four fan ids. THAT IS TRUE OF THE DOCUMENTED BUILD, AND THE PHOTOGRAPH
-    SHOWS ANOTHER ONE - see the ac-psu-variant gap, found by the matched-scale comparison
-    and not by reading.
-  front-vertical: >-
-    ONE BAND, ONE PITCH - AND THE FIRST DRAFT SAID TWO. All four port blocks share the
-    band: ganged shells at y 8.6-35.5, coloured grounds behind them at 7.0-37.4, openings
-    centred on y 14.15 and 29.89 for a 15.74 mm belly-to-belly pitch. That figure is the
-    mean of two readings - the guide's drawn optical cell centres at 14.34/29.92 (pitch
-    15.58) and the front photograph's real apertures at 13.95/29.85 (pitch 15.90) - which
-    agree to a third of a millimetre. THE COPPER BLOCK WAS THE TRAP. Its drawn cell centres
-    read 15.60 and 29.06, a 13.46 mm pitch, and this file first recorded that as a second,
-    tighter pitch on the same band. It is not: an RJ45 cell is inset from its opening by
-    different amounts top and bottom, so cell centres are not opening centres for that
-    part. The matched-scale render settled it - at a 13.46 mm pitch the rendered contact
-    bands fell at 13.6-21.1 and 23.2-30.8 against the photograph's 12.2-19.9 and 24.5-32.0,
-    out by 1.4 and 1.3 mm in OPPOSITE directions, which is the signature of a pitch error
-    rather than an offset. Putting the copper openings on the same 15.74 mm band as the
-    optical ones reproduces the photograph to 0.25 mm. This is the same lesson as the
-    guide's filled cells being module faces, in a second disguise: a drawn cell is not an
-    aperture, and where the two are inset asymmetrically it will not even give you the
-    pitch.
-  port-pitch: >-
-    MEASURED FROM THE WEB LAMPS, WHICH REPEAT ONCE PER PORT, and not from the filled cells
-    the guide draws for module faces. Each optical column carries a green up/down lamp pair
-    in the silver web between its rows; taking the pair centres gives 14.27 mm on the combo
-    SFP block and 14.26/14.32/14.16 - mean 14.25 - across the SFP28 block, which is the
-    SFF-8433 port pitch exactly. That was the check that mattered: cell-to-cell centres
-    would have given the module pitch and drifted a gutter into every block. Column
-    positions are then anchored on the ganged shells, whose extents were measured off the
-    light mask (combo RJ45 243.91-274.46, combo SFP 278.37-308.15, SFP+ 310.11-370.98,
-    SFP28 372.07-433.26) and which give a symmetric 0.6-2.1 mm flange against four or two
-    standard openings. NOTE the lamp pairs sit about 1.3 mm LEFT of their column centres
-    rather than on them, so the lamps fix the pitch and the shells fix the origin.
-  combo-ports: >-
-    Ports 0-3 are combo ports and are drawn as EIGHT apertures for FOUR logical ports. The
-    HIG port table gives '0 ~ 3, SFP/RJ45 combo, 1G' and adds 'Ports 0 to 3 (labeled in
-    brown) are SFP/RJ45 combo ports, configurable to support either connection type', and
-    the faceplate shows both: a 2x2 RJ45 block numbered 0/2 over 1/3 and, immediately to
-    its right inside the same brown frame, a 2x2 SFP block numbered the same way. They are
-    modelled as two groups - combo-1g-rj45 and combo-1g-sfp - each carrying the vendor's
-    numbers 0-3, rather than as one group with duplicated positions, so that both faces
-    keep the number the vendor prints on them and neither pretends to be a separate port.
-    Only one of each pair can be used at a time; the manifest cannot say that and the group
-    descriptions do.
-  colour-coding: >-
-    THE VENDOR COLOUR-CODES THE THREE PORT GROUPS AND THE COLOURS ARE MODELLED. Each block
-    sits on a printed ground that shows as a border around its silver ganged shell, sampled
-    from the figure: brown/orange (206,130,45) for the combo ports - the HIG's own words
-    are 'labeled in brown' - blue (51,133,175) for the SFP+ block and olive (187,183,60)
-    for the SFP28 block. The port numerals are printed in the matching colour on each
-    ground. This is the same faceplate idiom as the S9500-22XST's yellow SFP28 band and it
-    carries the same meaning to whoever ordered the box, so it is drawn as panel decor
-    under the shells rather than dropped as decoration.
-  timing-block: >-
-    drawing - three coaxial jacks in one column at x centre 125.55, top to bottom 1PPS,
-    10MHz and GNSS ANT. The first two measure about 6.1 mm across the drawn hex against
-    common/smb-jack's 7.0 and the datasheet calls them SMB; the third measures 9.57 mm
-    against common/sma-jack's 9.5 and the datasheet calls it SMA - so the drawing and the
-    spec table agree about which connector is which, which is worth saying because the
-    three are drawn in one column and look alike at page scale. BITS (RJ48) and ToD (RJ45)
-    are the stacked pair at x 145.43-160.22, BITS above and ToD below.
-  jack-orientation: >-
-    std/rj45-ganged draws the latch keyway DOWN with its gold contacts at the TOP, and on
-    a real jack the integrated lamps sit at the contact end. On the 2x2 copper block the
-    upper row's lamps are at the TOP corners and the lower row's at the BOTTOM, so the
-    upper row is unrotated and the lower carries rotate: 180. BITS (upper of its pair) has
-    the keyway up and is turned; ToD below it is not. The management RJ45 at the top of
-    its stack is turned; the console at the bottom is not. That sense was got backwards on
-    the S9500-22XST and caught by the matched-scale render; it is applied the corrected way
-    round here and re-checked the same way.
-  cage-mirroring: >-
-    The stacked optical rows are drawn UNMIRRORED, as on the S9500-22XST and S9502-16SMT
-    where the render-against-photograph test established it: rotating a std/sfp-ganged
-    moves its drawn cavity 1.13 mm, so a mirrored pair reads a cavity pitch 2.26 mm away
-    from the opening pitch. Checked here the same way after rendering.
-  system-lamps: >-
-    drawing - five lamps at x 135.43 on a measured 2.545 mm pitch with centres at y 22.99,
-    25.54, 28.03, 30.62 and 33.11, beside a printed legend block at 138.04-143.26. The HIG
-    section 8 table names them GNSS, SYNC, STAT, FAN and PWR and gives each its own
-    vocabulary, transcribed onto each lamp. THE COLUMN IS DRAWN 0.4 mm TALLER THAN IT
-    MEASURES: common/led-rect@1 is 2.6 mm tall and four gaps of 2.545 will not hold five
-    of them, so they are placed on a 2.62 mm pitch centred on the measured block. Same
-    compromise, same reason, as the S9502-16SMT.
-  rear-layout: >-
-    drawing - HIG Figure 7 at 8.932 px/mm, which passes the aspect gate at 0.6 percent.
-    Four circular convection grilles over the four fixed fans, each about 38 mm across,
-    with FAN0, FAN1 and FAN2 grouped at 75.7, 124.9 and 175.8 mm on a roughly 50 mm pitch
-    and FAN3 alone at 373.0 mm. That asymmetry is the drawing's, not a mis-measurement:
-    the figure prints FAN0-FAN3 legends with arrows and the fourth sits by itself at the
-    right-hand end, which is what a 3+1 layout looks like when the spare is not in line.
-    Five screws along the lower edge on a roughly 100 mm pitch.
-  views: >-
-    Six views. TOP and BOTTOM carry only size and a compliance sticker: no held figure
-    draws either face on this device - Figure 5's overview shows front and rear only - and
-    inventing lid reliefs from a sibling would be borrowing geometry, so the top is left
-    honestly empty and says so here. LEFT (x = 0 is the REAR) and RIGHT (x = 0 is the
-    FRONT): the HIG section 6 puts the grounding lug on the side of the chassis and its
-    Figure 12 inset shows it on the RIGHT near the FRONT, which is where the two-hole lug
-    is drawn - the one asymmetric feature on either side face, so the depth-axis convention
-    is load-bearing here rather than merely stated. Screw positions on both side faces are
-    estimated.
-  attrs: >-
-    datasheet - Physical, Performance, Environmental, Regulatory Compliance, Timing and
-    Accessories sections, transcribed into sections. DC ONLY: the datasheet's Power Specs
-    row gives a DC input and no AC input, the HIG's Connecting Power section has a DC
-    Version subsection and no AC one, and no AC PSU appears anywhere, so this device
-    carries one configuration rather than the AC/DC pair its siblings have. The datasheet's
-    key-features list prints 'IEEE 1558v2' where the timing row prints IEEE 1588v2; the
-    obvious typo is not propagated.
-  power: >-
-    datasheet 'Typical power: 63 Watts (no transceiver)' - the vendor's own scope, so
-    power-envelope is bare. No maximum is published in either document, and the per-feed
-    input rating (-36 to -72 V, 8 A) is supply-side and is not converted into a draw
-    figure. Note the input range is -36 to -72 V here where the S9500-22XST and S9502-16SMT
-    both read -36 to -75; that is this datasheet's own number, not a transcription slip.
-  lifecycle: >-
-    searched 2026-08-28: 'UfiSpace S9511-20CT end of life end of sale' - no announcement
-    found; the vendor product page and the datasheet PDF are live. none-announced is a
-    real finding here, not an absence of looking.
+  sources:
+    note: >-
+      UfiSpace S9511-20CT datasheet for dimensions, weight, port inventory, platform, timing,
+      power, environment and compliance; S9511-20CT Hardware Installation Guide (s9511-20ct-hig)
+      for the Figure 8 Port Overview and Figure 7 rear elevations on page 10, the Component
+      Physical Information table, the port table, the LED tables and grounding; three vendor
+      product renders (photos/s9511-20ct-1-view, -2-front, -3-rear) for colour and confirmation.
+      BOTH ELEVATIONS PASS THE ASPECT GATE AND THEY ARE THE BEST THIS VENDOR HAS GIVEN. The front
+      measures 4048 x 402 px across the 440 x 43.5 mm face - aspect 10.07 against a true 10.115,
+      0.45 percent - and the rear 3930 x 391, aspect 10.051, 0.6 percent. Both are therefore
+      orthographic enough to carry geometry directly, in x AND in y, which is why this device's
+      vertical band is taken from the guide rather than anchored to a photograph as the last three
+      were. The photographs (520 px wide, 1.18 px/mm) are used for colour and counts only.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - 'Chassis (W x D x H) 1RU, 440 x 250 x 43.5 mm', weight 4.2 kg; the HIG Component
+      Physical Information table repeats the same triple (17.32" x 9.84" x 1.71") and the same
+      weight, and heads its weight row simply 'Chassis' rather than 'Chassis without FRU' - which
+      is correct here, because this device has no FRU of any kind. 440 is the body: the HIG ships
+      a separate rack mount bracket as an accessory, so the 19 inch mounting hardware is
+      additional to 440 and is not drawn.
+  fixed-everything:
+    note: >-
+      NEITHER THE SUPPLY NOR THE FANS IS FIELD-REPLACEABLE, and that is the structural fact about
+      this device. The datasheet's Redundancy rows read 'Dual-feed one power stage PSU' and
+      'Fixed, 3+1 redundant Fans'; the HIG's PSU Overview section says 'Dual-feed one power stage
+      fixed PSU' and its Fan Overview heading is '3+1 Redundant, fixed fans.' So there are no
+      components.bays anywhere in this manifest. The two DC feeds are the six screw terminal posts
+      on the front, drawn as panel decor under INPUT0 and INPUT1 silkscreen; the four fans are the
+      four circular grilles on the rear, drawn as panel decor under FAN0-FAN3 silkscreen. Neither
+      is addressable - see the fixed-fru-not-addressable gap - and the front FAN lamp therefore
+      points at the chassis rather than at four fan ids. THAT IS TRUE OF THE DOCUMENTED BUILD, AND
+      THE PHOTOGRAPH SHOWS ANOTHER ONE - see the ac-psu-variant gap, found by the matched-scale
+      comparison and not by reading.
+  front-vertical:
+    note: >-
+      ONE BAND, ONE PITCH - AND THE FIRST DRAFT SAID TWO. All four port blocks share the band:
+      ganged shells at y 8.6-35.5, coloured grounds behind them at 7.0-37.4, openings centred on y
+      14.15 and 29.89 for a 15.74 mm belly-to-belly pitch. That figure is the mean of two readings
+      - the guide's drawn optical cell centres at 14.34/29.92 (pitch 15.58) and the front
+      photograph's real apertures at 13.95/29.85 (pitch 15.90) - which agree to a third of a
+      millimetre. THE COPPER BLOCK WAS THE TRAP. Its drawn cell centres read 15.60 and 29.06, a
+      13.46 mm pitch, and this file first recorded that as a second, tighter pitch on the same
+      band. It is not: an RJ45 cell is inset from its opening by different amounts top and bottom,
+      so cell centres are not opening centres for that part. The matched-scale render settled it -
+      at a 13.46 mm pitch the rendered contact bands fell at 13.6-21.1 and 23.2-30.8 against the
+      photograph's 12.2-19.9 and 24.5-32.0, out by 1.4 and 1.3 mm in OPPOSITE directions, which is
+      the signature of a pitch error rather than an offset. Putting the copper openings on the
+      same 15.74 mm band as the optical ones reproduces the photograph to 0.25 mm. This is the
+      same lesson as the guide's filled cells being module faces, in a second disguise: a drawn
+      cell is not an aperture, and where the two are inset asymmetrically it will not even give
+      you the pitch.
+  port-pitch:
+    confidence: measured
+    note: >-
+      MEASURED FROM THE WEB LAMPS, WHICH REPEAT ONCE PER PORT, and not from the filled cells the
+      guide draws for module faces. Each optical column carries a green up/down lamp pair in the
+      silver web between its rows; taking the pair centres gives 14.27 mm on the combo SFP block
+      and 14.26/14.32/14.16 - mean 14.25 - across the SFP28 block, which is the SFF-8433 port
+      pitch exactly. That was the check that mattered: cell-to-cell centres would have given the
+      module pitch and drifted a gutter into every block. Column positions are then anchored on
+      the ganged shells, whose extents were measured off the light mask (combo RJ45 243.91-274.46,
+      combo SFP 278.37-308.15, SFP+ 310.11-370.98, SFP28 372.07-433.26) and which give a symmetric
+      0.6-2.1 mm flange against four or two standard openings. NOTE the lamp pairs sit about 1.3
+      mm LEFT of their column centres rather than on them, so the lamps fix the pitch and the
+      shells fix the origin.
+  combo-ports:
+    note: >-
+      Ports 0-3 are combo ports and are drawn as EIGHT apertures for FOUR logical ports. The HIG
+      port table gives '0 ~ 3, SFP/RJ45 combo, 1G' and adds 'Ports 0 to 3 (labeled in brown) are
+      SFP/RJ45 combo ports, configurable to support either connection type', and the faceplate
+      shows both: a 2x2 RJ45 block numbered 0/2 over 1/3 and, immediately to its right inside the
+      same brown frame, a 2x2 SFP block numbered the same way. They are modelled as two groups -
+      combo-1g-rj45 and combo-1g-sfp - each carrying the vendor's numbers 0-3, rather than as one
+      group with duplicated positions, so that both faces keep the number the vendor prints on
+      them and neither pretends to be a separate port. Only one of each pair can be used at a
+      time; the manifest cannot say that and the group descriptions do.
+  colour-coding:
+    note: >-
+      THE VENDOR COLOUR-CODES THE THREE PORT GROUPS AND THE COLOURS ARE MODELLED. Each block sits
+      on a printed ground that shows as a border around its silver ganged shell, sampled from the
+      figure: brown/orange (206,130,45) for the combo ports - the HIG's own words are 'labeled in
+      brown' - blue (51,133,175) for the SFP+ block and olive (187,183,60) for the SFP28 block.
+      The port numerals are printed in the matching colour on each ground. This is the same
+      faceplate idiom as the S9500-22XST's yellow SFP28 band and it carries the same meaning to
+      whoever ordered the box, so it is drawn as panel decor under the shells rather than dropped
+      as decoration.
+  timing-block:
+    confidence: drawing
+    note: >-
+      drawing - three coaxial jacks in one column at x centre 125.55, top to bottom 1PPS, 10MHz
+      and GNSS ANT. The first two measure about 6.1 mm across the drawn hex against
+      common/smb-jack's 7.0 and the datasheet calls them SMB; the third measures 9.57 mm against
+      common/sma-jack's 9.5 and the datasheet calls it SMA - so the drawing and the spec table
+      agree about which connector is which, which is worth saying because the three are drawn in
+      one column and look alike at page scale. BITS (RJ48) and ToD (RJ45) are the stacked pair at
+      x 145.43-160.22, BITS above and ToD below.
+  jack-orientation:
+    note: >-
+      std/rj45-ganged draws the latch keyway DOWN with its gold contacts at the TOP, and on a real
+      jack the integrated lamps sit at the contact end. On the 2x2 copper block the upper row's
+      lamps are at the TOP corners and the lower row's at the BOTTOM, so the upper row is
+      unrotated and the lower carries rotate: 180. BITS (upper of its pair) has the keyway up and
+      is turned; ToD below it is not. The management RJ45 at the top of its stack is turned; the
+      console at the bottom is not. That sense was got backwards on the S9500-22XST and caught by
+      the matched-scale render; it is applied the corrected way round here and re-checked the same
+      way.
+  cage-mirroring:
+    note: >-
+      The stacked optical rows are drawn UNMIRRORED, as on the S9500-22XST and S9502-16SMT where
+      the render-against-photograph test established it: rotating a std/sfp-ganged moves its drawn
+      cavity 1.13 mm, so a mirrored pair reads a cavity pitch 2.26 mm away from the opening pitch.
+      Checked here the same way after rendering.
+  system-lamps:
+    confidence: drawing
+    note: >-
+      drawing - five lamps at x 135.43 on a measured 2.545 mm pitch with centres at y 22.99,
+      25.54, 28.03, 30.62 and 33.11, beside a printed legend block at 138.04-143.26. The HIG
+      section 8 table names them GNSS, SYNC, STAT, FAN and PWR and gives each its own vocabulary,
+      transcribed onto each lamp. THE COLUMN IS DRAWN 0.4 mm TALLER THAN IT MEASURES:
+      common/led-rect@1 is 2.6 mm tall and four gaps of 2.545 will not hold five of them, so they
+      are placed on a 2.62 mm pitch centred on the measured block. Same compromise, same reason,
+      as the S9502-16SMT.
+  rear-layout:
+    confidence: drawing
+    note: >-
+      drawing - HIG Figure 7 at 8.932 px/mm, which passes the aspect gate at 0.6 percent. Four
+      circular convection grilles over the four fixed fans, each about 38 mm across, with FAN0,
+      FAN1 and FAN2 grouped at 75.7, 124.9 and 175.8 mm on a roughly 50 mm pitch and FAN3 alone at
+      373.0 mm. That asymmetry is the drawing's, not a mis-measurement: the figure prints
+      FAN0-FAN3 legends with arrows and the fourth sits by itself at the right-hand end, which is
+      what a 3+1 layout looks like when the spare is not in line. Five screws along the lower edge
+      on a roughly 100 mm pitch.
+  views:
+    note: >-
+      Six views. TOP and BOTTOM carry only size and a compliance sticker: no held figure draws
+      either face on this device - Figure 5's overview shows front and rear only - and inventing
+      lid reliefs from a sibling would be borrowing geometry, so the top is left honestly empty
+      and says so here. LEFT (x = 0 is the REAR) and RIGHT (x = 0 is the FRONT): the HIG section 6
+      puts the grounding lug on the side of the chassis and its Figure 12 inset shows it on the
+      RIGHT near the FRONT, which is where the two-hole lug is drawn - the one asymmetric feature
+      on either side face, so the depth-axis convention is load-bearing here rather than merely
+      stated. Screw positions on both side faces are estimated.
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet - Physical, Performance, Environmental, Regulatory Compliance, Timing and
+      Accessories sections, transcribed into sections. DC ONLY: the datasheet's Power Specs row
+      gives a DC input and no AC input, the HIG's Connecting Power section has a DC Version
+      subsection and no AC one, and no AC PSU appears anywhere, so this device carries one
+      configuration rather than the AC/DC pair its siblings have. The datasheet's key-features
+      list prints 'IEEE 1558v2' where the timing row prints IEEE 1588v2; the obvious typo is not
+      propagated.
+  power:
+    confidence: datasheet
+    note: >-
+      datasheet 'Typical power: 63 Watts (no transceiver)' - the vendor's own scope, so
+      power-envelope is bare. No maximum is published in either document, and the per-feed input
+      rating (-36 to -72 V, 8 A) is supply-side and is not converted into a draw figure. Note the
+      input range is -36 to -72 V here where the S9500-22XST and S9502-16SMT both read -36 to -75;
+      that is this datasheet's own number, not a transcription slip.
+  lifecycle:
+    note: >-
+      searched 2026-08-28: 'UfiSpace S9511-20CT end of life end of sale' - no announcement found;
+      the vendor product page and the datasheet PDF are live. none-announced is a real finding
+      here, not an absence of looking.
+
 attrs:
   performance:
     switching-capacity: 100 Gbps

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: as7726-32x
-version: 1.0.9
+version: 1.0.10
 maturity: modelled
 manufacturer: Edgecore
 model: AS7726-32X
@@ -12,34 +12,62 @@ portfolio:
 description: 32x QSFP28 1U spine/ToR switch, Broadcom Trident 3 (BCM56870)
 profile: networking
 provenance:
-  cpu: datasheet says only 'Intel Xeon 4-Core'; model and clock (D-1518 @ 2.20GHz) from the live
-    entity dump of a lab unit (dumps/arcos-openconfig-components.json)
-  attrs: datasheet (Hardware/Performance/Power/Supported-Transceivers sections; power figures are
-    min idle / typical 32x SR4 at 30 percent load, 25 C ambient)
-  chassis: datasheet (Dimensions WxDxH 43.84 x 51.5 x 4.35 cm; Weight 10.87 kg)
-  port-positions: photo-measured; true 18.5mm pitch (measured ~18.8mm from photo), 6mm block gaps,
-    human-reviewed round 5
-  port-numbering: estimated (verify against faceplate silkscreen)
-  port-number-positions: 'drawing - CONFIRMED, not estimated. Measured off the datasheet
-    front figure (datasheet figure img-007, sibling of img-005) at 2.18 px/mm: the odd
-    number sits in the lamp band above the top row at 12.4mm and the even one below the
-    bottom row at 39.3mm, against the 12.35 and 39.4 already modelled. The digit is printed
-    in the bare metal BETWEEN the left and right lamp pairs. It was invisible because
-    common/qsfp28-cage painted its whole box including that band; fixed in that skin at
-    v3.2.0, not by moving a correct label'
-  led-cluster: human-reviewed vs device photo
-  rear-layout: human-reviewed round 3-5
-  rear-psu-marks: 'drawing - the right-hand strip carries, top to bottom, an airflow arrow,
-    PS1, an earth symbol and the grounding screw, all on the lug centreline (datasheet rear
-    figure, datasheet figure img-005). They were one text mark holding a newline, which
-    SVG renders as ONE line, so "< PS1" ran 16mm sideways into the mounting ear. Split into
-    two marks, centred on the lug at 433.7 (and 4.7 for PS2), with the chevron replaced by
-    a filled path triangle. It was tried as an arrow GLYPH first and came out as
-    tofu: the renderer''s font has no U+2190 and no U+25C0, so an arrow on this
-    panel has to be drawn, the way the AGR420 pair legends draw theirs'
-  top-bottom-sides: top from angled photo (grooves + front vent strip); bottom = one label photo-measured
-    from a dark in-rack shot (big sticker edge visible ~155mm from front) and a second label
-    front-left estimated, not measured - reshoot on a bench for calibration; sides extrapolated from angled photo
+  cpu:
+    confidence: datasheet
+    note: >-
+      datasheet says only 'Intel Xeon 4-Core'; model and clock (D-1518 @ 2.20GHz) from the live
+      entity dump of a lab unit (dumps/arcos-openconfig-components.json)
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet (Hardware/Performance/Power/Supported-Transceivers sections; power figures are min
+      idle / typical 32x SR4 at 30 percent load, 25 C ambient)
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet (Dimensions WxDxH 43.84 x 51.5 x 4.35 cm; Weight 10.87 kg)
+  port-positions:
+    confidence: photo-measured
+    note: >-
+      photo-measured; true 18.5mm pitch (measured ~18.8mm from photo), 6mm block gaps,
+      human-reviewed round 5
+  port-numbering:
+    confidence: estimated
+    note: >-
+      estimated (verify against faceplate silkscreen)
+  port-number-positions:
+    confidence: drawing
+    note: >-
+      drawing - CONFIRMED, not estimated. Measured off the datasheet front figure (datasheet
+      figure img-007, sibling of img-005) at 2.18 px/mm: the odd number sits in the lamp band
+      above the top row at 12.4mm and the even one below the bottom row at 39.3mm, against the
+      12.35 and 39.4 already modelled. The digit is printed in the bare metal BETWEEN the left and
+      right lamp pairs. It was invisible because common/qsfp28-cage painted its whole box
+      including that band; fixed in that skin at v3.2.0, not by moving a correct label
+  led-cluster:
+    note: >-
+      human-reviewed vs device photo
+  rear-layout:
+    note: >-
+      human-reviewed round 3-5
+  rear-psu-marks:
+    confidence: drawing
+    note: >-
+      drawing - the right-hand strip carries, top to bottom, an airflow arrow, PS1, an earth
+      symbol and the grounding screw, all on the lug centreline (datasheet rear figure, datasheet
+      figure img-005). They were one text mark holding a newline, which SVG renders as ONE line,
+      so "< PS1" ran 16mm sideways into the mounting ear. Split into two marks, centred on the lug
+      at 433.7 (and 4.7 for PS2), with the chevron replaced by a filled path triangle. It was
+      tried as an arrow GLYPH first and came out as tofu: the renderer's font has no U+2190 and no
+      U+25C0, so an arrow on this panel has to be drawn, the way the AGR420 pair legends draw
+      theirs
+  top-bottom-sides:
+    note: >-
+      top from angled photo (grooves + front vent strip); bottom = one label photo-measured from a
+      dark in-rack shot (big sticker edge visible ~155mm from front) and a second label front-left
+      estimated, not measured - reshoot on a bench for calibration; sides extrapolated from angled
+      photo
+
 attrs:
   performance:
     switching-capacity: 3.2 Tbps (6.4 Tbps full duplex)

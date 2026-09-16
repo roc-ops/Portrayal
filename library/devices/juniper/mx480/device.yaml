@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx480
-version: 1.1.8
+version: 1.1.9
 maturity: modelled
 manufacturer: Juniper
 model: MX480
@@ -16,46 +16,59 @@ description: >-
   tray and air filter vertical at the rear sides.
 profile: networking
 provenance:
-  sources: MX480 Universal Routing Platform Hardware Guide, HPE datasheet a00150825enw, and the Juniper
-    image-library photographs mx480-front-high and mx480-rear-high. No
-    mechanical drawing was available
-  chassis: 'datasheet-table - guide chassis description: 14.0 x 17.45 x 24.5
-    in (355.6 x 443 x 622 mm), 8RU. Ears are NOT MODELLED by project
-    convention'
-  scale: 'photo - the rear photograph passes the orthographic gate at 0.8%
-    (3.33 px/mm isotropic); the front photograph is 5.1% ANISOTROPIC in y
-    and was anchored per axis (x 3.379 px/mm to 443, y 3.214 to 355.6).
-    Feature sizes come from the registry and the shared card family'
-  front-rows: 'photo - vent band 0-38.6, craft 38.6-80.6, card cage
-    87.0-341.9 as eight 31.86 mm slots, top to bottom DPC 5, 4, 3, 2, 1, 0,
-    then SCB 1 and SCB 0 (craft tabs: blue 0/1 for SCBs, white 0-5 for
-    DPCs; left flange numbers match). Card apertures span x 11.5-432.4.
-    NOTE the MX240 photo gave the same card family a 30.45 mm pitch - the
-    5% front-photo anisotropy here bounds the truth; each device is
-    internally consistent and the shared cards fit both'
-  populated-with: 'photo - slot 4 carries DPC 4x10GE (the DPC-R-4XGE-XFP
-    face), slots 3 and 0 carry DPC 40xGE (DPCE-R-40GE-SFP, with transceivers
-    seated in the photo - drawn as empty cages), slots 5/2/1 carry blank
-    covers, SCB 1 carries SCB-MX with RE-S-2000 and SCB 0 with RE-S-1300.
-    Defaults reproduce that configuration except both SCBs default to the
-    RE-S-1300 (the SCB contract carries one default; RE-S-2000 is in
-    accepts and the photo difference is recorded here)'
-  rear: 'photo - four PSU bays across the top on a 103.9 mm pitch (dividers
-    measured at 110.8/214.7/318.2), AC supplies photographed; the vertical
-    air-filter (left) and fan-tray (right) door strips below, estimated at
-    12 x 240; earthing studs and ESD placed at the MX240''s positions and
-    marked estimated - the AC rear photo does not resolve them'
-  power: 'guide power tables - base system 40 W, cooling 110/160 W
-    normal/high (dedicated tap), SCB and card figures on the shared
-    components. No chassis-level draw is published; the vendor instructs a
-    per-configuration budget'
-  lifecycle: 'announced - same per-SKU M/MX milestones situation as the
-    MX240 (trackers list 2020/2026 dates for older base bundles), searched
-    2026-08-27'
-  color: photo - as the MX240 family
-  other-faces: 'near-blank by evidence - rail bands and the right-side
-    exhaust field estimated as on the MX240. Axis conventions per
-    viewer3d.js: LEFT x = 0 REAR, RIGHT x = 0 FRONT, top/bottom y = 0 FRONT'
+  sources:
+    note: >-
+      MX480 Universal Routing Platform Hardware Guide, HPE datasheet a00150825enw, and the Juniper
+      image-library photographs mx480-front-high and mx480-rear-high. No mechanical drawing was
+      available
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet-table - guide chassis description: 14.0 x 17.45 x 24.5 in (355.6 x 443 x 622 mm),
+      8RU. Ears are NOT MODELLED by project convention
+  scale:
+    note: >-
+      photo - the rear photograph passes the orthographic gate at 0.8% (3.33 px/mm isotropic); the
+      front photograph is 5.1% ANISOTROPIC in y and was anchored per axis (x 3.379 px/mm to 443, y
+      3.214 to 355.6). Feature sizes come from the registry and the shared card family
+  front-rows:
+    note: >-
+      photo - vent band 0-38.6, craft 38.6-80.6, card cage 87.0-341.9 as eight 31.86 mm slots, top
+      to bottom DPC 5, 4, 3, 2, 1, 0, then SCB 1 and SCB 0 (craft tabs: blue 0/1 for SCBs, white
+      0-5 for DPCs; left flange numbers match). Card apertures span x 11.5-432.4. NOTE the MX240
+      photo gave the same card family a 30.45 mm pitch - the 5% front-photo anisotropy here bounds
+      the truth; each device is internally consistent and the shared cards fit both
+  populated-with:
+    note: >-
+      photo - slot 4 carries DPC 4x10GE (the DPC-R-4XGE-XFP face), slots 3 and 0 carry DPC 40xGE
+      (DPCE-R-40GE-SFP, with transceivers seated in the photo - drawn as empty cages), slots 5/2/1
+      carry blank covers, SCB 1 carries SCB-MX with RE-S-2000 and SCB 0 with RE-S-1300. Defaults
+      reproduce that configuration except both SCBs default to the RE-S-1300 (the SCB contract
+      carries one default; RE-S-2000 is in accepts and the photo difference is recorded here)
+  rear:
+    note: >-
+      photo - four PSU bays across the top on a 103.9 mm pitch (dividers measured at
+      110.8/214.7/318.2), AC supplies photographed; the vertical air-filter (left) and fan-tray
+      (right) door strips below, estimated at 12 x 240; earthing studs and ESD placed at the
+      MX240's positions and marked estimated - the AC rear photo does not resolve them
+  power:
+    note: >-
+      guide power tables - base system 40 W, cooling 110/160 W normal/high (dedicated tap), SCB
+      and card figures on the shared components. No chassis-level draw is published; the vendor
+      instructs a per-configuration budget
+  lifecycle:
+    note: >-
+      announced - same per-SKU M/MX milestones situation as the MX240 (trackers list 2020/2026
+      dates for older base bundles), searched 2026-08-27
+  color:
+    note: >-
+      photo - as the MX240 family
+  other-faces:
+    note: >-
+      near-blank by evidence - rail bands and the right-side exhaust field estimated as on the
+      MX240. Axis conventions per viewer3d.js: LEFT x = 0 REAR, RIGHT x = 0 FRONT, top/bottom y =
+      0 FRONT
+
 attrs:
   physical:
     weight: up to 163.5 kg maximum configuration (guide rack text, five per

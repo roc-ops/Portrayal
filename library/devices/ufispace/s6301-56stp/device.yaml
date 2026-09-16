@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s6301-56stp
-version: 2.0.8
+version: 2.0.9
 maturity: modelled
 manufacturer: UfiSpace
 model: S6301-56STP
@@ -13,156 +13,165 @@ description: UfiSpace S6301-56STP - 1RU 48-port 1G PoE (802.3af/at, 30W/port) ac
   hot-swap 920W AC PSUs, 1+1 hot-swap fans, front-to-back airflow
 profile: networking
 provenance:
-  chassis: >-
-    datasheet - 'Chassis (WxDxH) 1RU, 440 x 440 x 43.8 mm', weight 5.74 kg without
-    FRU; the HIG Component Physical Information table repeats all three. 440 is
-    the body between the ear folds, not a rack face: the HIG Space Clearance
-    section separates 'The S6301-56STP width is 17.32 inches (44.0cm)' from the
-    'rack mount brackets suitable for 19 inch (48.3cm) wide racks', and the
-    brackets are shipped loose (88 x 43 x 20 mm accessories, 8 M4 screws), so no
-    ear extent needed subtracting. Depth 440 is likewise 'without the field
-    replaceable units (FRUs)'; the fan handles project 25 mm and the PSU handles
-    38 mm beyond it (HIG Space Clearance), carried as relief on the FRU
-    contracts rather than in the chassis depth.
-  front-layout: >-
-    drawing - HIG Figure 8 (Port Overview strip, 1385 x 141 px). GATE 1: the
-    chassis in it measures 1378 x 137 px, aspect 10.06 against the datasheet's
-    10.05 (440/43.8) - 0.1% out, orthographic, measured at 3.13 px/mm. The 48
-    RJ45 jacks sit in four 6-column ganged blocks: the green jack LEDs (one per
-    jack, read as column markers) give a within-block pitch of 13.9 mm and a
-    block step of 87.5 mm (three independent steps of 87.49), first jack left
-    edge at x 25.8. The SFP+ block's blue paint spans x 376.1-434.3, four
-    columns on the std 14.25 pitch. Vent strip holes run x 84.6-436.5 in two
-    rows. Vertical placements are the softer axis: the figure draws the jack
-    rows schematically short, so the rows are set inside the measured shell
-    band (y 11.9-38.3) with std/rj45-ganged's 11.0 height and the row split
-    recorded here as drawing-constrained rather than measured.
-  jack-orientation: >-
-    photo - the front photograph and the datasheet front render, zoomed: the TOP
-    RJ45 row has its keyway/tab UP and gold contacts toward the centre band
-    (rotate 180 from the std default), the bottom row keyway-down; the SFP+ top
-    row's bail nubs face the centre lamp band (rotate 180), bottom row default.
-    Same mirrored-rows construction as the GL-8XEP and MX150 precedents.
-  port-numbering: >-
-    HIG Port Overview table: 'Port ID 0~47 RJ45 ... 48~55 SFP+', and the printed
-    strip under each column pair reads '▲n  n+1▼' (even numbers top row, odd
-    bottom). HIG Figure 8 draws large per-jack numerals as a schematic aid; the
-    photographs show NO numerals on the ganged shells - the real device numbers
-    its ports only on the strip below the field, so only the strip is modelled
-    (guide art vs real device: the real device wins).
-  port-leds: >-
-    photo+HIG - each RJ45 jack carries ONE integrated lamp in its outer corner
-    (top-left on the top row, bottom-left on the bottom row), mode-switched
-    between LNK/SPD and PoE status by the front-panel Mode button (HIG front
-    panel LED table). Before the RJ45 sweep std/rj45-ganged drew the opening
-    only and the lamps, sitting INSIDE the jack apertures, were not drawn -
-    same treatment as the MX150's in-jack lamps. They now draw as led-a/led-b
-    of common/rj45-ganged-eth@1 on the ge-poe group (both corners modelled at
-    component default vocabulary; the mode-switched single-lamp behaviour the
-    hardware actually has is not separately captured here). The SFP+ ports' lamps
-    sit in the centre band between the cage rows (one ▲▼ pair per column,
-    upper/lower port) and are drawn with common/sfp-led-pair, states overridden
-    to the mode-switched vocabulary because the component default cites another
-    device's guide.
-  left-cluster: >-
-    drawing - HIG Figure 8 at 3.13 px/mm: silver bezel plate x 6.4-21.7,
-    y 4.2-39.3 holding, top to bottom, the OOB management jack (two lamps above
-    it), the USB-A port and the console jack ('IOIO' legend, HIG section 11:
-    'The console can be connected using the RJ45 port labelled IOIO'). The
-    management and console jacks are drawn with std/rj45-ganged inside the
-    shared plate decor because the plate is one piece of metal - the 16 mm
-    single-port bezels would not fit the 35 mm stack. Management jack keyway-up
-    (rotate 180), console keyway-down, both read from the figure's tab notches
-    at zoom. The left-edge network pictogram and the USB/LED-mode/IOIOI icon
-    row are approximated with the nearest glyphs, as the S9510-28DC does.
-  jack-shells: >-
-    photo-measured - the four 12-port RJ45 blocks sit in SILVER ganged
-    shells on the real unit (product render s6301-56stp-2-front.png);
-    std/rj45-ganged draws the opening only, so each block's shell is a
-    decor fill sized from its own placements plus a 1.1/1.2 mm flange,
-    per the s9510-28dc silver-band precedent. Caught in review after the
-    first pass drew the jacks dark-on-dark - the same defect the gl-8xep
-    review found, and one no lint rule can see.
-  buttons: >-
-    drawing - MODE at (37.4, 4.4) and RESET at (47.1, 4.4), legends under each,
-    read from HIG Figure 8; both drawn with common/reset-button (4 mm recessed
-    pinhole). The real MODE button is a raised rubber dome ~4 mm - closest
-    library part used and the delta recorded here. Mode function per the HIG
-    LED table footnote: 'The Mode button on the front panel allows switching
-    between LNK/SPD and PoE status LEDs'.
-  system-leds: >-
-    drawing - HIG Figure 8: two lamp rows above the first jack block, row 1 at
-    y ~4.5 (SYS, FAN, PS0, PS1 at x 53.6/60.5/67.2/74.0), row 2 at y ~7.1
-    (LNK/SPD, POE, ID at x 53.0/66.5/73.2), lamps ~1.3 mm drawn with
-    common/led-dot (2.0 mm, nearest part). States transcribed from the HIG
-    section 10 front-panel LED table on each placement.
-  rear-layout: >-
-    drawing - HIG Figure 7 rear strip (1391 x 143 px, aspect 10.11 vs true
-    10.05, 0.6% out, 3.15 px/mm): grounding column at the left edge (two M4
-    holes at (6.2, 7.6) and (6.2, 24.4) with the earth symbol below - one of
-    the HIG's two lug locations, Figure 21), fan bays at x 13.7 and 65.9
-    (module faces 51.5 x 42.2 abutting), blank panel to x 277, PSU bays at
-    x 277.2 and 360.5 (faces 73 x 40 confirmed by the red release tabs at
-    340.9-350.1 and 424.1-433.0), vertical 'PSU0 ◄'/'PSU1 ◄' legends on the
-    chassis strips right of each bay. The photograph corroborates every
-    feature. The 'FAN ◄0'/'FAN ◄1' texts sit ON the fan modules' own faces in
-    both sources, not on the chassis, and the shared fan component cannot carry
-    a per-position legend - not modelled, see gaps.
-  psu-fru: 'ufispace/psu-921-ac@1 built for this device from the HIG Fig 6 drawing,
-    Component Physical Information table and the rear photograph; the fan FRU
-    reuses ufispace/fan-402825@1 (S9510-28DC family) - the datasheet orders
-    FAN-402825-HDN where the S9510 orders -HD, same drawn 51.5 x 42.2 face, and
-    the configuration overrides the model attr. The S6301 photo shows the fan
-    status lamp low on the right strip where the component draws it top-left -
-    a skin-level delta on a shared part, recorded here and left'
-  top: >-
-    drawing - HIG Figure 5 top view (D and W both dimensioned 440 mm; measured
-    at 1.44 px/mm against them). AXIS: y = 0 is the REAR, as the figure is
-    printed (fan handles and PSU tabs at its top edge). Four recessed
-    finger-slot grooves at y 132/212/293/370 from the rear (the two nearer the
-    rear span x 190-433, the two nearer the front x 10-433) plus the screw
-    heads the figure draws. Positions to the figure's ~1 mm; groove depth not
-    dimensioned anywhere, drawn as sink decor.
-  bottom: >-
-    deliberately size-only - no photograph or drawing of the underside exists
-    in the intake (the HIG's Figure 5 shows top, front and rear only), and
-    inventing the label field the class of device usually carries would be a
-    guess. L45's size-only warning stands as the record.
-  sides: >-
-    estimated - no orthographic side drawing exists; the angle photograph shows
-    the LEFT side with the front bracket screw holes and rear rail holes, and
-    positions are estimated from it against the HIG accessory dimensions
-    (bracket 88 x 43 x 20 mm with 4 M4 holes; rail 406.8 x 43 x 21 mm).
-    AXIS CONVENTION: on the RIGHT view x = 0 is the FRONT; on the LEFT view
-    x = 0 is the REAR (renderer convention). Content is otherwise symmetric
-    hole patterns, mirrored as depth - x - width.
-  attrs: datasheet (Specifications table and Supported Accessories), with the
-    HIG Connecting Power section for the system maxima and the PoE budget
-  power: >-
-    datasheet gives 'Typical power: 80 Watts (no transceiver)'. The HIG
-    Connecting Power section gives the maxima: 'The maximum system power
-    consumption is 145 watts without PoE enabled, and 1517 watts with PoE
-    enabled', with the testing criteria printed beside them - 45C ambient,
-    optics fully populated, 100% traffic load - hence
-    power-envelope: fully-configured. power-max-w carries the PoE-enabled 1517;
-    the no-PoE 145 is kept as power-max-no-poe-w because the two describe the
-    same box with and without its defining feature loaded. The PoE budget is
-    stated three times as 820 W (802.3at 30 W or 802.3af 15.4 W per port).
-    The vendor qualifies all of these; nothing here is an unqualified reading.
-  usb-version: >-
-    sources-disagree, recorded not resolved: the datasheet says '1 x USB 1.0
-    Type-A port', the HIG's cabling section says 'Connect the USB 2.0 A Type
-    plug', and the accessory list ships a 'USB 3.0 cable'. The manifest carries
-    the datasheet's line verbatim; see gaps. THE DRAWING FOLLOWS THE MANIFEST, not the
-    cable: the `usb2` skin paints USB-IF's white tongue, which is the colour for 1.x AND
-    2.0, so it agrees with two of the three sources at once and leaves the disagreement
-    where it is. The blue it drew before agreed only with the accessory cable, and
-    nothing in the library had chosen that.
-  lifecycle: >-
-    searched 2026-08-28, 'UfiSpace S6301-56STP end of life' - no announcement;
-    the vendor still lists the product (ufispace.com S6301-56STP product page)
-    and it joined the SONiC Lite HCL in Feb 2026. none-announced is a checked
-    state, not an absence.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - 'Chassis (WxDxH) 1RU, 440 x 440 x 43.8 mm', weight 5.74 kg without FRU; the HIG
+      Component Physical Information table repeats all three. 440 is the body between the ear
+      folds, not a rack face: the HIG Space Clearance section separates 'The S6301-56STP width is
+      17.32 inches (44.0cm)' from the 'rack mount brackets suitable for 19 inch (48.3cm) wide
+      racks', and the brackets are shipped loose (88 x 43 x 20 mm accessories, 8 M4 screws), so no
+      ear extent needed subtracting. Depth 440 is likewise 'without the field replaceable units
+      (FRUs)'; the fan handles project 25 mm and the PSU handles 38 mm beyond it (HIG Space
+      Clearance), carried as relief on the FRU contracts rather than in the chassis depth.
+  front-layout:
+    confidence: drawing
+    note: >-
+      drawing - HIG Figure 8 (Port Overview strip, 1385 x 141 px). GATE 1: the chassis in it
+      measures 1378 x 137 px, aspect 10.06 against the datasheet's 10.05 (440/43.8) - 0.1% out,
+      orthographic, measured at 3.13 px/mm. The 48 RJ45 jacks sit in four 6-column ganged blocks:
+      the green jack LEDs (one per jack, read as column markers) give a within-block pitch of 13.9
+      mm and a block step of 87.5 mm (three independent steps of 87.49), first jack left edge at x
+      25.8. The SFP+ block's blue paint spans x 376.1-434.3, four columns on the std 14.25 pitch.
+      Vent strip holes run x 84.6-436.5 in two rows. Vertical placements are the softer axis: the
+      figure draws the jack rows schematically short, so the rows are set inside the measured
+      shell band (y 11.9-38.3) with std/rj45-ganged's 11.0 height and the row split recorded here
+      as drawing-constrained rather than measured.
+  jack-orientation:
+    note: >-
+      photo - the front photograph and the datasheet front render, zoomed: the TOP RJ45 row has
+      its keyway/tab UP and gold contacts toward the centre band (rotate 180 from the std
+      default), the bottom row keyway-down; the SFP+ top row's bail nubs face the centre lamp band
+      (rotate 180), bottom row default. Same mirrored-rows construction as the GL-8XEP and MX150
+      precedents.
+  port-numbering:
+    note: 'HIG Port Overview table: ''Port ID 0~47 RJ45 ... 48~55 SFP+'', and the printed strip under each
+      column pair reads ''▲n  n+1▼'' (even numbers top row, odd bottom). HIG Figure 8 draws large per-jack
+      numerals as a schematic aid; the photographs show NO numerals on the ganged shells - the real device
+      numbers its ports only on the strip below the field, so only the strip is modelled (guide art vs real
+      device: the real device wins).'
+  port-leds:
+    note: >-
+      photo+HIG - each RJ45 jack carries ONE integrated lamp in its outer corner (top-left on the
+      top row, bottom-left on the bottom row), mode-switched between LNK/SPD and PoE status by the
+      front-panel Mode button (HIG front panel LED table). Before the RJ45 sweep std/rj45-ganged
+      drew the opening only and the lamps, sitting INSIDE the jack apertures, were not drawn -
+      same treatment as the MX150's in-jack lamps. They now draw as led-a/led-b of
+      common/rj45-ganged-eth@1 on the ge-poe group (both corners modelled at component default
+      vocabulary; the mode-switched single-lamp behaviour the hardware actually has is not
+      separately captured here). The SFP+ ports' lamps sit in the centre band between the cage
+      rows (one ▲▼ pair per column, upper/lower port) and are drawn with common/sfp-led-pair,
+      states overridden to the mode-switched vocabulary because the component default cites
+      another device's guide.
+  left-cluster:
+    confidence: drawing
+    note: >-
+      drawing - HIG Figure 8 at 3.13 px/mm: silver bezel plate x 6.4-21.7, y 4.2-39.3 holding, top
+      to bottom, the OOB management jack (two lamps above it), the USB-A port and the console jack
+      ('IOIO' legend, HIG section 11: 'The console can be connected using the RJ45 port labelled
+      IOIO'). The management and console jacks are drawn with std/rj45-ganged inside the shared
+      plate decor because the plate is one piece of metal - the 16 mm single-port bezels would not
+      fit the 35 mm stack. Management jack keyway-up (rotate 180), console keyway-down, both read
+      from the figure's tab notches at zoom. The left-edge network pictogram and the
+      USB/LED-mode/IOIOI icon row are approximated with the nearest glyphs, as the S9510-28DC
+      does.
+  jack-shells:
+    confidence: photo-measured
+    note: >-
+      photo-measured - the four 12-port RJ45 blocks sit in SILVER ganged shells on the real unit
+      (product render s6301-56stp-2-front.png); std/rj45-ganged draws the opening only, so each
+      block's shell is a decor fill sized from its own placements plus a 1.1/1.2 mm flange, per
+      the s9510-28dc silver-band precedent. Caught in review after the first pass drew the jacks
+      dark-on-dark - the same defect the gl-8xep review found, and one no lint rule can see.
+  buttons:
+    confidence: drawing
+    note: >-
+      drawing - MODE at (37.4, 4.4) and RESET at (47.1, 4.4), legends under each, read from HIG
+      Figure 8; both drawn with common/reset-button (4 mm recessed pinhole). The real MODE button
+      is a raised rubber dome ~4 mm - closest library part used and the delta recorded here. Mode
+      function per the HIG LED table footnote: 'The Mode button on the front panel allows
+      switching between LNK/SPD and PoE status LEDs'.
+  system-leds:
+    confidence: drawing
+    note: >-
+      drawing - HIG Figure 8: two lamp rows above the first jack block, row 1 at y ~4.5 (SYS, FAN,
+      PS0, PS1 at x 53.6/60.5/67.2/74.0), row 2 at y ~7.1 (LNK/SPD, POE, ID at x 53.0/66.5/73.2),
+      lamps ~1.3 mm drawn with common/led-dot (2.0 mm, nearest part). States transcribed from the
+      HIG section 10 front-panel LED table on each placement.
+  rear-layout:
+    confidence: drawing
+    note: >-
+      drawing - HIG Figure 7 rear strip (1391 x 143 px, aspect 10.11 vs true 10.05, 0.6% out, 3.15
+      px/mm): grounding column at the left edge (two M4 holes at (6.2, 7.6) and (6.2, 24.4) with
+      the earth symbol below - one of the HIG's two lug locations, Figure 21), fan bays at x 13.7
+      and 65.9 (module faces 51.5 x 42.2 abutting), blank panel to x 277, PSU bays at x 277.2 and
+      360.5 (faces 73 x 40 confirmed by the red release tabs at 340.9-350.1 and 424.1-433.0),
+      vertical 'PSU0 ◄'/'PSU1 ◄' legends on the chassis strips right of each bay. The photograph
+      corroborates every feature. The 'FAN ◄0'/'FAN ◄1' texts sit ON the fan modules' own faces in
+      both sources, not on the chassis, and the shared fan component cannot carry a per-position
+      legend - not modelled, see gaps.
+  psu-fru:
+    note: >-
+      ufispace/psu-921-ac@1 built for this device from the HIG Fig 6 drawing, Component Physical
+      Information table and the rear photograph; the fan FRU reuses ufispace/fan-402825@1
+      (S9510-28DC family) - the datasheet orders FAN-402825-HDN where the S9510 orders -HD, same
+      drawn 51.5 x 42.2 face, and the configuration overrides the model attr. The S6301 photo
+      shows the fan status lamp low on the right strip where the component draws it top-left - a
+      skin-level delta on a shared part, recorded here and left
+  top:
+    confidence: drawing
+    note: >-
+      drawing - HIG Figure 5 top view (D and W both dimensioned 440 mm; measured at 1.44 px/mm
+      against them). AXIS: y = 0 is the REAR, as the figure is printed (fan handles and PSU tabs
+      at its top edge). Four recessed finger-slot grooves at y 132/212/293/370 from the rear (the
+      two nearer the rear span x 190-433, the two nearer the front x 10-433) plus the screw heads
+      the figure draws. Positions to the figure's ~1 mm; groove depth not dimensioned anywhere,
+      drawn as sink decor.
+  bottom:
+    note: >-
+      deliberately size-only - no photograph or drawing of the underside exists in the intake (the
+      HIG's Figure 5 shows top, front and rear only), and inventing the label field the class of
+      device usually carries would be a guess. L45's size-only warning stands as the record.
+  sides:
+    confidence: estimated
+    note: >-
+      estimated - no orthographic side drawing exists; the angle photograph shows the LEFT side
+      with the front bracket screw holes and rear rail holes, and positions are estimated from it
+      against the HIG accessory dimensions (bracket 88 x 43 x 20 mm with 4 M4 holes; rail 406.8 x
+      43 x 21 mm). AXIS CONVENTION: on the RIGHT view x = 0 is the FRONT; on the LEFT view x = 0
+      is the REAR (renderer convention). Content is otherwise symmetric hole patterns, mirrored as
+      depth - x - width.
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet (Specifications table and Supported Accessories), with the HIG Connecting Power
+      section for the system maxima and the PoE budget
+  power:
+    confidence: datasheet
+    note: >-
+      datasheet gives 'Typical power: 80 Watts (no transceiver)'. The HIG Connecting Power section
+      gives the maxima: 'The maximum system power consumption is 145 watts without PoE enabled,
+      and 1517 watts with PoE enabled', with the testing criteria printed beside them - 45C
+      ambient, optics fully populated, 100% traffic load - hence power-envelope: fully-configured.
+      power-max-w carries the PoE-enabled 1517; the no-PoE 145 is kept as power-max-no-poe-w
+      because the two describe the same box with and without its defining feature loaded. The PoE
+      budget is stated three times as 820 W (802.3at 30 W or 802.3af 15.4 W per port). The vendor
+      qualifies all of these; nothing here is an unqualified reading.
+  usb-version:
+    note: >-
+      sources-disagree, recorded not resolved: the datasheet says '1 x USB 1.0 Type-A port', the
+      HIG's cabling section says 'Connect the USB 2.0 A Type plug', and the accessory list ships a
+      'USB 3.0 cable'. The manifest carries the datasheet's line verbatim; see gaps. THE DRAWING
+      FOLLOWS THE MANIFEST, not the cable: the `usb2` skin paints USB-IF's white tongue, which is
+      the colour for 1.x AND 2.0, so it agrees with two of the three sources at once and leaves
+      the disagreement where it is. The blue it drew before agreed only with the accessory cable,
+      and nothing in the library had chosen that.
+  lifecycle:
+    note: >-
+      searched 2026-08-28, 'UfiSpace S6301-56STP end of life' - no announcement; the vendor still
+      lists the product (ufispace.com S6301-56STP product page) and it joined the SONiC Lite HCL
+      in Feb 2026. none-announced is a checked state, not an absence.
+
 attrs:
   performance:
     switching-capacity: 130 Gbps
