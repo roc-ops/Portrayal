@@ -29,8 +29,13 @@ needs the artifacts, not a checkout of this repository.
 ```sh
 ./build.sh                                    # lint, then compile every device
 ./publish.sh                                  # the same, plus the DCIM exports
-python3 tools/serve.py 8931                   # browse http://localhost:8931/library/dist/
+python3 tools/serve.py 8931                   # then open http://localhost:8931/kit/index.html
 ```
+
+`kit/index.html` is the explorer: every device in the build, any face, in 2D or
+3D, with a tree you can click into. It is what the visual gate in
+`docs/modelling-a-device.md` is run in. The raw compiled files are under
+`http://localhost:8931/library/dist/` if you want them directly.
 
 To compile one device:
 
