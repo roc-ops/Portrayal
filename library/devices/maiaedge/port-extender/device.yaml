@@ -5,13 +5,13 @@ version: 0.1.0
 maturity: modelled
 manufacturer: MaiaEdge
 model: Port Extender
-profile: networking
 description: >-
   MaiaEdge Port Extender - a 1RU switch sold to expand a Path Border Controller's
   physical port count. 48 SFP28 tenant ports in two rows and 8 QSFP28 fabric uplinks
   on the front; 1+1 supplies and a 3+1 fan tray behind. Its port roles are configured
   from the MaiaEdge portal rather than on the box, which is what distinguishes it from
   the third-party switches that can stand in for it.
+profile: networking
 provenance:
   size: >-
     datasheet - MaiaEdge-Port-Extender-Datasheet-v1.pdf page 3, "Dimensions (H x W x D)
@@ -110,6 +110,73 @@ attrs:
   lifecycle:
     eol: none-announced
 chassis: {width: 438.0, height: 44.0, depth: 520.0, ru: 1, color: '#1b1e21'}
+gaps:
+- what: rear-face-unmodelled
+  scope: [rear]
+  reason: needs-photo
+  wanted: a photograph of the rear, or a mechanical drawing of it.
+  note: >-
+    THE REAR'S INVENTORY IS KNOWN AND NOTHING PLACES IT, so the face draws the envelope
+    and nothing else. The datasheet counts two hot-swappable supplies and a 3+1 fan
+    tray, and lists the management interfaces as "1 x Rear CPU/BMC Shared Ethernet
+    (RJ45) - 1 x Serial Console (RJ45) - 1 x USB Type-A"; the product documentation
+    puts the management jack "on the rear of the Port Extender (center of the device,
+    at the top)". That is an inventory and one coarse position, and drawing a rear from
+    it would be inventing five or six coordinates to carry one. The front render shows
+    no jacks at all, which is why all three management interfaces are taken to be back
+    there.
+- what: front-face-positions
+  scope: [front]
+  reason: needs-drawing
+  wanted: >-
+    a face-on photograph or a mechanical drawing. Either settles the whole face in one
+    step.
+  note: >-
+    EVERY POSITION ON THE FRONT FACE IS ESTIMATED. The only image held is a marketing
+    render that is not orthographic - the lid is visible in it, so the face is
+    foreshortened vertically and no vertical figure may be taken from it. What the
+    render does settle is the ARRANGEMENT (see provenance `arrangement`), and the
+    horizontal pitch it implies agrees with the standard part to 2%. The row heights,
+    the row gap, the margins and the block gaps are all chosen.
+- what: tenant-port-lamps
+  scope: [front]
+  reason: needs-photo
+  wanted: a face-on photograph, or an LED table.
+  note: >-
+    A ROW OF SMALL ROUND FEATURES RUNS ABOVE AND BELOW THE TENANT PORTS, one per column
+    in each row, and they are NOT DRAWN because nothing held can say whether they are
+    lamps or fasteners. On an 800 px render an unlit indicator and a panel screw are the
+    same dark dot. The uplink ports' lamps ARE drawn, and the difference is the evidence:
+    those are clustered in fours per port and read clearly as the four-lane band the
+    cage part carries. Guessing 48 indicators into existence, or 48 screws, would be
+    drawing something nobody can check.
+- what: port-numerals
+  scope: [front]
+  reason: needs-photo
+  wanted: a face-on photograph square enough to read the legends.
+  note: >-
+    The port numbers are PRINTED between the two rows - the render shows a legend per
+    column - and they are not drawn, because the render cannot resolve their format.
+    Whether a column is labelled with both numbers, or one above the other, or on
+    alternating sides, is not readable at 800 px. The NUMBERING is modelled (see
+    provenance `numbering`); the artwork that carries it is not.
+- what: wordmark-logo-mark
+  scope: [front]
+  reason: needs-drawing
+  wanted: the MaiaEdge mark as vector art.
+  note: >-
+    The faceplate carries the word MaiaEdge at its top left, and that is drawn. The
+    stylised angular glyph beside it is not - the same decision the PBC-2000's face
+    records, for the same reason: approximating a company's mark from a render is
+    drawing something nobody can check, and a wrong logo is worse than an absent one.
+- what: envelope-faces-undetailed
+  scope: [top, bottom, left, right]
+  reason: needs-photo
+  wanted: photographs of the lid, the underside and either flank.
+  note: >-
+    These four faces draw the chassis envelope and nothing else. The envelope is not a
+    guess - 44 x 438 x 520 is dimensioned on page 3 of the datasheet - but no source
+    held shows what is on any of them.
 groups:
   # ONE GROUP, BECAUSE THE VENDOR NUMBERS ALL 56 IN ONE SPACE. The documentation
   # addresses tenant ports 41-48 and uplinks 51-56 without ever restarting the
@@ -294,70 +361,3 @@ views:
     panel:
       decor:
       - {id: right-envelope, at: [0.0, 0.0], size: [520.0, 44.0], fill: '#1b1e21', kind: envelope}
-gaps:
-- what: rear-face-unmodelled
-  scope: [rear]
-  reason: needs-photo
-  wanted: a photograph of the rear, or a mechanical drawing of it.
-  note: >-
-    THE REAR'S INVENTORY IS KNOWN AND NOTHING PLACES IT, so the face draws the envelope
-    and nothing else. The datasheet counts two hot-swappable supplies and a 3+1 fan
-    tray, and lists the management interfaces as "1 x Rear CPU/BMC Shared Ethernet
-    (RJ45) - 1 x Serial Console (RJ45) - 1 x USB Type-A"; the product documentation
-    puts the management jack "on the rear of the Port Extender (center of the device,
-    at the top)". That is an inventory and one coarse position, and drawing a rear from
-    it would be inventing five or six coordinates to carry one. The front render shows
-    no jacks at all, which is why all three management interfaces are taken to be back
-    there.
-- what: front-face-positions
-  scope: [front]
-  reason: needs-drawing
-  wanted: >-
-    a face-on photograph or a mechanical drawing. Either settles the whole face in one
-    step.
-  note: >-
-    EVERY POSITION ON THE FRONT FACE IS ESTIMATED. The only image held is a marketing
-    render that is not orthographic - the lid is visible in it, so the face is
-    foreshortened vertically and no vertical figure may be taken from it. What the
-    render does settle is the ARRANGEMENT (see provenance `arrangement`), and the
-    horizontal pitch it implies agrees with the standard part to 2%. The row heights,
-    the row gap, the margins and the block gaps are all chosen.
-- what: tenant-port-lamps
-  scope: [front]
-  reason: needs-photo
-  wanted: a face-on photograph, or an LED table.
-  note: >-
-    A ROW OF SMALL ROUND FEATURES RUNS ABOVE AND BELOW THE TENANT PORTS, one per column
-    in each row, and they are NOT DRAWN because nothing held can say whether they are
-    lamps or fasteners. On an 800 px render an unlit indicator and a panel screw are the
-    same dark dot. The uplink ports' lamps ARE drawn, and the difference is the evidence:
-    those are clustered in fours per port and read clearly as the four-lane band the
-    cage part carries. Guessing 48 indicators into existence, or 48 screws, would be
-    drawing something nobody can check.
-- what: port-numerals
-  scope: [front]
-  reason: needs-photo
-  wanted: a face-on photograph square enough to read the legends.
-  note: >-
-    The port numbers are PRINTED between the two rows - the render shows a legend per
-    column - and they are not drawn, because the render cannot resolve their format.
-    Whether a column is labelled with both numbers, or one above the other, or on
-    alternating sides, is not readable at 800 px. The NUMBERING is modelled (see
-    provenance `numbering`); the artwork that carries it is not.
-- what: wordmark-logo-mark
-  scope: [front]
-  reason: needs-drawing
-  wanted: the MaiaEdge mark as vector art.
-  note: >-
-    The faceplate carries the word MaiaEdge at its top left, and that is drawn. The
-    stylised angular glyph beside it is not - the same decision the PBC-2000's face
-    records, for the same reason: approximating a company's mark from a render is
-    drawing something nobody can check, and a wrong logo is worse than an absent one.
-- what: envelope-faces-undetailed
-  scope: [top, bottom, left, right]
-  reason: needs-photo
-  wanted: photographs of the lid, the underside and either flank.
-  note: >-
-    These four faces draw the chassis envelope and nothing else. The envelope is not a
-    guess - 44 x 438 x 520 is dimensioned on page 3 of the datasheet - but no source
-    held shows what is on any of them.

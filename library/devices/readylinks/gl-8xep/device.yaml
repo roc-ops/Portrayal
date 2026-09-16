@@ -152,6 +152,29 @@ chassis:
   depth: 165.0
   color: '#17191c'
   edge: '#0e0f11'
+gaps:
+- what: pd-port-identity
+  scope: [eth-2g5-1, eth-2g5-2]
+  reason: vendor-silent
+  wanted: >-
+    Which of the panel's 2.5G1 / 2.5G2 jacks is the PoE-PD port. The
+    datasheet lists one 2.5G RJ45 port and one 2.5G RJ45 PoE-PD port and
+    no document maps that to the panel labels; neither placement claims
+    the PD role until a source or a live unit says.
+- what: sfp-led-pairing
+  scope: [sfp-leds]
+  reason: vendor-silent
+  wanted: >-
+    Which centre-band lamp pair serves XG1 vs XG2. The four lamps split
+    into pairs at the 3.6 mm gap; assigned by adjacency (left pair to the
+    top cage XG2) - verify against a live unit.
+- what: right-side-boss
+  scope: [right]
+  reason: vendor-silent
+  wanted: >-
+    Identity of the 9.2 x 10.2 x 7.7 mm boss on the right side wall near
+    the front (GLB mesh idx22, y 7.9-18.1) - likely a security slot or
+    wall-mount feature. No document names it; not drawn until identified.
 groups:
   gbe-poe:
     term: Port
@@ -322,29 +345,6 @@ views:
     panel:
       decor:
       - {at: [5.2, 8.8], size: [149.7, 147.4], fill: '#141619'}
-gaps:
-- what: pd-port-identity
-  scope: [eth-2g5-1, eth-2g5-2]
-  reason: vendor-silent
-  wanted: >-
-    Which of the panel's 2.5G1 / 2.5G2 jacks is the PoE-PD port. The
-    datasheet lists one 2.5G RJ45 port and one 2.5G RJ45 PoE-PD port and
-    no document maps that to the panel labels; neither placement claims
-    the PD role until a source or a live unit says.
-- what: sfp-led-pairing
-  scope: [sfp-leds]
-  reason: vendor-silent
-  wanted: >-
-    Which centre-band lamp pair serves XG1 vs XG2. The four lamps split
-    into pairs at the 3.6 mm gap; assigned by adjacency (left pair to the
-    top cage XG2) - verify against a live unit.
-- what: right-side-boss
-  scope: [right]
-  reason: vendor-silent
-  wanted: >-
-    Identity of the 9.2 x 10.2 x 7.7 mm boss on the right side wall near
-    the front (GLB mesh idx22, y 7.9-18.1) - likely a security slot or
-    wall-mount feature. No document names it; not drawn until identified.
 configurations:
   base:
     kind: base

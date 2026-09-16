@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9705-48d
-version: 2.0.9
+version: 2.0.10
 maturity: modelled
 manufacturer: UfiSpace
 model: S9705-48D
@@ -345,6 +345,8 @@ chassis:
   ru: 2
   color: '#404040'
   weight-kg: 19.86
+  airflow: front-to-back
+
 gaps:
 - what: port-led-semantics
   scope: [port-leds, fabric]
@@ -915,7 +917,6 @@ configurations:
       the DC terminal block. No orderable chassis part number appears in any held
       document.
     default: true
-    airflow: front-to-back
   ac:
     kind: orderable
     description: >-
@@ -923,7 +924,6 @@ configurations:
       Order). Input 200 to 240 V at 12.5 A per feed; the HIG notes that on a 110 V feed
       each supply delivers only 1000 W and the pair cannot then be swapped live. Maximum
       system consumption 1229 W at 45 C with optics fully populated and traffic at 100%.
-    airflow: front-to-back
     bays:
       psu-0: ufispace/psu-202-ac@1
       psu-1: ufispace/psu-202-ac@1
@@ -936,7 +936,6 @@ configurations:
       consumption 1433 W at 45 C with optics fully populated and traffic at 100%. No held
       image shows this build; the face drawn is ufispace/psu-202-dc as built for the
       S9600-56DX, which orders the same PSU-202-DESR part number at the same rating.
-    airflow: front-to-back
     bays:
       psu-0: ufispace/psu-202-dc@1
       psu-1: ufispace/psu-202-dc@1

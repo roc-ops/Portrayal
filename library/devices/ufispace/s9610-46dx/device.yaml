@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9610-46dx
-version: 3.0.8
+version: 3.0.9
 maturity: modelled
 manufacturer: UfiSpace
 model: S9610-46DX
@@ -396,6 +396,8 @@ chassis:
   color: '#3c3c3c'
   weight-kg: 22.64
 # What no rule can find, because the manifest looks complete.
+  airflow: front-to-back
+
 gaps:
 - what: port-led-semantics
   scope: [qsfp28, qsfpdd-400g, sfp28, sfp-plus-mgmt, port-leds]
@@ -1020,7 +1022,6 @@ configurations:
       Maximum system consumption 1263 W under 400G MSA optics, 1534 W with OpenZR+. No
       orderable chassis part number appears in any held document; see the chassis-sku gap.
     default: true
-    airflow: front-to-back
     component-attrs:
       psu-202-ac:
         model: PSU-202-AESR
@@ -1036,7 +1037,6 @@ configurations:
       mechanical drawing (Figure 6) and the cabling figures (26-28). Datasheet input -40 to
       -72 V at 60 A; maximum system consumption 1220 W under 400G MSA optics and 1524 W
       with OpenZR+, both below the AC build's figures.
-    airflow: front-to-back
     bays:
       psu-0: ufispace/psu-202-dc@1
       psu-1: ufispace/psu-202-dc@1

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9500-22xst
-version: 1.0.5
+version: 1.0.6
 maturity: modelled
 manufacturer: UfiSpace
 model: S9500-22XST
@@ -272,6 +272,8 @@ chassis:
   depth: 302
   ru: 1
   weight-kg: 4.75
+  airflow: front-to-back
+
 gaps:
 - what: port-led-semantics
   scope: [rj45-1g, sfp-plus, sfp28, qsfp28, port-leds]
@@ -658,11 +660,9 @@ configurations:
       back-to-front airflow variant is offered in any held document - the datasheet lists
       one fan SKU - and no chassis SKU is printed anywhere (see the chassis-sku gap)
     default: true
-    airflow: front-to-back
   ac:
     kind: orderable
     description: Dual 200W AC PSUs (PSU-201-AISB, 100-240 V) with three FAN-402825-HD exhaust fans
-    airflow: front-to-back
     bays:
       psu-0: ufispace/psu-201-ac@1
       psu-1: ufispace/psu-201-ac@1

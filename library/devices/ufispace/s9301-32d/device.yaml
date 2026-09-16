@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9301-32d
-version: 1.0.6
+version: 1.0.7
 maturity: modelled
 manufacturer: UfiSpace
 model: S9301-32D
@@ -277,6 +277,8 @@ chassis:
   depth: 645
   ru: 1
   weight-kg: 11.34
+  airflow: front-to-back
+
 gaps:
 - what: port-led-semantics
   scope: [qsfpdd-400g, sfp-plus-oob, sfp-plus-mgmt, port-leds]
@@ -692,13 +694,11 @@ configurations:
       PSU part number to a latch colour (see the psu-airflow-sku-mapping gap) and none
       prints a chassis SKU (see chassis-sku)
     default: true
-    airflow: front-to-back
   dc:
     kind: orderable
     description: >-
       Dual 1300W DC PSUs (-40 to -75 V, screw-terminal input) with front-to-back airflow
       fans; the HIG's rear elevation on page 13 is this build
-    airflow: front-to-back
     bays:
       psu-0: ufispace/psu-132-dc@1
       psu-1: ufispace/psu-132-dc@1

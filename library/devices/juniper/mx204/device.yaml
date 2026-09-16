@@ -216,6 +216,42 @@ chassis:
   depth: 470.0
   ru: 1
   color: '#9a9ea3'
+gaps:
+  - what: smb-column-legend
+    scope: [timing]
+    reason: sources-disagree
+    wanted: a photograph of a second production unit's SMB legend
+    note: The photographed faceplate prints PPS under the left SMB column and
+      100MHz under the right; the guide art prints 10MHz left and 1PPS right,
+      and the guide text calls the ports 10-MHz throughout (pinouts, clocking
+      topics). The silkscreen follows the photograph; the cutout ids follow the
+      guide's functional naming (smb-10mhz-* left, smb-1pps-* right), which
+      therefore disagrees with the printed legend under them.
+  - what: fan-module-width
+    scope: [fans]
+    reason: sources-disagree
+    wanted: a mechanical drawing or a caliper on the hardware
+    note: Table 19 states the fan module 1.89 in (48.0 mm) wide; the rear
+      drawing's bay apertures measure ~42 mm on a 49.1 mm pitch and the
+      photograph shows the orange face filling the aperture. Modelled at 42.0
+      (drawing aperture); the 48.0 envelope presumably includes body rails
+      behind the panel.
+  - what: rear-extra-hole
+    scope: [rear]
+    reason: vendor-silent
+    wanted: identification of the small hole at x 250.0, y 28.9 right of fan
+      bay 2 (drawing shows it with no icon or number; not modelled)
+  - what: supported-optics
+    scope: [qsfp28, sfp-plus, timing]
+    reason: vendor-silent
+    wanted: the MX204 transceiver list - the guide points at the external
+      Hardware Compatibility Tool ("MX204 Transceivers") and no document in
+      the intake carries the table, so the port groups declare no interface
+  - what: serial-label-location
+    reason: vendor-silent
+    wanted: the face and position of the chassis serial-number label - guide
+      Figure 60 shows the label but names no face and carries no locating
+      dimension
 groups:
   qsfp28:
     term: Port
@@ -592,39 +628,3 @@ configurations:
       psu-1: juniper/mx204-psu-dc@1
     part-numbers:
       MX204-HWBASE-DC-FS: {}
-gaps:
-  - what: smb-column-legend
-    scope: [timing]
-    reason: sources-disagree
-    wanted: a photograph of a second production unit's SMB legend
-    note: The photographed faceplate prints PPS under the left SMB column and
-      100MHz under the right; the guide art prints 10MHz left and 1PPS right,
-      and the guide text calls the ports 10-MHz throughout (pinouts, clocking
-      topics). The silkscreen follows the photograph; the cutout ids follow the
-      guide's functional naming (smb-10mhz-* left, smb-1pps-* right), which
-      therefore disagrees with the printed legend under them.
-  - what: fan-module-width
-    scope: [fans]
-    reason: sources-disagree
-    wanted: a mechanical drawing or a caliper on the hardware
-    note: Table 19 states the fan module 1.89 in (48.0 mm) wide; the rear
-      drawing's bay apertures measure ~42 mm on a 49.1 mm pitch and the
-      photograph shows the orange face filling the aperture. Modelled at 42.0
-      (drawing aperture); the 48.0 envelope presumably includes body rails
-      behind the panel.
-  - what: rear-extra-hole
-    scope: [rear]
-    reason: vendor-silent
-    wanted: identification of the small hole at x 250.0, y 28.9 right of fan
-      bay 2 (drawing shows it with no icon or number; not modelled)
-  - what: supported-optics
-    scope: [qsfp28, sfp-plus, timing]
-    reason: vendor-silent
-    wanted: the MX204 transceiver list - the guide points at the external
-      Hardware Compatibility Tool ("MX204 Transceivers") and no document in
-      the intake carries the table, so the port groups declare no interface
-  - what: serial-label-location
-    reason: vendor-silent
-    wanted: the face and position of the chassis serial-number label - guide
-      Figure 60 shows the label but names no face and carries no locating
-      dimension

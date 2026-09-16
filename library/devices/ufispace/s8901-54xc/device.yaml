@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s8901-54xc
-version: 2.0.5
+version: 2.0.6
 maturity: modelled
 manufacturer: UfiSpace
 model: S8901-54XC
@@ -183,6 +183,8 @@ chassis:
   ru: 1
   weight-kg: 8.7
   color: '#2c2f32'
+  airflow: front-to-back
+
 gaps:
 - what: port-led-semantics
   scope: [sfp28, qsfp28, port-leds]
@@ -705,7 +707,6 @@ configurations:
     default: true
     description: DC chassis as it powers on - five fans and both 400W DC PSUs
       seated, every cage empty; front-to-back airflow (red-latch FRUs)
-    airflow: front-to-back
     component-attrs:
       psu-401-dc:
         model: PSU-401-DESR
@@ -715,7 +716,6 @@ configurations:
     kind: orderable
     description: Dual 400W DC PSUs (PSU-401-DESR) and FAN-402825-HD fans,
       front-to-back airflow; no chassis SKU published (see gaps)
-    airflow: front-to-back
     component-attrs:
       psu-401-dc:
         model: PSU-401-DESR
@@ -725,7 +725,6 @@ configurations:
     kind: orderable
     description: Dual 400W AC PSUs (PSU-401-AESR) and FAN-402825-HD fans,
       front-to-back airflow; no chassis SKU published (see gaps)
-    airflow: front-to-back
     bays:
       psu-0: ufispace/psu-401-ac@1
       psu-1: ufispace/psu-401-ac@1

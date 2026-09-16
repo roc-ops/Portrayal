@@ -226,6 +226,8 @@ RULES = {
     "L87": ("component",  "a module naming what its rear IS has a rear face to name", "add `faces.rear`, or drop `optical.rear-kind`"),
     "L88": ("component",  "a fibre face with more than one row of connectors states its own front numbering", "add `optical.front-order` listing the fibre part ids in the vendor's printed order"),
     "L89": ("library",    "every component major is reachable from a device, or says why it is not", "seat it in a device or in a seated part's bay, or add `unplaced:` saying what would seat it and what is missing"),
+    "L90": ("device",     "a manifest's top-level keys read in the canonical order", "reorder them; the message prints the order, and docs/device-template.yaml is written in it"),
+    "L91": ("device",     "airflow is stated once - on the chassis, and on a configuration only where it differs", "move it to `chassis.airflow`, or drop the configuration's copy"),
 }
 
 
@@ -4270,6 +4272,85 @@ def lint_unplaced_majors(root):
                 "has been closed")
 
 
+# The order a device manifest reads in, top to bottom: what it IS, who sells it,
+# where the facts came from, the facts, what is missing, the drawing, and the
+# documents behind it. Derived rather than invented - of the four orderings that
+# were argued for, this is the one 53 of the 89 manifests already used, so the
+# sweep that introduced it moved 25 files instead of 88.
+TOP_LEVEL_ORDER = (
+    "format", "kind", "name", "version", "maturity",
+    "manufacturer", "model", "portfolio", "description", "profile",
+    "provenance", "attrs", "chassis", "gaps", "groups", "views",
+    "configurations", "datasheet", "references",
+)
+
+
+def lint_device_key_order(path, data):
+    """L90: a manifest's top-level keys read in one order across the library.
+
+    L16 has enforced key order INSIDE a view since early on, for the reason that
+    a reader who knows where to look stops looking things up. Nothing enforced it
+    at the top level, and 89 manifests had grown 22 distinct orderings - `gaps`
+    before `groups` in some and after `configurations` in others, `profile`
+    floating, `description` and `portfolio` swapping places.
+
+    None of that is wrong and all of it is friction: a reviewer comparing two
+    devices reads two different documents, and a contributor copying a nearby
+    manifest inherits whichever arrangement they happened to open.
+
+    A KEY THE ORDER DOES NOT KNOW is not an error here. L1 has already reported
+    it against the schema, and a second complaint about where it sits would be
+    noise on top of a message that already says it does not belong.
+    """
+    keys = [k for k in data if k in TOP_LEVEL_ORDER]
+    want = [k for k in TOP_LEVEL_ORDER if k in keys]
+    if keys == want:
+        return
+    # name the first key that is out of place rather than printing both lists:
+    # one key moved is the usual case and the whole order is hard to read.
+    for a, b in zip(keys, want):
+        if a != b:
+            err(path, "L90", f"top-level key {a!r} comes before {b!r}; the order is "
+                             + " ".join(want))
+            return
+
+
+def lint_device_airflow_home(path, data):
+    """L91: airflow is stated once.
+
+    It had two homes - `chassis.airflow` in 10 manifests and
+    `configurations.*.airflow` in 124 places - and the library was split between
+    them with no rule for which. The rule the evidence supports is the one
+    `render.py` has always implemented, `config.get("airflow") or
+    chassis.airflow`: the chassis is the home, and a configuration says it only
+    when it DIFFERS.
+
+    That is not what #171 assumed, and the corpus is why. Airflow genuinely
+    varies by configuration in 7 of the 48 devices that state it; in 39 it was
+    one value repeated across every configuration, five times on the DCP-2. And
+    the two schemas never agreed: `chassis.airflow` admits `side` and `passive`,
+    a configuration's admits only front-to-back and back-to-front - so half the
+    devices stating it on the chassis could not have moved even if the rest
+    should have.
+    """
+    chassis = (data.get("chassis") or {}).get("airflow")
+    cfgs = data.get("configurations") or {}
+    stated = {n: (c or {}).get("airflow") for n, c in cfgs.items()}
+    stated = {n: v for n, v in stated.items() if v}
+    if chassis:
+        same = sorted(n for n, v in stated.items() if v == chassis)
+        if same:
+            err(path, "L91", f"configuration(s) {', '.join(same)} restate the chassis "
+                             f"airflow {chassis!r}. A configuration states airflow only "
+                             "when it differs from the chassis")
+        return
+    if stated and len(set(stated.values())) == 1 and len(stated) == len(cfgs):
+        v = next(iter(stated.values()))
+        err(path, "L91", f"every configuration states airflow {v!r} and the chassis "
+                         "states none. One fact, one home: put it on the chassis and "
+                         "let a configuration override it only where it differs")
+
+
 def lint_device_config_scope(path, data):
     """L41: a bay scoped to configurations that do not exist is a bay in none.
 
@@ -6683,6 +6764,8 @@ def main():
                 lint_device_fan_redundancy(f, d)
                 lint_device_declared_silence(f, d)
                 lint_device_control_plane_redundancy(f, d)
+                lint_device_key_order(f, d)
+                lint_device_airflow_home(f, d)
                 try:
                     dev_maturity[str(f.parent.relative_to(root / "devices"))] = \
                         d.get("maturity", "draft")

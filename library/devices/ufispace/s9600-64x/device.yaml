@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-64x
-version: 2.0.6
+version: 2.0.7
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-64X
@@ -280,6 +280,8 @@ chassis:
   weight-kg: 19.15
   color: '#363636'
 # What no rule can find, because the manifest looks complete.
+  airflow: front-to-back
+
 gaps:
 - what: port-led-semantics
   scope: [qsfp28, sfp28, port-leds]
@@ -892,11 +894,9 @@ configurations:
     kind: base
     description: the chassis as it powers on - four fans and two 1600 W AC supplies, no optics
     default: true
-    airflow: front-to-back
   dc:
     kind: orderable
     description: DC build, 2x PSU-162-DESR 1600 W -40 to -72 V, exhaust supplies, front-to-back airflow
-    airflow: front-to-back
     bays:
       psu-0: ufispace/psu-162-dc@1
       psu-1: ufispace/psu-162-dc@1
@@ -908,7 +908,6 @@ configurations:
   ac:
     kind: orderable
     description: AC build, 2x PSU-162-AESR 1600 W 200-240 V on IEC C19 cords, front-to-back airflow
-    airflow: front-to-back
     component-attrs:
       psu-162-ac:
         model: PSU-162-AESR
@@ -920,7 +919,6 @@ configurations:
     # break-out of QSFP28 port 0, which is the one relationship on this panel a picture
     # explains better than a sentence: port-0 is drawn EMPTY here on purpose.
     description: DC build fitted with 25G optics on the four SFP28 break-out ports
-    airflow: front-to-back
     bays:
       psu-0: ufispace/psu-162-dc@1
       psu-1: ufispace/psu-162-dc@1

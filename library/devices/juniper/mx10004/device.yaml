@@ -51,6 +51,32 @@ chassis:
   depth: 932.0
   ru: 7
   color: '#565b61'
+gaps:
+  - what: psu-variants
+    scope: [psus]
+    reason: needs-photo
+    wanted: the JNP10K-PWR-AC3, DC2 and DC3 faces (AC3 adds four feeds
+      A0/A1/B0/B1 and six LEDs; only AC2 is photographed usably).
+  - what: line-card-catalogue
+    scope: [fpcs]
+    reason: needs-photo
+    wanted: LC2101, LC4800 and LC4802 faceplates - the guide names them
+      and gives dimensions and power, but the extraction has no usable
+      face art; only LC9600 and LC480 are modelled.
+  - what: slot-label-print
+    scope: [fpcs]
+    reason: needs-photo
+    wanted: legible FPC slot labels - the top-down 0-3 order follows the
+      family convention, not a readable print.
+  - what: rcb-vendor-width
+    scope: [res]
+    reason: vendor-silent
+    wanted: a vendor dimension for the RCB face - the FRU table covers
+      chassis, cards and PSUs but not the RCB; 389 mm is photo-derived.
+  - what: fan-tray-power
+    scope: [cooling]
+    reason: vendor-silent
+    wanted: per-tray power draw - not in the extraction's text layer.
 groups:
   res:
     term: Slot
@@ -235,29 +261,3 @@ configurations:
       fpc1: juniper/jnp10k-lc-blank@1
       fpc2: juniper/jnp10k-lc-blank@1
       fpc3: juniper/jnp10k-lc-blank@1
-gaps:
-  - what: psu-variants
-    scope: [psus]
-    reason: needs-photo
-    wanted: the JNP10K-PWR-AC3, DC2 and DC3 faces (AC3 adds four feeds
-      A0/A1/B0/B1 and six LEDs; only AC2 is photographed usably).
-  - what: line-card-catalogue
-    scope: [fpcs]
-    reason: needs-photo
-    wanted: LC2101, LC4800 and LC4802 faceplates - the guide names them
-      and gives dimensions and power, but the extraction has no usable
-      face art; only LC9600 and LC480 are modelled.
-  - what: slot-label-print
-    scope: [fpcs]
-    reason: needs-photo
-    wanted: legible FPC slot labels - the top-down 0-3 order follows the
-      family convention, not a readable print.
-  - what: rcb-vendor-width
-    scope: [res]
-    reason: vendor-silent
-    wanted: a vendor dimension for the RCB face - the FRU table covers
-      chassis, cards and PSUs but not the RCB; 389 mm is photo-derived.
-  - what: fan-tray-power
-    scope: [cooling]
-    reason: vendor-silent
-    wanted: per-tray power draw - not in the extraction's text layer.

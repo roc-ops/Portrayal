@@ -51,6 +51,28 @@ chassis:
   depth: 584.2
   ru: 16
   color: '#3a3e43'
+gaps:
+  - what: card-catalogue
+    scope: [fpcs]
+    reason: needs-photo
+    wanted: vertical authors for the rest of the MX960 card range (the
+      photographed unit also shows a 4-port tunnel-services card that is
+      not identified in the extraction); only the 40x1GE DPC, SCB and
+      blank are modelled.
+  - what: fan-trays
+    reason: needs-photo
+    wanted: the two horizontal fan trays - they sit behind the front
+      bezels above and below the cage and are drawn as the bezels, not
+      as FRU bays; a tray face photograph would let them become bays.
+  - what: dc-power-variant
+    scope: [psus]
+    reason: needs-photo
+    wanted: the DC PEM and high-capacity variants; only the photographed
+      AC unit is modelled, and no vendor wattage table was captured.
+  - what: chassis-power
+    reason: vendor-silent
+    wanted: a chassis or per-PEM power table - not in the captured text
+      layer of the three-part extraction.
 groups:
   craft:
     term: Panel
@@ -266,25 +288,3 @@ configurations:
       fpc9: juniper/mx960-blank-v@1
       fpc10: juniper/mx960-blank-v@1
       fpc11: juniper/mx960-blank-v@1
-gaps:
-  - what: card-catalogue
-    scope: [fpcs]
-    reason: needs-photo
-    wanted: vertical authors for the rest of the MX960 card range (the
-      photographed unit also shows a 4-port tunnel-services card that is
-      not identified in the extraction); only the 40x1GE DPC, SCB and
-      blank are modelled.
-  - what: fan-trays
-    reason: needs-photo
-    wanted: the two horizontal fan trays - they sit behind the front
-      bezels above and below the cage and are drawn as the bezels, not
-      as FRU bays; a tray face photograph would let them become bays.
-  - what: dc-power-variant
-    scope: [psus]
-    reason: needs-photo
-    wanted: the DC PEM and high-capacity variants; only the photographed
-      AC unit is modelled, and no vendor wattage table was captured.
-  - what: chassis-power
-    reason: vendor-silent
-    wanted: a chassis or per-PEM power table - not in the captured text
-      layer of the three-part extraction.

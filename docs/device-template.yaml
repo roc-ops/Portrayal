@@ -49,6 +49,12 @@ chassis:                        # the body, not the rack face; every view is siz
   depth: 300.0
   ru: 1                         # rack units; the elevation and the 3D box use it
   color: '#3a3d42'              # panel colour as a hex fill; from a photograph, not a guess
+gaps:                           # what you could not find, so silence is never mistaken for a finding
+  - what: rear-grounding-stud   # a slug for the missing thing
+    scope: [rear]               # the view, group, id or configuration it belongs to
+    reason: vendor-silent       # why it is missing; sources-disagree is the one that is not an absence
+    note: the guide's grounding section names a stud but no figure shows where it is
+    wanted: a rear photograph or drawing that places the stud   # what would close it
 groups:                         # what the parts are FOR; every placement and bay names one
   sfp-plus:
     term: Port                  # the vendor's word for one of these
@@ -147,12 +153,6 @@ configurations:                 # the ways the box is sold or built; `base` powe
   base:
     kind: base                  # base | orderable | example | model - see the schema
     description: two supplies, one fan, no transceivers fitted
-gaps:                           # what you could not find, so silence is never mistaken for a finding
-  - what: rear-grounding-stud   # a slug for the missing thing
-    scope: [rear]               # the view, group, id or configuration it belongs to
-    reason: vendor-silent       # why it is missing; sources-disagree is the one that is not an absence
-    note: the guide's grounding section names a stud but no figure shows where it is
-    wanted: a rear photograph or drawing that places the stud   # what would close it
 datasheet:                      # the document the dimensions came from: title, url, and
   title: Example EX-1U Datasheet   # sha256 once you hold the file; the file itself stays out
   url: https://example.com/ex-1u-datasheet

@@ -54,6 +54,27 @@ chassis:
   depth: 762.0
   ru: 3
   color: '#6a6f75'
+gaps:
+  - what: dc-power-variant
+    scope: [psus]
+    reason: needs-photo
+    wanted: the DC PSM face (the guide's DC figures are isometric line art;
+      the DC supply is also deeper - 274.3 vs 235.2 mm).
+  - what: psm-slot-numbering
+    scope: [psus]
+    reason: needs-photo
+    wanted: the printed PSM slot labels - the rear drawing's edge legends
+      are not legible in any source, so left-stack-top-down 0-2 /
+      right-stack 3-5 is an assumption.
+  - what: side-earthing-bracket
+    reason: vendor-silent
+    wanted: the position of the two-hole protective earthing bracket on the
+      side rail (M4 studs at 19.1 mm centres per the guide, location not
+      drawn).
+  - what: rear-photo
+    reason: needs-photo
+    wanted: a photograph of the rear - only the schematic line drawing
+      g009801 exists in the intake, so rear finish is inferred.
 groups:
   res:
     term: Slot
@@ -198,24 +219,3 @@ configurations:
     bays:
       mpc1: juniper/jnp-lc-blnk-3@1
       mpc0: juniper/jnp-lc-blnk-3@1
-gaps:
-  - what: dc-power-variant
-    scope: [psus]
-    reason: needs-photo
-    wanted: the DC PSM face (the guide's DC figures are isometric line art;
-      the DC supply is also deeper - 274.3 vs 235.2 mm).
-  - what: psm-slot-numbering
-    scope: [psus]
-    reason: needs-photo
-    wanted: the printed PSM slot labels - the rear drawing's edge legends
-      are not legible in any source, so left-stack-top-down 0-2 /
-      right-stack 3-5 is an assumption.
-  - what: side-earthing-bracket
-    reason: vendor-silent
-    wanted: the position of the two-hole protective earthing bracket on the
-      side rail (M4 studs at 19.1 mm centres per the guide, location not
-      drawn).
-  - what: rear-photo
-    reason: needs-photo
-    wanted: a photograph of the rear - only the schematic line drawing
-      g009801 exists in the intake, so rear finish is inferred.

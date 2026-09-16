@@ -5,16 +5,16 @@ version: 1.0.10
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9912
+portfolio:
+  line: Service Provider
+  family: Aggregation Services Router
+  series: ASR 9000 Series
 description: >-
   Cisco ASR 9912 Router - 30 RU, and the first chassis in this family with TWO card cages on one
   face. Ten vertical line card slots sit above a second cage of nine positions carrying two route
   processors flanking seven fabric cards, with three power shelves below. The two fan trays are
   fitted from the REAR, which the guide marks on the figure itself. Modelled as a bare cage with
   every card position a real bay.
-portfolio:
-  line: Service Provider
-  family: Aggregation Services Router
-  series: ASR 9000 Series
 provenance:
   chassis: >-
     datasheet - Table 13, b-asr9k-overview-reference-guide.pdf p130. ASR 9912: chassis height 52.5
@@ -261,153 +261,6 @@ chassis:
   airflow: front-to-back
   color: '#c8cacc'
   silk: '#231f20'
-groups:
-  power-modules:
-    term: PM
-    role: service
-    index-origin: 0
-    physical-context: Power Module
-    attrs:
-      redundancy: 'n+n'
-      redundancy-note: 'n+n on AC, n+1 on DC - the AC power trays provide N+N redundancy and the DC power trays N+1 (Overview and Reference Guide, Power System). The form here is the AC one'
-  slots:
-    term: Slot
-    role: traffic
-    index-origin: 0
-    physical-context: NetworkingDevice
-  fabric:
-    term: FC
-    role: service
-    index-origin: 0
-    physical-context: NetworkingDevice
-    attrs:
-      redundancy: '6+1'
-      redundancy-note: '6+1 - b-asr9k-overview-reference-guide, "Fabric Switchover": on the 9922 and 9912 the fabric is a separate set of seven OIR FC cards run 6+1, any one of which can be pulled, power-cycled or left unpowered without affecting traffic, and all of which stay active unless disabled or faulty. So the spare is a working plane and not a standby card. "Fabric Controller Card" in the same guide gives the partly-populated case: five FCs are 4+1, all seven are 6+1'
-  rp:
-    term: RP
-    role: service
-    index-origin: 0
-    physical-context: NetworkingDevice
-    attrs:
-      redundancy: '1+1'
-      redundancy-note: '1+1 - b-asr9k-overview-reference-guide, "Stateful Switchover": the RSP/RP pair runs active/standby, and SSO carries state and configuration across to the standby on a switchover. Unlike the RSP chassis in the series, no fabric rides on this card: "Functional Description" puts the route processor functions on the RP and the switch fabric on the FC cards'
-  grounding:
-    term: Point
-    role: furniture
-    index-origin: 1
-views:
-  front:
-    size: {w: 447.0, h: 1333.5}
-    panel:
-      decor:
-        - {at: [0, 0], size: [447.0, 320.0], fill: '#d5d7d9'}
-      cutouts:
-        - {id: lc-cage, at: [6.36, 324.31], size: [433.88, 357.35], shape: rect}
-        - {id: rpfc-cage, at: [6.36, 759.21], size: [433.88, 358.15], shape: rect}
-    components:
-      bays:
-        - {id: ps0-pm-0, at: [16.12, 1146.58], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 0}
-        - {id: ps0-pm-1, at: [121.17, 1146.58], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 1}
-        - {id: ps0-pm-2, at: [226.22, 1146.58], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 2}
-        - {id: ps0-pm-3, at: [331.26, 1146.58], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 3}
-        - {id: ps1-pm-0, at: [16.12, 1212.25], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 4}
-        - {id: ps1-pm-1, at: [121.17, 1212.25], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 5}
-        - {id: ps1-pm-2, at: [226.22, 1212.25], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 6}
-        - {id: ps1-pm-3, at: [331.26, 1212.25], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 7}
-        - {id: ps2-pm-0, at: [16.12, 1277.91], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 8}
-        - {id: ps2-pm-1, at: [121.17, 1277.91], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 9}
-        - {id: ps2-pm-2, at: [226.22, 1277.91], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 10}
-        - {id: ps2-pm-3, at: [331.26, 1277.91], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 11}
-        - {id: slot-0, at: [3.74, 301.43], size: {w: 42.67, h: 403.10}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0, default: cisco/a9k-slot-cover@1}
-        - {id: slot-1, at: [47.84, 301.43], size: {w: 42.67, h: 403.10}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1, default: cisco/a9k-slot-cover@1}
-        - {id: slot-2, at: [91.83, 301.43], size: {w: 42.67, h: 403.10}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2, default: cisco/a9k-slot-cover@1}
-        - {id: slot-3, at: [135.93, 301.43], size: {w: 42.67, h: 403.10}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 3, default: cisco/a9k-slot-cover@1}
-        - {id: slot-4, at: [180.02, 301.43], size: {w: 42.67, h: 403.10}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 4, default: cisco/a9k-slot-cover@1}
-        - {id: slot-5, at: [224.00, 301.43], size: {w: 42.67, h: 403.10}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 5, default: cisco/a9k-slot-cover@1}
-        - {id: slot-6, at: [268.11, 301.43], size: {w: 42.67, h: 403.10}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 6, default: cisco/a9k-slot-cover@1}
-        - {id: slot-7, at: [312.19, 301.43], size: {w: 42.67, h: 403.10}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 7, default: cisco/a9k-slot-cover@1}
-        - {id: slot-8, at: [356.19, 301.43], size: {w: 42.67, h: 403.10}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 8, default: cisco/a9k-slot-cover@1}
-        - {id: slot-9, at: [400.28, 301.43], size: {w: 42.67, h: 403.10}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 9, default: cisco/a9k-slot-cover@1}
-        - {id: rp-0, at: [24.13, 740.43], size: {w: 46.00, h: 395.7}, accepts: ['cisco/asr-9922-rp-se@1', 'cisco/asr-9922-rp-tr@1', 'cisco/a99-rp3-se@1', 'cisco/a99-rp3-tr@1', 'cisco/a9k-slot-cover@1'], group: rp, rel-pos: 0, default: cisco/a9k-slot-cover@1}
-        - {id: fc-0, at: [70.52, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/asr-9912-sfc110@1', 'cisco/a99-sfc3@1'], group: fabric, rel-pos: 0, default: cisco/asr-9912-sfc110@1}
-        - {id: fc-1, at: [114.51, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/asr-9912-sfc110@1', 'cisco/a99-sfc3@1'], group: fabric, rel-pos: 1, default: cisco/asr-9912-sfc110@1}
-        - {id: fc-2, at: [158.61, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/asr-9912-sfc110@1', 'cisco/a99-sfc3@1'], group: fabric, rel-pos: 2, default: cisco/asr-9912-sfc110@1}
-        - {id: fc-3, at: [202.70, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/asr-9912-sfc110@1', 'cisco/a99-sfc3@1'], group: fabric, rel-pos: 3, default: cisco/asr-9912-sfc110@1}
-        - {id: fc-4, at: [246.79, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/asr-9912-sfc110@1', 'cisco/a99-sfc3@1'], group: fabric, rel-pos: 4, default: cisco/asr-9912-sfc110@1}
-        - {id: fc-5, at: [290.78, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/asr-9912-sfc110@1', 'cisco/a99-sfc3@1'], group: fabric, rel-pos: 5, default: cisco/asr-9912-sfc110@1}
-        - {id: fc-6, at: [334.88, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/asr-9912-sfc110@1', 'cisco/a99-sfc3@1'], group: fabric, rel-pos: 6, default: cisco/asr-9912-sfc110@1}
-        - {id: rp-1, at: [376.57, 740.43], size: {w: 46.00, h: 395.7}, accepts: ['cisco/asr-9922-rp-se@1', 'cisco/asr-9922-rp-tr@1', 'cisco/a99-rp3-se@1', 'cisco/a99-rp3-tr@1', 'cisco/a9k-slot-cover@1'], group: rp, rel-pos: 1, default: cisco/a9k-slot-cover@1}
-    regions:
-      - {id: line-cards, label: 'Line cards LC0 to LC9 - slots 0 to 9'}
-      - {id: rp-fc-cage, label: 'RP and FC cage - RP0, FC0 to FC6, RP1, named directly by Cisco'}
-      - {id: air-filters, label: 'Three air filters on the front of the RP and FC card cage'}
-      - {id: power-shelves, label: 'Power shelves PS0, PS1 and PS2'}
-  rear:
-    size: {w: 447.0, h: 1333.5}
-    panel:
-      cutouts:
-        - {id: ground-pad, at: [26.0, 1280.0], size: [46.0, 20.0], shape: rect}
-    components:
-      placements:
-        - {id: ground-pad, ref: cisco/a9k-ground-pad@1, at: [26.0, 1280.0], group: grounding, rel-pos: 0}
-    regions:
-      - {id: fan-trays, label: 'Fan trays FT0 and FT1 - rear insertion'}
-      - {id: rear-air-exhaust, label: 'Rear air exhaust - upper rear'}
-      - {id: nebs-ground, label: 'NEBS bonding and grounding - bottom rear right side'}
-  top:
-    size: {w: 447.0, h: 652.0}
-    panel:
-      decor:
-        - {at: [0, 556.85], size: [447.0, 3.9], fill: '#9a9c9e'}
-    regions:
-      - {id: rack-mounting-surface, label: 'Rack mounting surface - 22 in (55.88 cm) from the rear, i.e. 93.2 mm from the front'}
-      - {id: top-plate, label: 'Top plate - outline and rack mounting brackets dimensioned in Figure 14'}
-      - {id: rack-mounting-brackets, label: 'Rack mounting brackets'}
-  bottom:
-    size: {w: 447.0, h: 652.0}
-    panel:
-      decor:
-        - {at: [0, 556.85], size: [447.0, 3.9], fill: '#9a9c9e'}
-    regions:
-      - {id: rack-mounting-surface, label: 'Rack mounting surface - 22 in (55.88 cm) from the rear, i.e. 93.2 mm from the front'}
-  left:
-    size: {w: 652.0, h: 1333.5}
-    regions:
-      - {id: rack-rails, label: 'Vertical rack rail locations - present but NOT dimensioned in any figure for this chassis'}
-      - {id: lift-handles, label: 'Chassis lift handles - present but NOT dimensioned in any figure for this chassis'}
-      - {id: cooling-path, label: 'Front-to-rear cooling path - inlet at the bottom front, exhaust at the upper rear'}
-  right:
-    size: {w: 652.0, h: 1333.5}
-    regions:
-      - {id: rack-rails, label: 'Vertical rack rail locations - present but NOT dimensioned in any figure for this chassis'}
-      - {id: lift-handles, label: 'Chassis lift handles - present but NOT dimensioned in any figure for this chassis'}
-      - {id: cooling-path, label: 'Front-to-rear cooling path - inlet at the bottom front, exhaust at the upper rear'}
-configurations:
-  base:
-    kind: base
-    source: >-
-      derived - built from the group roles rather than from a vendor bundle: every bay
-      whose group is `service` or `management` keeps its seat, every `traffic` bay takes
-      a blank. This vendor publishes no base configuration for this chassis, so the
-      library defines one. Where a vendor DOES publish one, follow it instead and say so
-      here.
-    default: true
-    description: >-
-      Chassis only - what you spec before deciding what goes in it. The 10 slot bays are
-      EMPTY; fabric, rp are populated. Enough to power on and reach the box, which is
-      the question most people ask first and the one `default` used to answer with
-      whatever the drawing happened to be populated with.
-    bays:
-      slot-0: cisco/a9k-slot-cover@1
-      slot-1: cisco/a9k-slot-cover@1
-      slot-2: cisco/a9k-slot-cover@1
-      slot-3: cisco/a9k-slot-cover@1
-      slot-4: cisco/a9k-slot-cover@1
-      slot-5: cisco/a9k-slot-cover@1
-      slot-6: cisco/a9k-slot-cover@1
-      slot-7: cisco/a9k-slot-cover@1
-      slot-8: cisco/a9k-slot-cover@1
-      slot-9: cisco/a9k-slot-cover@1
 gaps:
 - what: chassis-power-figure
   scope:
@@ -558,3 +411,150 @@ gaps:
     level 1. See docs/deliberately-empty-faces.md.
   wanted: a bottom elevation, a photograph of the underside, or a way for a view to declare itself
     deliberately empty so that empty-by-verification counts where empty-by-omission does not
+groups:
+  power-modules:
+    term: PM
+    role: service
+    index-origin: 0
+    physical-context: Power Module
+    attrs:
+      redundancy: 'n+n'
+      redundancy-note: 'n+n on AC, n+1 on DC - the AC power trays provide N+N redundancy and the DC power trays N+1 (Overview and Reference Guide, Power System). The form here is the AC one'
+  slots:
+    term: Slot
+    role: traffic
+    index-origin: 0
+    physical-context: NetworkingDevice
+  fabric:
+    term: FC
+    role: service
+    index-origin: 0
+    physical-context: NetworkingDevice
+    attrs:
+      redundancy: '6+1'
+      redundancy-note: '6+1 - b-asr9k-overview-reference-guide, "Fabric Switchover": on the 9922 and 9912 the fabric is a separate set of seven OIR FC cards run 6+1, any one of which can be pulled, power-cycled or left unpowered without affecting traffic, and all of which stay active unless disabled or faulty. So the spare is a working plane and not a standby card. "Fabric Controller Card" in the same guide gives the partly-populated case: five FCs are 4+1, all seven are 6+1'
+  rp:
+    term: RP
+    role: service
+    index-origin: 0
+    physical-context: NetworkingDevice
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 - b-asr9k-overview-reference-guide, "Stateful Switchover": the RSP/RP pair runs active/standby, and SSO carries state and configuration across to the standby on a switchover. Unlike the RSP chassis in the series, no fabric rides on this card: "Functional Description" puts the route processor functions on the RP and the switch fabric on the FC cards'
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 1
+views:
+  front:
+    size: {w: 447.0, h: 1333.5}
+    panel:
+      decor:
+        - {at: [0, 0], size: [447.0, 320.0], fill: '#d5d7d9'}
+      cutouts:
+        - {id: lc-cage, at: [6.36, 324.31], size: [433.88, 357.35], shape: rect}
+        - {id: rpfc-cage, at: [6.36, 759.21], size: [433.88, 358.15], shape: rect}
+    components:
+      bays:
+        - {id: ps0-pm-0, at: [16.12, 1146.58], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 0}
+        - {id: ps0-pm-1, at: [121.17, 1146.58], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 1}
+        - {id: ps0-pm-2, at: [226.22, 1146.58], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 2}
+        - {id: ps0-pm-3, at: [331.26, 1146.58], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 3}
+        - {id: ps1-pm-0, at: [16.12, 1212.25], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 4}
+        - {id: ps1-pm-1, at: [121.17, 1212.25], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 5}
+        - {id: ps1-pm-2, at: [226.22, 1212.25], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 6}
+        - {id: ps1-pm-3, at: [331.26, 1212.25], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 7}
+        - {id: ps2-pm-0, at: [16.12, 1277.91], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 8}
+        - {id: ps2-pm-1, at: [121.17, 1277.91], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 9}
+        - {id: ps2-pm-2, at: [226.22, 1277.91], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 10}
+        - {id: ps2-pm-3, at: [331.26, 1277.91], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], default: cisco/a9k-power-module-v2@1, group: power-modules, rel-pos: 11}
+        - {id: slot-0, at: [3.74, 301.43], size: {w: 42.67, h: 403.10}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0, default: cisco/a9k-slot-cover@1}
+        - {id: slot-1, at: [47.84, 301.43], size: {w: 42.67, h: 403.10}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1, default: cisco/a9k-slot-cover@1}
+        - {id: slot-2, at: [91.83, 301.43], size: {w: 42.67, h: 403.10}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2, default: cisco/a9k-slot-cover@1}
+        - {id: slot-3, at: [135.93, 301.43], size: {w: 42.67, h: 403.10}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 3, default: cisco/a9k-slot-cover@1}
+        - {id: slot-4, at: [180.02, 301.43], size: {w: 42.67, h: 403.10}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 4, default: cisco/a9k-slot-cover@1}
+        - {id: slot-5, at: [224.00, 301.43], size: {w: 42.67, h: 403.10}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 5, default: cisco/a9k-slot-cover@1}
+        - {id: slot-6, at: [268.11, 301.43], size: {w: 42.67, h: 403.10}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 6, default: cisco/a9k-slot-cover@1}
+        - {id: slot-7, at: [312.19, 301.43], size: {w: 42.67, h: 403.10}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 7, default: cisco/a9k-slot-cover@1}
+        - {id: slot-8, at: [356.19, 301.43], size: {w: 42.67, h: 403.10}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 8, default: cisco/a9k-slot-cover@1}
+        - {id: slot-9, at: [400.28, 301.43], size: {w: 42.67, h: 403.10}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a99-12x100ge@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 9, default: cisco/a9k-slot-cover@1}
+        - {id: rp-0, at: [24.13, 740.43], size: {w: 46.00, h: 395.7}, accepts: ['cisco/asr-9922-rp-se@1', 'cisco/asr-9922-rp-tr@1', 'cisco/a99-rp3-se@1', 'cisco/a99-rp3-tr@1', 'cisco/a9k-slot-cover@1'], group: rp, rel-pos: 0, default: cisco/a9k-slot-cover@1}
+        - {id: fc-0, at: [70.52, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/asr-9912-sfc110@1', 'cisco/a99-sfc3@1'], group: fabric, rel-pos: 0, default: cisco/asr-9912-sfc110@1}
+        - {id: fc-1, at: [114.51, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/asr-9912-sfc110@1', 'cisco/a99-sfc3@1'], group: fabric, rel-pos: 1, default: cisco/asr-9912-sfc110@1}
+        - {id: fc-2, at: [158.61, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/asr-9912-sfc110@1', 'cisco/a99-sfc3@1'], group: fabric, rel-pos: 2, default: cisco/asr-9912-sfc110@1}
+        - {id: fc-3, at: [202.70, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/asr-9912-sfc110@1', 'cisco/a99-sfc3@1'], group: fabric, rel-pos: 3, default: cisco/asr-9912-sfc110@1}
+        - {id: fc-4, at: [246.79, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/asr-9912-sfc110@1', 'cisco/a99-sfc3@1'], group: fabric, rel-pos: 4, default: cisco/asr-9912-sfc110@1}
+        - {id: fc-5, at: [290.78, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/asr-9912-sfc110@1', 'cisco/a99-sfc3@1'], group: fabric, rel-pos: 5, default: cisco/asr-9912-sfc110@1}
+        - {id: fc-6, at: [334.88, 740.43], size: {w: 41.4, h: 395.7}, accepts: ['cisco/asr-9912-sfc110@1', 'cisco/a99-sfc3@1'], group: fabric, rel-pos: 6, default: cisco/asr-9912-sfc110@1}
+        - {id: rp-1, at: [376.57, 740.43], size: {w: 46.00, h: 395.7}, accepts: ['cisco/asr-9922-rp-se@1', 'cisco/asr-9922-rp-tr@1', 'cisco/a99-rp3-se@1', 'cisco/a99-rp3-tr@1', 'cisco/a9k-slot-cover@1'], group: rp, rel-pos: 1, default: cisco/a9k-slot-cover@1}
+    regions:
+      - {id: line-cards, label: 'Line cards LC0 to LC9 - slots 0 to 9'}
+      - {id: rp-fc-cage, label: 'RP and FC cage - RP0, FC0 to FC6, RP1, named directly by Cisco'}
+      - {id: air-filters, label: 'Three air filters on the front of the RP and FC card cage'}
+      - {id: power-shelves, label: 'Power shelves PS0, PS1 and PS2'}
+  rear:
+    size: {w: 447.0, h: 1333.5}
+    panel:
+      cutouts:
+        - {id: ground-pad, at: [26.0, 1280.0], size: [46.0, 20.0], shape: rect}
+    components:
+      placements:
+        - {id: ground-pad, ref: cisco/a9k-ground-pad@1, at: [26.0, 1280.0], group: grounding, rel-pos: 0}
+    regions:
+      - {id: fan-trays, label: 'Fan trays FT0 and FT1 - rear insertion'}
+      - {id: rear-air-exhaust, label: 'Rear air exhaust - upper rear'}
+      - {id: nebs-ground, label: 'NEBS bonding and grounding - bottom rear right side'}
+  top:
+    size: {w: 447.0, h: 652.0}
+    panel:
+      decor:
+        - {at: [0, 556.85], size: [447.0, 3.9], fill: '#9a9c9e'}
+    regions:
+      - {id: rack-mounting-surface, label: 'Rack mounting surface - 22 in (55.88 cm) from the rear, i.e. 93.2 mm from the front'}
+      - {id: top-plate, label: 'Top plate - outline and rack mounting brackets dimensioned in Figure 14'}
+      - {id: rack-mounting-brackets, label: 'Rack mounting brackets'}
+  bottom:
+    size: {w: 447.0, h: 652.0}
+    panel:
+      decor:
+        - {at: [0, 556.85], size: [447.0, 3.9], fill: '#9a9c9e'}
+    regions:
+      - {id: rack-mounting-surface, label: 'Rack mounting surface - 22 in (55.88 cm) from the rear, i.e. 93.2 mm from the front'}
+  left:
+    size: {w: 652.0, h: 1333.5}
+    regions:
+      - {id: rack-rails, label: 'Vertical rack rail locations - present but NOT dimensioned in any figure for this chassis'}
+      - {id: lift-handles, label: 'Chassis lift handles - present but NOT dimensioned in any figure for this chassis'}
+      - {id: cooling-path, label: 'Front-to-rear cooling path - inlet at the bottom front, exhaust at the upper rear'}
+  right:
+    size: {w: 652.0, h: 1333.5}
+    regions:
+      - {id: rack-rails, label: 'Vertical rack rail locations - present but NOT dimensioned in any figure for this chassis'}
+      - {id: lift-handles, label: 'Chassis lift handles - present but NOT dimensioned in any figure for this chassis'}
+      - {id: cooling-path, label: 'Front-to-rear cooling path - inlet at the bottom front, exhaust at the upper rear'}
+configurations:
+  base:
+    kind: base
+    source: >-
+      derived - built from the group roles rather than from a vendor bundle: every bay
+      whose group is `service` or `management` keeps its seat, every `traffic` bay takes
+      a blank. This vendor publishes no base configuration for this chassis, so the
+      library defines one. Where a vendor DOES publish one, follow it instead and say so
+      here.
+    default: true
+    description: >-
+      Chassis only - what you spec before deciding what goes in it. The 10 slot bays are
+      EMPTY; fabric, rp are populated. Enough to power on and reach the box, which is
+      the question most people ask first and the one `default` used to answer with
+      whatever the drawing happened to be populated with.
+    bays:
+      slot-0: cisco/a9k-slot-cover@1
+      slot-1: cisco/a9k-slot-cover@1
+      slot-2: cisco/a9k-slot-cover@1
+      slot-3: cisco/a9k-slot-cover@1
+      slot-4: cisco/a9k-slot-cover@1
+      slot-5: cisco/a9k-slot-cover@1
+      slot-6: cisco/a9k-slot-cover@1
+      slot-7: cisco/a9k-slot-cover@1
+      slot-8: cisco/a9k-slot-cover@1
+      slot-9: cisco/a9k-slot-cover@1

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcp-2
-version: 1.8.4
+version: 1.8.5
 manufacturer: Smartoptics
 model: DCP-2
 description: 1RU 19-inch chassis for the DCP transponder and muxponder family. Two
@@ -103,6 +103,14 @@ provenance:
   vents: >-
     photo-measured - the rear vent area is the fan tray's own faceplate and belongs to
     smartoptics/dcp-2-fan@1, not to the chassis. The chassis draws none of its own.
+chassis:
+  width: 440
+  height: 45
+  depth: 500
+  ru: 1
+  color: '#1b1e21'
+  airflow: front-to-back
+
 gaps:
 - what: front-vents
   scope: [front]
@@ -169,12 +177,6 @@ gaps:
   wanted: >-
     a rear photograph above about 5 px/mm, which would separate a lamp window from a
     retention tab. The best in the corpus is 2.7.
-chassis:
-  width: 440
-  height: 45
-  depth: 500
-  ru: 1
-  color: '#1b1e21'
 groups:
   furniture:
     term: Item
@@ -367,7 +369,6 @@ configurations:
   ac-f2b:
     kind: base
     default: true
-    airflow: front-to-back
     description: >-
       The chassis as it is specified before deciding what goes in it: two AC supplies,
       the fan tray, the management board, and BOTH TRAFFIC SLOTS BLANKED. so-ds-dcp-2-r4.3
@@ -379,7 +380,6 @@ configurations:
       is a configuration the vendor tells you not to run. It also reads far better.
   dc-f2b:
     kind: orderable
-    airflow: front-to-back
     description: >-
       The same chassis with both supplies ordered as DCP-2-PSU-DC-FB, -40 to -72 VDC at
       7A max. UM s2.3 is explicit that the bay geometry does not change and that "Both

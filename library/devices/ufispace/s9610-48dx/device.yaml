@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9610-48dx
-version: 3.0.7
+version: 3.0.8
 maturity: modelled
 manufacturer: UfiSpace
 model: S9610-48DX
@@ -362,6 +362,8 @@ chassis:
   color: '#3c3c3c'
   weight-kg: 22.64
 # What no rule can find, because the manifest looks complete.
+  airflow: front-to-back
+
 gaps:
 - what: port-led-semantics
   scope: [qsfp28, qsfpdd-400g, sfp28, port-leds]
@@ -987,7 +989,6 @@ configurations:
       single 110 VAC source each supply delivers 1000 W. No orderable chassis part number
       appears in any held document; see the chassis-variants gap.
     default: true
-    airflow: front-to-back
     component-attrs:
       psu-202-ac:
         model: PSU-202-AESR
@@ -1001,7 +1002,6 @@ configurations:
       Figures 6, 17 and 18. Datasheet input -40 to -72 V at 60 A; the HIG's DC section
       gives the maximum system consumption as 1220 W under 400G optics MSA standards and
       1524 W with OpenZR+, against the AC build's 1212 W and 1510 W.
-    airflow: front-to-back
     bays:
       psu-0: ufispace/psu-202-dc@1
       psu-1: ufispace/psu-202-dc@1

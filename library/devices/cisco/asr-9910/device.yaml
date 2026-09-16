@@ -5,16 +5,16 @@ version: 0.2.12
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9910
+portfolio:
+  line: Service Provider
+  family: Aggregation Services Router
+  series: ASR 9000 Series
 description: >-
   Cisco ASR 9910 Router - the 21 RU, ten-slot member of the ASR 9900 generation. Cards mount
   VERTICALLY on the front with the redundant RSP pair at the OUTER slots, 0 and 9, and eight line
   cards between them. The REAR carries a separate cage of five fabric cards with its own numbering
   restarting at 0, two fan trays and a rear exhaust. Modelled as a BARE CAGE; the fan trays are
   real bays and the card openings are cutouts - see gaps.
-portfolio:
-  line: Service Provider
-  family: Aggregation Services Router
-  series: ASR 9000 Series
 provenance:
   bay-opening-is-the-hole-not-the-reserved-space: >-
     `size` on these bays is what the slot RESERVES - where a card is placed and what
@@ -271,6 +271,145 @@ chassis:
   airflow: front-to-back
   color: '#c8cacc'
   silk: '#231f20'
+gaps:
+- what: chassis-power-figure
+  scope:
+  - fact:peak-power-w
+  - fact:typical-power-w
+  reason: vendor-silent
+  note: >-
+    Cisco publishes no chassis-level power draw for any ASR 9000. Table 14's "Power Dissipation"
+    row says only "Use the Cisco Power Calculator ... to estimate the maximum power
+    distribution", so the chassis total is whatever its occupants sum to. Recorded in provenance
+    as no-chassis-power-figure since the family was modelled; scoped here so a comparison can
+    tell this apart from a figure nobody has looked for
+  wanted: >-
+    a chassis-level maximum and typical draw from Cisco, or confirmation that the Power
+    Calculator is the only answer the vendor will give
+- what: bay-extents-reconciled-rather-than-measured
+  scope: [slots]
+  reason: needs-drawing
+  note: >-
+    THESE BAY DIMENSIONS WERE GROWN TO MEET A COMPONENT AND ARE NOT MEASUREMENTS. Each was set by
+    taking the size of a card the bay accepts, because a fit check reported the bay as too small.
+    On this chassis:
+    42.67 on 10 bays - a9k-4hg-flex, 42.67 thick
+    403.40 on 10 bays - a99-rsp-se, 403.40 long
+    492.10 on 5 bays - a99-sfc3-s, 492.10 long
+    The danger is specific and it is why they are listed rather than left to look like geometry.
+    A fit check compares a bay to a component and NEITHER of them to the world, so it is satisfied
+    by both being wrong together exactly as easily as by both being right. Every mismatch resolved
+    by moving one side removes the signal without adding any truth, and once resolved nothing will
+    flag it again. These are the entries where that happened, so the record survives the check
+    going quiet.
+    What IS independently grounded and is not in this list: the cage extents, measured off the
+    stencil and confirmed on several chassis by printed slot labels or a card guide rail; the slot
+    pitch; the 395.70 fourth-generation envelope, which is Cisco's own "includes ejector
+    bracket/lever" figure; and the shapesheet sizes for the power modules and fan trays. The
+    ejector arithmetic that explains why a bay legitimately exceeds its cage opening - 355.60
+    against 395.70, 40.10 mm - is also sourced, and it justifies the SHAPE of these numbers
+    without justifying any particular one of them.
+  wanted: a dimensioned figure giving the clear opening of any ASR 9000 card cage, which would
+    replace every reconciled figure above with a measured one
+- what: neighbour-constraint-excludes-the-control-card-length
+  scope: [slots]
+  reason: sources-disagree
+  note: >-
+    A THIRD LINE OF EVIDENCE ON THE ~428 mm CONTROL CARDS, derived rather than asserted, and it
+    comes from parts that have nothing to do with the question. The vertical space available to a
+    card is bounded by whatever structure sits above and below its cage, and on this chassis that
+    space measures the figure recorded in card-envelope-headroom below. A card envelope larger than
+    that cannot be installed whatever any data sheet says, because something else is already there.
+    Applied across the family:
+        ASR 9010   399.96 mm between the cable management tray and the card guide bar
+        ASR 9910   421.79 mm between the tray band and the front air intake
+        ASR 9922   420.30 mm between the tray band and the fan band
+        ASR 9912   439.21 mm - does NOT exclude 428.5, so this chassis is silent on the question
+        ASR 9906   unbounded above in the model, so no constraint is derivable
+    Three of the five independently exclude a 428.2-428.5 card. That is a separate argument from
+    the slot pitch and from the ejector arithmetic, and it agrees with both. THE 9912 DOES NOT
+    EXCLUDE IT and is recorded as silent rather than as agreement - a constraint that fails to
+    bite is not evidence either way, and reporting it as if it were would manufacture support.
+    The 9010's 399.96 also sits 3.14 mm under the 403.10 fifth-generation envelope its bays now
+    carry, which is a smaller open question of the same kind.
+  wanted: a figure dimensioning the clear vertical opening of any ASR 9000 card cage, which would
+    turn all of this from derived to measured
+- what: rsp880-length-also-exceeds-the-cage
+  scope: [slots]
+  reason: sources-disagree
+  note: >-
+    THE SECOND AXIS OF THE SAME CONFLICT, and it makes the first one much harder to explain away.
+    The RSP-880 family is published at 428.5 mm on its long axis. Two Cisco statements fix what a
+    line card measures on that axis in this family: Table A-10 of OL-17500-09 gives the
+    original-generation card 14 in (355.60 mm) with NO qualifier, and the 4th-generation data
+    sheets give 15.58 in (395.70) explicitly "including ejector bracket/lever". The 40.10 mm
+    between them is the ejectors, about 20 mm each end - which is also why a bay declared at the
+    395.70 envelope is legitimately longer than the cage opening it sits in.
+    Against that, 428.50 does not reconcile. Subtract the same 40.10 of ejector and the plate would
+    still be 33.45 mm longer than this chassis's measured cage - a cage independently confirmed to
+    0.65 mm by Table A-10's own 355.60. So BOTH published RSP-880 dimensions, 46.0 thick and 428.5
+    long, are irreconcilable with a cage that two unrelated sources agree on.
+    That is why the bays were NOT inflated to hold it. Building five chassis around a pair of
+    numbers that contradict the only independently confirmed dimension in the family would put the
+    error into the geometry instead of into the record. The accepts keep the RSP-880 where Cisco
+    names it; the bays stay at what the cage and the reconcilable envelopes allow.
+  wanted: the RSP-880's plate dimensions as distinct from whatever 46.0 x 428.5 measures, or a
+    photograph of an RSP-880 beside a line card
+- what: rsp880-width-exceeds-every-measured-pitch
+  scope: [slots]
+  reason: sources-disagree
+  note: >-
+    Cisco's RSP-880 and RSP880-LT data sheet gives "Height: 1.81 in. (4.60 cm)", i.e. 46.0 mm, and
+    names the ASR 9006, 9010, 9904, 9906 and 9910 as the chassis they are the system processor for.
+    THAT WIDTH EXCEEDS THE MEASURED SLOT PITCH ON EVERY CHASSIS IN THE FAMILY:
+        9010 44.33   9906 43.42   9910 43.78   9912 44.06   9922 44.06
+    and three of those pitches are measured from PRINTED SLOT LABELS or a card guide rail with a
+    spread of 0.11 to 0.20 mm - among the best-supported numbers in this library. A card cannot be
+    thicker than its slot, so 1.81 in is not the seating width; it is most likely taken over the
+    ejector levers, the same way Cisco's line card "Width" is stated as "includes ejector
+    bracket/lever" elsewhere.
+    The accepts lists keep the RSP-880 family where Cisco names it, because a compatibility claim is
+    Cisco's to make. The bays are sized to what the measured opening can hold. So a reader will find
+    a bay narrower than a component it accepts, and that is a RECORDED CONFLICT between two sources
+    rather than an oversight - the alternative was to inflate five chassis' geometry to fit one
+    published number that three independent pitch measurements contradict.
+  wanted: the RSP-880's seating width as distinct from its over-ejector width, or any Cisco
+    statement of an ASR 9000 slot pitch
+- what: power-module-openings
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    Two power shelves are drawn as single openings rather than three module openings each. Table 15
+    establishes the count - "ASR 9910: Version 3 power system: Up to six AC power modules per
+    system, three per tray" - and Figure 22 numbers them M0 to M3 for the DC system, which is four
+    per tray, so the count itself DIFFERS BETWEEN AC AND DC on this chassis and neither figure nor
+    table gives boundaries. The master draws both shelves populated, so a scan returns module
+    detail rather than separators. The shelves' outer rectangles are measured and drawn.
+  wanted: a figure showing the power shelves empty, and a statement of the AC and DC module counts
+    on one page
+- what: rack-mounting-plane-not-dimensioned-for-this-chassis
+  scope: [bottom]
+  reason: needs-drawing
+  note: >-
+    THE BOTTOM FACE IS EMPTY BY VERIFICATION, NOT BY OMISSION, and this is the only chassis in the
+    Cisco family where that is still true. Its seven siblings each earn this face from a rack
+    mounting surface strip dimensioned in their own footprint figure. FOUR ROUTES WERE TRIED HERE
+    AND ALL FOUR FAIL:
+    (1) Figure 12's Top View, read whole at 300 dpi, carries exactly one dimension - 17.600, the
+    width - and no mounting offset. (2) The fraction route needs a scale, and that view has none
+    that reconciles: 17.600 across its short axis makes its long axis 28.04 in, which is 11 percent
+    off Table 13's 31.50 and 10 percent off its own side view's 31.266. (3) The HIG's 4-post
+    mounting figures for this chassis are undimensioned illustrations. (4) Transferring the ASR
+    9906's 127.0 and 240.0 mm would cross two chassis differing by 313 mm in height, which is the
+    sibling transfer this work has spent the session correcting.
+    Separately and for the whole family: no bottom VIEW of any ASR 9000 chassis exists in the
+    78-document intake - every figure caption in all 65 PDFs was searched for "Bottom View",
+    "underside" and "bottom of the chassis", returning zero hits.
+    Nothing is drawn and no region names the absence. The face is correctly SIZED, so the 3D box
+    and a rack elevation are the right shape; what is missing is a statement of what is on it, and
+    this chassis holds at capability 2 rather than borrow a number it cannot source.
+  wanted: a dimensioned rail or mounting-flange position for the ASR 9910 from any figure, or a
+    way for a view to declare itself deliberately empty so empty-by-verification can count
 groups:
   slots:
     term: Slot
@@ -411,142 +550,3 @@ configurations:
       slot-7: cisco/a9k-slot-cover@1
       slot-8: cisco/a9k-slot-cover@1
       slot-9: cisco/a9k-slot-cover@1
-gaps:
-- what: chassis-power-figure
-  scope:
-  - fact:peak-power-w
-  - fact:typical-power-w
-  reason: vendor-silent
-  note: >-
-    Cisco publishes no chassis-level power draw for any ASR 9000. Table 14's "Power Dissipation"
-    row says only "Use the Cisco Power Calculator ... to estimate the maximum power
-    distribution", so the chassis total is whatever its occupants sum to. Recorded in provenance
-    as no-chassis-power-figure since the family was modelled; scoped here so a comparison can
-    tell this apart from a figure nobody has looked for
-  wanted: >-
-    a chassis-level maximum and typical draw from Cisco, or confirmation that the Power
-    Calculator is the only answer the vendor will give
-- what: bay-extents-reconciled-rather-than-measured
-  scope: [slots]
-  reason: needs-drawing
-  note: >-
-    THESE BAY DIMENSIONS WERE GROWN TO MEET A COMPONENT AND ARE NOT MEASUREMENTS. Each was set by
-    taking the size of a card the bay accepts, because a fit check reported the bay as too small.
-    On this chassis:
-    42.67 on 10 bays - a9k-4hg-flex, 42.67 thick
-    403.40 on 10 bays - a99-rsp-se, 403.40 long
-    492.10 on 5 bays - a99-sfc3-s, 492.10 long
-    The danger is specific and it is why they are listed rather than left to look like geometry.
-    A fit check compares a bay to a component and NEITHER of them to the world, so it is satisfied
-    by both being wrong together exactly as easily as by both being right. Every mismatch resolved
-    by moving one side removes the signal without adding any truth, and once resolved nothing will
-    flag it again. These are the entries where that happened, so the record survives the check
-    going quiet.
-    What IS independently grounded and is not in this list: the cage extents, measured off the
-    stencil and confirmed on several chassis by printed slot labels or a card guide rail; the slot
-    pitch; the 395.70 fourth-generation envelope, which is Cisco's own "includes ejector
-    bracket/lever" figure; and the shapesheet sizes for the power modules and fan trays. The
-    ejector arithmetic that explains why a bay legitimately exceeds its cage opening - 355.60
-    against 395.70, 40.10 mm - is also sourced, and it justifies the SHAPE of these numbers
-    without justifying any particular one of them.
-  wanted: a dimensioned figure giving the clear opening of any ASR 9000 card cage, which would
-    replace every reconciled figure above with a measured one
-- what: neighbour-constraint-excludes-the-control-card-length
-  scope: [slots]
-  reason: sources-disagree
-  note: >-
-    A THIRD LINE OF EVIDENCE ON THE ~428 mm CONTROL CARDS, derived rather than asserted, and it
-    comes from parts that have nothing to do with the question. The vertical space available to a
-    card is bounded by whatever structure sits above and below its cage, and on this chassis that
-    space measures the figure recorded in card-envelope-headroom below. A card envelope larger than
-    that cannot be installed whatever any data sheet says, because something else is already there.
-    Applied across the family:
-        ASR 9010   399.96 mm between the cable management tray and the card guide bar
-        ASR 9910   421.79 mm between the tray band and the front air intake
-        ASR 9922   420.30 mm between the tray band and the fan band
-        ASR 9912   439.21 mm - does NOT exclude 428.5, so this chassis is silent on the question
-        ASR 9906   unbounded above in the model, so no constraint is derivable
-    Three of the five independently exclude a 428.2-428.5 card. That is a separate argument from
-    the slot pitch and from the ejector arithmetic, and it agrees with both. THE 9912 DOES NOT
-    EXCLUDE IT and is recorded as silent rather than as agreement - a constraint that fails to
-    bite is not evidence either way, and reporting it as if it were would manufacture support.
-    The 9010's 399.96 also sits 3.14 mm under the 403.10 fifth-generation envelope its bays now
-    carry, which is a smaller open question of the same kind.
-  wanted: a figure dimensioning the clear vertical opening of any ASR 9000 card cage, which would
-    turn all of this from derived to measured
-- what: rsp880-length-also-exceeds-the-cage
-  scope: [slots]
-  reason: sources-disagree
-  note: >-
-    THE SECOND AXIS OF THE SAME CONFLICT, and it makes the first one much harder to explain away.
-    The RSP-880 family is published at 428.5 mm on its long axis. Two Cisco statements fix what a
-    line card measures on that axis in this family: Table A-10 of OL-17500-09 gives the
-    original-generation card 14 in (355.60 mm) with NO qualifier, and the 4th-generation data
-    sheets give 15.58 in (395.70) explicitly "including ejector bracket/lever". The 40.10 mm
-    between them is the ejectors, about 20 mm each end - which is also why a bay declared at the
-    395.70 envelope is legitimately longer than the cage opening it sits in.
-    Against that, 428.50 does not reconcile. Subtract the same 40.10 of ejector and the plate would
-    still be 33.45 mm longer than this chassis's measured cage - a cage independently confirmed to
-    0.65 mm by Table A-10's own 355.60. So BOTH published RSP-880 dimensions, 46.0 thick and 428.5
-    long, are irreconcilable with a cage that two unrelated sources agree on.
-    That is why the bays were NOT inflated to hold it. Building five chassis around a pair of
-    numbers that contradict the only independently confirmed dimension in the family would put the
-    error into the geometry instead of into the record. The accepts keep the RSP-880 where Cisco
-    names it; the bays stay at what the cage and the reconcilable envelopes allow.
-  wanted: the RSP-880's plate dimensions as distinct from whatever 46.0 x 428.5 measures, or a
-    photograph of an RSP-880 beside a line card
-- what: rsp880-width-exceeds-every-measured-pitch
-  scope: [slots]
-  reason: sources-disagree
-  note: >-
-    Cisco's RSP-880 and RSP880-LT data sheet gives "Height: 1.81 in. (4.60 cm)", i.e. 46.0 mm, and
-    names the ASR 9006, 9010, 9904, 9906 and 9910 as the chassis they are the system processor for.
-    THAT WIDTH EXCEEDS THE MEASURED SLOT PITCH ON EVERY CHASSIS IN THE FAMILY:
-        9010 44.33   9906 43.42   9910 43.78   9912 44.06   9922 44.06
-    and three of those pitches are measured from PRINTED SLOT LABELS or a card guide rail with a
-    spread of 0.11 to 0.20 mm - among the best-supported numbers in this library. A card cannot be
-    thicker than its slot, so 1.81 in is not the seating width; it is most likely taken over the
-    ejector levers, the same way Cisco's line card "Width" is stated as "includes ejector
-    bracket/lever" elsewhere.
-    The accepts lists keep the RSP-880 family where Cisco names it, because a compatibility claim is
-    Cisco's to make. The bays are sized to what the measured opening can hold. So a reader will find
-    a bay narrower than a component it accepts, and that is a RECORDED CONFLICT between two sources
-    rather than an oversight - the alternative was to inflate five chassis' geometry to fit one
-    published number that three independent pitch measurements contradict.
-  wanted: the RSP-880's seating width as distinct from its over-ejector width, or any Cisco
-    statement of an ASR 9000 slot pitch
-- what: power-module-openings
-  scope: [front]
-  reason: needs-drawing
-  note: >-
-    Two power shelves are drawn as single openings rather than three module openings each. Table 15
-    establishes the count - "ASR 9910: Version 3 power system: Up to six AC power modules per
-    system, three per tray" - and Figure 22 numbers them M0 to M3 for the DC system, which is four
-    per tray, so the count itself DIFFERS BETWEEN AC AND DC on this chassis and neither figure nor
-    table gives boundaries. The master draws both shelves populated, so a scan returns module
-    detail rather than separators. The shelves' outer rectangles are measured and drawn.
-  wanted: a figure showing the power shelves empty, and a statement of the AC and DC module counts
-    on one page
-- what: rack-mounting-plane-not-dimensioned-for-this-chassis
-  scope: [bottom]
-  reason: needs-drawing
-  note: >-
-    THE BOTTOM FACE IS EMPTY BY VERIFICATION, NOT BY OMISSION, and this is the only chassis in the
-    Cisco family where that is still true. Its seven siblings each earn this face from a rack
-    mounting surface strip dimensioned in their own footprint figure. FOUR ROUTES WERE TRIED HERE
-    AND ALL FOUR FAIL:
-    (1) Figure 12's Top View, read whole at 300 dpi, carries exactly one dimension - 17.600, the
-    width - and no mounting offset. (2) The fraction route needs a scale, and that view has none
-    that reconciles: 17.600 across its short axis makes its long axis 28.04 in, which is 11 percent
-    off Table 13's 31.50 and 10 percent off its own side view's 31.266. (3) The HIG's 4-post
-    mounting figures for this chassis are undimensioned illustrations. (4) Transferring the ASR
-    9906's 127.0 and 240.0 mm would cross two chassis differing by 313 mm in height, which is the
-    sibling transfer this work has spent the session correcting.
-    Separately and for the whole family: no bottom VIEW of any ASR 9000 chassis exists in the
-    78-document intake - every figure caption in all 65 PDFs was searched for "Bottom View",
-    "underside" and "bottom of the chassis", returning zero hits.
-    Nothing is drawn and no region names the absence. The face is correctly SIZED, so the 3D box
-    and a rack elevation are the right shape; what is missing is a statement of what is on it, and
-    this chassis holds at capability 2 rather than borrow a number it cannot source.
-  wanted: a dimensioned rail or mounting-flange position for the ASR 9910 from any figure, or a
-    way for a view to declare itself deliberately empty so empty-by-verification can count

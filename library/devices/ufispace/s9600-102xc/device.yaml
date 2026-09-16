@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-102xc
-version: 2.0.6
+version: 2.0.7
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-102XC
@@ -320,6 +320,8 @@ chassis:
   depth: 609.6
   ru: 2
   weight-kg: 15.19
+  airflow: front-to-back
+
 gaps:
 - what: qsfp-green-plate
   scope: [front]
@@ -1021,7 +1023,6 @@ configurations:
       FAN-803816-HI exhaust fans - the DC build, which is also the bare working chassis,
       since the traffic cages ship empty
     default: true
-    airflow: front-to-back
     component-attrs:
       psu-132-dc:
         model: PSU-132-DESR
@@ -1031,7 +1032,6 @@ configurations:
     kind: orderable
     description: Dual 1300W AC PSUs (PSU-132-AESR, exhaust airflow) with four
       FAN-803816-HI exhaust fans
-    airflow: front-to-back
     bays:
       psu-0: ufispace/psu-132-ac@1
       psu-1: ufispace/psu-132-ac@1

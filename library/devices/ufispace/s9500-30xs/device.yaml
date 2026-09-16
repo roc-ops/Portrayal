@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9500-30xs
-version: 2.0.5
+version: 2.0.6
 maturity: modelled
 manufacturer: UfiSpace
 model: S9500-30XS
@@ -251,6 +251,8 @@ chassis:
   ru: 1
   color: '#3c3f42'
   weight-kg: 4.76
+  airflow: front-to-back
+
 gaps:
 - what: port-led-semantics
   scope: [sfp-plus, sfp28, qsfp28, port-leds]
@@ -714,14 +716,12 @@ configurations:
       ports empty. No orderable chassis part number appears in any held document; see
       the chassis-sku gap.
     default: true
-    airflow: front-to-back
   dc:
     kind: orderable
     description: >-
       Dual 400W DC supplies (PSU-401-DISB, screw-terminal input, intake airflow) with
       five FAN-402825-HD exhaust fans. The datasheet's DC input rating is -36 to -75 V
       at 16 A.
-    airflow: front-to-back
     component-attrs:
       psu-401-dc:
         model: PSU-401-DISB
@@ -732,7 +732,6 @@ configurations:
     description: >-
       Dual 400W AC supplies (PSU-401-AISB, C14 inlet, intake airflow) with five
       FAN-402825-HD exhaust fans. The datasheet's AC input rating is 100 to 240 V at 6 A.
-    airflow: front-to-back
     bays:
       psu-0: ufispace/psu-401-ac@1
       psu-1: ufispace/psu-401-ac@1

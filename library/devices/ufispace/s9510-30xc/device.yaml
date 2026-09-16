@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9510-30xc
-version: 2.0.3
+version: 2.0.4
 maturity: modelled
 manufacturer: UfiSpace
 model: S9510-30XC
@@ -273,6 +273,8 @@ chassis:
   depth: 302
   ru: 1
   weight-kg: 4.5
+  airflow: front-to-back
+
 gaps:
 - what: port-led-semantics
   scope: [sfp28, qsfp28, port-leds]
@@ -704,7 +706,6 @@ configurations:
       FAN-402825-HD fan modules 4+1 - the build both vendor renders and HIG Figures 5,
       6 and 8 show
     default: true
-    airflow: front-to-back
     component-attrs:
       psu-401-dc:
         model: PSU-401-DISB-1
@@ -714,7 +715,6 @@ configurations:
     kind: orderable
     description: Dual 400W AC PSUs (PSU-401-AISB, intake airflow) 1+1, five
       FAN-402825-HD fan modules 4+1, per HIG Figure 7
-    airflow: front-to-back
     bays:
       psu-0: ufispace/psu-401-ac@1
       psu-1: ufispace/psu-401-ac@1

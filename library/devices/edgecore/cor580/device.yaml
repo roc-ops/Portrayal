@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: cor580
-version: 1.0.6
+version: 1.0.7
 maturity: modelled
 manufacturer: Edgecore
 model: COR580
@@ -301,7 +301,76 @@ attrs:
     nebs: GR-63-CORE, GR-1089-CORE, NEBS Level 3.0
     rohs: RoHS-2.0 compliant; WEEE Directive 2002/96/EC
   lifecycle: {eol: none-announced}
-chassis: {width: 438.4, height: 43.1, depth: 536.0, ru: 1, weight-kg: 10.77, color: '#2b2f33'}
+chassis: {width: 438.4, height: 43.1, depth: 536.0, ru: 1, weight-kg: 10.77, color: '#2b2f33', airflow: front-to-back}
+
+gaps:
+- what: dip-switch-bank
+  scope:
+  - front
+  reason: sources-disagree
+  wanted: >-
+    A ten-cell switch strip with red end caps sits at x 30.4-49.4, y 32.6-36.0 on the front face, below
+    RST. Callout 8 of cor580-datasheet/fig-0007 points its leader at this strip while the same page's
+    list names item 8 'Reset button', and cor580-qsg/fig-0008 unambiguously gives that name to the round
+    button above. It is drawn as decor and given no function. Its printed two-word label does not resolve
+    at 3.2 px/mm. A straight-on bench photograph of the left-hand end of the faceplate settles both the
+    label and whether the cells are switches, jumpers or lamps.
+- what: dc-psu-module
+  scope:
+  - rear
+  reason: needs-hardware
+  wanted: >-
+    The dc48-f2b configuration orders FSJ033-610G, a 1300 W -48 VDC supply with a terminal block rather
+    than a C14 inlet. The library has common/psu-dc-650 but no 1300 W DC module, and neither COR580 document
+    photographs the DC PSU's face - both rear elevations show the AC unit. The DC configuration therefore
+    draws the AC part, which is wrong at the connector. A photograph or drawing of FSJ033-610G's face
+    is what it needs.
+- what: sibling-fan-bay-width
+  scope:
+  - rear
+  reason: sources-disagree
+  wanted: >-
+    COR580's fan opening measures 40.9 mm on a 48.79 pitch here, with an 8.3 mm chassis divider carrying
+    the fan numeral. The sibling DCS510, which shares this chassis shell, records 46.6 mm on a 48.8 pitch
+    with a 2.2 mm divider - and prints the same 3.4 mm numerals on that divider, which will not fit. One
+    of the two is reading the tray FRAME where the other reads the OPENING. This device is drawn on its
+    own measurement; the sibling was not re-opened and may carry the error. Somebody should re-measure
+    dcs510-datasheet/fig-0007 panel 1 and reconcile the two, because common/fan-module-46@1 is shared
+    and a wrong bay there is a wrong bay everywhere it is used.
+- what: fan-tray-power-draw
+  scope:
+  - rear
+  reason: vendor-silent
+  wanted: >-
+    Neither document gives a per-fan or per-tray figure; the only wattages either states are the 1300
+    W supply rating and the 800 W chassis maximum. L29 stands on the fan module and the chassis module
+    total is a floor.
+- what: rear-product-label-position
+  scope:
+  - rear
+  reason: needs-photo
+  wanted: >-
+    The quick-start's FRU list names 'Product label' as callout 4, but neither rear elevation resolves
+    where on the face it is applied. Not drawn rather than placed by guess.
+- what: minor-face-geometry
+  scope:
+  - top
+  - bottom
+  - left
+  - right
+  reason: needs-drawing
+  wanted: >-
+    Sized from the datasheet triple and carried over from the sibling DCS510, which shares this shell
+    - a lid seam, a rear vent strip and the side rail lines, all estimated there and no better sourced
+    here. No mechanical drawing in this intake dimensions a single feature on these four faces.
+- what: rj45-bezel-colour
+  scope:
+  - mgmt-eth
+  - console-1
+  reason: needs-drawing
+  wanted: >-
+    A bezel plate part or a skin variant for the white-bezelled RJ-45 the photo shows; the four-part
+    RJ45 family draws one dark housing.
 groups:
   qsfpdd-400g:
     term: Port
@@ -850,7 +919,6 @@ configurations:
   ac-f2b:
     kind: base
     default: true
-    airflow: front-to-back
     description: >-
       Dual 1300 W AC PSUs (FRU FSH082-610G) and six fan trays (FRU AS9926-24D/24DB-FAN), front-to-back
       airflow. This is a fixed 1RU switch, so the base configuration is the box as it is bought - supplies
@@ -873,7 +941,6 @@ configurations:
       AS9926-24DB-O-AC-F-JP: {part: FP5EC9524501Z, power-cord: JP}
   dc48-f2b:
     kind: orderable
-    airflow: front-to-back
     description: >-
       Dual -48 VDC PSUs (FRU FSJ033-610G, rated 48 VDC 1300 W, input -40 V to -75 V at 40 A maximum) and
       the same six fan trays, front-to-back airflow. The DC SKUs ship four ring lugs that the AC SKUs
@@ -882,71 +949,3 @@ configurations:
     part-numbers:
       AS9926-24D-O-48V-F: {part: FP5EC9524001Z, power-cord: none}
       AS9926-24DB-O-48V-F: {part: FP5EC9524003Z, power-cord: none}
-gaps:
-- what: dip-switch-bank
-  scope:
-  - front
-  reason: sources-disagree
-  wanted: >-
-    A ten-cell switch strip with red end caps sits at x 30.4-49.4, y 32.6-36.0 on the front face, below
-    RST. Callout 8 of cor580-datasheet/fig-0007 points its leader at this strip while the same page's
-    list names item 8 'Reset button', and cor580-qsg/fig-0008 unambiguously gives that name to the round
-    button above. It is drawn as decor and given no function. Its printed two-word label does not resolve
-    at 3.2 px/mm. A straight-on bench photograph of the left-hand end of the faceplate settles both the
-    label and whether the cells are switches, jumpers or lamps.
-- what: dc-psu-module
-  scope:
-  - rear
-  reason: needs-hardware
-  wanted: >-
-    The dc48-f2b configuration orders FSJ033-610G, a 1300 W -48 VDC supply with a terminal block rather
-    than a C14 inlet. The library has common/psu-dc-650 but no 1300 W DC module, and neither COR580 document
-    photographs the DC PSU's face - both rear elevations show the AC unit. The DC configuration therefore
-    draws the AC part, which is wrong at the connector. A photograph or drawing of FSJ033-610G's face
-    is what it needs.
-- what: sibling-fan-bay-width
-  scope:
-  - rear
-  reason: sources-disagree
-  wanted: >-
-    COR580's fan opening measures 40.9 mm on a 48.79 pitch here, with an 8.3 mm chassis divider carrying
-    the fan numeral. The sibling DCS510, which shares this chassis shell, records 46.6 mm on a 48.8 pitch
-    with a 2.2 mm divider - and prints the same 3.4 mm numerals on that divider, which will not fit. One
-    of the two is reading the tray FRAME where the other reads the OPENING. This device is drawn on its
-    own measurement; the sibling was not re-opened and may carry the error. Somebody should re-measure
-    dcs510-datasheet/fig-0007 panel 1 and reconcile the two, because common/fan-module-46@1 is shared
-    and a wrong bay there is a wrong bay everywhere it is used.
-- what: fan-tray-power-draw
-  scope:
-  - rear
-  reason: vendor-silent
-  wanted: >-
-    Neither document gives a per-fan or per-tray figure; the only wattages either states are the 1300
-    W supply rating and the 800 W chassis maximum. L29 stands on the fan module and the chassis module
-    total is a floor.
-- what: rear-product-label-position
-  scope:
-  - rear
-  reason: needs-photo
-  wanted: >-
-    The quick-start's FRU list names 'Product label' as callout 4, but neither rear elevation resolves
-    where on the face it is applied. Not drawn rather than placed by guess.
-- what: minor-face-geometry
-  scope:
-  - top
-  - bottom
-  - left
-  - right
-  reason: needs-drawing
-  wanted: >-
-    Sized from the datasheet triple and carried over from the sibling DCS510, which shares this shell
-    - a lid seam, a rear vent strip and the side rail lines, all estimated there and no better sourced
-    here. No mechanical drawing in this intake dimensions a single feature on these four faces.
-- what: rj45-bezel-colour
-  scope:
-  - mgmt-eth
-  - console-1
-  reason: needs-drawing
-  wanted: >-
-    A bezel plate part or a skin variant for the white-bezelled RJ-45 the photo shows; the four-part
-    RJ45 family draws one dark housing.

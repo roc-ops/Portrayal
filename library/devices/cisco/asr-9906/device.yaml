@@ -5,6 +5,10 @@ version: 0.4.6
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9906
+portfolio:
+  line: Service Provider
+  family: Aggregation Services Router
+  series: ASR 9000 Series
 description: >-
   Cisco ASR 9906 Router - the 14 RU, six-slot member of the ASR 9900 generation. Cards mount
   VERTICALLY and the redundant RSP pair takes the OUTER slots, 0 and 5, with four line cards
@@ -12,10 +16,6 @@ description: >-
   the card cage and two fan trays sit behind a door on the RIGHT, with a full-width air intake
   along the bottom. Modelled as a BARE CAGE; the card openings are cutouts rather than bays - see
   gaps.
-portfolio:
-  line: Service Provider
-  family: Aggregation Services Router
-  series: ASR 9000 Series
 provenance:
   bay-opening-is-the-hole-not-the-reserved-space: >-
     `size` on these bays is what the slot RESERVES - where a card is placed and what
@@ -320,117 +320,6 @@ chassis:
   airflow: front-to-back
   color: '#c8cacc'
   silk: '#231f20'
-groups:
-  slots:
-    term: Slot
-    role: traffic
-    index-origin: 0
-    physical-context: NetworkingDevice
-  grounding:
-    term: Point
-    role: furniture
-    index-origin: 1
-views:
-  front:
-    size: {w: 447.0, h: 619.51}
-    panel:
-      decor:
-        - {at: [20.0, 500.0], size: [300.0, 105.0], fill: '#3a3c3e', pattern: grille, vent: 60}
-      cutouts:
-        - {id: power-shelf, at: [16.0, 94.09], size: [46.0, 364.32], shape: rect}
-        - {id: esd, at: [352.0, 512.0], size: [5.0, 5.0], shape: circle}
-    silkscreen:
-      - {at: [39.48, 487.0], text: PS0, font-size: 6, anchor: middle}
-      - {at: [90.22, 487.0], text: RSP0, font-size: 6, anchor: middle, for: slot-0}
-      - {at: [132.29, 487.0], text: LC0, font-size: 6, anchor: middle, for: slot-1}
-      - {at: [177.3, 487.0], text: LC1, font-size: 6, anchor: middle, for: slot-2}
-      - {at: [220.38, 487.0], text: LC2, font-size: 6, anchor: middle, for: slot-3}
-      - {at: [264.77, 487.0], text: LC3, font-size: 6, anchor: middle, for: slot-4}
-      - {at: [308.97, 487.0], text: RSP1, font-size: 6, anchor: middle, for: slot-5}
-    components:
-      bays:
-        - {id: slot-0, at: [71.97, 74.55], size: {w: 42.67, h: 403.40}, opening: {w: 42.67, h: 364.32}, accepts: ['cisco/a9k-rsp880-lt-se@1', 'cisco/a9k-rsp880-lt-tr@1', 'cisco/a99-rsp-se@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0, default: cisco/a9k-slot-cover@1}
-        - {id: slot-1, at: [115.39, 74.55], size: {w: 42.67, h: 403.40}, opening: {w: 42.67, h: 364.32}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1, default: cisco/a9k-slot-cover@1}
-        - {id: slot-2, at: [158.81, 74.55], size: {w: 42.67, h: 403.40}, opening: {w: 42.67, h: 364.32}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2, default: cisco/a9k-slot-cover@1}
-        - {id: slot-3, at: [202.25, 74.55], size: {w: 42.67, h: 403.40}, opening: {w: 42.67, h: 364.32}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 3, default: cisco/a9k-slot-cover@1}
-        - {id: slot-4, at: [245.65, 74.55], size: {w: 42.67, h: 403.40}, opening: {w: 42.67, h: 364.32}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 4, default: cisco/a9k-slot-cover@1}
-        - {id: slot-5, at: [289.07, 74.55], size: {w: 42.67, h: 403.40}, opening: {w: 42.67, h: 364.32}, accepts: ['cisco/a9k-rsp880-lt-se@1', 'cisco/a9k-rsp880-lt-tr@1', 'cisco/a99-rsp-se@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 5, default: cisco/a9k-slot-cover@1}
-      placements:
-        - {id: esd-jack, ref: common/esd-jack@1, at: [351.5, 511.5], for: chassis, group: grounding, rel-pos: 0}
-    regions:
-      - {id: rsp-slots, label: 'RSP cards - the outer pair, slots 0 and 5'}
-      - {id: lc-slots, label: Line cards 0 to 3 - slots 1 to 4}
-      - {id: power-shelf-region, label: 'Power shelf PS0 - vertical, left of the cage, M0 to M2'}
-      - {id: fan-trays, label: 'Fan trays FT0 and FT1 - right of the cage, behind a door'}
-      - {id: front-air-intake, label: Front air intake - inlet at the bottom front}
-  rear:
-    size: {w: 447.0, h: 619.51}
-    regions:
-      - {id: fabric-cards, label: 'Fabric card cage - five fabric cards, numbering restarts at Slot 0'}
-      - {id: nebs-ground, label: 'NEBS bonding and grounding - bottom rear and left side'}
-  top:
-    size: {w: 447.0, h: 730.8}
-    panel:
-      decor:
-        - {at: [0, 601.85], size: [447.0, 3.9], fill: '#9a9c9e'}
-        - {at: [0, 488.85], size: [447.0, 3.9], fill: '#9a9c9e'}
-        - {at: [42.0, 29.0], size: [152.0, 93.0], fill: '#e8eaec'}
-        - {at: [42.0, 129.0], size: [155.0, 165.0], fill: '#d5d7d9'}
-    silkscreen:
-      - {at: [111.0, 650.0], text: cisco, font-size: 22, anchor: middle, for: chassis}
-    regions:
-      - {id: rack-mounting-surface, label: 'Rack mounting surface - the same plane the bottom face carries'}
-      - {id: regulatory-label, label: 'Regulatory and compliance label block'}
-      - {id: top-access-panel, label: 'Top access panel'}
-      - {id: cable-management-protrusion, label: 'Cable management system - protrudes 2.68 in (6.81 cm) beyond the front'}
-  bottom:
-    size: {w: 447.0, h: 730.8}
-    panel:
-      decor:
-        - {at: [0, 601.85], size: [447.0, 3.9], fill: '#9a9c9e'}
-        - {at: [0, 488.85], size: [447.0, 3.9], fill: '#9a9c9e'}
-    regions:
-      - {id: rack-mounting-surface, label: 'Rack mounting surface - 5.00 in (127.0 mm) and 9.45 in (240.0 mm) from the front'}
-  left:
-    size: {w: 730.8, h: 619.51}
-    panel:
-      decor:
-        - {at: [483.8, 40.0], size: [14.0, 540.0], fill: '#b0b2b4'}
-        - {at: [596.8, 40.0], size: [14.0, 540.0], fill: '#b0b2b4'}
-    regions:
-      - {id: rack-rails, label: 'Vertical rack rail locations - 5.00 in (127.0 mm) and 9.45 in (240.0 mm) from the front'}
-      - {id: lift-handles, label: 'Chassis lift handles - two per side, drawn in HIG Figure 17 but not dimensioned'}
-  right:
-    size: {w: 730.8, h: 619.51}
-    panel:
-      decor:
-        - {at: [120.0, 40.0], size: [14.0, 540.0], fill: '#b0b2b4'}
-        - {at: [233.0, 40.0], size: [14.0, 540.0], fill: '#b0b2b4'}
-    regions:
-      - {id: rack-rails, label: 'Vertical rack rail locations - 5.00 in (127.0 mm) and 9.45 in (240.0 mm) from the front'}
-      - {id: lift-handles, label: 'Chassis lift handles - two per side, drawn in HIG Figure 17 but not dimensioned'}
-configurations:
-  base:
-    kind: base
-    source: >-
-      derived - built from the group roles rather than from a vendor bundle: every bay
-      whose group is `service` or `management` keeps its seat, every `traffic` bay takes
-      a blank. This vendor publishes no base configuration for this chassis, so the
-      library defines one. Where a vendor DOES publish one, follow it instead and say so
-      here.
-    default: true
-    description: >-
-      Chassis only - what you spec before deciding what goes in it. The 6 slot bays are
-      EMPTY; nothing else is fitted. Enough to power on and reach the box, which is the
-      question most people ask first and the one `default` used to answer with whatever
-      the drawing happened to be populated with.
-    bays:
-      slot-0: cisco/a9k-slot-cover@1
-      slot-1: cisco/a9k-slot-cover@1
-      slot-2: cisco/a9k-slot-cover@1
-      slot-3: cisco/a9k-slot-cover@1
-      slot-4: cisco/a9k-slot-cover@1
-      slot-5: cisco/a9k-slot-cover@1
 gaps:
 - what: chassis-power-figure
   scope:
@@ -556,3 +445,114 @@ gaps:
     sibling ASR 9910, which has no bottom view at all, is the one still held at capability 2.
   wanted: a bottom elevation or a photograph of the underside. What is on this face between the
     rack rails remains unstated by every document in the intake
+groups:
+  slots:
+    term: Slot
+    role: traffic
+    index-origin: 0
+    physical-context: NetworkingDevice
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 1
+views:
+  front:
+    size: {w: 447.0, h: 619.51}
+    panel:
+      decor:
+        - {at: [20.0, 500.0], size: [300.0, 105.0], fill: '#3a3c3e', pattern: grille, vent: 60}
+      cutouts:
+        - {id: power-shelf, at: [16.0, 94.09], size: [46.0, 364.32], shape: rect}
+        - {id: esd, at: [352.0, 512.0], size: [5.0, 5.0], shape: circle}
+    silkscreen:
+      - {at: [39.48, 487.0], text: PS0, font-size: 6, anchor: middle}
+      - {at: [90.22, 487.0], text: RSP0, font-size: 6, anchor: middle, for: slot-0}
+      - {at: [132.29, 487.0], text: LC0, font-size: 6, anchor: middle, for: slot-1}
+      - {at: [177.3, 487.0], text: LC1, font-size: 6, anchor: middle, for: slot-2}
+      - {at: [220.38, 487.0], text: LC2, font-size: 6, anchor: middle, for: slot-3}
+      - {at: [264.77, 487.0], text: LC3, font-size: 6, anchor: middle, for: slot-4}
+      - {at: [308.97, 487.0], text: RSP1, font-size: 6, anchor: middle, for: slot-5}
+    components:
+      bays:
+        - {id: slot-0, at: [71.97, 74.55], size: {w: 42.67, h: 403.40}, opening: {w: 42.67, h: 364.32}, accepts: ['cisco/a9k-rsp880-lt-se@1', 'cisco/a9k-rsp880-lt-tr@1', 'cisco/a99-rsp-se@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0, default: cisco/a9k-slot-cover@1}
+        - {id: slot-1, at: [115.39, 74.55], size: {w: 42.67, h: 403.40}, opening: {w: 42.67, h: 364.32}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1, default: cisco/a9k-slot-cover@1}
+        - {id: slot-2, at: [158.81, 74.55], size: {w: 42.67, h: 403.40}, opening: {w: 42.67, h: 364.32}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2, default: cisco/a9k-slot-cover@1}
+        - {id: slot-3, at: [202.25, 74.55], size: {w: 42.67, h: 403.40}, opening: {w: 42.67, h: 364.32}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 3, default: cisco/a9k-slot-cover@1}
+        - {id: slot-4, at: [245.65, 74.55], size: {w: 42.67, h: 403.40}, opening: {w: 42.67, h: 364.32}, accepts: ['cisco/a9k-4x100ge@1', 'cisco/a9k-4hg-flex-se@1', 'cisco/a9k-4hg-flex-tr@1', 'cisco/a99-4hg-flex-se@1', 'cisco/a99-4hg-flex-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 4, default: cisco/a9k-slot-cover@1}
+        - {id: slot-5, at: [289.07, 74.55], size: {w: 42.67, h: 403.40}, opening: {w: 42.67, h: 364.32}, accepts: ['cisco/a9k-rsp880-lt-se@1', 'cisco/a9k-rsp880-lt-tr@1', 'cisco/a99-rsp-se@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 5, default: cisco/a9k-slot-cover@1}
+      placements:
+        - {id: esd-jack, ref: common/esd-jack@1, at: [351.5, 511.5], for: chassis, group: grounding, rel-pos: 0}
+    regions:
+      - {id: rsp-slots, label: 'RSP cards - the outer pair, slots 0 and 5'}
+      - {id: lc-slots, label: Line cards 0 to 3 - slots 1 to 4}
+      - {id: power-shelf-region, label: 'Power shelf PS0 - vertical, left of the cage, M0 to M2'}
+      - {id: fan-trays, label: 'Fan trays FT0 and FT1 - right of the cage, behind a door'}
+      - {id: front-air-intake, label: Front air intake - inlet at the bottom front}
+  rear:
+    size: {w: 447.0, h: 619.51}
+    regions:
+      - {id: fabric-cards, label: 'Fabric card cage - five fabric cards, numbering restarts at Slot 0'}
+      - {id: nebs-ground, label: 'NEBS bonding and grounding - bottom rear and left side'}
+  top:
+    size: {w: 447.0, h: 730.8}
+    panel:
+      decor:
+        - {at: [0, 601.85], size: [447.0, 3.9], fill: '#9a9c9e'}
+        - {at: [0, 488.85], size: [447.0, 3.9], fill: '#9a9c9e'}
+        - {at: [42.0, 29.0], size: [152.0, 93.0], fill: '#e8eaec'}
+        - {at: [42.0, 129.0], size: [155.0, 165.0], fill: '#d5d7d9'}
+    silkscreen:
+      - {at: [111.0, 650.0], text: cisco, font-size: 22, anchor: middle, for: chassis}
+    regions:
+      - {id: rack-mounting-surface, label: 'Rack mounting surface - the same plane the bottom face carries'}
+      - {id: regulatory-label, label: 'Regulatory and compliance label block'}
+      - {id: top-access-panel, label: 'Top access panel'}
+      - {id: cable-management-protrusion, label: 'Cable management system - protrudes 2.68 in (6.81 cm) beyond the front'}
+  bottom:
+    size: {w: 447.0, h: 730.8}
+    panel:
+      decor:
+        - {at: [0, 601.85], size: [447.0, 3.9], fill: '#9a9c9e'}
+        - {at: [0, 488.85], size: [447.0, 3.9], fill: '#9a9c9e'}
+    regions:
+      - {id: rack-mounting-surface, label: 'Rack mounting surface - 5.00 in (127.0 mm) and 9.45 in (240.0 mm) from the front'}
+  left:
+    size: {w: 730.8, h: 619.51}
+    panel:
+      decor:
+        - {at: [483.8, 40.0], size: [14.0, 540.0], fill: '#b0b2b4'}
+        - {at: [596.8, 40.0], size: [14.0, 540.0], fill: '#b0b2b4'}
+    regions:
+      - {id: rack-rails, label: 'Vertical rack rail locations - 5.00 in (127.0 mm) and 9.45 in (240.0 mm) from the front'}
+      - {id: lift-handles, label: 'Chassis lift handles - two per side, drawn in HIG Figure 17 but not dimensioned'}
+  right:
+    size: {w: 730.8, h: 619.51}
+    panel:
+      decor:
+        - {at: [120.0, 40.0], size: [14.0, 540.0], fill: '#b0b2b4'}
+        - {at: [233.0, 40.0], size: [14.0, 540.0], fill: '#b0b2b4'}
+    regions:
+      - {id: rack-rails, label: 'Vertical rack rail locations - 5.00 in (127.0 mm) and 9.45 in (240.0 mm) from the front'}
+      - {id: lift-handles, label: 'Chassis lift handles - two per side, drawn in HIG Figure 17 but not dimensioned'}
+configurations:
+  base:
+    kind: base
+    source: >-
+      derived - built from the group roles rather than from a vendor bundle: every bay
+      whose group is `service` or `management` keeps its seat, every `traffic` bay takes
+      a blank. This vendor publishes no base configuration for this chassis, so the
+      library defines one. Where a vendor DOES publish one, follow it instead and say so
+      here.
+    default: true
+    description: >-
+      Chassis only - what you spec before deciding what goes in it. The 6 slot bays are
+      EMPTY; nothing else is fitted. Enough to power on and reach the box, which is the
+      question most people ask first and the one `default` used to answer with whatever
+      the drawing happened to be populated with.
+    bays:
+      slot-0: cisco/a9k-slot-cover@1
+      slot-1: cisco/a9k-slot-cover@1
+      slot-2: cisco/a9k-slot-cover@1
+      slot-3: cisco/a9k-slot-cover@1
+      slot-4: cisco/a9k-slot-cover@1
+      slot-5: cisco/a9k-slot-cover@1

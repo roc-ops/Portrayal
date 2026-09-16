@@ -207,6 +207,53 @@ chassis:
   color: '#b4b7b9'
   edge: '#8f9396'
   silk: '#2b2d2f'
+gaps:
+- what: no-dimensioned-drawing
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    EVERY POSITION ON THIS FACE IS SCALED OFF A RENDER, not read off a drawing.
+    UfiSpace publishes no mechanical drawing for this card: the HIG carries five
+    renders and the datasheet is two pages whose only dimension line is the
+    overall 126.35 x 181.07 x 21.95. The scale is now anchored on the PCIe
+    bracket's governed 120.02 and corroborated by the registry's sfp-ganged
+    pitch, which is far better than the datasheet width it replaced - but three
+    figures agreeing to under 2 percent is corroboration, not measurement.
+    What a drawing would settle and this cannot - whether the connector opening
+    is the specification's 12.06 or something larger. The render cannot show it
+    because the cages fill the opening and their bezels cover the metal around
+    it, which is also why the bracket is not composed here yet.
+  wanted: >-
+    a dimensioned mechanical drawing of the N3100-4C faceplate from UfiSpace, or
+    a square-on photograph with a scale in frame
+- what: rear-edge-connector
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    Identity of the SFP-cage-like connector standing on the card's rear
+    edge near the left corner (visible in datasheet fig-0002 and HIG
+    fig-0003 angled renders, ~15 mm wide silver shell with a black
+    slot face). The interface list (GNSS SMA, 1PPS/10MHz SMB, 4x SFP28)
+    does not include it and no document names it; not drawn until
+    identified.
+- what: micro-usb-function
+  scope: [usb-mgmt]
+  reason: vendor-silent
+  wanted: >-
+    The function of the micro-USB receptacle on the left edge near the
+    faceplate (datasheet fig-0002) - likely a console/debug port, but no
+    document mentions it. Its position is also only estimated from an
+    angled render; a straight-on side drawing or a caliper would settle
+    both.
+- what: storage-temp
+  scope: [storage-temp-c]
+  reason: sources-disagree
+  wanted: >-
+    Storage temperature upper bound: the datasheet environmental table
+    says -40 to 70 C, the installation guide's requirements list says
+    -40 to 65 C - same measure, same scope, different value. The manifest
+    carries the datasheet 70; a vendor errata or newer revision would
+    settle it.
 groups:
   sfp28:
     term: Port
@@ -383,53 +430,6 @@ views:
     panel:
       decor:
       - {at: [0, 0], size: [126.35, 181.07], fill: '#1e5c2b'}
-gaps:
-- what: no-dimensioned-drawing
-  scope: [front]
-  reason: needs-drawing
-  note: >-
-    EVERY POSITION ON THIS FACE IS SCALED OFF A RENDER, not read off a drawing.
-    UfiSpace publishes no mechanical drawing for this card: the HIG carries five
-    renders and the datasheet is two pages whose only dimension line is the
-    overall 126.35 x 181.07 x 21.95. The scale is now anchored on the PCIe
-    bracket's governed 120.02 and corroborated by the registry's sfp-ganged
-    pitch, which is far better than the datasheet width it replaced - but three
-    figures agreeing to under 2 percent is corroboration, not measurement.
-    What a drawing would settle and this cannot - whether the connector opening
-    is the specification's 12.06 or something larger. The render cannot show it
-    because the cages fill the opening and their bezels cover the metal around
-    it, which is also why the bracket is not composed here yet.
-  wanted: >-
-    a dimensioned mechanical drawing of the N3100-4C faceplate from UfiSpace, or
-    a square-on photograph with a scale in frame
-- what: rear-edge-connector
-  scope: [rear]
-  reason: vendor-silent
-  wanted: >-
-    Identity of the SFP-cage-like connector standing on the card's rear
-    edge near the left corner (visible in datasheet fig-0002 and HIG
-    fig-0003 angled renders, ~15 mm wide silver shell with a black
-    slot face). The interface list (GNSS SMA, 1PPS/10MHz SMB, 4x SFP28)
-    does not include it and no document names it; not drawn until
-    identified.
-- what: micro-usb-function
-  scope: [usb-mgmt]
-  reason: vendor-silent
-  wanted: >-
-    The function of the micro-USB receptacle on the left edge near the
-    faceplate (datasheet fig-0002) - likely a console/debug port, but no
-    document mentions it. Its position is also only estimated from an
-    angled render; a straight-on side drawing or a caliper would settle
-    both.
-- what: storage-temp
-  scope: [storage-temp-c]
-  reason: sources-disagree
-  wanted: >-
-    Storage temperature upper bound: the datasheet environmental table
-    says -40 to 70 C, the installation guide's requirements list says
-    -40 to 65 C - same measure, same scope, different value. The manifest
-    carries the datasheet 70; a vendor errata or newer revision would
-    settle it.
 configurations:
   base:
     kind: base

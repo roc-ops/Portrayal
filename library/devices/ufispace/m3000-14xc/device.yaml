@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: m3000-14xc
-version: 2.0.6
+version: 2.0.7
 maturity: modelled
 manufacturer: UfiSpace
 model: M3000-14XC
@@ -231,6 +231,8 @@ chassis:
   depth: 250
   ru: 1
   weight-kg: 4.18
+  airflow: front-to-back
+
 gaps:
 - what: system-power-figure
   scope: [power-max-w]
@@ -601,11 +603,9 @@ configurations:
       orderable build, which is also the bare working chassis (the traffic cages
       ship empty and the fans are fixed)
     default: true
-    airflow: front-to-back
   ac:
     kind: orderable
     description: Dual 200W AC PSUs (PSU-201-AISB), front-to-back airflow
-    airflow: front-to-back
     bays:
       psu-0: ufispace/psu-201-ac@1
       psu-1: ufispace/psu-201-ac@1

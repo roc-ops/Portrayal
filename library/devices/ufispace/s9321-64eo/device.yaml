@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9321-64eo
-version: 1.0.5
+version: 1.0.6
 maturity: modelled
 manufacturer: UfiSpace
 model: S9321-64EO
@@ -302,6 +302,8 @@ chassis:
   ru: 2
   weight-kg: 23.74
   color: '#404244'
+  airflow: front-to-back
+
 gaps:
 - what: osfp-registry
   scope: [osfp-800g]
@@ -857,7 +859,6 @@ configurations:
       'Contact our sales team for current configuration options' - so the library defines
       one. The AC supply is the seat because the bay defaults name it.
     default: true
-    airflow: front-to-back
   ac:
     kind: orderable
     description: >-
@@ -865,7 +866,6 @@ configurations:
       offered fan type (FAN-808012-HCE). At 110 V each supply delivers only 1500 W and 1+1
       redundancy is lost (HIG note). No chassis SKU appears in any held document (see the
       chassis-sku gap)
-    airflow: front-to-back
     component-attrs:
       psu-302-ac:
         model: PSU-302-AESR
@@ -876,7 +876,6 @@ configurations:
     description: >-
       Dual 3000W DC PSUs (PSU-302-DESR, two-hole lug terminal block, -40 to -72 V, 150 A
       fast-acting internal fuse per the HIG DC procedure) with FAN-808012-HCE fans
-    airflow: front-to-back
     bays:
       psu-0: ufispace/psu-302-dc@1
       psu-1: ufispace/psu-302-dc@1
