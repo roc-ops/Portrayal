@@ -376,11 +376,20 @@ def iface_type(p, attrs, group_role=None):
     placements in the library, and typing those 1000base-t would put a timing
     input in a DCIM as a gigabit interface.
 
-    The eight exceptions are one device's Ethernet ports fitted on the bare part
-    (ReadyLinks GL-8xEP, group `gbe-poe`, media rj45 / speed 1g / PoE), so the
-    test is the group's role rather than the part alone: a bare RJ45 counts only
-    where the device itself calls the group `traffic`. Every timing and serial
-    jack in the library sits in a `management` group instead.
+    The exceptions are the devices that fit an Ethernet port on the bare part, so
+    the test is what the DEVICE says rather than the part alone. A bare RJ45
+    counts when either holds:
+
+      - its group's role is `traffic` - the ReadyLinks GL-8xEP's eight PoE ports,
+        group `gbe-poe`, media rj45 / speed 1g / PoE; or
+      - the device states an Ethernet SPEED for it. Exactly one placement in the
+        library does, the S9110-32X's out-of-band management jack at 100m-1g,
+        and all 64 timing and serial jacks state none - a ToD or BITS input has
+        no Ethernet speed to give. The port is modelled on the bare part BY
+        DESIGN, with its two lamps placed separately above the jack where a
+        photograph puts them and carrying the HIG's own state table; fitting the
+        `-eth` part instead would add two more lamps inside the jack, where the
+        hardware has none.
     """
     ref = p["ref"]
     # OSFP BEFORE SFP, AND THAT ORDER IS THE WHOLE POINT: "osfp" contains "sfp",
@@ -394,7 +403,8 @@ def iface_type(p, attrs, group_role=None):
            "sfp" if "sfp" in ref else None)
     if fam is None:
         return None
-    if fam == "rj45" and "-eth" not in ref and group_role != "traffic":
+    if (fam == "rj45" and "-eth" not in ref
+            and group_role != "traffic" and not attrs.get("speed")):
         return None
     if fam == "rj45" and attrs.get("role") == "mgmt":
         return "1000base-t"                    # a copper management port is 1G
