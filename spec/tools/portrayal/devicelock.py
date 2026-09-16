@@ -29,6 +29,8 @@ import sys
 
 import yaml
 
+import manifest
+
 LOCK_NAME = "devices.lock.json"
 FORMAT = 1
 
@@ -188,7 +190,7 @@ def component_versions(library: pathlib.Path):
         return out
     for ct in root.glob("*/*/v*/contract.yaml"):
         try:
-            doc = yaml.safe_load(ct.read_text()) or {}
+            doc = manifest.load_yaml(ct) or {}
         except Exception:
             continue
         vendor, name, major = ct.parts[-4], ct.parts[-3], ct.parts[-2]
@@ -491,7 +493,7 @@ def check(library: pathlib.Path):
     versions = component_versions(library)
     for path in device_files(library):
         name = slug(path, library)
-        doc = yaml.safe_load(path.read_text()) or {}
+        doc = manifest.load_yaml(path) or {}
         now = entry(doc, versions)
         was = known.get(name)
         if was is None:
@@ -568,7 +570,7 @@ def update(library: pathlib.Path):
     changed = []
     for path in device_files(library):
         name = slug(path, library)
-        doc = yaml.safe_load(path.read_text()) or {}
+        doc = manifest.load_yaml(path) or {}
         now = entry(doc, versions)
         if devices.get(name) != now:
             changed.append(name)
