@@ -56,14 +56,38 @@ from faces import face_ref
 # Portrayal media/speed -> DCIM interface type. Every value here is valid in
 # both libraries: NetBox's enum is a strict superset of Nautobot's (227 types
 # against 115) and there is nothing Nautobot accepts that NetBox does not.
+# THE CAGE FAMILY AND WHAT IT RUNS AT. Every entry below is corroborated by the
+# devices that place it - each one declares the cage in its own `media` attr, and
+# the speed decides which member of the family it is.
+#
+# 773 placements used to fall out of the exports for want of a row here, in the
+# same silence the `port-` prefix caused: 400 QSFP-DD at 800G, 192 OSFP at 800G,
+# 80 QSFP56, 72 SFP56. An absent row reads exactly like a port that does not
+# exist.
+#
+# NOT EVERY MISS IS A MISSING ROW. The MX304's GM/PTP port declares its speed as
+# "1g/10g (reserved for future use per the guide)" because that is what Juniper
+# says about it - a PTP grandmaster clock input in a `timing` group, unsupported.
+# It is right that it does not type. Do not add a row to make it.
 IFACE_TYPE = {
+    ("sfp", "50g"): "50gbase-x-sfp56",      # s9620-40dg, s9620-54dc: media sfp56
     ("sfp", "25g"): "25gbase-x-sfp28",
     ("sfp", "10g"): "10gbase-x-sfpp",
     ("sfp", "1g"): "1000base-x-sfp",
+    ("osfp", "800g"): "800gbase-x-osfp",    # s9321-64eo - the 'o' in the model
+    ("qsfp", "800g"): "800gbase-x-qsfpdd",  # every 800G qsfp here is std/qsfp-dd
     ("qsfp", "400g"): "400gbase-x-qsfpdd",
+    ("qsfp", "200g"): "200gbase-x-qsfp56",  # s9301-32db, s9601-104bc: media qsfp56
     ("qsfp", "100g"): "100gbase-x-qsfp28",
     ("qsfp", "40g"): "40gbase-x-qsfpp",
+    # XFP predates SFP+ and is nobody's substring, so the family test simply did
+    # not look for it and the MX80's ports never typed. PART_IFACE has spelled it
+    # this way all along for module ports; a test holds the two in step.
+    ("xfp", "10g"): "10gbase-x-xfp",
+    ("rj45", "10g"): "10gbase-t",
+    ("rj45", "2.5g"): "2.5gbase-t",
     ("rj45", "1g"): "1000base-t",
+    ("rj45", "100m-1g"): "1000base-t",      # a 10/100/1000 port is 1000base-t
 }
 AIRFLOW = {"front-to-back": "front-to-rear", "back-to-front": "rear-to-front"}
 
@@ -321,20 +345,64 @@ def breakout_note(breakout, n):
     return "; ".join(parts)[:200]
 
 
-def iface_type(p, attrs):
+# WHICH GROUPS HOLD PORTS. A group states its `role`, and that is the structural
+# answer to "is this placement a network interface" - the question the exporter
+# used to answer by asking whether the id started with `port-`.
+#
+# That spelling test dropped, in silence and with no rule anywhere to catch it:
+# every one of the S9710-76D's 76 ports, because they are `fab-N` and `svc-N`
+# (the export carried ZERO interfaces for a 76-port router); the ASR-9001's
+# `sfp-plus-N` and `cluster-N`; the MX104's and MX150's `xe-N`; and the MaiaEdge
+# Port Extender's eight 100G uplinks, which is how it was found. 271 ports on 13
+# devices.
+#
+# THE TWO SETS ARE EXHAUSTIVE OVER THE SCHEMA'S ENUM, and a test holds that. A
+# sixth role must be classified by whoever adds it rather than falling silently
+# to one side - which is the whole defect this replaced, one level up.
+PORT_ROLES = {"traffic", "management", "service"}
+NON_PORT_ROLES = {"indicator", "furniture"}
+
+
+def iface_type(p, attrs, group_role=None):
     """DCIM interface type for a port placement, or None when it cannot be
     known. Family from the cage ref, speed from the attrs; an unknown
-    combination is skipped rather than guessed."""
+    combination is skipped rather than guessed.
+
+    AN RJ45 IS NOT AUTOMATICALLY AN ETHERNET PORT, and this is the one family
+    where the ref alone cannot say. `common/rj45-eth@1` and its ganged sibling
+    are Ethernet jacks by name - that is the split docs/rj45-family-design.md
+    draws and L76 polices. The bare `std/rj45@2` housing carries ToD, BITS, PPS,
+    SYNC, an external reference clock, a console or an AUX port on 65 of the 73
+    placements in the library, and typing those 1000base-t would put a timing
+    input in a DCIM as a gigabit interface.
+
+    The eight exceptions are one device's Ethernet ports fitted on the bare part
+    (ReadyLinks GL-8xEP, group `gbe-poe`, media rj45 / speed 1g / PoE), so the
+    test is the group's role rather than the part alone: a bare RJ45 counts only
+    where the device itself calls the group `traffic`. Every timing and serial
+    jack in the library sits in a `management` group instead.
+    """
     ref = p["ref"]
-    fam = ("qsfp" if "qsfp" in ref else
+    # OSFP BEFORE SFP, AND THAT ORDER IS THE WHOLE POINT: "osfp" contains "sfp",
+    # so an OSFP cage read as an SFP one. It silently cost the S9321-64EO all 192
+    # of its 800G ports, and had any of them been declared at 25g it would have
+    # exported them as SFP28 instead - a wrong answer rather than a missing one.
+    fam = ("osfp" if "osfp" in ref else
+           "qsfp" if "qsfp" in ref else
            "rj45" if "rj45" in ref else
+           "xfp" if "xfp" in ref else
            "sfp" if "sfp" in ref else None)
     if fam is None:
         return None
+    if fam == "rj45" and "-eth" not in ref and group_role != "traffic":
+        return None
     if fam == "rj45" and attrs.get("role") == "mgmt":
         return "1000base-t"                    # a copper management port is 1G
-    speed = attrs.get("speed") or {"qsfp": "100g", "sfp": "25g", "rj45": "1g"}[fam]
-    return IFACE_TYPE.get((fam, speed))
+    # A DEFAULT IS A GUESS, so only the families that have a settled one carry it.
+    # An OSFP is 400G or 800G and nothing makes one likelier, so an OSFP that does
+    # not say its speed does not type - which is this function's own rule.
+    speed = attrs.get("speed") or {"qsfp": "100g", "sfp": "25g", "rj45": "1g"}.get(fam)
+    return IFACE_TYPE.get((fam, speed)) if speed else None
 
 
 def flatten(section, prefix=""):
@@ -545,6 +613,9 @@ def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
         g = dev_groups.get(p.get("group")) or {}
         return {**(g.get("attrs") or {}), **(p.get("attrs") or {})}
 
+    def group_role(p):
+        return (dev_groups.get(p.get("group")) or {}).get("role")
+
     # WHAT THE NOS CALLS EACH PORT comes from the overlay's `interfaces:` rules
     # and from nowhere else. None means no NOS: the document is the hardware's
     # own, and names its ports by the id on the faceplate.
@@ -595,20 +666,23 @@ def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
                     continue
                 name, breakout = names[pid]
             else:
-                if not pid.startswith("port-") or a.get("role") in ("mgmt", "console"):
+                if group_role(p) not in PORT_ROLES or a.get("role") in ("mgmt", "console"):
                     continue
                 name, breakout = pid, None
-            t = iface_type(p, a)
+            t = iface_type(p, a, group_role(p))
             if t is None:                      # unknown combination: skip, do not guess
                 continue
             iface = {"name": name, "type": t}
-            if a.get("role") == "mgmt":
+            # EITHER WAY OF SAYING IT COUNTS. `attrs.role: mgmt` is the per-port
+            # spelling; a group whose own role is `management` says the same
+            # thing about every port in it, and six devices only say it that way.
+            if a.get("role") == "mgmt" or group_role(p) == "management":
                 iface["mgmt_only"] = True
             if breakout:
                 iface["description"] = breakout_note(breakout, _num(pid.rsplit("-", 1)[-1]))
             # management first, then by faceplate number - the order a person
             # reads the front panel in
-            ports.setdefault(name, ((0 if a.get("role") == "mgmt" else 1),
+            ports.setdefault(name, ((0 if iface.get("mgmt_only") else 1),
                                     _num(pid.rsplit("-", 1)[-1]), iface))
 
     ifaces = ([i for _, _, i in sorted(ports.values(), key=lambda k: k[:2]) if i.get("mgmt_only")]
