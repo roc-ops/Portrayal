@@ -1,16 +1,22 @@
 format: 1
 kind: module
 name: mic-3d-8choc3-4choc12-v
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
 description: >-
   Juniper channelized SONET/SDH OC3/STM1 multirate MIC with SFP (eight ports). Vertical author for the vertical carriers (MX960/MX2000 MPCs stand on end, and their MICs with them).
 attrs:
+  oc3: 8
   model: MIC-3D-8CHOC3-4CHOC12
   power-draw-max-w: 52
 provenance:
+  sonet-rate: >-
+    the SONET rate, transcribed from this contract's own description: 'channelized SONET/SDH
+    OC3/STM1 multirate MIC with SFP (eight ports)'. Without it the SFP cage has no rate to
+    read and the export typed it Gigabit Ethernet, which an OC-3 port is not. Nothing new
+    was measured.
   size: 'registry + layout - the face is the slot geometry of its chassis
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate

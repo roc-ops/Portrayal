@@ -1,16 +1,27 @@
 format: 1
 kind: module
 name: mic-3d-8oc3oc12-4oc48
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
 description: >-
   Juniper SONET/SDH OC3/OC12 MIC with SFP (eight ports, four OC48-capable). MIC form (168 x 27 window; the earlier 31 mm reading was the bay opening with bezel - a MIC must seat inside the 29.5 mm MPC face, so the window is 27).
 attrs:
+  oc12: 8
   model: MIC-3D-8OC3OC12-4OC48
   power-draw-max-w: 29
 provenance:
+  sonet-rate: >-
+    the SONET rate, transcribed from this contract's own description: 'SONET/SDH OC3/OC12
+    MIC with SFP (eight ports, four OC48-capable)'. Without it the SFP cage has no rate to
+    read and the export typed it Gigabit Ethernet, which an OC-12 port is not. Nothing new
+    was measured. THE PORT'S RATED CAPABILITY, not the lowest mode it will run. This card
+    does OC-3 too, and the model number says so - but an SFP+ cage that takes a 1G optic is
+    typed 10G here for the same reason: `type` is what the port IS rated for. Where the
+    model offers FEWER ports at a HIGHER rate ("N OC48-capable"), that is an alternative
+    mode of the whole card and not a property of one cage, and the faceplate this draws is
+    the other mode - so every cage on it carries the same rate.
   size: 'registry + layout - the face is the slot geometry of its chassis
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
