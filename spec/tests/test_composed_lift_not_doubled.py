@@ -12,7 +12,7 @@ rewrote each dust cap's own 3.175 lift to 47.175, so relief.js summed 91.175
 against an `out` of 50.35 and built each cap as a box whose front face was 40mm
 BEHIND its back. They rendered as white spikes standing off the faceplate.
 
-It has a second shape, found by CodeRabbit on the fix's own PR and confirmed by
+It has a second shape, found in review on the fix's own PR and confirmed by
 seating the other occupant the A22 accepts: a module in a bay that carries a lift
 got the lift on its group and its own relief left panel-relative, so every
 feature on smartoptics/ppm-ad1-1510@1 went 40mm negative in the A22's raised
