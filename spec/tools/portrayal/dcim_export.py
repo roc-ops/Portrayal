@@ -148,6 +148,24 @@ FAMILY_ATTRS = {
 }
 
 
+def cage_family_needs_a_rate(ref, attrs):
+    """Is this cage about to be typed by the TABLE rather than by the card?
+
+    `cage_type` falls back to PART_IFACE when a card declares no media attr for
+    its cage's family, and that fallback is a default standing in for a fact.
+    1215 placements across 114 cards reached it, and at least seven cards were
+    typed wrong by it - `dpce-r-40ge-sfp` exported forty 10G interfaces on a
+    40x1GbE card (#267), `mic3-3d-2x40ge-qsfpp` two 100G on a 40GbE MIC, and
+    `roc-ops/Portrayal#23` is the same defect three years earlier. It returned because
+    nothing counted how often the default was reached.
+
+    L96 asks this question of every module; `export_modules` prints the count.
+    A family with no attrs to declare - XFP has one rate - is not a gap.
+    """
+    wants = FAMILY_ATTRS.get(CAGE_FAMILY.get(ref, ""), ())
+    return bool(wants) and not any(attrs.get(a) for a, _t in wants)
+
+
 def cage_type(ref, attrs):
     """The interface type for one cage on one card."""
     for attr, t in FAMILY_ATTRS.get(CAGE_FAMILY.get(ref, ""), ()):
@@ -964,11 +982,13 @@ def contract_view(entry):
             "optical": entry.get("optical") or {}}
 
 
-def build_module(contract, manufacturer, load_ref=None, dropped=None):
+def build_module(contract, manufacturer, load_ref=None, dropped=None,
+                 defaulted=None):
     """A module contract as a DCIM module type.
 
     `dropped` is an optional dict the caller passes in to be told which part
-    refs matched no branch, counted. See `export_modules`, which prints them.
+    refs matched no branch, counted. `defaulted` is the same for cages typed by
+    the table rather than by the card. See `export_modules`, which prints both.
     """
     load_ref = load_ref or (lambda _r: None)
     attrs = contract.get("attrs") or {}
@@ -1028,6 +1048,8 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None):
             # which is the part the type cannot express.
             ifaces.append({"name": pid or t, "type": t, "label": connector})
         elif ref in PART_IFACE:
+            if defaulted is not None and cage_family_needs_a_rate(ref, attrs):
+                defaulted[ref] = defaulted.get(ref, 0) + 1
             ifaces.append({"name": pid, "type": cage_type(ref, attrs)})
         elif dropped is not None:
             # THE else THIS CHAIN DID NOT HAVE. A part matching no branch fell
@@ -1316,6 +1338,7 @@ def export_modules(dist, root, images=None):
     skipped = 0
     imaged = set()
     dropped = {}
+    defaulted = {}
     # components.json in place of a glob over contracts, and devices.json in
     # place of one over manifests. The index carries `ns` on both sides, which is
     # what the namespace-to-manufacturer join needs and what a checkout used to
@@ -1326,8 +1349,8 @@ def export_modules(dist, root, images=None):
         if not man:
             skipped += 1
             continue
-        built.append((man, build_module(contract, man, dist.component_by_ref, dropped),
-                      contract))
+        built.append((man, build_module(contract, man, dist.component_by_ref, dropped,
+                                        defaulted), contract))
 
     groups = {}
     for man, doc, contract in built:
@@ -1416,6 +1439,15 @@ def export_modules(dist, root, images=None):
             first = next(f"{c.get('ns')}/{c.get('name')}"
                          for _d, c in groups[(man, model)][:1])
             print(f"    {man}/{model}: {ref} differs from {first}, not written")
+    # HOW MANY PORTS WERE TYPED BY THE TABLE AND NOT BY THE CARD. Cheap, and it
+    # is the line that would have made `dpce-r-40ge-sfp` findable: forty 10G
+    # interfaces on a 40x1GbE card, for want of `sfp: 40`. L96 names them one by
+    # one; this says how big the heap is without reading a lint run.
+    if defaulted:
+        print(f"cage rate from the table, not the card: {sum(defaulted.values())} "
+              f"placement(s) (L96 names them)")
+        for ref, n in sorted(defaulted.items(), key=lambda kv: (-kv[1], kv[0])):
+            print(f"    {n:5d}  {ref} -> {PART_IFACE.get(ref)}")
     if dropped:
         print(f"unclassified parts: {sum(dropped.values())} placement(s) across "
               f"{len(dropped)} ref(s) matched no branch in build_module")

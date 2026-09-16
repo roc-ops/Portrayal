@@ -1,17 +1,23 @@
 format: 1
 kind: module
 name: mic-3d-20ge-sfp
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
 description: >-
   Juniper Gigabit Ethernet MIC with SFP - twenty cages in two PIC groups of ten; the E and EH revisions share the faceplate. MIC form (168 x 27 window; the earlier 31 mm reading was the bay opening with bezel - a MIC must seat inside the 29.5 mm MPC face, so the window is 27).
 attrs:
+  sfp: 20
   model: MIC-3D-20GE-SFP
   model-variants: MIC-3D-20GE-SFP-E, MIC-3D-20GE-SFP-EH
   power-draw-max-w: 37
 provenance:
+  sfp-rate: >-
+    the cage RATE, transcribed from this contract's own description: 'Gigabit Ethernet MIC
+    with SFP - twenty cages in two PIC groups of ten'. Without it `cage_type` finds no media
+    attr for the sfp family and falls through to PART_IFACE's default, which is SFP+ at 10G
+    - a rate this card does not run. Nothing new was measured.
   size: 'registry + layout - the face is the slot geometry of its chassis
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate

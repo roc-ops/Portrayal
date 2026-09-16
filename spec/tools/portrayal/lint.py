@@ -103,6 +103,7 @@ import yaml
 
 import attrsections as attrs_mod
 import capability
+import dcim_export
 import devicelock
 import optical
 import optical_ports
@@ -232,6 +233,7 @@ RULES = {
     "L93": ("device",     "a provenance entry says how the figure is known, not only where it was read", "add `confidence:` beside the note, from the eight words in the confidence enum"),
     "L94": ("device",     "a `component-attrs` key names a component the device seats, or a placement or bay it declares", "fix the key; one that matches neither sets nothing and is silently ignored"),
     "L95": ("component",  "a power supply says where power enters it", "compose an inlet part, or add `attrs.inlet` from the enum - `none` if the chassis carries it"),
+    "L96": ("component",  "a module composing a pluggable cage says what rate it runs at", "add the media attr for that family - `sfp`, `sfp-plus`, `qsfp`, `qsfp28`, `qsfp-dd` - with the port count"),
 }
 
 
@@ -1162,6 +1164,54 @@ def lint_component_dc_capacity(path, data, _lib_roots=None):
          "provenance. If the vendor really publishes nothing, say `power-absent: "
          "not-published` and name the documents - that is an answer. "
          "`not-applicable` is not, for a part with no bays")
+
+
+def lint_component_cage_rate(path, data, _lib_roots=None):
+    """L96: a module composing a pluggable cage says what rate it runs at.
+
+    THE CAGE SAYS WHAT FITS; THE CARD SAYS WHAT RUNS. An SFP housing takes a 1G
+    optic and a 10G one, so the DCIM export reads the family from the cage ref
+    and the rate from a media attr on the card - and falls back to a per-cage
+    DEFAULT when the card declares none. That fallback is a default standing in
+    for a fact, and it was reached by 1215 placements across 114 cards with
+    nothing anywhere to say so.
+
+    IT HAS BEEN WRONG AT LEAST SEVEN TIMES. `dpce-r-40ge-sfp` exported forty 10G
+    interfaces on a card whose model number and description both say 40x1GbE;
+    `mic3-3d-2x40ge-qsfpp` exported two 100G ports on a 40GbE MIC; A9K-40GE-B
+    did the identical thing in roc-ops/Portrayal#23, three years earlier, and was fixed by
+    stating `sfp: 40`. It came back because nothing counted the fallback - which
+    is #294, and the shape docs/failure-by-omission.md is about.
+
+    A CENSUS WARNING of the L92/L93 kind: it fires on the day it lands and is
+    meant to shrink. Most of what it names is probably right - an SFP-ganged
+    strip on a modern line card usually is SFP+ - and "probably right" is
+    exactly what cannot be told from "wrong" without asking.
+
+    A FAMILY WITH NOTHING TO DECLARE IS NOT A GAP. XFP runs at one rate and
+    `FAMILY_ATTRS` gives it no attrs, so an XFP cage answers for itself and is
+    not counted here.
+    """
+    if data.get("kind") != "module":
+        return
+    attrs = attrs_mod.flatten(data.get("attrs"))
+    want = {}
+    for part in (data.get("parts") or []):
+        if not isinstance(part, dict) or "ref" not in part:
+            continue
+        ref = part["ref"].split("@")[0]
+        if dcim_export.cage_family_needs_a_rate(ref, attrs):
+            want[ref] = want.get(ref, 0) + 1
+    if not want:
+        return
+    for ref, n in sorted(want.items()):
+        fam = dcim_export.CAGE_FAMILY[ref]
+        names = ", ".join(f"`{a}`" for a, _t in dcim_export.FAMILY_ATTRS[fam])
+        warn(path, "L96", f"{n} x {ref} and nothing says what rate they run at, so "
+             f"the export types them {dcim_export.PART_IFACE.get(ref)} from the table. "
+             f"State {names} with the port count - the cage says what FITS and the "
+             "card says what RUNS, and a default that is right is indistinguishable "
+             "from one that is not")
 
 
 def lint_component_inlet(path, data, _lib_roots=None):
@@ -6940,6 +6990,7 @@ def main():
                 lint_component_power(f, d)
                 lint_component_dc_capacity(f, d)
                 lint_component_inlet(f, d, args.library)
+                lint_component_cage_rate(f, d)
                 lint_component_size_sourced(f, d)
                 lint_component_role(f, d)
                 lint_component_forwarded_mate(f, d, args.library)

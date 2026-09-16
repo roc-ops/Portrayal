@@ -46,7 +46,7 @@ It has now been seen seven times in this repository, which is why it has a page:
 | `lint` PLUGGABLE_CAGES | `sfp56` - two devices L40 never asked, found by this sweep |
 | `expand.py --check` | a generator nobody ran (#168) |
 | `dcim_export --modules` | 55 module types overwritten by model collision (#267) |
-| `cage_type` fallback | 1215 cage placements typed by a table default, one of them wrong (#294) |
+| `cage_type` fallback | 1215 cage placements typed by a table default, seven cards wrong (#294) |
 
 ## The method
 

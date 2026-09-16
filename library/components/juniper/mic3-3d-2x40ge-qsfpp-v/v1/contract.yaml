@@ -1,16 +1,22 @@
 format: 1
 kind: module
 name: mic3-3d-2x40ge-qsfpp-v
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
 description: >-
   Juniper 40GbE MIC3 with QSFP+ (two ports). Vertical author for the vertical carriers (MX960/MX2000 MPCs stand on end, and their MICs with them).
 attrs:
+  qsfp: 2
   model: MIC3-3D-2X40GE-QSFPP
   power-draw-max-w: 18
 provenance:
+  qsfp-rate: >-
+    the cage RATE, transcribed from this contract's own description: '40GbE MIC3 with QSFP+
+    (two ports)'. Without it `cage_type` finds no media attr for the qsfp family and falls
+    through to PART_IFACE's default, which is QSFP28 at 100G - a rate this card does not
+    run. Nothing new was measured.
   size: 'registry + layout - the face is the slot geometry of its chassis
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
