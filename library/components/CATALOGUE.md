@@ -140,8 +140,8 @@ aperture when it is a bare opening - never both at one position. The README's
 | `casa/blank-faceplate@1` | module | blank | 30.47 × 345.5 × 20 |  | 2 | 0 | Casa blank face plate for an unpopulated C100G or C40G card slot |
 | `casa/brand-swoop@1` | component | marking | 258.3 × 40.5 × 1 |  | 1 | 0 | The curved moulding on the C100G front bezel, between the casa systems mark and the model name |
 | `casa/c40g-ac-inlet-panel@1` | module | inlet | 349.2 × 68.5 × 20 |  | 1 | 0 | Casa C40G AC input panel - the bolted panel across the bottom of the REAR face on an AC chassis, where a DC c… |
-| `casa/c40g-fan@1` | module | cooling | 34.7 × 205 × 380 |  | 1 | 0 | Casa C40G system fan module, RIGHT-hand position |
-| `casa/c40g-fan-left@1` | module | cooling | 34.7 × 205 × 380 |  | 1 | 1 | Casa C40G LEFT fan module - the secondary position, and the one that carries the slot numbering |
+| `casa/c40g-fan@1` | module | fan | 34.7 × 205 × 380 |  | 1 | 0 | Casa C40G system fan module, RIGHT-hand position |
+| `casa/c40g-fan-left@1` | module | fan | 34.7 × 205 × 380 |  | 1 | 1 | Casa C40G LEFT fan module - the secondary position, and the one that carries the slot numbering |
 | `casa/c40g-ground-studs@1` | component | ground | 27.6 × 27.6 |  | 1 | 0 | Casa C40G shelf ground terminal - the grounding landing in the left strip of the rear face, near the bottom |
 | `casa/c40g-pem@1` | module | power | 158 × 68.5 × 200 |  | 1 | 0 | Casa C40G DC power entry module |
 | `casa/c40g-psu-ac@1` | module | psu | 81 × 38.2 × 300 |  | 1 | 1 | Casa C40G AC power supply unit, 1100 W |
@@ -152,7 +152,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `casa/ds-8x192@1` | module | line-card | 30.47 × 345.5 × 380 |  | 2 | 0 | Casa DS 8X192 downstream line card for the C100G/C40G CCAP chassis |
 | `casa/ds-8x8@1` | module | line-card | 30.47 × 345.5 × 380 |  | 2 | 0 | Casa DS 8X8 downstream line card for the C100G/C40G CCAP chassis |
 | `casa/ds-8x96@1` | module | line-card | 30.47 × 345.5 × 380 |  | 2 | 0 | Casa DS 8X96 downstream line card for the C100G/C40G CCAP chassis |
-| `casa/fan@1` | module | cooling | 137.25 × 91.2 × 150 |  | 1 | 0 | Casa C100G fan assembly module |
+| `casa/fan@1` | module | fan | 137.25 × 91.2 × 150 |  | 1 | 0 | Casa C100G fan assembly module |
 | `casa/ground-bolts@1` | component | mechanical | 27.6 × 11.3 |  | 2 | 2 | Casa C100G rear grounding lug landing |
 | `casa/ground-strap@1` | component | ground | 15 × 7.9 |  | 1 | 0 | Casa C100G ESD strap receptacle |
 | `casa/io-6p12@2` | module | line-card | 30.47 × 345.5 × 380 |  | 2 | 3 | Casa 6+12 I/O module - the rear half of a BDM position, carrying six downstream (D0-D5) and twelve upstream (… |
@@ -280,12 +280,12 @@ aperture when it is a bare opening - never both at one position. The README's
 | `cisco/a9k-sip-700@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 SIP-700 SPA Interface Processor with 4 GB of memory |
 | `cisco/a9k-sip-700-8g@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 SIP-700 SPA Interface Processor with 8 GB of memory |
 | `cisco/a9k-slot-cover@1` | module | blank | 41.4 × 395.7 × 25 |  | 7 | 0 | Line card and RSP/RP blank filler for a Cisco ASR 9000 modular chassis |
-| `cisco/asr-9001-fan@1` | module | cooling | 54.76 × 88.19 |  | 1 | 0 | Cisco ASR 9001 fan module |
-| `cisco/asr-9006-fan@1` | module | cooling | 175.65 × 70.97 |  | 0 | 0 | Cisco ASR 9006 Router fan tray |
-| `cisco/asr-9010-fan@1` | module | cooling | 444.25 × 33.32 |  | 1 | 0 | Cisco ASR 9010 Router fan tray |
-| `cisco/asr-9910-fan@1` | module | cooling | 447.09 × 41.07 |  | 1 | 0 | Cisco ASR 9910 Router fan tray |
+| `cisco/asr-9001-fan@1` | module | fan | 54.76 × 88.19 |  | 1 | 0 | Cisco ASR 9001 fan module |
+| `cisco/asr-9006-fan@1` | module | fan | 175.65 × 70.97 |  | 0 | 0 | Cisco ASR 9006 Router fan tray |
+| `cisco/asr-9010-fan@1` | module | fan | 444.25 × 33.32 |  | 1 | 0 | Cisco ASR 9010 Router fan tray |
+| `cisco/asr-9910-fan@1` | module | fan | 447.09 × 41.07 |  | 1 | 0 | Cisco ASR 9910 Router fan tray |
 | `cisco/asr-9912-sfc110@1` | module | fabric | 41.4 × 395.7 |  | 1 | 0 | Cisco ASR 9912 Router Switch Fabric Card, first generation |
-| `cisco/asr-9922-fan-v3@1` | module | cooling | 475.95 × 38.1 × 584.2 |  | 1 | 0 | Cisco ASR 9922 Router fan tray, version 3 |
+| `cisco/asr-9922-fan-v3@1` | module | fan | 475.95 × 38.1 × 584.2 |  | 1 | 0 | Cisco ASR 9922 Router fan tray, version 3 |
 | `cisco/asr-9922-rp-se@1` | module | supervisor | 46 × 428.5 × 628.9 |  | 2 | 0 | Cisco ASR 9900 Route Processor, Service Edge optimised, for the ASR 9922 and ASR 9912 |
 | `cisco/asr-9922-rp-tr@1` | module | supervisor | 46 × 428.5 × 628.9 |  | 2 | 0 | Cisco ASR 9900 Route Processor, Packet Transport optimised, for the ASR 9922 and ASR 9912 |
 | `cisco/asr-9922-sfc110@1` | module | fabric | 41.4 × 395.7 |  | 1 | 0 | Cisco ASR 9922 Router Switch Fabric Card, first generation |
@@ -324,8 +324,8 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/bezel-2u-14g@1` | module | bezel | 434 × 82.35 × 23.3 |  | 1 | 0 | The optional metal front bezel for a 2U 14th-generation PowerEdge - a honeycomb of large hexagonal openings b… |
 | `dell/control-panel-grid-14g@1` | component | silkscreen | 8.39 × 4.91 |  | 1 | 0 | The small grid of squares moulded into a 14th-generation PowerEdge right control panel, between the two USB p… |
 | `dell/control-panel-left-14g@1` | module | control-panel | 11.59 × 30 × 22.8 |  | 1 | 0 | Left control panel of a 14th-generation PowerEdge - five status glyphs that are themselves lamps, the system … |
-| `dell/dc-terminal-6ryj9@1` | component | connector | 31 × 27.5 × 12 |  | 0 | 1 | The -48 V DC input receptacle on a 14th-generation PowerEdge power supply - two bladed openings taking Dell p… |
-| `dell/fan-14g@1` | module | cooling | 63.6 × 46.2 × 74.6 |  | 1 | 1 | A hot-swap cooling fan of a 2U 14G PowerEdge seen from above - the block that lifts straight out of the fan c… |
+| `dell/dc-terminal-6ryj9@1` | component | inlet | 31 × 27.5 × 12 |  | 0 | 1 | The -48 V DC input receptacle on a 14th-generation PowerEdge power supply - two bladed openings taking Dell p… |
+| `dell/fan-14g@1` | module | fan | 63.6 × 46.2 × 74.6 |  | 1 | 1 | A hot-swap cooling fan of a 2U 14G PowerEdge seen from above - the block that lifts straight out of the fan c… |
 | `dell/fan-cage-14g@1` | component | mechanical | 408.9 × 71.5 × 78.08 |  | 1 | 1 | The cooling fan cage of a 14G PowerEdge seen from above - the frame across the full width of the chassis, bet… |
 | `dell/heatsink-1u-14g@1` | component | mechanical | 82.2 × 128.1 |  | 1 | 1 | The 1U processor heatsink of a 14G PowerEdge seen from above - a finned block the width of the socket, one pe… |
 | `dell/idrac-direct-symbol@1` | component | silkscreen | 3.8 × 3.8 |  | 1 | 0 | The wrench Dell prints beside an iDRAC Direct micro USB port - the mark that says this socket reaches the ser… |
@@ -389,7 +389,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `edgecore/agr-label-caution@1` | component | sticker | 26 × 62 |  | 2 | 1 | Caution label near the rear left of the top cover on the Edgecore AGR400 / AGR420 |
 | `edgecore/agr-label-serial@1` | component | sticker | 74 × 100 |  | 2 | 0 | Serial number, SKU and MAC label on the top cover on the Edgecore AGR400 / AGR420 |
 | `edgecore/agr-label-spec@1` | component | sticker | 74 × 88 |  | 2 | 24 | Regulatory and specification label on the top cover on the Edgecore AGR400 / AGR420 |
-| `edgecore/agr-panel-screw@1` | component | fastener | 8.4 × 8.4 × 3 |  | 1 | 90 | Captive slotted thumb screw at each corner of the Edgecore AGR400 / AGR420 front panel, holding the rack flan… |
+| `edgecore/agr-panel-screw@1` | component | screw | 8.4 × 8.4 × 3 |  | 1 | 90 | Captive slotted thumb screw at each corner of the Edgecore AGR400 / AGR420 front panel, holding the rack flan… |
 | `edgecore/agr-psu-ac@1` | module | psu | 60.1 × 37.6 × 360.7 |  | 2 | 0 | AC-DC hot-swappable PSU for the Edgecore AGR400 (AS7946-30XB) and AGR420 (AS7946-74XKSB) |
 | `edgecore/agr-psu-dc@1` | module | psu | 60.1 × 37.6 × 360.7 |  | 2 | 87 | DC-DC hot-swappable PSU for the Edgecore AGR400 (AS7946-30XB) and AGR420 (AS7946-74XKSB) |
 | `edgecore/agr420-filter-bottom@1` | module | filter | 399.5 × 9 × 12 |  | 1 | 0 | Removable BOTTOM air filter for the Edgecore AGR420 (AS7946-74XKSB) - the full-width band of it |
@@ -545,7 +545,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `juniper/mx2000-cb-re-128g-v@1` | module | supervisor | 55 × 405 |  | 2 | 0 | Juniper MX2000 Control Board and Routing Engine (CB-RE) - a combined vertical FRU, one at each end of the upp… |
 | `juniper/mx2000-cb-re-1800-v@1` | module | supervisor | 55 × 405 |  | 2 | 0 | Juniper MX2000 Control Board and Routing Engine (CB-RE) - a combined vertical FRU, one at each end of the upp… |
 | `juniper/mx2000-cb-re-v@1` | module | supervisor | 55 × 405 |  | 2 | 0 | Juniper MX2000 Control Board and Routing Engine (CB-RE) - a combined vertical FRU, one at each end of the upp… |
-| `juniper/mx2000-craft@1` | module | panel | 440 × 95 |  | 3 | 0 | Juniper MX2000 craft interface - the status panel at the top of the MX2010/MX2020 front: SFB 0-7 and CB-RE la… |
+| `juniper/mx2000-craft@1` | module | display | 440 × 95 |  | 3 | 0 | Juniper MX2000 craft interface - the status panel at the top of the MX2010/MX2020 front: SFB 0-7 and CB-RE la… |
 | `juniper/mx2000-mpc-blank-v@1` | module | blank | 41 × 425 |  | 3 | 0 | Juniper MX2000 lower-cage slot blank cover |
 | `juniper/mx2000-psm-dc-v@1` | module | psu | 44 × 430 |  | 3 | 0 | Juniper MX2000 DC power supply module (PSM) - nine stand side by side in the rear power cage between the two … |
 | `juniper/mx2000-sfb-v@1` | module | fabric | 40 × 405 |  | 2 | 0 | Juniper MX2000 Switch Fabric Board (SFB/SFB2/SFB3) - eight stand in the centre of the upper cage between the … |
@@ -578,7 +578,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `juniper/mx80-psu-ac@1` | module | psu | 72 × 44 |  | 1 | 0 | Juniper MX5/MX10/MX40/MX80 AC power supply - two side-by-side at the front lower left (PS 0 and PS 1), 1+1 re… |
 | `juniper/mx80-rear-cover@1` | module | blank | 170 × 32 |  | 1 | 0 | Juniper MX80 rear service cover - the silver plate over the rear aperture labelled MPC 0 / MIC 1 on the chass… |
 | `juniper/mx960-blank-v@1` | module | blank | 30.1 × 405 |  | 1 | 0 | Juniper MX960 vertical slot blank cover |
-| `juniper/mx960-craft@1` | module | panel | 441 × 48 |  | 1 | 0 | Juniper MX960 craft interface - the full-width status panel above the card cage |
+| `juniper/mx960-craft@1` | module | display | 441 × 48 |  | 1 | 0 | Juniper MX960 craft interface - the full-width status panel above the card cage |
 | `juniper/mx960-psu-ac@1` | module | psu | 103 × 480 |  | 1 | 0 | Juniper MX960 AC power supply - four tall units fill the rear card cage below the inlet strip (the C20 inlets… |
 | `juniper/re-s-1300@1` | module | supervisor | 261.8 × 27.5 |  | 0 | 2 | Juniper RE-S-1300 Routing Engine (RE-S-1300-2048, EOL) as photographed in the MX240's SCB-MX bays |
 | `juniper/re-s-1300-v@1` | module | supervisor | 27 × 262 |  | 0 | 1 | Juniper RE-S-1300 Routing Engine as seated in the MX960's vertical SCB - the same FRU the MX240/MX480 carry h… |

@@ -139,8 +139,17 @@ connection-points:
 skins: [default]
 ```
 
-Required keys are `format`, `kind`, `name`, `version`, `class`, `size`. The
-rest earns its place:
+Required keys are `format`, `kind`, `name`, `version`, `class`, `size`.
+
+`class` comes from a closed vocabulary, and it lives in
+[`spec/schemas/power-roles.yaml`](../../spec/schemas/power-roles.yaml) rather
+than in the schema - one list, in the file lint actually reads, sorted into the
+three power roles. L51 refuses a class that appears in no role, which is how a
+class invented today gets its power question asked today. Synonyms are merged
+rather than admitted: `cooling` is `fan`, `fastener` is `screw`, `panel` is
+`display`, `connector` is `inlet`.
+
+The rest earns its place:
 
 - `conforms` for anything in `std/`; lint (L9) refuses a size that disagrees
   with the registry.
@@ -160,7 +169,13 @@ rest earns its place:
   something does, so a stale one cannot accumulate. Do not add it to a part that
   IS used; and do not reach for it to silence the rule on a part you could seat
   in the same afternoon.
-- `provenance` with one entry per figure you state. The confidence words are
+- `provenance` with one entry per figure you state, **keyed by the figure, not
+  by a headline for the note**. The core keys are `size` (the face dimensions,
+  asked for by L92), `depth`, `power` (L52) and `relief` (L35/L36); a figure
+  needing its own note takes a key starting with the core one - `size-width`,
+  `power-output` - so it still answers when a rule asks. A finding about
+  something no figure holds is welcome under its own name; it adds to the core
+  keys rather than replacing one. The confidence words are
   `datasheet`, `drawing`, `measured`, `photo-measured`, `registry`,
   `borrowed`, `estimated`, `known-wrong`; `borrowed` must name the part the
   figure came from. (Older `std/` contracts, the real `qsfp28` among them, say

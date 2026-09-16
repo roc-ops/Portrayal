@@ -228,6 +228,7 @@ RULES = {
     "L89": ("library",    "every component major is reachable from a device, or says why it is not", "seat it in a device or in a seated part's bay, or add `unplaced:` saying what would seat it and what is missing"),
     "L90": ("device",     "a manifest's top-level keys read in the canonical order", "reorder them; the message prints the order, and docs/device-template.yaml is written in it"),
     "L91": ("device",     "airflow is stated once - on the chassis, and on a configuration only where it differs", "move it to `chassis.airflow`, or drop the configuration's copy"),
+    "L92": ("component",  "a part's size says where it came from", "add a `size:` provenance note; the key for a size is `size`, not a sentence about it"),
 }
 
 
@@ -1058,6 +1059,48 @@ def lint_component_role(path, data, _lib_roots=None):
                       "its silence is indistinguishable from a part that draws nothing - "
                       "which is how a chassis total quietly became a floor. Add it to "
                       "the role it belongs in")
+
+
+def lint_component_size_sourced(path, data, _lib_roots=None):
+    """L92: a part's size says where it came from.
+
+    Every figure in this library is supposed to name its source, and `size` is
+    the figure everything else is built on - a cutout is derived from it, a bay
+    is sized to it, a pitch is measured across it. It was also the one figure no
+    rule asked about. 41 of 584 contracts stated a size and had no note named
+    for it.
+
+    THIRTEEN OF THOSE FORTY-ONE HAD THE NOTE AND NOT THE NAME, under `extent`,
+    `face`, `geometry` or `overall`, which is the vocabulary half of #173: with
+    579 distinct provenance keys across 584 contracts - 495 of them used fewer
+    than five times, some of them whole sentences like
+    `adjacent-brackets-overlap-by-1.27-on-purpose` - a rule cannot ask whether a
+    figure is sourced, because the key is prose. The same problem forced L52 to
+    accept "any power-named key" after it convicted eighteen contracts that had
+    done the work. Those thirteen are renamed; the key for a size is `size`.
+
+    THE OTHER TWENTY-SEVEN REALLY DO NOT SAY. `dell/riser-1a-14g` is 107.59 x
+    62.0 and carries eight provenance notes, none of which is about where those
+    two numbers came from - they cover the body boxes, the slot numbering, the
+    electrical facts and why adjacent brackets overlap. Fourteen Dell risers,
+    six Casa parts and four ground plates are in that position.
+
+    A WARNING AND NOT AN ERROR, like L27 next door: it fires on the day it lands
+    and is meant to shrink, and the figure being unsourced is a fact about the
+    library rather than a mistake in the contract in front of you. An axis that
+    needs its own note keeps one - `size-width`, `size-depth` - and counts.
+    """
+    if not data.get("size"):
+        return
+    prov = data.get("provenance") or {}
+    if not isinstance(prov, dict):
+        return
+    if any(k == "size" or k.startswith("size") for k in prov):
+        return
+    warn(path, "L92", "states a size and no provenance key names it. The key for a "
+                      f"size is `size` (it carries {', '.join(sorted(prov)[:4]) or 'none'}"
+                      "); if the figure has no source, say so there in the words the "
+                      "library uses - estimated, borrowed, known-wrong")
 
 
 def lint_component_dc_capacity(path, data, _lib_roots=None):
@@ -6721,6 +6764,7 @@ def main():
                 lint_component_aperture(f, d, args.library)
                 lint_component_power(f, d)
                 lint_component_dc_capacity(f, d)
+                lint_component_size_sourced(f, d)
                 lint_component_role(f, d)
                 lint_component_forwarded_mate(f, d, args.library)
                 lint_component_relief_confidence(f, d, args.library)

@@ -40,7 +40,7 @@
   },
   "class": {
    "$ref": "#/$defs/segment",
-   "description": "core/profile class identity, e.g. port, psu, fan, blank"
+   "description": "WHAT KIND OF PART THIS IS, from a closed vocabulary that lives in spec/schemas/power-roles.yaml - not repeated here as an enum, because the same list in two files drifts and only one of them would be the one lint reads. Every class sits in exactly one power role there, and L51 refuses a class that sits in none: that is how a class invented today gets its power question asked today rather than by a totalling tool falling over months later. The vocabulary is deliberately small and synonyms are merged rather than admitted - `cooling` became `fan`, `fastener` became `screw`, `panel` became `display` and `connector` became `inlet` in #173, because each pair was one kind of part split by who happened to model it."
   },
   "profile": {
    "$ref": "#/$defs/segment"
@@ -886,9 +886,10 @@
   },
   "provenance": {
    "type": "object",
+   "description": "WHERE EACH FIGURE CAME FROM, keyed by the figure it explains. THE KEY IS A FIELD NAME, NOT A HEADLINE FOR THE NOTE. That distinction is the whole difference between a block a rule can ask questions of and one it can only read: the library reached 579 distinct keys across 584 contracts, 495 of them used fewer than five times and some of them whole sentences, and the cost was that L52 had to be loosened to accept `any power-named key` after convicting eighteen contracts that had done the work, while nothing could ask about `size` at all. The core keys are `size` for the face dimensions (L92), `depth` for the third axis, `power` for a wattage (L52) and `relief` for a raised or recessed magnitude (L35, L36). An axis or a figure that needs its own note takes a key that STARTS with the core one - `size-width`, `power-output` - so it still answers the question the core key is asked. A finding that explains something no figure holds is welcome under a name of its own; it is an addition to the core keys, never a substitute for one.",
    "additionalProperties": {
     "type": "string",
-    "description": "field name -> source, e.g. 'datasheet \u00a7Physical', 'photo-measured', 'measured', 'estimated'"
+    "description": "the source, in the words this library uses: datasheet, drawing, measured, photo-measured, registry, borrowed (naming the part the figure came from), estimated, known-wrong"
    }
   },
   "confidence": {

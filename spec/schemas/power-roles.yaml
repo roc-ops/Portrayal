@@ -35,16 +35,21 @@ roles:
     # are counted. Leaving them out made a C100G's coverage report short by
     # three modules in its denominator.
     - switch
+    # `cooling` merged into `fan` (#173). Nine parts carried it - the Casa and
+    # Cisco fan trays and Dell's fan module - and every description said fan
+    # tray, fan module or fan assembly. The split was by who modelled the part,
+    # not by what the part is, and `comparable.py` already had to paper over it
+    # with FAN_WORDS = ("fan", "cooling").
     - fan
-    - cooling
     - transceiver
-    # THE CRAFT INTERFACE, AND THE REASON THIS FILE EXISTS. `panel` and
-    # `display` carry the MX craft interfaces - an LCD, buttons, alarm lamps and
-    # a processor behind them. They were in no set, so L27 never asked, so every
+    # THE CRAFT INTERFACE, AND THE REASON THIS FILE EXISTS. `display` carries the
+    # MX craft interfaces - an LCD, buttons, alarm lamps and a processor behind
+    # them. It used to carry only two of the four: the MX240's and MX480's were
+    # `display` and the MX2000's and MX960's were `panel`, one kind of part under
+    # two names, which #173 merged into `display`. They were in no set, so L27 never asked, so every
     # craft contract is silent, so the totalling tool that stopped at "I don't
     # know how much the craft interface uses" was reading a silence nothing had
     # ever demanded be filled. That is a class-set omission, not a missing token.
-    - panel
     - display
     # a control panel is lamps, buttons and a flex cable to the board. It draws
     # little and no document held here says how little - which is exactly the
@@ -89,12 +94,12 @@ roles:
     - ground
     - mechanical
     - mount
-    - fastener
+    # `fastener` merged into `screw` (#173): its one part was a captive slotted
+    # thumb screw, which is what `screw` already held.
     - screw
     - latch
     - ear
     - tab
-    - panel-blank
     # a PCIe I/O bracket is 20 GA steel and nothing else - the CARD behind it
     # draws, and the card is a different part.
     - bracket
@@ -110,14 +115,12 @@ roles:
     # connectors and cages. A cage is a hole with a bezel; the OPTIC in it
     # draws, and `transceiver` is a draw class for exactly that reason.
     - port
+    # A terminal block is the same argument as an appliance inlet at the other
+    # polarity: dell/dc-terminal-6ryj9 is two bladed openings and a ground stud,
+    # and the SUPPLY behind it is what draws. It had a class of its own,
+    # `connector`, until #173 read that argument back and merged it here - a
+    # note saying "the same argument as `inlet`" is a note saying it IS one.
     - inlet
-    # A terminal block is the same argument as `inlet` at the other polarity:
-    # dell/dc-terminal-6ryj9 is two bladed openings and a ground stud, and the
-    # SUPPLY behind it is what draws. It arrived with the -48 V DC supply and
-    # was the only class in the library sorted into no role at all, which is
-    # exactly the silence this file exists to prevent - a class nobody asks for
-    # a figure is indistinguishable from a part that draws nothing.
-    - connector
     # A button is a switch contact. An indicator's draw sits inside the figure
     # of the card that lights it, and at hundredths of a watt it is below the
     # resolution of every published figure in the corpus - counting them

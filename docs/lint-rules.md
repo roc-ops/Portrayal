@@ -98,3 +98,4 @@ a test fails when this page and the linter disagree. A finding prints as
 | L89 | library | every component major is reachable from a device, or says why it is not | seat it in a device or in a seated part's bay, or add `unplaced:` saying what would seat it and what is missing |
 | L90 | device | a manifest's top-level keys read in the canonical order | reorder them; the message prints the order, and docs/device-template.yaml is written in it |
 | L91 | device | airflow is stated once - on the chassis, and on a configuration only where it differs | move it to `chassis.airflow`, or drop the configuration's copy |
+| L92 | component | a part's size says where it came from | add a `size:` provenance note; the key for a size is `size`, not a sentence about it |
