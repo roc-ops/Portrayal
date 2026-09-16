@@ -88,6 +88,8 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
   L76 device: an Ethernet RJ45 is a lamped part and a console or timing RJ45 is
       a bare one - counted, so the two-component convention cannot grow back
       (census; see docs/rj45-family-design.md)
+  L89 library: a component major no device reaches carries `unplaced:` saying
+      what would seat it - and a part that IS reached does not still carry one
 """
 import argparse
 import json
@@ -223,6 +225,7 @@ RULES = {
     "L86": ("component",  "a module composing a connector the enum spells two ways states its polish", "add `optical.polish: upc` or `apc`, and say in provenance where it came from"),
     "L87": ("component",  "a module naming what its rear IS has a rear face to name", "add `faces.rear`, or drop `optical.rear-kind`"),
     "L88": ("component",  "a fibre face with more than one row of connectors states its own front numbering", "add `optical.front-order` listing the fibre part ids in the vendor's printed order"),
+    "L89": ("library",    "every component major is reachable from a device, or says why it is not", "seat it in a device or in a seated part's bay, or add `unplaced:` saying what would seat it and what is missing"),
 }
 
 
@@ -4098,6 +4101,136 @@ def lint_vendor_registry(root):
                     "which is not itself a vendor in the registry")
 
 
+# A ref is a whole string or it is prose. `ufispace/psu-120-ac@1` appears inside
+# a sentence on the S9502 explaining why that device does NOT place it, and a
+# substring search would have read that explanation as a use - turning the one
+# part whose absence is best documented into the one part that looked seated.
+MAJOR_REF = re.compile(r"^[a-z0-9_-]+/[a-z0-9._-]+@[0-9]+$")
+
+
+def _ref_strings(node):
+    """Every string in a parsed manifest that IS a component ref.
+
+    Deliberately not a list of the keys a ref may appear under. That list is
+    already written twice in this repository - `component_refs` for devices,
+    `_inputs` for the renderer - and BOTH of them stop at a contract's `parts`,
+    so neither sees the sixteen MIC twins that `mpc1e-3d-v960` names in a bay.
+    A rule that decides whether a part may be DELETED cannot afford that shape
+    of miss, and the failure modes are not symmetric: reading one string too
+    many leaves a dead part alive, reading one too few deletes a live one.
+    """
+    if isinstance(node, str):
+        if MAJOR_REF.match(node):
+            yield node
+    elif isinstance(node, dict):
+        for k, v in node.items():
+            yield from _ref_strings(k)
+            yield from _ref_strings(v)
+    elif isinstance(node, list):
+        for v in node:
+            yield from _ref_strings(v)
+
+
+def _major_of(contract_path):
+    """`ns/name@major` from library/components/<ns>/<name>/v<major>/contract.yaml."""
+    return (f"{contract_path.parents[2].name}/{contract_path.parents[1].name}"
+            f"@{contract_path.parent.name[1:]}")
+
+
+def lint_unplaced_majors(root):
+    """L89: a component major nothing reaches says why nothing reaches it.
+
+    THE LIBRARY IS THE ONLY CONSUMER. Every reference to a part is inside this
+    repository, so "does anything use this" is a question that can be answered
+    exactly rather than guessed at - and until now nothing asked it. 55 majors
+    of 587 were reachable from no device at all, and from the outside they were
+    indistinguishable from the 532 that were: same shape of contract, same
+    provenance, same place in the catalogue.
+
+    They are not the same, and neither is the right answer for all of them. The
+    38 Cisco ASR 9000 cards were drawn off stencils and datasheets and are
+    waiting on chassis `accepts` lists that name a different card generation.
+    `common/psu-ac-650@1` is superseded by an `@3` every device now uses.
+    `common/qsfp-drawing` is a reference drawing that nothing should ever seat.
+    Deleting all of those would throw away sourced work; keeping all of them
+    quietly is how the count got to 55.
+
+    So the rule asks for the SENTENCE, not for the deletion. `unplaced:` is the
+    same shape as `optical.unused` (L80) and a view's `empty:` (L45): the
+    library already accepts "nothing here, and here is why" as an answer, and
+    what it does not accept is the question going unasked.
+
+    Two ways to fail, and the second is what keeps the first honest:
+
+      - nothing reaches the part and it says nothing about that
+      - something DOES reach it and it still carries `unplaced:`, which is a
+        waiver outliving what it waived. Without this half, the field becomes a
+        line you add once and nobody ever removes.
+
+    A part reached only from an `unplaced:` part is fine and says nothing: the
+    QSFP pull tab is composed by the QSFP transceiver, and one sentence about
+    the transceiver covers both. Requiring a waiver per part would put the
+    reason on the sub-part, which is the one place a reader is not looking.
+    """
+    comp_root = Path(root) / "components"
+    if not comp_root.is_dir():
+        return
+    contracts = {}
+    for c in sorted(comp_root.glob("*/*/v*/contract.yaml")):
+        contracts[_major_of(c)] = c
+
+    refs = {}
+    for ref, c in contracts.items():
+        refs[ref] = set(_ref_strings(load_yaml(c) or {}))
+    device_refs, named_by = set(), {}
+    for d in sorted((Path(root) / "devices").glob("**/*.yaml")):
+        for r in _ref_strings(load_yaml(d) or {}):
+            device_refs.add(r)
+            named_by.setdefault(r, d)
+
+    def reach(seeds):
+        seen, queue = set(), [r for r in seeds if r in contracts]
+        while queue:
+            r = queue.pop()
+            if r in seen:
+                continue
+            seen.add(r)
+            queue.extend(c for c in refs.get(r, ()) if c in contracts)
+        return seen
+
+    # SEATED is reachable from a device. JUSTIFIED widens that with the parts a
+    # declared-unplaced part composes, which are explained by its sentence.
+    seated = reach(device_refs)
+    declared = {r for r, c in contracts.items() if (load_yaml(c) or {}).get("unplaced")}
+    justified = seated | reach(declared)
+
+    # NON-VACUITY. Every rule here that sweeps a corpus can pass by finding
+    # nothing, and this one would report a clean library if the glob broke or if
+    # `devices/` moved. The library cannot be mostly unreachable and be working.
+    if contracts and len(seated) < len(contracts) // 2:
+        err(Path(root) / "…", "L89",
+            f"only {len(seated)} of {len(contracts)} component majors are reachable "
+            "from any device - this rule's walk is broken, not the library")
+        return
+
+    for ref in sorted(contracts):
+        if ref not in justified:
+            err(contracts[ref], "L89",
+                f"{ref} is reachable from no device. Seat it in a device, or in the "
+                "`accepts`/`default` of a bay on a part that is seated - or add "
+                "`unplaced:` saying what would seat it and what is missing")
+        elif ref in seated and (load_yaml(contracts[ref]) or {}).get("unplaced"):
+            # NAME WHAT SEATS IT. "something reaches this now" sends the reader
+            # back to a search this rule has already done, and the answer is
+            # usually one file.
+            who = named_by.get(ref)
+            where = f"{who}" if who else "a part that is itself seated"
+            err(contracts[ref], "L89",
+                f"{ref} carries `unplaced:` but IS reachable from a device now, "
+                f"through {where}. Remove the sentence; it describes a gap that "
+                "has been closed")
+
+
 def lint_device_config_scope(path, data):
     """L41: a bay scoped to configurations that do not exist is a bay in none.
 
@@ -6524,6 +6657,7 @@ def main():
         lint_library_comparable_facts([Path(r) for r in args.library], matrix)
         for root in [Path(r) for r in args.library]:
             lint_vendor_registry(root)
+            lint_unplaced_majors(root)
             if not (root / devicelock.LOCK_NAME).exists() and not list(root.glob("devices/*/*/device.yaml")):
                 continue
             for slug_, kind_, msg_ in devicelock.check(root):

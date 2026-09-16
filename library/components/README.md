@@ -121,6 +121,12 @@ rest earns its place:
   drive's capacity. Do not make a new skin per wattage.
 - `states` for lamps, named as tokens (`link`, `activity`, `fault`), with the
   behaviour in `behaviour`.
+- `unplaced` when nothing in the library seats the part - a sentence saying
+  what would seat it and what is missing, not a flag. Lint (L89) asks for it on
+  any major no device reaches, and fails again if it is still there once
+  something does, so a stale one cannot accumulate. Do not add it to a part that
+  IS used; and do not reach for it to silence the rule on a part you could seat
+  in the same afternoon.
 - `provenance` with one entry per figure you state. The confidence words are
   `datasheet`, `drawing`, `measured`, `photo-measured`, `registry`,
   `borrowed`, `estimated`, `known-wrong`; `borrowed` must name the part the
