@@ -18,6 +18,19 @@ import yaml
 
 REF = re.compile(r"\b([a-z0-9-]+)/([a-z0-9-]+)@(\d+)\b")
 
+# A BLOCK THAT EXPLAINS WHY NOTHING USES A PART MUST NOT READ AS A USE. Both
+# counters below match refs in the raw text, which is deliberate - a part cited
+# in provenance as the origin of a borrowed figure is worth showing - but
+# `unplaced:` is the one field whose whole subject is the absence of a user, and
+# it names the part that superseded it or the issue that will seat it. Counted,
+# `common/psu-ac-650@1` would report itself as composing the `@3` that replaced
+# it. The block runs from the key to the next one at column zero.
+UNPLACED_BLOCK = re.compile(r"^unplaced:.*?(?=^\S)", re.M | re.S)
+
+
+def without_unplaced(text):
+    return UNPLACED_BLOCK.sub("", text)
+
 
 def first_sentence(text, limit=110):
     s = " ".join(str(text or "").split())
@@ -40,7 +53,7 @@ def composed_by(library):
     users = defaultdict(set)
     for contract in sorted(library.glob("components/*/*/v*/contract.yaml")):
         own = f"{contract.parts[-4]}/{contract.parts[-3]}@{contract.parts[-2][1:]}"
-        for ns, name, major in set(REF.findall(contract.read_text())):
+        for ns, name, major in set(REF.findall(without_unplaced(contract.read_text()))):
             ref = f"{ns}/{name}@{major}"
             if ref != own:
                 users[ref].add(own)

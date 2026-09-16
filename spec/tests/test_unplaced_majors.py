@@ -1,0 +1,214 @@
+"""L89: a component major nothing reaches says why nothing reaches it.
+
+The library is the only consumer of its own parts - every reference lives in
+this repository - so "does anything use this" has an exact answer and nothing
+was asking for it. 55 majors of 587 turned out to be reachable from no device,
+and from the outside they looked exactly like the 532 that were.
+
+They were not one thing. 38 are ASR 9000 cards drawn off stencils and datasheets
+whose chassis `accepts` lists name a different card generation (#262). Four are
+older majors superseded by a version every device now uses. One is a reference
+drawing that nothing should ever seat. Deleting them all would throw away
+sourced work; keeping them all quietly is how the count reached 55.
+
+So the field is a SENTENCE, not a deletion and not a waiver flag - the same
+shape as `optical.unused` (L80) and a view's `empty:` (L45).
+
+THE TRAP THIS RULE HAD TO AVOID. `ufispace/psu-120-ac@1` is named inside the
+S9502's own note, in a paragraph explaining why that device does NOT place it:
+the AC build is a different front panel, not the DC panel with another
+connector. A substring search would have read that explanation as a use, and the
+one part whose absence is best documented would have been the one part that
+looked seated. Refs are matched as whole strings for exactly that reason.
+"""
+import pathlib
+import re
+import sys
+
+import json
+import jsonschema
+import pytest
+import yaml
+
+ROOT = pathlib.Path(__file__).resolve().parents[2]
+LIB = ROOT / "library"
+sys.path.insert(0, str(ROOT / "spec" / "tools" / "portrayal"))
+import lint  # noqa: E402
+import components_catalogue as cat  # noqa: E402
+
+
+def run(root):
+    lint.ERRORS.clear()
+    lint.lint_unplaced_majors(root)
+    return [e for e in lint.ERRORS if "[L89]" in e]
+
+
+# --- the live library ---------------------------------------------------------
+
+def test_the_library_has_no_unexplained_majors():
+    """The corpus, which is the only run that matters. Every major is reachable
+    from a device, or carries the sentence saying what would seat it."""
+    found = run(LIB)
+    assert found == [], f"{len(found)} unexplained:\n" + "\n".join(found[:10])
+
+
+def test_most_of_the_library_is_actually_reachable():
+    """NON-VACUITY for the test above, which passes by finding nothing - which
+    is also what it does if the glob breaks or `devices/` moves. The rule has
+    its own guard for this; this asserts the guard's premise independently."""
+    majors = {f"{c.parts[-4]}/{c.parts[-3]}@{c.parts[-2][1:]}"
+              for c in LIB.glob("components/*/*/v*/contract.yaml")}
+    declared = {f"{c.parts[-4]}/{c.parts[-3]}@{c.parts[-2][1:]}"
+                for c in LIB.glob("components/*/*/v*/contract.yaml")
+                if (yaml.safe_load(c.read_text()) or {}).get("unplaced")}
+    assert len(majors) > 400, f"only {len(majors)} contracts found - the walk is broken"
+    assert len(declared) < len(majors) // 4, (
+        f"{len(declared)} of {len(majors)} majors are declared unplaced; the field is "
+        "becoming the answer rather than the exception")
+
+
+# --- the rule, on libraries built to exercise one thing each ------------------
+
+def write(root, ref, **keys):
+    ns, rest = ref.split("/", 1)
+    name, major = rest.split("@")
+    p = root / "components" / ns / name / f"v{major}" / "contract.yaml"
+    p.parent.mkdir(parents=True, exist_ok=True)
+    doc = {"format": 1, "kind": "module", "name": name, "version": "1.0.0",
+           "class": "psu", "size": {"w": 10.0, "h": 10.0}}
+    doc.update(keys)
+    p.write_text(yaml.safe_dump(doc))
+    return p
+
+
+def device(root, name, *refs, note=None):
+    p = root / "devices" / "acme" / name / "device.yaml"
+    p.parent.mkdir(parents=True, exist_ok=True)
+    doc = {"format": 1, "kind": "device", "name": name, "version": "1.0.0",
+           "manufacturer": "Acme", "model": name, "maturity": "modelled",
+           "chassis": {"width": 440.0, "height": 44.0, "depth": 300.0},
+           "views": {"front": {"size": {"w": 440.0, "h": 44.0},
+                               "panel": {"placements": [
+                                   {"ref": r, "id": f"p{i}", "at": [float(i), 1.0]}
+                                   for i, r in enumerate(refs)]}}}}
+    if note:
+        doc["views"]["front"]["note"] = note
+    p.write_text(yaml.safe_dump(doc))
+    return p
+
+
+def bulk(root, n):
+    """Enough seated parts that the rule's own broken-walk guard stays quiet."""
+    refs = [f"std/filler-{i}@1" for i in range(n)]
+    for r in refs:
+        write(root, r)
+    device(root, "filler", *refs)
+
+
+def test_a_part_nothing_reaches_is_reported(tmp_path):
+    bulk(tmp_path, 8)
+    write(tmp_path, "common/orphan@1")
+    found = run(tmp_path)
+    assert len(found) == 1 and "common/orphan@1" in found[0], found
+
+
+def test_a_part_a_device_places_is_not_reported(tmp_path):
+    bulk(tmp_path, 8)
+    write(tmp_path, "common/seated@1")
+    device(tmp_path, "box", "common/seated@1")
+    assert run(tmp_path) == []
+
+
+def test_the_sentence_is_what_clears_it(tmp_path):
+    bulk(tmp_path, 8)
+    write(tmp_path, "common/orphan@1",
+          unplaced="no chassis in this library has a bay it fits; see issue 262 for the matrix")
+    assert run(tmp_path) == []
+
+
+def test_a_bay_on_a_seated_part_counts_as_a_use(tmp_path):
+    """How the MIC twins are referenced. `mpc1e-3d-v960` names sixteen of them in
+    a bay's `accepts`, and no device names any of them directly - so a walk that
+    stopped at a contract's `parts:` would have called all sixteen dead. Both
+    existing dependency walkers in this repository stop there."""
+    bulk(tmp_path, 8)
+    write(tmp_path, "common/mic@1")
+    write(tmp_path, "common/carrier@1",
+          bays={"mic0": {"at": [0.0, 0.0], "size": [10.0, 10.0],
+                         "accepts": ["common/mic@1"], "default": "common/mic@1"}})
+    device(tmp_path, "box", "common/carrier@1")
+    assert run(tmp_path) == []
+
+
+def test_a_part_composed_only_by_an_unplaced_part_needs_no_sentence_of_its_own(tmp_path):
+    """The QSFP pull tab: composed by the QSFP transceiver, which is itself
+    unplaced. One sentence about the transceiver covers both, and requiring a
+    second would put the reason on the sub-part - the one place nobody looks."""
+    bulk(tmp_path, 8)
+    write(tmp_path, "common/tab@1")
+    write(tmp_path, "common/optic@1", parts=[{"ref": "common/tab@1", "at": [0.0, 0.0]}],
+          unplaced="devices model the cage, not the optic in it; nothing seats a transceiver yet")
+    assert run(tmp_path) == []
+
+
+def test_a_sentence_that_outlived_its_gap_is_reported(tmp_path):
+    """The half that keeps the other half honest. Without it `unplaced:` is a
+    line you add once and nobody ever removes, and the library slowly fills with
+    parts described as unused that are not."""
+    bulk(tmp_path, 8)
+    write(tmp_path, "common/seated@1",
+          unplaced="nothing seats this part yet, and here is a sentence long enough to pass")
+    device(tmp_path, "box", "common/seated@1")
+    found = run(tmp_path)
+    assert len(found) == 1 and "has been closed" in found[0], found
+
+
+def test_a_ref_named_inside_a_sentence_is_not_a_use(tmp_path):
+    """THE S9502 CASE, which is why refs match whole strings. That device's note
+    names `ufispace/psu-120-ac@1` while explaining that it deliberately does not
+    place it."""
+    bulk(tmp_path, 8)
+    write(tmp_path, "common/orphan@1")
+    device(tmp_path, "box", note="common/orphan@1 is built and sourced, and this "
+                                 "device does not place it because the AC face differs")
+    found = run(tmp_path)
+    assert len(found) == 1 and "common/orphan@1" in found[0], found
+
+
+def test_a_broken_walk_says_so_rather_than_passing(tmp_path):
+    """A library where nothing is reachable is this rule failing, not the
+    library being empty - and reporting 500 parts as unexplained would bury
+    that. The guard fires instead."""
+    for i in range(10):
+        write(tmp_path, f"common/part-{i}@1")
+    found = run(tmp_path)
+    assert len(found) == 1 and "walk is broken" in found[0], found
+
+
+# --- the field itself ---------------------------------------------------------
+
+def test_the_schema_wants_a_sentence_not_a_word():
+    """A one-word `unplaced: yes` would make the field a flag, which is the
+    failure mode of every waiver list."""
+    schema = json.loads((ROOT / "spec/schemas/component.schema.json").read_text())
+    v = jsonschema.Draft202012Validator(schema)
+    part = {"format": 1, "kind": "module", "name": "t", "version": "1.0.0",
+            "class": "psu", "size": {"w": 1.0, "h": 1.0}}
+    assert list(v.iter_errors(dict(part, unplaced="yes"))), "a bare flag should be rejected"
+    assert not list(v.iter_errors(dict(
+        part, unplaced="no chassis in this library has a bay that fits it; see issue 262")))
+
+
+def test_the_catalogue_does_not_read_the_sentence_as_a_use():
+    """`common/psu-ac-650@1` says it was superseded by `@3`, naming it. The
+    catalogue counts refs in a contract's raw text on purpose - a part cited in
+    provenance as the origin of a borrowed figure is worth showing - but this
+    one field is about the ABSENCE of a user, so counting it would have the
+    superseded part reporting itself as composing its replacement."""
+    text = (LIB / "components/common/psu-ac-650/v1/contract.yaml").read_text()
+    assert "common/psu-ac-650@3" in text, "the sentence should name what replaced it"
+    assert "common/psu-ac-650@3" not in cat.without_unplaced(text)
+    assert "psu-ac-650" in cat.without_unplaced(text), \
+        "only the unplaced block should be removed"
+    composed = cat.composed_by(LIB)
+    assert "common/psu-ac-650@1" not in composed.get("common/psu-ac-650@3", set())

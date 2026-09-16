@@ -95,3 +95,4 @@ a test fails when this page and the linter disagree. A finding prints as
 | L86 | component | a module composing a connector the enum spells two ways states its polish | add `optical.polish: upc` or `apc`, and say in provenance where it came from |
 | L87 | component | a module naming what its rear IS has a rear face to name | add `faces.rear`, or drop `optical.rear-kind` |
 | L88 | component | a fibre face with more than one row of connectors states its own front numbering | add `optical.front-order` listing the fibre part ids in the vendor's printed order |
+| L89 | library | every component major is reachable from a device, or says why it is not | seat it in a device or in a seated part's bay, or add `unplaced:` saying what would seat it and what is missing |

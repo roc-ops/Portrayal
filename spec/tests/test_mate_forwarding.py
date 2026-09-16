@@ -127,24 +127,33 @@ def test_a_composed_port_is_as_deep_as_its_aperture():
     assert not shallow, f"composed ports with an aperture depth but none of their own: {shallow}"
 
 
-def test_a_component_with_one_skin_does_not_need_it_named():
+def test_a_component_with_one_skin_does_not_need_it_named(tmp_path):
     """`qsfp-transceiver` declares `skins: [lc]` and no default, deliberately.
-    Seating it used to fail with a bare FileNotFoundError on default.svg."""
-    import subprocess, tempfile, shutil, re as _re
-    dev = ROOT / "library/devices/edgecore/as7726-32x/device.yaml"
+    Seating it used to fail with a bare FileNotFoundError on default.svg.
+
+    THE MUTATION HAPPENS ON A COPY. This test used to seat the optic by editing
+    `library/devices/edgecore/as7726-32x/device.yaml` in place and restoring it
+    in a `finally`, which is safe in a serial run and is not safe under `-n`:
+    for the length of one render, the real library said that device seats a
+    QSFP transceiver, and any test reading the corpus in another worker saw it.
+    L89 caught it - the transceiver is declared `unplaced:`, and the rule
+    reports a part that carries the sentence while something seats it, so the
+    window showed up as an intermittent failure in a test that never touches
+    this file. A corpus other tests read is not a scratch pad.
+    """
+    import subprocess, shutil, re as _re
+    src = ROOT / "library/devices/edgecore/as7726-32x"
+    dev = tmp_path / "as7726-32x" / "device.yaml"
+    shutil.copytree(src, dev.parent)
     original = dev.read_text()
-    try:
-        m = _re.search(r"^  ac-f2b:\n", original, _re.M)
-        dev.write_text(original[:m.end()]
-                       + "    occupants: {port-1: common/qsfp-transceiver@1}\n"
-                       + original[m.end():])
-        out = tempfile.mkdtemp()
-        r = subprocess.run([sys.executable, str(ROOT / "spec/tools/portrayal/render.py"),
-                            str(dev), "--library", str(ROOT / "library"), "--out", out],
-                           capture_output=True, text=True)
-        assert r.returncode == 0, r.stderr[-400:]
-        svg = pathlib.Path(out, "as7726-32x.ac-f2b.front.svg").read_text()
-        assert "port-1-occupant" in svg, "the optic did not seat"
-        shutil.rmtree(out, ignore_errors=True)
-    finally:
-        dev.write_text(original)
+    m = _re.search(r"^  ac-f2b:\n", original, _re.M)
+    dev.write_text(original[:m.end()]
+                   + "    occupants: {port-1: common/qsfp-transceiver@1}\n"
+                   + original[m.end():])
+    out = tmp_path / "out"
+    r = subprocess.run([sys.executable, str(ROOT / "spec/tools/portrayal/render.py"),
+                        str(dev), "--library", str(ROOT / "library"), "--out", str(out)],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr[-400:]
+    svg = (out / "as7726-32x.ac-f2b.front.svg").read_text()
+    assert "port-1-occupant" in svg, "the optic did not seat"
