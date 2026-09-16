@@ -91,6 +91,27 @@ def _module_exports(part, attrs, fibre):
     return bool(fibre)
 
 
+def _device_exports(pl, ref, attrs, group_role):
+    """EVERY ONE OF build's EXITS, and the list is the point.
+
+    A mirror that knows about only some of a tool's exits is the mistake this
+    whole file is about, and it has now been made twice on this function - both
+    times caught here, on the commit that added the exit. #286's power path left
+    `common/dc-barrel` reading as silent the moment it started exporting;
+    #285's RF path did the same to the three timing jacks. Anything added to
+    `build` belongs in this list on the same commit.
+    """
+    if ref in dx.PART_POWER:                        # power-ports
+        return True
+    if ref in dx.PART_RF:                           # RF and timing, as `other`
+        return True
+    if pl["ref"] in dx.FAMILY_PART and dx.rj45_timing_label({**pl, "attrs": attrs}):
+        return True                                 # a bare RJ45 naming a timing job
+    if attrs.get("role") == "console" or group_role in dx.PORT_ROLES:
+        return dx.iface_type(pl, attrs, group_role) is not None   # interfaces
+    return False
+
+
 @functools.lru_cache(maxsize=1)
 def _census():
     """ref -> (placements seen, placements that reach an export).
@@ -128,20 +149,10 @@ def _census():
                 for pl in dx.scoped(view_parts(view)["placements"], cfg):
                     r = pl["ref"].split("@")[0]
                     seen[r] += 1
-                    # BOTH OF build's EXITS. It grew a power path in #286, and
-                    # a mirror that knows about only one of a tool's exits is
-                    # the mistake this whole file is about: with `iface_type`
-                    # alone, `common/dc-barrel` read as silent on the very
-                    # commit that made it export.
-                    if r in dx.PART_POWER:
-                        heard[r] += 1
-                        continue
                     g = groups.get(pl.get("group")) or {}
                     a = {**(g.get("attrs") or {}), **(pl.get("attrs") or {})}
-                    role = g.get("role")
-                    if a.get("role") == "console" or role in dx.PORT_ROLES:
-                        if dx.iface_type(pl, a, role) is not None:
-                            heard[r] += 1
+                    if _device_exports(pl, r, a, g.get("role")):
+                        heard[r] += 1
     return seen, heard
 
 
