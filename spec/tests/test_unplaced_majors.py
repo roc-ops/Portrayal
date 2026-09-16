@@ -185,6 +185,59 @@ def test_a_broken_walk_says_so_rather_than_passing(tmp_path):
     assert len(found) == 1 and "walk is broken" in found[0], found
 
 
+# --- a dead major goes, which is what pays for the v<major> level (#172) -------
+
+def test_a_superseded_major_nothing_names_must_be_deleted_not_described(tmp_path):
+    """#172 kept the directory level on these terms. Without this, `unplaced:`
+    becomes the place old majors go to be described instead of removed, which is
+    the accumulation that made dropping the level look right in the first
+    place."""
+    bulk(tmp_path, 8)
+    write(tmp_path, "common/psu@1", unplaced="superseded by @2, which every device places; kept for now")
+    write(tmp_path, "common/psu@2")
+    device(tmp_path, "box", "common/psu@2")
+    found = run(tmp_path)
+    assert len(found) == 1 and "delete the directory" in found[0], found
+
+
+def test_a_superseded_major_something_still_names_may_stay(tmp_path):
+    """THE PBC CASE, and the reason this asks for a mention rather than a
+    seating. `common/psu-550w@1` is retired and seated by nothing, and the
+    PBC-2000's `psu-module-width` gap argues from its 84.0 mm against the 73.5
+    of the `@2` the device actually places. A retired major can be one side of
+    an open question, and deleting it takes the figure with it."""
+    bulk(tmp_path, 8)
+    write(tmp_path, "common/psu@1", unplaced="retired, but the rear photograph reads closer to this one")
+    write(tmp_path, "common/psu@2")
+    device(tmp_path, "box", "common/psu@2",
+           note="the photograph reads 85.5, closer to the retired common/psu@1 than to what is placed")
+    assert run(tmp_path) == []
+
+
+def test_an_older_major_is_only_superseded_by_a_LIVE_one(tmp_path):
+    """Two dead majors of one name are both just unreferenced. Calling the lower
+    one 'superseded' by a sibling nothing uses would demand a deletion that
+    fixes nothing and lose the sentence explaining both."""
+    bulk(tmp_path, 8)
+    for v in (1, 2):
+        write(tmp_path, f"common/psu@{v}",
+              unplaced="the chassis that takes this supply is not modelled yet, see issue 262")
+    assert run(tmp_path) == []
+
+
+def test_the_live_library_keeps_exactly_one_retired_major(tmp_path):
+    """The corpus side of the two tests above: #172's deletions happened, and the
+    one survivor is the one with an argument attached."""
+    import collections
+    majors = collections.defaultdict(list)
+    for c in LIB.glob("components/*/*/v*/contract.yaml"):
+        majors[f"{c.parts[-4]}/{c.parts[-3]}"].append(int(c.parts[-2][1:]))
+    multi = {n: sorted(v) for n, v in majors.items() if len(v) > 1}
+    assert set(multi) == {"common/psu-550w", "common/usb-a"}, multi
+    assert multi["common/usb-a"] == [2, 3], \
+        "usb-a's two majors are a variant pair, not a version pair - see #264"
+
+
 # --- the field itself ---------------------------------------------------------
 
 def test_the_schema_wants_a_sentence_not_a_word():
@@ -200,15 +253,15 @@ def test_the_schema_wants_a_sentence_not_a_word():
 
 
 def test_the_catalogue_does_not_read_the_sentence_as_a_use():
-    """`common/psu-ac-650@1` says it was superseded by `@3`, naming it. The
+    """`common/psu-550w@1` says it was superseded by `@2`, naming it. The
     catalogue counts refs in a contract's raw text on purpose - a part cited in
     provenance as the origin of a borrowed figure is worth showing - but this
     one field is about the ABSENCE of a user, so counting it would have the
     superseded part reporting itself as composing its replacement."""
-    text = (LIB / "components/common/psu-ac-650/v1/contract.yaml").read_text()
-    assert "common/psu-ac-650@3" in text, "the sentence should name what replaced it"
-    assert "common/psu-ac-650@3" not in cat.without_unplaced(text)
-    assert "psu-ac-650" in cat.without_unplaced(text), \
+    text = (LIB / "components/common/psu-550w/v1/contract.yaml").read_text()
+    assert "common/psu-550w@2" in text, "the sentence should name what replaced it"
+    assert "common/psu-550w@2" not in cat.without_unplaced(text)
+    assert "psu-550w" in cat.without_unplaced(text), \
         "only the unplaced block should be removed"
     composed = cat.composed_by(LIB)
-    assert "common/psu-ac-650@1" not in composed.get("common/psu-ac-650@3", set())
+    assert "common/psu-550w@1" not in composed.get("common/psu-550w@2", set())

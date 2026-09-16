@@ -69,6 +69,35 @@ Three layers:
    in-tree (`v1/`, `v2/`); linter hashes contract geometry to catch unbumped
    breaks; every file carries `format: 1`.
 
+   **The `v<major>` level stays, decided 2026-09-16 (#172), and here is what it
+   cost and what it buys.** Measured on the day: 587 version directories across
+   582 names, 17 of them non-v1, and only four names holding more than one
+   major. Three of those four were an old major behind a live one and nothing
+   referenced them; they are deleted. The fourth, `common/usb-a@2` against `@3`,
+   is not a version pair at all — one is a 17×7 receptacle, the other a 17×9.3
+   bezel plate sized so it can abut its neighbours — which is a variant wearing
+   a version number (#264). So on the evidence, coexistence had never once been
+   used for the thing it exists for, and the argument to drop the level was a
+   good one.
+
+   It stays because of WHEN the question is being asked. Every reference to a
+   component today is inside this repository, which is why "does anything use
+   this" has an exact answer (L89) — and it is exactly that property that ends
+   the day the library goes public. An outside manifest pinning `name@2` is the
+   consumer coexistence is for, and there have been none to serve. Dropping the
+   level would move 587 directories and change resolution in sixteen tools to
+   retire a mechanism the week before it acquires its first users.
+
+   **What pays for keeping it: a dead major goes.** An old major is deleted once
+   nothing references it, and L89 fails on one that lingers — it will not accept
+   an `unplaced:` sentence from a major that a newer live major supersedes.
+   There is one exception, and it is the reason the check asks whether anything
+   NAMES a major rather than only whether something seats it: a retired major
+   can still be one side of an open question. `common/psu-550w@1` is retired and
+   seated by nothing, and the PBC-2000's `psu-module-width` gap argues from its
+   84.0 mm against the 73.5 mm of the `@2` that device places. Deleting it would
+   have left that gap arguing from a figure no longer in the tree.
+
    **Devices take the same bump rules and not the coexistence.** A device is a
    root rather than a dependency — nothing pins `mx10016@1` — so majors do not
    need to live side by side; what a device needs is that the version tells the

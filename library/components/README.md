@@ -63,13 +63,22 @@ there first.
 ## Versions
 
 `v<major>` is the directory; `version:` inside the contract is the full
-semver. The bump rules, from DESIGN.md: **art is a patch** (a skin redrawn, a
-colour, a label), **additive is a minor** (a new element, a new state, a new
-skin), **geometry or ids are a major** (the size changed, an element moved or
-was renamed), because a device that placed the part may now be wrong. A major
-bump is a new `v<N+1>/` directory; the old major is removed once no device
-references it (the open question of whether the directory level should stay at
-all is #172).
+semver. The level is here to stay: #172 weighed dropping it and kept it, because
+an outside manifest pinning `name@2` is the consumer coexistence exists for and
+this library acquires those the day it goes public. `spec/DESIGN.md` §9 carries
+the measurement that decision was made on.
+
+The bump rules, from DESIGN.md: **art is a patch** (a skin redrawn, a colour, a
+label), **additive is a minor** (a new element, a new state, a new skin),
+**geometry or ids are a major** (the size changed, an element moved or was
+renamed), because a device that placed the part may now be wrong. A major bump
+is a new `v<N+1>/` directory, and **the old major is deleted once nothing
+references it** - that is what pays for the level, and L89 fails on a dead major
+left behind an `unplaced:` sentence. What keeps a retired major alive is
+something still naming it: a gap arguing from its figure, say. `common/psu-550w@1`
+is retired, seated by nothing, and stays, because the PBC-2000's
+`psu-module-width` gap argues from its 84.0 mm against the 73.5 mm of the `@2`
+that device places.
 
 A change to a component changes every device that draws it. After editing a
 contract, run the lock check from the repository root and bump the devices it

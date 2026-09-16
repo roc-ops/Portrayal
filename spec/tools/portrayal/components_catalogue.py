@@ -23,8 +23,8 @@ REF = re.compile(r"\b([a-z0-9-]+)/([a-z0-9-]+)@(\d+)\b")
 # in provenance as the origin of a borrowed figure is worth showing - but
 # `unplaced:` is the one field whose whole subject is the absence of a user, and
 # it names the part that superseded it or the issue that will seat it. Counted,
-# `common/psu-ac-650@1` would report itself as composing the `@3` that replaced
-# it. The block runs from the key to the next one at column zero.
+# `common/psu-550w@1` would report itself as composing the `@2` that replaced it.
+# The block runs from the key to the next one at column zero.
 UNPLACED_BLOCK = re.compile(r"^unplaced:.*?(?=^\S)", re.M | re.S)
 
 

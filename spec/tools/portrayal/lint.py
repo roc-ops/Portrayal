@@ -4150,8 +4150,10 @@ def lint_unplaced_majors(root):
     They are not the same, and neither is the right answer for all of them. The
     38 Cisco ASR 9000 cards were drawn off stencils and datasheets and are
     waiting on chassis `accepts` lists that name a different card generation.
-    `common/psu-ac-650@1` is superseded by an `@3` every device now uses.
     `common/qsfp-drawing` is a reference drawing that nothing should ever seat.
+    `common/psu-550w@1` was superseded and is still one of two answers to an open
+    question on the PBC-2000, which is why the superseded check below asks
+    whether anything NAMES a major and not only whether something seats it.
     Deleting all of those would throw away sourced work; keeping all of them
     quietly is how the count got to 55.
 
@@ -4213,7 +4215,44 @@ def lint_unplaced_majors(root):
             "from any device - this rule's walk is broken, not the library")
         return
 
+    # SUPERSEDED IS NOT UNPLACED, and #172 settled which of the two it is. The
+    # `v<major>` level stays, and what pays for it is that an old major goes
+    # once nothing references it - otherwise the level accumulates exactly the
+    # dead directories that made keeping it look indefensible. Three did:
+    # `common/psu-ac-650@1` and `@2` behind an `@3`, `psu-dc-650@1` behind a
+    # `@2`, none of them named anywhere.
+    #
+    # THE EXCEPTION IS WHY THIS CHECKS FOR A MENTION AND NOT JUST A SEATING.
+    # `common/psu-550w@1` is also superseded and also seated by nothing, and
+    # deleting it would have broken an argument: the PBC-2000 carries a
+    # `sources-disagree` gap whose note says the rear photograph reads closer to
+    # THIS major's 84.0 than to the 73.5 its device actually places. A retired
+    # major can still be one side of an open question, and the way that shows is
+    # that something names it in prose.
+    mentions = set()
+    for f in sorted(Path(root).glob("**/*.yaml")):
+        text = f.read_text(errors="ignore")
+        own = _major_of(f) if f.name == "contract.yaml" else None
+        for ref in contracts:
+            if ref != own and ref in text:
+                mentions.add(ref)
+
+    live_successor = {}
+    for ref in contracts:
+        name, major = ref.rsplit("@", 1)
+        for other in seated:
+            oname, omajor = other.rsplit("@", 1)
+            if oname == name and int(omajor) > int(major):
+                live_successor[ref] = other
+
     for ref in sorted(contracts):
+        if (ref not in seated and ref in live_successor and ref not in mentions):
+            err(contracts[ref], "L89",
+                f"{ref} is superseded by {live_successor[ref]}, is reachable from no "
+                "device, and is named nowhere. #172 kept the `v<major>` level on the "
+                "terms that a dead major goes: delete the directory rather than "
+                "describing it in `unplaced:`")
+            continue
         if ref not in justified:
             err(contracts[ref], "L89",
                 f"{ref} is reachable from no device. Seat it in a device, or in the "
