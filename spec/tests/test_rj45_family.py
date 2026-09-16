@@ -1259,8 +1259,13 @@ def test_a_timing_jack_exports_as_an_other_interface_not_a_console():
     }
     out = dx.build_module(contract, "Juniper")
     assert out["console-ports"] == [{"name": "con", "type": "rj-45"}]
-    assert out["interfaces"] == [{"name": "tod", "type": "other", "label": "TOD"},
-                                 {"name": "bits", "type": "other", "label": "BITS"}]
+    # BY NAME SINCE #267, not in the order the parts are listed. That order is
+    # the order the jacks sit across the face, and half these cards are drawn
+    # twice - once horizontally, once rotated - so it handed the DCIM whichever
+    # drawing's x-order happened to be written last. What this test is about is
+    # the TYPE and the LABEL, which is what #125 broke.
+    assert out["interfaces"] == [{"name": "bits", "type": "other", "label": "BITS"},
+                                 {"name": "tod", "type": "other", "label": "TOD"}]
 
 
 def test_jnp10003_rcb_exports_no_console_named_bits_or_tod():

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dpce-r-40ge-sfp
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -12,6 +12,12 @@ description: >-
   (x/0..x/9, four PICs).
 attrs:
   model: DPCE-R-40GE-SFP
+  # FORTY 1GbE, WHICH THIS CARD'S OWN DESCRIPTION AND MODEL NUMBER BOTH SAY.
+  # Without it `cage_type` finds no media attr for the `sfp` family and falls
+  # through to PART_IFACE's std/sfp-ganged default, which is SFP+ - so the
+  # export said forty 10G ports. Exactly the shape of roc-ops/Portrayal#23, where
+  # A9K-40GE-B kept exporting 10G until its contract said `sfp: 40`.
+  sfp: 40
   power-draw-max-w: 335
   lifecycle-note: EOL per PSN-TSB16810; modelled because it is the card the
     reference photograph carries

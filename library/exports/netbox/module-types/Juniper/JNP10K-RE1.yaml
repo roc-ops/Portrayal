@@ -9,22 +9,14 @@ console-ports:
   - name: usb
     type: usb-a
 interfaces:
-  - name: pps-in
-    type: other
-    label: SMB
-  - name: pps-out
-    type: other
-    label: SMB
+  - name: mgmt
+    type: 1000base-t
   - name: mhz-in
     type: other
     label: SMB
   - name: mhz-out
     type: other
     label: SMB
-  - name: mgmt
-    type: 1000base-t
-  - name: sfp-mgmt
-    type: 1000base-x-sfp
   - name: port-0
     type: 1000base-x-sfp
   - name: port-1
@@ -32,6 +24,14 @@ interfaces:
   - name: port-2
     type: 1000base-x-sfp
   - name: port-3
+    type: 1000base-x-sfp
+  - name: pps-in
+    type: other
+    label: SMB
+  - name: pps-out
+    type: other
+    label: SMB
+  - name: sfp-mgmt
     type: 1000base-x-sfp
 comments: 'Juniper JNP10K-RE1 Routing and Control Board for the MX10004/MX10008 - a slim full-width FRU,
   two stacked in the top slots. MST/PWR/STS/OFF lamps, CON and MGMT jacks, PPS / 10MHZ SMB quad, an SFP
@@ -42,5 +42,4 @@ comments: 'Juniper JNP10K-RE1 Routing and Control Board for the MX10004/MX10008 
 
   - power-draw-max-w: 175
 
-
-  Contract version 1.1.0.'
+  Contract version 1.1.0 (juniper/jnp10k-re1).'
