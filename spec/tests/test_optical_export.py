@@ -14,9 +14,8 @@ import yaml
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 DIST = ROOT / "library" / "dist"
 EXPORTS = ROOT / "library" / "exports"
-sys.path.insert(0, str(ROOT / "spec/tools/portrayal"))
 
-import optical as O  # noqa: E402
+from portrayal import optical as O
 
 
 def index():
@@ -54,7 +53,7 @@ def test_capacities_answers_from_the_built_index():
     `contract_view` is the adapter. If it stops being applied, this is what
     notices - the rear face's twelve positions simply vanish from the answer.
     """
-    import dcim_export as D
+    from portrayal import dcim_export as D
     idx = index()
     caps = O.capacities(D.contract_view(idx["fs/fhd-1mtp6lcd-os2-a@1"]),
                         lambda ref: idx.get(ref))
@@ -91,7 +90,7 @@ def test_the_registry_fallback_still_answers_for_a_deviceless_namespace():
     the old test passed through the device path while claiming to prove the
     fallback. This drives the fallback directly instead.
     """
-    from artifacts import Dist
+    from portrayal.artifacts import Dist
     d = Dist(str(DIST))
     assert d.manufacturer_of("fs") == "FS.com"      # now via the device
     # a namespace that exists in vendors.yaml and has no device at all
@@ -105,7 +104,7 @@ def test_the_registry_fallback_still_answers_for_a_deviceless_namespace():
 def test_a_namespace_with_no_vendor_is_still_not_orderable():
     """`common/` and `std/` are absent from vendors.yaml, so the property holds
     by data rather than by a special case."""
-    from artifacts import Dist
+    from portrayal.artifacts import Dist
     d = Dist(str(DIST))
     assert d.manufacturer_of("common") is None
     assert d.manufacturer_of("std") is None
@@ -116,7 +115,7 @@ def test_the_device_lookup_still_wins_over_the_registry():
     Technologies` from vendors.yaml; `juniper` and `edgecore` differ the same
     way. A vendors-first lookup would rename the manufacturer on several hundred
     existing export files."""
-    from artifacts import Dist
+    from portrayal.artifacts import Dist
     d = Dist(str(DIST))
     assert d.manufacturer_of("dell") == "Dell"
     assert d.manufacturer_of("juniper") == "Juniper"
@@ -125,7 +124,7 @@ def test_the_device_lookup_still_wins_over_the_registry():
 def test_a_namespace_with_no_vendor_is_still_not_orderable():
     """`common/` and `std/` are absent from vendors.yaml, so the property
     `manufacturer_of` documents holds by data rather than by a special case."""
-    from artifacts import Dist
+    from portrayal.artifacts import Dist
     d = Dist(str(DIST))
     assert d.manufacturer_of("common") is None
     assert d.manufacturer_of("std") is None
@@ -169,8 +168,8 @@ def projecting_modules(idx):
     same accessor `build_module`/`export_modules` gate on - never the raw
     flattened `faces` shape the index carries.
     """
-    import dcim_export as D
-    from faces import face_ref
+    from portrayal import dcim_export as D
+    from portrayal.faces import face_ref
     out = []
     for e in fibre_modules(idx):
         view = D.contract_view(e)
@@ -215,7 +214,7 @@ def test_a_fibre_module_with_no_rear_face_exports_nothing_optical():
     produce no front-ports, no rear-ports and no fibre map at all, because
     nothing in the vocabulary says which of its endpoints is the trunk.
     """
-    import dcim_export as D
+    from portrayal import dcim_export as D
     idx = index()
     all_fibre = fibre_modules(idx)
     projecting = projecting_modules(idx)
@@ -236,8 +235,8 @@ def test_a_fibre_module_with_no_rear_face_exports_nothing_optical():
 
 def test_every_fibre_module_exports_ports_matching_its_graph():
     """Section D: the count a module exports equals the count its graph carries."""
-    import dcim_export as D
-    import optical_ports as P
+    from portrayal import dcim_export as D
+    from portrayal import optical_ports as P
     idx = index()
     for e in projecting_modules(idx):
         view = D.contract_view(e)
@@ -251,8 +250,8 @@ def test_every_fibre_module_exports_ports_matching_its_graph():
 
 def test_every_fibre_map_row_names_ports_that_exist():
     """Section D: a row pointing at a port nobody exported is a silent drop."""
-    import dcim_export as D
-    import optical_ports as P
+    from portrayal import dcim_export as D
+    from portrayal import optical_ports as P
     idx = index()
     for e in projecting_modules(idx):
         view = D.contract_view(e)
@@ -268,8 +267,8 @@ def test_every_fibre_map_row_names_ports_that_exist():
 
 def test_no_exported_front_port_is_left_without_a_rear_port():
     """Section D, and netbox#21830: we do not get to omit rear ports."""
-    import dcim_export as D
-    import optical_ports as P
+    from portrayal import dcim_export as D
+    from portrayal import optical_ports as P
     idx = index()
     for e in projecting_modules(idx):
         view = D.contract_view(e)
@@ -351,9 +350,9 @@ def test_the_exported_module_files_carry_the_ports_the_graph_implies():
     """
     if not EXPORTS.exists():
         pytest.skip("library/exports not built - run ./publish.sh --no-images")
-    import dcim_export as D
-    import optical_ports as P
-    from artifacts import Dist
+    from portrayal import dcim_export as D
+    from portrayal import optical_ports as P
+    from portrayal.artifacts import Dist
     dist = Dist(str(DIST))
     idx = index()
     checked = 0
@@ -393,8 +392,8 @@ def test_every_fibre_map_row_names_ports_in_the_exported_file():
     """
     if not EXPORTS.exists():
         pytest.skip("library/exports not built - run ./publish.sh --no-images")
-    import dcim_export as D
-    from artifacts import Dist
+    from portrayal import dcim_export as D
+    from portrayal.artifacts import Dist
     dist = Dist(str(DIST))
     idx = index()
     checked = 0
@@ -430,7 +429,7 @@ def test_a_module_that_exports_front_ports_also_exports_a_rear_port():
     """
     if not EXPORTS.exists():
         pytest.skip("library/exports not built - run ./publish.sh --no-images")
-    import dcim_export as D
+    from portrayal import dcim_export as D
     checked = 0
     for target in D.TARGETS:
         for f in sorted((EXPORTS / target / "module-types").rglob("*.yaml")):
@@ -452,7 +451,7 @@ def test_no_exported_port_has_a_null_type():
     """
     if not EXPORTS.exists():
         pytest.skip("library/exports not built - run ./publish.sh --no-images")
-    import dcim_export as D
+    from portrayal import dcim_export as D
     checked = 0
     for target in D.TARGETS:
         for f in sorted((EXPORTS / target / "module-types").rglob("*.yaml")):

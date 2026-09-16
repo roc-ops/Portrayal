@@ -13,9 +13,8 @@ import sys
 import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "spec" / "tools" / "portrayal"))
 
-from manifest import presented_interface  # noqa: E402
+from portrayal.manifest import presented_interface  # noqa: E402
 
 
 def resolve(ref):

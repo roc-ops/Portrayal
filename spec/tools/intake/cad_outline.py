@@ -12,7 +12,7 @@ handle was traced from the whole part and was simply the wrong drawing.
 So the cut plane is the argument that matters, and it is not guessable from the
 part. Two ways to find it in a chassis scene, both used on the R740xd:
 
-    the chassis shell's own rear face          `glb-parts.py --zone rear`
+    the chassis shell's own rear face          `glb_parts.py --zone rear`
     a part known to sit in the panel plane     a PSU faceplate, an inlet
 
 A part's own flange gives it away too - if some region of it stops dead at one z
@@ -24,7 +24,7 @@ box, and prints the face position to place it at. Simplification is stated in mm
 so a reader knows what was thrown away: a 0.3 tolerance cannot be measured back
 off the result as if it were a chamfer.
 
-    cad-outline.py chassis.glb "rear handle" --plane 713.5
+    cad_outline.py chassis.glb "rear handle" --plane 713.5
 """
 import argparse
 import json
@@ -153,7 +153,7 @@ def main():
     ap_.add_argument("--plane", type=float, required=True,
                      help="cut plane in scene z. Geometry BEHIND this is not "
                           "drawn, because a face view cannot see it. Find it "
-                          "with glb-parts.py --zone rear, or from a part known "
+                          "with glb_parts.py --zone rear, or from a part known "
                           "to sit in the panel")
     ap_.add_argument("--face", default="434x86.8",
                      help="chassis WxH in mm, to report face coordinates")

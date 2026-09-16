@@ -22,7 +22,7 @@ The third is the important one and the reason this prints rather than fails: a
 face that needs a part nobody has built yet is not a broken face, it is a face
 waiting on a component. Go and build the standard, then come back.
 
-Usage:  audit-standards.py <vendor>/<model> [view]
+Usage:  audit_standards.py <vendor>/<model> [view]
 """
 import pathlib
 import sys

@@ -17,8 +17,7 @@ import yaml
 
 SPEC = pathlib.Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library"
-sys.path.insert(0, str(SPEC / "tools/portrayal"))
-import lint  # noqa: E402
+from portrayal import lint
 
 
 @pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
@@ -90,8 +89,7 @@ def test_a_configuration_can_seat_a_riser_slot():
     wins over the module bay's default. Rendered on a fixture that seats
     riser 1B in a bay and the generic card in its top slot."""
     import re
-    sys.path.insert(0, str(SPEC / "tools/portrayal"))
-    import render
+    from portrayal import render
     lib = render.Library([str(LIB)])
     view = {"size": {"w": 434.0, "h": 86.8}, "components": {"bays": [
         {"id": "riser-1", "at": [13.95, 4.0], "size": {"w": 107.59, "h": 62.0},
@@ -132,8 +130,7 @@ def test_a_seated_part_is_projected_into_another_view_once():
     of its own and no relief - and the cards in the riser's slots come along
     at their declared offsets, mirrored with the riser."""
     import re
-    sys.path.insert(0, str(SPEC / "tools/portrayal"))
-    import render
+    from portrayal import render
     lib = render.Library([str(LIB)])
     rear = {"size": {"w": 434.0, "h": 86.8}, "components": {"bays": [
         {"id": "riser-1", "at": [13.95, 4.0], "size": {"w": 107.59, "h": 62.0},

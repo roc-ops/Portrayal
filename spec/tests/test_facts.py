@@ -12,8 +12,7 @@ import pathlib
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "spec/tools/portrayal"))
-import facts as F  # noqa: E402
+from portrayal import facts as F
 
 
 def make(tmp_path, name, body):

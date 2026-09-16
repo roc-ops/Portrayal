@@ -32,10 +32,8 @@ import xml.etree.ElementTree as ET
 import zipfile
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent))
-import visio_geom
-import visio_meta
-
+from portrayal import visio_geom
+from portrayal import visio_meta
 V = "{http://schemas.microsoft.com/office/visio/2012/main}"
 R = "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}"
 IMAGE_EXT = (".emf", ".wmf", ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".svg")

@@ -19,13 +19,12 @@ import yaml
 # not ask them to group text they were never meant to group.
 APPLIED_CLASSES = {"sticker", "label", "marking"}
 
-import attrsections as attrs_mod
-from faces import face_ref
-from manifest import (view_parts, targets, split_target, component_refs,
+from portrayal import attrsections as attrs_mod
+from portrayal.faces import face_ref
+from portrayal.manifest import (view_parts, targets, split_target, component_refs,
                       presented_interface,
                       load_yaml)
-import capability
-
+from portrayal import capability
 TOOL_VERSION = "0.1.0"
 # profiles.yaml lives with the schemas, and every tool that needs it can find it
 # from here rather than each growing a flag that is always given the same value.

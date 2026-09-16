@@ -20,8 +20,7 @@ import sys
 
 from PIL import Image
 
-sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
-import benchvlm  # noqa: E402
+from portrayal import benchvlm
 
 
 def main(argv=None):

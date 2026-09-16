@@ -13,7 +13,7 @@ inheriting lint's opinions.
 """
 import re
 
-from faces import OPTICAL_FACES, face_ref
+from portrayal.faces import OPTICAL_FACES, face_ref
 
 # The optional `<face>:` prefix is what lets one module's paths reach a part
 # drawn on another of its faces - a cassette's rear MTP lives in the rear face

@@ -13,7 +13,6 @@ import pytest
 import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "spec" / "tools" / "portrayal"))
 
 SCHEMA = json.loads((ROOT / "spec/schemas/device.schema.json").read_text())
 REAL = yaml.safe_load((ROOT / "library/devices/cisco/asr-9910/device.yaml").read_text())
@@ -49,7 +48,7 @@ def test_the_declaration_says_where_it_looked():
 # ---- L60: the sentence must not outlive the search --------------------------
 
 def lint_one(doc, tmp_path):
-    import lint
+    from portrayal import lint
     lint.FINDINGS.clear() if hasattr(lint, "FINDINGS") else None
     p = tmp_path / "device.yaml"
     p.write_text(yaml.safe_dump(doc))

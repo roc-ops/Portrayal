@@ -19,10 +19,9 @@ import yaml
 
 SPEC = Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library"
-sys.path.insert(0, str(SPEC / "tools/portrayal"))
 
-import attrsections  # noqa: E402
-import lint  # noqa: E402
+from portrayal import attrsections
+from portrayal import lint
 
 MANIFESTS = sorted(LIB.glob("devices/*/*/device.yaml"))
 

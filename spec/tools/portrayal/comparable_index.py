@@ -14,9 +14,7 @@ from pathlib import Path
 
 import yaml
 
-import comparable as facts_mod
-
-
+from portrayal import comparable as facts_mod
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--library", default="library")

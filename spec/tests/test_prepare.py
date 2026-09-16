@@ -14,8 +14,7 @@ import sys
 from PIL import Image, ImageDraw
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "spec/tools/portrayal"))
-import prepare as P  # noqa: E402
+from portrayal import prepare as P
 
 
 def figure(dirpath, name, size, band):

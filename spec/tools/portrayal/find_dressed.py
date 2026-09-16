@@ -22,8 +22,8 @@ sit are both correct parts, and which one matches the machine in front of you is
 a question for the picture. This narrows the field to the candidates and prints
 what separates them.
 
-Usage:  find-dressed.py std/rj45          all dressed variants of one standard
-        find-dressed.py --all             every standard that has any
+Usage:  find_dressed.py std/rj45          all dressed variants of one standard
+        find_dressed.py --all             every standard that has any
 """
 import argparse
 import pathlib

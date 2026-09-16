@@ -6,7 +6,6 @@ import sys
 import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "spec" / "tools" / "portrayal"))
 
 REG = yaml.safe_load((ROOT / "spec" / "schemas" / "vendors.yaml").read_text())
 VENDORS = REG["vendors"]
@@ -94,7 +93,7 @@ def test_the_accton_claim_is_backed_by_the_dump_it_cites():
 # ---- overlay identity: the disaggregation case -------------------------------
 
 import importlib  # noqa: E402
-dx = importlib.import_module("dcim_export")
+dx = importlib.import_module("portrayal.dcim_export")
 
 OVERLAYS = sorted((ROOT / "library" / "devices").glob("*/*/overlays/*.yaml"))
 

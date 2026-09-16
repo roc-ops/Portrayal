@@ -18,22 +18,19 @@ would test the camera; neither tests whether the model says what the document
 says. A tolerance is still needed - parts are placed to two decimals and shared
 edges rarely come out bit-identical - so `--tol` is explicit and small.
 
-Usage:  verify-alignment.py <vendor>/<model> <view> [--tol 0.15]
+Usage:  verify_alignment.py <vendor>/<model> <view> [--tol 0.15]
 """
 import argparse
 import collections
-import importlib.util
-import pathlib
-import sys
 
 import yaml
 
-HERE = pathlib.Path(__file__).parent
-_spec = importlib.util.spec_from_file_location(
-    'rstd', HERE / 'render-standards.py')
-rstd = importlib.util.module_from_spec(_spec)
-sys.modules['rstd'] = rstd
-_spec.loader.exec_module(rstd)
+# A PLAIN IMPORT, because the file it wants is no longer called
+# `render_standards.py`. A hyphen is not an identifier, so this reached for
+# `importlib.util.spec_from_file_location` to load a sibling by path - fifteen
+# lines standing in for one, and invisible to every tool that reads imports
+# (#178).
+from portrayal import render_standards as rstd
 
 
 def families(vals, tol):

@@ -12,7 +12,6 @@ import sys
 import pytest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "spec/tools/intake"))
 
 
 def _corpus():
@@ -46,7 +45,11 @@ IMG = _corpus() / "intake" / "fs" / "fhd" / "photos"
 
 @pytest.fixture(scope="module")
 def pm():
-    return pytest.importorskip("panel_measure")
+    # THE PACKAGE NAME, and getting it wrong here is silent. This said
+    # `panel_measure` and relied on a `sys.path.insert` above it; removing
+    # that hack in #178 turned nine tests into skips and nothing failed.
+    # The skip allow-list (#183) is what showed the count moving.
+    return pytest.importorskip("portrayal_intake.panel_measure")
 
 
 def _im(pm, name):

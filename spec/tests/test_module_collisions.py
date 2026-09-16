@@ -31,9 +31,8 @@ import yaml
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
 DIST = LIB / "dist"
-sys.path.insert(0, str(ROOT / "spec/tools/portrayal"))
 
-import dcim_export as dx        # noqa: E402
+from portrayal import dcim_export as dx
 
 # EVERY GROUP WHOSE AUTHORS STILL DISAGREE, AND WHOSE PROBLEM IT IS.
 #
@@ -65,7 +64,7 @@ def _groups():
     """(manufacturer, model) -> [(doc, ref)], built the way the exporter builds."""
     if not (DIST / "components.json").exists():
         pytest.skip("no build; run ./build.sh")
-    from artifacts import Dist
+    from portrayal.artifacts import Dist
     dist = Dist(DIST)
     out = collections.defaultdict(list)
     for c in sorted(dist.modules(), key=lambda c: (c.get("ns") or "", c.get("name") or "")):

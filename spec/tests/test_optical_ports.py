@@ -9,10 +9,9 @@ import pytest
 import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "spec/tools/portrayal"))
 
-import lint as L  # noqa: E402
-import optical_ports as P  # noqa: E402
+from portrayal import lint as L
+from portrayal import optical_ports as P
 
 LIB = [str(ROOT / "library")]
 
@@ -84,7 +83,7 @@ def cassette_entry():
 
 def test_the_rear_mtp_is_one_port_with_twelve_positions():
     """C1: a rear MPO-12 exports as ONE rear port, not twelve."""
-    import dcim_export as D
+    from portrayal import dcim_export as D
     e, idx = cassette_entry()
     got = P.ports(D.contract_view(e), idx.get)
     assert got["rear"] == [{"name": "MTP-1", "type": "mpo", "positions": 12}]
@@ -93,7 +92,7 @@ def test_the_rear_mtp_is_one_port_with_twelve_positions():
 def test_every_front_fibre_is_its_own_port():
     """C1: per-fibre granularity is what makes the projection lossless for the
     22 breakouts, 4 conversions and 4 mesh cassettes."""
-    import dcim_export as D
+    from portrayal import dcim_export as D
     e, idx = cassette_entry()
     got = P.ports(D.contract_view(e), idx.get)
     assert len(got["front"]) == 12
@@ -110,7 +109,7 @@ def test_the_front_numbering_reproduces_the_faceplate():
     derivation lands where the vendor's labels do: adapter lc1 carries 1 and 2,
     lc6 carries 11 and 12.
     """
-    import dcim_export as D
+    from portrayal import dcim_export as D
     e, idx = cassette_entry()
     view = D.contract_view(e)
     assert P.front_label(view, "lc1.1", idx.get) == "1"
@@ -137,7 +136,7 @@ def test_a_single_faced_module_with_paths_exports_no_ports():
     which is what makes the gate the thing standing between this contract and
     a non-empty `front-ports`.
     """
-    import dcim_export as D
+    from portrayal import dcim_export as D
     contract = {
         "name": "t-coupler",
         "parts": [
@@ -171,7 +170,7 @@ def test_the_real_ppm_coupler_export_has_no_ports():
 
 
 def test_the_fibre_map_carries_one_row_per_leg():
-    import dcim_export as D
+    from portrayal import dcim_export as D
     e, idx = cassette_entry()
     m = P.fibre_map(D.contract_view(e), idx.get, "FHD-1MTP6LCDOS2A")
     assert m["model"] == "FHD-1MTP6LCDOS2A"
@@ -342,7 +341,7 @@ skins: [default]
     assert all("at" in p for p in e["parts"]), \
         f"components_index dropped `at` from the built entry: {e['parts']}"
 
-    import dcim_export as D
+    from portrayal import dcim_export as D
     view = D.contract_view(e)
     assert P.front_label(view, "lc9.1", idx.get) == "1"
     assert P.front_label(view, "lc9.2", idx.get) == "2"
@@ -358,7 +357,7 @@ def test_the_two_row_cassette_follows_its_front_order():
     its own provenance.parts for the two retractions).
     """
     import json
-    import dcim_export as D
+    from portrayal import dcim_export as D
     f = ROOT / "library" / "dist" / "components.json"
     if not f.exists():
         pytest.skip("library/dist not built - run ./publish.sh --no-images")

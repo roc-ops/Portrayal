@@ -12,9 +12,8 @@ import sys
 import pytest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "spec/tools/portrayal"))
 
-import optical as O  # noqa: E402
+from portrayal import optical as O
 
 
 def test_an_unqualified_endpoint_has_no_face():
@@ -71,7 +70,7 @@ def test_a_face_that_names_nothing_resolvable_contributes_nothing():
 
 import yaml  # noqa: E402
 
-import lint as L  # noqa: E402
+from portrayal import lint as L
 
 LIB = [str(ROOT / "library")]
 
@@ -206,6 +205,6 @@ def test_every_optical_face_is_a_real_direction():
     cassette would quietly lose its rear positions, and L85 would start
     reporting the one face that is supposed to carry fibres.
     """
-    import faces as FA
+    from portrayal import faces as FA
     assert set(FA.OPTICAL_FACES) <= set(FA.DIRECTIONS), \
         f"{set(FA.OPTICAL_FACES) - set(FA.DIRECTIONS)} is not a declared direction"

@@ -23,9 +23,8 @@ import sys
 import pytest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "spec" / "tools" / "portrayal"))
 
-import ocr_pages  # noqa: E402
+from portrayal import ocr_pages
 
 HAS_POPPLER = all(shutil.which(t) for t in ("pdftotext", "pdftoppm", "pdfinfo"))
 needs_poppler = pytest.mark.skipif(

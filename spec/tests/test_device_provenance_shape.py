@@ -36,8 +36,7 @@ import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
-sys.path.insert(0, str(ROOT / "spec/tools/portrayal"))
-import lint  # noqa: E402
+from portrayal import lint
 
 ENUM = set(json.loads((ROOT / "spec/schemas/device.schema.json").read_text())
            ["$defs"]["confidence"]["enum"])

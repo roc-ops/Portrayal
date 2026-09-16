@@ -39,9 +39,8 @@ import sys
 import yaml
 
 HERE = pathlib.Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE))
-import facts as F                      # noqa: E402
-import measure as M                    # noqa: E402
+from portrayal import facts as F
+from portrayal import measure as M
 
 
 def stated_facts(intake, model):

@@ -21,8 +21,7 @@ LIB = SPEC.parent / "library"
 
 SNIPPET = textwrap.dedent(f"""
     import sys, yaml
-    sys.path.insert(0, {str(SPEC / "tools/portrayal")!r})
-    from devices_index import search_blob
+    from portrayal.devices_index import search_blob
     man = {str(LIB / "devices/ufispace/s9510-28dc/device.yaml")!r}
     d = yaml.safe_load(open(man).read())
     print(search_blob(d, __import__("pathlib").Path(man).parent))

@@ -20,9 +20,8 @@ import sys
 import pytest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "spec" / "tools" / "intake"))
 
-import extract  # noqa: E402
+from portrayal_intake import extract  # noqa: E402
 
 
 # ---- the fix itself ---------------------------------------------------------
@@ -40,18 +39,18 @@ def test_the_module_imports_with_docling_unavailable():
     saved = {k: v for k, v in sys.modules.items() if k.split(".")[0] == "docling"}
     for k in saved:
         del sys.modules[k]
-    sys.modules.pop("extract", None)
+    sys.modules.pop("portrayal_intake.extract", None)
     builtins.__import__ = blocked
     try:
-        mod = importlib.import_module("extract")
+        mod = importlib.import_module("portrayal_intake.extract")
         assert callable(mod.classify), "imported, but the filter is not there"
         with pytest.raises(ImportError):
             mod.convert(pathlib.Path("x.pdf"), pathlib.Path("."), 3.0)
     finally:
         builtins.__import__ = real
         sys.modules.update(saved)
-        sys.modules.pop("extract", None)
-        importlib.import_module("extract")
+        sys.modules.pop("portrayal_intake.extract", None)
+        importlib.import_module("portrayal_intake.extract")
 
 
 # ---- hashing ----------------------------------------------------------------

@@ -14,7 +14,6 @@ import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
-sys.path.insert(0, str(ROOT / "spec/tools/portrayal"))
 
 
 def device(rel):
@@ -121,8 +120,8 @@ def test_two_rear_connectors_export_as_two_distinct_ports():
     Distinct ids are what prevent that, and this is what checks it.
     """
     import json
-    import dcim_export as D
-    import optical_ports as P
+    from portrayal import dcim_export as D
+    from portrayal import optical_ports as P
     f = ROOT / "library" / "dist" / "components.json"
     if not f.exists():
         pytest.skip("library/dist not built - run ./publish.sh --no-images")
@@ -139,8 +138,8 @@ def test_two_rear_connectors_export_as_two_distinct_ports():
 
 def test_every_one_of_the_24_fibres_is_bound():
     import json
-    import dcim_export as D
-    import optical_ports as P
+    from portrayal import dcim_export as D
+    from portrayal import optical_ports as P
     f = ROOT / "library" / "dist" / "components.json"
     if not f.exists():
         pytest.skip("library/dist not built")
@@ -187,7 +186,7 @@ def test_the_sc_adapters_are_the_first_real_check_of_the_registry_floor():
     contract's `provenance.pitch-note` and task-5-report.md for why the
     placement is not widened to hide it.
     """
-    import lint as L
+    from portrayal import lint as L
     L.STANDARDS.update(
         L.load_yaml(ROOT / "spec/schemas/standards.yaml")["standards"])
     assert L.STANDARDS["sc-duplex-adapter"]["pitch"] == 13.0
@@ -226,8 +225,8 @@ def test_the_mtp24_cassette_carries_24_fibres_on_one_rear_port():
     """One rear connector, 24 positions - the count is on the port, not the
     number of ports. This is C1's asymmetry at a width nothing has exercised."""
     import json
-    import dcim_export as D
-    import optical_ports as P
+    from portrayal import dcim_export as D
+    from portrayal import optical_ports as P
     f = ROOT / "library" / "dist" / "components.json"
     if not f.exists():
         pytest.skip("library/dist not built - run ./publish.sh --no-images")
@@ -247,8 +246,8 @@ def test_the_front_numbering_covers_all_24_without_a_gap():
     x-order alone may not reproduce the vendor's numbering - which is exactly the
     soft spot plan 5's self-review named. This is where it gets tested."""
     import json
-    import dcim_export as D
-    import optical_ports as P
+    from portrayal import dcim_export as D
+    from portrayal import optical_ports as P
     f = ROOT / "library" / "dist" / "components.json"
     if not f.exists():
         pytest.skip("library/dist not built")

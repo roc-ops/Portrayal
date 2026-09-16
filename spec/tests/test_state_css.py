@@ -70,10 +70,7 @@ def test_component_skins_declare_state_rules_for_their_own_states():
 
 
 def _render():
-    import sys
-    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]
-                           / "tools" / "portrayal"))
-    import render
+    from portrayal import render
     return render
 
 

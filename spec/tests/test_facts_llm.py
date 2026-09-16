@@ -9,8 +9,7 @@ import pathlib
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "spec/tools/portrayal"))
-import facts_llm as F  # noqa: E402
+from portrayal import facts_llm as F
 
 DOC = [
     "## SPECS",                       # 1

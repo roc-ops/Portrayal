@@ -36,8 +36,7 @@ import sys
 
 from PIL import Image
 
-sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
-import benchtile  # noqa: E402
+from portrayal import benchtile
 
 # THE PROMPT IS IN THE MODEL'S OWN DIALECT, AND THAT IS NOT A DETAIL.
 #

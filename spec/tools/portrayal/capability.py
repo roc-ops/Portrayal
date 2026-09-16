@@ -22,7 +22,7 @@ from pathlib import Path
 
 import yaml
 
-from manifest import view_parts
+from portrayal.manifest import view_parts
 
 # A RACK FACE IS NOT A BODY, and two rules need to agree about which they are
 # looking at. L43 asks the question first - a front or rear face measuring
@@ -597,7 +597,7 @@ def _rule_warnings(path, data, lib_roots):
     appended to - running this must not put anything into the report lint is
     about to print.
     """
-    import lint
+    from portrayal import lint
     saved_e, saved_w = lint.ERRORS[:], lint.WARNINGS[:]
     lint.ERRORS.clear()
     lint.WARNINGS.clear()

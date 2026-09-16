@@ -8,9 +8,8 @@ import libdata
 
 SPEC = Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library"
-sys.path.insert(0, str(SPEC / "tools/portrayal"))
 
-import capability  # noqa: E402
+from portrayal import capability
 
 PROFILES = capability.load_profiles(SPEC / "schemas")
 

@@ -5,7 +5,6 @@ import sys
 import pytest
 import yaml
 
-sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import libdata  # noqa: E402
 
 # PyYAML SHIPS TWO PARSERS AND THE TESTS WERE USING THE SLOW ONE. `yaml.safe_load`

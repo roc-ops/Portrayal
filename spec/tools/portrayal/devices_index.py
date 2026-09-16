@@ -11,9 +11,9 @@ from pathlib import Path
 
 import yaml
 
-import attrsections as attrs_mod
-import capability
-from manifest import view_parts, load_yaml
+from portrayal import attrsections as attrs_mod
+from portrayal import capability
+from portrayal.manifest import view_parts, load_yaml
 
 SCHEMAS = Path(__file__).resolve().parents[2] / "schemas"
 

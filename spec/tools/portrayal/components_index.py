@@ -17,11 +17,10 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 import yaml
-from manifest import load_yaml
+from portrayal.manifest import load_yaml
 
-sys.path.insert(0, str(Path(__file__).parent))
-from faces import DIRECTIONS, face_ref  # noqa: E402
-from render import (SVG_NS, STATE_CSS, Library, instance_group,  # noqa: E402
+from portrayal.faces import DIRECTIONS, face_ref  # noqa: E402
+from portrayal.render import (SVG_NS, STATE_CSS, Library, instance_group,  # noqa: E402
                     seq_css_name, state_rule)
 
 

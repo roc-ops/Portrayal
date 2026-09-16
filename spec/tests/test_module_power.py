@@ -16,9 +16,8 @@ from pathlib import Path
 import yaml
 
 SPEC = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(SPEC / "tools/portrayal"))
 
-import lint  # noqa: E402
+from portrayal import lint
 
 
 def plant(root, ref, cls="line-card", **contract):
@@ -464,7 +463,7 @@ def test_the_register_carries_the_rule(tmp_path):
     """L29 is in RULE_GAPS, which is the only reason any of this reaches
     `gaps.json`: `derived_gaps` runs the DEVICE rules, so a component-scoped
     warning never gets there - L26 does not."""
-    import capability
+    from portrayal import capability
     assert "L29" in capability.RULE_GAPS
     what, wanted = capability.RULE_GAPS["L29"]
     assert what == "module-power"

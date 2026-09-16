@@ -6,9 +6,8 @@ are the smallest devices that can express a change of each kind.
 import pathlib
 import sys
 
-sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "tools" / "portrayal"))
 
-import devicelock as dl  # noqa: E402
+from portrayal import devicelock as dl
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 

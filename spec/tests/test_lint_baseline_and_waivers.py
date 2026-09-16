@@ -40,8 +40,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
 LINT = ROOT / "spec/tools/portrayal/lint.py"
 BASELINE = LIB / "lint-baseline.json"
-sys.path.insert(0, str(ROOT / "spec/tools/portrayal"))
-import lint as L  # noqa: E402
+from portrayal import lint as L
 
 
 def run(*args):
@@ -141,7 +140,7 @@ def test_the_schema_requires_a_reason_of_some_length():
 def test_changing_a_waiver_asks_for_a_version():
     """An unfingerprinted claim can be retyped with no version asked for - the
     gap `portfolio` had, and then `profile` in #170."""
-    import devicelock
+    from portrayal import devicelock
     d = yaml.safe_load((LIB / "devices/casa/c40g/device.yaml").read_text())
     before = devicelock.buckets(d)
     after = devicelock.buckets({**d, "lint": {"waive": {"L44": "x" * 50}}})

@@ -11,7 +11,7 @@ import json
 from pathlib import Path
 
 import yaml
-from manifest import load_yaml
+from portrayal.manifest import load_yaml
 
 
 def main() -> int:

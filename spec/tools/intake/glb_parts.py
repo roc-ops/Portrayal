@@ -44,7 +44,7 @@ A SCENE THAT LOOKS EMPTY IS PROBABLY DRACO. Counting accessors that carry a
 it is wrong: KHR_draco_mesh_compression puts the vertices in a blob the
 extension points at, and leaves POSITION with no bufferView BY DESIGN. 212 of
 the R740XD scene's 411 meshes read as empty that way and every one of them is
-readable - see glb-view.py, which draws them. Boxes are unaffected either way,
+readable - see glb_view.py, which draws them. Boxes are unaffected either way,
 because min/max live in the accessor regardless.
 
 AND THE SCENE IS EXPLODED. Each guide is posed for its own procedure - the
@@ -53,8 +53,8 @@ the chassis. Sizes survive that; POSITIONS do not. Take a position only from a
 guide that leaves the part where it lives, and say which guide in provenance.
 
 Usage:
-    glb-parts.py FILE [pattern] [--face WxH] [--sort size|name|depth]
-    glb-parts.py FILE --names           what is named in here at all
+    glb_parts.py FILE [pattern] [--face WxH] [--sort size|name|depth]
+    glb_parts.py FILE --names           what is named in here at all
 """
 import argparse
 import json
