@@ -232,10 +232,34 @@ def _composed(doc, versions):
     return dict(sorted(seen.items()))
 
 
+# WHICH CHASSIS KEYS ARE GEOMETRY, AND WHICH ARE NOT.
+#
+# `shape` means dimensions - "moving a slot invalidates anything that cached a
+# coordinate, which is what major means" - and the whole `chassis` mapping used
+# to be hashed into it wholesale. Five of its nine keys are not dimensions, so
+# correcting a weight typo or recolouring a housing demanded a MAJOR bump while
+# nothing moved. #171 took `airflow` out for exactly that reason, on 40 devices;
+# this is the rest of it (#271).
+#
+# `edge` IS A COLOUR, which is the one the issue guessed wrong and `render.py`
+# settles in a line: `faceplate.set("stroke", ch.get("edge", "#22262a"))`. Its
+# schema entry carried no description, which is why it read as geometry.
+#
+# THE TWO SETS ARE EXHAUSTIVE OVER THE SCHEMA'S `chassis` PROPERTIES, and
+# test_lock_chassis_split.py holds that. `chassis` is `additionalProperties:
+# false`, so a tenth key can only arrive by someone adding it to the schema -
+# and they have to say which side it falls on rather than have it default into
+# `shape` and quietly demand a major from every device that adopts it. Same
+# guard, and the same reason, as PORT_ROLES/NON_PORT_ROLES in dcim_export.
+CHASSIS_SHAPE = {"width", "height", "depth", "ru"}
+CHASSIS_SURFACE = {"color", "edge", "silk", "weight-kg", "airflow"}
+
+
 def buckets(doc, versions=None):
     """The four things a device change can be, hashed apart.
 
-    `shape` is the breaking surface: chassis dimensions, view sizes, and the
+    `shape` is the breaking surface: chassis DIMENSIONS (see CHASSIS_SHAPE - the
+    housing's colours and its weight are not), view sizes, and the
     position, size and wiring of every placed thing. Moving a slot invalidates
     anything that cached a coordinate, which is what major means.
 
@@ -258,17 +282,7 @@ def buckets(doc, versions=None):
     # nothing new to say; writing it unconditionally billed them for a bump.
     skins = _placement_skins(doc)
     chassis = dict(doc.get("chassis") or {})
-    # AIRFLOW IS NOT A DIMENSION, and `shape` means dimensions - "moving a slot
-    # invalidates anything that cached a coordinate, which is what major means".
-    # Nothing caches a coordinate from a thermal direction. It sat here only
-    # because the whole `chassis` mapping was hashed wholesale, so putting
-    # airflow on the chassis where it belongs (#171) asked 40 devices for a MAJOR
-    # bump for a fact that moved between two keys and left every coordinate
-    # exactly where it was. Same shape of mistake as `_bay_accepts`, which used
-    # to sit in `shape` and read as "a slot moved" whenever a bay learned a new
-    # module. `color`, `weight-kg` and `silk` are not dimensions either and are
-    # still hashed here; that is #271.
-    thermal = chassis.pop("airflow", None)
+    chassis_surface = {k: chassis.pop(k) for k in CHASSIS_SURFACE if k in chassis}
     return {
         "shape": _digest({
             "chassis": chassis or None,
@@ -324,12 +338,13 @@ def buckets(doc, versions=None):
                       for v, w in (doc.get("views") or {}).items()},
             "configurations": doc.get("configurations"),
             **({"placement-skins": skins} if skins else {}),
-            # CONDITIONAL FOR THE REASON `placement-skins` IS. Written
-            # unconditionally, `airflow: None` is still a new key in the hashed
-            # map and rehashes all 89 devices - which it did, on the first
-            # attempt at this, asking every one of them for a bump it had not
-            # earned. Only the 51 that state an airflow are billed.
-            **({"airflow": thermal} if thermal else {}),
+            # CONDITIONAL, ONE KEY AT A TIME, FOR THE REASON `placement-skins`
+            # IS. Written unconditionally, `airflow: None` is still a new key in
+            # the hashed map and rehashes all 89 devices - which it did, on the
+            # first attempt at #171, asking every one of them for a bump it had
+            # not earned. `chassis_surface` carries only the keys this device
+            # actually states, so the 24 with no colour are not billed for one.
+            **chassis_surface,
         }),
         "gaps": _digest(doc.get("gaps") or []),
         # WHAT THIS DEVICE DRAWS THAT LIVES SOMEWHERE ELSE. Hashed apart from
