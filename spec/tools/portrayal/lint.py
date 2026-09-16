@@ -5659,6 +5659,18 @@ def lint_device_module_power(path, data, lib_roots):
     PSUs are not counted here. Their figure is `power-output-w` and it belongs
     to the supply side of the arithmetic, which is a different sum with a
     different meaning - see L27 for the module itself.
+
+    NEITHER IS A MODULE THAT SAYS `power-absent: not-applicable`, which this
+    rule used to count and should never have. The schema defines the two values
+    by what they mean to exactly this arithmetic: `not-published` is "a hole in
+    the total", and `not-applicable` is that "a chassis total is COMPLETE
+    without a number here, rather than a floor". Counting the second one made
+    the rule contradict the vocabulary it was reading - 23 of its 165 warnings
+    were modules whose absence was already settled, among them the three generic
+    `common/fan-module` shapes, where a wattage would be a fiction dressed as a
+    fact because the drawing stands for many real fans at once (#212).
+
+    `not-published` stays counted, because there the figure really is missing.
     """
     by_view = _bay_refs_by_view(data)
     refs = set().union(*by_view.values()) if by_view else set()
@@ -5674,6 +5686,8 @@ def lint_device_module_power(path, data, lib_roots):
         sattrs = sub.get("attrs") or {}
         if sub.get("class") == "transceiver" and sattrs.get("media") in AMBIGUOUS_MEDIA:
             families.add(ref)
+        if sattrs.get("power-absent") == "not-applicable":
+            continue                       # settled, not missing - see the docstring
         if not any(k in sattrs for k in DRAW_KEYS):
             unsourced.add(ref)
     # One warning per unsourced module, not one per chassis. The register turns

@@ -9,6 +9,12 @@ description: Hot-swappable 1U fan module — 44.6mm square unioned with a 4mm le
 size: {w: 48.6, h: 40.0}
 attrs: {power-absent: not-applicable, airflow: front-to-back}
 provenance:
+  states: >-
+    NO LAMP, BECAUSE THIS IS A GENERIC. The part is a shape standing for many vendors' 1U fan
+    modules, and where a real one puts its status LED differs by vendor - the nine UfiSpace
+    fans in this library each draw their own status-led at their own measured position. A lamp
+    on the generic would be a position invented for all of them. A device whose fan really has
+    one places the vendor part.
   power: >-
     NOT APPLICABLE, because this contract is a GENERIC and not a part. It is a shape that
     stands in for every module of its kind, so there is no one figure to state: a 40GBASE-SR4
@@ -22,7 +28,7 @@ provenance:
     The chassis-level hole stays visible in L29, which is the right place for it.
   size: photo-measured (red bar 36.6mm wide -> square 44.6mm; pitch 48.6mm)
   elements: photo-measured (bar rows 29.4-32.7mm abs)
-states: [ok, fail, absent]
+states: [absent]
 elements:
   screw: {at: [0.3, 17.8], size: [3.4, 3.4], class: screw}
   rotor: {at: [7.5, 0.8], size: [37.6, 37.6], class: rotor}
