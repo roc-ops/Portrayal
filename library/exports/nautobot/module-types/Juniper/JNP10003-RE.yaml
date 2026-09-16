@@ -4,31 +4,31 @@ model: JNP10003-RE
 description: Juniper MX10003 Routing and Control Board (JNP10003-RE) - two run side by side across the
   top of the chassis
 console-ports:
-  - name: usb
-    type: usb-a
   - name: con
     type: rj-45
+  - name: usb
+    type: usb-a
 interfaces:
-  - name: mgmt
-    type: 1000base-t
-  - name: tod
-    type: other
-    label: TOD
   - name: bits
     type: other
     label: BITS
-  - name: pps-out
-    type: other
-    label: SMB
-  - name: pps-in
+  - name: mgmt
+    type: 1000base-t
+  - name: mhz-in
     type: other
     label: SMB
   - name: mhz-out
     type: other
     label: SMB
-  - name: mhz-in
+  - name: pps-in
     type: other
     label: SMB
+  - name: pps-out
+    type: other
+    label: SMB
+  - name: tod
+    type: other
+    label: TOD
 comments: 'Juniper MX10003 Routing and Control Board (JNP10003-RE) - two run side by side across the top
   of the chassis. USB, MGMT and CON jacks, the blue SSD carrier (SSD 0 / SSD 1), MST/HA/ALM lamps, ToD
   and BITS jacks and the PPS / 10MHz OUT-IN SMB quad, with RESET, OK/FAIL and ONLINE on the bottom strip.
@@ -38,5 +38,4 @@ comments: 'Juniper MX10003 Routing and Control Board (JNP10003-RE) - two run sid
 
   - power-draw-max-w: 58
 
-
-  Contract version 1.1.0.'
+  Contract version 1.1.0 (juniper/jnp10003-rcb).'

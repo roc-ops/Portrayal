@@ -421,6 +421,12 @@ NOT_A_DCIM_PORT = {
 TARGETS = ("netbox", "nautobot")
 
 
+def _natural(name):
+    """`port-2` before `port-10`, and a missing name last rather than crashing."""
+    return tuple((int(t), "") if t.isdigit() else (0, t)
+                 for t in re.split(r"(\d+)", str(name or "")))
+
+
 def slugify(s):
     return re.sub(r"-+", "-", re.sub(r"[^a-z0-9]+", "-", str(s).lower())).strip("-")
 
@@ -1041,6 +1047,19 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None):
         if declared:
             powers.append({"name": "Inlet", "type": declared})
 
+    # BY NAME, NOT BY WHERE THE JACK IS DRAWN.
+    #
+    # The order used to be the order the parts are listed in, which is the order
+    # they sit across the FACE - and half these cards are authored twice, once
+    # horizontally for the MX240/MX480 and once rotated for the MX960. Both
+    # write one module type, so whichever sorted last handed the DCIM ITS port
+    # order: the committed DPCE-R-20GE-2XGE begins `port-0-1, port-0-0,
+    # port-0-3`, which is a vertical drawing's x-order and means nothing to a
+    # DCIM. 26 of the 44 colliding pairs differed in nothing else (#267).
+    #
+    # Natural order, so port-2 precedes port-10.
+    for lst in (consoles, ifaces, powers):
+        lst.sort(key=lambda i: _natural(i.get("name")))
     if consoles:
         out["console-ports"] = consoles
     if ifaces:
@@ -1094,8 +1113,16 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None):
         body.append("")
     # Same reasoning as the device stamp: a module type is cached in a DCIM too,
     # and its faceplate can move under it.
+    #
+    # NAMED, because a module type can have more than one author. Forty Juniper
+    # cards are drawn twice - once horizontally, once rotated - and both write
+    # this one document, so a bare version number would be one of the two chosen
+    # by `sorted()`. `export_modules` merges the stamps of every contract that
+    # collapses here, which is what makes the collapsed document a function of
+    # the whole group rather than of iteration order (#267).
     if contract.get("version"):
-        body.append(f"Contract version {contract['version']}.")
+        out["_stamp"] = [f"{contract['version']} ({contract.get('ns')}/"
+                         f"{contract.get('name')})"]
     if body:
         out["comments"] = "\n".join(body).strip()
     return out
@@ -1245,6 +1272,22 @@ def render_module_image(dist, root, target, doc, ns, name, ver):
                      / (doc["model"].replace("/", "-") + ".front.png"), 1)
 
 
+def dcim_significant(doc):
+    """What a DCIM READS, which is everything but the comments.
+
+    Two authors of one card carry their own version numbers and their own
+    sentence about which way it was drawn, and neither is a difference in the
+    hardware. Comparing whole rendered files instead called all 52 Juniper twins
+    a loss, which would have buried the two that are.
+
+    One function rather than a rule written twice, because the test that pins
+    the collision list has to ask the same question the exporter asks - a second
+    copy of it would drift, and this file's own history is that a mirror of a
+    tool is wrong about it within a commit or two.
+    """
+    return {k: v for k, v in doc.items() if k not in ("comments", "_stamp")}
+
+
 def export_modules(dist, root, images=None):
     """Every module contract in the library, as module types for both targets.
 
@@ -1252,40 +1295,88 @@ def export_modules(dist, root, images=None):
     namespace gives it - learned from the devices, which are the only place the
     library states a manufacturer - and the generic `common/` namespace is
     skipped: a part with no vendor is not something a DCIM can order.
+
+    TWO PASSES, BECAUSE A MODEL CAN HAVE MORE THAN ONE AUTHOR. A module type is
+    written to <manufacturer>/<model>.yaml, so two contracts carrying one
+    `attrs.model` used to write one path and the second silently won - 55
+    contracts overwritten across 44 filenames, every run green (#267).
+
+    Most of that is deduplication and should be: 40 of the 44 are one Juniper
+    card drawn twice, horizontally for the MX240/MX480 and rotated for the
+    MX960, and a DCIM orders a card rather than an orientation. What was wrong
+    is that the right outcome arrived BY ACCIDENT - `sorted()` decided which
+    twin's document survived, so renaming a contract changed the export and
+    nothing said so.
+
+    So the first pass builds; the second writes. A group whose documents agree
+    collapses DELIBERATELY into one whose version stamp names every author. A
+    group whose documents differ keeps the first, and every loss is printed by
+    name - test_module_collisions.py pins that list so a new one fails.
     """
-    wrote = skipped = 0
+    skipped = 0
     imaged = set()
     dropped = {}
     # components.json in place of a glob over contracts, and devices.json in
     # place of one over manifests. The index carries `ns` on both sides, which is
     # what the namespace-to-manufacturer join needs and what a checkout used to
     # be opened for.
+    built = []                                   # (man, doc, contract)
     for contract in sorted(dist.modules(), key=lambda c: (c.get("ns") or "", c.get("name") or "")):
-        ns = contract.get("ns")
-        man = dist.manufacturer_of(ns)
+        man = dist.manufacturer_of(contract.get("ns"))
         if not man:
             skipped += 1
             continue
-        doc = build_module(contract, man, dist.component_by_ref, dropped)
+        built.append((man, build_module(contract, man, dist.component_by_ref, dropped),
+                      contract))
+
+    groups = {}
+    for man, doc, contract in built:
+        groups.setdefault((man, doc["model"]), []).append((doc, contract))
+
+    wrote = 0
+    collisions = []                              # ((man, model), ref, kind)
+    for (man, model), members in sorted(groups.items()):
+        doc, contract = members[0]
+        first = f"{contract.get('ns')}/{contract.get('name')}"
+        stamps = list(doc.pop("_stamp", []))
+        for other, oc in members[1:]:
+            ref = f"{oc.get('ns')}/{oc.get('name')}"
+            stamp = other.pop("_stamp", [])
+            # WHAT A DCIM READS, which is everything but the comments. Two
+            # authors of one card carry their own version numbers and their own
+            # sentence about which way it was drawn, and neither is a difference
+            # in the hardware. Comparing the whole rendered file instead called
+            # all 52 twins a loss, which would have buried the two that are.
+            if dcim_significant(other) == dcim_significant(doc):
+                collisions.append(((man, model), ref, "identical"))
+                stamps += stamp
+            else:
+                collisions.append(((man, model), ref, "differs"))
+        if stamps:
+            body = (doc.get("comments") or "").rsplit("Contract version", 1)[0].rstrip()
+            doc["comments"] = (body + "\n" + "Contract version "
+                               + ", ".join(stamps) + ".").strip()
+        doc.pop("_stamp", None)
+
+        body_text = "---\n" + yaml.dump(doc, Dumper=Indented, sort_keys=False,
+                                        width=100, default_flow_style=False)
         # `major` ARRIVES PREFIXED. It is the version directory's own name, so
         # components.json carries `v1` and not `1` - every other reader strips
         # with `major[1:]` rather than adding. Prefixing again asked for
         # `casa--oob-2p8--vv1--default.svg`, which no build produces, and
         # `rasterize` answers None for an absent drawing rather than raising,
         # so all 376 module images stopped rendering without a word.
-        name, ver = contract.get("name"), contract.get("major")
+        name, ver, ns = contract.get("name"), contract.get("major"), contract.get("ns")
         for target in TARGETS:
             d = Path(root) / target / "module-types" / man
             d.mkdir(parents=True, exist_ok=True)
             # Cisco ships part numbers with slashes in them - A9K-16T/8-B - and
             # a slash is a path separator, not a character. The model keeps the
             # real name; only the filename is sanitised.
-            out = d / (doc["model"].replace("/", "-") + ".yaml")
-            out.write_text("---\n" + yaml.dump(doc, Dumper=Indented, sort_keys=False,
-                                               width=100, default_flow_style=False))
+            (d / (model.replace("/", "-") + ".yaml")).write_text(body_text)
             if images and RASTER:
                 if render_module_image(images, root, target, doc, ns, name, ver):
-                    imaged.add(doc["model"])
+                    imaged.add(model)
 
         # THE FIBRE MAP, gated the same way build_module gates rear-ports: on a
         # declared rear face, not merely on having paths. A single-faced module
@@ -1294,35 +1385,37 @@ def export_modules(dist, root, images=None):
         # the same shape netbox#21830 rejected for the port lists themselves.
         # It sits beside `netbox/` and `nautobot/` rather than inside either,
         # because it is not a document of either schema - it is the artefact
-        # this project defines, and both targets consume the same rows.
+        # this project defines, and both targets consume the same rows. Written
+        # once per MODEL for the same reason the type is: its filename is the
+        # model too, so it collided in exactly the same silence.
         view = contract_view(contract)
         if face_ref(view, "rear") and (contract.get("optical") or {}).get("paths"):
-            m = optical_ports.fibre_map(view, dist.component_by_ref, doc["model"])
+            m = optical_ports.fibre_map(view, dist.component_by_ref, model)
             d = Path(root) / "fibre-maps" / man
             d.mkdir(parents=True, exist_ok=True)
-            (d / (doc["model"].replace("/", "-") + ".yaml")).write_text(
+            (d / (model.replace("/", "-") + ".yaml")).write_text(
                 "---\n" + yaml.dump(m, Dumper=Indented, sort_keys=False,
                                     width=100, default_flow_style=False))
 
         wrote += 1
-        print(f"{doc['model']}  ({len(doc.get('interfaces', []))} interfaces, "
+        print(f"{model}  ({len(doc.get('interfaces', []))} interfaces, "
               f"{len(doc.get('power-ports', []))} power ports)")
-    print(f"module types: {wrote} written, {skipped} skipped for having no manufacturer")
-    # WHAT THIS PASS COULD NOT CLASSIFY, BY NAME. Most of it is furniture - a
-    # riser plate, a warning triangle, a lamp - and saying so costs one line.
-    # The line is here because the alternative is what this repo had until #254:
-    # a silence that reads identically whether the part is a bracket or a 100GbE
-    # cage nobody has written a row for. A name in the log is something a person
-    # can be surprised by; an absence is not. NOT_A_DCIM_PORT carries the
-    # port-class ones with a reason each, and test_silent_drops.py holds it
-    # exhaustive, so a new one appears both here and as a failing test.
-    #
-    # NOT cross-checked against NOT_A_DCIM_PORT here, and the first draft that
-    # did was wrong twice over: most of this list is furniture the register has
-    # no business carrying, and two of the fibre adapters export their whole
-    # port list through the OTHER exit - the optical path - so the branch chain
-    # never sees them and flagging them read as a defect. This line records;
-    # test_silent_drops.py judges.
+
+    print(f"module types: {wrote} written from {len(built)} contract(s), "
+          f"{skipped} skipped for having no manufacturer")
+    # NAMED, NOT COUNTED. A number here would be the instrument that failed in
+    # #183: it cannot tell one part quietly vanishing from forty twins
+    # collapsing the way they are meant to.
+    if collisions:
+        same = [c for c in collisions if c[2] == "identical"]
+        diff = [c for c in collisions if c[2] == "differs"]
+        print(f"model collisions: {len(collisions)} contract(s) share a model - "
+              f"{len(same)} collapsed (same document, stamps merged), "
+              f"{len(diff)} DIFFER and were not written")
+        for (man, model), ref, kind in diff:
+            first = next(f"{c.get('ns')}/{c.get('name')}"
+                         for _d, c in groups[(man, model)][:1])
+            print(f"    {man}/{model}: {ref} differs from {first}, not written")
     if dropped:
         print(f"unclassified parts: {sum(dropped.values())} placement(s) across "
               f"{len(dropped)} ref(s) matched no branch in build_module")

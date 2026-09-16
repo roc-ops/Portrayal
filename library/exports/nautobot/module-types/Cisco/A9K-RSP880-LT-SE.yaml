@@ -5,40 +5,40 @@ weight: 8.07
 weight_unit: kg
 description: Cisco ASR 9000 Route Switch Processor 880-LT, Service Edge optimised - four cores at 2
 console-ports:
-  - name: console
-    type: rj-45
   - name: aux
+    type: rj-45
+  - name: console
     type: rj-45
   - name: usb
     type: usb-a
 interfaces:
-  - name: sync-0
+  - name: cmp
+    type: 1000base-t
+  - name: gps-1pps
     type: other
-    label: SYNC
-  - name: sync-1
+    label: SMB
+  - name: gps-10mhz
     type: other
-    label: SYNC
-  - name: ieee-1588
-    type: other
-    label: '1588'
+    label: SMB
   - name: ics-0
     type: other
     label: ICS
   - name: ics-1-tod
     type: other
     label: ICS
+  - name: ieee-1588
+    type: other
+    label: '1588'
   - name: mgt-lan-0
     type: 1000base-t
   - name: mgt-lan-1
     type: 1000base-t
-  - name: cmp
-    type: 1000base-t
-  - name: gps-10mhz
+  - name: sync-0
     type: other
-    label: SMB
-  - name: gps-1pps
+    label: SYNC
+  - name: sync-1
     type: other
-    label: SMB
+    label: SYNC
 comments: 'Cisco ASR 9000 Route Switch Processor 880-LT, Service Edge optimised - four cores at 2.4 GHz
   and two 128 GB SSDs, against the RSP-880''s eight cores and two 32 GB SSDs. Ten RJ-45 jacks - two SYNC
   timing ports configurable as BITS, J.211 or DTI, an IEEE 1588 timestamp port, two inter-chassis sync
@@ -69,5 +69,4 @@ comments: 'Cisco ASR 9000 Route Switch Processor 880-LT, Service Edge optimised 
 
   - weight-kg: 8.07
 
-
-  Contract version 1.3.0.'
+  Contract version 1.3.0 (cisco/a9k-rsp880-lt-se).'

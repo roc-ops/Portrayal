@@ -5,42 +5,42 @@ weight: 9.0
 weight_unit: kg
 description: Cisco ASR 9000 Series Route Switch Processor 440, Packet Transport optimised
 console-ports:
-  - name: console
-    type: rj-45
   - name: aux
+    type: rj-45
+  - name: console
     type: rj-45
   - name: usb
     type: usb-a
 interfaces:
-  - name: sync-0
+  - name: gps-1pps
     type: other
-    label: SYNC
-  - name: sync-1
+    label: SMB
+  - name: gps-10mhz
     type: other
-    label: SYNC
-  - name: ieee-1588
-    type: other
-    label: '1588'
+    label: SMB
   - name: ics-0
     type: other
     label: ICS
   - name: ics-1-tod
     type: other
     label: ICS
+  - name: ieee-1588
+    type: other
+    label: '1588'
   - name: mgt-lan-0
     type: 1000base-t
   - name: mgt-lan-1
     type: 1000base-t
-  - name: gps-10mhz
-    type: other
-    label: SMB
-  - name: gps-1pps
-    type: other
-    label: SMB
   - name: sfp-plus-0
     type: 10gbase-x-sfpp
   - name: sfp-plus-1
     type: 10gbase-x-sfpp
+  - name: sync-0
+    type: other
+    label: SYNC
+  - name: sync-1
+    type: other
+    label: SYNC
 comments: 'Cisco ASR 9000 Series Route Switch Processor 440, Packet Transport optimised. Two SYNC timing
   ports, an IEEE 1588 timestamp port, ICS0 and ICS1/TOD inter-chassis sync ports, two management LAN ports,
   a console and an auxiliary port, and two 10-GE SFP+ virtualization cluster ports. Nine RJ-45 jacks,
@@ -71,5 +71,4 @@ comments: 'Cisco ASR 9000 Series Route Switch Processor 440, Packet Transport op
 
   - weight-kg: 9.0
 
-
-  Contract version 1.2.0.'
+  Contract version 1.2.0 (cisco/a9k-rsp440-tr).'
