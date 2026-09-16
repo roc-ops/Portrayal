@@ -82,6 +82,17 @@ data. Three of this sweep's candidates did not survive it:
 - **`common/sc-apc` at `10g-pon`.** Upstream separates `xg-pon` (10G/2.5G) from
   `xgs-pon` (10G/10G) and the model does not say which. Typing it would pick one.
 
+And it is not only candidates that fail step three. A *rule* can too, and the
+same check catches it. Three parts in a row turned out to be thin wrappers over a
+connector the exporter already classifies - `common/smb-jack` is "a gold nut
+around a std/smb core" in its own words - which makes "a wrapper inherits its
+core's type" look like the general fix. Run against the corpus it is wrong on
+half the cases it would touch: `common/rj45-ganged-eth` composes
+`std/rj45-ganged`, which the console table maps to `rj-45`, so inheriting would
+file **every Ethernet jack in the library as a console port**. `common/usb-a`
+composes a console and is a storage port. `casa/c40g-ac-inlet-panel` composes
+four inlets and would inherit one. The rule was replaced by three named rows.
+
 ## What replaced the silence
 
 Not a fix - fixes are one-shot and this shape keeps coming back. Two instruments:

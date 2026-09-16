@@ -319,6 +319,19 @@ PART_RF = {
     "std/f-type": ("docsis", "F"),
     "std/mcx": ("docsis", "MCX"),
     "std/smb": ("other", "SMB"),
+    "std/sma": ("other", "SMA"),
+    # THE PANEL-MOUNT SIBLINGS, WHICH ARE LISTED AND NOT DERIVED. Each is a
+    # bezel around a core that is already here - `common/smb-jack` is "a gold nut
+    # around a std/smb core" in its own words - and following composition to
+    # classify a wrapper is a rule that looks right and is not. Six class:port
+    # parts compose a classified core, and it would be WRONG on three of them:
+    # `common/rj45-ganged-eth` composes `std/rj45-ganged`, which PART_CONSOLE
+    # calls a console, and inheriting that would file every Ethernet jack in the
+    # library as a console port - #27 and #29, for a third time. `common/usb-a`
+    # composes a console and is a storage port. `casa/c40g-ac-inlet-panel`
+    # composes FOUR inlets and would inherit one.
+    "common/smb-jack": ("other", "SMB"),
+    "common/sma-jack": ("other", "SMA"),
 }
 
 # std/lc-bore is the rx/tx bore of a QSFP transceiver, not a port on a device:
@@ -384,13 +397,9 @@ NOT_A_DCIM_PORT = {
     "common/rj11-jack": "FXS analogue telephone line. `rj-11` upstream is a CONSOLE type; "
                         "an FXS line is not a console and must not read as one",
 
-    # --- timing, and the asymmetry that is a filed bug -----------------------
-    # `std/smb` on a MODULE types as `other` + an SMB label through PART_RF. The
-    # same jack on a CHASSIS faceplate drops, because the device pass has no
-    # path to PART_RF at all. That is roc-ops/Portrayal#285, not a decision.
-    "common/smb-jack": "timing jack on a chassis faceplate; the device pass has no PART_RF path (#285)",
-    "common/sma-jack": "timing jack on a chassis faceplate; the device pass has no PART_RF path (#285)",
-    "std/sma": "timing jack on a chassis faceplate; the device pass has no PART_RF path (#285)",
+    # The three timing jacks were here until #285 gave `build` a PART_RF path
+    # and added them to it. They now export as `other` with their connector,
+    # and the register's stale-entry test is what took them off.
 
     # --- power entry on a chassis ---------------------------------------------
     # `common/dc-barrel` was here until #286 gave `build` a power path; it now
@@ -779,7 +788,7 @@ def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
     # own, and names its ports by the id on the faceplate.
     names = overlay_names(overlay) if overlay is not None else None
 
-    console, mgmt_sfp, bays, powers = [], [], [], {}
+    console, mgmt_sfp, bays, powers, timing = [], [], [], {}, {}
     for view in views_for(dev, cfg_name):
         parts = view_parts(view)
         for p in scoped(parts["placements"], cfg_name):
@@ -799,6 +808,36 @@ def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
             # in `mgmt` beside the console and the USB - and a rule built on
             # either spelling would have caught one of them. What the part IS
             # does not depend on which region of the faceplate it sits in.
+            # RF AND TIMING, the same treatment build_module gives them.
+            #
+            # A 10 MHz input, a BITS port and a ToD jack are not network
+            # interfaces, and `iface_type` is right to refuse them - but
+            # refusing them is not the same as having nothing to say. On a CARD
+            # they have exported as `other` carrying the connector or the
+            # function as a label since PART_RF was written, which is the
+            # schema's way of saying "a thing it has no name for". On a CHASSIS
+            # they exported nothing, because `build` had no path to PART_RF at
+            # all: the same jack, two answers, and only one of them decided
+            # (#285). 263 placements across 33 devices.
+            #
+            # The label is the whole point. `other` alone says a port exists and
+            # nothing else; `other` + BITS says what to plug into it.
+            rf_ref = p["ref"].split("@")[0]
+            if rf_ref in PART_RF:
+                t, connector = PART_RF[rf_ref]
+                timing.setdefault(p["id"], {"name": p["id"] or t, "type": t,
+                                            "label": connector})
+            elif p["ref"] in FAMILY_PART:
+                # A BARE RJ45 THAT NAMES A TIMING FUNCTION, read from the
+                # placement's own words rather than from the ref - #125 gave
+                # std/rj45@2 seven jobs, so the ref cannot carry the answer and
+                # the device says which one this is. Console jacks are NOT taken
+                # here: `build` already has a console path with its own test,
+                # and widening this to RJ45_CONSOLE would be a different change.
+                label = rj45_timing_label({**p, "attrs": a})
+                if label:
+                    timing.setdefault(p["id"], {"name": p["id"], "type": "other",
+                                                "label": label})
             if p["ref"].split("@")[0] in PART_POWER:
                 powers.setdefault(p["id"], {
                     "name": p["id"] or "Inlet",
@@ -863,7 +902,11 @@ def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
 
     ifaces = ([i for _, _, i in sorted(ports.values(), key=lambda k: k[:2]) if i.get("mgmt_only")]
               + sorted(mgmt_sfp, key=lambda i: i["name"])
-              + [i for _, _, i in sorted(ports.values(), key=lambda k: k[:2]) if not i.get("mgmt_only")])
+              + [i for _, _, i in sorted(ports.values(), key=lambda k: k[:2]) if not i.get("mgmt_only")]
+              # LAST, because they are not what anyone opens this list to find.
+              # A person reading a device type wants its ports; the timing and
+              # RF jacks are real and belong here, and they belong at the end.
+              + [timing[k] for k in sorted(timing)])
 
     if console:
         out["console-ports"] = console

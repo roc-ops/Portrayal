@@ -357,3 +357,67 @@ def test_a_device_whose_supply_carries_the_inlet_exports_none_itself():
     if d is None:
         pytest.skip("R740xd is not in this library")
     assert not d.get("power-ports")
+
+
+# --- the same jack, the same answer (#285) -----------------------------------
+#
+# `build_module` has typed a timing connector as `other` carrying its connector
+# or its function as a label since PART_RF was written - the schema's way of
+# saying "a thing it has no name for". `build` had no path to PART_RF at all, so
+# the identical jack on a chassis faceplate exported nothing: 263 placements
+# across 33 devices, and the two halves of one exporter disagreeing about one
+# piece of hardware.
+
+def test_a_chassis_timing_jack_says_what_it_is():
+    """The ASR 9001's two SYNC jacks and its ToD port. `other` alone would say
+    only that a port exists; `other` + SYNC says what to plug into it."""
+    d = _export("ASR 9001 Router")
+    if d is None:
+        pytest.skip("the ASR 9001 is not in this library")
+    timing = {i["name"]: i.get("label") for i in (d.get("interfaces") or [])
+              if i["type"] == "other"}
+    assert timing == {"sync-0": "SYNC", "sync-1": "SYNC", "tod": "TOD"}
+
+
+def test_the_two_passes_agree_about_std_smb():
+    """The asymmetry itself, asserted as a pair rather than as two facts. An
+    SMB on a route processor and an SMB on a chassis are the same connector,
+    and before this they were an interface and nothing."""
+    assert dx.PART_RF["std/smb"] == ("other", "SMB")
+    on_a_card = dx.build_module(
+        {"name": "x", "parts": [{"ref": "std/smb@1", "id": "mhz"}]}, "Test")
+    assert on_a_card["interfaces"] == [{"name": "mhz", "type": "other", "label": "SMB"}]
+
+    with_smb = [d for _m, d in _exports()
+                if any(i.get("label") == "SMB" for i in (d.get("interfaces") or []))]
+    assert with_smb, "no device type carries an SMB interface; the chassis path is gone"
+
+
+def test_a_panel_mount_jack_is_listed_and_not_derived():
+    """`common/smb-jack` is "a gold nut around a std/smb core" in its own words,
+    and is in PART_RF by name rather than by following that composition.
+
+    Six class:port parts compose a classified core and inheriting would be WRONG
+    on three: `common/rj45-ganged-eth` composes `std/rj45-ganged`, which
+    PART_CONSOLE calls a console - inheriting it would file every Ethernet jack
+    in the library as a console port, which is #27 and #29 for a third time.
+    """
+    assert dx.PART_RF["common/smb-jack"] == ("other", "SMB")
+    assert dx.PART_RF["common/sma-jack"] == ("other", "SMA")
+    assert dx.PART_CONSOLE["std/rj45-ganged"] == "rj-45"
+    assert "common/rj45-ganged-eth" not in dx.PART_CONSOLE, (
+        "the Ethernet jack must not inherit its core's console type")
+
+
+def test_no_device_type_names_one_port_twice():
+    """Both libraries key ports by name within a type, and the timing list is a
+    second source of names appended to the interface list. A collision would be
+    rejected on import, which is a failure a person finds rather than a test."""
+    bad = []
+    for model, d in _exports():
+        for key in ("interfaces", "console-ports", "power-ports", "module-bays"):
+            names = [i.get("name") for i in (d.get(key) or [])]
+            dupes = {n for n in names if names.count(n) > 1}
+            if dupes:
+                bad.append(f"{model}: {key} {sorted(dupes)}")
+    assert not bad, "\n".join(bad)
