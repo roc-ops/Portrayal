@@ -9,6 +9,12 @@ the [components README](README.md) says which namespace a new one belongs in.
 
 584 component majors in 11 namespaces.
 
+A `std/x` and a `common/x` with the same name are two layers rather than two
+copies: `std/` is the aperture, `common/` is the bezel, shell or nut around it and
+composes it. Place the wrapper when the panel carries that furniture and the
+aperture when it is a bare opening - never both at one position. The README's
+[Namespaces](README.md#namespaces) section has the pairs and the rule.
+
 ## std/ (32)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
@@ -378,7 +384,7 @@ the [components README](README.md) says which namespace a new one belongs in.
 |---|---|---|---|---|---|---|---|
 | `edgecore/agr-fan@1` | module | fan | 69.4 × 69.4 × 132 |  | 2 | 20 | Hot-swappable fan module for the Edgecore AGR400 (AS7946-30XB) and AGR420 (AS7946-74XKSB) |
 | `edgecore/agr-filter-bottom@1` | module | filter | 353.5 × 17.2 × 12 |  | 1 | 0 | Removable bottom air filter for the Edgecore AGR400 (AS7946-30XB) and AGR420 (AS7946-74XKSB) |
-| `edgecore/agr-filter-top@1` | module | filter | 353.5 × 17.2 × 12 |  | 2 | 3 | Removable top air filter for the Edgecore AGR400 (AS7946-30XB) and AGR420 (AS7946-74XKSB) |
+| `edgecore/agr-filter-top@1` | module | filter | 353.5 × 17.2 × 12 |  | 2 | 3 | Removable top air filter for the Edgecore AGR400 (AS7946-30XB) |
 | `edgecore/agr-ground-plate@1` | component | ground | 11 × 34 |  | 2 | 3 | Chassis grounding landing on the AGR400/AGR420 rear, between the PSU bay and the fans |
 | `edgecore/agr-label-caution@1` | component | sticker | 26 × 62 |  | 2 | 1 | Caution label near the rear left of the top cover on the Edgecore AGR400 / AGR420 |
 | `edgecore/agr-label-serial@1` | component | sticker | 74 × 100 |  | 2 | 0 | Serial number, SKU and MAC label on the top cover on the Edgecore AGR400 / AGR420 |
@@ -388,7 +394,7 @@ the [components README](README.md) says which namespace a new one belongs in.
 | `edgecore/agr-psu-dc@1` | module | psu | 60.1 × 37.6 × 360.7 |  | 2 | 87 | DC-DC hot-swappable PSU for the Edgecore AGR400 (AS7946-30XB) and AGR420 (AS7946-74XKSB) |
 | `edgecore/agr420-filter-bottom@1` | module | filter | 399.5 × 9 × 12 |  | 1 | 0 | Removable BOTTOM air filter for the Edgecore AGR420 (AS7946-74XKSB) - the full-width band of it |
 | `edgecore/agr420-filter-step@1` | module | filter | 25.5 × 16.5 × 12 |  | 1 | 0 | The deep section of an Edgecore AGR420 air filter, beside the QSFP-DD column at the left of the front panel, … |
-| `edgecore/agr420-filter-top@1` | module | filter | 417 × 8.6 × 12 |  | 1 | 0 | Removable TOP air filter for the Edgecore AGR420 (AS7946-74XKSB) - the full-width band of it |
+| `edgecore/agr420-filter-top@1` | module | filter | 417 × 8.6 × 12 |  | 1 | 1 | Removable TOP air filter for the Edgecore AGR420 (AS7946-74XKSB) - the full-width band of it |
 
 ## fs/ (10)
 
@@ -609,9 +615,9 @@ the [components README](README.md) says which namespace a new one belongs in.
 | `ufispace/fan-402825@1` | module | fan | 51.5 × 42.2 |  | 9 | 1 | UfiSpace FAN-402825-HD hot-swap fan module (S9510-28DC family) - red tube pull handle looped on the left, a h… |
 | `ufispace/fan-405637@1` | module | fan | 50.7 × 40 |  | 5 | 0 | UfiSpace FAN-405637 hot-swap fan module (S9110-32X) - tube handle over a hex rotor grille, and a narrow right… |
 | `ufispace/fan-40802825@1` | module | fan | 52.4 × 87.2 |  | 1 | 0 | UfiSpace FAN-40802825-HD hot-swap fan module (S9620-40DG) - a full-height 2RU module with a hexagonal grille … |
-| `ufispace/fan-803816@1` | module | fan | 82.5 × 81.5 |  | 5 | 0 | UfiSpace FAN-803816-HI hot-swap fan module (S9600-30DX) - hex rotor grille behind a curved red tube handle, a… |
+| `ufispace/fan-803816@1` | module | fan | 82.5 × 81.5 |  | 5 | 1 | UfiSpace FAN-803816-HI hot-swap fan module (S9600-30DX) - hex rotor grille behind a curved red tube handle, a… |
 | `ufispace/fan-803816-hc@1` | module | fan | 81 × 81.5 |  | 3 | 0 | UfiSpace FAN-803816-HC hot-swap fan module (S9700 disaggregated core-router family) - a narrow flange strip d… |
-| `ufispace/fan-803816-hi@1` | module | fan | 80 × 81.5 |  | 8 | 2 | UfiSpace FAN-803816-HI hot-swap fan module (S9600-28DX 2RU aggregation family) - red loop handle down the mid… |
+| `ufispace/fan-803816-hi@1` | module | fan | 80 × 81.5 |  | 8 | 3 | UfiSpace FAN-803816-HI hot-swap fan module (S9600-28DX 2RU aggregation family) - red loop handle down the mid… |
 | `ufispace/fan-805616@1` | module | fan | 83.7 × 80 |  | 2 | 0 | UfiSpace FAN-805616 hot-swap fan module (S9311-64D) - a hex rotor grille with a long vertical tube handle, a … |
 | `ufispace/fan-808012@1` | module | fan | 81 × 81.5 |  | 11 | 2 | UfiSpace FAN-808012-HCE hot-swap fan module (S9321-64E/EO 800G family) - red loop handle, red release tab on … |
 | `ufispace/lane-led-quad@1` | component | led | 14.4 × 2.6 |  | 11 | 0 | Four round port lamps in a row on a 3.94 mm pitch - the per-QSFP28 indicator cluster the S9110-32X prints abo… |

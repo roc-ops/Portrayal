@@ -46,6 +46,30 @@ vendor's namespace even if another vendor ships something that looks the same.
 Vendor slugs are the keys in `spec/schemas/vendors.yaml`; a new vendor is added
 there first.
 
+### `std/x` and `common/x` are two layers, not two copies
+
+The library holds pairs that look like duplicates and are not. `std/` holds the
+**hole**; `common/` holds the **part around the hole**, and composes it:
+
+| the aperture | the faceplate part that wraps it | what the wrapper adds |
+|---|---|---|
+| `std/usb-a` 12 × 4.5 | `common/usb-a` 17 × 7 | the receptacle shell and its trident mark |
+| `std/db9` 20.5 × 11.4 | `common/db9-receptacle` 30.8 × 12.5 | a jackscrew standoff either side |
+| `std/sma` 6.35 × 6.35 | `common/sma-jack` 9.5 × 9.5 | the gold jam nut |
+| `std/qsfp-ganged` 18.5 × 9.58 | `common/qsfp-cage` 19.5 × 10.18 | the cage bezel |
+
+**Which to place.** Place the `std/` part when the faceplate really is just a
+cut opening, and the `common/` one when the panel carries the bezel, nut or
+shell around it — the wrapper's own size is the thing you are drawing, and it
+composes the aperture so the standard is still checked underneath. Never place
+both at one position: the aperture is already inside the wrapper, and L39 will
+report the overlap.
+
+A `std/` part states `conforms:` and is size-checked against
+`spec/schemas/standards.yaml`. A wrapper states no `conforms:` of its own; it
+inherits the claim from the part it composes, which is why the pair is a layering
+and not a fork.
+
 ## Names
 
 - Lower-case, digits, hyphens: `^[a-z0-9]+(-[a-z0-9]+)*$`, no double hyphen

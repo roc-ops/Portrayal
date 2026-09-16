@@ -105,6 +105,12 @@ def build(library):
         "how many other components compose it. Search this page before drawing a part;",
         "the [components README](README.md) says which namespace a new one belongs in.",
         "",
+        "A `std/x` and a `common/x` with the same name are two layers rather than two",
+        "copies: `std/` is the aperture, `common/` is the bezel, shell or nut around it and",
+        "composes it. Place the wrapper when the panel carries that furniture and the",
+        "aperture when it is a bare opening - never both at one position. The README's",
+        "[Namespaces](README.md#namespaces) section has the pairs and the rule.",
+        "",
     ]
     total = 0
     for ns in order:
