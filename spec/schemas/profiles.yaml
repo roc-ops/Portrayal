@@ -86,6 +86,24 @@ profiles:
       - section: environmental
         any-of: [operating-temp, operating-temp-f2b, operating-temp-b2f]
 
+  server:
+    description: >-
+      a general-purpose rack server - CPU, memory and storage rather than a
+      forwarding plane. NO `performance` SECTION IS OWED: that section holds
+      switching capacity, port density and buffer figures, which have no
+      analogue on a server, and requiring them would make the flag unreachable
+      for a whole product class rather than informative about it. That is the
+      same argument `optical` makes below for cpu and memory, and it is the
+      reason this file keys the minimum set on the class instead of setting one
+      threshold for everything.
+    requires:
+      - section: platform
+        keys: [cpu, memory]
+      - section: power
+        any-of: [power-max-w, power-max-ac-w, power-max-dc-w]
+      - section: environmental
+        any-of: [operating-temp, operating-temp-f2b, operating-temp-b2f]
+
   optical:
     description: >-
       DWDM transport - mux/demux, transponder, amplifier. No CPU or memory is

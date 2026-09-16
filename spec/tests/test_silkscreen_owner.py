@@ -122,10 +122,18 @@ def test_the_modelled_devices_are_nearly_all_owned():
     an unmodelled filter, an ESD jack that is a bare cutout, a fan tray. L42 is
     pointing at modelling debt, which is what it is for; it is not noise to be
     silenced with a false owner.
+
+    THE CENSUS WENT FROM 8 TO 16 WITHOUT A MARK BEING ADDED. `maturity` was
+    absent on twelve finished devices and absent meant `draft`, so their marks
+    were outside this count; #170 made the field required and they came in. The
+    ES1010 brought four of the eight - 'MGMT COMBO' on the front, and '3', '2',
+    '1' on a rear that has psu-1 and psu-2 and no fan bay at all, because its
+    fans are not modelled. Pointing those at something would be inventing an
+    owner, which is the one thing this test exists to prevent.
     """
     own, tot = _ownership(True)
-    assert tot - own <= 8, f"{tot - own} unowned marks on modelled devices"
-    assert own / tot > 0.95
+    assert tot - own <= 16, f"{tot - own} unowned marks on modelled devices"
+    assert own / tot > 0.99
 
 
 def test_the_whole_library_stays_owned():

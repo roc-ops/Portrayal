@@ -80,7 +80,7 @@ def test_a_cutouts_provenance_validates_rather_than_crashing():
     cutout = {"id": "usb", "at": [1.0, 2.0], "size": [4.5, 12.0],
               "provenance": {"size": "registry - std/usb-a@1"}}
     dev = {"format": 1, "kind": "device", "name": "d", "version": "1.0.0",
-           "manufacturer": "M", "model": "M", "maturity": "modelled",
+           "manufacturer": "M", "model": "M", "maturity": "modelled", "profile": "networking",
            "chassis": {"width": 100.0, "height": 44.0, "depth": 200.0},
            "views": {"front": {"size": {"w": 100.0, "h": 44.0},
                                "panel": {"cutouts": [cutout]}}}}
@@ -97,7 +97,7 @@ def test_a_cutouts_provenance_validates_rather_than_crashing():
 def _device_with(n_faults, tmp_path):
     """A manifest carrying `n_faults` independent schema faults."""
     dev = {"format": 1, "kind": "device", "name": "d", "version": "1.0.0",
-           "manufacturer": "M", "model": "M", "maturity": "modelled",
+           "manufacturer": "M", "model": "M", "maturity": "modelled", "profile": "networking",
            "chassis": {"width": 100.0, "height": 44.0, "depth": 200.0},
            "views": {"front": {"size": {"w": 100.0, "h": 44.0}}}}
     faults = [("chassis", "width", "wide"), ("chassis", "height", "tall"),
