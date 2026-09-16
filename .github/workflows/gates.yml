@@ -14,6 +14,16 @@ on:
   push:
     branches: [main]
 
+# NO `paths-ignore`, AND THAT IS A DECISION (#183). The obvious saving is to
+# skip the run on a docs-only diff, and this repository cannot: four files under
+# docs/ are asserted by tests - `lint-rules.md` against the linter's own rule
+# table, `modelling-a-device.md`, `optical-paths-design.md` and
+# `what-a-configuration-cannot-say.md` - plus DESIGN.md and two CATALOGUE.md.
+# A "docs-only" change is one of the ways this suite most easily goes red, so
+# filtering it out would turn the cheapest failure into the one nobody catches.
+# The saving is bought instead where it helps every run: a pip cache, a lint job
+# that fails in half a minute, and one lint per run instead of three.
+
 # A second push to a PR makes the first run pointless - it is testing a tree
 # nobody will merge.
 concurrency:
@@ -21,7 +31,29 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  gates:
+  # LINT ON ITS OWN, AND FIRST. It is the fastest gate and the one whose failure
+  # is most often the whole story, so it answers in well under a minute instead
+  # of behind a render log; and because `build` waits on it, a broken manifest
+  # costs one short job rather than twenty minutes of rendering and testing.
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      # ONLY WHAT LINT IMPORTS, which is the point of this job existing. The
+      # suite's list pulls numpy and pillow - tens of megabytes of wheel for a
+      # job that reads YAML and validates it against a schema, and on a cold
+      # cache that is most of the "fast" gone. These two install in seconds and
+      # need no cache at all.
+      - run: pip install pyyaml jsonschema
+      - name: lint
+        run: python3 spec/tools/portrayal/lint.py --schemas spec/schemas --library library
+
+  build:
+    needs: lint
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -30,33 +62,23 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+          cache: pip
+          cache-dependency-path: spec/requirements-ci.txt
 
-      # WHAT THE SUITE ACTUALLY NEEDS, which is not what the TOOLS need. The
-      # library tools import only yaml and jsonschema, and reasoning from that
-      # is how the second run of this workflow died: test_figmap imports figmap,
-      # which imports numpy at module scope, and a module-scope import in a
-      # collected test file is a COLLECTION ERROR - it takes the whole suite
-      # down rather than skipping one file.
-      #
-      # Derived by walking every test module's top-level imports one hop through
-      # the local modules, rather than by guessing: PIL and numpy are needed at
-      # collection, and cairosvg, docling, mlx_vlm and rapidocr are imported
-      # lazily and stay optional. mlx_vlm could not be installed here anyway -
-      # it is Apple-silicon only.
-      - name: install
-        run: |
-          python -m pip install --upgrade pip
-          pip install pytest pytest-xdist pyyaml jsonschema pillow numpy
+      # NODE IS INSTALLED, NOT INHERITED. Fourteen test modules shell out to it
+      # and each carries `skipif(shutil.which("node") is None)`, so before this
+      # line the suite depended on the runner image happening to ship it - and
+      # the day it stopped, fourteen files would have gone quiet rather than red.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - run: pip install -r spec/requirements-ci.txt
 
       # pdftoppm gates the OCR tests. Without it they SKIP, which is the one
       # thing this workflow exists to stop happening quietly.
       - name: poppler
         run: sudo apt-get update && sudo apt-get install -y poppler-utils
-
-      # Lint on its own first. build.sh lints too, but a failure here names the
-      # rule and the file without a render log on top of it.
-      - name: lint
-        run: python3 spec/tools/portrayal/lint.py --schemas spec/schemas --library library
 
       # BUILD BEFORE PYTEST, AND THIS ORDER IS THE POINT. Four test modules -
       # behaviour, config-scope, viewbox, state-css - skip themselves when
@@ -70,11 +92,23 @@ jobs:
       # --no-images: every rendered PNG under library/exports is gitignored, so
       # CI was building 1104 pictures and throwing them away inside the step
       # that costs a quarter of the run.
+      #
+      # NO_LINT=1 because the `lint` job above already ran it and this run
+      # cannot have started without it passing. That is the second of the three
+      # lints a run used to do; the third is inside the suite and is skipped for
+      # the same reason, below.
       - name: build and publish
-        run: ./publish.sh --no-images
+        run: NO_LINT=1 ./publish.sh --no-images
 
       - name: devicelock
         run: python3 spec/tools/portrayal/devicelock.py --library library
+
+      # The kit is eleven ES modules that nothing checked. `node --check` is a
+      # syntax check and not a test suite, which is what the script claims;
+      # before it, a broken module surfaced only if some python test happened to
+      # shell out to the one that imports it.
+      - name: kit
+        run: cd kit && npm test
 
       # ONE WORKER PER CORE. The suite spends most of its wall clock waiting on
       # child processes - node for the kit tests, lint.py and render.py for the
@@ -85,18 +119,25 @@ jobs:
       # ubuntu-latest has two cores; a larger runner would use them without this
       # line being touched.
       #
+      # PORTRAYAL_LINT_ALREADY_RAN retires the third lint of the run.
+      # `test_lint_green` shells out and lints the whole library at 76s, which
+      # made it the critical path INSIDE the suite - it cannot be split, which is
+      # why parallelism flattened after two workers. It is worth its time
+      # locally and is guaranteed redundant here, because the `lint` job gates
+      # this one.
+      #
       # NOTHING HERE SHARES MUTABLE STATE: the only test that writes outside a
       # tmp fixture makes its own tempfile.mkdtemp(), and the library the rest
       # read is read-only by libdata's own contract.
       - name: tests
+        env:
+          PORTRAYAL_LINT_ALREADY_RAN: '1'
         run: |
           set -o pipefail
           python3 -m pytest spec/tests -q -rs -n auto | tee /tmp/pytest.txt
 
-      # The guard for the failure above. A skip is legitimate - a lamp part not
-      # in this library, an optional tool - but a JUMP in skips means the suite
-      # quietly stopped testing something. The threshold sits close to the real
-      # number so it bites early; raise it in the same commit that explains why.
+      # The guard for the failure above, and it checks WHICH test stopped running
+      # rather than how many.
       #
       # IT CHECKS THAT THE SUITE RAN AT ALL FIRST, and that is not theoretical:
       # the first run of this workflow had no pytest installed, so the file held
@@ -104,6 +145,12 @@ jobs:
       # reported SUCCESS. A suite that never started looked exactly like a suite
       # with nothing skipped - the same shape of blindness the step exists to
       # prevent, one level up.
+      #
+      # THE ALLOW-LIST REPLACED A BUDGET OF FIVE. An integer is a global anyone's
+      # legitimate optional test spends for everyone, and it says nothing about
+      # what went quiet: `node` vanishing skips fourteen files at once and a
+      # budget catches that only because fourteen happens to exceed five.
+      # spec/allowed-skips.txt says which reasons are facts about the world.
       - name: no silent skipping
         if: always()
         run: |
@@ -113,16 +160,7 @@ jobs:
             tail -20 /tmp/pytest.txt || true
             exit 1
           fi
-          n=$(sed -n 's/.*[^0-9]\([0-9][0-9]*\) skipped.*/\1/p' /tmp/pytest.txt | tail -1)
-          n=${n:-0}
-          echo "skipped: $n"
-          if [ "$n" -gt 5 ]; then
-            echo "::error::$n tests skipped (expected at most 5). A jump in skips"
-            echo "::error::usually means dist was not built, or a tool the suite"
-            echo "::error::needs is missing from the runner - see the build step."
-            sed -n '/short test summary/,$p' /tmp/pytest.txt || true
-            exit 1
-          fi
+          python3 spec/tools/portrayal/check_skips.py /tmp/pytest.txt spec/allowed-skips.txt
 
       # The exports are committed and a DCIM reads them, so a stale one is a
       # real defect rather than untidiness. publish.sh above has already
