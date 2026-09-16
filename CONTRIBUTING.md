@@ -70,6 +70,32 @@ The short version of what you will write:
   the vocabulary `datasheet`, `drawing`, `measured`, `photo-measured`,
   `registry`, `borrowed`, `estimated`, `known-wrong`. An `estimated` value is
   fine; an unlabelled one is not.
+
+### Which file you author
+
+**`device.yaml`, unless the device already has a `layout.yaml` beside it.**
+
+A face of 64 ports is four hundred lines that say the same thing sixty-four
+times, so `spec/tools/portrayal/expand.py` can generate the placements, cutouts,
+numerals and lamps of a regular block from a compact `layout.yaml` - about forty
+lines for a face. Where a device has one, **the layout is the source and
+`device.yaml` is generated**: edit the layout, re-run
+
+```sh
+python3 spec/tools/portrayal/expand.py library/devices/<vendor>/<model>/layout.yaml     --library library --schemas spec/schemas
+```
+
+and commit both. Editing the generated file instead is the one thing that breaks
+this: `spec/tests/test_layout_in_step.py` re-expands every layout and fails if it
+disagrees with the device beside it, because before that test existed both of the
+library's layouts had silently drifted months behind - one still carrying a
+registry figure the library removed, and one missing a key the schema had since
+made required.
+
+Two devices use it today (`edgecore/cor580`, `edgecore/dcs510`). Adding a layout
+to a device that has none is worthwhile where the face is regular and worth
+nothing where it is not: expand.py passes longhand items through untouched
+precisely so that an irregular block stays written out by hand.
 - `maturity`: `draft` while you work, `modelled` once every face is sourced,
   `verified` only when nothing in the assembly is estimated, components
   included. The linter holds you to the level you claim.
