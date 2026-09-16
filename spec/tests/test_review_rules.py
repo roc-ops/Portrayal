@@ -603,10 +603,20 @@ def test_a_class_belongs_to_exactly_one_role():
 
 def test_the_craft_interface_draws():
     """The class-set omission that caused the bug. A craft interface is an LCD,
-    buttons, alarm lamps and a processor - it is not sheet metal."""
+    buttons, alarm lamps and a processor - it is not sheet metal.
+
+    It used to check `panel` AND `display`, because the four MX craft interfaces
+    were split between the two classes. #173 merged `panel` into `display`, so
+    the check is now on the PARTS rather than on both names - which is what it
+    was always about, and is a thing a later rename cannot quietly satisfy.
+    """
     r = _roles()
-    for cls in ("panel", "display"):
-        assert cls in r["draw"], f"{cls} carries the MX craft interfaces and they draw"
+    assert "display" in r["draw"], "the craft interfaces draw"
+    import yaml
+    for name in ("mx240-craft", "mx480-craft", "mx2000-craft", "mx960-craft"):
+        c = next(iter(LIB.glob(f"components/juniper/{name}/*/contract.yaml")))
+        cls = (yaml.safe_load(c.read_text()) or {}).get("class")
+        assert cls in r["draw"], f"{name} is {cls!r}, which is in no draw role"
 
 
 def test_a_cage_is_passive_and_the_optic_in_it_is_not():

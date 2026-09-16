@@ -68,7 +68,9 @@ def test_the_transceiver_is_removable():
 def test_the_old_class_list_is_a_subset_of_fills():
     """Nothing that used to get a body may lose one. The five classes the viewer
     hardcoded must all still qualify, or the migration dropped a FRU."""
-    for cls in ("psu", "fan", "tab", "power", "cooling"):
+    # `cooling` was one of the five and is now `fan` (#173) - one kind of part
+    # under two names, merged rather than kept as a synonym.
+    for cls in ("psu", "fan", "tab", "power"):
         for p in CONTRACTS:
             d = load(p)
             if d.get("class") == cls:
