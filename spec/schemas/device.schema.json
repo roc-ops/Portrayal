@@ -8,6 +8,8 @@
   "kind",
   "name",
   "version",
+  "maturity",
+  "profile",
   "manufacturer",
   "model",
   "chassis",
@@ -26,7 +28,8 @@
   },
   "version": {
    "type": "string",
-   "pattern": "^\\d+\\.\\d+\\.\\d+$"
+   "pattern": "^\\d+\\.\\d+\\.\\d+$",
+   "description": "Semver, and the bump rules are tied to `library/devices.lock.json` rather than left to judgement: the lock records a fingerprint per device split into `shape`, `names`, `surface` and `gaps`, and `devicelock` reads the change and says which bump it needs. Surface alone is a patch; ids added with nothing moved or removed is a minor; anything else about shape or names is a major, because a moved slot invalidates a cached coordinate exactly as a renamed id invalidates a held reference. spec/DESIGN.md section 9 carries the argument and CONTRIBUTING step 5 the order to run it in - the check must see the lock BEFORE you regenerate it, or the bump it would have asked for is lost. L53 is what fails when content moved and the version did not."
   },
   "maturity": {
    "enum": [
@@ -34,7 +37,7 @@
     "modelled",
     "verified"
    ],
-   "description": "how far this device has been taken, and the standard lint holds it to. draft: no requirement. modelled: must carry a provenance block citing a datasheet or hardware guide. verified: additionally no dimension may be estimated. Defaults to draft when absent."
+   "description": "how far this device has been taken, and the standard lint holds it to. draft: no requirement. modelled: must carry a provenance block citing a datasheet or hardware guide. verified: additionally no dimension may be estimated. REQUIRED, because absent used to mean `draft` and twelve finished devices were reading as drafts on that default - the Edgecore AS7726-32X, all five Smartoptics DCPs, the FS enclosure. A default that silently mislabels the work is worse than a field somebody has to fill in."
   },
   "manufacturer": {
    "type": "string"
@@ -52,7 +55,8 @@
    "type": "string"
   },
   "profile": {
-   "$ref": "#/$defs/segment"
+   "$ref": "#/$defs/segment",
+   "description": "WHAT KIND OF DEVICE THIS IS, from the classes in spec/schemas/profiles.yaml - the file that says what a device of each class has to STATE before the `specified` capability flag is true. REQUIRED, because a device without one is not judged leniently, it is not judged at all: `capability._specified` returns `cannot evaluate`, and 67 of 89 devices were in that position while the flag read as a fact about the other 22. The classes are deliberately few and each carries the argument for its own minimum set - `optical` owes no cpu or memory, `server` owes no switching performance."
   },
   "datasheet": {
    "type": "object",

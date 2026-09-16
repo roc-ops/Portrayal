@@ -294,6 +294,14 @@ def buckets(doc, versions=None):
             # identifier anything addresses by, so a patch is the right size.
             "portfolio": doc.get("portfolio"),
             "maturity": doc.get("maturity"),
+            # `profile` SITS BESIDE `maturity` AND WAS NOT HASHED. Both say what
+            # standard the device is held to - maturity what lint demands of it,
+            # profile what `specified` judges its attrs against - and changing
+            # either changes a published claim. #170 made profile required, and a
+            # required field nothing fingerprints can be retyped from
+            # `networking` to `optical` with no version asked for, which is the
+            # gap the `portfolio` note above records having found.
+            **({"profile": doc.get("profile")} if doc.get("profile") else {}),
             "attrs": doc.get("attrs"),
             "provenance": doc.get("provenance"),
             "groups": doc.get("groups"),

@@ -207,16 +207,24 @@ def test_a_paid_debt_leaves_the_register_on_its_own():
 
 
 def test_cannot_evaluate_is_not_the_same_answer_as_no():
-    """The two most complete models in the portfolio - level 4, `modelled`, 19
-    and 23 attrs off a datasheet - declare no `profile:`, so `specified` has
-    nothing to judge them against. Reporting that as a bare `no` is a silent
-    failure: it is indistinguishable from a device that was checked and came up
-    short, and a reader who knows the attr count concludes the predicate is
-    broken."""
+    """A complete model that declares no `profile:` has nothing for `specified`
+    to judge it against. Reporting that as a bare `no` is a silent failure: it is
+    indistinguishable from a device that was checked and came up short, and a
+    reader who knows the attr count concludes the predicate is broken.
+
+    IT OWNS ITS FIXTURE NOW. This used to read the AS7946-30XB, which was the
+    most complete model in the portfolio with no profile - and #170 gave all 67
+    profile-less devices one, so the test that asserted the debt broke when the
+    debt was paid. That is the pattern `_planted` below already records having
+    hit three times. The behaviour under test is unchanged and still reachable;
+    what changed is that no real device has to stay in arrears to reach it."""
     complete = assess(load("edgecore/as7946-30xb"))
-    assert complete["level"] == 4
-    assert "specified" not in complete["flags"]
-    assert complete["unknown"] == ["specified"]
+    assert complete["level"] == 4, "still the complete model this is built on"
+    unprofiled = dict(complete_manifest := load("edgecore/as7946-30xb"))
+    unprofiled.pop("profile", None)
+    got = assess(unprofiled)
+    assert "specified" not in got["flags"]
+    assert got["unknown"] == ["specified"]
 
     checked = assess(load("edgecore/as7326-56x"))          # has a profile,
     assert "specified" not in checked["flags"]             # genuinely short a key
@@ -230,6 +238,7 @@ def test_an_unevaluable_flag_files_its_gap_against_the_missing_thing():
     decision, not something to guess to make a number go up."""
     man = LIB / "devices/edgecore/as7946-74xksb/device.yaml"
     dev = yaml.safe_load(man.read_text())
+    dev.pop("profile", None)          # the fixture, not the library's debt - see above
     cap, flags = capability.assess(dev, profiles=PROFILES)
     gaps = capability.derived_gaps(man, dev, [str(LIB)], cap, flags)
     what = {g["what"] for g in gaps}
