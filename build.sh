@@ -26,10 +26,19 @@ OUT="${1:-library/dist}"
 
 # Lint first. A broken manifest used to render as an empty or partial dist that
 # looked like a successful build - failing here instead means that cannot happen.
-LINTSEL=()
-for d in ${DEVSEL+"${DEVSEL[@]}"}; do LINTSEL+=(--device "$d"); done
-python3 spec/tools/portrayal/lint.py --schemas spec/schemas --library library \
-  ${LINTSEL+"${LINTSEL[@]}"}
+#
+# `--no-lint` IS FOR ONE CALLER AND IT SAYS SO. CI runs lint as its own job
+# before this one starts, so linting again here is the same answer bought twice
+# at 27s a time, and a third time inside `test_lint_green` (#183). Nothing else
+# should pass it: locally the whole point is that a bad manifest never reaches
+# the renderer, and skipping the check to save half a minute is how the partial
+# dist that looked successful came back.
+if [ "${NO_LINT:-0}" != 1 ]; then
+  LINTSEL=()
+  for d in ${DEVSEL+"${DEVSEL[@]}"}; do LINTSEL+=(--device "$d"); done
+  python3 spec/tools/portrayal/lint.py --schemas spec/schemas --library library \
+    ${LINTSEL+"${LINTSEL[@]}"}
+fi
 STALE=()
 if [ "$FAST" = 1 ]; then
   STALE=(--if-stale)

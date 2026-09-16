@@ -1,0 +1,24 @@
+# Skip reasons this suite is allowed to report, one substring per line.
+#
+# WHY NOT A COUNT. The gate used to allow "at most 5 skipped", which is a global
+# integer that any contributor's legitimate optional test spends for everyone -
+# and which says nothing about WHICH test stopped running. The failure it exists
+# to catch is a tool going missing from the runner: `node` disappearing skips
+# fourteen files at a stroke, and a budget of 5 catches that only because the
+# number happens to be large. A budget of 20 would not.
+#
+# A reason is matched as a substring of pytest's `-rs` line, so the entry is the
+# stable half of the sentence and not the file or line number.
+#
+# ADDING ONE IS A DECISION. A skip is the suite saying it did not test
+# something; the reason has to be a fact about the world - a part this library
+# does not contain, a tool that is genuinely optional - rather than about the
+# runner being short of something it should have. "node not installed" is
+# exactly what must NOT be in here: node is installed explicitly by the
+# workflow, so that reason means the install step silently stopped working.
+multi-window lamp part not in this library
+# The third lint of a CI run. `test_lint_green` lints the whole library at ~76s
+# and is the critical path inside the suite; the `lint` job gates the job the
+# suite runs in, so on CI it is answering a question already answered. Locally
+# the variable is unset and the test runs.
+lint ran as its own CI job before this suite started

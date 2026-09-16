@@ -1,6 +1,9 @@
 """Walking-skeleton tests: lint green, render deterministic, IDs addressable."""
+import os
 import subprocess
 import sys
+
+import pytest
 from pathlib import Path
 
 SPEC = Path(__file__).resolve().parents[1]
@@ -14,7 +17,18 @@ def run(*args):
     return subprocess.run([sys.executable, *args], capture_output=True, text=True)
 
 
+@pytest.mark.skipif(os.environ.get("PORTRAYAL_LINT_ALREADY_RAN") == "1",
+                    reason="lint ran as its own CI job before this suite started")
 def test_lint_green():
+    """THE THIRD LINT OF A CI RUN, and the only one that is not free.
+
+    It shells out and lints the whole library at around 76 seconds, which makes
+    it the critical path INSIDE the suite: it cannot be split across workers, so
+    parallelism flattens after two of them. Locally it is worth every second -
+    it is what stops a green test run over a library that does not lint. On CI
+    it is guaranteed redundant, because the `lint` job gates the job this runs
+    in and nothing can have reached here without it passing (#183).
+    """
     r = run(SPEC / "tools/portrayal/lint.py", "--schemas", SPEC / "schemas", "--library", LIB)
     assert r.returncode == 0, r.stdout + r.stderr
 
