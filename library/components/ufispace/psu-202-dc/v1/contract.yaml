@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: psu-202-dc
-version: 1.0.0
+version: 1.0.1
 class: psu
 behaviour: fills
 profile: networking
@@ -10,8 +10,11 @@ description: UfiSpace PSU-202-DESR 2000W DC PSU (S9600-56DX 2RU aggregation fami
   filling the left half, a square-grid intake vent on the right carrying the status
   lamp, and a red release latch on the right edge; exhaust airflow
 size: {w: 50.5, h: 40.2}
-attrs: {power-output-w: 2000, input: dc, model: PSU-202-DESR, airflow: exhaust}
+attrs: {power-output-w: 2000, input: dc, model: PSU-202-DESR, airflow: exhaust, inlet: dc-terminal}
 provenance:
+  inlet: >-
+    transcribed from this contract's own description: 'a two-post screw-terminal block
+    behind a hinged plastic safety cover'. Nothing new was measured.
   power: >-
     datasheet - the S9600-56DX datasheet's Available to Order block states the rating in
     the part number's own row: 'PSU-202-DESR, 2000W DC, exhaust air flow', beside the AC

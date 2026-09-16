@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mx960-psu-ac
-version: 1.0.0
+version: 1.0.1
 class: psu
 behaviour: fills
 profile: networking
@@ -11,11 +11,18 @@ description: >-
   the chassis, one above each supply). Nameplate labels mid-body, PS
   FAIL / DC OK / AC OK lamps and the exhaust fan at the bottom.
 attrs:
+  inlet: none
   model: MX960 AC PSU
   power-output-w: 1700
   role: ac-power-supply
   redundancy: 2+2
 provenance:
+  inlet: >-
+    THIS SUPPLY HAS NO INLET AND THAT IS THE CLAIM. Its own description says 'the C20 inlets
+    and their switches sit on the chassis, one above each supply', and the MX960 places four
+    std/c20-inlet in an `inlets` group whose note records that the inlet stays with the
+    chassis while a PEM comes out. `none` keeps the DCIM export from counting the chassis's
+    four a second time here - see roc-ops/Portrayal#286.
   power: >-
     MX960 hardware guide, Table 91 'AC Power Supply Electrical Specifications', Normal-Capacity
     block: 'Maximum output power | 1700W', at 200-240 VAC operating range with no separate

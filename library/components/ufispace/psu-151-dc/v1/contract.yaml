@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: psu-151-dc
-version: 1.0.0
+version: 1.0.1
 class: psu
 behaviour: fills
 profile: networking
@@ -9,8 +9,11 @@ description: UfiSpace PSU-151-DESR 150W DC PSU (S6301-56ST family) - screw-termi
   block, red release latch (exhaust / front-to-back airflow; the intake sibling
   PSU-151-DISB wears blue), black wire pull strap, status LED top-right
 size: {w: 50.5, h: 40.2}
-attrs: {power-output-w: 150, input: dc, model: PSU-151-DESR}
+attrs: {power-output-w: 150, input: dc, model: PSU-151-DESR, inlet: dc-terminal}
 provenance:
+  inlet: >-
+    transcribed from this contract's own description: 'screw-terminal block', drawn here as
+    the `terminal-block` element. Nothing new was measured.
   power: >-
     datasheet - UfiSpace states the rating in the part number's own ordering line, in the
     S6301-56ST datasheet's Available to Order section: 'PSU-151-DESR, 150W DC, exhaust air

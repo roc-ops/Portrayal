@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: psu-242-dc
-version: 1.0.1
+version: 1.0.2
 class: psu
 behaviour: fills
 profile: networking
@@ -11,8 +11,11 @@ description: UfiSpace PSU-242-DEERN 2400W -48V DC PSU (S9311-64D) - CRPS form
   appliance inlet; red release latch on the right edge, status lamp below it;
   front-to-back (exhaust) airflow
 size: {w: 73.5, h: 40.0}
-attrs: {power-output-w: 2400, input: dc, model: PSU-242-DEERN, airflow: exhaust}
+attrs: {power-output-w: 2400, input: dc, model: PSU-242-DEERN, airflow: exhaust, inlet: dc-terminal}
 provenance:
+  inlet: >-
+    transcribed from this contract's own description: 'a two-row DC input connector and its
+    lug screws in place of the appliance inlet'. Nothing new was measured.
   power: >-
     datasheet - the S9311-64D datasheet's Available to Order block states the rating
     in the part number's own row: 'PSU-242-DEERN 2400W, DC, exhaust air, CRPS type,

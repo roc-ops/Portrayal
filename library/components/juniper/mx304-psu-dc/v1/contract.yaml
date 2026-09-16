@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mx304-psu-dc
-version: 1.0.0
+version: 1.0.1
 class: psu
 behaviour: fills
 profile: networking
@@ -12,6 +12,7 @@ description: >-
   a removable cover, the fan grille and orange pull handle at the left, and a
   single STATUS lamp.
 attrs:
+  inlet: dc-terminal
   envelope: 73.5 x 40.1 x 198.5 mm (Table 22)
   model: MX304 DC PSU
   role: dc-power-supply
@@ -19,6 +20,9 @@ attrs:
   input: -48/-60 VDC nominal (operating -40 to -72 VDC), 50 A maximum
   redundancy: 1+1
 provenance:
+  inlet: >-
+    transcribed from this contract's own description: 'a two-stud terminal block behind a
+    removable cover'. Nothing new was measured.
   size: 'datasheet-table + photo - Table 22: DC power supply 2.89 x 1.57 x
     7.81 in (73.5 x 40.1 x 198.5 mm); drawn face 66.0 as the AC (same bay),
     envelope in attrs. Provenance for the drawn-face reading is

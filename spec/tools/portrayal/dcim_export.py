@@ -242,6 +242,43 @@ PART_POWER = {
     "common/dc-barrel": "other",
 }
 
+# ...AND WHAT A SUPPLY SAYS WHEN IT DRAWS NO INLET.
+#
+# PART_POWER reads a COMPOSED inlet, which is the strong form and the one to
+# prefer: the part carries a panel cutout, a standard and a size. But half the
+# PSU catalogue draws no inlet part at all - 31 of 61 - and they are not 31
+# oversights. Most are DC supplies whose power entry is a screw-terminal block,
+# and the library has one DC terminal component against two IEC ones, so the
+# studs were drawn as ELEMENTS in the skin instead. Their contracts say so in
+# prose ("two-stud screw-terminal block under a hinged plastic cover") and the
+# element is right there, named `terminal-block` or `terminals` or `dc-input`
+# depending on who typed it - which is a spelling convention, not a fact, and
+# reading it would be the `port-` prefix defect again (#251).
+#
+# So the supply DECLARES it, in one attr, from a closed vocabulary. `attrs.inlet`
+# is not new: the three Dell supplies have carried `c14`, `c20` and `dc-terminal`
+# since they were modelled, agreeing with the part each of them also composes.
+# This makes the token answer on its own when there is no part to compose.
+#
+# `none` IS A CLAIM, NOT A BLANK. It says the supply has no inlet because the
+# CHASSIS carries it - true of the MX960, whose four C20 receptacles sit on an
+# inlet strip above the supplies and are exported by `build` (#286). A supply
+# that simply has not been looked at says nothing, and L95 counts it.
+#
+# `other` IS FOR A REAL INLET UPSTREAM CANNOT NAME, the treatment PART_RF gives
+# an SMB. It is NOT for one we have not identified: the MX240's supply says "one
+# C-type appliance inlet", which is some IEC 60320 receptacle and therefore
+# something upstream DOES have a type for - so it stays unanswered and counted
+# rather than filed as `other`, which would be a wrong answer dressed as a
+# modest one.
+INLET_TYPE = {
+    "c14": "iec-60320-c14",
+    "c20": "iec-60320-c20",
+    "dc-terminal": "dc-terminal",
+    "other": "other",
+    "none": None,
+}
+
 # What the PLACEMENT says runs through the connector, when it says.
 #
 # A housing cannot carry this. Ten identical `common/sfp-plus-cage` can be eight
@@ -953,6 +990,14 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None):
             # that only want the document.
             dropped[ref] = dropped.get(ref, 0) + 1
 
+    # THE DECLARED INLET, when no part draws one. Second, not first: a composed
+    # part knows its own id and there may be several, so it wins wherever it
+    # exists. The three Dell supplies carry both and are unaffected either way.
+    if not powers and attrs.get("inlet"):
+        declared = INLET_TYPE.get(attrs["inlet"])
+        if declared:
+            powers.append({"name": "Inlet", "type": declared})
+
     if consoles:
         out["console-ports"] = consoles
     if ifaces:
@@ -990,8 +1035,16 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None):
     body = []
     if contract.get("description"):
         body += [contract["description"].strip(), ""]
+    # `model` names the type and is not a leftover fact. `inlet` stops being one
+    # THE MOMENT IT TYPES: the heading says "facts the schema has no field for",
+    # and once the token has produced a power port the schema plainly has one.
+    # It stays listed when it did not - `none`, or a token with no mapping -
+    # because then the sentence is true again and a reader still wants it.
+    typed = {"model"}
+    if any(pp["type"] == INLET_TYPE.get(attrs.get("inlet")) for pp in powers):
+        typed.add("inlet")
     facts = [f"- {k}: {v}" for k, v in attrs.items()
-             if k != "model" and isinstance(v, (str, int, float))]
+             if k not in typed and isinstance(v, (str, int, float))]
     if facts:
         body.append("Facts carried in the model that this schema has no field for:")
         body += facts

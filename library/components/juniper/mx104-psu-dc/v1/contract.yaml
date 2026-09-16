@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mx104-psu-dc
-version: 1.0.0
+version: 1.0.1
 class: psu
 behaviour: fills
 profile: networking
@@ -11,12 +11,16 @@ description: >-
   chip, and the 24V/-48V-60V 40A/20A nameplate. The MX104 also ships AC
   variants (guide Figure 9); only the photographed DC face is modelled.
 attrs:
+  inlet: dc-terminal
   model: MX104 DC PSU
   power-output-w: 800
   role: dc-power-supply
   input: 24 VDC or -48 to -60 VDC, 40 A / 20 A per the nameplate
   redundancy: 1+1
 provenance:
+  inlet: >-
+    transcribed from this contract's own description: 'Two-stud terminal block behind a
+    cover', drawn here as the `terminals` element. Nothing new was measured.
   power: >-
     MX104 hardware guide, DC Power Supply Electrical Specifications: 'Maximum power supply
     output | 800W', with 'Maximum output power | 800W' for the system beneath it. The AC

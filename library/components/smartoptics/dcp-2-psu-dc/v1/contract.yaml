@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dcp-2-psu-dc
-version: 1.3.0
+version: 1.3.1
 class: psu
 behaviour: fills
 profile: networking
@@ -10,12 +10,16 @@ description: Smartoptics DCP-2-PSU-DC-FB - the -48V DC power supply for the DCP-
   place of the C14 inlet and a green release lever in place of the orange one.
 size: {w: 73.5, h: 40.0}
 attrs:
+  inlet: dc-terminal
   model: DCP-2-PSU-DC-FB
   input: dc
   voltage: '-48v'
   power-output-w: 460
   airflow: front-to-back
 provenance:
+  inlet: >-
+    transcribed from this contract's own description: 'a three-post DC terminal in place of
+    the C14 inlet', drawn here as the `dc-terminal` element. Nothing new was measured.
   size: >-
     borrowed - smartoptics/dcp-2-psu-ac@1, which is the same 1U CRPS envelope. UM s2.3
     shows the two modules in one bay pair and says "Both types can be used
