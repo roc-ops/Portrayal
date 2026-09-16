@@ -3232,8 +3232,13 @@ def lint_device_cutouts(path, view_name, view, lib_roots):
 # knowledge. So a device modelled correctly with a new form factor gets accused
 # of the defect it does not have - which is how `osfp` was found, on the first
 # 800G box the library carried.
-PLUGGABLE_CAGES = {"sfp", "sfp-plus", "sfp28", "sfp-dd", "qsfp", "qsfp28",
-                   "qsfp56", "qsfp-dd", "osfp", "xfp", "cfp", "cfp2"}
+# sfp56 AND cxp WERE MISSING, and a cage missing from this set is never asked -
+# `media not in PLUGGABLE_CAGES` skips the group in silence, which is the same
+# shape as a type table with no row for a form factor. Two groups on two devices
+# escaped L40 entirely while sfp, sfp-plus, sfp28 and qsfp56 were all listed;
+# test_silent_drops.py holds the set against the media the library actually uses.
+PLUGGABLE_CAGES = {"sfp", "sfp-plus", "sfp28", "sfp56", "sfp-dd", "qsfp", "qsfp28",
+                   "qsfp56", "qsfp-dd", "osfp", "xfp", "cfp", "cfp2", "cxp"}
 
 
 def _bay_pitch_is_uneven(gaps):

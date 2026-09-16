@@ -102,6 +102,18 @@ PART_IFACE = {
     "std/qsfp-ganged": "40gbase-x-qsfpp",
     "std/qsfp28": "100gbase-x-qsfp28",
     "std/qsfp-dd": "400gbase-x-qsfpdd",
+    # CFP, CFP2 AND CXP ARE NOBODY'S SUBSTRING, exactly as XFP was not, and for
+    # the same reason they were absent here: the family test in `iface_type`
+    # reads the ref for "sfp", and a form factor whose name does not contain it
+    # has to be named. Twenty-four 100GbE ports on fourteen Juniper MICs and
+    # MPCs exported nothing at all - MIC3-3D-1X100GE-CFP, MIC3-100G-DWDM,
+    # MIC6-100G-CFP2, MIC6-100G-CXP, MPC4E-3D-2CGE-8XGE, MPC5E-100G10G and
+    # their vertical authors. Every one of them says 100GbE in its own
+    # description, so the speed is the library's and not a guess, and all three
+    # slugs are in netbox-community/netbox and nautobot/nautobot alike.
+    "std/cfp": "100gbase-x-cfp",
+    "std/cfp2": "100gbase-x-cfp2",
+    "std/cxp": "100gbase-x-cxp",
 }
 # What a cage RUNS AT is a property of the card, not of the cage. So the cage ref
 # gives the family and the card's attrs give the speed within it.
@@ -215,6 +227,13 @@ def rj45_timing_label(part):
 PART_POWER = {
     "std/c14-inlet": "iec-60320-c14",
     "std/c20-inlet": "iec-60320-c20",
+    # A DC SUPPLY HAS AN INLET TOO, and this one had no row, so
+    # dell/psu-1100w-dc-14g exported no power port at all while its two AC
+    # siblings in the same family each exported theirs. Nothing distinguished
+    # that from a supply drawn without an inlet. `dc-terminal` is a power-port
+    # type in netbox and nautobot alike; the part is the -48 V receptacle taking
+    # Dell 6RYJ9, which is why it is a dell/ part and not a std/ one.
+    "dell/dc-terminal-6ryj9": "dc-terminal",
 }
 
 # What the PLACEMENT says runs through the connector, when it says.
@@ -262,6 +281,85 @@ PART_RF = {
 # std/lc-bore is the rx/tx bore of a QSFP transceiver, not a port on a device:
 # the transceiver IS the module. A pull tab is furniture.
 PART_SKIP = {"common/qsfp-pull-tab", "std/lc-bore"}
+
+# EVERY PORT-CLASS PART THIS EXPORTER NEVER EMITS, AND WHY IT DOES NOT.
+#
+# THE TABLES ABOVE SAY WHAT A PART IS. This says what the silence means for the
+# parts none of them name, and it exists because the two are indistinguishable
+# from outside: a 76-port router exporting nothing and a device with no ports
+# produce the same document, and it took a person reading an output and asking
+# "is that number right?" to tell them apart (#251). A count cannot do that and
+# neither can a green gate. A NAME can.
+#
+# THE ENTRY CONDITION IS MEASURED, NOT GUESSED: a part whose `class` is `port`
+# or `inlet` and not ONE of whose placements anywhere in the library reaches
+# either export. A part that types on some placements and not others is not
+# here - `std/rj45` types 32 of its 178 and the other 146 are timing and serial
+# jacks it is right to refuse, which is `iface_type`'s own rule and not silence.
+#
+# test_silent_drops.py holds this exhaustive. A new port-class part that exports
+# nothing fails that test until whoever added it either gives it a row above or
+# writes down here why it has none - which is the whole of what was missing when
+# XFP, OSFP and 800G each cost the library several hundred interfaces in a row.
+# Writing a reason is cheap; ten of these say "upstream has no type for this",
+# which is a fine reason and a very different one from "nobody noticed".
+NOT_A_DCIM_PORT = {
+    # --- fibre: deferred, with a design note rather than a gap ---------------
+    # A front port in both libraries requires a rear port to terminate on, and
+    # nothing in a contract says which of a single-faced module's parts is the
+    # trunk - exporting front ports with no rear counterpart is the shape
+    # netbox#21830 rejected outright. See build_module's `rear-ports` comment
+    # and docs/optical-paths-design.md C3.
+    #
+    # ONE ADAPTER, AND THE TWO THAT ARE NOT HERE ARE THE POINT. The FS
+    # cassettes' lc-duplex-v and sc-duplex adapters export their whole fibre
+    # list, because those modules declare a rear face - so they were wrong to be
+    # listed here, and the register's own stale-entry test is what threw them
+    # out. What is left is the single-faced case: a Smartoptics PPM coupler's
+    # paths run front-to-front, so there is no trunk, plus the 117 placements on
+    # DCP chassis, where the device pass has no fibre path at all.
+    "common/lc-duplex-adapter": "single-faced modules have no trunk to terminate on, and the "
+                                "device pass has no fibre path; optical-paths-design.md C3",
+    "std/lc-bore": "the rx/tx bore of a transceiver, not a port on anything - see PART_SKIP",
+    "common/sc-apc": "PON; the model says `10g-pon`, and upstream separates xg-pon "
+                     "(10G/2.5G) from xgs-pon (10G/10G). Typing it would pick one",
+
+    # --- USB: real ports, no device-type field to put them in ----------------
+    # A DCIM device type has console ports, power ports and interfaces. A USB
+    # data port is none of those unless it is a console, which std/usb-a is on
+    # the 26 placements PART_CONSOLE catches. The rest are storage, maintenance
+    # and iDRAC Direct, and there is nowhere honest to put them.
+    "std/micro-usb": "USB maintenance port (iDRAC Direct); not a console, and no device-type field fits",
+    "common/usb-a": "USB storage/maintenance port; not a console - std/usb-a's console placements type via PART_CONSOLE",
+    "std/usb-c": "USB-C power input on the GL-8xEP, group `usbc-power`; power in, not a port",
+
+    # --- connectors upstream has no type for ---------------------------------
+    "common/db9-receptacle": "all 55 placements are `alarm-out` - a dry-contact relay, not RS-232. "
+                             "Neither library has an alarm port, and `de-9` would read as a console",
+    "std/vga": "VGA; neither library has a video port type",
+    "common/vga-receptacle": "VGA; neither library has a video port type",
+    "common/rj11-jack": "FXS analogue telephone line. `rj-11` upstream is a CONSOLE type; "
+                        "an FXS line is not a console and must not read as one",
+
+    # --- timing, and the asymmetry that is a filed bug -----------------------
+    # `std/smb` on a MODULE types as `other` + an SMB label through PART_RF. The
+    # same jack on a CHASSIS faceplate drops, because the device pass has no
+    # path to PART_RF at all. That is roc-ops/Portrayal#285, not a decision.
+    "common/smb-jack": "timing jack on a chassis faceplate; the device pass has no PART_RF path (#285)",
+    "common/sma-jack": "timing jack on a chassis faceplate; the device pass has no PART_RF path (#285)",
+    "std/sma": "timing jack on a chassis faceplate; the device pass has no PART_RF path (#285)",
+
+    # --- power entry on a chassis, which device types cannot carry yet -------
+    # A device type in this exporter has no power-ports list at all: 0 of the
+    # 89 device types carry one, while 27 module types do. roc-ops/Portrayal#286.
+    "common/dc-barrel": "DC barrel jack on a chassis; device types carry no power ports yet (#286)",
+    "casa/c40g-ac-inlet-panel": "an inlet PANEL - a module, not a connector; and see #286",
+
+    # --- a modelling gap, not an exporter one --------------------------------
+    "dell/rj45-port-14g": "the NDC's four jacks carry no speed, and Dell's own master is named "
+                          "2x10gb-bt-2x1gb - two 10GBASE-T and two 1G. The model cannot say "
+                          "which is which, so the exporter must not. roc-ops/Portrayal#287",
+}
 
 # Both libraries take the same device-type document. They differ only in what
 # they REQUIRE - NetBox also demands u_height and is_full_depth, which we always
@@ -736,8 +834,12 @@ def contract_view(entry):
             "optical": entry.get("optical") or {}}
 
 
-def build_module(contract, manufacturer, load_ref=None):
-    """A module contract as a DCIM module type."""
+def build_module(contract, manufacturer, load_ref=None, dropped=None):
+    """A module contract as a DCIM module type.
+
+    `dropped` is an optional dict the caller passes in to be told which part
+    refs matched no branch, counted. See `export_modules`, which prints them.
+    """
     load_ref = load_ref or (lambda _r: None)
     attrs = contract.get("attrs") or {}
     model = str(attrs.get("model") or contract["name"])
@@ -797,6 +899,15 @@ def build_module(contract, manufacturer, load_ref=None):
             ifaces.append({"name": pid or t, "type": t, "label": connector})
         elif ref in PART_IFACE:
             ifaces.append({"name": pid, "type": cage_type(ref, attrs)})
+        elif dropped is not None:
+            # THE else THIS CHAIN DID NOT HAVE. A part matching no branch fell
+            # out here with nothing written down, and an empty interface list is
+            # indistinguishable from a card with no ports - which is how 24
+            # 100GbE CFP, CFP2 and CXP ports sat missing across fourteen Juniper
+            # cards through every green run this repo has ever had. The caller
+            # decides what to do with the names; `None` opts out, for readers
+            # that only want the document.
+            dropped[ref] = dropped.get(ref, 0) + 1
 
     if consoles:
         out["console-ports"] = consoles
@@ -1004,6 +1115,7 @@ def export_modules(dist, root, images=None):
     """
     wrote = skipped = 0
     imaged = set()
+    dropped = {}
     # components.json in place of a glob over contracts, and devices.json in
     # place of one over manifests. The index carries `ns` on both sides, which is
     # what the namespace-to-manufacturer join needs and what a checkout used to
@@ -1014,7 +1126,7 @@ def export_modules(dist, root, images=None):
         if not man:
             skipped += 1
             continue
-        doc = build_module(contract, man, dist.component_by_ref)
+        doc = build_module(contract, man, dist.component_by_ref, dropped)
         # `major` ARRIVES PREFIXED. It is the version directory's own name, so
         # components.json carries `v1` and not `1` - every other reader strips
         # with `major[1:]` rather than adding. Prefixing again asked for
@@ -1056,6 +1168,26 @@ def export_modules(dist, root, images=None):
         print(f"{doc['model']}  ({len(doc.get('interfaces', []))} interfaces, "
               f"{len(doc.get('power-ports', []))} power ports)")
     print(f"module types: {wrote} written, {skipped} skipped for having no manufacturer")
+    # WHAT THIS PASS COULD NOT CLASSIFY, BY NAME. Most of it is furniture - a
+    # riser plate, a warning triangle, a lamp - and saying so costs one line.
+    # The line is here because the alternative is what this repo had until #254:
+    # a silence that reads identically whether the part is a bracket or a 100GbE
+    # cage nobody has written a row for. A name in the log is something a person
+    # can be surprised by; an absence is not. NOT_A_DCIM_PORT carries the
+    # port-class ones with a reason each, and test_silent_drops.py holds it
+    # exhaustive, so a new one appears both here and as a failing test.
+    #
+    # NOT cross-checked against NOT_A_DCIM_PORT here, and the first draft that
+    # did was wrong twice over: most of this list is furniture the register has
+    # no business carrying, and two of the fibre adapters export their whole
+    # port list through the OTHER exit - the optical path - so the branch chain
+    # never sees them and flagging them read as a defect. This line records;
+    # test_silent_drops.py judges.
+    if dropped:
+        print(f"unclassified parts: {sum(dropped.values())} placement(s) across "
+              f"{len(dropped)} ref(s) matched no branch in build_module")
+        for ref, n in sorted(dropped.items(), key=lambda kv: (-kv[1], kv[0])):
+            print(f"    {n:5d}  {ref}")
     if images and RASTER:
         print(f"module images: {len(imaged)} of {wrote} rendered")
 
