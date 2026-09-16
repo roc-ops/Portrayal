@@ -19,10 +19,9 @@ import json
 from pathlib import Path
 
 import yaml
-from manifest import load_yaml
+from portrayal.manifest import load_yaml
 
-import capability
-
+from portrayal import capability
 SCHEMAS = Path(__file__).resolve().parents[2] / "schemas"
 
 

@@ -7,8 +7,7 @@ build, and it is why the naming rules live here rather than inside
 
 See docs/optical-paths-design.md section C.
 """
-import optical
-
+from portrayal import optical
 # WHICH CONNECTOR FAMILY EACH PART IS. The ref is the fact; the family is what
 # the port-type enum is keyed on. A part absent from this table carries no
 # fibre as far as the projection is concerned, which is the same answer

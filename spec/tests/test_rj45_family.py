@@ -16,9 +16,8 @@ import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
-sys.path.insert(0, str(ROOT / "spec" / "tools" / "portrayal"))
-import lint  # noqa: E402
-import dcim_export as dx  # noqa: E402
+from portrayal import lint
+from portrayal import dcim_export as dx
 
 STANDARDS = yaml.safe_load((ROOT / "spec/schemas/standards.yaml").read_text())["standards"]
 
@@ -231,7 +230,7 @@ def test_the_base_stylesheet_renders_the_link_state():
     and `activity` already do. Without a rule the lamp declares a state nothing
     paints, which test_state_css catches on a build - this catches it on the
     source."""
-    import render
+    from portrayal import render
     assert ".state-link" in render.STATE_CSS
     assert ".state-up" in render.STATE_CSS
 

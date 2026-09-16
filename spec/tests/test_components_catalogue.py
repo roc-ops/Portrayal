@@ -21,9 +21,8 @@ import pytest
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
 PAGE = LIB / "components" / "CATALOGUE.md"
-sys.path.insert(0, str(ROOT / "spec/tools/portrayal"))
 
-import components_catalogue as cat  # noqa: E402
+from portrayal import components_catalogue as cat
 
 
 @pytest.fixture(scope="module")

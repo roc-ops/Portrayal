@@ -17,13 +17,13 @@ where the governed aperture actually is.
 
 WHAT IT LEAVES OUT is everything else, and the gaps are the point: each one is a
 place where this face draws its own art instead of composing a standard. Run
-audit-standards.py to see them named.
+audit_standards.py to see them named.
 
 NOTHING HERE READS A PIXEL. Positions come from the contracts, sizes from the
 registry, and the only picture involved is the one a human compares the output
 against afterwards.
 
-Usage:  render-standards.py <vendor>/<model> <view> [--out FILE]
+Usage:  render_standards.py <vendor>/<model> <view> [--out FILE]
 """
 import argparse
 import pathlib

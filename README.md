@@ -44,13 +44,16 @@ python3 spec/tools/portrayal/render.py library/devices/edgecore/as7726-32x/devic
     --library library --out library/dist
 ```
 
-The build and lint gates need Python 3.12 with `pyyaml` and `jsonschema`, plus
-what `build.sh` already assumes (a POSIX shell, `xargs -P`). **Preparing a new vendor line** additionally needs
+The build and lint gates need Python 3.12 and `pip install -e .`, which brings
+`pyyaml` and `jsonschema` and makes the `portrayal` package importable. They are
+**macOS and Linux only**: `build.sh` and `publish.sh` are shell scripts and run
+one renderer per device under `xargs -P`. (`python -m portrayal lint|lock|test`
+is pure Python and runs anywhere.) **Preparing a new vendor line** additionally needs
 [docling](https://github.com/docling-project/docling) to convert vendor PDFs
 into the figure-and-caption sets modelling works from:
 
 ```sh
-pip install -r spec/tools/intake/requirements.txt   # docling + pillow; GPU optional
+pip install -e ".[intake]"                          # docling + pillow; GPU optional
 python3 spec/tools/intake/extract.py <guide.pdf> --out working/images
 ```
 

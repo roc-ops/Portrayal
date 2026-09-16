@@ -16,9 +16,8 @@ from pathlib import Path
 
 SPEC = Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library"
-sys.path.insert(0, str(SPEC / "tools/portrayal"))
 
-import render  # noqa: E402
+from portrayal import render
 
 
 def _svg(decor):

@@ -29,8 +29,7 @@ import sys
 
 import yaml
 
-import manifest
-
+from portrayal import manifest
 LOCK_NAME = "devices.lock.json"
 FORMAT = 1
 

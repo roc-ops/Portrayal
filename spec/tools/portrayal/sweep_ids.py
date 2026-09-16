@@ -30,11 +30,9 @@ import pathlib
 import re
 import sys
 
-sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import argparse
 import yaml
-import lint as L
-
+from portrayal import lint as L
 ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
 ap.add_argument("--library", default="library")
 ap.add_argument("--schemas", default="spec/schemas")

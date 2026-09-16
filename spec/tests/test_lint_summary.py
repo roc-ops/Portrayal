@@ -16,9 +16,8 @@ import subprocess
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools" / "portrayal"))
 
-import lint  # noqa: E402
+from portrayal import lint
 
 SPEC = Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library"

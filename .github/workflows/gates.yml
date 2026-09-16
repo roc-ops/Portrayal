@@ -44,11 +44,16 @@ jobs:
         with:
           python-version: '3.12'
       # ONLY WHAT LINT IMPORTS, which is the point of this job existing. The
-      # suite's list pulls numpy and pillow - tens of megabytes of wheel for a
+      # suite's extra pulls numpy and pillow - tens of megabytes of wheel for a
       # job that reads YAML and validates it against a schema, and on a cold
-      # cache that is most of the "fast" gone. These two install in seconds and
-      # need no cache at all.
-      - run: pip install pyyaml jsonschema
+      # cache that is most of the "fast" gone.
+      #
+      # `pip install -e .` IS THAT LIST NOW: pyproject's `dependencies` are
+      # pyyaml and jsonschema and nothing else, so this stays seconds long and
+      # the two names stop being duplicated in a YAML step (#178). The editable
+      # install is also what makes `import portrayal` resolve, which every tool
+      # now needs.
+      - run: pip install -e .
       - name: lint
         run: python3 spec/tools/portrayal/lint.py --schemas spec/schemas --library library
 
@@ -63,7 +68,7 @@ jobs:
         with:
           python-version: '3.12'
           cache: pip
-          cache-dependency-path: spec/requirements-ci.txt
+          cache-dependency-path: pyproject.toml
 
       # NODE IS INSTALLED, NOT INHERITED. Fourteen test modules shell out to it
       # and each carries `skipif(shutil.which("node") is None)`, so before this
@@ -73,7 +78,10 @@ jobs:
         with:
           node-version: '20'
 
-      - run: pip install -r spec/requirements-ci.txt
+      # THE `test` EXTRA, which is the same list spec/requirements-ci.txt held and
+      # in the one place a tool looks for it. Editable, so `import portrayal`
+      # resolves for the tools the shell scripts run by path.
+      - run: pip install -e ".[test]"
 
       # pdftoppm gates the OCR tests. Without it they SKIP, which is the one
       # thing this workflow exists to stop happening quietly.

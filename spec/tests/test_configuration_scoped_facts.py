@@ -37,8 +37,7 @@ import yaml
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
 DIST = LIB / "dist"
-sys.path.insert(0, str(ROOT / "spec/tools/portrayal"))
-import lint  # noqa: E402
+from portrayal import lint
 
 
 def dev(slug):

@@ -12,16 +12,34 @@ gates apply; skip to [The gates](#the-gates).
 
 ## Before you start
 
-You need Python 3.12 with `pyyaml` and `jsonschema`, a POSIX shell, and a
-browser. Everything else is optional and only for intake (converting vendor PDFs
-into figures), which the modelling guide covers.
+You need Python 3.12, a POSIX shell and a browser. **macOS or Linux**: the build
+gates are shell scripts, and `build.sh` runs one renderer per device under
+`xargs -P`. Everything else is optional and only for intake (converting vendor
+PDFs into figures), which the modelling guide covers.
 
 ```sh
 git clone https://github.com/roc-ops/Portrayal.git
 cd Portrayal
-python3 -m pip install pyyaml jsonschema pytest pillow numpy
+python3 -m pip install -e ".[test]"
 ./build.sh                       # lint, then compile every device into library/dist/
 python3 tools/serve.py 8931      # then open http://localhost:8931/kit/index.html
+```
+
+**The editable install is not optional.** The tools are a package - `portrayal` -
+and they import each other by name; before that they inserted their own directory
+onto `sys.path` in fourteen spellings across 94 files. `pip install -e .` is what
+makes `import portrayal` resolve, for `python -m portrayal lint` and for the
+`python3 spec/tools/portrayal/....py` paths the rest of this file gives alike.
+The extras are `[test]`, `[render]` (rasterising DCIM images), `[intake]` and
+`[bench]`.
+
+If you prefer a driver to a path, `python -m portrayal` wraps the gates:
+
+```sh
+python -m portrayal lint         # the library against the schemas
+python -m portrayal lock         # what version bump your change needs
+python -m portrayal build        # or `publish`, which adds the DCIM exports
+python -m portrayal test
 ```
 
 `./build.sh` is the check that your environment works. It lints the whole

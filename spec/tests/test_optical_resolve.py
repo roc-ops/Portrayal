@@ -12,7 +12,6 @@ import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
-sys.path.insert(0, str(ROOT / "spec/tools/portrayal"))
 
 
 def contract(ref):
@@ -29,7 +28,7 @@ def test_the_lc_duplex_adapter_presents_two_fibre_positions():
         "composing it has no capacity to check its paths against")
 
 
-import optical  # noqa: E402
+from portrayal import optical
 
 
 def test_an_endpoint_splits_into_a_part_id_and_a_position():

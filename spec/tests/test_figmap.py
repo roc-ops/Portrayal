@@ -19,9 +19,8 @@ import pathlib
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "spec" / "tools" / "portrayal"))
 
-import figmap  # noqa: E402
+from portrayal import figmap
 
 
 DOC = """# S6301-56ST

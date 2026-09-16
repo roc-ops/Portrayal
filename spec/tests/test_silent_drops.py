@@ -34,12 +34,11 @@ import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
-sys.path.insert(0, str(ROOT / "spec/tools/portrayal"))
 
-import dcim_export as dx        # noqa: E402
-import lint                     # noqa: E402
-from faces import face_ref                  # noqa: E402
-from manifest import load_yaml, view_parts   # noqa: E402
+from portrayal import dcim_export as dx
+from portrayal import lint
+from portrayal.faces import face_ref                  # noqa: E402
+from portrayal.manifest import load_yaml, view_parts   # noqa: E402
 
 # `port` is a connector on a faceplate; `inlet` is power entry. Both are things a
 # DCIM has somewhere to put, which is what makes their silence worth auditing.

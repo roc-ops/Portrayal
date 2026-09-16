@@ -12,8 +12,7 @@ import sys
 from PIL import Image, ImageDraw
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "spec/tools/portrayal"))
-import measure as M  # noqa: E402
+from portrayal import measure as M
 
 
 def figure(tmp_path, panels, size=(800, 400), callouts=True):

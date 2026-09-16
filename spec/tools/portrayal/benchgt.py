@@ -30,8 +30,7 @@ import sys
 
 import yaml
 
-sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
-import manifest as mf  # noqa: E402
+from portrayal import manifest as mf
 
 ROT_SWAPS = (90, 270, -90, -270)
 

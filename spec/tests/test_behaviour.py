@@ -179,8 +179,7 @@ def test_a_card_stands_on_its_shelf_and_leaves_no_hole():
     these bays once and does not now (a card's slot is on the rear face), so
     the fixture is its own."""
     import re
-    sys.path.insert(0, str(SPEC / "tools/portrayal"))
-    import render
+    from portrayal import render
 
     # the real board well and the generic plan card, resolved from the library
     lib = render.Library([str(LIB)])

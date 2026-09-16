@@ -25,9 +25,8 @@ import yaml
 import libdata
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "spec" / "tools" / "portrayal"))
-import capability as C  # noqa: E402
-import lint  # noqa: E402
+from portrayal import capability as C
+from portrayal import lint
 
 LIB = ROOT / "library"
 

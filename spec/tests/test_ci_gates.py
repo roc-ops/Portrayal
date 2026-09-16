@@ -81,29 +81,86 @@ def test_node_is_installed_rather_than_inherited(workflow):
     assert len(users) >= 10, f"only {len(users)} modules shell out to node"
 
 
+def _pyproject():
+    import tomllib
+    return tomllib.loads((ROOT / "pyproject.toml").read_text())
+
+
 def test_the_build_job_caches_pip_against_a_real_file(workflow):
+    """The cache key has to be a file pip actually reads, or it never invalidates
+    - and since #178 the dependency list lives in pyproject rather than in
+    spec/requirements-ci.txt."""
     body = yaml.safe_dump(workflow["jobs"]["build"])
     assert "cache: pip" in body
-    assert "spec/requirements-ci.txt" in body
-    assert (ROOT / "spec/requirements-ci.txt").exists()
+    assert "pyproject.toml" in body
+    assert (ROOT / "pyproject.toml").exists()
 
 
 def test_the_lint_job_installs_only_what_lint_imports(workflow):
-    """The suite's list pulls numpy and pillow. On a cold cache that is most of
-    the "fast" gone, for a job that reads YAML and checks it against a schema."""
+    """The suite's extra pulls numpy and pillow. On a cold cache that is most of
+    the "fast" gone, for a job that reads YAML and checks it against a schema.
+
+    `pip install -e .` keeps that true only while pyproject's `dependencies`
+    stay the two the tools import, so both halves are asserted - the step and
+    the list it resolves to."""
     body = yaml.safe_dump(workflow["jobs"]["lint"])
-    assert "pip install pyyaml jsonschema" in body, body[:400]
-    for heavy in ("numpy", "pillow", "requirements-ci"):
+    assert "pip install -e ." in body, body[:400]
+    for heavy in ("numpy", "pillow", "[test]"):
         assert heavy not in body, f"the lint job should not install {heavy}"
+    core = {d.split(">")[0].split("=")[0].strip()
+            for d in _pyproject()["project"]["dependencies"]}
+    assert core == {"pyyaml", "jsonschema"}, (
+        f"the lint job installs pyproject's core dependencies; they are now {core}")
 
 
-def test_the_requirements_cover_what_the_suite_imports_at_collection():
+def test_the_test_extra_covers_what_the_suite_imports_at_collection():
     """A module-scope import in a collected test file is a COLLECTION ERROR - it
     takes the whole suite down rather than skipping one file, which is how the
     second run of this workflow died on numpy."""
-    req = (ROOT / "spec/requirements-ci.txt").read_text()
-    for pkg in ("pytest", "pytest-xdist", "pyyaml", "jsonschema", "pillow", "numpy"):
-        assert re.search(rf"^{re.escape(pkg)}$", req, re.M), pkg
+    extra = _pyproject()["project"]["optional-dependencies"]
+    names = {d.split(">")[0].split("=")[0].strip() for d in extra["test"]}
+    assert {"pytest", "pytest-xdist", "pillow", "numpy"} <= names, names
+    # pyyaml and jsonschema arrive as core dependencies, not as test extras
+    core = {d.split(">")[0].split("=")[0].strip()
+            for d in _pyproject()["project"]["dependencies"]}
+    assert {"pyyaml", "jsonschema"} <= names | core
+
+
+def test_the_tools_are_a_package_and_nothing_inserts_a_path():
+    """#178. Fifty modules imported each other by bare name and 94 files put this
+    directory onto `sys.path` in fourteen spellings - a hack a test could get
+    subtly wrong, and that no editor or import linter could follow.
+
+    Asserted over the tree rather than over a list, because the next file to do
+    it will not be on any list.
+    """
+    import ast
+
+    def inserts_a_path(src):
+        """A real CALL, parsed - not the string in a comment. Grepping for the
+        text flagged this file's own docstring and a note left where the hack
+        used to be, which is a sweep measuring the searcher rather than the tree.
+        """
+        for node in ast.walk(ast.parse(src)):
+            if (isinstance(node, ast.Call)
+                    and isinstance(node.func, ast.Attribute)
+                    and node.func.attr == "insert"
+                    and isinstance(node.func.value, ast.Attribute)
+                    and node.func.value.attr == "path"
+                    and getattr(node.func.value.value, "id", None) == "sys"):
+                return True
+        return False
+
+    offenders = [str(f.relative_to(ROOT)) for f in sorted((ROOT / "spec").rglob("*.py"))
+                 if inserts_a_path(f.read_text())]
+    assert not offenders, offenders
+    hyphened = [str(f.relative_to(ROOT)) for f in (ROOT / "spec/tools").rglob("*-*.py")]
+    assert not hyphened, f"a hyphen is not an identifier: {hyphened}"
+
+    setup = _pyproject()["tool"]["setuptools"]
+    assert set(setup["packages"]) == {"portrayal", "portrayal_intake"}
+    for pkg, where in setup["package-dir"].items():
+        assert (ROOT / where / "__init__.py").exists(), f"{pkg} has no __init__.py"
 
 
 def test_the_kit_has_a_test_script_covering_every_module():
@@ -156,3 +213,17 @@ def test_the_allow_list_matches_what_the_suite_skips_today():
                if l.strip() and not l.startswith("#")]
     assert allowed, "the allow-list is empty"
     assert len(allowed) <= 6, f"{len(allowed)} allowed skip reasons - this list is growing"
+
+
+def test_the_intake_extra_and_its_requirements_file_agree():
+    """Two lists of the same dependencies drift. The file carries the ARGUMENT -
+    why docling, why opencv, why the GPU is optional - and pyproject carries the
+    install; neither is redundant, and nothing was holding them together."""
+    import tomllib
+    req = (ROOT / "spec/tools/intake/requirements.txt").read_text()
+    named = {l.split(">")[0].split("=")[0].strip().lower()
+             for l in req.splitlines() if l.strip() and not l.startswith("#")}
+    extra = tomllib.loads((ROOT / "pyproject.toml").read_text())
+    intake = {d.split(">")[0].split("=")[0].strip().lower()
+              for d in extra["project"]["optional-dependencies"]["intake"]}
+    assert named == intake, f"file-only: {named - intake}, extra-only: {intake - named}"

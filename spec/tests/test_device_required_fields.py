@@ -35,8 +35,7 @@ import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
-sys.path.insert(0, str(ROOT / "spec/tools/portrayal"))
-import devicelock  # noqa: E402
+from portrayal import devicelock
 
 
 @pytest.fixture(scope="module")

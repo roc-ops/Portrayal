@@ -28,9 +28,8 @@ import sys
 import pytest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "spec/tools/portrayal"))
 
-import devicelock as dl    # noqa: E402
+from portrayal import devicelock as dl
 
 BASE = {
     "chassis": {"width": 440.0, "height": 44.45, "depth": 500.0, "ru": 1,

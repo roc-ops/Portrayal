@@ -36,8 +36,7 @@ import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
-sys.path.insert(0, str(ROOT / "spec/tools/portrayal"))
-import lint  # noqa: E402
+from portrayal import lint
 
 
 def run(fn, doc):
@@ -154,7 +153,7 @@ def test_the_exporter_falls_back_to_the_chassis():
     """THE BUG THIS FOUND. `render.py` read config-then-chassis; `dcim_export`
     read only the configuration, so a device stating airflow on the chassis
     exported none. Twelve export files gained the line."""
-    import dcim_export
+    from portrayal import dcim_export
     dev = {"chassis": {"airflow": "front-to-back"}}
     out = {}
     air = dcim_export.AIRFLOW.get(({}).get("airflow") or (dev.get("chassis") or {}).get("airflow"))

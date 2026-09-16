@@ -101,14 +101,14 @@ from pathlib import Path
 
 import yaml
 
-import attrsections as attrs_mod
-import capability
-import dcim_export
-import devicelock
-import optical
-import optical_ports
-from faces import DIRECTIONS, OPTICAL_FACES, face_ref
-from manifest import (view_parts, targets, split_target, presented_interface,
+from portrayal import attrsections as attrs_mod
+from portrayal import capability
+from portrayal import dcim_export
+from portrayal import devicelock
+from portrayal import optical
+from portrayal import optical_ports
+from portrayal.faces import DIRECTIONS, OPTICAL_FACES, face_ref
+from portrayal.manifest import (view_parts, targets, split_target, presented_interface,
                       VIEW_KEY_ORDER,
                       component_refs, load_yaml,
                       PANEL_KEY_ORDER, COMPONENT_KEY_ORDER)
@@ -3862,8 +3862,7 @@ def lint_library_comparable_facts(roots, docs):
     attrsections says keys are globally unique; this is what actually holds
     them to it.
     """
-    import comparable as facts_mod
-
+    from portrayal import comparable as facts_mod
     homes, tail = {}, {}
     for path, doc in docs:
         for section, body in (doc.get("attrs") or {}).items():
@@ -3970,8 +3969,7 @@ def lint_device_declared_silence(path, data):
     asks a person. It is an error rather than a warning because a reader shown
     a number has no way to know a retraction was filed against it.
     """
-    import comparable as facts_mod
-
+    from portrayal import comparable as facts_mod
     stated = facts_mod.resolve(data)
     for name, why in facts_mod.declared_silence(data).items():
         if name not in facts_mod.BY_NAME:

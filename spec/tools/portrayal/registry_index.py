@@ -25,7 +25,7 @@ from pathlib import Path
 
 import yaml
 
-from manifest import load_yaml
+from portrayal.manifest import load_yaml
 
 SCHEMAS = Path(__file__).resolve().parents[2] / "schemas"
 

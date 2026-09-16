@@ -18,8 +18,7 @@ import pathlib
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "spec/tools/portrayal"))
-import lint as L  # noqa: E402
+from portrayal import lint as L
 
 LIB = [str(ROOT / "library")]
 

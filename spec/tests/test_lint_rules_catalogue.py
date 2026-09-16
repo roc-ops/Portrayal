@@ -14,8 +14,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 TOOLS = ROOT / "spec" / "tools" / "portrayal"
-sys.path.insert(0, str(TOOLS))
-import lint  # noqa: E402
+from portrayal import lint
 
 SOURCE = (TOOLS / "lint.py").read_text()
 # The RULES literal is the thing under test, so it is cut out of the source

@@ -32,9 +32,8 @@ import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
-sys.path.insert(0, str(ROOT / "spec" / "tools" / "portrayal"))
-import lint  # noqa: E402
-import components_catalogue as cat  # noqa: E402
+from portrayal import lint
+from portrayal import components_catalogue as cat
 
 
 def run(root):

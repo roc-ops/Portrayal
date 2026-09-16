@@ -19,8 +19,7 @@ import yaml
 import libdata
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "spec" / "tools" / "portrayal"))
-import lint  # noqa: E402
+from portrayal import lint
 
 LIB = ROOT / "library"
 
@@ -123,6 +122,6 @@ def test_the_comparison_layer_can_now_reach_them():
     """The point of the exercise. It resolved on nothing before this. Forty
     when the rule landed; the R740xd made it forty-one the day its fans became
     bays with a group that quotes the technical guide's N+1."""
-    import comparable as C
+    from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
     assert n == 41, n

@@ -96,8 +96,7 @@ def test_scoping_never_silently_empties_a_view():
 
 import sys
 
-sys.path.insert(0, str(SPEC / "tools/portrayal"))
-import render  # noqa: E402
+from portrayal import render
 
 
 class _Lib:

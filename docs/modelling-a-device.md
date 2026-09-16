@@ -58,7 +58,7 @@ scale. Where one exists, port pitch, lamp positions, cage depths and screw
 locations come off it directly and the panel gate below does not apply, because
 there is no projection to be wrong about. Look on the product page for `.glb`,
 `.gltf`, `.usdz` or a `model-viewer` element before concluding you only have
-figures. `spec/tools/intake/glb-parts.py` lists a model's parts with their
+figures. `spec/tools/intake/glb_parts.py` lists a model's parts with their
 world-space boxes.
 
 Expect the datasheet's overall dimensions to disagree with the CAD body, and

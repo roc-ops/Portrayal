@@ -21,7 +21,6 @@ import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 DIST = ROOT / "library" / "dist"
-sys.path.insert(0, str(ROOT / "spec" / "tools" / "portrayal"))
 
 pytestmark = pytest.mark.skipif(
     not (DIST / "vendors.json").exists(),
@@ -152,7 +151,7 @@ def test_the_overlays_declared_interface_names_are_what_the_exporter_reads():
     the exporter answer "what does ArcOS call port 7" from the same bytes.
     `spec/tests/test_dcim_nos_overlay.py` runs the export itself.
     """
-    from dcim_export import overlay_names
+    from portrayal.dcim_export import overlay_names
     doc = load("overlays.json")["overlays"]["edgecore/as7726-32x"]["arcos"]
     names = overlay_names(doc)
     assert names["port-7"][0] == "swp7"
@@ -231,7 +230,7 @@ def test_a_module_image_is_asked_for_by_a_name_the_build_publishes():
     because what is being checked is which path the export asks for - not
     whether cairosvg is installed.
     """
-    import dcim_export
+    from portrayal import dcim_export
 
     asked = []
     real, dcim_export.rasterize = dcim_export.rasterize, (

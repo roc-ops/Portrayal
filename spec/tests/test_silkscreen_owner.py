@@ -18,10 +18,9 @@ import libdata
 
 SPEC = Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library"
-sys.path.insert(0, str(SPEC / "tools/portrayal"))
 
-import lint  # noqa: E402
-from manifest import view_parts  # noqa: E402
+from portrayal import lint
+from portrayal.manifest import view_parts  # noqa: E402
 
 
 class _NoSchema:

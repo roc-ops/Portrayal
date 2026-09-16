@@ -47,11 +47,11 @@ from pathlib import Path
 
 import yaml
 
-from artifacts import Dist
+from portrayal.artifacts import Dist
 
-from manifest import view_parts
-import optical_ports
-from faces import face_ref
+from portrayal.manifest import view_parts
+from portrayal import optical_ports
+from portrayal.faces import face_ref
 
 # Portrayal media/speed -> DCIM interface type. Every value here is valid in
 # both libraries: NetBox's enum is a strict superset of Nautobot's (227 types

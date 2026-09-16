@@ -1,0 +1,64 @@
+# WHAT THIS PROJECT NEEDS TO RUN, IN THE ONE PLACE A TOOL LOOKS FOR IT.
+#
+# There was no pyproject, no requirements at the root, no lockfile and no
+# Makefile; the dependency list lived in a step of gates.yml, and README said
+# "standard library only" while the linter imported pyyaml and jsonschema. A
+# contributor's first command had nowhere to come from (#178).
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "portrayal"
+version = "0.1.0"
+description = "Hardware devices as declarative SVG: a library, a compiler and the gates that keep them honest"
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.12"
+# WHAT THE TOOLS THEMSELVES IMPORT, and nothing else. `lint` and the indexers
+# need a YAML parser and a schema validator; that is the whole of it, which is
+# why the lint CI job installs these two and runs in under a minute against the
+# suite's several tens of megabytes of wheels.
+dependencies = [
+  "pyyaml>=6.0",
+  "jsonschema>=4.0",
+]
+
+[project.optional-dependencies]
+# DERIVED BY WALKING EVERY TEST MODULE'S TOP-LEVEL IMPORTS one hop through the
+# local modules, rather than by guessing - the note spec/requirements-ci.txt
+# carries, kept with the list. A module-scope import in a collected test file is
+# a COLLECTION ERROR, so a missing one takes the suite down rather than skipping
+# a file.
+test = ["pytest", "pytest-xdist", "pillow", "numpy"]
+# Rasterising the DCIM elevation images. Imported lazily, so a build that passes
+# `--no-raster` needs none of it.
+render = ["cairosvg"]
+# The machine that converts vendor PDFs, which may be a different and beefier
+# box - see spec/tools/intake/requirements.txt for why, and the
+# portrayal-vendor-intake skill for the workflow.
+intake = ["docling>=2.0", "pillow>=10.0", "DracoPy", "numpy", "opencv-python-headless"]
+# The measurement benchmarks under spec/tools/portrayal/bench*.py. `mlx-vlm` is
+# Apple-silicon only and is deliberately absent: it cannot install on a Linux
+# runner, and every tool that uses it imports it lazily.
+bench = ["ultralytics", "opencv-python-headless", "numpy", "pillow",
+         "rapidocr-onnxruntime"]
+
+[project.scripts]
+portrayal = "portrayal.__main__:main"
+
+[tool.setuptools]
+# THE PACKAGES LIVE WHERE THE TOOLS HAVE ALWAYS LIVED. `package-dir` maps each
+# directory to its import name, so `import portrayal` resolves without moving
+# fifty files and without a doc having to learn a new path.
+#
+# `spec/tools/intake` becomes `portrayal_intake` rather than `intake`, which is
+# a real package on PyPI, and rather than a subpackage of `portrayal`: the
+# intake tools convert vendor PDFs on what may be a different and beefier box,
+# and none of the gates need any of their dependencies. A sibling says that;
+# `portrayal.intake` would say the opposite.
+package-dir = {portrayal = "spec/tools/portrayal", portrayal_intake = "spec/tools/intake"}
+packages = ["portrayal", "portrayal_intake"]
+
+[tool.pytest.ini_options]
+testpaths = ["spec/tests"]

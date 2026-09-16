@@ -10,8 +10,7 @@ import zipfile
 from pathlib import Path
 
 SPEC = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(SPEC / "tools" / "portrayal"))
-import visio_geom  # noqa: E402
+from portrayal import visio_geom
 
 NS = "http://schemas.microsoft.com/office/visio/2012/main"
 REL = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
@@ -89,7 +88,7 @@ def test_extractor_names_output_by_master(tmp_path):
 
 import struct  # noqa: E402
 
-import visio_meta  # noqa: E402
+from portrayal import visio_meta
 
 SHEET = f"""<?xml version='1.0' encoding='utf-8'?>
 <MasterContents xmlns='{NS}' xmlns:r='{REL}'><Shapes>
@@ -166,7 +165,7 @@ def test_suggest_name_uses_metadata_without_repeating_itself():
 def test_legacy_raw_dump_keeps_master_names(tmp_path, monkeypatch):
     """The raw libvisio dump names each master; the extractor must use it."""
     import base64 as _b64
-    import visio_extract
+    from portrayal import visio_extract
 
     blob = _emf_with_text("A9903", "-", "20HG")
     dump = (

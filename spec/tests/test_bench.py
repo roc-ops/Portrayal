@@ -20,15 +20,14 @@ import pathlib
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "spec" / "tools" / "portrayal"))
 
 import pytest  # noqa: E402
 
-import benchdata  # noqa: E402
-import benchgt  # noqa: E402
-import benchscore  # noqa: E402
-import benchtile  # noqa: E402
-import benchvlm  # noqa: E402
+from portrayal import benchdata
+from portrayal import benchgt
+from portrayal import benchscore
+from portrayal import benchtile
+from portrayal import benchvlm
 
 
 # ---- the projection ---------------------------------------------------------

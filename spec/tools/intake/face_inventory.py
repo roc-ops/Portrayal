@@ -18,7 +18,7 @@ posed the part: this R740xd model swings the power supply's own handle open, so
 that unit reports 39.3 proud against a body that is nothing of the sort. Sizes
 survive a pose; depths of moving parts do not. Cross-check anything that moves.
 
-Boxes here are ENVELOPES. Feed a row to cad-outline.py to get the real outline.
+Boxes here are ENVELOPES. Feed a row to cad_outline.py to get the real outline.
 """
 import argparse
 
@@ -34,7 +34,7 @@ _a = argparse.ArgumentParser()
 _a.add_argument('file')
 _a.add_argument('--plane', type=float, required=True,
                 help='cut plane in scene z. Geometry behind it is not visible '
-                     'and is not reported. Find it with glb-parts.py --zone '
+                     'and is not reported. Find it with glb_parts.py --zone '
                      'rear, or from a part known to sit in the panel')
 _a.add_argument('--face', default='434x86.8', help='chassis WxH in mm')
 _a.add_argument('--min-area', type=float, default=25.0,

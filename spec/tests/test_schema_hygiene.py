@@ -25,9 +25,8 @@ import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 SCHEMAS = ROOT / "spec/schemas"
-sys.path.insert(0, str(ROOT / "spec/tools/portrayal"))
 
-import lint  # noqa: E402
+from portrayal import lint
 
 
 def _schema_files():

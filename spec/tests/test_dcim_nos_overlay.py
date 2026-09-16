@@ -19,9 +19,8 @@ import sys
 import pytest
 import yaml
 
-sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "tools" / "portrayal"))
 
-import dcim_export as dx  # noqa: E402
+from portrayal import dcim_export as dx
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 DIST = ROOT / "library/dist"

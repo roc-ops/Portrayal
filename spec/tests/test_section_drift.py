@@ -23,9 +23,8 @@ import pytest
 import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "spec" / "tools" / "portrayal"))
-import lint  # noqa: E402
-import attrsections  # noqa: E402
+from portrayal import lint
+from portrayal import attrsections
 
 LIB = ROOT / "library"
 

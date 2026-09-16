@@ -33,10 +33,9 @@ import sys
 
 from PIL import Image
 
-sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
-import benchtile  # noqa: E402
-import benchvlm  # noqa: E402
-import figmap  # noqa: E402
+from portrayal import benchtile
+from portrayal import benchvlm
+from portrayal import figmap
 
 TOL = 0.03
 

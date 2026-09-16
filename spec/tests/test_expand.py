@@ -14,8 +14,7 @@ import pytest
 import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "spec/tools/portrayal"))
-import expand as E  # noqa: E402
+from portrayal import expand as E
 
 LIB = ROOT / "library"
 STD = E.load_standards(ROOT / "spec/schemas")
