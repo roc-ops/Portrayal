@@ -624,8 +624,16 @@ def lint_component(path, validator):
         err(path, "L0", f"will not parse: {str(exc).splitlines()[0]}")
         scalar_colon_hint(path, exc)
         return None
-    for e in validator.iter_errors(data):
+    # EVERY SCHEMA ERROR, NOT THE FIRST. `return` inside the loop reported one
+    # and stopped, so a manifest with four schema faults took four runs to fix -
+    # each one a full lint to find the next. The return still happens, because
+    # the checks below read a shape the schema has just said is wrong; it happens
+    # after the whole file has been reported rather than after one line of it.
+    # `lint_overlay` a few thousand lines down has always done it this way.
+    schema_errors = list(validator.iter_errors(data))
+    for e in schema_errors:
         err(path, "L1", f"{'/'.join(str(p) for p in e.path)}: {e.message}")
+    if schema_errors:
         return data
     check_segment(path, "L2", data["name"])
     check_states(path, data["name"], data.get("states"), data.get("attrs"))
@@ -5525,8 +5533,16 @@ def lint_device(path, validator, lib_roots):
         err(path, "L0", f"will not parse: {str(exc).splitlines()[0]}")
         scalar_colon_hint(path, exc)
         return None
-    for e in validator.iter_errors(data):
+    # EVERY SCHEMA ERROR, NOT THE FIRST. `return` inside the loop reported one
+    # and stopped, so a manifest with four schema faults took four runs to fix -
+    # each one a full lint to find the next. The return still happens, because
+    # the checks below read a shape the schema has just said is wrong; it happens
+    # after the whole file has been reported rather than after one line of it.
+    # `lint_overlay` a few thousand lines down has always done it this way.
+    schema_errors = list(validator.iter_errors(data))
+    for e in schema_errors:
         err(path, "L1", f"{'/'.join(str(p) for p in e.path)}: {e.message}")
+    if schema_errors:
         return data
 
     def resolve(ref):

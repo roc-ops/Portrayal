@@ -95,10 +95,7 @@
    }
   },
   "provenance": {
-   "type": "object",
-   "additionalProperties": {
-    "type": "string"
-   }
+   "$ref": "#/$defs/provenance"
   },
   "attrs": {
    "type": "object",
@@ -265,13 +262,16 @@
    "additionalProperties": false,
    "properties": {
     "width": {
-     "type": "number"
+     "type": "number",
+     "description": "millimetres, across the rack face"
     },
     "height": {
-     "type": "number"
+     "type": "number",
+     "description": "millimetres, the rack dimension - 1RU is 44.45"
     },
     "depth": {
-     "type": "number"
+     "type": "number",
+     "description": "millimetres, front face to rear face"
     },
     "ru": {
      "type": "number"
@@ -1071,10 +1071,7 @@
            "description": "the vendor's own sentence about this indicator, kept beside the tokens - 'Blue = 100G, Green = 40G'. Prose, never a state list"
           },
           "provenance": {
-           "type": "object",
-           "additionalProperties": {
-            "type": "string"
-           }
+           "$ref": "#/$defs/provenance"
           },
           "mate-to": {
            "$ref": "#/$defs/segment",
@@ -1303,6 +1300,14 @@
   }
  },
  "$defs": {
+  "provenance": {
+   "description": "field name -> where the figure came from. The same shape as component.schema.json's `$defs.provenance`, and deliberately so: a provenance note means one thing whether it is written on a device, a cutout or a placement.",
+   "type": "object",
+   "additionalProperties": {
+    "type": "string",
+    "description": "field name -> source, e.g. 'datasheet \u00a7Physical', 'photo-measured', 'measured', 'estimated'"
+   }
+  },
   "state": {
    "description": "one state a lamp can be in. The name is a token because `state-<name>` is a CSS class; the sentence explaining it belongs in `description` alongside THE BEHAVIOR BLOCK IS THE SAME SHAPE AS component.schema.json's and is kept that way deliberately: a state means one thing whether it is declared on a part or overridden on a placement. When `rate` and `sequence` were added they went into the component schema only, and a device that stated a blink frequency on a placement was rejected by a rule nobody had thought about - two definitions of one concept, drifting.",
    "oneOf": [
