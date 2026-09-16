@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: c40g
-version: 0.5.8
+version: 0.5.10
 maturity: modelled
 manufacturer: Casa Systems
 model: C40G
@@ -10,6 +10,14 @@ portfolio:
 description: Casa C40G CMTS/CCAP - 6RU, 6 paired front/rear slots. Takes the same line cards as
   the C100G but HORIZONTALLY, so the card is one model placed at rotate 90.
 profile: networking
+lint:
+  waive:
+    L44: >-
+      the field is 100% buried in 2D and that is correct - the two PEM openings fill this band
+      on a DC chassis and the bolted AC panel covers it on an AC one. It is kept because
+      `vent: 50` is what punches the rear panel in 3D, and a PEM is removable, so the air path
+      behind it is exactly what you see when one is pulled. Delete this waiver if the 3D vent
+      is ever driven from somewhere else.
 provenance:
   chassis:
     confidence: datasheet

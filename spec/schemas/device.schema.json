@@ -98,6 +98,19 @@
     }
    }
   },
+  "lint": {
+   "type": "object",
+   "additionalProperties": false,
+   "description": "WHAT THIS DEVICE HAS DECIDED ABOUT A RULE, as opposed to what it has not got round to. The difference matters and nothing could express it: `library/lint-baseline.json` records what is merely already true, and this records what a person has argued. The Casa C40G is the case it was written for - it keeps a rear vent field that L44 reports as 100% buried, and its provenance already says why at length, in prose no tool reads: the field is invisible in 2D because the PEMs or the AC panel cover it, and it is what punches the rear panel in 3D, which is exactly what you see when a PEM is pulled. That is a decision, and it belongs somewhere a count can see it.",
+   "properties": {
+    "waive": {
+     "type": "object",
+     "description": "rule code -> why this device will not satisfy it. The reason is REQUIRED and is checked for length, because a waiver whose reason is `n/a` is the thing that turns a rule off for everyone who copies the device. Waived warnings are still counted and still listed in the run's summary - they are separated, never hidden.",
+     "propertyNames": {"pattern": "^L[0-9]+$"},
+     "additionalProperties": {"type": "string", "minLength": 40}
+    }
+   }
+  },
   "provenance": {
    "type": "object",
    "description": "WHERE EACH FIGURE ON THIS DEVICE CAME FROM, keyed by the figure. Each entry is an object, not a sentence: `note` carries the prose and `confidence` carries the word, so a rule can ask what only a reader could answer before. The rule that needed it is L15's - `maturity: verified` means no dimension may be estimated, and it was implemented as `str(value).startswith(\"estimated\")` against a corpus where 42 entries opened with the word and 80 more said it somewhere in the middle of a 566-character paragraph. `confidence` is OPTIONAL and 744 of 1688 entries do not carry one: they were migrated with the prose intact and no word invented for them, because reading 744 paragraphs and deciding measured-or-estimated by eye is how an estimate becomes a measurement. L93 counts them, and the count is meant to fall. `source` is not here yet - it wants ids on the `datasheet`/`references` entries, which is roc-ops/Portrayal#274.",
