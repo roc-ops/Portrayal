@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9001
-version: 1.0.6
+version: 1.0.7
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9001
@@ -236,7 +236,7 @@ provenance:
       ports and one bay disabled in software until A9K-9001-120G-LIC is applied. The stencil
       having its own asr-9001-s-front master is not evidence to the contrary - a marketing stencil
       drawing a variant separately says nothing about the metal. What the configuration cannot
-      express is recorded in the per-instance-config-attrs gap
+      express is recorded in the config-scoped-device-attrs gap
   fan-legend:
     note: >-
       REMOVED, do not re-add at chassis level. "ASR-9001 FAN" and "STATUS" are printed on the FAN
@@ -292,32 +292,22 @@ chassis:
   color: '#c8cacc'
   silk: '#231f20'
 gaps:
-- what: per-instance-config-attrs
-  scope: [sfp-plus-2, sfp-plus-3]
+- what: config-scoped-device-attrs
+  scope: [asr-9001-s]
   reason: vendor-silent
   note: >-
-    The ASR 9001-S is the same metal as the ASR 9001 with two of its four fixed
-    SFP+ ports disabled until a licence is applied. That is not a population
-    fact - the cages are physically present and identical - so `bays:` cannot
-    express it, and the ports are correctly drawn present in both configurations.
-    INVESTIGATED AND IT DOES NOT REACH: `component-attrs` is the closest
-    mechanism the format has, and it is keyed by component NAME rather than by
-    placement id. render.py computes `comp_name = ref.split("/")[-1].split("@")[0]`
-    and looks the overrides up by that, so `component-attrs: {sfp-ganged: ...}`
-    would mark all SIX std/sfp-ganged instances on this chassis - both CLUSTER
-    ports and all four SFP+ - when only two are disabled. A placement can carry
-    `attrs:` per instance but not per configuration; `component-attrs` is per
-    configuration but not per instance. The 9001-S needs both at once and
-    neither mechanism spans the gap. The same edge stops this configuration
-    carrying its own 60 Gbps fabric figure, since a configuration cannot
-    override device attrs at all.
+    HALF OF THIS IS FIXED. The ASR 9001-S's two licence-disabled SFP+ ports and its disabled
+    modular bay are now stated: roc-ops/Portrayal#193 widened `component-attrs` to accept a
+    placement id as well as a component name, and `bay-attrs` already took a bay path, so
+    sfp-plus-2, sfp-plus-3 and mpa-1 carry `enabled: no` and the licence that unlocks them, in
+    that configuration alone. WHAT IS STILL NOT SAYABLE is the 60 Gbps figure: a configuration
+    can now say what is true of a PART and still cannot override an attr of the DEVICE, so this
+    chassis carries the 120 Gbps switching capacity for both models and the -S's half-capacity
+    lives in prose.
   wanted: >-
-    per-instance attrs in a configuration - `component-attrs` keyed by placement
-    id as well as by component name would do it - or a device-attrs override in
-    a configuration. This is a second instance of the shape recorded in
-    docs/what-a-configuration-cannot-say.md, from a different vendor: the
-    format can say what OCCUPIES a bay per configuration, but not what is TRUE
-    of a part per configuration.
+    a way for a configuration to override a device-level attr - the same widening one level up.
+    docs/what-a-configuration-cannot-say.md now records which two thirds of that shape are
+    closed and why this one is not.
   blocks: []
 - what: din-1-0-2-3-connector
   scope: [clk-10mhz, clk-1pps]
@@ -533,7 +523,7 @@ configurations:
       and 3 are physically present and identical - the cages are the same cages -
       but disabled by default and dust-capped, and unlocked by applying the
       A9K-9001-120G-LIC upgrade licence, after which the router must be reloaded.
-      NOTE WHAT THIS CONFIGURATION CANNOT SAY - see the per-instance-config-attrs
+      NOTE WHAT THIS CONFIGURATION STILL CANNOT SAY - see the config-scoped-device-attrs
       gap. It cannot mark SFP+ 2 and 3 as disabled, and it cannot carry the
       60 Gbps figure, so both live in this sentence rather than in data.
     part-numbers:
@@ -541,3 +531,8 @@ configurations:
         part: ASR-9001-S
       Upgrade license for 120G Bandwidth:
         part: A9K-9001-120G-LIC
+    component-attrs:
+      sfp-plus-2: {enabled: 'no', enabled-by: A9K-9001-120G-LIC}
+      sfp-plus-3: {enabled: 'no', enabled-by: A9K-9001-120G-LIC}
+    bay-attrs:
+      mpa-1: {enabled: 'no', enabled-by: A9K-9001-120G-LIC}
