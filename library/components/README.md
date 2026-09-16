@@ -13,12 +13,17 @@ The modelling guide covers measuring and drawing the part itself.
 
 ## Find it before you draw it
 
-Most parts already exist. Before creating one:
+Most parts already exist. **Read [CATALOGUE.md](CATALOGUE.md) first** — every
+component major on one page, with its size, the standard it conforms to, and how
+many devices already use it. It needs no build, and a test fails if it disagrees
+with the library.
+
+To search it from a shell instead:
 
 ```sh
-ls library/components/std library/components/common       # standard apertures and shared shapes
-grep -rl 'conforms: qsfp28' library/components              # everything that is a QSFP28 cage
-./build.sh && python3 -m json.tool library/dist/components.json | less   # the built catalogue
+grep -i qsfp28 library/components/CATALOGUE.md              # every QSFP28 part, with its size
+ls library/components/std library/components/common         # standard apertures and shared shapes
+grep -rl 'conforms: qsfp28' library/components              # the contracts themselves
 ```
 
 A QSFP28 cage, an SFP+ cage, an RJ45 jack, a C14 inlet, a status lamp, a USB
