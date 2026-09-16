@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-72xc
-version: 5.0.6
+version: 5.0.7
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-72XC
@@ -362,6 +362,8 @@ chassis:
   ru: 2
   color: '#484848'
   weight-kg: 15.19
+  airflow: front-to-back
+
 gaps:
 - what: port-led-semantics
   scope: [qsfp28, port-leds]
@@ -985,7 +987,6 @@ configurations:
       orderable chassis part number appears in any held document; see the chassis-sku
       gap.
     default: true
-    airflow: front-to-back
   ac:
     kind: orderable
     description: >-
@@ -993,7 +994,6 @@ configurations:
       fans. The datasheet's AC input rating is 100 to 240 V at 12 A; the HIG's maximum
       system consumption is 685 W and it specifies a 250 VAC 15 A IEC60320 C15 cord,
       with a 16 A fast-acting fuse built into each supply.
-    airflow: front-to-back
     component-attrs:
       psu-132-ac:
         model: PSU-132-AESR
@@ -1007,7 +1007,6 @@ configurations:
       each supply carries a 60 A fast-acting fuse; the DC build ships four #8 AWG input
       lugs in addition to the grounding lug kit (HIG accessory list). The HIG publishes
       no separate maximum for the DC build.
-    airflow: front-to-back
     bays:
       psu-0: ufispace/psu-132-dc@1
       psu-1: ufispace/psu-132-dc@1

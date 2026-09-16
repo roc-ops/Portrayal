@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-30dx
-version: 3.0.7
+version: 3.0.8
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-30DX
@@ -231,6 +231,8 @@ chassis:
   ru: 2
   color: '#3c3f42'
   weight-kg: 20.62
+  airflow: front-to-back
+
 gaps:
 - what: port-led-semantics
   scope: [qsfp28, qsfpdd-100g, qsfpdd-400g, port-leds]
@@ -715,7 +717,6 @@ configurations:
       orderable chassis part number appears in any held document; see the chassis-sku
       gap.
     default: true
-    airflow: front-to-back
   ac:
     kind: orderable
     description: >-
@@ -723,7 +724,6 @@ configurations:
       fans. The datasheet's AC input rating is 200 to 240 V at 10 A; the HIG's maximum
       system consumption for this build is 1300 W, and on a single 110 V feed both
       supplies derate to 1000 W each. The AC build ships one grounding lug.
-    airflow: front-to-back
     component-attrs:
       psu-162-ac:
         model: PSU-162-AESR
@@ -736,7 +736,6 @@ configurations:
       FAN-803816-HI fans. The datasheet's DC input rating is -40 to -72 V at 50 A and
       the HIG's maximum system consumption for this build is 1276 W. The DC build ships
       five grounding lugs where the AC build ships one (HIG accessory list).
-    airflow: front-to-back
     bays:
       psu-0: ufispace/psu-162-dc@1
       psu-1: ufispace/psu-162-dc@1

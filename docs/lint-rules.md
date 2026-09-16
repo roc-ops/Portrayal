@@ -96,3 +96,5 @@ a test fails when this page and the linter disagree. A finding prints as
 | L87 | component | a module naming what its rear IS has a rear face to name | add `faces.rear`, or drop `optical.rear-kind` |
 | L88 | component | a fibre face with more than one row of connectors states its own front numbering | add `optical.front-order` listing the fibre part ids in the vendor's printed order |
 | L89 | library | every component major is reachable from a device, or says why it is not | seat it in a device or in a seated part's bay, or add `unplaced:` saying what would seat it and what is missing |
+| L90 | device | a manifest's top-level keys read in the canonical order | reorder them; the message prints the order, and docs/device-template.yaml is written in it |
+| L91 | device | airflow is stated once - on the chassis, and on a configuration only where it differs | move it to `chassis.airflow`, or drop the configuration's copy |

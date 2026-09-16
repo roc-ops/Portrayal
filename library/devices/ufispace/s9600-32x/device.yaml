@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-32x
-version: 2.0.5
+version: 2.0.6
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-32X
@@ -310,6 +310,8 @@ chassis:
   ru: 2
   color: '#3c3f42'
   weight-kg: 17.73
+  airflow: front-to-back
+
 gaps:
 - what: port-led-semantics
   scope: [qsfp28, sfp28, port-leds]
@@ -786,7 +788,6 @@ configurations:
       empty. No orderable chassis part number appears in any held document; see the
       chassis-sku gap.
     default: true
-    airflow: front-to-back
   ac:
     kind: orderable
     description: >-
@@ -794,7 +795,6 @@ configurations:
       The build HIG Figure 7 draws; its maximum system power consumption is 621.3 W
       at 45 C with optics fully populated and 100% traffic. The accessory list ships
       two IEC power cords and one grounding lug with this build.
-    airflow: front-to-back
     bays:
       psu-0: ufispace/psu-162-ac@1
       psu-1: ufispace/psu-162-ac@1
@@ -808,7 +808,6 @@ configurations:
       grounding lugs and no power cord with this build. See the
       dc-psu-face-mirrored gap: the vendor's rear render shows this face the other
       way round from the component that draws it.
-    airflow: front-to-back
     bays:
       psu-0: ufispace/psu-162-dc@1
       psu-1: ufispace/psu-162-dc@1
@@ -818,7 +817,6 @@ configurations:
       The AC build with the four SFP28 breakout ports fitted with 25G optics. QSFP28
       port 0 is disabled while they are enabled, which is a software state the
       drawing cannot show - the cage is still there and still empty.
-    airflow: front-to-back
     occupants:
       sfp-0: common/sfp-lc-duplex@1
       sfp-1: common/sfp-lc-duplex@1

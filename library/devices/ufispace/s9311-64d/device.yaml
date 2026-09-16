@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9311-64d
-version: 3.0.5
+version: 3.0.6
 maturity: modelled
 manufacturer: UfiSpace
 model: S9311-64D
@@ -260,6 +260,8 @@ chassis:
   ru: 2
   color: '#3c3c3c'
   weight-kg: 18.52
+  airflow: front-to-back
+
 gaps:
 - what: port-led-semantics
   scope: [qsfpdd-400g, sfp-plus, port-leds]
@@ -772,7 +774,6 @@ configurations:
       management ports empty. No orderable chassis part number appears in any held
       document; see the chassis-sku gap.
     default: true
-    airflow: front-to-back
   ac:
     kind: orderable
     description: >-
@@ -781,7 +782,6 @@ configurations:
       their blue-latched intake counterparts - PSU-242-AICB-NN and FAN-805616-CCD -
       which are orderable and are modelled only as the fan's blue skin, because no
       held figure shows the intake PSU's face.
-    airflow: front-to-back
     component-attrs:
       psu-242-ac:
         model: PSU-242-AECRN
@@ -794,7 +794,6 @@ configurations:
       latch) with front-to-back fans (FAN-805616-HCE). The HIG rates the DC feed at
       -48V to -60V for operation up to 5000 m and notes a 120 A fast-acting fuse
       built into each supply.
-    airflow: front-to-back
     bays:
       psu-0: ufispace/psu-242-dc@1
       psu-1: ufispace/psu-242-dc@1

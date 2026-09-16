@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s6301-56st
-version: 2.0.5
+version: 2.0.6
 maturity: modelled
 manufacturer: UfiSpace
 model: S6301-56ST
@@ -241,6 +241,8 @@ chassis:
   depth: 440
   ru: 1
   weight-kg: 5.62
+  airflow: front-to-back
+
 gaps:
 - what: front-panel-led-legends
   scope: [status-leds]
@@ -656,7 +658,6 @@ configurations:
     description: Dual 150W DC PSUs (PSU-151-DESR) 1+1, dual FAN-402825-HDN fan
       modules 1+1, front-to-back airflow - the build the vendor's rear render shows
     default: true
-    airflow: front-to-back
     component-attrs:
       fan-402825:
         model: FAN-402825-HDN
@@ -664,7 +665,6 @@ configurations:
     kind: orderable
     description: Dual 150W AC PSUs (PSU-151-AESR) 1+1, dual FAN-402825-HDN fan
       modules 1+1, front-to-back airflow
-    airflow: front-to-back
     bays:
       psu-0: ufispace/psu-151-ac@1
       psu-1: ufispace/psu-151-ac@1

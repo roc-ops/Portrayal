@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9501-28smt
-version: 2.0.5
+version: 2.0.6
 maturity: modelled
 manufacturer: UfiSpace
 model: S9501-28SMT
@@ -292,6 +292,8 @@ chassis:
   depth: 302
   ru: 1
   weight-kg: 4.44
+  airflow: front-to-back
+
 gaps:
 - what: sfp-port-speed
   scope: [sfp-1g]
@@ -726,7 +728,6 @@ configurations:
       modules, front-to-back airflow. This is the bare working chassis - the traffic
       cages ship empty.
     default: true
-    airflow: front-to-back
     component-attrs:
       psu-201-dc:
         model: PSU-201-DISB
@@ -736,7 +737,6 @@ configurations:
     kind: orderable
     description: Dual 200 W AC PSUs (PSU-201-AISB), three FAN-402818-HC exhaust fan
       modules, front-to-back airflow
-    airflow: front-to-back
     bays:
       psu-0: ufispace/psu-201-ac@1
       psu-1: ufispace/psu-201-ac@1
@@ -749,7 +749,6 @@ configurations:
     kind: example
     description: The DC build fitted with 1G optics on the first four SFP ports and
       10G optics on the two MACsec SFP+ ports
-    airflow: front-to-back
     occupants:
       port-4: common/sfp-lc-duplex@1
       port-5: common/sfp-lc-duplex@1

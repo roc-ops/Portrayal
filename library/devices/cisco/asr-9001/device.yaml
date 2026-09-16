@@ -5,16 +5,16 @@ version: 1.0.4
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9001
+portfolio:
+  line: Service Provider
+  family: Aggregation Services Router
+  series: ASR 9000 Series
 description: >-
   Cisco ASR 9000 Series ASR 9001 Router - a 2 RU fixed-port aggregation services
   router with an integrated route processor, four fixed 10 GE SFP+ ports, two
   modular port adapter bays and 120 Gbps of fabric. Everything is on the front
   face: both MPA bays, both power supplies, the side-mounted fan tray and every
   port. The rear is a plain louvred panel.
-portfolio:
-  line: Service Provider
-  family: Aggregation Services Router
-  series: ASR 9000 Series
 provenance:
   port-cutouts: >-
     DERIVED, not measured, and the distinction matters. Every one of the fifteen
@@ -259,6 +259,64 @@ chassis:
   airflow: side
   color: '#c8cacc'
   silk: '#231f20'
+gaps:
+- what: per-instance-config-attrs
+  scope: [sfp-plus-2, sfp-plus-3]
+  reason: vendor-silent
+  note: >-
+    The ASR 9001-S is the same metal as the ASR 9001 with two of its four fixed
+    SFP+ ports disabled until a licence is applied. That is not a population
+    fact - the cages are physically present and identical - so `bays:` cannot
+    express it, and the ports are correctly drawn present in both configurations.
+    INVESTIGATED AND IT DOES NOT REACH: `component-attrs` is the closest
+    mechanism the format has, and it is keyed by component NAME rather than by
+    placement id. render.py computes `comp_name = ref.split("/")[-1].split("@")[0]`
+    and looks the overrides up by that, so `component-attrs: {sfp-ganged: ...}`
+    would mark all SIX std/sfp-ganged instances on this chassis - both CLUSTER
+    ports and all four SFP+ - when only two are disabled. A placement can carry
+    `attrs:` per instance but not per configuration; `component-attrs` is per
+    configuration but not per instance. The 9001-S needs both at once and
+    neither mechanism spans the gap. The same edge stops this configuration
+    carrying its own 60 Gbps fabric figure, since a configuration cannot
+    override device attrs at all.
+  wanted: >-
+    per-instance attrs in a configuration - `component-attrs` keyed by placement
+    id as well as by component name would do it - or a device-attrs override in
+    a configuration. This is a second instance of the shape recorded in
+    docs/what-a-configuration-cannot-say.md, from a different vendor: the
+    format can say what OCCUPIES a bay per configuration, but not what is TRUE
+    of a part per configuration.
+  blocks: []
+- what: din-1-0-2-3-connector
+  scope: [clk-10mhz, clk-1pps]
+  reason: needs-drawing
+  note: >-
+    Table 4 of the fixed-port install guide gives the 10MHz and 1PPS connectors
+    as DIN 1.0/2.3. The standards registry has no key for it - sma, smb, mcx and
+    f-type are there, DIN 1.0/2.3 is not - so these two openings are declared as
+    panel cutouts at their measured size rather than composed from a std/ part.
+    Substituting sma or smb would name a connector Cisco does not.
+    THE REASON WAS vendor-silent AND THAT WAS THE WRONG TOKEN. Cisco is not
+    silent - it names the connector outright. What is missing is a panel-cutout
+    dimension, which is needs-drawing, and the difference matters because the
+    two tokens ask different things of a reader: vendor-silent reads as closed
+    until better documents appear, needs-drawing reads as an errand somebody can
+    run today. The correction came from asr9k-cards, who had just been wrong in
+    exactly this direction about the XFP - concluding a figure was unsourceable
+    after searching the intake rather than the standards - and found it in
+    INF-8077i ten minutes after looking somewhere else. IEC 61169-8 is the
+    somewhere else here, and nobody has opened it yet.
+  wanted: >-
+    a std/din-1-0-2-3 part and its standards.yaml key. THE CONNECTOR IS
+    STANDARDISED, so a sourced dimension exists to be found rather than
+    estimated - DIN 1.0/2.3 is specified in IEC 61169-8, and any manufacturer's
+    bulkhead-jack panel drawing carries the D-hole figure. std/mcx is the worked
+    example of exactly this being done properly earlier tonight: registered from
+    IEC 61169-36 / CECC 22220 at 4.95 x 4.50 with confidence verified, replacing
+    an estimate that was 28 percent too small. This should be done the same way,
+    and until it is, an sma or smb standing in would be a plausible wrong answer
+    - which is the failure mode this project keeps having to dig back out
+  blocks: []
 groups:
   mpa-bays: {role: traffic, term: Bay, index-origin: 0, physical-context: NetworkingDevice}
   power-modules:
@@ -451,61 +509,3 @@ configurations:
         part: ASR-9001-S
       Upgrade license for 120G Bandwidth:
         part: A9K-9001-120G-LIC
-gaps:
-- what: per-instance-config-attrs
-  scope: [sfp-plus-2, sfp-plus-3]
-  reason: vendor-silent
-  note: >-
-    The ASR 9001-S is the same metal as the ASR 9001 with two of its four fixed
-    SFP+ ports disabled until a licence is applied. That is not a population
-    fact - the cages are physically present and identical - so `bays:` cannot
-    express it, and the ports are correctly drawn present in both configurations.
-    INVESTIGATED AND IT DOES NOT REACH: `component-attrs` is the closest
-    mechanism the format has, and it is keyed by component NAME rather than by
-    placement id. render.py computes `comp_name = ref.split("/")[-1].split("@")[0]`
-    and looks the overrides up by that, so `component-attrs: {sfp-ganged: ...}`
-    would mark all SIX std/sfp-ganged instances on this chassis - both CLUSTER
-    ports and all four SFP+ - when only two are disabled. A placement can carry
-    `attrs:` per instance but not per configuration; `component-attrs` is per
-    configuration but not per instance. The 9001-S needs both at once and
-    neither mechanism spans the gap. The same edge stops this configuration
-    carrying its own 60 Gbps fabric figure, since a configuration cannot
-    override device attrs at all.
-  wanted: >-
-    per-instance attrs in a configuration - `component-attrs` keyed by placement
-    id as well as by component name would do it - or a device-attrs override in
-    a configuration. This is a second instance of the shape recorded in
-    docs/what-a-configuration-cannot-say.md, from a different vendor: the
-    format can say what OCCUPIES a bay per configuration, but not what is TRUE
-    of a part per configuration.
-  blocks: []
-- what: din-1-0-2-3-connector
-  scope: [clk-10mhz, clk-1pps]
-  reason: needs-drawing
-  note: >-
-    Table 4 of the fixed-port install guide gives the 10MHz and 1PPS connectors
-    as DIN 1.0/2.3. The standards registry has no key for it - sma, smb, mcx and
-    f-type are there, DIN 1.0/2.3 is not - so these two openings are declared as
-    panel cutouts at their measured size rather than composed from a std/ part.
-    Substituting sma or smb would name a connector Cisco does not.
-    THE REASON WAS vendor-silent AND THAT WAS THE WRONG TOKEN. Cisco is not
-    silent - it names the connector outright. What is missing is a panel-cutout
-    dimension, which is needs-drawing, and the difference matters because the
-    two tokens ask different things of a reader: vendor-silent reads as closed
-    until better documents appear, needs-drawing reads as an errand somebody can
-    run today. The correction came from asr9k-cards, who had just been wrong in
-    exactly this direction about the XFP - concluding a figure was unsourceable
-    after searching the intake rather than the standards - and found it in
-    INF-8077i ten minutes after looking somewhere else. IEC 61169-8 is the
-    somewhere else here, and nobody has opened it yet.
-  wanted: >-
-    a std/din-1-0-2-3 part and its standards.yaml key. THE CONNECTOR IS
-    STANDARDISED, so a sourced dimension exists to be found rather than
-    estimated - DIN 1.0/2.3 is specified in IEC 61169-8, and any manufacturer's
-    bulkhead-jack panel drawing carries the D-hole figure. std/mcx is the worked
-    example of exactly this being done properly earlier tonight: registered from
-    IEC 61169-36 / CECC 22220 at 4.95 x 4.50 with confidence verified, replacing
-    an estimate that was 28 percent too small. This should be done the same way,
-    and until it is, an sma or smb standing in would be a plausible wrong answer
-    - which is the failure mode this project keeps having to dig back out
-  blocks: []

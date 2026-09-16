@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-28dx
-version: 2.0.6
+version: 2.0.7
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-28DX
@@ -290,6 +290,8 @@ chassis:
   depth: 762
   ru: 2
   weight-kg: 17.66
+  airflow: front-to-back
+
 gaps:
 - what: port-number-printing
   scope: [qsfp28, qsfpdd-400g, sfp28]
@@ -706,7 +708,6 @@ configurations:
       modules, front-to-back airflow. This is the bare working chassis - the traffic
       cages ship empty.
     default: true
-    airflow: front-to-back
     component-attrs:
       psu-132-dc:
         model: PSU-132-DESR
@@ -717,7 +718,6 @@ configurations:
     kind: orderable
     description: Dual 1300 W AC PSUs (PSU-132-AESR), four FAN-803816-HI exhaust fan
       modules, front-to-back airflow
-    airflow: front-to-back
     bays:
       psu-0: ufispace/psu-132-ac@1
       psu-1: ufispace/psu-132-ac@1
@@ -730,7 +730,6 @@ configurations:
   dc-populated:
     kind: example
     description: The DC build with 25G optics fitted in the four SFP28 breakout ports
-    airflow: front-to-back
     occupants:
       port-0-1: common/sfp-lc-duplex@1
       port-0-2: common/sfp-lc-duplex@1

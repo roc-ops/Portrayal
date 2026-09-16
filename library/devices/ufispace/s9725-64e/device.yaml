@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9725-64e
-version: 1.0.6
+version: 1.0.7
 maturity: modelled
 manufacturer: UfiSpace
 model: S9725-64E
@@ -407,6 +407,8 @@ chassis:
   depth: 762
   ru: 2
   weight-kg: 23.69
+  airflow: front-to-back
+
 gaps:
 - what: port-shell-ganging-sources-disagree
   scope: [qsfpdd-800g]
@@ -1212,12 +1214,10 @@ configurations:
       3+1, front-to-back airflow - the build HIG Figure 4's rear elevation, HIG Figure 5
       and the vendor rear photograph all show
     default: true
-    airflow: front-to-back
   dc:
     kind: orderable
     description: Dual 3000W DC PSUs (PSU-302-DESR) 1+1, four FAN-808012-HCE fan modules
       3+1, front-to-back airflow
-    airflow: front-to-back
     bays:
       psu-0: ufispace/psu-302-dc@1
       psu-1: ufispace/psu-302-dc@1

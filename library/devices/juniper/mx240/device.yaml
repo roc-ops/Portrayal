@@ -104,6 +104,30 @@ chassis:
   depth: 622.0
   ru: 5
   color: '#43474c'
+gaps:
+  - what: current-generation-frus
+    scope: [slots]
+    reason: needs-photo
+    wanted: orthographic imagery for the current MPC/SCBE2-SCBE3/RE-S-X6
+      generation - the intake holds their figures and power tables but no
+      straight-on photography, so the EOL FRUs the reference photograph
+      carries are what is modelled. The power tables for the newer FRUs are
+      already transcribed in the guide extraction for when they are built.
+  - what: high-capacity-psus
+    scope: [psus]
+    reason: needs-photo
+    wanted: faces for the high-capacity AC/DC supplies (figures 15/17 are
+      isometric line art only).
+  - what: craft-and-card-dimensions
+    scope: [craft, slots]
+    reason: vendor-silent
+    wanted: vendor dimensions for the craft panel and cards - no physical
+      dimension for either exists in the intake, so faces are sized to the
+      photographed apertures.
+  - what: supported-optics
+    scope: [slots]
+    reason: vendor-silent
+    wanted: transceiver lists per DPC/MPC (external compatibility tool).
 groups:
   slots:
     term: Slot
@@ -295,27 +319,3 @@ configurations:
       pem1: juniper/mx240-psu-ac@1
       pem2: juniper/mx240-psu-ac@1
       pem3: juniper/mx240-psu-ac@1
-gaps:
-  - what: current-generation-frus
-    scope: [slots]
-    reason: needs-photo
-    wanted: orthographic imagery for the current MPC/SCBE2-SCBE3/RE-S-X6
-      generation - the intake holds their figures and power tables but no
-      straight-on photography, so the EOL FRUs the reference photograph
-      carries are what is modelled. The power tables for the newer FRUs are
-      already transcribed in the guide extraction for when they are built.
-  - what: high-capacity-psus
-    scope: [psus]
-    reason: needs-photo
-    wanted: faces for the high-capacity AC/DC supplies (figures 15/17 are
-      isometric line art only).
-  - what: craft-and-card-dimensions
-    scope: [craft, slots]
-    reason: vendor-silent
-    wanted: vendor dimensions for the craft panel and cards - no physical
-      dimension for either exists in the intake, so faces are sized to the
-      photographed apertures.
-  - what: supported-optics
-    scope: [slots]
-    reason: vendor-silent
-    wanted: transceiver lists per DPC/MPC (external compatibility tool).

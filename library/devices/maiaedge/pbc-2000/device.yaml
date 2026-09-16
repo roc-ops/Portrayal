@@ -5,13 +5,13 @@ version: 3.0.0
 maturity: modelled
 manufacturer: MaiaEdge
 model: PBC-2000
-profile: networking
 description: >-
   MaiaEdge Path Border Controller - a 1RU appliance that merges L2 switching and L3
   routing to provision deterministic private Ethernet paths over any underlying
   transport, with line-rate AES-256-GCM IPsec. Two 100GbE QSFP28 ports on the front
   beside a console and two management jacks; two 550W supplies and a five-fan wall on
   the back, front-to-back.
+profile: networking
 provenance:
   model-number: >-
     vendor documentation - www.maiaedge.io/getting-started (getting-started.pdf),
@@ -149,6 +149,102 @@ attrs:
   lifecycle:
     eol: none-announced
 chassis: {width: 437.9, height: 41.27, depth: 291.08, ru: 1, color: '#1b1e21'}
+gaps:
+- what: front-face-positions
+  scope: [front]
+  reason: needs-drawing
+  wanted: >-
+    a face-on photograph of the front with nothing plugged in, or a mechanical drawing
+    from MaiaEdge. Either settles the whole face in one step.
+  note: >-
+    EVERY POSITION ON THE FRONT FACE IS ESTIMATED. The only sources held are a
+    three-quarter marketing render and photographs of a unit racked in service, and
+    neither is orthographic. panel_measure refuses the photograph outright, and
+    hand-anchoring it gives width- and height-derived scales that disagree far beyond
+    its 3% gate - the RJ45 jacks read 11.5 mm against their known 15.8 because the
+    right of the frame is further from the lens. So the ORDER of the face is evidence
+    and the coordinates are not. Tracked as roc-ops/Portrayal#247.
+- what: right-panel-identity
+  scope: [front]
+  reason: needs-drawing
+  wanted: >-
+    a dimension for the display and its bezel, so a real component can be built for it.
+    WHAT it is is no longer the question.
+  note: >-
+    IT IS A TOUCH SCREEN, and the vendor says so four times. The product documentation
+    has NTP servers configurable "using the on-board web UI or the front panel's touch
+    screen" and DNS "by navigating the menus on the front panel display on the front of
+    your PBC"; the setup guide sets the management IP, gateway and netmask "using the
+    touch screen on the front of the device", and reads the claim code "by navigating
+    the menus on the touchscreen display (from the home screen display, tap on the Claim
+    Info button)". So it is an interactive display with a home screen and menus - not
+    the vent a first draft drew a honeycomb on, which was reading reflection.
+    STILL DRAWN AS A BLANK GREY PLATE, deliberately: this entry used to say "if it is an
+    LCD it deserves a real component rather than paint", and that is now the open work
+    rather than an open question. No source held dimensions the display or its bezel, so
+    a component would have to invent its size - and the recess it sits in is itself
+    estimated like everything else on this face.
+- what: front-indicator-meanings
+  scope: [front]
+  reason: vendor-silent
+  wanted: an LED table, or a photograph of the unit powered down so the louvres read clean.
+  note: >-
+    THREE DIFFERENT THINGS GLOW ON THIS FACE and two of them are modelled. The
+    vendor's UI view draws a deliberate column of four round lamps immediately left of
+    port 0, which the rack photograph could not show because the transceivers' pull
+    tabs and their fibre cover that corner - those four are modelled, and WHAT EACH ONE
+    MEANS is unknown, so they carry `for: chassis` rather than an invented identity.
+    Each 100G port also carries ONE lamp (provenance `port-lamps`); its count is the
+    maintainer's and NEITHER SOURCE SHOWS WHERE IT SITS, so it is drawn above the cage
+    - the one place both sources rule out a four-lamp band - and that position is a
+    guess. Separately the photograph shows red and green points scattered at irregular
+    positions and heights across BOTH vent fields; those are internal board LEDs
+    glowing through the louvres, not a panel array - they do not line up and they sit
+    at several louvre heights - and they are deliberately not drawn. No document held
+    carries an LED table for any of the three.
+- what: psu-module-width
+  scope: [rear]
+  reason: sources-disagree
+  wanted: >-
+    a face-on rear photograph, or the vendor's part number for the supply. The answer
+    decides which of the library's two 550W majors this device should carry.
+  note: >-
+    common/psu-550w@2 is placed, being the maintained major and the 73.5 mm CRPS 1U
+    standard width. The rear photograph disagrees: on the scale the five fans validate
+    to 0.2%, the two-supply block reads about 171 mm, or 85.5 mm each, which is far
+    closer to the RETIRED common/psu-550w@1 at 84.0. An attempt to confirm the module
+    seams programmatically failed, so the reading rests on an eyeball and is not
+    asserted here. Either MaiaEdge fits a wider-than-CRPS module, or the eyeball is
+    wrong.
+- what: envelope-faces-undetailed
+  scope: [top, bottom, left, right]
+  reason: needs-photo
+  wanted: >-
+    photographs of the lid, the underside and either flank out of the rack. The unit
+    was shot in service with a device directly above it.
+  note: >-
+    These four faces draw the chassis envelope and nothing else. The envelope itself is
+    not a guess - 437.90 x 291.08 x 41.27 is dimensioned on page 3 of the datasheet -
+    but no source held shows what is ON any of them: no vent field, no label, no screw
+    pattern, no rail. The flat rect asserts the box and claims nothing about its
+    surface, which is what lets the device carry a rack elevation and a 3D box without
+    inventing detail.
+- what: wordmark-logo-mark
+  scope: [front]
+  reason: needs-drawing
+  wanted: the MaiaEdge mark as vector art, or a face-on photograph square enough to trace it from.
+  note: >-
+    The centre band carries the word MaiaEdge in the vendor's amber, sized and coloured
+    to match the photograph. The LOGO MARK that sits immediately left of it - a
+    stylised angular glyph - is not drawn. Approximating a company's mark from a
+    perspective photograph would be drawing something nobody can check, and a wrong
+    logo is worse than an absent one.
+- what: chassis-power-draw
+  reason: vendor-silent
+  wanted: a chassis draw or input figure from MaiaEdge.
+  note: >-
+    The datasheet states the supply configuration and no chassis draw figure, so none
+    is recorded. L27 stands, and the chassis total is a floor rather than a total.
 groups:
   qsfp28:
     term: Port
@@ -300,99 +396,3 @@ views:
     panel:
       decor:
       - {id: right-envelope, at: [0.0, 0.0], size: [291.08, 41.27], fill: '#1b1e21', kind: envelope}
-gaps:
-- what: front-face-positions
-  scope: [front]
-  reason: needs-drawing
-  wanted: >-
-    a face-on photograph of the front with nothing plugged in, or a mechanical drawing
-    from MaiaEdge. Either settles the whole face in one step.
-  note: >-
-    EVERY POSITION ON THE FRONT FACE IS ESTIMATED. The only sources held are a
-    three-quarter marketing render and photographs of a unit racked in service, and
-    neither is orthographic. panel_measure refuses the photograph outright, and
-    hand-anchoring it gives width- and height-derived scales that disagree far beyond
-    its 3% gate - the RJ45 jacks read 11.5 mm against their known 15.8 because the
-    right of the frame is further from the lens. So the ORDER of the face is evidence
-    and the coordinates are not. Tracked as roc-ops/Portrayal#247.
-- what: right-panel-identity
-  scope: [front]
-  reason: needs-drawing
-  wanted: >-
-    a dimension for the display and its bezel, so a real component can be built for it.
-    WHAT it is is no longer the question.
-  note: >-
-    IT IS A TOUCH SCREEN, and the vendor says so four times. The product documentation
-    has NTP servers configurable "using the on-board web UI or the front panel's touch
-    screen" and DNS "by navigating the menus on the front panel display on the front of
-    your PBC"; the setup guide sets the management IP, gateway and netmask "using the
-    touch screen on the front of the device", and reads the claim code "by navigating
-    the menus on the touchscreen display (from the home screen display, tap on the Claim
-    Info button)". So it is an interactive display with a home screen and menus - not
-    the vent a first draft drew a honeycomb on, which was reading reflection.
-    STILL DRAWN AS A BLANK GREY PLATE, deliberately: this entry used to say "if it is an
-    LCD it deserves a real component rather than paint", and that is now the open work
-    rather than an open question. No source held dimensions the display or its bezel, so
-    a component would have to invent its size - and the recess it sits in is itself
-    estimated like everything else on this face.
-- what: front-indicator-meanings
-  scope: [front]
-  reason: vendor-silent
-  wanted: an LED table, or a photograph of the unit powered down so the louvres read clean.
-  note: >-
-    THREE DIFFERENT THINGS GLOW ON THIS FACE and two of them are modelled. The
-    vendor's UI view draws a deliberate column of four round lamps immediately left of
-    port 0, which the rack photograph could not show because the transceivers' pull
-    tabs and their fibre cover that corner - those four are modelled, and WHAT EACH ONE
-    MEANS is unknown, so they carry `for: chassis` rather than an invented identity.
-    Each 100G port also carries ONE lamp (provenance `port-lamps`); its count is the
-    maintainer's and NEITHER SOURCE SHOWS WHERE IT SITS, so it is drawn above the cage
-    - the one place both sources rule out a four-lamp band - and that position is a
-    guess. Separately the photograph shows red and green points scattered at irregular
-    positions and heights across BOTH vent fields; those are internal board LEDs
-    glowing through the louvres, not a panel array - they do not line up and they sit
-    at several louvre heights - and they are deliberately not drawn. No document held
-    carries an LED table for any of the three.
-- what: psu-module-width
-  scope: [rear]
-  reason: sources-disagree
-  wanted: >-
-    a face-on rear photograph, or the vendor's part number for the supply. The answer
-    decides which of the library's two 550W majors this device should carry.
-  note: >-
-    common/psu-550w@2 is placed, being the maintained major and the 73.5 mm CRPS 1U
-    standard width. The rear photograph disagrees: on the scale the five fans validate
-    to 0.2%, the two-supply block reads about 171 mm, or 85.5 mm each, which is far
-    closer to the RETIRED common/psu-550w@1 at 84.0. An attempt to confirm the module
-    seams programmatically failed, so the reading rests on an eyeball and is not
-    asserted here. Either MaiaEdge fits a wider-than-CRPS module, or the eyeball is
-    wrong.
-- what: envelope-faces-undetailed
-  scope: [top, bottom, left, right]
-  reason: needs-photo
-  wanted: >-
-    photographs of the lid, the underside and either flank out of the rack. The unit
-    was shot in service with a device directly above it.
-  note: >-
-    These four faces draw the chassis envelope and nothing else. The envelope itself is
-    not a guess - 437.90 x 291.08 x 41.27 is dimensioned on page 3 of the datasheet -
-    but no source held shows what is ON any of them: no vent field, no label, no screw
-    pattern, no rail. The flat rect asserts the box and claims nothing about its
-    surface, which is what lets the device carry a rack elevation and a 3D box without
-    inventing detail.
-- what: wordmark-logo-mark
-  scope: [front]
-  reason: needs-drawing
-  wanted: the MaiaEdge mark as vector art, or a face-on photograph square enough to trace it from.
-  note: >-
-    The centre band carries the word MaiaEdge in the vendor's amber, sized and coloured
-    to match the photograph. The LOGO MARK that sits immediately left of it - a
-    stylised angular glyph - is not drawn. Approximating a company's mark from a
-    perspective photograph would be drawing something nobody can check, and a wrong
-    logo is worse than an absent one.
-- what: chassis-power-draw
-  reason: vendor-silent
-  wanted: a chassis draw or input figure from MaiaEdge.
-  note: >-
-    The datasheet states the supply configuration and no chassis draw figure, so none
-    is recorded. L27 stands, and the chassis total is a floor rather than a total.

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9610-36d
-version: 3.0.8
+version: 3.0.9
 maturity: modelled
 manufacturer: UfiSpace
 model: S9610-36D
@@ -329,6 +329,8 @@ chassis:
   ru: 2
   color: '#474749'
   weight-kg: 24.12
+  airflow: front-to-back
+
 gaps:
 - what: port-led-semantics
   scope: [qsfpdd-400g, sfp-plus, port-leds]
@@ -882,7 +884,6 @@ configurations:
       management ports empty. No orderable chassis part number appears in any held
       document; see the chassis-sku gap.
     default: true
-    airflow: front-to-back
     component-attrs:
       fan-808012:
         model: FAN-808012-HC
@@ -893,7 +894,6 @@ configurations:
       figure and render shows. The HIG rates the feed at 80 A maximum per circuit for
       operation up to 5000 m and notes a 150 A fast-acting fuse built into each supply;
       the terminal block takes two-hole #4 AWG lugs at 50 kgf.cm.
-    airflow: front-to-back
     bays:
       psu-0: ufispace/psu-302-dc@1
       psu-1: ufispace/psu-302-dc@1
@@ -910,7 +910,6 @@ configurations:
       in no figure - both rear images carry the DC unit - so the AC face here is
       ufispace/psu-302-ac@1 as drawn for the S9321-64E/EO, which orders the same part
       number at the same rating and the same 68 x 40.6 envelope.
-    airflow: front-to-back
     bays:
       psu-0: ufispace/psu-302-ac@1
       psu-1: ufispace/psu-302-ac@1

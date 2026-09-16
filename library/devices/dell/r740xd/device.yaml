@@ -2,11 +2,11 @@ format: 1
 kind: device
 name: r740xd
 version: 21.0.6
+maturity: draft
 manufacturer: Dell
 model: PowerEdge R740xd
 description: 2U two-socket rack server - 24 x 2.5 inch front drive bays
 profile: server
-maturity: draft
 provenance:
   chassis: >-
     datasheet - the R740xd spec sheet gives Height 86.8 mm, Width 434 mm, Depth
@@ -175,6 +175,275 @@ chassis:
   color: '#2f3439'
   edge: '#1d2125'
   silk: '#c9ced3'
+# THE FRONT AND THE REAR ARE NOT INDEPENDENT, and nothing in this file can say
+# so yet. Recorded as a gap rather than left for the next person to rediscover
+# from a bay number that does not add up.
+gaps:
+  - what: riser-divider-plate-face-detail-unknown
+    scope: [rear]
+    reason: needs-photo
+    note: >-
+      dell/riser-divider-plate-14g@1's OUTLINE AND DEPTH ARE MEASURED and its
+      FACE IS NOT. Both bodies come off Dell's service model to the hundredth -
+      face 267.32..278.64 and 297.10..308.42, y 1.81..42.42, 17.61 proud - but
+      what is printed or punched on them has not been established from any
+      figure. Riser 1's equivalent plate carries a five-slot column that appears
+      in no cut of the model at any plane and had to be read off ISM figure 8;
+      whether these two carry the same column, or anything else, was NOT
+      SEARCHED FOR rather than looked for and found absent.
+      The recess drawn for the card clip is drawn because a clip sits in a
+      recess on riser 1, not because this plate was seen to have one.
+    wanted: >-
+      a rear photograph or ISM figure at usable resolution across face
+      267..309, which would settle both plates at once - they are the same
+      pressing
+  - what: riser-1-shelf-over-plate-ordering-estimated
+    scope: [rear]
+    reason: needs-hardware
+    note: >-
+      WHICH OF THE TWO IS IN FRONT IS ASSERTED, NOT MEASURED. dell/riser-1-top-
+      shelf-14g@1 is 14.68 proud (measured, the chassis shell's front) and
+      dell/riser-1-shroud-14g@1's plate is extruded at 17.76 (an approximation
+      across a whole outline, as that file's depth key says), so the plate drew
+      in front and the shelf read as tucked under the piece it closes the top
+      of. The operator, looking at the render against the hardware, says the
+      shelf is the outermost thing there.
+      It is expressed as a 3.10 `lift` on the composition - the smallest value
+      that clears 17.76 - so both measured depths survive untouched and only the
+      ordering changes. If the plate's width and depth are ever settled properly
+      (see riser-1-shroud-rib-width-unresolved, which is the same piece of
+      missing evidence) this lift should be re-derived rather than kept.
+    wanted: >-
+      a mechanical drawing or a caliper on the hardware giving the riser-1
+      shroud plate's front and the chassis top shelf's front at the same face x,
+      which is the one measurement that settles the ordering outright
+  - what: mid-bay-drive-numbering-unknown
+    scope: [top]
+    reason: vendor-silent
+    note: >-
+      THE MID BAYS ARE NOT NUMBERED HERE, AND THAT IS DELIBERATE. This device
+      numbers its front drives 0 to 23 and its rear drives 12 to 15 or 24 to 27,
+      in both cases because Dell's own label says so and the numbering was
+      checked against it. NOTHING FOUND SO FAR SAYS WHAT DELL CALLS THE FOUR
+      MID-BAY DRIVES.
+      They are `mid-lff-0..3` and `mid-sff-0..3`, which are positions and not
+      claims: they say "the four slots, left to right" and assert nothing about
+      what the machine prints or what iDRAC reports. Inventing a range that
+      looked like the others - 24 to 27 say - would have been the easy thing and
+      would have been a fabrication of exactly the kind the front and rear
+      numbering was careful to avoid.
+    wanted: >-
+      the mid-drive-tray page of the R740xd installation and service manual, or
+      a photograph of the tray with its silkscreen legible
+  - what: riser-1-shroud-rib-width-unresolved
+    scope: [rear]
+    reason: needs-drawing
+    note: >-
+      THE PREVIOUS FORM OF THIS GAP SAID THE CAD POSE WAS EXPLODED. IT IS NOT,
+      AND THE SENTENCE IS KEPT HERE BECAUSE IT IS THE INSTRUCTIVE PART.
+      A reading of R740XD_GPU_Brackets_01-1 was rejected on the grounds that its
+      y extent ran -40 to +24 against an 86.8 mm panel - "not a seated pose".
+      That was a Y-CONVENTION ARTEFACT IN THE READER, not a fact about the
+      model. Calibrated against the rear handle, whose device y is trusted, the
+      convention is face_y = 86.8 - raw_y; it reproduces the handle's low edge
+      at 42.35 to the hundredth and this assembly's own sibling
+      R740XD_Expansioncard_Clip-1.001 at y 1.81..44.81, the figure
+      riser-1-shroud-14g already carried from an independent read. The pose is
+      seated and the 36.9 mm was real all along - a plausibility check that
+      fires on the reader instead of the data rejects good evidence, and it
+      cost a wrong fix at the other end of the part.
+      WHAT THE MODEL ACTUALLY SHOWS, descended to mesh children, is two levels:
+      Body_2_3.002 at 111.70..148.60, 11.06 proud - a wide lower shelf, now
+      drawn - and Body_1_3.005 at 125.00..135.10, 17.71 proud - a narrow rib.
+      WHAT IS STILL OPEN is the rib. riser-1-shroud-14g draws it 120.64..137.26,
+      about 4 mm wider on each side than the body at that depth. The outline
+      came from cad-outline.py cutting at the panel plane, which returns the
+      SILHOUETTE of everything the plane crosses rather than one body, so it
+      cannot settle a single body's width. Re-cutting it would move the slot
+      column and the clip recess, both photo-measured off ISM figure 8 and both
+      currently agreeing with the render, so it is recorded rather than guessed.
+    wanted: >-
+      a mechanical drawing of the riser-1 shroud, or a clean section of
+      R740XD_GPU_Brackets_01-1 above the shelf, to settle the raised rib's width
+      independently of the panel-plane silhouette
+  - what: front-vga-setback-estimated
+    scope: [front, front-lff-12]
+    reason: needs-hardware
+    note: >-
+      THE NUMBER CAME FROM A DESCRIPTION, NOT A MEASUREMENT. std/vga@1 stands
+      6.73 proud because that is what a D-sub does when its flange bolts through
+      sheet metal, and on this machine's front the connector is on the control
+      panel board, which sits back from the bezel - so only a little of it
+      emerges. The operator, looking at the hardware, put that at "a millimetre
+      and a half"; `inset: 5.23` is 6.73 less 1.50 and is therefore an estimate
+      dressed as two decimal places.
+      IT IS THE SETBACK THAT IS UNKNOWN, not the connector. The 6.73 is TE
+      114-40010's mating dimension and stays; what nobody here has measured is
+      how far behind the faceplate the board sits. A caliper on the hardware, or
+      any drawing that dimensions the control panel board against the front
+      bezel, replaces one number and nothing else.
+      THE REAR D-SUBS ARE NOT AFFECTED. They bolt through the rear panel in the
+      ordinary way and carry no inset.
+    wanted: >-
+      the control panel board's setback from the front bezel, measured
+  - what: psu-top-edge-unsettled
+    scope: [rear]
+    reason: sources-disagree
+    note: >-
+      TWO NUMBERS, ONE APPEARANCE EACH, AND NEITHER CORROBORATED. This device
+      seats both supplies at y 46.20, and the only other place that number
+      appears is a comment on riser 2's plate saying the plate was cut back to
+      "face 46.20 - the power supply's top edge", which cites this seating
+      rather than a source. psu-1100w-ac-14g's provenance used to argue the
+      module top was y 45.0, read off R740 ISM figure 9 - but it argued that in
+      the same breath as a height of 41.8, and the height has since been
+      measured off Dell's own service model at 39.1. A position argued from a
+      reading whose companion number is disproven is not evidence for the
+      position.
+      THE CAD CANNOT ANSWER IT. glb-parts.py states the rule it enforces:
+      sizes survive a pose and positions do not, and this scene draws the
+      supply with its withdrawal handle swung open for a removal procedure. The
+      body measures cleanly at 86.3 x 39.1 x 195.5 and its face y lands
+      nowhere near either candidate.
+      AN ATTEMPT TO RE-READ FIGURE 9 FAILED GATE 1 AT 13.18%, against a
+      provenance that claims 0.26% for the same figure - so the failure is in
+      the panel detection, not in the figure, and nothing may be taken off it
+      until somebody finds the body's true top and bottom edges in that raster.
+      The seating is left where it is rather than moved on a measurement that
+      did not pass its own gate.
+      WHAT WOULD SETTLE IT: the body edges in ISM figure 9 identified by hand
+      rather than by ink-density, which turns the 13.18% back into the 0.26%
+      the figure is capable of and makes the fraction readable. 1.2 mm is worth
+      one careful pass, because riser 2's plate is cut to this number.
+    wanted: >-
+      the supply's top edge on the rear face, from a figure that has passed Gate 1
+  - what: riser-2-and-3-bodies-placed-by-analogy
+    scope: [rear, riser-2, riser-3]
+    reason: needs-drawing
+    note: >-
+      Dell's model carries riser 1 (three-slot, measured here to the tenth)
+      and the low-profile riser 2C. It carries no full-height riser 2 and no
+      riser 3. Their bodies - the PCB and the slot connectors in
+      `body.boxes` on dell/riser-2a/2d/2e/2f-14g and dell/riser-3a/3b-14g -
+      are riser 1's, stood at their own bays' outer edges, and riser 3's
+      PCB is cut to end at the supply cage it stands on.
+    wanted: >-
+      A model or a photograph of riser 2A and riser 3 seated, which would put
+      both PCBs where they are.
+  - what: front-panel-variants
+    scope: [front, front-lff-12]
+    reason: needs-drawing
+    note: >-
+      ISM figures 17 and 18 number five fronts - 24, 16 and 8 x 2.5 inch at bays
+      0-23, 0-15 and 0-7, and 12 and 8 x 3.5 inch at 0-11 and 0-7.
+      TWO OF THE FIVE ARE NOW DRAWN. `front` is the 24 x 2.5 inch; `front-lff-12`
+      is the 12 x 3.5 inch, the one that mattered, because it is the front the
+      rears numbered 12-15 and 12-13 belong to. It is a variant view with
+      `face: front`, bound by the `lff12-` configurations, and its grid was
+      measured off dellr740xd-12x35.webp at Gate 1 0.07% - the same backplane
+      opening the 24 SFF bays divide, 428.832 / 4 = 107.208 against a measured
+      period of 107.216.
+      THE 16 AND 8 x 2.5 INCH AND THE 8 x 3.5 INCH ARE STILL NOT MODELLED, and
+      no figure for them has been measured.
+    wanted: >-
+      the remaining three fronts as further `face: front` variants, each with a
+      configuration to bind it.
+  - what: front-rear-configuration-coupling
+    scope: [front, front-lff-12, rear, rear-4-sff, rear-2-lff, lff-12, lff-12-rear-2-lff]
+    reason: vendor-silent
+    note: >-
+      DELL ENUMERATES THEM. ISM table 28, "Supported backplane options for
+      PowerEdge R740XD systems", lists front, mid and rear together - ten rows,
+      and the coupling falls straight out:
+        2.5in x24                                      no rear
+        2.5in x24  + 2.5in x4 mid  + 2.5in x4 rear
+        2.5in x24 (20 SAS/SATA + 4 NVMe)               no rear
+        3.5in x12                                      no rear
+        3.5in x12  + 3.5in x4 mid  + 3.5in x2 rear
+        3.5in x12  + 3.5in x4 mid  + 2.5in x4 rear
+        3.5in x12                  + 3.5in x2 rear
+        3.5in x12                  + 2.5in x4 rear
+        2.5in x24 NVMe                                 no rear
+        3.5in x12 Hybrid with NVMe U.2                 no rear
+      The 24-bay front takes ONE rear, the 4 x 2.5 inch, which figure 19 numbers
+      24-27. The 12-bay front takes either, and figure 19 numbers both from 12.
+      This device carries the 24-bay front, which is why its rear reads 24-27.
+      THE ARITHMETIC GOT THERE FIRST AND IS NOW REDUNDANT. Bays numbered 12-15
+      imply eleven bays this model does not have; that is how the error was
+      found. Table 28 is how it is now SOURCED, and a guess agreeing with a
+      document afterwards is worth more than either alone.
+      THE RISER SIDE IS TABLE 25, and its discriminator is riser 2 rather than
+      riser 3. Rear storage is offered in riser configurations 0, 1 and 2 and no
+      others: 1 and 2 fit a one-slot low-profile riser 2 (2B or 2C, slot 4
+      only), while configuration 3 fits a three-slot 2A (slots 4, 5, 6) and has
+      NO rear storage despite fitting no riser 3 at all. It is riser 2's
+      full-height section that occupies the bay the rear cage needs. This
+      device's configurations already encode exactly that - rear storage only
+      with rc0, rc1 and rc2 - and row 3 is `rc3-1a2a`, added when the riser 3 opening and
+      rear storage bay 3 turned out to be the SAME HOLE, closed by two
+      different blanks depending on which configuration you picked.
+      RE-READ AND STILL OPEN: that change touched which bay closes an opening,
+      not the front-to-rear coupling this gap is about. Re-read again when
+      riser 1's brackets moved 1 mm and slot 2 lost its numeral on 1A - both
+      are ink and geometry inside one bay, and neither reaches across faces.
+      Re-read a third time when riser 1's plate grew to meet the slot strip and
+      the shroud: the bay's own box moved, and still nothing crossed a face.
+      A fourth time when riser 2's three slots were aligned and its plate cut
+      back to the full-height pair. That one surfaced a NEW question but not a
+      new gap of this kind: a bay's occupant is drawn after the panel, so a
+      card cannot be shown "only through its cutout" without a part drawn after
+      the bays to mask it. Recorded where it belongs, on the riser 2 slot 6
+      cutout, rather than widened into this one.
+      A fifth time when the screw tab was split out of the frame so it could
+      draw in front of riser 2's bracket tails. That is a draw-order fact about
+      one bay, not a coupling between faces.
+      A sixth time when riser 3 became bay 1 reflected - mirrored brackets, a
+      two-slot plate and its own slot strip. Handedness is a fact about one
+      bay's own metal and reaches no further than that.
+      A seventh time when riser 3 slid 9.525 right to sit over the power
+      supply's edge. Moving one bay along its own face changes nothing about
+      which front it can be sold with.
+      An eighth time when two "rivet" pairs beside the divider turned out to be
+      card retention clips. A misread of what is on the rear, corrected on the
+      rear, and silent about any front.
+      A ninth time when those rivets came back, scoped: they are what the riser
+      cage mounts to and they show when drives are fitted instead. That one is
+      a rear configuration telling two rear drawings apart, which is the
+      mechanism this gap says is MISSING between faces - and still is.
+      A tenth time when the C20 supply became its own part. A second occupant
+      for an existing bay, on the same face, coupled to nothing at the front.
+      TWO SOURCES DISAGREE AND ARE LEFT DISAGREEING. The system information
+      label draws FIVE fronts - 24, 16 and 8 x 2.5 inch, 12 and 8 x 3.5 inch -
+      where table 28 lists TWO front backplanes. Whether the 16- and 8-bay
+      fronts are different chassis or one backplane drawn part-populated,
+      nothing held here says.
+      AND TABLE 28 HAS A MID DRIVE TRAY in three of its ten rows. This device
+      models no mid bay at all, which is a whole third drive location missing
+      rather than a detail.
+    wanted: >-
+      NOW DEMONSTRABLE RATHER THAN HYPOTHETICAL. `rear-2-lff` draws a correct
+      2 x 3.5 inch rear on a 24 x 2.5 inch front, and ISM table 28 lists no such
+      machine - every row carrying that rear has a 12-bay front. The mismatch
+      even forced an id: the figure prints 12 and 13, which are already two of
+      this chassis's front bays, so the rear ones had to be rear-drive-12 and
+      rear-drive-13. An id clash is what this gap looks like from the inside.
+      RE-READ AFTER THE REAR BAYS WERE SEPARATED, and still open. The rear half
+      of this is now expressible: the chassis structure across bays 2 and 3 is
+      its own always-present part, and what each bay holds - drives, PCIe, a
+      blank - varies independently of the other. That was the piece `only-in`
+      could not reach while one 287 mm component owned both bays.
+      WHAT REMAINS IS THE FRONT. The 24 x 2.5 inch and 12 x 3.5 inch fronts are
+      different panels, not different occupancy, and until the second is drawn
+      nothing exercises the face-binding that would couple it to a rear.
+      A way for a configuration to constrain more than one view at once. Today
+      `only-in` scopes a bay to a configuration and every view chooses
+      independently, so nothing stops a consumer selecting a 24-bay front and a
+      rear numbered 12-15 - a machine that cannot be bought. The library needs
+      either configurations that span views, or a declared incompatibility
+      between them; and this device needs its 12 x 3.5 inch front modelled
+      before either can be exercised, which is the same gap `rear-2-lff` already
+      stands on.
+
 groups:
   drives:
     term: Drive
@@ -1727,275 +1996,6 @@ views:
         - {id: edge-bottom, at: [0.0, 82.8], size: [737.5, 4.0],
            fill: '#1a1d21', confidence: estimated,
            source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the 6.0 is not measured"}
-
-# THE FRONT AND THE REAR ARE NOT INDEPENDENT, and nothing in this file can say
-# so yet. Recorded as a gap rather than left for the next person to rediscover
-# from a bay number that does not add up.
-gaps:
-  - what: riser-divider-plate-face-detail-unknown
-    scope: [rear]
-    reason: needs-photo
-    note: >-
-      dell/riser-divider-plate-14g@1's OUTLINE AND DEPTH ARE MEASURED and its
-      FACE IS NOT. Both bodies come off Dell's service model to the hundredth -
-      face 267.32..278.64 and 297.10..308.42, y 1.81..42.42, 17.61 proud - but
-      what is printed or punched on them has not been established from any
-      figure. Riser 1's equivalent plate carries a five-slot column that appears
-      in no cut of the model at any plane and had to be read off ISM figure 8;
-      whether these two carry the same column, or anything else, was NOT
-      SEARCHED FOR rather than looked for and found absent.
-      The recess drawn for the card clip is drawn because a clip sits in a
-      recess on riser 1, not because this plate was seen to have one.
-    wanted: >-
-      a rear photograph or ISM figure at usable resolution across face
-      267..309, which would settle both plates at once - they are the same
-      pressing
-  - what: riser-1-shelf-over-plate-ordering-estimated
-    scope: [rear]
-    reason: needs-hardware
-    note: >-
-      WHICH OF THE TWO IS IN FRONT IS ASSERTED, NOT MEASURED. dell/riser-1-top-
-      shelf-14g@1 is 14.68 proud (measured, the chassis shell's front) and
-      dell/riser-1-shroud-14g@1's plate is extruded at 17.76 (an approximation
-      across a whole outline, as that file's depth key says), so the plate drew
-      in front and the shelf read as tucked under the piece it closes the top
-      of. The operator, looking at the render against the hardware, says the
-      shelf is the outermost thing there.
-      It is expressed as a 3.10 `lift` on the composition - the smallest value
-      that clears 17.76 - so both measured depths survive untouched and only the
-      ordering changes. If the plate's width and depth are ever settled properly
-      (see riser-1-shroud-rib-width-unresolved, which is the same piece of
-      missing evidence) this lift should be re-derived rather than kept.
-    wanted: >-
-      a mechanical drawing or a caliper on the hardware giving the riser-1
-      shroud plate's front and the chassis top shelf's front at the same face x,
-      which is the one measurement that settles the ordering outright
-  - what: mid-bay-drive-numbering-unknown
-    scope: [top]
-    reason: vendor-silent
-    note: >-
-      THE MID BAYS ARE NOT NUMBERED HERE, AND THAT IS DELIBERATE. This device
-      numbers its front drives 0 to 23 and its rear drives 12 to 15 or 24 to 27,
-      in both cases because Dell's own label says so and the numbering was
-      checked against it. NOTHING FOUND SO FAR SAYS WHAT DELL CALLS THE FOUR
-      MID-BAY DRIVES.
-      They are `mid-lff-0..3` and `mid-sff-0..3`, which are positions and not
-      claims: they say "the four slots, left to right" and assert nothing about
-      what the machine prints or what iDRAC reports. Inventing a range that
-      looked like the others - 24 to 27 say - would have been the easy thing and
-      would have been a fabrication of exactly the kind the front and rear
-      numbering was careful to avoid.
-    wanted: >-
-      the mid-drive-tray page of the R740xd installation and service manual, or
-      a photograph of the tray with its silkscreen legible
-  - what: riser-1-shroud-rib-width-unresolved
-    scope: [rear]
-    reason: needs-drawing
-    note: >-
-      THE PREVIOUS FORM OF THIS GAP SAID THE CAD POSE WAS EXPLODED. IT IS NOT,
-      AND THE SENTENCE IS KEPT HERE BECAUSE IT IS THE INSTRUCTIVE PART.
-      A reading of R740XD_GPU_Brackets_01-1 was rejected on the grounds that its
-      y extent ran -40 to +24 against an 86.8 mm panel - "not a seated pose".
-      That was a Y-CONVENTION ARTEFACT IN THE READER, not a fact about the
-      model. Calibrated against the rear handle, whose device y is trusted, the
-      convention is face_y = 86.8 - raw_y; it reproduces the handle's low edge
-      at 42.35 to the hundredth and this assembly's own sibling
-      R740XD_Expansioncard_Clip-1.001 at y 1.81..44.81, the figure
-      riser-1-shroud-14g already carried from an independent read. The pose is
-      seated and the 36.9 mm was real all along - a plausibility check that
-      fires on the reader instead of the data rejects good evidence, and it
-      cost a wrong fix at the other end of the part.
-      WHAT THE MODEL ACTUALLY SHOWS, descended to mesh children, is two levels:
-      Body_2_3.002 at 111.70..148.60, 11.06 proud - a wide lower shelf, now
-      drawn - and Body_1_3.005 at 125.00..135.10, 17.71 proud - a narrow rib.
-      WHAT IS STILL OPEN is the rib. riser-1-shroud-14g draws it 120.64..137.26,
-      about 4 mm wider on each side than the body at that depth. The outline
-      came from cad-outline.py cutting at the panel plane, which returns the
-      SILHOUETTE of everything the plane crosses rather than one body, so it
-      cannot settle a single body's width. Re-cutting it would move the slot
-      column and the clip recess, both photo-measured off ISM figure 8 and both
-      currently agreeing with the render, so it is recorded rather than guessed.
-    wanted: >-
-      a mechanical drawing of the riser-1 shroud, or a clean section of
-      R740XD_GPU_Brackets_01-1 above the shelf, to settle the raised rib's width
-      independently of the panel-plane silhouette
-  - what: front-vga-setback-estimated
-    scope: [front, front-lff-12]
-    reason: needs-hardware
-    note: >-
-      THE NUMBER CAME FROM A DESCRIPTION, NOT A MEASUREMENT. std/vga@1 stands
-      6.73 proud because that is what a D-sub does when its flange bolts through
-      sheet metal, and on this machine's front the connector is on the control
-      panel board, which sits back from the bezel - so only a little of it
-      emerges. The operator, looking at the hardware, put that at "a millimetre
-      and a half"; `inset: 5.23` is 6.73 less 1.50 and is therefore an estimate
-      dressed as two decimal places.
-      IT IS THE SETBACK THAT IS UNKNOWN, not the connector. The 6.73 is TE
-      114-40010's mating dimension and stays; what nobody here has measured is
-      how far behind the faceplate the board sits. A caliper on the hardware, or
-      any drawing that dimensions the control panel board against the front
-      bezel, replaces one number and nothing else.
-      THE REAR D-SUBS ARE NOT AFFECTED. They bolt through the rear panel in the
-      ordinary way and carry no inset.
-    wanted: >-
-      the control panel board's setback from the front bezel, measured
-  - what: psu-top-edge-unsettled
-    scope: [rear]
-    reason: sources-disagree
-    note: >-
-      TWO NUMBERS, ONE APPEARANCE EACH, AND NEITHER CORROBORATED. This device
-      seats both supplies at y 46.20, and the only other place that number
-      appears is a comment on riser 2's plate saying the plate was cut back to
-      "face 46.20 - the power supply's top edge", which cites this seating
-      rather than a source. psu-1100w-ac-14g's provenance used to argue the
-      module top was y 45.0, read off R740 ISM figure 9 - but it argued that in
-      the same breath as a height of 41.8, and the height has since been
-      measured off Dell's own service model at 39.1. A position argued from a
-      reading whose companion number is disproven is not evidence for the
-      position.
-      THE CAD CANNOT ANSWER IT. glb-parts.py states the rule it enforces:
-      sizes survive a pose and positions do not, and this scene draws the
-      supply with its withdrawal handle swung open for a removal procedure. The
-      body measures cleanly at 86.3 x 39.1 x 195.5 and its face y lands
-      nowhere near either candidate.
-      AN ATTEMPT TO RE-READ FIGURE 9 FAILED GATE 1 AT 13.18%, against a
-      provenance that claims 0.26% for the same figure - so the failure is in
-      the panel detection, not in the figure, and nothing may be taken off it
-      until somebody finds the body's true top and bottom edges in that raster.
-      The seating is left where it is rather than moved on a measurement that
-      did not pass its own gate.
-      WHAT WOULD SETTLE IT: the body edges in ISM figure 9 identified by hand
-      rather than by ink-density, which turns the 13.18% back into the 0.26%
-      the figure is capable of and makes the fraction readable. 1.2 mm is worth
-      one careful pass, because riser 2's plate is cut to this number.
-    wanted: >-
-      the supply's top edge on the rear face, from a figure that has passed Gate 1
-  - what: riser-2-and-3-bodies-placed-by-analogy
-    scope: [rear, riser-2, riser-3]
-    reason: needs-drawing
-    note: >-
-      Dell's model carries riser 1 (three-slot, measured here to the tenth)
-      and the low-profile riser 2C. It carries no full-height riser 2 and no
-      riser 3. Their bodies - the PCB and the slot connectors in
-      `body.boxes` on dell/riser-2a/2d/2e/2f-14g and dell/riser-3a/3b-14g -
-      are riser 1's, stood at their own bays' outer edges, and riser 3's
-      PCB is cut to end at the supply cage it stands on.
-    wanted: >-
-      A model or a photograph of riser 2A and riser 3 seated, which would put
-      both PCBs where they are.
-  - what: front-panel-variants
-    scope: [front, front-lff-12]
-    reason: needs-drawing
-    note: >-
-      ISM figures 17 and 18 number five fronts - 24, 16 and 8 x 2.5 inch at bays
-      0-23, 0-15 and 0-7, and 12 and 8 x 3.5 inch at 0-11 and 0-7.
-      TWO OF THE FIVE ARE NOW DRAWN. `front` is the 24 x 2.5 inch; `front-lff-12`
-      is the 12 x 3.5 inch, the one that mattered, because it is the front the
-      rears numbered 12-15 and 12-13 belong to. It is a variant view with
-      `face: front`, bound by the `lff12-` configurations, and its grid was
-      measured off dellr740xd-12x35.webp at Gate 1 0.07% - the same backplane
-      opening the 24 SFF bays divide, 428.832 / 4 = 107.208 against a measured
-      period of 107.216.
-      THE 16 AND 8 x 2.5 INCH AND THE 8 x 3.5 INCH ARE STILL NOT MODELLED, and
-      no figure for them has been measured.
-    wanted: >-
-      the remaining three fronts as further `face: front` variants, each with a
-      configuration to bind it.
-  - what: front-rear-configuration-coupling
-    scope: [front, front-lff-12, rear, rear-4-sff, rear-2-lff, lff-12, lff-12-rear-2-lff]
-    reason: vendor-silent
-    note: >-
-      DELL ENUMERATES THEM. ISM table 28, "Supported backplane options for
-      PowerEdge R740XD systems", lists front, mid and rear together - ten rows,
-      and the coupling falls straight out:
-        2.5in x24                                      no rear
-        2.5in x24  + 2.5in x4 mid  + 2.5in x4 rear
-        2.5in x24 (20 SAS/SATA + 4 NVMe)               no rear
-        3.5in x12                                      no rear
-        3.5in x12  + 3.5in x4 mid  + 3.5in x2 rear
-        3.5in x12  + 3.5in x4 mid  + 2.5in x4 rear
-        3.5in x12                  + 3.5in x2 rear
-        3.5in x12                  + 2.5in x4 rear
-        2.5in x24 NVMe                                 no rear
-        3.5in x12 Hybrid with NVMe U.2                 no rear
-      The 24-bay front takes ONE rear, the 4 x 2.5 inch, which figure 19 numbers
-      24-27. The 12-bay front takes either, and figure 19 numbers both from 12.
-      This device carries the 24-bay front, which is why its rear reads 24-27.
-      THE ARITHMETIC GOT THERE FIRST AND IS NOW REDUNDANT. Bays numbered 12-15
-      imply eleven bays this model does not have; that is how the error was
-      found. Table 28 is how it is now SOURCED, and a guess agreeing with a
-      document afterwards is worth more than either alone.
-      THE RISER SIDE IS TABLE 25, and its discriminator is riser 2 rather than
-      riser 3. Rear storage is offered in riser configurations 0, 1 and 2 and no
-      others: 1 and 2 fit a one-slot low-profile riser 2 (2B or 2C, slot 4
-      only), while configuration 3 fits a three-slot 2A (slots 4, 5, 6) and has
-      NO rear storage despite fitting no riser 3 at all. It is riser 2's
-      full-height section that occupies the bay the rear cage needs. This
-      device's configurations already encode exactly that - rear storage only
-      with rc0, rc1 and rc2 - and row 3 is `rc3-1a2a`, added when the riser 3 opening and
-      rear storage bay 3 turned out to be the SAME HOLE, closed by two
-      different blanks depending on which configuration you picked.
-      RE-READ AND STILL OPEN: that change touched which bay closes an opening,
-      not the front-to-rear coupling this gap is about. Re-read again when
-      riser 1's brackets moved 1 mm and slot 2 lost its numeral on 1A - both
-      are ink and geometry inside one bay, and neither reaches across faces.
-      Re-read a third time when riser 1's plate grew to meet the slot strip and
-      the shroud: the bay's own box moved, and still nothing crossed a face.
-      A fourth time when riser 2's three slots were aligned and its plate cut
-      back to the full-height pair. That one surfaced a NEW question but not a
-      new gap of this kind: a bay's occupant is drawn after the panel, so a
-      card cannot be shown "only through its cutout" without a part drawn after
-      the bays to mask it. Recorded where it belongs, on the riser 2 slot 6
-      cutout, rather than widened into this one.
-      A fifth time when the screw tab was split out of the frame so it could
-      draw in front of riser 2's bracket tails. That is a draw-order fact about
-      one bay, not a coupling between faces.
-      A sixth time when riser 3 became bay 1 reflected - mirrored brackets, a
-      two-slot plate and its own slot strip. Handedness is a fact about one
-      bay's own metal and reaches no further than that.
-      A seventh time when riser 3 slid 9.525 right to sit over the power
-      supply's edge. Moving one bay along its own face changes nothing about
-      which front it can be sold with.
-      An eighth time when two "rivet" pairs beside the divider turned out to be
-      card retention clips. A misread of what is on the rear, corrected on the
-      rear, and silent about any front.
-      A ninth time when those rivets came back, scoped: they are what the riser
-      cage mounts to and they show when drives are fitted instead. That one is
-      a rear configuration telling two rear drawings apart, which is the
-      mechanism this gap says is MISSING between faces - and still is.
-      A tenth time when the C20 supply became its own part. A second occupant
-      for an existing bay, on the same face, coupled to nothing at the front.
-      TWO SOURCES DISAGREE AND ARE LEFT DISAGREEING. The system information
-      label draws FIVE fronts - 24, 16 and 8 x 2.5 inch, 12 and 8 x 3.5 inch -
-      where table 28 lists TWO front backplanes. Whether the 16- and 8-bay
-      fronts are different chassis or one backplane drawn part-populated,
-      nothing held here says.
-      AND TABLE 28 HAS A MID DRIVE TRAY in three of its ten rows. This device
-      models no mid bay at all, which is a whole third drive location missing
-      rather than a detail.
-    wanted: >-
-      NOW DEMONSTRABLE RATHER THAN HYPOTHETICAL. `rear-2-lff` draws a correct
-      2 x 3.5 inch rear on a 24 x 2.5 inch front, and ISM table 28 lists no such
-      machine - every row carrying that rear has a 12-bay front. The mismatch
-      even forced an id: the figure prints 12 and 13, which are already two of
-      this chassis's front bays, so the rear ones had to be rear-drive-12 and
-      rear-drive-13. An id clash is what this gap looks like from the inside.
-      RE-READ AFTER THE REAR BAYS WERE SEPARATED, and still open. The rear half
-      of this is now expressible: the chassis structure across bays 2 and 3 is
-      its own always-present part, and what each bay holds - drives, PCIe, a
-      blank - varies independently of the other. That was the piece `only-in`
-      could not reach while one 287 mm component owned both bays.
-      WHAT REMAINS IS THE FRONT. The 24 x 2.5 inch and 12 x 3.5 inch fronts are
-      different panels, not different occupancy, and until the second is drawn
-      nothing exercises the face-binding that would couple it to a rear.
-      A way for a configuration to constrain more than one view at once. Today
-      `only-in` scopes a bay to a configuration and every view chooses
-      independently, so nothing stops a consumer selecting a 24-bay front and a
-      rear numbered 12-15 - a machine that cannot be bought. The library needs
-      either configurations that span views, or a declared incompatibility
-      between them; and this device needs its 12 x 3.5 inch front modelled
-      before either can be exercised, which is the same gap `rear-2-lff` already
-      stands on.
 
 configurations:
   # GENERATED ALONGSIDE THE only-in LISTS ABOVE, from one table, because

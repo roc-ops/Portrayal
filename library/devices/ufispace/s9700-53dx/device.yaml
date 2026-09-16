@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9700-53dx
-version: 3.0.8
+version: 3.0.9
 maturity: modelled
 manufacturer: UfiSpace
 model: S9700-53DX
@@ -393,6 +393,8 @@ chassis:
   color: '#33332e'
   weight-kg: 21.14
 # What no rule can find, because the manifest looks complete.
+  airflow: front-to-back
+
 gaps:
 - what: port-led-semantics
   scope: [qsfp28, qsfpdd-400g, port-leds]
@@ -1014,7 +1016,6 @@ configurations:
       hot-swapping a supply is no longer supported. No orderable chassis part number appears
       in any held document; see the chassis-sku gap.
     default: true
-    airflow: front-to-back
     component-attrs:
       psu-202-ac:
         model: PSU-202-AESR
@@ -1028,7 +1029,6 @@ configurations:
       the HIG's DC section gives the maximum system consumption as 1434 W against the AC
       build's 1422 W. No held image of THIS device shows a DC supply - see the
       dc-build-unphotographed gap.
-    airflow: front-to-back
     bays:
       psu-0: ufispace/psu-202-dc@1
       psu-1: ufispace/psu-202-dc@1

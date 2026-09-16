@@ -143,6 +143,47 @@ chassis:
   depth: 610.0
   ru: 2
   color: '#8b8f94'
+gaps:
+  - what: module-envelope-vs-aperture
+    scope: [res, lmics, psus]
+    reason: needs-drawing
+    wanted: a mechanical drawing resolving the module envelopes against the
+      drawn apertures - Table 22 states 203.5 mm module and 73.5 mm PSU
+      envelopes while the photographed apertures measure 197.6 and 66.0; the
+      bays and module faces are both drawn at the aperture and the envelopes
+      live in each contract's attrs. That reconciliation is a judgement (rails
+      hidden behind the panel), not a measurement, and this gap is its record.
+  - what: front-cover-and-air-filter
+    scope: [front]
+    reason: needs-photo
+    wanted: geometry for the optional JNP-FLTRDR-2RU cover and
+      JNP-AIRFLTR-2RU filter that bolt over the front face (Table 22 gives
+      envelopes; no straight-on image exists in the intake). Not modelled;
+      the bare front is the photographed configuration.
+  - what: fan-module-table-error
+    scope: [fans]
+    reason: sources-disagree
+    wanted: a corrected vendor dimension for the fan module - Table 22's row
+      reads 0.31 x 5.62 x 0.31 in, dimensionally impossible for a module
+      holding two 80 mm fans; the model carries the photographed 82.0 x 85.5
+      aperture and the table's 143 mm depth.
+  - what: table-26-totals
+    reason: vendor-silent
+    wanted: the 400GbE-configuration chassis power totals (guide Table 26) -
+      the rows fell outside the docling text layer; only the 100GbE Table 25
+      totals are carried.
+  - what: supported-optics
+    scope: [lmics, timing]
+    reason: vendor-silent
+    wanted: the MX304 transceiver list - the guide points at the external
+      Hardware Compatibility Tool and no document in the intake carries the
+      table.
+  - what: slot-label-brackets
+    scope: [res, lmics]
+    reason: needs-drawing
+    wanted: the removable front brackets carrying the RE 0 / LMIC0 /
+      RE1/LMIC2 / LMIC1 slot legends, should ears-and-brackets modelling ever
+      be wanted; with ears unmodelled the chassis prints no slot names.
 groups:
   res:
     term: Slot
@@ -406,44 +447,3 @@ configurations:
     bays:
       psu-0: juniper/mx304-psu-hvacdc@1
       psu-1: juniper/mx304-psu-hvacdc@1
-gaps:
-  - what: module-envelope-vs-aperture
-    scope: [res, lmics, psus]
-    reason: needs-drawing
-    wanted: a mechanical drawing resolving the module envelopes against the
-      drawn apertures - Table 22 states 203.5 mm module and 73.5 mm PSU
-      envelopes while the photographed apertures measure 197.6 and 66.0; the
-      bays and module faces are both drawn at the aperture and the envelopes
-      live in each contract's attrs. That reconciliation is a judgement (rails
-      hidden behind the panel), not a measurement, and this gap is its record.
-  - what: front-cover-and-air-filter
-    scope: [front]
-    reason: needs-photo
-    wanted: geometry for the optional JNP-FLTRDR-2RU cover and
-      JNP-AIRFLTR-2RU filter that bolt over the front face (Table 22 gives
-      envelopes; no straight-on image exists in the intake). Not modelled;
-      the bare front is the photographed configuration.
-  - what: fan-module-table-error
-    scope: [fans]
-    reason: sources-disagree
-    wanted: a corrected vendor dimension for the fan module - Table 22's row
-      reads 0.31 x 5.62 x 0.31 in, dimensionally impossible for a module
-      holding two 80 mm fans; the model carries the photographed 82.0 x 85.5
-      aperture and the table's 143 mm depth.
-  - what: table-26-totals
-    reason: vendor-silent
-    wanted: the 400GbE-configuration chassis power totals (guide Table 26) -
-      the rows fell outside the docling text layer; only the 100GbE Table 25
-      totals are carried.
-  - what: supported-optics
-    scope: [lmics, timing]
-    reason: vendor-silent
-    wanted: the MX304 transceiver list - the guide points at the external
-      Hardware Compatibility Tool and no document in the intake carries the
-      table.
-  - what: slot-label-brackets
-    scope: [res, lmics]
-    reason: needs-drawing
-    wanted: the removable front brackets carrying the RE 0 / LMIC0 /
-      RE1/LMIC2 / LMIC1 slot legends, should ears-and-brackets modelling ever
-      be wanted; with ears unmodelled the chassis prints no slot names.

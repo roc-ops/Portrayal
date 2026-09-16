@@ -225,6 +225,50 @@ attrs:
     rohs: RoHS-2.0 compliant; WEEE Directive 2002/96/EC
   lifecycle: {eol: none-announced}
 chassis: {width: 438.4, height: 43.1, depth: 536.0, ru: 1, weight-kg: 11.06, color: '#2b2f33'}
+gaps:
+- what: reset-area-legend
+  scope:
+  - front
+  reason: needs-photo
+  wanted: >-
+    A small mark sits between the Reset button and the ToD jack in dcs510-datasheet/fig-0007 and is unresolved
+    at 3.3 px/mm. It could be the ToD port's own legend or an ESD-point symbol. Nothing is printed there
+    rather than guess: the QSG's system-LED zoom (fig-0005) crops it away and the stock photographs are
+    too small. A straight-on bench photograph of the left-hand end of the faceplate settles it.
+- what: tod-port-legend
+  scope:
+  - front
+  reason: needs-photo
+  wanted: >-
+    Every other port on this face carries printing and the ToD jack appears to as well, but no held image
+    resolves it. Same photograph as above.
+- what: fan-tray-power-draw
+  scope:
+  - rear
+  reason: vendor-silent
+  wanted: >-
+    Neither document gives a per-fan or per-tray figure; the only wattage either states is the chassis's
+    own 1300 W maximum. Edgecore publishes no technical-specifications appendix for this model. L29 stands
+    on common/fan-module@1 and the chassis module total is a floor.
+- what: rear-product-label-position
+  scope:
+  - rear
+  reason: needs-photo
+  wanted: >-
+    The quick-start's FRU list names 'Product label' as callout 4 (dcs510-qsg/doc.md:71) and dcs510-qsg/fig-0008
+    reproduces the barcode itself, but neither rear elevation resolves where on the face it is applied.
+    Not drawn rather than placed by guess.
+- what: minor-face-geometry
+  scope:
+  - top
+  - bottom
+  - left
+  - right
+  reason: needs-drawing
+  wanted: >-
+    Sized from the datasheet triple and given only what the stock three-quarter photograph supports -
+    a lid seam, a rear vent strip and the side rail lines, all estimated. No mechanical drawing in the
+    intake dimensions a single feature on these four faces.
 groups:
   qsfpdd-400g:
     term: Port
@@ -906,47 +950,3 @@ configurations:
       9716-32D-O-AC-B-EU: {part: FP5ZZ8632201A, power-cord: EU}
       9716-32D-O-A C-B-UK: {part: FP5ZZ8632301A, power-cord: UK}
       9716-32D-O-AC-B-JP: {part: FP5ZZ8632501A, power-cord: JP}
-gaps:
-- what: reset-area-legend
-  scope:
-  - front
-  reason: needs-photo
-  wanted: >-
-    A small mark sits between the Reset button and the ToD jack in dcs510-datasheet/fig-0007 and is unresolved
-    at 3.3 px/mm. It could be the ToD port's own legend or an ESD-point symbol. Nothing is printed there
-    rather than guess: the QSG's system-LED zoom (fig-0005) crops it away and the stock photographs are
-    too small. A straight-on bench photograph of the left-hand end of the faceplate settles it.
-- what: tod-port-legend
-  scope:
-  - front
-  reason: needs-photo
-  wanted: >-
-    Every other port on this face carries printing and the ToD jack appears to as well, but no held image
-    resolves it. Same photograph as above.
-- what: fan-tray-power-draw
-  scope:
-  - rear
-  reason: vendor-silent
-  wanted: >-
-    Neither document gives a per-fan or per-tray figure; the only wattage either states is the chassis's
-    own 1300 W maximum. Edgecore publishes no technical-specifications appendix for this model. L29 stands
-    on common/fan-module@1 and the chassis module total is a floor.
-- what: rear-product-label-position
-  scope:
-  - rear
-  reason: needs-photo
-  wanted: >-
-    The quick-start's FRU list names 'Product label' as callout 4 (dcs510-qsg/doc.md:71) and dcs510-qsg/fig-0008
-    reproduces the barcode itself, but neither rear elevation resolves where on the face it is applied.
-    Not drawn rather than placed by guess.
-- what: minor-face-geometry
-  scope:
-  - top
-  - bottom
-  - left
-  - right
-  reason: needs-drawing
-  wanted: >-
-    Sized from the datasheet triple and given only what the stock three-quarter photograph supports -
-    a lid seam, a rear vent strip and the side rail lines, all estimated. No mechanical drawing in the
-    intake dimensions a single feature on these four faces.

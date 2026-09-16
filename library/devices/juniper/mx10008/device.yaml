@@ -48,6 +48,26 @@ chassis:
   depth: 813.0
   ru: 13
   color: '#565b61'
+gaps:
+  - what: rear-photo
+    reason: needs-photo
+    wanted: a photograph of the rear - only the isometric line drawing
+      g050553 exists, so PSU stack and fan tray geometry are fractional
+      readings and finish is inferred.
+  - what: psu-variants
+    scope: [psus]
+    reason: needs-photo
+    wanted: the JNP10K-PWR-AC3 (four-feed) and DC faces; only AC2 is
+      modelled.
+  - what: line-card-catalogue
+    scope: [fpcs]
+    reason: needs-photo
+    wanted: LC4800/LC4802 faceplates - named with dimensions and power
+      in the guides but with no usable face art in the extraction.
+  - what: fan-tray-power
+    scope: [cooling]
+    reason: vendor-silent
+    wanted: per-tray power draw - not in the extraction's text layer.
 groups:
   res:
     term: Slot
@@ -255,23 +275,3 @@ configurations:
       fpc5: juniper/jnp10k-lc-blank@1
       fpc6: juniper/jnp10k-lc-blank@1
       fpc7: juniper/jnp10k-lc-blank@1
-gaps:
-  - what: rear-photo
-    reason: needs-photo
-    wanted: a photograph of the rear - only the isometric line drawing
-      g050553 exists, so PSU stack and fan tray geometry are fractional
-      readings and finish is inferred.
-  - what: psu-variants
-    scope: [psus]
-    reason: needs-photo
-    wanted: the JNP10K-PWR-AC3 (four-feed) and DC faces; only AC2 is
-      modelled.
-  - what: line-card-catalogue
-    scope: [fpcs]
-    reason: needs-photo
-    wanted: LC4800/LC4802 faceplates - named with dimensions and power
-      in the guides but with no usable face art in the extraction.
-  - what: fan-tray-power
-    scope: [cooling]
-    reason: vendor-silent
-    wanted: per-tray power draw - not in the extraction's text layer.

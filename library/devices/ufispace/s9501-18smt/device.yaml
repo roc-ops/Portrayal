@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9501-18smt
-version: 2.0.4
+version: 2.0.5
 maturity: modelled
 manufacturer: UfiSpace
 model: S9501-18SMT
@@ -311,6 +311,8 @@ chassis:
   depth: 302
   ru: 1
   weight-kg: 4.34
+  airflow: front-to-back
+
 gaps:
 - what: sfp-port-speed
   scope: [sfp-1g]
@@ -768,7 +770,6 @@ configurations:
       FAN-402818-HC exhaust fans - the DC build, which is also the bare working
       chassis, since the traffic cages ship empty
     default: true
-    airflow: front-to-back
     component-attrs:
       fan-402825:
         model: FAN-402818-HC
@@ -776,7 +777,6 @@ configurations:
     kind: orderable
     description: Dual 200W AC PSUs (PSU-201-AISB, intake airflow) with three
       FAN-402818-HC exhaust fans
-    airflow: front-to-back
     bays:
       psu-0: ufispace/psu-201-ac@1
       psu-1: ufispace/psu-201-ac@1

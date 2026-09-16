@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9710-76d
-version: 1.0.7
+version: 1.0.8
 maturity: modelled
 manufacturer: UfiSpace
 model: S9710-76D
@@ -369,6 +369,8 @@ chassis:
   ru: 2
   color: '#42464a'
   weight-kg: 26.95
+  airflow: front-to-back
+
 gaps:
 - what: port-number-legends-unresolved
   scope: [qsfpdd-fabric, qsfpdd-service]
@@ -885,12 +887,10 @@ configurations:
       front-to-back airflow - the build HIG Figure 4's rear elevation and the vendor rear
       render both show
     default: true
-    airflow: front-to-back
   dc:
     kind: orderable
     description: Dual 3000W DC PSUs (PSU-302-DESR) 1+1, four FAN-808012 fan modules 3+1,
       front-to-back airflow
-    airflow: front-to-back
     bays:
       psu-0: ufispace/psu-302-dc@1
       psu-1: ufispace/psu-302-dc@1

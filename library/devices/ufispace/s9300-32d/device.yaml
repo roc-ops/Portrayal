@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9300-32d
-version: 1.0.4
+version: 1.0.5
 maturity: modelled
 manufacturer: UfiSpace
 model: S9300-32D
@@ -180,6 +180,8 @@ chassis:
   depth: 645
   ru: 1
   weight-kg: 11.34
+  airflow: front-to-back
+
 gaps:
 - what: port-led-semantics
   scope: [qsfpdd-400g, sfp-plus-oob, sfp-plus-mgmt, port-leds]
@@ -546,7 +548,6 @@ configurations:
       not modelled; no chassis SKU appears in any held document (see the chassis-sku
       gap)
     default: true
-    airflow: front-to-back
     component-attrs:
       psu-132-ac:
         model: PSU-132-AISB1
@@ -557,7 +558,6 @@ configurations:
     description: >-
       Dual 1300W DC PSUs (PSU-132-DISB1, screw-terminal input, 60A internal fuse)
       with front-to-back airflow fans (FAN-405637-HD)
-    airflow: front-to-back
     bays:
       psu-0: ufispace/psu-132-dc@1
       psu-1: ufispace/psu-132-dc@1

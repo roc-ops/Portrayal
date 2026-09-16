@@ -280,6 +280,7 @@
      "type": "number"
     },
     "airflow": {
+     "description": "WHERE AIRFLOW LIVES. The chassis is the home; a configuration states `airflow` only when it DIFFERS from this, which render.py has always assumed - it reads the configuration first and falls back here. Airflow genuinely varies by build in 7 of the 48 devices that state it; in the rest it is one fact about the box, and repeating it per configuration gave one fact two homes. The enums differ on purpose: `side` and `passive` are chassis answers a configuration cannot give, because a fanless enclosure and a side-breathing modular chassis offer no airflow option to choose between. L91 checks the division.",
      "enum": [
       "front-to-back",
       "back-to-front",
@@ -318,6 +319,7 @@
       "description": "the configuration a viewer opens with. Where a `base` exists it is the default and nothing else may claim it: opening on an illustration is how `default` came to mean 'whatever the drawing happens to be populated with', which is what four of the library's devices did."
      },
      "airflow": {
+      "description": "ONLY WHEN THIS BUILD DIFFERS FROM THE CHASSIS. A front-to-back and a back-to-front SKU of one switch are two configurations of one chassis, and that is what this is for; a chassis whose airflow does not depend on the build states it once under `chassis.airflow` instead. Restating the chassis value here is what L91 reports. Narrower than the chassis enum on purpose: `side` and `passive` are not options a buyer picks between.",
       "enum": [
        "front-to-back",
        "back-to-front"

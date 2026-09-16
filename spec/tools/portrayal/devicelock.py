@@ -257,9 +257,21 @@ def buckets(doc, versions=None):
     # every device in the library. 48 of the 88 name no skin at all and have
     # nothing new to say; writing it unconditionally billed them for a bump.
     skins = _placement_skins(doc)
+    chassis = dict(doc.get("chassis") or {})
+    # AIRFLOW IS NOT A DIMENSION, and `shape` means dimensions - "moving a slot
+    # invalidates anything that cached a coordinate, which is what major means".
+    # Nothing caches a coordinate from a thermal direction. It sat here only
+    # because the whole `chassis` mapping was hashed wholesale, so putting
+    # airflow on the chassis where it belongs (#171) asked 40 devices for a MAJOR
+    # bump for a fact that moved between two keys and left every coordinate
+    # exactly where it was. Same shape of mistake as `_bay_accepts`, which used
+    # to sit in `shape` and read as "a slot moved" whenever a bay learned a new
+    # module. `color`, `weight-kg` and `silk` are not dimensions either and are
+    # still hashed here; that is #271.
+    thermal = chassis.pop("airflow", None)
     return {
         "shape": _digest({
-            "chassis": doc.get("chassis"),
+            "chassis": chassis or None,
             "views": {v: (w or {}).get("size") for v, w in (doc.get("views") or {}).items()},
             "placed": placed,
         }),
@@ -298,6 +310,12 @@ def buckets(doc, versions=None):
                       for v, w in (doc.get("views") or {}).items()},
             "configurations": doc.get("configurations"),
             **({"placement-skins": skins} if skins else {}),
+            # CONDITIONAL FOR THE REASON `placement-skins` IS. Written
+            # unconditionally, `airflow: None` is still a new key in the hashed
+            # map and rehashes all 89 devices - which it did, on the first
+            # attempt at this, asking every one of them for a bump it had not
+            # earned. Only the 51 that state an airflow are billed.
+            **({"airflow": thermal} if thermal else {}),
         }),
         "gaps": _digest(doc.get("gaps") or []),
         # WHAT THIS DEVICE DRAWS THAT LIVES SOMEWHERE ELSE. Hashed apart from

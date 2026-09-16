@@ -142,6 +142,50 @@ chassis:
   depth: 480.0
   ru: 2
   color: '#3f4449'
+# What no rule can find. Two Edgecore documents for this SKU state different
+# power consumption figures, and the manifest can only carry one of them.
+gaps:
+- what: power-consumption-sources
+  scope: [power-max-w]
+  reason: sources-disagree
+  note: >-
+    The datasheet states "Power Consumption - Max: 527 W, Typical: 186 W" with
+    no ambient. The quick start guide for the same SKU states "Power Consumption
+    638 W at 25 C, 695 W at 45 C". This is not the usual measure-versus-measure
+    difference that explains most such pairs: the QSG's LOWEST figure, at the
+    cooler ambient, already exceeds the datasheet's stated MAXIMUM by 111 W, so
+    neither typical-against-max nor an ambient axis accounts for it. Both rows
+    are labelled Power Consumption and neither states a scope or a population.
+    527 W is kept because it is the datasheet's, which is the source of record
+    for a spec-table fact; if the QSG is right the device draws 21 percent more
+    than this manifest says.
+  wanted: >-
+    a measurement from a running unit, or any Edgecore document stating what
+    each figure covers - populated or bare, input power or system draw. Note
+    that the AGR420's QSG gives 527 W at 25 C, the same number this datasheet
+    gives as the AGR400's maximum, which may mean one of the four figures is a
+    copy error
+  blocks: []
+
+- what: fru-power-unpublished
+  scope: [edgecore/agr-psu-ac@1, edgecore/agr-psu-dc@1, edgecore/agr-fan@1]
+  reason: vendor-silent
+  note: >-
+    Searched and absent, which is why this is asserted rather than left to L27
+    to imply. Both documents we hold - the datasheet and the QSG - rate the AGR
+    PSUs by INPUT only ("DC Input: -40 to -75V, 40 A, per PS"; "AC Input:
+    100-120 V 12 A or 200-240 V 7.5 A per PS") and state no output wattage
+    anywhere. The fan module gets no power figure at all. Unlike the Casa PEMs,
+    these PSUs genuinely CONVERT, so `power-output-w` is the right key for them
+    and the only thing missing is the number - which is exactly why it must not
+    be derived from the input current, where 12 A at 100-120 V and 7.5 A at
+    200-240 V give different products and neither is an output rating.
+  wanted: >-
+    a photograph of either PSU's nameplate, which is where this figure normally
+    lives, or an Edgecore part datasheet for the PSU and fan FRUs rather than
+    for the chassis. The 550 W CRPS nameplate already photographed for common/psu-550w is the
+    worked example of what would close it
+  blocks: []
 groups:
   qsfpdd-400g:
     term: Port
@@ -708,47 +752,3 @@ configurations:
       AS7946-30XB-O-AC-F-JP:
         part: FNPEC7946501Z
         power-cord: Japan
-# What no rule can find. Two Edgecore documents for this SKU state different
-# power consumption figures, and the manifest can only carry one of them.
-gaps:
-- what: power-consumption-sources
-  scope: [power-max-w]
-  reason: sources-disagree
-  note: >-
-    The datasheet states "Power Consumption - Max: 527 W, Typical: 186 W" with
-    no ambient. The quick start guide for the same SKU states "Power Consumption
-    638 W at 25 C, 695 W at 45 C". This is not the usual measure-versus-measure
-    difference that explains most such pairs: the QSG's LOWEST figure, at the
-    cooler ambient, already exceeds the datasheet's stated MAXIMUM by 111 W, so
-    neither typical-against-max nor an ambient axis accounts for it. Both rows
-    are labelled Power Consumption and neither states a scope or a population.
-    527 W is kept because it is the datasheet's, which is the source of record
-    for a spec-table fact; if the QSG is right the device draws 21 percent more
-    than this manifest says.
-  wanted: >-
-    a measurement from a running unit, or any Edgecore document stating what
-    each figure covers - populated or bare, input power or system draw. Note
-    that the AGR420's QSG gives 527 W at 25 C, the same number this datasheet
-    gives as the AGR400's maximum, which may mean one of the four figures is a
-    copy error
-  blocks: []
-
-- what: fru-power-unpublished
-  scope: [edgecore/agr-psu-ac@1, edgecore/agr-psu-dc@1, edgecore/agr-fan@1]
-  reason: vendor-silent
-  note: >-
-    Searched and absent, which is why this is asserted rather than left to L27
-    to imply. Both documents we hold - the datasheet and the QSG - rate the AGR
-    PSUs by INPUT only ("DC Input: -40 to -75V, 40 A, per PS"; "AC Input:
-    100-120 V 12 A or 200-240 V 7.5 A per PS") and state no output wattage
-    anywhere. The fan module gets no power figure at all. Unlike the Casa PEMs,
-    these PSUs genuinely CONVERT, so `power-output-w` is the right key for them
-    and the only thing missing is the number - which is exactly why it must not
-    be derived from the input current, where 12 A at 100-120 V and 7.5 A at
-    200-240 V give different products and neither is an output rating.
-  wanted: >-
-    a photograph of either PSU's nameplate, which is where this figure normally
-    lives, or an Edgecore part datasheet for the PSU and fan FRUs rather than
-    for the chassis. The 550 W CRPS nameplate already photographed for common/psu-550w is the
-    worked example of what would close it
-  blocks: []

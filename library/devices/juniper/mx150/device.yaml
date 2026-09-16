@@ -70,6 +70,23 @@ chassis:
   depth: 305.0
   ru: 1
   color: '#6d7175'
+gaps:
+  - what: fan-and-switch-representation
+    scope: [rear]
+    reason: needs-drawing
+    wanted: proper MX150 fixed-fan and rocker components - the rear reuses
+      common/fan-module (a generic square FRU face) behind circular grille
+      cutouts and common/power-button for the rocker; both are stand-ins
+      sized to the photo.
+  - what: port-parameter-leds
+    scope: [status-leds]
+    reason: vendor-silent
+    wanted: the SPD/DX/EN selector lamp semantics tied to the mode button -
+      the guide's port-parameter table is transcribed only as legends here.
+  - what: supported-optics
+    scope: [ge, xe]
+    reason: vendor-silent
+    wanted: transceiver list (external compatibility tool).
 groups:
   ge:
     term: Port
@@ -322,20 +339,3 @@ views:
            source: 'side edge; estimated'}
         - {at: [436.0, 0.0], size: [5.0, 305.0], fill: '#5f6367', confidence: estimated,
            source: 'side edge; estimated'}
-gaps:
-  - what: fan-and-switch-representation
-    scope: [rear]
-    reason: needs-drawing
-    wanted: proper MX150 fixed-fan and rocker components - the rear reuses
-      common/fan-module (a generic square FRU face) behind circular grille
-      cutouts and common/power-button for the rocker; both are stand-ins
-      sized to the photo.
-  - what: port-parameter-leds
-    scope: [status-leds]
-    reason: vendor-silent
-    wanted: the SPD/DX/EN selector lamp semantics tied to the mode button -
-      the guide's port-parameter table is transcribed only as legends here.
-  - what: supported-optics
-    scope: [ge, xe]
-    reason: vendor-silent
-    wanted: transceiver list (external compatibility tool).

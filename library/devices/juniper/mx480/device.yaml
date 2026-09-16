@@ -77,6 +77,29 @@ chassis:
   depth: 622.0
   ru: 8
   color: '#43474c'
+gaps:
+  - what: front-photo-anisotropy
+    scope: [front]
+    reason: needs-drawing
+    wanted: a mechanical drawing or an isotropic front photograph - the DAM
+      front photo is 5.1% compressed in y, so the 31.86 mm slot pitch here
+      and the MX240's 30.45 mm disagree for the same card family; each
+      device is internally consistent and the truth is between them.
+  - what: weight-and-max-config
+    reason: vendor-silent
+    wanted: a clean Table 88-equivalent weight row - the extraction carries
+      the rack-planning prose (five routers > 371 kg combined) but the
+      per-chassis maximum row fell outside the text layer.
+  - what: current-generation-frus
+    scope: [slots]
+    reason: needs-photo
+    wanted: orthographic imagery for MPC/SCBE2-3/RE-S-X6 FRUs (as on the
+      MX240).
+  - what: rear-ground-and-esd
+    scope: [rear]
+    reason: needs-photo
+    wanted: a rear photograph resolving the earthing studs and ESD socket -
+      placed at the MX240's positions, estimated.
 groups:
   slots:
     term: Slot
@@ -285,26 +308,3 @@ configurations:
       pem1: juniper/mx240-psu-dc@1
       pem2: juniper/mx240-psu-dc@1
       pem3: juniper/mx240-psu-dc@1
-gaps:
-  - what: front-photo-anisotropy
-    scope: [front]
-    reason: needs-drawing
-    wanted: a mechanical drawing or an isotropic front photograph - the DAM
-      front photo is 5.1% compressed in y, so the 31.86 mm slot pitch here
-      and the MX240's 30.45 mm disagree for the same card family; each
-      device is internally consistent and the truth is between them.
-  - what: weight-and-max-config
-    reason: vendor-silent
-    wanted: a clean Table 88-equivalent weight row - the extraction carries
-      the rack-planning prose (five routers > 371 kg combined) but the
-      per-chassis maximum row fell outside the text layer.
-  - what: current-generation-frus
-    scope: [slots]
-    reason: needs-photo
-    wanted: orthographic imagery for MPC/SCBE2-3/RE-S-X6 FRUs (as on the
-      MX240).
-  - what: rear-ground-and-esd
-    scope: [rear]
-    reason: needs-photo
-    wanted: a rear photograph resolving the earthing studs and ESD socket -
-      placed at the MX240's positions, estimated.

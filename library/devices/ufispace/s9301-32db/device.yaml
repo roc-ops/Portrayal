@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9301-32db
-version: 2.0.6
+version: 2.0.7
 maturity: modelled
 manufacturer: UfiSpace
 model: S9301-32DB
@@ -264,6 +264,8 @@ chassis:
   ru: 1
   weight-kg: 11.2
   color: '#404244'
+  airflow: front-to-back
+
 gaps:
 - what: port-led-semantics
   scope: [qsfp56-200g, qsfpdd-400g, sfp-plus-mgmt, port-leds]
@@ -740,7 +742,6 @@ configurations:
       seat because the bay defaults name it; see the ac and dc configurations for the
       orderable variants.
     default: true
-    airflow: front-to-back
   ac:
     kind: orderable
     description: >-
@@ -749,7 +750,6 @@ configurations:
       (FAN-405637-CD with PSU-132-AESR, blue handles, photographed in -3-view) is orderable
       and not modelled, because the shared PSU and fan components carry only red-latch
       skins; no chassis SKU appears in any held document (see the chassis-sku gap)
-    airflow: front-to-back
     component-attrs:
       psu-132-ac:
         model: PSU-132-AISB
@@ -760,7 +760,6 @@ configurations:
     description: >-
       Dual 1300W DC PSUs (PSU-132-DISB, screw-terminal input, 60A fast-acting internal
       fuse per the HIG DC procedure) with front-to-back airflow fans (FAN-405637-HD)
-    airflow: front-to-back
     bays:
       psu-0: ufispace/psu-132-dc@1
       psu-1: ufispace/psu-132-dc@1

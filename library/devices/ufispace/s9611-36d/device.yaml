@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9611-36d
-version: 3.0.7
+version: 3.0.8
 maturity: modelled
 manufacturer: UfiSpace
 model: S9611-36D
@@ -367,6 +367,8 @@ chassis:
   ru: 2
   color: '#454545'
   weight-kg: 24.12
+  airflow: front-to-back
+
 gaps:
 - what: artwork-model-name
   scope: [front]
@@ -1019,7 +1021,6 @@ configurations:
       No orderable chassis part number appears in any held document; see the chassis-sku
       gap.
     default: true
-    airflow: front-to-back
   dc:
     kind: orderable
     description: >-
@@ -1028,7 +1029,6 @@ configurations:
       rear elevation and the vendor rear render draw. The HIG rates the feed for operation
       up to 5000 m and notes a 150 A fast-acting fuse built into each supply; system
       maximum 1752 W on MSA optics and 2073 W with OpenZR+.
-    airflow: front-to-back
     component-attrs:
       psu-302-dc:
         model: PSU-302-DESR
@@ -1041,7 +1041,6 @@ configurations:
       cable) with FAN-808012-HC fans; system maximum 1728 W on MSA optics and 2049 W with
       OpenZR+, and a 25 A fast-acting fuse per supply. No held figure shows this build
       seated in the chassis - see the ac-build-rear-face gap.
-    airflow: front-to-back
     bays:
       psu-0: ufispace/psu-302-ac@1
       psu-1: ufispace/psu-302-ac@1

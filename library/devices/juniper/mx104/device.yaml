@@ -69,6 +69,28 @@ chassis:
   depth: 240.0
   ru: 3.5
   color: '#8b8f94'
+gaps:
+  - what: vendor-table-axes
+    reason: sources-disagree
+    wanted: a corrected MX104 physical table - the module rows scramble
+      width/depth/height (a MIC listed 15.9 cm wide when the photographed
+      face is ~168 mm, PSU axes likewise); faces are photo-sized and marked
+      approximate.
+  - what: ac-power-variant
+    scope: [psus]
+    reason: needs-photo
+    wanted: the AC supply face (guide Figure 9 is isometric line art only);
+      only the photographed DC variant is modelled.
+  - what: per-module-power
+    scope: [mics, res, psus]
+    reason: vendor-silent
+    wanted: the remaining per-module wattage rows - only the 20x1GE MIC's
+      26 W was inside this extraction's text layer.
+  - what: alarm-connector
+    scope: [mgmt]
+    reason: needs-drawing
+    wanted: a DB-15 standard part - the ALARM connector is drawn as a plain
+      cutout with its legend.
 groups:
   xe:
     term: Port
@@ -297,25 +319,3 @@ configurations:
       mic-1-1: juniper/mx-mic-blank@1
       mic-0-0: juniper/mx-mic-blank@1
       mic-0-1: juniper/mx-mic-blank@1
-gaps:
-  - what: vendor-table-axes
-    reason: sources-disagree
-    wanted: a corrected MX104 physical table - the module rows scramble
-      width/depth/height (a MIC listed 15.9 cm wide when the photographed
-      face is ~168 mm, PSU axes likewise); faces are photo-sized and marked
-      approximate.
-  - what: ac-power-variant
-    scope: [psus]
-    reason: needs-photo
-    wanted: the AC supply face (guide Figure 9 is isometric line art only);
-      only the photographed DC variant is modelled.
-  - what: per-module-power
-    scope: [mics, res, psus]
-    reason: vendor-silent
-    wanted: the remaining per-module wattage rows - only the 20x1GE MIC's
-      26 W was inside this extraction's text layer.
-  - what: alarm-connector
-    scope: [mgmt]
-    reason: needs-drawing
-    wanted: a DB-15 standard part - the ALARM connector is drawn as a plain
-      cutout with its legend.

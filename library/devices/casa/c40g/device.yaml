@@ -337,6 +337,176 @@ chassis:
   depth: 388.45
   ru: 6
   color: '#a7a9ac'
+# What no rule can find, because the manifest looks complete. Both bays are
+# populated, both components render, and nothing in the model can see that the
+# only power figure the vendor publishes for them is a single number covering
+# the two of them together. Detectable gaps are derived from the lint rules at
+# build time and must not be listed here.
+gaps:
+- what: redundant-power-and-cooling-variants
+  scope: [ac-power, dc-power, power, fans]
+  reason: vendor-silent
+  note: >-
+    THE ORDERING SHEET SELLS FOUR CHASSIS AND THIS LIBRARY MODELS TWO. C40G_DS_RevA
+    lists C40G-CHASSIS-AC and C40G-CHASSIS-DC, which are here, and C40G-CHASSIS-ACR
+    and C40G-CHASSIS-DCR, described as "with Redundant Power and Cooling", which are
+    not. The sheet gives the phrase and nothing else - no count, no which modules, no
+    dimensions - and the installation guide never uses the word for a chassis variant.
+    What the guide DOES say is that the C40G takes up to four 1100 W PSUs operating
+    concurrently and that fewer than two cannot power a C40G-20, which tells you the
+    supplies are redundant by population rather than by chassis. That makes the R
+    variants most likely a populated bundle rather than different metal - but "most
+    likely" is not a source, and inventing two configurations from a four-word
+    description would put a guess where a part number goes.
+  wanted: >-
+    a Casa or CommScope ordering guide saying what the R bundles contain - how many
+    PSUs and fan modules, and whether the chassis itself differs at all
+- what: ground-stud-count
+  scope: [ground-studs-rear]
+  reason: sources-disagree
+  note: >-
+    Casa says two things about this terminal and they do not agree. The prose in
+    "Connecting the chassis to ground" says it "provides two M6 screws to connect a
+    double-lug ground terminal cable". Figures 1-2 and 1-4 both DRAW three studs, in a
+    2x2 grid with the protective-earth mark in the fourth corner, and the two figures
+    agree with each other.
+    THE DRAWING IS FOLLOWED, and the model carries three. The figure is the only source
+    that says anything about arrangement at all, so following the prose would mean
+    inventing a layout for the two it describes; and a third stud has easy explanations
+    - a spare, an alternate lug pitch - while a stud drawn twice that is not there has
+    none. That is a judgement, not a reading, which is why it is filed here.
+    THE PITCH IS NOT MEASURED FROM EITHER. It is borrowed from casa/ground-bolts@1,
+    15.3, off the maintainer`s hand-built C100G rear SVG. Figure 1-4 gives 13.2 across and 14.7
+    down for what must be one square grid - an 11 percent disagreement with itself,
+    which is that figure`s anisotropy rather than a rectangular pattern.
+  wanted: a photograph of the C40G rear lower-left corner, which would settle the count
+    and the pitch together in one look
+  blocks: []
+- what: band-not-centred-in-chassis
+  scope: [front, rear]
+  reason: needs-drawing
+  note: >-
+    The card band runs 37.5 to 386.7 in a body 432.95 wide, so it sits 37.5 from the left
+    edge and 46.25 from the right - 8.75 mm out of centre, or 4.375 on the band's own
+    centreline. Everything inside the band agrees with everything else; the question is
+    whether the band is really off-centre in the metal, and nothing we hold answers it.
+    IT IS NOT COSMETIC, and the AC input panel is where it bites. Its four C14 inlets sit
+    behind the four front power supplies. Reflect the supply centres about the PANEL and
+    the inlets are 1.2 out; reflect them about the CHASSIS - which is what walking round a
+    box actually does - and they are 9.95 out. The gap between those two answers IS this
+    asymmetry, and no arrangement of the parts inside the band can close it, because the
+    disagreement is between the band and the chassis rather than within either.
+    THE SUPPORTING NUMBERS ARE ALSO ODD IN THE SAME DIRECTION. The two front fan strips
+    measure 36.0 wide each - equal, as you would expect - but leave 1.5 outside them on the
+    left and 10.25 on the right. Two equal strips with unequal surrounds is exactly the
+    shape of a band that has been positioned from one edge.
+    NOT RESOLVED BY GUESSING, deliberately. Re-centring the band would move the two fan
+    strips, the card bays on both faces, the PSU row, the PSU cover and the AC panel - and
+    it would be one estimate reconciled against another, which this device's
+    `pem-band-top-edge` note already records going wrong twice in opposite directions.
+  wanted: a dimensioned C40G front or rear elevation from Casa, or a tape measure across a
+    real chassis from its left edge to the first card slot and from the last card slot to
+    its right edge
+  blocks: []
+- what: pem-band-top-edge
+  scope: [pem-1, pem-2]
+  reason: needs-drawing
+  note: >-
+    The PEM band's BOTTOM edge at 264.5 is agreed by every source and is not in doubt. Its TOP
+    edge is known only to about 2 mm, and the three candidates each have support: 194.0 is the
+    direct reading of Figure 1-4 and is impossible, because the card slot above ends at 194.82;
+    194.82 is flush against that slot; 196.0 is what the bays carry and is what the manifest now
+    uses, on the argument that 194.82 is an accumulation of six DERIVED slot pitches (426.6 mm
+    over 14 slots on the C100G, carried across) and that the front face shows a measured 1.48 mm
+    margin in the equivalent position. That argument is sound but it is an argument, not a
+    measurement, and the whole disagreement is six pixels at 2.982 px/mm. A tape measure on a real
+    C40G, or any Casa drawing that dimensions the rear panel, would settle it in one number.
+    FIGURE 1-12 HAS NOW BEEN LOOKED AT AND DOES NOT SETTLE IT, recorded so nobody spends the
+    search twice. "C40G power entry module" is the only isolated drawing of this part and the
+    first independent look anything has had at it. Its body measures 866 x 381 px for an aspect of
+    2.273. The modelled 158.0 x 68.5 is 2.307 and the superseded 158.0 x 70.5 is 2.241, and 2.273
+    lands 0.04 percent off the midpoint of those two - at 158.0 wide it implies a height of 69.51.
+    IT IS EQUIDISTANT AND CONFIRMS NEITHER. This guide's isolated part drawings are in any case
+    demonstrably about 10 percent wrong about their own aspect - Figure 1-20 draws a card at 12.54
+    whose real aspect is 11.34 - so a 1.5 percent lean is well inside the drawing's own error. THE
+    NUMBER IS THEREFORE NOT MOVED. It has been moved twice already, in both directions, and a
+    third move on evidence that splits the difference would be the reconciliation loop rather than
+    an escape from it. What Figure 1-12 does confirm is the ARRANGEMENT, which is what a figure is
+    good for: a bolted terminal cover across the top with three fasteners, a minus pair of studs
+    above a plus pair inside two outlined blocks, two release levers standing proud of the body
+    top and bottom, and the yellow disconnect-power label to their right - all of which
+    casa/c40g-pem draws.
+    RECORDED BECAUSE THE MODULE AND THE BAY NOW AGREE, which means nothing will ever flag this
+    again - the fit check that found the original 2 mm discrepancy is satisfied by both being
+    wrong together as easily as by both being right.
+  wanted: a dimensioned C40G rear elevation, or a tape measure on the PEM opening
+- what: paired-module-power
+  scope:
+  - casa/bdm2@1
+  - casa/bdm2m@1
+  - casa/bdm@1
+  - casa/ds-8x192@1
+  - casa/ds-8x8@1
+  - casa/ds-8x96@1
+  - casa/io-6p12-io2@1
+  - casa/io-6p12-sw-io2@1
+  - casa/io-6p12-sw@2
+  - casa/io-6p12@2
+  - casa/rfd@1
+  - casa/rfu-16x8@1
+  - casa/ups-32x4@1
+  - casa/us-16x4@1
+  - casa/us-16x8@1
+  reason: vendor-silent
+  note: 'The BDM2/BDM2m datasheet states "Total Power  300 W" in a technical specifications
+    table headed "BDM2/2 m with 6+12 IO Card", whose RF connector row describes
+    that card''s six downstream and twelve upstream ports. The figure is the assembly''s.
+    A BDM position is TWO modules here - casa/bdm in a front bay and casa/io-6p12
+    in the paired rear bay, which is why casa/bdm already carries `pairs-with` -
+    and no document we hold divides the 300 W between them. Writing it onto the
+    front module would make the chassis total come out right and the answer to "what
+    does a BDM front module draw" come out wrong, so neither half carries a figure
+    and the chassis total stays a floor. The arithmetic does not settle it either
+    way: 12 x 300 W lands on the C100G''s stated 3.6 kW whether the 300 W is the
+    pair or the front half with small rear cards. THE THREE REAR RF I/O CARDS ADDED
+    LATER FALL ON THE SAME SIDE OF THIS AS THE 6+12. casa/rfd, casa/rfu-16x8 and
+    casa/ups-32x4 carry NO power figure, because Tables A-8 and A-9 give their port
+    counts and connector types and no watts at all, and every figure Casa does publish
+    for the slot is already the pair''s - Table A-3 heads the DQM column "Maximum
+    consumption with I/O module" and Table A-4 gives "Single DCU w/ RFU I/O" 200
+    W against "Single DCU w/ RFU UPS 32x4 I/O" 220 W for the same US16x8. Subtracting
+    one from the other to get a rear card''s share would be our arithmetic and would
+    also be the wrong subtraction - the 20 W is the difference between two PAIRINGS,
+    not between two I/O cards.'
+  wanted: 'a pairable unit that can carry properties, so that a figure measured
+    on a pair can be attached to the pair. The scope is now DATA - every card here
+    declares `power-draw-scope: module-with-paired-io`, so a chassis sum knows not
+    to add the rear partner and L30 catches it if one gains its own figure - but
+    the scope says only THAT the figure covers a pair, not WHICH pair. The C100G
+    HIG gives the same US16x8 200 W with the RFU I/O and 220 W with the RFU UPS
+    32x4, and the manifest can carry only one of them. Asking for "a per-module
+    figure" was the wrong question: Casa states none, and one may not exist to be
+    divided out. What is missing is the mechanism, and enough vendors doing this
+    to design one from - Casa is the only one in the corpus.'
+- what: power-entry-rating
+  scope:
+  - casa/c40g-pem@1
+  reason: vendor-silent
+  note: 'Casa rates a power ENTRY module in amps and volts, never in watts. Table
+    A-1 gives "DC current 20A nominal per feed @ -48VDC" and the PEM section says
+    the modules "receive -40.5 to -60 VDC (-48VDC nominal) power from separate 20A
+    power supply sources" - but no document states a wattage, and deriving one means
+    choosing a point the vendor left open: two current figures across a voltage
+    range put V x I anywhere from about 810 W to 1800 W per feed. A power entry
+    module also does not convert or regulate; it filters and distributes what the
+    plant feeds it, so its rating is a current-carrying limit rather than the continuous
+    output power-output-w means. The stated volts and amps are recorded in the contract''s
+    attrs; the L27 warning stays standing as the record that the watt figure is
+    missing.'
+  wanted: a wattage for the C40G power entry module from Casa - a nameplate photograph
+    of the module itself would do it, or any document that rates it in watts rather
+    than amps
+  blocks: []
 groups:
   front-slots:
     term: Slot
@@ -581,173 +751,3 @@ configurations:
       rear-3: casa/blank-faceplate@1
       rear-4: casa/rfd@1
       rear-5: casa/rfd@1
-# What no rule can find, because the manifest looks complete. Both bays are
-# populated, both components render, and nothing in the model can see that the
-# only power figure the vendor publishes for them is a single number covering
-# the two of them together. Detectable gaps are derived from the lint rules at
-# build time and must not be listed here.
-gaps:
-- what: redundant-power-and-cooling-variants
-  scope: [ac-power, dc-power, power, fans]
-  reason: vendor-silent
-  note: >-
-    THE ORDERING SHEET SELLS FOUR CHASSIS AND THIS LIBRARY MODELS TWO. C40G_DS_RevA
-    lists C40G-CHASSIS-AC and C40G-CHASSIS-DC, which are here, and C40G-CHASSIS-ACR
-    and C40G-CHASSIS-DCR, described as "with Redundant Power and Cooling", which are
-    not. The sheet gives the phrase and nothing else - no count, no which modules, no
-    dimensions - and the installation guide never uses the word for a chassis variant.
-    What the guide DOES say is that the C40G takes up to four 1100 W PSUs operating
-    concurrently and that fewer than two cannot power a C40G-20, which tells you the
-    supplies are redundant by population rather than by chassis. That makes the R
-    variants most likely a populated bundle rather than different metal - but "most
-    likely" is not a source, and inventing two configurations from a four-word
-    description would put a guess where a part number goes.
-  wanted: >-
-    a Casa or CommScope ordering guide saying what the R bundles contain - how many
-    PSUs and fan modules, and whether the chassis itself differs at all
-- what: ground-stud-count
-  scope: [ground-studs-rear]
-  reason: sources-disagree
-  note: >-
-    Casa says two things about this terminal and they do not agree. The prose in
-    "Connecting the chassis to ground" says it "provides two M6 screws to connect a
-    double-lug ground terminal cable". Figures 1-2 and 1-4 both DRAW three studs, in a
-    2x2 grid with the protective-earth mark in the fourth corner, and the two figures
-    agree with each other.
-    THE DRAWING IS FOLLOWED, and the model carries three. The figure is the only source
-    that says anything about arrangement at all, so following the prose would mean
-    inventing a layout for the two it describes; and a third stud has easy explanations
-    - a spare, an alternate lug pitch - while a stud drawn twice that is not there has
-    none. That is a judgement, not a reading, which is why it is filed here.
-    THE PITCH IS NOT MEASURED FROM EITHER. It is borrowed from casa/ground-bolts@1,
-    15.3, off the maintainer`s hand-built C100G rear SVG. Figure 1-4 gives 13.2 across and 14.7
-    down for what must be one square grid - an 11 percent disagreement with itself,
-    which is that figure`s anisotropy rather than a rectangular pattern.
-  wanted: a photograph of the C40G rear lower-left corner, which would settle the count
-    and the pitch together in one look
-  blocks: []
-- what: band-not-centred-in-chassis
-  scope: [front, rear]
-  reason: needs-drawing
-  note: >-
-    The card band runs 37.5 to 386.7 in a body 432.95 wide, so it sits 37.5 from the left
-    edge and 46.25 from the right - 8.75 mm out of centre, or 4.375 on the band's own
-    centreline. Everything inside the band agrees with everything else; the question is
-    whether the band is really off-centre in the metal, and nothing we hold answers it.
-    IT IS NOT COSMETIC, and the AC input panel is where it bites. Its four C14 inlets sit
-    behind the four front power supplies. Reflect the supply centres about the PANEL and
-    the inlets are 1.2 out; reflect them about the CHASSIS - which is what walking round a
-    box actually does - and they are 9.95 out. The gap between those two answers IS this
-    asymmetry, and no arrangement of the parts inside the band can close it, because the
-    disagreement is between the band and the chassis rather than within either.
-    THE SUPPORTING NUMBERS ARE ALSO ODD IN THE SAME DIRECTION. The two front fan strips
-    measure 36.0 wide each - equal, as you would expect - but leave 1.5 outside them on the
-    left and 10.25 on the right. Two equal strips with unequal surrounds is exactly the
-    shape of a band that has been positioned from one edge.
-    NOT RESOLVED BY GUESSING, deliberately. Re-centring the band would move the two fan
-    strips, the card bays on both faces, the PSU row, the PSU cover and the AC panel - and
-    it would be one estimate reconciled against another, which this device's
-    `pem-band-top-edge` note already records going wrong twice in opposite directions.
-  wanted: a dimensioned C40G front or rear elevation from Casa, or a tape measure across a
-    real chassis from its left edge to the first card slot and from the last card slot to
-    its right edge
-  blocks: []
-- what: pem-band-top-edge
-  scope: [pem-1, pem-2]
-  reason: needs-drawing
-  note: >-
-    The PEM band's BOTTOM edge at 264.5 is agreed by every source and is not in doubt. Its TOP
-    edge is known only to about 2 mm, and the three candidates each have support: 194.0 is the
-    direct reading of Figure 1-4 and is impossible, because the card slot above ends at 194.82;
-    194.82 is flush against that slot; 196.0 is what the bays carry and is what the manifest now
-    uses, on the argument that 194.82 is an accumulation of six DERIVED slot pitches (426.6 mm
-    over 14 slots on the C100G, carried across) and that the front face shows a measured 1.48 mm
-    margin in the equivalent position. That argument is sound but it is an argument, not a
-    measurement, and the whole disagreement is six pixels at 2.982 px/mm. A tape measure on a real
-    C40G, or any Casa drawing that dimensions the rear panel, would settle it in one number.
-    FIGURE 1-12 HAS NOW BEEN LOOKED AT AND DOES NOT SETTLE IT, recorded so nobody spends the
-    search twice. "C40G power entry module" is the only isolated drawing of this part and the
-    first independent look anything has had at it. Its body measures 866 x 381 px for an aspect of
-    2.273. The modelled 158.0 x 68.5 is 2.307 and the superseded 158.0 x 70.5 is 2.241, and 2.273
-    lands 0.04 percent off the midpoint of those two - at 158.0 wide it implies a height of 69.51.
-    IT IS EQUIDISTANT AND CONFIRMS NEITHER. This guide's isolated part drawings are in any case
-    demonstrably about 10 percent wrong about their own aspect - Figure 1-20 draws a card at 12.54
-    whose real aspect is 11.34 - so a 1.5 percent lean is well inside the drawing's own error. THE
-    NUMBER IS THEREFORE NOT MOVED. It has been moved twice already, in both directions, and a
-    third move on evidence that splits the difference would be the reconciliation loop rather than
-    an escape from it. What Figure 1-12 does confirm is the ARRANGEMENT, which is what a figure is
-    good for: a bolted terminal cover across the top with three fasteners, a minus pair of studs
-    above a plus pair inside two outlined blocks, two release levers standing proud of the body
-    top and bottom, and the yellow disconnect-power label to their right - all of which
-    casa/c40g-pem draws.
-    RECORDED BECAUSE THE MODULE AND THE BAY NOW AGREE, which means nothing will ever flag this
-    again - the fit check that found the original 2 mm discrepancy is satisfied by both being
-    wrong together as easily as by both being right.
-  wanted: a dimensioned C40G rear elevation, or a tape measure on the PEM opening
-- what: paired-module-power
-  scope:
-  - casa/bdm2@1
-  - casa/bdm2m@1
-  - casa/bdm@1
-  - casa/ds-8x192@1
-  - casa/ds-8x8@1
-  - casa/ds-8x96@1
-  - casa/io-6p12-io2@1
-  - casa/io-6p12-sw-io2@1
-  - casa/io-6p12-sw@2
-  - casa/io-6p12@2
-  - casa/rfd@1
-  - casa/rfu-16x8@1
-  - casa/ups-32x4@1
-  - casa/us-16x4@1
-  - casa/us-16x8@1
-  reason: vendor-silent
-  note: 'The BDM2/BDM2m datasheet states "Total Power  300 W" in a technical specifications
-    table headed "BDM2/2 m with 6+12 IO Card", whose RF connector row describes
-    that card''s six downstream and twelve upstream ports. The figure is the assembly''s.
-    A BDM position is TWO modules here - casa/bdm in a front bay and casa/io-6p12
-    in the paired rear bay, which is why casa/bdm already carries `pairs-with` -
-    and no document we hold divides the 300 W between them. Writing it onto the
-    front module would make the chassis total come out right and the answer to "what
-    does a BDM front module draw" come out wrong, so neither half carries a figure
-    and the chassis total stays a floor. The arithmetic does not settle it either
-    way: 12 x 300 W lands on the C100G''s stated 3.6 kW whether the 300 W is the
-    pair or the front half with small rear cards. THE THREE REAR RF I/O CARDS ADDED
-    LATER FALL ON THE SAME SIDE OF THIS AS THE 6+12. casa/rfd, casa/rfu-16x8 and
-    casa/ups-32x4 carry NO power figure, because Tables A-8 and A-9 give their port
-    counts and connector types and no watts at all, and every figure Casa does publish
-    for the slot is already the pair''s - Table A-3 heads the DQM column "Maximum
-    consumption with I/O module" and Table A-4 gives "Single DCU w/ RFU I/O" 200
-    W against "Single DCU w/ RFU UPS 32x4 I/O" 220 W for the same US16x8. Subtracting
-    one from the other to get a rear card''s share would be our arithmetic and would
-    also be the wrong subtraction - the 20 W is the difference between two PAIRINGS,
-    not between two I/O cards.'
-  wanted: 'a pairable unit that can carry properties, so that a figure measured
-    on a pair can be attached to the pair. The scope is now DATA - every card here
-    declares `power-draw-scope: module-with-paired-io`, so a chassis sum knows not
-    to add the rear partner and L30 catches it if one gains its own figure - but
-    the scope says only THAT the figure covers a pair, not WHICH pair. The C100G
-    HIG gives the same US16x8 200 W with the RFU I/O and 220 W with the RFU UPS
-    32x4, and the manifest can carry only one of them. Asking for "a per-module
-    figure" was the wrong question: Casa states none, and one may not exist to be
-    divided out. What is missing is the mechanism, and enough vendors doing this
-    to design one from - Casa is the only one in the corpus.'
-- what: power-entry-rating
-  scope:
-  - casa/c40g-pem@1
-  reason: vendor-silent
-  note: 'Casa rates a power ENTRY module in amps and volts, never in watts. Table
-    A-1 gives "DC current 20A nominal per feed @ -48VDC" and the PEM section says
-    the modules "receive -40.5 to -60 VDC (-48VDC nominal) power from separate 20A
-    power supply sources" - but no document states a wattage, and deriving one means
-    choosing a point the vendor left open: two current figures across a voltage
-    range put V x I anywhere from about 810 W to 1800 W per feed. A power entry
-    module also does not convert or regulate; it filters and distributes what the
-    plant feeds it, so its rating is a current-carrying limit rather than the continuous
-    output power-output-w means. The stated volts and amps are recorded in the contract''s
-    attrs; the L27 warning stays standing as the record that the watt figure is
-    missing.'
-  wanted: a wattage for the C40G power entry module from Casa - a nameplate photograph
-    of the module itself would do it, or any document that rates it in watts rather
-    than amps
-  blocks: []
