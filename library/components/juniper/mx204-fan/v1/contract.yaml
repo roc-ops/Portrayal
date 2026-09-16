@@ -18,6 +18,11 @@ attrs:
   power-absent: not-published
   airflow: front-to-back
 provenance:
+  states: >-
+    NO LAMP ON THIS PART, and the guide says so outright. MX204 hardware guide, 'MX204 Fan
+    Status LED': 'The MX204 fan module does not have any LED-the fan status LEDs are located
+    on the MX204 chassis.' So ok/fail were states nothing here could ever show; they are the
+    chassis's to draw, not the module's.
   power: >-
     NOT PUBLISHED. The chassis guide for this part is staged and converted, its FRU power
     requirements table is present, and THIS PART IS NOT IN IT - which is a stronger
@@ -44,10 +49,7 @@ provenance:
     gives only whole-chassis figures. Searched the MX204 guide doc.md for
     "Power Requirement", "fan" near watt figures, and the family datasheet;
     no per-module figure exists in the intake. L27 stands deliberately'
-states:
-- ok
-- fail
-- absent
+states: [absent]
 elements:
   screw:
     at: [2.3, 2.3]

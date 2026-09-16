@@ -12,6 +12,10 @@ description: Hot-swappable 1U fan tray, 40.9mm opening on a 48.8mm pitch - honey
 size: {w: 40.9, h: 40.0}
 attrs: {power-absent: not-applicable, airflow: front-to-back}
 provenance:
+  states: >-
+    NO LAMP, BECAUSE THIS IS A GENERIC - as common/fan-module@1. The 40.9mm opening and the
+    code-plate are what this shape asserts; where a real fan of this pitch puts a status LED
+    is a vendor fact, and the vendor part is where it belongs.
   power: >-
     NOT APPLICABLE, because this contract is a GENERIC and not a part - the same
     reasoning common/fan-module-46@1 records. Neither COR580 document states a
@@ -59,7 +63,7 @@ provenance:
     as 'Front-to-Back airflow' (cor580-datasheet/doc.md:194), so there is no blue
     B2F tray to draw and none is invented.
   elements: positions derived from the face measurements above
-states: [ok, fail, absent]
+states: [absent]
 elements:
   rotor: {at: [1.85, 0.6], size: [37.2, 37.2], class: rotor}
   handle: {at: [0.75, 18.0], size: [39.4, 11.0], class: latch}

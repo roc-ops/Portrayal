@@ -23,9 +23,14 @@ TEMPLATE = ROOT / "docs" / "device-template.yaml"
 TOOLS = ROOT / "spec" / "tools" / "portrayal"
 
 # Two warnings come from the fan module the template seats, not from the template:
-# common/fan-module@1 declares lamp states it never draws (L47) and states no draw
-# figure (L29). Tracked as roc-ops/Portrayal#212; the template is not the place to fix it.
-ALLOWED_WARNINGS = {"L29", "L47"}
+# THE TEMPLATE LINTS SILENT, and nothing is allowed through. It used to allow
+# {L29, L47}, both of them arriving from `common/fan-module@1` rather than from
+# the template: the fan declared lamp states it drew nothing for, and L29 counted
+# it as an unaccounted module although it says `power-absent: not-applicable`.
+# roc-ops/Portrayal#212 fixed the fan and the rule, so a starting point a
+# contributor copies now warns about nothing at all - which is the only version
+# of this promise worth making.
+ALLOWED_WARNINGS = set()
 
 
 def test_template_validates_against_the_device_schema():

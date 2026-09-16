@@ -590,3 +590,44 @@ def test_l29_still_sends_a_real_card_to_its_contract(tmp_path):
     dev = plant_device(tmp_path, "chassis",
                        [{"id": "slot-0", "accepts": ["acme/card@1"]}])
     assert "Add power-draw-max-w to that contract" in found(dev, tmp_path, "L29")[0]
+
+
+def test_l29_does_not_count_a_module_whose_absence_is_settled(tmp_path):
+    """`not-applicable` and `not-published` are defined by what they mean to
+    exactly this arithmetic. The schema: `not-published` is "a hole in the
+    total"; `not-applicable` is that "a chassis total is COMPLETE without a
+    number here, rather than a floor". L29 read neither and counted both, so 23
+    of its 165 warnings were modules whose absence was already answered - the
+    three generic `common/fan-module` shapes among them, where a wattage would
+    be a fiction dressed as a fact because one drawing stands for many real
+    fans (roc-ops/Portrayal#212)."""
+    plant(tmp_path, "acme/tray@1", cls="fan",
+          attrs={"power-absent": "not-applicable"})
+    dev = plant_device(tmp_path, "chassis",
+                       [{"id": "fan-0", "accepts": ["acme/tray@1"]}])
+    assert found(dev, tmp_path, "L29") == []
+
+
+def test_l29_still_counts_a_module_the_vendor_simply_never_published(tmp_path):
+    """The other half, and the one that keeps the change honest. A figure nobody
+    published is still missing from the total, and softening both values would
+    turn the rule off rather than correct it."""
+    plant(tmp_path, "acme/tray@1", cls="fan",
+          attrs={"power-absent": "not-published"})
+    dev = plant_device(tmp_path, "chassis",
+                       [{"id": "fan-0", "accepts": ["acme/tray@1"]}])
+    msgs = found(dev, tmp_path, "L29")
+    assert len(msgs) == 1 and "floor and not a total" in msgs[0]
+
+
+def test_a_settled_module_does_not_shrink_the_denominator(tmp_path):
+    """"N of M" has to stay readable. The module is still one of the chassis's
+    modules; what it is not is one of the ones missing a figure."""
+    plant(tmp_path, "acme/tray@1", cls="fan", attrs={"power-absent": "not-applicable"})
+    plant(tmp_path, "acme/card@1")
+    dev = plant_device(tmp_path, "chassis", [
+        {"id": "fan-0", "accepts": ["acme/tray@1"]},
+        {"id": "slot-0", "accepts": ["acme/card@1"]}])
+    msgs = found(dev, tmp_path, "L29")
+    assert len(msgs) == 1
+    assert "1 of 2 module(s)" in msgs[0], msgs
