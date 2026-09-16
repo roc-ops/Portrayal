@@ -2123,7 +2123,10 @@ def lint_component_fields(path, data, _lib_roots=None):
     drawing is wired to the field at all, not about which attribute carries it -
     so both count, in both directions. Reading only one of them would have
     called the RJ45 family's `finish` an unkept promise and, worse, let a skin
-    paint itself from an attr no form is ever offered.
+    paint itself from an attr no form is ever offered. `data-stroke-from` joined
+    them in #177, for the same reason and with the same standing: a coloured part
+    is a fill AND an outline, and a mechanism that could only say half of it
+    would have produced blue handles wearing dark red edges.
     """
     fields = data.get("fields") or {}
     skins_dir = path.parent / "skins"
@@ -2133,12 +2136,12 @@ def lint_component_fields(path, data, _lib_roots=None):
         if not sp.exists():
             continue
         text = sp.read_text(errors="replace")
-        keys = set(re.findall(r'data-(?:fill-)?from="([^"]+)"', text))
+        keys = set(re.findall(r'data-(?:fill-|stroke-)?from="([^"]+)"', text))
         seen[skin] = keys
         for k in fields:
             if k not in keys:
-                err(path, "L73", f"field {k} has no data-from or data-fill-from "
-                                 f"node in skin {skin}")
+                err(path, "L73", f"field {k} has no data-from, data-fill-from or "
+                                 f"data-stroke-from node in skin {skin}")
     undeclared = set().union(*seen.values()) - set(fields) if seen else set()
     if undeclared:
         warn(path, "L73", f"skin fills {', '.join(sorted(undeclared))} from attrs but the "

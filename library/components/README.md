@@ -198,10 +198,30 @@ A skin is a hand-written SVG at `skins/<name>.svg`, drawn in millimetres:
 - Printed text sits inside `<g id="silkscreen">` (lint L38), unless the part
   is a label applied over the panel rather than printing on it.
 - `default.svg` is the skin a placement gets unless it names another.
-  Additional skins are for a different **appearance of the same part**: a
-  colour the vendor ships (`blue.svg`), a variant of the printed art. They are
-  not for wattage (use `fields`), orientation (a placement rotates), or a
-  different shape (that is another component).
+  **An additional skin is for printed art that differs** - a different legend, a
+  different mark - and for nothing else. In particular it is not for:
+
+  | not a skin | what it is instead |
+  |---|---|
+  | wattage, capacity, any printed value | a `field`, filled through a `data-from` node |
+  | **colour** | a `field`, through `data-fill-from` and `data-stroke-from` |
+  | orientation | the placement rotates |
+  | a different shape | a different component |
+
+  Colour was on that list until #177 and is the reason the rest of it is worth
+  restating. Ten parts carried a `blue.svg` that differed from `default.svg` in
+  one to four fills - `ufispace/psu-751-ac` in a single line - and every one of
+  them was a second copy of a drawing that had to be kept in step by hand. A
+  finish is one word on the configuration that differs:
+
+  ```yaml
+  component-attrs:
+    fan-module: {handle-finish: '#3d7bd6', airflow-legend: B2F}
+  ```
+
+  A skin per colour also has to be CHOSEN, once per placement, which is how the
+  library ended up with one Edgecore chassis drawing its back-to-front build in
+  blue and two others in red from the same vendor convention.
 - `body-left.svg`, `body-right.svg`, `body-top.svg`, `body-bottom.svg`,
   `body-rear.svg` are optional side views for parts that have a 3D body
   (modules, PSUs, fans); the viewer uses them to texture the box.
