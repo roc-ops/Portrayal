@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: spa-oc192pos-xfp
-version: 1.0.1
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -15,6 +15,7 @@ description: >-
   subslot; it is a module, not a device.
 size: {w: 17.29, h: 167.87}
 attrs:
+  oc192: 1
   model: 'SPA-OC192POS-XFP'
   power-absent: not-published
   role: 'shared-port-adapter'
@@ -25,6 +26,11 @@ attrs:
   min-hardware-revision: '1.0'
   eol: 'none-announced'
 provenance:
+  sonet-rate: >-
+    the SONET rate, transcribed from this contract's own description - an OC-192/STM-64
+    port. The XFP cage cannot say: an XFP takes a 10GbE optic and an OC-192 one, both at ~10
+    Gb/s, and the framing is what differs. Without this the export typed it 10gbase-x-xfp.
+    Nothing new was measured.
   relief: >-
     RELIEF IS DECLARED, AND WHAT MATTERS ABOUT IT IS THAT IT IS A HANDFUL OF NUMBERS AND NOT
     A HANDFUL PER PART. This face carries: 6 panel lamps at dome 0.3 (one number, carried by

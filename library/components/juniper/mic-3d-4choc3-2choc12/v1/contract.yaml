@@ -1,16 +1,22 @@
 format: 1
 kind: module
 name: mic-3d-4choc3-2choc12
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
 description: >-
   Juniper channelized SONET/SDH OC3/STM1 multirate MIC with SFP (four ports). MIC form (168 x 27 window; the earlier 31 mm reading was the bay opening with bezel - a MIC must seat inside the 29.5 mm MPC face, so the window is 27).
 attrs:
+  oc3: 4
   model: MIC-3D-4CHOC3-2CHOC12
   power-draw-max-w: 41
 provenance:
+  sonet-rate: >-
+    the SONET rate, transcribed from this contract's own description: 'channelized SONET/SDH
+    OC3/STM1 multirate MIC with SFP (four ports)'. Without it the SFP cage has no rate to
+    read and the export typed it Gigabit Ethernet, which an OC-3 port is not. Nothing new
+    was measured.
   size: 'registry + layout - the face is the slot geometry of its chassis
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate

@@ -5,11 +5,11 @@ description: Cisco 3-Port Clear Channel OC-3 ATM SPA, a single-height shared por
   9000 SIP-700
 interfaces:
   - name: p0
-    type: 1000base-x-sfp
+    type: sonet-oc3
   - name: p1
-    type: 1000base-x-sfp
+    type: sonet-oc3
   - name: p2
-    type: 1000base-x-sfp
+    type: sonet-oc3
 comments: 'Cisco 3-Port Clear Channel OC-3 ATM SPA, a single-height shared port adapter for the ASR 9000
   SIP-700. ''Each SPA port accepts an SFP module with a duplex LC-type receptacle.'' Optics: SFP-OC3-MM,
   -SR, -IR1, -LR1, -LR2. Seats in a SIP-700 SPA subslot; it is a module, not a device.
@@ -27,10 +27,12 @@ comments: 'Cisco 3-Port Clear Channel OC-3 ATM SPA, a single-height shared port 
 
   - min-ios-xr: 4.2.0
 
+  - oc3: 3
+
   - ports: 3
 
   - power-absent: not-published
 
   - role: shared-port-adapter
 
-  Contract version 1.0.1 (cisco/spa-3xoc3-atm-v2).'
+  Contract version 1.1.0 (cisco/spa-3xoc3-atm-v2).'

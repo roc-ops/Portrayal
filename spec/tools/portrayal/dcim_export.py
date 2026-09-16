@@ -140,11 +140,33 @@ CAGE_FAMILY = {
 }
 # Most specific first: a card declaring both qsfp28 and qsfp is 100G in a QSFP
 # cage, because a QSFP28 cage takes a 40G optic too.
+#
+# AND AN SFP CAGE IS NOT ONLY AN ETHERNET CAGE. Twenty-seven SONET, ATM and
+# channelized cards put an SFP in front of an OC-3, OC-12 or OC-48 port - fifteen
+# Cisco SIP-700 SPAs and six Juniper MICs with their vertical authors - and
+# because the only rates this table knew were Ethernet ones, all of them fell to
+# the cage default and exported as Gigabit Ethernet. ~90 ports (#296).
+#
+# The Ethernet pair stays first so nothing about an Ethernet card changes; the
+# SONET rates follow, highest first, in the same most-specific-first order.
+#
+# ATM TAKES ITS SONET TYPE AND THAT IS NOT A COMPROMISE. Upstream's "ATM" group
+# contains exactly one choice, `xdsl`, so there is no ATM interface type to
+# reach for - and there should not be. `type` names the PHYSICAL interface; ATM
+# is the framing that runs over it, the way POS and channelized DS0 are. An
+# OC-3 ATM port is an OC-3 port.
 FAMILY_ATTRS = {
-    "sfp": (("sfp-plus", "10gbase-x-sfpp"), ("sfp", "1000base-x-sfp")),
+    "sfp": (("sfp-plus", "10gbase-x-sfpp"), ("sfp", "1000base-x-sfp"),
+            ("oc48", "sonet-oc48"), ("oc12", "sonet-oc12"), ("oc3", "sonet-oc3")),
     "qsfp": (("qsfp28", "100gbase-x-qsfp28"), ("qsfp", "40gbase-x-qsfpp")),
     "qsfp-dd": (("qsfp-dd", "400gbase-x-qsfpdd"),),
-    "xfp": (),
+    # AN XFP CAGE IS NOT ONE RATE EITHER, and this entry said it was - the empty
+    # tuple meant "nothing to declare", so L96 never asked and the cards below
+    # were not even in #296's census. The sweep over the committed exports found
+    # them: SPA-OC192POS-XFP and MIC-3D-1OC192-XFP put an OC-192 port behind an
+    # XFP, exporting as 10GbE. Both are ~10 Gb/s and the framing is what differs,
+    # which is exactly why the cage cannot say.
+    "xfp": (("oc192", "sonet-oc192"),),
 }
 
 

@@ -1,16 +1,22 @@
 format: 1
 kind: module
 name: mic-3d-1oc192-xfp
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
 description: >-
   Juniper SONET/SDH OC192/STM64 MIC with XFP (one port). MIC form (168 x 27 window; the earlier 31 mm reading was the bay opening with bezel - a MIC must seat inside the 29.5 mm MPC face, so the window is 27).
 attrs:
+  oc192: 1
   model: MIC-3D-1OC192-XFP
   power-draw-max-w: 38
 provenance:
+  sonet-rate: >-
+    the SONET rate, transcribed from this contract's own description - an OC-192/STM-64
+    port. The XFP cage cannot say: an XFP takes a 10GbE optic and an OC-192 one, both at ~10
+    Gb/s, and the framing is what differs. Without this the export typed it 10gbase-x-xfp.
+    Nothing new was measured.
   size: 'registry + layout - the face is the slot geometry of its chassis
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate

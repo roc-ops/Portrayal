@@ -63,13 +63,18 @@ def test_l96_is_registered_as_a_component_rule():
     assert lint.RULES["L96"][0] == "component"
 
 
-def test_a_family_with_no_attrs_to_declare_is_not_a_gap():
-    """XFP runs at one rate, so `FAMILY_ATTRS` gives it nothing to declare and an
-    XFP cage answers for itself. Counting it would put 97 placements into a
-    backlog that has no fix."""
-    assert dx.FAMILY_ATTRS["xfp"] == ()
-    assert not dx.cage_family_needs_a_rate("std/xfp", {})
+def test_an_xfp_cage_is_not_one_rate_either():
+    """THIS ENTRY USED TO BE EMPTY, meaning "nothing to declare" - so L96 never
+    asked an XFP card anything and #296's census excluded them by construction.
+
+    The sweep over the committed exports is what found them:
+    `SPA-OC192POS-XFP` and `MIC-3D-1OC192-XFP` put an OC-192 port behind an XFP
+    and exported 10GbE. Both are ~10 Gb/s; the framing is what differs, which is
+    exactly why the cage cannot say and the card must.
+    """
+    assert dx.FAMILY_ATTRS["xfp"] == (("oc192", "sonet-oc192"),)
     assert dx.cage_type("std/xfp", {}) == "10gbase-x-xfp"
+    assert dx.cage_type("std/xfp", {"oc192": 1}) == "sonet-oc192"
 
 
 def test_declaring_the_rate_answers_the_question():
@@ -138,3 +143,84 @@ def test_the_census_and_the_rule_count_the_same_things():
     import inspect
     src = inspect.getsource(lint.lint_component_cage_rate)
     assert "dcim_export.cage_family_needs_a_rate" in src
+
+
+# --- an SFP cage is not only an Ethernet cage (#296) -------------------------
+#
+# Twenty-seven SONET, ATM and channelized cards put an SFP in front of an OC-3,
+# OC-12 or OC-48 port - fifteen Cisco SIP-700 SPAs and six Juniper MICs with
+# their vertical authors. `FAMILY_ATTRS` knew only Ethernet rates, so every one
+# of them fell to the cage default and exported as Gigabit Ethernet: ~90 ports,
+# and an OC-3 ATM port is not a Gigabit Ethernet interface.
+
+SONET = {"oc3": "sonet-oc3", "oc12": "sonet-oc12", "oc48": "sonet-oc48"}
+
+
+def test_the_sonet_rates_are_types_both_targets_have():
+    """One document is written to both trees, so a type either library refuses
+    would be rejected on import rather than by any gate here."""
+    assert dict(dx.FAMILY_ATTRS["sfp"][2:]) == \
+        {"oc48": "sonet-oc48", "oc12": "sonet-oc12", "oc3": "sonet-oc3"}
+
+
+def test_an_ethernet_card_is_unaffected_by_the_sonet_rates():
+    """The Ethernet pair stays FIRST in the tuple, so nothing about a card that
+    declares `sfp` or `sfp-plus` changes."""
+    assert dx.FAMILY_ATTRS["sfp"][:2] == (("sfp-plus", "10gbase-x-sfpp"),
+                                          ("sfp", "1000base-x-sfp"))
+    assert dx.cage_type("std/sfp-ganged", {"sfp": 20}) == "1000base-x-sfp"
+    assert dx.cage_type("std/sfp-ganged", {"sfp-plus": 16}) == "10gbase-x-sfpp"
+
+
+@pytest.mark.parametrize("ref,attr,count", [
+    ("cisco/spa-4xoc48pos-rpr", "oc48", 4),      # "4-Port OC-48/STM-16 POS/RPR SPA"
+    ("cisco/spa-8xoc3-pos", "oc3", 8),           # "8-Port OC-3/STM-1 POS SPA"
+    ("cisco/spa-1choc3-ce-atm", "oc3", 1),       # "1-Port Channelized OC-3 ATM CEoP SPA"
+    ("juniper/mic-3d-8oc3-2oc12-atm", "oc3", 8), # "ATM MIC with SFP (eight ports)"
+    ("juniper/mic-3d-8oc3oc12-4oc48", "oc12", 8),
+])
+def test_a_sonet_card_states_its_rate(ref, attr, count):
+    d = _modules().get(ref)
+    if d is None:
+        pytest.skip(f"{ref} is not in this library")
+    attrs = d.get("attrs") or {}
+    assert attrs.get(attr) == count
+    cage = next(p["ref"].split("@")[0] for p in d["parts"]
+                if isinstance(p, dict) and p["ref"].split("@")[0] in dx.CAGE_FAMILY)
+    assert dx.cage_type(cage, attrs) == SONET[attr]
+
+
+def test_an_atm_port_takes_its_sonet_type():
+    """UPSTREAM'S "ATM" GROUP CONTAINS ONE CHOICE, `xdsl`, so there is no ATM
+    interface type to reach for - and there should not be. `type` names the
+    PHYSICAL interface; ATM is the framing that runs over it, the way POS and
+    channelized DS0 are. An OC-3 ATM port is an OC-3 port.
+    """
+    p = LIB / "exports/netbox/module-types/Juniper/MIC-3D-8OC3-2OC12-ATM.yaml"
+    if not p.exists():
+        pytest.skip("the ATM MIC export is not in this library")
+    d = yaml.safe_load(p.read_text()) or {}
+    assert "ATM" in (d.get("description") or ""), "this is still the ATM card"
+    assert {i["type"] for i in d["interfaces"]} == {"sonet-oc3"}
+
+
+def test_no_sonet_card_still_exports_ethernet():
+    """The sweep, over the committed exports rather than the contracts. A card
+    whose description names SONET, ATM, POS or a channelized rate must not carry
+    a `base-` interface type - that is the defect, stated as a property."""
+    import re
+    words = re.compile(r"\b(OC-?\d+|STM-?\d+|ATM|POS|SONET|SDH|channeli[sz]ed)\b", re.I)
+    bad, checked = [], 0
+    for p in sorted((LIB / "exports/netbox/module-types").glob("*/*.yaml")):
+        d = yaml.safe_load(p.read_text()) or {}
+        if not words.search(str(d.get("description") or "")):
+            continue
+        checked += 1
+        eth = {i["name"] for i in (d.get("interfaces") or [])
+               if "base-" in i.get("type", "")}
+        if eth:
+            bad.append(f"{d.get('model')}: {sorted(eth)}")
+    assert not bad, "\n".join(bad)
+    # NOT VACUOUS. Run before this change it names fifteen Cisco SPAs and six
+    # Juniper MICs; a sweep over an empty collection passes just as quietly.
+    assert checked >= 20, f"only {checked} card(s) reached the sweep"
