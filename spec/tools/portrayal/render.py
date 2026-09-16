@@ -559,7 +559,19 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     comp_name = ref.split("/")[-1].split("@")[0]
     if skin_overrides and comp_name in skin_overrides:
         skin_name = skin_overrides[comp_name]
+    # BY COMPONENT NAME, AND THEN BY THIS INSTANCE. `component-attrs` was keyed by
+    # the component alone, which says a true thing about every copy of a part and
+    # cannot say anything about one of them. The ASR 9001-S is the same metal as
+    # the 9001 with two of its four SFP+ ports disabled until a licence is
+    # applied: both chassis draw six `std/sfp-ganged`, so `{sfp-ganged: ...}`
+    # marks all six - the two CLUSTER ports included - when two are meant
+    # (roc-ops/Portrayal#193). Keying by the placement or bay id says it exactly,
+    # and the two compose: the component entry is the default for every copy and
+    # the instance entry narrows it.
     extra_attrs = (attr_overrides or {}).get(comp_name)
+    per_instance = (attr_overrides or {}).get(inst_id)
+    if per_instance:
+        extra_attrs = {**(extra_attrs or {}), **per_instance}
     if palette is not None:
         comp = ref.split("@")[0]
         # every segment name this component's artwork draws, so a shape-changing

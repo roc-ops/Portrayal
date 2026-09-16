@@ -428,7 +428,7 @@
      },
      "component-attrs": {
       "type": "object",
-      "description": "component name -> extra data-* attrs (FRU model/part-number per config)",
+      "description": "component name OR placement/bay id -> extra data-* attrs for this configuration. A component name reaches every instance of that part and is how a configuration says which FRU model or part number is fitted; a PLACEMENT OR BAY ID reaches exactly one, and is how it says something true of that instance alone. The two compose, the instance winning. Keying by the component alone could not express the ASR 9001-S, which is the same metal as the 9001 with two of its four SFP+ ports disabled until a licence is applied: both draw six `std/sfp-ganged`, so `{sfp-ganged: ...}` marks all six when two are meant. This is the OCCUPANCY/PROPERTY split in docs/what-a-configuration-cannot-say.md: `bays` and `only-in` say what is THERE, and this says what is TRUE of it. L94 checks the key resolves, because a key that matches nothing is silently ignored.",
       "additionalProperties": {
        "type": "object",
        "additionalProperties": {

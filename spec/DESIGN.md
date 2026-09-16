@@ -64,6 +64,30 @@ Three layers:
 8. **Builds**: byte-deterministic (no timestamps; toolchain version in
    `<metadata>`); source-only repos, compiled SVGs as release artifacts/gallery;
    CI = schema validation + contract↔skin linter + pixel-diff regression.
+   **A configuration says what OCCUPIES a bay AND what is TRUE of a part, and
+   still not what is true of the DEVICE.** That sentence is the decision #193
+   asked for, and the shape it names came from two vendors at once
+   (docs/what-a-configuration-cannot-say.md): a Casa C40G whose AC build bolts
+   one inlet panel across the band its DC build fills with two PEMs, and a Cisco
+   ASR 9001-S which is the same metal as the 9001 with two of four SFP+ ports
+   disabled until a licence is applied.
+
+   The design note costed two schema changes for it. Neither was needed.
+   **Presence** was already sayable: `only-in:` scopes a placement or a bay to
+   named configurations, which is where the C40G's panel and its two PEM
+   openings live now - an AC chassis has the panel and no PEM openings, a DC one
+   the openings and no panel, and because they are never both present there is no
+   overlap for L13 to reject. Geometry belongs in the view, and which
+   configurations a piece of metal exists in is geometry. **Property** needed one
+   lookup: `component-attrs` was keyed by component name, which says a true thing
+   about every copy of a part and nothing about one of them, and now takes a
+   placement id too; `bay-attrs` already took a bay path and had never been used.
+
+   What is still not sayable is a device attr that changes with the
+   configuration - the 9001-S's 60 Gbps against the 9001's 120. That is the
+   remaining third, filed on the device rather than solved here, because the
+   fix is the same widening one level up and it has one instance.
+
 9. **Versioning**: semver per component — art=patch, additive=minor,
    geometry/IDs=major. Manifests pin major only (`name@2`); majors coexist
    in-tree (`v1/`, `v2/`); linter hashes contract geometry to catch unbumped

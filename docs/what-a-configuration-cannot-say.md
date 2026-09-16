@@ -2,10 +2,40 @@
 
 *(Started as "config-scoped placements"; a second instance from Cisco widened it.)*
 
-Status: design note, 2026-08-25. **Deliberately not implemented.** This is the
-write-up of three dead ends so the next person does not have to find them
-again. The rendering half of the same problem (draw order of bay openings
-against placements) is recorded separately.
+Status: **RESOLVED, 2026-09-16 (roc-ops/Portrayal#193), and kept for the reasoning.** Two thirds of the
+shape below are closed and neither took a schema change of the size this note
+costed. The dead ends are still worth reading - they are why the answer is where
+it is - but do not cost the two options at the top of this note: a fifth route
+nobody had tried beat both.
+
+**What actually happened.**
+
+- **Presence** - the C40G's AC inlet panel - is said with **`only-in:`**, which
+  scopes a placement or a bay to named configurations and already existed for
+  `bays`. The panel carries `only-in: [ac-power]` and the two PEM bays carry
+  `only-in: [dc-power, ...]`. An AC chassis has the panel and no PEM openings, a
+  DC one the openings and no panel, so they are never both present and the
+  overlap route 2 died on never arises. That also answers the "is the model
+  DC-shaped?" question at the top: the band holds either, and the view says
+  which - the geometry is per configuration and lives where geometry lives.
+- **Property** - the 9001-S's licence-disabled ports - is said by
+  **`component-attrs` keyed by a placement id**, which is one lookup in
+  `instance_group`, not the `placements:` property this note costed. `bay-attrs`
+  already took a bay path for the bay half and had no user at all until now.
+- **Still open**: a DEVICE attr that changes with the configuration, which is the
+  9001-S's 60 Gbps against the 9001's 120. Filed on `cisco/asr-9001` as the
+  `config-scoped-device-attrs` gap.
+
+**The lesson worth keeping.** This note costed two schema changes and a
+rendering change, and the answer was a field that already existed used on a
+thing it had not been used on. Both fixes together are a lookup and two lines of
+YAML per device. Reading the whole cost before checking whether an existing
+field reaches is how a note like this talks itself into a migration.
+
+---
+
+*Original note, 2026-08-25, unchanged below.* The rendering half of the same
+problem (draw order of bay openings against placements) is recorded separately.
 
 ## The decision, up front
 

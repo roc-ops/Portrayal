@@ -230,6 +230,7 @@ RULES = {
     "L91": ("device",     "airflow is stated once - on the chassis, and on a configuration only where it differs", "move it to `chassis.airflow`, or drop the configuration's copy"),
     "L92": ("component",  "a part's size says where it came from", "add a `size:` provenance note; the key for a size is `size`, not a sentence about it"),
     "L93": ("device",     "a provenance entry says how the figure is known, not only where it was read", "add `confidence:` beside the note, from the eight words in the confidence enum"),
+    "L94": ("device",     "a `component-attrs` key names a component the device seats, or a placement or bay it declares", "fix the key; one that matches neither sets nothing and is silently ignored"),
 }
 
 
@@ -4434,6 +4435,51 @@ def lint_device_provenance_confidence(path, data):
                       "a figure whose standing nobody has written down")
 
 
+def lint_device_component_attrs_resolve(path, data):
+    """L94: a `component-attrs` key names something the device actually has.
+
+    The key was a component name and is now a component name OR a placement or
+    bay id (#193). That is what lets a configuration say something true of ONE
+    instance - the ASR 9001-S's two licence-disabled SFP+ ports, where keying by
+    the component marks all six `std/sfp-ganged` on the chassis.
+
+    THE COST OF WIDENING A KEY IS THAT MORE TYPOS LOOK LIKE INTENT. Before, a key
+    that matched no component did nothing and nothing said so; now there are two
+    ways to be right and still the same silence when you are wrong. A
+    configuration that sets `sfp-plus-4: {...}` on a chassis with four ports
+    numbered 0 to 3 renders exactly as if the line were not there, which is the
+    failure #254 is about - not a wrong answer, an absent one.
+    """
+    names, ids = set(), set()
+    for view in (data.get("views") or {}).values():
+        parts_ = view_parts(view or {})
+        for q in parts_["placements"]:
+            if q.get("id"):
+                ids.add(q["id"])
+            if q.get("ref"):
+                names.add(q["ref"].split(":")[0].split("/")[-1].split("@")[0])
+        for b in parts_["bays"]:
+            if b.get("id"):
+                ids.add(b["id"])
+            for a in (b.get("accepts") or []) + ([b["default"]] if b.get("default") else []):
+                names.add(str(a).split(":")[0].split("/")[-1].split("@")[0])
+    for cname, cfg in (data.get("configurations") or {}).items():
+        for key in (cfg or {}).get("component-attrs") or {}:
+            if key in names or key in ids:
+                continue
+            err(path, "L94", f"configuration {cname}: `component-attrs` key {key!r} is "
+                             "neither a component this device seats nor a placement or "
+                             "bay id it declares, so it sets nothing and says nothing")
+        # `bay-attrs` is keyed by bay path and was documented with no user at all
+        # until #193 gave it one, so it has never been checked. Its first key is
+        # its first chance to be wrong.
+        for key in (cfg or {}).get("bay-attrs") or {}:
+            if key.split("/")[0] in ids:
+                continue
+            err(path, "L94", f"configuration {cname}: `bay-attrs` key {key!r} names no bay "
+                             "this device declares, so it sets nothing and says nothing")
+
+
 def lint_device_config_scope(path, data):
     """L41: a bay scoped to configurations that do not exist is a bay in none.
 
@@ -6877,6 +6923,7 @@ def main():
                 lint_device_key_order(f, d)
                 lint_device_airflow_home(f, d)
                 lint_device_provenance_confidence(f, d)
+                lint_device_component_attrs_resolve(f, d)
                 try:
                     dev_maturity[str(f.parent.relative_to(root / "devices"))] = \
                         d.get("maturity", "draft")
