@@ -71,6 +71,47 @@ The short version of what you will write:
   `registry`, `borrowed`, `estimated`, `known-wrong`. An `estimated` value is
   fine; an unlabelled one is not.
 
+### Reading what lint says
+
+A clean tree reports around 1,400 warnings. **That is the backlog, not your
+change.** `library/lint-baseline.json` records it, counted per file per rule, and
+every run ends with one of two lines:
+
+```
+LINT: no change against the baseline - every warning here was already in library/lint-baseline.json
+LINT: 3 warnings NEW since the baseline (`--new-only` prints just the new ones; ...)
+      +2   [L61] library/devices/acme/box/device.yaml
+```
+
+So the question "did I break something" is answered by the last line rather than
+by running lint twice and diffing. `--new-only` prints just those warnings.
+
+When you fix some, or add a device that legitimately brings its own, re-record:
+
+```sh
+python3 spec/tools/portrayal/lint.py --schemas spec/schemas --library library --update-baseline
+```
+
+and commit the result with your change. A baseline that has drifted from the tree
+is worse than none - it reports phantom fixes and hides real additions - so a
+test fails when the two disagree.
+
+**A baseline is not a waiver.** It says "already true", not "decided". Where a
+device genuinely will not satisfy a rule and somebody has worked out why, the
+device says so and the reason is required:
+
+```yaml
+lint:
+  waive:
+    L44: >-
+      the field is 100% buried in 2D and that is correct ... it is what punches
+      the rear panel in 3D, which is what you see when a PEM is pulled.
+```
+
+Waived warnings are still counted and are printed with their reason under their
+own heading - separated, never hidden. Reach for this only when the answer is
+argued; the backlog belongs in the baseline where it stays visible.
+
 ### Which file you author
 
 **`device.yaml`, unless the device already has a `layout.yaml` beside it.**

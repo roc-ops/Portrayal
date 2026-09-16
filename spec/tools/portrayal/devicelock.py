@@ -302,6 +302,12 @@ def buckets(doc, versions=None):
             # `networking` to `optical` with no version asked for, which is the
             # gap the `portfolio` note above records having found.
             **({"profile": doc.get("profile")} if doc.get("profile") else {}),
+            # A WAIVER IS A CLAIM, and an unfingerprinted claim can be retyped
+            # with no version asked for - the gap `portfolio` and then `profile`
+            # each had. Adding, removing or rewording `lint.waive` changes what
+            # the gate says about this device (#180). Conditional, like the two
+            # above: a device that waives nothing is not rehashed for the key.
+            **({"lint": doc.get("lint")} if doc.get("lint") else {}),
             "attrs": doc.get("attrs"),
             "provenance": doc.get("provenance"),
             "groups": doc.get("groups"),

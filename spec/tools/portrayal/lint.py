@@ -4328,7 +4328,10 @@ def lint_unplaced_majors(root):
 TOP_LEVEL_ORDER = (
     "format", "kind", "name", "version", "maturity",
     "manufacturer", "model", "portfolio", "description", "profile",
-    "provenance", "attrs", "chassis", "gaps", "groups", "views",
+    # `lint:` sits with `provenance:` rather than at the end, because it is the
+    # same kind of statement: this is what we know and how we know it, and this
+    # is the rule we have argued with and why.
+    "lint", "provenance", "attrs", "chassis", "gaps", "groups", "views",
     "configurations", "datasheet", "references",
 )
 
@@ -6822,6 +6825,12 @@ def main():
     # on any warning, for a caller who wants "no warnings" to be checkable.
     ap.add_argument("--strict", action="store_true",
                     help="exit 2 if any warning was raised (default: warnings pass)")
+    # THE BACKLOG IS NOT THE NEWS. See the baseline note above `load_baseline`.
+    ap.add_argument("--new-only", action="store_true",
+                    help="print only warnings this tree has and library/lint-baseline.json "
+                         "does not - what THIS change added, rather than the whole backlog")
+    ap.add_argument("--update-baseline", action="store_true",
+                    help="rewrite library/lint-baseline.json from this run, and exit")
     args = ap.parse_args()
     if args.list_rules:
         sys.stdout.write(rules_text(markdown=args.markdown) + ("" if args.markdown else "\n"))
@@ -6920,6 +6929,9 @@ def main():
                 lint_device_fan_redundancy(f, d)
                 lint_device_declared_silence(f, d)
                 lint_device_control_plane_redundancy(f, d)
+                waive = ((d.get("lint") or {}).get("waive")) or {}
+                if waive:
+                    WAIVED[str(Path(f).resolve())] = dict(waive)
                 lint_device_key_order(f, d)
                 lint_device_airflow_home(f, d)
                 lint_device_provenance_confidence(f, d)
@@ -6973,9 +6985,45 @@ def main():
     else:
         print_matrix(matrix, schemas)
 
-    if WARNINGS:
-        by_code = {}
+    base = None if args.device else load_baseline(Path(args.library[0]))
+    # WAIVED WARNINGS ARE SEPARATED, NOT HIDDEN. A rule a device has argued with
+    # still fires and is still counted; what changes is that it stops competing
+    # for attention with the ones nobody has looked at. The reason is printed
+    # beside it, so the argument is in the output rather than only in the file.
+    waived = [w for w in WARNINGS if _is_waived(w)]
+    if waived:
+        WARNINGS[:] = [w for w in WARNINGS if not _is_waived(w)]
+    # AFTER THE WAIVER SPLIT, so a warning a device has argued with is not
+    # recorded as backlog and then reported as newly fixed on every later run.
+    if args.update_baseline:
+        counts = _warning_counts(WARNINGS, args.library[0])
+        out = Path(args.library[0]) / BASELINE_NAME
+        out.write_text(json.dumps(counts, indent=1, sort_keys=True) + "\n")
+        total = sum(n for r in counts.values() for n in r.values())
+        print(f"LINT: baseline written - {_count(total, 'warning')} across "
+              f"{_count(len(counts), 'file')} -> {out}")
+        return 0
+    shown = WARNINGS
+    if args.new_only:
+        if base is None:
+            print("LINT: --new-only needs library/lint-baseline.json; run --update-baseline")
+            return 2
+        new_counts, _gone = baseline_delta(WARNINGS, base, args.library[0])
+        keep, seen = [], {}
         for w in WARNINGS:
+            if "[" not in w:
+                continue
+            f = _rel(w.split(":")[0].strip(), args.library[0])
+            code = w.split("[")[1].split("]")[0]
+            want = (new_counts.get(f) or {}).get(code, 0)
+            k = seen.get((f, code), 0)
+            if k < want:
+                keep.append(w)
+                seen[(f, code)] = k + 1
+        shown = keep
+    if shown:
+        by_code = {}
+        for w in shown:
             by_code.setdefault(w.split("[")[1].split("]")[0], []).append(w)
         for code, ws in sorted(by_code.items()):
             print(f"LINT: {len(ws)} warning(s) [{code}]")
@@ -6998,11 +7046,146 @@ def main():
         for e in ERRORS:
             print(f"  {e}")
         sys.exit(1)
+    # THE LINE A REVIEWER READS. Without it the tail says 1393 and a reader has
+    # no way to know whether this branch put one of them there.
+    if base is not None and WARNINGS:
+        new_counts, gone = baseline_delta(WARNINGS, base, args.library[0])
+        n_new = sum(v for r in new_counts.values() for v in r.values())
+        n_gone = sum(v for r in gone.values() for v in r.values())
+        if n_new or n_gone:
+            bits = []
+            if n_new:
+                bits.append(f"{_count(n_new, 'warning')} NEW since the baseline")
+            if n_gone:
+                bits.append(f"{n_gone} fixed")
+            print(f"LINT: {', '.join(bits)} "
+                  "(`--new-only` prints just the new ones; `--update-baseline` re-records)")
+            for f_, rules in sorted(new_counts.items()):
+                for code, k in sorted(rules.items()):
+                    print(f"      +{k:<3d} [{code}] {f_}")
+        else:
+            print("LINT: no change against the baseline - every warning here was "
+                  "already in library/lint-baseline.json")
+    if waived:
+        print(f"LINT: {_count(len(waived), 'warning')} waived by the device that raised "
+              "them, with a reason:")
+        seen = set()
+        for w in waived:
+            f_ = w.split(":")[0].strip()
+            code = w.split("[")[1].split("]")[0]
+            if (f_, code) in seen:
+                continue
+            seen.add((f_, code))
+            n_ = sum(1 for x in waived
+                     if x.split(":")[0].strip() == f_ and f"[{code}]" in x)
+            print(f"      {n_:4d}  [{code}] {f_}")
+            print(f"            {(_is_waived(w) or '')[:150]}")
     if args.strict and WARNINGS:
         print(f"LINT: failed --strict ({n} files, {_count(len(WARNINGS), 'warning')} "
               f"in {_count(len(_rules(WARNINGS)), 'rule')})")
         sys.exit(2)
     print(summary_line(n, WARNINGS))
+
+
+# --------------------------------------------------------------- baseline ---
+#
+# WHAT A NEWCOMER SEES ON THEIR FIRST RUN, which is the half of #180 that is
+# about people rather than about rules. A clean tree reports 1393 warnings in 24
+# rules; L61 alone is 645. Somebody who clones the repository, changes one
+# device and runs the gate cannot tell the known backlog from the thing they
+# just broke, and the only way to find out has been to run lint before and
+# after and diff the two by hand.
+#
+# COUNTS PER FILE PER RULE, not warning text. A message carries coordinates and
+# measurements - "is 0.92mm off centre ... it sits at 51.42" - so keying on the
+# sentence would churn the baseline on every re-measurement and hide the new
+# warning in the noise of the moved ones. A count is stable under rewording and
+# still says the thing that matters: this file has more of this rule than it
+# used to.
+#
+# IT IS NOT A WAIVER AND MUST NOT READ AS ONE. Nothing here is forgiven; the
+# full count still prints and the summary line still carries it. The baseline
+# only separates "already true" from "true because of this change", which is
+# the question a reviewer is actually asking.
+
+BASELINE_NAME = "lint-baseline.json"
+
+
+# device path -> {rule: reason}, filled as each manifest is read
+WAIVED = {}
+
+
+def _is_waived(w):
+    """A warning this device has argued with, by rule code.
+
+    Keyed on the resolved path, for the reason `_rel` gives: the message carries
+    whatever spelling the caller passed, and a waiver that only works when lint
+    is run from the repository root is a waiver that silently stops working.
+    """
+    if "[" not in w:
+        return None
+    try:
+        f = str(Path(w.split(":")[0].strip()).resolve())
+    except OSError:
+        f = w.split(":")[0].strip()
+    code = w.split("[")[1].split("]")[0]
+    return (WAIVED.get(f) or {}).get(code)
+
+
+def _rel(f, root):
+    """A warning's path as the baseline records it: relative to the library.
+
+    RUNNING LINT FROM ELSEWHERE MUST NOT REPORT THE WHOLE BACKLOG AS NEW. The
+    message carries whatever path the caller passed - `library/devices/...` from
+    the repository root, an absolute one from a test or another checkout - so a
+    baseline keyed on it is keyed on the invocation. Relative to the library root
+    both spellings are `devices/...`.
+    """
+    try:
+        return str(Path(f).resolve().relative_to(Path(root).resolve()))
+    except (ValueError, OSError):
+        return str(f)
+
+
+def _warning_counts(warnings, root):
+    """{file relative to the library: {rule: n}} from the warning list."""
+    out = {}
+    for w in warnings:
+        if "[" not in w:
+            continue
+        f = _rel(w.split(":")[0].strip(), root)
+        code = w.split("[")[1].split("]")[0]
+        out.setdefault(f, {}).setdefault(code, 0)
+        out[f][code] += 1
+    return out
+
+
+def load_baseline(root):
+    p = Path(root) / BASELINE_NAME
+    if not p.exists():
+        return None
+    try:
+        return json.loads(p.read_text())
+    except (OSError, ValueError):
+        return None
+
+
+def baseline_delta(warnings, base, root="library"):
+    """(new, gone) as {file: {rule: n}} - what this tree has that the baseline
+    did not, and what it no longer has."""
+    now = _warning_counts(warnings, root)
+    new, gone = {}, {}
+    for f, rules in now.items():
+        for code, n in rules.items():
+            was = (base.get(f) or {}).get(code, 0)
+            if n > was:
+                new.setdefault(f, {})[code] = n - was
+    for f, rules in base.items():
+        for code, n in rules.items():
+            has = (now.get(f) or {}).get(code, 0)
+            if has < n:
+                gone.setdefault(f, {})[code] = n - has
+    return new, gone
 
 
 def _rules(warnings):
