@@ -264,3 +264,30 @@ def test_an_xfp_placement_types():
     """20 placements on the MX80. XFP is nobody's substring, so the family test
     simply never looked for it."""
     assert dx.iface_type(_pl("std/xfp@1"), {"speed": "10g"}, "traffic") == "10gbase-x-xfp"
+
+
+def test_a_bare_rj45_the_device_gives_a_speed_is_an_ethernet_port():
+    """The S9110-32X's out-of-band jack, and the reason it is on the bare part.
+
+    It is modelled that way BY DESIGN: its two lamps are placed separately above
+    the jack, where an 8x reading of the HIG photo puts them, carrying the HIG's
+    own Management Port LED table - green 1G on the left, amber 10M/100M on the
+    right. The `-eth` part brings its own pair, which would land INSIDE the jack
+    at a different height and with a weaker state vocabulary. So the device is
+    right and the exporter had to learn the difference.
+
+    A declared Ethernet speed is what separates it from the 64 timing and serial
+    jacks on the same part: a ToD or BITS input has no Ethernet speed to give,
+    and not one of them states a speed.
+    """
+    assert dx.iface_type(_pl("std/rj45-ganged@2"), {"speed": "100m-1g"},
+                         "management") == "1000base-t"
+    assert dx.iface_type(_pl("std/rj45@2"), {}, "management") is None
+
+
+def test_the_s9110_exports_its_out_of_band_jack():
+    d = _export("S9110-32X")
+    if d is None:
+        pytest.skip("S9110-32X is not in this library")
+    oob = [i for i in (d.get("interfaces") or []) if i["name"] == "oob"]
+    assert oob == [{"name": "oob", "type": "1000base-t", "mgmt_only": True}], oob

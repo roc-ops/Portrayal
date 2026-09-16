@@ -46,7 +46,7 @@ jobs:
       - name: install
         run: |
           python -m pip install --upgrade pip
-          pip install pytest pyyaml jsonschema pillow numpy
+          pip install pytest pytest-xdist pyyaml jsonschema pillow numpy
 
       # pdftoppm gates the OCR tests. Without it they SKIP, which is the one
       # thing this workflow exists to stop happening quietly.
@@ -76,10 +76,22 @@ jobs:
       - name: devicelock
         run: python3 spec/tools/portrayal/devicelock.py --library library
 
+      # ONE WORKER PER CORE. The suite spends most of its wall clock waiting on
+      # child processes - node for the kit tests, lint.py and render.py for the
+      # tool tests - so the parent sits idle while a core is free. Measured on
+      # this suite after the loader fix: 358s serial, 235s at -n 2, 177s at -n 4.
+      #
+      # `auto` and not a number, because the runner decides. A GitHub-hosted
+      # ubuntu-latest has two cores; a larger runner would use them without this
+      # line being touched.
+      #
+      # NOTHING HERE SHARES MUTABLE STATE: the only test that writes outside a
+      # tmp fixture makes its own tempfile.mkdtemp(), and the library the rest
+      # read is read-only by libdata's own contract.
       - name: tests
         run: |
           set -o pipefail
-          python3 -m pytest spec/tests -q -rs | tee /tmp/pytest.txt
+          python3 -m pytest spec/tests -q -rs -n auto | tee /tmp/pytest.txt
 
       # The guard for the failure above. A skip is legitimate - a lamp part not
       # in this library, an optional tool - but a JUMP in skips means the suite
