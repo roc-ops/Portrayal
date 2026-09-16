@@ -88,6 +88,7 @@ source documents stay out of the repository. See `PRIOR-ART.md`.
 - `spec/DEPTH-AND-3D.md` — how depth and relief turn the 2D drawing into 3D
 - `docs/layers-and-conformance.md` — the canonical manifest, the layer model and the maturity gate
 - `docs/modelling-a-device.md` — how to model a device from reference material, stage by stage with a check at each; `docs/modelling-pitfalls.md` for when a figure or a rule misbehaves
+- `docs/failure-by-omission.md` — the audit for tools that report success by reporting nothing, and the census-and-register method it produced
 - `library/components/CATALOGUE.md` — every component on one page: size, what it conforms to,
   how many devices use it. Generated, and a test fails when it and the library disagree
 - `PRIOR-ART.md` — the research this rests on, and the gap it fills

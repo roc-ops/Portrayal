@@ -339,7 +339,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/power-button-14g@1` | component | button | 8.34 × 8.31 |  | 1 | 0 | The backlit power button on a 14th-generation PowerEdge control panel - a square recess with the IEC power sy… |
 | `dell/psu-1100w-ac-14g@1` | module | psu | 86.3 × 39.1 × 195.5 |  | 1 | 2 | 1100 W AC hot-plug power supply for a 14th-generation PowerEdge - C14 inlet, a fan, and a translucent handle … |
 | `dell/psu-1100w-dc-14g@1` | module | psu | 86.3 × 39.1 × 195.5 |  | 1 | 0 | 1100 W -48 V DC hot-plug power supply for a 14th-generation PowerEdge - a terminal-block input, a fan under a… |
-| `dell/psu-2400w-ac-14g@1` | module | psu | 86.3 × 39.1 × 195.5 |  | 1 | 0 | 2400 W AC hot-plug power supply for a 14th-generation PowerEdge - C14 inlet, a fan, and a translucent handle … |
+| `dell/psu-2400w-ac-14g@1` | module | psu | 86.3 × 39.1 × 195.5 |  | 1 | 0 | 2400 W AC hot-plug power supply for a 14th-generation PowerEdge - C20 inlet, a fan, and a translucent handle … |
 | `dell/rack-latch-14g@1` | component | latch | 12.16 × 37.99 |  | 1 | 0 | The rack release rocker built into a 14th-generation PowerEdge ear - pressed to free the chassis from the rac… |
 | `dell/rear-bay-blank-14g@2` | module | mechanical | 135.19 × 39.5 × 12 |  | 1 | 0 | The perforated blank over one empty rear storage bay on a 14th-generation PowerEdge - fitted where a riser co… |
 | `dell/rear-bay-frame-14g@4` | component | mechanical | 294.12 × 42.98 |  | 1 | 2 | The chassis structure across rear bays 2 and 3 on a 14G PowerEdge - rails, screw tabs, vent panels and the T-… |
