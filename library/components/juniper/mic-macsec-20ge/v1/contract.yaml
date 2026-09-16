@@ -1,16 +1,22 @@
 format: 1
 kind: module
 name: mic-macsec-20ge
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
 description: >-
   Juniper MACsec Gigabit Ethernet MIC - twenty SFP cages in two PIC groups of ten. MIC form (168 x 27 window; the earlier 31 mm reading was the bay opening with bezel - a MIC must seat inside the 29.5 mm MPC face, so the window is 27).
 attrs:
+  sfp: 20
   model: MIC-MACSEC-20GE
   power-draw-max-w: 60
 provenance:
+  sfp-rate: >-
+    the cage RATE, transcribed from this contract's own description: 'MACsec Gigabit
+    Ethernet MIC - twenty SFP cages in two PIC groups of ten'. Without it `cage_type` finds
+    no media attr for the sfp family and falls through to PART_IFACE's default, which is
+    SFP+ at 10G - a rate this card does not run. Nothing new was measured.
   size: 'registry + layout - the face is the slot geometry of its chassis
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate

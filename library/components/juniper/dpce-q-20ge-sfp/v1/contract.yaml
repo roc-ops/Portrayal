@@ -1,16 +1,22 @@
 format: 1
 kind: module
 name: dpce-q-20ge-sfp
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
 description: >-
   Juniper DPCE-R-Q-20GE-SFP (EOL) - twenty SFP in two PIC groups of ten. Authored as the MX240/MX480 horizontal form.
 attrs:
+  sfp: 20
   model: DPCE-R-Q-20GE-SFP
   power-draw-max-w: 365
 provenance:
+  sfp-rate: >-
+    the cage RATE, transcribed from this contract's own description: 'DPCE-R-Q-20GE-SFP
+    (EOL) - twenty SFP in two PIC groups of ten'. Without it `cage_type` finds no media attr
+    for the sfp family and falls through to PART_IFACE's default, which is SFP+ at 10G - a
+    rate this card does not run. Nothing new was measured.
   size: 'registry + layout - the face is the slot geometry of its chassis
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate

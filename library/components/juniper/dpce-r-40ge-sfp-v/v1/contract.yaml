@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dpce-r-40ge-sfp-v
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -11,9 +11,15 @@ description: >-
   card cage: four banks of ten SFP cages in two columns of five, every
   cage a single std/sfp rotated 90.
 attrs:
+  sfp: 40
   model: DPCE-R-40GE-SFP
   power-draw-max-w: 333
 provenance:
+  sfp-rate: >-
+    the cage RATE, transcribed from this contract's own description: 'the same 40x1GbE DPC
+    the MX240/MX480 seat horizontally'. Without it `cage_type` finds no media attr for the
+    sfp family and falls through to PART_IFACE's default, which is SFP+ at 10G - a rate this
+    card does not run. Nothing new was measured.
   size: 'photo - the studio front photograph at ~2.07 px/mm: the card cage is ~405 mm tall and fourteen slots share the 441 mm width on a ~30.1 mm pitch; positions approximate to ~2 mm. No vendor card dimension in the extraction'
   power: 'datasheet-table - the MX240 extraction gives the 40x1GE DPC
     333 W maximum; the module is the same FRU'

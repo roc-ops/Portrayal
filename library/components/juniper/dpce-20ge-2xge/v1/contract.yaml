@@ -1,17 +1,23 @@
 format: 1
 kind: module
 name: dpce-20ge-2xge
-version: 1.0.1
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
 description: >-
   Juniper DPCE 20GE+2XGE (EOL) - twenty SFP in two PIC groups of ten plus two XFP uplink PICs; the X and Q variants share the faceplate. Authored as the MX240/MX480 horizontal form.
 attrs:
+  sfp: 20
   model: DPCE-R-20GE-2XGE
   model-variants: DPCE-X-20GE-2XGE, DPCE-R-Q-20GE-2XGE
   power-draw-max-w: 333
 provenance:
+  sfp-rate: >-
+    the cage RATE, transcribed from this contract's own description: 'DPCE 20GE+2XGE (EOL) -
+    twenty SFP in two PIC groups of ten plus two XFP uplink PICs'. Without it `cage_type`
+    finds no media attr for the sfp family and falls through to PART_IFACE's default, which
+    is SFP+ at 10G - a rate this card does not run. Nothing new was measured.
   size: 'registry + layout - the face is the slot geometry of its chassis
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate

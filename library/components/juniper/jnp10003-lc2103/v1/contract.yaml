@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: jnp10003-lc2103
-version: 1.1.0
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -11,10 +11,16 @@ description: >-
   the GM/PTP timing jack at the right, blue ejector levers both ends. The
   -V2 model shares the faceplate.
 attrs:
+  qsfp: 6
   model: JNP10003-LC2103
   model-variants: JNP10003-LC2103-V2
   power-draw-max-w: 715
 provenance:
+  qsfp-rate: >-
+    the cage RATE, transcribed from this contract's own description: 'six fixed QSFP+ ports
+    0-5'. Without it `cage_type` finds no media attr for the qsfp family and falls through
+    to PART_IFACE's default, which is QSFP28 at 100G - a rate this card does not run.
+    Nothing new was measured.
   size: 'datasheet-table - the guide FRU table gives the MPC 16.5 x 22.37 x
     1.65 in; 419.1 mm face width, 41.9 mm face height'
   power: 'datasheet-table - the guide power table: 660 W typical, 715 W max

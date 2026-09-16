@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-mpa-2x40ge
-version: 1.0.1
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -12,6 +12,7 @@ description: >-
   A9K-MOD carrier line cards.
 size: {w: 34.54, h: 161.8, d: 170.18}
 attrs:
+  qsfp: 2
   model: 'A9K-MPA-2X40GE'
   power-absent: not-published
   role: 'modular-port-adapter'
@@ -20,6 +21,11 @@ attrs:
   weight-kg: 0.79
   eol: 'none-announced'
 provenance:
+  qsfp-rate: >-
+    the cage RATE, transcribed from this contract's own description: '2-Port 40 Gigabit
+    Ethernet Modular Port Adapter with QSFP+'. Without it `cage_type` finds no media attr
+    for the qsfp family and falls through to PART_IFACE's default, which is QSFP28 at 100G -
+    a rate this card does not run. Nothing new was measured.
   relief: >-
     RELIEF IS DECLARED, AND WHAT MATTERS ABOUT IT IS THAT IT IS A HANDFUL OF NUMBERS AND NOT
     A HANDFUL PER PART. This face carries: 3 panel lamps at dome 0.3 (one number, carried by
