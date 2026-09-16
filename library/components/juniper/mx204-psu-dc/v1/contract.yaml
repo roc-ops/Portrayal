@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mx204-psu-dc
-version: 1.1.0
+version: 1.1.1
 class: psu
 behaviour: fills
 profile: networking
@@ -14,12 +14,16 @@ description: >-
   IN / OUT / ! status lamps at the lower right, release latch at the right
   edge.
 attrs:
+  inlet: dc-terminal
   model: MX204 DC PSU
   role: dc-power-supply
   power-output-w: 650
   input: dedicated -48 VDC feeds; PS0 from feed A, PS1 from feed B
   redundancy: 1+1; one PSU carries a fully configured router
 provenance:
+  inlet: >-
+    transcribed from this contract's own description: 'Four terminal studs in a row across
+    the top of the face, labelled V- V- V+ V+'. Nothing new was measured.
   size: 'datasheet-table - Table 19: DC power supply 2.23 x 1.67 x 14.53 in
     (56.6 x 42.4 x 369.1 mm), weight 1 kg. Note the DC module is stated 2.3 mm
     TALLER than the AC (40.1); both drop into the same bay, so the bay is sized

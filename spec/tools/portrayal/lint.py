@@ -231,6 +231,7 @@ RULES = {
     "L92": ("component",  "a part's size says where it came from", "add a `size:` provenance note; the key for a size is `size`, not a sentence about it"),
     "L93": ("device",     "a provenance entry says how the figure is known, not only where it was read", "add `confidence:` beside the note, from the eight words in the confidence enum"),
     "L94": ("device",     "a `component-attrs` key names a component the device seats, or a placement or bay it declares", "fix the key; one that matches neither sets nothing and is silently ignored"),
+    "L95": ("component",  "a power supply says where power enters it", "compose an inlet part, or add `attrs.inlet` from the enum - `none` if the chassis carries it"),
 }
 
 
@@ -1161,6 +1162,54 @@ def lint_component_dc_capacity(path, data, _lib_roots=None):
          "provenance. If the vendor really publishes nothing, say `power-absent: "
          "not-published` and name the documents - that is an answer. "
          "`not-applicable` is not, for a part with no bays")
+
+
+def lint_component_inlet(path, data, _lib_roots=None):
+    """L95: a power supply says where power enters it.
+
+    A supply that does not draw power from anything is not a thing, and the
+    library had 31 of them - half the PSU catalogue, exporting no power port,
+    with nothing anywhere to say so. A DCIM built from those exports shows half
+    a rack's supplies with no port to cable and raises nothing.
+
+    IT IS NOT 31 OVERSIGHTS, which is why this rule takes a declaration and not
+    a drawing. Most of them are DC supplies whose entry is a screw-terminal
+    block; the library has one DC terminal component against two IEC ones, so
+    the studs were drawn as elements in the skin and the connector named in
+    prose - "two-stud screw-terminal block under a hinged plastic cover" and
+    twenty more like it. The hardware is modelled. What is missing is a fact a
+    tool can read.
+
+    Demanding a composed part would also be wrong for the C40G's supply, whose
+    AC inlet is on the end of the module at the REAR of the chassis - a face
+    this model does not draw, on purpose. The port exists; the drawing cannot
+    show it. `attrs.inlet` can say so where a part cannot.
+
+    A CENSUS WARNING, of the L92/L93 kind: it fires on the day it lands and is
+    meant to shrink. The baseline records the backlog so a newcomer can tell it
+    from something they just broke.
+    """
+    if (data.get("class") or "") != "psu":
+        return
+    attrs = attrs_mod.flatten(data.get("attrs"))
+    if attrs.get("inlet"):
+        return
+    # A COMPOSED INLET IS THE STRONG FORM and needs no attr. Matched on the
+    # component's `class` rather than on a list of refs, so a new inlet part
+    # counts the day it is written - the mirror-the-table mistake is what #254
+    # is about, and this rule is downstream of it.
+    for part in (data.get("parts") or []):
+        if not isinstance(part, dict) or "ref" not in part:
+            continue
+        if contract_class(part["ref"], _lib_roots) == "inlet":
+            return
+    warn(path, "L95", f"{data.get('name')} is a power supply and says nothing about where "
+         "power enters it. Compose an inlet part where one is drawn, or state "
+         "`attrs.inlet` - c14, c20, dc-terminal, or `other` for a real connector "
+         "upstream has no type for. If the CHASSIS carries the inlet, that is "
+         "`none`, which is an answer. What is not an answer is silence: it reads "
+         "identically to a supply nobody has looked at, and exports no power port "
+         "either way")
 
 
 def lint_component_power(path, data, _lib_roots=None):
@@ -6890,6 +6939,7 @@ def main():
                 lint_component_aperture(f, d, args.library)
                 lint_component_power(f, d)
                 lint_component_dc_capacity(f, d)
+                lint_component_inlet(f, d, args.library)
                 lint_component_size_sourced(f, d)
                 lint_component_role(f, d)
                 lint_component_forwarded_mate(f, d, args.library)

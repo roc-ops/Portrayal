@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mx240-psu-dc
-version: 1.0.0
+version: 1.0.1
 class: psu
 behaviour: fills
 profile: networking
@@ -12,12 +12,16 @@ description: >-
   block, a 40 A rotary input breaker, PWR OK / BKR ON / INPUT OK lamps, an
   exhaust vent field and a pull handle. Weighs 1.7 kg.
 attrs:
+  inlet: dc-terminal
   model: MX240 DC PSU (normal capacity)
   power-output-w: 1600
   role: dc-power-supply
   input: -48 VDC and return; dedicated 40 A customer breaker per PEM
   redundancy: 2 required, 4 for redundancy
 provenance:
+  inlet: >-
+    transcribed from this contract's own description: 'One -48 VDC input with RTN/-48V
+    terminal studs behind the block'. Nothing new was measured.
   power: >-
     MX240 hardware guide, Table 23 'Power Supply Electrical Specifications', Normal-Capacity
     block: 'Maximum output power | 1600W' at -48 VDC nominal. Table 24 repeats it as output

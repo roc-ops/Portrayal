@@ -424,8 +424,12 @@
   },
   "attrs": {
    "type": "object",
-   "description": "default data-* attributes for instances. Free-form, except that the power figures below are typed: they are the terms of a sum, and a term that is a string is not a number no matter how it reads",
+   "description": "default data-* attributes for instances. Free-form, except that the power figures below are typed: they are the terms of a sum, and a term that is a string is not a number no matter how it reads, and `inlet` is a closed vocabulary",
    "properties": {
+    "inlet": {
+     "enum": ["c14", "c20", "dc-terminal", "other", "none"],
+     "description": "WHERE POWER ENTERS THIS MODULE, when no inlet part is composed. The strong form is a composed part - std/c14-inlet and its siblings carry a panel cutout, a standard and a size - and a module that draws one needs nothing here. Half the PSU catalogue draws none: a DC supply's entry is a screw-terminal block, the library has one DC terminal component against two IEC ones, so the studs were drawn as elements in the skin and the connector was named only in prose. The element's own name is a spelling convention (`terminal-block`, `terminals`, `dc-input`) and reading it would be the `port-` prefix defect again, so the module says it once, here, from a closed list. `none` is a CLAIM and not a blank: it says the CHASSIS carries the inlet, which is true of the MX960, whose four C20 receptacles sit on a strip above the supplies. `other` is for a real inlet upstream has no type for - an HVDC connector - and NOT for one nobody has identified: a supply whose guide says 'a C-type appliance inlet' is some IEC 60320 receptacle, so it stays unanswered and L95 counts it rather than claiming `other`, which would be a wrong answer dressed as a modest one. L95 asks every `class: psu` component for one of these or a part."
+    },
     "power-draw-typical-w": {
      "$ref": "#/$defs/watts",
      "description": "load this module IMPOSES in normal operation. Draw and supply are opposite signs of one unit and must never share a key: summing a chassis's `watts` over two PSUs and eight line cards yields a plausible number that is neither"
