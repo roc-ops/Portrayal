@@ -291,3 +291,69 @@ def test_the_s9110_exports_its_out_of_band_jack():
         pytest.skip("S9110-32X is not in this library")
     oob = [i for i in (d.get("interfaces") or []) if i["name"] == "oob"]
     assert oob == [{"name": "oob", "type": "1000base-t", "mgmt_only": True}], oob
+
+
+# --- where the cord goes in (#286) -------------------------------------------
+#
+# `power-ports` used to be written in exactly one place - build_module - so 0 of
+# 89 device types carried one against 27 module types, and a DCIM built from
+# these exports showed the MX150 drawing power from nothing.
+#
+# The reason it took a census to notice is the reason it is not simply a bug:
+# on 39 devices the absence is CORRECT. The cord goes into the supply, the
+# supply is a module type with its own inlet, and the DCIM instantiates that
+# port when the module is seated. Only a chassis-mounted inlet is missing, and
+# only two devices have one.
+
+def test_a_fixed_device_exports_the_inlet_on_its_faceplate():
+    """The MX150 has no PSU bay at all. Its C14 is the only way power enters the
+    box, and it sat in the `mgmt` group beside the console and the USB service
+    port - which is why a rule reading the group or the id would have missed it,
+    and why the ref is what selects."""
+    d = _export("MX150")
+    if d is None:
+        pytest.skip("MX150 is not in this library")
+    assert d.get("power-ports") == [{"name": "inlet", "type": "iec-60320-c14"}]
+
+
+def test_a_chassis_inlet_is_not_counted_twice_against_its_supply():
+    """THE QUESTION #286 ASKED BEFORE IT COULD BE ANSWERED.
+
+    The MX960 places four C20 receptacles AND has four PEM bays, which is the
+    shape a double count would take. It is not one, and the library says so
+    from both ends: the rear studio photograph the model is measured from shows
+    an inlet strip above the supplies, the device's `inlets` group records that
+    "the inlet is the cord's end and stays with the chassis while a PEM comes
+    out", and `juniper/mx960-psu-ac` composes no inlet part because the supply
+    has none.
+
+    So the assertion is the pair, not either half: four on the chassis, none on
+    the supply. Giving that supply an inlet later would break this test, which
+    is the point - it would be describing different hardware.
+    """
+    d = _export("MX960")
+    if d is None:
+        pytest.skip("MX960 is not in this library")
+    chassis = d.get("power-ports") or []
+    assert len(chassis) == 4, f"MX960 exports {len(chassis)} chassis inlet(s)"
+    assert {p["type"] for p in chassis} == {"iec-60320-c20"}
+
+    psu = None
+    for p in sorted((LIB / "exports/netbox/module-types").glob("*/*.yaml")):
+        doc = yaml.safe_load(p.read_text()) or {}
+        if doc.get("model") == "MX960 AC PSU":
+            psu = doc
+    assert psu is not None, "the MX960 AC PSU module type is missing"
+    assert not psu.get("power-ports"), (
+        "the MX960's supply has no inlet of its own - the chassis carries them. "
+        "If this supply has grown one, the four chassis ports are now a double count")
+
+
+def test_a_device_whose_supply_carries_the_inlet_exports_none_itself():
+    """The other 39. The R740xd's C14 belongs to `dell/psu-1100w-ac-14g`, which
+    exports it as a module type; the chassis places no inlet and must stay
+    quiet, or every seated supply would arrive with two."""
+    d = _export("PowerEdge R740xd")
+    if d is None:
+        pytest.skip("R740xd is not in this library")
+    assert not d.get("power-ports")

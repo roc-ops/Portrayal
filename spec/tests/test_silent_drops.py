@@ -128,6 +128,14 @@ def _census():
                 for pl in dx.scoped(view_parts(view)["placements"], cfg):
                     r = pl["ref"].split("@")[0]
                     seen[r] += 1
+                    # BOTH OF build's EXITS. It grew a power path in #286, and
+                    # a mirror that knows about only one of a tool's exits is
+                    # the mistake this whole file is about: with `iface_type`
+                    # alone, `common/dc-barrel` read as silent on the very
+                    # commit that made it export.
+                    if r in dx.PART_POWER:
+                        heard[r] += 1
+                        continue
                     g = groups.get(pl.get("group")) or {}
                     a = {**(g.get("attrs") or {}), **(pl.get("attrs") or {})}
                     role = g.get("role")

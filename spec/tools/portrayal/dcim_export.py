@@ -234,6 +234,12 @@ PART_POWER = {
     # type in netbox and nautobot alike; the part is the -48 V receptacle taking
     # Dell 6RYJ9, which is why it is a dell/ part and not a std/ one.
     "dell/dc-terminal-6ryj9": "dc-terminal",
+    # A BARREL JACK IS NOT A TERMINAL BLOCK, and upstream has no row for one, so
+    # this takes `other` - the treatment PART_RF gives an SMB timing input, which
+    # says "a thing this schema has no name for" instead of naming a neighbour.
+    # Calling it `dc-terminal` would put a 12 V coaxial jack in a DCIM as a -48 V
+    # lug pair, which is a wrong answer where this is merely an unnamed one.
+    "common/dc-barrel": "other",
 }
 
 # What the PLACEMENT says runs through the connector, when it says.
@@ -349,11 +355,11 @@ NOT_A_DCIM_PORT = {
     "common/sma-jack": "timing jack on a chassis faceplate; the device pass has no PART_RF path (#285)",
     "std/sma": "timing jack on a chassis faceplate; the device pass has no PART_RF path (#285)",
 
-    # --- power entry on a chassis, which device types cannot carry yet -------
-    # A device type in this exporter has no power-ports list at all: 0 of the
-    # 89 device types carry one, while 27 module types do. roc-ops/Portrayal#286.
-    "common/dc-barrel": "DC barrel jack on a chassis; device types carry no power ports yet (#286)",
-    "casa/c40g-ac-inlet-panel": "an inlet PANEL - a module, not a connector; and see #286",
+    # --- power entry on a chassis ---------------------------------------------
+    # `common/dc-barrel` was here until #286 gave `build` a power path; it now
+    # exports, and the register's stale-entry test is what says so.
+    "casa/c40g-ac-inlet-panel": "an inlet PANEL - a bolted assembly carrying the receptacles, "
+                                "not a connector; the C40G's own inlets are not modelled yet",
 
     # --- a modelling gap, not an exporter one --------------------------------
     "dell/rj45-port-14g": "the NDC's four jacks carry no speed, and Dell's own master is named "
@@ -736,12 +742,30 @@ def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
     # own, and names its ports by the id on the faceplate.
     names = overlay_names(overlay) if overlay is not None else None
 
-    console, mgmt_sfp, bays = [], [], []
+    console, mgmt_sfp, bays, powers = [], [], [], {}
     for view in views_for(dev, cfg_name):
         parts = view_parts(view)
         for p in scoped(parts["placements"], cfg_name):
             a = attrs_of(p)
             role, media = a.get("role"), a.get("media")
+            # WHERE THE CORD GOES IN, when it goes into the chassis rather than
+            # into a supply. `power-ports` used to be written in exactly one
+            # place - build_module - so a device type carried none at all, and
+            # a DCIM built from these exports showed the MX150 drawing power
+            # from nothing. See the block above `powers` below for why that is
+            # right for 39 devices and wrong for these.
+            #
+            # KEYED ON THE REF, exactly as build_module keys it, and not on the
+            # group or the id. The two devices that place an inlet spell the
+            # surrounding model differently - the MX960 puts its four C20s in
+            # an `inlets` group whose term is `Inlet`, the MX150 puts its C14
+            # in `mgmt` beside the console and the USB - and a rule built on
+            # either spelling would have caught one of them. What the part IS
+            # does not depend on which region of the faceplate it sits in.
+            if p["ref"].split("@")[0] in PART_POWER:
+                powers.setdefault(p["id"], {
+                    "name": p["id"] or "Inlet",
+                    "type": PART_POWER[p["ref"].split("@")[0]]})
             if role == "console" and media == "rj45-serial":
                 console.append({"name": "Console", "type": "rj-45"})
             elif role == "console" and p["ref"].startswith("std/usb-c"):
@@ -808,6 +832,26 @@ def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
         out["console-ports"] = console
     if ifaces:
         out["interfaces"] = ifaces
+    # A CHASSIS INLET AND A SUPPLY'S INLET ARE NOT THE SAME PORT, and the
+    # library already distinguishes them - which is what makes emitting these
+    # safe rather than a double count.
+    #
+    # On 39 devices the cord goes into the SUPPLY: the PSU is a module type
+    # carrying its own `std/c14-inlet`, and a DCIM instantiates that port when
+    # the module is seated in the bay. Those devices place no inlet and get
+    # nothing here, correctly.
+    #
+    # On the MX960 the cord goes into the CHASSIS. Its four C20 receptacles sit
+    # on an inlet strip above the supplies, one per PEM - the rear studio
+    # photograph the model is measured from shows them, the device's `inlets`
+    # group says "the inlet is the cord's end and stays with the chassis while
+    # a PEM comes out", and `juniper/mx960-psu-ac` composes no inlet part
+    # BECAUSE THE SUPPLY HAS NONE. So the four ports appear once, here, and
+    # anything that later gives that supply an inlet would be describing
+    # different hardware. The placements even name the supply they feed
+    # (`for: pem0`), which is the fact a DCIM has no field for yet.
+    if powers:
+        out["power-ports"] = [powers[k] for k in sorted(powers)]
     if bays:
         out["module-bays"] = sorted(
             bays, key=lambda b: (b["name"].split()[0], _num(b["position"])))
