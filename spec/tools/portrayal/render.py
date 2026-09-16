@@ -2323,5 +2323,30 @@ def main():
     print(f"wrote {device['name']}.configs.json")
 
 
+def _cli():
+    """`main()` with the failures a person actually hits turned into messages.
+
+    THE COMMAND IN README.md PRODUCED A TRACEBACK. A mistyped `ref:` reaches
+    `Library.resolve`, which raises FileNotFoundError with a perfectly good
+    sentence in it, and nothing caught it - so the first thing a newcomer saw
+    after the quickstart was forty lines of Python ending in the answer
+    (roc-ops/Portrayal#180). A missing skin is the same shape: `instance_group`
+    raises ValueError naming the skin and what the part has.
+
+    ONLY THE FAILURES THAT ARE ABOUT THE FILE. A KeyError or an AttributeError
+    from inside the renderer is a bug in the renderer, and swallowing it into a
+    one-line message would hide the traceback that gets it fixed. These three
+    carry a sentence written for the reader and mean the input is wrong.
+    """
+    import yaml as _yaml
+    argv = sys.argv[1:]
+    where = next((a for a in argv if a.endswith(".yaml")), "device")
+    try:
+        return main()
+    except (FileNotFoundError, ValueError, _yaml.YAMLError) as e:
+        print(f"render: {where}: {e}", file=sys.stderr)
+        return 1
+
+
 if __name__ == "__main__":
-    main()
+    sys.exit(_cli() or 0)
