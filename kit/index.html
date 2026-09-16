@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portrayal explorer</title>
+<!--
+  The page a contributor opens to look at what they built. It is the kit's
+  shell (device picker, view switch, tree, inspector) over a local build:
+
+      ./build.sh                       # or ./build.sh --device <name>
+      python3 tools/serve.py 8931      # from the repository root
+      open http://localhost:8931/kit/index.html?device=<name>
+
+  Everything it draws comes from ../library/dist. It brings no logic of its own
+  beyond the 2D/3D switch; the shell and the viewer are the kit modules the
+  README lists. The published site carries a richer page; this one exists so
+  the visual gates in docs/modelling-a-device.md can be run without it.
+-->
+<style>
+  #mode { display: inline-flex; gap: 2px; margin-right: 8px; }
+  #mode button { font: inherit; padding: 2px 10px; border: 1px solid #555; background: #222; color: #ddd; cursor: pointer; }
+  #mode button.on { background: #f59e0b; color: #111; border-color: #f59e0b; }
+  #mode button:disabled { opacity: .45; cursor: not-allowed; }
+  #stage-3d { position: absolute; inset: 0; }
+</style>
+<!-- viewer3d.js imports `three` as a bare specifier; the kit resolves nothing itself. -->
+<script type="importmap">
+{ "imports": {
+  "three": "https://unpkg.com/three@0.161.0/build/three.module.js",
+  "three/addons/": "https://unpkg.com/three@0.161.0/examples/jsm/"
+}}
+</script>
+</head>
+<body>
+<script type="module">
+import { createShell } from './shell.js';
+
+const DIST = '../library/dist';
+const shell = createShell({ title: 'Portrayal explorer', dist: DIST });
+const state = shell.state;
+
+// ---------------------------------------------------------------- 2D / 3D
+// The scene is mounted beside the SVG stage and imported on first use, so a
+// page that never presses 3D pays for neither three.js nor a WebGL context.
+const modeBar = document.createElement('span');
+modeBar.id = 'mode';
+modeBar.innerHTML = '<button data-mode="2d" class="on">2D</button><button data-mode="3d">3D</button>';
+shell.el.fit.before(modeBar);
+
+const host3d = document.createElement('div');
+host3d.id = 'stage-3d';
+host3d.hidden = true;
+shell.el.stage.appendChild(host3d);
+
+let mode = '2d', viewer = null, loading = null, loadedKey = '';
+
+async function ensureViewer() {
+  if (viewer) return viewer;
+  if (!loading) loading = (async () => {
+    const { createViewer } = await import('./viewer3d.js');
+    const v = createViewer(host3d, { dist: DIST + '/' });
+    v.on('select', p => {
+      if (!p) return;
+      if (state.svg?.querySelector(`[data-path="${CSS.escape(p)}"]`)) return shell.select(p, false);
+      shell.el.status.textContent = `${p} — not in the ${state.view} view`;
+    });
+    v.on('hover', p => { shell.el.status.textContent = p || ''; });
+    return v;
+  })();
+  try { viewer = await loading; }
+  catch (err) { loading = null; throw err; }   // a rejected promise would poison every retry
+  return viewer;
+}
+
+async function sync3d() {
+  if (mode !== '3d') return;
+  const v = await ensureViewer();
+  const key = `${state.device}.${state.cfg}`;
+  if (key === loadedKey) return;
+  await v.load({ device: state.device, config: state.cfg });
+  loadedKey = key;
+  if (state.sel) v.select(state.sel);
+}
+
+async function setMode(m) {
+  if (m === mode) return;
+  mode = m;
+  for (const b of modeBar.querySelectorAll('button')) b.classList.toggle('on', b.dataset.mode === m);
+  shell.el.svgHost.hidden = m !== '2d';
+  host3d.hidden = m !== '3d';
+  shell.el.fit.hidden = m === '3d';
+  if (m === '2d') { shell.fit(); if (state.sel) shell.select(state.sel, true); return; }
+  shell.el.status.textContent = 'loading 3D…';
+  try {
+    await sync3d();
+    (await ensureViewer()).resize();
+    shell.el.status.textContent = '';
+  } catch (err) {
+    console.warn('[portrayal] 3D unavailable', err);
+    shell.el.status.textContent = `3D unavailable: ${err.message || err}`;
+    setMode('2d');
+  }
+}
+for (const b of modeBar.querySelectorAll('button')) b.onclick = () => setMode(b.dataset.mode);
+
+// A device below capability level 3 has no box to show; say why instead of failing.
+const btn3d = modeBar.querySelector('[data-mode="3d"]');
+shell.on('device', (name, meta) => {
+  const cap = meta?.capability || shell.device()?.capability;
+  const short = cap && cap.level != null && cap.level < 3;
+  btn3d.disabled = !!short;
+  btn3d.title = short ? ((cap.blocked || []).find(b => b.level === 3)?.needs
+                         ? `3D needs ${(cap.blocked || []).find(b => b.level === 3).needs}`
+                         : '3D needs portrayal level 3') : '';
+  if (short && mode === '3d') setMode('2d');
+  else sync3d();
+});
+shell.on('select', path => { if (mode === '3d' && viewer) viewer.select(path); });
+addEventListener('resize', () => { if (mode === '3d' && viewer) viewer.resize(); });
+</script>
+</body>
+</html>

@@ -21,7 +21,7 @@ git clone https://github.com/roc-ops/Portrayal.git
 cd Portrayal
 python3 -m pip install pyyaml jsonschema pytest pillow numpy
 ./build.sh                       # lint, then compile every device into library/dist/
-python3 tools/serve.py 8931      # then open http://localhost:8931/library/dist/
+python3 tools/serve.py 8931      # then open http://localhost:8931/kit/index.html
 ```
 
 `./build.sh` is the check that your environment works. It lints the whole
@@ -89,8 +89,11 @@ in and how it is named.
 ./build.sh --device <model>      # lint this device, render it, refresh the indexes
 ```
 
-Open the render in the browser beside your reference at the same scale and say
-what you see. This sentence goes in the pull request: which figure you compared
+Open `http://localhost:8931/kit/index.html?device=<model>` beside your reference
+at the same scale and say what you see. That page is the explorer: pick the
+device, switch faces, and click a part to see what it is and where it came from.
+It reads `library/dist/`, so `./build.sh --device <model>` above is what puts
+your change in it. This sentence goes in the pull request: which figure you compared
 against, at what scale, what agreed, what did not, and what you did about it.
 "Looks right" is not the sentence; "front over the datasheet elevation at
 2.2 px/mm, port pitch and PSU cut-out agree, the status lamp sits 0.6 mm low
