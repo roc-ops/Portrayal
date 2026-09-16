@@ -468,6 +468,15 @@ def fill_from_attrs(root, attrs):
         paint = node.get("data-fill-from")
         if paint is not None and attrs.get(paint) not in (None, ""):
             node.set("fill", str(attrs[paint]).strip())
+        # AND THE OUTLINE WITH IT. A coloured part is not a fill on its own: every
+        # red latch in this library is `fill="#c22f2f" stroke="#8c1f1f"`, and the
+        # blue variant changed both. Converting those skins to an attr with only
+        # `data-fill-from` would have left a blue handle wearing a dark red
+        # outline - a drawing nobody would have written by hand, arrived at by a
+        # mechanism that could only say half of what the art said (#177).
+        line = node.get("data-stroke-from")
+        if line is not None and attrs.get(line) not in (None, ""):
+            node.set("stroke", str(attrs[line]).strip())
         key = node.get("data-from")
         if key is None:
             continue

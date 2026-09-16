@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: as7726-32x
-version: 1.0.10
+version: 1.0.11
 maturity: modelled
 manufacturer: Edgecore
 model: AS7726-32X
@@ -448,9 +448,6 @@ configurations:
     kind: orderable
     description: Dual AC PSUs, back-to-front airflow (7726-32X-O-AC-B)
     airflow: back-to-front
-    skins:
-      fan-module: blue
-      psu-ac-650: blue
     region-context:
       intake: Exhaust
       exhaust: Intake
@@ -478,10 +475,14 @@ configurations:
         power-cord: IEC 60083 Type I (GB 2099.1)
     component-attrs:
       psu-ac-650:
+        latch-finish: '#3d7bd6'
+        latch-edge: '#234b8c'
         model: PSU-AC-650B-B
         part-number: F0TZZ5654020A
         alt-model: PSU-AC-650C-B (F0TZZ7656003A)
       fan-module:
+        handle-finish: '#3d7bd6'
+        airflow-legend: B2F
         model: FAN-1U-1x1C-B2
         part-number: F0TZZ7632000A
   dc-f2b:
@@ -506,9 +507,6 @@ configurations:
     kind: orderable
     description: Dual -48V DC PSUs, back-to-front airflow (7726-32X-O-48V-B)
     airflow: back-to-front
-    skins:
-      fan-module: blue
-      psu-dc-650: blue
     bays:
       psu-1: common/psu-dc-650@2
       psu-2: common/psu-dc-650@2
@@ -521,9 +519,14 @@ configurations:
         power-cord: none
     component-attrs:
       psu-dc-650:
+        latch-finish: '#3d7bd6'
+        latch-edge: '#234b8c'
+        cover-edge: '#2a5aa8'
         model: PSU-48V-650-B
         part-number: F0TZZ7632003A
       fan-module:
+        handle-finish: '#3d7bd6'
+        airflow-legend: B2F
         model: FAN-1U-1x1C-B2
         part-number: F0TZZ7632000A
 datasheet:

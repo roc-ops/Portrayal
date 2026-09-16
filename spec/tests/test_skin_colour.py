@@ -81,7 +81,10 @@ def test_the_sweep_has_something_to_sweep():
     A rule proposed here once returned a clean bill because the collection it
     walked was empty and nobody checked. This is the guard.
     """
-    assert sum(1 for _ in _multi_skin()) >= 20
+    # 23 before #177, which took colour out of skins: nine `blue.svg` near-copies
+    # and three wattage skins the `watts` field had already replaced. The guard is
+    # that the sweep walks something, not that the library stays untidy.
+    assert sum(1 for _ in _multi_skin()) >= 12
 
 
 def test_the_sweep_would_catch_the_defect_it_exists_for():
