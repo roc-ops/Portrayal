@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices name it and
 how many other components compose it. Search this page before drawing a part;
 the [components README](README.md) says which namespace a new one belongs in.
 
-587 component majors in 11 namespaces.
+584 component majors in 11 namespaces.
 
 ## std/ (32)
 
@@ -46,7 +46,7 @@ the [components README](README.md) says which namespace a new one belongs in.
 | `std/vga@1` | component | port | 20.47 × 11.4 × 6.73 | hd15 | 1 | 3 | VGA video receptacle - a female high-density DE-15, fifteen contacts in three rows inside the D-subminiature … |
 | `std/xfp@1` | component | port | 19.5 × 9.7 × 61.7 | xfp | 1 | 29 | XFP cage cutout (10G pluggable) - the recommended bezel opening of the XFP MSA, the aperture an XFP cage prot… |
 
-## common/ (76)
+## common/ (73)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -90,10 +90,7 @@ the [components README](README.md) says which namespace a new one belongs in.
 | `common/psu-550w@1` | component | psu | 84 × 40 |  | 1 | 0 | 550W hot-swap PSU module with an integrated axial fan and its own C14 inlet, as fitted to the Smartoptics DCP… |
 | `common/psu-550w@2` | module | psu | 73.5 × 40 × 185 | crps-1u | 4 | 0 | 550W CRPS hot-swap PSU module - axial fan, pull handle, latch and a panel-mounted C14 inlet turned portrait |
 | `common/psu-ac-1300@1` | module | psu | 57 × 40 |  | 2 | 0 | 1300W AC PSU module, CRPS form factor (composed - bezel art wraps a std/c14-inlet core) |
-| `common/psu-ac-650@1` | module | psu | 56 × 40 |  | 0 | 0 | 650W AC PSU module (Edgecore PSU-AC-650B family) — release tab, pull handle, C14 inlet |
-| `common/psu-ac-650@2` | module | psu | 54 × 40 |  | 0 | 0 | 650W AC PSU module - red fold-out handle, release tab, C14 inlet (v2 = photo-measured 54mm) |
 | `common/psu-ac-650@3` | module | psu | 54 × 40 |  | 3 | 2 | 650W AC PSU module (v3 = composed - bezel art wraps a std/c14-inlet core) |
-| `common/psu-dc-650@1` | module | psu | 56 × 40 |  | 0 | 0 | 650W -48V DC PSU module (Edgecore PSU-DC-650B family) — same footprint as the AC unit, DC terminal input |
 | `common/psu-dc-650@2` | module | psu | 54 × 40 |  | 3 | 0 | 650W -48V DC PSU module - blue fold-out handle, terminal cover (v2 = photo-measured 54mm) |
 | `common/pull-tab@1` | component | tab | 16 × 4.5 |  | 4 | 0 | Captive pull-out information tab (default credentials / serial card) |
 | `common/qsfp-cage@2` | component | port | 19.5 × 10.18 × 37 |  | 6 | 0 | Plain QSFP cage (no lane LEDs) - bezel around a std/qsfp-ganged aperture (v2 = the cage only - the coloured b… |
